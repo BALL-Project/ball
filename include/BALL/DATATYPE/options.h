@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.9 2000/10/05 21:52:57 oliver Exp $
+// $Id: options.h,v 1.10 2000/11/30 22:58:54 amoll Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -57,7 +57,7 @@ namespace BALL
 		/**	Default constructor. Creates a new and empty Options object.
 				@memo
 		*/
-		Options();
+		Options() throw();
 
 		/**	Copy constructor.	
 				Creates a new option table from an existing one.
@@ -65,7 +65,7 @@ namespace BALL
 				@param	deep bool, no effect		
 				@memo
 		*/
-		Options(const Options& options, bool deep = true);
+		Options(const Options& options, bool deep = true) throw();
 
 		/**		Destructor.
 					Destructs the option table and frees all 
@@ -73,11 +73,24 @@ namespace BALL
 					@see	clear
 					@memo
 		*/
-		virtual ~Options();
+		virtual ~Options() throw();
 
 		//@}
 
+		/**@name		Assignment
+		*/
+		//@{
 		
+		/** Assignment operator
+		*/
+		const Options& operator = (const Options& options) throw();
+
+		/** Clear method
+		*/
+		virtual void clear() throw();
+
+		//@}
+
 		/**@name		Predicates
 		*/
 		//@{
@@ -87,7 +100,7 @@ namespace BALL
 					@return	bool, true/false
 					@memo
 		*/
-		bool isInteger(const String& key) const;
+		bool isInteger(const String& key) const throw();
 
 		/**		Returns true, if the value associated with the 
 					given key is a boolean.
@@ -97,7 +110,7 @@ namespace BALL
 					@return					bool, true/false
 					@memo
 		*/
-		bool isBool(const String& key) const;
+		bool isBool(const String& key) const throw();
 
 		/**		Returns true, if the value associated with the 
 					given key is a real number
@@ -105,8 +118,7 @@ namespace BALL
 					@return					bool, true/false
 					@memo
 		*/
-		bool isReal(const String& key) const;
-
+		bool isReal(const String& key) const throw();
 
 		/**		Returns true, if the value associated with the given key 
 					can be read as a vector.
@@ -117,15 +129,14 @@ namespace BALL
 					@return					bool, true/false
 					@memo
 		*/
-		bool isVector(const String& key) const;
+		bool isVector(const String& key) const throw();
 
-		/**		Returns true, if a value is defined for the given 
-					key
+		/**		Returns true, if a value is defined for the given key.
 					@param					key String
 					@return					bool, true/false
 					@memo
 		*/
-		bool isSet(const String& key) const;
+		bool isSet(const String& key) const throw();
 
 		//@}
 
@@ -136,12 +147,12 @@ namespace BALL
 		/**		Sets the option table's name.
 					@memo
 		*/
-		void setName(const String& name);
+		void setName(const String& name) throw();
 
 		/**		Returns the option table's name.
 					@memo
 		*/
-		const String& getName() const;
+		const String& getName() const throw();
 
 		/**		Returns the value associated with the key.
 					If the key does not exists an empty string is returned.
@@ -149,7 +160,7 @@ namespace BALL
 					@return	String, the value
 					@memo
 		*/
-		String get(const String& key) const;
+		String get(const String& key) const throw();
 
 		/**		Returns the value associated with the key as bool.
 					This method tries to convert the value associated
@@ -162,7 +173,7 @@ namespace BALL
 					@return	bool, boolean value
 					@memo
 		*/
-		bool	getBool(const String& key) const;
+		bool	getBool(const String& key) const throw();
 
 		/**		Returns the value associated with the key as a floting point number.
 					If the value could not be converted to a floating point number or the key
@@ -173,7 +184,7 @@ namespace BALL
 					@return float, floating point value
 					@memo
 		*/
-		double getReal(const String& key) const;
+		double getReal(const String& key) const throw();
 
 		/**		Returns the value associated with the key as a Vector3 object.
 					This method is useful to read threedimensional coordinates, points, etc.
@@ -188,7 +199,7 @@ namespace BALL
 					@return	Vector3	vector containing the three coordinates
 					@memo
 		*/
-		Vector3	getVector(const String& key) const;
+		Vector3	getVector(const String& key) const throw();
 
 		/**		Returns the value associated with the key as an integer.
 					If the value corresponding to {\bf key} could not be converted to an
@@ -199,7 +210,7 @@ namespace BALL
 					@param	key the key
 					@memo
 		*/
-		long getInteger(const String& key) const;
+		long getInteger(const String& key) const throw();
 
 		/** 	Assigns value to key. 
 					The string given as {\bf value} is assigned to the {\bf key}.
@@ -208,7 +219,7 @@ namespace BALL
 					@param key the key
 					@memo
 		*/
-		void set(const String& key, const String& value);
+		void set(const String& key, const String& value) throw();
 
 		/** 	Assigns the real number given by value to key.
 					{\bf value} is first converted to a string, which is 
@@ -218,7 +229,7 @@ namespace BALL
 					@param key the key
 					@memo
 		*/
-		void setReal(const String& key, const double value);
+		void setReal(const String& key, const double value) throw();
 
 		/**		Assigns a Vector3 object to the value corresponding to a key.
 					The given Vector3 is converted to a string by the following
@@ -230,7 +241,7 @@ namespace BALL
 					@param	value a vector
 					@memo
 		*/
-		void setVector(const String& key, const Vector3& value);
+		void setVector(const String& key, const Vector3& value) throw();
 
 		/** Assigns the integer given by value to key.
 				{\bf value} is first converted to a string, which is 
@@ -240,7 +251,7 @@ namespace BALL
 				@param	value the integer value
 				@memo
 		*/
-		void setInteger(const String& key, const long value);
+		void setInteger(const String& key, const long value) throw();
 
 		/**	Assigns the boolean value given by value to the table entry key.
 				The value assocaited with {\bf key} is either set to
@@ -250,7 +261,7 @@ namespace BALL
 				@param	value the boolean value
 				@memo
 		*/
-		void setBool(const String& key, const bool value);
+		void setBool(const String& key, const bool value) throw();
 
 		/**	Assigns the value only, if the key is not yet defined. 
 				If an entry for {\bf key} exists, it is not modified.
@@ -260,7 +271,7 @@ namespace BALL
 				@param 	value	a new value
 				@memo
 		*/
-		String setDefault(const String& key, const String& value);
+		String setDefault(const String& key, const String& value) throw();
 
 		/**	Assigns the value only, if the key is not yet defined. 
 				If an entry for {\bf key} exists, it is not modified.
@@ -271,7 +282,7 @@ namespace BALL
 				@return	the value of {\tt key}
 				@memo
 		*/
-		long setDefaultInteger(const String& key, const long value);
+		long setDefaultInteger(const String& key, const long value) throw();
 
 		/**	Assigns the value only, if the key is not yet defined. 
 				If an entry for {\bf key} exists, it is not modified.
@@ -282,7 +293,7 @@ namespace BALL
 				@return	the value of {\tt key}
 				@memo
 		*/
-		double setDefaultReal(const String& key, const double value);
+		double setDefaultReal(const String& key, const double value) throw();
 
 		/**	Assigns the value only if the key is not yet defined.
 				If an entry for {\bf key} exists, it is not modified.
@@ -293,7 +304,7 @@ namespace BALL
 				@return	the value of {\tt key}
 				@memo
 		*/
-		bool setDefaultBool(const String& key, const bool value);
+		bool setDefaultBool(const String& key, const bool value) throw();
 
 		/**		Reads options from a file. 
 					This method opens the file specified by {\bf filename}.
@@ -314,7 +325,7 @@ namespace BALL
 												\end{itemize}
 					@memo
 		*/
-		bool readOptionFile(const String& filename);
+		bool readOptionFile(const String& filename) throw();
 
 		/**		Writes options to a file.
 					This method opens or creates the file specified by {\bf filename}.
@@ -327,7 +338,14 @@ namespace BALL
 												\end{itemize}
 					@see readOptionFile
 		*/		
-		bool writeOptionFile(const String& filename) const;
+		bool writeOptionFile(const String& filename) const throw();
+
+		/// Equality operator
+		bool operator == (const Options& option) const throw();
+
+		/// Inequality operator
+		bool operator != (const Options& option) const throw();
+
 
 		//@}
 
@@ -335,7 +353,7 @@ namespace BALL
 		//@{
 		
 		/** 	Dumps the whole content of the object */
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const throw();
 
 		//@}
 
