@@ -1,4 +1,4 @@
-// $Id: forwardIterator.h,v 1.9 2001/06/26 17:15:04 anker Exp $
+// $Id: forwardIterator.h,v 1.10 2001/07/04 20:31:41 amoll Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -72,19 +72,17 @@ namespace BALL
 		void toBegin()
 			throw(Exception::InvalidIterator);
 
-		/** Check whether the iterator points to the item at the beginning 
-				of the container
+		/** Check whether the iterator points to the first item of the container
 		*/
 		bool isBegin() const
 			throw(Exception::InvalidIterator);
 
-		/** Move the iterator to the item at the end of the container.
+		/** Move the iterator behind the last item of the container.
 		 */
 		void toEnd()
 			throw(Exception::InvalidIterator);
 
-		/** Check whether the iterator points to the item at the end of the
-				container
+		/** Check whether the iterator points behind the last item of the container
 		*/
 		bool isEnd() const
 			throw(Exception::InvalidIterator);
@@ -99,12 +97,12 @@ namespace BALL
 		ConstForwardIterator operator ++ (int)
 			throw(Exception::InvalidIterator);
 
-		/** Return an iterator at the beginning of the container
+		/** Return an iterator pointing to the beginning of the container
 		 */
 		static ConstForwardIterator begin(const Container& container)
 			throw(Exception::InvalidIterator);
 
-		/** Return an iterator at the end of the container
+		/** Return an iterator pointing at the end of the container
 		 */
 		static ConstForwardIterator end(const Container &container) 
 			throw(Exception::InvalidIterator);
@@ -130,14 +128,16 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator(const ConstForwardIterator &iterator)
+	ConstForwardIterator<Container, DataType, Position, Traits>
+	::ConstForwardIterator(const ConstForwardIterator &iterator)
 		throw()
 		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
+	ConstForwardIterator<Container, DataType, Position, Traits>
+	::ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
 		throw()
 		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
@@ -161,7 +161,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits> ConstForwardIterator<Container, DataType, Position, Traits>::begin(const Container &container)
+	ConstForwardIterator<Container, DataType, Position, Traits> 
+		ConstForwardIterator<Container, DataType, Position, Traits>::begin(const Container &container)
 		throw(Exception::InvalidIterator)
 	{
 		ConstForwardIterator<Container, DataType, Position, Traits> iterator(container);
@@ -190,7 +191,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits> ConstForwardIterator<Container, DataType, Position, Traits>::end(const Container &container)
+	ConstForwardIterator<Container, DataType, Position, Traits> 
+		ConstForwardIterator<Container, DataType, Position, Traits>::end(const Container &container)
 		throw(Exception::InvalidIterator)
 	{
 		ConstForwardIterator<Container, DataType, Position, Traits> iterator(container);
@@ -209,7 +211,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits>& ConstForwardIterator<Container, DataType, Position, Traits>::operator ++ ()
+	ConstForwardIterator<Container, DataType, Position, Traits>& 
+		ConstForwardIterator<Container, DataType, Position, Traits>::operator ++ ()
 		throw(Exception::InvalidIterator)
 	{
 		if (!traits_ptr_->isValid())
@@ -220,7 +223,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits> ConstForwardIterator<Container, DataType, Position, Traits>::operator ++ (int)
+	ConstForwardIterator<Container, DataType, Position, Traits> 
+		ConstForwardIterator<Container, DataType, Position, Traits>::operator ++ (int)
 		throw(Exception::InvalidIterator)
 	{
 		ConstForwardIterator iterator(*this);
@@ -230,7 +234,8 @@ namespace BALL
 
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator(const Container& container)
+	ConstForwardIterator<Container, DataType, Position, Traits>
+	::ConstForwardIterator(const Container& container)
 		throw()
 		:	ConstBaseIterator<Container, DataType, Position, Traits>(container)
 	{
@@ -286,24 +291,22 @@ namespace BALL
 		bool operator + () const
 			throw();
 
-		/** Move the iterator to the item at the beginning of the container.
+		/** Move the iterator to the first item of the container.
 		 */
 		void toBegin()
 			throw(Exception::InvalidIterator);
 
-		/** Check whether the iterator points to the item at the beginning 
-				of the container
+		/** Check whether the iterator points to the first item of the container
 		*/
 		bool isBegin() const
 			throw(Exception::InvalidIterator);
 
-		/** Move the iterator to the item at the end of the container.
+		/** Move the iterator behind the last item of the container.
 		 */
 		void toEnd()
 			throw(Exception::InvalidIterator);
 
-		/** Check whether the iterator points to the item at the end of the
-				container
+		/** Check whether the iterator points behind the last item of the container
 		*/
 		bool isEnd() const
 			throw(Exception::InvalidIterator);
@@ -339,8 +342,6 @@ namespace BALL
 
 	};
 
-	// AB HIER BAUSTELLE
-	// method implementations
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ForwardIterator<Container, DataType, Position, Traits>::ForwardIterator()
@@ -357,7 +358,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ForwardIterator<Container, DataType, Position, Traits>::ForwardIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
+	ForwardIterator<Container, DataType, Position, Traits>
+	::ForwardIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
 		throw()
 		:	BaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
@@ -375,8 +377,10 @@ namespace BALL
 		throw(Exception::InvalidIterator)
 	{
 		if (traits_ptr_->isSingular())
+		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+		}
+		
 		traits_ptr_->toBegin();
 	}
 
@@ -385,7 +389,9 @@ namespace BALL
 		throw(Exception::InvalidIterator)
 	{
 		if (traits_ptr_->isSingular())
+		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
+		}
 
 		return traits_ptr_->isBegin();
 	}
@@ -395,8 +401,9 @@ namespace BALL
 		throw(Exception::InvalidIterator)
 	{
 		if (traits_ptr_->isSingular())
+		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+		}
 		traits_ptr_->toEnd();
 	}
 
@@ -405,24 +412,28 @@ namespace BALL
 		throw(Exception::InvalidIterator)
 	{
 		if (traits_ptr_->isSingular())
+		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+		}
 		return traits_ptr_->isEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ForwardIterator<Container, DataType, Position, Traits>& ForwardIterator<Container, DataType, Position, Traits>::operator ++ ()
+	ForwardIterator<Container, DataType, Position, Traits>& 
+		ForwardIterator<Container, DataType, Position, Traits>::operator ++ ()
 		throw(Exception::InvalidIterator)
 	{
 		if (!traits_ptr_->isValid())
+		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+		}
 		traits_ptr_->forward();
 		return *this;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ForwardIterator<Container, DataType, Position, Traits> ForwardIterator<Container, DataType, Position, Traits>::operator ++ (int)
+	ForwardIterator<Container, DataType, Position, Traits> 
+		ForwardIterator<Container, DataType, Position, Traits>::operator ++ (int)
 		throw(Exception::InvalidIterator)
 	{
 		ForwardIterator iterator(*this);
@@ -431,7 +442,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ForwardIterator<Container, DataType, Position, Traits> ForwardIterator<Container, DataType, Position, Traits>::begin(const Container &container)
+	ForwardIterator<Container, DataType, Position, Traits> 
+		ForwardIterator<Container, DataType, Position, Traits>::begin(const Container &container)
 		throw(Exception::InvalidIterator)
 	{
 		ForwardIterator<Container, DataType, Position, Traits> iterator(container);
@@ -440,7 +452,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ForwardIterator<Container, DataType, Position, Traits> ForwardIterator<Container, DataType, Position, Traits>::end(const Container &container)
+	ForwardIterator<Container, DataType, Position, Traits> 
+		ForwardIterator<Container, DataType, Position, Traits>::end(const Container &container)
 		throw(Exception::InvalidIterator)
 	{
 		ForwardIterator<Container, DataType, Position, Traits> iterator(container);
@@ -449,7 +462,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ForwardIterator<Container, DataType, Position, Traits>::ForwardIterator(const Container& container)
+	ForwardIterator<Container, DataType, Position, Traits>
+	::ForwardIterator(const Container& container)
 		throw()
 		:	BaseIterator<Container, DataType, Position, Traits>(container)
 	{
