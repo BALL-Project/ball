@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.21 2002/12/12 11:10:06 oliver Exp $
+// $Id: TCPTransfer.C,v 1.22 2002/12/20 06:36:16 oliver Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -50,7 +50,7 @@ namespace BALL
 
 TCPTransfer::TransferFailed::TransferFailed(const char* file, int line, Index error_code)
 	throw()
-	: Exception::GeneralException(file, line, string("TransferFailed"), string("Error Code: ") + String(error_code))
+	: Exception::GeneralException(file, line, string("TransferFailed"), string("Error code: ") + String(error_code))
 {
 }
 

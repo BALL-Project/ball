@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.36 2002/12/12 11:34:40 oliver Exp $
+// $Id: File_test.C,v 1.37 2002/12/20 06:36:16 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(File, "$Id: File_test.C,v 1.36 2002/12/12 11:34:40 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.37 2002/12/20 06:36:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -449,6 +449,8 @@ CHECK(TCPTransfer/1)
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
+sleep(2);
+
 CHECK(TCPTransfer/2)
 	// just repeat test to make sure we didn't mess up ports or stuff...
 	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
@@ -460,6 +462,8 @@ CHECK(TCPTransfer/2)
 	f.copyTo(filename);
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
+
+sleep(2);
 
 CHECK(TCPTransfer/3)
 	// just repeat test to make sure we didn't mess up ports or stuff...
@@ -473,6 +477,8 @@ CHECK(TCPTransfer/3)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
+sleep(2);
+
 CHECK(TCPTransfer/4)
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
@@ -483,6 +489,8 @@ CHECK(TCPTransfer/4)
 	f.copyTo(filename);
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
+
+sleep(2);
 
 CHECK(TCPTransfer/5)
 	// just repeat test to make sure that FTP transfers don't upset HTTP transfers
@@ -496,6 +504,8 @@ CHECK(TCPTransfer/5)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
+sleep(2);
+
 CHECK(TCPTransfer/6)
 	// ... and the other way round
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
@@ -508,6 +518,8 @@ CHECK(TCPTransfer/6)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
+sleep(2);
+
 CHECK(TCPTransfer/7)
 	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
 	STATUS("network status of www.mpi-sb.mpg.de: " << (network ? "up" : "down"))
@@ -519,6 +531,8 @@ CHECK(TCPTransfer/7)
 	f.copyTo(filename);
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
+
+sleep(2);
 
 CHECK(TCPTransfer/8)
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);

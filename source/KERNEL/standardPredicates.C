@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.35 2002/12/19 21:01:35 oliver Exp $
+// $Id: standardPredicates.C,v 1.36 2002/12/20 06:36:16 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -254,14 +254,14 @@ namespace BALL
 			else
 			{
 				Log.error() << "InRingPredicate::operator () (): "
-					<< "Expected a number < 9: " << argument_ << endl;
+					<< "Expected a number < 9: " << argument_ << std::endl;
 				return false;
 			}
 		}
 		else
 		{
 			Log.error() << "InRingPredicate::operator () (): "
-				<< "Expected a number < 9: " << argument_ << endl;
+				<< "Expected a number < 9: " << argument_ << std::endl;
 			return false;
 		}
 
@@ -302,7 +302,7 @@ namespace BALL
 		{
 			// There can only be an operator followed by a number < 9
 			Log.error() << "DoubleBondsPredicate::operator () (): "
-				<< "argument_ too long " << endl;
+				<< "argument_ too long " << std::endl;
 			return false;
 		}
 		
@@ -354,7 +354,7 @@ namespace BALL
 
 				default:
 					Log.error() << "doubleBond::operator (): Illegal operator " 
-						<< s[0] << endl;
+						<< s[0] << std::endl;
 					return false;
 			}
 		}
@@ -401,7 +401,7 @@ namespace BALL
 		if (s.size() > 2)
 		{
 			// There can only be an operator followed by a number < 9
-			Log.error() << "DoubleBondsPredicate::operator () (): argument_ too long " << endl;
+			Log.error() << "DoubleBondsPredicate::operator () (): argument_ too long " << std::endl;
 			return false;
 		}
 		
@@ -445,7 +445,7 @@ namespace BALL
 
 				default:
 					Log.error() << "doubleBond::operator (): Illegal operator " 
-						<< s[0] << endl;
+						<< s[0] << std::endl;
 					return false;
 			}
 		}
@@ -522,7 +522,7 @@ namespace BALL
 		if (parent == 0)
 		{
 			Log.error() << "ConnectedToPredicate::CTPNode::setParent(): "
-				<< "Trying to set NULL as parent. Ignoring." << endl;
+				<< "Trying to set NULL as parent. Ignoring." << std::endl;
 		}
 		else
 		{
@@ -542,7 +542,7 @@ namespace BALL
 		if (child == 0)
 		{
 			Log.error() << "ConnectedToPredicate::CTPNode::addChild(): "
-				<< "Trying to add NULL as child. Ignoring." << endl;
+				<< "Trying to add NULL as child. Ignoring." << std::endl;
 		}
 		else
 		{
@@ -631,7 +631,7 @@ namespace BALL
 
 			default:
 				Log.error() << "ConnectedToPredicate::CTPNode::setBondType(): "
-					<< "Unknown bond type character, defaulting to <any>." << endl;
+					<< "Unknown bond type character, defaulting to <any>." << std::endl;
 				bond_type_ = BONDTYPE__ANY;
 		}
 	}
@@ -727,7 +727,7 @@ namespace BALL
 		if (partner == 0)
 		{
 			Log.error() << "ConnectedToPredicate::CTPNode::linkWith(): "
-				<< "Trying to link with NULL. Ignoring." << endl;
+				<< "Trying to link with NULL. Ignoring." << std::endl;
 			return;
 		}
 		link_list_.push_back(partner);
@@ -759,7 +759,7 @@ namespace BALL
 		if (node == 0)
 		{
 			Log.error() << "ConnectedToPredicate::createNewNode_: "
-				<< "got NULL as argument" << ::std::endl;
+				<< "got NULL as argument" << std::endl;
 			return(0);
 		}
 		// /PARANOIA
@@ -772,7 +772,7 @@ namespace BALL
 		if (child == 0)
 		{
 			Log.error() << "ConnectedToPredicate::createNewNode_: "
-				<< "Could not create a child node" << ::std::endl;
+				<< "Could not create a child node" << std::endl;
 			return(0);
 		}
 		// /PARANOIA
@@ -812,7 +812,7 @@ namespace BALL
 		if (root == 0)
 		{
 			Log.error() << "ConnectedToPredicate::parse_(): "
-				<< "could not create the root node" << endl;
+				<< "could not create the root node" << std::endl;
 			return(0);
 		}
 		// /PARANOIA
@@ -832,21 +832,21 @@ namespace BALL
 			if (current == 0)
 			{
 				Log.error() << ""
-					<< "current is NULL at beginning of for loop." << endl;
+					<< "current is NULL at beginning of for loop." << std::endl;
 			}
 			// /PARANOIA
 
 			if (verbosity > 90)
 			{
-				Log.info() << "Examining character " << input[position] << endl;
+				Log.info() << "Examining character " << input[position] << std::endl;
 			}
 
 			if (input[position] == '(')
 			{
 				if (bond_chars.has(input[position - 1]))
 				{
-					Log.error() << "ConnectedToPredicate:parse_(): " << endl
-						<< "\tparse error: bond char before bracket." << endl;
+					Log.error() << "ConnectedToPredicate:parse_(): " << std::endl
+						<< "\tparse error: bond char before bracket." << std::endl;
 					return(false);
 				}
 				bracket_stack.push_back(current);
@@ -857,7 +857,7 @@ namespace BALL
 				if (verbosity > 90)
 				{
 					Log.info() << "Found (, created new node, new depth is " << depth
-						<< endl;
+						<< std::endl;
 				}
 			}
 			else
@@ -866,8 +866,8 @@ namespace BALL
 				{
 					if (current == 0)
 					{
-						Log.error() << "ConnectedToPredicate::parse_(): " << endl
-							<< "\ttried to access a NULL pointer. Aborting." << endl;
+						Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
+							<< "\ttried to access a NULL pointer. Aborting." << std::endl;
 						return(false);
 					}
 					current->setFinished();
@@ -876,7 +876,7 @@ namespace BALL
 					if (verbosity > 90)
 					{
 						Log.info() << "Found ), new depth is " << depth
-							<< endl;
+							<< std::endl;
 					}
 					if (bracket_stack.size() > 0)
 					{
@@ -885,8 +885,8 @@ namespace BALL
 					}
 					else
 					{
-						Log.error() << "ConnectedToPredicate::parse_(): " << endl
-							<< "\tparse error: missing opening bracket." << endl;
+						Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
+							<< "\tparse error: missing opening bracket." << std::endl;
 						return(false);
 					}
 				}
@@ -901,7 +901,7 @@ namespace BALL
 							depth++;
 							if (verbosity > 90)
 							{
-								Log.info() << "Tried to set bond type of finished node, created a new one, new depth is " << depth << endl;
+								Log.info() << "Tried to set bond type of finished node, created a new one, new depth is " << depth << std::endl;
 							}
 						}
 						current->setBondType(input[position]);
@@ -918,7 +918,7 @@ namespace BALL
 								if (verbosity > 90)
 								{
 									Log.info() << "Found uppercase letter without prior \"(\", created new node, new depth is " << depth
-										<< endl;
+										<< std::endl;
 								}
 							}
 							// We are in a fresh node.
@@ -934,9 +934,9 @@ namespace BALL
 							{
 								if (current->isFinished() == true)
 								{
-									Log.error() << "ConnectedToPredicate::parse_(): " << endl
+									Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
 										<< "\tparse error: trying to add a lowercase char to an already finished node." 
-										<< endl;
+										<< std::endl;
 									return(0);
 								}
 								String symbol = current->getSymbol();
@@ -944,14 +944,14 @@ namespace BALL
 								{
 									Log.error() << "ConnectedToPredicate::parse_(): "
 										<< "\tparse error: trying to add a lowercase char to a symbol with length != 1." 
-										<< endl;
+										<< std::endl;
 									return(0);
 								}
 								if (symbol == '*')
 								{
-									Log.error() << "ConnectedToPredicate::parse_(): " << endl
+									Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
 										<< "\tparse error: trying to add a lowercase char to a \"*\"." 
-										<< endl;
+										<< std::endl;
 									return(0);
 								}
 								symbol += input[position];
@@ -970,7 +970,7 @@ namespace BALL
 											if (link_map_[link_mark_].second != 0)
 											{
 												Log.error() << "ConnectedToPredicate::parse_(): "
-													<< "\tparse error: triple mark: " << link_mark_ << endl;
+													<< "\tparse error: triple mark: " << link_mark_ << std::endl;
 												return(0);
 											}
 											link_map_[link_mark_].second = current;
@@ -981,7 +981,7 @@ namespace BALL
 									else
 									{
 										Log.error() << "ConnectedToPredicate::parse_(): "
-											<< "\tparse error: only numbers are allowed as marks." << endl;
+											<< "\tparse error: only numbers are allowed as marks." << std::endl;
 										return(0);
 									}
 								}
@@ -994,9 +994,9 @@ namespace BALL
 										CTPNode* parent = current->getParent();
 										if (parent == 0)
 										{
-											Log.error() << "ConnectedToPredicate::parse_(): " << endl
+											Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
 												<< "\tmultiplier without parent. Aborting."
-												<< endl;
+												<< std::endl;
 											return(0);
 										}
 										CTPNode* new_child = 0;
@@ -1010,9 +1010,9 @@ namespace BALL
 									}
 									else
 									{
-										Log.error() << "ConnectedToPredicate::parse_(): " << endl
+										Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
 											<< "\tparse error: unknown input char: " 
-											<< input[position] << endl;
+											<< input[position] << std::endl;
 										return(false);
 									}
 								}
@@ -1025,15 +1025,15 @@ namespace BALL
 
 		if (bracket_count > 0)
 		{
-			Log.error() << "ConnectedToPredicate::parse_(): " << endl
-				<< "\tparse error: too many opening brackets." << endl;
+			Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
+				<< "\tparse error: too many opening brackets." << std::endl;
 			return(0);
 		}
 
 		if (bracket_count < 0)
 		{
-			Log.error() << "ConnectedToPredicate::parse_(): " << endl
-				<< "\tparse error: Too many closing brackets." << endl;
+			Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
+				<< "\tparse error: Too many closing brackets." << std::endl;
 			return(0);
 		}
 
@@ -1047,8 +1047,8 @@ namespace BALL
 
 			if (it->second.second == 0)
 			{
-				Log.error() << "ConnectedToPredicate::parse_(): " << endl
-					<< "unresolved mark: " << it->first << endl;
+				Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
+					<< "unresolved mark: " << it->first << std::endl;
 				return(0);
 			}
 
@@ -1118,8 +1118,8 @@ namespace BALL
 		switch (node.getBondType())
 		{
 			case CTPNode::BONDTYPE__UNINITIALISED:
-				Log.error() << "ConnectedToPredicate::bondOrderMatch_(): " << endl
-					<< "\tuninitialized bond. Returning false." << endl;
+				Log.error() << "ConnectedToPredicate::bondOrderMatch_(): " << std::endl
+					<< "\tuninitialized bond. Returning false." << std::endl;
 				result = false;
 				break;
 
@@ -1153,8 +1153,8 @@ namespace BALL
 				break;
 
 			default:
-				Log.error() << "ConnectedToPredicate::bondOrderMatch_(): " << endl
-					<< "\tunknown bond type " << node.getBondType() << endl;
+				Log.error() << "ConnectedToPredicate::bondOrderMatch_(): " << std::endl
+					<< "\tunknown bond type " << node.getBondType() << std::endl;
 				result = false;
 		}
 		return result;
@@ -1170,8 +1170,8 @@ namespace BALL
 
 		if (current == 0)
 		{
-			Log.error() << "ConnectedToPredicate::find_(): " << endl
-				<< "\tencountered NULL as node pointer, aborting." << endl;
+			Log.error() << "ConnectedToPredicate::find_(): " << std::endl
+				<< "\tencountered NULL as node pointer, aborting." << std::endl;
 			return(false);
 		}
 
@@ -1199,7 +1199,7 @@ namespace BALL
 								if (verbosity > 90)
 								{
 									Log.info() << "found " 
-										<< partner->getElement().getSymbol() << endl;
+										<< partner->getElement().getSymbol() << std::endl;
 								}
 								break;
 							}
@@ -1222,9 +1222,9 @@ namespace BALL
 	void ConnectedToPredicate::dump() const
 		throw()
 	{
-		Log.info() << endl;
+		Log.info() << std::endl;
 		dump(tree_);
-		Log.info() << flush << endl << endl;
+		Log.info() << flush << std::endl << std::endl;
 	}
 
 	void ConnectedToPredicate::dump(const ConnectedToPredicate::CTPNode* current) const
@@ -1232,11 +1232,11 @@ namespace BALL
 	{
 		if (current == 0)
 		{
-			Log.error() << "ConnectedToPredicate::dump(): got 0" << endl;
+			Log.error() << "ConnectedToPredicate::dump(): got 0" << std::endl;
 			return;
 		}
 		// DEBUG
-		Log.info() << "CTPNode address: " << current << endl;
+		Log.info() << "CTPNode address: " << current << std::endl;
 		// /DEBUG
 		if (current->isLinked())
 		{

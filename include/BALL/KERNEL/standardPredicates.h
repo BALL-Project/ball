@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.24 2002/12/19 17:40:45 anker Exp $
+// $Id: standardPredicates.h,v 1.25 2002/12/20 06:36:16 oliver Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -675,7 +675,7 @@ namespace BALL
 							}
 							else
 							{
-								Log.error() << "greater_: got NULL pointers" << endl;
+								Log.error() << "greater_: got NULL pointers" << std::endl;
 								return false;
 							}
 						}
