@@ -1,5 +1,5 @@
 #!/usr/local/bin/bash
-WEBDIR=/www/pub/homepage/oliver/BALL/doc
+WEBDIR=/www/pub/www.mpi-sb.mpg.de/BALL/doc
 echo "copying postscript and PDF documentation..."
 cp ../doc/BALL.ps ../doc/BALL.pdf ${WEBDIR}
 rm -fr ${WEBDIR}/html
