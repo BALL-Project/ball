@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.11 2003/12/07 18:38:02 amoll Exp $
+// $Id: molecularControl.h,v 1.12 2003/12/09 14:23:33 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -31,7 +31,7 @@ namespace BALL
 		class BondProperties;
 
 		/**	MolecularControl is a widget to display the molecular structure of Composite objects. 
-				This class is derived from the class Control and extends it for showing and modifiying
+				This class is derived from the class GenericControl and extends it for showing and modifiying
 				molecular structures. The methods checkMenu() and buildContextMenu() are overridden 
 				for performing special molecular tasks.
 				\ingroup ViewWidgets
@@ -42,11 +42,10 @@ namespace BALL
 			///
 			enum MolecularMenuEntries
 			{
-				// show DisplayPropertiesDialog
+				/// show DisplayPropertiesDialog
 				CREATE_REPRESENTATION_MODE = 1,
-				// create a new Representation
+				/// create a new Representation
 				CREATE_REPRESENTATION,
-				OBJECT__REMOVE,
 				OBJECT__CUT,
 				OBJECT__COPY,
 				OBJECT__PASTE,
@@ -54,15 +53,22 @@ namespace BALL
 				SELECT,
 				DESELECT,
 
+				/// Center camera on one Composite (done in MolecularProperites)
 				CAMERA__CENTER,
+				/// Build bonds (done in MolecularProperites)
 				BONDS__BUILD,
 				BONDS__REMOVE,
+				/// Check the residues (done in MolecularProperites)
 				RESIDUE__CHECK,
-				DISPLAY__CHANGE,
+				/// Show a dialog with the atom properties
 				ATOM__PROPERTIES,
+				/// Show a dialog with the bond properties
 				BOND__PROPERTIES,
+				/// Count residues, atoms and bonds
 				COUNT__ITEMS,
+				/// show the filename form which the Composite was loaded
 				SHOW__FILENAME,
+				/// Collapse all QListViewItem
 				COLLAPSE_ALL
 			};
 
@@ -165,7 +171,6 @@ namespace BALL
 				throw();
 
 			/** Access the mutable reference to the selection list of this control.
-					\return   List<Composite*>& a mutable reference of the selection list 
 			*/
 			List<Composite*>& getSelection()
 				throw();
@@ -178,7 +183,6 @@ namespace BALL
 			/** Message handling.
 					Overridden method from ConnectionObject to handle incoming messages.\par
 					Calls reactToMessages_().\par
-					Calls sendSelection()
 					\param  message a pointer to a Message object
 			*/
 			virtual void onNotify(Message *message)
@@ -196,30 +200,14 @@ namespace BALL
 			virtual void buildContextMenu(Composite& composite)
 				throw();
 
-			/** Create a new context menu entry with the given parameters.
-					See documentation of the QT-library concerning context menu entries and the
-					signal/slot mechanism.
-					\param name the name of the new menu entry
-					\param receiver the object to which the menu action will be connected
-					\param slot the function that will be called by activation of the menu entry
-					\param accel the acceleration key
-					\param entry_ID the id for the new menu entry (default: -1, will create a new one)
-					\see   buildContextMenu
-			*/
-			void insertContextMenuEntry(const String& name, const QObject* receiver = 0, 
-																  const char* slot = 0, int entry_ID = -1, int accel = 0)
-				throw();
-
-			/**	Initialize the widget.
-					Initialize the menus of this control:
-					  - the cut menu
-					  - the copy menu
-					  - the paste menu
-					  - the clipboard menu
+			/**	Initialize the menu entries:
+					  - cut 
+					  - copy 
+					  - paste 
+					  - clear clipboard
 					\par
 					This method is called automatically	immediately before the main application 
-					is started. 
-					This method will be called by MainControl::show.
+					is started by MainControl::show.
 					\param main_control the MainControl object to be initialized with this ModularWidget
 			*/
 			virtual void initializeWidget(MainControl& main_control)
@@ -318,7 +306,7 @@ namespace BALL
 			/// Move a composite
 			void move();
 			
-			/// Collapse all entries in the control
+			/// Collapse all QListViewItem
 			void collapseAll();
 
 			//@} 
@@ -352,13 +340,12 @@ namespace BALL
 			void setSelection_(bool open)
 				throw();
 
-			/** Access the MolecularInformation visitor of this Control.
+			/** Access the MolecularInformation visitor.
 			 		With the MolecularInformation, the names and type entries for the SelectableListViewItem 
 					are generated.
 					Override this method if another information visitor is needed.
 					This method is used in the method generateListViewItem_() to
 					retrieve certain information of the given Composite.
-					\return  MolecularInformation a reference to a information visitor.
 			*/
 			virtual MolecularInformation& getInformationVisitor_()
 				throw();
@@ -367,7 +354,7 @@ namespace BALL
 					call for each the method generateListViewItem_().
 					\param   item a pointer to a SelectableListViewItem to which all children of the Composite 
 									 will be inserted
-					\param   composite a pointer to a Composite whose children will be inserted into <tt>item</tt>
+					\param   composite whose children will be inserted into <tt>item</tt>
 			*/
 			virtual void recurseGeneration_(SelectableListViewItem* item, Composite& composite)
 				throw();
@@ -375,7 +362,7 @@ namespace BALL
 			/** Iterate over the children of the Composite and
 					call for each the method updateListViewItem_().
 					\param   item a pointer to a SelectableListViewItem containing the subtree structure 
-					\param   composite a pointer to a Composite object containing the (possibly) new substructure
+					\param   composite object containing the (possibly) new substructure
 					\see     updateListViewItem_
 			*/
 			virtual void recurseUpdate_(SelectableListViewItem* item, Composite& composite)
@@ -399,10 +386,8 @@ namespace BALL
 				throw();
 			
 			/** Mutable inspection of the copy list.
-					Access the mutable reference of the copy list of the Control.
 					In this list all copied or cutted Composite objects are stored until
 					the method clearClipboard() is called.
-					\return  List<Composite*>& a mutable reference of the list of the copied Composite objects
 			*/
 			List<Composite*>& getCopyList_()
 				throw();
@@ -431,9 +416,9 @@ namespace BALL
 				throw();
 			
 			/** Update the item tree recursivly.
-					Check if the tree structure of <b> item</b> matches the tree structure of
-					<b> composite</b>.
-					If an item does not exist a subtree for <b> composite</b>, it will be created with the
+					Check if the tree structure of <b>item</b> matches the tree structure of
+					<b>composite</b>.
+					If an item does not exist a subtree for <b>composite</b>, it will be created with the
 					method generateListViewItem_() and inserted into <b>item</b>.
 					Otherwise the method recurseUpdate_() will iterate over the childrens	of <b> composite</b>.			
 					\param  item a SelectableListViewItem whose subtree of items will be checked against <b>composite
@@ -473,7 +458,6 @@ namespace BALL
 					This variable is provided for access to the clipboard menu. With the help of
 					this variable the clipboard menu can be enabled or disabled in the 
 					checkMenu	method.
-					In this variable the menu id for the clipboard menu is stored.
 			*/
 			int clipboard_id_;
 
@@ -495,12 +479,14 @@ namespace BALL
 			
 			MolecularInformation 		information_;
 			
-			// the context menu
+			// the context menus
 			QPopupMenu 							context_menu_, 
 															model_menu_, 
 															color_menu_[MODEL_LABEL - MODEL_LINES];
 
 			Composite* 							context_composite_;
+
+			// the dialogs
 			SelectableListViewItem* context_item_;
 			TransformationDialog* 	transformation_dialog_;
 
