@@ -1,4 +1,4 @@
-// $Id: PreciseTime_test.C,v 1.5 2002/01/04 01:10:20 oliver Exp $
+// $Id: PreciseTime_test.C,v 1.6 2002/01/05 02:59:53 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.5 2002/01/04 01:10:20 oliver Exp $")
+START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.6 2002/01/05 02:59:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -59,30 +59,30 @@ RESULT
 
 CHECK(PreciseTime::PreciseTime(const PreciseTime& time))
 	PreciseTime t1;
-	t1.set(12345678, 23456789);
+	t1.set(12345678, 456789);
 	PreciseTime t2(t1);
 	TEST_EQUAL(t2, t1)
 	TEST_EQUAL(t2.getSeconds(), 12345678)
-	TEST_EQUAL(t2.getMicroSeconds(), 23456789)
+	TEST_EQUAL(t2.getMicroSeconds(), 456789)
 RESULT
 
 CHECK(PreciseTime::set(const PreciseTime& time) throw())	
 	PreciseTime t1, t2;
-	t1.set(12345678, 23456789);
+	t1.set(12345678, 456789);
 	t2.set(t1);
 	TEST_EQUAL(t2, t1)
 	TEST_EQUAL(t2.getSeconds(), 12345678)
-	TEST_EQUAL(t2.getMicroSeconds(), 23456789)
+	TEST_EQUAL(t2.getMicroSeconds(), 456789)
 RESULT
 
 
 CHECK(PreciseTime::PreciseTime& operator = (const PreciseTime& time) throw())
 	PreciseTime t1, t2;
-	t1.set(12345678, 23456789);
+	t1.set(12345678, 456789);
 	t2 = t1;
 	TEST_EQUAL(t2, t1)
 	TEST_EQUAL(t2.getSeconds(), 12345678)
-	TEST_EQUAL(t2.getMicroSeconds(), 23456789)
+	TEST_EQUAL(t2.getMicroSeconds(), 456789)
 RESULT
 
 CHECK(void PreciseTime::clear() throw())
@@ -101,11 +101,11 @@ RESULT
 
 CHECK(PreciseTime::bool operator < (const PreciseTime& time) const  throw())
 	PreciseTime t1, t2;
-	t1.set(12345678, 23456789);
-	t2.set(12345679, 23456789);
+	t1.set(12345678, 456789);
+	t2.set(12345679, 456789);
 	TEST_EQUAL((t2 < t1), false)
 	TEST_EQUAL((t1 < t2), true)
-	t2.set(12345678, 23456789);
+	t2.set(12345678, 456789);
 	TEST_EQUAL((t2 < t1), false)
 	TEST_EQUAL((t1 < t2), false)
 	t2.set(12345678, 2345);
@@ -116,11 +116,11 @@ RESULT
 
 CHECK(PreciseTime::bool operator > (const PreciseTime& time) const  throw())
 	PreciseTime t1, t2;
-	t1.set(12345678, 23456789);
-	t2.set(12345679, 23456789);
+	t1.set(12345678, 456789);
+	t2.set(12345679, 456789);
 	TEST_EQUAL((t2 > t1), true)
 	TEST_EQUAL((t1 > t2), false)
-	t2.set(12345678, 23456789);
+	t2.set(12345678, 456789);
 	TEST_EQUAL((t2 > t1), false)
 	TEST_EQUAL((t1 > t2), false)
 	t2.set(12345678, 2345);
@@ -131,11 +131,11 @@ RESULT
 
 CHECK(PreciseTime::bool operator == (const PreciseTime& time) const  throw())
 	PreciseTime t1, t2;
-	t1.set(12345678, 23456789);
-	t2.set(12345679, 23456789);
+	t1.set(12345678, 456789);
+	t2.set(12345679, 456789);
 	TEST_EQUAL((t2 == t1), false)
 	TEST_EQUAL((t1 == t2), false)
-	t2.set(12345678, 23456789);
+	t2.set(12345678, 456789);
 	TEST_EQUAL((t2 == t1), true)
 	TEST_EQUAL((t1 == t2), true)
 	t2.set(12345678, 2345);
@@ -158,7 +158,7 @@ RESULT
 
 TextPersistenceManager pm;
 CHECK(PreciseTime::write(PersistenceManager& pm) const )
-	PreciseTime t(12345678, 23456789);
+	PreciseTime t(12345678, 456789);
 	String filename;
 	NEW_TMP_FILE(filename)
 	std::ofstream of(filename.c_str(), std::ios::out);
@@ -176,11 +176,11 @@ CHECK(PreciseTime::read(PersistenceManager& pm))
 	t.read(pm);
 	inf.close();
 	TEST_EQUAL(t.getSeconds(), 12345678)
-	TEST_EQUAL(t.getMicroSeconds(), 23456789)
+	TEST_EQUAL(t.getMicroSeconds(), 456789)
 RESULT
 
 CHECK(ostream& operator << (ostream& os, const PreciseTime& time))
-	PreciseTime t(12345678, 23456789);
+	PreciseTime t(12345678, 456789);
 	String filename;
 	NEW_TMP_FILE(filename);
 	ofstream of(filename.c_str(), std::ios::out);
