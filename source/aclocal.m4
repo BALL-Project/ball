@@ -2841,6 +2841,14 @@ AC_DEFUN(CF_BALLVIEW, [
 		fi
 
 		if test "${QT_LINKING_OK+set}" != set ; then
+			SAVE_LIBS=${LIBS}
+			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
+			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${BALLVIEW_INCLUDES}"
+			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+			LIBS=${SAVE_LIBS}
+		fi
+
+		if test "${QT_LINKING_OK+set}" != set ; then
 			AC_MSG_RESULT(no)
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Cannot link against libqgl/qt - disabling support for visualization!])
