@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.6 2000/03/21 15:57:37 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.7 2000/03/22 00:44:45 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.6 2000/03/21 15:57:37 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.7 2000/03/22 00:44:45 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -112,31 +112,94 @@ RESULT
 
 //line651: method GetIntersection(const TPlane3<T>& plane, const TLine3<T>& line, TVector3<T>& intersection_point)
 CHECK(GetIntersection(const TPlane3<T>& plane, const TLine3<T>& line, TVector3<T>& intersection_point))
-  //BAUSTELLE
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(10.0, 0.0, 0.0);
+	v3.set(0.0, 10.0, 0.0);  
+	p1 = Plane3(v1, v2, v3);
+	v1.set(5.0, 5.0, -5.0);
+	v2.set(0.0, 0.0, 10.0);
+	l1.set(v1, v2);
+	v1.set(5.0, 5.0, 0.0);
+	TEST_EQUAL(GetIntersection(p1, l1, v2), true)
+	TEST_EQUAL(v1, v2);
+	v1.set(500.0, 5.0, -5.0);
+	v2.set(0.0, 0.0, 10.0);
+	l1.set(v1, v2);
+	TEST_EQUAL(GetIntersection(p1, l1, v2), false)
 RESULT
 
 
 //line687: method GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
 CHECK(GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line))
-  //BAUSTELLE
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(10.0, 0.0, 0.0);
+	v3.set(0.0, 10.0, 0.0);  
+	p1 = Plane3(v1, v2, v3);
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(10.0, 0.0, 0.0);
+	v3.set(0.0, 0.0, 10.0);  
+	p2 = Plane3(v1, v2, v3);
+	v1.set(0.0, 5.0, 0.0);
+	v2.set(10.0, 0.0, 0.0);
+	l1.set(v1, v2);
+	//??? TEST_EQUAL(GetIntersection(p1, p2, l2), true)
+	//TEST_EQUAL(l2, l1);
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(10.0, 0.0, 0.0);
+	v3.set(0.0, 0.0, 10.0);  
+	p2 = Plane3(v1, v2, v3);
+	//TEST_EQUAL(GetIntersection(p1, p1, l1), false)
 RESULT
 
 
 //line765: method GetIntersection(const TSphere3<T> &sphere, const TLine3<T>& line, TVector3<T> &intersection_point1, TVector3<T> &intersection_point2)
 CHECK(GetIntersection(const TSphere3<T> &sphere, const TLine3<T>& line, TVector3<T> &intersection_point1, TVector3<T> &intersection_point2))
-  //BAUSTELLE
+	v1.set(5.0, 0.0, 0.0);
+	s1 = Sphere3(v1, 2);
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(10.0, 0.0, 0.0);
+	l1.set(v1, v2);
+	v1.set(3.0, 0.0, 0.0);
+	v2.set(7.0, 0.0, 0.0);
+	//??? TEST_EQUAL(GetIntersection(s1, l1, v3, v4), true);
+	//TEST_EQUAL(v1, v3);
+	//TEST_EQUAL(v2, v4);
+	v1.set(500.0, 0.0, 0.0);
+	s1 = Sphere3(v1, 2);
+	//TEST_EQUAL(GetIntersection(s1, l1, v3, v4), false);
 RESULT
 
 
 //line809: method GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane, TCircle3<T>& intersectionCircle)
 CHECK(GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane, TCircle3<T>& intersectionCircle))
-  //BAUSTELLE
+	v1.set(5.0, 0.0, 0.0);
+	s1 = Sphere3(v1, 2);
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(0.0, 10.0, 0.0);
+	v3.set(10.0, 0.0, 0.0);
+	p1.set(v1, v2, v3);
+	v1.set(5.0, 0.0, 0.0);
+	v2.set(-0.0, -0.0, -100.0);
+	c1.set(v1, v2, 2.0);
+	TEST_EQUAL(GetIntersection(s1, p1, c2), true)
+	TEST_EQUAL(c2, c1)
+	v1.set(500.0, 0.0, 0.0);
+	s1 = Sphere3(v1, 2);
+	TEST_EQUAL(GetIntersection(s1, p1, c1), false)
 RESULT
 
 
 //line861: method GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle)
 CHECK(GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle))
-  //BAUSTELLE
+	v1.set(0.0, 0.0, 0.0);
+	s1 = Sphere3(v1, 5);
+	v1.set(2.5, 0.0, 0.0);
+	s1 = Sphere3(v1, 5);
+	//???	TEST_EQUAL(GetIntersection(s1, s2, c1), true)
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(0.0, 0.0, 0.0);
+	c2 = Circle3(v1, v2, 3.0);
+	//TEST_EQUAL(c1, c2)
 RESULT
 
 
@@ -146,9 +209,9 @@ CHECK(isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>&
 	v2.set(2.0, 4.0, 6.0);
 	v3.set(3.0, 6.0, 9.0);
 	TEST_EQUAL(isComplanar(v1, v2, v3), true)
-	v3.set(35.0, -6.1, 9.1);
+	v2.set(35.0, -6.1, 9.1);
 	v3.set(3.0, -66.0, 19.0);
-	TEST_EQUAL(isComplanar(v1, v2, v2), false)
+	TEST_EQUAL(isComplanar(v1, v2, v3), false)
 RESULT
 
 
@@ -174,39 +237,39 @@ RESULT
 
 //line981: method isOrthogonal(const TVector3<T>& vector, const TPlane3<T>& plane)
 CHECK(isOrthogonal(const TVector3<T>& vector, const TPlane3<T>& plane))
-	v1.set(1.0, 2.0, 3.0);
+	v1.set(0.0, 0.0, 0.0);
 	v2.set(0.0, 5.0, 0.0);
 	v3.set(5.0, 0.0, 0.0);
 	p1 = Plane3(v1, v2, v3);
-	v3.set(5.0, 0.0, 5.0);
-	TEST_EQUAL(isOrthogonal(p1, v3), true)
-	TEST_EQUAL(isOrthogonal(p1, v1), false)
-RESULT
-
-CHECK(isOrthogonal(const TPlane3<T>& plane, const TVector3<T>& vector))
-	v1.set(1.0, 2.0, 3.0);
-	v2.set(0.0, 5.0, 0.0);
-	v3.set(5.0, 0.0, 0.0);
-	p1 = Plane3(v1, v2, v3);
-	v3.set(5.0, 0.0, 5.0);
+	v3.set(0.0, 0.0, 5.0);
+	v1.set(2.0, 2.0, 2.0);
 	TEST_EQUAL(isOrthogonal(v3, p1), true)
 	TEST_EQUAL(isOrthogonal(v1, p1), false)
 RESULT
 
+CHECK(isOrthogonal(const TPlane3<T>& plane, const TVector3<T>& vector))
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(0.0, 5.0, 0.0);
+	v3.set(5.0, 0.0, 0.0);
+	p1 = Plane3(v1, v2, v3);
+	v3.set(0.0, 0.0, 5.0);
+	v1.set(2.0, 2.0, 2.0);
+	TEST_EQUAL(isOrthogonal(p1, v3), true)
+	TEST_EQUAL(isOrthogonal(p1, v1), false)
+RESULT
+
 //line1005: method isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b)
 CHECK(isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b))
-	v1.set(1.0, 2.0, 3.0);
+	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
 	v3.set(0.0, 10.0, 0.0);  
 	p1 = Plane3(v1, v2, v3);
-	v1.set(1.0, 2.0, 3.0);
-	v2.set(10.0, 0.0, 0.0);
-	v3.set(0.0, 0.0, 10.0);  
+	v1.set(1.0, 0.0, 0.0);
+	v2.set(11.0, 0.0, 0.0);
+	v3.set(1.0, 0.0, 10.0);  
 	p2 = Plane3(v1, v2, v3);
 	TEST_EQUAL(isOrthogonal(p1, p2), true)
-	v2.set(100.0, 1110.0, 210.0);
-	p2 = Plane3(v1, v2, v3);
-	TEST_EQUAL(isOrthogonal(p1, p2), false)
+	TEST_EQUAL(isOrthogonal(p1, p1), false)
 RESULT
 
 CHECK(isIntersecting(const TVector3<T>& point, const TLine3<T>& line))
@@ -302,11 +365,11 @@ RESULT
 
 //line1125: method isParallel(const TPlane3<T>& plane, const TLine3<T>& line)
 CHECK(isParallel(const TPlane3<T>& plane, const TLine3<T>& line))
-	v1.set(1.0, 2.0, 3.0);
+	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
 	v3.set(0.0, 10.0, 0.0);  
 	p1 = Plane3(v1, v2, v3);
-	v1.set(1.0, 2.0, 3.0);
+	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
 	l1.set(v1, v2);
 	TEST_EQUAL(isParallel(p1, l1), true)
@@ -320,7 +383,7 @@ CHECK(isParallel(const TLine3<T>& line, const TPlane3<T>& plane))
 	v2.set(10.0, 0.0, 0.0);
 	v3.set(0.0, 10.0, 0.0);  
 	p1 = Plane3(v1, v2, v3);
-	v1.set(0.0, 0.0, 0.0);
+	v1.set(1.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
 	l1.set(v1, v2);
 	TEST_EQUAL(isParallel(l1, p1), true)
@@ -331,13 +394,13 @@ RESULT
 
 
 CHECK(isParallel(const TPlane3<T>& a, const TPlane3<T>& b))
-	v1.set(1.0, 2.0, 3.0);
+	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
 	v3.set(0.0, 0.0, 10.0);  
 	p1 = Plane3(v1, v2, v3);
-	v1.set(2.0, 3.0, 4.0);
-	v2.set(10.0, 0.0, 0.0);
-	v3.set(0.0, 0.0, 10.0);  
+	v1.set(1.0, 0.0, 0.0);
+	v2.set(11.0, 0.0, 0.0);
+	v3.set(1.0, 0.0, 10.0);  
 	p2 = Plane3(v1, v2, v3);
 	TEST_EQUAL(isParallel(p1, p2), true)
 	v2.set(100.0, 1110.0, 210.0);
@@ -350,21 +413,29 @@ CHECK(TAngle<T> getTorsionAngle
 		 const T& bx, const T& by, const T& bz,
 		 const T& cx, const T& cy, const T& cz, 
 		 const T& dx, const T& dy, const T& dz))
-	a1 = getTorsionAngle(0.0, 0.0,   0.0,  10.0,   0.0, 0.0,
-											 0.0, -10.0, 0.0,  10.0, -10.0, 0.0);
+	a1 = getTorsionAngle((float)0.0, (float)0.0,  (float)0.0,   (float)10.0,
+											 (float)0.0, (float)0.0,  (float)0.0,   (float)-10.0,
+											 (float)0.0, (float)10.0, (float)-10.0, (float)0.0);
 	Angle res(-180, false);
 	TEST_EQUAL(a1, res)
 
-	a1 = getTorsionAngle(0.0, 0.0,   0.0,  10.0,   0.0, 0.0,
-											 0.0, -10.0, 0.0,  5.0, -5.0, 10.0);
+	a1 = getTorsionAngle((float)0.0, (float)0.0, (float)0.0,  (float)10.0,
+											 (float)0.0, (float)0.0, (float)0.0,  (float)-10.0,
+											 (float)0.0, (float)5.0, (float)-5.0, (float)10.0);
 	res.set(-90, false);
 	TEST_EQUAL(a1, res)
 
-	a1 = getTorsionAngle(0.0, 0.0,   0.0,  10.0, 0.0, 0.0,
-											 0.0, -10.0, 0.0,   0.0, 0.0, 0.0);
+	a1 = getTorsionAngle((float)0.0, (float)0.0, (float)0.0, (float)10.0,
+											 (float)0.0, (float)0.0, (float)0.0, (float)-10.0,
+											 (float)0.0, (float)0.0, (float)0.0, (float)0.0);
 	res.set(0, false);
 	TEST_EQUAL(a1, res)
-
+	a1 = getTorsionAngle((float)0.0, (float)0.0,  (float)0.0,   (float)10.0,
+											 (float)0.0, (float)0.0,  (float)0.0,   (float)-10.0,
+											 (float)0.0, (float)10.0, (float)-10.0, (float)0.0);
+	TEST_EXCEPTION(Exception::DivisionByZero, 
+		getTorsionAngle((float)0, (float)0, (float)0, (float)0, (float)0, (float)0, 
+										(float)0, (float)0, (float)0, (float)0, (float)0, (float)0))
 RESULT
 
 END_TEST
