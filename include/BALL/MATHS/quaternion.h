@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.36 2003/06/09 22:40:49 oliver Exp $
+// $Id: quaternion.h,v 1.37 2003/06/10 23:16:01 amoll Exp $
 //
 
 #ifndef BALL_MATHS_QUATERNION_H
@@ -289,7 +289,8 @@ namespace BALL
 	void TQuaternion<T>::clear()
 		throw()
 	{
-		i = j = k = angle = (T)0;
+		i = j = k = (T)0;
+		angle = (T)1;
 	}
 
 	template <typename T>
