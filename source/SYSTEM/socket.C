@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.C,v 1.30 2003/05/08 13:55:05 anhi Exp $
+// $Id: socket.C,v 1.31 2003/06/02 14:04:40 oliver Exp $
+//
 
 // stupid workaround for Intel C++ 7.0/Linux w/ optimization enabled
 #ifdef __OPTIMIZE__
@@ -233,6 +234,10 @@ namespace BALL
 		if (--rep->cnt == 0) 
 		{
 			delete rep;
+		}
+		if (pbase() != 0)
+		{
+			delete [] (pbase() - BUFSIZ);
 		}
 	}
 
