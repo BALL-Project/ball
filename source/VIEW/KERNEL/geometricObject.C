@@ -1,4 +1,4 @@
-// $Id: geometricObject.C,v 1.10 2001/02/04 16:14:27 hekl Exp $
+// $Id: geometricObject.C,v 1.11 2001/02/11 13:06:32 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		GeometricObject::GeometricObject()
+			throw()
 			:	Composite(),
 				PropertyManager(),
 				selected_color_(255, 255, 0, 255),
@@ -21,6 +22,7 @@ namespace BALL
 
 		GeometricObject::GeometricObject
 			(const GeometricObject& geometric_object, bool deep)
+			throw()
 			:	Composite(geometric_object, deep),
 				PropertyManager(geometric_object, deep),
 				selected_color_(geometric_object.selected_color_),
@@ -29,6 +31,7 @@ namespace BALL
 		}
 
 		GeometricObject::~GeometricObject()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -39,6 +42,7 @@ namespace BALL
 		}
 
 		void GeometricObject::clear()
+			throw()
 		{
 			Composite::clear();
 			PropertyManager::clear();
@@ -49,6 +53,7 @@ namespace BALL
 		}
 
 		void GeometricObject::destroy()
+			throw()
 		{
 			Composite::destroy();
 			PropertyManager::destroy();
@@ -56,6 +61,7 @@ namespace BALL
 
 		void GeometricObject::set
 			(const GeometricObject& geometric_object, bool deep)
+			throw()
 		{
 			Composite::set(geometric_object, deep);
 			PropertyManager::set(geometric_object, deep);
@@ -66,6 +72,7 @@ namespace BALL
 
 		GeometricObject& GeometricObject::operator =
 			(const GeometricObject& geometric_object)
+			throw()
 		{
 			set(geometric_object);
 
@@ -74,11 +81,13 @@ namespace BALL
 
 		void GeometricObject::get
 			(GeometricObject& geometric_object, bool deep) const
+			throw()
 		{
 			geometric_object.set(*this, deep);
 		}
 
 		void GeometricObject::swap(GeometricObject& geometric_object)
+			throw()
 		{
 			Composite::swap(geometric_object);
 			PropertyManager::swap(geometric_object);
@@ -89,6 +98,7 @@ namespace BALL
 
 		void GeometricObject::setProperty
 			(Property property)
+			throw()
 		{
 			if (property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 
 					|| property == GeometricObject::PROPERTY__OBJECT_OPAQUE)
@@ -128,11 +138,13 @@ namespace BALL
 		}
 
 		String GeometricObject::getTypeName() const
+			throw()
     {
 			return String("GeometricObject");
     }
 
 		bool GeometricObject::isValid() const
+			throw()
 		{
 			return (bool)(Composite::isValid() == true
 										&& PropertyManager::isValid() == true);
@@ -140,6 +152,7 @@ namespace BALL
 
 		void GeometricObject::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -233,11 +246,13 @@ namespace BALL
 		}
 				
 		void GeometricObject::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void GeometricObject::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
@@ -248,6 +263,7 @@ namespace BALL
 		}
 		*/
 		bool GeometricObject::extract()
+			throw()
 		{
 			return true;
 		}
@@ -255,6 +271,7 @@ namespace BALL
 		void 
 		GeometricObject::getDrawingModeAndPrecision
 			(unsigned int& mode, unsigned int& precision) const
+			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW) == true)
 			{
@@ -299,6 +316,7 @@ namespace BALL
 		}
 
 		void GeometricObject::clear_()
+			throw()
 		{
 			setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			setProperty(GeometricObject::PROPERTY__OBJECT_OPAQUE);

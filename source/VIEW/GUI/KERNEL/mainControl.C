@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.12 2000/12/22 21:31:11 amoll Exp $
+// $Id: mainControl.C,v 1.13 2001/02/11 13:06:32 hekl Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -45,19 +45,6 @@ namespace BALL
 			preferences_.read();
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
-		}
-		
-		MainControl::MainControl(const MainControl& main_control)
-			:	QMainWindow((QWidget*)main_control.parent(), 0, 0),
-				ConnectionObject(main_control),
-				Embeddable(main_control),
-				composite_map_(),
-				descriptor_map_(),
-				descriptors_(),
-				main_control_preferences_(0),
-				preferences_dialog_(0),
-				preferences_id_(-1)
-		{
 		}
 		
 		MainControl::~MainControl()
@@ -461,6 +448,17 @@ namespace BALL
 		  (Composite* composite, const String& name,
 			 const Vector3& center)
 		{
+			if (composite == 0)
+			{
+				return;
+			}
+
+			// is already inserted => remove it and sent a message
+			if (isInserted(*composite))
+			{
+				remove(*composite, true);
+			}
+
         // create a new composite descriptor and enable the self deletion mechanism
         // for the composite
         List<CompositeDescriptor*>::Iterator list_iterator = descriptors_.end();
@@ -675,7 +673,7 @@ namespace BALL
 					// insert the menu entry
 					if (entry_ID == -1)
 					{
-						entry_ID = getNextID();
+						entry_ID = getNextID_();
 					}
 
 					popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID);

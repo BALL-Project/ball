@@ -1,4 +1,4 @@
-// $Id: glQuadricObject.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
+// $Id: glQuadricObject.C,v 1.3 2001/02/11 13:06:32 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
 #include <BALL/COMMON/exception.h>
@@ -11,6 +11,30 @@ namespace BALL
 	namespace VIEW
 	{
 
+	  GLQuadricObject::WrongDrawingStyle::WrongDrawingStyle(const char* file, int line)
+			throw()
+			: Exception::GeneralException(file, line, string("WrongDrawingStyle"), string("wrong drawing style for quadric objects."))
+		{
+    }
+  
+	  GLQuadricObject::WrongOrientationStyle::WrongOrientationStyle(const char* file, int line)
+			throw()
+			: Exception::GeneralException(file, line, string("WrongOrientationStyle"), string("wrong orientation style for quadric objects."))
+		{
+    }
+  
+	  GLQuadricObject::WrongNormalStyle::WrongNormalStyle(const char* file, int line)
+			throw()
+			: Exception::GeneralException(file, line, string("WrongNormalStyle"), string("wrong normal style for quadric objects."))
+		{
+    }
+  
+	  GLQuadricObject::NoQuadricObjectAvailable::NoQuadricObjectAvailable(const char* file, int line)
+			throw()
+			: Exception::GeneralException(file, line, string("NoQuadricObjectAvailable"), string("memory allocation for quadric objects failed."))
+		{
+    }
+  
 		GLQuadricObject::GLQuadricObject
 			(int draw_style, int normals, int orientation,
 			 bool generate_texture_coordinates)
@@ -23,7 +47,7 @@ namespace BALL
 		}
 
 		GLQuadricObject::GLQuadricObject
-			(const GLQuadricObject& GL_quadric_object, bool /* deep */)
+			(const GLQuadricObject& GL_quadric_object)
 			:	draw_style_(GL_quadric_object.draw_style_),
 				normals_(GL_quadric_object.normals_),
 				orientation_(GL_quadric_object.orientation_),
@@ -61,7 +85,7 @@ namespace BALL
 		}
 
 		void GLQuadricObject::set
-			(const GLQuadricObject& GL_quadric_object, bool /* deep */)
+			(const GLQuadricObject& GL_quadric_object)
 		{
 			draw_style_ = GL_quadric_object.draw_style_;
 			normals_ = GL_quadric_object.normals_;
@@ -78,9 +102,9 @@ namespace BALL
 		}
 
 		void GLQuadricObject::get
-			(GLQuadricObject& GL_quadric_object, bool deep) const
+			(GLQuadricObject& GL_quadric_object) const
 		{
-			GL_quadric_object.set(*this, deep);
+			GL_quadric_object.set(*this);
 		}
 
 		void GLQuadricObject::swap(GLQuadricObject& GL_quadric_object)
@@ -103,26 +127,28 @@ namespace BALL
 		}
 
 		void GLQuadricObject::setDrawStyle(int style)
+			throw()
 		{
-			BALL_PRECONDITION
-				(style == GLU_FILL
-				 || style == GLU_LINE
-				 || style == GLU_SILHOUETTE
-				 || style == GLU_POINT,
-				 BALL_VIEW_GLQUADRICOBJECT_ERROR_HANDLER
-				 (GLQuadricObject::ERROR__WRONG_DRAWING_STYLE));
+			if (style != GLU_FILL
+					&& style != GLU_LINE
+					&& style != GLU_SILHOUETTE
+					&& style != GLU_POINT)
+			{
+				throw WrongDrawingStyle(__FILE__, __LINE__);
+			}
 			
 			draw_style_ = style;;
 		}
 
 		void GLQuadricObject::setOrientation(int orientation)
+			throw()
 		{
-			BALL_PRECONDITION
-				(orientation == GLU_INSIDE
-				 || orientation == GLU_OUTSIDE,
-				 BALL_VIEW_GLQUADRICOBJECT_ERROR_HANDLER
-				 (GLQuadricObject::ERROR__WRONG_ORIENTATION_STYLE));
-			
+			if (orientation != GLU_INSIDE
+					&& orientation != GLU_OUTSIDE)
+			{
+				throw WrongOrientationStyle(__FILE__, __LINE__);
+			}
+
 			orientation_ = orientation;
 		}
 
@@ -132,39 +158,43 @@ namespace BALL
 		}
 
 		void GLQuadricObject::setNormals(int normals)
+			throw()
 		{
-			BALL_PRECONDITION
-				(normals == GLU_NONE
-				 || normals == GLU_FLAT
-				 || normals == GLU_SMOOTH,
-				 BALL_VIEW_GLQUADRICOBJECT_ERROR_HANDLER
-				 (GLQuadricObject::ERROR__WRONG_NORMALS_STYLE));
+			if (normals != GLU_NONE
+					&& normals != GLU_FLAT
+					&& normals != GLU_SMOOTH)
+			{
+				throw WrongNormalStyle(__FILE__, __LINE__);
+			}
 			
 			normals_ = normals;
 		}
 
 		void GLQuadricObject::drawPartialDisk
 			(GLdouble inner_radius, GLdouble outer_radius,
-			 int slices, int loops, GLdouble start_angle, GLdouble sweep_angle)
+			 int slices, int rings, GLdouble start_angle, GLdouble sweep_angle)
+			throw()
 		{
 			create_();
 
 			gluPartialDisk(GLU_quadric_obj_, inner_radius, outer_radius,
-										 slices, loops, start_angle, sweep_angle);
+										 slices, rings, start_angle, sweep_angle);
 		}
 
 		void GLQuadricObject::drawDisk
 			(GLdouble inner_radius, GLdouble outer_radius,
-			 int slices, int loops)
+			 int slices, int rings)
+			throw()
 		{
 			create_();
 
-			gluDisk(GLU_quadric_obj_, inner_radius, outer_radius, slices, loops);
+			gluDisk(GLU_quadric_obj_, inner_radius, outer_radius, slices, rings);
 		}
 
 		void GLQuadricObject::drawCylinder
 			(GLdouble base_radius, GLdouble top_radius, GLdouble height,
 			 int slices, int stacks)
+			throw()
 		{
 			create_();
 
@@ -172,10 +202,11 @@ namespace BALL
 		}
 
 		void GLQuadricObject::drawSphere
-			(GLdouble radius, int longitude_subdiv, int latitude_subdiv)
+			(GLdouble radius, int slices, int stacks)
+			throw()
 		{
 			create_();
-			gluSphere(GLU_quadric_obj_, radius, longitude_subdiv, latitude_subdiv);
+			gluSphere(GLU_quadric_obj_, radius, slices, stacks);
 		}
 
 		bool GLQuadricObject::isValid() const
@@ -265,25 +296,28 @@ namespace BALL
 		}
 
 		void GLQuadricObject::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 		 
 		void GLQuadricObject::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void GLQuadricObject::create_()
+			throw()
 		{
 			if (GLU_quadric_obj_ == 0)
 			{
 				GLU_quadric_obj_ = gluNewQuadric();
 
-				BALL_PRECONDITION
-					(GLU_quadric_obj_ != 0,
-					 BALL_VIEW_GLQUADRICOBJECT_ERROR_HANDLER
-					 (GLQuadricObject::ERROR__CANNOT_CREATE_QUADRIC_OBJECT));
+				if (GLU_quadric_obj_ == 0)
+				{
+					throw NoQuadricObjectAvailable(__FILE__, __LINE__);
+				}
 			}
 				
 			gluQuadricNormals(GLU_quadric_obj_, (GLenum)normals_);

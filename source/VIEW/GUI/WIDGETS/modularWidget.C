@@ -1,4 +1,4 @@
-// $Id: modularWidget.C,v 1.3 2000/12/21 17:03:46 amoll Exp $
+// $Id: modularWidget.C,v 1.4 2001/02/11 13:06:32 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 
@@ -48,7 +48,7 @@ ModularWidget::~ModularWidget()
 
 void ModularWidget::registerWidget(ModularWidget* mwidget)
 {
-	cerr << "registering ModularWIdget at " << mwidget << endl;
+	cerr << "registering ModularWidget at " << mwidget << endl;
 	QObject* object = dynamic_cast<QObject*>(mwidget);
 	if (object != 0)
 	{

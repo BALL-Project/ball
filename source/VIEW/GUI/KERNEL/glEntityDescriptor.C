@@ -1,4 +1,4 @@
-// $Id: glEntityDescriptor.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
+// $Id: glEntityDescriptor.C,v 1.3 2001/02/11 13:06:31 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h>
 #include <BALL/COMMON/exception.h>
@@ -24,19 +24,6 @@ namespace BALL
 		{
 		}
 			
-		GLEntityDescriptor::GLEntityDescriptor
-		  (const GLEntityDescriptor& /* descriptor */, bool /* deep */)
-			:	static_display_list_(),
-				static_always_front_display_list_(),
-				static_wireframe_display_list_(),
-				static_wireframe_always_front_display_list_(),
-				dynamic_display_list_(),
-				dynamic_always_front_display_list_(),
-				transparent_display_list_(),
-				transparent_always_front_display_list_(),
-				update_(true)
-		{
-		}
 
 		GLEntityDescriptor::~GLEntityDescriptor()
 		{
@@ -44,6 +31,8 @@ namespace BALL
 				cout << "Destructing object " << (void *)this << " of class " 
 					<< RTTI::getName<GLEntityDescriptor>() << endl;
 			#endif 
+
+			destroy();
 		}
 
 		void GLEntityDescriptor::clear()
@@ -62,7 +51,6 @@ namespace BALL
 
 		void GLEntityDescriptor::destroy()
 		{
-			clear();
 		}
 
 		bool GLEntityDescriptor::isValid() const

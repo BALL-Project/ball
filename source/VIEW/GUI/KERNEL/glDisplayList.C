@@ -1,4 +1,4 @@
-// $Id: glDisplayList.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
+// $Id: glDisplayList.C,v 1.3 2001/02/11 13:06:31 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
@@ -15,15 +15,23 @@ namespace BALL
 		GLDisplayList::DISPLAYLIST_NOT_DEFINED = (GLDisplayList::GLList)0;
 
 
-		GLDisplayList::GLDisplayList()
-			:	compile_(true),
-				GL_list_(0)
+		GLDisplayList::NestedDisplayList::NestedDisplayList(const char* file, int line)
+			:	Exception::GeneralException(file, line, string("NestedDisplayList"), string("display list definition inside another is not allowed."))
 		{
 		}
 
-		GLDisplayList::GLDisplayList
-			(const GLDisplayList& GL_display_list, bool /* deep */)
-			:	compile_(GL_display_list.compile_),
+		GLDisplayList::NoDisplayListAvailable::NoDisplayListAvailable(const char* file, int line)
+			:	Exception::GeneralException(file, line, string("NoDisplayListAvailable"), string("memory allocation for display list failed."))
+		{
+		}
+
+		GLDisplayList::DisplayListRedeclaration::DisplayListRedeclaration(const char* file, int line)
+			:	Exception::GeneralException(file, line, string("DisplayListRedeclaration"), string("display list already defined."))
+		{
+		}
+
+		GLDisplayList::GLDisplayList()
+			:	compile_(true),
 				GL_list_(0)
 		{
 		}
@@ -51,35 +59,6 @@ namespace BALL
 
 				GL_list_ = 0;
 			}
-
-			clear();
-		}
-
-		void GLDisplayList::set
-			(const GLDisplayList& GL_display_list, bool /* deep */)
-		{
-			compile_ = GL_display_list.compile_;
-		}
-
-		GLDisplayList& GLDisplayList::operator =
-			(const GLDisplayList& GL_display_list)
-		{
-			set(GL_display_list);
-
-			return *this;
-		}
-
-		void GLDisplayList::get
-			(GLDisplayList& GL_display_list, bool deep) const
-		{
-			GL_display_list.set(*this, deep);
-		}
-
-		void GLDisplayList::swap(GLDisplayList& GL_display_list)
-		{
-			bool tmp = compile_;
-			compile_ = GL_display_list.compile_;
-			GL_display_list.compile_ = tmp;
 		}
 
 		void GLDisplayList::startDefinition()
@@ -90,24 +69,22 @@ namespace BALL
 
 				glGetIntegerv(GL_LIST_INDEX, &current_index);
 
-				BALL_PRECONDITION
-					(current_index == 0,
-					 BALL_VIEW_GLDISPLAYLIST_ERROR_HANDLER
-					 (GLDisplayList::ERROR__NESTED_DISPLAY_LIST_DEFINITION));
+				// we are already in a display list definition
+				if (current_index != 0)
+				{
+					throw NestedDisplayList(__FILE__, __LINE__);
+				}
 
 				GL_list_ = glGenLists(1);
-				
-				BALL_PRECONDITION
-					(GL_list_ != GLDisplayList::DISPLAYLIST_NOT_DEFINED,
-					 BALL_VIEW_GLDISPLAYLIST_ERROR_HANDLER
-					 (GLDisplayList::ERROR__NO_DISPLAY_LIST_AVAILABLE));
+
+				if (GL_list_ == GLDisplayList::DISPLAYLIST_NOT_DEFINED)
+				{
+					throw NoDisplayListAvailable(__FILE__, __LINE__);
+				}
 			}
 			else
 			{
-				BALL_PRECONDITION
-					(0,
-					 BALL_VIEW_GLDISPLAYLIST_ERROR_HANDLER
-					 (GLDisplayList::ERROR__REDECLARATION_OF_DISPLAY_LIST));
+				throw DisplayListRedeclaration(__FILE__, __LINE__);
 			}
 
 			if (compile_ == true)

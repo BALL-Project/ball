@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
+// $Id: glPrimitiveManager.C,v 1.3 2001/02/11 13:06:32 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 
@@ -11,6 +11,17 @@ namespace BALL
 
 	namespace VIEW
 	{
+
+		GLDisplayListObject_::NoGLDisplayListsAvailable::NoGLDisplayListsAvailable(const char* file, int line)
+			:	Exception::GeneralException(file, line, string("NoGLDisplayListsAvailable"), string("memory allocation for display lists failed"))
+		{
+		}
+
+		GLDisplayListObject_::WrongModes::WrongModes(const char* file, int line)
+			:	Exception::GeneralException(file, line, string("WrongModes"), string("the drawing precision or the drawing mode are not allowed."))
+		{
+		}
+
 
 		GLDisplayListObject_::GLDisplayListObject_()
 		{
@@ -73,16 +84,8 @@ namespace BALL
 			{ 7, 2,11}
 		};
 
-
 		GLSphereDisplayLists_::GLSphereDisplayLists_()
 			:	GL_display_list_(0)
-		{
-		}
-
-		GLSphereDisplayLists_::GLSphereDisplayLists_
-			(const GLSphereDisplayLists_&  GL_sphere_display_lists, bool /* deep */)
-			:	GLDisplayListObject_(GL_sphere_display_lists),
-				GL_display_list_(0)
 		{
 		}
 
@@ -96,7 +99,7 @@ namespace BALL
 			destroy();
 		}
 
-		void GLSphereDisplayLists_::clear()
+		void GLSphereDisplayLists_::destroy()
 		{
 			if (GL_display_list_ != 0)
 			{
@@ -106,21 +109,16 @@ namespace BALL
 			}
 		}
 
-		void GLSphereDisplayLists_::destroy()
-		{
-			clear();
-		}
-
 		void GLSphereDisplayLists_::init()
 		{
 			if (GL_display_list_ == 0)
 			{
 				GL_display_list_ = new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 
-				BALL_PRECONDITION
-					(GL_display_list_ != 0,
-					 BALL_VIEW_GLSPHEREDISPLAYLISTS_ERROR_HANDLER
-					 (GLSphereDisplayLists_::ERROR__CANNOT_CREATE_DISPLAY_LIST_ARRAY));
+				if (GL_display_list_ == 0)
+				{
+					throw NoGLDisplayListsAvailable(__FILE__, __LINE__);
+				}
 
 				create_();
 			}
@@ -129,11 +127,11 @@ namespace BALL
 		GLDisplayList& GLSphereDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
 		{
-			BALL_PRECONDITION
-				(drawing_mode < 3
-				 && drawing_precision < 4,
-				 BALL_VIEW_GLSPHEREDISPLAYLISTS_ERROR_HANDLER
-				 (GLSphereDisplayLists_::ERROR__INDEX_OVERFLOW));
+			if (drawing_mode >= 3
+					|| drawing_precision >= 4)
+			{
+				throw WrongModes(__FILE__, __LINE__);
+			}
 			
 			return GL_display_list_[drawing_mode * 4 + drawing_precision];
 		}
@@ -315,13 +313,6 @@ namespace BALL
 		{
 		}
 
-		GLTubeDisplayLists_::GLTubeDisplayLists_
-			(const GLTubeDisplayLists_&  GL_tube_display_lists, bool /* deep */)
-			:	GLDisplayListObject_(GL_tube_display_lists),
-				GL_display_list_(0)
-		{
-		}
-
 		GLTubeDisplayLists_::~GLTubeDisplayLists_()
 		{
 			#ifdef BALL_VIEW_DEBUG
@@ -332,7 +323,7 @@ namespace BALL
 			destroy();
 		}
 
-		void GLTubeDisplayLists_::clear()
+		void GLTubeDisplayLists_::destroy()
 		{
 			if (GL_display_list_ != 0)
 			{
@@ -342,11 +333,6 @@ namespace BALL
 			}
 		}
 
-		void GLTubeDisplayLists_::destroy()
-		{
-			clear();
-		}
-
 		void GLTubeDisplayLists_::init()
 		{
 			if (GL_display_list_ == 0)
@@ -354,10 +340,10 @@ namespace BALL
 				GL_display_list_ 
 					= new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 
-				BALL_PRECONDITION
-					(GL_display_list_ != 0,
-					 BALL_VIEW_GLTUBEDISPLAYLISTS_ERROR_HANDLER
-					 (GLTubeDisplayLists_::ERROR__CANNOT_CREATE_DISPLAY_LIST_ARRAY));
+				if (GL_display_list_ == 0)
+				{
+					throw NoGLDisplayListsAvailable(__FILE__, __LINE__);
+				}
 
 				create_();
 			}
@@ -366,11 +352,11 @@ namespace BALL
 		GLDisplayList& GLTubeDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
 		{
-			BALL_PRECONDITION
-				(drawing_mode < 3
-				 && drawing_precision < 4,
-				 BALL_VIEW_GLTUBEDISPLAYLISTS_ERROR_HANDLER
-				 (GLTubeDisplayLists_::ERROR__INDEX_OVERFLOW));
+			if (drawing_mode >= 3
+					|| drawing_precision >= 4)
+			{
+				throw WrongModes(__FILE__, __LINE__);
+			}
 			
 			return GL_display_list_[drawing_mode * 4 + drawing_precision];
 		}
@@ -483,13 +469,6 @@ namespace BALL
 		{
 		}
 
-		GLSimpleBoxDisplayLists_::GLSimpleBoxDisplayLists_
-			(const GLSimpleBoxDisplayLists_&  GL_simple_box_display_lists, bool /* deep */)
-			:	GLDisplayListObject_(GL_simple_box_display_lists),
-				GL_display_list_(0)
-		{
-		}
-
 		GLSimpleBoxDisplayLists_::~GLSimpleBoxDisplayLists_()
 		{
 			#ifdef BALL_VIEW_DEBUG
@@ -500,7 +479,7 @@ namespace BALL
 			destroy();
 		}
 
-		void GLSimpleBoxDisplayLists_::clear()
+		void GLSimpleBoxDisplayLists_::destroy()
 		{
 			if (GL_display_list_ != 0)
 			{
@@ -510,11 +489,6 @@ namespace BALL
 			}
 		}
 
-		void GLSimpleBoxDisplayLists_::destroy()
-		{
-			clear();
-		}
-
 		void GLSimpleBoxDisplayLists_::init()
 		{
 			if (GL_display_list_ == 0)
@@ -522,10 +496,10 @@ namespace BALL
 				GL_display_list_ 
 					= new GLDisplayList[BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE]();
 
-				BALL_PRECONDITION
-					(GL_display_list_ != 0,
-					 BALL_VIEW_GLSIMPLEBOXDISPLAYLISTS_ERROR_HANDLER
-					 (GLSimpleBoxDisplayLists_::ERROR__CANNOT_CREATE_DISPLAY_LIST_ARRAY));
+				if (GL_display_list_ == 0)
+				{
+					throw NoGLDisplayListsAvailable(__FILE__, __LINE__);
+				}
 
 				create_();
 			}
@@ -534,11 +508,11 @@ namespace BALL
 		GLDisplayList& GLSimpleBoxDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
 		{
-			BALL_PRECONDITION
-				(drawing_mode < 3
-				 && drawing_precision < 4,
-				 BALL_VIEW_GLSIMPLEBOXDISPLAYLISTS_ERROR_HANDLER
-				 (GLSimpleBoxDisplayLists_::ERROR__INDEX_OVERFLOW));
+			if (drawing_mode >= 3
+					|| drawing_precision >= 4)
+			{
+				throw WrongModes(__FILE__, __LINE__);
+			}
 			
 			return GL_display_list_[drawing_mode * 4 + drawing_precision];
 		}
@@ -754,17 +728,6 @@ namespace BALL
 		{
 		}
 		 
-		GLPrimitiveManager::GLPrimitiveManager
-			(const GLPrimitiveManager& /* GL_primitive_manager */, bool /* deep */)
-			:	Sphere(),
-				Tube(),
-				SimpleBox(),
-				name_to_object_(),
-				object_to_name_(),
-				all_names_(0)
-		{
-		}
-		 
 		GLPrimitiveManager::~GLPrimitiveManager()
 		{
 			#ifdef BALL_VIEW_DEBUG
@@ -773,15 +736,6 @@ namespace BALL
 			#endif 
 
 			destroy();
-		}
-
-		void GLPrimitiveManager::clear()
-		{
-			Sphere.clear();
-			Tube.clear();
-			SimpleBox.clear();
-
-			clearNames();
 		}
 
 		void GLPrimitiveManager::destroy()
