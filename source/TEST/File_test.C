@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.16 2001/02/25 20:49:28 amoll Exp $
+// $Id: File_test.C,v 1.17 2001/03/01 11:21:27 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.16 2001/02/25 20:49:28 amoll Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.17 2001/03/01 11:21:27 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -299,8 +299,14 @@ CHECK(isCanonized())
 	TEST_EQUAL(f6.isValid(), true)
 	TEST_EQUAL(f6.isCanonized(), true)
 
-	File f7("~/BALL/source/TEST/data/File_test.txt");
+	/* This is a test for an absolute path.
+		 Because the location of the file is unsure, 
+		 I had to comment it out.
+		 Try it on your computer with YOUR path.
+	
+  File f7("~/BALL/source/TEST/data/File_test.txt");
 	TEST_EQUAL(f7.isCanonized(), true)
+  */
 RESULT
 
 CHECK(isReadable(String name))
