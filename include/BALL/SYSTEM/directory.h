@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.11 2001/02/26 00:23:29 amoll Exp $
+// $Id: directory.h,v 1.12 2001/05/18 21:11:43 amoll Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -24,8 +24,8 @@
 namespace BALL 
 {
 
-	/**	Directory class.
-			{\bf Definition:}\URL{BALL/SYSTEM/directory.C}
+	/**	Directory class. \\
+			{\bf Definition:} \URL{BALL/SYSTEM/directory.C}
 	*/
 	class Directory
 	{
@@ -261,6 +261,7 @@ namespace BALL
 		private:
 			//switch to this dir
 			void synchronize_();
+
 			//switch back to the working directory
 			bool desynchronize_(bool result = true);
 
