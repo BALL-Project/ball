@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.12 2001/06/07 12:44:27 anker Exp $
+// $Id: baseIterator.h,v 1.13 2001/06/22 15:18:23 anker Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -559,11 +559,6 @@ namespace BALL
 
 		/**
 		*/
-		operator Position& () const
-			throw();
-
-		/**
-		*/
 		DataType& operator * () const
 			throw(Exception::InvalidIterator);
 
@@ -616,13 +611,6 @@ namespace BALL
 		throw()
 	{
 		return traits_ptr_->getContainer();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>::operator Position& () const 
-		throw()
-	{
-		return traits_ptr_->getPosition();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
