@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.28 2004/02/23 17:26:01 anhi Exp $
+// $Id: logStream.h,v 1.29 2004/04/15 12:09:51 amoll Exp $
 //
 
 #ifndef BALL_COMMON_LOGSTREAM_H
@@ -264,11 +264,13 @@ namespace BALL
 				and  \link LogStream::INFORMATION INFORMATION \endlink  for messages that do not indicate any problem 
 				(e.g. progress messages).
 		*/
-		enum 
+		enum Levels
 		{
 			/** Loglevels >= ERROR should be used to indicate errors
 			*/
-			ERROR = 2000,
+
+			ERROR = 2000 ,
+			
 			/** Loglevels >= WARNING should be used to indicate warnings
 			*/
 			WARNING = 1000,
