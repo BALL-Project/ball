@@ -9,28 +9,12 @@
             <x>0</x>
             <y>0</y>
             <width>478</width>
-            <height>295</height>
+            <height>297</height>
         </rect>
     </property>
     <property name="caption">
         <string>PythonHotkeys</string>
     </property>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>remove_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>84</x>
-                <y>264</y>
-                <width>126</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Remove</string>
-        </property>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>new_button</cstring>
@@ -73,6 +57,28 @@
         </property>
         <property name="focusStyle">
             <enum>SpreadSheet</enum>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>remove_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>264</y>
+                <width>126</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Remove</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>To remove a hotkey, select the row (with the field to the left)</string>
         </property>
     </widget>
 </widget>
