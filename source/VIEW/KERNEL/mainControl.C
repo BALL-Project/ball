@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.96 2004/07/04 17:04:12 amoll Exp $
+// $Id: mainControl.C,v 1.97 2004/07/23 13:50:20 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -228,13 +228,13 @@ namespace BALL
 					menuBar()->insertItem("&File", menu, FILE, FILE);
 					break;
 				case FILE_OPEN:
-					initPopupMenu(MainControl::FILE)->insertItem("&Open", menu, FILE_OPEN);
+					initPopupMenu(FILE)->insertItem("&Open", menu, FILE_OPEN);
 					break;
 				case FILE_IMPORT:
-					initPopupMenu(MainControl::FILE)->insertItem("&Import", menu, FILE_IMPORT);
+					initPopupMenu(FILE)->insertItem("&Import", menu, FILE_IMPORT);
 					break;
 				case FILE_EXPORT:
-					initPopupMenu(MainControl::FILE)->insertItem("&Export", menu, FILE_EXPORT);
+					initPopupMenu(FILE)->insertItem("&Export", menu, FILE_EXPORT);
 					break;
 				case EDIT:
 					menuBar()->insertItem("&Edit", menu, EDIT, EDIT);
@@ -246,22 +246,22 @@ namespace BALL
 					menuBar()->insertItem("&Display", menu, DISPLAY, DISPLAY);
 					break;
 				case DISPLAY_VIEWPOINT:
-					initPopupMenu(MainControl::DISPLAY)->insertItem("&Viewpoint", menu, DISPLAY_VIEWPOINT);
+					initPopupMenu(DISPLAY)->insertItem("&Viewpoint", menu, DISPLAY_VIEWPOINT);
 					break;
 				case DISPLAY_STEREO:
-					initPopupMenu(MainControl::DISPLAY)->insertItem("&Stereo", menu, DISPLAY_STEREO);
+					initPopupMenu(DISPLAY)->insertItem("&Stereo", menu, DISPLAY_STEREO);
 					break;
 				case MOLECULARMECHANICS:
 					menuBar()->insertItem("&Molecular Mechanics", menu, MOLECULARMECHANICS, -1);
 					break;
 				case CHOOSE_FF:
-					initPopupMenu(MainControl::MOLECULARMECHANICS)->insertItem("Force Field", menu, CHOOSE_FF);
+					initPopupMenu(MOLECULARMECHANICS)->insertItem("Force Field", menu, CHOOSE_FF);
 					break;
 				case TOOLS:
 					menuBar()->insertItem("&Tools", menu, TOOLS, TOOLS);
 					break;
 				case TOOLS_PYTHON:
-					initPopupMenu(MainControl::TOOLS)->insertItem("&Python", menu, TOOLS_PYTHON);
+					initPopupMenu(TOOLS)->insertItem("&Python", menu, TOOLS_PYTHON);
 					break;
 				case WINDOWS:
 					menuBar()->insertItem("&Windows", menu, WINDOWS, WINDOWS);
@@ -661,7 +661,7 @@ namespace BALL
 
 		int MainControl::current_id_ = 15000;
 
-		int MainControl::insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, 
+		int MainControl::insertMenuEntry(int parent_id, const String& name, const QObject* receiver, const char* slot, 
 																		 int accel, int entry_ID, String hint)
 			throw()
 		{
@@ -669,11 +669,11 @@ namespace BALL
 			if (menu_bar == 0) return -1;
 			
 			// enable the corresponding popup menu
-			menu_bar->setItemEnabled(ID, true);
-			QPopupMenu* popup = initPopupMenu(ID);
+			menu_bar->setItemEnabled(parent_id, true);
+			QPopupMenu* popup = initPopupMenu(parent_id);
 			if (popup == 0)
 			{
-				Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
+				Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << parent_id << endl;
 				return -1;
 			}
 
@@ -687,12 +687,19 @@ namespace BALL
 
 
 		void MainControl::removeMenuEntry
-			(int /* ID */, const String& /* name */, 
+			(int parent_id, const String& /* name */, 
 			 const QObject* /* receiver */, const char* /* slot */, 
-			 int /* accel */, int /* entry_ID */)
+			 int /* accel */, int entry_ID)
 			throw()
 		{
-			// ?????
+			QMenuBar* menu_bar = menuBar();
+			if (menu_bar == 0) return;
+			
+			QPopupMenu* popup = initPopupMenu(parent_id);
+			if (popup == 0) return;
+
+			if (entry_ID == -1) return;
+			popup->removeItem(entry_ID);
 		}
 
 

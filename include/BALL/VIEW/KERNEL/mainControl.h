@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.49 2004/07/04 17:04:45 amoll Exp $
+// $Id: mainControl.h,v 1.50 2004/07/23 13:50:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -492,12 +492,12 @@ namespace BALL
 					\param hint
 					\return int the new entry_ID
 			*/
-			int insertMenuEntry (int ID, const String& name, const QObject* receiver = 0, 
+			int insertMenuEntry (int parent_id, const String& name, const QObject* receiver = 0, 
 													 const char* slot = 0, int accel = 0, int entry_ID = -1, String hint = "")
 				throw();
 
-			/// Not implemented yet.
-			void removeMenuEntry (int ID, const String& name, const QObject* receiver = 0, 
+			/// 
+			void removeMenuEntry (int parent_id, const String& name, const QObject* receiver = 0, 
 												 const char* slot = 0, int accel = 0, int entry_ID = -1)
 			throw();
 			
