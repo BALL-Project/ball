@@ -1,4 +1,4 @@
-// $Id: scene.h,v 1.3 2000/09/23 14:15:07 hekl Exp $
+// $Id: scene.h,v 1.4 2000/10/22 15:26:58 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -346,6 +346,13 @@ namespace BALL
 				(QMouseEvent* qmouse_event);
 
 
+			protected slots:
+
+			virtual void rotateMode_();
+
+			virtual void pickingMode_();
+
+
 			private:
 
 			void renderView_(bool woth_names = false);
@@ -366,7 +373,6 @@ namespace BALL
 			void deselectionReleased_(Scene* scene);
 			void deselectionPressedMoved_(Scene* scene);
 
-
 			void initializeOpenGL_();
 
 			Vector3 translateObjectXY_(const Real distance);
@@ -384,6 +390,12 @@ namespace BALL
 			void convertMatrix_(const Matrix4x4& m, GLfloat glfloat_array[4][4]);
 
 			void selectObjects_(bool select = true);
+
+			
+			int rotate_id_;
+			int picking_id_;
+			
+			bool rotate_mode_;
 
 			GLObjectCollector *GL_object_collector_;
 			GLPrimitiveManager GL_primitive_manager_;
