@@ -1,4 +1,4 @@
-// $Id: geometricTransformations.h,v 1.3 2000/01/10 15:51:07 oliver Exp $
+// $Id: geometricTransformations.h,v 1.4 2000/03/27 21:30:21 oliver Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
 #define BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
@@ -31,10 +31,10 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Translation applicator.
-			This applicator executes a translation on each atom of a given Composite object.
-			The translation ma be given in the constructor, or by calling setTranslation.
-			Applying the applicator to a given Composite object will add the given
+	/**	Translation processor.
+			This processor executes a translation on each atom of a given Composite object.
+			The translation may be given in the constructor, or by calling setTranslation.
+			Applying the processor to a given Composite object will add the given
 			translation vector to the coordinates of each Atom object (and derived classes).\\
 
 			{\bf Definition:} \URL{BALL/STRUCTURE/geometricTransformations.h}
