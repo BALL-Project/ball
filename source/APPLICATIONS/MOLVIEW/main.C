@@ -1,15 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.17 2003/09/07 17:24:00 oliver Exp $
+// $Id: main.C,v 1.18 2003/09/19 18:43:50 amoll Exp $
 //
 
 // order of includes is important:
 #include <qapplication.h>
 #include "mainframe.h"
-#include <BALL/common.h>
-
-
 
 int main(int argc, char **argv)
 {
