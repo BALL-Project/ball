@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.13 2000/03/16 12:07:26 oliver Exp $
+// $Id: persistenceManager.h,v 1.14 2000/03/16 12:43:33 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -130,7 +130,7 @@ namespace BALL
 		/**	Register a class with its default name and virtual constructor.
 		*/
 		template <typename T>
-		void register();
+		void registerDefault();
 		
 		/**	Create an object of a registered class.
 				If the persistence manager has registered a creation method for the given
@@ -783,7 +783,7 @@ namespace BALL
 	};
 
 	template <typename T>
-	void PersistenceManager::register()
+	void PersistenceManager::registerDefault()
 	{
 		registerClass(RTTI::getStreamName<T>(), T::createDefault);
 	}
