@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31.2.10 2005/01/14 13:11:45 amoll Exp $
+// $Id: colorProcessor.C,v 1.31.2.11 2005/01/26 15:23:01 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -14,6 +14,7 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/list.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/SYSTEM/sysinfo.h>
 
 using namespace std;
 
@@ -201,8 +202,8 @@ namespace BALL
 				{
 					if (RTTI::isKindOf<AtomContainer>(**it))
 					{
-						AtomIterator ait;
-						AtomContainer* acont = (AtomContainer*)(*it);
+						AtomConstIterator ait;
+						const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(*it);
 						BALL_FOREACH_ATOM(*acont, ait)
 						{
 							atoms.push_back(&*ait);
@@ -220,8 +221,8 @@ namespace BALL
 				// composite from mesh
 				if (RTTI::isKindOf<AtomContainer>(*from_mesh))
 				{
-					AtomIterator ait;
-					AtomContainer* acont = (AtomContainer*)(from_mesh);
+					AtomConstIterator ait;
+					const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(from_mesh);
 					BALL_FOREACH_ATOM(*acont, ait)
 					{
 						atoms.push_back(&*ait);
@@ -252,10 +253,11 @@ namespace BALL
 			{
 				grid_spacing = 3.0;
 			} 
-			else if (diagonal.getSquareLength() > 100000)
+			else 
 			{
-				// well this will be slower, but prevent locking machine by consuming all memory
-				grid_spacing = 5.0;
+				float memory = SysInfo::getAvailableMemory() * 0.9;
+				float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing(memory, diagonal + Vector3(2 * additional_grid_distance_));
+				if (min_spacing > grid_spacing) grid_spacing = min_spacing;
 			}
 			
 			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_),
