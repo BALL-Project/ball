@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.6 1999/12/19 17:34:00 oliver Exp $
+// $Id: string.iC,v 1.7 2000/05/23 14:15:31 oliver Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -139,10 +139,10 @@ Substring& Substring::bind(const Substring& s, Index from, Size len)
 BALL_INLINE 
 void Substring::set(const String& s)
 {
-  BALL_PRECOND(
-		if (bound_ != 0)
-			throw UnboundSubstring(__FILE__, __LINE__);
-	)
+	if (bound_ == 0)
+	{
+		throw UnboundSubstring(__FILE__, __LINE__);
+	}
 
   bound_->replace(from_, to_, s);
 }
@@ -167,13 +167,26 @@ BALL_INLINE
 void Substring::set(const char* char_ptr, Size size)
 {
 	if (bound_ == 0)
+	{
 		throw UnboundSubstring(__FILE__, __LINE__);
+	}
 	if (char_ptr == 0)
+	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 	if (size == 0)
+	{
 		throw Exception::SizeUnderflow(__FILE__, __LINE__);
+	}
 
-  bound_->replace(from_, to_, char_ptr, size);
+	if (size == string::npos)
+	{
+		bound_->replace(from_, to_, string(char_ptr));
+	}
+	else
+	{
+		bound_->replace(from_, to_, char_ptr, size);
+	}
 }
 
 BALL_INLINE 
