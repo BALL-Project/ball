@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.11 2005/03/21 16:24:27 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.12 2005/03/22 11:32:38 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -30,6 +30,10 @@
 
 #ifndef BALL_STRUCTURE_DOCKING_ENERGETICEVALUATION_H
 # include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
+#endif
+
+#ifndef BALL_STRUCTURE_DOCKING_RANDOMEVALUATION_H
+# include <BALL/STRUCTURE/DOCKING/randomEvaluation.h>
 #endif
 
 namespace BALL
@@ -75,9 +79,8 @@ namespace BALL
 			addAlgorithm("Geometric Fit", GEOMETRIC_FIT, geo_fit);
 			
 			//build HashMap for scoring function advanced option dialogs
-			
 			addScoringFunction("Default", DEFAULT);
-			
+			addScoringFunction("Random", RANDOM);
 			
 			result_dialog_ = new DockResultDialog(this);
 			
@@ -324,9 +327,6 @@ namespace BALL
 					dock_alg =  new GeometricFit();
 					break;
 			}
-		
-			//create docking algorithm object
-			//GeometricFit geo_fit;
 			
 			// keep the larger protein in System A and the smaller one in System B
 			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
@@ -365,11 +365,28 @@ namespace BALL
 			///////////////// BEST_NUM ist Option von DockingAlgorithm!!!!!!!!!!!!!!!!
 			ConformationSet conformation_set = dock_alg->getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
 			
-			// ToDo: switch-Anweisung, wenn mehrere scoring functions vorhanden sind
 			// create scoring function object
-			EnergeticEvaluation scoring;
+			EnergeticEvaluation* scoring = 0;
+			//check which scoring function is chosen
+			index = scoring_functions->currentItem();
+			switch(index)
+			{
+				case DEFAULT:
+					scoring = new EnergeticEvaluation();
+					Log.info() << "in DEFAULT" << std::endl;
+					break;
+				case RANDOM:
+					scoring = new RandomEvaluation();
+					Log.info() << "in RANDOM" << std::endl;
+					break;
+			}
+			
 			// score the results of the docking algorithm
-			std::vector<ConformationSet::Conformation> ranked_conformations = scoring(conformation_set);
+			std::vector<ConformationSet::Conformation> ranked_conformations = (*scoring)(conformation_set);
+			for(unsigned int i = 0; i < ranked_conformations.size() ; i++)
+			{
+				Log.info() << "conformation: " << ranked_conformations[i].first << " score: " << ranked_conformations[i].second << std::endl;
+			}
 			conformation_set.setScoring(ranked_conformations);
 			
 			// setup result_dialog 

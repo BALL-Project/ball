@@ -34,7 +34,7 @@ namespace BALL
 				
 					/** if you want to add a new sccoring function extend enum 
 					*/
-					enum ScoringFunction {DEFAULT = 0};
+					enum ScoringFunction {DEFAULT = 0, RANDOM = 1};
 				
 					//Constructor
 					DockResultDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
@@ -45,10 +45,10 @@ namespace BALL
 						throw();
 				
 					void setConformationSet(ConformationSet& conformations)
-						throw() {ranked_conformations_ = conformations;}
+						throw() {conformation_set_ = conformations;}
 						
 					ConformationSet getConformationSet()
-						throw() {return ranked_conformations_;}
+						throw() {return conformation_set_;}
 						
 					void setScoringName(QString name)
 						throw() {scoring_name_ = name;}
@@ -87,7 +87,7 @@ namespace BALL
 				protected:
 				
 				private:
-					ConformationSet ranked_conformations_;
+					ConformationSet conformation_set_;
 					System* docked_system_;
 					QString scoring_name_;
 					

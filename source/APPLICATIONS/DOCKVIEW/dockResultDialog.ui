@@ -35,16 +35,10 @@
                 <property name="text">
                     <string>snapshot</string>
                 </property>
-                <property name="pixmap">
-                    <pixmap></pixmap>
-                </property>
             </column>
             <column>
                 <property name="text">
                     <string>score</string>
-                </property>
-                <property name="pixmap">
-                    <pixmap></pixmap>
                 </property>
             </column>
             <property name="name">
@@ -93,6 +87,9 @@
             </property>
             <property name="readOnly">
                 <bool>true</bool>
+            </property>
+            <property name="sorting">
+                <bool>false</bool>
             </property>
             <property name="selectionMode">
                 <enum>SingleRow</enum>

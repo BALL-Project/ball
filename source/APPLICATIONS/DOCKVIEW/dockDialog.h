@@ -80,7 +80,7 @@ namespace BALL
 				
 				/** if you want to add a new sccoring function extend enum 
 				*/
-				enum ScoringFunction {DEFAULT = 0};
+				enum ScoringFunction {DEFAULT = 0, RANDOM = 1};
 				
 				/// Constructor
 				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
