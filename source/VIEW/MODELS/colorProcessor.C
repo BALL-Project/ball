@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.21 2003/11/03 16:53:50 amoll Exp $
+// $Id: colorProcessor.C,v 1.22 2003/11/10 16:36:50 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -200,12 +200,7 @@ namespace BALL
 			for(; sit != mesh.vertex.end(); sit++)
 			{
 				// make sure we found an atom
-				const Atom* const* ptr = atom_grid_.getClosestItem(*sit, 1);
-				const Atom* atom = 0;
-				if (ptr != 0)
-				{
-					atom = *ptr;
-				}
+				const Atom* atom = getClosestItem_(*sit);
 
 				if (atom == 0)
 				{
@@ -257,6 +252,59 @@ namespace BALL
 				return default_color_;
 			}
 		}
+
+
+		const Atom* ColorProcessor::getClosestItem_(const Vector3& point) const
+			throw()
+		{
+			const HashGridBox3<const Atom*>* box = atom_grid_.getBox(point);
+			if (!box)
+			{
+				return 0;
+			}
+
+			Position x, y, z;
+			atom_grid_.getIndices(*box, x, y, z);
+
+			const Atom* const* item = 0;
+			float distance = FLT_MAX;
+			List<HashGridBox3<const Atom*>* > box_list;
+			Size dist = 1;
+			// iterator over neighbour boxes
+			for (Index xi = -(Index)dist; xi <= (Index)dist; xi++)
+			{
+				for (Index yi = -(Index)dist; yi <= (Index)dist; yi++)
+				{
+					for (Index zi = -(Index)dist; zi <= (Index)dist; zi++)
+					{
+						// iterate over all data items
+						const HashGridBox3<const Atom*>* box_ptr = atom_grid_.getBox(x+xi, y+yi, z+zi);	
+						if (box_ptr != 0 && !box_ptr->isEmpty())
+						{
+							HashGridBox3<const Atom*>::ConstDataIterator hit = box_ptr->beginData();
+							for (;hit != box_ptr->endData(); hit++)
+							{
+								// this is not 
+								float radius = (*hit)->getRadius();
+								if (radius <= 0.0) radius = 0.4;
+								float new_dist = ((*hit)->getPosition() - point).getSquareLength() - radius * radius;
+								if (new_dist < distance)
+								{
+									item = &*hit;
+									distance = new_dist;
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if (item == 0) return 0;
+			
+			return *item;
+		}
+
+
 		//////////////////////////////////////////////////////////////////////
 		InterpolateColorProcessor::InterpolateColorProcessor()
 			: ColorProcessor(),
@@ -360,6 +408,5 @@ namespace BALL
 			default_color_.setAlpha(255 - transparency_);
 			return true;
 		}
-
 	} // namespace VIEW
  } // namespace BALL

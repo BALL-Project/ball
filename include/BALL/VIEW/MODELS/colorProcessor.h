@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.16 2003/11/03 02:06:20 amoll Exp $
+// $Id: colorProcessor.h,v 1.17 2003/11/10 16:37:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -180,6 +180,11 @@ namespace BALL
 			/** @name Protected member variables 
 			*/ 
 			//@{
+
+			protected:
+
+			const Atom* getClosestItem_(const Vector3& v) const
+				throw();
 
 			//_ a color that will be used if no other color can be calculated.
 			ColorRGBA		default_color_;
