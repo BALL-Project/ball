@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.3 1999/09/19 20:54:00 oliver Exp $
+// $Id: exception.C,v 1.4 1999/09/22 17:44:17 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -108,6 +108,20 @@ namespace BALL
 				sprintf(buf, "%ld", (long)size);
 				message_ += buf;
 				message_ += ")";
+
+				globalHandler.setMessage(message_);
+			}
+
+			OutOfMemory::OutOfMemory(const char* file, int line, Size size)
+				:	GeneralException(file, line, "OutOfMemory", "a memory allocation failed"),
+					size_(size)
+			{
+				message_ = "unable to allocate enough memory (size = ";
+				char buf[40];
+
+				sprintf(buf, "%ld", (long)size_);
+				message_ += buf;
+				message_ += " bytes) ";
 
 				globalHandler.setMessage(message_);
 			}
