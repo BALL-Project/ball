@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.17 2003/03/26 14:16:46 anhi Exp $
+// $Id: global.h,v 1.18 2003/05/13 12:13:14 oliver Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -63,30 +63,28 @@ namespace BALL
 	template <class AtomContainerType>
 	void cloneBonds(const AtomContainerType& atom_container, AtomContainerType& cloned)
 	{
-		AtomConstIterator atom_iter_a;
-		AtomIterator atom_iter_b;
-		Atom::BondConstIterator bond_iter;
-		
 		typedef HashMap<const Atom*, Atom*>	AtomMap;
+		AtomMap atom_map;
 
-		list<const Bond*>	bond_list;
-		AtomMap			atom_map;
+		std::list<const Bond*>	bond_list;
 
 		// iterate over the two composite structures in parallel
 		// caveat: if the two composite structures are not isomorphous, bonds
 		// are created between unrelated atoms!
-		for (atom_iter_a = atom_container.beginAtom(), atom_iter_b = cloned.beginAtom();
-				 !atom_iter_a.isEnd(); ++atom_iter_a, ++atom_iter_b)
+		Atom::BondConstIterator bond_iter;		
+		AtomConstIterator atom_iter_a(atom_container.beginAtom());
+		AtomIterator atom_iter_b(cloned.beginAtom());
+		for (; +atom_iter_a; ++atom_iter_a, ++atom_iter_b)
 		{
 			// create a hash map containing a 1:1 relation for the atom pointers
 			// atom_map maps atom pointers of atom_container to atom pointers in cloned
-			atom_map.insert(pair<const Atom*, Atom*>(&(*atom_iter_a), &(*atom_iter_b)));
+			atom_map.insert(pair<const Atom*, Atom*>(&*atom_iter_a, &*atom_iter_b));
 
 			// iterate over all bonds and store the bonds in a list
 			// to get each bond exactly once, we check the first atom
-			for (bond_iter = (*atom_iter_a).beginBond(); +bond_iter; ++bond_iter) 
+			for (bond_iter = atom_iter_a->beginBond(); +bond_iter; ++bond_iter) 
 			{
-				if (*(*bond_iter).getFirstAtom() == *atom_iter_a)
+				if (bond_iter->getFirstAtom() == &(*atom_iter_a))
 				{
 					bond_list.push_back(&(*bond_iter));
 				}
@@ -97,7 +95,7 @@ namespace BALL
 		// if both atoms of the bond are contained in the cloned structure,
 		// thus preventing the copying of bonds between atoms of atom_container
 		// and atoms outside atom_container
-		list<const Bond*>::iterator list_iter = bond_list.begin();
+		std::list<const Bond*>::iterator list_iter = bond_list.begin();
 		for ( ; list_iter != bond_list.end(); ++list_iter)
 		{
 			if (atom_map.has((*list_iter)->getFirstAtom()) && atom_map.has((*list_iter)->getSecondAtom()))
@@ -106,7 +104,7 @@ namespace BALL
 				Atom* a2 = atom_map[(*list_iter)->getSecondAtom()];
 				Bond*	tmp_bond = static_cast<Bond*>((*list_iter)->create(false, true));
 				tmp_bond->createBond(*tmp_bond, *a1, *a2);
-				(*tmp_bond) = (**list_iter);
+				*tmp_bond = **list_iter;
 				tmp_bond->setFirstAtom(a1);
 				tmp_bond->setSecondAtom(a2);
 				tmp_bond->finalize();
