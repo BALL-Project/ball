@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.34 2004/02/05 16:45:27 amoll Exp $
+// $Id: molecularControl.C,v 1.35 2004/02/06 15:09:48 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -10,8 +10,12 @@
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
 #include <BALL/VIEW/DIALOGS/transformationDialog.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/selector.h>
 #include <qmenubar.h>
 #include <qinputdialog.h>
+#include <qlineedit.h> 
+#include <qpushbutton.h> 
+#include <qmessagebox.h> 
 
 using std::endl;
 
@@ -71,6 +75,7 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			clipboard_id_(-1),
 			selected_(),
 			information_(),
+			selector_edit_(new QLineEdit(this)),
 			context_menu_(this),
 			model_menu_(this),
 			context_composite_(0),
@@ -83,6 +88,20 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 	listview->addColumn("Type");
 	listview->setColumnWidth(0, 120);
 	listview->setColumnWidth(1, 60);
+
+	QPushButton* help_button = new QPushButton(this);
+	help_button->resize(40, 12);
+	help_button->setText("Help");
+	connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
+
+	QHBoxLayout* layout2 = new QHBoxLayout();
+	selector_edit_->setPaletteBackgroundColor(QColor(255, 255, 0));
+	selector_edit_->resize(90, 12);
+	selector_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
+	layout2->addWidget(selector_edit_);
+	layout2->addWidget(help_button);
+	getLayout()->addLayout(layout2);
+	connect(selector_edit_, SIGNAL(returnPressed()), this, SLOT(applySelector()));
 
 	// if the selection of any item changed,
 	// mark the complete selection as invalid
@@ -1054,5 +1073,97 @@ void MolecularControl::changeID()
 	CompositeMessage* msg = new CompositeMessage(*r, CompositeMessage::CHANGED_COMPOSITE);
 	notify_(msg);
 }
+
+
+void MolecularControl::applySelector()
+{
+	if (parentWidget() == 0) return;
+	if (selector_edit_->text() == "")
+	{
+		getMainControl()->clearSelection();
+		return;
+	}
+
+	Selector s;
+	try
+	{
+		s.setExpression(Expression(selector_edit_->text().ascii()));
+	}
+	catch(...)
+	{
+		setStatusbarText("Invalid regular expression");
+		return;
+	}
+
+	HashSet<Composite*> roots;
+
+	CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
+	for(; it != getMainControl()->getCompositeManager().end(); it++)
+	{
+		(*it)->apply(s);
+		List<Atom*>::Iterator ait = s.getSelectedAtoms().begin();
+		for (; ait != s.getSelectedAtoms().end(); ait++)
+		{
+			getMainControl()->selectCompositeRecursive(*ait, true);
+			roots.insert(&(*ait)->getRoot());
+		}
+	}
+
+	HashSet<Composite*>::Iterator sit = roots.begin();
+	for (; sit != roots.end(); sit++)
+	{
+		// faster, but doesnt always work:
+//	 	mc->updateRepresentationsOf(**sit, false);
+		getMainControl()->updateRepresentationsOf(**sit, true, true);
+	}
+
+	NewSelectionMessage* nm = new NewSelectionMessage;
+	nm->setOpenItems(true);
+	notify_(nm);
+
+	setStatusbarText(String("Selected " + String(s.getNumberOfSelectedAtoms()) + " Atoms."));
+}
+
+
+void MolecularControl::showSelectorHelp()
+{
+	QMessageBox::information( this, "molview",
+			String(
+			String("In this text field, you can enter regular expressions to select molecular entities.\n")+
+			"To apply your selection, just press Return key after you are finished. If you want to\n"+
+			"clear your selection, just clear the text field and press again the Return key.\n\n"+
+			"Possible predicates are: \n"+
+			"true() \t this is always true\n" +
+			"false() \t this is always false\n" +
+			"selected() \t this is true for already selected atoms\n" +
+			"name(string) \t the name of the atom \n" +
+			"type(string) \t the type name of the atom\n" +
+			"element(char) \t the element (abbreviated by its symbol)\n" +
+			"residue(string) \t the name of the residue containing the atom\n" +
+			"residueID(int) \t the PDB ID of the residue (usally a number)\n" +
+			"protein() \t the name of the protein the atom is contained in\n" +
+			"secondaryStruct() \t the name of the secondary structure the atom is contained in\n" +
+			"solvent() \t true if the atom is a solvent atom added by BALL\n" +
+			"backbone() \t true for backbone atoms\n" +
+			"chain() \n" +
+			"nucleotide() \n" +
+			"inRing() \n" +
+			"doubleBonds() \n" +
+			"tripleBonds() \n" +
+			"aromaticBonds() \n" +
+			"numberOfBonds(int) \n" +
+			"connectedTo(char) \n" +
+			"sp3Hybridized() \n" +
+			"sp2Hybridized() \n" +
+			"spHybridized() \n" +
+			"charge() \n" +
+			"isAxial() \n" +
+			"is4C1() \n\n" +
+			"They can be connected with\n" +
+			"AND and OR, grouped with brackets, and each predicate can be negated with '!'\n"
+			).c_str(),
+			"&OK");
+}
+
 
 } } // namespaces

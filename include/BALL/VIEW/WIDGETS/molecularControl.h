@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.16 2004/02/05 16:45:31 amoll Exp $
+// $Id: molecularControl.h,v 1.17 2004/02/06 15:09:37 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -34,6 +34,8 @@ namespace BALL
 				This class is derived from the class GenericControl and extends it for showing and modifiying
 				molecular structures. The methods checkMenu() and buildContextMenu() are overridden 
 				for performing special molecular tasks.
+				MolecularControl has also a QLineEdit to select Composites by regular expressions.
+				For further informations on this topic have a look at the class Selector.
 				\ingroup ViewWidgets
 		*/
 		class MolecularControl
@@ -319,6 +321,12 @@ namespace BALL
 			/// Change the ID of a Residue
 			void changeID();
 
+			/// Apply the regular expression from the QLineEdit
+			void applySelector();
+
+			/// Show a help dialog for the Selector 
+			void showSelectorHelp();
+
 			//@} 
 			/** @name Protected members 
 			*/ 
@@ -491,6 +499,7 @@ namespace BALL
 			
 			MolecularInformation 		information_;
 			
+			QLineEdit* 							selector_edit_;
 			// the context menus
 			QPopupMenu 							context_menu_, 
 															model_menu_, 
