@@ -1,4 +1,4 @@
-// $Id: PairExpRDFIntegrator_test.C,v 1.4 2000/09/22 16:31:02 anker Exp $
+// $Id: PairExpRDFIntegrator_test.C,v 1.5 2000/09/25 16:34:00 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PairExpRDFIntegrator_test.C,v 1.4 2000/09/22 16:31:02 anker Exp $")
+START_TEST(class_name, "$Id: PairExpRDFIntegrator_test.C,v 1.5 2000/09/25 16:34:00 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ RESULT
 
 CHECK(PairExpRDFIntegrator::PairExpRDFIntegrator(const PairExpRDFIntegrator& integrator))
 	PairExpRDFIntegrator int1;
-	int1.getRDF().setRepresentation(poly);
+	int1.setRDF(RadialDistributionFunction(poly));
 	int1.setConstants(alpha, C1, C2, R_ij_o, k1, k2);
 	PairExpRDFIntegrator int2(int1);
 	bool test = (int2.getRDF().getRepresentation().getIntervals() == intervals);
@@ -90,8 +90,6 @@ RESULT
 CHECK(PairExpRDFIntegrator::PairExpRDFIntegrator(double alpha, double C1, double C2, double R_ij_o, double k1, double k2, const RadialDistributionFunction& rdf))
 	PairExpRDFIntegrator integrator(alpha, C1, C2, R_ij_o, k1, k2, rdf);
 	bool test = (integrator.getRDF().getRepresentation().getIntervals() == intervals);
-	Log.info() << "Intervalle: " << rdf.getRepresentation().getIntervals().size() << endl;
-	Log.info() << "Intervalle: " << integrator.getRDF().getRepresentation().getIntervals().size() << endl;
 	TEST_EQUAL(test, true);
 	test = (integrator.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
@@ -130,7 +128,7 @@ RESULT
 
 CHECK(PairExpRDFIntegrator::set(const PairExpRDFIntegrator& integrator))
 	PairExpRDFIntegrator int1;
-	int1.getRDF().setRepresentation(poly);
+	int1.setRDF(RadialDistributionFunction(poly));
 	int1.setConstants(alpha, C1, C2, R_ij_o, k1, k2);
 	PairExpRDFIntegrator int2;
 	int2.set(int1);
@@ -146,7 +144,7 @@ RESULT
 CHECK(PairExpRDFIntegrator::PairExpRDFIntegrator& operator = 
 			(const PairExpRDFIntegrator& integrator))
 	PairExpRDFIntegrator int1;
-	int1.getRDF().setRepresentation(poly);
+	int1.setRDF(RadialDistributionFunction(poly));
 	int1.setConstants(alpha, C1, C2, R_ij_o, k1, k2);
 	PairExpRDFIntegrator int2;
 	int2 = int1;
@@ -218,7 +216,7 @@ CHECK(PairExpRDFIntegrator::integrate(double from, double to, double alpha, doub
 
 	PRECISION(0.01)
 
-	val = integrator.integrate(0.1, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
+	val = integrator.integrate(0.1, 0.9, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
 	TEST_REAL_EQUAL(val, 0.0)
 	val = integrator.integrate(1.0, 1.5, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
 	rel_err = fabs((val - (-0.080510343)) / -0.080510343);
