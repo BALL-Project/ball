@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.h,v 1.27 2003/07/03 11:36:39 amoll Exp $
+// $Id: lineBasedFile.h,v 1.28 2003/07/09 12:54:46 amoll Exp $
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
@@ -45,15 +45,12 @@ namespace BALL
 		LineBasedFile(const LineBasedFile& f)
 			throw(Exception::FileNotFound);
 
-
 		/**	Clear method.
 		*/
 		void clear() 
 			throw();
 
 		//@}
-
-
 		/**	@name Equality operators
 		*/
 		//@{
@@ -75,9 +72,9 @@ namespace BALL
 				The file is opened and the same position in it is seeked.
 		*/
 		const LineBasedFile& operator = (const LineBasedFile& file)
-			throw();
-		//@}
+			throw(Exception::FileNotFound);
 
+		//@}
 		/**	@name Accessors
 		*/
 		//@{
@@ -93,9 +90,8 @@ namespace BALL
 		/// Return the current line
 		String& getLine() 
 			throw();
+
 		//@}
-
-
 		/**	@name	Help-Methods for File Acces
 		*/
 		//@{
@@ -113,8 +109,7 @@ namespace BALL
 			throw(Exception::ParseError);
 
 		/** Search for a line starting with a given string.
-				Search starts at the current line and ends at the end of the file 
-				(no wrap around).
+				Search starts at the current line and ends at the end of the file (no wrap around).
 				@param return_to_start if set to <b>true</b>, the current line is reset to its value prior to the invocation
 				@return true if line could be found
 		*/
@@ -123,8 +118,7 @@ namespace BALL
 
 		/* Search for a line starting with a given string, abort at a stop tag.
 		*/
-		bool search(const String& text, const String& stop, 
-								bool return_to_start = false)
+		bool search(const String& text, const String& stop, bool return_to_start = false)
 			throw(Exception::ParseError);
 
 		/** Go to a given line.
@@ -180,7 +174,6 @@ namespace BALL
 		bool parseColumnFormat(const char* format, Position index, Size length, void* arg);
 
 		//@}
-
 		/*	@name	Protected Attributes
 		*/
 		//_@{

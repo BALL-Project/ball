@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.h,v 1.18 2003/03/26 13:56:25 anhi Exp $
+// $Id: genericMolFile.h,v 1.19 2003/07/09 12:54:47 amoll Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -83,36 +83,21 @@ namespace BALL
 			throw();
 		
 		//@}
-
 		/**	@name Assignment
 		*/
 		//@{
+	
 		/**	Assignment operator.
 				Create a new object pointing to the same filename.
 		*/
 		const GenericMolFile& operator = (const GenericMolFile& rhs)
-			throw();
-		//@}
+			throw(Exception::FileNotFound);
 
+		//@}
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{
 
-		/**	Initialize internals for read.
-				This method is called by the default implementation 
-				of  \link read(System& system) read(System& system) \endlink . Its purpose is the 
-				initialization of internal members holding, for example,
-				header information from the file.
-				The default implementation provided is empty.
-		*/
-		virtual void initRead();
-			
-		/**	Initialize internals for write.
-				Same functionality as  \link initRead initRead \endlink , but is called 
-				prior to writing a system.
-		*/
-		virtual void initWrite();
-		
 		/**	Write the molecules of a system.
 				If the file format does not support multiple 
 				molecules in a single file, a warning should be printed
@@ -154,11 +139,12 @@ namespace BALL
 		*/
 		virtual Molecule* read()
 			throw(Exception::ParseError);
-		//@}
 
+		//@}
 		/**	@name Operators
 		*/
 		//@{
+	
 		/** Stream operator for reading a system.
 				Calls  \link read(System&) read(System&) \endlink .
 		*/
@@ -181,6 +167,23 @@ namespace BALL
 		*/
 		virtual GenericMolFile& operator << (const Molecule& molecule);
 		//@}
+		
+		protected:
+		/**	Initialize internals for read.
+				This method is called by the default implementation 
+				of  \link read(System& system) read(System& system) \endlink . Its purpose is the 
+				initialization of internal members holding, for example,
+				header information from the file.
+				The default implementation provided is empty.
+		*/
+		virtual void initRead_();
+			
+		/**	Initialize internals for write.
+				Same functionality as  \link initRead initRead \endlink , but is called 
+				prior to writing a system.
+		*/
+		virtual void initWrite_();
+		
 	};
 } // namespace BALL
 

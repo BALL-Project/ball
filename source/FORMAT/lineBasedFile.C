@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.C,v 1.25 2002/12/12 10:19:13 oliver Exp $
+// $Id: lineBasedFile.C,v 1.26 2003/07/09 12:55:13 amoll Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -43,7 +43,7 @@ namespace BALL
 	}
 
 	const LineBasedFile& LineBasedFile::operator = (const LineBasedFile& f)
-		throw()
+		throw(Exception::FileNotFound)
 	{
 		open(f.getName(), f.getOpenMode());
 		line_number_ = 0;
