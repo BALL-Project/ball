@@ -24,7 +24,7 @@ DlgDisplayProperties::DlgDisplayProperties
   model_string_("stick"),
   precision_string_("high"),
   coloring_method_string_("by element"),
-	selection_(0)
+	selection_()
 {
 	setCaption("Display Settings");
 }
@@ -161,7 +161,7 @@ void DlgDisplayProperties::onNotify(Message *message)
 	{
 		SelectionMessage *selection = RTTI::castTo<SelectionMessage>(*message);
 
-		selection_ = const_cast<List<Composite*>*>(selection->getSelection());
+		selection_ = selection->getSelection();
 	}
 }
 
@@ -297,32 +297,42 @@ void DlgDisplayProperties::selectColoringMethod(const QString& string)
 
 void DlgDisplayProperties::applyButtonClicked()
 {
-		// no selection present => return
-		if (selection_ == 0)
-		{
-			return;
-		}
+	// no selection present => return
+	if (selection_.empty())
+	{
+		return;
+	}
+	
+	List<Composite*> update_list;
 
-		// for each element in the selection => perform generation
-		List<Composite*>::ConstIterator list_it = selection_->begin();
-		for (; list_it != selection_->end(); ++list_it)
-		{
-			object_processor_->applyOn(**list_it);
+	// for each element in the selection => perform generation
+	List<Composite*>::ConstIterator list_it = selection_.begin();
+	for (; list_it != selection_.end(); ++list_it)
+	{
+		object_processor_->applyOn(**list_it);
 
-			// mark composite for update
-			ChangedCompositeMessage change_message;
-			change_message.setComposite((*list_it));
-			notify_(change_message);
-		}
+		// move composite pointer to update list for later update
+		update_list.push_back(*list_it);
+	}
 
-		// update scene
-		SceneMessage scene_message;
-		scene_message.updateOnly();
-		notify_(scene_message);
+	// perform update of the composites
+	list_it = update_list.begin();
+	for (; list_it != update_list.end(); ++list_it)
+	{
+		// mark composite for update
+		ChangedCompositeMessage change_message;
+		change_message.setComposite((*list_it));
+		notify_(change_message);
+	}
 
-		// clear status bar
-		WindowMessage window_message;
-		notify_(window_message);
+	// update scene
+	SceneMessage scene_message;
+	scene_message.updateOnly();
+	notify_(scene_message);
+	
+	// clear status bar
+	WindowMessage window_message;
+	notify_(window_message);
 }
 
 void DlgDisplayProperties::editColor()

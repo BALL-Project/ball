@@ -78,6 +78,6 @@ public:
 
 		MoleculeObjectProcessor *object_processor_;
 
-		List<Composite*> *selection_;
+		List<Composite*> selection_;
 };
 #endif // DlgDisplayProperties_included
