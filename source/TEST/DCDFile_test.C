@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.21 2004/03/17 11:18:41 amoll Exp $
+// $Id: DCDFile_test.C,v 1.22 2004/03/17 13:37:35 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.21 2004/03/17 11:18:41 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.22 2004/03/17 13:37:35 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -98,6 +98,7 @@ CHECK([EXTRA] full test writing)
 	AmberFF amberFF;
 	NEW_TMP_FILE(filename);
 	DCDFile dcd(filename, std::ios::out);
+	dcd.enableVelocityStorage();
 	TEST_EQUAL(dcd.isAccessible(), true)
 	Options options;
 	SnapShotManager ssm(&system, &amberFF, options, &dcd, true);
@@ -109,6 +110,7 @@ CHECK([EXTRA] full test writing)
 	ssm.flushToDisk();
 	dcd.close();
 	TEST_NOT_EQUAL(dcd.getSize(), 0) 
+	system.getAtom(0)->setVelocity(Vector3(1,2,3));
 RESULT
 
 SnapShot ss;
@@ -118,13 +120,15 @@ CHECK(bool read(SnapShot& snapshot) throw())
 	TEST_EQUAL(result, true)
 	ss.applySnapShot(system);
 	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(11.936, 104.294, 10.149))
+	TEST_EQUAL(system.getAtom(0)->getVelocity(), Vector3(0,0,0))
 	result = dcd.read(ss);
 	TEST_EQUAL(result, true)
 	ss.applySnapShot(system);
 	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(1,2,1111))
 	TEST_EQUAL(system.getAtom(0)->getForce(), Vector3(3,4,5))
 	TEST_EQUAL(system.getAtom(0)->getVelocity(), Vector3(6,7,8))
-	TEST_EQUAL(dcd.read(ss), false)
+	result = dcd.read(ss);
+	TEST_EQUAL(result, true)
 RESULT
 
 
