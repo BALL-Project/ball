@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.14 2002/12/12 11:34:46 oliver Exp $
+// $Id: Timer_test.C,v 1.15 2002/12/18 22:05:42 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.14 2002/12/12 11:34:46 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.15 2002/12/18 22:05:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -44,10 +44,22 @@ CHECK(Timer::Timer(Timer& timer))
 	t1.stop();
 	Timer t2(t1);
 	TEST_EQUAL(t2.isRunning(), false)
-	TEST_REAL_EQUAL(t1.getClockTime(), t2.getClockTime())	
-	TEST_REAL_EQUAL(t1.getUserTime(), t2.getUserTime())	
-	TEST_REAL_EQUAL(t1.getSystemTime(), t2.getSystemTime())	
-	TEST_REAL_EQUAL(t1.getCPUTime(), t2.getCPUTime())	
+
+	double diff = t1.getClockTime() - t2.getClockTime();
+	STATUS("t1.getClockTime() = " << t1.getClockTime() << " / diff = " << diff)
+	TEST_EQUAL(diff, 0.0)	
+
+	diff = t1.getUserTime() - t2.getUserTime();
+	STATUS("t1.getUserTime() = " << t1.getUserTime() << " / diff = " << diff)
+	TEST_EQUAL(diff, 0.0)	
+
+	diff = t1.getSystemTime() - t2.getSystemTime();
+	STATUS("t1.getSystemTime() = " << t1.getSystemTime() << " / diff = " << diff)
+	TEST_EQUAL(diff, 0.0)	
+
+	diff = t1.getCPUTime() - t2.getCPUTime();
+	STATUS("t1.getCPUTime() = " << t1.getCPUTime() << " / diff = " << diff)
+	TEST_EQUAL(diff, 0.0)	
 RESULT
 
 CHECK(Timer::clear())
@@ -104,12 +116,18 @@ RESULT
 
 CHECK(Timer::getClockTime() const )
 	Timer t1;
-	TEST_EQUAL(t1.getClockTime(), 0)	
+	TEST_EQUAL(t1.getClockTime(), 0.0)	
+	STATUS("t1.getClockTime() = " << t1.getClockTime())
 	t1.start();
-	sleep(2);
+	sleep(1);
 	t1.stop();
-	TEST_EQUAL(t1.getClockTime() > 1, true)
-	TEST_EQUAL(t1.getClockTime() < 3, true)	
+	STATUS("t1.getClockTime() = " << t1.getClockTime())
+	t1.start();
+	sleep(1);
+	t1.stop();
+	STATUS("t1.getClockTime() = " << t1.getClockTime())
+	TEST_EQUAL(t1.getClockTime() > 1.0, true)
+	TEST_EQUAL(t1.getClockTime() < 3.0, true)	
 RESULT
 
 CHECK(Timer::getUserTime() const )
@@ -170,10 +188,22 @@ CHECK(Timer::Timer& operator = (const Timer& timer))
 	Timer t2;
 	t2 = t1;
 	TEST_EQUAL(t2.isRunning(), false)
-	TEST_REAL_EQUAL(t1.getClockTime(), t2.getClockTime())	
-	TEST_REAL_EQUAL(t1.getUserTime(), t2.getUserTime())	
-	TEST_REAL_EQUAL(t1.getSystemTime(), t2.getSystemTime())	
-	TEST_REAL_EQUAL(t1.getCPUTime(), t2.getCPUTime())	
+
+	double diff = t1.getClockTime() - t2.getClockTime();
+	STATUS("t1.getClockTime() = " << t1.getClockTime() << " / diff = " << diff)
+	TEST_EQUAL(diff, 0.0)	
+
+	diff = t1.getUserTime() - t2.getUserTime();
+	STATUS("t1.getUserTime() = " << t1.getUserTime() << " / diff = " << diff)
+	TEST_EQUAL(diff, 0.0)	
+
+	diff = t1.getSystemTime() - t2.getSystemTime();
+	STATUS("t1.getSystemTime() = " << t1.getSystemTime() << " / diff = " << diff)
+	TEST_EQUAL(diff, 0.0)	
+
+	diff = t1.getCPUTime() - t2.getCPUTime();
+	STATUS("t1.getCPUTime() = " << t1.getCPUTime() << " / diff = " << diff)
+	TEST_EQUAL(diff, 0.0)	
 RESULT
 
 CHECK(Timer::isRunning() const )

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.h,v 1.8 2002/12/12 09:27:23 oliver Exp $
+// $Id: timer.h,v 1.9 2002/12/18 22:05:41 oliver Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H
@@ -89,25 +89,26 @@ namespace BALL
 		/**	Get clock time.
 				Return the accumulated clock (real) time in seconds.
 		*/
-		float getClockTime() const;
+		double getClockTime() const;
 
 		/**	Get user time.
 				Return the accumulated user time in seconds.
 		*/
-		float getUserTime() const;		
+		double getUserTime() const;		
 
 		/**	Get user time.
 				Return the accumulated system time in seconds.
 		*/
-		float getSystemTime() const;
+		double getSystemTime() const;
 
 		/**	Get CPU time.
 				Return the accumulated CPU time in seconds.
 				CPU time is the sum of user time and system time.
 		*/
-		float getCPUTime() const;
+		double getCPUTime() const;
 
 		//@}
+
 		/**	@name	Assignment
 		*/
 		//@{
@@ -120,6 +121,7 @@ namespace BALL
 		Timer& operator = (const Timer& timer);
 
 		//@}
+
 		/**	@name	Predicates 
 		*/
 		//@{
@@ -199,20 +201,20 @@ namespace BALL
 
 		private:
 
-		static long cpu_speed_;
+		static PointerSizeInt cpu_speed_;
 
 		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-			static long clock_speed_;
+			static PointerSizeInt clock_speed_;
 		#endif
 
 		// state of timer, either true(on) or false(off) 
 		bool is_running_;
 
 		// clock seconds value when the timer was last started 
-		long last_secs_;	
+		PointerSizeInt last_secs_;	
 
 		// clock useconds value when the timer was last started 
-		long last_usecs_;		
+		PointerSizeInt last_usecs_;		
 
 		// user time when the timer was last started 
 		clock_t last_user_time_;   
@@ -221,10 +223,10 @@ namespace BALL
 		clock_t last_system_time_; 
 		 
 		// current accumulated clock seconds 
-		long current_secs_;		
+		PointerSizeInt current_secs_;		
 
 		// current accumulated clock useconds 
-		long current_usecs_;		
+		PointerSizeInt current_usecs_;		
 		
 		// current accumulated user time 
 		clock_t current_user_time_;		

@@ -164,6 +164,7 @@ EXECUTABLES_STRUCTURE = \
 	RDFSection_test$(e)\
 	ReconstructFragmentProcessor_test$(e)\
 	SmilesParser_test$(e)\
+	SurfaceProcessor_test$(e)\
 	StructureMapper_test$(e)\
 	TransformationApplicator_test$(e)\
 	TranslationApplicator_test$(e)

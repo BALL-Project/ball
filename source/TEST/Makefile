@@ -110,7 +110,6 @@ EXECUTABLES_MOLMEC = \
 	Gradient_test\
 	AtomVector_test\
 	AmberFF_test\
-	CharmmFF_test\
 	MolmecSupport_test\
 	EnergyMinimizer_test\
 	SnapShot_test\
