@@ -1,4 +1,4 @@
-// $Id: RDFSection.h,v 1.1 2000/08/31 13:34:01 anker Exp $
+// $Id: RDFSection.h,v 1.2 2000/08/31 21:15:46 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RDFSECTION_H
 #define BALL_STRUCTURE_RDFSECTION_H
@@ -21,7 +21,7 @@ namespace BALL
 		public:
 
 
-		BALL_CREATE_NODEEP(RDFSection)
+		BALL_CREATE(RDFSection)
 
 		/** @name Enums */
 		//@{
