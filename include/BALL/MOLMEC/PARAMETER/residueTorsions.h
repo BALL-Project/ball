@@ -1,4 +1,4 @@
-// $Id: residueTorsions.h,v 1.1 2000/02/06 19:49:44 oliver Exp $
+// $Id: residueTorsions.h,v 1.2 2000/02/10 15:05:29 oliver Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
@@ -52,6 +52,15 @@ namespace BALL
 					atom_name_B(B),
 					atom_name_C(C),
 					atom_name_D(D)
+			{
+			}
+
+			ResidueTorsion()
+				:	residue_name(""),
+					atom_name_A(""),
+					atom_name_B(""),
+					atom_name_C(""),
+					atom_name_D("")
 			{
 			}
 		};
