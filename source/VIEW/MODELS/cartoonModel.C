@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.11 2004/12/29 17:41:57 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.12 2005/01/04 22:41:48 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -45,7 +45,10 @@ AddCartoonModel::AddCartoonModel()
 		DNA_helix_radius_(0.5),
 		DNA_ladder_radius_(0.8),
 		DNA_base_radius_(0.2),
-		draw_DNA_as_ladder_(false)
+		ribbon_width_(1.8),
+		ribbon_radius_(0.05),
+		draw_DNA_as_ladder_(false),
+		draw_ribbon_(true)
 {
 }
 
@@ -60,7 +63,10 @@ AddCartoonModel::AddCartoonModel(const AddCartoonModel& cartoon)
 		DNA_helix_radius_(cartoon.DNA_helix_radius_),
 		DNA_ladder_radius_(cartoon.DNA_ladder_radius_),
 		DNA_base_radius_(cartoon.DNA_base_radius_),
-		draw_DNA_as_ladder_(cartoon.draw_DNA_as_ladder_)
+		ribbon_width_(cartoon.ribbon_width_),
+		ribbon_radius_(cartoon.ribbon_radius_),
+		draw_DNA_as_ladder_(cartoon.draw_DNA_as_ladder_),
+		draw_ribbon_(cartoon.draw_ribbon_)
 {
 }
 
@@ -538,7 +544,19 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 
 	if (ss.getType() == SecondaryStructure::HELIX)
 	{
+		if (draw_ribbon_)
+		{
+			Position nr_of_residues = ss.countResidues();
+			Position max = getStartPosition_(ss) + nr_of_residues;
+			if (max > spline_vector_.size() - 1) max = spline_vector_.size() - 1;
+
+			drawRibbon_(spline_vector_position_ * interpolation_steps_, 
+																			max * interpolation_steps_);
+		}
+		else
+		{
 		 drawHelix_(ss);
+		}
 	}
 	else if ((ss.getType() == SecondaryStructure::STRAND) && (ss.countResidues() > 3))
 	{
@@ -577,10 +595,23 @@ void AddCartoonModel::drawTube_(SecondaryStructure& ss)
 		return;
 	}
 
+	Position nr_of_residues = ss.countResidues();
+	Position max = getStartPosition_(ss) + nr_of_residues;
+	if (max > spline_vector_.size() - 1) max = spline_vector_.size() - 1;
+
+	buildGraphicalRepresentation_(spline_vector_position_ * interpolation_steps_, 
+																										max * interpolation_steps_);
+}
+
+
+Size AddCartoonModel::getStartPosition_(const SecondaryStructure& ss)
+	throw()
+{
 	// find first C atom
 	Vector3 c1_position; 
 	AtomIterator it;
-	BALL_FOREACH_ATOM(ss, it)
+	SecondaryStructure& ss2 = *(SecondaryStructure*) &ss;
+	BALL_FOREACH_ATOM(ss2, it)
 	{
 		if (it->getName() == "C")
 		{
@@ -607,14 +638,8 @@ void AddCartoonModel::drawTube_(SecondaryStructure& ss)
 		}
 	}
 
-	Position nr_of_residues = ss.countResidues();
-	Position max = index + nr_of_residues;
-	if (max > spline_vector_.size() - 1) max = spline_vector_.size() - 1;
-
-	buildGraphicalRepresentation_(spline_vector_position_ * interpolation_steps_, 
-																										max * interpolation_steps_);
+	return index;
 }
-
 
 void AddCartoonModel::dump(std::ostream& s, Size depth) const
 	throw()
@@ -723,6 +748,265 @@ void AddCartoonModel::drawStrand_(const Vector3& start,
 }
 
 
+// draw a helix as ribbon model
+void AddCartoonModel::drawRibbon_(Size start, Size end)
+	throw()
+{
+	if (spline_points_.size() == 0) return;
+	if (spline_points_.size() != atoms_of_spline_points_.size() ||
+												end >= atoms_of_spline_points_.size() ||
+											start >= atoms_of_spline_points_.size() )
+	{
+		Log.error() << "Error in " << __FILE__ << __LINE__ << std::endl;
+		return;
+	}
+
+	if (end == 0) end = spline_points_.size();
+
+	if (!have_start_point_)
+	{
+		last_point_ = spline_points_[start];
+		start++;
+	}
+
+	Vector3 helix_dir = spline_points_[end] - spline_points_[start];
+	helix_dir.normalize();
+	helix_dir *= (ribbon_width_ * 0.5);
+
+	// create sphere for the point
+	Sphere* sphere = new Sphere;
+	sphere->setRadius(tube_radius_);
+	sphere->setPosition(last_point_);
+	sphere->setComposite(atoms_of_spline_points_[start]);
+	geometric_objects_.push_back(sphere);
+
+	// calculate the number of slides for the circle and the angle in between them
+	Size slides = (Size)(8.0 + drawing_precision_ * 8.0);
+	Angle slides_angle = Angle(360.0 / slides, false);
+
+	// direction vector of the two current spline points
+	Vector3 dir;
+
+	// prevent problems if last point is the same as the start point
+	while (true)
+	{
+		dir = spline_points_[start] - last_point_;
+		if (Maths::isZero(dir.getSquareLength()))
+		{
+			start++;
+		}
+		else
+		{
+			break;
+		}
+	}
+
+	if (start >= atoms_of_spline_points_.size()) return;
+			
+	////////////////////////////////////////////////////////////
+	// calculate normal vector r to direction vector dir, with length of radius
+	////////////////////////////////////////////////////////////
+	Vector3 n = Vector3(0,1,0);
+	Vector3 r = dir % n;
+	if (Maths::isZero(r.getSquareLength())) 
+	{ 
+		r = dir % n;
+		if (Maths::isZero(r.getSquareLength())) 
+		{
+			n = Vector3(0,0,1);
+			r = dir % n;
+		}
+	}
+	r.normalize();
+	r *= ribbon_radius_;
+
+	////////////////////////////////////////////////////////////
+	// initialise a first set of points in a circle around the start position
+	////////////////////////////////////////////////////////////
+	const Position middle = (Position)(slides / 2.0);
+	vector<Vector3> new_points;
+	new_points.resize(slides);
+	Vector3 x = r;
+	new_points[0] = x;
+	new_points[middle] = -x;
+
+	Matrix4x4 m;
+	m.setRotation(slides_angle, n % r);
+	// second half of points can be calculated by negating first half
+	for (Position i= 1; i < middle; i++)
+	{
+		x = m * x;
+		new_points[i] = x;
+		new_points[i + middle] = -x;
+	}
+
+	////////////////////////////////////////////////////////////
+	// create a new mesh with the points and triangles
+	////////////////////////////////////////////////////////////
+	// every residue get its own mesh to enable picking for the tube model
+	Mesh* mesh = new Mesh();
+	if (atoms_of_spline_points_[start] != 0)
+	{
+		mesh->setComposite(atoms_of_spline_points_[start]->getParent());
+	}
+	geometric_objects_.push_back(mesh);
+	
+	// insert connection between tubes
+	mesh->vertex.push_back(last_point_ + helix_dir);
+	mesh->normal.push_back(r);
+	mesh->vertex.push_back(last_point_ - helix_dir);
+	mesh->normal.push_back(r);
+
+	for (Position p = 0; p < slides; p++)
+	{
+		mesh->vertex.push_back(last_point_ + helix_dir + new_points[p]);
+		mesh->normal.push_back(new_points[p]);
+		mesh->vertex.push_back(last_point_ - helix_dir + new_points[p]);
+		mesh->normal.push_back(new_points[p]);
+	}
+	
+	////////////////////////////////////////////////////////////
+	// same data structures for faster access
+	////////////////////////////////////////////////////////////
+	Mesh::Triangle t;
+	Size s_old = 0;  // start position of the last points in the meshs vertices
+	Size s_new = 0;  // start position of the  new points in the meshs vertices
+
+	//------------------------------------------------------>
+	// iterate over all spline_points_
+	//------------------------------------------------------>
+	for (Position p = start; p < end - 1; p++)
+	{
+		// faster access to the current spline point
+		const Vector3 point = spline_points_[p];
+		
+		// new direction vector: new point - last point
+		const Vector3 dir_new = point - last_point_;
+
+		// new normal vector
+		Vector3 r_new = r - (
+							 (dir_new.x * r.x       + dir_new.y *       r.y + dir_new.z *       r.z)  /
+							 (dir_new.x * dir_new.x + dir_new.y * dir_new.y + dir_new.z * dir_new.z) 
+							 * dir_new);
+		r_new.normalize();
+		r_new *= ribbon_radius_;
+
+		////////////////////////////////////////////////////////////
+		// rotate all points of the circle according to new normal
+		////////////////////////////////////////////////////////////
+		m.setRotation(slides_angle, dir_new);
+		x = r_new;
+		new_points[0] = x;
+
+		// second half of points can be calculated by negating first half
+		new_points[middle] = -x;
+		for (Position i = 1; i < middle; i++)
+		{
+			x = m * x;
+			new_points[i] = x;
+			new_points[i + middle] = -x;
+		}
+
+		////////////////////////////////////////////////////////////
+		// create a new mesh if we have a different atom now
+		////////////////////////////////////////////////////////////
+		if (atoms_of_spline_points_[p] != 0 &&
+				mesh->getComposite() != atoms_of_spline_points_[p]->getParent())
+		{
+			const Mesh* old_mesh = mesh;
+			mesh = new Mesh();
+			if (atoms_of_spline_points_[p] != 0)
+			{
+				mesh->setComposite(atoms_of_spline_points_[p]->getParent());
+			}
+			geometric_objects_.push_back(mesh);
+
+			// insert the vertices and normals of the last points again into the new mesh
+			for (Position point_pos = old_mesh->vertex.size() - slides - 2;
+										point_pos < old_mesh->vertex.size(); point_pos++)
+			{
+				mesh->vertex.push_back(old_mesh->vertex[point_pos]);
+				mesh->normal.push_back(old_mesh->normal[point_pos]);
+			}
+
+			s_old = 0;
+		}
+		
+		// insert connection between tubes
+		mesh->vertex.push_back(point + helix_dir);
+		mesh->normal.push_back(r_new);
+		mesh->vertex.push_back(point - helix_dir);
+		mesh->normal.push_back(r_new);
+
+		const Size s = mesh->vertex.size() - 1;
+		t.v1 = s - slides - 2;
+		t.v2 = s - slides - 1;
+		t.v3 = s;
+		mesh->triangle.push_back(t);
+
+		t.v1 = s - slides - 1;
+		t.v2 = s;
+		t.v3 = s - 1;
+		mesh->triangle.push_back(t);
+
+
+		////////////////////////////////////////////////////////////
+		// insert only the new points, the old ones are already stored in the mesh
+		////////////////////////////////////////////////////////////
+		// we will add an other point next, so here we do an off by one :)
+		s_new = mesh->vertex.size();
+
+		//------------------------------------------------------>
+		// iterate over all points of the circle
+		//------------------------------------------------------>
+		for (Position point_pos = 0; point_pos < slides ; point_pos++)
+		{
+			mesh->vertex.push_back(point + helix_dir + new_points[point_pos]);
+			mesh->normal.push_back(new_points[point_pos]);
+
+			t.v1 = s_old;			// last lower
+			t.v2 = s_old + 2;	// last upper
+			t.v3 = s_new;			// new upper
+			mesh->triangle.push_back(t);
+
+			t.v1 = s_new;			// new upper
+			t.v2 = s_new - 2;	// new lower
+			t.v3 = s_old; 		// last lower
+			mesh->triangle.push_back(t);
+
+			s_old++;
+			s_new++;
+
+			mesh->vertex.push_back(point - helix_dir + new_points[point_pos]);
+			mesh->normal.push_back(new_points[point_pos]);
+
+			t.v1 = s_old;			// last lower
+			t.v2 = s_old + 2;	// last upper
+			t.v3 = s_new;			// new upper
+			mesh->triangle.push_back(t);
+
+			t.v1 = s_new;			// new upper
+			t.v2 = s_new - 2;	// new lower
+			t.v3 = s_old; 		// last lower
+			mesh->triangle.push_back(t);
+
+			s_old++;
+			s_new++;
+		}
+
+		r = r_new;
+		last_point_ = point;
+	}
+
+	have_start_point_ = true;
+	
+	// create a sphere as an end cap for the point
+	sphere = new Sphere;
+	sphere->setRadius(tube_radius_);
+	sphere->setPosition(last_point_);
+	sphere->setComposite(atoms_of_spline_points_[end - 1]);
+	geometric_objects_.push_back(sphere);
+}
 // -----------------------------------------------------------------------
 // --------------------- DNA -------------------------------------------->
 void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)

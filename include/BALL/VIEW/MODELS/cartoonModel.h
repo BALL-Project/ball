@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.26.2.4 2004/12/30 17:14:27 amoll Exp $
+// $Id: cartoonModel.h,v 1.26.2.5 2005/01/04 22:41:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -165,6 +165,9 @@ namespace BALL
 			void drawWatsonCrickModel_(const SecondaryStructure& ss)
 				throw();
 
+			void drawRibbon_(Size start, Size end)
+				throw();
+
 			void computeSpline_(AtomContainer& ac);
 
 			void insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh);
@@ -184,6 +187,9 @@ namespace BALL
 			bool assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[10], Atom* atoms[10])
 				throw();
 
+			Size getStartPosition_(const SecondaryStructure& ss)
+				throw();
+
 			Composite* last_chain_;
 
 			// used to speed up drawTube_
@@ -195,8 +201,11 @@ namespace BALL
 			float DNA_helix_radius_;
 			float DNA_ladder_radius_;
 			float DNA_base_radius_;
+			float ribbon_width_;
+			float ribbon_radius_;
 
 			bool  draw_DNA_as_ladder_;
+			bool  draw_ribbon_;
 
 			HashMap<Residue*, Residue*> complementary_bases_;
 	};
