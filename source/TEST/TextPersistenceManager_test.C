@@ -1,4 +1,4 @@
-// $Id: TextPersistenceManager_test.C,v 1.1 2001/05/29 16:36:31 anker Exp $
+// $Id: TextPersistenceManager_test.C,v 1.2 2001/06/05 02:38:07 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.1 2001/05/29 16:36:31 anker Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.2 2001/06/05 02:38:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -335,10 +335,12 @@ RESULT
 CHECK(TextPersistenceManager::get(Real& x))
 	Real x;
 	pm.get(x);
-  TEST_REAL_EQUAL(x, (Real)0.0)
+  TEST_EQUAL(x, (Real)0.0)
 	pm.get(x);
+	PRECISION(1e-5)
   TEST_REAL_EQUAL(x, (Real)1.234567)
 	pm.get(x);
+	PRECISION(1e30)
   TEST_REAL_EQUAL(x, (Real)-9.87654e37)
 RESULT
 
@@ -346,10 +348,12 @@ RESULT
 CHECK(TextPersistenceManager::get(DoubleReal& s))
 	DoubleReal x;
 	pm.get(x);
-  TEST_REAL_EQUAL(x, (DoubleReal)0.0)
+  TEST_EQUAL(x, (DoubleReal)0.0)
 	pm.get(x);
+	PRECISION(1e-5)
   TEST_REAL_EQUAL(x, (DoubleReal)1.234567)
 	pm.get(x);
+	PRECISION(1e290)
   TEST_REAL_EQUAL(x, (DoubleReal)-9.87654e300)
 RESULT
 
