@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.10 2000/01/14 20:42:41 oliver Exp $
+// $Id: socket.h,v 1.11 2000/01/15 18:55:36 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -722,9 +722,11 @@ namespace BALL
 
 		/// Constructor
 		IOSockStream(SocketBuf* sb)
-			: std::iostream(sb)
+			: BALL_IOS(0),
+				BALL_IOSTREAM(0)
 		{
 			BALL_IOS::rdbuf(sb);
+			init(sb);
 			if (rdbuf() == 0)
 			{
 				throw Exception::NullPointer(__FILE__, __LINE__);
