@@ -360,7 +360,7 @@ as a thread in space, the &lt;it&gt;backbone&lt;/it&gt; of the protein.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-Parts of a protein's backbone often assume one of two typical
+Parts of a proteins backbone often assume one of two typical
 patterns, the so-called secondary structure elements: a helical
 shape, or a zig-zag motive. These structural elements can be
 computed and visualized in a &lt;it&gt;Cartoon&lt;/it&gt; like fashion.
@@ -397,7 +397,7 @@ computed and visualized in a &lt;it&gt;Cartoon&lt;/it&gt; like fashion.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-In order to understand a protein's structure, or the structure of a biomolecular
+In order to understand a proteins structure, or the structure of a biomolecular
 complex, it is often illustrative to look at the hydrogen bonds occurring in
 the system. These can be computed as well, and visualized as "dashed"
 bonds.
