@@ -1,4 +1,4 @@
-// $Id: main.C,v 1.9 2002/01/16 02:41:48 oliver Exp $
+// $Id: main.C,v 1.9.4.1 2002/12/03 17:52:35 anker Exp $
 
 #include <iomanip>
 
@@ -136,11 +136,11 @@ int main(int argc, char** argv)
 				readRadiusFile(argv[++i]);
 				break;
 
-			case 'u':		// read a rule file
+			case 't':		// read a rule file
 				readRuleFile(argv[++i], CHARGES_AND_RADII);
 				break;
 
-			case 't':		// read a rule file
+			case 'u':		// read a rule file
 				readRuleFile(argv[++i], CHARGES);
 				break;
 
