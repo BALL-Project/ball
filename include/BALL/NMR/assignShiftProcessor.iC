@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignShiftProcessor.iC,v 1.11 2002/02/27 12:19:30 sturm Exp $
+// $Id: assignShiftProcessor.iC,v 1.12 2003/05/26 16:08:56 amoll Exp $
 BALL_INLINE
-AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)
+AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData>& atom_data)
 	:	atom_data_(atom_data),
 		molecule_(0)
 {
@@ -22,8 +22,3 @@ AssignShiftProcessor::~AssignShiftProcessor()
 {
 }
 
-BALL_INLINE
-bool AssignShiftProcessor::finish()
-{ 
-	return true;
-}
