@@ -1,4 +1,4 @@
-// $Id: version.h,v 1.7 2000/11/13 19:30:54 amoll Exp $
+// $Id: version.h,v 1.8 2001/06/21 01:54:22 oliver Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -10,7 +10,7 @@
 //
 //  master data for all revisions is stored in this define!
 //
-#define BALL_RELEASE_STRING             "0.96a"
+#define BALL_RELEASE_STRING             "1.0n"
 
 namespace BALL
 {
