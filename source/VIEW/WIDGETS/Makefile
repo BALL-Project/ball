@@ -14,7 +14,7 @@ CPP_SOURCES=\
 	genericControlData.C\
 	logView.C\
 	geometricControl.C\
-	trajectoryControl.C\
+	datasetControl.C\
 	molecularControl.C\
 	molecularProperties.C\
 	regularData1DWidget.C\
@@ -33,7 +33,7 @@ MOC_SOURCES=\
 	genericControl_moc.C\
 	genericControlData_moc.C\
 	logView_moc.C\
-	trajectoryControl_moc.C\
+	datasetControl_moc.C\
 	geometricControl_moc.C\
 	molecularControl_moc.C\
 	molecularProperties_moc.C\
@@ -79,6 +79,6 @@ regularData1DWidget_moc.C:	$(HEADER_DIR)/regularData1DWidget.h
 regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
 	$(MOC) $(HEADER_DIR)/regularData2DWidget.h -o $@
 
-trajectoryControl_moc.C:	$(HEADER_DIR)/trajectoryControl.h
-	$(MOC) $(HEADER_DIR)/trajectoryControl.h -o $@
+datasetControl_moc.C:	$(HEADER_DIR)/datasetControl.h
+	$(MOC) $(HEADER_DIR)/datasetControl.h -o $@
 
