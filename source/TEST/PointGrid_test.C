@@ -1,9 +1,9 @@
-// $Id: PointGrid_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: PointGrid_test.C,v 1.2 1999/12/29 08:52:52 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/DATATYPE/pointGrid.h>
 
-START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.2 1999/12/29 08:52:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ lower.set(5.0, 5.0, 5.0);
 TEST_EQUAL((*grid)[3 + 11 * 3 + 11 * 11 * 3], (*grid)[lower]);
 RESULT
 
-BALL::GridIndex	index;
+BALL::PointGrid<float>::GridIndex	index;
 CHECK(getIndex/1)
 lower.set(3.49, 3.51, 3.0);
 index = grid->getIndex(lower);
