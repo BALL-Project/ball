@@ -16,6 +16,7 @@ EXECUTABLES_MATHS = \
 	AnalyticalGeometry_test\
 	Angle_test\
 	Vector2_test\
+	Vector3_test\
 	Vector4_test\
 	Quaternion_test\
 	Matrix44_test\
