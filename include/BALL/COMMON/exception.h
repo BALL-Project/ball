@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.21 2000/12/20 08:11:49 anker Exp $
+// $Id: exception.h,v 1.22 2001/01/21 21:09:39 amoll Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -77,8 +77,7 @@ namespace BALL
 				throw();
 
 			/// Destructor
-			virtual ~GeneralException()
-				throw();
+			virtual ~GeneralException();
 			//@}
 
 			/**	@name	Accessors
