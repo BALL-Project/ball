@@ -16,12 +16,13 @@
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
 			CharacterSet="2"
-			ManagedExtensions="TRUE">
+			ManagedExtensions="TRUE"
+			WholeProgramOptimization="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_PATH=\&quot;$(ProjectDir)../BALL\&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
@@ -39,7 +40,8 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
 				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(ProjectDir)..\..\..\lib\&quot;"
-				GenerateDebugInformation="TRUE"/>
+				GenerateDebugInformation="TRUE"
+				TerminalServerAware="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool

@@ -20,7 +20,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;LIBVIEW_EXPORTS;_USRDLL;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_PATH=\&quot;$(ProjectDir)../BALL\&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;LIBVIEW_EXPORTS;_USRDLL;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -732,8 +732,10 @@
 					Name="Debug|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						CommandLine="$(QTDIR)\bin\uic &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"/>
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h"/>
 				</FileConfiguration>
 			</File>
 		</Filter>

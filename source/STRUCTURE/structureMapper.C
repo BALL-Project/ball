@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.20 2002/12/12 14:51:35 oliver Exp $
+// $Id: structureMapper.C,v 1.21 2002/12/16 09:08:29 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -223,10 +223,12 @@ namespace BALL
 
 		Composite::CompositeConstIterator it;
 
-		for(it = composite.beginComposite(); +it; ++it)
+		for (it = composite.beginComposite(); +it; ++it)
 		{
-			if (RTTI::isKindOf<Fragment>(*it));
-			number_of_mol_fragments++;
+			if (RTTI::isKindOf<Fragment>(*it))
+			{
+				number_of_mol_fragments++;
+			}
 		}
 
 		return number_of_mol_fragments;

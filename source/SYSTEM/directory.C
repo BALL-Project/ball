@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.18 2002/12/12 14:51:35 oliver Exp $
+// $Id: directory.C,v 1.19 2002/12/16 09:08:29 oliver Exp $
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -613,9 +613,9 @@ namespace BALL
 		if (backup_path_ != "")
 		{
 #ifdef BALL_COMPILER_MSVC
-			result2 = ::_chdir(backup_path_.data());
+			result2 = (::_chdir(backup_path_.data()) != 0);
 #else
-			result2 = ::chdir(backup_path_.data());
+			result2 = (::chdir(backup_path_.data()) != 0);
 #endif
 			backup_path_ = "";
 		}

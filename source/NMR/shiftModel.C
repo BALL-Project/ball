@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModel.C,v 1.15 2002/02/27 12:23:55 sturm Exp $
+// $Id: shiftModel.C,v 1.16 2002/12/16 09:08:28 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
+#include <BALL/CONCEPT/factory.h>
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/NMR/haighMallionShiftProcessor.h>
@@ -247,13 +248,12 @@ namespace BALL
 	void ShiftModel::registerStandardModules_()
 		throw()
 	{
-		using RTTI::getNew;
-		registerModule("JohnsonBovey", getNew<JohnsonBoveyShiftProcessor>);
-		registerModule("HaighMallion", getNew<HaighMallionShiftProcessor>);
-		registerModule("ElectricField", getNew<EFShiftProcessor>);
-		registerModule("Anisotropy", getNew<AnisotropyShiftProcessor>);
-		registerModule("RandomCoil", getNew<RandomCoilShiftProcessor>);
-		registerModule("HBond", getNew<HBondShiftProcessor>);
+		registerModule("JohnsonBovey", Factory<JohnsonBoveyShiftProcessor>::createVoid);
+		registerModule("HaighMallion", Factory<HaighMallionShiftProcessor>::createVoid);
+		registerModule("ElectricField", Factory<EFShiftProcessor>::createVoid);
+		registerModule("Anisotropy", Factory<AnisotropyShiftProcessor>::createVoid);
+		registerModule("RandomCoil", Factory<RandomCoilShiftProcessor>::createVoid);
+		registerModule("HBond", Factory<HBondShiftProcessor>::createVoid);
 	}
 
 	Processor::Result ShiftModel::operator () (Composite& composite)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12RDFIntegrator.C,v 1.17 2002/12/12 11:04:08 oliver Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.18 2002/12/16 09:08:28 oliver Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
@@ -330,7 +330,7 @@ namespace BALL
 				{
 					interval.second = poly.getInterval(from_index).second;
 					x0 = poly.getInterval(from_index).first;
-					val = analyticallyIntegrateInterval(interval, coeffs, from_index);
+					val = analyticallyIntegrateInterval(interval, coeffs, x0);
 				}
 
 				// if we are below the last interval, sum up the results from each

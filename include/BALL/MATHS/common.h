@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.16 2002/12/12 09:48:46 oliver Exp $
+// $Id: common.h,v 1.17 2002/12/16 09:08:27 oliver Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -189,9 +189,9 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_COMPILER_MSVC
-				return _isnan(t);
+				return (_isnan(t) != 0);
 			#else
-				return isnan(t);
+				return (isnan(t) != 0);
 			#endif
 		}
 

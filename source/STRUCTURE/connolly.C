@@ -1,8 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connolly.C,v 1.11 2002/12/12 11:07:19 oliver Exp $
+// $Id: connolly.C,v 1.12 2002/12/16 09:08:28 oliver Exp $
 
+#ifdef _WIN32
+#	define _USE_MATH_DEFINES
+#endif
 
 #include <math.h>
 
@@ -1497,12 +1500,12 @@ namespace	BALL
 
 /*     edges point to vertices */
 
-					face08_1.env[(face08_1.nen + 1 << 1) - 2] = face07_1.nv + 1;
-					face08_1.env[(face08_1.nen + 1 << 1) - 1] = face07_1.nv + 2;
-					face08_1.env[(face08_1.nen + 2 << 1) - 2] = face07_1.nv + 2;
-					face08_1.env[(face08_1.nen + 2 << 1) - 1] = face07_1.nv + 3;
-					face08_1.env[(face08_1.nen + 3 << 1) - 2] = face07_1.nv + 3;
-					face08_1.env[(face08_1.nen + 3 << 1) - 1] = face07_1.nv + 1;
+					face08_1.env[((face08_1.nen + 1) << 1) - 2] = face07_1.nv + 1;
+					face08_1.env[((face08_1.nen + 1) << 1) - 1] = face07_1.nv + 2;
+					face08_1.env[((face08_1.nen + 2) << 1) - 2] = face07_1.nv + 2;
+					face08_1.env[((face08_1.nen + 2) << 1) - 1] = face07_1.nv + 3;
+					face08_1.env[((face08_1.nen + 3) << 1) - 2] = face07_1.nv + 3;
+					face08_1.env[((face08_1.nen + 3) << 1) - 1] = face07_1.nv + 1;
 					if (face08_1.nfn + 1 > 10000)
 					{
 						cerr << "Too many Concave Faces" << endl;
@@ -2110,7 +2113,7 @@ namespace	BALL
 
 				/*     first vertex of second concave edge */
 
-				face10_1.epv[(face10_1.nep - 1 << 1) - 1] = face08_1.env[(ien << 1) - 2];
+				face10_1.epv[((face10_1.nep - 1) << 1) - 1] = face08_1.env[(ien << 1) - 2];
 
 				/*     first vertex of second convex edge is */
 
@@ -3875,7 +3878,7 @@ namespace	BALL
 				{
 					if (ke > 1)
 					{
-						angle = vecang_ (&tanv[((ke - 1 << 1) + 2) * 3 - 9], &tanv[
+						angle = vecang_ (&tanv[(((ke - 1) << 1) + 2) * 3 - 9], &tanv[
 																																			 ((ke << 1) + 1) * 3 - 9], &radial[ke * 3 - 3],
 														 &c_b158);
 						if (angle < 0.0)

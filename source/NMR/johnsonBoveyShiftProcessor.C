@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.C,v 1.13 2002/02/27 12:23:54 sturm Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.14 2002/12/16 09:08:28 oliver Exp $
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -378,7 +378,7 @@ namespace BALL
 					{
 						center += vector_field[counter];
 					}
-					center /= vcounter;
+					center /= (double)vcounter;
 				
 					// determine the vector perpendicular to the 
 					// ring plane

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.31 2002/12/12 11:04:08 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.32 2002/12/16 09:08:28 oliver Exp $ 
 
 // FDPB: Finite Difference Poisson Solver
 
@@ -313,7 +313,7 @@ namespace BALL
 		verbosity = (int)options.getInteger(Option::VERBOSITY);
 
 		// ...and whether we should tell him how Index it took us...
-		print_timing = options.getInteger(Option::PRINT_TIMING);
+		print_timing = (options.getInteger(Option::PRINT_TIMING) != 0);
 
 		Timer	step_timer;
 		step_timer.start();

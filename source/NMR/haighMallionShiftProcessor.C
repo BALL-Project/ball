@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.13 2002/02/27 12:23:53 sturm Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.14 2002/12/16 09:08:28 oliver Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -206,7 +206,7 @@ namespace BALL
 						{
 							center += ring_positions[pos];
 						}
-						center /= number_of_ring_atoms;
+						center /= (double)number_of_ring_atoms;
 					
 						// if the center of the ring is within the cut off,
 						// perform the shift calculation

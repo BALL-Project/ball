@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.C,v 1.9 2002/12/12 11:10:06 oliver Exp $
+// $Id: timer.C,v 1.10 2002/12/16 09:08:29 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -92,9 +92,6 @@ namespace BALL
 		}
 		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 			LARGE_INTEGER tms;
-			clock_t timeval;
-		
-			//timeval=clock();
 			FILETIME kt,ut,ct,et;
 			
 			QueryPerformanceCounter(&tms);
@@ -141,11 +138,8 @@ namespace BALL
 			return false;
 		}
 		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-			struct _timeb timeval_buffer;
 			LARGE_INTEGER tms;
-			clock_t timeval;
-
-			//timeval=clock();
+	
 			QueryPerformanceCounter(&tms);
 			FILETIME kt,ut,ct,et;
 			
@@ -163,10 +157,9 @@ namespace BALL
 			current_secs_ += secs_to_add -last_secs_;
 			long usecs_to_add = (long)((double)(tms.QuadPart - secs_to_add*cpu_speed_) /(double)(cpu_speed_) * 1000000.0);
 			current_usecs_ += usecs_to_add -last_usecs_;
-			//current_user_time_  += timeval / clock_speed_ - last_user_time_;
-			//last_system_time_ = 0;
-			current_user_time_ += user_time.QuadPart/10 - last_user_time_;
-			current_system_time_ += kernel_time.QuadPart/10 - last_system_time_;
+			
+			current_user_time_ += user_time.QuadPart / 10 - last_user_time_;
+			current_system_time_ += kernel_time.QuadPart / 10 - last_system_time_;
 		#else
 			struct tms tms_buffer;
 			struct timeval timeval_buffer;

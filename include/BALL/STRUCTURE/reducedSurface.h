@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.35 2002/12/12 09:48:55 oliver Exp $
+// $Id: reducedSurface.h,v 1.36 2002/12/16 09:08:27 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -2307,7 +2307,7 @@ namespace BALL
 							#ifdef print_rs_debug_info
 							std::cout << "verkleinere Atom " << atom << "\n";
 							#endif
-		atom_[atom].radius -= 10*Constants::EPSILON;
+		atom_[atom].radius -= 10.0 * Constants::EPSILON;
 		atom_status_[atom] = STATUS_UNKNOWN;
 				#ifdef print_rs_debug_info
 				std::cout << "status of atom" << atom << " set to STATUS_UNKNOWN\n";

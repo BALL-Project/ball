@@ -3,7 +3,7 @@
 # by Andreas Crauser 
 #---------------------------------------------------------------
 
-CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR -DBALL_PATH="\"$(BALL_PATH)\"" 
+CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR
 LD = cl -nologo -MTd 
 
 

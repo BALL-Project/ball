@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.29 2002/12/12 16:03:01 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.30 2002/12/16 09:08:27 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -831,7 +831,7 @@ namespace BALL
 								}
 								else
 								{
-									edge0->rsedge_->phi_.value = 2*Constants::PI;
+									edge0->rsedge_->phi_.value = 2.0 * Constants::PI;
 								}
 							}
 							else

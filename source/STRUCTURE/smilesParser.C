@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.C,v 1.8 2002/02/27 12:24:16 sturm Exp $
+// $Id: smilesParser.C,v 1.9 2002/12/16 09:08:29 oliver Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -23,7 +23,7 @@ namespace BALL
 			is_aromatic_(false),
 			in_brackets_(in_brackets)
 	{
-		setAromatic(islower(symbol[0]));
+		setAromatic(islower(symbol[0]) != 0);
 		String s(symbol);
 		s.toUpper(0, 1);
 		setElement(PTE[s]);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.35 2002/12/12 11:10:06 oliver Exp $
+// $Id: file.C,v 1.36 2002/12/16 09:08:29 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -368,7 +368,7 @@ namespace BALL
 		source.close();
 		destination.close();
 
-		return (destination);
+		return destination.good();
 	}
 
 	void File::close()

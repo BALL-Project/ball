@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.C,v 1.14 2002/12/12 11:10:06 oliver Exp $
+// $Id: fileSystem.C,v 1.15 2002/12/16 09:08:29 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -195,7 +195,7 @@ namespace BALL
 
 	String FileSystem::baseName(const String& filename)
 	{
-		Position idx = filename.find_last_of(PATH_SEPARATOR);
+		Position idx = (Position)filename.find_last_of(PATH_SEPARATOR);
 		if (idx != String::EndPos)
 		{
 			if ((idx + 1)< filename.size())
@@ -215,7 +215,7 @@ namespace BALL
 
 	String FileSystem::path(const String& filename)
 	{
-		Position idx = filename.find_last_of(PATH_SEPARATOR);
+		Position idx = (Position)filename.find_last_of(PATH_SEPARATOR);
 		if (idx != String::EndPos)
 		{
 			return filename(0, idx + 1);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSurface.h,v 1.28 2002/12/12 09:48:56 oliver Exp $
+// $Id: triangulatedSurface.h,v 1.29 2002/12/16 09:08:27 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -917,7 +917,7 @@ namespace BALL
 					l++;
 				}
 				l = edge_list.begin();
-				while (second == NULL)
+				while ((second == 0) && (l != edge_list.end()))
 				{
 					if ((*l)->vertex_[0]->point_ == p3->point_)
 					{
