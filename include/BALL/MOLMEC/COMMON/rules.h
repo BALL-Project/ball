@@ -1,4 +1,4 @@
-// $Id: rules.h,v 1.3 2000/05/19 13:21:41 oliver Exp $
+// $Id: rules.h,v 1.4 2000/05/19 15:59:31 oliver Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULES_H
@@ -59,7 +59,7 @@ namespace BALL
 
 		/**	Destructor
 		*/
-		~RuleEvaluator();
+		virtual ~RuleEvaluator();
 
 		/**
 		*/
