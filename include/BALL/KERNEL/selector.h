@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.14 2001/02/27 01:57:54 amoll Exp $
+// $Id: selector.h,v 1.15 2001/07/09 19:18:04 anker Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -38,7 +38,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE(Selector)
+		// BALL_CREATE(Selector)
 
 		/**	Default constructor.
 		*/
@@ -92,6 +92,17 @@ namespace BALL
 		*/
 		Size getNumberOfSelectedAtoms() const
 			throw();
+		
+		/** Define the expression.
+		*/
+		void setExpression(const Expression& expression)
+			throw();
+
+		/** Return the expression.
+		*/
+		const Expression& getExpression() const
+			throw();
+		
 				
 		//@}
 			
