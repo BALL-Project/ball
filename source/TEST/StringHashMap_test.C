@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StringHashMap_test.C,v 1.3 2002/02/27 12:24:58 sturm Exp $
+// $Id: StringHashMap_test.C,v 1.4 2003/06/23 14:11:13 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -33,27 +33,27 @@ class MyVisitor
 	}
 };
 
-START_TEST(StringHashMap, "$Id: StringHashMap_test.C,v 1.3 2002/02/27 12:24:58 sturm Exp $")
+START_TEST(StringHashMap, "$Id: StringHashMap_test.C,v 1.4 2003/06/23 14:11:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 StringHashMap<int>* map_ptr;
-CHECK(StringHashMap::StringHashMap())
+CHECK(StringHashMap() throw())
 	map_ptr = new StringHashMap<int>;
 	TEST_NOT_EQUAL(map_ptr, 0)
 RESULT
 
-CHECK(StringHashMap::~StringHashMap())
+CHECK(~StringHashMap() throw())
 	delete map_ptr;
 RESULT
 
-CHECK(StringHashMap::getSize())
+CHECK(Size getSize() const throw())
 	StringHashMap<int> hm;
 	TEST_EQUAL(hm.getSize(), 0)
 RESULT
 
-CHECK(StringHashMap::insert(const ValueType& entry))
+CHECK(std::pair<Iterator, bool> insert(const ValueType& obj) throw())
 	StringHashMap<int> hm;
 	TEST_EQUAL(hm.getSize(), 0)
 	pair<String, int> p("a", 0);
@@ -68,7 +68,7 @@ CHECK(StringHashMap::insert(const ValueType& entry))
 	TEST_EQUAL(hm.has("b"), true)
 RESULT
 
-CHECK(StringHashMap::insert(const String& key, const Value& value))
+CHECK(::std::pair<Iterator, bool> insert(const String& key, const Value& value) throw())
 	StringHashMap<int> hm;
 	TEST_EQUAL(hm.getSize(), 0)
 	hm.insert("a", 0);
@@ -82,7 +82,7 @@ CHECK(StringHashMap::insert(const String& key, const Value& value))
 RESULT
 
 // testing inherited method function
-CHECK(HashMap::find(const String& key))
+CHECK([EXTRA] find(const String& key))
 	StringHashMap<int> hm;
 	TEST_EQUAL((hm.find("a") == hm.end()), true)
 	hm.insert("a", 0);
@@ -94,7 +94,7 @@ CHECK(HashMap::find(const String& key))
 	TEST_EQUAL((hm.find("c") == hm.end()), true)
 RESULT
 
-CHECK(StringHashMap::erase(const KeyType& key))
+CHECK([EXTRA]StringHashMap::erase(const KeyType& key))
 	StringHashMap<int> hm;
 	hm.insert("a", 0);
 	hm.insert("b", 1);
@@ -113,7 +113,7 @@ RESULT
 
 StringHashMap<int> hm;
 
-CHECK(StringHashMap::StringHashMap(const StringHashMap&, bool))
+CHECK(StringHashMap(const StringHashMap& map, bool /* deep = true */) throw())
 	hm.insert("a", 0);
 	hm.insert("b", 1);
 	hm.insert("c", 2);
@@ -125,7 +125,7 @@ CHECK(StringHashMap::StringHashMap(const StringHashMap&, bool))
 	TEST_EQUAL(hm2.getSize(), 3)
 RESULT
 
-CHECK(StringHashMap::destroy())
+CHECK(void destroy() throw())
 	StringHashMap<int> hm;
 	hm.insert("a", 0);
 	hm.destroy();
@@ -134,7 +134,7 @@ CHECK(StringHashMap::destroy())
 	TEST_EQUAL(hm.getBucketSize(), 3)
 RESULT
 
-CHECK(StringHashMap::set(const StringHashMap&, bool))
+CHECK(void set(const StringHashMap& hash_map, bool /* deep */ = true) throw())
 	StringHashMap<int> hm2;
 	hm2.set(hm);
 	TEST_EQUAL(hm2["a"], 0)
@@ -143,7 +143,7 @@ CHECK(StringHashMap::set(const StringHashMap&, bool))
 	TEST_EQUAL(hm2.getSize(), 3)
 RESULT
 
-CHECK(StringHashMap::get(StringHashMap&, bool) const)
+CHECK(void get(StringHashMap& hash_map, bool deep = true) const throw())
 	StringHashMap<int> hm2;
 	hm.get(hm2);
 	TEST_EQUAL(hm2["a"], 0)
@@ -152,7 +152,7 @@ CHECK(StringHashMap::get(StringHashMap&, bool) const)
 	TEST_EQUAL(hm2.getSize(), 3)
 RESULT
 
-CHECK(StringHashMap::swap(StringHashMap&, bool))
+CHECK(void swap(StringHashMap& hash_map) throw())
 	StringHashMap<int> hm, hm2;
 	hm.insert("a", 0);
 	hm.insert("b", 1);
@@ -172,7 +172,7 @@ CHECK(StringHashMap::swap(StringHashMap&, bool))
 	TEST_EQUAL(hm["e"], 12)
 RESULT
 
-CHECK(StringHashMap::operator = (const StringHashMap&))
+CHECK(const StringHashMap& operator = (const StringHashMap& hash_map) throw())
 	StringHashMap<int> hm2 = hm;
 	TEST_EQUAL(hm2["a"], 0)
 	TEST_EQUAL(hm2["b"], 1)
@@ -180,7 +180,7 @@ CHECK(StringHashMap::operator = (const StringHashMap&))
 	TEST_EQUAL(hm2.getSize(), 3)
 RESULT
 
-CHECK(StringHashMap::host(Visitor<Value>& visitor))
+CHECK(void host(Visitor<StringHashMap<Value> >& visitor) throw())
 	StringHashMap<int> hm;
 	hm.insert("a", 200);
 	hm.insert("b", 22);
@@ -190,7 +190,7 @@ CHECK(StringHashMap::host(Visitor<Value>& visitor))
 	TEST_EQUAL(mv.value_sum, 222)
 RESULT
 
-CHECK(StringHashMap::has(const Key&))
+CHECK(bool has(const String& key) const throw())
 	StringHashMap<int> hm;
 	hm.insert("a", 0);
 	hm.insert("b", 1);
@@ -199,7 +199,7 @@ CHECK(StringHashMap::has(const Key&))
 	TEST_EQUAL(hm.has("c"), false)
 RESULT
 
-CHECK(StringHashMap::isEmpty())
+CHECK(bool isEmpty() const throw())
 	StringHashMap<int> hm;
 	TEST_EQUAL(hm.isEmpty(), true)
 	hm.insert("a", 0);
@@ -208,7 +208,7 @@ CHECK(StringHashMap::isEmpty())
 	TEST_EQUAL(hm.isEmpty(), true)
 RESULT
 
-CHECK(StringHashMap::operator == (const StringHashMap&) const)
+CHECK(bool operator == (const StringHashMap<Value>& hash_map) const throw())
 	StringHashMap<int> hm;
 	StringHashMap<int> hm2;
 	TEST_EQUAL(hm == hm2, true)
@@ -229,7 +229,7 @@ CHECK(StringHashMap::operator == (const StringHashMap&) const)
 	TEST_EQUAL(hm == hm2, false)
 RESULT
 
-CHECK(StringHashMap::operator != (const StringHashMap&) const)
+CHECK(bool operator != (const StringHashMap<Value>& hash_map) const throw())
 	StringHashMap<int> hm;
 	StringHashMap<int> hm2;
 
@@ -245,12 +245,12 @@ CHECK(StringHashMap::operator != (const StringHashMap&) const)
 	TEST_EQUAL(hm != hm2, true)
 RESULT
 
-CHECK(StringHashMap::isValid() const)
+CHECK([EXTRA]StringHashMap::isValid() const)
 	StringHashMap<int> hm;
 	TEST_EQUAL(hm.isValid(), true)
 RESULT
 
-CHECK(StringHashMap::getLoadFactor() const)
+CHECK(float getLoadFactor() const throw())
 	StringHashMap<int> hm;
 	TEST_EQUAL(hm.getLoadFactor(), 0)
 	hm.insert("a", 0);
@@ -260,7 +260,7 @@ CHECK(StringHashMap::getLoadFactor() const)
 RESULT
 
 // testing inherited method function
-CHECK(HashMap::apply(UnaryProcessor))
+CHECK([EXTRA] apply(UnaryProcessor))
 	StringHashMap<int> hm;
 	hm.insert("a", 0);
 	hm.insert("b", 1);
@@ -269,6 +269,33 @@ CHECK(HashMap::apply(UnaryProcessor))
 	TEST_EQUAL(myproc.getSize(), 2)
 	TEST_EQUAL(myproc.getPointer()->first, "b") myproc.forward();
 	TEST_EQUAL(myproc.getPointer()->first, "a") myproc.forward();
+RESULT
+
+CHECK(BALL_CREATE_DEEP(StringHashMap))
+ 	StringHashMap<int> hm;
+	hm.insert("a", 0);
+	StringHashMap<int> p = *(StringHashMap<int>*) hm.create(false, false);
+	StringHashMap<int> empty;
+	TEST_EQUAL(p == empty, true)
+	p = hm.create();
+	TEST_EQUAL(p == hm, true)
+RESULT
+
+CHECK(bool remove(const String& key) throw())
+	StringHashMap<int> hm;
+	hm.insert("a", 0);
+	hm.insert("b", 1);
+	hm.insert("c", 2);
+	TEST_EQUAL(hm.remove("a"), true)
+	TEST_EQUAL(hm.has("a"), false)
+	TEST_EQUAL(hm.has("b"), true)
+	TEST_EQUAL(hm.has("c"), true)
+	TEST_EQUAL(hm.getSize(), 2)
+	TEST_EQUAL(hm.remove("sss"), false)
+	TEST_EQUAL(hm.has("a"), false)
+	TEST_EQUAL(hm.has("b"), true)
+	TEST_EQUAL(hm.has("c"), true)
+	TEST_EQUAL(hm.getSize(), 2)
 RESULT
 
 /////////////////////////////////////////////////////////////
