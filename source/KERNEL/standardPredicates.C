@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.22 2001/05/24 13:57:23 anker Exp $
+// $Id: standardPredicates.C,v 1.23 2001/05/24 14:47:13 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -159,6 +159,15 @@ namespace BALL
 		return false;
 	}
 	
+	// nucleic acid predicate
+
+	bool NucleicAcidPredicate::operator () (const Atom& atom) const
+		throw()
+	{
+		// BAUSTELLE
+		// return RTTI::isKindOf<NucleicAcid>(atom);
+	}
+
 	// nucleotide predicate
 
 	bool NucleotidePredicate::operator () (const Atom& atom) const
@@ -167,12 +176,11 @@ namespace BALL
 		return RTTI::isKindOf<Nucleotide>(atom);
 	}
 
-	InRingPredicate::InRingPredicate()
-	{
-	}
+	// in ring predicate
 
-	bool InRingPredicate::dfs(const Atom& atom, const Atom& first_atom,
-		const Size limit, HashSet<const Bond*>& visited) const
+	bool InRingPredicate::dfs_(const Atom& atom, const Atom& first_atom,
+			const Size limit, HashSet<const Bond*>& visited) const
+		throw()
 	{
 		// the following recursive function performs an ad-hoc dfs and returns
 		// true, if a ring was found and false otherwise.
@@ -204,7 +212,7 @@ namespace BALL
 			{
 				descend = bond->getPartner(atom);
 				my_visited.insert(bond);
-				if (dfs(*descend, first_atom, limit-1, my_visited))
+				if (dfs_(*descend, first_atom, limit-1, my_visited))
 				{
 					return true;
 				}
@@ -246,7 +254,7 @@ namespace BALL
 		}
 
 		HashSet<const Bond*> visited;
-		if (dfs (atom,atom,n,visited))
+		if (dfs_(atom,atom,n,visited))
 		{
 			return true;
 		}
@@ -267,6 +275,7 @@ namespace BALL
 
 	bool DoubleBondsPredicate::testPredicate_(const Atom& atom, 
 			Bond::Order order) const
+		throw()
 	{
 		String s = argument_;
 		s.trim();
@@ -274,7 +283,8 @@ namespace BALL
 		if (s.size() > 2)
 		{
 			// There can only be an operator followed by a number < 9
-			Log.error() << "DoubleBondsPredicate::operator () (): argument_ too long " << endl;
+			Log.error() << "DoubleBondsPredicate::operator () (): "
+				<< "argument_ too long " << endl;
 			return false;
 		}
 		
@@ -436,8 +446,9 @@ namespace BALL
 	}
 
 
-	bool ConnectedToPredicate::parse
-		(const String& group, std::list<std::pair<String,String> >& subs) const
+	bool ConnectedToPredicate::parse_(const String& group,
+			std::list<std::pair<String,String> >& subs) const
+		throw()
 	{
 		// BAUSTELLE
 		// EIGENTLICH müssen hier Symbolfolgen erzeugt werden, keine Strings.
@@ -499,7 +510,7 @@ namespace BALL
 					}
 					if (depth < 0)
 					{
-						Log.error() << "ConnectedToPredicate::parse(): Got negative bracket count" << endl;
+						Log.error() << "ConnectedToPredicate::parse_(): Got negative bracket count" << endl;
 						return false;
 					}
 					break;
@@ -576,14 +587,16 @@ namespace BALL
 		}
 		if (depth > 0)
 		{
-			Log.error() << "ConnectedToPredicate::parse(): Got positive bracket count" << endl; 
+			Log.error() << "ConnectedToPredicate::parse_(): Got positive bracket count" << endl; 
 			return false;
 		}
 		return true;
 	}
 
-	bool ConnectedToPredicate::bondOrderMatch
-		(const String& bond_description, const Bond::Order order) const
+
+	bool ConnectedToPredicate::bondOrderMatch_(const String& bond_description,
+			const Bond::Order order) const
+		throw()
 	{
 		Bond::Order required_order;
 		bool result = false;
@@ -606,13 +619,14 @@ namespace BALL
 		return result;
 	}
 
-	bool ConnectedToPredicate::findAndTest
-		(const String& group, const Atom& atom, 
-		 const Bond* source) const
+
+	bool ConnectedToPredicate::findAndTest_(const String& group,
+			const Atom& atom, const Bond* source) const
+		throw()
 	{
 		if ((group[0] == atom.getElement().getSymbol()) || (group[0] == '*'))
 		{
-			return find(group, atom, source);
+			return find_(group, atom, source);
 		}
 		else
 		{
@@ -620,15 +634,15 @@ namespace BALL
 		}
 	}
 
-	bool ConnectedToPredicate::find
-		(const String& group, const Atom& atom,
-		 const Bond* source) const
+	bool ConnectedToPredicate::find_(const String& group, const Atom& atom,
+			const Bond* source) const
+		throw()
 	{
 		// BAUSTELLE
 
 		// ANNAHME: Nur Elemente mit EINEM Buchstaben. Der Rest muss nuch
 		// irgendwie gefummelt werden. Wahrscheinlich über Symbolfolgen, die
-		// aus parse() rausfallen.
+		// aus parse_() rausfallen.
 
 		// Now we have to find pattern matches...
 
@@ -637,9 +651,9 @@ namespace BALL
 
 		std::list< std::pair<String, String> > subgroups;
 
-		if (!parse(group, subgroups))
+		if (!parse_(group, subgroups))
 		{
-			Log.error() << "ConnectedToPredicate::find(): couldn't parse()." 
+			Log.error() << "ConnectedToPredicate::find_(): couldn't parse_()." 
 				<< endl;
 			return false;
 		}
@@ -678,12 +692,13 @@ namespace BALL
 				if (bond != source)
 				{
 					// Log.info() << ": not source";
-					if (bondOrderMatch(subgroups_it->first, bond->getOrder()))
+					if (bondOrderMatch_(subgroups_it->first, bond->getOrder()))
 					{
 						// Log.info() << ", order match";
 						if (subgroups_it->second.size() < 1) 
 						{
-							Log.error() << "ConnectedToPredicate::find: subgroup too short: " 
+							Log.error() << "ConnectedToPredicate::find_(): "
+								<< "subgroup too short: " 
 								<< subgroups_it->second.size() << " " 
 								<< subgroups_it->second << endl;
 							return false;
@@ -700,7 +715,7 @@ namespace BALL
 						}
 						else
 						{
-							if (findAndTest(subgroups_it->second, 
+							if (findAndTest_(subgroups_it->second, 
 										*(atom.getBond(i)->getPartner(atom)), bond))
 							{
 								// Log.info() << ", recursion.";
@@ -835,11 +850,12 @@ namespace BALL
 		return true;
 	} 
 
+
 	bool ConnectedToPredicate::operator () (const Atom& atom) const
 		throw()
 	{
-		//BAUSTELLE
-		if (find(argument_, atom, 0))
+		// BAUSTELLE
+		if (find_(argument_, atom, 0))
 		{
 			return true;
 		}
@@ -848,6 +864,7 @@ namespace BALL
 			return false;
 		}
 	}
+
 
 	bool SpHybridizedPredicate::operator () (const Atom& atom) const
 		throw()
