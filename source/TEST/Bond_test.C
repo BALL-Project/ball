@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.10 2000/05/27 13:30:38 amoll Exp $
+// $Id: Bond_test.C,v 1.11 2000/05/29 08:17:44 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.10 2000/05/27 13:30:38 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.11 2000/05/29 08:17:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -92,9 +92,11 @@ CHECK(createBond(Bond&, Atom&, Atom&))
 	Bond b8("bond", a1, a9);
 	Bond b9;
 	TEST_EQUAL(b9.createBond(b9, a3, a3), 0);
+	TEST_EQUAL(a1.countBonds(), 8);
 	TEST_EXCEPTION(Exception::GeneralException, b9.createBond(b9, a1, a10))
-	TEST_EQUAL(a1.countBonds(), 1); //ernstes Problem
+	TEST_EQUAL(a1.countBonds(), 8);
 	TEST_EXCEPTION(Exception::GeneralException, b9.createBond(b9, a10, a1))
+	TEST_EQUAL(a1.countBonds(), 8);
 RESULT
 
 CHECK(clear())
