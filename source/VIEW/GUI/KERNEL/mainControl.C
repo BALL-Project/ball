@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.15 2002/12/09 21:13:16 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.16 2002/12/10 00:14:38 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -808,6 +808,13 @@ namespace BALL
 			{
 				main_control_preferences_->writePreferences(inifile);
 			}
+			
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin();
+			for (; it != modular_widgets_.end(); it++)
+			{
+				(*it)->writePreferences(inifile);
+			}
+
 			inifile.write();
 		}
 
