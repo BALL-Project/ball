@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.18 2001/06/21 00:54:00 amoll Exp $
+// $Id: standardPredicates.h,v 1.19 2001/07/17 00:28:48 oliver Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -50,6 +50,24 @@ namespace BALL
 			*/
 			virtual bool operator () (const Atom& atom) const
 				throw();
+	};
+
+	/** False predicate.
+			This predicate may be used to implement
+			default rules. It is always {\bf false}.
+	 */
+	class FalsePredicate
+		:	public ExpressionPredicate
+	{
+		public:
+		BALL_CREATE(FalsePredicate)
+
+		/** Evaluate the predicate for the atom {\tt atom}
+				@param atom the atom to test
+				@return false - always
+		*/
+		virtual bool operator () (const Atom& atom) const
+			throw();
 	};
 
 	/** Selection predicate.
