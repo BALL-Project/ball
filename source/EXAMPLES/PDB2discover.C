@@ -1,4 +1,4 @@
-// $Id: PDB2discover.C,v 1.4 2000/01/17 13:12:17 oliver Exp $
+// $Id: PDB2discover.C,v 1.5 2000/01/31 16:06:06 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
@@ -19,8 +19,8 @@ int main(int argc, char** argv)
 		return 1;
 	}
 	
-	PDBFile	pdb_file(argv[1]);
-	if (pdb_file.bad())
+	PDBFile	in_file(argv[1]);
+	if (in_file.bad())
 	{
 		Log.error() << "cannot read PDB file " << argv[1] << endl;
 		return 2;
@@ -29,8 +29,8 @@ int main(int argc, char** argv)
 	// read the contents of the file into a System
 	Log << "reading file " << argv[1] << endl;
 	System S;
-	pdb_file >> S;
-	pdb_file.close();
+	in_file >> S;
+	in_file.close();
 
 	Log << "opening fragment database" << endl;
 	FragmentDB	db;
@@ -43,9 +43,9 @@ int main(int argc, char** argv)
 	S.apply(*db.normalizeNames);
 
 	Log << "writing file " << argv[2] << endl;
-	pdb_file2.open(argv[2], ios::out);
-	pdb_file2 << S;
-	pdb_file2.close();
+	PDBFile out_file(argv[2], ios::out);
+	out_file << S;
+	out_file.close();
 
 	return 0;
 }
