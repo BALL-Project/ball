@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeGLObjectCollector.C,v 1.6 2002/12/12 10:57:46 oliver Exp $
+// $Id: moleculeGLObjectCollector.C,v 1.7 2003/06/19 16:12:59 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
 #include <BALL/KERNEL/atom.h>
@@ -47,10 +47,10 @@ namespace BALL
 			BALL_FOREACH_INTRABOND(*molecule, atom_it, bond_it)
 			{
 				// ?????: Applicator durch Processor ersetzt fuerht zu unendl. Rek.
-				Composite::SubcompositeIterator	subcomp_it = bond_it->beginSubcomposite();
-				for (; subcomp_it != bond_it->endSubcomposite(); ++subcomp_it)
+				Composite::CompositeIterator comp_it = bond_it->beginComposite();
+				for (; +comp_it; ++comp_it)
 				{
-					this->operator()(*subcomp_it);
+					this->operator () (*comp_it);
 				}
 				//bond_it->Composite::apply(*((UnaryProcessor<Composite>*)this));
 			}
