@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.25 2003/03/26 13:56:22 anhi Exp $
+// $Id: HINFile.h,v 1.26 2003/07/09 12:56:26 amoll Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -31,6 +31,7 @@ namespace BALL
 		/** @name Constructors and Destructors
 		*/
 		//@{
+		
 		/** Default constructor
 		*/
 		HINFile()
@@ -50,17 +51,18 @@ namespace BALL
 		*/
 		virtual ~HINFile()
 			throw();
-		//@}
 
+		//@}
 		/**	@name Assignment.
 		*/
 		//@{
+		
 		/** Assignment operator.
 		*/
 		const HINFile& operator = (const HINFile& rhs)
-			throw();
-		//@}
+			throw(Exception::FileNotFound);
 
+		//@}
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{
@@ -70,6 +72,7 @@ namespace BALL
 		*/
 		virtual void write(const Molecule& molecule);
 			
+		///
 		virtual void write(const System& system);
 		
 		/**	Read a system from the HIN file
@@ -82,13 +85,7 @@ namespace BALL
 		virtual bool read(System& system)
 			throw(Exception::ParseError);
 
-		/**	Initialize internals.
-				Initialize temperature and box dimensions prior to
-				reading a system.
-		*/
-		virtual void initRead();
 		//@}
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -115,6 +112,9 @@ namespace BALL
 
 		protected:
 		
+		///	Initialize temperature and box dimensions prior to reading a system.
+		virtual void initRead_();
+
 		Box3		box_;
 		float		temperature_;
 	

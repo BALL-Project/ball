@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.C,v 1.6 2002/12/17 16:40:42 oliver Exp $
+// $Id: genericMolFile.C,v 1.7 2003/07/09 12:55:38 amoll Exp $
 
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/KERNEL/system.h>
@@ -32,10 +32,9 @@ namespace BALL
 	}
 
 	const GenericMolFile& GenericMolFile::operator = (const GenericMolFile& rhs)
-		throw()
+		throw(Exception::FileNotFound)
 	{
 		LineBasedFile::operator = (rhs);
-
 		return *this;
 	}
 
@@ -47,7 +46,7 @@ namespace BALL
 			return false;
 		}
 
-		initRead();
+		initRead_();
 
 		bool read_anything = false;
 		Molecule* molecule = 0;
@@ -77,7 +76,7 @@ namespace BALL
 			return;
 		}
 
-		initWrite();
+		initWrite_();
 		MoleculeConstIterator molecule = system.beginMolecule();
 		for (; +molecule; ++molecule)
 		{
@@ -116,11 +115,11 @@ namespace BALL
 		return *this;
 	}
 
-	void GenericMolFile::initRead()
+	void GenericMolFile::initRead_()
 	{
 	}
 
-	void GenericMolFile::initWrite()
+	void GenericMolFile::initWrite_()
 	{
 	}
 
