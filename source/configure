@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.36 2000/01/06 11:35:23 oliver Exp $
+#  $Id: configure,v 1.37 2000/01/06 20:51:44 oliver Exp $
 
 
 ##################################################
@@ -3817,8 +3817,8 @@ echo "configure:3711: checking for BALLView libraries" >&5
 	fi
 
 	if test ${USE_BALLVIEW} = true ; then
-		echo $ac_n "checking BALLVIEW platform""... $ac_c" 1>&6
-echo "configure:3721: checking BALLVIEW platform" >&5
+		echo $ac_n "checking for OpenGL/Mesa""... $ac_c" 1>&6
+echo "configure:3721: checking for OpenGL/Mesa" >&5
 		echo "$ac_t""$BALLVIEW_PLATFORM" 1>&6
 
 		if test ${BALLVIEW_PLATFORM} = Mesa ; then
@@ -3832,7 +3832,7 @@ echo "configure:3726: checking for Mesa includes" >&5
 	fi
 
 	if test "${_INCLUDES}" = "" ; then
-		for i in /usr/include /opt/include  ; do
+		for i in /usr/include /opt/include ${OPENGL_INCLUDES} ${X11_PATH} ; do
 			if test -f "$i/GL/gl.h" && test "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
@@ -3886,8 +3886,8 @@ echo "configure:3726: checking for Mesa includes" >&5
 			done
 		fi
 
-		if test "${_INCLUDES}" = "" && test "" != ""; then
-			for i in  /dev/null ; do
+		if test "${_INCLUDES}" = "" && test "${OPENGL_INCLUDES} ${X11_PATH}" != ""; then
+			for i in ${OPENGL_INCLUDES} ${X11_PATH} /dev/null ; do
 				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
 				for j in ${_TMP} ; do
 					if test "${_INCLUDES}" = "" ; then
@@ -3903,17 +3903,19 @@ echo "configure:3726: checking for Mesa includes" >&5
 			if test "${MESA_INCLUDES}" = "" ; then
 				echo "$ac_t""(not found!)" 1>&6
 				echo "$ac_t""" 1>&6
-				echo "$ac_t""no Mesa headers found! Please modify the top section" 1>&6
-				echo "$ac_t""of configure and specify the correct path to these headers" 1>&6
-				echo "$ac_t""or install the Mesa package. Mesa can be found in BALL/contrib/Mesa." 1>&6
-				{ echo "configure: error: aborted" 1>&2; exit 1; }
+				echo "$ac_t""No Mesa headers found! Please specify the path to the directory" 1>&6
+				echo "$ac_t""containing the Mesa headers using "--with-opengl-incl=DIR".
+				echo "$ac_t""Mesa can be obtained from www.mesa3d.org." 1>&6
+				echo "$ac_t""Disabling support for visualization component BALLVIEW" 1>&6
+				USE_BALLVIEW=false
 			else
 				echo "$ac_t""(${MESA_INCLUDES})" 1>&6
 			fi
 
-			echo $ac_n "checking for Mesa library""... $ac_c" 1>&6
-echo "configure:3815: checking for Mesa library" >&5
-			
+			if test "${USE_BALLVIEW}" = true ; then
+				echo $ac_n "checking for Mesa library""... $ac_c" 1>&6
+echo "configure:3817: checking for Mesa library" >&5
+				
 	_LIBS=
 
 		if test "${MESA_LIBS}" != "" ; then
@@ -3921,7 +3923,7 @@ echo "configure:3815: checking for Mesa library" >&5
 	fi
 
 	if test "${_LIBS}" = "" ; then
-		for i in /usr/lib /opt/lib  ; do
+		for i in /usr/lib /opt/lib ${OPENGL_LIBS} ${x_libraries} ; do
 			for j in $i/libMesaGL.* ; do
 				if test -f "$j" && test "${_LIBS}" = ""; then
 					_LIBS="$i"
@@ -3951,8 +3953,8 @@ echo "configure:3815: checking for Mesa library" >&5
 	fi
 
 	if test "${_LIBS}" = "" && test "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" && test "" != ""; then
-			for i in  /dev/null; do
+		if test "${_LIBS}" = "" && test "${OPENGL_LIBS} ${x_libraries}" != ""; then
+			for i in ${OPENGL_LIBS} ${x_libraries} /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "libMesaGL*" -print 2>/dev/null`
 					for j in ${_TMP} ; do
@@ -3986,15 +3988,16 @@ echo "configure:3815: checking for Mesa library" >&5
 
 	MESA_LIBS="${_LIBS}"
 
-			if test "${MESA_LIBS}" = "" ; then
-				echo "$ac_t""(not found!)" 1>&6
-				echo "$ac_t""" 1>&6
-				echo "$ac_t""no Mesa lib found! Please modify the top section" 1>&6
-				echo "$ac_t""of configure and specify the correct path to these libraries" 1>&6
-				echo "$ac_t""or compile Mesa to create these libraries." 1>&6
-				{ echo "configure: error: aborted" 1>&2; exit 1; }
-			else
-				echo "$ac_t""(${MESA_LIBS})" 1>&6
+				if test "${MESA_LIBS}" = "" ; then
+					echo "$ac_t""(not found!)" 1>&6
+					echo "$ac_t""" 1>&6
+					echo "$ac_t""no Mesa lib found! Please modify the top section" 1>&6
+					echo "$ac_t""of configure and specify the correct path to these libraries" 1>&6
+					echo "$ac_t""or compile Mesa to create these libraries." 1>&6
+					{ echo "configure: error: aborted" 1>&2; exit 1; }
+				else
+					echo "$ac_t""(${MESA_LIBS})" 1>&6
+				fi
 			fi
 			
 									if test "${MESA_INCLUDES}" != /usr/include && test "${MESA_INCLUDES}" != "" ; then
@@ -4004,7 +4007,7 @@ echo "configure:3815: checking for Mesa library" >&5
 
 		if test ${BALLVIEW_PLATFORM} = OpenGL ; then
 			echo $ac_n "checking for OpenGL includes""... $ac_c" 1>&6
-echo "configure:3907: checking for OpenGL includes" >&5
+echo "configure:3910: checking for OpenGL includes" >&5
 			
 	_INCLUDES=
 
@@ -4092,7 +4095,7 @@ echo "configure:3907: checking for OpenGL includes" >&5
 			fi
 
 			echo $ac_n "checking for OpenGL library""... $ac_c" 1>&6
-echo "configure:3995: checking for OpenGL library" >&5
+echo "configure:3998: checking for OpenGL library" >&5
 			
 	_LIBS=
 
@@ -4182,7 +4185,7 @@ echo "configure:3995: checking for OpenGL library" >&5
 		fi
 
 		echo $ac_n "checking for QT headers""... $ac_c" 1>&6
-echo "configure:4085: checking for QT headers" >&5
+echo "configure:4088: checking for QT headers" >&5
 		if test "${QTDIR}" != "" ; then
 			
 	_INCLUDES=
@@ -4353,7 +4356,7 @@ echo "configure:4085: checking for QT headers" >&5
 		fi
 
 		echo $ac_n "checking for QT library""... $ac_c" 1>&6
-echo "configure:4256: checking for QT library" >&5
+echo "configure:4259: checking for QT library" >&5
 		if test "${QTDIR}" != "" ; then
 			
 	_LIBS=
@@ -4537,7 +4540,7 @@ fi
 
 if test "${USE_BALLVIEW}" = true ; then		
 				echo $ac_n "checking linking against X11 libraries""... $ac_c" 1>&6
-echo "configure:4440: checking linking against X11 libraries" >&5
+echo "configure:4443: checking linking against X11 libraries" >&5
 	if test "${OS}" = Linux ; then
 		ADD_X_LIBS="-lSM -lICE"
 	fi
@@ -4549,14 +4552,14 @@ echo "configure:4440: checking linking against X11 libraries" >&5
 							SAVE_LDFLAGS=${LDFLAGS}
 	LDFLAGS="${LDFLAGS} ${X11_PATH} ${X_LIBS} ${ADD_X_LIBS}"
 	cat > conftest.$ac_ext <<EOF
-#line 4452 "configure"
+#line 4455 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:4459: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:4462: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   X_LINKING_OK=1
 else
@@ -4596,18 +4599,18 @@ if test "${USE_BALLVIEW}" = true ; then
 		fi
 		
 								echo $ac_n "checking linking against Mesa libs""... $ac_c" 1>&6
-echo "configure:4499: checking linking against Mesa libs" >&5
+echo "configure:4502: checking linking against Mesa libs" >&5
 		SAVE_LDFLAGS=${LDFLAGS}
 		LDFLAGS="${LDFLAGS} ${OPENGL_LIBS} ${X11_PATH} ${X_LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 4503 "configure"
+#line 4506 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:4510: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:4513: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   HAVE_MESALIBS=1
 else
@@ -4640,18 +4643,18 @@ if test "${USE_BALLVIEW}" = true ; then
 			OPENGL_LIBS="-lGLU -lGL"
 		fi
 		echo $ac_n "checking linking against OpenGL libraries""... $ac_c" 1>&6
-echo "configure:4543: checking linking against OpenGL libraries" >&5
+echo "configure:4546: checking linking against OpenGL libraries" >&5
 		SAVE_LDFLAGS=${LDFLAGS}
 		LDFLAGS="${LDFLAGS} ${OPENGL_LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 4547 "configure"
+#line 4550 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:4554: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:4557: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   OPENGL_LINKING_OK=1
 else
@@ -4686,18 +4689,18 @@ if test "${USE_BALLVIEW}" = true ; then
 fi
 if test "${USE_BALLVIEW}" = true ; then
 	echo $ac_n "checking linking against QT libraries""... $ac_c" 1>&6
-echo "configure:4589: checking linking against QT libraries" >&5
+echo "configure:4592: checking linking against QT libraries" >&5
 	SAVE_LIBS=${LIBS}
 	LIBS="${LIBS} ${QT_PATH} -lqgl -lqt ${OPENGL_PATH} ${OPENGL_LIBS} ${X11_PATH} ${X_LIBS}"
 	cat > conftest.$ac_ext <<EOF
-#line 4593 "configure"
+#line 4596 "configure"
 #include "confdefs.h"
 const char* qGLVersion();
 int main() {
 qGLVersion();
 ; return 0; }
 EOF
-if { (eval echo configure:4600: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:4603: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   QT_LINKING_OK=1
 else
@@ -4732,62 +4735,7 @@ if test "${MULTI_BUILD}" = "true" ; then
 fi
 
 if test "${MULTI_BUILD}" = "true" ; then
-	${CAT} config/config.h.header | ${SED} 1,2d > config.h
-	LINES=`cat config/binary_formats | wc -l`
-	i=1
-	while test $i -le $LINES ; do
-		BFMT=`cat ${BINFORMAT_FILE} | ${SED} -n ${i}p`
-		echo "#if ( BFMT == $i )" >> config.h
-		echo "#	include <BALL/CONFIG/config.h.${BFMT}>" >> config.h
-		echo "#endif" >> config.h
-		echo " " >> config.h
-		i=`expr $i + 1`
-	done
-	${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
-	if test -f ${BALL_PATH}/include/BALL/CONFIG/config.h ; then
-		if test "`${DIFF} ${BALL_PATH}/include/BALL/CONFIG/config.h config.h`" != "" ; then
-			${RM} ${BALL_PATH}/include/BALL/CONFIG/config.h
-			${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
-		else 
-			${RM} config.h
-		fi
-	else
-		${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
-	fi
-
-	BINFMT_INDEX="-DBFMT="`${GREP} -n ${BINFMT} ${BINFORMAT_FILE} | ${CUT} -d: -f1 | ${TAIL} -1`
-else
-	BINFMT_INDEX=""
-fi
-
-LIBS="${LIBS} -lm"
-BALLVIEW_LIBS="${BALLVIEW_LIBS} -lm"
-
-BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL"
-if test "${USE_BALLVIEW}" = true ; then
-	BALLVIEW_INCLUDES="${BALL_INCLUDES} ${BALLVIEW_INCLUDES}"
-	BALLVIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lMOLVIEW -lVIEW -lBALL ${BALLVIEW_LIBS}"
-fi
-
-LDFLAGS="$LDFLAGS"
-LIBS="$BALL_LIBS $LIBS"
-
-
-
-CPPFLAGS="$CPPFLAGS $DEFINES"
-
-
-	
-
-# Extract the first word of "dirname", so it can be a program name with args.
-set dummy dirname; ac_word=$2
-echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:4685: checking for $ac_word" >&5
-if eval "test \"`echo '$''{'ac_cv_path_DIRNAME'+set}'`\" = set"; then
-  echo $ac_n "(cached) $ac_c" 1>&6
-else
-  case "$DIRNAME" in
-  /*)
+	${CAT} config/config.h.header | ${SED} 1" 1>&6
   ac_cv_path_DIRNAME="$DIRNAME" # Let the user override the test with a path.
   ;;
   ?:/*)			 
@@ -4816,7 +4764,7 @@ else
 fi
 
 echo $ac_n "checking for standard include path...""... $ac_c" 1>&6
-echo "configure:4719: checking for standard include path..." >&5
+echo "configure:4667: checking for standard include path..." >&5
 echo "#include <iostream.h>" >/tmp/$$.test.C
 LINES=`${CXX} -E /tmp/$$.test.C | egrep /iostream.h\"`
 ${RM} /tmp/$$.test.C
@@ -4846,7 +4794,7 @@ STD_CPP_INCLUDES="-I${STD_CPP_INCLUDES} -I/usr/include"
 
 
 echo $ac_n "checking for prelinker""... $ac_c" 1>&6
-echo "configure:4749: checking for prelinker" >&5
+echo "configure:4697: checking for prelinker" >&5
 if test "${PRELINK}" = "" ; then
 	echo "$ac_t""not needed" 1>&6
 	__PRELINK__="@echo no external prelinker needed..."

@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.29 2000/01/06 11:35:18 oliver Exp $
+dnl    $Id: configure.in,v 1.30 2000/01/06 20:51:47 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1421,34 +1421,37 @@ if test ${USE_BALLVIEW} = true ; then
 	fi
 
 	if test ${USE_BALLVIEW} = true ; then
-		AC_MSG_CHECKING(BALLVIEW platform)
+		AC_MSG_CHECKING(for OpenGL/Mesa)
 		AC_MSG_RESULT($BALLVIEW_PLATFORM)
 
 		if test ${BALLVIEW_PLATFORM} = Mesa ; then
 			AC_MSG_CHECKING(for Mesa includes)
-			AC_FIND_HEADER(MESA_INCLUDES,GL/gl.h)
+			AC_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCLUDES} ${X11_PATH})
 			if test "${MESA_INCLUDES}" = "" ; then
 				AC_MSG_RESULT((not found!))
 				AC_MSG_RESULT()
-				AC_MSG_RESULT(no Mesa headers found! Please modify the top section)
-				AC_MSG_RESULT(of configure and specify the correct path to these headers)
-				AC_MSG_RESULT(or install the Mesa package. Mesa can be found in BALL/contrib/Mesa.)
-				AC_MSG_ERROR(aborted)
+				AC_MSG_RESULT(No Mesa headers found! Please specify the path to the directory)
+				AC_MSG_RESULT(containing the Mesa headers using "--with-opengl-incl=DIR".
+				AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
+				AC_MSG_RESULT(Disabling support for visualization component BALLVIEW)
+				USE_BALLVIEW=false
 			else
 				AC_MSG_RESULT((${MESA_INCLUDES}))
 			fi
 
-			AC_MSG_CHECKING(for Mesa library)
-			AC_FIND_LIB(MESA_LIBS,libMesaGL)
-			if test "${MESA_LIBS}" = "" ; then
-				AC_MSG_RESULT((not found!))
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(no Mesa lib found! Please modify the top section)
-				AC_MSG_RESULT(of configure and specify the correct path to these libraries)
-				AC_MSG_RESULT(or compile Mesa to create these libraries.)
-				AC_MSG_ERROR(aborted)
-			else
-				AC_MSG_RESULT((${MESA_LIBS}))
+			if test "${USE_BALLVIEW}" = true ; then
+				AC_MSG_CHECKING(for Mesa library)
+				AC_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBS} ${x_libraries})
+				if test "${MESA_LIBS}" = "" ; then
+					AC_MSG_RESULT((not found!))
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(no Mesa lib found! Please modify the top section)
+					AC_MSG_RESULT(of configure and specify the correct path to these libraries)
+					AC_MSG_RESULT(or compile Mesa to create these libraries.)
+					AC_MSG_ERROR(aborted)
+				else
+					AC_MSG_RESULT((${MESA_LIBS}))
+				fi
 			fi
 			
 			dnl   prevent the use of -L/usr/lib - this may lead to problems with different
