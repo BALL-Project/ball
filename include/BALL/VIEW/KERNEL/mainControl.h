@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.4 2003/08/27 13:39:41 amoll Exp $
+// $Id: mainControl.h,v 1.5 2003/09/03 15:23:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -183,6 +183,9 @@ namespace BALL
 					Update is called after receiving a CompositeChangedMessage in onNotify().
 					It sends a RepresentationChangedMessage for every Representation, which was build for the Composite.
 					After this a SceneMessage is send to redraw the Scene.
+					Remember:
+					If you changed a composite in MainControl or a derived class, the MainControl doesnt get notified,
+					from the CompositeChangedMessage, it sends. So you have to call this function instead of sending the message.
 					\param  composite the Composite that should be updated
 					\return bool <tt>true</tt> if <b>composite</b> was successfully marked for update, <tt>false</tt> otherwise
 			*/
