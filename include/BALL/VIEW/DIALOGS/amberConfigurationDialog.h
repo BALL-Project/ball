@@ -1,27 +1,33 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.h,v 1.1 2004/01/20 13:22:09 amoll Exp $
+// $Id: amberConfigurationDialog.h,v 1.2 2004/01/20 15:08:01 amoll Exp $
 //
 
-#ifndef BALL_VIEW_DIALOGS_AmberConfigurationDialog_H
-#define BALL_VIEW_DIALOGS_AmberConfigurationDialog_H
+#ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
+#define BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
 
-#include <BALL/VIEW/UIC/AmberConfigurationDialogData.h>
+#include <BALL/VIEW/UIC/amberConfigurationDialogData.h>
 
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/SYSTEM/path.h>
 
 namespace BALL
 {
+	class AmberFF;
+	
 	namespace VIEW
 	{
+		class MolecularProperties;
+
 		/** Dialog for changing the options of the AMBER forcefield
 				\ingroup ViewDialogs
 		*/
 		class AmberConfigurationDialog
 			: public AmberConfigurationDialogData
 		{
+			friend class MolecularProperties;
+
 			Q_OBJECT
 			
 			public:
@@ -42,41 +48,41 @@ namespace BALL
 			bool getUseDistanceDependentDC() const;
 			
 			///
-			float getNonbondedCutoff();
+			float getNonbondedCutoff() const;
 
 			///
-			float getVdwCutoff();
+			float getVdwCutoff() const;
 
 			///
-			float getVdwCuton();
+			float getVdwCuton() const;
 
 			///
-			float getElectrostaticCutoff();
+			float getElectrostaticCutoff() const;
 
 			///
-			float getElectrostaticCuton();
+			float getElectrostaticCuton() const;
 
 			///
-			float getScalingElectrostatic_1_4();
+			float getScalingElectrostatic_1_4() const;
 
 			///
-			float getScalingVdw_1_4();
+			float getScalingVdw_1_4() const;
 			
 			///
-			bool getAssignCharges();
+			bool getAssignCharges() const;
 			
 			///
-			bool getAssignTypenames();
+			bool getAssignTypenames() const;
 			
 			///
-			bool getAssignTypes();
+			bool getAssignTypes() const;
 			
 			///
-			bool getOverwriteCharges();
+			bool getOverwriteCharges() const;
 			
 			///
-			bool getOverwriteTypenames();
-			
+			bool getOverwriteTypenames() const;
+
 			///
 			void setOptions(float nonbonded_cutoff, float vdw_cutoff, float vdw_cuton, float electrostatic_cutoff, 
 											float electrostatic_cuton, float scaling_electrostatic_1_4, float scaling_vdw_1_4, 
@@ -88,7 +94,19 @@ namespace BALL
 				throw();
 				
 			///
-			void readPreferences(const INIFile& inifile)
+			void fetchPreferences(const INIFile& inifile)
+				throw();
+
+			public slots:
+
+			///
+			void accept();
+
+			///
+			void reject();
+
+			/// apply the settings to a given AMBER force field
+			void applyTo(AmberFF& amber)
 				throw();
 
 			protected:
@@ -97,12 +115,17 @@ namespace BALL
 			
 			virtual void browseParameterFiles();
 
+			void setAmberFF(AmberFF& amber)
+				throw();
+
 			private:
 
-			bool 		use_dddc, assign_charges, assign_typenames, assign_types, overwrite_charges, overwrite_typenames;
-			String 	ini;
-			float 	nonbonded_cutoff, vdw_cutoff, vdw_cuton, electrostatic_cutoff, electrostatic_cuton,
-							scaling_electrostatic_1_4, scaling_vdw_1_4;
+			bool 		use_dddc_, assign_charges_, assign_typenames_, assign_types_, overwrite_charges_, overwrite_typenames_;
+			String 	ini_;
+			float 	nonbonded_cutoff_, vdw_cutoff_, vdw_cuton_, electrostatic_cutoff_, electrostatic_cuton_,
+							scaling_electrostatic_1_4_, scaling_vdw_1_4_;
+
+			AmberFF* amber_;
 		};
 	}
 }

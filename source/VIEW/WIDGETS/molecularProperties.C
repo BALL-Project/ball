@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.20 2004/01/17 00:40:23 amoll Exp $
+// $Id: molecularProperties.C,v 1.21 2004/01/20 15:08:35 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -12,6 +12,8 @@
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/STRUCTURE/structureMapper.h>
+#include <BALL/MOLMEC/CHARMM/charmm.h>
+#include <BALL/MOLMEC/AMBER/amber.h>
 
 #include <qmenubar.h>
 
@@ -26,7 +28,10 @@ MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
 	throw()
 	:	QWidget(parent, name),
 		ModularWidget(name),
-		view_distance_(25)
+		view_distance_(25),
+		amber_(0),
+		charmm_(0),
+		amber_dialog_(this)
 {
 	registerWidget(this);
 	hide();
@@ -94,6 +99,9 @@ MolecularProperties::~MolecularProperties()
 
 	main_control.removeMenuEntry(MainControl::BUILD, "Map two Proteins", this,
 																									SLOT(mapProteins()));
+
+	if (charmm_ != 0) delete charmm_;
+	if (amber_  != 0) delete amber_;
 }
 
 void MolecularProperties::onNotify(Message *message)
@@ -584,5 +592,71 @@ void MolecularProperties::mapProteins()
 	Log.info() << "Not matched CA: " << not_matched_ca << std::endl << std::endl;
 	setStatusbarText("Calcuted RMSD: " + String(rmsd));
 }
+
+AmberFF& MolecularProperties::getAMBERFF()
+	throw()
+{
+	if (amber_ == 0) 
+	{
+		amber_ = new AmberFF;
+		amber_dialog_.setAmberFF(*amber_);
+		amber_dialog_.accept();
+	}
+
+	return *amber_;
+}
+
+AmberConfigurationDialog& MolecularProperties::getAmberConfigurationDialog()
+	throw()
+{
+	return amber_dialog_;
+}
 	
+
+CharmmFF& MolecularProperties::getCHARMMFF()
+	throw()
+{
+	if (charmm_ == 0) 
+	{
+		charmm_ = new CharmmFF();
+
+		charmm_->options[CharmmFF::Option::ASSIGN_TYPES] = "true";
+		charmm_->options[CharmmFF::Option::ASSIGN_CHARGES] = "true";
+		charmm_->options[CharmmFF::Option::ASSIGN_TYPENAMES] = "true";
+		charmm_->options[CharmmFF::Option::OVERWRITE_CHARGES] = "true";
+		charmm_->options[CharmmFF::Option::OVERWRITE_TYPENAMES] = "true";
+		charmm_->options[CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = 1;
+		charmm_->options[CharmmFF::Option::FILENAME] = "CHARMM/param22.ini";
+	}
+
+	return *charmm_;
+}
+
+void MolecularProperties::printAmberResults()
+	throw()
+{
+	Log.info() << endl;
+	Log.info() << "AMBER Energy:" << endl;
+	Log.info() << " - electrostatic     : " << getAMBERFF().getESEnergy() << " kJ/mol" << endl;
+	Log.info() << " - van der Waals     : " << getAMBERFF().getVdWEnergy() << " kJ/mol" << endl;
+	Log.info() << " - bond stretch      : " << getAMBERFF().getStretchEnergy() << " kJ/mol" << endl;
+	Log.info() << " - angle bend        : " << getAMBERFF().getBendEnergy() << " kJ/mol" << endl;
+	Log.info() << " - torsion           : " << getAMBERFF().getTorsionEnergy() << " kJ/mol" << endl;
+	Log.info() << "---------------------------------------" << endl;
+	Log.info() << "  total energy       : " << getAMBERFF().getEnergy() << " kJ/mol" << endl;
+}
+
+void MolecularProperties::fetchPreferences(INIFile& inifile)
+	throw()
+{
+	amber_dialog_.fetchPreferences(inifile);
+}
+
+
+void MolecularProperties::writePreferences(INIFile& inifile)
+	throw()
+{
+	amber_dialog_.writePreferences(inifile);
+}
+
 } } // namespaces

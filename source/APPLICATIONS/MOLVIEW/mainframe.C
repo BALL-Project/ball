@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.113 2004/01/18 21:55:36 oliver Exp $
+// $Id: mainframe.C,v 1.114 2004/01/20 15:08:57 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -127,6 +127,8 @@ namespace BALL
 
 		molecular_properties_ = new MolecularProperties(this, "MolecularProperties");
 		CHECK_PTR(molecular_properties_);
+		minimization_dialog_->setAmberDialog(&molecular_properties_->getAmberConfigurationDialog());
+		md_dialog_->setAmberDialog(&molecular_properties_->getAmberConfigurationDialog());
 
 		server_ = new Server(this);
 		CHECK_PTR(server_);
@@ -346,24 +348,7 @@ namespace BALL
 		// set up the AMBER force field
 		setStatusbarText("setting up force field...");
 
-		String filename(minimization_dialog_->getFilename());
-		Path path;
-		filename = path.find(filename);
-		if (filename == "")
-		{
-			Log.error() << "Invalid filename for amber options" << std::endl;
-			return;
-		}
-
-		AmberFF amber;
-		amber.options[AmberFF::Option::ASSIGN_TYPES] = "true";
-		amber.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
-		amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
-		amber.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
-		amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
-		amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] 
-			= String(minimization_dialog_->getUseDistanceDependentDC());
-		amber.options[AmberFF::Option::FILENAME] = String(filename);
+		AmberFF& amber = molecular_properties_->getAMBERFF();
 
 		if (!amber.setup(*system))
 		{
@@ -377,7 +362,7 @@ namespace BALL
 		amber.updateEnergy();
 
 		// print the result
-		printAmberResults(amber);
+		molecular_properties_->printAmberResults();
 		setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
 	}
 
@@ -418,38 +403,12 @@ namespace BALL
 			return;
 		}
 		
-		String filename(minimization_dialog_->getFilename());
-		Path path;
-		filename = path.find(filename);
-		if (filename == "")
-		{
-			Log.error() << "Invalid filename for amber options" << std::endl;
-			return;
-		}
-
 		// set up the AMBER force field
 		setStatusbarText("setting up force field...");
 
-		AmberFF* amber = new AmberFF;
-		amber->options[AmberFF::Option::ASSIGN_TYPES] = minimization_dialog_->getAssignTypes();
-		amber->options[AmberFF::Option::ASSIGN_CHARGES] = minimization_dialog_->getAssignCharges();
-		amber->options[AmberFF::Option::ASSIGN_TYPENAMES] = minimization_dialog_->getAssignTypenames();
-		amber->options[AmberFF::Option::OVERWRITE_CHARGES] = minimization_dialog_->getOverwriteCharges();
-		amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = minimization_dialog_->getOverwriteTypenames();
-		amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = minimization_dialog_->getUseDistanceDependentDC();
-		amber->options[AmberFF::Option::NONBONDED_CUTOFF] = minimization_dialog_->getNonbondedCutoff();
-		amber->options[AmberFF::Option::VDW_CUTOFF] = minimization_dialog_->getVdwCutoff();
-		amber->options[AmberFF::Option::VDW_CUTON] = minimization_dialog_->getVdwCuton();
-		amber->options[AmberFF::Option::ELECTROSTATIC_CUTOFF] = minimization_dialog_->getElectrostaticCutoff();
-		amber->options[AmberFF::Option::ELECTROSTATIC_CUTON] = minimization_dialog_->getElectrostaticCuton();
-		amber->options[AmberFF::Option::SCALING_ELECTROSTATIC_1_4] = minimization_dialog_->getScalingElectrostatic_1_4();
-		amber->options[AmberFF::Option::SCALING_VDW_1_4] = minimization_dialog_->getScalingVdw_1_4();
+		AmberFF& amber = molecular_properties_->getAMBERFF();
 
-		amber->options[AmberFF::Option::FILENAME] = filename;
-
-		//amber->options.dump();
-
-		if (!amber->setup(*system))
+		if (!amber.setup(*system))
 		{
 			Log.error() << "Setup of AMBER force field failed." << endl;
 			return;
@@ -458,7 +417,7 @@ namespace BALL
 		// calculate the energy
 		setStatusbarText("starting minimization...");
 
-		amber->updateEnergy();
+		amber.updateEnergy();
 
 		EnergyMinimizer* minimizer;
 		if (minimization_dialog_->getUseConjugateGradient())	 minimizer = new ConjugateGradientMinimizer;
@@ -469,7 +428,7 @@ namespace BALL
 		minimizer->options[EnergyMinimizer::Option::MAX_GRADIENT] = minimization_dialog_->getMaxGradient();
 		minimizer->options[EnergyMinimizer::Option::ENERGY_DIFFERENCE_BOUND] = minimization_dialog_->getEnergyDifference();
 		minimizer->options[EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY] = 999999999;
-		minimizer->setup(*amber);
+		minimizer->setup(amber);
 		minimizer->setMaxNumberOfIterations(minimization_dialog_->getMaxIterations());
 
 		// perform an initial step (no restart step)
@@ -487,7 +446,6 @@ namespace BALL
 		thread->setComposite(system);
 
 		#if BALL_QT_VERSION >=	0x030200
-
 			thread->start(QThread::LowPriority);
 		#else
 			thread->start();
@@ -508,7 +466,7 @@ namespace BALL
 		}
 
 		Log.info() << endl << "minimization terminated." << endl << endl;
-		printAmberResults(*amber);
+		molecular_properties_->printAmberResults();
 		Log.info() << "final RMS gadient    : " << amber->getRMSGradient() << " kJ/(mol A)   after "
 							 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
 		setStatusbarText("Total AMBER energy: " + String(amber->getEnergy()) + " kJ/mol.");
@@ -538,41 +496,17 @@ namespace BALL
 		{
 			return;
 		}
-
-		String filename(md_dialog_->getFilename());
-		Path path;
-		filename = path.find(filename);
-		if (filename == "")
-		{
-			Log.error() << "Invalid filename for amber options" << std::endl;
-			return;
-		}
+		
+		AmberFF& amber = molecular_properties_->getAMBERFF();
 
 		// set up the AMBER force field
 		setStatusbarText("setting up force field...");
 
-		AmberFF* amber = new AmberFF;
-		amber->options[AmberFF::Option::ASSIGN_TYPES] = md_dialog_->getAssignTypes();
-		amber->options[AmberFF::Option::ASSIGN_CHARGES] = md_dialog_->getAssignCharges();
-		amber->options[AmberFF::Option::ASSIGN_TYPENAMES] = md_dialog_->getAssignTypenames();
-		amber->options[AmberFF::Option::OVERWRITE_CHARGES] = md_dialog_->getOverwriteCharges();
-		amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = md_dialog_->getOverwriteTypenames();
-		amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = md_dialog_->getUseDistanceDependentDC();
-		amber->options[AmberFF::Option::NONBONDED_CUTOFF] = md_dialog_->getNonbondedCutoff();
-		amber->options[AmberFF::Option::VDW_CUTOFF] = md_dialog_->getVdwCutoff();
-		amber->options[AmberFF::Option::VDW_CUTON] = md_dialog_->getVdwCuton();
-		amber->options[AmberFF::Option::ELECTROSTATIC_CUTOFF] = md_dialog_->getElectrostaticCutoff();
-		amber->options[AmberFF::Option::ELECTROSTATIC_CUTON] = md_dialog_->getElectrostaticCuton();
-		amber->options[AmberFF::Option::SCALING_ELECTROSTATIC_1_4] = md_dialog_->getScalingElectrostatic_1_4();
-		amber->options[AmberFF::Option::SCALING_VDW_1_4] = md_dialog_->getScalingVdw_1_4();
-
-		amber->options[AmberFF::Option::FILENAME] = filename;
-
 	#ifdef BALL_VIEW_DEBUG
-		amber->options.dump();
+		amber.options.dump();
 	#endif
 
-		if (!amber->setup(*system))
+		if (!amber.setup(*system))
 		{
 			Log.error() << "Setup of AMBER force field failed." << endl;
 			return;
@@ -581,7 +515,7 @@ namespace BALL
 		// calculate the energy
 		setStatusbarText("starting simulation...");
 
-		amber->updateEnergy();
+		amber.updateEnergy();
 
 		MolecularDynamics* mds = 0;
 		if (md_dialog_->useMicroCanonical()) mds = new CanonicalMD;
@@ -593,7 +527,7 @@ namespace BALL
 		options[MolecularDynamics::Option::TIME_STEP] = md_dialog_->getTimeStep();
 
 		// setup the simulation
-		mds->setup(*amber, 0, options);
+		mds->setup(amber, 0, options);
 		if (!mds->isValid())
 		{
 			Log.error() << "Setup for MD simulation failed!" << std::endl;
@@ -637,7 +571,7 @@ namespace BALL
 		// ============================= WITHOUT MULTITHREADING ==============================
 		// iterate until done and refresh the screen every "steps" iterations
 		
-		SnapShotManager manager(amber->getSystem(), amber, dcd);
+		SnapShotManager manager(amber.getSystem(), &amber, dcd);
 		manager.setFlushToDiskFrequency(10);
 		while (mds->getNumberOfIterations() < md_dialog_->getNumberOfSteps())
 		{
@@ -663,7 +597,7 @@ namespace BALL
 		if (dcd) manager.flushToDisk();
 
 		Log.info() << std::endl << "simulation terminated." << std::endl << endl;
-		printAmberResults(*amber);
+		molecular_properties_->printAmberResults();
 		Log.info() << "final RMS gadient    : " << amber->getRMSGradient() << " kJ/(mol A)   after " 
 							 << mds->getNumberOfIterations() << " iterations" << endl << endl;
 		setStatusbarText("Total AMBER energy: " + String(amber->getEnergy()) + " kJ/mol.");
@@ -797,20 +731,6 @@ namespace BALL
 		stop_simulation_ = false;
 		checkMenuEntries();
 	#endif
-	}
-
-	void Mainframe::printAmberResults(const AmberFF& amber)
-		throw()
-	{
-		Log.info() << endl;
-		Log.info() << "AMBER Energy:" << endl;
-		Log.info() << " - electrostatic     : " << amber.getESEnergy() << " kJ/mol" << endl;
-		Log.info() << " - van der Waals     : " << amber.getVdWEnergy() << " kJ/mol" << endl;
-		Log.info() << " - bond stretch      : " << amber.getStretchEnergy() << " kJ/mol" << endl;
-		Log.info() << " - angle bend        : " << amber.getBendEnergy() << " kJ/mol" << endl;
-		Log.info() << " - torsion           : " << amber.getTorsionEnergy() << " kJ/mol" << endl;
-		Log.info() << "---------------------------------------" << endl;
-		Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
 	}
 
 	void Mainframe::customEvent( QCustomEvent * e )

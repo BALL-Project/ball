@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.13 2004/01/18 21:55:35 oliver Exp $
+// $Id: molecularProperties.h,v 1.14 2004/01/20 15:08:41 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
@@ -14,11 +14,17 @@
  #include <BALL/MATHS/vector3.h>
 #endif
 
+#ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
+ #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
+#endif
+
 #include <qwidget.h>
 
 namespace BALL
 {
 	class Composite;
+	class AmberFF;
+	class CharmmFF;
 
 	namespace VIEW
 	{
@@ -100,6 +106,38 @@ class MolecularProperties
 	void checkMenu(MainControl& main_control)
 		throw();
 
+	/** Get the instance of the AMBER forcefield.
+	 		The forcefield will be created, when this function is called the first time.
+	*/
+	AmberFF& getAMBERFF() 
+		throw();
+	
+	/** Get the instance of the CHARMM forcefield.
+	 		The forcefield will be created, when this function is called the first time.
+	*/
+	CharmmFF& getCHARMMFF() 
+		throw();
+
+	///
+	AmberConfigurationDialog& getAmberConfigurationDialog()
+		throw();
+	
+	/// Print the results of the AMBER forcefield.
+	void printAmberResults()
+		throw();
+	
+	/** Fetch the widgets preferences from the INIfile.
+			\param  inifile the INIFile that contains the needed values
+	*/
+	virtual void fetchPreferences(INIFile &inifile)
+		throw();
+			
+	/** Writes the widgets preferences to the INIFile.
+			\param  inifile the INIFile that contains the needed values
+	*/
+	virtual void writePreferences(INIFile &inifile)
+		throw();
+			
 	public slots:
 
 	/** Centers the camera of Scene to the geometric center of the molecular objects
@@ -176,8 +214,10 @@ private:
 
 	
 	Vector3 										view_center_vector_;
-	float 												view_distance_;
-
+	float 											view_distance_;
+	AmberFF* 										amber_;
+	CharmmFF*										charmm_;
+	AmberConfigurationDialog    amber_dialog_;
 };
 
 } } // namespaces

@@ -1,188 +1,40 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>AdvancedOptions</class>
+<class>AmberConfigurationDialogData</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>AdvancedOptions</cstring>
+        <cstring>AmberConfigurationDialogData</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>0</y>
-            <width>540</width>
-            <height>435</height>
+            <y>3</y>
+            <width>550</width>
+            <height>415</height>
         </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>550</width>
+            <height>415</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>550</width>
+            <height>415</height>
+        </size>
     </property>
     <property name="caption">
         <string>AMBER Options</string>
     </property>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>check_options</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>195</x>
-                <y>40</y>
-                <width>340</width>
-                <height>110</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>340</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="font">
-            <font>
-                <bold>1</bold>
-            </font>
-        </property>
-        <property name="title">
-            <string>Charge and type assignment</string>
-        </property>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>assign_charges_checkBox</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>14</y>
-                    <width>140</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>140</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>Assign Charges</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>assign_typenames_checkBox</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>159</x>
-                    <y>13</y>
-                    <width>170</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>170</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>Assign Typenames</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>assign_types_checkBox</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>41</y>
-                    <width>140</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>140</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>Assign Types</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>overwrite_charges_checkBox</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>159</x>
-                    <y>43</y>
-                    <width>170</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>170</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>Overwrite Charges</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>overwrite_typenames_checkBox</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>73</y>
-                    <width>264</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>Overwrite Typenames</string>
-            </property>
-        </widget>
-    </widget>
     <widget class="QButtonGroup">
         <property name="name">
             <cstring>dielectric_group</cstring>
@@ -192,7 +44,7 @@
                 <x>5</x>
                 <y>40</y>
                 <width>190</width>
-                <height>110</height>
+                <height>97</height>
             </rect>
         </property>
         <property name="minimumSize">
@@ -270,179 +122,252 @@
             </property>
         </widget>
     </widget>
-    <widget class="QPushButton">
+    <widget class="QLineEdit">
         <property name="name">
-            <cstring>reset_button</cstring>
+            <cstring>parameter_file_edit</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>184</x>
-                <y>401</y>
-                <width>172</width>
-                <height>30</height>
+                <x>112</x>
+                <y>9</y>
+                <width>319</width>
+                <height>22</height>
             </rect>
         </property>
-        <property name="text">
-            <string>Reset</string>
+        <property name="minimumSize">
+            <size>
+                <width>150</width>
+                <height>0</height>
+            </size>
         </property>
-        <property name="accel">
-            <string></string>
+        <property name="backgroundMode">
+            <enum>PaletteBase</enum>
+        </property>
+        <property name="font">
+            <font>
+            </font>
+        </property>
+        <property name="focusPolicy">
+            <enum>StrongFocus</enum>
+        </property>
+        <property name="text">
+            <string>Amber/amber96.ini</string>
+        </property>
+        <property name="maxLength">
+            <number>32767</number>
+        </property>
+        <property name="frame">
+            <bool>true</bool>
+        </property>
+        <property name="echoMode">
+            <enum>Normal</enum>
+        </property>
+        <property name="alignment">
+            <set>AlignRight</set>
         </property>
     </widget>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>cancel_button</cstring>
+            <cstring>browse_button</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>362</x>
-                <y>401</y>
-                <width>172</width>
+                <x>439</x>
+                <y>6</y>
+                <width>82</width>
                 <height>30</height>
             </rect>
         </property>
-        <property name="text">
-            <string>Cancel</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>close_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>6</x>
-                <y>401</y>
-                <width>172</width>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
                 <height>30</height>
-            </rect>
+            </size>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteButton</enum>
+        </property>
+        <property name="font">
+            <font>
+            </font>
+        </property>
+        <property name="focusPolicy">
+            <enum>TabFocus</enum>
         </property>
         <property name="text">
-            <string>&amp;Close</string>
+            <string>Browse</string>
         </property>
-        <property name="accel">
-            <string>Alt+C</string>
-        </property>
-        <property name="default">
+        <property name="autoDefault">
             <bool>true</bool>
         </property>
     </widget>
-    <widget class="QLayoutWidget">
+    <widget class="QGroupBox">
         <property name="name">
-            <cstring>layout1</cstring>
+            <cstring>check_options</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>5</x>
-                <y>5</y>
-                <width>530</width>
-                <height>31</height>
+                <x>195</x>
+                <y>40</y>
+                <width>330</width>
+                <height>97</height>
             </rect>
         </property>
-        <hbox>
+        <property name="minimumSize">
+            <size>
+                <width>330</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="font">
+            <font>
+                <bold>1</bold>
+            </font>
+        </property>
+        <property name="title">
+            <string>Charge and type assignment</string>
+        </property>
+        <widget class="QCheckBox">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>assign_charges_checkBox</cstring>
             </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>Label_10</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>80</width>
-                        <height>29</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteBackground</enum>
-                </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
-                <property name="focusPolicy">
-                    <enum>NoFocus</enum>
-                </property>
-                <property name="lineWidth">
-                    <number>1</number>
-                </property>
-                <property name="text">
-                    <string>Parameter file</string>
-                </property>
-                <property name="textFormat">
-                    <enum>AutoText</enum>
-                </property>
-                <property name="alignment">
-                    <set>AlignVCenter|AlignLeft</set>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>parameter_file_edit</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>150</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteBase</enum>
-                </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
-                <property name="focusPolicy">
-                    <enum>StrongFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Amber/amber96.ini</string>
-                </property>
-                <property name="maxLength">
-                    <number>32767</number>
-                </property>
-                <property name="frame">
-                    <bool>true</bool>
-                </property>
-                <property name="echoMode">
-                    <enum>Normal</enum>
-                </property>
-                <property name="alignment">
-                    <set>AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>browse_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>0</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteButton</enum>
-                </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
-                <property name="focusPolicy">
-                    <enum>TabFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Browse</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
-        </hbox>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>14</y>
+                    <width>140</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>140</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                    <bold>0</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Assign Charges</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>assign_types_checkBox</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>41</y>
+                    <width>140</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>140</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                    <bold>0</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Assign Types</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>overwrite_typenames_checkBox</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>68</y>
+                    <width>264</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                    <bold>0</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Overwrite Typenames</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>assign_typenames_checkBox</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>159</x>
+                    <y>13</y>
+                    <width>165</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>165</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                    <bold>0</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Assign Typenames</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>overwrite_charges_checkBox</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>159</x>
+                    <y>43</y>
+                    <width>165</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>165</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                    <bold>0</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Overwrite Charges</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
     </widget>
     <widget class="QGroupBox">
         <property name="name">
@@ -451,14 +376,14 @@
         <property name="geometry">
             <rect>
                 <x>5</x>
-                <y>157</y>
-                <width>530</width>
+                <y>140</y>
+                <width>520</width>
                 <height>230</height>
             </rect>
         </property>
         <property name="minimumSize">
             <size>
-                <width>530</width>
+                <width>520</width>
                 <height>0</height>
             </size>
         </property>
@@ -876,36 +801,155 @@
             </property>
         </widget>
     </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>close_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>7</x>
+                <y>378</y>
+                <width>168</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>&amp;Close</string>
+        </property>
+        <property name="accel">
+            <string>Alt+C</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancel_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>181</x>
+                <y>378</y>
+                <width>169</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>reset_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>356</x>
+                <y>378</y>
+                <width>168</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Reset</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>Label_10</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>7</y>
+                <width>101</width>
+                <height>29</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>80</width>
+                <height>29</height>
+            </size>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteBackground</enum>
+        </property>
+        <property name="font">
+            <font>
+            </font>
+        </property>
+        <property name="focusPolicy">
+            <enum>NoFocus</enum>
+        </property>
+        <property name="lineWidth">
+            <number>1</number>
+        </property>
+        <property name="text">
+            <string>Parameter file</string>
+        </property>
+        <property name="textFormat">
+            <enum>AutoText</enum>
+        </property>
+        <property name="alignment">
+            <set>AlignVCenter|AlignLeft</set>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
         <sender>close_button</sender>
         <signal>clicked()</signal>
-        <receiver>AdvancedOptions</receiver>
+        <receiver>AmberConfigurationDialogData</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>cancel_button</sender>
         <signal>clicked()</signal>
-        <receiver>AdvancedOptions</receiver>
+        <receiver>AmberConfigurationDialogData</receiver>
         <slot>reject()</slot>
     </connection>
     <connection>
         <sender>reset_button</sender>
         <signal>clicked()</signal>
-        <receiver>AdvancedOptions</receiver>
+        <receiver>AmberConfigurationDialogData</receiver>
         <slot>resetOptions()</slot>
     </connection>
     <connection>
         <sender>browse_button</sender>
         <signal>clicked()</signal>
-        <receiver>AdvancedOptions</receiver>
+        <receiver>AmberConfigurationDialogData</receiver>
         <slot>browseParameterFiles()</slot>
     </connection>
 </connections>
 <tabstops>
-    <tabstop>browse_button</tabstop>
     <tabstop>parameter_file_edit</tabstop>
+    <tabstop>browse_button</tabstop>
     <tabstop>constant_button</tabstop>
     <tabstop>assign_charges_checkBox</tabstop>
     <tabstop>assign_typenames_checkBox</tabstop>

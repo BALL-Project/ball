@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.29 2004/01/18 12:43:08 amoll Exp $
+# $Id: Makefile,v 1.30 2004/01/20 15:07:42 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -13,8 +13,8 @@ UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	advancedOptionsDialog.C\
-	advancedOptionsDialogData.C\
+	amberConfigurationDialog.C\
+	amberConfigurationDialogData.C\
 	amberMinimizationDialog.C\
 	amberMinimizationDialogData.C\
 	atomProperties.C\
@@ -66,8 +66,8 @@ CPP_SOURCES=\
 	transformationDialogData.C
 
 MOC_SOURCES=\
-	advancedOptionsDialog_moc.C\
-	advancedOptionsDialogData_moc.C\
+	amberConfigurationDialog_moc.C\
+	amberConfigurationDialogData_moc.C\
 	amberMinimizationDialog_moc.C\
 	amberMinimizationDialogData_moc.C\
 	atomProperties_moc.C\
@@ -119,7 +119,7 @@ MOC_SOURCES=\
 	transformationDialogData_moc.C
 
 UIC_SOURCES=\
-	advancedOptionsDialogData.C\
+	amberConfigurationDialogData.C\
 	amberMinimizationDialogData.C\
 	atomPropertiesData.C\
 	bondPropertiesData.C\
