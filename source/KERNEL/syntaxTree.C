@@ -1,4 +1,4 @@
-// $Id: syntaxTree.C,v 1.7 2001/12/30 13:28:46 sturm Exp $
+// $Id: syntaxTree.C,v 1.8 2002/01/10 15:02:35 anker Exp $
 
 #include <BALL/KERNEL/syntaxTree.h>
 
@@ -205,8 +205,9 @@ namespace BALL
 		// closing bracket (see for() {} above)
     ey = i;
 
-		// ?????: I think ey >= s.size() cannot happen, because the for()
-		// statement above runs at most to s.size() - 1.
+		// I think ey >= s.size() cannot happen, because the for() statement
+		// above runs at most to s.size() - 1, but I'll leave this just as an
+		// additional robustness feature.
     if (ey >= s.size())
     {
       sz = s.size();
@@ -216,7 +217,7 @@ namespace BALL
       sz = ++i;
 		}
 
-    // we identified the first expresion in brackets.
+    // we identified the first expression in brackets.
     // now decide, whether it is a predicate or a bracket expresion
     // or something strange
     String left(s, (Index)sx, (Index)ex);
@@ -340,9 +341,6 @@ namespace BALL
 		// if we have less than 3 children, we cannot collapse anything.
     if (children.size() < 3)
     {
-			// ?????
-			// Maybe we should check here whether this node is a conjunction or not.
-			// If it is, throw() a ParseError.
       return;
 		}
 
