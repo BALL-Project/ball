@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.10 2000/07/06 14:43:31 oliver Exp $
+// $Id: periodicBoundary.C,v 1.11 2000/07/10 21:23:18 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -321,7 +321,7 @@ namespace BALL
 			}
 			catch (Exception::FileNotFound e)
 			{
-				Log.error() << "Solvent file not found: " << e.getName() << endl;
+				Log.error() << "PeriodicBoundary::setup: Solvent file not found: " << e.getName() << endl;
 				return false;
 			}
 		}
@@ -330,7 +330,6 @@ namespace BALL
 		// store the box dimensions in the options
 		options->setVector(Option::PERIODIC_BOX_LOWER, box_.a);
 		options->setVector(Option::PERIODIC_BOX_UPPER, box_.b);
-		Log.level(LogStream::INFORMATION) << "PeriodicBoundary dimensions: " << box_.a << "/" << box_.b << endl;
 	
 		return true;
 	}
@@ -355,8 +354,8 @@ namespace BALL
 		
 		if (!hin.hasPeriodicBoundary())
 		{
-			Log.level(LogStream::ERROR) << "Solvent file " << hin.getName() 
-				<< " does not contain a periodic boundary!" << endl;
+			Log.error() << "Solvent file " << hin.getName() 
+									<< " does not contain a periodic boundary!" << endl;
 			return 0;
 		}
 		
@@ -366,7 +365,7 @@ namespace BALL
 		// the simulation system
 		if ((force_field_ == 0) || (force_field_->getSystem() == 0))
 		{
-			Log.level(LogStream::ERROR) << "Force field does not contain  a system." << endl;
+			Log.error() << "Force field does not contain  a system." << endl;
 			return 0;
 		}
 		
