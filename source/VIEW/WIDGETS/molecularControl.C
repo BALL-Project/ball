@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.5 2005/01/17 13:02:42 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.6 2005/01/21 12:43:49 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -706,8 +706,9 @@ void MolecularControl::invalidateSelection()
 void MolecularControl::setSelection_(bool open, bool force)
 	throw()
 {	
-	const HashSet<Composite*>& selection = getMainControl()->getSelection();
+	listview->clearSelection();
 	
+	const HashSet<Composite*>& selection = getMainControl()->getSelection();
 	if (selection.size() == 0)
 	{
 		QListViewItemIterator it(listview);
@@ -727,6 +728,7 @@ void MolecularControl::setSelection_(bool open, bool force)
 		if (selection.has(item->getComposite()))
 		{
 			item->setOn(true);
+			item->setSelected(true);
 			if (open)
 			{
 				item->setSelected(true);
