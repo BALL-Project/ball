@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.5 2003/03/05 16:17:28 anker Exp $
+# $Id: Makefile,v 1.6 2003/05/28 04:12:51 anker Exp $
 # Makefile for BALL utilities
 
 DIRECTORY=APPLICATIONS/UTILITIES
@@ -6,6 +6,7 @@ DIRECTORY=APPLICATIONS/UTILITIES
 EXECUTABLES = \
 	add_hydrogens\
 	assign_typenames_from_rules\
+	clip_protein_around_ligand\
 	dcd2dcd\
 	export_fragment\
 	pdb2amber_naming\
