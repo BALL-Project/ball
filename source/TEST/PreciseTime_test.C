@@ -1,18 +1,21 @@
-// $Id: PreciseTime_test.C,v 1.4 2001/12/30 13:29:00 sturm Exp $
+// $Id: PreciseTime_test.C,v 1.5 2002/01/04 01:10:20 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/CONCEPT/timeStamp.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
+#include <fstream>
 
 ///////////////////////////
 
-START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.4 2001/12/30 13:29:00 sturm Exp $")
+START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.5 2002/01/04 01:10:20 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 // tests for class PreciseTime::
 
@@ -153,18 +156,37 @@ CHECK(PreciseTime::now())
 	TEST_EQUAL((t1 == t2), false)
 RESULT
 
-
+TextPersistenceManager pm;
 CHECK(PreciseTime::write(PersistenceManager& pm) const )
-  //?????
+	PreciseTime t(12345678, 23456789);
+	String filename;
+	NEW_TMP_FILE(filename)
+	std::ofstream of(filename.c_str(), std::ios::out);
+	pm.setOstream(of);
+	t.write(pm);
+	of.close();
+	TEST_FILE(filename.c_str(), "data/PreciseTime_test2.txt", false)
 RESULT
 
 
 CHECK(PreciseTime::read(PersistenceManager& pm))
-  //?????
+	PreciseTime t;
+	std::ifstream inf("data/PreciseTime_test2.txt");
+	pm.setIstream(inf);
+	t.read(pm);
+	inf.close();
+	TEST_EQUAL(t.getSeconds(), 12345678)
+	TEST_EQUAL(t.getMicroSeconds(), 23456789)
 RESULT
 
 CHECK(ostream& operator << (ostream& os, const PreciseTime& time))
-	// ?????
+	PreciseTime t(12345678, 23456789);
+	String filename;
+	NEW_TMP_FILE(filename);
+	ofstream of(filename.c_str(), std::ios::out);
+	of << t << std::endl;
+	of.close();
+	TEST_FILE(filename.c_str(), "data/PreciseTime_test.txt", false)
 RESULT
 
 /////////////////////////////////////////////////////////////
