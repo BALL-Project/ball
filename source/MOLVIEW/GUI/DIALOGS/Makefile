@@ -15,7 +15,9 @@ CPP_SOURCES=\
 	openBruker1DFile.C\
 	openBruker2DFile.C\
 	contourSurfaceDialog.C\
-	contourSurfaceDialogData.C
+	contourSurfaceDialogData.C\
+	peptideDialog.C\
+	peptideDialogData.C
 
 MOC_SOURCES=\
 	atomProperties_moc.C\
@@ -28,7 +30,9 @@ MOC_SOURCES=\
 	openBruker1DFile_moc.C\
 	openBruker2DFile_moc.C\
 	contourSurfaceDialog_moc.C\
-	contourSurfaceDialogData_moc.C
+	contourSurfaceDialogData_moc.C\
+	peptideDialog_moc.C\
+	peptideDialogData_moc.C
 
 include ../../../common.mak
 include .Dependencies
@@ -85,4 +89,17 @@ $(HEADER_DIR)/atomPropertiesData.h:  atomProperties.ui
 
 atomPropertiesData.C:  $(HEADER_DIR)/atomPropertiesData.h
 	$(UIC) -o $@ -impl $< atomProperties.ui
+
+
+peptideDialog_moc.C:	$(HEADER_DIR)/peptideDialog.h
+	$(MOC) $< -o $@
+
+peptideDialogData_moc.C:	$(HEADER_DIR)/peptideDialogData.h
+	$(MOC) $< -o $@
+
+$(HEADER_DIR)/peptideDialogData.h:  peptideDialog.ui
+	$(UIC) -o $@ $<
+
+peptideDialogData.C:  $(HEADER_DIR)/peptideDialogData.h
+	$(UIC) -o $@ -impl $< peptideDialog.ui
 
