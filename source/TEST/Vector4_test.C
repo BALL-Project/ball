@@ -1,16 +1,17 @@
-// $Id: Vector4_test.C,v 1.13 2000/07/12 19:36:50 oliver Exp $
+// $Id: Vector4_test.C,v 1.14 2000/07/26 16:49:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.13 2000/07/12 19:36:50 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.14 2000/07/26 16:49:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 String filename;
 using std::ofstream;

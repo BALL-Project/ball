@@ -1,4 +1,4 @@
-// $Id: Quaternion_test.C,v 1.8 2000/07/12 19:36:48 oliver Exp $
+// $Id: Quaternion_test.C,v 1.9 2000/07/26 16:49:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,12 +7,13 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Quaternion_test.C,v 1.8 2000/07/12 19:36:48 oliver Exp $")
+START_TEST(class_name, "$Id: Quaternion_test.C,v 1.9 2000/07/26 16:49:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 Vector3 const v = Vector3(1.0, 2.0, 3.0);
 String filename;

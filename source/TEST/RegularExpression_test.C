@@ -1,4 +1,4 @@
-// $Id: RegularExpression_test.C,v 1.4 2000/07/12 19:36:48 oliver Exp $
+// $Id: RegularExpression_test.C,v 1.5 2000/07/26 16:49:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.4 2000/07/12 19:36:48 oliver Exp $")
+START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.5 2000/07/26 16:49:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -90,7 +90,16 @@ CHECK(RegularExpression::countSubexpressions() const )////////////////////////
 RESULT
 
 CHECK(RegularExpression::match(const char* text, const char* pattern, int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0 ))
-  //BAUSTELLE
+	TEST_EQUAL(re2.match("abbcbbd", "*bd"), true)
+	TEST_EQUAL(re2.match("abbcbbd", "bd"), true)
+	TEST_EQUAL(re2.match("abbcbbd", "b.a"), false)
+	TEST_EQUAL(re2.match("abbcbbd", "a*d"), true)
+	TEST_EQUAL(re2.match("abbcbbd", "a..d"), false)
+	TEST_EQUAL(re2.match("abbcbbd", "x"), false)
+	TEST_EQUAL(re2.match("abbcbbd", "a[bc]+d"), true)
+	TEST_EQUAL(re2.match("abbcbbd", "a[bc][bc]d"), false)
+	TEST_EQUAL(re2.match("abbcbbd", "a[b]+d"), false)
+	TEST_EQUAL(re2.match("abbcbbd", "a[b]+d"), true)
 RESULT
 
 CHECK(RegularExpression::match(const String& text, Index from = 0, int execute_flags = 0 ) const )

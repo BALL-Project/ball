@@ -1,4 +1,4 @@
-// $Id: Matrix44_test.C,v 1.13 2000/07/12 19:36:46 oliver Exp $
+// $Id: Matrix44_test.C,v 1.14 2000/07/26 16:49:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,12 +10,13 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Matrix44_test.C,v 1.13 2000/07/12 19:36:46 oliver Exp $")
+START_TEST(class_name, "$Id: Matrix44_test.C,v 1.14 2000/07/26 16:49:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 String filename;
 using std::ofstream;

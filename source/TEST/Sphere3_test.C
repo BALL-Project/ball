@@ -1,4 +1,4 @@
-// $Id: Sphere3_test.C,v 1.5 2000/07/12 19:36:49 oliver Exp $
+// $Id: Sphere3_test.C,v 1.6 2000/07/26 16:49:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,12 +6,13 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Sphere3_test.C,v 1.5 2000/07/12 19:36:49 oliver Exp $")
+START_TEST(class_name, "$Id: Sphere3_test.C,v 1.6 2000/07/26 16:49:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 Vector3 const v = Vector3(1, 2, 3);
 Vector3 v2;	

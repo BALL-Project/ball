@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.26 2000/07/12 19:36:49 oliver Exp $
+// $Id: Vector3_test.C,v 1.27 2000/07/26 16:49:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,12 +9,13 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.26 2000/07/12 19:36:49 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.27 2000/07/26 16:49:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 CHECK(TVector3::BALL_CREATE(TVector3<T>))
 	Vector3 v(1.0, 2.0, 3.0);

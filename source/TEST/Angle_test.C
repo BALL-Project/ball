@@ -1,16 +1,17 @@
-// $Id: Angle_test.C,v 1.13 2000/07/12 19:36:44 oliver Exp $
+// $Id: Angle_test.C,v 1.14 2000/07/26 16:49:46 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.13 2000/07/12 19:36:44 oliver Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.14 2000/07/26 16:49:46 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 String filename;
 using std::ofstream;

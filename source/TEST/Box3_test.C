@@ -1,4 +1,4 @@
-// $Id: Box3_test.C,v 1.10 2000/07/12 19:36:45 oliver Exp $
+// $Id: Box3_test.C,v 1.11 2000/07/26 16:49:46 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,12 +6,13 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Box3_test.C,v 1.10 2000/07/12 19:36:45 oliver Exp $")
+START_TEST(class_name, "$Id: Box3_test.C,v 1.11 2000/07/26 16:49:46 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 CHECK(TVector3::BALL_CREATE(TBox3<T>))
 	Vector3 v1(1.0, 2.0, 3.0), v2(1.0, 2.0, 3.0);
