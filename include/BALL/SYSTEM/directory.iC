@@ -27,41 +27,12 @@ void Directory::clear()
 }
 
 BALL_INLINE 
-bool Directory::set(const String& directory_path, bool set_current)
-{
-  dir_ = 0;
-  dirent_ = 0;
-  char* buffer_;
-  if ((buffer_ = ::getcwd(NULL, 64)) != NULL)
-  {
-    directory_path_ = buffer_;
-    directory_path_ += BALL::FileSystem::PATH_SEPARATOR;
-    directory_path_ += directory_path;
-    FileSystem::canonizePath(directory_path_);
-    if (directory_path_.hasSuffix(String(BALL::FileSystem::PATH_SEPARATOR)))
-    {
-      directory_path_.truncate(directory_path_.size() - 1);
-    }
-  }
-  else 
-	{	
-		directory_path_ = "";
-		return false;
-	}
-	if (!isValid())
-	{
-		return false;
-	}
-  if (set_current) return (::chdir(directory_path_.data()));
-	return true;
-}
-
-BALL_INLINE 
 void Directory::set(const Directory& directory)
 {
   dir_ = 0;
   dirent_ = 0;
   directory_path_ = directory.directory_path_;
+	backup_path_ = "";
 }
 
 BALL_INLINE 
@@ -76,20 +47,7 @@ bool Directory::rename(String old_path, String new_path)
 	synchronize_();	
   FileSystem::canonizePath(old_path);
   FileSystem::canonizePath(new_path);
-  result_ = (::rename(old_path.data(), new_path.data()) == 0);
-	return desynchronize_();
-}
-
-BALL_INLINE 
-bool Directory::renameTo(String new_path)
-{
-  FileSystem::canonizePath(new_path);
-	if (::rename(directory_path_.data(), new_path.data()) == 0)
-  {
-    directory_path_ = new_path;
-    return true;
-  }
-  else return false;
+	return desynchronize_((::rename(old_path.data(), new_path.data()) == 0));
 }
 
 BALL_INLINE 
@@ -106,21 +64,23 @@ bool Directory::setCurrent()
 }
 
 BALL_INLINE 
-bool Directory::create(String path, const mode_t& mode)
+bool Directory::create(String directory_path, const mode_t& mode)
 {
+  FileSystem::canonizePath(directory_path);
+	if (directory_path[0] == FileSystem::PATH_SEPARATOR)
+	{
+		return (::mkdir(directory_path.data(), mode) == 0);
+	}
 	synchronize_();	
-  FileSystem::canonizePath(path);
-  result_ = (::mkdir(path.data(), mode) == 0);
-	return desynchronize_();
+	return desynchronize_((::mkdir(directory_path.data(), mode) == 0));
 }
 
 BALL_INLINE 
-bool Directory::remove(String path)
+bool Directory::remove(String directory_path)
 {
 	synchronize_();	
-  FileSystem::canonizePath(path);
-  result_ = (::rmdir(path.data()) == 0);
-	return desynchronize_();
+  FileSystem::canonizePath(directory_path);
+	return desynchronize_((::rmdir(directory_path.data()) == 0));
 }
 
 BALL_INLINE 
@@ -144,8 +104,7 @@ bool Directory::operator != (const Directory& directory) const
 BALL_INLINE 
 bool Directory::isValid() const
 {
-		DIR* dir = ::opendir(directory_path_.data());
-    return (dir != NULL);
+	return (::opendir(directory_path_.data()) != NULL && directory_path_ != "");
 }
 
 BALL_INLINE 
@@ -159,12 +118,10 @@ void Directory::synchronize_()
 }
 
 BALL_INLINE 
-bool Directory::desynchronize_()
+bool Directory::desynchronize_(bool result1)
 {
-  if (backup_path_ != "")
-  {
-    ::chdir(backup_path_.data());
-    backup_path_ = "";
-  }
-	return result_;
+  if (backup_path_ == "") return result1;
+	bool result2 = (::chdir(backup_path_.data()) == 0);
+  backup_path_ = "";
+	return (result1 && result2);
 }
