@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.4 2000/12/20 18:39:00 anker Exp $
+// $Id: DCDFile.h,v 1.5 2001/01/08 16:56:08 anker Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -35,6 +35,11 @@ namespace BALL
 				of the number of bytes in the following record.  It ends with a
 				record containing the same 4 bytes."
 				\\
+				The header consists of several blocks. Each block starts and ends
+				with the number of bytes enclosed between those numbers, i. e. a
+				block consisting of 8 bytes starts with the number 8 followed by 8
+				bytes of data and ends with the number 8.
+				\\
 				{\bf Definition:} \URL{BALL/Format/DCDFile.h}
 				\\
 		*/
@@ -43,10 +48,11 @@ namespace BALL
 
 			public: 
 
-			///
+			/// Start tag of the first block
 			Size				start_info_block;
 
-			///
+			/// Four characters used as a kind of magic number. They have to form
+			/// the string CORD.
 			char				CORD[4];
 
 			/// The number of coordinate sets in this file
@@ -55,40 +61,44 @@ namespace BALL
 			/// The number of the starting time step
 			Size 				step_number_of_starting_time;
 
-			///
+			/// The number of time steps between saves
 			Size				steps_between_saves;
 
-			/// 
+			/// An array of 6 unuses integers (specialized versions use them, e.
+			/// g. CHARMM)
 			Size 				unused_1[6];
 
 			/// The length of one time step (in units of ???)
 			DoubleReal	time_step_length;
 
-			///
+			/// Another array of unused integers
 			Size				unused_2[9];
 
-			///
+			/// End tag of the first block
 			Size				end_info_block;
 
-			///
+			/// Start tag of the title block.
 			Size				start_title_block;
 
-			/// the number of 80 byte comments in this record
+			/// The number of 80 byte comments in this record. In our case we
+			/// restrict this to be 2 for simplicity reasons.
 			Size				number_of_comments;
 
-			///
+			/// This 160 char array (actually consisting of two 80 char arrays)
+			/// may be used for arbitrary comments.
 			char				title[160];
 			
-			///
+			/// End tag of the title block
 			Size				end_title_block;
 
-			///
+			/// Start tag of the little block containing only the number of atoms
+			/// in the system
 			Size				start_atomnumber_block;
 
 			/// the number of atoms covered by every timestep
 			Size				number_of_atoms;
 
-			///
+			/// End tag of the atom number block
 			Size				end_atomnumber_block;
 
 			DCDHeader()
@@ -109,10 +119,12 @@ namespace BALL
 					number_of_atoms(0),
 					end_atomnumber_block(4)
 			{
+				// BAUSTELLE: What about using c_str() for initializing CORD?
 				CORD[0] = 'C';
 				CORD[1] = 'O';
 				CORD[2] = 'R';
 				CORD[3] = 'D';
+				// BAUSTELLE: This is more than ugly
 				Size argh;
 				for (argh = 0; argh < 6; ++argh)
 				{
@@ -126,6 +138,10 @@ namespace BALL
 				{
 					title[argh] = ' ';
 				}
+				// BAUSTELLE: this only works with <cstdio> which does not seem to
+				// be available under IRIX
+				// sprintf(title, "BALL DCD export file");
+				// sprintf(title+80, "Here should be the date");
 			}
 
 			/**	@name I/O operators
