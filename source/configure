@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.136 2001/05/07 14:25:46 oliver Exp $
+#  $Id: configure,v 1.138 2001/05/09 16:18:28 oliver Exp $
 
 
 ##################################################
@@ -7314,8 +7314,8 @@ if test "${MULTI_BUILD}" = "true" ; then
 	${RM} -fr `pwd`/${BINFMT}/BENCHMARKS/data 2>/dev/null
 	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST 2>/dev/null
 	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST 2>/dev/null
-	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
-	${LN} -s `pwd`/TEST/runbenchmarks `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
+	${LN} -s `pwd`/BENCHMARKS/data `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
+	${LN} -s `pwd`/BENCHMARKS/runbenchmarks `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
 
 	${CP} config/Makefile.multiplatform Makefile
 
