@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.16 2000/08/28 17:43:38 oliver Exp $
+// $Id: Composite_test.C,v 1.17 2000/08/28 21:01:50 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@
 using namespace BALL;
 using namespace std;
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.16 2000/08/28 17:43:38 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.17 2000/08/28 21:01:50 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -299,7 +299,7 @@ CHECK(getPathLength(const Composite&) const)
 	c.appendChild(e);
 	TEST_EQUAL(a.getPathLength(a), 0)
 	TEST_EQUAL(a.getPathLength(b), 1)
-	TEST_EQUAL(a.getPathLength(a), 1)
+	TEST_EQUAL(b.getPathLength(a), 1)
 	TEST_EQUAL(b.getPathLength(c), 1)
 	TEST_EQUAL(c.getPathLength(b), 1)
 	TEST_EQUAL(c.getPathLength(d), INVALID_SIZE)
@@ -321,15 +321,6 @@ a.appendChild(b);
 b.appendChild(c);
 b.appendChild(d);
 c.appendChild(e);
-
-CHECK(getDepth(const Composite&))
-	TEST_EQUAL(a.getDepth(), 0)
-	TEST_EQUAL(b.getDepth(), 1)
-	TEST_EQUAL(c.getDepth(), 2)
-	TEST_EQUAL(d.getDepth(), 2)
-	TEST_EQUAL(e.getDepth(), 3)
-	TEST_EQUAL(f.getDepth(), 0)
-RESULT
 
 const Composite& c_a = a;
 const Composite& c_b = b;
@@ -379,7 +370,6 @@ CHECK(getRoot() const)
 	TEST_EQUAL(&c_e.getRoot(), &a)
 	TEST_EQUAL(&c_f.getRoot(), &f)
 RESULT
-
 
 CHECK(isEmpty() const)
 	TEST_EQUAL(a.isEmpty(), false)
@@ -831,7 +821,43 @@ RESULT
 
 CHECK(static bool insertParent(Composite& parent, Composite& first, 
 															 Composite& last, bool destroy_parent = true))
-//
+	{
+		Composite a, b, c, d, e, f, x;
+		a.appendChild(b);
+		a.appendChild(c);
+		a.appendChild(d);
+		a.appendChild(e);
+		d.appendChild(f);
+		TEST_EQUAL(Composite::insertParent(x, c, d, true), true)
+		TEST_EQUAL(a.getChild(0), &b)
+		TEST_EQUAL(a.getChild(1), &x)
+		TEST_EQUAL(a.getChild(2), &e)
+		TEST_EQUAL(a.getChild(3), 0)
+
+		TEST_EQUAL(x.getChild(0), &c)
+		TEST_EQUAL(x.getChild(1), &d)
+		TEST_EQUAL(x.getChild(2), 0)
+
+		TEST_EQUAL(d.getChild(0), &f)
+	}
+	{
+		Composite a, b, c, d, e, f, x;
+		a.appendChild(b);
+		a.appendChild(c);
+		a.appendChild(d);
+		a.appendChild(e);
+		d.appendChild(f);
+		TEST_EQUAL(Composite::insertParent(x, a, e, true), false)
+		TEST_EQUAL(Composite::insertParent(x, e, x, true), false)
+		TEST_EQUAL(Composite::insertParent(x, b, e, true), true)
+		TEST_EQUAL(a.getChild(0), &x)
+		TEST_EQUAL(a.getChild(1), 0)
+		TEST_EQUAL(x.getChild(0), &b)
+		TEST_EQUAL(x.getChild(1), &c)
+		TEST_EQUAL(x.getChild(2), &d)
+		TEST_EQUAL(x.getChild(3), &e)
+		TEST_EQUAL(d.getChild(0), &f)
+	}
 RESULT
 
 CHECK(insertBefore(Composite& composite))
@@ -851,15 +877,64 @@ CHECK(insertAfter(Composite& composite))
 RESULT
 
 CHECK(spliceBefore(Composite& composite))
-//
+	Composite a, b, c, d, e, f;
+	a.appendChild(b);
+	b.appendChild(c);
+	b.appendChild(d);
+
+	e.appendChild(f);
+
+	e.spliceBefore(b);
+	TEST_EQUAL(e.getChild(0), &c)
+	TEST_EQUAL(e.getChild(1), &d)
+	TEST_EQUAL(e.getChild(2), &f)
+	TEST_EQUAL(b.getChild(0), 0)
+
+	a.spliceBefore(a);
 RESULT
 
 CHECK(spliceAfter(Composite& composite))
-//
+	Composite a, b, c, d, e, f;
+	a.appendChild(b);
+	b.appendChild(c);
+	b.appendChild(d);
+
+	e.appendChild(f);
+
+	e.spliceAfter(b);
+	TEST_EQUAL(e.getChild(0), &f)
+	TEST_EQUAL(e.getChild(1), &c)
+	TEST_EQUAL(e.getChild(2), &d)
+	TEST_EQUAL(b.getChild(0), 0)
+
+	a.spliceAfter(a);
 RESULT
 
 CHECK(splice(Composite& composite))
-//
+	{
+		Composite a, b, c, d, e, f;
+		a.appendChild(b);
+		b.appendChild(c);
+		b.appendChild(d);
+
+		e.appendChild(f);
+
+		e.splice(b);
+		TEST_EQUAL(e.getChild(0), &c)
+		TEST_EQUAL(e.getChild(1), &d)
+		TEST_EQUAL(e.getChild(2), &f)
+		TEST_EQUAL(b.getChild(0), 0)
+	}
+	{
+		Composite a, b, c, d, e, f;
+		a.appendChild(b);
+		b.appendChild(c);
+		b.appendChild(d);
+		c.appendChild(e);
+		b.splice(c);
+		TEST_EQUAL(b.getChild(0), &e)
+		TEST_EQUAL(b.getChild(1), &d)
+	}
 RESULT
 
 CHECK(bool removeChild(Composite& child))
@@ -897,7 +972,7 @@ CHECK(replace(Composite& composite))
 	TEST_EQUAL(c1.getParent(), &b1)
 RESULT
 
-CHECK(swap(Composite& composite))/*
+CHECK(swap(Composite& composite))
 	Composite a, b, c, d, e;
 	a.appendChild(b);
 	b.appendChild(c);
@@ -910,38 +985,19 @@ CHECK(swap(Composite& composite))/*
 	b1.appendChild(d1);
 	c1.appendChild(e1);
 
-	cout <<endl;
-	cout << "a " << &a <<endl;
-	cout << "b " << &b <<endl;
-	cout << "c " << &c <<endl;
-	cout << "d " << &d <<endl;
-	cout << "e " << &e <<endl;
-	cout << endl;
-	cout << "a1 " << &a1 <<endl;
-	cout << "b1 " << &b1 <<endl;
-	cout << "c1 " << &c1 <<endl;
-	cout << "d1 " << &d1 <<endl;
-	cout << "e1 " << &e1 <<endl;
-	cout << endl;
-
 	a.swap(e);
 	TEST_EQUAL(b.getParent(), &a)
 	TEST_EQUAL(c.getParent(), &b)
 	TEST_EQUAL(e.getParent(), &c)
 
 	b1.swap(b);
-	cout << "-----------1";
 	TEST_EQUAL(a.getFirstChild(), &b1)
-	cout << "-----------2";
 	TEST_EQUAL(a1.getFirstChild(), &b)
-	cout << "-----------3";
 	TEST_EQUAL(b.getParent(), &a1)
-	cout << "-----------4";
 	TEST_EQUAL(b1.getParent(), &a)
-	cout << "-----------5";
 
 	TEST_EQUAL(c.getParent(), &b1)
-	TEST_EQUAL(c1.getParent(), &b)*/
+	TEST_EQUAL(c1.getParent(), &b)
 RESULT
 
 CHECK(bool isExpanded() const)
@@ -1002,8 +1058,8 @@ RESULT
 
 CHECK(isHomomorph(const Composite& composite))
 	f.set(a);
-	TEST_EQUAL(f.isHomomorph(a), true) // ???
-	TEST_EQUAL(a.isHomomorph(f), true) // ???
+	TEST_EQUAL(f.isHomomorph(a), true)
+	TEST_EQUAL(a.isHomomorph(f), true)
 	TEST_EQUAL(a.isHomomorph(a), true)
 	TEST_EQUAL(a.isHomomorph(b), false)
 	f.clear();
