@@ -1,3 +1,7 @@
+// $Id: Makefile,v 1.8 2000/01/17 10:32:49 oliver Exp $
+//========================
+// BALL/EXAMPLES Makefile
+//========================
 
 EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens MOLVIEWClient
 
@@ -5,9 +9,8 @@ all:	$(EXECUTABLES)
 
 include ../common.mak
 
-
 clean:	default_clean
-	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	core a.out $(EXECUTABLES)
+	@$(RM) $(EXECUTABLES)
 
 proteinMapper:	proteinMapper.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
