@@ -19,6 +19,7 @@ CPP_SOURCES= \
 	graphVertex.C\
 	numericalSAS.C\
 	radialDistributionFunction.C\
+	reconstructFragmentProcessor.C\
 	RDFIntegrator.C\
 	RDFParameter.C\
 	RDFSection.C\
