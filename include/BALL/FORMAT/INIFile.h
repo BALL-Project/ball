@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.37 2003/08/26 08:04:13 oliver Exp $
+// $Id: INIFile.h,v 1.38 2003/12/10 15:54:19 anhi Exp $
 //
 
 #ifndef BALL_FORMAT_INIFILE_H
@@ -43,7 +43,39 @@ namespace BALL
 		};
 
 		class IteratorTraits_;
-		class Section;
+	
+		///
+		class Section
+		{
+			public:
+
+			friend class INIFile;
+			friend class IteratorTraits_;
+
+			///
+			const String& getName() const
+			{
+				return name_;
+			}
+
+			///
+			bool operator == (const Section& section) const
+			{
+				return (name_		 == section.name_		&&
+								lines_	 == section.lines_);
+			}
+
+			protected:
+
+			// name of the section
+			String																	name_;
+
+			// all lines of the section
+			List<String>														lines_;
+
+			// hashmap with all keys
+			StringHashMap<List<String>::Iterator>		key_map_;
+		};
 
 		///
 		typedef List<Section>::Iterator SectionIterator;
@@ -384,39 +416,6 @@ namespace BALL
 		StringHashMap<SectionIterator>		section_index_;
 
 		public:
-
-		///
-		class Section
-		{
-			public:
-
-			friend class INIFile;
-			friend class IteratorTraits_;
-
-			///
-			const String& getName() const
-			{
-				return name_;
-			}
-
-			///
-			bool operator == (const Section& section) const
-			{
-				return (name_		 == section.name_		&&
-								lines_	 == section.lines_);
-			}
-
-			protected:
-
-			// name of the section
-			String																	name_;
-
-			// all lines of the section
-			List<String>														lines_;
-
-			// hashmap with all keys
-			StringHashMap<List<String>::Iterator>		key_map_;
-		};
 
 		/// Interface for the LineIterator
 		class IteratorTraits_
