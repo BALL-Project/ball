@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.5 2003/10/15 14:54:43 amoll Exp $
+// $Id: modelProcessor.h,v 1.6 2003/10/17 16:17:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_GUI_MODELS_ModelProcessor_H
@@ -23,7 +23,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class ColorProcessor;
 		class GeometricObject;
 		
 		class ModelProcessor
@@ -69,14 +68,6 @@ namespace BALL
 					throw(){};
 
 				///
-				void setColorProcessor(ColorProcessor* processor)
-					throw() { color_processor_ = processor;}
-
-				///
-				ColorProcessor* getColorProcessor()
-					throw() { return color_processor_;}
-				
-				///
 				GeometricObjectList& getGeometricObjects() 
 					throw() { return geometric_objects_;}
 				
@@ -96,9 +87,6 @@ namespace BALL
 				
 				//_
 				GeometricObjectList geometric_objects_;
-
-				//_
-				ColorProcessor* color_processor_;
 
 				//_
 				Index drawing_precision_;

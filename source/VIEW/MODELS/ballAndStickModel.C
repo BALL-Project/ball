@@ -1,10 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.4 2003/09/03 12:34:32 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.5 2003/10/17 16:17:37 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
-#include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -152,10 +151,7 @@ Processor::Result AddBallAndStickModel::operator() (Composite& composite)
 	}
 
 	sphere_ptr->setPositionAddress(atom->getPosition());
-	
-	getColorProcessor()->operator() (atom);
-
-	sphere_ptr->setColor(getColorProcessor()->getColor());
+	sphere_ptr->setComposite(&composite);
 	
 	// append sphere in Atom
 	geometric_objects_.push_back(sphere_ptr);
@@ -194,48 +190,16 @@ void AddBallAndStickModel::dump(std::ostream& s, Size depth) const
 void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 	throw()
 {
-	// get colors from both atoms
-	ColorRGBA first_color, second_color;
-
-	if (getColorProcessor() != 0)
-	{
-		getColorProcessor()->operator() (bond.getFirstAtom());
-		first_color = getColorProcessor()->getColor();
-						
-		getColorProcessor()->operator() (bond.getSecondAtom());
-		second_color = getColorProcessor()->getColor();
-	}
+	// generate two colored tube
+	TwoColoredTube *tube = new TwoColoredTube;
 					
-	// if both colors are identical
-	if (first_color == second_color)
-	{
-		// generate single colored tube
-		Tube *tube = new Tube;
-
-		if (tube == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
+	if (tube == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredTube));
 						
-		tube->setRadius(stick_radius_);
-		tube->setVertex1Address(bond.getFirstAtom()->getPosition());
-		tube->setVertex2Address(bond.getSecondAtom()->getPosition());
-		tube->setColor(first_color);
-		tube->setComposite(&bond);
-		geometric_objects_.push_back(tube);
-	}
-	else
-	{
-		// generate two colored tube
-		TwoColoredTube *tube = new TwoColoredTube;
-						
-		if (tube == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredTube));
-						
-		tube->setRadius(stick_radius_);
-		tube->setVertex1Address(bond.getFirstAtom()->getPosition());
-		tube->setVertex2Address(bond.getSecondAtom()->getPosition());
-		tube->setColor(first_color);
-		tube->setColor2(second_color);
-		tube->setComposite(&bond);
-		geometric_objects_.push_back(tube);
-	}
+	tube->setRadius(stick_radius_);
+	tube->setVertex1Address(bond.getFirstAtom()->getPosition());
+	tube->setVertex2Address(bond.getSecondAtom()->getPosition());
+	tube->setComposite(&bond);
+	geometric_objects_.push_back(tube);
 }
 
 

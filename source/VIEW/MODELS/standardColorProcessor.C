@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.3 2003/10/15 13:57:23 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.4 2003/10/17 16:17:37 amoll Exp $
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/KERNEL/residue.h>
@@ -144,21 +144,27 @@ ElementColorProcessor::ElementColorProcessor()
 	for (Size i = 0; i < 111; i++)
 	{
 		color_map_.insert
-			(StringHashMap<ColorRGBA>::ValueType(PTE[i].getSymbol(), 
+			(HashMap<Position, ColorRGBA>::ValueType(i, 
 			 ColorRGBA(color_values[i][0], color_values[i][1], color_values[i][2])));
 	}
 }
 
 
-Processor::Result ElementColorProcessor::operator() (const Composite* composite)
+ColorRGBA ElementColorProcessor::getColor(const Composite* composite)
 {
 	if (!RTTI::isKindOf<Atom>(*composite))
 	{
-		color_ = default_color_;
-		return Processor::CONTINUE;
+		return default_color_;
 	}
-	getColor(((Atom*) composite)->getElement().getSymbol());
-	return Processor::CONTINUE;
+	Position pos = ((Atom*) composite)->getElement().getAtomicNumber();
+	if (color_map_.has(pos))
+	{
+		return color_map_[pos];
+	}
+	else
+	{
+		return default_color_;
+	}
 }
 
 
@@ -208,18 +214,25 @@ ResidueNameColorProcessor::ResidueNameColorProcessor()
 	}
 }
 
-Processor::Result ResidueNameColorProcessor::operator() (const Composite* composite)
+ColorRGBA ResidueNameColorProcessor::getColor(const Composite* composite)
 {
 	if (composite->getParent() == 0 ||
 			 !RTTI::isKindOf<Residue>(*composite->getParent()))
 	{
-		color_ = default_color_;
+		return default_color_;
 	} 
 	else 
 	{
-		getColor(((Residue*)(composite->getParent()))->getName());
+		String name = ((Residue*) composite->getParent())->getName();
+		if (color_map_.has(name))
+		{
+			return color_map_[name];
+		}
+		else
+		{
+			return default_color_;
+		}
 	}
-	return Processor::CONTINUE;
 }
 
 ResidueNumberColorProcessor::ResidueNumberColorProcessor()
@@ -229,38 +242,49 @@ ResidueNumberColorProcessor::ResidueNumberColorProcessor()
 	Position nr = 0;
 	for (Index red = 100; red < 255; red+=10)
 	{
-		color_map_.insert(StringHashMap<ColorRGBA>::ValueType(String(nr), ColorRGBA(red,0,0)));
+		colors_.push_back(ColorRGBA(red,0,0));
 		nr++;
 	}
 	for (Index red = 255; red >= 0; red-=10)
 	{
-		color_map_.insert(StringHashMap<ColorRGBA>::ValueType(String(nr), ColorRGBA(red,255-red,0)));
+		colors_.push_back(ColorRGBA(red,255-red,0));
 		nr++;
 	}
 	for (Index green= 255; green>= 0; green-=10)
 	{
-		color_map_.insert(StringHashMap<ColorRGBA>::ValueType(String(nr), ColorRGBA(0,green,255-green)));
+		colors_.push_back(ColorRGBA(0,green,255-green));
 		nr++;
 	}
 	for (Index p = 0; p < 255; p+=10)
 	{
-		color_map_.insert(StringHashMap<ColorRGBA>::ValueType(String(nr), ColorRGBA(p,p,255)));
+		colors_.push_back(ColorRGBA(p,p,255));
 		nr++;
 	}
+
+	max_ = nr;
 }
 
-Processor::Result ResidueNumberColorProcessor::operator() (const Composite* composite)
+ColorRGBA ResidueNumberColorProcessor::getColor(const Composite* composite)
 {
 	if (composite->getParent() == 0 ||
-			 !RTTI::isKindOf<Residue>(*composite->getParent()))
+			!RTTI::isKindOf<Residue>(*composite->getParent()))
 	{
-		color_ = default_color_;
+		return default_color_;
 	}
 	else
 	{
-		getColor(((const Residue*)(composite->getParent()))->getID());
+		Position pos;
+		try
+		{
+			pos = ((const Residue*)(composite->getParent()))->getID().toUnsignedShort();
+		}
+		catch(...)
+		{
+			return default_color_;
+		}
+		while (pos > max_) pos = pos - max_;
+		return colors_[pos];
 	}
-	return Processor::CONTINUE;
 }
 
 AtomChargeColorProcessor::AtomChargeColorProcessor()
@@ -281,12 +305,11 @@ AtomChargeColorProcessor::AtomChargeColorProcessor(const AtomChargeColorProcesso
 {
 }
 
-Processor::Result AtomChargeColorProcessor::operator() (const Composite* composite)
+ColorRGBA AtomChargeColorProcessor::getColor(const Composite* composite)
 {
 	if (!RTTI::isKindOf<Atom>(*composite))
 	{
-		color_ = default_color_;
-		return Processor::CONTINUE;
+		return default_color_;
 	}
 
 	Atom& atom = *(Atom*) composite;
@@ -318,10 +341,9 @@ Processor::Result AtomChargeColorProcessor::operator() (const Composite* composi
 	green2 = neutral_color_.getGreen();
 	blue2  = neutral_color_.getBlue();
 
-	color_.set(red1 * charge + (1.0 - charge) * red2,
-					 green1 * charge + (1.0 - charge) * green2,
-						blue1 * charge + (1.0 - charge) * blue2);
-	return Processor::CONTINUE;
+	return ColorRGBA(red1 * charge + (1.0 - charge) * red2,
+									 green1 * charge + (1.0 - charge) * green2,
+									 blue1 * charge + (1.0 - charge) * blue2);
 }
 
 
@@ -376,29 +398,25 @@ void AtomDistanceColorProcessor::calculateDistances()
 }
 
 
-Processor::Result AtomDistanceColorProcessor::operator() (const Composite* composite)
+void AtomDistanceColorProcessor::visit(Atom& atom)
 {
-	if (!RTTI::isKindOf<Atom>(*composite))
-	{
-		color_ = default_color_;
-		return Processor::CONTINUE;
-	}
-
-	Atom& atom = *(Atom*)composite;
-	AtomDistanceHashMap::Iterator it = atom_2_distance_.find((void*)&atom);
+	AtomDistanceHashMap::Iterator it = atom_2_distance_.find(&atom);
 
 	// atom in hashmap ? => insert into hashmap with start distance = distance_
 	if (it == atom_2_distance_.end())
 	{
-		atom_2_distance_.insert(AtomDistanceHashMap::ValueType((void*)&atom, distance_));
+		atom_2_distance_.insert(AtomDistanceHashMap::ValueType(&atom, distance_));
 	}		
-
-	return Processor::CONTINUE;
 }
 
-void AtomDistanceColorProcessor::visit(Atom& atom)
+ColorRGBA AtomDistanceColorProcessor::getColor(const Composite* composite)
 {
-	AtomDistanceHashMap::Iterator it = atom_2_distance_.find((void*)&atom);
+	if (!RTTI::isKindOf<Atom>(*composite))
+	{
+		return default_color_;
+	}
+
+	AtomDistanceHashMap::Iterator it = atom_2_distance_.find(composite);
 
 	float distance = distance_;
 
@@ -421,9 +439,9 @@ void AtomDistanceColorProcessor::visit(Atom& atom)
 	float green2 = full_distance_color_.getGreen();
 	float blue2  = full_distance_color_.getBlue();
 
-	color_.set(red1 + (distance * (red2 - red1)) 			/ distance_,
-					 green1 + (distance * (green2 - green1)) 	/ distance_,
-						blue1 + (distance * (blue2 - blue1)) 		/ distance_);
+	return ColorRGBA(red1 + (distance * (red2 - red1)) 			/ distance_,
+									 green1 + (distance * (green2 - green1)) 	/ distance_,
+									 blue1 + (distance * (blue2 - blue1)) 		/ distance_);
 }
 
 

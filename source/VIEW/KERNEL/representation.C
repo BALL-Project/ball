@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.3 2003/09/03 13:05:32 amoll Exp $
+// $Id: representation.C,v 1.4 2003/10/17 16:17:34 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
+#include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/MATHS/common.h>
@@ -20,6 +21,7 @@ namespace BALL
 					drawing_precision_(DRAWING_PRECISION_HIGH),
 					model_type_(0),
 					model_processor_(0),
+					color_processor_(0),
 					geometric_objects_(),
 					composites_()
 		{
@@ -32,6 +34,7 @@ namespace BALL
 					drawing_precision_(rp.drawing_precision_),
 					model_type_(rp.model_type_),
 					model_processor_(new ModelProcessor(*rp.model_processor_)),
+					color_processor_(new ColorProcessor(*rp.color_processor_)),
 					geometric_objects_(),
 					composites_(rp.composites_)
 		{
@@ -47,6 +50,7 @@ namespace BALL
 					drawing_precision_(drawing_precision),
 					model_type_(model_type),
 					model_processor_(0),
+					color_processor_(0),
 					geometric_objects_(),
 					composites_()
 		{
@@ -85,6 +89,15 @@ namespace BALL
 				model_processor_ = 0;
 			}
 
+			if (representation.color_processor_ != 0)
+			{
+				color_processor_ = new ColorProcessor(*representation.color_processor_);
+			}
+			else
+			{
+				color_processor_ = 0;
+			}
+
 			GeometricObjectList::ConstIterator it = representation.geometric_objects_.begin();
 			for (;it != representation.geometric_objects_.end(); it++)
 			{
@@ -116,7 +129,9 @@ namespace BALL
 			composites_.clear();
 
 			if (model_processor_  != 0) delete model_processor_;
+			//if (color_processor_  != 0) delete model_processor_;
 			model_processor_ 	= 0;
+			color_processor_ 	= 0;
 
 			drawing_mode_= DRAWING_MODE_SOLID;
 			drawing_precision_= DRAWING_PRECISION_HIGH;
@@ -199,14 +214,16 @@ namespace BALL
 				model_processor_->getGeometricObjects().clear();
 				
 				CompositeSet::Iterator it = composites_.begin();
-				if (model_processor_ != 0)
+				for (; it!= composites_.end(); it++)
 				{
-					for (; it!= composites_.end(); it++)
-					{
-						(const_cast<Composite*>(*it))->apply(*model_processor_);
-					}
+					(const_cast<Composite*>(*it))->apply(*model_processor_);
 				}
 				geometric_objects_ = model_processor_->getGeometricObjects();
+			}
+
+			if (color_processor_ != 0) 
+			{
+				geometric_objects_.apply(*color_processor_);
 			}
 		}
 
@@ -225,8 +242,22 @@ namespace BALL
 		void Representation::setModelProcessor(ModelProcessor* processor)
 			throw() 
 		{ 
+			if (model_processor_ != 0)
+			{
+				delete model_processor_;
+			}
 			model_processor_ = processor;
 			if (model_processor_ != 0) model_processor_->setDrawingPrecision(drawing_precision_);
+		}
+
+		void Representation::setColorProcessor(ColorProcessor* processor)
+			throw() 
+		{ 
+			if (color_processor_ != 0)
+			{
+				//delete color_processor_;
+			}
+			color_processor_ = processor;
 		}
 
 		void Representation::setDrawingPrecision(Index precision)

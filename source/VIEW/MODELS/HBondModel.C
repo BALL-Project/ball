@@ -1,10 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.C,v 1.2 2003/09/03 15:10:39 amoll Exp $
+// $Id: HBondModel.C,v 1.3 2003/10/17 16:17:36 amoll Exp $
 
 #include <BALL/VIEW/MODELS/HBondModel.h>
-#include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 

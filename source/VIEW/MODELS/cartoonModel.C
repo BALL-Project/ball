@@ -1,10 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.5 2003/10/15 13:58:09 amoll Exp $
+// $Id: cartoonModel.C,v 1.6 2003/10/17 16:17:37 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
-#include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -506,9 +505,11 @@ namespace BALL
 			{
 				if (it->getName() == "C")
 				{
+					/*
 					getColorProcessor()->operator() (&*it);
 					SplinePoint spline_point(it->getPosition(), getColorProcessor()->getColor());
 					spline_vector_.push_back(spline_point);
+					*/
 				}
 			}
 

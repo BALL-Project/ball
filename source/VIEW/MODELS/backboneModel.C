@@ -1,11 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.4 2003/09/01 10:27:20 amoll Exp $
+// $Id: backboneModel.C,v 1.5 2003/10/17 16:17:36 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
-#include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/KERNEL/atom.h>
@@ -98,10 +97,12 @@ namespace BALL
 						 residue.getFullName() == "NME-C" )
 						))
 				{
+					/*
 					getColorProcessor()->operator() (&*it);
 				
 					SplinePoint spline_point((*it).getPosition(), getColorProcessor()->getColor());
 					spline_vector_.push_back(spline_point);
+					*/
 				}
 			}
 

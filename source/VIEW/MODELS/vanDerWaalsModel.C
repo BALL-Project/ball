@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.C,v 1.3 2003/09/03 12:34:32 amoll Exp $
+// $Id: vanDerWaalsModel.C,v 1.4 2003/10/17 16:17:37 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
-#include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/PTE.h>
 
 using namespace std;
 
@@ -70,12 +70,8 @@ namespace BALL
 			if (sphere_ptr == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
 
 			sphere_ptr->setComposite(atom);
-
 			sphere_ptr->setRadius(atom->getElement().getVanDerWaalsRadius());
 			sphere_ptr->setPositionAddress(atom->getPosition());
-
-			getColorProcessor()->operator() (atom);
-			sphere_ptr->setColor(getColorProcessor()->getColor());
 			
 			geometric_objects_.push_back(sphere_ptr);
 			

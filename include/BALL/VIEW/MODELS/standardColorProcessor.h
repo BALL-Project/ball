@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.4 2003/10/15 14:24:38 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.5 2003/10/17 16:17:23 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -38,15 +38,18 @@ namespace BALL
 
 			/** Default Constructor.
 					Initialize the internal ColorMap to contain all element colors with 
-					element symbols as names.
+					element numbers as names.
 			*/
 			ElementColorProcessor()
 				throw();
 
 			///
-			virtual Processor::Result operator() (const Composite* composite);
+			virtual ColorRGBA getColor(const Composite* composite);
 
 			//@}
+			protected: 
+
+			HashMap<Position, ColorRGBA> color_map_;
 		};
 
 
@@ -61,7 +64,11 @@ namespace BALL
 					throw();
 
 				///
-				virtual Processor::Result operator() (const Composite* composite);
+				virtual ColorRGBA getColor(const Composite* composite);
+
+			protected:
+				vector<ColorRGBA> colors_;
+				Position max_;
 		};
 
 
@@ -94,8 +101,11 @@ namespace BALL
 			//@{
 
 			///
-			virtual Processor::Result operator() (const Composite* composite);
+			virtual ColorRGBA getColor(const Composite* composite);
 			//@}
+			
+			protected:	
+				StringHashMap<ColorRGBA> color_map_;
 		};
 
 			
@@ -181,7 +191,7 @@ namespace BALL
 				throw();
 
 			///
-			virtual Processor::Result operator() (const Composite* composite);
+			virtual ColorRGBA getColor(const Composite* composite);
 
 			//@}
 
@@ -310,13 +320,13 @@ namespace BALL
 
 			/**	Operator ().
 			*/
-			virtual Processor::Result operator() (const Composite* composite);
+			virtual ColorRGBA getColor(const Composite* composite);
 
 			//@}
 
 			private:
 
-			typedef HashMap<void*, float> AtomDistanceHashMap;
+			typedef HashMap<const Composite*, float> AtomDistanceHashMap;
 
 			AtomDistanceHashMap atom_2_distance_;
 
