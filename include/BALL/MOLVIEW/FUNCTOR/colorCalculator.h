@@ -1,4 +1,4 @@
-// $Id: colorCalculator.h,v 1.5 2000/03/28 19:23:33 oliver Exp $
+// $Id: colorCalculator.h,v 1.6 2000/12/12 16:16:52 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -68,11 +68,14 @@ namespace BALL
 			ColorCalculator
 				(const ColorCalculator& color_calculator, bool deep = true);
 
-			virtual ~ColorCalculator();
+			virtual ~ColorCalculator()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Asignment
@@ -122,7 +125,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			protected:

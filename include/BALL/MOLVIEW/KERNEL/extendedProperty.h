@@ -1,4 +1,4 @@
-// $Id: extendedProperty.h,v 1.3 2000/01/08 20:31:43 hekl Exp $
+// $Id: extendedProperty.h,v 1.4 2000/12/12 16:16:57 oliver Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #define BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
@@ -37,7 +37,8 @@ namespace BALL
 			ExtendedPropertyManager
 				(const ExtendedPropertyManager& extended_property_manager, bool deep = true);
 
-			virtual ~ExtendedPropertyManager();
+			virtual ~ExtendedPropertyManager()
+				throw();
 			//@}
 
 			/**	@name	Accessors

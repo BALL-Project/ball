@@ -1,4 +1,4 @@
-// $Id: glBallAndStickModel.h,v 1.1 2000/09/23 15:38:10 hekl Exp $
+// $Id: glBallAndStickModel.h,v 1.2 2000/12/12 16:16:57 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
@@ -45,7 +45,8 @@ namespace BALL
 			AddGLBallAndStickModel
 				(const AddGLBallAndStickModel& add_GL_ball_and_stick_model, bool deep = true);
 
-			virtual ~AddGLBallAndStickModel();
+			virtual ~AddGLBallAndStickModel()
+				throw();
 			//@}
 
 

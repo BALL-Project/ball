@@ -1,4 +1,4 @@
-// $Id: glAtomBondModelConnector.h,v 1.2 2000/10/05 10:51:03 oliver Exp $
+// $Id: glAtomBondModelConnector.h,v 1.3 2000/12/12 16:16:57 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
@@ -57,7 +57,8 @@ namespace BALL
 			GLAtomBondModelConnector
 				(const AtomBondModelConnector& connector, bool deep = true);
 
-			virtual ~GLAtomBondModelConnector();
+			virtual ~GLAtomBondModelConnector()
+				throw();
 
 			//@}
 

@@ -1,4 +1,4 @@
-// $Id: removeModel.h,v 1.5 2000/06/25 19:14:42 hekl Exp $
+// $Id: removeModel.h,v 1.6 2000/12/12 16:16:53 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -50,11 +50,14 @@ namespace BALL
 			RemoveModel
 				(const RemoveModel& model, bool deep = true);
 
-			virtual ~RemoveModel();
+			virtual ~RemoveModel()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 
@@ -102,7 +105,8 @@ namespace BALL
 			*/
 			//@{
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers

@@ -1,4 +1,4 @@
-// $Id: twoColoredLine.h,v 1.3 1999/12/28 18:38:07 oliver Exp $
+// $Id: twoColoredLine.h,v 1.4 2000/12/12 16:16:58 oliver Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
 #define BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
@@ -48,11 +48,14 @@ namespace BALL
 			TwoColoredLine
 				(const VIEW::GeometricObject& geometric_object);
 
-			virtual ~TwoColoredLine();
+			virtual ~TwoColoredLine()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Assignment
@@ -87,7 +90,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers

@@ -1,4 +1,4 @@
-// $Id: molecularInformation.h,v 1.2 2000/10/05 22:32:14 oliver Exp $
+// $Id: molecularInformation.h,v 1.3 2000/12/12 16:16:53 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
@@ -104,11 +104,14 @@ namespace BALL
 			MolecularInformation
 				(const MolecularInformation& info, bool deep = true);
 
-			virtual ~MolecularInformation();
+			virtual ~MolecularInformation()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Asignment
@@ -145,7 +148,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			protected:

@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.h,v 1.1 2000/09/23 15:38:15 hekl Exp $
+// $Id: glTwoColoredLine.h,v 1.2 2000/12/12 16:16:57 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
@@ -42,11 +42,14 @@ namespace BALL
 
 			GLTwoColoredLine(const VIEW::GeometricObject& geometric_object);
 
-			virtual ~GLTwoColoredLine();
+			virtual ~GLTwoColoredLine()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 

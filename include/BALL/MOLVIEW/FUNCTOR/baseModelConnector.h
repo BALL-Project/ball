@@ -1,4 +1,4 @@
-// $Id: baseModelConnector.h,v 1.1 2000/06/25 19:13:03 hekl Exp $
+// $Id: baseModelConnector.h,v 1.2 2000/12/12 16:16:52 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
@@ -56,11 +56,14 @@ namespace BALL
 			BaseModelConnector
 				(const BaseModelConnector& connector, bool deep = true);
 
-			virtual ~BaseModelConnector();
+			virtual ~BaseModelConnector()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Asignment
@@ -107,7 +110,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			protected:

@@ -1,4 +1,4 @@
-// $Id: moleculeObjectProcessor.h,v 1.1 2000/09/23 15:38:13 hekl Exp $
+// $Id: moleculeObjectProcessor.h,v 1.2 2000/12/12 16:16:57 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEOBJECTPROCESSOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEOBJECTPROCESSOR_H
@@ -93,7 +93,8 @@ namespace BALL
 			MoleculeObjectProcessor
 				(const MoleculeObjectProcessor& object_processor, bool deep = true);
 
-			virtual ~MoleculeObjectProcessor();
+			virtual ~MoleculeObjectProcessor()
+				throw();
 			//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: surfaceModel.h,v 1.1 2000/04/25 15:28:11 hekl Exp $
+// $Id: surfaceModel.h,v 1.2 2000/12/12 16:16:53 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
@@ -56,11 +56,14 @@ namespace BALL
 			AddSurfaceModel
 				(const AddSurfaceModel& add_surface_model, bool deep = true);
 
-			virtual ~AddSurfaceModel();
+			virtual ~AddSurfaceModel()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 
@@ -108,7 +111,8 @@ namespace BALL
 			*/
 			//@{
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers

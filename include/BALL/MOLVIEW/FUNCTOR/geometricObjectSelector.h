@@ -1,4 +1,4 @@
-// $Id: geometricObjectSelector.h,v 1.5 2000/08/30 19:58:21 oliver Exp $
+// $Id: geometricObjectSelector.h,v 1.6 2000/12/12 16:16:52 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GEOMETRICOBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GEOMETRICOBJECTSELECTOR_H
@@ -63,11 +63,14 @@ namespace BALL
 			GeometricObjectSelector
 				(const GeometricObjectSelector& selector, bool deep = true);
 
-			virtual ~GeometricObjectSelector();
+			virtual ~GeometricObjectSelector()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 
@@ -129,7 +132,8 @@ namespace BALL
 			*/
 			//@{
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers

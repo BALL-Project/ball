@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.h,v 1.7 2000/06/25 19:14:42 hekl Exp $
+// $Id: vanDerWaalsModel.h,v 1.8 2000/12/12 16:16:53 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -56,11 +56,14 @@ namespace BALL
 			AddVanDerWaalsModel
 				(const AddVanDerWaalsModel& add_van_der_waals_model, bool deep = true);
 
-			virtual ~AddVanDerWaalsModel();
+			virtual ~AddVanDerWaalsModel()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			
@@ -81,7 +84,8 @@ namespace BALL
 			//@{
 
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers

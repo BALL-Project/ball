@@ -1,4 +1,4 @@
-// $Id: atomBondModelConnector.h,v 1.1 2000/06/25 19:13:04 hekl Exp $
+// $Id: atomBondModelConnector.h,v 1.2 2000/12/12 16:16:52 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
@@ -78,7 +78,8 @@ namespace BALL
 			AtomBondModelConnector
 				(const AtomBondModelConnector& connector, bool deep = true);
 
-			virtual ~AtomBondModelConnector();
+			virtual ~AtomBondModelConnector()
+				throw();
 
 			//@}
 

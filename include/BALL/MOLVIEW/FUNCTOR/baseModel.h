@@ -1,4 +1,4 @@
-// $Id: baseModel.h,v 1.7 2000/06/25 19:13:52 hekl Exp $
+// $Id: baseModel.h,v 1.8 2000/12/12 16:16:52 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -60,11 +60,14 @@ namespace BALL
 			BaseModelProcessor
 				(const BaseModelProcessor& base_model_processor, bool deep = true);
 
-			virtual ~BaseModelProcessor();
+			virtual ~BaseModelProcessor()
+				throw();
 
-			virtual void clear();
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			
@@ -145,7 +148,8 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name Storers

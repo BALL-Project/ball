@@ -1,4 +1,4 @@
-// $Id: glVanDerWaalsModel.h,v 1.1 2000/09/23 15:38:12 hekl Exp $
+// $Id: glVanDerWaalsModel.h,v 1.2 2000/12/12 16:16:57 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
@@ -38,7 +38,8 @@ namespace BALL
 			AddGLVanDerWaalsModel
 				(const AddGLVanDerWaalsModel& add_Gl_van_der_waals_model, bool deep = true);
 
-			virtual ~AddGLVanDerWaalsModel();
+			virtual ~AddGLVanDerWaalsModel()
+				throw();
 			//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: molecularFilter.h,v 1.2 2000/08/30 19:58:21 oliver Exp $
+// $Id: molecularFilter.h,v 1.3 2000/12/12 16:16:52 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
@@ -57,7 +57,8 @@ namespace BALL
 
 			MolecularFilter();
 
-			virtual ~MolecularFilter();
+			virtual ~MolecularFilter()
+				throw();
 			//@}
 
 			/**	@name	Asignment

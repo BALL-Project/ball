@@ -1,4 +1,4 @@
-// $Id: moleculeGLObjectCollector.h,v 1.1 2000/09/23 15:38:12 hekl Exp $
+// $Id: moleculeGLObjectCollector.h,v 1.2 2000/12/12 16:16:57 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
@@ -51,7 +51,8 @@ namespace BALL
 			MoleculeGLObjectCollector
 				(const MoleculeGLObjectCollector& molecule_GL_object_collector, bool deep = true);
 
-			virtual ~MoleculeGLObjectCollector();
+			virtual ~MoleculeGLObjectCollector()
+				throw();
 			//@}
 
 

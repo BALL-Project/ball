@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.h,v 1.7 2000/10/05 22:32:15 oliver Exp $
+// $Id: standardColorCalculator.h,v 1.8 2000/12/12 16:16:53 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -84,6 +84,9 @@ namespace BALL
 
  			AtomChargeColorCalculator(const AtomChargeColorCalculator& color_calculator);
 
+			~AtomChargeColorCalculator()
+				throw();
+
 			//@}
 
 			/**	@name Accessors
@@ -129,9 +132,14 @@ namespace BALL
 
  			AtomDistanceColorCalculator(const AtomDistanceColorCalculator& color_calculator);
 
-			virtual void clear();
+      ~AtomDistanceColorCalculator()
+				throw();
 
-			virtual void destroy();
+			virtual void clear()
+				throw();
+
+			virtual void destroy()
+				throw();
 
 			//@}
 
