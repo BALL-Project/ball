@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.18.4.7 2002/11/30 10:32:02 oliver Exp $
+// $Id: TCPTransfer.C,v 1.18.4.8 2002/11/30 13:24:25 oliver Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -43,7 +43,7 @@ TCPTransfer::TransferFailed::TransferFailed(const char* file, int line, Index er
 
 
 TCPTransfer::TCPTransfer(std::ofstream& file, const String& address)
-	throw(TransferFailed) 
+	throw(TCPTransfer::TransferFailed) 
 :	host_address_(""),
 	file_address_(""),
 	port_(0),
