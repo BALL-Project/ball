@@ -1,4 +1,4 @@
-// $Id: moleculeObjectCreator.h,v 1.2 2001/05/13 14:55:24 hekl Exp $
+// $Id: moleculeObjectCreator.h,v 1.3 2001/07/06 14:15:48 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -55,9 +55,9 @@ namespace BALL
 				This class is used by the class \Ref{Server} to convert incoming
 				\Ref{PersistentObject} objects to \Ref{Composite} objects.
 				@memo    MoleculeObjectCreator class (BALL MOLVIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.2 $
-				@date    $Date: 2001/05/13 14:55:24 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.3 $
+				@date    $Date: 2001/07/06 14:15:48 $
 		*/
 		class MoleculeObjectCreator: public ObjectCreator
 		{
@@ -68,7 +68,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new moleculeObjectCreator.
+					Constructs new moleculeObjectCreator.
 					@return      MoleculeObjectCreator new constructed moleculeObjectCreator
 					@see         ObjectCreator
 			*/
@@ -108,9 +108,9 @@ namespace BALL
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{		
-			/** Initialize the persistence manager.
-					Initialize the \Ref{TextPersistenceManager} of {\em *this} moleculeObjectCreator.
-					Register all necessary molecular structures available in BALL.
+			/** Initializes the persistence manager.
+					Initializes the \Ref{TextPersistenceManager} of {\em *this} moleculeObjectCreator.
+					Registers all necessary molecular structures available in BALL.
 					See \Ref{TextPersistenceManager} for information on how and why
 					to register \Ref{PersistentObject} classes.
 					@param  pm the \Ref{TextPersistenceManager} to be initialized
@@ -120,7 +120,7 @@ namespace BALL
 			virtual void initPersistenceManager(TextPersistenceManager &pm)
 				throw();
 
-			/** Convert persistent objects.
+			/** Converts persistent objects.
 					If {\em po} is an object that represents a molecular structure (an \Ref{Atom},
 					\Ref{Protein} or \Ref{System}) it will be converted into a \Ref{Composite}
 					object and returned. If it is none of the above {\tt 0} will be returned.

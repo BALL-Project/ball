@@ -1,4 +1,4 @@
-// $Id: openPDBFile.h,v 1.4 2001/05/13 14:55:24 hekl Exp $
+// $Id: openPDBFile.h,v 1.5 2001/07/06 14:12:46 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENPDBFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENPDBFILE_H
@@ -38,9 +38,9 @@ namespace BALL
 				into a \Ref{Composite} object. See \Ref{openFile} for information
 				concerning conversion and notification.
 				@memo    OpenPDBFile class (BALL MOLVIEW gui dialogs framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 14:55:24 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/06 14:12:46 $
 		*/
 		class OpenPDBFile: public FileDialog
 		{
@@ -51,8 +51,8 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new openPDBFile.
-					Set the title and the mode of {\em *this} openPDBFile to {\em Import PDB file}.
+					Constructs new openPDBFile.
+					Sets the title and the mode of {\em *this} openPDBFile to {\em Import PDB file}.
 					@param       parent the parent \Ref{QWidget} of {\em *this} openPDBFile (See QFileDialog in the QT documentation)
 					@param       name the name of {\em *this} openPDBFile (See QFileDialog in the QT documentation)
 					@return      OpenPDBFile new constructed openPDBFile
@@ -77,8 +77,8 @@ namespace BALL
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
-			/**	Initialize the widget.
-					Initialize the menu {\em File} with its submenu {\em Import}.
+			/**	Initializes the widget.
+					Initializes the menu {\em File} with its submenu {\em Import}.
 					Add menu entry {\em PDB File}.
 					This method is called automatically	immediately before the main application 
 					is started. 
@@ -91,9 +91,9 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 			
-			/**	Remove the widget.
-					Reverse all actions performed in \Ref{initializeWidget}
-					(remove menu entries of {\em *this} openPDBFile).
+			/**	Removes the widget.
+					Reverses all actions performed in \Ref{initializeWidget}
+					(removes menu entries of {\em *this} openPDBFile).
 					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl}
 					object.
 					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} openPDBFile
@@ -112,9 +112,9 @@ namespace BALL
 			*/
 			//@{
 
-			/** Open the pdb file.
-					Open the selected pdb file and if successfull convert it into a \Ref{System}
-					and sent the message \Ref{NewCompositeMessage} containing the \Ref{Composite}
+			/** Opens the pdb file.
+					Opens the selected pdb file and if successfull convert it into a \Ref{System}
+					and sents the message \Ref{NewCompositeMessage} containing the \Ref{Composite}
 					object to the other \Ref{ConnectionObject} objects.
 					All text output will be written into \Ref{Log}. The contents of the \Ref{Log}
 					can be viewed with the widget \Ref{LogView}.
