@@ -1,0 +1,190 @@
+# 
+#  PARSE rule set -- charge and radius assignment rules based on the 
+#  parameters developed by 
+#   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
+#   Using Macroscopic Solvent Models, H. Phys. Chem, (1994), 98, 1978-1988
+#
+# $Id: PARSE.rul,v 1.1 2000/05/30 12:36:47 oliver Exp $
+#
+[ChargeRules:H]
+; -NH-CH=NH+-CH= (imidazolium) - NH hydrogen
+ 0.45  = connectedTo((-N(-*)(-C(-*)(=N(-H)(-C(-*)(=*)))))) OR connectedTo((-N(-*)(=C(-*)(-N(-H)(-C(-*)(=*))))))
+ 0.45  = connectedTo((-N(~*)(~C(-*)(~N(-H)(~C(-*)(~*))))))
+; -NH-CH=N-CH= (imidazole) - NH hydrogen
+ 0.40  = connectedTo((-N(~*)(~C(-*)(~N(~C(-*)(~*)))))) OR connectedTo((-N(-*)(-C(-*)(=N(-C(-*)(=*))))))
+; -NH-CH=N-CH= (imidazole) - CHn hydrogens
+ 0.125 = connectedTo((-C(-N(-*)(-*))(=N(-C(-*)(=*))))) OR connectedTo((-C(=*)(-N(=C(-*)(-N(-*)(-*))))))
+ 0.125 = connectedTo((-C(~N(-*)(-*))(~N(~C(-*)(~*))))) OR connectedTo((-C(~*)(~N(~C(-*)(~N(-*)(~*))))))
+; -C-NH-C+(NH2)2 (guanidinium)
+ 0.45  = connectedTo((-N(-C(-*))(-C(~N(-H)(-H))(~N(-H)(-H)))))
+ 0.40  = connectedTo((-N(-H)(~C(~N(-H)(-H))(-N(-H)(-C(-*))))))
+; carboxylic acid groups
+ 0.435 = connectedTo((-O(-C(=O))))
+; hydroxyl group at aromatic rings (e.g. TYR)
+ 0.435 = connectedTo((-O(-C(~*)(~*)))) OR connectedTo((-O(-C(=*)(-*))))
+; hydroxyl groups
+ 0.49  = connectedTo((-O))
+; thiol hydrogens
+ 0.29  = connectedTo((-S(-*)))
+; alkyl groups in sulfides are treated as united atoms
+ 0.0   = connectedTo((-C(-S)))
+; aldehyde hydrogen  
+ 0.0   = connectedTo((-C(=O)))
+; primary carboxylic acid amides (CONH2)
+ 0.39  = connectedTo((-N(-H)(-C(=O))))
+; secondary carboxylic acid amides (CONHR)
+ 0.40  = connectedTo((-N(-*)(-C(=O))))
+; guanidine hydrogens: R-N=C(NH2)2
+ 0.375 = connectedTo((-N(-H)(-C(-N(-H)(-H))(=N(-C)))))
+; hydrogens connected to aromatic carbons ~CH~
+ 0.125 = connectedTo((-C(~*)(~*)))
+; methyl groups at aromatic rings (e.g. methylbenzene)
+; are considered as united atoms: charge 0 and radius 0
+ 0.0   = connectedTo((C(-H)(-H)(-C(~*)(~*)))) OR connectedTo((C(-H)(-H)(-C(=*)(-*))))
+; aromatic amide (indole)
+ 0.4   = connectedTo((-N(~*)(~*))) OR connectedTo((-N(=*)(-*)))
+; -CH=N-CH- (aromatic aza heterocycles - e.g. pyridine)
+ 0.125 = connectedTo((-C(-*)(=N(-C(-H)(=*))))) OR connectedTo((-C(-*)(-N(=C(-H)(-*))))) OR connectedTo((-C(~*)(~N(~C(-H)(~*)))))
+; ammonium hydrogens
+ 0.33  = connectedTo((-N(-*)(-*)(-*)))
+; amine hydrogens
+ 0.39  = connectedTo((-N(-H)))
+; amide group
+ 0.50  = connectedTo((-N(-*)(-*)))
+
+[ChargeRules:C]
+; -NH-CH=NH+-CH= (imidazolium)
+ 0.14166667 = connectedTo((-*)(=*)(-N(-H)(=C(-*)(-N(-H)(-*))))) OR connectedTo((-*)(-N(-H)(-*))(=N(-H)(-C(-*)(=*))))
+ 0.14166667 = true(imi1) AND connectedTo((-*)(~*)(~N(-H)(~C(-*)(~N(-H)(~*))))) 
+ 0.14166667 = true(miniimi2) AND connectedTo((-*)(~N(-H)(~*))(~N(-H)(~*)))
+; 0.14166667 = true(imi2) AND connectedTo((-*)(~N(-H)(~*))(~N(-H)(~C(-*)(~*))))
+; -NH-CH=N-CH= (imidazole)
+ 0.155 = true(imidazole) AND (connectedTo((-N(-H)(-*))(-H)(=N(-C(-H)(=*)))) OR connectedTo((=*)(-H)(-N(=C(-H)(-N(-H)(-*))))))
+ 0.155 = true(imidazole) AND (connectedTo((~N(-H)(~*))(-H)(~N(~C(-H)(~*)))) OR connectedTo((~*)(-H)(~N(~C(-H)(~N(-H)(~*))))))
+; -C-NH-C+(NH2)2 (guanidinium)
+ 0.35  = connectedTo((-*)(-N(-H)(-C(~N(-H)(-H))(~N(-H)(-H)))))
+ 0.35  = connectedTo((~N(-H)(-H))(~N(-H)(-H))(-N(-H)(-C)))
+; dialkylsulfide (MET) (CHn is a united atom group -> RadiusRule)
+; 0.265  = connectedTo((-S(-C))) AND sp3Hybridized()
+ 0.265  = connectedTo((-S(-C(-H)(-H)(-*))))
+; aldehyde carbon  
+ 0.49   = connectedTo((-H)(=O)(-*))
+; carboxylic acid carbons
+ 0.55   = connectedTo((=O)(-O(H))(-*))
+; carboxylate carbons
+ 0.10   = connectedTo((~O)(~O)(-*)) OR connectedTo((=O)(-O)(-*))
+; carbonyl carbons
+ 0.55   = connectedTo((=O))
+; aliphatic carbons neighburing an ammonium ion
+ 0.33   = sp3Hybridized() AND connectedTo((-N(-*)(-*)(-*)))
+; aliphatic carbons neighbouring aromatic carbons (e.g. CH3 of methylbenzene)
+; they are considered to be united atoms
+ 0.125  = sp3Hybridized() AND connectedTo((-C(~*)(~*))) AND !connectedTo((-C(.O)(.O)))
+; carbons in aromatic rings are assigned a negative charge
+-0.125  = sp2Hybridized() AND inRing(>4)
+; aliphatic CHn groups are neutral
+ 0.0    = sp3Hybridized() AND connectedTo((H))
+; primary carboxylic acid amide
+ 0.55  = connectedTo((=O)(-N(-H)(-H))(-*))
+; secondary carboxylic acid amide
+ 0.55  = connectedTo((=O)(-N(H)(-*))(-*))
+; guanidine (e.g. ARG) -C-N=C(NH2)2
+ 0.28  = connectedTo((-*)(-N(=C(-N(-H)(-H))(-N(-H)(-H))))) OR connectedTo((=N(-C(-*)))(-N(-H)(-H))(-N(-H)(-H)))
+; aromatic carbons and aromatic carbons with aliphatic groups (benzene, methylbenzene)
+-0.125 = connectedTo((-H)(~*)(~*)) OR connectedTo((-C(-H)(-H)(-H))(~*)(~*))
+; pyridine carbons 
+ 0.055 = connectedTo((-*)(-H)(=N(-C(-H)(=*)))) OR connectedTo((~*)(-H)(~N(~C(-H)(~*))))
+; 
+ 0.055 = connectedTo((-N(H)(=C(H)(-*)))(H)(=*))
+ 0.055 = connectedTo((~*)(~*)(O(H)))
+
+[ChargeRules:N]
+; -NH-CH=NH+-CH= (imidazolium)
+ -0.35  = connectedTo((-H)(-*)(-C(-H)(=N(-H)(-C(-H)(=*))))) OR connectedTo((-H)(-C(-H)(=*))(=C(-H)(-N(-H))))
+ -0.35  = connectedTo((-H)(~*)(~C(-H)(~N(-H)(~C(-H)(~*))))) OR connectedTo((-H)(~C(-H)(~*))(~C(-H)(~N(-H))))
+; -C-NH-C+(NH2)2 (guanidinium)
+ -0.35  = connectedTo((-C(-*))(-H)(-C(~N(-H)(-H))(~N(-H)(-H))))
+ -0.70  = connectedTo((-H)(-H)(~C(~N(-H)(-H))(-N(-H)(-C(-*)))))
+; amide 
+-0.78   = connectedTo((-C(=O)(-*))(-H)(-H))
+; N-substituted amide
+-0.40   = connectedTo((-C(=O)(-*))(-H)(-*))
+; guanidine 
+-0.56   = connectedTo((-C(-*))(=C(-N(-H)(-H))(-N(-H)(-H))))
+; guanidine: amino N
+-0.75   = connectedTo((-H)(-H)(-C(=N(-C))(-N(-H)(-H))))
+; indole N
+-0.40   = connectedTo((~*)(~*)(-H))
+; pyridine N
+-0.56   = connectedTo((=C(-*)(-*))(-C(-*)(=*))) OR connectedTo((~C(-*)(~*))(~C(-*)(~*)))
+; imidazole NH
+-0.40   = connectedTo((-*)(-*)(-C(-*)(=N(-C(-*)(=*))))) OR connectedTo((~*)(-*)(~C(-*)(~N(~C(-*)(~*)))))
+; imidazole N
+-0.56   = connectedTo((=C(-*)(-N(-*)(-*)))(-C(-*)(=*))) OR connectedTo((~C(-*)(~N(-*)(~*)))(~C(-*)(~*)))
+; ammonium ions
+ -0.32  = connectedTo((-*)(-*)(-*)(-*))
+; primary amines
+-0.78   = connectedTo((-H)(-H)(-*))
+; secondary amines
+-0.50   = connectedTo((-H)(-*)(-*))
+
+
+[ChargeRules:O]
+; carboxylic acid / carbonyl O
+ -0.495  = connectedTo((=C(-O(-H))))
+; aldehyde oxygen  
+ -0.49   = connectedTo((=C(-H)))
+; carboxylic acid / Hydroxyl O
+ -0.49   = connectedTo((-H)(-C(=O)))
+; carboxylate oxygens (three different possibilities for bond description)
+ -0.55   = connectedTo((~C(~O))) OR connectedTo((=C(-O))) OR connectedTo((-C(=O)))
+; carbonyl oxygens
+ -0.55   = connectedTo((=C))
+; hydroxyl oxygen
+ -0.49   = numberOfBonds(=2) AND connectedTo((-H))
+; amide 
+-0.55   = connectedTo((=C(-N(-H)(-H))))
+; N-substituted amide
+-0.55   = connectedTo((=C(-N(-H)(-*))))
+; phenol
+-0.49   = connectedTo((-C(~*)(~*))(-H)) OR connectedTo((-C(=*)(-*))(-H))
+
+[ChargeRules:S]
+; dialkylsufide (MET)
+ -0.53   = connectedTo((-C)(-C)) AND numberOfBonds(=2)
+; thiol group
+ -0.29   = connectedTo((H)) AND numberOfBonds(=2)
+; methylthiol anion
+ -0.92   = numberOfBonds(=1) AND connectedTo((-C))
+; missing: CYS-CYS (CHn-S-S-CHn)
+
+[ChargeRules:*]
+
+
+
+[RadiusRules:H]
+; methyl groups at aromatic rings (e.g. methylbenzene)
+; are considered as united atoms: charge 0 and radius 0
+ 0.0  = connectedTo((-C(-*)(-*)(-*)))
+ 1.0  = true()
+
+[RadiusRules:N]
+; the N radius in ammonium ions is larger than 
+; the neutral group 
+ 2.0  = sp3Hybridized()
+; default
+ 1.5  = true()
+
+[RadiusRules:C]
+; aliphatic CHn groups are "united atoms"
+ 2.0  = sp3Hybridized()
+; default
+ 1.7  = true()
+
+[RadiusRules:O]
+ 1.4  = true()
+
+[RadiusRules:S]
+ 1.85 = true()
+
+
