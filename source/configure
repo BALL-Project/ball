@@ -2894,6 +2894,7 @@ echo "$as_me: error: aborted" >&2;}
 	done
 
 
+SAVE_CXXFLAGS="${CXXFLAGS}"
 ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3406,6 +3407,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
+CXXFLAGS="${SAVE_CXXFLAGS}"
 
 
 	echo "$as_me:$LINENO: checking for GNU compiler" >&5
@@ -16623,7 +16625,7 @@ echo $ECHO_N "checking libsip.so... $ECHO_C" >&6
 			echo "$as_me:$LINENO: result: ${SIP_LIB}" >&5
 echo "${ECHO_T}${SIP_LIB}" >&6
 		else
-			SIP_LIB_LOCATION=`${FIND} "${PYTHON_PREFIX}" -name libsip.so 2>/dev/null`
+			SIP_LIB_LOCATION=`${FIND} "${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/site-packages" -name libsip.so 2>/dev/null`
 			if test "${SIP_LIB_LOCATION}" != "" ; then
 				SIP_LIB=" -L`(dirname "${SIP_LIB_LOCATION}") 2>/dev/null ||
 $as_expr X"${SIP_LIB_LOCATION}" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \

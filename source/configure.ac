@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.6 2003/04/17 20:21:13 oliver Exp $
+dnl    $Id: configure.ac,v 1.7 2003/04/19 15:46:12 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -261,9 +261,11 @@ CF_SEARCH_CXX
 dnl
 dnl		Determine the object suffix and executable suffix
 dnl
+SAVE_CXXFLAGS="${CXXFLAGS}"
 AC_PROG_CXX
 AC_OBJEXT
 AC_EXEEXT
+CXXFLAGS="${SAVE_CXXFLAGS}"
 
 dnl
 dnl  		Try to identify the compiler and determine its version number.
