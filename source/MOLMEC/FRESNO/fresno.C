@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.2 2002/02/14 19:04:16 anker Exp $
+// $Id: fresno.C,v 1.1.2.3 2002/03/05 22:43:40 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -324,8 +324,8 @@ namespace BALL
 						connectedTo.setArgument("(H)");
 						if (connectedTo(*atom))
 						{
-							it->second = FresnoFF::HBOND_DONOR;
-							++donor_counter;
+							it->second = FresnoFF::HBOND_ACCEPTOR_DONOR;
+							++acc_don_counter;
 							// DEBUG
 							cout << it->first->getFullName() << ": DON" << endl;
 							// /DEBUG
@@ -450,7 +450,7 @@ namespace BALL
 			symbol = atom->getElement().getSymbol();
 			if (symbol == "S")
 			{
-				if (it->second != FresnoFF::UNKNOWN)
+				if (it->second == FresnoFF::UNKNOWN)
 				{
 					BALL_FOREACH_ATOM_BOND(*atom, bond_it)
 					{
@@ -486,8 +486,15 @@ namespace BALL
 				// DEBUG
 				else
 				{
-					Log.warn() << "Trying to overwrite already assigned Fresno type"
-						<< endl;
+					if (it->second != FresnoFF::POLAR)
+					{
+						Log.warn() << "FresnoFF:specificSetup(): "
+							<< "Trying to overwrite already assigned Fresno type: "
+							<< atom->getFullName()
+							<< " (Step 2, Symbol " << symbol
+							<< ", old type " << it->second << ")"
+							<< endl;
+					}
 				}
 				// /DEBUG
 			}
@@ -495,7 +502,7 @@ namespace BALL
 			{
 				if (symbol == "C")
 				{
-					if (it->second != FresnoFF::UNKNOWN)
+					if (it->second == FresnoFF::UNKNOWN)
 					{
 						bool already_found_one = false;
 						BALL_FOREACH_ATOM_BOND(*atom, bond_it)
@@ -539,8 +546,15 @@ namespace BALL
 					// DEBUG
 					else
 					{
-						Log.warn() << "Trying to overwrite already assigned Fresno type"
-							<< endl;
+						if (it->second != FresnoFF::POLAR)
+						{
+							Log.warn() << "FresnoFF:specificSetup(): "
+								<< "Trying to overwrite already assigned Fresno type: "
+								<< atom->getFullName()
+								<< " (Step 2, Symbol " << symbol 
+								<< ", old type " << it->second << ")"
+								<< endl;
+						}
 					}
 					// /DEBUG
 				}
@@ -574,6 +588,17 @@ namespace BALL
 				if ((it->second != FresnoFF::HBOND_ACCEPTOR)
 					&& (it->second != FresnoFF::POLAR))
 				{
+					// PARANOIA
+					if (it->second != FresnoFF::UNKNOWN)
+					{
+						Log.warn() << "FresnoFF:specificSetup(): "
+							<< "Trying to overwrite already assigned Fresno type: "
+							<< atom->getFullName()
+							<< " (Step 3, Symbol " << symbol 
+							<< ", old type " << it->second << ")"
+							<< endl;
+					}
+					// /PARANOIA
 					it->second = FresnoFF::LIPOPHILIC;
 					// DEBUG
 					cout << it->first->getFullName() << ": LIP" << endl;
@@ -587,6 +612,17 @@ namespace BALL
 				{
 					if (it->second != FresnoFF::POLAR)
 					{
+						// PARANOIA
+						if (it->second != FresnoFF::UNKNOWN)
+						{
+							Log.warn() << "FresnoFF:specificSetup(): "
+								<< "Trying to overwrite already assigned Fresno type: "
+								<< atom->getFullName()
+								<< " (Step 3, Symbol " << symbol 
+								<< ", old type " << it->second << ")"
+								<< endl;
+						}
+						// /PARANOIA
 						it->second = FresnoFF::LIPOPHILIC;
 						// DEBUG
 						cout << it->first->getFullName() << ": LIP" << endl;
