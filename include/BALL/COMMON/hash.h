@@ -1,4 +1,4 @@
-// $Id: hash.h,v 1.2 1999/09/21 06:36:05 oliver Exp $
+// $Id: hash.h,v 1.3 1999/12/28 18:31:02 oliver Exp $
 
 #ifndef BALL_COMMON_HASH_H
 #define BALL_COMMON_HASH_H
@@ -105,6 +105,10 @@ namespace BALL
 
 	//@}
 		
+	/**	Calculate the next prime 
+	*/
+	HashIndex getNextPrime(HashIndex l);
+
 	//@}
 
 } // namespace BALL
