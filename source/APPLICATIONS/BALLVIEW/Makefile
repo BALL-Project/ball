@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.6 2005/03/01 18:33:38 oliver Exp $
+# $Id: Makefile,v 1.7 2005/03/01 18:48:40 oliver Exp $
 #
 
 EXECUTABLE=BALLView
@@ -105,12 +105,16 @@ BALLView.app/Contents/MacOS/../Info.plist:
 
 
 macos_pkg: $(EXECUTABLE)
+	@echo "Cleaning old package contents..."
 	@-$(RM) -fr $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
 	@-mkkdir $(BALL_PATH)/MacOSX/BALLPackage 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library 2>/dev/null | true
 	@-mkdir $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL 2>/dev/null | true
+	@echo "Copying BALL/data..."
 	@$(CP) -r $(BALL_PATH)/data $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL
+	@echo "Copying BALLView"
 	@$(MV) BALLView $(BALL_PATH)/MacOSX/BALLPackage/Applications/BALLView.app/Contents/MacOS/
-	@echo "Package is prepared!"
+	@echo "Please don't forget to copy the QT library to"
+	@echo "  $(BALL_PATH)/MacOSX/BALLPackage/Library/BALL/Library"
 	
 	
