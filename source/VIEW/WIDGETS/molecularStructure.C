@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.43 2004/04/30 13:17:16 amoll Exp $
+// $Id: molecularStructure.C,v 1.44 2004/05/10 11:35:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1117,6 +1117,7 @@ namespace BALL
 	void MolecularStructure::buildPeptide()
 	{
 		PeptideDialog* dialog = new PeptideDialog;
+		dialog->setFragmentDB(&getFragmentDB());
 		dialog->exec();
 
 		Protein* protein = dialog->getProtein();
