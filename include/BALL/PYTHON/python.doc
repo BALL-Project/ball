@@ -1,14 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: python.doc,v 1.5 2003/08/26 08:04:47 oliver Exp $
+// $Id: python.doc,v 1.6 2004/05/19 13:48:23 amoll Exp $
 //
 
-/** \defgroup PythonExtensions Python extensions
-		\ingroup Python
-		BALL provides classes for the extension of \link Python http://www.python.org \endlink,
-		an object oriented script language.
-		Since the language concepts of C++ and Python are rather dissimilar, several	
-		concepts had to be ported and modified. This chapter describes the BALL classes
-		that implement these interface classes.
-*/
+	/** \defgroup PythonExtensions Python extensions
+			\ingroup Python
+	*/

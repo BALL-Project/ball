@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyCompositeList.h,v 1.2 2004/02/11 18:52:27 oliver Exp $
+// $Id: pyCompositeList.h,v 1.3 2004/05/19 13:48:21 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYCOMPOSITELIST_H
@@ -27,8 +27,8 @@ namespace BALL
 {
 	class Composite;
 	
-	/** pyCompositeList
-		\ingroup PythonExtensions
+	/** Equivalent for a STL::List of Composite Pointers in Python
+			\ingroup PythonExtensions
 	*/
 	class PyCompositeList
 		:	public List<Composite*>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyMoleculeList.h,v 1.9 2003/08/26 08:04:46 oliver Exp $
+// $Id: pyMoleculeList.h,v 1.10 2004/05/19 13:48:22 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYMOLECULELIST_H
@@ -17,13 +17,11 @@
 
 namespace BALL 
 {
-  /**  \addtogroup  PythonExtensions
-   *  @{
-   */
 	class Molecule;
 	class AtomContainer;
 	
-	/**
+	/** Equivalent for a STL::List of Molecule Pointers in Python
+			\ingroup PythonExtensions		
 	*/
 	class PyMoleculeList
 		:	public List<Molecule*>
