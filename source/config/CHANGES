@@ -4,13 +4,14 @@ Added:
 - Documentation for BALLView in the folder BALL/doc/BALLView
 - Stereo Modi: Side-by-Side and for shutter googles 
 - Clipping Planes
+- new Move-Mode for molecular entities and Clipping Planes
 - Writing and loading of BALLView project files
 - Esc key now switches to last used modus in Scene
 - Hotkey support for starting any (BALL-)Python command from BALLView
 - new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
 - new rotate mode for Scene
 - Backbone Model for DNA
-- 2 new Cartoon Models for DNA
+- 2 new Cartoon Models for DNA and RNA
 - DataSetControl:
 	management of 1D and 2D grids 
   ability to start visualisation of 1D and 2D grids
@@ -49,9 +50,11 @@ Fixed:
 - Scene: mouse sensitivity was adjusted
 - now show the correct number of added bonds
 - prevent flicking on startup from MainControlPreferences dialog
-- ResidueIndexColorProcessor now no longer counts water Residues
+- ResidueIndexColorProcessor now no longer counts water Residues 
+- ResidueNameColorProcessor now supports RNA
 
 Changed:
+- Layout of Preferences 
 - inside of surfaces gets now correctly drawn
 - increased OpenGL performance 
 - .BALLView config files are now always stored in the users homedir
@@ -62,6 +65,7 @@ Changed:
 Code Changes:
 - fixed drawing of Boxes
 - GeometricObjects no longe have names
+- cleanup for storing of settings from dialogs
 - removed Information Processor for GeometricObjects
 - interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
 - interface for the property "hidden" of Representation's
@@ -69,3 +73,4 @@ Code Changes:
   from ModularWidget derived classes no longer have to deregister themselves
 - improved the code for the BALLView termination process
 - fixed core dump in RingPerception Processesor
+- removed the old Move-Dialog
