@@ -1,9 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.C,v 1.5 2004/03/15 12:55:28 amoll Exp $
+// $Id: HBondProcessor.C,v 1.6 2004/03/19 15:02:53 anne Exp $
 
 #include <BALL/STRUCTURE/HBondProcessor.h>
+#include <BALL/STRUCTURE/peptides.h>
+
+
 
 namespace BALL
 {
@@ -22,7 +25,7 @@ namespace BALL
 
 	void HBondProcessor::preComputeBonds(ResidueIterator& data)
 	{
-
+					
 		POS pos;
 		int j=1;                // index to serially the residues TOTHINK:maybe it is possible 
 		                        //   to identify the residue by residue ID 
@@ -34,6 +37,8 @@ namespace BALL
 
 		PDBAtomIterator ai;
 		Residue res=*data;
+
+//		Peptides::OneLetterCode(res->getFullName());
 		
 		for(ai=res.beginPDBAtom();+ai;++ai)
 		{
@@ -59,7 +64,8 @@ namespace BALL
 		//iterate over the following residues
 
 		for(; +data; ++data)
-		{		
+		{	
+						
 			res=*data;
 
 			if (!res.isAminoAcid())
@@ -117,12 +123,11 @@ namespace BALL
 
 		// insert all protein-residues in respect of N-atom
 		// the last residue does not _have_ an O. => don't use it
-		for(Size i=0; i<(vec_.size()-1); i++) 
+//		for(Size i=0; i<(vec_.size()-1); i++) 
+		for(Size i=0; i<(vec_.size()); i++) 
 		{
-
 			Vector3 r(vec_[i].posN);
 			atom_grid.insert(r, vec_[i]);
-
 		}                   
 
 		HashGridBox3<POS>::DataIterator data_it;       // iterate over residues of neighbouring boxes
@@ -246,7 +251,6 @@ namespace BALL
 			lower_ = bp.getLower();
 
       ri = s->beginResidue();
-
 		}else
 		if (RTTI::isKindOf<Protein>(composite))
 		{
@@ -254,7 +258,7 @@ namespace BALL
 			s->apply(bp);
 			upper_ = bp.getUpper();
 			lower_ = bp.getLower();
-
+		
       ri = s->beginResidue();
 		
 		}else
@@ -264,7 +268,7 @@ namespace BALL
 			s->apply(bp);
 			upper_ = bp.getUpper();
 			lower_ = bp.getLower();
-
+	
 			ri = s->beginResidue();
 		
 		}
@@ -277,7 +281,7 @@ namespace BALL
 		// compute the H-Bonds
 		
 		preComputeBonds(ri);
-		
+	  	
 		return Processor::BREAK;
 
 	}
