@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.6 2003/09/23 15:00:08 amoll Exp $
+// $Id: datasetControl.C,v 1.7 2003/10/04 12:23:52 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -210,6 +210,11 @@ void DatasetControl::deleteGrid_()
 	if (!item_to_grid_.has(context_item_)) return;
 
 	RegularData3D* ssm = item_to_grid_[context_item_];
+
+	RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::REMOVE);
+	msg->setRegularData3D(ssm);
+	notify_(msg);
+
 	delete ssm;
 	deleteItem_(context_item_);
 	setStatusbarText("deleted 3D grid");
@@ -292,6 +297,11 @@ void DatasetControl::add3DGrid()
 	infile >> *dat;
 	infile.close();
 	insertGrid_(dat, *getMainControl()->getSelectedSystem(), String(result.ascii()));
+	RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
+	msg->setRegularData3D(dat);
+	msg->setComposite(getMainControl()->getSelectedSystem());
+	msg->setCompositeName(result.ascii());
+	notify_(msg);
 }
 
 void DatasetControl::insertGrid_(RegularData3D* data, System& system, const String& name)
