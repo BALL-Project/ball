@@ -38,9 +38,8 @@ bool TransformationDialog::translate(float x, float y, float z)
 {
 	if (rep_ != 0)
 	{
-		rep_->setProperty("X", rep_->getProperty("X").getDouble() + x); 
-		rep_->setProperty("Y", rep_->getProperty("Y").getDouble() + y); 
-		rep_->setProperty("Z", rep_->getProperty("Z").getDouble() + z); 
+		ClippingPlane& plane = *(ClippingPlane*) rep_;
+		plane.translation += Vector3(x, y, z);
 		return true;
 	}
 
@@ -55,7 +54,8 @@ bool TransformationDialog::rotateX(float angle, bool radian)
 {
  	if (rep_ != 0)
 	{
-		rep_->setProperty("AX", rep_->getProperty("AX").getDouble() + angle); 
+		ClippingPlane& plane = *(ClippingPlane*) rep_;
+		plane.plane_vector.x += angle;
 		return true;
 	}
 
@@ -83,8 +83,8 @@ bool TransformationDialog::rotateY(float angle, bool radian)
 {
  	if (rep_ != 0)
 	{
-		rep_->setProperty("AY", rep_->getProperty("AY").getDouble() + angle); 
-		return true;
+		ClippingPlane& plane = *(ClippingPlane*) rep_;
+		plane.plane_vector.y += angle;
 	}
 
   if (!composite_) return false;
@@ -111,8 +111,8 @@ bool TransformationDialog::rotateZ(float angle, bool radian)
 {
  	if (rep_ != 0)
 	{
-		rep_->setProperty("AZ", rep_->getProperty("AZ").getDouble() + angle); 
-		return true;
+		ClippingPlane& plane = *(ClippingPlane*) rep_;
+	  plane.plane_vector.z += angle;
 	}
 
   if (!composite_) return false;

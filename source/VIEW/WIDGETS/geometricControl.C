@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.42 2004/06/13 23:47:58 amoll Exp $
+// $Id: geometricControl.C,v 1.43 2004/06/24 23:03:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -225,7 +225,7 @@ namespace BALL
 
 			context_menu_.insertSeparator();
 			insertContextMenuEntry("Move Clipping Plane", this, SLOT(moveClippingPlane()), 40);	
-			if (rep.getModelType() != MODEL_CLIPPING_PLANE)
+			if (!RTTI::isKindOf<ClippingPlane>(rep))
 			{
 				context_menu_.setItemEnabled(40, false);
 			}
@@ -590,43 +590,21 @@ namespace BALL
 
 			// update scene
 			SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
-			scene_message->getCamera().setLookAtPosition(vwp);
+			scene_message->getStage().getCamera().setLookAtPosition(vwp);
 			vwp.z += view_distance;
-			scene_message->getCamera().setViewPoint(vwp);
+			scene_message->getStage().getCamera().setViewPoint(vwp);
 			notify_(scene_message);
 		}
 
-		void GeometricControl::createNewClippingPlane()
-		{
-			Representation* rep = new Representation();
-			rep->setModelType(MODEL_CLIPPING_PLANE);
-			rep->setProperty("AX", double(0.0));
-			rep->setProperty("AY", double(0.0));
-			rep->setProperty("AZ", double(0.0));
-			rep->setProperty("D", double(0.0));
-			rep->setProperty("X", double(25.0));
-			rep->setProperty("Y", double(25.0));
-			rep->setProperty("Z", double(25.0));
-			rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
-			getMainControl()->insert(*rep);
-		}
-		
 		void GeometricControl::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			String hint = "Add an OpenGL Clipping Plane to the Scene";
-			main_control.insertMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
-					SLOT(createNewClippingPlane()), 0, -1, hint);   
-
 			GenericControl::initializeWidget(main_control);
 		}
 
 		void GeometricControl::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
-					SLOT(createNewClippingPlane()), 0);
-
 			GenericControl::finalizeWidget(main_control);
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.18 2004/06/13 19:18:49 amoll Exp $
+// $Id: geometricControl.h,v 1.19 2004/06/24 23:03:43 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -199,9 +199,6 @@ namespace BALL
 
 			///
 			virtual void focusRepresentation();
-
-			///
-			virtual void createNewClippingPlane();
 
 			///
 			virtual void moveClippingPlane();

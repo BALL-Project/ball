@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.51 2004/06/10 16:42:49 amoll Exp $
+// $Id: message.h,v 1.52 2004/06/24 23:03:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -274,6 +274,9 @@ class BALL_EXPORT SceneMessage: public Message
 		/// Remove the coordinate system in the Scene.
 		REMOVE_COORDINATE_SYSTEM,
 
+		/// Modified Clipping Planes
+		UPDATE_CLIPPING_PLANES,
+
 		/// Export a PNG
 		EXPORT_PNG,
 
@@ -323,30 +326,25 @@ class BALL_EXPORT SceneMessage: public Message
 	SceneMessageType getType() const
 		throw() { return type_;}
 
-	/** Set the Camera in this message.
-			Only usefull with type UPDATE_CAMERA.
+	/** Set the Stage in this message.
 	*/
-	void setCamera(const Camera& camera) 
-		throw() { camera_ = camera; }
+	void setStage(Stage stage) 
+		throw() { stage_ = stage;}
+	
+	/// Get the Stage in this message.
+	Stage& getStage() 
+		throw() { return stage_;}
 
-	/** Get the Camera in this message.
-			Only usefull with type UPDATE_CAMERA.
-	*/
-	Camera& getCamera()
-		throw() { return camera_;}
-
-	/** Get the Camera in this message.
-			Only usefull with type UPDATE_CAMERA.
-	*/
-	const Camera& getCamera() const
-		throw() { return camera_;}
+	/// Get the Stage in this message.
+	const Stage& getStage() const
+		throw() { return stage_;}
 
 	//@}
 
 	private:
 
-	SceneMessageType   type_;
-	Camera camera_;
+	SceneMessageType  type_;
+	Stage 			 			stage_;
 };
 
 

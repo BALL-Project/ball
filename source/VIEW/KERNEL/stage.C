@@ -168,6 +168,7 @@ Stage::Stage()
 	throw()
 	: background_color_(),
 		light_sources_(),
+		clipping_planes_(),
 		camera_(),
 		show_coordinate_system_(false),
 		eye_distance_(2.0),
@@ -175,10 +176,47 @@ Stage::Stage()
 		swap_side_by_side_stereo_(false)
 {}
 
+ClippingPlane::ClippingPlane()
+	throw()
+	: Representation(),
+		translation(),
+		plane_vector(),
+		hidden(false)
+{
+}
+
+ClippingPlane::ClippingPlane(const ClippingPlane& plane)
+	throw()
+	: Representation(plane),
+		translation(plane.translation),
+		plane_vector(plane.plane_vector),
+		hidden(plane.hidden)
+{
+}
+
+
+bool ClippingPlane::operator == (const ClippingPlane& plane) const
+	throw()
+{
+	return plane_vector == plane.plane_vector &&
+				 translation  == plane.translation;
+}
+
+ClippingPlane& ClippingPlane::operator = (const ClippingPlane& plane)
+	throw()
+{
+	Representation::operator = (plane);
+	plane_vector = plane.plane_vector;
+	translation = plane.translation;
+	hidden = plane.hidden;
+	return *this;
+}
+
 Stage::Stage(const Stage& stage)
 	throw()
 	: background_color_(stage.background_color_),
 		light_sources_(stage.light_sources_),
+		clipping_planes_(stage.clipping_planes_),
 		camera_(stage.camera_),
 		show_coordinate_system_(false),
 		eye_distance_(stage.eye_distance_),
@@ -192,6 +230,7 @@ void Stage::clear()
 {
 	background_color_.clear();
 	light_sources_.clear();
+	clipping_planes_.clear();
 	camera_ = Camera();
 	show_coordinate_system_ = false;
 	eye_distance_ = 2.0;
@@ -217,11 +256,12 @@ bool Stage::operator == (const Stage& stage) const
 	throw()
 {
 	return light_sources_ 					== stage.light_sources_ 		&&
-				 camera_ 					 				== stage.camera_ 					&&
-				 background_color_ 				== stage.background_color_ &&
+				 clipping_planes_ 				== stage.clipping_planes_   &&
+				 camera_ 					 				== stage.camera_ 						&&
+				 background_color_ 				== stage.background_color_ 	&&
 				 show_coordinate_system_ 	== stage.show_coordinate_system_ &&
-				 eye_distance_ 						== stage.eye_distance_ &&
-				 focal_distance_ 					== stage.focal_distance_ &&
+				 eye_distance_ 						== stage.eye_distance_ 			&&
+				 focal_distance_ 					== stage.focal_distance_ 		&&
 				 swap_side_by_side_stereo_== stage.swap_side_by_side_stereo_;
 }
 

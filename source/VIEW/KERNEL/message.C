@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.21 2004/06/10 16:32:33 amoll Exp $
+// $Id: message.C,v 1.22 2004/06/24 23:03:24 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -79,7 +79,8 @@ CompositeMessage::~CompositeMessage()
 SceneMessage::SceneMessage(SceneMessageType type)
 	throw()
 	: Message(),
-		type_(type)
+		type_(type),
+		stage_()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new SceneMessage" << std::endl;		
@@ -90,7 +91,7 @@ SceneMessage::SceneMessage(const SceneMessage& message)
 	throw()
 	: Message(message),
 		type_(message.type_),
-		camera_(message.camera_)
+		stage_(message.stage_)
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new SceneMessage" << type_ << std::endl;		

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.52 2004/06/10 22:10:55 amoll Exp $
+// $Id: molecularStructure.C,v 1.53 2004/06/24 23:03:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -395,9 +395,9 @@ namespace BALL
 
 			// update scene
 			SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
-			scene_message->getCamera().setLookAtPosition(view_point);
+			scene_message->getStage().getCamera().setLookAtPosition(view_point);
 			view_point.z += view_distance_;
-			scene_message->getCamera().setViewPoint(view_point);
+			scene_message->getStage().getCamera().setViewPoint(view_point);
 			notify_(scene_message);
 		}
 

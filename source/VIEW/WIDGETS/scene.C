@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.83 2004/06/19 14:30:59 amoll Exp $
+// $Id: scene.C,v 1.84 2004/06/24 23:03:24 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -253,8 +253,8 @@ namespace BALL
 					return;
 
 				case SceneMessage::UPDATE_CAMERA:
-					stage_->moveCameraTo(scene_message->getCamera());
-					system_origin_ = scene_message->getCamera().getLookAtPosition();
+					stage_->moveCameraTo(scene_message->getStage().getCamera());
+					system_origin_ = scene_message->getStage().getCamera().getLookAtPosition();
 					updateCamera_();
 					return;
 
@@ -269,6 +269,10 @@ namespace BALL
 
 				case SceneMessage::EXPORT_POVRAY:
 					exportPOVRay();
+					return;
+
+				case SceneMessage::UPDATE_CLIPPING_PLANES:
+					update(false);
 					return;
 
 				case SceneMessage::UNDEFINED:
@@ -423,20 +427,15 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-			PrimitiveManager::RepresentationList::ConstIterator it;
+			List<ClippingPlane>::ConstIterator cit;
 
 			// ============== render Clipping planes ==============================
 			
 			GLint current_clipping_plane = GL_CLIP_PLANE0;
-			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
+			cit = stage_->getClippingPlanes().begin();
+			for(; cit != stage_->getClippingPlanes().end(); cit++)
 			{
-				if ((**it).getModelType() != MODEL_CLIPPING_PLANE)
-				{
-					continue;
-				}
-
-				if ((**it).hasProperty(Representation::PROPERTY__HIDDEN)) 
+				if ((*cit).hidden)
 				{
 					glDisable(current_clipping_plane);
 					current_clipping_plane ++;
@@ -444,13 +443,12 @@ namespace BALL
 				}
 
 				glPushMatrix();
-				glTranslatef ((**it).getProperty("X").getDouble(),
-											(**it).getProperty("Y").getDouble(),
-											(**it).getProperty("Z").getDouble());
-
-				glRotated((**it).getProperty("AX").getDouble(), 1, 0, 0);
-				glRotated((**it).getProperty("AY").getDouble(), 0, 1, 0);
-				glRotated((**it).getProperty("AZ").getDouble(), 0, 0, 1);
+				glTranslatef ((*cit).translation.x,
+											(*cit).translation.y,
+											(*cit).translation.z);
+				glRotated((*cit).plane_vector.x, 1, 0, 0);
+				glRotated((*cit).plane_vector.y, 0, 1, 0);
+				glRotated((*cit).plane_vector.z, 0, 0, 1);
 
 				GLdouble plane[] ={1, 0, 0, 0};
 				glEnable(current_clipping_plane);
@@ -491,6 +489,7 @@ namespace BALL
 	
 			// -------------------------------------------------------------------
 			
+			PrimitiveManager::RepresentationList::ConstIterator it;
 			// render all "normal" (non always front and non transparent models)
 			gl_renderer_.initSolid();
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
@@ -1250,6 +1249,10 @@ namespace BALL
 				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			menuBar()->setItemChecked(window_menu_entry_id_, true);
 
+			hint = "Add an OpenGL Clipping Plane to the Scene";
+			main_control.insertMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
+					SLOT(createNewClippingPlane()), 0, -1, hint);   
+
 			setCursor(QCursor(Qt::SizeAllCursor));
 		}
 
@@ -1267,6 +1270,9 @@ namespace BALL
 			main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT( switchStereo()), ALT+Key_Y);		
 			main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
 			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+
+			main_control.removeMenuEntry(MainControl::DISPLAY, "New Clipping Plane", this, 
+					SLOT(createNewClippingPlane()), 0);
 		}
 
 		void Scene::checkMenu(MainControl& /*main_control*/)
@@ -1618,5 +1624,19 @@ namespace BALL
 			update();
 		}
 
+		void Scene::createNewClippingPlane()
+		{
+			ClippingPlane cplane;
+			cplane.translation = Vector3(25,25,25);
+			cplane.plane_vector = Vector3(0,0,0);
+Log.error() << "#~~#   4 " << stage_->getLightSources().size() << " "   << __FILE__ << "  " << __LINE__<< std::endl;
+			stage_->getClippingPlanes().push_front(cplane);
+Log.error() << "#~~#   3 "    << __FILE__ << "  " << __LINE__<< std::endl;
+
+			SceneMessage* msg = new SceneMessage(SceneMessage::UPDATE_CLIPPING_PLANES);
+			msg->setStage(*stage_);
+			notify_(msg);
+		}
+		
 
 } }// namespaces
