@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.4 2004/07/01 13:08:44 amoll Exp $
+// $Id: view-common.sip,v 1.5 2005/01/12 16:55:49 amoll Exp $
 //
 
 %ModuleHeaderCode 
@@ -74,6 +74,6 @@ enum EventsIDs
 {
 	SCENE_EXPORTPNG_EVENT = 60000,
 	SIMULATION_THREAD_FINISHED_EVENT,
-	SIMULATION_OUTPUT_EVENT,
+	LOG_EVENT,
 	UPDATE_COMPOSITE_EVENT
 };
