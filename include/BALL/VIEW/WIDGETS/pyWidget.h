@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.8 2003/11/12 12:17:03 amoll Exp $
+// $Id: pyWidget.h,v 1.9 2003/11/13 15:02:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -124,11 +124,17 @@ namespace BALL
 
 			protected:
 
-			//_ Avoid set of cursor with mouse
+			//_ Avoid set of cursor with mouse or other nonsense
+			virtual void ensureCursorVisible() {}
+			virtual void scrollToBottom() {}
+			virtual void placeCursor ( const QPoint& /*pos*/, QTextCursor* /*c = 0*/ ){}
 			virtual void mousePressEvent(QMouseEvent* m);
 			virtual void contentsMousePressEvent(QMouseEvent* m);
 
 			virtual void keyPressEvent(QKeyEvent* e);
+
+			virtual void clear();
+			virtual void cut();
 
 			void parseLine_();
 
