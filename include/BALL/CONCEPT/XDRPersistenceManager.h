@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.9 2000/08/26 14:58:15 amoll Exp $
+// $Id: XDRPersistenceManager.h,v 1.10 2000/10/29 11:29:24 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -22,6 +22,26 @@ namespace BALL
 		:	public PersistenceManager
 	{
 		public:
+
+		/**	@name Constants
+		*/
+		//@{
+		/**	A constant value used to mark the beginning of a persistent stream
+		*/
+		static const Size STREAM_HEADER;
+
+		/**	A constant value used to mark the end of a persistent stream
+		*/
+		static const Size STREAM_TRAILER;
+
+		/**	A constant value used to mark the beginning of an object
+		*/
+		static const Size OBJECT_HEADER;
+
+		/**	A constant value used to mark the end of an object
+		*/
+		static const Size OBJECT_TRAILER;
+		//@}
 
 		/**	@name Constructors and Destructors
 		*/
@@ -49,36 +69,26 @@ namespace BALL
 		//@{
 
 		/**	Write an object header.
-				This method writes an object header. It starts with the current number of spaces
-				needed for a correct indentation.
-				If {\tt name} is a null pointer, the object is a base object of the current
-				object. This method then writes the string {\tt BASEOBJECT}. If {\tt name}
-				is a name or an empty string, {\tt OBJECT} is written.\\
-				Then, the object's {\tt type\_name} is written, followed by a blank, the character
-				"@" to indicate an address and then the object's {\tt this} pointer in decimal
-				format. The last string in the line is either "-" (for a base object or an object without
-				name) or the object's {\tt name}.\\
-				The indentation level is incremented.
-				{\bf Example for a base object:}
-\begin{verbatim}
-    BASEOBJECT BALL::Composite @ 1145254238 -
-\end{verbatim}
-				{\bf Example for a member object:}
-\begin{verbatim}
-    BASEOBJECT BALL::Bond @ 2334208924 bond_
-\end{verbatim}
+				This method stores \Ref{OBJECT_HEADER} as an int value to mark the
+				start of an object (using {\tt xdr_int}).
 		*/
 		virtual void writeHeader(const char* type_name, const char* name, LongPointerType ptr);
 
-		/**	Check for an an object header.
+		/**	Check for an object header.
+				This method reads an int form the input stream (using {\tt xdr_int}) and
+				returns {\bf true} if the value read equals \Ref{OBJECT_HEADER}.
 		*/
 		virtual bool checkHeader(const char* type_name, const char* name, LongPointerType& ptr);
 
-		/**
+		/** Write an object trailer.
+				This method stores \Ref{OBJECT_TRAILER} as an int value to mark the
+				start of an object (using {\tt xdr_int}).
 		*/
 		virtual void writeTrailer(const char* name = 0);
 
-		/**
+		/**	Check for an object trailer.
+				This method reads an int form the input stream (using {\tt xdr_int}) and
+				returns {\bf true} if the value read equals \Ref{OBJECT_TRAILER}.
 		*/
 		virtual bool checkTrailer(const char* name = 0);
 
@@ -321,19 +331,12 @@ namespace BALL
 
 		/**	The XDR struct used to read from
 		*/
-		XDR		xdr_read_struct_;
+		XDR		xdr_in_;
 		
-		/**	The XDR read buffer
-		*/
-		char*	read_buffer_;
-
 		/**	The XDR struct used to write to
 		*/
-		XDR		xdr_write_struct_;
+		XDR		xdr_out_;
 		
-		/**	The XDR write buffer
-		*/
-		char*	write_buffer_;
 	};
 
 } // namespace BALL
