@@ -9,6 +9,8 @@ BALL_INCLUDES=$(BALLVIEW_INCLUDES)
 OBJECTS=\
 	control.o\
 	control_moc.o\
+	displayProperties.o\
+	displayProperties_moc.o\
 	main.o\
 	mainframe.o\
 	mainframe_moc.o
