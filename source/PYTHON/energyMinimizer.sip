@@ -50,4 +50,4 @@ using namespace BALL;
   ForceField* getForceField();
   virtual bool minimize(int, bool);
   Options options;
- };
+};

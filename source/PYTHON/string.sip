@@ -4,8 +4,9 @@ class String
 #include <BALL/DATATYPE/string.h>
 using namespace BALL;
 %End
-  public:
-  String();
+
+	public:
+	String();
   String(const char*);
   void destroy();
   void swap(String&);
@@ -22,4 +23,22 @@ using namespace BALL;
   bool isWhitespace() const;
 	const char* c_str() const;
 	int size() const;
- };
+
+	operator const char* () const;
+%CanConvertToClassCode
+	// automatic conversion of Py-Strings to Strings
+	return (PyString_Check(sipPy) || sipIsSubClassInstance(sipPy,sipClass_String));
+%End
+%ConvertToClassCode
+  if (PyString_Check(sipPy))
+  {
+    *sipCppPtr = new String(PyString_AS_STRING(sipPy));
+
+    return 1;
+  }
+
+  *sipCppPtr = (String*)sipConvertToCpp(sipPy,sipClass_String,sipIsErr);
+
+  return 0;
+%End
+};

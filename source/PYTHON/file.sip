@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.2 2000/06/20 22:16:11 oliver Exp $
+// $Id: file.sip,v 1.3 2000/06/22 10:21:32 oliver Exp $
 class File
 {
 %HeaderCode
@@ -15,6 +15,41 @@ using namespace BALL;
   // static void disableProtocol(Protocol protocol);
 	// default open mode: READ
   bool open(const String&, int = 1);
+%MemberCode
+
+    const String *a0;
+    PyObject *a0obj;
+    int a1 = 1;
+
+    if (sipParseArgs(sipArgs,"I|i",sipCanConvertTo_String,&a0obj,&a1))
+    {
+      bool res;
+      File *ptr;
+
+      if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
+        return NULL;
+
+      int iserr = 0;
+
+      int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+
+      if (iserr)
+        return NULL;
+
+      res = ptr -> File::open(* a0, a1);
+
+			if (res == false)
+			{
+				Log.error() << "Cannot open file " << *a0 << std::endl;
+			}
+
+      if (istemp0)
+        delete a0;
+
+      return sipConvertFromBool((int)res);
+    }
+%End
+
   bool reopen();
   void close();
   const String& getName() const;
