@@ -1,18 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.C,v 1.32 2002/12/12 10:13:11 oliver Exp $
+// $Id: bitVector.C,v 1.33 2002/12/22 15:48:38 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
 
 #include <algorithm>
 
-using namespace std;
-
-
 namespace BALL 
 {
+
+	#	ifdef BALL_NO_INLINE_FUNCTIONS
+	#		include <BALL/DATATYPE/bitVector.iC>
+	#	endif
+
 	// CHECK: min/max issue
 	// collision in the defintion of Maths::min/max and std::min/max
 	#ifndef BALL_COMPILER_MSVC
@@ -493,21 +495,21 @@ namespace BALL
 		return true;
 	}
 
-	istream& operator >> (istream& s, BitVector& bit_vector)
+	std::istream& operator >> (std::istream& s, BitVector& bit_vector)
 		throw(Exception::OutOfMemory)
 	{
 		bit_vector.read(s);
 		return s;
 	}
 
-	ostream& operator << (ostream& s, const BitVector& bit_vector)
+	std::ostream& operator << (std::ostream& s, const BitVector& bit_vector)
 		throw()
 	{
 		bit_vector.write(s);
 		return s;
 	}
 
-	void BitVector::read(istream& s)
+	void BitVector::read(std::istream& s)
 		throw(Exception::OutOfMemory)
 	{
 		Size size = 0;
@@ -528,7 +530,7 @@ namespace BALL
 		}
 	}
 
-	void BitVector::write(ostream& s) const
+	void BitVector::write(std::ostream& s) const
 		throw()
 	{
 		s << getSize() << ' ';
@@ -656,9 +658,4 @@ namespace BALL
 
 		size_ = size;
 	}
-
-#	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/DATATYPE/bitVector.iC>
-#	endif
-
 } // namespace BALL

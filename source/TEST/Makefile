@@ -211,8 +211,8 @@ all:	$(EXECUTABLES)
 CPP_SOURCES=$(EXECUTABLES:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
 
--include ../common.mak
--include .Dependencies
+include ../common.mak
+include .Dependencies
 
 # remove the library specific flags
 # and replace them by the aplication specific
