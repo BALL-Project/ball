@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.10 2000/02/12 09:32:24 oliver Exp $
+// $Id: selector.C,v 1.11 2000/02/12 19:28:49 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -449,13 +449,15 @@ namespace BALL
  
 
 	Selector::Selector()
-		:	expression_tree_(0)
+		:	expression_tree_(0),
+			number_of_selected_atoms_(0)
 	{
 		registerStandardPredicates_();
 	}
 	
 	Selector::Selector(const String& expression)
-		:	expression_tree_(0)
+		:	expression_tree_(0),
+			number_of_selected_atoms_(0)
 	{
 		registerStandardPredicates_();
 		setExpression(expression);
@@ -497,6 +499,11 @@ namespace BALL
 		return create_methods_.has(name);
 	}
 
+	Size Selector::getNumberOfSelectedAtoms() const
+	{
+		return number_of_selected_atoms_;
+	}
+
 	ExpressionPredicate* Selector::getPredicate
 		(const String& name, const String& args) const
   {
@@ -535,14 +542,26 @@ namespace BALL
     return root;
 	}
 
+	bool Selector::start() 
+	{
+		// reset the number of selected atoms
+		number_of_selected_atoms_ = 0;
+
+		// and continue
+		return true;
+	}
+
   Processor::Result Selector::operator () (Composite& composite)
   {
+		// if the composite is an atom, we apply the expression tree...
 		if (RTTI::isKindOf<Atom>(composite))
 		{
 			Atom& atom = dynamic_cast<Atom&>(composite);
 			if (expression_tree_->operator () (atom))
 			{
+				// select the atoms and increase the atom counter
 				atom.select();
+				number_of_selected_atoms_++;
 			}
 		}
 
@@ -555,8 +574,10 @@ namespace BALL
 		create_methods_.insert(name, creation_method);
 	}
 
-	// expression predicate: the predicate base class
-	
+	////////////////////////////////////////////////////
+	// expression predicate: the predicate base class //
+	////////////////////////////////////////////////////
+
 	ExpressionPredicate::ExpressionPredicate()
 	{
 	}
@@ -569,7 +590,6 @@ namespace BALL
 	{
 		argument_ = args;
 	}
-
 
 	// Atom name predicate
 
