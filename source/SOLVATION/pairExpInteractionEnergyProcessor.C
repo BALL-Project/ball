@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.9 2000/10/17 17:20:45 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.10 2000/10/23 10:24:52 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -67,10 +67,11 @@ namespace BALL
 		throw()
 		:	EnergyProcessor(),
 			options(),
-			solvent_(),
 			alpha_(0),
 			C1_(0),
-			C2_(0)
+			C2_(0),
+			solvent_(),
+			rdf_parameter_()
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultReal(Option::ALPHA, Default::ALPHA);
@@ -93,10 +94,11 @@ namespace BALL
 			PairExpInteractionEnergyProcessor& proc) throw()
 		:	EnergyProcessor(proc),
 			options(proc.options),
-			solvent_(proc.solvent_),
 			alpha_(proc.alpha_),
 			C1_(proc.C1_),
-			C2_(proc.C2_)
+			C2_(proc.C2_),
+			solvent_(proc.solvent_),
+			rdf_parameter_(proc.rdf_parameter_)
 	{
 	}
 
@@ -111,10 +113,11 @@ namespace BALL
 	void PairExpInteractionEnergyProcessor::clear() throw()
 	{
 		options.clear();
-		solvent_.clear();
 		alpha_ = 0.0;
 		C1_ = 0.0;
 		C2_ = 0.0;
+		solvent_.clear();
+		rdf_parameter_.clear();
 
 		valid_ = false;
 	}
@@ -125,10 +128,11 @@ namespace BALL
 			(const PairExpInteractionEnergyProcessor& proc) throw()
 	{
 		options = proc.options;
-		solvent_ = proc.solvent_;
 		alpha_ = proc.alpha_;
 		C1_ = proc.C1_;
 		C2_ = proc.C2_;
+		solvent_ = proc.solvent_;
+		rdf_parameter_ = rdf_parameter_;
 
 		return *this;
 	}
@@ -171,11 +175,13 @@ namespace BALL
 		rho = solvent_descriptor.getNumberDensity();
 
 		// define the rdf, if desired
-		ForceFieldParameters rdf_ff_param(rdf_filename);
-		RDFParameter rdf_parameter;
+		ForceFieldParameters rdf_ff_param;
 		if (use_rdf)
 		{
-			if (!rdf_parameter.extractSection(rdf_ff_param, "RDF"))
+			rdf_ff_param.setFilename(rdf_filename);
+			rdf_ff_param.init();
+
+			if (!rdf_parameter_.extractSection(rdf_ff_param, "RDF"))
 			{
 				Log.error() << "PairExpInteractionEnergyProcessor::finish(); "
 					<< "Cannot read RDF descriptions." << endl;
@@ -295,7 +301,7 @@ namespace BALL
 				case SURFACE__UNKNOWN:
 				default:
 
-					Log.error() << "Pair6_12InteractionEnergyProcessor::finish(): "
+					Log.error() << "PairExpInteractionEnergyProcessor::finish(): "
 						<< "Unknown or unspecified surface type." << endl;
 					return false;
 			}
@@ -326,7 +332,10 @@ namespace BALL
 				}
 				else
 				{
-					Log.error() << "Cannot assign Claverie parameters."<< endl;
+					Log.error() << "PairExpInteractionEnergyProcessor::finish(): " 
+						<< "Cannot assign Claverie parameters for types "
+						<< solvent_atom.element_symbol << " (" << type_i << ") / " 
+						<< solute_iterator->getTypeName() << " (" << type_j << ")" << endl;
 				}
 
 				K_ij_D = claverie.first;
@@ -388,7 +397,7 @@ namespace BALL
 							// BAUSTELLE: Sollte protected werden. Und nicht geteilt in
 							// zwei Beiträge
 							integrator.setConstants(alpha_, C1_, C2_, R_ij_o, k1, k2);
-							integrator.setRDF(rdf_parameter.getRDF(type_i, type_j));
+							integrator.setRDF(rdf_parameter_.getRDF(type_i, type_j));
 							e_ij += rho * integrator.integrateToInf(r_k)
 								* ((r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
 
@@ -472,6 +481,7 @@ namespace BALL
 				<< " kcal/mol" << endl;
 		}
 
+		// return the energy in units of kJ/mol
 		energy_ = 4184 * E;
 		return true;
 	}

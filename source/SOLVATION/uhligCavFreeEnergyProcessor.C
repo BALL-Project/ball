@@ -1,4 +1,4 @@
-// $Id: uhligCavFreeEnergyProcessor.C,v 1.5 2000/10/06 15:23:29 anker Exp $
+// $Id: uhligCavFreeEnergyProcessor.C,v 1.6 2000/10/23 10:24:52 anker Exp $
 
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -70,7 +70,8 @@ namespace BALL
 		
 		double A = calculateSASArea(*fragment_, solvent_radius);
 		
-		energy_ = gamma * A + C;
+		// return energy in units of kJ/mol
+		energy_ = (gamma * A + C)/1000; 
 		return 1;
 	}
 

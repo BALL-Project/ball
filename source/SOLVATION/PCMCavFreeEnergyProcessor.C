@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.5 2000/10/06 15:23:28 anker Exp $
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.6 2000/10/23 10:24:51 anker Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -89,7 +89,8 @@ namespace BALL
 		HashMap<Atom*,float> atom_areas;
 		calculateSASAtomAreas(*fragment_, atom_areas, solvent_radius);
 		HashMap<Atom*,float> atom_areas_reduced;
-		calculateSESAtomAreas(*fragment_, atom_areas_reduced, 0.0);
+		// BAUSTELLE: Hier stand vorher SES? Warum?
+		calculateSASAtomAreas(*fragment_, atom_areas_reduced, 0.0);
 		
 		// R is two times ( atom radius + probe radius ) [ m ]
 		double R; 
@@ -119,7 +120,9 @@ namespace BALL
 			deltaGcav += it_red->second * 1e-20 / 
 				( 4 * Constants::PI * R * R ) * deltaGspher;
 		}
-		energy_ = deltaGcav;
+
+		// return energy in junits of kJ/mol
+		energy_ = deltaGcav/1000;
 		return 1;
 	}
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: reissCavFreeEnergyProcessor.C,v 1.5 2000/10/06 15:23:29 anker Exp $
+// $Id: reissCavFreeEnergyProcessor.C,v 1.6 2000/10/23 10:24:52 anker Exp $
 
 #include <BALL/SOLVATION/reissCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -118,7 +118,8 @@ namespace BALL
 			deltaGcav += it->second * 1e-20 /
 				( 4 * Constants::PI * R * R ) * deltaGspher;
 		}
-		energy_ = deltaGcav;
+		// return energy in units of kJ/mol
+		energy_ = deltaGcav/1000;
 		return 1;
 	}
 		

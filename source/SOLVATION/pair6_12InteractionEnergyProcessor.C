@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.6 2000/10/17 17:20:44 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.7 2000/10/23 10:24:52 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -163,13 +163,15 @@ namespace BALL
 		}
 
 		// define the rdf, if desired
-		ForceFieldParameters rdf_ff_param(rdf_filename);
+		ForceFieldParameters rdf_ff_param;
 		if (use_rdf)
 		{
-			// BAUSTELLE
+			rdf_ff_param.setFilename(rdf_filename);
+			rdf_ff_param.init();
+
 			if (!rdf_parameter_.extractSection(rdf_ff_param, "RDF"))
 			{
-				Log.error() << "PairExpInteractionEnergyProcessor::finish(); "
+				Log.error() << "Pair6_12InteractionEnergyProcessor::finish(); "
 					<< "Cannot read RDF descriptions." << endl;
 				return 0.0;
 			}
