@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.12 2005/02/02 15:29:36 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.13 2005/02/03 16:39:19 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -789,6 +789,8 @@ void MolecularControl::cut()
 	setStatusbarText("Deleted " + String(nr_of_items) + " items.");
 
 	selected_.clear();
+	listview->setUpdatesEnabled(true);
+	listview->triggerUpdate();
 	ControlSelectionMessage* message = new ControlSelectionMessage;
 	notify_(message);
 
@@ -855,10 +857,21 @@ void MolecularControl::paste()
 		changed_roots.insert(&parent->getRoot());
 	}
 
+	listview->setUpdatesEnabled(false);
+
+	// update of molecular control first
 	HashSet<Composite*>::Iterator it = changed_roots.begin();
 	for (; it != changed_roots.end(); it++)
 	{
 		updateListViewItem_(0, **it);
+		listview->setUpdatesEnabled(true);
+	}
+
+	listview->triggerUpdate();
+
+	// update of representations, etc.
+	for (it = changed_roots.begin(); it != changed_roots.end(); it++)
+	{
 		CompositeMessage *new_message = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 		notify_(*new_message);
 	}
