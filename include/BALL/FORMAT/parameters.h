@@ -1,0 +1,101 @@
+// $Id: parameters.h,v 1.1 2000/02/14 09:14:54 oliver Exp $
+// Molecular Mechanics: general force field parameter class
+
+#ifndef BALL_FORMAT_PARAMETERS_H
+#define BALL_FORMAT_PARAMETERS_H
+
+#ifndef BALL_COMMON_H
+#	include <BALL/common.h>
+#endif
+
+#ifndef BALL_FORMAT_INIFILE_H
+# include <BALL/FORMAT/INIFile.h>
+#endif
+
+namespace BALL 
+{
+
+	/**	General Parameter class.
+			This class is intended to simplify parameter management 
+			for force fields or other stronlgy parameterized methods.
+			It is based on \Ref{INIFile}.
+			\\
+			{\bf Definition:}\URL{BALL/include/FORMAT/parameters.h}
+			\\
+	*/
+	class Parameters
+	{
+		public:
+
+		/**@name	Constructors and destructor	*/
+		//@{
+
+		/**	Default constructor.
+		*/
+		Parameters();
+
+		/**	Constructor.
+		*/
+		Parameters(const String& filename);
+
+		/**	Copy constructor
+		*/
+		Parameters(const Parameters& force_field_parameter, bool deep = true);
+
+		/**	Destructor.
+		*/
+		virtual ~Parameters();
+
+		//@}
+
+		/**@name	Accessors 	*/
+		//@{
+
+		/**	Sets the filename for the INI file.
+		*/
+		void setFilename(const String& filename);
+
+		/**	Return the current INI file's name.
+		*/
+		const String& getFilename() const;
+
+		/**	Return a reference to the INI file.
+		*/
+		INIFile& getParameterFile();
+			
+		/**	Read the contents of the INI file and interpret them.
+		*/
+		bool init();
+		//@}
+
+		/**	@name	Predicates
+		*/
+		//@{
+			
+		/**	Validity predicate.
+				Return {\bf true} if the force field parameters were correctly
+				initialized, the internal INI file is valid and the internal atom types		
+				object is valid.
+				@return {\tt valid\_ \&\& parameter\_file\_.isValid()}
+		*/
+		virtual bool isValid() const;
+		//@}
+
+		protected:
+
+		/*_	@name	Protected Members */
+		//_@{ 
+
+		/*_
+		*/
+		bool		valid_;
+
+		/*_	the INIFile
+		*/
+		INIFile	INI_file_;
+		//_@} 
+	};
+
+} // namespace BALL
+
+#endif // BALL_FORMAT_PARAMETERS_H
