@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.17.4.1 2002/11/29 23:07:37 oliver Exp $
+// $Id: timeStamp.C,v 1.17.4.2 2002/11/30 09:48:44 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
@@ -8,6 +8,11 @@
 #ifdef BALL_HAS_TIME_H
 #	include <time.h>
 #endif 
+
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+#	include <windows.h>
+#	include <sys/timeb.h>
+#endif
 
 using namespace std;
 

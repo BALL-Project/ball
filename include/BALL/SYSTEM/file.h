@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.39 2002/01/11 13:26:25 amoll Exp $
+// $Id: file.h,v 1.39.4.1 2002/11/30 09:48:44 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -24,7 +24,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>		// 'stat', 'lstat'
 #include <stdio.h>			// 'rename'
-#include <unistd.h>			// 'access', 'rename', 'truncate'
+
+#ifdef BALL_HAS_UNISTD_H
+#	include <unistd.h>			// 'access', 'rename', 'truncate'
+#endif
 
 #include <map>
 

@@ -1,12 +1,26 @@
-// $Id: timer.C,v 1.7 2001/01/26 01:37:21 amoll Exp $
+// $Id: timer.C,v 1.7.4.1 2002/11/30 09:48:45 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
-#include <unistd.h>
+#ifdef BALL_HAS_UNISTD_H
+#	include <unistd.h>
+#endif
 #include <sys/types.h>
-#include <time.h>
-#include <sys/times.h>
-#include <sys/time.h>
+#ifdef BALL_HAS_TIME_H
+#	include <time.h>
+#endif
+#ifdef BALL_HAS_SYS_TIMES_H
+#	include <sys/times.h>
+#endif
+#ifdef BALL_HAS_SYS_TIME_H
+#	include <sys/time.h>
+#endif
+
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+#	include <windows.h>
+#	include <sys/timeb.h>
+#endif
+
 
 using std::cout;
 using std::endl;
@@ -15,14 +29,27 @@ using std::ostream;
 namespace BALL 
 {
 
-	long Timer::cpu_speed_ = 0L;
-
 	Timer::Timer()
 	{
+		#ifdef BALL_HAS_SYSCONF
 		if (cpu_speed_ == 0L)
 		{
 			cpu_speed_ = sysconf(_SC_CLK_TCK);
 		}
+		#endif
+	
+		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			LARGE_INTEGER ticks;
+			if(QueryPerformanceFrequency(&ticks))
+			{
+				cpu_speed_ = (long) ticks.QuadPart;
+			}
+			else 
+			{
+				cpu_speed_ = 0L;
+			}
+			clock_speed_ = CLOCKS_PER_SEC;
+		#endif
 
 		clear();
 	}
@@ -51,18 +78,32 @@ namespace BALL
 		{ /* tried to start a running timer */
 			return false;
 		}
+		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			LARGE_INTEGER tms;
+			clock_t timeval;
 		
-		struct tms tms_buffer; 
-		struct timeval timeval_buffer;	
-		struct timezone timezone_buffer; 
+			timeval=clock();
+			QueryPerformanceCounter(&tms);
 
-		gettimeofday(&timeval_buffer, &timezone_buffer);
-		times(&tms_buffer);
+			last_secs_  = tms.QuadPart / cpu_speed_;
+			last_usecs_ = tms.QuadPart / cpu_speed_ * 1000000;
+			last_user_time_ = timeval / clock_speed_;
+			last_system_time_ = 0;
+		#else
+
+			struct tms tms_buffer; 
+			struct timeval timeval_buffer;	
+			struct timezone timezone_buffer; 
+
+			gettimeofday(&timeval_buffer, &timezone_buffer);
+			times(&tms_buffer);
 		
-		last_secs_ = timeval_buffer.tv_sec;
-		last_usecs_ = timeval_buffer.tv_usec;
-		last_user_time_ = tms_buffer.tms_utime;
-		last_system_time_ = tms_buffer.tms_stime;
+			last_secs_ = timeval_buffer.tv_sec;
+			last_usecs_ = timeval_buffer.tv_usec;
+			last_user_time_ = tms_buffer.tms_utime;
+			last_system_time_ = tms_buffer.tms_stime;
+		#endif
+
 		is_running_ = true;
 
 		return true;
@@ -74,18 +115,31 @@ namespace BALL
 		{ /* tried to stop a stopped timer */
 			return false;
 		}
+		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			struct _timeb timeval_buffer;
+			LARGE_INTEGER tms;
+		
+			_ftime(&timeval_buffer);
+			QueryPerformanceCounter(&tms);
 
-		struct tms tms_buffer;
-		struct timeval timeval_buffer;
-		struct timezone timezone_buffer;
+			current_secs_ += timeval_buffer.time - last_secs_;
+			current_usecs_ += timeval_buffer.millitm - last_usecs_;
+			current_user_time_ += tms.QuadPart/cpu_speed_ - last_user_time_;
+			current_system_time_ += 0;
+		#else
+			struct tms tms_buffer;
+			struct timeval timeval_buffer;
+			struct timezone timezone_buffer;
 
-		gettimeofday(&timeval_buffer, &timezone_buffer);
-		times(&tms_buffer);
+			gettimeofday(&timeval_buffer, &timezone_buffer);
+			times(&tms_buffer);
 
-		current_secs_ += timeval_buffer.tv_sec - last_secs_;
-		current_usecs_ += timeval_buffer.tv_usec - last_usecs_;
-		current_user_time_ += tms_buffer.tms_utime - last_user_time_;
-		current_system_time_ += tms_buffer.tms_stime - last_system_time_;
+			current_secs_ += timeval_buffer.tv_sec - last_secs_;
+			current_usecs_ += timeval_buffer.tv_usec - last_usecs_;
+			current_user_time_ += tms_buffer.tms_utime - last_user_time_;
+			current_system_time_ += tms_buffer.tms_stime - last_system_time_;
+		#endif
+		
 		is_running_ = false;
 
 		return true;
@@ -107,7 +161,7 @@ namespace BALL
 
 	/************************************************************************/
 	/*																																			*/
-	/*     getClockTime returns the current amount of real (clock) time			*/
+	/*  getClockTime returns the current amount of real (clock) time			*/
 	/*  accumulated by this timer.  If the timer is stopped, this is just		*/
 	/*  the total accumulated time.  If the timer is running, this is the		*/
 	/*  accumulated time + the time since the timer was last started.				*/
@@ -115,8 +169,13 @@ namespace BALL
 	/************************************************************************/
 	float Timer::getClockTime() const
 	{
-		struct timeval timeval_buffer;
-		struct timezone timezone_buffer;
+		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			LARGE_INTEGER tms;
+		#else
+			struct timeval timeval_buffer;
+			struct timezone timezone_buffer;
+		#endif
+
 		long elapsed_seconds;
 		long micro_useconds;
 
@@ -130,11 +189,18 @@ namespace BALL
 		{ 
 			/* timer is currently running, so add the elapsed time since */
 			/* the timer was last started to the accumulated time        */
+			#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+				if(QueryPerformanceCounter(&tms))
+				{
+					elapsed_seconds = current_secs_ + tms.QuadPart/cpu_speed_;
+					micro_useconds  = current_secs_ + tms.QuadPart/cpu_speed_*1000000;
+				}
+			#else
+				gettimeofday(&timeval_buffer, &timezone_buffer);
 
-			gettimeofday(&timeval_buffer, &timezone_buffer);
-
-			elapsed_seconds = current_secs_ + timeval_buffer.tv_sec - last_secs_;
-			micro_useconds = current_usecs_ + timeval_buffer.tv_usec - last_usecs_;
+				elapsed_seconds = current_secs_ + timeval_buffer.tv_sec - last_secs_;
+				micro_useconds = current_usecs_ + timeval_buffer.tv_usec - last_usecs_;
+			#endif
 		}
 
 		/* Adjust for the fact that the useconds may be negative. */
@@ -152,7 +218,7 @@ namespace BALL
 
 	/************************************************************************/
 	/*																																			*/
-	/*      getUserTime reports the current amount of user cpu time         */
+	/*   getUserTime reports the current amount of user cpu time         */
 	/*   accumulated by this Timer.  If the timer is currently off,					*/
 	/*   this is just the accumulated time.  If the Timer is running, this	*/
 	/*   is the accumulated time plust the time since the timer was last    */
@@ -162,8 +228,12 @@ namespace BALL
 	float Timer::getUserTime() const
 	{
 		float temp_value;
-		struct tms tms_buffer;	
 
+		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			clock_t tms;
+		#else
+			struct tms tms_buffer;	
+		#endif
 		if (is_running_ == false)
 		{ 
 			/* timer is off, just return accumulated time */
@@ -172,13 +242,24 @@ namespace BALL
 		else 
 		{
 			/* timer is on, add current running time to accumulated time */
-			times(&tms_buffer);
-			temp_value = (float)(current_user_time_ + tms_buffer.tms_utime - last_user_time_);
+			#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+				tms=clock();
+				temp_value = (float)(current_user_time_ + tms/clock_speed_ - last_user_time_);
+			
+			#else
+				times(&tms_buffer);
+				temp_value = (float)(current_user_time_ + tms_buffer.tms_utime - last_user_time_);
+			#endif
 		}
 
-		/* convert from clock ticks to seconds using the */
-		/* cpu-speed value obtained by the constructor   */
-		return (float)(temp_value / (float)cpu_speed_);
+		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			return temp_value;
+		#else
+		
+			/* convert from clock ticks to seconds using the */
+			/* cpu-speed value obtained by the constructor   */
+			return (float)(temp_value / (float)cpu_speed_);
+		#endif	
 	}
 
 	/************************************************************************/
@@ -193,8 +274,11 @@ namespace BALL
 	float Timer::getSystemTime() const
 	{
 		float temp_value;
-		struct tms tms_buffer;
-												
+
+		#ifndef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			struct tms tms_buffer;
+		#endif												
+		
 		if (is_running_ == false)
 		{ 
 			/* timer is off, just return accumulated time */
@@ -203,13 +287,19 @@ namespace BALL
 		else 
 		{ 
 			/* timer is on, return accumulated plus current */
-			times(&tms_buffer);
-			temp_value = (float)(current_system_time_ + tms_buffer.tms_stime - last_system_time_);
+			#ifndef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+				times(&tms_buffer);
+				temp_value = (float)(current_system_time_ + tms_buffer.tms_stime - last_system_time_);
+			#endif
 		}
 
 		/* convert from clock ticks to seconds using the */
 		/* cpu-speed value obtained by the constructor   */
-		return (temp_value / (float)cpu_speed_);
+		#ifndef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			return (temp_value / (float)cpu_speed_);
+		#else 
+			return 0.0;
+		#endif
 	}
 
 	Timer& Timer::operator = (const Timer& timer)

@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.14 2001/12/30 13:28:36 sturm Exp $
+// $Id: regExp.h,v 1.14.4.1 2002/11/30 09:48:44 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -11,8 +11,12 @@
 #if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
 #	pragma set woff 1174
 #endif
-#include <sys/types.h>
-#include <regex.h>
+#ifdef BALL_HAS_SYS_TYPES_H
+#	include <sys/types.h>
+#endif
+#ifdef BALL_HAS_REGEX_H
+#	include <regex.h>
+#endif
 #if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
 #	pragma reset woff 1174
 #endif

@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.24 2001/12/30 13:28:44 sturm Exp $
+// $Id: socket.h,v 1.24.4.1 2002/11/30 09:48:44 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -27,9 +27,21 @@
 #include <stddef.h>
 #include <stdio.h>
 #include <sys/types.h>
-#include <sys/uio.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+// WIN
+#ifdef BALL_INCLUDE_UIO_H
+#	include <sys/uio.h>
+#endif
+#ifdef BALL_INCLUDE_SYS_SOCKET_H
+#	include <sys/socket.h>
+#endif
+#ifdef BALL_INCLUDE_NETINET_IN_H
+#	include <netinet/in.h>
+#endif
+#ifdef BALL_USE_WINSOCK
+#	include <winsock2.h>
+#endif
+//WIN
+
 
 #ifdef BALL_HAS_ANSI_IOSTREAM
 #	ifndef _S_USER_BUF

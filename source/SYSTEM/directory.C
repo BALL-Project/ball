@@ -1,14 +1,18 @@
-// $Id: directory.C,v 1.15 2001/05/17 12:19:25 oliver Exp $
+// $Id: directory.C,v 1.15.4.1 2002/11/30 09:48:45 oliver Exp $
 
-#include <dirent.h>
+#include <BALL/SYSTEM/directory.h>
+
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
-#include <sys/types.h>
-#include <unistd.h>
+#ifdef BALL_INCLUDE_SYS_TYPES_H
+#	include <sys/types.h>
+#endif
+#ifdef BALL_INCLUDE_UNISTD_H
+#	include <unistd.h>
+#endif
 #include <iostream>
 #include <errno.h>
-#include <BALL/SYSTEM/directory.h>
 
 namespace BALL 
 {
@@ -19,13 +23,22 @@ namespace BALL
 		dir_ = 0;
 		dirent_ = 0;
 		char* buffer_;
-		if ((buffer_ = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	directory_path_ = buffer_;
-		else directory_path_ = "";
+		if ((buffer_ = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
+		{
+			directory_path_ = buffer_;
+		}
+		else 
+		{
+			directory_path_ = "";
+		}
 	}
 
 	Directory::Directory(const String& directory_path, bool set_current)
 	{
-		if (!set(directory_path, set_current)) directory_path_ = "";
+		if (!set(directory_path, set_current)) 
+		{
+			directory_path_ = "";
+		}
 	}
 
 	Directory::Directory(const Directory& directory)

@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.25 2001/06/07 20:13:54 anker Exp $
+// $Id: socket.C,v 1.25.4.1 2002/11/30 09:48:45 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -13,15 +13,29 @@
 // Version: 17Oct95 1.10
 
 #include <BALL/SYSTEM/socket.h>
+#include <stdio.h>
 
-#include <sys/time.h>
-#include <sys/socket.h>
+#ifdef BALL_INCLUDE_SYS_TIME_H
+#	include <sys/time.h>
+#endif
 #include <stdlib.h>
-#include <unistd.h>
+#ifdef BALL_INCLUDE_UNISTD_H
+#	include <unistd.h>
+#endif
 #include <errno.h>
 #include <stdio.h>
-#include <netdb.h>
-#include <arpa/inet.h>
+#ifdef BALL_INCLUDE_NETDB_H
+#	include <netdb.h>
+#endif
+#ifdef BALL_INCLUDE_ARPA_INET_H
+#	include <arpa/inet.h>
+#endif
+#ifdef BALL_USE_WINSOCK
+#	include <io.h>
+#	define GLOBAL_CLOSE	_close
+#else
+#	define GLOBAL_CLOSE ::close
+#endif
 
 #ifndef BUFSIZ
 #  define BUFSIZ 1024
@@ -212,7 +226,7 @@ namespace BALL
 	{
 		if (rep->sock >= 0) 
 		{
-			if (::close (rep->sock) == -1) 
+			if (GLOBAL_CLOSE(rep->sock) == -1) 
 			{
 				return this;
 			}
@@ -1033,7 +1047,20 @@ namespace BALL
 	SocketBuf* SockInetBuf::open(SocketBuf::type socket_type, int proto)
 		throw()
 	{
+		
+		#ifdef BALL_USE_WINSOCK
+			WORD    wsa_vers = 0x0101;
+			WSADATA wsa_data;
+ 
+		   if (WSAStartup(wsa_vers, &wsa_data) != 0)
+			 {
+				 Log.error() << "SockInetBuf::open: No WINSOCK.DLL found!" << std::endl;
+			 }	
+		 
+		#endif
+
 		*this = SockInetBuf(socket_type, proto);
+
 		return this;
 	}
 
@@ -1135,11 +1162,14 @@ namespace BALL
 			{
 				return 0;
 			}
-
-			if (eno != EADDRINUSE)
-			{
+#			ifndef BALL_USE_WINSOCK
+				if (eno != EADDRINUSE)
+				{
+					return eno;
+				}
+#			else
 				return eno;
-			}
+#			endif
 		}
 	}
 
