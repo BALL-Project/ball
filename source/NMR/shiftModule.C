@@ -1,4 +1,4 @@
-// $Id: shiftModule.C,v 1.7 2000/09/20 11:16:09 oliver Exp $
+// $Id: shiftModule.C,v 1.8 2000/09/21 13:48:04 oliver Exp $
 
 #include<BALL/NMR/shiftModule.h>
 
@@ -12,7 +12,8 @@ namespace BALL
 	ShiftModule::ShiftModule()
 		throw()
 		:	module_name_(""),
-			parameters_(0)
+			parameters_(0),
+			valid_(false)
 	{
 	}
 
@@ -24,7 +25,8 @@ namespace BALL
 	ShiftModule::ShiftModule(Parameters& parameters, const String& name)
 		throw()
 		:	module_name_(name),
-			parameters_(&parameters)
+			parameters_(&parameters),
+			valid_(false)
 	{
 	}
 
@@ -32,7 +34,8 @@ namespace BALL
 		throw()
 		:	UnaryProcessor<Composite>(module),
 			module_name_(module.module_name_),
-			parameters_(module.parameters_)
+			parameters_(module.parameters_),
+			valid_(module.valid_)
 	{
 	}
 
@@ -41,6 +44,7 @@ namespace BALL
 	{
 		module_name_ = "";
 		parameters_ = 0;
+		valid_ = false;
 	}
 
 
@@ -55,6 +59,7 @@ namespace BALL
 	{
 		module_name_ = module.module_name_;
 		parameters_ = module.parameters_;
+		valid_ = module.valid_;
 
 		return *this;
 	}
@@ -75,12 +80,33 @@ namespace BALL
 		throw()
 	{
 		parameters_ = &parameters;
+		valid_ = false;
 	}
 
 	const Parameters* ShiftModule::getParameters() const
 		throw()
 	{
 		return parameters_;
+	}
+
+	bool ShiftModule::start()
+		throw()
+	{
+		// abort if the module was not correctly initialized
+		return valid_;
+	}
+
+	bool ShiftModule::finish()
+		throw()
+	{
+		// abort if the module was not correctly initialized
+		return valid_;
+	}
+
+	bool ShiftModule::isValid() const
+		throw()
+	{
+		return valid_;
 	}
 
 }	// namespace BALL
