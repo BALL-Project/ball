@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.33 2002/01/15 16:01:21 anker Exp $
+# $Id: Makefile,v 1.33.4.1 2002/10/16 00:45:43 amoll Exp $
 
 EXECUTABLE=molview
 DIRECTORY=APPLICATIONS/MOLVIEW
@@ -37,9 +37,6 @@ SPECIAL_OBJECTS=
 
 molview:	$(OBJECTS) $(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS)
-
-example: example02.o 
-	$(CXX)	$(LDFLAGS) -o example example02.o $(BALLVIEW_LIBS) $(PYTHON_LIBS)
 
 DIALOGS/DlgAbout_moc.C:     DIALOGS/DlgAbout.h
 				$(MOC) DIALOGS/DlgAbout.h -o $@
