@@ -1,13 +1,9 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: displayProperties.C,v 1.17 2002/12/12 10:57:44 oliver Exp $
+// $Id: displayProperties.C,v 1.18 2002/12/12 17:21:42 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
-#include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 #include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <qcolordialog.h>
 #include <qmenubar.h>
@@ -35,21 +31,13 @@ namespace BALL
 			:	DisplayPropertiesData( parent, name ),
 				ModularWidget(name),
 				id_(-1),
-				select_id_(-1),
-				deselect_id_(-1),
-				center_camera_id_(-1),
-				build_bonds_id_(-1),
-				add_hydrogens_id_(-1),
 				model_string_static_("stick"),
 				model_string_dynamic_("line"),
-				precision_string_static_("high"),
+				precision_string_static_("ultra"),
 				precision_string_dynamic_("high"),
 				coloring_method_string_("by element"),
 				distance_coloring_(false),
 
-				view_center_vector_(0,0,0),
-				view_direction_(2),
-				view_distance_(25),
 				address_array_((int)50, (int)-1),
 
 				fragmentdb_(),
@@ -139,6 +127,15 @@ namespace BALL
 				color_sample->setBackgroundColor(qcolor);
 			}
 
+			if (inifile.hasEntry("WINDOWS", "Display::selectedcolor"))
+			{
+				BALL_SELECTED_COLOR.set(inifile.getValue("WINDOWS", "Display::selectedcolor"));
+				QColor qcolor(BALL_SELECTED_COLOR.getRed(), 
+											BALL_SELECTED_COLOR.getGreen(), 
+											BALL_SELECTED_COLOR.getBlue());
+				color_sample_selection->setBackgroundColor(qcolor);
+			}
+
 			if (inifile.hasEntry("WINDOWS", "Display::modeldynamic"))
 			{
 				model_string_dynamic_ = inifile.getValue("WINDOWS", "Display::modeldynamic").c_str();
@@ -180,7 +177,6 @@ namespace BALL
 			throw()
 		{
 			// the display window position
-			inifile.insertValue("WINDOWS", "Display::x", String(x()));
 			inifile.insertValue("WINDOWS", "Display::y", String(y()));
 
 			// the combobox values
@@ -190,6 +186,7 @@ namespace BALL
 			inifile.insertValue("WINDOWS", "Display::precisiondynamic", precision_string_dynamic_.ascii());
 			inifile.insertValue("WINDOWS", "Display::colormethod", coloring_method_string_.ascii());
 			inifile.insertValue("WINDOWS", "Display::customcolor", custom_color_);
+			inifile.insertValue("WINDOWS", "Display::selectedcolor", BALL_SELECTED_COLOR);
 		}
 
 
@@ -200,14 +197,6 @@ namespace BALL
 
 			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
 																				 SLOT(openDialog()), CTRL+Key_I);   
-			select_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
-			deselect_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
-			center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, 
-																											 SLOT(centerCamera()), CTRL+Key_A);
-			build_bonds_id_ = main_control.insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
-																										 SLOT(buildBonds()), CTRL+Key_B);
-			add_hydrogens_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
-																											 SLOT(addHydrogens()), CTRL+Key_H);
 		}
 
 
@@ -233,23 +222,18 @@ namespace BALL
 
 			(main_control.menuBar())->setItemEnabled(select_id_, selected);
 			(main_control.menuBar())->setItemEnabled(deselect_id_, selected);
-			(main_control.menuBar())->setItemEnabled(add_hydrogens_id_, selected);
-			(main_control.menuBar())->setItemEnabled(build_bonds_id_, selected);
-
-			// these menu points for single items only
-			(main_control.menuBar()) ->setItemEnabled(center_camera_id_, number_of_selected_objects == 1);
 		}
 
 
 		void DisplayProperties::openDialog()
 		{
-			show();
-			raise();
 			setComboBoxIndex_(coloring_type_combobox, coloring_method_string_);
 			setComboBoxIndex_(mode_resolution_combobox_static, precision_string_static_);
 			setComboBoxIndex_(mode_resolution_combobox_dynamic, precision_string_dynamic_);
 			setComboBoxIndex_(model_type_combobox_static, model_string_static_);
 			setComboBoxIndex_(model_type_combobox_dynamic, model_string_dynamic_);
+			show();
+			raise();
 		}
 
 
@@ -309,7 +293,7 @@ namespace BALL
 		{
 			model_string_static_ = string;
 
-			setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_SOLID);
+			setValue_(ADDRESS__STATIC_DRAWING_MODE, VALUE__DRAWING_MODE_SOLID);
 
 			if (string == "none")
 			{
@@ -349,7 +333,7 @@ namespace BALL
 		{
 			model_string_dynamic_ = string;
 
-			setValue_(ADDRESS__STATIC_DRAWING_MODE, VALUE__DRAWING_MODE_SOLID);
+			setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_SOLID);
 
 			if (string == "none")
 			{
@@ -490,6 +474,11 @@ namespace BALL
 				// notify scene to perform an update and set the camera to the new object
 				notify_(scene_message);
 			}
+			else if (RTTI::isKindOf<DrawMessage>(*message))
+			{
+				DrawMessage* draw_message = RTTI::castTo<DrawMessage>(*message);
+				applyOn_(*draw_message->getComposite());
+			}
 
 			// disable apply button if selection is empty
 			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
@@ -500,183 +489,6 @@ namespace BALL
 			{
 				apply_button->setEnabled(true);
 			}
-		}
-
-
-		void DisplayProperties::select()
-		{
-			List<Composite*>& selection = MainControl::getMainControl(this)->getControlSelection();
-			if (selection.size() == 0)
-			{
-				return;
-			}
-
-			// notify the main window
-			setStatusbarText("selecting " + String(selection.size()) + " objects...");
-
-			int value_static = getValue_(ADDRESS__STATIC_MODEL);
-			int value_dynamic = getValue_(ADDRESS__DYNAMIC_MODEL);
-
-			// copy list because the selection_ list can change after a changemessage event
-			List<Composite*> temp_selection_ = selection;
-						
-			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
-			CompositeSelectedMessage* cs_message = new CompositeSelectedMessage(0, true);
-			cs_message->setDeletable(false);
-			for (; list_it != temp_selection_.end(); ++list_it)
-			{
-				cs_message->composite_ = *list_it;
-				notify_(cs_message);
-			}
-
-			// restore old values
-			setValue_(ADDRESS__STATIC_MODEL, value_static);
-			setValue_(ADDRESS__DYNAMIC_MODEL, value_dynamic);
-			
-			setStatusbarText("");
-		}
-
-
-		void DisplayProperties::deselect()
-		{
-			List<Composite*>& selection = MainControl::getMainControl(this)->getControlSelection();
-
-			if (selection.size() == 0)
-			{
-				return;
-			}
-
-			// notify the main window
-			setStatusbarText("deselecting " + String(selection.size()) + "objects...");
-
-			int value_static = getValue_(ADDRESS__STATIC_MODEL);
-			int value_dynamic = getValue_(ADDRESS__DYNAMIC_MODEL);
-
-			// copy list because the selection_ list can change after a changemessage event
-			List<Composite*> temp_selection_ = selection;
-
-			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
-			CompositeSelectedMessage* cs_message = new CompositeSelectedMessage(0, false);
-			cs_message->setDeletable(false);
-			for (; list_it != temp_selection_.end(); ++list_it)
-			{
-				// mark composite for update
-				cs_message->composite_ = *list_it;
-				notify_(cs_message);
-			}
-
-			// restore old values
-			setValue_(ADDRESS__STATIC_MODEL, value_static);
-			setValue_(ADDRESS__DYNAMIC_MODEL, value_dynamic);
-
-			setStatusbarText("");
-		}
-
-
-		void DisplayProperties::centerCamera()
-		{
-			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
-			{
-				return;
-			}
-
-			// use specified object processor for calculating the center
-			calculateCenter_(**MainControl::getMainControl(this)->getControlSelection().begin());
-
-			Vector3 view_point = getViewCenter_();
-
-			// update scene
-			SceneMessage *scene_message = new SceneMessage;
-			scene_message->setCameraLookAt(view_point);
-
-			view_point.z += getViewDistance_();
-			scene_message->setCameraViewPoint(view_point);
-			scene_message->setDeletable(true);
-			notify_(scene_message);
-		}
-
-
-		void DisplayProperties::buildBonds()
-		{
-			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
-			{
-				return;
-			}
-
-			// notify the main window
-			setStatusbarText("building bonds ...");
-
-			// copy the selection_, it can change after a changemessage event
-			List<Composite*> temp_selection_ = MainControl::getMainControl(this)->getControlSelection();
-			List<Composite*>::ConstIterator it = temp_selection_.begin();	
-			
-			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
-			change_message->setDeletable(false);
-			
-			Size number_of_bonds = 0;
-			for (; it != temp_selection_.end(); ++it)
-			{	
-				(*it)->apply(fragmentdb_.build_bonds);
-				number_of_bonds += fragmentdb_.build_bonds.getNumberOfBondsBuilt();
-				applyOn_(**it);
-
-				// mark composite for update
-				change_message->setComposite((*it));
-				notify_(change_message);
-			}
-
-			// update scene
-			SceneMessage *scene_message = new SceneMessage;
-			scene_message->updateOnly();
-			scene_message->setDeletable(true);
-			notify_(scene_message);
-
-			setStatusbarText("");
-
-			Log.info() << "Added " << number_of_bonds << " bonds." << std::endl;
-		}
-
-
-		void DisplayProperties::addHydrogens()
-		{
-			if (MainControl::getMainControl(this)->getControlSelection().size() == 0)
-			{
-				return;
-			}
-
-			// notify the main window
-			setStatusbarText("adding hydrogens ...");
-
-			// copy the selection_, it can change after a changemessage event
-			List<Composite*> temp_selection_ = MainControl::getMainControl(this)->getControlSelection();
-			List<Composite*>::ConstIterator it = temp_selection_.begin();	
-
-			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
-			change_message->setDeletable(false);
-
-			Size number_of_hydrogens = 0;
-
-			for (; it != temp_selection_.end(); ++it)
-			{	
-				(*it)->apply(fragmentdb_.add_hydrogens);
-				number_of_hydrogens += fragmentdb_.add_hydrogens.getNumberOfInsertedAtoms();
-				(*it)->apply(fragmentdb_.build_bonds);
-				applyOn_(**it);	
-
-				// mark composite for update
-				change_message->setComposite((*it));
-				notify_(change_message);
-			}
-
-			Log.info() << "added " <<  number_of_hydrogens << " hydrogen atoms." << std::endl;
-
-			// update scene
-			SceneMessage *scene_message = new SceneMessage;
-			scene_message->updateOnly();
-			scene_message->setDeletable(true);
-			notify_(scene_message);
-
-			setStatusbarText("");
 		}
 
 
@@ -805,7 +617,7 @@ namespace BALL
 
 			if (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_BACKBONE)
 			{
-				return;
+				//return;
 			}
 			composite.apply(*dynamic_base_model_pointer_);
 		}
@@ -930,6 +742,10 @@ namespace BALL
 				case VALUE__MODEL_VAN_DER_WAALS:
 					dynamic_base_model_pointer_ = &van_der_waals_model_dynamic_;
 					break;
+
+				case VALUE__MODEL_BACKBONE:
+					dynamic_base_model_pointer_ = &backbone_model_dynamic_;
+					break;
 					
 				case VALUE__MODEL_REMOVE:
 					dynamic_base_model_pointer_ = &remove_model_dynamic_;
@@ -987,46 +803,6 @@ namespace BALL
 			// register the color calculator ------------------------------------------------
 			dynamic_base_model_pointer_->registerColorCalculator(*color_calculator_);
 		}
-
-
-		void DisplayProperties::calculateCenter_(Composite &composite)
-		{
-			GeometricCenterProcessor center;
-			composite.apply((UnaryProcessor<Atom>&) center);			
-					
-			setViewCenter_(center.getCenter());
-			setViewDirection_(2);
-
-			if (getValue_(ADDRESS__CAMERA_DISTANCE) != -1)
-			{
-				setViewDistance_(getValue_(ADDRESS__CAMERA_DISTANCE));
-			}
-			else
-			{
-				BoundingBoxProcessor bbox;
-				composite.apply(bbox);				
-				setViewDistance_((bbox.getUpper() - bbox.getLower()).getLength() - center.getCenter().z + 3);
-			}
-		}
-
-
-		bool DisplayProperties::checkResidue_(Composite &composite)
-		{
-			ResidueChecker residue_checker(fragmentdb_);
-
-			if (RTTI::isKindOf<AtomContainer>(composite))
-			{
-				(RTTI::castTo<AtomContainer>(composite))->apply(residue_checker);
-				return residue_checker.getStatus();
-			}
-			else 
-			{
-				Log.error() << "ResidueChecker: cannot apply to a " << typeid(composite).name() << " object" << std::endl;
-			}
-			
-			return false;
-		}
-
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.iC>
