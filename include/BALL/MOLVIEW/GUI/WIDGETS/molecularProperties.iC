@@ -1,0 +1,7 @@
+// $Id: molecularProperties.iC,v 1.1 2000/09/23 15:38:18 hekl Exp $
+
+BALL_INLINE
+void MolecularProperties::registerFragmentDB(const FragmentDB &fragment_db)
+{
+	fragment_db_ = const_cast<FragmentDB*>(&fragment_db);
+}
