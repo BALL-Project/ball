@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.50 2004/10/29 20:24:23 amoll Exp $
+// $Id: glRenderer.C,v 1.51 2004/12/09 22:14:39 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -823,8 +823,15 @@ namespace BALL
 		GLubyte* GLRenderer::generateBitmapFromText_(const String& text, int& width, int& height) const
 			throw()
 		{
+#ifndef BALL_PLATFORM_WINDOWS
 			QColor c1(0,0,0);
 			QColor c2(255,255,255);
+#else
+			// invert colors to fix problem under windows
+			QColor c2(0,0,0);
+			QColor c1(255,255,255);
+#endif
+		
 			int border = 2;
 			
 			QPainter p;
