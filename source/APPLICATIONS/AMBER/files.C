@@ -1,4 +1,4 @@
-// $Id: files.C,v 1.1 2000/06/10 11:23:19 oliver Exp $
+// $Id: files.C,v 1.2 2000/06/10 12:51:30 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
@@ -255,7 +255,7 @@ void readPDBFile(const String& filename)
 	// print the number of atoms read in verbose mod
 	if (verbose)
 	{
-		Log.info() << "read " << S.countAtoms() << " atoms from " << filename << endl;
+		Log.info() << "read " << PDB_files.back().getSystem().countAtoms() << " atoms from " << filename << endl;
 	}
 	
 	// normalize the names
