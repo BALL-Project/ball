@@ -1,8 +1,5 @@
 DIRECTORY=TEST
 
-XDR_DEPENDENT_EXECUTABLES=\
-	XDRPersistenceManager_test$(e)
-
 EXECUTABLES_BASIC = \
 	ClassTest_test$(e)\
 	RegularExpression_test$(e)\
@@ -35,11 +32,11 @@ EXECUTABLES_SYSTEM = \
 	FileSystem_test$(e)\
 	Directory_test$(e)\
 	Socket_test$(e)\
-#	TCPTransfer_test$(e)\
-#	File_test$(e)\
+	TCPTransfer_test$(e)\
+	File_test$(e)\
 	Path_test$(e)\
 	PreciseTime_test$(e)\
-#	Timer_test$(e)\
+	Timer_test$(e)\
 	TimeStamp_test$(e)\
 	TransformationManager_test$(e)
 
@@ -52,7 +49,10 @@ EXECUTABLES_DATATYPES = \
 	HashSet_test$(e)\
 	HashGrid3_test$(e)\
 	Options_test$(e)\
-#	String_test$(e)\
+	String_test1$(e)\
+	String_test1$(e)\
+	String_test3$(e)\
+	String_test4$(e)\
 	Substring_test$(e)\
 	Triple_test$(e)\
 	Quadruple_test$(e)\
@@ -60,7 +60,8 @@ EXECUTABLES_DATATYPES = \
 	RegularData2D_test$(e)\
 	RegularData3D_test$(e)
 
-EXECUTABLES_CONCEPTS = Enumerator_test$(e)\
+EXECUTABLES_CONCEPTS = \
+	Enumerator_test$(e)\
 	Factory_test$(e)\
 	LogStream_test$(e)\
 	AutoDeletable_test$(e)\
@@ -68,9 +69,11 @@ EXECUTABLES_CONCEPTS = Enumerator_test$(e)\
 	PersistentObject_test$(e)\
 	PersistenceManager_test$(e)\
 	TextPersistenceManager_test$(e)\
+#	XDRPersistenceManager_test$(e)\
 	Selectable_test$(e)\
 	PropertyManager_test$(e)\
-#	Composite_test$(e)\
+	Composite_test1$(e)\
+	Composite_test2$(e)\
 	Embeddable_test$(e)\
 	RandomAccessIterator_test$(e)
 
@@ -133,8 +136,8 @@ EXECUTABLES_FORMATS =\
 	Parameters_test$(e)\
 	ParameterSection_test$(e)\
 	ResourceFile_test$(e)\
-#	GenericMolFile_test$(e)\
-#	HINFile_test$(e)\
+	GenericMolFile_test$(e)\
+	HINFile_test$(e)\
 	MOLFile_test$(e)\
 	SDFile_test$(e)\
 	MOL2File_test$(e)\
@@ -146,7 +149,7 @@ EXECUTABLES_FORMATS =\
 
 EXECUTABLES_ENERGY = \
 	AtomicContactEnergy_test$(e)\
-#	ComposedEnergyProcessor_test$(e)\
+	ComposedEnergyProcessor_test$(e)\
 	EnergyProcessor_test$(e)\
 	OoiEnergy_test$(e)
 
@@ -200,59 +203,3 @@ EXECUTABLES = \
 
 # default target
 all:	$(EXECUTABLES)
-	
-#all:	MolecularGraph_test
-
-	
-
-
-#test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
-#	@./runtests -success
-
-#info:
-#	@./runtests -info
-
-#basic_test:	$(EXECUTABLES_BASIC)
-#	@./runtests -section "BASIC" $(TEST_OPTIONS) $(EXECUTABLES_BASIC)
-
-#system_test:	$(EXECUTABLES_SYSTEM)
-#	@./runtests -section "SYSTEM" $(TEST_OPTIONS) $(EXECUTABLES_SYSTEM)
-
-#maths_test:	$(EXECUTABLES_MATHS)
-#	@./runtests -section "MATHS" $(TEST_OPTIONS) $(EXECUTABLES_MATHS)
-
-#datatypes_test:	$(EXECUTABLES_DATATYPES)
-#	@./runtests -section "DATATYPES" $(TEST_OPTIONS) $(EXECUTABLES_DATATYPES)
-	
-#concepts_test:	$(EXECUTABLES_CONCEPTS)
-#	@./runtests -section "CONCEPTS" $(TEST_OPTIONS) $(EXECUTABLES_CONCEPTS)
-	
-#kernel_test:	$(EXECUTABLES_KERNEL)
-#	@./runtests -section "KERNEL" $(TEST_OPTIONS) $(EXECUTABLES_KERNEL)
-	
-#formats_test:	$(EXECUTABLES_FORMATS)
-#	@./runtests -section "FORMATS" $(TEST_OPTIONS) $(EXECUTABLES_FORMATS)
-	
-#energy_test:	$(EXECUTABLES_ENERGY)
-#	@./runtests -section "ENERGY" $(TEST_OPTIONS) $(EXECUTABLES_ENERGY)
-	
-#molmec_test:	$(EXECUTABLES_MOLMEC)
-#	@./runtests -section "MOLMEC" $(TEST_OPTIONS) $(EXECUTABLES_MOLMEC)
-	
-#nmr_test:	$(EXECUTABLES_NMR)
-#	@./runtests -section "NMR" $(TEST_OPTIONS) $(EXECUTABLES_NMR)
-
-#structure_test:	$(EXECUTABLES_STRUCTURE)
-#	@./runtests -section "STRUCTURE" $(TEST_OPTIONS) $(EXECUTABLES_STRUCTURE)
-
-#qsar_test:	$(EXECUTABLES_QSAR)
-#	@./runtests -section "QSAR" $(TEST_OPTIONS) $(EXECUTABLES_QSAR)
-
-#solvation_test:	$(EXECUTABLES_SOLVATION)
-#	@./runtests -section "SOLVATION" $(TEST_OPTIONS) $(EXECUTABLES_SOLVATION)
-
-#clean:	default_clean
-#	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
-
-#Enumerator_test:	Enumerator_test.o ../CONCEPT/enumerator.o
-#	$(CXX) $(LDFLAGS) -o Enumerator_test Enumerator_test.o ../CONCEPT/enumerator.o $(LIBS)

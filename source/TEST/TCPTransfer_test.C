@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.18 2002/01/26 22:01:29 oliver Exp $
+// $Id: TCPTransfer_test.C,v 1.18.4.1 2002/12/08 10:01:41 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +19,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.18 2002/01/26 22:01:29 oliver Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.18.4.1 2002/12/08 10:01:41 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -48,7 +48,7 @@ CHECK(set(ofstream& file, const String& address))
 	TEST_EQUAL(tcp_t.getHostAddress(), "www.mpi-sb.mpg.de")
 	TEST_EQUAL(tcp_t.getFileAddress(), "/BALL/test/http_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
-	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
+	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 0)
 	TEST_EQUAL(tcp_t.getLogin(), "")
 	TEST_EQUAL(tcp_t.getPassword(), "")
@@ -66,7 +66,7 @@ CHECK(http/no login)
 	TEST_EQUAL(tcp_t.getHostAddress(), "www.mpi-sb.mpg.de")
 	TEST_EQUAL(tcp_t.getFileAddress(), "/BALL/test/http_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
-	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
+	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
 	TEST_EQUAL(tcp_t.getLogin(), "")
 	TEST_EQUAL(tcp_t.getPassword(), "")
@@ -84,7 +84,7 @@ CHECK(http/login)
 	TEST_EQUAL(tcp_t.getHostAddress(), "www.zbi.uni-saarland.de")
 	TEST_EQUAL(tcp_t.getFileAddress(), "/zbi/BALL/test/protected/TCPTransferTest.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
-	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
+	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
 	TEST_EQUAL(tcp_t.getLogin(), "BALL-TEST")
 	TEST_EQUAL(tcp_t.getPassword(), "test")	
@@ -102,7 +102,7 @@ CHECK(ftp)
 	TEST_EQUAL(tcp_t.getHostAddress(), "ftp.mpi-sb.mpg.de")
 	TEST_EQUAL(tcp_t.getFileAddress(), "/pub/outgoing/BALL/ftp_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 21)
-	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
+	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::OK)
 	TEST_EQUAL(tcp_t.getReceivedBytes(), 2312)
 	TEST_EQUAL(tcp_t.getLogin(), "")
 	TEST_EQUAL(tcp_t.getPassword(), "")

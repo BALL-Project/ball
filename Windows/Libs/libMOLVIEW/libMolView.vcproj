@@ -20,7 +20,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBMOLVIEW_EXPORTS;_WINDOWS;UNICODE;QT_THREAD_SUPPORT;QT_DLL;NO_DEBUG"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBMOLVIEW_EXPORTS;_WINDOWS;UNICODE;QT_THREAD_SUPPORT;QT_DLL;NO_DEBUG;BALL_PATH=\&quot;$(ProjectDir)../BALL\&quot;"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"

@@ -95,7 +95,10 @@ EXECUTABLES_DATATYPES = \
 	HashSet_test\
 	HashGrid3_test\
 	Options_test\
-	String_test\
+	String_test1\
+	String_test2\
+	String_test3\
+	String_test4\
 	Substring_test\
 	Triple_test\
 	Quadruple_test\
@@ -111,7 +114,10 @@ StringHashMap_test_SOURCES=StringHashMap_test.C
 HashSet_test_SOURCES=HashSet_test.C
 HashGrid3_test_SOURCES=HashGrid3_test.C
 Options_test_SOURCES=Options_test.C
-String_test_SOURCES=String_test.C
+String_test1_SOURCES=String_test1.C
+String_test2_SOURCES=String_test2.C
+String_test3_SOURCES=String_test3.C
+String_test4_SOURCES=String_test4.C
 Substring_test_SOURCES=Substring_test.C
 Triple_test_SOURCES=Triple_test.C
 Quadruple_test_SOURCES=Quadruple_test.C
@@ -129,7 +135,8 @@ EXECUTABLES_CONCEPTS = \
 	TextPersistenceManager_test\
 	Selectable_test\
 	PropertyManager_test\
-	Composite_test\
+	Composite_test1\
+	Composite_test2\
 	Embeddable_test\
 	RandomAccessIterator_test\
 	$(XDR_DEPENDENT_EXECUTABLES)
@@ -143,7 +150,8 @@ PersistenceManager_test_SOURCES=PersistenceManager_test.C
 TextPersistenceManager_test_SOURCES=TextPersistenceManager_test.C
 Selectable_test_SOURCES=Selectable_test.C
 PropertyManager_test_SOURCES=PropertyManager_test.C
-Composite_test_SOURCES=Composite_test.C
+Composite_test1_SOURCES=Composite_test1.C
+Composite_test2_SOURCES=Composite_test2.C
 Embeddable_test_SOURCES=Embeddable_test.C
 RandomAccessIterator_test_SOURCES=RandomAccessIterator_test.C
 

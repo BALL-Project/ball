@@ -18,7 +18,7 @@
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="cd ..\..\source\TEST
-nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot; BALL_PATH=&quot;$(ProjectDir)..\BALL&quot;"
 				ReBuildCommandLine="cd ..\..\source\TEST
 del *.obj
 del *.exe
