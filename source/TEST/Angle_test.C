@@ -1,4 +1,4 @@
-// $Id: Angle_test.C,v 1.2 2000/02/27 20:36:19 amoll Exp $
+// $Id: Angle_test.C,v 1.3 2000/02/29 11:00:20 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.2 2000/02/27 20:36:19 amoll Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.3 2000/02/29 11:00:20 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -35,7 +35,7 @@ RESULT
 //line 293: method TAngle::TAngle(const T& new_value, bool radian)
 CHECK(TAngle::TAngle(const T& new_value, bool radian))
 	Angle a = Angle(0.5);
-	TEST_REAL_EQUAL(a, 0.5 )  
+	TEST_REAL_EQUAL(a, (float)0.5)  
 RESULT
 
 //line 287: method TAngle::TAngle(const TAngle& angle, bool /* deep */)
@@ -61,9 +61,9 @@ RESULT
 //line 236: method TAngle::bool operator == (const T& val) const 
 CHECK(TAngle::bool operator == (const T& val) const )
 	b = Angle(a);
-	TEST_EQUAL(b == 0.5, true )  
+	TEST_EQUAL(b == (float)0.5, true)  
 	b = Angle(0.6);
-	TEST_EQUAL(b == 0.5, false )
+	TEST_EQUAL(b == (float)0.5, false)
 RESULT
 
 
@@ -92,7 +92,7 @@ RESULT
 CHECK(TVector3::BALL_CREATE(TVector3<T>))
 	Angle a(0.5);
 	Angle* v_ptr = (Angle*)a.create(false, true);
-	TEST_REAL_EQUAL(v_ptr->value, 0)
+	TEST_REAL_EQUAL(v_ptr->value, 0.5)
 	delete v_ptr;
 	v_ptr = (Angle*)a.create();
 	TEST_REAL_EQUAL(v_ptr->value, 0.5)
@@ -106,15 +106,15 @@ CHECK(TAngle::swap(TAngle& angle))
 	a1 = Angle(1.0);
 	a2 = Angle(2.0);
 	a1.swap(a2);
-	TEST_REAL_EQUAL(a1, 2.0 )  
-	TEST_REAL_EQUAL(a2, 1.0 )  
+	TEST_REAL_EQUAL(a1, (float)2.0)  
+	TEST_REAL_EQUAL(a2, (float)1.0)  
 RESULT
 
 
 //line 117: method TAngle::set(const T& new_value, bool radian = true)
 CHECK(TAngle::set(const T& new_value, bool radian = true))
 	b.set(0.1);
-	TEST_REAL_EQUAL(b, 0.1 )  
+	TEST_REAL_EQUAL(b, (float)0.1)  
 RESULT
 
 
@@ -167,7 +167,8 @@ RESULT
 //line 157: method TAngle::toRadian() const 
 CHECK(TAngle::toRadian() const )
 	b = 3.1;
-	TEST_REAL_EQUAL(3.1, b.toRadian() )
+	b.toRadian();
+	TEST_REAL_EQUAL((Constants::PI / 180.0 * 3.1),b )
 RESULT
 
 
@@ -179,22 +180,22 @@ RESULT
 
 //line 165: method TAngle::toDegree() const 
 CHECK(TAngle::toDegree() const )
-	b = 1;
-	TEST_REAL_EQUAL(57.2957795130823209, b.toDegree())
+	b = 3.1;
+  b.toDegree();
+	TEST_REAL_EQUAL((180.0 / Constants::PI * 3.1),b)
 RESULT
 
 
 //line 169: method TAngle::toDegree(const T& radian)
 CHECK(TAngle::toDegree(const T& radian))
-	TEST_REAL_EQUAL(57.2957795130823209, b.toDegree(1) )
+	b.toDegree(3.1);
+	TEST_REAL_EQUAL((180.0 / Constants::PI * 3.1),b )
 RESULT
 
 
 //line 176: method TAngle::getTorsionAngle(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz, const T& cx, const T& cy, const T& cz, const T& dx, const T& dy, const T& dz)
 CHECK(TAngle::getTorsionAngle(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz, const T& cx, const T& cy, const T& cz, const T& dx, const T& dy, const T& dz))
-	b.getTorsionAngle(0, 10, 20,  100, 210, 320,  50, 110, 170,  200, 410, 620);
-//b.toDegree()
-	TEST_REAL_EQUAL(b, 0)
+	TEST_REAL_EQUAL(b.getTorsionAngle(0, 1 ,2, 100, 201, 302, 50, 101, 202, 200, 401, 602), (float)0.0)
 RESULT
 
 
@@ -208,7 +209,7 @@ CHECK(TAngle::normalize(Range range))
 	TEST_REAL_EQUAL(35.4 - 5 * (Constants::PI * 2), b )
 	b = 35.4;
 	b.normalize(Angle::RANGE__SIGNED);
-	TEST_REAL_EQUAL(35.4 - 6 * (Constants::PI * 2), b )
+	TEST_REAL_EQUAL(35.4 - 5 * (Constants::PI * 2), b )
 RESULT
 
 
@@ -256,15 +257,15 @@ RESULT
 CHECK(TAngle::TAngle operator + (const TAngle& angle))
 	b = Angle(0);
 	b = 1 + a;
-	TEST_REAL_EQUAL(1.5, b )  
+	TEST_REAL_EQUAL(1.5, b)  
 RESULT
 
 
 //line 200: method TAngle::TAngle operator + (const T& val)
 CHECK(TAngle::TAngle operator + (const T& val))
 	b = Angle(0);
-	b = a + 1;
-	TEST_REAL_EQUAL(1.5, b )  
+	b = a + (float)1.0;
+	TEST_REAL_EQUAL((float)1.5, b)  
 RESULT
 
 
@@ -295,8 +296,8 @@ RESULT
 //line 212: method TAngle::TAngle operator - (const T& val)
 CHECK(TAngle::TAngle operator - (const T& val))
 	b = Angle(0);
-	b = a - 0.5;
-	TEST_REAL_EQUAL(0, b )
+	b = a - (float)0.5;
+	TEST_REAL_EQUAL(0, b)
 RESULT
 
 
@@ -319,8 +320,8 @@ RESULT
 //line 221: method TAngle::TAngle operator * (const T& value)
 CHECK(TAngle::TAngle operator * (const T& value))
 	b = Angle(1);
-	b = b * 5;
-	TEST_REAL_EQUAL(5, b )
+	b = b * (float)5.0;
+	TEST_REAL_EQUAL((float)5.0, b)
 RESULT
 
 
@@ -343,15 +344,15 @@ RESULT
 //line 227: method TAngle::TAngle operator /      (const T& val)
 CHECK(TAngle::TAngle operator / (const T& val))
 	b = Angle(1);
-	b = b / 0.5;
-	TEST_REAL_EQUAL(2, b )
+	b = b / (float)0.5;
+	TEST_REAL_EQUAL(2, b)
 RESULT
 
 
 //line 238: method TAngle::bool operator != (const TAngle& angle) const 
 CHECK(TAngle::bool operator != (const TAngle& angle) const )
 	b = Angle(1);
-	TEST_EQUAL(a != b, true )
+	TEST_EQUAL(a != b, true)
 	b = a;
 	TEST_EQUAL(a != b, false )
 RESULT
@@ -360,9 +361,9 @@ RESULT
 //line 240: method TAngle::bool operator !=       (const T& val) const 
 CHECK(TAngle::bool operator !=  (const T& val) const )
 	b = Angle(1);
-	TEST_EQUAL(b != 1, false )
+	TEST_EQUAL(b != (float)1.0, false)
 	b = Angle(2);
-	TEST_EQUAL(b != 1, true )
+	TEST_EQUAL(b != (float)1.0, true)
 RESULT
 
 
