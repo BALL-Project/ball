@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: binarySearchTree.C,v 1.2 2000/07/31 15:16:59 oliver Exp $
 
 #include <BALL/DATATYPE/binarySearchTree.h>
 
@@ -36,7 +36,9 @@ namespace BALL
 		return (((lhsize > rhsize) ? lhsize : rhsize) + 1);
 	}
 
-	Processor::Result BSTreeItem::applyPreorder_(UnaryProcessor<BSTreeItem>& processor)
+
+	Processor::Result BSTreeItem::applyPreorder_
+		(UnaryProcessor<BSTreeItem>& processor)
 	{
 		Processor::Result result = Processor::ABORT;
 		BSTreeItem *item = this;
@@ -66,8 +68,8 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	Processor::Result 
-	BSTreeItem::applyInorder_(UnaryProcessor<BSTreeItem>& processor)
+	Processor::Result BSTreeItem::applyInorder_
+		(UnaryProcessor<BSTreeItem>& processor)
 	{
 		Processor::Result result = Processor::ABORT;
 		BSTreeItem *item = this;
@@ -97,7 +99,8 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	Processor::Result BSTreeItem::applyPostorder_(UnaryProcessor<BSTreeItem>& processor)
+	Processor::Result BSTreeItem::applyPostorder_
+		(UnaryProcessor<BSTreeItem>& processor)
 	{
 		Processor::Result result = Processor::ABORT;
 
@@ -124,10 +127,11 @@ namespace BALL
 		return processor(*this);
 	}
 
-	Processor::Result BSTreeItem::applyPreorderFlat_(UnaryProcessor<BSTreeItem>& processor)
+	Processor::Result BSTreeItem::applyPreorderFlat_
+		(UnaryProcessor<BSTreeItem>& processor)
 	{
 		Processor::Result result = Processor::ABORT;
-		TSStack<BSTreeItem *> path_;
+		TSStack<BSTreeItem*> path;
 		BSTreeItem *item = this;
 		bool loop = true;
 
@@ -142,12 +146,12 @@ namespace BALL
 						return result;
 				 }
 
-				 path_.push(item);
+				 path.push(item);
 				 item = item->left;
 			}
 			else 
 			{
-				if (path_.pop(item) == 0)
+				if (path.pop(item) == 0)
 				{
 					loop = false;
 					break;
@@ -160,10 +164,11 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	Processor::Result BSTreeItem::applyInorderFlat_(UnaryProcessor<BSTreeItem>& processor)
+	Processor::Result BSTreeItem::applyInorderFlat_
+		(UnaryProcessor<BSTreeItem>& processor)
 	{
 		Processor::Result result = Processor::ABORT;
-		TSStack<BSTreeItem *> path_;
+		TSStack<BSTreeItem*> path;
 		BSTreeItem *item = this;
 		bool loop = true;
 
@@ -171,12 +176,12 @@ namespace BALL
 		{
 			if (item) 
 			{
-				path_.push(item);
+				path.push(item);
 				item = item->left;
 			}
 			else 
 			{
-				if (path_.pop(item) == 0)
+				if (path.pop(item) == 0)
 				{
 					loop = false;
 					break;
@@ -196,11 +201,12 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	Processor::Result BSTreeItem::applyPostorderFlat_(UnaryProcessor<BSTreeItem>& processor)
+	Processor::Result BSTreeItem::applyPostorderFlat_
+		(UnaryProcessor<BSTreeItem>& processor)
 	{
 		Processor::Result result = Processor::ABORT;
-		TSStack<BSTreeItem *> path_;
-		BSTreeItem *item = this;
+		TSStack<BSTreeItem *> path;
+		BSTreeItem* item = this;
 		bool state = false;
 		// just to prevent tedious compiler remarks like "control expression is constant"
 		bool loop = true;
@@ -211,7 +217,7 @@ namespace BALL
 			{ 
 				if (item) 
 				{
-					path_.push(item);
+					path.push(item);
 					item = item->left;
 				}
 				else 
@@ -223,13 +229,13 @@ namespace BALL
 			{ 
 				BSTreeItem *leftitem = item;
 				
-				if (path_.isEmpty())
+				if (path.isEmpty())
 				{
 					loop = false;
 					break;
 				}
 				
-				item = *path_.top();
+				item = *path.top();
 				
 				if (leftitem == item->left && item->right)
 				{
@@ -245,7 +251,7 @@ namespace BALL
 			return result;
 		}
 
-		path_.pop();
+		path.pop();
 				}
 			}
 		}
@@ -256,16 +262,16 @@ namespace BALL
 	Processor::Result BSTreeItem::applyLevelorder_(UnaryProcessor<BSTreeItem>& processor)
 	{
 		Processor::Result result = Processor::ABORT;
-		TSStack<BSTreeItem *> path_;
+		TSStack<BSTreeItem *> path;
 		BSTreeItem *parentitem = 0;
 		// just to prevent tedious compiler remarks like "control expression is constant"
 		bool loop = true;
 
-		path_.pushBottom(this);
+		path.pushBottom(this);
 
 		while(loop) 
 		{
-			if (path_.pop(parentitem) == 0)
+			if (path.pop(parentitem) == 0)
 			{
 				loop = false;
 				break;
@@ -277,10 +283,10 @@ namespace BALL
 				return result;
 			
 			if (parentitem->left)
-				path_.pushBottom(parentitem->left);
+				path.pushBottom(parentitem->left);
 			
 			if (parentitem->right)
-				path_.pushBottom(parentitem->right);
+				path.pushBottom(parentitem->right);
 		}
 
 		return Processor::CONTINUE;
@@ -466,46 +472,62 @@ namespace BALL
 		return p;
 	}
 
-	BSTreeItem *
-	BSTreeItem::detachNode
-		(BSTreeItem *&root, 
-		 BSTreeItem *t, 
-		 BSTreeItem *p, 
-		 bool right_side)
 	// Detaches node item with parent p from the tree. Node item is
 	// the left child if right_side = false, else it's the right child.
 	// If p is 0, it means item is the root, and that is handled
 	// accordingly. Redundantly returns the pointer item. May
 	// have to update root pointer.
+	BSTreeItem* BSTreeItem::detachNode
+		(BSTreeItem*& root, BSTreeItem* t, 
+		 BSTreeItem* p, bool right_side)
 	{
-		BSTreeItem *psucc = 0, *replacement = 0;
+		BSTreeItem* psucc = 0;
+		BSTreeItem* replacement = 0;
 
-		if (t) {
-			 if (t->left == 0 || t->right == 0) {
-					// At least one child is null, so use the other 
-					// as the replacement. (It may be null too.)
-					replacement = (t->left) ? t->left : t->right;
-			 }
-			 else { // Neither child is null
-					psucc = t->getParentOfSuccessor(); // guaranteed not null
-					if (psucc == t) { // Immediate successor
-						 replacement = psucc->right;
-					}
-					else { 
-						 // Detach replacement from where it is and relocate
-						 // it to where t used to be.
-						 replacement = psucc->left;
-						 psucc->left = psucc->left->right;
-						 replacement->right = t->right;
-					}
-					// Finish relocating replacement to go where t used to.
-					replacement->left = t->left;
-			 }
-			 if (p) { // Fixup parent of t to point to replacement
-					if (right_side) p->right = replacement; else p->left = replacement;
-			 }
-			 else root = replacement; // No parent, so t was the root
+		if (t != 0)	
+		{
+			if (t->left == 0 || t->right == 0) 
+			{
+				// At least one child is null, so use the other 
+				// as the replacement. (It may be null too.)
+				replacement = (t->left) ? t->left : t->right;
+			}
+			else 
+			{	// Neither child is null
+				psucc = t->getParentOfSuccessor(); // guaranteed not null
+				if (psucc == t) 
+				{ // Immediate successor
+					replacement = psucc->right;
+				}
+				else 
+				{ 
+					// Detach replacement from where it is and relocate
+					// it to where t used to be.
+					replacement = psucc->left;
+					psucc->left = psucc->left->right;
+					replacement->right = t->right;
+				}
+				// Finish relocating replacement to go where t used to.
+				replacement->left = t->left;
+			}
+			if (p != 0) 
+			{ // Fixup parent of t to point to replacement
+				if (right_side) 
+				{
+					p->right = replacement; 
+				}
+				else 
+				{
+					p->left = replacement;
+				}
+			}
+			else
+			{
+				// No parent, so t was the root
+				root = replacement; 
+			}
 		}
+
 		return t;
 	}
 
@@ -577,38 +599,46 @@ namespace BALL
 		return root;
 	}
 
-	BSTreeItem *
-	BSTreeItem::removeBalance
-		(BSTreeItem *root, 
-		 BSTreeItem::Pack &pp)
 	// Balancing code during top down deletion
+	BSTreeItem* BSTreeItem::removeBalance
+		(BSTreeItem* root, BSTreeItem::Pack& pp)
 	{
-		if ((T == 0 || T->color == BSTreeItem::BLACK) && S && S->color == BSTreeItem::RED) {
+		if ((T == 0 || T->color == BSTreeItem::BLACK) && S && S->color == BSTreeItem::RED) 
+		{
+			// Case: t black, s red. t might be null,
+			// but s and p must not be.
 
-			 // Case: t black, s red. t might be null,
-			 // but s and p must not be.
-
-			 // Fix g child to be s. Also s may become p of m
-			 if (G) {
-					if (G->left == P) G->left = S; else G->right = S;
-			 }
-			 else root = S;
-			 if (P == M) PM = S;
-			 // Finish rotating
-			 if (P->left == T) {
-					// RotateLeft(p);
-					P->right = LS;
-					S->left = P;
-					G = S;
-					S = LS;
-			 }
-			 else {
-					// RotateRight(p);
-					P->left = RS;
-					S->right = P;
-					G = S;
-					S = RS;
-			 }
+			// Fix g child to be s. Also s may become p of m
+			if (G) 
+			{
+				if (G->left == P) G->left = S; else G->right = S;
+			}
+			else 
+			{
+				root = S;	
+			}
+			
+			if (P == M)
+			{
+				PM = S;
+			}
+			// Finish rotating
+			if (P->left == T) 
+			{
+				// RotateLeft(p);
+				P->right = LS;
+				S->left = P;
+				G = S;
+				S = LS;
+			}
+			else 
+			{
+				// RotateRight(p);
+				P->left = RS;
+				S->right = P;
+				G = S;
+				S = RS;
+			}
 	#ifndef TRYIT
 			 // Fixup children of s
 			 if (S) { LS = S->getLeftChild(); RS = S->getRightChild(); }
@@ -735,24 +765,31 @@ namespace BALL
 		// successor, p will = m, and replacement is the non-null
 		// child of m.
 
-		if (M) { // Matching node was found
-			if (P == M || M->left == 0 || M->right == 0) {
-				 // No successor, and/or at least one child null
-				 // Get non-null child, if any, else p will be null
-				 P = (M->left) ? M->getLeftChild() : M->getRightChild();
+		if (M) 
+		{ // Matching node was found
+			if (P == M || M->left == 0 || M->right == 0) 
+			{
+				// No successor, and/or at least one child null
+				// Get non-null child, if any, else p will be null
+				P = (M->left) ? M->getLeftChild() : M->getRightChild();
 			}
-			else { // m has a successor to use as a replacement
-				 if (G != M) {
-					 // Successor isn't immediate child of m, so detach
-					 // from where it is, attach to where m is
-					 G->left = P->right;
-					 P->right = M->right;
-				 }
-				 // Finish attaching where m is.
-				 P->left = M->left;
+			else 
+			{ // m has a successor to use as a replacement
+				if (G != M) 
+				{
+					// Successor isn't immediate child of m, so detach
+					// from where it is, attach to where m is
+					G->left = P->right;
+					P->right = M->right;
+				}
+				// Finish attaching where m is.
+				P->left = M->left;
 			}
 			// p should have same color as m since it's going where m was
-			if (P) P->color = M->color;
+			if (P) 
+			{
+				P->color = M->color;
+			}
 		}
 
 		// Fixup pm child link to be p
@@ -875,10 +912,10 @@ namespace BALL
 		}
 		state_ = false;
 		current_ = root_;
-		path_.clear();
+		path.clear();
 		if (root_ && walk_order_ == BSTreeIterator::WALK_ORDER__LEVELORDER)
 		{
-			path_.pushBottom(root_);
+			path.pushBottom(root_);
 		}
 	}
 
@@ -890,14 +927,14 @@ namespace BALL
 		{
 			if (current_)
 			{
-				path_.push(current_);
+				path.push(current_);
 				const BSTreeItem *item = current_;
 				current_ = current_->left;
 				return item;
 			}
 			else
 			{
-				if (path_.pop(current_) == 0)
+				if (path.pop(current_) == 0)
 				{
 					return current_ = 0;
 				}
@@ -919,12 +956,12 @@ namespace BALL
 		{
 			if (current_)
 			{
-				path_.push(current_);
+				path.push(current_);
 				current_ = current_->left;
 			}
 			else
 			{
-				if (path_.pop(current_) == 0)
+				if (path.pop(current_) == 0)
 				{
 					return current_ = 0;
 				}
@@ -950,7 +987,7 @@ namespace BALL
 			{ // Ready to go down the tree to left
 				if (current_)
 				{
-					path_.push(current_);
+					path.push(current_);
 					current_ = current_->left;
 				}
 				else
@@ -961,11 +998,11 @@ namespace BALL
 			else
 			{ // Ready to come up the tree
 				const BSTreeItem *item = current_;
-				if (path_.isEmpty())
+				if (path.isEmpty())
 				{
 		return (current_ = 0); // At root
 				}
-				current_ = *path_.top();
+				current_ = *path.top();
 				if (item == current_->left
 			&& current_->right)
 				{ // Coming back up the tree from the left, and
@@ -978,7 +1015,7 @@ namespace BALL
 				 { // Coming back up the tree from the right,
 		 // or there was no right child, so visit
 		 // the node, and continue on up. (state stays at true.)
-		 path_.pop();
+		 path.pop();
 		 return current_;
 				 }
 			}
@@ -990,17 +1027,17 @@ namespace BALL
 	BSTreeIterator::forwardLevelOrder
 		()
 	{
-		if (path_.pop(current_) == 0)
+		if (path.pop(current_) == 0)
 		{
 			return 0;
 		}
 		if (current_->left != 0)
 		{
-			path_.pushBottom(current_->left);
+			path.pushBottom(current_->left);
 		}
 		if (current_->right != 0)
 		{
-			path_.pushBottom(current_->right);
+			path.pushBottom(current_->right);
 		}
 		return current_;
 	}

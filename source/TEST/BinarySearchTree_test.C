@@ -1,4 +1,4 @@
-// $Id: BinarySearchTree_test.C,v 1.1 2000/07/30 11:53:57 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.2 2000/07/31 15:17:00 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,52 @@
 #include <iostream>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.1 2000/07/30 11:53:57 amoll Exp $")
+// helper class: a processor counting tree items
+class BSTreeItemCollector
+	: public UnaryProcessor<BSTreeItem>
+{
+	public:
+	bool start()
+	{
+		// clear the item list
+		list_.clear();
+		return true;
+	}
+
+	bool finish()
+	{
+		return true;
+	}
+
+	Processor::Result operator () (BSTreeItem& item)
+	{
+		// store the item
+		list_.push_back(&item);
+		return Processor::CONTINUE;
+	}
+
+	list<BSTreeItem*> getList()
+	{
+		return list_;
+	}
+	
+	private:
+	list<BSTreeItem*>	list_;
+};
+
+// BSTreeItemCollector myproc;
+// BSTree tree ...;
+// tree.apply(myproc);
+// list<BSTreeItem*> mylist(myproc.getList());
+//
+// list<BSTreeItem*>::iterator list_it = mylist.begin();
+// TEST_EQUAL((list_it != mylist.end()) && (*list_it == item1), true)
+// list_it++;
+// TEST_EQUAL((list_it != mylist.end()) && (*list_it == item2), true)
+// list_it++;
+
+
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.2 2000/07/31 15:17:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -219,8 +264,8 @@ RESULT
 
 TBSTreeItem<int>* tbsitem;
 CHECK(TBSTreeItem())
-	//tbsitem = new TBSTreeItem<int>;
-	TEST_NOT_EQUAL(tbsitem, 0) //???
+	tbsitem = new TBSTreeItem<int>;
+	TEST_NOT_EQUAL(tbsitem, 0)
 RESULT
 
 CHECK(~TBSTreeItem())

@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.6 2000/06/06 13:18:57 oliver Exp $
+// $Id: binarySearchTree.h,v 1.7 2000/07/31 15:16:55 oliver Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -414,7 +414,7 @@ namespace BALL
 	{
 		public:
 			
-		BALL_CREATE(TBSTreeItem)
+		BALL_CREATE_NODEEP(TBSTreeItem)
 
 
 		/**	@name Constructors and Destructors
@@ -429,7 +429,7 @@ namespace BALL
 		{
 		}
 
-		/**	Detailled constructor.
+		/**	Detailed constructor.
 				Create a new TBSTreeItem from its {\tt data}, {\tt color},
 				{\tt left_item} and {\tt right_item}.
 				@param	data	the node's data
