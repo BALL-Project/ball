@@ -1,6 +1,8 @@
-// $Id: backboneModel.C,v 1.1 2001/01/07 15:38:58 hekl Exp $
+// $Id: backboneModel.C,v 1.2 2001/01/08 17:29:42 anker Exp $
 
+#ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
+#endif
 
 using namespace std;
 
@@ -27,6 +29,7 @@ namespace BALL
 		}
 
 		AddBackboneModel::~AddBackboneModel()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -37,6 +40,7 @@ namespace BALL
 		}
 
 		void AddBackboneModel::clear()
+			throw()
 		{
 			BaseModelProcessor::clear();
 			get_composite_ = true;
@@ -47,6 +51,7 @@ namespace BALL
 		}
 
 		void AddBackboneModel::destroy()
+			throw()
 		{
 			BaseModelProcessor::destroy();
 			get_composite_ = true;
@@ -168,6 +173,7 @@ namespace BALL
 		void 
 		AddBackboneModel::dump
 			(std::ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			

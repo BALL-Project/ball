@@ -1,4 +1,4 @@
-// $Id: backboneModel.h,v 1.1 2001/01/07 15:44:16 hekl Exp $
+// $Id: backboneModel.h,v 1.2 2001/01/08 17:29:30 anker Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
@@ -51,97 +51,120 @@ namespace BALL
 		class AddBackboneModel
 			: public BaseModelProcessor
 		{
+
 			public:
 
-			/**	@name	Constructors and Destructors
-			*/
+			///	@name	Constructors and Destructors
 			//@{
 
+			///
 			AddBackboneModel();
 
+			///
 			AddBackboneModel
 				(const AddBackboneModel& add_Backbone_model, bool deep = true);
 
-			virtual ~AddBackboneModel();
+			///
+			virtual ~AddBackboneModel()
+				throw();
 
-			virtual void clear();
+			///
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			///
+			virtual void destroy()
+				throw();
+
 			//@}
 
 
-			/**	@name	Assignment
-			*/
+			///	@name	Assignment
 			//@{
 
+			/// 
 			void set
 				(const AddBackboneModel& add_Backbone_model, bool deep = true);
 
+			///
 			AddBackboneModel& operator =
 				(const AddBackboneModel& add_Backbone_model);
 
+			///
 			void get
 				(AddBackboneModel& add_Backbone_model, bool deep = true) const;
 
+			///
 			void swap(AddBackboneModel& add_Backbone_model);
-			//@}
-
-			/**	@name	Accessors
-			*/
-			//@{
 
 			//@}
 
-			/**	@name	Processor-Related Methods
-			*/
+
+			///	@name	Accessors
+			//@{
+			//@}
+
+
+			///	@name	Processor-Related Methods
 			//@{
 
+			///
 			virtual bool start();
 			
+			///
 			virtual bool finish();
 			
+			///
 			virtual Processor::Result operator() (Composite& composite);
-			//@}
-
-			/**	@name	Predicates
-			*/
-			//@{
 
 			//@}
 
 
-			/**	@name	Debugging and Diagnostics
-			*/
+			///	@name	Predicates
 			//@{
+			//@}
+
+
+			///	@name	Debugging and Diagnostics
+			//@{
+
+			///
 			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
+
 			//@}
 
-			/**	@name	Storers
-			*/
+
+			///	@name	Storers
 			//@{
 
+			///
 			virtual void read(std::istream& s);
 
+			///
 			virtual void write(std::ostream& s) const;
+
 			//@}
 
 
-			
 			private:
 
+			//_
 			virtual Backbone *createBackbone_();
 
-
+			//_
 			bool get_composite_;
 
+			//_
 			Composite* start_composite_;
 
-			// list of used atoms for the creation of the backbone
+			//_ list of used atoms for the creation of the backbone
 			List<Atom*> atoms_;
 
-			// list of colors correlating to the atoms saved in atoms_.
+			//_ list of colors correlating to the atoms saved in atoms_.
 			List<ColorRGBA> atoms_color_;
+
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS

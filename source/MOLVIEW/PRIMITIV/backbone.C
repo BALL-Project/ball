@@ -1,4 +1,4 @@
-// $Id: backbone.C,v 1.1 2001/01/07 15:40:52 hekl Exp $
+// $Id: backbone.C,v 1.2 2001/01/08 17:29:43 anker Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/backbone.h>
 
@@ -32,6 +32,7 @@ namespace BALL
 		}
 
 		Backbone::~Backbone()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -42,11 +43,13 @@ namespace BALL
 		}
 
 		void Backbone::clear()
+			throw()
 		{
 			GeometricObject::clear();
 		}
 
 		void Backbone::destroy()
+			throw()
 		{ 
 			GeometricObject::destroy();
 		}
@@ -111,12 +114,14 @@ namespace BALL
 		}
 
 		bool Backbone::isValid() const
+			throw()
 		{
 			return (bool)(GeometricObject::isValid() == true);
 		}
 
 		void Backbone::dump
 			(ostream& s, Size depth) const
+				throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -129,11 +134,13 @@ namespace BALL
 		}
 
 		void Backbone::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Backbone::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

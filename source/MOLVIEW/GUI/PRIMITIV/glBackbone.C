@@ -1,4 +1,4 @@
-// $Id: glBackbone.C,v 1.1 2001/01/07 15:41:37 hekl Exp $
+// $Id: glBackbone.C,v 1.2 2001/01/08 17:29:43 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h>
 #include <GL/gl.h>
@@ -29,6 +29,7 @@ namespace BALL
 		}
 
 		GLBackbone::~GLBackbone()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -39,12 +40,14 @@ namespace BALL
 		}
 
 		void GLBackbone::clear()
+			throw()
 		{
 			Backbone::clear();
 			GLObject::clear();
 		}
 
 		void GLBackbone::destroy()
+			throw()
 		{
 			Backbone::destroy();
 			GLObject::destroy();
@@ -61,6 +64,7 @@ namespace BALL
 		}
 
 		bool GLBackbone::extract()
+			throw()
 		{
 			return Backbone::extract();
 		}

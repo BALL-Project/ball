@@ -1,4 +1,4 @@
-// $Id: glBackbone.h,v 1.1 2001/01/07 15:47:18 hekl Exp $
+// $Id: glBackbone.h,v 1.2 2001/01/08 17:29:36 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -42,37 +42,56 @@ namespace BALL
 		{
 			public:
 
-			/**	@name	Constructors and Destructors
-			*/	
+			///	@name	Constructors and Destructors
 			//@{
 
+			///
 			GLBackbone();
 
+			///
 			GLBackbone(const GLBackbone& backbone, bool deep = true);
 
+			///
 			GLBackbone(const GeometricObject& geometric_object);
 
-			virtual ~GLBackbone();
+			///
+			virtual ~GLBackbone()
+				throw();
 
-			virtual void clear();
+			///
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			///
+			virtual void destroy()
+				throw();
+
 			//@}
 
 
 			protected:
 
+			// BAUSTELLE: protected method names must have a trailing _
+			//_
 			virtual bool draw(bool with_names = false);
 
+			//_
 			virtual bool drawUserDefined();
 
-			virtual bool extract();
+			//_
+			virtual bool extract()
+				throw();
 
 
   		private:
 
+			//_
 			virtual Sphere* createSphere_();
+
+			//_
 			virtual Tube* createTube_();		
+
+			//_
 			virtual Line* createLine_();		
 		};
 

@@ -1,4 +1,4 @@
-// $Id: glBackboneModel.C,v 1.1 2001/01/07 15:39:53 hekl Exp $
+// $Id: glBackboneModel.C,v 1.2 2001/01/08 17:29:42 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.h>
 
@@ -24,6 +24,7 @@ namespace BALL
 		}
 
 		AddGLBackboneModel::~AddGLBackboneModel()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 

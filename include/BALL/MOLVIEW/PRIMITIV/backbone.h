@@ -1,4 +1,4 @@
-// $Id: backbone.h,v 1.1 2001/01/07 15:46:36 hekl Exp $
+// $Id: backbone.h,v 1.2 2001/01/08 17:29:39 anker Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
@@ -51,66 +51,99 @@ namespace BALL
 		{
 			public:
 
-			/**	@name	Constructors and Destructors
-			*/
+			///	@name	Constructors and Destructors
 			//@{
 
+			///
 			Backbone();
 
+			///
 			Backbone(const Backbone& backbone, bool deep = true);
 
+			///
 			Backbone(const GeometricObject& geometric_object);
 
-			virtual ~Backbone();
+			///
+			virtual ~Backbone()
+				throw();
 
-			virtual void clear();
+			///
+			virtual void clear()
+				throw();
 
-			virtual void destroy();
+			///
+			virtual void destroy()
+				throw();
 			//@}
 
 			
-			/**	@name	Assignment
-			*/
+			///	@name	Assignment
 			//@{
 
+			///
 			void set(const Backbone& backbone, bool deep = true);
 
+			///
 			Backbone& operator = (const Backbone& backbone);
 
+			///
 			void get(Backbone& backbone, bool deep = true) const;
 
+			///
 			void swap(Backbone& backbone);
+
 			//@}
 
-			/**	@name	Accessors
-			*/
+
+			///	@name	Accessors
 			//@{
+
+			///
 			void setAtomList(const List<Atom*> &atoms);
 
+			///
 			void setAtomColorList(const List<ColorRGBA> &atom_colors);
 
+			///
 			void createBackbone();
 
+			///
 			virtual String getTypeName() const;
+
 			//@}
 
 
-			/**	@name	Debugging and Diagnostics
-			*/
+			/// @name Predicates
+			//@{
+			//@}
+
+
+			///	@name	Debugging and Diagnostics
 			//@{
 
-			virtual bool isValid() const;
+			///
+			virtual bool isValid() const
+				throw();
 
+			///
 			virtual void dump
-				(std::ostream&  s = std::cout, Size depth = 0) const;
+				(std::ostream&  s = std::cout, Size depth = 0) const
+				throw();
+
 			//@}
 
-			/**	@name	Storers
-			*/
-			//@{
-			virtual void read(std::istream&  s);
 
-			virtual void write(std::ostream& s) const;
+			///	@name	Storers
+			//@{
+
+			///
+			virtual void read(std::istream&  s)
+				throw();
+
+			///
+			virtual void write(std::ostream& s) const
+				throw();
+
 			//@}
 
 
@@ -118,6 +151,7 @@ namespace BALL
 			
 		  private:
 
+			//_
 			class SplinePoint
 			{
 			  public:
@@ -142,40 +176,49 @@ namespace BALL
 			};
 
 
+			//_
 			virtual Sphere* createSphere_();
 
+			//_
 			virtual Tube* createTube_();
 
+			//_
 			virtual Line* createLine_();
 
-			// init the spline array with both the positions from the atom list
-			// and the colors from the color list
+			//_ init the spline array with both the positions from the atom list
+			//_ and the colors from the color list
 			void initSplineArray_();
 
-			// calculates to every splinepoint the tangential vector
+			//_ calculates to every splinepoint the tangential vector
 			void calculateTangentialVectors_();
 			
-			// computes the actual spline path through the given support points
-			// in the splinepoint array
+			//_ computes the actual spline path through the given support points
+			//_ in the splinepoint array
 			void createSplinePath_();
 
-			// create a spline segment between two spline points a and b
+			//_ create a spline segment between two spline points a and b
 			void createSplineSegment_(const SplinePoint &a, const SplinePoint &b);
 
-			// builds a graphical representation to this point with color
+			//_ builds a graphical representation to this point with color
 			void buildGraphicalRepresentation_(const Vector3 &point, const ColorRGBA &color);
 
 
+			//_
 			List<Atom*> atoms_;
 
+			//_
 			List<ColorRGBA> atom_colors_;
 
+			//_
 			SplinePoint *spline_array_;
 
+			//_
 			int size_of_spline_array_;
 
+			//_
 			bool have_start_point_;
 
+			//_
 			Vector3 last_point_;
 		};
 

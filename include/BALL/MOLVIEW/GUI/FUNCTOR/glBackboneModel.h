@@ -1,4 +1,4 @@
-// $Id: glBackboneModel.h,v 1.1 2001/01/07 15:45:30 hekl Exp $
+// $Id: glBackboneModel.h,v 1.2 2001/01/08 17:29:33 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
@@ -29,21 +29,25 @@ namespace BALL
 		{
 			public:
 
-			/**	@name	Constructors and Destructors
-			*/
+			///	@name	Constructors and Destructors
 			//@{
 
+			///
 			AddGLBackboneModel();
 
+			///
 			AddGLBackboneModel
 				(const AddGLBackboneModel& add_gl_backbone_model, bool deep = true);
 
-			virtual ~AddGLBackboneModel();
+			///
+			virtual ~AddGLBackboneModel()
+				throw();
 			//@}
 
 
 			private:
 
+			//_
 			virtual Backbone* createBackbone_();
 		};
 
