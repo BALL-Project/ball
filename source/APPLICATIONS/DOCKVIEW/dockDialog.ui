@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>404</width>
-            <height>429</height>
+            <width>491</width>
+            <height>464</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -39,6 +39,33 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <widget class="QPushButton" row="1" column="0">
+            <property name="name">
+                <cstring>ok_button</cstring>
+            </property>
+            <property name="text">
+                <string>OK</string>
+            </property>
+            <property name="default">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>cancel_button</cstring>
+            </property>
+            <property name="text">
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>reset_button</cstring>
+            </property>
+            <property name="text">
+                <string>Reset</string>
+            </property>
+        </widget>
         <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
                 <cstring>tab_pages</cstring>
@@ -57,42 +84,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QButtonGroup" row="1" column="0">
-                        <property name="name">
-                            <cstring>generator_group</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Structure Generator</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QComboBox" row="0" column="0">
-                                <item>
-                                    <property name="text">
-                                        <string>&lt;select&gt;</string>
-                                    </property>
-                                </item>
-                                <item>
-                                    <property name="text">
-                                        <string>Geometric Fit</string>
-                                    </property>
-                                </item>
-                                <property name="name">
-                                    <cstring>generators</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="0" column="1">
-                                <property name="name">
-                                    <cstring>gen_advanced_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Advanced...</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
                     <widget class="QButtonGroup" row="0" column="0">
                         <property name="name">
                             <cstring>systems_group</cstring>
@@ -122,25 +113,30 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <widget class="QButtonGroup" row="2" column="0">
+                    <widget class="QButtonGroup" row="1" column="0">
                         <property name="name">
-                            <cstring>evaluation_group</cstring>
+                            <cstring>generator_group</cstring>
                         </property>
                         <property name="title">
-                            <string>Evaluation</string>
+                            <string>Docking Algorithm</string>
                         </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
                             <widget class="QComboBox" row="0" column="0">
+                                <item>
+                                    <property name="text">
+                                        <string>&lt;select&gt;</string>
+                                    </property>
+                                </item>
                                 <property name="name">
-                                    <cstring>eval_functions</cstring>
+                                    <cstring>algorithms</cstring>
                                 </property>
                             </widget>
                             <widget class="QPushButton" row="0" column="1">
                                 <property name="name">
-                                    <cstring>eval_advanced_button</cstring>
+                                    <cstring>alg_advanced_button</cstring>
                                 </property>
                                 <property name="text">
                                     <string>Advanced...</string>
@@ -148,7 +144,7 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QButtonGroup" row="3" column="0">
+                    <widget class="QButtonGroup" row="2" column="0">
                         <property name="name">
                             <cstring>ranking_group</cstring>
                         </property>
@@ -160,6 +156,11 @@
                                 <cstring>unnamed</cstring>
                             </property>
                             <widget class="QComboBox" row="0" column="0">
+                                <item>
+                                    <property name="text">
+                                        <string>&lt;select&gt;</string>
+                                    </property>
+                                </item>
                                 <property name="name">
                                     <cstring>rank_functions</cstring>
                                 </property>
@@ -174,7 +175,7 @@
                             </widget>
                         </grid>
                     </widget>
-                    <widget class="QButtonGroup" row="4" column="0">
+                    <widget class="QButtonGroup" row="3" column="0">
                         <property name="name">
                             <cstring>options_group</cstring>
                         </property>
@@ -445,33 +446,6 @@
                 </grid>
             </widget>
         </widget>
-        <widget class="QPushButton" row="1" column="0">
-            <property name="name">
-                <cstring>ok_button</cstring>
-            </property>
-            <property name="text">
-                <string>OK</string>
-            </property>
-            <property name="default">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>cancel_button</cstring>
-            </property>
-            <property name="text">
-                <string>Cancel</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="1" column="2">
-            <property name="name">
-                <cstring>reset_button</cstring>
-            </property>
-            <property name="text">
-                <string>Reset</string>
-            </property>
-        </widget>
     </grid>
 </widget>
 <connections>
@@ -494,22 +468,16 @@
         <slot>resetPressed()</slot>
     </connection>
     <connection>
-        <sender>gen_advanced_button</sender>
+        <sender>alg_advanced_button</sender>
         <signal>clicked()</signal>
         <receiver>DockDialogData</receiver>
-        <slot>genAdvancedPressed()</slot>
+        <slot>algAdvancedPressed()</slot>
     </connection>
     <connection>
         <sender>rank_advanced_button</sender>
         <signal>clicked()</signal>
         <receiver>DockDialogData</receiver>
         <slot>rankAdvancedPressed()</slot>
-    </connection>
-    <connection>
-        <sender>eval_advanced_button</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>evalAdvancedPressed()</slot>
     </connection>
     <connection>
         <sender>systems1</sender>
@@ -523,14 +491,18 @@
         <receiver>DockDialogData</receiver>
         <slot>partner2Chosen()</slot>
     </connection>
+    <connection>
+        <sender>algorithms</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>algorithmChosen()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>systems1</tabstop>
     <tabstop>systems2</tabstop>
-    <tabstop>generators</tabstop>
-    <tabstop>gen_advanced_button</tabstop>
-    <tabstop>eval_functions</tabstop>
-    <tabstop>eval_advanced_button</tabstop>
+    <tabstop>algorithms</tabstop>
+    <tabstop>alg_advanced_button</tabstop>
     <tabstop>rank_functions</tabstop>
     <tabstop>rank_advanced_button</tabstop>
     <tabstop>ok_button</tabstop>
@@ -541,8 +513,7 @@
     <slot>resetPressed()</slot>
     <slot>okPressed()</slot>
     <slot>cancelPressed()</slot>
-    <slot>genAdvancedPressed()</slot>
-    <slot>evalAdvancedPressed()</slot>
+    <slot>algAdvancedPressed()</slot>
     <slot>rankAdvancedPressed()</slot>
     <slot>partner1Chosen()</slot>
     <slot>partner2Chosen()</slot>
@@ -550,6 +521,7 @@
     <slot>browseChargeData()</slot>
     <slot>browseChargeRules()</slot>
     <slot>browseRadiiRules()</slot>
+    <slot>algorithmChosen()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

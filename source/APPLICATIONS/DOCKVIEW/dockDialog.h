@@ -61,7 +61,9 @@ namespace BALL
 
 				public:
 				
-				enum StructureGenerator {GEOMETRIC_FIT};
+				/** if you want to add a new docking algorithm extend enum  
+				*/
+				enum Algorithm {GEOMETRIC_FIT = 1, TEST1, TEST2};
 				
 				/// Constructor
 				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
@@ -102,7 +104,7 @@ namespace BALL
 				void reset()
 					throw();
 
-				/// Calculate...
+				/// dock the two systems
 				bool calculate()
 					throw();
 					
@@ -116,16 +118,17 @@ namespace BALL
 				{	docking_partner1_ = system1;
 					docking_partner2_ = system2; }
 						
+				// add docking algorithm to HashMap and ComboBox
+				void addEntry(QString name, int algorithm, QDialog* dialog)
+					throw();
+					
 				public slots:
 	
 					/// Show and raise
 					void show();
 					
 					//
-					virtual void genAdvancedPressed();
-					
-					//
-					virtual void evalAdvancedPressed();
+					virtual void algAdvancedPressed();
 					
 					//
 					virtual void rankAdvancedPressed();
@@ -172,6 +175,9 @@ namespace BALL
 					
 				private:
 					
+					// key: Algorithm(enum), value: advanced options dialog
+					HashMap<int, QDialog*> algorithm_dialogs_;
+				
 					//pointer to docking partners
 					System* docking_partner1_;
 					System* docking_partner2_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.10 2005/01/26 10:58:42 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.11 2005/02/01 13:12:33 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -49,23 +49,29 @@ namespace BALL
 			setINIFileSectionName("DOCKING");
 			registerObject_(systems1);
 			registerObject_(systems2);
-			registerObject_(generators);
-			registerObject_(eval_functions);
+			registerObject_(algorithms);
 			registerObject_(rank_functions);
 			registerObject_(radii_data_lineedit);
 			registerObject_(radii_rules_lineedit);
 			registerObject_(charges_data_lineedit);
 			registerObject_(charges_rules_lineedit);
-			
-			//registerObject_(radii_rules_button);
-			//registerObject_(charges_rules_button);
-			
 			registerObject_(normalize_names);
 			registerObject_(assign_charges);
 			registerObject_(assign_radii);
 			registerObject_(build_bonds);
 			registerObject_(add_hydrogens);
 		
+			//build HashMap for advanced option dialogs
+			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
+			addEntry("Geometric Fit", GEOMETRIC_FIT, geo_fit);
+			
+			QDialog* test1 = new QDialog(this);
+			test1->setCaption("Test1");
+			addEntry("Test1", TEST1, test1);
+			QDialog* test2 = new QDialog(this);
+			test2->setCaption("Test2");
+			addEntry("Test2", TEST2, test2);
+			
 			hide(); 
 		}
 
@@ -77,9 +83,20 @@ namespace BALL
 				Log.info() << "Destructing object " << this << " of class DockDialog" << std::endl;
 			#endif 
 		}
-
+		
+		
 		// ------------------------- helper functions -------------------------------------
 		// --------------------------------------------------------------------------------
+
+		// add docking algorithm to HashMap and ComboBox
+		void DockDialog::addEntry(QString name, int algorithm, QDialog* dialog)
+			throw()
+		{
+			algorithm_dialogs_[algorithm] = dialog;
+			algorithms->insertItem(name, algorithm);
+			
+			//Log.info() << algorithms->text(1) << std::endl;
+		}
 		
 		void DockDialog::initializeWidget(MainControl& main_control)
 			throw()
@@ -115,7 +132,7 @@ namespace BALL
 				}
 			}
 			//no systems loaded, disable menu entry "Docking"
-			menuBar()->setItemEnabled(id_, num_systems);
+			//menuBar()->setItemEnabled(id_, num_systems);
 		}
 		
 		// if the user has selected one or two systems,  
@@ -221,8 +238,7 @@ namespace BALL
 				// comboboxes
 				systems1->setCurrentText("<select>");
 				systems2->setCurrentText("<select>");
-				generators->setCurrentText("<select>");
-				eval_functions->setCurrentText("<select>");
+				algorithms->setCurrentText("<select>");
 				rank_functions->setCurrentText("<select>");
 				
 				//options
@@ -384,31 +400,15 @@ namespace BALL
 		// --------------------------------------------------------------------------------
 
 		///
-		void DockDialog::genAdvancedPressed()
+		void DockDialog::algAdvancedPressed()
 		{
-			//check which generator is currentText of the combobox
-			if (generators->currentText() == "Geometric Fit")
+			int index = algorithms->currentItem();
+			if(index)
 			{
-				GeometricFitDialog dialog(this);
-				dialog.exec();
-				
-				
-				
+				algorithm_dialogs_[index]->exec();
 			}
+		}
 			
-			//generate object of GeometricFitDialog
-			//ausführen mit exec()
-			//test, ob exec erfolgreich war
-			//ja -> ok wurde gedrückt
-			//nein -> cancel wurde gedrückt
-			//hole werte vom dialog und speichere sie in options_
-		}
-		//
-		void DockDialog::evalAdvancedPressed()
-		{
-		
-		}
-		
 		//
 		void DockDialog::rankAdvancedPressed()
 		{
@@ -450,7 +450,7 @@ namespace BALL
 		///
 		void DockDialog::okPressed()
 		{
-			//if less than 2/ more than 2 equal systems are selected => Error message!
+			//if less than 2/ more than 2 equal systems are chosen => Error message!
 			if ((systems1->currentText() == "<select>") || (systems2->currentText() == "<select>") 
 					|| (systems1->currentText() == systems2->currentText()))
 			{
@@ -463,8 +463,21 @@ namespace BALL
 			}
 			else
 			{
-				hide();
-				calculate();
+				//if no algorithm is chosen => Error message!
+				if(algorithms->currentText() == "<select>")
+				{
+					#ifdef BALL_VIEW_DEBUG
+					Log.error() << "DockDialog: " << "Please select docking algorithm!" << std::endl;
+					#endif
+					
+					QMessageBox error_message(0,0);
+					error_message.warning(0,"Error","Please select docking algorithm!", QMessageBox::Ok, QMessageBox::NoButton);
+				}
+				else
+				{
+					hide();
+					calculate();
+				}
 			}
 		}
 		
