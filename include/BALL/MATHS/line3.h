@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.6 2000/01/16 17:28:42 oliver Exp $
+// $Id: line3.h,v 1.7 2000/02/16 17:04:57 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -61,17 +61,17 @@ namespace BALL
 
 		///
 		TLine3(const TLine3& line,
-			 bool /* deep */ = true)
-			:
-			p(line.p),
-			d(line.d)
+					 bool /* deep */ = true)
+			:	p(line.p),
+				d(line.d)
 		{
 		}
 
 		// form: PARAMETER (default) or TWO_POINTS
 
-		///
-		TLine3(const TPoint3<T>& point, const TVector3<T> &vector, 
+		/**
+		*/
+		TLine3(const TVector3<T>& point, const TVector3<T>& vector, 
 					 Form form = FORM__PARAMETER)
 			:	p(point),
 				d((form == FORM__PARAMETER) 
@@ -93,7 +93,7 @@ namespace BALL
 		///
 		void swap(TLine3& line)
 		{
-			TPoint3<T> temp_point(p);
+			TVector3<T> temp_point(p);
 			p = line.p;
 			line.p = temp_point;
 
@@ -110,10 +110,11 @@ namespace BALL
 		}
 
 		///
-		void set(const TPoint3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
+		void set(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER)
 		{
 			p = point;
-			if (form == FORM__PARAMETER) {
+			if (form == FORM__PARAMETER) 
+			{
 				d = vector;
 			} else {
 				d = vector - point;
@@ -137,11 +138,12 @@ namespace BALL
 		}
 
 		///
-		void get(TPoint3<T>& point,TVector3<T>& vector,
+		void get(TVector3<T>& point,TVector3<T>& vector,
 						 Form form = FORM__PARAMETER) const
 		{
 			point = p;
-			if (form == FORM__PARAMETER) {
+			if (form == FORM__PARAMETER) 
+			{
 				d = vector;
 			} else {
 				d = vector - point;
@@ -178,7 +180,7 @@ namespace BALL
 		}
 
 		///
-		bool has(const TPoint3<T>& point) const
+		bool has(const TVector3<T>& point) const
 		{
 			if (Maths::isNotZero(d.x))
 			{
@@ -254,7 +256,7 @@ namespace BALL
 		//@{
 
 		///
-		TPoint3<T> p;
+		TVector3<T> p;
 
 		///
 		TVector3<T> d;
