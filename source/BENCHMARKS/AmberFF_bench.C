@@ -1,4 +1,4 @@
-// $Id: AmberFF_bench.C,v 1.3.4.6 2002/06/06 21:56:04 oliver Exp $
+// $Id: AmberFF_bench.C,v 1.3.4.7 2002/06/07 10:36:52 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.3.4.6 2002/06/06 21:56:04 oliver Exp $")
+START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.3.4.7 2002/06/07 10:36:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -57,6 +57,47 @@ START_SECTION(50x force calculation w/o selection, 0.2)
 	STOP_TIMER
 END_SECTION
 
+ForceFieldComponent* component;
+START_SECTION(100x nonbonded energy calculation w/o selection, 0.1)
+	component = amber.getComponent("Amber NonBonded");
+	START_TIMER
+		for (Size i = 0; i < 100; i++)
+		{
+			component->updateEnergy();
+		}
+	STOP_TIMER
+END_SECTION
+
+START_SECTION(5000x stretch energy calculation w/o selection, 0.1)
+	component = amber.getComponent("Amber Stretch");
+	START_TIMER
+		for (Size i = 0; i < 5000; i++)
+		{
+			component->updateEnergy();
+		}
+	STOP_TIMER
+END_SECTION
+
+START_SECTION(5000x bend energy calculation w/o selection, 0.1)
+	component = amber.getComponent("Amber Bend");
+	START_TIMER
+		for (Size i = 0; i < 5000; i++)
+		{
+			component->updateEnergy();
+		}
+	STOP_TIMER
+END_SECTION
+
+START_SECTION(5000x torsion energy calculation w/o selection, 0.1)
+	component = amber.getComponent("Amber Torsion");
+	START_TIMER
+		for (Size i = 0; i < 5000; i++)
+		{
+			component->updateEnergy();
+		}
+	STOP_TIMER
+END_SECTION
+
 S.beginResidue()->select();
 START_SECTION(50x update w/ selection, 0.05)
 	START_TIMER
@@ -85,41 +126,40 @@ START_SECTION(200x force calculation w/ selection, 0.2)
 	STOP_TIMER
 END_SECTION
 
-ForceFieldComponent* component;
-START_SECTION(200x nonbonded energy calculation w/ selection, 0.1)
+START_SECTION(1000x nonbonded energy calculation w/ selection, 0.1)
 	component = amber.getComponent("Amber NonBonded");
 	START_TIMER
-		for (Size i = 0; i < 400; i++)
+		for (Size i = 0; i < 1000; i++)
 		{
 			component->updateEnergy();
 		}
 	STOP_TIMER
 END_SECTION
 
-START_SECTION(1000x stretch energy calculation w/ selection, 0.1)
+START_SECTION(10000x stretch energy calculation w/ selection, 0.1)
 	component = amber.getComponent("Amber Stretch");
 	START_TIMER
-		for (Size i = 0; i < 1000; i++)
+		for (Size i = 0; i < 10000; i++)
 		{
 			component->updateEnergy();
 		}
 	STOP_TIMER
 END_SECTION
 
-START_SECTION(1000x bend energy calculation w/ selection, 0.1)
+START_SECTION(10000x bend energy calculation w/ selection, 0.1)
 	component = amber.getComponent("Amber Bend");
 	START_TIMER
-		for (Size i = 0; i < 1000; i++)
+		for (Size i = 0; i < 10000; i++)
 		{
 			component->updateEnergy();
 		}
 	STOP_TIMER
 END_SECTION
 
-START_SECTION(1000x torsion energy calculation w/ selection, 0.1)
+START_SECTION(10000x torsion energy calculation w/ selection, 0.1)
 	component = amber.getComponent("Amber Torsion");
 	START_TIMER
-		for (Size i = 0; i < 1000; i++)
+		for (Size i = 0; i < 10000; i++)
 		{
 			component->updateEnergy();
 		}

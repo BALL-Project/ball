@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.12 2002/06/06 22:22:00 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.13 2002/06/07 10:36:59 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -183,14 +183,14 @@ namespace BALL
 	AmberNonBonded::determineMethodOfAtomPairGeneration()
 		throw()
 	{
-		MolmecSupport::PairListAlgorithmType algorithm_type 
-			= MolmecSupport::BRUTE_FORCE;
-		if (force_field_->getAtoms().size() > 8000) 
+		if (force_field_->getAtoms().size() > 4000) 
 		{ 
-			algorithm_type = MolmecSupport::HASH_GRID;
+			return MolmecSupport::HASH_GRID;
 		} 
-
-		return algorithm_type;
+		else
+		{
+			return MolmecSupport::BRUTE_FORCE;
+		}
 	}
 
 	void AmberNonBonded::update()
