@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.7 2002/12/16 17:06:07 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.8 2002/12/18 11:19:52 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.7 2002/12/16 17:06:07 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.8 2002/12/18 11:19:52 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -344,8 +344,6 @@ CHECK(has()1/1)
 	TEST_EQUAL(h.has(v), false)
 RESULT
 
-
-
 CHECK(operator << (ostream& os, const RegularData3D&))
 	String filename;
 	NEW_TMP_FILE(filename)
@@ -357,7 +355,8 @@ CHECK(operator << (ostream& os, const RegularData3D&))
 	
 	STATUS(2)
 	// fill the grid with something meaningful
-	for (Position i = 0; i < data.getSize(); i++, data[i] = (float)((float)i / data.getSize()));
+	for (Position i = 0; i < data.getSize(); data[i] = (float)((float)i /
+		data.getSize()), i++);
 	
 	STATUS(3)
 	std::ofstream os(filename.c_str(), std::ios::out);
