@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.17 2000/07/16 19:26:20 oliver Exp $
+// $Id: string.h,v 1.18 2000/07/19 18:49:45 amoll Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -109,7 +109,8 @@ namespace BALL
 				@param	from the start index of the substring
 				@param	len the length of the substring (default {\tt npos}: to the end of the string)
 		*/
-		Substring(const String& string, Index from = 0, Size len = string::npos);
+		Substring(const String& string, Index from = 0, Size len = string::npos)
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Destructor.
 				Destruct the substring.
@@ -131,12 +132,14 @@ namespace BALL
 		/** Convert a substring to a string.
 				Return a copy of the substring's contents.
 		*/
-		operator String() const;
+		operator String() const
+			throw(Substring::UnboundSubstring);
 
 		/** Convert a substring to a string.
 				Return a copy of the substring's contents.
 		*/
-		String toString() const;
+		String toString() const
+			throw(Substring::UnboundSubstring);
 		//@}
 
 
@@ -149,12 +152,14 @@ namespace BALL
 				@param from the start position in the string (default is the beginning of the string)
 				@param len the substring's length (default is to the end of the string)
 		*/
-		Substring& bind(const String& string, Index from = 0, Size len = string::npos);
+		Substring& bind(const String& string, Index from = 0, Size len = string::npos)
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Bind the substring to the same string another substring is bound to.
 				@param	substring the substring that is bound to a string
 		*/
-		Substring& bind(const Substring& substring, Index from = 0, Size len = string::npos);
+		Substring& bind(const Substring& substring, Index from = 0, Size len = string::npos)
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// unbinds the substring from the string it is bound to
 		void unbind();
@@ -172,23 +177,29 @@ namespace BALL
 	
 		/** Sets the substring to a certain string
 		*/
-		void set(const String& string);
+		void set(const String& string)
+			throw(Substring::UnboundSubstring);
 
 		/** Copies a substring from another substring
 		*/
-		void set(const Substring& s);
+		void set(const Substring& s)
+			throw(Substring::UnboundSubstring);
 
 		/// Assigns a substring from a char pointer
-		void set(const char* char_ptr, Size size = string::npos);
+		void set(const char* char_ptr, Size size = string::npos)
+			throw(Substring::UnboundSubstring, Exception::NullPointer, Exception::SizeUnderflow);
 
 		/// String assignment operator
-		Substring& operator = (const String& string);
+		Substring& operator = (const String& string)
+			throw(Substring::UnboundSubstring());
 
 		/// Substring assignment operator
-		Substring& operator = (const Substring& substring);
+		Substring& operator = (const Substring& substring)
+			throw(Substring::UnboundSubstring());
 
 		/// char pointer assignment operator
-		Substring& operator = (const char* char_ptr);
+		Substring& operator = (const char* char_ptr)
+			throw(Substring::UnboundSubstring, Exception::NullPointer);
 
 		//@}
 
@@ -196,31 +207,37 @@ namespace BALL
 		//@{	
 		
 		/// Returns a pointer to the substring's contents
-		char* c_str();
+		char* c_str()
+			throw(Substring::UnboundSubstring);
 
 		/// Returns a const pointer to the substring's contents
-		const char* c_str() const;
+		const char* c_str() const
+			throw(Substring::UnboundSubstring);
 
 		/// Returns the first index of the substring
-		Index getFirstIndex() const;
+		Index getFirstIndex() const
+			throw(Substring::UnboundSubstring);
 
 		/// Returns the last index of the substring
-		Index getLastIndex() const;
+		Index getLastIndex() const
+			throw(Substring::UnboundSubstring);
 
 		/// Returns the substring size
 		Size size() const;
 
 		/// Mutable random access to a character of the substring
-		char& operator [] (Index index);
+		char& operator [] (Index index)
+			throw(Substring::UnboundSubstring);
 
 		/// Random access to a character of the substring
-		char operator [] (Index index) const;
+		char operator [] (Index index) const
+			throw(Substring::UnboundSubstring);
 
 		/// Converts the substring to lower case characters
-		Substring& toLower();
+		Substring& toLower()	throw(Substring::UnboundSubstring);
 
 		/// Converts the substring to lower case characters
-		Substring& toUpper();
+		Substring& toUpper()	throw(Substring::UnboundSubstring);
 			
 		//@}
 
@@ -238,16 +255,20 @@ namespace BALL
 		//@{
 
 		/// returns true, if the contents of the two substrings are equal
-		bool operator == (const Substring& substring) const;
+		bool operator == (const Substring& substring) const
+			throw(Substring::UnboundSubstring);
 
 		/// Returns true, if the contents of the two substrings are not equal
-		bool operator != (const Substring& substring) const;
+		bool operator != (const Substring& substring) const
+			throw(Substring::UnboundSubstring);
 
 		/// Returns true, if the contents of the substring and the string are equal
-		bool operator == (const String& string) const;
+		bool operator == (const String& string) const
+			throw(Substring::UnboundSubstring);
 
 		/// Returns true, if the contents of the substring and the string are not equal
-		bool operator != (const String& string) const;
+		bool operator != (const String& string) const
+			throw(Substring::UnboundSubstring);
 
 		/// Returns true, if the contents of the substring and the string are equal
 		friend bool operator == (const String& string, const Substring& substring);
@@ -256,16 +277,20 @@ namespace BALL
 		friend bool operator != (const String& string, const Substring& substring);
 
 		/// Returns true, if the contents of the substring are equal to the contents of the string the char pointer points to
-		bool operator == (const char* char_ptr) const;
+		bool operator == (const char* char_ptr) const
+		throw(Substring::UnboundSubstring, Exception::NullPointer);
 
 		/// Returns true, if the contents of the substring are not equal to the contents of the string the char pointer points to
-		bool operator != (const char* char_ptr) const;
+		bool operator != (const char* char_ptr) const
+		throw(Substring::UnboundSubstring, Exception::NullPointer);
 
 		/// Returns truw, if the substring has length 1 and contains the given char
-		bool operator == (char c) const;
+		bool operator == (char c) const
+			throw(Substring::UnboundSubstring);
 
 		/// Returns true, if the substring is differnet from the given char
-		bool operator != (char c) const;
+		bool operator != (char c) const
+			throw(Substring::UnboundSubstring);
 		//@}
 
 		/**	@name	Stream I/O */
@@ -285,13 +310,14 @@ namespace BALL
 		bool isValid() const;
 
 		///	Dumps the substring object (including the values of its private memebers)
-		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
+		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const 
+			throw(Substring::UnboundSubstring);
 		//@}
 		
 		protected:
 			
-		void validateRange_(Index& from, Size& len) const;
-
+		void validateRange_(Index& from, Size& len) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		private:
 		
@@ -422,7 +448,8 @@ namespace BALL
 				@exception IndexUnderflow, if the buffer size specified is not larger than 0
 				@exception NullPointer, if {\tt format == 0}
 		*/
-		String(Size buffer_size, const char* format, ... );
+		String(Size buffer_size, const char* format, ... )
+			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
 		/**	Create a new string from the contents of a {\bf strstream}.
 				The contents of the {\tt strstream} are not modified, i.e.
@@ -476,19 +503,22 @@ namespace BALL
 				@exception Exception::IndexOverflow if {\tt from < 0}
 				@exception Exception::IndexUnderflow if {\tt from >= size()}
 		*/
-		void set(const String& string, Index from = 0, Size len = npos);
+		void set(const String& string, Index from = 0, Size len = npos)
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Assign a String from a C type string 
 				@exception Exception::IndexUnderflow if {\tt from < 0}
 				@exception Exception::IndexOverflow if {\tt from >= size()}
 		*/
-		void set(const char* char_ptr, Index from = 0, Size len = npos);
+		void set(const char* char_ptr, Index from = 0, Size len = npos)
+			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 	
 		/** Assign a string to the result of a {\bf sprintf} call
 				@exception Exception::IndexUnderflow, if the buffer size is zero
 				@exception Exception::NullPointer, {\tt format} is a NULL pointer
 		*/
-		void set(Size buffer_size, const char *format, ...);
+		void set(Size buffer_size, const char *format, ...)
+				throw(Exception::IndexUnderflow, Exception::NullPointer);
 
 		/** Assign a String from a {\bf strstream}.
 				The contents of the {\tt strstream} object are not modified.
@@ -526,13 +556,15 @@ namespace BALL
 		void set(double d);
 
 		/// Assign a C type string
-		void get(char* char_ptr, Index from = 0, Size len = npos) const;
+		void get(char* char_ptr, Index from = 0, Size len = npos) const
+			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// Assign a String from another String
 		String& operator = (const String& s);
 
 		/// Assign a String from a C type string
-		String& operator = (const char* pc);
+		String& operator = (const char* pc)
+			throw(Exception::NullPointer);
 
 		/** Assign a string from a {\bf strstream}.
 				The contents of the {\tt strstream} obejct are not modified.
@@ -594,28 +626,36 @@ namespace BALL
 		unsigned char toUnsignedChar() const;
 
 		/// Evaluates the string to a short
-		short toShort() const;
+		short toShort() const
+			throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to an unsigned short
-		unsigned short toUnsignedShort() const;
+		unsigned short toUnsignedShort() const
+			throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to an int
-		int toInt() const;
+		int toInt() const
+			throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to an unsigned int
-		unsigned int toUnsignedInt() const;
+		unsigned int toUnsignedInt() const
+			throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to a long
-		long toLong() const;
+		long toLong() const
+			throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to an unsigned long
-		unsigned long toUnsignedLong() const;
+		unsigned long toUnsignedLong() const
+			throw(Exception::InvalidFormat);
 
 		///  Evaluates the string to a float
-		float toFloat() const;
+		float toFloat() const
+			throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to a double
-		double toDouble() const;
+		double toDouble() const
+			throw(Exception::InvalidFormat);
 		//@}
 	
 		
@@ -623,10 +663,12 @@ namespace BALL
 		//@{			
 
 		/// Converts all characters in the given range to lower case
-		void toLower(Index from = 0, Size len = npos);
+		void toLower(Index from = 0, Size len = npos)
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 			
 		/// Converts all characters in the given range to upper case
-		void toUpper(Index from = 0, Size len = npos);
+		void toUpper(Index from = 0, Size len = npos)
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		//@}
 
@@ -634,10 +676,12 @@ namespace BALL
 		//@{
 
 		/// Returns a substring
-		Substring getSubstring(Index from = 0, Size len = npos) const; 
+		Substring getSubstring(Index from = 0, Size len = npos) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// Returns a substring
-		Substring operator () (Index from, Size len = npos) const; 
+		Substring operator () (Index from, Size len = npos) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Returns a substring containing the string before the first occurence of {\bf s}
 		*/
@@ -661,13 +705,16 @@ namespace BALL
 		//@{
 
 		/// count the fields that are separated by a defined set of delimiters
-		Size countFields(const char* delimiters = CHARACTER_CLASS__WHITESPACE) const;
+		Size countFields(const char* delimiters = CHARACTER_CLASS__WHITESPACE) const
+			throw(Exception::NullPointer);
 
 		/// Returns a given field as a substring
-		String getField(Index index, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index* from = 0) const;
+		String getField(Index index, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index* from = 0) const
+			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
 		/// Split the string into fields and assign these field to an array of strings
-		Size split(String string_array[], Size array_size, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const;
+		Size split(String string_array[], Size array_size, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const
+			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
 		//@}
 
@@ -746,7 +793,8 @@ namespace BALL
 				@param	to last index of the sequence to be reversed
 				@see		String:Indices
 		*/
-		String& reverse(Index from = 0, Size len = npos);
+		String& reverse(Index from = 0, Size len = npos)
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// Substitutes the first occurence of {\bf to_replace} by the content of {\bf replacing}
 		Index substitute(const String& to_replace, const String& replacing);
@@ -827,19 +875,25 @@ namespace BALL
 		//@{
 
 		///
-		int compare(const String& string, Index from = 0) const;
+		int compare(const String& string, Index from = 0) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		///
-		int compare(const String& string, Index from, Size len) const;
+		int compare(const String& string, Index from, Size len) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
+
 
 		///
-		int compare(const char* char_ptr, Index from = 0) const;
+		int compare(const char* char_ptr, Index from = 0) const
+			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		///
-		int compare(const char* char_ptr, Index from, Size len) const;
+		int compare(const char* char_ptr, Index from, Size len) const
+				throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		///
-		int compare(char c, Index from = 0) const;
+		int compare(char c, Index from = 0) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		///
 		bool operator == (const String& string) const;
@@ -860,40 +914,52 @@ namespace BALL
 		bool operator > (const String& string) const;
 
 		///
-		friend bool operator == (const char* char_ptr, const String& string);
+		friend bool operator == (const char* char_ptr, const String& string)
+			throw(Exception::NullPointer);
 
 		///
-		friend bool operator != (const char* char_ptr, const String& string);
+		friend bool operator != (const char* char_ptr, const String& string)
+			throw(Exception::NullPointer);
 
 		///
-		friend bool operator < (const char* char_ptr, const String& string);
+		friend bool operator < (const char* char_ptr, const String& string)
+			throw(Exception::NullPointer);
 
 		///
-		friend bool operator <= (const char* char_ptr, const String& string);
+		friend bool operator <= (const char* char_ptr, const String& string)
+			throw(Exception::NullPointer);
 		
 		///
-		friend bool operator > (const char* char_ptr, const String& string);
+		friend bool operator > (const char* char_ptr, const String& string)
+			throw(Exception::NullPointer);
 
 		///
-		friend bool operator >= (const char* char_ptr, const String& string);
+		friend bool operator >= (const char* char_ptr, const String& string)
+			throw(Exception::NullPointer);
 
 		///
-		bool operator == (const char* char_ptr) const;
+		bool operator == (const char* char_ptr) const
+			throw(Exception::NullPointer);
 
 		///
-		bool operator != (const char* char_ptr) const;
+		bool operator != (const char* char_ptr) const
+			throw(Exception::NullPointer);
 
 		///
-		bool operator < (const char* char_ptr) const;
+		bool operator < (const char* char_ptr) const
+			throw(Exception::NullPointer);
 
 		///
-		bool operator <= (const char* char_ptr) const;
+		bool operator <= (const char* char_ptr) const
+			throw(Exception::NullPointer);
 
 		///
-		bool operator > (const char* char_ptr) const;
+		bool operator > (const char* char_ptr) const
+			throw(Exception::NullPointer);
 
 		///
-		bool operator >= (const char* char_ptr) const;
+		bool operator >= (const char* char_ptr) const
+			throw(Exception::NullPointer);
 
 		///
 		friend bool operator == (char c, const String& string);
@@ -960,35 +1026,22 @@ namespace BALL
 
 		protected:
 	
-		/** @name Internal validation methods.
-				The {\tt validate...}  methods check perform a thorough
-				index checking and an index translation
-				Indices below zero are interpreted as indices
-				relative to the end of the string
-				All methods throw IndexUnder|Overflow exceptions
-		*/
-		//@{
-		
-		/**
-		*/
-		void validateIndex_(Index& index) const 
-			throw (Exception::IndexOverflow, Exception::IndexUnderflow);
+		// the validate...  methods check perform a thorough
+		// index checking and an index translation
+		// Indices below zero are interpreted as indices
+		// relative to the end of the string
+		// All methods throw IndexUnder|Overflow exceptions
+		//
+		void validateIndex_(Index& index) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 	
-		/**
-		*/
-		void validateRange_(Index& from, Size& len) const 
-			throw (Exception::IndexOverflow, Exception::IndexUnderflow); 
+		void validateRange_(Index& from, Size& len) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow); 
 
-		/**
-		*/
-		static void validateCharPtrRange_(Index& from, Size& len, const char* char_ptr) 
-			throw (Exception::IndexUnderflow, Exception::IndexOverflow);
+		static void validateCharPtrRange_(Index& from, Size& len, const char* char_ptr)
+			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 		
-		/**
-		*/
-		static void valudateCharPtrIndex_(Index& index) 
-			throw (Exception::IndexUnderflow, Exception::IndexOverflow);
-		//@}
+		static void valudateCharPtrIndex_(Index& index);
 		
 
 
