@@ -1,11 +1,11 @@
-// $Id: LineBasedFile_test.C,v 1.2 2000/10/13 01:49:56 amoll Exp $
+// $Id: LineBasedFile_test.C,v 1.3 2000/10/14 16:40:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LineBasedFile_test.C,v 1.2 2000/10/13 01:49:56 amoll Exp $")
+START_TEST(class_name, "$Id: LineBasedFile_test.C,v 1.3 2000/10/14 16:40:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -109,14 +109,14 @@ CHECK(getField(Position pos = 0, const String& quotes = "",
 RESULT
 
 CHECK(copyString(Position start, Position end = 0) 
-			const throw(Exception::IndexUnderflow))
-	TEST_EQUAL(f1.copyString(), "/0/ /1/ /2 2//3/")
+			const throw(Exception::IndexUnderflow, Exception::NullPointer))
+	TEST_EQUAL(f1.copyString(0), "/0/ /1/ /2 2//3/")
 	TEST_EQUAL(f1.copyString(1, 15), "0/ /1/ /2 2//3")
 	TEST_EXCEPTION(Exception::IndexUnderflow, f1.copyString(-1, 15))
 	TEST_EQUAL(f1.copyString(0, 150), "0/ /1/ /2 2//3")
 	TEST_EQUAL(f1.copyString(30, 150), "")
 
-	TEST_EQUAL(fx.copyString(), "")
+	TEST_EQUAL(fx.copyString(0), "")
 RESULT
 
 CHECK(startsWith(const String& text) const  throw())
