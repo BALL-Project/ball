@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.10 2002/12/05 00:29:43 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.11 2002/12/06 16:56:46 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -482,14 +482,7 @@ namespace BALL
 		void MainControl::onNotify(Message *message)
 			throw()
     {
-			if (RTTI::isKindOf<WindowMessage>(*message))
-			{
-				WindowMessage *window_message = RTTI::castTo<WindowMessage>(*message);
-				statusBar()->message(window_message->getStatusBar().c_str());
-				
-				QWidget::update();
-			}
-			else if (RTTI::isKindOf<NewCompositeMessage>(*message))
+			if (RTTI::isKindOf<NewCompositeMessage>(*message))
 			{
 				NewCompositeMessage* new_message = RTTI::castTo<NewCompositeMessage>(*message);
 				insert(new_message->getComposite(), new_message->getCompositeName());
@@ -503,6 +496,11 @@ namespace BALL
 			{
 				ChangedCompositeMessage *composite_message = RTTI::castTo<ChangedCompositeMessage>(*message);
 				update(composite_message->getComposite()->getRoot());
+			}
+			else if (RTTI::isKindOf<ControlSelectionMessage> (*message))
+			{
+				ControlSelectionMessage* selection_message = RTTI::castTo<ControlSelectionMessage>(*message);
+				control_selection_ = selection_message->getSelection();
 			}
 			else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
 			{
@@ -524,6 +522,13 @@ namespace BALL
 								
 				// sending of scene message and geometric object selector is done in MolecularProperties, because
 				// ObjectSelector is part of MOLVIEW
+			}
+			else if (RTTI::isKindOf<WindowMessage>(*message))
+			{
+				WindowMessage *window_message = RTTI::castTo<WindowMessage>(*message);
+				statusBar()->message(window_message->getStatusBar().c_str());
+				
+				QWidget::update();
 			}
     }
 
@@ -863,15 +868,11 @@ namespace BALL
 			throw()
 		{
 			System* system = NULL;
-			HashSet<Composite*>::Iterator it = selection_.begin();
-			for (; it != selection_.end(); it++)
+			if (control_selection_.size() != 1) return system;
+			
+			if (RTTI::isKindOf<System>(**control_selection_.begin()))
 			{
-				if (*it == 0) continue;
-				if (RTTI::isKindOf<System>(**it))
-				{
-					if (system != 0) return 0;
-					system = (System*) *it;
-				}
+				system = (System*) *control_selection_.begin();
 			}
 			return system;
 		}
