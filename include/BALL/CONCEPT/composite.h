@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.10 2000/01/13 22:17:55 oliver Exp $
+// $Id: composite.h,v 1.11 2000/01/15 18:53:03 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -278,17 +278,17 @@ namespace BALL
 		template <class T>
 		const T* getAncestor(const T& /* dummy */) const
 		{
-			T* T_ptr = 0;
+			T* t_ptr = 0;
 			for (Composite* composite_ptr = parent_;
 					 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
 			{
-				if ((T_ptr = dynamic_cast<T*>(composite_ptr)) != 0)
+				if ((t_ptr = dynamic_cast<T*>(composite_ptr)) != 0)
 				{
 					break;
 				}	
 			}
 			
-			return const_cast<const T*>(T_ptr);
+			return const_cast<const T*>(t_ptr);
 		}
 
 		/**	Return the composite's parent.
@@ -570,31 +570,40 @@ namespace BALL
 
 
 		///
-		bool applyAncestor(UnaryProcessor<Composite>& processor);
+		template <typename T>
+		bool applyAncestor(UnaryProcessor<T>& processor);
 
 		///
-		bool applyChild(UnaryProcessor<Composite>& processor);
+		template <typename T>
+		bool applyChild(UnaryProcessor<T>& processor);
 		
 		///
-		bool applyDescendantPreorder(UnaryProcessor<Composite>& processor);
+		template <typename T>
+		bool applyDescendantPreorder(UnaryProcessor<T>& processor);
 
 		///
-		bool applyDescendantPostorder(UnaryProcessor<Composite>& processor);
+		template <typename T>
+		bool applyDescendantPostorder(UnaryProcessor<T>& processor);
 	
 		///
-		bool applyDescendant(UnaryProcessor<Composite>& processor);
+		template <typename T>
+		bool applyDescendant(UnaryProcessor<T>& processor);
 		
 		///
-		bool applyPreorder(UnaryProcessor<Composite>& processor);
+		template <typename T>
+		bool applyPreorder(UnaryProcessor<T>& processor);
 		
 		///
-		bool applyPostorder(UnaryProcessor<Composite>& processor);
+		template <typename T>
+		bool applyPostorder(UnaryProcessor<T>& processor);
 
 		///
-		bool apply(UnaryProcessor<Composite>& processor);
+		template <typename T>
+		bool apply(UnaryProcessor<T>& processor);
 		
 		///
-		bool applyLevel(UnaryProcessor<Composite>& processor, long level);
+		template <typename T>
+		bool applyLevel(UnaryProcessor<T>& processor, long level);
 		//@}			
 
 
@@ -1390,11 +1399,20 @@ namespace BALL
 		static Composite* setCurrentPreorderBackward_
 			(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite);
 
-		bool applyLevelNostart_(UnaryProcessor<Composite>& processor, long level);
-		bool applyChildNostart_(UnaryProcessor<Composite>& processor);
-		bool applyPreorderNostart_(UnaryProcessor<Composite>& processor);
-		bool applyDescendantPreorderNostart_(UnaryProcessor<Composite>& processor);
-		bool applyDescendantPostorderNostart_(UnaryProcessor<Composite>& processor);
+		template <typename T>
+		bool applyLevelNostart_(UnaryProcessor<T>& processor, long level);
+
+		template <typename T>
+		bool applyChildNostart_(UnaryProcessor<T>& processor);
+
+		template <typename T>
+		bool applyPreorderNostart_(UnaryProcessor<T>& processor);
+
+		template <typename T>
+		bool applyDescendantPreorderNostart_(UnaryProcessor<T>& processor);
+
+		template <typename T>
+		bool applyDescendantPostorderNostart_(UnaryProcessor<T>& processor);
 
 
 		void updateSelection_();
@@ -1415,6 +1433,241 @@ namespace BALL
 		Size										number_of_selected_children_;
 		Size										number_of_children_containing_selection_;
 	};
+
+	template <typename T>
+	bool Composite::applyAncestor(UnaryProcessor<T>& processor)
+  {
+    if (processor.start() == false)
+		{
+			return false;
+		}
+
+    Processor::Result result;
+
+    for (Composite* composite = parent_;
+         composite != 0; composite = composite->parent_)
+    {
+			T* t_ptr;
+			if ((t_ptr = dynamic_cast<T*>(composite)) != 0)
+			{	
+				result = processor(*t_ptr);
+				if (result <= Processor::BREAK)
+				{
+					return (result == Processor::BREAK);
+				}
+			}
+		}
+
+    return processor.finish();
+	}
+	
+	template <typename T>
+	bool Composite::applyChild(UnaryProcessor<T>& processor)
+  {
+    return processor.start() && applyChildNostart_(processor) && processor.finish();
+	}
+
+	template <typename T>
+  bool Composite::applyChildNostart_(UnaryProcessor<T>& processor)
+  {
+    Processor::Result result = Processor::CONTINUE;
+
+    if (!isCollapsed())
+    {
+			for (Composite* composite = first_child_;
+					 composite != 0; composite = composite->next_)
+			{
+				T* t_ptr;
+				if ((t_ptr = dynamic_cast<T*>(composite)) != 0)
+				{
+					result = processor(*t_ptr);
+					if (result <= Processor::BREAK)
+					{
+						break;
+					}
+				}
+			}
+		}
+
+    return (result >= Processor::BREAK);
+	}
+ 
+	template <typename T>
+  bool Composite::applyDescendantPreorder(UnaryProcessor<T>& processor)
+  {
+    return processor.start() && applyDescendantPreorderNostart_(processor) && processor.finish();
+	}
+
+	template <typename T>
+  bool Composite::applyDescendantPreorderNostart_(UnaryProcessor<T>& processor)
+  {
+    if (isCollapsed() == true)
+    {
+      return true;
+		}
+
+    Processor::Result result;
+
+    for (Composite* composite = first_child_;
+         composite != 0; composite = composite->next_)
+    {
+			T* t_ptr;
+			if ((t_ptr = dynamic_cast<T*>(composite)) != 0)
+			{	
+				result = processor(*t_ptr);
+
+				if (result <= Processor::BREAK)
+				{
+					return (result == Processor::BREAK);
+				}
+			}
+
+      if (composite->first_child_ != 0  && composite->applyDescendantPreorderNostart_(processor) == false)
+			{
+        return false;
+			}
+		}
+
+    return true;
+	}
+
+	template <typename T>
+  bool Composite::applyDescendantPostorder(UnaryProcessor<T>& processor)
+  {
+    return processor.start() && applyDescendantPostorderNostart_(processor) && processor.finish();
+	}
+
+	template <typename T>
+  bool Composite::applyDescendantPostorderNostart_(UnaryProcessor<T>& processor)
+  {
+    if (isCollapsed() == true)
+    {
+      return true;
+		}
+
+    Processor::Result result;
+
+    for (Composite* composite = first_child_;
+         composite != 0; composite = composite->next_)
+    {
+      if (composite->first_child_ != 0 && composite->applyDescendantPostorderNostart_(processor) == false)
+			{
+        return false;
+			}
+
+			T* t_ptr = dynamic_cast<T*>(composite);
+      if (t_ptr != 0)
+      {
+				result = processor(*t_ptr);
+
+				if (result <= Processor::BREAK)
+				{
+					return (result == Processor::BREAK);
+				}
+			}
+		}
+
+    return true;
+	}
+
+	template <typename T>
+  bool Composite::applyLevel(UnaryProcessor<T>& processor, long level)
+  {
+    return processor.start() && applyLevelNostart_(processor, level) && processor.finish();
+	}
+
+	template <typename T>
+  bool Composite::applyLevelNostart_(UnaryProcessor<T>& processor, long level)
+  {
+    if (level == 0)
+    {
+			T* t_ptr = dynamic_cast<T*>(this);
+      if (t_ptr != 0)
+      {
+       Processor::Result result = processor(*t_ptr);
+
+				if (result <= Processor::BREAK)
+				{
+					return (result == Processor::BREAK);
+				}
+			}
+		}
+    else if (--level == 0)
+    {
+      return applyChildNostart_(processor);
+		}
+    else if (level > 0)
+    {
+      for (Composite* composite = first_child_;
+           composite != 0; composite_ptr = composite->next_)
+      {
+        if (composite->first_child_ != 0 && composite->applyLevelNostart_(processor, level) == false)
+        {
+          return false;
+				}
+			}
+		}
+
+    return true;
+	}
+
+	template <typename T>
+	bool Composite::applyPreorderNostart_(UnaryProcessor<T>& processor)
+	{
+		Processor::Result result;
+		bool return_value;
+		T* t_ptr = dynamic_cast<T*>(this);
+    if (t_ptr != 0)
+    {
+			result = processor(*t_ptr);
+	
+			if (result <= Processor::BREAK)
+			{
+				return_value = (result == Processor::BREAK);
+			} else {
+				return_value =  applyDescendantPreorderNostart_(processor);
+			}
+		} else {
+			return_value =  applyDescendantPreorderNostart_(processor);
+		}
+		
+		return return_value;
+	}
+
+	template <typename T>
+	bool Composite::applyDescendant(UnaryProcessor<T>& processor)
+	{
+		return applyDescendantPreorder(processor);
+	}
+
+	template <typename T>
+	bool Composite::applyPreorder(UnaryProcessor<T>& processor)
+	{
+		return processor.start() && applyPreorderNostart_(processor) && processor.finish();
+	}
+
+	template <typename T>
+	bool Composite::applyPostorder(UnaryProcessor<T>& processor)
+	{
+		bool return_value = false;
+		if (processor.start() != false)
+		{
+			return_value = applyDescendantPostorderNostart_(processor);
+			T* t_ptr = dynamic_cast<T*>(this);
+			if (!return_value && (t_ptr != 0))
+			{
+				return_value = (processor(*t_ptr) < BREAK) && processor.finish();
+			} 
+		}
+		
+		return return_value;
+	}
+
+	template <typename T>
+	bool Composite::apply(UnaryProcessor<T>& processor)
+	{
+		return processor.start() && applyPreorderNostart_(processor) && processor.finish();
+	}
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/CONCEPT/composite.iC>

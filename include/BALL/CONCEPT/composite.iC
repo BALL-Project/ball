@@ -1,4 +1,4 @@
-// $Id: composite.iC,v 1.5 1999/09/08 15:28:27 oliver Exp $
+// $Id: composite.iC,v 1.6 2000/01/15 18:53:03 oliver Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
@@ -354,52 +354,3 @@ void Composite::host(Visitor<Composite>& visitor)
   visitor.visit(*this);
 }
 
-BALL_INLINE 
-bool Composite::applyPreorderNostart_(UnaryProcessor<Composite>& processor)
-{
-  Processor::Result result = processor(*this);
-	bool return_value;
-
-  if (result <= Processor::BREAK)
-	{
-		return_value = (result == Processor::BREAK) ? true : false;
-	} else {
-		return_value =  applyDescendantPreorderNostart_(processor);
-	}
-	
-	return return_value;
-}
-
-BALL_INLINE 
-bool Composite::applyDescendant(UnaryProcessor<Composite>& processor)
-{
-  return applyDescendantPreorder(processor);
-}
-
-BALL_INLINE
-bool Composite::applyPreorder(UnaryProcessor<Composite>& processor)
-{
-	return processor.start() && applyPreorderNostart_(processor) && processor.finish();
-}
-
-BALL_INLINE 
-bool Composite::applyPostorder(UnaryProcessor<Composite>& processor)
-{
-	bool return_value = false;
-	if (processor.start() != false)
-	{
-		if (applyDescendantPostorderNostart_(processor) == true
-				&& processor(*this) < Processor::BREAK)
-		{
-			return_value = processor.finish();
-		} 
-	}
-	
-	return return_value;
-}
-
-BALL_INLINE 
-bool Composite::apply(UnaryProcessor<Composite>& processor)
-{
-  return processor.start() && applyPreorderNostart_(processor) && processor.finish();
-}
