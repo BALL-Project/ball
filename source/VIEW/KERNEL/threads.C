@@ -40,9 +40,9 @@ namespace BALL
 		void FetchHTMLThread::run()
 		{
 			if (url_ == "") return;
+ 			File f(url_);
 			File::createTemporaryFilename(filename_);
-			File f(url_);
-			f.copyTo(filename_);
+ 			f.copyTo(filename_);
 		}
 
 		// ==========================================
