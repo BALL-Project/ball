@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.6 2000/06/21 10:55:01 amoll Exp $
+// $Id: directory.h,v 1.7 2000/06/29 14:09:00 amoll Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -76,8 +76,7 @@ namespace BALL
 		/**	@name	Assignment */
 		//@{
 
-		/** Assignment with cloning facility.
-				Assign the Directory with the path {\em directory_path} to {\em *this}.
+		/** Assign the Directory with the path {\em directory_path} to {\em *this}.
 				The given directory path can be either absolute or relative. 
 				If the path starts with a path seperator it is set as a absolute path.
 				@param  directory_path the name of the directory to be cloned
