@@ -1,7 +1,9 @@
-// $Id: energyMinimizer.C,v 1.9 2000/04/25 14:43:18 oliver Exp $
+// $Id: energyMinimizer.C,v 1.10 2001/06/26 02:46:14 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
+
 #include <BALL/COMMON/limits.h>
+#include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 
 using namespace std;
 
@@ -449,6 +451,15 @@ BAUSTELLE
 							 << "  RMS gradient " << initial_grad_.rms
 							 << " kJ/(mol A)      total energy " << initial_energy_ << " kJ/mol"
 							 << endl;
+		//if (force_field_ != 0)
+		//{
+		//	Log.info() << "  components:" << endl;
+		//	for (Position i = 0; i < force_field_->countComponents(); i++)
+		//	{
+		//		Log.info() << "     " << force_field_->getComponent(i)->getName() << ": " 
+		//							 << force_field_->getComponent(i)->getEnergy() << " kJ/mol" << endl;
+		//	}
+		//}
 	}
 
 	void EnergyMinimizer::takeSnapShot() const
