@@ -1,4 +1,4 @@
-// $Id: pierottiCavFreeEnergyProcessor.h,v 1.1 2000/08/31 18:45:35 anker Exp $
+// $Id: pierottiCavFreeEnergyProcessor.h,v 1.2 2000/08/31 18:49:03 anker Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
@@ -8,7 +8,6 @@
 #include <BALL/common.h>
 #endif
 
-// BAUSTELLE: Pfad?
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #include <BALL/ENERGY/energyProcessor.h>
 #endif

@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.1 2000/08/31 18:45:35 anker Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.2 2000/08/31 18:49:03 anker Exp $
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -7,9 +7,8 @@
 #include <BALL/common.h>
 #endif
 
-// BAUSTELLE: Pfad?
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
-#include "energyProcessor.h"
+#include <BALL/ENERGY/energyProcessor.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
