@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.11 2004/06/10 15:49:02 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.12 2004/06/10 16:02:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
@@ -16,10 +16,9 @@ RegularData1DWidget::RegularData1DWidget(const RegularData1D* data, QWidget *par
 	throw()
 	:CanvasWidget(parent),
 	 data_(data),
-	 diagram_color_(QColor(red)),
-	 background_color_(QColor(white)) //,
-	 //	 height_(0),//400), 
-	 //	 line_style_(true)
+	 diagram_color_(QColor(black)),
+	 background_color_(QColor(white)),
+	 axis_color_(QColor(red))
 {
 }
 
@@ -29,9 +28,8 @@ RegularData1DWidget::RegularData1DWidget(RegularData1DWidget* widget)
 	: //pixmapWidget(widget),
 		data_(widget->data_),
 		diagram_color_(widget->diagram_color_),
-		background_color_(widget->background_color_)//,
-//	heigth_(widget->heigth_),
-//	line_style_(widget->line_style)
+		background_color_(widget->background_color_),
+		axis_color_(widget->axis_color_)
 { 
 }
 
@@ -73,7 +71,7 @@ void RegularData1DWidget::createPolygon()
 		old = (*data_)[i];
 	}
 
-	height_ = (int)ceil(((max-min) / dif_min) * 5);
+	int height_ = (int)ceil(((max-min) / dif_min) * 5);
  
 	if (height_ > 1000)
 	{
@@ -97,7 +95,7 @@ void RegularData1DWidget::createPolygon()
 		y_new = height_+5 - (int)((((*data_)[i]-min)/dif_min)*5);
 		
 		ql = new QCanvasLine(&canvas_);
-		ql->setPen(QColor(black));
+		ql->setPen(diagram_color_);
 		ql->setPoints(x_old, y_old, x_new, y_new);
 		objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
 		ql->show();
@@ -112,13 +110,13 @@ void RegularData1DWidget::createPolygon()
 	int starty = height_+5 - (int)round(((startx-min)/dif_min)*5);
 	int endx   = data_->size()*5;
 	ql->setPoints(startx, starty, endx, starty);
-	ql->setPen(QColor(red));
+	ql->setPen(axis_color_);
 	ql->show();
 	objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
 		
 	//add the y-axis	
 	ql = new QCanvasLine(&canvas_);
-	startx = 0;
+	startx = 4;
 	starty = 0;
 	int endy   = height_+5 - (int)round((((*data_)[endx]-min)/dif_min)*5);
 	ql->setPoints(startx, starty, startx, endy);
