@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.57 2004/11/07 21:19:21 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.58 2004/11/08 11:00:50 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -453,6 +453,9 @@ AC_DEFUN(CF_DETECT_OS,[
 	fi
 	if test "${OS}" = Darwin ; then
 		SHARED_LIB_SUFFIX=dylib
+	fi
+	if test "${OS}" = CYGWIN ; then
+		SHARED_LIB_SUFFIX=dll
 	fi
 	AC_SUBST(SHARED_LIB_SUFFIX)
 	])
