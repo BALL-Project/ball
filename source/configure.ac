@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.16 2004/04/16 11:40:27 amoll Exp $
+dnl $Id: configure.ac,v 1.18 2004/05/27 19:49:56 oliver Exp $
 dnl
 dnl
 
@@ -13,7 +13,7 @@ dnl
 dnl    Disable caching in MULTI_BUILD mode - just to be sure
 dnl
 if test "${MULTI_BUILD}" = "true" ; then
-	${RM} config.cache
+${RM} config.cache
 fi
 
 
@@ -22,7 +22,7 @@ dnl    Some initialization stuff...
 dnl 
 AC_INIT(BALL, 1.0, ball-bugs@bioinf.uni-sb.de)
 AC_CONFIG_HEADER([
-	config.h:config/config.h.in
+config.h:config/config.h.in
 ])
 AC_LANG(C++)
 
@@ -70,116 +70,116 @@ dnl
 dnl    interpret switches...
 dnl
 if test "$enable_optimization" = "no" ; then
-	DEBUG=true
+DEBUG=true
 else
-	DEBUG=false
+DEBUG=false
 fi
 
 if test "$enable_debuginfo" = "yes" ; then
-	DEBUG_INFO=true
+DEBUG_INFO=true
 else
-	DEBUG_INFO=false
+DEBUG_INFO=false
 fi
 
 if test "$enable_64" = "yes" ; then
-	BINFMT_64_BIT=true
+BINFMT_64_BIT=true
 else
-	BINFMT_64_BIT=false
+BINFMT_64_BIT=false
 fi
 
 if test "$with_compiler" != "" ; then
-	CXX=$with_compiler
+CXX=$with_compiler
 fi
 
 if test "$with_cxxflags" != "" ; then
-	CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
+CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
 fi
 
 if test "$with_ldflags" != "" ; then
-	LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
+LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
 fi
 
 if test "$with_dynarflags" != "" ; then
-	DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
+DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
 fi
 
 if test "$with_arflags" != "" ; then
-	AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
+AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
 fi
 
 if test "$with_qt" != "" ; then
-	QTDIR=$with_qt
+QTDIR=$with_qt
 fi
 if test "$with_qt_incl" != "" ; then
-	QT_INCPATH=$with_qt_incl
+QT_INCPATH=$with_qt_incl
 fi
 if test "$with_qt_libs" != "" ; then
-	QT_LIBPATH=$with_qt_libs
+QT_LIBPATH=$with_qt_libs
 fi
 if test "$with_qt_mt" = "yes" ; then
-	USE_THREADSAFE_QT=true
-	QT_MT_SUFFIX="-mt"
+USE_THREADSAFE_QT=true
+QT_MT_SUFFIX="-mt"
 else
-	USE_THREADSAFE_QT=false
-	QT_MT_SUFFIX=""
+USE_THREADSAFE_QT=false
+QT_MT_SUFFIX=""
 fi
 if test "$with_opengl_incl" != "" ; then
-	OPENGL_INCPATH=$with_opengl_incl
+OPENGL_INCPATH=$with_opengl_incl
 fi
 if test "$with_opengl_libs" != "" ; then
-	OPENGL_LIBPATH=$with_opengl_libs
+OPENGL_LIBPATH=$with_opengl_libs
 fi
 
 if test "$with_mesa" != "yes" ; then	
-	VIEW_PLATFORM=OpenGL
+VIEW_PLATFORM=OpenGL
 else
- 	VIEW_PLATFORM=Mesa
+VIEW_PLATFORM=Mesa
 fi
 
 if test "$with_moc" != "" ; then	
-	MOC=$with_moc
+MOC=$with_moc
 else
- 	MOC=moc
+MOC=moc
 fi
 
 if test "$with_uic" != "" ; then	
-	UIC=$with_uic
+UIC=$with_uic
 else
- 	UIC=uic
+UIC=uic
 fi
 
 if test "$with_libxnet" != "no" ; then	
-	USE_LIBXNET=true
+USE_LIBXNET=true
 else
-	USE_LIBXNET=false
+USE_LIBXNET=false
 fi
 
 if test "$with_VIEW" = "no" -o "$enable_VIEW" = "no"; then
-	USE_VIEW=false
-	BALL_HAS_VIEW=""
+USE_VIEW=false
+BALL_HAS_VIEW=""
 else	
-	USE_VIEW=true
-	BALL_HAS_VIEW=true
+USE_VIEW=true
+BALL_HAS_VIEW=true
 fi
 
 if test "$with_xdr" = "no" ; then
-	BALL_NO_XDR=true
+BALL_NO_XDR=true
 else
-	BALL_NO_XDR=false
+BALL_NO_XDR=false
 fi
 
 # use this switch to enable the python support
 # this also builds libBALLc.so and requires
 # Python.h and libsip.a
 if test "$with_python" != "" -a "$with_python" != "no" -o "$enable_python" = yes ; then
-	PYTHON_SUPPORT=true
-	if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
-		PYTHON_EXE=${with_python}
-	else
-		PYTHON_EXE=python
-	fi
+PYTHON_SUPPORT=true
+if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
+PYTHON_EXE=${with_python}
 else
-	PYTHON_SUPPORT=
+PYTHON_EXE=python
+fi
+else
+PYTHON_SUPPORT=
 fi
 
 # the path to the python includes (Python.h)
@@ -198,22 +198,22 @@ SIP=$with_sip
 
 # support for fftw (FFT lib)
 if test "$with_fftw" != "" -a "$with_fftw" != "no" -o "$enable_fftw" = yes ; then
-	FFTW_SUPPORT=true
-	if test "${with_fftw_lib}" != "" ; then
-		FFTW_LIBPATH=${with_fftw_lib}
-	else
-		FFTW_LIBPATH=""
-	fi
-	FFTW_INCL=${with_fftw_incl}
+FFTW_SUPPORT=true
+if test "${with_fftw_lib}" != "" ; then
+FFTW_LIBPATH=${with_fftw_lib}
 else
-	FFTW_SUPPORT=
+FFTW_LIBPATH=""
+fi
+FFTW_INCL=${with_fftw_incl}
+else
+FFTW_SUPPORT=
 fi
 
 # size of Complex type (if given)
 if test "$enable_double_cplx" = yes ; then
-	FFTW_PRECISION=double
+FFTW_PRECISION=double
 else
-	FFTW_PRECISION=float
+FFTW_PRECISION=float
 fi
 
 dnl
@@ -294,16 +294,16 @@ dnl
 CXX_MAKEDEPEND="makedepend"
 MAKEDEP_CXX_OPTS="-f.Dependencies -D__cplusplus --"
 
-dnl	
+dnl
 dnl		Set the compiler-specific options, archiver, linker, etc.
 dnl
 case "${CXX_NAME}" in
-	g++ )				CF_GXX_OPTIONS ;;
-	KAI ) 			CF_KAI_OPTIONS ;;
-	Intel ) 		CF_INTEL_OPTIONS ;;
-	Compaq )		CF_COMPAQ_OPTIONS ;;
-	MIPSpro )		CF_MIPSPRO_OPTIONS ;;
-	SunCC )			CF_SUNCC_OPTIONS ;;
+g++ )				CF_GXX_OPTIONS ;;
+KAI ) 			CF_KAI_OPTIONS ;;
+Intel ) 		CF_INTEL_OPTIONS ;;
+Compaq )		CF_COMPAQ_OPTIONS ;;
+MIPSpro )		CF_MIPSPRO_OPTIONS ;;
+SunCC )			CF_SUNCC_OPTIONS ;;
 esac
 
 CF_BUILD_FULL_CXX_NAME
@@ -323,8 +323,8 @@ dnl		some platforms need to include ieeefp.h
 dnl		for the definition of finite
 dnl
 if test "$OS" = IRIX -o "$OS" = Solaris ; then
-	INCLUDE_IEEEFP=true
-	BALL_INCLUDE_IEEEFP=true
+INCLUDE_IEEEFP=true
+BALL_INCLUDE_IEEEFP=true
 fi
 
 dnl 	check for standard C headers
@@ -420,16 +420,16 @@ dnl
 AC_PROG_LEX
 AC_PROG_YACC
 if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
-	BALL_HAS_FLEX_YACC=false
-	AC_DEFINE(BALL_HAS_FLEX_YACC, false)
-	AC_MSG_RESULT(flex and yacc/bison required!)
-	AC_MSG_RESULT(Please install them from your closest GNU mirror.)	
-	AC_MSG_RESULT()
-	AC_MSG_ERROR(Aborted.)
+BALL_HAS_FLEX_YACC=false
+AC_DEFINE(BALL_HAS_FLEX_YACC, false)
+AC_MSG_RESULT(flex and yacc/bison required!)
+AC_MSG_RESULT(Please install them from your closest GNU mirror.)	
+AC_MSG_RESULT()
+AC_MSG_ERROR(Aborted.)
 else
-	BALL_HAS_FLEX_YACC=true
-	AC_DEFINE(BALL_HAS_FLEX_YACC, true)
-	LIBS="${LIBS}"
+BALL_HAS_FLEX_YACC=true
+AC_DEFINE(BALL_HAS_FLEX_YACC, true)
+LIBS="${LIBS}"
 fi
 AC_SUBST(BALL_HAS_FLEX_YACC)
 AC_SUBST(LEX)
@@ -476,8 +476,8 @@ VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
 if test "${USE_VIEW}" = true ; then
-	VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
-	VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
+VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
+VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
 fi
 
 LDFLAGS="$LDFLAGS"
@@ -502,7 +502,7 @@ dnl  [] to escape m4, and finally $$ to escape make - the correct expression
 dnl  is something like "(${BALL_PATH}|^[^/]*$)". Send me an email if got that immediately...
 dnl
 if test "${HAS_GPLUSPLUS}" = false -a "${MAKEDEP_CXX_SUFFIX}" != "" ; then
-	MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[[^/]]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
+MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[[^/]]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
 fi
 
 
@@ -522,9 +522,9 @@ dnl					DEPENDENCIES
 
 MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} ${CXXFLAGS}"
 if test ${CXX_MAKEDEPEND} = "makedepend" ; then
-	MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
+MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
 fi
-	
+
 AC_SUBST(CXX_MAKEDEPEND)		dnl path to C++ makedepend
 AC_SUBST(MAKEDEP_CXX_OPTS)	dnl options to C++ makedepend
 AC_SUBST(MAKEDEP_CXX_SUFFIX)dnl optional suffix (for redirection) for C++ makedepend
@@ -544,10 +544,10 @@ AC_SUBST(HAS_GPLUSPLUS)     dnl true, if C++ compiler is g++
 AC_SUBST(STD_CPP_INCLUDES)  dnl standard include paths of C++ compiler
 AC_SUBST(MAKEDEP_OPTS)      dnl options for makedep (needed for Linux)
 AC_SUBST(BALL_TYPENAME)			dnl if the compiler requires the use of typename
-                            dnl this variable is set to "typename". "" otherwise.
+										dnl this variable is set to "typename". "" otherwise.
 AC_SUBST(BINFMT_INDEX)      dnl BFMT: binformat index of the current BINFMT - passed to the compiler
-                            dnl   as -DBFMT=${BINFMT_INDEX} to decide which config.h to use
-                            dnl   used in multi-platform build only!
+										dnl   as -DBFMT=${BINFMT_INDEX} to decide which config.h to use
+										dnl   used in multi-platform build only!
 
 dnl         LINKER
 
@@ -568,7 +568,7 @@ AC_SUBST(CXXFLAGS_D)        dnl debug flags for compiler
 AC_SUBST(CXXFLAGS_O)        dnl optimization flags for compiler 
 AC_SUBST(CPP_MODE_FLAGS)    dnl set to CXXFLAGS_D|CXXFLAGS_O, depending on BALL_DEBUG
 AC_SUBST(CPP_MODE_FLAGS_NO_OPTIMIZATION)    
-														dnl set to CXXFLAGS_D|"", depending on BALL_DEBUG
+										dnl set to CXXFLAGS_D|"", depending on BALL_DEBUG
 
 
 
@@ -580,16 +580,19 @@ dnl if nothing has been defined for AR/AROPTS,
 dnl use default
 
 if test "${AR}" = "no" ; then
-	AR="ar"
+AR="ar"
 fi
 if test "${AROPTS}" = "" ; then
-	AROPTS="cru"
+AROPTS="cru"
 fi
 
 AC_SUBST(AR)
 AC_SUBST(AROPTS)
 AC_SUBST(DYNAR)
 AC_SUBST(DYNAROPTS)
+AC_SUBST(ADD_DYNAROPTS_LIBBALL)
+AC_SUBST(ADD_DYNAROPTS_LIBVIEW)
+AC_SUBST(RANLIB)
 
 
 dnl				  MISC
@@ -600,7 +603,7 @@ dnl 	the library has been built.
 dnl   Any hints concerning a special OS/compiler combination 
 dnl   might want to print some information here (as is the
 dnl   case for the IRIX LD_LBRARY_PATH/LD_LIBRARY64_PATH/LD_LIBRARYN32_PATH)
-dnl   If VIEW is to be built, we add a hint for BALLView.
+dnl   If VIEW is to be built, we add a hint for MolVIEW.
 if test "${ADDITIONAL_COMMENTS}" = "" ; then
 	ADDITIONAL_COMMENTS=""
 fi

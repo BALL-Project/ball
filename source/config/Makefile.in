@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile.in,v 1.35 2004/04/16 11:35:26 amoll Exp $
+# $Id: Makefile.in,v 1.36 2004/05/11 21:08:22 oliver Exp $
 #
 
 include config.mak
@@ -31,8 +31,8 @@ staticlibs: $(STATIC_LIBS)
 
 install:	install.shared
 
-BALLView:
-	@( cd APPLICATIONS/BALLVIEW; make )
+molview:
+	@( cd APPLICATIONS/MOLVIEW; make )
 
 PB:
 	@( cd APPLICATIONS/PB; make )
@@ -66,14 +66,15 @@ collect:	$(OBJECT_LISTS)
 	
 
 libBALL.@SHARED_LIB_SUFFIX@: libBALL.objects
-	$(DYNAR) $(DYNAROPTS) libBALL.@SHARED_LIB_SUFFIX@ `cat libBALL.objects` $(PYTHON_LIBS) -lm
+	$(DYNAR) $(ADD_DYNAROPTS_LIBBALL) $(DYNAROPTS) libBALL.@SHARED_LIB_SUFFIX@ `cat libBALL.objects` $(PYTHON_LIBS) -lm
 
 libVIEW.@SHARED_LIB_SUFFIX@: libVIEW.objects libBALL.@SHARED_LIB_SUFFIX@
-	$(DYNAR) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) $(X11_LIBOPTS) -lm
+	$(DYNAR) $(ADD_DYNAROPTS_LIBVIEW) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) $(X11_LIBOPTS) -lm
 
 .objects.a:	
 	@$(ECHO) "Creating library $@ ..."
 	$(AR) $(AROPTS) $*.a `cat $*.objects`
+	@RANLIB@ $*.a
 
 lib:	.Dependencies dirs collect $(SHARED_LIBS)
 	@$(ECHO) " "

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.50 2004/03/07 22:36:08 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.51 2004/05/11 21:08:17 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -647,17 +647,26 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 	dnl
 	dnl		Here go the g++-specific options
 	dnl
-  CXX_MAKEDEPEND="${CXX}"
+  CXXFLAGS="${CXXFLAGS} -pipe"
+	CXX_MAKEDEPEND="${CXX}"
   MAKEDEP_CXX_OPTS="-M"
   CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
-  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
+	dnl
+	dnl	Some compiler versions have problems with -O3 unter Darwin (3.3.0),
+	dnl so we go back to -O2.
+	dnl
+	if test "${OS}" = "Darwin" ; then
+	  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long"		
+	else
+	  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
+	fi
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-  dnl  We do not need the -fPIC flag for CYGWIN,
+  dnl  We do not need the -fPIC flag for CYGWIN and Darwin,
   dnl  because its code is always position independent.
   dnl  A warning is emitted otherwise.
-  if test "${OS}" != "CYGWIN" ; then
+  if test "${OS}" != "CYGWIN" -a "${OS}" != "Darwin" ; then
     CXXFLAGS="${CXXFLAGS} -fPIC"
   fi
 
@@ -665,10 +674,13 @@ AC_DEFUN(CF_GXX_OPTIONS, [
   if test "${OS}" = "Solaris" ; then
     DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
   else 
-    if test "${OS}" = Darwin ; then
-	    DYNAROPTS="${DYNAROPTS} -dynamiclib -fPIC -o"			
-		else	
-  	  DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
+    if test "${OS}" = "Darwin" ; then
+      DYNAROPTS="${DYNAROPTS} -prebind -dynamiclib -o"
+			ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000"
+			ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
+      RANLIB="ranlib -s "
+    else	
+      DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"
 		fi
   fi
 
@@ -2563,6 +2575,15 @@ AC_DEFUN(CF_VIEW, [
 		fi
 
 		if test "${USE_VIEW}" = true ; then
+			dnl
+			dnl		Fix up the OpenGL stuff for MacOS X -- here we need to use OpenGL and AGL frameworks
+			dnl
+			if test "${OS}" = "Darwin" ; then
+				VIEW_PLATFORM="OpenGL-Darwin"
+				OPENGL_LIBOPTS="-framework OpenGL -framework AGL"
+				X11_LIBPATHOPT=""
+			fi
+
 			if test "${VIEW_PLATFORM}" = Mesa ; then
 				AC_MSG_CHECKING(for Mesa includes)
 				CF_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCPATH} ${X11_INCPATH})
@@ -2709,7 +2730,7 @@ AC_DEFUN(CF_VIEW, [
 					AC_MSG_RESULT()
 					AC_MSG_RESULT([  Could not determine version number of QT library -- please])
 					AC_MSG_RESULT([  check config.log for details.])
-					AC_MSG_RESULT([  You might have a problem with your LD_LIBRARY_PATH.])
+					AC_MSG_RESULT([  You might have a problem with your (DY)LD_LIBRARY_PATH.])
 					AC_MSG_RESULT([  Please check the settings of QTDIR as well or specify])
 					AC_MSG_RESULT([  the path to the library/headers with])
 					AC_MSG_RESULT([    --with-qt-libs=<DIR> / --with-qt-incl=<DIR>])
@@ -2774,6 +2795,16 @@ AC_DEFUN(CF_VIEW, [
 			LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 			AC_TRY_LINK([],[],X_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
+		fi
+
+		dnl
+		dnl  Special treatment for MacOS X -- we just ignore everything.
+		dnl		The OpenGL and AGL frameworks will take care of it...
+		dnl
+		if test "${OS}" = "Darwin" ; then
+			X11_LIBS=""
+			X11_LIBPATHOPTS=""
+			X_LINKING_OK="true"
 		fi
 
 		dnl 		
@@ -2953,28 +2984,28 @@ AC_DEFUN(CF_VIEW, [
 	if test "${USE_VIEW}" = true ; then
 		AC_MSG_CHECKING(linking against QT libraries)
 
-		SAVE_LIBS=${LIBS}
-		LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-		AC_TRY_LINK([#include <qgl.h>], [QGLWidget widget;], QT_LINKING_OK=1)
-		LIBS=${SAVE_LIBS}
-
-		if test "${QT_LINKING_OK+set}" != set ; then
 			SAVE_LIBS=${LIBS}
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+			LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+			AC_TRY_LINK([#include <qgl.h>], [QGLWidget widget;], QT_LINKING_OK=1)
 			LIBS=${SAVE_LIBS}
-		else
-			dnl link against qgl as well (for qt <= 2.0)
-			QT_LIBOPTS="${QTQGL_LIBOPTS}"
-		fi
+	
+			if test "${QT_LINKING_OK+set}" != set ; then
+				SAVE_LIBS=${LIBS}
+				LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+				AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+				LIBS=${SAVE_LIBS}
+			else
+				dnl link against qgl as well (for qt <= 2.0)
+				QT_LIBOPTS="${QTQGL_LIBOPTS}"
+			fi
 
-		if test "${QT_LINKING_OK+set}" != set ; then
-			SAVE_LIBS=${LIBS}
-			X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
-			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
-			AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
-			LIBS=${SAVE_LIBS}
-		fi
+			if test "${QT_LINKING_OK+set}" != set ; then
+				SAVE_LIBS=${LIBS}
+				X11_LIBOPTS="-lXrender -lfreetype ${X11_LIBOPTS}"
+				LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS} ${VIEW_INCLUDES}"
+				AC_TRY_LINK([#include <qgl.h>], [QGLWidget wid;], QT_LINKING_OK=1)
+				LIBS=${SAVE_LIBS}
+			fi
 
 		if test "${QT_LINKING_OK+set}" != set ; then
 			AC_MSG_RESULT(no)
@@ -2992,9 +3023,15 @@ AC_DEFUN(CF_VIEW, [
 			AC_MSG_CHECKING(QT library version)
 			SAVE_LIBS=${LIBS}
 			LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
-			LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
-			export LD_LIBRARY_PATH
-			echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
+			if test "${OS}" = "Darwin" ; then
+				DYLD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${DYLD_LIBRARY_PATH}"
+				export DYLD_LIBRARY_PATH
+				echo "DYLD_LIBRARY_PATH = ${DYLD_LIBRARY_PATH}" 1>&5
+			else
+				LD_LIBRARY_PATH="${QT_LIBPATH}:${X11_LIBPATH}:${OPENGL_LIBPATH}:${LD_LIBRARY_PATH}"
+				export LD_LIBRARY_PATH
+				echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
+			fi
 			AC_TRY_RUN(
 				[
 					#include <stdio.h> 

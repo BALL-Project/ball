@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: config.mak.in,v 1.31 2004/02/16 11:48:20 oliver Exp $
+# $Id: config.mak.in,v 1.33 2004/05/27 19:50:03 oliver Exp $
 #
 
 # First, some basic unix commands, including the C++ compiler
@@ -10,6 +10,7 @@
 
 # archiver ar (to create static libraries)
 AR	=@AR@
+RANLIB = @RANLIB@
 
 # dynamic archiver (to create shared libraries)
 DYNAR = @DYNAR@
@@ -19,6 +20,8 @@ AROPTS  = @AROPTS@
 
 # options for shared library generation
 DYNAROPTS = @DYNAROPTS@
+ADD_DYNAROPTS_LIBBALL = @ADD_DYNAROPTS_LIBBALL@
+ADD_DYNAROPTS_LIBVIEW = @ADD_DYNAROPTS_LIBVIEW@
 
 # suffix of shared library filenames
 SHARED_LIB_SUFFIX = @SHARED_LIB_SUFFIX@
