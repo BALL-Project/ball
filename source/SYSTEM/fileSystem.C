@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.C,v 1.15 2002/12/16 09:08:29 oliver Exp $
+// $Id: fileSystem.C,v 1.16 2003/05/08 11:30:03 oliver Exp $
+//
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -105,10 +106,9 @@ namespace BALL
 	void FileSystem::expandTilde_(String& path)
 		throw()
 	{
-// WIN port: How to do this under Windows? WHAT to do?
-#ifndef BALL_COMPILER_MSVC
-			
 
+
+		#ifndef BALL_COMPILER_MSVC
 		if (path.isEmpty() == true)
 		{
 			return;
@@ -168,7 +168,8 @@ namespace BALL
 		String buffer(passwd->pw_dir);
 		buffer.append(path.c_str() + index);
 		buffer.swap(path);
-#else
+
+#else // Windows implementation
 		Index index = (Index)path.find_first_not_of(FileSystem::PATH_SEPARATOR, 1);
 		
 		if (index == 2)
