@@ -40,7 +40,7 @@ QColorTable::QColorTable(QWidget* parent)
 {
   setNumCols(2);
   horizontalHeader()->setLabel(1, "Color");
-	setGeometry(5,5, 385, 345);
+	setGeometry(5,5, 375, 345);
 	setColumnWidth(1, 200);
 	setSelectionMode(NoSelection);
 }
