@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.C,v 1.7 2001/06/27 23:49:25 oliver Exp $
+// $Id: charmmEEF1.C,v 1.8 2001/07/11 00:10:47 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
@@ -36,32 +36,36 @@ namespace BALL
 			R_min_(0),
 			is_defined_(0)
 	{
-		// copy attributes
-		number_of_atom_types_ = charmm_EEF1.number_of_atom_types_;
+		// avoid allocation of zero-length blocks -- this is usually trouble...
+		if (number_of_atom_types_ > 0)
+		{
+			// copy attributes
+			number_of_atom_types_ = charmm_EEF1.number_of_atom_types_;
 
-		V_ = new float [number_of_atom_types_];
-		memcpy(V_, charmm_EEF1.V_, sizeof(float) * number_of_atom_types_);
+			V_ = new float [number_of_atom_types_];
+			memcpy(V_, charmm_EEF1.V_, sizeof(float) * number_of_atom_types_);
 
-		dG_ref_ = new float [number_of_atom_types_];
-		memcpy(dG_ref_, charmm_EEF1.dG_ref_, sizeof(float) * number_of_atom_types_);
+			dG_ref_ = new float [number_of_atom_types_];
+			memcpy(dG_ref_, charmm_EEF1.dG_ref_, sizeof(float) * number_of_atom_types_);
 
-		dG_free_ = new float [number_of_atom_types_];
-		memcpy(dG_free_, charmm_EEF1.dG_free_, sizeof(float) * number_of_atom_types_);
+			dG_free_ = new float [number_of_atom_types_];
+			memcpy(dG_free_, charmm_EEF1.dG_free_, sizeof(float) * number_of_atom_types_);
 
-		dH_ref_ = new float [number_of_atom_types_];
-		memcpy(dH_ref_, charmm_EEF1.dH_ref_, sizeof(float) * number_of_atom_types_);
+			dH_ref_ = new float [number_of_atom_types_];
+			memcpy(dH_ref_, charmm_EEF1.dH_ref_, sizeof(float) * number_of_atom_types_);
 
-		Cp_ref_ = new float [number_of_atom_types_];
-		memcpy(Cp_ref_, charmm_EEF1.Cp_ref_, sizeof(float) * number_of_atom_types_);
+			Cp_ref_ = new float [number_of_atom_types_];
+			memcpy(Cp_ref_, charmm_EEF1.Cp_ref_, sizeof(float) * number_of_atom_types_);
 
-		sig_w_ = new float [number_of_atom_types_];
-		memcpy(sig_w_, charmm_EEF1.sig_w_, sizeof(float) * number_of_atom_types_);
+			sig_w_ = new float [number_of_atom_types_];
+			memcpy(sig_w_, charmm_EEF1.sig_w_, sizeof(float) * number_of_atom_types_);
 
-		R_min_ = new float [number_of_atom_types_];
-		memcpy(R_min_, charmm_EEF1.R_min_, sizeof(float) * number_of_atom_types_);
-		
-		is_defined_ = new bool [number_of_atom_types_];
-		memcpy(is_defined_, charmm_EEF1.is_defined_, sizeof(bool) * number_of_atom_types_);
+			R_min_ = new float [number_of_atom_types_];
+			memcpy(R_min_, charmm_EEF1.R_min_, sizeof(float) * number_of_atom_types_);
+			
+			is_defined_ = new bool [number_of_atom_types_];
+			memcpy(is_defined_, charmm_EEF1.is_defined_, sizeof(bool) * number_of_atom_types_);
+		}
 	}
 
 
