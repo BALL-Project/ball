@@ -48,6 +48,7 @@ EXECUTABLES = \
 	Molecule_test\
 	NumericalSAS_test\
 	Nucleotide_test\
+	OoiEnergy_test\
 	Options_test\
 	PDBFile_test\
 	Plane3_test\
@@ -141,7 +142,7 @@ Expression_test:	Expression_test.o
 Fragment_test:	Fragment_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-FragmentDB_test:	FragmentDB_test.o
+FragmentDB_test:	FragmentDB_test.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Gradient_test:	Gradient_test.o
@@ -195,6 +196,9 @@ Nucleotide_test:	Nucleotide_test.o
 Options_test:	Options_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+OoiEnergy_test:	OoiEnergy_test.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 NumericalSAS_test:	NumericalSAS_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
@@ -234,8 +238,8 @@ ResourceFile_test:	ResourceFile_test.o
 RTTI_test:	RTTI_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-RuleEvaluator_test:	RuleEvaluator_test.o ../MOLMEC/COMMON/ruleEvaluator.o ../KERNEL/expression.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o ../MOLMEC/COMMON/ruleEvaluator.o ../KERNEL/expression.o $(LIBS)
+RuleEvaluator_test:	RuleEvaluator_test.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 SecondaryStructure_test:	SecondaryStructure_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
@@ -249,8 +253,8 @@ Skeleton_test:	Skeleton_test.o
 Sphere3_test:	Sphere3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-StandardPredicates_test: StandardPredicates_test.o ../KERNEL/standardPredicates.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o ../KERNEL/standardPredicates.o $(LIBS)
+StandardPredicates_test: 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 StructureMapper_test:	StructureMapper_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
