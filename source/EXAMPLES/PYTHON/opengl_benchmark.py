@@ -1,5 +1,3 @@
-import time
-
 m = MainControl.getInstance(0)
 pm = m.getPrimitiveManager()
 py = PyWidget.getInstance(0)
@@ -33,7 +31,8 @@ def runTest(name, model):
 	sm = SceneMessage(SceneMessage.UPDATE_CAMERA)
 	sm.setStage(s)
 	m.sendMessage(sm)
-	t = time.clock()
+	timer = Timer();
+	timer.start();
 	while run < nr_runs and not py.toAbortScript():
 		run += 1
 		v = v + Vector3(0,0,1)
@@ -42,7 +41,8 @@ def runTest(name, model):
 		sm = SceneMessage(SceneMessage.UPDATE_CAMERA)
 		sm.setStage(s)
 		m.sendMessage(sm)
-	model_result = time.clock() - t
+	timer.stop()
+	model_result = timer.getClockTime()
 	clearRepresentations()
 	print name+" "+str(model_result)+" seconds"
 	result += model_result
