@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.13 2004/07/26 13:56:41 amoll Exp $
+// $Id: main.C,v 1.14 2004/07/26 13:59:15 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -237,8 +237,7 @@ int main(int argc, char **argv)
 	Size s = povray_exec.split(strings, String(FileSystem::PATH_SEPARATOR).c_str());
 	String pov_exec2 = strings[s - 1];
 
-//	whil e(sm.applyNextSnapShot())
-	while (false)
+	while(sm.applyNextSnapShot())
 	{
 		String pov_arg = povray_options + String(nr) + ".png" ;
 

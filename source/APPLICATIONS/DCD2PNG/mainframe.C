@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.3 2004/07/26 13:49:52 amoll Exp $
+// $Id: mainframe.C,v 1.4 2004/07/26 13:59:15 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -24,7 +24,6 @@ namespace BALL
 	Mainframe::Mainframe(QWidget* parent, const char* name)
 		:	MainControl(parent, name, ".BALLView"),
 			control_(0),
-			dataset_control_(0),
 			geometric_control_(0),
 			display_properties_(0),
 			molecular_structure_(0)
@@ -55,35 +54,33 @@ namespace BALL
  		molecular_structure_ = new MolecularStructure(this, "MolecularStructure");
  		CHECK_PTR(molecular_structure_);
 
+		// initialize own preferences tab
+		initializePreferencesTab(*preferences_dialog_);
 
-			// initialize own preferences tab
-			initializePreferencesTab(*preferences_dialog_);
+		// initialize all modular widgets 
+		List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+		for (; it != modular_widgets_.end(); ++it)
+		{
+			(*it)->initializeWidget(*this);
+			(*it)->initializePreferencesTab(*preferences_dialog_);
+		}
 
-			// initialize all modular widgets 
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-			for (; it != modular_widgets_.end(); ++it)
-			{
-				(*it)->initializeWidget(*this);
-				(*it)->initializePreferencesTab(*preferences_dialog_);
-			}
+		// check own preferences 
+		preferences_dialog_->fetchPreferences(preferences_);
 
-			// check own preferences 
-			preferences_dialog_->fetchPreferences(preferences_);
+		// fetch own preferences tab
+		fetchPreferences(preferences_);
 
-			// fetch own preferences tab
-			fetchPreferences(preferences_);
+		// apply on own preferences tab
+		applyPreferences();
 
-			// apply on own preferences tab
-			applyPreferences();
-
-			// check menu entries, fetch and apply preferences
-			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
-			{
-				(*it)->checkMenu(*this);
-				(*it)->fetchPreferences(preferences_);
-				(*it)->applyPreferences();
-			}
-
+		// check menu entries, fetch and apply preferences
+		for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+		{
+			(*it)->checkMenu(*this);
+			(*it)->fetchPreferences(preferences_);
+			(*it)->applyPreferences();
+		}
 	}
 
 	Mainframe::~Mainframe()
