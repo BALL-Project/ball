@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.h,v 1.4 2000/09/24 13:16:47 oliver Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.5 2000/09/26 19:26:46 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -96,7 +96,7 @@ namespace BALL
 		
 		private:
 		
-		std::list<PDBAtom*> proton_list_;	
+		std::list<Atom*> proton_list_;	
 		std::list<Residue*> aromat_list_;
 		String **asrings_;
 
