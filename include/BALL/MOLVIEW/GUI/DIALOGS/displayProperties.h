@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.15 2002/12/12 17:10:02 amoll Exp $
+// $Id: displayProperties.h,v 1.16 2002/12/15 01:53:25 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -435,8 +435,6 @@ namespace BALL
 			// --------------------------------------------------------------------------------
 			
 			int id_;
-			int select_id_;
-			int deselect_id_;
 			
 			QString  					model_string_static_;
 			QString  					model_string_dynamic_;
