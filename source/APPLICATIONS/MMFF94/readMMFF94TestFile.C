@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.6 2005/03/23 13:43:56 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.7 2005/03/23 16:13:27 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -154,10 +154,11 @@ int runtests(const vector<String>& filenames)
 				if (s.r0 != r0s[poss2] ||
 						s.kb != kbs[poss2])
 				{
-					Log.error() << "Problem Stretch:   " << filenames[pos] << "   " 
+					Log.error() << std::endl
+											<< "Problem Stretch:   " << filenames[pos] << "   " 
 											<< s.atom1->getName() << " " << s.atom2->getName() << std::endl
-											<< "got " << s.r0 << " " << s.kb << " " << s.sbmb << std::endl
-											<< "was " << r0s[poss2] << " " << kbs[poss2] << " " << is_sbmb[poss2]
+											<< "got " << s.r0 << "   " << s.kb << "   " << s.sbmb << "    " << s.reason<< std::endl
+											<< "was " << r0s[poss2] << "   " << kbs[poss2] << "   " << is_sbmb[poss2]
 											<< std::endl;
 				}
 
@@ -174,7 +175,7 @@ int runtests(const vector<String>& filenames)
 
 		float stretch_diff = std::fabs(mmff.getEnergy() - results[1]);
 
-		if (std::fabs(stretch_diff / results[1]) > 1.0 / 100.0 && stretch_diff > 0.001)
+		if (std::fabs(stretch_diff / results[1]) > 1.0 / 100.0 && stretch_diff > 0.0001)
 		{
 			Log.error() << filenames[pos] << "   " << results[1] << "  " << mmff.getEnergy() << std::endl;
 		}

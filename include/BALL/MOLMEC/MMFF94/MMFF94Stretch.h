@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.h,v 1.1.2.7 2005/03/23 14:57:56 amoll Exp $ 
+// $Id: MMFF94Stretch.h,v 1.1.2.8 2005/03/23 16:12:28 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -44,13 +44,13 @@ namespace BALL
 		//@{
 		
 		// Constant CS
-		#define CUBIC_STRENGTH_CONSTANT -2.0L
+		#define CUBIC_STRENGTH_CONSTANT -2.0
 
 		// Constant 7 / 12 * CS^2
-		#define KCS 7L / 3L  
+		#define KCS 7.0 / 3.0
 
 		// Constant 143.9325 / 2
-		#define K0 71.96625L
+		#define K0 71.96625
 
 		///
 		struct Stretch
