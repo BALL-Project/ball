@@ -1,4 +1,4 @@
-// $Id: LogStream_test.C,v 1.6 2000/05/29 23:45:27 amoll Exp $
+// $Id: LogStream_test.C,v 1.7 2000/06/07 09:35:07 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LogStream_test.C,v 1.6 2000/05/29 23:45:27 amoll Exp $")
+START_TEST(class_name, "$Id: LogStream_test.C,v 1.7 2000/06/07 09:35:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,9 +33,15 @@ RESULT
 
 CHECK(LogStream(LogStreamBuf* buf))
 	LogStream* l1;
-	LogStreamBuf* lb1;
-	l1 = new LogStream(lb1);
+	l1 = new LogStream((LogStreamBuf*)0);
 	TEST_NOT_EQUAL(l1, 0)
+	delete l1;
+
+	LogStream* l2;
+	LogStreamBuf* lb2 = new LogStreamBuf;
+	l2 = new LogStream(lb2);
+	TEST_NOT_EQUAL(l2, 0)
+	delete l2;
 RESULT
 
 CHECK(rdbuf())
