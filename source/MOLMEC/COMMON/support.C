@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.18 2001/02/19 12:53:17 anker Exp $
+// $Id: support.C,v 1.19 2001/02/20 10:31:59 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -154,8 +154,8 @@ namespace BALL
 					{
 						position = (*atom_it)->getPosition();
 						atom_it2 = atom_it; ++atom_it2;
-						// for (atom_it2 = atom_it, atom_it2++; +atom_it2; ++atom_it2) 
-						while (+atom_it2)
+						for (atom_it2 = atom_it, atom_it2++; 
+								atom_it2 != atom_vector.end(); ++atom_it2) 
 						{
 							new_position = position;
 							difference = position - (*atom_it2)->getPosition();
@@ -264,7 +264,8 @@ namespace BALL
 			// periodic boundary not enabled
 			else 
 			{
-				// Check what kind of algorithm should be used for calculating the neighbours
+				// Check what kind of algorithm should be used for calculating the
+				// neighbours
 				if (type == BRUTE_FORCE) 
 				{
 					// Brute force algorithm
