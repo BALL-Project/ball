@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.14 2003/12/15 02:27:23 amoll Exp $
+// $Id: molecularProperties.C,v 1.15 2004/01/13 15:16:38 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -136,7 +136,7 @@ void MolecularProperties::onNotify(Message *message)
 
 bool MolecularProperties::checkResidue()
 {
-	List<Composite*>& selection = getMainControl()->getControlSelection();
+	List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
 	if (selection.size() == 0) return false;
 
 	setStatusbarText("checking " + String(selection.size()) + " objects...");
@@ -176,7 +176,7 @@ bool MolecularProperties::checkResidue()
 
 void MolecularProperties::addHydrogens()
 {
-	if (getMainControl()->getControlSelection().size() == 0) 
+	if (getMainControl()->getMolecularControlSelection().size() == 0) 
 	{
 		return;
 	}
@@ -184,7 +184,7 @@ void MolecularProperties::addHydrogens()
 	setStatusbarText("adding hydrogens ...");
 
 	// copy the selection_, it can change after a changemessage event
-	List<Composite*> temp_selection_ = getMainControl()->getControlSelection();
+	List<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
 	List<Composite*>::ConstIterator it = temp_selection_.begin();	
 
 	Size number_of_hydrogens = 0;
@@ -193,6 +193,9 @@ void MolecularProperties::addHydrogens()
 	{	
 		(*it)->apply(getFragmentDB().add_hydrogens);
 		number_of_hydrogens += getFragmentDB().add_hydrogens.getNumberOfInsertedAtoms();
+		
+		if (getFragmentDB().add_hydrogens.getNumberOfInsertedAtoms() == 0) continue;
+		
 		(*it)->apply(getFragmentDB().build_bonds);
 
 		CompositeMessage *change_message = 
@@ -208,7 +211,7 @@ void MolecularProperties::addHydrogens()
 
 void MolecularProperties::buildBonds()
 {
-	if (getMainControl()->getControlSelection().size() == 0) 
+	if (getMainControl()->getMolecularControlSelection().size() == 0) 
 	{
 		return;
 	}
@@ -216,7 +219,7 @@ void MolecularProperties::buildBonds()
 	setStatusbarText("building bonds ...");
 
 	// copy the selection_, it can change after a changemessage event
-	List<Composite*> temp_selection_ = getMainControl()->getControlSelection();
+	List<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
 	List<Composite*>::ConstIterator it = temp_selection_.begin();	
 	
 	Size number_of_bonds = 0;
@@ -242,12 +245,12 @@ void MolecularProperties::centerCamera(Composite* composite)
 	
 	if (to_center_on == 0)
 	{
-		if (getMainControl()->getControlSelection().size() == 0)
+		if (getMainControl()->getMolecularControlSelection().size() == 0)
 		{
 			return;
 		}
 
-		to_center_on = *getMainControl()->getControlSelection().begin();
+		to_center_on = *getMainControl()->getMolecularControlSelection().begin();
 	}
 
 	// use specified object processor for calculating the center
@@ -280,7 +283,7 @@ void MolecularProperties::calculateCenter_(Composite &composite)
 void MolecularProperties::checkMenu(MainControl& main_control)
 	throw()
 {
-	List<Composite*>& selection = getMainControl()->getControlSelection();
+	List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
 	Size number_of_selected_objects = selection.size(); 
 	bool selected = (number_of_selected_objects != 0);
 	selected = selected && getMainControl()->compositesAreMuteable();
@@ -325,7 +328,7 @@ void MolecularProperties::checkMenu(MainControl& main_control)
 
 void MolecularProperties::select()
 {
-	List<Composite*>& selection = getMainControl()->getControlSelection();
+	List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
 
 	if (!selection.size()) return;
 
@@ -353,7 +356,7 @@ void MolecularProperties::select()
 
 void MolecularProperties::deselect()
 {
-	List<Composite*>& selection = getMainControl()->getControlSelection();
+	List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
 
 	if (!selection.size()) return;
 

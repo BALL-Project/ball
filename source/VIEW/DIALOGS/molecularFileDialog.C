@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.12 2003/12/10 15:10:14 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.13 2004/01/13 15:16:37 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -181,7 +181,7 @@ namespace BALL
 		bool MolecularFileDialog::writeFile()
 		{
 			List<Composite*>& selection = 
-				((MainControl*) ((ConnectionObject*)this)->getRoot())->getControlSelection();
+				getMainControl()->getMolecularControlSelection();
 
 			if (selection.size() == 0 || !RTTI::isKindOf<System> (**selection.begin()))
 			{

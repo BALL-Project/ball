@@ -224,9 +224,9 @@ void TransformationDialog::onNotify(Message *message)
 #endif
 	if (RTTI::isKindOf<ControlSelectionMessage>(*message))
   {
-		if (getMainControl()->getControlSelection().size() != 0)
+		if (getMainControl()->getMolecularControlSelection().size() != 0)
 		{
-			composite_ = *getMainControl()->getControlSelection().begin();
+			composite_ = *getMainControl()->getMolecularControlSelection().begin();
 		}
 		else
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.27 2003/12/20 15:55:54 amoll Exp $
+// $Id: mainControl.h,v 1.28 2004/01/13 15:16:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -583,7 +583,7 @@ namespace BALL
 				throw();
 
 			/// Get the selection (highlighted items) of the MolecularControl (not the selection with checkboxes)
-			List<Composite*>& getControlSelection()
+			List<Composite*>& getMolecularControlSelection()
 				throw();
 
 			/// If exactly one System is selected in the Control, return a pointer to this system, otherwise 0.

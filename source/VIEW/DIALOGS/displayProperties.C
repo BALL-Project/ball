@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.57 2003/12/20 19:46:26 amoll Exp $
+// $Id: displayProperties.C,v 1.58 2004/01/13 15:16:36 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -236,7 +236,7 @@ void DisplayProperties::createRepresentationMode()
 	rep_ = 0;
 	setCaption("create Representation");
 	apply_button->setText("Create");
-	apply_button->setEnabled(getMainControl()->getControlSelection().size());
+	apply_button->setEnabled(getMainControl()->getMolecularControlSelection().size());
 }
 
 void DisplayProperties::modifyRepresentationMode()
@@ -354,7 +354,7 @@ void DisplayProperties::onNotify(Message *message)
 	{
 		createRepresentationMode();
 		// disable apply button if selection is empty
-		apply_button->setEnabled(getMainControl()->getControlSelection().size());
+		apply_button->setEnabled(getMainControl()->getMolecularControlSelection().size());
 		return;
 	}
 
@@ -373,13 +373,13 @@ void DisplayProperties::onNotify(Message *message)
 void DisplayProperties::applyButtonClicked()
 {
 	// no molecular or representation selection present 
-	if (getMainControl()->getControlSelection().size() == 0 && rep_ == 0)
+	if (getMainControl()->getMolecularControlSelection().size() == 0 && rep_ == 0)
 	{
 		return;
 	}
 
 	setStatusbarText("building model...");
-	createRepresentation_(getMainControl()->getControlSelection());
+	createRepresentation_(getMainControl()->getMolecularControlSelection());
 	setStatusbarText("drawing representation...");
 
 	// update scene
