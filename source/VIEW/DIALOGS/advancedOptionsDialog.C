@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: advancedOptionsDialog.C,v 1.6 2003/12/21 10:10:20 oliver Exp $
+// $Id: advancedOptionsDialog.C,v 1.7 2004/01/18 16:43:58 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/advancedOptionsDialog.h>
@@ -153,6 +153,7 @@ namespace BALL
 		{
 			return overwrite_typenames_checkBox->isChecked();
 		}
+
 		//function to restore previously changed options
 		void AdvancedOptionsDialog::setOptions
 					(float nonbonded_cutoff, float vdw_cutoff, 

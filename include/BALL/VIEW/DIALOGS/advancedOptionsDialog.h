@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: advancedOptionsDialog.h,v 1.4 2003/12/21 10:10:20 oliver Exp $
+// $Id: advancedOptionsDialog.h,v 1.5 2004/01/18 16:43:57 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_ADVANCEDOPTIONSDIALOG_H
@@ -76,7 +76,7 @@ namespace BALL
 			bool getOverwriteTypenames();
 			
 			///
-			void setOptions(	float nonbonded_cutoff, float vdw_cutoff, float vdw_cuton, float electrostatic_cutoff, float electrostatic_cuton,
+			void setOptions(float nonbonded_cutoff, float vdw_cutoff, float vdw_cuton, float electrostatic_cutoff, float electrostatic_cuton,
 						float scaling_electrostatic_1_4, float scaling_vdw_1_4, bool use_dddc, bool assign_charges,
 						bool assign_typenames, bool assign_types, bool overwrite_charges, bool overwrite_typenames);
 

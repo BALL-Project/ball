@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.111 2004/01/17 00:39:48 amoll Exp $
+// $Id: mainframe.C,v 1.112 2004/01/18 16:43:57 oliver Exp $
 //
 
 #include "mainframe.h"
@@ -201,7 +201,7 @@ Log.error() << "new Mainframe " << this << std::endl;
 									CTRL+Key_U,MENU_CONTOUR_SURFACE, hint);
 
 	insertPopupMenuSeparator(MainControl::TOOLS);
-	hint = "Select atoms from a regular expression.";
+	hint = "Select atoms from a system based on an expression.";
 	insertMenuEntry(MainControl::TOOLS, "Select atoms", this,  SLOT(showSelectorDialog()), 
 									ALT+Key_A, MENU_SELECT_ATOMS, hint);
 
@@ -441,7 +441,6 @@ void Mainframe::amberMinimization()
 	amber->options[AmberFF::Option::OVERWRITE_CHARGES] = minimization_dialog_->getOverwriteCharges();
 	amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = minimization_dialog_->getOverwriteTypenames();
 	amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = minimization_dialog_->getUseDistanceDependentDC();
-
 	amber->options[AmberFF::Option::NONBONDED_CUTOFF] = minimization_dialog_->getNonbondedCutoff();
 	amber->options[AmberFF::Option::VDW_CUTOFF] = minimization_dialog_->getVdwCutoff();
 	amber->options[AmberFF::Option::VDW_CUTON] = minimization_dialog_->getVdwCuton();
@@ -563,7 +562,6 @@ void Mainframe::amberMDSimulation()
 	amber->options[AmberFF::Option::OVERWRITE_CHARGES] = md_dialog_->getOverwriteCharges();
 	amber->options[AmberFF::Option::OVERWRITE_TYPENAMES] = md_dialog_->getOverwriteTypenames();
 	amber->options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = md_dialog_->getUseDistanceDependentDC();
-
 	amber->options[AmberFF::Option::NONBONDED_CUTOFF] = md_dialog_->getNonbondedCutoff();
 	amber->options[AmberFF::Option::VDW_CUTOFF] = md_dialog_->getVdwCutoff();
 	amber->options[AmberFF::Option::VDW_CUTON] = md_dialog_->getVdwCuton();
