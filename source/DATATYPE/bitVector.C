@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.3 1999/12/04 18:34:27 oliver Exp $
+// $Id: bitVector.C,v 1.4 1999/12/17 11:15:37 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
@@ -563,6 +563,10 @@ namespace BALL {
 			memset(bitset_, BALL_BLOCK_ALL_BITS_CLEARED,
 						 block_size << (sizeof(BlockType) - 1));
 		}
+
+		block_size_ = block_size;
+		size_ = size;
+
 	}
  
 
