@@ -1,4 +1,4 @@
-// $Id: molecularProperties.h,v 1.11 2002/12/12 17:13:38 amoll Exp $
+// $Id: molecularProperties.h,v 1.12 2002/12/15 01:11:12 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -104,7 +104,7 @@ namespace BALL
 					The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
 					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
 			*/
-			void centerCamera();
+			void centerCamera(Composite* composite = 0);
 
 			/** Creates bonds.
 					If selected molecular objects are available \Ref{Bond} objects will be created
