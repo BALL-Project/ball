@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.17 2002/12/20 16:57:29 oliver Exp $
+// $Id: Timer_test.C,v 1.18 2002/12/22 13:09:57 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.17 2002/12/20 16:57:29 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.18 2002/12/22 13:09:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -130,6 +130,7 @@ CHECK(Timer::getClockTime() const )
 	TEST_EQUAL(t1.getClockTime() > 1.0, true)
 	TEST_EQUAL(t1.getClockTime() < 3.0, true)	
 RESULT
+
 
 CHECK(Timer::getUserTime() const )
 	Timer t1;
@@ -308,6 +309,8 @@ CHECK(Timer::dump(::std::ostream& s = ::std::cout, Size depth = 0L) const )
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Timer_test.txt")
 RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
 END_TEST

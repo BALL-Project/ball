@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.C,v 1.13 2002/12/20 16:57:28 oliver Exp $
+// $Id: timer.C,v 1.14 2002/12/22 13:09:57 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -41,6 +41,15 @@ namespace BALL
 	#endif
 
 	Timer::Timer()
+		:	is_running_(false),
+			last_secs_(0),
+			last_usecs_(0),
+			last_user_time_(0),
+			last_system_time_(0),
+			current_secs_(0),
+			current_usecs_(0),
+			current_user_time_(0),
+			current_system_time_(0)
 	{
 		#ifdef BALL_HAS_SYSCONF
 		if (cpu_speed_ == 0L)
@@ -50,20 +59,20 @@ namespace BALL
 		#endif
 	
 		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-			LARGE_INTEGER ticks;
-			if(QueryPerformanceFrequency(&ticks))
+			if (cpu_speed_ == 0L)
 			{
-				cpu_speed_ = (PointerSizeInt) ticks.QuadPart;
+				LARGE_INTEGER ticks;
+				if (QueryPerformanceFrequency(&ticks))
+				{
+					cpu_speed_ = (PointerSizeInt) ticks.QuadPart;
+				}
+				else 
+				{
+					cpu_speed_ = 1L;
+				}
+				clock_speed_ = CLOCKS_PER_SEC;
 			}
-			else 
-			{
-				cpu_speed_ = 0L;
-			}
-			clock_speed_ = CLOCKS_PER_SEC;
-			
 		#endif
-
-		clear();
 	}
 
 	Timer::Timer(Timer& timer)

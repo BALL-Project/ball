@@ -915,6 +915,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\parsedFunctionParser.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							WarningLevel="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\parsedFunctionParser.y">

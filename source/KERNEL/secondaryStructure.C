@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.C,v 1.15 2002/12/18 06:10:07 oliver Exp $
+// $Id: secondaryStructure.C,v 1.16 2002/12/22 13:09:57 oliver Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -288,7 +288,7 @@ namespace BALL
 	{
 		BALL_DUMP_STREAM_PREFIX(s)
 		
-		AtomContainer::dump(s, depth);
+		AtomContainer::dump(s, depth + 1);
 		// just to avoid these damned compiler warnings
 		// (dump_indent_depth_ was declared but never referenced)
 		if (dump_indent_depth_ == 0) ;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.11 2002/12/12 09:48:39 oliver Exp $
+// $Id: global.h,v 1.12 2002/12/22 13:09:57 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -152,14 +152,24 @@ namespace BALL
 	*/
 	typedef	unsigned char Byte;
 
-	/**	Pointer-sized int type.
+	/**	Pointer-sized unsigned int type.
 			This type holds unsigned 64 bit numbers and is used to store pointers
 			in a portable fashion (for both 32-bit and 64-bit systems).
 			\\
 			{\bf Size:} 64 bit\\
 			{\bf persistent}
 	*/
-	typedef BALL_64BIT_UINT_TYPE PointerSizeInt;
+	typedef BALL_ULONG64_TYPE PointerSizeUInt;
+
+	/**	Pointer-sized signed int type.
+			This type holds unsigned 64 bit numbers and is used to store pointers
+			in a portable fashion (for both 32-bit and 64-bit systems).
+			\\
+			{\bf Size:} 64 bit\\
+			{\bf persistent}
+	*/
+	typedef BALL_LONG64_TYPE PointerSizeInt;
+
 	#else
 		// the ISO C99 definitions
 		typedef int32_t	Distance; 
@@ -175,6 +185,7 @@ namespace BALL
 		typedef int32_t ErrorCode;
 		typedef	uint8_t Byte;
 		typedef uint64_t PointerSizeInt;
+		typedef int64_t	 PointerSizeUInt;
 
 	#endif
 
