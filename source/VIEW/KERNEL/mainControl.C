@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.76 2004/04/16 11:33:17 amoll Exp $
+// $Id: mainControl.C,v 1.77 2004/04/17 22:04:19 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -491,6 +491,10 @@ namespace BALL
 					{
 						rep->update(rebuild);
 					}
+					else
+					{
+						rep->update(false);
+					}
 				}
 				
 				RepresentationMessage* ur_message = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
@@ -561,9 +565,9 @@ namespace BALL
 						if (cmessage->updateRepresentations())
 						{
 							// faster, but doesnt always work correctly:
-							//updateRepresentationsOf(*cmessage->getComposite(), false);
+							updateRepresentationsOf(*cmessage->getComposite(), false);
 					 
-							updateRepresentationsOf(*cmessage->getComposite(), true, true);
+//							 updateRepresentationsOf(*cmessage->getComposite(), true, true);
 						}
 
 						NewSelectionMessage* nws_message = new NewSelectionMessage;					
@@ -843,8 +847,8 @@ namespace BALL
 			for(; it != roots.end(); it++)
 			{
 				//faster, but doesnt always work:
-				//updateRepresentationsOf(**it, false);
-				updateRepresentationsOf(**it, true, true);
+				updateRepresentationsOf(**it, false);
+//				 updateRepresentationsOf(**it, true, true);
 			}
 
 			#ifdef BALL_DEBUG_VIEW
@@ -1220,9 +1224,9 @@ namespace BALL
 			{
 				deselectCompositeRecursive(*it);
 				// faster, but doesnt always work:
-		//	 	updateRepresentationsOf(**it, false);
+			 	updateRepresentationsOf(**it, false);
 				
-				updateRepresentationsOf(**it, true, true);
+//		 		updateRepresentationsOf(**it, true, true);
 			}
 
 			getSelection().clear();
@@ -1397,8 +1401,8 @@ namespace BALL
 				complementSelectionHelper_(**it);
 
 				//faster, but doesnt always work:
-				//updateRepresentationsOf(**it, false);
-				updateRepresentationsOf(**it, true, true);
+				updateRepresentationsOf(**it, false);
+//				 updateRepresentationsOf(**it, true, true);
 			}
 
 			NewSelectionMessage* new_message = new NewSelectionMessage;
