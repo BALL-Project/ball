@@ -1,18 +1,19 @@
 # 
-# $Id: common.mak.in,v 1.6 2000/07/16 21:50:13 oliver Exp $
+# $Id: common.mak.in,v 1.7 2000/07/17 09:38:24 oliver Exp $
 #
 
 include @BALL_PATH@/source@BINFMT_PATH@/config.mak
 
-OBJECTS 	= $(CPP_SOURCES:.C=.o) $(MOC_SOURCES:.C=.o)
+SOURCES		= $(CPP_SOURCES) $(MOC_SOURCES) $(ADD_CPP_SOURCES) $(ADD_MOC_SOURCES)
+OBJECTS 	= $(SOURCES:.C=.o)
 
 # support for conditional Pythone source compilation
 #  PYTHON_SUPPORT has to be defined as empty (do not build Python stuff) 
 #  or as true (build everything)
 # Makefiles have to define PYTHON_MOC_SOURCES and PYTHON_CPP_SOURCES for 
 # for this purpose
-CPP_SOURCES += $(PYTHON_SUPPORT:true=$(PYTHON_CPP_SOURCES))
-MOC_SOURCES += $(PYTHON_SUPPORT:true=$(PYTHON_MOC_SOURCES))
+ADD_CPP_SOURCES = $(PYTHON_SUPPORT:true=$(PYTHON_CPP_SOURCES))
+ADD_MOC_SOURCES = $(PYTHON_SUPPORT:true=$(PYTHON_MOC_SOURCES))
 
 default:	echodir $(OBJECTS)
 
@@ -31,4 +32,4 @@ collectlib:	default
 depend:
 	@echo "creating dependencies for $(DIRECTORY)..."
 	@echo "" > .Dependencies
-	@@CXX_MAKEDEPEND@ @MAKEDEP_CXX_OPTS@ @BINFMT_INDEX@ $(CPP_SOURCES) $(STD_CPP_INCLUDES) $(BALL_INCLUDES) @MAKEDEP_CXX_SUFFIX@
+	@@CXX_MAKEDEPEND@ @MAKEDEP_CXX_OPTS@ @BINFMT_INDEX@ $(SOURCES) $(STD_CPP_INCLUDES) $(BALL_INCLUDES) @MAKEDEP_CXX_SUFFIX@
