@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.19.4.2 2002/06/05 22:52:39 oliver Exp $
+// $Id: enumerator.h,v 1.19.4.3 2002/06/06 22:21:59 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -26,11 +26,16 @@
 namespace BALL
 {
 
-	/** Enumerator Class.
-			The Enumerator class provides means for enumerating all possible
-			permutations of an ordered sequence of objects, where the possible variants for
-			each position of the seqeunce are given in a separate list.
-			Each permutation thus can be denoted by an integer.
+	/** EnumeratorIndex class.
+			The Enumerator class provides a means for enumerating all possible
+			combinations of objects. The counting is hereby done by the
+			EnumeratorIndex class.  This class is derived from vector and
+			additionally contains two vectors of the same size which hold the
+			modulus and the base for each digit. The values of the EnumeratorIndex
+			vector itself are interpreted as an inhomogenous number consisting of
+			digits that have different bases. The bases are the numbers of
+			possibilities for each variant in the list. Most significant component
+			is operator [] (0), so incrementing starts at operator [] (size() - 1)
 			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
 	*/
@@ -206,17 +211,9 @@ namespace BALL
 		//@}
 
 		private:
-
-		/* The EnumeratorIndex class is derived from vector and additionally
-       contains two vectors of the same size which hold the modulus and the
-       base for each cell. The values of the EnumeratorIndex vector itself
-       are interpreted as an inhomogenous number consisting of figures
-       that have different bases. The bases are the numbers of
-       possibilities for each variant in the list. Most significant
-       component is operator[](0), so incrementing starts with
-       operator[](size() - 1)
-		*/
+		///
 		std::vector<Size>	modulus_;
+		///
 		std::vector<Size>	base_multipliers_;
 	};
 
@@ -243,9 +240,35 @@ namespace BALL
 	}
 
 
-	/**
+	/** Enumerator class.
+			The EnumeratorIndex class is designed to enumerate all possible
+			combinations of things. Applications are e.g. the enumeration of
+			all possible sequences defined through a multisequence or
+			enumerating all possible rotamers of a peptide or a bindings site.
+			\\
+			Enumerator uses \Ref{EnumeratorIndex} as an inhomogeneous counter
+			class. It is also highly templatized in order to be adaptable to
+			most problem instances. In general, the enumeration problem can 
+			be seen as counting with a mixed-base number. For an example of 
+			the Enumerator's usage, please refer to the tutorial.
+			\\
+			The Enumerator's template arguments are 
+			\begin{itemize}
+				\item the {\tt Container}
+					it operates on (e.g. the \Ref{String} representing the sequence
+					or the protein containing the amino acids)
+				\item the {\tt PositionIterator} (i.e. an iterator pointing to a 
+					defined position within the container)
+				\item the {\tt Variant} type (i.e. the type of the object to be enumerated).
+					It has to be the same type as the dereferenced {\tt PositionIterator}.
+			\end{itemize}
+			In the case of a string sequence that has to be mutated, the {\tt Container}
+			is of class \Ref{String}, the {\tt PositionIterator} is of type
+			{\tt String::Iterator}, and {\tt Variant} is obviously of type {\tt char}.
+			\\
+			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
 	*/
-	template <class Container, class VariantIterator, class Variant>
+	template <class Container, class PositionIterator, class Variant>
 	class Enumerator
 	{	
 		protected:
@@ -268,7 +291,7 @@ namespace BALL
 
 		/**
 		*/
-		typedef std::pair<VariantIterator, VariantVector>
+		typedef std::pair<PositionIterator, VariantVector>
 			Site;
 
 		/**
@@ -278,12 +301,12 @@ namespace BALL
 
 		/** Mutable forward iterator
 		*/
-		typedef ForwardIterator<Enumerator<Container, VariantIterator, Variant>, EnumeratorIndex, EnumeratorIndex*, IteratorTraits_>
+		typedef ForwardIterator<Enumerator<Container, PositionIterator, Variant>, EnumeratorIndex, EnumeratorIndex*, IteratorTraits_>
 			Iterator;
 
 		/** Constant forward iterator
 		*/
-		typedef ConstForwardIterator<Enumerator<Container, VariantIterator, Variant>, EnumeratorIndex, EnumeratorIndex*, IteratorTraits_>
+		typedef ConstForwardIterator<Enumerator<Container, PositionIterator, Variant>, EnumeratorIndex, EnumeratorIndex*, IteratorTraits_>
 			ConstIterator;
 
 		//@}
@@ -294,22 +317,22 @@ namespace BALL
 		/** Default Constructor
 		*/
 		Enumerator()
-			throw()
-			: container_(const_cast<Container&>(RTTI::getDefault<Container>())),
-				mutator_(0)
-		{
-		}
-		
+			throw();
+
+		/** Detailed Constructor.
+				The mutator function is set to a default mutator,
+				using the assignment operator for {\tt Variant}.
+				@param container a Container class to be mutated
+		 */
+		Enumerator(Container& container)
+			throw();
+
 		/** Detailed Constructor
 				@param container a Container class to be mutated
 				@param mutator the function defining the mutations to be applied
 		 */
 		Enumerator(Container& container, MutatorFunction mutator)
-			throw()
-			: container_(container),
-				mutator_(mutator)
-		{
-		}
+			throw();
 
 		/** Default Destructor
 		 */
@@ -325,7 +348,7 @@ namespace BALL
 
 		/** Add variants to the list of variants
 		 */
-		void addVariants(const VariantIterator& it, const VariantVector& variants)
+		void addVariants(const PositionIterator& it, const VariantVector& variants)
 			throw()
 		{
 			variant_sites_.push_back(Site(it, variants));
@@ -333,7 +356,7 @@ namespace BALL
 
 		/** Delete variants from the list of variants
 		 */
-		void deleteVariants(const VariantIterator& it, const VariantVector& variants)
+		void deleteVariants(const PositionIterator& it, const VariantVector& variants)
 			throw()
 		{
 			typename SiteList::iterator var_it;
@@ -406,14 +429,14 @@ namespace BALL
 		*/
 		class IteratorTraits_
 		{
-			friend class Enumerator<Container, VariantIterator, Variant>;
+			friend class Enumerator<Container, PositionIterator, Variant>;
 			
 			public:
 				
-			typedef Enumerator<Container, VariantIterator, Variant>	
+			typedef Enumerator<Container, PositionIterator, Variant>	
 				ContainerType;
 
-			typedef Enumerator<Container, VariantIterator, Variant>* 
+			typedef Enumerator<Container, PositionIterator, Variant>* 
 				ContainerPointer;
 
 			typedef EnumeratorIndex														
@@ -554,9 +577,14 @@ namespace BALL
 			ContainerPointer	bound_;
 			IteratorPosition	position_;
 		};
-	
 
-		void mutate_(VariantIterator& it, Variant& v)
+		
+		static void default_assign_(Variant& a, Variant& b)
+		{
+			a = b;
+		}
+
+		void mutate_(PositionIterator& it, Variant& v)
 			throw()
 		{
 			mutator_(*it, v);
@@ -567,16 +595,43 @@ namespace BALL
 		SiteList				variant_sites_;
 	};
 
-	template <typename Container, typename VariantIterator, typename Variant>
+	template <typename Container, typename PositionIterator, typename Variant>
+	Enumerator<Container, PositionIterator, Variant>::Enumerator()
+			throw()
+		: container_(const_cast<Container&>(RTTI::getDefault<Container>())),
+			mutator_(0)
+	{
+	}
+		
+	template <typename Container, typename PositionIterator, typename Variant>
+	Enumerator<Container, PositionIterator, Variant>::Enumerator(Container& container)
+			throw()
+		: container_(container),
+			mutator_(default_assign_)
+	{
+	}
+		
+	template <typename Container, typename PositionIterator, typename Variant>
 	BALL_INLINE
-	Container& Enumerator<Container, VariantIterator, Variant>::getCurrent()
+	Enumerator<Container, PositionIterator, Variant>::Enumerator
+		(Container& container, Enumerator<Container, PositionIterator, Variant>::MutatorFunction mutator)
+		throw()
+		: container_(container),
+			mutator_(mutator)
+	{
+	}
+
+
+	template <typename Container, typename PositionIterator, typename Variant>
+	BALL_INLINE
+	Container& Enumerator<Container, PositionIterator, Variant>::getCurrent()
 		throw()
 	{
 		return container_;
 	}
 	
-	template <typename Container, typename VariantIterator, typename Variant>
-	void Enumerator<Container, VariantIterator, Variant>::createPermutation(const Position index)
+	template <typename Container, typename PositionIterator, typename Variant>
+	void Enumerator<Container, PositionIterator, Variant>::createPermutation(const Position index)
 		throw()
 	{
 		EnumeratorIndex enumerator_index(variant_sites_);
@@ -591,8 +646,8 @@ namespace BALL
 		}
 	}
 
-	template <typename Container, typename VariantIterator, typename Variant>
-	void Enumerator<Container, VariantIterator, Variant>::createPermutation(const EnumeratorIndex& index)
+	template <typename Container, typename PositionIterator, typename Variant>
+	void Enumerator<Container, PositionIterator, Variant>::createPermutation(const EnumeratorIndex& index)
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (index.getSize() != variant_sites_.size())
@@ -608,17 +663,17 @@ namespace BALL
 		}
 	}
 
-	template <typename Container, typename VariantIterator, typename Variant>
+	template <typename Container, typename PositionIterator, typename Variant>
 	BALL_INLINE
-	typename Enumerator<Container, VariantIterator, Variant>::Iterator Enumerator<Container, VariantIterator, Variant>::begin()
+	typename Enumerator<Container, PositionIterator, Variant>::Iterator Enumerator<Container, PositionIterator, Variant>::begin()
 		throw()
 	{
 		return Iterator::begin(this);
 	}
 
-	template <typename Container, typename VariantIterator, typename Variant>
+	template <typename Container, typename PositionIterator, typename Variant>
 	BALL_INLINE
-	typename Enumerator<Container, VariantIterator, Variant>::Iterator Enumerator<Container, VariantIterator, Variant>::end()
+	typename Enumerator<Container, PositionIterator, Variant>::Iterator Enumerator<Container, PositionIterator, Variant>::end()
 		throw()
 	{
 		return Iterator::end(this);

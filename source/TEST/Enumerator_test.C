@@ -1,4 +1,4 @@
-// $Id: Enumerator_test.C,v 1.11.4.2 2002/06/05 22:52:41 oliver Exp $
+// $Id: Enumerator_test.C,v 1.11.4.3 2002/06/06 22:22:00 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ void char_assign(char& c1, char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.11.4.2 2002/06/05 22:52:41 oliver Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.11.4.3 2002/06/06 22:22:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -319,22 +319,190 @@ CHECK(bool EnumeratorIndex::operator != (const EnumeratorIndex& rhs))
 	TEST_EQUAL(ei != ei3, true)
 RESULT
 
+EnumeratorIndex ei;
+ei << 3 << 4 << 5;
+ei[0] = 1;
+ei[1] = 2;
+ei[2] = 3;
+
+EnumeratorIndex ei_equal(ei);
+
+// lesser in the first digit
+EnumeratorIndex ei_lesser_1;
+ei_lesser_1 << 3 << 4 << 5;
+ei_lesser_1[0] = 0;
+ei_lesser_1[1] = 2;
+ei_lesser_1[2] = 3;
+
+// lesser in the 2nd digit
+EnumeratorIndex ei_lesser_2;
+ei_lesser_2 << 3 << 4 << 5;
+ei_lesser_2[0] = 1;
+ei_lesser_2[1] = 1;
+ei_lesser_2[2] = 3;
+
+// lesser in the 3rd digit
+EnumeratorIndex ei_lesser_3;
+ei_lesser_3 << 3 << 4 << 5;
+ei_lesser_3[0] = 1;
+ei_lesser_3[1] = 2;
+ei_lesser_3[2] = 2;
+
+// greater in the first digit
+EnumeratorIndex ei_greater_1;
+ei_greater_1 << 3 << 4 << 5;
+ei_greater_1[0] = 2;
+ei_greater_1[1] = 2;
+ei_greater_1[2] = 3;
+
+// greater in the 2nd digit
+EnumeratorIndex ei_greater_2;
+ei_greater_2 << 3 << 4 << 5;
+ei_greater_2[0] = 1;
+ei_greater_2[1] = 3;
+ei_greater_2[2] = 3;
+
+// greater in the 3rd digit
+EnumeratorIndex ei_greater_3;
+ei_greater_3 << 3 << 4 << 5;
+ei_greater_3[0] = 1;
+ei_greater_3[1] = 2;
+ei_greater_3[2] = 4;
+
+// different modulus size
+EnumeratorIndex ei_lesser_size;
+ei_lesser_size << 3 << 4;
+EnumeratorIndex ei_greater_size;
+ei_greater_size << 3 << 4 << 5 << 6;
+
+// different modulus values
+EnumeratorIndex ei_mod_diff_1;
+ei_mod_diff_1 << 2 << 4 << 5;
+EnumeratorIndex ei_mod_diff_2;
+ei_mod_diff_1 << 3 << 3 << 5;
+EnumeratorIndex ei_mod_diff_3;
+ei_mod_diff_1 << 3 << 4 << 6;
+
 CHECK(bool EnumeratorIndex::operator < (const EnumeratorIndex& rhs))
-  //?????
+	TEST_EQUAL(ei < ei_equal, false)
+	TEST_EQUAL(ei_equal < ei, false)
+	
+	TEST_EQUAL(ei_lesser_1 < ei, true)
+	TEST_EQUAL(ei_lesser_2 < ei, true)
+	TEST_EQUAL(ei_lesser_3 < ei, true)
+	TEST_EQUAL(ei < ei_lesser_1, false)
+	TEST_EQUAL(ei < ei_lesser_2, false)
+	TEST_EQUAL(ei < ei_lesser_2, false)
+
+	TEST_EQUAL(ei_greater_1 < ei, false)
+	TEST_EQUAL(ei_greater_2 < ei, false)
+	TEST_EQUAL(ei_greater_3 < ei, false)
+	TEST_EQUAL(ei < ei_greater_1, true)
+	TEST_EQUAL(ei < ei_greater_2, true)
+	TEST_EQUAL(ei < ei_greater_2, true)
+
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei < ei_lesser_size)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_lesser_size < ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei < ei_greater_size)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_greater_size < ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei < ei_mod_diff_1)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_1 < ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei < ei_mod_diff_2)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_2 < ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei < ei_mod_diff_3)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_3 < ei)
 RESULT
 
 
 CHECK(bool EnumeratorIndex::operator > (const EnumeratorIndex& rhs))
-  //?????
+	TEST_EQUAL(ei > ei_equal, false)
+	TEST_EQUAL(ei_equal > ei, false)
+	
+	TEST_EQUAL(ei_lesser_1 > ei, false)
+	TEST_EQUAL(ei_lesser_2 > ei, false)
+	TEST_EQUAL(ei_lesser_3 > ei, false)
+	TEST_EQUAL(ei > ei_lesser_1, true)
+	TEST_EQUAL(ei > ei_lesser_2, true)
+	TEST_EQUAL(ei > ei_lesser_2, true)
+
+	TEST_EQUAL(ei_greater_1 > ei, true)
+	TEST_EQUAL(ei_greater_2 > ei, true)
+	TEST_EQUAL(ei_greater_3 > ei, true)
+	TEST_EQUAL(ei > ei_greater_1, false)
+	TEST_EQUAL(ei > ei_greater_2, false)
+	TEST_EQUAL(ei > ei_greater_2, false)
+
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei > ei_lesser_size)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_lesser_size > ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei > ei_greater_size)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_greater_size > ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei > ei_mod_diff_1)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_1 > ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei > ei_mod_diff_2)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_2 > ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei > ei_mod_diff_3)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_3 > ei)
 RESULT
 
 CHECK(bool EnumeratorIndex::operator <= (const EnumeratorIndex& rhs))
-  //?????
+	TEST_EQUAL(ei <= ei_equal, true)
+	TEST_EQUAL(ei_equal <= ei, true)
+	
+	TEST_EQUAL(ei_lesser_1 <= ei, true)
+	TEST_EQUAL(ei_lesser_2 <= ei, true)
+	TEST_EQUAL(ei_lesser_3 <= ei, true)
+	TEST_EQUAL(ei <= ei_lesser_1, false)
+	TEST_EQUAL(ei <= ei_lesser_2, false)
+	TEST_EQUAL(ei <= ei_lesser_2, false)
+
+	TEST_EQUAL(ei_greater_1 <= ei, false)
+	TEST_EQUAL(ei_greater_2 <= ei, false)
+	TEST_EQUAL(ei_greater_3 <= ei, false)
+	TEST_EQUAL(ei <= ei_greater_1, true)
+	TEST_EQUAL(ei <= ei_greater_2, true)
+	TEST_EQUAL(ei <= ei_greater_2, true)
+
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei <= ei_lesser_size)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_lesser_size <= ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei <= ei_greater_size)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_greater_size <= ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei <= ei_mod_diff_1)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_1 <= ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei <= ei_mod_diff_2)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_2 <= ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei <= ei_mod_diff_3)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_3 <= ei)
 RESULT
 
 
 CHECK(bool EnumeratorIndex::operator >= (const EnumeratorIndex& rhs))
-  //?????
+	TEST_EQUAL(ei >= ei_equal, true)
+	TEST_EQUAL(ei_equal >= ei, true)
+	
+	TEST_EQUAL(ei_lesser_1 >= ei, false)
+	TEST_EQUAL(ei_lesser_2 >= ei, false)
+	TEST_EQUAL(ei_lesser_3 >= ei, false)
+	TEST_EQUAL(ei >= ei_lesser_1, true)
+	TEST_EQUAL(ei >= ei_lesser_2, true)
+	TEST_EQUAL(ei >= ei_lesser_2, true)
+
+	TEST_EQUAL(ei_greater_1 >= ei, true)
+	TEST_EQUAL(ei_greater_2 >= ei, true)
+	TEST_EQUAL(ei_greater_3 >= ei, true)
+	TEST_EQUAL(ei >= ei_greater_1, false)
+	TEST_EQUAL(ei >= ei_greater_2, false)
+	TEST_EQUAL(ei >= ei_greater_2, false)
+
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei >= ei_lesser_size)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_lesser_size >= ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei >= ei_greater_size)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_greater_size >= ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei >= ei_mod_diff_1)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_1 >= ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei >= ei_mod_diff_2)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_2 >= ei)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei >= ei_mod_diff_3)
+	TEST_EXCEPTION(EnumeratorIndex::IncompatibleIndex, ei_mod_diff_3 >= ei)
 RESULT
 
 

@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.11 2002/06/06 00:37:07 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.12 2002/06/06 22:22:00 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -694,7 +694,7 @@ namespace BALL
 	
 	
 
-	// This  function AMBERcalculates the force vector
+	// This  function calculates the force vector
 	// resulting from non-bonded interactions between two atoms 
 	BALL_INLINE
 	void AMBERcalculateNBForce
@@ -820,7 +820,7 @@ namespace BALL
 					//    1e10 (A -> m)
 					//    1/NA (J/mol -> J)
 					tmp *= inverse_distance_6 * vdw_scaling_factor 
-						* (12 * LJ_data.values.A * inverse_distance_6 - 6 * LJ_data.values.B);
+							   * (12 * LJ_data.values.A * inverse_distance_6 - 6 * LJ_data.values.B);
 				} 
 				else 
 				{

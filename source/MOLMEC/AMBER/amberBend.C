@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.15.2.1 2002/05/31 22:53:56 oliver Exp $
+// $Id: amberBend.C,v 1.15.2.2 2002/06/06 22:21:59 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -131,28 +131,35 @@ namespace BALL
 	// calculates the current energy of this component
 	double AmberBend::updateEnergy()
 	{
-		double length;
 		energy_ = 0;
-
-		for (Size i = 0 ; i < bend_.size() ; i++) 
+		
+		// abort for an empty vector
+		if (bend_.size() == 0)
 		{
-			if (getForceField()->getUseSelection() == false ||
-					(getForceField()->getUseSelection() == true  &&
-					(bend_[i].atom1->ptr->isSelected() 
-					 || bend_[i].atom2->ptr->isSelected() 
-					 || bend_[i].atom3->ptr->isSelected())))
+			return 0.0;
+		}
+
+		Vector3 v1, v2;
+		bool use_selection = getForceField()->getUseSelection();
+		QuadraticAngleBend::Data* bend_it = &(bend_[0]);
+		QuadraticAngleBend::Data* bend_end = &(bend_[bend_.size() - 1]);
+		for (; bend_it <= bend_end ; ++bend_it) 
+		{
+			if (use_selection == false ||
+					(bend_it->atom1->ptr->isSelected() 
+					 || bend_it->atom2->ptr->isSelected() 
+					 || bend_it->atom3->ptr->isSelected()))
 			{
+				v1 = bend_it->atom1->position - bend_it->atom2->position;
+				v2 = bend_it->atom3->position - bend_it->atom2->position;
+				double square_length = v1.getSquareLength() * v2.getSquareLength();
 
-				Vector3 v1 = bend_[i].atom1->position - bend_[i].atom2->position;
-				Vector3 v2 = bend_[i].atom3->position - bend_[i].atom2->position;
-				length = v1.getLength() * v2.getLength();
-
-				if (length == 0.0) 
+				if (square_length == 0.0) 
 				{
 					continue;
 				}
 
-				double costheta = v1 * v2 / length;
+				double costheta = v1 * v2 / sqrt(square_length);
 				double theta;
 				if (costheta > 1.0) 
 				{	
@@ -167,7 +174,8 @@ namespace BALL
 					theta = acos(costheta);
 				}
 			
-				energy_ += bend_[i].values.k * (theta - bend_[i].values.theta0) * (theta - bend_[i].values.theta0);
+				theta -= bend_it->values.theta0;
+				energy_ += bend_it->values.k * theta * theta;
 			}
 		}
 		
