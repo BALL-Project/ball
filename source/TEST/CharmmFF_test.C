@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_test.C,v 1.6 2002/12/19 21:01:35 oliver Exp $
+// $Id: CharmmFF_test.C,v 1.7 2003/04/18 12:02:03 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.6 2002/12/19 21:01:35 oliver Exp $")
+START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.7 2003/04/18 12:02:03 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,9 +28,9 @@ CHECK(~CharmmFF())
 	delete charmm;
 RESULT
 
-CHECK(CharmmFF(const CharmmFF& force_field, bool clone_deep = true))
+CHECK(CharmmFF(const CharmmFF& force_field))
 	CharmmFF a1;
-	// CharmmFF a2(a1);
+	CharmmFF a2(a1);
 RESULT
 	
 CHECK(specificSetup())
@@ -127,6 +127,47 @@ FragmentDB frag_db;
 		}
 	RESULT
 
+}
+
+{
+	// read the PDB file containing a single GLY
+	PDBFile f("data/CharmmFF_test_1.pdb");	
+	System s;
+	f >> s;
+	f.close();
+		
+	// normalize the names and build the bonds
+	s.apply(frag_db.normalize_names);
+	s.apply(frag_db.build_bonds);
+
+	// setup the force field
+	Options options;
+	options[CharmmFF::Option::ASSIGN_CHARGES] = "true";
+	options[CharmmFF::Option::ASSIGN_TYPENAMES] = "true";
+	options[CharmmFF::Option::ASSIGN_TYPES] = "true";
+	options[CharmmFF::Option::FILENAME] = "CHARMM/EEF1/param19_eef1.ini";
+	CharmmFF eef1;
+	CHECK(multiple calls to setup)
+		eef1.setup(s, options);
+		eef1.setup(s, options);
+		eef1.setup(s, options);
+	RESULT
+
+	CHECK(energy test 2 (GLY) [EEF1])
+		// check whether we got the right number of atoms
+		TEST_EQUAL(s.countAtoms(), 8)
+
+		eef1.updateEnergy();
+		PRECISION(5e-3)
+		TEST_REAL_EQUAL(eef1.getEnergy(), 157.4572251)
+		TEST_REAL_EQUAL(eef1.getStretchEnergy(), 30.83411352)
+		TEST_REAL_EQUAL(eef1.getBendEnergy(), 307.4544619)
+		TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 2.11036776)
+		TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 5.48237888)
+		TEST_REAL_EQUAL(eef1.getVdWEnergy(), 26.64563664)
+		TEST_REAL_EQUAL(eef1.getESEnergy(), -53.3215644)
+		TEST_REAL_EQUAL(eef1.getSolvationEnergy(), -161.7481263)
+	RESULT
 }
 
 CHECK(force test 2 (GLY, bend only) [EEF1])
