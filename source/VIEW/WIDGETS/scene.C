@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.33 2004/01/18 12:44:12 amoll Exp $
+// $Id: scene.C,v 1.34 2004/01/29 12:11:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1049,7 +1049,7 @@ void Scene::initializeWidget(MainControl& main_control)
 	stereo_id_ = main_control.insertMenuEntry(
 		MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()));
 
-	hint = "Change the mouse sensitivity. (It also depends on how large the group is, you focused on";
+	hint = "Change the mouse sensitivity. (It also depends on how large the group is, you focused on)";
 	main_control.insertMenuEntry(
 		MainControl::DISPLAY, "&Mouse Sensitivity", this, SLOT(mouseSensitivity_()), CTRL+Key_M, -1, hint);
 
