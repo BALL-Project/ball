@@ -1,12 +1,14 @@
-// $Id: AmberFF_test.C,v 1.10 2000/05/23 10:23:44 oliver Exp $
+// $Id: AmberFF_test.C,v 1.11 2001/12/13 02:42:30 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MOLMEC/AMBER/amber.h>
+#include <BALL/MOLMEC/AMBER/amberNonBonded.h>
+#include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/FORMAT/HINFile.h>
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.10 2000/05/23 10:23:44 oliver Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.11 2001/12/13 02:42:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,6 +35,7 @@ CHECK(specificSetup())
 	AmberFF a;
 	a.specificSetup();
 RESULT
+
 
 AmberFF amber91;
 amber91.options[AmberFF::Option::FILENAME] = "Amber/amber91.ini";
