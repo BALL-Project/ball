@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.13 2003/02/28 09:25:36 anhi Exp $
+// $Id: molecularFileDialog.C,v 1.14 2003/03/20 16:26:44 anhi Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -82,8 +82,8 @@ namespace BALL
 
 			fd->exec();
 
-			String filename(fd->selectedFile());
-			String filter(fd->selectedFilter());
+			String filename(fd->selectedFile().latin1());
+			String filter(fd->selectedFilter().latin1());
 
 			bool ok = false;
 			try
@@ -106,19 +106,19 @@ namespace BALL
 
 			if (filter.hasSubstring("PDB"))
 			{
-				readPDBFile(filename, String(qfilename));
+				readPDBFile(filename, String(qfilename.latin1()));
 			}
 			else if (filter.hasSubstring("HIN"))
 			{
-				readHINFile(filename, String(qfilename));
+				readHINFile(filename, String(qfilename.latin1()));
 			}
 			else if (filter.hasSubstring("MOL2"))
 			{
-				readMOL2File(filename, String(qfilename));
+				readMOL2File(filename, String(qfilename.latin1()));
 			}
 			else if (filter.hasSubstring("MOL"))
 			{
-				readMOLFile(filename, String(qfilename));
+				readMOLFile(filename, String(qfilename.latin1()));
 			}
 		}
 
@@ -153,8 +153,8 @@ namespace BALL
 
 			fd->exec();
 
-			String filename(fd->selectedFile());
-			String filter(fd->selectedFilter());
+			String filename(fd->selectedFile().latin1());
+			String filter(fd->selectedFilter().latin1());
 			
 			if (filename == "/" || filename == "\\") 
 			{
