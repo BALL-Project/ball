@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.9 2005/03/23 14:57:51 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.10 2005/03/23 15:54:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -240,7 +240,7 @@ dummy_stretch.reason = reason;
 			const double delta_2(delta * delta);
 
 			double eb_ij = K0 * (double) stretch_[i].kb * delta_2 *
-				            (1.0L + CUBIC_STRENGTH_CONSTANT * delta + KCS * delta_2);
+				            (1.0 + CUBIC_STRENGTH_CONSTANT * delta + KCS * delta_2);
 
 #ifdef BALL_DEBUG_MMFF
 			Log.info() << stretch_[i].atom1->getFullName() << " -> " 
