@@ -6,7 +6,7 @@
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
-#include "/var/tmp/oliver/MAIN/BALL/include/BALL/VIEW/GUI/DIALOGS/colorMeshDialogData.h"
+#include <BALL/VIEW/GUI/DIALOGS/colorMeshDialogData.h>
 
 #include <qlabel.h>
 #include <qlineedit.h>
