@@ -1,4 +1,4 @@
-// $Id: spectrum.h,v 1.4 2001/07/29 22:18:31 oliver Exp $
+// $Id: spectrum.h,v 1.5 2001/08/16 00:45:33 oliver Exp $
 
 #ifndef BALL_NMR_SPECTRUM_H
 #define BALL_NMR_SPECTRUM_H
@@ -42,6 +42,10 @@ namespace BALL
 		typedef	PositionT	PositionType;
 		///	The peak type
 		typedef	PeakT			PeakType;
+		/// An iterator 
+		typedef typename DataT::Iterator Iterator;
+		/// A constant iterator 
+		typedef typename DataT::ConstIterator ConstIterator;
 		//@}
 
 		/**	Constructors and Destructor
@@ -56,8 +60,12 @@ namespace BALL
 		/**	@name	Accessors
 		*/
 		//@{
-		const DataType& getData() const;
-		DataType& getData();
+		///
+		const DataType& getData() const
+			throw();
+		///
+		DataType& getData()
+			throw();
 		//@}
 
 		virtual void clear();
