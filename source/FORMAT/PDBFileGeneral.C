@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileGeneral.C,v 1.1 2005/02/13 22:47:54 oliver Exp $
+// $Id: PDBFileGeneral.C,v 1.2 2005/02/14 12:45:10 amoll Exp $
 //
 
 // This file contains the more or less "general" portion of PDBFile.
@@ -20,6 +20,10 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdlib.h>
+
+using std::streampos;
+using std::ios;
+using std::endl;
 
 namespace BALL 
 {

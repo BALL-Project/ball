@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.1 2005/02/13 22:49:31 oliver Exp $
+// $Id: PDBFileDetails.C,v 1.2 2005/02/14 12:45:10 amoll Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -20,6 +20,8 @@
 #include <ctype.h>
 #include <stdarg.h>
 #include <stdlib.h>
+
+using namespace std;
 
 namespace BALL 
 {
