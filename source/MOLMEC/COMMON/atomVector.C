@@ -1,4 +1,4 @@
-// $Id: atomVector.C,v 1.6 2001/07/16 11:17:31 amoll Exp $
+// $Id: atomVector.C,v 1.7 2002/01/05 04:00:39 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -45,7 +45,7 @@ namespace BALL
 	void AtomVector::set(const AtomVector& atoms)
 	{
 		// resize the vector and copy the contents of atoms
-		resize(atoms.size());
+		resize((Size)atoms.size());
 		copy(atoms.begin(), atoms.end(), begin());
 
 		// copy the saved positions
@@ -135,7 +135,7 @@ namespace BALL
 
 	void AtomVector::resize(Size new_size)
 	{
-		Size old_size = size();
+		Size old_size = (Size)size();
 		::std::vector<Atom*>::resize(new_size);
 		for (Position p = old_size; p < new_size; p++)
 		{

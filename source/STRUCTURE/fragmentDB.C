@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.40 2001/12/30 13:28:55 sturm Exp $
+// $Id: fragmentDB.C,v 1.41 2002/01/05 04:00:39 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1402,18 +1402,8 @@ namespace BALL
 		 const Atom& ref_center_atom, const Atom& ref_atom_1, const Atom& ref_atom_2)
 		throw()
 	{
-		// moving first point to coordinate center
-		// actual residue 
-		Vector3 b_a = atom_1.getPosition() - center_atom.getPosition();	
-		Vector3 c_a = atom_2.getPosition() - center_atom.getPosition();
-
-		// residue prototype    
-		Vector3 xb_a = ref_atom_1.getPosition() - ref_center_atom.getPosition();
-		Vector3 xc_a = ref_atom_2.getPosition() - ref_center_atom.getPosition();
-
 		// hydrogen to be added
 		Vector3 xtarget = ref_hydrogen.getPosition();
-		Vector3 xtarget_a = xtarget - ref_center_atom.getPosition();
 
 		Matrix4x4 T = matchVectors_
 										(ref_center_atom.getPosition(), ref_atom_1.getPosition(), ref_atom_2.getPosition(),

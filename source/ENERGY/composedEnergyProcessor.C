@@ -1,4 +1,4 @@
-// $Id: composedEnergyProcessor.C,v 1.4 2001/07/16 11:15:19 amoll Exp $
+// $Id: composedEnergyProcessor.C,v 1.5 2002/01/05 04:00:35 oliver Exp $
 
 #include <BALL/ENERGY/composedEnergyProcessor.h>
 
@@ -95,7 +95,7 @@ namespace BALL
 
 	Size ComposedEnergyProcessor::getNumberOfEnergyProcessors() const throw()
 	{
-		return components_.size();
+		return (Size)components_.size();
 	}
 	
 	void ComposedEnergyProcessor::checkValidity() throw()

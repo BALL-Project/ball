@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.28 2002/01/05 03:00:43 oliver Exp $
+// $Id: file.C,v 1.29 2002/01/05 04:00:40 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -74,10 +74,10 @@ namespace BALL
 				while (suffix_regexp.find(result, suffix_substring) && (++count <= MAX_SUBSTITUTIONS))
 				{
 					String suffix = suffix_substring;
-					suffix = suffix(3, suffix.size() - 4);
+					suffix = suffix(3, (Size)suffix.size() - 4);
 					if (!suffix.empty() && full_name.hasSuffix(suffix))
 					{
-						full_name = full_name(0, full_name.size() - suffix.size());
+						full_name = full_name(0, (Size)(full_name.size() - suffix.size()));
 					}
 					suffix_substring = full_name;
 				}
@@ -90,7 +90,7 @@ namespace BALL
 					String suffix = name(name.find_last_of('.'));
 					if (!suffix.empty() && full_name.hasSuffix(suffix))
 					{
-						full_name = full_name(0, full_name.size() - suffix.size());
+						full_name = full_name(0, (Size)(full_name.size() - suffix.size()));
 					}
 				}
 				count = 0;

@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.26 2001/12/14 01:14:53 oliver Exp $
+// $Id: forceField.C,v 1.27 2002/01/05 04:00:39 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -254,11 +254,11 @@ namespace BALL
 
 	void ForceField::sortSelectedAtomVector_()
 	{
-		if (system_->containsSelection())
+		if (system_->containsSelection() && (atoms_.size() > 1))
 		{
 			// sort by swapping
 			Position first = 0;
-			Position last = atoms_.size() - 1;
+			Position last = (Position)(atoms_.size() - 1);
 			while (last >= first)
 			{	
 				while ((first < atoms_.size()) && atoms_[first]->isSelected())
@@ -280,7 +280,7 @@ namespace BALL
 		}
 		else
 		{
-			number_of_movable_atoms_ = atoms_.size();
+			number_of_movable_atoms_ = (Size)atoms_.size();
 		}
 	}
 

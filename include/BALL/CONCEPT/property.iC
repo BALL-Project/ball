@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.25 2001/12/18 01:16:12 oliver Exp $
+// $Id: property.iC,v 1.26 2002/01/05 03:57:20 oliver Exp $
 
 using namespace std;
 
@@ -386,7 +386,7 @@ const NamedProperty& PropertyManager::getNamedProperty(Position index) const
 {
 	if (index >= named_properties_.size())
 	{
-		throw Exception::IndexOverflow(__FILE__, __LINE__, index, named_properties_.size());
+		throw Exception::IndexOverflow(__FILE__, __LINE__, index, (Size)named_properties_.size());
 	}
 	return named_properties_[index];
 }
@@ -397,7 +397,7 @@ NamedProperty& PropertyManager::getNamedProperty(Position index)
 {
 	if (index >= named_properties_.size())
 	{
-		throw Exception::IndexOverflow(__FILE__, __LINE__, index, named_properties_.size());
+		throw Exception::IndexOverflow(__FILE__, __LINE__, index, (Size)named_properties_.size());
 	}
 	return named_properties_[index];
 }
