@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.C,v 1.22 2004/05/27 19:49:58 oliver Exp $
+// $Id: amberBend.C,v 1.23 2004/12/17 15:29:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
@@ -111,6 +111,15 @@ namespace BALL
 									<< " (atoms are: " << this_bend.atom1->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
 									<< this_bend.atom2->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
 									<< this_bend.atom3->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
+
+								getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
+								getForceField()->getUnassignedAtoms().insert((const Atom*)&*atom_it);
+								getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
+								if (getForceField()->getNumberOfUnassignedAtoms() > 
+										getForceField()->getMaximumUnassignedAtoms())
+								{
+									return false;
+								}
 							}
 							else
 							{

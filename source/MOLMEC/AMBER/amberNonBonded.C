@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.29 2004/05/27 19:49:58 oliver Exp $
+// $Id: amberNonBonded.C,v 1.30 2004/12/17 15:29:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
@@ -206,8 +206,7 @@ namespace BALL
 	{
 		if (getForceField() == 0) 
 		{
-			Log.error() << "AmberNonBonded::update(): "
-				<< "component not bound to a force field" << endl;
+			Log.error() << "AmberNonBonded::update(): component not bound to a force field" << endl;
 			return;
 		}
 
@@ -236,8 +235,7 @@ namespace BALL
 	{
 		if (getForceField() == 0) 
 		{
-			Log.error() << "AmberNonBonded::setup(): "
-				<< "component not bound to a force field" << endl;
+			Log.error() << "AmberNonBonded::setup(): component not bound to a force field" << endl;
 			return false;
 		}
 
@@ -249,21 +247,11 @@ namespace BALL
 
 		// the cutoffs for the nonbonded pair list and the switching function
 		// for vdW and electrostatics
-		cut_off_ 
-			= options.setDefaultReal(AmberFF::Option::NONBONDED_CUTOFF,
-					AmberFF::Default::NONBONDED_CUTOFF);
-		cut_off_electrostatic_ 
-			= options.setDefaultReal(AmberFF::Option::ELECTROSTATIC_CUTOFF,
-					AmberFF::Default::ELECTROSTATIC_CUTOFF);
-		cut_off_vdw_ 
-			= options.setDefaultReal(AmberFF::Option::VDW_CUTOFF,
-					AmberFF::Default::VDW_CUTOFF);
-		cut_on_electrostatic_ 
-			= options.setDefaultReal(AmberFF::Option::ELECTROSTATIC_CUTON,
-					AmberFF::Default::ELECTROSTATIC_CUTON);
-		cut_on_vdw_ 
-			= options.setDefaultReal(AmberFF::Option::VDW_CUTON,
-					AmberFF::Default::VDW_CUTON);
+		cut_off_ = options.setDefaultReal(AmberFF::Option::NONBONDED_CUTOFF, AmberFF::Default::NONBONDED_CUTOFF);
+		cut_off_electrostatic_ = options.setDefaultReal(AmberFF::Option::ELECTROSTATIC_CUTOFF, AmberFF::Default::ELECTROSTATIC_CUTOFF);
+		cut_off_vdw_ = options.setDefaultReal(AmberFF::Option::VDW_CUTOFF, AmberFF::Default::VDW_CUTOFF);
+		cut_on_electrostatic_ = options.setDefaultReal(AmberFF::Option::ELECTROSTATIC_CUTON, AmberFF::Default::ELECTROSTATIC_CUTON);
+		cut_on_vdw_ = options.setDefaultReal(AmberFF::Option::VDW_CUTON, AmberFF::Default::VDW_CUTON);
 
 		// when using periodic boundary conditions, all
 		// cutoffs must be smaller than the smallest linear extension of
@@ -276,17 +264,15 @@ namespace BALL
 			if (cut_off_electrostatic_ > max_cut_off)
 			{
 				Log.error() << "AmberNonBonded::setup(): "
-					<< "electrostatic cutoff may not exceed half" << endl
-					<< "the box dimension when using periodic boundary conditions!" 
-					<< endl;
+										<< "electrostatic cutoff may not exceed half" << endl
+										<< "the box dimension when using periodic boundary conditions!" << endl;
 				return false;
 			}
 			if (cut_off_vdw_ > max_cut_off)
 			{
 				Log.error() << "AmberNonBonded::setup(): "
-					<< "vdW cutoff may not exceed half" << endl
-					<< "the box dimension when using periodic boundary conditions!" 
-					<< endl;
+										<< "vdW cutoff may not exceed half" << endl
+										<< "the box dimension when using periodic boundary conditions!" << endl;
 				return false;
 			}
 		}
@@ -311,8 +297,8 @@ namespace BALL
     if (inverse_distance_off_on_electrostatic_3_ <= 0.0)
     {
       Log.warn() << "AmberNonBonded::setup(): "
-				<< "electrostatic cuton value should be smaller than cutoff." << endl
-				<< "Switching function disabled." << endl;
+								 << "electrostatic cuton value should be smaller than cutoff." << endl
+								 << "Switching function disabled." << endl;
       cut_on_electrostatic_ = cut_off_electrostatic_ + 1.0;
 		}
     else
@@ -326,8 +312,8 @@ namespace BALL
 		if (scaling_electrostatic_1_4_ == 0.0)
 		{
 			Log.warn() << "AmberNonBonded::setup(): "
-				<< "illegal - 1-4-electrostatic scaling factor must be non-zero!"
-				<< endl << "Resetting to 1.0." << endl;
+									<< "illegal - 1-4-electrostatic scaling factor must be non-zero!"
+									<< endl << "Resetting to 1.0." << endl;
 			scaling_electrostatic_1_4_ = 1.0;
 		}
 		else 
@@ -359,19 +345,16 @@ namespace BALL
 		// extract the Lennard-Jones parameters
 		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
 		bool has_initialized_parameters = false;
-		if ((amber_force_field != 0) 
-				&& (amber_force_field->hasInitializedParameters()))
+		if ((amber_force_field != 0) && (amber_force_field->hasInitializedParameters()))
 		{
 			has_initialized_parameters = true;
 		}
 			
 		if (!has_initialized_parameters)
 		{
-			bool result 
-				= van_der_waals_.extractSection(getForceField()->getParameters(),
-						"LennardJones");
+			bool result = van_der_waals_.extractSection(getForceField()->getParameters(), "LennardJones");
 
-			if (result == false) 
+			if (!result) 
 			{	
 				Log.error() << "AmberNonBonded::setup(): "
 					<< "cannot find section LennardJones in " << getForceField()->getParameters().getFilename() << endl;
@@ -382,11 +365,9 @@ namespace BALL
 		// extract the hydrogen bond parameters
 		if (!has_initialized_parameters)
 		{
-			bool result 
-				= hydrogen_bond_.extractSection(getForceField()->getParameters(),
-						"HydrogenBonds");
+			bool result = hydrogen_bond_.extractSection(getForceField()->getParameters(), "HydrogenBonds");
 
-			if (result == false) 
+			if (!result) 
 			{
 				Log.error() << "AmberNonBonded::setup(): "
 					<< "cannot find section HydrogenBonds in " << getForceField()->getParameters().getFilename() << endl;
@@ -399,6 +380,12 @@ namespace BALL
 
 		// build the nonbonded pairs
 		update();
+
+		if (getForceField()->getNumberOfUnassignedAtoms() > 
+				getForceField()->getMaximumUnassignedAtoms())
+		{
+			return false;
+		}
 
 		return true;
 	}
@@ -466,6 +453,14 @@ namespace BALL
 												<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")" << endl;
 						tmp.values.A = 0;
 						tmp.values.B = 0;
+
+						getForceField()->getUnassignedAtoms().insert(atom1);
+						getForceField()->getUnassignedAtoms().insert(atom2);
+						if (getForceField()->getNumberOfUnassignedAtoms() > 
+								getForceField()->getMaximumUnassignedAtoms())
+						{
+							return;
+						}
 					}
 				}
 

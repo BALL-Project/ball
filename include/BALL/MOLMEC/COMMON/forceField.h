@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.29 2004/05/27 19:49:43 oliver Exp $
+// $Id: forceField.h,v 1.30 2004/12/17 15:29:18 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -146,7 +146,6 @@ namespace BALL
 		ForceField&	operator = (const ForceField& force_field);
 
 		//@}
-
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{
@@ -159,7 +158,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	Setup methods 
 		*/
 		//@{
@@ -176,6 +174,23 @@ namespace BALL
 				This method is called by setup.
 		*/
 		virtual bool specificSetup();
+
+		/** Set the number of atoms, for which the setup of the forcefield can
+		    fail, until the setup() methods aborts and return false.
+				By default, there is no limit set.
+		*/
+		void setMaximumUnassignedAtoms(Size nr);
+
+		/** Get the number of atoms, for which the setup of the forcefield can
+		    fail, until the setup() methods aborts and return false.
+		*/
+		Size getMaximumUnassignedAtoms() const;
+
+		/// Get the number of atoms, for which the force field setup failed.
+		Size getNumberOfUnassignedAtoms() const;
+
+		/// Get the atoms, for which the force field setup failed.
+		HashSet<const Atom*>& getUnassignedAtoms();
 
 		//@}
 		/**	@name	Accessors 
@@ -409,6 +424,12 @@ namespace BALL
 		/*_	The time of the last call to setup.
 		*/
 		TimeStamp	setup_time_stamp_;
+
+		//_ Atoms, for which the setup of the force field fails
+		HashSet<const Atom*> unassigned_atoms_;
+
+		//_ max number of unassigned atoms
+		Size max_number_unassigned_atoms_;
 
 		//_@}
 	};

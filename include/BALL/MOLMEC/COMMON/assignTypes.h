@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignTypes.h,v 1.14 2003/08/26 08:04:24 oliver Exp $
+// $Id: assignTypes.h,v 1.15 2004/12/17 15:29:18 amoll Exp $
 //
 
 // Molecular Mechanics: atom type assignment
@@ -21,12 +21,47 @@
 
 namespace BALL 
 {
+	/// Only used for deriving interface
+	class	AssignBaseProcessor
+		:	public UnaryProcessor<Atom>
+	{
+		public:
+
+		///
+		AssignBaseProcessor();
+
+		/** Set the number of atoms, for which the setup of the forcefield can
+		    fail, until the setup() methods aborts and return false.
+				By default, there is no limit set.
+		*/
+		void setMaximumUnassignedAtoms(Size nr);
+
+		/** Get the number of atoms, for which the setup of the forcefield can
+		    fail, until the setup() methods aborts and return false.
+		*/
+		Size getMaximumUnassignedAtoms() const;
+
+		/// Get the number of atoms, for which the force field setup failed.
+		Size getNumberOfUnassignedAtoms() const;
+
+		/// Get the atoms, for which the force field setup failed.
+		HashSet<const Atom*>& getUnassignedAtoms();
+
+		protected:
+
+		//_ Atoms, for which the setup of the force field fails
+		HashSet<const Atom*> unassigned_atoms_;
+
+		//_ max number of unassigned atoms
+		Size max_number_unassigned_atoms_;
+	};
+
+
 	/**	Type assignment processor.
-			
     	\ingroup  MolmecCommon
 	*/
 	class	AssignTypeProcessor
-		:	public UnaryProcessor<Atom>
+		:	public AssignBaseProcessor
 	{
 		public:
 
@@ -60,7 +95,7 @@ namespace BALL
     	\ingroup  MolmecCommon
 	*/
 	class	AssignTypeNameProcessor
-		:	public UnaryProcessor<Atom>
+		:	public AssignBaseProcessor
 	{
 		public:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.C,v 1.30 2004/05/27 19:49:59 oliver Exp $
+// $Id: amberTorsion.C,v 1.31 2004/12/17 15:29:33 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
@@ -77,7 +77,7 @@ namespace BALL
 		{
 			result = torsion_parameters_.extractSection(getForceField()->getParameters(), "Torsions");
 
-			if (result == false) 
+			if (!result) 
 			{
 				Log.error() << "AmberTorsion::setup: cannot find section Torsions" << endl;
 				return false;
@@ -179,6 +179,16 @@ namespace BALL
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a4) 
 												<< " (atoms are: " << a1->getFullName() << "/" << a2->getFullName() 
 												<< "/" << a3->getFullName() << "/" << a4->getFullName() << ")" << endl;
+
+											getForceField()->getUnassignedAtoms().insert(a1);
+											getForceField()->getUnassignedAtoms().insert(a2);
+											getForceField()->getUnassignedAtoms().insert(a3);
+											getForceField()->getUnassignedAtoms().insert(a4);
+											if (getForceField()->getNumberOfUnassignedAtoms() > 
+													getForceField()->getMaximumUnassignedAtoms())
+											{
+												return false;
+											}
 										}
 									}
 								} 
@@ -193,7 +203,7 @@ namespace BALL
 		{
 			result = improper_parameters_.extractSection(getForceField()->getParameters(), "ImproperTorsions");
 
-			if (result == false) 
+			if (!result) 
 			{
 				Log.error() << "AmberTorsion::setup: cannot find section ImproperTorsions" << endl;
 				return false;
@@ -295,18 +305,9 @@ namespace BALL
 
 								// sort IJL according to the lexicographic order
 								// of their type name (AMBER!!)
-								if (a1->getTypeName() > a2->getTypeName())
-								{
-									swap(a1, a2);
-								}
-								if (a1->getTypeName() > a4->getTypeName())
-								{
-									swap(a1, a4);
-								}
-								if (a2->getTypeName() > a4->getTypeName())
-								{
-									swap(a2, a4);
-								}
+								if (a1->getTypeName() > a2->getTypeName()) swap(a1, a2);
+								if (a1->getTypeName() > a4->getTypeName()) swap(a1, a4);
+								if (a2->getTypeName() > a4->getTypeName()) swap(a2, a4);
 
 								if	((use_selection == false) ||
 										 ((use_selection == true) &&
@@ -322,25 +323,21 @@ namespace BALL
 									if (improper_parameters_.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
 									{
 										improper_parameters_.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
-	
 										found = true;
 									} 
 									else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, type_a4))
 									{
 										improper_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, type_a4);
-
 										found = true;
 									} 
 									else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4)) 
 									{
 										improper_parameters_.assignParameters(values, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4);
-	
 										found = true;
 									} 
 									else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
 									{
 										improper_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
-	
 										found = true;
 									}
 

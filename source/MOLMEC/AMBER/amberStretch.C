@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.21 2004/05/27 19:49:59 oliver Exp $
+// $Id: amberStretch.C,v 1.22 2004/12/17 15:29:32 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
@@ -64,7 +64,7 @@ namespace BALL
 		{
 			bool result = stretch_parameters_.extractSection(getForceField()->getParameters(), "QuadraticBondStretch");
 
-			if (result == false) 
+			if (!result) 
 			{
 				Log.error() << "cannot find section QuadraticBondStretch" << endl;
 				return false;
@@ -86,9 +86,9 @@ namespace BALL
 				{
 					Bond&	bond = const_cast<Bond&>(*it);
 
-					if ((use_selection == false) 
-							|| ((use_selection == true) 
-									&& (bond.getFirstAtom()->isSelected() && bond.getSecondAtom()->isSelected())))
+					if (!use_selection ||
+							(use_selection && bond.getFirstAtom()->isSelected() && 
+							 									bond.getSecondAtom()->isSelected()))
 					{
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
 						Atom::Type atom_type_B = bond.getSecondAtom()->getType();
@@ -125,6 +125,14 @@ namespace BALL
 							// from this stretch
 							values.k = 0.0;
 							values.r0 = 1.0;	
+
+							getForceField()->getUnassignedAtoms().insert(bond.getFirstAtom());
+							getForceField()->getUnassignedAtoms().insert(bond.getSecondAtom());
+							if (getForceField()->getNumberOfUnassignedAtoms() > 
+									getForceField()->getMaximumUnassignedAtoms())
+							{
+								return false;
+							}
 						}
 						stretch_.back().values = values;
 					}
