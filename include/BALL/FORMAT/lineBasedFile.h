@@ -62,6 +62,14 @@ namespace BALL
 
 		//@}
 
+		/** Equality operator
+		*/
+		bool operator == (const LineBasedFile& f)  throw();
+
+		/** Inequality operator
+		*/
+		bool operator != (const LineBasedFile& f)  throw();
+
 		/**	@name Assignment
 		*/
 		//@{
@@ -99,13 +107,13 @@ namespace BALL
 				@return true if a line could be read, false if End Of File.
 		*/
 		bool readLine()
-			throw(LineBasedFileError);
+			throw(LineBasedFile::LineBasedFileError);
 
 		/** Skip a given number of lines.
 				@return false, if EOF occurs.
 		*/
 		bool skipLines(Size number = 1)
-			throw(LineBasedFileError);
+			throw(LineBasedFile::LineBasedFileError);
 
 		/** Function to search for a line starting like a given String.
 				The search is started at the actual line.
@@ -113,26 +121,26 @@ namespace BALL
 				@return true if line could be found
 		*/
 		bool search(const String& text, bool return_to_point = false)
-			throw(LineBasedFileError);
+			throw(LineBasedFile::LineBasedFileError);
 
 		/** Like search above, but stop search when coming to a line staring with stop
 		*/
-		bool search(const String& text, const String& stop, bool return_to_point = false)
-			throw(LineBasedFileError);
+		bool search(const String& text, const String& stop, bool return_to_point)
+			throw(LineBasedFile::LineBasedFileError);
 
 		/** Go to a given line.
 				@return false if EOF occurs
 		*/
 		bool goToLine(Position line_number)
-			throw(LineBasedFileError);
+			throw(LineBasedFile::LineBasedFileError);
 
 		/// Rewind file to start
 		void rewind()
-			throw(LineBasedFileError);
+			throw(LineBasedFile::LineBasedFileError);
 
 		/// Tests a condition, if false prints an errormsg and terminates the programm
 		void test(const char* file, int line, bool condition, const String& msg) 
-			const throw(LineBasedFileError);
+			const throw(LineBasedFile::LineBasedFileError);
 
 		/** Function to get a field surrounded by delimiter
 		*/
