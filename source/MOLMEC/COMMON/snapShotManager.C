@@ -1,4 +1,4 @@
-// $Id: snapShotManager.C,v 1.4 2001/03/22 19:43:36 anker Exp $
+// $Id: snapShotManager.C,v 1.5 2001/03/27 11:19:15 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -519,6 +519,7 @@ namespace BALL
 				<< " SnapShots" << endl;
 			return false;
 		}
+		return true;
 	}
 
 
