@@ -1,4 +1,4 @@
-// $Id: stringHashMap.h,v 1.6 1999/12/28 18:36:42 oliver Exp $
+// $Id: stringHashMap.h,v 1.7 2000/01/11 20:22:12 hekl Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -127,7 +127,7 @@ namespace BALL
 		/// Swaps the contents of two hash maps
     void swap(StringHashMap& hash_map)
 		{
-			swap(*this, hash_map);
+			std::swap(*this, hash_map);
 		}
 
 		//@}
