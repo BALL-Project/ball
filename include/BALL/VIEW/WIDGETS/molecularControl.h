@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.46 2005/02/14 23:48:32 amoll Exp $
+// $Id: molecularControl.h,v 1.47 2005/02/27 21:39:39 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -75,7 +75,7 @@ class BALL_EXPORT MolecularControl
 	BALL_EMBEDDABLE(MolecularControl,GenericControl)
 	
 	/// A selectable list view item with a pointer to a Composite
-	class SelectableListViewItem
+	class BALL_EXPORT SelectableListViewItem
 		: public QCheckListItem
 	{
 		public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.22 2004/09/08 11:53:40 amoll Exp $
+// $Id: pyWidget.h,v 1.23 2005/02/27 21:39:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -38,7 +38,7 @@ namespace BALL
 		class RunPythonThread;
 
 #ifdef BALL_QT_HAS_THREADS
-		class RunPythonThread
+		class BALL_EXPORT RunPythonThread
 			: public QThread
 		{
 			public:
@@ -55,7 +55,7 @@ namespace BALL
 #endif
 
 		///
-		struct Hotkey
+		struct BALL_EXPORT Hotkey
 		{
 			public:
 

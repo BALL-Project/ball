@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.60 2005/02/17 16:20:07 amoll Exp $
+// $Id: scene.h,v 1.61 2005/02/27 21:39:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -726,7 +726,7 @@ namespace BALL
 
 #ifdef BALL_QT_HAS_THREADS
 		///
-		class AnimationThread
+		class BALL_EXPORT AnimationThread
 			: public QThread
 		{
 			public:
