@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.13 2003/11/03 20:10:55 amoll Exp $
+// $Id: molecularControl.C,v 1.14 2003/11/05 23:03:44 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -128,14 +128,17 @@ bool MolecularControl::reactToMessages_(Message* message)
 			case CompositeMessage::NEW_MOLECULE:
 				addComposite(*(Composite *)composite_message->getComposite());
 				return false;
+			
 			case CompositeMessage::REMOVED_COMPOSITE:
 				removeComposite(*(Composite *)composite_message->getComposite());
 				return false;
+			
 			case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
 			case CompositeMessage::CHANGED_COMPOSITE:
 				removeComposite(*(Composite *)composite_message->getComposite());
 				addComposite(*(Composite *)composite_message->getComposite());
 				return (composite_message->getType() == CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+				
 			case CompositeMessage::SELECTED_COMPOSITE:
 			case CompositeMessage::DESELECTED_COMPOSITE:
 				updateListViewItem_(0, *composite_message->getComposite());
@@ -192,7 +195,6 @@ void MolecularControl::buildContextMenu(Composite& composite)
 
 		context_menu_.insertItem("Build Bonds", this, SLOT(buildBonds()), BONDS__BUILD);
 		context_menu_.setItemEnabled(BONDS__BUILD, composites_muteable);
-		//context_menu_.insertItem("remove Bonds", this, SLOT(removeBonds()), BONDS__REMOVE);
 	}
 
 	context_menu_.insertItem("Focus camera", this, SLOT(centerCamera()), CAMERA__CENTER);
@@ -340,7 +342,6 @@ void MolecularControl::selectedComposite_(Composite* composite, bool state)
 	{
 		return;
 	}
-
 	if (state)
 	{
 		getMainControl()->selectCompositeRecursive(composite, true);
@@ -369,6 +370,7 @@ void MolecularControl::selectedComposite_(Composite* composite, bool state)
 	notify_(message);
 	
 	setSelection_(false);
+	getMainControl()->update(*composite, false);
 }
 
 
