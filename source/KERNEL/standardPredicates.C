@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.10 2000/05/25 10:54:56 anker Exp $
+// $Id: standardPredicates.C,v 1.11 2000/05/25 10:57:03 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -421,7 +421,6 @@ namespace BALL
 					}
 					if (depth == 0) 
 					{
-						// Log.info() << "push_back: " << tmp << endl;
 						this_pair.second = tmp;
 						subs.push_back(this_pair);
 					}
