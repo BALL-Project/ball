@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.10 2003/12/02 13:23:13 amoll Exp $
+// $Id: glRenderer.C,v 1.11 2003/12/02 15:58:20 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -305,6 +305,11 @@ namespace BALL
 		bool GLRenderer::render_(const Representation& representation)
 			throw()
 		{
+			if (representation.hasProperty(Representation::PROPERTY__HIDDEN))
+			{
+				return true;
+			}
+
 			if (!representation.isValid())
 			{
 				Log.error() << "Representation " << &representation 
