@@ -16,9 +16,14 @@ DlgLabelProperties::DlgLabelProperties
 (QWidget* parent, const char* name)
 	:
 	Inherited( parent, name ),
+	ModularWidget(name),
+	id_(-1),
 	selection_()
 {
     setCaption("Label Properties");
+
+	// register the widget with the MainControl
+  ModularWidget::registerWidget(this);
 }
 
 DlgLabelProperties::~DlgLabelProperties()
@@ -96,6 +101,38 @@ void DlgLabelProperties::onNotify(Message *message)
 	{
 		apply_button_->setEnabled(true);
 	}
+}
+
+void DlgLabelProperties::initializeWidget(MainControl& main_control)
+{
+	//	main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
+
+	id_ = main_control.insertMenuEntry
+		      (MainControl::DISPLAY, "&Label Properties", this,
+					 SLOT(openDialog()), 
+					 CTRL+Key_L);   
+}
+
+void DlgLabelProperties::finalizeWidget(MainControl& main_control)
+{
+	main_control.removeMenuEntry
+		(MainControl::DISPLAY, "&Label Properties", this,
+		 SLOT(openDialog()), 
+		 CTRL+Key_L);   
+}
+
+void DlgLabelProperties::checkMenu(MainControl& main_control)
+{
+	bool selected = (selection_.empty() ? false : true);
+
+	//	main_control.menuBar()->setItemEnabled(id_, selected);
+	//	main_control.menuBar()->setItemChecked(id_, isVisible());
+}
+
+void DlgLabelProperties::openDialog()
+{
+	show();
+	raise();
 }
 
 void DlgLabelProperties::applyButtonClicked()

@@ -21,6 +21,8 @@ DlgDisplayProperties::DlgDisplayProperties
 )
 	:
 	Inherited( parent, name ),
+	ModularWidget(name),
+	id_(-1),
   model_string_("stick"),
   precision_string_("high"),
   coloring_method_string_("by element"),
@@ -29,13 +31,16 @@ DlgDisplayProperties::DlgDisplayProperties
 	selection_()
 {
 	setCaption("Display Settings");
+
+	// register the widget with the MainControl
+  ModularWidget::registerWidget(this);
 }
 
 DlgDisplayProperties::~DlgDisplayProperties()
 {
 }
 
-void DlgDisplayProperties::setObjectProcessor
+void DlgDisplayProperties::registerObjectProcessor
   (const MoleculeObjectProcessor& object_processor)
 {
 	object_processor_ = &(const_cast<MoleculeObjectProcessor&>(object_processor));
@@ -165,6 +170,35 @@ void DlgDisplayProperties::onNotify(Message *message)
 
 		selection_ = selection->getSelection();
 	}
+}
+
+void DlgDisplayProperties::initializeWidget(MainControl& main_control)
+{
+	//	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
+
+	id_ = main_control.insertMenuEntry
+		      (MainControl::DISPLAY, "D&isplay Properties", this,
+					 SLOT(openDisplayPropertiesDialog()), 
+					 CTRL+Key_I);   
+}
+
+void DlgDisplayProperties::finalizeWidget(MainControl& main_control)
+{
+	main_control.removeMenuEntry
+		(MainControl::DISPLAY, "D&isplay Properties", this,
+		 SLOT(openDisplayPropertiesDialog()), 
+		 CTRL+Key_I);   
+}
+
+void DlgDisplayProperties::checkMenu(MainControl& main_control)
+{
+	//	(main_control.menuBar())->setItemChecked(id_, isVisible());
+}
+
+void DlgDisplayProperties::openDialog()
+{
+	show();
+	raise();
 }
 
 void DlgDisplayProperties::selectPrecision(const QString& string)

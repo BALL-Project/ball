@@ -1,4 +1,4 @@
-// $Id: openPDBFile.C,v 1.1 2000/09/23 15:39:12 hekl Exp $
+// $Id: openPDBFile.C,v 1.2 2000/10/07 15:26:56 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
 
@@ -28,6 +28,22 @@ namespace BALL
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<OpenPDBFile>() << endl;
 			#endif 
+		}
+
+		void OpenPDBFile::initializeWidget(MainControl& main_control)
+		{
+			main_control.insertMenuEntry
+				(MainControl::FILE_IMPORT, "&PDB File", this,
+				 SLOT(exec()), 
+				 CTRL+Key_P);   
+		}
+		
+		void OpenPDBFile::finalizeWidget(MainControl& main_control)
+		{
+			main_control.removeMenuEntry
+				(MainControl::FILE_IMPORT, "&PDB File", this,
+				 SLOT(exec()), 
+				 CTRL+Key_P);   
 		}
 
 		void OpenPDBFile::openFile_()

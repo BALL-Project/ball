@@ -1,4 +1,4 @@
-// $Id: openHINFile.C,v 1.1 2000/09/23 15:39:12 hekl Exp $
+// $Id: openHINFile.C,v 1.2 2000/10/07 15:26:56 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 
@@ -33,6 +33,22 @@ namespace BALL
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<OpenHINFile>() << endl;
 			#endif 
+		}
+
+		void OpenHINFile::initializeWidget(MainControl& main_control)
+		{
+			main_control.insertMenuEntry
+				(MainControl::FILE_IMPORT, "&HIN File", this,
+				 SLOT(exec()), 
+				 CTRL+Key_H);   
+		}
+		
+		void OpenHINFile::finalizeWidget(MainControl& main_control)
+		{
+			main_control.removeMenuEntry
+				(MainControl::FILE_IMPORT, "&HIN File", this,
+				 SLOT(exec()), 
+				 CTRL+Key_H);   
 		}
 
 		void OpenHINFile::openFile_()
