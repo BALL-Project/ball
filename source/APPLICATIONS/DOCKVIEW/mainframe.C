@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.1.2.1 2005/01/06 15:00:31 haid Exp $
+// $Id: mainframe.C,v 1.1.2.2 2005/01/11 15:22:51 haid Exp $
 //
 
 #include "mainframe.h"
@@ -60,7 +60,7 @@ namespace BALL
 		// ---------------------
 		// setup main window
 		// ---------------------
-		setCaption("BALLView");
+		setCaption("DockView");
 		setIcon(QPixmap(bucky_64x64_xpm));
 		resize(640,400);
 		// make sure submenus are the first 

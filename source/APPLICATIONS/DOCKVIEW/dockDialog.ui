@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>DockDialog</class>
+<class>DockDialogData</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>DockDialog</cstring>
+        <cstring>DockDialogData</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -269,37 +269,37 @@
     <connection>
         <sender>cancel_button</sender>
         <signal>clicked()</signal>
-        <receiver>DockDialog</receiver>
+        <receiver>DockDialogData</receiver>
         <slot>cancelPressed()</slot>
     </connection>
     <connection>
         <sender>ok_button</sender>
         <signal>clicked()</signal>
-        <receiver>DockDialog</receiver>
+        <receiver>DockDialogData</receiver>
         <slot>okPressed()</slot>
     </connection>
     <connection>
         <sender>reset_button</sender>
         <signal>clicked()</signal>
-        <receiver>DockDialog</receiver>
+        <receiver>DockDialogData</receiver>
         <slot>resetPressed()</slot>
     </connection>
     <connection>
         <sender>gen_advanced_button</sender>
         <signal>clicked()</signal>
-        <receiver>DockDialog</receiver>
+        <receiver>DockDialogData</receiver>
         <slot>genAdvancedPressed()</slot>
     </connection>
     <connection>
         <sender>rank_advanced_button</sender>
         <signal>clicked()</signal>
-        <receiver>DockDialog</receiver>
+        <receiver>DockDialogData</receiver>
         <slot>rankAdvancedPressed()</slot>
     </connection>
     <connection>
         <sender>eval_advanced_button</sender>
         <signal>clicked()</signal>
-        <receiver>DockDialog</receiver>
+        <receiver>DockDialogData</receiver>
         <slot>evalAdvancedPressed()</slot>
     </connection>
 </connections>
