@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.h,v 1.1 2004/02/18 11:49:52 bender Exp $
+// $Id: charmmConfigurationDialog.h,v 1.2 2004/02/18 23:16:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
@@ -130,10 +130,25 @@ namespace BALL
 
 			private:
 
-			bool 		use_dddc_, assign_charges_, assign_typenames_, assign_types_, overwrite_charges_, overwrite_typenames_, use_eef1_;
-			String 	ini_;
-			float 	nonbonded_cutoff_, vdw_cutoff_, vdw_cuton_, electrostatic_cutoff_, electrostatic_cuton_, solvation_cutoff_, solvation_cuton_,
-							scaling_electrostatic_1_4_, scaling_vdw_1_4_;
+			bool 		use_dddc_, 
+							assign_charges_, 
+							assign_typenames_, 
+							assign_types_, 
+							overwrite_charges_, 
+							overwrite_typenames_, 
+							use_eef1_;
+							
+			String 	ini_; 
+
+			float 	nonbonded_cutoff_, 
+							vdw_cutoff_, 
+							vdw_cuton_, 
+							electrostatic_cutoff_, 
+							electrostatic_cuton_, 
+							solvation_cutoff_, 
+							solvation_cuton_,
+							scaling_electrostatic_1_4_, 
+							scaling_vdw_1_4_;
 
 			CharmmFF* charmm_;
 		};

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.37 2004/02/18 11:47:30 bender Exp $
+// $Id: mainControl.h,v 1.38 2004/02/18 23:11:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -379,7 +379,6 @@ namespace BALL
 					Calls Preferences::fetchPreferences() \par
 					Calls QMainWindow::show() \par
 					<b>Note: <\b>Call this method to start the application.
-					\exception  GeneralException thrown if the Preferences dialogs cannot be allocated.
 			*/
 			virtual void show();
 
@@ -395,9 +394,8 @@ namespace BALL
 			*/
 			virtual void checkMenus();
 
-			///
+			/// Stop a currently running calculation
 			void stopSimulation();
-
 	
 			/** Apply preferences.
 					This method calls the method <b>ModularWidget::applyPreferences</b> of all registered
@@ -447,7 +445,7 @@ namespace BALL
 			void menuItemHighlighted(int id)
 				throw();
 			
-			///
+			/// Interface to QT events, e.g. to communicate with other threads
 			virtual void customEvent( QCustomEvent * e );
 			
 			public:
@@ -679,15 +677,21 @@ namespace BALL
 			bool setSimulationThread(SimulationThread* thread)
 				throw();
 
-			///
+			/** Get the currently running SimulationThread or
+			 		zero pointer if no simulation running.
+			*/
 			SimulationThread* getSimulationThread()
 				throw();
 
-			///
+			/** Enable the delete entry for GenericControls.
+					Called by a GenericControl, if it has a selection, that can be deleted.
+			*/
 			void enableDeleteEntry()
 				throw();
 	
-			///
+			/** Insert the delete entry for GenericControls.
+					Called by all GenericControls.
+			*/
 			void insertDeleteEntry()
 				throw();
 			

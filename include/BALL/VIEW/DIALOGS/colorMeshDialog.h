@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.9 2004/02/05 14:15:58 amoll Exp $
+// $Id: colorMeshDialog.h,v 1.10 2004/02/18 23:18:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -34,6 +34,8 @@ namespace BALL
 	namespace VIEW
 	{
 		/** Dialog for coloring of surfaces
+		 		The surfaces can be colored by a given color, or from the values, contained 
+				in a RegularData3D grid. You can also set the transparency of the surface.
 				\ingroup ViewDialogs
 		*/
 		class ColorMeshDialog 
@@ -70,7 +72,7 @@ namespace BALL
 			virtual void onNotify(Message *message)
 				throw();
 
-			///
+			/// 
 			void setMesh(Mesh* mesh, Representation* rep)
 				throw();
 				

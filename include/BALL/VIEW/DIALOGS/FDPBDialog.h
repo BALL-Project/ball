@@ -50,40 +50,39 @@ namespace BALL
 				
 				BALL_EMBEDDABLE(FDPBDialog,ModularWidget)
 
-				///
+				/// Constructor
 				FDPBDialog(QWidget* parent = 0, const char* name = 0, 
 									 bool modal = FALSE, WFlags fl = 0);
 
-				///
+				/// Destructor
 				virtual ~FDPBDialog()
 					throw();
 					
-				///
+				///	Read the preferences from a INIFile
 				void fetchPreferences(INIFile& file)
 					throw();
 				
-				///
+				/// Write the preferences to a INIFile
 				void writePreferences(INIFile& file)
 					throw();
 					
-				///
+				/// Reset the dialog to the standard values
 				void reset()
 					throw();
 
-
-				///
+				/// Calculate the FDPB grid
 				bool calculate()
 					throw();
 
-				///
+				/// Get the instance of the FDPB solver
 				FDPB& getFDPBSolver()
 					throw() {return fdpb_;}
 
-				///
+				/// Set the system, the FDPB will be calculated for
 				void setSystem(System* system)
 					throw() {system_ = system;}
 
-				///
+				/// Get the system
 				System* getSystem()
 					throw() { return system_;}
 				

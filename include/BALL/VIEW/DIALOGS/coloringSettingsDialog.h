@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.9 2004/01/21 23:05:58 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.10 2004/02/18 23:20:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -79,7 +79,8 @@ namespace BALL
 		};
 
 
-		/** Dialog for the molecular model coloring settings
+		/** Dialog for the molecular model coloring settings.
+		 		It is inserted to the Preferences.
 				\ingroup ViewDialogs
 		*/
 		class ColoringSettingsDialog 
