@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.h,v 1.8 2002/01/09 16:36:05 amoll Exp $
+// $Id: TCPTransfer.h,v 1.8.4.1 2002/10/15 11:55:07 amoll Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -248,6 +248,13 @@ namespace BALL
 				Status	getHTTP_()
 					throw();
 
+				/*_ Read a complete status message form a FTP server
+				    Return false if timeout of 20 seconds is exceeded or an other than the given message
+						is received.
+				*/						
+				bool getFTPMessage_(Index status)
+					throw();				
+				
 				//_ Compute the status of a ftp server from its response
 				Status	getFTPStatus_()
 					throw();
