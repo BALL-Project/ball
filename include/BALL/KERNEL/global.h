@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: global.h,v 1.2 2000/01/08 12:36:08 oliver Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -6,7 +6,6 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
-
 
 #ifndef BALL_KERNEL_ATOM_H
 #	include <BALL/KERNEL/atom.h>
@@ -20,7 +19,8 @@
 #	include <BALL/KERNEL/residue.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Bond cloning method.
 			This template function implements the cloning of \Ref{Bond}s in AtomContainers.
