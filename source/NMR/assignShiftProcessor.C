@@ -5,67 +5,52 @@ using namespace std;
 namespace BALL
 {
 
-	//Konstruktor
-	BALL_INLINE 
-	AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atomData)
-		: 	atomData_(atomData)
-	{
-	}
-					
-	//Destruktor
-	BALL_INLINE
-	AssignShiftProcessor::~AssignShiftProcessor()
-	{
-	}
-
 	bool AssignShiftProcessor::start()
 	{
-		for (Position i = 0; i < atomData_.size() ; i++)
+		if (!valid_)
 		{
-			shiftTable_[atomData_[i]->atomName] = atomData_[i]->shiftValue;
+			Log.error() << endl << "AssignShiftProcessor: shift data were not assigned" << endl;
+			return false;
+		}
+
+		for (Position i = 0; i < atom_data_.size() ; i++)
+		{
+			shift_table_[atom_data_[i]->atomName] = atom_data_[i]->shiftValue;
 		}
 
 		return true;
 	}
 
-	BALL_INLINE
-	bool AssignShiftProcessor::finish()
-	{ 
-		return true;
-	}
-
-	Processor::Result AssignShiftProcessor::operator()(Object&  object)
+	Processor::Result AssignShiftProcessor::operator()(Composite&  object)
 	{
-		// lese aus der shift_table den entsprechenden Eintrag und setze die Property
 		float shift;
 		String atomName;
+		PDBAtom *patom_;
 
 		if (RTTI::isKindOf<PDBAtom>(object))
 		{
-			cerr  << endl << "Object ist ProteinAtom";
 			patom_=RTTI::castTo<PDBAtom>(object);
 
-			if (patom_->getElement()==PTE[Element::H])
+			if (patom_->getElement() == PTE[Element::H] || patom_->getElement() == PTE[Element::N])
 			{
-				atomName=patom_->getFullName();
+				atomName = patom_->getFullName();
 				atomName.substitute("-", "");
 				patom_->clearProperty("chemical_shift");
 			
-				if (shiftTable_.has(atomName))
+				if (shift_table_.has(atomName))
 				{
-					cerr << endl <<"Eintrag gefunden:"<<atomName;
-					shift = shiftTable_[atomName];
+					shift = shift_table_[atomName];
 					patom_->setProperty("chemical_shift", shift);
 				}
 				else 
 				{
-					cerr << endl << "Eintrag nicht gefunden:"<<atomName;   
+					Log.error() << endl << "AssignShiftProcessor: entry not found:"<<atomName;   
 				}               
 			}
 		}
 		else
 		{
-			cerr << endl << "uebergebenes Object ist kein PDBAtom" << endl;
+			Log.error() << endl << "AssignShiftProcessor: given object is not a PDBAtom" << endl;
 		}
 
 		return Processor::CONTINUE;

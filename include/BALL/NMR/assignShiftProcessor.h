@@ -14,63 +14,65 @@
 namespace BALL 
 {
                 
-/**@name	AssignShiftProcessor
-*/
-//@{            
+	/**@name	AssignShiftProcessor
+	*/
+	//@{            
 
-/**	sets a property called chemical_shift to Hydrogens
-*/
-class AssignShiftProcessor:public UnaryProcessor<Object>
-{
-	public:
-	
-	/**@name	Constructors and Destructors
+	/**	Sets a property called chemical_shift to hydrogens
 	*/
-	//@{
-	
-	/**	Detailed constructor.
-	*/
-	AssignShiftProcessor(const vector<NMRAtomData*>& atomData);
+	class AssignShiftProcessor
+		: public UnaryProcessor<Composite>
+	{
+		public:
+		
+		/**@name	Constructors and Destructors
+		*/
+		//@{
 
-	/**	Destructor
-	*/
-	virtual ~AssignShiftProcessor();
-	
+		BALL_CREATE(AssignShiftProcessor)
+
+		/**	Detailed constructor.
+		*/
+		AssignShiftProcessor(const vector<NMRAtomData*>& atomData);
+
+		/**	Copy constructor.
+		*/
+		AssignShiftProcessor(const AssignShiftProcessor& processor);
+
+		/**	Destructor
+		*/
+		virtual ~AssignShiftProcessor();
+		
+		//@}
+
+		
+		/**@name	Processor specific functions.
+		*/
+		//@{
+		
+		/**	Start method.
+		*/
+		virtual bool start();
+		
+		/**	Finish method.  
+		*/
+		virtual bool finish();
+
+		/**	Application method
+		*/
+		virtual Processor::Result operator()(Composite&);
+		//@}
+		
+		private:
+		
+		StringHashMap<float> shift_table_;
+		const vector<NMRAtomData*>& atom_data_;
+		bool valid_;
+
+		AssignShiftProcessor();
+	};
+
 	//@}
-
-	
-	/**@name	Processor specific functions.
-	*/
-	//@{
-	
-	/**	Start method.
-	*/
-	virtual bool start();
-	
-	/**	Finish method.  
-	*/
-	virtual bool finish();
-
-	/**	Application method
-	*/
-	virtual Processor::Result operator()(Object&);
-	//@}
-	
-	private:
-	
-	// private Variablen :
-	
-	StringHashMap<float> shiftTable_;
-	PDBAtom *patom_;
-	//String tableFileName_;
-	const vector<NMRAtomData*>& atomData_;
-
-	// private Funktionen :	
-
-	AssignShiftProcessor();
-};
-
-//@}
 
 } // namespace Ball
 
