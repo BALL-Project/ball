@@ -25,6 +25,22 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
+#ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
+ #include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
+ #include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
+#endif
+
+#ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
+ #include <BALL/STRUCTURE/defaultProcessors.h>
+#endif
+
+#ifndef BALL_STRUCTURE_FRAGMENTDB_H
+ #include <BALL/STRUCTURE/fragmentDB.h>
+#endif
+
 #include "dockDialogData.h"
 
 namespace BALL
@@ -51,9 +67,6 @@ namespace BALL
 				/**	Initializes the popup menu <b>  Display </b> with its checkable submenu <b>  Docking </b>; 
 						This method is called automatically	immediately before the main application is started. 
 						@param main_control the  MainControl object to be initialized 
-						@see   openDialog
-						@see   finalizeWidget
-						@see   insertMenuEntry
 				*/
 				virtual void initializeWidget(MainControl& main_control)
 					throw();
@@ -61,9 +74,6 @@ namespace BALL
 				/**	Removes the checkable submenu <b>  Docking </b> from the popup menu <b>  Display </b>.
 						This method will be called by  MainControl::aboutToExit.
 						@param main_control the  MainControl to be finalized 
-						@see   initializeWidget
-						@see   removeMenuEntry
-						@see   aboutToExit
 				*/
 				virtual void finalizeWidget(MainControl& main_control)
 					throw();	
@@ -89,8 +99,17 @@ namespace BALL
 				/// Calculate...
 				bool calculate()
 					throw();
-				
 					
+				/// merge two systems into one
+				void mergeSystems()
+					throw();
+				
+				/// Set the systems for docking
+				void setSystem(System* system1, System* system2)
+					throw() 
+				{	docking_partner1_ = system1;
+					docking_partner2_ = system2; }
+						
 				public slots:
 	
 					/// Show and raise
@@ -114,16 +133,47 @@ namespace BALL
 					//
 					virtual void resetPressed();
 					
+					//
+					virtual void partner1Chosen();
 					
+					//
+					virtual void partner2Chosen();
+					
+					///
+					virtual void browseChargesData();
+
+					///
+					virtual void browseChargesRules();
+
+					///
+					virtual void browseRadiiData();
+
+					///
+					virtual void browseRadiiRules();
+				
 				protected:
+				
+					bool applyProcessors_() throw();
+					void selectFile_(QLineEdit& lineedit) throw();
+					//find chosen system
+					System* partnerChosen_(QString qstr) throw();
+					
 					
 				private:
 					
-					int id_;
-					System* selected_system1_;
-					System* selected_system2_; 
-
+					//pointer to docking partners
+					System* docking_partner1_;
+					System* docking_partner2_;
 				
+					//menu entry id
+					int id_;
+					
+					//processors
+					RadiusRuleProcessor 			radius_rule_processor_;
+					ChargeRuleProcessor 			charge_rule_processor_;
+					AssignRadiusProcessor 		radius_processor_;
+					AssignChargeProcessor 		charge_processor_;
+					
 		};
 		
 } } // Namespaces

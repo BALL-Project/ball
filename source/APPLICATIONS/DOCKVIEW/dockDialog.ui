@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>448</width>
-            <height>545</height>
+            <width>378</width>
+            <height>664</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -28,8 +28,8 @@
     </property>
     <property name="maximumSize">
         <size>
-            <width>450</width>
-            <height>550</height>
+            <width>600</width>
+            <height>800</height>
         </size>
     </property>
     <property name="caption">
@@ -46,11 +46,11 @@
             <property name="title">
                 <string>Docking Partners</string>
             </property>
-            <grid>
+            <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QComboBox" row="0" column="0">
+                <widget class="QComboBox">
                     <property name="name">
                         <cstring>systems1</cstring>
                     </property>
@@ -58,7 +58,7 @@
                         <bool>false</bool>
                     </property>
                 </widget>
-                <widget class="QComboBox" row="0" column="1">
+                <widget class="QComboBox">
                     <property name="name">
                         <cstring>systems2</cstring>
                     </property>
@@ -66,7 +66,7 @@
                         <bool>false</bool>
                     </property>
                 </widget>
-            </grid>
+            </hbox>
         </widget>
         <widget class="QButtonGroup">
             <property name="name">
@@ -163,6 +163,170 @@
                     </property>
                     <property name="text">
                         <string>checkBox6</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>charges_group</cstring>
+            </property>
+            <property name="title">
+                <string>Charges Config File</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>charges_rules_button</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>110</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>by rules</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>charges_data_button</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>110</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>from table</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>charges_data_lineedit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>charges/PARSE.crg</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>charges_rules_lineedit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>solvation/PARSE.rul</string>
+                    </property>
+                    <property name="readOnly">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="2">
+                    <property name="name">
+                        <cstring>charges_data_browse</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Browse</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="2">
+                    <property name="name">
+                        <cstring>charges_rules_browse</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Browse</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>radii_group</cstring>
+            </property>
+            <property name="title">
+                <string>Radii Config File</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>radii_rules_lineedit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>solvation/PARSE.rul</string>
+                    </property>
+                    <property name="readOnly">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="2">
+                    <property name="name">
+                        <cstring>radii_rules_browse</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Browse</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>radii_data_lineedit</cstring>
+                    </property>
+                    <property name="text">
+                        <string>radii/PARSE.siz</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="2">
+                    <property name="name">
+                        <cstring>radii_data_browse</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Browse</string>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="0" column="0">
+                    <property name="name">
+                        <cstring>radii_data_button</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>110</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>110</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>from table</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QRadioButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>radii_rules_button</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>110</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>by rules</string>
                     </property>
                 </widget>
             </grid>
@@ -302,6 +466,42 @@
         <receiver>DockDialogData</receiver>
         <slot>evalAdvancedPressed()</slot>
     </connection>
+    <connection>
+        <sender>systems1</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>partner1Chosen()</slot>
+    </connection>
+    <connection>
+        <sender>systems2</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>partner2Chosen()</slot>
+    </connection>
+    <connection>
+        <sender>radii_data_browse</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>browseRadiiData()</slot>
+    </connection>
+    <connection>
+        <sender>radii_rules_browse</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>browseRadiiRules()</slot>
+    </connection>
+    <connection>
+        <sender>charges_data_browse</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>browseChargeData()</slot>
+    </connection>
+    <connection>
+        <sender>charges_rules_browse</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>browseChargeRules()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>systems1</tabstop>
@@ -328,6 +528,12 @@
     <slot>genAdvancedPressed()</slot>
     <slot>evalAdvancedPressed()</slot>
     <slot>rankAdvancedPressed()</slot>
+    <slot>partner1Chosen()</slot>
+    <slot>partner2Chosen()</slot>
+    <slot>browseRadiiData()</slot>
+    <slot>browseChargeData()</slot>
+    <slot>browseChargeRules()</slot>
+    <slot>browseRadiiRules()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
