@@ -43,6 +43,9 @@ for i in $* ; do
 	# print the name of the test running
 	$ECHO " (${COUNT}) $i: $SUFFIX"
 	
+	# remove potential log files
+	rm $i.log 2>/dev/null
+
 	# run it and examine its return value
 	if ./$i 2>&1 >/dev/null ; then
 		# test passed - OK
@@ -56,11 +59,8 @@ for i in $* ; do
 
 		# rerun it in verbose mode to find out which
 		# subtest failed
-		echo "Failure in test $i. Rerunning test in verbose mode:"
-		echo "--------------------------------------"
-		./$i -V
-		echo "--------------------------------------"
-		echo " "
+		echo "Failure in test $i. Please check log file $i.log."
+		./$i -V 2>&1 >$i.log
 	fi
 	COUNT=`expr ${COUNT} + 1`
 done
