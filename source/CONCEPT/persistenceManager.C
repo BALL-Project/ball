@@ -1,4 +1,4 @@
-// $Id: persistenceManager.C,v 1.6 2000/03/16 12:43:53 oliver Exp $
+// $Id: persistenceManager.C,v 1.7 2000/03/17 11:17:53 oliver Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/KERNEL/system.h>
@@ -50,22 +50,24 @@ namespace BALL
 		// register all kernel classes, their base classes, 
 		// and the classes used in kernel classes
 
-		registerDefault<BaseFragment>();
-		registerDefault<NamedProperty>();
-		registerDefault<Vector3>();
-		registerDefault<Composite>();
-		registerDefault<Atom>();
-		registerDefault<Bond>();
-		registerDefault<Fragment>();
-		registerDefault<System>();
-		registerDefault<Molecule>();
-		registerDefault<PDBAtom>();
-		registerDefault<Residue>();
-		registerDefault<Chain>();
-		registerDefault<Protein>();
-		registerDefault<SecondaryStructure>();
-		registerDefault<NucleicAcid>();
-		registerDefault<Nucleotide>();
+		#define REGISTER_CLASS(T) registerClass(RTTI::getStreamName<T>(), T::createDefault);
+		REGISTER_CLASS(BaseFragment)
+		REGISTER_CLASS(NamedProperty)
+		REGISTER_CLASS(Vector3)
+		REGISTER_CLASS(Composite)
+		REGISTER_CLASS(Atom)
+		REGISTER_CLASS(Bond)
+		REGISTER_CLASS(Fragment)
+		REGISTER_CLASS(System)
+		REGISTER_CLASS(Molecule)
+		REGISTER_CLASS(PDBAtom)
+		REGISTER_CLASS(Residue)
+		REGISTER_CLASS(Chain)
+		REGISTER_CLASS(Protein)
+		REGISTER_CLASS(SecondaryStructure)
+		REGISTER_CLASS(NucleicAcid)
+		REGISTER_CLASS(Nucleotide)
+		#undef REGISTER_CLASS
 	}
 
 	PersistenceManager& PersistentObject::operator >> (PersistenceManager& pm) const
