@@ -123,6 +123,9 @@
 // Define an unsigned integer type of 64 bit to hold (portable) pointers
 #define BALL_64BIT_UINT_TYPE long
 
+// Define the argument type for xdr_u_hyper (64 bit)
+#define BALL_XDR_UINT64_TYPE u_quad_t
+
 // Define on 64 bit architectures to avoid the use of long long
 // which is required on 32 bit machines for comatibility
 #undef BALL_64BIT_ARCHITECTURE

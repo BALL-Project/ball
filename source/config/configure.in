@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.119 2000/12/13 10:53:35 oliver Exp $
+dnl    $Id: configure.in,v 1.120 2000/12/14 19:32:10 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1856,6 +1856,64 @@ if test "${BALL_XDRREC_VOID_VOID_UINT}" = false ; then
 else
 	AC_MSG_RESULT((void*, void*, unsigned int))
 fi
+
+AC_MSG_CHECKING(for 64-bit XDR type (for xdr_u_hyper))
+BALL_U_QUAD_TYPE=""
+AC_TRY_COMPILE(
+	[
+		#include <rpc/types.h>
+		#include <rpc/xdr.h>
+	],
+	[	u_quad_t   q;
+		XDR xdrs;
+	  xdr_u_hyper(&xdrs, &q);
+	],
+	BALL_U_QUAD_TYPE=u_quad_t)	
+if test "${BALL_U_QUAD_TYPE}" = "" ; then
+	AC_TRY_COMPILE(
+		[
+			#include <rpc/types.h>
+			#include <rpc/xdr.h>
+		],
+		[	u_longlong_t   q;
+			XDR xdrs;
+			xdr_u_hyper(&xdrs, &q);
+		],
+		BALL_U_QUAD_TYPE=u_longlong_t)	
+fi
+
+if test "${BALL_U_QUAD_TYPE}" = "" ; then
+	AC_TRY_COMPILE(
+		[
+			#include <rpc/types.h>
+			#include <rpc/xdr.h>
+		],
+		[	unsigned long long int  q;
+			XDR xdrs;
+			xdr_u_hyper(&xdrs, &q);
+		],
+		BALL_U_QUAD_TYPE="unsigned long long int")	
+fi
+
+if test "${BALL_U_QUAD_TYPE}" = "" ; then
+	AC_TRY_COMPILE(
+		[
+			#include <rpc/types.h>
+			#include <rpc/xdr.h>
+		],
+		[	__uint64_t  q;
+			XDR xdrs;
+			xdr_u_hyper(&xdrs, &q);
+		],
+		BALL_U_QUAD_TYPE=__uint64_t)	
+fi
+if test "${BALL_U_QUAD_TYPE}" = "" ; then
+	AC_MSG_RESULT(Could not identify an appropriate type for xdr_u_hyper.)
+	AC_MSG_ERROR(Aborted.)
+fi
+
+AC_MSG_RESULT(${BALL_U_QUAD_TYPE})
+AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
 
 dnl
 dnl Define appropriate symbols in config.h.
