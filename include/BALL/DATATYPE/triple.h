@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triple.h,v 1.7 2003/03/26 13:56:20 anhi Exp $
+// $Id: triple.h,v 1.8 2003/06/11 15:42:03 amoll Exp $
 
 #ifndef BALL_DATATYPE_TRIPLE_H
 #define BALL_DATATYPE_TRIPLE_H
@@ -28,7 +28,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE(Triple);
+		BALL_CREATE(Triple)
 
 		/**	Default constructor.
 				Creates a new Triple object.

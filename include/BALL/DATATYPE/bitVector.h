@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.37 2003/06/11 14:30:51 amoll Exp $
+// $Id: bitVector.h,v 1.38 2003/06/11 15:42:02 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -64,7 +64,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE(Bit);
+		BALL_CREATE(Bit)
 
 		/** Default constructor 
 		*/

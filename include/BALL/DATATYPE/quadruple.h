@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadruple.h,v 1.11 2003/03/26 13:56:19 anhi Exp $
+// $Id: quadruple.h,v 1.12 2003/06/11 15:42:03 amoll Exp $
 
 #ifndef BALL_DATATYPE_QUADRUPLE_H
 #define BALL_DATATYPE_QUADRUPLE_H
@@ -26,7 +26,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE(Quadruple);
+		BALL_CREATE(Quadruple)
 
 		/**	Default constructor.
 				Creates a new Quadruple object.
