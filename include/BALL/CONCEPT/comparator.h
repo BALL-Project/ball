@@ -1,4 +1,4 @@
-// $Id: comparator.h,v 1.3 2000/02/16 19:09:23 oliver Exp $
+// $Id: comparator.h,v 1.4 2000/12/09 20:52:56 amoll Exp $
 
 #ifndef BALL_CONCEPT_COMPARATOR_H
 #define BALL_CONCEPT_COMPARATOR_H
@@ -24,11 +24,13 @@ namespace BALL
 	
 		/**	Default constructor
 		*/
-		Comparator();
+		Comparator()
+			throw();
 
 		/**	Destructor
 		*/
-		virtual ~Comparator();
+		virtual ~Comparator()
+			throw();
 		//@}
 
 		/**	@name	Predicates
@@ -37,90 +39,110 @@ namespace BALL
 
 		/**
 		*/
-		virtual bool isEqual(const T& a, const T& b) const;
+		virtual bool isEqual(const T& a, const T& b) const
+			throw();
 
 		/**
 		*/
-		bool isNotEqual(const T& a, const T& b) const;
+		bool isNotEqual(const T& a, const T& b) const
+			throw();
 
 		/**
 		*/
-		virtual bool isLess(const T& a, const T& b) const;
+		virtual bool isLess(const T& a, const T& b) const
+			throw();
 
 		/**
 		*/
-		bool isLessOrEqual(const T& a, const T& b) const;
+		bool isLessOrEqual(const T& a, const T& b) const
+			throw();
 
 		/**
 		*/
-		bool isGreaterOrEqual(const T& a, const T& b) const;
+		bool isGreaterOrEqual(const T& a, const T& b) const
+			throw();
 
 		/**
 		*/
-		bool isGreater(const T& a, const T& b) const;
+		bool isGreater(const T& a, const T& b) const
+			throw();
 
 		/**
 		*/
-		int operator () (const T& a, const T& b) const;
+		int operator () (const T& a, const T& b) const
+			throw();
 		//@}
 	};
 
 	template <typename T>
 	inline Comparator<T>::Comparator()
+		throw()
 	{
 	}
 
 	template <typename T>
 	inline Comparator<T>::~Comparator()
+		throw()
 	{
 	}
 
 	template <class T>
 	inline bool Comparator<T>::isEqual(const T& a, const T& b) const
+		throw()
 	{
-		return (bool)(a == b);
+		return (a == b);
 	}
 
 	template <class T>
 	inline bool Comparator<T>::isNotEqual(const T& a, const T& b) const
+		throw()
 	{
-		return (bool)!isEqual(a, b);
+		return !isEqual(a, b);
 	}
 
 	template <class T>
 	inline bool Comparator<T>::isLess(const T& a, const T& b) const
+		throw()
 	{
-		return (bool)(a < b);
+		return (a < b);
 	}
 
 	template <class T>
 	inline bool Comparator<T>::isLessOrEqual(const T& a, const T& b) const
+		throw()
 	{
-		return (bool)!isLess(b, a);
+		return !isLess(b, a);
 	}
 
 	template <class T>
 	inline bool Comparator<T>::isGreaterOrEqual(const T& a, const T& b) const
+		throw()
 	{
-		return (bool)!isLess(a, b);
+		return !isLess(a, b);
 	}
 
 	template <class T>
 	inline bool Comparator<T>::isGreater(const T& a, const T& b) const
+		throw()
 	{
 		return isLess(b, a);
 	}
 
 	template <class T>
 	inline int Comparator<T>::operator () (const T& a,const T& b) const
+		throw()
 	{
 		if (isEqual(a, b) == true)
 		{ 
 			return 0;
-		} else if (isLess(a, b) == true)
+		} 
+
+		if (isLess(a, b) == true)
 		{ 
 			return -1;
-		} else { 
+		} 
+		else 
+		{ 
 			return 1;
 		}
 	}
