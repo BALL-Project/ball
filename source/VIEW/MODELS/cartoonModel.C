@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.25 2005/01/10 13:52:26 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.26 2005/01/10 18:30:38 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -637,8 +637,9 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 	}
 	else
 	{
+		// is this a chain with nucleic acids?
 		const String name = ss.getResidue(0)->getName();
-		if ((name.size() == 1) &&
+		if (!ss.getResidue(0)->isAminoAcid() && (name.size() == 1) &&
 				(name == "A" || name == "C" || name == "G" || name == "T" || name == "U"))
 		{
 			drawDNA_(ss);
