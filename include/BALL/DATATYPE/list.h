@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.5 2000/08/23 15:36:13 anker Exp $
+// $Id: list.h,v 1.6 2000/08/29 10:35:17 oliver Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -148,7 +148,6 @@ namespace BALL
 				if (*it == item)
 				{
 					erase(it);
-					Log.info() << "returning 1" << endl;
 					return 1;
 				}
 			}
