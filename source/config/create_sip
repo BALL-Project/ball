@@ -17,5 +17,7 @@ sed -e "s/ [a-z_0-9]*)/)/" | \
 sed -e "s/ [a-z_0-9]*,/,/" \
 >> $FILE2
 
+cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip |  sed -n -e '1,13p'
 cat $FILE2
+echo "};"
 
