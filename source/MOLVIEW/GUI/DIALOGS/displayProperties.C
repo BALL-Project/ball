@@ -24,6 +24,11 @@ DisplayProperties::DisplayProperties
 	Inherited( parent, name ),
 	ModularWidget(name),
 	id_(-1),
+	select_id_(-1),
+	deselect_id_(-1),
+	center_camera_id_(-1),
+	build_bonds_id_(-1),
+	add_hydrogens_id_(-1),
   model_string_("stick"),
   precision_string_("high"),
   coloring_method_string_("by element"),
@@ -42,30 +47,7 @@ DisplayProperties::~DisplayProperties()
 {
 }
 
-void DisplayProperties::setPreferences(INIFile& inifile) const
-{
-	//	
-	// the display window position
-	//
-	inifile.setValue
-		("WINDOWS", "Display::x", String(x()));
-	inifile.setValue
-		("WINDOWS", "Display::y", String(y()));
-
-	// 
-	// the combobox values
-	// 
-	inifile.setValue
-		("WINDOWS", "Display::model", model_string_.ascii());
-	inifile.setValue
-		("WINDOWS", "Display::precision", precision_string_.ascii());
-	inifile.setValue
-		("WINDOWS", "Display::colormethod", coloring_method_string_.ascii());
-	inifile.setValue
-		("WINDOWS", "Display::customcolor", custom_color_);
-}
-
-void DisplayProperties::getPreferences(const INIFile& inifile)
+void DisplayProperties::fetchPreferences(INIFile& inifile)
 {
 	// 
 	// the geometry of the main window
@@ -127,6 +109,28 @@ void DisplayProperties::getPreferences(const INIFile& inifile)
 	}
 }
 
+void DisplayProperties::writePreferences(INIFile& inifile)
+{
+	//	
+	// the display window position
+	//
+	inifile.setValue
+		("WINDOWS", "Display::x", String(x()));
+	inifile.setValue
+		("WINDOWS", "Display::y", String(y()));
+
+	// 
+	// the combobox values
+	// 
+	inifile.setValue
+		("WINDOWS", "Display::model", model_string_.ascii());
+	inifile.setValue
+		("WINDOWS", "Display::precision", precision_string_.ascii());
+	inifile.setValue
+		("WINDOWS", "Display::colormethod", coloring_method_string_.ascii());
+	inifile.setValue
+		("WINDOWS", "Display::customcolor", custom_color_);
+}
 
 void DisplayProperties::onNotify(Message *message)
 {
@@ -183,10 +187,41 @@ void DisplayProperties::initializeWidget(MainControl& main_control)
 {
 	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
-	id_ = main_control.insertMenuEntry
-		      (MainControl::DISPLAY, "D&isplay Properties", this,
-					 SLOT(openDialog()), 
-					 CTRL+Key_I);   
+	id_ 
+		= main_control.insertMenuEntry
+		    (MainControl::DISPLAY, "D&isplay Properties", this,
+				 SLOT(openDialog()), 
+				 CTRL+Key_I);   
+
+	select_id_ 
+		= main_control.insertMenuEntry
+		    (MainControl::EDIT, "&Select", this,
+				 SLOT(select()), 
+				 CTRL+Key_S);   
+
+	deselect_id_ 
+		= main_control.insertMenuEntry
+		    (MainControl::EDIT, "&Deselect", this,
+				 SLOT(deselect()), 
+				 CTRL+Key_D);   
+
+	center_camera_id_ 
+		= main_control.insertMenuEntry
+		    (MainControl::DISPLAY, "Focus C&amera", this,
+				 SLOT(centerCamera()),
+				 CTRL+Key_A);
+
+	build_bonds_id_
+		= main_control.insertMenuEntry
+		    (MainControl::BUILD, "&Build Bonds", this,
+				 SLOT(buildBonds()),
+				 CTRL+Key_B);
+
+	add_hydrogens_id_
+		= main_control.insertMenuEntry
+		    (MainControl::BUILD, "Add &Hydrogens", this,
+				 SLOT(addHydrogens()),
+				 CTRL+Key_H);
 }
 
 void DisplayProperties::finalizeWidget(MainControl& main_control)
@@ -195,11 +230,284 @@ void DisplayProperties::finalizeWidget(MainControl& main_control)
 		(MainControl::DISPLAY, "D&isplay Properties", this,
 		 SLOT(openDialog()), 
 		 CTRL+Key_I);   
+
+	main_control.removeMenuEntry
+		(MainControl::EDIT, "&Select", this,
+		 SLOT(select()), 
+		 CTRL+Key_S);   
+
+	main_control.removeMenuEntry
+		(MainControl::EDIT, "&Deselect", this,
+		 SLOT(deselect()), 
+		 CTRL+Key_D);   
+
+	main_control.removeMenuEntry
+		(MainControl::DISPLAY, "Focus C&amera", this,
+		 SLOT(centerCamera()),
+		 CTRL+Key_A);
+
+	main_control.removeMenuEntry
+		(MainControl::BUILD, "&Build Bonds", this,
+		 SLOT(buildBonds()),
+		 CTRL+Key_B);
+
+	main_control.removeMenuEntry
+		(MainControl::BUILD, "Add &Hydrogens", this,
+		 SLOT(addHydrogens()),
+		 CTRL+Key_H);
 }
 
 void DisplayProperties::checkMenu(MainControl& main_control)
 {
 	(main_control.menuBar())->setItemChecked(id_, isVisible());
+
+	bool selected = true;
+	int number_of_selected_objects = 0;
+
+	if (selection_.empty())
+	{
+		selected = false;
+	}
+	else
+	{
+		number_of_selected_objects = selection_.size();
+	}
+
+	(main_control.menuBar())->setItemEnabled(select_id_, selected);
+	(main_control.menuBar())->setItemEnabled(deselect_id_, selected);
+	(main_control.menuBar())->setItemEnabled(add_hydrogens_id_, selected);
+	(main_control.menuBar())->setItemEnabled(build_bonds_id_, selected);
+
+	// these menu points for single items only
+	(main_control.menuBar())
+		->setItemEnabled(center_camera_id_, selected && (number_of_selected_objects == 1));
+}
+
+void DisplayProperties::select()
+{
+	if (selection_.size() == 0)
+	{
+		return;
+	}
+
+	// notify the main window
+	WindowMessage *window_message = new WindowMessage;
+	QString message;
+	message.sprintf("selecting %d objects...", selection_.size());
+	window_message->setStatusBar(message.ascii());
+	window_message->setDeletable(true);
+	notify_(window_message);
+
+	int value_static = object_processor_.getValue(ADDRESS__STATIC_MODEL);
+	int value_dynamic = object_processor_.getValue(ADDRESS__DYNAMIC_MODEL);
+
+	object_processor_.setValue(ADDRESS__STATIC_MODEL, VALUE__SELECT);
+	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, VALUE__SELECT);
+
+	// copy list because the selection_ list can change after a changemessage event
+	List<Composite*> temp_selection_ = selection_;
+        
+	List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
+	for (; list_it != temp_selection_.end(); ++list_it)
+	{
+		object_processor_.applyOn(**list_it);
+		
+		// mark composite for update
+		ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
+		change_message->setComposite((*list_it));
+		change_message->setDeletable(true);
+		notify_(change_message);
+	}
+
+	// restore old values
+	object_processor_.setValue(ADDRESS__STATIC_MODEL, value_static);
+	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic);
+
+	// update scene
+	SceneMessage *scene_message = new SceneMessage;
+	scene_message->updateOnly();
+	scene_message->setDeletable(true);
+	notify_(scene_message);
+
+	// notify the main window
+	WindowMessage *window_message_2 = new WindowMessage;
+	window_message_2->setStatusBar("");
+	window_message_2->setDeletable(true);
+	notify_(window_message_2);
+}
+
+void DisplayProperties::deselect()
+{
+	if (selection_.size() == 0)
+	{
+		return;
+	}
+
+	// notify the main window
+	WindowMessage *window_message = new WindowMessage;
+	QString message;
+	message.sprintf("deselecting %d objects...", selection_.size());
+	window_message->setStatusBar(message.ascii());
+	window_message->setDeletable(true);
+	notify_(window_message);
+
+	int value_static = object_processor_.getValue(ADDRESS__STATIC_MODEL);
+	int value_dynamic = object_processor_.getValue(ADDRESS__DYNAMIC_MODEL);
+
+	object_processor_.setValue(ADDRESS__STATIC_MODEL, VALUE__DESELECT);
+	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, VALUE__DESELECT);
+        
+	// copy list because the selection_ list can change after a changemessage event
+	List<Composite*> temp_selection_ = selection_;
+
+	List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
+	for (; list_it != temp_selection_.end(); ++list_it)
+	{
+		object_processor_.applyOn(**list_it);
+
+		// mark composite for update
+		ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
+		change_message->setComposite((*list_it));
+		change_message->setDeletable(true);
+		notify_(change_message);
+	}
+
+	// restore old values
+	object_processor_.setValue(ADDRESS__STATIC_MODEL, value_static);
+	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic);
+
+	// update scene
+	SceneMessage *scene_message = new SceneMessage;
+	scene_message->updateOnly();
+	scene_message->setDeletable(true);
+	notify_(scene_message);
+
+	// notify the main window
+	WindowMessage *window_message_2 = new WindowMessage;
+	window_message_2->setStatusBar("");
+	window_message_2->setDeletable(true);
+	notify_(window_message_2);
+}
+
+void DisplayProperties::centerCamera()
+{
+	if (selection_.size() != 1)
+	{
+		return;
+	}
+
+  // use specified object processor for calculating the center
+  object_processor_.calculateCenter(*selection_.front());
+
+	Vector3 view_point = object_processor_.getViewCenter();
+
+	// update scene
+	SceneMessage *scene_message = new SceneMessage;
+	scene_message->setCameraLookAt(view_point);
+
+	view_point.z = view_point.z + object_processor_.getViewDistance();
+	scene_message->setCameraViewPoint(view_point);
+	scene_message->setDeletable(true);
+	notify_(scene_message);
+}
+
+void DisplayProperties::buildBonds()
+{
+	if (selection_.size() == 0)
+	{
+		return;
+	}
+
+	Size number_of_bonds = 0;
+
+	// notify the main window
+	WindowMessage *window_message = new WindowMessage;
+	QString message;
+	message.sprintf("building bonds ...");
+	window_message->setStatusBar(message.ascii());
+	window_message->setDeletable(true);
+	notify_(window_message);
+
+	// copy list because the selection_ list can change after a changemessage event
+	List<Composite*> temp_selection_ = selection_;
+
+	List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
+	for (; list_it != temp_selection_.end(); ++list_it)
+	{	
+		(*list_it)->apply(object_processor_.fragmentdb.build_bonds);
+		number_of_bonds += object_processor_.fragmentdb.build_bonds.getNumberOfBondsBuilt();
+		object_processor_.applyOn(**list_it);
+
+		// mark composite for update
+		ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
+		change_message->setComposite((*list_it));
+		change_message->setDeletable(true);
+		notify_(change_message);
+	}
+
+	// update scene
+	SceneMessage *scene_message = new SceneMessage;
+	scene_message->updateOnly();
+	scene_message->setDeletable(true);
+	notify_(scene_message);
+
+	// notify the main window
+	WindowMessage *window_message_2 = new WindowMessage;
+	window_message_2->setStatusBar("");
+	window_message_2->setDeletable(true);
+	notify_(window_message_2);
+
+	Log.info() << "Added " << number_of_bonds << " bonds." << endl;
+}
+
+void DisplayProperties::addHydrogens()
+{
+	if (selection_.size() == 0)
+	{
+		return;
+	}
+
+	Size number_of_hydrogens = 0;
+
+	// notify the main window
+	WindowMessage *window_message = new WindowMessage;
+	QString message;
+	message.sprintf("adding hydrogens ...");
+	window_message->setStatusBar(message.ascii());
+	window_message->setDeletable(true);
+	notify_(window_message);
+
+	// copy list because the selection_ list can change after a changemessage event
+	List<Composite*> temp_selection_ = selection_;
+
+	List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
+	for (; list_it != temp_selection_.end(); ++list_it)
+	{	
+		(*list_it)->apply(object_processor_.fragmentdb.add_hydrogens);
+		number_of_hydrogens += object_processor_.fragmentdb.add_hydrogens.getNumberOfInsertedH();
+		(*list_it)->apply(object_processor_.fragmentdb.build_bonds);
+		object_processor_.applyOn(**list_it);
+
+		// mark composite for update
+		ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
+		change_message->setComposite((*list_it));
+		change_message->setDeletable(true);
+		notify_(change_message);
+	}
+
+	Log.info() << "added " << number_of_hydrogens << " hydrogen atoms." << endl;
+
+	// update scene
+	SceneMessage *scene_message = new SceneMessage;
+	scene_message->updateOnly();
+	scene_message->setDeletable(true);
+	notify_(scene_message);
+
+	// notify the main window
+	WindowMessage *window_message_2 = new WindowMessage;
+	window_message_2->setStatusBar("");
+	window_message_2->setDeletable(true);
+	notify_(window_message_2);
 }
 
 void DisplayProperties::openDialog()
