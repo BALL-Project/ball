@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.50 2004/09/27 22:05:57 amoll Exp $
+// $Id: cartoonModel.C,v 1.51 2004/10/07 22:47:19 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -424,7 +424,8 @@ namespace BALL
 				Angle current(fabs(acos(peptide_normals[i]*peptide_normals[i+1])));
 				if ((current <= (float)Constants::PI*3./2.)&&(current >= (float)Constants::PI/2.))
 				{
-					Vector3 rotaxis = (peptide_normals[i]%peptide_normals[i+1]).normalize();
+					Vector3 rotaxis = peptide_normals[i]%peptide_normals[i+1];
+					if (!Maths::isZero(rotaxis.getSquareLength())) rotaxis.normalize();
 					Matrix4x4 rotmat;
 					rotmat.rotate(Angle(M_PI), rotaxis);
 					peptide_normals[i+1] = rotmat * peptide_normals[i+1];
