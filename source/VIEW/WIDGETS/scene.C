@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.10 2005/01/20 23:44:07 amoll Exp $
+// $Id: scene.C,v 1.156.2.11 2005/01/22 00:53:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -303,6 +303,7 @@ namespace BALL
 					stage_->moveCameraTo(scene_message->getStage().getCamera());
 					system_origin_ = scene_message->getStage().getCamera().getLookAtPosition();
 					updateCamera_();
+					light_settings_->updateFromStage();
 					return;
 
 				case SceneMessage::REMOVE_COORDINATE_SYSTEM:
@@ -660,10 +661,11 @@ namespace BALL
 			if (current_mode_ != ROTATE__MODE ||
 					x_window_pos_old_ == x_window_pos_new_) return;
 
-			float angle = (x_window_pos_new_ - x_window_pos_old_) * (mouse_sensitivity_ / (ROTATE_FACTOR * -30));
+			const float angle = (x_window_pos_new_ - x_window_pos_old_) * 
+													(mouse_sensitivity_ / (ROTATE_FACTOR * -30));
 				
-			Matrix4x4 m;
 			Camera& camera = stage_->getCamera();
+			Matrix4x4 m;
 			m.setRotation(Angle(angle), camera.getViewVector());
 			camera.setLookUpVector(m * camera.getLookUpVector());
 			updateCamera_();
@@ -673,11 +675,7 @@ namespace BALL
 		void Scene::rotateSystem_(Scene* scene)
 		{
 			scene->calculateQuaternion_(quaternion_);
-
-			// ??? We have to put that into the stage_'s Camera somehow...
-			stage_->translate((float)(-1.)*system_origin_);
-			stage_->rotate(quaternion_);
-			stage_->translate(system_origin_);
+			stage_->rotate(quaternion_, system_origin_);
 			updateCamera_();
 		}
 
@@ -879,6 +877,7 @@ namespace BALL
 			Camera camera;
 			stage_->moveCameraTo(camera);
 			updateCamera_();
+ 			light_settings_->updateFromStage();
 		}
 
 		
@@ -889,7 +888,6 @@ namespace BALL
 			{
 				gl_renderer_.updateCamera();
  				gl_renderer_.setLights();
- 				light_settings_->updateFromStage();
 			}
 
 			updateGL();
@@ -903,13 +901,13 @@ namespace BALL
 		{
 			LightSource light;
 			light.setType(LightSource::POSITIONAL);
-			light.setPosition(stage_->getCamera().getViewPoint() - 
-												stage_->getCamera().getViewVector() * 4);
+			light.setPosition((stage_->getCamera().getViewPoint() - 
+												stage_->getCamera().getViewVector() * 4) 
+												+ stage_->getCamera().getLookUpVector() * 20);
 			light.setDirection(stage_->getCamera().getLookAtPosition());
 
-			List<LightSource>& lights = stage_->getLightSources();
-			lights.clear();
-			lights.push_back(light);
+			stage_->clearLightSources();
+			stage_->addLightSource(light);
 			gl_renderer_.setLights(true);
 			light_settings_->updateFromStage();
 
@@ -1180,7 +1178,8 @@ namespace BALL
 				if (coordinate_rep != 0)
 				{
 					pm.remove(*coordinate_rep);
-					RepresentationMessage* message = new RepresentationMessage(*coordinate_rep, RepresentationMessage::REMOVE);
+					RepresentationMessage* message = new 
+						RepresentationMessage(*coordinate_rep, RepresentationMessage::REMOVE);
 					notify_(message);
 				}
 			}
@@ -1275,7 +1274,7 @@ namespace BALL
 		void Scene::readLights_(const INIFile& inifile)
 			throw()
 			{
-				stage_->getLightSources().clear();
+				stage_->clearLightSources();
 				String data;
 				vector<String> strings;
 				try
@@ -1446,7 +1445,8 @@ namespace BALL
 																!getMainControl()->compositesAreLocked() &&
 																!animation_running);
 			
-			menuBar()->setItemEnabled(clear_animation_id_, animation_points_.size() > 0 && !animation_running);
+			menuBar()->setItemEnabled(clear_animation_id_, 
+					animation_points_.size() > 0 && !animation_running);
 		}
 
 		//##########################EVENTS#################################
@@ -1656,6 +1656,7 @@ namespace BALL
 			else if (current_mode_ == ROTATE__MODE)
 			{
 				processRotateModeMouseEvents_(e);
+ 				light_settings_->updateFromStage();
 			}
 			else if (current_mode_ == MOVE__MODE)
 			{
@@ -2023,6 +2024,7 @@ namespace BALL
 		{
 			stage_->moveCameraTo(camera);
 			updateCamera_();
+ 			light_settings_->updateFromStage();
 		}
 
 		void Scene::clearRecordedAnimation()
@@ -2065,7 +2067,8 @@ namespace BALL
 		void Scene::recordAnimationClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(record_animation_id_, !menuBar()->isItemChecked(record_animation_id_));
+			menuBar()->setItemChecked(record_animation_id_, 
+					!menuBar()->isItemChecked(record_animation_id_));
 		}
 
 		void Scene::animate_()
@@ -2148,19 +2151,22 @@ namespace BALL
 		void Scene::animationRepeatClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(animation_repeat_id_, !menuBar()->isItemChecked(animation_repeat_id_));
+			menuBar()->setItemChecked(animation_repeat_id_, 
+					!menuBar()->isItemChecked(animation_repeat_id_));
 		}
 
 		void Scene::animationExportPOVClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(animation_export_POV_id_, !menuBar()->isItemChecked(animation_export_POV_id_));
+			menuBar()->setItemChecked(animation_export_POV_id_, 
+					!menuBar()->isItemChecked(animation_export_POV_id_));
 		}
 
 		void Scene::animationExportPNGClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(animation_export_PNG_id_, !menuBar()->isItemChecked(animation_export_PNG_id_));
+			menuBar()->setItemChecked(animation_export_PNG_id_, 
+					!menuBar()->isItemChecked(animation_export_PNG_id_));
 		}
 
 		void Scene::switchToLastMode()

@@ -75,16 +75,6 @@ void LightSource::dump(std::ostream& s, Size depth) const
 	BALL_DUMP_STREAM_SUFFIX(s);
 }
 
-void LightSource::rotate(const Quaternion& q)
-	throw()
-{
-	Matrix4x4  m;
-	q.getRotationMatrix(m);
-
-	position_  = m*position_;
-	direction_ = m*direction_;
-}
-
 Camera::Camera()
 	throw()
 	: view_point_(0, 0, 0),
