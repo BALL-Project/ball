@@ -1,4 +1,4 @@
-// $Id: directory.C,v 1.12 2000/06/27 10:40:51 amoll Exp $
+// $Id: directory.C,v 1.13 2000/07/03 12:24:52 oliver Exp $
 
 #include <dirent.h>
 #include <stdio.h>
@@ -10,6 +10,8 @@
 #include <errno.h>
 #include <BALL/SYSTEM/directory.h>
 
+#define BALL_MAX_PATH_LENGTH 8192
+
 namespace BALL 
 {
 	Directory::Directory()
@@ -17,7 +19,7 @@ namespace BALL
 		dir_ = 0;
 		dirent_ = 0;
 		char* buffer_;
-		if ((buffer_ = ::getcwd(NULL, 64)) != NULL)	directory_path_ = buffer_;
+		if ((buffer_ = ::getcwd(NULL, BALL_MAX_PATH_LENGTH)) != NULL)	directory_path_ = buffer_;
 		else directory_path_ = "";
 	}
 
@@ -150,7 +152,7 @@ namespace BALL
 	bool Directory::isCurrent() const
 	{
 		char* buffer_;
-		if ((buffer_ = ::getcwd(NULL, 64)) == 0) return false;
+		if ((buffer_ = ::getcwd(NULL, BALL_MAX_PATH_LENGTH)) == 0) return false;
 		return (buffer_ == directory_path_);
 	}
 
@@ -212,7 +214,7 @@ namespace BALL
 			FileSystem::canonizePath(directory_path_);
 			return isValid();
 		}
-		if ((buffer_ = ::getcwd(NULL, 64)) != NULL)
+		if ((buffer_ = ::getcwd(NULL, BALL_MAX_PATH_LENGTH)) != NULL)
 		{
 			directory_path_ = buffer_;
 			directory_path_ += FileSystem::PATH_SEPARATOR;
