@@ -1,4 +1,4 @@
-// $Id: composedEnergyProcessor.C,v 1.2 2000/10/05 17:20:28 anker Exp $
+// $Id: composedEnergyProcessor.C,v 1.3 2001/07/15 22:57:39 amoll Exp $
 
 #include <BALL/ENERGY/composedEnergyProcessor.h>
 
@@ -63,7 +63,7 @@ namespace BALL
 			((AtomContainer*) fragment_)->apply(**list_it);
 			energy_ += (*list_it)->getEnergy();
 		}
-		return 1;
+		return true;
 	}
 
 
@@ -92,7 +92,6 @@ namespace BALL
 		components_.remove(proc);
 		checkValidity();
 	}
-
 
 	void ComposedEnergyProcessor::checkValidity() throw()
 	{
