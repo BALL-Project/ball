@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.32 2004/04/18 18:12:24 amoll Exp $
+// $Id: representation.C,v 1.32.2.1 2004/05/14 12:41:04 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -37,7 +37,8 @@ namespace BALL
 					model_processor_(0),
 					color_processor_(0),
 					geometric_objects_(),
-					composites_()
+					composites_(),
+					update_running_(false)
 		{
 		}
 
@@ -63,7 +64,8 @@ namespace BALL
 					model_processor_(0),
 					color_processor_(0),
 					geometric_objects_(),
-					composites_()
+					composites_(),
+					update_running_(false)
 		{
 		}
 
@@ -79,7 +81,8 @@ namespace BALL
 				model_processor_(model_processor),
 				color_processor_(0),
 				geometric_objects_(),
-				composites_(composites)
+				composites_(composites),
+				update_running_(false)
 		{
 		}
 
@@ -126,6 +129,8 @@ namespace BALL
 
 			composites_ = representation.composites_;
 
+			update_running_ = false;
+
 			return *this;
 		}
 
@@ -140,6 +145,10 @@ namespace BALL
 		void Representation::clear()
 			throw()
 		{
+			while (update_running_)
+			{
+				sleep(1);
+			}
 			clearGeometricObjects();
 			composites_.clear();
 
@@ -197,8 +206,10 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "model processor: " << model_processor_ << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
-			s << "PropertyManager: " << std::endl;
+			s << "update runnning: " << update_running_ << std::endl;
 
+			BALL_DUMP_DEPTH(s, depth);
+			s << "PropertyManager: " << std::endl;
 			PropertyManager::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);     
@@ -267,6 +278,7 @@ namespace BALL
 				delete thread_;
 				thread_ = 0;
 			}
+
 			thread_ = new UpdateRepresentationThread;
 			thread_->setRepresentation(*this);
 			thread_->setRebuild(rebuild);
@@ -315,6 +327,7 @@ namespace BALL
 		void Representation::update_(bool rebuild) 
 			throw()
 		{
+			update_running_ = true;
 			// if no ModelProcessor was given, there can only exist 
 			// handmade GeometricObjects, which dont need to be updated
 			if (model_processor_ != 0 && rebuild) 
@@ -340,6 +353,8 @@ namespace BALL
 				color_processor_->setModelType(model_type_);
 				geometric_objects_.apply(*color_processor_);
 			}
+
+			update_running_ = false;
 		}
 		
 

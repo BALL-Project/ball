@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.19 2004/04/18 17:15:25 amoll Exp $
+// $Id: representation.h,v 1.19.2.1 2004/05/14 12:41:05 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -260,6 +260,10 @@ namespace BALL
 			bool needsUpdate() const
 				throw();
 
+			/// Return true, if the Representation is currently updated by a thread
+			bool updateRunning() const
+				throw() { return update_running_;}
+
 			///
 			void dump(std::ostream& s, Size depth) const
 				throw();
@@ -323,6 +327,9 @@ namespace BALL
 
 			//_ set to true, if update is called, while representation is hidden
 			bool 								needs_update_;
+
+			//_ 								true, if thread is currently updateing this representation
+			bool 								update_running_;
 
 			static UpdateRepresentationThread* thread_;
 		};
