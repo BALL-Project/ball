@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.1 2004/04/16 11:24:47 amoll Exp $
+// $Id: mainframe.h,v 1.2 2004/07/04 14:00:12 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -107,6 +107,15 @@ namespace BALL
 				Calls MolecularFileDialog::openFile
 		*/
 		void openFile(const String& file) throw();
+
+		///
+		void saveBALLViewProjectFile() throw();
+
+		///
+		void loadBALLViewProjectFile() throw();
+		
+		///
+		void loadBALLViewProjectFile(const String& filename) throw();
 
 		private:
 

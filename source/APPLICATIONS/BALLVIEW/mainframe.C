@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.9 2004/06/13 23:58:53 amoll Exp $
+// $Id: mainframe.C,v 1.10 2004/07/04 14:00:00 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -136,6 +136,9 @@ namespace BALL
 										CTRL+Key_Y);
 
 		insertMenuEntry(MainControl::FILE, "Print", this, SLOT(printScene()));
+
+		insertMenuEntry(MainControl::FILE_OPEN, "Project", this, SLOT(loadBALLViewProjectFile()));
+		insertMenuEntry(MainControl::FILE, "Save Project", this, SLOT(saveBALLViewProjectFile()));
 
 		// Display Menu
 		insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
@@ -289,4 +292,99 @@ namespace BALL
 		setStatusbarText("finished printing");
 	}
 
-} 
+	void Mainframe::saveBALLViewProjectFile()
+		throw()
+	{
+		QString result = QFileDialog::getSaveFileName(
+				getWorkingDir().c_str(), "*.bvp", 0, "Select a BALLView project file");
+		if (result.isEmpty())
+		{
+			return;
+		}
+
+		INIFile out(result.ascii());
+		out.appendSection("WINDOWS");
+
+		// check menu entries, fetch and apply preferences
+		List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+		for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+		{
+			(*it)->writePreferences(out);
+		}
+		
+
+		List<Composite*>& selected_composites = getMolecularControlSelection();
+		if (selected_composites.size() != 0)
+		{
+			String molecular_file = String(result.ascii())+"_molecule.pdb";
+			out.appendSection("BALLVIEW_PROJECT");
+			out.insertValue("BALLVIEW_PROJECT", "MolecularFile", molecular_file);
+
+			file_dialog_->writePDBFile(molecular_file, *(System*)*selected_composites.begin());
+		}
+		else
+		{
+			setStatusbarText("Warning: No molecular entities selected, so no writen...");
+		}
+
+		out.insertValue("BALLVIEW_PROJECT", "Camera", scene_->getStage()->getCamera().toString());
+
+		writePreferences(out);
+	} 
+
+
+	void Mainframe::loadBALLViewProjectFile()
+		throw()
+	{
+		QString result = QFileDialog::getOpenFileName(
+				getWorkingDir().c_str(), "*.bvp", 0, "Select a BALLView project file");
+		if (result.isEmpty())
+		{
+			return;
+		}
+
+		loadBALLViewProjectFile(result.ascii());
+	}
+
+
+	void Mainframe::loadBALLViewProjectFile(const String& filename)
+		throw()
+	{
+		INIFile in(filename);
+		in.read();
+
+		// check menu entries, fetch and apply preferences
+		List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+		for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+		{
+			(*it)->fetchPreferences(in);
+			(*it)->applyPreferences();
+		}
+
+		String molecular_file;
+		if (in.hasEntry("BALLVIEW_PROJECT", "MolecularFile"))
+		{
+			molecular_file = in.getValue("BALLVIEW_PROJECT", "MolecularFile");
+			openFile(molecular_file);
+		}
+		
+		if (in.hasEntry("BALLVIEW_PROJECT", "Camera"))
+		{
+			Stage stage;
+			Camera c;
+			if (!c.readFromString(in.getValue("BALLVIEW_PROJECT", "Camera")))
+			{
+				setStatusbarText("Could not read Camera position from project");
+				Log.error() << "Could not read Camera position from project" << std::endl;
+				return;
+			}
+			stage.setCamera(c);
+			SceneMessage* msg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+			msg->setStage(stage);
+			notify_(msg);
+		}
+
+		fetchPreferences(in);
+	}
+
+}

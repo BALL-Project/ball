@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.9 2004/05/27 18:13:07 oliver Exp $
+// $Id: main.C,v 1.10 2004/07/04 13:59:46 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -90,12 +90,21 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	// If there are additional command line arguments, interpret them as files to open or logging flag.
 	for (BALL::Index i = 1; i < argc; ++i)
 	{
-		if (BALL::String(argv[i]) == "-l") 
+		BALL::String argument(argv[i]);
+		if (argument == "-l") 
 		{
 			mainframe.enableLoggingToFile();
 			continue;
 		}
-		mainframe.openFile(argv[i]);
+
+		if (argument.hasSuffix(".bvp"))
+		{
+			mainframe.loadBALLViewProjectFile(argument);
+		}
+		else
+		{
+			mainframe.openFile(argument);
+		}
 	}
 
   // Hand over control to the application.
