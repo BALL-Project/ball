@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.5 2001/12/28 03:31:40 oliver Exp $
+# $Id: Makefile,v 1.6 2002/01/15 00:43:01 oliver Exp $
 #
 
 DIRECTORY=PYTHON_EXTENSIONS
@@ -86,6 +86,6 @@ clean:
 	@-$(RM) $(CLEAN_FILES) 2>/dev/null
 
 
-mydepend: sipBALLVersion.h depend Makefile.inc .Dependencies
+depend: sipBALLVersion.h Makefile.inc .Dependencies
 
 -include .Dependencies
