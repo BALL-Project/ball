@@ -1,4 +1,4 @@
-// $Id: path.C,v 1.7 2000/05/06 14:09:56 oliver Exp $
+// $Id: path.C,v 1.8 2000/06/20 22:23:13 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/path.h>
@@ -114,20 +114,19 @@ namespace BALL
 		
 	string Path::findStrict(const string& name)
 	{
-		// rebuild the path array (only if not already done so!)
-		buildPathArray_();
-
-		vector<string>::iterator	path_it = path_array_.begin();
-		string filename;
-
 		// first, try the path itself
 		if (File::isAccessible(name))
 		{
 			return name;
 		}
 
+		// rebuild the path array (only if not already done so!)
+		buildPathArray_();
+
 		// iterate over all path entries and check for 
 		// a file of the desired name...
+		vector<string>::iterator path_it = path_array_.begin();
+		string filename;
 		for (; path_it != path_array_.end(); ++path_it)
 		{
 			filename = *path_it + name;
