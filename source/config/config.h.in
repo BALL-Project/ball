@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.29.2.3 2002/11/30 08:17:42 oliver Exp $ 
+// $Id: config.h.in,v 1.29.2.4 2002/11/30 09:57:35 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -128,7 +128,7 @@
 #undef STDC_HEADERS
 
 // Define if numeric_limits is defined in <limits>
-#undef BALL_HAVE_NUMERIC_LIMITS
+#undef BALL_HAS_NUMERIC_LIMITS
 
 // Define whether float.h has to be included along with limits.h
 #undef BALL_INCLUDE_FLOAT_H 
@@ -190,24 +190,26 @@
 // Maximum line length for reading from files (see source/FORMAT)
 #define BALL_MAX_LINE_LENGTH 65535
 
-// #undef BALL_HAS_UNISTD_H
-#define BALL_HAS_PROCESS_H
-// #undef BALL_HAS_SYS_TIME_H
-#define BALL_HAS_TIME_H
-#define BALL_HAS_VALUES_H
-// #undef BALL_HAS_SYS_PARAM_H
-// #undef BALL_HAS_DIRENT_H
-// #undef BALL_HAS_DIRECT_H
-// #undef BALL_HAS_SYS_SOCKET_H
-// #undef BALL_HAS_NETINET_IN_H
-// #undef BALL_HAS_NETDB_H
-// #undef BALL_HAS_ARPA_INET_H
+#undef BALL_HAS_UNISTD_H
+#undef BALL_HAS_PROCESS_H
+#undef BALL_HAS_SYS_TIME_H
+#undef BALL_HAS_TIME_H
+#undef BALL_HAS_VALUES_H
+#undef BALL_HAS_LIMITS_H
+#undef BALL_HAS_FLOAT_H
+#undef BALL_HAS_SYS_PARAM_H
+#undef BALL_HAS_DIRENT_H
+#undef BALL_HAS_DIRECT_H
+#undef BALL_HAS_SYS_SOCKET_H
+#undef BALL_HAS_NETINET_IN_H
+#undef BALL_HAS_NETDB_H
+#undef BALL_HAS_ARPA_INET_H
 
-#define BALL_HAS_KILL
-#define BALL_HAS_SYSCONF
-// #undef BALL_HAS_CLOCKS_PER_SEC
-// #undef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+#undef BALL_HAS_KILL
+#undef BALL_HAS_SYSCONF
+#undef BALL_HAS_CLOCKS_PER_SEC
+#undef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 
-// #undef BALL_USE_WINSOCK
+#undef BALL_USE_WINSOCK
 
 #endif // BALL_CONFIG_CONFIG_H
