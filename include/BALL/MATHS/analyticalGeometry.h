@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.48 2001/07/02 15:41:04 strobel Exp $
+// $Id: analyticalGeometry.h,v 1.49 2001/12/13 18:17:10 strobel Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -1368,19 +1368,15 @@ namespace BALL
       bel = -1;
 		}
 
-    T acosbel = (T) acos(bel);
+    T acosbel = (T) acos(bel);	// >= 0
 
     if (( nx * (az * by - ay * bz)
 				 + ny * (ax * bz - az * bx)
-				 + nz * (ay * bx - ax * by)) < 0)
+				 + nz * (ay * bx - ax * by)) > 0)
     {
-      acosbel = -acosbel;
+    	acosbel = Constants::PI+Constants::PI-acosbel;
 		}
 
-    acosbel = (acosbel > 0.0)
-						? Constants::PI - acosbel
-						: -(Constants::PI + acosbel);
-		
 		return TAngle<T>(acosbel);
 	}
 
