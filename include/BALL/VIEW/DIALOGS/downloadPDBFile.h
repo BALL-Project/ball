@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.8 2004/05/27 19:49:48 oliver Exp $
+// $Id: downloadPDBFile.h,v 1.9 2004/12/02 15:37:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -76,11 +76,7 @@ namespace BALL
 				/// 
 				virtual void abort();
 
-				///
-				virtual void checkMenuEntries()
-					throw();
-
-				protected:
+			protected:
 
 				//_
 				void downloadStarted_()
@@ -90,12 +86,11 @@ namespace BALL
 				void downloadEnded_()
 					throw();
 
-
 				void threadedDownload_(const String& url);
 				
-				QTextBrowser *qb_;
-				FetchHTMLThread * thread_;
-				bool aborted_;
+				QTextBrowser 		*qb_;
+				FetchHTMLThread *thread_;
+				bool 						aborted_;
 		};
 
 	} 

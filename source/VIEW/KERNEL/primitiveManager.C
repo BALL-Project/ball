@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.30 2004/11/17 13:45:00 amoll Exp $
+// $Id: primitiveManager.C,v 1.31 2004/12/02 15:42:46 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -57,6 +57,14 @@ void PrimitiveManager::clear()
 		(*it)->clear();
 	}
 	representations_.clear();
+
+#ifdef BALL_QT_HAS_THREADS
+	if (thread_.running())
+	{
+		thread_.terminate();
+		thread_.wait();
+	}
+#endif
 }
 
 
