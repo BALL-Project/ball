@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.18 2001/07/31 00:47:52 oliver Exp $
+// $Id: residueChecker.C,v 1.19 2001/08/01 01:42:35 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -206,7 +206,7 @@ namespace BALL
 										 << atom_it->getName() << " and " << atom_it2->getName() 
 										 << " in " << res_name << " is " << pos.getDistance(atom_it2->getPosition()) 
 										 << " A." << std::endl;
-					result == false;
+					result = false;
 				}
 				// check for identical names (OK, a bad place, but why not...)
 				if (atom_it->getName() == atom_it2->getName())
