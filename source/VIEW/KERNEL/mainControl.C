@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.83 2004/05/05 15:12:10 amoll Exp $
+// $Id: mainControl.C,v 1.84 2004/05/05 15:54:57 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -107,9 +107,9 @@ namespace BALL
 						"BALL or BALLView data directory (e.g. to C:\\BALL\\data).\n"+
 						"If the problem persists, start the application with the\n"+
 						"-l flag to enable logging and read the file "+
-						logging_file_name_.c_str() + ". This file is created in either\n" +
-						"your home directory or in the directory with this\n" + 
-						"executeable.",
+						logging_file_name_.c_str() + "." +
+						"This file is created in either your home directory or\n"+ 
+						"in the directory with this executeable.",
 						QMessageBox::Abort,  QMessageBox::NoButton);
 				exit(-1);
 			}
