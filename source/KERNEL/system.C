@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.9 2000/05/09 16:21:42 amoll Exp $
+// $Id: system.C,v 1.10 2000/05/15 21:18:04 amoll Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -96,6 +96,18 @@ namespace BALL
 		Size size = 0;
 
 		for (FragmentIterator frag_it = beginFragment(); !frag_it.isEnd(); ++frag_it)
+		{
+			++size;
+		}
+
+		return size;
+	}
+
+	Size  System::countResidues() const
+	{
+		Size size = 0;
+
+		for (ResidueIterator frag_it = beginResidue(); !frag_it.isEnd(); ++frag_it)
 		{
 			++size;
 		}
