@@ -1,4 +1,4 @@
-// $Id: vector3.sip,v 1.4 2003/03/25 17:09:02 anhi Exp $
+// $Id: vector3.sip,v 1.5 2003/03/28 14:53:55 oliver Exp $
 
 class Vector3
  : PersistentObject
@@ -65,22 +65,20 @@ class Vector3
   float x;
   float y;
   float z;
-	char *__str__() /NoLazy/;
+
+
+  char *__str__() /NonLazy/;
 %MemberCode
   Vector3* ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Vector3,&ptr))
-	{
-  static String tmp;
-  tmp = "(";
-  tmp += String(ptr->x) + " ";
-  tmp += String(ptr->y) + " ";
-  tmp += String(ptr->z) + ")";
-  return PyString_FromString(tmp.c_str());
-	}
-	else
-	{
-		return NULL;
+  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Atom,&ptr))
+  {
+	  static String tmp;
+	  tmp = "(";
+	  tmp += String(ptr->x) + " ";
+	  tmp += String(ptr->y) + " ";
+	  tmp += String(ptr->z) + ")";
+	  return PyString_FromString(tmp.c_str());
 	}
 %End
 

@@ -1,4 +1,4 @@
-// $Id: vector2.sip,v 1.4 2003/03/25 17:09:02 anhi Exp $
+// $Id: vector2.sip,v 1.5 2003/03/28 14:53:55 oliver Exp $
 
 //Vector2 operator * (float scalar, const Vector2& vector)
 //  throw();
@@ -113,20 +113,16 @@ class Vector2
 	float x;
 	float y;
 
-	char *__str__() /NoLazy/;
+  char* __str__() /NonLazy/;
 %MemberCode
   Vector2* ptr;
  
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Vector2,&ptr))
-	{
-  static String tmp;
-  tmp = "(";
-  tmp += String(ptr->x) + " ";
-  tmp += String(ptr->y) + ")";
-  return PyString_FromString(tmp.c_str());
-	}
-	else
-	{
-		return NULL;
+  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Vector3,&ptr))
+  {
+	  static String tmp;
+	  tmp = "(";
+	  tmp += String(ptr->x) + " ";
+	  tmp += String(ptr->y) + ")";
+	  return PyString_FromString(tmp.c_str());
 	}
 %End};

@@ -1,4 +1,4 @@
-// $Id: string.sip,v 1.7 2003/03/28 10:49:27 oliver Exp $
+// $Id: string.sip,v 1.8 2003/03/28 14:53:54 oliver Exp $
 
 class Substring
 {
@@ -254,30 +254,6 @@ class String
 
       return PyString_FromString(s);
 		}
-%End
-
- 
-	char *__repr__() /NonLazy/;
-%MemberCode
-  const char *s;
-  String *ptr;
-
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_String,&ptr))
-	{
-	*ptr = String("'") + *ptr + "'";
-
-  if ((s = ptr->c_str()) == NULL)
-  {
-    Py_INCREF(Py_None);
-    return Py_None;
-  }
-
-  return PyString_FromString(s);
-	}
-	else
-	{
-		return NULL;
-	}
 %End
 
  

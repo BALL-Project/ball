@@ -1,4 +1,4 @@
-// $Id: atomContainer.sip,v 1.3 2003/03/25 17:08:55 anhi Exp $
+// $Id: atomContainer.sip,v 1.4 2003/03/28 14:53:53 oliver Exp $
 
 class AtomContainer
   : Composite, 
@@ -71,18 +71,14 @@ class AtomContainer
 	bool apply(ResidueProcessor& /processor/);
 
 	
-	char *__str__() /NoLazy/;
+  char* __str__() /NonLazy/;
 %MemberCode
   AtomContainer* ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_AtomContainer,&ptr))
-	{
-  return PyString_FromString(String(String("AtomContainer ") + ptr->getName() 
+  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_AtomContainer,&ptr))
+  {
+	  return PyString_FromString(String(String("AtomContainer ") + ptr->getName() 
 						+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-	}
-	else
-	{
-		return NULL;
 	}
 %End
 };

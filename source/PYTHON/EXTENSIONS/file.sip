@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.6 2003/03/25 17:08:57 anhi Exp $
+// $Id: file.sip,v 1.7 2003/03/28 14:53:53 oliver Exp $
 
 class std__openmode
 {
@@ -94,30 +94,28 @@ class OpenMode
 	typedef File::OpenMode OpenMode;
 %End
   public:
-	char *__str__() /NoLazy/;
+
+  char* __str__() /NonLazy/;
 %MemberCode
   OpenMode* ptr;
-  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_CompositeDescriptor,&ptr))
-	{	
-	String mode_string;
-	switch ((int)*ptr)
-	{
-		case (int)std::ios::app: 		mode_string = "std::ios::app"; break;
-		case (int)std::ios::binary:	mode_string = "std::ios::binary"; break;
-		case (int)std::ios::ate: 		mode_string = "std::ios::ate"; break;
-		case (int)std::ios::trunc: 	mode_string = "std::ios::trunc"; break;
-		case (int)std::ios::out: 		mode_string = "std::ios::out"; break;
-		case (int)std::ios::in: 			mode_string = "std::ios::in"; break; 
-		default:						mode_string = *ptr;
-	}
+  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_OpenMode,&ptr))
+  {
+		String mode_string;
+		switch ((int)*ptr)
+		{
+			case (int)std::ios::app: 		mode_string = "std::ios::app"; break;
+			case (int)std::ios::binary:	mode_string = "std::ios::binary"; break;
+			case (int)std::ios::ate: 		mode_string = "std::ios::ate"; break;
+			case (int)std::ios::trunc: 	mode_string = "std::ios::trunc"; break;
+			case (int)std::ios::out: 		mode_string = "std::ios::out"; break;
+			case (int)std::ios::in: 			mode_string = "std::ios::in"; break; 
+			default:						mode_string = *ptr;
+		}
 
-  return PyString_FromString(mode_string.c_str());
-	}
-	else
-	{
-		return NULL;
+		return PyString_FromString(mode_string.c_str());
 	}
 %End
+
 %ConvertToTypeCode
   if (PyInt_Check(sipPy))
   {

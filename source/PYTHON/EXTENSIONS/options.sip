@@ -1,4 +1,4 @@
-// $Id: options.sip,v 1.3 2003/03/25 17:08:59 anhi Exp $
+// $Id: options.sip,v 1.4 2003/03/28 14:53:54 oliver Exp $
 
 class IllegalKey
 	:	GeneralException
@@ -53,18 +53,14 @@ class Options
 	const String& operator [] (const String& /key/) const
 		throw(IllegalKey);
 
-	char *__str__() /NoLazy/;
+  char* __str__() /NonLazy/;
 %MemberCode
-  Options* ptr;
+	  Options* ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Options,&ptr))
-	{
-  return PyString_FromString(String(String("Options ") + ptr->getName()
-        + " { " + String(ptr->getSize()) + " entries }").c_str());
-	}
-	else
-	{
-		return NULL;
+    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Options,&ptr))
+    {
+		  return PyString_FromString(String(String("Options ") + ptr->getName()
+    			    + " { " + String(ptr->getSize()) + " entries }").c_str());
 	}
 %End
 

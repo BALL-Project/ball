@@ -1,4 +1,4 @@
-// $Id: atom.sip,v 1.4 2003/03/25 17:08:55 anhi Exp $
+// $Id: atom.sip,v 1.5 2003/03/28 14:53:53 oliver Exp $
 
 class Atom
   : Composite,
@@ -95,39 +95,19 @@ class Atom
    // bool applyBonds(UnaryProcessor<Bond>& processor);
 	
 	// convert the atom to a string representation
-	char *__str__() /NoLazy/;
+	char *__str__() /NonLazy/;
 %MemberCode
-  Atom* ptr;
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Atom,&ptr))
-	{
+    Atom *ptr;
 
-  return PyString_FromString(String(String("Atom ") + ptr->getName() 
-				+ " { " + ptr->getElement().getSymbol() + " @ (" 
-				+ String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " " 
-				+ String(ptr->getPosition().z) + " }").c_str());
-	}
-	else
-	{
-		return NULL;
-	}
+    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Atom,&ptr))
+    {
+		  return PyString_FromString(String(String("Atom ") + ptr->getName() 
+						+ " { " + ptr->getElement().getSymbol() + " @ (" 
+						+ String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " " 
+						+ String(ptr->getPosition().z) + " }").c_str());
+    }
 %End
 
-	char *__repr__() /NoLazy/;
-%MemberCode
-  Atom* ptr;
-
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Atom,&ptr))
-	{
-  return PyString_FromString(String(String("Atom ") + ptr->getName() 
-				+ " { " + ptr->getElement().getSymbol() + " @ (" 
-				+ String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " " 
-				+ String(ptr->getPosition().z) + " }").c_str());
-	}
-	else
-	{
-		return NULL;
-	}
-%End
 
 };
  
@@ -152,30 +132,13 @@ class AtomType
 	return 0;
 %End
 
-	char *__str__() /NoLazy/;
+	char *__str__() /NonLazy/;
 %MemberCode
-	AtomType* ptr;
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_AtomType,&ptr))
-	{
-  return PyString_FromString(String(*ptr).c_str());
-	}
-	else
-	{
-		return NULL;
-	}
-%End
+	Atom::Type* ptr;
 
-	char *__repr__() /NoLazy/;
-%MemberCode
-	AtomType* ptr;
-
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_AtomType,&ptr))
-	{
-  return PyString_FromString(String(*ptr).c_str());
-	}
-	else
-	{
-		return NULL;
+  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_String,&ptr))
+  {
+	  return PyString_FromString(String(*ptr).c_str());
 	}
 %End
 };

@@ -1,4 +1,4 @@
-// $Id: protein.sip,v 1.3 2003/03/25 17:08:59 anhi Exp $
+// $Id: protein.sip,v 1.4 2003/03/28 14:53:54 oliver Exp $
 
 class Protein
   : Molecule
@@ -42,19 +42,17 @@ class Protein
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	char *__str__() /NoLazy/;
-%MemberCode
-  Protein* ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Protein,&ptr))
-	{
-  return PyString_FromString(String(String("Protein ") + ptr->getName() 
-				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
-	}
-	else
-	{
-		return NULL;
-	}
+
+  char* __str__() /NonLazy/;
+%MemberCode
+	  Protein* ptr;
+
+    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Protein,&ptr))
+    {
+		  return PyString_FromString(String(String("Protein ") + ptr->getName() 
+						+ " { " + String(ptr->countResidues()) + " residues }").c_str());
+		}
 %End
 
 };

@@ -1,4 +1,4 @@
-// $Id: PDBAtom.sip,v 1.3 2003/03/25 17:08:54 anhi Exp $
+// $Id: PDBAtom.sip,v 1.4 2003/03/28 14:53:52 oliver Exp $
 
 class PDBAtom
   : Atom
@@ -54,20 +54,16 @@ class PDBAtom
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	char *__str__() /NoLazy/;
+  char *__str__() /NonLazy/;
 %MemberCode
   PDBAtom* ptr;
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_PDBAtom,&ptr))
-	{
 
-  return PyString_FromString(String(String("PDBAtom ") + ptr->getName()
+  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_PDBAtom,&ptr))
+  {
+	  return PyString_FromString(String(String("PDBAtom ") + ptr->getName()
         + " { " + ptr->getElement().getSymbol() + " @ ("
         + String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " "
         + String(ptr->getPosition().z) + " }").c_str());
-	}
-	else
-	{
-		return NULL;
 	}
 %End
 };

@@ -1,4 +1,4 @@
-// $Id: bond.sip,v 1.3 2003/03/25 17:08:56 anhi Exp $
+// $Id: bond.sip,v 1.4 2003/03/28 14:53:53 oliver Exp $
 
 class Bond
 	: Composite,
@@ -82,47 +82,45 @@ class Bond
   virtual bool isValid() const throw();
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // convert the atom to a string representation
-	char *__str__() /NoLazy/;
+
+
+  char* __str__() /NonLazy/;
 %MemberCode
   Bond* ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Bond,&ptr))
-	{
-	const Atom* a1 = ptr->getFirstAtom();
-	const Atom* a2 = ptr->getSecondAtom();
-	String tmp("Bond {");
-	if ((a1 != 0) && (a2 != 0))
-	{
-		tmp += a1->getFullName();
-		tmp += " - ";
-		tmp += a2->getFullName();
-		tmp += ", ";
-		tmp += String(ptr->getLength());
-		tmp += " A";
-		switch (ptr->getOrder())
+  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Bond,&ptr))
+  {
+		const Atom* a1 = ptr->getFirstAtom();
+		const Atom* a2 = ptr->getSecondAtom();
+		String tmp("Bond {");
+		if ((a1 != 0) && (a2 != 0))
 		{
-			case Bond::ORDER__SINGLE:
-				tmp += ", single";
-				break;
-			case Bond::ORDER__DOUBLE:
-				tmp += ", double";
-				break;
-			case Bond::ORDER__AROMATIC:
-				tmp += ", aromatic";
-				break;
-			case Bond::ORDER__TRIPLE:
-				tmp += ", triple";
-				break;
-			default:
-				tmp += ", unknown";
+			tmp += a1->getFullName();
+			tmp += " - ";
+			tmp += a2->getFullName();
+			tmp += ", ";
+			tmp += String(ptr->getLength());
+			tmp += " A";
+			switch (ptr->getOrder())
+			{
+				case Bond::ORDER__SINGLE:
+					tmp += ", single";
+					break;
+				case Bond::ORDER__DOUBLE:
+					tmp += ", double";
+					break;
+				case Bond::ORDER__AROMATIC:
+					tmp += ", aromatic";
+					break;
+				case Bond::ORDER__TRIPLE:
+					tmp += ", triple";
+					break;
+				default:
+					tmp += ", unknown";
+			}
+			tmp += " }";
 		}
-		tmp += " }";
-	}
-  return PyString_FromString(tmp.c_str());
-	}
-	else
-	{
-		return NULL;
+		return PyString_FromString(tmp.c_str());
 	}
 %End
 };

@@ -1,4 +1,4 @@
-// $Id: box3.sip,v 1.4 2003/03/25 17:08:56 anhi Exp $
+// $Id: box3.sip,v 1.5 2003/03/28 14:53:53 oliver Exp $
 
 class Box3
 {
@@ -36,25 +36,23 @@ class Box3
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
   Vector3 a;
   Vector3 b;
-	char *__str__() /NoLazy/;
-%MemberCode
-  	Box3* ptr;
 
-	 if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Box3,&ptr))
-	 {
-   static String tmp;
-   tmp = "Box3 { (";
-   tmp += String(ptr->a.x) + " ";
-   tmp += String(ptr->a.y) + " ";
-   tmp += String(ptr->a.z) + ") (";
-   tmp += String(ptr->b.x) + " ";
-   tmp += String(ptr->b.y) + " ";
-   tmp += String(ptr->b.z) + ") }";
-   return PyString_FromString(tmp.c_str());
-	 }
-	 else
-	 {
-		 return NULL;
-	 }
+
+  char *__str__() /NonLazy/;
+%MemberCode
+	Box3* ptr;
+
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Box3,&ptr))
+	{
+		 static String tmp;
+		 tmp = "Box3 { (";
+		 tmp += String(ptr->a.x) + " ";
+		 tmp += String(ptr->a.y) + " ";
+		 tmp += String(ptr->a.z) + ") (";
+		 tmp += String(ptr->b.x) + " ";
+		 tmp += String(ptr->b.y) + " ";
+		 tmp += String(ptr->b.z) + ") }";
+		 return PyString_FromString(tmp.c_str());
+ }
 %End
 };

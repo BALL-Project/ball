@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.sip,v 1.3 2003/03/25 17:09:01 anhi Exp $
+// $Id: secondaryStructure.sip,v 1.4 2003/03/28 14:53:54 oliver Exp $
 
 class SecondaryStructure
   : AtomContainer
@@ -55,19 +55,17 @@ class SecondaryStructure
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	char *__str__() /NoLazy/;
-%MemberCode
-  SecondaryStructure* ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_SecondaryStructure,&ptr))
-	{
-  return PyString_FromString(String(String("SecondaryStructure ") + ptr->getName() 
-				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
-	}
-	else
-	{
-		return NULL;
-	}
+
+  char* __str__() /NonLazy/;
+%MemberCode
+	  SecondaryStructure* ptr;
+
+    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Residue,&ptr))
+    {
+		  return PyString_FromString(String(String("SecondaryStructure ") + ptr->getName() 
+						+ " { " + String(ptr->countResidues()) + " residues }").c_str());
+		}
 %End
 
 };

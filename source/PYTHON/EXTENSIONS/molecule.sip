@@ -1,4 +1,4 @@
-// $Id: molecule.sip,v 1.3 2003/03/25 17:08:59 anhi Exp $
+// $Id: molecule.sip,v 1.4 2003/03/28 14:53:54 oliver Exp $
 
 class Molecule
   : AtomContainer
@@ -41,18 +41,15 @@ class Molecule
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	char *__str__() /NoLazy/;
-%MemberCode
-  Molecule* ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Molecule,&ptr))
-	{
-  return PyString_FromString(String(String("Molecule ") + ptr->getName() 
-				+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-	}
-	else
-	{
-		return NULL;
-	}
+  char* __str__() /NonLazy/;
+%MemberCode
+	  Molecule* ptr;
+
+    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Molecule,&ptr))
+    {
+		  return PyString_FromString(String(String("Molecule ") + ptr->getName() 
+						+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+		}
 %End
 };

@@ -1,4 +1,4 @@
-// $Id: chain.sip,v 1.3 2003/03/25 17:08:56 anhi Exp $
+// $Id: chain.sip,v 1.4 2003/03/28 14:53:53 oliver Exp $
 
 class Chain
  : AtomContainer
@@ -55,19 +55,15 @@ class Chain
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
 	
-	char *__str__() /NoLazy/;
+  char* __str__() /NonLazy/;
 %MemberCode
-  Chain* ptr;
+	  Chain* ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_Chain,&ptr))
-	{
-  return PyString_FromString(String(String("Chain ") + ptr->getName()
-				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
-	}
-	else
-	{
-		return NULL;
-	}
+	  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Chain,&ptr))
+	  {
+		  return PyString_FromString(String(String("Chain ") + ptr->getName()
+						+ " { " + String(ptr->countResidues()) + " residues }").c_str());
+		}
 %End
 
 };

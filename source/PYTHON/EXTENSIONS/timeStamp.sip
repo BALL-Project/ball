@@ -1,4 +1,4 @@
-// $Id: timeStamp.sip,v 1.5 2003/03/25 17:09:02 anhi Exp $
+// $Id: timeStamp.sip,v 1.6 2003/03/28 14:53:55 oliver Exp $
 
 class PreciseTime
 {
@@ -24,25 +24,22 @@ class PreciseTime
   static PreciseTime now() throw();
   //  void write(PersistenceManager& pm)const;
   //  bool read(PersistenceManager& pm);
-	char *__str__() /NoLazy/;
+
+  char* __str__() /NonLazy/;
 %MemberCode
   PreciseTime* ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_PreciseTime,&ptr))
-	{
-	char buf[128];
-	time_t secs = ptr->getSeconds();
-	strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
-	String time_str(buf);
-	time_str.append(".");
-	String usec_str(ptr->getMicroSeconds() / 1.0e6);
-	time_str.append(usec_str.after("."));
+  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_PreciseTime,&ptr))
+  {
+		char buf[128];
+		time_t secs = ptr->getSeconds();
+		strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
+		String time_str(buf);
+		time_str.append(".");
+		String usec_str(ptr->getMicroSeconds() / 1.0e6);
+		time_str.append(usec_str.after("."));
 
-  return PyString_FromString(time_str.c_str());
-	}
-	else
-	{
-		return NULL;
+		return PyString_FromString(time_str.c_str());
 	}
 %End
 };
@@ -66,25 +63,21 @@ class TimeStamp
   //  void write(PersistenceManager& pm) const;
   //  bool read(PersistenceManager& pm);
 
-	char *__str__() /NoLazy/;
+  char *__str__() /NonLazy/;
 %MemberCode
   TimeStamp* ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_TimeStamp,&ptr))
-	{
-	time_t secs = ptr->getTime().getSeconds();
-	char buf[128];
-	strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
-	String time_str(buf);
-	time_str.append(".");
-	String usec_str(ptr->getTime().getMicroSeconds() / 1.0e6);
-	time_str.append(usec_str.after("."));
+  if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_TimeStamp,&ptr))
+  {
+		time_t secs = ptr->getTime().getSeconds();
+		char buf[128];
+		strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
+		String time_str(buf);
+		time_str.append(".");
+		String usec_str(ptr->getTime().getMicroSeconds() / 1.0e6);
+		time_str.append(usec_str.after("."));
 
-  return PyString_FromString(time_str.c_str());
-	}
-	else
-	{
-		return NULL;
+		return PyString_FromString(time_str.c_str());
 	}
 %End
 };
