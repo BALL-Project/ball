@@ -97,9 +97,7 @@ NotificationTarget                  DI          Z
 NotificationTarget1                 DI          Z
 NotificationTarget2                 DI          Z
 
-Object                              DI,         Z
-ObjectManager                       DI          Z
-      IteratorTraits_               DI          Z
+Object                              DX,         Z	read/write
 PersistenceManager                  I           Z
 PersistentObject                    I           Z
 RandomAccessIterator                DI          Z
@@ -147,41 +145,41 @@ ParameterSection                    I,          X
 PDBFile                             DEI,        X
 XYZFile                             DEI,        /
 ------------------------KERNEL----------------------------------------------
-Atom                                DIX         /           read, write fehlt
+Atom                                DX          /           read, write fehlt
             BondIteratorTraits_     DEI         Z
-AtomContainer                       IX          /           read, write fehlt
+AtomContainer                       X           /           read, write fehlt
 AtomContainerIteratorTraits_        EI          Z
 AtomIteratorTraits_                 EI          Z
-Bond                                I           /
+Bond                                /           /
             TooManyBonds            I           Z
-Chain                               IX          /           read, write fehlt
+Chain                               X           /           read, write fehlt
 ChainIteratorTraits_                EI
 CompositeIteratorTraits_            EI          Z
 Expression                          EIX
 ExpressionPredicate                 EIX
 ExpressionTree                      EIX         
 SyntaxTree                          EI
-Fragment                            IX          /           read, write fehlt
+Fragment                            X           /           read, write fehlt
 FragmentIteratorTraits_             EI          Z
-Element                             I           /
-PTE_                                I           /
+Element                             /           /
+PTE_                                /           /
 KernelPredicate                     I           /
-Molecule                            IX          /           read, write fehlt
+Molecule                            X           /           read, write fehlt
 MoleculeIteratorTraits_             EI          Z
-NucleicAcid                         IX          /           read, write fehlt
+NucleicAcid                         X           /           read, write fehlt
 NucleicAcidIteratorTraits_          EI          Z
-Nucleotide                          IX          /           read, write fehlt
+Nucleotide                          X           /           read, write fehlt
 NucleotideIteratorTraits_           EI          Z
-PDBAtom                             I           Z
+PDBAtom                             X           Z           read, write fehlt
 PDBAtomIteratorTraits_              EI          Z
-Protein                             IX          /           read, write fehlt
+Protein                             X           /           read, write fehlt
 ProteinIteratorTraits_              EI          Z
-Residue                             IX          /           read, write fehlt
+Residue                             X           /           read, write fehlt
 ResidueIteratorTraits_              EI          Z
-SecondaryStructure                  IX          /           read, write fehlt
+SecondaryStructure                  X           /           read, write fehlt
 SecondaryStructureIteratorTraits_   EI          Z
 Selector                            EI
-System                              IX          /           read, write fehlt
+System                              X           /           read, write fehlt
 
  AromaticBondsPredicate             EI          /
  AtomNamePredicate                  EI          /
@@ -209,19 +207,19 @@ System                              IX          /           read, write fehlt
  TripleBondsPredicate               EI          /
  TruePredicate                      EI          /
 ------------------------MATHS-----------------------------------------------
-TAngle                              I           /
-TBox3                               I           /
-TCircle3                            I           /
-TLine3                              I           /
-TMatrix4x4                          I           /
+TAngle                              /           /
+TBox3                               /           /
+TCircle3                            /           /
+TLine3                              /           /
+TMatrix4x4                          /           /
 PiecewiseFunction                   I           X
 PiecewisePolynomial                 I           X
-TPlane3                             I           /
-TQuaternion                         I           /
-TSphere3                            I           /
-TSurface                            IX          Z    
-TVector3                            I           /
-TVector4                            I           /
+TPlane3                             /           /
+TQuaternion                         /           /
+TSphere3                            /           /
+TSurface                            X           Z    
+TVector3                            /           /
+TVector4                            /           /
 ------------------------MOLMEC----------------------------------------------
                         ---------AMBER-----
 amberBend                           DEI         Z
