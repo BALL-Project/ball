@@ -74,7 +74,7 @@ namespace BALL
     protected:  
 
       //Copyconstructor doesn't work because of the QT private copy constructors
-			CanvasWidget(const CanvasWidget& cw)
+			CanvasWidget(const CanvasWidget& /*cw*/)
 				throw()
 				: QCanvasView() {};
 
