@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.15 2001/07/09 22:06:28 amoll Exp $
+// $Id: regularData1D.h,v 1.16 2001/07/10 08:27:19 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -31,7 +31,7 @@ namespace BALL
 		/**	The vector type.
 				This type is used to store the data.
 		*/
-		typedef std::vector<T>	VectorType;
+		typedef ::std::vector<T>	VectorType;
 
 		//@}
 		/** @name Constructors and Destructors.
@@ -247,7 +247,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	const TRegularData1D<T>& TRegularData1D<T>::operator = (const TRegularData1D<T>::VectorType& data)
+	const TRegularData1D<T>& TRegularData1D<T>::operator = (const VectorType& data)
 		throw()
 	{
 		// Copy the data. The boundaries remain unchanged.
@@ -407,7 +407,9 @@ namespace BALL
 		
 		if (lower > upper)
 		{
-			swap(lower, upper);
+			double temp(lower);
+			lower = upper;
+			upper = temp;
 		}
 		
 		// if the new boundaries and the old boundaries do not overlap,
