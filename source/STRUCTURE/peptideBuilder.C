@@ -23,7 +23,6 @@
 #include <BALL/MATHS/vector3.h> 
 #include <BALL/MATHS/angle.h>     
 
-
 namespace BALL
 {
 	namespace Peptides
@@ -194,7 +193,6 @@ namespace BALL
 			Residue* residue = createResidue_(sequence_[0].getType(), 0);
 			chain->insert(*residue);
 			Residue* residueold = residue;
-			
 			std::vector<AminoAcidDescriptor>::iterator i = sequence_.begin();
 			
 			// consistency check for empty sequences and sequences of length < 2!!	
@@ -208,14 +206,14 @@ namespace BALL
 				// We have to take care of two special cases:
 				// 		- the residue we are looking at is proline
 				// 		- the last residue was proline
-				String type = i->getType();
+				String type = (i-1)->getType();
 				type.toUpper();
 				if (type == "PRO")
 				{
 					is_proline_ = true;
 					
 					// in this case, the second torsion angle is fixed to -80 degrees
-					i->setPsi(Angle(-80.,false));
+					(i-1)->setPsi(Angle(-80.,false));
 				}
 				else
 				{
@@ -229,7 +227,8 @@ namespace BALL
 					
 				//set the torsion angle 
 				// TODO: angle of the peptide bond (omega)
-				transform_(i->getPhi(),i->getPsi(),*residueold,*residue2);
+					
+				transform_(i->getPhi(),(i-1)->getPsi(),*residueold,*residue2);
 				peptide_(*residueold,*residue2);
 
 				// set the peptide bond angle omega
@@ -456,10 +455,10 @@ namespace BALL
 			(const Angle& phi, const Angle& psi, Residue& resold, Residue& resnew)
 		{
 			// Parameter omega obviously not used!!!
-			Matrix4x4 phimat;   // rotation matrix
-			Matrix4x4 psimat;   //    "
-			Vector3 phiaxis;    // rotation axis for the torsion angles
-			Vector3 psiaxis;
+			Matrix4x4 psimat;   // rotation matrix
+			Matrix4x4 phimat;   //    "
+			Vector3 psiaxis;    // rotation axis for the torsion angles
+			Vector3 phiaxis;
 			TranslationProcessor translation;
 
 
@@ -469,8 +468,8 @@ namespace BALL
 			PDBAtom* pcarbona_n = getAtomByName_(resnew, "CA");
 			PDBAtom* pcarbon_n   = getAtomByName_(resnew, "C");
 			PDBAtom* pnitrogen   = getAtomByName_(resold, "N");
-			Angle currentphi;
 			Angle currentpsi;
+			Angle currentphi;
 
 			Vector3 v_pn     = pnitrogen->getPosition();
 			Vector3 v_pca    = pcarbona->getPosition();
@@ -478,14 +477,14 @@ namespace BALL
 			Vector3 v_pn_n   = pnitrogen_n->getPosition();
 			Vector3 v_pca_n  = pcarbona_n->getPosition();
 			Vector3 v_pc_n   = pcarbon_n->getPosition();
-			currentphi = getTorsionAngle( v_pn.x,    v_pn.y,   v_pn.z, 
+			currentpsi = getTorsionAngle( v_pn.x,    v_pn.y,   v_pn.z, 
 							v_pca.x,   v_pca.y,  v_pca.z,
 							v_pc.x,  v_pc.y, v_pc.z,	
 							v_pn_n.x,  v_pn_n.y,  v_pn_n.z);
 
-			phiaxis = ( pcarbon->getPosition() - pcarbona->getPosition()).normalize();
-			phimat.rotate((float)-1. * currentphi, phiaxis);
-			TransformationProcessor phitrans(phimat);
+			psiaxis = ( pcarbon->getPosition() - pcarbona->getPosition()).normalize();
+			psimat.rotate((float)-1. * currentpsi, psiaxis);
+			TransformationProcessor psitrans(psimat);
 
 		 
 			//translate  to 0|0|0 (needed for the rotation)
@@ -494,11 +493,11 @@ namespace BALL
 			resnew.apply(translation);
 		 
 			//rotate
-			resnew.apply(phitrans);
+			resnew.apply(psitrans);
 
-			phimat.rotate(phi, phiaxis);
-			phitrans.setTransformation(phimat);
-			resnew.apply(phitrans);
+			psimat.rotate(psi, psiaxis);
+			psitrans.setTransformation(psimat);
+			resnew.apply(psitrans);
 
 			//translate back
 			translation.setTranslation(toOrigin);
@@ -511,15 +510,15 @@ namespace BALL
 			v_pca_n  = pcarbona_n->getPosition();
 			v_pc_n   = pcarbon_n->getPosition();
 
-			currentpsi = getTorsionAngle( v_pc.x,    v_pc.y,    v_pc.z,
+			currentphi = getTorsionAngle( v_pc.x,    v_pc.y,    v_pc.z,
 					 v_pn_n.x,  v_pn_n.y,  v_pn_n.z,
 					 v_pca_n.x, v_pca_n.y, v_pca_n.z,  
 					 v_pc_n.x,  v_pc_n.y,  v_pc_n.z	);
 
 
-			psiaxis = (pcarbona_n->getPosition() -  pnitrogen_n->getPosition()).normalize();
-			psimat.rotate(psi, psiaxis);
-			TransformationProcessor psitrans(psimat);
+			phiaxis = (pcarbona_n->getPosition() -  pnitrogen_n->getPosition()).normalize();
+			phimat.rotate(phi, phiaxis);
+			TransformationProcessor phitrans(phimat);
 
 			// translate to 0|0|0 (needed for the rotation)
 			toOrigin =  pcarbona_n->getPosition();
@@ -527,7 +526,7 @@ namespace BALL
 			resnew.apply(translation);
 
 			// rotate 
-			resnew.apply(psitrans);
+			resnew.apply(phitrans);
 
 			// translate back to the correct position
 			translation.setTranslation(toOrigin);
