@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.62 2000/03/04 12:07:44 oliver Exp $
+dnl    $Id: configure.in,v 1.63 2000/03/06 14:56:38 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -653,7 +653,7 @@ dnl
 dnl
 if test "${IS_GXX}" = false -a "${IS_KCC}" = false ; then
 	AC_MSG_CHECKING(for Digital/Compaq C++ compiler)
-	DIGITAL_CXX=`${CXX} -V | grep "C++" | cut -d" " -f-2` 
+	DIGITAL_CXX=`${CXX} -V 2>/dev/null | grep "C++" | cut -d" " -f-2` 
 	if test "${DIGITAL_CXX}" = "DIGITAL C++" -o "${DIGITAL_CXX}" = "Compaq C++"; then
 		IS_DIGITALCXX=true
 		AC_MSG_RESULT(yes)
@@ -752,7 +752,7 @@ dnl
 if test "${IS_DIGITALCXX}" = true ; then
 	AC_MSG_CHECKING(compiler version)
 	echo "int main(){}" > conftest.C
-	CXX_VERSION=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
+	CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
 	CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1` 
 	VERSION_OUTPUT="${CXX_NAME} C++ ${CXX_VERSION}"
 	CXX_COMPILER_NAME="Digital"

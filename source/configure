@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.71 2000/03/04 12:07:50 oliver Exp $
+#  $Id: configure,v 1.72 2000/03/06 14:56:41 oliver Exp $
 
 
 ##################################################
@@ -1865,7 +1865,7 @@ fi
 if test "${IS_GXX}" = false -a "${IS_KCC}" = false ; then
 	echo $ac_n "checking for Digital/Compaq C++ compiler""... $ac_c" 1>&6
 echo "configure:1767: checking for Digital/Compaq C++ compiler" >&5
-	DIGITAL_CXX=`${CXX} -V | grep "C++" | cut -d" " -f-2` 
+	DIGITAL_CXX=`${CXX} -V 2>/dev/null | grep "C++" | cut -d" " -f-2` 
 	if test "${DIGITAL_CXX}" = "DIGITAL C++" -o "${DIGITAL_CXX}" = "Compaq C++"; then
 		IS_DIGITALCXX=true
 		echo "$ac_t""yes" 1>&6
@@ -1957,7 +1957,7 @@ if test "${IS_DIGITALCXX}" = true ; then
 	echo $ac_n "checking compiler version""... $ac_c" 1>&6
 echo "configure:1858: checking compiler version" >&5
 	echo "int main(){}" > conftest.C
-	CXX_VERSION=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
+	CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
 	CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1` 
 	VERSION_OUTPUT="${CXX_NAME} C++ ${CXX_VERSION}"
 	CXX_COMPILER_NAME="Digital"
@@ -2173,7 +2173,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 	MAKEDEP_CXX_OPTS="-M -D__USE_STD_IOSTREAM"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-	CXX_FLAGS="${CXX_FLAGS} -D__USE_STD_IOSTREAM"
+	CXXFLAGS="${CXXFLAGS} -D__USE_STD_IOSTREAM"
 	CXXFLAGS_O="${CXXFLAGS_O} -O5"
 	
 	CXXFLAGS_D="${CXXFLAGS_D}"
