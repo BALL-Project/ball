@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.8 2005/01/28 15:08:01 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.9 2005/01/31 15:59:41 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -72,7 +72,8 @@ void MolecularControl::SelectableListViewItem::stateChange(bool state)
 		return;
 	}
 
-	if (control_reference_.getMainControl()->compositesAreLocked())
+	if (control_reference_.getMainControl()->compositesAreLocked() ||
+			control_reference_.getMainControl()->updateOfRepresentationRunning())
 	{
 		ignore_change_ = true;
 		setOn(!state);
@@ -186,6 +187,9 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	throw()
 {
 	String hint;
+	bool busy = main_control.compositesAreLocked() ||
+							main_control.updateOfRepresentationRunning();
+
 	// prevent changes to composites while simulations are running
 	
 	// check for paste-slot: enable only if one selected item &&
@@ -193,8 +197,8 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// 																			no simulation running &&
 	// 																			it makes sense
 	bool allow_paste = getSelection().size() <= 1 &&
-										 copy_list_.size() > 0 &&
-										 !main_control.compositesAreLocked();
+										 copy_list_.size() && 
+										 !busy;
 	if (allow_paste)
 	{
 		hint = "Paste a copied or cuted object into current selected object.";
@@ -216,7 +220,9 @@ void MolecularControl::checkMenu(MainControl& main_control)
 		else if (copy_list_.size() == 0)
 			hint = "No copied/cuted object.";
 		else if (main_control.compositesAreLocked())
-			hint = "Simulation running, cant copy meanwhile";
+			hint = "Simulation running, cant paste meanwhile";
+		else
+			hint = "Update of Representation running, cant paste meanwhile";
 	}
 	menuBar()->setItemEnabled(paste_id_, allow_paste);	
  	getMainControl()->setMenuHint(paste_id_, hint);
@@ -239,7 +245,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 
 	// ------------------------------------------------------------------
 	// cut / delete  +  select / deselect
-	bool list_filled = (selected_.size() != 0 && !main_control.compositesAreLocked());
+	bool list_filled = selected_.size() && !busy;
 	
 	if (list_filled) hint = "";
 	else hint = "No item selected or simulation running";
@@ -258,7 +264,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	if (selected_.size() > 0)
 	{
 		// enable global delete entry for all GenericControls, if this Control has the selection
-		getMainControl()->setDeleteEntryEnabled(!main_control.compositesAreLocked());
+		getMainControl()->setDeleteEntryEnabled(!busy);
 	}
 }
 

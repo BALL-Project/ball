@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.iC,v 1.5 2004/11/13 16:22:32 amoll Exp $
+// $Id: mainControl.iC,v 1.5.2.1 2005/01/31 16:00:37 amoll Exp $
 
 BALL_INLINE 
 int MainControl::getNextID_()
@@ -49,7 +49,7 @@ BALL_INLINE
 bool MainControl::compositesAreLocked()
 	throw()
 {
-	return (composites_locked_);
+	return composites_locked_;
 }
 
 BALL_INLINE

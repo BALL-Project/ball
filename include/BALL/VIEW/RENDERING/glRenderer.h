@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.16 2005/01/23 23:26:14 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.17 2005/01/31 15:59:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -276,6 +276,11 @@ namespace BALL
 			///
 			DrawingMode getDrawingMode() const;
 
+			/** Check if Renderer is currently rendering.
+			 		Added for usage with multithreading.
+			*/
+			bool isBusy() const;
+
 			//@}
 			// protected:
 
@@ -405,6 +410,10 @@ namespace BALL
 			void renderMeshWithVertexArray_(const Mesh& mesh)
 				throw();
 
+			//_ Wait until Renderer is not busy anymore
+			void checkBusy_()
+				throw();
+
 			///
 			DrawingMode 					drawing_mode_;
 
@@ -450,6 +459,7 @@ namespace BALL
 			bool 										picking_mode_;
 			ModelType 							model_type_;
 			Position 								display_lists_index_;
+			bool 										busy_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
