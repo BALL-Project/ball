@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.10 2000/04/25 14:42:01 oliver Exp $
+// $Id: amberBend.C,v 1.11 2000/05/18 17:50:27 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -104,7 +104,10 @@ namespace BALL
 							Log.error() << "AmberBend::setup: cannot find bend parameters for atom types:"
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) << endl;
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) 
+								<< " (atoms are: " << this_bend.atom1->getFullName() << "/" 
+								<< this_bend.atom2->getFullName() << "/" 
+								<< this_bend.atom3->getFullName() << ")" << endl;
 						} 
 						else 
 						{

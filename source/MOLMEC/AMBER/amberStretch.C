@@ -1,4 +1,4 @@
-// $Id: amberStretch.C,v 1.8 2000/03/26 12:52:25 oliver Exp $
+// $Id: amberStretch.C,v 1.9 2000/05/18 17:50:28 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -139,18 +139,29 @@ namespace BALL
 						stretch_[i].atom2 = bond.getSecondAtom();
 			
 						// Pay attention to the symmetric database input
-						if ( stretch_parameters_.hasParameters(atom_type_A, atom_type_B)) {
+						if (stretch_parameters_.hasParameters(atom_type_A, atom_type_B)) 
+						{
 							stretch_parameters_.assignParameters(values, atom_type_A, atom_type_B);
-						} else if (stretch_parameters_.hasParameters(atom_type_A, Atom::ANY_TYPE)) {
+						} 
+						else if (stretch_parameters_.hasParameters(atom_type_A, Atom::ANY_TYPE)) 
+						{
 							stretch_parameters_.assignParameters(values, atom_type_A, Atom::ANY_TYPE);
-						} else if (stretch_parameters_.hasParameters(Atom::ANY_TYPE, atom_type_B)) {
+						} 
+						else if (stretch_parameters_.hasParameters(Atom::ANY_TYPE, atom_type_B)) 
+						{
 							stretch_parameters_.assignParameters(values, Atom::ANY_TYPE, atom_type_B); 
-						} else if (stretch_parameters_.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE)) {
+						} 
+						else if (stretch_parameters_.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE)) 
+						{
 							stretch_parameters_.assignParameters(values,Atom::ANY_TYPE, Atom::ANY_TYPE);
-						} else {
+						} 
+						else 
+						{
 							Log.level(LogStream::ERROR) << "cannot find stretch parameters for atom types " 
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B) << endl;
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B)
+								<< " (atoms are: " << stretch_[i].atom1->getFullName() 
+								<< "/" << stretch_[i].atom2->getFullName() << ")" << endl;
 
 							// we don't want to get any force or energy component
 							// from this stretch
@@ -218,7 +229,9 @@ namespace BALL
 					{
 						stretch_[i].atom1->setForce(stretch_[i].atom1->getForce() - direction);
 						stretch_[i].atom2->setForce(stretch_[i].atom2->getForce() + direction);
-					} else {
+					} 
+					else 
+					{
 						if (stretch_[i].atom1->isSelected())
 						{
 							stretch_[i].atom1->setForce(stretch_[i].atom1->getForce() - direction);
