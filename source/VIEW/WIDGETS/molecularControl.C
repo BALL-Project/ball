@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.33 2004/02/05 14:45:20 amoll Exp $
+// $Id: molecularControl.C,v 1.34 2004/02/05 16:45:27 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -11,6 +11,7 @@
 #include <BALL/VIEW/DIALOGS/transformationDialog.h>
 #include <BALL/KERNEL/system.h>
 #include <qmenubar.h>
+#include <qinputdialog.h>
 
 using std::endl;
 
@@ -212,6 +213,9 @@ void MolecularControl::activatedItem_(int pos)
 void MolecularControl::buildContextMenu(Composite& composite)
 	throw()
 {
+	bool one_item = (selected_.size() == 1);
+	bool composites_muteable = getMainControl()->compositesAreMuteable();
+
 	context_menu_.insertItem("Create Representation...", this, 
 			SLOT(createRepresentation()), 0, CREATE_REPRESENTATION_MODE);
 	context_menu_.insertItem("Create Representation", &model_menu_, 0, CREATE_REPRESENTATION);
@@ -221,9 +225,11 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.insertItem("Copy", this, SLOT(copy()), 0, OBJECT__COPY);
 	context_menu_.insertItem("Paste", this, SLOT(paste()), 0, OBJECT__PASTE);
 
+	context_menu_.insertItem("Rename", this, SLOT(rename()), 0, RENAME);
+	context_menu_.setItemEnabled(RENAME, composites_muteable && composites_muteable && one_item);
+
 	context_menu_.insertItem("Move", this, SLOT(move()), 0, OBJECT__MOVE);
 
-	bool composites_muteable = getMainControl()->compositesAreMuteable();
 	context_menu_.setItemEnabled(OBJECT__CUT, composites_muteable);
 	context_menu_.setItemEnabled(OBJECT__PASTE, getCopyList_().size() > 0 && composites_muteable);
 	context_menu_.setItemEnabled(OBJECT__MOVE, composites_muteable);
@@ -254,11 +260,16 @@ void MolecularControl::buildContextMenu(Composite& composite)
 
 	context_menu_.setItemEnabled(OBJECT__COPY, system_selected);
 
+	bool allow_id_change = one_item && RTTI::isKindOf<Residue>(**selected_.begin());
+	context_menu_.insertItem("Change ID", this, SLOT(changeID()), 0, CHANGEID);
+	context_menu_.setItemEnabled(CHANGEID, composites_muteable && allow_id_change);
+
 	context_menu_.insertItem("Build Bonds", this, SLOT(buildBonds()), 0, BONDS__BUILD);
 	context_menu_.setItemEnabled(BONDS__BUILD, composites_muteable && atom_container_selected);
 
 	context_menu_.insertItem("Count items", this, SLOT(countItems()), 0, COUNT__ITEMS);
 	context_menu_.setItemEnabled(COUNT__ITEMS, atom_container_selected);
+
 	// <----------------------------------- AtomContainer
 	context_menu_.insertSeparator();
 	// -----------------------------------> Atoms
@@ -978,6 +989,70 @@ void MolecularControl::countItems()
 	s+=String(ac.countAtoms()) + " Atoms, ";
 	s+=String(ac.countBonds()) + " Bonds";
 	setStatusbarText(s);
+}
+
+
+void MolecularControl::rename()
+{
+	if (selected_.size() == 0) return;
+
+	String old_name;
+	Composite* c = *selected_.begin();
+	if (RTTI::isKindOf<AtomContainer>(*c))
+	{
+		old_name = ((AtomContainer*) c)->getName();
+	}
+	else if (RTTI::isKindOf<Atom>(*c))
+	{
+		old_name = ((Atom*)c)->getName();
+	}
+	else
+	{
+		return;
+	}
+
+	bool ok;
+	String result = QInputDialog::getText("Rename dialog", "Set a new name", QLineEdit::Normal, 
+																				old_name.c_str(), &ok, this).ascii();
+	if (!ok) return;
+
+	if (RTTI::isKindOf<AtomContainer>(*c))
+	{
+		((AtomContainer*)c)->setName(result);
+	}
+	else if (RTTI::isKindOf<Atom>(*c))
+	{
+		((Atom*)c)->setName(result);
+	}
+	
+	c->host(getInformationVisitor_());
+	QString text = getInformationVisitor_().getName().c_str();
+
+	context_item_->setText(0, text);
+	CompositeMessage* msg = new CompositeMessage(*c, CompositeMessage::CHANGED_COMPOSITE);
+	notify_(msg);
+}
+
+void MolecularControl::changeID()
+{
+	if (selected_.size() == 0) return;
+	Residue* r = (Residue*) *selected_.begin();
+
+	String id = r->getID();
+
+	bool ok;
+	id = QInputDialog::getText("Set new ID dialog", "Set a new ID", QLineEdit::Normal, 
+															id.c_str(), &ok, this).ascii();
+	if (!ok) return;
+
+	r->setID(id);
+
+	r->host(getInformationVisitor_());
+	QString text = getInformationVisitor_().getName().c_str();
+
+	context_item_->setText(0, text);
+	CompositeMessage* msg = new CompositeMessage(*r, CompositeMessage::CHANGED_COMPOSITE);
+	notify_(msg);
 }
 
 } } // namespaces

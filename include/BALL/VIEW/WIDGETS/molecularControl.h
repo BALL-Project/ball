@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.15 2004/01/18 21:55:35 oliver Exp $
+// $Id: molecularControl.h,v 1.16 2004/02/05 16:45:31 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -69,7 +69,11 @@ namespace BALL
 				/// show the filename form which the Composite was loaded
 				SHOW__FILENAME,
 				/// Collapse all QListViewItem
-				COLLAPSE_ALL
+				COLLAPSE_ALL,
+				/// Rename a Composite
+				RENAME,
+				/// Change the ID of a Residue
+				CHANGEID
 			};
 
 			Q_OBJECT
@@ -308,6 +312,12 @@ namespace BALL
 			
 			/// Collapse all QListViewItem
 			void collapseAll();
+
+			/// Rename a Composite
+			void rename();
+
+			/// Change the ID of a Residue
+			void changeID();
 
 			//@} 
 			/** @name Protected members 
