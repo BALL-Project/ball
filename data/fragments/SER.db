@@ -1,0 +1,101 @@
+(SER
+  (Names
+		(Serine)
+		(Serin)
+		(Ser)
+		(S)
+  )
+  (Atoms
+    (N N 0.1130663 1.226434 -0.1468897)
+    (3H H 0.8968111 1.837972 0.05464922)
+    (CA C -0.7048293 1.905604 -1.168307)
+    (HA H -0.2017423 1.780946 -2.128185)
+    (C C -0.7701361 3.410257 -0.8778276)
+    (O O 0.1488766 3.858471 -0.1539113)
+    (CB C -2.088618 1.24965 -1.250489)
+    (1HB H -1.956628 0.1725609 -1.368818)
+    (2HB H -2.637483 1.435655 -0.3253672)
+    (OG O -2.817839 1.744102 -2.356831)
+    (HG H -3.648096 1.264079 -2.429246)
+    (OXT O -1.487331 4.10633 -1.629405)
+    (1H H -0.4311985 1.10388 0.6950446)
+    (2H H 0.4303224 0.3296314 -0.4862972)
+  )
+  (Bonds
+    (1 3H N)
+    (2 CA N)
+    (3 HA CA)
+    (4 C CA)
+    (5 O C)
+    (6 CB CA)
+    (7 1HB CB)
+    (8 2HB CB)
+    (9 OG CB)
+    (10 HG OG)
+    (11 OXT C)
+    (12 1H N)
+    (13 2H N)
+  )
+  (Connections
+    (N-term N C-term 1.33 0.5)
+    (C-term C N-term 1.33 0.5)
+  )
+ 	(Properties
+		(AMINO_ACID)
+	)
+	(Variants
+		(Default
+			(Delete
+				(OXT)
+			  (1H)
+			  (2H)
+			)
+		  (Rename
+			  (3H H)
+			)
+			(addh 5
+				(H N CA C x )
+				(HA CA N C CB )
+				(1HB CB CA OG N )
+				(2HB CB CA OG N )
+				(HG OG CB CA N )
+			)
+		)
+	  (SER-N
+		  (Delete
+			  (OXT)
+			)
+		  (Properties
+			  (N_TERMINAL)
+      )
+			(addh 5
+				(H N CA C x )
+				(HA CA N C CB )
+				(1HB CB CA OG N )
+				(2HB CB CA OG N )
+				(HG OG CB CA N )
+			)
+		)
+		(SER-C
+		  (Delete
+				(1H)
+				(2H)
+			)
+		  (Rename
+				(3H H)
+				)
+      (Properties
+				(C_TERMINAL)
+			)
+			(addh 7
+				(HA CA N C CB )
+				(1HB CB CA OG N )
+				(2HB CB CA OG N )
+				(HG OG CB CA N )
+        (1H N CA C O)
+        (2H N CA C O)
+        (3H N CA C O)
+			)
+		)
+	)
+)

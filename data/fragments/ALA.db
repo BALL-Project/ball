@@ -1,0 +1,99 @@
+(ALA
+  (Names
+		(Alanine)
+		(Alanin)
+		(Ala)
+		(A)
+  )
+  (Atoms
+    (N N 0.09952427 1.425946 -0.01392276)
+    (3H H 0.9122966 2.021833 0.09543685)
+    (CA C -0.6343572 1.904422 -1.199327)
+    (HA H -0.06613517 1.608824 -2.082189)
+    (C C -0.7061328 3.434369 -1.195026)
+    (O O 0.2770563 4.020259 -0.6877273)
+    (CB C -2.018631 1.250585 -1.273356)
+    (1HB H -2.525042 1.535779 -2.196084)
+    (2HB H -1.909473 0.1656088 -1.256012)
+    (3HB H -2.621985 1.560564 -0.4192078)
+    (OXT O -1.554726 3.968913 -1.942107)
+    (1H H -0.4859746 1.514033 0.8043322)
+    (2H H 0.3756785 0.4622824 -0.137128)
+  )
+  (Bonds
+    (1 3H N)
+    (2 CA N)
+    (3 HA CA)
+    (4 C CA)
+    (5 O C)
+    (6 CB CA)
+    (7 1HB CB)
+    (8 2HB CB)
+    (9 3HB CB)
+    (10 OXT C)
+    (11 1H N)
+    (12 2H N)
+  )
+	(Connections
+		(N-term N C-term 1.33 0.5)
+		(C-term C N-term 1.33 0.5)
+	)
+	(Properties
+		(AMINO_ACID)
+	)
+	(Variants
+		(Default
+			(Delete
+				(OXT )
+			  (1H )
+			  (2H )
+			)
+		  (Rename
+			  (3H H)
+			)
+			(addh 5 
+				(H N CA C x )
+				(HA CA N C CB )
+				(1HB CB CA N C )
+				(2HB CB CA N C )
+				(3HB CB CA N C )
+			)     
+		)
+		(ALA-C
+		  (Delete
+				(1H )
+				(2H )
+			)
+		  (Rename
+				(3H H)
+			)
+      (Properties
+				(C_TERMINAL)
+			)
+			(addh 5 
+				(H N CA C x )
+				(HA CA N C CB )
+				(1HB CB CA N C )
+				(2HB CB CA N C )
+				(3HB CB CA N C )
+			)     
+		)
+	  (ALA-N
+		  (Delete
+			  (OXT )
+			)
+		  (Properties
+			  (N_TERMINAL)
+      )
+			(addh 7
+				(HA CA N C CB )
+				(1HB CB CA N C )
+				(2HB CB CA N C )
+				(3HB CB CA N C )
+        (1H N CA C O)
+        (2H N CA C O)
+        (3H N CA C O)
+			)     
+		)
+	)       
+)
