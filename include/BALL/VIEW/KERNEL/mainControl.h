@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.3 2003/08/26 18:35:32 amoll Exp $
+// $Id: mainControl.h,v 1.4 2003/08/27 13:39:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -594,7 +594,7 @@ namespace BALL
 		};
 
 #ifndef BALL_NO_INLINE_FUNCTIONS
-#	include <BALL/VIEWKERNEL/mainControl.iC>
+#	include <BALL/VIEW/KERNEL/mainControl.iC>
 #endif 
     
 		} // namespace VIEW

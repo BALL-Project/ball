@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.2 2003/08/26 15:26:41 amoll Exp $
+// $Id: events.h,v 1.3 2003/08/27 13:39:41 amoll Exp $
 //
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -12,8 +12,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef BALL_VIEW_GUI_WIDGETS_EVENTS_H
-#define BALL_VIEW_GUI_WIDGETS_EVENTS_H
+#ifndef BALL_VIEW_KERNEL_EVENTS_H
+#define BALL_VIEW_KERNEL_EVENTS_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -2030,14 +2030,13 @@ namespace BALL
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEWWIDGETS/events.iC>
+#			include <BALL/VIEW/KERNEL/events.iC>
 #		endif
   
 	} // namespace VIEW
-
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_WIDGETS_EVENTS_H
+#endif // BALL_VIEW_KERNEL_EVENTS_H
 
 ////////////////////////////////////////////////////////////////////////////////
 //
