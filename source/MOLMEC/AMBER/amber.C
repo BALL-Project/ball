@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.3 1999/09/07 11:28:39 len Exp $
+// $Id: amber.C,v 1.4 1999/09/07 11:49:50 len Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -108,11 +108,11 @@ namespace BALL
 		// open parameter file
 
 		Path    path;
-		String  filename(path.find("AMBER95.ini"));
+		String  filename(path.find("Amber/amber91.ini"));
 
 		if (filename == "") 
 		{
-			Log.level(LogStream::ERROR) << "cannot open parameter file AMBER95.ini" << endl;
+			Log.level(LogStream::ERROR) << "cannot open parameter file Amber/amber91.ini" << endl;
 			return false;
 		}
 
@@ -122,7 +122,7 @@ namespace BALL
 		parameters_.init();
 
 		// assign atom types: QUICK AND _VERY_ DIRTY (BAUSTELLLE)
-		AssignTypeNameProcessor type_name_proc("/KM/comp-bio/BALL-data/amber_types.dat", false);
+		AssignTypeNameProcessor type_name_proc("/KM/comp-bio/BALL-data/Amber/amber91.types", false);
 		getSystem()->apply(type_name_proc);
 		AssignTypeProcessor type_proc(parameters_.getAtomTypes());
 		getSystem()->apply(type_proc);
