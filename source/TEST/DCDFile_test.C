@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.10 2002/12/12 11:34:40 oliver Exp $
+// $Id: DCDFile_test.C,v 1.11 2002/12/17 16:21:54 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.10 2002/12/12 11:34:40 oliver Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.11 2002/12/17 16:21:54 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -50,7 +50,6 @@ RESULT
 
 
 CHECK(DCDFile::DCDFile(const String& name, File::OpenMode open_mode) throw())
-  //?????
   DCDFile test_file(dcd_test_file, std::ios::in);
 	TEST_EQUAL(test_file.isOpen(), true)
 	TEST_EQUAL(test_file.getOpenMode(), std::ios::in)
@@ -110,29 +109,34 @@ RESULT
 
 
 CHECK(DCDFile::writeHeader() throw())
-	// ?????:
-	// Oh, how did this temporary file thing work again?
-	// DCDFile one(temporary, std::ios::out);
-	// one.writeHeader();
-	// one.close();
-	// DCDFile two(temporary, std::ios::in);
-	// bool test = two.readHeader();
-	// TEST_EQUAL(test, true);
+	String temporary;
+	NEW_TMP_FILE(temporary)
+	DCDFile one(temporary, std::ios::out);
+	one.writeHeader();
+	one.close();
+	DCDFile two(temporary, std::ios::in);
+	bool test = two.readHeader();
+	TEST_EQUAL(test, true);
 RESULT
 
 
 CHECK(DCDFile::append(const SnapShot& snapshot) throw())
-  // ?????
-	// SnapShot snap;
-	// DCDFile one(temporary, File::out);
-	// one.append(snap);
-	// one.close();
-	// DCDFile two(temporary, std::ios::in);
-	// SnapShot snap2;
-	// two.readHeader();
-	// two.read(snap2);
-	// bool test = (snap == snap2);
-	// TEST_EQUAL(test, true);
+	Atom atom;
+	::std::vector<Vector3> atom_positions;
+	atom_positions.push_back(atom.getPosition());
+	SnapShot snap;
+	snap.setAtomPositions(atom_positions);
+	String temporary;
+	NEW_TMP_FILE(temporary)
+	DCDFile one(temporary, File::out);
+	for (Size i = 0; i < 100; i++) one.append(snap);
+	one.close();
+	DCDFile two(temporary, std::ios::in);
+	SnapShot snap2;
+	two.readHeader();
+	two.read(snap2);
+	bool test = (snap == snap2);
+	TEST_EQUAL(test, true);
 RESULT
 
 
