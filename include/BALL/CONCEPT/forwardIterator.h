@@ -1,4 +1,4 @@
-// $Id: forwardIterator.h,v 1.8 2001/06/26 08:58:21 anker Exp $
+// $Id: forwardIterator.h,v 1.9 2001/06/26 17:15:04 anker Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -94,7 +94,7 @@ namespace BALL
 		ConstForwardIterator& operator ++ ()
 			throw(Exception::InvalidIterator);
 
-		/** BAUSTELLE
+		/** Advance the iterator (postfix notation).
 		 */
 		ConstForwardIterator operator ++ (int)
 			throw(Exception::InvalidIterator);
@@ -313,7 +313,7 @@ namespace BALL
 		ForwardIterator& operator ++ ()
 			throw(Exception::InvalidIterator);
 
-		/** BAUSTELLE
+		/** Advance the iterator (postfix notation).
 		 */
 		ForwardIterator operator ++ (int)
 			throw(Exception::InvalidIterator);
