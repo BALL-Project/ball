@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.54 2005/02/13 22:38:49 oliver Exp $
+// $Id: atom.C,v 1.55 2005/03/09 16:18:57 amoll Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -265,12 +265,6 @@ namespace BALL
     static_attributes_[index_] = static_attributes_[atom.index_];
   }
 
-  void Atom::get(Atom& atom, bool deep) const
-    throw()
-  {
-    atom.set(*this, deep);
-  }
-
 	Atom& Atom::operator = (const Atom& atom)
 		throw()
 	{
@@ -289,18 +283,6 @@ namespace BALL
 		return *this;
 	}
 			
-	bool Atom::operator == (const Atom& atom) const
-		throw()
-	{
-		return(Object::operator ==(atom));
-	}
-
-	bool Atom::operator != (const Atom& atom) const
-		throw()
-	{
-		return ! (*this == atom);
-	}
-
 	void Atom::swap(Atom &atom)
 		throw()
 	{
@@ -401,12 +383,6 @@ namespace BALL
 		}
 
 		return name;
-	}
-
-	Size Atom::countBonds() const
-		throw()
-	{
-		return number_of_bonds_;
 	}
 
 	Bond* Atom::getBond(Position index)
@@ -559,12 +535,6 @@ namespace BALL
 			return (bond->getType() != Bond::TYPE__HYDROGEN);
 		}
 		return false;
-	}
-
-	bool Atom::isBound() const
-		throw()
-	{
-		return (number_of_bonds_ > 0);
 	}
 
 	bool Atom::isGeminal(const Atom& atom) const
