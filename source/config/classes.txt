@@ -37,12 +37,12 @@ VersionInfo                         /           /
 ------------------------DATATYPE--------------------------------------------
 Bit                                 /           /
 BitVector                           /           /
-HashGridBox3                        DEIX        Z
+HashGridBox3                        DX          Z       HashGridBox3<Item>::set lacks
       DataItem_
       NeighbourBoxItem_
       BoxIteratorTraits_
       DataIteratorTraits_
-HashGrid3                           DEI         Z
+HashGrid3                           D           Z      
       BoxIteratorTraits_
 HashMap                             D           /       
       IllegalKey
@@ -55,20 +55,15 @@ List                                /           /
 Options                             /           /
 Quadruple                           /           Z
 OrderedQuadruple                    /           Z
-RegularData1D                       E           Z
-RegularData2D                       E           Z
+RegularData1D                       /           Z
+RegularData2D                       /           Z
 RegularData3D                       /           /
 RegularExpression                   D           /
-String                              DEI         /
-Substring                           DEI         /
+String                              D           /
+Substring                           D           /
       UnboundSubstring
       InvalidSubstring
-StringHashMap                       /           /       
-StackListItem                       DEI         /
-StackList                           DEI         /
-TStackListItem                      DEI         /
-TSStack                             DEI         /
-TRegularData1D                      E           X
+StringHashMap                       /           /
 ------------------------CONCEPT---------------------------------------------
 AutoDeletable                       EI,         X
 BaseIterator                        EI,         Z     clear fehlt, BALL_CREATE_DEEP
