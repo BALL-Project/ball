@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.h,v 1.8 2001/03/05 01:55:44 amoll Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.9 2001/05/29 16:40:19 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -71,17 +71,17 @@ namespace BALL
 			/** Default verbosity level.
 					@see Option::VERBOSITY
 			 */
-			static const int VERBOSITY;
+			static const Size VERBOSITY;
 			
 			/** Default integration method.
 					@see Option::METHOD
 			 */
-			static const int METHOD;
+			static const Size METHOD;
 
 			/** Default number of inetgartion samples.
 					@see Option::SAMPLES
 			 */
-			static const int SAMPLES;
+			static const Size SAMPLES;
 		};
 
 		/** The available methods for integration 

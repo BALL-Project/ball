@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.9 2001/03/12 00:47:05 amoll Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.10 2001/05/29 16:40:18 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -127,7 +127,7 @@ namespace BALL
 			/** Default verbosity level.
 					@see Option::VERBOSITY
 			 */
-			static const int VERBOSITY;
+			static const Size VERBOSITY;
 
 			/** Default RDF setting.
 					We use RDF information for the calculation of the interaction	energy by default.
@@ -147,7 +147,7 @@ namespace BALL
 			/** 
 					@see Option::SURFACE_TYPE
 			 */
-			static const int SURFACE_TYPE;
+			static const Size SURFACE_TYPE;
 
 			/** 
 					@see Option::SURFACE_FILENAME

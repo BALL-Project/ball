@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.11 2000/11/06 18:06:19 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.12 2001/05/29 16:40:22 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -36,7 +36,7 @@ namespace BALL
 	const char* PairExpInteractionEnergyProcessor::Option::SURFACE_FILENAME
 		= "surface_filename";
 
-	const int PairExpInteractionEnergyProcessor::Default::VERBOSITY = 1;
+	const Size PairExpInteractionEnergyProcessor::Default::VERBOSITY = 1;
 	const double PairExpInteractionEnergyProcessor::Default::ALPHA 
 		= 12.35;
 	const double PairExpInteractionEnergyProcessor::Default::C1
@@ -50,7 +50,7 @@ namespace BALL
 		= "rdf.ini";
 	const char* PairExpInteractionEnergyProcessor::Default::SOLVENT_FILENAME
 		= "solvent.ini";
-	const int PairExpInteractionEnergyProcessor::Default::SURFACE_TYPE
+	const Size PairExpInteractionEnergyProcessor::Default::SURFACE_TYPE
 		= SURFACE__SAS;
 	const char* PairExpInteractionEnergyProcessor::Default::SURFACE_FILENAME
 		= "surface.surf";
@@ -143,7 +143,7 @@ namespace BALL
 		String rdf_filename = options.get(Option::RDF_FILENAME);
 		// the file contacining the solvent description
 		String solvent_filename = options.get(Option::SOLVENT_FILENAME);
-		int surface_type = options.getInteger(Option::SURFACE_TYPE);
+		Size surface_type = options.getInteger(Option::SURFACE_TYPE);
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
 
 		// define the solvent

@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.12 2001/05/17 01:30:57 oliver Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.13 2001/05/29 16:40:22 anker Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
@@ -15,9 +15,9 @@ namespace BALL
 	const char* Pair6_12RDFIntegrator::Option::METHOD = "integration_method";
 	const char* Pair6_12RDFIntegrator::Option::SAMPLES = "samples";
 
-	const int Pair6_12RDFIntegrator::Default::VERBOSITY = 0;
-	const int Pair6_12RDFIntegrator::Default::METHOD = METHOD__ANALYTICAL;
-	const int Pair6_12RDFIntegrator::Default::SAMPLES = 30;
+	const Size Pair6_12RDFIntegrator::Default::VERBOSITY = 0;
+	const Size Pair6_12RDFIntegrator::Default::METHOD = METHOD__ANALYTICAL;
+	const Size Pair6_12RDFIntegrator::Default::SAMPLES = 30;
 
 	Pair6_12RDFIntegrator::Pair6_12RDFIntegrator() throw()
 		: RDFIntegrator(),
@@ -119,7 +119,7 @@ namespace BALL
 
 		Index verbosity =
 			(Index)options.getInteger(Pair6_12RDFIntegrator::Option::VERBOSITY);
-		Index method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
+		Size method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
 
 		if (method == METHOD__UNKNOWN)
 		{
@@ -135,6 +135,14 @@ namespace BALL
 		
 		// now build the interval we want to integrate
 		Size number_of_intervals = poly.getIntervals().size();
+		if (number_of_intervals < 1)
+		{ 
+			// BAUSTELLE: Sollte hier eine Exception geworfen werden?
+			Log.error() << "Pair6_12RDFIntegrator::integrateToInf(): "
+				<< "No intervals defined" << endl;
+			getRDF().dump();
+			return 0.0;
+		}
 		interval = poly.getInterval(number_of_intervals - 1);
 
 		// the last interval has to be defined to infinity
@@ -223,7 +231,7 @@ namespace BALL
 
 		// int verbosity =
 		//	options.getInteger(Pair6_12RDFIntegrator::Option::VERBOSITY);
-		int method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
+		Size method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
 
 		if (method == METHOD__UNKNOWN)
 		{

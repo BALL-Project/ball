@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.8 2001/03/05 01:55:44 amoll Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.9 2001/05/29 16:40:19 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
@@ -144,7 +144,7 @@ namespace BALL
 			/** Default verbosity level.
 					@see Option::VERBOSITY
 			 */
-			static const int VERBOSITY;
+			static const Size VERBOSITY;
 
 			/** Default pair potential constants.
 					@see: Option::ALPHA
@@ -169,7 +169,7 @@ namespace BALL
 			/** 
 					@see Option::SURFACE_TYPE
 			 */
-			static const int SURFACE_TYPE;
+			static const Size SURFACE_TYPE;
 
 			/** 
 					@see Option::SURFACE_FILENAME

@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.10 2001/03/12 00:45:49 amoll Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.11 2001/05/29 16:40:22 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -29,13 +29,13 @@ namespace BALL
 		= "surface_filename";
 	
 
-	const int Pair6_12InteractionEnergyProcessor::Default::VERBOSITY = 1;
+	const Size Pair6_12InteractionEnergyProcessor::Default::VERBOSITY = 1;
 	const bool Pair6_12InteractionEnergyProcessor::Default::USE_RDF = false;
 	const char* Pair6_12InteractionEnergyProcessor::Default::RDF_FILENAME
 		= "data/solvation/RDF-AMBER.ini";
 	const char* Pair6_12InteractionEnergyProcessor::Default::SOLVENT_FILENAME
 		= "data/solvents/PCM-water.ini";
-	const int Pair6_12InteractionEnergyProcessor::Default::SURFACE_TYPE
+	const Size Pair6_12InteractionEnergyProcessor::Default::SURFACE_TYPE
 		= SURFACE__SAS;
 	const char* Pair6_12InteractionEnergyProcessor::Default::SURFACE_FILENAME
 		= "surface.surf";
@@ -185,7 +185,7 @@ namespace BALL
 		{
 			solvent_filename = options.get(Option::SOLVENT_FILENAME);
 		}
-		int surface_type = options.getInteger(Option::SURFACE_TYPE);
+		Size surface_type = options.getInteger(Option::SURFACE_TYPE);
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
 
 		// define the solvent
@@ -215,13 +215,13 @@ namespace BALL
 			// check whether there is an option set for the integration method
 			rdf_integrator_.options.setInteger
 				(Pair6_12RDFIntegrator::Option::VERBOSITY, verbosity);
-			int method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
+			Size method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
 			if (method != Pair6_12RDFIntegrator::METHOD__UNKNOWN)
 			{
 				Log.info() << "method: " << method << endl;
 				rdf_integrator_.options.setInteger
 					(Pair6_12RDFIntegrator::Option::METHOD, method);
-				int samples =
+				Size samples =
 					options.getInteger(Pair6_12RDFIntegrator::Option::SAMPLES);
 				if (samples != 0)
 				{
@@ -386,6 +386,9 @@ namespace BALL
 					Log.error() << "Pair6_12InteractionEnergyProcessor::finish(): "
 						<< "Cannot assign force field parameters for types " 
 						<< type_i << "/" << type_j << endl;
+					// DEBUG
+					Log.error() << "TYPENAME = " << solute_iterator->getTypeName() << endl;
+					Log.error() << "FULLNAME = " << solute_iterator->getFullName() << endl;
 					return false;
 				}
 
