@@ -17,12 +17,11 @@
 # include <BALL/FORMAT/DCDFile.h>
 #endif
 
-#include <set>
 #include <vector>
+#include <set>
 
 namespace BALL
 {
-
 		/** A class defining the interface for docking algorithms.
 				This is a first iteration.
 		*/
@@ -82,6 +81,10 @@ namespace BALL
 				 *  with name filename. If num == 0, all results are exported.
 				 */
 				void writeDCDFile(const String& filename, const Size num=0);
+
+				/** Return the number of conformations.
+				 */
+				Size size() const;
 				
 			protected:
 

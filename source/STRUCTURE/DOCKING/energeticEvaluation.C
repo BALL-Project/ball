@@ -1,16 +1,22 @@
-#include "energeticEvaluation.h"
-#include <stdlib.h>
-#include <iostream>
-#include "rankedConformations.h"
+#include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
+
 using namespace::std;
+using namespace BALL;
 
-
-void BALL::Docking::EnergeticEvaluation::operator () (RankedConformations& ranked_conformations) const
+EnergeticEvaluation::EnergeticEvaluation()
 	throw()
 {
-	ranked_conformations = ranked_conformations;
-	
-	Log.error() << "This is just an interface definition. Check your dynamic binding" << endl;
+}
+
+EnergeticEvaluation::~EnergeticEvaluation()
+	throw()
+{
+}
+
+vector<ConformationSet::Conformation> EnergeticEvaluation::operator () (const ConformationSet& conformations)
+	throw()
+{
+	return conformations.getScoring();
 }
 
 

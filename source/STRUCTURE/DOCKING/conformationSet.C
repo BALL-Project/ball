@@ -91,4 +91,10 @@ namespace BALL
 			ssm.takeSnapShot();
 		}
 	}
+
+	Size ConformationSet::size() const
+	{
+		return snapshot_order_.size();
+	}
+
 }

@@ -1,43 +1,31 @@
-#include <BALL/DATATYPE/hashMap.h>
-#include "rankedConformations.h"
-
 #ifndef ENERGETICEVALUATION_H
 #define ENERGETICEVALUATION_H
 
+#include <BALL/STRUCTURE/DOCKING/conformationSet.h>
+#include <BALL/DATATYPE/hashMap.h>
+
+#include <vector>
+
 namespace BALL
 {
-
-	namespace Docking
-	{
-
-		class EnergyGrid;
-
-		/** A class defining the interface for docking algorithms.
-
-				This is a first iteration.
-
-		*/
+		/** A basis class for energetic evaluators of docking results.
+		 *	This trivial class will return the identity scoring, leaving
+		 *	permutation and score unchanged.
+		 */
 		class EnergeticEvaluation
 		{
-
 			public:
 
-				/** Attributes
-				*/
-		                
-		                
-
+				EnergeticEvaluation()
+					throw();
+				
+				virtual ~EnergeticEvaluation()
+					throw();
+				
 				/** Operations
 				*/
-		               
-				void operator () (RankedConformations& ranked_conformations) const 
-				      throw();
-						
-
-
+				std::vector<ConformationSet::Conformation> operator () (const ConformationSet& conformations)
+					throw();
 		};
-
-	}
-
 }
 #endif
