@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.28 2001/07/29 17:24:00 oliver Exp $
+// $Id: exception.h,v 1.29 2001/07/29 22:18:15 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -55,7 +55,7 @@ namespace BALL
 		*/
 		
 		class GeneralException 
-			:	std::exception
+			:	public std::exception
 		{
 			public:
 
