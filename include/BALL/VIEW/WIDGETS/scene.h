@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.28 2004/04/07 15:11:59 amoll Exp $
+// $Id: scene.h,v 1.29 2004/04/14 15:24:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -390,6 +390,9 @@ namespace BALL
 			virtual void wheelEvent(QWheelEvent* qmouse_event);
 #endif
 
+			/// Catch key events
+			void keyPressEvent(QKeyEvent* e);
+			
 			//_ state of the scene: picking or rotate mode?
 			int current_mode_;
 			

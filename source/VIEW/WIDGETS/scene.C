@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.50 2004/04/07 15:11:57 amoll Exp $
+// $Id: scene.C,v 1.51 2004/04/14 15:23:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -20,6 +20,7 @@
 #include <qimage.h>
 #include <qmenubar.h>
 #include <qcursor.h>
+#include <qapp.h>
 
 
 using std::endl;
@@ -1004,8 +1005,9 @@ namespace BALL
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			// 	stereo_id_ = main_control.insertMenuEntry(
-			// 		MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()));
+			stereo_id_ = main_control.insertMenuEntry (
+ 					MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()), ALT+Key_Y);
+ 			menuBar()->setItemChecked(stereo_id_, false) ;
 
 			hint = "Print the coordinates of the current viewpoint";
 			main_control.insertMenuEntry(
@@ -1026,7 +1028,6 @@ namespace BALL
 			window_menu_entry_id_ = 
 				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 			menuBar()->setItemChecked(window_menu_entry_id_, true);
-			//	menuBar()->setItemChecked(stereo_id_, false) ;
 
 			setCursor(QCursor(Qt::SizeAllCursor));
 		}
@@ -1042,7 +1043,7 @@ namespace BALL
 					SLOT(setViewPoint_()), CTRL+Key_N);		
 			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
 					SLOT(resetCamera_()), CTRL+Key_T);		
-			//	main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT(switchStereo()), CTRL+Key_T);		
+			main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT( switchStereo()), ALT+Key_Y);		
 			main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
 			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 		}
@@ -1203,6 +1204,14 @@ namespace BALL
 		}
 #endif
 
+		void Scene::keyPressEvent(QKeyEvent* e)
+		{
+			if (e->key() == Key_Y && e->state() == AltButton)
+			{
+				switchStereo();
+			}
+		}
+
 		void Scene::rotateMode_()
 		{
 			current_mode_ = ROTATE__MODE;		
@@ -1326,23 +1335,35 @@ namespace BALL
 		void Scene::switchStereo()
 			throw()
 		{
+			/*
 			GLboolean enabled = false;
 			glGetBooleanv(GL_STEREO, &enabled);
 			if (!enabled)
 			{
 				Log.error() << "No Stereo mode capability in driver" << std::endl;
+				setStatusbarText("No Stereo mode capability in driver");
 				return;
 			}
-
+			*/
 			QMenuBar* menu = getMainControl()->menuBar();
 			bool stereo;
 			if (menu->isItemChecked(stereo_id_))
 			{
+				hide();
+				showNormal();
+				reparent((QWidget*)getMainControl(), getWFlags() & ~WType_Mask, last_pos_, false);
+				((QMainWindow*)getMainControl())->setCentralWidget(this);
+				show();
 				stereo = false;
 			}
 			else
 			{
+				showNormal();
+				reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
+				showFullScreen();
+				setGeometry(qApp->desktop()->screenGeometry());
 				stereo = true;
+				last_pos_ = pos();
 			}
 
 			menu->setItemChecked(stereo_id_, stereo);
