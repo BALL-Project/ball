@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.21 2003/12/04 15:29:34 amoll Exp $
+// $Id: molecularControl.C,v 1.22 2003/12/06 00:01:24 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -408,7 +408,6 @@ void MolecularControl::selectedComposite_(Composite* composite, bool state)
 	notify_(message);
 	
 	setSelection_(false);
-	getMainControl()->updateRepresentationsOf(*composite, false);
 }
 
 
