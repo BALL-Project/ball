@@ -1,6 +1,8 @@
-// $Id: control.C,v 1.3 2000/01/09 17:43:39 hekl Exp $
+// $Id: control.C,v 1.4 2000/01/09 21:04:48 oliver Exp $
 
 #include "control.h"
+
+using namespace std;
 
 Control::Control
   (QWidget* parent__pQWidget, 
