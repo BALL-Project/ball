@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.h,v 1.2 2001/09/10 12:49:28 amoll Exp $
+// $Id: TCPTransfer.h,v 1.3 2001/09/11 17:09:42 amoll Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -11,20 +11,20 @@
 # include <BALL/DATATYPE/string.h>
 #endif
 
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h> 
-#include <unistd.h>
-
-#include <sys/ioctl.h>
 #include <fstream>
-//#include <stdio.h>
 
 #define BUFFER_SIZE 1024
 
 namespace BALL
 {
 
+	/** Class for TCPTransfers.
+	 * 	You can use http and ftp protocol to transfer files
+	 * 	from the internet and store them in an ofstream.
+	 * 	Support for login, password and port is build in for
+	 * 	FTP and HTTP. FTP transports are done by passive FTP, so
+	 * 	no problems with local firewalls are encountered.
+	 */
 	class TCPTransfer
 	{
 		public:
@@ -55,18 +55,22 @@ namespace BALL
 				FILENOTFOUND_ERROR 			= 404
 			};
 
-			/** Enumeration of the protocols.
+			/** Enumeration of the supported protocols.
 			 */
 			enum Protocol
 			{
+				///
 				UNKNOWN_PROTOCOL 	= 0,
+				
+				///
 				HTTP_PROTOCOL			= 1,
+				
+				///
 				FTP_PROTOCOL			= 2
 			};
 			
 			/** Default constructor.
-					The instance is set to a non valid state, by setting
-					its state to UNINITIALIZED_ERROR.
+					The instance is set to UNINITIALIZED_ERROR.
 			*/
 			TCPTransfer()
 				throw()
@@ -81,7 +85,7 @@ namespace BALL
 			 *	the syntax: \\
 			 *	http[ftp]://login:pass@server.com:port/fileaddress
 			 */
-			TCPTransfer(ofstream& file, const String& address)
+			TCPTransfer(::std::ofstream& file, const String& address)
 				throw();
 			
 			/** Clear method.
@@ -95,13 +99,13 @@ namespace BALL
 			 * 	You can set a new file and address, but the transfer is not
 			 * 	yet done. To do that, use transfer() afterwards.
 			 */
-			bool set(ofstream& file, const String& address)
+			bool set(::std::ofstream& file, const String& address)
 				throw();
 			
 			/** Detailled set method.
 			 *  @see set(ofstream& file, const String& address)
 			 */
-			void set(ofstream& file, 
+			void set(::std::ofstream& file, 
 							 Protocol protocol, 
 							 const String& host_address, 
 							 const String& file_address,
@@ -142,8 +146,10 @@ namespace BALL
 				return port_;
 			}
 
-			/// Return the status code.
-			Position getStatusCode() const
+			/** Return the status code.
+			 * 	@see Status
+			 */
+			Status getStatusCode() const
 				throw()
 			{
 				return status_;
@@ -156,7 +162,9 @@ namespace BALL
 				return received_bytes_;
 			}
 			
-			/// Return the protocol.
+			/** Return the protocol.
+			 * 	@see Protocol
+			 */
 			Protocol getProtocol() const
 				throw()
 			{
@@ -178,7 +186,7 @@ namespace BALL
 			}
 
 			/// Get a pointer to the stream.
-			const ofstream* getStream() const
+			const ::std::ofstream* getStream() const
 				throw()
 			{
 				return fstream_;
@@ -197,7 +205,7 @@ namespace BALL
 
 			/** Transfer method.
 					If the address is specified, the file can be transfered
-					whith this method.
+					with this method.
 					@return Status the status of the transfer/instance
 					@see Status
 			*/
@@ -215,8 +223,8 @@ namespace BALL
 				int			 		received_bytes_;
 				Protocol 		protocol_;
 				char* 			buffer_;
-				ofstream*		fstream_;
 				Socket			socket_;
+				::std::ofstream*		fstream_;
 				
 				//_ Specified method for transfering per FTP-protocol
 				Status	 		getFTP_();
