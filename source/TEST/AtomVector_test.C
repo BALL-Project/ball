@@ -1,4 +1,4 @@
-// $Id: AtomVector_test.C,v 1.4 2001/07/15 11:11:13 amoll Exp $
+// $Id: AtomVector_test.C,v 1.5 2001/07/15 11:16:30 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/atom.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AtomVector_test.C,v 1.4 2001/07/15 11:11:13 amoll Exp $")
+START_TEST(class_name, "$Id: AtomVector_test.C,v 1.5 2001/07/15 11:16:30 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -151,6 +151,13 @@ CHECK(AtomVector::resetPositions())
 	TEST_EQUAL(a.getPosition(), v3);
 	v3.set(10.0, 20.0, 30.0);
 	TEST_EQUAL(b.getPosition(), v3);
+	
+	AtomVector av2;
+	av2.push_back(&a);
+	av2.push_back(&b);
+	v3 = a.getPosition();
+	av2.resetPositions();
+	TEST_EQUAL(a.getPosition(), v3)
 RESULT
 
 
