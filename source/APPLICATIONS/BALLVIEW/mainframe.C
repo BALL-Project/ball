@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.50 2005/02/27 18:38:27 amoll Exp $
+// $Id: mainframe.C,v 1.51 2005/02/28 15:55:05 amoll Exp $
 //
 
 #include "mainframe.h"
 #include "aboutDialog.h"
 #include "icons.h"
+#include "ballviewTutorial.h"
 #include "ballviewDemo.h"
 
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
@@ -19,7 +20,9 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
 #include <BALL/VIEW/DIALOGS/labelDialog.h>
+#include <BALL/VIEW/DIALOGS/displayProperties.h>
 
+#include <BALL/FORMAT/PDBFile.h>
 #include <BALL/COMMON/version.h>
 
 #ifdef BALL_PYTHON_SUPPORT
@@ -31,6 +34,7 @@
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qimage.h>
+#include <qmessagebox.h>
 
 #include <sstream>
 
@@ -112,6 +116,9 @@ namespace BALL
 		CHECK_PTR(logview);
 		logview->setMinimumSize(10, 10);
 
+		BALLViewTutorial* tutorial = new BALLViewTutorial(this, "BALLViewTutorial");
+		CHECK_PTR(tutorial);
+
 		BALLViewDemo* demo = new BALLViewDemo(this, "BALLViewDemo");
 		CHECK_PTR(demo);
 
@@ -140,8 +147,9 @@ namespace BALL
 										ALT+Key_X);
 
 		// Help-Menu -------------------------------------------------------------------
-		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
 		insertMenuEntry(MainControl::HELP, "Demo", demo, SLOT(show()));
+		insertMenuEntry(MainControl::HELP, "Tutorial", tutorial, SLOT(show()));
+		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
 
 		// Menu ------------------------------------------------------------------------
 		menuBar()->setSeparator(QMenuBar::InWindowsStyle);

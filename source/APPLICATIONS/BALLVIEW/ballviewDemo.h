@@ -28,10 +28,10 @@ namespace BALL
 		*/
 		class BALLViewDemo : 
 			public BALLViewDemoData,
-			public ModularWidget
+ 			public ModularWidget
 		{
 			Q_OBJECT
-			BALL_EMBEDDABLE(BALLViewDemo,ModularWidget)
+ 			BALL_EMBEDDABLE(BALLViewDemo,ModularWidget)
 				
 			public:
 			
@@ -65,13 +65,10 @@ namespace BALL
 			//@{
 
 			/** Message handling method.
-					Catches only ControlSelectionMessage from MolecularControl.
-					If such a message is catched the apply button will be enabled and labels
-					can be appended onto the selection.
 					@param message the pointer to the message that should be processed
 		  */
-			virtual void onNotify(Message *message)
-				throw();
+ 			virtual void onNotify(Message *message)
+ 				throw();
 							
 			//@}
 			
@@ -84,22 +81,13 @@ namespace BALL
 			/** Show and raise the dialog
 			*/
 			void show();
-						
-			//@}
-			/** @name Protected slots
-			*/
-			//@{
-				
-			protected slots:
-							
-			///
-			virtual void next();
+			void accept();
 						
 			//@}
 			
-		private:
-			
-			void enableNextStep_();
+			private:
+
+			List<Composite*> composites_;
 		};
 
 } } // namespaces

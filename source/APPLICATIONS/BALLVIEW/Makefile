@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.3 2005/02/28 14:51:37 amoll Exp $
+# $Id: Makefile,v 1.4 2005/02/28 15:55:05 amoll Exp $
 #
 
 EXECUTABLE=BALLView
@@ -20,6 +20,8 @@ CPP_SOURCES=\
 	aboutDialog.C\
 	ballviewTutorial.C\
 	ballviewTutorialData.C\
+	ballviewDemo.C\
+	ballviewDemoData.C\
 	icons.C\
 	main.C\
 	mainframe.C
@@ -28,6 +30,8 @@ MOC_SOURCES=\
 	aboutDialog_moc.C\
 	ballviewTutorial_moc.C\
 	ballviewTutorialData_moc.C\
+	ballviewDemo_moc.C\
+	ballviewDemoData_moc.C\
 	mainframe_moc.C
 	
 UIC_FILES=\
@@ -35,6 +39,8 @@ UIC_FILES=\
 	aboutDialog.h\
 	ballviewTutorialData.C\
 	ballviewTutorialData.h\
+	ballviewDemoData.C\
+	ballviewDemo.h\
 
 BALLView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS)
@@ -43,7 +49,6 @@ depend: $(UIC_FILES) $(MOC_SOURCES)
 
 mainframe_moc.C:	mainframe.h
 	$(MOC) mainframe.h -o $@
-
 
 aboutDialog.h: aboutDialog.ui
 	$(UIC) aboutDialog.ui > aboutDialog.h
@@ -66,6 +71,19 @@ ballviewTutorial_moc.C: ballviewTutorial.h
 
 ballviewTutorialData_moc.C: ballviewTutorialData.h
 	$(MOC) ballviewTutorialData.h -o $@
+
+
+ballviewDemoData.h: ballviewDemo.ui
+	$(UIC) ballviewDemo.ui > ballviewDemoData.h
+				
+ballviewDemoData.C: ballviewDemo.h
+	$(UIC) -impl ballviewDemoData.h ballviewDemo.ui > ballviewDemoData.C
+
+ballviewDemo_moc.C: ballviewDemo.h
+	$(MOC) ballviewDemo.h -o $@
+
+ballviewDemoData_moc.C: ballviewDemoData.h
+	$(MOC) ballviewDemoData.h -o $@
 
 
 clean: clean_moc_uic
