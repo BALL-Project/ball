@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.53 2004/09/03 13:49:48 amoll Exp $
+// $Id: scene.h,v 1.54 2004/09/14 15:01:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -142,6 +142,9 @@ namespace BALL
 			{
 				/// Default value.
 				ROTATE__MODE         = 0,
+
+				/// Move mode
+				MOVE__MODE,
 
 				// add new modi here!!!
 				
@@ -485,7 +488,10 @@ namespace BALL
 			void keyPressEvent(QKeyEvent* e);
 			
 			//_ state of the scene: picking or rotate mode?
-			int current_mode_;
+			ModeType current_mode_;
+
+			//_ last state of the scene: picking or rotate mode?
+			ModeType last_mode_;
 			
 			public slots:
 
@@ -544,6 +550,10 @@ namespace BALL
 			void animationExportPNGClicked()
 				throw();
 
+			///
+			void switchToLastMode()
+				throw();
+
 			protected slots:
 
 			//@}
@@ -569,6 +579,10 @@ namespace BALL
 			*/
 			virtual void pickingMode_();
 
+			/**
+			*/
+			virtual void moveMode_();
+			
 			/// Show the viewpoint and the look at point in the statusline of the mainwidget.
 			virtual void showViewPoint_()
 				throw();
@@ -608,6 +622,7 @@ namespace BALL
 				throw();
 
 			void processRotateModeMouseEvents_(QMouseEvent* e);
+			void processMoveModeMouseEvents_(QMouseEvent* e);
 
 			void rotateSystem_(Scene* scene);
 			void rotateSystem2_(Scene* scene);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.129 2004/09/08 11:45:49 amoll Exp $
+// $Id: scene.C,v 1.130 2004/09/14 15:01:13 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -59,6 +59,7 @@ namespace BALL
 			:	QGLWidget(gl_format_),
 				ModularWidget("<Scene>"),
 				current_mode_(ROTATE__MODE),
+				last_mode_(PICKING__MODE),
 				rotate_id_(-1),
 				picking_id_(-1),
 				system_origin_(0.0),
@@ -84,6 +85,7 @@ namespace BALL
 			:	QGLWidget(gl_format_, parent_widget, name, 0, w_flags),
 				ModularWidget(name),
 				current_mode_(ROTATE__MODE),
+				last_mode_(PICKING__MODE),
 				rotate_id_(-1),
 				picking_id_(-1),
 				system_origin_(0.0, 0.0, 0.0),
@@ -273,6 +275,18 @@ namespace BALL
 
 				case SceneMessage::EXPORT_POVRAY:
 					exportPOVRay();
+					return;
+
+				case SceneMessage::ENTER_ROTATE_MODE:
+					rotateMode_();
+					return;
+
+				case SceneMessage::ENTER_PICKING_MODE:
+					pickingMode_();
+					return;
+
+				case SceneMessage::ENTER_MOVE_MODE:
+					moveMode_();
 					return;
 
 				case SceneMessage::UNDEFINED:
@@ -1405,7 +1419,7 @@ namespace BALL
 			y_window_pos_new_ = e->y();
 
 			// ============ picking mode ================
-			if(current_mode_ == PICKING__MODE)
+			if (current_mode_ == PICKING__MODE)
 			{
 				if (e->state() == Qt::LeftButton  ||
 						e->state() == Qt::RightButton ||
@@ -1414,8 +1428,14 @@ namespace BALL
 					selectionPressedMoved_();
 				}
 			}
-
-			processRotateModeMouseEvents_(e);
+			else if (current_mode_ == MOVE__MODE)
+			{
+				processMoveModeMouseEvents_(e);
+			}
+			else
+			{
+				processRotateModeMouseEvents_(e);
+			}
 
 			x_window_pos_old_ = x_window_pos_new_;
 			y_window_pos_old_ = y_window_pos_new_;
@@ -1480,6 +1500,88 @@ namespace BALL
 			}
 		}
 
+		void Scene::processMoveModeMouseEvents_(QMouseEvent* e)
+		{
+			if(current_mode_ != MOVE__MODE) return;
+
+			Camera& camera = stage_->getCamera();
+
+			// Difference between the old and new position in the window 
+			float delta_x = x_window_pos_new_ - x_window_pos_old_;
+			float delta_y = y_window_pos_new_ - y_window_pos_old_;
+
+			// stop if no movement
+			if (delta_x == 0 && delta_y == 0) return;
+
+			TransformationMessage* msg = new TransformationMessage;
+			Matrix4x4 m;
+
+			switch (e->state())
+			{
+				// zoom
+				case (Qt::ShiftButton | Qt::LeftButton): 
+				case  Qt::MidButton:
+				{
+					Vector3 v((delta_y / 
+								gl_renderer_.getHeight() * camera.getDistance()) 
+							* -stage_->getCamera().getViewVector()
+							* mouse_sensitivity_ / ZOOM_FACTOR);  
+					m.setTranslation(v);
+					break;
+				}
+
+				// =============== translate ========================
+				case (Qt::ControlButton | Qt::LeftButton):
+				case  Qt::RightButton:
+				{
+					// calculate translation in x-axis direction
+					Vector3 right_translate = camera.getRightVector()
+						* (delta_x / gl_renderer_.getWidth()) 
+						* 1.4 * camera.getDistance()   
+						* 2.0 * gl_renderer_.getXScale()
+						* mouse_sensitivity_ / TRANSLATE_FACTOR;
+
+					// calculate translation in y-axis direction
+					Vector3 up_translate 		= camera.getLookUpVector() 
+						* (delta_y / gl_renderer_.getHeight()) 
+						* 1.4 * camera.getDistance() 
+						* 2.0 * gl_renderer_.getYScale()
+						* mouse_sensitivity_ / TRANSLATE_FACTOR;
+
+					m.setTranslation(-right_translate - up_translate);
+					break;
+				}
+
+				// ===================== rotate2 ===========================
+				case (Qt::LeftButton | Qt::RightButton):
+				case (Qt::LeftButton | Qt::ShiftButton | Qt::ControlButton):
+					break;
+
+				// rotate
+				case Qt::LeftButton:
+				{
+					if (delta_x > delta_y)
+					{
+						Angle angle(delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * -30)), false);
+						m.rotate(angle, camera.getLookUpVector());
+					}
+					else
+					{
+						Angle angle(delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -30)), false);
+						m.rotate(angle, camera.getRightVector());
+					}
+					break;
+				}
+
+				default:
+					delete msg;
+					return;
+			}
+
+			msg->setMatrix(m);
+			notify_(msg);
+		}
+
 
 		void Scene::mouseReleaseEvent(QMouseEvent* e)
 		{
@@ -1506,8 +1608,14 @@ namespace BALL
 						break;
 				}
 			}
-
-			processRotateModeMouseEvents_(e);
+			else if (current_mode_ == ROTATE__MODE)
+			{
+				processRotateModeMouseEvents_(e);
+			}
+			else if (current_mode_ == MOVE__MODE)
+			{
+				processMoveModeMouseEvents_(e);
+			}
 
 			if (need_update_)
 			{
@@ -1627,16 +1735,24 @@ namespace BALL
 
 		void Scene::rotateMode_()
 		{
+			last_mode_ = current_mode_;
 			current_mode_ = ROTATE__MODE;		
 			setCursor(QCursor(Qt::SizeAllCursor));
 		}
 
 		void Scene::pickingMode_()
 		{
+			last_mode_ = current_mode_;
 			current_mode_ = PICKING__MODE;
 			setCursor(QCursor(Qt::CrossCursor));
 		}
 
+		void Scene::moveMode_()
+		{
+			last_mode_ = current_mode_;
+			current_mode_ = MOVE__MODE;
+			setCursor(QCursor(Qt::PointingHandCursor));
+		}
 
 		void Scene::selectionPressed_()
 		{
@@ -1964,6 +2080,23 @@ namespace BALL
 			throw()
 		{
 			menuBar()->setItemChecked(animation_export_PNG_id_, !menuBar()->isItemChecked(animation_export_PNG_id_));
+		}
+
+		void Scene::switchToLastMode()
+			throw()
+		{
+			switch (last_mode_)
+			{
+ 				case PICKING__MODE: 
+					pickingMode_();
+					break;
+ 				case ROTATE__MODE: 
+					rotateMode_();
+					break;
+ 				case MOVE__MODE: 
+					moveMode_();
+					break;
+			}
 		}
 
 } }// namespaces

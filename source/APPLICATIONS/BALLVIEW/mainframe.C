@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.30 2004/09/02 13:51:20 amoll Exp $
+// $Id: mainframe.C,v 1.31 2004/09/14 15:01:19 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -597,6 +597,12 @@ namespace BALL
 
 	void Mainframe::keyPressEvent(QKeyEvent* e)
 	{
+		if (e->key() == Key_Escape) 
+		{
+			Scene::getInstance(0)->switchToLastMode();
+			return;
+		}
+
 		#ifdef BALL_PYTHON_SUPPORT
 			PyWidget::getInstance(0)->reactTo(*e);
 			e->accept();

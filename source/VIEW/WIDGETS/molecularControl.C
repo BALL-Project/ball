@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.62 2004/08/29 17:31:59 amoll Exp $
+// $Id: molecularControl.C,v 1.63 2004/09/14 15:01:13 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -9,6 +9,7 @@
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
 #include <BALL/VIEW/DIALOGS/transformationDialog.h>
+#include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
 #include <qmenubar.h>
@@ -100,7 +101,8 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			model_menu_(this),
 			context_composite_(0),
 			transformation_dialog_(0),
-			was_delete_(false)
+			was_delete_(false),
+			react_to_move_items_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new MolecularControl " << this << std::endl;
@@ -308,6 +310,18 @@ bool MolecularControl::reactToMessages_(Message* message)
 		NewSelectionMessage* nsm = (NewSelectionMessage*) message;
 		setSelection_(true, nsm->openItems());
 		updateSelection();
+	}
+	else if (RTTI::isKindOf<TransformationMessage> (*message))
+	{
+		moveItems(((TransformationMessage*)message)->getMatrix());
+	}
+	else if (RTTI::isKindOf<SceneMessage> (*message))
+	{
+		// if an other widget told the Scene to enter move mode, we wont react on TransformationMessages
+		if (((SceneMessage*)message)->getType() == SceneMessage::ENTER_MOVE_MODE)
+		{
+			react_to_move_items_ = false;
+		}
 	}
 
 	return false;
@@ -917,6 +931,7 @@ void MolecularControl::move()
 {
 	if (selected_.size() == 0) return;
 
+	/*
 	if (transformation_dialog_) 
 	{
 		transformation_dialog_->hide();
@@ -926,6 +941,10 @@ void MolecularControl::move()
 	transformation_dialog_ = new TransformationDialog(this);
 	transformation_dialog_->show();
 	transformation_dialog_->setComposite(*selected_.begin());
+	*/
+	react_to_move_items_ = true;
+	SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
+	notify_(msg);
 }
 
 
@@ -1273,6 +1292,27 @@ Size MolecularControl::applySelector(const String& expression)
 {
 	selector_edit_->setText(expression.c_str());
 	return applySelector();
+}
+
+void MolecularControl::moveItems(const Matrix4x4& m)
+	throw()
+{
+	// copy list, because selection could change
+	List<Composite*> selection = selected_;
+
+	TransformationProcessor tp(m);
+	List<Composite*>::Iterator it = selection.begin();
+	for(; it != selection.end(); it++)
+	{
+		(*it)->apply(tp);
+	}
+
+	it = selection.begin();
+	for(; it != selection.end(); it++)
+	{
+		CompositeMessage* msg = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE);
+		notify_(msg);
+	}
 }
 
 

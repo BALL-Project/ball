@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.33 2004/07/26 22:07:09 amoll Exp $
+// $Id: molecularControl.h,v 1.34 2004/09/14 15:01:17 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -16,6 +16,10 @@
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
+#endif
+
+#ifndef BALL_MATHS_MATRIX44_H
+ #include <BALL/MATHS/matrix44.h>
 #endif
 
 #include <qlistview.h>
@@ -331,6 +335,10 @@ namespace BALL
 			/// Connected to the clear selection button
 			virtual void clearSelector();
 
+			///
+			void moveItems(const Matrix4x4& m)
+				throw();
+
 			//@} 
 			/** @name Protected members 
 			*/ 
@@ -515,6 +523,7 @@ namespace BALL
 			ColoringMethod  selected_coloring_method_;
 			// let cut know to delete the entries, set by deleteCurrentItems()
 			bool 						was_delete_;
+			bool 						react_to_move_items_;
 		};
 
 }} // namespaces
