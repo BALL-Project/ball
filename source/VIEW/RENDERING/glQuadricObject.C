@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.C,v 1.3 2003/08/29 15:38:00 amoll Exp $
+// $Id: glQuadricObject.C,v 1.4 2004/07/14 17:42:47 amoll Exp $
 
 #include <BALL/VIEW/RENDERING/glQuadricObject.h>
 #include <BALL/COMMON/exception.h>
@@ -40,9 +40,7 @@ namespace BALL
 		{
     }
   
-		GLQuadricObject::GLQuadricObject
-			(int draw_style, int normals, int orientation,
-			 bool generate_texture_coordinates)
+		GLQuadricObject::GLQuadricObject(GLenum draw_style, GLenum normals, GLenum orientation, bool generate_texture_coordinates)
 			throw()
 			:	GLU_quadric_obj_(0)
 		{
@@ -52,8 +50,7 @@ namespace BALL
 			setTextureCoordinateGeneration(generate_texture_coordinates);
 		}
 
-		GLQuadricObject::GLQuadricObject
-			(const GLQuadricObject& GL_quadric_object)
+		GLQuadricObject::GLQuadricObject(const GLQuadricObject& GL_quadric_object)
 			throw()
 			:	draw_style_(GL_quadric_object.draw_style_),
 				normals_(GL_quadric_object.normals_),
@@ -67,11 +64,14 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLQuadricObject>() << endl;
+				Log.info() << "Destructing object " << (void *)this 
+					<< " of class " << RTTI::getName<GLQuadricObject>() << std::endl;
 			#endif 
 
-			destroy();
+			if (GLU_quadric_obj_ != 0)
+			{
+				gluDeleteQuadric(GLU_quadric_obj_);
+			}
 		}
 
 		void GLQuadricObject::clear()
@@ -83,19 +83,7 @@ namespace BALL
 			generate_texture_coordinates_ = false;
 		}
 
-		void GLQuadricObject::destroy()
-			throw()
-		{
-			if (GLU_quadric_obj_ != 0)
-			{
-				gluDeleteQuadric(GLU_quadric_obj_);
-			}
-
-			clear();
-		}
-
-		void GLQuadricObject::set
-			(const GLQuadricObject& GL_quadric_object)
+		void GLQuadricObject::set(const GLQuadricObject& GL_quadric_object)
 			throw()
 		{
 			draw_style_ = GL_quadric_object.draw_style_;
@@ -108,14 +96,13 @@ namespace BALL
 			throw()
 		{
 			set(GL_quadric_object);
-
 			return *this;
 		}
 
 		void GLQuadricObject::swap(GLQuadricObject& GL_quadric_object)
 			throw()
 		{
-			int i = draw_style_;
+			GLenum i = draw_style_;
 			draw_style_ = GL_quadric_object.draw_style_;
 			GL_quadric_object.draw_style_ = i;
 
@@ -146,7 +133,7 @@ namespace BALL
 			draw_style_ = style;;
 		}
 
-		void GLQuadricObject::setOrientation(int orientation)
+		void GLQuadricObject::setOrientation(GLenum orientation)
 			throw(GLQuadricObject::WrongOrientationStyle)
 		{
 			if (orientation != GLU_INSIDE
@@ -177,9 +164,8 @@ namespace BALL
 			normals_ = normals;
 		}
 
-		void GLQuadricObject::drawPartialDisk
-			(GLdouble inner_radius, GLdouble outer_radius,
-			 int slices, int rings, GLdouble start_angle, GLdouble sweep_angle)
+		void GLQuadricObject::drawPartialDisk(GLdouble inner_radius, GLdouble outer_radius,
+ 																				  int slices, int rings, GLdouble start_angle, GLdouble sweep_angle)
 			throw(GLQuadricObject::NoQuadricObjectAvailable)
 		{
 			create_();
@@ -188,28 +174,22 @@ namespace BALL
 										 slices, rings, start_angle, sweep_angle);
 		}
 
-		void GLQuadricObject::drawDisk
-			(GLdouble inner_radius, GLdouble outer_radius,
-			 int slices, int rings)
+		void GLQuadricObject::drawDisk(GLdouble inner_radius, GLdouble outer_radius, int slices, int rings)
 			throw(GLQuadricObject::NoQuadricObjectAvailable)
 		{
 			create_();
-
 			gluDisk(GLU_quadric_obj_, inner_radius, outer_radius, slices, rings);
 		}
 
-		void GLQuadricObject::drawCylinder
-			(GLdouble base_radius, GLdouble top_radius, GLdouble height,
-			 int slices, int stacks)
+		void GLQuadricObject::drawCylinder(GLdouble base_radius, GLdouble top_radius, GLdouble height,
+			 																 int slices, int stacks)
 			throw(GLQuadricObject::NoQuadricObjectAvailable)
 		{
 			create_();
-
 			gluCylinder(GLU_quadric_obj_, base_radius, top_radius, height, slices, stacks);  
 		}
 
-		void GLQuadricObject::drawSphere
-			(GLdouble radius, int slices, int stacks)
+		void GLQuadricObject::drawSphere(GLdouble radius, int slices, int stacks)
 			throw(GLQuadricObject::NoQuadricObjectAvailable)
 		{
 			create_();
@@ -219,7 +199,7 @@ namespace BALL
 		bool GLQuadricObject::isValid() const
 			throw()
 		{
-			return (GLU_quadric_obj_ != 0);
+			return GLU_quadric_obj_ != 0;
 		}
 
 		void GLQuadricObject::dump(ostream& s, Size depth) const
@@ -317,9 +297,9 @@ namespace BALL
 				}
 			}
 				
-			gluQuadricNormals(GLU_quadric_obj_, (GLenum)normals_);
+			gluQuadricNormals(GLU_quadric_obj_, normals_);
 			
-			if(generate_texture_coordinates_ == true)
+			if(generate_texture_coordinates_)
 			{ 
 				gluQuadricTexture(GLU_quadric_obj_, GL_TRUE);
 			}
@@ -328,9 +308,8 @@ namespace BALL
 				gluQuadricTexture(GLU_quadric_obj_, GL_FALSE);
 			}
 			
-			gluQuadricDrawStyle(GLU_quadric_obj_, (GLenum)draw_style_);
-			
-			gluQuadricOrientation(GLU_quadric_obj_, (GLenum)orientation_);
+			gluQuadricDrawStyle(GLU_quadric_obj_, draw_style_);
+			gluQuadricOrientation(GLU_quadric_obj_, orientation_);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
