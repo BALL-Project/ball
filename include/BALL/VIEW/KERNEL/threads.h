@@ -225,7 +225,7 @@ namespace VIEW
 				EnergyMinimizerThread();
 				
 				///
-				~EnergyMinimizerThread();
+				virtual ~EnergyMinimizerThread();
 				
 				///
 				virtual void run();
@@ -248,7 +248,7 @@ namespace VIEW
 				MDSimulationThread();
 				
 				///
-				~MDSimulationThread();
+				virtual ~MDSimulationThread();
 				
 				///
 				virtual void run()

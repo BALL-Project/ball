@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.14 2004/12/09 23:35:04 amoll Exp $
+// $Id: modelProcessor.h,v 1.15 2004/12/16 15:57:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -55,7 +55,7 @@ namespace BALL
 
 				/** Destructor, calls clear
 				*/
-				~ModelProcessor()
+				virtual ~ModelProcessor()
 					throw();
 
 				/// Clear all datastructures, but dont destroy the geometric objects.
