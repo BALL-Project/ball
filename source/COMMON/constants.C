@@ -1,4 +1,4 @@
-// $Id: constants.C,v 1.2 2000/05/15 19:10:51 oliver Exp $
+// $Id: constants.C,v 1.3 2001/12/11 12:03:17 oliver Exp $
 
 #include <BALL/COMMON/constants.h>
 
@@ -103,10 +103,10 @@ namespace BALL
 		const double	M_PER_FOOT  			= 3.048L;
 
 		// Joule per calorie
-		const double	JOULE_PER_CAL     = 4.184;
+		const double	JOULE_PER_CAL     = 4.1868;
 
 		// Calories per Joule.
-		const double	CAL_PER_JOULE     = (1 / 4.184);
+		const double	CAL_PER_JOULE     = (1 / 4.1868);
 
 	}
 }
