@@ -1,4 +1,4 @@
-// $Id: Line3_test.C,v 1.8 2000/07/26 16:49:47 amoll Exp $
+// $Id: Line3_test.C,v 1.9 2000/08/29 15:53:39 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Line3_test.C,v 1.8 2000/07/26 16:49:47 amoll Exp $")
+START_TEST(class_name, "$Id: Line3_test.C,v 1.9 2000/08/29 15:53:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -17,8 +17,6 @@ using namespace std;
 Vector3 v1, v2, v3, v4;
 
 String filename;
-using std::ofstream;
-using std::ios;
 
 CHECK(TLine3::BALL_CREATE(TLine3<T>))
 	v1 = Vector3(0, 1, 2);
