@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.1 2003/10/08 12:25:03 anhi Exp $
+// $Id: secondaryStructureProcessor.C,v 1.2 2003/10/08 12:29:20 anhi Exp $
 
-#include <BALL/STRUCTURE/SecondaryStructureProcessor.h>
+#include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
 
 using namespace std;
