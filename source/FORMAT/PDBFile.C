@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.6 1999/12/17 13:57:15 oliver Exp $
+// $Id: PDBFile.C,v 1.7 1999/12/28 18:21:37 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -8,6 +8,8 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/COMMON/logStream.h>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -134,7 +136,7 @@ namespace BALL
 		 PDB::Integer hydrogen_bonded_atom_serial_number[4],
 		 PDB::Integer salt_bridged_atom_serial_number[2])
 	{
-		PDBAtomMap::iterator	atom_map_it = PDB_atom_map_.find(atom_serial_number);
+		PDBAtomMap::Iterator	atom_map_it = PDB_atom_map_.find(atom_serial_number);
 
 		PDBAtom*				PDB_atom = 0;
 		Bond*						bond = 0;
@@ -1292,8 +1294,8 @@ namespace BALL
 
 	void PDBFile::postprocessSSBonds_()
 	{
-		ResidueMap::iterator first;
-		ResidueMap::iterator second;
+		ResidueMap::Iterator first;
+		ResidueMap::Iterator second;
 		
 		QuadrupleList::iterator it;
 		for (it = ssbond_list_.begin(); it != ssbond_list_.end(); ++it)
@@ -1312,8 +1314,8 @@ namespace BALL
 
 	void  PDBFile::postprocessHelices_()
 	{
-		ResidueMap::iterator initial;
-		ResidueMap::iterator terminal;
+		ResidueMap::Iterator initial;
+		ResidueMap::Iterator terminal;
 		QuadrupleList::iterator res_it = helix_list_.begin();
 		SecStrucList::iterator helix_it = new_helix_secstruc_list_.begin();
 		
@@ -1337,8 +1339,8 @@ namespace BALL
 		 PDBFile::SecStrucList& new_secstruc_list)
 	{
 		ResidueIterator protein_res_it;
-		ResidueMap::iterator initial;
-		ResidueMap::iterator terminal;
+		ResidueMap::Iterator initial;
+		ResidueMap::Iterator terminal;
 		QuadrupleList::iterator res_it = secstruc_list.begin();
 		SecStrucList::iterator secstruc_it = new_secstruc_list.begin();
 		
