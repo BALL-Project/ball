@@ -62,6 +62,7 @@ EXECUTABLES = \
 	SecondaryStructure_test\
 	Socket_test\
 	Sphere3_test\
+	SplayTree_test\
 	StandardPredicates_test\
 	String_test\
 	StructureMapper_test\
