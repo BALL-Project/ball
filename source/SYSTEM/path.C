@@ -1,4 +1,4 @@
-// $Id: path.C,v 1.1 2000/06/21 14:16:14 amoll Exp $
+// $Id: path.C,v 1.2 2001/05/10 23:33:33 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/SYSTEM/path.h>
@@ -65,8 +65,8 @@ namespace BALL
 		// segment the path string and insert each path 
 		// into the path array. append slashes where neccessary
 		string tmp = path_ + ":";
-		Size position;
-		while ((position = tmp.find(":")) != string::npos) 
+		string::size_type position = tmp.find(":");
+		while (position != string::npos) 
 		{
 			// extract the next path...
 			string path = tmp.substr(0, position);
@@ -80,6 +80,9 @@ namespace BALL
 			// store the path...
 			path_array_.push_back(path);
 			tmp.erase(0, position + 1);
+
+			// find the next occurence	
+			position = tmp.find(":");
 		}
 
 		// remember we don't have to do this again - computation on demand!
