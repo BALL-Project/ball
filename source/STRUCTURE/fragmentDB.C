@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.14 2000/02/10 15:18:15 oliver Exp $
+// $Id: fragmentDB.C,v 1.15 2000/02/16 19:21:35 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -126,9 +126,9 @@ namespace BALL
 
 		init();
 
-		normalizeNames = new NormalizeNamesProcessor(*this);
-		addHydrogens = new AddHydrogensProcessor(*this);
-		buildBonds = new BuildBondsProcessor(*this);
+		normalize_names.setFragmentDB(*this);
+		add_hydrogens.setFragmentDB(*this);
+		build_bonds.setFragmentDB(*this);
 	}
 
 
@@ -138,9 +138,9 @@ namespace BALL
 
 		init();
 
-		normalizeNames = new NormalizeNamesProcessor(*this);
-		addHydrogens = new AddHydrogensProcessor(*this);
-		buildBonds = new BuildBondsProcessor(*this);
+		normalize_names.setFragmentDB(*this);
+		add_hydrogens.setFragmentDB(*this);
+		build_bonds.setFragmentDB(*this);
 	}
 
 	FragmentDB::FragmentDB(const FragmentDB& db, bool /* deep */)
@@ -1084,6 +1084,11 @@ namespace BALL
 	//		FragmentDB::AddHydrogensProcessor												 //
 	/////////////////////////////////////////////////////////////////	
 
+	void FragmentDB::AddHydrogensProcessor::setFragmentDB(const FragmentDB& db)
+	{
+		fragment_db_ = &const_cast<FragmentDB&>(db);
+	}
+
 	// turns vector around x1-axis
 	void FragmentDB::AddHydrogensProcessor::turn_x1_(Vector3& v,const float winkel) 
 	{
@@ -1707,7 +1712,7 @@ namespace BALL
 		fragment_db_ = 0;
 	}
 	// returning numbers of inserted hydrogens
-	unsigned long FragmentDB::AddHydrogensProcessor::getNumberOfInsertedH()
+	Size FragmentDB::AddHydrogensProcessor::getNumberOfInsertedH()
 	{
 		return count_h_;
 	}
@@ -1730,6 +1735,11 @@ namespace BALL
 	FragmentDB::BuildBondsProcessor::~BuildBondsProcessor()
 	{
 		fragment_db_ = 0;
+	}
+
+	void FragmentDB::BuildBondsProcessor::setFragmentDB(const FragmentDB& db)
+	{
+		fragment_db_ = &const_cast<FragmentDB&>(db);
 	}
 
 	bool FragmentDB::BuildBondsProcessor::start()
