@@ -1,4 +1,4 @@
-/* $Id: datatype.doc,v 1.6 2000/10/05 22:28:46 oliver Exp $ */
+/* $Id: datatype.doc,v 1.7 2000/10/06 12:03:19 oliver Exp $ */
 
 /**@name	General datastructures
 		This section contains all relevant information on 
@@ -18,19 +18,12 @@
 	//@{
 		// @Include: hashMap.h
 		// @Include: hashSet.h
-		//@Include: hashGrid.h
+		// @Include: hashGrid.h
 		//@Include: stringHashMap.h
 		//@Include: stringHashSet.h
 		//@Include: options.h 
 	//@}
 
-	/**	@name	Tree Datastructures
-	*/
-	//@{
-		//@Include: binarySearchTree.h	
-		//@Include: splayTree.h
-		//@Include: redBlackTree.h
-	//@}
 	/**	@name	Miscellaneous
 	*/
 	//@{

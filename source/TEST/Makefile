@@ -12,7 +12,6 @@ EXECUTABLES = \
 	AtomicContactEnergy_test\
 	AtomVector_test\
 	AutoDeleteable_test\
-	BinarySearchTree_test\
 	BitVector_test\
 	Bond_test\
 	Box3_test\
@@ -97,7 +96,6 @@ EXECUTABLES = \
 	SolventDescriptor_test\
 	SolventParameter_test\
 	Sphere3_test\
-	SplayTree_test\
 	StandardPredicates_test\
 	String_test\
 	StructureMapper_test\
