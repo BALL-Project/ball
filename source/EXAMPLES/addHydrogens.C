@@ -46,6 +46,11 @@ int main(int argc, char** argv)
 	cout << "normalizing names..." << endl;
 	S.apply(fragment_db.normalize_names);
 
+	// now we create the bonds between the atoms (PDB files hardly
+  // ever contain a complete set of CONECT records)																							
+	cout << "building bonds..." << endl;
+	S.apply(fragment_db.build_bonds);
+
 	// now we add any missing hydrogens to the residues
 	// the data on the hydrogen positions stems from the
 	// fragment database. However the hydrogen positions 
@@ -53,18 +58,13 @@ int main(int argc, char** argv)
 	cout << "adding hydrogens..." << endl;
 	S.apply(fragment_db.add_hydrogens);
 
-	// now we create the bonds between teh atoms (PDB files hardly
-  // contain a complete set of CONECT records)																							
-	cout << "building bonds..." << endl;
-	S.apply(fragment_db.build_bonds);
-
 	// now we check whether the model we built is consistent
 	// The ResidueChecker checks for charges, bond lengths,
 	// and missing atoms
 	cout << "checking the built model..." << endl;
 	ResidueChecker checker(fragment_db);
 	S.apply(checker);
-
+	
 	// now we create an AMBER force field 
 	cout << "setting up force field..." << endl;
 	AmberFF FF;
@@ -111,7 +111,7 @@ int main(int argc, char** argv)
 	float terminal_energy = FF.getEnergy();
 
 	cout << "energy before/after minimization: " << initial_energy << "/" << terminal_energy << " kJ/mol" << endl;
-	
+
 	// write the optimized structure to a file whose
 	// name is given as the second command line argument
 	cout << "writing PBD file " << argv[2] << endl;
