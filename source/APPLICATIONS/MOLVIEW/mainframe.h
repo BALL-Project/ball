@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.30.4.1 2002/06/27 02:38:28 oliver Exp $
+// $Id: mainframe.h,v 1.30.4.2 2002/10/16 17:24:44 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -6,22 +6,6 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
-
-#include <qmetaobject.h>
-#include <qmainwindow.h>
-#include <qwidget.h>
-#include <qmenubar.h>
-#include <qkeycode.h>
-#include <qapplication.h>
-#include <qmessagebox.h>
-#include <qpopupmenu.h>
-#include <qlayout.h>
-#include <qbutton.h>
-#include <qstring.h>
-#include <qsplitter.h>
-#include <qstatusbar.h>
-#include <qlabel.h>
-#include <qtooltip.h>
 
 #ifndef BALL_VIEW_KERNEL_LOGVIEW_H
 #	include <BALL/VIEW/KERNEL/logView.h>
@@ -63,9 +47,13 @@
 # include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
 #endif  
 
-#include "DIALOGS/DlgPreferences.h"
 #include "DIALOGS/DlgAmberMinimization.h"
 
+class QWidget;
+class QSplitter;
+class QVBoxLayout;
+class QPopupMenu;
+class QLabel;
 
 using namespace BALL;
 using namespace BALL::VIEW;

@@ -1,10 +1,5 @@
 #include "mainframe.h"
 #include "icons.h"
-#include <qcolordialog.h>
-#include <qfiledialog.h>
-#include <qlabel.h>
-#include <qtooltip.h>
-#include <qfile.h>
 #include "DIALOGS/DlgAbout.h"
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -22,6 +17,13 @@
 #ifdef BALL_PYTHON_SUPPORT
 #	include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 #endif
+
+#include <qlabel.h>
+#include <qmenubar.h>
+#include <qsplitter.h>
+#include <qstatusbar.h>
+#include <qlabel.h>
+
 
 using namespace std;
 
