@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.13 2001/07/15 18:50:28 oliver Exp $
+// $Id: ballAndStickModel.C,v 1.13.4.1 2002/12/06 01:12:27 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -167,7 +167,7 @@ namespace BALL
 			sphere_ptr->PropertyManager::set(*this);
 			sphere_ptr->PropertyManager::setProperty(PROPERTY__MODEL_BALL_AND_STICK);
 
-			if (ball_and_stick_ == true)
+			if (ball_and_stick_)
 			{
 				sphere_ptr->setRadius(ball_radius_);
 			}
