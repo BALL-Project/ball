@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.89 2004/12/15 15:23:50 amoll Exp $
+// $Id: molecularControl.C,v 1.90 2004/12/15 15:45:32 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -750,12 +750,13 @@ void MolecularControl::cut()
 	for (; it != selected_.end(); it++)
 	{
 		getMainControl()->deselectCompositeRecursive(*it, false);
-		nr_of_items += removeComposite(**it);
 
 		if (!(**it).isRoot())
 		{
+			nr_of_items += removeComposite(**it);
 			roots.insert(&(**it).getRoot());
 			(**it).getParent()->removeChild(**it);
+ 			if (was_delete_) delete *it;
 		}
 		else
 		{
@@ -765,11 +766,6 @@ void MolecularControl::cut()
 		if (!was_delete_) 
 		{
  			copy_list_.push_back(*it);
-		}
-		else
-		{
-			// Systems are deleted above with remove()
- 			if (!(**it).isRoot()) delete *it;
 		}
 	}
 
