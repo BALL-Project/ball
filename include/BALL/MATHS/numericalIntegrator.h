@@ -1,4 +1,4 @@
-// $Id: numericalIntegrator.h,v 1.6 2001/12/30 13:28:39 sturm Exp $
+// $Id: numericalIntegrator.h,v 1.7 2002/01/09 01:02:47 oliver Exp $
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
 #define BALL_MATHS_NUMERICALINTEGRATOR_H
@@ -45,10 +45,6 @@ namespace BALL
 
 		/// Assignment operator
 		const NumericalIntegrator& operator = (const NumericalIntegrator& nint)
-			throw();
-
-		/// Clear method, might be unusable...
-		virtual void clear()
 			throw();
 
 		//@}
@@ -146,18 +142,6 @@ namespace BALL
 	{
 		function_ = nint.function_;
 		return *this;
-	}
-
-
-	template<typename Function, typename DataType>
-	BALL_INLINE
-	void NumericalIntegrator<Function, DataType>::clear()
-		throw()
-	{
-		// ?????: 
-		// Depending on the template there doesn't exist a clear() method, so I
-		// commented it out. Any reasonable strategy?
-		// function_.clear();
 	}
 
 
