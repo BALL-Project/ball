@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.15.4.1 2002/05/14 23:27:43 oliver Exp $
+// $Id: support.h,v 1.15.4.2 2002/08/22 17:33:52 oliver Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -141,7 +141,7 @@ namespace BALL
 		template <typename TorsionType, typename AtomIteratorType>
 		Size computeTorsions
 			(const AtomIteratorType& start, const AtomIteratorType& end, 
-			 std::vector<TorsionType>& torsions, bool use_selection = false)
+			 std::vector<TorsionType>& torsions, bool use_selection)
 		{
 			// pointers to the four atoms
 			Atom*	a1;

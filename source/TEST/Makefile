@@ -32,13 +32,13 @@ EXECUTABLES_MATHS = \
 	PiecewisePolynomial_test
 
 EXECUTABLES_SYSTEM = \
-	Directory_test\
 	FileSystem_test\
+	Directory_test\
+	Socket_test\
+	TCPTransfer_test\
 	File_test\
 	Path_test\
 	PreciseTime_test\
-	Socket_test\
-	TCPTransfer_test\
 	Timer_test\
 	TimeStamp_test\
 	TransformationManager_test

@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.18 2002/01/17 23:28:51 amoll Exp $
+// $Id: TCPTransfer.C,v 1.18.4.1 2002/08/22 17:34:02 oliver Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -14,6 +14,9 @@
 
 #include <fstream>				// ofstream
 #include <iostream>				// cout, endl
+
+/// ???
+#include <stdio.h>
 
 namespace BALL
 {
@@ -818,14 +821,23 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return status_;
 	}
 
-	// test if file was transfer correct
-	buffer_[control_bytes] = '\0';
-	temp = buffer_;
-	temp = temp.getSubstring(0, 3);
-
-	if (temp != "226")
+	while (control_bytes > 0)
 	{
-		return (Status) temp.toUnsignedInt();
+		buffer_[control_bytes] = '\0';
+
+		// test if file was transfer correct
+		printf("read control: [%d] '%s'\n", control_bytes, buffer_);
+		temp = buffer_;
+		temp = temp.getSubstring(0, 3);
+
+		control_bytes = read(socket_, buffer_, BUFFER_SIZE);
+		printf("socket read: %d\n", control_bytes);
+	}
+
+	status = (Status)temp.toUnsignedInt();
+	if (status != 226)
+	{
+		return status;
 	}
 
 	return NO_ERROR;
