@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.31 2001/07/29 21:03:18 oliver Exp $
+// $Id: expression.C,v 1.32 2001/07/30 00:52:22 oliver Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -173,9 +173,16 @@ namespace BALL
 		expression_tree_ = 0;
 
 		// make certain all expressions are bracketed correctly
-		expression_string_ = "(";
-		expression_string_ += expression_string;
-		expression_string_ += ")";
+		if ((expression_string.size() > 0) && (expression_string[0] != '('))
+		{
+			expression_string_ = "(";
+			expression_string_ += expression_string;
+			expression_string_ += ")";
+		}
+		else
+		{
+			expression_string_ = expression_string;
+		}
 		
 
 		// create a temporary tree from which the expression_tree_ can be built
