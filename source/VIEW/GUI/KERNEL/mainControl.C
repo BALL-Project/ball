@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.16 2002/12/10 00:14:38 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.17 2002/12/11 14:52:18 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -359,7 +359,7 @@ namespace BALL
 		CompositeDescriptor* MainControl::getDescriptor(const String& name)
 			throw()
 		{
-			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
+			List<CompositeDescriptor*>::Iterator it = descriptors_.begin();
 
 			for (; it != descriptors_.end(); ++it)
 			{
