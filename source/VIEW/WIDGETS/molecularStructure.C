@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.75 2004/11/29 11:34:35 amoll Exp $
+// $Id: molecularStructure.C,v 1.76 2004/12/03 00:17:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -688,13 +688,12 @@ namespace BALL
 			StructureMapper sm(*a1, *a2);
 			double	rmsd = sm.calculateRMSD();
 
-			Log.info() << "Calcuted RMSD: " << rmsd << std::endl;
 			String rmsd_text("Calcuted RMSD: " + String(rmsd));
 			if (sm.getBijection().size() != a1->countAtoms())
 			{
-				Index not_matched = max(a1->countAtoms() - sm.getBijection().size(), a2->countAtoms() -sm.getBijection().size());
+				Index not_matched = max(a1->countAtoms() - sm.getBijection().size(), 
+																a2->countAtoms() - sm.getBijection().size());
 				String warning("WARNING: " + String(not_matched) + " atoms were not mapped.");
-				Log.error() << warning << std::endl;
 				rmsd_text += "  WARNING: not all atoms were mapped.";
 			}
 

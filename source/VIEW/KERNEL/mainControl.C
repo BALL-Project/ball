@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.149 2004/12/02 15:57:41 amoll Exp $
+// $Id: mainControl.C,v 1.150 2004/12/03 00:22:27 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1061,7 +1061,6 @@ namespace BALL
 													 String(atom.getPosition().z) + ")" + "  Charge: " + 
 													 String(atom.getCharge());
 					setStatusbarText(text, true);
-					Log.info() << text << std::endl;
 					break;
 				}
 				case 2:
@@ -1072,7 +1071,6 @@ namespace BALL
 														atoms[1]->getFullName() + ": " + 
 														String(GetDistance(atoms[0]->getPosition(), atoms[1]->getPosition()));
 					setStatusbarText(text, true);
-					Log.info() << text << std::endl;
 					break;
 				}
 				case 3:
@@ -1087,7 +1085,6 @@ namespace BALL
 														atoms[2]->getFullName() + ": " +
 														String(result.toDegree()); 
 					setStatusbarText(text, true);
-					Log.info() << text << std::endl;
 					break;
 				}
 				case 4:
@@ -1106,7 +1103,6 @@ namespace BALL
 														ordered_atoms[3]->getFullName() + ": " +
 														String(result.toDegree());
 					setStatusbarText(text, true);
-					Log.info() << text << std::endl;
 					break;
 				}
 			}
@@ -1499,7 +1495,10 @@ namespace BALL
 			if (e->type() == (QEvent::Type)SIMULATION_OUTPUT_EVENT)
 			{
 				SimulationOutput* so = dynamic_cast<SimulationOutput*>(e);
- 				Log.info() << so->getMessage() << std::endl;
+				if (!so->isImportant())
+				{
+					Log.info() << so->getMessage() << std::endl;
+				}
  				setStatusbarText(so->getMessage(), so->isImportant());
 				return;
 			}
