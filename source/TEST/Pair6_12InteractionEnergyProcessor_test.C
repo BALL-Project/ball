@@ -1,4 +1,4 @@
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.8 2001/05/15 17:58:00 anker Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.9 2001/05/15 18:15:15 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.8 2001/05/15 17:58:00 anker Exp $")
+START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.9 2001/05/15 18:15:15 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ CHECK(Pair6_12InteractionEnergyProcessor::finish())
 	TEST_REAL_EQUAL(val, -6.027207050)
 
 	proc.options.set(Pair6_12InteractionEnergyProcessor::Option::RDF_FILENAME,
-	"data/6_12-test.rdf.ini");
+			"data/6_12-test.rdf.ini");
 	S.apply(proc);
 	val = proc.getEnergy();
 	TEST_REAL_EQUAL(val, -7.62216)
