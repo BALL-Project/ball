@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.21 2003/02/19 16:15:12 amoll Exp $
+// $Id: surfaceModel.C,v 1.22 2003/05/08 12:05:08 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -106,9 +106,21 @@ namespace BALL
 				Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
 			}
 
+
+			// Initialize the surface processor
+			sp.start();
 			try 
 			{
-				atoms_.apply(sp);
+				// Since we have container of *pointers* only, we have to 
+				// do the iteration on our own.
+				HashSet<Atom*>::Iterator it(atoms_.begin());
+				for (; +it; ++it)
+				{
+					if (sp.operator () (**it) != Processor::CONTINUE)
+					{
+						break;
+					}
+				}
 			}
 			catch (Exception::GeneralException e)
 			{
@@ -125,6 +137,8 @@ namespace BALL
 			Log.info() << "assigning surface (" << sp.getSurface().vertex.size() << " vertices, " 
 								 << sp.getSurface().triangle.size() << " triangles)" << endl;
 			
+			// Compute the surface
+			sp.finish();
 			*static_cast<Surface*>(mesh) = sp.getSurface();
 		
 			mesh->setName(String("Surface of ")

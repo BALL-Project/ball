@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.C,v 1.8 2003/05/08 11:29:49 oliver Exp $
+// $Id: surfaceProcessor.C,v 1.9 2003/05/08 12:05:11 oliver Exp $
 
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 
@@ -10,7 +10,6 @@ namespace BALL
 
 	SurfaceProcessor::SurfaceProcessor()
 		:	UnaryProcessor<Atom>(),
-			UnaryProcessor<Atom*>(),
 			radius_offset_(0.0),
 			vdw_factor_(1.0),
 			surface_type_(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE),
