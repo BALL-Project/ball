@@ -61,7 +61,7 @@ int main(int argc, char** argv)
 	// created in this way are only good estimates
 	Log << "adding hydrogens..." << endl;
 	S.apply(fragment_db.add_hydrogens);	
-	Log << "added " << fragment_db.add_hydrogens.getNumberOfInsertedHydrogens() 
+	Log << "added " << fragment_db.add_hydrogens.getNumberOfInsertedAtoms() 
 			<< " hydrogen atoms" << endl;
 
 	// now we check whether the model we built is consistent
