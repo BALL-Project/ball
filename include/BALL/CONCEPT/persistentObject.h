@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistentObject.h,v 1.8 2002/02/27 12:18:27 sturm Exp $
+// $Id: persistentObject.h,v 1.14 2003/08/26 08:04:08 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
 #define BALL_CONCEPT_PERSISTENTOBJECT_H
@@ -18,11 +19,12 @@ namespace BALL
 	/**	The persistent object.
 			Each object that needs persistence, has to be derived from
 			PersistentObject to define an interface to the
-			\Ref{PersistenceManager}.
-			\\
-			The class itself has no functionality except for the {\tt operator >>}.
-			\\
-			{\bf Definition:} \URL{BALL/CONCEPT/persistentObject.h}
+			 \link PersistenceManager PersistenceManager \endlink .
+			 \par
+			The class itself has no functionality except for the <tt>operator >></tt>.
+			 \par
+			
+	 	 \ingroup  Persistence
 	*/
 	class PersistentObject
 		:	public Object
@@ -57,9 +59,9 @@ namespace BALL
 			
 		/**	Stream operator.
 				This operator is used to serialize an instance of PersistentObject.
-				The method first calls {\tt pm.startOutput()} to write the necessary
-				headers. Then, {\tt persistentWrite(pm)} is called to serialize
-				the object. Finally, a call to {\tt pm.stopOutput()} writes all
+				The method first calls <tt>pm.startOutput()</tt> to write the necessary
+				headers. Then, <tt>persistentWrite(pm)</tt> is called to serialize
+				the object. Finally, a call to <tt>pm.stopOutput()</tt> writes all
 				dependend objects and the end marker to the persistent stream.
 				@param	pm	the persistence manager
 				@return the persistence manager (for chaining multiple output 
@@ -70,10 +72,10 @@ namespace BALL
 
 		/**	Serialize the object.
 				This method serializes the object by calls to Layer 1 methods of 
-				\Ref{PersistenceManager}.  The first method in the implementation
+				 \link PersistenceManager PersistenceManager \endlink .  The first method in the implementation
 				of persistentRead should be a call to {\tt
 				pm.writeObjectHeader(*this, name)}. Likewise the last method in
-				this method should be {\tt pm.writeObjectTrailer(name)}.
+				this method should be <tt>pm.writeObjectTrailer(name)</tt>.
 				@param	pm the persistence manager
 				@param	name the name of the object (0 for writing base classes)
 		*/
@@ -83,7 +85,7 @@ namespace BALL
 		/**	Deserialize the object.
 				This method reads the contents of an persistent object into an
 				(already existing!) object. It is implemented using Layer 1
-				commands of PersistenceManager.  To each {\bf write} command used
+				commands of PersistenceManager.  To each <b>write</b> command used
 				in persistentWrite, there should be exactly the same call to a read
 				command in persistentRead. Only the header and trailer
 				(writeObjectHeader/writeObjectTrailer calls) have to be omitted, as
@@ -97,8 +99,8 @@ namespace BALL
 		/**	Finalize the deserialization.
 				This method is called for all objects after their pointers have
 				been demangled. It is intended for the adaptation of internal data
-				structures. For example, the bond class has to swap {\tt first\_}
-				and {\tt second\_} depending on the order of the atoms. It is
+				structures. For example, the bond class has to swap <tt>first\_</tt>
+				and <tt>second\_</tt> depending on the order of the atoms. It is
 				usually left unimplemented.
 		*/
 		virtual void finalize()

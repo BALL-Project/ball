@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.h,v 1.15 2002/12/12 09:48:44 oliver Exp $
+// $Id: MOL2File.h,v 1.22 2003/08/26 08:04:13 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -16,13 +17,13 @@
 
 namespace BALL 
 {
-
 	class Atom;
 	class System;
 
 	/**	SYBYL MOL2 file class.
-			This class is used to read and write SYBYL MOL2 files (Tripos).	\\
-			{\bf Definition:} \URL{BALL/FORMAT/MOL2File.h} \\
+			This class is used to read and write SYBYL MOL2 files (Tripos).	 \par
+			
+    	\ingroup  StructureFormats
 	*/
 	class MOL2File
 		: public GenericMolFile
@@ -69,7 +70,8 @@ namespace BALL
 		
 		/**	Write a system to the MOL2 file
 		*/
-		virtual void write(const System& system);
+		virtual bool write(const System& system)
+			throw(File::CannotWrite);
 		
 		/**	Read a system from the MOL2 file
 		*/
@@ -83,7 +85,8 @@ namespace BALL
 
 		/**	
 		*/
-		virtual void write(const Molecule& molecule);
+		virtual bool write(const Molecule& molecule)
+			throw(File::CannotWrite);
 		//@}
 
 		protected:
@@ -170,7 +173,6 @@ namespace BALL
 		char buffer_[4096];
 		String line_;
 	};
-
 } // namespace BALL
 
 #endif // BALL_FORMAT_MOL2FILE_H

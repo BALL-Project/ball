@@ -1,67 +1,33 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.33 2002/12/12 09:46:22 oliver Exp $
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
+// $Id: classTest.h,v 1.50 2004/02/18 23:24:03 oliver Exp $
+//
 
 #ifndef BALL_SYSTEM_H
 # include <BALL/SYSTEM/file.h>
 #endif
 
+#ifndef BALL_DATATYPE_REGULAREXPRESSION_H
+# include <BALL/DATATYPE/regularExpression.h>
+#endif
+
 #include <string>
 #include <list>
-#include <sstream>
 
-/**	@name	Class Black Box Testing
-		To provide a maximum reliability for all BALL classes, each class
-		provides its own test program to ensure that each class compiles
-		and behaves (at least basically) as intended.
-
-		The testprograms reside in the directory source/TEST, they may 
-		be built and executed by calling {\bf make test}.
-
-		Each test program prints after execution either "PASSED" or "FAILED".
-		If any of the subtest contained in the test program fails, the whole 
-		test failed. The result of the test program can also be checked via its
-		exit code. An exit code of zero means "PASSED", non-zero exit code means 
-		"FAILED".
-
-		There are several macros defined to simplify the creation of a test program
-		and to provide a common interface.
-		Each test program consists of several subtests which usually test one
-		method or property of the class. Each of this subtests uses a series
-		of elementary tests to check the functionality of the method.
-
-		A number of elementary tests has been implemented that is sufficient
-		for most cases:
-		\begin{itemize}
-			\item \Ref{TEST_EQUAL}
-			\item \Ref{TEST_NOT_EQUAL}
-			\item \Ref{TEST_REAL_EQUAL}
-		\end{itemize}
-		A subtest is defined by calling the \Ref{CHECK} macro with the subtest name
-		as an argument. Then a series of calls to {\bf TEST} macros follows,
-		mixed with standard BALL code (remember to include all neccessary header files).
-		The subtest is terminated by calling \Ref{RESULT}.
-		Use the two macros \Ref{START_TEST} and \Ref{END_TEST} to generate a complete
-		test program.
-
-		To create a new test program, use the file 
-		\URL[source/TEST/Skeleton_test.C]{../../source/BALL/TEST/Skeleton_test.C}
-		\\
-		{\bf Definitions:} \URL{BALL/CONCEPT/classTest.h}
-*/
-//@{
+#ifdef BALL_HAS_SSTREAM
+# include <sstream>
+#else
+# include <strstream>
+#endif
 
 /**	Define the precision for floating point comparisons.
-		The macro \Ref{CHECK_REAL_EQUAL} checks whether the floating point number returned by
+		The macro  \link #TEST_REAL_EQUAL TEST_REAL_EQUAL \endlink  checks whether the floating point number returned by
 		the subtest is close to the expected result by comparing the absolute value
-		of the difference of the two values to {\bf PRECISION}.\\
+		of the difference of the two values to <b>PRECISION</b>. \par
 		The default value is $10^{-6}$. It is possible to redefine precision in the
-		test program by calling this macro with the new value.\\
+		test program by calling this macro with the new value. \par
+		\ingroup ClassTest
 */
 #define PRECISION(a) \
 		TEST::precision = (a);
@@ -69,14 +35,15 @@
 /**	Create the test header for a certain class.
 		This macro defines the start of the test program for a given classname.
 		The classname is printed together with some information when calling the 
-		test program with any arguments (except for #-v# or #-V#).\\
-		This macro should be the first to call in a test program. It introduces a global {\tt try}
+		test program with any arguments (except for #-v# or #-V#). \par
+		This macro should be the first to call in a test program. It introduces a global <tt>try</tt>
 		block to catch any unwanted exceptions. If any of these exceptions occurs, all tests failed.
-		Exceptions defined by BALL (i.e. exception classes derived from \Ref{GeneralException}) provide
-		some additional information that is evaluated by the \Ref{END_TEST} macro. The END_TEST macro
-		also closes the {\tt try} block. This {\tt try} block should never catch an exception! 
+		Exceptions defined by BALL (i.e. exception classes derived from  \link BALL::Exception::GeneralException GeneralException \endlink ) provide
+		some additional information that is evaluated by the  \link #END_TEST END_TEST \endlink  macro. The END_TEST macro
+		also closes the <tt>try</tt> block. This <tt>try</tt> block should never catch an exception! 
 		All exceptions that are thrown due to some malfunction in one of the member functions should be 
-		caught by the {\tt try} block created by \Ref{CHECK} and \Ref{RESULT}.
+		caught by the <tt>try</tt> block created by  \link #CHECK CHECK \endlink  and  \link #RESULT RESULT \endlink .
+		\ingroup ClassTest
 */
 #define START_TEST(class_name, version)\
 /* define a special namespace for all internal variables */\
@@ -131,15 +98,16 @@ int main(int argc, char **argv)\
 		test program and should therefore be the last macro to call.
 		It determines the exit code based on all previously run
 		subtests and prints out the message "PASSED" or "FAILED".
-		This macro also closes the global {\tt try} block opened by \Ref{START_TEST}
- 		and contains the related {\tt catch} clauses. If an exception is caught here,
+		This macro also closes the global <tt>try</tt> block opened by  \link #START_TEST START_TEST \endlink 
+ 		and contains the related <tt>catch</tt> clauses. If an exception is caught here,
 		the test program fails.
+		\ingroup ClassTest
 */
 #define END_TEST \
 	/* global try block */\
 	}\
 	/* catch FileNotFound exceptions to print out the file name */\
-	catch (BALL::Exception::FileNotFound e)\
+	catch (BALL::Exception::FileNotFound& e)\
 	{\
 		TEST::this_test = false;\
 		TEST::test = false;\
@@ -174,7 +142,19 @@ int main(int argc, char **argv)\
 			std::cout << "    (message is: " << e.getMessage() << ")" << std::endl;\
 		}\
   }\
-	/* catch all non-BALL exceptions */\
+	/* catch all std::exception-derived exceptions */\
+	catch (std::exception& e)\
+	{\
+		TEST::this_test = false;\
+		TEST::test = false;\
+		TEST::all_tests = false;\
+  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+    	std::cout << std::endl << "    (caught expected STL exception outside a subtest: " << e.what() << ")" << std::endl;\
+		}\
+	}\
+\
+	/* catch all non-BALL/non-STL exceptions */\
 	catch (...)\
 	{\
 		TEST::this_test = false;\
@@ -185,7 +165,6 @@ int main(int argc, char **argv)\
     	std::cout << std::endl << "    (caught unidentified and unexpected exception outside a subtest!) " << std::endl;\
 		}\
 	}\
-\
 	/* clean up all temporary files */\
 	while (TEST::tmp_file_list.size() > 0 && TEST::verbose < 1)\
 	{\
@@ -206,15 +185,16 @@ int main(int argc, char **argv)\
 /**	Declare subtest name.
 		This macro is used to declare the name of a subtest.
 		If you want to check e.g. the setName method of a class,
-		insert a line\\
-			#CHECK(setName)#\\
+		insert a line \par
+			#CHECK(setName)# \par
 		in your test program. If the test program is called in verbose mode,
-		this leads to the name of the subtest being printed on execution.\\
-		This macro also opens a {\tt try} block to catch any unexpected exceptions thrown
+		this leads to the name of the subtest being printed on execution. \par
+		This macro also opens a <tt>try</tt> block to catch any unexpected exceptions thrown
 		in the course of a subtest. To catch {\em wanted} exceptions (i.e. to check for exceptions that are
-		the expected result of some command) use the \Ref{TEST_EXCEPTION} macro.
-		The {\tt try} block opened by CHECK is closed in \Ref{RESULT}, so these two macros
+		the expected result of some command) use the  \link #TEST_EXCEPTION TEST_EXCEPTION \endlink  macro.
+		The <tt>try</tt> block opened by CHECK is closed in  \link #RESULT RESULT \endlink , so these two macros
 		have to be balanced.
+		\ingroup ClassTest
 */
 #define CHECK(test_name)  \
 	TEST::test = true;\
@@ -227,16 +207,17 @@ int main(int argc, char **argv)\
 		{\
 
 /**	Print a status message.
-		If tests require longer preparations, {\tt STATUS} may be used to 
+		If tests require longer preparations, <tt>STATUS</tt> may be used to 
 		print some intermediated progress messages.
-		{\tt STATUS} uses {\tt cout} to print these messages (in verbose mode only).
-		The given stream expression {\tt message} is prefixed by the string {\tt status:}
+		<tt>STATUS</tt> uses <tt>cout</tt> to print these messages (in verbose mode only).
+		The given stream expression <tt>message</tt> is prefixed by the string <tt>status:</tt>
 		and terminated with a newline. All valid operations on a stream may be performed
-		in {\tt message}.\\
-		{\bf Example:}\\
-		\begin{verbatim}
+		in <tt>message</tt>. \par
+		<b>Example:</b> \par
+		\verbatim
 		STATUS("just calculated x = " << setprecision(10) << x)
-		\end{verbatim}
+		\endverbatim
+		\ingroup ClassTest
 */
 #define STATUS(message)\
 					if (TEST::verbose > 1)\
@@ -250,21 +231,22 @@ int main(int argc, char **argv)\
 					}\
 
 /**	Check subtest result.
-		Each elementary test macro updates an internal variable ({\bf TEST}, defined by 
-		\Ref{START_TEST}) that holds the state of the current subtest.\\
-		{\bf RESULT} prints whether the subtest has failed or passed in verbose mode
-		and updates the internal variables {\bf TEST::all_tests} that describes the state of
-		the whole class test. {\bf TEST::all_tests} is initialized to be {\bf true}.
-		If any elementary test fails, {\bf TEST::test} becomes {\bf false}.
-		At the time of the next call to {\bf RESULT}, {\bf TEST::all_tests} will be
-    set to false, if {\bf TEST::test} is false. One failed elementary test leads therefore
-		to a failed subtest, which leads to a failed class test.\\
-		This macro closes the {\tt try} block opened by CHECK, so CHECK and RESULT have to 
+		Each elementary test macro updates an internal variable (<b>TEST</b>, defined by 
+		 \link #START_TEST START_TEST \endlink ) that holds the state of the current subtest. \par
+		<b>RESULT</b> prints whether the subtest has failed or passed in verbose mode
+		and updates the internal variables <b>TEST::all_tests</b> that describes the state of
+		the whole class test. <b>TEST::all_tests</b> is initialized to be <b>true</b>.
+		If any elementary test fails, <b>TEST::test</b> becomes <b>false</b>.
+		At the time of the next call to <b>RESULT</b>, <b>TEST::all_tests</b> will be
+    set to false, if <b>TEST::test</b> is false. One failed elementary test leads therefore
+		to a failed subtest, which leads to a failed class test. \par
+		This macro closes the <tt>try</tt> block opened by CHECK, so CHECK and RESULT have to 
 		be balanced, or some ugly compile-time errors may occur.
-		RESULT first tries to catch all {\tt BALL} exceptions (i.e. exceptions 
+		RESULT first tries to catch all <tt>BALL</tt> exceptions (i.e. exceptions 
 		derived from GeneralException).	If this fails, it tries to catch any exception. 
 		After the exception is thrown, the execution will continue with the next subtest,
 		the current subtest will be marked as failed (as is the whole test program).
+		\ingroup ClassTest
 */
 #define RESULT \
 			break;\
@@ -337,9 +319,10 @@ int main(int argc, char **argv)\
 
 /**	Create a temporary filename.
 		This macro assigns a new temporary filename to the string variable given as
-		its argument. The filename is created using \Ref{File::createTemporaryFilename}.
-		All temporary files are deleted if \Ref{END_TEST} is called.
+		its argument. The filename is created using  \link File::createTemporaryFilename File::createTemporaryFilename \endlink .
+		All temporary files are deleted if  \link #END_TEST END_TEST \endlink  is called.
 		@param	filename String will contain the filename on completion of the macro
+		\ingroup ClassTest
 */
 #define NEW_TMP_FILE(filename)\
 					::BALL::File::createTemporaryFilename(filename);\
@@ -358,9 +341,10 @@ int main(int argc, char **argv)\
 	
 /**	Floating point equality macro.
 		Checks whether the absolute value of the difference of the two floating point
-		values {\bf a} and {\bf b} is less or equal to the value defined by \Ref{PRECISION}.
+		values <b>a</b> and <b>b</b> is less or equal to the value defined by  \link #PRECISION PRECISION \endlink .
 		@param	a floating point value to test
 		@param  b expected value
+		\ingroup ClassTest
 */
 #define TEST_REAL_EQUAL(a,b)  \
 	TEST::this_test = BALL_REAL_EQUAL((a), (b), TEST::precision); \
@@ -382,11 +366,12 @@ int main(int argc, char **argv)\
 /**	Generic equality macro.
 		This macro uses the operator == to check its two arguments
 		for equality. Besides handling some internal stuff, it basically
-		evaluates #((a) == (b))#.\\
+		evaluates #((a) == (b))#. \par
 		Remember that operator == has to be defined somehow for the two 
-		argument types.\\
+		argument types. \par
 		@param	a value/object to test
 		@param	b expected value
+		\ingroup ClassTest
 */
 #define TEST_EQUAL(a,b)  \
 	{\
@@ -408,11 +393,12 @@ int main(int argc, char **argv)\
 	}\
 
 /**	Generic inequality macro.
-		This macro checks for inequality as \Ref{TEST_EQUAL} tests for equality.
-		The only difference between the two macros is that{\bf  TEST_NOT_EQUAL} evaluates
-		#!((a) == (b))#.\\
+		This macro checks for inequality as  \link #TEST_EQUAL TEST_EQUAL \endlink  tests for equality.
+		The only difference between the two macros is that<b> TEST_NOT_EQUAL</b> evaluates
+		#!((a) == (b))#. \par
 		@param	a value/object to test
 		@param	b forbidden value
+		\ingroup ClassTest
 */
 #define TEST_NOT_EQUAL(a,b)  \
 	{\
@@ -436,11 +422,12 @@ int main(int argc, char **argv)\
 /**	Exception test macro.
 		This macro checks if a given type of exception occured while executing the
 		given command.
-		Example:\\
-		#TEST_EXCEPTION(Exception::IndexOverflow, vector3[-1])#\\
+		Example: \par
+		#TEST_EXCEPTION(Exception::IndexOverflow, vector3[-1])# \par
 		If no or a wrong exception occured, false is returned, otherwise true.
 		@param exception_type the exception-class
 		@param command any general C++ or BALL-specific command
+		\ingroup ClassTest
 */
 #define TEST_EXCEPTION(exception_type, command) \
 	{\
@@ -487,18 +474,84 @@ int main(int argc, char **argv)\
 		}\
 	}\
 
+#ifdef BALL_DEBUG
+/**	Precondition exception test macro.
+		This macro checks if a the command specified correctly throws
+		an exception of type Precondition because one of its preconditions
+		is violated. If BALL is not compile din DEBUG mode, this macro
+		won't do anything, as the BALL_EXCEPTION_PRECONDITION macro is
+		expanded to nothing in that case.
+		\ingroup ClassTest
+*/
+#define TEST_PRECONDITION_EXCEPTION(command) \
+	{\
+		TEST::exception = 0;\
+		try\
+		{\
+			command;\
+		}\
+		catch (Exception::Precondition)\
+		{\
+			TEST::exception = 1;\
+		}\
+		catch (::BALL::Exception::GeneralException e)\
+		{\
+			TEST::exception = 2;\
+			TEST::exception_name = e.getName();\
+		}\
+		catch (...)\
+		{ \
+			TEST::exception = 3;\
+		}\
+		TEST::this_test = (TEST::exception == 1);\
+		TEST::test = TEST::test && TEST::this_test;\
+		\
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+			if (!TEST::newline)\
+			{\
+				TEST::newline = true;\
+				std::cout << std::endl;\
+			}\
+			std::cout << "    (line " << __LINE__ << " TEST_PRECONDITION_EXCEPTION(" << ", " << #command << "): ";\
+			switch (TEST::exception)\
+			{\
+				case 0:	std::cout << " ERROR: no exception!) "; break;\
+				case 1:	std::cout << " OK) "; break;\
+				case 2:	std::cout << " ERROR: wrong exception: " << TEST::exception_name << ") "; break;\
+				case 3:	std::cout << " ERROR: wrong exception!) "; break;\
+			}\
+			if (TEST::this_test)\
+				std::cout << " + " << std::endl;\
+			else \
+				std::cout << " - " << std::endl;\
+		}\
+	}\
+
+#else
+
+# define TEST_PRECONDITION_EXCEPTION(command)\
+	if (TEST::verbose > 1)\
+	{\
+		std::cout << "  TEST_EXCEPTION_PRECONDITION(" #command ") : (DEBUG mode disabled!)" << std::endl;\
+	}\
+
+#endif // BALL_DEBUG
+
 /** Skip remainder of subtest.
     If the condition is not fulfilled, the remainder of the test is skipped.
     The status (whether it fails or passes) remains unchanged.
+		\ingroup ClassTest
 */
 #define ABORT_IF(condition) \
   if (condition) break;
 
 /**	File comparison macro.
-		This macro is used to test file operations. It compares the file with name {\tt filename} 
-		against a template file {\tt templatename}. Corresponding lines of the two files
+		This macro is used to test file operations. It compares the file with name <tt>filename</tt> 
+		against a template file <tt>templatename</tt>. Corresponding lines of the two files
 		have to be identical. 
 		@see TEST_FILE_REGEXP for more sophisticated comparisons
+		\ingroup ClassTest
 */
 #define TEST_FILE(filename, templatename) \
 	{\
@@ -589,11 +642,12 @@ int main(int argc, char **argv)\
 
 
 /**	Regular expression file comparison macro.
-		This macro is used to test file operations. It compares the file with name {\tt filename} 
-		against a template file {\tt templatename}. 
-		Each line of the template file starting with {\tt ``/''} is considered to contain a regular
+		This macro is used to test file operations. It compares the file with name <tt>filename</tt> 
+		against a template file <tt>templatename</tt>. 
+		Each line of the template file starting with <tt>``/''</tt> is considered to contain a regular
 		expression, which has to match the corresponding line in the input file. All other lines
 		of the input and the template file have to be identical.
+		\ingroup ClassTest
 */
 #define TEST_FILE_REGEXP(filename, templatename) \
 	{\
@@ -704,39 +758,107 @@ int main(int argc, char **argv)\
 
 
 /**	Redirect output to the global logging facility.
-		This macro (together with \Ref{COMPARE_OUTPUT}) can be used
+		This macro (together with  \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink ) can be used
 		to ensure that a function prints an error message to the
-		global logging facility \Ref{Log}. It disables the output
-		to {\tt cout} and {\tt cerr} and redirects all output to
-		{\tt level} to a temporary {\tt ostringstream}. The contents 
+		global logging facility  \link #BALL::Log Log \endlink . It disables the output
+		to <tt>cout</tt> and <tt>cerr</tt> and redirects all output to
+		<tt>level</tt> to a temporary <tt>ostringstream</tt>. The contents 
 		of this stream can be compared with the expected output	
-		afterwards using the macro \Ref{COMPARE_OUTPUT}.
-		Each {\tt CAPTURE_OUTPUT} requires exactly one subsequent
-		\Ref{COMPARE_OUTPUT} macro.
+		afterwards using the macro  \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink .
+		Each <tt>CAPTURE_OUTPUT</tt> requires exactly one subsequent
+		 \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink  macro.
+		\ingroup ClassTest
 */
-#define CAPTURE_OUTPUT(level) \
+#ifdef BALL_HAS_SSTREAM
+#define CAPTURE_OUTPUT_LEVEL(level) \
 	{\
 		std::ostringstream TEST_strstr;\
 		Log.remove(std::cout);\
 		Log.remove(std::cerr);\
 		Log.insert(TEST_strstr, level, level);
+#else
+#define CAPTURE_OUTPUT_LEVEL(level) \
+	{\
+		std::ostrstream TEST_strstr;\
+		Log.remove(std::cout);\
+		Log.remove(std::cerr);\
+		Log.insert(TEST_strstr, level, level);
+#endif
 
+/**	Redirect output to the global logging facility.
+		This macro (together with  \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink ) can be used
+		to ensure that a function prints an error message to the
+		global logging facility  \link #BALL::Log Log \endlink . It disables the output
+		to <tt>cout</tt> and <tt>cerr</tt> and redirects all output to
+		<tt>level</tt> to a temporary <tt>ostringstream</tt>. The contents 
+		of this stream can be compared with the expected output	
+		afterwards using the macro  \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink .
+		Each <tt>CAPTURE_OUTPUT</tt> requires exactly one subsequent
+		 \link #COMPARE_OUTPUT COMPARE_OUTPUT \endlink  macro.
+		\ingroup ClassTest
+*/
+#ifdef BALL_HAS_SSTREAM
+#define CAPTURE_OUTPUT_LEVEL_RANGE(minlevel, maxlevel) \
+	{\
+		std::ostringstream TEST_strstr;\
+		Log.remove(std::cout);\
+		Log.remove(std::cerr);\
+		Log.insert(TEST_strstr, minlevel, maxlevel);
+#else
+#define CAPTURE_OUTPUT_LEVEL_RANGE(minlevel, maxlevel) \
+	{\
+		std::ostrstream TEST_strstr;\
+		Log.remove(std::cout);\
+		Log.remove(std::cerr);\
+		Log.insert(TEST_strstr, minlevel, maxlevel);
+#endif
 /**	Compare output made to the global logging facility.
 		@see CAPTURE_OUTPUT
+		\ingroup ClassTest
 */
+
+#ifdef BALL_HAS_SSTREAM
+#define COMPARE_OUTPUT(text) \
+                Log.remove(TEST_strstr);\
+                Log.insert(std::cout, LogStream::INFORMATION, LogStream::ERROR - 1);\
+                Log.insert(std::cerr, LogStream::ERROR);\
+                TEST::this_test = (::strncmp(TEST_strstr.str().c_str(), text, TEST_strstr.str().size()) == 0);\
+                TEST::test = TEST::test && TEST::this_test;\
+                \
+                if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+                {\
+                        /* reserve space for the null-terminated content of the strstrem */\
+                        char* TEST_strstr_contents = new char[TEST_strstr.str().size() + 1];\
+                        ::strncpy(TEST_strstr_contents, TEST_strstr.str().c_str(), TEST_strstr.str().size());\
+                        TEST_strstr_contents[TEST_strstr.str().size()] = '\0';\
+                        \
+                        if (!TEST::newline)\
+                        {\
+                                TEST::newline = true;\
+                                std::cout << std::endl;\
+                        }\
+                        std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got '" << (TEST_strstr_contents) << "', expected '" << (text) << ") ";\
+                        if (TEST::this_test)\
+                                std::cout << " + " << std::endl;\
+                        else \
+                                std::cout << " - " << std::endl;\
+                        delete [] TEST_strstr_contents;\
+                }\
+        }
+#else
 #define COMPARE_OUTPUT(text) \
 		Log.remove(TEST_strstr);\
 		Log.insert(std::cout, LogStream::INFORMATION, LogStream::ERROR - 1);\
 		Log.insert(std::cerr, LogStream::ERROR);\
-		TEST::this_test = (::strncmp(TEST_strstr.str().c_str(), text, TEST_strstr.str().size()) == 0);\
+		TEST::this_test = (::strncmp(TEST_strstr.str(), text, TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0) == 0);\
 		TEST::test = TEST::test && TEST::this_test;\
 		\
 		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 		{\
 			/* reserve space for the null-terminated content of the strstrem */\
-			char* TEST_strstr_contents = new char[TEST_strstr.str().size() + 1];\
-			::strncpy(TEST_strstr_contents, TEST_strstr.str().c_str(), TEST_strstr.str().size());\
-			TEST_strstr_contents[TEST_strstr.str().size()] = '\0';\
+			char* TEST_strstr_contents = new char[TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0 + 1];\
+			::strncpy(TEST_strstr_contents, TEST_strstr.str(), TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0);\
+			TEST_strstr_contents[TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0] = '\0';\
 			\
 			if (!TEST::newline)\
 			{\
@@ -750,8 +872,6 @@ int main(int argc, char **argv)\
 				std::cout << " - " << std::endl;\
 			delete [] TEST_strstr_contents;\
 		}\
-	}\
-	
-	
-	
-//@}
+	}
+
+#endif	

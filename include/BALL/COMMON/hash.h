@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.h,v 1.14 2002/12/12 09:48:39 oliver Exp $
+// $Id: hash.h,v 1.21 2004/02/18 18:19:01 anhi Exp $
+//
 
 #ifndef BALL_COMMON_HASH_H
 #define BALL_COMMON_HASH_H
@@ -16,23 +17,19 @@
 
 namespace BALL 
 {
-
-	/**	@name	Hashing
-	*/
-	//@{
-
 	/**	General Hash Function Template.
 			This template function provides a simple wrapper
 			for the specialized hash functions. It facilitates their use 
-			in STL hash associative containers which expect a {\bf Hasher}
+			in STL hash associative containers which expect a <b>Hasher</b>
 			class as template parameter.
+	\ingroup Common
 	*/
   template <typename T>
   class HashFunction
   {
     public:
 		
-    bool operator () (const T& t) const throw()
+		HashIndex operator () (const T& t) const throw()
     {
       return Hash(t);
 		}
@@ -60,9 +57,9 @@ namespace BALL
 
 	/** General default hash function.
 			This method converts a given key to a 
-			\Ref{HashIndex} by calling {\tt (HashIndex)key}.
-			If the key type {\tt T} is not convertible to \Ref{HashIndex} by
-			default, a converter should be defined ({\tt operator HashIndex}).
+			 \link HashIndex HashIndex \endlink  by calling <tt>(HashIndex)key</tt>.
+			If the key type <tt>T</tt> is not convertible to  \link HashIndex HashIndex \endlink  by
+			default, a converter should be defined (<tt>operator HashIndex</tt>).
 			@param	key the key to be hashed
 			@return	HashIndex the hash index
 	*/
@@ -74,7 +71,7 @@ namespace BALL
 
 	/** String hash function.
 			This method is optimized for the hashing of STL strings.
-			In fact, it is only an inline wrapper around \Ref{hashString}.
+			In fact, it is only an inline wrapper around  \link hashString hashString \endlink .
 	*/
 	inline HashIndex Hash(const string& s) throw()
 	{
@@ -83,7 +80,7 @@ namespace BALL
 
 	/** String hash function.
 			This method is optimized for the hashing of BALL strings.
-			In fact, it is only an inline wrapper around \Ref{hashString}.
+			In fact, it is only an inline wrapper around  \link hashString hashString \endlink .
 	*/
 	inline HashIndex Hash(const String& s) throw()
 	{
@@ -100,6 +97,7 @@ namespace BALL
 
 	//@}
 		
+	//@{
 	/**	Calculate the next prime number.
 			This method returns the first prime number that is 
 			greater or equal to the number given as the argument.

@@ -46,502 +46,1285 @@ del *.obj
 del *.exe"
 				Output="Test.log"/>
 		</Configuration>
+		<Configuration
+			Name="Python|Win32"
+			OutputDirectory="Python"
+			IntermediateDirectory="Python"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cd ..\..\source\TEST
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot; BALL_PATH=&quot;$(ProjectDir)..\BALL&quot;"
+				ReBuildCommandLine="cd ..\..\source\TEST
+del *.obj
+del *.exe
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
+				CleanCommandLine="cd ..\..\source\TEST
+del *.obj
+del *.exe"
+				Output="Test.log"/>
+		</Configuration>
+		<Configuration
+			Name="Python Multithreaded|Win32"
+			OutputDirectory="Python Multithreaded"
+			IntermediateDirectory="Python Multithreaded"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cd ..\..\source\TEST
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot; BALL_PATH=&quot;$(ProjectDir)..\BALL&quot;"
+				ReBuildCommandLine="cd ..\..\source\TEST
+del *.obj
+del *.exe
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
+				CleanCommandLine="cd ..\..\source\TEST
+del *.obj
+del *.exe"
+				Output="Test.log"/>
+		</Configuration>
 	</Configurations>
 	<Files>
 		<File
 			RelativePath="..\..\source\TEST\AmberFF_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AnalyticalGeometry_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AnalyticalSES_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Angle_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AnisotropyShiftProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AssignShiftProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\AtomAttributeVector_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\AtomBondIteratorTraits_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AtomContainer_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AtomIterator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\AtomStaticAtomAttributes_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\AtomTypes_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AtomVector_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Atom_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AtomicContactEnergy_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\AutoDeletable_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\BaseIterator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\BidirectionalIterator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\BinaryFileAdaptor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\BitVector_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\Bit_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Bond_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Box3_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\Bruker1DFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\Bruker2DFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Chain_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\CharmmFF_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Circle3_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ClassTest_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ClaverieParameter_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ClearShiftProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ComposedEnergyProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\CompositeAncestorIteratorTraits_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\CompositeChildcompositeIteratorTraits_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\CompositeCompositeIteratorTraits_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\CompositeIteratorTraits_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Composite_test1.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Composite_test2.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ConjugateGradientMinimizer_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ConstBidirectionalIterator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ConstForwardIterator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ConstRandomAccessIterator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ContourLine_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ContourSurface_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\Contour_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\CreateSpectrumProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\DCDFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\DefaultProcessors_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Descriptor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Directory_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\EFShiftProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Embeddable_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\EnergyMinimizer_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\EnergyProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\EnumeratorIndex_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Enumerator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ExpressionParser_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ExpressionPredicate_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ExpressionTree_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Expression_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Factory_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\FileSystem_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\File_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ForEach_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ForceField_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ForwardIterator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\FragmentDB_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Fragment_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Function_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\GenericMolFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\GlobalKernel_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\GlobalTypes_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Gradient_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\HINFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\HaighMallionShiftProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\HashGrid3BoxIteratorTraits_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\HashGrid3DataItem_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\HashGrid3DataIteratorTraits_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\HashGrid3NeighborBoxItem_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\HashGrid3_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\HashGrid3_test.h">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\HashGridBox3_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\HashMap_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\HashSet_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Hash_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\INIFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ItemCollector.h">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\JCAMPFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\JohnsonBoveyShiftProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\KernelPredicate_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Limits_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Line3_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\LineBasedFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\LineSearch_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\List_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\LogStream_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\MOL2File_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\MOLFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="Make.lst">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\Makefile.lst">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="Makefile.win">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\MathsCommon_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Matrix44_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\MolecularGraph_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Molecule_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\MolmecSupport_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\NMRStarFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\NamedProperty_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\NucleicAcid_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Nucleotide_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\NumericalIntegrator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\NumericalSAS_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Object_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\OoiEnergy_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Options_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\PARSE_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PCMCavFreeEnergyProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PDBAtom_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PDBFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PTE_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Pair6_12InteractionEnergyProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Pair6_12RDFIntegrator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PairExpInteractionEnergyProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PairExpRDFIntegrator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ParameterSection_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Parameters_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Path_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PeakList_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Peak_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\PeptideBuilder_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Peptides_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PersistenceManager_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PersistentObject_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PiecewiseFunction_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PiecewisePolynomial_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PierottiCavFreeEnergyProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Plane3_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PoissonBoltzmann_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PreciseTime_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\PropertyManager_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Protein_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Quadruple_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Quaternion_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RDFIntegrator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RDFParameter_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RDFSection_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RTTI_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RadialDistributionFunction_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RandomAccessIterator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RandomCoilShiftProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ReconstructFragmentProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RegularData1D_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RegularData2D_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RegularData3D_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RegularExpression_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ReissCavFreeEnergyProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\ResidueChecker_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Residue_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ResourceFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\RotamerLibrary_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\RuleEvaluator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\SDFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\SecondaryStructure_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Selectable_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Selector_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ShiftModel_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\ShiftModule_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\SimpleDescriptors_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\SmilesParser_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\SnapShotManager_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\SnapShot_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Socket_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\SolventDescriptor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\SolventParameter_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Spectrum_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Sphere3_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\StandardPredicates_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\SteepestDescentMinimizer_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\StringHashMap_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\String_test1.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\String_test2.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\String_test3.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\String_test4.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\StructureMapper_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Substring_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\SurfaceProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Surface_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\System_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\TCPTransfer_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\TextPersistenceManager_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\TimeStamp_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Timer_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\TrajectoryFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\TransformationApplicator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\TransformationManager_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\TransformationProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\TranslationApplicator_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="..\..\source\TEST\TranslationProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Triple_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\UhligCavFreeEnergyProcessor_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Vector2_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Vector3_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\Vector4_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\VersionInfo_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\XDRPersistenceManager_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\XYZFile_test.C">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="..\..\source\TEST\networkTest.h">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

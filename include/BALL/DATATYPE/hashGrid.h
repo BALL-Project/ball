@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.27 2002/12/12 09:48:43 oliver Exp $
+// $Id: hashGrid.h,v 1.38 2004/02/18 18:19:02 anhi Exp $
+//
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -18,10 +19,6 @@
 #	include <BALL/CONCEPT/visitor.h>
 #endif
 
-#ifndef BALL_DATATYPE_FOREACH_H
-#	include <BALL/DATATYPE/forEach.h>
-#endif
-
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
 #endif
@@ -30,10 +27,14 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
+#ifndef BALL_DATATYPE_LIST_H
+# include <BALL/DATATYPE/list.h>
+#endif
+
 namespace BALL 
 {
-
-	/**	@name	Three-dimensional Hash Grid
+	/**	\defgroup GenericHash3D Three-dimensional Hash Grid
+    	\ingroup  GenericHash
 	*/
 	//@{
 
@@ -41,8 +42,9 @@ namespace BALL
 			These boxes represent the buckets of a threedimensional hash grid.
 			Every such box contains a linear list of the objects that are
 			contained in this box. This list is accessible through a
-			DataIterator.\\
-			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
+			DataIterator. \par
+
+			\ingroup GenericHash3D
 	*/
 	template <typename Item>
 	class HashGridBox3
@@ -76,7 +78,6 @@ namespace BALL
 			throw();
 	
 		//@}
-
 		/**	@name	Assignment 
 		*/
 		//@{
@@ -89,12 +90,7 @@ namespace BALL
 		const HashGridBox3& operator = (const HashGridBox3& box)
 			throw(Exception::NotImplemented);
 
-		///
-		void get(HashGridBox3& box, bool deep = true) const
-			throw(Exception::NotImplemented);
-
 		//@}
-
 		/**	@name	Accessors 
 		*/
 		//@{
@@ -125,7 +121,7 @@ namespace BALL
 
 		/** Remove the first occurrence of a certain item from the data item list.
 				@param item the item to be removed
-				@return bool - {\tt true}, if the item could be removed, {\tt false} 
+				@return bool - <tt>true</tt>, if the item could be removed, <tt>false</tt> 
 								otherwise.
 		*/
 		bool remove(const Item& item)
@@ -133,22 +129,21 @@ namespace BALL
 
 		/** Remove all occurences of a certain item from the data item list.
 				@param item the item to be removed
-				@return bool - {\tt true}, if the item could be removed, {\tt false} 
+				@return bool - <tt>true</tt>, if the item could be removed, <tt>false</tt> 
 								otherwise.
 		*/
 		bool removeAll(const Item& item)
 			throw();
 			
 		//@}			
-
 		/**	@name	Miscellaneous 
 		*/
 		//@{
+		
 		/// Host method
 		void host(Visitor<HashGridBox3> &visitor)
 			throw();
 		//@}
-
 		/**	@name	Predicates 
 		*/
 		//@{
@@ -163,30 +158,30 @@ namespace BALL
 
 		/** Test whether an item is in the data item list
 				@param item
-				@return bool - {\tt true} if instance has {\tt item}, {\tt false} otherwise.
+				@return bool - <tt>true</tt> if instance has <tt>item</tt>, <tt>false</tt> otherwise.
 		*/
 		bool has(const Item& item) const
 			throw();
 
-		/** Test, whether this box is empty, i. e. the data item list contains
-				nothing
-				@return bool - {\tt true}, if {\tt this} is empty. {\tt false} otherwise. 
+		/** Test, whether this box is empty, i. e. the data item list contains nothing
+				@return bool - <tt>true</tt>, if <tt>this</tt> is empty. <tt>false</tt> otherwise. 
 		*/
 		bool isEmpty() const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{
+		
 		///
 		bool isValid() const
 			throw();
 		///
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Internal Iterators 
 		*/
 		//@{
@@ -198,18 +193,18 @@ namespace BALL
 		///
 		bool apply(UnaryProcessor< HashGridBox3<Item> >& processor)
 			throw();
-		//@}
 
+		//@}
 		/** @name	External Iterators 
 		*/
 		//@{
 
 		/// ?????
-		class DataItem_
+		class DataItem
 		{
 			public:
 		
-			DataItem_(const Item& item, DataItem_* next)
+			DataItem(const Item& item, DataItem* next)
 				throw()
 			:	item_(item),
 				previous_(0),
@@ -222,16 +217,16 @@ namespace BALL
 			}
 
 			Item 			item_;
-			DataItem_* previous_;
-			DataItem_* next_;
+			DataItem* previous_;
+			DataItem* next_;
 		};
 			
 		/// ?????
-		class NeighbourBoxItem_
+		class NeighborBoxItem
 		{
 			public:
 		
-			NeighbourBoxItem_(HashGridBox3* box, NeighbourBoxItem_* next)
+			NeighborBoxItem(HashGridBox3* box, NeighborBoxItem* next)
 				throw()
 				: box_(box),
 					previous_(0),
@@ -244,41 +239,41 @@ namespace BALL
 			}
 
 			HashGridBox3<Item>* 	box_;
-			NeighbourBoxItem_* 		previous_;
-			NeighbourBoxItem_* 		next_;
+			NeighborBoxItem* 		previous_;
+			NeighborBoxItem* 		next_;
 		};
 
 
-		typedef NeighbourBoxItem_* BoxIteratorPosition;
+		typedef NeighborBoxItem* BoxIteratorPosition;
 		
-		class BoxIteratorTraits_
+		class BoxIteratorTraits
 		{
 			public:
 
-			BALL_CREATE_DEEP(BoxIteratorTraits_)
+			BALL_CREATE_DEEP(BoxIteratorTraits)
 
-			BoxIteratorTraits_()
+			BoxIteratorTraits()
 				throw()
 				:	bound_(0),
 					position_(0)
 			{
 			}
 				
-			BoxIteratorTraits_(const HashGridBox3& box)
+			BoxIteratorTraits(const HashGridBox3& box)
 				throw()
 				:	bound_((HashGridBox3 *)&box),
 					position_(0)
 			{
 			}
 				
-			BoxIteratorTraits_(const BoxIteratorTraits_& traits, bool /* deep */ = true)
+			BoxIteratorTraits(const BoxIteratorTraits& traits, bool /* deep */ = true)
 				throw()
 				:	bound_(traits.bound_),
 					position_(traits.position_)
 			{
 			}
 				
-			const BoxIteratorTraits_& operator = (const BoxIteratorTraits_& traits)
+			const BoxIteratorTraits& operator = (const BoxIteratorTraits& traits)
 				throw()
 			{
 				bound_ = traits.bound_;
@@ -316,13 +311,13 @@ namespace BALL
 				return position_;
 			}
 
-			bool operator == (const BoxIteratorTraits_& traits) const
+			bool operator == (const BoxIteratorTraits& traits) const
 				throw()
 			{
 				return (position_ == traits.position_);
 			}
 
-			bool operator != (const BoxIteratorTraits_& traits) const
+			bool operator != (const BoxIteratorTraits& traits) const
 				throw()
 			{
 				return (position_ != traits.position_);
@@ -344,13 +339,13 @@ namespace BALL
 			void toBegin()
 				throw()
 			{
-				position_ = bound_->first_neighbour_;
+				position_ = bound_->first_neighbor_;
 			}
 
 			bool isBegin() const
 				throw()
 			{
-				return (position_ == bound_->first_neighbour_);
+				return (position_ == bound_->first_neighbor_);
 			}
 
 			void toEnd()
@@ -389,15 +384,15 @@ namespace BALL
 			BoxIteratorPosition position_;
 		};
 
-		friend class BoxIteratorTraits_;
+		friend class BoxIteratorTraits;
 
 		/** BoxIterators iterate over all non-empty boxes that lie in the
-				direct neighbourhood to a box. Such an iterator traverses at most
+				direct neighborhood to a box. Such an iterator traverses at most
 				26 boxes.
 		*/
 		typedef ForwardIterator
 			<HashGridBox3<Item>, HashGridBox3<Item>,
-			BoxIteratorPosition, BoxIteratorTraits_>
+			BoxIteratorPosition, BoxIteratorTraits>
 				BoxIterator;
 
 		/// get the first non-empty box 
@@ -415,10 +410,10 @@ namespace BALL
 		}
 
 
-		/// This is the const version of \Ref{BoxIterator}
+		/// This is the const version of  \link BoxIterator BoxIterator \endlink 
 		typedef ConstForwardIterator
 			<HashGridBox3<Item>, HashGridBox3<Item>,
-			BoxIteratorPosition, BoxIteratorTraits_>
+			BoxIteratorPosition, BoxIteratorTraits>
 				ConstBoxIterator;
 
 		/// get the first non-empty box 
@@ -436,36 +431,36 @@ namespace BALL
 		}
 
 
-		typedef DataItem_* DataIteratorPosition;
+		typedef DataItem* DataIteratorPosition;
 		
-		class DataIteratorTraits_
+		class DataIteratorTraits
 		{
 			public:
 
-			BALL_CREATE_DEEP(DataIteratorTraits_)
+			BALL_CREATE_DEEP(DataIteratorTraits)
 
-			DataIteratorTraits_()
+			DataIteratorTraits()
 				throw()
 			:	bound_(0),
 				position_(0)
 			{
 			}
 				
-			DataIteratorTraits_(const HashGridBox3& box)
+			DataIteratorTraits(const HashGridBox3& box)
 				throw()
 			:	bound_((HashGridBox3 *)&box),
 				position_(0)
 			{
 			}
 				
-			DataIteratorTraits_(const DataIteratorTraits_& traits, bool /* deep */ = true)
+			DataIteratorTraits(const DataIteratorTraits& traits, bool /* deep */ = true)
 				throw()
 			:	bound_(traits.bound_),
 				position_(traits.position_)
 			{
 			}
 				
-			const DataIteratorTraits_& operator = (const DataIteratorTraits_ &traits)
+			const DataIteratorTraits& operator = (const DataIteratorTraits &traits)
 				throw()
 			{
 				bound_ = traits.bound_;
@@ -503,13 +498,13 @@ namespace BALL
 				return position_;
 			}
 
-			bool operator == (const DataIteratorTraits_ &traits) const
+			bool operator == (const DataIteratorTraits &traits) const
 				throw()
 			{
 				return (position_ == traits.position_);
 			}
 
-			bool operator != (const DataIteratorTraits_ &traits) const
+			bool operator != (const DataIteratorTraits &traits) const
 				throw()
 			{
 				return (position_ != traits.position_);
@@ -576,14 +571,14 @@ namespace BALL
 			DataIteratorPosition 	position_;
 		};
 
-		friend class DataIteratorTraits_;
+		friend class DataIteratorTraits;
 
 		/** Data iterator for grid boxes.
-				This iterator traverses the list of data items store in a \Ref{HashGridBox3}.
+				This iterator traverses the list of data items store in a  \link HashGridBox3 HashGridBox3 \endlink .
 		*/
 		typedef ForwardIterator
 			<HashGridBox3<Item>, Item,
-			 DataIteratorPosition, DataIteratorTraits_>
+			 DataIteratorPosition, DataIteratorTraits>
 			DataIterator;
 
 		///
@@ -602,11 +597,11 @@ namespace BALL
 
 
 		/** Const data iterator for grid boxes.
-				This is the const version of \Ref{DataIterator}
+				This is the const version of  \link DataIterator DataIterator \endlink 
 		*/
 		typedef ConstForwardIterator
 			<HashGridBox3<Item>, Item,
-			 DataIteratorPosition, DataIteratorTraits_>
+			 DataIteratorPosition, DataIteratorTraits>
 			ConstDataIterator;
 
 		///
@@ -638,8 +633,8 @@ namespace BALL
 		bool remove_(HashGridBox3 *box)
 			throw();
 
-		NeighbourBoxItem_* 	first_neighbour_;
-		DataItem_* 					first_item_;
+		NeighborBoxItem* 	first_neighbor_;
+		DataItem* 					first_item_;
 	};
 
 	template<typename Item>  
@@ -647,7 +642,7 @@ namespace BALL
 		throw()
 		:	previous_(0),
 			next_(0),
-			first_neighbour_(0),
+			first_neighbor_(0),
 			first_item_(0)
 	{
 	}
@@ -657,7 +652,7 @@ namespace BALL
 		throw()
 		:	previous_(0),
 			next_(0),
-			first_neighbour_(0),
+			first_neighbor_(0),
 			first_item_(0)
 	{
 		set(box, deep);
@@ -674,13 +669,13 @@ namespace BALL
 	void HashGridBox3<Item>::clear()
 		throw()
 	{
-		for (NeighbourBoxItem_* next = 0; first_neighbour_ != 0; first_neighbour_ = next)
+		for (NeighborBoxItem* next = 0; first_neighbor_ != 0; first_neighbor_ = next)
 		{
-			next = first_neighbour_->next_;
-			delete first_neighbour_;
+			next = first_neighbor_->next_;
+			delete first_neighbor_;
 		}
 
-		for (DataItem_* next_item = 0; first_item_ != 0; first_item_ = next_item)
+		for (DataItem* next_item = 0; first_item_ != 0; first_item_ = next_item)
 		{
 			next_item = first_item_->next_;
 			delete first_item_;
@@ -714,19 +709,10 @@ namespace BALL
 	}
 
 	template<typename Item>  
-	BALL_INLINE 
-	void HashGridBox3<Item>::get(HashGridBox3<Item>& box, bool deep) const
-		throw(Exception::NotImplemented)
-	{
-		// ????? - not implemented
-    throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	template<typename Item>  
 	Item* HashGridBox3<Item>::find(const Item& item)
 		throw()
 	{
-		for (DataItem_* item_ptr= first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
+		for (DataItem* item_ptr= first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
 		{
 			if (item_ptr->item_ == item)
 			{
@@ -752,7 +738,7 @@ namespace BALL
 		Size size = 0;
 
 		// count all items in the box
-		for (const DataItem_* item = first_item_; item != 0; item = item->next_, size++);
+		for (const DataItem* item = first_item_; item != 0; item = item->next_, size++);
 		
 		return size;
 	}
@@ -762,14 +748,14 @@ namespace BALL
 	void HashGridBox3<Item>::insert(const Item& item)
 		throw()
 	{
-		first_item_ = new DataItem_(item, first_item_);
+		first_item_ = new DataItem(item, first_item_);
 	}
 
 	template<typename Item>  
 	bool HashGridBox3<Item>::remove(const Item& item)
 		throw()
 	{
-		for (DataItem_* item_ptr = first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
+		for (DataItem* item_ptr = first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
 		{
 			if (item_ptr->item_ == item)
 			{
@@ -802,8 +788,8 @@ namespace BALL
 		throw()
 	{
 		bool found = false;
-		DataItem_* next_item = 0;
-		DataItem_* item_ptr = first_item_;
+		DataItem* next_item = 0;
+		DataItem* item_ptr = first_item_;
 		
 		while(item_ptr != 0)
 		{
@@ -849,8 +835,8 @@ namespace BALL
 	bool HashGridBox3<Item>::operator == (const HashGridBox3<Item>& box) const
 		throw()
 	{
-		const DataItem_* a = first_item_;
-		const DataItem_* b = box.first_item_;
+		const DataItem* a = first_item_;
+		const DataItem* b = box.first_item_;
 		
 		for (; a != 0 && b != 0; a = a->next_, b = b->next_)
 		{
@@ -892,9 +878,9 @@ namespace BALL
 		throw()
 	{
 		Size size = 0;
-		NeighbourBoxItem_* item_ptr_ = 0;
+		NeighborBoxItem* item_ptr_ = 0;
 		
-		for (item_ptr_ = first_neighbour_; item_ptr_ != 0; item_ptr_ = item_ptr_->next_)
+		for (item_ptr_ = first_neighbor_; item_ptr_ != 0; item_ptr_ = item_ptr_->next_)
 		{
 			++size;
 
@@ -912,7 +898,7 @@ namespace BALL
 		}
 		
 		size = 0;
-		DataItem_* item = 0;
+		DataItem* item = 0;
 		
 		for (item = first_item_; item != 0; item = item->next_)
 		{
@@ -942,15 +928,15 @@ namespace BALL
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  data:" << std::endl;
-		for (DataItem_ *item = first_item_; item != 0; item = item->next_)
+		for (DataItem *item = first_item_; item != 0; item = item->next_)
 		{
 			BALL_DUMP_DEPTH(s, depth);
 			s << "    " << item->item_ << std::endl;
 		}
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  neighbour boxes:" << std::endl;
-		for (NeighbourBoxItem_ *item_ptr_ = first_neighbour_; item_ptr_ != 0; item_ptr_ = item_ptr_->next_)
+		s << "  neighbor boxes:" << std::endl;
+		for (NeighborBoxItem *item_ptr_ = first_neighbor_; item_ptr_ != 0; item_ptr_ = item_ptr_->next_)
 		{
 			BALL_DUMP_DEPTH(s, depth);
 			s << "    " << item_ptr_->box_ << std::endl;
@@ -970,7 +956,7 @@ namespace BALL
 
 		Processor::Result result;
 			
-		for (DataItem_ *item = first_item_; item != 0; item = item->next_)
+		for (DataItem *item = first_item_; item != 0; item = item->next_)
 		{
 			result = processor(item->item_);
 
@@ -994,10 +980,10 @@ namespace BALL
  
 		Processor::Result result;
 
-		for (NeighbourBoxItem_* neighbour_item = first_neighbour_;
-				 neighbour_item != 0; neighbour_item = neighbour_item->next_)
+		for (NeighborBoxItem* neighbor_item = first_neighbor_;
+				 neighbor_item != 0; neighbor_item = neighbor_item->next_)
 		{
-			result = processor(*(neighbour_item->box_));
+			result = processor(*(neighbor_item->box_));
 
 			if (result <= Processor::BREAK)
 			{
@@ -1013,34 +999,34 @@ namespace BALL
 	void HashGridBox3<Item>::insert_(HashGridBox3* box)
 		throw()
 	{
-		first_neighbour_ = new NeighbourBoxItem_(box, first_neighbour_);
+		first_neighbor_ = new NeighborBoxItem(box, first_neighbor_);
 	}
 
 	template<typename Item>  
 	bool HashGridBox3<Item>::remove_(HashGridBox3* box)
 		throw()
 	{
-		for (NeighbourBoxItem_* neighbour_item = first_neighbour_; 
-				 neighbour_item != 0; neighbour_item = neighbour_item->next_)
+		for (NeighborBoxItem* neighbor_item = first_neighbor_; 
+				 neighbor_item != 0; neighbor_item = neighbor_item->next_)
 		{
-			if (neighbour_item->box_ == box)
+			if (neighbor_item->box_ == box)
 			{
-				if (neighbour_item == first_neighbour_)
+				if (neighbor_item == first_neighbor_)
 				{
-					first_neighbour_ = first_neighbour_->next_;
+					first_neighbor_ = first_neighbor_->next_;
 				}
 				
-				if (neighbour_item->next_ != 0)
+				if (neighbor_item->next_ != 0)
 				{
-					neighbour_item->next_->previous_ = neighbour_item->previous_;
+					neighbor_item->next_->previous_ = neighbor_item->previous_;
 				}
 			
-				if (neighbour_item->previous_ != 0)
+				if (neighbor_item->previous_ != 0)
 				{
-					neighbour_item->previous_->next_ = neighbour_item->next_;
+					neighbor_item->previous_->next_ = neighbor_item->next_;
 				}
 			
-				delete neighbour_item;
+				delete neighbor_item;
 				
 				return true;
 			}
@@ -1051,8 +1037,8 @@ namespace BALL
 
 
 	/**	Three-dimensional Hash Grid Class.
-			?????\\
-			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
+			????? \par
+			
 	*/
 	template <typename Item>
 	class HashGrid3
@@ -1070,7 +1056,7 @@ namespace BALL
 			throw();
 			
 		/** Constructor using origin, dimensions, and spacings of the grid.
-				It creates a hashgrid at {\tt origin} with axis-dependant spacings. 
+				It creates a hashgrid at <tt>origin</tt> with axis-dependant spacings. 
 				@param origin
 				@param dimension_x
 				@param dimension_y
@@ -1091,8 +1077,8 @@ namespace BALL
 			throw();
 
 		/** Constructor using two vectors and a single spacing.
-				This constructor creates a hash grid at {\tt origin} with spacing
-				{\tt spacing}. The vector {\tt size} has to be relative to {\tt origin}
+				This constructor creates a hash grid at <tt>origin</tt> with spacing
+				<tt>spacing</tt>. The vector <tt>size</tt> has to be relative to <tt>origin</tt>
 				and defines the opposite corner of the grid, thereby setting the size 
 				of the grid.
 				@param origin a vector defining the origin of our cubic hash grid
@@ -1118,7 +1104,7 @@ namespace BALL
 		void clear(Position x, Position y, Position z)
 			throw();
 
-		/// Clears the HashGridBox3 at position {\tt vector}
+		/// Clears the HashGridBox3 at position <tt>vector</tt>
 		void clear(const Vector3 &vector)
 			throw();
 
@@ -1230,7 +1216,7 @@ namespace BALL
 		void insert(Position x, Position y, Position z, const Item& item)
 			throw();
 		
-		/// Insert an item at position {\tt vector}
+		/// Insert an item at position <tt>vector</tt>
 		void insert(const Vector3& vector, const Item& item)
 			throw();
 
@@ -1238,7 +1224,7 @@ namespace BALL
 		bool remove(Position x, Position y, Position z, const Item& item)
 			throw();
 
-		/// Remove an item from position {\tt vector}
+		/// Remove an item from position <tt>vector</tt>
 		bool remove(const Vector3& vector, const Item& item)
 			throw();
 
@@ -1264,7 +1250,7 @@ namespace BALL
 		bool operator != (const HashGrid3& grid) const
 			throw();
 
-		/// Tests, whether {\tt this} is empty
+		/// Tests, whether <tt>this</tt> is empty
 		bool isEmpty() const
 			throw();
 
@@ -1295,6 +1281,12 @@ namespace BALL
 		bool apply(UnaryProcessor< HashGridBox3<Item> > &processor)
 			throw();
 
+		/** Get the nearest item for a point
+		 		@param distance number of adjacted boxes in each direction to search in
+		*/
+		const Item* getClosestItem(const Vector3& point, Size distance) const
+			throw();
+
 		//@}
 		/**	@name	External Iterators 
 		*/
@@ -1302,34 +1294,34 @@ namespace BALL
 
 		typedef HashGridBox3<Item>* BoxIteratorPosition;
 		
-		class BoxIteratorTraits_
+		class BoxIteratorTraits
 		{
 			public:
 
-			BALL_CREATE_DEEP(BoxIteratorTraits_)
+			BALL_CREATE_DEEP(BoxIteratorTraits)
 
-			BoxIteratorTraits_()
+			BoxIteratorTraits()
 				throw()
 				:	bound_(0),
 					position_(0)
 			{
 			}
 				
-			BoxIteratorTraits_(const HashGrid3 &grid)
+			BoxIteratorTraits(const HashGrid3 &grid)
 				throw()
 				:	bound_((HashGrid3 *)&grid),
 					position_(0)
 			{
 			}
 				
-			BoxIteratorTraits_(const BoxIteratorTraits_& traits, bool /* deep */ = true)
+			BoxIteratorTraits(const BoxIteratorTraits& traits, bool /* deep */ = true)
 				throw()
 				:	bound_(traits.bound_),
 					position_(traits.position_)
 			{
 			}
 				
-			const BoxIteratorTraits_& operator = (const BoxIteratorTraits_& traits)
+			const BoxIteratorTraits& operator = (const BoxIteratorTraits& traits)
 				throw()
 			{
 				bound_ = traits.bound_;
@@ -1367,13 +1359,13 @@ namespace BALL
 				return position_;
 			}
 
-			bool operator == (const BoxIteratorTraits_& traits) const
+			bool operator == (const BoxIteratorTraits& traits) const
 				throw()
 			{
 				return (position_ == traits.position_);
 			}
 
-			bool operator != (const BoxIteratorTraits_& traits) const
+			bool operator != (const BoxIteratorTraits& traits) const
 				throw()
 			{
 				return (position_ != traits.position_);
@@ -1440,12 +1432,12 @@ namespace BALL
 			BoxIteratorPosition position_;
 		};
 
-		friend class BoxIteratorTraits_;
+		friend class BoxIteratorTraits;
 
 		///
 		typedef ForwardIterator
 			<HashGrid3<Item>, HashGridBox3<Item>,
-			 BoxIteratorPosition, BoxIteratorTraits_>
+			 BoxIteratorPosition, BoxIteratorTraits>
 			BoxIterator;
 
 		/// 
@@ -1466,7 +1458,7 @@ namespace BALL
 		///
 		typedef ConstForwardIterator
 			<HashGrid3<Item>, HashGridBox3<Item>,
-			 BoxIteratorPosition, BoxIteratorTraits_>
+			 BoxIteratorPosition, BoxIteratorTraits>
 			ConstBoxIterator;
 
 		/// 
@@ -1757,7 +1749,7 @@ namespace BALL
 		{
 			if (sourcebox->isEmpty() == false)
 			{
-				for (typename HashGridBox3<Item>::DataItem_* item  = sourcebox->first_item_; item != 0; item = item->next_)
+				for (typename HashGridBox3<Item>::DataItem* item  = sourcebox->first_item_; item != 0; item = item->next_)
 				{
 					insert_(targetbox, item->item_);
 				}
@@ -1873,6 +1865,52 @@ namespace BALL
 		throw()
 	{
 		return dimension_z_;
+	}
+
+	template <typename Item>
+	const Item* HashGrid3<Item>::getClosestItem(const Vector3& point, Size dist) const
+		throw()
+	{
+		const HashGridBox3<Item>* box = getBox(point);
+		if (!box)
+		{
+			return 0;
+		}
+
+		Position x, y, z;
+		getIndices(*box, x, y, z);
+
+		const Item* item = 0;
+		float distance = FLT_MAX;
+		List<HashGridBox3<Item>* > box_list;
+
+		// iterator over neighbour boxes
+		for (Index xi = -(Index)dist; xi <= (Index)dist; xi++)
+		{
+			for (Index yi = -(Index)dist; yi <= (Index)dist; yi++)
+			{
+				for (Index zi = -(Index)dist; zi <= (Index)dist; zi++)
+				{
+					// iterate over all data items
+					const HashGridBox3<Item>* box_ptr = getBox(x+xi, y+yi, z+zi);	
+					if (box_ptr != 0 && !box_ptr->isEmpty())
+					{
+						typename HashGridBox3<Item>::ConstDataIterator hit = box_ptr->beginData();
+						for (;hit != box_ptr->endData(); hit++)
+						{
+							float new_dist = ((*hit)->getPosition() - point).getSquareLength();
+							if (new_dist < distance)
+							{
+								item = &*hit;
+								distance = new_dist;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return item;
 	}
 
 	template <typename Item>
@@ -2166,7 +2204,7 @@ namespace BALL
 
 		for (HashGridBox3<Item>* box = first_nonempty_; box != 0; box = box->next_)
 		{
-			for (typename HashGridBox3<Item>::DataItem_ *item = box->first_item_; item != 0; item = item->next_)
+			for (typename HashGridBox3<Item>::DataItem *item = box->first_item_; item != 0; item = item->next_)
 			{
 				result = processor(item->item_);
 
@@ -2241,17 +2279,17 @@ namespace BALL
 			++end_y;
 			++end_z;
 			
-			HashGridBox3<Item>* neighbourbox = 0;
+			HashGridBox3<Item>* neighborbox = 0;
 			for (Position x = end_x - 2; x <= end_x; ++x)
 			{
 				for (Position y = end_y - 2; y <= end_y; ++y)
 				{
 					for (Position z = end_z - 2; z <= end_z; ++z)
 					{
-						neighbourbox = getBox(x, y, z);
+						neighborbox = getBox(x, y, z);
 			
-						if (neighbourbox != 0)
-							neighbourbox->insert_(box);
+						if (neighborbox != 0)
+							neighborbox->insert_(box);
 					}
 				}
 			}
@@ -2289,18 +2327,18 @@ namespace BALL
 			++end_y;
 			++end_z;
 			
-			HashGridBox3<Item> *neighbourbox = 0;
+			HashGridBox3<Item> *neighborbox = 0;
 			for (Index x = end_x - 2; x <= end_x; ++x)
 			{
 				for (Index y = end_y - 2; y <= end_y; ++y)
 				{
 					for (Index z = end_z - 2; z <= end_z; ++z)
 					{
-						neighbourbox = getBox(x, y, z);
+						neighborbox = getBox(x, y, z);
 			
-						if (neighbourbox != 0)
+						if (neighborbox != 0)
 						{
-							neighbourbox->remove_(box);
+							neighborbox->remove_(box);
 						}
 					}
 				}
@@ -2309,7 +2347,6 @@ namespace BALL
 		
 		return result;
 	}
-
 } // namespace BALL
 
 #endif // BALL_DATATYPE_HASHGRID_H

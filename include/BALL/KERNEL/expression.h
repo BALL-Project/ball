@@ -1,25 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.21 2002/02/27 12:18:46 sturm Exp $
+// $Id: expression.h,v 1.31 2004/02/07 19:34:47 amoll Exp $
+//
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #	include <BALL/DATATYPE/stringHashMap.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_EXPRESSIONTREE_H
-#	include <BALL/KERNEL/expressionTree.h>
 #endif
 
 #ifndef BALL_KERNEL_EXPRESSIONPARSER_H
@@ -28,19 +17,23 @@
 
 namespace BALL 
 {
-
+	class Atom;
+	class ExpressionTree;
+	
 	/** Expression class. 
-			This class provides a frontend to ExpressionTree.	\\
-			Expressions may be built from the following modules: \\
-			AND & a conjunction \\
-			OR & a disjunction \\
+			This class provides a frontend to ExpressionTree.	 \par
+			Expressions may be built from the following modules:  \par
+			AND & a conjunction  \par
+			OR & a disjunction  \par
 			predicate(argument) & a predicate class that is derived from
-			\Ref{ExpressionPredicate) and provides {\tt operator () (const Atom& atom) const}. \\
-			\\
+			\Ref{ExpressionPredicate) and provides <tt>operator () (const Atom& atom) const</tt>.  \par
+			 \par
 			Additionally brackets can be used for grouping. At least one bracket
 			pair must exist which encloses the argument of a predicate. Empty arguments are allowed.
-			{\bf Definition:} \URL{BALL/KERNEL/expression.h}
+			
 			@see ExpressionTree
+
+    	\ingroup  Predicates
 	*/
 	class Expression
 	{
@@ -73,7 +66,7 @@ namespace BALL
 		/** Construct an Expression with a string
 		*/
 		Expression(const String& expression_string) 
-			throw();
+			throw(Exception::ParseError);
 
 		/** Destructor.
 		*/
@@ -100,7 +93,7 @@ namespace BALL
 		*/
 		//@{
 
-		/** Evaluate the expression of {\tt atom}
+		/** Evaluate the expression of <tt>atom</tt>
 				@param atom
 		*/
 		virtual bool operator () (const Atom& atom) const 
@@ -147,7 +140,7 @@ namespace BALL
 
 		/** Assignment operator 
 		 */
-		const Expression& operator = (const Expression& expression) 
+		Expression& operator = (const Expression& expression) 
 			throw();
 
 		/** Clear method 
@@ -166,8 +159,7 @@ namespace BALL
 		/*_ Construct the expression tree from the SyntaxTree
 		*/
 		ExpressionTree*	constructExpressionTree_(const ExpressionParser::SyntaxTree& tree)
-			
-			throw();
+			throw(Exception::ParseError);
 
 		/*_ Register the predicates defined by default.
 				See also: \URL{BALL/KERNEL/standardPredicates.h}
@@ -195,7 +187,6 @@ namespace BALL
 
 		//@}
 	};
-
 }	
 
 #endif // BALL_KERNEL_EXPRESSION_H

@@ -1,57 +1,50 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeIterator.h,v 1.5 2002/02/27 12:18:49 sturm Exp $
+// $Id: moleculeIterator.h,v 1.13 2003/08/26 08:04:18 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
 #define BALL_KERNEL_MOLECULEITERATOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
-#endif
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #	include <BALL/KERNEL/iterator.h>
 #endif
 
 #ifndef BALL_KERNEL_PREDICATE_H
-#	include <BALL/KERNEL/predicate.h>
+# include <BALL/KERNEL/predicate.h>
 #endif
 
 namespace BALL 
 {
-
-	class MoleculeIteratorTraits_
-		: public CompositeIteratorTraits_
+	/** MoleculeIteratorTratis_
+	 		\ingroup KernelIterators
+	*/
+	class MoleculeIteratorTraits
+		: public CompositeIteratorTraits
 	{
 		public:
 		
-		BALL_CREATE_DEEP(MoleculeIteratorTraits_)
-
-		MoleculeIteratorTraits_()
-			:	CompositeIteratorTraits_()
+		MoleculeIteratorTraits()
+			:	CompositeIteratorTraits()
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<Molecule> >();
 		}
 			
-		MoleculeIteratorTraits_(const Composite& composite)
-			:	CompositeIteratorTraits_(composite)
+		MoleculeIteratorTraits(const Composite& composite)
+			:	CompositeIteratorTraits(composite)
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<Molecule> >();
 		}
 			
-		MoleculeIteratorTraits_(const MoleculeIteratorTraits_& traits, bool /* deep */ = true)
-			:	CompositeIteratorTraits_(traits)
+		MoleculeIteratorTraits(const MoleculeIteratorTraits& traits, bool /* deep */ = true)
+			:	CompositeIteratorTraits(traits)
 		{
 		}
 			
-		MoleculeIteratorTraits_ &operator = (const MoleculeIteratorTraits_& traits)
+		MoleculeIteratorTraits &operator = (const MoleculeIteratorTraits& traits)
 		{
-			CompositeIteratorTraits_::operator=(traits);
+			CompositeIteratorTraits::operator=(traits);
 			return *this;
 		}
 
@@ -64,20 +57,16 @@ namespace BALL
 
 
 	typedef BidirectionalIterator
-		<Composite, Molecule, Composite::SubcompositeIterator, MoleculeIteratorTraits_>
+		<Composite, Molecule, Composite::CompositeIterator, MoleculeIteratorTraits>
 		MoleculeIterator;
 
 	typedef ConstBidirectionalIterator
-		<Composite, Molecule, Composite::SubcompositeIterator, MoleculeIteratorTraits_>
+		<Composite, Molecule, Composite::CompositeIterator, MoleculeIteratorTraits>
 		MoleculeConstIterator;
 
-	typedef ReverseBidirectionalIterator
-		<Composite, Molecule, Composite::SubcompositeIterator, MoleculeIteratorTraits_>
-		MoleculeReverseIterator;
+	typedef std::reverse_iterator<MoleculeIterator> MoleculeReverseIterator;
 
-	typedef ConstReverseBidirectionalIterator
-		<Composite, Molecule, Composite::SubcompositeIterator, MoleculeIteratorTraits_>
-		MoleculeConstReverseIterator;
+	typedef std::reverse_iterator<MoleculeConstIterator> MoleculeConstReverseIterator;
 
 } // namespace BALL
 

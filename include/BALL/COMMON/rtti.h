@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.h,v 1.17 2002/12/23 08:26:12 oliver Exp $
+// $Id: rtti.h,v 1.24 2003/08/26 08:04:05 oliver Exp $
+//
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -10,6 +11,9 @@
 #	include <BALL/CONFIG/config.h>
 #endif
 
+#ifndef BALL_COMMON_H
+#	include <BALL/common.h>
+#endif
 
 #include <string>
 #include <typeinfo>
@@ -17,7 +21,6 @@ using std::string;
 
 namespace BALL 
 {
-
 
 #	ifdef	__GNUC__
 	// EGCS produces a nearly unreadable name mangling that requires 
@@ -31,22 +34,24 @@ namespace BALL
 	/**	Returns a unique name for a class.
 			This name contains no blanks. It is usually derived by substituting all
 			blanks in the name (as returned by RTTI::getName()) with underscores ("_").
-			In the case of {\tt gcc}, however a name demangling decodes the string first.
+			In the case of <tt>gcc</tt>, however a name demangling decodes the string first.
 			This function is needed for object persistence.
-			@param	t the {\tt type_info} structure as returned by {\tt typeid}
+			@param	t the <tt>type_info</tt> structure as returned by <tt>typeid</tt>
 			@return	string the coverted class name
+			
+			\ingroup Common
 	*/ 
-	string streamClassName(const ::std::type_info& t);
+	string streamClassName(const std::type_info& t);
 
-	/**	@name Simplified RunTime Type Identification.
+	/**	Simplified RunTime Type Identification.
 			ANSI C++ provides support for runtime type identification (RTTI). However, the support
 			is very basic. The template functions of the RTTI namespace  provide a more 
 			readable support for RTTI. It defines
-			predicates such as \Ref{isKindOf} that simplify tests on the hereditary relationship of
-			different objects.\\
+			predicates such as  \link isKindOf isKindOf \endlink  that simplify tests on the hereditary relationship of
+			different objects. \par
 			To use the RTTI template functions, parametrize it with the type you are interested in.
 			For example, to find out whether a given molecule is a protein, the following code
-			can be used:\\
+			can be used: \par
 			\begin{verbatim}
 				Molecule& m =...;
 				...
@@ -57,9 +62,9 @@ namespace BALL
 					// this is only a molecule...
 				}
 			\end{verbatim}
+	
+			\ingroup Common
 	*/
-	//@{
-
 	namespace RTTI
 	{
 
@@ -77,7 +82,7 @@ namespace BALL
 
 		/**	Return a void pointer to a new instance of the class.
 				Use this method to provide an easy factory for objects of a certain class.
-				The main use of this function lies in object persistence. The \Ref{PersistenceManager}
+				The main use of this function lies in object persistence. The  \link PersistenceManager PersistenceManager \endlink 
 				needs a function for the dynamic creation of objects.
 		*/
 		template <typename T>
@@ -87,7 +92,7 @@ namespace BALL
 		}
 
 		/**	Return the name of the class.
-				This method returns the name of the class as given by {\tt typeid(<class instance>.name())}.
+				This method returns the name of the class as given by <tt>typeid(<class instance>.name())</tt>.
 				No additional name demangling and whitespace substitution are performed.
 		*/
 		template <typename T>
@@ -175,9 +180,9 @@ namespace BALL
 			return s.c_str();
 		}
 
-		/**	Return true if {\tt u} is a kind of T.
-				If {\tt u} is an instance of a class derived from T,
-				this predicate returns true:\\
+		/**	Return true if <tt>u</tt> is a kind of T.
+				If <tt>u</tt> is an instance of a class derived from T,
+				this predicate returns true: \par
 				\begin{verbatim}
 					Protein p;
 
@@ -192,7 +197,7 @@ namespace BALL
 		}
 
 		/**	Cast an object to a specialized class.
-				{\bf Example:}\\
+				<b>Example:</b> \par
 				\begin{verbatim}
 					Composite* composite = ...;
 					...
@@ -214,10 +219,10 @@ namespace BALL
 			return const_cast<T*>(dynamic_cast<const T*>(&u));
 		}
 
-		/**	Return {\bf true} if a given object is an instance of a given class.
-				If {\tt u} is an instance of {\tt T}, this predicate returns {\bf true}.
-				If {\tt u} is an instance of a class that is derived from {\tt T} or
-				a base class of {\tt T}, it returns false.
+		/**	Return <b>true</b> if a given object is an instance of a given class.
+				If <tt>u</tt> is an instance of <tt>T</tt>, this predicate returns <b>true</b>.
+				If <tt>u</tt> is an instance of a class that is derived from <tt>T</tt> or
+				a base class of <tt>T</tt>, it returns false.
 		*/
 		template <typename T, typename U>
 		bool isInstanceOf(const U& u)
@@ -225,8 +230,6 @@ namespace BALL
 			T		t;
 			return (typeid(u) == typeid(t));
 		}
-	//@}
-
 	} // namespace RTTI
 
 } // namespace BALL

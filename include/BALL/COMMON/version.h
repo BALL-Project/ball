@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.h,v 1.14 2002/12/20 17:20:51 anker Exp $
+// $Id: version.h,v 1.24 2004/02/19 12:35:29 oliver Exp $
+//
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -13,23 +14,20 @@
 //
 //  master data for all revisions is stored in this define!
 //
-#define BALL_RELEASE_STRING             "1.0pre1"
+#define BALL_RELEASE_STRING             "1.0pre2"
 
 namespace BALL
 {
 
-	/**	@name Version information class.
+	/**	Version information class.
 			The BALL release, release data and related version
-			can be retrieved by these methods.\\
-			BALL releases ending on:
-			"a" are alpha releases, \\
-			"b" are beta releases, \\
-			"n" are nonpublic releases. \\
-			Stable releases are not suffixed by a letter. \\
+			can be retrieved by these methods. \par
+			Stable releases are designated with numbers only.  \par
+			Alpha, beta, nonpublic, or prereleases are suffixed as "alpha", "beta", "nonpublic", and "pre", respectively.\par
 			The VersionInfo class contains only static methods
 			that can be used to retrieve the desired information.
-			\\
-			{\bf Definition:}\URL{BALL/COMMON/version.h}
+			 \par
+	\ingroup Common		
 	*/
 	class VersionInfo
 	{
@@ -44,7 +42,7 @@ namespace BALL
 			BETA,
 			NONPUBLIC,
 			PRERELEASE,
-			PATCHLEVEL,
+			PATCHLVL, // this can't be PATCHLEVEL due to a collision with historic Python versions (< 2.2).
 			UNKNOWN
 		};
 
@@ -63,7 +61,7 @@ namespace BALL
 		static int getMinorRevision() throw(Exception::InvalidFormat);
 
 		/** Return the type of release:
-				ALPHA, BETA, NONPUPLIC, STABLE, PRERELEASE, PATCHLEVEL, UNKNOWN.
+				ALPHA, BETA, NONPUPLIC, STABLE, PRERELEASE, PATCHLVL, UNKNOWN.
 		*/
 		static Type getType() throw();
 		
@@ -73,6 +71,7 @@ namespace BALL
 		static const char* RELEASE_DATE_AND_TIME;
 	  static const char* RELEASE_WHAT_STRING;
 	};
+	
 }
 
 #endif // BALL_COMMON_VERSION_H

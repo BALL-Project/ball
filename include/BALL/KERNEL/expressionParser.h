@@ -1,39 +1,25 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.h,v 1.4 2002/12/12 09:48:45 oliver Exp $
+// $Id: expressionParser.h,v 1.12 2003/08/26 08:04:17 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_EXPRESSIONPARSER_H
 #define BALL_KERNEL_EXPRESSIONPARSER_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-#	include <BALL/KERNEL/system.h>
-#endif
-
 #ifndef BALL_KERNEL_EXPRESSION_TREE_H
-	#include <BALL/KERNEL/expressionTree.h>
+#	include <BALL/KERNEL/expressionTree.h>
 #endif
 
 namespace BALL 
 {
 
-	/** @name	Expression Parser.
+	/** Expression Parser.
 			A simple parser for BALL kernel expressions. It reads a string and constructs
 			a syntax tree from the boolean expressions contained therein.
-			\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/expressionParser.h}
+			 \par
+			
+			\ingroup KernelMiscellaneous 
 	*/
 	class ExpressionParser
 	{
@@ -41,9 +27,8 @@ namespace BALL
 
 		/** SyntaxTree.
 				This internal class should be used in the implementation
-				of \Ref{ExpressionParser} only.
-				\\
-				{\bf Definition} \URL{BALL/KERNEL/syntaxTree.h}
+				of  \link ExpressionParser ExpressionParser \endlink  only.
+				 \par
 		*/
 		class SyntaxTree
 		{
@@ -91,7 +76,7 @@ namespace BALL
 			//@{
 
 			/** Clear method. This method brings this instance to the state after
-					default construction. {\bf Note} that the list of children will be
+					default construction. <b>Note</b> that the list of children will be
 					cleared but the childrem themselves will \emph{not} be deleted.
 			*/
 			virtual void clear()
@@ -190,7 +175,8 @@ namespace BALL
 
 		/**	Return the parsed system
 		*/
-		const SyntaxTree& getSyntaxTree() const;
+		const SyntaxTree& getSyntaxTree() const
+			throw(Exception::NullPointer);
 		//@}
 		
 		struct State
@@ -207,7 +193,6 @@ namespace BALL
 		SyntaxTree*								syntax_tree_;
 		static ExpressionParser*	current_parser_;
 	};
-
 } // namespace BALL
 
 #endif // BALL_KERNEL_EXPRESSIONPARSER_H

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: list.h,v 1.14 2002/02/27 12:18:32 sturm Exp $
+// $Id: list.h,v 1.22 2003/08/26 08:04:11 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -18,17 +19,15 @@
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
-
 #include <list>
 
 namespace BALL 
 {
-	
 	/** Extended list object.
 		This object is an improved version of the STL list class
-		{\bf Definition:} \URL{BALL/DATATYPE/list.h}
-	 */
-
+		
+    \ingroup  DatatypeMiscellaneous
+	*/
  	template <typename Value>
 	class List
 		:	public std::list<Value>
@@ -52,7 +51,6 @@ namespace BALL
 		typedef typename std::list<Value>::const_iterator const_iterator;
 
 		//@}
-
 		/**	@name	Constructors and Destructors */
 		//@{
 
@@ -76,39 +74,36 @@ namespace BALL
 		{
 		}
 			
-		/** Clear the list.
-				Remove all contents from the list.
+		/** Clear the list
 		*/
- 		void destroy()  throw()
+ 		void destroy() throw()
 		{
-			clear();
+			std::list<Value>::clear();
 		}
 	
 		/** Destructor
 		*/
 		virtual ~List() throw()
 		{
-			clear();
+			std::list<Value>::clear();
 		}
 
 		//@}
-
 		/**	@name	Assignment */
 		//@{
 			
 		/** Assign a list from another.
-				Create a copy of a list.
 				@param	list	the map to be copied
 				@param	deep ignored
 		*/
     void set(const List& list, bool /* deep */ = true) throw()
 		{
-			clear();
+			std::list<Value>::clear();
 
 			ConstIterator it = list.begin();
 			for ( ; it != list.end(); ++it)
 			{
-				push_back(const_cast<Value&>(*it));
+				std::list<Value>::push_back(const_cast<Value&>(*it));
 			}
 		}
 
@@ -136,31 +131,28 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name Accessors */
 		//@{
 
 		/** Return the size of the list.
-			@return Size the size of the list
 		*/
 		Size getSize() const throw()
 		{
-			return (Size)size();
+			return (Size)std::list<Value>::size();
 		}
 
-		/** Remove an item from the list. The first item that matches 
-			{\tt item} will be removed.
-			@param 	item the item to be removed
-			@return bool {\bf true} if the item was removed
+		/** Remove an item from the list. The first item that matches <tt>item</tt> will be removed.
+				@param 	item the item to be removed
+				@return bool <b>true</b> if the item was removed
 		 */
 		bool remove(const Value& item) throw()
 		{
-			Iterator it = begin();
-			for (; it != end(); ++it)
+			Iterator it = std::list<Value>::begin();
+			for (; it != std::list<Value>::end(); ++it)
 			{
 				if (*it == item)
 				{
-					erase(it);
+					std::list<Value>::erase(it);
 					return true;
 				}
 			}
@@ -168,20 +160,19 @@ namespace BALL
 		}
 		
 		//@}
-
 		/**	@name	Predicates */
 		//@{
 
 		/** Return true if the list is empty.
-				This method return {\bf true} if the list does not contain any entries.
+				This method return <b>true</b> if the list does not contain any entries.
 		*/
 		bool isEmpty() const throw()
 		{
-			return (size() == 0);
+			return (std::list<Value>::size() == 0);
 		}
-		//@}
 
-		/**	@name	Miscellaneous */
+		//@}
+		/**	@name	DatatypeMiscellaneous */
 		//@{
 
 		/**	Visitor host method.
@@ -190,8 +181,8 @@ namespace BALL
 		*/
 		virtual void host(Visitor<List<Value> >& visitor) 
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Internal Iterators */
 		//@{
 
@@ -201,28 +192,20 @@ namespace BALL
 		*/
 		bool apply(UnaryProcessor<Value>& processor) throw()
 		{
-			if (processor.start() == false)
-			{
-				return false;
-			}
+			if (!processor.start()) return false;
 
-			Processor::Result result;
-			Iterator it = begin();
-			for (; it != end(); ++it)
+			for (Iterator it = std::list<Value>::begin(); it != std::list<Value>::end(); ++it)
 			{
-				result = processor(*it);
+				Processor::Result result = processor(*it);
 				if (result <= Processor::BREAK)
 				{
 					return (result == Processor::BREAK);
 				}
 			}
-			if (result == Processor::ABORT)
-			{
-				return false;
-			}
 
 			return processor.finish();
 		}
+
 		//@}
 
 		/** Equality operator.
@@ -230,15 +213,15 @@ namespace BALL
 		*/
 		bool operator == (const List<Value>& list) const throw()
 		{
-			if (size() != list.size())
+			if (std::list<Value>::size() != list.size())
 			{
 				return false;
 			}
 
-			List<Value>::ConstIterator this_it = begin();
+			List<Value>::ConstIterator this_it = std::list<Value>::begin();
 			List<Value>::ConstIterator list_it = list.begin();
 
-			for (; this_it != end(); ++this_it)
+			for (; this_it != std::list<Value>::end(); ++this_it)
 			{
 				if (!(*this_it == *list_it))
 				{
@@ -265,7 +248,6 @@ namespace BALL
 	{
 		visitor.visit(*this);
 	}
-
 } // namespace BALL
 
 #endif // BALL_DATATYPE_LIST_H

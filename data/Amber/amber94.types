@@ -1256,3 +1256,47 @@
    MET-C:OXT     O2
  	 CA:CA  CA
    MG:MG  MG
+   PCA:N       N
+   PCA:H       H
+   PCA:CA      CT
+   PCA:C       C
+   PCA:O       O
+   PCA:CB      CT
+   PCA:CG      CT
+   PCA:CD      C
+   PCA:OE      O
+   PCA:HA      H1
+   PCA:1HB     HC
+   PCA:2HB     HC
+   PCA:1HG     HC
+   PCA:2HG     HC
+   PCA:OXT     O
+   PCA-N:N     N
+   PCA-N:H     H
+   PCA-N:CA    CT
+   PCA-N:C     C
+   PCA-N:O     O
+   PCA-N:CB    CT
+   PCA-N:CG    CT
+   PCA-N:CD    C
+   PCA-N:OE    O
+   PCA-N:HA    H1
+   PCA-N:1HB   HC
+   PCA-N:2HB   HC
+   PCA-N:1HG   HC
+   PCA-N:2HG   HC
+   PCA-M:N     N
+   PCA-M:H     H
+   PCA-M:CA    CT
+   PCA-M:C     C
+   PCA-M:O     O
+   PCA-M:CB    CT
+   PCA-M:CG    CT
+   PCA-M:CD    C
+   PCA-M:OE    O
+   PCA-M:HA    H1
+   PCA-M:1HB   HC
+   PCA-M:2HB   HC
+   PCA-M:1HG   HC
+   PCA-M:2HG   HC
+   PCA-M:OXT   O

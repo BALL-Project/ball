@@ -1,14 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.20 2002/12/21 11:10:24 oliver Exp $
+// $Id: PDBFile.h,v 1.28 2003/08/26 08:04:14 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #include <list>
 
@@ -18,10 +15,6 @@
 
 #ifndef BALL_DATATYPE_QUADRUPLE_H
 #	include <BALL/DATATYPE/quadruple.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
@@ -38,7 +31,9 @@
 
 namespace BALL 
 {
-
+    /** Hash 
+		 * \ingroup  StructureFormats
+     */
 	inline
 	HashIndex Hash(const Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>& quadruple)
 		throw()
@@ -46,6 +41,9 @@ namespace BALL
 		return (Index)quadruple.third;
 	}
 
+	/** Operator <<
+	 		\ingroup StructureFormats
+	*/
 	inline
 	std::ostream& operator << (std::ostream& s, const Quadruple<String,PDB::Character,PDB::Integer,PDB::AChar>& /* q */)
 	{
@@ -54,8 +52,9 @@ namespace BALL
 
 	
 	/**	PDB file class.
-			\\
-			{\bf Definition:} \URL{BALL/FORMAT/PDBFile.h}\\
+			 \par
+			
+		 \ingroup  StructureFormats
 	*/
 	class PDBFile
 		: public GenericPDBFile
@@ -78,8 +77,8 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/** Detailed constructor.
-				The file named {\tt filename} is opened. By default, the file is
-				opened for reading. To open it for writing, use {\tt open_mode = File::OUT}.
+				The file named <tt>filename</tt> is opened. By default, the file is
+				opened for reading. To open it for writing, use <tt>open_mode = File::OUT</tt>.
 				@param	filename the name of the file to open
 				@param	open_mode the file mode
 		*/
@@ -198,7 +197,8 @@ namespace BALL
 
 		/**	Write a system to the PDBfile
 		*/
-		virtual void write(const System& system);
+		virtual bool write(const System& system)
+			throw(File::CannotWrite);
 
 		/**	Read a system from the PDBfile
 		*/
@@ -211,7 +211,8 @@ namespace BALL
 
 		/**	Write a protein to the PDBfile
 		*/
-    virtual void write(const Protein& protein);
+    virtual bool write(const Protein& protein)
+			throw(File::CannotWrite);
 
 		/**	Read a protein from the PDBfile
 		*/
@@ -289,7 +290,6 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/FORMAT/PDBFile.iC>
 #	endif
-
 } // namespace BALL
 
 #endif // BALL_FORMAT_PDBFILE_H

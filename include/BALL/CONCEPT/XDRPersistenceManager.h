@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.h,v 1.16 2002/12/22 15:56:23 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.22 2004/02/18 18:19:01 anhi Exp $
+//
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -15,11 +16,12 @@
 
 namespace BALL 
 {
-
 	/**	XDR-format-based persistence manager.
 			This class implements a persistence manager that reads and writes
 			its objects in a portable binary format.
 			@see	TextPersistenceManager
+			
+			\ingroup  Persistence
 	*/
 	class XDRPersistenceManager
 		:	public PersistenceManager
@@ -76,29 +78,29 @@ namespace BALL
 		//@{
 
 		/**	Write an object header.
-				This method stores \Ref{OBJECT_HEADER} as an int value to mark the
-				start of an object (using {\tt xdr_int}).
+				This method stores  \link OBJECT_HEADER OBJECT_HEADER \endlink  as an int value to mark the
+				start of an object (using <tt>xdr_int</tt>).
 		*/
 		virtual void writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr)
       throw();
 
 		/**	Check for an object header.
-				This method reads an int form the input stream (using {\tt xdr_int}) and
-				returns {\bf true} if the value read equals \Ref{OBJECT_HEADER}.
+				This method reads an int form the input stream (using <tt>xdr_int</tt>) and
+				returns <b>true</b> if the value read equals  \link OBJECT_HEADER OBJECT_HEADER \endlink .
 		*/
 		virtual bool checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr)
       throw();
 
 		/** Write an object trailer.
-				This method stores \Ref{OBJECT_TRAILER} as an int value to mark the
-				start of an object (using {\tt xdr_int}).
+				This method stores  \link OBJECT_TRAILER OBJECT_TRAILER \endlink  as an int value to mark the
+				start of an object (using <tt>xdr_int</tt>).
 		*/
 		virtual void writeTrailer(const char* name = 0)
       throw();
 
 		/**	Check for an object trailer.
-				This method reads an int form the input stream (using {\tt xdr_int}) and
-				returns {\bf true} if the value read equals \Ref{OBJECT_TRAILER}.
+				This method reads an int form the input stream (using <tt>xdr_int</tt>) and
+				returns <b>true</b> if the value read equals  \link OBJECT_TRAILER OBJECT_TRAILER \endlink .
 		*/
 		virtual bool checkTrailer(const char* name = 0)
       throw();

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashMap.h,v 1.29 2002/12/12 09:48:43 oliver Exp $ 
+// $Id: hashMap.h,v 1.39 2003/08/28 20:56:29 oliver Exp $ 
+//
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -38,13 +39,13 @@
 #	include <BALL/COMMON/exception.h>
 #endif
 
+#include <utility>
 #include <algorithm>
 
 namespace BALL
 {
-
 	/**	Generic Hash Map Class.
-			{\bf Definition:} \URL{BALL/DATATYPE/hashMap.h}
+    	\ingroup  GenericHash
 	*/
 	template <class Key, class T>
 	class HashMap
@@ -185,7 +186,7 @@ namespace BALL
 			{
 				bound_ = 0;
 				position_ = 0;
-				bucket_ = INVALID_INDEX;
+				bucket_ = INVALID_POSITION;
 			}
 			
 			
@@ -344,8 +345,6 @@ namespace BALL
 			throw();
 			
 		/**	Copy Constructor.
-				@param	hash_map the hash map to be copied
-				@param	deep not used
 		*/
 		HashMap(const HashMap& hash_map) throw();
 
@@ -416,21 +415,21 @@ namespace BALL
 		*/
 		Size size() const throw();
 
-		/** Find the element whose key is {\tt key}.
+		/** Find the element whose key is <tt>key</tt>.
 		*/
 		Iterator find(const Key& key) throw();
 	
-		/** Find the element whose key is {\tt key}.
+		/** Find the element whose key is <tt>key</tt>.
 		*/
 		ConstIterator find(const Key& key) const throw();
 
-		/**	Return a mutable reference to the element whose key is {\tt key}.
-				If an element with the key {\tt key} does not exist, it is inserted.
+		/**	Return a mutable reference to the element whose key is <tt>key</tt>.
+				If an element with the key <tt>key</tt> does not exist, it is inserted.
 				@param	key the key
 		*/
 		T& operator [] (const Key& key) throw();
 
-		/**	Return a constant reference to the element whose key is {\tt key}.
+		/**	Return a constant reference to the element whose key is <tt>key</tt>.
 				@exception IllegalKey if the given key does not exist
 				@param	key the key
 		*/
@@ -439,14 +438,14 @@ namespace BALL
 
 		/**	Insert a new entry into the hash map.
 		*/
-		std::pair<Iterator, bool> insert(const ValueType& entry) throw();
+		::std::pair<Iterator, bool> insert(const ValueType& entry) throw();
 
 		/**	Insert a new entry into the hash map.
-				For STL compatibility. The value of {\tt pos} is ignored.
+				For STL compatibility. The value of <tt>pos</tt> is ignored.
 		*/
 		Iterator insert(Iterator pos, const ValueType& entry) throw();
 
-		/**	Erase element with key {\tt key}.
+		/**	Erase element with key <tt>key</tt>.
 				@return Size the number of elements erased (0 or 1)
 		*/
 		Size erase(const Key& key) throw();
@@ -457,7 +456,7 @@ namespace BALL
 		void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator);
 
 		/**	Erase a range of elements.
-				Erase all elements in the range {\tt first - last}.
+				Erase all elements in the range <tt>first - last</tt>.
 		*/
 		void erase(Iterator first, Iterator last) throw(Exception::IncompatibleIterators);
 
@@ -784,7 +783,7 @@ namespace BALL
 		if (it == end())
 		{
 			T value;
-			std::pair<Iterator, bool> result = insert(ValueType(key, value));
+			::std::pair<Iterator, bool> result = insert(ValueType(key, value));
 			it = result.first;
 		} 
 		
@@ -808,7 +807,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
+	::std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
 		(const ValueType& item)	throw()
 	{
 		Iterator it = find(item.first);
@@ -829,14 +828,14 @@ namespace BALL
 			it.getTraits().position_	= bucket_[bucket];
 			it.getTraits().bucket_		= bucket;
 
-			return std::pair<Iterator, bool>(it, true);
+			return ::std::pair<Iterator, bool>(it, true);
 		} 
 		else 
 		{
 			// replace the existing value
 			it->second = item.second;
 
-			return std::pair<Iterator, bool>(it, false);
+			return ::std::pair<Iterator, bool>(it, false);
 		}
 	}
 
@@ -1087,19 +1086,15 @@ namespace BALL
 	bool HashMap<Key, T>::operator == (const HashMap& hash_map) const
 		throw()
 	{
-		if(size_ != hash_map.size_) 
+		if (size_ != hash_map.size_) 
 		{
 			return false;
 		}
 		
-		ConstIterator it = begin();
-		ConstIterator hash_map_it;
-
-		for (; +it; ++it)
+		for (ConstIterator it(begin()); it != end(); ++it)
 		{
-			hash_map_it = hash_map.find(it->first);
-			if (hash_map_it == hash_map.end() ||
-					hash_map_it->second != it->second)
+			ConstIterator hash_map_it(hash_map.find(it->first));
+			if ((hash_map_it == hash_map.end()) || (hash_map_it->second != it->second))
 			{
 				return false;
 			}
@@ -1274,7 +1269,6 @@ namespace BALL
 			}
 		}		
 	}
-
 } // namespace BALL
 
 #endif // BALL_DATATYPE_HASHMAP_H

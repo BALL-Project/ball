@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcidIterator.h,v 1.3 2002/02/27 12:18:49 sturm Exp $
+// $Id: nucleicAcidIterator.h,v 1.10 2003/08/26 08:04:18 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_NUCLEICACIDITERATOR_H
 #define BALL_KERNEL_NUCLEICACIDITERATOR_H
@@ -24,36 +25,37 @@
 
 namespace BALL 
 {
-
 	class NucleicAcid;
 
-	class NucleicAcidIteratorTraits_
-		: public CompositeIteratorTraits_
+	/** NucleicAcidIteratorTraits
+	
+			\ingroup  KernelIterators
+	*/
+	class NucleicAcidIteratorTraits
+		: public CompositeIteratorTraits
 	{
 		public:
 
-		BALL_CREATE_DEEP(NucleicAcidIteratorTraits_)
-
-		NucleicAcidIteratorTraits_()
-			:	CompositeIteratorTraits_()
+		NucleicAcidIteratorTraits()
+			:	CompositeIteratorTraits()
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<NucleicAcid> >();
 		}
 			
-		NucleicAcidIteratorTraits_(const Composite& composite)
-			:	CompositeIteratorTraits_(composite)
+		NucleicAcidIteratorTraits(const Composite& composite)
+			:	CompositeIteratorTraits(composite)
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<NucleicAcid> >();
 		}
 			
-		NucleicAcidIteratorTraits_(const NucleicAcidIteratorTraits_& traits, bool /* deep */ = true)
-			:	CompositeIteratorTraits_(traits)
+		NucleicAcidIteratorTraits(const NucleicAcidIteratorTraits& traits, bool /* deep */ = true)
+			:	CompositeIteratorTraits(traits)
 		{
 		}
 			
-		NucleicAcidIteratorTraits_& operator =(const NucleicAcidIteratorTraits_& traits)
+		NucleicAcidIteratorTraits& operator =(const NucleicAcidIteratorTraits& traits)
 		{
-			CompositeIteratorTraits_::operator=(traits);
+			CompositeIteratorTraits::operator=(traits);
 			return *this;
 		}
 
@@ -66,20 +68,16 @@ namespace BALL
 
 
 	typedef BidirectionalIterator
-		<Composite, NucleicAcid, Composite::SubcompositeIterator, NucleicAcidIteratorTraits_>
+		<Composite, NucleicAcid, Composite::CompositeIterator, NucleicAcidIteratorTraits>
 		NucleicAcidIterator;
 
 	typedef ConstBidirectionalIterator
-		<Composite, NucleicAcid, Composite::SubcompositeIterator, NucleicAcidIteratorTraits_>
+		<Composite, NucleicAcid, Composite::CompositeIterator, NucleicAcidIteratorTraits>
 		NucleicAcidConstIterator;
 
-	typedef ReverseBidirectionalIterator
-		<Composite, NucleicAcid, Composite::SubcompositeIterator, NucleicAcidIteratorTraits_>
-		NucleicAcidReverseIterator;
+	typedef std::reverse_iterator<NucleicAcidIterator> NucleicAcidReverseIterator;
 
-	typedef ConstReverseBidirectionalIterator
-		<Composite, NucleicAcid, Composite::SubcompositeIterator, NucleicAcidIteratorTraits_>
-		NucleicAcidConstReverseIterator;
+	typedef std::reverse_iterator<NucleicAcidConstIterator> NucleicAcidConstReverseIterator;
 
 } // namespace BALL
 

@@ -1,0 +1,167 @@
+DlgEdit:v1.2:Dialog:
+Dialog {
+	ClassHeader {DlgPreferencesGeneral.h}
+	ClassSource {DlgPreferencesGeneral.C}
+	ClassName {DlgPreferencesGeneral}
+	DataHeader {DlgPreferencesGeneralData.h}
+	DataSource {DlgPreferencesGeneralData.C}
+	DataName {DlgPreferencesGeneralData}
+	WindowBaseClass {QWidget}
+	WindowFlags {0}
+}
+WidgetLayout {
+InitialPos {-1 -1}
+Size {380 210}
+MinSize {0 0}
+MaxSize {32767 32767}
+Grid {10}
+TextTranslated {TRUE}
+
+VButtonGroup {
+		Exclusive {TRUE}
+		Title {GUI Style}
+		Alignment {AlignHCenter}
+		Style {33}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {52 39 102 132}
+		Name {VButtonGroup_1}
+		MinimumSize {102 132}
+		MaximumSize {102 132}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {TRUE}
+		Text {Platinum}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {60 64 91 22}
+		Name {RadioButton_1}
+		Variable {is_platinum_style}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {FALSE}
+		Text {Windows }
+		AutoRepeat {FALSE}
+		AutoResize {TRUE}
+		Rect {60 91 91 22}
+		Name {RadioButton_2}
+		Variable {is_windows_style}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {FALSE}
+		Text {Motif}
+		AutoRepeat {FALSE}
+		AutoResize {TRUE}
+		Rect {60 118 91 22}
+		Name {RadioButton_3}
+		Variable {is_motif_style}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {FALSE}
+		Text {CDE}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {60 145 91 22}
+		Name {RadioButton_4}
+		Variable {is_cde_style}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+
+Box_Layout-1{
+	Direction {TopToBottom}
+	Border {5}
+	AutoBorder {5}
+	Name {}
+	Strut {0}
+	Stretch {1}
+}
+Box_Layout-1.1{
+	Direction {LeftToRight}
+	Border {5}
+	AutoBorder {5}
+	Name {}
+	Strut {0}
+	Stretch {1}
+}
+Box_Spacing-1.1.1{
+	Spacing {7}
+}
+Layout_Widget-1.1.2{
+	Widget {VButtonGroup_1}
+	BoxStretch {1}
+	Alignment {36}
+}
+Layout_Widget-1.1.2.1{
+	Widget {RadioButton_1}
+}
+Layout_Widget-1.1.2.2{
+	Widget {RadioButton_2}
+}
+Layout_Widget-1.1.2.3{
+	Widget {RadioButton_3}
+}
+Layout_Widget-1.1.2.4{
+	Widget {RadioButton_4}
+}
+Box_Stretch-1.1.3{
+	Stretch {1}
+}
+}

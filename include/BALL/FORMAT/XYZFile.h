@@ -1,39 +1,34 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.8 2002/12/12 09:48:44 oliver Exp $
+// $Id: XYZFile.h,v 1.16 2003/08/26 08:04:14 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_SYSTEM_FILE_H
 #	include <BALL/SYSTEM/file.h>
 #endif
 
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
-#endif
-
 namespace BALL 
 {
+	class System;
 
 	/**	XYZ file class.
 			This class enables BALL to read and write XMol XYZ files.
 			The XYZ format is a very simple molecular file format. It contains
 			only the atom type (i.e., the element) and the cartesian coordinates
 			of the structure. Bonds, atom names, and structural informations are
-			not part of this file format.\\
+			not part of this file format. \par
 			The first line of each XYZ file contains a single integer number: the number
 			of atoms in the file. The second line is just a comment line. When reading a 
 			XYZ file, BALL stores this comment as the name attribute of the system read.
 			Similarly, on writing the system, it's name is written to this comment line.
 			All remaining lines contain the element symbol and the three coordinates
-			in free format.	\\
-			{\bf Definition:} \URL{BALL/FORMAT/XYZFile.h}	\\
+			in free format.	 \par
+			
+    	\ingroup  StructureFormats
 	*/
 	class XYZFile
 		: public File
@@ -49,9 +44,9 @@ namespace BALL
 		XYZFile();
 
 		/** Detailed constructor.
-				Create a XYZ file and open it with mode {\tt open_mode} (reading is default)
+				Create a XYZ file and open it with mode <tt>open_mode</tt> (reading is default)
 				@param filename the filename
-				@param open_mode the openmode - default is \Ref{File::IN}
+				@param open_mode the openmode - default is  \link File::IN File::IN \endlink 
 		*/
 		XYZFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
@@ -73,7 +68,8 @@ namespace BALL
 		
 		/**	Write a system to the XYZ file
 		*/
-		virtual void write(const System&	system);
+		virtual bool write(const System&	system)
+			throw(File::CannotWrite);
 		
 		/**	Read a system from the XYZ file
 		*/
@@ -97,7 +93,6 @@ namespace BALL
 		
 		//@}
 	};
-
 } // namespace BALL
 
 #endif // BALL_FORMAT_XYZFILE_H

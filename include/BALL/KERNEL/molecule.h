@@ -1,31 +1,28 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.21 2002/02/27 12:18:48 sturm Exp $
+// $Id: molecule.h,v 1.31 2003/08/26 08:04:18 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #	include <BALL/KERNEL/atomContainer.h>
 #endif
 
-#ifndef BALL_KERNEL_FRAGMENT_H
-#	include <BALL/KERNEL/fragment.h>
+#ifndef BALL_KERNEL_FRAGMENTITERATOR_H
+#	include <BALL/KERNEL/fragmentIterator.h>
 #endif
 
 namespace BALL 
 {
-
 	class System;
 
-	/**	Kernel Molecule Class.
-			Used to represent general molecules without specific properties.\\
-			{\bf Definition:}\URL{BALL/KERNEL/molecule.h}
+	/**	Molecule class.
+			Used to represent general molecules without specific properties. \par
+			
+   		\ingroup KernelContainers 
 	*/
 	class Molecule
 		: public AtomContainer
@@ -95,7 +92,7 @@ namespace BALL
 
 		/**	Assign from another Molecule.
 				@param molecule	the Molecule object to assign from
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const Molecule& molecule, bool deep = true)
 			throw();
@@ -103,12 +100,12 @@ namespace BALL
 		/**	Assignment operator.
 				@param molecule the Molecule to assign from
 		**/
-		const Molecule& operator = (const Molecule& molecule)
+		Molecule& operator = (const Molecule& molecule)
 			throw();
 
 		/**	Assign to another Molecule.
 				@param molecule	the Molecule to be assigned to
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void get(Molecule& molecule, bool deep = true) const
 			throw();
@@ -206,22 +203,22 @@ namespace BALL
 		void insertAfter(AtomContainer& atom_container, Composite& after)
 			throw();
 
-		/**	Cut all children of {\tt atom_container} and prepend them before the children of this molecule.
+		/**	Cut all children of <tt>atom_container</tt> and prepend them before the children of this molecule.
 				@param atom_container the AtomContainer to access
 		*/
 		void spliceBefore(AtomContainer& atom_container)
 			throw();
 
-		/**	Cut all children of {\tt atom_container} and append them after the children of this molecule.
+		/**	Cut all children of <tt>atom_container</tt> and append them after the children of this molecule.
 				@param atom_container the AtomContainer to access
 		*/
 		void spliceAfter(AtomContainer& atom_container)
 			throw();
 
 		/**	Move the children of atom_container into this molecule.
-				The children of {\tt atom_container} are inserted at the position of 
-				{\tt atom_container} if it is a child of {\tt this}.
-				Otherwise the children are inserted using \Ref{spliceBefore}.
+				The children of <tt>atom_container</tt> are inserted at the position of 
+				<tt>atom_container</tt> if it is a child of <tt>this</tt>.
+				Otherwise the children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
 		void splice(AtomContainer& atom_container)
 			throw();
@@ -300,7 +297,6 @@ namespace BALL
 		bool isSubAtomContainerOf(const AtomContainer& atom_container) const
 			throw();
 	};
-
 } // namespace BALL 
 
 #endif // BALL_KERNEL_MOLECULE_H

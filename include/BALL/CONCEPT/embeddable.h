@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.h,v 1.7 2002/02/27 12:18:25 sturm Exp $
+// $Id: embeddable.h,v 1.20 2004/02/13 15:50:03 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #define BALL_CONCEPT_EMBEDDABLE_H
@@ -27,22 +28,61 @@
 namespace BALL 
 {
 
-	///
-	#define BALL_EMBEDDABLE(TYPE)\
-		virtual void registerThis() throw() { Embeddable::registerInstance_(typeid(TYPE), this); };\
-		static TYPE* getInstance(Position index) throw() { return dynamic_cast<TYPE*>(Embeddable::getInstance_(typeid(TYPE), index)); };\
-		static TYPE* getInstance(const String& identifier) throw() { return dynamic_cast<TYPE*>(Embeddable::getInstance_(typeid(TYPE), identifier)); };\
+	/** Embeddable macro.
+			This macro defines all methods required for clases
+			derived from Embeddable. It should be included in the class definition
+			of each of these classes, even for classes further down in the inheritance.
+			The argument ist just the class type, e.g. BALL::ModularWidget.
+	*/
+	#define BALL_EMBEDDABLE(TYPE,BASE)\
+		virtual void registerThis() throw() \
+		{ \
+			if (typeid(*this) != typeid(TYPE))\
+			{\
+				Log.error() << "Warning: derived class " << typeid(*this).name() << " was derived from BALL::Embeddable, but the macro\n"\
+                  << "BALL_EMBEDDABLE(...) was not specified in the class declaration!" << std::endl;\
+			}\
+			Embeddable::registerInstance_(typeid(TYPE), this);\
+			Embeddable::registerInstance_(typeid(BASE), this);\
+		}\
+		\
+		static TYPE* getInstance(Position index) throw() \
+		{ \
+			Embeddable* ptr = Embeddable::getInstance_(typeid(TYPE), index);\
+			if (ptr != 0)\
+			{\
+				return dynamic_cast<TYPE*>(ptr); \
+			}\
+			else\
+			{\
+				return 0;\
+			}\
+		}\
+		static TYPE* getInstance(const String& identifier) throw()\
+		{\
+			Embeddable* ptr = Embeddable::getInstance_(typeid(TYPE), identifier);\
+			if (ptr != 0)\
+			{\
+				return dynamic_cast<TYPE*>(ptr); \
+			}\
+			else\
+			{\
+				return 0;\
+			}\
+		}\
 		static Size countInstances() throw() { return (Embeddable::countInstances_(typeid(TYPE))); };
 	
 	/**	Python Embedding Base Class.
 			This class defines a common interface for all classes that
 			have to be accessible from an embedded Python interpreter.
-			\\
-			{\bf Definition:} \URL{BALL/CONCEPT/embeddable.h}		
-			\\
+			Each instance of a class derived from embeddable can be registered by calling
+			registerThis() of the instance and is then accessible through the static methods
+			of the class (e.g. getInstance).
+		 \par
 			@see PyInterpreter
 			@see MainControl
 			@see ModularWidget
+	 	 \ingroup ConceptsMiscellaneous
 	*/
 	class Embeddable
 	{
@@ -51,7 +91,7 @@ namespace BALL
 		/**	@name Type definitions
 		*/
 		//@{
-		typedef List<Embeddable*> EmbeddableList;
+		typedef std::vector<Embeddable*> EmbeddableVector;
 		//@}
 
 		/**	@name Constructors and Destructors
@@ -95,15 +135,24 @@ namespace BALL
 
 		/**	Register the instance.
 				DO NOT IMPLEMENT THIS METHOD! It is automatically implemented
-				correctly when putting the \Ref{BALL_EMBEDDABLE} macro in a class
+				correctly when putting the  \link BALL_EMBEDDABLE BALL_EMBEDDABLE \endlink  macro in a class
 				definition.
-				@see getInstanceList
+				@see getInstanceVector
 		*/
 		virtual void registerThis()
 			throw();	
 
 		//@}
-			
+		
+		/** Internal value dump.
+				Dump the current state to 
+				the output ostream <b> s</b> with dumping depth <b> depth</b>.
+				\param   s output stream where to output the state 
+				\param   depth the dumping depth
+		*/
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
+
 		protected:
 		/**
 		*/
@@ -139,9 +188,9 @@ namespace BALL
 		*/
 		String	identifier_;
 
-		/**	The instance lists
+		/**	The instance vectors
 		*/
-		static StringHashMap<EmbeddableList>	instance_lists_;
+		static StringHashMap<EmbeddableVector>	instance_vectors_;
 
 		/**	A hash map to retrieve the class ID for each instance.
 		*/

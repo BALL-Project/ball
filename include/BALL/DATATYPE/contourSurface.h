@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.5 2002/12/12 09:48:43 oliver Exp $
+// $Id: contourSurface.h,v 1.15 2003/08/26 08:04:10 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -25,163 +26,22 @@
 #include <vector>
 #include <math.h>
 
-/* cube parameters */
-#define NUM_CUBE_PERMS         256
-#define NUM_BASIS_CUBES        15
-#define NUM_CUBE_VERTICES      8
-#define NUM_CUBE_EDGES         12
-#define NUM_CUBE_ROTATIONS     24
-
 namespace BALL
 {
-	typedef std::pair<Position, Position> KeyType;
-
-
 	template<>
-	HashIndex Hash(const KeyType& p) throw();
+	HashIndex Hash(const std::pair<Position, Position>& p) throw();
 
-	static int init_facet_data[NUM_BASIS_CUBES][NUM_CUBE_EDGES] = {
-	  /* 7654 3210 (corners markers) */
-	  
-	  /* 0000 0000b */   {-1,-1,-1,  -1,-1,-1,  -1,-1,-1,  -1,-1,-1,},
-		/* 0100 0000b */   { 6, 5,10,  -1,-1,-1,  -1,-1,-1,  -1,-1,-1,},
-		/* 0000 0110b */   { 2,10, 9,   2, 9, 0,  -1,-1,-1,  -1,-1,-1,},
-		/* 0100 0010b */   { 6, 5,10,   1, 9, 0,  -1,-1,-1,  -1,-1,-1,},			                     
-	  /* 0000 1111b */   {10, 9, 8,  10, 8,11,  -1,-1,-1,  -1,-1,-1,},
-	  /* 0001 1011b */   { 9, 4, 7,   9, 7, 1,   1, 7,11,   1,11, 2,},
-	  /* 1010 1010b */   { 1, 5, 4,   1, 4, 0,   3, 6, 2,   3, 7, 6,},
-		/* 1000 1011b */   { 1, 9, 8,   1, 8, 6,   8, 7, 6,   1, 6, 2,},	
-		/* 0100 0001b */   { 6, 5,10,   0, 8, 3,  -1,-1,-1,  -1,-1,-1,},
-		/* 0000 1101b */   { 1, 0,10,   0, 8,10,  10, 8,11,  -1,-1,-1,},
-		/* 1000 0110b */   {11, 7, 6,  10, 9, 0,  10, 0, 2,  -1,-1,-1,},
-		/* 1010 0100b */   { 5, 4, 9,  11, 7, 6,   2,10, 1,  -1,-1,-1,},
-    /* 0010 1101b */   { 5, 4, 9,   1, 0,10,  10, 0, 8,  10, 8,11,},
- 		/* 0101 1010b */   { 4, 7, 8,   6, 5,10,   1, 9, 0,   2, 3,11,},
-		/* 0001 1101b */   { 4, 7,11,   1, 4,11,   1, 0, 4,   1,11,10,},
-};
+	// 
+	typedef Index FacetArray[256][12];
 
-static int init_facet_index[NUM_BASIS_CUBES][NUM_CUBE_VERTICES] = {
-	  /* 0000 0000b */   {0,0,0,0, 0,0,0,0,},
-		/* 0100 0000b */   {0,0,0,0, 0,0,1,0,},
-		/* 0000 0110b */   {0,1,1,0, 0,0,0,0,},
-		/* 0100 0010b */   {0,1,0,0, 0,0,1,0,},
-    /* 0000 1111b */   {1,1,1,1, 0,0,0,0,},
-		/* 0001 1011b */   {1,1,0,1, 1,0,0,0,},
-	  /* 1010 1010b */   {0,1,0,1, 0,1,0,1,},
-		/* 1000 1011b */   {1,1,0,1, 0,0,0,1,},
-    /* 0100 0001b */   {1,0,0,0, 0,0,1,0,},
-		/* 0000 1101b */   {1,0,1,1, 0,0,0,0,},
-		/* 1000 0110b */   {0,1,1,0, 0,0,0,1,},
-		/* 1010 0100b */   {0,0,1,0, 0,1,0,1,},
-		/* 0010 1101b */   {1,0,1,1, 0,1,0,0,},
-		/* 0101 1010b */   {0,1,0,1, 1,0,1,0,},
-		/* 0001 1101b */   {1,0,1,1, 1,0,0,0,},
-};
+	// function defined in contourSurface.C to precompute some tables.
+	extern const FacetArray& getContourSurfaceFacetData(double threshold);
 
-/***************************************************************************
- *   FACET_DATA: Holds the facet information for all 256 permutations of the 
- *                 cube. 
- *****************************************************************************/
-static int facet_data[NUM_CUBE_PERMS][NUM_CUBE_EDGES];
-
-/***************************************************************************
- *   EDGE_DATA: Contains the same information as FACET_DATA, but multiple 
- *              occurrences of vertices are removed and the edges are ordered 
- *              in the following order: 
- *               11,2,1,  0,4,6,  3,7,5,  8,9,10
- *****************************************************************************/
-	/*static int edge_data[NUM_CUBE_PERMS][NUM_CUBE_EDGES];
-static int edge_list[NUM_CUBE_EDGES]={11,2,1, 0,4,6, 3,7,5, 8,9,10};
-	*/
-
-/***************************************************************************
- *   EDGE_ROTATION and CORNER_ROTATION: 
- *   These tables contain the edge and corner positions for every possible 
- *   cube rotation, including the non-rotated position.
- *   The total number of cube rotations possible
- *   = 6 faces * 4 positions per face = 24 entries.
- *****************************************************************************/
-
-static int edge_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_EDGES] = {
-	  /* face 5,6,2,1 forward */
-	  /* 00 */  { 0, 1, 2, 3,   4, 5, 6, 7,   8, 9,10,11,},
-		/* 01 */  { 2,10, 6,11,   0, 9, 4, 8,   3, 1, 5, 7,},
-		/* 02 */  { 6, 5, 4, 7,   2, 1, 0, 3,  11,10, 9, 8,},
-		/* 03 */  { 4, 9, 0, 8,   6,10, 2,11,   7, 5, 1, 3,},
-
-		/* face 6,7,3,2 forward */
-		/* 04 */  { 1, 2, 3, 0,   5, 6, 7, 4,   9,10,11, 8,},
-		/* 05 */  { 3,11, 7, 8,   1,10, 5, 9,   0, 2, 6, 4,},
-		/* 06 */  { 7, 6, 5, 4,   3, 2, 1, 0,   8,11,10, 9,},
-		/* 07 */  { 5,10, 1, 9,   7,11, 3, 8,   4, 6, 2, 0,},
-
-		/* face 7,4,0,3 forward */
-		/* 08 */  { 2, 3, 0, 1,   6, 7, 4, 5,  10,11, 8, 9,},
-		/* 09 */  { 0, 8, 4, 9,   2,11, 6,10,   1, 3, 7, 5,},
-		/* 10 */  { 4, 7, 6, 5,   0, 3, 2, 1,   9, 8,11,10,},
-		/* 11 */  { 6,11, 2,10,   4, 8, 0, 9,   5, 7, 3, 1,},
-
-	  /* face 4,5,1,0 forward */
-		/* 12 */  { 3, 0, 1, 2,   7, 4, 5, 6,  11, 8, 9,10,},
-		/* 13 */  { 1, 9, 5,10,   3, 8, 7,11,   2, 0, 4, 6,},
-		/* 14 */  { 5, 4, 7, 6,   1, 0, 3, 2,  10, 9, 8,11,},
-		/* 15 */  { 7, 8, 3,11,   5, 9, 1,10,   6, 4, 0, 2,},
-
-		/* face 4,7,6,5 forward */
-		/* 16 */  { 9, 5,10, 1,   8, 7,11, 3,   0, 4, 6, 2,},
-		/* 17 */  {10, 6,11, 2,   9, 4, 8, 0,   1, 5, 7, 3,},
-		/* 18 */  {11, 7, 8, 3,  10, 5, 9, 1,   2, 6, 4, 0,},
-		/* 19 */  { 8, 4, 9, 0,  11, 6,10, 2,   3, 7, 5, 1,},
-
-		/* face 1,2,3,0 forward */
-		/* 20 */  { 8, 3,11, 7,   9, 1,10, 5,   4, 0, 2, 6,},
-		/* 21 */  {11, 2,10, 6,   8, 0, 9, 4,   7, 3, 1, 5,},
-		/* 22 */  {10, 1, 9, 5,  11, 3, 8, 7,   6, 2, 0, 4,},
-		/* 23 */  { 9, 0, 8, 4,  10, 2,11, 6,   5, 1, 3, 7,},
-};
-
-static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
-	  /* face 5,6,2,1 forward */
-	  /* 00 */  { 0, 1, 2, 3,   4, 5, 6, 7,},
-		/* 01 */  { 3, 2, 6, 7,   0, 1, 5, 4,},
-		/* 02 */  { 7, 6, 5, 4,   3, 2, 1, 0,},
-		/* 03 */  { 4, 5, 1, 0,   7, 6, 2, 3,},
-
-	  /* face 6,7,3,2 forward */
-		/* 04 */  { 1, 2, 3, 0,   5, 6, 7, 4,},
-		/* 05 */  { 0, 3, 7, 4,   1, 2, 6, 5,},
-		/* 06 */  { 4, 7, 6, 5,   0, 3, 2, 1,},
-		/* 07 */  { 5, 6, 2, 1,   4, 7, 3, 0,},
-
-		/* face 7,4,0,3 forward */
-		/* 08 */  { 2, 3, 0, 1,   6, 7, 4, 5,},
-		/* 09 */  { 1, 0, 4, 5,   2, 3, 7, 6,},
-		/* 10 */  { 5, 4, 7, 6,   1, 0, 3, 2,},
-		/* 11 */  { 6, 7, 3, 2,   5, 4, 0, 1,},
-
-		/* face 4,5,1,0 forward */
-		/* 12 */  { 3, 0, 1, 2,   7, 4, 5, 6,},
-		/* 13 */  { 2, 1, 5, 6,   3, 0, 4, 7,},
-		/* 14 */  { 6, 5, 4, 7,   2, 1, 0, 3,},
-		/* 15 */  { 7, 4, 0, 3,   6, 5, 1, 2,},
-
-	  /* face 4,7,6,5 forward */
-	  /* 16 */  { 1, 5, 6, 2,   0, 4, 7, 3,},
-		/* 17 */  { 2, 6, 7, 3,   1, 5, 4, 0,},
-		/* 18 */  { 3, 7, 4, 0,   2, 6, 5, 1,},
-		/* 19 */  { 0, 4, 5, 1,   3, 7, 6, 2,},
-
-		/* face 1,2,3,0 forward */
-		/* 20 */  { 4, 0, 3, 7,   5, 1, 2, 6,},
-		/* 21 */  { 7, 3, 2, 6,   4, 0, 1, 5,},
-		/* 22 */  { 6, 2, 1, 5,   7, 3, 0, 4,},
-		/* 23 */  { 5, 1, 0, 4,   6, 2, 3, 7,},
-};
-
-	
-
-  /** This class is intended to store a single contour surface generated from a RegularData3D - class.
-      {\bf Definition:} \URL{BALL/DATATYPE/contourLine.h}
+  /** This class contains a contour surface.
+			Contour surfaces are created from 3D (volume) data sets, in general from 
+			data sets store in \link RegularData3D RegularData3D \endlink using a 
+			marching cube algorithm.
+    	\ingroup  DatatypeMiscellaneous
   */
   template <typename T>  
   class TContourSurface 
@@ -189,450 +49,460 @@ static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
   {
     public:
 
-      /** @name Type definitions
-       */
-      //@{
-      
-      /** The point type.
-	        This type is used to store points in the 3-d regularData.
-      */
-      typedef Vector3 PointType;
-      
-      /** The vector type.
-	        This type is used to store the edgepoints of the contour-Surface.
-      */
-      typedef std::vector<pair<PointType,pair<Position,Position> > > VectorType;
-      //@}
+		/** @name Type definitions
+		 */
+		//@{
+		
+		/**
+		*/
+		typedef std::pair<Position, Position> KeyType;
 
-      /** @name Constructors and Destructors.
-       */
-      //@{
+		/** The point type.
+				This type is used to store points in the 3-d regularData.
+		*/
+		typedef Vector3 PointType;
+		
+		/** The vector type.
+				This type is used to store the edge points of the contour-Surface.
+		*/
+		typedef std::vector<std::pair<PointType, std::pair<Position, Position> > > VectorType;
+		//@}
 
-      
-      /// Default constructor
-      TContourSurface(T height = 0);
+		/** @name Constructors and Destructors.
+		 */
+		//@{
 
-      /// Copy constructor
-      TContourSurface(const TContourSurface& copyTContourSurface);
+		/// Default constructor
+		TContourSurface();
 
-      /// Destructor
-      virtual ~TContourSurface()
-				throw();
-      //@}
+		/// Constructor with threshold
+		TContourSurface(T threshold);
 
-      /// Creates a contour surface from a given data set.
-      void createContourSurface(TRegularData3D<T>& from);
+		/// Copy constructor
+		TContourSurface(const TContourSurface& surface);
 
-      /** @name Assignment
-       */
-      //@{
-      
-      /// Assignment operator
-      const TContourSurface& operator = (const TContourSurface& assigTContourSurface);
+		/// Constructor for TRegularData3D
+		TContourSurface(const TRegularData3D<T>& data, T threshold = 0.0);
 
-      /// Clear method
-      virtual void clear();
-      //@}
+		/// Destructor
+		virtual ~TContourSurface()
+			throw();
+		//@}
 
-      /** @name Predicates
-       */
-      //@{
+		/** @name Assignment
+		 */
+		//@{
+		
+		/// Assignment operator
+		const TContourSurface& operator = (const TContourSurface<T>& surface);
 
-      /// Equality operator
-      bool operator == (const TContourSurface& compTContourSurface) const;
+		/// Create a contour surface from a given data set.
+		const TContourSurface<T>& operator << (const TRegularData3D<T>& data);
 
-      //@}
+		/// Clear method
+		virtual void clear();
+		//@}
 
-      /** @name Accessors
-       */
-      //@{
+		/** @name Predicates
+		 */
+		//@{
 
-      /** Return the next endpoint.
-       */
-      bool getNextPoint(PointType &p);
+		/// Equality operator
+		bool operator == (const TContourSurface<T>& surface) const;
 
-      /** Reset the counter.
-       */
-      void resetCounter();
+		//@}
 
-      //@}
+		
+		protected:
 
-		  void generateFacetData();
+		/** A cube in the grid.
+				This class is used to extract information from the grid,
+				store the values of the eight corners of a cube, and 
+				determine the topology and the triangles in the cube.
+		*/
+		class Cube
+		{	
+			public:
 
+			Cube(const TRegularData3D<T>& grid) throw()
+				:	grid_(&grid),
+					current_position_(0),
+					ptr_(0),
+					spacing_(grid.getSpacing().x, grid.getSpacing().y, grid.getSpacing().z)
+			{
+				// Retrieve the number of points in the grid along the x- and y-axes.
+				Size nx = grid.getSize().x;
+				Size ny = grid.getSize().y;
 
-		  void computeTriangles(int topology, RegularData3D& from);
-
-      
-
-      //  private:
-      T height_;
-			unsigned int data_[3];
-      Size number_of_cells_x;
-      Size number_of_cells_y;
-			Size number_of_cells_z;
-      Position act_cell_x;
-      Position act_cell_y;
-	    Position act_cell_z;
-		  PointType currentCoords;
-      Position currentPosition;
-      double d1, d2, slope;
-      HashMap<pair<Position,Position>, unsigned int> h;
-		  unsigned int size, pos;
-    };
-
-    /** Default type
-     */
-    typedef TContourSurface<float> ContourSurface;
-
-    template <typename T>
-      TContourSurface<T>::TContourSurface(T height)
-			: height_(height)
-    {
-    }
-
-    template <typename T>
-    TContourSurface<T>::~TContourSurface()
-			throw()		
-    {
-    }
-
-    template <typename T>
-    TContourSurface<T>::TContourSurface(const TContourSurface<T>& from)
-      : height_(from.height_),
-        data_(from.data_)
-    {
-    }
-
-    template <typename T>
-    void TContourSurface<T>::clear()
-    {
-    }
-
-    template <typename T>
-    const TContourSurface<T>& TContourSurface<T>::operator = (const TContourSurface<T>& data)
-    {
-      data_ = data.data_;
-      height_ = data.height_;
-			return *this;
-    }
-
-    template <typename T>
-    bool TContourSurface<T>:: operator == (const TContourSurface<T>& data) const
-    {
-      return ((height_    == data.height_)
-               && (data_  == data.data_));
-    }
-
-    template <typename T>
-    void TContourSurface<T>::createContourSurface(TRegularData3D<T>& from)
-    {
-      // This function the "marching cubes" algorithm to determine the contour-surfaces.
-      double threshold = height_;
-      PointType origin = from.getOrigin();
-      float x_spacing = from.getXSpacing();
-      float y_spacing = from.getYSpacing();
-      float z_spacing = from.getZSpacing();
-      number_of_cells_x = (Size) from.getMaxXIndex()+1;
-      number_of_cells_y = (Size) from.getMaxYIndex()+1;
-	    number_of_cells_z = (Size) from.getMaxZIndex()+1;
-      size=0;
-      currentCoords = origin;
-      currentPosition = 0;
-      
-      generateFacetData();
-    
-
-      for (act_cell_z = 0; act_cell_z < number_of_cells_z-1; act_cell_z++)
-			{ 
-				for (act_cell_y = 0; act_cell_y < number_of_cells_y-1; act_cell_y++)
-				{
-					for (act_cell_x = 0; act_cell_x < number_of_cells_x-1; act_cell_x++)
-					{
-					// First we have to find out the topology of the actual cube.
-					int topology = 0;
-           if (from[currentPosition + number_of_cells_y*number_of_cells_x] > threshold)
-					{
-						topology |= 1;
-					}
-					if (from[currentPosition] > threshold)
-					{
-						topology |= 2;
-					}
-					if (from[currentPosition + 1] > threshold)
-					{
-						topology |= 4;
-					}
-          if (from[currentPosition + 1 + number_of_cells_y*number_of_cells_x] > threshold)
-					{
-						topology |= 8;
-					}
-          if (from[currentPosition + (number_of_cells_y+1)*number_of_cells_x] > threshold)
-					{
-						topology |= 16;
-					}
-          if (from[currentPosition + number_of_cells_x ] > threshold)
-					{
-						topology |= 32;
-					}
-          if (from[currentPosition + 1 + number_of_cells_x] > threshold)
-					{
-						topology |= 64;
-					}
-          if (from[currentPosition + 1 + (number_of_cells_y+1)*number_of_cells_x] > threshold)
-					{
-						topology |= 128;
-					}
-          
-					// now we can use this information to compute the intersection points of the current cube.
-          
-					computeTriangles(topology, from);
-					currentCoords.x+=x_spacing;
-          currentPosition++;
-					}
-          currentCoords.x=origin.x;
-          currentCoords.y+=y_spacing;
-          currentPosition++;
-				}
-        currentCoords.x=origin.x;
-        currentCoords.y=origin.y;
-        currentCoords.z+=z_spacing;
-        currentPosition+=number_of_cells_y;
+				// Compute the offsets in the grid for the eight 
+				// corners of the cube (in absolute grid indices).
+				grid_offset_[0] = nx * ny;
+				grid_offset_[1] = 0;
+				grid_offset_[2] = 1;
+				grid_offset_[3] = 1 + nx * ny;
+				grid_offset_[4] = nx * ny + nx;
+				grid_offset_[5] = nx;
+				grid_offset_[6] = nx + 1;
+				grid_offset_[7] = nx * ny + nx + 1;
 			}
-      unsigned int i=0;
-      double l;
-			
-      // normalize each vertex normal		
-      for (i=0;i<normal.size();i++)
+
+			void setTo(Position p) 
+			{
+				current_position_ = p;
+
+				ptr_ = &(const_cast<TRegularData3D<T>*>(grid_)->getData(current_position_));
+				for (Position i = 0; i < 8; i++)
 				{
-          l=normal[i].getLength();
-          //cout<<"Laenge Punktnormale "<<i<<": "<<l<<" Vektor: "<<normal[i]<<endl;
-					if (l!=0) 
-          {
-          normal[i]/=l;
-          }
+					values[i] = *(ptr_ + grid_offset_[i]);
 				}
-      Log.info()<<"Number of triangles generated: "<<triangle.size()<<endl;
-      Log.info()<<"consisting of "<<vertex.size()<<" vertices"<<endl;
+			}
+
+			inline Vector3 getOrigin() const
+			{
+				return grid_->getCoordinates(current_position_);
+			}
+
+			inline const Vector3& getSpacing() const
+			{
+				return spacing_;
+			}
+
+			inline Vector3 getCoordinates(Position index) const
+			{
+				return grid_->getCoordinates(index);
+			}
+
+			/// Return the absolute grid position for a given corner
+			inline Position getIndex(Position corner) const
+			{
+				return current_position_ + grid_offset_[corner];
+			}
+
+			void shift() 
+				throw()
+			{
+				// Shift the cube by one along the x-axis.
+				current_position_++;
+				ptr_++;
+				
+				// Keep the four old values for x = 1.
+				values[0] = values[3];
+				values[1] = values[2];
+				values[4] = values[7];
+				values[5] = values[6];
+				
+				// Retrieve the four new values.
+				values[3] = *(ptr_ + grid_offset_[3]);
+				values[2] = *(ptr_ + grid_offset_[2]);
+				values[7] = *(ptr_ + grid_offset_[7]);
+				values[6] = *(ptr_ + grid_offset_[6]);
+			}
+
+			/// Compute the topology code for the current cube.
+			Position computeTopology(double threshold)
+				throw()	
+			{
+				static const Position topology_modifier[8] = {1, 2, 4, 8, 16, 32, 64, 128};
+
+				// The topology is a bitvector constructed by ORing the
+				// bits corresponding to each of the inside/outside status of
+				// of each individual corner.
+				Position topology = 0;
+				for (Position i = 0; i < 8; i++)
+				{
+					topology |= ((values[i] > threshold) ? topology_modifier[i] : 0);
+				}
+				
+				return topology;
+			}
+
+			// The values at the eight corners of the cube.
+			double										values[8];
+
+			protected:
+
+			// A pointer to the grid.
+			const TRegularData3D<T>*	grid_;
+
+			// The current position of the cube as an absolute index into the grid.
+			Position									current_position_;
+
+			// The gridd offsets: what to add to current_index_ to get to the correct
+			// grid coordinate.
+			Position									grid_offset_[8];
+
+			// A pointer into (nasty hack!) the grid itself. For speed's sake.
+			const T*									ptr_;
+		
+			// The spacing of the grid.
+			Vector3	spacing_;
+		};
+
+
+		/// 
+		void addTriangles_(Cube& cube, const FacetArray& facet_data)
+			throw();
+
+		///
+		void computeTriangles(Size topology, const TRegularData3D<T>& data);
+
+		/// The threshold separating inside and outside
+		T threshold_;
+
+		//
+		HashMap<std::pair<Position, Position>, Position> cut_hash_map_;
+	};
+
+	/// Default type
+  typedef TContourSurface<float> ContourSurface;
+
+	template <typename T>
+	TContourSurface<T>::TContourSurface()
+		: threshold_(0.0)
+	{
+	}
+
+	template <typename T>
+	TContourSurface<T>::TContourSurface(T threshold)
+		: threshold_(threshold)
+	{
+	}
+   
+	template <typename T>
+	TContourSurface<T>::TContourSurface(const TRegularData3D<T>& data, T threshold)
+		: threshold_(threshold)
+	{
+		this->operator << (data);
+	}
+   
+	template <typename T>
+	TContourSurface<T>::~TContourSurface()
+		throw()		
+  {
+  }
+
+	template <typename T>
+	TContourSurface<T>::TContourSurface(const TContourSurface<T>& from)
+		: threshold_(from.threshold_)
+	{
+  }
+
+	template <typename T>
+	void TContourSurface<T>::clear()
+	{
+		Surface::clear();
+		cut_hash_map_.clear();
+	}
+
+	template <typename T>
+	const TContourSurface<T>& TContourSurface<T>::operator = (const TContourSurface<T>& data)
+	{
+		// Avoid self-assignment
+		if (&data != this)
+		{
+			threshold_ = data.threshold_;
 		}
 
-template<typename T>
-void TContourSurface<T>::generateFacetData() {
-  int i,j,k,l,cube_index;
-  for (i=0; i<NUM_CUBE_PERMS; i++) 
-    {                           /* i is the targeted cube_index */
-      for (j=0; j<NUM_BASIS_CUBES; j++) 
-        {                       /* scan each of the NUM_BASIS_CUBES possible basis cubes */
-          for (k=0; k<NUM_CUBE_ROTATIONS; k++) 
-            {                   /* and every possible rotation for those cubes */
-              /* first determine if we have a matching cube_index */
-              cube_index=0;
-              for (l=0; l<NUM_CUBE_VERTICES; l++) 
-                {
-                  if (init_facet_index[j][l]) 
-                    cube_index |= (1 << corner_rotation[k][l]);
-                }
-          
-              if (cube_index==i) 
-                {               /* we have located a matching cube_index */
-                  for (l=0; l<NUM_CUBE_EDGES; l++) 
-                    {
-                      if (init_facet_data[j][l]>=0) 
-                        { 
-                          if(height_>0)
-														{
-                          facet_data[i][11-l] = edge_rotation[k][init_facet_data[j][l]];
-                          facet_data[0xFF-i][l] = edge_rotation[k][init_facet_data[j][l]];
-														}
-                          else
-                            {
-                          facet_data[i][l] = edge_rotation[k][init_facet_data[j][l]];
-                          facet_data[0xFF-i][11-l] = edge_rotation[k][init_facet_data[j][l]];
-													}
-                        }
-                      else 
-                        { 
-                          if(height_>0)
-														{
-                          facet_data[i][11-l] = (-1);
-                          facet_data[0xFF-i][l] = (-1);
-														}
-                         else
-                            {
-                          facet_data[i][l] = (-1);
-                          facet_data[0xFF-i][11-l] = (-1);
-													}
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
+		return *this;
+	}
 
+	template <typename T>
+	bool TContourSurface<T>:: operator == (const TContourSurface<T>& data) const
+	{
+		// ???? Surface::operator ==
+		return ((threshold_    == data.threshold_)
+						 && (data_  == data.data_));
+	}
 
-template <typename T>
-void TContourSurface<T>::computeTriangles(int topology, RegularData3D& from) { 
-	
-  PointType vec,h1,h2;
-  float x_spacing = from.getXSpacing();
-  float y_spacing = from.getYSpacing();
-  float z_spacing = from.getZSpacing();
-  Triangle t;
-  Normal normale;
-  pos=0;
-  double threshold = height_;
-  KeyType key;
+  template <typename T>
+	const TContourSurface<T>& TContourSurface<T>::operator << (const TRegularData3D<T>& data)
+	{
+		// Clear the old stuff:
+		clear();
+		
+		
+		// Marching cube algorithm: construct a contour surface from
+		// a volume data set.
 
-    for(int i=0;i<12;i++) { 
-      vec=currentCoords;
-			switch(facet_data[topology][i])
+		// Get the dimensions of the volume data set.
+		Vector3 origin = data.getOrigin();
+		Size number_of_cells_x = (Size)data.getSize().x;
+		Size number_of_cells_y = (Size)data.getSize().y;
+		Size number_of_cells_z = (Size)data.getSize().z;
+
+		// Precompute the facet data. This depends on the threshold!
+		const FacetArray& facet_data = getContourSurfaceFacetData(threshold_);
+
+		// We start in the left-front-bottom-most corner of the grid.
+		Position current_index = 0;
+		Cube cube(data);
+		for (Position curr_cell_z = 0; curr_cell_z < (number_of_cells_z - 1); curr_cell_z++)
+		{ 
+			// Determine the start position in the current XY plane.
+			current_index = curr_cell_z * number_of_cells_y * number_of_cells_x;
+
+			// Walk along the y-axis....
+			for (Position curr_cell_y = 0; curr_cell_y < (number_of_cells_y - 1); curr_cell_y++)
+			{
+				// Retrieve the cube from the current grid position (the first position along
+				// along the x-axis).
+				cube.setTo(current_index);
+
+				// Walk along the x-axis....
+				for (Position curr_cell_x = 0; (curr_cell_x < (number_of_cells_x - 2)); )
 				{
-        case -1: break;
-        case 0:
-					  key=pair<Position,Position>(currentPosition,currentPosition+number_of_cells_x*number_of_cells_y);
-            d1  = from[currentPosition];
-            d2  = from[currentPosition + number_of_cells_y*number_of_cells_x];
-            slope = (d2 - d1) / z_spacing;
-            vec.z += (threshold - d1)/slope;
-						break;
+					// Compute topology, triangles, and add those triangles to the surface.
+					addTriangles_(cube, facet_data);
+						
+					// Done. cube.shift() will now shift the cube
+					// along the x-axis and efficently retrieve the four new values.
+					curr_cell_x++;
+					cube.shift();
+				}
 
-        case 1: 
-					  key=pair<Position,Position>(currentPosition,currentPosition+1);
-						d1  = from[currentPosition];
-						d2  = from[currentPosition + 1];
-						slope = (d2 - d1) / x_spacing;
-						vec.x += (threshold - d1)/slope;	
-            break;
+				// Add the triangles from the last cube position.
+				addTriangles_(cube, facet_data);
+	
+				// Shift the cube by one along the y-axis.
+				current_index += number_of_cells_x;
+			}
+		}
 
-        case 2:
-					  key=pair<Position,Position>(currentPosition+1,currentPosition+1+number_of_cells_x*number_of_cells_y);
-            vec.x+=x_spacing;
-						d1  = from[currentPosition + 1];
-            d2  = from[currentPosition + 1 + number_of_cells_x*number_of_cells_y];
-						slope = (d2 - d1) / z_spacing;
-						vec.z += (threshold - d1)/slope; 	
-						break;
+		// Normalize the vertex normals.
+		for (Position i = 0; i < normal.size(); i++)
+		{
+			try
+			{
+				normal[i].normalize();
+			}
+			catch (...)
+			{
+			}
+		}
 
-        case 3:
-					  key=pair<Position,Position>(currentPosition+number_of_cells_x*number_of_cells_y,currentPosition+1+number_of_cells_x*number_of_cells_y);
-            vec.z+=z_spacing;
-						d1  = from[currentPosition + number_of_cells_x*number_of_cells_y];
-						d2  = from[currentPosition + 1 + number_of_cells_x*number_of_cells_y];
-						slope = (d2 - d1) / x_spacing;
-						vec.x += (threshold - d1)/slope;
-            break;
+		// Return this (stream operator, for command chaining...)
+		return *this;
+	}
 
-        case 4:
-					  key=pair<Position,Position>(currentPosition+number_of_cells_x,currentPosition+number_of_cells_x*(number_of_cells_y+1));
-            vec.y+=y_spacing;
-            d1  = from[currentPosition + number_of_cells_x];
-            d2  = from[currentPosition + number_of_cells_x*(number_of_cells_y+1)];
-            slope = (d2 - d1) / z_spacing;
-            vec.z += (threshold - d1)/slope;
-            break;
+	template <typename T>
+	void TContourSurface<T>::addTriangles_
+		(TContourSurface<T>::Cube& cube, const FacetArray& facet_data) 
+		throw()
+	{ 
+		// Some static variables we need below -- since we will
+		// call this rather often, we would rather want to avoid
+		// to many ctor/dtor calls.
+		static Triangle t;
+		static std::pair<Position, Position> key;
+		static std::pair<Position, Position> indices;
 
-				case 5:
-			  		key=pair<Position,Position>(currentPosition+number_of_cells_x,currentPosition+number_of_cells_x+1);
-            vec.y+=y_spacing;
-            d1  = from[currentPosition + number_of_cells_x];
-            d2  = from[currentPosition + 1 + number_of_cells_x];
-            slope = (d2 - d1) / x_spacing;
-            vec.x += (threshold - d1)/slope;
-            break;
+		// The indices of the corners of a cube's twelve edges.
+		static const Position edge_indices[12][2] 
+			= {{1, 0}, {1, 2}, {2, 3}, {0, 3}, {5, 4}, {5, 6},
+				 {6, 7}, {4, 7}, {0, 4}, {1, 5}, {2, 6}, {3, 7}
+				};
 
-				case 6:
-					  key=pair<Position,Position>(currentPosition+1+number_of_cells_x,currentPosition+1+number_of_cells_x*(number_of_cells_y+1));
-            vec.y+=y_spacing;
-            vec.x+=x_spacing;
-            d1  = from[currentPosition + 1 + number_of_cells_x];
-            d2  = from[currentPosition + 1 + number_of_cells_x*(number_of_cells_y+1)];
-            slope = (d2 - d1) / z_spacing;
-            vec.z += (threshold - d1)/slope;
-						break;
+		// The index (into Vector3) of the axis along which the
+		// current edged runs (0: x, 1: y, 2: z).
+		static const Position edge_axis[12] 
+			= {2, 0, 2, 0, 2, 0, 2, 0, 1, 1, 1, 1};
 
-			  case 7:
-					  key=pair<Position,Position>(currentPosition+number_of_cells_x*(number_of_cells_y+1),currentPosition+1+number_of_cells_x*(number_of_cells_y+1));
-            vec.z+=z_spacing;
-						vec.y+=y_spacing;
-            d1  = from[currentPosition + number_of_cells_x*(number_of_cells_y+1)];
-            d2  = from[currentPosition + 1 + number_of_cells_x*(number_of_cells_y+1)];
-            slope = (d2 - d1) / x_spacing;
-            vec.x += (threshold - d1)/slope;
-						break;
+		// Retrieve some basic grid properties.
+		const Vector3& spacing = cube.getSpacing();
 
+		// The indices (into Surface::vertex) of the triangle
+		// under construction.
+		TVector3<Position> triangle_vertices;
 
-				case 8:
-					  key=pair<Position,Position>(currentPosition+number_of_cells_x*number_of_cells_y,currentPosition+number_of_cells_x*(number_of_cells_y+1));
-            vec.z+=z_spacing;
-            d1  = from[currentPosition + number_of_cells_x*number_of_cells_y];
-            d2  = from[currentPosition + number_of_cells_x*(number_of_cells_y+1)];
-            slope = (d2 - d1) / y_spacing;
-            vec.y += (threshold - d1)/slope; 
-            break;
+		// A counter for the number of vertices already in triangle_vertices
+		Size vertex_counter = 0;
+		
+		// Compute the cube's topology
+		Position topology = cube.computeTopology(threshold_);
+		if (topology == 0)
+		{
+			return;
+		}
 
-				case 9:
-				    key=pair<Position,Position>(currentPosition,currentPosition+number_of_cells_x);
-            d1  = from[currentPosition];
-            d2  = from[currentPosition + number_of_cells_x];
-            slope = (d2 - d1) / y_spacing;
-            vec.y += (threshold - d1)/slope;
-            break;
+		// Iterate over all 12 edges and determine whether
+		// there's a cut. 
+		for (Position i = 0; i < 12; i++) 
+		{ 
+			// facet_data_ defines whether there's a cut for
+			// a given topology and a given edge.
+			Index facet_index = facet_data[topology][i];
 
-			 case 10:
-			      key=pair<Position,Position>(currentPosition+1,currentPosition+1+number_of_cells_x);
-            vec.x+=x_spacing;
-						d1  = from[currentPosition + 1];
-            d2  = from[currentPosition + 1 + number_of_cells_x];
-						slope = (d2 - d1) / y_spacing;
-						vec.y += (threshold - d1)/slope;
-            break;
+			// There's a cut only for values larger than -1
+			if (facet_index != -1)
+			{	
+				// There is a cut -- determine its position along the edge.
 
-			 case 11:
-			      key=pair<Position,Position>(currentPosition+1+number_of_cells_x*number_of_cells_y,currentPosition+1+number_of_cells_x*(number_of_cells_y+1));
-            vec.z+=z_spacing;
-            vec.x+=x_spacing;
-						d1  = from[currentPosition + 1 + number_of_cells_x*number_of_cells_y];
-            d2  = from[currentPosition + 1 + number_of_cells_x*(number_of_cells_y+1)];
-						slope = (d2 - d1) / y_spacing;
-						vec.y += (threshold - d1)/slope;
-            break;
-						}
+				// The axis: x = 0, y = 1, z = 2 -- used as in index into Vector3.
+				Position edge = edge_axis[facet_index];
 
-			if ((facet_data[topology][i])!=-1)
-       {
-				 if (h.has(key))
-					 {
-						 data_[pos]=h[key];
-					 }
-				 else 
-					 {
-						 h.insert(pair<KeyType,unsigned int>(key, size));
-						 vertex.push_back(vec);
-						 normal.push_back(Vector3(0,0,0));
-						 data_[pos]=size;
-						 size++;
-					 }
-				 pos++;
-				 if (pos==3)
-					 {
-						 t.v1=data_[0];
-						 t.v2=data_[1];
-						 t.v3=data_[2];
-						 triangle.push_back(t);
-						 pos=0;
-						 h1=vertex[t.v1]-vertex[t.v2];
-						 h2=vertex[t.v3]-vertex[t.v2];
-						 normale.x=h1.y*h2.z-h1.z*h2.y;
-						 normale.y=h1.z*h2.x-h2.z*h1.x;
-						 normale.z=h1.x*h2.y-h1.y*h2.x;
-						 normal[t.v1]+=normale;
-						 normal[t.v2]+=normale;
-						 normal[t.v3]+=normale;
-					 }
-			 }
-    }
-}
+				indices.first = edge_indices[facet_index][0];
+				indices.second = edge_indices[facet_index][1];
+				key.first = cube.getIndex(indices.first);
+				key.second = cube.getIndex(indices.second);
 
+				// Check whether we computed this cut already.
+				if (!cut_hash_map_.has(key))
+				{
+					// Compute the position of the cut.
+					
+					// Get the position of the d1 point
+					Vector3 pos = cube.getCoordinates(key.first);
+
+					// Compute the position of the cut along the edge.
+					const double& d1 = cube.values[indices.first];
+					const double& d2 = cube.values[indices.second];
+					pos[edge] += ((double)threshold_ - d1) / (d2 - d1) * spacing[edge];
+					
+					// Store it as a triangle vertex.
+					triangle_vertices[vertex_counter++] = vertex.size();
+
+					// Store the index of the vertex in the hash map under the
+					// indices of its grid points.
+					cut_hash_map_.insert(std::pair<std::pair<Position, Position>, Position>(key, (Size)vertex.size()));
+
+					// Create a vertex and a normal (the normal reamins empty for now).
+					vertex.push_back(pos);
+					static Vector3 null_normal(0.0, 0.0, 0.0);
+					normal.push_back(null_normal);
+				}
+				else
+				{
+					// This one we know already! Retrieve it from the hash map.
+					triangle_vertices[vertex_counter++] = cut_hash_map_[key];
+				}
+				
+				// For every three vertices, create a new triangle.
+				if (vertex_counter == 3)
+				{
+					// Create a new triangle.
+					t.v1 = triangle_vertices.x;
+					t.v2 = triangle_vertices.y;
+					t.v3 = triangle_vertices.z;
+					triangle.push_back(t);
+
+					// We can start with the next one.
+					vertex_counter = 0;
+
+					// Compute the normals: add the triangle
+					// normals to each of the triangle vertices.
+					// We will average them out to the correct normals later.
+					Vector3 h1(vertex[t.v1] - vertex[t.v2]);
+					Vector3 h2(vertex[t.v3] - vertex[t.v2]);
+					Vector3 current_normal(h1.y * h2.z - h1.z * h2.y,
+																 h1.z * h2.x - h2.z * h1.x,
+																 h1.x * h2.y - h1.y * h2.x);
+					normal[t.v1] += current_normal;
+					normal[t.v2] += current_normal;
+					normal[t.v3] += current_normal;
+				}
+			}
+		}
+	}
 }
 #endif
 

@@ -1,28 +1,34 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: iterator.h,v 1.13 2002/12/22 11:45:20 sturm Exp $
+// $Id: iterator.h,v 1.25 2003/08/26 08:04:18 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
-#	include <BALL/CONCEPT/reverseBidirectionalIterator.h>
+#ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
+#	include <BALL/CONCEPT/bidirectionalIterator.h>
 #endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
 #endif
 
+
+/** A macro defining kernel iterators.
+		This macro allows th definition of arbitrary bidirectional
+		iterators for kernel container classes.
+		Multiple iterator definition macros can be included at the same
+		time, thus enabling the iteration over different types of 
+		kernel objects. Each macro defines beginX()/endX() (const and mutable)
+		and rendX()/rbeginX() where X is the type of item to iterate over.
+*/
 #define BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Type) \
 Type##Iterator \
 begin##Type () \
 { \
-  return Type##Iterator :: begin (*this); \
+  return Type##Iterator::begin(*this); \
 } \
  \
 Type##Iterator \
@@ -34,13 +40,13 @@ end##Type () \
 Type##ReverseIterator \
 rbegin##Type () \
 { \
-  return Type##ReverseIterator::begin(*this); \
+  return Type##ReverseIterator(end##Type ()); \
 } \
  \
 Type##ReverseIterator \
 rend##Type () \
 { \
-  return Type##ReverseIterator::end(*this); \
+  return Type##ReverseIterator(begin##Type ()); \
 } \
  \
 Type##ConstIterator \
@@ -58,26 +64,25 @@ end##Type () const \
 Type##ConstReverseIterator \
 rbegin##Type () const \
 { \
-  return Type##ConstReverseIterator::begin(*this); \
+  return Type##ConstReverseIterator(end##Type ()); \
 } \
  \
 Type##ConstReverseIterator \
 rend##Type () const \
 { \
-  return Type##ConstReverseIterator::end(*this); \
+  return Type##ConstReverseIterator(begin##Type ()); \
 }
 
 namespace BALL 
 {
-
-	/**	Composite Iterator Traits.	
+	/**	Composite Iterator Traits
 			This class is used in the implementation of the kernel iterators.
 			It is intended for internal use only.
-			\\
-			{\bf Definition:} \URL{BALL/KERNEL/iterator.h}
+			 \par
 			
+    	\ingroup  KernelIterators
 	*/
-	class CompositeIteratorTraits_
+	class CompositeIteratorTraits
 	{
 		public:
 
@@ -86,20 +91,16 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		CompositeIteratorTraits_()
-			throw();
+		inline CompositeIteratorTraits() throw();
 
 		/// Copy constructor
-		CompositeIteratorTraits_(const Composite& composite)
-			throw();
+		inline CompositeIteratorTraits(const Composite& composite) throw();
 
 		/// Detailed constructor
-		CompositeIteratorTraits_(const CompositeIteratorTraits_& traits)
-			throw();
+		inline CompositeIteratorTraits(const CompositeIteratorTraits& traits) throw();
 
 		/// Destructor
-		virtual ~CompositeIteratorTraits_()
-			throw();
+		inline ~CompositeIteratorTraits() throw() {}
 
 		//@}
 		/** @name Assignment
@@ -107,35 +108,29 @@ namespace BALL
 		//@{
 
 		/// Assignment operator
-		CompositeIteratorTraits_ &operator = (const CompositeIteratorTraits_& traits)
-			throw();
-
+		inline CompositeIteratorTraits& operator = (const CompositeIteratorTraits& traits) throw();
 		//@}
+
 		/** @name Accessors
 		*/
 		//@{
 
 		/// Return a pointer to the container the iterator is bound to
-		Composite *getContainer()
-			throw();
+		Composite* getContainer()	throw() { return bound_; }
 	
 		/// Return a const pointer to the container the iterator is bound to
-		const Composite* getContainer() const
-			throw();
-	
+		inline const Composite* getContainer() const throw() { return bound_; }
 		//@}
+
 		/** @name Predicates
 		*/
 		//@{
 
 		/// Equality operator.
-		bool operator == (const CompositeIteratorTraits_& traits) const
-			throw();
+		inline bool operator == (const CompositeIteratorTraits& traits) const throw();
 
 		/// Inequality operator.
-		bool operator != (const CompositeIteratorTraits_& traits) const
-			throw();
-	
+		inline bool operator != (const CompositeIteratorTraits& traits) const throw();
 		//@}
 
 		/**	@name Predicates
@@ -143,367 +138,253 @@ namespace BALL
 		//@{
 		/** Return the current status of the iterator.
 				If the iterator is bound and its subcomposite iterator is valid,
-				this predicate returns {\tt true}.
+				this predicate returns <tt>true</tt>.
 		*/
-		bool isValid() const
-			throw();
+		inline bool isValid() const throw() { return ((bound_ != 0) && composite_iterator_.isValid()); }
 
 		/// Check whether the iterator is bound to a container.
-		bool isSingular() const
-			throw();
+		inline bool isSingular() const throw() { return (bound_ == 0); }
 	
 		/** Return true if the iterator is at the first element of the container.
-				@exception InvalidIterator if the iterator is {\em singular}
 				@see isSingular
 		*/
-		bool isBegin() const
-			throw(Exception::InvalidIterator);
+		inline bool isBegin() const throw();
 
 		/** Return true if the iterator is beyond the last element of the container.
 				@exception InvalidIterator if the iterator is {\em singular}
 				@see isSingular
 		*/
-		bool isEnd() const
-			throw();
+		inline bool isEnd() const throw() 
+		{ 
+			return composite_iterator_.isEnd(); 
+		}
 
 		/** Return true if the iterator is at the last element of the container.
 				@exception InvalidIterator if the iterator is {\em singular}
 				@see isSingular
 		*/
-		bool isRBegin() const
-			throw(Exception::InvalidIterator);
+		inline bool isRBegin() const throw();
 			
 		/** Return true if the iterator is beyond the first element of the container.
 				@exception InvalidIterator if the iterator is {\em singular}
 				@see isSingular
 		*/
-		bool isREnd() const
-			throw();
+		inline bool isREnd() const	throw();
 		//@}
 	
 		/// Return the current iterator position
-		Composite::SubcompositeIterator& getPosition()
-			throw();
+		inline Composite::CompositeIterator& getPosition() throw() { return composite_iterator_; }
 	
 		/// Return the current iterator posittion (const method)
-		const Composite::SubcompositeIterator& getPosition() const
-			throw();
+		inline const Composite::CompositeIterator& getPosition() const throw() { return composite_iterator_; }
 	
 		/**	Invalidate the iterator.
-				The iterator is separated from its container (\Ref{isSingular} is {\bf true} afterwards)
-				and its \Ref{SubCompositeIterator} is invalidated as well.
+				The iterator is separated from its container ( \link isSingular isSingular \endlink  is <b>true</b> afterwards)
+				and its  \link SubCompositeIterator SubCompositeIterator \endlink  is invalidated as well.
 		*/
-		void invalidate()
-			throw();
+		inline void invalidate() throw();
 
 		/**	Reposition the iterator to the first element of the container.
 				@exception InvalidIterator if the iterator is {\em singular}.
 				@see isSingular
 		*/
-		void toBegin()
-			throw(Exception::InvalidIterator);
+		inline void toBegin() throw(Exception::Precondition);
 
 		/**	Reposition the iterator after the last element of the container.
 				@exception InvalidIterator if the iterator is {\em singular}.
 				@see isSingular
 		*/
-		void toEnd()
-			throw();
+		inline void toEnd() throw(Exception::Precondition);
 
 		/// Return a reference to the current element
-		Composite& getData()
-			throw();
+		inline Composite& getData() throw();
 	
 		/// Return a const reference to the current element
-		const Composite& getData() const
-			throw();
+		inline const Composite& getData() const throw();
 	
 		/// Increment the iterator by one element.
-		void forward()
-			throw();
+		inline void forward() throw();
 	
 		/// Decrement the iterator one element
-		void backward()
-			throw();
+		inline void backward() throw();
 			
 		/// Reposition the (backward) iterator to the last element of the container
-		void toRBegin()
-			throw(Exception::InvalidIterator);
+		inline void toRBegin() throw(Exception::Precondition);
 
 		/// Reposition the (backward) iterator beyond the first element of the container
-		void toREnd()
-			throw();
+		inline void toREnd() throw(Exception::Precondition);
 
 		/// Assign the current predicate associated with the iterator
-		void setPredicate(const UnaryPredicate<Composite>& predicate)
-			throw();
+		inline void setPredicate(const UnaryPredicate<Composite>& predicate) throw() { predicate_ = &predicate; }
 			
 		/// Return the current predicate associated with the iterator
-		const UnaryPredicate<Composite>* getPredicate() const
-			throw();
+		inline const UnaryPredicate<Composite>* getPredicate() const	throw() { return predicate_; }
 
 
 		protected:
 
-		/*_ The pointer to the container
-		*/
-		Composite*												bound_;
+		/// The pointer to the container
+		Composite* bound_;
 
-		/*_ The internal iterator to iterate over the current node's children
-		*/
-		Composite::SubcompositeIterator 	subcomposite_iterator_;
+		/// The internal iterator to iterate over the current node's children
+		Composite::CompositeIterator composite_iterator_;
 
-		/*_ The predicate
-		*/
-		const UnaryPredicate<Composite>*	predicate_;
-
+		/// The predicate
+		const UnaryPredicate<Composite>* predicate_;
 	};
 
-	inline
-	CompositeIteratorTraits_::CompositeIteratorTraits_()
+	inline CompositeIteratorTraits::CompositeIteratorTraits()
 		throw()
 		:	bound_(0),
-			subcomposite_iterator_(),
+			composite_iterator_(),
 			predicate_(0)
 	{
 	}
 		
-	inline
-	CompositeIteratorTraits_::CompositeIteratorTraits_(const Composite& composite)
+	inline CompositeIteratorTraits::CompositeIteratorTraits(const Composite& composite)
 		throw()
-		:	bound_((Composite *)&composite),
-			subcomposite_iterator_(composite.beginSubcomposite()),
+		:	bound_(const_cast<Composite*>(&composite)),
+			composite_iterator_(const_cast<Composite&>(composite).beginComposite()),
 			predicate_(0)
 	{
 	}
 		
-	inline
-	CompositeIteratorTraits_::CompositeIteratorTraits_(const CompositeIteratorTraits_ &traits)
+	inline CompositeIteratorTraits::CompositeIteratorTraits(const CompositeIteratorTraits& traits)
 		throw()
 		:	bound_(traits.bound_),
-			subcomposite_iterator_(traits.subcomposite_iterator_),
+			composite_iterator_(traits.composite_iterator_),
 			predicate_(traits.predicate_)
 	{
 	}
 
-	inline
-	CompositeIteratorTraits_::~CompositeIteratorTraits_()
-		throw()
-	{
-	}
-
-	inline
-	CompositeIteratorTraits_& CompositeIteratorTraits_::operator = (const CompositeIteratorTraits_& traits)
-		throw()
+	inline CompositeIteratorTraits& CompositeIteratorTraits::operator = (const CompositeIteratorTraits& traits) throw()
 	{
 		bound_ = traits.bound_;
-		subcomposite_iterator_ = traits.subcomposite_iterator_;
+		composite_iterator_ = traits.composite_iterator_;
 		predicate_ = traits.predicate_;
 		return *this;
 	}
 
-	inline
-	Composite* CompositeIteratorTraits_::getContainer()
-		throw()
+	inline bool CompositeIteratorTraits::operator == (const CompositeIteratorTraits& traits) const throw()
 	{
-		return bound_;
+		return ((composite_iterator_ == traits.composite_iterator_) && (bound_ == traits.bound_));
 	}
 
-	inline
-	const Composite* CompositeIteratorTraits_::getContainer() const
-		throw()
+	inline bool CompositeIteratorTraits::operator != (const CompositeIteratorTraits& traits) const throw()
 	{
-		return bound_;
+		return !this->operator == (traits);
 	}
 
-	inline
-	bool CompositeIteratorTraits_::isSingular() const
-		throw()
-	{
-		return (bound_ == 0);
-	}
-
-	inline
-	Composite::SubcompositeIterator& CompositeIteratorTraits_::getPosition()
-		throw()
-	{
-		return subcomposite_iterator_;
-	}
-
-	inline
-	const Composite::SubcompositeIterator& CompositeIteratorTraits_::getPosition() const
-		throw()
-	{
-		return subcomposite_iterator_;
-	}
-
-	inline
-	bool CompositeIteratorTraits_::operator == (const CompositeIteratorTraits_ &traits) const
-		throw()
-	{
-		return (subcomposite_iterator_ == traits.subcomposite_iterator_);
-	}
-
-	inline
-	bool CompositeIteratorTraits_::operator !=(const CompositeIteratorTraits_ &traits) const
-		throw()
-	{
-		return (subcomposite_iterator_ != traits.subcomposite_iterator_);
-	}
-
-	inline
-	bool CompositeIteratorTraits_::isValid() const
-		throw()
-	{
-		return (bound_ != 0 && subcomposite_iterator_.isValid() == true);
-	}
-
-	inline
-	void CompositeIteratorTraits_::invalidate()
-		throw()
+	inline void CompositeIteratorTraits::invalidate() throw()
 	{
 		bound_ = 0;
-		subcomposite_iterator_.invalidate();
+		composite_iterator_.invalidate();
 	}
 
-	inline
-	void CompositeIteratorTraits_::toBegin()
-		throw(Exception::InvalidIterator)
+	inline void CompositeIteratorTraits::toBegin() throw(Exception::Precondition)
+	{
+		BALL_PRECONDITION_EXCEPTION((bound_ != 0), "cannot move unbound iterator to begin")
+		composite_iterator_ = bound_->beginComposite();
+		while (+composite_iterator_ && (predicate_->operator () (*composite_iterator_) == false))
+		{
+			++composite_iterator_;
+		}
+	}
+
+	inline bool CompositeIteratorTraits::isBegin() const throw()
 	{
 		if (isSingular())
 		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
+			return false;
 		}
-		
-		subcomposite_iterator_ = bound_->beginSubcomposite();
-		if (predicate_->operator()(*subcomposite_iterator_) == false)
+
+		try
 		{
-			subcomposite_iterator_.findNext(*predicate_);
+			Composite::CompositeIterator sub_iterator(bound_->beginComposite());
+			while (+sub_iterator && (predicate_->operator () (*sub_iterator) == false))
+			{
+				++sub_iterator;
+			}
+			return (composite_iterator_ == sub_iterator);
+		}
+		catch (Exception::Precondition&)
+		{
+		}
+
+		return false;
+	}
+
+	inline void CompositeIteratorTraits::toEnd() throw(Exception::Precondition)
+	{
+		composite_iterator_.toEnd();
+	}
+
+	inline Composite& CompositeIteratorTraits::getData() throw()
+	{
+		return const_cast<Composite&>(*composite_iterator_);
+	}
+
+	inline const Composite& CompositeIteratorTraits::getData() const	throw()
+	{
+		return *composite_iterator_;
+	}
+
+	inline void CompositeIteratorTraits::forward() throw()
+	{
+		++composite_iterator_;
+		while (+composite_iterator_ && (predicate_->operator () (*composite_iterator_) == false))
+		{
+			++composite_iterator_;
 		}
 	}
 
-	inline
-	bool CompositeIteratorTraits_::isBegin() const
-		throw(Exception::InvalidIterator)
+	inline void CompositeIteratorTraits::toRBegin() throw(Exception::Precondition)
+	{
+		BALL_PRECONDITION_EXCEPTION(!isSingular(), "cannot move singular iterator to reverse begin")
+		composite_iterator_ = --bound_->endComposite();
+		while (+composite_iterator_ && (predicate_->operator () (*composite_iterator_) == false))
+		{
+			--composite_iterator_;
+		}
+	}
+
+	inline bool CompositeIteratorTraits::isRBegin() const throw()
 	{
 		if (isSingular())
 		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
+			return false;
 		}
+		Composite::CompositeIterator sub_iterator = --bound_->endComposite();
 
-		Composite::SubcompositeIterator sub_iterator = bound_->beginSubcomposite();
-
-		if (predicate_->operator()(*subcomposite_iterator_) == false)
+		while (+sub_iterator && (predicate_->operator () (*sub_iterator) == false))
 		{
-			sub_iterator.findNext(*predicate_);
+			--sub_iterator;
 		}
-		return (subcomposite_iterator_ == sub_iterator);
+		return (composite_iterator_ == sub_iterator);
 	}
 
-	inline
-	void CompositeIteratorTraits_::toEnd()
-		throw()
+	inline void CompositeIteratorTraits::toREnd() throw(Exception::Precondition)
 	{
-		subcomposite_iterator_.toEnd();
+		composite_iterator_.toREnd();
 	}
 
-	inline
-	bool CompositeIteratorTraits_::isEnd() const
-		throw()
-	{
-		return subcomposite_iterator_.isEnd();
-	}
-
-	inline
-	Composite& CompositeIteratorTraits_::getData()
-		throw()
-	{
-		return *subcomposite_iterator_;
-	}
-
-	inline
-	const Composite& CompositeIteratorTraits_::getData() const
-		throw()
-	{
-		return *subcomposite_iterator_;
-	}
-
-	inline
-	void CompositeIteratorTraits_::forward()
-		throw()
-	{
-		subcomposite_iterator_.findNext(*predicate_);
-	}
-
-	inline
-	void CompositeIteratorTraits_::toRBegin()
-		throw(Exception::InvalidIterator)
+	inline bool CompositeIteratorTraits::isREnd() const throw()
 	{
 		if (isSingular())
 		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
+			return false;
 		}
+		return composite_iterator_.isREnd();
+	}
 
-		subcomposite_iterator_ = bound_->rbeginSubcomposite();
-		if (predicate_->operator()(*subcomposite_iterator_) == false)
+	inline void CompositeIteratorTraits::backward() throw()
+	{
+		--composite_iterator_;
+		while (+composite_iterator_ && (predicate_->operator () (*composite_iterator_) == false))
 		{
-			subcomposite_iterator_.findPrevious(*predicate_);
+			--composite_iterator_;
 		}
 	}
-
-	inline
-	bool CompositeIteratorTraits_::isRBegin() const
-		throw(Exception::InvalidIterator)
-	{
-		if (isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		Composite::SubcompositeIterator sub_iterator = bound_->rbeginSubcomposite();
-
-		if (predicate_->operator()(*subcomposite_iterator_) == false)
-		{
-			sub_iterator.findPrevious(*predicate_);
-		}
-		return (subcomposite_iterator_ == sub_iterator);
-	}
-
-	inline
-	void CompositeIteratorTraits_::toREnd()
-		throw()
-	{
-		subcomposite_iterator_.toREnd();
-	}
-
-	inline
-	bool CompositeIteratorTraits_::isREnd() const
-		throw()
-	{
-		return subcomposite_iterator_.isREnd();
-	}
-
-	inline
-	void CompositeIteratorTraits_::backward()
-		throw()
-	{
-		subcomposite_iterator_.findPrevious(*predicate_);
-	}
-
-	inline
-	void CompositeIteratorTraits_::setPredicate(const UnaryPredicate<Composite>& predicate)
-		throw()
-	{
-		predicate_ = &predicate;
-	}
-
-	inline
-	const UnaryPredicate<Composite>* CompositeIteratorTraits_::getPredicate() const
-		throw()
-	{
-		return predicate_;
-	}
-
 } // namespace BALL
 
 #endif // BALL_KERNEL_ITERATOR_H

@@ -53,7 +53,8 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="4"
-			CharacterSet="2">
+			CharacterSet="2"
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
@@ -68,10 +69,10 @@
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="1"
+				RuntimeLibrary="0"
 				BufferSecurityCheck="FALSE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="0"
@@ -215,6 +216,12 @@
 					<File
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\openBruker2DFile.C">
 					</File>
+					<File
+						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\peptideDialog.C">
+					</File>
+					<File
+						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\peptideDialogData.C">
+					</File>
 				</Filter>
 				<Filter
 					Name="FUNCTOR"
@@ -330,6 +337,18 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\WIDGETS\molecularProperties_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\openBruker1DFile_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\openBruker2DFile_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\peptideDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\peptideDialog_moc.C">
 				</File>
 			</Filter>
 		</Filter>
@@ -605,9 +624,87 @@
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\openBruker1DFile.h">
+						<FileConfiguration
+							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\openBruker2DFile.h">
+						<FileConfiguration
+							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\peptideDialog.h">
+						<FileConfiguration
+							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\peptideDialogData.h">
+						<FileConfiguration
+							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 				</Filter>
 				<Filter
@@ -748,7 +845,7 @@
 						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h"/>
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h;$(InputDir)atomPropertiesData.C"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
@@ -758,7 +855,30 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\
 						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h"/>
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h;$(InputDir)atomPropertiesData.C"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog.ui">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="&quot;$(QTDIR)\bin\uic&quot; -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h&quot; &quot;$(InputPath)&quot;
+&quot;$(QTDIR)\bin\uic&quot; -o &quot;$(InputDir)\contourSurfaceDialogData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h;$(InputDir)contourSurfaceDialogData.C"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h&quot; &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\contourSurfaceDialogData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h;$(InputDir)contourSurfaceDialogData.C"/>
 				</FileConfiguration>
 			</File>
 			<File
@@ -771,7 +891,7 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\
 						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h&quot; &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\displayPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h"/>
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h;$(InputDir)displayPropertiesData.C"/>
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Release|Win32">
@@ -781,7 +901,30 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\displayPropertiesData.C&quot; -impl &quot;
 						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h&quot; &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\displayPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h"/>
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h;$(InputDir)displayPropertiesData.C"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\peptideDialog.ui">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Ein Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\peptideDialogData.h&quot; &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\peptideDialogData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\peptideDialogData.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\peptideDialogData.h;$(InputDir)peptideDialogData.C"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\peptideDialogData.h&quot; &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\peptideDialogData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\peptideDialogData.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\peptideDialogData.h;$(InputDir)peptideDialogData.C"/>
 				</FileConfiguration>
 			</File>
 		</Filter>

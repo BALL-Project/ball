@@ -1,70 +1,23 @@
-// $Id: kernel.doc,v 1.13 2002/12/12 09:48:45 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: kernel.doc,v 1.21 2003/08/26 08:04:18 oliver Exp $
+//
 
-/**@name	Kernel
-		This chapter contains all relevant information on BALL kernel datastructures. 
-		\\
-		The hierarchy of the kernel classes looks like this: 
-		\\
-		\TEX{
-			\begin{figure}[htbp]
-				\begin{center}
-					\includegraphics[width=17cm]{../../doc/images/KERNEL}
-				\end{center}
-			\end{figure}
-		}
-*/
-//@{
+	/** \defgroup KernelContainers Molecular Datastructures
+	 		\ingroup Kernel
+	*/
 
-  //@Include: atom.h
-  //@Include: bond.h
-  //@Include: chain.h
-  //@Include: fragment.h
-  //@Include: molecule.h
-	//@Include:	nucleicAcid.h
-	//@Include:	nucleotide.h
-  //@Include: PDBAtom.h
-  //@Include: protein.h
-  //@Include: residue.h
-  //@Include: secondaryStructure.h
-  //@Include: system.h
-
-	/** @name Iterator classes.
+	/** \defgroup KernelIterators Iterator Classes
+			\ingroup Kernel
 			Iterators for KERNEL classes
 	*/
-	//@{
-  	//@Include: iterator.h
-		//@Include: atomIterator.h
-		//@Include: bondIterator.h
-		//@Include: chainIterator.h
-		//@Include: fragmentIterator.h
-		//@Include: moleculeIterator.h
-		//@Include: nucleicAcidIterator.h
-		//@Include: nucleotideIterator.h
-		//@Include: proteinIterator.h
-		//@Include: residueIterator.h
-		//@Include: secondaryStructureIterator.h
-	//@}
 
-	/**	@name Miscellaneous
+	/**	\defgroup KernelMiscellaneous Miscellaneous
+			\ingroup Kernel
 			Further classes and functions related to the kernel classes
 	*/
-	//@{
-	  //@Include: atomContainer.h
-	  //@Include: atomContainerIterator.h
-		//@Include: PDBAtomIterator.h
-	  //@Include: global.h
-	  //@Include: forEach.h
-	  //@Include: PTE.h
-	//@}
 
-	/** @name Kernel Predicates
+	/** \defgroup Predicates Kernel Predicates
+	* 	\ingroup Kernel
 	*/
-	//@{
-		//@Include: expression.h
-  	//@Include: predicate.h
-		//@Include: expressionPredicate.h
-		//@Include:	selector.h
-		//@Include:	standardPredicates.h
-	//@}
-
-//@}

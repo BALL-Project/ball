@@ -1,440 +1,408 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.19 2002/12/22 11:45:17 sturm Exp $
+// $Id: regularData2D.h,v 1.38 2003/08/26 08:04:11 oliver Exp $
+//
 
-#ifndef BALL_DATATYPE_TRegularData2D_H
-#define BALL_DATATYPE_TRegularData2D_H
+#ifndef BALL_DATATYPE_REGULARDATA2D_H
+#define BALL_DATATYPE_REGULARDATA2D_H
 
-#include <iostream>
-
-#ifndef BALL_MATHS_Vector2_H
+#ifndef BALL_MATHS_VECTOR2_H
 # include <BALL/MATHS/vector2.h>
 #endif
 
-using namespace std;
+#ifndef BALL_SYSTEM_FILE_H
+# include <BALL/SYSTEM/file.h>
+#endif
+
+#include <iostream>
+#include <fstream>
+#include <iterator>
+#include <algorithm>
 
 namespace BALL 
 {
-
-	/**	Simple 2D grid class.
+	/**	Two-dimensional grid class.
 			This class represents a two-dimensional array. 
-			An instance of GridDataType will be created
-			for each point of the grid upon instantiation of TRegularData2D.\\
-			{\bf Definition:} \URL{BALL/DATATYPE/regularData2D.h}	\\
+			An instance of ValueType will be created for each point of the grid upon instantiation of TRegularData2D. 
+			\par
+      This class fulfills the STL <tt>Container</tt> and <tt>Unary Function</tt> requirements.
+			Iteration is along the x-axis first, then along the y-axis.
+
+			\ingroup  RegularData
 	*/
-	template <typename GridDataType>
+	template <typename ValueType>
 	class TRegularData2D 
 	{
 		public:
 
-		BALL_CREATE(TRegularData2D<GridDataType>)
+		BALL_CREATE(TRegularData2D<ValueType>)
 
 		/**	@name	Type Definitions
 		*/
 		//@{
 
-		/**	Grid position type
-		*/
-		typedef TVector2<Position> GridIndex;
-		
+		/// The index type used to refer to a specific element in the grid (x-, and y-index)
+		class IndexType
+		{
+			public:
+			inline IndexType() : x(0), y(0) {}
+			inline IndexType(Position p) : x(p), y(p) {}
+			inline IndexType(Position p, Position q) : x(p), y(q) {}
+
+			///
+			Position x;
+			///
+			Position y;
+
+		};
+
+		/// The type containing an STL vector of the appropriate type
+		typedef std::vector<ValueType> VectorType;
+		/// The coordinate type
+		typedef TVector2<float> CoordinateType;
+		/// A mutable iterator
+		typedef typename std::vector<ValueType>::iterator Iterator;
+		/// A nonmutable iterator
+		typedef typename std::vector<ValueType>::const_iterator ConstIterator;
 		//@}
+
+    //  STL compatibility types
+    //
+    typedef ValueType value_type;
+    typedef typename std::vector<ValueType>::iterator iterator;
+    typedef typename std::vector<ValueType>::const_iterator const_iterator;
+    typedef typename std::vector<ValueType>::reference reference;
+    typedef typename std::vector<ValueType>::const_reference const_reference;
+    typedef typename std::vector<ValueType>::pointer pointer;
+    typedef typename std::vector<ValueType>::difference_type difference_type;
+    typedef typename std::vector<ValueType>::size_type size_type;
 
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
 
 		/**	Default constructor.
-				Creates a TRegularData2D object without allocating a grid.
-				The instance is not valid.
+				Creates an empty TRegularData2D object.
 		*/
-		TRegularData2D() throw();	
+		TRegularData2D() throw();
 
-		/**	Copy constructor.
-				Creates a copy of an existing TRegularData2D object.
-				@param grid the grid to be copied
-				@param bool ignored
-		*/
-		TRegularData2D(const TRegularData2D<GridDataType>& grid, bool deep = true)
+		///	Copy constructor
+		TRegularData2D(const TRegularData2D<ValueType>& data)
 			throw(Exception::OutOfMemory);	
 
-		/**	Constructor for TRegularData2D.
-				{\em lower_[x,y]} should be set to the coordinates of
-				the "lower" corner of the rectangle represented by the grid
-				{\em upper_[x,y]} should likewise contain the "upper" corner
-				In fact, it doesn't really matter which coordinates are
-				which, as this method always takes the lowest coordinates (x,y)
-				for the lower corner and the highest coordinates for
-				the upper corner.\\
-				{\em grid_points_[x,y]} gives the number of grid points in 
-				either direction. 
-				@param	lower_x	float, the x coordinate of the lower corner of the grid
-				@param	lower_y	float, the y coordinate of the lower corner of the grid
-				@param	upper_x	float, the x coordinate of the upper corner of the grid
-				@param	upper_y	float, the y coordinate of the upper corner of the grid
-		*/
-		TRegularData2D(float lower_x, float lower_y, 
-									 float upper_x, float upper_y, 
-									 Size grid_points_x, Size grid_points_y)
-			 throw(Exception::OutOfMemory);
-
 		/**	Constructor.
-				The grid's origin is at lower, it has grid_points_[x,y]
-				points in each direction.
+				@param	origin the origin of the grid
+				@param	dimension the dimension of the grid (extension in x- and y-direction)
+				@param	spacing the grid spacing along the x- and y-axis
+			 @exception OutOfMemory if insufficient memory is available to allocate the grid
 		*/
-		TRegularData2D
-			(const Vector2& lower, const Vector2& upper,
-			 Size grid_points_x, Size grid_points_y)
+		TRegularData2D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing)
 			 throw(Exception::OutOfMemory);
 
-		/**	Constructor. 
-				Takes lower and upper corners and the grid spacing
-				The grid will include the coordinates given by upper/lower.
-				Its origin is in the lower corner, it may extend up to spacing over
-				the upper corner.
+		/* Constructor.
+			 This constructor takes the size of the grid (as the number of grid points per dimension)
+			 as input and (optionally) the origin and the dimension (in grid <em>coordinates</em>).
+			 @exception OutOfMemory if insufficient memory is available to allocate the grid
 		*/
-		TRegularData2D(const Vector2& lower, const Vector2& upper, float spacing)
+		TRegularData2D(const IndexType& size, 
+									 const CoordinateType& origin = CoordinateType(0.0), 
+									 const CoordinateType& dimension = CoordinateType(1.0))
 			throw(Exception::OutOfMemory);
 
 		/**	Destructor. 
-				Frees all allocated memory.
 		*/
 		virtual ~TRegularData2D() 
 			throw();
 
 		/** Clear method.
-				Frees all allocated memory. The instance is set to not valid.
+				Delete the grid contents and resize it to zero.
 		*/
 		virtual void clear() 
 			throw();
-
 		//@}
 
-		///
-		void resize(Size i, Size j)
-			throw(Exception::OutOfMemory);
-
-		///
-		void resize(float lower_x, float lower_y, float upper_x, float upper_y, 
-				Size number_of_grid_points_x, Size number_of_grid_points_y)
-			throw(Exception::OutOfMemory);
-
-		///
-		void resize(Vector2 lower, Vector2 upper,
-				Size number_of_grid_points_x, Size number_of_grid_points_y)
-			throw(Exception::OutOfMemory);
-
-		///
-		void resize(Vector2 lower, Vector2 upper,
-				TVector2<Size> number_of_grid_points)
-			throw(Exception::OutOfMemory);
-
-		/**	@name Assignment
+		/** @name Assignment
 		*/
 		//@{
 
 		/**	Assignment operator.
+				Copy the data, the origin, and the dimension (spacing is copied implicitly as well).
 		*/
-		const TRegularData2D& operator = (const TRegularData2D& grid) throw(Exception::OutOfMemory);
-
+		TRegularData2D& operator = (const TRegularData2D<ValueType>& data) 
+			throw(Exception::OutOfMemory);
 		//@}
-		/**	@name	Debugging and Diagnostics
+			
+
+		/** @name Predicates
 		*/
 		//@{
-
-		/** Internal state dump.
-				Dump the current internal state of {\em *this} TRegularData2D to 
-				the output ostream {\em s}.
-				@param   s - output stream where to output the internal state of {\em *this}
-		*/
-		virtual void dump(std::ostream& stream) const throw(); 
-
-		/**	Returns the current stat of the object.	
-				isValid() returns false, if the grid couldn't be initialized 
-				correctly. Usually this is due to an allocation error in one
-				of the constructors.
-		*/
-		bool isValid() const throw();
-
-		//@}
-		/**	@name	Accessors
-		*/
-		//@{
-
-		/**	Returns the largest possible x coordinate for the rectangle.
-		*/
-		float getMaxX() const throw();
-
-		/**	Returns the largest possible y coordinate for the rectangle.
-		*/
-		float getMaxY() const throw();
-
-
-		/**	Returns the x coordinate of the grid origin.
-		*/
-		float getMinX() const throw();
-
-		/**	Returns the y coordinate of the grid origin.
-		*/
-		float getMinY() const throw();
-
-		/**	Return the largest grid position for the x direction.
-				This method returns the maximum position allowed in the grid.
-				As the point in the origin has the indices (0, 0), this
-				method returns the number of points in X direction minus one.
-		*/
-		Size getMaxXIndex() const throw();
-
-		/**	Return the largest grid position for the y direction.
-				This method returns the maximum position allowed in the grid.
-				As the point in the origin has the indices (0, 0), this
-				method returns the number of points in Y direction minus one.
-		*/
-		Size getMaxYIndex() const throw();
-
-		/**	Returns the total number of grid points.
-		*/
-		Size getSize() const throw();
-
-		/**	Returns the grid spacing in x direction.
-		*/	
-		float getXSpacing() const throw();
-
-		/**	Returns the grid spacing in y direction.
-		*/	
-		float getYSpacing() const throw();
-
-		/**	Returns the position of the grid point closest to the given vector.
-				If there are multiple grid points with equal distance, the
-				grid point with the lowest indices in x, y direction is returned.
-				@exception OutOfGrid if the point is outside the grid
-		*/
-		GridIndex getIndex(const Vector2& v) const throw(Exception::OutOfGrid);
-
-		/**	Returns the position of the grid point closest to two given coordinates.
-				If there are multiple grid points with equal distance, the
-				grid point with the lowest indices in x, y direction is returned.
-				@exception OutOfGrid if the point is outside the grid
-		*/
-		GridIndex getIndex(float x, float y) const
-			throw(Exception::OutOfGrid);
 		
-		/**	Returns a pointer to the grid contents determined by the two indices.
+		/** Equality operator.
+				Two grids are equal if they have the same number of points in all two
+				dimensions, same origin, spacing and the data fields are equal.
+		*/
+		bool operator == (const TRegularData2D<ValueType>& data) const throw();
+
+    /// Inequality operator
+    BALL_INLINE bool operator != (const TRegularData2D<ValueType>& data) const throw() { return !this->operator == (data); }
+
+		/// Empty predicate
+		BALL_INLINE bool empty() const throw() { return data_.empty(); }
+
+		/// Test if a given point is inside the grid.
+		bool isInside(const CoordinateType& x) const throw();
+		//@}
+
+    /** @name Iterators
+    */
+    //@{
+    ///
+    BALL_INLINE ConstIterator begin() const throw() { return data_.begin(); }
+    ///
+    BALL_INLINE ConstIterator end() const throw() { return data_.end(); }
+    ///
+    BALL_INLINE Iterator begin() throw() { return data_.begin(); }
+    ///
+    BALL_INLINE Iterator end() throw() { return data_.end(); }
+    //@}
+
+    /** @name Accessors
+    */
+    //@{
+    // STL compatibility
+    BALL_INLINE size_type size() const throw() { return data_.size(); }
+    BALL_INLINE size_type max_size() const throw() { return data_.max_size(); }
+		BALL_INLINE void swap(TRegularData2D<ValueType>& data) throw() { std::swap(*this, data); }
+		
+
+    /** Return a nonmutable reference to a specific data element.
+        This is the range chacking version of <tt>operator []</tt>.
+     */
+    const ValueType& getData(const IndexType& index) const
+      throw(Exception::OutOfGrid);
+
+    /** Return a mutable reference to a specific data element.
+        This is the range chacking version of <tt>operator []</tt>.
+     */
+    ValueType& getData(const IndexType& index)
+      throw(Exception::OutOfGrid);
+
+    /** Return a nonmutable reference to a specific data element.
+        This is the range chacking version of <tt>operator []</tt>.
+     */
+    const ValueType& getData(Position index) const
+      throw(Exception::OutOfGrid);
+
+    /** Return a mutable reference to a specific data element.
+        This is the range chacking version of <tt>operator []</tt>.
+     */
+    ValueType& getData(Position index)
+      throw(Exception::OutOfGrid);
+
+    /** Nonmutable random access operator.
+        @note No range checking is done. For a more robust version, please
+        use getData.
+    */
+    const ValueType& operator [] (const IndexType& index) const throw() { return data_[index.x + size_.x * index.y]; }
+
+    /** Mutable random access operator.
+        @note No range checking is done. For a more robust version, please
+        use getData.
+    */
+    ValueType& operator [] (const IndexType& index) throw() { return data_[index.x + size_.x * index.y]; }
+
+    /** Nonmutable random access operator.
+        @note No range checking is done. For a more robust version, please
+        use getData.
+    */
+    const ValueType& operator [] (Position index) const throw() { return data_[index]; }
+
+    /** Mutable random access operator.
+        @note No range checking is done. For a more robust version, please
+        use getData.
+    */
+    ValueType& operator [] (Position index) throw() { return data_[index]; }
+
+    /** Function operator.
+        This operator allows the use of a TRegularData1D instance
+        as a unary function. As required by the STL <tt>Unary Function</tt>
+        concept, the argument <tt>x</tt> is required to be within the
+        correct range. A more robust (range-checking) version of
+        this operator is implemented as \link getInterpolatedValue
+        getInterpolatedValue \endlink.
+    */
+    ValueType operator () (const CoordinateType& x) const throw();
+
+    /** Return the linearly interpolated value of the surrounding two grid points.
+        This method first performs a range check for the argument <tt>x</tt>
+        and then calls <tt>operator () (x)</tt> to determine an interpolated
+        value at that position.
+    */
+    ValueType getInterpolatedValue(const CoordinateType& x) const
+      throw(Exception::OutOfGrid);
+
+    /** Return a nonmutable reference to the closest non-interpolated value.
+        This method first performs a range check for the argument <tt>x</tt>
+        and then returns the value of the closest data point to the left or
+        right of <tt>x</tt>.
+    */
+    const ValueType& getClosestValue(const CoordinateType& x) const
+      throw(Exception::OutOfGrid);
+
+    /** Return a mutable reference to the closest non-interpolated value.
+        This method first performs a range check for the argument <tt>x</tt>
+        and then returns the value of the closest data point to the left or
+        right of <tt>x</tt>.
+    */
+    ValueType& getClosestValue(const CoordinateType& x)
+      throw(Exception::OutOfGrid);
+
+		/**	Return the position of the grid point with coordinates lesser than the given vector.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridDataType* getData(const Position i, const Position j)
+		IndexType getLowerIndex(const CoordinateType& v) const 
+			throw(Exception::OutOfGrid);
+
+		/**	Return the position of the grid point closest to the given vector.
+				If there are multiple grid points with equal distance, the
+				grid point with the lowest indices in x, y direction is returned.
+				@exception OutOfGrid if the point is outside the grid
+		*/
+		IndexType getClosestIndex(const CoordinateType& v) const 
+			throw(Exception::OutOfGrid);
+
+		/**	Return the size of the grid.
+				This method yields the number of grid points in x- and y-direction.
+				Use \link size size \endlink to obtain the <em>total</em> number of 
+				points in the grid.
+		*/
+		inline const IndexType& getSize() const throw() { return size_; }
+				
+		/** Return the origin of the data.
+        The origin represents the coordinate of the very first
+				(lower left) element, i.e. <tt>data_[0]</tt>.
+    */
+    inline const CoordinateType& getOrigin() const throw() { return origin_; }
+
+    /** Return the spacing of the data.
+        The spacing corresponds to the distance between two adjacent
+        data elements.
+    */
+    const CoordinateType& getSpacing() const throw() {  return spacing_; }
+
+    /** Set the origin of the data.
+    */
+    void setOrigin(const CoordinateType& origin) throw();
+
+    /** Return the dimension of the data.
+        The dimension represents the length of the data vector.
+        Hence, the coordinate of the rightmost element, <tt>data_[getSize() - 1]</tt>
+        is the origin plus the dimension (<tt>getOrigin() + getDimension()</tt>).
+    */
+    const CoordinateType& getDimension() const throw() { return dimension_; }
+
+    /** Set the dimension of the data.
+        This will affect neither the origin of the data, nor the number of
+        elements stored (in contrast to \link resize() resize() \endlink).
+        It will just store the appropriate scling factor and affect the spacing.
+    */
+    void setDimension(const CoordinateType& dimension) throw() { dimension_ = dimension; }
+
+    /** Resize the data.
+        If <tt>new_size</tt> is larger than the current size, the data
+        <tt>vector</tt> is extended to the new size and filled with default
+        constructed items of type <tt>ValueType</tt>. Resizing to a value lesser than
+        the current size truncates the vector.
+        \par
+        The boundaries are adapted and the positions of the retained items
+        fixed, i.e.  the dimension is increased or decreased proportionally
+        while the origin remains unchanged.
+        @param new_size the new size
+    */
+    void resize(const IndexType& new_size)
+      throw(Exception::OutOfMemory);
+
+    /** Rescale the data.
+        Keep the current boundaries of the data and reinterpolate
+        the data to reflect the new size. To create a data set of <tt>new_size</tt>
+        data points, the data is interpolated linearly at the new data points from
+        the closest points in the old data set.
+
+        @param new_size the new data set size
+    */
+    void rescale(const IndexType& new_size)
+      throw(Exception::OutOfMemory);
+
+		/**	Return the exact coordinates of a grid point.	
+				@return			CoordinateType	
+				@exception 	OutOfGrid if the point is outside the grid
+		*/
+		CoordinateType getCoordinates(const IndexType& index) const
 		  throw(Exception::OutOfGrid);
 
-		/**	Returns a pointer to the grid contents closest to a given vector.
-				Determination of the selected grid point is made via getPosition.
-				@exception OutOfGrid if the point is outside the grid
-		*/
-		GridDataType* getData(const Vector2& r) throw(Exception::OutOfGrid);
-
-		/**	Returns a pointer to the grid contents determined by the position.
-				@exception OutOfGrid if the point is outside the grid
-		*/
-		GridDataType* getData(const Position position) throw(Exception::OutOfGrid);
-
-		/**	Subscript operator.
-				Returns the data of the grid point specified by its {\tt position}.
-				@return			GridDataType
+		/**	Return the exact coordinates of a grid point.	
+				@return			CoordinateType	
 				@exception 	OutOfGrid if the point is outside the grid
-				@param			position Position, the grid position
-				@see				getData
 		*/
-		GridDataType& operator[](const Position position) throw(Exception::OutOfGrid);
-
-		/**	Subscript operator.
-				Returns the data of the grid point nearest to the given {\tt vector}
-				@return			GridDataType
-				@exception 	OutOfGrid if the point is outside the grid
-				@param			vector Vector2, a position in the grid
-				@see				getData
-		*/
-		GridDataType& operator[](const Vector2& vector) throw(Exception::OutOfGrid);
-
-		/**	Returns the exact coordinates of a grid point.	
-				@return			Vector2	
-				@exception 	OutOfGrid if the point is outside the grid
-				@param			i Position, grid x position
-				@param			j Position, grid y position
-		*/
-		Vector2 getGridCoordinates(const Position i, const Position j) const
+		CoordinateType getCoordinates(Position index) const
 		  throw(Exception::OutOfGrid);
-
-		/**	Returns the exact coordinates of a grid point.	
-				@return		Vector2	
-				@param		Position
-		*/
-		Vector2 getGridCoordinates(const Position position) const throw(Exception::OutOfGrid);
 
 		/**	Return the indices of the grid points of the enclosing rectangle.
 				This method calculates the grid rectangle that contains the given vector
 				and returns the indices of the grid points forming this rectangle.
 				The given point lies either in the rectangle or is the lower left front edge of the rectangle.
-				@return bool {\bf true} if the vector is inside the grid
+				@return bool <b>true</b> if the vector is inside the grid
 				@exception OutOfGrid if the point is outside the grid
-				@param vector a point inside the grid
+				@param r	 a point inside the grid
 				@param ll  left lower corner of the rectangle
 				@param lr  right lower corner of the rectangle
 				@param ul  left upper corner of the rectangle
 				@param ur  right upper corner of the rectangle
 		*/
-		void getRectangleIndices
-			(const Vector2& vector,	Position& ll, Position& lr, Position& ul, Position& ur) const
+		void getEnclosingIndices
+			(const CoordinateType& r,	Position& ll, Position& lr, Position& ul, Position& ur) const
 			throw(Exception::OutOfGrid);
-													
-		/**	Return the data at the grid points of the enclosing rectangle. (Const method)
-				This method calculates the grid rectangle that contains the given vector
-				and returns the values at the grid points forming this rectangle.
-				The given point lies either in the rectangle or is the lower left front edge of the rectangle.
-				@see getRectangleIndices
-				@return bool {\bf true} if the vector is inside the grid
-				@exception OutOfGrid if the point is outside the grid
-				@param vector a point inside the grid
-				@param ll  value at the left lower corner of the rectangle
-				@param lr  value at the right lower corner of the rectangle
-				@param ul  value at the left upper corner of the rectangle
-				@param ur  value at the right upper corner of the rectangle
+									
+		/**	Return the values at the grid points of the enclosing the spcified position.
+				@see getEnclosingIndices
 		*/
-		void getRectangleData (const Vector2& vector,
-			GridDataType& ll, GridDataType& lr, GridDataType& ul, GridDataType& ur) const
+		void getEnclosingValues
+			(const CoordinateType& r,	ValueType& ll, ValueType& lr, ValueType& ul, ValueType& ur) const
 			throw(Exception::OutOfGrid);
-													
-		/**	Returns a vector to the grid's origin.
-				@return		Vector2& the grid origin
+									
+		/** Write the grid contents in a (non-portable) binary format.
+		 		@exception FileNotFound thrown if file could not be written
 		*/
-		Vector2& getOrigin() throw();
+		void binaryWrite(const String& filename) const
+			throw(Exception::FileNotFound);
 
-		/**	Returns a vector to the grid's origin (const method).
-				@return		Vector2&
+		/** Read the grid contents from a file written with binaryWrite
+		 		@exception FileNotFound thrown if file doesnt exists or could not be read
 		*/
-		const Vector2& getOrigin() const throw();
-
-		/**	Modifies the grid's origin
-				@param		origin, new origin
-		*/
-		void setOrigin(const Vector2& origin) throw();
-
-		/**	Modifies the grid's origin
-				@param		x new origin x
-				@param		y new origin y
-		*/
-		void setOrigin(float x, float y) throw();
-
-		/**	Returns a Vector2 containing the grid's dimensions.
-				@return		Vector2&
-		*/
-		Vector2& getDimension() throw();
-		
-		/**	Returns a Vector2 containing the grid's dimensions (const method).
-				@return		Vector2&
-		*/
-		const Vector2& getDimension() const throw();
-
-		/** Test if a given point is inside the grid.
-				Also returns false if instance is not valid.
-				@param vector the point
-				@return bool
-		*/
-		bool has(const Vector2& vector) const throw();
-
-		/** Test if a given point is inside the grid.
-				Also returns false if instance is not valid.
-				@param x, y the coordinates
-				@return bool
-		*/
-		bool has(float x, float y) const throw();
-
-		//?????
-		/**	Returns the linear interpolation of the eight surrounding grid points.
-				This method calculates the corresponding rectangle to a Vector2 and linearly.
-				Then, it calculates the position of this Vector2 in rectangle coordinates dx, dy
-				with $0 \le dx, dy \le 1$. It then calculates the weighted average of 
-				the values at the eight surrounding grid points $v_i$:
-				\TEX{
-					\begin{eqnarray*}
-						{\mathrm value} & = & v_1 dx dy dz\\
-														& + & v_2 (1 - dx) dy dz\\
-														& + & v_3 dx (1 - dy) dz\\
-														& + & v_4 (1 - dx) (1 - dy) dz\\
-					\end{eqnarray*}
-				}
-				@exception OutOfGrid if the point is outside the grid or the grid has fewer then two points in any dimension
-				@param	vector the position to evaluate
-		*/
-		GridDataType getInterpolatedValue(const Vector2& vector) const throw(Exception::OutOfGrid);
-		
-		/** Get the maximum value in the the data set.
-		 * 	If the data grid is empty, 0.0 is returned.
-		 * 	@return GridDataType the maximum value
-		 */ 	
-		GridDataType getMaxValue() const throw();
-		
-		/** Get the minimum value in the the data set.
-		 * 	If the data grid is empty, 0.0 is returned.
-		 * 	@return GridDataType the minimum value
-		 */ 	
-		GridDataType getMinValue() const throw();
-			
-		/** Rescale the data.
-		 * 	All data values are rescaled to fit between a minimum and a maximum value.
-		 * 	@param minValue the new lower boundary for the values
-		 * 	@param maxValue the new upper boundary for the values
-		 */
-		void rescale(const GridDataType& minValue, const GridDataType& maxValue) throw();
-		
-		/** Equality operator.
-				Two point grids are equal if they have the same number of points in all two
-				dimensions, same origin, spacing and the data fields are equal.
-				Both grids have to be valid or false is returned.
-		*/
-		bool operator == (const TRegularData2D<GridDataType>& grid) const throw();
-
-		/** Inequality operator.
-				@see operator ==
-		*/
-		bool operator != (const TRegularData2D<GridDataType>& grid) const throw();
-
+		void binaryRead(const String& filename)
+			throw(Exception::FileNotFound);
 		//@}
-
-		/**	The grid data
-		*/
-		GridDataType* data;
-
+	
 		protected:
 			
-		/*_ origin of the rectangle (offset) 
-		*/	
-		Vector2	origin_;
+		/// The grid data
+		VectorType data_;
 
-		/*_ size of the rectangle 
-		*/
-		Vector2	size_;
+		/// Origin of the grid (offset) 
+		CoordinateType	origin_;
 
-		/*_ distance grid spacing (spacing = size / (number_of_points - 1))
-		*/
-		Vector2 spacing_;
+		/// Dimension of the grid
+		CoordinateType	dimension_;
 
-		/*_ number of grid points of the rectangle
-		*/
-		Size number_of_points_x_, number_of_points_y_;
+		/// Grid spacing
+		CoordinateType	spacing_;
 
-		/*_ contains the total number of grid points
-		*/
-		Size number_of_grid_points_;
+		/// The dimensions in grid points
+		IndexType size_;
 
-		/*_ contains the topmost edge
-		*/
-		Vector2 upper_;
-
-		/*_ Is set to true, if the grid has been set up correctly.
-				If the requested memory couldn't be allocated, valid_ is set to
-				false. The state of this flag can be queried by isValid()
-				@see	isValid
-		*/
-		bool valid_;
+		/// The block data type for reading and writing binary data
+		typedef struct { ValueType bt[1024]; } BlockValueType;
 	};
 
 	/**	Default type
@@ -442,751 +410,696 @@ namespace BALL
 	typedef TRegularData2D<float> RegularData2D;
 
 	// default constructor.
-	template <class GridDataType>
-	TRegularData2D<GridDataType>::TRegularData2D()
+	template <class ValueType>
+	TRegularData2D<ValueType>::TRegularData2D()
 		throw()
-		: data(0),
-			origin_(0,0),
-			size_(0,0),
-			spacing_(0,0),
-			number_of_points_x_(0),
-			number_of_points_y_(0),
-			number_of_grid_points_(0),
-			upper_(0,0),
-			valid_(false)
+		: data_(),
+			origin_(0.0),
+			dimension_(0.0),
+			spacing_(1.0),
+			size_(0)
 	{
 	}
 
 	// copy constructor
-	template <class GridDataType>
-	TRegularData2D<GridDataType>::TRegularData2D
-		(const TRegularData2D<GridDataType>& grid, bool /* deep */)
+	template <class ValueType>
+	TRegularData2D<ValueType>::TRegularData2D(const TRegularData2D<ValueType>& data)
 		throw(Exception::OutOfMemory)
-		: data(0),
-			origin_(0,0),
-			size_(0,0),
-			spacing_(0,0),
-			number_of_points_x_(0),
-			number_of_points_y_(0),
-			number_of_grid_points_(0),
-			upper_(0,0),
-			valid_(false)
+		: data_(),
+			origin_(data.origin_),
+			dimension_(data.dimension_),
+			spacing_(data.spacing_),
+			size_(data.size_)
 	{
-		// resize the grid
-		resize(grid.origin_, grid.upper_,
-				grid.number_of_points_x_,
-				grid.number_of_points_y_);
-
-		// copy data
-		if (valid_)
+		try
 		{
-			for (Position i = 0; i < number_of_grid_points_; i++)
-			{
-				data[i] = grid.data[i];
-			}
+			data_ = data.data_;
 		}
-
+		catch (std::bad_alloc&)
+		{
+			data_.resize(0);
+			throw Exception::OutOfMemory(__FILE__, __LINE__, data.data_.size() * sizeof(ValueType));
+		}
 	}
 
-	// copy constructor
-	template <class GridDataType>
-	TRegularData2D<GridDataType>::~TRegularData2D()
+	template <class ValueType>
+	TRegularData2D<ValueType>::TRegularData2D
+		(const TRegularData2D<ValueType>::IndexType& size,
+		 const TRegularData2D<ValueType>::CoordinateType& origin,
+		 const TRegularData2D<ValueType>::CoordinateType& dimension)
+		throw(Exception::OutOfMemory)
+		: data_(),
+			origin_(origin),
+			dimension_(dimension),
+			spacing_(0.0, 0.0),
+			size_(size)
+	{
+		// Compute the grid spacing
+		spacing_.x = dimension_.x / (double)(size_.x - 1);
+		spacing_.y = dimension_.y / (double)(size_.y - 1);
+
+		// Compute the number of grid points
+		size_type number_of_points = size_.x * size_.y;
+		try
+		{
+			data_.resize(number_of_points);
+		}
+		catch (std::bad_alloc&)
+		{
+			data_.resize(0);
+			throw Exception::OutOfMemory(__FILE__, __LINE__, number_of_points * sizeof(ValueType));
+		}
+	}
+
+	template <class ValueType>
+	TRegularData2D<ValueType>::TRegularData2D
+		(const TRegularData2D<ValueType>::CoordinateType& origin,
+		 const TRegularData2D<ValueType>::CoordinateType& dimension,
+		 const TRegularData2D<ValueType>::CoordinateType& spacing)
+		throw(Exception::OutOfMemory)
+		: data_(),
+			origin_(origin),
+			dimension_(dimension),
+			spacing_(spacing),
+			size_(0)
+	{
+		// Compute the grid size
+		size_.x = (Size)(dimension_.x / spacing_.x + 0.5) + 1;
+		size_.y = (Size)(dimension_.y / spacing_.y + 0.5) + 1;
+		
+		// Compute the number of grid points
+		size_type size = size_.x * size_.y;
+		try
+		{
+			data_ .resize(size);
+		}
+		catch (std::bad_alloc&)
+		{
+			data_.resize(0);
+			throw Exception::OutOfMemory(__FILE__, __LINE__, size * sizeof(ValueType));
+		}
+		
+		// Adjust the spacing -- dimension has precedence.
+		spacing_.x = dimension_.x / (double)(size_.x - 1);
+		spacing_.y = dimension_.y / (double)(size_.y - 1);
+	}
+
+	template <class ValueType>
+	TRegularData2D<ValueType>::~TRegularData2D()
 		throw()
 	{
-		clear();
 	}
 
 	// assignment operator
-	template <typename GridDataType>
+	template <typename ValueType>
 	BALL_INLINE
-	const TRegularData2D<GridDataType>& TRegularData2D<GridDataType>::operator = 
-		(const TRegularData2D<GridDataType>& grid)
+	TRegularData2D<ValueType>& TRegularData2D<ValueType>::operator = 
+		(const TRegularData2D<ValueType>& rhs)
 		throw(Exception::OutOfMemory)
 	{
-
-		resize(grid.origin_, grid.upper_, 
-				grid.number_of_points_x_, grid.number_of_points_y_);
-
-		if (valid_)
+		// Avoid self assignment
+		if (&rhs != this)
 		{
-			for (Position i = 0; i < number_of_grid_points_; i++)
+			// Copy the coordinate-related attributes and
+			// the size.
+			origin_ = rhs.origin_;
+			dimension_ = rhs.dimension_;
+			spacing_ = rhs.spacing_;
+			size_ = rhs.size_;
+
+			// Copy the data itself and rethrow allocation exceptions.
+			try
 			{
-				data[i] = grid.data[i];
+				data_ = rhs.data_;
+			}
+			catch (std::bad_alloc&)
+			{
+				data_.resize(0);
+				throw Exception::OutOfMemory(__FILE__, __LINE__, rhs.data_.size() * sizeof(ValueType));
 			}
 		}
 
 		return *this;
 	}
 
-	template <typename GridDataType>
-	void TRegularData2D<GridDataType>::resize(Size i, Size j)
+	template <typename ValueType>
+	void TRegularData2D<ValueType>::rescale(const typename TRegularData2D<ValueType>::IndexType& size)
 		throw(Exception::OutOfMemory)
 	{
-		// 
-		if (data != 0)
+		// If the old size equals the new size, we're done.
+		if ((size.x == size_.x) && (size_.y == size.y))
 		{
-			delete [] data;
-			data = 0;
+			return;
+		}
+	
+		// If the new grid is empty, this whole thing is quite easy.
+		if ((size.x == 0) || (size.y == 0))
+		{
+			data_.resize(0);
+			dimension_.set(0.0);
+			return;
 		}
 
-		// set the number of grid points in all directions
-		number_of_points_x_ = i;
-		number_of_points_y_ = j;
+		// Compute the new array size.
+		size_type new_size = (size_type)(size.x * size.y);
 
-		// if the number of grid points in any direction is below 2
-		// (which means that the grid is not three-dimensional!)
-		// then increase to at least one point in each dimension
-		if (number_of_points_x_ < 2)
+		// Catch any bad_allocs thrown by vector::resize
+		try
 		{
-			number_of_points_x_ = 2;
-		}
-		if (number_of_points_y_ < 2)
-		{
-			number_of_points_y_ = 2;
-		}
+			// Create a new temporary array.
+			TRegularData2D<ValueType> old_data(*this);
 
-		// calculate the total number of grid points
-		number_of_grid_points_ 
-			= number_of_points_x_ * number_of_points_y_;
-		
-		// allocate space for the array containing pointers to the objects
-		data = new GridDataType[number_of_grid_points_];
-
-		// mark this instance as invalid if the alloc failed
-		valid_ = (data != 0);			
-
-		if (!valid_)
-		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, 
-					number_of_grid_points_ * (Size)sizeof(GridDataType));
-		}
-	}
-
-	template <typename GridDataType>
-	BALL_INLINE
-	void TRegularData2D<GridDataType>::resize(float lower_x, float lower_y, 
-			float upper_x, float upper_y, 
-			Size number_of_grid_points_x, Size number_of_grid_points_y)
-		throw(Exception::OutOfMemory)
-	{
-
-		// throw away the old data
-		clear();
-
-		// resize the data section and set the internal variables holding the
-		// number of grid points for every direction
-		resize(number_of_grid_points_x, number_of_grid_points_y);
-
-		// calculate the origin as the lowest given coordinates
-		// of each direction
-		origin_.x = ( lower_x < upper_x ) ? lower_x : upper_x;
-		origin_.y = ( lower_y < upper_y ) ? lower_y : upper_y;
-
-		// calculate the box sizes
-		size_.x = fabs(upper_x - lower_x);
-		size_.y = fabs(upper_y - lower_y);
-
-		// calculate the topmost edge
-		upper_.set(origin_.x + size_.x, origin_.y + size_.y); 
-
-		// calculate the grid spacing in all directions
-		spacing_.x = size_.x / (number_of_points_x_ - 1);
-		spacing_.y = size_.y / (number_of_points_y_ - 1);
-  }
-
-	template <typename GridDataType>
-	BALL_INLINE
-	void TRegularData2D<GridDataType>::resize(Vector2 lower, Vector2 upper,
-			Size number_of_grid_points_x, Size number_of_grid_points_y)
-		throw(Exception::OutOfMemory)
-	{
-		resize(lower.x, lower.y, upper.x, upper.y, 
-				number_of_grid_points_x, number_of_grid_points_y);
-	}
-
-	template <typename GridDataType>
-	BALL_INLINE
-	void TRegularData2D<GridDataType>::resize(Vector2 lower, Vector2 upper, TVector2<Size> number_of_grid_points)
-		throw(Exception::OutOfMemory)
-	{
-		resize(lower.x, lower.y, upper.x, upper.y, 
-				number_of_grid_points.x, number_of_grid_points.y);
-	}
-
-	template <class GridDataType>
-	BALL_INLINE
-	TRegularData2D<GridDataType>::TRegularData2D
-		(float lower_x, float lower_y, float upper_x, float upper_y, Size grid_points_x, Size grid_points_y)
-		throw(Exception::OutOfMemory)
-	{
-		// set data and number_of_grid_points_ to 0/0, just to be sure 
-		data = (GridDataType*) 0;
-		number_of_grid_points_ = 0;
-
-		// set the number of grid points in all directions
-		number_of_points_x_ = grid_points_x;
-		number_of_points_y_ = grid_points_y;
-
-		// if the number of grid points in any direction is below 2
-		// (which means that the grid is not two-dimensional!)
-		// then increase to at least one point in each dimension
-		if (number_of_points_x_ < 2)
-		{
-			number_of_points_x_ = 2;
-		}
-		if (number_of_points_y_ < 2)
-		{
-			number_of_points_y_ = 2;
-		}
-		// calculate the origin as the lowest given coordinates
-		// of each direction
-		origin_ = Vector2((lower_x < upper_x ) ? lower_x : upper_x,
-							        (lower_y < upper_y ) ? lower_y : upper_y);
-
-		// calculate the rectangle sizes
-		size_ = Vector2(fabs(upper_x - lower_x), fabs(upper_y - lower_y));
-
-		// calculate the topmost edge
-		upper_ = Vector2(origin_.x + size_.x, origin_.y + size_.y);
-
-		// calculate the grid spacing in all directions
-		spacing_ = Vector2(size_.x / (number_of_points_x_ - 1),
-											 size_.y / (number_of_points_y_ - 1));
-
-		// calculate the total number of grid points
-		number_of_grid_points_ = number_of_points_x_ * number_of_points_y_;
-		
-		// allocate space for the array containing pointers to the objects
-		data = new GridDataType[number_of_grid_points_];
-
-		// mark this instance as invalid if the alloc failed
-		valid_ = (data != 0);			
-
-		if (!valid_)
-		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, 
-									number_of_grid_points_ * sizeof(GridDataType));
-		}
-
-		for (Position pos = 0; pos < number_of_grid_points_; pos++)
-		{
-			data[pos] = GridDataType();
-		}
-	}
-
-	template <class GridDataType>
-	TRegularData2D<GridDataType>::TRegularData2D
-		(const Vector2& lower, const Vector2& upper, Size grid_points_x, Size grid_points_y) 
-		throw(Exception::OutOfMemory)
-		: data(0)
-	{
-		*this = TRegularData2D(lower.x, lower.y, upper.x, upper.y,
-													grid_points_x, grid_points_y);
-	}
-
-	template <class GridDataType>
-	TRegularData2D<GridDataType>::TRegularData2D(const Vector2& lower, const Vector2& upper, float spacing) 
-		throw(Exception::OutOfMemory)
-		: data(0)
-	{
-		*this = TRegularData2D(lower.x, lower.y, upper.x, upper.y,
-											(Size)((upper.x - lower.x) / spacing + 1), 
-											(Size)((upper.y - lower.y) / spacing + 1));
-	}
+			// Resize the data to its new size.
+			data_.resize(new_size);
+			spacing_.x = dimension_.x / (double)(size.x - 1);
+			spacing_.y = dimension_.y / (double)(size.y - 1);
 			
-	template <class GridDataType>
-	void TRegularData2D<GridDataType>::dump(std::ostream& stream) const throw()
-	{
-		stream << "Dump of " << typeid(this).name()<< " (" << getMaxXIndex() 
-					 << "x" << getMaxYIndex() << ")" << std::endl;
-		stream << "--------------------------------------" << std::endl;
-		for (Position i = 0; i < number_of_grid_points_; i++)
-		{
-			stream << "(" << data[i] << ")";
+			// Walk over the new grid and copy the (interpolated) old stuff back.
+			CoordinateType v;
+			for (size_type i = 0; i < new_size; i++)
+			{	
+				Position x = i % size.x;
+				Position y = i / size.x;
+				v.x = origin_.x + x * spacing_.x;
+				v.y = origin_.y + y * spacing_.y;
+				data_[i] = old_data(v);
+			}
+			
+			// Correct the grid dimension. Origin and spacing remain constant.
+			size_ = size;
 		}
-		stream << std::endl << "--------------------------------------" << std::endl;
+		catch (std::bad_alloc&)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * (Size)sizeof(ValueType));
+		}
 	}
 
-	// returns the state of this instance
-	template <class GridDataType>
-	BALL_INLINE 
-	bool TRegularData2D<GridDataType>::isValid() const throw()
+	template <typename ValueType>
+	void TRegularData2D<ValueType>::resize(const typename TRegularData2D<ValueType>::IndexType& size)
+		throw(Exception::OutOfMemory)
 	{
-		return valid_;
+		// If the old size equals the new size, we're done.
+		if (size.x == size_.x && size_.y == size.y)
+		{
+			return;
+		}
+	
+		// If the new grid is empty, this whole thing is quite easy.
+		if ((size.x == 0) || (size.y == 0))
+		{
+			data_.resize(0);
+			dimension_.set(0.0, 0.0);
+			return;
+		}
+
+		// Compute the new array size.
+		size_type new_size = (size_type)(size.x * size.y);
+
+		// Catch any bad_allocs thrown by vector::resize
+		try
+		{
+			// Create a new temporary array.
+			std::vector<ValueType> old_data(data_);
+
+			// Resize the data to its new size.
+			data_.resize(new_size);
+			
+			// walk over the new grid and copy the old stuff back.
+			static ValueType default_value = (ValueType)0;
+			for (size_type i = 0; i < new_size; i++)
+			{	
+				size_type x = i % size.x;
+				size_type y = i / size.x;
+				if (x >= size_.x || y >= size_.y)
+				{
+					data_[i] = default_value;
+				}
+				else
+				{
+					data_[i] = old_data[x + y * size_.x];
+				}
+			}
+			
+			// Correct the grid dimension. Origin and spacing remain constant.
+			dimension_.x *= (double)size.x / (double)size_.x;
+			dimension_.y *= (double)size.y / (double)size_.y;
+			size_ = size;
+		}
+		catch (std::bad_alloc&)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * (Size)sizeof(ValueType));
+		}
 	}
 
-	// getMax[x,y] returns the maximum possible coordinates for
-	// the rectangle, i.e. origin + size
-	template <class GridDataType>
-	BALL_INLINE 
-	float TRegularData2D<GridDataType>::getMaxX() const throw()
-	{
-		return upper_.x;
-	}
-
-	template <class GridDataType>
-	BALL_INLINE 
-	float TRegularData2D<GridDataType>::getMaxY() const throw()
-	{
-		return upper_.y;
-	}
-
-	// getMax[x,y] returns the maximum possible coordinates for
-	// the rectangle, i.e. origin + size
-	template <class GridDataType>
-	BALL_INLINE 
-	float TRegularData2D<GridDataType>::getMinX() const throw()
-	{
-		return origin_.x;
-	}
-
-	template <class GridDataType>
-	BALL_INLINE 
-	float TRegularData2D<GridDataType>::getMinY() const throw()
-	{
-		return origin_.y;
-	}
-
-	// getMax[x,y]Position returns the maximum grid position for the rectangle.
-	//.x point has position 0, getMax[x,y]Position therefore returns number_of_points
-	template <class GridDataType>
-	BALL_INLINE 
-	Size TRegularData2D<GridDataType>::getMaxXIndex() const
+	template <class ValueType>
+	void TRegularData2D<ValueType>::setOrigin(const typename TRegularData2D<ValueType>::CoordinateType& origin)
 		throw()
 	{
-		return number_of_points_x_ - 1;
-	}
-
-	template <class GridDataType>
-	BALL_INLINE 
-	Size TRegularData2D<GridDataType>::getMaxYIndex() const
-		throw()
-	{
-		return number_of_points_y_ - 1;
-	}
-
-	// getSize() returns the total number of grid points
-	template <class GridDataType>
-	BALL_INLINE 
-	Size TRegularData2D<GridDataType>::getSize() const
-		throw()
-	{
-		return number_of_grid_points_;
-	}
-
-	template <class GridDataType>
-	typename TRegularData2D<GridDataType>::GridIndex 
-	TRegularData2D<GridDataType>::getIndex(const Vector2& r) const 
-		throw(Exception::OutOfGrid)
-	{
-		return getIndex(r.x, r.y);
-	}
-
-	// get[x,y]Spacing returns the grid spacing, i.e. the distance
-	// between two grid points in the given direction
-	template <class GridDataType>
-	BALL_INLINE 
-	float TRegularData2D<GridDataType>::getXSpacing() const
-		throw()
-	{
-		return spacing_.x;
-	}
-
-	template <class GridDataType>
-	BALL_INLINE 
-	float TRegularData2D<GridDataType>::getYSpacing() const
-		throw()
-	{
-		return spacing_.y;
-	}
-
-	template <class GridDataType> 
-	BALL_INLINE
-	const Vector2& 
-		TRegularData2D<GridDataType>::getOrigin() const
-		throw()
-	{
-		return origin_;
-	}
-
-	template <class GridDataType> 
-	BALL_INLINE
-	Vector2& 
-		TRegularData2D<GridDataType>::getOrigin()
-		throw()
-	{
-		return origin_;
-	}
-
-	template <class GridDataType>
-	void TRegularData2D<GridDataType>::setOrigin(const Vector2& origin)
-		throw()
-	{
-		Vector2 diff = upper_ - origin_;
 		origin_ = origin;
-		upper_ = origin_ + diff;
 	}
 
-	template <class GridDataType>
-	void TRegularData2D<GridDataType>::setOrigin(float x, float y) 
-	 	throw()
-	{
-		Vector2 diff = upper_ - origin_;
-		origin_ = Vector2(x, y);
-		upper_ = origin_ + diff;
-	}
-
-	template <class GridDataType> 
-	const Vector2& 
-		TRegularData2D<GridDataType>::getDimension() const
-		throw()
-	{
-		return size_;
-	}
-
-	template <class GridDataType> 
-	Vector2& 
-		TRegularData2D<GridDataType>::getDimension()
-		throw()
-	{
-		return size_;
-	}
-
-	template <class GridDataType> 
+	template <class ValueType> 
 	BALL_INLINE
-	bool TRegularData2D<GridDataType>::has(float x, float y) const		
+	bool TRegularData2D<ValueType>::isInside(const typename TRegularData2D<ValueType>::CoordinateType& r) const		
 		throw()
 	{
-		if (x > upper_.x  ||	y > upper_.y  ||
-				x < origin_.x ||	y < origin_.y || !valid_)
-		{
-			return false;
-		}		
-
-		return true;
+		return ((r.x >= origin_.x) && (r.x <= (origin_.x + dimension_.x))
+						&& (r.y >= origin_.y) && (r.y <= (origin_.y + dimension_.y)));
 	}
 
-	template <class GridDataType> 
-	BALL_INLINE
-	bool TRegularData2D<GridDataType>::has(const Vector2& vector) const
-		throw()
-	{
-		if (vector.x > upper_.x  ||	vector.y > upper_.y  ||
-				vector.x < origin_.x ||	vector.y < origin_.y ||	!valid_)
-		{
-			return false;
-		}		
-
-		return true;
-	}
-
-	template <class GridDataType>
+	template <class ValueType>
 	BALL_INLINE 
-	typename TRegularData2D<GridDataType>::GridIndex 
-	TRegularData2D<GridDataType>::getIndex(float x, float y) const 
+	const ValueType& TRegularData2D<ValueType>::getData
+		(const typename TRegularData2D<ValueType>::IndexType& index) const
 		throw(Exception::OutOfGrid)
-	{
-		if (!has(x, y))
+	{	
+		size_type pos = index.x + index.y * size_.x;
+		if (pos >= data_.size())
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}				
-		
-		GridIndex	position;
-
-		position.x = (Position) ((x - origin_.x) / spacing_.x + 0.5);
-		position.y = (Position) ((y - origin_.y) / spacing_.y + 0.5);
-
-		return position;
+		return data_[pos];
 	}
 
-	template <class GridDataType>
+	template <class ValueType>
 	BALL_INLINE 
-	GridDataType* TRegularData2D<GridDataType>::getData(const Position i, const Position j) 
-		throw(Exception::OutOfGrid)
-	{
-		if (i >= number_of_points_x_ ||	j >= number_of_points_y_ || !valid_)
-		{
-			throw Exception::OutOfGrid(__FILE__, __LINE__);
-		}		
-
-		return &(data[i + j * number_of_points_x_ ]);
-	}
-
-	template <class GridDataType>
-	BALL_INLINE 
-	GridDataType* TRegularData2D<GridDataType>::getData(const Vector2& r) 
+	ValueType& TRegularData2D<ValueType>::getData(const typename TRegularData2D<ValueType>::IndexType& index)
 		throw(Exception::OutOfGrid)
 	{	
-		GridIndex	position = getIndex(r);
-		return getData(position.x, position.y);
-	}
-
-	template <class GridDataType>
-	BALL_INLINE 
-	GridDataType* TRegularData2D<GridDataType>::getData(const Position position) 
-		throw(Exception::OutOfGrid)
-	{
-		if (position > number_of_grid_points_)
+		size_type pos = index.x + index.y * size_.x;
+		if (pos >= data_.size())
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
-		} 
-		return &(data[position]);
+		}				
+		return data_[pos];
 	}
 
-	template <class GridDataType>
-	GridDataType& TRegularData2D<GridDataType>::operator[] (const Position position)
+	template <class ValueType>
+	BALL_INLINE 
+	const ValueType& TRegularData2D<ValueType>::getData(Position index) const
 		throw(Exception::OutOfGrid)
-	{
-		if (position > number_of_grid_points_)
+	{	
+		if (index >= data_.size())
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
-		} 
-		return *(getData(position));
+		}				
+		return data_[index];
 	}
 
-	template <class GridDataType>
-	GridDataType& TRegularData2D<GridDataType>::operator[](const Vector2& v)
-		throw(Exception::OutOfGrid)
-	{
-		return *(getData(v));
-	}
-
-	template <class GridDataType>
+	template <class ValueType>
 	BALL_INLINE 
-	Vector2 TRegularData2D<GridDataType>::getGridCoordinates
-		(const Position i, const Position j) const 
+	ValueType& TRegularData2D<ValueType>::getData(Position index)
+		throw(Exception::OutOfGrid)
+	{	
+		if (index >= data_.size())
+		{
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
+		}				
+		return data_[index];
+	}
+
+	template <class ValueType>
+	BALL_INLINE 
+	typename TRegularData2D<ValueType>::CoordinateType TRegularData2D<ValueType>::getCoordinates
+		(const TRegularData2D<ValueType>::IndexType& index) const 
 		throw(Exception::OutOfGrid)
 	{
-		if (i >= number_of_points_x_ ||	j >= number_of_points_y_)
+		if ((index.x >= size_.x) ||	(index.y >= size_.y))
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}		
 		
-		Vector2 r(origin_.x + i * spacing_.x,
-							origin_.y + j * spacing_.y);
+		CoordinateType r(origin_.x + index.x * spacing_.x,
+										 origin_.y + index.y * spacing_.y);
 
 		return r;
 	}
 
-	template <class GridDataType> 
+	template <class ValueType> 
 	BALL_INLINE 
-	Vector2 
-		TRegularData2D<GridDataType>::getGridCoordinates(const Position position) const 
+	typename TRegularData2D<ValueType>::CoordinateType
+	TRegularData2D<ValueType>::getCoordinates(Position position) const 
 		throw(Exception::OutOfGrid)
 	{
-		if (position >= number_of_grid_points_)
+		if (position >= data_.size())
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		} 
 		
-		Position x =  position %  number_of_points_x_;
-		Position y = (position % (number_of_points_x_ * number_of_points_y_)) / number_of_points_x_;
+		Position x = (Position)(position %  size_.x);
+		Position y = (Position)(position / size_.x);
 
-		Vector2 r( origin_.x + (float)x * spacing_.x,
-							origin_.y + (float)y * spacing_.y);
-
-		return r;
+		return CoordinateType(origin_.x + (double)x * spacing_.x,
+													origin_.y + (double)y * spacing_.y);
 	}
 
-	template <typename GridDataType>
+	template <typename ValueType>
 	BALL_INLINE
-	void TRegularData2D<GridDataType>::getRectangleIndices(const Vector2& vector,
-		Position& ll, Position& lr, Position& ul, Position& ur) const
+	void TRegularData2D<ValueType>::getEnclosingIndices
+		(const TRegularData2D<ValueType>::CoordinateType& r,
+		 Position& ll, Position& lr, Position& ul, Position& ur) const
 		throw(Exception::OutOfGrid)
 	{
-		if (!has(vector))
+		if (!isInside(r))
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}		
-		// calculate the grid indices of the lower left front corner
+
+		// Calculate the grid indices of the lower left front corner
 		// of the enclosing rectangle
-		GridIndex position;
-		position.x = (Position)((vector.x - origin_.x) / spacing_.x);
-		position.y = (Position)((vector.y - origin_.y) / spacing_.y);
+		IndexType position;
+		position.x = (Position)((r.x - origin_.x) / spacing_.x);
+		position.y = (Position)((r.y - origin_.y) / spacing_.y);
 		
-		// calculate the (linear) indices of the four rectangle corners
-		ll = position.x + number_of_points_x_ * position.y;
+		// Calculate the (linear) indices of the four rectangle corners
+		ll = position.x + size_.x * position.y;
 		lr = ll + 1;
-		ul = ll + number_of_points_x_;
+		ul = ll + size_.x;
 		ur = ul + 1;
 	}
 
-	template <typename GridDataType>
+	template <typename ValueType>
 	BALL_INLINE
-	void TRegularData2D<GridDataType>::getRectangleData(const Vector2& vector,
-		GridDataType& ll, GridDataType& lr, GridDataType& ul, GridDataType& ur) const
+	void TRegularData2D<ValueType>::getEnclosingValues
+		(const typename TRegularData2D<ValueType>::CoordinateType& r,
+		 ValueType& ll, ValueType& lr, ValueType& ul, ValueType& ur) const
 		throw(Exception::OutOfGrid)
 	{
-		if (!has(vector))
+		if (!isInside(r))
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}		
 		
 		// compute the four grid indices forming the enclosing rectangle
 		Position ll_id, lr_id, ul_id, ur_id;
-		getRectangleIndices(vector, ll_id, lr_id, ul_id, ur_id);
+		getEnclosingIndices(r, ll_id, lr_id, ul_id, ur_id);
 				
-		// retrieve the grid values
-		ll = data[ll_id];
-		lr = data[lr_id];
-		ul = data[ul_id];
-		ur = data[ur_id];
+		// Retrieve the grid values
+		ll = data_[ll_id];
+		lr = data_[lr_id];
+		ul = data_[ul_id];
+		ur = data_[ur_id];
 	}
 
-	template <typename GridDataType>
+	template <typename ValueType>
 	BALL_INLINE
-	GridDataType TRegularData2D<GridDataType>::getInterpolatedValue(const Vector2& vector) const
+	ValueType TRegularData2D<ValueType>::getInterpolatedValue
+		(const typename TRegularData2D<ValueType>::CoordinateType& r) const
 		throw(Exception::OutOfGrid)
 	{
-		if (!has(vector) || (number_of_points_x_ < 2) || (number_of_points_y_ < 2))
+		if (!isInside(r))
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}		
+		
+		return this->operator () (r);
+	}
 
-		Vector2 h(vector.x - origin_.x, vector.y - origin_.y);
+	template <typename ValueType>
+	BALL_INLINE
+	ValueType TRegularData2D<ValueType>::operator ()
+		(const typename TRegularData2D<ValueType>::CoordinateType& r) const
+		throw()
+	{
+		CoordinateType h(r - origin_);
 		Position x = (Position)(h.x / spacing_.x);
 		Position y = (Position)(h.y / spacing_.y);
 
 		// correct for numerical inaccuracies
-		if (x >= (number_of_points_x_ - 1))
+		if (x >= (size_.x - 1))
 		{
-			x = number_of_points_x_ - 2;
+			x = size_.x - 2;
 		}
-		if (y >= (number_of_points_y_ - 1))
+		if (y >= (size_.y - 1))
 		{
-			y = number_of_points_y_ - 2;
+			y = size_.y - 2;
 		}
 
-		Size Nx = number_of_points_x_;
-		Size l = x + Nx * y;
-		Vector2 r_0(getGridCoordinates((Position)l));
-		double dx = 1.0 - ((vector.x - r_0.x) / getXSpacing());
-		double dy = 1.0 - ((vector.y - r_0.y) / getYSpacing());
+		Size l = x + size_.x * y;
+		CoordinateType r_0(origin_.x + (double)x * spacing_.x,
+											 origin_.y + (double)y * spacing_.y);
 
-		return  data[l] * dx * dy
-					+ data[l + 1] * (1.0 - dx) * dy
-					+ data[l + Nx] * dx * (1.0 - dy)
-					+ data[l + Nx + 1] * (1.0 - dx) * (1.0 - dy);
+		double dx = 1.0 - ((r.x - r_0.x) / spacing_.x);
+		double dy = 1.0 - ((r.y - r_0.y) / spacing_.y);
+
+		return  data_[l] * dx * dy
+					+ data_[l + 1] * (1.0 - dx) * dy
+					+ data_[l + size_.x] * dx * (1.0 - dy)
+					+ data_[l + size_.x + 1] * (1.0 - dx) * (1.0 - dy);
 	}
 
-	template <typename GridDataType>
-	void TRegularData2D<GridDataType>::clear() throw()
+	template <typename ValueType>
+	BALL_INLINE
+	typename TRegularData2D<ValueType>::IndexType TRegularData2D<ValueType>::getLowerIndex
+		(const typename TRegularData2D<ValueType>::CoordinateType& r) const
+		throw(Exception::OutOfGrid)
 	{
-		delete [] data;
-		data = 0;
-
-		origin_		=
-		size_			=
-		spacing_  =
-		upper_		=	Vector2(0, 0);
-
-		number_of_points_x_ =
-		number_of_points_y_ =
-		number_of_grid_points_ = 0;
-
-		valid_ = false;
-	}
-
-	template <typename GridDataType>
-	GridDataType TRegularData2D<GridDataType>::getMinValue() const throw()
-	{
-		if (number_of_grid_points_ == 0)
+		if (!isInside(r))
 		{
-			return 0;
-		}
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
+		}		
 		
-		GridDataType min = data[0];
-		for (Position i = 0; i < number_of_grid_points_; i++)
-		{
-			if (data[i] < min)
-			{
-				min = data[i];
-			}
-		}
-		return min;
-	}
-	
-	template <typename GridDataType>
-	GridDataType TRegularData2D<GridDataType>::getMaxValue() const throw()
-	{
-		if (number_of_grid_points_ == 0)
-		{
-			return 0.0;
-		}
+		static IndexType position;
+		position.x = (Position)((r.x - origin_.x) / spacing_.x);
+		position.y = (Position)((r.y - origin_.y) / spacing_.y);
 		
-		GridDataType max = data[0];
-		for (Position i = 0; i < number_of_grid_points_; i++)
-		{
-			if (data[i] > max)
-			{
-				max = data[i];
-			}
-		}
-		return max;
+		return position;
 	}
-	
-	template <typename GridDataType>
-	void TRegularData2D<GridDataType>::rescale(const GridDataType& minValue, const GridDataType& maxValue) 
+
+	template <typename ValueType>
+	BALL_INLINE
+	typename TRegularData2D<ValueType>::IndexType TRegularData2D<ValueType>::getClosestIndex
+		(const typename TRegularData2D<ValueType>::CoordinateType& r) const
+		throw(Exception::OutOfGrid)
+	{
+		if (!isInside(r))
+		{
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
+		}		
+		
+		static IndexType position;
+		position.x = (Position)((r.x - origin_.x) / spacing_.x + 0.5);
+		position.y = (Position)((r.y - origin_.y) / spacing_.y + 0.5);
+		
+		return position;
+	}
+
+	template <typename ValueType>
+	BALL_INLINE
+	const ValueType& TRegularData2D<ValueType>::getClosestValue
+		(const typename TRegularData2D<ValueType>::CoordinateType& r) const
+		throw(Exception::OutOfGrid)
+	{
+		if (!isInside(r))
+		{
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
+		}		
+		
+		static IndexType position;
+		position.x = (Position)((r.x - origin_.x) / spacing_.x + 0.5);
+		position.y = (Position)((r.y - origin_.y) / spacing_.y + 0.5);
+
+		return operator [] (position);
+	}
+
+	template <typename ValueType>
+	BALL_INLINE
+	ValueType& TRegularData2D<ValueType>::getClosestValue
+		(const typename TRegularData2D<ValueType>::CoordinateType& r)
+		throw(Exception::OutOfGrid)
+	{
+		if (!isInside(r))
+		{
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
+		}		
+		
+		static IndexType position;
+		position.x = (Position)((r.x - origin_.x) / spacing_.x + 0.5);
+		position.y = (Position)((r.y - origin_.y) / spacing_.y + 0.5);
+
+		return operator [] (position);
+	}
+
+	template <typename ValueType>
+	void TRegularData2D<ValueType>::clear() throw()
+	{
+		data_.resize(0);
+		
+		origin_.set(0.0);
+		dimension_.set(0.0, 0.0);
+		size_.x = 0;
+		size_.y = 0;
+		spacing_.set(1.0, 1.0);
+	}
+
+	template <typename ValueType>	
+	bool TRegularData2D<ValueType>::operator == (const TRegularData2D<ValueType>& data) const 
 		throw()
 	{
-		GridDataType new_min;
-		GridDataType new_max;
-		if (maxValue > minValue)
-		{
-			new_min = minValue;
-			new_max = maxValue;
-		}	
-		else
-		{
-			new_min = maxValue;
-			new_max = minValue;
-		}
-		
-		GridDataType old_min = getMinValue();
-		GridDataType old_max = getMaxValue();
-
-		GridDataType shift_factor(old_min - new_min);
-		GridDataType resize_factor = new_max / (old_max - shift_factor);
-		
-		for (Position i = 0; i < number_of_grid_points_; i++)
-		{
-			data[i] -= shift_factor;
-			data[i] *= resize_factor;
-		}
-	}
-		
-	template <typename GridDataType>	
-	bool TRegularData2D<GridDataType>::operator == (const TRegularData2D<GridDataType>& grid) const 
-		throw()
-	{
-		if ((!valid_)						|| 
-				(!grid.valid_)			||
-				(number_of_points_x_ != grid.number_of_points_x_) ||
-				(number_of_points_y_ != grid.number_of_points_y_) ||
-				(origin_						 != grid.origin_						)	||
-				(spacing_						 != grid.spacing_						)	)
-		{
-			return false;
-		}
-
-		for (Position pos = 0; pos < number_of_grid_points_; pos++)
-		{
-			if (!(data[pos] == grid.data[pos]))
-			{
-				return false;
-			}
-		}
-
-		return true;
+		return ((origin_ == data.origin_)
+						&& (dimension_ == data.dimension_)
+						&& (size_.x == data.size_.x)
+						&& (size_.y == data.size_.y)
+						&& (data_ == data.data_));
 	}	
 
-	template <typename GridDataType>	
-	bool TRegularData2D<GridDataType>::operator != (const TRegularData2D<GridDataType>& grid) const 
-		throw()
-	{
-		return !(*this == grid);
+
+	/** @name Stream I/O */
+	//@{
+	/// Output operator
+	template <typename ValueType>
+  std::ostream& operator << (std::ostream& os, const TRegularData2D<ValueType>& data)
+    throw()
+  {
+    // Write the grid origin, dimension, and number of grid points
+    os << data.getOrigin().x << " " << data.getOrigin().y
+      << std::endl
+      << data.getOrigin().x + data.getDimension().x << " "
+      << data.getOrigin().y + data.getDimension().y
+      << std::endl
+      << data.getSize().x - 1 << " " << data.getSize().y - 1
+      << std::endl;
+
+    // Write the array contents.
+    std::copy(TRegularData2D<ValueType>::data_.begin(), TRegularData2D<ValueType>::data_.end(), std::ostream_iterator<ValueType>(os, "\n"));
+    return os;
 	}
 
+	/// Input operator
+	template <typename ValueType>
+  std::istream& operator >> (std::istream& is, TRegularData2D<ValueType>& grid)
+    throw()
+  {
+    typename TRegularData2D<ValueType>::CoordinateType origin;
+    typename TRegularData2D<ValueType>::CoordinateType dimension;
+    typename TRegularData2D<ValueType>::IndexType size;
+
+    is >> origin.x >> origin.y;
+    is >> dimension.x >> dimension.y;
+    is >> size.x >> size.y;
+		
+		dimension -= origin;
+		size += TRegularData2D<ValueType>::IndexType(1);
+
+    grid.resize(origin, dimension, size);
+		std::copy(std::istream_iterator<ValueType>(is), 
+							std::istream_iterator<ValueType>(is)+grid.size(), 
+							grid.begin());
+		//		std::copy_n(std::istream_iterator<ValueType>(is), grid.size(), grid.begin());
+		
+		return is;
+	}
+	//@}
+
+	template <typename ValueType>
+	void TRegularData2D<ValueType>::binaryWrite(const String& filename) const
+		throw(Exception::FileNotFound)
+	{
+		File outfile(filename, std::ios::out|std::ios::binary);
+		if (!outfile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+
+		BinaryFileAdaptor<BlockValueType> adapt_block;
+		BinaryFileAdaptor<ValueType>			adapt_single;
+		
+		// write all information we need to recreate the grid
+		BinaryFileAdaptor<CoordinateType> adapt_coordinate;
+		BinaryFileAdaptor<Size> 					adapt_size;
+
+		adapt_size.setData(data_.size());
+		outfile << adapt_size;
+		
+		adapt_coordinate.setData(origin_);
+		outfile << adapt_coordinate;
+
+		adapt_coordinate.setData(dimension_);
+		outfile << adapt_coordinate;
+
+		adapt_coordinate.setData(spacing_);
+		outfile << adapt_coordinate;
+
+		BinaryFileAdaptor<IndexType> adapt_index;
+		adapt_index.setData(size_);
+		outfile << adapt_index;
+	
+		// we slide a window of size 1024 over our data
+		Index window_pos = 0;
+		
+		while ( ((int)data_.size() - (1024 + window_pos)) >= 0 )
+		{
+			adapt_block.setData(* (BlockValueType*)&(data_[window_pos]));
+			outfile << adapt_block;
+			window_pos+=1024;
+		}
+
+		// now we have to write the remaining data one by one
+		for (Size i=window_pos; i<data_.size(); i++)
+		{
+			adapt_single.setData(data_[i]);
+			outfile << adapt_single;
+		}
+
+		// that's it. I hope...
+		outfile.close();
+	}
+
+	template <typename ValueType>
+	void TRegularData2D<ValueType>::binaryRead(const String& filename)
+		throw(Exception::FileNotFound)
+	{
+		File infile(filename, std::ios::in|std::ios::binary);
+		if (!infile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		
+		BinaryFileAdaptor< BlockValueType > adapt_block;
+		BinaryFileAdaptor< ValueType >		  adapt_single;
+		
+		// read all information we need to recreate the grid
+		BinaryFileAdaptor<CoordinateType> adapt_coordinate;
+		BinaryFileAdaptor<Size> 					adapt_size;
+
+		infile >> adapt_size;
+		Size new_size = adapt_size.getData();
+	
+		infile >> adapt_coordinate;
+		origin_ = adapt_coordinate.getData();
+
+		infile >> adapt_coordinate;
+		dimension_ = adapt_coordinate.getData();
+
+		infile >> adapt_coordinate;
+		spacing_ = adapt_coordinate.getData();
+
+		BinaryFileAdaptor<IndexType> adapt_index;
+		infile >> adapt_index;
+		size_ =  adapt_index.getData();
+	
+		data_.resize(new_size);
+
+		// we slide a window of size 1024 over our data
+		Index window_pos = 0;
+		
+		while ( ((int)data_.size() - (1024 + window_pos)) >= 0 )
+		{
+			infile >> adapt_block;
+			*(BlockValueType*)(&(data_[window_pos])) = adapt_block.getData();
+			/*
+			for (Size i=0; i<1024; i++)
+			{
+				data_[i+window_pos] = adapt_block.getData().bt[i];
+			}
+			*/
+			window_pos+=1024;
+		}
+
+		// now we have to read the remaining data one by one
+		for (Size i=window_pos; i<data_.size(); i++)
+		{
+			infile >> adapt_single;
+			data_[i] = adapt_single.getData();
+		}
+
+		// that's it. I hope...
+		infile.close();
+	}	
  } // namespace BALL
 
-#endif // BALL_DATATYPE_TRegularData2D_H
+#endif // BALL_DATATYPE_TREGULARDATA2D_H

@@ -1,808 +1,208 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bidirectionalIterator.h,v 1.16 2002/12/12 09:46:22 oliver Exp $ 
+// $Id: bidirectionalIterator.h,v 1.31 2004/02/18 18:19:01 anhi Exp $ 
+//
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 
-#ifndef BALL_CONCEPT_BASEITERATOR_H
-#	include <BALL/CONCEPT/baseIterator.h>
-#endif
-
-#ifndef BALL_CONCEPT_PREDICATE_H
-#	include <BALL/CONCEPT/predicate.h>
+#ifndef BALL_CONCEPT_FORWARDITERATOR_H
+#	include <BALL/CONCEPT/forwardIterator.h>
 #endif
 
 namespace BALL 
 {
 
 	/**	@name	Bidirectional Iterators
+	  	\ingroup  ConceptsIterators
 	*/
 	//@{
 
-	/**	@name Bidirectional Iterator.
-			{\bf Definition:} \URL{BALL/CONCEPT/bidirectionalIterator.h}
-	*/
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	class BidirectionalIterator
-		: public BaseIterator<Container, DataType, Position, Traits>
-	{
-		public:
-
-		BALL_CREATE(BidirectionalIterator)
-
-		/** @name Typedefs
-		 */
-		//@{
-
-		/** Tag this iterator as a bidirectional iterator according to the STL scheme
-		 */
-		typedef std::bidirectional_iterator_tag iterator_category;
-		
-		//@}
-		/** @name Constructors and Destructor
-		 */
-		//@{
-
-		/// Default constructor
-		BidirectionalIterator()
-			throw();
-	
-		/// Copy constructor
-		BidirectionalIterator(const BidirectionalIterator& iterator)
-			throw();
-
-		/// Detailed constructor
-		BidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw()
-			:	BaseIterator<Container, DataType, Position, Traits>(iterator)
-		{
-		}
-
-
-		/// Destructor
-		~BidirectionalIterator()
-			throw();
-
-		//@}
-		/** @name Iterator methods
-		 */
-		//@{
-
-		/** BALL iterator validity check.
-				@return true if the iterator is valid
-		*/
-		bool operator + () const
-			throw();
-
-		/** Move the iterator to the beginning of the container.
-		 */
-		void toBegin()
-			throw(Exception::InvalidIterator);
-
-		/** Test whether the iterator points to the first element in the
-				container.
-		*/
-		bool isBegin() const
-			throw(Exception::InvalidIterator);
-
-		/** Move the iterator to the end of the container.
-		 */
-		void toEnd()
-			throw(Exception::InvalidIterator);
-
-		/** Test whether the iterator points behind the last element in the container.
-		*/
-		bool isEnd() const
-			throw(Exception::InvalidIterator);
-
-		/** Move the iterator to the "reverse" beginning of the container.
-		 */
-		void toRBegin()
-			throw(Exception::InvalidIterator);
-
-		/** Test whether the iterator points before the first element of the container.
-		*/
-		bool isRBegin() const
-			throw(Exception::InvalidIterator);
-
-		/** Move the iterator before the first element of the container.
-		 */
-		void toREnd()
-			throw(Exception::InvalidIterator);
-
-		/** Test whether the iterator points before the first element of the container. 
-		*/
-		bool isREnd() const
-			throw(Exception::InvalidIterator);
-
-		/** Advance the iterator.
-		 */
-		BidirectionalIterator& operator ++ ()
-			throw(Exception::InvalidIterator);
-
-		/** Advance the iterator (postfix notation).
-		*/
-		BidirectionalIterator operator ++ (int)
-			throw(Exception::InvalidIterator);
-
-		/** Advance the iterator in reverse direction.
-		 */
-		BidirectionalIterator& operator -- ()
-			throw(Exception::InvalidIterator);
-
-		/** Advance the iterator in reverse direction (postfix notation).
-		 */
-		BidirectionalIterator operator -- (int)
-			throw(Exception::InvalidIterator);
-
-		/** Return a new iterator.
-				It will point to the first item of the container. 
-		 */
-		static BidirectionalIterator begin(const Container& container)
-			throw(Exception::InvalidIterator);
-
-		/** Return a new iterator.
-				It will point to the position after the last element.
-		 */
-		static BidirectionalIterator end(const Container& container)
-			throw(Exception::InvalidIterator);
-
-		/** Return a new iterator.
-				It will point to the last element.
-		 */
-		static BidirectionalIterator rbegin(const Container& container)
-			throw(Exception::InvalidIterator);
-
-		/** Return a new iterator.
-				It will point to the positon before the first element.
-		 */
-		static BidirectionalIterator rend(const Container &container)
-			throw(Exception::InvalidIterator);
-
-		/** Find the previous item that is satisfying the predicate
-		*/
-		DataType* findPrevious(const UnaryPredicate<DataType>& predicate)
-			throw(Exception::InvalidIterator);
-
-		/** Find the next position that is satisfying the predicate
-		*/
-		DataType* findNext(const UnaryPredicate<DataType>& predicate)
-			throw(Exception::InvalidIterator);
-
-		//@}
-
-		protected:
-
-		/** @name Protected methods
-		*/
-		//@{
-
-		/*_ Detailed ctor which is for internal use only.
-		*/
-		BidirectionalIterator(const Container& container)
-			throw();
-
-		//@}
-
-	};
-
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits>::BidirectionalIterator()
-		throw()
-		: BaseIterator<Container, DataType, Position, Traits>()
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits>
-	::BidirectionalIterator(const BidirectionalIterator& iterator)
-		throw()
-		:	BaseIterator<Container, DataType, Position, Traits>(iterator)
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits>::~BidirectionalIterator()
-		throw()
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BidirectionalIterator<Container, DataType, Position, Traits>::operator + () const
-		throw()
-	{
-		return traits_ptr_->isValid();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	void BidirectionalIterator<Container, DataType, Position, Traits>::toBegin()
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->toBegin();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BidirectionalIterator<Container, DataType, Position, Traits>::isBegin() const
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		return traits_ptr_->isBegin();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	void BidirectionalIterator<Container, DataType, Position, Traits>::toEnd()
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->toEnd();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BidirectionalIterator<Container, DataType, Position, Traits>::isEnd() const
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		return traits_ptr_->isEnd();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	void BidirectionalIterator<Container, DataType, Position, Traits>::toRBegin()
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->toRBegin();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BidirectionalIterator<Container, DataType, Position, Traits>::isRBegin() const
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		return traits_ptr_->isRBegin();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	void BidirectionalIterator<Container, DataType, Position, Traits>::toREnd()
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->toREnd();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BidirectionalIterator<Container, DataType, Position, Traits>::isREnd() const
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		return traits_ptr_->isREnd();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits>& 
-		BidirectionalIterator<Container, DataType, Position, Traits>::operator ++ ()
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-		 throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->forward();
-		return *this;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits> 
-		BidirectionalIterator<Container, DataType, Position, Traits>::operator ++ (int)
-		throw(Exception::InvalidIterator)
-	{
-		BidirectionalIterator iterator(*this);
-		++(*this);
-		return iterator;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits>& 
-		BidirectionalIterator<Container, DataType, Position, Traits>::operator -- ()
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-		 throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->backward();
-		return *this;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits> 
-		BidirectionalIterator<Container, DataType, Position, Traits>::operator -- (int)
-		throw(Exception::InvalidIterator)
-	{
-		BidirectionalIterator iterator(*this);
-		--(*this);
-		return iterator;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits> 
-		BidirectionalIterator<Container, DataType, Position, Traits>::begin(const Container& container)
-		throw(Exception::InvalidIterator)
-	{
-		BidirectionalIterator iterator(container);
-		iterator.toBegin();
-		return iterator;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits>
-  	BidirectionalIterator<Container, DataType, Position, Traits>::end(const Container& container)
-		throw(Exception::InvalidIterator)
-	{
-		BidirectionalIterator iterator(container);
-		iterator.toEnd();
-		return iterator;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits> 
-		BidirectionalIterator<Container, DataType, Position, Traits>::rbegin(const Container& container)
-		throw(Exception::InvalidIterator)
-	{
-		BidirectionalIterator iterator(container);
-		iterator.toRBegin();
-		return iterator;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits> 
-		BidirectionalIterator<Container, DataType, Position, Traits>::rend(const Container &container)
-		throw(Exception::InvalidIterator)
-	{
-		BidirectionalIterator iterator(container);
-		iterator.toREnd();
-		return iterator;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits>::BidirectionalIterator(const Container& container)
-		throw()
-		:	BaseIterator<Container, DataType, Position, Traits>(container)
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* BidirectionalIterator<Container, DataType, Position, Traits>
-		::findPrevious(const UnaryPredicate<DataType>& predicate)
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		for(traits_ptr_->backward(); traits_ptr_->isREnd() == false;
-				traits_ptr_->backward())
-		{
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
-			{
-				return (DataType *)&(traits_ptr_->getData());
-			}
-		}
-
-		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* BidirectionalIterator<Container, DataType, Position, Traits>
-		::findNext(const UnaryPredicate<DataType>& predicate)
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		for(traits_ptr_->forward(); traits_ptr_->isEnd() == false;
-				traits_ptr_->forward())
-		{
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
-			{
-				return (DataType *)&(traits_ptr_->getData());
-			}
-		}
-
-		return 0;
-	}
-
-
-
 	/**	Constant Bidirectional Iterator.
-			{\bf Definition:} \URL{BALL/CONCEPT/bidirectionalIterator.h}
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstBidirectionalIterator
-		: public ConstBaseIterator<Container, DataType, Position, Traits>
+		: public ConstForwardIterator<Container, DataType, Position, Traits>
 	{
 		public:
-
-		BALL_CREATE(ConstBidirectionalIterator)
 
 		/** @name Typedefs
 		 */
 		//@{
 
-		/** Tag this iterator as a bidirectional iterator according to the STL
-				scheme
-		 */
-		typedef ::std::bidirectional_iterator_tag iterator_category;
-
+		///
+		typedef std::bidirectional_iterator_tag iterator_category;
+		// convenience typedef
+		typedef ConstForwardIterator<Container, DataType, Position, Traits> Base;		
 		//@}
 
 		/** @name Constructors and destructor.
 		 */
 		//@{
 
-		/** Constructor
-		 */
-		ConstBidirectionalIterator()
-			throw();
+		///
+		BALL_INLINE ConstBidirectionalIterator() throw() {}
 	
-		/** Copy constructor
-		 */
-		ConstBidirectionalIterator(const ConstBidirectionalIterator& iterator)
-			throw();
-
-		/** Detailed constructor
-		 */
-		ConstBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator)
-			throw()
-			:	ConstBaseIterator <Container, DataType, Position, Traits>(iterator)
+		///
+		BALL_INLINE ConstBidirectionalIterator(const ConstBidirectionalIterator& iterator) throw()
+			:	Base(iterator)
 		{
 		}
 
-
-		/** Destructor
-		 */
-		~ConstBidirectionalIterator()
-			throw();
-
+		///
+		BALL_INLINE ~ConstBidirectionalIterator() throw() {}
 		//@}
+
 		/** @name Iterator methods
 		 */
 		//@{
 
-		/** BALL iterator validity check.
-				@return true if the iterator is valid
-		*/
-		bool operator + () const
-			throw(Exception::InvalidIterator);
+		/// Move the iterator to the beginning of the container
+		BALL_INLINE void toBegin() throw(Exception::Precondition);
 
-		/** Move the iterator to the beginning of the container.
-		 */
-		void toBegin()
-			throw(Exception::InvalidIterator);
+		/// Check whether the iterator points to the item at the beginning of the container
+		BALL_INLINE bool isBegin() const throw() { return Base::getTraits().isBegin(); }
 
-		/** Check whether the iterator points to the item at the beginning of the container.
-		*/
-		bool isBegin() const
-			throw(Exception::InvalidIterator);
+		/// Move the iterator to the position after the last item of the container
+		void toEnd() throw(Exception::Precondition);
 
-		/** Move the iterator to the position after the last item of the container.
-		*/
-		void toEnd()
-			throw(Exception::InvalidIterator);
+		/// Check whether the iterator points to the position after the last item of the container.
+		BALL_INLINE bool isEnd() const throw() { return Base::getTraits().isEnd(); }
 
-		/** Check whether the iterator points to the position after the last item of the container.
-		*/
-		bool isEnd() const
-			throw(Exception::InvalidIterator);
+		/// Move the iterator to the "reverse" beginning of the container
+		void toRBegin() throw(Exception::Precondition);
 
-		/** Move the iterator to the "reverse" beginning of the container.
-		*/
-		void toRBegin()
-			throw(Exception::InvalidIterator);
+		/// Test whether the iterator points to the "reverse" first element	of the container
+		BALL_INLINE bool isRBegin() const throw() { return Base::getTraits().isRBegin(); }
 
-		/** Test whether the iterator points to the "reverse" first element
-				of the container.
-		*/
-		bool isRBegin() const
-			throw(Exception::InvalidIterator);
+		/// Move the iterator to the position before the first element
+		void toREnd()	throw(Exception::Precondition);
 
-		/** Move the iterator to the position before the first element.
-		*/
-		void toREnd()
-			throw(Exception::InvalidIterator);
+		/// Test wheter the iterator points to the position before the first element
+		BALL_INLINE bool isREnd() const throw() { return Base::getTraits().isREnd(); }
 
-		/** Test wheter the iterator points to the position before the first element.
-		*/
-		bool isREnd() const
-			throw(Exception::InvalidIterator);
+		/// Increment operator
+		BALL_INLINE ConstBidirectionalIterator& operator ++ () throw(Exception::Precondition);
 
-		/** Advance the iterator.
-		*/
-		ConstBidirectionalIterator& operator ++ ()
-			throw(Exception::InvalidIterator);
+		/// Postfix increment operator
+		BALL_INLINE ConstBidirectionalIterator operator ++ (int) throw(Exception::Precondition);
 
-		/** Advance the iterator (postfix notation).
-		*/
-		ConstBidirectionalIterator operator ++ (int)
-			throw(Exception::InvalidIterator);
+		/// Decrement operator
+		BALL_INLINE ConstBidirectionalIterator& operator -- () throw(Exception::Precondition);
 
-		/** Advance the iterator in reverse direction.
-		*/
-		ConstBidirectionalIterator& operator -- ()
-			throw(Exception::InvalidIterator);
+		/// Postfix decrement operator
+		BALL_INLINE ConstBidirectionalIterator operator -- (int) throw(Exception::Precondition);
 
-		/** Advance the iterator in reverse direction (postfix notation).
-		*/
-		ConstBidirectionalIterator operator -- (int)
-			throw(Exception::InvalidIterator);
+		/// Return an iterator pointingto the first item of the container
+		static ConstBidirectionalIterator begin(const Container& container) throw(Exception::Precondition);
 
-		/** Return a new iterator.
-				It will point to the first item of the container.
-		*/
-		static ConstBidirectionalIterator begin(const Container &container)
-			throw(Exception::InvalidIterator);
+		/// Return an iterator pointing to the position after the last element.
+		static ConstBidirectionalIterator end(const Container& container) throw(Exception::Precondition);
 
-		/** Return a new iterator.
-				It will point to the position after the last element.
-		*/
-		static ConstBidirectionalIterator end(const Container& container)
-			throw(Exception::InvalidIterator);
+		/// Return an iterator pointing to the last element
+		static ConstBidirectionalIterator rbegin(const Container& container) throw(Exception::Precondition);
 
-		/** Return a new iterator.
-				It will point to the last element.
-		*/
-		static ConstBidirectionalIterator rbegin(const Container& container)
-			throw(Exception::InvalidIterator);
-
-		/** Return a new iterator.
-				It will point to the positon before the first element.
-		*/
-		static ConstBidirectionalIterator rend(const Container& container)
-			throw(Exception::InvalidIterator);
-
-		/** Find the previous position that is satisfying the predicate
-		*/
-		const DataType* findPrevious(const UnaryPredicate<DataType>& predicate)
-					throw(Exception::InvalidIterator);
-
-		/** Find the next position that is satisfying the predicate
-		*/
-		const DataType* findNext(const UnaryPredicate<DataType>& predicate)
-					throw(Exception::InvalidIterator);
-
+		/// Return an iterator pointing to the positon before the first element
+		static ConstBidirectionalIterator rend(const Container& container) throw(Exception::Precondition);
 		//@}
 
 		protected:
 
-		/** @name Protected methods
-		*/
-		//@{
-
-		/*_ Detailed ctor which is for internal use only
-		*/
-		ConstBidirectionalIterator(const Container& container)
-			throw();
-
-		//@}
-
+		/// Construct an iterator bound to a specific container
+		BALL_INLINE ConstBidirectionalIterator(const Container& container) throw()
+			:	Base(container)
+		{
+		}
 	};
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBidirectionalIterator<Container, DataType, Position, Traits>::ConstBidirectionalIterator()
-		throw()
-		:	ConstBaseIterator<Container, DataType, Position, Traits>()
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBidirectionalIterator<Container, DataType, Position, Traits>
-	::ConstBidirectionalIterator(const ConstBidirectionalIterator& iterator)
-		throw()
-		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
-	{
-	}
-
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBidirectionalIterator<Container, DataType, Position, Traits>::~ConstBidirectionalIterator()
-		throw()
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator + () const
-		throw(Exception::InvalidIterator)
-	{
-		return traits_ptr_->isValid();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toBegin()
-		throw(Exception::InvalidIterator)
+		throw(Exception::Precondition)
 	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->toBegin();
+		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot set unbound iterator to begin")
+		Base::getTraits().toBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool ConstBidirectionalIterator<Container, DataType, Position, Traits>::isBegin() const
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		return traits_ptr_->isBegin();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toEnd()
-		throw(Exception::InvalidIterator)
+		throw(Exception::Precondition)
 	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->toEnd();
+		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot set unbound iterator to end")
+		Base::getTraits().toEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool ConstBidirectionalIterator<Container, DataType, Position, Traits>::isEnd() const
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		return traits_ptr_->isEnd();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toRBegin()
-		throw(Exception::InvalidIterator)
+		throw(Exception::Precondition)
 	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->toRBegin();
+		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot set unbound iterator to reverse begin")
+		Base::getTraits().toRBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool ConstBidirectionalIterator<Container, DataType, Position, Traits>::isRBegin() const
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		return traits_ptr_->isRBegin();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	void ConstBidirectionalIterator<Container, DataType, Position, Traits>::toREnd()
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->toREnd();
+		throw(Exception::Precondition)
+	{	
+		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot set unbound iterator to reverse end")
+		Base::getTraits().toREnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool ConstBidirectionalIterator<Container, DataType, Position, Traits>::isREnd() const
-		throw(Exception::InvalidIterator)
-	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		return traits_ptr_->isREnd();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits>& 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator ++ ()
-		throw(Exception::InvalidIterator)
+		throw(Exception::Precondition)
 	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		traits_ptr_->forward();
+		BALL_PRECONDITION_EXCEPTION(Base::getTraits().isValid(), "cannot increment an invalid iterator")
+		Base::getTraits().forward();
 		return *this;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator ++ (int)
-		throw(Exception::InvalidIterator)
+		throw(Exception::Precondition)
 	{
+		BALL_PRECONDITION_EXCEPTION(Base::getTraits().isValid(), "cannot increment an invalid iterator")
 		ConstBidirectionalIterator iterator(*this);
 		++(*this);
 		return iterator;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits>& 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator -- ()
-		throw(Exception::InvalidIterator)
+		throw(Exception::Precondition)
 	{
-		if (traits_ptr_->isSingular())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-		traits_ptr_->backward();
+		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot decrement unbound iterator")
+		Base::getTraits().backward();
 		return *this;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator -- (int)
-		throw(Exception::InvalidIterator)
+		throw(Exception::Precondition)
 	{
+		BALL_PRECONDITION_EXCEPTION(!Base::getTraits().isSingular(), "cannot decrement an unbound iterator")
 		ConstBidirectionalIterator iterator(*this);
 		--(*this);
 		return iterator;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
-		ConstBidirectionalIterator<Container, DataType, Position, Traits>::begin(const Container &container)
-		throw(Exception::InvalidIterator)
+		ConstBidirectionalIterator<Container, DataType, Position, Traits>::begin(const Container& container)
+		throw(Exception::Precondition)
 	{
 		ConstBidirectionalIterator iterator(container);
 		iterator.toBegin();
@@ -810,9 +210,10 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::end(const Container& container)
-		throw(Exception::InvalidIterator)
+		throw(Exception::Precondition)
 	{
 		ConstBidirectionalIterator iterator(container);
 		iterator.toEnd();
@@ -820,9 +221,10 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::rbegin(const Container& container)
-		throw(Exception::InvalidIterator)
+		throw(Exception::Precondition)
 	{
 		ConstBidirectionalIterator iterator(container);
 		iterator.toRBegin();
@@ -830,65 +232,192 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
 	ConstBidirectionalIterator<Container, DataType, Position, Traits> 
 		ConstBidirectionalIterator<Container, DataType, Position, Traits>::rend(const Container& container)
-		throw(Exception::InvalidIterator)
+		throw(Exception::Precondition)
 	{
 		ConstBidirectionalIterator iterator(container);
 		iterator.toREnd();
 		return iterator;
 	}
 
+	/// Mutable bidirectional iterator
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBidirectionalIterator<Container, DataType, Position, Traits>
-	::ConstBidirectionalIterator(const Container& container)
+	class BidirectionalIterator
+		: public ConstBidirectionalIterator<Container, DataType, Position, Traits>
+	{
+		public:
+
+		/** @name Typedefs
+		 */
+		//@{
+		
+		///
+    typedef DataType& reference;
+		///
+    typedef DataType* pointer;
+		// convenience typedef
+		typedef ConstBidirectionalIterator<Container, DataType, Position, Traits> Base;
+		//@}
+
+		/** @name Constructors and Destructor
+		 */
+		//@{
+
+		/// Default constructor
+		BALL_INLINE BidirectionalIterator() throw() {}
+	
+		/// Copy constructor
+		BALL_INLINE BidirectionalIterator(const BidirectionalIterator& iterator)
+			throw()
+			:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
+
+		/// Destructor
+		BALL_INLINE ~BidirectionalIterator() throw() {}
+
+		//@}
+
+		/** @name Iterator methods
+		 */
+		//@{
+
+		/// Dereferentiation
+		BALL_INLINE reference operator * () const throw() { return (reference)Base::getTraits().getData(); }
+
+		/// Pointer dereferentiation
+		BALL_INLINE pointer operator -> () const throw() { return (pointer)&Base::getTraits().getData(); }
+
+		/// Increment operator
+		BALL_INLINE BidirectionalIterator& operator ++ ()	throw(Exception::Precondition);
+
+		/// Postfix increment operator
+		BALL_INLINE BidirectionalIterator operator ++ (int) throw(Exception::Precondition);
+
+		/// Decrement operator
+		BALL_INLINE BidirectionalIterator& operator -- ()	throw(Exception::Precondition);
+
+		/// Postfix decrement operator
+		BALL_INLINE BidirectionalIterator operator -- (int) throw(Exception::Precondition);
+
+		/// Return an iterator pointing to the first item of the container
+		static BidirectionalIterator begin(const Container& container)
+			throw(Exception::Precondition);
+
+		/// Return an iterator pointing to the position after the last element
+		static BidirectionalIterator end(const Container& container)
+			throw(Exception::Precondition);
+
+		/// Return an iterator pointing to the last element.
+		static BidirectionalIterator rbegin(const Container& container)
+			throw(Exception::Precondition);
+
+		/// Return an iterator pointing to the positon before the first element
+		static BidirectionalIterator rend(const Container& container)
+			throw(Exception::Precondition);
+		//@}
+
+		protected:
+
+		/// Construct an iterator bound to a specific container
+		BALL_INLINE BidirectionalIterator(const Container& container)	throw();
+	};
+
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
+	BidirectionalIterator<Container, DataType, Position, Traits>& 
+		BidirectionalIterator<Container, DataType, Position, Traits>::operator ++ ()
+		throw(Exception::Precondition)
+	{
+		Base::operator ++ ();
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
+	BidirectionalIterator<Container, DataType, Position, Traits> 
+		BidirectionalIterator<Container, DataType, Position, Traits>::operator ++ (int)
+		throw(Exception::Precondition)
+	{
+		BidirectionalIterator iterator(*this);
+		this->operator ++ ();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
+	BidirectionalIterator<Container, DataType, Position, Traits>& 
+		BidirectionalIterator<Container, DataType, Position, Traits>::operator -- ()
+		throw(Exception::Precondition)
+	{
+		Base::operator -- ();
+		return *this;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
+	BidirectionalIterator<Container, DataType, Position, Traits> 
+		BidirectionalIterator<Container, DataType, Position, Traits>::operator -- (int)
+		throw(Exception::Precondition)
+	{
+		BidirectionalIterator iterator(*this);
+		this->operator -- ();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
+	BidirectionalIterator<Container, DataType, Position, Traits> 
+		BidirectionalIterator<Container, DataType, Position, Traits>::begin(const Container& container)
+		throw(Exception::Precondition)
+	{
+		BidirectionalIterator iterator(container);
+		iterator.toBegin();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
+	BidirectionalIterator<Container, DataType, Position, Traits>
+  	BidirectionalIterator<Container, DataType, Position, Traits>::end(const Container& container)
+		throw(Exception::Precondition)
+	{
+		BidirectionalIterator iterator(container);
+		iterator.toEnd();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
+	BidirectionalIterator<Container, DataType, Position, Traits> 
+		BidirectionalIterator<Container, DataType, Position, Traits>::rbegin(const Container& container)
+		throw(Exception::Precondition)
+	{
+		BidirectionalIterator iterator(container);
+		iterator.toRBegin();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
+	BidirectionalIterator<Container, DataType, Position, Traits> 
+		BidirectionalIterator<Container, DataType, Position, Traits>::rend(const Container& container)
+		throw(Exception::Precondition)
+	{
+		BidirectionalIterator iterator(container);
+		iterator.toREnd();
+		return iterator;
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	BALL_INLINE
+	BidirectionalIterator<Container, DataType, Position, Traits>::BidirectionalIterator(const Container& container)
 		throw()
-		:	ConstBaseIterator<Container, DataType, Position, Traits>(container)
+		:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(container)
 	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstBidirectionalIterator<Container, DataType, Position, Traits>
-	::findPrevious(const UnaryPredicate<DataType>& predicate)
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		for(traits_ptr_->backward(); traits_ptr_->isREnd() == false;
-				traits_ptr_->backward())
-		{
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
-			{
-				return (const DataType *)&(traits_ptr_->getData());
-			}
-		}
-
-		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstBidirectionalIterator<Container, DataType, Position, Traits>
-	::findNext(const UnaryPredicate<DataType>& predicate)
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		for(traits_ptr_->forward(); traits_ptr_->isEnd() == false;
-				traits_ptr_->forward())
-		{
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
-			{
-				return (const DataType *)&(traits_ptr_->getData());
-			}
-		}
-
-		return 0;
 	}
 
 	//@}

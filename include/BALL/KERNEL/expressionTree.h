@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionTree.h,v 1.3 2002/02/27 12:18:47 sturm Exp $
+// $Id: expressionTree.h,v 1.11 2003/08/26 08:04:17 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_EXPRESSIONTREE_H
 #define BALL_KERNEL_EXPRESSIONTREE_H
@@ -16,9 +17,10 @@ namespace BALL
 	/** Expression tree class.
 			Represents the logical tree of an Expression. This is the backend of
 			Expression.
-			\\
-			{\bf Definition:} \URL{BALL/KERNEL/expressionTree.h}
+			 \par
+			
 			@see Expression
+		 	\ingroup KernelMiscellaneous 
 	*/
 	class ExpressionTree
 	{
@@ -52,7 +54,7 @@ namespace BALL
 			
 		/**	Default constructor.
 				Create an empty expression node. The node's type is set to INVALID,
-				{\tt negate_} is set to {\bf false}, the internal predicate is set
+				<tt>negate_</tt> is set to <b>false</b>, the internal predicate is set
 				to 0, and the list of children is empty.
 		*/
 		ExpressionTree() 
@@ -68,7 +70,7 @@ namespace BALL
 				Create an expression node representing a leaf, i.e., a 
 				predicate.
 				@param	predicate the node's predicate
-				@param	negate set to {\bf true} if the node's predicate should be
+				@param	negate set to <b>true</b> if the node's predicate should be
 								negated
 		*/
 		ExpressionTree(ExpressionPredicate* predicate, bool negate = false)
@@ -156,7 +158,7 @@ namespace BALL
 
 		/** Asignment operator 
 		 */
-		const ExpressionTree& operator = (const ExpressionTree& tree) 
+		ExpressionTree& operator = (const ExpressionTree& tree) 
 			throw();
 
 		/** Clear method 

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.h,v 1.5 2002/12/12 09:48:44 oliver Exp $
+// $Id: MOLFile.h,v 1.13 2003/08/26 08:04:13 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H
@@ -21,8 +22,9 @@ namespace BALL
 	class Molecule;
 
 	/**	MDL MOL file class.
-			This class enables BALL to read and write MDL MOL files. \\
-			{\bf Definition:} \URL{BALL/FORMAT/MOLFile.h} \\
+			This class enables BALL to read and write MDL MOL files.  \par
+			
+    	\ingroup  StructureFormats
 	*/
 	class MOLFile
 		: public GenericMolFile
@@ -37,8 +39,8 @@ namespace BALL
 
 		/** String constants used for named properties.
 				Some of the data read from MOL files cannot be stored immediately in
-				the kernel datastructures, so they are stored as \Ref{NamedProperty} objects
-				in \Ref{Atom} and \Ref{Bond}. These string constants are used to access
+				the kernel datastructures, so they are stored as  \link NamedProperty NamedProperty \endlink  objects
+				in  \link Atom Atom \endlink  and  \link Bond Bond \endlink . These string constants are used to access
 				the corresponding fields of the atom and bond block of the MOL file.
 				@see PropertyManager::setProperty
 				@see PropertyManager::getProperty
@@ -150,10 +152,16 @@ namespace BALL
 		*/
 		//@{
 		
+		/**	Write a molecule to the file
+		*/
+		virtual bool write(const Molecule& molecule)
+			throw(File::CannotWrite);
+
 		/**	Write a system to the MOL file.
 				Note that this changes the properties of atoms in the system.
 		*/
-		virtual void write(const System& system);
+		virtual bool write(const System& system)
+			throw(File::CannotWrite);
 		
 		/**	Read a system from the MOL file
 		*/
@@ -165,9 +173,6 @@ namespace BALL
 		virtual Molecule* read()
 			throw(Exception::ParseError);
 			
-		/**	Write a molecule to the file
-		*/
-		virtual void write(const Molecule& molecule);
 		//@}
 
 		protected:
@@ -189,13 +194,13 @@ namespace BALL
 			throw(Exception::ParseError);
 
 		/// Read the Counts line of a MOL file
-		void readCountsLine_(CountsStruct& counts);
+		bool readCountsLine_(CountsStruct& counts);
 
 		/// Read a line from the atom block
-		void readAtomLine_(AtomStruct& atom);
+		bool readAtomLine_(AtomStruct& atom);
 
 		/// Read a line from the bond block
-		void readBondLine_(BondStruct& bond);
+		bool readBondLine_(BondStruct& bond);
 
 		/// Write the Counts line
 		void writeCountsLine_(const CountsStruct& counts);
@@ -206,7 +211,6 @@ namespace BALL
 		/// Write a line of the bond block 
 		void writeBondLine_(const BondStruct& bond);
 	};
-
 } // namespace BALL
 
 #endif // BALL_FORMAT_MOLFILE_H

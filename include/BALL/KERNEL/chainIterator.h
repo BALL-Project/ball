@@ -1,14 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainIterator.h,v 1.10 2002/02/27 12:18:46 sturm Exp $
+// $Id: chainIterator.h,v 1.20 2003/08/26 08:04:17 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
 #define BALL_KERNEL_CHAINITERATOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_KERNEL_CHAIN_H
 #	include <BALL/KERNEL/chain.h>
@@ -24,103 +21,75 @@
 
 namespace BALL 
 {
-
 	/** Traits class for the various ChainIterators.
-			{\bf Definition:} \URL{BALL/KERNEL/chainIterator.h}
+			
+    	\ingroup  KernelIterators
 	*/
-	class ChainIteratorTraits_
-		: public CompositeIteratorTraits_
+	class ChainIteratorTraits
+		: public CompositeIteratorTraits
 	{
 
 		public:
 
-		BALL_CREATE(ChainIteratorTraits_)
+		inline ChainIteratorTraits()	throw();
+			
+		ChainIteratorTraits(const Composite& composite) throw();
+			
+		inline ChainIteratorTraits(const ChainIteratorTraits& traits)	throw();
+			
+		ChainIteratorTraits& operator = (const ChainIteratorTraits& traits)	throw();
 
-		inline ChainIteratorTraits_()
-			throw();
-			
-		ChainIteratorTraits_(const Composite& composite)
-			throw();
-			
-		inline ChainIteratorTraits_(const ChainIteratorTraits_& traits)
-			throw();
-			
-		ChainIteratorTraits_& operator = (const ChainIteratorTraits_& traits)
-			throw();
-
-		void resetPredicate()
-			throw();
+		void resetPredicate() throw();
 	};
 
-	inline
-	ChainIteratorTraits_::ChainIteratorTraits_()
-		throw()
-		:	CompositeIteratorTraits_()
+	inline ChainIteratorTraits::ChainIteratorTraits() throw()
+		:	CompositeIteratorTraits()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Chain> >();
 	}
 		
-	inline
-	ChainIteratorTraits_::ChainIteratorTraits_(const Composite& composite)
-		throw()
-		:	CompositeIteratorTraits_(composite)
+	inline ChainIteratorTraits::ChainIteratorTraits(const Composite& composite)	throw()
+		:	CompositeIteratorTraits(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Chain> >();
 	}
 		
-	inline
-	ChainIteratorTraits_::ChainIteratorTraits_(const ChainIteratorTraits_& traits)
-		throw()
-		:	CompositeIteratorTraits_(traits)
+	inline ChainIteratorTraits::ChainIteratorTraits(const ChainIteratorTraits& traits)	throw()
+		:	CompositeIteratorTraits(traits)
 	{
 	}
 		
-	inline
-	ChainIteratorTraits_& ChainIteratorTraits_::operator = (const ChainIteratorTraits_& traits)
-		throw()
+	inline ChainIteratorTraits& ChainIteratorTraits::operator = (const ChainIteratorTraits& traits) throw()
 	{
-		CompositeIteratorTraits_::operator=(traits);
+		CompositeIteratorTraits::operator=(traits);
 		return *this;
 	}
 
-	inline
-	void ChainIteratorTraits_::resetPredicate()
-		throw()
+	inline void ChainIteratorTraits::resetPredicate() throw()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Chain> >();
 	}
 
 
 	/** @name Iterator type definitions for the various ChainIterators
+    	\ingroup  KernelIterators
 	*/
 	//@{
 
-	/** A mutable bidirectional iterator for the Chain class.
-	*/
-	typedef BidirectionalIterator
-		<Composite, Chain, Composite::SubcompositeIterator, ChainIteratorTraits_>
+	/// A mutable bidirectional iterator for the Chain class.
+	typedef BidirectionalIterator<Composite, Chain, Composite::CompositeIterator, ChainIteratorTraits>
 		ChainIterator;
 
-	/** A constant bidirectional iterator for the Chain class.
-	*/
-	typedef ConstBidirectionalIterator
-		<Composite, Chain, Composite::SubcompositeIterator, ChainIteratorTraits_>
+	/// A constant bidirectional iterator for the Chain class.
+	typedef ConstBidirectionalIterator<Composite, Chain, Composite::CompositeIterator, ChainIteratorTraits>
 		ChainConstIterator;
 
-	/** A mutable reverse bidirectional iterator for the Chain class.
-	*/
-	typedef ReverseBidirectionalIterator
-		<Composite, Chain, Composite::SubcompositeIterator, ChainIteratorTraits_>
-		ChainReverseIterator;
+	/// A mutable reverse bidirectional iterator for the Chain class.
+	typedef std::reverse_iterator<ChainIterator> ChainReverseIterator;
 
-	/** A constant reverse bidirectional iterator for the Chain class.
-	*/
-	typedef ConstReverseBidirectionalIterator
-		<Composite, Chain, Composite::SubcompositeIterator, ChainIteratorTraits_>
-		ChainConstReverseIterator;
-	
+	/// A constant reverse bidirectional iterator for the Chain class.
+	typedef std::reverse_iterator<ChainConstIterator> ChainConstReverseIterator;	
 	//@}
-
 } // namespace BALL 
 
 #endif // BALL_KERNEL_CHAINITERATOR_H

@@ -57,7 +57,7 @@ new atoms, which will be the still missing hydrogen atoms:
 \end{lstlisting}
 	
 \noindent
-Now we have to assign the correct coordinates to the two hydrogen atoms.  the
+Now we have to assign the correct coordinates to the two hydrogen atoms.  The
 method \method{setPosition} takes an instance of \class{Vector3} as an
 argument. This class is used to represent coordinates and vectors in
 three--dimensional space. An object of type \class{Vector3} can be constructed
@@ -96,6 +96,12 @@ achieved with the method \method{createBond}:
 \begin{lstlisting}{}
 	oxygen->createBond(*hydrogen1);
 	oxygen->createBond(*hydrogen2);
+\end{lstlisting}
+
+or
+
+\begin{lstlisting}{}
+	hydrogen2->createBond(*oxygen);
 \end{lstlisting}
 
 \noindent

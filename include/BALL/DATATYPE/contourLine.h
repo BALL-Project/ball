@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourLine.h,v 1.8 2002/02/27 12:18:31 sturm Exp $
+// $Id: contourLine.h,v 1.15 2003/08/26 08:04:10 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
@@ -21,30 +22,30 @@ namespace BALL
   // First I define some macros needed for the marching cube-algorithm. 
 	// The names come from the number associated with the different corners of the square.
   #define INTERPOL12 { \
-						vec = from.getGridCoordinates(act_cell_x, act_cell_y);\
+						vec = from.getCoordinates(from.getClosestIndex(Vector2(act_cell_x, act_cell_y)));\
 						d1  = from[act_cell_x + act_cell_y*(number_of_cells_x+1)];\
 						d2  = from[act_cell_x + 1 + act_cell_y*(number_of_cells_x+1)];\
-						vec2 = from.getGridCoordinates(act_cell_x + 1, act_cell_y + 1);\
+						vec2 = from.getCoordinates(from.getClosestIndex(Vector2(act_cell_x + 1, act_cell_y + 1)));\
 						slope = (d2 - d1) / (vec2.x - vec.x);\
 						vec.x += (threshold - d1)/slope;\
 						data_.push_back(vec);\
   } 
 
   #define INTERPOL18 { \
-						vec = from.getGridCoordinates(act_cell_x, act_cell_y);\
+						vec = from.getCoordinates(from.getClosestIndex(Vector2(act_cell_x, act_cell_y)));\
 						d1  = from[act_cell_x + act_cell_y*(number_of_cells_x+1)];\
 						d2  = from[act_cell_x + (act_cell_y+1)*(number_of_cells_x+1)];\
-						vec2 = from.getGridCoordinates(act_cell_x, act_cell_y+1);\
+						vec2 = from.getCoordinates(from.getClosestIndex(Vector2(act_cell_x, act_cell_y+1)));\
 						slope = (d2 - d1) / (vec2.y - vec.y);\
 						vec.y += (threshold - d1)/slope;\
 						data_.push_back(vec);\
   }
 
   #define INTERPOL24 {  \
-            vec = from.getGridCoordinates(act_cell_x+1, act_cell_y);\
+            vec = from.getCoordinates(from.getClosestIndex(Vector2(act_cell_x+1, act_cell_y)));\
             d1  = from[act_cell_x+1 + act_cell_y*(number_of_cells_x+1)];\
             d2  = from[act_cell_x+1 + (act_cell_y+1)*(number_of_cells_x+1)];\
-            vec2 = from.getGridCoordinates(act_cell_x+1, act_cell_y+1);\
+            vec2 = from.getCoordinates(from.getClosestIndex(Vector2(act_cell_x+1, act_cell_y+1)));\
             slope = (d2 - d1) / (vec2.y - vec.y);\
             vec.y += (threshold - d1)/slope;\
             data_.push_back(vec);\
@@ -52,10 +53,10 @@ namespace BALL
 
 	// is it vec.x += or vec.y += ...?
   #define INTERPOL48 {  \
-				    vec = from.getGridCoordinates(act_cell_x+1, act_cell_y+1);\
+				    vec = from.getCoordinates(from.getClosestIndex(Vector2(act_cell_x+1, act_cell_y+1)));\
             d1  = from[act_cell_x+1 + (act_cell_y+2)*(number_of_cells_x+1)];\
             d2  = from[act_cell_x   + (act_cell_y+1)*(number_of_cells_x+1)];\
-            vec2 = from.getGridCoordinates(act_cell_x, act_cell_y+1);\
+            vec2 = from.getCoordinates(from.getClosestIndex(Vector2(act_cell_x, act_cell_y+1)));\
             slope = (d2 - d1) / (vec2.x - vec.x);\
             vec.x += (threshold - d1)/slope;\
 						data_.push_back(vec);\
@@ -63,7 +64,7 @@ namespace BALL
 
 
   /** This class is intended to store a single contour line generated from a RegularData2D - class.
-      {\bf Definition:} \URL{BALL/DATATYPE/contourLine.h}
+      \ingroup DatatypeMiscellaneous   
   */
   template <typename T>  
   class TContourLine
@@ -215,9 +216,8 @@ namespace BALL
       double d1, d2, slope;
       double threshold = height_;
 
-      number_of_cells_x = (Size) from.getMaxXIndex();
-      number_of_cells_y = (Size) from.getMaxYIndex();
-      //number_of_cells   = number_of_cells_x * number_of_cells_y;
+      number_of_cells_x = (Size) from.getSize().x - 1;
+      number_of_cells_y = (Size) from.getSize().y - 1;
       
       for (act_cell_y = 0; act_cell_y < number_of_cells_y; act_cell_y++)
 			{
@@ -226,19 +226,19 @@ namespace BALL
 					// First we have to find out the topology of the actual square.
 					int topology = 0;
 					
-					if (from[act_cell_x + act_cell_y*(number_of_cells_x+1)] > threshold)
+					if (from[act_cell_x + act_cell_y * (number_of_cells_x+1)] > threshold)
 					{
 						topology |= 1;
 					}
-					if (from[act_cell_x+1 + act_cell_y*(number_of_cells_x+1)] > threshold)
+					if (from[act_cell_x + 1 + act_cell_y * (number_of_cells_x+1)] > threshold)
 					{
 						topology |= 2;
 					}
-					if (from[act_cell_x+1 + (act_cell_y+1)*(number_of_cells_x+1)] > threshold)
+					if (from[act_cell_x + 1 + (act_cell_y + 1)*(number_of_cells_x + 1)] > threshold)
 					{
 						topology |= 4;
 					}
-					if (from[act_cell_x + (act_cell_y+1)*(number_of_cells_x+1)] > threshold)
+					if (from[act_cell_x + (act_cell_y + 1) * (number_of_cells_x + 1)] > threshold)
 					{
 						topology |= 8;
 					}

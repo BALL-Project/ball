@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: comparator.h,v 1.6 2002/02/27 12:18:24 sturm Exp $
+// $Id: comparator.h,v 1.13 2003/08/26 08:04:07 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_COMPARATOR_H
 #define BALL_CONCEPT_COMPARATOR_H
@@ -15,7 +16,8 @@ namespace BALL
 
 	/**	Generic Comparator Class.
 			It is used as a baseclass, providing a common interface.
-			{\bf Definition:} \URL{BALL/CONCEPT/comparator.h}
+			
+	 	 \ingroup ConceptsMiscellaneous
 	*/
 	template <typename T>
 	class Comparator
@@ -72,8 +74,8 @@ namespace BALL
 			throw();
 
 		/** Compare two values.
-				-1 is returned if a  < b. \\
-				0  is returned if a == b. \\
+				-1 is returned if a  < b.  \par
+				0  is returned if a == b.  \par
 				1  is returned if a  > b.
 		*/
 		int operator () (const T& a, const T& b) const

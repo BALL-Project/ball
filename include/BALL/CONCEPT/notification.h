@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: notification.h,v 1.13 2002/02/27 12:18:25 sturm Exp $
+// $Id: notification.h,v 1.20 2003/08/26 08:04:08 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -23,8 +24,9 @@ namespace BALL
 			Using the notification management, objects may exchange data and notify
 			each other of events by invoking methods of the other object (remotely similar to the
 			signal/slot mechanism of QT).
-			\\
-			{\bf Definition:} \URL{BALL/CONCEPT/notification.h}
+			 \par
+			
+			\ingroup ConceptsMiscellaneous
 	*/
 	//@{
 	
@@ -587,7 +589,6 @@ namespace BALL
 	}
 
 	//@}
-
 } // namespace BALL
 
 #endif // BALL_CONCEPT_NOTIFICATION_H

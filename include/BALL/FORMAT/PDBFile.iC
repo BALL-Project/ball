@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.iC,v 1.5 2002/02/27 12:18:39 sturm Exp $
+// $Id: PDBFile.iC,v 1.7 2003/08/26 08:04:14 oliver Exp $
+//
 
 BALL_INLINE 
 bool PDBFile::readUnknownRecord(const char * /* line */)
@@ -56,9 +57,16 @@ void PDBFile::write(const Molecule& molecule)
 }
 
 BALL_INLINE 
-void PDBFile::write(const Protein& protein)
+bool PDBFile::write(const Protein& protein)
+	throw(File::CannotWrite)
 {
+	if (!isOpen() || getOpenMode() != File::OUT)
+	{
+		throw (File::CannotWrite(__FILE__, __LINE__, name_));
+	}
   write_(protein);
+
+	return true;
 }
 
 BALL_INLINE 

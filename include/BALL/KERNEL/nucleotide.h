@@ -1,14 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.20 2002/02/27 12:18:49 sturm Exp $
+// $Id: nucleotide.h,v 1.32 2003/08/26 08:04:18 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #	include <BALL/KERNEL/fragment.h>
@@ -24,11 +21,14 @@
 
 namespace BALL 
 {
-
 	class NucleicAcid;
-	class Protein;
 
-	/**	Kernel class representing a nucleotide.
+	/**	Nucleotide class.
+			This class is used to represent nucleotides within
+			an  \link NucleicAcid NucleicAcid \endlink  object.
+			 \par
+			
+    	\ingroup KernelContainers 
 	*/
 	class Nucleotide
 		: public Fragment
@@ -110,7 +110,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  nucleotide the nucleotide to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const Nucleotide& nucleotide, bool deep = true)
 			throw();
@@ -121,7 +121,7 @@ namespace BALL
 				@return  nucleotide& - this instance nucleotide
 				@see     nucleotide::set
 		*/
-		const Nucleotide& operator = (const Nucleotide& nucleotide)
+		Nucleotide& operator = (const Nucleotide& nucleotide)
 			throw();
 
 		/** Copy this instance to {\em nucleotide}.
@@ -232,20 +232,20 @@ namespace BALL
 		bool remove(Atom& atom)
 			throw();
 
-		/**	Cut all children of {\tt nucleotide} and prepend them before the children of this instance.
+		/**	Cut all children of <tt>nucleotide</tt> and prepend them before the children of this instance.
 				@param nucleotide the nucleotide to access
 		*/
 		void spliceBefore(Nucleotide& nucleotide)
 			throw();
 
-		/**	Cut all children of {\tt nucleotide} and append them after the children of this instance.
+		/**	Cut all children of <tt>nucleotide</tt> and append them after the children of this instance.
 				@param nucleotide the nucleotide to access
 		*/
 		void spliceAfter(Nucleotide& nucleotide)
 			throw();
 
-		/**	Move the children of {\tt nucleotide} into this instance.
-				The children are inserted using \Ref{spliceBefore}.
+		/**	Move the children of <tt>nucleotide</tt> into this instance.
+				The children are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
 		void splice(Nucleotide& nucleotide)
 			throw();
@@ -283,8 +283,8 @@ namespace BALL
 		//@{
 
 		/** Internal state and consistency self-validation.
-				@return	 bool -	{\tt true} if the internal state of this instance nucleotide is correct
-												(self-validated) and consistent, {\tt false} otherwise
+				@return	 bool -	<tt>true</tt> if the internal state of this instance nucleotide is correct
+												(self-validated) and consistent, <tt>false</tt> otherwise
 		*/
 		virtual bool isValid() const
 			throw();
@@ -374,7 +374,6 @@ namespace BALL
     return 0;
   }
  
-
 } // namespace BALL
 
 #endif // BALL_KERNEL_NUCLEOTIDE_H

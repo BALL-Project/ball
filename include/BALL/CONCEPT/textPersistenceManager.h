@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: textPersistenceManager.h,v 1.11 2002/12/22 15:56:23 oliver Exp $
+// $Id: textPersistenceManager.h,v 1.16 2003/08/26 08:04:09 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -20,6 +21,8 @@ namespace BALL
 			comprehensible - the ideal format to debug persistence-related programs.
 			For production use, the XDRPersistenceManager is preferred.
 			@see	XDRPersistenceManager
+			
+			\ingroup  Persistence
 	*/
 	class TextPersistenceManager
 		:	public PersistenceManager
@@ -55,19 +58,19 @@ namespace BALL
 		/**	Write an object header.
 				This method write an object header. It starts with the current number of spaces
 				needed for a correct indentation.
-				If {\tt name} is a null pointer, the object is a base object of the current
-				object. This method then writes the string {\tt BASEOBJECT}. If {\tt name}
-				is a name or an empty string, {\tt OBJECT} is written.\\
-				Then, the object's {\tt type\_name} is written, followed by a blank, the character
-				"@" to indicate an address and then the object's {\tt this} pointer in decimal
+				If <tt>name</tt> is a null pointer, the object is a base object of the current
+				object. This method then writes the string <tt>BASEOBJECT</tt>. If <tt>name</tt>
+				is a name or an empty string, <tt>OBJECT</tt> is written. \par
+				Then, the object's <tt>type\_name</tt> is written, followed by a blank, the character
+				"@" to indicate an address and then the object's <tt>this</tt> pointer in decimal
 				format. The last string in the line is either "-" (for a base object or an object without
-				name) or the object's {\tt name}.\\
+				name) or the object's <tt>name</tt>. \par
 				The indentation level is incremented.
-				{\bf Example for a base object:}
+				<b>Example for a base object:</b>
 				\begin{verbatim}
 					BASEOBJECT BALL::Composite @ 1145254238 -
 				\end{verbatim}
-				{\bf Example for a member object:}
+				<b>Example for a member object:</b>
 				\begin{verbatim}
 					BASEOBJECT BALL::Bond @ 2334208924 bond_
 				\end{verbatim}
@@ -265,11 +268,11 @@ namespace BALL
 		protected:
 		
 		/**	Check whether the streams contains a given string.
-				This method reads the next string from the persistence manager's {\tt istream}
-				and compares it to the {\tt value} given. If both strings are equal, {\bf true}
+				This method reads the next string from the persistence manager's <tt>istream</tt>
+				and compares it to the <tt>value</tt> given. If both strings are equal, <b>true</b>
 				is returned.
 				@param	value the expected string
-				@return bool, {\bf true} if the expected string was found, {\bf false} otherwise	
+				@return bool, <b>true</b> if the expected string was found, <b>false</b> otherwise	
 		*/
 		virtual bool expect(const String& value);
 
@@ -285,7 +288,6 @@ namespace BALL
 		Size indent_depth_;
 
 	};
-
 } // namespace BALL
 
 #endif // BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H

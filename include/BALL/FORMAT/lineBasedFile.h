@@ -1,27 +1,23 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.h,v 1.21 2002/12/12 09:48:45 oliver Exp $
+// $Id: lineBasedFile.h,v 1.31 2004/02/17 16:07:18 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_SYSTEM_FILE_H
 # include <BALL/SYSTEM/file.h>
 #endif
 
 #include <vector>
-#include <fstream>
 
 namespace BALL 
 {
-
 	/** A class for the convenient parsing of line-based file formats.
-			{\bf Definition:} \URL{BALL/FORMAT/lineBasedFile.h} \\
+			
+    	\ingroup  General
 	*/
 	class LineBasedFile
 		:	public File
@@ -39,9 +35,11 @@ namespace BALL
 			throw();
 			
 		/** Detailed constuctor.
+		 		@param trim_whitespaces - sets wheter leading and trailing whitespaces 
+							 shall be removed while reading the file
 				Open the given file.
 		*/
-		LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in)
+		LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in, bool trim_whitespaces = false)
 			throw(Exception::FileNotFound);
 
 		/** Copy constructor
@@ -50,15 +48,12 @@ namespace BALL
 		LineBasedFile(const LineBasedFile& f)
 			throw(Exception::FileNotFound);
 
-
 		/**	Clear method.
 		*/
 		void clear() 
 			throw();
 
 		//@}
-
-
 		/**	@name Equality operators
 		*/
 		//@{
@@ -70,8 +65,8 @@ namespace BALL
 		/** Inequality operator
 		*/
 		bool operator != (const LineBasedFile& f)  throw();
-
 		//@}
+
 		/**	@name Assignment
 		*/
 		//@{
@@ -80,9 +75,9 @@ namespace BALL
 				The file is opened and the same position in it is seeked.
 		*/
 		const LineBasedFile& operator = (const LineBasedFile& file)
-			throw();
-		//@}
+			throw(Exception::FileNotFound);
 
+		//@}
 		/**	@name Accessors
 		*/
 		//@{
@@ -98,9 +93,8 @@ namespace BALL
 		/// Return the current line
 		String& getLine() 
 			throw();
+
 		//@}
-
-
 		/**	@name	Help-Methods for File Acces
 		*/
 		//@{
@@ -118,9 +112,8 @@ namespace BALL
 			throw(Exception::ParseError);
 
 		/** Search for a line starting with a given string.
-				Search starts at the current line and ends at the end of the file 
-				(no wrap around).
-				@param return_to_start if set to {\bf true}, the current line is reset to its value prior to the invocation
+				Search starts at the current line and ends at the end of the file (no wrap around).
+				@param return_to_start if set to <b>true</b>, the current line is reset to its value prior to the invocation
 				@return true if line could be found
 		*/
 		bool search(const String& text, bool return_to_start = false)
@@ -128,8 +121,7 @@ namespace BALL
 
 		/* Search for a line starting with a given string, abort at a stop tag.
 		*/
-		bool search(const String& text, const String& stop, 
-								bool return_to_start = false)
+		bool search(const String& text, const String& stop, bool return_to_start = false)
 			throw(Exception::ParseError);
 
 		/** Go to a given line.
@@ -153,7 +145,7 @@ namespace BALL
 				@param line should be used for __LINE__
 				@param condition to be tested
 				@param msg this string is used as message in the exception
-				@exception ParseError if {\tt condition} is not fulfilled
+				@exception ParseError if <tt>condition</tt> is not fulfilled
 		*/
 		void test(const char* file, int line, bool condition, const String& msg) 
 			const throw(Exception::ParseError);
@@ -179,13 +171,20 @@ namespace BALL
 			const throw();
 
 		/**	Parse column based formats.
-				Copy the subsection of the current line defined by {\tt index} and {\tt length} into a buffer
-				try to parse it using {\tt sscanf}. The result is stored in {\tt arg} (use with caution: no type checking!).
+				Copy the subsection of the current line defined by <tt>index</tt> and <tt>length</tt> into a buffer
+				try to parse it using <tt>sscanf</tt>. The result is stored in <tt>arg</tt> (use with caution: no type checking!).
 		*/
 		bool parseColumnFormat(const char* format, Position index, Size length, void* arg);
 
-		//@}
+		/// Set wheter leading and trailing whitespaces in lines shall be removed
+		void enableTrimWhitespaces(bool state)
+			throw();
+		
+		///
+		bool trimWhiteSpacesEnabled() const
+			throw();
 
+		//@}
 		/*	@name	Protected Attributes
 		*/
 		//_@{
@@ -195,6 +194,8 @@ namespace BALL
 
 		/// line number in the file
 		Position line_number_;
+
+		bool trim_whitespaces_;
 		//_@}
 	};
 
@@ -202,7 +203,6 @@ namespace BALL
 # ifndef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/FORMAT/lineBasedFile.iC>
 # endif
-
 } // namespace BALL
 
 #endif // BALL_FORMAT_LINEBASEDFILE_H

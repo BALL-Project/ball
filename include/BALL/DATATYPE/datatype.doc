@@ -1,43 +1,23 @@
-// $Id: datatype.doc,v 1.13 2002/12/22 13:36:56 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: datatype.doc,v 1.17 2003/08/26 08:04:10 oliver Exp $
+//
 
-/**@name	General datastructures
+/** \defgroup Datatype General datastructures
+		\ingroup Foundation
 		This section contains all relevant information on 
 		general BALL datastructures.
 */
-//@{
 
-	/**	@name Generic Datastructures for Regularly Spaced Data
+	/**	\defgroup RegularData Generic Datastructures for Regularly Spaced Data
+	* 	\ingroup Datatype
 	*/
-	//@{
-		//@Include: regularData1D.h
-    //@Include: regularData2D.h
-		//@Include: regularData3D.h
-	//@}
 
-	/**	@name	Generic Hash Associative Containers
+	/**	\defgroup GenericHash Generic Hash Associative Containers
+	*   \ingroup Datatype
 	*/
-	//@{
-		//@Include: hashMap.h
-		//@Include: hashSet.h
-		//@Include: hashGrid.h
-		//@Include: stringHashMap.h
-		//@Include: stringHashSet.h
-		//@Include: options.h 
-	//@}
 
-	/**	@name	Miscellaneous
-	*/
-	//@{
-		//@Include: bitVector.h	
-		//@Include: forEach.h	
-		//@Include: triple.h
-		//@Include: quadruple.h
-		//@Include: regExp.h
-		//@Include: string.h
-    //@Include: list.h
-    //@Include: contour.h
-    //@Include: contourLine.h
-		//@Include: contourSurface.h
-	//@}
-
-//@}
+	/**	\defgroup DatatypeMiscellaneous Miscellaneous
+	 * 	\ingroup Datatype
+	 */

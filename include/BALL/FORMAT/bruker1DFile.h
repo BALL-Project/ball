@@ -1,42 +1,29 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.h,v 1.15 2002/12/12 09:48:44 oliver Exp $
+// $Id: bruker1DFile.h,v 1.25 2003/08/26 08:04:14 oliver Exp $
+//
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
 
-#include <vector>
-
-#ifndef BALL_SYSTEM_FILESYSTEM_H
-#       include <BALL/SYSTEM/fileSystem.h>
-#endif
-
-#ifndef BALL_SYSTEM_FILE_H
-#	include <BALL/SYSTEM/file.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
-
 #ifndef BALL_FORMAT_JCAMPFILE_H
-#       include <BALL/FORMAT/JCAMPFile.h>
+# include <BALL/FORMAT/JCAMPFile.h>
 #endif
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
-#       include <BALL/DATATYPE/regularData1D.h>
+# include <BALL/DATATYPE/regularData1D.h>
 #endif
 
 namespace BALL
 {
-	//????
 	/**	Bruker 1D spectrum format.
 			A class for handling Bruker one-dimensional NMR spectra.
-			\\
-			{\bf Definition:}\URL{BALL/FORMAT/bruker1DFile.h}
+			 \par
+			
+    	\ingroup  NMRFileFormats
 	*/
-	class Bruker1D 
+	class Bruker1DFile 
 		: public File
 	{
 		public:
@@ -47,56 +34,52 @@ namespace BALL
 
 		/**	Constructor
 		*/
-    Bruker1D();
+    Bruker1DFile();
 
 		/**	Constructor.
 				@param name important: name of the Bruker-*directory*
 		*/
-		Bruker1D(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
+		Bruker1DFile(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
 			throw(Exception::FileNotFound);
 
 		/// Copy constructor
-		Bruker1D(const Bruker1D& file)
+		Bruker1DFile(const Bruker1DFile& file)
 			throw(Exception::FileNotFound);
 
 		/// Destructor
-		virtual ~Bruker1D()
+		virtual ~Bruker1DFile()
 			throw();
 
 		//@}
-
-
 		/**	@name Accessors
 		*/
 		//@{
 
-		/**	Read a spectrum from {\tt name}. 
+		/**	Read a spectrum from <tt>name</tt>. 
 				It will be stored in spectrum_
 		*/
-		void read(const String &name);
+		void read(const String& name);
 
 		void read();
 
 	  /** Return a pointer to the spectrum.
 		 */
-		RegularData1D* getData();
+		const RegularData1D& getData() const { return spectrum_; }
 
-		/**
-		*/
-		JCAMPFile* getParameters();
+		///
+		const JCAMPFile::EntryMap& getParameters() const;
+		///
+		const JCAMPFile::HeaderMap& getHeader() const;
 
 		//@}
 
 		protected:
 
-		/**
-		 * This class gives access to the parameters used in
-		 * acquiring this spectrum.
-		 */
-		JCAMPFile* pars_;
-		
 		Size min_;
 		Size max_;
+
+		/// The parameters from the procs file
+		JCAMPFile pars_;
 
 		RegularData1D spectrum_;
 	};

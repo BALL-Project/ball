@@ -1,0 +1,18 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: basetube.iC,v 1.4 2002/02/27 12:20:18 sturm Exp $
+
+BALL_INLINE
+Real BaseTube::getLength() const
+	throw()
+{
+  return (getVertex1() - getVertex2()).getLength();
+}
+
+BALL_INLINE
+Real BaseTube::getSquareLength() const
+	throw()
+{
+  return (getVertex1() - getVertex2()).getSquareLength();
+}

@@ -46,13 +46,55 @@ del *.obj
 del *.exe"
 				Output="BENCHMARKS.log"/>
 		</Configuration>
+		<Configuration
+			Name="Python|Win32"
+			OutputDirectory="Python"
+			IntermediateDirectory="Python"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cd ..\..\source\BENCHMARKS
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot; BALL_PATH=&quot;$(ProjectDir)..\BALL&quot;"
+				ReBuildCommandLine="cd ..\..\source\BENCHMARKS
+del *.obj
+del *.exe
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
+				CleanCommandLine="cd ..\..\source\BENCHMARKS
+del *.obj
+del *.exe"
+				Output="BENCHMARKS.log"/>
+		</Configuration>
+		<Configuration
+			Name="Python Multithreaded|Win32"
+			OutputDirectory="Python Multithreaded"
+			IntermediateDirectory="Python Multithreaded"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="cd ..\..\source\BENCHMARKS
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot; BALL_PATH=&quot;$(ProjectDir)..\BALL&quot;"
+				ReBuildCommandLine="cd ..\..\source\BENCHMARKS
+del *.obj
+del *.exe
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
+				CleanCommandLine="cd ..\..\source\BENCHMARKS
+del *.obj
+del *.exe"
+				Output="BENCHMARKS.log"/>
+		</Configuration>
 	</Configurations>
 	<Files>
 		<File
 			RelativePath="Make.lst">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="Makefile.win">
+			<FileConfiguration
+				Name="Python Multithreaded|Win32">
+			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>

@@ -1,0 +1,49 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: normal.iC,v 1.4 2002/02/27 12:20:16 sturm Exp $
+
+BALL_INLINE
+void NormalVector::setNormalVector
+  (const Vector3& n)
+	throw()
+{
+  normal_ = n;
+}
+
+BALL_INLINE
+void NormalVector::setNormalVector
+  (const Real x, const Real y, const Real z)
+	throw()
+{
+  normal_.set(x, y, z);
+}
+
+BALL_INLINE
+Vector3& NormalVector::getNormalVector()
+	throw()
+{
+  return normal_;
+}
+
+BALL_INLINE
+const Vector3& NormalVector::getNormalVector() const
+	throw()
+{
+  return normal_;
+}
+
+BALL_INLINE
+void NormalVector::getNormalVector(Vector3& n) const
+	throw()
+{
+  n = normal_;
+}
+
+BALL_INLINE
+void NormalVector::getNormalVector
+  (Real& x, Real& y, Real& z) const
+	throw()
+{
+  normal_.get(x, y, z);
+}

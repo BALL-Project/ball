@@ -53,23 +53,27 @@
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
 			ConfigurationType="4"
-			CharacterSet="2">
+			CharacterSet="2"
+			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
-				GlobalOptimizations="FALSE"
+				Optimization="3"
+				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
 				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
+				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;LIBVIEW_EXPORTS;_USRDLL;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG"
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="1"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="FALSE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="0"
@@ -78,7 +82,108 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"/>
+				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"
+				AdditionalLibraryDirectories=" C:\Programme\Qt\3.3.0b1\lib"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Python|Win32"
+			OutputDirectory="Python"
+			IntermediateDirectory="Python"
+			ConfigurationType="4"
+			CharacterSet="2"
+			WholeProgramOptimization="TRUE">
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="3"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				OptimizeForProcessor="2"
+				OptimizeForWindowsApplication="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;LIBVIEW_EXPORTS;_USRDLL;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG"
+				StringPooling="TRUE"
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="FALSE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="0"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="0"
+				CompileAs="2"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"
+				AdditionalLibraryDirectories=" C:\Programme\Qt\3.3.0b1\lib"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+		</Configuration>
+		<Configuration
+			Name="Python Multithreaded|Win32"
+			OutputDirectory="Python Multithreaded"
+			IntermediateDirectory="Python Multithreaded"
+			ConfigurationType="4"
+			CharacterSet="2"
+			WholeProgramOptimization="TRUE">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/D &quot;BALL_QT_HAS_THREADS&quot;"
+				Optimization="3"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				ImproveFloatingPointConsistency="TRUE"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				OptimizeForProcessor="2"
+				OptimizeForWindowsApplication="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;LIBVIEW_EXPORTS;_USRDLL;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG"
+				StringPooling="TRUE"
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="FALSE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="0"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="0"
+				CompileAs="2"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"
+				AdditionalLibraryDirectories=" C:\Programme\Qt\3.3.0b1\lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -114,244 +219,192 @@
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"/>
+				</FileConfiguration>
 			</File>
 			<Filter
 				Name="DATATYPE"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\VIEW\DATATYPE\colorHSV.C">
+					RelativePath="..\..\..\source\VIEW\DATATYPE\colorExtension2.C">
 					<FileConfiguration
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"/>
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"/>
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DATATYPE\colorHSV.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DATATYPE\colorRGBA.C">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DATATYPE\colorTable.C">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DATATYPE\colorUnit.C">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"/>
-					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DATATYPE\colorUnitHue.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DATATYPE\vertex1.C">
 					<FileConfiguration
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"/>
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"/>
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DATATYPE\vertex2.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
 					</FileConfiguration>
 				</File>
 			</Filter>
 			<Filter
-				Name="FUNCTOR"
+				Name="MODELS"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\VIEW\FUNCTOR\filter.C">
+					RelativePath="..\..\..\source\VIEW\MODELS\HBondModel.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\FUNCTOR\geometricCollector.C">
+					RelativePath="..\..\..\source\VIEW\MODELS\atomBondModelBaseProcessor.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\FUNCTOR\information.C">
+					RelativePath="..\..\..\source\VIEW\MODELS\backboneModel.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\MODELS\ballAndStickModel.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\MODELS\cartoonModel.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\MODELS\colorProcessor.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\MODELS\lineModel.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\MODELS\modelProcessor.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\MODELS\standardColorProcessor.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\MODELS\surfaceModel.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\MODELS\vanDerWaalsModel.C">
 				</File>
 			</Filter>
 			<Filter
-				Name="GUI"
+				Name="PRIMITIVES"
 				Filter="">
-				<Filter
-					Name="DIALOGS"
-					Filter="">
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\DIALOGS\colorMeshDialog.C">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ShowIncludes="FALSE"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCLCompilerTool"
-								ShowIncludes="FALSE"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\DIALOGS\colorMeshDialogData.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\DIALOGS\fileDialog.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\DIALOGS\preferences.C">
-					</File>
-				</Filter>
-				<Filter
-					Name="FUNCTOR"
-					Filter="">
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\FUNCTOR\POVRenderer.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\FUNCTOR\externalRenderer.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\FUNCTOR\glObjectCollector.C">
-					</File>
-				</Filter>
-				<Filter
-					Name="KERNEL"
-					Filter="">
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\KERNEL\compositeDescriptor.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\KERNEL\glDisplayList.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\KERNEL\glEntityDescriptor.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\KERNEL\glObject.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\KERNEL\glPrimitiveManager.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\KERNEL\glQuadricObject.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\KERNEL\mainControl.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\KERNEL\objectCreator.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\KERNEL\server.C">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
-					</File>
-				</Filter>
-				<Filter
-					Name="PRIMITIV"
-					Filter="">
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\PRIMITIV\gllabel.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\PRIMITIV\glline.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\PRIMITIV\glmesh.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\PRIMITIV\glpoint.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\PRIMITIV\glsimpleBox.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\PRIMITIV\glsphere.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\PRIMITIV\gltube.C">
-					</File>
-				</Filter>
-				<Filter
-					Name="WIDGETS"
-					Filter="">
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\control.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\mainControlPreferences.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\modularWidget.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\pyWidget.C">
-						<FileConfiguration
-							Name="Debug|Win32"
-							ExcludedFromBuild="TRUE">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32"
-							ExcludedFromBuild="TRUE">
-							<Tool
-								Name="VCCLCompilerTool"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\regularData1DWidget.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\regularData2DWidget.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\scene.C">
-					</File>
-					<File
-						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\serverPreferences.C">
-					</File>
-				</Filter>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\box.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\disc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\label.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\line.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\mesh.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\point.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\simpleBox.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\sphere.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\tube.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\twoColoredLine.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\PRIMITIVES\twoColoredTube.C">
+				</File>
 			</Filter>
 			<Filter
 				Name="KERNEL"
@@ -363,99 +416,626 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\client.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\colorExtension1.C">
+					RelativePath="..\..\..\source\VIEW\KERNEL\common.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\colorExtension2.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\colorExtension3.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\colorExtension4.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\colorExtension5.C">
+					RelativePath="..\..\..\source\VIEW\KERNEL\compositeManager.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\connectionObject.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\events.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\geometricObject.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\logView.C">
+					RelativePath="..\..\..\source\VIEW\KERNEL\information.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\mainControl.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\message.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\vertex1.C">
+					RelativePath="..\..\..\source\VIEW\KERNEL\modularWidget.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\vertex2.C">
+					RelativePath="..\..\..\source\VIEW\KERNEL\molecularInformation.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\moleculeObjectCreator.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\objectCreator.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\primitiveManager.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\representation.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\server.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\stage.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\threads.C">
 				</File>
 			</Filter>
 			<Filter
-				Name="PRIMITIV"
+				Name="RENDERING"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\VIEW\PRIMITIV\label.C">
+					RelativePath="..\..\..\source\VIEW\RENDERING\POVRenderer.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\PRIMITIV\line.C">
+					RelativePath="..\..\..\source\VIEW\RENDERING\VRMLRenderer.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\PRIMITIV\mesh.C">
+					RelativePath="..\..\..\source\VIEW\RENDERING\glDisplayList.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\PRIMITIV\point.C">
+					RelativePath="..\..\..\source\VIEW\RENDERING\glQuadricObject.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\PRIMITIV\simpleBox.C">
+					RelativePath="..\..\..\source\VIEW\RENDERING\glRenderer.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\PRIMITIV\sphere.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\PRIMITIV\tube.C">
+					RelativePath="..\..\..\source\VIEW\RENDERING\renderer.C">
 				</File>
 			</Filter>
 			<Filter
 				Name="MOC Files"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialogData_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialog_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\control_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\advancedOptionsDialogData_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\DIALOGS\fileDialog_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\advancedOptionsDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\mainControlPreferences_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\amberMinimizationDialogData_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\KERNEL\mainControl_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\amberMinimizationDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\DIALOGS\preferences_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\atomPropertiesData_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\regularData1DWidget_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\atomProperties_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\regularData2DWidget_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\bondPropertiesData_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\scene_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\bondProperties_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\serverPreferences_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\contourSurfaceDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\contourSurfaceDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\datasetControl_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\displayPropertiesData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\displayProperties_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\dockWidget_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\genericControlData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\genericControl_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\geometricControl_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\labelDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\labelDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\lightSettingsData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\lightSettings_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\logView_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\mainControlPreferencesData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\mainControlPreferences_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\mainControl_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\modelSettingsDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\modelSettingsDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\molecularControl_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularFileDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\molecularProperties_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\mouseSensitivityData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\mouseSensitivity_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\moveOverlayDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\moveOverlayDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\openBruker1DFile_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\openBruker2DFile_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\peptideDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\peptideDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\preferences_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\pyWidget_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettingsData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettings_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\regularData1DWidget_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\regularData2DWidget_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\scene_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\serverPreferences_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\setCameraData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\setCamera_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\snapShotVisualisationData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\snapShotVisualisation_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\stageSettingsData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\stageSettings_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\transformationDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\transformationDialog_moc.C">
+				</File>
+			</Filter>
+			<Filter
+				Name="DIALOGS"
+				Filter="">
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialog.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\advancedOptionsDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\advancedOptionsDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\amberMinimizationDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\amberMinimizationDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\atomProperties.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\atomPropertiesData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\bondProperties.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\bondPropertiesData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialog.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\contourSurfaceDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\contourSurfaceDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\displayProperties.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\displayPropertiesData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\labelDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\labelDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\lightSettings.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\lightSettingsData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\mainControlPreferences.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\mainControlPreferencesData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\modelSettingsDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\modelSettingsDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularFileDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\mouseSensitivity.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\mouseSensitivityData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\moveOverlayDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\moveOverlayDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\openBruker1DFile.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\openBruker2DFile.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\peptideDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\peptideDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\preferences.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettings.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettingsData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\serverPreferences.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\setCamera.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\setCameraData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\snapShotVisualisation.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\snapShotVisualisationData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\stageSettings.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\stageSettingsData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\transformationDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\transformationDialogData.C">
+				</File>
+			</Filter>
+			<Filter
+				Name="WIDGETS"
+				Filter="">
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\datasetControl.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\dockWidget.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\genericControl.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\genericControlData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\geometricControl.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\logView.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\molecularControl.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\molecularProperties.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\pyWidget.C">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="C:\Programme\Python23\include"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="C:\Programme\Python23\include"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="C:\Programme\Python23\include"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\regularData1DWidget.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\regularData2DWidget.C">
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\WIDGETS\scene.C">
 				</File>
 			</Filter>
 		</Filter>
@@ -472,7 +1052,7 @@
 				Name="DATATYPE"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\color.h">
+					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\colorExtension2.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\colorHSV.h">
@@ -489,375 +1069,2093 @@
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\colorUnitHue.h">
 				</File>
-			</Filter>
-			<Filter
-				Name="FUNCTOR"
-				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\FUNCTOR\filter.h">
+					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\vertex1.h">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\FUNCTOR\geometricCollector.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\FUNCTOR\information.h">
+					RelativePath="..\..\..\include\BALL\VIEW\DATATYPE\vertex2.h">
 				</File>
 			</Filter>
 			<Filter
-				Name="GUI"
+				Name="DIALOGS"
 				Filter="">
-				<Filter
-					Name="DIALOGS"
-					Filter="">
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialog.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\FDPBDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\FDPBDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\DIALOGS\fileDialog.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\DIALOGS\preferences.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\advancedOptionsDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-				</Filter>
-				<Filter
-					Name="FUNCTOR"
-					Filter="">
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\FUNCTOR\POVRenderer.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\FUNCTOR\externalRenderer.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\FUNCTOR\glObjectCollector.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\FUNCTOR\objectProcessor.h">
-					</File>
-				</Filter>
-				<Filter
-					Name="KERNEL"
-					Filter="">
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\KERNEL\compositeDescriptor.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\KERNEL\glDisplayList.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\KERNEL\glEntityDescriptor.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\KERNEL\glObject.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\KERNEL\glPrimitiveManager.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\KERNEL\glQuadricObject.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\KERNEL\mainControl.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\advancedOptionsDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\KERNEL\objectCreator.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\KERNEL\server.h">
-					</File>
-				</Filter>
-				<Filter
-					Name="PRIMITIV"
-					Filter="">
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\PRIMITIV\gllabel.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\PRIMITIV\glline.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\PRIMITIV\glmesh.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\PRIMITIV\glpoint.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\PRIMITIV\glsimpleBox.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\PRIMITIV\glsphere.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\PRIMITIV\gltube.h">
-					</File>
-				</Filter>
-				<Filter
-					Name="WIDGETS"
-					Filter="">
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\control.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\events.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\mainControlPreferences.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\amberMinimizationDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\modularWidget.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\pyWidget.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\regularData1DWidget.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\amberMinimizationDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\regularData2DWidget.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\scene.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\atomProperties.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\VIEW\GUI\WIDGETS\serverPreferences.h">
-						<FileConfiguration
-							Name="Debug|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-						<FileConfiguration
-							Name="Release|Win32">
-							<Tool
-								Name="VCCustomBuildTool"
-								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\atomPropertiesData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
-								Outputs="$(InputDir)$(InputName)_moc.C"/>
-						</FileConfiguration>
-					</File>
-				</Filter>
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\bondProperties.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\bondPropertiesData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\colorMeshDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\colorMeshDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\coloringSettingsDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\coloringSettingsDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\contourSurfaceDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\contourSurfaceDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\displayProperties.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\displayPropertiesData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\labelDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\labelDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\lightSettings.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\lightSettingsData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\mainControlPreferences.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\mainControlPreferencesData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\modelSettingsDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\modelSettingsDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\molecularDynamicsDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\molecularDynamicsDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\molecularFileDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\mouseSensitivity.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\mouseSensitivityData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\moveOverlayDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\moveOverlayDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\openBruker1DFile.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\openBruker2DFile.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\parsedFunctionDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\parsedFunctionDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\peptideDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\peptideDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\preferences.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\pythonSettings.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\pythonSettingsData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\serverPreferences.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\setCamera.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\setCameraData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\snapShotVisualisation.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\snapShotVisualisationData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\stageSettings.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\stageSettingsData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\transformationDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\transformationDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
 			</Filter>
 			<Filter
 				Name="KERNEL"
 				Filter="">
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\QTTimer.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\client.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\common.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\compositeManager.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\connectionObject.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\events.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\geometricObject.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\information.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\mainControl.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\KERNEL\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\KERNEL\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\KERNEL\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\KERNEL\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\KERNEL\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\KERNEL\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\message.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\modularWidget.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\molecularInformation.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\moleculeObjectCreator.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\objectCreator.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\primitiveManager.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\representation.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\server.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\stage.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\threads.h">
+				</File>
 			</Filter>
 			<Filter
-				Name="PRIMITIV"
+				Name="MODELS"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\label.h">
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\HBondModel.h">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\line.h">
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\atomBondModelBaseProcessor.h">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\mesh.h">
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\backboneModel.h">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\point.h">
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\ballAndStickModel.h">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\simpleBox.h">
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\cartoonModel.h">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\sphere.h">
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\colorProcessor.h">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\tube.h">
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\lineModel.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\modelProcessor.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\standardColorProcessor.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\surfaceModel.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\vanDerWaalsModel.h">
 				</File>
 			</Filter>
 			<Filter
-				Name="COMMON"
+				Name="RENDERING"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\COMMON\global.h">
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\POVRenderer.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\VRMLRenderer.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glDisplayList.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glQuadricObject.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glRenderer.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\renderer.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="PRIMITIVES"
+				Filter="">
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\box.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\disc.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\label.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\line.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\mesh.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\point.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\simpleBox.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\sphere.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\tube.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\twoColoredLine.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIVES\twoColoredTube.h">
+				</File>
+			</Filter>
+			<Filter
+				Name="WIDGETS"
+				Filter="">
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\datasetControl.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\dockWidget.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\genericControl.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\genericControlData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\geometricControl.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\logView.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\molecularControl.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\molecularProperties.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\pyWidget.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\regularData1DWidget.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\regularData2DWidget.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\scene.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 		</Filter>
@@ -865,25 +3163,795 @@
 			Name="Ressourcendateien"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 			<File
-				RelativePath="..\..\..\source\VIEW\GUI\DIALOGS\colorMeshDialog.ui">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running UIC on $(InputPath)"
-						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
-"
-						Outputs="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h"/>
-				</FileConfiguration>
+				RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialog.ui">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"
-						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
-$(QTDIR)\bin\uic -o &quot;$(InputDir)\colorMeshDialogData.C&quot; -impl &quot;..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h;$(InputDir)\colorMeshDialogData.C"/>
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\advancedOptionsDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\amberMinimizationDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\atomProperties.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\bondProperties.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\contourSurfaceDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\displayProperties.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\WIDGETS\genericControl.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\labelDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\lightSettings.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\mainControlPreferences.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\modelSettingsDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\mouseSensitivity.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\moveOverlayDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\peptideDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettings.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\setCamera.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\snapShotVisualisation.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\stageSettings.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\transformationDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
 				</FileConfiguration>
 			</File>
 		</Filter>

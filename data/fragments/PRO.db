@@ -58,6 +58,12 @@
 				<node>2H</node>
 			</node>
 		</node>
+		<node>PRO-M
+			<node>Properties
+				<node>C_TERMINAL</node>
+				<node>N_TERMINAL</node>
+ 			</node>
+		</node>
 		<node>PRO-C
 			<node>Delete
 				<node>1H</node>

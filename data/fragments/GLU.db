@@ -62,6 +62,12 @@
 				<node>3H<value>H</value></node>
 			</node>
 		</node>
+		<node>GLU-M
+			<node>Properties
+				<node>C_TERMINAL</node>
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
 		<node>GLU-C
 			<node>Delete
 				<node>1H</node>

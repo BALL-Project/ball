@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forEach.h,v 1.4 2002/02/27 12:18:31 sturm Exp $
+// $Id: forEach.h,v 1.11 2004/02/18 23:24:03 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_FOREACH_H
 #define BALL_DATATYPE_FOREACH_H
@@ -9,22 +10,23 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
-
 /**	Container Iteration Macro.
 		Use this macro for convenient iteration over BALL container 
-		classes.\\
-		{\bf Example:}\\
-\begin{verbatim}
+		classes. \par
+		<b>Example:</b> \par
+\verbatim
 		HashMap<int,int> hm;
 		HashMap<int,int>::Iterator it;
 		BALL_FOREACH(p,it)
 		{
 			cout << it->first << endl;
 		}
-\end{verbatim}
-		{\bf Definition:} \URL{BALL/DATATYPE/forEach.h}
+\endverbatim
+		
 		@param container an instance of a BALL container class
 		@param element_iterator an iterator of the container class
+
+    \ingroup  DatatypeMiscellaneous
 */
 #define BALL_FOREACH(container, element_iterator) \
 for (element_iterator = container.begin(); \

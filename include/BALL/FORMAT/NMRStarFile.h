@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NMRStarFile.h,v 1.20 2002/12/22 17:27:55 sturm Exp $
+// $Id: NMRStarFile.h,v 1.28 2003/08/26 08:04:13 oliver Exp $
+//
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
@@ -10,17 +11,13 @@
 # include<BALL/FORMAT/lineBasedFile.h>
 #endif
 
-#ifndef BALL_DATATYPE_STRING_H
-# include <BALL/DATATYPE/string.h>
-#endif
-
 #include <vector>
 
 namespace BALL 
 {
-	/** @name Data classes and structures.
+	/** name Data classes and structures.
 			These classes represent the data extracted from NMR-Star-Files.
-			{\bf Definition:} \URL{BALL/FORMAT/NMRStarFile.h}
+    	\ingroup  NMRFileFormats
 	*/
 	//@{
 
@@ -31,6 +28,8 @@ namespace BALL
 	*/
 	struct NMRAtomData
 	{
+		NMRAtomData() throw();
+
 		Position	atom_ID;
 		Position	residue_seq_code;
 		String		residue_label;
@@ -83,8 +82,9 @@ namespace BALL
 	*/
 	struct ShiftReferenceSet
 	{
+		ShiftReferenceSet() throw();
 		String name;
-		std::vector<ShiftReferenceElement*> elements;
+		std::vector<ShiftReferenceElement> elements;
 	};
 
 	struct NMRAtomDataSet
@@ -92,9 +92,9 @@ namespace BALL
 		NMRAtomDataSet() throw();
 
 		String										name;
-		std::vector<NMRAtomData*> atom_data;
-		SampleCondition*					condition;
-		ShiftReferenceSet*				reference;
+		std::vector<NMRAtomData> atom_data;
+		SampleCondition					condition;
+		ShiftReferenceSet				reference;
 	};
 
 	std::ostream& operator << (std::ostream& s, const NMRAtomData&						ad)	throw();
@@ -110,7 +110,7 @@ namespace BALL
 			To read a file simpy use the NMRStarFile(char* filename)- Constructor.
 			All useful data are extracted and stored.
 			To get access to the data use getData().
-			{\bf Definition:} \URL{BALL/FORMAT/NMRStarFile.h}
+			
 	*/
 	//@{
 	class NMRStarFile
@@ -171,7 +171,7 @@ namespace BALL
 
 			/** Get the extracted data for the atoms.
 			*/
-			const std::vector<NMRAtomDataSet*>& getData()
+			const std::vector<NMRAtomDataSet>& getData()
 				const throw();
 
 			//@}
@@ -219,7 +219,7 @@ namespace BALL
 			//_@{
 
 			/// function to extract the data from a chemical shift line
-			NMRAtomData* processShiftLine_()
+			NMRAtomData processShiftLine_()
 				throw(Exception::ParseError);
 
 			/// reads the number of chemical shifts
@@ -255,13 +255,13 @@ namespace BALL
 			Size number_of_shifts_;
 
 			/// the data for the atoms is stored here
-			std::vector<NMRAtomDataSet*> atom_data_sets_;
+			std::vector<NMRAtomDataSet> atom_data_sets_;
 
 			/// the data for different sample sets
-			std::vector<SampleCondition*> sample_conditions_;
+			std::vector<SampleCondition> sample_conditions_;
 
 			/// the data for shift references
-			std::vector<ShiftReferenceSet*> shift_references_;
+			std::vector<ShiftReferenceSet> shift_references_;
 
 			/// name of the molecular system
 			String system_name_;
@@ -288,7 +288,6 @@ namespace BALL
 	};
 
 	//@}
-
 } // Namespace BALL
 
 #endif // BALL_NMR_READ_STAR_H

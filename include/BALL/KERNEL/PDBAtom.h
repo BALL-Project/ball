@@ -1,14 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.h,v 1.23 2002/02/27 12:18:43 sturm Exp $
+// $Id: PDBAtom.h,v 1.32 2003/08/26 08:04:15 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_KERNEL_ATOM_H
 #	include <BALL/KERNEL/atom.h>
@@ -24,7 +21,6 @@
 
 namespace BALL 
 {
-
 	class Chain;
 	class Protein;
 	class Residue;
@@ -34,10 +30,12 @@ namespace BALL
 			It contains additional attributes to hold the crystallographic properties
 			of atoms from a PDB file (e.g., temperature factor, occupancy).
 			For details on the PDB format and the detailed meaning of those fields,
-			please refer to the PDB documentation at \URL{http://www.rcsb.org}.
-			\\
-			{\bf Definition:}\URL{BALL/KERNEL/PDBAtom.h}
+			please refer to the PDB documentation at http://www.rcsb.org
+			 \par
+			
 			@see PDBFile
+    	
+			\ingroup KernelContainers 
 	*/
 	class PDBAtom
 		: public Atom
@@ -169,7 +167,7 @@ namespace BALL
     /** Assignment with cloning facility.
         The assignment is either deep or shallow (default).
         @param  pdb_atom the PDBAtom to be copied (cloned)
-        @param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+        @param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
     */
     void set(const PDBAtom& pdb_atom, bool deep = true)
       throw(); 
@@ -186,7 +184,7 @@ namespace BALL
 				@param   pdb_atom the PDBAtom to be copied (cloned)
 				@return  pdb_atom& - the instance
 		*/
-		const PDBAtom& operator = (const PDBAtom& pdb_atom)
+		PDBAtom& operator = (const PDBAtom& pdb_atom)
 			throw();
 
 		/** Swapping of PDBAtoms.
@@ -349,7 +347,6 @@ namespace BALL
 		float temperature_factor_;
 
 	};
-
 } // namespace BALL
 
 #endif // BALL_KERNEL_PDBATOM_H

@@ -1,14 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.h,v 1.22 2002/02/27 12:18:49 sturm Exp $ 
+// $Id: nucleicAcid.h,v 1.32 2003/08/26 08:04:18 oliver Exp $ 
+//
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #	include <BALL/KERNEL/molecule.h>
@@ -22,11 +19,12 @@
 
 namespace BALL 
 {
-
-	class Nucleotide;
-
-	/**	Kernel class representing nucleic acids.
-			{\bf Definition:} \URL{BALL/KERNEL/nucleicAcid.h}
+	/**	Nucleic acid class.
+			 \par
+			
+			 \par
+    	
+			\ingroup KernelContainers 
 	*/
 	class NucleicAcid
 		: public Molecule
@@ -108,14 +106,14 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  nucleic_acid the NucleicAcid to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const NucleicAcid& nucleic_acid, bool deep = true)
 			throw();
 
 		/**	Assignment operator.
 		*/
-		const NucleicAcid& operator = (const NucleicAcid& nucleic_acid)
+		NucleicAcid& operator = (const NucleicAcid& nucleic_acid)
 			throw();
 
 		/**	Assign a NucleicAcid object from another.
@@ -241,8 +239,8 @@ namespace BALL
 		//@{
 
 		/** Internal state and consistency self-validation.
-				@return	 bool - {\tt true} if the internal state of this instance atom 
-								 is correct (self-validated) and consistent, {\tt false}
+				@return	 bool - <tt>true</tt> if the internal state of this instance atom 
+								 is correct (self-validated) and consistent, <tt>false</tt>
 								 otherwise
 		*/
 		virtual bool isValid() const
@@ -271,7 +269,6 @@ namespace BALL
 
 		String id_;
 	};
-
 } // namespace BALL
 
 #endif // BALL_KERNEL_NUCLEICACID_H

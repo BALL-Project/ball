@@ -1,29 +1,23 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.17 2002/02/27 12:18:43 sturm Exp $
+// $Id: PTE.h,v 1.26 2003/08/26 08:04:16 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_CONCEPT_PROPERTY_H
-#	include <BALL/CONCEPT/property.h>
+#ifndef BALL_COMMON_CREATE_H
+# include <BALL/COMMON/create.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
+# include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
-#	include <BALL/CONCEPT/processor.h>
+# include <BALL/CONCEPT/processor.h>
 #endif
-
-#include <ctype.h> 	//  toupper, tolower
-#include <stdlib.h> //  bsearch
 
 #define BALL_ELEMENT_NAME_DEFAULT                "Unknown"
 #define BALL_ELEMENT_SYMBOL_DEFAULT              "?"
@@ -39,24 +33,24 @@
 
 namespace BALL 
 {
-
-	/**	@name	Periodic Table of Elements
+	/**	\defgroup PTE Periodic Table of Elements
 			These classes represent elements and the periodic table of elements.
-			The \Ref{Element} class is used to describe common properties of atoms
+			The  \link Element Element \endlink  class is used to describe common properties of atoms
 			(e.g., mass, nuclear charge, element symbol). Elements can be retrieved
-			from the \Ref{PTE} object ({\bf P}eriodic {\bf T}able of {\bf E}lements)
-			which is a global instance of \Ref{PTE_}.\\
-			{\bf Definition:}\URL{BALL/KERNEL/PTE.h}
+			from the  \link PTE PTE \endlink  object (<b>P</b>eriodic <b>T</b>able of <b>E</b>lements)
+			which is a global instance of  \link PTE_ PTE_ \endlink . \par
+			
 			@see Atom::setElement
 			@see Atom::getElement
+    	
+			\ingroup  KernelMiscellaneous
 	*/
 	//@{
 
 	/**	Element class.
-			{\bf Definition:}\URL{BALL/KERNEL/PTE.h}
+			\ingroup KernelMiscellaneous	
 	*/
 	class Element
-		: public PropertyManager
 	{
 		public:
 
@@ -314,23 +308,13 @@ namespace BALL
 				Zr
 			};
 
-			/**	@name	Property
-					Enum to define atom element properties.
-			*/
-			enum Property
-			{
-				/**	@name NUMBER_OF_PROPERTIES
-				*/
-				NUMBER_OF_PROPERTIES
-			};
-			
 			/**	@name	Constructors and Destructors.
 			*/
 			//@{
 			
 			/**	Default constructor
 					The instance is set to the default values
-					(= \Ref{UNKNOWN} element).
+					(=  \link UNKNOWN UNKNOWN \endlink  element).
 			*/
 			Element()
 				throw();
@@ -362,7 +346,7 @@ namespace BALL
 
 			/** Clear method.
 					The instance is set to the default values
-					(= \Ref{UNKNOWN} element).
+					(=  \link UNKNOWN UNKNOWN \endlink  element).
 			*/
 			virtual void clear()
 				throw();
@@ -376,7 +360,7 @@ namespace BALL
 					@param   element the Element to be copied (cloned)
 					@return  Element& - this instance
 			*/
-			const Element& operator = (const Element& element)
+			Element& operator = (const Element& element)
 				throw();
 
 			//@}
@@ -674,7 +658,7 @@ namespace BALL
 
 
 	/**	Element output operator.
-			Prints the contents of an instance of \Ref{Element} to an {\tt ostream}.
+			Prints the contents of an instance of  \link Element Element \endlink  to an <tt>ostream</tt>.
 	*/
 	std::ostream& operator << (std::ostream& s, const Element& element)
 		throw();
@@ -683,18 +667,10 @@ namespace BALL
 	/**	Periodic Table of Elements Class
 	*/
 	class PTE_
-		: public PropertyManager
 	{
 		public:
 
 			BALL_CREATE(PTE_)
-
-			/**	
-			*/
-			enum Property
-			{
-				NUMBER_OF_PROPERTIES
-			};
 
 			/**	@name	Constructors and Destructors
 			*/
@@ -716,7 +692,6 @@ namespace BALL
 				throw();
 
 			/** Clear method.
-					This method just calls \Ref{PropertyManager::clear}.
 			*/
 			virtual void clear()
 				throw();
@@ -730,7 +705,7 @@ namespace BALL
 					Does not assign anything.
 					Implemented just for the OCI.
 			*/
-			const PTE_& operator = (const PTE_& /*pte*/)
+			PTE_& operator = (const PTE_& /*pte*/)
 				throw();
 			
 			//@}
@@ -818,8 +793,8 @@ namespace BALL
 		
 			/** Application of an unary processor on every contained element.
 					@param  processor a typed unary processor for Element instances
-					@return  bool - {\tt true} if application has been terminated successfully,
-													{\tt false} otherwise
+					@return  bool - <tt>true</tt> if application has been terminated successfully,
+													<tt>false</tt> otherwise
 			*/
 			static bool apply(UnaryProcessor<Element>& applicator)
 				throw();
@@ -849,17 +824,16 @@ namespace BALL
 	};
 
 
-	/**	@memo	Global static instance of the periodic table.
+	/**	Global static instance of the periodic table.
+			\ingroup KernelMiscellaneous
 	*/
 	extern PTE_ PTE;
 
-	//@}
 
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/KERNEL/PTE.iC>
 #	endif
-
 } //namespace BALL 
 
 

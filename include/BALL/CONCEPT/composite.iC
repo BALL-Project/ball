@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.iC,v 1.19 2002/12/16 17:15:32 oliver Exp $
+// $Id: composite.iC,v 1.22 2003/08/26 08:04:07 oliver Exp $
+//
 
 BALL_INLINE 
-const Composite& Composite::operator = (const Composite& composite)
+Composite& Composite::operator = (const Composite& composite)
 	throw()
 {
   set(composite);
@@ -114,34 +115,6 @@ const PreciseTime& Composite::getSelectionTime() const
 	throw()
 {
   return selection_stamp_.getTime();
-}
-
-BALL_INLINE 
-void Composite::expand()
-	throw()
-{
-  BALL_BIT_CLEAR(properties_, PROPERTY__COLLAPSED_);
-}
-
-BALL_INLINE 
-void Composite::collapse()
-	throw()
-{
-  BALL_BIT_SET(properties_, PROPERTY__COLLAPSED_);
-}
-
-BALL_INLINE 
-bool Composite::isExpanded() const
-	throw()
-{
-  return (BALL_BIT_IS_CLEARED(properties_, PROPERTY__COLLAPSED_) != 0);
-}
-
-BALL_INLINE 
-bool Composite::isCollapsed() const
-	throw()
-{
-  return (BALL_BIT_IS_SET(properties_, PROPERTY__COLLAPSED_) != 0);
 }
 
 BALL_INLINE 

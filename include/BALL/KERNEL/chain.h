@@ -1,21 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.25 2002/02/27 12:18:46 sturm Exp $
+// $Id: chain.h,v 1.35 2003/08/26 08:04:17 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_KERNEL_RESIDUE_H
 #	include <BALL/KERNEL/residue.h>
-#endif
-
-#ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
-#	include <BALL/KERNEL/secondaryStructure.h>
 #endif
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
@@ -27,11 +20,14 @@
 
 namespace BALL 
 {
-	
 	class Protein;
 
-	/** Protein Chain Class.
-			{\bf Definition:}\URL{BALL/KERNEL/chain.h}
+	/** Protein chain class.
+			This class represents a polypeptide chain within a  \link Protein Protein \endlink .
+			Chains can contain  \link SecondaryStructure SecondaryStructure \endlink s or  \link Residue Residue \endlink s.
+			 \par
+			
+	 		\ingroup KernelContainers 
 	*/
 	class Chain
 		: public AtomContainer
@@ -97,7 +93,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  chain the chain to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
+				@param  deep make a deep (=<tt>true</tt>) or shallow (=<tt>false</tt>) copy
 		*/
 		void set(const Chain& chain, bool deep = true)
 			throw();
@@ -108,7 +104,7 @@ namespace BALL
 				@return  chain& - this instance.
 				@see     chain::set
 		*/
-		const Chain& operator = (const Chain& chain)
+		Chain& operator = (const Chain& chain)
 			throw();
 
 		/** Copying with cloning facility.
@@ -335,20 +331,20 @@ namespace BALL
 		bool remove(Residue& residue)
 			throw();
 
-		/**	Cut all children of {\tt chain} and prepend them before the children of this chain.
+		/**	Cut all children of <tt>chain</tt> and prepend them before the children of this chain.
 				@param chain the chain to access
 		*/
 		void spliceBefore(Chain& chain)
 			throw();
 
-		/**	Cut all children of {\tt chain} and append them after the children of this chain.
+		/**	Cut all children of <tt>chain</tt> and append them after the children of this chain.
 				@param chain the chain to access
 		*/
 		void spliceAfter(Chain &chain)
 			throw();
 
-		/**	Move the children of {\tt chain} into this chain.
-				The children of {\tt chain} are inserted using \Ref{spliceBefore}.
+		/**	Move the children of <tt>chain</tt> into this chain.
+				The children of <tt>chain</tt> are inserted using  \link spliceBefore spliceBefore \endlink .
 		*/
 		void splice(Chain &chain)
 			throw();
@@ -438,7 +434,6 @@ namespace BALL
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 	};
-
 } // namespace BALL
 
 #endif // BALL_KERNEL_CHAIN_H

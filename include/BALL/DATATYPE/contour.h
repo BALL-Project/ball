@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contour.h,v 1.10 2002/02/27 12:18:31 sturm Exp $
+// $Id: contour.h,v 1.16 2003/08/26 08:04:10 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_CONTOUR_H
 #define BALL_DATATYPE_CONTOUR_H
@@ -16,11 +17,11 @@
 
 #include <vector>
 
-using namespace BALL;
 
 namespace BALL
 {
 	/** This class is intended to create and store ContourLines belonging to the same data-set.
+    	\ingroup  DatatypeMiscellaneous
 	*/
 	template <typename T>
 	class TContour
@@ -56,7 +57,7 @@ namespace BALL
 		//@{
 			
 		/// Assignment operator
-		const TContour& operator = (const TContour& assigTContour);
+		TContour& operator = (const TContour& rhs);
 
 		/**		
 		*/
@@ -89,6 +90,7 @@ namespace BALL
 	};
 
 	/** Default type
+    	\ingroup  DatatypeMiscellaneous
 	 */
 	typedef TContour<float> Contour;
 
@@ -108,13 +110,13 @@ namespace BALL
 	}
 
 	template <typename T>
-	const TContour<T>& TContour<T>::operator = (const TContour& assigTContour)
+	TContour<T>& TContour<T>::operator = (const TContour& rhs)
 	{
-		start_     = assigTContour.start_;
-		end_       = assigTContour.end_;
-		data_      = assigTContour.data_;
-		num_lines_ = assigTContour.num_lines_;
-		it_        = assigTContour.it_;
+		start_     = rhs.start_;
+		end_       = rhs.end_;
+		data_      = rhs.data_;
+		num_lines_ = rhs.num_lines_;
+		it_        = rhs.it_;
 	}
 
 	template <typename T>
@@ -174,7 +176,6 @@ namespace BALL
 		it_ = lines_.begin();
 		index_ = 0;
 	}
-
 
 } // namespace BALL
 

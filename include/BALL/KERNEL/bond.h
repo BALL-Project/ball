@@ -1,14 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.30 2002/12/12 09:48:45 oliver Exp $
+// $Id: bond.h,v 1.41 2003/08/26 08:04:16 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #	include <BALL/CONCEPT/property.h>
@@ -22,11 +19,6 @@
 #	include <BALL/KERNEL/atomContainer.h>
 #endif
 
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
-
-
 #define BALL_BOND_DEFAULT_FIRST_ATOM    0
 #define BALL_BOND_DEFAULT_SECOND_ATOM   0
 #define BALL_BOND_DEFAULT_NAME          ""
@@ -36,7 +28,6 @@
 
 namespace BALL 
 {
-
 	class Atom;
 	class Fragment;
 	class System;
@@ -44,22 +35,22 @@ namespace BALL
 	/** Bond class.
 			An instance of Bond represents a bond between two atoms.
 			Bond equality is defined as bond identity.
-			A linear ordering of bonds is defined as the linear order of the \Ref{Object::Handle}s.
+			A linear ordering of bonds is defined as the linear order of the  \link Object::Handle Object::Handle \endlink s.
 			There can be only one bond between two atoms (double, triple, etc. bonds are represented
-			using just one bond and an appropriate value for the bond order attribute, see \Ref{setBondOrder}).
-			\\
+			using just one bond and an appropriate value for the bond order attribute, see  \link setBondOrder setBondOrder \endlink ).
+			 \par
 			The "first" and "second" atom are assigned in a unique way: the first atom is always
-			the atom with the lower \Ref{Handle} thant the second atom.
-			\\
+			the atom with the lower  \link Handle Handle \endlink  thant the second atom.
+			 \par
 			The "state" of a bond is defined by its attributes:
-			\begin{itemize}
-				\item "first atom" (\Ref{Bond::first_})
-				\item "second atom" (\Ref{Bond::second_})
-				\item "bond name" (\Ref{Bond::name_})
-				\item "bond order" (\Ref{Bond::bond_order_})
-				\item "bond type" (\Ref{Bond::bond_type_})
-			\end{itemize}
-			{\bf Definition:} \URL{BALL/KERNEL/bond.h}\\
+			
+				- "first atom" ( \link Bond::first_ Bond::first_ \endlink )
+				- "second atom" ( \link Bond::second_ Bond::second_ \endlink )
+				- "bond name" ( \link Bond::name_ Bond::name_ \endlink )
+				- "bond order" ( \link Bond::bond_order_ Bond::bond_order_ \endlink )
+				- "bond type" ( \link Bond::bond_type_ Bond::bond_type_ \endlink )
+			
+    	\ingroup KernelMiscellaneous 
 	*/
 	class Bond
 		: public Composite,
@@ -77,7 +68,7 @@ namespace BALL
 		//@{
 			
 		/**	Too many bonds created.
-				This exception may be thrown by \Ref{createBond} if the maximum number
+				This exception may be thrown by  \link createBond createBond \endlink  if the maximum number
 				of bonds (8 bonds) is exceeded.
 		*/
 		class TooManyBonds
@@ -86,10 +77,12 @@ namespace BALL
 			public:
 			TooManyBonds(const char* file, int line)
 				throw();
+			TooManyBonds(const char* file, int line, const Atom& atom1, const Atom& atom2)
+				throw();
 		};
 
 		/**	Not bound to two atoms.
-				This exception may be thrown by \Ref{getLength} if this instance is not bound.
+				This exception may be thrown by  \link getLength getLength \endlink  if this instance is not bound.
 		*/
 		class NotBound
 			:	public	Exception::GeneralException
@@ -118,19 +111,21 @@ namespace BALL
 		*/
 		enum BondOrder
 		{
-			/// Default value
+			/// Default value.
 			ORDER__UNKNOWN        = 0,
-			///
+			/// Single bond.
 			ORDER__SINGLE         = 1,
-			///
+			/// Double bond.
 			ORDER__DOUBLE         = 2,
-			///
+			/// Triple Bond.
 			ORDER__TRIPLE         = 3,
-			///
+			/// Quadruple bond.
 			ORDER__QUADRUPLE      = 4,
-			///
+			/// Aromatic bonds.
 			ORDER__AROMATIC       = 5,
-			///
+			/// Any bond orders (useful for predicates).
+			ORDER__ANY            = 6,
+			/// The number of bond orders.
 			NUMBER_OF_BOND_ORDERS
 		};
 			
@@ -172,22 +167,22 @@ namespace BALL
 
 		/** Default constructor.
 				The state of this bond is:
-				\begin{itemize}
-					\item bond has no first atom (=0)
-					\item bond has no second atom (=0)
-					\item bond name is the empty string (="")
-					\item bond order is unknown (=\Ref{Bond::ORDER__UNKNOWN})
-					\item bond type is unknown (=\Ref{Bond::TYPE__UNKNOWN})
-				\end{itemize}
+
+					- bond has no first atom (=0)
+					- bond has no second atom (=0)
+					- bond name is the empty string (="")
+					- bond order is unknown (= \link Bond::ORDER__UNKNOWN Bond::ORDER__UNKNOWN \endlink )
+					- bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
+				
 		*/
 		Bond()
 			throw();
 
 		/** Copy constructor.
-				Calls \Ref{Bond::createBond}.
+				Calls  \link Bond::createBond Bond::createBond \endlink .
 				The state of this bond is initialized to the state of bond.
-				\\
-				{\bf Note:} Deep copying of bonds makes no sense, the parameter {\tt deep} is therefore
+				 \par
+				<b>Note:</b> Deep copying of bonds makes no sense, the parameter <tt>deep</tt> is therefore
 				ignored. The use of this method is not recommended because it may result in inconcistencies
 				of the whole the kernel data structure. This if for internal use only!
 				@param			 bond the bond to be copied
@@ -198,26 +193,26 @@ namespace BALL
 			throw();
 	
 		/** Detailed constructor.
-				Calls \Ref{createBond} to create a new bond between the two atoms
+				Calls  \link createBond createBond \endlink  to create a new bond between the two atoms
 				@param       name name of the constructed bond
 				@param       first first atom of the constructed bond
 				@param       second second atom of the constructed bond
 				@param       order order of the constructed bond
 				@param       type type of the constructed bond
-				@exception TooManyBonds if one of the atom already possesses \Ref{Atom::MAX_NUMBER_OF_BONDS} bonds.
+				@exception TooManyBonds if one of the atom already possesses  \link Atom::MAX_NUMBER_OF_BONDS Atom::MAX_NUMBER_OF_BONDS \endlink  bonds.
 		*/
 		Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BOND_DEFAULT_ORDER,
 				 Type type = BALL_BOND_DEFAULT_TYPE)
 			throw(TooManyBonds);
 
 		/** Create a bond.
-				Connect the two atoms {\tt first} and {\tt second} via a bond.
-				@param 	bond the instantiated bond that connects the first atom {\tt first} 
-								to the second atom {\tt second}
+				Connect the two atoms <tt>first</tt> and <tt>second</tt> via a bond.
+				@param 	bond the instantiated bond that connects the first atom <tt>first</tt> 
+								to the second atom <tt>second</tt>
 				@param 	first the first atom of the bond
 				@param 	second the second atom of the bond
-				@return Bond* {\tt this}
-				@exception TooManyBonds if one of the atom already possesses \Ref{Atom::MAX_NUMBER_OF_BONDS} bonds.
+				@return Bond* <tt>this</tt>
+				@exception TooManyBonds if one of the atom already possesses  \link Atom::MAX_NUMBER_OF_BONDS Atom::MAX_NUMBER_OF_BONDS \endlink  bonds.
 		*/
 		static Bond* createBond(Bond& bond, Atom& first, Atom& second)
 			throw(TooManyBonds);
@@ -232,22 +227,22 @@ namespace BALL
 		/** Explicit default initialization.
 				Set the state of this bond to the default values.
 				The state of this bond is:
-				\begin{itemize}
-					\item bond has no connectivity with first atom (=0)
-					\item bond has no connectivity with second atom (=0)
-					\item bond name is the empty string (="")
-					\item bond order is unknown (=\Ref{Bond::ORDER__UNKNOWN})
-					\item bond type is unknown (=\Ref{Bond::TYPE__UNKNOWN})
-				\end{itemize}
+
+					- bond has no connectivity with first atom (=0)
+					- bond has no connectivity with second atom (=0)
+					- bond name is the empty string (="")
+					- bond order is unknown (= \link Bond::ORDER__UNKNOWN Bond::ORDER__UNKNOWN \endlink )
+					- bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
+				
 		*/
 		virtual void clear()
 			throw();
 
 		/** Explicit destructor.
 				Destroy this bond explicitly without releasing its heap memory thus
-				this bond may exist further.	Calls \Ref{Bond::clear}.
+				this bond may exist further.	Calls  \link Bond::clear Bond::clear \endlink .
 				Set the state of this bond to the default values. 
-				{\bf Note:} Destroy is equivalent to \Ref{Bond::clear}.
+				<b>Note:</b> Destroy is equivalent to  \link Bond::clear Bond::clear \endlink .
 				@see Bond::clear
 		*/
 		virtual void destroy()
@@ -271,8 +266,8 @@ namespace BALL
 			throw(Exception::GeneralException);
 
 		/**	Finalize the deserialization.
-				Bond might have to swap {\tt first_} and {\tt second_} to ensure
-				the correct order (see \Ref{Bond}).
+				Bond might have to swap <tt>first_</tt> and <tt>second_</tt> to ensure
+				the correct order (see  \link Bond Bond \endlink ).
 		*/
 		void finalize()
 			throw(Exception::GeneralException);
@@ -300,19 +295,19 @@ namespace BALL
 		//@{
 	
 		/** Assignment operator.
-				Assign a deep copy (on the level of \Ref{Composite}).
+				Assign a deep copy (on the level of  \link Composite Composite \endlink ).
 				
-				{\bf Note:} The use of this method is not recommended because it may result in inconcistencies
+				<b>Note:</b> The use of this method is not recommended because it may result in inconcistencies
 				of the whole system. This is for internal use only.
 				@param  bond the bond to be copied
 				@return Bond - this bond
 				@see    Bond::set
 		*/
-		const Bond& operator = (const Bond& bond)
+		Bond& operator = (const Bond& bond)
 			throw();
 
 		/** Swap the contents of two bonds
-				@param bond the bond {\tt this} is being swapped with
+				@param bond the bond <tt>this</tt> is being swapped with
 				@see   Bond::Bond
 		*/
 		void swap(Bond& bond)
@@ -326,7 +321,7 @@ namespace BALL
 
 		/** Set the first atom.
 				This method does not ensure the correct order of atoms 
-				(see \Ref{Bond}), so its use is recommended for internal purposes only.
+				(see  \link Bond Bond \endlink ), so its use is recommended for internal purposes only.
 				@param atom the atom to set
 		*/
 		void setFirstAtom(Atom* atom)
@@ -339,7 +334,7 @@ namespace BALL
 	 
 		/** Set the second atom.
 				This method does not ensure the correct order of atoms 
-				(see \Ref{Bond}), so its use is recommended for internal purposes only.
+				(see  \link Bond Bond \endlink ), so its use is recommended for internal purposes only.
 				@param atom the atom to set
 		*/
 		void setSecondAtom(Atom* atom)
@@ -351,8 +346,8 @@ namespace BALL
 			throw();
 
 		/**	Return the partner atom of an atom.
-				If the given {\tt atom} is part of this bond, the other atom
-				of the bond is returned. 0 is returned if {\tt atom} is not
+				If the given <tt>atom</tt> is part of this bond, the other atom
+				of the bond is returned. 0 is returned if <tt>atom</tt> is not
 				one of the bond's atoms.
 				@param	atom one of the bond's atoms
 				@return	the atom's bond partner
@@ -418,18 +413,18 @@ namespace BALL
 		//@{ 
 
 		/** Determine whether the bond belongs to an atom.
-				Calls \Ref{Atom::hasBond}.
+				Calls  \link Atom::hasBond Atom::hasBond \endlink .
 				@param atom the atom that is queried to connect this bond to another atom
-				@return  bool - {\tt true} if bond connects the atom {\em atom} with another atom, 
-												{\tt false} otherwise
+				@return  bool - <tt>true</tt> if bond connects the atom {\em atom} with another atom, 
+												<tt>false</tt> otherwise
 				@see     Atom::hasBond
 		*/
 		bool isBondOf(const Atom& atom) const
 			throw();
 
 		/** Determine whether this bond contains any atom.
-				@return   bool - {\tt true} if bond connects the atom {\em atom} with another atom, 
-												 {\tt false} otherwise
+				@return   bool - <tt>true</tt> if bond connects the atom {\em atom} with another atom, 
+												 <tt>false</tt> otherwise
 				@see      Atom::hasBond
 		*/
 		bool isBound() const
@@ -437,9 +432,9 @@ namespace BALL
 
 		/** Determine whether the bond connects two fragments.
 				If both atoms have no roots, the result is false.
-				Calls \Ref{Composite::getRoot}.
-				@return   bool - {\tt true} if this bond is intermolecular, 
-												 {\tt false} otherwise
+				Calls  \link Composite::getRoot Composite::getRoot \endlink .
+				@return   bool - <tt>true</tt> if this bond is intermolecular, 
+												 <tt>false</tt> otherwise
 				@see      Composite::getRoot
 		*/
 		bool isInterBond() const
@@ -447,21 +442,21 @@ namespace BALL
 
 		/** Request for the intermolecular bonding of this bond within {\em atom_container}.
 				Query, if this bond connects a atom within {\em atom_container} instance with an atom outside.
-				Calls \Ref{Composite::isDescendantOf}.
+				Calls  \link Composite::isDescendantOf Composite::isDescendantOf \endlink .
 				@param  	atom_container the queried parent fragment.
-				@return  	bool -	{\tt true} if this bond is intermolecular, 
-													{\tt false} otherwise
+				@return  	bool -	<tt>true</tt> if this bond is intermolecular, 
+													<tt>false</tt> otherwise
 				@see      Composite::isDescendantOf
 		*/
 		bool isInterBondOf(const AtomContainer& atom_container) const
 			throw();
 
 		/**	Request for the intramolecular bonding of this bond.
-				Query, if this bond connects its two atoms within a common parent \Ref{Composite} instance.
+				Query, if this bond connects its two atoms within a common parent  \link Composite Composite \endlink  instance.
 				If both atoms have no roots, the result is true.
-				Calls \Ref{Composite::getRoot}.
-				@return bool - {\tt true} if this bond is intramolecular, 
-											 {\tt false} otherwise
+				Calls  \link Composite::getRoot Composite::getRoot \endlink .
+				@return bool - <tt>true</tt> if this bond is intramolecular, 
+											 <tt>false</tt> otherwise
 				@see    Composite::getRoot
 		*/
 		bool isIntraBond() const
@@ -469,10 +464,10 @@ namespace BALL
 
 		/** Request for the intramolecular bonding of this bond within {\em atom_container}.
 				Query, if this bond connects its two atoms within the common parent {\em atom_container} instance.
-				Calls \Ref{Composite::isDescendantOf}.
+				Calls  \link Composite::isDescendantOf Composite::isDescendantOf \endlink .
 				@param  atom_container the queried parent fragment.
-				@return bool - {\tt true} if this bond is intramolecular, 
-											 {\tt false} otherwise
+				@return bool - <tt>true</tt> if this bond is intramolecular, 
+											 <tt>false</tt> otherwise
 				@see    Composite::isDescendantOf
 		*/
 		bool isIntraBondOf(const AtomContainer& atom_container) const
@@ -485,8 +480,8 @@ namespace BALL
 		//@{ 
 
 		/** Internal state and consistency self-validation.
-				@return   bool - {\tt true} if the internal state of this bond is correct (self-validated)
-									and consistent, {\tt false} otherwise
+				@return   bool - <tt>true</tt> if the internal state of this bond is correct (self-validated)
+									and consistent, <tt>false</tt> otherwise
 		*/
 		virtual bool isValid() const
 			throw();
@@ -536,7 +531,6 @@ namespace BALL
 # ifndef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/KERNEL/bond.iC>
 # endif
-
 } // namespace BALL
 
 #endif // BALL_KERNEL_BOND_H

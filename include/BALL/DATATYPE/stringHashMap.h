@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stringHashMap.h,v 1.16 2002/02/27 12:18:35 sturm Exp $
+// $Id: stringHashMap.h,v 1.24 2003/08/26 08:04:12 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -30,14 +31,16 @@
 
 namespace BALL 
 {
-
+	/** StringHashMap
+	    \ingroup  GenericHash
+	*/
 	template <typename Value>
 	class StringHashMap
 		:	public HashMap<String, Value>
 	{
 		public:
 
-		BALL_CREATE_DEEP(StringHashMap)
+		BALL_CREATE(StringHashMap)
 
 		/**	@name Type Definitions
 		*/
@@ -71,9 +74,8 @@ namespace BALL
 		/** Copy constructor.
 				Create a copy of an existing hash map.
 				@param	map the hash map to be copied
-				@param	deep ignored
 		*/
-		StringHashMap(const StringHashMap& map, bool /* deep = true */)
+		StringHashMap(const StringHashMap& map)
 			throw()
 			: HashMap<String, Value>(map)
 		{
@@ -93,7 +95,7 @@ namespace BALL
 		void destroy()
 			throw()
 		{
-			clear();
+			HashMap<String, Value>::clear();
 		}
 	
 		//@}
@@ -104,12 +106,11 @@ namespace BALL
 		/** Assign a hash map from another.
 				Create a copy of a hash map.
 				@param	hash_map	the map to be copied
-				@param	deep ignored
 		*/
-    void set(const StringHashMap& hash_map, bool /* deep */ = true)
+    void set(const StringHashMap& hash_map)
 			throw()
 		{
-			clear();
+			HashMap<String, Value>::clear();
 
 			ConstIterator it = hash_map.begin();
 			for ( ; it != hash_map.end(); ++it)
@@ -128,10 +129,10 @@ namespace BALL
 		}
 			
 		/// Assigns the content of a hash map to another
-    void get(StringHashMap& hash_map, bool deep = true) const
+    void get(StringHashMap& hash_map) const
 			throw()
 		{
-			hash_map.set(*this, deep);
+			hash_map.set(*this);
 		}
 
 		/// Swaps the contents of two hash maps
@@ -165,23 +166,23 @@ namespace BALL
 		}
 
 			
-		/**	Remove the entry {\tt key} from the map.
+		/**	Remove the entry <tt>key</tt> from the map.
 				@param	key the key of the entry to be removed
-				@return	bool {\bf true} if the key was removed
+				@return	bool <b>true</b> if the key was removed
 		*/
 		bool remove(const String& key)	
 			throw()
 		{
 			// search the key
-			Iterator it = find(key);
-			if (it == end())
+			Iterator it = HashMap<String, Value>::find(key);
+			if (it == HashMap<String, Value>::end())
 			{
 				// we didn't find it..
 				return false;
 			}
 			
 			// found it: delete it
-			erase(it);
+			HashMap<String, Value>::erase(it);
 
 			return true;
 		}
@@ -191,7 +192,7 @@ namespace BALL
 		Size getSize() const
 			throw()
 		{
-			return size();
+			return HashMap<String, Value>::size();
 		}
 		
 		/**	Return the load factor of the hash map.
@@ -202,7 +203,7 @@ namespace BALL
 		float getLoadFactor() const
 			throw()
 		{
-			return (float)size() / (float)HashMap<String, Value>::getBucketSize();
+			return (float)HashMap<String, Value>::size() / (float)HashMap<String, Value>::getBucketSize();
 		}
 	
 		//@}
@@ -229,16 +230,16 @@ namespace BALL
 		bool has(const String& key) const
 			throw()
 		{
-			return !(find(key) == end());
+			return !(HashMap<String, Value>::find(key) == HashMap<String, Value>::end());
 		}
 
 		/** Return true if the hash map is empty.
-				This method return {\bf true} if the hash map does not contain any entries.
+				This method return <b>true</b> if the hash map does not contain any entries.
 		*/
 		bool isEmpty() const
 			throw()
 		{
-			return (size() == 0);
+			return (HashMap<String, Value>::size() == 0);
 		}
 		//@}
 
@@ -257,7 +258,6 @@ namespace BALL
 		//@}
 
 	};
-
 
 }// namespace BALL
 

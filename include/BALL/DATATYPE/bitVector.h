@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.31 2002/02/27 12:18:30 sturm Exp $
+// $Id: bitVector.h,v 1.42 2003/08/26 08:04:09 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -33,12 +34,12 @@
 
 namespace BALL 
 {
-
 	class BitVector;
 
 	/**	Bit Class. This class represents a bit within a BitVector.
-			{\bf Definition:} \URL{BALL/DATATYPE/bitVector.h} \\
+			
 			@see BitVector. 
+    	\ingroup  DatatypeMiscellaneous
 	*/
 	class Bit
 	{
@@ -64,7 +65,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE(Bit);
+		BALL_CREATE(Bit)
 
 		/** Default constructor 
 		*/
@@ -114,14 +115,14 @@ namespace BALL
 		/** Assignment operator.
 				Assign the position from a Bit to this instance
 		*/
-		const Bit& operator = (const Bit& bit) throw();
+		Bit& operator = (const Bit& bit) throw();
 
 		/** Assignment operator.
 				Assign a bool value to this instance.
 				The bit in the bitvector is set to the given value.
 				@exception IllegalOperation if instance points to a const bitvector
 		*/
-		const Bit& operator = (const bool bit) 
+		Bit& operator = (const bool bit) 
 			throw(Exception::NullPointer, IllegalOperation);
 
 		/** Clear method 
@@ -171,6 +172,8 @@ namespace BALL
 			Some functions resize the instance if a index greater than the
 			size of the instance is given.
 			Other functions throw exception in this case.
+
+    	\ingroup  DatatypeMiscellaneous
 	*/
 	class BitVector
 	{
@@ -240,13 +243,13 @@ namespace BALL
 		  throw(Exception::OutOfMemory);
 
 		/// Assignment from an other BitVector instance.
-		const BitVector& operator = (const BitVector& bit_vector)
+		BitVector& operator = (const BitVector& bit_vector)
 		  throw(Exception::OutOfMemory);
 
 		/** Assignment from a char string.
 				If a char is different from '0', it is interpreted as true.
 		*/
-		const BitVector& operator = (const char *bit_string)
+		BitVector& operator = (const char *bit_string)
 		  throw(Exception::OutOfMemory);
 
 		/// Assignment to an other BitVector.
@@ -300,7 +303,7 @@ namespace BALL
 				@return Bit a Bit pointing to the given element of this instance
 		*/
 		Bit operator []	(Index index)
-		  throw(Exception::IndexUnderflow, Exception::OutOfMemory);
+		  throw(Exception::OutOfMemory);
 
 		/**	Constant random access to the components.
 				If the given index is greater than the size of this instance an exception is thrown.
@@ -450,7 +453,7 @@ namespace BALL
 
 		/** Xor Operator.
 				Creates a new BitVector object and fills it with the result of
-				{\em this Xor bit\_Vector}.
+				{\em this Xor bit\_vector}.
 		*/
 		BitVector operator ^ (const BitVector& bit_vector) 
 			throw(Exception::OutOfMemory);
@@ -573,7 +576,6 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/bitVector.iC>
 #	endif
-
 } //namespace BALL
 
 

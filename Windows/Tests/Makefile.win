@@ -3,8 +3,9 @@
 # by Andreas Crauser 
 #---------------------------------------------------------------
 
-CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR
+CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR -Zi
 LD = cl -nologo -MTd 
+LDOPTS = /link /OPT:NOREF /DEBUG
 
 
 
@@ -18,19 +19,38 @@ XLIB = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib 
 INCL = -I ..\..\Windows\include -I ..\..\include -I ..\..\Windows\Contrib\regex-0.12 -I ..\..\Windows\Contrib\ONC_RPC
 
 o = .obj
+EXEEXT = .exe
 e = .exe
 
 .obj.exe:
-	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB)
+	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB) $(LDOPTS)
 
 .c.obj:
 	$(CC) $(CFLAGS) $(DFLAGS) $(IFLAGS) $(INCL) $(*).C
 
 .c.exe:
 	$(CC) $(CFLAGS) $(DFLAGS) $(IFLAGS) $(INCL) $(*).C
-	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB)
+	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB) $(LDOPTS)
 
 
-!include Make.lst
+include ..\..\source\TEST\Makefile.lst
+
+EXECUTABLES = \
+	$(EXECUTABLES_BASIC)\
+	$(EXECUTABLES_SYSTEM)\
+	$(EXECUTABLES_MATHS)\
+	$(EXECUTABLES_DATATYPES)\
+	$(EXECUTABLES_CONCEPTS)\
+	$(EXECUTABLES_KERNEL)\
+	$(EXECUTABLES_FORMATS)\
+	$(EXECUTABLES_MOLMEC)\
+	$(EXECUTABLES_NMR)\
+	$(EXECUTABLES_ENERGY)\
+	$(EXECUTABLES_STRUCTURE)\
+	$(EXECUTABLES_QSAR)\
+	$(EXECUTABLES_SOLVATION)
+
+# default target
+all:	$(EXECUTABLES)
 
 

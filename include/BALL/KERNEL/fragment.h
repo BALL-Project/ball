@@ -1,30 +1,23 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.h,v 1.17 2002/02/27 12:18:48 sturm Exp $
+// $Id: fragment.h,v 1.26 2003/08/26 08:04:17 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #	include <BALL/KERNEL/atomContainer.h>
 #endif
 
-#ifndef BALL_KERNEL_FRAGMENTITERATOR_H
-#	include <BALL/KERNEL/fragmentIterator.h>
-#endif
-
 namespace BALL 
 {
-
 	/**	Fragment class.
 			Fragments are used to represent parts of molecules (for example functional
-			groups, monomers in larger polymers).\\
-			{\bf Definition:}\URL{BALL/KERNEL/fragment.h}
+			groups, monomers in larger polymers). \par
+			
+    	\ingroup KernelContainers 
 	*/
 	class Fragment
 		: public AtomContainer
@@ -95,7 +88,7 @@ namespace BALL
 				@param   fragment the Fragment to be copied (cloned)
 				@return  Fragment& - this instance
 		*/
-		const Fragment& operator = (const Fragment& fragment)
+		Fragment& operator = (const Fragment& fragment)
 			throw();
 
 		//@}
@@ -128,7 +121,6 @@ namespace BALL
 
 		//@}
 	};
-
 } // namespace BALL
 
 #endif // BALL_KERNEL_FRAGMENT_H

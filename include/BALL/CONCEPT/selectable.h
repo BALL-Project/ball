@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectable.h,v 1.11 2002/12/12 09:46:22 oliver Exp $
+// $Id: selectable.h,v 1.19 2003/08/26 08:04:09 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -24,12 +25,13 @@ namespace BALL
 			It is used in the BALL kernel to mark parts of the kernel
 			objects for special operations. In principle, Selectable
 			provides a boolean flag and defines an interface to access
-			this flag.\\
+			this flag. \par
 
-			{\bf Interface:} Storable
-			\\
-			{\bf Definition:} \URL{BALL/CONCEPT/selectable.h}
-			\\
+			<b>Interface:</b> Storable
+			 \par
+			
+			 \par
+			 \ingroup ConceptsMiscellaneous
 	*/
 	class Selectable
 	{
@@ -65,12 +67,6 @@ namespace BALL
 		virtual void clear()
 			throw();
 		
-		/**	Clear the selection flag.
-				This method does the same as the clear method.
-		*/
-		virtual void destroy()
-			throw();
-
 		//@}
 
 		/**	@name	Assignment 
@@ -111,24 +107,29 @@ namespace BALL
 		//@{
 		
 		/**	Select the object.
-				The internal flag is set to {\bf true}.
+				The internal flag is set to <b>true</b>.
 		*/
 		virtual void select()
 			throw();
 
 		/**	Deselect the object.
-				The internal flag is set to {\bf false}.
+				The internal flag is set to <b>false</b>.
 		*/
 		virtual void deselect()
 			throw();
-		//@}
 
+		/** For faster access 
+		 */
+		virtual void setSelected(bool selected)
+			throw() { selected_ = selected; }
+
+		//@}
 		/**	@name Predicates 
 		*/
 		//@{
 
 		/**	Get the object state.
-				@return bool {\bf true}, if the object is selected, {\bf false} otherwise
+				@return bool <b>true</b>, if the object is selected, <b>false</b> otherwise
 		*/
 		bool isSelected() const
 			throw();
@@ -151,7 +152,7 @@ namespace BALL
 
 		/**	Persistent stream writing.
 				This method writes a boolean variable to the
-				persistent stream using the {\tt writePrimitive} method
+				persistent stream using the <tt>writePrimitive</tt> method
 				of the PersistenceManager.
 				@param pm the persistence manager
 		*/
@@ -160,7 +161,7 @@ namespace BALL
 
 		/** Persistent stream reading.
 				This method reads a boolean variable from the
-				persistent stream using the {\tt readPrimitive} method
+				persistent stream using the <tt>readPrimitive</tt> method
 				of the PersistenceManager.
 				@param pm the persistence manager
 		*/

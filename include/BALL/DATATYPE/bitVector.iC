@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.iC,v 1.26 2002/12/16 17:15:32 oliver Exp $
+// $Id: bitVector.iC,v 1.29 2003/08/26 08:04:09 oliver Exp $
+//
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
@@ -80,7 +81,7 @@ void BitVector::clear()
 }
 
 BALL_INLINE 
-const BitVector& BitVector::operator = (const BitVector& bit_vector)
+BitVector& BitVector::operator = (const BitVector& bit_vector)
   throw(Exception::OutOfMemory)
 {
   set(bit_vector);
@@ -88,7 +89,7 @@ const BitVector& BitVector::operator = (const BitVector& bit_vector)
 }
 
 BALL_INLINE 
-const BitVector& BitVector::operator = (const char* bit_string)
+BitVector& BitVector::operator = (const char* bit_string)
   throw(Exception::OutOfMemory)
 {
   set(bit_string);
@@ -192,7 +193,7 @@ bool BitVector::isValid() const
 
 BALL_INLINE
 Bit BitVector::operator [] (Index index)
-  throw(Exception::IndexUnderflow, Exception::OutOfMemory)
+  throw(Exception::OutOfMemory)
 {
 	block_(index);
 	return Bit(this, index);
@@ -298,7 +299,7 @@ Bit::operator bool() const
 }
 
 BALL_INLINE
-const Bit& Bit::operator = (const Bit& bit)	
+Bit& Bit::operator = (const Bit& bit)	
 	throw()
 {
 	bitvector_					= bit.bitvector_;
@@ -309,7 +310,7 @@ const Bit& Bit::operator = (const Bit& bit)
 }
 
 BALL_INLINE
-const Bit& Bit::operator = (const bool bit)
+Bit& Bit::operator = (const bool bit)
 	throw(Exception::NullPointer, Bit::IllegalOperation)
 {
 	if (bitvector_ == 0)
