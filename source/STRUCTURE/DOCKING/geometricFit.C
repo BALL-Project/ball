@@ -1122,7 +1122,26 @@ namespace BALL
     return ( current_round_ == total_round_ );
   }
 
-	/** Return the ranked conformations.
+	/** Return the translation corresponding to conformation con_num.
+	 */
+	Vector3 GeometricFit::getTranslation(Index con_num) const
+		throw()
+	{
+		Vector3 result = (con_num < (Index)translations_.size()) ? translations_[con_num] : Vector3(0.);
+
+		return result;
+	}
+		
+	/** Return the orientation corresponding to conformation con_num.
+	 */
+	Vector3 GeometricFit::getOrientation(Index con_num) const
+		throw()
+	{
+		Vector3 result = (con_num < (Index)orientations_.size()) ? orientations_[con_num] : Vector3(0.);
+
+		return result;
+	}
+		/** Return the ranked conformations.
 	 */
 	ConformationSet GeometricFit::getConformationSet(Index total_number)
 		throw()
@@ -1130,6 +1149,12 @@ namespace BALL
 		// first see how many conformations we should generate
 		if ( (total_number == 0) || (total_number > options.getInteger(Option::BEST_NUM)) )
 			total_number = options.getInteger(Option::BEST_NUM);
+
+		// clear the translation and orientation vector
+		translations_.clear();
+		orientations_.clear();
+		translations_.resize(total_number);
+		orientations_.resize(total_number);
 
 		// 			 this can probably be done smarter
 		System S = system_backup_a_;
@@ -1156,6 +1181,8 @@ namespace BALL
 				Log << "orientation = " << p.orientation << endl << endl;
 			}
    
+			translations_[count] = p.translation;
+			orientations_[count] = p.orientation;
 			System sys_a = system_backup_a_;
 			System sys_b = system_backup_b_;
 
