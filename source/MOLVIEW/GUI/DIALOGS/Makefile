@@ -8,6 +8,7 @@ CPP_SOURCES=\
 	labelProperties.C\
 	labelPropertiesData.C\
 	openHINFile.C\
+	openMOL2File.C\
 	openPDBFile.C\
 	openBruker1DFile.C\
 	openBruker2DFile.C\
