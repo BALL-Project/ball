@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.5 1999/12/28 18:32:13 oliver Exp $
+// $Id: bitVector.h,v 1.6 2000/01/19 17:54:45 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -135,19 +135,27 @@ namespace BALL
 		/**	@name	Constructors and Destructors */
 		//@{
 
-		///
-		BitVector(Size size = BlockSize);
+		/**	Default constructor
+		*/
+		BitVector();
 
-		///
+		/**	Detailled constructor
+		*/
+		BitVector(Size size);
+
+		/** Copy constructor
+		*/
 		BitVector(const BitVector& bit_vector, bool deep = true);
 
 		///
-		BitVector(const char *bit_string);
+		BitVector(const char* bit_string);
 
-		///
+		/**	Destructor
+		*/
 		virtual ~BitVector();
 
-		///
+		/**	Clear method
+		*/
 		void clear();
 		//@}
 
