@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.h,v 1.3 2000/09/21 07:56:32 oliver Exp $
+// $Id: EFShiftProcessor.h,v 1.4 2000/09/21 10:08:29 oliver Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -167,6 +167,14 @@ namespace BALL
 				Default is false.
 		*/
 		bool									exclude_residue_field_;
+
+		/**	A cut off value for the electric field effect.
+				Any effector that is further away than this cut off is ignored.
+				THe distance is read from the option {\tt cut_off} in the 
+				section {\tt ElectricFieldEffect} from the parameter file.
+				This member contains the squared value(!) of the distance.
+		*/
+		float cut_off2_;
  	};
 
 } // namespace BALL
