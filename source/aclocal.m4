@@ -1470,13 +1470,15 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 	AC_DEFINE_UNQUOTED(BALL_SIZE_TYPE, ${BALL_SIZE_TYPE})
 	AC_DEFINE_UNQUOTED(BALL_INDEX_TYPE, ${BALL_INDEX_TYPE})
 
-	dnl  define 64 bit unsigned type
+	dnl  define 64 bit signed/unsigned type
 	if test "${SIZEOF_ULONG}" = "8" ; then
 		BALL_ULONG64_TYPE="unsigned long"
+		BALL_LONG64_TYPE="unsigned long"
 		AC_DEFINE(BALL_64BIT_ARCHITECTURE)
 	else
 		if test "${SIZEOF_ULONGLONG}" = "8" ; then
 			BALL_ULONG64_TYPE="unsigned long long"
+			BALL_LONG64_TYPE="unsigned long long"			
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find unsigned 64bit type.)
@@ -1485,6 +1487,8 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 		fi
 	fi
 	AC_DEFINE_UNQUOTED(BALL_ULONG64_TYPE, ${BALL_ULONG64_TYPE})
+	AC_DEFINE_UNQUOTED(BALL_LONG64_TYPE, ${BALL_LONG64_TYPE})
+
 	dnl
 	dnl Check for size of Complex type
 	dnl

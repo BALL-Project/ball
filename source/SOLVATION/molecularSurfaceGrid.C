@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.15 2002/12/20 19:10:22 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.16 2002/12/22 13:19:20 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -18,6 +18,8 @@ namespace BALL
 	{
 		return (int)(*(PointerSizeInt*)a - *(PointerSizeInt*)b);
 	}
+
+
 
 	TRegularData3D<char> *calculateSESGrid
 		(const Vector3& lower, const Vector3& upper,

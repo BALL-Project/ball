@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_bench.C,v 1.4 2002/12/17 16:40:42 oliver Exp $
+// $Id: CharmmFF_bench.C,v 1.5 2002/12/22 13:19:19 oliver Exp $
 
 #include <BALL/CONCEPT/benchmark.h>
 
@@ -17,7 +17,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(CharmmFF, 1.0, "$Id: CharmmFF_bench.C,v 1.4 2002/12/17 16:40:42 oliver Exp $")
+START_BENCHMARK(CharmmFF, 1.0, "$Id: CharmmFF_bench.C,v 1.5 2002/12/22 13:19:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -66,12 +66,16 @@ END_SECTION
 ForceFieldComponent* component;
 START_SECTION(100x nonbonded energy calculation w/o selection, 0.1)
 	component = charmm.getComponent("Charmm NonBonded");
-	START_TIMER
-		for (Size i = 0; i < 100; i++)
-		{
-			component->updateEnergy();
-		}
-	STOP_TIMER
+	STATUS("Component pointer: " << (void*)component)
+	if (component != 0)
+	{
+		START_TIMER
+			for (Size i = 0; i < 100; i++)
+			{
+				component->updateEnergy();
+			}
+		STOP_TIMER
+	}
 END_SECTION
 
 START_SECTION(5000x stretch energy calculation w/o selection, 0.1)

@@ -1566,7 +1566,7 @@ else
 	USE_LIBXNET=false
 fi
 
-if test "$with_BALLVIEW" = "no" ; then
+if test "$with_BALLVIEW" = "no" -o "$enable_BALLVIEW" = "no"; then
 	USE_BALLVIEW=false
 else
 	USE_BALLVIEW=true
@@ -7230,6 +7230,7 @@ _ACEOF
 
 		if test "${SIZEOF_ULONG}" = "8" ; then
 		BALL_ULONG64_TYPE="unsigned long"
+		BALL_LONG64_TYPE="unsigned long"
 		cat >>confdefs.h <<\_ACEOF
 #define BALL_64BIT_ARCHITECTURE 1
 _ACEOF
@@ -7237,6 +7238,7 @@ _ACEOF
 	else
 		if test "${SIZEOF_ULONGLONG}" = "8" ; then
 			BALL_ULONG64_TYPE="unsigned long long"
+			BALL_LONG64_TYPE="unsigned long long"
 		else
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
@@ -7252,6 +7254,11 @@ echo "$as_me: error: abort" >&2;}
 	cat >>confdefs.h <<_ACEOF
 #define BALL_ULONG64_TYPE ${BALL_ULONG64_TYPE}
 _ACEOF
+
+	cat >>confdefs.h <<_ACEOF
+#define BALL_LONG64_TYPE ${BALL_LONG64_TYPE}
+_ACEOF
+
 
 				BALL_COMPLEX_PRECISION=float
 	echo "$as_me:$LINENO: checking for Complex type precision" >&5
@@ -15973,6 +15980,17 @@ echo "${ECHO_T}" >&6
 
 
 	if test "${PYTHON_SUPPORT}" = true ; then
+		echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+		echo "$as_me:$LINENO: result: Python support temporarily disabled in this version!" >&5
+echo "${ECHO_T}Python support temporarily disabled in this version!" >&6
+		echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+		echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+		{ { echo "$as_me:$LINENO: error: Aborted" >&5
+echo "$as_me: error: Aborted" >&2;}
+   { (exit 1); exit 1; }; }
 										if test "${USE_BALLVIEW}" = false ; then
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6

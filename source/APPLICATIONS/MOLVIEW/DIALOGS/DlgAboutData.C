@@ -79,13 +79,10 @@ DlgAboutData::DlgAboutData(QWidget *parent, const char *name)
     {
         QFont font("linotype-helvetica", 24, 50, 0);
         font.setStyleHint((QFont::StyleHint)5);
-        //font.setCharSet((QFont::CharSet)0);
         qtarch_Label_4->setFont( font );
     }
     qtarch_Label_4->setFocusPolicy(QWidget::NoFocus);
     qtarch_Label_4->setBackgroundMode(QWidget::PaletteBackground);
-    //qtarch_Label_4->setFontPropagation(QWidget::SameFont);
-    //qtarch_Label_4->setPalettePropagation(QWidget::SameFont);
     qtarch_Label_4->setFrameStyle( 0 );
     qtarch_Label_4->setLineWidth( 1 );
     qtarch_Label_4->setMidLineWidth( 0 );
@@ -112,9 +109,9 @@ DlgAboutData::DlgAboutData(QWidget *parent, const char *name)
     connect(qtarch_PushButton_4, SIGNAL(pressed()), SLOT(accept()));
 
     QLabel *qtarch_Label_5 = new QLabel(this, "Label_5");
-    qtarch_Label_5->setGeometry(55, 62, 249, 256);
-    qtarch_Label_5->setMinimumSize(249, 256);
-    qtarch_Label_5->setMaximumSize(249, 256);
+    qtarch_Label_5->setGeometry(55, 62, 149, 175);
+    qtarch_Label_5->setMinimumSize(149, 175);
+    qtarch_Label_5->setMaximumSize(149, 175);
 
     {
 				#include "logo.xpm"

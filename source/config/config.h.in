@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.31 2002/12/12 10:11:50 oliver Exp $ 
+// $Id: config.h.in,v 1.32 2002/12/22 13:19:21 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -119,9 +119,6 @@
 // Define if numeric_limits is defined in <limits>
 #undef BALL_HAS_NUMERIC_LIMITS
 
-// Define an unsigned integer type of 64 bit to hold (portable) pointers
-#define BALL_64BIT_UINT_TYPE long
-
 // Define the argument type for xdr_u_hyper (64 bit)
 #define BALL_XDR_UINT64_TYPE u_quad_t
 
@@ -129,11 +126,12 @@
 // which is required on 32 bit machines for comatibility
 #undef BALL_64BIT_ARCHITECTURE
 
-// Define an unsigned numeric type of 64 bit length (used for
+// Define a signed/unsigned numeric type of 64 bit length (used for
 // platform independent persistence: stores pointers)
 // this usually defaults to unsigned long on 64 bit architectures
 // and unsigned long long on 32 bit machines
 #define BALL_ULONG64_TYPE ""
+#define BALL_LONG64_TYPE ""
 
 // Defines an unsigned type that has the same length as size_t
 #define BALL_SIZE_TYPE int

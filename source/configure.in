@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.23 2002/12/12 17:29:53 oliver Exp $
+dnl    $Id: configure.in,v 1.24 2002/12/22 13:19:19 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -135,7 +135,7 @@ else
 	USE_LIBXNET=false
 fi
 
-if test "$with_BALLVIEW" = "no" ; then
+if test "$with_BALLVIEW" = "no" -o "$enable_BALLVIEW" = "no"; then
 	USE_BALLVIEW=false
 else	
 	USE_BALLVIEW=true

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.12 2002/12/22 13:09:57 oliver Exp $
+// $Id: global.h,v 1.13 2002/12/22 13:19:12 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -29,7 +29,7 @@
 
 // Added to avoid warnings with MS Visual Studio .NET
 #ifdef BALL_COMPILER_MSVC
-#pragma warning( disable : 4290 )
+#	pragma warning( disable : 4290 )
 #endif
 
 namespace BALL
@@ -153,7 +153,7 @@ namespace BALL
 	typedef	unsigned char Byte;
 
 	/**	Pointer-sized unsigned int type.
-			This type holds unsigned 64 bit numbers and is used to store pointers
+			This type holds unsigned 64 bit integer numbers and is used to store pointers
 			in a portable fashion (for both 32-bit and 64-bit systems).
 			\\
 			{\bf Size:} 64 bit\\

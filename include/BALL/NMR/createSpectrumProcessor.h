@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: createSpectrumProcessor.h,v 1.15 2002/12/12 09:48:53 oliver Exp $
+// $Id: createSpectrumProcessor.h,v 1.16 2002/12/22 13:19:14 oliver Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -71,7 +71,7 @@ namespace BALL
 				@exception ParseError if the contents of the file could not be parsed
 		*/	
 		CreateSpectrumProcessor()
-			throw(Exception::FileNotFound, Exception::ParseError);
+			throw(Exception::ParseError, Exception::FileNotFound);
 		
 		/**	Destructor
 		*/

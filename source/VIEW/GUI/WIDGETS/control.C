@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.C,v 1.16 2002/12/18 23:45:08 amoll Exp $
+// $Id: control.C,v 1.17 2002/12/22 13:19:20 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -221,7 +221,7 @@ void Control::onNotify(Message *message)
 	}
 }
 
-void Control::buildContextMenu(Composite* composite, QListViewItem* item)
+void Control::buildContextMenu(Composite* composite, QListViewItem* /* item */)
 	throw()
 {
 	if (RTTI::isKindOf<GeometricObject>(*composite))
