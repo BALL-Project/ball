@@ -1,4 +1,4 @@
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.10 2001/07/15 17:32:40 amoll Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.11 2001/07/17 12:10:15 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Pair6_12InteractionEnergyProcessor, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.10 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(Pair6_12InteractionEnergyProcessor, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.11 2001/07/17 12:10:15 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -135,7 +135,7 @@ RESULT
 
 CHECK(Pair6_12InteractionEnergyProcessor::isValid())
 	Pair6_12InteractionEnergyProcessor proc;
-	TEST_EQUAL(proc.isValid(), false)
+	TEST_EQUAL(proc.isValid(), true)
 
 	// BAUSTELLE
 RESULT

@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.12 2001/06/05 15:53:28 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.13 2001/07/17 12:09:43 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -95,7 +95,7 @@ namespace BALL
 		rdf_parameter_.clear();
 		rdf_integrator_.clear();
 
-		valid_ = false;
+		valid_ = true;
 	}
 
 
@@ -159,8 +159,8 @@ namespace BALL
 	{
 		return (EnergyProcessor::operator == (proc)
 			&& (solvent_ == proc.solvent_)
-			&& (rdf_parameter_ == rdf_parameter_)
-			&& (rdf_integrator_ == rdf_integrator_) );
+			&& (rdf_parameter_ == proc.rdf_parameter_)
+			&& (rdf_integrator_ == proc.rdf_integrator_) );
 	}
 
 
