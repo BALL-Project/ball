@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.6 2000/01/16 22:36:20 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.7 2000/03/12 22:20:57 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -12,7 +12,26 @@ namespace BALL
 	const char* TextPersistenceManager::INDENT_STEP = "  ";
 
 	TextPersistenceManager::TextPersistenceManager()
-		:	indent_depth_(0)
+		:	PersistenceManager(),
+			indent_depth_(0)
+	{
+	}
+
+	TextPersistenceManager::TextPersistenceManager(istream& is)
+		:	PersistenceManager(is),
+			indent_depth_(0)
+	{
+	}
+
+	TextPersistenceManager::TextPersistenceManager(ostream& os)
+		:	PersistenceManager(os),
+			indent_depth_(0)
+	{
+	}
+
+	TextPersistenceManager::TextPersistenceManager(istream& is, ostream& os)
+		:	PersistenceManager(is, os),
+			indent_depth_(0)
 	{
 	}
 
@@ -21,7 +40,9 @@ namespace BALL
 		static String s;
 		*is >> s;
 		if (s != value)
-			Log.level(LogStream::ERROR) << "textPersistenceManager::expect: read " << s << ", expected " << value << endl;
+		{
+			Log.error() << "textPersistenceManager::expect: read " << s << ", expected " << value << endl;
+		}
 		
 		return (s == value);
 	}
@@ -67,10 +88,13 @@ namespace BALL
  
 	void TextPersistenceManager::writeTrailer(const char* name)
 	{
+		// decrease indentation by one column
 		indent_depth_--;
 		*os << indent();
-			
-		if (name == 0) {
+		
+		// and write the object/base object trailer
+		if (name == 0) 
+		{
 			*os << "END_BASEOBJECT" << endl;
 		} else {
 			*os << "END_OBJECT" << endl;
@@ -79,35 +103,41 @@ namespace BALL
 
 	void TextPersistenceManager::writeStreamHeader()
 	{
+		// write a start tag
 		*os << "START" << endl;
 	}
 
 	bool TextPersistenceManager::checkStreamHeader()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkStreamHeader()" << endl;
+			Log.info() << "entering checkStreamHeader()" << endl;
 #		endif
 
+		// read a string from the input stream
 		String s;
 		*is >> s;
 
+		// and check whether it is the start tag we expected
 		return (s == "START");
 	}
 
 	void TextPersistenceManager::writeStreamTrailer()
 	{
+		// write a END trailer to the stream
 		*os << "END" << endl;
 	}
 
 	bool TextPersistenceManager::checkStreamTrailer()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkStreamTrailer()" << endl;
+			Log.info() << "entering checkStreamTrailer()" << endl;
 #		endif
 
+		// read the next string from the stream
 		String s;
 		*is >> s;
 
+		// and check for the END tag
 		return (s == "END");
 	}
 
@@ -115,15 +145,20 @@ namespace BALL
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			if (name != 0)
-				Log.level(LogStream::INFORMATION) << "entering checkTrailer(" << name << ")" << endl;
-			else
-				Log.level(LogStream::INFORMATION) << "entering checkTrailer()" << endl;
+			{
+				Log.info() << "entering checkTrailer(" << name << ")" << endl;
+			} else {
+				Log.info() << "entering checkTrailer()" << endl;
+			}
 #		endif
 
+		// check for the object or base object trailer
 		if (name == 0) 
 		{
 			return expect("END_BASEOBJECT");
-		} else {
+		} 
+		else 
+		{
 			return expect("END_OBJECT");
 		}
 	}
@@ -133,41 +168,63 @@ namespace BALL
 #		ifdef BALL_DEBUG_PERSISTENCE
 			if (name == 0)
 			{
-				Log.level(LogStream::INFORMATION) << "entering checkHeader(" << type_name << ", 0)" << endl;
-			} else {
-				Log.level(LogStream::INFORMATION) << "entering checkHeader(" << type_name << ", " << name << ")" << endl;
+				Log.info() << "entering checkHeader(" << type_name << ", 0)" << endl;
+			} 
+			else 
+			{
+				Log.info() << "entering checkHeader(" << type_name << ", " << name << ")" << endl;
 			}
 #		endif
+		// check for the header keyword OBJECT/BASEOBJECT
 		if (name == 0) 
 		{
 			if (!expect("BASEOBJECT"))
-				return false;
-		} else {
+			{
+				// abort immediately if not found
+				return false;	
+			}
+		} 
+		else 
+		{
 			if (!expect("OBJECT"))
+			{
+				// abort immediately if not found
 				return false;
+			}
 		}
 
+		// read the next string. it should contain the
+		// type name ofthe object
 		String s;
 		*is >> s;
+
+		// compare it with the type we expected
 		if (s != type_name) 
 		{
 #			ifdef BALL_DEBUG_PERSISTENCE
-				Log.level(LogStream::ERROR) << "Expected object of type " << type_name << " but found definition for " << s << "!" << endl;
+				Log.error() << "Expected object of type " << type_name << " but found definition for " << s << "!" << endl;
 #			endif
 
+			// we didn't find the right object - abort
 			return false;
 		}
 
+		// abort if we cannot read an @ sign 
+		// (indicating the pointer that follows)
 		if (!expect("@"))
+		{
 			return false;
+		}
 		
+		// read the object pointer
 		get(ptr);
 		if (ptr == 0) 
 		{
 #			ifdef BALL_DEBUG_PERSISTENCE
-				Log.level(LogStream::ERROR) << "Could not read a valid object pointer: " << dec << (LongPointerType)ptr << "!" << endl;
+				Log.error() << "Could not read a valid object pointer: " << dec << (LongPointerType)ptr << "!" << endl;
 #			endif
 
+			// abort if it was not a valid pointer
 			return false;
 		}
 
@@ -176,7 +233,11 @@ namespace BALL
 		{
 			if (!expect("-"))
 				return false;
-		} else {
+		} 
+		else 
+		{
+			// since an empty object name cannot be read
+			// as a string, we convert it to a "-"
 			if (!strcmp(name, ""))
 			{
 				if (!expect("-"))
@@ -186,44 +247,50 @@ namespace BALL
 			} 
 			else if (!expect(name))
 			{
+				// it the object name is incorrect - abort
 				return false;
 			}
 		}
 
+		// everything went well - we read a complete object header
 		return true;
 	}
 
 	bool TextPersistenceManager::getObjectHeader(String& type_name, LongPointerType& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering getObjectHeader()" << endl;
+			Log.info() << "entering getObjectHeader()" << endl;
 #		endif
 
 		if (!expect("OBJECT"))
+		{
 			return false;
+		}
 
 		*is >> type_name;
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "read type name: " << type_name << endl;
+			Log.info() << "read type name: " << type_name << endl;
 #		endif
 
 		// retrieve the 
 		if (!expect("@"))
+		{
 			return false;
+		}
 		
 		get(ptr);
 		if (ptr == 0) 
 		{
-#		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::ERROR) << "Could not read a valid object pointer: " << dec << (PointerInt)ptr << "!" << endl;
-#		endif
+#			ifdef BALL_DEBUG_PERSISTENCE
+				Log.error() << "Could not read a valid object pointer: " << dec << (PointerInt)ptr << "!" << endl;
+#			endif
 
 			return false;
 		} 
 #		ifdef BALL_DEBUG_PERSISTENCE
 		else 
 		{
-			Log.level(LogStream::INFORMATION) << "Read pointer: " << ptr << endl;
+			Log.info() << "Read pointer: " << ptr << endl;
 		}
 #		endif
 
@@ -235,7 +302,9 @@ namespace BALL
 		if ((name == 0) || !strcmp(name, ""))
 		{
 			*os << " - ";
-		} else {
+		} 
+		else 
+		{
 			*os << ' ' << name << ' ';
 		}
 	}
@@ -243,7 +312,7 @@ namespace BALL
 	bool TextPersistenceManager::checkName(const char* name)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkName()" << endl;
+			Log.info() << "entering checkName()" << endl;
 #endif
 
 		String s;
@@ -269,7 +338,7 @@ namespace BALL
 	bool TextPersistenceManager::checkStorableHeader(const char* type_name, const char* name)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkStorableHeader()" << endl;
+			Log.info() << "entering checkStorableHeader()" << endl;
 #		endif
 
 		return (expect("STORABLE") && checkName(type_name) && checkName(name));
@@ -277,6 +346,7 @@ namespace BALL
 
 	void TextPersistenceManager::writeStorableTrailer()
 	{
+		// decrease indentation by one column and write a trailer string
 		--indent_depth_;
 		*os << indent() << "END_STORABLE" << endl;
 	}
@@ -284,15 +354,15 @@ namespace BALL
 	bool TextPersistenceManager::checkStorableTrailer()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkStorableTrailer()" << endl;
+			Log.info() << "entering checkStorableTrailer()" << endl;
 #		endif
 
+		// check for the trailer "END_STORABLE"
 		return expect("END_STORABLE");
 	}
 
 	void TextPersistenceManager::writePrimitiveHeader(const char* type_name, const char* name)
 	{
-		
 		*os << indent() << type_name;
 		writeName(name);
 		*os << "=";
@@ -301,13 +371,15 @@ namespace BALL
 	bool TextPersistenceManager::checkPrimitiveHeader(const char* type_name, const char* name)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkPrimitiveHeader(" << name << ")" << endl;
+			Log.info() << "entering checkPrimitiveHeader(" << name << ")" << endl;
 #		endif
 
 		if (!strcmp(name, ""))
 		{
 			return (expect(type_name) && expect("-") && expect("="));
-		} else {
+		} 
+		else 
+		{
 			return (expect(type_name) && expect(name) && expect("="));
 		}
 	}
@@ -320,7 +392,7 @@ namespace BALL
 	bool TextPersistenceManager::checkPrimitiveTrailer()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkPrimitiveTrailer()" << endl;
+			Log.info() << "entering checkPrimitiveTrailer()" << endl;
 #		endif
 
 		return true;
@@ -335,7 +407,7 @@ namespace BALL
 	bool TextPersistenceManager::checkObjectPointerHeader(const char* type_name, const char* name)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkObjectPointerHeader()" << endl;
+			Log.info() << "entering checkObjectPointerHeader()" << endl;
 #		endif
 
 		return (checkName(type_name) && expect("*") && checkName(name));
@@ -350,7 +422,7 @@ namespace BALL
 	bool TextPersistenceManager::checkObjectReferenceHeader(const char* type_name, const char* name)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkObjectReferenceHeader()" << endl;
+			Log.info() << "entering checkObjectReferenceHeader()" << endl;
 #		endif
 
 		return (checkName(type_name) && expect("&") && checkName(name));
@@ -403,15 +475,20 @@ namespace BALL
 	}
 
 	void TextPersistenceManager::put(const bool b)
-	{		
+	{	
+		// write a boolena value as TRUE or FALSE
 		if (b)
 		{
 			*os << " TRUE ";
-		} else {
+		} 
+		else 
+		{
 			*os << " FALSE ";
 		}
 	}
 	
+// define a macro for all numeric types
+// just write it to a stream...
 #define BALL_DEFINE_NUMBER_PUT(type)\
 	void TextPersistenceManager::put(const type i)\
 	{\
@@ -431,18 +508,23 @@ namespace BALL
 
 	void TextPersistenceManager::put(const string& s)
 	{
+		// strings are prefixed by their size
 		*os << ' ' << s.size() << ' ';
 
+		// then we write each characters sequentially
 		for (Size i = 0; i < s.size(); i++)
 		{
 			os->put(s[i]);
 		}
 
+		// and terminate everything with a blank
 		*os << ' ';
 	}
 
 	void TextPersistenceManager::put(const void* p)
 	{
+		// pointers are converted to an int of equal length
+		// and written in decimal format
 		*os << ' ' << dec << (PointerInt)p << ' ';
 	}
 

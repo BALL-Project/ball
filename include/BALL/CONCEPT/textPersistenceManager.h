@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.h,v 1.4 2000/01/16 22:36:15 oliver Exp $
+// $Id: textPersistenceManager.h,v 1.5 2000/03/12 22:20:57 oliver Exp $
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -31,6 +31,18 @@ namespace BALL
 				Initializes just an internal variable.
 		*/
 		TextPersistenceManager();
+			
+		/**	Detailed constructor with an input stream.
+		*/
+		TextPersistenceManager(std::istream& is);
+
+		/**	Detailed constructor with an output stream.
+		*/
+		TextPersistenceManager(std::ostream& os);
+
+		/**	Detailed constructor with an input stream and an output stream.
+		*/
+		TextPersistenceManager(std::istream& is, std::ostream& os);
 		//@}
 		
 		/**	@name	Layer 0 methods

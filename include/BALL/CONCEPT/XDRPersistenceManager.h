@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.6 2000/03/07 08:39:20 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.7 2000/03/12 22:21:43 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -28,9 +28,20 @@ namespace BALL
 		//@{
 		
 		/**	Default constructor.
-				Initializes just an internal variable.
 		*/
 		XDRPersistenceManager();
+
+		/**	Detailed constructor with an input stream
+		*/
+		XDRPersistenceManager(std::istream& is);
+
+		/**	Detailed constructor with an output stream
+		*/
+		XDRPersistenceManager(std::ostream& os);
+
+		/**	Detailed constructor with an input stream and an output stream.
+		*/
+		XDRPersistenceManager(std::istream& is, std::ostream& os);
 		//@}
 		
 		/**	@name	Layer 0 methods

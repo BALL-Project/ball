@@ -1,13 +1,31 @@
-// $Id: XDRPersistenceManager.C,v 1.4 2000/01/16 22:36:20 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.5 2000/03/12 22:21:43 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
 //#define BALL_DEBUG_PERSISTENCE
 
+using namespace std;
+
 namespace BALL 
 {
 
 	XDRPersistenceManager::XDRPersistenceManager()
+		:	PersistenceManager()
+	{
+	}
+
+	XDRPersistenceManager::XDRPersistenceManager(istream& is)
+		:	PersistenceManager(is)
+	{
+	}
+
+	XDRPersistenceManager::XDRPersistenceManager(ostream& os)
+		:	PersistenceManager(os)
+	{
+	}
+
+	XDRPersistenceManager::XDRPersistenceManager(istream& is, ostream& os)
+		:	PersistenceManager(is, os)
 	{
 	}
 
