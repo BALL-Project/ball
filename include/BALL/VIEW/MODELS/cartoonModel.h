@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.15 2004/07/03 10:19:38 amoll Exp $
+// $Id: cartoonModel.h,v 1.16 2004/07/03 10:47:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -142,7 +142,7 @@ namespace BALL
 											 Vector3& right,
 											 float arrow_width,
 											 Position& last_vertices,
-											Mesh& mesh);
+											 Mesh& mesh);
 
 			std::vector<Vector3> spline_;
 
