@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.18 2001/09/19 17:25:41 strobel Exp $
+// $Id: RSEdge.h,v 1.19 2001/11/08 16:47:03 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -31,6 +31,18 @@ namespace BALL
 	template <typename T>
 	class TRSVertex;
 
+	template <typename T>
+	class TSolventExcludedSurface;
+
+	template <typename T>
+	class TSESEdge;
+
+	template <typename T>
+	class TSESFace;
+
+	template <typename T>
+	class TSESVertex;
+
 	/** Generic RSEdge Class.	
       {\bf Definition:} \URL{BALL/STRUCTURE/RSEdge.h} 
 	*/
@@ -44,11 +56,19 @@ namespace BALL
 					\item class TReducedSurface<T>
 					\item class TRSFace<T>
 					\item class TRSVertex<T>
+					\item class TSolventExcludedSurface<T>;
+					\item class TSESFace<T>
+					\item class TSESEdge<T>
+					\item class TSESVertex<T>
 				\end{itemize}
 		*/
 		friend class TReducedSurface<T>;
 		friend class TRSFace<T>;
 		friend class TRSVertex<T>;
+		friend class TSolventExcludedSurface<T>;
+		friend class TSESFace<T>;
+		friend class TSESEdge<T>;
+		friend class TSESVertex<T>;
 
 		BALL_CREATE(TRSEdge)
 
@@ -65,9 +85,8 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new RSEdge object from another.
 				@param	rsface	the RSEdge object to be copied
-				@param	deep		the vertices and faces are setten to NULL, if deep is	
-												false, otherwise they are copied, too	
-												(with deep = false)
+				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the new
+												RSEdge object is linked to the neighbours of the old RSEdge object.
 		*/
 		TRSEdge(const TRSEdge<T>& rsedge, bool deep = false)
 			throw();
@@ -119,9 +138,8 @@ namespace BALL
 
 		/**	Assign from another RSEdge.
 				@param	rsedge	the RSEdge object to assign from
-				@param	deep		the vertices and faces are setten to NULL, if deep is	
-												false, otherwise they are copied, too	
-												(with deep = false)
+				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the
+												RSEdge object is linked to the neighbours of the RSEdge object to be copied.
 		*/
 		void set(const TRSEdge& rsedge, bool deep = false)
 			throw();
@@ -538,10 +556,10 @@ namespace BALL
 	{
 		if (deep)
 		{
-			vertex0_ = new TRSVertex<T>(*rsedge.vertex0_,false);
-			vertex1_ = new TRSVertex<T>(*rsedge.vertex1_,false);
-			face0_ = new TRSFace<T>(*rsedge.face0_,false);
-			face1_ = new TRSFace<T>(*rsedge.face1_,false);
+			vertex0_ = rsedge.vertex0_;
+			vertex1_ = rsedge.vertex1_;
+			face0_ = rsedge.face0_;
+			face1_ = rsedge.face1_;
 		}
 	}
 
@@ -591,10 +609,10 @@ namespace BALL
 	{
 		if (deep)
 		{
-			vertex0_ = new TRSVertex<T>(*rsedge.vertex0_,false);
-			vertex1_ = new TRSVertex<T>(*rsedge.vertex1_,false);
-			face0_ = new TRSFace<T>(*rsedge.face0_,false);
-			face1_ = new TRSFace<T>(*rsedge.face1_,false);
+			vertex0_ = rsedge.vertex0_;
+			vertex1_ = rsedge.vertex1_;
+			face0_ = rsedge.face0_;
+			face1_ = rsedge.face1_;
 		}
 		else
 		{

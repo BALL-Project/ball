@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.18 2001/09/19 17:26:54 strobel Exp $
+// $Id: RSFace.h,v 1.19 2001/11/08 16:46:24 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -19,6 +19,18 @@ namespace BALL
 	template <typename T>
 	class TReducedSurface;
 
+	template <typename T>
+	class TSolventExcludedSurface;
+
+	template <typename T>
+	class TSESEdge;
+
+	template <typename T>
+	class TSESFace;
+
+	template <typename T>
+	class TSESVertex;
+
 	/** Generic RSFace Class.	
 			{\bf Definition:} \URL{BALL/STRUCTURE/RSFace.h} 
 	*/
@@ -30,13 +42,21 @@ namespace BALL
 		/** @name Class friends
 				\begin{itemize}
 					\item class TReducedSurface<T>
-					\item class TRSVertex<T>
 					\item class TRSEdge<T>
+					\item class TRSVertex<T>
+					\item class TSolventExcludedSurface<T>;
+					\item class TSESFace<T>
+					\item class TSESEdge<T>
+					\item class TSESVertex<T>
 				\end{itemize}
 		*/
 		friend class TReducedSurface<T>;
-		friend class TRSVertex<T>;
 		friend class TRSEdge<T>;
+		friend class TRSVertex<T>;
+		friend class TSolventExcludedSurface<T>;
+		friend class TSESFace<T>;
+		friend class TSESEdge<T>;
+		friend class TSESVertex<T>;
 
 		BALL_CREATE(TRSFace)
 
@@ -53,9 +73,8 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new RSFace object from another.
 				@param	rsface	the RSFace object to be copied
-				@param	deep		the vertices and edges are setten to NULL, if deep is	
-												false, otherwise they are copied, too	
-												(with deep = false)
+				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the new
+												RSFace object is linked to the neighbours of the old RSFace object.
 		*/
 		TRSFace(const TRSFace<T>& rsface, bool deep = false)
 			throw();
@@ -98,9 +117,8 @@ namespace BALL
 
 		/**	Assign from another RSFace.
 				@param	rsface	the RSFace object to assign from
-				@param	deep		the vertices and edges are setten to NULL, if deep is	
-												false, otherwise they are copied, too	
-												(with deep = false)
+				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the
+												RSFace object is linked to the neighbours of the RSFace object to be copied.
 		*/
 		void set(const TRSFace<T>& rsface, bool deep = false)
 			throw();
@@ -427,12 +445,12 @@ namespace BALL
 	{
 		if (deep)
 		{
-			vertex0_ = new TRSVertex<T>(*rsface.vertex0_,false);
-			vertex1_ = new TRSVertex<T>(*rsface.vertex1_,false);
-			vertex2_ = new TRSVertex<T>(*rsface.vertex2_,false);
-			edge0_ = new TRSEdge<T>(*rsface.edge0_,false);
-			edge1_ = new TRSEdge<T>(*rsface.edge1_,false);
-			edge2_ = new TRSEdge<T>(*rsface.edge2_,false);
+			vertex0_ = rsface.vertex0_;
+			vertex1_ = rsface.vertex1_;
+			vertex2_ = rsface.vertex2_;
+			edge0_ = rsface.edge0_;
+			edge1_ = rsface.edge1_;
+			edge2_ = rsface.edge2_;
 		}
 	}
 
@@ -477,12 +495,12 @@ namespace BALL
 	{
 		if (deep)
 		{
-			vertex0_ = new TRSVertex<T>(*rsface.vertex0_,false);
-			vertex1_ = new TRSVertex<T>(*rsface.vertex1_,false);
-			vertex2_ = new TRSVertex<T>(*rsface.vertex2_,false);
-			edge0_ = new TRSEdge<T>(*rsface.edge0_,false);
-			edge1_ = new TRSEdge<T>(*rsface.edge1_,false);
-			edge2_ = new TRSEdge<T>(*rsface.edge2_,false);
+			vertex0_ = rsface.vertex0_;
+			vertex1_ = rsface.vertex1_;
+			vertex2_ = rsface.vertex2_;
+			edge0_ = rsface.edge0_;
+			edge1_ = rsface.edge1_;
+			edge2_ = rsface.edge2_;
 		}
 		else
 		{
