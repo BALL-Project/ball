@@ -1,4 +1,4 @@
-// $Id: clip_protein_around_ligand.C,v 1.3 2003/07/02 16:08:38 anker Exp $
+// $Id: clip_protein_around_ligand.C,v 1.4 2003/07/15 13:28:46 anker Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -31,14 +31,17 @@ void usage(const String& name)
 	Log.error() << name << endl << endl
 		<< "This program is designed for clipping the protein structures around" <<endl
 		<< "a ligand. The artificial chains that are created during that process" <<endl
-		<< "are finalised by adding NME and ACE and caps and reconstructed parts" <<endl
+		<< "are finalised by adding NME and ACE end caps and reconstructed parts" <<endl
 		<< "of the protein will be structurally optimised by employing an AMBER" << endl << endl
 		<< "forcefield." << endl
 		<< "  -p <FILE>    use FILE as receptor (PDB format)" << endl
 		<< "  -l <FILE>    use FILE as ligand (PDB format)" << endl
 		<< "  -L <FILE>    use FILE as ligand (HIN format)" << endl
-		<< "  -c <CUTOFF>  use CUTOFF (default: 8 A)" << endl;
-		// << "  -o {yes,no}  optimize reconstructed atoms (default: yes)" << endl;          
+		<< "  -c <CUTOFF>  use CUTOFF (default: 8 A)" << endl
+		<< "  -n <ATOMS>   the maximum number of atoms the cut system should have"
+// 		<< "  -h <ATOMS>   the maximum number of heavy atoms the cut system should have"
+//		<< "  -o <FORAMT>  Output format. Choose between pdb and xyz (default: xyz)"
+		<< endl;
 }
 
 
@@ -78,6 +81,16 @@ Size find_sulphur_bridges(const System& system,
 
 }
 
+Size count_heavy_atoms(const AtomContainer& container)
+{
+	AtomConstIterator it(container.beginAtom());
+	Size count = 0;
+	for (; +it; ++it)
+	{
+		if (it->getElement() != PTE[Element::H]) count++;
+	}
+	return count;
+}
 
 Residue* transform_residue_to_cap(PDBAtom& atom, FragmentDB& fragment_db)
 {
@@ -180,8 +193,11 @@ int main(int argc, char** argv)
 
 	String protein_file_name;
 	String ligand_file_name;
+	String output_format = "pdb";
 
 	float cutoff = 8.0;
+	Size max_atoms = 0;
+	Size max_heavy_atoms = 0;
 
 	bool use_hin_ligand = false;
 
@@ -201,7 +217,7 @@ int main(int argc, char** argv)
 
 		// check for another argument for those 
 		// options requiring a filename (-h)
-		if (String("cplL").has(option[1]) && (i == (argc - 1)))
+		if (String("cplLn").has(option[1]) && (i == (argc - 1)))
 		{
 			// pring usage hints, an error message, exit
 			usage(argv[0]);
@@ -213,8 +229,17 @@ int main(int argc, char** argv)
 		// interpret all command line options
 		switch (option[1])
 		{
+
 			case 'c':
-				cutoff = atoi(argv[++i]);
+				cutoff = atof(argv[++i]);
+				break;
+
+			case 'n':
+				max_atoms = atoi(argv[++i]);
+				break;
+
+			case 'h':
+				max_heavy_atoms = atoi(argv[++i]);
 				break;
 
 			case 'p':
@@ -229,6 +254,10 @@ int main(int argc, char** argv)
 			case 'L':
 				use_hin_ligand = true;
 				ligand_file_name = argv[++i];
+				break;
+
+			case 'o':
+				output_format = argv[++i];
 				break;
 
 			default:		// unknown option
@@ -296,6 +325,10 @@ int main(int argc, char** argv)
 		ligand.apply(db.build_bonds);
 	}
 
+	// initialize atom boundaries
+	if (max_atoms == 0) max_atoms = protein.countAtoms() + ligand.countAtoms();
+	if (max_heavy_atoms == 0) max_heavy_atoms = max_atoms;
+
 	// Build a list of sulphur bridges
 
 	list< pair<const Residue*, const Residue*> > sulphur_bridges;
@@ -304,7 +337,7 @@ int main(int argc, char** argv)
 	// Find residues that have atoms which are less than cutoff \AA away from
 	// any atom of the ligand
 
-	ResidueIterator res_it = protein.beginResidue();
+	ResidueIterator res_it;
 	PDBAtomIterator atom_it;
 	AtomConstIterator lig_it;
 	Vector3 position;
@@ -314,39 +347,128 @@ int main(int argc, char** argv)
 	Index last_inserted_ID;
 
 	float charge = 0.0f;
+	Size atoms = 0;
+	Size heavy_atoms = 0;
 
-	for (; +res_it; ++res_it)
-	{
+	// For calculating the number of atoms our cut system will contain, we
+	// need to know:
+	// ACE-N residues contain 6 atoms (4 light, 2 heavy)
+	// NME-C residues contain 6 atoms (4 light, 2 heavy)
 
-		for (atom_it = res_it->beginPDBAtom(); +atom_it; ++atom_it)
+	do {
+		cut.clear();
+		last_inserted_ID = 65000;
+		// Initialize the atom count with the number of atoms of the ligand and
+		// an additional 12 atoms for the end-caps of the last chain (which
+		// will not be added by the for-loop)
+		atoms = ligand.countAtoms() + 12;
+		heavy_atoms = count_heavy_atoms(ligand) + 4;
+		// DEBUG
+		Log.info() << "init: a: " << atoms << ", h: " << heavy_atoms << endl;
+		// /DEBUG
+
+		res_it = protein.beginResidue();
+		for (; +res_it && (atoms <= max_atoms) && (heavy_atoms <= max_heavy_atoms); 
+				++res_it)
 		{
-			position = atom_it->getPosition();
-			for (lig_it = ligand.beginAtom(); +lig_it; ++lig_it)
+			atom_it = res_it->beginPDBAtom();
+			for (; +atom_it && (atoms <= max_atoms) && (heavy_atoms <= max_heavy_atoms);
+						++atom_it)
 			{
-				dist = (position - lig_it->getPosition()).getLength();
-				if (dist < cutoff)
+				position = atom_it->getPosition();
+				lig_it = ligand.beginAtom();
+				for (; +lig_it && (atoms <= max_atoms) && (heavy_atoms <= max_heavy_atoms); ++lig_it)
 				{
-					if (!cut.has(&*res_it))
+					dist = (position - lig_it->getPosition()).getLength();
+					if (dist < cutoff)
 					{
-						// distance is less than the cutoff, co add this residue to the
-						// cut
-						cut.insert(&*res_it);
 
-						// if there is too short a gap between chain snippets, add
-						// residue that lies inbetween to the cut.
-						if ((res_it->getID().toInt() - 2) == last_inserted_ID)
+						if (!cut.has(&*res_it))
 						{
-							tmp_res_it = res_it;
-							tmp_res_it--;
-							cut.insert(&*tmp_res_it);
+							// Add 12 atoms for two end-caps if the last inserted is
+							// further away tha two residues.
+							if ((res_it->getID().toInt() - last_inserted_ID) > 2)
+							{
+								atoms += 12;
+								heavy_atoms += 4;
+								// DEBUG
+								Log.info() << "caps: a: " << atoms << ", h: " << heavy_atoms << endl;
+								// /DEBUG
+							}
+
+							// If the residue is terminal, subtract 6 atoms from those 12
+							// because the ACE-N or NME-C residue will not be added.
+							if ((res_it->isNTerminal() || res_it->isCTerminal())
+									&& (res_it->hasProperty(Residue::PROPERTY__AMINO_ACID)))
+							{
+								atoms -= 6;
+								heavy_atoms -= 2;
+								// DEBUG
+								Log.info() << "term: a: " << atoms << ", h: " << heavy_atoms << endl;
+								// /DEBUG
+							}
+
+							// distance is less than the cutoff, co add this residue to the
+							// cut
+							atoms += res_it->countAtoms();
+							heavy_atoms += count_heavy_atoms(*res_it);
+							// DEBUG
+							Log.info() << "res:  a: " << atoms << ", h: " << heavy_atoms 
+								<< " (" << res_it->getFullName() << ":"
+								<< res_it->getID() << ")" << endl;
+							// /DEBUG
+							if (atoms > max_atoms || heavy_atoms > max_heavy_atoms)
+							{
+								cutoff -= 0.25;
+								Log.info() << "adding " << res_it->getFullName() << ":"
+									<< res_it->getID() << " breaks the bounds: "
+									<< atoms << "/" << max_atoms << ", "
+									<< heavy_atoms << "/" << max_heavy_atoms
+									<< ", setting cutoff to "
+									<< cutoff << endl;
+							}
+							cut.insert(&*res_it);
+
+							// if there is too short a gap between chain snippets, add
+							// residue that lies inbetween to the cut.
+							if ((res_it->getID().toInt() - 2) == last_inserted_ID)
+							{
+								tmp_res_it = res_it;
+								tmp_res_it--;
+								atoms += tmp_res_it->countAtoms();
+								heavy_atoms += count_heavy_atoms(*tmp_res_it);
+								// DEBUG
+								Log.info() << "gap:  a: " << atoms << ", h: " << heavy_atoms 
+									<< " (" << tmp_res_it->getFullName() << ":"
+									<< tmp_res_it->getID() << ")" << endl;
+								// /DEBUG
+								if (atoms > max_atoms || heavy_atoms > max_heavy_atoms)
+								{
+									cutoff -= 0.25;
+									Log.info() << "adding " << tmp_res_it->getFullName() << ":"
+										<< tmp_res_it->getID() << " breaks the bounds: "
+										<< atoms << "/" << max_atoms << ", "
+										<< heavy_atoms << "/" << max_heavy_atoms
+										<< ", setting cutoff to "
+										<< cutoff << endl;
+									break;
+								}
+								cut.insert(&*tmp_res_it);
+							}
+
+							last_inserted_ID = res_it->getID().toInt();
+							break;
 						}
-						last_inserted_ID = res_it->getID().toInt();
-						break;
 					}
 				}
+				if (cut.has(&*res_it)) break;
 			}
-			if (cut.has(&*res_it)) break;
 		}
+	} while ((max_atoms != 0) 
+			&& (atoms > max_atoms || heavy_atoms > max_heavy_atoms));
+
+	if (cut.size() == 0)
+	{
 	}
 
 	// Build a hash set containing all residues that still have sulphur
@@ -400,7 +522,7 @@ int main(int argc, char** argv)
 
 					if (!residues_with_sulphur_bridges.has(&*res_it))
 					{
-						// Reconstruct  residues that lost their sulphur bridges
+						// Reconstruct residues that lost their sulphur bridges
 						residue->clearProperty(Residue::PROPERTY__HAS_SSBOND);
 						residue->apply(reconstruct);
 						residue->apply(db.build_bonds);
@@ -513,6 +635,10 @@ int main(int argc, char** argv)
 	system.insert(*cut_protein);
 	system.apply(db.build_bonds);
 
+	PDBFile intermediate("intermediate.pdb", File::OUT);
+	intermediate << system;
+	intermediate.close();
+
 	Path path;
 
 	cout << endl;
@@ -574,6 +700,12 @@ int main(int argc, char** argv)
 	cut_protein->insert(*tmp_chain);
 	XYZFile cut_system_file_xyz("cut_system_file.xyz", File::OUT);
 	cut_system_file_xyz << system;
+	Log.info() << "# atoms in cut system: " << system.countAtoms() << endl;
+	Log.info() << "# heavy atoms in cut system: " << count_heavy_atoms(system) << endl;
+	// DEBUG
+	// Log.info() << "computed # atoms in cut system: " << atoms << endl;
+	// Log.info() << "computed # heavy atoms in cut system: " << heavy_atoms << endl;
+	// /DEBUG
 
 	XYZFile ligand_file_xyz("ligand_file.xyz", File::OUT);
 	ligand_file_xyz << ligand;
