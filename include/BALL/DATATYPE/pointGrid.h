@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.7 1999/12/28 21:29:14 oliver Exp $ 
+// $Id: pointGrid.h,v 1.8 1999/12/29 00:21:18 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -757,7 +757,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	GridIndex PointGrid<GridDataType>::getIndex(const Vector3& r) const 
+	PointGrid<GridDataType>::GridIndex PointGrid<GridDataType>::getIndex(const Vector3& r) const 
 	{
 		GridIndex	index;
 		Index 		i;
@@ -825,7 +825,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	GridIndex PointGrid<GridDataType>::getIndex
+	PointGrid<GridDataType>::GridIndex PointGrid<GridDataType>::getIndex
 		(const float x, const float y, const float z) const 
 	{
 		GridIndex	index;
