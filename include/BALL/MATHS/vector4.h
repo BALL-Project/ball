@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.12 2000/02/19 01:35:34 amoll Exp $
+// $Id: vector4.h,v 1.13 2000/02/20 20:58:56 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -40,10 +40,6 @@ namespace BALL
 	template <class T>
 	BALL_INLINE
 	TVector4<T> operator - (const TVector4<T>& a, const TVector4<T>& b);
-	
-	template <class T>
-	BALL_INLINE
-	TVector4<T> operator * (const TVector4<T>& a, const TVector4<T>& b);
 	
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector4<T>& vector);
