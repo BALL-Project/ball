@@ -1,4 +1,4 @@
-// $Id: connolly.C,v 1.2 1999/10/30 12:53:36 oliver Exp $
+// $Id: connolly.C,v 1.3 2000/02/18 00:23:09 oliver Exp $
 
 #include <math.h>
 #include <algorithm>
@@ -142,9 +142,9 @@ face13_;
 
 /* Table of constant values */
 
-static double c_b94 = 0.;
-static double c_b157 = -1.;
-static double c_b158 = 1.;
+static double c_b94 = 0.0;
+static double c_b157 = -1.0;
+static double c_b158 = 1.0;
 
 
 double dist2_ (double* x, double* y);
@@ -217,7 +217,7 @@ int connolly_ (int number_of_atoms, double* coordinates, double* radius,
 			face01_1.a[i__ * 3 - 2] = coordinates[3 * i__ - 2];
 			face01_1.a[i__ * 3 - 1] = coordinates[3 * i__ - 1];
       face01_1.ar[i__ - 1] = radius[i__];
-      if (face01_1.ar[i__ - 1] == 0.)
+      if (face01_1.ar[i__ - 1] == 0.0)
 	{
 	  face02_1.skip[i__ - 1] = true;
 	}
@@ -305,7 +305,7 @@ int getprb_ (int* ia, int* ja, int* ka,
 
   if (*ka < *ja)
     {
-      if (rad2 <= 0.)
+      if (rad2 <= 0.0)
 	{
 	  return 0;
 	}
@@ -335,9 +335,9 @@ int getprb_ (int* ia, int* ja, int* ka,
 /*     probe placement; but we still care whether the torus */
 /*     is buried by atom "k" */
 
-  if (swijk == 0.)
+  if (swijk == 0.0)
     {
-      *tb = rad2 > 0. && dat2 <= rad2;
+      *tb = rad2 > 0.0 && dat2 <= rad2;
       return 0;
     }
   vcross_ (uij, uik, &uijk[1]);
@@ -361,9 +361,9 @@ int getprb_ (int* ia, int* ja, int* ka,
   d__1 = face01_1.ar[*ia - 1] + face01_1.pr;
   rip2 = d__1 * d__1;
   rad = rip2 - dba;
-  if (rad < 0.)
+  if (rad < 0.0)
     {
-      *tb = rad2 > 0. && dat2 <= rad2;
+      *tb = rad2 > 0.0 && dat2 <= rad2;
     }
   else
     {
@@ -439,7 +439,7 @@ int gettor_ (int* ia, int* ja, bool* ttok, double* torcen, double* torad, double
 
   d__2 = dij;
   temp1 = d__1 * d__1 - d__2 * d__2;
-  if (temp1 >= 0.)
+  if (temp1 >= 0.0)
     {
 
 /*     skip if one atom is inside the other */
@@ -449,7 +449,7 @@ int gettor_ (int* ia, int* ja, bool* ttok, double* torcen, double* torad, double
 
       d__2 = face01_1.ar[*ia - 1] - face01_1.ar[*ja - 1];
       temp2 = d__1 * d__1 - d__2 * d__2;
-      if (temp2 >= 0.)
+      if (temp2 >= 0.0)
 	{
 
 		/*     store the torus radius, center and axis */
@@ -546,7 +546,7 @@ int  neighbor_ ()
 
 /*     check for new coordinate minima and radii maxima */
 
-  radmax = 0.;
+  radmax = 0.0;
   for (k = 1; k <= 3; ++k)
     {
       comin[k - 1] = face01_1.a[k - 1];
@@ -648,7 +648,7 @@ int  neighbor_ ()
 /*     check for duplicate atoms, turn off one of them */
 
 	  if (dist2_ (&face01_1.a[iatom * 3 - 3], &face01_1.a[iptr * 3 - 3])
-	      <= 0.)
+	      <= 0.0)
 	    {
 	      face02_1.skip[iatom - 1] = true;
 	      goto L30;
@@ -1408,7 +1408,7 @@ int place_ ()
 /*     want the concave face to have counter-clockwise orienta
    tion */
 
-	      if (det > 0.)
+	      if (det > 0.0)
 		{
 
 /*     swap second and third vertices */
@@ -1814,14 +1814,14 @@ int saddles_ ()
 	  tev[k + nent * 3 - 4] = face06_1.p[k + ip * 3 - 4] - face05_1.t[k
 							      + it * 3 - 4];
 	}
-      dtev = 0.;
+      dtev = 0.0;
       for (k = 1; k <= 3; ++k)
 	{
 
 	  d__1 = tev[k + nent * 3 - 4];
 	  dtev += d__1 * d__1;
 	}
-      if (dtev <= 0.)
+      if (dtev <= 0.0)
 	{
 	  cerr << "Probe on Torus Axis" << endl;
 	}
@@ -1839,7 +1839,7 @@ int saddles_ ()
 
 /*     calculate angle between this vector and first vector */
 
-	  dt = 0.;
+	  dt = 0.0;
 	  for (k = 1; k <= 3; ++k)
 	    {
 	      dt += tev[k - 1] * tev[k + nent * 3 - 4];
@@ -1863,14 +1863,14 @@ int saddles_ ()
 /*     get the sign right */
 
 	  if (triple_ (tev, &tev[nent * 3 - 3], &face05_1.tax[it * 3 - 3]) <
-	      0.)
+	      0.0)
 	    {
 	      teang[nent - 1] = 2 * M_PI - teang[nent - 1];
 	    }
 	}
       else
 	{
-	  teang[0] = 0.;
+	  teang[0] = 0.0;
 	}
 
 /*     saddle face starts with this edge if it points parallel */
@@ -2840,7 +2840,7 @@ int vam_ (double* volume, double* area)
 
 /*     compute the volume of the interior polyhedron */
 
-  hedron = 0.;
+  hedron = 0.0;
   i__1 = face08_1.nfn;
   for (ifn = 1; ifn <= i__1; ++ifn)
 	{
@@ -2851,12 +2851,12 @@ int vam_ (double* volume, double* area)
 /*     compute the area and volume due to convex faces */
 /*     as well as the area partitioned among the atoms */
 
-  totap = 0.;
-  totvp = 0.;
+  totap = 0.0;
+  totvp = 0.0;
   i__1 = face01_1.na;
   for (ia = 1; ia <= i__1; ++ia)
 	{
-		atmarea[ia - 1] = 0.;
+		atmarea[ia - 1] = 0.0;
 	}
   i__1 = face13_1.nfp;
   for (ifp = 1; ifp <= i__1; ++ifp)
@@ -2871,10 +2871,10 @@ int vam_ (double* volume, double* area)
 /*     compute the area and volume due to saddle faces */
 /*     as well as the spindle correction value */
 
-  totas = 0.;
-  totvs = 0.;
-  totasp = 0.;
-  totvsp = 0.;
+  totas = 0.0;
+  totvs = 0.0;
+  totasp = 0.0;
+  totvsp = 0.0;
   i__1 = face11_1.nfs;
   for (ifs = 1; ifs <= i__1; ++ifs)
     {
@@ -2891,7 +2891,7 @@ int vam_ (double* volume, double* area)
       totvs += vols;
       totasp += areasp;
       totvsp += volsp;
-      if (areas - areasp < 0.)
+      if (areas - areasp < 0.0)
 	{
 	  cerr <<"Negative Area for Saddle Face" << endl;
 	}
@@ -2899,8 +2899,8 @@ int vam_ (double* volume, double* area)
 
 /*     compute the area and volume due to concave faces */
 
-  totan = 0.;
-  totvn = 0.;
+  totan = 0.0;
+  totvn = 0.0;
   i__1 = face08_1.nfn;
   for (ifn = 1; ifn <= i__1; ++ifn)
     {
@@ -2911,11 +2911,11 @@ int vam_ (double* volume, double* area)
 
 /*     compute the area and volume lens correction values */
 
-  alenst = 0.;
-  alensn = 0.;
-  vlenst = 0.;
-  vlensn = 0.;
-  if (face01_1.pr <= 0.)
+  alenst = 0.0;
+  alensn = 0.0;
+  vlenst = 0.0;
+  vlensn = 0.0;
+  if (face01_1.pr <= 0.0)
     {
       goto L140;
     }
@@ -2928,8 +2928,8 @@ int vam_ (double* volume, double* area)
   for (ifn = 1; ifn <= i__1; ++ifn)
     {
       nlap[ifn - 1] = 0;
-      cora[ifn - 1] = 0.;
-      corv[ifn - 1] = 0.;
+      cora[ifn - 1] = 0.0;
+      corv[ifn - 1] = 0.0;
       badav[ifn - 1] = false;
       badt[ifn - 1] = false;
       for (k = 1; k <= 3; ++k)
@@ -3019,9 +3019,9 @@ int vam_ (double* volume, double* area)
 
 	  d__2 = dpp / 2.;
 	  rm = d__1 * d__1 - d__2 * d__2;
-	  if (rm < 0.)
+	  if (rm < 0.0)
 	    {
-	      rm = 0.;
+	      rm = 0.0;
 	    }
 	  rm = sqrt (rm);
 	  rat = dpp / (face01_1.pr * 2.);
@@ -3047,9 +3047,9 @@ int vam_ (double* volume, double* area)
 	    }
 	  for (ke = 1; ke <= 3; ++ke)
 	    {
-	      thetaq[ke - 1] = 0.;
-	      sigmaq[ke - 1] = 0.;
-	      tau[ke - 1] = 0.;
+	      thetaq[ke - 1] = 0.0;
+	      sigmaq[ke - 1] = 0.0;
+	      tau[ke - 1] = 0.0;
 	      cirpln_ (ppm, &rm, upp, &fncen[ifn * 3 - 3], &fnvect[(ke + ifn
 			      * 3) * 3 - 12], &cinsp, &cintp, xpnt1, xpnt2);
 	      if (!cinsp)
@@ -3229,44 +3229,44 @@ int vam_ (double* volume, double* area)
 		      vect6[k - 1] = xpnt2[k - 1] - fncen[k + jfn * 3 - 4];
 		    }
 		  if (triple_ (vect3, vect1, &fnvect[(ke + ifn * 3) * 3 - 12]
-		      ) < 0.)
+		      ) < 0.0)
 		    {
 		      goto L20;
 		    }
 		  if (triple_ (vect1, vect4, &fnvect[(ke + ifn * 3) * 3 - 12]
-		      ) < 0.)
+		      ) < 0.0)
 		    {
 		      goto L20;
 		    }
 		  if (triple_ (vect7, vect5, &fnvect[(ke2 + jfn * 3) * 3 -
-						     12]) < 0.)
+						     12]) < 0.0)
 		    {
 		      goto L20;
 		    }
 		  if (triple_ (vect5, vect8, &fnvect[(ke2 + jfn * 3) * 3 -
-						     12]) < 0.)
+						     12]) < 0.0)
 		    {
 		      goto L20;
 		    }
 		  goto L30;
 		L20:
 		  if (triple_ (vect3, vect2, &fnvect[(ke + ifn * 3) * 3 - 12]
-		      ) < 0.)
+		      ) < 0.0)
 		    {
 		      goto L40;
 		    }
 		  if (triple_ (vect2, vect4, &fnvect[(ke + ifn * 3) * 3 - 12]
-		      ) < 0.)
+		      ) < 0.0)
 		    {
 		      goto L40;
 		    }
 		  if (triple_ (vect7, vect6, &fnvect[(ke2 + jfn * 3) * 3 -
-						     12]) < 0.)
+						     12]) < 0.0)
 		    {
 		      goto L40;
 		    }
 		  if (triple_ (vect6, vect8, &fnvect[(ke2 + jfn * 3) * 3 -
-						     12]) < 0.)
+						     12]) < 0.0)
 		    {
 		      goto L40;
 		    }
@@ -3327,44 +3327,44 @@ int vam_ (double* volume, double* area)
 		      vect6[k - 1] = xpnt2[k - 1] - fncen[k + jfn * 3 - 4];
 		    }
 		  if (triple_ (vect3, vect1, &fnvect[(ke + ifn * 3) * 3 - 12]
-		      ) < 0.)
+		      ) < 0.0)
 		    {
 		      goto L50;
 		    }
 		  if (triple_ (vect1, vect4, &fnvect[(ke + ifn * 3) * 3 - 12]
-		      ) < 0.)
+		      ) < 0.0)
 		    {
 		      goto L50;
 		    }
 		  if (triple_ (vect7, vect5, &fnvect[(ke2 + jfn * 3) * 3 -
-						     12]) < 0.)
+						     12]) < 0.0)
 		    {
 		      goto L50;
 		    }
 		  if (triple_ (vect5, vect8, &fnvect[(ke2 + jfn * 3) * 3 -
-						     12]) < 0.)
+						     12]) < 0.0)
 		    {
 		      goto L50;
 		    }
 		  goto L60;
 		L50:
 		  if (triple_ (vect3, vect2, &fnvect[(ke + ifn * 3) * 3 - 12]
-		      ) < 0.)
+		      ) < 0.0)
 		    {
 		      goto L70;
 		    }
 		  if (triple_ (vect2, vect4, &fnvect[(ke + ifn * 3) * 3 - 12]
-		      ) < 0.)
+		      ) < 0.0)
 		    {
 		      goto L70;
 		    }
 		  if (triple_ (vect7, vect6, &fnvect[(ke2 + jfn * 3) * 3 -
-						     12]) < 0.)
+						     12]) < 0.0)
 		    {
 		      goto L70;
 		    }
 		  if (triple_ (vect6, vect8, &fnvect[(ke2 + jfn * 3) * 3 -
-						     12]) < 0.)
+						     12]) < 0.0)
 		    {
 		      goto L70;
 		    }
@@ -3374,9 +3374,9 @@ int vam_ (double* volume, double* area)
 		  ;
 		}
 	    }
-	  sumlam = 0.;
-	  sumsig = 0.;
-	  sumsc = 0.;
+	  sumlam = 0.0;
+	  sumsig = 0.0;
+	  sumsc = 0.0;
 	  for (ke = 1; ke <= 3; ++ke)
 	    {
 	      if (ispind[ke - 1] != 0)
@@ -3420,7 +3420,7 @@ int vam_ (double* volume, double* area)
 		{
 		  dt = dot_ (&fnvect[(ke + ifn * 3) * 3 - 12], &face07_1.v[
 							       iv * 3 - 3]);
-		  if (dt > 0.)
+		  if (dt > 0.0)
 		    {
 		      goto L80;
 		    }
@@ -3479,12 +3479,12 @@ int vam_ (double* volume, double* area)
 
 /*     numerical calculation of the correction */
 
-      areado = 0.;
-      voldo = 0.;
-      scinc = .050000000000000003;
+      areado = 0.0;
+      voldo = 0.0;
+      scinc = 0.050000000000000003;
       for (isc = 1; isc <= 20; ++isc)
 	{
-	  rsc = isc - .5;
+	  rsc = isc - 0.5;
 
 	  d__1 = rsc;
 /* Computing 3rd power */
@@ -3505,7 +3505,7 @@ int vam_ (double* volume, double* area)
 	    {
 	      dt = dot_ (&fnvect[(ke + ifn * 3) * 3 - 12], &dots[idot * 3 -
 								 3]);
-	      if (dt > 0.)
+	      if (dt > 0.0)
 		{
 		  goto L120;
 		}
@@ -3556,7 +3556,7 @@ int vam_ (double* volume, double* area)
 			{
 			  dt = dot_ (&fnvect[(ke + jfn * 3) * 3 - 12], vect1)
 			    ;
-			  if (dt > 0.)
+			  if (dt > 0.0)
 			    {
 			      goto L110;
 			    }
@@ -3688,7 +3688,7 @@ int measpm_ (int* ifn, double* prism)
   static int ien;
   static double pav[9] /* was [3][3] */ ;
 
-  height = 0.;
+  height = 0.0;
   for (ke = 1; ke <= 3; ++ke)
     {
       ien = face08_1.fnen[ke + *ifn * 3 - 4];
@@ -3746,8 +3746,8 @@ int measfp_ (int* ifp, double* areap, double* volp)
   static int iep, icy;
 
   ia = face13_1.fpa[*ifp - 1];
-  pcurve = 0.;
-  gcurve = 0.;
+  pcurve = 0.0;
+  gcurve = 0.0;
   ncycle = face13_1.fpncy[*ifp - 1];
   if (ncycle > 0)
     {
@@ -3820,7 +3820,7 @@ int measfp_ (int* ifp, double* areap, double* volp)
 		  angle = vecang_ (&tanv[((ke - 1 << 1) + 2) * 3 - 9], &tanv[
 			    ((ke << 1) + 1) * 3 - 9], &radial[ke * 3 - 3], &
 				   c_b158);
-		  if (angle < 0.)
+		  if (angle < 0.0)
 		    {
 		      cerr <<"Negative Angle in MEASFP" << endl;
 		    }
@@ -3832,7 +3832,7 @@ int measfp_ (int* ifp, double* areap, double* volp)
 	{
 	  angle = vecang_ (&tanv[((nedge << 1) + 2) * 3 - 9], tanv, radial, &
 			   c_b158);
-	  if (angle < 0.)
+	  if (angle < 0.0)
 	    {
 	      cerr <<"Negative Angle in MEASFP" << endl;
 	    }
@@ -3920,7 +3920,7 @@ int measfs_ (int* ifs, double* areas, double* vols, double* areasp, double* vols
 
 /*     check for cusps */
 
-  if (face05_1.tr[it - 1] < face01_1.pr && theta1 > 0. && theta2 > 0.)
+  if (face05_1.tr[it - 1] < face01_1.pr && theta1 > 0.0 && theta2 > 0.0)
     {
       cusp = true;
       rat = face05_1.tr[it - 1] / face01_1.pr;
@@ -3937,9 +3937,9 @@ int measfs_ (int* ifs, double* areas, double* vols, double* areasp, double* vols
   else
     {
       cusp = false;
-      thetaq = 0.;
-      *areasp = 0.;
-      *volsp = 0.;
+      thetaq = 0.0;
+      *areasp = 0.0;
+      *volsp = 0.0;
     }
   term1 = face05_1.tr[it - 1] * face01_1.pr * (theta1 + theta2);
 
@@ -4058,14 +4058,14 @@ int measfn_ (int* ifn, double* arean, double* voln)
 	  pav[k + ke * 3 - 4] = face01_1.a[k + ia * 3 - 4] - face06_1.p[k +
 								ip * 3 - 4];
 	}
-      if (face01_1.pr > 0.)
+      if (face01_1.pr > 0.0)
 	{
 	  vnorm_ (&pvv[ke * 3 - 3], &pvv[ke * 3 - 3]);
 	}
     }
-  if (face01_1.pr <= 0.)
+  if (face01_1.pr <= 0.0)
     {
-      *arean = 0.;
+      *arean = 0.0;
     }
   else
     {
@@ -4088,7 +4088,7 @@ int measfn_ (int* ifn, double* arean, double* voln)
 	    }
 	  angle[ke - 1] = vecang_ (&planev[je * 3 - 3], &planev[ke * 3 - 3],
 				   &pvv[ke * 3 - 3], &c_b157);
-	  if (angle[ke - 1] < 0.)
+	  if (angle[ke - 1] < 0.0)
 	    {
 	      cerr <<"Negative Angle in MEASFN" << endl;
 	    }
@@ -4156,7 +4156,7 @@ int projct_ (double* pnt, double* unvect, int* icy, int* ia, double* spv, int* n
 /*     calculate multiplication factor */
 
 	  dt = dot_ (polev, &unvect[1]);
-	  if (dt == 0.)
+	  if (dt == 0.0)
 	    {
 	      *fail = true;
 	      return 0;
@@ -4235,7 +4235,7 @@ bool ptincy_ (double* pnt, double* unvect, int* icy)
 							     iatom * 3 - 4];
 	  cpvect[k - 1] = pnt[k] - face09_1.c__[k + ic * 3 - 4];
 	}
-      if (dot_ (acvect, cpvect) >= 0.)
+      if (dot_ (acvect, cpvect) >= 0.0)
 	{
 	  ret_val = false;
 	  return ret_val;
@@ -4254,7 +4254,7 @@ bool ptincy_ (double* pnt, double* unvect, int* icy)
     }
   epuclc_ (spv, &nedge, epu);
   totang = rotang_ (epu, &nedge, &unvect[1]);
-  ret_val = totang > 0.;
+  ret_val = totang > 0.0;
   return ret_val;
 }				/* ptincy_ */
 
@@ -4312,7 +4312,7 @@ int epuclc_ (double* spv, int* nedge, double* epu)
 
 /*     normalize */
 
-      if (epun > 0.)
+      if (epun > 0.0)
 	{
 	  for (k = 1; k <= 3; ++k)
 	    {
@@ -4323,7 +4323,7 @@ int epuclc_ (double* spv, int* nedge, double* epu)
 	{
 	  for (k = 1; k <= 3; ++k)
 	    {
-	      epu[k + ke * 3] = 0.;
+	      epu[k + ke * 3] = 0.0;
 	    }
 	}
     }
@@ -4333,7 +4333,7 @@ int epuclc_ (double* spv, int* nedge, double* epu)
   i__1 = *nedge;
   for (ke = 1; ke <= i__1; ++ke)
     {
-      if (anorm_ (&epu[ke * 3 + 1]) <= 0.)
+      if (anorm_ (&epu[ke * 3 + 1]) <= 0.0)
 	{
 	  le = ke - 1;
 	  if (le <= 0)
@@ -4377,7 +4377,7 @@ double rotang_ (double* epu, int* nedge, double* unvect)
   --unvect;
 
   /* Function Body */
-  totang = 0.;
+  totang = 0.0;
 
 /*     sum angles at vertices of cycle */
 
@@ -4406,7 +4406,7 @@ double rotang_ (double* epu, int* nedge, double* unvect)
 	  dt = 1.;
 	}
       ang = acos (dt);
-      if (dot_ (crs, &unvect[1]) > 0.)
+      if (dot_ (crs, &unvect[1]) > 0.0)
 	{
 	  ang = -ang;
 	}
@@ -4508,9 +4508,9 @@ double anorm_ (double* x)
 
   d__3 = x[3];
   ret_val = d__1 * d__1 + d__2 * d__2 + d__3 * d__3;
-  if (ret_val < 0.)
+  if (ret_val < 0.0)
     {
-      ret_val = 0.;
+      ret_val = 0.0;
     }
   ret_val = sqrt (ret_val);
   return ret_val;
@@ -4632,7 +4632,7 @@ double vecang_ (double* v1, double* v2, double* axis, double* hand)
   a2 = anorm_ (&v2[1]);
   dt = dot_ (&v1[1], &v2[1]);
   a12 = a1 * a2;
-  if (fabs (a12) != 0.)
+  if (fabs (a12) != 0.0)
     {
       dt /= a12;
     }
@@ -4645,7 +4645,7 @@ double vecang_ (double* v1, double* v2, double* axis, double* hand)
       dt = 1.;
     }
   angle = acos (dt);
-  if (*hand * triple_ (&v1[1], &v2[1], &axis[1]) < 0.)
+  if (*hand * triple_ (&v1[1], &v2[1], &axis[1]) < 0.0)
     {
       ret_val = 2 * M_PI - angle;
     }
@@ -4696,17 +4696,17 @@ int cirpln_ (double* circen, double* cirrad, double* cirvec,
       cpvect[k - 1] = plncen[k] - circen[k];
     }
   dcp = dot_ (cpvect, &plnvec[1]);
-  *cinsp = dcp > 0.;
+  *cinsp = dcp > 0.0;
   vcross_ (&plnvec[1], &cirvec[1], vect1);
-  if (anorm_ (vect1) > 0.)
+  if (anorm_ (vect1) > 0.0)
     {
       vnorm_ (vect1, uvect1);
       vcross_ (&cirvec[1], uvect1, vect2);
-      if (anorm_ (vect2) > 0.)
+      if (anorm_ (vect2) > 0.0)
 	{
 	  vnorm_ (vect2, uvect2);
 	  dir = dot_ (uvect2, &plnvec[1]);
-	  if (dir != 0.)
+	  if (dir != 0.0)
 	    {
 	      ratio = dcp / dir;
 	      if (fabs (ratio) <= *cirrad)
@@ -4720,9 +4720,9 @@ int cirpln_ (double* circen, double* cirrad, double* cirvec,
 
 		  d__2 = ratio;
 		  rlen = d__1 * d__1 - d__2 * d__2;
-		  if (rlen < 0.)
+		  if (rlen < 0.0)
 		    {
-		      rlen = 0.;
+		      rlen = 0.0;
 		    }
 		  rlen = sqrt (rlen);
 		  for (k = 1; k <= 3; ++k)
