@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.sip,v 1.2 2003/11/15 12:53:57 oliver Exp $
+// $Id: compositeManager.sip,v 1.3 2003/11/17 14:50:22 amoll Exp $
 //
 class CompositeManager
 {
@@ -18,7 +18,7 @@ class CompositeManager
   // CompositeIterator end() throw();
   CompositeManager() throw();
   CompositeManager(const CompositeManager& /cm/) throw();
-  Size getNumberOfComposite() const throw();
+  Size getNumberOfComposites() const throw();
   bool has(const Composite& /composite/) const throw();
   bool insert(Composite& /composite/) throw();
   bool remove(Composite& /composite/) throw();
