@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.1 2002/09/24 16:57:58 anhi Exp $
+// $Id: control.h,v 1.10.4.2 2002/09/24 17:40:23 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -418,11 +418,6 @@ namespace BALL
 					@see    GeometricObject
 			*/
 			void eraseGeometricObject();
-
-			/** Color a mesh.
-			 */
-			void colorMesh();
-
 			//@}
 		
 
