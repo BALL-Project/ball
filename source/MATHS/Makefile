@@ -7,9 +7,13 @@ CPP_SOURCES=\
 	angle.C\
 	box3.C\
 	circle3.C\
+	FFT1D.C\
+	FFT2D.C\
+	FFT3D.C\
 	function.C\
 	line3.C\
 	matrix44.C\
+	parsedFunction.C\
 	plane3.C\
 	piecewiseFunction.C\
 	piecewisePolynomial.C\
