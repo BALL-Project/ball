@@ -16,7 +16,6 @@ CPP_SOURCES=\
 	shiftModel.C\
 	shiftModule.C\
 	NMRSpectrum.C\
-	createSpectrumProcessor.C\
 	johnsonBoveyShiftProcessor.C\
 	randomCoilShiftProcessor.C
 
