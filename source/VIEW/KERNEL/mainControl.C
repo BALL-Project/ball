@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.37 2003/12/12 23:56:09 amoll Exp $
+// $Id: mainControl.C,v 1.38 2003/12/13 00:00:03 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -390,10 +390,11 @@ bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebui
 	// notify GeometricControl of changed representations
 	for (; reps_it != changed_representations.end(); reps_it++)
 	{
+		Representation* rep = *reps_it;
+
 		// this should work, but it doesnt, so I had to do it the old way
 		// Andreas Moll 13.12.2003 ?????
 		/*
-		Representation* rep = *reps_it;
 		if (rep->getModelType() == MODEL_SE_SURFACE ||
 				rep->getModelType() == MODEL_SA_SURFACE ||
 				rep->getModelType() == MODEL_BACKBONE 	||
