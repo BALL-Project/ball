@@ -39,8 +39,8 @@ include directories, use \mbox{"\option{--with-qt-libs}{\tt{}=DIR}"} and
 Section \ref{section:building-ball}) to specify the paths QT was installed
 to.\index{QT} {\tt configure} will also honor the {\tt QTDIR} environment variable.
 
-QT also requires OpenGL. On platforms that do not provide OpenGL, MESA can
-be used (e.g. Linux). Mesa is a 3-D graphics library with an API which is 
+QT also requires OpenGL. On platforms that do not provide OpenGL, Mesa can
+be used. Mesa is a 3-D graphics library with an API which is 
 very similar to that of OpenGL. It can be obtained from 
 \URL{http://www.mesa3d.org}.
 \index{MESA}
@@ -142,7 +142,7 @@ An overview of these options can also be obtained by executing "{\tt configure
                                            \vspace{3mm}
 
   \option{--with-qt-libs}{\tt{}=DIR}&      QT libraries are in DIR\\\vspace{3mm}
-	\option{--with-qt-mt}{\tt{}=DIR}&					Use the multithreaded version of the QT
+	\option{--with-qt-mt}&										Use the multithreaded version of the QT
 																						libraries rather than the singlethreaded 
 																						one (libqt-mt instead of
 libqt).
@@ -183,10 +183,6 @@ an installed python in the current PATH.
 
   \option{--with-python-ldopts=X}&         Use additional options X when
                                            linking with the Python library
-                                           \\\vspace{3mm}
-
-  \option{--with-qt-mt}&                   use a threadsafe version of the
-                                           QT lib (libqt-mt)
                                            \\\vspace{3mm}
 
   \option{--with-sip-lib}{\tt{}=DIR}&             the SIP library resides in DIR
@@ -260,7 +256,7 @@ shared libraries. Two different libraries will be built:
 	\end{tabular}
 \end{center}
 
-The latter two libraries are not built if "\option{--disable-VIEW}" is specified or configure
+The latter library is not built if "\option{--disable-VIEW}" is specified or configure
 cannot find X libraries, OpenGL libraries, or QT libraries (and the respective headers).
 
 It is also possible (although not recommended) to build the corresponding static libraries
