@@ -1,2 +1,2 @@
-/Object: 0x[0-9a-f]+ is instance of class: .*
+/Object: [0-9a-fx]+ is instance of class: .*
   (x =  1.2, y = 2.3, z = 3.4)
