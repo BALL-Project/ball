@@ -2,21 +2,22 @@
 ---------------
 Changed:
   - molview has been renamed to BALLView in order to avoid
-    name collisions
+    confusion (there are other applications out there with the name molview)
+  - default constructor of FragmentDB does no longer open the default
+    fragment database. If you want the same behavior as before, simply
+    call FragmentDB::init() or use the other constructor with an empty
+    string as an argument (e.g. 'FragmentDB db("");').
 
 Added + improved:
+  - MOLFile and SDFile are now more robust with respect to slight errors in the
+    files
+  - Documentation has been added and improved in numerous places
   - Dialog to download and open PDB files directly from www.PDB.org
-	- Minor bugfixes in dialog for coloring surfaces
-	- Improved Python bindings for VIEW library
-	- further cleanup of the VIEW library
-	- Emulation in Scene for PCs with only one mouse button (e.g. Mac)
+	- Mouse button emulation in Scene for mice with less than three buttons (e.g. Mac):
+    use SHIFT, ALT, CTRL together with the mouse button
 	- Mousewheel sensitivity can be adjusted
-	- Added icon to BALLView executable
 	- Now using Windows native dialogs on Windows platforms
 	- Added capablity to BALLView to log to file
-	- Added capablity to BALLView to calculate RMSDs for proteins
-	- Fixed: Problems, when user cant write to BALLView installation dir
-	- Fixed: Problems, when BALLView cant find the data directory
 
 Installation:
   - Additional platform: Mac OS X (Panther)
