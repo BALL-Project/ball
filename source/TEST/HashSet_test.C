@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashSet_test.C,v 1.18 2003/06/15 09:03:41 amoll Exp $
+// $Id: HashSet_test.C,v 1.19 2003/06/15 20:13:17 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -46,7 +46,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.18 2003/06/15 09:03:41 amoll Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.19 2003/06/15 20:13:17 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -466,7 +466,7 @@ CHECK(Size getCapacity() const throw())
 	TEST_EQUAL(hs.getCapacity(), 4)
 RESULT
 
-CHECK(std::pair<Iterator, bool> insert(const ValueType& item) throw())
+CHECK((std::pair<Iterator, bool> insert(const ValueType& item) throw()))
 	HashSet<int> hs;
 	TEST_EQUAL(hs.getSize(), 0)
 	hs.insert(0);
