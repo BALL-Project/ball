@@ -1,6 +1,5 @@
-// $Id: directory.C,v 1.5 2000/06/15 19:12:41 amoll Exp $
+// $Id: directory.C,v 1.6 2000/06/16 21:37:31 amoll Exp $
 
-#include <assert.h>
 #include <dirent.h>
 #include <stdio.h>
 #include <string.h>
@@ -10,25 +9,16 @@
 #include <iostream>
 #include <BALL/SYSTEM/directory.h>
 
-#define BALL_DIRECTORY_STAT   ::lstat
-
 namespace BALL 
 {
 	Directory::Directory()
 	{
-		char* buffer_;
-		::getcwd(buffer_, sizeof(buffer_));
 		dir_ = 0;
 		dirent_ = 0;
-		if (buffer_ != 0)
-		{
+		char* buffer_;
+		if ((buffer_ = ::getcwd(NULL, 64)) != NULL)
 			directory_path_ = buffer_;
-		}
-		else
-		{
-			directory_path_ = "";
-		}
-		//cout<<endl<<buffer_;
+		else directory_path_ = "";
 	}
 
 	Directory::Directory(const String& directory_path, bool set_current = false)
@@ -45,8 +35,7 @@ namespace BALL
 			dirent_(0),
 			directory_depth_(0),
 			directory_path_(directory.directory_path_)
-	{
-	}
+	{}
 
 	Directory::~Directory()
 	{
@@ -97,15 +86,20 @@ namespace BALL
 
 	bool Directory::getNextEntry(String& entry)
 	{
-		String s;
+		if (dir_ == 0) dir_ = ::opendir(directory_path_.data());
+
+		if (dir_ == 0) return false;
 		dirent_ = ::readdir(dir_);
 		if (dirent_ == 0)
 		{
-			::closedir(dir_);
-			dir_ = 0;
+			if (dir_ != 0)
+			{
+				::closedir(dir_);
+				dir_ = 0;
+			}
 			return false;
 		}
-		else  entry = dirent_->d_name;
+		entry = dirent_->d_name;
 		return true;
 	}
 
@@ -119,10 +113,7 @@ namespace BALL
 		Size size = 0;
 		DIR* dir = ::opendir(directory_path_.data());
 		if (dir == 0)	return 0;
-		while(::readdir(dir) != 0)
-		{
-			++size;
-		}
+		while(::readdir(dir) != 0) ++size;
 		::closedir(dir);
 		return (size - 2); // ignore current (.) and parent directory entry (..)
 	}
@@ -134,12 +125,10 @@ namespace BALL
 		DIR* dir = ::opendir(directory_path_.data());
 		if (dir == 0)	return 0;
 
-		dirent* dir_entry = 0;
-		while((dir_entry = ::readdir(dir)) != 0)
+		while(readdir(dir) != 0)
 		{
 			char* c;
-			/* BALL_DIRECTORY_STAT error */
-			if (BALL_DIRECTORY_STAT(c, &stats) < 0)	continue;
+			if (lstat(c, &stats) < 0)	continue;
 			if (S_ISDIR(stats.st_mode) == 0) ++size;
 		}
 
@@ -157,8 +146,7 @@ namespace BALL
 		while(::readdir(dir) != 0)
 		{
 			char* c;
-			/* BALL_DIRECTORY_STAT error */
-			if (BALL_DIRECTORY_STAT(c, &stats) < 0)	continue;
+			if (lstat(c, &stats) < 0)	continue;
 			if (S_ISDIR(stats.st_mode) != 0) ++size;
 		}
 
@@ -235,8 +223,10 @@ namespace BALL
 	bool Directory::isCurrent() const
 	{
 		char* buffer_;
-		::getcwd(buffer_, sizeof(buffer_));
-
+		if ((buffer_ = ::getcwd(NULL, 64)) == NULL)
+		{
+			return false;
+		}
 		return (bool)(directory_path_ == buffer_);
 	}
 
@@ -262,9 +252,8 @@ namespace BALL
 		char* c = 0;
 		 BALLApplicator::Result result = Applicator::ABORT;
 		
-		if (BALL_DIRECTORY_STAT(s.c_str(), &stats) < 0)
-		{ // BALL_DIRECTORY_STAT error 
-
+		if (lstat(s.c_str(), &stats) < 0)
+		{
 			return Applicator::ABORT;
 		}
 		
@@ -322,5 +311,9 @@ namespace BALL
 		}
 		return result;
 	}*/
+
+#       ifdef BALL_NO_INLINE_FUNCTIONS
+#               include <BALL/SYSTEM/directory.iC>
+#       endif
 
 } // namespace BALL 
