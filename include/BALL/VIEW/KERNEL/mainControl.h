@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.22 2003/12/09 16:21:47 amoll Exp $
+// $Id: mainControl.h,v 1.23 2003/12/09 16:38:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -236,9 +236,10 @@ namespace BALL
 					of sending the message.
 					\param  composite the Composite that should be updated
 					\param  rebuild if set to true, the model is rebuilded, otherwise just the coloring is updated
+					\param  force is set to true, also rebuild non surface models (only usefull with rebuild = true)
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool updateRepresentationsOf(const Composite& composite, bool rebuild = true)
+			bool updateRepresentationsOf(const Composite& composite, bool rebuild = true, bool force = false)
 				throw();
 
 			/** Redraws all inserted Representation.
