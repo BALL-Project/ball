@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.10 2003/10/05 21:08:41 amoll Exp $
+// $Id: datasetControl.C,v 1.11 2003/10/05 21:30:54 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -60,7 +60,7 @@ void DatasetControl::initializeWidget(MainControl& main_control)
 		String("To open a trajectory file, one System has to be selected."));
 	open_grid_id_ = 
 		main_control.insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()), 0, -1,
-		String("To open a 3D grid, one System has to be selected."));
+		String("Open a 3D data grid."));
 	GenericControl::initializeWidget(main_control);
 }
 
@@ -78,7 +78,6 @@ void DatasetControl::checkMenu(MainControl& main_control)
 	throw()
 {
 	getMainControl()->menuBar()->setItemEnabled(open_trajectory_id_, main_control.getSelectedSystem());
-	getMainControl()->menuBar()->setItemEnabled(      open_grid_id_, main_control.getSelectedSystem());
 }
 
 
@@ -157,7 +156,7 @@ void DatasetControl::onNotify(Message *message)
 	if (RTTI::isKindOf<RegularData3DMessage>(*message))
 	{
 		RegularData3DMessage* ntm = RTTI::castTo<RegularData3DMessage>(*message);
-		insertGrid_(ntm->getRegularData3D(), *(System*)ntm->getComposite(), ntm->getCompositeName());
+		insertGrid_(ntm->getRegularData3D(), (System*)ntm->getComposite(), ntm->getCompositeName());
 		return;
 	}
 	else if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
@@ -298,20 +297,22 @@ void DatasetControl::add3DGrid()
 
 	infile >> *dat;
 	infile.close();
-	insertGrid_(dat, *getMainControl()->getSelectedSystem(), String(result.ascii()));
+	insertGrid_(dat, 0, String(result.ascii()));
 	RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
 	msg->setRegularData3D(dat);
-	msg->setComposite(getMainControl()->getSelectedSystem());
+	msg->setComposite(0);
 	msg->setCompositeName(result.ascii());
 	notify_(msg);
 }
 
-void DatasetControl::insertGrid_(RegularData3D* data, System& system, const String& name)
+void DatasetControl::insertGrid_(RegularData3D* data, System* system, const String& name)
 	throw()
 {
-	QListViewItem* item = new QListViewItem(listview, name.c_str(), system.getName().c_str(), "3D Grid");
+	QListViewItem* item;
+	if (system) item = new QListViewItem(listview, name.c_str(), system->getName().c_str(), "3D Grid");
+	else 				item = new QListViewItem(listview, name.c_str(), "", "3D Grid");
 	item_to_grid_[item] = data;
-	insertComposite_(&system, item);
+	insertComposite_(system, item);
 }
 
 void DatasetControl::save3DGrid_()
