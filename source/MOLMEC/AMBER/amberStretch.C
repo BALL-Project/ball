@@ -1,4 +1,4 @@
-// $Id: amberStretch.C,v 1.10 2000/06/30 05:56:10 oliver Exp $
+// $Id: amberStretch.C,v 1.11 2001/05/16 01:44:12 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -174,6 +174,13 @@ namespace BALL
 		// Everything went well.
 		return true;
 	}
+
+	// update bond lists if the selection has changed
+	void AmberStretch::update()
+	{
+		// BAUSTELLE
+	}
+	
 
 	// calculates the current energy of this component
 	double AmberStretch::updateEnergy()
