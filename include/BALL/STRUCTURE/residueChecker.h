@@ -1,4 +1,4 @@
-// $Id: residueChecker.h,v 1.4 2000/08/30 19:58:26 oliver Exp $
+// $Id: residueChecker.h,v 1.5 2001/01/15 10:12:42 anker Exp $
 
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -20,6 +20,8 @@ namespace BALL
 			It identifies missing or superfluous atoms, suspect bond lengths
 			and non-integral or extremely large charges on the residue.
 			Warnings are emitted to \Ref{Log}.
+			\\
+			{\bf Definition:} \URL{BALL/STRUCTURE/residueChecker.h}
 	*/
 	class ResidueChecker
 		:	public	UnaryProcessor<Residue>
