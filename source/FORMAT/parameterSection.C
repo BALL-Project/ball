@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.7 2000/09/19 19:35:56 oliver Exp $
+// $Id: parameterSection.C,v 1.8 2000/09/19 21:42:11 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -263,7 +263,7 @@ namespace BALL
 							// copy all variable fields to the corresponding array
 							for (j = 0; j < (Position)number_of_variables; j++)
 							{
-								if (variables[j] < f.size())
+								if ((Position)variables[j] < f.size())
 								{
 									entries_[number_of_lines * number_of_variables_ + j] = f[variables[j]];
 								}
