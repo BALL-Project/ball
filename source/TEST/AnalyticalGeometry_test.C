@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.12 2000/03/26 12:11:44 oliver Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.13 2000/03/26 16:33:51 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.12 2000/03/26 12:11:44 oliver Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.13 2000/03/26 16:33:51 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,29 +33,91 @@ RESULT
 
 //line90
 CHECK(GetDeterminant(const T* m, Size dim))
-  //BAUSTELLE
+	float m[16], x, x1;
+	for (int i = 0; i < 15 ; i++ )
+	{
+		m[i] = (float) i;
+	}
+	x = GetDeterminant(m, 4);
+	m[0] = 4;
+	m[1] = 5;
+	m[2] = 6;
+	m[3] = 7;
+	m[4] = 0;
+	m[5] = 1;
+	m[6] = 2;
+	m[7] = 3;
+	x1 = GetDeterminant(m, 4);
+	TEST_REAL_EQUAL(-x, x1)
+	for (int i = 0; i < 15 ; i++ )
+	{
+		m[i] = (float) i * 2;
+	}
+	x = GetDeterminant(m, 4);
+	TEST_REAL_EQUAL(x * 2, x1)
 RESULT
 
 //line114: method GetDeterminant2(const T* m)
 CHECK(GetDeterminant2(const T* m))
-  //BAUSTELLE
+	float m[16], x, x1;
+	m[0] = 0;
+	m[1] = 1;
+	m[2] = 2;
+	m[3] = 3;
+	x1 = GetDeterminant2(m);
+	m[0] = 2;
+	m[1] = 3;
+	m[2] = 0;
+	m[3] = 1;
+	x = GetDeterminant2(m);
+	TEST_REAL_EQUAL(-x, x1)
+	m[0] = 4;
+	m[1] = 6;
+	m[2] = 0;
+	m[3] = 2;
+	x1 = GetDeterminant2(m);
+	TEST_REAL_EQUAL(x * 4, x1)
 RESULT
 
 //line125
 CHECK(GetDeterminant2(const T& m00, const T& m01, const T& m10, const T& m11))
-  //BAUSTELLE
+	float x, x1;
+	x = GetDeterminant2(0, 1, 2, 3);
+	x1 = GetDeterminant2(2, 3, 0, 1);
+	TEST_REAL_EQUAL(-x, x1)
 RESULT
 
 //line136: method GetDeterminant3(const T *m)
 CHECK(GetDeterminant3(const T *m))
-  //BAUSTELLE
+	float m[9], x, x1;
+	for (int i = 0; i < 9 ; i++ )
+	{
+		m[i] = (float) i;
+	}
+	x = GetDeterminant3(m);
+	m[0] = 3;
+	m[1] = 4;
+	m[2] = 5;
+	m[3] = 0;
+	m[4] = 1;
+	m[5] = 2;
+	x1 = GetDeterminant3(m);
+	TEST_REAL_EQUAL(-x, x1)
+	for (int i = 0; i < 9 ; i++ )
+	{
+		m[i] = (float) i * 2;
+	}
+	x = GetDeterminant3(m);
+	TEST_REAL_EQUAL(x * 2, x1)
 RESULT
 
 //line154
 CHECK(GetDeterminant3(const T& m00, const T& m01, const T& m02,
 								  		const T& m10, const T& m11, const T& m12,
 											const T& m20, const T& m21, const T& m22))
-  //BAUSTELLE
+	float x = GetDeterminant3(0, 1, 2, 3, 4, 5, 6, 7, 8);
+	float x1 = GetDeterminant3(3, 4, 5, 0, 1, 2, 6, 7, 8);
+	TEST_REAL_EQUAL(x, -x1)
 RESULT
 
 //line166: method SolveSystem(const T* m, T* x, const Size dim)
