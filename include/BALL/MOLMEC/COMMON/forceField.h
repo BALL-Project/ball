@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.13 2001/02/18 20:51:19 amoll Exp $
+// $Id: forceField.h,v 1.14 2001/03/02 00:34:15 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -74,7 +74,7 @@ namespace BALL
 			components and invokes the updateEnergy method of each of these components.
 			The total energy may then be retrieved by calling \Ref{getEnergy}.\\
 			Analogously, a force calculation is performed by invoking \Ref{updateForces}.
-			\Ref{getForces} returns a pointer to an array containing the forces for each atom.\\
+			\Ref{getForces} returns a pointer to an array containing the forces for each atom.
 	*/
 	class ForceField
 	{
@@ -280,7 +280,7 @@ namespace BALL
 
 		/**	Return the update frequency for pair lists etc.
 				This method is used by minimzers or the MD simulation to determine the number
-				of iterations between to calls to \Ref{update}.
+				of iterations between two calls to \Ref{update}.
 		*/
 		virtual Size getUpdateFrequency() const;
 
@@ -315,7 +315,7 @@ namespace BALL
 		*/
 		void collectAtoms_(const System& system);
 		
-		/*_	@ name	Protected Attributes
+		/*_	@name	Protected Attributes
 		*/
 		//_@{
 

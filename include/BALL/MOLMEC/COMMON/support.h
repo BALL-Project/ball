@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.10 2001/02/23 14:38:43 anker Exp $
+// $Id: support.h,v 1.11 2001/03/02 00:34:15 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -52,7 +52,7 @@ namespace BALL
 			*/
 			HASH_GRID,
 
-			/**	brute force all agains all
+			/**	brute force all against all
 			*/
 			BRUTE_FORCE
 		};
@@ -77,20 +77,18 @@ namespace BALL
 			 double distance,	bool periodic_boundary_enabled, 
 			 PairListAlgorithmType type);
 
-		/**	Merge the non-overlapping molecules of a system into another
-				system.
-				Fills {\tt system} with copies of the solvent molecules stored in
-				{\tt solvent}. Solvent molecules are added to {\tt system} if
-				the molecules lie in the {\tt box} and if they do not overlap with
-				the molecules in {\tt solute_grid}. A molecule has an overlap with
-				another molecule if any atom of the first molecule is within {\tt
-				distance} of any atom of the other molecule.
+		/**	Merge the non-overlapping molecules of a system into another system.
+				Fills {\tt system} with copies of the solvent molecules stored in	{\tt solvent}. 
+				Solvent molecules are added to {\tt system} if the molecules lie in the 
+				{\tt box} and if they do not overlap with	the molecules in {\tt solute_grid}. 
+				A molecule has an overlap with another molecule if any atom of the first 
+				molecule is within {\tt	distance} of any atom of the other molecule.
 				@param	system the system to be filled
 				@param	solute_grid a hash grid containing the solute molecules
 				@param	solvent the system containing the solvent
-				@param	box the periodic boundary of {\tt system_A}
+				@param	box the periodic boundary of {\tt system}
 				@param	distance used to determine overlaps between two atoms
-				@return	the number of molecules added to {\tt system_A}
+				@return	the number of molecules added to {\tt system}
 		*/
 		BALL::Size addNonOverlappingMolecules
 			(System& system, const HashGrid3<Atom*>& solute_grid,
@@ -105,8 +103,7 @@ namespace BALL
 				such molecules to the opposite boundary wall such that their center
 				of gravity lies in the box afterwards.\\
 				This might be obsoleted by PeriodicBoundarry::updateMolecules()
-				@param system the system containing the water box which is to be
-				adapted
+				@param system the system containing the water box which is to be adapted
 				@param box the box definition for the periodic boundary
 		*/
 		void adaptWaterBox(System& system, const Box3& box);

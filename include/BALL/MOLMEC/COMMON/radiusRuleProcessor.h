@@ -1,4 +1,4 @@
-// $Id: radiusRuleProcessor.h,v 1.4 2001/02/18 20:51:19 amoll Exp $
+// $Id: radiusRuleProcessor.h,v 1.5 2001/03/02 00:34:15 amoll Exp $
 // Molecular Mechanics: rule-based assignment of radii
 
 #ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
@@ -11,7 +11,8 @@
 namespace BALL 
 {
 
-	/**	
+	/**	Radius Rule Processor.
+			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/radiusRuleProcessor.h}
 	*/
 	class RadiusRuleProcessor
 		:	public RuleProcessor

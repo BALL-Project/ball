@@ -1,4 +1,4 @@
-// $Id: typenameRuleProcessor.h,v 1.3 2001/02/18 20:51:20 amoll Exp $
+// $Id: typenameRuleProcessor.h,v 1.4 2001/03/02 00:34:16 amoll Exp $
 // Molecular Mechanics: rule-based assignment of typenames 
 
 #ifndef BALL_MOLMEC_COMMON_TYPENAMERULEPROCESSOR_H
@@ -11,7 +11,8 @@
 namespace BALL 
 {
 
-	/**	
+	/**	Typename Rule Processor.
+			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/typenameRuleProcessor.h}
 	*/
 	class TypenameRuleProcessor
 		:	public RuleProcessor

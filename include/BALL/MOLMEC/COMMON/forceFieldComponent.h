@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.h,v 1.7 2000/08/30 19:58:18 oliver Exp $
+// $Id: forceFieldComponent.h,v 1.8 2001/03/02 00:34:15 amoll Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -39,7 +39,6 @@ namespace BALL
 
 		BALL_CREATE_DEEP(ForceFieldComponent)
 
-
 		/**	Default constructor.
 		*/
 		ForceFieldComponent();
@@ -49,8 +48,8 @@ namespace BALL
 		ForceFieldComponent(ForceField&	force_field);
 
 		/**	Copy constructor.
-			Creates a new instance of the given ForceFieldComponent.
-			The created object will not be assigned to an existing force field.
+				Creates a new instance of the given ForceFieldComponent.
+				The created object will not be assigned to an existing force field.
 		*/
 		ForceFieldComponent(const ForceFieldComponent&	force_field_component, bool clone_deep = true);
 
@@ -69,14 +68,12 @@ namespace BALL
 		virtual bool setup();
 
 		//@}
-		
-
 		/**	@name	Accessors	
 		*/
 		//@{
 
 		/**	Returns the parent force field.
-			0 is returned, if no force field is assigned.
+				0 is returned, if no force field is assigned.
 		*/	
 		ForceField*	getForceField() const;
 
@@ -88,14 +85,11 @@ namespace BALL
 		*/
 		void	setName(const String& name);
 
-
 		/**	Returns the component's name 
 		*/
 		String	getName() const;
 
-		//@}
-
-		
+		//@}	
 		/**	@name	Force field calculations
 		*/
 		//@{
@@ -111,7 +105,6 @@ namespace BALL
 				zero is returned.
 		*/
 		virtual double	updateEnergy();
-		
 
 		/**	Updates the atomic forces in the force field.
 				The forces created by this ForceFieldComponent are
@@ -132,7 +125,6 @@ namespace BALL
 		
 		//@}
 
-
 		protected:
 
 		/*_	@name Protected Attributes
@@ -148,11 +140,10 @@ namespace BALL
 		double	energy_;
 
 		//_@}
-
 			
 		private:
 		
-		/*_	@ name Private Attributes
+		/*_	@name Private Attributes
 		*/
 		//_@{
 

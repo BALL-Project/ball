@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.h,v 1.10 2001/02/18 20:51:19 amoll Exp $
+// $Id: periodicBoundary.h,v 1.11 2001/03/02 00:34:15 amoll Exp $
 // Molecular Mechanics: class representing periodic boundary conditions
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -134,7 +134,6 @@ namespace BALL
 		virtual ~PeriodicBoundary();
 
 		//@}
-
 		/**	@name	Assignment
 		*/
 		//@{
@@ -221,7 +220,7 @@ namespace BALL
 		//@{
 		
 		/**	Checks which molecules are inside the box.
-				If the center of mass of a molecule levaes the box, 
+				If the center of mass of a molecule leaves the box, 
 				it is inserted on the other side.
 		*/
 		void updateMolecules();

@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.14 2001/02/18 20:51:19 amoll Exp $
+// $Id: snapShot.h,v 1.15 2001/03/02 00:34:15 amoll Exp $
 
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
@@ -67,8 +67,8 @@ namespace BALL
 	/** SnapShot class, containing the actual data of one single snapshot.
 			It consists of the posistions, velocities and forces for each atom
 			along with kinetic and potential energy of selected atoms. It is used
-			by the @see SnapShotManager. \\
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/snapShot.h}	\\
+			by the \Ref{SnapShotManager}. \\
+			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/snapShot.h}
 	*/
   class SnapShot
   {
@@ -131,7 +131,7 @@ namespace BALL
 		/// @name Accessors
 		//@{
 
-		/// Set the index attribute. This is the index of the this snapshot.
+		/// Set the index attribute.
 		void setIndex(Size index)
 			throw();
 
@@ -163,27 +163,27 @@ namespace BALL
 		double getKineticEnergy() const
 			throw();
 
-		/// specify all atom positions
+		/// Specify all atom positions
 		void setAtomPositions(const std::vector<Vector3>& atom_postions)
 			throw();
 
-		/// get the vector containing the atom postions
+		/// Get the vector containing the atom postions
 		const std::vector<Vector3>& getAtomPositions() const
 			throw();
 
-		/// specify all atom velocities
+		/// Specify all atom velocities
 		void setAtomVelocitites(const std::vector<Vector3>& atom_velocities)
 			throw();
 
-		/// get the vector containing the atom velocitites
+		/// Get the vector containing the atom velocitites
 		const std::vector<Vector3>& getAtomVelocities() const
 			throw();
 
-		/// specify all atom forces
+		/// Specify all atom forces
 		void setAtomForces(const std::vector<Vector3>& atom_forces)
 			throw();
 
-		/// get all atom forces
+		/// Get all atom forces
 		const std::vector<Vector3>& getAtomForces() const
 			throw();
 
@@ -250,7 +250,7 @@ namespace BALL
 
     public:
 
-    //  Local class for handling options
+    ///  Local class for handling options
     struct Option
     {
       /** After how many snapshots shall they be flushed to the hard disk 
@@ -260,12 +260,13 @@ namespace BALL
       static const char* FLUSH_TO_DISK_FREQUENCY; 
     };
 
-    // Local class for handling default values for the options
+    /// Local class for handling default values for the options
     struct Default
     {
       /** This is the default value of the number of snapshots to be taken
 					before writing them to hard disk. Default is ...
-					@see Option::FLUSH_TO_DISK_FREQUENCY */
+					@see Option::FLUSH_TO_DISK_FREQUENCY 
+			*/
       static const unsigned int FLUSH_TO_DISK_FREQUENCY; 
     }; 
 
@@ -280,11 +281,10 @@ namespace BALL
     SnapShotManager()
 			throw();
 
-    /** This constructor expects a valid system and a valid force field
-				and the name of a snapshot file. If the boolean 'overwrite' is true
+    /** This constructor expects a valid system, a valid force field
+				and the name of a snapshot file. If the {\tt overwrite} is true
 				then any existing file of the given name will be overwritten,
-				otherwise the new data will be appended provided that the
-        systems match. 
+				otherwise the new data will be appended, provided that the systems match. 
 				@param my_system the system to bind this manager to
 				@param my_force_field the force field that is bound to the system
 				@param my_snapshot_file 
@@ -295,17 +295,16 @@ namespace BALL
 			 TrajectoryFile* my_snapshot_file, bool overwrite = true)
 			throw();
 
-    /** This constructor expects a valid system and a valid force field
-				and the name of a snapshot file and options.  If the boolean
-				'overwrite' is true then any existing file of the given name will
-				be overwritten, otherwise the new data will be appended provided
-				that the systems match. 
-				@param my_system 
-				@param my_force_field
+    /** This constructor expects a valid system, a valid force field
+				and the name of a snapshot file. If the {\tt overwrite} is true
+				then any existing file of the given name will be overwritten,
+				otherwise the new data will be appended, provided that the systems match. 
+				@param my_system the system to bind this manager to
+				@param my_force_field the force field that is bound to the system
 				@param my_options
 				@param filename the name of the snapshot file
 				@param overwrite {\bf true}: overwrite existing snapshot file, 
-				{\bf false}: append to the file.
+												 {\bf false}: append to the file.
     */
     SnapShotManager	
 			(const System* my_system, const ForceField* my_force_field,
@@ -363,15 +362,13 @@ namespace BALL
 
     /** Set the frequency for saving snapshots to hard disk. 
         Every 'number' iterations, a save will be  done.         
-				@param number the number of snapshots to take before flushing to
-				disk
+				@param number the number of snapshots to take before flushing to disk
     */
     void setFlushToDiskFrequency(Size number)
 			throw();
 
     /** Get the current frequency for doing saves to hard disk
-				@return the number of snapshots to take befor flushing them to
-				disk
+				@return the number of snapshots to take befor flushing them to disk
     */
     Size getFlushToDiskFrequency() const
 			throw();
@@ -395,7 +392,7 @@ namespace BALL
     Size getNumberOfSnapShots() const 
 			throw();
 
-		/// obtain the number of atoms covered by this SnapshotManager 
+		/// Obtain the number of atoms covered by this SnapshotManager 
 		Size getNumberOfAtoms() const
 			throw();
 
@@ -433,8 +430,7 @@ namespace BALL
     */
     Size number_of_atoms_; 
 
-    /*_ A vector containing those snapshot objects currently in 
-        memory
+    /*_ A vector containing those snapshot objects currently in memory
     */
     vector<SnapShot> snapshot_list_; 
 
@@ -445,7 +441,7 @@ namespace BALL
     /*_ The frequency of saving snapshots in memory to disk.
         After flush_to_disk_frequency_ iterations, a save is done. 
     */
-		// BAUSTELLE: Gehîrt das hierher? Macht das ¸berhaupt Sinn? Werden denn
+		// BAUSTELLE: Gehoert das hierher? Macht das Åberhaupt Sinn? Werden denn
 		// bei einem Flush alle bis dahin noch nicht gespeicherten Snapshots
 		// gespeichert oder nur der letzte, also damit eine Art Zeitraffer
 		// generiert?
