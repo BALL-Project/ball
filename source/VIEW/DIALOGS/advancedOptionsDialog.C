@@ -79,6 +79,7 @@ namespace BALL
 		}
 //experimtental
 */
+		
 		bool AdvancedOptionsDialog::getUseDistanceDependentDC() const
 		{
 			return distance_button->isChecked();
@@ -86,49 +87,49 @@ namespace BALL
 
 		float AdvancedOptionsDialog::getNonbondedCutoff()
 		{
-			QString nonbondcut = nonbonded_cutoff_line_edit->text().ascii();
+			String nonbondcut = nonbonded_cutoff_line_edit->text().ascii();
 			float nonbond = nonbondcut.toFloat();
 			return nonbond;
 		}
 		
 		float AdvancedOptionsDialog::getVdwCutoff()
 		{
-			QString vdwcut = vdw_cutoff_line_edit->text().ascii();
+			String vdwcut = vdw_cutoff_line_edit->text().ascii();
 			float vdw = vdwcut.toFloat();
 			return vdw;
 		}
 		
 		float AdvancedOptionsDialog::getVdwCuton()
 		{
-			QString vdwcut = vdw_cuton_line_edit->text().ascii();
+			String vdwcut = vdw_cuton_line_edit->text().ascii();
 			float vdw = vdwcut.toFloat();
 			return vdw;
 		}
 		
 		float AdvancedOptionsDialog::getElectrostaticCutoff()
 		{
-			QString elcut = electrostatic_cutoff_line_edit->text().ascii();
+			String elcut = electrostatic_cutoff_line_edit->text().ascii();
 			float el = elcut.toFloat();
 			return el;
 		}
 		
 		float AdvancedOptionsDialog::getElectrostaticCuton()
 		{
-			QString elcut = electrostatic_cuton_line_edit->text().ascii();
+			String elcut = electrostatic_cuton_line_edit->text().ascii();
 			float el = elcut.toFloat();
 			return el;
 		}
 		
 		float AdvancedOptionsDialog::getScalingElectrostatic_1_4()
 		{
-			QString scaleel = scaling_electrostatic_1_4_line_edit->text().ascii();
+			String scaleel = scaling_electrostatic_1_4_line_edit->text().ascii();
 			float scale = scaleel.toFloat();
 			return scale;
 		}
 
 		float AdvancedOptionsDialog::getScalingVdw_1_4()
 		{
-			QString scalevdw = scaling_vdw_1_4_line_edit->text().ascii();
+			String scalevdw = scaling_vdw_1_4_line_edit->text().ascii();
 			float scale = scalevdw.toFloat();
 			return scale;
 		}
