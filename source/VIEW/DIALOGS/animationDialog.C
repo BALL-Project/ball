@@ -28,12 +28,16 @@ AnimationDialog::~AnimationDialog()
 
 void AnimationDialog::animatePressed()
 {
+	if (cameras_.size() < 2) return;
+
 	List<Camera>::Iterator it = cameras_.begin();
 	Camera last_camera = *it;
 	it++;
 
 	for (; it != cameras_.end(); it++)
 	{
+		if (*it == last_camera) continue;
+
 		Camera camera = last_camera;
 		Vector3 diff_viewpoint = (camera.getViewPoint() - (*it).getViewPoint());
 		Vector3 diff_up = (camera.getLookUpVector() - (*it).getLookUpVector());

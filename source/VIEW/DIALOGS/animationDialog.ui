@@ -172,28 +172,6 @@
             <set>AlignVCenter|AlignRight</set>
         </property>
     </widget>
-    <widget class="QSpinBox">
-        <property name="name">
-            <cstring>smoothness</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>302</x>
-                <y>203</y>
-                <width>54</width>
-                <height>23</height>
-            </rect>
-        </property>
-        <property name="maxValue">
-            <number>25</number>
-        </property>
-        <property name="minValue">
-            <number>1</number>
-        </property>
-        <property name="value">
-            <number>25</number>
-        </property>
-    </widget>
     <widget class="QListBox">
         <property name="name">
             <cstring>entries</cstring>
@@ -267,29 +245,51 @@
             <string>Close</string>
         </property>
     </widget>
+    <widget class="QSpinBox">
+        <property name="name">
+            <cstring>smoothness</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>302</x>
+                <y>203</y>
+                <width>54</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="maxValue">
+            <number>25</number>
+        </property>
+        <property name="minValue">
+            <number>1</number>
+        </property>
+        <property name="value">
+            <number>5</number>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
         <sender>animate_button</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>AnimationDialogData</receiver>
         <slot>animatePressed()</slot>
     </connection>
     <connection>
         <sender>cancel_button</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>AnimationDialogData</receiver>
         <slot>cancelPressed()</slot>
     </connection>
     <connection>
         <sender>close_button</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>AnimationDialogData</receiver>
         <slot>closePressed()</slot>
     </connection>
     <connection>
         <sender>delete_button</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>AnimationDialogData</receiver>
         <slot>deletePressed()</slot>
     </connection>
@@ -301,13 +301,13 @@
     </connection>
     <connection>
         <sender>goto_button</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>AnimationDialogData</receiver>
         <slot>gotoPressed()</slot>
     </connection>
     <connection>
         <sender>add_button</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>AnimationDialogData</receiver>
         <slot>addPressed()</slot>
     </connection>
