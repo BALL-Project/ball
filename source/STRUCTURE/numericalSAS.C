@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.5 2000/02/05 12:45:35 len Exp $
+// $Id: numericalSAS.C,v 1.6 2000/02/12 19:35:20 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -27,7 +27,11 @@ namespace BALL
 		{
 			if (RTTI::isKindOf<Atom>(*it))
 			{
-				atoms.push_back(RTTI::castTo<Atom>(*it));
+				Atom* atom = RTTI::castTo<Atom>(*it);
+				if (atom->getRadius() != 0.0)
+				{
+					atoms.push_back(atom);
+				}
 			}
 		}
 		
@@ -63,9 +67,13 @@ namespace BALL
 				 &surface_dots, &number_of_surface_dots);
 
 
+		// clear the hash map
+		aareas.clear();
+		
+		// iterate over all atoms and insert them into the
+		// hash map aareas
 		it = composite.beginSubcomposite();
-		Size j = 0;
-		for (; it != composite.endSubcomposite(); ++it)
+		for (Size j = 0; it != composite.endSubcomposite(); ++it)
 		{
 			if (RTTI::isKindOf<Atom>(*it))
 			{
@@ -103,7 +111,11 @@ namespace BALL
 		{
 			if (RTTI::isKindOf<Atom>(*it))
 			{
-				atoms.push_back(RTTI::castTo<Atom>(*it));
+				Atom* atom = RTTI::castTo<Atom>(*it);
+				if (atom->getRadius() != 0.0)
+				{
+					atoms.push_back(atom);
+				}
 			}
 		}
 		
