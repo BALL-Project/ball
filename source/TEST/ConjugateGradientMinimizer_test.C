@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.11 2003/03/21 17:33:05 anhi Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.12 2003/03/22 09:40:44 anhi Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,9 +12,11 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/MATHS/analyticalGeometry.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.11 2003/03/21 17:33:05 anhi Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.12 2003/03/22 09:40:44 anhi Exp $")
 
 using namespace BALL;
 
@@ -210,7 +212,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
 	TEST_REAL_EQUAL(a1->getPosition().getDistance(a2->getPosition()), 3.81244)
 RESULT
 
-CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO))
+CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 	System S;
 	HINFile f("data/ethan.hin");
 	f >> S;
@@ -279,8 +281,52 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO))
 	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
 	tet = (pos[7] - pos[1]).getAngle(pos[6] - pos[1]);
 	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
-
 RESULT
+
+CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO))// AlaAla)
+	System S;
+	HINFile f("data/AlaAla.hin");
+	f >> S;
+	S.deselect();
+	
+	FragmentDB fd;
+	S.apply(fd.normalize_names);
+	ResidueChecker checker(fd);
+	S.apply(checker);
+	
+//	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "false";
+	FF.setup(S);
+
+	TEST_EQUAL(FF.isValid(), true)
+	FF.updateEnergy();
+	FF.updateForces();
+	PRECISION(1E-4)
+	TEST_REAL_EQUAL(FF.getEnergy(), -139.0)
+
+	ConjugateGradientMinimizer cgm(FF);
+
+	cgm.setEnergyOutputFrequency(5);
+	cgm.setMaxGradient(0.01);
+	cgm.setEnergyDifferenceBound(0.00000001);
+	bool result = cgm.setUpdateMethod("SHANNO");
+	TEST_EQUAL(result, true)
+	ConjugateGradientMinimizer::UpdateMethod um;
+	um = cgm.getUpdateMethod();
+	TEST_EQUAL(um, ConjugateGradientMinimizer::SHANNO);
+	
+	TEST_EQUAL(cgm.isValid(), true)
+	FF.updateEnergy();
+	FF.updateForces();
+	result = cgm.minimize(55);
+
+	TEST_EQUAL(result, true)
+	float energy = FF.updateEnergy();
+	FF.updateForces();
+	
+	PRECISION(1E-3)
+	TEST_REAL_EQUAL(energy, 5.906)
+RESULT
+
 
 CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 	System S;
