@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.17 2003/05/03 17:29:33 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.18 2003/05/04 20:15:44 oliver Exp $
+//
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -21,10 +22,10 @@ namespace BALL
 
 
 
-	TRegularData3D<char> *calculateSESGrid
+	TRegularData3D<char>* calculateSESGrid
 		(const Vector3& lower, const Vector3& upper,
-		 const float spacing, const System& system, 
-		 const float probe_radius)
+		 float spacing, const System& system, 
+		 float probe_radius)
 	{
 
 		// points in the grid marked with
@@ -50,7 +51,7 @@ namespace BALL
 		// squared distance of any two vectors
 		float squared_distance;
 		float x, y, z;
-		float origin_x, origin_y, origin_z;
+		Vector3 origin;
 
 		// indices used in between to calculated the bounding boxes of spheres in the grid
 		TRegularData3D<char>::IndexType upper_index;
@@ -64,7 +65,7 @@ namespace BALL
 
 		// Here we go...
 		// First, create the grid...
-		grid = new TRegularData3D<char>(lower, upper, spacing);
+		grid = new TRegularData3D<char>(lower, upper - lower, Vector3(spacing));
 		
 		if (grid == 0)
 		{
@@ -76,26 +77,23 @@ namespace BALL
 		d = sqrt(d2);
 
 		// calculate some constants used for FAST access to the grid.
-		origin_x = grid->getMinX();
-		origin_y = grid->getMinY();
-		origin_z = grid->getMinZ();
+		origin = grid->getOrigin();
 
 		// Nx is the number of points in the grid along the x-axis
-		PointerSizeInt Nx;
+		PointerSizeInt Nx = grid->getSize().x;
 
 		// Nxy is the number of points in an xy-plane
-		PointerSizeInt Nxy;
+		PointerSizeInt Nxy = Nx * grid->getSize().y;
 
-		PointerSizeInt i, j, k;
-
-		// assign values for fast grid access
-		Nx = grid->getMaxXIndex() + 1;
-		Nxy = (grid->getMaxYIndex() + 1) * Nx;
+		PointerSizeInt i;
+		PointerSizeInt j;
+		PointerSizeInt k;
 
 		// constructing the FAST probe sphere, a collection of points 
 		// of a sphere on the grid relative to the sphere's origin
 		
-		PointerSizeInt count, relative_count;
+		PointerSizeInt count;
+		PointerSizeInt relative_count;
 
 		// the probe_radius (squared) in squared grid units
 		unsigned short grid_radius;
@@ -158,7 +156,7 @@ namespace BALL
 		// There will be three different marks: INSIDE(I), OUTSIDE(O), and BORDER(B)
 		// BORDER is just used temporarily. In the end, The grid will just contain INSIDEs and OUTSIDEs
 
-		memset((void*) grid->getData(0), CCONN__OUTSIDE, grid->size() * sizeof(char));
+		memset((void*)&grid->getData(0), CCONN__OUTSIDE, grid->size() * sizeof(char));
 
 		// for each atom do...
 		AtomConstIterator	atom_iterator;
@@ -173,23 +171,19 @@ namespace BALL
 				R_b = atom_radius + probe_radius;
 				R_b2 = R_b * R_b;
 				
-				r0 = (*atom_iterator).getPosition();
-				lower_index = grid->getIndex(r0.x - R_b - d, 
-																		 r0.y - R_b - d, 
-																		 r0.z - R_b - d);
+				r0 = atom_iterator->getPosition();
+				lower_index = grid->getClosestIndex(Vector3(r0.x - R_b - d, r0.y - R_b - d, r0.z - R_b - d));
+				upper_index = grid->getClosestIndex(Vector3(r0.x + R_b + d, r0.y + R_b + d, r0.z + R_b + d));
 
-				upper_index = grid->getIndex(r0.x + R_b + d, 
-																		 r0.y + R_b + d, 
-																		 r0.z + R_b + d);
-
+				char* data = &(grid->getData(0));
 				for(k = lower_index.z; k <= upper_index.z; k++)
 					for(j = lower_index.y; j <= upper_index.y; j++)
 						for(i = lower_index.x; i <= upper_index.x; i++){
-							x = (float)i * spacing + origin_x;
-							y = (float)j * spacing + origin_y;
-							z = (float)k * spacing + origin_z;
+							x = (float)i * spacing + origin.x;
+							y = (float)j * spacing + origin.y;
+							z = (float)k * spacing + origin.z;
 
-							grid_value = &(grid->data[i + Nx * j + Nxy * k]);
+							grid_value = &(data[i + Nx * j + Nxy * k]);
 															
 								
 							if (*grid_value != CCONN__INSIDE)
@@ -229,6 +223,7 @@ namespace BALL
 		PointerSizeInt t;
 		PointerSizeInt q;
 
+		char* data = &(grid->getData(0));
 		for (s = 1; s < grid->getSize().z - 1; s++)
 		{
 			for (t = 1; t < grid->getSize().y - 1; t++)
@@ -238,14 +233,14 @@ namespace BALL
 					// calculate the absolute grid index the hard way (faster!)
 					idx = q + Nx * t + s * Nxy;
 
-					if ((grid->data[idx] & 127) == CCONN__OUTSIDE)
+					if ((data[idx] & 127) == CCONN__OUTSIDE)
 					{
-						border	= grid->data[idx - 1]
-										+ grid->data[idx + 1]
-										+ grid->data[idx - Nx]
-										+ grid->data[idx + Nx]
-										+ grid->data[idx - Nxy]
-										+ grid->data[idx + Nxy];
+						border	= data[idx - 1]
+										+ data[idx + 1]
+										+ data[idx - Nx]
+										+ data[idx + Nx]
+										+ data[idx - Nxy]
+										+ data[idx + Nxy];
 
 						border &= 127;
 					
@@ -253,7 +248,7 @@ namespace BALL
 						{			
 							// Okay, we found a point on the boundary
 							border_count++;												
-							grid_pointer = (PointerSizeInt)&(grid->data[idx]);
+							grid_pointer = (PointerSizeInt)&(data[idx]);
 							fast_sphere_end = &(fast_sphere_relative[relative_count - 1]);
 
 							for (sphere_pointer = fast_sphere_relative; sphere_pointer <= fast_sphere_end; sphere_pointer++)
@@ -278,7 +273,7 @@ namespace BALL
 		// (inside the vdW-radius) and has not been marked inside
 		// the probe_radius of any border point
 
-		grid_value = grid->getData(0);
+		grid_value = &(grid->getData(0));
 		PointerSizeInt l;
 
 		for (l = 0; l < grid->size(); l++)
@@ -290,12 +285,9 @@ namespace BALL
 		return &(*grid);
 	}
 
-	TRegularData3D<char>* calculateSASGrid(
-				const Vector3 &lower, 
-				const Vector3 &upper,
-				const float spacing,
-				const System &system, 
-				const float probe_radius)
+	TRegularData3D<char>* calculateSASGrid
+		(const Vector3& lower, const Vector3& upper,
+		 float spacing, const System& system, float probe_radius)
 	{
 
 		// points in the grid marked with
@@ -317,7 +309,7 @@ namespace BALL
 		// squared distance of any two vectors
 		float squared_distance;
 		float x, y, z;
-		float origin_x, origin_y, origin_z;
+		Vector3 origin;
 
 
 		// indices used in between to calculated the bounding boxes of spheres in the grid
@@ -333,7 +325,7 @@ namespace BALL
 		// Here we go...
 		// First, create the grid...
 
-		grid = new TRegularData3D<char>(lower, upper, spacing);
+		grid = new TRegularData3D<char>(lower, upper - lower, Vector3(spacing));
 
 		if (grid == 0)
 		{
@@ -345,27 +337,22 @@ namespace BALL
 		d = sqrt(d2);
 
 		// calculate some constants used for FAST access to the grid.
-		origin_x = grid->getMinX();
-		origin_y = grid->getMinY();
-		origin_z = grid->getMinZ();
+		origin = grid->getOrigin();
 
 		// Nx is the number of points in the grid along the x-axis
-		PointerSizeInt Nx;
+		PointerSizeInt Nx = grid->getSize().x;
 
 		// Nxy is the number of points in an xy-plane
-		PointerSizeInt Nxy;
-
-		// assign values for fast grid access
-		Nx = grid->getMaxXIndex() + 1;
-		Nxy = (grid->getMaxYIndex() + 1) * Nx;
+		PointerSizeInt Nxy = Nx * grid->getSize().y;
 
 		// mark the whole grid with CCONN__OUTSIDE, meaning OUTSIDE
 		// There will be three different marks: INSIDE(I), OUTSIDE(O), and BORDER(B)
 		// BORDER is just used temporarily. In the end, The grid will just contain INSIDEs and OUTSIDEs
 
-		memset((void*) grid->getData(0), CCONN__OUTSIDE, grid->size() * sizeof(char));
+		memset((void*)&grid->getData(0), CCONN__OUTSIDE, grid->size() * sizeof(char));
 
-		// for each atom do...
+		// for each atom do...	
+		char* data = &(grid->getData(0));
 		AtomConstIterator	atom_iterator;
 		BALL_FOREACH_ATOM(system, atom_iterator)
 		{
@@ -379,13 +366,9 @@ namespace BALL
 				R_b2 = R_b * R_b;
 
 				r0 = (*atom_iterator).getPosition();
-				lower_index = grid->getIndex(r0.x - R_b - d, 
-																		 r0.y - R_b - d, 
-																		 r0.z - R_b - d);
+				lower_index = grid->getClosestIndex(Vector3(r0.x - R_b - d, r0.y - R_b - d, r0.z - R_b - d));
 
-				upper_index = grid->getIndex(r0.x + R_b + d, 
-																		 r0.y + R_b + d, 
-																		 r0.z + R_b + d);
+				upper_index = grid->getClosestIndex(Vector3(r0.x + R_b + d, r0.y + R_b + d, r0.z + R_b + d));
 
 				for (PointerSizeInt k = lower_index.z; k <= upper_index.z; k++)
 				{
@@ -393,11 +376,11 @@ namespace BALL
 					{
 						for (PointerSizeInt i = lower_index.x; i <= upper_index.x; i++)
 						{
-							x = (float)i * spacing + origin_x;
-							y = (float)j * spacing + origin_y;
-							z = (float)k * spacing + origin_z;
+							x = (float)i * spacing + origin.x;
+							y = (float)j * spacing + origin.y;
+							z = (float)k * spacing + origin.z;
 
-							grid_value = &(grid->data[i + Nx * j + Nxy * k]);
+							grid_value = &(data[i + Nx * j + Nxy * k]);
 															
 							if (*grid_value != CCONN__INSIDE)
 							{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.36 2003/05/03 17:29:33 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.37 2003/05/04 20:15:45 oliver Exp $ 
 
 // FDPB: Finite Difference Poisson Solver
 
@@ -491,7 +491,7 @@ namespace BALL
 
 		// now, create a new grid containing the dielectric constant of each grid point
 		delete eps_grid;
-		eps_grid = new TRegularData3D<Vector3>(lower_, upper_, spacing_);
+		eps_grid = new TRegularData3D<Vector3>(lower_, upper_ - lower_, Vector3(spacing_));
 
 		// check whether the grid is really cubic
 		if ((eps_grid->getSize().x != eps_grid->getSize().y) 
@@ -877,7 +877,7 @@ namespace BALL
 					
 		// create the grid
 		delete q_grid;
-		q_grid = new TRegularData3D<float>(lower_, upper_, spacing_);
+		q_grid = new TRegularData3D<float>(lower_, upper_ - lower_, Vector3(spacing_));
 
 		// set every grid point to zero
 		Index i;
@@ -982,16 +982,12 @@ namespace BALL
 
 					radius_on_grid = (short)((atom_radius + d2) / spacing_ + 1);
 					
-					lower_grid_index = phi_grid->getIndex((*atom_array)[i].x, 
-																									(*atom_array)[i].y, 
-																									(*atom_array)[i].z);
+					lower_grid_index = phi_grid->getClosestIndex(Vector3((*atom_array)[i].x, (*atom_array)[i].y, (*atom_array)[i].z));
 					lower_grid_index.x -= radius_on_grid;
 					lower_grid_index.y -= radius_on_grid;
 					lower_grid_index.z -= radius_on_grid;
 
-					upper_grid_index = phi_grid->getIndex((*atom_array)[i].x, 
-																									(*atom_array)[i].y, 
-																									(*atom_array)[i].z);
+					upper_grid_index = phi_grid->getClosestIndex(Vector3((*atom_array)[i].x, (*atom_array)[i].y, (*atom_array)[i].z));
 					upper_grid_index.x += radius_on_grid;
 					upper_grid_index.y += radius_on_grid;
 					upper_grid_index.z += radius_on_grid;
@@ -1194,7 +1190,7 @@ namespace BALL
 
 		// create the grid
 		delete kappa_grid;
-		kappa_grid = new TRegularData3D<float>(lower_, upper_, spacing_);
+		kappa_grid = new TRegularData3D<float>(lower_, upper_ - lower_, Vector3(spacing_));
 
 		if (kappa_grid->size() != SAS_grid->size())
 		{
@@ -1259,7 +1255,7 @@ namespace BALL
 
 		// create the grid
 		delete phi_grid;
-		phi_grid = new TRegularData3D<float>(lower_, upper_, spacing_);
+		phi_grid = new TRegularData3D<float>(lower_, upper_ - lower_, Vector3(spacing_));
 
 		// setting Phi to zero everywhere
 		Index i;
@@ -1924,7 +1920,7 @@ namespace BALL
 		// the potential will remain in its grid,
 		// we just take phi for a more convenient
 		// access
-		phi = phi_grid->data;
+		phi = &(phi_grid->getData(0));
 
 		if (verbosity > 0)
 		{
@@ -1965,7 +1961,7 @@ namespace BALL
 								+ (*kappa_grid)[l]);
 					}
 
-					Q[l] = e0 * *(q_grid->getData((Index)l)) / (1e-10 * VACUUM_PERMITTIVITY * spacing_) * d;
+					Q[l] = e0 * (*q_grid)[(Index)l] / (1e-10 * VACUUM_PERMITTIVITY * spacing_) * d;
 				}
 			}
 		}
@@ -2116,7 +2112,7 @@ namespace BALL
 		TRegularData3D<float>::IndexType		grid_index;
 		for ( i = 0; i < atom_array->size(); i++)
 		{
-			grid_index = phi_grid->getIndex((*atom_array)[i].x, (*atom_array)[i].y, (*atom_array)[i].z);
+			grid_index = phi_grid->getClosestIndex(Vector3((*atom_array)[i].x, (*atom_array)[i].y, (*atom_array)[i].z));
 			(*atom_array)[i].index = grid_index.x + grid_index.y * Nx + grid_index.z * Nxy;
 		}
 		
@@ -2544,18 +2540,18 @@ namespace BALL
 
 				// if the image charge is not inside the grid, it does not contribute to the 
 				// energy of the reaction field
-				if (phi_grid->has(image_position))
+				if (phi_grid->isInside(image_position))
 				{
-					phi_grid->getBoxIndices(image_position, llf, rlf, luf, ruf, llb, rlb, lub, rub);
-					TRegularData3D<float>::IndexType grid_index = phi_grid->getIndex(image_position);
+					phi_grid->getEnclosingIndices(image_position, llf, rlf, luf, ruf, llb, rlb, lub, rub);
+					TRegularData3D<float>::IndexType grid_index = phi_grid->getClosestIndex(image_position);
 					Size Nx = phi_grid->getSize().x;
 					Size Nxy = phi_grid->getSize().y * Nx;
 					Position idx = grid_index.x + grid_index.y * Nx + grid_index.z * Nxy;
 
-					double dPhi = phi_grid->data[idx]
-											- (phi_grid->data[idx - 1] + phi_grid->data[idx + 1]
-												 + phi_grid->data[idx - Nx] + phi_grid->data[idx + Nx]
-												 + phi_grid->data[idx - Nxy] + phi_grid->data[idx + Nxy]) / 6.0;
+					double dPhi = (*phi_grid)[idx]
+											- ((*phi_grid)[idx - 1] + (*phi_grid)[idx + 1]
+												 + (*phi_grid)[idx - Nx] + (*phi_grid)[idx + Nx]
+												 + (*phi_grid)[idx - Nxy] + (*phi_grid)[idx + Nxy]) / 6.0;
 					double delta_E_dS = dPhi * spacing_ * 1e-10 * 6.0;
 
 					// delta_i is in units of Coulomb (C)

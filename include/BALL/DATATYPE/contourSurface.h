@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.11 2003/05/03 17:29:19 oliver Exp $
+// $Id: contourSurface.h,v 1.12 2003/05/04 20:15:20 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
@@ -131,8 +131,8 @@ namespace BALL
 					spacing_(grid.getSpacing().x, grid.getSpacing().y, grid.getSpacing().z)
 			{
 				// Retrieve the number of points in the grid along the x- and y-axes.
-				Size nx = grid.getMaxXIndex() + 1;
-				Size ny = grid.getMaxYIndex() + 1;
+				Size nx = grid.getSize().x;
+				Size ny = grid.getSize().y;
 
 				// Compute the offsets in the grid for the eight 
 				// corners of the cube (in absolute grid indices).
@@ -150,7 +150,7 @@ namespace BALL
 			{
 				current_position_ = p;
 
-				ptr_ = const_cast<TRegularData3D<T>*>(grid_)->getData(current_position_);
+				ptr_ = &(const_cast<TRegularData3D<T>*>(grid_)->getData(current_position_));
 				for (Position i = 0; i < 8; i++)
 				{
 					values[i] = *(ptr_ + grid_offset_[i]);
@@ -326,8 +326,8 @@ namespace BALL
 
 		// Get the dimensions of the volume data set.
 		Vector3 origin = data.getOrigin();
-		Size number_of_cells_x = (Size)data.getMaxXIndex() + 1;
-		Size number_of_cells_y = (Size)data.getMaxYIndex() + 1;
+		Size number_of_cells_x = (Size)data.getSize().x;
+		Size number_of_cells_y = (Size)data.getSize().y;
 		Size number_of_cells_z = (Size)data.getSize().z;
 
 		// Precompute the facet data. This depends on the threshold!
