@@ -60,6 +60,8 @@ namespace BALL
 
 			void setDCDFileName(const String& name) {dcd_file_name_ = name;}
 
+			DCDFile* getDCDFile() { return dcd_file_;}
+
 		protected:
 
 			/// Provokes an update of the Scene with rebuild of the display-lists
@@ -77,6 +79,7 @@ namespace BALL
 			Size steps_between_updates_;
 			Mainframe* main_frame_;
 			String dcd_file_name_;
+			DCDFile* dcd_file_;
 		};
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.67 2003/09/01 22:34:00 amoll Exp $
+// $Id: mainframe.C,v 1.68 2003/09/02 10:57:24 amoll Exp $
 
 #include "mainframe.h"
 #include "icons.h"
@@ -517,6 +517,9 @@ void Mainframe::amberMDSimulation()
 	// we update everything every so and so steps
 	Size steps = md_dialog_->getStepsBetweenRefreshs();
 
+	String dcdfile = md_dialog_->getDCDFile();
+	bool store_dcd = dcdfile.size() != 0;
+	DCDFile* dcd;
 	// ============================= WITH MULTITHREADING ===================================
 #ifdef QT_THREAD_SUPPORT
 	MDSimulationThread* thread = new MDSimulationThread;
@@ -530,17 +533,17 @@ void Mainframe::amberMDSimulation()
 	thread->setSaveImages(md_dialog_->saveImages());
 	thread->setDCDFileName(md_dialog_->getDCDFile());
 	thread->start();
+	dcd = thread->getDCDFile();
+Log.error() << "#~~#   2 " << dcd << std::endl;
 
 #else
 	// ============================= WITHOUT MULTITHREADING ==============================
 	// iterate until done and refresh the screen every "steps" iterations
 	
-	String dcdfile = md_dialog_->getDCDFile();
-	bool store_dcd = dcdfile.size() != 0;
-	DCDFile dcd;
-	if store_dcd dcd = dcd.open(dcdfile, File::OUT);
-	dcd.enableVelocityStorage();
-	SnapShotManager manager(amber->getSystem(), amber, &dcd);
+	dcd = new DCDFile;
+	if store_dcd dcd = dcd->open(dcdfile, File::OUT);
+	dcd->enableVelocityStorage();
+	SnapShotManager manager(amber->getSystem(), amber, dcd);
 	manager.setFlushToDiskFrequency(10);
 	while (mds->getNumberOfIterations() < md_dialog_->getNumberOfSteps())
 	{
@@ -573,6 +576,16 @@ void Mainframe::amberMDSimulation()
 	delete mds;
 	delete amber;
 #endif
+
+	if (store_dcd) 
+	{
+		NewTrajectoryMessage* message = new NewTrajectoryMessage;
+		message->setComposite(system);
+		message->setTrajectoryFile(dcd);
+Log.error() << "#~~#   5 " << message->getTrajectoryFile()<< std::endl;
+		message->setDeletable(true);
+		notify_(message);
+	}
 }
 
 void Mainframe::about()

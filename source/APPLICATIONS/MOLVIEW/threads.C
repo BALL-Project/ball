@@ -125,13 +125,15 @@ namespace BALL
 		AmberFF& amber =*(AmberFF*)md_->getForceField();
 
 		bool store_dcd = dcd_file_name_.size() != 0;
-		DCDFile dcd;
-		if (store_dcd) dcd.open(dcd_file_name_, File::OUT);
+		if (store_dcd) 
+		{
+			dcd_file_ = new DCDFile;
+			dcd_file_->open(dcd_file_name_, File::OUT);
+			dcd_file_->enableVelocityStorage();
+Log.error() << "#~~#  1 " << dcd_file_<< std::endl;
+		}
 			
-			
-		//	dcd = DCDFile(dcd_file_name_, File::OUT);
-		dcd.enableVelocityStorage();
-		SnapShotManager manager(amber.getSystem(), &amber, &dcd);
+		SnapShotManager manager(amber.getSystem(), &amber, dcd_file_);
 		manager.setFlushToDiskFrequency(10);
 		// iterate until done and refresh the screen every "steps" iterations
 		
@@ -158,7 +160,10 @@ namespace BALL
 			if (store_dcd) manager.takeSnapShot();
 		}
 
-		if (store_dcd) manager.flushToDisk();
+		if (store_dcd) 
+		{
+			manager.flushToDisk();
+		}
 
 		outputAmberResult_(*(AmberFF*)md_->getForceField());
 		output_("final RMS gadient    : " + String(amber.getRMSGradient()) + " kJ/(mol A)   after " 
