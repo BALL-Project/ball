@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.5 2001/05/13 14:55:25 hekl Exp $
+// $Id: molecularControl.h,v 1.6 2001/07/06 14:26:44 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -50,9 +50,9 @@ namespace BALL
 				is reimplemented to work on molecular objects instead of \Ref{GeometricObject}
 				objects.
 				@memo    MolecularControl class (BALL MOLVIEW gui widgets framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 14:55:25 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/06 14:26:44 $
 		*/
 		class MolecularControl: public BALL::VIEW::Control
 		{			
@@ -65,7 +65,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new molecularControl.
+					Constructs new molecularControl.
 					@param      parent the parent widget of {\em *this} molecularControl (See documentation of QT-library for information concerning widgets)
 					@param      name the name of {\em *this} molecularControl (See documentation of QT-library for information concerning widgets)
 					@return     MolecularControl new constructed molecularControl
@@ -107,7 +107,7 @@ namespace BALL
 			virtual void checkMenu(MainControl& main_control)
 				throw();
 
-			/** Build a context menu.
+			/** Builds a context menu.
 					Calls \Ref{Control::buildContextMenu}.\\
 					{\bf Note:} context menus for molecular structures must be added.
 					@param   composite the \Ref{Composite} object for that a context menu should be created
@@ -123,9 +123,9 @@ namespace BALL
 			/** @name Public slots
 			*/
 			//@{
-			/** Sent the selection.
+			/** Sents the selection.
 					Calls \Ref{Control::sentSelection}.
-					Filter the selection with the \Ref{MolecularFilter} and sent a message
+					Filters the selection with the \Ref{MolecularFilter} and sents a message
 					\Ref{MolecularSelectionMessage} through the \Ref{ConnectionObject} tree.
 					@see  getSelection
 					@see  ConnectionObject
@@ -145,8 +145,8 @@ namespace BALL
 			/** @name Internal creation and message handling
 			*/
 			//@{
-			/** Access the molecular information visitor.
-					Access the \Ref{MolecularInformation} visitor of {\em *this} molecularControl.
+			/** Accesses the molecular information visitor.
+					Accesses the \Ref{MolecularInformation} visitor of {\em *this} molecularControl.
 					This method is used in the method \Ref{generateListViewItem_} to
 					retrieve certain information of the given \Ref{Composite} object.
 					@return  Information a reference to a \Ref{Information} visitor.
@@ -157,8 +157,8 @@ namespace BALL
 				throw();
 
 			/** Recursive iteration method.
-					Iterate over the children of the \Ref{Composite} {\em composite} and
-					call for each the method \Ref{generateListViewItem_}.
+					Iterates over the children of the \Ref{Composite} {\em composite} and
+					calls for each of these children the method \Ref{generateListViewItem_}.
 					@param   item a pointer to a \Ref{QListViewItem} to which all children of {\em composite} will be inserted
 					@param   composite a pointer to a \Ref{Composite} object whose children will be inserted into {\em item}
 					@see     generateListViewItem_
@@ -167,8 +167,8 @@ namespace BALL
 				throw();
 			
 			/** Recursive update method.
-					Iterate over the children of the \Ref{Composite} {\em composite} and
-					call for each the method \Ref{updateListViewItem_}.
+					Iterates over the children of the \Ref{Composite} {\em composite} and
+					calls for each of these children the method \Ref{updateListViewItem_}.
 					@param   item a pointer to a \Ref{QListViewItem} containing the subtree structure 
 					@param   composite a pointer to a \Ref{Composite} object containing the (possibly) new substructure
 					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree structure of {\em item} are unequal, {\tt false} otherwise 
@@ -178,7 +178,7 @@ namespace BALL
 				throw();
 		
 			/** Message handling.
-					Catch the \Ref{Message} objects and react accordingly to the different
+					Catches the \Ref{Message} objects and reacts accordingly to the different
 					messages.
 					\begin{itemize}
 					  \item  \Ref{NewMolecularMessage} - update always necessary
