@@ -1,5 +1,5 @@
-// $Id: exception.h,v 1.2 1999/08/31 22:14:02 oliver Exp $
-
+// $Id: exception.h,v 1.3 1999/09/01 12:09:19 hekl Exp $
+   
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
 
