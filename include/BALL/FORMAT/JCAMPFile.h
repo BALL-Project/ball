@@ -1,4 +1,4 @@
-// $Id: JCAMPFile.h,v 1.2 2000/10/23 23:31:01 amoll Exp $
+// $Id: JCAMPFile.h,v 1.5 2000/11/28 17:25:04 anhi Exp $
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -18,7 +18,7 @@
 namespace BALL
 {
 
-	class BrukerParameter 
+	class JCAMPFile 
 		: public File
 	{
 		public:
@@ -28,15 +28,15 @@ namespace BALL
 		//@{
 		/** Detailed constructor.
 		*/
-		BrukerParameter(const String& name, OpenMode open_mode = IN);
+		JCAMPFile(const String& name, OpenMode open_mode = IN);
 
 		/** Copy constructor.
 		*/
-		BrukerParameter(const BrukerParameter& file);
+		JCAMPFile(const JCAMPFile& file);
 
 		/**	Destructor.
 		*/
-		~BrukerParameter();
+		~JCAMPFile();
 		//@}
 
 		/**
