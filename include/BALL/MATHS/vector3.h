@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.65 2003/06/09 22:40:49 oliver Exp $
+// $Id: vector3.h,v 1.66 2003/08/19 19:57:31 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -491,7 +491,7 @@ namespace BALL
 
 		/**	Orthogonality predicate.
 		*/
-		bool isOrthogonalTo(TVector3& vector) const
+		bool isOrthogonalTo(const TVector3& vector) const
 			throw();
 
 		//@}
@@ -1136,7 +1136,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	bool TVector3<T>::isOrthogonalTo(TVector3<T>& v) const
+	bool TVector3<T>::isOrthogonalTo(const TVector3<T>& v) const
 		throw()
 	{
 		return Maths::isZero((*this) * v);
