@@ -11,6 +11,7 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 EXECUTABLES = \
 	AmberFF_test\
 	AnalyticalSES_test\
+        Angle_test\
 	Atom_test\
 	AtomicContactEnergy_test\
 	BitVector_test\
@@ -57,6 +58,9 @@ AmberFF_test:	AmberFF_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 AnalyticalSES_test:	AnalyticalSES_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Angle_test:	Angle_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Atom_test:	Atom_test.o
