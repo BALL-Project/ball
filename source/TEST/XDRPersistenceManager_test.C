@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.8 2002/12/22 19:08:57 oliver Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.9 2003/05/26 15:43:41 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.8 2002/12/22 19:08:57 oliver Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.9 2003/05/26 15:43:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -380,7 +380,6 @@ CHECK(XDRPersistenceManager::get(PointerSizeUInt& p))
 	TEST_EQUAL(p, psi2)
 RESULT
 
-pm.checkStreamTrailer();
 pm.finalizeInputStream();
 infile.close();
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Expression_test.C,v 1.35 2003/05/26 14:22:53 oliver Exp $
+// $Id: Expression_test.C,v 1.36 2003/05/26 15:43:40 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -21,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.35 2003/05/26 14:22:53 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.36 2003/05/26 15:43:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -299,19 +299,19 @@ RESULT
 
 CHECK(ExpressionTree::setPredicate(ExpressionPredicate* predicate) throw())
 	ExpressionTree et;
-	ExpressionPredicate ep;
-	TEST_NOT_EQUAL(et.getPredicate(), &ep)
-	et.setPredicate(&ep);
-	TEST_EQUAL(et.getPredicate(), &ep)
+	ExpressionPredicate* ep = new ExpressionPredicate;
+	TEST_NOT_EQUAL(et.getPredicate(), ep)
+	et.setPredicate(ep);
+	TEST_EQUAL(et.getPredicate(), ep)
 RESULT
 
 
 CHECK(ExpressionTree::getPredicate() const  throw())
-	ExpressionPredicate ep;
+	ExpressionPredicate* ep = new ExpressionPredicate;
 	ExpressionTree et1;
-	TEST_NOT_EQUAL(et1.getPredicate(), &ep)
-	ExpressionTree et2(&ep, false);
-	TEST_EQUAL(et2.getPredicate(), &ep)
+	TEST_NOT_EQUAL(et1.getPredicate(), ep)
+	ExpressionTree et2(ep, false);
+	TEST_EQUAL(et2.getPredicate(), ep)
 RESULT
 
 

@@ -14,6 +14,11 @@ CPP_SOURCES=\
 	pythonSettings.C\
 	pythonSettingsData.C
 
+UIC_SOURCES=\
+	colorMeshDialog.ui\
+	pythonSettings
+	
+
 MOC_SOURCES=\
 	fileDialog_moc.C\
 	preferences_moc.C\
@@ -47,21 +52,21 @@ colorMeshDialog_moc.C:	$(HEADER_DIR)/colorMeshDialog.h
 colorMeshDialogData_moc.C:	$(HEADER_DIR)/colorMeshDialogData.h
 	$(MOC) $< -o $@
 
-colorMeshDialogData.C:	$(HEADER_DIR)/colorMeshDialogData.h
-	$(UIC) -o $@ -impl $(HEADER_DIR)/colorMeshDialogData.h colorMeshDialog.ui
-
-$(HEADER_DIR)/colorMeshDialogData.h:	colorMeshDialog.ui
-	$(UIC) -o $@ colorMeshDialog.ui
-
-
 pythonSettings_moc.C:	$(HEADER_DIR)/pythonSettings.h
 	$(MOC) $< -o $@
 
 pythonSettingsData_moc.C:	$(HEADER_DIR)/pythonSettingsData.h
 	$(MOC) $< -o $@
 
-$(HEADER_DIR)/pythonSettingsData.h:	pythonSettingsData.ui
-	$(UIC) -o $@ pythonSettingsData.ui
+colorMeshDialogData.C:	$(HEADER_DIR)/colorMeshDialogData.h
+	$(UIC) -o $@ -impl $(HEADER_DIR)/colorMeshDialogData.h colorMeshDialog.ui
+
+$(HEADER_DIR)/colorMeshDialogData.h:	colorMeshDialog.ui
+	$(UIC) -o $@ colorMeshDialog.ui
 
 pythonSettingsData.C:	$(HEADER_DIR)/pythonSettingsData.h
-	$(UIC) -o $@ -impl $(HEADER_DIR)/pythonSettingsData.h pythonSettingsData.ui
+	$(UIC) -o $@ -impl $(HEADER_DIR)/pythonSettingsData.h pythonSettings.ui
+
+$(HEADER_DIR)/pythonSettingsData.h:	pythonSettings.ui
+	$(UIC) -o $@ pythonSettings.ui
+

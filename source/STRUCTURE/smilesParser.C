@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.C,v 1.11 2003/05/26 14:22:52 oliver Exp $
+// $Id: smilesParser.C,v 1.12 2003/05/26 15:43:39 oliver Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -75,15 +75,29 @@ namespace BALL
 	}
 
 	SmilesParser::SmilesParser()
+		:	system_(),
+			connections_(),
+			all_atoms_()
 	{
 	}
 
-	SmilesParser::SmilesParser(const SmilesParser& /* parser */)
+	SmilesParser::SmilesParser(const SmilesParser& parser)
+		:	system_(parser.system_),
+			connections_(),
+			all_atoms_()
 	{
 	}
 
 	SmilesParser::~SmilesParser()
 	{
+		for (Position i = 0; i < all_atoms_.size(); i++)
+		{
+			all_atoms_[i]->destroy();
+			delete all_atoms_[i];
+		}
+		all_atoms_.clear();
+
+		system_.destroy();
 	}
 
 	const System& SmilesParser::getSystem() const
@@ -95,6 +109,11 @@ namespace BALL
 		throw(Exception::ParseError)
 	{
 		// clear out previous atoms
+		for (Position i = 0; i < all_atoms_.size(); i++)
+		{
+			all_atoms_[i]->destroy();
+			delete all_atoms_[i];
+		}
 		all_atoms_.clear();
 		system_.destroy();
 
@@ -207,4 +226,5 @@ namespace BALL
 			}
 		}
 	}
+
 } // namespace BALL
