@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.2 1999/12/19 17:18:03 oliver Exp $
+// $Id: snapShot.h,v 1.3 1999/12/27 15:02:37 pmueller Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -178,6 +178,7 @@ namespace BALL
 
 
   // This class manages a list of single snapshot objects 
+  // Snapshots are numbered starting with 1 
   class SnapShotManager
     {
     public:
@@ -270,7 +271,7 @@ namespace BALL
     //@{
     /** This method takes a snapshot of the system's current state and stores
         it in main memory. If there is not sufficient space, the snapshots collected
-        so far are flushed to hard disk.
+        so far are flushed to hard disk. The first snapshot taken has index 1.
     */
     virtual void takeSnapShot(); 
 
@@ -298,7 +299,7 @@ namespace BALL
         the snapshot via BALLVIEW. 
         If it does not find the item, an empty System object is returned
     */ 
-    virtual System getAsSystem(Size); 
+    virtual System getSnapShotAsSystem(Size); 
 
     //@}
 
