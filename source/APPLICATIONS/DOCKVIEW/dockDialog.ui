@@ -288,25 +288,19 @@
         <sender>gen_advanced_button</sender>
         <signal>clicked()</signal>
         <receiver>DockDialog</receiver>
-        <slot>advancedPressed()</slot>
-    </connection>
-    <connection>
-        <sender>gen_advanced_button</sender>
-        <signal>clicked()</signal>
-        <receiver>DockDialog</receiver>
-        <slot>advancedPressed()</slot>
+        <slot>genAdvancedPressed()</slot>
     </connection>
     <connection>
         <sender>rank_advanced_button</sender>
         <signal>clicked()</signal>
         <receiver>DockDialog</receiver>
-        <slot>advancedPressed()</slot>
+        <slot>rankAdvancedPressed()</slot>
     </connection>
     <connection>
         <sender>eval_advanced_button</sender>
         <signal>clicked()</signal>
         <receiver>DockDialog</receiver>
-        <slot>advancedPressed()</slot>
+        <slot>evalAdvancedPressed()</slot>
     </connection>
 </connections>
 <tabstops>
@@ -331,7 +325,9 @@
     <slot>resetPressed()</slot>
     <slot>okPressed()</slot>
     <slot>cancelPressed()</slot>
-    <slot>advancedPressed()</slot>
+    <slot>genAdvancedPressed()</slot>
+    <slot>evalAdvancedPressed()</slot>
+    <slot>rankAdvancedPressed()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

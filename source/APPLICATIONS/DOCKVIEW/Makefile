@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.1 2005/01/06 15:00:32 haid Exp $
+# $Id: Makefile,v 1.1.2.2 2005/01/10 16:46:23 haid Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -46,7 +46,7 @@ aboutDialog.h: aboutDialog.ui
 	$(UIC) aboutDialog.ui > aboutDialog.h
 
 dockDialogData.h: dockDialogData.ui
-	$(UIC) dockDialogData.ui > dockDialogData.h
+	$(UIC) dockDialog.ui > dockDialogData.h
 
 #moc C files
 mainframe_moc.C:	mainframe.h
@@ -66,7 +66,7 @@ aboutDialog.C: aboutDialog.h
 	$(UIC) -impl aboutDialog.h aboutDialog.ui > aboutDialog.C
 
 dockDialogData.C: dockDialogData.h
-	$(UIC) -impl dockDialogData.h dockDialogData.ui > dockDialogData.C
+	$(UIC) -impl dockDialogData.h dockDialog.ui > dockDialogData.C
 
 
 clean: clean_moc_uic
