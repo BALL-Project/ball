@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.5 2000/01/13 22:28:26 oliver Exp $
+// $Id: INIFile.C,v 1.6 2000/01/15 18:58:11 oliver Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 
@@ -190,13 +190,13 @@ namespace BALL
 		for (i = 0; i < original_number_of_lines_; ++i)
 		{
 			// write all lines of a section 
-			if ((Index)line_section_index_[i] == current_section_index)
+			if (line_section_index_[i] == current_section_index)
 			{	
 				out << lines_[i] << endl;
 			} 
 			// skip the line if it was marked for removal 
 			// (negative sign of the index)
-			else if ((Index)line_section_index_[i] == -current_section_index)
+			else if (line_section_index_[i] == -current_section_index)
 			{
 				continue;
 			}
@@ -209,7 +209,7 @@ namespace BALL
 				{
 					// if any of the added lines belongs to our current
 					// section, write it to the file
-					if ((Index)line_section_index_[j] == current_section_index)
+					if (line_section_index_[j] == current_section_index)
 					{
 						out << lines_[j] << endl;
 					}
@@ -233,7 +233,7 @@ namespace BALL
 		{
 			for (i = original_number_of_lines_; i < lines_.size(); i++)
 			{
-				if ((Index)line_section_index_[i] == current_section_index)
+				if (line_section_index_[i] == current_section_index)
 				{
 					out << lines_[i] << endl;
 				}
