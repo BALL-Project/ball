@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.15 2001/01/24 12:01:09 amoll Exp $
+// $Id: bond.C,v 1.16 2001/02/22 20:36:12 amoll Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -383,7 +383,9 @@ namespace BALL
 	bool Bond::isInterBond() const
 		throw()
 	{
-		return (isBound() && (first_->Composite::getRoot() != second_->Composite::getRoot()));
+		// the two atoms have to be inside the same (non-NULL) composite
+		return (isBound() && (first_->Composite::getRoot() != second_->Composite::getRoot())
+						&& (&first_->Composite::getRoot() != first_));
 	}
 
 	bool Bond::isInterBondOf(const AtomContainer& atom_container) const
@@ -418,8 +420,10 @@ namespace BALL
 
 	bool Bond::isIntraBond() const
 		throw()
-	{
-		return (isBound() && (first_->Composite::getRoot() == second_->Composite::getRoot()));
+	{	
+		// the two atoms have to be inside two different (non-NULL) composite
+		return (isBound() && (first_->Composite::getRoot() == second_->Composite::getRoot()) 
+						&& (&first_->Composite::getRoot() != first_) && (&second_->Composite::getRoot() != second_));
 	}
 
 	bool Bond::isIntraBondOf(const AtomContainer &atom_container) const
