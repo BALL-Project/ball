@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.16 2001/08/01 01:04:15 oliver Exp $
+// $Id: lineBasedFile.C,v 1.17 2001/12/17 11:26:46 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -222,18 +222,6 @@ namespace BALL
 		File::clear();
 	}
 
-	Position LineBasedFile::getLineNumber() 
-		const throw()
-	{
-		return line_number_;
-	}
-
-	const String& LineBasedFile::getLine() 
-		const throw()
-	{
-		return line_;
-	}
-
 	void LineBasedFile::test(const char* file, int line, bool condition, const String& msg)
 		const throw(LineBasedFile::LineBasedFileError)
 	{
@@ -279,4 +267,35 @@ namespace BALL
 		return line_.hasSubstring(text);
 	}
 
-} //namespace
+	bool LineBasedFile::parseColumnFormat(const char* format, Position start, Size length, void* ptr)
+	{
+		// the number of entries parsed
+		int read = 0;
+
+		// make sure the specified section of the string exists
+		if (line_.size() < (start + length))
+		{
+			const Size max_len = 16384;
+			static char buf[max_len + 1];
+			length = std::min(length, max_len);
+
+			// copy the specified string section into the buffer...
+			strncpy(buf, line_.c_str() + start, length);
+			buf[length] = '\0';
+
+			// ...and try to parse it.
+			read = sscanf(buf, format, ptr);
+		}
+
+		// return true if exactly one entry was read
+		return (read == 1);
+	}
+
+
+# ifdef BALL_NO_INLINE_FUNCTIONS
+#   include <BALL/FORMAT/lineBasedFile.iC>
+# endif
+
+
+
+} // namespace BALL
