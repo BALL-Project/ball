@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.7.4.4 2002/10/27 20:25:17 amoll Exp $
+// $Id: molecularControl.h,v 1.7.4.5 2002/11/28 21:14:26 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -15,12 +15,18 @@
 #	include <BALL/MOLVIEW/FUNCTOR/molecularFilter.h>
 #endif
 
-using namespace BALL::VIEW;
+#ifndef BALL_KERNEL_ATOM_H
+#	include <BALL/KERNEL/atom.h>
+#endif
 
 namespace BALL
 {
 	namespace MOLVIEW
 	{
+		using VIEW::MainControl;
+		using VIEW::Information;
+		using VIEW::Message;
+
 		/**	The MolecularControl class.
 				The MolecularControl class is a widget to display the molecular structure of 
 				\Ref{Composite}	objects. 
@@ -172,6 +178,8 @@ namespace BALL
 				throw();
 			//@}
 			
+			void atomProperties_(Atom* atom)
+				throw();
 
 		private:
 			
