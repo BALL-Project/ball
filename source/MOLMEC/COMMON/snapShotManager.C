@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.C,v 1.11 2003/07/03 15:52:10 amoll Exp $
+// $Id: snapShotManager.C,v 1.12 2003/07/24 10:42:44 amoll Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -28,8 +28,7 @@ namespace BALL
 			force_field_ptr_(0),
 			snapshot_buffer_(0),
 			trajectory_file_ptr_(0),
-			flush_to_disk_frequency_(0),
-			valid_(false)
+			flush_to_disk_frequency_(0)
 	{
 		options.setDefaultInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY,
 				SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY);
@@ -55,14 +54,13 @@ namespace BALL
 			snapshot_buffer_(0),
 			trajectory_file_ptr_(file),
 			flush_to_disk_frequency_(0),
-			buffer_counter_(0),
-			valid_(false)
+			buffer_counter_(0)
 	{
 		options.setDefaultInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY,
 				SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY);
 
 		// call the setup method
-		valid_ = setup();
+		setup();
 	}
 
 
@@ -86,11 +84,10 @@ namespace BALL
 			snapshot_buffer_(0),
 			trajectory_file_ptr_(file),
 			flush_to_disk_frequency_(0),
-			buffer_counter_(0),
-			valid_(false)
+			buffer_counter_(0)
 	{
 		// simply call the setup method
-		valid_ = setup();
+		setup();
 	}
 
 
@@ -108,8 +105,7 @@ namespace BALL
 			snapshot_buffer_(manager.snapshot_buffer_),
 			trajectory_file_ptr_(manager.trajectory_file_ptr_),
 			flush_to_disk_frequency_(manager.flush_to_disk_frequency_),
-			buffer_counter_(0),
-			valid_(manager.valid_)
+			buffer_counter_(0)
 	{
 	}
 
@@ -120,13 +116,10 @@ namespace BALL
 	{
 		// clear() handles open files, so the destructor does not handle them
 		clear();
-
-		valid_ = false;
 	}
 
 
-	const SnapShotManager& SnapShotManager::operator = 
-		(const SnapShotManager& manager)
+	const SnapShotManager& SnapShotManager::operator = (const SnapShotManager& manager)
 		throw()
 	{
 		options = manager.options;
@@ -136,7 +129,6 @@ namespace BALL
 		trajectory_file_ptr_ = manager.trajectory_file_ptr_;
 		flush_to_disk_frequency_ = manager.flush_to_disk_frequency_;
 		buffer_counter_ = manager.buffer_counter_;
-		valid_ = manager.valid_;
 
 		return *this;
 	}
@@ -159,14 +151,32 @@ namespace BALL
 		flush_to_disk_frequency_ = (Size)
 			options.getInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY);
 		buffer_counter_ = 0;
-		valid_ = false;
 	}
 
 
 	bool SnapShotManager::isValid() const
 		throw()
 	{
-		return valid_;
+		// first test for existence of system and force field
+		if (system_ptr_ == 0 || !system_ptr_->isValid())
+		{
+			Log.error() << "SnapShotManager::setup(): No/invalid system." << endl;
+			return false;
+		}
+		if (force_field_ptr_ == 0 || !force_field_ptr_->isValid())
+		{
+			Log.error() << "SnapShotManager::setup(): No/invald force field." << endl;
+			return false;
+		}
+
+		// now check that the force field is assigned to the system
+		if (force_field_ptr_->getSystem() != system_ptr_)
+		{
+			Log.error() << "SnapShotManager::setup(): Systems do not match." << endl;
+			return false;
+		}
+
+		return true;
 	}
 
 
@@ -186,25 +196,7 @@ namespace BALL
 	bool SnapShotManager::setup()
 		throw()
 	{
-
-		// first test for existence of system and force field
-		if (system_ptr_ == 0 || !system_ptr_->isValid())
-		{
-			Log.error() << "SnapShotManager::setup(): No/invalid system." << endl;
-			return false;
-		}
-		if (force_field_ptr_ == 0 || !force_field_ptr_->isValid())
-		{
-			Log.error() << "SnapShotManager::setup(): No/invald force field." << endl;
-			return false;
-		}
-
-		// now check that the force field is assigned to the system
-		if (force_field_ptr_->getSystem() != system_ptr_)
-		{
-			Log.error() << "SnapShotManager::setup(): Systems do not match." << endl;
-			return false;
-		}
+		if (!isValid()) return false;
 
 		// first get the options
 		flush_to_disk_frequency_ =

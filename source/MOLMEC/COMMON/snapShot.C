@@ -1,13 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.C,v 1.28 2002/02/27 12:21:35 sturm Exp $
+// $Id: snapShot.C,v 1.29 2003/07/24 10:42:44 amoll Exp $
 
-// BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
-
-// STL includes 
-#include <algorithm>
 
 using namespace std;
 
@@ -23,8 +19,7 @@ namespace BALL
 			kinetic_energy_(0.0),
 			atom_positions_(0),
 			atom_velocities_(0),
-			atom_forces_(0),
-			valid_(false)
+			atom_forces_(0)
 	{
 	}
 
@@ -38,8 +33,7 @@ namespace BALL
 			kinetic_energy_(snapshot.kinetic_energy_),
 			atom_positions_(snapshot.atom_positions_),
 			atom_velocities_(snapshot.atom_velocities_),
-			atom_forces_(snapshot.atom_forces_),
-			valid_(snapshot.valid_)
+			atom_forces_(snapshot.atom_forces_)
 	{
 	}
 
@@ -50,8 +44,6 @@ namespace BALL
 		throw()
 	{
 		clear();
-
-		valid_ = false;
 	}
 
 
@@ -59,7 +51,6 @@ namespace BALL
 	const SnapShot& SnapShot::operator = (const SnapShot& snapshot)
 		throw()
 	{
-		valid_ = snapshot.valid_;
 		index_ = snapshot.index_;
 		number_of_atoms_ = snapshot.number_of_atoms_;
 		potential_energy_ = snapshot.potential_energy_;
@@ -75,7 +66,6 @@ namespace BALL
 	void SnapShot::clear()
 		throw()
 	{
-		valid_ = false;
 		index_ = 0;
 		number_of_atoms_ = 0;
 		potential_energy_ = 0.0;
@@ -90,21 +80,24 @@ namespace BALL
 	bool SnapShot::operator == (const SnapShot& snapshot) const
 		throw()
 	{
-		return ((valid_ == snapshot.valid_)
-			&& (index_ == snapshot.index_)
+		return 
+			   (index_ == snapshot.index_)
 			&& (number_of_atoms_ == snapshot.number_of_atoms_)
 			&& (potential_energy_ == snapshot.potential_energy_)
 			&& (kinetic_energy_ == snapshot.kinetic_energy_)
 			&& (atom_positions_ == snapshot.atom_positions_)
 			&& (atom_velocities_ == snapshot.atom_velocities_)
-			&& (atom_forces_ == snapshot.atom_forces_));
+			&& (atom_forces_ == snapshot.atom_forces_);
 	}
 
 
 	bool SnapShot::isValid() const
 		throw()
 	{
-		return valid_;
+		return 	number_of_atoms_ > 0 &&
+					 	number_of_atoms_ == atom_forces_.size() &&
+						number_of_atoms_ == atom_velocities_.size() &&
+						number_of_atoms_ == atom_positions_.size();
 	}
 
 	

@@ -1,14 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.h,v 1.24 2003/03/26 13:56:40 anhi Exp $
-
-// This file contains the definitions of the classes 
-// SnapshotManager and Snapshot. 
-// They can be used to obtain snapshots from an MD simulation or an energy 
-// minimisation.
-// A snapshot contains atom positions, velocities, forces and potential energy. 
-
+// $Id: snapShot.h,v 1.25 2003/07/24 10:41:50 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
 #define BALL_MOLMEC_COMMON_SNAPSHOT_H
@@ -31,7 +24,6 @@ namespace BALL
 			It consists of the posistions, velocities and forces for each atom
 			along with kinetic and potential energy of selected atoms. It is used
 			by the  \link SnapShotManager SnapShotManager \endlink .  \par
-			
     	\ingroup  MolmecCommon
 	*/
   class SnapShot
@@ -240,9 +232,6 @@ namespace BALL
 
     //_ An STL vector with the forces of all atoms 
     vector<Vector3> atom_forces_;
-
-    //_ Indicates whether the snapshot object is valid
-    bool valid_;
 
     //@}
 

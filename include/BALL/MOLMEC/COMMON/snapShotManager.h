@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.h,v 1.13 2003/07/03 15:54:19 amoll Exp $
+// $Id: snapShotManager.h,v 1.14 2003/07/24 10:41:50 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -247,8 +247,6 @@ namespace BALL
 		
     protected:
 
-		// ?????: this was a const ptr before, but applySnapShot needs a
-		// mutable System. is that reasonable
     //_ The system to which the SnapshotManager is bound
     System* system_ptr_; 
 
@@ -269,10 +267,6 @@ namespace BALL
 		/*_
 		*/
 		Size buffer_counter_;
-
-    /*_  This status flag indicates if the class is ready for use
-    */
-    bool valid_;
 
     //_@}
     /*_ @name Protected methods
