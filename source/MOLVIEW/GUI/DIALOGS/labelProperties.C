@@ -31,24 +31,7 @@ LabelProperties::~LabelProperties()
 {
 }
 
-void LabelProperties::setPreferences(INIFile& inifile) const
-{
-	//	
-	// the label window position
-	//
-	inifile.setValue
-		("WINDOWS", "Label::x", String(x()));
-	inifile.setValue
-		("WINDOWS", "Label::y", String(y()));
-
-	// 
-	// the color value
-	// 
-	inifile.setValue
-		("WINDOWS", "Label::customcolor", custom_color_);
-}
-
-void LabelProperties::getPreferences(const INIFile& inifile)
+void LabelProperties::fetchPreferences(INIFile& inifile)
 {
 	// 
 	// the geometry of the main window
@@ -81,6 +64,23 @@ void LabelProperties::getPreferences(const INIFile& inifile)
 
 		color_sample_->setBackgroundColor(qcolor);
 	}
+}
+
+void LabelProperties::writePreferences(INIFile& inifile)
+{
+	//	
+	// the label window position
+	//
+	inifile.setValue
+		("WINDOWS", "Label::x", String(x()));
+	inifile.setValue
+		("WINDOWS", "Label::y", String(y()));
+
+	// 
+	// the color value
+	// 
+	inifile.setValue
+		("WINDOWS", "Label::customcolor", custom_color_);
 }
 
 void LabelProperties::onNotify(Message *message)
