@@ -1,4 +1,4 @@
-// $Id: PTE.C,v 1.10 2001/01/21 21:03:56 amoll Exp $
+// $Id: PTE.C,v 1.11 2001/03/09 09:43:11 amoll Exp $
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -435,7 +435,7 @@ namespace BALL
 	{
 	}
 
-	ostream& operator <<(ostream& s, const Element& element)
+	ostream& operator << (ostream& s, const Element& element)
 		throw()
 	{
 		s	<< element.name_ << ' '
