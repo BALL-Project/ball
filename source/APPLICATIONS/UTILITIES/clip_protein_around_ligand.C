@@ -1,4 +1,4 @@
-// $Id: clip_protein_around_ligand.C,v 1.4 2003/07/15 13:28:46 anker Exp $
+// $Id: clip_protein_around_ligand.C,v 1.5 2003/08/20 12:19:33 anker Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -660,7 +660,7 @@ int main(int argc, char** argv)
 		charge += c;
 	}
 
-	cout << "CHARGE=" << charge << endl;
+	cout << "CHARGE=" << round(charge) << endl;
 
 	String parameter_file_name("Amber/amber94gly.ini");
 	tmp = path.find(parameter_file_name);
