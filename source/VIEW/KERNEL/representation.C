@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.7 2003/10/20 21:53:58 amoll Exp $
+// $Id: representation.C,v 1.8 2003/10/21 15:36:26 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -19,7 +19,8 @@ namespace BALL
 				: PropertyManager(),
 					drawing_mode_(DRAWING_MODE_SOLID),
 					drawing_precision_(DRAWING_PRECISION_HIGH),
-					model_type_(0),
+					model_type_(MODEL_UNKNOWN),
+					coloring_type_(COLORING_UNKNOWN),
 					model_processor_(0),
 					color_processor_(0),
 					geometric_objects_(),
@@ -72,6 +73,7 @@ namespace BALL
 			drawing_mode_= representation.drawing_mode_;
 			drawing_precision_= representation.drawing_precision_;
 			model_type_ = representation.model_type_;
+			coloring_type_ = representation.coloring_type_;
 
 			PropertyManager::operator = (representation);
 
@@ -124,13 +126,14 @@ namespace BALL
 			composites_.clear();
 
 			if (model_processor_  != 0) delete model_processor_;
-			if (color_processor_  != 0) delete model_processor_;
+			if (color_processor_  != 0) delete color_processor_;
 			model_processor_ 	= 0;
 			color_processor_ 	= 0;
 
 			drawing_mode_= DRAWING_MODE_SOLID;
 			drawing_precision_= DRAWING_PRECISION_HIGH;
-			model_type_ = 0;
+			model_type_ = MODEL_UNKNOWN;
+			coloring_type_ = COLORING_UNKNOWN;
 		}
 
 		
@@ -160,6 +163,8 @@ namespace BALL
 			s << "drawing precision: " << drawing_precision_<< std::endl;
 			BALL_DUMP_DEPTH(s, depth);
 			s << "model type : " << model_type_ << std::endl;
+			BALL_DUMP_DEPTH(s, depth);
+			s << "coloring type : " << coloring_type_ << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
 			s << "number of primitives: " << geometric_objects_.size() << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
@@ -198,12 +203,12 @@ namespace BALL
 		}
 
 		
-		void Representation::update() 
+		void Representation::update(bool rebuild) 
 			throw()
 		{
 			// if no modelprocessor was given, there can only exist 
 			// handmade GeometricObjects, which dont need to be updated
-			if (model_processor_ != 0) 
+			if (model_processor_ != 0 && rebuild) 
 			{
 				clearGeometricObjects_();
 				model_processor_->getGeometricObjects().clear();
@@ -219,7 +224,7 @@ namespace BALL
 			if (color_processor_ != 0) 
 			{
 				// make sure, that the atom grid is recomputed for meshes
-				color_processor_->setComposites(&composites_);
+				if (rebuild) color_processor_->setComposites(&composites_);
 				geometric_objects_.apply(*color_processor_);
 			}
 		}
