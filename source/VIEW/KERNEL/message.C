@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.14 2003/11/23 23:04:49 amoll Exp $
+// $Id: message.C,v 1.15 2003/12/10 15:09:31 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -179,9 +179,9 @@ RepresentationMessage::RepresentationMessage()
 	#endif
 }
 
-RepresentationMessage::RepresentationMessage(Representation* rep, Type type)
+RepresentationMessage::RepresentationMessage(Representation& rep, Type type)
 	throw()
-	: representation_(rep),
+	: representation_(&rep),
 		type_(type)
 {
 	#ifdef BALL_VIEW_DEBUG

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.33 2003/11/23 23:03:54 amoll Exp $
+// $Id: message.h,v 1.34 2003/12/10 15:09:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -191,11 +191,6 @@ class CompositeMessage: public Message
 	void setComposite(const Composite& composite)
 		throw();
 
-	/** Change the composite.
-	*/
-	void setComposite(const Composite* composite)
-		throw();
-
 	/** Inspection of the composite.
 	*/
 	Composite* getComposite() const
@@ -376,7 +371,7 @@ class SelectionMessage: public Message
 	/** Change the selection of Composite objects.
 			The selection list will be copied from the given list.
 	*/
-	void setSelection(const List<Composite*> &selection)
+	void setSelection(const List<Composite*>& selection)
 		throw();
 
 	/** Non-mutable inspection of the selection of Composite objects.
@@ -441,7 +436,7 @@ class GeometricObjectSelectionMessage: public Message
 	/** Change the selection of Composite objects.
 			The selection list will be copied from the given list.
 	*/
-	void setSelection(const List<GeometricObject*> &selection)
+	void setSelection(const List<GeometricObject*>& selection)
 		throw() { selection_ = selection;}
 
 	/** Non-mutable inspection of the selection of Composite objects.
@@ -498,12 +493,12 @@ class RepresentationMessage: public Message
 		throw();
 
 	///
-	RepresentationMessage(Representation* rep, Type type)
+	RepresentationMessage(Representation& rep, Type type)
 		throw();
 
 	///
-	void setRepresentation(Representation* rep)
-		throw() {representation_ = rep;}
+	void setRepresentation(Representation& rep)
+		throw() {representation_ = &rep;}
 
 	///
 	Representation* getRepresentation() 
@@ -620,8 +615,8 @@ class NewTrajectoryMessage
 			throw();
 
 		///
-		void setTrajectoryFile(TrajectoryFile* file)
-			throw() { file_ = file;}
+		void setTrajectoryFile(TrajectoryFile& file)
+			throw() { file_ = &file;}
 
 		///
 		TrajectoryFile* getTrajectoryFile()
@@ -656,8 +651,8 @@ class RegularData3DMessage
 			throw();
 
 		///
-		void setRegularData3D(RegularData3D* data)
-			throw() { data_ = data;}
+		void setRegularData3D(RegularData3D& data)
+			throw() { data_ = &data;}
 
 		///
 		RegularData3D* getRegularData3D()
