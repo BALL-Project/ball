@@ -10,10 +10,6 @@
 # include <BALL/KERNEL/atom.h>
 #endif
 
-#ifndef BALL_KERNEL_BOND_H
-# include <BALL/KERNEL/bond.h>
-#endif
-
 namespace BALL
 {
 	namespace VIEW
@@ -33,9 +29,12 @@ public:
 
 public slots:
 	void bondSelected();
+	void focusAtom();
+	void focusPartner();
 
 private:
 	Atom* atom_;
+	QWidget* parent_;
 };
 
 } } // namespaces
