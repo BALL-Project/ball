@@ -7,7 +7,7 @@
 			been specifically designed for this purpose. It provides an extensive set of
 			data structures as well as classes for Molecular Mechanics, advanced
 			solvation methods, comparison and analysis of protein structures, file
-			import/export, and visualization.  \\
+			import/export, and visualization.\\
 			BALL has been carefully designed to be
 			robust, easy to use, and open to extensions. Especially its extensibility
 			which results from an object-oriented and generic programming approach
@@ -17,9 +17,14 @@
 			simplified when using the data structures and functionality provided by
 			BALL.
 
-	@memo \begin{center}{\Large Biochemical Algorithms Library}\\Reference Manual\end{center}
+		@memo \begin{center}{\Large Biochemical Algorithms Library}\\Reference Manual\end{center}
 		@version 0.9a
-		@author Nicolas Pascal Boghossian<br> Andreas Burchardt<br> Heiko Klein<br> Oliver Kohlbacher<br> Hans-Peter Lenhof <br> Peter M\"uller
+		@author Nicolas Pascal Boghossian\\
+		 				Andreas Burchardt\\ 
+						Heiko Klein\\
+						Oliver Kohlbacher\\
+						Hans-Peter Lenhof\\
+						Peter M\"uller
 */
 //@{
 
