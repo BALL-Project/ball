@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.6 2005/01/27 12:39:15 amoll Exp $
+// $Id: sysinfo.C,v 1.7 2005/01/27 15:29:54 oliver Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -19,26 +19,21 @@ namespace BALL
 	namespace SysInfo
 	{
 
-		float getAvailableMemory()
+		LongIndex getAvailableMemory()
 		{
-			float mem = getFreeMemory();
+			LongIndex mem = getFreeMemory();
 #ifndef BALL_PLATFORM_WINDOWS
-			mem += getBufferdMemory();
+			mem += getBufferedMemory();
 #endif
 			return mem;
 		}
 
-		float getFreeMemory()
+		LongIndex getFreeMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
-			/*
-			MEMORYSTATUS ms;
-			GlobalMemoryStatus (&ms);
-			return (float) ms.dwAvailPhys;
-			*/
 			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return (float) statex.ullAvailPhys;
+			return static_cast<LongIndex>(statex.ullAvailPhys)
 #else
 			try
 			{
@@ -54,7 +49,7 @@ namespace BALL
 						line = line.after(":");
 						line.trimLeft();
 						line = line.before(" ");
-						return line.toFloat() * 1024;
+						return line.toLong() * 1024;
 					}
 				}
 			}
@@ -62,34 +57,35 @@ namespace BALL
 			{
 			}
 
-			// sysinfo seems to return somewhat unsane values, but better than nothing...
+			// sysinfo seems to return somewhat insane values, but better than nothing...
 			struct sysinfo info;
-			float result = sysinfo(&info);
-			if (result == -1) return result;
+			LongIndex result = sysinfo(&info);
+			if (result == -1) 
+			{
+				return result;
+			}
 			return info.freeram;
 #endif
 		}
 
-		float getTotalMemory()
+		LongIndex getTotalMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
-			/*
-			MEMORYSTATUS ms;
-			GlobalMemoryStatus (&ms);
-			return (float) ms.dwTotalPhys;
-			*/
  			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return (float) statex.ullTotalPhys;
+			return static_cast<LongIndex>(statex.ullFullPhys);
 #else
 			struct sysinfo info;
-			float result = sysinfo(&info);
-			if (result == -1) return result;
+			LongIndex result = sysinfo(&info);
+			if (result == -1) 
+			{
+				return result;
+			}
 			return info.totalram;
 #endif
 		}
 
-		float getBufferdMemory()
+		LongIndex getBufferedMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
 #else
@@ -107,7 +103,7 @@ namespace BALL
 						line = line.after(":");
 						line.trimLeft();
 						line = line.before(" ");
-						return line.toFloat() * 1024;
+						return line.toLong() * 1024;
 					}
 				}
 			}
@@ -116,19 +112,19 @@ namespace BALL
 			}
 
 			struct sysinfo info;
-			float result = sysinfo(&info);
+			LongIndex result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.bufferram;
 #endif
 		}
 
-		float getUptime()
+		Time getUptime()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
 			return -1;
 #else
 			struct sysinfo info;
-			float result = sysinfo(&info);
+			LongIndex result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.uptime;
 #endif
@@ -170,15 +166,15 @@ namespace BALL
 		}
 
 
-		float getFreeSwapSpace()
+		LongIndex getFreeSwapSpace()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
  			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return (float) statex.ullAvailPageFile;
+			return (LongIndex) statex.ullAvailPageFile;
 #else
 			struct sysinfo info;
-			float result = sysinfo(&info);
+			LongIndex result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.freeswap;
 #endif
@@ -186,5 +182,6 @@ namespace BALL
 		}
 
 	} // namespace SysInfo
+
 } // namespace BALL
 

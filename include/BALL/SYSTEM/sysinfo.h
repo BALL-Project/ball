@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.h,v 1.5 2005/01/25 17:15:52 amoll Exp $
+// $Id: sysinfo.h,v 1.6 2005/01/27 15:29:54 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_SYSINFO_H
@@ -21,36 +21,36 @@ namespace BALL
 	 */
 	namespace SysInfo
 	{
-		/** The the total amount of free memory (under linux + getBufferdMemory()).
+		/** The the total amount of free memory (under linux + getBufferedMemory()).
 				@return -1 if no valid value could be read
 		*/
-		float getAvailableMemory();
+		LongIndex getAvailableMemory();
 	
 		/** The the amount of freee memory.
 				@return -1 if no valid value could be read
 		*/
-		float getFreeMemory();
+		LongIndex getFreeMemory();
 		
 		/** The the total amount of memory.
 				@return -1 if no valid value could be read
 		*/
-		float getTotalMemory();
+		LongIndex getTotalMemory();
 
-		/** Return the bufferd memory under Linux
+		/** Return the buffered memory under Linux
 				@return -1 if no valid value could be read
 		*/
-		float getBufferdMemory();
+		LongIndex getBufferedMemory();
 
 		/** Return the the amount of free swap memory.
 				@return -1 if no valid value could be read
 		*/
-		float getFreeSwapSpace();
+		LongIndex getFreeSwapSpace();
 
 		/** Get the uptime of the system.
-		 		Work currently only under Linux.
+		 		Works currently only under Unix, not under Windows.
 				@return -1 if no valid value could be read
 		*/
-		float getUptime();
+		Time getUptime();
 
 		/** Get the number of processors
 				@return -1 if no valid value could be read
