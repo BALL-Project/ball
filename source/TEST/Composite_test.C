@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.5 1999/09/08 18:07:56 oliver Exp $
+// $Id: Composite_test.C,v 1.6 1999/09/27 13:16:37 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.5 1999/09/08 18:07:56 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.6 1999/09/27 13:16:37 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -224,9 +224,9 @@ TEST_EQUAL(d.isSelected(), false);
 TEST_EQUAL(e.isSelected(), false);
 a.select();
 e.deselect();
-TEST_EQUAL(a.isSelected(), true);
-TEST_EQUAL(b.isSelected(), true);
-TEST_EQUAL(c.isSelected(), true);
+TEST_EQUAL(a.isSelected(), false);
+TEST_EQUAL(b.isSelected(), false);
+TEST_EQUAL(c.isSelected(), false);
 TEST_EQUAL(d.isSelected(), true);
 TEST_EQUAL(e.isSelected(), false);
 RESULT
