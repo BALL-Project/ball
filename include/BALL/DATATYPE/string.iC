@@ -1,4 +1,62 @@
-// $Id: string.iC,v 1.29 2000/12/11 21:14:23 oliver Exp $
+// $Id: string.iC,v 1.30 2000/12/13 19:45:14 amoll Exp $
+
+BALL_INLINE 
+String::String()
+	throw()
+	: string()
+{
+}
+
+BALL_INLINE 
+String::String(const String& s)
+	throw()
+	: string(s.c_str())
+{
+}
+
+BALL_INLINE 
+String::String(const unsigned char c)
+	throw()
+	: string(1, (char)c)
+{
+}
+
+BALL_INLINE 
+String::String(const char c, Size len)
+	throw()
+	: string(len, c)
+{
+}
+
+BALL_INLINE 
+String::String(const string& s)
+	throw()
+	: string(s)
+{
+}
+
+BALL_INLINE 
+void String::set(::std::strstream& s)
+	throw()
+{
+	s << ::std::ends;
+	char* char_ptr = s.str();
+	assign(char_ptr);
+}
+
+BALL_INLINE 
+void String::set(char c, Size len)
+	throw()
+{
+	assign(len, c);
+}
+
+BALL_INLINE 
+void String::set(unsigned char c)
+	throw()
+{
+	assign(1, (char)c);
+}
 
 BALL_INLINE 
 bool String::operator == (const char* char_ptr) const
@@ -442,6 +500,9 @@ Substring& Substring::toUpper()
 	(*bound_).toUpper(from_, to_ - from_);
   return *this;
 }
+
+
+
 
 BALL_INLINE 
 const String& String::operator = (const String& s)
@@ -939,20 +1000,6 @@ bool operator == (const String& s, const Substring& substring)
 }
 
 BALL_INLINE 
-String::String()
-	throw()
-	: string()
-{
-}
-
-BALL_INLINE 
-String::String(const String& s)
-	throw()
-	: string(s.c_str())
-{
-}
-
-BALL_INLINE 
 String::String(const char* char_ptr, Index from, Size len)
 	throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
 	: string()
@@ -965,27 +1012,6 @@ String::String(const char* char_ptr, Index from, Size len)
 }
  
 BALL_INLINE 
-String::String(const unsigned char c)
-	throw()
-	: string(1, (char)c)
-{
-}
-
-BALL_INLINE 
-String::String(const char c, Size len)
-	throw()
-	: string(len, c)
-{
-}
-
-BALL_INLINE 
-String::String(const string& s)
-	throw()
-	: string(s)
-{
-}
-
-BALL_INLINE 
 String::String(const String& s, Index from, Size len)
 	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	: string("")
@@ -995,29 +1021,6 @@ String::String(const String& s, Index from, Size len)
 	{
 		assign(s.c_str() + from, len);
 	}
-}
-
-BALL_INLINE 
-void String::set(::std::strstream& s)
-	throw()
-{
-	s << ::std::ends;
-	char* char_ptr = s.str();
-	assign(char_ptr);
-}
-
-BALL_INLINE 
-void String::set(char c, Size len)
-	throw()
-{
-	assign(len, c);
-}
-
-BALL_INLINE 
-void String::set(unsigned char c)
-	throw()
-{
-	assign(1, (char)c);
 }
 
 BALL_INLINE 
