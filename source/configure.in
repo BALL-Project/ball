@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.1 2001/08/23 10:28:04 oliver Exp $
+dnl    $Id: configure.in,v 1.2 2001/08/24 01:33:14 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -986,7 +986,7 @@ if test "${HAS_GPLUSPLUS}" = "true" ; then
 	MAKEDEP_CXX_OPTS="-M"
 	CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
 	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
-	CXXFLAGS_O="${CXXFLAGS_O} -O2"
+	CXXFLAGS_O="${CXXFLAGS_O} -O3"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
 	dnl  We do not need the -fPIC flag for CYGWIN,
@@ -1089,7 +1089,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 
 	CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
 	LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
-	CXXFLAGS_O="${CXXFLAGS_O} -O2"
+	CXXFLAGS_O="${CXXFLAGS_O} -O3"
 	
 	CXXFLAGS_D="${CXXFLAGS_D}"
 	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
@@ -1201,7 +1201,7 @@ if test "${COMPILER_DONE}" != true ; then
 	if test $OS = SunOS ; then
 		CXXFLAGS_D="$CXXFLAGS_D}"
 		CXXFLAGS_DI="$CXXFLAGS_DI} -g"
-		CXXFLAGS_O="${CXXFLAGS_O} -O2"
+		CXXFLAGS_O="${CXXFLAGS_O} -O3"
 		AC_DEFINE(SPARC,)
 		AC_DEFINE(SUNOS,)
 		AC_ERROR(SunOS not supported - please use Solaris)
