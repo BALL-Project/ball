@@ -84,11 +84,10 @@ namespace BALL
 										//MOVED__ATOM
 								};
 
-							protected:
-								int	operationType_;
-								Atom* atom_;
-								Bond* bond_;
-								String description_;
+								int	operationType;
+								Atom* atom;
+								Bond* bond;
+								String description;
 
 						};
 
@@ -184,11 +183,18 @@ namespace BALL
 
 						virtual void mouseReleaseEvent(QMouseEvent *e);
 
+						// slots for communication with PTEDialog
 						void setEditElementType(int element_number);
+						int getEditElementType();
 
+											
 					protected slots:
 						virtual void editMode_();
 						virtual void bondMode_();
+
+					signals:
+						// signal for communication with EditOperationDialog
+						void newEditOperation(EditableScene::EditOperation &eo);
 
 
 		protected:

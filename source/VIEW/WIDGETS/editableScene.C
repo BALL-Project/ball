@@ -41,29 +41,29 @@ namespace BALL
 
 		EditableScene::EditOperation::EditOperation()
 			throw()
-			: operationType_(),
-				atom_(),
-				bond_(),
-				description_()
+			: operationType(),
+				atom(),
+				bond(),
+				description()
 		{ 
 		}
 
-		EditableScene::EditOperation::EditOperation(Atom* atom, Bond* bond, String description, int operation)
+		EditableScene::EditOperation::EditOperation(Atom* new_atom, Bond* new_bond, String new_description, int new_operation)
 			throw()
-			: operationType_((EditableScene::EditOperation::OperationType)operation),
-				atom_(atom),
-				bond_(bond),
-				description_(description)
+			: operationType((EditableScene::EditOperation::OperationType)new_operation),
+				atom(new_atom),
+				bond(new_bond),
+				description(new_description)
 		{
 		}
 
 		EditableScene::EditOperation::EditOperation(const EditOperation& eOperation)
 			throw()
-			: operationType_(eOperation.operationType_),
-				atom_(eOperation.atom_),
-				bond_(eOperation.bond_),
-				description_(eOperation.description_)
-		{
+			: operationType(eOperation.operationType),
+				atom(eOperation.atom),
+				bond(eOperation.bond),
+				description(eOperation.description)
+		{	
 		}
 
 		EditableScene::EditOperation::~EditOperation()	
@@ -85,7 +85,7 @@ namespace BALL
 				first_atom_for_bond_(0),
 				atom_limit_(1.5),
 				bond_limit_(2.0),
-				editAtomType_(0),
+				editAtomType_(6),
 				undo_()
 		{
 		}
@@ -98,9 +98,11 @@ namespace BALL
 				first_atom_for_bond_(0),
 				atom_limit_(1.5),
 				bond_limit_(2.0),
-				editAtomType_(0),
+				editAtomType_(6),
 				undo_()
-		{
+		{	
+			registerWidget(this); 
+			Log.error() << "EditableScene " << dynamic_cast<ModularWidget*>(this) << std::endl;
 		}
 
 		// TODO: Was sollte ein Copyconstructor sinnvolles tun?
@@ -113,7 +115,7 @@ namespace BALL
 				first_atom_for_bond_(eScene.first_atom_for_bond_),
 				atom_limit_(eScene.atom_limit_),
 				bond_limit_(eScene.bond_limit_),
-				editAtomType_(),
+				editAtomType_(eScene.editAtomType_),
 				undo_()
 		{
 		}
@@ -196,10 +198,17 @@ namespace BALL
 					current_mode_ =(Scene::ModeType)BOND__MODE;
 					
 					//store the Operation in undo_
-					EditOperation eo( *a, NULL, "added atom" , EditOperation::ADDED__ATOM);
+					Vector3 atom_position = a->getPosition();
+					
+					EditOperation eo(a, NULL, "Added atom of type " + PTE[editAtomType_].getName() + " at position (" 
+													+ String(atom_position.x) + ", "
+													+ String(atom_position.y) + ", "
+													+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
 					undo_.push_back(eo);
-	
 
+					// tell about the new undo operation
+					emit newEditOperation(eo);
+	
 					return;
 				}
 				if(e->button() == Qt::RightButton )
@@ -371,11 +380,13 @@ namespace BALL
 						//set the bond
 						// TODO: - make the bond_order variable. Even better: change order with click on the bond
 						//       - if there is already a bond, change it to a double bond
-						Bond* c = new Bond("Bond", *first_atom_for_bond_, *atom, Bond::ORDER__DOUBLE);		
+						Bond* c = new Bond("Bond", *first_atom_for_bond_, *atom, Bond::ORDER__SINGLE);		
 						
-						EditOperation eo( *c, NULL, "added bond" , EditOperation::ADDED__BOND);
+						EditOperation eo( NULL, c, "Added bond of type " , EditOperation::ADDED__BOND);
 						undo_.push_back(eo);
-	
+					
+						// tell about the new undo operation
+						emit newEditOperation(eo);
 
 						//update representation
 						CompositeMessage *m = 0;
@@ -394,8 +405,16 @@ namespace BALL
 						insert_(e->x(), e->y(), *a);
 						
 						//store the Operation in undo_
-						EditOperation eo( *a, NULL, "added atom" , EditOperation::ADDED__ATOM);
+						Vector3 atom_position = a->getPosition();
+					
+						EditOperation eo(a, NULL, "Added atom of type " + PTE[editAtomType_].getName() + " at position (" 
+														+ String(atom_position.x) + ", "
+														+ String(atom_position.y) + ", "
+														+ String(atom_position.z) + ")", EditOperation::ADDED__ATOM);
 						undo_.push_back(eo);
+
+						// tell about the new undo operation
+						emit newEditOperation(eo);
 	
 						//TODO: test if they have the same position, i.e. a and first_atom_for_bond!
 						if (a->getPosition() == first_atom_for_bond_->getPosition())
@@ -407,12 +426,40 @@ namespace BALL
 						//update representation
 						// TODO: bond_oder
 						CompositeMessage *m = 0;
-						Bond* c = new Bond("Bond", *first_atom_for_bond_, *a, Bond::ORDER__DOUBLE);		
+						Bond* c = new Bond("Bond", *first_atom_for_bond_, *a, Bond::ORDER__SINGLE);		
 						m = new CompositeMessage(*a, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
+					
+						String bond_string;
+						int bond_type = c->getOrder();
+
+						switch (bond_type)
+						{
+							case Bond::ORDER__SINGLE:
+								bond_string = "single bond";
+								break;
+							case Bond::ORDER__DOUBLE:
+								bond_string = "double bond";
+								break;
+							case Bond::ORDER__TRIPLE:						
+								bond_string = "triple bond";	
+								break;
+							case Bond::ORDER__QUADRUPLE:
+								bond_string = "quadruple bond";	
+								break;
+							case Bond::ORDER__AROMATIC:
+								bond_string = "aromatic bond";	
+								break;
+							default:					
+								bond_string = "unknown";	
+								break;
+						}
 						
-						EditOperation eo( *c, NULL, "added bond" , EditOperation::ADDED__BOND);
-						undo_.push_back(eo);
-	
+						EditOperation eo2( NULL, c, "Added bond of type " + bond_string, EditOperation::ADDED__BOND);
+						undo_.push_back(eo2);
+						
+						// tell about the new undo operation
+						emit newEditOperation(eo2);
+
 						notify_(m);
 					}
 					else // we did not find a first atom!
@@ -446,74 +493,50 @@ namespace BALL
 		// Find closest atom to screen position (x,y). If there is none closer than atom_limit_, return NULL
 		Atom* EditableScene::getClickedAtom_(int x, int y)
 		{
-			// vector to store all atoms and their distances from clicking-ray
-			vector< std::pair <Atom*, double> > distvec_;
-
 			//get the AtomContainer
 			CompositeManager& cm = getMainControl()->getCompositeManager();
 			CompositeManager::iterator it = cm.begin();
 
-			System *s=0;
+			float min_dist = numeric_limits<float>::max();
+			Atom* min_atom = 0;
+			float dist;
+
 			for (; it != cm.end(); it++)
 			{
 				//check if composite is a system
 				// TODO: do we have to check for Protein, Molecule, Chain, ... or is the System check already sufficient?
-				if(RTTI::isKindOf<System>(**it))
-				{
-					s = RTTI::castTo<System>(**it);
-				}	
-				else
-				{
-					break;
-				}
+				System* s = dynamic_cast<System*>(*it);
+				if (s == 0) continue;
 
-				//The Composite is a system
-				if (s!=0)
+				Vector3 cam_to_atom;
+				Vector3 cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
+
+				AtomIterator ai;
+				for(ai=s->beginAtom();+ai;++ai)
 				{
-					// save the atom and its distance to the click ray
-					std::pair<Atom*, double> pair_;
-					double dist;
+					cam_to_atom = (ai->getPosition() - getStage()->getCamera().getViewPoint());
 
-					Vector3 cam_to_atom;
-					Vector3 cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
+					// compute the angle between the rays Cam->Atom and Cam->clicked point
+					Angle	alpha((float)acos(  (cam_to_atom * cam_to_clickedPoint)
+								/(cam_to_atom.getLength() * cam_to_clickedPoint.getLength())
+								));
 
-					AtomIterator ai;
-					for(ai=s->beginAtom();+ai;++ai)
+					// the distance between the two rays is the sine of the angle between them times the length of Cam->Atom	
+					dist  = sin(alpha) * cam_to_atom.getLength();
+
+					// now save atom and distance
+					if (dist < min_dist)
 					{
-						cam_to_atom = (ai->getPosition() - getStage()->getCamera().getViewPoint());
-
-						// compute the angle between the rays Cam->Atom and Cam->clicked point
-						Angle	alpha((float)acos(  (cam_to_atom * cam_to_clickedPoint)
-												             /(cam_to_atom.getLength() * cam_to_clickedPoint.getLength())
-									                 ));
-
-						// the distance between the two rays is the sine of the angle between them times the length of Cam->Atom	
-						dist  = sin(alpha) * cam_to_atom.getLength();
-						
-						// now save atom and distance
-						pair_.first = &(*ai);
-						pair_.second = dist;
-						
-						distvec_.push_back(pair_);
+						min_dist = dist;
+						min_atom = &(*ai);
 					}
 				}
 			}
 
-			// find the atom with minimal distance to the click point
-			std::pair<Atom*, double> minimum;
-			minimum.second = atom_limit_ + 100;
-
-			std::vector< std::pair <Atom*, double> >  ::iterator pair_it = distvec_.begin();	
-			for (; pair_it != distvec_.end(); pair_it++)
-			{
-				if(pair_it->second < minimum.second)
-					minimum = *pair_it;	
-			}	
-
 			//is the minimal distance beyond the threshold?
-			if (minimum.second < atom_limit_)
+			if (min_dist < atom_limit_)
 			{
-				return minimum.first;
+				return min_atom;
 			}
 
 			return 0;
@@ -523,84 +546,62 @@ namespace BALL
 		// Note: this code is very similar to getClickedAtom. Maybe those two should be united.
 		Bond* EditableScene::getClickedBond_(int x, int y)
 		{
-			// vector to store all bonds and their distances from clicking-ray
-			vector< std::pair <Bond*, double> > distvec_;
-
 			//get the AtomContainer
 			CompositeManager& cm = getMainControl()->getCompositeManager();
 			CompositeManager::iterator it = cm.begin();
 
-			System *s=0;
+			Bond* closest = 0;
+			float min_dist = FLT_MAX;
+
+
 			for (; it != cm.end(); it++)
 			{
 				//check if composite is a system
 				// TODO: do we have to check for Protein, Molecule, Chain, ... or is the System check already sufficient?
-				if(RTTI::isKindOf<System>(**it))
-				{
-					s = RTTI::castTo<System>(**it);
-				}	
-				else
-				{
-					break;
-				}
+				System* s = dynamic_cast<System*>(*it);
+				if (s == 0) continue;
 
 				//The Composite is a system
-				if (s!=0)
+				// save the atom and its distance to the click ray
+				Vector3 cam_to_bond;
+				Vector3 cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
+
+				// To iterate over all bonds, we have to iterate over all atoms and then over all their bonds
+				// Unfortunately, this counts each bond twice...
+				for (AtomIterator ai = s->beginAtom(); +ai; ++ai)
 				{
-					// save the atom and its distance to the click ray
-					std::pair<Bond*, double> pair_;
-					double dist;
-
-					Vector3 cam_to_bond;
-					Vector3 cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
-
-					// To iterate over all bonds, we have to iterate over all atoms and then over all their bonds
-					// Unfortunately, this counts each bond twice...
-					AtomIterator ai;
-
-					for (ai=s->beginAtom();+ai;++ai)
+					AtomBondIterator bi;
+					for (bi = ai->beginBond(); +bi; ++bi)
 					{
-						AtomBondIterator bi;
-						for(bi=ai->beginBond();+bi;++bi)
+						if (bi->getPartner(*ai) < &*ai) continue;
+
+						// first point the position vector to the first atom of the bond
+						cam_to_bond = (bi->getFirstAtom()->getPosition() - getStage()->getCamera().getViewPoint());
+						// then add 1/2 * the vector pointing from first to second
+						cam_to_bond += (bi->getSecondAtom()->getPosition() - bi->getFirstAtom()->getPosition())*0.5;
+
+						// compute the angle between the rays Cam->Bond and Cam->clicked point
+						Angle	alpha((float)acos(  (cam_to_bond * cam_to_clickedPoint)
+									/(cam_to_bond.getLength() * cam_to_clickedPoint.getLength())
+									));
+
+						// the distance between the two rays is the sine of the angle between them times the length of Cam->Bond
+						float dist = sin(alpha) * cam_to_bond.getLength();
+
+						// now save bond and distance
+						if (dist < min_dist)
 						{
-							// first point the position vector to the first atom of the bond
-							cam_to_bond = (bi->getFirstAtom()->getPosition() - getStage()->getCamera().getViewPoint());
-							// then add 1/2 * the vector pointing from first to second
-							cam_to_bond += (bi->getSecondAtom()->getPosition() - bi->getFirstAtom()->getPosition())*0.5;
-
-							// compute the angle between the rays Cam->Bond and Cam->clicked point
-							Angle	alpha((float)acos(  (cam_to_bond * cam_to_clickedPoint)
-										/(cam_to_bond.getLength() * cam_to_clickedPoint.getLength())
-										));
-
-							// the distance between the two rays is the sine of the angle between them times the length of Cam->Bond
-							dist  = sin(alpha) * cam_to_bond.getLength();
-
-							// now save bond and distance
-							pair_.first = &(*bi);
-							pair_.second = dist;
-
-							distvec_.push_back(pair_);
+							min_dist = dist;
+							closest = &*bi;
 						}
 					}
 				}
 			}
 
-			// find the atom with minimal distance to the click point
-			std::pair<Bond*, double> minimum;
-			minimum.second = bond_limit_ + 100;
-
-			std::vector< std::pair <Bond*, double> >  ::iterator pair_it = distvec_.begin();	
-			for (; pair_it != distvec_.end(); pair_it++)
-			{
-				if(pair_it->second < minimum.second)
-					minimum = *pair_it;	
-			}	
-
 			//is the minimal distance beyond the threshold?
-			if (minimum.second < bond_limit_)
+			if (min_dist < bond_limit_)
 			{
-				return minimum.first;
+				return closest;
 			}
 
 			return 0;
@@ -639,49 +640,45 @@ namespace BALL
 			// the user.
 			bool refocus = (getMainControl()->getCompositeManager().getNumberOfComposites() == 0);
 			//message to update the representation
-			CompositeMessage *m = 0; 
 	
 			// get all highlighted composites
 			List <Composite * > compositeList = getMainControl()->getMolecularControlSelection(); 
 			List <Composite *>::iterator it = compositeList.begin();
 			
-			AtomContainer* ai = 0;
-			
+			if(compositeList.size() > 1 )
+			{
+				Log.error() <<"Please highlight exactly one AtomContainer for insertion of the created atoms!" << endl;
+				return;
+			}
+		
 			// only one highlighted composite
 			if(compositeList.size() == 1)
 			{
 				// is it an AtomContainer?
-				if(RTTI::isKindOf<AtomContainer>( **it))
+				AtomContainer* ai = dynamic_cast<AtomContainer*>(*it);
+				if (ai == 0)
 				{
-					// Yes? we do not need to create our own system
-					ai = RTTI::castTo<AtomContainer>(**it);
-					ai->insert(atom_);
-			
-					m = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);	
-					notify_(m); 
+					Log.error() <<"Please highlight exactly one AtomContainer for insertion of the created atoms!" << endl;
+					return;
 				}
+
+				// Yes? we do not need to create our own system
+				ai->insert(atom_);
+				getMainControl()->update(*ai, true);
 			}
 			else  // more or less than 1 highlighted
 			{
-				if(compositeList.size() > 1 )
-				{
-					Log.error() <<"Please highlight exactly one AtomContainer for insertion of the created atoms!" << endl;
-				}
-				else
-				{
-					System *system = new System();
-					Molecule* current_molecule = new Molecule();
-					system->insert(*current_molecule);
-					current_molecule->insert(atom_);
-					m = new CompositeMessage(*system, CompositeMessage::NEW_COMPOSITE);	
-					notify_(m); 
-				}	
+				System *system = new System();
+				Molecule* current_molecule = new Molecule();
+				system->insert(*current_molecule);
+				current_molecule->insert(atom_);
+				getMainControl()->insert(*system);
 			}	
 
 			// do we need to refocus the camera?
 			if (refocus)
 			{
-				m = new CompositeMessage(atom_, CompositeMessage::CENTER_CAMERA);
+				CompositeMessage* m = new CompositeMessage(atom_, CompositeMessage::CENTER_CAMERA);
 				notify_(m);
 				
 				//move the mouse to focused position for the draw bond code
@@ -851,6 +848,12 @@ namespace BALL
 		void EditableScene::setEditElementType(int element_number)
 		{
 			editAtomType_=element_number;
+		}
+		
+	  // Get the element for the next insert operations
+		int EditableScene::getEditElementType()
+		{
+			return editAtomType_;
 		}
 
 	}//end of namespace 

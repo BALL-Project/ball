@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editFunctions.C,v 1.1 2005/02/07 17:46:27 anne Exp $
+// $Id: editFunctions.C,v 1.2 2005/02/18 17:57:38 anne Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/editFunctions.h>
@@ -14,11 +14,14 @@ namespace BALL
 			throw()
 			: DockWidget(parent, name),
 				pte_(),
+				edit_operations_(),
 				tab_()
 		{
 			tab_.addTab(&pte_, "Periodic Table of Elements");
+			tab_.addTab(&edit_operations_, "Undo");
 			setGuest(tab_);
 			registerWidget(this);
+		  Log.error() << "Editfunctions " << dynamic_cast<ModularWidget*>(this) << std::endl;
 		}	
 
 		EditFunctions::~EditFunctions()

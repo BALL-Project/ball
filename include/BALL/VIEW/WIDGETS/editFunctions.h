@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: editFunctions.h,v 1.1 2005/02/07 17:46:52 anne Exp $
+// $Id: editFunctions.h,v 1.2 2005/02/18 17:57:52 anne Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_EDITFUNCTIONS_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_VIEW_DIALOGS_PTEDIALOG_H
 #	include <BALL/VIEW/DIALOGS/PTEDialog.h>
+#endif
+
+#ifndef BALL_VIEW_DIALOGS_EDITOPERATIONDIALOG_H
+#	include <BALL/VIEW/DIALOGS/editOperationDialog.h>
 #endif
 
 #include <qtabwidget.h>
@@ -34,6 +38,8 @@ namespace BALL
 
 //			BALL_EMBEDDABLE(DockWidget)
 
+				BALL_EMBEDDABLE(EditFunctions, DockWidget)
+
 				EditFunctions(QWidget* parent = 0, const char *name = 0)
 					throw();
 
@@ -52,6 +58,7 @@ namespace BALL
 
 			protected:
 				PTEDialog pte_;
+				EditOperationDialog edit_operations_;
 				QTabWidget tab_;
 		};
 	}

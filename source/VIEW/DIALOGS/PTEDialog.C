@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTEDialog.C,v 1.1 2005/02/07 13:21:21 anne Exp $
+// $Id: PTEDialog.C,v 1.2 2005/02/18 17:58:46 anne Exp $
 
 #include <BALL/VIEW/DIALOGS/PTEDialog.h>
 #include <BALL/KERNEL/PTE.h>
@@ -9,6 +9,7 @@
 
 #include <qtooltip.h>
 #include <qbuttongroup.h>
+#include <qbutton.h>
 
 namespace BALL
 {
@@ -18,7 +19,8 @@ namespace BALL
 			: PTEDialogData(parent, name, fl),
 				ModularWidget(name)
 		{
-			registerWidget(this);
+			//registerWidget(this);
+			Log.error() << "PTEDialog " << dynamic_cast<ModularWidget*>(this) << std::endl;
 			
 			// iterate over all buttons in the button group
 			int i=1;
@@ -28,13 +30,36 @@ namespace BALL
 			// and since the side groups (???) are left out
 			for (;i<=highest_id;i++)
 			{
-				if (buttonGroup1->find(i) != (QButton*)-1)
+				if (buttonGroup1->find(i) != 0)
 				{
 					QToolTip::add((QWidget*)buttonGroup1->find(i), atomProperties_(i));
 				}
 			}
-		}
+			
+			// colour the current ElementType in PTE
+			
+			button_standard_color_ = buttonGroup1->find(1)->paletteBackgroundColor();
+			EditableScene* scene = EditableScene::getInstance(0);
 
+		  if (scene == 0)
+		  {
+			 Log.error() << "Expected an EditableScene, but found none!" << std::endl;
+		  }
+		  else
+		  {
+			 	int element_type = scene->getEditElementType();
+			 	QButton* button = buttonGroup1->find(element_type);
+
+			 	if (button)
+				{
+					button->setPaletteBackgroundColor(QColor("yellow"));
+				}
+		  }
+
+			
+		}
+	
+				
 		PTEDialog::~PTEDialog()
 			throw()
 		{
@@ -52,7 +77,17 @@ namespace BALL
 		 }
 		 else
 		 {
+			 //recolor old ElementType
+			 QButton* old_button = buttonGroup1->find(scene->getEditElementType());
+
+			 if (old_button)
+				 old_button->setPaletteBackgroundColor(button_standard_color_);
+
+			 //color new ElementType
+			 buttonGroup1->find(elementNumber)->setPaletteBackgroundColor(QColor("yellow"));
+
 			 scene->setEditElementType(elementNumber);
+			 
 		 }
 	 }
 
