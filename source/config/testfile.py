@@ -16,7 +16,7 @@ class test:
 
 	# expressions for use in all files.
 	exp = [\
-		re.compile('.*BAUSTELLE.*'),												#good old BAUSTELLE
+		re.compile('BAUSTELLE'),														#good old BAUSTELLE
 		re.compile('cout'),																	#no cout in BALL!
 		re.compile('cerr'),																	#no cerr in BALL!
 		re.compile('[\s(]+int[\s\(\)\&\*]+'),								#integer values are bad!
@@ -25,6 +25,7 @@ class test:
 		re.compile(';{2}'),																	#;;
 		re.compile('}[\s]*else[\s]*{'),											#} else {
 		re.compile('throw[\s]*Exception::NotImplemented'),  #Exception Not Implemented
+		re.compile('\([\s]*Exception::NotImplemented'),  		#Exception Not Implemented in throw specifier
 		re.compile('[^:]std::endl'),                        #missing :: before std::endl
 		re.compile('\([\s]*bool[\s]*\)'),										#superflous bool cast
 		re.compile('const[\s]*float[\s]*&'),								#no const float references
@@ -34,15 +35,16 @@ class test:
 	# expressions for use in test-files
 	#exp_test = []																				#not yet an idea
 
-	exp_check = [
+	exp_check = [																					#test if check is empty
 		re.compile('RESULT'),
-		re.compile('\w*[^\s]\w*'),
+		re.compile('\A[\s]*\Z'),
 		re.compile('BAUSTELLE')
 	]
 
 	# expressions for use with header-files
 	exp_header = [
 		re.compile('///[\s]*\Z'),														#empty comment
+		re.compile('/\*\*[\s]*\Z'),														#empty comment
 		re.compile('@exception[\s]*NotImplemented'),				#no usefull information
 		re.compile('@param[\s]*{'),													#standard problem => tex error
 		re.compile('@return[\s]*{') 												#standard problem => tex error
@@ -98,7 +100,7 @@ class test:
 				for i in range(len(self.exp_check)):
 					if self.exp_check[i].search(self.line, 0):
 						self.errors = self.errors + 1	
-						self.write('test')		
+						self.write('test ' + `i`)		
 		self.ende()
 
 	def BALL_HEADER_TEST(self):
