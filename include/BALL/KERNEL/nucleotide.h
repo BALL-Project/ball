@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.30 2003/06/30 16:24:44 amoll Exp $
+// $Id: nucleotide.h,v 1.31 2003/06/30 23:00:08 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -12,11 +12,6 @@
 
 #ifndef BALL_KERNEL_NUCLEOTIDEITERATOR_H
 #	include <BALL/KERNEL/nucleotideIterator.h>
-#endif
-
-// testing
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
 #endif
 
  
@@ -198,6 +193,44 @@ namespace BALL
 		char getInsertionCode() const
 			throw();
 
+		/** Prepend an atom at position 0.
+				@param atom, the atom to prepend
+		*/
+		void prepend(Atom& atom)
+			throw();
+
+		/** Append an atom after the last position.
+				@param atom, the atom to append
+		*/
+		void append(Atom& atom)
+			throw();
+
+		/** Insert an atom after the last position.
+				@param atom, the atom to insert
+		*/
+		void insert(Atom& atom)
+			throw();
+
+		/** Insert an atom before a given Composite object.
+				@param atom, the atom to insert
+				@param before, the Composite object to insert before
+		*/
+		void insertBefore(Atom& atom, Composite& before)
+			throw();
+
+		/** Insert an atom after a given Composite object.
+				@param atom, the atom to insert
+				@param after, the Composite object to insert after
+		*/
+		void insertAfter(Atom& atom, Composite& after)
+			throw();
+
+		/** Remove an atom.
+				@param atom the atom to remove
+		*/
+		bool remove(Atom& atom)
+			throw();
+
 		/**	Cut all children of <tt>nucleotide</tt> and prepend them before the children of this instance.
 				@param nucleotide the nucleotide to access
 		*/
@@ -215,22 +248,6 @@ namespace BALL
 		*/
 		void splice(Nucleotide& nucleotide)
 			throw();
-
-#ifdef	BALL_CFG_USING_METHOD_DIRECTIVE
-		using AtomContainer::prepend;
-		using AtomContainer::append;
-		using AtomContainer::insert;
-		using AtomContainer::insertBefore;
-		using AtomContainer::insertAfter;
-		using AtomContainer::remove;
-#else
-		AtomContainer::prepend;
-		AtomContainer::append;
-		AtomContainer::insert;
-		AtomContainer::insertBefore;
-		AtomContainer::insertAfter;
-		AtomContainer::remove;
-#endif
 
 		//@}
 		/**	@name	Predicates 
