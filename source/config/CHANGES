@@ -64,3 +64,4 @@ changed:
   from ModularWidget derived classes no longer have to deregister themselves
 - improved the code for the BALLView termination process
 - fixed core dump in RingPerception Processesor
+- fixed drawing of Boxes

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.44 2004/09/07 13:57:30 amoll Exp $
+// $Id: glRenderer.C,v 1.46 2004/09/07 14:16:13 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -522,20 +522,15 @@ namespace BALL
 			Vector3 v3(box.getRightVector() % box.getHeightVector());
 			v3.normalize();
 
-			float m[16] = {
-									v1.x, v1.y, v1.z, 0,
-									v2.x, v2.y, v2.z, 0,
-									v3.x, v3.y, v3.z, 0,
-									0,0,0,1};
-		 	glLoadMatrixf(m);
-// 			glMultMatrixf(m);
+			float m[16] = { v1.x, v1.y, v1.z, 0,
+											v2.x, v2.y, v2.z, 0,
+											v3.x, v3.y, v3.z, 0,
+											0,0,0,1};
+			glMultMatrixf(m);
 			
-			/*
-			scaleVector3_(Vector3(
-					box.getRightVector().getLength(),
-			 		box.getHeightVector().getLength(),
- 					box.getDepth()));
-				*/
+			glScalef(box.getRightVector().getLength(),
+						 	 box.getHeightVector().getLength(),
+ 							 box.getDepth());
 	
 			GL_boxes_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION 
 										 + drawing_precision_].draw();
