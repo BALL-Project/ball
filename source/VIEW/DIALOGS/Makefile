@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.2 2003/08/26 13:14:50 oliver Exp $
+# $Id: Makefile,v 1.3 2003/08/26 14:57:29 oliver Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -76,7 +76,7 @@ UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 include ../../common.mak
 include .Dependencies
 
-BALL_INCLUDES=$(BALLVIEW_INCLUDES)
+BALL_INCLUDES=$(VIEW_INCLUDES)
 
 $(UIC_SOURCES):	$(UIC_HDR)
 
