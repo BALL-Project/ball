@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.67 2005/03/01 07:33:03 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.68 2005/03/01 09:00:12 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -17,9 +17,9 @@ AC_DEFUN(CF_CHECK_LICENSE,[
 		PAGER=cat
 	fi
 	if test ! -f config.lic ; then
-		${PAGER} LICENSE
+		${PAGER} COPYRIGHT
 		echo " "
-		echo "Do you accept these license terms (y/n)?"
+		echo "Do you accept these terms (y/n)?"
 		answer=""
 		while test "$answer" != "y" -a "$answer" != "n" ; do
 			read answer 

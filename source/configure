@@ -1370,9 +1370,9 @@ fi
 		PAGER=cat
 	fi
 	if test ! -f config.lic ; then
-		${PAGER} LICENSE
+		${PAGER} COPYRIGHT
 		echo " "
-		echo "Do you accept these license terms (y/n)?"
+		echo "Do you accept these terms (y/n)?"
 		answer=""
 		while test "$answer" != "y" -a "$answer" != "n" ; do
 			read answer
