@@ -1,5 +1,5 @@
 # 
-# $Id: Makefile,v 1.6 2004/04/16 11:25:02 amoll Exp $
+# $Id: Makefile,v 1.6.2.1 2004/05/10 12:57:39 amoll Exp $
 #
 #
 # APPLICATIONS/Makefile
@@ -13,7 +13,6 @@ DIRECTORY=APPLICATIONS
 THISLIB=$(LIBNAME)
 
 OPTIONAL_DIRS=\
-	NMRVIEW\
 	BALLVIEW
 
 VIEW_DIRS=$(BALL_HAS_VIEW:true=$(OPTIONAL_DIRS))
