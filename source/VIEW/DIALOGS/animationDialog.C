@@ -198,9 +198,10 @@ void AnimationThread::run()
 
 		for (Size i = 0; i < steps && !ani_->stop_; i++)
 		{
-// 	 	qApp->wakeUpGuiThread();
-//   		qApp->processEvents( 500);
-   	 	msleep(50);
+			while (qApp->hasPendingEvents())
+			{
+   	 		msleep(50);
+			}
 
 			camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
 			camera.setLookUpVector(camera.getLookUpVector() - diff_up);
