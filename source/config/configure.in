@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.148 2001/08/01 01:51:52 oliver Exp $
+dnl    $Id: configure.in,v 1.149 2001/08/02 01:10:34 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1310,7 +1310,7 @@ dnl		for the definition of finite
 dnl
 if test "$OS" = IRIX -o "$OS" = Solaris ; then
 	INCLUDE_IEEEFP=true
-	AC_DEFINE(BALL_INCLUDE_IEEEFP,)
+	BALL_INCLUDE_IEEEFP=true
 fi
 
 dnl 	check for standard C headers
@@ -2179,9 +2179,23 @@ fi
 dnl
 dnl   check whether ieeefp.h does really exist
 dnl
-if test "$INCLUDE_IEEEFP" = true ; then
-	AC_CHECK_HEADERS(ieeefp.h)
-	AC_DEFINE(INCLUDE_IEEEFP,)
+if test "$BALL_INCLUDE_IEEEFP" = true ; then
+	AC_CHECK_HEADERS(ieeefp.h,
+			[BALL_INCLUDE_IEEEFP=true],
+			[BALL_INCLUDE_IEEEFP=false])
+	if test ${BALL_INCLUDE_IEEEFP} = true ; then
+		AC_DEFINE(BALL_INCLUDE_IEEEFP,)
+	fi
+fi
+
+dnl
+dnl   check whether values.h does really exist
+dnl
+AC_CHECK_HEADERS(values.h,
+			[BALL_INCLUDE_VALUES=true],
+			[BALL_INCLUDE_VALUES=false])
+if test ${BALL_INCLUDE_VALUES} = true ; then
+	AC_DEFINE(BALL_INCLUDE_VALUES,)
 fi
 
 dnl
