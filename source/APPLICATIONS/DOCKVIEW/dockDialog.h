@@ -65,7 +65,8 @@ namespace BALL
 				public PreferencesEntry
 		{ 
 				Q_OBJECT
-
+				BALL_EMBEDDABLE(DockDialog,ModularWidget)
+				
 				public:
 				
 				/** if you want to add a new docking algorithm extend enum  

@@ -33,7 +33,8 @@ namespace BALL
 				public PreferencesEntry
 		{ 
 				Q_OBJECT
-
+				BALL_EMBEDDABLE(GeometricFitDialog,ModularWidget)
+				
 				public:
 				
 				/// Constructor

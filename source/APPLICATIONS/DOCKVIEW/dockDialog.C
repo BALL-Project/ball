@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.1 2005/02/15 11:48:05 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.2 2005/02/16 10:24:29 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -298,11 +298,12 @@ namespace BALL
 			// before docking, apply processors, e.g. add hydrogens
 			applyProcessors_();
 			
+			//create docking algorithm object
+			GeometricFit geo_fit = GeometricFit();
+			
 			System* partner1 = new System(*docking_partner1_);
 			System* partner2 = new System(*docking_partner2_);
 			
-			GeometricFit geo_fit(*partner1, *partner2, options_);
-			//GeometricFit geo_fit = GeometricFit();
 			
 			// keep the larger protein in System A and the smaller one in System B
 			if (partner1->countAtoms() < partner2->countAtoms())
@@ -311,8 +312,44 @@ namespace BALL
 				partner1->swap(*partner2);
 			}
 			
-			//geo_fit.setup(*partner1, *partner2, options_);
+			//update mainControl
+			MainControl* main_control = getMainControl();
+			main_control->update(*partner1,true);
+			main_control->update(*partner2,true);
+			
+			/*
+			// keep the larger protein in System A and the smaller one in System B
+			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
+			{
+				// swap the systems
+				docking_partner1_->swap(*docking_partner2_);
+			}
+			
+			
+			//update mainControl
+			MainControl* main_control = getMainControl();
+			main_control->update(*docking_partner1_,true);
+			main_control->update(*docking_partner2_,true);
+			*/
+			
+			geo_fit.setup(*partner1, *partner2, options_);
+			//geo_fit.setup(*docking_partner1_, *docking_partner2_, options_);
 			geo_fit.start();
+			
+		/*	System* partner1 = new System(*docking_partner1_);
+			System* partner2 = new System(*docking_partner2_);
+			
+			GeometricFit geo_fit(*partner1, *partner2, options_);
+	
+			*/
+			
+			
+			ConformationSet rc = geo_fit.getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
+	 		rc.writeDCDFile("docking.dcd");
+
+	 		System docked_system = rc.getSystem();
+			main_control->insert(docked_system);
+			
 			
 			Log.info() << "End of calculate" << std::endl;
 			return true;
@@ -525,7 +562,6 @@ namespace BALL
 					calculate();
 				}
 			}
-			//Log.error() << "Hallo!" << std::endl;
 		}
 		
 		///
