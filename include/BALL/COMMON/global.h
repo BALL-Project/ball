@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.5 2000/10/18 12:39:03 oliver Exp $
+// $Id: global.h,v 1.6 2000/12/08 05:47:07 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -94,9 +94,10 @@ namespace BALL
 	typedef	unsigned char Byte;
 
 	/**	Pointer-sized int type.
-			use this type to convert pointers to printable numbers.
+			This type holds unsigned 64 bit numbers and is used to store pointers
+			in a portable fashion (for both 32bit and 64bit systems).
 	*/
-	typedef BALL_POINTERSIZE_INT PointerInt;
+	typedef BALL_64BIT_UINT_TYPE PointerInt;
 
 	/**	64 bit unsigned integer type.
 			This type is used to read and write pointers to persistent
