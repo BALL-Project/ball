@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.17 2003/11/10 16:51:47 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.18 2003/11/20 01:25:19 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -265,29 +265,6 @@ namespace BALL
 			throw()
 			: ColorProcessor()
 		{
-			Position nr = 0;
-			for (Index red = 100; red < 255; red+=10)
-			{
-				colors_.push_back(ColorRGBA(red,0,0));
-				nr++;
-			}
-			for (Index red = 255; red >= 0; red-=10)
-			{
-				colors_.push_back(ColorRGBA(red,255-red,0));
-				nr++;
-			}
-			for (Index green= 255; green>= 0; green-=10)
-			{
-				colors_.push_back(ColorRGBA(0,green,255-green));
-				nr++;
-			}
-			for (Index p = 0; p < 255; p+=10)
-			{
-				colors_.push_back(ColorRGBA(p,p,255));
-				nr++;
-			}
-
-			max_ = nr;
 		}
 
 		ColorRGBA ResidueNumberColorProcessor::getColor(const Composite* composite)
@@ -319,7 +296,7 @@ namespace BALL
 				}
 			}
 			while (pos > max_) pos = pos - max_;
-			ColorRGBA color = colors_[pos];
+			ColorRGBA color;// = colors_[pos];
 			color.setAlpha(255 - transparency_);
 			return color;
 		}

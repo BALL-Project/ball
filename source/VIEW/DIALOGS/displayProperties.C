@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.42 2003/11/19 21:29:11 amoll Exp $
+// $Id: displayProperties.C,v 1.43 2003/11/20 01:21:47 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -126,6 +126,11 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 	{
 		model_settings_->fetchPreferences(inifile);
 	}
+
+	if (coloring_settings_ != 0)
+	{
+		coloring_settings_->fetchPreferences(inifile);
+	}
 }
 
 void DisplayProperties::getEntry_(INIFile& inifile, const String& key, QComboBox& box)
@@ -163,6 +168,11 @@ void DisplayProperties::writePreferences(INIFile& inifile)
 	if (model_settings_ != 0)
 	{
 		model_settings_->writePreferences(inifile);
+	}
+
+	if (coloring_settings_ != 0)
+	{
+		coloring_settings_->writePreferences(inifile);
 	}
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.14 2003/11/19 12:05:13 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.15 2003/11/20 01:25:47 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -68,8 +68,26 @@ namespace BALL
 				///
 				virtual ColorRGBA getColor(const Composite* composite);
 
+				///
+				void setFirstColor(const ColorRGBA& color) { first_color_ = color;}
+
+				///
+				void setMiddleColor(const ColorRGBA& color) { middle_color_ = color;}
+
+				///
+				void setLastColor(const ColorRGBA& color) { last_color_ = color;}
+
+				///
+				const ColorRGBA& getFirstColor() const { return first_color_;}
+
+				///
+				const ColorRGBA& getMiddleColor() const { return middle_color_;}
+
+				///
+				const ColorRGBA& getLastColor() const { return last_color_;}
+
 			protected:
-				vector<ColorRGBA> colors_;
+				ColorRGBA first_color_, middle_color_, last_color_;
 				Position max_;
 		};
 
