@@ -8,13 +8,7 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-/* 
- *  Constructs a AtomProperties which is a child of 'parent', with the 
- *  name 'name' and widget flags set to 'f' 
- *
- *  The dialog will by default be modeless, unless you set 'modal' to
- *  TRUE to construct a modal dialog.
- */
+
 AtomProperties::AtomProperties( Atom* atom, QWidget* parent,  const char* name, bool modal, WFlags fl )
     : AtomPropertiesData( parent, name, modal, fl ),
 			atom_(atom)
@@ -55,12 +49,9 @@ AtomProperties::AtomProperties( Atom* atom, QWidget* parent,  const char* name, 
 	raise();
 }
 
-/*  
- *  Destroys the object and frees any allocated resources
- */
 AtomProperties::~AtomProperties()
 {
-    // no need to delete child widgets, Qt does it all for us
+  // no need to delete child widgets, Qt does it all for us
 }
 
 /* 
@@ -93,6 +84,8 @@ void AtomProperties::applyClicked()
 	
 	Log.info() << "Values applied to atom." << std::endl;
 	close();
+
+	// Sending of messages to update Scene is done in MolecularControl
 }
 
 /* 
