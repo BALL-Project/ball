@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.17 2001/12/17 11:26:46 oliver Exp $
+// $Id: lineBasedFile.C,v 1.18 2001/12/18 01:14:29 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -273,7 +273,7 @@ namespace BALL
 		int read = 0;
 
 		// make sure the specified section of the string exists
-		if (line_.size() < (start + length))
+		if (getLine().size() >= (start + length))
 		{
 			const Size max_len = 16384;
 			static char buf[max_len + 1];
@@ -285,6 +285,11 @@ namespace BALL
 
 			// ...and try to parse it.
 			read = sscanf(buf, format, ptr);
+		}
+		else
+		{
+			Log.warn() << "LineBasedFile::parseColumnFormat: undefined position while parsing line (" 
+							   << start << "-" << start + length << " in line of length " << getLine().size() << ")" << std::endl;
 		}
 
 		// return true if exactly one entry was read
