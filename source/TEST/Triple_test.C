@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Triple_test.C,v 1.6 2003/06/01 17:06:02 oliver Exp $
+// $Id: Triple_test.C,v 1.7 2003/06/24 14:34:22 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,14 +10,14 @@
 #include <BALL/DATATYPE/triple.h>
 ///////////////////////////
 
-START_TEST(Triple, "$Id: Triple_test.C,v 1.6 2003/06/01 17:06:02 oliver Exp $")
+START_TEST(Triple, "$Id: Triple_test.C,v 1.7 2003/06/24 14:34:22 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-CHECK(Triple::BALL_CREATE(Triple))
+CHECK(BALL_CREATE(Triple))
 	Triple<int, int, int> a(0, 1, 2);
 	Triple<int, int, int>* v_ptr = (Triple<int, int, int>*)a.create();
 	TEST_EQUAL(v_ptr->first, 0)
@@ -25,7 +25,7 @@ CHECK(Triple::BALL_CREATE(Triple))
 RESULT
 
 Triple<int, int, int>* q;
-CHECK(Triple::Triple() throw())
+CHECK(Triple() throw())
 	q = new Triple<int, int, int>;
 	TEST_NOT_EQUAL(0, q);
 	q->first = 1;
@@ -36,7 +36,7 @@ CHECK(Triple::Triple() throw())
 	TEST_EQUAL(q->third, 3)
 RESULT
 
-CHECK(Triple::~Triple() throw())
+CHECK(~Triple() throw())
 	delete q;
 RESULT
 
@@ -45,21 +45,21 @@ my_q.first = 1;
 my_q.second = 2;
 my_q.third = 3;
 
-CHECK(Triple::Triple(const Triple& triple, bool deep = true) throw())
+CHECK(Triple(const Triple& triple, bool deep = true) throw())
 	Triple<int, int, int> q1(my_q);
 	TEST_EQUAL(q1.first, 1)
 	TEST_EQUAL(q1.second, 2)
 	TEST_EQUAL(q1.third, 3)
 RESULT
 
-CHECK(Triple::Triple(const first& new_first, const second& new_second, const third& new_third, const fourth& new_fourth) throw())
+CHECK(Triple(const T1& new_first, const T2& new_second, const T3& new_third) throw())
 	Triple<int, int, int> q1(1, 2, 3);
 	TEST_EQUAL(q1.first, 1)
 	TEST_EQUAL(q1.second, 2)
 	TEST_EQUAL(q1.third, 3)
 RESULT
 
-CHECK(Triple::clear() throw())
+CHECK(void clear() throw())
 	Triple<int, int, int> q1 = Triple<int, int, int>(1, 2, 3);
 	q1.clear();
 	TEST_EQUAL(q1.first, 0)
@@ -67,14 +67,14 @@ CHECK(Triple::clear() throw())
 	TEST_EQUAL(q1.third, 0)
 RESULT
 
-CHECK(Triple::Triple& operator = (const Triple& triple) throw())
+CHECK(const Triple& operator = (const Triple& triple) throw())
 	Triple<int, int, int> q1 = Triple<int, int, int>(1, 2, 3);
 	TEST_EQUAL(q1.first, 1)
 	TEST_EQUAL(q1.second, 2)
 	TEST_EQUAL(q1.third, 3)
 RESULT
 
-CHECK(Triple::set(const first& first, const second& second, const third& third, const fourth& fourth) throw())
+CHECK(void set(const T1& t1, const T2& t2, const T3& t3) throw())
 	Triple<int, int, int> q1;
 	q1.set(1, 2, 3);
 	TEST_EQUAL(q1.first, 1)
@@ -82,7 +82,7 @@ CHECK(Triple::set(const first& first, const second& second, const third& third, 
 	TEST_EQUAL(q1.third, 3)
 RESULT
 
-CHECK(Triple::get(first& first, second& second, third& third, fourth& fourth) const  throw())
+CHECK(void get(T1& first, T2& second, T3& third) const throw())
 	Triple<int, int, int> q1 = Triple<int, int, int>(1, 2, 3);
 	int a, b, c;
 	q1.get(a, b, c);
@@ -91,7 +91,7 @@ CHECK(Triple::get(first& first, second& second, third& third, fourth& fourth) co
 	TEST_EQUAL(c, 3)
 RESULT
 
-CHECK(Triple::bool operator == (const Triple& triple) const  throw())
+CHECK(bool operator == (const Triple& triple) const throw())
 	Triple<int, int, int> q1 = Triple<int, int, int>(1, 2, 3);
 	Triple<int, int, int> q2 = Triple<int, int, int>(1, 2, 3);
 	TEST_EQUAL(q1 == q2, true)
@@ -105,7 +105,7 @@ CHECK(Triple::bool operator == (const Triple& triple) const  throw())
 	TEST_EQUAL(q1 == q2, false)
 RESULT
 
-CHECK(Triple::bool operator != (const Triple& triple) const  throw())
+CHECK(bool operator != (const Triple& triple) const throw())
 	Triple<int, int, int> q1 = Triple<int, int, int>(1, 2, 3);
 	Triple<int, int, int> q2 = Triple<int, int, int>(1, 2, 3);
 	TEST_EQUAL(q1 != q2, false)

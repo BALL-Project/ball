@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Substring_test.C,v 1.3 2002/12/18 16:00:41 sturm Exp $
+// $Id: Substring_test.C,v 1.4 2003/06/24 14:31:42 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: Substring_test.C,v 1.3 2002/12/18 16:00:41 sturm Exp $")
+START_TEST(String,"$Id: Substring_test.C,v 1.4 2003/06/24 14:31:42 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,22 +21,16 @@ using std::string;
 
 // Substring class....
 Substring* ptr = 0;
-CHECK(Substring::Substring())
+CHECK(Substring() throw())
 	ptr = new Substring;
 	TEST_NOT_EQUAL(ptr, 0)
 RESULT
 
-CHECK(Substring::~Substring())
+CHECK(~Substring() throw())
 	delete ptr;
 RESULT
 
-CHECK(Substring::Substring(String&))
-	String s("abcdef");
-	Substring sub(s);
-	TEST_EQUAL(sub, s)
-RESULT
-
-CHECK(Substring::Substring(Subtring&))
+CHECK(Substring(const Substring& substring, bool deep = true) throw())
 	String s = "abcdef";
 	Substring sub(s);
 	Substring sub2(sub);
@@ -55,7 +49,7 @@ String test_string;
 String s5 = "abcdef";
 String s4;
 
-CHECK(Substring::Substring(String&, Index, Size))
+CHECK(Substring(const String& string, Index from = 0, Size len = String::EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	Substring sub(s5, 1);
 	TEST_EQUAL(sub, "bcdef")
 	Substring sub2(s5, 2, 1);
@@ -75,7 +69,7 @@ CHECK(Substring::~Substring())
 	delete sub;
 RESULT
 
-CHECK(Substring::create(bool))
+CHECK(BALL_CREATE_DEEP(Substring))
 	Substring sub(s5);
 	Substring* sub2 = (Substring*)sub.create(true);
 	TEST_EQUAL(sub, *sub2)
@@ -85,7 +79,7 @@ CHECK(Substring::create(bool))
 	delete sub2;
 RESULT
 
-CHECK(Substring::destroy())
+CHECK(void destroy() throw())
 	String test_destroy("abcdefghij");
 	Substring sub(test_destroy, 3, 3);
 	TEST_EQUAL(sub.isBound(), true)
@@ -95,7 +89,7 @@ CHECK(Substring::destroy())
 	TEST_EQUAL(test_destroy, "abcghij")
 RESULT
 
-CHECK(Substring::operator String ())
+CHECK(operator String() const throw(Substring::UnboundSubstring))
 	Substring sub(s5);
 	String s6 = (String)sub;
 	TEST_EQUAL(s6, s5)
@@ -104,43 +98,43 @@ CHECK(Substring::operator String ())
 	TEST_EQUAL(s6, "")
 RESULT
 
-CHECK(Substring::toString())
+CHECK(String toString() const throw(Substring::UnboundSubstring))
 	Substring sub(s5);
 	String s6 = sub.toString();
 	TEST_EQUAL(s6, s5)
 RESULT
 
-CHECK(Substring::bind(const String& string, Index from = 0, Size len = string::npos))
+CHECK(Substring& bind(const String& string, Index from = 0, Size len = String::EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	Substring sub;
 	sub.bind(ABCDEF, 1, 1);
 	TEST_EQUAL(sub, "B")
 RESULT
 
-CHECK(Substring::bind(const Substring& substring, Index from = 0, Size len = string::npos))
+CHECK(Substring& bind(const Substring& substring, Index from = 0, Size len = String::EndPos) throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	Substring sub;
 	sub.bind(ABCDEF, 1, 1);
 	TEST_EQUAL(sub, "B")
 RESULT
 
-CHECK(Substring::unbind())
+CHECK(void unbind() throw())
 	Substring sub;
 	sub.bind(test_sub1, 1, 1);
 	sub.unbind();
 	TEST_EQUAL(sub.getBoundString(), 0)
 RESULT
 
-CHECK(Substring::getBoundString())
+CHECK(String* getBoundString() throw())
 	Substring sub;
 	sub.bind(test_sub1, 1, 1);
 	TEST_EQUAL(sub.getBoundString(), &ABCDEF)
 RESULT
 
-CHECK(Substring::getBoundString() const )
+CHECK(const String* getBoundString() const throw())
 	String* p = test_sub1.getBoundString();
 	TEST_EQUAL(p, &ABCDEF)
 RESULT
 
-CHECK(Substring::set(const String& string))
+CHECK(void set(const String& string) throw(Substring::UnboundSubstring))
 	test_string = "";
 	test_sub1.bind(test_string);
 	test_sub1.set(ABCDEF);
@@ -148,7 +142,7 @@ CHECK(Substring::set(const String& string))
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.set(ABCDEF))	
 RESULT
 
-CHECK(Substring::set(const Substring& s))
+CHECK(void set(const Substring& s) throw(Substring::UnboundSubstring))
 	test_string = "";
 	test_sub1.bind(test_string);
 	test_sub2.bind(ABCDEF);
@@ -158,7 +152,7 @@ CHECK(Substring::set(const Substring& s))
 	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1.set(empty_sub))	
 RESULT
 
-CHECK(Substring::set(const char* char_ptr, Size size = string::npos))
+CHECK(void set(const char* char_ptr, Size size = String::EndPos) throw(Substring::UnboundSubstring, Exception::NullPointer, Exception::SizeUnderflow))
 	String s = "AB12CDEF";
 	Substring sub(s, 2, 2);
 	TEST_EQUAL(sub, "12")
@@ -170,7 +164,7 @@ CHECK(Substring::set(const char* char_ptr, Size size = string::npos))
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.set(s))	
 RESULT
 
-CHECK(Substring::Substring& operator = (const String& string))
+CHECK(bool operator == (const String& string) const throw(Substring::UnboundSubstring))
 	test_string = "";
 	test_sub1.bind(test_string);
 	test_sub1 = ABCDEF;
@@ -178,7 +172,7 @@ CHECK(Substring::Substring& operator = (const String& string))
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub = ABCDEF)	
 RESULT
 
-CHECK(Substring::Substring& operator = (const Substring& substring))
+CHECK(const Substring& operator = (const Substring& substring) throw(Substring::UnboundSubstring))
 	test_string = "";
 	test_sub1.bind(test_string);
 	test_sub1 = ABCDEF_sub;
@@ -191,7 +185,7 @@ CHECK(Substring::Substring& operator = (const Substring& substring))
 	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub2 = test_sub1)
 RESULT
 
-CHECK(Substring::Substring& operator = (const char* char_ptr))
+CHECK(const Substring& operator = (const char* char_ptr) throw(Substring::UnboundSubstring, Exception::NullPointer))
 	test_string = "";
 	test_sub1.bind(test_string);
 	test_sub1 = char1;
@@ -200,7 +194,7 @@ CHECK(Substring::Substring& operator = (const char* char_ptr))
 	TEST_EXCEPTION(Exception::NullPointer, test_sub1 = 0)	
 RESULT
 
-CHECK(Substring::c_str())
+CHECK(char* c_str() throw(Substring::UnboundSubstring))
 	test_string = "abcdef";
 	test_sub1.bind(test_string);
 	test_sub1.c_str()[0] = 'A';
@@ -208,33 +202,33 @@ CHECK(Substring::c_str())
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.c_str()[0] = 'A')	
 RESULT
 
-CHECK(Substring::c_str() const )
+CHECK(const char* c_str() const throw(Substring::UnboundSubstring))
 	const char*	c1 = ABCDEF_sub.c_str();
 	const char*	c2 = "ABCDEF";
 	TEST_EQUAL(strcmp(c1, c2), 0)
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.c_str())	
 RESULT
 
-CHECK(Substring::getFirstIndex() const )
+CHECK(Index getFirstIndex() const throw(Substring::UnboundSubstring))
 	String temp = "AAAA";
 	test_sub1.bind(temp, 2, 1);
 	TEST_EQUAL(test_sub1.getFirstIndex(), 2)
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.getFirstIndex())	
 RESULT
 
-CHECK(Substring::getLastIndex() const )
+CHECK(Index getLastIndex() const throw(Substring::UnboundSubstring))
 	String temp = "AAAA";
 	test_sub1.bind(temp, 1, 2);
 	TEST_EQUAL(test_sub1.getLastIndex(), 2)
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.getLastIndex())	
 RESULT
 
-CHECK(Substring::size() const )
+CHECK(Size size() const throw())
 	TEST_EQUAL(ABCDEF_sub.size(), 6)
 	TEST_EQUAL(empty_sub.size(), 0)
 RESULT
 
-CHECK(Substring::char& operator [] (Index index))
+CHECK(char& operator [] (Index index) throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow))
 	test_string = "ABCDEF";
 	test_sub1.bind(test_string);
 	test_sub1[0] = 'a';
@@ -246,35 +240,35 @@ CHECK(Substring::char& operator [] (Index index))
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub[0] = 'F')	
 RESULT
 
-CHECK(Substring::char operator [] (Index index) const )
+CHECK(char operator [] (Index index) const throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow))
 	const char c = abcdef_sub[0];
 	TEST_EQUAL(c, 'a')
 	TEST_EQUAL(abcdef_sub[-1], 'f')
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub[0])	
 RESULT
 
-CHECK(Substring::toLower())
+CHECK(Substring& toLower() throw(Substring::UnboundSubstring))
 	test_string = abcdef + ABCDEF + "1";
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1.toLower(), "abcdefabcdef1")
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.toLower())	
 RESULT
 
-CHECK(Substring::toUpper())
+CHECK(Substring& toUpper() throw(Substring::UnboundSubstring))
 	test_string = abcdef + ABCDEF + "1";
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1.toUpper(), "ABCDEFABCDEF1")
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.toUpper())	
 RESULT
 
-CHECK(Substring::isBound() const )
+CHECK(bool isBound() const throw())
 	test_sub1.unbind();
 	TEST_EQUAL(test_sub1.isBound(), false)
 	test_sub1.bind(ABCDEF, 1, 1);
 	TEST_EQUAL(test_sub1.isBound(), true)
 RESULT
 
-CHECK(Substring::isEmpty() const )
+CHECK(bool isEmpty() const throw())
 	test_string = "";
 	test_sub1.bind(test_string);
 	test_string = "A";
@@ -283,7 +277,7 @@ CHECK(Substring::isEmpty() const )
 	TEST_EQUAL(test_sub1.isEmpty(), true)
 RESULT
 
-CHECK(Substring::bool operator == (const Substring& substring) const )
+CHECK(bool operator == (const Substring& substring) const throw(Substring::UnboundSubstring))
 	test_sub1.unbind();
 	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 == test_sub2)	
 	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub2 == test_sub1)	
@@ -297,7 +291,7 @@ CHECK(Substring::bool operator == (const Substring& substring) const )
 	TEST_EQUAL(test_sub1 == test_sub2, false)
 RESULT
 
-CHECK(Substring::bool operator != (const Substring& substring) const )
+CHECK(bool operator != (const Substring& substring) const throw(Substring::UnboundSubstring))
 	test_sub1.unbind();
 	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 != test_sub2)	
 	TEST_EXCEPTION(Substring::UnboundSubstring,  test_sub2 != test_sub1)	
@@ -311,7 +305,7 @@ CHECK(Substring::bool operator != (const Substring& substring) const )
 	TEST_EQUAL(test_sub1 != test_sub2, true)
 RESULT
 
-CHECK(Substring::bool operator == (const String& string) const )
+CHECK(const Substring& operator = (const String& string) throw(Substring::UnboundSubstring))
 	test_string = "XABCDEFG";
 	test_sub1.bind(test_string, 1, 6);
 	TEST_EQUAL(test_sub1 == ABCDEF, true)
@@ -321,7 +315,7 @@ CHECK(Substring::bool operator == (const String& string) const )
 	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 == ABCDEF)	
 RESULT
 
-CHECK(Substring::bool operator != (const String& string) const )
+CHECK(friend bool operator != (const String& string, const Substring& substring) throw(Substring::UnboundSubstring))
 	test_string = "XABCDEFG";
 	test_sub1.bind(test_string, 1, 6);
 	TEST_EQUAL(test_sub1 != ABCDEF, false)
@@ -331,7 +325,7 @@ CHECK(Substring::bool operator != (const String& string) const )
 	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 != ABCDEF)	
 RESULT
 
-CHECK(Substring::bool operator == (const String& string, const Substring& substring))
+CHECK(friend bool operator == (const String& string, const Substring& substring) throw(Substring::UnboundSubstring))
 	test_string = "XABCDEFG";
 	test_sub1.bind(test_string, 1, 6);
 	TEST_EQUAL(ABCDEF == test_sub1, true)
@@ -340,7 +334,7 @@ CHECK(Substring::bool operator == (const String& string, const Substring& substr
 	TEST_EXCEPTION(Substring::UnboundSubstring, ABCDEF == empty_sub)	
 RESULT
 
-CHECK(Substring::bool operator != (const String& string, const Substring& substring))
+CHECK(bool operator != (const String& string) const throw(Substring::UnboundSubstring))
 	test_string = "XABCDEFG";
 	test_sub1.bind(test_string, 1, 6);
 	TEST_EQUAL(ABCDEF != test_sub1, false)
@@ -349,7 +343,7 @@ CHECK(Substring::bool operator != (const String& string, const Substring& substr
 	TEST_EXCEPTION(Substring::UnboundSubstring, ABCDEF != empty_sub)	
 RESULT
 
-CHECK(Substring::bool operator == (const char* char_ptr) const )
+CHECK(bool operator == (const char* char_ptr) const throw(Substring::UnboundSubstring, Exception::NullPointer))
 	test_string = "XABCDEFG";
 	test_sub1.bind(test_string, 1, 6);
 	TEST_EQUAL(test_sub1 == char1, true)
@@ -361,7 +355,7 @@ CHECK(Substring::bool operator == (const char* char_ptr) const )
 	TEST_EXCEPTION(Exception::NullPointer, test_sub1 == c)	
 RESULT
 
-CHECK(Substring::bool operator != (const char* char_ptr) const )
+CHECK(bool operator != (const char* char_ptr) const throw(Substring::UnboundSubstring, Exception::NullPointer))
 	test_string = "XABCDEFG";
 	test_sub1.bind(test_string, 1, 6);
 	TEST_EQUAL(test_sub1 != char1, false)
@@ -373,7 +367,7 @@ CHECK(Substring::bool operator != (const char* char_ptr) const )
 	TEST_EXCEPTION(Exception::NullPointer, test_sub1 != c)	
 RESULT
 
-CHECK(Substring::bool operator == (char c) const )
+CHECK(bool operator == (char c) const throw(Substring::UnboundSubstring))
 	test_string = "XABCDEFG";
 	test_sub1.bind(test_string, 1, 1);
 	char c = 'A';
@@ -384,7 +378,7 @@ CHECK(Substring::bool operator == (char c) const )
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub == c)	
 RESULT
 
-CHECK(Substring::bool operator != (char c) const )
+CHECK(bool operator != (char c) const throw(Substring::UnboundSubstring))
 	test_string = "XABCDEFG";
 	test_sub1.bind(test_string, 1, 1);
 	char c = 'A';
@@ -399,7 +393,7 @@ String filename;
 using std::ofstream;
 using std::ios;
 
-CHECK(std::ostream& operator << (std::ostream& s, const Substring& substring))
+CHECK(friend std::ostream& operator << (std::ostream& s, const Substring& substring) throw())
 	NEW_TMP_FILE(filename)
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	test_sub1.bind(ABCDEF, 1, 4);
@@ -411,7 +405,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const Substring& substring))
 	outstr2.close();
 RESULT
 
-CHECK(Substring::isValid() const )
+CHECK(bool isValid() const throw())
 	TEST_EQUAL(test_sub1.isValid(), true)
 	test_sub1.unbind();
 	TEST_EQUAL(test_sub1.isValid(), false)
@@ -419,7 +413,7 @@ CHECK(Substring::isValid() const )
 	TEST_EQUAL(test_sub1.isValid(), true)
 RESULT
 
-CHECK(Substring::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw(Substring::UnboundSubstring))
 	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), ios::out);
 	test_sub1.bind(ABCDEF, 1, 4);
@@ -431,12 +425,13 @@ CHECK(Substring::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	outfile2.close();
 RESULT
 
-CHECK(String::operator Substring())
-	s4 = "abcdef";
-	Substring sub((Substring)s4);
-	TEST_EQUAL(sub.toString(), s4)
+CHECK(void clear() throw())
+	Substring sub(s5, 1);
+	TEST_EQUAL(sub, "bcdef")
+	sub.clear();
+	TEST_EQUAL(sub.isBound(), false)
+	TEST_EXCEPTION(Substring::UnboundSubstring, sub.c_str())
 RESULT
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
