@@ -1,4 +1,4 @@
-// $Id: Function_test.C,v 1.4 2001/03/09 14:35:01 anker Exp $
+// $Id: Function_test.C,v 1.5 2001/03/09 16:05:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Function_test.C,v 1.4 2001/03/09 14:35:01 anker Exp $")
+START_TEST(class_name, "$Id: Function_test.C,v 1.5 2001/03/09 16:05:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -540,6 +540,7 @@ CHECK(SquareFunction::operator () (DataType x))
 	MutableConstant<> c3(4711.0);
 	SquareFunction<MutableConstant<> > sq1;
 	sq1.setFunction(c3);
+	PRECISION(1.0)
 	TEST_REAL_EQUAL(sq1.operator() (13), 22193521)
 RESULT
 
@@ -608,6 +609,7 @@ CHECK(CubicFunction::operator () (DataType x))
 	MutableConstant<> c3(11.5);
 	CubicFunction<MutableConstant<> > cu1;
 	cu1.setFunction(c3);
+	PRECISION(0.001)
 	TEST_REAL_EQUAL(cu1.operator() (13), 1520.875)
 RESULT
 
@@ -639,7 +641,7 @@ CHECK(MutablePower::~MutablePower())
 	delete mpiprocal_pointer;
 RESULT
 
-CHECK(MutablePower::MutablePower(const mp))
+CHECK(MutablePower::MutablePower(const MutablePower& mp))
 	MutableConstant<> c1(3.0);
 	MutablePower<MutableConstant<> > mp1;
 	mp1.setFunction(c1);
