@@ -117,7 +117,7 @@ namespace BALL
 
 		/** Like search above, but stop search when coming to a line staring with stop
 		*/
-		bool search(const String& text, const String& stop, bool return_to_point = false)
+		bool search(const String& text, const String& stop, bool return_to_point)
 			throw(LineBasedFileError);
 
 		/** Go to a given line.
@@ -149,8 +149,8 @@ namespace BALL
 			const throw();
 
 		/// Return the position of line_ in data or -1 if it does not exist in data
-		Index switchString(const std::vector<String>& data) const 
-			throw();
+		Index switchString(const std::vector<String>& data) 
+			const throw();
 
 		//_@}
 
