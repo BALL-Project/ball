@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.10 2000/03/28 15:34:46 oliver Exp $
+// $Id: support.C,v 1.11 2000/07/06 14:44:09 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -301,12 +301,12 @@ namespace BALL
 			// Initialize HashGrid for storing atoms of system_A
 			HashGrid3<Atom*> grid(box.a - vector, box.b + vector, distance);
 
-			::BALL::AtomIterator atom_it;
 
 			// Insert the atoms into the hash grid
+			AtomIterator atom_it;
 			for (atom_it = system_A.beginAtom(); +atom_it; ++atom_it) 
 			{
-				grid.insert((*atom_it).getPosition(),&(*atom_it));
+				grid.insert(atom_it->getPosition(), &*atom_it);
 			}
 
 			Molecule* old_molecule = 0;
@@ -324,19 +324,23 @@ namespace BALL
 			// the center of gravity is in the box. If so, the molecule will be inserted in system_A:
 	 
 			atom_it = system_B.beginAtom();
-			old_molecule = (*atom_it).getMolecule();
+			old_molecule = atom_it->getMolecule();
 			for (	; +atom_it; ++atom_it) 
 			{
 				// Test if a new molecule is reached and if the old can be inserted into sytemA
 
-				new_molecule = (*atom_it).getMolecule();
-				if (new_molecule != old_molecule) {
-					if (add == true) {
-						if (atom_counter > 0 && mass != 0) {
+				new_molecule = atom_it->getMolecule();
+				if (new_molecule != old_molecule) 
+				{
+					if (add == true) 
+					{
+						if (atom_counter > 0 && mass != 0) 
+						{
 							center_of_gravity /= mass;
 							if (center_of_gravity.x >= box.a.x && center_of_gravity.x <= box.b.x &&
 									center_of_gravity.y >= box.a.y && center_of_gravity.y <= box.b.y &&
-									center_of_gravity.z >= box.a.z && center_of_gravity.z <= box.b.z ) {
+									center_of_gravity.z >= box.a.z && center_of_gravity.z <= box.b.z ) 
+							{
 										system_A.insert(*new Molecule(*old_molecule));
 										mol_counter++;
 							}
@@ -358,7 +362,7 @@ namespace BALL
 				HashGridBox3<Atom*>::DataIterator data_it;
 				Vector3 position = (*atom_it).getPosition();
 
-				float atomic_mass = (*atom_it).getElement().getAtomicWeight();
+				float atomic_mass = atom_it->getElement().getAtomicWeight();
 				center_of_gravity += (atomic_mass * position);
 				mass += atomic_mass; 
 				atom_counter++;
@@ -369,7 +373,7 @@ namespace BALL
 				{	
 					for (box_it = hbox->beginBox(); +box_it && add; ++box_it)
 					{
-						for (data_it = (*box_it).beginData(); +data_it && add ; ++data_it)
+						for (data_it = box_it->beginData(); +data_it && add ; ++data_it)
 						{
 							if ((position.getSquareDistance((*data_it)->getPosition())) < square_distance)
 							{
@@ -379,6 +383,7 @@ namespace BALL
 					}
 				}
 			}
+
 			return(mol_counter);
 		}
 
