@@ -1,11 +1,11 @@
-// $Id: Angle_test.C,v 1.14 2000/07/26 16:49:46 amoll Exp $
+// $Id: Angle_test.C,v 1.15 2001/01/21 21:27:27 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.14 2000/07/26 16:49:46 amoll Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.15 2001/01/21 21:27:27 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -44,6 +44,11 @@ RESULT
 
 Angle a = Angle(0.5), b;
 
+CHECK(clear())
+	Angle a = Angle(0.5);
+	a.clear();
+	TEST_REAL_EQUAL(a, 0)  
+RESULT
 
 CHECK(TAngle::bool operator == (const TAngle& angle) const )
 	b = Angle(a);

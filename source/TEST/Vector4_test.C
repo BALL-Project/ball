@@ -1,11 +1,11 @@
-// $Id: Vector4_test.C,v 1.16 2000/12/22 20:19:33 amoll Exp $
+// $Id: Vector4_test.C,v 1.17 2001/01/21 21:25:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.16 2000/12/22 20:19:33 amoll Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.17 2001/01/21 21:25:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,6 +28,14 @@ CHECK(~TVector4();)
 	v = new Vector4();
 	delete v;
 RESULT		
+
+CHECK(clear())
+	TVector4 v1(1, 2, 3, 4);
+	TVector4 v2;
+	v2.set(0, 0, 0,0 );
+	v1.clear();
+	TEST_EQUAL(v1, v2)
+RESULT
 
 Vector4 v;
 Vector4 v1;
