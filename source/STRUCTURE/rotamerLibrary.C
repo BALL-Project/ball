@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.C,v 1.16 2001/12/17 01:30:27 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.16.4.1 2002/05/12 13:30:09 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -535,7 +535,7 @@ namespace BALL
 		Vector3	v1(0.0,0.0,0.0);
 		Vector3 v2(1.0,0.0,0.0);
 		Vector3 v3(0.0,1.0,0.0);
-		Matrix4x4 M = mapper.matchPoints_(a2, a3, a1, v1, v2, v3);
+		Matrix4x4 M = mapper.matchPoints(a2, a3, a1, v1, v2, v3);
 		// Apply this transformation to all atoms of the residue
 		proc.setTransformation(M);
 		side_chain_.apply(proc); 
@@ -674,7 +674,7 @@ namespace BALL
 		StructureMapper	mapper;
 
 		// Calculate the transformation
-		Matrix4x4 M = mapper.matchPoints_(a1,a2,a3,z1,z2,z3);
+		Matrix4x4 M = mapper.matchPoints(a1,a2,a3,z1,z2,z3);
 	
 		// Apply the transformation to side_chain
 		proc.setTransformation(M);
