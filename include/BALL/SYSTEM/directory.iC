@@ -125,3 +125,4 @@ bool Directory::desynchronize_(bool result1)
   backup_path_ = "";
 	return (result1 && result2);
 }
+
