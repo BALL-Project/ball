@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.2 2003/09/19 18:17:59 amoll Exp $
+// $Id: datasetControl.C,v 1.3 2003/09/19 23:54:14 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -152,7 +152,13 @@ void DatasetControl::onNotify(Message *message)
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "DatasetControl "<<this<<  " onNotify " << message << std::endl;
 #endif
-	if (RTTI::isKindOf<CompositeMessage>(*message))
+	if (RTTI::isKindOf<RegularData3DMessage>(*message))
+	{
+		RegularData3DMessage* ntm = RTTI::castTo<RegularData3DMessage>(*message);
+		insertGrid_(ntm->getRegularData3D(), *(System*)ntm->getComposite(), ntm->getCompositeName());
+		return;
+	}
+	else if (RTTI::isKindOf<CompositeMessage>(*message))
   {
     CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
 		if (!composite_message->getType() == CompositeMessage::REMOVED_COMPOSITE) return;
@@ -173,12 +179,6 @@ void DatasetControl::onNotify(Message *message)
 	{
 		NewTrajectoryMessage* ntm = RTTI::castTo<NewTrajectoryMessage>(*message);
 		insertTrajectory_(ntm->getTrajectoryFile(), *(System*)ntm->getComposite());
-		return;
-	}
-	else if (RTTI::isKindOf<RegularData3DMessage>(*message))
-	{
-		RegularData3DMessage* ntm = RTTI::castTo<RegularData3DMessage>(*message);
-		insertGrid_(ntm->getRegularData3D(), *(System*)ntm->getComposite(), ntm->getCompositeName());
 		return;
 	}
 }
