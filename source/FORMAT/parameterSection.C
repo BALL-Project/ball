@@ -1,7 +1,9 @@
-// $Id: parameterSection.C,v 1.14 2001/03/10 20:40:11 amoll Exp $
+// $Id: parameterSection.C,v 1.15 2001/03/11 21:02:11 anker Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>
+
+using namespace std;
 
 namespace BALL 
 {
