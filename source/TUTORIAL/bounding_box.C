@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bounding_box.C,v 1.3 2004/02/19 10:50:18 oliver Exp $
+// $Id: bounding_box.C,v 1.4 2004/02/19 21:27:06 amoll Exp $
 // molview tutorial example
 // ------------------------
 // create a processor that computes the bounding box of a molecular structure
@@ -13,6 +13,13 @@
 #include <BALL/common.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/WIDGETS/geometricControl.h>
+#include <BALL/VIEW/WIDGETS/molecularControl.h>
+
+#include <qapplication.h>
 
 // include our new processor
 #include "glBoundingBoxModel.h"
@@ -21,20 +28,52 @@ using namespace BALL;
 using namespace BALL::VIEW;
 using namespace std;
 
-int main()
+class MyMainframe
+  : public MainControl
 {
-	// read a molecule from a file
-	HINFile infile("bounding_box_example.hin");
-	System system;
-	infile >> system;
-	infile.close();
+  public:
+    MyMainframe(QWidget* parent = 0, const char* name = 0)
+			: MainControl(parent, name)
+    {
+      Scene* scene = new Scene(this, "3D View");
+      scene->setMinimumSize(10, 10);
+      setCentralWidget(scene);
 
-	// apply the bounding box processor
-	GLBoundingBoxModel bb_processor;
-	system.apply(bb_processor);
+      GeometricControl* geometric_control_ = new GeometricControl(this, "Representations");
+			CHECK_PTR(geometric_control_);
 
-	// TODO
-	// generate some output
-	cout << "Bounding Box: " << endl;
+// 			MolecularControl* mc = new MolecularControl(this, "MolecularControl");
+// 			CHECK_PTR(mc);
+    }
+};
+
+int main(int argc, char **argv)
+{
+  QApplication application(argc, argv);
+  MyMainframe mainframe;
+  application.setMainWidget(&mainframe);
+	// 	mainframe.registerThis();
+  // start the application
+  mainframe.show();
+  // read a molecule from a file
+  HINFile infile("bounding_box_example.hin") ;
+  System* system = new System();
+  infile >> *system;
+  infile.close();
+ 	mainframe.insert(*system);
+
+  // apply the bounding box processor
+  GLBoundingBoxModel bb_processor;
+	bb_processor.setColor(ColorRGBA(255,255,255));
+  system->apply(bb_processor);
+  Representation* rep = new Representation();
+	List<GeometricObject*>::Iterator it = bb_processor.getGeometricObjects().begin();
+	for (;it != bb_processor.getGeometricObjects().end(); ++it)
+	{
+		rep->insert(**it);
+	}
+  mainframe.insert(*rep);
+
+	return application.exec();
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBoundingBoxModel.C,v 1.3 2004/02/19 10:50:18 oliver Exp $
+// $Id: glBoundingBoxModel.C,v 1.4 2004/02/19 21:27:06 amoll Exp $
 // molview tutorial example
 // ------------------------
 // create a processor that computes the bounding box of a molecular structure
@@ -65,17 +65,18 @@ namespace BALL
 
 			// create a SimpleBox with the boundaries of the calculated box and set
 			// its properties with help from MolecularInformation
-			SimpleBox* pbox = new SimpleBox;
-			*pbox == bbox_;
+			SimpleBox* pbox = new SimpleBox();
+			pbox->a = bbox_.a ;
+ 			pbox->b = bbox_.b;
 			pbox->setColor(color_);
 			pbox->setName(String("BoundingBox of ")
 										+ molecular_information.getTypeName()
 										+ String(" (")
 										+ molecular_information.getName()
 										+ String(")"));
+			pbox->setColor(color_);
 
-			// append the generated box to the composite
-			root->appendChild(*pbox);
+			geometric_objects_.push_back(pbox);
 
 			// TODO
 			// move that to the main program
@@ -104,7 +105,7 @@ namespace BALL
 			Atom *atom = RTTI::castTo<Atom>(composite);
 
 			// Create a three dimensional Box defined by the atom position
-			Box3 bbox(atom->getPosition(), atom->getPosition());
+			SimpleBox3 bbox(atom->getPosition(), atom->getPosition());
 
 			// if we just started, use the just generated box as starting point, else
 			// join it with the previously calculated one to create a box containing all
