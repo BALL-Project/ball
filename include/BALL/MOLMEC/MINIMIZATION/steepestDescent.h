@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.21 2004/02/23 18:06:15 anhi Exp $
+// $Id: steepestDescent.h,v 1.22 2004/02/23 19:41:31 anhi Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -42,37 +42,6 @@ namespace BALL
 	{
 
 		public:
-
-		/**	@name	Options definitions
-		*/
-		//@{
-
-		/**  Options names
-		*/
-		struct Option
-		{
-			/**	Constant for the maximum of steps in an iteration
-			*/
-			static const char* MAXIMAL_NUMBER_OF_ITERATIONS;
-
-			/**	String constant for the maximum RMS gradient needed for convergence
-			*/
-			static const char* MAX_GRADIENT;
-
-    };
-
-		struct Default
-		{
-			/**	Default value for the maximum of steps in an iteration
-			*/
-			static Size MAXIMAL_NUMBER_OF_ITERATIONS;
-
-			/**	Default value for the maximum RMS gradient (termination condition)
-			*/
-			static float MAX_GRADIENT;
-		};
-
-		//@}
 
 		/**	@name	Constructors and Destructors	
 		*/

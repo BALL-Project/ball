@@ -1,23 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.21 2004/02/09 10:46:18 anhi Exp $
+// $Id: steepestDescent.C,v 1.22 2004/02/23 19:41:43 anhi Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/COMMON/limits.h>
 
-//#define BALL_DEBUG
-#undef BALL_DEBUG
+#define BALL_DEBUG
+//#undef BALL_DEBUG
 
 using namespace std;
 
 namespace BALL
 {
-	Size SteepestDescentMinimizer::Default::MAX_STEPS = 6;
-	const char *SteepestDescentMinimizer::Option::MAX_STEPS = "max_steps";
-
 	// default constructor
 	 SteepestDescentMinimizer::SteepestDescentMinimizer()
 		:	EnergyMinimizer(),
@@ -110,8 +107,8 @@ namespace BALL
 	bool SteepestDescentMinimizer::specificSetup()
 	{
 		maximal_number_of_iterations_ = (Size)options.setDefaultInteger
-			(SteepestDescentMinimizer::Option::MAX_STEPS, 
-			 (long)SteepestDescentMinimizer::Default::MAX_STEPS);
+			(SteepestDescentMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS,
+			 (long)SteepestDescentMinimizer::Default::MAXIMAL_NUMBER_OF_ITERATIONS);
 
 		return true;
 	}
@@ -141,6 +138,8 @@ namespace BALL
 			setNumberOfIterations(0);
 			same_energy_counter_ = 0;
 		}
+
+	Log.info() << getMaxNumberOfIterations() << " maxnum" << std::endl;
 		Size max_iterations = std::min(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
 		
 		LineSearch line_search(*this);
@@ -149,13 +148,18 @@ namespace BALL
 		// Some aliases
 		AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
 
-		// Initial step size:
-		double initial_step = 1.0;
-		step_ = initial_step;
-
 		// Compute initial energy and gradient.
 		updateEnergy();
 		updateForces();
+
+		// Initial step size:
+		atoms.savePositions();
+		storeGradientEnergy();
+		updateDirection();
+		double initial_step = direction_.inv_norm;
+		step_ = initial_step;
+
+cout << "Initial step: " << step_ << endl;
 
 		while (!converged && (getNumberOfIterations() < max_iterations))
 		{
@@ -173,7 +177,7 @@ namespace BALL
 					Log << "SDM: first line search failed." << std::endl;
 				#endif
 				// Try another step with half the initial step size
-				step_ = initial_step/2.;
+				step_ = direction_.inv_norm;//initial_step;
 				lambda = findStep();
 				
 				// Didn't help, we abort the minimization.
@@ -195,6 +199,7 @@ namespace BALL
 			
 			// End of this iteration: increment iteration counter, update pairlists etc.
 			finishIteration();
+			Log.info() << getNumberOfIterations() << " " << max_iterations << std::endl;
 		}
 		
 		return converged;
@@ -214,7 +219,7 @@ namespace BALL
 		}
 
 		double lambda = -1.0;
-		bool result = line_search_.minimize(lambda, step_ * direction_.inv_norm);
+		bool result = line_search_.minimize(lambda, step_ );//* direction_.inv_norm);
 
 		// If the line search was not successful, return -1, else
 		// the value for the optimal lambda.
@@ -239,6 +244,8 @@ namespace BALL
 		{
 			step_ *= 2.;
 		}
+		
+//		step_ *= lambda;
 		#ifdef BALL_DEBUG
 			Log << "SDM: new step size: " << step_ << std::endl;
 		#endif
