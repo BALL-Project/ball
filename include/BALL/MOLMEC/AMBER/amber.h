@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.1 1999/08/26 07:53:21 oliver Exp $ 
+// $Id: amber.h,v 1.2 1999/09/05 09:02:44 oliver Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -130,6 +130,37 @@ namespace BALL
 		/**	Force field specific setup
 		*/
 		virtual bool specificSetup(void);
+
+		//@}
+
+		/**	Accessors specific to the AMBER force field
+		*/
+		//@{
+		/**	Return the bond stretch contribution to the total energy
+		*/
+		float getStretchEnergy() const;
+
+		/**	Return the angle bend contribution to the total energy
+		*/
+		float getBendEnergy() const;
+
+		/**	Return the torsion contribution to the total energy.
+				This energy comprises proper and improper torsions.
+		*/
+		float getTorsionEnergy() const;
+
+		/**	Return the nonbonded contribution to the total energy.
+				This energy comprises Van der Waals energy, hydrogen bond energy, and elesctrostatic energy.
+		*/
+		float getNonbondedEnergy() const;
+
+		/**	Return the electrostatic contribution to the total energy.
+		*/
+		float getESEnergy() const;
+
+		/**	Return the Van der Waals and hydrogen bond contribution to the total energy.
+		*/
+		float getVdWEnergy() const;
 
 		//@}
 	};
