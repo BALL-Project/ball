@@ -1,7 +1,9 @@
-// $Id: INIFile.C,v 1.14 2001/03/14 14:19:31 amoll Exp $
+// $Id: INIFile.C,v 1.15 2001/04/08 23:30:03 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
+
+#include <iostream>
 
 using namespace std;
 
@@ -9,20 +11,18 @@ namespace BALL
 {
 
 	const String INIFile::UNDEFINED = "[UNDEFINED!]";
-	const String INIFile::PREFIX = "#PREFIX!";	
+	const String INIFile::HEADER = "#HEADER!";	
 
 	// Default constructor
 	INIFile::INIFile()
 		: valid_(false),
-			filename_(""),
-			original_number_of_lines_(0)
+			filename_("")
 	{	
 	}
 
 	INIFile::INIFile(const String& filename)
 		: valid_(false),
-			filename_(filename),
-			original_number_of_lines_(0)
+			filename_(filename)
 	{
 	}
 
@@ -35,14 +35,7 @@ namespace BALL
 
 	void INIFile::clear()
 	{
-		lines_.clear();
-		line_section_index_.clear();
-		original_number_of_lines_ = 0;
-		
-		section_names_.clear();
-		section_start_.clear();
-		section_end_.clear();
-		section_key_map_.destroy();
+		sections_.destroy();
 		section_index_.destroy();
 		valid_ = false;
 	}
@@ -51,7 +44,6 @@ namespace BALL
 	{
 		clear();
 	}
-
 
 	bool INIFile::isValid() const 
 	{
@@ -84,20 +76,20 @@ namespace BALL
 			return false;
 		}
 
-    // create the prefix; this has to be done to prevent problems 
-		// with the positions in the vectors; the prefix is section 0
-		Index section_nr = 0;
- 		section_names_.push_back(PREFIX);
-		section_index_[PREFIX] = 0;
-		section_start_.push_back(0);
+    // create the header; this has to be done to prevent problems 
+		// with the positions in the list; the HEADER is section 0
+		Section header;
+		header.name_ = HEADER;
+ 		sections_.push_back(header);
+		section_index_[HEADER] = sections_.begin();
+
+		List<Section>::Iterator	section_it(sections_.begin());
+		List<String >::Iterator	   line_it(section_it->lines_.begin());
 
 		// read all lines from the file
 		char buffer[MAX_LINE_LENGTH];
 		while (infile.getline(&(buffer[0]), MAX_LINE_LENGTH))
 		{
-			// store the line
-			lines_.push_back(buffer);
-      line_section_index_.push_back(section_nr);
 			// remove leading blanks
 			String line(buffer);
 			line.trimLeft();
@@ -106,6 +98,8 @@ namespace BALL
 			if ((line.size() == 0) || (line[0] == '!') || 
 					(line[0] == ';')   || (line[0] == '#'))
 			{
+				section_it->lines_.push_back(buffer);
+				line_it++;
 				continue;
 			}
 
@@ -118,6 +112,7 @@ namespace BALL
 				// check for a closing "]"
 				if (!line.has(']'))
 				{
+					// error in line, skip it
 					continue;
 				}
 
@@ -126,61 +121,37 @@ namespace BALL
 				// strip the bracket to get the name
 				line = line.before("]");
 
-				section_nr++;
+				Section section;
+				section.name_ = line;
+				sections_.push_back(section);
+				section_it++;
+
+				// store the line
+				section_it->lines_.push_back(buffer);
+				line_it = section_it->lines_.begin();
 				
 				// remember the current section_name
-				section_names_.push_back(line);
-				section_index_[line] = section_nr;
+				section_index_[line] = section_it;
 				
-				// insert this section
-				// this line is part of a new section
-				line_section_index_[line_section_index_.size() - 1]++;
-				// section will start in the next line
-				section_start_.push_back(lines_.size());
-
-				// if last section has size 0 mark it
-				if (section_start_[section_nr -1] == lines_.size() - 1)
-				{
-					section_end_.push_back(INVALID_SIZE);
-				}
-				else
-				{
-					// there is an end to remember
-					section_end_.push_back(lines_.size() - 2);
-				}
-
 				continue;
 			}
-
+			
 			// this is neither a comment line nor a section start
+			// line still has to be added
+			section_it->lines_.push_back(buffer);
+			line_it++;
+
 			// check for lines matching ".*=". These are key/value pairs
 			if (line.find_first_of("=") > 0)
 			{
 				String key(line.before("="));
 				key.trim();
-				String match_name = section_names_[section_nr] + "]" + key;
-				section_key_map_[match_name] = lines_.size() - 1;
+				section_it->key_map_[key] = line_it;			
 			}
 		}
 		
-		// terminate the last section
-		// if it had no lines mark it
-		if (section_start_[section_nr] >= lines_.size() - 1)
-		{
-			section_end_.push_back(INVALID_SIZE);
-		}
-		else
-		{
-			// there is an end to remember
-			section_end_.push_back(lines_.size() - 1);
-		}
-
 		// close the file
 		infile.close();
-
-		// remember the number of lines in the file
-		// lines that are added afterwards appear at the end of the lines_ vector
-		original_number_of_lines_ = lines_.size();
 
 		// done.
 		valid_ = true;
@@ -198,157 +169,151 @@ namespace BALL
 			return false;
 		}
 
-		// vector of the positions of lines in all sections
-		// positions[section][linenr]
-		vector<vector <Position> > positions;
-		positions.resize(section_names_.size());
-
-		// iterate over all lines and fill the vectors with the positions
-		for (Position line = 0; line < lines_.size(); line++)
+		LineIterator	line_it(getLine(0));
+		// iterate over all lines and write them
+		for (; +line_it; ++line_it)
 		{
-			// deleted lines
-			if (line_section_index_[line] == -1)
-			{	
-				continue;
-			}
-			
-			positions[(Position)line_section_index_[line]].push_back(line);
+			out << *line_it << endl;
 		}
-		
-		// iterate over all sections
-		for (Position section = 0; section < section_names_.size(); section++)
-		{
-			// iterate over all lines of the section and write them
-			for (Position sec_line = 0; sec_line < positions[section].size(); sec_line++)
-			{
-				out << lines_[positions[section][sec_line]] << endl;
-			}
-		}			
 		
 		out.close();
 		valid_ = true;
 		return true;
 	}
 
-	const String* INIFile::getLine(Size line_number) const
+	INIFile::LineIterator INIFile::getLine(Size line_number)
 	{
-		if (line_number < lines_.size() &&
-				line_section_index_[line_number] != -1)
+		if (line_number >= getNumberOfLines())
 		{
-			return &(lines_[line_number]);
+			return LineIterator();
 		}
 
-		return 0;
+		int line_nr(line_number);
+		int nr(-1);
+		LineIterator line_it;		
+
+		Section_iterator section_it(sections_.begin());
+		for (; (section_it != sections_.end() && nr != line_nr); ++section_it)
+		{
+			if ((int)section_it->lines_.size() + nr < line_nr)
+			{
+				nr += section_it->lines_.size();
+				continue;
+			}
+
+			line_it = getSectionFirstLine(section_it->getName());
+			nr++;
+
+			for (; nr < line_nr; ++line_it)
+			{
+				nr++;
+			}
+		}
+		return (line_it);
 	}
 
-	bool INIFile::setLine(Size line_number, const String& line)
+	bool INIFile::setLine(LineIterator line_it, const String& line)
 	{
 		// section lines cannot be changed with this method
-		if (line_number >= lines_.size() ||
-				lines_[line_number][0] == '[')
+		if ( line_it.getSection() == sections_.end() ||
+				 ! +line_it ||
+				 (*line_it)[0] == '[')
 		{
 			return false;
 		}
 		
-		// oh, this is a key :(
-		if (lines_[line_number].find_first_of("=") > 0)
-		{
-		  Index section_nr = line_section_index_[line_number];
-			String old_key(lines_[line_number].before("="));
-			old_key.trim();
+		String new_key(line.before("="));
+		new_key.trim();
 
-			String new_key(lines_[line_number].before("="));
-			new_key.trim();
+		if ((*line_it).find_first_of("=") > 0)
+		{
+			// oh, this line had a key :(
+			String old_key((*line_it).before("="));
+			old_key.trim();
 
 			// its a new key: delete the old one.
 			if (old_key != new_key)
 			{		
-				deleteLine(line_number);
-				line_section_index_[line_number = section_nr];
-				String match_name(section_names_[section_nr] + "]" + old_key);
-			  section_key_map_.remove(match_name);
-			 }
+			  line_it.getSection()->key_map_.remove(old_key);
+			}
 		}
-		lines_[line_number] = line;
-		
+
+		*line_it = line;
+
+		if (line.find_first_of("=") > 0)
+		{
+			// oh, the new line has a key :(
+			line_it.getSection()->key_map_[new_key] = line_it.getPosition();		
+		}
+
 		return true;
 	}
 
-
-	bool INIFile::deleteLine(Size line_number)
+	bool INIFile::deleteLine(LineIterator line_it)
 	{
-		Index section_nr = line_section_index_[line_number];
-
 		// test if line exists and if we try to remove a section line
-		if (line_number >= lines_.size() || section_nr == -1 || 
-				lines_[line_number][0] == '[')
+		if (!+line_it || (*line_it)[0] == '[')
 		{
 			return false;
 		}
 
 		// falls key, entfernen		
-		if (lines_[line_number].find_first_of("=") > 0)
+		if ((*line_it).find_first_of("=") > 0)
 		{
-			String key(lines_[line_number].before("="));
+			String key((*line_it).before("="));
 			key.trim();
 
-			String match_name = section_names_[section_nr] + "]" + key;
-			section_key_map_.remove(match_name);
+			line_it.getSection()->key_map_.remove(key);
 		}
 
-		line_section_index_[line_number] = INVALID_INDEX;
+		line_it.getSection()->lines_.erase(line_it.position_);
 
 		return true;
 	}
 
 	
-	bool INIFile::insertLine(const String& section_name, const String& line)
+	bool INIFile::appendLine(const String& section_name, const String& line)
 	{
 		if (!hasSection(section_name) || line[0] == '[')
 		{
 			return false;
 		}
-
-		Position section_nr(section_index_[section_name]);
 		
+		Section& section(*getSection(section_name));
+
 		// if no key, we are finished
     if (line.find_first_of("=") > 0)
     {
 			String key(line.before("="));
 			key.trim();
 
-			String match_name(section_names_[section_nr] + "]" + key);
-			if (section_key_map_.has(match_name))
+			if (section.key_map_.has(key))
 			{
 				return false;
 			}
 			
-			// somehow dirty trick, but line will be added next
-			section_key_map_[match_name] = lines_.size();			
+			section.lines_.push_back(line);
+			List<String >::Iterator	line_it(section.lines_.end());
+			line_it--;
+
+			section.key_map_[key] = line_it;
+
+			return true;
 		}
 
-		lines_.push_back(line);
-		line_section_index_.push_back(section_nr);
+		section.lines_.push_back(line);
 
 		return true;
 	}
 	
-	
-	Size INIFile::getOriginalNumberOfLines() const
-	{
-		return original_number_of_lines_;
-	}
-
 	Size INIFile::getNumberOfLines() const
 	{
 		Size number_of_lines(0);
 	
-		for (Position pos = 0; pos < lines_.size(); pos++)
+		List<Section>::ConstIterator it = sections_.begin();
+		for (; it != sections_.end(); ++it)
 		{
-			if (line_section_index_[pos] != -1)
-			{
-				number_of_lines++;
-			}
+			number_of_lines += it->lines_.size();
 		}
 		
 		return number_of_lines;
@@ -356,8 +321,8 @@ namespace BALL
 	
 	Size INIFile::getNumberOfSections() const 
 	{
-		// PREFIX is not counted
-		return section_names_.size() -1;
+		// HEADER is not counted
+		return sections_.size() -1;
 	}
 
 	bool INIFile::hasSection(const String& section_name) const
@@ -365,40 +330,52 @@ namespace BALL
 		return section_index_.has(section_name);
 	}
 
-	String* INIFile::getSectionName(Position pos)
+	INIFile::Section_iterator INIFile::getSection(const String& section_name)
 	{
-		if (pos >= section_names_.size())
+		if (!section_index_.has(section_name)) 
 		{
 			return 0;
 		}
-		return &section_names_[pos];
+		return section_index_[section_name];
 	}
 
 
-	Size INIFile::getSectionFirstLine(const String& section_name) const
+	INIFile::Section_iterator INIFile::getSection(Position pos)
 	{
-		if (section_index_.has(section_name)) 
+		if (pos >= sections_.size())
 		{
-			// the section had no lines in the read file
-		  if (section_end_[section_index_[section_name]] == INVALID_SIZE)
-		  {
-		  	return INVALID_SIZE;
-		  }
-		  	
-			return section_start_[section_index_[section_name]];
+			return 0;
 		}
 
-		return INVALID_SIZE;
+		Section_iterator it = sections_.begin();
+		for (Position i = 0; i < pos && it != sections_.end(); i++)
+		{
+			++it;
+		}
+		return it;
 	}
 
-	Size INIFile::getSectionLastLine(const String& section_name) const
+	INIFile::LineIterator INIFile::getSectionFirstLine(const String& section_name)
 	{
-		if (section_index_.has(section_name)) 
+		if (!section_index_.has(section_name)) 
 		{
-			return section_end_[section_index_[section_name]];
+			return LineIterator();
 		}
 
-		return INVALID_SIZE;
+		return LineIterator(sections_, getSection(section_name), 
+												 getSection(section_name)->lines_.begin());
+	}
+
+	INIFile::LineIterator INIFile::getSectionLastLine(const String& section_name)
+	{
+		if (!section_index_.has(section_name)) 
+		{
+			return LineIterator();
+		}
+
+		List<String >::Iterator	line_it(getSection(section_name)->lines_.end());
+		line_it--;
+		return LineIterator(sections_, getSection(section_name), line_it);
 	}
 
 	Size INIFile::getSectionLength(const String& section_name) const
@@ -407,107 +384,81 @@ namespace BALL
 		{
 			return INVALID_SIZE;
 		}
-		
-		Index section_nr(section_index_[section_name]);
-    Size number_of_lines(0);
-		
-		if (section_end_[section_nr] != INVALID_SIZE)
-		{
- 			for (Position pos = section_start_[section_nr];
- 					 pos <= section_end_[section_nr]; pos ++)
- 			{
- 				// dont count deleted lines
-  			if (line_section_index_[pos] != INVALID_INDEX)
- 				{
- 					number_of_lines++;
- 			 	}
- 			}
-		}
-		
-		// start counting all added lines
-		for (Position pos = original_number_of_lines_;
-				 pos < lines_.size(); pos++)
-		{
-			if (line_section_index_[pos] == section_nr)
-			{
-				number_of_lines++;
-			}
-		}
-		
-		return number_of_lines;
+
+		return section_index_[section_name]->lines_.size();
 	}
 
-	bool INIFile::hasEntry(const String& section, const String& key) const
+	bool INIFile::hasEntry(const String& section_name, const String& key) const
 	{
-		// create a hash key from section and key. Use "]" as a delimiter
-		// (it cannot be part of the section name)
-		String match_name(section + "]" + key);
+		if (!section_index_.has(section_name))
+		{
+			return false;
+		}
 
 		// check the hash map for the key
-		return section_key_map_.has(match_name);
+		return section_index_[section_name]->key_map_.has(key);
 	}
 
-	bool INIFile::setValue(const String& section, const String& key, const String& new_value)
+	bool INIFile::setValue(const String& section_name, const String& key, const String& new_value)
 	{
 		// does section exists?
-		if (!section_index_.has(section))
-		{
-			return false;
-		}
-		
-		if (key.isEmpty() || new_value.isEmpty())
-		{
-			return false;
-		}
-		
-		// create a hash key from section and key. Use "]" as a delimiter
-		// (it cannot be part of the section name)
-		String match_name(section + "]" + key);		
-
-		// does key exists in section?
-		if (!section_key_map_.has(match_name))
+		if (!section_index_.has(section_name)									||
+				key.isEmpty()																			||
+				!section_index_[section_name]->key_map_.has(key))
 		{
 			return false;
 		}
 		
 		String new_line(key + "=" + new_value);
-		lines_[section_key_map_[match_name]] = new_line;
+		(*section_index_[section_name]->key_map_[key]) = new_line;
 		
 		return true;
 	}
 
-	String INIFile::getValue(const String& section, const String& key) const
+	String INIFile::getValue(const String& section_name, const String& key) const
 	{
-		// create a hash key from section and key. Use "]" as a delimiter
-		// (it cannot be part of the section name)
-		String match_name(section + "]" + key);
-
-		// check whether we know the key - return false in case of failure
-		if (!section_key_map_.has(match_name))
+		if (!section_index_.has(section_name)									||
+				key.isEmpty()																			||
+				!section_index_[section_name]->key_map_.has(key))
 		{
 			return UNDEFINED;
 		}
 
 		// get the part of the line behind the "="
-		match_name = lines_[section_key_map_[match_name]].after('=', 0);
+		String match_name((*section_index_[section_name]->key_map_[key]).after('=', 0));
 		match_name.trim();
 		
 		return match_name;
 	}
 
+	bool INIFile::apply(UnaryProcessor<LineIterator>& processor)
+	{		
+		if (!processor.start())
+		{
+			return false;
+		}
+
+		LineIterator line_it(getLine(0));
+		for (; +line_it; ++line_it)
+		{
+			cout << endl << *line_it;
+			Processor::Result result = processor(line_it);
+		
+			if (result <= Processor::BREAK)
+			{
+				return (result && processor.finish());
+			}
+		}
+
+		return (processor.finish());
+	}
 
 	bool INIFile::operator == (const INIFile& inifile) const
 	{
-		return ((valid_ == inifile.valid_)
-		&& (filename_ == inifile.filename_)
-		&& (section_names_ == inifile.section_names_)
-		&& (lines_ == inifile.lines_)
-		&& (line_section_index_ == inifile.line_section_index_)
-		&& (section_start_== inifile.section_start_)
-		&& (section_end_ == inifile.section_end_)
-		&& (section_index_ == inifile.section_index_)
-		&& (section_key_map_ == inifile.section_key_map_)
-		&& (original_number_of_lines_ == inifile.original_number_of_lines_));
+		return (valid_ == inifile.valid_
+				&& filename_ == inifile.filename_
+				&& sections_ == inifile.sections_
+				&& section_index_ == inifile.section_index_);
 	}
 
 } // namespace BALL

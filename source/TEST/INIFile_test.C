@@ -1,11 +1,12 @@
-// $Id: INIFile_test.C,v 1.6 2001/03/14 14:17:16 amoll Exp $
+// $Id: INIFile_test.C,v 1.7 2001/04/08 23:32:07 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/INIFile.h>
+#include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.6 2001/03/14 14:17:16 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.7 2001/04/08 23:32:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -73,7 +74,7 @@ RESULT
 INIFile ini;
 
 
-// BAUSTELLE mit prefix, nur prefix
+// BAUSTELLE mit header, nur header
 CHECK(INIFile::read())
 	ini.setFilename("data/INIFile_test.ini");
 	TEST_EQUAL(ini.read(), true)
@@ -84,17 +85,22 @@ RESULT
 
 
 CHECK(INIFile::getLine(Size line_number))
+	for (int i = 0; i < 10; i++)
+	{
+	  TEST_EQUAL(+ini.getLine(i), true)
+	}
+
   TEST_EQUAL(*(ini.getLine(0)), "[Section1]")
   TEST_EQUAL(*(ini.getLine(1)), "[Section2]")
-  TEST_EQUAL(*(ini.getLine(10)), "[Section4]")
-RESULT
-
-
-CHECK(INIFile::setLine(Size line_number, const String& line))
-  TEST_EQUAL(ini.setLine(2, "replace test"), true)
-  TEST_EQUAL(*(ini.getLine(2)), "replace test")
-  TEST_EQUAL(ini.setLine(11, "replace test"), false)
-	TEST_EQUAL(ini.setLine(0, "replace test"), false)
+  TEST_EQUAL(*(ini.getLine(2)), "# this is a comment =")
+  TEST_EQUAL(*(ini.getLine(3)), "! even more comment")
+  TEST_EQUAL(*(ini.getLine(4)), "[Section3]")
+  TEST_EQUAL(*(ini.getLine(5)), "test1 = a")
+  TEST_EQUAL(*(ini.getLine(6)), "test2=b")
+  TEST_EQUAL(*(ini.getLine(7)), ";comments over comments")
+  TEST_EQUAL(*(ini.getLine(8)), "test3 = c")
+  TEST_EQUAL(*(ini.getLine(9)), "[Section4]")
+  TEST_EQUAL(+ini.getLine(10), false)
 RESULT
 
 
@@ -102,67 +108,83 @@ CHECK(INIFile::getNumberOfLines() const )
 	INIFile ini2("data/amber91.ini");
 	ini2.read();
 	TEST_EQUAL(ini2.getNumberOfLines(), 1379)
-  TEST_EQUAL(ini.getNumberOfLines(), 11)
+  TEST_EQUAL(ini.getNumberOfLines(), 10)
 RESULT
 
 
 CHECK(INIFile::hasSection(const String& section_name) const )
   TEST_EQUAL(ini.hasSection("replace test"), false)
-	TEST_EQUAL(ini.hasSection(ini.PREFIX), true)
+	TEST_EQUAL(ini.hasSection(ini.HEADER), true)
   TEST_EQUAL(ini.hasSection("Section1"), true)  
   TEST_EQUAL(ini.hasSection("Section2"), true)  
   TEST_EQUAL(ini.hasSection("Section3"), true)  
   TEST_EQUAL(ini.hasSection("Section4"), true)  
 RESULT
 
+CHECK(INIFile::getSection(const String& section_name) const )
+	INIFile::Section_iterator it;
+	TEST_EQUAL(ini.getSection("replace test") == 0, true)
+	TEST_EQUAL(ini.getSection(ini.HEADER)->getName(), ini.HEADER)
+  TEST_EQUAL(ini.getSection("Section1")->getName(), "Section1")
+  TEST_EQUAL(ini.getSection("Section2")->getName(), "Section2")
+  TEST_EQUAL(ini.getSection("Section3")->getName(), "Section3")
+  TEST_EQUAL(ini.getSection("Section4")->getName(), "Section4")
+RESULT
 
 CHECK(INIFile::getNumberOfSections() const )
   TEST_EQUAL(ini.getNumberOfSections(), 4)
 RESULT
 
 
-CHECK(INIFile::getSectionName(Position pos) const )
-  TEST_EQUAL(*(ini.getSectionName(0)), ini.PREFIX)
-  TEST_EQUAL(*(ini.getSectionName(1)), "Section1")
-	TEST_EQUAL(*(ini.getSectionName(2)), "Section2")
-  TEST_EQUAL(*(ini.getSectionName(3)), "Section3")
-  TEST_EQUAL(*(ini.getSectionName(4)), "Section4")
-  TEST_EQUAL(ini.getSectionName(5), 0)
+CHECK(INIFile::getSection(Position pos) const )
+  TEST_EQUAL(ini.getSection(0)->getName(), ini.HEADER)
+  TEST_EQUAL(ini.getSection(1)->getName(), "Section1")
+	TEST_EQUAL(ini.getSection(2)->getName(), "Section2")
+  TEST_EQUAL(ini.getSection(3)->getName(), "Section3")
+  TEST_EQUAL(ini.getSection(4)->getName(), "Section4")
+  TEST_EQUAL(ini.getSection(5) == 0, true)
 RESULT
 
 
 CHECK(INIFile::getSectionFirstLine(const String& section_name) const )
-  TEST_EQUAL(ini.getSectionFirstLine(ini.PREFIX), INVALID_SIZE)
-  TEST_EQUAL(ini.getSectionFirstLine("Section1"), INVALID_SIZE)
-  TEST_EQUAL(ini.getSectionFirstLine("Section2"), 2)
-  TEST_EQUAL(ini.getSectionFirstLine("Section3"), 6)
-  TEST_EQUAL(ini.getSectionFirstLine("Section4"), INVALID_SIZE)
-  TEST_EQUAL(ini.getSectionFirstLine(""), INVALID_SIZE)
+	INIFile::LineIterator it;
+  TEST_EQUAL(ini.getSectionFirstLine(ini.HEADER) == it, 0)//BAUSTELLE
+  TEST_EQUAL(+ini.getSectionFirstLine(ini.HEADER), false)
+  TEST_EQUAL(+ini.getSectionFirstLine("Section1"), true)
+  TEST_EQUAL(*ini.getSectionFirstLine("Section1"), "[Section1]")
+
+  TEST_EQUAL(+ini.getSectionFirstLine("Section2"), true)
+  TEST_EQUAL(*ini.getSectionFirstLine("Section1"), "[Section1]")
+  TEST_EQUAL(*ini.getSectionFirstLine("Section2"), "[Section2]")
+  TEST_EQUAL(*ini.getSectionFirstLine("Section3"), "[Section3]")
+  TEST_EQUAL(*ini.getSectionFirstLine("Section4"), "[Section4]")
+  TEST_EQUAL(ini.getSectionFirstLine("") == it, true)
 RESULT
 
 
 CHECK(INIFile::getSectionLastLine(const String& section_name) const )
-  TEST_EQUAL(ini.getSectionLastLine(ini.PREFIX), INVALID_SIZE)
-  TEST_EQUAL(ini.getSectionLastLine("Section1"), INVALID_SIZE)
-  TEST_EQUAL(ini.getSectionLastLine("Section2"), 4)
-  TEST_EQUAL(ini.getSectionLastLine("Section3"), 9)
-  TEST_EQUAL(ini.getSectionLastLine("Section4"), INVALID_SIZE)
-  TEST_EQUAL(ini.getSectionLastLine(""), INVALID_SIZE)
+  TEST_EQUAL(+ini.getSectionLastLine(ini.HEADER), false)
+//BAUSTELLE
+  TEST_EQUAL(*ini.getSectionLastLine("Section1"), "[Section1]")
+  TEST_EQUAL(*ini.getSectionLastLine("Section2"), "! even more comment")
+  TEST_EQUAL(*ini.getSectionLastLine("Section3"), "test3 = c")
+  TEST_EQUAL(*ini.getSectionLastLine("Section4"), "[Section4]")
+  TEST_EQUAL(+ini.getSectionLastLine(""), false)
 RESULT
 
 
 CHECK(INIFile::getSectionLength(const String& section_name) const )
-  TEST_EQUAL(ini.getSectionLength(ini.PREFIX), 0)
-  TEST_EQUAL(ini.getSectionLength("Section1"), 0)
+  TEST_EQUAL(ini.getSectionLength(ini.HEADER), 0)
+  TEST_EQUAL(ini.getSectionLength("Section1"), 1)
   TEST_EQUAL(ini.getSectionLength("Section2"), 3)
-  TEST_EQUAL(ini.getSectionLength("Section3"), 4)
-  TEST_EQUAL(ini.getSectionLength("Section4"), 0)
+  TEST_EQUAL(ini.getSectionLength("Section3"), 5)
+  TEST_EQUAL(ini.getSectionLength("Section4"), 1)
   TEST_EQUAL(ini.getSectionLength("Section5"), INVALID_SIZE)
 RESULT
 
 
 CHECK(INIFile::hasEntry(const String& section, const String& key) const )
-  TEST_EQUAL(ini.hasEntry(ini.PREFIX, "test"), false)
+  TEST_EQUAL(ini.hasEntry(ini.HEADER, "test"), false)
   TEST_EQUAL(ini.hasEntry("Section1", "test"), false)
   TEST_EQUAL(ini.hasEntry("Section2", "test"), false)
   TEST_EQUAL(ini.hasEntry("Section2", "! even more comment"), false)
@@ -174,7 +196,7 @@ RESULT
 
 
 CHECK(INIFile::getValue(const String& section, const String& key) const )
-  TEST_EQUAL(ini.getValue(ini.PREFIX, "test"), ini.UNDEFINED)
+  TEST_EQUAL(ini.getValue(ini.HEADER, "test"), ini.UNDEFINED)
   TEST_EQUAL(ini.getValue("Section1", "test"), ini.UNDEFINED)
   TEST_EQUAL(ini.getValue("Section2", "test"), ini.UNDEFINED)
   TEST_EQUAL(ini.getValue("Section2", "! even more comment"), ini.UNDEFINED)
@@ -186,7 +208,7 @@ RESULT
 
 
 CHECK(INIFile::setValue(const String& section, const String& key, const String& value))
-  TEST_EQUAL(ini.setValue(ini.PREFIX, "test", "setValue_test"), false)
+  TEST_EQUAL(ini.setValue(ini.HEADER, "test", "setValue_test"), false)
   TEST_EQUAL(ini.setValue("nonsense", "test", "setValue_test"), false)
   TEST_EQUAL(ini.setValue("Section1", "test", "setValue_test"), false)
   TEST_EQUAL(ini.getValue("Section1", "test"), ini.UNDEFINED)
@@ -207,40 +229,50 @@ RESULT
 CHECK(INIFile::deleteLine)
 	INIFile ini("data/INIFile_test.ini");
 	ini.read();
-  TEST_EQUAL(*(ini.getLine(7)), "test2=b")
-  TEST_EQUAL(ini.hasEntry("Section3", "test2"), true)
 
-  TEST_EQUAL(ini.deleteLine(7), true)
-	TEST_EQUAL(ini.getLine(7), 0)	
-  TEST_EQUAL(ini.hasEntry("Section3", "test2"), false)
+	INIFile::LineIterator it;
+	TEST_EQUAL(ini.deleteLine(it), false)
+	
+	it = ini.getSectionFirstLine("Section3");
+  ++it;
+	++it;
+	TEST_EQUAL(*it, "test2=b")
+	TEST_EQUAL(ini.deleteLine(it), true)
+
+	TEST_EQUAL(ini.hasEntry("Section3", "test2"), false)
   TEST_EQUAL(ini.getValue("Section3", "test2"), ini.UNDEFINED)
-  TEST_EQUAL(ini.getSectionLength("Section3"), 3)
+  TEST_EQUAL(ini.getSectionLength("Section3"), 4)
 RESULT
 
-CHECK(INIFile::insertLine(const String& section_name, const String& line))
+
+CHECK(INIFile::appendLine(const String& section_name, const String& line))
 	INIFile ini("data/INIFile_test.ini");
 	ini.read();
 	
-	TEST_EQUAL(ini.insertLine("Section9", "GAU"), false)	
-	TEST_EQUAL(ini.insertLine("Section2", "[AU"), false)	
-	TEST_EQUAL(ini.insertLine("Section3", "test1 = 123"), false)	
-	TEST_EQUAL(ini.getNumberOfLines(), 11)
+	TEST_EQUAL(ini.appendLine("Section9", "GAU"), false)	
+	TEST_EQUAL(ini.appendLine("Section2", "[AU"), false)	
+	TEST_EQUAL(ini.appendLine("Section3", "test1 = 123"), false)	
+	TEST_EQUAL(ini.getNumberOfLines(), 10)
 
-	TEST_EQUAL(ini.insertLine("Section3", "insert1=ok"), true)
-	TEST_EQUAL(ini.getNumberOfLines(), 12)
-	TEST_EQUAL(ini.getSectionLength("Section3"), 5)
+	TEST_EQUAL(ini.appendLine("Section3", "insert1=ok"), true)
+	TEST_EQUAL(ini.getNumberOfLines(), 11)
+	TEST_EQUAL(ini.getSectionLength("Section3"), 6)
 	TEST_EQUAL(ini.hasEntry("Section3", "insert1"), true)
 	TEST_EQUAL(ini.getValue("Section3", "insert1"), "ok")
-	/*
-  TEST_EQUAL(*(ini.getLine(7)), "test2=b")
-  TEST_EQUAL(ini.hasEntry("Section3", "test2"), true)
+RESULT
 
-  TEST_EQUAL(ini.deleteLine(7), true)
-	TEST_EQUAL(ini.getLine(7), 0)	
-  TEST_EQUAL(ini.hasEntry("Section3", "test2"), false)
-  TEST_EQUAL(ini.getValue("Section3", "test2"), INIFILE::UNDEFINED)
-  TEST_EQUAL(ini.getSectionLength("Section3"), 3)
-  */
+
+CHECK(apply(UnaryProcessor<LineIterator>& processor))
+	ItemCollector<INIFile::LineIterator> myproc;
+	INIFile ini("data/INIFile_test.ini");
+	TEST_EQUAL(ini.apply(myproc), true)
+
+	TEST_EQUAL(myproc.getSize(), 11)
+/*
+	TEST_EQUAL(*myproc.getPointer(), 1) myproc.forward();
+	TEST_EQUAL(*myproc.getPointer(), 2) myproc.forward();
+	TEST_EQUAL(*myproc.getPointer(), 3) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), 0)*/
 RESULT
 
 
