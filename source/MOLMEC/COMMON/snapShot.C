@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.17 2000/12/19 18:36:53 anker Exp $
+// $Id: snapShot.C,v 1.18 2001/01/16 17:20:04 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -575,6 +575,20 @@ namespace BALL
 		return result;
 
 	}	// end of 'calculateKineticEnergy'            
+
+
+	void SnapShotManager::setFlushToDiskFrequency(Size number)
+		throw()
+	{
+		flush_to_disk_frequency_ = number;
+	}
+
+
+	Size SnapShotManager::getFlushToDiskFrequency() const
+		throw()
+	{
+		return flush_to_disk_frequency_;
+	}
 
 
 	// This method takes a snapshot of the system's current state and stores it in
