@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.7 2000/03/30 10:16:08 oliver Exp $
+// $Id: system.h,v 1.8 2000/05/02 14:03:25 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -61,11 +61,6 @@ namespace BALL
 		///	Destructor
 		virtual ~System();
 
-		/// Clears the contents of the system
-		virtual void clear();
-	
-		/// Clears the contents of the system and removes all its composite structures
-		virtual void destroy();
 		//@}
 	
 		/** @name Persistence */
@@ -83,17 +78,30 @@ namespace BALL
 		/**	@name	Assignemnt */
 		//@{
 
-		///
+		/** Assignment with cloning facility.
+				Assign {\em system} to {\em *this}.
+				The assignment is either deep or shallow (default).
+				@param  system the System to be copied (cloned)
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em system}
+		*/
 		void set(const System& system, bool deep = true);
 
-		///
+		/** Assignment operator.
+				Assign {\em system} to {\em *this}.
+				The assignment is either deep or shallow (default).
+				@param   system the System to be copied (cloned)
+				@return  System& - {\em *this}
+				@see     System::set
+		*/
 		System& operator = (const System& system);
 
-		///
+		/** Copying with cloning facility.
+				Copy {\em *this} to {\em system}.
+				The assignment is either deep or shallow (default).
+				@param  System the System to be assigned to
+				@see    System::set
+		*/
 		void get(System& system, bool deep = true) const;
-
-		///
-		void swap(System& system);
 	
 		//@}
 
@@ -101,42 +109,70 @@ namespace BALL
 		/**	@name	Accessors */
 		//@{
 
-		///
-		///
+		/** Count the molecules in this system
+				@return Size the number of molecules
+		*/
 		Size countMolecules() const;
 
-		///
+		/** Count the fragments in this system
+				@return Size the number of fragments
+		*/
 		Size countFragments() const;
 
-		///
+		/** Count the atoms in this system
+				@return Size the number of atoms
+		*/
 		Size countAtoms() const;
 
-		///
+		/** Prepend a molecule at position 0.
+				@param molecule, the molecule to prepend
+		*/
 		void prepend(Molecule& molecule);
 
-		///
+		/** Append a molecule after the last position.
+				@param molecule, the molecule to append
+		*/
 		void append(Molecule& molecule);
 
-		///
+		/** Insert a molecule after the last position.
+				@param molecule, the molecule to insert
+		*/
 		void insert(Molecule& molecule);
 
-		///
+		/** Insert a molecule before a given {\em Comosite} object.
+				@param molecule, the molecule to insert
+				@param before, the {\em Comosite} object to insert before
+		*/
 		void insertBefore(Molecule& molecule, Composite& before);
 
-		///
+		/** Insert a molecule after a given {\em Comosite} object.
+				@param molecule, the molecule to insert
+				@param after, the {\em Comosite} object to insert before
+		*/
 		void insertAfter(Molecule& molecule, Composite& after);
 
-
-		///
+		/** Remove a molecule.
+				@param molecule the molecule to remove
+		*/
 		bool remove(Molecule& molecule);
 
-		///
+		/**	Move the children of {\tt system} into {\em *this}.
+				Cut all children of {\tt system} and prepend them before the children of {\em *this}.
+				@param system the system to access
+		*/
 		void spliceBefore(System& system);
 
-		///
+		/**	Move the children of {\tt system} into {\em *this}.
+				Cut all children of {\tt system} and append them after the children of {\em *this}.
+				@param system the system to access
+		*/
 		void spliceAfter(System& system);
 
-		///
+		/**	Move the children of {\tt system} into {\em *this}.
+				The children of {\tt system} are inserted at the position of 
+				{\tt system} if it is a child of {\tt this}.
+				Otherwise the children are inserted using \Ref{spliceBefore}.
+		*/
 		void splice(System& system);		
 		//@}
 
@@ -147,18 +183,6 @@ namespace BALL
 		void destroyBonds();
 
 		//@}
-
-		/**	@name	Debugging and Diagnostics */
-		//@{
-	
-		/// 
-		virtual bool isValid() const;
-
-		/// 
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
-
-		//@}
-
 
 		/**	@name	Storers */
 		//@{
