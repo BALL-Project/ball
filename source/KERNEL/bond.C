@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.C,v 1.28 2003/02/08 16:12:31 oliver Exp $
+// $Id: bond.C,v 1.29 2003/03/03 10:08:39 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -21,9 +21,8 @@ namespace BALL
 	Bond::TooManyBonds::TooManyBonds(const char* file, int line, const Atom& atom1, const Atom& atom2)
 		throw()
 		:	Exception::GeneralException(file, line, "Bond::TooManyBonds",
-																	std::string("Unable to create additional bond between ")
-																	+ atom1.getFullName() + std::string(" and ") + atom2.getFullName() + std::string(".")
-		  )
+																	String("Unable to create additional bond between ")
+																	+ atom1.getFullName() + String(" and ") + atom2.getFullName() + ".")
 	{
 	}
 
