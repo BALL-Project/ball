@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.5 1999/12/28 18:24:59 oliver Exp $ 
+// $Id: options.C,v 1.6 2000/02/06 19:54:07 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -135,7 +135,8 @@ namespace BALL
 
 	bool Options::getBool(const String& key) const 
 	{
-		if ((*find(key)).second == "true")
+		ConstIterator it = find(key);
+		if ((it != end()) && (it->second == "true"))
 		{
 			return true;
 		} else {
@@ -268,9 +269,11 @@ namespace BALL
 		ConstIterator it = find(key);
 
 		if (it == end())
+		{
 			return "";
-		else
+		} else {
 			return (*it).second;
+		}
 	}
 
 	bool Options::readOptionFile(const String& filename)
