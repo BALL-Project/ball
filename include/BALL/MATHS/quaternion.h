@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.24 2001/01/21 21:10:14 amoll Exp $
+// $Id: quaternion.h,v 1.25 2001/01/22 13:22:03 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -280,7 +280,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void clear()
+	void TQuaternion<T>::clear()
 		throw()
 	{
 		i = j = k = angle = (T)0;
