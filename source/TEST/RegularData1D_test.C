@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData1D_test.C,v 1.15 2003/06/12 14:12:32 amoll Exp $
+// $Id: RegularData1D_test.C,v 1.16 2003/06/17 14:00:28 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.15 2003/06/12 14:12:32 amoll Exp $")
+START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.16 2003/06/17 14:00:28 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -276,9 +276,8 @@ CHECK(void rescale(const IndexType& new_size) throw(Exception::OutOfMemory))
 	TEST_REAL_EQUAL(data[1], 1.3333333)
 	TEST_REAL_EQUAL(data[2], 1.6666667)
 	TEST_REAL_EQUAL(data[3], 2.0)
-RESULT
 
-CHECK(TRegularData1D::rescale(double origin, double dimension, Size new_size))
+{
 	TRegularData1D<float>	data;
 	data.resize(2);
 	data.setOrigin(0.0);
@@ -319,6 +318,7 @@ CHECK(TRegularData1D::rescale(double origin, double dimension, Size new_size))
 	TEST_REAL_EQUAL(data[0], 1.0)
 	TEST_REAL_EQUAL(data[1], 1.5)
 	TEST_REAL_EQUAL(data[2], 2.0)
+}
 RESULT
 
 
