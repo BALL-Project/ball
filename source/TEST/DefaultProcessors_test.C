@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DefaultProcessors_test.C,v 1.6 2002/02/27 12:24:28 sturm Exp $
+// $Id: DefaultProcessors_test.C,v 1.7 2003/01/22 17:16:58 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.6 2002/02/27 12:24:28 sturm Exp $")
+START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.7 2003/01/22 17:16:58 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -87,7 +87,7 @@ CHECK(AssignRadiusProcessor::Processor::Result operator()(Atom& atom))
 
 	TEST_EQUAL(S.countAtoms(), 33)
 
-	CAPTURE_OUTPUT(2000)
+	CAPTURE_OUTPUT_LEVEL(2000)
 		S.apply(arp);
 	COMPARE_OUTPUT("Cannot assign radius for :a1\nCannot assign radius for :a2\n")
 	
@@ -182,7 +182,7 @@ CHECK(AssignChargeProcessor::Processor::Result operator()(Atom& atom))
 
 	TEST_EQUAL(S.countAtoms(), 33)
 	
-	CAPTURE_OUTPUT(2000)
+	CAPTURE_OUTPUT_LEVEL(2000)
 		S.apply(acp);
 	COMPARE_OUTPUT("Cannot assign charge for :a1\nCannot assign charge for :a2\n")
 	

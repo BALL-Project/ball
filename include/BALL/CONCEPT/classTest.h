@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.33 2002/12/12 09:46:22 oliver Exp $
+// $Id: classTest.h,v 1.34 2003/01/22 17:16:40 anker Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -714,12 +714,30 @@ int main(int argc, char **argv)\
 		Each {\tt CAPTURE_OUTPUT} requires exactly one subsequent
 		\Ref{COMPARE_OUTPUT} macro.
 */
-#define CAPTURE_OUTPUT(level) \
+#define CAPTURE_OUTPUT_LEVEL(level) \
 	{\
 		std::ostringstream TEST_strstr;\
 		Log.remove(std::cout);\
 		Log.remove(std::cerr);\
 		Log.insert(TEST_strstr, level, level);
+
+/**	Redirect output to the global logging facility.
+		This macro (together with \Ref{COMPARE_OUTPUT}) can be used
+		to ensure that a function prints an error message to the
+		global logging facility \Ref{Log}. It disables the output
+		to {\tt cout} and {\tt cerr} and redirects all output to
+		{\tt level} to a temporary {\tt ostringstream}. The contents 
+		of this stream can be compared with the expected output	
+		afterwards using the macro \Ref{COMPARE_OUTPUT}.
+		Each {\tt CAPTURE_OUTPUT} requires exactly one subsequent
+		\Ref{COMPARE_OUTPUT} macro.
+*/
+#define CAPTURE_OUTPUT_LEVEL_RANGE(minlevel, maxlevel) \
+	{\
+		std::ostringstream TEST_strstr;\
+		Log.remove(std::cout);\
+		Log.remove(std::cerr);\
+		Log.insert(TEST_strstr, minlevel, maxlevel);
 
 /**	Compare output made to the global logging facility.
 		@see CAPTURE_OUTPUT

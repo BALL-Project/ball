@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ClaverieParameter_test.C,v 1.6 2002/02/27 12:24:26 sturm Exp $
+// $Id: ClaverieParameter_test.C,v 1.7 2003/01/22 17:16:57 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(ClaverieParameter, "$Id: ClaverieParameter_test.C,v 1.6 2002/02/27 12:24:26 sturm Exp $")
+START_TEST(ClaverieParameter, "$Id: ClaverieParameter_test.C,v 1.7 2003/01/22 17:16:57 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -120,13 +120,13 @@ CHECK(ClaverieParameter::extractSection(ForceFieldParameters& parameters, const 
 	cp.clear();
 	
 	ForceFieldParameters fffparam("data/ClaverieParameter_test.ini");
-	CAPTURE_OUTPUT(2000);
+	CAPTURE_OUTPUT_LEVEL(2000);
 	test = cp.extractSection(fffparam, "ClaverieParameters2");
 	COMPARE_OUTPUT("Variable missing.\n");
 	TEST_EQUAL(test, false)
 	cp.clear();
 	
-	CAPTURE_OUTPUT(2000);
+	CAPTURE_OUTPUT_LEVEL(2000);
 	test = cp.extractSection(fffparam, "ClaverieParameters3");
 	COMPARE_OUTPUT("Cannot assign atom type XX\n");
 	TEST_EQUAL(test, false)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StandardPredicates_test.C,v 1.21 2002/12/17 21:32:06 oliver Exp $
+// $Id: StandardPredicates_test.C,v 1.22 2003/01/22 17:16:59 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.21 2002/12/17 21:32:06 oliver Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.22 2003/01/22 17:16:59 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -454,15 +454,21 @@ CHECK(ConnectedToPredicate::operator () (const Atom& atom) const )
 	TEST_EQUAL(connectedTo(*it), true)
 
 	STATUS("CH)");
+	CAPTURE_OUTPUT_LEVEL(2000)
 	connectedTo.setArgument("CH)");
+	COMPARE_OUTPUT("ConnectedToPredicate::parse_():\n")
 	TEST_EQUAL(connectedTo(*it), false)
 
 	STATUS("(CH");
+	CAPTURE_OUTPUT_LEVEL(2000)
 	connectedTo.setArgument("(CH");
+	COMPARE_OUTPUT("ConnectedToPredicate::parse_():\n")
 	TEST_EQUAL(connectedTo(*it), false)
 
 	STATUS("C(H");
+	CAPTURE_OUTPUT_LEVEL(2000)
 	connectedTo.setArgument("C(H");
+	COMPARE_OUTPUT("ConnectedToPredicate::parse_():\n")
 	TEST_EQUAL(connectedTo(*it), false)
 
 	STATUS("(H)(H)(H)(C(H)(C(~O)(~O)))")
