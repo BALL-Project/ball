@@ -1,4 +1,4 @@
-// $Id: glObject.h,v 1.5 2001/02/11 13:04:38 hekl Exp $
+// $Id: glObject.h,v 1.6 2001/05/13 13:57:01 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLOBJECT_H
@@ -26,11 +26,8 @@ namespace BALL
 		class CompositeDescriptor;
 		
 		/** GLObject class.
-				
 				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glObject.h}
-				\\
-
+				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glObject.h}\\ \\
 				The class GLObject is the base class for all geometric primitives that have a 
 				graphical representation. GLObject declares an interface for the drawing mechanism
 				that is used for creating the visualisation.
@@ -38,11 +35,10 @@ namespace BALL
 				The class glObject has access to the class glPrimitiveManager that holds a number
 				of primitives in variable resolutions. See \Ref{GLPrimitiveManager} for further
 				information concerning available primitives.
-				
 				@memo    GLObject class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/02/11 13:04:38 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/05/13 13:57:01 $
 		*/
 		class GLObject
 		{
@@ -63,42 +59,46 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new glObject.
-
-					@return      GLObject - new constructed glObject
-					@see         GLPrimitiveManager::GLPrimitiveManager
+					@return      GLObject new constructed glObject
+					@see         GLPrimitiveManager
 			*/
-			GLObject();
+			GLObject()
+				throw();
 			
 			/** Copy constructor.
 					Construct new glObject by copying the glObject {\em GL_object}.
 					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
-
 					@param       GL_object the glObject to be copied 
-					@return      GLObject - new constructed glObject cloned from {\em GL_object}
-					@see         GLPrimitiveManager::GLPrimitiveManager
+					@return      GLObject new constructed glObject cloned from {\em GL_object}
+					@see         GLPrimitiveManager
 			*/
-			GLObject(const GLObject& GL_object);
+			GLObject(const GLObject& GL_object)
+				throw();
 
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} glObject.
-					Calls \Ref{GLObject::destroy}.
-					@see         GLObject::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~GLObject();
+			virtual ~GLObject()
+				throw();
 
 			/** Explicit default initialization.
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Empty for further purpose.
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Assignment methods
@@ -108,41 +108,41 @@ namespace BALL
 			/** Assignment.
 					Assign the glObject {\em GL_object} to {\em *this} glObject.
 					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
-
 					@param       GL_object the glObject to be copied
-					@see         GLObject::GLObject
+					@see         GLObject
 			*/
-			void set(const GLObject& GL_object);
+			void set(const GLObject& GL_object)
+				throw();
 
 			/** Assignment operator.
 					Assign the glObject {\em GL_object} to {\em *this} glObject.
-					Calls \Ref{GLObject::set}.
+					Calls \Ref{set}.
 					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
-
 					@param       GL_object the glObject to be copied
-					@return      GLObject& - {\em *this} glObject
-					@see         GLObject::set
+					@return      GLObject& constant reference of {\em *this} glObject
+					@see         set
 			*/
-			GLObject& operator = (const GLObject& GL_object);
+			const GLObject& operator = (const GLObject& GL_object)
+				throw();
 
 			/** Copying.
 					Copy {\em *this} glObject to the glObject {\em GL_object}.
-					Calls \Ref{GLObject::set}.
+					Calls \Ref{set}.
 					The glPrimitiveManager of {\em *this} glObject is initialized to the glPrimitiveManager of the glObject {\em GL_object}.\\
-
 					@param       GL_object the glObject to be assigned to
-					@see         GLObject::set
+					@see         set
 			*/
-			void get(GLObject& GL_object) const;
+			void get(GLObject& GL_object) const
+				throw();
 
 			/** Swapping of glObjects.
 					Swap the glPrimitiveManagers of {\em *this} glObject with the glObject
 					{\em GL_object}.
-
 					@param       GL_object the glObject being swapped with {\em *this} glObject 
-					@see         GLObject::GLObject
+					@see         GLObject
 			*/
-			void swap(GLObject& GL_object);
+			void swap(GLObject& GL_object)
+				throw();
 			//@}
 
 			/**	@name	debuggers and diagnostics
@@ -154,22 +154,21 @@ namespace BALL
 					If the internal state of {\em *this} glObject is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {GLPrimitiveManager::isValid}.
-
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} glObject is correct (self-validated) and consistent,
+					@return			bool {\tt true} if the internal state of {\em *this} glObject is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 					@see        GLPrimitiveManager::isValid
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} glObject to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-
 					@param   s output stream where to output the state of {\em *this} glObject
 					@param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
@@ -177,26 +176,22 @@ namespace BALL
 			//@{
 
 			/** Persistent stream output and state restorage.
-  			 Read persistent glObject data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s input stream from where to restore the internal state of {\em *this} glObject
-					@exception   NotImplemented - always
+  			  Read persistent glObject data from the input stream {\em s} and 
+				  restore the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s input stream from where to restore the internal state of {\em *this} glObject
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
-  			 Write persistent glObject data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s output stream to where to store the internal state of {\em *this} glObject
-					@exception   NotImplemented - always
+  			  Write persistent glObject data to the output stream {\em s} and 
+				  store the state of {\em *this}. \\
+				  {\bf Note:} Not yet implemented.
+				  @param       s output stream to where to store the internal state of {\em *this} glObject
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 			
@@ -214,27 +209,27 @@ namespace BALL
 					The parameter {\em with_names} indicates whether the openGL command {\em glLoadName}
 					must be used for naming the graphical object (necessary for picking mode in the
 					scene).
-					
 					@param     with_names flag if the graphical objects must have a name
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
-					@see       GLObject::getGLPrimitiveManager
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
+					@see       getGLPrimitiveManager
 			*/
-			virtual bool draw(bool with_names = false);
+			virtual bool draw(bool with_names = false)
+				throw();
 
 			/** Export method.
 					This method handles the export of {\em *this} glObject into another
-					format (eg. POVRAY, VRML)
-				  \\
+					format (eg. POVRAY, VRML)\\
 				  {\bf Note:} Not yet implemented.
-
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 			
 			/** Experimental method.
 					Please avoid using this method.
 			*/
-			virtual bool drawUserDefined();
+			virtual bool drawUserDefined()
+				throw();
 
 			//@}
 
@@ -247,13 +242,13 @@ namespace BALL
 					of predefined primitives in variable resolutions. This method will
 					be called for each \Ref{Scene} by the render engine before calling the method
 					draw. 
-
 					@param    GL_primitive_manager the primitive manager for the current scene
-					@see      GLObject::draw
-					@see      GLPrimitiveManager::GLPrimitiveManager
-					@see      Scene::Scene
+					@see      draw
+					@see      GLPrimitiveManager
+					@see      Scene
 			*/
-			void setGLPrimitiveManager(const GLPrimitiveManager& GL_primitive_manager);
+			void setGLPrimitiveManager(const GLPrimitiveManager& GL_primitive_manager)
+				throw();
 			
 			/** Internal primitive manager access method.
 					If the primitive uses predefined shapes that are available in \Ref{GLPrimitiveManager}
@@ -262,12 +257,12 @@ namespace BALL
 					manager changes. Therefore it is necessary that this method should be used
 					when accessing predefined shapes instead of permanent storing a pointer to the
 					primitive	manager.
-
-					@return     GLPrimitiveManager* - a pointer to a primitive manager containing predefined shapes
-					@see        GLobject::setGLPrimitiveManager
-					@see        GLPrimitiveManager::GLPrimitiveManager
+					@return     GLPrimitiveManager* a pointer to a primitive manager containing predefined shapes
+					@see        setGLPrimitiveManager
+					@see        GLPrimitiveManager
 			*/
-			GLPrimitiveManager* getGLPrimitiveManager() const;
+			GLPrimitiveManager* getGLPrimitiveManager() const
+				throw();
 
 			//@}
 				

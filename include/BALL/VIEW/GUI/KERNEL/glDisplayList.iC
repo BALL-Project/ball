@@ -1,25 +1,29 @@
-// $Id: glDisplayList.iC,v 1.6 2001/01/26 01:37:05 amoll Exp $
+// $Id: glDisplayList.iC,v 1.7 2001/05/13 13:57:01 hekl Exp $
 
 BALL_INLINE
 void GLDisplayList::useCompileMode()
+  throw()
 {
   compile_ = true;
 }
 
 BALL_INLINE
 void GLDisplayList::useCompileAndExecuteMode()
+  throw()
 {
   compile_ = false;
 }
 
 BALL_INLINE
 bool GLDisplayList::isCompileMode() const
+  throw()
 {
   return compile_;
 }
 
 BALL_INLINE
 bool GLDisplayList::isCompileAndExecuteMode() const
+  throw()
 {
   return (!compile_);
 }

@@ -1,4 +1,4 @@
-// $Id: glDisplayList.h,v 1.4 2001/02/11 13:04:38 hekl Exp $
+// $Id: glDisplayList.h,v 1.5 2001/05/13 13:57:01 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
@@ -16,10 +16,8 @@ namespace BALL
 	{
 
 		/** GLDisplayList class.
-				
 				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glDisplayList.h}
-				\\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glDisplayList.h}\\ \\
 				The class GLDisplayList is a container for graphical objects.
 				Graphical objects can be drawn directly to the screen or the can be
 				stored in a display list for faster drawing afterwards. This class
@@ -28,11 +26,10 @@ namespace BALL
 				It defines some useful methods for easy creation of a display list and
 				handles errors that can occur when using display lists. See the OpenGL
 				defintion of display lists for further information concerning display lists.
-
 				@memo    GLDisplayList class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/11 13:04:38 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:57:01 $
 		*/
 		class GLDisplayList
 		{
@@ -68,40 +65,40 @@ namespace BALL
 			/** NestedDisplayList exception class.
 					This exception will be thrown whenever a display list is tried to be
 					defined inside another definition of a display list.
-
-					@see         Exception::GeneralException			
+					@see         GeneralException			
 			*/
 			class NestedDisplayList:	public Exception::GeneralException
 			{
 				public:
 
-				NestedDisplayList(const char* file, int line);
+				NestedDisplayList(const char* file, int line) 
+					throw();
 			};
 
 			/** NoDisplayListAvailable exception class.
 					This exception will be thrown when a display list should be internally
 					allocated but there is no more memory available.
-
-					@see         Exception::GeneralException			
+					@see         GeneralException			
 			*/
 			class NoDisplayListAvailable:	public Exception::GeneralException
 			{
 				public:
 
-				NoDisplayListAvailable(const char* file, int line);
+				NoDisplayListAvailable(const char* file, int line)
+					throw();
 			};
 
 			/** DisplayListRedeclaration exception class.
 					This exception will be thrown when a display list that is already defined
 					is tried to be redefined without being destroyed before.
-
-					@see         Exception::GeneralException			
+					@see         GeneralException			
 			*/
 			class DisplayListRedeclaration:	public Exception::GeneralException
 			{
 				public:
 
-				DisplayListRedeclaration(const char* file, int line);
+				DisplayListRedeclaration(const char* file, int line)
+					throw();
 			};
 			//@}
 
@@ -118,27 +115,30 @@ namespace BALL
 					  \item display list empty
 						\item use compile mode instead of compile and execute mode
 					\end{itemize}
-
-					@return      GLDisplayList - new constructed glDisplayList
+					@return      GLDisplayList new constructed glDisplayList
 			*/
-			GLDisplayList();
+			GLDisplayList()
+					throw();
 
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} glDisplayList.
-					Calls \Ref{GLDisplayList::destroy}.
-					@see         GLDisplayList::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~GLDisplayList();
+			virtual ~GLDisplayList()
+					throw();
 
 			/** Explicit default initialization.
 					Resets the mode of {\em *this} glDisplayList to compile.
 			*/
-			virtual void clear();
+			virtual void clear()
+					throw();
 
 			/** Explicit destructor.
 					If {\em *this} has already a display list then that display list
@@ -146,12 +146,8 @@ namespace BALL
 					This method can be used for clearing {\em *this} glDisplayList before
 					compiling other graphical objects into this display list.
 			*/
-			virtual void destroy();
-			//@}
-
-			/**	@name	 Assignment
-			*/
-			//@{
+			virtual void destroy()
+					throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -163,58 +159,58 @@ namespace BALL
 					between a {\em startDefinition} and {\em endDefinition} command.
 					This method indicates the start of a display list. Every object drawn after
 					this method will be compiled into {\em *this} glDisplayList.
-					
-					@exception   NestedDisplayList - thrown whenever a nested display list definition is tried.
-					@exception   NoDisplayListAvailable - thrown whenever no memory for the display list is available.
-					@exception   DisplayListRedeclaration - thrown whenever {\em *this} glDisplayList is tried to be redefined before \Ref{GLDisplayList::destroy} is called.
-					@see         GLDisplayList::endDefinition
+					@exception   NestedDisplayList thrown whenever a nested display list definition is tried.
+					@exception   NoDisplayListAvailable thrown whenever no memory for the display list is available.
+					@exception   DisplayListRedeclaration thrown whenever {\em *this} glDisplayList is tried to be redefined before \Ref{destroy} is called.
+					@see         endDefinition
 			*/
-			void startDefinition();
+			void startDefinition()
+				throw(NestedDisplayList, NoDisplayListAvailable, DisplayListRedeclaration);
 
 			/** End the display list.
 					This method is the end command for a display list definition.
-					
-					@see         GLDisplayList::startDefinition
+					@see         startDefinition
 			*/
-			void endDefinition();
+			void endDefinition()
+				throw();
 
 			/** Draw the display list.
 					If this method is called the graphical representation of {\em *this}
 					will be drawn. Precondition: {\em *this} glDisplayList has a graphical
-					representation defined before by \Ref{GLDisplayList::startDefinition}
-					and \Ref{GLDisplayList::endDefinition}.
-		
-					@see         GLDisplayList::startDefinition
-					@see         GLDisplayList::endDefinition
+					representation defined before by \Ref{startDefinition}
+					and \Ref{endDefinition}.
+					@see         startDefinition
+					@see         endDefinition
 			*/
-			void draw();
+			void draw()
+				throw();
 
 			/** Compile mode switch.
 					Before the definition of the graphical objects between
-					\Ref{GLDisplayList::startDefinition} and \Ref{GLDisplayList::endDefinition}
+					\Ref{startDefinition} and \Ref{endDefinition}
 					the compile mode can be set.
 					If this method is used {\em *this} glDisplayList will only compile
 					the graphical representation of the used objects into a display list.
-
-					@see         GLDisplayList::useCompileAndExecuteMode
-					@see         GLDisplayList::startDefinition
-					@see         GLDisplayList::endDefinition
+					@see         useCompileAndExecuteMode
+					@see         startDefinition
+					@see         endDefinition
 			*/
-			void useCompileMode();
+			void useCompileMode()
+				throw();
 
 			/** Compile and Execute mode switch.
 					Before the definition of the graphical objects between
-					\Ref{GLDisplayList::startDefinition} and \Ref{GLDisplayList::endDefinition}
+					\Ref{startDefinition} and \Ref{endDefinition}
 					the compile and execute mode can be set.
 					If this method is used {\em *this} glDisplayList will compile the used
 					objects into a display list and simultaneously execute their graphical
 					representation.
-
-					@see         GLDisplayList::useCompileMode
-					@see         GLDisplayList::startDefinition
-					@see         GLDisplayList::endDefinition
+					@see         useCompileMode
+					@see         startDefinition
+					@see         endDefinition
 			*/
-			void useCompileAndExecuteMode();
+			void useCompileAndExecuteMode()
+				throw();
 			//@}
 
 			/**	@name	Predicates
@@ -223,19 +219,19 @@ namespace BALL
 
 			/** Compile mode test.
 					Tests if {\em *this} glDisplayList is set to compile only.
-
-					@return  bool -	{\tt true} if {\em *this} glDisplayList is set to compile only, {\tt false} otherwise
-					@see         GLDisplayList::useCompileMode				
+					@return  bool {\tt true} if {\em *this} glDisplayList is set to compile only, {\tt false} otherwise
+					@see         useCompileMode				
 			*/
-			bool isCompileMode() const;
+			bool isCompileMode() const
+				throw();
 
 			/** Compile and Execute mode test.
 					Tests if {\em *this} glDisplayList is set to compile and execute.
-
-					@return  bool -	{\tt true} if {\em *this} glDisplayList is set to compile and execute, {\tt false} otherwise
-					@see         GLDisplayList::useCompileAndExecuteMode				
+					@return  bool {\tt true} if {\em *this} glDisplayList is set to compile and execute, {\tt false} otherwise
+					@see         useCompileAndExecuteMode				
 			*/
-			bool isCompileAndExecuteMode() const;
+			bool isCompileAndExecuteMode() const
+				throw();
 			//@}
 
 			/**	@name	debuggers and diagnostics
@@ -248,21 +244,20 @@ namespace BALL
 					(self-validated) and consistent {\tt true} is returned,
 					{\tt false} otherwise. 
 					{\em *this} glDisplayList is valid if a display list is already defined.
-
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} glDisplayList is correct (self-validated) and consistent,
+					@return			bool {\tt true} if the internal state of {\em *this} glDisplayList is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} glDisplayList to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-
 					@param   s output stream where to output the state of {\em *this} glDisplayList
 					@param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
@@ -270,26 +265,22 @@ namespace BALL
 			//@{
 
 			/** Persistent stream output and state restorage.
-  			 Read persistent glDisplayList data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s input stream from where to restore the internal state of {\em *this} glDisplayList
-					@exception   NotImplemented - always
+  			  Read persistent glDisplayList data from the input stream {\em s} and 
+				  restore the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s input stream from where to restore the internal state of {\em *this} glDisplayList
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
-  			 Write persistent glDisplayList data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s output stream to where to store the internal state of {\em *this} glDisplayList
-					@exception   NotImplemented - always
+  			  Write persistent glDisplayList data to the output stream {\em s} and 
+				  store the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s output stream to where to store the internal state of {\em *this} glDisplayList
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 			
@@ -299,7 +290,7 @@ namespace BALL
 			bool compile_;
 
 			/* display list */
-			GLDisplayList::GLList GL_list_;
+			GLList GL_list_;
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,19 +1,22 @@
-// $Id: compositeDescriptor.iC,v 1.6 2001/01/26 01:37:05 amoll Exp $
+// $Id: compositeDescriptor.iC,v 1.7 2001/05/13 13:57:01 hekl Exp $
 
 BALL_INLINE 
 void CompositeDescriptor::setName(const String& name)
+	throw()
 {
   *name_ptr_ = name;
 }
 
 BALL_INLINE 
 String& CompositeDescriptor::getName()
+	throw()
 {
   return *name_ptr_;
 }
 
 BALL_INLINE 
 const String& CompositeDescriptor::getName() const
+	throw()
 {
   return *name_ptr_;
 }
@@ -21,18 +24,21 @@ const String& CompositeDescriptor::getName() const
 BALL_INLINE 
 void CompositeDescriptor::setCenter
   (const Vector3& v)
+	throw()
 {
   *center_ptr_ = v;
 }
 
 BALL_INLINE 
 Vector3& CompositeDescriptor::getCenter()
+	throw()
 {
   return *center_ptr_;
 }
 
 BALL_INLINE 
 const Vector3& CompositeDescriptor::getCenter() const
+	throw()
 {
   return *center_ptr_;
 }
@@ -40,6 +46,7 @@ const Vector3& CompositeDescriptor::getCenter() const
 BALL_INLINE 
 void CompositeDescriptor::setQuaternion
   (const Quaternion& quaternion)
+	throw()
 {
   *quaternion_ptr_ = quaternion;
 }
@@ -47,6 +54,7 @@ void CompositeDescriptor::setQuaternion
 BALL_INLINE 
 void CompositeDescriptor::setQuaternion
   (const Vector3& axis, const Real angle)
+	throw()
 {
   quaternion_ptr_->set(axis, angle);
 }
@@ -54,24 +62,28 @@ void CompositeDescriptor::setQuaternion
 BALL_INLINE 
 void CompositeDescriptor::setQuaternion
   (const Vector3& axis, const Angle& angle)
+	throw()
 {
   quaternion_ptr_->set(axis, angle.toRadian());
 }
 
 BALL_INLINE 
 Quaternion& CompositeDescriptor::getQuaternion()
+	throw()
 {
   return *quaternion_ptr_;
 }
 
 BALL_INLINE 
 const Quaternion& CompositeDescriptor::getQuaternion() const
+	throw()
 {
   return *quaternion_ptr_;
 }
 
 BALL_INLINE 
 void CompositeDescriptor::setComposite(const Composite* composite, bool allow_deletion)
+	throw()
 {
 	composite_ = const_cast<Composite*>(composite);
 	shallow_copy_ = (!allow_deletion);
@@ -79,36 +91,42 @@ void CompositeDescriptor::setComposite(const Composite* composite, bool allow_de
 
 BALL_INLINE 
 Composite* CompositeDescriptor::getComposite()
+	throw()
 {
   return composite_;
 }
 
 BALL_INLINE 
 const Composite* CompositeDescriptor::getComposite() const
+	throw()
 {
   return composite_;
 }
 
 BALL_INLINE 
 void CompositeDescriptor::registerPrimitiveManager(const GLPrimitiveManager& manager)
+	throw()
 {
 	primitive_manager_ = const_cast<GLPrimitiveManager*>(&manager);
 }
 
 BALL_INLINE 
 void CompositeDescriptor::registerGLObjectCollector(const GLObjectCollector& collector)
+	throw()
 {
 	object_collector_ = const_cast<GLObjectCollector*>(&collector);
 }
 
 BALL_INLINE 
 bool CompositeDescriptor::isShallowCopy() const 
+	throw()
 {
   return (shallow_copy_);
 }
 
 BALL_INLINE 
 bool CompositeDescriptor::isDeepCopy() const
+	throw()
 {
   return (!shallow_copy_);
 }

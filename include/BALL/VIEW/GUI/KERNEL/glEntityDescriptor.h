@@ -1,4 +1,4 @@
-// $Id: glEntityDescriptor.h,v 1.4 2001/02/11 13:04:38 hekl Exp $
+// $Id: glEntityDescriptor.h,v 1.5 2001/05/13 13:57:01 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
@@ -19,15 +19,13 @@ namespace BALL
 	{
 
 		/** GLEntityDescriptor class.
-				
 				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h}
-				{\bf Category:} \Ref{GLDisplayList} container\\
-				\\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h} \\
+				{\bf Category:} \Ref{GLDisplayList} container\\	\\
 				The class GLEntityDescriptor is a container for \Ref{GLDisplayList}'s.
 				A graphical representation of an object contains different graphical
 				visualizations (e.g. a solid part, a transparent part, a wireframe part, etc.).
-				If a graphical object should be drawn correctly (wit OpenGL) it must be
+				If a graphical object should be drawn correctly (with OpenGL) it must be
 				divided into these parts. Later if the object is drawn these parts will
 				be drawn in a very strict order (e.g. first the solid part and than the
 				transparent part). If this order is not maintained the visualization of
@@ -48,11 +46,10 @@ namespace BALL
 					\item  {\bf transparent always front display list} - this \Ref{GLDisplayList} stores the visualization of an object in the moveable state that should be drawn transparent and should be always in front of other objects.
 				\end{itemize}
 				This class is used internally by the \Ref{CompositeDescriptor} class.
-
 				@memo    GLEntityDescriptor class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/11 13:04:38 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:57:01 $
 		*/
 		class GLEntityDescriptor
 		{
@@ -71,44 +68,41 @@ namespace BALL
 					  \item all display lists are empty
 						\item update is necessary
 					\end{itemize}
-
-					@return      GLEntityDescriptor - new constructed glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      GLEntityDescriptor new constructed glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			GLEntityDescriptor();
+			GLEntityDescriptor()
+				throw();
 			
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} glEntityDescriptor.
-					Calls \Ref{GLEntityDescriptor::destroy}
-
-					@see  GLEntityDescriptor::destroy
+					Calls \Ref{destroy}
+					@see  destroy
 			*/
-			virtual ~GLEntityDescriptor();
+			virtual ~GLEntityDescriptor()
+				throw();
 
 			/** Explicit default initialization.
 					Destroys all internal \Ref{GLDisplayList} objects.
 					That means that the graphical representation of {\em *this}
 					glEntityDescriptor is cleared.
 					Calls \Ref{GLDisplayList::destroy}
-
 					@see  GLDisplayList::destroy
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Empty for further purpose.
 			*/
-			virtual void destroy();
-			//@}
-
-			/**	@name	Assignment
-			*/
-			//@{
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -119,181 +113,181 @@ namespace BALL
 					Access the mutable pointer of the static display list of {\em *this} 
 					glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      GLDisplayList* - mutable pointer to the static display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      GLDisplayList* mutable pointer to the static display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			GLDisplayList* getStaticDisplayList();
+			GLDisplayList* getStaticDisplayList()
+				throw();
 
 			/** Non-mutable inspection of the static display list.
 					Access the constant pointer of the static display list of {\em *this} 
 					glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      const GLDisplayList* - constant pointer to the static display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      const GLDisplayList* constant pointer to the static display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			const GLDisplayList* getStaticDisplayList() const;
+			const GLDisplayList* getStaticDisplayList() const
+				throw();
 
 			/** Mutable inspection of the static always front display list.
 					Access the mutable pointer of the static always front display list of
 					{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      GLDisplayList* - mutable pointer to the static always front display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      GLDisplayList* mutable pointer to the static always front display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			GLDisplayList* getStaticAlwaysFrontDisplayList();
+			GLDisplayList* getStaticAlwaysFrontDisplayList()
+				throw();
 
 			/** Non-mutable inspection of the static always front display list.
 					Access the constant pointer of the static always front display list of
 					{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      const GLDisplayList* - constant pointer to the static always front display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      const GLDisplayList* constant pointer to the static always front display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			const GLDisplayList* getStaticAlwaysFrontDisplayList() const;
+			const GLDisplayList* getStaticAlwaysFrontDisplayList() const
+				throw();
 
 			/** Mutable inspection of the static wireframe display list.
 					Access the mutable pointer of the static wireframe display list of
 					{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      GLDisplayList* - mutable pointer to the static wireframe display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      GLDisplayList* mutable pointer to the static wireframe display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			GLDisplayList* getStaticWireframeDisplayList();
+			GLDisplayList* getStaticWireframeDisplayList()
+				throw();
 
 			/** Non-mutable inspection of the static wireframe display list.
 					Access the constant pointer of the static wireframe display list of
 					{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      const GLDisplayList* - constant pointer to the static wireframe display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      const GLDisplayList* constant pointer to the static wireframe display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			const GLDisplayList* getStaticWireframeDisplayList() const;
+			const GLDisplayList* getStaticWireframeDisplayList() const
+				throw();
 
 			/** Mutable inspection of the static wireframe always front display list.
 					Access the mutable pointer of the static wireframe always front display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      GLDisplayList* - mutable pointer to the static wireframe always front display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      GLDisplayList* mutable pointer to the static wireframe always front display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			GLDisplayList* getStaticWireframeAlwaysFrontDisplayList();
+			GLDisplayList* getStaticWireframeAlwaysFrontDisplayList()
+				throw();
 
 			/** Non-mutable inspection of the static wireframe always front display list.
 					Access the constant pointer of the static wireframe always front display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      const GLDisplayList* - constant pointer to the static wireframe always front display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      const GLDisplayList* constant pointer to the static wireframe always front display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			const GLDisplayList* getStaticWireframeAlwaysFrontDisplayList() const;
+			const GLDisplayList* getStaticWireframeAlwaysFrontDisplayList() const
+				throw();
 
 			/** Mutable inspection of the dynamic display list.
 					Access the mutable pointer of the dynamic display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      GLDisplayList* - mutable pointer to the dynamic display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      GLDisplayList* mutable pointer to the dynamic display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			GLDisplayList* getDynamicDisplayList();
+			GLDisplayList* getDynamicDisplayList()
+				throw();
 
 			/** Non-mutable inspection of the dynamic display list.
 					Access the constant pointer of the dynamic display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      const GLDisplayList* - constant pointer to the dynamic display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      const GLDisplayList* constant pointer to the dynamic display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			const GLDisplayList* getDynamicDisplayList() const;
+			const GLDisplayList* getDynamicDisplayList() const
+				throw();
 
 			/** Mutable inspection of the dynamic always front display list.
 					Access the mutable pointer of the dynamic always front display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      GLDisplayList* - mutable pointer to the dynamic always front display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      GLDisplayList* mutable pointer to the dynamic always front display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			GLDisplayList* getDynamicAlwaysFrontDisplayList();
+			GLDisplayList* getDynamicAlwaysFrontDisplayList()
+				throw();
 
 			/** Non-mutable inspection of the dynamic always front display list.
 					Access the constant pointer of the dynamic always front display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      const GLDisplayList* - constant pointer to the dynamic always front display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      const GLDisplayList* constant pointer to the dynamic always front display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			const GLDisplayList* getDynamicAlwaysFrontDisplayList() const;
+			const GLDisplayList* getDynamicAlwaysFrontDisplayList() const
+				throw();
 
 			/** Mutable inspection of the transparent display list.
 					Access the mutable pointer of the transparent display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      GLDisplayList* - mutable pointer to the transparent display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      GLDisplayList* mutable pointer to the transparent display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			GLDisplayList* getTransparentDisplayList();
+			GLDisplayList* getTransparentDisplayList()
+				throw();
 
 			/** Non-mutable inspection of the transparent display list.
 					Access the constant pointer of the transparent display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      const GLDisplayList* - constant pointer to the transparent display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      const GLDisplayList* constant pointer to the transparent display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			const GLDisplayList* getTransparentDisplayList() const;
+			const GLDisplayList* getTransparentDisplayList() const
+				throw();
 
 			/** Mutable inspection of the transparent always front display list.
 					Access the mutable pointer of the transparent always front display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      GLDisplayList* - mutable pointer to the transparent always front display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      GLDisplayList* mutable pointer to the transparent always front display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			GLDisplayList* getTransparentAlwaysFrontDisplayList();
+			GLDisplayList* getTransparentAlwaysFrontDisplayList()
+				throw();
 
 			/** Non-mutable inspection of the transparent always front display list.
 					Access the constant pointer of the transparent always front display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					
-					@return      const GLDisplayList* - constant pointer to the transparent always front display list of {\em *this} glEntityDescriptor
-					@see         GLDisplayList::GLDisplayList
+					@return      const GLDisplayList* constant pointer to the transparent always front display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
 			*/
-			const GLDisplayList* getTransparentAlwaysFrontDisplayList() const;
+			const GLDisplayList* getTransparentAlwaysFrontDisplayList() const
+				throw();
 
 			/** Mark for update.
 					Mark {\em *this} glEntityDescriptor for update.
 					If {\em *this} glEntityDescriptor is updated all \Ref{GLDisplayList} objects
-					will be cleared (see \Ref{GLEntityDescriptor::clear}). This method will be 
+					will be cleared (see \Ref{clear}). This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-
-					@see   GLEntityDescriptor::cancelUpdate
-					@see   GLEntityDescriptor::needUpdate
+					@see   cancelUpdate
+					@see   needUpdate
 			*/
-			void update();
+			void update()
+				throw();
 
 			/** Cancel the update.
 					Cancel the update of {\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-
-					@see   GLEntityDescriptor::update
-					@see   GLEntityDescriptor::needUpdate
+					@see   update
+					@see   needUpdate
 			*/
-			void cancelUpdate();
+			void cancelUpdate()
+				throw();
  			//@}
 
 			/**	@name	Predicates
@@ -303,11 +297,11 @@ namespace BALL
 			/** Test if update needed.
 					Test if {\em *this} glEntityDescriptor needs an update. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-
-					@see   GLEntityDescriptor::update
-					@see   GLEntityDescriptor::cancelUpdate
+					@see   update
+					@see   cancelUpdate
 			*/
-			bool needUpdate() const;
+			bool needUpdate() const
+				throw();
 			//@}
 
 			/**	@name	debuggers and diagnostics
@@ -322,23 +316,22 @@ namespace BALL
 					{\em *this} glEntityDescriptor is valid if all internal display lists
 					are valid.
 					Calls \Ref{GLDisplayList::isValid}
-
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} glEntityDescriptor is correct (self-validated) and consistent,
+					@return			bool {\tt true} if the internal state of {\em *this} glEntityDescriptor is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} glEntityDescriptor to 
 					the output ostream {\em s} with dumping depth {\em depth}.
 					Dumps all display lists.
 					Calls \Ref{GLDisplayList::dump}
-
 					@param   s output stream where to output the state of {\em *this} glEntityDescriptor
 					@param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
@@ -346,26 +339,22 @@ namespace BALL
 			//@{
 
 			/** Persistent stream output and state restorage.
-  			 Read persistent glEntityDescriptor data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s input stream from where to restore the internal state of {\em *this} glEntityDescriptor
-					@exception   NotImplemented - always
+  			  Read persistent glEntityDescriptor data from the input stream {\em s} and 
+				  restore the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s input stream from where to restore the internal state of {\em *this} glEntityDescriptor
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
-  			 Write persistent glEntityDescriptor data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s output stream to where to store the internal state of {\em *this} glEntityDescriptor
-					@exception   NotImplemented - always
+  			  Write persistent glEntityDescriptor data to the output stream {\em s} and 
+				  store the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s output stream to where to store the internal state of {\em *this} glEntityDescriptor
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 				
 

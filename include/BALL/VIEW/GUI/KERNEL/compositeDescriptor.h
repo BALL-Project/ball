@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.h,v 1.5 2001/02/11 13:04:38 hekl Exp $
+// $Id: compositeDescriptor.h,v 1.6 2001/05/13 13:57:01 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
@@ -55,13 +55,10 @@ namespace BALL
 	{
 
 		/** CompositeDescriptor class.
-  
 				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Defintion:} \URL{BALL/VIEW/GUI/KERNEL/compositeDescriptor.h}
-				\\
+				{\bf Defintion:} \URL{BALL/VIEW/GUI/KERNEL/compositeDescriptor.h}\\
 				{\bf Category:} \Ref{CompositeDescriptor} container\\
-				{\bf Category:} \Ref{GLEntityDescriptor} container\\	
-				
+				{\bf Category:} \Ref{GLEntityDescriptor} container\\ \\
 				The class CompositeDescriptor is responsible for maintaining
 				the graphical representation stored in \Ref{GLEntityDescriptor} objects of 
 				a given \Ref{Composite}.
@@ -70,7 +67,7 @@ namespace BALL
 				This class will be used internally by the \Ref{MainControl} class for
 				handling \Ref{Composite} objects.
 				All necessary information concerning visualization of a \Ref{Composite} like
-				name, center vector and rotation axis are available int this class.
+				name, center vector and rotation axis are available in this class.
 				Further this class creates, updates and maintains \Ref{GLEntityDescriptor}
 				objects for every \Ref{Scene}.
 				These \Ref{GLEntityDescriptor} contain precompiled display lists of the
@@ -82,11 +79,10 @@ namespace BALL
 				If the parent of such a shallow copy will be deleted the shallow copy will be
 				deleted as well because all attributs are no longer available. This mechanism
 				will work automatically.
-
 				@memo    CompositeDescriptor class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/02/11 13:04:38 $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/05/13 13:57:01 $
 		*/
 		class CompositeDescriptor
 		{
@@ -117,15 +113,15 @@ namespace BALL
 						\item no shallow copies
 						\item no parent 
 					\end{itemize}
-
-					@return CompositeDescriptor - new constructed compositeDescriptor
-					@see    Composite::Composite
-					@see    Quaternion::Quaternion
-					@see    GLPrimitiveManager::GLPrimitiveManager
-					@see    GLEntityDescriptor::GLEntityDescriptor
-					@see    GLObjectCollector::GLObjectCollector
+					@return CompositeDescriptor new constructed compositeDescriptor
+					@see    Composite
+					@see    Quaternion
+					@see    GLPrimitiveManager
+					@see    GLEntityDescriptor
+					@see    GLObjectCollector
 			 */
-			CompositeDescriptor();
+			CompositeDescriptor()
+				throw();
 			
 			/** Copy constructor.
 					Construct new compositeDescriptor by copying the compositeDescriptor
@@ -141,13 +137,13 @@ namespace BALL
 					so the shallow compositeDescriptor will also be deleted because all the 
 					necessary attributes and the \Ref{Composite} are originally stored in the parent
 					compositeDescriptor.
-					
 					@param  composite_descriptor the compositeDescriptor to be copied (cloned)
 					@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em composite_descriptor}
-					@return CompositeDescriptor - new constructed compositeDescriptor cloned from {\em composite_descriptor}.
-					@see    CompositeDescriptor::CompositeDescriptor
+					@return CompositeDescriptor new constructed compositeDescriptor cloned from {\em composite_descriptor}.
+					@see    CompositeDescriptor
 			 */
-			CompositeDescriptor(const CompositeDescriptor& composite_descriptor, bool deep = true);
+			CompositeDescriptor(const CompositeDescriptor& composite_descriptor, bool deep = true)
+				throw();
 
 			//@}
 
@@ -157,21 +153,20 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} compositeDescriptor.
-					Calls \Ref{CompositeDescriptor::destroy}.
-
-					@see         CompositeDescriptor::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			 */
-			virtual ~CompositeDescriptor();
+			virtual ~CompositeDescriptor()
+				throw();
 
 			/** Explicit default initialization.
 					Clears all \Ref{GLEntityDescriptor} objects of {\em *this} compositeDescriptor 
 					and resets the internal linkage.
 					Calls \Ref{GLEntityDescriptor::clear}.
-
-					@see     CompositeDescriptor::CompositeDescriptor
 					@see     GLEntityDescriptor::clear
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Destroy {\em *this} compositeDescriptor.
@@ -182,11 +177,11 @@ namespace BALL
 					compositeDescriptor it will be removed from it. If {\em *this} compositeDescriptor
 					was a deep copy of another compositeDescriptor the \Ref{Composite}
 					of {\em *this} compositeDescriptor will be deleted.
-					Calls \Ref{CompositeDescriptor::clear}
-
-					@see         CompositeDescriptor::clear
+					Calls \Ref{clear}
+					@see         clear
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Assignment
@@ -198,49 +193,48 @@ namespace BALL
 					compositeDescriptor.
 					The assignment is either deep (default) or shallow.
 					If this method is called {\em *this} compositeDescriptor is internally destroyed.
-					Calls \Ref{CompositeDescriptor::destroy}
-
+					Calls \Ref{destroy}
 					@param  composite_descriptor the compositeDescriptor to be copied (cloned)
 					@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em composite_descriptor}
-					@see    CompositeDescriptor::CompositeDescriptor
-					@see    CompositeDescriptor::destroy
+					@see    CompositeDescriptor
+					@see    destroy
 			*/
-			void set(CompositeDescriptor& composite_descriptor, bool deep = true);
+			void set(CompositeDescriptor& composite_descriptor, bool deep = true)
+				throw();
 
 			/** Assignment operator.
 					Assign the compositeDescriptor {\em composite_descriptor} to {\em *this}
 					compositeDescriptor.
 					The assignment is deep.
-					Calls \Ref{CompositeDescriptor::set}.
-
+					Calls \Ref{set}.
 					@param   composite_descriptor the compositeDescriptor to be copied (cloned)
-					@return  CompositeDescriptor& - {\em *this} compositeDescriptor
-					@see     CompositeDescriptor::set
+					@return  CompositeDescriptor& constant reference of {\em *this} compositeDescriptor
+					@see     set
 			*/
-			CompositeDescriptor& operator = (CompositeDescriptor& composite_descriptor);
+			const CompositeDescriptor& operator = (CompositeDescriptor& composite_descriptor)
+				throw();
 
 			/** Copying with cloning facility.
 					Copy {\em *this} compositeDescriptor to the compositeDescriptor 
 					{\em composite_descriptor}.
 					The assignment is either deep (default) or shallow.
-					Calls \Ref{CompositeDescriptor::set}.
-
+					Calls \Ref{set}.
 					@param  composite_descriptor the compositeDescriptor to be assigned to
-					@see    CompositeDescriptor::set
+					@see    set
 			*/
-			void get(CompositeDescriptor& composite_descriptor, bool deep = true);
+			void get(CompositeDescriptor& composite_descriptor, bool deep = true)
+				throw();
 			
 			/** Swapping of CompositeDescriptors.
-					Swap the states of {\em *this} with {\em composite_descriptor}.
+					Swap the states of {\em *this} with {\em composite_descriptor}.\\
  				  {\bf Note:} Not yet implemented.
-		 
 					@param  composite_descriptor the CompositeDescriptor {\em *this} is being swapped with
-					@exception   NotImplemented - always
 			*/
-			void swap(CompositeDescriptor& composite_descriptor);
+			void swap(CompositeDescriptor& composite_descriptor)
+				throw();
 			//@}
 
-			/**	@name	Accessors
+			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
 
@@ -248,144 +242,146 @@ namespace BALL
 					Change the name of {\em *this} compositeDescriptor to the parameter {\em name}.
 					Every graphical representation of the \Ref{Composite} of {\em *this}
 					compositeDescriptor needs a name to identify later.
-
 					@param  name the new name of {\em *this} compositeDescriptor
-					@see    CompositeDescriptor::getName
+					@see    getName
 			*/
-			void setName(const String& name);
+			void setName(const String& name)
+				throw();
 
 			/** Mutable inspection of the name.
 					Access a mutable reference of the name of {\em *this} compositeDescriptor.
-					@return  String& - mutable reference of the name of {\em *this} compositeDescriptor
-					@see     CompositeDescriptor::setName
+					@return  String& mutable reference of the name of {\em *this} compositeDescriptor
+					@see     setName
 			*/
-			String& getName();
+			String& getName()
+				throw();
 
 			/** Constant inspection of the name.
 					Access a constant reference of the name of {\em *this} compositeDescriptor.
-
-					@return  String& - constant reference of the name of {\em *this} compositeDescriptor
-					@see     CompositeDescriptor::setName
+					@return  String& constant reference of the name of {\em *this} compositeDescriptor
+					@see     setName
 			*/
-			const String& getName() const;
+			const String& getName() const
+				throw();
 
 			/** Change of the CompositeDescriptor's center vector.
 					Change the center vector of {\em *this} compositeDescriptor to \Ref{Vector3}
 					{\em center}.
 					The center vector is the vector that is the origin of the graphical
 					representation of the \Ref{Composite} of {\em *this}	compositeDescriptor.
-
 					@param  center the new center vector of {\em *this} compositeDescriptor
-					@see    CompositeDescriptor::getCenter
-					@see     Vector3::Vector3
+					@see    getCenter
+					@see     Vector3
 			*/
-			void setCenter(const Vector3& center);
+			void setCenter(const Vector3& center)
+				throw();
 
 			/** Mutable inspection of the center vector.
 					Access a mutable reference to the center vector of {\em *this} compositeDescriptor.
-
-					@return  Vector3& - mutable reference to the center vector of {\em *this} compositeDescriptor
-					@see     CompositeDescriptor::setCenter
-					@see     Vector3::Vector3
+					@return  Vector3& mutable reference to the center vector of {\em *this} compositeDescriptor
+					@see     setCenter
+					@see     Vector3
 			*/
-			Vector3& getCenter();
+			Vector3& getCenter()
+				throw();
 
 			/** Non-mutable inspection of the center vector.
 					Access a constant reference of the center vector of {\em *this}
 					compositeDescriptor.
-
-					@return  Vector3& - constant reference to the center vector of {\em *this} compositeDescriptor
-					@see     CompositeDescriptor::setCenter
-					@see     Vector3::Vector3
+					@return  Vector3& constant reference to the center vector of {\em *this} compositeDescriptor
+					@see     setCenter
+					@see     Vector3
 			*/
-			const Vector3& getCenter() const;
+			const Vector3& getCenter() const
+				throw();
 
 			/** Change of the CompositeDescriptor's quaternion.
 					Change the \Ref{Quaternion} of {\em *this} compositeDescriptor to the
 					\Ref{Quaternion} {\em quaternion}.
 					The \Ref{Quaternion} describes the rotation of the graphical representation 
 					of the \Ref{Composite} of {\em *this}	compositeDescriptor.
-
 					@param  quaternion the new quaternion
-					@see    CompositeDescriptor::getQuaternion
-					@see    Quaternion::Quaternion
+					@see    getQuaternion
+					@see    Quaternion
 			*/
-			void setQuaternion(const Quaternion& quaternion);
+			void setQuaternion(const Quaternion& quaternion)
+				throw();
 
 			/** Change of the CompositeDescriptor's quaternion.
 					Change the \Ref{Quaternion} of {\em *this} compositeDescriptor to the
 					\Ref{Quaternion} constructed from {\em axis} and {\em angle}.
 					The \Ref{Quaternion} describes the rotation of the graphical representation 
 					of the \Ref{Composite} of {\em *this}	compositeDescriptor.
-
 					@param  axis the new quaternion axis
 					@param  angle the new quaternion angle
-					@see    CompositeDescriptor::getQuaternion
-					@see    Quaternion::Quaternion
-					@see    Vector3::Vector3
+					@see    getQuaternion
+					@see    Quaternion
+					@see    Vector3
 			*/
-			void setQuaternion(const Vector3& axis, const Real angle);
+			void setQuaternion(const Vector3& axis, const Real angle)
+				throw();
 
 			/** Change of the CompositeDescriptor's quaternion.
 					Change the \Ref{Quaternion} of {\em *this} compositeDescriptor to the 
 					\Ref{Quaternion} constructed from the parameter {\em axis} and {\em angle}.
 					The \Ref{Quaternion} describes the rotation of the graphical representation 
 					of the \Ref{Composite} of {\em *this}	compositeDescriptor.
-
 					@param  axis the new \Ref{Quaternion} axis
 					@param  angle the new \Ref{Quaternion} angle
-					@see    CompositeDescriptor::getQuaternion
-					@see    Quaternion::Quaternion
-					@see    Vector3::Vector3
+					@see    getQuaternion
+					@see    Quaternion
+					@see    Vector3
 			*/
-			void setQuaternion(const Vector3& axis, const Angle& angle);
+			void setQuaternion(const Vector3& axis, const Angle& angle)
+				throw();
 
 			/** Mutable inspection of the quaternion.
 					Access a mutable reference of the \Ref{Quaternion} of {\em *this} compositeDescriptor.
-
-					@return  Quaternion& - mutable reference of the \Ref{Quaternion} of {\em *this} compositeDescriptor
-					@see     CompositeDescriptor::setQuaternion
-					@see     Quaternion::Quaternion
+					@return  Quaternion& mutable reference of the \Ref{Quaternion} of {\em *this} compositeDescriptor
+					@see     setQuaternion
+					@see     Quaternion
 			*/
-			Quaternion& getQuaternion();
+			Quaternion& getQuaternion()
+				throw();
 
 			/** Constant inspection of the quaternion.
 					Access a constant reference of the \Ref{Quaternion} of {\em *this}.
 
-					@return  Quaternion& - constant reference of the \Ref{Quaternion} of {\em *this} compositeDescriptor
-					@see     CompositeDescriptor::setQuaternion
-					@see     Quaternion::Quaternion
+					@return  Quaternion& constant reference of the \Ref{Quaternion} of {\em *this} compositeDescriptor
+					@see     setQuaternion
+					@see     Quaternion
 			*/
-			const Quaternion& getQuaternion() const;
+			const Quaternion& getQuaternion() const
+				throw();
 
 			/** Change of the CompositeDescriptor's composite.
 					Change the \Ref{Composite} of {\em *this} compositeDescriptor to {\em composite}.
-
 					@param  composite the new \Ref{Composite} of {\em *this} compositeDescriptor
 					@param  allow_deletion states if the given composite may be deleted by destruction of {\em *this} compositeDescriptor
-					@see    CompositeDescriptor::getComposite
-					@see    Composite::Composite
+					@see    getComposite
+					@see    Composite
 			*/
-			void setComposite(const Composite* composite, bool allow_deletion = false);
+			void setComposite(const Composite* composite, bool allow_deletion = false)
+				throw();
 
 			/** Mutable inspection of the composite.
 					Access a mutable pointern to the \Ref{Composite} of {\em *this} compositeDescriptor.
-
-					@return  Composite* - mutable pointer to the \Ref{Composite} of {\em *this} compositeDescriptor
-					@see     CompositeDescriptor::setComposite
-					@see     Composite::Composite
+					@return  Composite* mutable pointer to the \Ref{Composite} of {\em *this} compositeDescriptor
+					@see     setComposite
+					@see     Composite
 			*/
-			Composite* getComposite();
+			Composite* getComposite()
+				throw();
 
 			/** Non-mutable inspection of the composite.
 					Access a constant pointer of the \Ref{Composite} of {\em *this}
 					compositeDescriptor.
-
-					@return  Composite* - constant pointer of the \Ref{Composite} of {\em *this} compositeDescriptor
-					@see     CompositeDescriptor::setComposite
-					@see     Composite::Composite
+					@return  Composite* constant pointer of the \Ref{Composite} of {\em *this} compositeDescriptor
+					@see     setComposite
+					@see     Composite
 			*/
-			const Composite* getComposite() const;
+			const Composite* getComposite() const
+				throw();
 				
 			/** Mark all graphical representation for update.
 					This method marks the \Ref{Composite} of {\em *this} and all shallow copies
@@ -395,11 +391,11 @@ namespace BALL
 					\Ref{GLEntityDescriptor} will be rebuild. 
 					Call this method if the structure of the \Ref{Composite} or its graphical
 					representation has changed.
-					
-					@see    CompositeDescriptor::compileEntity
-					@see    GLEntityDescriptor::GLEntityDescriptor
+					@see    compileEntity
+					@see    GLEntityDescriptor
 			*/
-			void update();
+			void update()
+				throw();
 			//@}
 
 			/** @name Internally used render engine methods.
@@ -413,24 +409,24 @@ namespace BALL
 					For each \Ref{GLPrimitiveManager} there will be a new \Ref{GLEntityDescriptor}
 					created.
 					This method will be called internally from the render engine.
-
 					@param manager the new \Ref{GLPrimitiveManager}
-					@see   GLPrimitiveManager::GLPrimitiveManager
-					@see   GLEntityDescriptor::GLEntityDescriptor
+					@see   GLPrimitiveManager
+					@see   GLEntityDescriptor
 			*/
-			void registerPrimitiveManager(const GLPrimitiveManager& manager);
+			void registerPrimitiveManager(const GLPrimitiveManager& manager)
+				throw();
 
 			/** Registers a \Ref{GLObjectCollector}.
 					The \Ref{GLObjectCollector} is used by the \Ref{GLEntityDescriptor}
 					for collecting all openGL objects from the \Ref{Composite} of {\em *this}
 					compositeDescriptor.
 					This method will be called internally from the render engine.
-
 					@param collector the new \Ref{GLObjectCollector}
-					@see   GLObjectCollector::GLObjectCollector
-					@see   GLEntityDescriptor::GLEntityDescriptor
+					@see   GLObjectCollector
+					@see   GLEntityDescriptor
 			*/
-			void registerGLObjectCollector(const GLObjectCollector& collector);
+			void registerGLObjectCollector(const GLObjectCollector& collector)
+				throw();
 
 			/** Create display lists of the graphical representation.
 					If the graphical representation of the \Ref{Composite} of {\em *this}
@@ -440,14 +436,14 @@ namespace BALL
 					of the graphical representation of the \Ref{Composite} of {\em *this}
 					compositeDescriptor.
 					This method will be called internally by the 
-					\Ref{CompositeDescriptor::drawEntity} method.
-					
+					\Ref{drawEntity} method.
 					@param entity the new \Ref{GLEntityDescriptor} that will hold the lists of 
 					              the graphical representation of the \Ref{Composite} of {\em *this}
 												compositeDescriptor
-					@see   CompositeDescriptor::drawEntity
+					@see   drawEntity
 			*/
-			void compileEntity(GLEntityDescriptor* entity);
+			void compileEntity(GLEntityDescriptor* entity)
+				throw();
 
 			/** Draws the graphical representation fast. 
 					This method uses precompiled lists created with \Ref{compileEntity} for 
@@ -456,17 +452,17 @@ namespace BALL
 					The representation can either be drawn in hires
 					quality (default) or in lowres quality used for quicker moving the graphic.
 					This method will be called internally from the render engine.
-					Calls \Ref{CompositeDescriptor::compileEntity}
-
+					Calls \Ref{compileEntity}
 					@param dynamic the new drawing mode ({\tt true} - lowres drawing mode, 
 					               {\tt false} (Default) - hires drawing mode.
 												 See \Ref{GeometricObject} for description of the different
 												 drawing modes)
-					@see   CompositeDescriptor::compileEntity
-					@see   CompositeDescriptor::registerPrimitiveManager
-					@see   GeometricObject::GeometricObject
+					@see   compileEntity
+					@see   registerPrimitiveManager
+					@see   GeometricObject
 			*/
-			void drawEntity(bool dynamic = false);
+			void drawEntity(bool dynamic = false)
+				throw();
 
 			/** Draws the graphical representation directly.
 					The representation can either be drawn in hires
@@ -480,16 +476,16 @@ namespace BALL
 					considerably. Another feat of this method is the possibily that each
 					graphical object can be named. That is essential for the selection mode.
 					This method will be called internally from the render engine.
-
 					@param dynamic the new drawing mode ({\tt true} - lowres drawing mode, 
 					               {\tt false} (Default) - hires drawing mode.
 												 See \Ref{GeometricObject} for description of the different
 												 drawing modes)
 					@param with_names the flag if names should be used or not (default)
-					@see   CompositeDescriptor::registerPrimitiveManager
-					@see   GeometricObject::GeometricObject
+					@see   registerPrimitiveManager
+					@see   GeometricObject
 			*/
-			void drawDirect(bool dynamic = false, bool with_names = false);
+			void drawDirect(bool dynamic = false, bool with_names = false)
+				throw();
 			//@}
 
 			/**	@name	Predicates
@@ -497,20 +493,18 @@ namespace BALL
 			//@{
 			
 			/** Determines if the compositeDescriptor is a shallow copy.
-
 					@return  bool {\tt true} if {\em *this} compositeDescriptor is a shallow copy, {\tt false} otherwise
-					@see     CompositeDescriptor::CompositeDescriptor
-					@see     CompositeDescriptor::isDeepCopy
+					@see     isDeepCopy
 			*/
-			bool isShallowCopy() const;
+			bool isShallowCopy() const
+				throw();
 
 			/** Test if compositeDescriptor is a deep copy.
-
 					@return  bool {\tt true} if {\em *this} compositeDescriptor is a deep copy, {\tt false} otherwise
-					@see     CompositeDescriptor::CompositeDescriptor
-					@see     CompositeDescriptor::isShallowCopy
+					@see     isShallowCopy
 			*/
-			bool isDeepCopy() const;
+			bool isDeepCopy() const
+				throw();
 			//@}
 
 			/**	@name	Debugging and Diagnostics
@@ -524,21 +518,19 @@ namespace BALL
 					(self-validated) and consistent {\tt true} is returned, {\tt false} otherwise. 
 					This method checks whether all shallow copies of {\em *this} 
 					compositeDescriptor are connected to {\em *this} compositeDescriptor.
-
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} compositeDescriptor is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} compositeDescriptor is correct (self-validated) and consistent, {\tt false} otherwise
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current internal state of {\em *this} compositeDescriptor to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-
 					@param   s output stream where to output the internal state of {\em *this} compositeDescriptor
-					@param   depth - the dumping depth
+					@param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
@@ -546,26 +538,22 @@ namespace BALL
 			//@{
 
 			/** Persistent stream output and state restorage.
-  			 Read persistent compositeDescriptor data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s input stream from where to restore the internal state of {\em *this} compositeDescriptor
-					@exception   NotImplemented - always
+  			  Read persistent compositeDescriptor data from the input stream {\em s} and 
+				  restore the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s input stream from where to restore the internal state of {\em *this} compositeDescriptor
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
-  			 Write persistent compositeDescriptor data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s output stream to where to store the internal state of {\em *this} compositeDescriptor
-					@exception   NotImplemented - always
+  			  Write persistent compositeDescriptor data to the output stream {\em s} and 
+				  store the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s output stream to where to store the internal state of {\em *this} compositeDescriptor
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 		
 

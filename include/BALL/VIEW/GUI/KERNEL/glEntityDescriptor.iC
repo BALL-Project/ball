@@ -1,115 +1,134 @@
-// $Id: glEntityDescriptor.iC,v 1.5 2000/09/23 14:40:12 hekl Exp $
+// $Id: glEntityDescriptor.iC,v 1.6 2001/05/13 13:57:01 hekl Exp $
 
 BALL_INLINE 
 GLDisplayList* GLEntityDescriptor::getStaticDisplayList()
+  throw()
 {
   return &static_display_list_;
 }
 
 BALL_INLINE 
 const GLDisplayList* GLEntityDescriptor::getStaticDisplayList() const
+  throw()
 {
   return &static_display_list_;
 }
 
 BALL_INLINE 
 GLDisplayList* GLEntityDescriptor::getStaticAlwaysFrontDisplayList()
+  throw()
 {
   return &static_always_front_display_list_;
 }
 
 BALL_INLINE 
 const GLDisplayList* GLEntityDescriptor::getStaticAlwaysFrontDisplayList() const
+  throw()
 {
   return &static_always_front_display_list_;
 }
 
 BALL_INLINE 
 GLDisplayList* GLEntityDescriptor::getStaticWireframeDisplayList()
+  throw()
 {
   return &static_wireframe_display_list_;
 }
 
 BALL_INLINE 
 const GLDisplayList* GLEntityDescriptor::getStaticWireframeDisplayList() const
+  throw()
 {
   return &static_wireframe_display_list_;
 }
 
 BALL_INLINE 
 GLDisplayList* GLEntityDescriptor::getStaticWireframeAlwaysFrontDisplayList()
+  throw()
 {
   return &static_wireframe_always_front_display_list_;
 }
 
 BALL_INLINE 
 const GLDisplayList* GLEntityDescriptor::getStaticWireframeAlwaysFrontDisplayList() const
+  throw()
 {
   return &static_wireframe_always_front_display_list_;
 }
 
 BALL_INLINE 
 GLDisplayList* GLEntityDescriptor::getDynamicDisplayList()
+  throw()
 {
   return &dynamic_display_list_;
 }
 
 BALL_INLINE 
 const GLDisplayList* GLEntityDescriptor::getDynamicDisplayList() const
+  throw()
 {
   return &dynamic_display_list_;
 }
 
 BALL_INLINE 
 GLDisplayList* GLEntityDescriptor::getDynamicAlwaysFrontDisplayList()
+  throw()
 {
   return &dynamic_always_front_display_list_;
 }
 
 BALL_INLINE 
 const GLDisplayList* GLEntityDescriptor::getDynamicAlwaysFrontDisplayList() const
+  throw()
 {
   return &dynamic_always_front_display_list_;
 }
 
 BALL_INLINE 
 GLDisplayList* GLEntityDescriptor::getTransparentDisplayList()
+  throw()
 {
   return &transparent_display_list_;;
 }
 
 BALL_INLINE 
 const GLDisplayList* GLEntityDescriptor::getTransparentDisplayList() const
+  throw()
 {
   return &transparent_display_list_;;
 }
 
 BALL_INLINE 
 GLDisplayList* GLEntityDescriptor::getTransparentAlwaysFrontDisplayList()
+  throw()
 {
   return &transparent_always_front_display_list_;;
 }
 
 BALL_INLINE 
 const GLDisplayList* GLEntityDescriptor::getTransparentAlwaysFrontDisplayList() const
+  throw()
 {
   return &transparent_always_front_display_list_;;
 }
 
 BALL_INLINE 
 void GLEntityDescriptor::update()
+  throw()
 {
 	update_ = true;
 }
 
 BALL_INLINE 
 void GLEntityDescriptor::cancelUpdate()
+  throw()
 {
 	update_ = false;
 }
 
 BALL_INLINE 
 bool GLEntityDescriptor::needUpdate() const
+  throw()
 {
 	return update_;
 }

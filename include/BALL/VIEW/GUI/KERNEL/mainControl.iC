@@ -1,4 +1,4 @@
-// $Id: mainControl.iC,v 1.9 2001/02/11 13:04:39 hekl Exp $
+// $Id: mainControl.iC,v 1.10 2001/05/13 13:57:02 hekl Exp $
 
 BALL_INLINE 
 int MainControl::getNextID_()
@@ -9,6 +9,7 @@ int MainControl::getNextID_()
 
 BALL_INLINE 
 CompositeDescriptor* MainControl::insert(const Composite& composite, const String& name, const Vector3& center)
+	throw()
 {
 	NewCompositeMessage message;
 	message.setComposite(composite);
@@ -18,12 +19,14 @@ CompositeDescriptor* MainControl::insert(const Composite& composite, const Strin
 
 BALL_INLINE 
 CompositeDescriptor* MainControl::insert(CompositeDescriptor& composite_descriptor, bool deep)
+	throw()
 {
   return insert_(composite_descriptor, deep);
 }
 
 BALL_INLINE 
 CompositeDescriptor* MainControl::getDescriptor(const Composite& composite)
+	throw()
 {
 	ListIteratorHashMap::ConstIterator it = composite_map_.find((void*)&composite);
   if (it != composite_map_.end())
@@ -36,6 +39,7 @@ CompositeDescriptor* MainControl::getDescriptor(const Composite& composite)
     
 BALL_INLINE 
 const CompositeDescriptor* MainControl::getDescriptor(const Composite& composite) const
+	throw()
 {
 	ListIteratorHashMap::ConstIterator it = composite_map_.find((void*)&composite);
   if (it != composite_map_.end())
@@ -62,24 +66,28 @@ const List<CompositeDescriptor*>& MainControl::getDescriptorList() const
   
 BALL_INLINE 
 const String* MainControl::getName(const Composite& composite) const
+	throw()
 {
   return ((MainControl*)this)->getName(composite);
 }
 
 BALL_INLINE 
 const CompositeDescriptor* MainControl::getDescriptor(const String& name) const
+	throw()
 {
   return (CompositeDescriptor*)this->getDescriptor(name);
 }
 
 BALL_INLINE 
 const Vector3* MainControl::getCenter(const Composite& composite) const
+	throw()
 {
   return ((MainControl*)this)->getCenter(composite);
 }
 
 BALL_INLINE 
 const CompositeDescriptor* MainControl::getDescriptor(const Vector3& center) const
+	throw()
 {
   return (CompositeDescriptor *)this->getDescriptor(center);
 }

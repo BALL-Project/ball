@@ -1,4 +1,4 @@
-// $Id: glQuadricObject.h,v 1.4 2001/02/11 13:04:39 hekl Exp $
+// $Id: glQuadricObject.h,v 1.5 2001/05/13 13:57:02 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
@@ -17,10 +17,8 @@ namespace BALL
 	{
 		
 		/** GLQuadricObject class.
-				
 				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glQuadricObject.h}
-				\\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glQuadricObject.h}\\ \\
 				The class QLQuadricObject is a wrapper class for the quadric objects
 				of the OpenGL graphical library. It defines some useful methods to define
 				and create quadric objects. Further this class hides the handling
@@ -28,11 +26,10 @@ namespace BALL
 				quadric objects.
 				See the documentation of th OpenGL graphical library for information
 				concerning quadric objects.
-
 				@memo    GLQuadricObject class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/11 13:04:39 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:57:02 $
 		*/
 		class GLQuadricObject
 		{
@@ -46,8 +43,7 @@ namespace BALL
 					This exception will be thrown if a wrong drawing style for {\em *this}
 					glQuadricObject will be used. See the documentation of the OpenGL
 					graphical library for drawing styles of quadric objects.
-
-					@see         Exception::GeneralException			
+					@see         GeneralException			
 			*/
 			class WrongDrawingStyle:	public Exception::GeneralException
 			{
@@ -61,8 +57,7 @@ namespace BALL
 					This exception will be thrown if a wrong orientation style for {\em *this}
 					glQuadricObject will be used. See the documentation of the OpenGL
 					graphical library for orientation styles of quadric objects.
-
-					@see         Exception::GeneralException			
+					@see         GeneralException			
 			*/
 			class WrongOrientationStyle:	public Exception::GeneralException
 			{
@@ -76,8 +71,7 @@ namespace BALL
 					This exception will be thrown if a wrong normal style for {\em *this}
 					glQuadricObject will be used. See the documentation of the OpenGL
 					graphical library for normal styles of quadric objects.
-
-					@see         Exception::GeneralException			
+					@see         GeneralException			
 			*/
 			class WrongNormalStyle:	public Exception::GeneralException
 			{
@@ -91,8 +85,7 @@ namespace BALL
 			/** NoQuadricObjectAvailable exception class.
 					This exception will be thrown if no memory for {\em *this} glQuadricObject
 					is available.
-
-					@see         Exception::GeneralException			
+					@see         GeneralException			
 			*/
 			class NoQuadricObjectAvailable:	public Exception::GeneralException
 			{
@@ -119,51 +112,51 @@ namespace BALL
 					\end{itemize}
 					See the documentation of the OpenGL	graphical library for the various
 					styles of quadric objects.
-
-					@return      GLQuadricObject - new constructed glQuadricObject
+					@return      GLQuadricObject new constructed glQuadricObject
 			*/
 			GLQuadricObject
 				(int draw_style = GLU_FILL, int normals = GLU_FLAT,
-				 int orientation = GLU_OUTSIDE, bool generate_texture_coordinates = false);
+				 int orientation = GLU_OUTSIDE, bool generate_texture_coordinates = false)
+				throw();
 
 			/** Copy constructor.
 					Construct new glQuadricObject by copying the glQuadricObject 
 					{\em GL_quadric_object}.
 					{\em *this} glQuadricObject is initialized to the glQuadricObject
 					{\em GL_quadric_object}.\\
-
 					@param       GL_quadric_object the glQuadricObject to be copied 
-					@return      GLQuadricObject - new constructed glQuadricObject copied from {\em GL_quadric_object}
-					@see         GLQuadricObject::GLQuadricObject
+					@return      GLQuadricObject new constructed glQuadricObject copied from {\em GL_quadric_object}
 			*/
-			GLQuadricObject(const GLQuadricObject& GL_quadric_object);
+			GLQuadricObject(const GLQuadricObject& GL_quadric_object)
+				throw();
 		
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} glQuadricObject.
-					Calls \Ref{GLQuadricObject::destroy}.
-					@see         GLQuadricObject::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~GLQuadricObject();
+			virtual ~GLQuadricObject()
+				throw();
 
 			/** Explicit default initialization.
 					Resets the values of {\em *this} glQuadricObject to the default values.
-
-					@see    GLQuadricObject::GLQuadricObject
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Deletes the internally allocated OpenGL quadric object if already allocated.
-					Calls \Ref{GLQuadricObject::clear}
-					
-					@see  GLQuadricObject::clear
+					Calls \Ref{clear}
+					@see  clear
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Assignment methods
@@ -175,45 +168,43 @@ namespace BALL
 					glQuadricObject.
 					The state of {\em *this} glQuadricObject is initialized to the state
 					of the glQuadricObject {\em GL_quadric_object}
-
 					@param       GL_quadric_object the glQuadricObject to be copied
-					@see         GLQuadricObject::GLQuadricObject
 			*/
-			void set(const GLQuadricObject& GL_quadric_object);
+			void set(const GLQuadricObject& GL_quadric_object)
+				throw();
 
 			/** Assignment operator.
 					Assign the glQuadricObject {\em GL_quadric_object} to {\em *this}
 					glQuadricObject.
 					The state of {\em *this} glQuadricObject is initialized to the state
 					of the glQuadricObject {\em GL_quadric_object}
-					Calls \Ref{GLQuadricObject::set}.
-
+					Calls \Ref{set}.
 					@param       GL_quadric_object the glObject to be copied
-					@return      GLQuadricObject& - {\em *this} glQuadricObject
-					@see         GLQuadricObject::set
+					@return      GLQuadricObject& constant reference of {\em *this} glQuadricObject
+					@see         set
 			*/
-			GLQuadricObject& operator = (const GLQuadricObject& GL_quadric_object);
+			const GLQuadricObject& operator = (const GLQuadricObject& GL_quadric_object)
+				throw();
 
 			/** Copying.
 					Copy {\em *this} glQuadricObject to the glQuadricObject 
 					{\em GL_quadric_object}.
 					The state of {\em *this} glQuadricObject is initialized to the state
 					of the glQuadricObject {\em GL_quadric_object}
-					Calls \Ref{GLQuadricObject::set}.
-
+					Calls \Ref{set}.
 					@param       GL_quadric_object the glQuadricObject to be assigned to
-					@see         GLQuadricObject::set
+					@see         set
 			*/
-			void get(GLQuadricObject& GL_quadric_object) const;
+			void get(GLQuadricObject& GL_quadric_object) const
+				throw();
 
 			/** Swapping of glQuadricObjects.
 					Swap the state of {\em *this} glQuadricObject with the state of the
 					glQuadricObject	{\em GL_quadric_object}.
-
 					@param       GL_quadric_object the glQuadricObject being swapped with {\em *this} glQuadricObject 
-					@see         GLQuadricObject::GLQuadricObject
 			*/
-			void swap(GLQuadricObject& GL_quadric_object);
+			void swap(GLQuadricObject& GL_quadric_object)
+				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -225,89 +216,86 @@ namespace BALL
 					represented by the parameter {\em style}.
 					See the documentation of the OpenGL	graphical library for drawing
 					styles of quadric objects.
-
 					@param       style the new drawing style of {\em *this} glQuadricObject
-					@see         GLQuadricObject::getDrawStyle
-					@exception   WrongDrawingStyle - thrown whenever the drawing style is not allowed.
+					@see         getDrawStyle
+					@exception   WrongDrawingStyle thrown whenever the drawing style is not allowed.
 			*/
 			void setDrawStyle(int style)
-				throw();
+				throw(WrongDrawingStyle);
 
 			/** Inspection of the drawing style.
 					Access the drawing style of {\em *this} glQuadricObject.
 					See the documentation of the OpenGL	graphical library for drawing
 					styles of quadric objects.
-
-					@return      int - the drawing style of {\em *this} glQuadricObject
-					@see         GLQuadricObject::setDrawStyle
+					@return      int the drawing style of {\em *this} glQuadricObject
+					@see         setDrawStyle
 			*/
-			int getDrawStyle() const;
+			int getDrawStyle() const
+				throw();
 
 			/** Change the orientation style.
 					Change the orientation style of {\em *this} glQuadricObject to the value
 					represented by the parameter {\em orientation}.
 					See the documentation of the OpenGL	graphical library for orientation
 					styles of quadric objects.
-
 					@param       orientation the new orientation style of {\em *this} glQuadricObject
-					@see         GLQuadricObject::getOrientation
-					@exception   WrongOrientationStyle - thrown whenever the orientation style is not allowed.
+					@see         getOrientation
+					@exception   WrongOrientationStyle thrown whenever the orientation style is not allowed.
 			*/
 			void setOrientation(int orientation)
-				throw();
+				throw(WrongOrientationStyle);
 
 			/** Inspection of the orientation style.
 					Access the orientation style of {\em *this} glQuadricObject.
 					See the documentation of the OpenGL	graphical library for orientation
 					styles of quadric objects.
-
-					@return      int - the orientation style of {\em *this} glQuadricObject
-					@see         GLQuadricObject::setOrientation
+					@return      int the orientation style of {\em *this} glQuadricObject
+					@see         setOrientation
 			*/
-			int getOrientation() const;
+			int getOrientation() const
+				throw();
 
 			/** Change the texture coordinate generation.
 					Turn the texture coordinate generation of {\em *this} glQuadricObject on or
 					off according to the value represented by the parameter {\em generate}.
 					See the documentation of the OpenGL	graphical library for information
 					concerning texture coordinate generation of quadric objects.
-
 					@param       generate if set to {\tt true} the texture coordinate generation of {\em *this} glQuadricObject will be turned on; turned off if set to {\tt false}
-					@see         GLQuadricObject::getTextureCoordinateGeneration
+					@see         getTextureCoordinateGeneration
 			*/
-			void setTextureCoordinateGeneration(bool generate);
+			void setTextureCoordinateGeneration(bool generate)
+				throw();
 
 			/** Inspection of the texture coordinate generation switch.
 					Is the texture coordinate generation of {\em *this} glQuadricObject
 					turned on {\tt true}, or turned off {\tt false}.
-					
-					@return    bool - {\tt true} if the texture coordinate generation of {\em *this} glQuadricObject will be turned on, {\tt false} otherwise
-					@see         GLQuadricObject::setTextureCoordinateGeneration
+					@return    bool {\tt true} if the texture coordinate generation of {\em *this} glQuadricObject will be turned on, {\tt false} otherwise
+					@see         setTextureCoordinateGeneration
 			*/
-			bool getTextureCoordinateGeneration() const;
+			bool getTextureCoordinateGeneration() const
+				throw();
 
 			/** Change the normal style.
 					Change the normal style of {\em *this} glQuadricObject to the value
 					represented by the parameter {\em normals}.
 					See the documentation of the OpenGL	graphical library for normal
 					styles of quadric objects.
-
 					@param       normals the new normal style of {\em *this} glQuadricObject
-					@see         GLQuadricObject::getNormals
-					@exception   WrongNormalStyle - thrown whenever the normal style is not allowed.
+					@see         getNormals
+					@exception   WrongNormalStyle thrown whenever the normal style is not allowed.
 			*/
 			void setNormals(int normals)
-				throw();
+				throw(WrongNormalStyle);
 
 			/** Inspection of the normal style.
 					Access the normal style of {\em *this} glQuadricObject.
 					See the documentation of the OpenGL	graphical library for normal
 					styles of quadric objects.
-
-					@return      int - the normal style of {\em *this} glQuadricObject
-					@see         GLQuadricObject::setNormals
+					@return      int the normal style of {\em *this} glQuadricObject
+					@see         setNormals
 			*/
-			int getNormals() const;
+			int getNormals() const
+				throw();
 
 			//@}
 
@@ -322,20 +310,19 @@ namespace BALL
 					This method is a wrapper method for the OpenGL function {\em gluPartialDisk}.
 					See documentation of the OpenGL graphical library for information
 					on the function {\em gluPartialDisk} in the quadric object section.
-
 					@param    inner_radius the inner radius of the partial disk.
 					@param    outer_radius the outer radius of the partial disk.
 					@param    slices the number of slices the partial disk have
 					@param    rings the number of rings the partial disk have
 					@param    start_angle the start angle of the partial disk.
 					@param    sweep_angle the sweep angle of the partial disk.
-					@exception  NoQuadricObjectAvailable - thrown if no memory is available for {\em *this} glQuadricObject
+					@exception  NoQuadricObjectAvailable thrown if no memory is available for {\em *this} glQuadricObject
 			*/
 			void drawPartialDisk
 				(GLdouble inner_radius, GLdouble outer_radius,
 				 int slices,int rings,
 				 GLdouble start_angle, GLdouble sweep_angle)
-				throw();
+				throw(NoQuadricObjectAvailable);
 
 			/** Draw a disk.
 					This method draws a disk with the given parameter.
@@ -344,17 +331,16 @@ namespace BALL
 					This method is a wrapper method for the OpenGL function {\em gluDisk}.
 					See documentation of the OpenGL graphical library for information
 					on the function {\em gluDisk} in the quadric object section.
-
 					@param    inner_radius the inner radius of the disk.
 					@param    outer_radius the outer radius of the disk.
 					@param    slices the number of slices the disk have
 					@param    rings the number of rings the disk have
-					@exception  NoQuadricObjectAvailable - thrown if no memory is available for {\em *this} glQuadricObject
+					@exception  NoQuadricObjectAvailable thrown if no memory is available for {\em *this} glQuadricObject
 			*/
 			void drawDisk
 				(GLdouble inner_radius, GLdouble outer_radius,
 				 int slices, int rings)
-				throw();
+				throw(NoQuadricObjectAvailable);
 
 			/** Draw a cylinder.
 					This method draws a cylinder with the given parameter.
@@ -363,18 +349,17 @@ namespace BALL
 					This method is a wrapper method for the OpenGL function {\em gluCylinder}.
 					See documentation of the OpenGL graphical library for information
 					on the function {\em gluCylinder} in the quadric object section.
-
 					@param    base_radius the base radius of the cylinder.
 					@param    top_radius the top radius of the cylinder.
 					@param    height the height of the cylinder.
 					@param    slices the number of slices the cylinder have
 					@param    stacks the number of stacks the cylinder have
-					@exception  NoQuadricObjectAvailable - thrown if no memory is available for {\em *this} glQuadricObject
+					@exception  NoQuadricObjectAvailable thrown if no memory is available for {\em *this} glQuadricObject
 			*/
 			void drawCylinder
 				(GLdouble base_radius, GLdouble top_radius, GLdouble height,
 				 int slices, int stacks)
-				throw();
+				throw(NoQuadricObjectAvailable);
 
 			/** Draw a sphere.
 					This method draws a sphere with the given parameter.
@@ -383,14 +368,13 @@ namespace BALL
 					This method is a wrapper method for the OpenGL function {\em gluSphere}.
 					See documentation of the OpenGL graphical library for information
 					on the function {\em gluSphere} in the quadric object section.
-
 					@param    radius the radius of the sphere.
 					@param    slices the number of slices the sphere have
 					@param    stacks the number of stacks the sphere have
-					@exception  NoQuadricObjectAvailable - thrown if no memory is available for {\em *this} glQuadricObject
+					@exception  NoQuadricObjectAvailable thrown if no memory is available for {\em *this} glQuadricObject
 			*/
 			void drawSphere(GLdouble radius, int slices, int stacks)
-				throw();
+				throw(NoQuadricObjectAvailable);
 
 			//@}
 			
@@ -405,46 +389,39 @@ namespace BALL
 					{\tt false} otherwise. 
 					{\em *this} glQuadricObject is valid if a quadric object is already defined
 					(a graphical object is created).
-
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} glQuadricObject is correct (self-validated) and consistent,
+					@return			bool {\tt true} if the internal state of {\em *this} glQuadricObject is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} glQuadricObject to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-
 					@param   s output stream where to output the state of {\em *this} glQuadricObject
 					@param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
 			*/
 			//@{
 			/** Persistent stream output and state restorage.
-  			 Read persistent glQuadricObject data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s input stream from where to restore the internal state of {\em *this} glQuadricObject
-					@exception   NotImplemented - always
+  			  Read persistent glQuadricObject data from the input stream {\em s} and 
+				  restore the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s input stream from where to restore the internal state of {\em *this} glQuadricObject
 			*/
 			virtual void read(std::istream& s)
 				throw();
 
 			/** Persistent stream output and state storage.
-  			 Write persistent glQuadricObject data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s output stream to where to store the internal state of {\em *this} glQuadricObject
-					@exception   NotImplemented - always
+  			  Write persistent glQuadricObject data to the output stream {\em s} and 
+				  store the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s output stream to where to store the internal state of {\em *this} glQuadricObject
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
@@ -454,7 +431,7 @@ namespace BALL
 			private:
 
 			void create_()
-				throw();
+				throw(NoQuadricObjectAvailable);
 
 			int draw_style_;
 			int normals_;

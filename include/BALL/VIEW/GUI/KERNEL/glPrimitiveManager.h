@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.h,v 1.4 2001/02/11 13:04:39 hekl Exp $
+// $Id: glPrimitiveManager.h,v 1.5 2001/05/13 13:57:02 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -34,20 +34,17 @@ namespace BALL
 	namespace VIEW
 	{
 		/**	GLDisplayListObject_ class.
-
 				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}
-				\\
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}\\ \\
 				The class GLDisplayListObject_ is a base class for the concrete display list
 				classes \Ref{GLSphereDisplayLists_}, \Ref{GLTubeDisplayLists_} and
 				\Ref{GLSimpleBoxDisplayLists_}. It defines an interface that every display
 				list class must have.
 				This is an internally used class and should not be used in any programs.
-
 				@memo    GLDisplayListObject_ class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/11 13:04:39 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:57:02 $
 		*/
 		class GLDisplayListObject_
 		{
@@ -67,33 +64,31 @@ namespace BALL
 			//@{
 			
 			/** NoGLDisplayListsAvailable Exception class.
-
 					This exeption will be thrown if no memory for \Ref{GLDisplayList} objects
 					can be allocated. This exception will be used by derived classes.
-
-					@see         Exception::GeneralException			
-					@see         GLDisplayList::GLDisplayList
+					@see         GeneralException			
+					@see         GLDisplayList
 			*/
 			class NoGLDisplayListsAvailable:	public Exception::GeneralException
 			{
 				public:
 
-				NoGLDisplayListsAvailable(const char* file, int line);
+				NoGLDisplayListsAvailable(const char* file, int line)
+					throw();
 			};
 
 			/** WrongModes Exception class.
-
 					This exeption will be thrown if the {\em drawing_precision} or
 					{\em drawing_mode} of the method \Ref{GLDisplayListObject_::operator()} are
 					not allowed. Each derived class will determine which modes are allowed or not.
-
-					@see         Exception::GeneralException			
+					@see         GeneralException			
 			*/
 			class WrongModes:	public Exception::GeneralException
 			{
 				public:
 
-				WrongModes(const char* file, int line);
+				WrongModes(const char* file, int line)
+					throw();
 			};
 			//@}
 
@@ -103,20 +98,22 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new glDisplayListObject_.
-
-					@return      GLDisplayListObject_ - new constructed glDisplayListObject_
+					@return      GLDisplayListObject_ new constructed glDisplayListObject_
 			*/
-			GLDisplayListObject_();
+			GLDisplayListObject_()
+				throw();
 
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} glDisplayListObject_.
 			*/
-			virtual ~GLDisplayListObject_();
+			virtual ~GLDisplayListObject_()
+				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -126,44 +123,41 @@ namespace BALL
 			/** Return a glDisplayList (Pure virtual method).
 					This method must be overridden from the derived classes. They must implement
 					this method. 
-
 					@param   drawing_mode the drawing mode the \Ref{GLDisplayList} should have
 					@param   drawing_precision the drawing precision the \Ref{GLDisplayList} should have
-					@return  GLDisplayList& - a reference to a \Ref{GLDisplayList}
-					@see     GeometricObject::getDrawingModeAndPrecision
+					@return  GLDisplayList& a reference to a \Ref{GLDisplayList}
+					@see     getDrawingModeAndPrecision
 			*/
 			virtual GLDisplayList& operator ()
-				(unsigned int drawing_mode, unsigned int drawing_precision) = 0;
-
+				(unsigned int drawing_mode, unsigned int drawing_precision)
+				throw() = 0;
+			
 			/** Return a glDisplayList.
-					Calls \Ref{GLDisplayListObject_::operator()}
-
+					Calls \Ref{operator()}
 					@param   drawing_mode the drawing mode the \Ref{GLDisplayList} should have
 					@param   drawing_precision the drawing precision the \Ref{GLDisplayList} should have
-					@return  const GLDisplayList& - a constant reference to a \Ref{GLDisplayList}
-					@see     GeometricObject::getDrawingModeAndPrecision
+					@return  const GLDisplayList& a constant reference to a \Ref{GLDisplayList}
+					@see     getDrawingModeAndPrecision
 			*/
 			const GLDisplayList& operator ()
-				(unsigned int drawing_mode, unsigned int drawing_precision) const;
+				(unsigned int drawing_mode, unsigned int drawing_precision) const
+				throw();
 			//@}
 		};
 
 
 		/**	GLSphereDisplayLists_ class.
-
 				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}
-				\\
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}\\ \\
 				The class GLSphereDisplayLists_ is the graphical representation of the
 				geometric primitive "sphere".
 				It is derived from the class \Ref{GLDisplayListObject_} and creates the
 				different graphical visualizations of a sphere.
 				This is an internally used class and should not be used in any programs.
-
 				@memo    GLSphereDisplayLists_ class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/11 13:04:39 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:57:02 $
 		*/
 		class GLSphereDisplayLists_: public GLDisplayListObject_
 		{
@@ -180,27 +174,29 @@ namespace BALL
 					  \item no display lists allocated
 					\end{itemize}
 			*/
- 			GLSphereDisplayLists_();
+ 			GLSphereDisplayLists_()
+				throw();
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} glSphereDisplayList_.
-					Calls \Ref{GLSphereDisplayList_::destroy}.
-
-					@see         GLSphereDisplayList_::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~GLSphereDisplayLists_();
+			virtual ~GLSphereDisplayLists_()
+				throw();
 
 			/** Explicit destructor.
 					Destroy {\em *this} glSphereDisplayList_.
 					Deletes all allocated \Ref{GLDisplayList} objects.
-
-					@see GLDisplayList::GLDisplayList
+					@see GLDisplayList
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -210,26 +206,25 @@ namespace BALL
 			/** Initialize the sphere display lists.
 					This method creates the \Ref{GLDisplayList} objects that contain
 					the graphical representation of the geometric primitive "sphere" in various
-					resolutions and drawing modes.
-					\\
+					resolutions and drawing modes.\\
 					{\bf Note:} this method will be called by the class \Ref{GLPrimitiveManager}.
-
-					@exception  NoGLDisplayListsAvailable - thrown if the memory allocation for the needed \Ref{GLDisplayList} objects failed
-					@see GLDisplayList::GLDisplayList
+					@exception  NoGLDisplayListsAvailable thrown if the memory allocation for the needed \Ref{GLDisplayList} objects failed
+					@see GLDisplayList
 			*/
-			void init();
+			void init()
+				throw(NoGLDisplayListsAvailable);
 
 			/** Return a glDisplayList.
 					Return a \Ref{GLDisplayList} containing a sphere with the given graphical 
 					properties {\em drawing_mode} and {\em drawing_precision}.
-
 					@param   drawing_mode the drawing mode the \Ref{GLDisplayList} the sphere should have
 					@param   drawing_precision the drawing precision the \Ref{GLDisplayList} the sphere should have
-					@return  GLDisplayList& - a reference to a \Ref{GLDisplayList} containing a sphere
-					@exception WrongModes - thrown if the {\em drawing_mode} or {\em drawing_precision} are not allowed
-					@see     GeometricObject::getDrawingModeAndPrecision
+					@return  GLDisplayList& a reference to a \Ref{GLDisplayList} containing a sphere
+					@exception WrongModes thrown if the {\em drawing_mode} or {\em drawing_precision} are not allowed
+					@see     getDrawingModeAndPrecision
 			*/
-			GLDisplayList& operator () (unsigned int drawing_mode, unsigned int drawing_precision);
+			GLDisplayList& operator () (unsigned int drawing_mode, unsigned int drawing_precision)
+				throw(WrongModes);
 			//@}
 
 			/**	@name	debuggers and diagnostics
@@ -241,41 +236,44 @@ namespace BALL
 					If all allocated \Ref{GLDisplayList} objects for {\em *this}
 					glSphereDisplayLists_ are valid	{\tt true} is returned, {\tt false} otherwise. 
 					Calls {GLDisplayList::isValid}.
-
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} glSphereDisplayLists_ is correct (self-validated) and consistent,
+					@return			bool {\tt true} if the internal state of {\em *this} glSphereDisplayLists_ is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 					@see        GLDisplayList::isValid
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} glSphereDisplayLists_ to 
 					the output ostream {\em s} with dumping depth {\em depth}.
 					Dumps all \Ref{GLDisplayList} objects allocated for {\em *this}
 					glSphereDisplayLists_.
-
 					@param   s output stream where to output the state of {\em *this} glSphereDisplayLists_
 					@param   depth the dumping depth
 					@see     GLDisplayList::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 
 			private:
 
-			void create_();
+			void create_()
+				throw();
 
 			/* builts the sphere dots display lists */
-			void buildDottedSphere_(int precision);
+			void buildDottedSphere_(int precision)
+				throw();
 
 			/* help functions for sphere dots */
-			void drawPoint_(Vector3& v);
+			void drawPoint_(Vector3& v)
+				throw();
 
 			/* help functions for sphere dots */
 			void subdivideTriangle_
-				(Vector3& v1, Vector3& v2, Vector3& v3, int precision);
+				(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
+				throw();
 
 			/* the display lists */
 			GLDisplayList* GL_display_list_;
@@ -288,20 +286,17 @@ namespace BALL
 
 
 		/**	GLTubeDisplayLists_ class.
-
 				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}
-				\\
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}\\ \\
 				The class GLTubeDisplayLists_ is the graphical representation of the
 				geometric primitive "tube".
 				It is derived from the class \Ref{GLDisplayListObject_} and creates the
 				different graphical visualizations of a tube.
 				This is an internally used class and should not be used in any programs.
-
 				@memo    GLTubeDisplayLists_ class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/11 13:04:39 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:57:02 $
 		*/
 		class GLTubeDisplayLists_: public GLDisplayListObject_
 		{
@@ -318,27 +313,29 @@ namespace BALL
 					  \item no display lists allocated
 					\end{itemize}
 			*/
-			GLTubeDisplayLists_();
+			GLTubeDisplayLists_()
+				throw();
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} glTubeDisplayList_.
-					Calls \Ref{GLTubeDisplayList_::destroy}.
-
-					@see         GLTubeDisplayList_::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~GLTubeDisplayLists_();
+			virtual ~GLTubeDisplayLists_()
+				throw();
 
 			/** Explicit destructor.
 					Destroy {\em *this} glTubeDisplayList_.
 					Deletes all allocated \Ref{GLDisplayList} objects.
-
-					@see GLDisplayList::GLDisplayList
+					@see GLDisplayList
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -348,27 +345,26 @@ namespace BALL
 			/** Initialize the tube display lists.
 					This method creates the \Ref{GLDisplayList} objects that contain
 					the graphical representation of the geometric primitive "tube" in various
-					resolutions and drawing modes.
-					\\
+					resolutions and drawing modes.\\
 					{\bf Note:} this method will be called by the class \Ref{GLPrimitiveManager}.
-
-					@exception  NoGLDisplayListsAvailable - thrown if the memory allocation for the needed \Ref{GLDisplayList} objects failed
-					@see GLDisplayList::GLDisplayList
+					@exception  NoGLDisplayListsAvailable thrown if the memory allocation for the needed \Ref{GLDisplayList} objects failed
+					@see GLDisplayList
 			*/
-			void init();
+			void init()
+				throw(NoGLDisplayListsAvailable);
 
 			/** Return a glDisplayList.
 					Return a \Ref{GLDisplayList} containing a tube with the given graphical 
 					properties {\em drawing_mode} and {\em drawing_precision}.
-
 					@param   drawing_mode the drawing mode the \Ref{GLDisplayList} the tube should have
 					@param   drawing_precision the drawing precision the \Ref{GLDisplayList} the tube should have
-					@return  GLDisplayList& - a reference to a \Ref{GLDisplayList} containing a tube
-					@exception WrongModes - thrown if the {\em drawing_mode} or {\em drawing_precision} are not allowed
-					@see     GeometricObject::getDrawingModeAndPrecision
+					@return  GLDisplayList& a reference to a \Ref{GLDisplayList} containing a tube
+					@exception WrongModes thrown if the {\em drawing_mode} or {\em drawing_precision} are not allowed
+					@see     getDrawingModeAndPrecision
 			*/
 			GLDisplayList& operator () 
-				(unsigned int drawing_mode, unsigned int drawing_precision);
+				(unsigned int drawing_mode, unsigned int drawing_precision)
+				throw(WrongModes);
 			//@}
 
 			/**	@name	debuggers and diagnostics
@@ -380,31 +376,31 @@ namespace BALL
 					If all allocated \Ref{GLDisplayList} objects for {\em *this}
 					glTubeDisplayLists_ are valid	{\tt true} is returned, {\tt false} otherwise. 
 					Calls {GLDisplayList::isValid}.
-
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} glTubeDisplayLists_ is correct (self-validated) and consistent,
+					@return			bool {\tt true} if the internal state of {\em *this} glTubeDisplayLists_ is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 					@see        GLDisplayList::isValid
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} glTubeDisplayLists_ to 
 					the output ostream {\em s} with dumping depth {\em depth}.
 					Dumps all \Ref{GLDisplayList} objects allocated for {\em *this}
 					glTubeDisplayLists_.
-
 					@param   s output stream where to output the state of {\em *this} glTubeDisplayLists_
 					@param   depth the dumping depth
 					@see     GLDisplayList::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 
 			private:
 
-			void create_();
+			void create_()
+				throw();
 
 			/* the display lists */
 			GLDisplayList* GL_display_list_;
@@ -412,20 +408,17 @@ namespace BALL
 
 
 		/**	GLSimpleBoxDisplayLists_ class.
-
 				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}
-				\\
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}\\ \\
 				The class GLSimpleBoxDisplayLists_ is the graphical representation of the
 				geometric primitive "simpleBox".
 				It is derived from the class \Ref{GLDisplayListObject_} and creates the
 				different graphical visualizations of a simpleBox.
 				This is an internally used class and should not be used in any programs.
-
 				@memo    GLSimpleBoxDisplayLists_ class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/11 13:04:39 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:57:02 $
 		*/
 		class GLSimpleBoxDisplayLists_: public GLDisplayListObject_
 		{
@@ -442,28 +435,30 @@ namespace BALL
 					  \item no display lists allocated
 					\end{itemize}
 			*/
-			GLSimpleBoxDisplayLists_();
+			GLSimpleBoxDisplayLists_()
+				throw();
 
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} glSimpleBoxDisplayList_.
-					Calls \Ref{GLSimpleBoxDisplayList_::destroy}.
-
-					@see         GLSimpleBoxDisplayList_::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~GLSimpleBoxDisplayLists_();
+			virtual ~GLSimpleBoxDisplayLists_()
+				throw();
 
 			/** Explicit destructor.
 					Destroy {\em *this} glSimpleBoxDisplayList_.
 					Deletes all allocated \Ref{GLDisplayList} objects.
-
-					@see GLDisplayList::GLDisplayList
+					@see GLDisplayList
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -473,27 +468,26 @@ namespace BALL
 			/** Initialize the simpleBox display lists.
 					This method creates the \Ref{GLDisplayList} objects that contain
 					the graphical representation of the geometric primitive "simpleBox" in various
-					resolutions and drawing modes.
-					\\
+					resolutions and drawing modes.\\
 					{\bf Note:} this method will be called by the class \Ref{GLPrimitiveManager}.
-
-					@exception  NoGLDisplayListsAvailable - thrown if the memory allocation for the needed \Ref{GLDisplayList} objects failed
-					@see GLDisplayList::GLDisplayList
+					@exception  NoGLDisplayListsAvailable thrown if the memory allocation for the needed \Ref{GLDisplayList} objects failed
+					@see GLDisplayList
 			*/
-			void init();
+			void init()
+				throw(NoGLDisplayListsAvailable);
 
 			/** Return a glDisplayList.
 					Return a \Ref{GLDisplayList} containing a simpleBox with the given graphical 
 					properties {\em drawing_mode} and {\em drawing_precision}.
-
 					@param   drawing_mode the drawing mode the \Ref{GLDisplayList} the simpleBox should have
 					@param   drawing_precision the drawing precision the \Ref{GLDisplayList} the simpleBox should have
-					@return  GLDisplayList& - a reference to a \Ref{GLDisplayList} containing a simpleBox
-					@exception WrongModes - thrown if the {\em drawing_mode} or {\em drawing_precision} are not allowed
-					@see     GeometricObject::getDrawingModeAndPrecision
+					@return  GLDisplayList& a reference to a \Ref{GLDisplayList} containing a simpleBox
+					@exception WrongModes thrown if the {\em drawing_mode} or {\em drawing_precision} are not allowed
+					@see     getDrawingModeAndPrecision
 			*/
 			GLDisplayList& operator ()
-				(unsigned int drawing_mode, unsigned int drawing_precision);
+				(unsigned int drawing_mode, unsigned int drawing_precision)
+				throw(WrongModes);
 			//@}
 
 			/**	@name	debuggers and diagnostics
@@ -505,35 +499,38 @@ namespace BALL
 					If all allocated \Ref{GLDisplayList} objects for {\em *this}
 					glSimpleBoxDisplayLists_ are valid	{\tt true} is returned, {\tt false} otherwise. 
 					Calls {GLDisplayList::isValid}.
-
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} glSimpleBoxDisplayLists_ is correct (self-validated) and consistent,
+					@return			bool {\tt true} if the internal state of {\em *this} glSimpleBoxDisplayLists_ is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 					@see        GLDisplayList::isValid
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} glSimpleBoxDisplayLists_ to 
 					the output ostream {\em s} with dumping depth {\em depth}.
 					Dumps all \Ref{GLDisplayList} objects allocated for {\em *this}
 					glSimpleBoxDisplayLists_.
-
 					@param   s output stream where to output the state of {\em *this} glSimpleBoxDisplayLists_
 					@param   depth the dumping depth
 					@see     GLDisplayList::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 
 			private:
 
-			void create_();
+			void create_()
+				throw();
 
-			void createDotBox_();
-			void createLineBox_();
-			void createSolidBox_();
+			void createDotBox_()
+				throw();
+			void createLineBox_()
+				throw();
+			void createSolidBox_()
+				throw();
 
 			/* the display lists */
 			GLDisplayList* GL_display_list_;
@@ -542,16 +539,17 @@ namespace BALL
 
 
 		/**	GLPrimitiveManager class.
-
 				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}
-				\\
-				The class GLPrimitiveManager
-
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}\\ \\
+				The class GLPrimitiveManager is container for the predefined primitives
+				\Ref{GLSphereDisplayLists_}, \Ref{GLTubeDisplayLists_} and \Ref{GLSimpleBoxDisplayLists_}.
+				Further it provides methods for naming and accessing \Ref{GeometricObject} objects.
+				This mechanism is used by the class \Ref{Scene} to name all primitives to identify them
+				when picked.
 				@memo    GLPrimitiveManager class (BALL VIEW gui kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/11 13:04:39 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:57:02 $
 		*/
 		class GLPrimitiveManager
 		{
@@ -576,37 +574,38 @@ namespace BALL
 					  \item simpleBox display lists empty
 					  \item name management empty
 					\end{itemize}
-
-					@see     GLSphereDisplayLists_::GLSphereDisplayLists_
-					@see     GLTubeDisplayLists_::GLTubeDisplayLists_
-					@see     GLSimpleBoxDisplayLists_::GLSimpleBoxDisplayLists_
+					@see     GLSphereDisplayLists_
+					@see     GLTubeDisplayLists_
+					@see     GLSimpleBoxDisplayLists_
 			*/
-			GLPrimitiveManager();
+			GLPrimitiveManager()
+				throw();
 			
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} glPrimitiveManager.
-					Calls \Ref{GLPrimitiveManager::destroy}.
-
-					@see         GLPrimitiveManager::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~GLPrimitiveManager();
+			virtual ~GLPrimitiveManager()
+				throw();
 
 			/** Explicit destructor.
 					Destroy {\em *this} glPrimitiveManager.
 					Calls \Ref{GLSphereDisplayLists_::destroy}
 					Calls \Ref{GLTubeDisplayLists_::destroy}
 					Calls \Ref{GLSimpleBoxDisplayLists_::destroy}
-
 					@see     GLSphereDisplayLists_::destroy
 					@see     GLTubeDisplayLists_::destroy
 					@see     GLSimpleBoxDisplayLists_::destroy
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 		
 			/**	@name	Accessors
@@ -618,20 +617,20 @@ namespace BALL
 					Calls \Ref{GLSphereDisplayLists_::init}
 					Calls \Ref{GLTubeDisplayLists_::init}
 					Calls \Ref{GLSimpleBoxDisplayLists_::init}
-
 					@see     GLSphereDisplayLists_::init
 					@see     GLTubeDisplayLists_::init
 					@see     GLSimpleBoxDisplayLists_::init
 			*/
-			void init();
+			void init()
+				throw();
 
 			/** Reset name management.
 					Clears all previously assigned names. 
-
-					@see    GLPrimitiveManager::getObject
-					@see    GLPrimitiveManager::getName
+					@see    getObject
+					@see    getName
 			*/
-			void clearNames();
+			void clearNames()
+				throw();
 
 			/** Retrieve a name for a geometricObject.
 					This method is called internally whenever a \Ref{GeometricObject} needs a
@@ -640,23 +639,23 @@ namespace BALL
 					unique name will be created. If it was already named that name will be returned.
 					A name is a normal integer value that will start at {\tt 0} and will be increased
 					for each new \Ref{GeometricObject} that is used with this method.
-					
 					@param  object the \Ref{GeometricObject} that should be named.
-					@return Name - a name for the \Ref{GeometricObject} {\em object}
-					@see    GLPrimitiveManager::getObject
+					@return Name a name for the \Ref{GeometricObject} {\em object}
+					@see    getObject
 			*/
-			Name getName(const GeometricObject& object);
+			Name getName(const GeometricObject& object)
+				throw();
 
 			/** Access the geometricObject of a name.
 					This method is called internally whenever a \Ref{GeometricObject} is searched by
 					the parameter {\em name}.
 					If {\em name} has no associated \Ref{GeometricObject} {\tt 0} will be returned.
-					
-					@param   Name - a name for a \Ref{GeometricObject}
-					@return  GeometricObject* - the \Ref{GeometricObject} that is found with the parameter {\em name} ({\tt 0} is returned if no such \Ref{GeometricObject} exists)
-					@see    GLPrimitiveManager::getName
+					@param   Name a name for a \Ref{GeometricObject}
+					@return  GeometricObject* the \Ref{GeometricObject} that is found with the parameter {\em name} ({\tt 0} is returned if no such \Ref{GeometricObject} exists)
+					@see    getName
 			*/
-			GeometricObject* getObject(Name name) const;
+			GeometricObject* getObject(Name name) const
+				throw();
 			//@}
 
 			/** @name Predefined display lists.
@@ -665,23 +664,20 @@ namespace BALL
 
 			/** Sphere display list.
 					See \Ref{GLSphereDisplayLists_} for further information about the sphere primitive.
-
-					@see  GLSphereDisplayLists_::GLSphereDisplayLists_
+					@see  GLSphereDisplayLists_
 			*/
 			GLSphereDisplayLists_ Sphere;
 
 			/** Tube display list.
 					See \Ref{GLTubeDisplayLists_} for further information about the tube primitive.
-
-					@see  GLTubeDisplayLists_::GLTubeDisplayLists_
+					@see  GLTubeDisplayLists_
 			*/
 			GLTubeDisplayLists_ Tube;
 
 			/** SimpleBox display list.
 					See \Ref{GLSimpleBoxDisplayLists_} for further information about the
 					simpleBox primitive.
-
-					@see  GLSimpleBoxDisplayLists_::GLSimpleBoxDisplayLists_
+					@see  GLSimpleBoxDisplayLists_
 			*/
 			GLSimpleBoxDisplayLists_ SimpleBox;
 			//@}
@@ -695,15 +691,14 @@ namespace BALL
 					Calls \Ref{GLSphereDisplayLists_::isValid}
 					Calls \Ref{GLTubeDisplayLists_::isValid}
 					Calls \Ref{GLSimpleBoxDisplayLists_::isValid}
-
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} glPrimitiveManager is correct (self-validated) and consistent,
+					@return			bool {\tt true} if the internal state of {\em *this} glPrimitiveManager is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 					@see     GLSphereDisplayLists_::isValid
 					@see     GLTubeDisplayLists_::isValid
 					@see     GLSimpleBoxDisplayLists_::isValid
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} glPrimitiveManager to 
@@ -711,14 +706,14 @@ namespace BALL
 					Calls \Ref{GLSphereDisplayLists_::dump}
 					Calls \Ref{GLTubeDisplayLists_::dump}
 					Calls \Ref{GLSimpleBoxDisplayLists_::dump}
-
 					@param   s output stream where to output the state of {\em *this} glPrimitiveManager
 					@param   depth the dumping depth
 					@see     GLSphereDisplayLists_::dump
 					@see     GLTubeDisplayLists_::dump
 					@see     GLSimpleBoxDisplayLists_::dump
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
@@ -726,26 +721,22 @@ namespace BALL
 			//@{
 
 			/** Persistent stream output and state restorage.
-  			 Read persistent glPrimitiveManager data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s input stream from where to restore the internal state of {\em *this} glPrimitiveManager
-					@exception   NotImplemented - always
+  			  Read persistent glPrimitiveManager data from the input stream {\em s} and 
+				  restore the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s input stream from where to restore the internal state of {\em *this} glPrimitiveManager
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
-  			 Write persistent glPrimitiveManager data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s output stream to where to store the internal state of {\em *this} glPrimitiveManager
-					@exception   NotImplemented - always
+  			  Write persistent glPrimitiveManager data to the output stream {\em s} and 
+				  store the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s output stream to where to store the internal state of {\em *this} glPrimitiveManager
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 			private:
