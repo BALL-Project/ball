@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.h,v 1.5 2000/11/06 17:58:22 anker Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.6 2000/11/08 16:36:21 amoll Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -137,32 +137,35 @@ namespace BALL
 		//@{
 
 		/** set the constants for the integration, usually done by the calling
-			energy processor */
+				energy processor 
+		*/
 		void setConstants(double A, double B, double k1, double k2) throw();
 
-		/** get the constants from this processor */
-		void getConstants(double& A, double& B, double& k1, double& k2)
-		throw();
+		/** get the constants from this processor 
+		*/
+		void getConstants(double& A, double& B, double& k1, double& k2)	throw();
 
-		/** integrate to Infinity from {\tt from} using previously set 
-			constants */
+		/** integrate to Infinity from {\tt from} using previously set constants 
+		*/
 		double integrateToInf(double from) const throw();
 
-		/** integrate from {\tt from} to infinity using the specified constants */
+		/** integrate from {\tt from} to infinity using the specified constants 
+		*/
 		double integrateToInf(double from, double A, double B, double k1,
 				double k2) throw();
 
-		/** integrate from {\tt from} to {\tt to} using previously assigned
-		  constants */
+		/** integrate from {\tt from} to {\tt to} using previously assigned constants 
+		*/
 		double integrate(double from, double to) const throw();
 		
-		/** integrate from {\tt from} to {\tt to} using the specified
-		  constants */
-		double integrate(double from, double to, double A, double B,
-				double k1, double k2) throw();
+		/** integrate from {\tt from} to {\tt to} using the specified constants 
+		*/
+		double integrate(double from, double to, double A, double B, double k1, double k2) 
+			throw();
 
 		/** Default operation, integrate from {\tt x} to infinity using
-		 * previously assigned constants */
+		 *  previously assigned constants 
+		 */
 		virtual double operator () (double x) const throw();
 
 		//@}
@@ -172,54 +175,67 @@ namespace BALL
 		//@{
 
 		/** Equality operator */
-		bool operator == (const Pair6_12RDFIntegrator& integrator) const
-			throw();
+		bool operator == (const Pair6_12RDFIntegrator& integrator) const throw();
 		//@}
 
 
-		/** The options of this Integrator */
+		/** The options of this Integrator 
+		*/
 		Options options;
 
-		/** @name Debugging and diagnostics */
+		/** @name Debugging and diagnostics 
+		*/
 		//@{
 
-		/** Dumps the whole content of the object */
+		/** Dumps the whole content of the object 
+		*/
 		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const
 		throw();
 		
 		//@}
 
 
-
 		protected:
 
-		/*_ Repulsion constant */
+		/*_ Repulsion constant 
+		*/
 		double A_;
-		/*_ Dispersion constant */
+
+		/*_ Dispersion constant 
+		*/
 		double B_;
-		/*_ Geometry constant */
+
+		/*_ Geometry constant 
+		*/
 		double k1_;
-		/*_ Geometry constant */
+
+		/*_ Geometry constant 
+		*/
 		double k2_;
 
-		/*_ The valid flag. Should move to RDFIntegrator. */
+		/*_ The valid flag. Should move to RDFIntegrator. 
+		*/
 		bool valid_;
 
 
 		private:
 
-		/*_ Integrate an interval analytically. This method does the actual
-		 * work. */
+		/*_ Integrate an interval analytically. This method does the actual work. 
+		*/
 		double analyticallyIntegrateInterval(const Interval& interval,
 				const Coefficients& coeffs, Position index) const throw();
+
 		double numericallyIntegrateInterval(const Interval& interval) const
 			throw();
-		/*_ Project a number from the integration beam to the projection beam
-		 * of an atom center for the rdf thingy. */
-		double project(double x) const throw();
-		/*_ Do the reverse of project(). */
-		double unproject(double x) const throw();
 
+		/*_ Project a number from the integration beam to the projection beam
+		 *  of an atom center for the rdf thingy. 
+		 */
+		double project(double x) const throw();
+
+		/*_ Do the reverse of project(). 
+		*/
+		double unproject(double x) const throw();
 	};
 
 } // namespace BALL
