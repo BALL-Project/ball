@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.11 2002/12/18 16:00:36 sturm Exp $
+// $Id: molecularControl.C,v 1.12 2003/06/12 12:58:59 anhi Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -82,8 +82,9 @@ void MolecularControl::recurseGeneration_(QListViewItem* item, Composite* compos
 	// we iterate over all children and recurse
 	//	if (!RTTI::isKindOf<Atom>(*composite))
 	{
-		Composite::ChildCompositeReverseIterator it = composite->rbeginChildComposite();
-		for (; it != composite->rendChildComposite(); ++it)
+		Composite::ChildCompositeIterator it(composite->endChildComposite());
+
+		for (--it; +it; --it)
 		{
 			generateListViewItem_(item, &*it);
 		}
