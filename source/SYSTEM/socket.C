@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.11 2000/01/13 22:36:55 oliver Exp $
+// $Id: socket.C,v 1.12 2000/01/14 20:34:08 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -315,7 +315,7 @@ namespace BALL
 	{
 		if (::connect(rep->sock, sa.getAddr(), sa.getSize()) == -1) 
 		{
-			// error("SocketBuf::connect");
+			Log.error() << "SocketBuf::connect: cannot connect. " << endl;
 			return errno;
 		}
 		return 0;
@@ -822,13 +822,18 @@ namespace BALL
 	// addr and port_no are in host byte order
 	SockInetAddr::SockInetAddr(unsigned long addr, int port_no)
 	{
+		if (addr == 0)
+		{
+			sin_addr.s_addr = htonl(INADDR_ANY);
+		} else {
+			sin_addr.s_addr = (unsigned int)htonl(addr);
+		}
 		sin_family = SockInetBuf::af_inet;
-		sin_addr.s_addr = (unsigned int)htonl(addr);
 		sin_port = htons(port_no);
 	}
 
 	// addr is in host byte order
-	SockInetAddr::SockInetAddr(unsigned long addr, const char* sn, const char* pn)
+	SockInetAddr::SockInetAddr(unsigned long addr, const String& sn, const String& pn)
 	{
 		sin_family = SockInetBuf::af_inet;
 		sin_addr.s_addr = (unsigned int)htonl(addr); // Added by cgay@cs.uoregon.edu May 29, 1993
@@ -836,13 +841,13 @@ namespace BALL
 	}
 
 	// port_no is in host byte order
-	SockInetAddr::SockInetAddr(const char* host_name, int port_no)
+	SockInetAddr::SockInetAddr(const String& host_name, int port_no)
 	{
 		setaddr(host_name);
 		sin_port = htons(port_no);
 	}
 
-	SockInetAddr::SockInetAddr(const char* hn, const char* sn, const char* pn)
+	SockInetAddr::SockInetAddr(const String& hn, const String& sn, const String& pn)
 	{
 		setaddr(hn);
 		setport(sn, pn);
@@ -855,12 +860,13 @@ namespace BALL
 		sin_port = sina.sin_port;
 	}   
 
-	void SockInetAddr::setport(const char* sn, const char* pn)
+	void SockInetAddr::setport
+		(const String& service_name, const String& protocol_name)
 	{
-		servent* sp = getservbyname(sn, pn);
+		servent* sp = getservbyname(service_name.c_str(), protocol_name.c_str());
 		if (sp == 0) 
 		{
-			perror(sn);
+			perror(service_name.c_str());
 			error ("SockInetAddr: invalid service name");
 			exit(1);
 		}
@@ -873,14 +879,14 @@ namespace BALL
 		return ntohs (sin_port);
 	}
 
-	void SockInetAddr::setaddr(const char* host_name)
+	void SockInetAddr::setaddr(const String& host_name)
 	{
-		if ((int)(sin_addr.s_addr = inet_addr(host_name)) == -1) 
+		if ((int)(sin_addr.s_addr = inet_addr(host_name.c_str())) == -1) 
 		{
-			hostent* hp = gethostbyname(host_name);
+			hostent* hp = gethostbyname(host_name.c_str());
 			if (hp == 0) 
 			{
-				herror("SockInetAddr::SockInetAddr");
+				Log.error() << "SockInetAddr::setaddr(" << host_name << "): cannot find host!" << endl;
 				exit(1);
 			}
 			memcpy(&sin_addr, hp->h_addr, hp->h_length);
@@ -890,16 +896,22 @@ namespace BALL
 		}
 	}
 
-	const char* SockInetAddr::getHostname() const
+	const String& SockInetAddr::getHostname() const
 	{
+		static String hostname;
+		static char buf[256];
+		
+		hostname = "";
 		if (sin_addr.s_addr == htonl(INADDR_ANY)) 
 		{
-			static char hostname[64];
-			if (::gethostname(hostname, 63) == -1) 
+			if (::gethostname(buf, 255) == -1) 
 			{
 				perror("in SockInetAddr::getHostname");
-				return "";
+				hostname = "";
+			} else {
+				hostname = buf;
 			}
+
 			return hostname;		
 		}
 		
@@ -907,15 +919,16 @@ namespace BALL
 		if (hp == 0) 
 		{
 			herror("SockInetAddr::getHostname");
-			return "";
+			
+			return hostname;
 		}
 
 		if (hp->h_name) 
 		{
-			return hp->h_name;
+			hostname = hp->h_name;
 		}
 
-		return "";
+		return hostname;
 	}
 
 	SockInetBuf::SockInetBuf(SocketBuf::type ty, int proto)
@@ -965,12 +978,13 @@ namespace BALL
 		return sin.getPort();
 	}
 
-	const char* SockInetBuf::localhost() const
+	const String& SockInetBuf::localhost() const
 	{
+		static String empty;
 		SockInetAddr sin = localaddr();
 		if (sin.getFamily() != af_inet) 
 		{
-			return "";
+			return empty;
 		}
 
 		return sin.getHostname();
@@ -1000,12 +1014,13 @@ namespace BALL
 		return sin.getPort();
 	}
 
-	const char* SockInetBuf::peerhost() const
+	const String& SockInetBuf::peerhost() const
 	{
+		static String empty;
 		SockInetAddr sin = peeraddr();
 		if (sin.getFamily() != af_inet) 
 		{
-			return "";
+			return empty;
 		}
 
 		return sin.getHostname();
@@ -1041,32 +1056,32 @@ namespace BALL
 	int SockInetBuf::bind()
 	{
 		SockInetAddr sa;
-		return bind (sa);
+		return bind(sa);
 	}
 
 	// address and portno are in host byte order
 	int SockInetBuf::bind(unsigned long addr, int port_no)
 	{
-		SockInetAddr sa (addr, port_no);
+		SockInetAddr sa(addr, port_no);
 
 		return bind (sa);
 	}
 
-	int SockInetBuf::bind(const char* host_name, int port_no)
+	int SockInetBuf::bind(const String& host_name, int port_no)
 	{
 		SockInetAddr sa (host_name, port_no);
 
 		return bind (sa);
 	}
 
-	int SockInetBuf::bind (unsigned long addr, const char* service_name, const char* protocol_name)
+	int SockInetBuf::bind (unsigned long addr, const String& service_name, const String& protocol_name)
 	{
 		SockInetAddr sa (addr, service_name, protocol_name);
 
 		return bind (sa);
 	}
 
-	int SockInetBuf::bind (const char* host_name, const char* service_name, const char* protocol_name)
+	int SockInetBuf::bind (const String& host_name, const String& service_name, const String& protocol_name)
 	{
 		SockInetAddr sa(host_name, service_name, protocol_name);
 
@@ -1086,21 +1101,21 @@ namespace BALL
 		return connect (sa);
 	}
 
-	int SockInetBuf::connect(const char* host_name, int port_no)
+	int SockInetBuf::connect(const String& host_name, int port_no)
 	{
 		SockInetAddr sa (host_name, port_no);
 
 		return connect (sa);
 	}
 
-	int SockInetBuf::connect (unsigned long addr, const char* service_name, const char* protocol_name)
+	int SockInetBuf::connect (unsigned long addr, const String& service_name, const String& protocol_name)
 	{
 		SockInetAddr sa (addr, service_name, protocol_name);
 
 		return connect (sa);
 	}
 
-	int SockInetBuf::connect (const char* host_name, const char* service_name, const char* protocol_name)
+	int SockInetBuf::connect (const String& host_name, const String& service_name, const String& protocol_name)
 	{
 		SockInetAddr sa (host_name, service_name, protocol_name);
 
