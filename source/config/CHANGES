@@ -9,6 +9,8 @@ added:
 - managment of 1D and 2D grids in DatasetControl
 - ability of DatasetControl to start visualisation of 1D and 2D grids
 - 1D and 2D RegularDataWidgets update their contents automaticaly
+- Visualisation of forces
+- Writing and loading of project files
 
 fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier

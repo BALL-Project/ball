@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceModel.C,v 1.1 2004/07/08 16:49:24 amoll Exp $
+// $Id: forceModel.C,v 1.2 2004/07/09 16:14:26 amoll Exp $
 
 #include <BALL/VIEW/MODELS/forceModel.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
+#include <math.h>
 
 using namespace std;
 
@@ -43,20 +44,22 @@ Processor::Result ForceModel::operator() (Composite &composite)
 	}
 	Atom* atom = (Atom*) &composite;
 
-//	 Vector3 force = atom->getForce();
-	Vector3 force = atom->getVelocity();
+	Vector3 force = atom->getForce();
 	if (force.getSquareLength() == 0) return Processor::CONTINUE;
-	force /= 10.0;
+	force.normalize();
+	force *= 10000000000.0;
+
+	float forcev = std::log(force.getLength());
+	if (forcev < 0) return Processor::CONTINUE;
+	if (forcev > 10)
+	{
+		forcev = 10;
+	}	
+	force *= forcev;
 
 	Line* line = new Line();
 	line->setVertex1Address(atom->getPosition());
-	if (force.getLength() > 10)
-	{
-		force.normalize();
-		force *= 10.0;
-	}
-	Vector3 pos = atom->getPosition() + force;
-	line->setVertex2(pos);
+	line->setVertex2(atom->getPosition() + force);
 	line->setComposite(atom);
 	line->setColor(ColorRGBA(1.0,1.0,1.0,1.0));
 	geometric_objects_.push_back(line);
