@@ -1,33 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.h,v 1.12 2003/03/26 13:56:40 anhi Exp $
+// $Id: snapShotManager.h,v 1.13 2003/07/03 15:54:19 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-#	include <BALL/KERNEL/system.h>
-#endif
-
-#ifndef BALL_COMMON_EXCEPTION_H
-#	include <BALL/common/exception.h>
-#endif
-
-#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
-#	include <BALL/MOLMEC/COMMON/forceField.h>
-#endif
-
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
 #	include <BALL/MOLMEC/COMMON/snapShot.h>
-#endif
-
-#ifndef BALL_FORMAT_TRAJECTORYFILE_H
-#	include <BALL/FORMAT/trajectoryFile.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
@@ -37,6 +17,8 @@
 namespace BALL
 {
 	class TrajectoryFile;
+	class System;
+	class ForceField;
 
   /**	Snapshot management for MD simulations.
 			This class manages a list of single snapshot objects.
@@ -260,11 +242,10 @@ namespace BALL
     Options options; 
 
     //@} 
-
-    protected:
-
     //_ @name Protected Attributes
     //_@{
+		
+    protected:
 
 		// ?????: this was a const ptr before, but applySnapShot needs a
 		// mutable System. is that reasonable
