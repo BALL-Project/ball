@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.20 2004/10/01 14:20:21 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.21 2005/02/24 15:52:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -128,35 +128,52 @@ namespace BALL
 				throw();
 
 			///
-			vector<ColorRGBA> getElementColors() const
+			vector<ColorRGBA> getColors(ColoringMethod method) const
 				throw();
 
 			///
-			vector<ColorRGBA> getResidueColors() const
-				throw();
+			void writeColorTable(const QColorTable& table, INIFile& inifile);
+
+			///
+			void readColorTable(QColorTable& table, const INIFile& inifile);
 
 			protected slots:
 
-			virtual void minimumOccupancyColorPressed();
-			virtual void middleResidueColorPressed();
-			virtual void lastResidueColorPressed();
-			virtual void negativeChargeColorPressed();
-			virtual void neutralChargeColorPressed();
-			virtual void positiveChargeColorPressed();
-			virtual void nullDistanceColorPressed();
-			virtual void maxDistanceColorPressed();
-			virtual void minimumTFColorPressed();
-			virtual void maximumTFColorPressed();
-			virtual void unassignedTFColorPressed();
-			virtual void maximumOccupancyColorPressed();
-			virtual void unassignedOccupancyColorPressed();
-			virtual void firstResidueColorPressed();
-			virtual void helixColorPressed();
-			virtual void turnColorPressed();
-			virtual void strandColorPressed();
-			virtual void coilColorPressed();
-			virtual void forceMinColorPressed();
-			virtual void forceMaxColorPressed();
+			void middleResidueColorPressed() 	{ chooseColor(middle_residue_label); }
+			void lastResidueColorPressed() 		{ chooseColor(last_residue_label); }
+			void firstResidueColorPressed() 	{ chooseColor(first_residue_label); }
+
+			void negativeChargeColorPressed() { chooseColor(negative_charge_label); }
+			void neutralChargeColorPressed() 	{ chooseColor(neutral_charge_label); }
+			void positiveChargeColorPressed() { chooseColor(positive_charge_label);}
+			
+			void nullDistanceColorPressed() 	{ chooseColor(null_distance_label); }
+			void maxDistanceColorPressed() 		{ chooseColor(max_distance_label); }
+			
+			void minimumTFColorPressed() 			{ chooseColor(minimum_tf_label); }
+			void maximumTFColorPressed() 			{ chooseColor(maximum_tf_label); }
+			void unassignedTFColorPressed() 	{ chooseColor(unassigned_tf_label); }
+			
+			void minimumOccupancyColorPressed() 		{ chooseColor(minimum_o_label); }
+			void maximumOccupancyColorPressed() 		{ chooseColor(maximum_o_label); }
+			void unassignedOccupancyColorPressed() 	{ chooseColor(unassigned_o_label); }
+			
+			void helixColorPressed() 		{ chooseColor(helix_color_label); }
+			void turnColorPressed() 		{ chooseColor(turn_color_label); }
+			void strandColorPressed() 	{ chooseColor(strand_color_label);}
+			void coilColorPressed() 		{ chooseColor(coil_color_label); }
+			
+			void forceMaxColorPressed() { chooseColor(force_max_color_label); }
+			void forceMinColorPressed() { chooseColor(force_min_color_label); }
+			
+			// residue types ===============================
+			void acidicColorPressed() 			{ chooseColor(acidic_color_label); }
+			void aromaticColorPressed() 		{ chooseColor(aromatic_color_label); }
+			void basicColorPressed() 				{ chooseColor(basic_color_label); }
+			void otherColorPressed() 				{ chooseColor(other_color_label); }
+			void polarColorPressed() 				{ chooseColor(polar_color_label); }
+			void hydrophobicColorPressed() 	{ chooseColor(hydrophobic_color_label); }
+			// ---------------------------------------------
 
 			virtual void maxDistanceChanged();
 			virtual void maxTFChanged();
@@ -167,6 +184,7 @@ namespace BALL
 
 			QColorTable* element_table_;
 			QColorTable* residue_table_;
+			QColorTable* chain_table_;
 		};
 
 } }

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.164 2005/02/21 13:37:10 amoll Exp $
+// $Id: mainControl.C,v 1.165 2005/02/24 15:54:01 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -46,7 +46,7 @@
 
 #include <qtimer.h>
 
-    #define BALL_BENCHMARKING
+//       #define BALL_BENCHMARKING
 
 using std::istream;
 using std::ostream;

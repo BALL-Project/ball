@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.35 2005/02/15 12:36:08 amoll Exp $
+// $Id: common.h,v 1.36 2005/02/24 15:52:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -242,6 +242,9 @@ namespace BALL
 
 			///
 			COLORING_RESIDUE_TYPE,
+
+			///
+			COLORING_CHAIN,
 
 			// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 			// add new coloring types before this comment!!!!

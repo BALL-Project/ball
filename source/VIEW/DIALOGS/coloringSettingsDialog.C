@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.36 2005/02/15 12:35:50 amoll Exp $
+// $Id: coloringSettingsDialog.C,v 1.37 2005/02/24 15:52:32 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -105,6 +105,7 @@ namespace BALL
 
 			element_table_ = new QColorTable(widget_stack->widget(0));
 			residue_table_ = new QColorTable(widget_stack->widget(2));
+			chain_table_   = new QColorTable(widget_stack->widget(10));
 			setDefaultValues(true);
 
 			registerObject_(first_residue_label);
@@ -139,6 +140,13 @@ namespace BALL
 			registerObject_(force_max_value_slider);
 			registerObject_(force_min_value_slider);
 
+			registerObject_(acidic_color_label);
+			registerObject_(aromatic_color_label);
+			registerObject_(basic_color_label);
+			registerObject_(hydrophobic_color_label);
+			registerObject_(other_color_label);
+			registerObject_(polar_color_label);
+
 			insertEntry(this, "Colors");
 			setWidgetStack(widget_stack);
 		}
@@ -146,46 +154,46 @@ namespace BALL
 		void ColoringSettingsDialog::writePreferenceEntries(INIFile& inifile)
 		{
 			PreferencesEntry::writePreferenceEntries(inifile);
+			writeColorTable(*element_table_, inifile);
+			writeColorTable(*residue_table_, inifile);
+			writeColorTable(*chain_table_,   inifile);
+		}
 
-			for (Position p = 0; p < element_table_->getColors().size(); p ++)
+		void ColoringSettingsDialog::writeColorTable(const QColorTable& table, INIFile& inifile)
+		{
+			for (Position p = 0; p < table.getColors().size(); p ++)
 			{
-				inifile.insertValue(inifile_section_name_, String(p).c_str(), element_table_->getColors()[p]);
-			}
-
-			for (Position p = 0; p < residue_table_->getColors().size(); p ++)
-			{
-				inifile.insertValue(inifile_section_name_, residue_table_->getNames()[p].c_str(), 
-												 residue_table_->getColors()[p]);
+				inifile.insertValue(inifile_section_name_, table.getNames()[p].c_str(), table.getColors()[p]);
 			}
 		}
+
+		void ColoringSettingsDialog::readColorTable(QColorTable& table, const INIFile& inifile)
+		{
+			vector<ColorRGBA> colors;
+			for (Position p = 0; p < table.getColors().size(); p ++)
+			{
+				ColorRGBA color;
+				if (!fetchPreference_(inifile, table.getNames()[p], color)) break;
+				colors.push_back(color);
+			}
+
+			if (colors.size() == table.getNames().size())
+			{
+				table.setColors(colors);
+			}
+			else
+			{
+				Log.error() << "Could not read color table from INIFile, maybe config file is corrupted?" << std::endl;
+			}
+		}
+
 
 		void ColoringSettingsDialog::readPreferenceEntries(const INIFile& inifile)
 		{
 			PreferencesEntry::readPreferenceEntries(inifile);
-
-			vector<ColorRGBA> colors;
-			for (Position p = 0; p < 112; p ++)
-			{
-				ColorRGBA color;
-				if (!fetchPreference_(inifile, String(p), color)) break;
-				colors.push_back(color);
-			}
-			if (colors.size() == element_table_->getNames().size())
-			{
-				element_table_->setColors(colors);
-			}
-
-			colors.clear();
-			for (Position p = 0; p < residue_table_->getColors().size(); p ++)
-			{
-				ColorRGBA color;
-				if (!fetchPreference_(inifile, residue_table_->getNames()[p], color)) break;
-				colors.push_back(color);
-			}
-			if (colors.size() == residue_table_->getColors().size())
-			{
-				residue_table_->setColors(colors);
-			}
+			readColorTable(*element_table_, inifile);
+			readColorTable(*chain_table_, 	inifile);
+			readColorTable(*residue_table_, inifile);
 		}
 
 		void ColoringSettingsDialog::setDefaultValues(bool all)
@@ -240,77 +248,50 @@ namespace BALL
 			}
 				
 			// =============================================================
-			// setting residue number colors
-			if (all || current == 1)
+			if (all || current == 1) getSettings(ResidueNumberColorProcessor());
+			if (all || current == 3) getSettings(AtomChargeColorProcessor());
+			if (all || current == 4) getSettings(AtomDistanceColorProcessor());
+			if (all || current == 5) getSettings(TemperatureFactorColorProcessor());
+			if (all || current == 6) getSettings(OccupancyColorProcessor());
+			if (all || current == 7) getSettings(SecondaryStructureColorProcessor());
+			if (all || current == 8) getSettings(ForceColorProcessor());
+			if (all || current == 9)
 			{
-				ResidueNumberColorProcessor dummy;
-				getSettings(dummy);
+				getSettings(ResidueTypeColorProcessor());
 			}
 			// =============================================================
-			// setting charge colors
-			if (all || current == 3)
+			// setting chain colors
+			if (all || current == 10)
 			{
-				AtomChargeColorProcessor dummy;
-				getSettings(dummy);
+				getSettings(ChainColorProcessor());
 			}
-			// =============================================================
-			// setting distance colors
-			if (all || current == 4)
-			{
-				AtomDistanceColorProcessor dummy;
-				getSettings(dummy);
-			}
-			// =============================================================
-			// setting temperature factor colors
-			if (all || current == 5)
-			{
-				TemperatureFactorColorProcessor dummy;
-				getSettings(dummy);
-			}
-			// =============================================================
-			// setting occupancy colors
-			if (all || current == 6) 
-			{
-				OccupancyColorProcessor dummy;
-				getSettings(dummy);
-			}
-			// =============================================================
-			// setting secondary structure colors
-			if (all || current == 7)
-			{
-				SecondaryStructureColorProcessor dummy;
-				getSettings(dummy);
-			}
-			// =============================================================
-			// setting force colors
-			if (all || current == 8)
-			{
-				ForceColorProcessor dummy;
-				getSettings(dummy);
-			}
+
 		}
 
-		vector<ColorRGBA> ColoringSettingsDialog::getElementColors() const
+		vector<ColorRGBA> ColoringSettingsDialog::getColors(ColoringMethod method) const
 			throw()
 		{
 			vector<ColorRGBA> colors;
-			colors.push_back(((QColorTableItem*)element_table_->item(element_table_->numRows()-1, 1))->getColor());
-			for (Position p = 0; p < (Position)element_table_->numRows(); p++)
+			QColorTable* table = 0;
+			switch (method)
 			{
-				colors.push_back(((QColorTableItem*)element_table_->item(p, 1))->getColor());
+				case COLORING_ELEMENT:
+				{
+					table = element_table_; 
+					if (table->numRows() > 0)
+					{
+						colors.push_back(((QColorTableItem*)table->item(table->numRows() - 1, 1))->getColor());
+					}
+					break;
+				}
+				case COLORING_RESIDUE_INDEX: 	table = residue_table_; break;
+				case COLORING_CHAIN: 					table = chain_table_  ; break;
+				default: return colors;
 			}
-
-			return colors;
-		}
-
-		vector<ColorRGBA> ColoringSettingsDialog::getResidueColors() const
-			throw()
-		{
-			vector<ColorRGBA> colors;
-			colors.push_back(((QColorTableItem*)residue_table_->item(residue_table_->numRows()-1, 1))->getColor());
-			for (Position p = 0; p < (Position)residue_table_->numRows(); p++)
+					
+			for (Position p = 0; p < (Position)table->numRows(); p++)
 			{
-				colors.push_back(((QColorTableItem*)residue_table_->item(p, 1))->getColor());
+				colors.push_back(((QColorTableItem*)table->item(p, 1))->getColor());
 			}
 
 			return colors;
@@ -319,14 +300,11 @@ namespace BALL
 		void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 			throw()
 		{
-			if (RTTI::isKindOf<CustomColorProcessor>(cp))
-			{
-				return;
-			}
+			if (RTTI::isKindOf<CustomColorProcessor>(cp)) return;
 
 			if (RTTI::isKindOf<ElementColorProcessor>(cp))
 			{
-				vector<ColorRGBA> colors = getElementColors();
+				vector<ColorRGBA> colors = getColors(COLORING_ELEMENT);
 				for (Position p = 0; p < colors.size(); p++)
 				{
 					(*(ElementColorProcessor*)&cp).getColorMap()[p] = colors[p];
@@ -412,109 +390,26 @@ namespace BALL
 				dp.setMinValue(((float)force_min_value_slider->value()) / 10.0);
 				return;
 			}
-		}
-			
 
-		void ColoringSettingsDialog::minimumOccupancyColorPressed()
-		{
-			chooseColor(minimum_o_label);
-		}
-			
-		void ColoringSettingsDialog::middleResidueColorPressed()
-		{
-			chooseColor(middle_residue_label);
-		}
-			
-		void ColoringSettingsDialog::lastResidueColorPressed()
-		{
-			chooseColor(last_residue_label);
-		}
-			
-		void ColoringSettingsDialog::negativeChargeColorPressed()
-		{
-			chooseColor(negative_charge_label);
-		}
-			
-		void ColoringSettingsDialog::neutralChargeColorPressed()
-		{
-			chooseColor(neutral_charge_label);
-		}
-			
-		void ColoringSettingsDialog::positiveChargeColorPressed()
-		{
-			chooseColor(positive_charge_label);
-		}
-			
-		void ColoringSettingsDialog::nullDistanceColorPressed()
-		{
-			chooseColor(null_distance_label);
-		}
-			
-		void ColoringSettingsDialog::maxDistanceColorPressed()
-		{
-			chooseColor(max_distance_label);
-		}
+			if (RTTI::isKindOf<ResidueTypeColorProcessor>(cp))
+			{
+				ResidueTypeColorProcessor& dp = (*(ResidueTypeColorProcessor*)&cp);
+				dp.setBasicColor(getLabelColor_(basic_color_label));
+				dp.setAcidicColor(getLabelColor_(acidic_color_label));
+				dp.setAromaticColor(getLabelColor_(aromatic_color_label));
+				dp.setPolarColor(getLabelColor_(polar_color_label));
+				dp.setHydrophobicColor(getLabelColor_(hydrophobic_color_label));
+				dp.setOtherColor(getLabelColor_(other_color_label));
+				return;
+			}
 
-		void ColoringSettingsDialog::minimumTFColorPressed()
-		{
-			chooseColor(minimum_tf_label);
+			if (RTTI::isKindOf<ChainColorProcessor>(cp))
+			{
+				((ChainColorProcessor*)&cp)->setColors(getColors(COLORING_CHAIN));
+				return;
+			}
 		}
 			
-		void ColoringSettingsDialog::maximumTFColorPressed()
-		{
-			chooseColor(maximum_tf_label);
-		}
-			
-		void ColoringSettingsDialog::unassignedTFColorPressed()
-		{
-			chooseColor(unassigned_tf_label);
-		}
-			
-		void ColoringSettingsDialog::maximumOccupancyColorPressed()
-		{
-			chooseColor(maximum_o_label);
-		}
-			
-		void ColoringSettingsDialog::unassignedOccupancyColorPressed()
-		{
-			chooseColor(unassigned_o_label);
-		}
-
-		void ColoringSettingsDialog::firstResidueColorPressed()
-		{
-			chooseColor(first_residue_label);
-		}
-
-		void ColoringSettingsDialog::helixColorPressed()
-		{
-			chooseColor(helix_color_label);
-		}
-
-		void ColoringSettingsDialog::turnColorPressed()
-		{
-			chooseColor(turn_color_label);
-		}
-
-		void ColoringSettingsDialog::strandColorPressed()
-		{
-			chooseColor(strand_color_label);
-		}
-
-		void ColoringSettingsDialog::coilColorPressed()
-		{
-			chooseColor(coil_color_label);
-		}
-
-		void ColoringSettingsDialog::forceMaxColorPressed()
-		{
-			chooseColor(force_max_color_label);
-		}
-
-		void ColoringSettingsDialog::forceMinColorPressed()
-		{
-			chooseColor(force_min_color_label);
-		}
-
 		void ColoringSettingsDialog::maxDistanceChanged()
 		{
 			String text = String(((float)max_distance_slider->value()) / 10.0);
@@ -599,6 +494,11 @@ namespace BALL
 					color_processor = new ResidueTypeColorProcessor;
 					break;
 
+				case COLORING_CHAIN:
+					color_processor = new ChainColorProcessor;
+					break;
+
+
 				default:
 					throw(Exception::InvalidOption(__FILE__, __LINE__, method));
 			}
@@ -668,7 +568,6 @@ namespace BALL
 			if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
 			{
 				TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
-
 				setLabelColor_(unassigned_tf_label, dp.getMinMinColor());
 				setLabelColor_(minimum_tf_label, dp.getMinColor());
 				setLabelColor_(maximum_tf_label, dp.getMaxColor());
@@ -678,11 +577,37 @@ namespace BALL
 			if (RTTI::isKindOf<ForceColorProcessor>(cp))
 			{
 				ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
-
 				setLabelColor_(force_min_color_label, dp.getMinColor());
 				setLabelColor_(force_max_color_label, dp.getMaxColor());
 				force_max_value_slider->setValue((Size)(dp.getMaxValue() * 10.0));
 				force_min_value_slider->setValue((Size)(dp.getMinValue() * 10.0));
+			} else
+
+			if (RTTI::isKindOf<ResidueTypeColorProcessor>(cp))
+			{
+ 				ResidueTypeColorProcessor& dp = (*(ResidueTypeColorProcessor*)&cp);
+				setLabelColor_(acidic_color_label, dp.getAcidicColor());
+				setLabelColor_(aromatic_color_label, dp.getAromaticColor());
+				setLabelColor_(basic_color_label, dp.getBasicColor());
+				setLabelColor_(hydrophobic_color_label, dp.getHydrophobicColor());
+				setLabelColor_(other_color_label, dp.getOtherColor());
+				setLabelColor_(polar_color_label, dp.getPolarColor());
+			} else
+
+			if (RTTI::isKindOf<ChainColorProcessor>(cp))
+			{
+ 				ChainColorProcessor& dp = (*(ChainColorProcessor*)&cp);
+				vector<String> 		names;
+				vector<ColorRGBA> colors;
+
+				for (Position p = 0; p < dp.getColors().size(); p++)
+				{
+					colors.push_back(dp.getColors()[p]);
+					names.push_back(p);
+				}
+
+				chain_table_->setNamesTitle("Chain");
+				chain_table_->setContent(names, colors);
 			}
 		}
 
@@ -691,35 +616,18 @@ namespace BALL
 		{
 			switch (method)
 			{
-				case COLORING_ELEMENT:
-					return widget_stack->widget(0);
-
-				case COLORING_RESIDUE_NAME:
-					return widget_stack->widget(2);
-
-				case COLORING_RESIDUE_INDEX:
-					return widget_stack->widget(1);
-
-				case COLORING_SECONDARY_STRUCTURE:
-					return widget_stack->widget(7);
-
-				case COLORING_ATOM_CHARGE:
-					return widget_stack->widget(3);
-
-				case COLORING_DISTANCE:
-					return widget_stack->widget(4);
-
-				case COLORING_TEMPERATURE_FACTOR:
-					return widget_stack->widget(5);
-
-				case COLORING_OCCUPANCY:
-					return widget_stack->widget(6);
-
-				case COLORING_FORCES:
-					return widget_stack->widget(8);
-
-				default:
-					break;
+				case COLORING_ELEMENT: 							return widget_stack->widget(0);
+				case COLORING_RESIDUE_NAME: 				return widget_stack->widget(2);
+				case COLORING_RESIDUE_INDEX: 				return widget_stack->widget(1);
+				case COLORING_SECONDARY_STRUCTURE: 	return widget_stack->widget(7);
+				case COLORING_ATOM_CHARGE: 					return widget_stack->widget(3);
+				case COLORING_DISTANCE: 						return widget_stack->widget(4);
+				case COLORING_TEMPERATURE_FACTOR: 	return widget_stack->widget(5);
+				case COLORING_OCCUPANCY: 						return widget_stack->widget(6);
+				case COLORING_FORCES: 							return widget_stack->widget(8);
+				case COLORING_RESIDUE_TYPE: 				return widget_stack->widget(9);
+				case COLORING_CHAIN: 								return widget_stack->widget(10);
+				default: break;
 			}
 
 			return 0;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.51 2005/02/06 20:57:10 oliver Exp $
+// $Id: standardColorProcessor.C,v 1.52 2005/02/24 15:52:34 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -1097,7 +1097,76 @@ namespace BALL
 			aromatic_color_.setAlpha(255 - t);
 			other_color_.setAlpha(255 - t);
 		}
-			
+
+		ChainColorProcessor::ChainColorProcessor()
+			: ColorProcessor(),
+				colors_()
+		{
+			colors_.resize(20);
+			colors_[ 0].set(1.0, 0.0, 0.0);
+			colors_[ 1].set(0.0, 1.0, 0.0);
+			colors_[ 2].set(0.0, 0.0, 1.0);
+			colors_[ 3].set(1.0, 1.0, 0.0);
+			colors_[ 4].set(0.0, 1.0, 1.0);
+			colors_[ 5].set(1.0, 0.0, 1.0);
+			colors_[ 6].set(0.5, 0.5, 0.5);
+			colors_[ 7].set(1.0, 0.5, 0.5);
+			colors_[ 8].set(1.0, 1.0, 1.0);
+			colors_[ 9].set(0.5, 0.5, 0.0);
+			colors_[10].set(1.0, 0.2, 0.2);
+			colors_[11].set(0.9, 0.1, 0.9);
+			colors_[12].set(0.0, 0.9, 0.0);
+			colors_[13].set(0.9, 0.0, 0.2);
+			colors_[14].set(1.0, 1.0, 0.5);
+			colors_[15].set(0.5, 1.0, 1.0);
+			colors_[16].set(1.0, 0.5, 1.0);
+			colors_[17].set(0.7, 0.2, 0.7);
+			colors_[18].set(0.2, 0.7, 0.7);
+			colors_[19].set(0.7, 0.7, 0.2);
+		}
+
+		void ChainColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
+		{
+			const Chain* chain = composite.getAncestor(dummy_chain_);
+			if (chain == 0)
+			{
+				color_to_be_set.set(default_color_);
+				return;
+			}
+
+			HashMap<const Chain*, Position>::Iterator it = chain_to_position_.find(chain);
+			if (it != chain_to_position_.end())
+			{
+				color_to_be_set.set(colors_[it->second]);
+				return;
+			}
+
+ 			const Composite* parent = chain->getParent();
+			if (parent == 0) 
+			{
+				chain_to_position_[chain] = 0;
+				color_to_be_set.set(colors_[0]);
+				return;
+			}
+
+		 	const Composite* child = parent->getFirstChild();
+		 	Position pos = 0;
+		 	while (child != 0)
+		 	{
+				const Chain* current_chain = dynamic_cast<const Chain*>(child);
+				if (current_chain != 0)
+				{
+				 	chain_to_position_[current_chain] = pos;
+			 	}
+
+			 	child = child->getSibling(1);
+				pos++;
+				if (pos >= colors_.size()) pos -= colors_.size();
+		 	}
+
+			color_to_be_set.set(colors_[chain_to_position_[chain]]);
+		}
+
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>
 #	endif

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.167 2005/02/23 13:22:34 amoll Exp $
+// $Id: scene.C,v 1.168 2005/02/24 15:52:34 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -35,7 +35,7 @@
 #include <qdir.h>
 
 
- #define BALL_BENCHMARKING
+//    #define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;

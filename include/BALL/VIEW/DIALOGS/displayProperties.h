@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.38 2004/10/01 14:20:22 amoll Exp $
+// $Id: displayProperties.h,v 1.39 2005/02/24 15:52:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -215,6 +215,7 @@ namespace BALL
 			///
 			virtual void setTransparency(int value);
 
+			///
 			virtual void setCustomColor(const ColorRGBA& color);
 			
 			/** Indicates the apply button was pressed.
