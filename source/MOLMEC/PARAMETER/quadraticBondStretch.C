@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticBondStretch.C,v 1.8 2002/02/27 12:21:44 sturm Exp $
+// $Id: quadraticBondStretch.C,v 1.9 2003/05/26 08:23:20 anhi Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticBondStretch.h>
@@ -31,6 +31,10 @@ namespace BALL
 		delete [] k_;
 		delete [] r0_;
 		delete [] is_defined_;
+
+		k_ = 0;
+		r0_ = 0;
+		is_defined_ = 0;
 
 		ParameterSection::clear();
 	}
@@ -68,6 +72,15 @@ namespace BALL
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 		
 		// allocate two onedimensional fields for the two parameters
+		// and a two dimensional field of boolean variables.
+		// we might have to delete old stuff lying around
+		if (k_)
+			delete [] k_;
+		if (r0_)
+			delete [] r0_;
+		if (is_defined_)
+			delete [] is_defined_;
+
 		k_  = new float[number_of_atom_types_ * number_of_atom_types_];
 		r0_ = new float[number_of_atom_types_ * number_of_atom_types_];
 		is_defined_ = new bool[number_of_atom_types_ * number_of_atom_types_];
