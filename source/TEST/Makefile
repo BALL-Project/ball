@@ -167,12 +167,14 @@ EXECUTABLES_STRUCTURE = \
 	AnalyticalSES_test\
 	MolecularGraph_test\
 	NumericalSAS_test\
+	PeptideBuilder_test\
 	Peptides_test\
 	RadialDistributionFunction_test\
 	RDFIntegrator_test\
 	RDFParameter_test\
 	RDFSection_test\
 	ReconstructFragmentProcessor_test\
+	ResidueChecker_test\
 	RotamerLibrary_test\
 	SmilesParser_test\
 	StructureMapper_test\

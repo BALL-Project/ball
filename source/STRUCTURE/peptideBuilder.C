@@ -427,8 +427,9 @@ namespace BALL
 		}
 
 		void PeptideBuilder::transform_
-			(const Angle& phi, const Angle& psi, const Angle& omega, Residue& resold, Residue& resnew)
+			(const Angle& phi, const Angle& psi, const Angle& /* omega */, Residue& resold, Residue& resnew)
 		{
+			// Parameter omega obviously not used!!!
 			Matrix4x4 phimat;   // rotation matrix
 			Matrix4x4 psimat;   //    "
 			Vector3 phiaxis;    // rotation axis for the torsion angles

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.C,v 1.21 2003/04/16 21:20:43 oliver Exp $
+// $Id: residueChecker.C,v 1.22 2003/04/17 14:19:52 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 
@@ -18,23 +18,50 @@ namespace BALL
 
 	ResidueChecker::ResidueChecker()
 		:	fragment_db_(0),
-			status_(true)
+			status_(true),
+			tests_(ResidueChecker::NUMBER_OF_TESTS)
 	{
+		// Enable all tests by default.
+		tests_.fill();
 	}
 	
 	ResidueChecker::ResidueChecker(FragmentDB& fragment_db)
-		:	fragment_db_(&fragment_db),
-			status_(true)
+		:	UnaryProcessor<Residue>(),
+			fragment_db_(&fragment_db),
+			status_(true),
+			tests_(ResidueChecker::NUMBER_OF_TESTS)
 	{
+		// Enable all tests by default.
+		tests_.fill();		
 	}
+
 	
-	ResidueChecker::ResidueChecker(const ResidueChecker& residue_checker , bool /* deep */)
+	ResidueChecker::ResidueChecker(const ResidueChecker& residue_checker)
 		:	UnaryProcessor<Residue>(),
 			fragment_db_(residue_checker.fragment_db_),
-			status_(residue_checker.status_)
+			status_(residue_checker.status_),
+			tests_(ResidueChecker::NUMBER_OF_TESTS)
 	{
 	}
 
+	bool ResidueChecker::isEnabled(ResidueChecker::TestType t) const 
+		throw()
+	{
+		return tests_.getBit((Position)t);
+	}
+
+	void ResidueChecker::enable(ResidueChecker::TestType t) 
+		throw()
+	{
+		tests_.setBit((Position)t);
+	}
+	
+	void ResidueChecker::disable(ResidueChecker::TestType t) 
+		throw()
+	{
+		tests_.setBit((Position)t, false);
+	}
+	
 	ResidueChecker::~ResidueChecker()
 	{
 	}
@@ -64,11 +91,14 @@ namespace BALL
 		}
 		res_name += residue.getName() + ":" + residue.getID();
 
-		bool result = checkCharge(residue, res_name);
-		status_ &= result;
+		// We win, by default.
+		status_ = true;
 
-		result = checkAtomPositions(residue, res_name);
-		status_ &= result;
+		// Check charges.
+		status_ &= checkCharge(residue, res_name);
+
+		// Check atom positions.
+		status_ &= checkAtomPositions(residue, res_name);
 
 		// if a fragment data base is defined, check for completeness
 		// of the residue
@@ -77,16 +107,16 @@ namespace BALL
 			const Residue* reference = dynamic_cast<const Residue*>(fragment_db_->getReferenceFragment(residue));
 			if (reference == 0)
 			{
-				Log.warn() << "ResidueChecker: didn't find a reference fragment for " << res_name << endl;
-				status_ = false;	
+				if (isEnabled(UNKNOWN_RESIDUES))
+				{
+					Log.warn() << "ResidueChecker: didn't find a reference fragment for " << res_name << endl;
+					status_ &= false;	
+				}
 			} 
 			else 
 			{
-				result = checkCompleteness(residue, *reference, res_name);
-				status_ &= result;
-
-				result = checkTemplate(residue, *reference, res_name);
-				status_ &= result;
+				status_ &= checkCompleteness(residue, *reference, res_name);
+				status_ &= checkTemplate(residue, *reference, res_name);
 			}
 		}
 
@@ -96,7 +126,14 @@ namespace BALL
 	bool ResidueChecker::checkCharge(const Residue& residue, const String& res_name)
 		throw()
 	{
+		// Make sure we are suppose to do this.
+		if (!isEnabled(LARGE_NET_CHARGE) && !isEnabled(LARGE_CHARGES) && !isEnabled(NON_INTEGRAL_NET_CHARGE))
+		{
+			return true;
+		}
+
 		bool result = true;
+
 		// checking charge: charge should be integral and -2 <= charge <= 2
 		float total_charge = 0.0;
 		AtomConstIterator atom_it = residue.beginAtom();
@@ -104,7 +141,7 @@ namespace BALL
 		{
 			total_charge += atom_it->getCharge();
 			// warn for too large charges (above +/- 4 e0)
-			if (fabs(atom_it->getCharge()) > 4.0)
+			if (isEnabled(LARGE_CHARGES) && (fabs(atom_it->getCharge()) > 4.0))
 			{
 				Log.warn() << "ResidueChecker: suspect charge of " << atom_it->getCharge()
 					<< " for " << atom_it->getName() << " in " << res_name << std::endl;
@@ -113,14 +150,14 @@ namespace BALL
 		}
 
 		// check for very large absolute charges
-		if (total_charge < -2.0)
+		if (isEnabled(LARGE_NET_CHARGE) && (total_charge < -2.0))
 		{
 			Log.warn() << "ResidueChecker: in residue " << res_name << ": total charge of " 
 								 << total_charge << " is too negative." << endl;
 			result = false;
 		}
 
-		if (total_charge > 2.0)
+		if (isEnabled(LARGE_NET_CHARGE) && (total_charge > 2.0))
 		{
 			Log.warn() << "ResidueChecker: in residue " << res_name << ": total charge of " 
 								 << total_charge << " is too positive." << endl;
@@ -129,7 +166,7 @@ namespace BALL
 
 		// check for integrality of charges
 		float tmp = fabs(fabs(total_charge) - (float)((int)(fabs(total_charge) + 0.5)));
-		if (tmp > 0.05)
+		if (isEnabled(NON_INTEGRAL_NET_CHARGE) && (tmp > 0.05))
 		{
 			Log.warn() << "ResidueChecker: in residue " << res_name << ": residue total charge of " 
 								 << total_charge << " is not integral." << endl;
@@ -143,9 +180,15 @@ namespace BALL
 		(const Residue& residue, const Residue& reference, const String& res_name)
 		throw()
 	{
+		// Make sure we are suppose to do this.
+		if (!isEnabled(EXTRA_ATOMS) && !isEnabled(MISSING_ATOMS))
+		{
+			return true;
+		}
+
 		bool result = true;
 
-		// first, check for completeness
+		// First, check for completeness
 		HashSet<String> reference_names;
 		AtomConstIterator atom_it;
 		for (atom_it = reference.beginAtom(); +atom_it; ++atom_it)
@@ -153,20 +196,23 @@ namespace BALL
 			reference_names.insert(atom_it->getName());
 		}
 		
+		// Check for extra atoms in the residue.
 		for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 		{
 			if (reference_names.has(atom_it->getName()))
 			{
 				reference_names.erase(atom_it->getName());
 			} 
-			else 
+			else if (isEnabled(EXTRA_ATOMS))
 			{
 				Log.warn() << "ResidueChecker: did not find atom " << atom_it->getName() << " of " 
 									 << res_name  << " in the reference residue " << reference.getName() << endl;
 				status_ = false;
 			}
 		}
-		if (reference_names.size() > 0)
+
+		// Check for missing atoms in the residue.
+		if (isEnabled(MISSING_ATOMS) && (reference_names.size() > 0))
 		{
 			Log.warn() << "ResidueChecker: did not find the following atoms in " << res_name << " : ";
 			HashSet<String>::Iterator set_it = reference_names.begin();
@@ -184,15 +230,22 @@ namespace BALL
 	bool ResidueChecker::checkAtomPositions(const Residue& res, const String& res_name)
 		throw()
 	{
+		// Make sure we are suppose to do this.
+		if (!isEnabled(NAN_POSITIONS) && !isEnabled(OVERLAPPING_ATOMS) && !isEnabled(DUPLICATE_ATOM_NAMES))
+		{
+			return true;
+		}
+
 		bool result = true;
 
 		AtomConstIterator atom_it;
 		for (atom_it = res.beginAtom(); +atom_it; ++atom_it)
 		{
-			// check for illegal atom positions (NaNs)
-			if (Maths::isNan(atom_it->getPosition().x)
-					||Maths::isNan(atom_it->getPosition().y)
-					||Maths::isNan(atom_it->getPosition().z))
+			// Check for illegal atom positions (NaNs in any of the coordinates).
+			if (isEnabled(NAN_POSITIONS) 
+					&& (Maths::isNan(atom_it->getPosition().x)
+					|| Maths::isNan(atom_it->getPosition().y)
+					|| Maths::isNan(atom_it->getPosition().z)))
 			{
 				Log.warn() << "ResidueChecker: illegal atom position (not a number) for atom "
 									 << atom_it->getName() << " of " << res_name << endl;
@@ -203,8 +256,10 @@ namespace BALL
 			AtomConstIterator atom_it2;
 			for (atom_it2 = atom_it, ++atom_it2; +atom_it2; ++atom_it2)
 			{
-				// check for overlapping atoms (closer than 0.5 Angstrom)
-				if (pos.getSquareDistance(atom_it2->getPosition()) < 0.5)
+				
+				// Check for overlapping atoms (closer than 0.5 Angstrom)
+				if (isEnabled(OVERLAPPING_ATOMS)
+						&& (pos.getSquareDistance(atom_it2->getPosition()) < 0.5))
 				{
 					Log.warn() << "ResidueChecker: atoms too close -- distance between " 
 										 << atom_it->getName() << " and " << atom_it2->getName() 
@@ -212,8 +267,10 @@ namespace BALL
 										 << " A." << std::endl;
 					result = false;
 				}
-				// check for identical names (OK, a bad place, but why not...)
-				if (atom_it->getName() == atom_it2->getName())
+
+				// Check for identical names (OK, a bad place, but why not...)
+				if (isEnabled(DUPLICATE_ATOM_NAMES)
+						&& (atom_it->getName() == atom_it2->getName()))
 				{
 					Log.warn() << "ResidueChecker: duplicate atom name " << atom_it->getName()
 										 << " in " << res_name << "." << std::endl;
@@ -228,8 +285,15 @@ namespace BALL
 	bool ResidueChecker::checkTemplate(const Residue& residue, const Residue& reference, const String& res_name)
 		throw()
 	{
+		// Make sure there's something to be done at all.
+		if (!isEnabled(SUSPECT_BOND_LENGTHS) && !isEnabled(ELEMENTS))
+		{
+			return true;
+		}
+
 		bool result = true;
-		// check bond lengths (should be within +/- 15% of reference values)
+
+		// Check bond lengths (should be within +/- 15% of reference values).
 		Atom::BondConstIterator bond_it;
 		AtomConstIterator bond_atom_it;
 		AtomConstIterator atom_it;
@@ -254,7 +318,7 @@ namespace BALL
 			{
 				float distance = first->getPosition().getDistance(second->getPosition());
 				float deviation = fabs(distance - bond_it->getLength()) / bond_it->getLength();
-				if (deviation > 0.15)
+				if (isEnabled(SUSPECT_BOND_LENGTHS) && (deviation > 0.15))
 				{
 					Log.warn() << "ResidueChecker: in residue " << res_name << ": atom distance " 
 										 << "between " << first->getName() << " and " << second->getName() << " suspect: " 
@@ -262,8 +326,9 @@ namespace BALL
 					result = false;
 				}
 
-				// check for the element type of each atom
-				if (first->getElement() != bond_it->getFirstAtom()->getElement())
+				// Check for the element type of each atom
+				if (isEnabled(ELEMENTS)
+						&& (first->getElement() != bond_it->getFirstAtom()->getElement()))
 				{
 					Log.warn() << "ResidueChecker: in residue " << res_name << ": atom "
 										 << first->getName() << " is " 
@@ -273,7 +338,8 @@ namespace BALL
 										 // (const_cast<Atom*> (first))->setElement(bond_it->getFirstAtom()->getElement());
 					result = false;
 				}
-				if (second->getElement() != bond_it->getSecondAtom()->getElement())
+				if (isEnabled(ELEMENTS)
+						&& (second->getElement() != bond_it->getSecondAtom()->getElement()))
 				{
 					Log.warn() << "ResidueChecker: in residue " << res_name << ": atom "
 										 << second->getName() << " is " 

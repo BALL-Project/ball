@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.3 2003/04/12 10:04:21 oliver Exp $
+// $Id: RotamerLibrary_test.C,v 1.4 2003/04/17 14:19:53 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.3 2003/04/12 10:04:21 oliver Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.4 2003/04/17 14:19:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -235,6 +235,7 @@ RESULT
 
 
 ResidueChecker rc(frag_db);
+rc.disable(ResidueChecker::OVERLAPPING_ATOMS);
 
 CHECK(Side chain positions for Ser)
 	System S;
