@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.39 2004/11/10 15:51:52 amoll Exp $
+// $Id: mainframe.C,v 1.40 2004/11/27 20:54:03 amoll Exp $
 //
 
 #include "mainframe.h"
 #include "aboutDialog.h"
 #include "icons.h"
 
-#include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -22,7 +21,6 @@
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 
 #include <BALL/COMMON/version.h>
-#include <BALL/DATATYPE/contourSurface.h>
 
 #ifdef BALL_PYTHON_SUPPORT
 #	include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -46,10 +44,8 @@ namespace BALL
 			scene_(0),
 			dataset_control_(0),
 			display_properties_(0),
-			surface_dialog_(0),
 			file_dialog_(0),
 			fullscreen_(false),
-			menu_cs_(-1),
 			menu_FPDB_(-1)
 	{
 		#ifdef BALL_VIEW_DEBUG
@@ -96,10 +92,6 @@ namespace BALL
 
 		display_properties_ = new DisplayProperties(this, "DisplayProperties");
 		CHECK_PTR(display_properties_);
-
-		surface_dialog_ = new ContourSurfaceDialog(this, "ContourSurfaceDialog");
-		surface_dialog_->setDatasetControl(dataset_control_);
-		CHECK_PTR(surface_dialog_);
 
 		CHECK_PTR(new LabelDialog(this, "LabelDialog"));
 		
@@ -153,12 +145,6 @@ namespace BALL
 		menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", FDPB_dialog, SLOT(show()), 0,
 				-1, hint);
 				
-		insertPopupMenuSeparator(MainControl::TOOLS);
-
-		hint = "Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.";
-		menu_cs_ = insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  SLOT(computeIsoContourSurface()), 
-										CTRL+Key_U,-1, hint);
-
 		// Help-Menu -------------------------------------------------------------------
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()));
 
@@ -175,9 +161,8 @@ namespace BALL
 
 	void Mainframe::checkMenus()
 	{
-		if (menu_cs_ == -1) return;
+		if (menu_FPDB_ == -1) return;
 		menuBar()->setItemEnabled(menu_FPDB_, !compositesAreLocked() && (getSelectedSystem() != 0));
- 	  menuBar()->setItemEnabled(menu_cs_,   !compositesAreLocked() && (dataset_control_->count3DGrids() != 0));
 		MainControl::checkMenus();
 	}
 
@@ -212,55 +197,6 @@ namespace BALL
 		pr.init(*(scene_->getStage()));
 		scene_->exportScene(pr);
 		pr.finish();
-	}
-
-	void Mainframe::computeIsoContourSurface()
-	{
-		// execute the surface dialog and abort if cancel is clicked
-		if (!surface_dialog_->exec()) return;
-
-		// Create a new contour surface.
-		ContourSurface cs(*surface_dialog_->getGrid(), surface_dialog_->getThreshold());
-		Mesh* mesh = new Mesh;
-		mesh->Surface::operator = (static_cast<Surface&>(cs));
-
-		// fix for the cases, where all normals of the surface are in the wrong direction
-		// calculate center of surface and count normals, which show to the center of the surface,
-		// if this are more than the normals in opposite direction, flip all normals
-		Vector3 center;
-		for (Position i = 0; i < mesh->vertex.size(); i++)
-		{
-			center += mesh->vertex[i];
-		}
-
-		center /= mesh->vertex.size();
-
-		Size nr_of_strange_normals = 0;
-		for (Position i = 0; i < mesh->normal.size(); i++)
-		{
-			if ((mesh->vertex[i] + mesh->normal[i]).getDistance(center) < (mesh->vertex[i] - mesh->normal[i]).getDistance(center))
-			{
-				nr_of_strange_normals ++;
-			}
-		}
-
-		if (nr_of_strange_normals > mesh->normal.size() / 2.0)
-		{
-			for (Position i = 0; i < mesh->normal.size(); i++)
-			{
-				mesh->normal[i] *= -1;
-			}
-		}
-
-
-		// Create a new representation containing the contour surface.
-		Representation* rep = getPrimitiveManager().createRepresentation();
-		rep->insert(*mesh);
-		rep->setModelType(MODEL_CONTOUR_SURFACE); 
-
-		// Make sure BALLView knows about the new representation.
-		RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
-		notify_(message);
 	}
 
 	void Mainframe::about()
@@ -304,7 +240,7 @@ namespace BALL
 
 		if (file.hasSuffix(".bvp"))
 		{
-			loadBALLViewProjectFile(file);
+			MainControl::loadBALLViewProjectFile(file);
 			return;
 		}
 
@@ -337,9 +273,13 @@ namespace BALL
 		setStatusbarText("finished printing");
 	}
 
+	
 	void Mainframe::saveBALLViewProjectFile()
 		throw()
 	{
+//      		MainControl::saveBALLViewProjectFile();
+//      		return;
+
 		QString result = QFileDialog::getSaveFileName(
 				getWorkingDir().c_str(), "*.bvp", 0, "Select a BALLView project file");
 		if (result.isEmpty())
@@ -424,6 +364,7 @@ namespace BALL
 	} 
 
 
+
 	void Mainframe::loadBALLViewProjectFile()
 		throw()
 	{
@@ -434,10 +375,11 @@ namespace BALL
 			return;
 		}
 
-		loadBALLViewProjectFile(result.ascii());
+//   		MainControl::loadBALLViewProjectFile(result.ascii());
 	}
 
 
+	
 	void Mainframe::loadBALLViewProjectFile(const String& filename)
 		throw()
 	{
@@ -616,6 +558,7 @@ namespace BALL
 		Scene::getInstance(0)->fetchPreferences(in);
 		Scene::getInstance(0)->applyPreferences();
 	}
+
 
 	void Mainframe::setSelection_(Composite* c, HashSet<Position>& hash_set, Position& current)
 		throw()

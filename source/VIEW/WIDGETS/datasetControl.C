@@ -1,14 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.34 2004/11/27 10:58:11 amoll Exp $
+// $Id: datasetControl.C,v 1.35 2004/11/27 20:56:08 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/DCDFile.h>
+
+#include <BALL/DATATYPE/contourSurface.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
+#include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
+
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
 
@@ -28,7 +34,9 @@ namespace BALL
 DatasetControl::DatasetControl(QWidget* parent, const char* name)
 	throw()
 	:	GenericControl(parent, name),
-		dialog_(0)
+		dialog_(0),
+		surface_dialog_(0),
+		menu_cs_(0)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DatasetControl " << this << std::endl;
@@ -68,6 +76,11 @@ void DatasetControl::initializeWidget(MainControl& main_control)
 		String("Open a 2D data grid"));
 	main_control.insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()), 0, -1,
 		String("Open a 3D data grid"));
+
+	String hint("Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.");
+	menu_cs_ = main_control.insertMenuEntry(MainControl::TOOLS, "Contour S&urface", this,  
+																					SLOT(computeIsoContourSurface()), CTRL+Key_U, -1, hint);
+
 	GenericControl::initializeWidget(main_control);
 }
 
@@ -89,6 +102,11 @@ void DatasetControl::checkMenu(MainControl& main_control)
 	menuBar()->setItemEnabled(open_trajectory_id_, main_control.getSelectedSystem());
 	ItemList item_list = getSelectedItems(); 
 	if (item_list.size() > 0) main_control.setDeleteEntryEnabled(true);
+
+	bool enable_cs = (getSelectedItems().size() == 1) && 
+									 item_to_grid3_.has(*getSelectedItems().begin()) && 
+									 !getMainControl()->compositesAreLocked();
+ 	menuBar()->setItemEnabled(menu_cs_, enable_cs);
 }
 
 
@@ -636,6 +654,68 @@ List<std::pair<RegularData3D*, String> > DatasetControl::get3DGrids()
 		grids.push_back(p);
 	}
 	return grids;
+}
+
+
+void DatasetControl::computeIsoContourSurface()
+{
+	// execute the surface dialog and abort if cancel is clicked
+	if (surface_dialog_ == 0) 
+	{
+		surface_dialog_ = new ContourSurfaceDialog(this, "ContourSurfaceDialog");
+		surface_dialog_->setDatasetControl(this);
+	}
+	if (!surface_dialog_->exec()) return;
+
+	// Create a new contour surface.
+	ContourSurface cs(*surface_dialog_->getGrid(), surface_dialog_->getThreshold());
+
+	if (cs.vertex.size() == 0)
+	{
+		setStatusbarText("Could not calculate ContourSurface, no grid points found for threshold!", true);
+		return;
+	}
+
+	Mesh* mesh = new Mesh;
+	mesh->Surface::operator = (static_cast<Surface&>(cs));
+
+	// fix for the cases, where all normals of the surface are in the wrong direction
+	// calculate center of surface and count normals, which show to the center of the surface,
+	// if this are more than the normals in opposite direction, flip all normals
+	Vector3 center;
+	for (Position i = 0; i < mesh->vertex.size(); i++)
+	{
+		center += mesh->vertex[i];
+	}
+
+	center /= mesh->vertex.size();
+
+	Size nr_of_strange_normals = 0;
+	for (Position i = 0; i < mesh->normal.size(); i++)
+	{
+		if ((mesh->vertex[i] + mesh->normal[i]).getDistance(center) < (mesh->vertex[i] - mesh->normal[i]).getDistance(center))
+		{
+			nr_of_strange_normals ++;
+		}
+	}
+
+	if (nr_of_strange_normals > mesh->normal.size() / 2.0)
+	{
+		for (Position i = 0; i < mesh->normal.size(); i++)
+		{
+			mesh->normal[i] *= -1;
+		}
+	}
+
+
+	// Create a new representation containing the contour surface.
+	Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();
+	rep->insert(*mesh);
+	rep->setModelType(MODEL_CONTOUR_SURFACE); 
+
+	// Make sure BALLView knows about the new representation.
+	RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
+	notify_(message);
 }
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.6 2004/10/09 09:07:22 amoll Exp $
+// $Id: mainframe.h,v 1.7 2004/11/27 20:54:03 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
@@ -64,8 +64,6 @@ namespace BALL
 		/// Catch key events
 		void keyPressEvent(QKeyEvent* e);
 			
-		// Build menu
-		void computeIsoContourSurface();
 		void toggleFullScreen();
 
 		// Help menu
@@ -80,13 +78,13 @@ namespace BALL
 		virtual void openFile(const String& file) throw();
 
 		///
-		void saveBALLViewProjectFile() throw();
+ 		void saveBALLViewProjectFile() throw();
 
 		///
 		void loadBALLViewProjectFile() throw();
 		
 		///
-		void loadBALLViewProjectFile(const String& filename) throw();
+ 		void loadBALLViewProjectFile(const String& filename) throw();
 
 		protected:
 
@@ -96,7 +94,6 @@ namespace BALL
 		Scene*										scene_;
 		DatasetControl* 					dataset_control_;
 		DisplayProperties*    		display_properties_;
-		ContourSurfaceDialog* 		surface_dialog_;
 		MolecularFileDialog*  		file_dialog_;
 		bool 											fullscreen_;
 

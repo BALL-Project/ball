@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.10 2004/09/01 14:14:11 amoll Exp $
+// $Id: datasetControl.h,v 1.11 2004/11/27 20:48:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -43,6 +43,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class SnapshotVisualisationDialog;
+		class ContourSurfaceDialog;
 
 		/**	DatasetControl is a widget to manipulate Trajectories and RegularData instances.
 		 		It is derived from GenricControl.
@@ -145,6 +146,9 @@ namespace BALL
 			virtual void deleteCurrentItems()
 				throw() {deleteItems_();}
 
+			///
+			void computeIsoContourSurface();
+
 			//@} 
 			/** @name Protected members 
 			*/ 
@@ -196,6 +200,8 @@ namespace BALL
 			HashMap<QListViewItem*	, RegularData3D*>   					item_to_grid3_;
 			HashMap<Composite*      , HashSet<QListViewItem*> > 	composite_to_items_;
 			HashMap<QListViewItem*  , Composite*>  								item_to_composite_;
+			ContourSurfaceDialog* 		surface_dialog_;
+			Index menu_cs_;
 		};
 		
 } } // namespaces
