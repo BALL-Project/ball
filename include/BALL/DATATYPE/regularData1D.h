@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.42 2004/02/25 16:03:56 anhi Exp $
+// $Id: regularData1D.h,v 1.43 2004/03/05 13:51:13 anhi Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
@@ -662,7 +662,7 @@ namespace BALL
 		}
 		
 		// Interpolate between the point to the left and the point to the right.
-		double d = 1.0 - ((x - (double)left_index * spacing_) / spacing_);
+		double d = 1.0 - (((x - origin_) - (double)left_index * spacing_) / spacing_);
 		return data_[left_index] * d + (1.0 - d) * data_[left_index + 1];
 	}
 			
