@@ -1,11 +1,11 @@
-// $Id: Vector4_test.C,v 1.15 2000/07/27 18:52:13 amoll Exp $
+// $Id: Vector4_test.C,v 1.16 2000/12/22 20:19:33 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.15 2000/07/27 18:52:13 amoll Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.16 2000/12/22 20:19:33 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -39,7 +39,7 @@ CHECK(TVector4::T& operator [] (Index index) const)
 	TEST_EQUAL(v[1], 2.0)
 	TEST_EQUAL(v[2], 3.0)
 	TEST_EQUAL(v[3], 4.0)
-	TEST_EXCEPTION(Exception::IndexUnderflow, v[-1])
+	TEST_EXCEPTION(Exception::IndexOverflow, v[-1])
 	TEST_EXCEPTION(Exception::IndexOverflow,  v[4])
 RESULT
 
@@ -209,7 +209,7 @@ CHECK(TVector4::T& operator [] (Index index) )
 	TEST_EQUAL(v[1], 6)
 	TEST_EQUAL(v[2], 7)
 	TEST_EQUAL(v[3], 8)
-	TEST_EXCEPTION(Exception::IndexUnderflow, v[-1] = 5)
+	TEST_EXCEPTION(Exception::IndexOverflow, v[-1] = 5)
 	TEST_EXCEPTION(Exception::IndexOverflow, v[4] = 5)
 RESULT
 
