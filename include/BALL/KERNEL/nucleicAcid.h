@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.5 2000/01/11 20:12:52 oliver Exp $ 
+// $Id: nucleicAcid.h,v 1.6 2000/04/14 13:29:31 amoll Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -111,19 +111,19 @@ namespace BALL
 		/**	@name Accessors */
 		//@{
 
-		/**	Retrieve a pointer to the Nucleotide a the 3'-end of the nucleic acid
+		/**	Retrieve a pointer to the Nucleotide at the 3'-end of the nucleic acid
 		*/
 		Nucleotide* get3Prime();
 
-		/**	Retrieve a const pointer to the nucleotide a the 3'-end of the nucleic acid
+		/**	Retrieve a const pointer to the nucleotide at the 3'-end of the nucleic acid
 		*/
 		const Nucleotide* get3Prime() const;
 
-		/**	Retrieve a pointer to the Nucleotide a the 5'-end of the nucleic acid
+		/**	Retrieve a pointer to the Nucleotide at the 5'-end of the nucleic acid
 		*/
 		Nucleotide* get5Prime();
 
-		/**	Retrieve a const pointer to the Nucleotide a the 5'-end of the nucleic acid
+		/**	Retrieve a const pointer to the Nucleotide at the 5'-end of the nucleic acid
 		*/
 		const Nucleotide* get5Prime() const;
 
