@@ -1,4 +1,4 @@
-// $Id: rules.C,v 1.3 2000/05/19 15:35:09 oliver Exp $
+// $Id: ruleEvaluator.C,v 1.1 2000/05/24 12:16:08 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/rules.h>
 #include <BALL/KERNEL/PTE.h>
