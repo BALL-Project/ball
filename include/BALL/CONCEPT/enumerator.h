@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.16 2002/01/12 01:59:48 oliver Exp $
+// $Id: enumerator.h,v 1.17 2002/01/15 00:43:39 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -69,7 +69,7 @@ namespace BALL
 			  @param variant_list the list of variants to be applied
 		 */
 		template <typename Variant, typename VariantIterator>
-		EnumeratorIndex(const std::list< std::pair< VariantIterator, std::vector<Variant> > >& variant_list)
+		EnumeratorIndex(const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
 			throw();
 
 		/** Destructor
@@ -133,8 +133,8 @@ namespace BALL
        component is operator[](0), so incrementing starts with
        operator[](size())
 		*/
-		std::vector<Size>		 modulus_;
-		std::vector<Size>		 base_multipliers_;
+		std::vector<Size>	modulus_;
+		std::vector<Size>	base_multipliers_;
 	};
 
 
@@ -304,11 +304,16 @@ namespace BALL
 		void deleteVariants(const VariantIterator& it, const VariantVector& variants)
 			throw()
 		{
-			//???
+			typename SiteList::iterator var_it;
+			var_it = find(variant_sites_.begin(), variant_sites_.end(), Site(it, variants));
+			if (var_it != variant_sites_.end())
+			{
+				variant_sites_.erase(var_it);
+			}
 		}
 
 		/** Count all variants.
-       @return the number of all possible variants
+				@return the number of all possible variants
 		 */
 		Size countVariants()
 			throw()
