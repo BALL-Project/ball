@@ -1,4 +1,4 @@
-// $Id: selectable.h,v 1.4 1999/12/28 18:42:46 oliver Exp $
+// $Id: selectable.h,v 1.5 2000/02/17 00:30:38 oliver Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -110,7 +110,7 @@ namespace BALL
 		//@{
 
 		/**	Get the object state.
-				@return {\bf true}, if the object is selected, {\bf false} otherwise
+				@return bool {\bf true}, if the object is selected, {\bf false} otherwise
 		*/
 		bool isSelected() const;
 

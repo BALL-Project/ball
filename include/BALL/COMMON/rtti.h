@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.6 2000/01/14 20:38:49 oliver Exp $
+// $Id: rtti.h,v 1.7 2000/02/17 00:30:37 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -27,10 +27,10 @@ namespace BALL
 
 	/**	Returns a unique name for a class.
 			This name contains no blanks. It is usually derived by substituting all
-			blanks in the name (as returned by RTTI::getName()) with underscores ("\_").
-			In the case of {\tt egcs}, however a name demangling decodes the string first.
+			blanks in the name (as returned by RTTI::getName()) with underscores ("_").
+			In the case of {\tt gcc}, however a name demangling decodes the string first.
 			This function is needed for object persistence.
-			@param		type_info t the {\tt type\_info} structure as returned by {\tt typeid}
+			@param		type_info t the {\tt type_info} structure as returned by {\tt typeid}
 			@return		string the coverted class name
 	*/ 
 	string streamClassName(const std::type_info& t);

@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.2 2000/01/08 12:36:08 oliver Exp $
+// $Id: global.h,v 1.3 2000/02/17 00:30:42 oliver Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -32,7 +32,7 @@ namespace BALL
 			all composites is performed. Second, the root composite (which is always an AtomContainer,
       as it is either a System or derived from BaseFragment) calls \Ref{cloneBonds} for the
 			cloned system to copy the bonds.\\
-      The troule with this implementation is that each clone method must have the possibility to
+      The trouble with this implementation is that each clone method must have the possibility to
       call {\bf cloneBonds}, but only the first clone method in the recursive call tree is allowed
       to call it. This is guaranteed by the use of a global static variable \Ref{clone_bonds}.
 			The first clone method called sets \Ref{clone_bonds} to {\bf false} thereby forbidding the use of
@@ -44,8 +44,8 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/KERNEL/global.h}
 			\\
 			{\bf Namespace:} BALL\\
-			@param atom_container	the atom\_container containing the bonds
-			@param cloned a deep copy of {\bf atom\_container}
+			@param atom_container	the atom_container containing the bonds
+			@param cloned a deep copy of {\bf atom_container}
 	*/
 	template <class AtomContainerType>
 	void cloneBonds(const AtomContainerType& atom_container, AtomContainerType& cloned)

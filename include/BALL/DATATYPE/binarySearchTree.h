@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.4 2000/01/10 15:50:57 oliver Exp $
+// $Id: binarySearchTree.h,v 1.5 2000/02/17 00:30:38 oliver Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -82,7 +82,7 @@ namespace BALL
 
 		/**	Detailled Constructor.
 				Create a new BSTreeItem with color {\tt color} and the two child items
-				{\tt left\_item} and {\tt right\_item}.
+				{\tt left_item} and {\tt right_item}.
 				@param	color the node color
 				@param	left_item the left child
 				@param	right_item the right child
@@ -315,7 +315,7 @@ namespace BALL
 		/**	Return true if the node is a leaf of the tree.
 				This method returns {\bf true} if the node is 
 				a leaf of the tree, i.e. if it has no children.
-				@return {\bf true} if the node has no children
+				@return bool {\bf true} if the node has no children
 		*/
 		bool isLeaf() const
 		{
@@ -325,7 +325,7 @@ namespace BALL
 		/**	Return true if the node is an interior node of the tree.
 				This method returns {\bf true} if the node is 
 				an interior node of the tree, i.e. if it has children.
-				@return {\bf true} if the node has children
+				@return bool {\bf true} if the node has children
 		*/
 		bool isInterior() const
 		{
@@ -427,7 +427,7 @@ namespace BALL
 
 		/**	Detailled constructor.
 				Create a new TBSTreeItem from its {\tt data}, {\tt color},
-				{\tt left\_item} and {\tt right\_item}.
+				{\tt left_item} and {\tt right_item}.
 				@param	data	the node's data
 				@param	color the node's color
 				@param	left_item the left child of the node

@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.5 2000/01/14 20:40:50 oliver Exp $
+// $Id: INIFile.h,v 1.6 2000/02/17 00:30:40 oliver Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -92,7 +92,7 @@ namespace BALL
 		/**	Writes the buffer contents to a file.
 				Not yet implemented!
 
-				@return	bool \begin{itemize}
+				@return	bool - \begin{itemize}
 												\item {\bf true} if the file could be succesfully written
 												\item {\bf false} otherwise
 											\end{itemize}
@@ -100,7 +100,7 @@ namespace BALL
 		bool write();
 
 		/**	Returns the current filename.
-				@return 	String\& the filename
+				@return 	String& -  the filename
 		*/	
 		const String& getFilename() const;
 
@@ -134,7 +134,7 @@ namespace BALL
 		//@{	
 
 		/**	Return the contents of the specified line.
-				If the {\bf line\_number} given is not valid (less than
+				If the {\bf line_number} given is not valid (less than
 				0 or greater or equal to the number returned by \Ref{getNumberOfLines})
 				0 is returned
 				@param	line_number	first line starts with 0
@@ -143,13 +143,13 @@ namespace BALL
 		String* getLine(Size line_number);
 
 		/**	Change the contents of a line.
-				Replaces the line given by {\bf line\_number} by the text 
+				Replaces the line given by {\bf line_number} by the text 
 				in {\bf line}.\\
 				Not yet implemented!
 				@param	line_number number of the line to change, first line is 0
 				@param	line new content of the line
 				@return	bool \begin{itemize}
-											\item {\bf true} if line\_number was in a valid range
+											\item {\bf true} if line_number was in a valid range
 											\item {\bf false} otherwise
 										\end{itemize}
 		*/	
@@ -173,7 +173,7 @@ namespace BALL
 		/**	Returns the index of the first line of a section.
 				The first line of a section is the line immediately following the
 				section name (in square brackets).
-				@return	Size the index of the first line, or -1 if the section
+				@return	Size - the index of the first line, or -1 if the section
 						could not be found
 				@param	section_name	the name of the section to be found
 		*/	
@@ -183,7 +183,7 @@ namespace BALL
 				The last line of a section is either the last line
 				before a new section definition (starting with square brackets)
 				or the last line of a file.
-				@return	Size the index of the last line, or -1 if the section
+				@return	Size - the index of the last line, or -1 if the section
 						could not be found
 				@param	section_name	the name of the section to be found
 		*/	
@@ -192,7 +192,7 @@ namespace BALL
 		/**	Returns the number of line in a section.
 				The header line is not counted. The last section is terminated
 				by the last line of the file.
-				@return	Size the number of lines, or -1 if the section
+				@return	Size - the number of lines, or -1 if the section
 						could not be found
 				@param	section_name	the name of the section to be found
 		*/	
@@ -206,10 +206,8 @@ namespace BALL
 
 		/**	Check whether the given section contains a certain key.
 				
-				@return	bool \begin{itemize}
-												\item {\bf true} if the key could be found in the section
-												\item {\bf false} if either key or section didn't exist
-											\end{itemize}
+				@return	bool - {\bf true} if the key could be found in the section,
+											{\bf false} if either key or section didn't exist
 				@param	section	the section to lokk in for the key
 				@param	key the key to look for
 		*/	
@@ -220,7 +218,7 @@ namespace BALL
 				the key are not defined, an empty string is returned.
 				@param	section	the section name to look in for the key
 				@param	key a key in the {\bf section}
-				@return	String the value corresponding to the {\bf key} in {\bf section}
+				@return	String - the value corresponding to the {\bf key} in {\bf section}
 								or an empty string
 		*/	
 		String getValue(const String& section, const String& key) const;
@@ -230,7 +228,7 @@ namespace BALL
 				@param	section	the section to look in for the key
 				@param	key	the key to look for
 				@param	value the new value
-				@return	\begin{itemize}
+				@return	bool - \begin{itemize}
 									\item {\bf true} if the value was changed
 									\item {\bf false} if key or section do not exist
 								\end{itemize}

@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.6 2000/01/10 15:50:53 oliver Exp $
+// $Id: logStream.h,v 1.7 2000/02/17 00:30:36 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -127,7 +127,7 @@ namespace BALL
 					Dumps the contents of the whole message buffer 
 					including time and log level.
 			*/
-			virtual void dump(::std::ostream& s);
+			virtual void dump(std::ostream& s);
 
 			//@}
 
@@ -369,7 +369,7 @@ namespace BALL
 				@param	min_level the minimum level of messages copied to this stream
 				@param	max_level the maximum level of messages copied to this stream
 		*/
-		void insert(::std::ostream& s, int min_level = INT_MIN, int max_level = INT_MAX);
+		void insert(std::ostream& s, int min_level = INT_MIN, int max_level = INT_MAX);
 
 		/**	Remove an association with a stream.
 				Remove a stream from the stream list and avoid the copying of new messages to
@@ -378,7 +378,7 @@ namespace BALL
 				happen.
 				@param	s the stream to be removed
 		*/
-		void remove(::std::ostream& s);
+		void remove(std::ostream& s);
 
 		/**	Add a notification target for the stream.	
 		*/
@@ -395,7 +395,7 @@ namespace BALL
 				@param	s the associated stream
 				@param	min_level the new minimum level
 		*/
-		void setMinLevel(const ::std::ostream& s, int min_level);
+		void setMinLevel(const std::ostream& s, int min_level);
 		
 		/**	Set the maximum log level of an associated stream.
 				This method changes the maximum log level of an already
@@ -404,7 +404,7 @@ namespace BALL
 				@param	s the associated stream
 				@param	min_level the new minimum level
 		*/
-		void setMaxLevel(const ::std::ostream& s, int max_level);
+		void setMaxLevel(const std::ostream& s, int max_level);
 
 		/**	Set prefix for output to this stream.
 				Each line written to the stream will be prefixed by
@@ -413,18 +413,18 @@ namespace BALL
 				of the logged message.\\
 				The following format tags are recognized:
 				\begin{itemize}
-					\item {\bf \%l}	loglevel
-					\item {\bf \%y}	message type ("Error", "Warning", "Information", "-")
-					\item {\bf \%T}  time (HH:MM:SS)
-					\item {\bf \%t}  time in short format (HH:MM)
-					\item {\bf \%D}	date (DD.MM.YYYY)
-					\item {\bf \%d}  date in short format (DD.MM.)
-					\item {\bf \%S}  time and date (DD.MM.YYYY, HH:MM:SS)
-					\item {\bf \%s}  time and date in short format (DD.MM., HH:MM)
-					\item {\bf \%\%}	percent sign (escape sequence)
+					\item {\bf %l}	loglevel
+					\item {\bf %y}	message type ("Error", "Warning", "Information", "-")
+					\item {\bf %T}  time (HH:MM:SS)
+					\item {\bf %t}  time in short format (HH:MM)
+					\item {\bf %D}	date (DD.MM.YYYY)
+					\item {\bf %d}  date in short format (DD.MM.)
+					\item {\bf %S}  time and date (DD.MM.YYYY, HH:MM:SS)
+					\item {\bf %s}  time and date in short format (DD.MM., HH:MM)
+					\item {\bf %%}	percent sign (escape sequence)
 				\end{itemize}
 		*/
-		void setPrefix(const ::std::ostream& s, const string& prefix);
+		void setPrefix(const std::ostream& s, const string& prefix);
 		//@}		
 		
 		/**	@name	Message Buffer Management */

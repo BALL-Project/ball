@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.8 2000/02/15 18:17:58 oliver Exp $
+// $Id: vector4.h,v 1.9 2000/02/17 00:30:44 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -25,29 +25,29 @@
 namespace BALL 
 {
 
+	/**	@name	Four-dimensional vector
+			@memo	representation of points and vectors in four-dimensional space: class \Ref{TVector4} and class \Ref{Vector4}
+	*/
+	//@{
+
 	template <class T>
 	class TVector4;
 	
-	///
 	template <class T>
 	BALL_INLINE
 	TVector4<T> operator + (const TVector4<T>& a, const TVector4<T>& b);
 
-	///
 	template <class T>
 	BALL_INLINE
 	TVector4<T> operator - (const TVector4<T>& a, const TVector4<T>& b);
 	
-	///
 	template <class T>
 	BALL_INLINE
 	TVector4<T> operator * (const TVector4<T>& a, const TVector4<T>& b);
 	
-	///
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector4<T>& vector);
 
-	///
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector4<T>& vector);
 
@@ -498,13 +498,6 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	TVector4<T> operator + (const TVector4<T>& a, const TVector4<T>& b)
-	{
-		return TVector4<T>(a.x + b.x, a.y + b.y, a.z + b.z, a.h + b.h);
-	}
-
-	template <class T>
-	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator += (const TVector4<T>& v)
 	{
 		x += v.x;
@@ -513,13 +506,6 @@ namespace BALL
 		h += v.h;
 
 		return *this;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	TVector4<T> operator - (const TVector4<T>& a, const TVector4<T>& b)
-	{
-		return TVector4<T>(a.x - b.x, a.y - b.y, a.z - b.z, a.h - b.h);
 	}
 
 	template <class T>
@@ -539,13 +525,6 @@ namespace BALL
 	TVector4<T> TVector4<T>::operator * (const T& scalar)
 	{
 		return TVector4<T>(x * scalar, y * scalar, z * scalar, h * scalar);
-	}
-
-	template <class T>
-	BALL_INLINE 
-	TVector4<T> operator * (const T& scalar, const TVector4<T>& v)
-	{
-		return TVector4<T>(scalar * v.x, scalar * v.y, scalar * v.z, scalar * v.h);
 	}
 
 	template <class T>
@@ -660,6 +639,42 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
+	/**	Default four-dimensional vector class
+	*/
+	typedef TVector4<float> Vector4;
+
+	/**	@name	Operators
+	*/
+	//@{
+	/**
+	*/
+	template <class T>
+	BALL_INLINE 
+	TVector4<T> operator + (const TVector4<T>& a, const TVector4<T>& b)
+	{
+		return TVector4<T>(a.x + b.x, a.y + b.y, a.z + b.z, a.h + b.h);
+	}
+
+	/**
+	*/
+	template <class T>
+	BALL_INLINE 
+	TVector4<T> operator - (const TVector4<T>& a, const TVector4<T>& b)
+	{
+		return TVector4<T>(a.x - b.x, a.y - b.y, a.z - b.z, a.h - b.h);
+	}
+
+	/**
+	*/
+	template <class T>
+	BALL_INLINE 
+	TVector4<T> operator * (const T& scalar, const TVector4<T>& v)
+	{
+		return TVector4<T>(scalar * v.x, scalar * v.y, scalar * v.z, scalar * v.h);
+	}
+
+	/**
+	*/
 	template <class T>
 	std::istream& operator >> (std::istream& s, TVector4<T>& v)
 	{
@@ -668,6 +683,8 @@ namespace BALL
 		return s;
 	}
 
+	/**
+	*/
 	template <class T>
 	std::ostream& operator << (std::ostream& s, const TVector4<T>& v)
 	{
@@ -675,10 +692,8 @@ namespace BALL
 		
 		return s;
 	}
-
-
-	///
-	typedef TVector4<float> Vector4;
+	//@}
+	//@}
 
 } // namespace BALL
 

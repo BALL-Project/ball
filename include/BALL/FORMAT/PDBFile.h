@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.6 2000/01/17 13:08:51 oliver Exp $
+// $Id: PDBFile.h,v 1.7 2000/02/17 00:30:40 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -64,7 +64,7 @@ namespace BALL
 
 		/** Detailled constructor.
 				The file named {\tt filename} is opened. By default, the file is
-				opened for reading. To open it for writing, use {\tt open\_mode = std::ios::out}.
+				opened for reading. To open it for writing, use {\tt open_mode = std::ios::out}.
 				@param	filename the name of the file to open
 				@param	open_mode the file mode
 		*/

@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.13 2000/02/16 19:09:45 oliver Exp $
+// $Id: composite.h,v 1.14 2000/02/17 00:30:37 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -137,7 +137,7 @@ namespace BALL
 				then adds recursively each composite of the tree that fulfils the {\tt predicate}.
 				@param	root the cloning target root is {\tt destroy}ed prior to any copying 
 				@param	predicate the predicate
-				@param  a pointer to the root composite ({\tt \&root})
+				@param  a pointer to the root composite ({\tt &root})
 		*/
 		void* clone(Composite& root, UnaryPredicate<Composite>& predicate) const;
 
@@ -446,12 +446,12 @@ namespace BALL
 		bool isCollapsed() const;
 	
 		/**	Return true if the node does not contain children.
-				@return {\bf true} if {\tt number\_of\_children\_ == 0}
+				@return bool {\bf true} if {\tt number_of_children_ == 0}
 		*/
 		bool isEmpty() const;
 
 		/**	Return true if the node has no parent.
-				@return {\bf true} if {\tt parent\_ == 0}
+				@return bool {\bf true} if {\tt parent_ == 0}
 		*/
 		bool isRoot() const;
 	
@@ -548,7 +548,7 @@ namespace BALL
 				modification in the tree internal flags are updated and propagated 
 				upwards in the tree.\\
 				Complexity: O(1)\\
-				@return {\bf true} if any node in the subtree is selected
+				@return bool {\bf true} if any node in the subtree is selected
 		*/
 		bool containsSelection() const;
 		//@}

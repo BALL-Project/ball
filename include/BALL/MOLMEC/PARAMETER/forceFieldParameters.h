@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.h,v 1.6 2000/02/14 22:42:39 oliver Exp $
+// $Id: forceFieldParameters.h,v 1.7 2000/02/17 00:30:45 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -70,7 +70,7 @@ namespace BALL
 				Return {\bf true} if the force field parameters were correctly
 				initialized, the internal INI file is valid and the internal atom types		
 				object is valid.
-				@return {\tt valid\_ \&\& parameter\_file\_.isValid() \&\& atom\_types\_.isValid()}
+				@return bool - {\tt valid_ && parameter_file_.isValid() && atom_types_.isValid()}
 		*/
 		virtual bool isValid() const;
 		//@}

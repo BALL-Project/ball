@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.6 2000/02/13 17:02:06 oliver Exp $
+// $Id: selector.h,v 1.7 2000/02/17 00:30:42 oliver Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -92,7 +92,7 @@ namespace BALL
 				
 			/**	Default constructor.
 					Create an empty expression node. The node's type is set to INVALID,
-					{\tt negate\_} is set to {\bf false}, the internal predicate is set to 0, and 
+					{\tt negate_} is set to {\bf false}, the internal predicate is set to 0, and 
 					the list of children is empty.
 			*/
 			ExpressionNode();

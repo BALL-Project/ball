@@ -1,4 +1,4 @@
-// $Id: timer.h,v 1.4 2000/02/16 19:15:54 oliver Exp $
+// $Id: timer.h,v 1.5 2000/02/17 00:30:46 oliver Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H
@@ -104,7 +104,7 @@ namespace BALL
 		/**	Assignment operator.
 				Assigns a timer from another. The two timer will then run 
 				synchronously.
-				@return {\tt *this}
+				@return Timer {\tt *this}
 		*/
 		Timer& operator = (const Timer& timer);
 		//@}
@@ -114,7 +114,7 @@ namespace BALL
 		//@{
 
 		/**	Return true if the timer is running.
-				@return {\bf true} if the timer is running, {\bf false} otherwise
+				@return bool {\bf true} if the timer is running, {\bf false} otherwise
 		*/
 		bool isRunning() const;
 

@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.3 1999/12/28 18:37:22 oliver Exp $
+// $Id: options.h,v 1.4 2000/02/17 00:30:38 oliver Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -146,7 +146,7 @@ namespace BALL
 		
 		/**		Returns the value associated with the key.
 					@param	key the key
-					@return	{\bf String}, the value
+					@return	String, the value
 					@memo
 		*/
 		String get(const String& key) const;

@@ -1,4 +1,4 @@
-// $Id: clientScene.h,v 1.5 2000/01/13 22:23:16 oliver Exp $
+// $Id: clientScene.h,v 1.6 2000/02/17 00:30:46 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENTSCENE_H
 #define BALL_VIEW_KERNEL_CLIENTSCENE_H
@@ -45,7 +45,7 @@ namespace BALL
 			/** Default constructor.
 					Construct a new clientscene.
 
-					@return      {\bf ClientScene} - new constructed clientscene
+					@return   ClientScene - new constructed clientscene
 			*/
 			ClientScene();
 
@@ -55,7 +55,7 @@ namespace BALL
 					Construct new clientscene by copying the clientscene {\em atom}.
 					The copy is either deep or shallow (default).
 
-					@return      {\bf ClientScene} - new constructed clientscene
+					@return    ClientScene - new constructed clientscene
 			*/
 			ClientScene(const ClientScene& clientScene, bool deep = true);
 

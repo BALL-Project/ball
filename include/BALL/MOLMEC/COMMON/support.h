@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.3 2000/02/10 15:04:38 oliver Exp $
+// $Id: support.h,v 1.4 2000/02/17 00:30:44 oliver Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -50,15 +50,15 @@ namespace BALL
 			
 		/**	Create a pair vector for non-bonded interactions.
 				Calculates a vector of atom pairs whose distance is smaller than distance.
-				The {\tt type} determines if a brute force algorithm ({\tt type == BRUTE\_FORCE})
-				or a more sophisticated grid method ({\tt type == HASH\_GRID}) is used.
+				The {\tt type} determines if a brute force algorithm ({\tt type == BRUTE_FORCE})
+				or a more sophisticated grid method ({\tt type == HASH_GRID}) is used.
 				@param	pair_vector the vector containing pairs of interacting atoms
 				@param	atom_vector the atoms to be considered for pairs
-				@param	box	the periodic boundary used (if {\tt periodic\_boundary\_enabled == true})
+				@param	box	the periodic boundary used (if {\tt periodic_boundary_enabled == true})
 				@param	distance the maximum distance (cut-off distance) for two atoms
 				@param	periodic_boundary_enabled flag indicating the use of periodic boundary conditions
 				@param	type	the type of algorithm used to calculate the pair vector
-				@return	the number of pairs generated ({\tt pair\_vector.size()})
+				@return	the number of pairs generated ({\tt pair_vector.size()})
 		*/
 		BALL::Size calculateNonBondedAtomPairs
 			(ForceField::PairVector& pair_vector, 
@@ -67,16 +67,16 @@ namespace BALL
 			 PairListAlgorithmType type);
 
 		/**	Merge the non-overlapping molecules of a system into another system.
-				Fills {\tt system\_A} with copies of the solvent molecules stored in {\tt system\_B}.
-				Solvent molecules are added to {\tt system\_A} if the molecules lie in the {\tt box}
-				and if they do not overlap with the molecules in {\tt system\_A}. A molecule has
+				Fills {\tt system_A} with copies of the solvent molecules stored in {\tt system_B}.
+				Solvent molecules are added to {\tt system_A} if the molecules lie in the {\tt box}
+				and if they do not overlap with the molecules in {\tt system_A}. A molecule has
 				an overlap with another molecule if any atom of the first molecule is within {\tt distance}
 				of any atom of the other molecule.
 				@param	system_A the system to be filled
 				@param	system_B the system containing the solvent
-				@param	box the periodic boundary of {\tt system\_A}
+				@param	box the periodic boundary of {\tt system_A}
 				@param	distance used to determine overlaps between two atoms
-				@return	the number of molecules added to {\tt system\_A}
+				@return	the number of molecules added to {\tt system_A}
 		*/
 		BALL::Size addNonOverlappingMolecules
 			(System&  system_A, const System& system_B,

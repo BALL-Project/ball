@@ -1,4 +1,4 @@
-// $Id: stringHashMap.h,v 1.7 2000/01/11 20:22:12 hekl Exp $
+// $Id: stringHashMap.h,v 1.8 2000/02/17 00:30:39 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -155,7 +155,7 @@ namespace BALL
 			
 		/**	Remove the entry {\tt key} from the map.
 				@param	key the key of the entry to be removed
-				@return	{\bf true} if the key was removed
+				@return	bool {\bf true} if the key was removed
 		*/
 		bool remove(const String& key)	
 		{

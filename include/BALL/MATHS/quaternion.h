@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.5 2000/01/16 17:28:42 oliver Exp $
+// $Id: quaternion.h,v 1.6 2000/02/17 00:30:43 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -19,6 +19,12 @@
 
 namespace BALL 
 {
+
+	/**	@name Quaternion
+			@memo representing a rotation in three dimensional space: class \Ref{TQuaternion} and class \Ref{Quaternion}
+	*/
+	//@{
+			
 
 	/**	Generic Quaternion Class.
       {\bf Definition:} \URL{BALL/MATHS/.h}
@@ -470,6 +476,7 @@ namespace BALL
 
 	///
 	typedef TQuaternion<float> Quaternion;
+	//@}
 
 } // namespace BALL
 

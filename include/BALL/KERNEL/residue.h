@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.6 2000/02/12 19:28:24 oliver Exp $
+// $Id: residue.h,v 1.7 2000/02/17 00:30:42 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -145,7 +145,7 @@ namespace BALL
 					\item {\tt [-]S} is added for CYS involved in a disulphide bridge
 					\item {\tt -M} is added for individual amino acids (C and N terminal)
 				\end{itemize}
-			@param	type if type is set to {\tt NO\_VARIANT\_EXTENSIONS},
+			@param	type if type is set to {\tt NO_VARIANT_EXTENSIONS},
 				the variant extension ({\tt -XX}) is omitted.
 			@return String the full fragment name
 		*/

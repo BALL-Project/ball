@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.7 2000/02/16 17:05:46 oliver Exp $
+// $Id: angle.h,v 1.8 2000/02/17 00:30:42 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -16,20 +16,20 @@ namespace BALL
 	template <typename T>
 	class TAngle;
 
-	/**	
+	/**	@name Angle
+			@memo representation of angles: class \Ref{TAngle} and class \Ref{Angle}
 	*/
+	//@{
+	
+
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator * (const T& val, const TAngle<T>& angle);
 
-	/**	
-	*/
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator + (const T& val, const TAngle<T>& angle);
 
-	/**	
-	*/
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator - (const T& val, const TAngle<T>& angle);
@@ -85,10 +85,10 @@ namespace BALL
 
 		/**	Detailled constructor.
 				Create a new angle object and set its value to 
-				{\tt new\_value}. {\tt radian} determines whether {\tt new\_value}
+				{\tt new_value}. {\tt radian} determines whether {\tt new_value}
 				is in radians or in degrees.
 				@param	new_value the value of the angle object
-				@param	radian {\bf true} if {\tt new\_value} is in radians, {\tt false} otherwise 
+				@param	radian {\bf true} if {\tt new_value} is in radians, {\tt false} otherwise 
 		*/
 		TAngle(const T& new_value, bool radian = true);
 
@@ -109,10 +109,10 @@ namespace BALL
 		void swap(TAngle& angle);
 
 		/**	Assign a new value to the angle.
-				{\tt radian} determines whether {\tt new\_value}
+				{\tt radian} determines whether {\tt new_value}
 				is in radians or in degrees.
 				@param	new_value the value of the angle object
-				@param	radian {\bf true} if {\tt new\_value} is in radians, {\tt false} otherwise 
+				@param	radian {\bf true} if {\tt new_value} is in radians, {\tt false} otherwise 
 		*/
 		void set(const T& new_value, bool radian = true);
 
@@ -670,6 +670,19 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
+	/**	The Default Angle Type.
+			If double precision is not needed, {\tt TAngle<float>} should
+			be used. It is predefined as {\tt Angle} for convenience.
+	*/
+	typedef TAngle<float> Angle;
+
+	/**	Operators
+	*/
+	//@{
+
+	/**	Multiplication operator.
+			Multiplies a number and an angle.
+	*/
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator * (const T& val, const TAngle<T>& angle)
@@ -677,6 +690,9 @@ namespace BALL
 		return TAngle<T>(val * angle.value);
 	}
 
+	/**	Plus operator.
+			Adds an number and an angle (in rad!)
+	*/
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator + (const T& val, const TAngle<T>& angle) 
@@ -684,6 +700,9 @@ namespace BALL
 		return TAngle<T>(val + angle.value);
 	}
 
+	/**	Minus operator.
+			Subtracts the value of an angle (in rad!) from a number.
+	*/
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator - (const T& val, const TAngle<T>& angle) 
@@ -692,11 +711,8 @@ namespace BALL
 	}
 
 
-	/**	The Default Angle Type.
-			If double precision is not needed, {\tt TAngle<float>} should
-			be used. It is predefined as {\tt Angle} for convenience.
-	*/
-	typedef TAngle<float> Angle;
+	//@}
+	//@}
 
 } // namespace BALL
 

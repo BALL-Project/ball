@@ -7,4 +7,6 @@
 */
 //@{
 	//@Include: poissonBoltzmann.h
+	//@include: molecularSurfaceGrid.h
+	//@Include: ooiEnergy.h
 //@}

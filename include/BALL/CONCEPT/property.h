@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.5 1999/12/30 20:30:39 oliver Exp $
+// $Id: property.h,v 1.6 2000/02/17 00:30:38 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -189,7 +189,7 @@ namespace BALL
 		float getFloat() const;
 			
 		/** Return the data of the property object as unsigned int.
-				If the property object is not of UNSIGNED\_INT type, {\bf 0}
+				If the property object is not of UNSIGNED_INT type, {\bf 0}
 				is returned.
 		*/
 		unsigned int getUnsignedInt() const;
@@ -248,8 +248,8 @@ namespace BALL
 			as a BitVector. However the meaning of the different bits has to be defined
 			and the uniqueness of this meaning has to be guaranteed. In order to avoid
 			this, all kernel classes derived from PropertyManager contain a public enum
-			that defines a value NUMBER\_OF\_PROPERTIES. All user defined properties should	
-			refer to this constant (e.g. by defining {\tt MY\_PROPERTY = Molecule::NUMBER\_OF\_PROPERTIES + 1}).\\
+			that defines a value NUMBER_OF_PROPERTIES. All user defined properties should	
+			refer to this constant (e.g. by defining {\tt MY_PROPERTY = Molecule::NUMBER_OF_PROPERTIES + 1}).\\
 			The second way of storing properties is much mor flexible, but less efficient. 
 			It uses the class NamedProperty that also allow to store additional information 
 			along with the property. In this case, each property is accessed via a 
@@ -291,16 +291,16 @@ namespace BALL
 		void set(const PropertyManager& property_manager, bool deep = true);
 
 		/** Assignment operator.
-				This operator calls {\tt set(property\_manager)} to assign
+				This operator calls {\tt set(property_manager)} to assign
 				a new object.
 				@param property_manager the PropertyManager object to copy from
-				@return {\tt *this}
+				@return PropertyManager {\tt *this}
 		*/
 		PropertyManager& operator = (const PropertyManager& property_manager);
 
 		/** Assign properties to another property manager.
 				This method copies the contents of the a PropertyManager object
-				to the given {\tt property\_manager}.
+				to the given {\tt property_manager}.
 				@param	property_manager the target object
 				@param	deep ignored (just for interface compatibility)
 		*/
@@ -428,7 +428,7 @@ namespace BALL
 
 		/**	Set a named property containing an unsigned integer number.
 				This method creates a new named property containing an 
-				unsigned int ({\tt NamedProperty::Type == UNSIGNED\_INT}).
+				unsigned int ({\tt NamedProperty::Type == UNSIGNED_INT}).
 				Already existing data using the same {\tt name} is overwritten.
 				@param	name the name to be used for the new property
 				@param	value the data 

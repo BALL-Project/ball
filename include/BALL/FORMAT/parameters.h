@@ -1,4 +1,4 @@
-// $Id: parameters.h,v 1.1 2000/02/14 09:14:54 oliver Exp $
+// $Id: parameters.h,v 1.2 2000/02/17 00:30:40 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_FORMAT_PARAMETERS_H
@@ -73,10 +73,9 @@ namespace BALL
 		//@{
 			
 		/**	Validity predicate.
-				Return {\bf true} if the force field parameters were correctly
-				initialized, the internal INI file is valid and the internal atom types		
-				object is valid.
-				@return {\tt valid\_ \&\& parameter\_file\_.isValid()}
+				Return {\bf true} if the parameters were correctly
+				initialized, the internal INI file is valid.		
+				@return bool - {\tt valid_ && parameter_file_.isValid()}
 		*/
 		virtual bool isValid() const;
 		//@}

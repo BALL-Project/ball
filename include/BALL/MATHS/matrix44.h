@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.6 2000/01/16 17:28:42 oliver Exp $
+// $Id: matrix44.h,v 1.7 2000/02/17 00:30:43 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -24,6 +24,11 @@
 
 namespace BALL 
 {
+
+	/**		@name	4x4 Matrix
+				@memo matrix representing transformations: class \Ref{TMatrix4x4} and class \Ref{Matrix4x4}
+	*/
+	//@{
 	template <typename T>
 	class TMatrix4x4;
 
@@ -2045,6 +2050,7 @@ namespace BALL
 
 	///
 	typedef TMatrix4x4<float> Matrix4x4;
+	//@}
 
 } // namespace BALL
 

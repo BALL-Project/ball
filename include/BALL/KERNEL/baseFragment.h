@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.4 2000/01/15 18:54:17 oliver Exp $
+// $Id: baseFragment.h,v 1.5 2000/02/17 00:30:41 oliver Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -79,13 +79,13 @@ namespace BALL
 
 		/** Clears the contents of the BaseFragment.
 				This methods clears the base fragment's name, destroys all its children
-				(as in \ref{Composite::clear}), but does not remove it from its parent composite structures.
+				(as in \Ref{Composite::clear}), but does not remove it from its parent composite structures.
 		*/
 		virtual void clear();
 	
 		/** Clears the contents of the BaseFragment and removes it from its parent composite structures.
 				This methods clears the base fragment's name, destroys all its children
-				(as in \ref{Composite::destroy}), and removes it from its parent composite structures.
+				(as in \Ref{Composite::destroy}), and removes it from its parent composite structures.
 		*/
 		virtual void destroy();
 

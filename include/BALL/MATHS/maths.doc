@@ -6,16 +6,24 @@
 */
 //@{
 
-	//@Include: angle.h
-	//@Include: box3.h
-	//@Include: circle3.h
+	/**	@name	Primitive datatypes
+	*/
+	//@{
+		//@Include: angle.h
+		//@Include: vector3.h
+		//@Include: vector4.h
+		//@Include: quaternion.h
+		//@Include: matrix44.h
+	//@}
+	/**	@name Geometric objects
+	*/
+	//@{
+		//@Include: line3.h
+		//@Include: box3.h
+		//@Include: circle3.h
+		//@Include: plane3.h
+		//@Include: sphere3.h
+		//@Include: surface.h
+	//@}
 	//@Include: common.h
-	//@Include: line3.h
-	//@Include: matrix44.h
-	//@Include: plane3.h
-	//@Include: quaternion.h
-	//@Include: sphere3.h
-	//@Include: surface.h
-	//@Include: vector3.h
-	//@Include: vector4.h
 //@}

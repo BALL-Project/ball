@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.5 2000/02/06 19:46:04 oliver Exp $
+// $Id: forceField.h,v 1.6 2000/02/17 00:30:44 oliver Exp $
 // Molecular Mechanics: general force field class
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -174,8 +174,8 @@ namespace BALL
 		Size	getNumberOfAtoms() const;
 
 		/**	Returns the number of non-fixed atoms stored in the force field.
-				If the option {\tt SELECTION\_FIXED} is set to {\bf true} or
-				{\tt SELECTION\_MOVABLE} is set to {\bf true} the atom array
+				If the option {\tt SELECTION_FIXED} is set to {\bf true} or
+				{\tt SELECTION_MOVABLE} is set to {\bf true} the atom array
 				is split. The first section (indices 0 to \Ref{getNumberOfMovableAtoms})
 				contains the atoms that are to be moved, the rest of the array contains
 				the fixed atoms.
@@ -236,7 +236,7 @@ namespace BALL
 		/**	Return the sum of energies of all registered force field components. 
 				No calculation will be performed. This method simply returns the 
 				last value for the total energy calculated by updateEnergy.
-				@return 	float energy in kJ/mol
+				@return	float - energy in kJ/mol
 		*/
 		float	getEnergy() const;
 

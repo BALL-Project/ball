@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.9 2000/01/07 21:50:20 oliver Exp $ 
+// $Id: pointGrid.h,v 1.10 2000/02/17 00:30:39 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -73,14 +73,14 @@ namespace BALL
 		PointGrid(PointGrid<GridDataType>& grid, bool deep = true);	
 
 		/**	Constructor for PointGrid.
-				{\em lower\_[x|y|z]} should be set to the coordinates of
+				{\em lower_[x|y|z]} should be set to the coordinates of
 				the "lower" corner of the box represented by the grid
-				{\em upper\_[x|y|z]} should likewise contain the "upper" corner
+				{\em upper_[x|y|z]} should likewise contain the "upper" corner
 				In fact, it doesn't really matter which coordinates are
 				which, as this method always takes the lowest coordinates (x,y,z)
 				for the lower corner and the highest coordinates for
 				the upper corner.\\
-				{\em grid\_points\_[x|y|z]} gives the number of grid points in 
+				{\em grid_points_[x|y|z]} gives the number of grid points in 
 				either direction. 
 				@param	lower_x	float, the x coordinate of the lower corner of the grid
 				@param	lower_y	float, the y coordinate of the lower corner of the grid
@@ -103,7 +103,7 @@ namespace BALL
 
 
 		/**	Constructor.
-				The grid's origin is at lower, it has grid\_points\_[x|y|z]
+				The grid's origin is at lower, it has grid_points_[x|y|z]
 				points in each direction.
 				@memo
 		*/

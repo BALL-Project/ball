@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.8 2000/01/17 13:12:58 oliver Exp $
+// $Id: classTest.h,v 1.9 2000/02/17 00:30:37 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -9,21 +9,26 @@
 /**	@name	Class Black Box Testing
 		To provide a maximum reliability for all BALL classes, each class
 		provides its own test program to ensure that each class compiles
-		and behaves (at least basically) as intended.\\
+		and behaves (at least basically) as intended.
+
 		The testprograms reside in the directory source/TEST, they may 
-		be built and executed by calling {\bf make test}.\\
+		be built and executed by calling {\bf make test}.
+
 		Each test program prints after execution either "PASSED" or "FAILED".
 		If any of the subtest contained in the test program fails, the whole 
-		test failed.\\ the result of the test program can also be check via its
+		test failed. The result of the test program can also be checked via its
 		exit code. An exit code of zero means "PASSED", non-zero exit code means 
-		"FAILED".\\
+		"FAILED".
+
 		There are several macros defined to simplify the creation of a test program
-		and to provide a common interface.\\
+		and to provide a common interface.
 		Each test program consists of several subtests the usually test one
 		method or property of the class. Each of this subtests uses a series
-		of elementary tests to check the functionality of the method.\\
-		A number of elemntary tests has been implemented that is sufficient
-		for most cases:\begin{itemize}
+		of elementary tests to check the functionality of the method.
+
+		A number of elementary tests has been implemented that is sufficient
+		for most cases:
+		\begin{itemize}
 			\item \Ref{TEST_EQUAL}
 			\item \Ref{TEST_NOT_EQUAL}
 			\item \Ref{TEST_REAL_EQUAL}
@@ -31,11 +36,12 @@
 		A subtest is defined by calling the \Ref{CHECK} macro with the subtest name
 		as an argument. Then a series of calls to {\bf TEST} macros follows,
 		mixed with standard BALL code (remember to include all neccessary header files).
-		The subtest is terminated by calling \Ref{RESULT}.\\
+		The subtest is terminated by calling \Ref{RESULT}.
 		Use the two macros \Ref{START_TEST} and \Ref{END_TEST} to generate a complete
-		test program.\\
+		test program.
+
 		To create a new test program, use the file 
-		\URL[source/TEST/Skeleton\_test.C]{../../source/BALL/TEST/Skeleton\_test.C}
+		\URL[source/TEST/Skeleton_test.C]{../../source/BALL/TEST/Skeleton_test.C}
 		\\ 
 		{\bf Definitions:} \URL{BALL/CONCEPT/classTest.h}
 */
@@ -45,7 +51,7 @@
 		The macro \Ref{CHECK_REAL_EQUAL} checks whether the floating point number returned by
 		by the subtest is close to the expected result by comparing the absolute value
 		if the difference of the two values to {\bf PRECISION}.\\
-		The default value is $10^{-6}$.It is possible to redefine precision in the
+		The default value is $10^{-6}$. It is possible to redefine precision in the
 		test program by redefining it:\\
 		{\large
 		\#undef PRECISION\\
@@ -60,11 +66,11 @@
 		test program with any arguments (except for #-v# or #-V#).\\
 		This macro should be the first to call in a test program. It introduces a global {\tt try}
 		block to catch any unwanted exceptions. If any of these exceptions occurs, all tests failed.
-		Exceptions defined by BALL (i.e. exception classes derived from \ref{GeneralException}) provide
-		some additional information that is evaluated by the \ref{END_TEST} macro. The END\_TEST macro
+		Exceptions defined by BALL (i.e. exception classes derived from \Ref{GeneralException}) provide
+		some additional information that is evaluated by the \Ref{END_TEST} macro. The END_TEST macro
 		also closes the {\tt try} block. This {\tt try} block should never catch an exception! 
 		All exceptions that are thrown due to some malfunction in one of the member functions should be 
-		caught by the {\tt try} block created by \ref{CHECK} and \ref{RESULT}.
+		caught by the {\tt try} block created by \Ref{CHECK} and \Ref{RESULT}.
 */
 #define START_TEST(class_name,version)\
 /* define a special namespace for all internal variables */\
@@ -118,7 +124,7 @@ int main(int argc, char **argv)\
 		test program and should therefore be the last macro to call.
 		It determines the exit code based on all previously run
 		subtests and prints out the message "PASSED" or "FAILED".
-		This macro also closes the global {\tt try} block opened by \ref{START_TEST}
+		This macro also closes the global {\tt try} block opened by \Ref{START_TEST}
  		and contains the related {\tt catch} clauses. If an exception is caught here,
 		the test program fails.
 */
@@ -198,8 +204,8 @@ int main(int argc, char **argv)\
 		this leads to the name of the subtest being printed on execution.\\
 		This macro also opens a {\tt try} block to catch any unexpected exceptions thrown
 		in the course of a subtest. To catch {\em wanted} exceptions (i.e. to check for exceptions that are
-		the expected result of some command) use the \ref{TEST_EXCEPTION} macro.
-		The {\tt try} block opened by CHECK is closed in \ref{RESULT}, so these two macros
+		the expected result of some command) use the \Ref{TEST_EXCEPTION} macro.
+		The {\tt try} block opened by CHECK is closed in \Ref{RESULT}, so these two macros
 		have to be balanced.
 */
 #define CHECK(test_name)  \
@@ -237,10 +243,10 @@ int main(int argc, char **argv)\
 		Each elementary test macro updates an internal variable ({\bf TEST}, defined by 
 		\Ref{START_TEST}) that holds the state of the current subtest.\\
 		{\bf RESULT} prints a whether the subtest has failed or passed in verbose mode
-		and updates the internal variables {\bf TEST::all\_tests} that describes the state of
-		the whole class test. {\bf TEST::all\_tests} is initialized to be {\bf true}.
+		and updates the internal variables {\bf TEST::all_tests} that describes the state of
+		the whole class test. {\bf TEST::all_tests} is initialized to be {\bf true}.
 		If any elementary test fails, {\bf TEST::test} becomes {\bf false}.
-		At the time of the next call to {\bf RESULT}, {\bf TEST::all\_tests} will be
+		At the time of the next call to {\bf RESULT}, {\bf TEST::all_tests} will be
     set to false, if {\bf TEST::test} is false. One failed elementary test leads therefore
 		to a failed subtest, which leads to a failed class test.\\
 		This macro closes the {\tt try} block opened by CHECK, so CHECK and RESULT--if they are not balanced, 
@@ -317,8 +323,8 @@ int main(int argc, char **argv)\
 
 /**	Create a temporary filename.
 		This macro assigns a new temporary filename to the string variable given as
-		its argument. The filename is created using \ref{File::createTemporaryFilename}.
-		All temporary files are deleted if \ref{END_TEST} is called.
+		its argument. The filename is created using \Ref{File::createTemporaryFilename}.
+		All temporary files are deleted if \Ref{END_TEST} is called.
 		@param	filename String will contain the filename on completion of the macro
 */
 #define NEW_TMP_FILE(filename)\
@@ -377,7 +383,7 @@ int main(int argc, char **argv)\
 
 /**	Generic inequality macro.
 		This macro checks for inequality as \Ref{TEST_EQUAL} tests for equality.
-		The only difference between the two macros is that{\bf  TEST\_NOT\_EQUAL} evaluates
+		The only difference between the two macros is that{\bf  TEST_NOT_EQUAL} evaluates
 		#!((a) == (b))#.\\
 		@param	a value/object to test
 		@param	b forbidden value
@@ -447,7 +453,7 @@ int main(int argc, char **argv)\
 
 /**	File comparison macro.
 		This macro is used to test file operations. It compares the file with name {\tt filename} 
-		against a template file {\tt templatename}. If {\tt use\_regexps} is {\bf true}, 
+		against a template file {\tt templatename}. If {\tt use_regexps} is {\bf true}, 
 		each line of the template file starting with {\tt ``/''} is considered to contain a regular
 		expression. 
 */

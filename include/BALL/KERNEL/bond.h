@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.4 2000/02/06 19:43:24 oliver Exp $
+// $Id: bond.h,v 1.5 2000/02/17 00:30:41 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -62,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.4 $
-			@date    $Date: 2000/02/06 19:43:24 $
+			@version $Revision: 1.5 $
+			@date    $Date: 2000/02/17 00:30:41 $
 	*/
 	class Bond
 		: public Composite,
@@ -171,7 +171,7 @@ namespace BALL
 					\item bond type is unknown (=\Ref{Bond::TYPE__UNKNOWN})
 				\end{itemize}
 
-				@return      {\bf Bond} - new constructed bond
+				@return    Bond - new constructed bond
 		*/
 		Bond();
 
@@ -187,7 +187,7 @@ namespace BALL
 
 				@param  bond the bond to be copied (cloned)
 				@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em bond}
-				@return      {\bf Bond} - new constructed bond cloned from {\em bond}
+				@return      Bond - new constructed bond cloned from {\em bond}
 				@see         createBond
 		*/
 		Bond(const Bond& bond, bool deep = true);
@@ -208,7 +208,7 @@ namespace BALL
 				@param       second second atom of the constructed bond
 				@param       order order of the constructed bond
 				@param       type type of the constructed bond
-				@return      {\bf Bond} - new constructed bond
+				@return      Bond - new constructed bond
 		*/
 		 Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BOND_DEFAULT_ORDER,
 				 Type type = BALL_BOND_DEFAULT_TYPE);
@@ -224,7 +224,7 @@ namespace BALL
 				@param 	bond the instantiated bond that connects the first atom {\em first} to the second atom {\em second}
 				@param 	first the first atom of the bond
 				@param 	second the second atom of the bond
-				@return {\bf Bond*} - bond that connects the first atom {\em first} with the second atom {\em second}
+				@return Bond* - bond that connects the first atom {\em first} with the second atom {\em second}
 		*/
 		static Bond* createBond(Bond& bond, Atom& first, Atom& second);
 
@@ -276,7 +276,7 @@ namespace BALL
 		void persistentRead(PersistenceManager& pm);
 
 		/**	Finalize the deserialization.
-				Bond might have to swap {\tt first\_} and {\tt second\_}.
+				Bond might have to swap {\tt first_} and {\tt second_}.
 		*/
 		void finalize();
 
@@ -311,7 +311,7 @@ namespace BALL
 				It is used for backup only.
 
 				@param  bond the bond to be copied (cloned)
-				@return {\bf Bond} - {\em *this} bond
+				@return Bond - {\em *this} bond
 				@see    Bond::set
 		*/
 		Bond& operator = (const Bond& bond);
@@ -354,7 +354,7 @@ namespace BALL
 					{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency of the bond tables in the atoms.
 
 
-					@return      {\bf \Ref{Atom} *} -
+					@return      Atom* -
 											 mutable reference to the first atom that is connected to {\em *this} bond,
 											 0 if no first atom exists
 					@see         Bond::getSecondAtom
@@ -367,7 +367,7 @@ namespace BALL
 					\\
 					{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency of the bond tables in the atoms.
 
-					@return      {\bf const \Ref{Atom} *} -
+					@return      Atom* - 
 											 constant reference to the first atom that is connected to {\em *this} bond,
 												 0 if no first atom exists
 					@see         Bond::getSecondAtom
@@ -392,7 +392,7 @@ namespace BALL
 					\\
 					{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency of the bond tables in the atoms.
 
-					@return      {\bf \Ref{Atom} *} -
+					@return      Atom* - 
 											 mutable reference to the second atom that is connected to {\em *this} bond,
 											 0 if no second atom exists
 					@see         Bond::getFirstAtom
@@ -405,7 +405,7 @@ namespace BALL
 					\\
 					{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency of the bond tables in the atoms.
 
-					@return      {\bf const \Ref{Atom} *} -
+					@return      Atom* -
 											 constant reference to the second atom that is connected to {\em *this} bond,
 											 0 if no second atom exists
 					@see         Bond::getFirstAtom
@@ -424,7 +424,7 @@ namespace BALL
 			/** Mutable inspection of the bond's name.
 					Access a mutable reference to the name of {\em *this} bond.
 
-					@return  {String\&} - mutable reference to the name of {\em *this} bond
+					@return  String& - mutable reference to the name of {\em *this} bond
 					@see     Bond::setName
 			*/
 			String& getName();
@@ -432,13 +432,13 @@ namespace BALL
 			/** Constant inspection of the bond's name.
 					Access a constant reference to the name of {\em *this} bond.
 
-					@return      {const String\&} - constant reference to the name of {\em *this} bond
+					@return      String& - constant reference to the name of {\em *this} bond
 					@see         Bond::setName
 			*/
 			const String& getName() const;
 
 			/** Change of the bond's order.
-					Change the order of {\em *this} bond to the order {\em bond\_order}.
+					Change the order of {\em *this} bond to the order {\em bond_order}.
 
 					@param       bond_order the new order of {\em *this} bond
 					@see         Bond::getOrder
@@ -448,13 +448,13 @@ namespace BALL
 			/** Constant inspection of the bond's order.
 					Access the order of {\em *this} bond.
 
-					@return      {\bf \Ref{Order} } - copy of the the order of {\em *this} bond
+					@return      Order - copy of the the order of {\em *this} bond
 					@see         Bond::setOrder
 			*/
 			Order getOrder() const;
 		
 			/** Change of the bond's type.
-					Change the type of {\em *this} bond to the type {\em bond\_type}.
+					Change the type of {\em *this} bond to the type {\em bond_type}.
 
 					@param       bond_type the new type of {\em *this} bond
 					@see         Bond::getType
@@ -464,7 +464,7 @@ namespace BALL
 			/** Constant inspection of the bond's type.
 					Access the type of {\em *this} bond.
 
-					@return      {\bf \Ref{Type} } - copy of the the type of {\em *this} bond
+					@return      Type - copy of the the type of {\em *this} bond
 					@see         Bond::setType
 			*/
 			Type getType() const;
@@ -472,7 +472,7 @@ namespace BALL
 			/** Constant inspection of the bond's length.
 					Access the length of {\em *this} bond.
 
-					@return      {\bf \Ref{Real} } - copy of the the length of {\em *this} bond
+					@return      Real - copy of the the length of {\em *this} bond
 			*/
 			Real getLength() const;
 
@@ -480,7 +480,7 @@ namespace BALL
 					Access the bond that might connect the atom {\em first} with the atom {\em second}.
 					If no such bond exists 0 is returned. The order of atoms may be arbitrary. Calls \Ref{Atom::getBond}.
 		
-					@return      {\bf Bond *} -
+					@return      Bond* -
 											 mutable reference to the bond connecting the atom {\em first} and {\em second},
 											 0 if no such bond exists
 					@see         Atom::getBond
@@ -504,7 +504,7 @@ namespace BALL
 					Calls \Ref{Atom::hasBond}.
 		
 					@param atom the atom that is queried to connect {\em *this} bond to another atom
-					@return  {\bf bool} -
+					@return  bool -
 									 {\tt true} if bond connects the atom {\em atom} with another atom,
 									 {\tt false} otherwise
 					@see     Atom::hasBond
@@ -515,7 +515,7 @@ namespace BALL
 					Query, if {\em *this} bond connects an atom.
 					If such a bond exists {\tt true} is returned, {\tt false} otherwise. 
 		
-					@return      {\bf bool} -
+					@return      bool -
 											 {\tt true} if bond connects the atom {\em atom} with another atom,
 											 {\tt false} otherwise
 					@see         Atom::hasBond
@@ -527,20 +527,20 @@ namespace BALL
 					If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
 					Calls \Ref{Composite::getRoot}.
 		
-					@return      {\bf bool} -
+					@return      bool -
 											 {\tt true} if {\em *this} bond is intermolecular
 											 {\tt false} otherwise
 					@see         Composite::getRoot
 			*/
 			bool isInterBond() const;
 
-			/** Request for the intermolecular bonding of {\em *this} bond within {\em base\_fragment}.
-					Query, if {\em *this} bond connects its two atoms within the common parent {\em base\_fragment} instance.
+			/** Request for the intermolecular bonding of {\em *this} bond within {\em base_fragment}.
+					Query, if {\em *this} bond connects its two atoms within the common parent {\em base_fragment} instance.
 					If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
 					Calls \Ref{Composite::isDescendantOf}.
 		
 					@param  	base_fragment The queried parent fragment.
-					@return  	{\bf bool} -
+					@return  	bool -
 									 	{\tt true} if {\em *this} bond is intermolecular
 									 	{\tt false} otherwise
 					@see      Composite::isDescendantOf
@@ -553,7 +553,7 @@ namespace BALL
 					Calls \Ref{Composite::isDescendantOf}.
 		
 					@param 	system The queried parent fragment.
-					@return	{\bf bool} -
+					@return	bool -
 								 	{\tt true} if {\em *this} bond is intermolecular
 					 				{\tt false} otherwise
 					@see    Composite::isDescendantOf
@@ -565,20 +565,20 @@ namespace BALL
 					If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
 					Calls \Ref{Composite::getRoot}.
 		
-					@return      {\bf bool} -
+					@return      bool -
 											 {\tt true} if {\em *this} bond is intramolecular
 											 {\tt false} otherwise
 					@see         Composite::getRoot
 			*/
 			bool isIntraBond() const;
 
-			/** Request for the intramolecular bonding of {\em *this} bond within {\em base\_fragment}.
-					Query, if {\em *this} bond connects its two atoms within the common parent {\em base\_fragment} instance.
+			/** Request for the intramolecular bonding of {\em *this} bond within {\em base_fragment}.
+					Query, if {\em *this} bond connects its two atoms within the common parent {\em base_fragment} instance.
 					If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
 					Calls \Ref{Composite::isDescendantOf}.
 		
 					@param       base_fragment The queried parent fragment.
-					@return      {\bf bool} -
+					@return      bool -
 											 {\tt true} if {\em *this} bond is intramolecular
 											 {\tt false} otherwise
 					@see         Composite::isDescendantOf
@@ -591,7 +591,7 @@ namespace BALL
 					Calls \Ref{Composite::isDescendantOf}.
 		
 					@param 		system The queried parent fragment.
-					@return   {\bf bool} -
+					@return   bool -
 										{\tt true} if {\em *this} bond is intramolecular
 										{\tt false} otherwise
 					@see         Composite::isDescendantOf
@@ -607,7 +607,7 @@ namespace BALL
 					Initiate self-validation of the internal state and data structure consistencies of {\em *this} bond.
 					If the internal state of {\em *this} bond is correct (self-validated) and consistent {\tt true} is returned, {\tt false} otherwise. 
 		
-					@return      {\bf bool} -
+					@return      bool -
 											 {\tt true} if the internal state of {\em *this} bond is correct (self-validated) and consistent,
 											 {\tt false} otherwise
 			*/

@@ -1,4 +1,4 @@
-// $Id: residueTorsions.h,v 1.5 2000/02/16 19:05:03 oliver Exp $
+// $Id: residueTorsions.h,v 1.6 2000/02/17 00:30:45 oliver Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
@@ -87,7 +87,7 @@ namespace BALL
 		*/
 		//@{
 		/**	Reads a parameter section from an INI file.
-				This method reads the section given in section\_name from ini\_file,
+				This method reads the section given in section_name from ini_file,
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
@@ -102,7 +102,7 @@ namespace BALL
 				@param	name the residue name (including modifiers like -S or -N);
 				@param  i the index. 0 $<$ {\tt i} $<$ \Ref{getNumberOfResidueTorsions}
 				@param	ResidueTorsion the torsion to be assigned to
-				@return {\bf true} if the torsion was found, {\bf false} otherwise
+				@return bool - {\bf true} if the torsion was found, {\bf false} otherwise
 		*/
 		bool assignTorsion(const String& name, Position i, Data& torsion) const;
 

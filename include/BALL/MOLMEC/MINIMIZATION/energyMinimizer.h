@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.12 2000/02/06 19:47:46 oliver Exp $
+// $Id: energyMinimizer.h,v 1.13 2000/02/17 00:30:45 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -290,13 +290,13 @@ namespace BALL
 		/**	Minimize the energy of the system bound to the force field.	
 				If a number of steps is given, the minimization is aborted after
 				that number of steps, regardless of the number of steps given in 
-				the options ({\tt MAX\_STEPS}). Together with the {\tt restart} option
+				the options ({\tt MAX_STEPS}). Together with the {\tt restart} option
 				this feature is used to extract properties or visualize the results
 				in the course of the minimization. If restart is set to {\bf true},
 				the minimization continues with the former step width.	
 				@param		steps maximum number of steps to be taken
 				@param		restart {\bf true} if the minimization is to be continued
-				@return		{\bf true} if the minimization is terminated
+				@return		bool - {\bf true} if the minimization is terminated
 		*/
 		virtual bool	minimize(Size steps = 0, bool restart = false);
 

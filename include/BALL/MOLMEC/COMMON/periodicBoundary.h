@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.h,v 1.5 2000/02/02 09:49:40 len Exp $
+// $Id: periodicBoundary.h,v 1.6 2000/02/17 00:30:44 oliver Exp $
 // Molecular Mechanics: class representing periodic boundary conditions
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -176,14 +176,14 @@ namespace BALL
 
 		/**	Set the box dimensions.
 				The box dimensions are additionally stored in options
-				using keys \Ref{lower} and \ref{upper}.
+				using keys \Ref{lower} and \Ref{upper}.
 		*/
 		void setBox(const Box3& box);
 
 		/** Fill the defined box with a solvent.
 				This method fills the defined box with solvent molecules.
 				If no box is defined, no solvent is added. The neccessary
-				solvent box template is either taken from the options (solvent\_file)
+				solvent box template is either taken from the options (solvent_file)
 				or a default is assumed.\\
 				This method replicates the solvent box starting at the box origin in
 				all three dimensions and removes all solvent molecules that are within 
@@ -197,7 +197,7 @@ namespace BALL
 		
 		/**	Removes all solvent molecules
 				This method removes all molecules that have the property \Ref{Molecule::PROPERTY__PERIODIC_BOX_SOLVENT}
-				set from the force field's system.\\
+				set from the force field's system.
 				The number of removed solvent molecules is returned.
 				@see	addSolvent
 		*/

@@ -19,7 +19,7 @@
 
 	@memo \begin{center}{\Large Biochemical Algorithms Library}\\Reference Manual\end{center}
 		@version 0.9a
-		@author Nicolas Pascal Boghossian \\ Heiko Klein \\ Oliver Kohlbacher \\ Hans-Peter Lenhof \\ Peter M\"uller
+		@author Nicolas Pascal Boghossian<br> Andreas Burchardt<br> Heiko Klein<br> Oliver Kohlbacher<br> Hans-Peter Lenhof <br> Peter M\"uller
 */
 //@{
 

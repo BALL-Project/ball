@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.13 2000/02/16 17:08:09 oliver Exp $
+// $Id: vector3.h,v 1.14 2000/02/17 00:30:43 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -29,24 +29,25 @@
 
 namespace BALL 
 {
+	/**	@name	Three-dimensional vector.
+			@memo representation of points and vectors in three-dimensional space: class \Ref{TVector3} and class \Ref{Vector3}
+	*/
+	//@{
+
 	template <typename T>
 	class TVector3;
 
-	///
 	template <typename T>
 	BALL_INLINE 
 	TVector3<T> operator + (const TVector3<T>& a, const TVector3<T>& b);
 
-	///
 	template <typename T>
 	BALL_INLINE 
 	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b);
 
-	///
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector3<T>& vector);
 
-	///
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector3<T>& vector);
 
@@ -736,20 +737,6 @@ namespace BALL
 	}
 
 	template <typename T>
-	inline 
-	TVector3<T> operator + (const TVector3<T>& a, const TVector3<T>& b)
-	{
-		return TVector3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
-	}
-
-	template <typename T>
-	inline
-	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b)
-	{
-		return TVector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
-	}
-
-	template <typename T>
 	BALL_INLINE
 	TVector3<T> TVector3<T>::operator + () const	
 	{
@@ -790,13 +777,6 @@ namespace BALL
 	TVector3<T> TVector3<T>::operator * (const T& scalar)
 	{
 		return TVector3<T>(x * scalar, y * scalar, z * scalar);
-	}
-
-	template <typename T>
-	BALL_INLINE 
-	TVector3<T> operator * (const T& scalar, const TVector3<T>& vector)
-	{
-		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 	}
 
 	template <typename T>
@@ -987,9 +967,47 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
+	/**
+	*/
+	typedef TVector3<float> Vector3;
+
+	/**	Operators
+	*/
+	//@{
+	/**
+	*/
+	template <typename T>
+	inline 
+	TVector3<T> operator + (const TVector3<T>& a, const TVector3<T>& b)
+	{
+		return TVector3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
+	}
+
+	/**
+	*/
+	template <typename T>
+	inline
+	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b)
+	{
+		return TVector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
+	}
+
+	/**
+	*/
+	template <typename T>
+	BALL_INLINE 
+	TVector3<T> operator * (const T& scalar, const TVector3<T>& vector)
+	{
+		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
+	}
+
+	/**
+	*/
 	template <typename T>
 	TVector3<T> operator * (const T& scalar, const TVector3<T>& vector);
 
+	/**
+	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector3<T>& v)
 	{
@@ -1004,6 +1022,8 @@ namespace BALL
 		return s;
 	}
 
+	/**
+	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector3<T>& v)
 	{
@@ -1012,9 +1032,9 @@ namespace BALL
 		return s;
 	}
 
-	///
-	typedef TVector3<float> Vector3;
-
+	//@}
+	//@}
+		
 } // namespace BALL
 
 #endif // BALL_MATHS_VECTOR3_H

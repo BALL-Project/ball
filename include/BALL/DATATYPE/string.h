@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.8 2000/01/28 16:39:23 oliver Exp $
+// $Id: string.h,v 1.9 2000/02/17 00:30:39 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -44,7 +44,7 @@ namespace BALL
 
 	/**	A substring class.
 			The Substring class represents an efficient way to deal with substrings
-			of \ref{String}s. Each Substring is bound to an instance of String and 
+			of \Ref{String}s. Each Substring is bound to an instance of String and 
 			is defined by a start and end index. It can be used like a String (with several
 			restrictions) but only affects the given range of the string it is bount to.\\
 			{\bf Definition:} \URL{BALL/DATATYPE/string.h}
@@ -400,7 +400,7 @@ namespace BALL
 				to the result of a call to {\bf sprintf} using {\bf format} as a
 				format string and all additional parameters as arguments.\\
 				The result of the sprintf call is intermediately written to a buffer
-				of a maximum soze of {\bf buffer\_size} characters, so choose an 
+				of a maximum soze of {\bf buffer_size} characters, so choose an 
 				appropriate size for this variables.\\
 				@exception IndexUnderflow, if the buffer size specified is not larger than 0
 				@exception NullPointer, if {\tt format == 0}
@@ -662,7 +662,7 @@ namespace BALL
 
 		/** Strips all characters in {\bf trimmed} from the left of the string.
 				trimLeft stops at the first character encountered that is not in {\bf trimmed}.
-				Using its default parameter CHARACTER\_CLASS\_\_WHITESPACE, it is usually handy to 
+				Using its default parameter CHARACTER_CLASS__WHITESPACE, it is usually handy to 
 				remove blanks from the beginning of a string.
 				Strings consisting of character from {\tt trimmed} only yield an empty string.
 		*/
@@ -670,7 +670,7 @@ namespace BALL
 
 		/** Strips all characters in {\bf trimmed} from the right of the string.
 				trimRight stops at the first character encountered that is not in {\bf trimmed}.
-				Using its default parameter CHARACTER\_CLASS\_\_WHITESPACE, it is usually handy to 
+				Using its default parameter CHARACTER_CLASS__WHITESPACE, it is usually handy to 
 				remove blanks from the end of a string.
 				Strings consisting of character from {\tt trimmed} only yield an empty string.
 		*/
@@ -732,7 +732,7 @@ namespace BALL
 		*/
 		String& reverse(Index from = 0, Size len = npos);
 
-		/// Substitutes the first occurence of {\bf to\_replace} by the content of {\bf replacing}
+		/// Substitutes the first occurence of {\bf to_replace} by the content of {\bf replacing}
 		Index substitute(const String& to_replace, const String& replacing);
 
 		//@}
@@ -777,7 +777,7 @@ namespace BALL
 		bool isSpace() const;
 
 		/** True, if the string only contains whitespace characters.
-				Whitespaces are defined in CHARACTER\_CLASS\_\_WHITESPACE.
+				Whitespaces are defined in CHARACTER_CLASS__WHITESPACE.
 				It returns also {\bf true}, if called for an empty string.
 		*/
 		bool isWhitespace() const;
@@ -795,7 +795,7 @@ namespace BALL
 		static bool isSpace(char c);
 
 		/** True, if the character is any whitespace character
-				Whitespaces are defined in CHARACTER\_CLASS\_\_WHITESPACE
+				Whitespaces are defined in CHARACTER_CLASS__WHITESPACE
 		*/
 		static bool isWhitespace(char c);
 
