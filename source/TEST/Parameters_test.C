@@ -1,4 +1,4 @@
-// $Id: Parameters_test.C,v 1.4 2001/08/27 09:06:00 aubertin Exp $
+// $Id: Parameters_test.C,v 1.5 2001/08/27 09:24:50 aubertin Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: Parameters_test.C,v 1.4 2001/08/27 09:06:00 aubertin Exp $")
+START_TEST(Parameters, "$Id: Parameters_test.C,v 1.5 2001/08/27 09:24:50 aubertin Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,8 +53,8 @@ CHECK(Parameters::clear())
   para.clear();
   TEST_EQUAL(para.isValid(),false)
   TEST_EQUAL( "", para.getFilename())
-    TEST_EQUAL(inif->getDuplicateKeyCheck(),false)
-    TEST_EQUAL(inif->isValid(),false)
+  TEST_EQUAL(inif->getDuplicateKeyCheck(),false)
+  TEST_EQUAL(inif->isValid(),false)
 RESULT
 
 
@@ -63,17 +63,17 @@ CHECK(Parameters::Parameters& operator = (const Parameters& parameters))
   Parameters para(filename);
   Parameters para2;
   para2 = para;
-TEST_EQUAL(para2.getFilename(),"data/Parameters_test.ini")
-TEST_EQUAL(para2 == para, true)
+  TEST_EQUAL(para2.getFilename(),"data/Parameters_test.ini")
+  TEST_EQUAL(para2 == para, true)
 RESULT
 
 
 CHECK(Parameters::setFilename(const String& filename) + Parameters::getFilename() const + Parameters::getParameterFile())
-   Parameters para;
-   para.setFilename("data/Parameters_test.ini");
-   TEST_EQUAL(para.getFilename(),"data/Parameters_test.ini")
-   INIFile* inif = &para.getParameterFile();
-TEST_NOT_EQUAL(inif,0)
+  Parameters para;
+  para.setFilename("data/Parameters_test.ini");
+  TEST_EQUAL(para.getFilename(),"data/Parameters_test.ini")
+  INIFile* inif = &para.getParameterFile();
+  TEST_NOT_EQUAL(inif,0)
 RESULT
 
 
@@ -86,9 +86,9 @@ RESULT
 
 
 CHECK(Parameters::isValid() const )
-   String filename("data/Parameters_test.ini");
-   Parameters para(filename);
-   TEST_EQUAL(para.isValid(),true)
+  String filename("data/Parameters_test.ini");
+  Parameters para(filename);
+  TEST_EQUAL(para.isValid(),true)
 RESULT
 
 
