@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.10 2000/12/11 21:14:26 oliver Exp $
+// $Id: PDBFile.h,v 1.11 2000/12/15 13:15:02 amoll Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -37,13 +37,13 @@ namespace BALL
 {
 
 	inline
-	Index Hash(const OrderedQuadruple<String, PDB::Character, PDB::Integer, PDB::AChar>& quadruple)
+	Index Hash(const Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>& quadruple)
 	{
 		return (Index)quadruple.third;
 	}
 
 	inline
-	std::ostream& operator << (std::ostream& s, const OrderedQuadruple<String,PDB::Character,PDB::Integer,PDB::AChar>& /* q */)
+	std::ostream& operator << (std::ostream& s, const Quadruple<String,PDB::Character,PDB::Integer,PDB::AChar>& /* q */)
 	{
 		return s;
 	}
@@ -223,15 +223,15 @@ namespace BALL
 		void postprocessHelices_();
 
 		void postprocessSheetsTurns_
-			(std::list<OrderedQuadruple<String, PDB::Character, PDB::Integer, PDB::AChar> >& secstruc_list,
+			(std::list<Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar> >& secstruc_list,
 			 std::list<SecondaryStructure *>& new_secstruc_list);
 
 		void postprocessRandomCoils_();
 
 		typedef HashMap<PDB::Integer,PDBAtom *>																										PDBAtomMap;
-		typedef	OrderedQuadruple<String, PDB::Character, PDB::Integer, PDB::AChar>								ResidueQuadruple;
+		typedef	Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>								ResidueQuadruple;
 		typedef HashMap<ResidueQuadruple, Residue *>																							ResidueMap;
-		typedef std::list<OrderedQuadruple<String, PDB::Character, PDB::Integer, PDB::AChar> >		QuadrupleList;
+		typedef std::list<Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar> >		QuadrupleList;
 		typedef std::list<SecondaryStructure *>																										SecStrucList;
 
 		PDBAtomMap			PDB_atom_map_;
