@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.C,v 1.13 2003/06/19 13:24:03 oliver Exp $
+// $Id: nucleotide.C,v 1.14 2003/06/30 15:31:14 amoll Exp $
 //
 
 #include <BALL/KERNEL/nucleotide.h>
@@ -157,42 +157,6 @@ namespace BALL
 		throw()
 	{
 		return insertion_code_;
-	}
-
-	void Nucleotide::prepend(Atom& atom)
-		throw()
-	{
-		Composite::prependChild(atom);
-	}
-
-	void Nucleotide::append(Atom &atom)
-		throw()
-	{
-		Composite::appendChild(atom);
-	}
-
-	void Nucleotide::insert(Atom &atom)
-		throw()
-	{
-		append(atom);
-	}
-
-	void Nucleotide::insertBefore(Atom &atom, Composite& before)
-		throw()
-	{
-		before.Composite::insertBefore(atom);
-	}
-
-	void Nucleotide::insertAfter(Atom& atom, Composite &after)
-		throw()
-	{
-		after.Composite::insertAfter(atom);
-	}
-
-	bool Nucleotide::remove(Atom& atom)
-		throw()
-	{
-		return Composite::removeChild(atom);
 	}
 
 	void Nucleotide::spliceBefore(Nucleotide& nucleotide)

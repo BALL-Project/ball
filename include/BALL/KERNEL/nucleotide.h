@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.28 2003/06/19 13:16:55 oliver Exp $
+// $Id: nucleotide.h,v 1.29 2003/06/30 15:30:35 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -196,44 +196,6 @@ namespace BALL
 				@return String the insertion code (constant)
 		*/
 		char getInsertionCode() const
-			throw();
-
-		/** Prepend an atom at position 0.
-				@param atom, the atom to prepend
-		*/
-		void prepend(Atom& atom)
-			throw();
-
-		/** Append an atom after the last position.
-				@param atom, the atom to append
-		*/
-		void append(Atom& atom)
-			throw();
-
-		/** Insert an atom after the last position.
-				@param atom, the atom to insert
-		*/
-		void insert(Atom& atom)
-			throw();
-
-		/** Insert an atom before a given Composite object.
-				@param atom, the atom to insert
-				@param before, the Composite object to insert before
-		*/
-		void insertBefore(Atom& atom, Composite& before)
-			throw();
-
-		/** Insert an atom after a given Composite object.
-				@param atom, the atom to insert
-				@param after, the Composite object to insert after
-		*/
-		void insertAfter(Atom& atom, Composite& after)
-			throw();
-
-		/** Remove an atom.
-				@param atom the atom to remove
-		*/
-		bool remove(Atom& atom)
 			throw();
 
 		/**	Cut all children of <tt>nucleotide</tt> and prepend them before the children of this instance.
