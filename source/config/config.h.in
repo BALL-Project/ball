@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: config.h.in,v 1.43 2004/02/23 16:27:26 oliver Exp $ 
+// $Id: config.h.in,v 1.44 2005/02/02 10:51:34 anhi Exp $ 
 //
 
 #ifndef BALL_CONFIG_CONFIG_H
@@ -195,6 +195,11 @@
 // Define whether the FFTW library/header is available.
 #undef BALL_HAS_FFTW
 #undef BALL_HAS_FFTW_H
+
+// Define which versions of fftw can be used: double, float, long double
+#undef BALL_HAS_FFTW_DOUBLE
+#undef BALL_HAS_FFTW_FLOAT
+#undef BALL_HAS_FFTW_LONG_DOUBLE
 
 // QT options
 #undef BALL_HAS_VIEW

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.19 2005/01/29 18:02:01 oliver Exp $
+dnl $Id: configure.ac,v 1.20 2005/02/02 10:51:33 anhi Exp $
 dnl
 dnl
 
@@ -68,6 +68,10 @@ AC_ARG_WITH(xdr,               [  --without-xdr           no RPC/XDR headers ava
 AC_ARG_ENABLE(fftw,            [  --enable-fftw           enable the build of BALL with support for FFTW (a FFT library)])
 AC_ARG_WITH(fftw-lib,          [  --with-fftw-lib=DIR     libfftw is in DIR])
 AC_ARG_WITH(fftw-incl,         [  --with-fftw-incl=DIR    fftw includes are in DIR])
+AC_ARG_ENABLE(fftw-float,      [  --disable-fftw-float    disable support for float precision in FFT code])
+AC_ARG_ENABLE(fftw-double,     [  --disable-fftw-double   disable support for double precision in FFT code])
+AC_ARG_ENABLE(fftw-longdbl,    [  --disable-fftw-longdbl  disable support for long double precision in FFT code])
+dnl		 Do we still need this?
 AC_ARG_ENABLE(double-cpx,      [  --enable-double-cplx    use double precision floats for Complex type])
 
 dnl
@@ -208,7 +212,26 @@ FFTW_LIBPATH=${with_fftw_lib}
 else
 FFTW_LIBPATH=""
 fi
+if test "${with_fftw_incl}" != "" ; then
 FFTW_INCL=${with_fftw_incl}
+else
+FFTW_INCL=""
+fi
+if test "$enable_fftw_float" = "no" ; then
+FFTW_DISABLE_FFTW_FLOAT=true
+else
+FFTW_DISABLE_FFTW_FLOAT=false
+fi
+if test "$enable_fftw_double" = "no" ; then
+FFTW_DISABLE_FFTW_DOUBLE=true
+else
+FFTW_DISABLE_FFTW_DOUBLE=false
+fi
+if test "$enable_fftw_longdbl" = "no" ; then
+FFTW_DISABLE_FFTW_LONGDBL=true
+else
+FFTW_DISABLE_FFTW_LONGDBL=false
+fi
 else
 FFTW_SUPPORT=
 fi
