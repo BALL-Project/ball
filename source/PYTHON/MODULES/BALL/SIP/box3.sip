@@ -1,4 +1,4 @@
-// $Id: box3.sip,v 1.1 2000/07/18 21:27:14 oliver Exp $
+// $Id: box3.sip,v 1.2 2001/07/25 11:32:32 oliver Exp $
 
 class Box3
 {
@@ -36,10 +36,11 @@ class Box3
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
   Vector3 a;
   Vector3 b;
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   	Box3* ptr;
-	  if ((ptr = (Box3*)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
+	  if ((ptr = (Box3*)sipGetCppPtr((sipThisType*)a0,sipClass_Box3)) == NULL)
 	    return NULL;
 
    static String tmp;

@@ -19,35 +19,53 @@ static PyTypeObject sipType_ResidueProcessor = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipResidueProcessor::sipResidueProcessor(): ResidueProcessor()
+sipResidueProcessor::sipResidueProcessor()
+    : ResidueProcessor()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipResidueProcessor::sipResidueProcessor(const ResidueProcessor& a0): ResidueProcessor(a0)
+sipResidueProcessor::sipResidueProcessor(const ResidueProcessor& a0)
+    : ResidueProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipResidueProcessor::~sipResidueProcessor()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
-Processor::Result sipResidueProcessor::operator()(Residue& a0)
+
+Processor::Result sipResidueProcessor::operator ()(Residue& a0)
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_Operator__call__,&relLock) ?
-		sipResidueProcessor::sipVH_Operator__call__(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		ResidueProcessor::operator()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
+		sipResidueProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		ResidueProcessor::operator ()(a0);
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-Processor::Result sipResidueProcessor::sipVH_Operator__call__(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Residue& a0)
+Processor::Result sipResidueProcessor::sipVH_CallOperator(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Residue& a0)
 {
 	Processor::Result res;
 	PyObject *resobj;
@@ -78,7 +96,7 @@ Processor::Result sipResidueProcessor::sipVH_Operator__call__(const sipMethodCac
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_ResidueProcessor,sipName_BALL_Operator__call__);
+		sipBadVirtualResultType(sipName_BALL_ResidueProcessor,sipName_BALL___call__);
 	}
 
 reportError:
@@ -93,12 +111,13 @@ releaseLock:
 static PyObject *sipDo_ResidueProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ResidueProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			ResidueProcessor *ptr;
@@ -114,7 +133,7 @@ static PyObject *sipDo_ResidueProcessor_start(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ResidueProcessor,sipName_BALL_start);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ResidueProcessor,sipName_BALL_start);
 
 	return NULL;
 }
@@ -122,12 +141,13 @@ static PyObject *sipDo_ResidueProcessor_start(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_ResidueProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ResidueProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			ResidueProcessor *ptr;
@@ -143,14 +163,15 @@ static PyObject *sipDo_ResidueProcessor_finish(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ResidueProcessor,sipName_BALL_finish);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ResidueProcessor,sipName_BALL_finish);
 
 	return NULL;
 }
 
-static PyObject *sipDo_ResidueProcessor_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_ResidueProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ResidueProcessor)) == NULL)
 		return NULL;
@@ -159,7 +180,7 @@ static PyObject *sipDo_ResidueProcessor_Operator__call__(PyObject *sipThisObj,Py
 		Residue *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
 		{
 			Processor::Result res;
 			ResidueProcessor *ptr;
@@ -174,7 +195,7 @@ static PyObject *sipDo_ResidueProcessor_Operator__call__(PyObject *sipThisObj,Py
 			if (iserr)
 				return NULL;
 
-			res = ptr -> ResidueProcessor::operator()(* a0);
+			res = ptr -> ResidueProcessor::operator ()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -182,7 +203,7 @@ static PyObject *sipDo_ResidueProcessor_Operator__call__(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ResidueProcessor,sipName_BALL_Operator__call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ResidueProcessor,sipName_BALL___call__);
 
 	return NULL;
 }
@@ -223,6 +244,7 @@ PyObject *sipNew_ResidueProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -230,10 +252,10 @@ PyObject *sipNew_ResidueProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipResidueProcessor();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -241,7 +263,7 @@ PyObject *sipNew_ResidueProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const ResidueProcessor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ResidueProcessor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ResidueProcessor,&a0obj))
 		{
 			int iserr = 0;
 
@@ -251,12 +273,12 @@ PyObject *sipNew_ResidueProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipResidueProcessor(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_ResidueProcessor);
+		sipNoCtor(sipArgsParsed,sipName_BALL_ResidueProcessor);
 		return NULL;
 	}
 
@@ -283,7 +305,7 @@ PyObject *sipNew_ResidueProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_ResidueProcessor[] = {
 	{sipName_BALL_start, sipDo_ResidueProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_ResidueProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__call__, sipDo_ResidueProcessor_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL___call__, sipDo_ResidueProcessor___call__, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -292,17 +314,15 @@ int sipCanConvertTo_ResidueProcessor(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_ResidueProcessor);
 }
 
-void sipConvertTo_ResidueProcessor(PyObject *sipPy,ResidueProcessor **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_ResidueProcessor(PyObject *sipPy,ResidueProcessor **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_ResidueProcessor);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_ResidueProcessor);
+		*sipCppPtr = NULL;
 
 		return;
 	}

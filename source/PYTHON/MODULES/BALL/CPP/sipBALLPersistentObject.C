@@ -19,6 +19,19 @@ static PyTypeObject sipType_PersistentObject = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
@@ -51,6 +64,7 @@ PyObject *sipNew_PersistentObject(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -58,10 +72,10 @@ PyObject *sipNew_PersistentObject(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new PersistentObject();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -69,7 +83,7 @@ PyObject *sipNew_PersistentObject(PyObject *sipSelf,PyObject *sipArgs)
 		const PersistentObject *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_PersistentObject,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PersistentObject,&a0obj))
 		{
 			int iserr = 0;
 
@@ -79,12 +93,12 @@ PyObject *sipNew_PersistentObject(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PersistentObject(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_PersistentObject);
+		sipNoCtor(sipArgsParsed,sipName_BALL_PersistentObject);
 		return NULL;
 	}
 
@@ -111,17 +125,15 @@ int sipCanConvertTo_PersistentObject(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_PersistentObject);
 }
 
-void sipConvertTo_PersistentObject(PyObject *sipPy,PersistentObject **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_PersistentObject(PyObject *sipPy,PersistentObject **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PersistentObject);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_PersistentObject);
+		*sipCppPtr = NULL;
 
 		return;
 	}

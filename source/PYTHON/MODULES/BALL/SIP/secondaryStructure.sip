@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.sip,v 1.2 2000/08/30 19:59:11 oliver Exp $
+// $Id: secondaryStructure.sip,v 1.3 2001/07/25 11:32:36 oliver Exp $
 
 class SecondaryStructure
   : AtomContainer
@@ -11,9 +11,9 @@ class SecondaryStructure
   SecondaryStructure();
   SecondaryStructure(const SecondaryStructure&,bool = true);
   SecondaryStructure(const String&);
-  ~SecondaryStructure();
-  virtual void clear();
-  virtual void destroy();
+  ~SecondaryStructure() throw();
+  virtual void clear() throw();
+  virtual void destroy() throw();
 	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 	//  void persistentRead(PersistenceManager& pm);
   void set(const SecondaryStructure&, bool = true);
@@ -43,14 +43,15 @@ class SecondaryStructure
   void spliceBefore(SecondaryStructure&);
   void spliceAfter(SecondaryStructure&);
   void splice(SecondaryStructure&);
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   SecondaryStructure* ptr;
-  if ((ptr = (SecondaryStructure*)sipGetCppPtr(sipThis,sipClass_SecondaryStructure)) == NULL)
+  if ((ptr = (SecondaryStructure*)sipGetCppPtr((sipThisType*)a0,sipClass_SecondaryStructure)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("SecondaryStructure ") + ptr->getName() 

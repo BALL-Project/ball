@@ -34,7 +34,7 @@ PyObject *sipConvertFrom_PyChainList(const PyChainList *sipCpp)
 	}
 
 	return pl;
-#line 42 "../CPP/sipBALLPyChainList.cpp"
+#line 42 "sipBALLPyChainList.cpp"
 }
 
 PyObject *sipClass_PyChainList;
@@ -43,23 +43,13 @@ int sipCanConvertTo_PyChainList(PyObject *sipPy)
 {
 #line 37 "pyChainList.sip"
 	return PyList_Check(sipPy);
-#line 51 "../CPP/sipBALLPyChainList.cpp"
+#line 51 "sipBALLPyChainList.cpp"
 }
 
-int sipConvertTo_PyChainList(PyObject *sipPy,PyChainList **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_PyChainList(PyObject *sipPy,PyChainList **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
-
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PyChainList);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
+		return 0;
 
 #line 41 "pyChainList.sip"
 	// Convert a Python list of Chain instances to an ChainList object on the
@@ -85,7 +75,7 @@ int sipConvertTo_PyChainList(PyObject *sipPy,PyChainList **sipCppPtr,int sipNoNu
 	*sipCppPtr = chain_list;
 
 	return 1;
-#line 93 "../CPP/sipBALLPyChainList.cpp"
+#line 83 "sipBALLPyChainList.cpp"
 }
 
 PyChainList *sipForceConvertTo_PyChainList(PyObject *valobj,int *iserrp)

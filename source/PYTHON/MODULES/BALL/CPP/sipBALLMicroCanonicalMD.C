@@ -19,106 +19,141 @@ static PyTypeObject sipType_MicroCanonicalMD = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipMicroCanonicalMD::sipMicroCanonicalMD(): MicroCanonicalMD()
+sipMicroCanonicalMD::sipMicroCanonicalMD()
+    : MicroCanonicalMD()
 {
-	sipCommonCtor(sipPyMethods,6);
+	sipCommonCtor(sipPyMethods,7);
 }
 
-sipMicroCanonicalMD::sipMicroCanonicalMD(ForceField& a0): MicroCanonicalMD(a0)
+sipMicroCanonicalMD::sipMicroCanonicalMD(ForceField& a0)
+    : MicroCanonicalMD(a0)
 {
-	sipCommonCtor(sipPyMethods,6);
+	sipCommonCtor(sipPyMethods,7);
 }
 
-sipMicroCanonicalMD::sipMicroCanonicalMD(ForceField& a0,SnapShotManager * a1): MicroCanonicalMD(a0,a1)
+sipMicroCanonicalMD::sipMicroCanonicalMD(ForceField& a0,SnapShotManager * a1)
+    : MicroCanonicalMD(a0,a1)
 {
-	sipCommonCtor(sipPyMethods,6);
+	sipCommonCtor(sipPyMethods,7);
 }
 
-sipMicroCanonicalMD::sipMicroCanonicalMD(ForceField& a0,SnapShotManager * a1,const Options& a2): MicroCanonicalMD(a0,a1,a2)
+sipMicroCanonicalMD::sipMicroCanonicalMD(ForceField& a0,SnapShotManager * a1,const Options& a2)
+    : MicroCanonicalMD(a0,a1,a2)
 {
-	sipCommonCtor(sipPyMethods,6);
+	sipCommonCtor(sipPyMethods,7);
 }
 
-sipMicroCanonicalMD::sipMicroCanonicalMD(const MicroCanonicalMD& a0,bool a1): MicroCanonicalMD(a0,a1)
+sipMicroCanonicalMD::sipMicroCanonicalMD(const MicroCanonicalMD& a0,bool a1)
+    : MicroCanonicalMD(a0,a1)
 {
-	sipCommonCtor(sipPyMethods,6);
+	sipCommonCtor(sipPyMethods,7);
 }
 
-sipMicroCanonicalMD::sipMicroCanonicalMD(const MicroCanonicalMD& a0): MicroCanonicalMD(a0)
+sipMicroCanonicalMD::sipMicroCanonicalMD(const MicroCanonicalMD& a0)
+    : MicroCanonicalMD(a0)
 {
-	sipCommonCtor(sipPyMethods,6);
+	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMicroCanonicalMD::~sipMicroCanonicalMD()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipMicroCanonicalMD::setup(ForceField& a0,SnapShotManager * a1,const Options& a2)
+
+void sipMicroCanonicalMD::simulateTime(double a0,bool a1)
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipMolecularDynamics::sipVH_setup(&sipPyMethods[0],sipPyThis,relLock,a0,a1,a2) :
-		MicroCanonicalMD::setup(a0,a1,a2);
-}
-bool sipMicroCanonicalMD::setup(ForceField& a0,SnapShotManager * a1)
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipMolecularDynamics::sipVH_setup(&sipPyMethods[0],sipPyThis,relLock,a0,a1) :
-		MicroCanonicalMD::setup(a0,a1);
-}
-bool sipMicroCanonicalMD::specificSetup()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_specificSetup,&relLock) ?
-		sipMolecularDynamics::sipVH_specificSetup(&sipPyMethods[1],sipPyThis,relLock) :
-		MicroCanonicalMD::specificSetup();
-}
-void sipMicroCanonicalMD::setTimeStep(double a0)
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_setTimeStep,&relLock))
-		sipMolecularDynamics::sipVH_setTimeStep(&sipPyMethods[2],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_simulateTime,&relLock))
+		sipMolecularDynamics::sipVH_simulateTime(&sipPyMethods[0],sipPyThis,relLock,a0,a1);
 	else
-		MicroCanonicalMD::setTimeStep(a0);
+		MicroCanonicalMD::simulateTime(a0,a1);
 }
-void sipMicroCanonicalMD::simulate(bool a0)
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_simulate,&relLock))
-		sipMolecularDynamics::sipVH_simulate(&sipPyMethods[3],sipPyThis,relLock,a0);
-	else
-		MicroCanonicalMD::simulate(a0);
-}
 void sipMicroCanonicalMD::simulateIterations(int a0,bool a1)
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_simulateIterations,&relLock))
-		sipMolecularDynamics::sipVH_simulateIterations(&sipPyMethods[4],sipPyThis,relLock,a0,a1);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_simulateIterations,&relLock))
+		sipMolecularDynamics::sipVH_simulateIterations(&sipPyMethods[1],sipPyThis,relLock,a0,a1);
 	else
 		MicroCanonicalMD::simulateIterations(a0,a1);
 }
-void sipMicroCanonicalMD::simulateTime(double a0,bool a1)
+
+void sipMicroCanonicalMD::simulate(bool a0)
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_simulateTime,&relLock))
-		sipMolecularDynamics::sipVH_simulateTime(&sipPyMethods[5],sipPyThis,relLock,a0,a1);
+	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_simulate,&relLock))
+		sipMolecularDynamics::sipVH_simulate(&sipPyMethods[2],sipPyThis,relLock,a0);
 	else
-		MicroCanonicalMD::simulateTime(a0,a1);
+		MicroCanonicalMD::simulate(a0);
+}
+
+void sipMicroCanonicalMD::setTimeStep(double a0)
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_setTimeStep,&relLock))
+		sipMolecularDynamics::sipVH_setTimeStep(&sipPyMethods[3],sipPyThis,relLock,a0);
+	else
+		MicroCanonicalMD::setTimeStep(a0);
+}
+
+bool sipMicroCanonicalMD::specificSetup()
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_specificSetup,&relLock) ?
+		sipMolecularDynamics::sipVH_specificSetup(&sipPyMethods[4],sipPyThis,relLock) :
+		MicroCanonicalMD::specificSetup();
+}
+
+bool sipMicroCanonicalMD::setup(ForceField& a0,SnapShotManager * a1,const Options& a2)
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipMolecularDynamics::sipVH_setup(&sipPyMethods[5],sipPyThis,relLock,a0,a1,a2) :
+		MicroCanonicalMD::setup(a0,a1,a2);
+}
+
+bool sipMicroCanonicalMD::setup(ForceField& a0,SnapShotManager * a1)
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipMolecularDynamics::sipVH_setup(&sipPyMethods[6],sipPyThis,relLock,a0,a1) :
+		MicroCanonicalMD::setup(a0,a1);
 }
 
 static PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MicroCanonicalMD)) == NULL)
 		return NULL;
@@ -129,7 +164,7 @@ static PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sip
 		SnapShotManager *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
 		{
 			bool res;
 			MicroCanonicalMD *ptr;
@@ -159,7 +194,7 @@ static PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sip
 		const Options *a2;
 		PyObject *a2obj;
 
-		if (sipParseArgs(sipArgs,"III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
 		{
 			bool res;
 			MicroCanonicalMD *ptr;
@@ -184,7 +219,7 @@ static PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MicroCanonicalMD,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MicroCanonicalMD,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -192,12 +227,13 @@ static PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_MicroCanonicalMD_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MicroCanonicalMD)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			MicroCanonicalMD *ptr;
@@ -213,7 +249,7 @@ static PyObject *sipDo_MicroCanonicalMD_specificSetup(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MicroCanonicalMD,sipName_BALL_specificSetup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MicroCanonicalMD,sipName_BALL_specificSetup);
 
 	return NULL;
 }
@@ -221,6 +257,7 @@ static PyObject *sipDo_MicroCanonicalMD_specificSetup(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_MicroCanonicalMD_setTimeStep(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MicroCanonicalMD)) == NULL)
 		return NULL;
@@ -228,7 +265,7 @@ static PyObject *sipDo_MicroCanonicalMD_setTimeStep(PyObject *sipThisObj,PyObjec
 	{
 		double a0;
 
-		if (sipParseArgs(sipArgs,"d",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"d",&a0))
 		{
 			MicroCanonicalMD *ptr;
 
@@ -244,7 +281,7 @@ static PyObject *sipDo_MicroCanonicalMD_setTimeStep(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MicroCanonicalMD,sipName_BALL_setTimeStep);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MicroCanonicalMD,sipName_BALL_setTimeStep);
 
 	return NULL;
 }
@@ -252,6 +289,7 @@ static PyObject *sipDo_MicroCanonicalMD_setTimeStep(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_MicroCanonicalMD_simulate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MicroCanonicalMD)) == NULL)
 		return NULL;
@@ -259,7 +297,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulate(PyObject *sipThisObj,PyObject *
 	{
 		long a0 = false;
 
-		if (sipParseArgs(sipArgs,"|l",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"|l",&a0))
 		{
 			MicroCanonicalMD *ptr;
 
@@ -275,7 +313,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulate(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MicroCanonicalMD,sipName_BALL_simulate);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MicroCanonicalMD,sipName_BALL_simulate);
 
 	return NULL;
 }
@@ -283,6 +321,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulate(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_MicroCanonicalMD_simulateIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MicroCanonicalMD)) == NULL)
 		return NULL;
@@ -291,7 +330,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulateIterations(PyObject *sipThisObj,
 		int a0;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"i|l",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i|l",&a0,&a1))
 		{
 			MicroCanonicalMD *ptr;
 
@@ -307,7 +346,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulateIterations(PyObject *sipThisObj,
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MicroCanonicalMD,sipName_BALL_simulateIterations);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MicroCanonicalMD,sipName_BALL_simulateIterations);
 
 	return NULL;
 }
@@ -315,6 +354,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulateIterations(PyObject *sipThisObj,
 static PyObject *sipDo_MicroCanonicalMD_simulateTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MicroCanonicalMD)) == NULL)
 		return NULL;
@@ -323,7 +363,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulateTime(PyObject *sipThisObj,PyObje
 		double a0;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"d|l",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"d|l",&a0,&a1))
 		{
 			MicroCanonicalMD *ptr;
 
@@ -339,7 +379,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulateTime(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MicroCanonicalMD,sipName_BALL_simulateTime);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MicroCanonicalMD,sipName_BALL_simulateTime);
 
 	return NULL;
 }
@@ -385,6 +425,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -392,10 +433,10 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipMicroCanonicalMD();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -403,7 +444,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -413,7 +454,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMicroCanonicalMD(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -423,7 +464,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 		SnapShotManager *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
 		{
 			int iserr = 0;
 
@@ -434,7 +475,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMicroCanonicalMD(* a0, a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -446,7 +487,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 		const Options *a2;
 		PyObject *a2obj;
 
-		if (sipParseArgs(sipArgs,"-III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
 		{
 			int iserr = 0;
 
@@ -458,7 +499,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMicroCanonicalMD(* a0, a1,* a2);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -467,7 +508,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_MicroCanonicalMD,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_MicroCanonicalMD,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -477,7 +518,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMicroCanonicalMD(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -485,7 +526,7 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 		const MicroCanonicalMD *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_MicroCanonicalMD,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_MicroCanonicalMD,&a0obj))
 		{
 			int iserr = 0;
 
@@ -495,12 +536,12 @@ PyObject *sipNew_MicroCanonicalMD(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMicroCanonicalMD(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_MicroCanonicalMD);
+		sipNoCtor(sipArgsParsed,sipName_BALL_MicroCanonicalMD);
 		return NULL;
 	}
 
@@ -539,17 +580,15 @@ int sipCanConvertTo_MicroCanonicalMD(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_MicroCanonicalMD);
 }
 
-void sipConvertTo_MicroCanonicalMD(PyObject *sipPy,MicroCanonicalMD **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_MicroCanonicalMD(PyObject *sipPy,MicroCanonicalMD **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_MicroCanonicalMD);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_MicroCanonicalMD);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -6,7 +6,7 @@
 PyObject *sipClass_Residue;
 
 static void sipDealloc_Residue(sipThisType *);
-static PyObject *sipPyInternalRepr_Residue(sipThisType *);
+static PyObject * sip__str__Residue(PyObject *a0);
 
 static PyTypeObject sipType_Residue = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,87 +19,116 @@ static PyTypeObject sipType_Residue = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_Residue,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__Residue,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipResidue::sipResidue(): Residue()
+sipResidue::sipResidue()
+    : Residue()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipResidue::sipResidue(const Residue& a0,bool a1): Residue(a0,a1)
+sipResidue::sipResidue(const Residue& a0,bool a1)
+    : Residue(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipResidue::sipResidue(const String& a0,const String& a1,char a2): Residue(a0,a1,a2)
+sipResidue::sipResidue(const String& a0,const String& a1,char a2)
+    : Residue(a0,a1,a2)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipResidue::sipResidue(const Residue& a0): Residue(a0)
+sipResidue::sipResidue(const Residue& a0)
+    : Residue(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipResidue::~sipResidue()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipResidue::select()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_select,&relLock))
-		sipSelectable::sipVH_select(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		Composite::select();
-}
 void sipResidue::deselect()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
-		sipSelectable::sipVH_deselect(&sipPyMethods[1],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
+		sipSelectable::sipVH_deselect(&sipPyMethods[0],sipPyThis,relLock);
 	else
 		Composite::deselect();
 }
-void sipResidue::clear()
+
+void sipResidue::select()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipObject::sipVH_clear(&sipPyMethods[2],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_select,&relLock))
+		sipSelectable::sipVH_select(&sipPyMethods[1],sipPyThis,relLock);
 	else
-		Residue::clear();
+		Composite::select();
 }
+
+bool sipResidue::isValid() const
+ throw()
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipObject::sipVH_isValid(&sipPyMethods[2],sipPyThis,relLock) :
+		Residue::isValid();
+}
+
 void sipResidue::destroy()
+ throw()
 {
 	int relLock;
 
 	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_destroy,&relLock))
-		sipObject::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
+		sipComposite::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
 	else
 		Residue::destroy();
 }
-bool sipResidue::isValid() const
+
+void sipResidue::clear()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipObject::sipVH_isValid(&sipPyMethods[4],sipPyThis,relLock) :
-		Residue::isValid();
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipObject::sipVH_clear(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		Residue::clear();
 }
 
 static PyObject *sipDo_Residue_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Residue *ptr;
 
@@ -115,7 +144,7 @@ static PyObject *sipDo_Residue_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -123,12 +152,13 @@ static PyObject *sipDo_Residue_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Residue *ptr;
 
@@ -144,7 +174,7 @@ static PyObject *sipDo_Residue_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -152,6 +182,7 @@ static PyObject *sipDo_Residue_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -161,7 +192,7 @@ static PyObject *sipDo_Residue_set(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Residue,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_Residue,&a0obj,&a1))
 		{
 			Residue *ptr;
 
@@ -184,7 +215,7 @@ static PyObject *sipDo_Residue_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_set);
 
 	return NULL;
 }
@@ -192,6 +223,7 @@ static PyObject *sipDo_Residue_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -201,7 +233,7 @@ static PyObject *sipDo_Residue_get(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Residue,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_Residue,&a0obj,&a1))
 		{
 			Residue *ptr;
 
@@ -224,7 +256,7 @@ static PyObject *sipDo_Residue_get(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_get);
 
 	return NULL;
 }
@@ -232,6 +264,7 @@ static PyObject *sipDo_Residue_get(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -240,7 +273,7 @@ static PyObject *sipDo_Residue_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		Residue *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
 		{
 			Residue *ptr;
 
@@ -263,7 +296,7 @@ static PyObject *sipDo_Residue_swap(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -271,6 +304,7 @@ static PyObject *sipDo_Residue_swap(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_getFullName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -278,7 +312,7 @@ static PyObject *sipDo_Residue_getFullName(PyObject *sipThisObj,PyObject *sipArg
 	{
 		long a0 = Residue::ADD_VARIANT_EXTENSIONS;
 
-		if (sipParseArgs(sipArgs,"|l",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"|l",&a0))
 		{
 			String *res;
 			Residue *ptr;
@@ -294,7 +328,7 @@ static PyObject *sipDo_Residue_getFullName(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getFullName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_getFullName);
 
 	return NULL;
 }
@@ -302,12 +336,13 @@ static PyObject *sipDo_Residue_getFullName(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_Residue_hasTorsionPhi(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Residue *ptr;
@@ -323,7 +358,7 @@ static PyObject *sipDo_Residue_hasTorsionPhi(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_hasTorsionPhi);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_hasTorsionPhi);
 
 	return NULL;
 }
@@ -331,12 +366,13 @@ static PyObject *sipDo_Residue_hasTorsionPhi(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_Residue_getTorsionPhi(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Angle *res;
 			Residue *ptr;
@@ -352,7 +388,7 @@ static PyObject *sipDo_Residue_getTorsionPhi(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getTorsionPhi);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_getTorsionPhi);
 
 	return NULL;
 }
@@ -360,12 +396,13 @@ static PyObject *sipDo_Residue_getTorsionPhi(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_Residue_hasTorsionPsi(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Residue *ptr;
@@ -381,7 +418,7 @@ static PyObject *sipDo_Residue_hasTorsionPsi(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_hasTorsionPsi);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_hasTorsionPsi);
 
 	return NULL;
 }
@@ -389,12 +426,13 @@ static PyObject *sipDo_Residue_hasTorsionPsi(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_Residue_getTorsionPsi(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Angle *res;
 			Residue *ptr;
@@ -410,7 +448,7 @@ static PyObject *sipDo_Residue_getTorsionPsi(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getTorsionPsi);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_getTorsionPsi);
 
 	return NULL;
 }
@@ -418,12 +456,13 @@ static PyObject *sipDo_Residue_getTorsionPsi(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_Residue_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Protein *res;
 			Residue *ptr;
@@ -438,7 +477,7 @@ static PyObject *sipDo_Residue_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Protein *res;
 			Residue *ptr;
@@ -454,7 +493,7 @@ static PyObject *sipDo_Residue_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getProtein);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_getProtein);
 
 	return NULL;
 }
@@ -462,12 +501,13 @@ static PyObject *sipDo_Residue_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Residue_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Chain *res;
 			Residue *ptr;
@@ -482,7 +522,7 @@ static PyObject *sipDo_Residue_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Chain *res;
 			Residue *ptr;
@@ -498,7 +538,7 @@ static PyObject *sipDo_Residue_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getChain);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_getChain);
 
 	return NULL;
 }
@@ -506,6 +546,7 @@ static PyObject *sipDo_Residue_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -514,7 +555,7 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 		Position *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Position,&a0obj))
 		{
 			PDBAtom *res;
 			Residue *ptr;
@@ -542,7 +583,7 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 		Position *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Position,&a0obj))
 		{
 			const PDBAtom *res;
 			Residue *ptr;
@@ -568,7 +609,7 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getPDBAtom);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_getPDBAtom);
 
 	return NULL;
 }
@@ -576,6 +617,7 @@ static PyObject *sipDo_Residue_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Residue_setID(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -584,7 +626,7 @@ static PyObject *sipDo_Residue_setID(PyObject *sipThisObj,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			Residue *ptr;
 
@@ -610,7 +652,7 @@ static PyObject *sipDo_Residue_setID(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_setID);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_setID);
 
 	return NULL;
 }
@@ -618,12 +660,13 @@ static PyObject *sipDo_Residue_setID(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_getID(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const String *res;
 			Residue *ptr;
@@ -639,7 +682,7 @@ static PyObject *sipDo_Residue_getID(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getID);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_getID);
 
 	return NULL;
 }
@@ -647,6 +690,7 @@ static PyObject *sipDo_Residue_getID(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_setInsertionCode(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -654,7 +698,7 @@ static PyObject *sipDo_Residue_setInsertionCode(PyObject *sipThisObj,PyObject *s
 	{
 		char a0;
 
-		if (sipParseArgs(sipArgs,"c",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"c",&a0))
 		{
 			Residue *ptr;
 
@@ -670,7 +714,7 @@ static PyObject *sipDo_Residue_setInsertionCode(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_setInsertionCode);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_setInsertionCode);
 
 	return NULL;
 }
@@ -678,12 +722,13 @@ static PyObject *sipDo_Residue_setInsertionCode(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_Residue_getInsertionCode(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			char res;
 			Residue *ptr;
@@ -699,7 +744,7 @@ static PyObject *sipDo_Residue_getInsertionCode(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_getInsertionCode);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_getInsertionCode);
 
 	return NULL;
 }
@@ -707,12 +752,13 @@ static PyObject *sipDo_Residue_getInsertionCode(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_Residue_countPDBAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			Residue *ptr;
@@ -728,7 +774,7 @@ static PyObject *sipDo_Residue_countPDBAtoms(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_countPDBAtoms);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_countPDBAtoms);
 
 	return NULL;
 }
@@ -736,6 +782,7 @@ static PyObject *sipDo_Residue_countPDBAtoms(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_Residue_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -744,7 +791,7 @@ static PyObject *sipDo_Residue_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 		PDBAtom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
 		{
 			Residue *ptr;
 
@@ -767,7 +814,7 @@ static PyObject *sipDo_Residue_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_prepend);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_prepend);
 
 	return NULL;
 }
@@ -775,6 +822,7 @@ static PyObject *sipDo_Residue_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -783,7 +831,7 @@ static PyObject *sipDo_Residue_append(PyObject *sipThisObj,PyObject *sipArgs)
 		PDBAtom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
 		{
 			Residue *ptr;
 
@@ -806,7 +854,7 @@ static PyObject *sipDo_Residue_append(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_append);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_append);
 
 	return NULL;
 }
@@ -814,6 +862,7 @@ static PyObject *sipDo_Residue_append(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -822,7 +871,7 @@ static PyObject *sipDo_Residue_insert(PyObject *sipThisObj,PyObject *sipArgs)
 		PDBAtom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
 		{
 			Residue *ptr;
 
@@ -845,7 +894,7 @@ static PyObject *sipDo_Residue_insert(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_insert);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_insert);
 
 	return NULL;
 }
@@ -853,6 +902,7 @@ static PyObject *sipDo_Residue_insert(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -863,7 +913,7 @@ static PyObject *sipDo_Residue_insertBefore(PyObject *sipThisObj,PyObject *sipAr
 		Composite *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_PDBAtom,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_PDBAtom,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
 			Residue *ptr;
 
@@ -887,7 +937,7 @@ static PyObject *sipDo_Residue_insertBefore(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_insertBefore);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_insertBefore);
 
 	return NULL;
 }
@@ -895,6 +945,7 @@ static PyObject *sipDo_Residue_insertBefore(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_Residue_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -905,7 +956,7 @@ static PyObject *sipDo_Residue_insertAfter(PyObject *sipThisObj,PyObject *sipArg
 		Composite *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_PDBAtom,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_PDBAtom,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
 			Residue *ptr;
 
@@ -929,7 +980,7 @@ static PyObject *sipDo_Residue_insertAfter(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_insertAfter);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_insertAfter);
 
 	return NULL;
 }
@@ -937,6 +988,7 @@ static PyObject *sipDo_Residue_insertAfter(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_Residue_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -945,7 +997,7 @@ static PyObject *sipDo_Residue_remove(PyObject *sipThisObj,PyObject *sipArgs)
 		PDBAtom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
 		{
 			bool res;
 			Residue *ptr;
@@ -968,7 +1020,7 @@ static PyObject *sipDo_Residue_remove(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_remove);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_remove);
 
 	return NULL;
 }
@@ -976,6 +1028,7 @@ static PyObject *sipDo_Residue_remove(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -984,7 +1037,7 @@ static PyObject *sipDo_Residue_spliceBefore(PyObject *sipThisObj,PyObject *sipAr
 		Residue *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
 		{
 			Residue *ptr;
 
@@ -1007,7 +1060,7 @@ static PyObject *sipDo_Residue_spliceBefore(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_spliceBefore);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_spliceBefore);
 
 	return NULL;
 }
@@ -1015,6 +1068,7 @@ static PyObject *sipDo_Residue_spliceBefore(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_Residue_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -1023,7 +1077,7 @@ static PyObject *sipDo_Residue_spliceAfter(PyObject *sipThisObj,PyObject *sipArg
 		Residue *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
 		{
 			Residue *ptr;
 
@@ -1046,7 +1100,7 @@ static PyObject *sipDo_Residue_spliceAfter(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_spliceAfter);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_spliceAfter);
 
 	return NULL;
 }
@@ -1054,6 +1108,7 @@ static PyObject *sipDo_Residue_spliceAfter(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_Residue_splice(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
@@ -1062,7 +1117,7 @@ static PyObject *sipDo_Residue_splice(PyObject *sipThisObj,PyObject *sipArgs)
 		Residue *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
 		{
 			Residue *ptr;
 
@@ -1085,7 +1140,7 @@ static PyObject *sipDo_Residue_splice(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_splice);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_splice);
 
 	return NULL;
 }
@@ -1093,12 +1148,13 @@ static PyObject *sipDo_Residue_splice(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Residue_isAminoAcid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Residue *ptr;
@@ -1114,7 +1170,7 @@ static PyObject *sipDo_Residue_isAminoAcid(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_isAminoAcid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_isAminoAcid);
 
 	return NULL;
 }
@@ -1122,12 +1178,13 @@ static PyObject *sipDo_Residue_isAminoAcid(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_Residue_isTerminal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Residue *ptr;
@@ -1143,7 +1200,7 @@ static PyObject *sipDo_Residue_isTerminal(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_isTerminal);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_isTerminal);
 
 	return NULL;
 }
@@ -1151,12 +1208,13 @@ static PyObject *sipDo_Residue_isTerminal(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Residue_isNTerminal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Residue *ptr;
@@ -1172,7 +1230,7 @@ static PyObject *sipDo_Residue_isNTerminal(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_isNTerminal);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_isNTerminal);
 
 	return NULL;
 }
@@ -1180,12 +1238,13 @@ static PyObject *sipDo_Residue_isNTerminal(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_Residue_isCTerminal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Residue *ptr;
@@ -1201,7 +1260,7 @@ static PyObject *sipDo_Residue_isCTerminal(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_isCTerminal);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_isCTerminal);
 
 	return NULL;
 }
@@ -1209,12 +1268,13 @@ static PyObject *sipDo_Residue_isCTerminal(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_Residue_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Residue)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Residue *ptr;
@@ -1230,7 +1290,7 @@ static PyObject *sipDo_Residue_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Residue,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Residue,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -1266,17 +1326,16 @@ static void sipDealloc_Residue(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_Residue(sipThisType *sipThis)
+static PyObject * sip__str__Residue(PyObject *a0)
 {
-#line 76 "residue.sip"
+#line 77 "residue.sip"
   Residue* ptr;
-  if ((ptr = (Residue*)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
+  if ((ptr = (Residue*)sipGetCppPtr((sipThisType*)a0,sipClass_Residue)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("Residue ") + ptr->getName() + ptr->getID()
         + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-#line 1284 "../CPP/sipBALLResidue.cpp"
+#line 1343 "sipBALLResidue.cpp"
 }
 
 PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
@@ -1288,6 +1347,7 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -1295,10 +1355,10 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipResidue();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1307,7 +1367,7 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_Residue,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_Residue,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -1317,7 +1377,7 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipResidue(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1328,7 +1388,7 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a1obj = NULL;
 		char a2 = ' ';
 
-		if (sipParseArgs(sipArgs,"-I|Ic",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj,&a2))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|Ic",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj,&a2))
 		{
 			int iserr = 0;
 
@@ -1345,7 +1405,7 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1353,7 +1413,7 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 		const Residue *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Residue,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Residue,&a0obj))
 		{
 			int iserr = 0;
 
@@ -1363,12 +1423,12 @@ PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipResidue(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Residue);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Residue);
 		return NULL;
 	}
 
@@ -1433,17 +1493,15 @@ int sipCanConvertTo_Residue(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Residue);
 }
 
-void sipConvertTo_Residue(PyObject *sipPy,Residue **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Residue(PyObject *sipPy,Residue **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Residue);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Residue);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -5,14 +5,13 @@
 using namespace BALL;
 %End
   public:
-  Object();
-  Object(const Object&, bool = true);
-  // virtual ~Object();
-  virtual void clear();
-  virtual void destroy();
-  int getHandle() const;
-  static int getNextHandle();
-  static int getNewHandle();
+  Object() throw();
+  Object(const Object&) throw();
+  ~Object() throw();
+  virtual void clear() throw();
+  Size getHandle() const throw();
+  static Size getNextHandle() throw();
+  static Size getNewHandle() throw();
   // virtual bool operator == (const Object& object) const;
   // bool operator != (const Object& object) const;
   // virtual bool operator < (const Object& object) const;
@@ -24,6 +23,6 @@ using namespace BALL;
   // virtual void write(::std::ostream& s) const;
   // friend ::std::istream& operator >> (::std::istream& s, Object& object);
   // friend ::std::ostream& operator << (::std::ostream& s, const Object& object);
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
   //virtual void dump(::std::ostream& s = std::cout, unsigned long depth = 0) const;
  };

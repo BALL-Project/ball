@@ -19,39 +19,59 @@ static PyTypeObject sipType_TransformationProcessor = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipTransformationProcessor::sipTransformationProcessor(): TransformationProcessor()
+sipTransformationProcessor::sipTransformationProcessor()
+    : TransformationProcessor()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipTransformationProcessor::sipTransformationProcessor(const Matrix4x4& a0): TransformationProcessor(a0)
+sipTransformationProcessor::sipTransformationProcessor(const Matrix4x4& a0)
+    : TransformationProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipTransformationProcessor::sipTransformationProcessor(const TransformationProcessor& a0): TransformationProcessor(a0)
+sipTransformationProcessor::sipTransformationProcessor(const TransformationProcessor& a0)
+    : TransformationProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipTransformationProcessor::~sipTransformationProcessor()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
-Processor::Result sipTransformationProcessor::operator()(Atom& a0)
+
+Processor::Result sipTransformationProcessor::operator ()(Atom& a0)
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_Operator__call__,&relLock) ?
-		sipAtomProcessor::sipVH_Operator__call__(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		TransformationProcessor::operator()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
+		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		TransformationProcessor::operator ()(a0);
 }
 
 static PyObject *sipDo_TransformationProcessor_setTransformation(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TransformationProcessor)) == NULL)
 		return NULL;
@@ -60,7 +80,7 @@ static PyObject *sipDo_TransformationProcessor_setTransformation(PyObject *sipTh
 		const Matrix4x4 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
 		{
 			TransformationProcessor *ptr;
 
@@ -83,7 +103,7 @@ static PyObject *sipDo_TransformationProcessor_setTransformation(PyObject *sipTh
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TransformationProcessor,sipName_BALL_setTransformation);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TransformationProcessor,sipName_BALL_setTransformation);
 
 	return NULL;
 }
@@ -91,12 +111,13 @@ static PyObject *sipDo_TransformationProcessor_setTransformation(PyObject *sipTh
 static PyObject *sipDo_TransformationProcessor_getTransformation(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TransformationProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Matrix4x4 *res;
 			TransformationProcessor *ptr;
@@ -112,14 +133,15 @@ static PyObject *sipDo_TransformationProcessor_getTransformation(PyObject *sipTh
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TransformationProcessor,sipName_BALL_getTransformation);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TransformationProcessor,sipName_BALL_getTransformation);
 
 	return NULL;
 }
 
-static PyObject *sipDo_TransformationProcessor_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_TransformationProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TransformationProcessor)) == NULL)
 		return NULL;
@@ -128,7 +150,7 @@ static PyObject *sipDo_TransformationProcessor_Operator__call__(PyObject *sipThi
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Processor::Result res;
 			TransformationProcessor *ptr;
@@ -143,7 +165,7 @@ static PyObject *sipDo_TransformationProcessor_Operator__call__(PyObject *sipThi
 			if (iserr)
 				return NULL;
 
-			res = ptr -> TransformationProcessor::operator()(* a0);
+			res = ptr -> TransformationProcessor::operator ()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -151,7 +173,7 @@ static PyObject *sipDo_TransformationProcessor_Operator__call__(PyObject *sipThi
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TransformationProcessor,sipName_BALL_Operator__call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TransformationProcessor,sipName_BALL___call__);
 
 	return NULL;
 }
@@ -197,6 +219,7 @@ PyObject *sipNew_TransformationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -204,10 +227,10 @@ PyObject *sipNew_TransformationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipTransformationProcessor();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -215,7 +238,7 @@ PyObject *sipNew_TransformationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const Matrix4x4 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Matrix4x4,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Matrix4x4,&a0obj))
 		{
 			int iserr = 0;
 
@@ -225,7 +248,7 @@ PyObject *sipNew_TransformationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipTransformationProcessor(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -233,7 +256,7 @@ PyObject *sipNew_TransformationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const TransformationProcessor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_TransformationProcessor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_TransformationProcessor,&a0obj))
 		{
 			int iserr = 0;
 
@@ -243,12 +266,12 @@ PyObject *sipNew_TransformationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipTransformationProcessor(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_TransformationProcessor);
+		sipNoCtor(sipArgsParsed,sipName_BALL_TransformationProcessor);
 		return NULL;
 	}
 
@@ -275,7 +298,7 @@ PyObject *sipNew_TransformationProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_TransformationProcessor[] = {
 	{sipName_BALL_setTransformation, sipDo_TransformationProcessor_setTransformation, METH_VARARGS, NULL},
 	{sipName_BALL_getTransformation, sipDo_TransformationProcessor_getTransformation, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__call__, sipDo_TransformationProcessor_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL___call__, sipDo_TransformationProcessor___call__, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -284,17 +307,15 @@ int sipCanConvertTo_TransformationProcessor(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_TransformationProcessor);
 }
 
-void sipConvertTo_TransformationProcessor(PyObject *sipPy,TransformationProcessor **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_TransformationProcessor(PyObject *sipPy,TransformationProcessor **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_TransformationProcessor);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_TransformationProcessor);
+		*sipCppPtr = NULL;
 
 		return;
 	}

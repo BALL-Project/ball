@@ -1,4 +1,4 @@
-// $Id: atom.sip,v 1.2 2000/07/25 21:20:34 oliver Exp $
+// $Id: atom.sip,v 1.3 2001/07/25 11:32:31 oliver Exp $
 
 class Atom
   : Composite,
@@ -39,9 +39,9 @@ class Atom
      const Vector3& /force/ = Vector3(0,0,0 ),
      float /charge/ = 0 ,
      float /radius/ = 0 );
-   ~Atom();
-   virtual void clear();
-   virtual void destroy();
+   ~Atom() throw();
+   virtual void clear() throw();
+   virtual void destroy() throw();
    // virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
    // virtual void persistentRead(PersistenceManager& pm);
    void set(const Atom& /atom/, bool /deep/ = true);
@@ -52,12 +52,11 @@ class Atom
    const Element& getElement() const;
    void setCharge(float /charge/);
    float getCharge() const;
-   Molecule *getMolecule();
-   const Molecule *getMolecule() const;
+   const Molecule* getMolecule() const;
    Fragment* getFragment();
    const Fragment* getFragment() const;
    void setName(const String& /name/);
-   String& getName();
+   const String& getName();
    const String& getName() const;
    String getFullName(FullNameType /type/ = ADD_VARIANT_EXTENSIONS) const;
    void setPosition(const Vector3& /position/);
@@ -89,17 +88,18 @@ class Atom
    bool isBound() const;
    bool isGeminal(const Atom& /atom/) const;
    bool isVicinal(const Atom& /atom/) const;
-   virtual bool isValid() const;
+   virtual bool isValid() const throw();
    // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
    // virtual void read(std::istream& s);
    // virtual void write(std::ostream& s) const;
    // bool applyBonds(UnaryProcessor<Bond>& processor);
 	
 	// convert the atom to a string representation
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   Atom* ptr;
-  if ((ptr = (Atom*)sipGetCppPtr(sipThis,sipClass_Atom)) == NULL)
+  if ((ptr = (Atom*)sipGetCppPtr((sipThisType*)a0 ,sipClass_Atom)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("Atom ") + ptr->getName() 
@@ -117,14 +117,6 @@ class AtomType
 	typedef Atom::Type AtomType;
 %End
 	public:
-	operator const char* ();
-%MemberCode
-	AtomType* ptr;
-  if ((ptr = (AtomType*)sipGetCppPtr(sipThis,sipClass_AtomType)) == NULL)
-    return NULL;
-
-  return PyString_FromString(String(*ptr).c_str());
-%End
 %CanConvertToClassCode
 	// automatic conversion of Py integers to Position 
 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_AtomType));
@@ -140,6 +132,15 @@ class AtomType
 	*sipCppPtr = (AtomType*)sipConvertToCpp(sipPy, sipClass_AtomType, sipIsErr);
 
 	return 0;
+%End
+	PyMethods:
+	__str__
+%MemberCode
+	AtomType* ptr;
+  if ((ptr = (AtomType*)sipGetCppPtr((sipThisType*)a0,sipClass_AtomType)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(*ptr).c_str());
 %End
 };
 

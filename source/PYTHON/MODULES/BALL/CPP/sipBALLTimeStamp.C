@@ -6,7 +6,7 @@
 PyObject *sipClass_TimeStamp;
 
 static void sipDealloc_TimeStamp(sipThisType *);
-static PyObject *sipPyInternalRepr_TimeStamp(sipThisType *);
+static PyObject * sip__str__TimeStamp(PyObject *a0);
 
 static PyTypeObject sipType_TimeStamp = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,24 +19,42 @@ static PyTypeObject sipType_TimeStamp = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_TimeStamp,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__TimeStamp,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipTimeStamp::sipTimeStamp(): TimeStamp()
+sipTimeStamp::sipTimeStamp()
+   throw()  : TimeStamp()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipTimeStamp::sipTimeStamp(const TimeStamp& a0): TimeStamp(a0)
+sipTimeStamp::sipTimeStamp(const TimeStamp& a0)
+    : TimeStamp(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipTimeStamp::~sipTimeStamp()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
+
 void sipTimeStamp::stamp(const PreciseTime& a0)
+ throw()
 {
 	int relLock;
 
@@ -88,6 +106,7 @@ releaseLock:
 static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TimeStamp)) == NULL)
 		return NULL;
@@ -96,7 +115,7 @@ static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipA
 		const PreciseTime *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
 		{
 			bool res;
 			TimeStamp *ptr;
@@ -121,7 +140,7 @@ static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipA
 		const TimeStamp *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_TimeStamp,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_TimeStamp,&a0obj))
 		{
 			bool res;
 			TimeStamp *ptr;
@@ -144,7 +163,7 @@ static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TimeStamp,sipName_BALL_isNewerThan);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TimeStamp,sipName_BALL_isNewerThan);
 
 	return NULL;
 }
@@ -152,6 +171,7 @@ static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TimeStamp)) == NULL)
 		return NULL;
@@ -160,7 +180,7 @@ static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipA
 		const PreciseTime *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
 		{
 			bool res;
 			TimeStamp *ptr;
@@ -185,7 +205,7 @@ static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipA
 		const TimeStamp *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_TimeStamp,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_TimeStamp,&a0obj))
 		{
 			bool res;
 			TimeStamp *ptr;
@@ -208,7 +228,7 @@ static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TimeStamp,sipName_BALL_isOlderThan);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TimeStamp,sipName_BALL_isOlderThan);
 
 	return NULL;
 }
@@ -216,6 +236,7 @@ static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_TimeStamp_stamp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TimeStamp)) == NULL)
 		return NULL;
@@ -224,7 +245,7 @@ static PyObject *sipDo_TimeStamp_stamp(PyObject *sipThisObj,PyObject *sipArgs)
 		const PreciseTime *a0 = &PreciseTime::ZERO;
 		PyObject *a0obj = NULL;
 
-		if (sipParseArgs(sipArgs,"|I",sipCanConvertTo_PreciseTime,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"|I",sipCanConvertTo_PreciseTime,&a0obj))
 		{
 			TimeStamp *ptr;
 
@@ -247,7 +268,7 @@ static PyObject *sipDo_TimeStamp_stamp(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TimeStamp,sipName_BALL_stamp);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TimeStamp,sipName_BALL_stamp);
 
 	return NULL;
 }
@@ -255,12 +276,13 @@ static PyObject *sipDo_TimeStamp_stamp(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_TimeStamp_getTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TimeStamp)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const PreciseTime *res;
 			TimeStamp *ptr;
@@ -276,7 +298,7 @@ static PyObject *sipDo_TimeStamp_getTime(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TimeStamp,sipName_BALL_getTime);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TimeStamp,sipName_BALL_getTime);
 
 	return NULL;
 }
@@ -307,12 +329,11 @@ static void sipDealloc_TimeStamp(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_TimeStamp(sipThisType *sipThis)
+static PyObject * sip__str__TimeStamp(PyObject *a0)
 {
-#line 66 "timeStamp.sip"
+#line 68 "timeStamp.sip"
   TimeStamp* ptr;
-  if ((ptr = (TimeStamp*)sipGetCppPtr(sipThis,sipClass_TimeStamp)) == NULL)
+  if ((ptr = (TimeStamp*)sipGetCppPtr((sipThisType*)a0,sipClass_TimeStamp)) == NULL)
     return NULL;
 
 	long secs = ptr->getTime().getSeconds();
@@ -324,7 +345,7 @@ static PyObject *sipPyInternalRepr_TimeStamp(sipThisType *sipThis)
 	time_str.append(usec_str.after("."));
 
   return PyString_FromString(time_str.c_str());
-#line 332 "../CPP/sipBALLTimeStamp.cpp"
+#line 353 "sipBALLTimeStamp.cpp"
 }
 
 PyObject *sipNew_TimeStamp(PyObject *sipSelf,PyObject *sipArgs)
@@ -336,6 +357,7 @@ PyObject *sipNew_TimeStamp(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -343,10 +365,10 @@ PyObject *sipNew_TimeStamp(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipTimeStamp();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -354,7 +376,7 @@ PyObject *sipNew_TimeStamp(PyObject *sipSelf,PyObject *sipArgs)
 		const TimeStamp *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_TimeStamp,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_TimeStamp,&a0obj))
 		{
 			int iserr = 0;
 
@@ -364,12 +386,12 @@ PyObject *sipNew_TimeStamp(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipTimeStamp(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_TimeStamp);
+		sipNoCtor(sipArgsParsed,sipName_BALL_TimeStamp);
 		return NULL;
 	}
 
@@ -406,17 +428,15 @@ int sipCanConvertTo_TimeStamp(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_TimeStamp);
 }
 
-void sipConvertTo_TimeStamp(PyObject *sipPy,TimeStamp **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_TimeStamp(PyObject *sipPy,TimeStamp **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_TimeStamp);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_TimeStamp);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -19,33 +19,53 @@ static PyTypeObject sipType_ForceField = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipForceField::sipForceField(): ForceField()
+sipForceField::sipForceField()
+    : ForceField()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipForceField::sipForceField(System& a0): ForceField(a0)
+sipForceField::sipForceField(System& a0)
+    : ForceField(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipForceField::sipForceField(System& a0,Options& a1): ForceField(a0,a1)
+sipForceField::sipForceField(System& a0,Options& a1)
+    : ForceField(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipForceField::sipForceField(const ForceField& a0): ForceField(a0)
+sipForceField::sipForceField(const ForceField& a0)
+    : ForceField(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipForceField::~sipForceField()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
+
 bool sipForceField::specificSetup()
+
 {
 	int relLock;
 
@@ -98,12 +118,13 @@ releaseLock:
 static PyObject *sipDo_ForceField_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			ForceField *ptr;
@@ -119,7 +140,7 @@ static PyObject *sipDo_ForceField_isValid(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -127,6 +148,7 @@ static PyObject *sipDo_ForceField_isValid(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
@@ -135,7 +157,7 @@ static PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
 		System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			bool res;
 			ForceField *ptr;
@@ -150,15 +172,7 @@ static PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-					try
-		{
-res = ptr -> ForceField::setup(* a0);
-		}
-		catch (FileNotFound e)
-		{
-			PyErr_SetString(PyExc_Exception, "FileNotFound");
-			return NULL;
-		}
+			res = ptr -> ForceField::setup(* a0);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -170,7 +184,7 @@ res = ptr -> ForceField::setup(* a0);
 		Options *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
 		{
 			bool res;
 			ForceField *ptr;
@@ -186,15 +200,7 @@ res = ptr -> ForceField::setup(* a0);
 			if (iserr)
 				return NULL;
 
-					try
-		{
-res = ptr -> ForceField::setup(* a0,* a1);
-		}
-		catch (FileNotFound e)
-		{
-			PyErr_SetString(PyExc_Exception, "FileNotFound");
-			return NULL;
-		}
+			res = ptr -> ForceField::setup(* a0,* a1);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -202,7 +208,7 @@ res = ptr -> ForceField::setup(* a0,* a1);
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -210,12 +216,13 @@ res = ptr -> ForceField::setup(* a0,* a1);
 static PyObject *sipDo_ForceField_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			ForceField *ptr;
@@ -231,7 +238,7 @@ static PyObject *sipDo_ForceField_specificSetup(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_specificSetup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_specificSetup);
 
 	return NULL;
 }
@@ -239,6 +246,7 @@ static PyObject *sipDo_ForceField_specificSetup(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_ForceField_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
@@ -247,7 +255,7 @@ static PyObject *sipDo_ForceField_setName(PyObject *sipThisObj,PyObject *sipArgs
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			ForceField *ptr;
 
@@ -273,7 +281,7 @@ static PyObject *sipDo_ForceField_setName(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_setName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_setName);
 
 	return NULL;
 }
@@ -281,12 +289,13 @@ static PyObject *sipDo_ForceField_setName(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_ForceField_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			String *res;
 			ForceField *ptr;
@@ -302,7 +311,7 @@ static PyObject *sipDo_ForceField_getName(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_getName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_getName);
 
 	return NULL;
 }
@@ -310,12 +319,13 @@ static PyObject *sipDo_ForceField_getName(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_ForceField_getNumberOfAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			ForceField *ptr;
@@ -331,7 +341,7 @@ static PyObject *sipDo_ForceField_getNumberOfAtoms(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_getNumberOfAtoms);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_getNumberOfAtoms);
 
 	return NULL;
 }
@@ -339,12 +349,13 @@ static PyObject *sipDo_ForceField_getNumberOfAtoms(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_ForceField_getNumberOfMovableAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			ForceField *ptr;
@@ -360,7 +371,7 @@ static PyObject *sipDo_ForceField_getNumberOfMovableAtoms(PyObject *sipThisObj,P
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_getNumberOfMovableAtoms);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_getNumberOfMovableAtoms);
 
 	return NULL;
 }
@@ -368,12 +379,13 @@ static PyObject *sipDo_ForceField_getNumberOfMovableAtoms(PyObject *sipThisObj,P
 static PyObject *sipDo_ForceField_getAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const AtomVector *res;
 			ForceField *ptr;
@@ -389,7 +401,7 @@ static PyObject *sipDo_ForceField_getAtoms(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_getAtoms);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_getAtoms);
 
 	return NULL;
 }
@@ -397,12 +409,13 @@ static PyObject *sipDo_ForceField_getAtoms(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_ForceField_getSystem(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			System *res;
 			ForceField *ptr;
@@ -418,7 +431,7 @@ static PyObject *sipDo_ForceField_getSystem(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_getSystem);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_getSystem);
 
 	return NULL;
 }
@@ -426,12 +439,13 @@ static PyObject *sipDo_ForceField_getSystem(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_ForceField_getUseSelection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			ForceField *ptr;
@@ -447,7 +461,7 @@ static PyObject *sipDo_ForceField_getUseSelection(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_getUseSelection);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_getUseSelection);
 
 	return NULL;
 }
@@ -455,6 +469,7 @@ static PyObject *sipDo_ForceField_getUseSelection(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_ForceField_setUseSelection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
@@ -462,7 +477,7 @@ static PyObject *sipDo_ForceField_setUseSelection(PyObject *sipThisObj,PyObject 
 	{
 		long a0;
 
-		if (sipParseArgs(sipArgs,"l",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"l",&a0))
 		{
 			ForceField *ptr;
 
@@ -478,7 +493,7 @@ static PyObject *sipDo_ForceField_setUseSelection(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_setUseSelection);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_setUseSelection);
 
 	return NULL;
 }
@@ -486,12 +501,13 @@ static PyObject *sipDo_ForceField_setUseSelection(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_ForceField_countComponents(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			ForceField *ptr;
@@ -507,7 +523,7 @@ static PyObject *sipDo_ForceField_countComponents(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_countComponents);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_countComponents);
 
 	return NULL;
 }
@@ -515,6 +531,7 @@ static PyObject *sipDo_ForceField_countComponents(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_ForceField_insertComponent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
@@ -523,7 +540,7 @@ static PyObject *sipDo_ForceField_insertComponent(PyObject *sipThisObj,PyObject 
 		ForceFieldComponent *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_ForceFieldComponent,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ForceFieldComponent,&a0obj))
 		{
 			ForceField *ptr;
 
@@ -546,7 +563,7 @@ static PyObject *sipDo_ForceField_insertComponent(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_insertComponent);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_insertComponent);
 
 	return NULL;
 }
@@ -554,6 +571,7 @@ static PyObject *sipDo_ForceField_insertComponent(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
@@ -562,7 +580,7 @@ static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject 
 		const ForceFieldComponent *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_ForceFieldComponent,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ForceFieldComponent,&a0obj))
 		{
 			ForceField *ptr;
 
@@ -587,7 +605,7 @@ static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject 
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			ForceField *ptr;
 
@@ -613,7 +631,7 @@ static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_removeComponent);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_removeComponent);
 
 	return NULL;
 }
@@ -621,6 +639,7 @@ static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_ForceField_getComponent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
@@ -628,7 +647,7 @@ static PyObject *sipDo_ForceField_getComponent(PyObject *sipThisObj,PyObject *si
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			ForceFieldComponent *res;
 			ForceField *ptr;
@@ -646,7 +665,7 @@ static PyObject *sipDo_ForceField_getComponent(PyObject *sipThisObj,PyObject *si
 		String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			ForceFieldComponent *res;
 			ForceField *ptr;
@@ -672,7 +691,7 @@ static PyObject *sipDo_ForceField_getComponent(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_getComponent);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_getComponent);
 
 	return NULL;
 }
@@ -680,12 +699,13 @@ static PyObject *sipDo_ForceField_getComponent(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_ForceField_getEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			ForceField *ptr;
@@ -701,7 +721,7 @@ static PyObject *sipDo_ForceField_getEnergy(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_getEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_getEnergy);
 
 	return NULL;
 }
@@ -709,12 +729,13 @@ static PyObject *sipDo_ForceField_getEnergy(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_ForceField_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			ForceField *ptr;
@@ -730,7 +751,7 @@ static PyObject *sipDo_ForceField_updateEnergy(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_updateEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_updateEnergy);
 
 	return NULL;
 }
@@ -738,12 +759,13 @@ static PyObject *sipDo_ForceField_updateEnergy(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_ForceField_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			ForceField *ptr;
 
@@ -759,7 +781,7 @@ static PyObject *sipDo_ForceField_updateForces(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_updateForces);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_updateForces);
 
 	return NULL;
 }
@@ -767,12 +789,13 @@ static PyObject *sipDo_ForceField_updateForces(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_ForceField_getRMSGradient(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			ForceField *ptr;
@@ -788,7 +811,7 @@ static PyObject *sipDo_ForceField_getRMSGradient(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_getRMSGradient);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_getRMSGradient);
 
 	return NULL;
 }
@@ -796,12 +819,13 @@ static PyObject *sipDo_ForceField_getRMSGradient(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_ForceField_getUpdateFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			ForceField *ptr;
@@ -817,7 +841,7 @@ static PyObject *sipDo_ForceField_getUpdateFrequency(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_getUpdateFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_getUpdateFrequency);
 
 	return NULL;
 }
@@ -825,12 +849,13 @@ static PyObject *sipDo_ForceField_getUpdateFrequency(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_ForceField_update(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceField)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			ForceField *ptr;
 
@@ -846,7 +871,7 @@ static PyObject *sipDo_ForceField_update(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceField,sipName_BALL_update);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceField,sipName_BALL_update);
 
 	return NULL;
 }
@@ -887,6 +912,7 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -894,10 +920,10 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipForceField();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -905,7 +931,7 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 		System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_System,&a0obj))
 		{
 			int iserr = 0;
 
@@ -915,7 +941,7 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipForceField(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -925,7 +951,7 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 		Options *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
 		{
 			int iserr = 0;
 
@@ -936,7 +962,7 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipForceField(* a0,* a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -944,7 +970,7 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 		const ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -954,12 +980,12 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipForceField(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_ForceField);
+		sipNoCtor(sipArgsParsed,sipName_BALL_ForceField);
 		return NULL;
 	}
 
@@ -978,38 +1004,6 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (!(sipFlags & SIP_SIMPLE))
 		((sipForceField *)sipNew) -> sipPyThis = sipThis;
-
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
-static PyObject *sipGetSetVar_ForceField_options(PyObject *sipThisObj,PyObject *valobj)
-{
-	int iserr = 0;
-	Options *val;
-	ForceField *ptr;
-
-	if ((ptr = (ForceField *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_ForceField)) == NULL)
-		return NULL;
-
-	if (valobj == NULL)
-	{
-		val = &ptr -> options;
-
-		valobj = sipMapCppToSelf(val,sipClass_Options);
-
-		return valobj;
-	}
-
-	val = sipForceConvertTo_Options(valobj,&iserr);
-
-	if (iserr)
-	{
-		sipBadSetType(sipName_BALL_ForceField,sipName_BALL_options);
-		return NULL;
-	}
-
-	ptr -> options = *val;
 
 	Py_INCREF(Py_None);
 	return Py_None;
@@ -1047,6 +1041,38 @@ static PyObject *sipGetSetVar_ForceField_periodic_boundary(PyObject *sipThisObj,
 	return Py_None;
 }
 
+static PyObject *sipGetSetVar_ForceField_options(PyObject *sipThisObj,PyObject *valobj)
+{
+	int iserr = 0;
+	Options *val;
+	ForceField *ptr;
+
+	if ((ptr = (ForceField *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_ForceField)) == NULL)
+		return NULL;
+
+	if (valobj == NULL)
+	{
+		val = &ptr -> options;
+
+		valobj = sipMapCppToSelf(val,sipClass_Options);
+
+		return valobj;
+	}
+
+	val = sipForceConvertTo_Options(valobj,&iserr);
+
+	if (iserr)
+	{
+		sipBadSetType(sipName_BALL_ForceField,sipName_BALL_options);
+		return NULL;
+	}
+
+	ptr -> options = *val;
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
 PyMethodDef sipClassAttrTab_ForceField[] = {
 	{sipName_BALL_isValid, sipDo_ForceField_isValid, METH_VARARGS, NULL},
 	{sipName_BALL_setup, sipDo_ForceField_setup, METH_VARARGS, NULL},
@@ -1073,8 +1099,8 @@ PyMethodDef sipClassAttrTab_ForceField[] = {
 };
 
 PyMethodDef sipClassVarTab_ForceField[] = {
-	{sipName_BALL_options, sipGetSetVar_ForceField_options, 0, NULL},
 	{sipName_BALL_periodic_boundary, sipGetSetVar_ForceField_periodic_boundary, 0, NULL},
+	{sipName_BALL_options, sipGetSetVar_ForceField_options, 0, NULL},
 	{NULL}
 };
 
@@ -1088,17 +1114,15 @@ int sipCanConvertTo_ForceField(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_ForceField);
 }
 
-void sipConvertTo_ForceField(PyObject *sipPy,ForceField **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_ForceField(PyObject *sipPy,ForceField **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_ForceField);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_ForceField);
+		*sipCppPtr = NULL;
 
 		return;
 	}

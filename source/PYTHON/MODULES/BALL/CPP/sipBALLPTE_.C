@@ -19,15 +19,29 @@ static PyTypeObject sipType_PTE_ = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_PTE__getElement(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"-i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-i",&a0))
 		{
 			Element *res;
 
@@ -41,7 +55,7 @@ static PyObject *sipDo_PTE__getElement(PyObject *,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
 		{
 			Element *res;
 
@@ -63,7 +77,7 @@ static PyObject *sipDo_PTE__getElement(PyObject *,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PTE_,sipName_BALL_getElement);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PTE_,sipName_BALL_getElement);
 
 	return NULL;
 }
@@ -103,6 +117,7 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -110,10 +125,10 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new PTE_();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -121,7 +136,7 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 		const PTE_ *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_PTE_,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PTE_,&a0obj))
 		{
 			int iserr = 0;
 
@@ -131,12 +146,12 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PTE_(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_PTE_);
+		sipNoCtor(sipArgsParsed,sipName_BALL_PTE_);
 		return NULL;
 	}
 
@@ -164,17 +179,15 @@ int sipCanConvertTo_PTE_(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_PTE_);
 }
 
-void sipConvertTo_PTE_(PyObject *sipPy,PTE_ **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_PTE_(PyObject *sipPy,PTE_ **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PTE_);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_PTE_);
+		*sipCppPtr = NULL;
 
 		return;
 	}

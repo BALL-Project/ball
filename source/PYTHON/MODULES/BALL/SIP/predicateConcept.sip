@@ -1,4 +1,4 @@
-// $Id: predicateConcept.sip,v 1.1 2000/07/18 21:27:58 oliver Exp $
+// $Id: predicateConcept.sip,v 1.2 2001/07/25 11:32:34 oliver Exp $
 
 class UnaryCompositePredicate 
 //  : public unary_function<T, bool> 
@@ -9,7 +9,9 @@ class UnaryCompositePredicate
 	typedef UnaryPredicate<Composite> UnaryCompositePredicate;
 %End
   public:
-  virtual bool operator() (const Composite&) const;
+	UnaryCompositePredicate() throw();
+	~UnaryCompositePredicate() throw();
+  virtual bool operator() (const Composite&) const throw();
 };
 
 
@@ -22,7 +24,7 @@ class UnaryAtomPredicate
 	typedef UnaryPredicate<Atom> UnaryAtomPredicate;
 %End
   public:
-  virtual bool operator() (const Atom&) const;
+	UnaryAtomPredicate() throw();
+	~UnaryAtomPredicate() throw();
+  virtual bool operator() (const Atom&) const throw();
 };
-
-

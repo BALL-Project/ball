@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.sip,v 1.2 2000/10/05 22:33:35 oliver Exp $
+// $Id: compositeDescriptor.sip,v 1.3 2001/07/25 11:32:32 oliver Exp $
 
 class CompositeDescriptor
 {
@@ -13,9 +13,9 @@ class CompositeDescriptor
   CompositeDescriptor();
   CompositeDescriptor
     (const CompositeDescriptor& /composite_descriptor/, bool /deep/ = true);
-  ~CompositeDescriptor();
-  virtual void clear();
-  virtual void destroy();
+  ~CompositeDescriptor() throw();
+  virtual void clear() throw();
+  virtual void destroy() throw();
   void set
     (CompositeDescriptor& /composite_descriptor/, bool /deep/ = true);
   // CompositeDescriptor& operator = (CompositeDescriptor& composite_descriptor);
@@ -36,7 +36,7 @@ class CompositeDescriptor
   if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
     return NULL;
 
-  if (sipParseArgs(sipArgs,""))
+  if (sipParseArgs(&sipArgsParsed,sipArgs,""))
   {
     Composite *res;
     CompositeDescriptor *ptr;
@@ -58,16 +58,17 @@ class CompositeDescriptor
   void drawDirect(bool /dynamic/ = false, bool /with_names/ = false);
   bool isShallowCopy() const;
   bool isDeepCopy() const;
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // virtual void read(std::istream& s);
   // virtual void write(std::ostream& s) const;
 
 	// __repr__ code:
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   CompositeDescriptor* ptr;
-  if ((ptr = (CompositeDescriptor*)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
+  if ((ptr = (CompositeDescriptor*)sipGetCppPtr((sipThisType*)a0,sipClass_CompositeDescriptor)) == NULL)
     return NULL;
 
 	String tmp = String("CompositeDescriptor { ") + ptr->getName() + " }";

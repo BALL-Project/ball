@@ -19,36 +19,57 @@ static PyTypeObject sipType_RuleProcessor = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipRuleProcessor::sipRuleProcessor(): RuleProcessor()
+sipRuleProcessor::sipRuleProcessor()
+    : RuleProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
-sipRuleProcessor::sipRuleProcessor(INIFile& a0,const String& a1): RuleProcessor(a0,a1)
+sipRuleProcessor::sipRuleProcessor(INIFile& a0,const String& a1)
+    : RuleProcessor(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
-sipRuleProcessor::sipRuleProcessor(const RuleProcessor& a0): RuleProcessor(a0)
+sipRuleProcessor::sipRuleProcessor(const RuleProcessor& a0)
+    : RuleProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipRuleProcessor::~sipRuleProcessor()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipRuleProcessor::start()
+
+Processor::Result sipRuleProcessor::operator ()(Atom& a0)
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_start,&relLock) ?
-		sipRuleProcessor::sipVH_start(&sipPyMethods[0],sipPyThis,relLock) :
-		RuleProcessor::start();
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
+		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		RuleProcessor::operator ()(a0);
 }
+
 bool sipRuleProcessor::finish()
+
 {
 	int relLock;
 
@@ -56,54 +77,15 @@ bool sipRuleProcessor::finish()
 		sipRuleProcessor::sipVH_finish(&sipPyMethods[1],sipPyThis,relLock) :
 		RuleProcessor::finish();
 }
-Processor::Result sipRuleProcessor::operator()(Atom& a0)
+
+bool sipRuleProcessor::start()
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_Operator__call__,&relLock) ?
-		sipAtomProcessor::sipVH_Operator__call__(&sipPyMethods[2],sipPyThis,relLock,a0) :
-		RuleProcessor::operator()(a0);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipRuleProcessor::sipVH_start(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_RuleProcessor,sipName_BALL_start);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
+	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_start,&relLock) ?
+		sipRuleProcessor::sipVH_start(&sipPyMethods[2],sipPyThis,relLock) :
+		RuleProcessor::start();
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -147,15 +129,57 @@ releaseLock:
 	return res;
 }
 
+// The common handler for all classes that inherit this virtual member
+// function.
+
+bool sipRuleProcessor::sipVH_start(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	bool res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = (bool)PyInt_AsLong(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_RuleProcessor,sipName_BALL_start);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
+}
+
 static PyObject *sipDo_RuleProcessor_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RuleProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			RuleProcessor *ptr;
 
@@ -171,7 +195,7 @@ static PyObject *sipDo_RuleProcessor_clear(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RuleProcessor,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -179,12 +203,13 @@ static PyObject *sipDo_RuleProcessor_clear(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_RuleProcessor_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RuleProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			RuleProcessor *ptr;
 
@@ -200,7 +225,7 @@ static PyObject *sipDo_RuleProcessor_destroy(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RuleProcessor,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -208,6 +233,7 @@ static PyObject *sipDo_RuleProcessor_destroy(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_RuleProcessor_initialize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RuleProcessor)) == NULL)
 		return NULL;
@@ -218,7 +244,7 @@ static PyObject *sipDo_RuleProcessor_initialize(PyObject *sipThisObj,PyObject *s
 		const String *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			bool res;
 			RuleProcessor *ptr;
@@ -245,7 +271,7 @@ static PyObject *sipDo_RuleProcessor_initialize(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RuleProcessor,sipName_BALL_initialize);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL_initialize);
 
 	return NULL;
 }
@@ -253,6 +279,7 @@ static PyObject *sipDo_RuleProcessor_initialize(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_RuleProcessor_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RuleProcessor)) == NULL)
 		return NULL;
@@ -261,7 +288,7 @@ static PyObject *sipDo_RuleProcessor_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const RuleProcessor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_RuleProcessor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_RuleProcessor,&a0obj))
 		{
 			RuleProcessor *ptr;
 
@@ -284,7 +311,7 @@ static PyObject *sipDo_RuleProcessor_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RuleProcessor,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL_set);
 
 	return NULL;
 }
@@ -292,12 +319,13 @@ static PyObject *sipDo_RuleProcessor_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_RuleProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RuleProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			RuleProcessor *ptr;
@@ -313,7 +341,7 @@ static PyObject *sipDo_RuleProcessor_start(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RuleProcessor,sipName_BALL_start);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL_start);
 
 	return NULL;
 }
@@ -321,12 +349,13 @@ static PyObject *sipDo_RuleProcessor_start(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_RuleProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RuleProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			RuleProcessor *ptr;
@@ -342,14 +371,15 @@ static PyObject *sipDo_RuleProcessor_finish(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RuleProcessor,sipName_BALL_finish);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL_finish);
 
 	return NULL;
 }
 
-static PyObject *sipDo_RuleProcessor_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_RuleProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RuleProcessor)) == NULL)
 		return NULL;
@@ -358,7 +388,7 @@ static PyObject *sipDo_RuleProcessor_Operator__call__(PyObject *sipThisObj,PyObj
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Processor::Result res;
 			RuleProcessor *ptr;
@@ -373,7 +403,7 @@ static PyObject *sipDo_RuleProcessor_Operator__call__(PyObject *sipThisObj,PyObj
 			if (iserr)
 				return NULL;
 
-			res = ptr -> RuleProcessor::operator()(* a0);
+			res = ptr -> RuleProcessor::operator ()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -381,7 +411,7 @@ static PyObject *sipDo_RuleProcessor_Operator__call__(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RuleProcessor,sipName_BALL_Operator__call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL___call__);
 
 	return NULL;
 }
@@ -389,6 +419,7 @@ static PyObject *sipDo_RuleProcessor_Operator__call__(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_RuleProcessor_evaluate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RuleProcessor)) == NULL)
 		return NULL;
@@ -397,7 +428,7 @@ static PyObject *sipDo_RuleProcessor_evaluate(PyObject *sipThisObj,PyObject *sip
 		const Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			String *res;
 			RuleProcessor *ptr;
@@ -420,7 +451,7 @@ static PyObject *sipDo_RuleProcessor_evaluate(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RuleProcessor,sipName_BALL_evaluate);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL_evaluate);
 
 	return NULL;
 }
@@ -428,12 +459,13 @@ static PyObject *sipDo_RuleProcessor_evaluate(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_RuleProcessor_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RuleProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			RuleProcessor *ptr;
@@ -449,7 +481,7 @@ static PyObject *sipDo_RuleProcessor_isValid(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RuleProcessor,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RuleProcessor,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -495,6 +527,7 @@ PyObject *sipNew_RuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -502,10 +535,10 @@ PyObject *sipNew_RuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipRuleProcessor();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -515,7 +548,7 @@ PyObject *sipNew_RuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const String *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			int iserr = 0;
 
@@ -529,7 +562,7 @@ PyObject *sipNew_RuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -537,7 +570,7 @@ PyObject *sipNew_RuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const RuleProcessor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_RuleProcessor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_RuleProcessor,&a0obj))
 		{
 			int iserr = 0;
 
@@ -547,12 +580,12 @@ PyObject *sipNew_RuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipRuleProcessor(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_RuleProcessor);
+		sipNoCtor(sipArgsParsed,sipName_BALL_RuleProcessor);
 		return NULL;
 	}
 
@@ -583,7 +616,7 @@ PyMethodDef sipClassAttrTab_RuleProcessor[] = {
 	{sipName_BALL_set, sipDo_RuleProcessor_set, METH_VARARGS, NULL},
 	{sipName_BALL_start, sipDo_RuleProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_RuleProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__call__, sipDo_RuleProcessor_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL___call__, sipDo_RuleProcessor___call__, METH_VARARGS, NULL},
 	{sipName_BALL_evaluate, sipDo_RuleProcessor_evaluate, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_RuleProcessor_isValid, METH_VARARGS, NULL},
 	{NULL}
@@ -594,17 +627,15 @@ int sipCanConvertTo_RuleProcessor(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_RuleProcessor);
 }
 
-void sipConvertTo_RuleProcessor(PyObject *sipPy,RuleProcessor **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_RuleProcessor(PyObject *sipPy,RuleProcessor **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_RuleProcessor);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_RuleProcessor);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -1,4 +1,4 @@
-// $Id: pyBondList.C,v 1.2 2000/08/30 19:58:38 oliver Exp $
+// $Id: pyBondList.C,v 1.3 2001/07/25 11:34:51 oliver Exp $
 
 #include <BALL/PYTHON/pyBondList.h>
 #include <BALL/KERNEL/atom.h>
@@ -20,6 +20,7 @@ namespace BALL
 	}
 
 	PyBondList::~PyBondList()
+		throw()
 	{
 	}
 
@@ -40,17 +41,17 @@ namespace BALL
 
 		// iterate over all atoms
 		HashSet<Bond*> bond_set;
-		AtomIterator atom_it = fragment.beginAtom();
+		AtomConstIterator atom_it = fragment.beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
 			if (atom_it->isSelected() || !selected_only)
 			{
 				// it the atom is selected or selection is irrelevant,
 				// insert all bonds into the bond_set
-				Atom::BondIterator bond_it = atom_it->beginBond();
+				Atom::BondConstIterator bond_it = atom_it->beginBond();
 				for (; +bond_it; ++bond_it)
 				{
-					bond_set.insert(&*bond_it);
+					bond_set.insert(const_cast<Bond*>(&*bond_it));
 				}
 			}
 		}
@@ -67,10 +68,10 @@ namespace BALL
 		// clear the old contents of the list
 		clear();
 
-		Atom::BondIterator bond_it = atom.beginBond();
+		Atom::BondConstIterator bond_it = atom.beginBond();
 		for (; +bond_it; ++bond_it)
 		{
-			push_back(&*bond_it);
+			push_back(const_cast<Bond*>(&*bond_it));
 		}
 	}	
 }

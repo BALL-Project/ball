@@ -34,7 +34,7 @@ PyObject *sipConvertFrom_PySecondaryStructureList(const PySecondaryStructureList
 	}
 
 	return pl;
-#line 42 "../CPP/sipBALLPySecondaryStructureList.cpp"
+#line 42 "sipBALLPySecondaryStructureList.cpp"
 }
 
 PyObject *sipClass_PySecondaryStructureList;
@@ -43,23 +43,13 @@ int sipCanConvertTo_PySecondaryStructureList(PyObject *sipPy)
 {
 #line 37 "pySecondaryStructureList.sip"
 	return PyList_Check(sipPy);
-#line 51 "../CPP/sipBALLPySecondaryStructureList.cpp"
+#line 51 "sipBALLPySecondaryStructureList.cpp"
 }
 
-int sipConvertTo_PySecondaryStructureList(PyObject *sipPy,PySecondaryStructureList **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_PySecondaryStructureList(PyObject *sipPy,PySecondaryStructureList **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
-
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PySecondaryStructureList);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
+		return 0;
 
 #line 41 "pySecondaryStructureList.sip"
 	// Convert a Python list of SecondaryStructure instances to an SecondaryStructureList object on the
@@ -85,7 +75,7 @@ int sipConvertTo_PySecondaryStructureList(PyObject *sipPy,PySecondaryStructureLi
 	*sipCppPtr = sec_struc_list;
 
 	return 1;
-#line 93 "../CPP/sipBALLPySecondaryStructureList.cpp"
+#line 83 "sipBALLPySecondaryStructureList.cpp"
 }
 
 PySecondaryStructureList *sipForceConvertTo_PySecondaryStructureList(PyObject *valobj,int *iserrp)

@@ -19,94 +19,106 @@ static PyTypeObject sipType_DCDFile = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipDCDFile::sipDCDFile(): DCDFile()
+sipDCDFile::sipDCDFile()
+   throw()  : DCDFile()
 {
-	sipCommonCtor(sipPyMethods,7);
+	sipCommonCtor(sipPyMethods,5);
 }
 
-sipDCDFile::sipDCDFile(const DCDFile& a0): DCDFile(a0)
+sipDCDFile::sipDCDFile(const DCDFile& a0)
+   throw(FileNotFound)  : DCDFile(a0)
 {
-	sipCommonCtor(sipPyMethods,7);
+	sipCommonCtor(sipPyMethods,5);
 }
 
-sipDCDFile::sipDCDFile(const String& a0,OpenMode a1): DCDFile(a0,a1)
+sipDCDFile::sipDCDFile(const String& a0,std__openmode a1)
+   throw()  : DCDFile(a0,a1)
 {
-	sipCommonCtor(sipPyMethods,7);
+	sipCommonCtor(sipPyMethods,5);
 }
 
 sipDCDFile::~sipDCDFile()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipDCDFile::clear()
+
+bool sipDCDFile::read(SnapShot& a0)
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipTrajectoryFile::sipVH_clear(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		DCDFile::clear();
-}
-bool sipDCDFile::readHeader()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_readHeader,&relLock) ?
-		sipTrajectoryFile::sipVH_readHeader(&sipPyMethods[1],sipPyThis,relLock) :
-		DCDFile::readHeader();
-}
-bool sipDCDFile::updateHeader(const SnapShotManager& a0)
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_updateHeader,&relLock) ?
-		sipTrajectoryFile::sipVH_updateHeader(&sipPyMethods[2],sipPyThis,relLock,a0) :
-		DCDFile::updateHeader(a0);
-}
-bool sipDCDFile::writeHeader()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_writeHeader,&relLock) ?
-		sipTrajectoryFile::sipVH_writeHeader(&sipPyMethods[3],sipPyThis,relLock) :
-		DCDFile::writeHeader();
-}
-bool sipDCDFile::read(SnapShotManager& a0)
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_read,&relLock) ?
-		sipTrajectoryFile::sipVH_read(&sipPyMethods[4],sipPyThis,relLock,a0) :
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_read,&relLock) ?
+		sipTrajectoryFile::sipVH_read(&sipPyMethods[0],sipPyThis,relLock,a0) :
 		DCDFile::read(a0);
 }
-bool sipDCDFile::write(const SnapShotManager& a0)
-{
-	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_write,&relLock) ?
-		sipTrajectoryFile::sipVH_write(&sipPyMethods[5],sipPyThis,relLock,a0) :
-		DCDFile::write(a0);
-}
 bool sipDCDFile::append(const SnapShot& a0)
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_append,&relLock) ?
-		sipTrajectoryFile::sipVH_append(&sipPyMethods[6],sipPyThis,relLock,a0) :
+	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_append,&relLock) ?
+		sipTrajectoryFile::sipVH_append(&sipPyMethods[1],sipPyThis,relLock,a0) :
 		DCDFile::append(a0);
+}
+
+bool sipDCDFile::writeHeader()
+ throw()
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_writeHeader,&relLock) ?
+		sipTrajectoryFile::sipVH_writeHeader(&sipPyMethods[2],sipPyThis,relLock) :
+		DCDFile::writeHeader();
+}
+
+bool sipDCDFile::readHeader()
+ throw()
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_readHeader,&relLock) ?
+		sipTrajectoryFile::sipVH_readHeader(&sipPyMethods[3],sipPyThis,relLock) :
+		DCDFile::readHeader();
+}
+
+void sipDCDFile::clear()
+ throw()
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipTrajectoryFile::sipVH_clear(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		DCDFile::clear();
 }
 
 static PyObject *sipDo_DCDFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			DCDFile *ptr;
 
@@ -122,7 +134,137 @@ static PyObject *sipDo_DCDFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_DCDFile,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_clear);
+
+	return NULL;
+}
+
+static PyObject *sipDo_DCDFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
+		return NULL;
+
+	{
+		const DCDFile *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_DCDFile,&a0obj))
+		{
+			bool res;
+			DCDFile *ptr;
+
+			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_DCDFile(a0obj,(DCDFile **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> DCDFile::operator ==(* a0);
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL___cmp__);
+
+	return NULL;
+}
+
+static PyObject *sipDo_DCDFile_isSwappingBytes(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
+		{
+			bool res;
+			DCDFile *ptr;
+
+			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
+				return NULL;
+
+			res = ptr -> DCDFile::isSwappingBytes();
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_isSwappingBytes);
+
+	return NULL;
+}
+
+static PyObject *sipDo_DCDFile_hasVelocities(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
+		{
+			bool res;
+			DCDFile *ptr;
+
+			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
+				return NULL;
+
+			res = ptr -> DCDFile::hasVelocities();
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_hasVelocities);
+
+	return NULL;
+}
+
+static PyObject *sipDo_DCDFile_init(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
+		{
+			bool res;
+			DCDFile *ptr;
+
+			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
+				return NULL;
+
+			res = ptr -> DCDFile::init();
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_init);
 
 	return NULL;
 }
@@ -130,12 +272,13 @@ static PyObject *sipDo_DCDFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_DCDFile_readHeader(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			DCDFile *ptr;
@@ -151,46 +294,7 @@ static PyObject *sipDo_DCDFile_readHeader(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_DCDFile,sipName_BALL_readHeader);
-
-	return NULL;
-}
-
-static PyObject *sipDo_DCDFile_updateHeader(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
-		return NULL;
-
-	{
-		const SnapShotManager *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SnapShotManager,&a0obj))
-		{
-			bool res;
-			DCDFile *ptr;
-
-			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_SnapShotManager(a0obj,(SnapShotManager **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> DCDFile::updateHeader(* a0);
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_DCDFile,sipName_BALL_updateHeader);
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_readHeader);
 
 	return NULL;
 }
@@ -198,12 +302,13 @@ static PyObject *sipDo_DCDFile_updateHeader(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_DCDFile_writeHeader(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			DCDFile *ptr;
@@ -219,85 +324,7 @@ static PyObject *sipDo_DCDFile_writeHeader(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_DCDFile,sipName_BALL_writeHeader);
-
-	return NULL;
-}
-
-static PyObject *sipDo_DCDFile_read(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
-		return NULL;
-
-	{
-		SnapShotManager *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SnapShotManager,&a0obj))
-		{
-			bool res;
-			DCDFile *ptr;
-
-			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_SnapShotManager(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> DCDFile::read(* a0);
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_DCDFile,sipName_BALL_read);
-
-	return NULL;
-}
-
-static PyObject *sipDo_DCDFile_write(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
-		return NULL;
-
-	{
-		const SnapShotManager *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SnapShotManager,&a0obj))
-		{
-			bool res;
-			DCDFile *ptr;
-
-			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_SnapShotManager(a0obj,(SnapShotManager **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> DCDFile::write(* a0);
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_DCDFile,sipName_BALL_write);
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_writeHeader);
 
 	return NULL;
 }
@@ -305,6 +332,7 @@ static PyObject *sipDo_DCDFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_DCDFile_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
 		return NULL;
@@ -313,7 +341,7 @@ static PyObject *sipDo_DCDFile_append(PyObject *sipThisObj,PyObject *sipArgs)
 		const SnapShot *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SnapShot,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SnapShot,&a0obj))
 		{
 			bool res;
 			DCDFile *ptr;
@@ -336,7 +364,177 @@ static PyObject *sipDo_DCDFile_append(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_DCDFile,sipName_BALL_append);
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_append);
+
+	return NULL;
+}
+
+static PyObject *sipDo_DCDFile_read(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
+		return NULL;
+
+	{
+		SnapShot *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SnapShot,&a0obj))
+		{
+			bool res;
+			DCDFile *ptr;
+
+			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_SnapShot(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> DCDFile::read(* a0);
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_read);
+
+	return NULL;
+}
+
+static PyObject *sipDo_DCDFile_getHeader(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
+		{
+			const DCDHeader *res;
+			DCDFile *ptr;
+
+			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
+				return NULL;
+
+			res = &ptr -> DCDFile::getHeader();
+
+			return sipMapCppToSelf(res,sipClass_DCDHeader);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_getHeader);
+
+	return NULL;
+}
+
+static PyObject *sipDo_DCDFile_setHeader(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
+		return NULL;
+
+	{
+		const DCDHeader *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_DCDHeader,&a0obj))
+		{
+			DCDFile *ptr;
+
+			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_DCDHeader(a0obj,(DCDHeader **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			ptr -> DCDFile::setHeader(* a0);
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_setHeader);
+
+	return NULL;
+}
+
+static PyObject *sipDo_DCDFile_enableVelocityStorage(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
+		{
+			DCDFile *ptr;
+
+			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
+				return NULL;
+
+			ptr -> DCDFile::enableVelocityStorage();
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_enableVelocityStorage);
+
+	return NULL;
+}
+
+static PyObject *sipDo_DCDFile_disableVelocityStorage(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_DCDFile)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
+		{
+			DCDFile *ptr;
+
+			if ((ptr = (DCDFile *)sipGetCppPtr(sipThis,sipClass_DCDFile)) == NULL)
+				return NULL;
+
+			ptr -> DCDFile::disableVelocityStorage();
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_DCDFile,sipName_BALL_disableVelocityStorage);
 
 	return NULL;
 }
@@ -382,6 +580,7 @@ PyObject *sipNew_DCDFile(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -389,10 +588,10 @@ PyObject *sipNew_DCDFile(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipDCDFile();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -400,7 +599,7 @@ PyObject *sipNew_DCDFile(PyObject *sipSelf,PyObject *sipArgs)
 		const DCDFile *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_DCDFile,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_DCDFile,&a0obj))
 		{
 			int iserr = 0;
 
@@ -410,22 +609,22 @@ PyObject *sipNew_DCDFile(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipDCDFile(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
 		const String *a0;
 		PyObject *a0obj;
-		OpenMode *a1;
-		PyObject *a1obj;
+		std__openmode *a1 = (std__openmode *)&File::IN;
+		PyObject *a1obj = NULL;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_OpenMode,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_std__openmode,&a1obj))
 		{
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
-			int istemp1 = sipConvertTo_OpenMode(a1obj,&a1,1,&iserr);
+			sipConvertTo_std__openmode(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -434,15 +633,12 @@ PyObject *sipNew_DCDFile(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-
-			if (istemp1)
-				delete a1;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_DCDFile);
+		sipNoCtor(sipArgsParsed,sipName_BALL_DCDFile);
 		return NULL;
 	}
 
@@ -468,12 +664,18 @@ PyObject *sipNew_DCDFile(PyObject *sipSelf,PyObject *sipArgs)
 
 PyMethodDef sipClassAttrTab_DCDFile[] = {
 	{sipName_BALL_clear, sipDo_DCDFile_clear, METH_VARARGS, NULL},
+	{sipName_BALL___cmp__, sipDo_DCDFile___cmp__, METH_VARARGS, NULL},
+	{sipName_BALL_isSwappingBytes, sipDo_DCDFile_isSwappingBytes, METH_VARARGS, NULL},
+	{sipName_BALL_hasVelocities, sipDo_DCDFile_hasVelocities, METH_VARARGS, NULL},
+	{sipName_BALL_init, sipDo_DCDFile_init, METH_VARARGS, NULL},
 	{sipName_BALL_readHeader, sipDo_DCDFile_readHeader, METH_VARARGS, NULL},
-	{sipName_BALL_updateHeader, sipDo_DCDFile_updateHeader, METH_VARARGS, NULL},
 	{sipName_BALL_writeHeader, sipDo_DCDFile_writeHeader, METH_VARARGS, NULL},
-	{sipName_BALL_read, sipDo_DCDFile_read, METH_VARARGS, NULL},
-	{sipName_BALL_write, sipDo_DCDFile_write, METH_VARARGS, NULL},
 	{sipName_BALL_append, sipDo_DCDFile_append, METH_VARARGS, NULL},
+	{sipName_BALL_read, sipDo_DCDFile_read, METH_VARARGS, NULL},
+	{sipName_BALL_getHeader, sipDo_DCDFile_getHeader, METH_VARARGS, NULL},
+	{sipName_BALL_setHeader, sipDo_DCDFile_setHeader, METH_VARARGS, NULL},
+	{sipName_BALL_enableVelocityStorage, sipDo_DCDFile_enableVelocityStorage, METH_VARARGS, NULL},
+	{sipName_BALL_disableVelocityStorage, sipDo_DCDFile_disableVelocityStorage, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -482,17 +684,15 @@ int sipCanConvertTo_DCDFile(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_DCDFile);
 }
 
-void sipConvertTo_DCDFile(PyObject *sipPy,DCDFile **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_DCDFile(PyObject *sipPy,DCDFile **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_DCDFile);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_DCDFile);
+		*sipCppPtr = NULL;
 
 		return;
 	}

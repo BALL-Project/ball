@@ -6,7 +6,7 @@
 PyObject *sipClass_PDBAtom;
 
 static void sipDealloc_PDBAtom(sipThisType *);
-static PyObject *sipPyInternalRepr_PDBAtom(sipThisType *);
+static PyObject * sip__str__PDBAtom(PyObject *a0);
 
 static PyTypeObject sipType_PDBAtom = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,87 +19,116 @@ static PyTypeObject sipType_PDBAtom = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_PDBAtom,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__PDBAtom,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipPDBAtom::sipPDBAtom(): PDBAtom()
+sipPDBAtom::sipPDBAtom()
+    : PDBAtom()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipPDBAtom::sipPDBAtom(const PDBAtom& a0,bool a1): PDBAtom(a0,a1)
+sipPDBAtom::sipPDBAtom(const PDBAtom& a0,bool a1)
+    : PDBAtom(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipPDBAtom::sipPDBAtom(Element& a0,const String& a1,const String& a2,AtomType a3,const Vector3& a4,const Vector3& a5,const Vector3& a6,float a7,float a8,char a9,char a10,char a11,float a12,float a13): PDBAtom(a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
+sipPDBAtom::sipPDBAtom(Element& a0,const String& a1,const String& a2,AtomType a3,const Vector3& a4,const Vector3& a5,const Vector3& a6,float a7,float a8,char a9,char a10,char a11,float a12,float a13)
+    : PDBAtom(a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipPDBAtom::sipPDBAtom(const PDBAtom& a0): PDBAtom(a0)
+sipPDBAtom::sipPDBAtom(const PDBAtom& a0)
+    : PDBAtom(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipPDBAtom::~sipPDBAtom()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipPDBAtom::select()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_select,&relLock))
-		sipSelectable::sipVH_select(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		Composite::select();
-}
 void sipPDBAtom::deselect()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
-		sipSelectable::sipVH_deselect(&sipPyMethods[1],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
+		sipSelectable::sipVH_deselect(&sipPyMethods[0],sipPyThis,relLock);
 	else
 		Composite::deselect();
 }
-void sipPDBAtom::clear()
+
+void sipPDBAtom::select()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipObject::sipVH_clear(&sipPyMethods[2],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_select,&relLock))
+		sipSelectable::sipVH_select(&sipPyMethods[1],sipPyThis,relLock);
 	else
-		PDBAtom::clear();
+		Composite::select();
 }
+
+bool sipPDBAtom::isValid() const
+ throw()
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipObject::sipVH_isValid(&sipPyMethods[2],sipPyThis,relLock) :
+		PDBAtom::isValid();
+}
+
 void sipPDBAtom::destroy()
+ throw()
 {
 	int relLock;
 
 	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_destroy,&relLock))
-		sipObject::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
+		sipComposite::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
 	else
 		PDBAtom::destroy();
 }
-bool sipPDBAtom::isValid() const
+
+void sipPDBAtom::clear()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipObject::sipVH_isValid(&sipPyMethods[4],sipPyThis,relLock) :
-		PDBAtom::isValid();
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipObject::sipVH_clear(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		PDBAtom::clear();
 }
 
 static PyObject *sipDo_PDBAtom_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PDBAtom *ptr;
 
@@ -115,7 +144,7 @@ static PyObject *sipDo_PDBAtom_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -123,12 +152,13 @@ static PyObject *sipDo_PDBAtom_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_PDBAtom_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PDBAtom *ptr;
 
@@ -144,7 +174,7 @@ static PyObject *sipDo_PDBAtom_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -152,6 +182,7 @@ static PyObject *sipDo_PDBAtom_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_PDBAtom_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
@@ -161,7 +192,7 @@ static PyObject *sipDo_PDBAtom_set(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_PDBAtom,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_PDBAtom,&a0obj,&a1))
 		{
 			PDBAtom *ptr;
 
@@ -184,7 +215,7 @@ static PyObject *sipDo_PDBAtom_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_set);
 
 	return NULL;
 }
@@ -192,6 +223,7 @@ static PyObject *sipDo_PDBAtom_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_PDBAtom_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
@@ -201,7 +233,7 @@ static PyObject *sipDo_PDBAtom_get(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_PDBAtom,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_PDBAtom,&a0obj,&a1))
 		{
 			PDBAtom *ptr;
 
@@ -224,7 +256,7 @@ static PyObject *sipDo_PDBAtom_get(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_get);
 
 	return NULL;
 }
@@ -232,6 +264,7 @@ static PyObject *sipDo_PDBAtom_get(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_PDBAtom_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
@@ -240,7 +273,7 @@ static PyObject *sipDo_PDBAtom_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		PDBAtom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PDBAtom,&a0obj))
 		{
 			PDBAtom *ptr;
 
@@ -263,7 +296,7 @@ static PyObject *sipDo_PDBAtom_swap(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -271,12 +304,13 @@ static PyObject *sipDo_PDBAtom_swap(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_PDBAtom_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Protein *res;
 			PDBAtom *ptr;
@@ -291,7 +325,7 @@ static PyObject *sipDo_PDBAtom_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Protein *res;
 			PDBAtom *ptr;
@@ -307,7 +341,7 @@ static PyObject *sipDo_PDBAtom_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getProtein);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_getProtein);
 
 	return NULL;
 }
@@ -315,12 +349,13 @@ static PyObject *sipDo_PDBAtom_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_PDBAtom_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Chain *res;
 			PDBAtom *ptr;
@@ -335,7 +370,7 @@ static PyObject *sipDo_PDBAtom_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Chain *res;
 			PDBAtom *ptr;
@@ -351,7 +386,7 @@ static PyObject *sipDo_PDBAtom_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getChain);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_getChain);
 
 	return NULL;
 }
@@ -359,12 +394,13 @@ static PyObject *sipDo_PDBAtom_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_PDBAtom_getResidue(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Residue *res;
 			PDBAtom *ptr;
@@ -379,7 +415,7 @@ static PyObject *sipDo_PDBAtom_getResidue(PyObject *sipThisObj,PyObject *sipArgs
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Residue *res;
 			PDBAtom *ptr;
@@ -395,7 +431,7 @@ static PyObject *sipDo_PDBAtom_getResidue(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getResidue);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_getResidue);
 
 	return NULL;
 }
@@ -403,6 +439,7 @@ static PyObject *sipDo_PDBAtom_getResidue(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_PDBAtom_setBranchDesignator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
@@ -410,7 +447,7 @@ static PyObject *sipDo_PDBAtom_setBranchDesignator(PyObject *sipThisObj,PyObject
 	{
 		char a0;
 
-		if (sipParseArgs(sipArgs,"c",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"c",&a0))
 		{
 			PDBAtom *ptr;
 
@@ -426,7 +463,7 @@ static PyObject *sipDo_PDBAtom_setBranchDesignator(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_setBranchDesignator);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_setBranchDesignator);
 
 	return NULL;
 }
@@ -434,12 +471,13 @@ static PyObject *sipDo_PDBAtom_setBranchDesignator(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_PDBAtom_getBranchDesignator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			char res;
 			PDBAtom *ptr;
@@ -455,7 +493,7 @@ static PyObject *sipDo_PDBAtom_getBranchDesignator(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getBranchDesignator);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_getBranchDesignator);
 
 	return NULL;
 }
@@ -463,6 +501,7 @@ static PyObject *sipDo_PDBAtom_getBranchDesignator(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_PDBAtom_setRemotenessIndicator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
@@ -470,7 +509,7 @@ static PyObject *sipDo_PDBAtom_setRemotenessIndicator(PyObject *sipThisObj,PyObj
 	{
 		char a0;
 
-		if (sipParseArgs(sipArgs,"c",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"c",&a0))
 		{
 			PDBAtom *ptr;
 
@@ -486,7 +525,7 @@ static PyObject *sipDo_PDBAtom_setRemotenessIndicator(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_setRemotenessIndicator);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_setRemotenessIndicator);
 
 	return NULL;
 }
@@ -494,12 +533,13 @@ static PyObject *sipDo_PDBAtom_setRemotenessIndicator(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_PDBAtom_getRemotenessIndicator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			char res;
 			PDBAtom *ptr;
@@ -515,7 +555,7 @@ static PyObject *sipDo_PDBAtom_getRemotenessIndicator(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getRemotenessIndicator);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_getRemotenessIndicator);
 
 	return NULL;
 }
@@ -523,6 +563,7 @@ static PyObject *sipDo_PDBAtom_getRemotenessIndicator(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_PDBAtom_setAlternateLocationIndicator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
@@ -530,7 +571,7 @@ static PyObject *sipDo_PDBAtom_setAlternateLocationIndicator(PyObject *sipThisOb
 	{
 		char a0;
 
-		if (sipParseArgs(sipArgs,"c",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"c",&a0))
 		{
 			PDBAtom *ptr;
 
@@ -546,7 +587,7 @@ static PyObject *sipDo_PDBAtom_setAlternateLocationIndicator(PyObject *sipThisOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_setAlternateLocationIndicator);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_setAlternateLocationIndicator);
 
 	return NULL;
 }
@@ -554,12 +595,13 @@ static PyObject *sipDo_PDBAtom_setAlternateLocationIndicator(PyObject *sipThisOb
 static PyObject *sipDo_PDBAtom_getAlternateLocationIndicator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			char res;
 			PDBAtom *ptr;
@@ -575,7 +617,7 @@ static PyObject *sipDo_PDBAtom_getAlternateLocationIndicator(PyObject *sipThisOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getAlternateLocationIndicator);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_getAlternateLocationIndicator);
 
 	return NULL;
 }
@@ -583,6 +625,7 @@ static PyObject *sipDo_PDBAtom_getAlternateLocationIndicator(PyObject *sipThisOb
 static PyObject *sipDo_PDBAtom_setOccupancy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
@@ -590,7 +633,7 @@ static PyObject *sipDo_PDBAtom_setOccupancy(PyObject *sipThisObj,PyObject *sipAr
 	{
 		float a0;
 
-		if (sipParseArgs(sipArgs,"f",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
 		{
 			PDBAtom *ptr;
 
@@ -606,7 +649,7 @@ static PyObject *sipDo_PDBAtom_setOccupancy(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_setOccupancy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_setOccupancy);
 
 	return NULL;
 }
@@ -614,12 +657,13 @@ static PyObject *sipDo_PDBAtom_setOccupancy(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_PDBAtom_getOccupancy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			PDBAtom *ptr;
@@ -635,7 +679,7 @@ static PyObject *sipDo_PDBAtom_getOccupancy(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getOccupancy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_getOccupancy);
 
 	return NULL;
 }
@@ -643,6 +687,7 @@ static PyObject *sipDo_PDBAtom_getOccupancy(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_PDBAtom_setTemperatureFactor(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
@@ -650,7 +695,7 @@ static PyObject *sipDo_PDBAtom_setTemperatureFactor(PyObject *sipThisObj,PyObjec
 	{
 		float a0;
 
-		if (sipParseArgs(sipArgs,"f",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
 		{
 			PDBAtom *ptr;
 
@@ -666,7 +711,7 @@ static PyObject *sipDo_PDBAtom_setTemperatureFactor(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_setTemperatureFactor);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_setTemperatureFactor);
 
 	return NULL;
 }
@@ -674,12 +719,13 @@ static PyObject *sipDo_PDBAtom_setTemperatureFactor(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_PDBAtom_getTemperatureFactor(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			PDBAtom *ptr;
@@ -695,7 +741,7 @@ static PyObject *sipDo_PDBAtom_getTemperatureFactor(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_getTemperatureFactor);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_getTemperatureFactor);
 
 	return NULL;
 }
@@ -703,12 +749,13 @@ static PyObject *sipDo_PDBAtom_getTemperatureFactor(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_PDBAtom_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBAtom)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			PDBAtom *ptr;
@@ -724,7 +771,7 @@ static PyObject *sipDo_PDBAtom_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PDBAtom,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBAtom,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -760,19 +807,18 @@ static void sipDealloc_PDBAtom(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_PDBAtom(sipThisType *sipThis)
+static PyObject * sip__str__PDBAtom(PyObject *a0)
 {
-#line 59 "PDBAtom.sip"
+#line 60 "PDBAtom.sip"
   PDBAtom* ptr;
-  if ((ptr = (PDBAtom*)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+  if ((ptr = (PDBAtom*)sipGetCppPtr((sipThisType*)a0,sipClass_PDBAtom)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("PDBAtom ") + ptr->getName()
         + " { " + ptr->getElement().getSymbol() + " @ ("
         + String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " "
         + String(ptr->getPosition().z) + " }").c_str());
-#line 780 "../CPP/sipBALLPDBAtom.cpp"
+#line 826 "sipBALLPDBAtom.cpp"
 }
 
 PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
@@ -784,6 +830,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -791,10 +838,10 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipPDBAtom();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -803,7 +850,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_PDBAtom,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_PDBAtom,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -813,7 +860,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipPDBAtom(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -840,7 +887,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 		float a12;
 		float a13;
 
-		if (sipParseArgs(sipArgs,"-IIIIIIIffcccff",sipCanConvertTo_Element,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_String,&a2obj,sipCanConvertTo_AtomType,&a3obj,sipCanConvertTo_Vector3,&a4obj,sipCanConvertTo_Vector3,&a5obj,sipCanConvertTo_Vector3,&a6obj,&a7,&a8,&a9,&a10,&a11,&a12,&a13))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-IIIIIIIffcccff",sipCanConvertTo_Element,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_String,&a2obj,sipCanConvertTo_AtomType,&a3obj,sipCanConvertTo_Vector3,&a4obj,sipCanConvertTo_Vector3,&a5obj,sipCanConvertTo_Vector3,&a6obj,&a7,&a8,&a9,&a10,&a11,&a12,&a13))
 		{
 			int iserr = 0;
 
@@ -865,7 +912,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp3)
 				delete a3;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -873,7 +920,7 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 		const PDBAtom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_PDBAtom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PDBAtom,&a0obj))
 		{
 			int iserr = 0;
 
@@ -883,12 +930,12 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipPDBAtom(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_PDBAtom);
+		sipNoCtor(sipArgsParsed,sipName_BALL_PDBAtom);
 		return NULL;
 	}
 
@@ -940,17 +987,15 @@ int sipCanConvertTo_PDBAtom(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_PDBAtom);
 }
 
-void sipConvertTo_PDBAtom(PyObject *sipPy,PDBAtom **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_PDBAtom(PyObject *sipPy,PDBAtom **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PDBAtom);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_PDBAtom);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -1,4 +1,4 @@
-// $Id: pyAtomDict.sip,v 1.1 2000/07/18 21:28:02 oliver Exp $
+// $Id: pyAtomDict.sip,v 1.2 2001/07/25 11:32:35 oliver Exp $
 
 class PyAtomDict
 {
@@ -6,11 +6,11 @@ class PyAtomDict
 	#include <BALL/DATATYPE/hashMap.h>
 	#include "sipBALLAtom.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>
-	typedef HashMap<Atom*, float> PyAtomDict;
+	typedef HashMap<const Atom*, float> PyAtomDict;
 %End
 
 %ConvertFromClassCode
-	cerr << "convert from" << endl;
+	std::cerr << "convert from" << std::endl;
 	PyObject* dict = PyDict_New();
 
 	if (dict == NULL)
@@ -36,7 +36,7 @@ class PyAtomDict
 %End
  
 %CanConvertToClassCode
-	cerr << "can convert to" << endl;
+	std::cerr << "can convert to" << std::endl;
 	return PyDict_Check(sipPy);
 %End
  
@@ -44,12 +44,12 @@ class PyAtomDict
 	// Convert a Python dictionary to a PyAtomDict object on the
 	// heap.
  
-	cerr << "convert-to" << endl;
+	std::cerr << "convert-to" << std::endl;
 	// create a list of all keys
 	PyObject* key_list = PyDict_Keys(sipPy);
 	if (key_list == NULL)
 	{
-		cerr << "cannot create key list" << endl;
+		std::cerr << "cannot create key list" << std::endl;
 		return 0;
 	}
 		
@@ -60,24 +60,24 @@ class PyAtomDict
 		PyObject* key = PyList_GET_ITEM(key_list,i);
 		if (key == NULL)
 		{
-			cerr << "cannot get item" << endl;
+			std::cerr << "cannot get item" << std::endl;
 			break;
 		}
 		Atom* atom = sipForceConvertTo_Atom(key,sipIsErr);
 		if (*sipIsErr)
 		{
-			cerr << "cannot convert to atom" << endl;
+			std::cerr << "cannot convert to atom" << std::endl;
 			break;
 		}
 		PyObject* float_obj = PyDict_GetItem(sipPy,key);
 		if (!PyFloat_Check(float_obj))
 		{
-			cerr << "cannot get dict item" << endl;
+			std::cerr << "cannot get dict item" << std::endl;
 			break;
 		}
 		double value = PyFloat_AsDouble(float_obj);
 		atom_dict -> insert(pair<Atom*,float>(atom, value));
-		cerr << "converted 1 item" << endl;
+		std::cerr << "converted 1 item" << std::endl;
 	}
  
 	*sipCppPtr = atom_dict;

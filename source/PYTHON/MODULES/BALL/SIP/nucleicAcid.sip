@@ -9,10 +9,10 @@ using namespace BALL;
   NucleicAcid();
   NucleicAcid(const NucleicAcid& /nucleic_acid/, bool /deep/ = true);
   NucleicAcid(const String& /name/, const String& /id/ = "" );
-  // virtual ~NucleicAcid();
+  ~NucleicAcid() throw();
 
-  virtual void clear();
-  virtual void destroy();
+  virtual void clear() throw();
+  virtual void destroy() throw();
 
   // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
   // void persistentRead(PersistenceManager& pm);
@@ -29,7 +29,7 @@ using namespace BALL;
   void setID(const String& /id/);
   const String& getID() const;
   int countNucleotides() const;
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // virtual void read(std::istream& s);
   // virtual void write(std::ostream& s) const;

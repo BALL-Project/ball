@@ -19,33 +19,53 @@ static PyTypeObject sipType_CharmmFF = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipCharmmFF::sipCharmmFF(): CharmmFF()
+sipCharmmFF::sipCharmmFF()
+    : CharmmFF()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipCharmmFF::sipCharmmFF(System& a0): CharmmFF(a0)
+sipCharmmFF::sipCharmmFF(System& a0)
+    : CharmmFF(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipCharmmFF::sipCharmmFF(System& a0,const Options& a1): CharmmFF(a0,a1)
+sipCharmmFF::sipCharmmFF(System& a0,const Options& a1)
+    : CharmmFF(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipCharmmFF::sipCharmmFF(const CharmmFF& a0): CharmmFF(a0)
+sipCharmmFF::sipCharmmFF(const CharmmFF& a0)
+    : CharmmFF(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipCharmmFF::~sipCharmmFF()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
+
 bool sipCharmmFF::specificSetup()
+
 {
 	int relLock;
 
@@ -57,12 +77,13 @@ bool sipCharmmFF::specificSetup()
 static PyObject *sipDo_CharmmFF_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			CharmmFF *ptr;
@@ -78,7 +99,7 @@ static PyObject *sipDo_CharmmFF_specificSetup(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_specificSetup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_specificSetup);
 
 	return NULL;
 }
@@ -86,12 +107,13 @@ static PyObject *sipDo_CharmmFF_specificSetup(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_CharmmFF_getStretchEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmFF *ptr;
@@ -107,7 +129,7 @@ static PyObject *sipDo_CharmmFF_getStretchEnergy(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_getStretchEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_getStretchEnergy);
 
 	return NULL;
 }
@@ -115,12 +137,13 @@ static PyObject *sipDo_CharmmFF_getStretchEnergy(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_CharmmFF_getBendEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmFF *ptr;
@@ -136,7 +159,7 @@ static PyObject *sipDo_CharmmFF_getBendEnergy(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_getBendEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_getBendEnergy);
 
 	return NULL;
 }
@@ -144,12 +167,13 @@ static PyObject *sipDo_CharmmFF_getBendEnergy(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_CharmmFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmFF *ptr;
@@ -165,7 +189,7 @@ static PyObject *sipDo_CharmmFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_getTorsionEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_getTorsionEnergy);
 
 	return NULL;
 }
@@ -173,12 +197,13 @@ static PyObject *sipDo_CharmmFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_CharmmFF_getImproperTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmFF *ptr;
@@ -194,7 +219,7 @@ static PyObject *sipDo_CharmmFF_getImproperTorsionEnergy(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_getImproperTorsionEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_getImproperTorsionEnergy);
 
 	return NULL;
 }
@@ -202,12 +227,13 @@ static PyObject *sipDo_CharmmFF_getImproperTorsionEnergy(PyObject *sipThisObj,Py
 static PyObject *sipDo_CharmmFF_getProperTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmFF *ptr;
@@ -223,7 +249,7 @@ static PyObject *sipDo_CharmmFF_getProperTorsionEnergy(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_getProperTorsionEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_getProperTorsionEnergy);
 
 	return NULL;
 }
@@ -231,12 +257,13 @@ static PyObject *sipDo_CharmmFF_getProperTorsionEnergy(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_CharmmFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmFF *ptr;
@@ -252,7 +279,7 @@ static PyObject *sipDo_CharmmFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_getNonbondedEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_getNonbondedEnergy);
 
 	return NULL;
 }
@@ -260,12 +287,13 @@ static PyObject *sipDo_CharmmFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_CharmmFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmFF *ptr;
@@ -281,7 +309,7 @@ static PyObject *sipDo_CharmmFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_getVdWEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_getVdWEnergy);
 
 	return NULL;
 }
@@ -289,12 +317,13 @@ static PyObject *sipDo_CharmmFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_CharmmFF_getESEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmFF *ptr;
@@ -310,7 +339,7 @@ static PyObject *sipDo_CharmmFF_getESEnergy(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_getESEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_getESEnergy);
 
 	return NULL;
 }
@@ -318,12 +347,13 @@ static PyObject *sipDo_CharmmFF_getESEnergy(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_CharmmFF_getSolvationEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmFF *ptr;
@@ -339,7 +369,7 @@ static PyObject *sipDo_CharmmFF_getSolvationEnergy(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_getSolvationEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_getSolvationEnergy);
 
 	return NULL;
 }
@@ -347,12 +377,13 @@ static PyObject *sipDo_CharmmFF_getSolvationEnergy(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_CharmmFF_hasInitializedParameters(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			CharmmFF *ptr;
@@ -368,7 +399,7 @@ static PyObject *sipDo_CharmmFF_hasInitializedParameters(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmFF,sipName_BALL_hasInitializedParameters);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmFF,sipName_BALL_hasInitializedParameters);
 
 	return NULL;
 }
@@ -414,6 +445,7 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -421,10 +453,10 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipCharmmFF();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -432,7 +464,7 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 		System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_System,&a0obj))
 		{
 			int iserr = 0;
 
@@ -442,7 +474,7 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmFF(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -452,7 +484,7 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 		const Options *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
 		{
 			int iserr = 0;
 
@@ -463,7 +495,7 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmFF(* a0,* a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -471,7 +503,7 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 		const CharmmFF *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_CharmmFF,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CharmmFF,&a0obj))
 		{
 			int iserr = 0;
 
@@ -481,12 +513,12 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmFF(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_CharmmFF);
+		sipNoCtor(sipArgsParsed,sipName_BALL_CharmmFF);
 		return NULL;
 	}
 
@@ -530,17 +562,15 @@ int sipCanConvertTo_CharmmFF(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_CharmmFF);
 }
 
-void sipConvertTo_CharmmFF(PyObject *sipPy,CharmmFF **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_CharmmFF(PyObject *sipPy,CharmmFF **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_CharmmFF);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_CharmmFF);
+		*sipCppPtr = NULL;
 
 		return;
 	}

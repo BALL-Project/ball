@@ -1,4 +1,4 @@
-// $Id: expression.sip,v 1.1 2000/07/18 21:27:31 oliver Exp $
+// $Id: expression.sip,v 1.2 2001/07/25 11:32:33 oliver Exp $
 
 class ExpressionPredicate
 //  : public UnaryPredicate<Atom>
@@ -12,9 +12,9 @@ class ExpressionPredicate
   // BALL_CREATE_NODEEP(ExpressionPredicate)
   ExpressionPredicate();
   ExpressionPredicate(const String& /argument/);
-	~ExpressionPredicate();
-  virtual bool operator () (const Atom& /atom/) const;
-  virtual void setArgument(const String& /argument/);
+	~ExpressionPredicate() throw();
+  virtual bool operator () (const Atom& /atom/) const throw();
+  virtual void setArgument(const String& /argument/) throw();
 };
 
 //class ExpressionTree
@@ -79,11 +79,11 @@ class Expression
   Expression();
   Expression(const Expression& /expression/);
   Expression(const String& /expression_string/);
-  ~Expression();
+  ~Expression() throw();
   bool hasPredicate(const String& /name/);
-  virtual bool operator () (const Atom& /atom/) const;
+  virtual bool operator () (const Atom& /atom/) const throw();
   ExpressionPredicate* getPredicate(const String& /name/, const String& /args/ = "") const;
   // void registerPredicate(const String& name, CreationMethod creation_method);
   void setExpression(const String& /expression/);
-  const String& getExpression() const;
+  const String& getExpressionString() const;
 };

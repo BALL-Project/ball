@@ -1,4 +1,4 @@
-// $Id: PDBFile.sip,v 1.1 2000/07/18 21:26:57 oliver Exp $
+// $Id: PDBFile.sip,v 1.2 2001/07/25 11:32:31 oliver Exp $
 
 class PDBFile
 {
@@ -10,7 +10,7 @@ class PDBFile
   PDBFile();
 	// default open mode: READ
   PDBFile(const String&, File::OpenMode /openmode/ = File::IN);
-	~PDBFile();
+	~PDBFile() throw();
   virtual void read(Protein& /protein/);
   virtual void read(System& /system/);
   virtual void write(const Protein& /protein/);

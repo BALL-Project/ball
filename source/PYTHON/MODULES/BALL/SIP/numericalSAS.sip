@@ -1,4 +1,4 @@
-// $Id: numericalSAS.sip,v 1.3 2000/08/30 19:59:10 oliver Exp $
+// $Id: numericalSAS.sip,v 1.4 2001/07/25 11:32:33 oliver Exp $
 
 %HeaderCode
 	#include <BALL/STRUCTURE/numericalSAS.h>
@@ -17,7 +17,7 @@ PyAtomDict& calculateSASAtomAreas
 	float a1 = 1.5;
 	Size a2 = 0;
 
-	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_AtomContainer,&a0obj,&a1,&a2))
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|fI",sipCanConvertTo_AtomContainer,&a0obj,&a1,&a2))
 	{
 		PyAtomDict *res;
 
@@ -46,7 +46,7 @@ Surface& calculateSASPoints
 	float a1 = 1.5;
 	Size a2 = 0;
 
-	if (sipParseArgs(sipArgs,"-I|fI",sipCanConvertTo_AtomContainer,&a0obj,&a1,&a2))
+	if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|fI",sipCanConvertTo_AtomContainer,&a0obj,&a1,&a2))
 	{
 		Surface *res;
 

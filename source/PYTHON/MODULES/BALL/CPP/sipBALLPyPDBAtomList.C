@@ -34,7 +34,7 @@ PyObject *sipConvertFrom_PyPDBAtomList(const PyPDBAtomList *sipCpp)
 	}
 
 	return pl;
-#line 42 "../CPP/sipBALLPyPDBAtomList.cpp"
+#line 42 "sipBALLPyPDBAtomList.cpp"
 }
 
 PyObject *sipClass_PyPDBAtomList;
@@ -43,23 +43,13 @@ int sipCanConvertTo_PyPDBAtomList(PyObject *sipPy)
 {
 #line 37 "pyPDBAtomList.sip"
 	return PyList_Check(sipPy);
-#line 51 "../CPP/sipBALLPyPDBAtomList.cpp"
+#line 51 "sipBALLPyPDBAtomList.cpp"
 }
 
-int sipConvertTo_PyPDBAtomList(PyObject *sipPy,PyPDBAtomList **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_PyPDBAtomList(PyObject *sipPy,PyPDBAtomList **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
-
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PyPDBAtomList);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
+		return 0;
 
 #line 41 "pyPDBAtomList.sip"
 	// Convert a Python list of PDBAtom instances to an PDBAtomList object on the
@@ -85,7 +75,7 @@ int sipConvertTo_PyPDBAtomList(PyObject *sipPy,PyPDBAtomList **sipCppPtr,int sip
 	*sipCppPtr = PDB_atom_list;
 
 	return 1;
-#line 93 "../CPP/sipBALLPyPDBAtomList.cpp"
+#line 83 "sipBALLPyPDBAtomList.cpp"
 }
 
 PyPDBAtomList *sipForceConvertTo_PyPDBAtomList(PyObject *valobj,int *iserrp)

@@ -1,4 +1,4 @@
-// $Id: angle.sip,v 1.2 2000/08/28 15:46:45 oliver Exp $
+// $Id: angle.sip,v 1.3 2001/07/25 11:32:31 oliver Exp $
 
 class Angle
 {
@@ -55,10 +55,11 @@ class Angle
   bool isEquivalent(Angle /angle/) const;
   bool isValid () const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
-  operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   Angle* ptr;
-  if ((ptr = (Angle*)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
+  if ((ptr = (Angle*)sipGetCppPtr((sipThisType*)a0 ,sipClass_Angle)) == NULL)
     return NULL;
 
   return PyString_FromString(String(ptr->toRadian()).c_str());

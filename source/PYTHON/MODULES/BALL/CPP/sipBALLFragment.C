@@ -6,7 +6,7 @@
 PyObject *sipClass_Fragment;
 
 static void sipDealloc_Fragment(sipThisType *);
-static PyObject *sipPyInternalRepr_Fragment(sipThisType *);
+static PyObject * sip__str__Fragment(PyObject *a0);
 
 static PyTypeObject sipType_Fragment = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,76 +19,104 @@ static PyTypeObject sipType_Fragment = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_Fragment,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__Fragment,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipFragment::sipFragment(): Fragment()
+sipFragment::sipFragment()
+    : Fragment()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipFragment::sipFragment(const Fragment& a0,bool a1): Fragment(a0,a1)
+sipFragment::sipFragment(const Fragment& a0,bool a1)
+    : Fragment(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipFragment::sipFragment(const String& a0): Fragment(a0)
+sipFragment::sipFragment(const String& a0)
+    : Fragment(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipFragment::sipFragment(const Fragment& a0): Fragment(a0)
+sipFragment::sipFragment(const Fragment& a0)
+    : Fragment(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipFragment::~sipFragment()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipFragment::select()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_select,&relLock))
-		sipSelectable::sipVH_select(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		Composite::select();
-}
 void sipFragment::deselect()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
-		sipSelectable::sipVH_deselect(&sipPyMethods[1],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
+		sipSelectable::sipVH_deselect(&sipPyMethods[0],sipPyThis,relLock);
 	else
 		Composite::deselect();
 }
-void sipFragment::clear()
+
+void sipFragment::select()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipObject::sipVH_clear(&sipPyMethods[2],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_select,&relLock))
+		sipSelectable::sipVH_select(&sipPyMethods[1],sipPyThis,relLock);
 	else
-		AtomContainer::clear();
+		Composite::select();
 }
+
+bool sipFragment::isValid() const
+ throw()
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipObject::sipVH_isValid(&sipPyMethods[2],sipPyThis,relLock) :
+		AtomContainer::isValid();
+}
+
 void sipFragment::destroy()
+ throw()
 {
 	int relLock;
 
 	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_destroy,&relLock))
-		sipObject::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
+		sipComposite::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
 	else
 		AtomContainer::destroy();
 }
-bool sipFragment::isValid() const
+
+void sipFragment::clear()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipObject::sipVH_isValid(&sipPyMethods[4],sipPyThis,relLock) :
-		AtomContainer::isValid();
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipObject::sipVH_clear(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		AtomContainer::clear();
 }
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
@@ -122,17 +150,16 @@ static void sipDealloc_Fragment(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_Fragment(sipThisType *sipThis)
+static PyObject * sip__str__Fragment(PyObject *a0)
 {
-#line 28 "fragment.sip"
+#line 29 "fragment.sip"
   Fragment* ptr;
-  if ((ptr = (Fragment*)sipGetCppPtr(sipThis,sipClass_Fragment)) == NULL)
+  if ((ptr = (Fragment*)sipGetCppPtr((sipThisType*)a0,sipClass_Fragment)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("Fragment ") + ptr->getName()
         + " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-#line 140 "../CPP/sipBALLFragment.cpp"
+#line 167 "sipBALLFragment.cpp"
 }
 
 PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
@@ -144,6 +171,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -151,10 +179,10 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipFragment();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -163,7 +191,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_Fragment,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_Fragment,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -173,7 +201,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipFragment(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -181,7 +209,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
 		{
 			int iserr = 0;
 
@@ -194,7 +222,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -202,7 +230,7 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 		const Fragment *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Fragment,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Fragment,&a0obj))
 		{
 			int iserr = 0;
 
@@ -212,12 +240,12 @@ PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipFragment(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Fragment);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Fragment);
 		return NULL;
 	}
 
@@ -250,17 +278,15 @@ int sipCanConvertTo_Fragment(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Fragment);
 }
 
-void sipConvertTo_Fragment(PyObject *sipPy,Fragment **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Fragment(PyObject *sipPy,Fragment **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Fragment);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Fragment);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -1,4 +1,4 @@
-// $Id: protein.sip,v 1.1 2000/07/18 21:28:00 oliver Exp $
+// $Id: protein.sip,v 1.2 2001/07/25 11:32:35 oliver Exp $
 
 class Protein
   : Molecule
@@ -11,9 +11,9 @@ class Protein
   Protein();
   Protein(const Protein&, bool = true);
   Protein(const String&, const String& = "" );
-	~Protein();
-  virtual void clear();
-  virtual void destroy();
+	~Protein() throw();
+  virtual void clear() throw();
+  virtual void destroy() throw();
 	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 	//  void persistentRead(PersistenceManager& pm);
   void set(const Protein&, bool = true);
@@ -38,14 +38,15 @@ class Protein
   int countSecondaryStructures() const;
   int countResidues() const;
   int countPDBAtoms() const;
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   Protein* ptr;
-  if ((ptr = (Protein*)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
+  if ((ptr = (Protein*)sipGetCppPtr((sipThisType*)a0,sipClass_Protein)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("Protein ") + ptr->getName() 

@@ -30,13 +30,13 @@ using namespace BALL;
  {
   public:
    PropertyManager();
-   PropertyManager(const PropertyManager&, bool = true);
+   PropertyManager(const PropertyManager&);
 //   virtual ~PropertyManager();
    void clear();
    void destroy();
-   void set(const PropertyManager&, bool = true);
+   void set(const PropertyManager&);
 //   PropertyManager& operator = (const PropertyManager&);
-   void get(PropertyManager&, bool = true) const;
+   void get(PropertyManager&) const;
    void swap(PropertyManager&);
 //   BitVector& getBitVector();
 //   const BitVector& getBitVector() const;

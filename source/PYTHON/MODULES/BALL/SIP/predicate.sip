@@ -1,4 +1,4 @@
-// $Id: predicate.sip,v 1.1 2000/07/18 21:27:56 oliver Exp $
+// $Id: predicate.sip,v 1.2 2001/07/25 11:32:34 oliver Exp $
 
 class KernelPredicate
  : CompositePrdicate
@@ -8,5 +8,5 @@ class KernelPredicate
 	using namespace BALL
 %End
   public:
-  virtual bool operator () (const Composite& /composite/) const;
+  virtual bool operator () (const Composite& /composite/) const throw();
 };

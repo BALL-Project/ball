@@ -1,4 +1,4 @@
-// $Id: ruleEvaluator.sip,v 1.1 2000/11/15 14:21:00 oliver Exp $
+// $Id: ruleEvaluator.sip,v 1.2 2001/07/25 11:32:36 oliver Exp $
 
 class RuleEvaluator
 {
@@ -13,7 +13,7 @@ class RuleEvaluator
   RuleEvaluator() throw();
   RuleEvaluator(INIFile& /file/, const String& /prefix/) throw();
   RuleEvaluator(const RuleEvaluator& /evaluator/) throw();
-  ~RuleEvaluator();
+  ~RuleEvaluator() throw();
   bool initialize(INIFile& /file/, const String& /prefix/) throw();
   const String& getPrefix() const throw();
   void setPrefix(const String& /prefix/) throw();

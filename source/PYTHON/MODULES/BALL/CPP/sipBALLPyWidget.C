@@ -19,18 +19,35 @@ static PyTypeObject sipType_PyWidget = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipPyWidget::sipPyWidget(const PyWidget& a0): PyWidget(a0)
+sipPyWidget::sipPyWidget(const PyWidget& a0)
+    : PyWidget(a0)
 {
 	sipCommonCtor(sipPyMethods,12);
 }
 
 sipPyWidget::~sipPyWidget()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
+
 void sipPyWidget::registerThis()
+ throw()
 {
 	int relLock;
 
@@ -39,7 +56,9 @@ void sipPyWidget::registerThis()
 	else
 		ModularWidget::registerThis();
 }
+
 void sipPyWidget::checkMenu(MainControl& a0)
+ throw()
 {
 	int relLock;
 
@@ -48,271 +67,121 @@ void sipPyWidget::checkMenu(MainControl& a0)
 	else
 		ModularWidget::checkMenu(a0);
 }
-void sipPyWidget::startInterpreter()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_startInterpreter,&relLock))
-		sipPyWidget::sipVH_startInterpreter(&sipPyMethods[2],sipPyThis,relLock);
-	else
-		PyWidget::startInterpreter();
-}
-void sipPyWidget::stopInterpreter()
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_stopInterpreter,&relLock))
-		sipPyWidget::sipVH_stopInterpreter(&sipPyMethods[3],sipPyThis,relLock);
-	else
-		PyWidget::stopInterpreter();
-}
-void sipPyWidget::initializeWidget(MainControl& a0)
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_initializeWidget,&relLock))
-		sipModularWidget::sipVH_initializeWidget(&sipPyMethods[4],sipPyThis,relLock,a0);
-	else
-		PyWidget::initializeWidget(a0);
-}
-void sipPyWidget::finalizeWidget(MainControl& a0)
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_finalizeWidget,&relLock))
-		sipModularWidget::sipVH_finalizeWidget(&sipPyMethods[5],sipPyThis,relLock,a0);
-	else
-		PyWidget::finalizeWidget(a0);
-}
-void sipPyWidget::cursorUp(bool a0)
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_cursorUp,&relLock))
-		sipPyWidget::sipVH_cursorUp(&sipPyMethods[6],sipPyThis,relLock,a0);
-	else
-		PyWidget::cursorUp(a0);
-}
-void sipPyWidget::cursorDown(bool a0)
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[7],sipPyThis,NULL,sipName_BALL_cursorDown,&relLock))
-		sipPyWidget::sipVH_cursorDown(&sipPyMethods[7],sipPyThis,relLock,a0);
-	else
-		PyWidget::cursorDown(a0);
-}
-void sipPyWidget::newLine()
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[8],sipPyThis,NULL,sipName_BALL_newLine,&relLock))
-		sipPyWidget::sipVH_newLine(&sipPyMethods[8],sipPyThis,relLock);
-	else
-		PyWidget::newLine();
-}
-void sipPyWidget::cursorLeft(bool a0,bool a1)
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[9],sipPyThis,NULL,sipName_BALL_cursorLeft,&relLock))
-		sipPyWidget::sipVH_cursorLeft(&sipPyMethods[9],sipPyThis,relLock,a0,a1);
-	else
-		PyWidget::cursorLeft(a0,a1);
-}
-void sipPyWidget::backspace()
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[10],sipPyThis,NULL,sipName_BALL_backspace,&relLock))
-		sipPyWidget::sipVH_backspace(&sipPyMethods[10],sipPyThis,relLock);
-	else
-		PyWidget::backspace();
-}
 void sipPyWidget::cursorRight(bool a0,bool a1)
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[11],sipPyThis,NULL,sipName_BALL_cursorRight,&relLock))
-		sipPyWidget::sipVH_cursorRight(&sipPyMethods[11],sipPyThis,relLock,a0,a1);
+	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_cursorRight,&relLock))
+		sipPyWidget::sipVH_cursorRight(&sipPyMethods[2],sipPyThis,relLock,a0,a1);
 	else
 		PyWidget::cursorRight(a0,a1);
 }
 
-// The common handler for all classes that inherit this virtual member
-// function.
+void sipPyWidget::backspace()
 
-void sipPyWidget::sipVH_startInterpreter(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
 {
-	PyObject *resobj;
-	PyObject *sipArgs;
+	int relLock;
 
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_backspace,&relLock))
+		sipPyWidget::sipVH_backspace(&sipPyMethods[3],sipPyThis,relLock);
+	else
+		PyWidget::backspace();
+}
 
-	if (sipArgs == NULL)
-		goto reportError;
+void sipPyWidget::cursorLeft(bool a0,bool a1)
 
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+{
+	int relLock;
 
-	Py_DECREF(sipArgs);
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_cursorLeft,&relLock))
+		sipPyWidget::sipVH_cursorLeft(&sipPyMethods[4],sipPyThis,relLock,a0,a1);
+	else
+		PyWidget::cursorLeft(a0,a1);
+}
 
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
+void sipPyWidget::newLine()
 
-		if (resobj == Py_None)
-			goto releaseLock;
+{
+	int relLock;
 
-		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_startInterpreter);
-	}
+	if (sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_newLine,&relLock))
+		sipPyWidget::sipVH_newLine(&sipPyMethods[5],sipPyThis,relLock);
+	else
+		PyWidget::newLine();
+}
 
-reportError:
-	PyErr_Print();
+void sipPyWidget::cursorDown(bool a0)
 
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_cursorDown,&relLock))
+		sipPyWidget::sipVH_cursorDown(&sipPyMethods[6],sipPyThis,relLock,a0);
+	else
+		PyWidget::cursorDown(a0);
+}
+
+void sipPyWidget::cursorUp(bool a0)
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[7],sipPyThis,NULL,sipName_BALL_cursorUp,&relLock))
+		sipPyWidget::sipVH_cursorUp(&sipPyMethods[7],sipPyThis,relLock,a0);
+	else
+		PyWidget::cursorUp(a0);
+}
+
+void sipPyWidget::finalizeWidget(MainControl& a0)
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[8],sipPyThis,NULL,sipName_BALL_finalizeWidget,&relLock))
+		sipModularWidget::sipVH_finalizeWidget(&sipPyMethods[8],sipPyThis,relLock,a0);
+	else
+		PyWidget::finalizeWidget(a0);
+}
+
+void sipPyWidget::initializeWidget(MainControl& a0)
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[9],sipPyThis,NULL,sipName_BALL_initializeWidget,&relLock))
+		sipModularWidget::sipVH_initializeWidget(&sipPyMethods[9],sipPyThis,relLock,a0);
+	else
+		PyWidget::initializeWidget(a0);
+}
+
+void sipPyWidget::stopInterpreter()
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[10],sipPyThis,NULL,sipName_BALL_stopInterpreter,&relLock))
+		sipPyWidget::sipVH_stopInterpreter(&sipPyMethods[10],sipPyThis,relLock);
+	else
+		PyWidget::stopInterpreter();
+}
+
+void sipPyWidget::startInterpreter()
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[11],sipPyThis,NULL,sipName_BALL_startInterpreter,&relLock))
+		sipPyWidget::sipVH_startInterpreter(&sipPyMethods[11],sipPyThis,relLock);
+	else
+		PyWidget::startInterpreter();
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-void sipPyWidget::sipVH_stopInterpreter(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_stopInterpreter);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipPyWidget::sipVH_cursorUp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,bool a0)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(Oi)",sipThis -> sipSelf,a0);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_cursorUp);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipPyWidget::sipVH_cursorDown(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,bool a0)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(Oi)",sipThis -> sipSelf,a0);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_cursorDown);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipPyWidget::sipVH_newLine(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_newLine);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipPyWidget::sipVH_cursorLeft(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,bool a0,bool a1)
+void sipPyWidget::sipVH_cursorRight(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,bool a0,bool a1)
 {
 	PyObject *resobj;
 	PyObject *sipArgs;
@@ -333,7 +202,7 @@ void sipPyWidget::sipVH_cursorLeft(const sipMethodCache *pymc,sipThisType *sipTh
 		if (resobj == Py_None)
 			goto releaseLock;
 
-		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_cursorLeft);
+		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_cursorRight);
 	}
 
 reportError:
@@ -380,7 +249,7 @@ releaseLock:
 // The common handler for all classes that inherit this virtual member
 // function.
 
-void sipPyWidget::sipVH_cursorRight(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,bool a0,bool a1)
+void sipPyWidget::sipVH_cursorLeft(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,bool a0,bool a1)
 {
 	PyObject *resobj;
 	PyObject *sipArgs;
@@ -401,7 +270,177 @@ void sipPyWidget::sipVH_cursorRight(const sipMethodCache *pymc,sipThisType *sipT
 		if (resobj == Py_None)
 			goto releaseLock;
 
-		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_cursorRight);
+		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_cursorLeft);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipPyWidget::sipVH_newLine(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_newLine);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipPyWidget::sipVH_cursorDown(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,bool a0)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(Oi)",sipThis -> sipSelf,a0);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_cursorDown);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipPyWidget::sipVH_cursorUp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,bool a0)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(Oi)",sipThis -> sipSelf,a0);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_cursorUp);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipPyWidget::sipVH_stopInterpreter(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_stopInterpreter);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipPyWidget::sipVH_startInterpreter(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_PyWidget,sipName_BALL_startInterpreter);
 	}
 
 reportError:
@@ -413,9 +452,10 @@ releaseLock:
 
 static PyObject *sipDo_PyWidget_countInstances(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			int res;
 
@@ -427,19 +467,20 @@ static PyObject *sipDo_PyWidget_countInstances(PyObject *,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_countInstances);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_countInstances);
 
 	return NULL;
 }
 
 static PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
 		{
 			PyWidget *res;
 
@@ -463,7 +504,7 @@ static PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
 		Position *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Position,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Position,&a0obj))
 		{
 			PyWidget *res;
 
@@ -485,7 +526,7 @@ static PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_getInstance);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_getInstance);
 
 	return NULL;
 }
@@ -493,12 +534,13 @@ static PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
 static PyObject *sipDo_PyWidget_startInterpreter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PyWidget)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PyWidget *ptr;
 
@@ -514,7 +556,7 @@ static PyObject *sipDo_PyWidget_startInterpreter(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_startInterpreter);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_startInterpreter);
 
 	return NULL;
 }
@@ -522,12 +564,13 @@ static PyObject *sipDo_PyWidget_startInterpreter(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_PyWidget_stopInterpreter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PyWidget)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PyWidget *ptr;
 
@@ -543,7 +586,7 @@ static PyObject *sipDo_PyWidget_stopInterpreter(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_stopInterpreter);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_stopInterpreter);
 
 	return NULL;
 }
@@ -551,6 +594,7 @@ static PyObject *sipDo_PyWidget_stopInterpreter(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_PyWidget_initializeWidget(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PyWidget)) == NULL)
 		return NULL;
@@ -559,7 +603,7 @@ static PyObject *sipDo_PyWidget_initializeWidget(PyObject *sipThisObj,PyObject *
 		MainControl *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_MainControl,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_MainControl,&a0obj))
 		{
 			PyWidget *ptr;
 
@@ -582,7 +626,7 @@ static PyObject *sipDo_PyWidget_initializeWidget(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_initializeWidget);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_initializeWidget);
 
 	return NULL;
 }
@@ -590,6 +634,7 @@ static PyObject *sipDo_PyWidget_initializeWidget(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_PyWidget_finalizeWidget(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PyWidget)) == NULL)
 		return NULL;
@@ -598,7 +643,7 @@ static PyObject *sipDo_PyWidget_finalizeWidget(PyObject *sipThisObj,PyObject *si
 		MainControl *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_MainControl,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_MainControl,&a0obj))
 		{
 			PyWidget *ptr;
 
@@ -621,7 +666,7 @@ static PyObject *sipDo_PyWidget_finalizeWidget(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_finalizeWidget);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_finalizeWidget);
 
 	return NULL;
 }
@@ -629,6 +674,7 @@ static PyObject *sipDo_PyWidget_finalizeWidget(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_PyWidget_cursorUp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PyWidget)) == NULL)
 		return NULL;
@@ -636,7 +682,7 @@ static PyObject *sipDo_PyWidget_cursorUp(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		long a0 = false;
 
-		if (sipParseArgs(sipArgs,"|l",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"|l",&a0))
 		{
 			PyWidget *ptr;
 
@@ -652,7 +698,7 @@ static PyObject *sipDo_PyWidget_cursorUp(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_cursorUp);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_cursorUp);
 
 	return NULL;
 }
@@ -660,6 +706,7 @@ static PyObject *sipDo_PyWidget_cursorUp(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_PyWidget_cursorDown(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PyWidget)) == NULL)
 		return NULL;
@@ -667,7 +714,7 @@ static PyObject *sipDo_PyWidget_cursorDown(PyObject *sipThisObj,PyObject *sipArg
 	{
 		long a0 = false;
 
-		if (sipParseArgs(sipArgs,"|l",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"|l",&a0))
 		{
 			PyWidget *ptr;
 
@@ -683,7 +730,7 @@ static PyObject *sipDo_PyWidget_cursorDown(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_cursorDown);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_cursorDown);
 
 	return NULL;
 }
@@ -691,12 +738,13 @@ static PyObject *sipDo_PyWidget_cursorDown(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_PyWidget_newLine(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PyWidget)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PyWidget *ptr;
 
@@ -712,7 +760,7 @@ static PyObject *sipDo_PyWidget_newLine(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_newLine);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_newLine);
 
 	return NULL;
 }
@@ -720,6 +768,7 @@ static PyObject *sipDo_PyWidget_newLine(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_PyWidget_cursorLeft(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PyWidget)) == NULL)
 		return NULL;
@@ -728,7 +777,7 @@ static PyObject *sipDo_PyWidget_cursorLeft(PyObject *sipThisObj,PyObject *sipArg
 		long a0 = false;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"|ll",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"|ll",&a0,&a1))
 		{
 			PyWidget *ptr;
 
@@ -744,7 +793,7 @@ static PyObject *sipDo_PyWidget_cursorLeft(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_cursorLeft);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_cursorLeft);
 
 	return NULL;
 }
@@ -752,12 +801,13 @@ static PyObject *sipDo_PyWidget_cursorLeft(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_PyWidget_backspace(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PyWidget)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PyWidget *ptr;
 
@@ -773,7 +823,7 @@ static PyObject *sipDo_PyWidget_backspace(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_backspace);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_backspace);
 
 	return NULL;
 }
@@ -781,6 +831,7 @@ static PyObject *sipDo_PyWidget_backspace(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_PyWidget_cursorRight(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PyWidget)) == NULL)
 		return NULL;
@@ -789,7 +840,7 @@ static PyObject *sipDo_PyWidget_cursorRight(PyObject *sipThisObj,PyObject *sipAr
 		long a0 = false;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"|ll",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"|ll",&a0,&a1))
 		{
 			PyWidget *ptr;
 
@@ -805,7 +856,7 @@ static PyObject *sipDo_PyWidget_cursorRight(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PyWidget,sipName_BALL_cursorRight);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PyWidget,sipName_BALL_cursorRight);
 
 	return NULL;
 }
@@ -851,6 +902,7 @@ PyObject *sipNew_PyWidget(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -861,7 +913,7 @@ PyObject *sipNew_PyWidget(PyObject *sipSelf,PyObject *sipArgs)
 		const PyWidget *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_PyWidget,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PyWidget,&a0obj))
 		{
 			int iserr = 0;
 
@@ -871,12 +923,12 @@ PyObject *sipNew_PyWidget(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipPyWidget(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_PyWidget);
+		sipNoCtor(sipArgsParsed,sipName_BALL_PyWidget);
 		return NULL;
 	}
 
@@ -921,17 +973,15 @@ int sipCanConvertTo_PyWidget(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_PyWidget);
 }
 
-void sipConvertTo_PyWidget(PyObject *sipPy,PyWidget **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_PyWidget(PyObject *sipPy,PyWidget **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PyWidget);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_PyWidget);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -34,7 +34,7 @@ PyObject *sipConvertFrom_PyMoleculeList(const PyMoleculeList *sipCpp)
 	}
 
 	return pl;
-#line 42 "../CPP/sipBALLPyMoleculeList.cpp"
+#line 42 "sipBALLPyMoleculeList.cpp"
 }
 
 PyObject *sipClass_PyMoleculeList;
@@ -43,23 +43,13 @@ int sipCanConvertTo_PyMoleculeList(PyObject *sipPy)
 {
 #line 37 "pyMoleculeList.sip"
 	return PyList_Check(sipPy);
-#line 51 "../CPP/sipBALLPyMoleculeList.cpp"
+#line 51 "sipBALLPyMoleculeList.cpp"
 }
 
-int sipConvertTo_PyMoleculeList(PyObject *sipPy,PyMoleculeList **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_PyMoleculeList(PyObject *sipPy,PyMoleculeList **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
-
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PyMoleculeList);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
+		return 0;
 
 #line 41 "pyMoleculeList.sip"
 	// Convert a Python list of Molecule instances to an MoleculeList object on the
@@ -85,7 +75,7 @@ int sipConvertTo_PyMoleculeList(PyObject *sipPy,PyMoleculeList **sipCppPtr,int s
 	*sipCppPtr = molecule_list;
 
 	return 1;
-#line 93 "../CPP/sipBALLPyMoleculeList.cpp"
+#line 83 "sipBALLPyMoleculeList.cpp"
 }
 
 PyMoleculeList *sipForceConvertTo_PyMoleculeList(PyObject *valobj,int *iserrp)

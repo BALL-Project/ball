@@ -6,7 +6,7 @@
 PyObject *sipClass_Molecule;
 
 static void sipDealloc_Molecule(sipThisType *);
-static PyObject *sipPyInternalRepr_Molecule(sipThisType *);
+static PyObject * sip__str__Molecule(PyObject *a0);
 
 static PyTypeObject sipType_Molecule = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,87 +19,116 @@ static PyTypeObject sipType_Molecule = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_Molecule,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__Molecule,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipMolecule::sipMolecule(): Molecule()
+sipMolecule::sipMolecule()
+    : Molecule()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipMolecule::sipMolecule(const Molecule& a0,bool a1): Molecule(a0,a1)
+sipMolecule::sipMolecule(const Molecule& a0,bool a1)
+    : Molecule(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipMolecule::sipMolecule(const String& a0): Molecule(a0)
+sipMolecule::sipMolecule(const String& a0)
+    : Molecule(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipMolecule::sipMolecule(const Molecule& a0): Molecule(a0)
+sipMolecule::sipMolecule(const Molecule& a0)
+    : Molecule(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipMolecule::~sipMolecule()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipMolecule::select()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_select,&relLock))
-		sipSelectable::sipVH_select(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		Composite::select();
-}
 void sipMolecule::deselect()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
-		sipSelectable::sipVH_deselect(&sipPyMethods[1],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
+		sipSelectable::sipVH_deselect(&sipPyMethods[0],sipPyThis,relLock);
 	else
 		Composite::deselect();
 }
-void sipMolecule::clear()
+
+void sipMolecule::select()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipObject::sipVH_clear(&sipPyMethods[2],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_select,&relLock))
+		sipSelectable::sipVH_select(&sipPyMethods[1],sipPyThis,relLock);
 	else
-		Molecule::clear();
+		Composite::select();
 }
+
+bool sipMolecule::isValid() const
+ throw()
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipObject::sipVH_isValid(&sipPyMethods[2],sipPyThis,relLock) :
+		Molecule::isValid();
+}
+
 void sipMolecule::destroy()
+ throw()
 {
 	int relLock;
 
 	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_destroy,&relLock))
-		sipObject::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
+		sipComposite::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
 	else
 		Molecule::destroy();
 }
-bool sipMolecule::isValid() const
+
+void sipMolecule::clear()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipObject::sipVH_isValid(&sipPyMethods[4],sipPyThis,relLock) :
-		Molecule::isValid();
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipObject::sipVH_clear(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		Molecule::clear();
 }
 
 static PyObject *sipDo_Molecule_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Molecule *ptr;
 
@@ -115,7 +144,7 @@ static PyObject *sipDo_Molecule_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -123,12 +152,13 @@ static PyObject *sipDo_Molecule_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Molecule_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Molecule *ptr;
 
@@ -144,7 +174,7 @@ static PyObject *sipDo_Molecule_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -152,6 +182,7 @@ static PyObject *sipDo_Molecule_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Molecule_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -161,7 +192,7 @@ static PyObject *sipDo_Molecule_set(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Molecule,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_Molecule,&a0obj,&a1))
 		{
 			Molecule *ptr;
 
@@ -184,7 +215,7 @@ static PyObject *sipDo_Molecule_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_set);
 
 	return NULL;
 }
@@ -192,6 +223,7 @@ static PyObject *sipDo_Molecule_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Molecule_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -201,7 +233,7 @@ static PyObject *sipDo_Molecule_get(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Molecule,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_Molecule,&a0obj,&a1))
 		{
 			Molecule *ptr;
 
@@ -224,7 +256,7 @@ static PyObject *sipDo_Molecule_get(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_get);
 
 	return NULL;
 }
@@ -232,6 +264,7 @@ static PyObject *sipDo_Molecule_get(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Molecule_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -240,7 +273,7 @@ static PyObject *sipDo_Molecule_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		Molecule *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Molecule,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Molecule,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -263,7 +296,7 @@ static PyObject *sipDo_Molecule_swap(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -271,12 +304,13 @@ static PyObject *sipDo_Molecule_swap(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Molecule_getSystem(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			System *res;
 			Molecule *ptr;
@@ -291,7 +325,7 @@ static PyObject *sipDo_Molecule_getSystem(PyObject *sipThisObj,PyObject *sipArgs
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const System *res;
 			Molecule *ptr;
@@ -307,7 +341,7 @@ static PyObject *sipDo_Molecule_getSystem(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_getSystem);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_getSystem);
 
 	return NULL;
 }
@@ -315,6 +349,7 @@ static PyObject *sipDo_Molecule_getSystem(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -323,7 +358,7 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -348,7 +383,7 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -371,7 +406,7 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_prepend);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_prepend);
 
 	return NULL;
 }
@@ -379,6 +414,7 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -387,7 +423,7 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -412,7 +448,7 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -435,7 +471,7 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_append);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_append);
 
 	return NULL;
 }
@@ -443,6 +479,7 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -451,7 +488,7 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -476,7 +513,7 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -499,7 +536,7 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_insert);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_insert);
 
 	return NULL;
 }
@@ -507,6 +544,7 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -517,7 +555,7 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 		Composite *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
 			Molecule *ptr;
 
@@ -545,7 +583,7 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 		Composite *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
 			Molecule *ptr;
 
@@ -569,7 +607,7 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_insertBefore);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_insertBefore);
 
 	return NULL;
 }
@@ -577,6 +615,7 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -587,7 +626,7 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 		Composite *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
 			Molecule *ptr;
 
@@ -615,7 +654,7 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 		Composite *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_AtomContainer,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
 			Molecule *ptr;
 
@@ -639,7 +678,7 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_insertAfter);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_insertAfter);
 
 	return NULL;
 }
@@ -647,6 +686,7 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -655,7 +695,7 @@ static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			bool res;
 			Molecule *ptr;
@@ -680,7 +720,7 @@ static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			bool res;
 			Molecule *ptr;
@@ -703,7 +743,7 @@ static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_remove);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_remove);
 
 	return NULL;
 }
@@ -711,6 +751,7 @@ static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -719,7 +760,7 @@ static PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipA
 		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -742,7 +783,7 @@ static PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_spliceBefore);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_spliceBefore);
 
 	return NULL;
 }
@@ -750,6 +791,7 @@ static PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -758,7 +800,7 @@ static PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipAr
 		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -781,7 +823,7 @@ static PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_spliceAfter);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_spliceAfter);
 
 	return NULL;
 }
@@ -789,6 +831,7 @@ static PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
@@ -797,7 +840,7 @@ static PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
 		AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			Molecule *ptr;
 
@@ -820,7 +863,7 @@ static PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_splice);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_splice);
 
 	return NULL;
 }
@@ -828,12 +871,13 @@ static PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Molecule_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Molecule)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Molecule *ptr;
@@ -849,7 +893,7 @@ static PyObject *sipDo_Molecule_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Molecule,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Molecule,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -885,17 +929,16 @@ static void sipDealloc_Molecule(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_Molecule(sipThisType *sipThis)
+static PyObject * sip__str__Molecule(PyObject *a0)
 {
-#line 46 "molecule.sip"
+#line 47 "molecule.sip"
   Molecule* ptr;
-  if ((ptr = (Molecule*)sipGetCppPtr(sipThis,sipClass_Molecule)) == NULL)
+  if ((ptr = (Molecule*)sipGetCppPtr((sipThisType*)a0,sipClass_Molecule)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("Molecule ") + ptr->getName() 
 				+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
-#line 903 "../CPP/sipBALLMolecule.cpp"
+#line 946 "sipBALLMolecule.cpp"
 }
 
 PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
@@ -907,6 +950,7 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -914,10 +958,10 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipMolecule();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -926,7 +970,7 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_Molecule,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_Molecule,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -936,7 +980,7 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMolecule(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -944,7 +988,7 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
 		{
 			int iserr = 0;
 
@@ -957,7 +1001,7 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -965,7 +1009,7 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 		const Molecule *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Molecule,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Molecule,&a0obj))
 		{
 			int iserr = 0;
 
@@ -975,12 +1019,12 @@ PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMolecule(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Molecule);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Molecule);
 		return NULL;
 	}
 
@@ -1029,17 +1073,15 @@ int sipCanConvertTo_Molecule(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Molecule);
 }
 
-void sipConvertTo_Molecule(PyObject *sipPy,Molecule **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Molecule(PyObject *sipPy,Molecule **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Molecule);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Molecule);
+		*sipCppPtr = NULL;
 
 		return;
 	}

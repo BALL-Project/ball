@@ -6,7 +6,7 @@
 PyObject *sipClass_CompositeDescriptor;
 
 static void sipDealloc_CompositeDescriptor(sipThisType *);
-static PyObject *sipPyInternalRepr_CompositeDescriptor(sipThisType *);
+static PyObject * sip__str__CompositeDescriptor(PyObject *a0);
 
 static PyTypeObject sipType_CompositeDescriptor = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,38 +19,58 @@ static PyTypeObject sipType_CompositeDescriptor = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_CompositeDescriptor,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__CompositeDescriptor,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipCompositeDescriptor::sipCompositeDescriptor(): CompositeDescriptor()
+sipCompositeDescriptor::sipCompositeDescriptor()
+    : CompositeDescriptor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
-sipCompositeDescriptor::sipCompositeDescriptor(const CompositeDescriptor& a0,bool a1): CompositeDescriptor(a0,a1)
+sipCompositeDescriptor::sipCompositeDescriptor(const CompositeDescriptor& a0,bool a1)
+    : CompositeDescriptor(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
-sipCompositeDescriptor::sipCompositeDescriptor(const CompositeDescriptor& a0): CompositeDescriptor(a0)
+sipCompositeDescriptor::sipCompositeDescriptor(const CompositeDescriptor& a0)
+    : CompositeDescriptor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipCompositeDescriptor::~sipCompositeDescriptor()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipCompositeDescriptor::clear()
+
+bool sipCompositeDescriptor::isValid() const
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipCompositeDescriptor::sipVH_clear(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		CompositeDescriptor::clear();
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipCompositeDescriptor::sipVH_isValid(&sipPyMethods[0],sipPyThis,relLock) :
+		CompositeDescriptor::isValid();
 }
+
 void sipCompositeDescriptor::destroy()
+ throw()
 {
 	int relLock;
 
@@ -59,81 +79,16 @@ void sipCompositeDescriptor::destroy()
 	else
 		CompositeDescriptor::destroy();
 }
-bool sipCompositeDescriptor::isValid() const
+
+void sipCompositeDescriptor::clear()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipCompositeDescriptor::sipVH_isValid(&sipPyMethods[2],sipPyThis,relLock) :
-		CompositeDescriptor::isValid();
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipCompositeDescriptor::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_CompositeDescriptor,sipName_BALL_clear);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipCompositeDescriptor::sipVH_destroy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_CompositeDescriptor,sipName_BALL_destroy);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
+	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipCompositeDescriptor::sipVH_clear(&sipPyMethods[2],sipPyThis,relLock);
+	else
+		CompositeDescriptor::clear();
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -177,15 +132,84 @@ releaseLock:
 	return res;
 }
 
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipCompositeDescriptor::sipVH_destroy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_CompositeDescriptor,sipName_BALL_destroy);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipCompositeDescriptor::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_CompositeDescriptor,sipName_BALL_clear);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
 static PyObject *sipDo_CompositeDescriptor_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			CompositeDescriptor *ptr;
 
@@ -201,7 +225,7 @@ static PyObject *sipDo_CompositeDescriptor_clear(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -209,12 +233,13 @@ static PyObject *sipDo_CompositeDescriptor_clear(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_CompositeDescriptor_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			CompositeDescriptor *ptr;
 
@@ -230,7 +255,7 @@ static PyObject *sipDo_CompositeDescriptor_destroy(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -238,6 +263,7 @@ static PyObject *sipDo_CompositeDescriptor_destroy(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_CompositeDescriptor_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
@@ -247,7 +273,7 @@ static PyObject *sipDo_CompositeDescriptor_set(PyObject *sipThisObj,PyObject *si
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_CompositeDescriptor,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_CompositeDescriptor,&a0obj,&a1))
 		{
 			CompositeDescriptor *ptr;
 
@@ -270,7 +296,7 @@ static PyObject *sipDo_CompositeDescriptor_set(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_set);
 
 	return NULL;
 }
@@ -278,6 +304,7 @@ static PyObject *sipDo_CompositeDescriptor_set(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_CompositeDescriptor_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
@@ -286,7 +313,7 @@ static PyObject *sipDo_CompositeDescriptor_swap(PyObject *sipThisObj,PyObject *s
 		CompositeDescriptor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_CompositeDescriptor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_CompositeDescriptor,&a0obj))
 		{
 			CompositeDescriptor *ptr;
 
@@ -309,7 +336,7 @@ static PyObject *sipDo_CompositeDescriptor_swap(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -317,6 +344,7 @@ static PyObject *sipDo_CompositeDescriptor_swap(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_CompositeDescriptor_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
@@ -325,7 +353,7 @@ static PyObject *sipDo_CompositeDescriptor_setName(PyObject *sipThisObj,PyObject
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			CompositeDescriptor *ptr;
 
@@ -351,7 +379,7 @@ static PyObject *sipDo_CompositeDescriptor_setName(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_setName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_setName);
 
 	return NULL;
 }
@@ -359,12 +387,13 @@ static PyObject *sipDo_CompositeDescriptor_setName(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_CompositeDescriptor_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			String *res;
 			CompositeDescriptor *ptr;
@@ -379,7 +408,7 @@ static PyObject *sipDo_CompositeDescriptor_getName(PyObject *sipThisObj,PyObject
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const String *res;
 			CompositeDescriptor *ptr;
@@ -395,7 +424,7 @@ static PyObject *sipDo_CompositeDescriptor_getName(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_getName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_getName);
 
 	return NULL;
 }
@@ -403,6 +432,7 @@ static PyObject *sipDo_CompositeDescriptor_getName(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
@@ -411,7 +441,7 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 		const Quaternion *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
 		{
 			CompositeDescriptor *ptr;
 
@@ -437,7 +467,7 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 		PyObject *a0obj;
 		float a1;
 
-		if (sipParseArgs(sipArgs,"If",sipCanConvertTo_Vector3,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"If",sipCanConvertTo_Vector3,&a0obj,&a1))
 		{
 			CompositeDescriptor *ptr;
 
@@ -464,7 +494,7 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 		const Angle *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Angle,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Angle,&a1obj))
 		{
 			CompositeDescriptor *ptr;
 
@@ -488,7 +518,7 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_setQuaternion);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_setQuaternion);
 
 	return NULL;
 }
@@ -496,12 +526,13 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 static PyObject *sipDo_CompositeDescriptor_getQuaternion(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Quaternion *res;
 			CompositeDescriptor *ptr;
@@ -516,7 +547,7 @@ static PyObject *sipDo_CompositeDescriptor_getQuaternion(PyObject *sipThisObj,Py
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Quaternion *res;
 			CompositeDescriptor *ptr;
@@ -532,7 +563,7 @@ static PyObject *sipDo_CompositeDescriptor_getQuaternion(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_getQuaternion);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_getQuaternion);
 
 	return NULL;
 }
@@ -540,6 +571,7 @@ static PyObject *sipDo_CompositeDescriptor_getQuaternion(PyObject *sipThisObj,Py
 static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
@@ -551,7 +583,7 @@ static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyO
   if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
     return NULL;
 
-  if (sipParseArgs(sipArgs,""))
+  if (sipParseArgs(&sipArgsParsed,sipArgs,""))
   {
     Composite *res;
     CompositeDescriptor *ptr;
@@ -563,12 +595,12 @@ static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyO
     return pyMapBALLObjectToSip(*res);
   }
 	return NULL;
-#line 571 "../CPP/sipBALLCompositeDescriptor.cpp"
+#line 603 "sipBALLCompositeDescriptor.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_getComposite);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_getComposite);
 
 	return NULL;
 }
@@ -576,12 +608,13 @@ static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyO
 static PyObject *sipDo_CompositeDescriptor_update(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			CompositeDescriptor *ptr;
 
@@ -597,7 +630,7 @@ static PyObject *sipDo_CompositeDescriptor_update(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_update);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_update);
 
 	return NULL;
 }
@@ -605,6 +638,7 @@ static PyObject *sipDo_CompositeDescriptor_update(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_CompositeDescriptor_drawEntity(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
@@ -612,7 +646,7 @@ static PyObject *sipDo_CompositeDescriptor_drawEntity(PyObject *sipThisObj,PyObj
 	{
 		long a0 = false;
 
-		if (sipParseArgs(sipArgs,"|l",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"|l",&a0))
 		{
 			CompositeDescriptor *ptr;
 
@@ -628,7 +662,7 @@ static PyObject *sipDo_CompositeDescriptor_drawEntity(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_drawEntity);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_drawEntity);
 
 	return NULL;
 }
@@ -636,6 +670,7 @@ static PyObject *sipDo_CompositeDescriptor_drawEntity(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_CompositeDescriptor_drawDirect(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
@@ -644,7 +679,7 @@ static PyObject *sipDo_CompositeDescriptor_drawDirect(PyObject *sipThisObj,PyObj
 		long a0 = false;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"|ll",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"|ll",&a0,&a1))
 		{
 			CompositeDescriptor *ptr;
 
@@ -660,7 +695,7 @@ static PyObject *sipDo_CompositeDescriptor_drawDirect(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_drawDirect);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_drawDirect);
 
 	return NULL;
 }
@@ -668,12 +703,13 @@ static PyObject *sipDo_CompositeDescriptor_drawDirect(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_CompositeDescriptor_isShallowCopy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			CompositeDescriptor *ptr;
@@ -689,7 +725,7 @@ static PyObject *sipDo_CompositeDescriptor_isShallowCopy(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_isShallowCopy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_isShallowCopy);
 
 	return NULL;
 }
@@ -697,12 +733,13 @@ static PyObject *sipDo_CompositeDescriptor_isShallowCopy(PyObject *sipThisObj,Py
 static PyObject *sipDo_CompositeDescriptor_isDeepCopy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			CompositeDescriptor *ptr;
@@ -718,7 +755,7 @@ static PyObject *sipDo_CompositeDescriptor_isDeepCopy(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_isDeepCopy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_isDeepCopy);
 
 	return NULL;
 }
@@ -726,12 +763,13 @@ static PyObject *sipDo_CompositeDescriptor_isDeepCopy(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_CompositeDescriptor_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CompositeDescriptor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			CompositeDescriptor *ptr;
@@ -747,7 +785,7 @@ static PyObject *sipDo_CompositeDescriptor_isValid(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CompositeDescriptor,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CompositeDescriptor,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -778,17 +816,16 @@ static void sipDealloc_CompositeDescriptor(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_CompositeDescriptor(sipThisType *sipThis)
+static PyObject * sip__str__CompositeDescriptor(PyObject *a0)
 {
-#line 69 "compositeDescriptor.sip"
+#line 70 "compositeDescriptor.sip"
   CompositeDescriptor* ptr;
-  if ((ptr = (CompositeDescriptor*)sipGetCppPtr(sipThis,sipClass_CompositeDescriptor)) == NULL)
+  if ((ptr = (CompositeDescriptor*)sipGetCppPtr((sipThisType*)a0,sipClass_CompositeDescriptor)) == NULL)
     return NULL;
 
 	String tmp = String("CompositeDescriptor { ") + ptr->getName() + " }";
   return PyString_FromString(tmp.c_str());
-#line 796 "../CPP/sipBALLCompositeDescriptor.cpp"
+#line 833 "sipBALLCompositeDescriptor.cpp"
 }
 
 PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
@@ -800,6 +837,7 @@ PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -807,10 +845,10 @@ PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipCompositeDescriptor();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -819,7 +857,7 @@ PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_CompositeDescriptor,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_CompositeDescriptor,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -829,7 +867,7 @@ PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCompositeDescriptor(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -837,7 +875,7 @@ PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
 		const CompositeDescriptor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_CompositeDescriptor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CompositeDescriptor,&a0obj))
 		{
 			int iserr = 0;
 
@@ -847,12 +885,12 @@ PyObject *sipNew_CompositeDescriptor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCompositeDescriptor(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_CompositeDescriptor);
+		sipNoCtor(sipArgsParsed,sipName_BALL_CompositeDescriptor);
 		return NULL;
 	}
 
@@ -900,17 +938,15 @@ int sipCanConvertTo_CompositeDescriptor(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_CompositeDescriptor);
 }
 
-void sipConvertTo_CompositeDescriptor(PyObject *sipPy,CompositeDescriptor **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_CompositeDescriptor(PyObject *sipPy,CompositeDescriptor **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_CompositeDescriptor);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_CompositeDescriptor);
+		*sipCppPtr = NULL;
 
 		return;
 	}

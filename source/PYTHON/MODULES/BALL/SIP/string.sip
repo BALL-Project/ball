@@ -1,4 +1,4 @@
-// $Id: string.sip,v 1.2 2000/07/20 19:35:07 oliver Exp $
+// $Id: string.sip,v 1.3 2001/07/25 11:32:36 oliver Exp $
 
 class Substring
 {
@@ -98,7 +98,7 @@ class String
 
   // String(Size buffer_size, const char* format, ... );
   // String(std::strstream& s);
-  String(char /c/, Size /size/ = 1);
+  // String(char /c/, Size /size/ = 1);
   // String(const unsigned char uc);
   String(short /s/);
   // String(unsigned short us);
@@ -114,7 +114,7 @@ class String
   void set(const char* /char_ptr/, Index /from/ = 0, Size /len/ = string::npos);
   // void set(Size /buffer_size/, const char *format, ...);
   // void set(std::strstream& s);
-  void set(char /c/, Size /len/ = 1);
+  // void set(char /c/, Size /len/ = 1);
   // void set(unsigned char uc);
   void set(short /s/);
   // void set(unsigned short us);
@@ -233,12 +233,13 @@ class String
   // friend ::std::istream& getline(::std::istream& s,  String& string,  char delimiter = '\n');
 	int size() const;
 
-	operator const char* () const;
+	PyMethods:
+	__str__
 %MemberCode
   const char *s;
   String *ptr;
 
-  if ((ptr = (String *)sipGetCppPtr(sipThis,sipClass_String)) == NULL)
+  if ((ptr = (String *)sipGetCppPtr((sipThisType*)a0,sipClass_String)) == NULL)
     return NULL;
 
   if ((s = ptr->c_str()) == NULL)
@@ -250,11 +251,6 @@ class String
   return PyString_FromString(s);
 %End
 
-	PyMethods:
-	__cmp__(self,other):
-%PythonMemberCode
-return cmp(str(self),str(other))
-%End
  
 %CanConvertToClassCode
 	// automatic conversion of Py-Strings to Strings

@@ -19,78 +19,65 @@ static PyTypeObject sipType_Selectable = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipSelectable::sipSelectable(): Selectable()
+sipSelectable::sipSelectable()
+   throw()  : Selectable()
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
-sipSelectable::sipSelectable(const Selectable& a0,bool a1): Selectable(a0,a1)
+sipSelectable::sipSelectable(const Selectable& a0,bool a1)
+   throw()  : Selectable(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
-sipSelectable::sipSelectable(const Selectable& a0): Selectable(a0)
+sipSelectable::sipSelectable(const Selectable& a0)
+    : Selectable(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipSelectable::~sipSelectable()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipSelectable::select()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_select,&relLock))
-		sipSelectable::sipVH_select(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		Selectable::select();
-}
 void sipSelectable::deselect()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
-		sipSelectable::sipVH_deselect(&sipPyMethods[1],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
+		sipSelectable::sipVH_deselect(&sipPyMethods[0],sipPyThis,relLock);
 	else
 		Selectable::deselect();
 }
 
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipSelectable::sipVH_select(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+void sipSelectable::select()
+ throw()
 {
-	PyObject *resobj;
-	PyObject *sipArgs;
+	int relLock;
 
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_Selectable,sipName_BALL_select);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_select,&relLock))
+		sipSelectable::sipVH_select(&sipPyMethods[1],sipPyThis,relLock);
+	else
+		Selectable::select();
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -127,15 +114,50 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipSelectable::sipVH_select(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_Selectable,sipName_BALL_select);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
 static PyObject *sipDo_Selectable_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Selectable)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Selectable *ptr;
 
@@ -151,7 +173,7 @@ static PyObject *sipDo_Selectable_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Selectable,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Selectable,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -159,12 +181,13 @@ static PyObject *sipDo_Selectable_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Selectable_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Selectable)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Selectable *ptr;
 
@@ -180,7 +203,7 @@ static PyObject *sipDo_Selectable_destroy(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Selectable,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Selectable,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -188,6 +211,7 @@ static PyObject *sipDo_Selectable_destroy(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Selectable_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Selectable)) == NULL)
 		return NULL;
@@ -197,7 +221,7 @@ static PyObject *sipDo_Selectable_set(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Selectable,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_Selectable,&a0obj,&a1))
 		{
 			Selectable *ptr;
 
@@ -220,7 +244,7 @@ static PyObject *sipDo_Selectable_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Selectable,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Selectable,sipName_BALL_set);
 
 	return NULL;
 }
@@ -228,6 +252,7 @@ static PyObject *sipDo_Selectable_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Selectable_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Selectable)) == NULL)
 		return NULL;
@@ -237,7 +262,7 @@ static PyObject *sipDo_Selectable_get(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Selectable,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_Selectable,&a0obj,&a1))
 		{
 			Selectable *ptr;
 
@@ -260,7 +285,7 @@ static PyObject *sipDo_Selectable_get(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Selectable,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Selectable,sipName_BALL_get);
 
 	return NULL;
 }
@@ -268,6 +293,7 @@ static PyObject *sipDo_Selectable_get(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Selectable_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Selectable)) == NULL)
 		return NULL;
@@ -276,7 +302,7 @@ static PyObject *sipDo_Selectable_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		Selectable *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Selectable,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Selectable,&a0obj))
 		{
 			Selectable *ptr;
 
@@ -299,7 +325,7 @@ static PyObject *sipDo_Selectable_swap(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Selectable,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Selectable,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -307,12 +333,13 @@ static PyObject *sipDo_Selectable_swap(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Selectable_select(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Selectable)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Selectable *ptr;
 
@@ -328,7 +355,7 @@ static PyObject *sipDo_Selectable_select(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Selectable,sipName_BALL_select);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Selectable,sipName_BALL_select);
 
 	return NULL;
 }
@@ -336,12 +363,13 @@ static PyObject *sipDo_Selectable_select(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Selectable_deselect(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Selectable)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Selectable *ptr;
 
@@ -357,7 +385,7 @@ static PyObject *sipDo_Selectable_deselect(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Selectable,sipName_BALL_deselect);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Selectable,sipName_BALL_deselect);
 
 	return NULL;
 }
@@ -365,12 +393,13 @@ static PyObject *sipDo_Selectable_deselect(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_Selectable_isSelected(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Selectable)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Selectable *ptr;
@@ -386,7 +415,7 @@ static PyObject *sipDo_Selectable_isSelected(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Selectable,sipName_BALL_isSelected);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Selectable,sipName_BALL_isSelected);
 
 	return NULL;
 }
@@ -427,6 +456,7 @@ PyObject *sipNew_Selectable(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -434,10 +464,10 @@ PyObject *sipNew_Selectable(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipSelectable();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -446,7 +476,7 @@ PyObject *sipNew_Selectable(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_Selectable,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_Selectable,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -456,7 +486,7 @@ PyObject *sipNew_Selectable(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSelectable(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -464,7 +494,7 @@ PyObject *sipNew_Selectable(PyObject *sipSelf,PyObject *sipArgs)
 		const Selectable *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Selectable,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Selectable,&a0obj))
 		{
 			int iserr = 0;
 
@@ -474,12 +504,12 @@ PyObject *sipNew_Selectable(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSelectable(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Selectable);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Selectable);
 		return NULL;
 	}
 
@@ -520,17 +550,15 @@ int sipCanConvertTo_Selectable(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Selectable);
 }
 
-void sipConvertTo_Selectable(PyObject *sipPy,Selectable **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Selectable(PyObject *sipPy,Selectable **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Selectable);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Selectable);
+		*sipCppPtr = NULL;
 
 		return;
 	}

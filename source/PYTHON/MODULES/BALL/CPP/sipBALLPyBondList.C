@@ -34,7 +34,7 @@ PyObject *sipConvertFrom_PyBondList(const PyBondList *sipCpp)
 	}
 
 	return pl;
-#line 42 "../CPP/sipBALLPyBondList.cpp"
+#line 42 "sipBALLPyBondList.cpp"
 }
 
 PyObject *sipClass_PyBondList;
@@ -43,23 +43,13 @@ int sipCanConvertTo_PyBondList(PyObject *sipPy)
 {
 #line 37 "pyBondList.sip"
 	return PyList_Check(sipPy);
-#line 51 "../CPP/sipBALLPyBondList.cpp"
+#line 51 "sipBALLPyBondList.cpp"
 }
 
-int sipConvertTo_PyBondList(PyObject *sipPy,PyBondList **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_PyBondList(PyObject *sipPy,PyBondList **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
-
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PyBondList);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
+		return 0;
 
 #line 41 "pyBondList.sip"
 	// Convert a Python list of Bond instances to an BondList object on the
@@ -85,7 +75,7 @@ int sipConvertTo_PyBondList(PyObject *sipPy,PyBondList **sipCppPtr,int sipNoNull
 	*sipCppPtr = bond_list;
 
 	return 1;
-#line 93 "../CPP/sipBALLPyBondList.cpp"
+#line 83 "sipBALLPyBondList.cpp"
 }
 
 PyBondList *sipForceConvertTo_PyBondList(PyObject *valobj,int *iserrp)

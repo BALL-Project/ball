@@ -19,18 +19,35 @@ static PyTypeObject sipType_MainControl = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipMainControl::sipMainControl(const MainControl& a0): MainControl(a0)
+sipMainControl::sipMainControl(const MainControl& a0)
+   throw()  : MainControl(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipMainControl::~sipMainControl()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
+
 void sipMainControl::registerThis()
+ throw()
 {
 	int relLock;
 
@@ -39,16 +56,19 @@ void sipMainControl::registerThis()
 	else
 		Embeddable::registerThis();
 }
-void sipMainControl::clear()
+
+bool sipMainControl::isValid() const
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipMainControl::sipVH_clear(&sipPyMethods[1],sipPyThis,relLock);
-	else
-		MainControl::clear();
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipMainControl::sipVH_isValid(&sipPyMethods[1],sipPyThis,relLock) :
+		MainControl::isValid();
 }
+
 void sipMainControl::destroy()
+ throw()
 {
 	int relLock;
 
@@ -57,81 +77,16 @@ void sipMainControl::destroy()
 	else
 		MainControl::destroy();
 }
-bool sipMainControl::isValid() const
+
+void sipMainControl::clear()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipMainControl::sipVH_isValid(&sipPyMethods[3],sipPyThis,relLock) :
-		MainControl::isValid();
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipMainControl::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_MainControl,sipName_BALL_clear);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipMainControl::sipVH_destroy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_MainControl,sipName_BALL_destroy);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
+	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipMainControl::sipVH_clear(&sipPyMethods[3],sipPyThis,relLock);
+	else
+		MainControl::clear();
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -175,15 +130,84 @@ releaseLock:
 	return res;
 }
 
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipMainControl::sipVH_destroy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_MainControl,sipName_BALL_destroy);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipMainControl::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_MainControl,sipName_BALL_clear);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
 static PyObject *sipDo_MainControl_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			MainControl *ptr;
 
@@ -199,7 +223,7 @@ static PyObject *sipDo_MainControl_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -207,12 +231,13 @@ static PyObject *sipDo_MainControl_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_MainControl_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			MainControl *ptr;
 
@@ -228,7 +253,7 @@ static PyObject *sipDo_MainControl_destroy(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -236,6 +261,7 @@ static PyObject *sipDo_MainControl_destroy(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
@@ -249,7 +275,7 @@ static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs
 		const Vector3 *a2 = &a2def;
 		PyObject *a2obj = NULL;
 
-		if (sipParseArgs(sipArgs,"I|II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_Vector3,&a2obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_Vector3,&a2obj))
 		{
 			CompositeDescriptor *res;
 			MainControl *ptr;
@@ -277,7 +303,7 @@ static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_insert);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_insert);
 
 	return NULL;
 }
@@ -285,6 +311,7 @@ static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
@@ -293,7 +320,7 @@ static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs
 		const Composite *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
 		{
 			bool res;
 			MainControl *ptr;
@@ -318,7 +345,7 @@ static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs
 		const CompositeDescriptor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_CompositeDescriptor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_CompositeDescriptor,&a0obj))
 		{
 			bool res;
 			MainControl *ptr;
@@ -341,7 +368,7 @@ static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_remove);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_remove);
 
 	return NULL;
 }
@@ -349,12 +376,13 @@ static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_MainControl_getDescriptorList(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PyCompositeDescriptorList *res;
 			MainControl *ptr;
@@ -373,7 +401,7 @@ static PyObject *sipDo_MainControl_getDescriptorList(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_getDescriptorList);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_getDescriptorList);
 
 	return NULL;
 }
@@ -381,6 +409,7 @@ static PyObject *sipDo_MainControl_getDescriptorList(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_MainControl_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
@@ -391,7 +420,7 @@ static PyObject *sipDo_MainControl_setName(PyObject *sipThisObj,PyObject *sipArg
 		const String *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			bool res;
 			MainControl *ptr;
@@ -418,7 +447,7 @@ static PyObject *sipDo_MainControl_setName(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_setName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_setName);
 
 	return NULL;
 }
@@ -426,6 +455,7 @@ static PyObject *sipDo_MainControl_setName(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
@@ -434,7 +464,7 @@ static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArg
 		const Composite *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
 		{
 			String *res;
 			MainControl *ptr;
@@ -459,7 +489,7 @@ static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArg
 		const Composite *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
 		{
 			const String *res;
 			MainControl *ptr;
@@ -482,7 +512,7 @@ static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_getName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_getName);
 
 	return NULL;
 }
@@ -490,6 +520,7 @@ static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
@@ -498,7 +529,7 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			CompositeDescriptor *res;
 			MainControl *ptr;
@@ -526,7 +557,7 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			const CompositeDescriptor *res;
 			MainControl *ptr;
@@ -554,7 +585,7 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 		const Vector3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
 		{
 			CompositeDescriptor *res;
 			MainControl *ptr;
@@ -579,7 +610,7 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 		const Vector3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
 		{
 			const CompositeDescriptor *res;
 			MainControl *ptr;
@@ -602,7 +633,7 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_getDescriptor);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_getDescriptor);
 
 	return NULL;
 }
@@ -610,6 +641,7 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
@@ -620,7 +652,7 @@ static PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipA
 		const Vector3 *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_Vector3,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Composite,&a0obj,sipCanConvertTo_Vector3,&a1obj))
 		{
 			bool res;
 			MainControl *ptr;
@@ -644,7 +676,7 @@ static PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_setCenter);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_setCenter);
 
 	return NULL;
 }
@@ -652,6 +684,7 @@ static PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
@@ -660,7 +693,7 @@ static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipA
 		const Composite *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
 		{
 			Vector3 *res;
 			MainControl *ptr;
@@ -685,7 +718,7 @@ static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipA
 		const Composite *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
 		{
 			const Vector3 *res;
 			MainControl *ptr;
@@ -708,7 +741,7 @@ static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_getCenter);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_getCenter);
 
 	return NULL;
 }
@@ -716,6 +749,7 @@ static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_MainControl_update(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
@@ -724,7 +758,7 @@ static PyObject *sipDo_MainControl_update(PyObject *sipThisObj,PyObject *sipArgs
 		const Composite *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
 		{
 			bool res;
 			MainControl *ptr;
@@ -747,7 +781,7 @@ static PyObject *sipDo_MainControl_update(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_update);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_update);
 
 	return NULL;
 }
@@ -755,12 +789,13 @@ static PyObject *sipDo_MainControl_update(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_MainControl_updateAll(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			MainControl *ptr;
 
@@ -776,7 +811,7 @@ static PyObject *sipDo_MainControl_updateAll(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_updateAll);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_updateAll);
 
 	return NULL;
 }
@@ -784,6 +819,7 @@ static PyObject *sipDo_MainControl_updateAll(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
@@ -792,7 +828,7 @@ static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sip
 		const Composite *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
 		{
 			bool res;
 			MainControl *ptr;
@@ -817,7 +853,7 @@ static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sip
 		const CompositeDescriptor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_CompositeDescriptor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_CompositeDescriptor,&a0obj))
 		{
 			bool res;
 			MainControl *ptr;
@@ -840,7 +876,7 @@ static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_isInserted);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_isInserted);
 
 	return NULL;
 }
@@ -848,12 +884,13 @@ static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_MainControl_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MainControl)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			MainControl *ptr;
@@ -869,16 +906,17 @@ static PyObject *sipDo_MainControl_isValid(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_isValid);
 
 	return NULL;
 }
 
 static PyObject *sipDo_MainControl_countInstances(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			int res;
 
@@ -890,19 +928,20 @@ static PyObject *sipDo_MainControl_countInstances(PyObject *,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_countInstances);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_countInstances);
 
 	return NULL;
 }
 
 static PyObject *sipDo_MainControl_getInstance(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
 		Position *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Position,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Position,&a0obj))
 		{
 			MainControl *res;
 
@@ -924,7 +963,7 @@ static PyObject *sipDo_MainControl_getInstance(PyObject *,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MainControl,sipName_BALL_getInstance);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MainControl,sipName_BALL_getInstance);
 
 	return NULL;
 }
@@ -970,6 +1009,7 @@ PyObject *sipNew_MainControl(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -980,7 +1020,7 @@ PyObject *sipNew_MainControl(PyObject *sipSelf,PyObject *sipArgs)
 		const MainControl *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_MainControl,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_MainControl,&a0obj))
 		{
 			int iserr = 0;
 
@@ -990,12 +1030,12 @@ PyObject *sipNew_MainControl(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMainControl(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_MainControl);
+		sipNoCtor(sipArgsParsed,sipName_BALL_MainControl);
 		return NULL;
 	}
 
@@ -1044,17 +1084,15 @@ int sipCanConvertTo_MainControl(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_MainControl);
 }
 
-void sipConvertTo_MainControl(PyObject *sipPy,MainControl **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_MainControl(PyObject *sipPy,MainControl **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_MainControl);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_MainControl);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -1,4 +1,4 @@
-// $Id: chain.sip,v 1.2 2000/08/30 19:59:09 oliver Exp $
+// $Id: chain.sip,v 1.3 2001/07/25 11:32:32 oliver Exp $
 
 class Chain
  : AtomContainer
@@ -11,9 +11,9 @@ class Chain
   Chain();
   Chain(const Chain&, bool = true);
   Chain(const String&);
-  ~Chain();
-  virtual void clear();
-  virtual void destroy();
+  ~Chain() throw();
+  virtual void clear() throw();
+  virtual void destroy() throw();
 	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 	//  void persistentRead(PersistenceManager& pm);
   void set(const Chain&, bool = true);
@@ -50,15 +50,16 @@ class Chain
   void spliceBefore(Chain&);
   void spliceAfter(Chain&);
   void splice(Chain&);
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
 	
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   Chain* ptr;
-  if ((ptr = (Chain*)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
+  if ((ptr = (Chain*)sipGetCppPtr((sipThisType*)a0,sipClass_Chain)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("Chain ") + ptr->getName()

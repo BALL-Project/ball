@@ -19,127 +19,418 @@ static PyTypeObject sipType_EnergyMinimizer = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipEnergyMinimizer::sipEnergyMinimizer(): EnergyMinimizer()
+sipEnergyMinimizer::sipEnergyMinimizer()
+    : EnergyMinimizer()
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
-sipEnergyMinimizer::sipEnergyMinimizer(ForceField& a0): EnergyMinimizer(a0)
+sipEnergyMinimizer::sipEnergyMinimizer(ForceField& a0)
+    : EnergyMinimizer(a0)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
-sipEnergyMinimizer::sipEnergyMinimizer(ForceField& a0,Options& a1): EnergyMinimizer(a0,a1)
+sipEnergyMinimizer::sipEnergyMinimizer(ForceField& a0,Options& a1)
+    : EnergyMinimizer(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
-sipEnergyMinimizer::sipEnergyMinimizer(const EnergyMinimizer& a0,bool a1): EnergyMinimizer(a0,a1)
+sipEnergyMinimizer::sipEnergyMinimizer(const EnergyMinimizer& a0,bool a1)
+    : EnergyMinimizer(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
-sipEnergyMinimizer::sipEnergyMinimizer(const EnergyMinimizer& a0): EnergyMinimizer(a0)
+sipEnergyMinimizer::sipEnergyMinimizer(const EnergyMinimizer& a0)
+    : EnergyMinimizer(a0)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
 
 sipEnergyMinimizer::~sipEnergyMinimizer()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipEnergyMinimizer::specificSetup()
+
+bool sipEnergyMinimizer::minimize(int a0,bool a1)
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_specificSetup,&relLock) ?
-		sipEnergyMinimizer::sipVH_specificSetup(&sipPyMethods[0],sipPyThis,relLock) :
-		EnergyMinimizer::specificSetup();
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_minimize,&relLock) ?
+		sipEnergyMinimizer::sipVH_minimize(&sipPyMethods[0],sipPyThis,relLock,a0,a1) :
+		EnergyMinimizer::minimize(a0,a1);
 }
-bool sipEnergyMinimizer::isConverged() const
-{
-	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_isConverged,&relLock) ?
-		sipEnergyMinimizer::sipVH_isConverged(&sipPyMethods[1],sipPyThis,relLock) :
-		EnergyMinimizer::isConverged();
-}
-bool sipEnergyMinimizer::findStep()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_findStep,&relLock) ?
-		sipEnergyMinimizer::sipVH_findStep(&sipPyMethods[2],sipPyThis,relLock) :
-		EnergyMinimizer::findStep();
-}
-void sipEnergyMinimizer::updateDirection()
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_updateDirection,&relLock))
-		sipEnergyMinimizer::sipVH_updateDirection(&sipPyMethods[3],sipPyThis,relLock);
-	else
-		EnergyMinimizer::updateDirection();
-}
-double sipEnergyMinimizer::updateEnergy()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_updateEnergy,&relLock) ?
-		sipEnergyMinimizer::sipVH_updateEnergy(&sipPyMethods[4],sipPyThis,relLock) :
-		EnergyMinimizer::updateEnergy();
-}
-void sipEnergyMinimizer::updateForces()
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
-		sipEnergyMinimizer::sipVH_updateForces(&sipPyMethods[5],sipPyThis,relLock);
-	else
-		EnergyMinimizer::updateForces();
-}
-void sipEnergyMinimizer::printEnergy() const
-{
-	int relLock;
-
-	if (sipIsPyMethod((sipMethodCache *)&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_printEnergy,&relLock))
-		sipEnergyMinimizer::sipVH_printEnergy(&sipPyMethods[6],sipPyThis,relLock);
-	else
-		EnergyMinimizer::printEnergy();
-}
-void sipEnergyMinimizer::takeSnapShot() const
-{
-	int relLock;
-
-	if (sipIsPyMethod((sipMethodCache *)&sipPyMethods[7],sipPyThis,NULL,sipName_BALL_takeSnapShot,&relLock))
-		sipEnergyMinimizer::sipVH_takeSnapShot(&sipPyMethods[7],sipPyThis,relLock);
-	else
-		EnergyMinimizer::takeSnapShot();
-}
 void sipEnergyMinimizer::finishIteration()
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[8],sipPyThis,NULL,sipName_BALL_finishIteration,&relLock))
-		sipEnergyMinimizer::sipVH_finishIteration(&sipPyMethods[8],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_finishIteration,&relLock))
+		sipEnergyMinimizer::sipVH_finishIteration(&sipPyMethods[1],sipPyThis,relLock);
 	else
 		EnergyMinimizer::finishIteration();
 }
-bool sipEnergyMinimizer::minimize(int a0,bool a1)
+
+void sipEnergyMinimizer::takeSnapShot() const
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[9],sipPyThis,NULL,sipName_BALL_minimize,&relLock) ?
-		sipEnergyMinimizer::sipVH_minimize(&sipPyMethods[9],sipPyThis,relLock,a0,a1) :
-		EnergyMinimizer::minimize(a0,a1);
+	if (sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_takeSnapShot,&relLock))
+		sipEnergyMinimizer::sipVH_takeSnapShot(&sipPyMethods[2],sipPyThis,relLock);
+	else
+		EnergyMinimizer::takeSnapShot();
+}
+
+void sipEnergyMinimizer::printEnergy() const
+
+{
+	int relLock;
+
+	if (sipIsPyMethod((sipMethodCache *)&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_printEnergy,&relLock))
+		sipEnergyMinimizer::sipVH_printEnergy(&sipPyMethods[3],sipPyThis,relLock);
+	else
+		EnergyMinimizer::printEnergy();
+}
+
+void sipEnergyMinimizer::updateForces()
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
+		sipEnergyMinimizer::sipVH_updateForces(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		EnergyMinimizer::updateForces();
+}
+
+double sipEnergyMinimizer::updateEnergy()
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_updateEnergy,&relLock) ?
+		sipEnergyMinimizer::sipVH_updateEnergy(&sipPyMethods[5],sipPyThis,relLock) :
+		EnergyMinimizer::updateEnergy();
+}
+
+void sipEnergyMinimizer::updateDirection()
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_updateDirection,&relLock))
+		sipEnergyMinimizer::sipVH_updateDirection(&sipPyMethods[6],sipPyThis,relLock);
+	else
+		EnergyMinimizer::updateDirection();
+}
+
+bool sipEnergyMinimizer::findStep()
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[7],sipPyThis,NULL,sipName_BALL_findStep,&relLock) ?
+		sipEnergyMinimizer::sipVH_findStep(&sipPyMethods[7],sipPyThis,relLock) :
+		EnergyMinimizer::findStep();
+}
+
+bool sipEnergyMinimizer::isConverged() const
+
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[8],sipPyThis,NULL,sipName_BALL_isConverged,&relLock) ?
+		sipEnergyMinimizer::sipVH_isConverged(&sipPyMethods[8],sipPyThis,relLock) :
+		EnergyMinimizer::isConverged();
+}
+
+bool sipEnergyMinimizer::specificSetup()
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[9],sipPyThis,NULL,sipName_BALL_specificSetup,&relLock) ?
+		sipEnergyMinimizer::sipVH_specificSetup(&sipPyMethods[9],sipPyThis,relLock) :
+		EnergyMinimizer::specificSetup();
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-bool sipEnergyMinimizer::sipVH_specificSetup(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+bool sipEnergyMinimizer::sipVH_minimize(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,int a0,bool a1)
+{
+	bool res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(Oii)",sipThis -> sipSelf,a0,a1);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = (bool)PyInt_AsLong(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_minimize);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipEnergyMinimizer::sipVH_finishIteration(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_finishIteration);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipEnergyMinimizer::sipVH_takeSnapShot(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_takeSnapShot);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipEnergyMinimizer::sipVH_printEnergy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_printEnergy);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipEnergyMinimizer::sipVH_updateForces(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_updateForces);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+double sipEnergyMinimizer::sipVH_updateEnergy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	double res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = PyFloat_AsDouble(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_updateEnergy);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipEnergyMinimizer::sipVH_updateDirection(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_updateDirection);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+bool sipEnergyMinimizer::sipVH_findStep(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
 {
 	bool res;
 	PyObject *resobj;
@@ -165,7 +456,7 @@ bool sipEnergyMinimizer::sipVH_specificSetup(const sipMethodCache *pymc,sipThisT
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_specificSetup);
+		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_findStep);
 	}
 
 reportError:
@@ -221,7 +512,7 @@ releaseLock:
 // The common handler for all classes that inherit this virtual member
 // function.
 
-bool sipEnergyMinimizer::sipVH_findStep(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+bool sipEnergyMinimizer::sipVH_specificSetup(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
 {
 	bool res;
 	PyObject *resobj;
@@ -247,259 +538,7 @@ bool sipEnergyMinimizer::sipVH_findStep(const sipMethodCache *pymc,sipThisType *
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_findStep);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipEnergyMinimizer::sipVH_updateDirection(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_updateDirection);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-double sipEnergyMinimizer::sipVH_updateEnergy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	double res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = PyFloat_AsDouble(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_updateEnergy);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipEnergyMinimizer::sipVH_updateForces(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_updateForces);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipEnergyMinimizer::sipVH_printEnergy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_printEnergy);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipEnergyMinimizer::sipVH_takeSnapShot(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_takeSnapShot);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipEnergyMinimizer::sipVH_finishIteration(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_finishIteration);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipEnergyMinimizer::sipVH_minimize(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,int a0,bool a1)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(Oii)",sipThis -> sipSelf,a0,a1);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_minimize);
+		sipBadVirtualResultType(sipName_BALL_EnergyMinimizer,sipName_BALL_specificSetup);
 	}
 
 reportError:
@@ -514,12 +553,13 @@ releaseLock:
 static PyObject *sipDo_EnergyMinimizer_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			EnergyMinimizer *ptr;
@@ -535,7 +575,7 @@ static PyObject *sipDo_EnergyMinimizer_isValid(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -543,6 +583,7 @@ static PyObject *sipDo_EnergyMinimizer_isValid(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
@@ -551,7 +592,7 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			bool res;
 			EnergyMinimizer *ptr;
@@ -578,7 +619,7 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 		SnapShotManager *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
 		{
 			bool res;
 			EnergyMinimizer *ptr;
@@ -608,7 +649,7 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 		Options *a2;
 		PyObject *a2obj;
 
-		if (sipParseArgs(sipArgs,"III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
 		{
 			bool res;
 			EnergyMinimizer *ptr;
@@ -637,7 +678,7 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 		Options *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_Options,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_Options,&a1obj))
 		{
 			bool res;
 			EnergyMinimizer *ptr;
@@ -661,7 +702,7 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -669,12 +710,13 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_EnergyMinimizer_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			EnergyMinimizer *ptr;
@@ -690,7 +732,7 @@ static PyObject *sipDo_EnergyMinimizer_specificSetup(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_specificSetup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_specificSetup);
 
 	return NULL;
 }
@@ -698,12 +740,13 @@ static PyObject *sipDo_EnergyMinimizer_specificSetup(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_EnergyMinimizer_isConverged(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			EnergyMinimizer *ptr;
@@ -719,7 +762,7 @@ static PyObject *sipDo_EnergyMinimizer_isConverged(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_isConverged);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_isConverged);
 
 	return NULL;
 }
@@ -727,12 +770,13 @@ static PyObject *sipDo_EnergyMinimizer_isConverged(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_EnergyMinimizer_findStep(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			EnergyMinimizer *ptr;
@@ -748,7 +792,7 @@ static PyObject *sipDo_EnergyMinimizer_findStep(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_findStep);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_findStep);
 
 	return NULL;
 }
@@ -756,12 +800,13 @@ static PyObject *sipDo_EnergyMinimizer_findStep(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_EnergyMinimizer_updateDirection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			EnergyMinimizer *ptr;
 
@@ -777,7 +822,7 @@ static PyObject *sipDo_EnergyMinimizer_updateDirection(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_updateDirection);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_updateDirection);
 
 	return NULL;
 }
@@ -785,12 +830,13 @@ static PyObject *sipDo_EnergyMinimizer_updateDirection(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_EnergyMinimizer_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			EnergyMinimizer *ptr;
@@ -806,7 +852,7 @@ static PyObject *sipDo_EnergyMinimizer_updateEnergy(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_updateEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_updateEnergy);
 
 	return NULL;
 }
@@ -814,12 +860,13 @@ static PyObject *sipDo_EnergyMinimizer_updateEnergy(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_EnergyMinimizer_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			EnergyMinimizer *ptr;
 
@@ -835,7 +882,7 @@ static PyObject *sipDo_EnergyMinimizer_updateForces(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_updateForces);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_updateForces);
 
 	return NULL;
 }
@@ -843,12 +890,13 @@ static PyObject *sipDo_EnergyMinimizer_updateForces(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_EnergyMinimizer_printEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			EnergyMinimizer *ptr;
 
@@ -864,7 +912,7 @@ static PyObject *sipDo_EnergyMinimizer_printEnergy(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_printEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_printEnergy);
 
 	return NULL;
 }
@@ -872,12 +920,13 @@ static PyObject *sipDo_EnergyMinimizer_printEnergy(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_EnergyMinimizer_takeSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			EnergyMinimizer *ptr;
 
@@ -893,7 +942,7 @@ static PyObject *sipDo_EnergyMinimizer_takeSnapShot(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_takeSnapShot);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_takeSnapShot);
 
 	return NULL;
 }
@@ -901,12 +950,13 @@ static PyObject *sipDo_EnergyMinimizer_takeSnapShot(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_EnergyMinimizer_finishIteration(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			EnergyMinimizer *ptr;
 
@@ -922,7 +972,7 @@ static PyObject *sipDo_EnergyMinimizer_finishIteration(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_finishIteration);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_finishIteration);
 
 	return NULL;
 }
@@ -930,12 +980,13 @@ static PyObject *sipDo_EnergyMinimizer_finishIteration(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_EnergyMinimizer_getNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			EnergyMinimizer *ptr;
@@ -951,7 +1002,7 @@ static PyObject *sipDo_EnergyMinimizer_getNumberOfIteration(PyObject *sipThisObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getNumberOfIteration);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getNumberOfIteration);
 
 	return NULL;
 }
@@ -959,12 +1010,13 @@ static PyObject *sipDo_EnergyMinimizer_getNumberOfIteration(PyObject *sipThisObj
 static PyObject *sipDo_EnergyMinimizer_getDirection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Gradient *res;
 			EnergyMinimizer *ptr;
@@ -980,7 +1032,7 @@ static PyObject *sipDo_EnergyMinimizer_getDirection(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getDirection);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getDirection);
 
 	return NULL;
 }
@@ -988,12 +1040,13 @@ static PyObject *sipDo_EnergyMinimizer_getDirection(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_EnergyMinimizer_getGradient(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Gradient *res;
 			EnergyMinimizer *ptr;
@@ -1009,7 +1062,7 @@ static PyObject *sipDo_EnergyMinimizer_getGradient(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getGradient);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getGradient);
 
 	return NULL;
 }
@@ -1017,12 +1070,13 @@ static PyObject *sipDo_EnergyMinimizer_getGradient(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_EnergyMinimizer_getInitialGradient(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Gradient *res;
 			EnergyMinimizer *ptr;
@@ -1038,7 +1092,7 @@ static PyObject *sipDo_EnergyMinimizer_getInitialGradient(PyObject *sipThisObj,P
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getInitialGradient);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getInitialGradient);
 
 	return NULL;
 }
@@ -1046,12 +1100,13 @@ static PyObject *sipDo_EnergyMinimizer_getInitialGradient(PyObject *sipThisObj,P
 static PyObject *sipDo_EnergyMinimizer_getEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			EnergyMinimizer *ptr;
@@ -1067,7 +1122,7 @@ static PyObject *sipDo_EnergyMinimizer_getEnergy(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getEnergy);
 
 	return NULL;
 }
@@ -1075,12 +1130,13 @@ static PyObject *sipDo_EnergyMinimizer_getEnergy(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_EnergyMinimizer_getInitialEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			EnergyMinimizer *ptr;
@@ -1096,7 +1152,7 @@ static PyObject *sipDo_EnergyMinimizer_getInitialEnergy(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getInitialEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getInitialEnergy);
 
 	return NULL;
 }
@@ -1104,6 +1160,7 @@ static PyObject *sipDo_EnergyMinimizer_getInitialEnergy(PyObject *sipThisObj,PyO
 static PyObject *sipDo_EnergyMinimizer_setNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
@@ -1111,7 +1168,7 @@ static PyObject *sipDo_EnergyMinimizer_setNumberOfIteration(PyObject *sipThisObj
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			EnergyMinimizer *ptr;
 
@@ -1127,7 +1184,7 @@ static PyObject *sipDo_EnergyMinimizer_setNumberOfIteration(PyObject *sipThisObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_setNumberOfIteration);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_setNumberOfIteration);
 
 	return NULL;
 }
@@ -1135,12 +1192,13 @@ static PyObject *sipDo_EnergyMinimizer_setNumberOfIteration(PyObject *sipThisObj
 static PyObject *sipDo_EnergyMinimizer_getMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			EnergyMinimizer *ptr;
@@ -1156,7 +1214,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaximalNumberOfIterations(PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getMaximalNumberOfIterations);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getMaximalNumberOfIterations);
 
 	return NULL;
 }
@@ -1164,6 +1222,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaximalNumberOfIterations(PyObject *si
 static PyObject *sipDo_EnergyMinimizer_setMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
@@ -1171,7 +1230,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaximalNumberOfIterations(PyObject *si
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			EnergyMinimizer *ptr;
 
@@ -1187,7 +1246,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaximalNumberOfIterations(PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_setMaximalNumberOfIterations);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_setMaximalNumberOfIterations);
 
 	return NULL;
 }
@@ -1195,6 +1254,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaximalNumberOfIterations(PyObject *si
 static PyObject *sipDo_EnergyMinimizer_setMaxSameEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
@@ -1202,7 +1262,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaxSameEnergy(PyObject *sipThisObj,PyO
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			EnergyMinimizer *ptr;
 
@@ -1218,7 +1278,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaxSameEnergy(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_setMaxSameEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_setMaxSameEnergy);
 
 	return NULL;
 }
@@ -1226,12 +1286,13 @@ static PyObject *sipDo_EnergyMinimizer_setMaxSameEnergy(PyObject *sipThisObj,PyO
 static PyObject *sipDo_EnergyMinimizer_getMaxSameEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			EnergyMinimizer *ptr;
@@ -1247,7 +1308,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaxSameEnergy(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getMaxSameEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getMaxSameEnergy);
 
 	return NULL;
 }
@@ -1255,6 +1316,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaxSameEnergy(PyObject *sipThisObj,PyO
 static PyObject *sipDo_EnergyMinimizer_setEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
@@ -1262,7 +1324,7 @@ static PyObject *sipDo_EnergyMinimizer_setEnergyOutputFrequency(PyObject *sipThi
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			EnergyMinimizer *ptr;
 
@@ -1278,7 +1340,7 @@ static PyObject *sipDo_EnergyMinimizer_setEnergyOutputFrequency(PyObject *sipThi
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_setEnergyOutputFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_setEnergyOutputFrequency);
 
 	return NULL;
 }
@@ -1286,12 +1348,13 @@ static PyObject *sipDo_EnergyMinimizer_setEnergyOutputFrequency(PyObject *sipThi
 static PyObject *sipDo_EnergyMinimizer_getEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			EnergyMinimizer *ptr;
@@ -1307,7 +1370,7 @@ static PyObject *sipDo_EnergyMinimizer_getEnergyOutputFrequency(PyObject *sipThi
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getEnergyOutputFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getEnergyOutputFrequency);
 
 	return NULL;
 }
@@ -1315,6 +1378,7 @@ static PyObject *sipDo_EnergyMinimizer_getEnergyOutputFrequency(PyObject *sipThi
 static PyObject *sipDo_EnergyMinimizer_setEnergyDifferenceBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
@@ -1322,7 +1386,7 @@ static PyObject *sipDo_EnergyMinimizer_setEnergyDifferenceBound(PyObject *sipThi
 	{
 		float a0;
 
-		if (sipParseArgs(sipArgs,"f",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
 		{
 			EnergyMinimizer *ptr;
 
@@ -1338,7 +1402,7 @@ static PyObject *sipDo_EnergyMinimizer_setEnergyDifferenceBound(PyObject *sipThi
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_setEnergyDifferenceBound);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_setEnergyDifferenceBound);
 
 	return NULL;
 }
@@ -1346,12 +1410,13 @@ static PyObject *sipDo_EnergyMinimizer_setEnergyDifferenceBound(PyObject *sipThi
 static PyObject *sipDo_EnergyMinimizer_getEnergyDifferenceBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			EnergyMinimizer *ptr;
@@ -1367,7 +1432,7 @@ static PyObject *sipDo_EnergyMinimizer_getEnergyDifferenceBound(PyObject *sipThi
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getEnergyDifferenceBound);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getEnergyDifferenceBound);
 
 	return NULL;
 }
@@ -1375,6 +1440,7 @@ static PyObject *sipDo_EnergyMinimizer_getEnergyDifferenceBound(PyObject *sipThi
 static PyObject *sipDo_EnergyMinimizer_setMaxGradient(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
@@ -1382,7 +1448,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaxGradient(PyObject *sipThisObj,PyObj
 	{
 		float a0;
 
-		if (sipParseArgs(sipArgs,"f",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
 		{
 			EnergyMinimizer *ptr;
 
@@ -1398,7 +1464,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaxGradient(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_setMaxGradient);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_setMaxGradient);
 
 	return NULL;
 }
@@ -1406,12 +1472,13 @@ static PyObject *sipDo_EnergyMinimizer_setMaxGradient(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_EnergyMinimizer_getMaxGradient(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			EnergyMinimizer *ptr;
@@ -1427,7 +1494,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaxGradient(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getMaxGradient);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getMaxGradient);
 
 	return NULL;
 }
@@ -1435,6 +1502,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaxGradient(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_EnergyMinimizer_setMaximalShift(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
@@ -1442,7 +1510,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaximalShift(PyObject *sipThisObj,PyOb
 	{
 		float a0;
 
-		if (sipParseArgs(sipArgs,"f",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
 		{
 			EnergyMinimizer *ptr;
 
@@ -1458,7 +1526,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaximalShift(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_setMaximalShift);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_setMaximalShift);
 
 	return NULL;
 }
@@ -1466,12 +1534,13 @@ static PyObject *sipDo_EnergyMinimizer_setMaximalShift(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_EnergyMinimizer_getMaximalShift(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			EnergyMinimizer *ptr;
@@ -1487,7 +1556,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaximalShift(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getMaximalShift);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getMaximalShift);
 
 	return NULL;
 }
@@ -1495,6 +1564,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaximalShift(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_EnergyMinimizer_setSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
@@ -1502,7 +1572,7 @@ static PyObject *sipDo_EnergyMinimizer_setSnapShotFrequency(PyObject *sipThisObj
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			EnergyMinimizer *ptr;
 
@@ -1518,7 +1588,7 @@ static PyObject *sipDo_EnergyMinimizer_setSnapShotFrequency(PyObject *sipThisObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_setSnapShotFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_setSnapShotFrequency);
 
 	return NULL;
 }
@@ -1526,12 +1596,13 @@ static PyObject *sipDo_EnergyMinimizer_setSnapShotFrequency(PyObject *sipThisObj
 static PyObject *sipDo_EnergyMinimizer_getSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			EnergyMinimizer *ptr;
@@ -1547,7 +1618,7 @@ static PyObject *sipDo_EnergyMinimizer_getSnapShotFrequency(PyObject *sipThisObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getSnapShotFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getSnapShotFrequency);
 
 	return NULL;
 }
@@ -1555,12 +1626,13 @@ static PyObject *sipDo_EnergyMinimizer_getSnapShotFrequency(PyObject *sipThisObj
 static PyObject *sipDo_EnergyMinimizer_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			ForceField *res;
 			EnergyMinimizer *ptr;
@@ -1576,7 +1648,7 @@ static PyObject *sipDo_EnergyMinimizer_getForceField(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_getForceField);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_getForceField);
 
 	return NULL;
 }
@@ -1584,6 +1656,7 @@ static PyObject *sipDo_EnergyMinimizer_getForceField(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_EnergyMinimizer_minimize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_EnergyMinimizer)) == NULL)
 		return NULL;
@@ -1592,7 +1665,7 @@ static PyObject *sipDo_EnergyMinimizer_minimize(PyObject *sipThisObj,PyObject *s
 		int a0;
 		long a1;
 
-		if (sipParseArgs(sipArgs,"il",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"il",&a0,&a1))
 		{
 			bool res;
 			EnergyMinimizer *ptr;
@@ -1608,7 +1681,7 @@ static PyObject *sipDo_EnergyMinimizer_minimize(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_EnergyMinimizer,sipName_BALL_minimize);
+	sipNoMethod(sipArgsParsed,sipName_BALL_EnergyMinimizer,sipName_BALL_minimize);
 
 	return NULL;
 }
@@ -1649,6 +1722,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -1656,10 +1730,10 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipEnergyMinimizer();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1667,7 +1741,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -1677,7 +1751,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipEnergyMinimizer(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1687,7 +1761,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 		Options *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_Options,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_Options,&a1obj))
 		{
 			int iserr = 0;
 
@@ -1698,7 +1772,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipEnergyMinimizer(* a0,* a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1707,7 +1781,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1;
 
-		if (sipParseArgs(sipArgs,"-Il",sipCanConvertTo_EnergyMinimizer,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-Il",sipCanConvertTo_EnergyMinimizer,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -1717,7 +1791,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipEnergyMinimizer(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1725,7 +1799,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 		const EnergyMinimizer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_EnergyMinimizer,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_EnergyMinimizer,&a0obj))
 		{
 			int iserr = 0;
 
@@ -1735,12 +1809,12 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipEnergyMinimizer(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_EnergyMinimizer);
+		sipNoCtor(sipArgsParsed,sipName_BALL_EnergyMinimizer);
 		return NULL;
 	}
 
@@ -1849,17 +1923,15 @@ int sipCanConvertTo_EnergyMinimizer(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_EnergyMinimizer);
 }
 
-void sipConvertTo_EnergyMinimizer(PyObject *sipPy,EnergyMinimizer **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_EnergyMinimizer(PyObject *sipPy,EnergyMinimizer **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_EnergyMinimizer);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_EnergyMinimizer);
+		*sipCppPtr = NULL;
 
 		return;
 	}

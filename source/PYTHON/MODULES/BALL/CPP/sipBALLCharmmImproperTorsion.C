@@ -19,33 +19,53 @@ static PyTypeObject sipType_CharmmImproperTorsion = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipCharmmImproperTorsion::sipCharmmImproperTorsion(): CharmmImproperTorsion()
+sipCharmmImproperTorsion::sipCharmmImproperTorsion()
+    : CharmmImproperTorsion()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipCharmmImproperTorsion::sipCharmmImproperTorsion(ForceField& a0): CharmmImproperTorsion(a0)
+sipCharmmImproperTorsion::sipCharmmImproperTorsion(ForceField& a0)
+    : CharmmImproperTorsion(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipCharmmImproperTorsion::sipCharmmImproperTorsion(const CharmmImproperTorsion& a0,bool a1): CharmmImproperTorsion(a0,a1)
+sipCharmmImproperTorsion::sipCharmmImproperTorsion(const CharmmImproperTorsion& a0,bool a1)
+    : CharmmImproperTorsion(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipCharmmImproperTorsion::sipCharmmImproperTorsion(const CharmmImproperTorsion& a0): CharmmImproperTorsion(a0)
+sipCharmmImproperTorsion::sipCharmmImproperTorsion(const CharmmImproperTorsion& a0)
+    : CharmmImproperTorsion(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmImproperTorsion::~sipCharmmImproperTorsion()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
+
 double sipCharmmImproperTorsion::getEnergy() const
+
 {
 	int relLock;
 
@@ -53,15 +73,20 @@ double sipCharmmImproperTorsion::getEnergy() const
 		sipForceFieldComponent::sipVH_getEnergy(&sipPyMethods[0],sipPyThis,relLock) :
 		ForceFieldComponent::getEnergy();
 }
-bool sipCharmmImproperTorsion::setup()
+
+void sipCharmmImproperTorsion::updateForces()
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipForceFieldComponent::sipVH_setup(&sipPyMethods[1],sipPyThis,relLock) :
-		CharmmImproperTorsion::setup();
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
+		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[1],sipPyThis,relLock);
+	else
+		CharmmImproperTorsion::updateForces();
 }
+
 double sipCharmmImproperTorsion::updateEnergy()
+
 {
 	int relLock;
 
@@ -69,25 +94,27 @@ double sipCharmmImproperTorsion::updateEnergy()
 		sipForceFieldComponent::sipVH_updateEnergy(&sipPyMethods[2],sipPyThis,relLock) :
 		CharmmImproperTorsion::updateEnergy();
 }
-void sipCharmmImproperTorsion::updateForces()
+
+bool sipCharmmImproperTorsion::setup()
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
-		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[3],sipPyThis,relLock);
-	else
-		CharmmImproperTorsion::updateForces();
+	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipForceFieldComponent::sipVH_setup(&sipPyMethods[3],sipPyThis,relLock) :
+		CharmmImproperTorsion::setup();
 }
 
 static PyObject *sipDo_CharmmImproperTorsion_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmImproperTorsion)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			CharmmImproperTorsion *ptr;
@@ -103,7 +130,7 @@ static PyObject *sipDo_CharmmImproperTorsion_setup(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmImproperTorsion,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmImproperTorsion,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -111,12 +138,13 @@ static PyObject *sipDo_CharmmImproperTorsion_setup(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_CharmmImproperTorsion_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmImproperTorsion)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmImproperTorsion *ptr;
@@ -132,7 +160,7 @@ static PyObject *sipDo_CharmmImproperTorsion_updateEnergy(PyObject *sipThisObj,P
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmImproperTorsion,sipName_BALL_updateEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmImproperTorsion,sipName_BALL_updateEnergy);
 
 	return NULL;
 }
@@ -140,12 +168,13 @@ static PyObject *sipDo_CharmmImproperTorsion_updateEnergy(PyObject *sipThisObj,P
 static PyObject *sipDo_CharmmImproperTorsion_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmImproperTorsion)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			CharmmImproperTorsion *ptr;
 
@@ -161,7 +190,7 @@ static PyObject *sipDo_CharmmImproperTorsion_updateForces(PyObject *sipThisObj,P
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmImproperTorsion,sipName_BALL_updateForces);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmImproperTorsion,sipName_BALL_updateForces);
 
 	return NULL;
 }
@@ -207,6 +236,7 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -214,10 +244,10 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipCharmmImproperTorsion();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -225,7 +255,7 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -235,7 +265,7 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmImproperTorsion(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -244,7 +274,7 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_CharmmImproperTorsion,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_CharmmImproperTorsion,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -254,7 +284,7 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmImproperTorsion(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -262,7 +292,7 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 		const CharmmImproperTorsion *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_CharmmImproperTorsion,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CharmmImproperTorsion,&a0obj))
 		{
 			int iserr = 0;
 
@@ -272,12 +302,12 @@ PyObject *sipNew_CharmmImproperTorsion(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmImproperTorsion(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_CharmmImproperTorsion);
+		sipNoCtor(sipArgsParsed,sipName_BALL_CharmmImproperTorsion);
 		return NULL;
 	}
 
@@ -313,17 +343,15 @@ int sipCanConvertTo_CharmmImproperTorsion(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_CharmmImproperTorsion);
 }
 
-void sipConvertTo_CharmmImproperTorsion(PyObject *sipPy,CharmmImproperTorsion **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_CharmmImproperTorsion(PyObject *sipPy,CharmmImproperTorsion **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_CharmmImproperTorsion);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_CharmmImproperTorsion);
+		*sipCppPtr = NULL;
 
 		return;
 	}

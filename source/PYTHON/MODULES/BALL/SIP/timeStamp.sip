@@ -1,4 +1,4 @@
-// $Id: timeStamp.sip,v 1.2 2000/10/24 20:29:18 oliver Exp $
+// $Id: timeStamp.sip,v 1.3 2001/07/25 11:32:37 oliver Exp $
 
 class PreciseTime
 {
@@ -11,7 +11,7 @@ class PreciseTime
   // BALL_CREATE_NODEEP(PreciseTime)
   PreciseTime();
   PreciseTime(const PreciseTime& /time/);
-  ~PreciseTime();
+  ~PreciseTime() throw();
   static const PreciseTime ZERO;
   void set(long /secs/, long /usecs/) throw();
   void set(const PreciseTime& /time/) throw();
@@ -24,10 +24,11 @@ class PreciseTime
   static const PreciseTime& now() throw();
   //  void write(PersistenceManager& pm)const;
   //  bool read(PersistenceManager& pm);
-  operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   PreciseTime* ptr;
-  if ((ptr = (PreciseTime*)sipGetCppPtr(sipThis,sipClass_PreciseTime)) == NULL)
+  if ((ptr = (PreciseTime*)sipGetCppPtr((sipThisType*)a0,sipClass_PreciseTime)) == NULL)
     return NULL;
 
 	char buf[128];
@@ -50,8 +51,8 @@ class TimeStamp
 %End
   public:
   // BALL_CREATE_NODEEP(TimeStamp)
-  TimeStamp();
-  ~TimeStamp();
+  TimeStamp() throw();
+  ~TimeStamp() throw();
   bool isNewerThan(const PreciseTime& /time/) const throw ();
   bool isOlderThan(const PreciseTime& /time/) const throw ();
   bool isNewerThan(const TimeStamp& /stamp/) const throw ();
@@ -61,10 +62,11 @@ class TimeStamp
   //  void write(PersistenceManager& pm) const;
   //  bool read(PersistenceManager& pm);
 
-  operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   TimeStamp* ptr;
-  if ((ptr = (TimeStamp*)sipGetCppPtr(sipThis,sipClass_TimeStamp)) == NULL)
+  if ((ptr = (TimeStamp*)sipGetCppPtr((sipThisType*)a0,sipClass_TimeStamp)) == NULL)
     return NULL;
 
 	long secs = ptr->getTime().getSeconds();

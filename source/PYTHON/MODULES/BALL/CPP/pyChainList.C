@@ -1,4 +1,4 @@
-// $Id: pyChainList.C,v 1.2 2000/08/30 19:58:38 oliver Exp $
+// $Id: pyChainList.C,v 1.3 2001/07/25 11:34:51 oliver Exp $
 
 #include <BALL/PYTHON/pyChainList.h>
 #include <BALL/KERNEL/chain.h>
@@ -18,6 +18,7 @@ namespace BALL
 	}
 
 	PyChainList::~PyChainList()
+		throw()
 	{
 	}
 

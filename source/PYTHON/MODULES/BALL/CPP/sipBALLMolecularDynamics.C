@@ -19,91 +19,300 @@ static PyTypeObject sipType_MolecularDynamics = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipMolecularDynamics::sipMolecularDynamics(): MolecularDynamics()
+sipMolecularDynamics::sipMolecularDynamics()
+    : MolecularDynamics()
 {
-	sipCommonCtor(sipPyMethods,6);
+	sipCommonCtor(sipPyMethods,7);
 }
 
-sipMolecularDynamics::sipMolecularDynamics(ForceField& a0): MolecularDynamics(a0)
+sipMolecularDynamics::sipMolecularDynamics(ForceField& a0)
+    : MolecularDynamics(a0)
 {
-	sipCommonCtor(sipPyMethods,6);
+	sipCommonCtor(sipPyMethods,7);
 }
 
-sipMolecularDynamics::sipMolecularDynamics(const MolecularDynamics& a0,bool a1): MolecularDynamics(a0,a1)
+sipMolecularDynamics::sipMolecularDynamics(const MolecularDynamics& a0,bool a1)
+    : MolecularDynamics(a0,a1)
 {
-	sipCommonCtor(sipPyMethods,6);
+	sipCommonCtor(sipPyMethods,7);
 }
 
-sipMolecularDynamics::sipMolecularDynamics(const MolecularDynamics& a0): MolecularDynamics(a0)
+sipMolecularDynamics::sipMolecularDynamics(const MolecularDynamics& a0)
+    : MolecularDynamics(a0)
 {
-	sipCommonCtor(sipPyMethods,6);
+	sipCommonCtor(sipPyMethods,7);
 }
 
 sipMolecularDynamics::~sipMolecularDynamics()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipMolecularDynamics::setup(ForceField& a0,SnapShotManager * a1,const Options& a2)
+
+void sipMolecularDynamics::simulateTime(double a0,bool a1)
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipMolecularDynamics::sipVH_setup(&sipPyMethods[0],sipPyThis,relLock,a0,a1,a2) :
-		MolecularDynamics::setup(a0,a1,a2);
-}
-bool sipMolecularDynamics::setup(ForceField& a0,SnapShotManager * a1)
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipMolecularDynamics::sipVH_setup(&sipPyMethods[0],sipPyThis,relLock,a0,a1) :
-		MolecularDynamics::setup(a0,a1);
-}
-bool sipMolecularDynamics::specificSetup()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_specificSetup,&relLock) ?
-		sipMolecularDynamics::sipVH_specificSetup(&sipPyMethods[1],sipPyThis,relLock) :
-		MolecularDynamics::specificSetup();
-}
-void sipMolecularDynamics::setTimeStep(double a0)
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_setTimeStep,&relLock))
-		sipMolecularDynamics::sipVH_setTimeStep(&sipPyMethods[2],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_simulateTime,&relLock))
+		sipMolecularDynamics::sipVH_simulateTime(&sipPyMethods[0],sipPyThis,relLock,a0,a1);
 	else
-		MolecularDynamics::setTimeStep(a0);
+		MolecularDynamics::simulateTime(a0,a1);
 }
-void sipMolecularDynamics::simulate(bool a0)
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_simulate,&relLock))
-		sipMolecularDynamics::sipVH_simulate(&sipPyMethods[3],sipPyThis,relLock,a0);
-	else
-		MolecularDynamics::simulate(a0);
-}
 void sipMolecularDynamics::simulateIterations(int a0,bool a1)
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_simulateIterations,&relLock))
-		sipMolecularDynamics::sipVH_simulateIterations(&sipPyMethods[4],sipPyThis,relLock,a0,a1);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_simulateIterations,&relLock))
+		sipMolecularDynamics::sipVH_simulateIterations(&sipPyMethods[1],sipPyThis,relLock,a0,a1);
 	else
 		MolecularDynamics::simulateIterations(a0,a1);
 }
-void sipMolecularDynamics::simulateTime(double a0,bool a1)
+
+void sipMolecularDynamics::simulate(bool a0)
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_simulateTime,&relLock))
-		sipMolecularDynamics::sipVH_simulateTime(&sipPyMethods[5],sipPyThis,relLock,a0,a1);
+	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_simulate,&relLock))
+		sipMolecularDynamics::sipVH_simulate(&sipPyMethods[2],sipPyThis,relLock,a0);
 	else
-		MolecularDynamics::simulateTime(a0,a1);
+		MolecularDynamics::simulate(a0);
+}
+
+void sipMolecularDynamics::setTimeStep(double a0)
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_setTimeStep,&relLock))
+		sipMolecularDynamics::sipVH_setTimeStep(&sipPyMethods[3],sipPyThis,relLock,a0);
+	else
+		MolecularDynamics::setTimeStep(a0);
+}
+
+bool sipMolecularDynamics::specificSetup()
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_specificSetup,&relLock) ?
+		sipMolecularDynamics::sipVH_specificSetup(&sipPyMethods[4],sipPyThis,relLock) :
+		MolecularDynamics::specificSetup();
+}
+
+bool sipMolecularDynamics::setup(ForceField& a0,SnapShotManager * a1,const Options& a2)
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipMolecularDynamics::sipVH_setup(&sipPyMethods[5],sipPyThis,relLock,a0,a1,a2) :
+		MolecularDynamics::setup(a0,a1,a2);
+}
+
+bool sipMolecularDynamics::setup(ForceField& a0,SnapShotManager * a1)
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipMolecularDynamics::sipVH_setup(&sipPyMethods[6],sipPyThis,relLock,a0,a1) :
+		MolecularDynamics::setup(a0,a1);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipMolecularDynamics::sipVH_simulateTime(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,double a0,bool a1)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(Odi)",sipThis -> sipSelf,a0,a1);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_MolecularDynamics,sipName_BALL_simulateTime);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipMolecularDynamics::sipVH_simulateIterations(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,int a0,bool a1)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(Oii)",sipThis -> sipSelf,a0,a1);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_MolecularDynamics,sipName_BALL_simulateIterations);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipMolecularDynamics::sipVH_simulate(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,bool a0)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(Oi)",sipThis -> sipSelf,a0);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_MolecularDynamics,sipName_BALL_simulate);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipMolecularDynamics::sipVH_setTimeStep(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,double a0)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(Od)",sipThis -> sipSelf,a0);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_MolecularDynamics,sipName_BALL_setTimeStep);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+bool sipMolecularDynamics::sipVH_specificSetup(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	bool res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = (bool)PyInt_AsLong(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_MolecularDynamics,sipName_BALL_specificSetup);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -213,186 +422,10 @@ releaseLock:
 	return res;
 }
 
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipMolecularDynamics::sipVH_specificSetup(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_MolecularDynamics,sipName_BALL_specificSetup);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipMolecularDynamics::sipVH_setTimeStep(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,double a0)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(Od)",sipThis -> sipSelf,a0);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_MolecularDynamics,sipName_BALL_setTimeStep);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipMolecularDynamics::sipVH_simulate(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,bool a0)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(Oi)",sipThis -> sipSelf,a0);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_MolecularDynamics,sipName_BALL_simulate);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipMolecularDynamics::sipVH_simulateIterations(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,int a0,bool a1)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(Oii)",sipThis -> sipSelf,a0,a1);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_MolecularDynamics,sipName_BALL_simulateIterations);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipMolecularDynamics::sipVH_simulateTime(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,double a0,bool a1)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(Odi)",sipThis -> sipSelf,a0,a1);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_MolecularDynamics,sipName_BALL_simulateTime);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
 static PyObject *sipDo_MolecularDynamics_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -401,7 +434,7 @@ static PyObject *sipDo_MolecularDynamics_set(PyObject *sipThisObj,PyObject *sipA
 		const MolecularDynamics *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_MolecularDynamics,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_MolecularDynamics,&a0obj))
 		{
 			MolecularDynamics *ptr;
 
@@ -424,7 +457,7 @@ static PyObject *sipDo_MolecularDynamics_set(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_set);
 
 	return NULL;
 }
@@ -432,12 +465,13 @@ static PyObject *sipDo_MolecularDynamics_set(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_MolecularDynamics_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			MolecularDynamics *ptr;
@@ -453,7 +487,7 @@ static PyObject *sipDo_MolecularDynamics_isValid(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -461,6 +495,7 @@ static PyObject *sipDo_MolecularDynamics_isValid(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -471,7 +506,7 @@ static PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *si
 		SnapShotManager *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj))
 		{
 			bool res;
 			MolecularDynamics *ptr;
@@ -501,7 +536,7 @@ static PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *si
 		const Options *a2;
 		PyObject *a2obj;
 
-		if (sipParseArgs(sipArgs,"III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
 		{
 			bool res;
 			MolecularDynamics *ptr;
@@ -526,7 +561,7 @@ static PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -534,12 +569,13 @@ static PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_MolecularDynamics_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			MolecularDynamics *ptr;
@@ -555,7 +591,7 @@ static PyObject *sipDo_MolecularDynamics_specificSetup(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_specificSetup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_specificSetup);
 
 	return NULL;
 }
@@ -563,6 +599,7 @@ static PyObject *sipDo_MolecularDynamics_specificSetup(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_MolecularDynamics_setNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -570,7 +607,7 @@ static PyObject *sipDo_MolecularDynamics_setNumberOfIteration(PyObject *sipThisO
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			MolecularDynamics *ptr;
 
@@ -586,7 +623,7 @@ static PyObject *sipDo_MolecularDynamics_setNumberOfIteration(PyObject *sipThisO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_setNumberOfIteration);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_setNumberOfIteration);
 
 	return NULL;
 }
@@ -594,6 +631,7 @@ static PyObject *sipDo_MolecularDynamics_setNumberOfIteration(PyObject *sipThisO
 static PyObject *sipDo_MolecularDynamics_setMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -601,7 +639,7 @@ static PyObject *sipDo_MolecularDynamics_setMaximalNumberOfIterations(PyObject *
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			MolecularDynamics *ptr;
 
@@ -617,7 +655,7 @@ static PyObject *sipDo_MolecularDynamics_setMaximalNumberOfIterations(PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_setMaximalNumberOfIterations);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_setMaximalNumberOfIterations);
 
 	return NULL;
 }
@@ -625,6 +663,7 @@ static PyObject *sipDo_MolecularDynamics_setMaximalNumberOfIterations(PyObject *
 static PyObject *sipDo_MolecularDynamics_setMaximalSimulationTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -632,7 +671,7 @@ static PyObject *sipDo_MolecularDynamics_setMaximalSimulationTime(PyObject *sipT
 	{
 		double a0;
 
-		if (sipParseArgs(sipArgs,"d",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"d",&a0))
 		{
 			MolecularDynamics *ptr;
 
@@ -648,7 +687,7 @@ static PyObject *sipDo_MolecularDynamics_setMaximalSimulationTime(PyObject *sipT
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_setMaximalSimulationTime);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_setMaximalSimulationTime);
 
 	return NULL;
 }
@@ -656,6 +695,7 @@ static PyObject *sipDo_MolecularDynamics_setMaximalSimulationTime(PyObject *sipT
 static PyObject *sipDo_MolecularDynamics_setTimeStep(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -663,7 +703,7 @@ static PyObject *sipDo_MolecularDynamics_setTimeStep(PyObject *sipThisObj,PyObje
 	{
 		double a0;
 
-		if (sipParseArgs(sipArgs,"d",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"d",&a0))
 		{
 			MolecularDynamics *ptr;
 
@@ -679,7 +719,7 @@ static PyObject *sipDo_MolecularDynamics_setTimeStep(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_setTimeStep);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_setTimeStep);
 
 	return NULL;
 }
@@ -687,6 +727,7 @@ static PyObject *sipDo_MolecularDynamics_setTimeStep(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_MolecularDynamics_setReferenceTemperature(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -694,7 +735,7 @@ static PyObject *sipDo_MolecularDynamics_setReferenceTemperature(PyObject *sipTh
 	{
 		double a0;
 
-		if (sipParseArgs(sipArgs,"d",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"d",&a0))
 		{
 			MolecularDynamics *ptr;
 
@@ -710,7 +751,7 @@ static PyObject *sipDo_MolecularDynamics_setReferenceTemperature(PyObject *sipTh
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_setReferenceTemperature);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_setReferenceTemperature);
 
 	return NULL;
 }
@@ -718,6 +759,7 @@ static PyObject *sipDo_MolecularDynamics_setReferenceTemperature(PyObject *sipTh
 static PyObject *sipDo_MolecularDynamics_setCurrentTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -725,7 +767,7 @@ static PyObject *sipDo_MolecularDynamics_setCurrentTime(PyObject *sipThisObj,PyO
 	{
 		double a0;
 
-		if (sipParseArgs(sipArgs,"d",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"d",&a0))
 		{
 			MolecularDynamics *ptr;
 
@@ -741,7 +783,7 @@ static PyObject *sipDo_MolecularDynamics_setCurrentTime(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_setCurrentTime);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_setCurrentTime);
 
 	return NULL;
 }
@@ -749,6 +791,7 @@ static PyObject *sipDo_MolecularDynamics_setCurrentTime(PyObject *sipThisObj,PyO
 static PyObject *sipDo_MolecularDynamics_setEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -756,7 +799,7 @@ static PyObject *sipDo_MolecularDynamics_setEnergyOutputFrequency(PyObject *sipT
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			MolecularDynamics *ptr;
 
@@ -772,7 +815,7 @@ static PyObject *sipDo_MolecularDynamics_setEnergyOutputFrequency(PyObject *sipT
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_setEnergyOutputFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_setEnergyOutputFrequency);
 
 	return NULL;
 }
@@ -780,6 +823,7 @@ static PyObject *sipDo_MolecularDynamics_setEnergyOutputFrequency(PyObject *sipT
 static PyObject *sipDo_MolecularDynamics_setSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -787,7 +831,7 @@ static PyObject *sipDo_MolecularDynamics_setSnapShotFrequency(PyObject *sipThisO
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			MolecularDynamics *ptr;
 
@@ -803,7 +847,7 @@ static PyObject *sipDo_MolecularDynamics_setSnapShotFrequency(PyObject *sipThisO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_setSnapShotFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_setSnapShotFrequency);
 
 	return NULL;
 }
@@ -811,12 +855,13 @@ static PyObject *sipDo_MolecularDynamics_setSnapShotFrequency(PyObject *sipThisO
 static PyObject *sipDo_MolecularDynamics_getEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			MolecularDynamics *ptr;
@@ -832,7 +877,7 @@ static PyObject *sipDo_MolecularDynamics_getEnergyOutputFrequency(PyObject *sipT
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getEnergyOutputFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getEnergyOutputFrequency);
 
 	return NULL;
 }
@@ -840,12 +885,13 @@ static PyObject *sipDo_MolecularDynamics_getEnergyOutputFrequency(PyObject *sipT
 static PyObject *sipDo_MolecularDynamics_getNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			MolecularDynamics *ptr;
@@ -861,7 +907,7 @@ static PyObject *sipDo_MolecularDynamics_getNumberOfIteration(PyObject *sipThisO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getNumberOfIteration);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getNumberOfIteration);
 
 	return NULL;
 }
@@ -869,12 +915,13 @@ static PyObject *sipDo_MolecularDynamics_getNumberOfIteration(PyObject *sipThisO
 static PyObject *sipDo_MolecularDynamics_getMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			MolecularDynamics *ptr;
@@ -890,7 +937,7 @@ static PyObject *sipDo_MolecularDynamics_getMaximalNumberOfIterations(PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getMaximalNumberOfIterations);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getMaximalNumberOfIterations);
 
 	return NULL;
 }
@@ -898,12 +945,13 @@ static PyObject *sipDo_MolecularDynamics_getMaximalNumberOfIterations(PyObject *
 static PyObject *sipDo_MolecularDynamics_getMaximalSimulationTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			MolecularDynamics *ptr;
@@ -919,7 +967,7 @@ static PyObject *sipDo_MolecularDynamics_getMaximalSimulationTime(PyObject *sipT
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getMaximalSimulationTime);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getMaximalSimulationTime);
 
 	return NULL;
 }
@@ -927,12 +975,13 @@ static PyObject *sipDo_MolecularDynamics_getMaximalSimulationTime(PyObject *sipT
 static PyObject *sipDo_MolecularDynamics_getTimeStep(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			MolecularDynamics *ptr;
@@ -948,7 +997,7 @@ static PyObject *sipDo_MolecularDynamics_getTimeStep(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getTimeStep);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getTimeStep);
 
 	return NULL;
 }
@@ -956,12 +1005,13 @@ static PyObject *sipDo_MolecularDynamics_getTimeStep(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_MolecularDynamics_getSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			MolecularDynamics *ptr;
@@ -977,7 +1027,7 @@ static PyObject *sipDo_MolecularDynamics_getSnapShotFrequency(PyObject *sipThisO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getSnapShotFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getSnapShotFrequency);
 
 	return NULL;
 }
@@ -985,12 +1035,13 @@ static PyObject *sipDo_MolecularDynamics_getSnapShotFrequency(PyObject *sipThisO
 static PyObject *sipDo_MolecularDynamics_getTemperature(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			MolecularDynamics *ptr;
@@ -1006,7 +1057,7 @@ static PyObject *sipDo_MolecularDynamics_getTemperature(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getTemperature);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getTemperature);
 
 	return NULL;
 }
@@ -1014,12 +1065,13 @@ static PyObject *sipDo_MolecularDynamics_getTemperature(PyObject *sipThisObj,PyO
 static PyObject *sipDo_MolecularDynamics_getTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			MolecularDynamics *ptr;
@@ -1035,7 +1087,7 @@ static PyObject *sipDo_MolecularDynamics_getTime(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getTime);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getTime);
 
 	return NULL;
 }
@@ -1043,12 +1095,13 @@ static PyObject *sipDo_MolecularDynamics_getTime(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_MolecularDynamics_getTotalEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			MolecularDynamics *ptr;
@@ -1064,7 +1117,7 @@ static PyObject *sipDo_MolecularDynamics_getTotalEnergy(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getTotalEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getTotalEnergy);
 
 	return NULL;
 }
@@ -1072,12 +1125,13 @@ static PyObject *sipDo_MolecularDynamics_getTotalEnergy(PyObject *sipThisObj,PyO
 static PyObject *sipDo_MolecularDynamics_getPotentialEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			MolecularDynamics *ptr;
@@ -1093,7 +1147,7 @@ static PyObject *sipDo_MolecularDynamics_getPotentialEnergy(PyObject *sipThisObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getPotentialEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getPotentialEnergy);
 
 	return NULL;
 }
@@ -1101,12 +1155,13 @@ static PyObject *sipDo_MolecularDynamics_getPotentialEnergy(PyObject *sipThisObj
 static PyObject *sipDo_MolecularDynamics_getKineticEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			MolecularDynamics *ptr;
@@ -1122,7 +1177,7 @@ static PyObject *sipDo_MolecularDynamics_getKineticEnergy(PyObject *sipThisObj,P
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getKineticEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getKineticEnergy);
 
 	return NULL;
 }
@@ -1130,12 +1185,13 @@ static PyObject *sipDo_MolecularDynamics_getKineticEnergy(PyObject *sipThisObj,P
 static PyObject *sipDo_MolecularDynamics_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			ForceField *res;
 			MolecularDynamics *ptr;
@@ -1151,7 +1207,7 @@ static PyObject *sipDo_MolecularDynamics_getForceField(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_getForceField);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_getForceField);
 
 	return NULL;
 }
@@ -1159,6 +1215,7 @@ static PyObject *sipDo_MolecularDynamics_getForceField(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_MolecularDynamics_simulate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -1166,7 +1223,7 @@ static PyObject *sipDo_MolecularDynamics_simulate(PyObject *sipThisObj,PyObject 
 	{
 		long a0 = false;
 
-		if (sipParseArgs(sipArgs,"|l",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"|l",&a0))
 		{
 			MolecularDynamics *ptr;
 
@@ -1182,7 +1239,7 @@ static PyObject *sipDo_MolecularDynamics_simulate(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_simulate);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_simulate);
 
 	return NULL;
 }
@@ -1190,6 +1247,7 @@ static PyObject *sipDo_MolecularDynamics_simulate(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_MolecularDynamics_simulateIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -1198,7 +1256,7 @@ static PyObject *sipDo_MolecularDynamics_simulateIterations(PyObject *sipThisObj
 		int a0;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"i|l",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i|l",&a0,&a1))
 		{
 			MolecularDynamics *ptr;
 
@@ -1214,7 +1272,7 @@ static PyObject *sipDo_MolecularDynamics_simulateIterations(PyObject *sipThisObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_simulateIterations);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_simulateIterations);
 
 	return NULL;
 }
@@ -1222,6 +1280,7 @@ static PyObject *sipDo_MolecularDynamics_simulateIterations(PyObject *sipThisObj
 static PyObject *sipDo_MolecularDynamics_simulateTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_MolecularDynamics)) == NULL)
 		return NULL;
@@ -1230,7 +1289,7 @@ static PyObject *sipDo_MolecularDynamics_simulateTime(PyObject *sipThisObj,PyObj
 		double a0;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"d|l",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"d|l",&a0,&a1))
 		{
 			MolecularDynamics *ptr;
 
@@ -1246,7 +1305,7 @@ static PyObject *sipDo_MolecularDynamics_simulateTime(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_MolecularDynamics,sipName_BALL_simulateTime);
+	sipNoMethod(sipArgsParsed,sipName_BALL_MolecularDynamics,sipName_BALL_simulateTime);
 
 	return NULL;
 }
@@ -1287,6 +1346,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -1294,10 +1354,10 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipMolecularDynamics();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1305,7 +1365,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -1315,7 +1375,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMolecularDynamics(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1324,7 +1384,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_MolecularDynamics,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_MolecularDynamics,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -1334,7 +1394,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMolecularDynamics(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1342,7 +1402,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 		const MolecularDynamics *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_MolecularDynamics,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_MolecularDynamics,&a0obj))
 		{
 			int iserr = 0;
 
@@ -1352,12 +1412,12 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipMolecularDynamics(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_MolecularDynamics);
+		sipNoCtor(sipArgsParsed,sipName_BALL_MolecularDynamics);
 		return NULL;
 	}
 
@@ -1459,17 +1519,15 @@ int sipCanConvertTo_MolecularDynamics(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_MolecularDynamics);
 }
 
-void sipConvertTo_MolecularDynamics(PyObject *sipPy,MolecularDynamics **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_MolecularDynamics(PyObject *sipPy,MolecularDynamics **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_MolecularDynamics);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_MolecularDynamics);
+		*sipCppPtr = NULL;
 
 		return;
 	}

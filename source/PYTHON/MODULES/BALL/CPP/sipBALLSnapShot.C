@@ -19,23 +19,41 @@ static PyTypeObject sipType_SnapShot = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipSnapShot::sipSnapShot(): SnapShot()
+sipSnapShot::sipSnapShot()
+   throw()  : SnapShot()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipSnapShot::sipSnapShot(const SnapShot& a0): SnapShot(a0)
+sipSnapShot::sipSnapShot(const SnapShot& a0)
+   throw()  : SnapShot(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipSnapShot::~sipSnapShot()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
+
 void sipSnapShot::clear()
+ throw()
 {
 	int relLock;
 
@@ -82,12 +100,13 @@ releaseLock:
 static PyObject *sipDo_SnapShot_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			SnapShot *ptr;
 
@@ -103,7 +122,7 @@ static PyObject *sipDo_SnapShot_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -111,12 +130,13 @@ static PyObject *sipDo_SnapShot_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_SnapShot_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			SnapShot *ptr;
@@ -132,7 +152,7 @@ static PyObject *sipDo_SnapShot_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -140,6 +160,7 @@ static PyObject *sipDo_SnapShot_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_SnapShot_setIndex(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -147,7 +168,7 @@ static PyObject *sipDo_SnapShot_setIndex(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			SnapShot *ptr;
 
@@ -163,7 +184,7 @@ static PyObject *sipDo_SnapShot_setIndex(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_setIndex);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_setIndex);
 
 	return NULL;
 }
@@ -171,12 +192,13 @@ static PyObject *sipDo_SnapShot_setIndex(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_SnapShot_getIndex(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			SnapShot *ptr;
@@ -192,7 +214,7 @@ static PyObject *sipDo_SnapShot_getIndex(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_getIndex);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_getIndex);
 
 	return NULL;
 }
@@ -200,6 +222,7 @@ static PyObject *sipDo_SnapShot_getIndex(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_SnapShot_setNumberOfAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -207,7 +230,7 @@ static PyObject *sipDo_SnapShot_setNumberOfAtoms(PyObject *sipThisObj,PyObject *
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			SnapShot *ptr;
 
@@ -223,7 +246,7 @@ static PyObject *sipDo_SnapShot_setNumberOfAtoms(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_setNumberOfAtoms);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_setNumberOfAtoms);
 
 	return NULL;
 }
@@ -231,12 +254,13 @@ static PyObject *sipDo_SnapShot_setNumberOfAtoms(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SnapShot_getNumberOfAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			SnapShot *ptr;
@@ -252,7 +276,7 @@ static PyObject *sipDo_SnapShot_getNumberOfAtoms(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_getNumberOfAtoms);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_getNumberOfAtoms);
 
 	return NULL;
 }
@@ -260,6 +284,7 @@ static PyObject *sipDo_SnapShot_getNumberOfAtoms(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SnapShot_setPotentialEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -267,7 +292,7 @@ static PyObject *sipDo_SnapShot_setPotentialEnergy(PyObject *sipThisObj,PyObject
 	{
 		double a0;
 
-		if (sipParseArgs(sipArgs,"d",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"d",&a0))
 		{
 			SnapShot *ptr;
 
@@ -283,7 +308,7 @@ static PyObject *sipDo_SnapShot_setPotentialEnergy(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_setPotentialEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_setPotentialEnergy);
 
 	return NULL;
 }
@@ -291,12 +316,13 @@ static PyObject *sipDo_SnapShot_setPotentialEnergy(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_SnapShot_getPotentialEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			SnapShot *ptr;
@@ -312,7 +338,7 @@ static PyObject *sipDo_SnapShot_getPotentialEnergy(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_getPotentialEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_getPotentialEnergy);
 
 	return NULL;
 }
@@ -320,6 +346,7 @@ static PyObject *sipDo_SnapShot_getPotentialEnergy(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_SnapShot_setKineticEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -327,7 +354,7 @@ static PyObject *sipDo_SnapShot_setKineticEnergy(PyObject *sipThisObj,PyObject *
 	{
 		double a0;
 
-		if (sipParseArgs(sipArgs,"d",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"d",&a0))
 		{
 			SnapShot *ptr;
 
@@ -343,7 +370,7 @@ static PyObject *sipDo_SnapShot_setKineticEnergy(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_setKineticEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_setKineticEnergy);
 
 	return NULL;
 }
@@ -351,12 +378,13 @@ static PyObject *sipDo_SnapShot_setKineticEnergy(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SnapShot_getKineticEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			SnapShot *ptr;
@@ -372,7 +400,7 @@ static PyObject *sipDo_SnapShot_getKineticEnergy(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_getKineticEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_getKineticEnergy);
 
 	return NULL;
 }
@@ -380,6 +408,7 @@ static PyObject *sipDo_SnapShot_getKineticEnergy(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SnapShot_takeSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -388,7 +417,7 @@ static PyObject *sipDo_SnapShot_takeSnapShot(PyObject *sipThisObj,PyObject *sipA
 		const System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			SnapShot *ptr;
 
@@ -402,15 +431,7 @@ static PyObject *sipDo_SnapShot_takeSnapShot(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
-					try
-		{
-ptr -> SnapShot::takeSnapShot(* a0);
-		}
-		catch (OutOfMemory e)
-		{
-			PyErr_SetString(PyExc_Exception, "OutOfMemory");
-			return NULL;
-		}
+			ptr -> SnapShot::takeSnapShot(* a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -419,7 +440,7 @@ ptr -> SnapShot::takeSnapShot(* a0);
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_takeSnapShot);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_takeSnapShot);
 
 	return NULL;
 }
@@ -427,6 +448,7 @@ ptr -> SnapShot::takeSnapShot(* a0);
 static PyObject *sipDo_SnapShot_applySnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -435,7 +457,7 @@ static PyObject *sipDo_SnapShot_applySnapShot(PyObject *sipThisObj,PyObject *sip
 		System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			SnapShot *ptr;
 
@@ -458,7 +480,7 @@ static PyObject *sipDo_SnapShot_applySnapShot(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_applySnapShot);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_applySnapShot);
 
 	return NULL;
 }
@@ -466,6 +488,7 @@ static PyObject *sipDo_SnapShot_applySnapShot(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_SnapShot_getAtomPositions(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -474,7 +497,7 @@ static PyObject *sipDo_SnapShot_getAtomPositions(PyObject *sipThisObj,PyObject *
 		const System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			SnapShot *ptr;
 
@@ -488,15 +511,7 @@ static PyObject *sipDo_SnapShot_getAtomPositions(PyObject *sipThisObj,PyObject *
 			if (iserr)
 				return NULL;
 
-					try
-		{
-ptr -> SnapShot::getAtomPositions(* a0);
-		}
-		catch (OutOfMemory e)
-		{
-			PyErr_SetString(PyExc_Exception, "OutOfMemory");
-			return NULL;
-		}
+			ptr -> SnapShot::getAtomPositions(* a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -505,7 +520,7 @@ ptr -> SnapShot::getAtomPositions(* a0);
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_getAtomPositions);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_getAtomPositions);
 
 	return NULL;
 }
@@ -513,6 +528,7 @@ ptr -> SnapShot::getAtomPositions(* a0);
 static PyObject *sipDo_SnapShot_setAtomPositions(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -521,7 +537,7 @@ static PyObject *sipDo_SnapShot_setAtomPositions(PyObject *sipThisObj,PyObject *
 		System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			SnapShot *ptr;
 
@@ -544,7 +560,7 @@ static PyObject *sipDo_SnapShot_setAtomPositions(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_setAtomPositions);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_setAtomPositions);
 
 	return NULL;
 }
@@ -552,6 +568,7 @@ static PyObject *sipDo_SnapShot_setAtomPositions(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SnapShot_getAtomVelocities(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -560,7 +577,7 @@ static PyObject *sipDo_SnapShot_getAtomVelocities(PyObject *sipThisObj,PyObject 
 		const System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			SnapShot *ptr;
 
@@ -574,15 +591,7 @@ static PyObject *sipDo_SnapShot_getAtomVelocities(PyObject *sipThisObj,PyObject 
 			if (iserr)
 				return NULL;
 
-					try
-		{
-ptr -> SnapShot::getAtomVelocities(* a0);
-		}
-		catch (OutOfMemory e)
-		{
-			PyErr_SetString(PyExc_Exception, "OutOfMemory");
-			return NULL;
-		}
+			ptr -> SnapShot::getAtomVelocities(* a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -591,7 +600,7 @@ ptr -> SnapShot::getAtomVelocities(* a0);
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_getAtomVelocities);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_getAtomVelocities);
 
 	return NULL;
 }
@@ -599,6 +608,7 @@ ptr -> SnapShot::getAtomVelocities(* a0);
 static PyObject *sipDo_SnapShot_setAtomVelocitites(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -607,7 +617,7 @@ static PyObject *sipDo_SnapShot_setAtomVelocitites(PyObject *sipThisObj,PyObject
 		System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			SnapShot *ptr;
 
@@ -630,7 +640,7 @@ static PyObject *sipDo_SnapShot_setAtomVelocitites(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_setAtomVelocitites);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_setAtomVelocitites);
 
 	return NULL;
 }
@@ -638,6 +648,7 @@ static PyObject *sipDo_SnapShot_setAtomVelocitites(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_SnapShot_getAtomForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -646,7 +657,7 @@ static PyObject *sipDo_SnapShot_getAtomForces(PyObject *sipThisObj,PyObject *sip
 		const System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			SnapShot *ptr;
 
@@ -660,15 +671,7 @@ static PyObject *sipDo_SnapShot_getAtomForces(PyObject *sipThisObj,PyObject *sip
 			if (iserr)
 				return NULL;
 
-					try
-		{
-ptr -> SnapShot::getAtomForces(* a0);
-		}
-		catch (OutOfMemory e)
-		{
-			PyErr_SetString(PyExc_Exception, "OutOfMemory");
-			return NULL;
-		}
+			ptr -> SnapShot::getAtomForces(* a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -677,7 +680,7 @@ ptr -> SnapShot::getAtomForces(* a0);
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_getAtomForces);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_getAtomForces);
 
 	return NULL;
 }
@@ -685,6 +688,7 @@ ptr -> SnapShot::getAtomForces(* a0);
 static PyObject *sipDo_SnapShot_setAtomForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShot)) == NULL)
 		return NULL;
@@ -693,7 +697,7 @@ static PyObject *sipDo_SnapShot_setAtomForces(PyObject *sipThisObj,PyObject *sip
 		System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			SnapShot *ptr;
 
@@ -716,7 +720,7 @@ static PyObject *sipDo_SnapShot_setAtomForces(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShot,sipName_BALL_setAtomForces);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShot,sipName_BALL_setAtomForces);
 
 	return NULL;
 }
@@ -757,6 +761,7 @@ PyObject *sipNew_SnapShot(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -764,10 +769,10 @@ PyObject *sipNew_SnapShot(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipSnapShot();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -775,7 +780,7 @@ PyObject *sipNew_SnapShot(PyObject *sipSelf,PyObject *sipArgs)
 		const SnapShot *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_SnapShot,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_SnapShot,&a0obj))
 		{
 			int iserr = 0;
 
@@ -785,12 +790,12 @@ PyObject *sipNew_SnapShot(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSnapShot(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_SnapShot);
+		sipNoCtor(sipArgsParsed,sipName_BALL_SnapShot);
 		return NULL;
 	}
 
@@ -841,17 +846,15 @@ int sipCanConvertTo_SnapShot(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_SnapShot);
 }
 
-void sipConvertTo_SnapShot(PyObject *sipPy,SnapShot **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_SnapShot(PyObject *sipPy,SnapShot **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_SnapShot);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_SnapShot);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -1,4 +1,4 @@
-// $Id: pyResidueList.C,v 1.2 2000/08/30 19:58:39 oliver Exp $
+// $Id: pyResidueList.C,v 1.3 2001/07/25 11:34:52 oliver Exp $
 
 #include <BALL/PYTHON/pyResidueList.h>
 #include <BALL/KERNEL/residue.h>
@@ -18,6 +18,7 @@ namespace BALL
 	}
 
 	PyResidueList::~PyResidueList()
+		throw()
 	{
 	}
 

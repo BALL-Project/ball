@@ -1,10 +1,10 @@
 // dummy class to emulate nested classes
-class GridIndex 
+class GridIndex3D 
 {
 %HeaderCode
 	#include <BALL/DATATYPE/regularData3D.h>
 	using namespace BALL;
-	typedef BALL::RegularData3D<float>::PositionStruct GridIndex;
+	typedef BALL::RegularData3D<float>::GridIndex GridIndex3D;
 %End
 	public:
   Position x;
@@ -23,8 +23,7 @@ class FloatRegularData3D
 %End
 	public:
 	FloatRegularData3D() throw(); 
-	FloatRegularData3D(const FloatRegularData3D& /grid/,
-			bool /deep/ = true)
+	FloatRegularData3D(const FloatRegularData3D& /grid/)
 		throw(OutOfMemory); 
 	FloatRegularData3D
 		(float /lower_x/, 
@@ -47,7 +46,7 @@ class FloatRegularData3D
 	FloatRegularData3D(const Vector3& /lower/, const Vector3& /upper/,
 			float /spacing/)
 		throw(OutOfMemory);
-	// virtual ~FloatRegularData3D() throw();
+	~FloatRegularData3D() throw();
 	virtual void clear() throw();
 	void set(const FloatRegularData3D& /grid/) throw(OutOfMemory);
 	// const FloatRegularData3D& operator = (const FloatRegularData3D& /grid/) throw(OutOfMemory);
@@ -66,8 +65,8 @@ class FloatRegularData3D
 	float getXSpacing() const throw();
 	float getYSpacing() const throw();
 	float getZSpacing() const throw();
-	GridIndex getIndex(const Vector3&) const throw(OutOfGrid);
-	GridIndex getIndex(float, float, float) const
+	GridIndex3D getIndex(const Vector3&) const throw(OutOfGrid);
+	GridIndex3D getIndex(float, float, float) const
 		throw(OutOfGrid);
 	// float* getData(const Position /i/, const Position /j/, const Position /k/)
 	//	throw(OutOfGrid);
@@ -102,6 +101,6 @@ class FloatRegularData3D
 	// bool has(const float& /x/, const float& /y/, const float& /z/) const throw();
 	float getInterpolatedValue(const Vector3& /vector/) const 
 		throw(OutOfGrid);
-	// bool operator == (const FloatRegularData3D& grid) const throw();
+	bool operator == (const FloatRegularData3D& /grid/) const throw();
 	// bool operator != (const FloatRegularData3D& grid) const throw();
 };

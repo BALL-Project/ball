@@ -19,11 +19,25 @@ static PyTypeObject sipType_Gradient = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_Gradient_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Gradient)) == NULL)
 		return NULL;
@@ -32,7 +46,7 @@ static PyObject *sipDo_Gradient_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const Gradient *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Gradient,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Gradient,&a0obj))
 		{
 			Gradient *ptr;
 
@@ -57,7 +71,7 @@ static PyObject *sipDo_Gradient_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const AtomVector *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomVector,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomVector,&a0obj))
 		{
 			Gradient *ptr;
 
@@ -80,7 +94,7 @@ static PyObject *sipDo_Gradient_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Gradient,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Gradient,sipName_BALL_set);
 
 	return NULL;
 }
@@ -88,12 +102,13 @@ static PyObject *sipDo_Gradient_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Gradient_negate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Gradient)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Gradient *ptr;
 
@@ -109,7 +124,7 @@ static PyObject *sipDo_Gradient_negate(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Gradient,sipName_BALL_negate);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Gradient,sipName_BALL_negate);
 
 	return NULL;
 }
@@ -117,12 +132,13 @@ static PyObject *sipDo_Gradient_negate(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Gradient_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Gradient)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Gradient *ptr;
 
@@ -138,7 +154,7 @@ static PyObject *sipDo_Gradient_normalize(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Gradient,sipName_BALL_normalize);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Gradient,sipName_BALL_normalize);
 
 	return NULL;
 }
@@ -146,12 +162,13 @@ static PyObject *sipDo_Gradient_normalize(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Gradient_size(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Gradient)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			Gradient *ptr;
@@ -167,7 +184,7 @@ static PyObject *sipDo_Gradient_size(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Gradient,sipName_BALL_size);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Gradient,sipName_BALL_size);
 
 	return NULL;
 }
@@ -175,12 +192,13 @@ static PyObject *sipDo_Gradient_size(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Gradient_invalidate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Gradient)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Gradient *ptr;
 
@@ -196,7 +214,7 @@ static PyObject *sipDo_Gradient_invalidate(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Gradient,sipName_BALL_invalidate);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Gradient,sipName_BALL_invalidate);
 
 	return NULL;
 }
@@ -204,12 +222,13 @@ static PyObject *sipDo_Gradient_invalidate(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_Gradient_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Gradient)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Gradient *ptr;
@@ -225,7 +244,7 @@ static PyObject *sipDo_Gradient_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Gradient,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Gradient,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -260,6 +279,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -267,10 +287,10 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new Gradient();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -278,7 +298,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 		const AtomVector *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AtomVector,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomVector,&a0obj))
 		{
 			int iserr = 0;
 
@@ -288,7 +308,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Gradient(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -297,7 +317,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1;
 
-		if (sipParseArgs(sipArgs,"-Il",sipCanConvertTo_Gradient,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-Il",sipCanConvertTo_Gradient,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -307,7 +327,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Gradient(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -315,7 +335,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 		const Gradient *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Gradient,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Gradient,&a0obj))
 		{
 			int iserr = 0;
 
@@ -325,12 +345,12 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Gradient(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Gradient);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Gradient);
 		return NULL;
 	}
 
@@ -343,68 +363,6 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 
 		return NULL;
 	}
-
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
-static PyObject *sipGetSetVar_Gradient_norm(PyObject *sipThisObj,PyObject *valobj)
-{
-	double val;
-	Gradient *ptr;
-
-	if ((ptr = (Gradient *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Gradient)) == NULL)
-		return NULL;
-
-	if (valobj == NULL)
-	{
-		val = ptr -> norm;
-
-		valobj = PyFloat_FromDouble(val);
-
-		return valobj;
-	}
-
-	val = PyFloat_AsDouble(valobj);
-
-	if (PyErr_Occurred() != NULL)
-	{
-		sipBadSetType(sipName_BALL_Gradient,sipName_BALL_norm);
-		return NULL;
-	}
-
-	ptr -> norm = val;
-
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
-static PyObject *sipGetSetVar_Gradient_inv_norm(PyObject *sipThisObj,PyObject *valobj)
-{
-	double val;
-	Gradient *ptr;
-
-	if ((ptr = (Gradient *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Gradient)) == NULL)
-		return NULL;
-
-	if (valobj == NULL)
-	{
-		val = ptr -> inv_norm;
-
-		valobj = PyFloat_FromDouble(val);
-
-		return valobj;
-	}
-
-	val = PyFloat_AsDouble(valobj);
-
-	if (PyErr_Occurred() != NULL)
-	{
-		sipBadSetType(sipName_BALL_Gradient,sipName_BALL_inv_norm);
-		return NULL;
-	}
-
-	ptr -> inv_norm = val;
 
 	Py_INCREF(Py_None);
 	return Py_None;
@@ -441,6 +399,68 @@ static PyObject *sipGetSetVar_Gradient_rms(PyObject *sipThisObj,PyObject *valobj
 	return Py_None;
 }
 
+static PyObject *sipGetSetVar_Gradient_inv_norm(PyObject *sipThisObj,PyObject *valobj)
+{
+	double val;
+	Gradient *ptr;
+
+	if ((ptr = (Gradient *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Gradient)) == NULL)
+		return NULL;
+
+	if (valobj == NULL)
+	{
+		val = ptr -> inv_norm;
+
+		valobj = PyFloat_FromDouble(val);
+
+		return valobj;
+	}
+
+	val = PyFloat_AsDouble(valobj);
+
+	if (PyErr_Occurred() != NULL)
+	{
+		sipBadSetType(sipName_BALL_Gradient,sipName_BALL_inv_norm);
+		return NULL;
+	}
+
+	ptr -> inv_norm = val;
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+static PyObject *sipGetSetVar_Gradient_norm(PyObject *sipThisObj,PyObject *valobj)
+{
+	double val;
+	Gradient *ptr;
+
+	if ((ptr = (Gradient *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Gradient)) == NULL)
+		return NULL;
+
+	if (valobj == NULL)
+	{
+		val = ptr -> norm;
+
+		valobj = PyFloat_FromDouble(val);
+
+		return valobj;
+	}
+
+	val = PyFloat_AsDouble(valobj);
+
+	if (PyErr_Occurred() != NULL)
+	{
+		sipBadSetType(sipName_BALL_Gradient,sipName_BALL_norm);
+		return NULL;
+	}
+
+	ptr -> norm = val;
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
 PyMethodDef sipClassAttrTab_Gradient[] = {
 	{sipName_BALL_set, sipDo_Gradient_set, METH_VARARGS, NULL},
 	{sipName_BALL_negate, sipDo_Gradient_negate, METH_VARARGS, NULL},
@@ -452,9 +472,9 @@ PyMethodDef sipClassAttrTab_Gradient[] = {
 };
 
 PyMethodDef sipClassVarTab_Gradient[] = {
-	{sipName_BALL_norm, sipGetSetVar_Gradient_norm, 0, NULL},
-	{sipName_BALL_inv_norm, sipGetSetVar_Gradient_inv_norm, 0, NULL},
 	{sipName_BALL_rms, sipGetSetVar_Gradient_rms, 0, NULL},
+	{sipName_BALL_inv_norm, sipGetSetVar_Gradient_inv_norm, 0, NULL},
+	{sipName_BALL_norm, sipGetSetVar_Gradient_norm, 0, NULL},
 	{NULL}
 };
 
@@ -468,17 +488,15 @@ int sipCanConvertTo_Gradient(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Gradient);
 }
 
-void sipConvertTo_Gradient(PyObject *sipPy,Gradient **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Gradient(PyObject *sipPy,Gradient **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Gradient);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Gradient);
+		*sipCppPtr = NULL;
 
 		return;
 	}

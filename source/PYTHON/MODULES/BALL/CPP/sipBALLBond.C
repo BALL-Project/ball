@@ -6,7 +6,7 @@
 PyObject *sipClass_Bond;
 
 static void sipDealloc_Bond(sipThisType *);
-static PyObject *sipPyInternalRepr_Bond(sipThisType *);
+static PyObject * sip__str__Bond(PyObject *a0);
 
 static PyTypeObject sipType_Bond = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,80 +19,109 @@ static PyTypeObject sipType_Bond = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_Bond,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__Bond,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipBond::sipBond(): Bond()
+sipBond::sipBond()
+    : Bond()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipBond::sipBond(const Bond& a0,bool a1): Bond(a0,a1)
+sipBond::sipBond(const Bond& a0,bool a1)
+    : Bond(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipBond::sipBond(const String& a0,Atom& a1,Atom& a2,short a3,short a4): Bond(a0,a1,a2,a3,a4)
+sipBond::sipBond(const String& a0,Atom& a1,Atom& a2,short a3,short a4)
+    : Bond(a0,a1,a2,a3,a4)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipBond::sipBond(const Bond& a0): Bond(a0)
+sipBond::sipBond(const Bond& a0)
+    : Bond(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipBond::~sipBond()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipBond::select()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_select,&relLock))
-		sipSelectable::sipVH_select(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		Composite::select();
-}
 void sipBond::deselect()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
-		sipSelectable::sipVH_deselect(&sipPyMethods[1],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
+		sipSelectable::sipVH_deselect(&sipPyMethods[0],sipPyThis,relLock);
 	else
 		Composite::deselect();
 }
-void sipBond::clear()
+
+void sipBond::select()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipObject::sipVH_clear(&sipPyMethods[2],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_select,&relLock))
+		sipSelectable::sipVH_select(&sipPyMethods[1],sipPyThis,relLock);
 	else
-		Bond::clear();
+		Composite::select();
 }
+
+bool sipBond::isValid() const
+ throw()
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipObject::sipVH_isValid(&sipPyMethods[2],sipPyThis,relLock) :
+		Bond::isValid();
+}
+
 void sipBond::destroy()
+ throw()
 {
 	int relLock;
 
 	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_destroy,&relLock))
-		sipObject::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
+		sipComposite::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
 	else
 		Bond::destroy();
 }
-bool sipBond::isValid() const
+
+void sipBond::clear()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipObject::sipVH_isValid(&sipPyMethods[4],sipPyThis,relLock) :
-		Bond::isValid();
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipObject::sipVH_clear(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		Bond::clear();
 }
 
 static PyObject *sipDo_Bond_createBond(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
 		Bond *a0;
@@ -102,7 +131,7 @@ static PyObject *sipDo_Bond_createBond(PyObject *,PyObject *sipArgs)
 		Atom *a2;
 		PyObject *a2obj;
 
-		if (sipParseArgs(sipArgs,"-III",sipCanConvertTo_Bond,&a0obj,sipCanConvertTo_Atom,&a1obj,sipCanConvertTo_Atom,&a2obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Bond,&a0obj,sipCanConvertTo_Atom,&a1obj,sipCanConvertTo_Atom,&a2obj))
 		{
 			Bond *res;
 
@@ -123,7 +152,7 @@ static PyObject *sipDo_Bond_createBond(PyObject *,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_createBond);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_createBond);
 
 	return NULL;
 }
@@ -131,12 +160,13 @@ static PyObject *sipDo_Bond_createBond(PyObject *,PyObject *sipArgs)
 static PyObject *sipDo_Bond_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Bond *ptr;
 
@@ -152,7 +182,7 @@ static PyObject *sipDo_Bond_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -160,12 +190,13 @@ static PyObject *sipDo_Bond_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Bond *ptr;
 
@@ -181,7 +212,7 @@ static PyObject *sipDo_Bond_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -189,12 +220,13 @@ static PyObject *sipDo_Bond_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_finalize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Bond *ptr;
 
@@ -210,7 +242,7 @@ static PyObject *sipDo_Bond_finalize(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_finalize);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_finalize);
 
 	return NULL;
 }
@@ -218,6 +250,7 @@ static PyObject *sipDo_Bond_finalize(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -226,7 +259,7 @@ static PyObject *sipDo_Bond_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		Bond *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Bond,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Bond,&a0obj))
 		{
 			Bond *ptr;
 
@@ -249,7 +282,7 @@ static PyObject *sipDo_Bond_swap(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -257,6 +290,7 @@ static PyObject *sipDo_Bond_swap(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_setFirstAtom(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -265,7 +299,7 @@ static PyObject *sipDo_Bond_setFirstAtom(PyObject *sipThisObj,PyObject *sipArgs)
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Bond *ptr;
 
@@ -288,7 +322,7 @@ static PyObject *sipDo_Bond_setFirstAtom(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_setFirstAtom);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_setFirstAtom);
 
 	return NULL;
 }
@@ -296,27 +330,13 @@ static PyObject *sipDo_Bond_setFirstAtom(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_getFirstAtom(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			Atom *res;
-			Bond *ptr;
-
-			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
-				return NULL;
-
-			res = ptr -> Bond::getFirstAtom();
-
-			return sipMapCppToSelf(res,sipClass_Atom);
-		}
-	}
-
-	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Atom *res;
 			Bond *ptr;
@@ -332,7 +352,7 @@ static PyObject *sipDo_Bond_getFirstAtom(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getFirstAtom);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_getFirstAtom);
 
 	return NULL;
 }
@@ -340,6 +360,7 @@ static PyObject *sipDo_Bond_getFirstAtom(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_getPartner(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -348,7 +369,7 @@ static PyObject *sipDo_Bond_getPartner(PyObject *sipThisObj,PyObject *sipArgs)
 		const Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Atom *res;
 			Bond *ptr;
@@ -371,7 +392,7 @@ static PyObject *sipDo_Bond_getPartner(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getPartner);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_getPartner);
 
 	return NULL;
 }
@@ -379,6 +400,7 @@ static PyObject *sipDo_Bond_getPartner(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_setSecondAtom(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -387,7 +409,7 @@ static PyObject *sipDo_Bond_setSecondAtom(PyObject *sipThisObj,PyObject *sipArgs
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Bond *ptr;
 
@@ -410,7 +432,7 @@ static PyObject *sipDo_Bond_setSecondAtom(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_setSecondAtom);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_setSecondAtom);
 
 	return NULL;
 }
@@ -418,27 +440,13 @@ static PyObject *sipDo_Bond_setSecondAtom(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Bond_getSecondAtom(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			Atom *res;
-			Bond *ptr;
-
-			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
-				return NULL;
-
-			res = ptr -> Bond::getSecondAtom();
-
-			return sipMapCppToSelf(res,sipClass_Atom);
-		}
-	}
-
-	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Atom *res;
 			Bond *ptr;
@@ -454,7 +462,7 @@ static PyObject *sipDo_Bond_getSecondAtom(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getSecondAtom);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_getSecondAtom);
 
 	return NULL;
 }
@@ -462,6 +470,7 @@ static PyObject *sipDo_Bond_getSecondAtom(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Bond_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -470,7 +479,7 @@ static PyObject *sipDo_Bond_setName(PyObject *sipThisObj,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			Bond *ptr;
 
@@ -496,7 +505,7 @@ static PyObject *sipDo_Bond_setName(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_setName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_setName);
 
 	return NULL;
 }
@@ -504,12 +513,13 @@ static PyObject *sipDo_Bond_setName(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const String *res;
 			Bond *ptr;
@@ -525,7 +535,7 @@ static PyObject *sipDo_Bond_getName(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_getName);
 
 	return NULL;
 }
@@ -533,6 +543,7 @@ static PyObject *sipDo_Bond_getName(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_setOrder(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -540,7 +551,7 @@ static PyObject *sipDo_Bond_setOrder(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		short a0;
 
-		if (sipParseArgs(sipArgs,"h",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"h",&a0))
 		{
 			Bond *ptr;
 
@@ -556,7 +567,7 @@ static PyObject *sipDo_Bond_setOrder(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_setOrder);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_setOrder);
 
 	return NULL;
 }
@@ -564,12 +575,13 @@ static PyObject *sipDo_Bond_setOrder(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_getOrder(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			short res;
 			Bond *ptr;
@@ -585,7 +597,7 @@ static PyObject *sipDo_Bond_getOrder(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getOrder);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_getOrder);
 
 	return NULL;
 }
@@ -593,6 +605,7 @@ static PyObject *sipDo_Bond_getOrder(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_setType(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -600,7 +613,7 @@ static PyObject *sipDo_Bond_setType(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		short a0;
 
-		if (sipParseArgs(sipArgs,"h",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"h",&a0))
 		{
 			Bond *ptr;
 
@@ -616,7 +629,7 @@ static PyObject *sipDo_Bond_setType(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_setType);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_setType);
 
 	return NULL;
 }
@@ -624,12 +637,13 @@ static PyObject *sipDo_Bond_setType(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_getType(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			short res;
 			Bond *ptr;
@@ -645,7 +659,7 @@ static PyObject *sipDo_Bond_getType(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getType);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_getType);
 
 	return NULL;
 }
@@ -653,12 +667,13 @@ static PyObject *sipDo_Bond_getType(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_getLength(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			Bond *ptr;
@@ -674,41 +689,7 @@ static PyObject *sipDo_Bond_getLength(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getLength);
-
-	return NULL;
-}
-
-static PyObject *sipDo_Bond_getBond(PyObject *,PyObject *sipArgs)
-{
-
-	{
-		Atom *a0;
-		PyObject *a0obj;
-		Atom *a1;
-		PyObject *a1obj;
-
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_Atom,&a0obj,sipCanConvertTo_Atom,&a1obj))
-		{
-			Bond *res;
-
-			int iserr = 0;
-
-			sipConvertTo_Atom(a0obj,&a0,1,&iserr);
-			sipConvertTo_Atom(a1obj,&a1,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = Bond::getBond(* a0,* a1);
-
-			return sipMapCppToSelf(res,sipClass_Bond);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getBond);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_getLength);
 
 	return NULL;
 }
@@ -716,6 +697,7 @@ static PyObject *sipDo_Bond_getBond(PyObject *,PyObject *sipArgs)
 static PyObject *sipDo_Bond_getBoundAtom(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -724,9 +706,9 @@ static PyObject *sipDo_Bond_getBoundAtom(PyObject *sipThisObj,PyObject *sipArgs)
 		const Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
-			Atom *res;
+			const Atom *res;
 			Bond *ptr;
 
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
@@ -749,7 +731,7 @@ static PyObject *sipDo_Bond_getBoundAtom(PyObject *sipThisObj,PyObject *sipArgs)
 		const Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			const Atom *res;
 			Bond *ptr;
@@ -772,7 +754,7 @@ static PyObject *sipDo_Bond_getBoundAtom(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getBoundAtom);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_getBoundAtom);
 
 	return NULL;
 }
@@ -780,6 +762,7 @@ static PyObject *sipDo_Bond_getBoundAtom(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_isBondOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -788,7 +771,7 @@ static PyObject *sipDo_Bond_isBondOf(PyObject *sipThisObj,PyObject *sipArgs)
 		const Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			bool res;
 			Bond *ptr;
@@ -811,7 +794,7 @@ static PyObject *sipDo_Bond_isBondOf(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_isBondOf);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_isBondOf);
 
 	return NULL;
 }
@@ -819,12 +802,13 @@ static PyObject *sipDo_Bond_isBondOf(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_isBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Bond *ptr;
@@ -840,7 +824,7 @@ static PyObject *sipDo_Bond_isBound(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_isBound);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_isBound);
 
 	return NULL;
 }
@@ -848,12 +832,13 @@ static PyObject *sipDo_Bond_isBound(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_isInterBond(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Bond *ptr;
@@ -869,7 +854,7 @@ static PyObject *sipDo_Bond_isInterBond(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_isInterBond);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_isInterBond);
 
 	return NULL;
 }
@@ -877,6 +862,7 @@ static PyObject *sipDo_Bond_isInterBond(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_isInterBondOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -885,7 +871,7 @@ static PyObject *sipDo_Bond_isInterBondOf(PyObject *sipThisObj,PyObject *sipArgs
 		const AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			bool res;
 			Bond *ptr;
@@ -910,7 +896,7 @@ static PyObject *sipDo_Bond_isInterBondOf(PyObject *sipThisObj,PyObject *sipArgs
 		const System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			bool res;
 			Bond *ptr;
@@ -933,7 +919,7 @@ static PyObject *sipDo_Bond_isInterBondOf(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_isInterBondOf);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_isInterBondOf);
 
 	return NULL;
 }
@@ -941,12 +927,13 @@ static PyObject *sipDo_Bond_isInterBondOf(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Bond_isIntraBond(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Bond *ptr;
@@ -962,7 +949,7 @@ static PyObject *sipDo_Bond_isIntraBond(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_isIntraBond);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_isIntraBond);
 
 	return NULL;
 }
@@ -970,6 +957,7 @@ static PyObject *sipDo_Bond_isIntraBond(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Bond_isIntraBondOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
@@ -978,7 +966,7 @@ static PyObject *sipDo_Bond_isIntraBondOf(PyObject *sipThisObj,PyObject *sipArgs
 		const AtomContainer *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomContainer,&a0obj))
 		{
 			bool res;
 			Bond *ptr;
@@ -1003,7 +991,7 @@ static PyObject *sipDo_Bond_isIntraBondOf(PyObject *sipThisObj,PyObject *sipArgs
 		const System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			bool res;
 			Bond *ptr;
@@ -1026,7 +1014,7 @@ static PyObject *sipDo_Bond_isIntraBondOf(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_isIntraBondOf);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_isIntraBondOf);
 
 	return NULL;
 }
@@ -1034,12 +1022,13 @@ static PyObject *sipDo_Bond_isIntraBondOf(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Bond_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bond)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Bond *ptr;
@@ -1055,7 +1044,7 @@ static PyObject *sipDo_Bond_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bond,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -1094,16 +1083,15 @@ static void sipDealloc_Bond(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_Bond(sipThisType *sipThis)
+static PyObject * sip__str__Bond(PyObject *a0)
 {
-#line 90 "bond.sip"
+#line 88 "bond.sip"
   Bond* ptr;
-  if ((ptr = (Bond*)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
+  if ((ptr = (Bond*)sipGetCppPtr((sipThisType*)a0,sipClass_Bond)) == NULL)
     return NULL;
 
-	Atom* a1 = ptr->getFirstAtom();
-	Atom* a2 = ptr->getSecondAtom();
+	const Atom* a1 = ptr->getFirstAtom();
+	const Atom* a2 = ptr->getSecondAtom();
 	String tmp("Bond {");
 	if ((a1 != 0) && (a2 != 0))
 	{
@@ -1133,7 +1121,7 @@ static PyObject *sipPyInternalRepr_Bond(sipThisType *sipThis)
 		tmp += " }";
 	}
   return PyString_FromString(tmp.c_str());
-#line 1141 "../CPP/sipBALLBond.cpp"
+#line 1129 "sipBALLBond.cpp"
 }
 
 PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
@@ -1145,6 +1133,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -1152,10 +1141,10 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipBond();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1164,7 +1153,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_Bond,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_Bond,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -1174,7 +1163,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipBond(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1188,7 +1177,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 		short a3 = Bond::ORDER__UNKNOWN;
 		short a4 = Bond::TYPE__UNKNOWN;
 
-		if (sipParseArgs(sipArgs,"-III|hh",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Atom,&a1obj,sipCanConvertTo_Atom,&a2obj,&a3,&a4))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III|hh",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Atom,&a1obj,sipCanConvertTo_Atom,&a2obj,&a3,&a4))
 		{
 			int iserr = 0;
 
@@ -1203,7 +1192,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1211,7 +1200,7 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 		const Bond *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Bond,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Bond,&a0obj))
 		{
 			int iserr = 0;
 
@@ -1221,12 +1210,12 @@ PyObject *sipNew_Bond(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipBond(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Bond);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Bond);
 		return NULL;
 	}
 
@@ -1268,7 +1257,6 @@ PyMethodDef sipClassAttrTab_Bond[] = {
 	{sipName_BALL_setType, sipDo_Bond_setType, METH_VARARGS, NULL},
 	{sipName_BALL_getType, sipDo_Bond_getType, METH_VARARGS, NULL},
 	{sipName_BALL_getLength, sipDo_Bond_getLength, METH_VARARGS, NULL},
-	{sipName_BALL_getBond, sipDo_Bond_getBond, METH_VARARGS, NULL},
 	{sipName_BALL_getBoundAtom, sipDo_Bond_getBoundAtom, METH_VARARGS, NULL},
 	{sipName_BALL_isBondOf, sipDo_Bond_isBondOf, METH_VARARGS, NULL},
 	{sipName_BALL_isBound, sipDo_Bond_isBound, METH_VARARGS, NULL},
@@ -1285,17 +1273,15 @@ int sipCanConvertTo_Bond(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Bond);
 }
 
-void sipConvertTo_Bond(PyObject *sipPy,Bond **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Bond(PyObject *sipPy,Bond **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Bond);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Bond);
+		*sipCppPtr = NULL;
 
 		return;
 	}

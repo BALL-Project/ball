@@ -1,4 +1,4 @@
-// $Id: molecule.sip,v 1.2 2000/08/30 19:59:10 oliver Exp $
+// $Id: molecule.sip,v 1.3 2001/07/25 11:32:33 oliver Exp $
 
 class Molecule
   : AtomContainer
@@ -11,9 +11,9 @@ class Molecule
   Molecule();
   Molecule(const Molecule&, bool = true);
   Molecule(const String&);
-	//  virtual ~Molecule();
-  virtual void clear();
-  virtual void destroy();
+	~Molecule() throw();
+  virtual void clear() throw();
+  virtual void destroy() throw();
 	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 	//  void persistentRead(PersistenceManager& pm);
   void set(const Molecule&, bool = true);
@@ -37,14 +37,15 @@ class Molecule
   void spliceAfter(AtomContainer&);
   void splice(AtomContainer&);
   bool remove(AtomContainer&);
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   Molecule* ptr;
-  if ((ptr = (Molecule*)sipGetCppPtr(sipThis,sipClass_Molecule)) == NULL)
+  if ((ptr = (Molecule*)sipGetCppPtr((sipThisType*)a0,sipClass_Molecule)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("Molecule ") + ptr->getName() 

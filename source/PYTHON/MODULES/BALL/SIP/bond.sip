@@ -1,4 +1,4 @@
-// $Id: bond.sip,v 1.4 2001/05/07 00:58:10 oliver Exp $
+// $Id: bond.sip,v 1.5 2001/07/25 11:32:32 oliver Exp $
 
 class Bond
 	: Composite,
@@ -49,20 +49,18 @@ class Bond
   Bond(const String& /name/, Atom& /first/, Atom& /second/, Order /order/ = ORDER__UNKNOWN ,
      Type /type/ = TYPE__UNKNOWN );
   static Bond* createBond(Bond& /bond/, Atom& /first/, Atom& /second/);
-  ~Bond();
-  virtual void clear();
-  virtual void destroy();
+  ~Bond() throw();
+  virtual void clear() throw();
+  virtual void destroy() throw();
   // void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
   // void persistentRead(PersistenceManager& pm);
   void finalize();
   // Bond& operator = (const Bond& bond);
   void swap(Bond& /bond/);
   void setFirstAtom(Atom* /atom/);
-  Atom* getFirstAtom();
   const Atom* getFirstAtom() const;
   Atom* getPartner(const Atom& /atom/) const;
   void setSecondAtom(Atom* /atom/);
-  Atom* getSecondAtom();
   const Atom* getSecondAtom() const;
   void setName(const String& /name/);
   const String& getName() const;
@@ -71,8 +69,7 @@ class Bond
   void setType(Type /bond_type/);
   Type getType() const;
   float getLength() const;
-  static Bond* getBond(Atom& /first/, Atom& /second/);
-  Atom* getBoundAtom(const Atom& /atom/);
+  const Atom* getBoundAtom(const Atom& /atom/);
   const Atom* getBoundAtom(const Atom& /atom/) const;
   bool isBondOf(const Atom& /atom/) const;
   bool isBound() const;
@@ -82,17 +79,18 @@ class Bond
   bool isIntraBond() const;
   bool isIntraBondOf(const AtomContainer& /atom_container/) const;
   bool isIntraBondOf(const System& /system/) const;
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // convert the atom to a string representation
-  operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   Bond* ptr;
-  if ((ptr = (Bond*)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
+  if ((ptr = (Bond*)sipGetCppPtr((sipThisType*)a0,sipClass_Bond)) == NULL)
     return NULL;
 
-	Atom* a1 = ptr->getFirstAtom();
-	Atom* a2 = ptr->getSecondAtom();
+	const Atom* a1 = ptr->getFirstAtom();
+	const Atom* a2 = ptr->getSecondAtom();
 	String tmp("Bond {");
 	if ((a1 != 0) && (a2 != 0))
 	{

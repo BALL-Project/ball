@@ -19,33 +19,53 @@ static PyTypeObject sipType_AmberFF = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipAmberFF::sipAmberFF(): AmberFF()
+sipAmberFF::sipAmberFF()
+    : AmberFF()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipAmberFF::sipAmberFF(System& a0): AmberFF(a0)
+sipAmberFF::sipAmberFF(System& a0)
+    : AmberFF(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipAmberFF::sipAmberFF(System& a0,Options& a1): AmberFF(a0,a1)
+sipAmberFF::sipAmberFF(System& a0,Options& a1)
+    : AmberFF(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipAmberFF::sipAmberFF(AmberFF& a0): AmberFF(a0)
+sipAmberFF::sipAmberFF(AmberFF& a0)
+    : AmberFF(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipAmberFF::~sipAmberFF()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
+
 bool sipAmberFF::specificSetup()
+
 {
 	int relLock;
 
@@ -57,12 +77,13 @@ bool sipAmberFF::specificSetup()
 static PyObject *sipDo_AmberFF_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			AmberFF *ptr;
@@ -78,7 +99,7 @@ static PyObject *sipDo_AmberFF_specificSetup(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberFF,sipName_BALL_specificSetup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberFF,sipName_BALL_specificSetup);
 
 	return NULL;
 }
@@ -86,12 +107,13 @@ static PyObject *sipDo_AmberFF_specificSetup(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_AmberFF_getStretchEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			AmberFF *ptr;
@@ -107,7 +129,7 @@ static PyObject *sipDo_AmberFF_getStretchEnergy(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberFF,sipName_BALL_getStretchEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberFF,sipName_BALL_getStretchEnergy);
 
 	return NULL;
 }
@@ -115,12 +137,13 @@ static PyObject *sipDo_AmberFF_getStretchEnergy(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_AmberFF_getBendEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			AmberFF *ptr;
@@ -136,7 +159,7 @@ static PyObject *sipDo_AmberFF_getBendEnergy(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberFF,sipName_BALL_getBendEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberFF,sipName_BALL_getBendEnergy);
 
 	return NULL;
 }
@@ -144,12 +167,13 @@ static PyObject *sipDo_AmberFF_getBendEnergy(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_AmberFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			AmberFF *ptr;
@@ -165,7 +189,7 @@ static PyObject *sipDo_AmberFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberFF,sipName_BALL_getTorsionEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberFF,sipName_BALL_getTorsionEnergy);
 
 	return NULL;
 }
@@ -173,12 +197,13 @@ static PyObject *sipDo_AmberFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_AmberFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			AmberFF *ptr;
@@ -194,7 +219,7 @@ static PyObject *sipDo_AmberFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberFF,sipName_BALL_getNonbondedEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberFF,sipName_BALL_getNonbondedEnergy);
 
 	return NULL;
 }
@@ -202,12 +227,13 @@ static PyObject *sipDo_AmberFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_AmberFF_getESEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			AmberFF *ptr;
@@ -223,7 +249,7 @@ static PyObject *sipDo_AmberFF_getESEnergy(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberFF,sipName_BALL_getESEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberFF,sipName_BALL_getESEnergy);
 
 	return NULL;
 }
@@ -231,12 +257,13 @@ static PyObject *sipDo_AmberFF_getESEnergy(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_AmberFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			AmberFF *ptr;
@@ -252,7 +279,7 @@ static PyObject *sipDo_AmberFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberFF,sipName_BALL_getVdWEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberFF,sipName_BALL_getVdWEnergy);
 
 	return NULL;
 }
@@ -260,12 +287,13 @@ static PyObject *sipDo_AmberFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_AmberFF_hasInitializedParameters(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberFF)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			AmberFF *ptr;
@@ -281,7 +309,7 @@ static PyObject *sipDo_AmberFF_hasInitializedParameters(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberFF,sipName_BALL_hasInitializedParameters);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberFF,sipName_BALL_hasInitializedParameters);
 
 	return NULL;
 }
@@ -327,6 +355,7 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -334,10 +363,10 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipAmberFF();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -345,7 +374,7 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 		System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_System,&a0obj))
 		{
 			int iserr = 0;
 
@@ -355,7 +384,7 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberFF(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -365,7 +394,7 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 		Options *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_System,&a0obj,sipCanConvertTo_Options,&a1obj))
 		{
 			int iserr = 0;
 
@@ -376,7 +405,7 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberFF(* a0,* a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -384,7 +413,7 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 		AmberFF *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AmberFF,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AmberFF,&a0obj))
 		{
 			int iserr = 0;
 
@@ -394,12 +423,12 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberFF(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_AmberFF);
+		sipNoCtor(sipArgsParsed,sipName_BALL_AmberFF);
 		return NULL;
 	}
 
@@ -440,17 +469,15 @@ int sipCanConvertTo_AmberFF(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_AmberFF);
 }
 
-void sipConvertTo_AmberFF(PyObject *sipPy,AmberFF **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_AmberFF(PyObject *sipPy,AmberFF **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_AmberFF);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_AmberFF);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -19,33 +19,53 @@ static PyTypeObject sipType_AmberStretch = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipAmberStretch::sipAmberStretch(): AmberStretch()
+sipAmberStretch::sipAmberStretch()
+    : AmberStretch()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipAmberStretch::sipAmberStretch(ForceField& a0): AmberStretch(a0)
+sipAmberStretch::sipAmberStretch(ForceField& a0)
+    : AmberStretch(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipAmberStretch::sipAmberStretch(const AmberStretch& a0,bool a1): AmberStretch(a0,a1)
+sipAmberStretch::sipAmberStretch(const AmberStretch& a0,bool a1)
+    : AmberStretch(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipAmberStretch::sipAmberStretch(const AmberStretch& a0): AmberStretch(a0)
+sipAmberStretch::sipAmberStretch(const AmberStretch& a0)
+    : AmberStretch(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipAmberStretch::~sipAmberStretch()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
+
 double sipAmberStretch::getEnergy() const
+
 {
 	int relLock;
 
@@ -53,15 +73,20 @@ double sipAmberStretch::getEnergy() const
 		sipForceFieldComponent::sipVH_getEnergy(&sipPyMethods[0],sipPyThis,relLock) :
 		ForceFieldComponent::getEnergy();
 }
-bool sipAmberStretch::setup()
+
+void sipAmberStretch::updateForces()
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipForceFieldComponent::sipVH_setup(&sipPyMethods[1],sipPyThis,relLock) :
-		AmberStretch::setup();
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
+		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[1],sipPyThis,relLock);
+	else
+		AmberStretch::updateForces();
 }
+
 double sipAmberStretch::updateEnergy()
+
 {
 	int relLock;
 
@@ -69,25 +94,27 @@ double sipAmberStretch::updateEnergy()
 		sipForceFieldComponent::sipVH_updateEnergy(&sipPyMethods[2],sipPyThis,relLock) :
 		AmberStretch::updateEnergy();
 }
-void sipAmberStretch::updateForces()
+
+bool sipAmberStretch::setup()
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
-		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[3],sipPyThis,relLock);
-	else
-		AmberStretch::updateForces();
+	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipForceFieldComponent::sipVH_setup(&sipPyMethods[3],sipPyThis,relLock) :
+		AmberStretch::setup();
 }
 
 static PyObject *sipDo_AmberStretch_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberStretch)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			AmberStretch *ptr;
@@ -103,7 +130,7 @@ static PyObject *sipDo_AmberStretch_setup(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberStretch,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberStretch,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -111,12 +138,13 @@ static PyObject *sipDo_AmberStretch_setup(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_AmberStretch_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberStretch)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			AmberStretch *ptr;
@@ -132,7 +160,7 @@ static PyObject *sipDo_AmberStretch_updateEnergy(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberStretch,sipName_BALL_updateEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberStretch,sipName_BALL_updateEnergy);
 
 	return NULL;
 }
@@ -140,12 +168,13 @@ static PyObject *sipDo_AmberStretch_updateEnergy(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_AmberStretch_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberStretch)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			AmberStretch *ptr;
 
@@ -161,7 +190,7 @@ static PyObject *sipDo_AmberStretch_updateForces(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberStretch,sipName_BALL_updateForces);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberStretch,sipName_BALL_updateForces);
 
 	return NULL;
 }
@@ -207,6 +236,7 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -214,10 +244,10 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipAmberStretch();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -225,7 +255,7 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -235,7 +265,7 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberStretch(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -244,7 +274,7 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AmberStretch,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_AmberStretch,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -254,7 +284,7 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberStretch(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -262,7 +292,7 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 		const AmberStretch *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AmberStretch,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AmberStretch,&a0obj))
 		{
 			int iserr = 0;
 
@@ -272,12 +302,12 @@ PyObject *sipNew_AmberStretch(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberStretch(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_AmberStretch);
+		sipNoCtor(sipArgsParsed,sipName_BALL_AmberStretch);
 		return NULL;
 	}
 
@@ -313,17 +343,15 @@ int sipCanConvertTo_AmberStretch(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_AmberStretch);
 }
 
-void sipConvertTo_AmberStretch(PyObject *sipPy,AmberStretch **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_AmberStretch(PyObject *sipPy,AmberStretch **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_AmberStretch);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_AmberStretch);
+		*sipCppPtr = NULL;
 
 		return;
 	}

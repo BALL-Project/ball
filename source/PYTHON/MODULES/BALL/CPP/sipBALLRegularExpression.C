@@ -19,82 +19,70 @@ static PyTypeObject sipType_RegularExpression = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipRegularExpression::sipRegularExpression(): RegularExpression()
+sipRegularExpression::sipRegularExpression()
+    : RegularExpression()
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
-sipRegularExpression::sipRegularExpression(const RegularExpression& a0,bool a1): RegularExpression(a0,a1)
+sipRegularExpression::sipRegularExpression(const RegularExpression& a0,bool a1)
+    : RegularExpression(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
-sipRegularExpression::sipRegularExpression(const String& a0,bool a1): RegularExpression(a0,a1)
+sipRegularExpression::sipRegularExpression(const String& a0,bool a1)
+    : RegularExpression(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
-sipRegularExpression::sipRegularExpression(const RegularExpression& a0): RegularExpression(a0)
+sipRegularExpression::sipRegularExpression(const RegularExpression& a0)
+    : RegularExpression(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
 
 sipRegularExpression::~sipRegularExpression()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipRegularExpression::clear()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipRegularExpression::sipVH_clear(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		RegularExpression::clear();
-}
 bool sipRegularExpression::isValid() const
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipRegularExpression::sipVH_isValid(&sipPyMethods[1],sipPyThis,relLock) :
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipRegularExpression::sipVH_isValid(&sipPyMethods[0],sipPyThis,relLock) :
 		RegularExpression::isValid();
 }
 
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipRegularExpression::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+void sipRegularExpression::clear()
+ throw()
 {
-	PyObject *resobj;
-	PyObject *sipArgs;
+	int relLock;
 
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_RegularExpression,sipName_BALL_clear);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipRegularExpression::sipVH_clear(&sipPyMethods[1],sipPyThis,relLock);
+	else
+		RegularExpression::clear();
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -138,15 +126,50 @@ releaseLock:
 	return res;
 }
 
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipRegularExpression::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_RegularExpression,sipName_BALL_clear);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
 static PyObject *sipDo_RegularExpression_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RegularExpression)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			RegularExpression *ptr;
 
@@ -162,7 +185,7 @@ static PyObject *sipDo_RegularExpression_clear(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RegularExpression,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RegularExpression,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -170,12 +193,13 @@ static PyObject *sipDo_RegularExpression_clear(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_RegularExpression_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RegularExpression)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			RegularExpression *ptr;
 
@@ -191,7 +215,7 @@ static PyObject *sipDo_RegularExpression_destroy(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RegularExpression,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RegularExpression,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -199,6 +223,7 @@ static PyObject *sipDo_RegularExpression_destroy(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_RegularExpression_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RegularExpression)) == NULL)
 		return NULL;
@@ -208,7 +233,7 @@ static PyObject *sipDo_RegularExpression_set(PyObject *sipThisObj,PyObject *sipA
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_RegularExpression,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_RegularExpression,&a0obj,&a1))
 		{
 			RegularExpression *ptr;
 
@@ -234,7 +259,7 @@ static PyObject *sipDo_RegularExpression_set(PyObject *sipThisObj,PyObject *sipA
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_String,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_String,&a0obj,&a1))
 		{
 			RegularExpression *ptr;
 
@@ -260,7 +285,7 @@ static PyObject *sipDo_RegularExpression_set(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RegularExpression,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RegularExpression,sipName_BALL_set);
 
 	return NULL;
 }
@@ -268,6 +293,7 @@ static PyObject *sipDo_RegularExpression_set(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_RegularExpression_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RegularExpression)) == NULL)
 		return NULL;
@@ -277,7 +303,7 @@ static PyObject *sipDo_RegularExpression_get(PyObject *sipThisObj,PyObject *sipA
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_RegularExpression,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_RegularExpression,&a0obj,&a1))
 		{
 			RegularExpression *ptr;
 
@@ -300,7 +326,7 @@ static PyObject *sipDo_RegularExpression_get(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RegularExpression,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RegularExpression,sipName_BALL_get);
 
 	return NULL;
 }
@@ -308,12 +334,13 @@ static PyObject *sipDo_RegularExpression_get(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_RegularExpression_getPattern(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RegularExpression)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const String *res;
 			RegularExpression *ptr;
@@ -329,7 +356,7 @@ static PyObject *sipDo_RegularExpression_getPattern(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RegularExpression,sipName_BALL_getPattern);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RegularExpression,sipName_BALL_getPattern);
 
 	return NULL;
 }
@@ -337,12 +364,13 @@ static PyObject *sipDo_RegularExpression_getPattern(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_RegularExpression_countSubexpressions(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RegularExpression)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			RegularExpression *ptr;
@@ -358,7 +386,7 @@ static PyObject *sipDo_RegularExpression_countSubexpressions(PyObject *sipThisOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RegularExpression,sipName_BALL_countSubexpressions);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RegularExpression,sipName_BALL_countSubexpressions);
 
 	return NULL;
 }
@@ -366,6 +394,7 @@ static PyObject *sipDo_RegularExpression_countSubexpressions(PyObject *sipThisOb
 static PyObject *sipDo_RegularExpression_match(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RegularExpression)) == NULL)
 		return NULL;
@@ -377,7 +406,7 @@ static PyObject *sipDo_RegularExpression_match(PyObject *sipThisObj,PyObject *si
 		PyObject *a1obj = NULL;
 		int a2 = 0;
 
-		if (sipParseArgs(sipArgs,"I|Ii",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,&a2))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|Ii",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Index,&a1obj,&a2))
 		{
 			bool res;
 			RegularExpression *ptr;
@@ -412,7 +441,7 @@ static PyObject *sipDo_RegularExpression_match(PyObject *sipThisObj,PyObject *si
 		PyObject *a1obj = NULL;
 		int a2 = 0;
 
-		if (sipParseArgs(sipArgs,"I|Ii",sipCanConvertTo_Substring,&a0obj,sipCanConvertTo_Index,&a1obj,&a2))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|Ii",sipCanConvertTo_Substring,&a0obj,sipCanConvertTo_Index,&a1obj,&a2))
 		{
 			bool res;
 			RegularExpression *ptr;
@@ -441,7 +470,7 @@ static PyObject *sipDo_RegularExpression_match(PyObject *sipThisObj,PyObject *si
 		const char *a0;
 		int a1 = 0;
 
-		if (sipParseArgs(sipArgs,"s|i",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"s|i",&a0,&a1))
 		{
 			bool res;
 			RegularExpression *ptr;
@@ -457,7 +486,7 @@ static PyObject *sipDo_RegularExpression_match(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RegularExpression,sipName_BALL_match);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RegularExpression,sipName_BALL_match);
 
 	return NULL;
 }
@@ -465,6 +494,7 @@ static PyObject *sipDo_RegularExpression_match(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_RegularExpression_find(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RegularExpression)) == NULL)
 		return NULL;
@@ -478,7 +508,7 @@ static PyObject *sipDo_RegularExpression_find(PyObject *sipThisObj,PyObject *sip
 		PyObject *a2obj = NULL;
 		int a3 = 0;
 
-		if (sipParseArgs(sipArgs,"II|Ii",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Substring,&a1obj,sipCanConvertTo_Index,&a2obj,&a3))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II|Ii",sipCanConvertTo_String,&a0obj,sipCanConvertTo_Substring,&a1obj,sipCanConvertTo_Index,&a2obj,&a3))
 		{
 			bool res;
 			RegularExpression *ptr;
@@ -516,7 +546,7 @@ static PyObject *sipDo_RegularExpression_find(PyObject *sipThisObj,PyObject *sip
 		PyObject *a2obj = NULL;
 		int a3 = 0;
 
-		if (sipParseArgs(sipArgs,"II|Ii",sipCanConvertTo_Substring,&a0obj,sipCanConvertTo_Substring,&a1obj,sipCanConvertTo_Index,&a2obj,&a3))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II|Ii",sipCanConvertTo_Substring,&a0obj,sipCanConvertTo_Substring,&a1obj,sipCanConvertTo_Index,&a2obj,&a3))
 		{
 			bool res;
 			RegularExpression *ptr;
@@ -544,7 +574,7 @@ static PyObject *sipDo_RegularExpression_find(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RegularExpression,sipName_BALL_find);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RegularExpression,sipName_BALL_find);
 
 	return NULL;
 }
@@ -552,12 +582,13 @@ static PyObject *sipDo_RegularExpression_find(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_RegularExpression_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RegularExpression)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			RegularExpression *ptr;
@@ -573,7 +604,7 @@ static PyObject *sipDo_RegularExpression_isEmpty(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RegularExpression,sipName_BALL_isEmpty);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RegularExpression,sipName_BALL_isEmpty);
 
 	return NULL;
 }
@@ -581,12 +612,13 @@ static PyObject *sipDo_RegularExpression_isEmpty(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_RegularExpression_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RegularExpression)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			RegularExpression *ptr;
@@ -602,7 +634,7 @@ static PyObject *sipDo_RegularExpression_isValid(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RegularExpression,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RegularExpression,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -643,6 +675,7 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -650,10 +683,10 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipRegularExpression();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -662,7 +695,7 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_RegularExpression,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_RegularExpression,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -672,7 +705,7 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipRegularExpression(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -681,7 +714,7 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_String,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_String,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -694,7 +727,7 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -702,7 +735,7 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 		const RegularExpression *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_RegularExpression,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_RegularExpression,&a0obj))
 		{
 			int iserr = 0;
 
@@ -712,12 +745,12 @@ PyObject *sipNew_RegularExpression(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipRegularExpression(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_RegularExpression);
+		sipNoCtor(sipArgsParsed,sipName_BALL_RegularExpression);
 		return NULL;
 	}
 
@@ -760,17 +793,15 @@ int sipCanConvertTo_RegularExpression(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_RegularExpression);
 }
 
-void sipConvertTo_RegularExpression(PyObject *sipPy,RegularExpression **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_RegularExpression(PyObject *sipPy,RegularExpression **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_RegularExpression);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_RegularExpression);
+		*sipCppPtr = NULL;
 
 		return;
 	}

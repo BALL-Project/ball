@@ -19,28 +19,42 @@ static PyTypeObject sipType_File = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_File_open(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-#line 26 "file.sip"
+#line 36 "file.sip"
 
     const String *a0;
     PyObject *a0obj;
     File::OpenMode a1 = File::IN;
 
-    if (sipParseArgs(sipArgs,"I|i",sipCanConvertTo_String,&a0obj,&a1))
+    if (sipParseArgs(&sipArgsParsed,sipArgs,"I|i",sipCanConvertTo_String,&a0obj,&a1))
     {
       bool res;
       File *ptr;
 
-      if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
+      if ((ptr = (File *)sipGetCppPtr((sipThisType*)a0,sipClass_File)) == NULL)
         return NULL;
 
       int iserr = 0;
@@ -62,12 +76,12 @@ static PyObject *sipDo_File_open(PyObject *sipThisObj,PyObject *sipArgs)
 
       return sipConvertFromBool((int)res);
     }
-#line 70 "../CPP/sipBALLFile.cpp"
+#line 84 "sipBALLFile.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_open);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_open);
 
 	return NULL;
 }
@@ -75,12 +89,13 @@ static PyObject *sipDo_File_open(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_reopen(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			File *ptr;
@@ -96,7 +111,7 @@ static PyObject *sipDo_File_reopen(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_reopen);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_reopen);
 
 	return NULL;
 }
@@ -104,12 +119,13 @@ static PyObject *sipDo_File_reopen(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_close(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			File *ptr;
 
@@ -125,7 +141,7 @@ static PyObject *sipDo_File_close(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_close);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_close);
 
 	return NULL;
 }
@@ -133,12 +149,13 @@ static PyObject *sipDo_File_close(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const String *res;
 			File *ptr;
@@ -154,7 +171,7 @@ static PyObject *sipDo_File_getName(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_getName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_getName);
 
 	return NULL;
 }
@@ -162,12 +179,13 @@ static PyObject *sipDo_File_getName(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_getSize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			File *ptr;
@@ -183,7 +201,7 @@ static PyObject *sipDo_File_getSize(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_getSize);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_getSize);
 
 	return NULL;
 }
@@ -191,28 +209,29 @@ static PyObject *sipDo_File_getSize(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_getOpenMode(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
-			OpenMode *res;
+			std__openmode *res;
 			File *ptr;
 
 			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
 				return NULL;
 
-			res = new OpenMode(ptr -> File::getOpenMode());
+			res = new std__openmode(ptr -> File::getOpenMode());
 
-			return sipNewCppToSelf(res,sipClass_OpenMode,SIP_SIMPLE | SIP_PY_OWNED);
+			return sipNewCppToSelf(res,sipClass_std__openmode,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_getOpenMode);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_getOpenMode);
 
 	return NULL;
 }
@@ -220,6 +239,7 @@ static PyObject *sipDo_File_getOpenMode(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_copyTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
@@ -228,7 +248,7 @@ static PyObject *sipDo_File_copyTo(PyObject *sipThisObj,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			bool res;
 			File *ptr;
@@ -254,7 +274,7 @@ static PyObject *sipDo_File_copyTo(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_copyTo);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_copyTo);
 
 	return NULL;
 }
@@ -262,6 +282,7 @@ static PyObject *sipDo_File_copyTo(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
@@ -270,7 +291,7 @@ static PyObject *sipDo_File_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			bool res;
 			File *ptr;
@@ -296,7 +317,7 @@ static PyObject *sipDo_File_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_moveTo);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_moveTo);
 
 	return NULL;
 }
@@ -304,12 +325,13 @@ static PyObject *sipDo_File_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			File *ptr;
@@ -325,7 +347,7 @@ static PyObject *sipDo_File_remove(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_remove);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_remove);
 
 	return NULL;
 }
@@ -333,6 +355,7 @@ static PyObject *sipDo_File_remove(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_renameTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
@@ -341,7 +364,7 @@ static PyObject *sipDo_File_renameTo(PyObject *sipThisObj,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			bool res;
 			File *ptr;
@@ -367,7 +390,7 @@ static PyObject *sipDo_File_renameTo(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_renameTo);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_renameTo);
 
 	return NULL;
 }
@@ -375,6 +398,7 @@ static PyObject *sipDo_File_renameTo(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
@@ -382,7 +406,7 @@ static PyObject *sipDo_File_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			bool res;
 			File *ptr;
@@ -398,7 +422,7 @@ static PyObject *sipDo_File_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_truncate);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_truncate);
 
 	return NULL;
 }
@@ -406,12 +430,13 @@ static PyObject *sipDo_File_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_isOpen(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			File *ptr;
@@ -427,7 +452,7 @@ static PyObject *sipDo_File_isOpen(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_isOpen);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_isOpen);
 
 	return NULL;
 }
@@ -435,12 +460,13 @@ static PyObject *sipDo_File_isOpen(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_isClosed(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			File *ptr;
@@ -456,7 +482,7 @@ static PyObject *sipDo_File_isClosed(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_isClosed);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_isClosed);
 
 	return NULL;
 }
@@ -464,12 +490,13 @@ static PyObject *sipDo_File_isClosed(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_isAccessible(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			File *ptr;
@@ -485,7 +512,7 @@ static PyObject *sipDo_File_isAccessible(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_isAccessible);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_isAccessible);
 
 	return NULL;
 }
@@ -493,12 +520,13 @@ static PyObject *sipDo_File_isAccessible(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_isCanonized(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			File *ptr;
@@ -514,7 +542,7 @@ static PyObject *sipDo_File_isCanonized(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_isCanonized);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_isCanonized);
 
 	return NULL;
 }
@@ -522,12 +550,13 @@ static PyObject *sipDo_File_isCanonized(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_isReadable(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			File *ptr;
@@ -543,7 +572,7 @@ static PyObject *sipDo_File_isReadable(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_isReadable);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_isReadable);
 
 	return NULL;
 }
@@ -551,12 +580,13 @@ static PyObject *sipDo_File_isReadable(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_isWritable(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			File *ptr;
@@ -572,7 +602,7 @@ static PyObject *sipDo_File_isWritable(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_isWritable);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_isWritable);
 
 	return NULL;
 }
@@ -580,12 +610,13 @@ static PyObject *sipDo_File_isWritable(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_isExecutable(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			File *ptr;
@@ -601,7 +632,7 @@ static PyObject *sipDo_File_isExecutable(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_isExecutable);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_isExecutable);
 
 	return NULL;
 }
@@ -609,12 +640,13 @@ static PyObject *sipDo_File_isExecutable(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_File_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			File *ptr;
@@ -630,7 +662,7 @@ static PyObject *sipDo_File_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_File,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_File,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -665,6 +697,7 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -672,25 +705,25 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new File();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
 		const String *a0;
 		PyObject *a0obj;
-		OpenMode *a1 = (OpenMode *)&File::IN;
+		std__openmode *a1 = (std__openmode *)&File::IN;
 		PyObject *a1obj = NULL;
 
-		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_OpenMode,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_std__openmode,&a1obj))
 		{
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
-			int istemp1 = sipConvertTo_OpenMode(a1obj,&a1,1,&iserr);
+			sipConvertTo_std__openmode(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -699,10 +732,7 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-
-			if (istemp1)
-				delete a1;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -710,7 +740,7 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 		const File *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_File,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_File,&a0obj))
 		{
 			int iserr = 0;
 
@@ -720,12 +750,12 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new File(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_File);
+		sipNoCtor(sipArgsParsed,sipName_BALL_File);
 		return NULL;
 	}
 
@@ -771,17 +801,15 @@ int sipCanConvertTo_File(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_File);
 }
 
-void sipConvertTo_File(PyObject *sipPy,File **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_File(PyObject *sipPy,File **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_File);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_File);
+		*sipCppPtr = NULL;
 
 		return;
 	}

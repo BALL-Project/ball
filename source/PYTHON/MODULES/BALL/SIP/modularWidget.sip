@@ -1,4 +1,4 @@
-// $Id: modularWidget.sip,v 1.2 2000/10/05 22:33:36 oliver Exp $
+// $Id: modularWidget.sip,v 1.3 2001/07/25 11:32:33 oliver Exp $
 
 class ModularWidget
   : Embeddable
@@ -12,17 +12,17 @@ class ModularWidget
   public:
  	// BALL_EMBEDDABLE(ModularWidget)
 	// expands to:
-	void registerThis();
-	void unregisterThis();
+	void registerThis() throw();
+	void unregisterThis() throw();
 	void setIdentifier(const String& /identifier/);
 	const String& getIdentifier() const;
 
 	ModularWidget();
- 	~ModularWidget();
+ 	~ModularWidget() throw();
 
 	static void registerWidget(ModularWidget* /mwidget/);
 
 	virtual void initializeWidget(MainControl& /main_control/);
  	virtual void finalizeWidget(MainControl& /main_control/);
-	virtual void checkMenu(MainControl& /main_control/);
+	virtual void checkMenu(MainControl& /main_control/) throw();
 }; 

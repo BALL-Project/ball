@@ -34,7 +34,7 @@ PyObject *sipConvertFrom_PyCompositeDescriptorList(const PyCompositeDescriptorLi
 	}
 
 	return pl;
-#line 42 "../CPP/sipBALLPyCompositeDescriptorList.cpp"
+#line 42 "sipBALLPyCompositeDescriptorList.cpp"
 }
 
 PyObject *sipClass_PyCompositeDescriptorList;
@@ -43,23 +43,13 @@ int sipCanConvertTo_PyCompositeDescriptorList(PyObject *sipPy)
 {
 #line 39 "pyCompositeDescriptorList.sip"
 	return PyList_Check(sipPy);
-#line 51 "../CPP/sipBALLPyCompositeDescriptorList.cpp"
+#line 51 "sipBALLPyCompositeDescriptorList.cpp"
 }
 
-int sipConvertTo_PyCompositeDescriptorList(PyObject *sipPy,PyCompositeDescriptorList **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_PyCompositeDescriptorList(PyObject *sipPy,PyCompositeDescriptorList **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
-
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PyCompositeDescriptorList);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
+		return 0;
 
 #line 43 "pyCompositeDescriptorList.sip"
 	// Convert a Python list of CompositeDescriptor instances to an CompositeDescriptorList object on the
@@ -85,7 +75,7 @@ int sipConvertTo_PyCompositeDescriptorList(PyObject *sipPy,PyCompositeDescriptor
 	*sipCppPtr = atom_list;
 
 	return 1;
-#line 93 "../CPP/sipBALLPyCompositeDescriptorList.cpp"
+#line 83 "sipBALLPyCompositeDescriptorList.cpp"
 }
 
 PyCompositeDescriptorList *sipForceConvertTo_PyCompositeDescriptorList(PyObject *valobj,int *iserrp)

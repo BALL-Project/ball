@@ -1,4 +1,4 @@
-// $Id: version.sip,v 1.1 2000/07/18 21:28:35 oliver Exp $
+// $Id: version.sip,v 1.2 2001/07/25 11:32:37 oliver Exp $
 
 class VersionInfo
 {
@@ -19,8 +19,9 @@ class VersionInfo
   static int getMajorRevision();
   static int getMinorRevision();
   static Type getType();
-	// __rep__ method: just call getVersion
-	operator const char* ();
+	// __str__ method: just call getVersion
+	PyMethods:
+	__str__
 %MemberCode
   return PyString_FromString(VersionInfo::getVersion());  	
 %End

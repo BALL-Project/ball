@@ -19,40 +19,59 @@ static PyTypeObject sipType_Expression = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipExpression::sipExpression(): Expression()
+sipExpression::sipExpression()
+    : Expression()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipExpression::sipExpression(const Expression& a0): Expression(a0)
+sipExpression::sipExpression(const Expression& a0)
+    : Expression(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipExpression::sipExpression(const String& a0): Expression(a0)
+sipExpression::sipExpression(const String& a0)
+    : Expression(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipExpression::~sipExpression()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipExpression::operator()(const Atom& a0) const
+
+bool sipExpression::operator ()(const Atom& a0) const
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_Operator__call__,&relLock) ?
-		sipExpression::sipVH_Operator__call__(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		Expression::operator()(a0);
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
+		sipExpression::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		Expression::operator ()(a0);
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-bool sipExpression::sipVH_Operator__call__(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const Atom& a0)
+bool sipExpression::sipVH_CallOperator(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const Atom& a0)
 {
 	bool res;
 	PyObject *resobj;
@@ -83,7 +102,7 @@ bool sipExpression::sipVH_Operator__call__(const sipMethodCache *pymc,sipThisTyp
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_Expression,sipName_BALL_Operator__call__);
+		sipBadVirtualResultType(sipName_BALL_Expression,sipName_BALL___call__);
 	}
 
 reportError:
@@ -98,6 +117,7 @@ releaseLock:
 static PyObject *sipDo_Expression_hasPredicate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Expression)) == NULL)
 		return NULL;
@@ -106,7 +126,7 @@ static PyObject *sipDo_Expression_hasPredicate(PyObject *sipThisObj,PyObject *si
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			bool res;
 			Expression *ptr;
@@ -132,14 +152,15 @@ static PyObject *sipDo_Expression_hasPredicate(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Expression,sipName_BALL_hasPredicate);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Expression,sipName_BALL_hasPredicate);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Expression_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Expression___call__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Expression)) == NULL)
 		return NULL;
@@ -148,7 +169,7 @@ static PyObject *sipDo_Expression_Operator__call__(PyObject *sipThisObj,PyObject
 		const Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			bool res;
 			Expression *ptr;
@@ -163,7 +184,7 @@ static PyObject *sipDo_Expression_Operator__call__(PyObject *sipThisObj,PyObject
 			if (iserr)
 				return NULL;
 
-			res = ptr -> Expression::operator()(* a0);
+			res = ptr -> Expression::operator ()(* a0);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -171,7 +192,7 @@ static PyObject *sipDo_Expression_Operator__call__(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Expression,sipName_BALL_Operator__call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Expression,sipName_BALL___call__);
 
 	return NULL;
 }
@@ -179,6 +200,7 @@ static PyObject *sipDo_Expression_Operator__call__(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_Expression_getPredicate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Expression)) == NULL)
 		return NULL;
@@ -189,7 +211,7 @@ static PyObject *sipDo_Expression_getPredicate(PyObject *sipThisObj,PyObject *si
 		const String *a1 = NULL;
 		PyObject *a1obj = NULL;
 
-		if (sipParseArgs(sipArgs,"I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			ExpressionPredicate *res;
 			Expression *ptr;
@@ -219,7 +241,7 @@ static PyObject *sipDo_Expression_getPredicate(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Expression,sipName_BALL_getPredicate);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Expression,sipName_BALL_getPredicate);
 
 	return NULL;
 }
@@ -227,6 +249,7 @@ static PyObject *sipDo_Expression_getPredicate(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_Expression_setExpression(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Expression)) == NULL)
 		return NULL;
@@ -235,7 +258,7 @@ static PyObject *sipDo_Expression_setExpression(PyObject *sipThisObj,PyObject *s
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			Expression *ptr;
 
@@ -261,20 +284,21 @@ static PyObject *sipDo_Expression_setExpression(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Expression,sipName_BALL_setExpression);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Expression,sipName_BALL_setExpression);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Expression_getExpression(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Expression_getExpressionString(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Expression)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const String *res;
 			Expression *ptr;
@@ -282,7 +306,7 @@ static PyObject *sipDo_Expression_getExpression(PyObject *sipThisObj,PyObject *s
 			if ((ptr = (Expression *)sipGetCppPtr(sipThis,sipClass_Expression)) == NULL)
 				return NULL;
 
-			res = &ptr -> Expression::getExpression();
+			res = &ptr -> Expression::getExpressionString();
 
 			return sipMapCppToSelf(res,sipClass_String);
 		}
@@ -290,7 +314,7 @@ static PyObject *sipDo_Expression_getExpression(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Expression,sipName_BALL_getExpression);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Expression,sipName_BALL_getExpressionString);
 
 	return NULL;
 }
@@ -331,6 +355,7 @@ PyObject *sipNew_Expression(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -338,10 +363,10 @@ PyObject *sipNew_Expression(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipExpression();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -349,7 +374,7 @@ PyObject *sipNew_Expression(PyObject *sipSelf,PyObject *sipArgs)
 		const Expression *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Expression,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Expression,&a0obj))
 		{
 			int iserr = 0;
 
@@ -359,7 +384,7 @@ PyObject *sipNew_Expression(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipExpression(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -367,7 +392,7 @@ PyObject *sipNew_Expression(PyObject *sipSelf,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
 		{
 			int iserr = 0;
 
@@ -380,12 +405,12 @@ PyObject *sipNew_Expression(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Expression);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Expression);
 		return NULL;
 	}
 
@@ -411,10 +436,10 @@ PyObject *sipNew_Expression(PyObject *sipSelf,PyObject *sipArgs)
 
 PyMethodDef sipClassAttrTab_Expression[] = {
 	{sipName_BALL_hasPredicate, sipDo_Expression_hasPredicate, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__call__, sipDo_Expression_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL___call__, sipDo_Expression___call__, METH_VARARGS, NULL},
 	{sipName_BALL_getPredicate, sipDo_Expression_getPredicate, METH_VARARGS, NULL},
 	{sipName_BALL_setExpression, sipDo_Expression_setExpression, METH_VARARGS, NULL},
-	{sipName_BALL_getExpression, sipDo_Expression_getExpression, METH_VARARGS, NULL},
+	{sipName_BALL_getExpressionString, sipDo_Expression_getExpressionString, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -423,17 +448,15 @@ int sipCanConvertTo_Expression(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Expression);
 }
 
-void sipConvertTo_Expression(PyObject *sipPy,Expression **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Expression(PyObject *sipPy,Expression **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Expression);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Expression);
+		*sipCppPtr = NULL;
 
 		return;
 	}

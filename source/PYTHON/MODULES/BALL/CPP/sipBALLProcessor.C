@@ -19,6 +19,19 @@ static PyTypeObject sipType_Processor = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
@@ -51,6 +64,7 @@ PyObject *sipNew_Processor(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -58,10 +72,10 @@ PyObject *sipNew_Processor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new Processor();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -69,7 +83,7 @@ PyObject *sipNew_Processor(PyObject *sipSelf,PyObject *sipArgs)
 		const Processor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Processor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Processor,&a0obj))
 		{
 			int iserr = 0;
 
@@ -79,12 +93,12 @@ PyObject *sipNew_Processor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Processor(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Processor);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Processor);
 		return NULL;
 	}
 
@@ -111,17 +125,15 @@ int sipCanConvertTo_Processor(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Processor);
 }
 
-void sipConvertTo_Processor(PyObject *sipPy,Processor **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Processor(PyObject *sipPy,Processor **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Processor);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Processor);
+		*sipCppPtr = NULL;
 
 		return;
 	}

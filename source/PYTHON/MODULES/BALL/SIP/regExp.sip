@@ -1,4 +1,4 @@
-// $Id: regExp.sip,v 1.1 2000/07/18 21:28:22 oliver Exp $
+// $Id: regExp.sip,v 1.2 2001/07/25 11:32:35 oliver Exp $
 
 class RegularExpression
 {
@@ -24,8 +24,8 @@ class RegularExpression
   RegularExpression();
   RegularExpression(const RegularExpression& /regular_expression/, bool /deep/ = true);
   RegularExpression(const String& /pattern/, bool /wildcard_pattern/ = false);
-  ~RegularExpression();
-  virtual void clear();
+  ~RegularExpression() throw();
+  virtual void clear() throw();
   void destroy();
   void set(const RegularExpression& /regular_expression/, bool /deep/ = true);
   void set(const String& /pattern/, bool /wildcard_pattern/ = false);
@@ -66,7 +66,7 @@ class RegularExpression
   //bool operator <= (const RegularExpression& regular_expression) const;
   //bool operator >= (const RegularExpression& regular_expression) const;
   //bool operator > (const RegularExpression& regular_expression) const;
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
   // virtual void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
   // friend ::std::ostream& operator << (::std::ostream& s, const RegularExpression& regular_expression);
   // friend ::std::istream& operator >> (::std::istream& s, RegularExpression& regular_expression);

@@ -19,258 +19,107 @@ static PyTypeObject sipType_TrajectoryFile = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipTrajectoryFile::sipTrajectoryFile(): TrajectoryFile()
+sipTrajectoryFile::sipTrajectoryFile()
+   throw()  : TrajectoryFile()
 {
-	sipCommonCtor(sipPyMethods,7);
+	sipCommonCtor(sipPyMethods,5);
 }
 
-sipTrajectoryFile::sipTrajectoryFile(const TrajectoryFile& a0): TrajectoryFile(a0)
+sipTrajectoryFile::sipTrajectoryFile(const TrajectoryFile& a0)
+   throw()  : TrajectoryFile(a0)
 {
-	sipCommonCtor(sipPyMethods,7);
+	sipCommonCtor(sipPyMethods,5);
 }
 
-sipTrajectoryFile::sipTrajectoryFile(const String& a0,OpenMode a1): TrajectoryFile(a0,a1)
+sipTrajectoryFile::sipTrajectoryFile(const String& a0,std__openmode a1)
+   throw()  : TrajectoryFile(a0,a1)
 {
-	sipCommonCtor(sipPyMethods,7);
+	sipCommonCtor(sipPyMethods,5);
 }
 
 sipTrajectoryFile::~sipTrajectoryFile()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipTrajectoryFile::clear()
+
+bool sipTrajectoryFile::read(SnapShot& a0)
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipTrajectoryFile::sipVH_clear(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		TrajectoryFile::clear();
-}
-bool sipTrajectoryFile::readHeader()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_readHeader,&relLock) ?
-		sipTrajectoryFile::sipVH_readHeader(&sipPyMethods[1],sipPyThis,relLock) :
-		TrajectoryFile::readHeader();
-}
-bool sipTrajectoryFile::updateHeader(const SnapShotManager& a0)
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_updateHeader,&relLock) ?
-		sipTrajectoryFile::sipVH_updateHeader(&sipPyMethods[2],sipPyThis,relLock,a0) :
-		TrajectoryFile::updateHeader(a0);
-}
-bool sipTrajectoryFile::writeHeader()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_writeHeader,&relLock) ?
-		sipTrajectoryFile::sipVH_writeHeader(&sipPyMethods[3],sipPyThis,relLock) :
-		TrajectoryFile::writeHeader();
-}
-bool sipTrajectoryFile::read(SnapShotManager& a0)
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_read,&relLock) ?
-		sipTrajectoryFile::sipVH_read(&sipPyMethods[4],sipPyThis,relLock,a0) :
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_read,&relLock) ?
+		sipTrajectoryFile::sipVH_read(&sipPyMethods[0],sipPyThis,relLock,a0) :
 		TrajectoryFile::read(a0);
 }
-bool sipTrajectoryFile::write(const SnapShotManager& a0)
-{
-	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_write,&relLock) ?
-		sipTrajectoryFile::sipVH_write(&sipPyMethods[5],sipPyThis,relLock,a0) :
-		TrajectoryFile::write(a0);
-}
 bool sipTrajectoryFile::append(const SnapShot& a0)
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_append,&relLock) ?
-		sipTrajectoryFile::sipVH_append(&sipPyMethods[6],sipPyThis,relLock,a0) :
+	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_append,&relLock) ?
+		sipTrajectoryFile::sipVH_append(&sipPyMethods[1],sipPyThis,relLock,a0) :
 		TrajectoryFile::append(a0);
 }
 
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipTrajectoryFile::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+bool sipTrajectoryFile::writeHeader()
+ throw()
 {
-	PyObject *resobj;
-	PyObject *sipArgs;
+	int relLock;
 
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_writeHeader,&relLock) ?
+		sipTrajectoryFile::sipVH_writeHeader(&sipPyMethods[2],sipPyThis,relLock) :
+		TrajectoryFile::writeHeader();
+}
 
-	if (sipArgs == NULL)
-		goto reportError;
+bool sipTrajectoryFile::readHeader()
+ throw()
+{
+	int relLock;
 
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_readHeader,&relLock) ?
+		sipTrajectoryFile::sipVH_readHeader(&sipPyMethods[3],sipPyThis,relLock) :
+		TrajectoryFile::readHeader();
+}
 
-	Py_DECREF(sipArgs);
+void sipTrajectoryFile::clear()
+ throw()
+{
+	int relLock;
 
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_TrajectoryFile,sipName_BALL_clear);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipTrajectoryFile::sipVH_clear(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		TrajectoryFile::clear();
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-bool sipTrajectoryFile::sipVH_readHeader(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_TrajectoryFile,sipName_BALL_readHeader);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipTrajectoryFile::sipVH_updateHeader(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const SnapShotManager& a0)
+bool sipTrajectoryFile::sipVH_read(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,SnapShot& a0)
 {
 	bool res;
 	PyObject *resobj;
 	PyObject *sipArgs;
 	PyObject *a0obj;
 
-	a0obj = sipMapCppToSelf(&a0,sipClass_SnapShotManager);
-
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_TrajectoryFile,sipName_BALL_updateHeader);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipTrajectoryFile::sipVH_writeHeader(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_TrajectoryFile,sipName_BALL_writeHeader);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipTrajectoryFile::sipVH_read(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,SnapShotManager& a0)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-	PyObject *a0obj;
-
-	a0obj = sipMapCppToSelf(&a0,sipClass_SnapShotManager);
+	a0obj = sipMapCppToSelf(&a0,sipClass_SnapShot);
 
 	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
 
@@ -295,52 +144,6 @@ bool sipTrajectoryFile::sipVH_read(const sipMethodCache *pymc,sipThisType *sipTh
 		}
 
 		sipBadVirtualResultType(sipName_BALL_TrajectoryFile,sipName_BALL_read);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipTrajectoryFile::sipVH_write(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const SnapShotManager& a0)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-	PyObject *a0obj;
-
-	a0obj = sipMapCppToSelf(&a0,sipClass_SnapShotManager);
-
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_TrajectoryFile,sipName_BALL_write);
 	}
 
 reportError:
@@ -398,15 +201,132 @@ releaseLock:
 	return res;
 }
 
+// The common handler for all classes that inherit this virtual member
+// function.
+
+bool sipTrajectoryFile::sipVH_writeHeader(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	bool res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = (bool)PyInt_AsLong(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_TrajectoryFile,sipName_BALL_writeHeader);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+bool sipTrajectoryFile::sipVH_readHeader(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	bool res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = (bool)PyInt_AsLong(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_TrajectoryFile,sipName_BALL_readHeader);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipTrajectoryFile::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_TrajectoryFile,sipName_BALL_clear);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
 static PyObject *sipDo_TrajectoryFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			TrajectoryFile *ptr;
 
@@ -422,7 +342,107 @@ static PyObject *sipDo_TrajectoryFile_clear(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TrajectoryFile,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TrajectoryFile,sipName_BALL_clear);
+
+	return NULL;
+}
+
+static PyObject *sipDo_TrajectoryFile___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
+		return NULL;
+
+	{
+		const TrajectoryFile *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_TrajectoryFile,&a0obj))
+		{
+			bool res;
+			TrajectoryFile *ptr;
+
+			if ((ptr = (TrajectoryFile *)sipGetCppPtr(sipThis,sipClass_TrajectoryFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_TrajectoryFile(a0obj,(TrajectoryFile **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> TrajectoryFile::operator ==(* a0);
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_TrajectoryFile,sipName_BALL___cmp__);
+
+	return NULL;
+}
+
+static PyObject *sipDo_TrajectoryFile_getNumberOfSnapShots(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
+		{
+			int res;
+			TrajectoryFile *ptr;
+
+			if ((ptr = (TrajectoryFile *)sipGetCppPtr(sipThis,sipClass_TrajectoryFile)) == NULL)
+				return NULL;
+
+			res = ptr -> TrajectoryFile::getNumberOfSnapShots();
+
+			return PyInt_FromLong((long)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_TrajectoryFile,sipName_BALL_getNumberOfSnapShots);
+
+	return NULL;
+}
+
+static PyObject *sipDo_TrajectoryFile_getNumberOfAtoms(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
+		{
+			int res;
+			TrajectoryFile *ptr;
+
+			if ((ptr = (TrajectoryFile *)sipGetCppPtr(sipThis,sipClass_TrajectoryFile)) == NULL)
+				return NULL;
+
+			res = ptr -> TrajectoryFile::getNumberOfAtoms();
+
+			return PyInt_FromLong((long)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_TrajectoryFile,sipName_BALL_getNumberOfAtoms);
 
 	return NULL;
 }
@@ -430,12 +450,13 @@ static PyObject *sipDo_TrajectoryFile_clear(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_TrajectoryFile_readHeader(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			TrajectoryFile *ptr;
@@ -451,46 +472,7 @@ static PyObject *sipDo_TrajectoryFile_readHeader(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TrajectoryFile,sipName_BALL_readHeader);
-
-	return NULL;
-}
-
-static PyObject *sipDo_TrajectoryFile_updateHeader(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
-		return NULL;
-
-	{
-		const SnapShotManager *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SnapShotManager,&a0obj))
-		{
-			bool res;
-			TrajectoryFile *ptr;
-
-			if ((ptr = (TrajectoryFile *)sipGetCppPtr(sipThis,sipClass_TrajectoryFile)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_SnapShotManager(a0obj,(SnapShotManager **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> TrajectoryFile::updateHeader(* a0);
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_TrajectoryFile,sipName_BALL_updateHeader);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TrajectoryFile,sipName_BALL_readHeader);
 
 	return NULL;
 }
@@ -498,12 +480,13 @@ static PyObject *sipDo_TrajectoryFile_updateHeader(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_TrajectoryFile_writeHeader(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			TrajectoryFile *ptr;
@@ -519,85 +502,7 @@ static PyObject *sipDo_TrajectoryFile_writeHeader(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TrajectoryFile,sipName_BALL_writeHeader);
-
-	return NULL;
-}
-
-static PyObject *sipDo_TrajectoryFile_read(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
-		return NULL;
-
-	{
-		SnapShotManager *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SnapShotManager,&a0obj))
-		{
-			bool res;
-			TrajectoryFile *ptr;
-
-			if ((ptr = (TrajectoryFile *)sipGetCppPtr(sipThis,sipClass_TrajectoryFile)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_SnapShotManager(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> TrajectoryFile::read(* a0);
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_TrajectoryFile,sipName_BALL_read);
-
-	return NULL;
-}
-
-static PyObject *sipDo_TrajectoryFile_write(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
-		return NULL;
-
-	{
-		const SnapShotManager *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SnapShotManager,&a0obj))
-		{
-			bool res;
-			TrajectoryFile *ptr;
-
-			if ((ptr = (TrajectoryFile *)sipGetCppPtr(sipThis,sipClass_TrajectoryFile)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			sipConvertTo_SnapShotManager(a0obj,(SnapShotManager **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> TrajectoryFile::write(* a0);
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_TrajectoryFile,sipName_BALL_write);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TrajectoryFile,sipName_BALL_writeHeader);
 
 	return NULL;
 }
@@ -605,6 +510,7 @@ static PyObject *sipDo_TrajectoryFile_write(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_TrajectoryFile_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
 		return NULL;
@@ -613,7 +519,7 @@ static PyObject *sipDo_TrajectoryFile_append(PyObject *sipThisObj,PyObject *sipA
 		const SnapShot *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SnapShot,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SnapShot,&a0obj))
 		{
 			bool res;
 			TrajectoryFile *ptr;
@@ -636,7 +542,47 @@ static PyObject *sipDo_TrajectoryFile_append(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_TrajectoryFile,sipName_BALL_append);
+	sipNoMethod(sipArgsParsed,sipName_BALL_TrajectoryFile,sipName_BALL_append);
+
+	return NULL;
+}
+
+static PyObject *sipDo_TrajectoryFile_read(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_TrajectoryFile)) == NULL)
+		return NULL;
+
+	{
+		SnapShot *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SnapShot,&a0obj))
+		{
+			bool res;
+			TrajectoryFile *ptr;
+
+			if ((ptr = (TrajectoryFile *)sipGetCppPtr(sipThis,sipClass_TrajectoryFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_SnapShot(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> TrajectoryFile::read(* a0);
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_TrajectoryFile,sipName_BALL_read);
 
 	return NULL;
 }
@@ -682,6 +628,7 @@ PyObject *sipNew_TrajectoryFile(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -689,10 +636,10 @@ PyObject *sipNew_TrajectoryFile(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipTrajectoryFile();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -700,7 +647,7 @@ PyObject *sipNew_TrajectoryFile(PyObject *sipSelf,PyObject *sipArgs)
 		const TrajectoryFile *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_TrajectoryFile,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_TrajectoryFile,&a0obj))
 		{
 			int iserr = 0;
 
@@ -710,22 +657,22 @@ PyObject *sipNew_TrajectoryFile(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipTrajectoryFile(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
 		const String *a0;
 		PyObject *a0obj;
-		OpenMode *a1 = (OpenMode *)&File::IN;
+		std__openmode *a1 = (std__openmode *)&File::IN;
 		PyObject *a1obj = NULL;
 
-		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_OpenMode,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_std__openmode,&a1obj))
 		{
 			int iserr = 0;
 
 			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
-			int istemp1 = sipConvertTo_OpenMode(a1obj,&a1,1,&iserr);
+			sipConvertTo_std__openmode(a1obj,&a1,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -734,15 +681,12 @@ PyObject *sipNew_TrajectoryFile(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-
-			if (istemp1)
-				delete a1;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_TrajectoryFile);
+		sipNoCtor(sipArgsParsed,sipName_BALL_TrajectoryFile);
 		return NULL;
 	}
 
@@ -768,12 +712,13 @@ PyObject *sipNew_TrajectoryFile(PyObject *sipSelf,PyObject *sipArgs)
 
 PyMethodDef sipClassAttrTab_TrajectoryFile[] = {
 	{sipName_BALL_clear, sipDo_TrajectoryFile_clear, METH_VARARGS, NULL},
+	{sipName_BALL___cmp__, sipDo_TrajectoryFile___cmp__, METH_VARARGS, NULL},
+	{sipName_BALL_getNumberOfSnapShots, sipDo_TrajectoryFile_getNumberOfSnapShots, METH_VARARGS, NULL},
+	{sipName_BALL_getNumberOfAtoms, sipDo_TrajectoryFile_getNumberOfAtoms, METH_VARARGS, NULL},
 	{sipName_BALL_readHeader, sipDo_TrajectoryFile_readHeader, METH_VARARGS, NULL},
-	{sipName_BALL_updateHeader, sipDo_TrajectoryFile_updateHeader, METH_VARARGS, NULL},
 	{sipName_BALL_writeHeader, sipDo_TrajectoryFile_writeHeader, METH_VARARGS, NULL},
-	{sipName_BALL_read, sipDo_TrajectoryFile_read, METH_VARARGS, NULL},
-	{sipName_BALL_write, sipDo_TrajectoryFile_write, METH_VARARGS, NULL},
 	{sipName_BALL_append, sipDo_TrajectoryFile_append, METH_VARARGS, NULL},
+	{sipName_BALL_read, sipDo_TrajectoryFile_read, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -782,17 +727,15 @@ int sipCanConvertTo_TrajectoryFile(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_TrajectoryFile);
 }
 
-void sipConvertTo_TrajectoryFile(PyObject *sipPy,TrajectoryFile **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_TrajectoryFile(PyObject *sipPy,TrajectoryFile **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_TrajectoryFile);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_TrajectoryFile);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -32,7 +32,7 @@ PyObject *sipConvertFrom_PyFragmentList(const PyFragmentList *sipCpp)
 	}
 
 	return pl;
-#line 40 "../CPP/sipBALLPyFragmentList.cpp"
+#line 40 "sipBALLPyFragmentList.cpp"
 }
 
 PyObject *sipClass_PyFragmentList;
@@ -41,23 +41,13 @@ int sipCanConvertTo_PyFragmentList(PyObject *sipPy)
 {
 #line 35 "pyFragmentList.sip"
 	return PyList_Check(sipPy);
-#line 49 "../CPP/sipBALLPyFragmentList.cpp"
+#line 49 "sipBALLPyFragmentList.cpp"
 }
 
-int sipConvertTo_PyFragmentList(PyObject *sipPy,PyFragmentList **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_PyFragmentList(PyObject *sipPy,PyFragmentList **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
-
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PyFragmentList);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
+		return 0;
 
 #line 39 "pyFragmentList.sip"
 	// Convert a Python list of Fragment instances to an FragmentList object on the
@@ -83,7 +73,7 @@ int sipConvertTo_PyFragmentList(PyObject *sipPy,PyFragmentList **sipCppPtr,int s
 	*sipCppPtr = fragment_list;
 
 	return 1;
-#line 91 "../CPP/sipBALLPyFragmentList.cpp"
+#line 81 "sipBALLPyFragmentList.cpp"
 }
 
 PyFragmentList *sipForceConvertTo_PyFragmentList(PyObject *valobj,int *iserrp)

@@ -1,4 +1,4 @@
-// $Id: snapShot.sip,v 1.4 2001/05/07 00:58:11 oliver Exp $
+// $Id: snapShot.sip,v 1.5 2001/07/25 11:32:36 oliver Exp $
 
 class SnapShot
 {
@@ -11,7 +11,7 @@ class SnapShot
    throw();
  SnapShot(const SnapShot& /snapshot/)
    throw();
- ~SnapShot();
+ ~SnapShot() throw();
  // const SnapShot& operator = (const SnapShot& /snapshot/)
  //  throw();
  virtual void clear()

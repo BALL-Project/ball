@@ -6,7 +6,7 @@
 PyObject *sipClass_AtomType;
 
 static void sipDealloc_AtomType(sipThisType *);
-static PyObject *sipPyInternalRepr_AtomType(sipThisType *);
+static PyObject * sip__str__AtomType(PyObject *a0);
 
 static PyTypeObject sipType_AtomType = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,7 +19,20 @@ static PyTypeObject sipType_AtomType = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_AtomType,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__AtomType,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
@@ -42,16 +55,15 @@ static void sipDealloc_AtomType(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_AtomType(sipThisType *sipThis)
+static PyObject * sip__str__AtomType(PyObject *a0)
 {
-#line 122 "atom.sip"
+#line 139 "atom.sip"
 	AtomType* ptr;
-  if ((ptr = (AtomType*)sipGetCppPtr(sipThis,sipClass_AtomType)) == NULL)
+  if ((ptr = (AtomType*)sipGetCppPtr((sipThisType*)a0,sipClass_AtomType)) == NULL)
     return NULL;
 
   return PyString_FromString(String(*ptr).c_str());
-#line 59 "../CPP/sipBALLAtomType.cpp"
+#line 71 "sipBALLAtomType.cpp"
 }
 
 PyObject *sipNew_AtomType(PyObject *sipSelf,PyObject *sipArgs)
@@ -63,6 +75,7 @@ PyObject *sipNew_AtomType(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -70,10 +83,10 @@ PyObject *sipNew_AtomType(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new AtomType();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -81,7 +94,7 @@ PyObject *sipNew_AtomType(PyObject *sipSelf,PyObject *sipArgs)
 		const AtomType *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AtomType,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomType,&a0obj))
 		{
 			int iserr = 0;
 
@@ -94,12 +107,12 @@ PyObject *sipNew_AtomType(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_AtomType);
+		sipNoCtor(sipArgsParsed,sipName_BALL_AtomType);
 		return NULL;
 	}
 
@@ -123,28 +136,18 @@ PyMethodDef sipClassAttrTab_AtomType[] = {
 
 int sipCanConvertTo_AtomType(PyObject *sipPy)
 {
-#line 129 "atom.sip"
+#line 121 "atom.sip"
 	// automatic conversion of Py integers to Position 
 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_AtomType));
-#line 134 "../CPP/sipBALLAtomType.cpp"
+#line 147 "sipBALLAtomType.cpp"
 }
 
-int sipConvertTo_AtomType(PyObject *sipPy,AtomType **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_AtomType(PyObject *sipPy,AtomType **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
+		return 0;
 
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_AtomType);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
-
-#line 133 "atom.sip"
+#line 125 "atom.sip"
 	if (PyInt_Check(sipPy))
 	{
 		*sipCppPtr = new AtomType(PyInt_AS_LONG(sipPy));
@@ -155,7 +158,7 @@ int sipConvertTo_AtomType(PyObject *sipPy,AtomType **sipCppPtr,int sipNoNull,int
 	*sipCppPtr = (AtomType*)sipConvertToCpp(sipPy, sipClass_AtomType, sipIsErr);
 
 	return 0;
-#line 163 "../CPP/sipBALLAtomType.cpp"
+#line 166 "sipBALLAtomType.cpp"
 }
 
 AtomType *sipForceConvertTo_AtomType(PyObject *valobj,int *iserrp)

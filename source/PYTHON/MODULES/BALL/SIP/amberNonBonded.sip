@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.sip,v 1.1 2000/07/18 21:27:01 oliver Exp $
+// $Id: amberNonBonded.sip,v 1.2 2001/07/25 11:32:31 oliver Exp $
 
 class AmberNonBonded 
   : ForceFieldComponent
@@ -12,11 +12,11 @@ class AmberNonBonded
   AmberNonBonded();
   AmberNonBonded(ForceField& /force_field/);
   AmberNonBonded(const AmberNonBonded& /amber_non_bonded/, bool /clone_deep/ = true);
-  ~AmberNonBonded();
-  bool setup();
-  virtual double updateEnergy();
-  virtual void updateForces();
-  virtual double getElectrostaticEnergy() const;
-  virtual double getVdwEnergy() const;
+  ~AmberNonBonded() throw();
+  bool setup() throw();
+  virtual double updateEnergy() throw();
+  virtual void updateForces() throw();
+  virtual double getElectrostaticEnergy() const throw();
+  virtual double getVdwEnergy() const throw();
 };
   

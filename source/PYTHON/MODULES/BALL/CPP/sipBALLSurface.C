@@ -19,17 +19,31 @@ static PyTypeObject sipType_Surface = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_Surface_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Surface)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Surface *ptr;
 
@@ -45,7 +59,7 @@ static PyObject *sipDo_Surface_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Surface,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Surface,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -53,6 +67,7 @@ static PyObject *sipDo_Surface_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Surface_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Surface)) == NULL)
 		return NULL;
@@ -61,7 +76,7 @@ static PyObject *sipDo_Surface_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const Surface *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Surface,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Surface,&a0obj))
 		{
 			Surface *ptr;
 
@@ -84,7 +99,7 @@ static PyObject *sipDo_Surface_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Surface,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Surface,sipName_BALL_set);
 
 	return NULL;
 }
@@ -92,6 +107,7 @@ static PyObject *sipDo_Surface_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Surface_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Surface)) == NULL)
 		return NULL;
@@ -100,7 +116,7 @@ static PyObject *sipDo_Surface_get(PyObject *sipThisObj,PyObject *sipArgs)
 		Surface *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Surface,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Surface,&a0obj))
 		{
 			Surface *ptr;
 
@@ -123,7 +139,7 @@ static PyObject *sipDo_Surface_get(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Surface,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Surface,sipName_BALL_get);
 
 	return NULL;
 }
@@ -131,6 +147,7 @@ static PyObject *sipDo_Surface_get(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Surface_readMSMSFile(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Surface)) == NULL)
 		return NULL;
@@ -141,7 +158,7 @@ static PyObject *sipDo_Surface_readMSMSFile(PyObject *sipThisObj,PyObject *sipAr
 		const String *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			Surface *ptr;
 
@@ -171,7 +188,7 @@ static PyObject *sipDo_Surface_readMSMSFile(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Surface,sipName_BALL_readMSMSFile);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Surface,sipName_BALL_readMSMSFile);
 
 	return NULL;
 }
@@ -179,12 +196,13 @@ static PyObject *sipDo_Surface_readMSMSFile(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_Surface_getArea(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Surface)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			Surface *ptr;
@@ -200,7 +218,7 @@ static PyObject *sipDo_Surface_getArea(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Surface,sipName_BALL_getArea);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Surface,sipName_BALL_getArea);
 
 	return NULL;
 }
@@ -208,12 +226,13 @@ static PyObject *sipDo_Surface_getArea(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Surface_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Surface)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Surface *ptr;
@@ -229,7 +248,7 @@ static PyObject *sipDo_Surface_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Surface,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Surface,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -264,6 +283,7 @@ PyObject *sipNew_Surface(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -271,10 +291,10 @@ PyObject *sipNew_Surface(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new Surface();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -282,7 +302,7 @@ PyObject *sipNew_Surface(PyObject *sipSelf,PyObject *sipArgs)
 		const Surface *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Surface,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Surface,&a0obj))
 		{
 			int iserr = 0;
 
@@ -292,12 +312,12 @@ PyObject *sipNew_Surface(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Surface(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Surface);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Surface);
 		return NULL;
 	}
 
@@ -330,17 +350,15 @@ int sipCanConvertTo_Surface(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Surface);
 }
 
-void sipConvertTo_Surface(PyObject *sipPy,Surface **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Surface(PyObject *sipPy,Surface **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Surface);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Surface);
+		*sipCppPtr = NULL;
 
 		return;
 	}

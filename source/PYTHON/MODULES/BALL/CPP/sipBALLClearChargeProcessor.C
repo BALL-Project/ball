@@ -19,34 +19,53 @@ static PyTypeObject sipType_ClearChargeProcessor = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipClearChargeProcessor::sipClearChargeProcessor(): ClearChargeProcessor()
+sipClearChargeProcessor::sipClearChargeProcessor()
+    : ClearChargeProcessor()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipClearChargeProcessor::sipClearChargeProcessor(const ClearChargeProcessor& a0): ClearChargeProcessor(a0)
+sipClearChargeProcessor::sipClearChargeProcessor(const ClearChargeProcessor& a0)
+    : ClearChargeProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipClearChargeProcessor::~sipClearChargeProcessor()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
-Processor::Result sipClearChargeProcessor::operator()(Atom& a0)
+
+Processor::Result sipClearChargeProcessor::operator ()(Atom& a0)
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_Operator__call__,&relLock) ?
-		sipAtomProcessor::sipVH_Operator__call__(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		ClearChargeProcessor::operator()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
+		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		ClearChargeProcessor::operator ()(a0);
 }
 
-static PyObject *sipDo_ClearChargeProcessor_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_ClearChargeProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ClearChargeProcessor)) == NULL)
 		return NULL;
@@ -55,7 +74,7 @@ static PyObject *sipDo_ClearChargeProcessor_Operator__call__(PyObject *sipThisOb
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Processor::Result res;
 			ClearChargeProcessor *ptr;
@@ -70,7 +89,7 @@ static PyObject *sipDo_ClearChargeProcessor_Operator__call__(PyObject *sipThisOb
 			if (iserr)
 				return NULL;
 
-			res = ptr -> ClearChargeProcessor::operator()(* a0);
+			res = ptr -> ClearChargeProcessor::operator ()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -78,7 +97,7 @@ static PyObject *sipDo_ClearChargeProcessor_Operator__call__(PyObject *sipThisOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ClearChargeProcessor,sipName_BALL_Operator__call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ClearChargeProcessor,sipName_BALL___call__);
 
 	return NULL;
 }
@@ -124,6 +143,7 @@ PyObject *sipNew_ClearChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -131,10 +151,10 @@ PyObject *sipNew_ClearChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipClearChargeProcessor();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -142,7 +162,7 @@ PyObject *sipNew_ClearChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const ClearChargeProcessor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ClearChargeProcessor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ClearChargeProcessor,&a0obj))
 		{
 			int iserr = 0;
 
@@ -152,12 +172,12 @@ PyObject *sipNew_ClearChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipClearChargeProcessor(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_ClearChargeProcessor);
+		sipNoCtor(sipArgsParsed,sipName_BALL_ClearChargeProcessor);
 		return NULL;
 	}
 
@@ -182,7 +202,7 @@ PyObject *sipNew_ClearChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 }
 
 PyMethodDef sipClassAttrTab_ClearChargeProcessor[] = {
-	{sipName_BALL_Operator__call__, sipDo_ClearChargeProcessor_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL___call__, sipDo_ClearChargeProcessor___call__, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -191,17 +211,15 @@ int sipCanConvertTo_ClearChargeProcessor(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_ClearChargeProcessor);
 }
 
-void sipConvertTo_ClearChargeProcessor(PyObject *sipPy,ClearChargeProcessor **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_ClearChargeProcessor(PyObject *sipPy,ClearChargeProcessor **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_ClearChargeProcessor);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_ClearChargeProcessor);
+		*sipCppPtr = NULL;
 
 		return;
 	}

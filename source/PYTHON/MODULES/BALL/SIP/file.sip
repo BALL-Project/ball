@@ -1,19 +1,29 @@
-// $Id: file.sip,v 1.1 2000/07/18 21:27:32 oliver Exp $
+// $Id: file.sip,v 1.2 2001/07/25 11:32:33 oliver Exp $
+
+class std__openmode
+{
+%HeaderCode
+	#include <BALL/SYSTEM/file.h>
+	using namespace BALL;
+	typedef std::ios::openmode std__openmode;
+%End
+	public:
+};
 
 class File
 {
 %HeaderCode
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
-	typedef File::OpenMode OpenMode;
 %End
   public:
-	static const OpenMode &IN;
-	static const OpenMode &OUT;
-	static const OpenMode &APP;
-	static const OpenMode &BINARY;
-	static const OpenMode &ATE;
-	static const OpenMode &TRUNC;
+	typedef std__openmode OpenMode;
+	static const OpenMode IN;
+	static const OpenMode OUT;
+	static const OpenMode APP;
+	static const OpenMode BINARY;
+	static const OpenMode ATE;
+	static const OpenMode TRUNC;
 
   File();
 	// default open mode: IN
@@ -28,12 +38,12 @@ class File
     PyObject *a0obj;
     File::OpenMode a1 = File::IN;
 
-    if (sipParseArgs(sipArgs,"I|i",sipCanConvertTo_String,&a0obj,&a1))
+    if (sipParseArgs(&sipArgsParsed,sipArgs,"I|i",sipCanConvertTo_String,&a0obj,&a1))
     {
       bool res;
       File *ptr;
 
-      if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
+      if ((ptr = (File *)sipGetCppPtr((sipThisType*)a0,sipClass_File)) == NULL)
         return NULL;
 
       int iserr = 0;
@@ -90,10 +100,11 @@ class OpenMode
 	typedef File::OpenMode OpenMode;
 %End
   public:
-  operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   OpenMode* ptr;
-  if ((ptr = (OpenMode*)sipGetCppPtr(sipThis,sipClass_OpenMode)) == NULL)
+  if ((ptr = (OpenMode*)sipGetCppPtr((sipThisType*)a0,sipClass_OpenMode)) == NULL)
     return NULL;
 	
 	String mode_string;

@@ -1,4 +1,4 @@
-// $Id: pyMoleculeList.C,v 1.2 2000/08/30 19:58:38 oliver Exp $
+// $Id: pyMoleculeList.C,v 1.3 2001/07/25 11:34:52 oliver Exp $
 
 #include <BALL/PYTHON/pyMoleculeList.h>
 #include <BALL/KERNEL/molecule.h>
@@ -18,6 +18,7 @@ namespace BALL
 	}
 
 	PyMoleculeList::~PyMoleculeList()
+		throw()
 	{
 	}
 

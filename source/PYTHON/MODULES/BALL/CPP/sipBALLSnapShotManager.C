@@ -19,67 +19,94 @@ static PyTypeObject sipType_SnapShotManager = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipSnapShotManager::sipSnapShotManager(): SnapShotManager()
+sipSnapShotManager::sipSnapShotManager()
+   throw()  : SnapShotManager()
 {
 	sipCommonCtor(sipPyMethods,9);
 }
 
-sipSnapShotManager::sipSnapShotManager(System * a0,const ForceField * a1,TrajectoryFile * a2,bool a3): SnapShotManager(a0,a1,a2,a3)
+sipSnapShotManager::sipSnapShotManager(System * a0,const ForceField * a1,TrajectoryFile * a2,bool a3)
+   throw()  : SnapShotManager(a0,a1,a2,a3)
 {
 	sipCommonCtor(sipPyMethods,9);
 }
 
-sipSnapShotManager::sipSnapShotManager(System * a0,const ForceField * a1,const Options& a2,TrajectoryFile * a3,bool a4): SnapShotManager(a0,a1,a2,a3,a4)
+sipSnapShotManager::sipSnapShotManager(System * a0,const ForceField * a1,const Options& a2,TrajectoryFile * a3,bool a4)
+   throw()  : SnapShotManager(a0,a1,a2,a3,a4)
 {
 	sipCommonCtor(sipPyMethods,9);
 }
 
-sipSnapShotManager::sipSnapShotManager(const SnapShotManager& a0): SnapShotManager(a0)
+sipSnapShotManager::sipSnapShotManager(const SnapShotManager& a0)
+   throw()  : SnapShotManager(a0)
 {
 	sipCommonCtor(sipPyMethods,9);
 }
 
 sipSnapShotManager::~sipSnapShotManager()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipSnapShotManager::setup()
+
+void sipSnapShotManager::flushToDisk()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipSnapShotManager::sipVH_setup(&sipPyMethods[0],sipPyThis,relLock) :
-		SnapShotManager::setup();
-}
-void sipSnapShotManager::clear()
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipSnapShotManager::sipVH_clear(&sipPyMethods[1],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_flushToDisk,&relLock))
+		sipSnapShotManager::sipVH_flushToDisk(&sipPyMethods[0],sipPyThis,relLock);
 	else
-		SnapShotManager::clear();
+		SnapShotManager::flushToDisk();
 }
-bool sipSnapShotManager::isValid() const
+
+bool sipSnapShotManager::applyLastSnapShot()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipSnapShotManager::sipVH_isValid(&sipPyMethods[2],sipPyThis,relLock) :
-		SnapShotManager::isValid();
+	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_applyLastSnapShot,&relLock) ?
+		sipSnapShotManager::sipVH_applyLastSnapShot(&sipPyMethods[1],sipPyThis,relLock) :
+		SnapShotManager::applyLastSnapShot();
 }
-void sipSnapShotManager::takeSnapShot()
+
+bool sipSnapShotManager::applyNextSnapShot()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_takeSnapShot,&relLock))
-		sipSnapShotManager::sipVH_takeSnapShot(&sipPyMethods[3],sipPyThis,relLock);
-	else
-		SnapShotManager::takeSnapShot();
+	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_applyNextSnapShot,&relLock) ?
+		sipSnapShotManager::sipVH_applyNextSnapShot(&sipPyMethods[2],sipPyThis,relLock) :
+		SnapShotManager::applyNextSnapShot();
 }
+
+bool sipSnapShotManager::applyFirstSnapShot()
+ throw()
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_applyFirstSnapShot,&relLock) ?
+		sipSnapShotManager::sipVH_applyFirstSnapShot(&sipPyMethods[3],sipPyThis,relLock) :
+		SnapShotManager::applyFirstSnapShot();
+}
+
 bool sipSnapShotManager::applySnapShot(int a0)
+ throw()
 {
 	int relLock;
 
@@ -87,85 +114,53 @@ bool sipSnapShotManager::applySnapShot(int a0)
 		sipSnapShotManager::sipVH_applySnapShot(&sipPyMethods[4],sipPyThis,relLock,a0) :
 		SnapShotManager::applySnapShot(a0);
 }
-bool sipSnapShotManager::applyFirstSnapShot()
+
+void sipSnapShotManager::takeSnapShot()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_applyFirstSnapShot,&relLock) ?
-		sipSnapShotManager::sipVH_applyFirstSnapShot(&sipPyMethods[5],sipPyThis,relLock) :
-		SnapShotManager::applyFirstSnapShot();
-}
-bool sipSnapShotManager::applyNextSnapShot()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_applyNextSnapShot,&relLock) ?
-		sipSnapShotManager::sipVH_applyNextSnapShot(&sipPyMethods[6],sipPyThis,relLock) :
-		SnapShotManager::applyNextSnapShot();
-}
-bool sipSnapShotManager::applyLastSnapShot()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[7],sipPyThis,NULL,sipName_BALL_applyLastSnapShot,&relLock) ?
-		sipSnapShotManager::sipVH_applyLastSnapShot(&sipPyMethods[7],sipPyThis,relLock) :
-		SnapShotManager::applyLastSnapShot();
-}
-void sipSnapShotManager::flushToDisk()
-{
-	int relLock;
-
-	if (sipIsPyMethod(&sipPyMethods[8],sipPyThis,NULL,sipName_BALL_flushToDisk,&relLock))
-		sipSnapShotManager::sipVH_flushToDisk(&sipPyMethods[8],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_takeSnapShot,&relLock))
+		sipSnapShotManager::sipVH_takeSnapShot(&sipPyMethods[5],sipPyThis,relLock);
 	else
-		SnapShotManager::flushToDisk();
+		SnapShotManager::takeSnapShot();
 }
 
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipSnapShotManager::sipVH_setup(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+bool sipSnapShotManager::isValid() const
+ throw()
 {
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
+	int relLock;
 
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipSnapShotManager::sipVH_isValid(&sipPyMethods[6],sipPyThis,relLock) :
+		SnapShotManager::isValid();
+}
 
-	if (sipArgs == NULL)
-		goto reportError;
+void sipSnapShotManager::clear()
+ throw()
+{
+	int relLock;
 
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+	if (sipIsPyMethod(&sipPyMethods[7],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipSnapShotManager::sipVH_clear(&sipPyMethods[7],sipPyThis,relLock);
+	else
+		SnapShotManager::clear();
+}
 
-	Py_DECREF(sipArgs);
+bool sipSnapShotManager::setup()
+ throw()
+{
+	int relLock;
 
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_setup);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
+	return sipIsPyMethod(&sipPyMethods[8],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipSnapShotManager::sipVH_setup(&sipPyMethods[8],sipPyThis,relLock) :
+		SnapShotManager::setup();
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-void sipSnapShotManager::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+void sipSnapShotManager::sipVH_flushToDisk(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
 {
 	PyObject *resobj;
 	PyObject *sipArgs;
@@ -186,7 +181,7 @@ void sipSnapShotManager::sipVH_clear(const sipMethodCache *pymc,sipThisType *sip
 		if (resobj == Py_None)
 			goto releaseLock;
 
-		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_clear);
+		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_flushToDisk);
 	}
 
 reportError:
@@ -199,7 +194,7 @@ releaseLock:
 // The common handler for all classes that inherit this virtual member
 // function.
 
-bool sipSnapShotManager::sipVH_isValid(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+bool sipSnapShotManager::sipVH_applyLastSnapShot(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
 {
 	bool res;
 	PyObject *resobj;
@@ -225,123 +220,7 @@ bool sipSnapShotManager::sipVH_isValid(const sipMethodCache *pymc,sipThisType *s
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_isValid);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipSnapShotManager::sipVH_takeSnapShot(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_takeSnapShot);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipSnapShotManager::sipVH_applySnapShot(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,int a0)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(Oi)",sipThis -> sipSelf,a0);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_applySnapShot);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipSnapShotManager::sipVH_applyFirstSnapShot(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_applyFirstSnapShot);
+		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_applyLastSnapShot);
 	}
 
 reportError:
@@ -397,7 +276,7 @@ releaseLock:
 // The common handler for all classes that inherit this virtual member
 // function.
 
-bool sipSnapShotManager::sipVH_applyLastSnapShot(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+bool sipSnapShotManager::sipVH_applyFirstSnapShot(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
 {
 	bool res;
 	PyObject *resobj;
@@ -423,7 +302,7 @@ bool sipSnapShotManager::sipVH_applyLastSnapShot(const sipMethodCache *pymc,sipT
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_applyLastSnapShot);
+		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_applyFirstSnapShot);
 	}
 
 reportError:
@@ -438,7 +317,48 @@ releaseLock:
 // The common handler for all classes that inherit this virtual member
 // function.
 
-void sipSnapShotManager::sipVH_flushToDisk(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+bool sipSnapShotManager::sipVH_applySnapShot(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,int a0)
+{
+	bool res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(Oi)",sipThis -> sipSelf,a0);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = (bool)PyInt_AsLong(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_applySnapShot);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipSnapShotManager::sipVH_takeSnapShot(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
 {
 	PyObject *resobj;
 	PyObject *sipArgs;
@@ -459,7 +379,7 @@ void sipSnapShotManager::sipVH_flushToDisk(const sipMethodCache *pymc,sipThisTyp
 		if (resobj == Py_None)
 			goto releaseLock;
 
-		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_flushToDisk);
+		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_takeSnapShot);
 	}
 
 reportError:
@@ -469,9 +389,126 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
+// The common handler for all classes that inherit this virtual member
+// function.
+
+bool sipSnapShotManager::sipVH_isValid(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	bool res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = (bool)PyInt_AsLong(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_isValid);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipSnapShotManager::sipVH_clear(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_clear);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+bool sipSnapShotManager::sipVH_setup(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	bool res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = (bool)PyInt_AsLong(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_SnapShotManager,sipName_BALL_setup);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
+}
+
 static PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
@@ -484,7 +521,7 @@ static PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipA
 		TrajectoryFile *a2;
 		PyObject *a2obj;
 
-		if (sipParseArgs(sipArgs,"III",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_TrajectoryFile,&a2obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_TrajectoryFile,&a2obj))
 		{
 			bool res;
 			SnapShotManager *ptr;
@@ -508,7 +545,7 @@ static PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			SnapShotManager *ptr;
@@ -524,7 +561,7 @@ static PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -532,12 +569,13 @@ static PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_SnapShotManager_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			SnapShotManager *ptr;
 
@@ -553,7 +591,7 @@ static PyObject *sipDo_SnapShotManager_clear(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -561,12 +599,13 @@ static PyObject *sipDo_SnapShotManager_clear(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_SnapShotManager_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			SnapShotManager *ptr;
@@ -582,7 +621,7 @@ static PyObject *sipDo_SnapShotManager_isValid(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -590,6 +629,7 @@ static PyObject *sipDo_SnapShotManager_isValid(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_SnapShotManager_setSystem(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
@@ -598,7 +638,7 @@ static PyObject *sipDo_SnapShotManager_setSystem(PyObject *sipThisObj,PyObject *
 		System *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
 		{
 			SnapShotManager *ptr;
 
@@ -621,7 +661,7 @@ static PyObject *sipDo_SnapShotManager_setSystem(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_setSystem);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_setSystem);
 
 	return NULL;
 }
@@ -629,12 +669,13 @@ static PyObject *sipDo_SnapShotManager_setSystem(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SnapShotManager_getSystem(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			System *res;
 			SnapShotManager *ptr;
@@ -650,7 +691,7 @@ static PyObject *sipDo_SnapShotManager_getSystem(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_getSystem);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_getSystem);
 
 	return NULL;
 }
@@ -658,6 +699,7 @@ static PyObject *sipDo_SnapShotManager_getSystem(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SnapShotManager_setForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
@@ -666,7 +708,7 @@ static PyObject *sipDo_SnapShotManager_setForceField(PyObject *sipThisObj,PyObje
 		const ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			SnapShotManager *ptr;
 
@@ -689,7 +731,7 @@ static PyObject *sipDo_SnapShotManager_setForceField(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_setForceField);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_setForceField);
 
 	return NULL;
 }
@@ -697,12 +739,13 @@ static PyObject *sipDo_SnapShotManager_setForceField(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_SnapShotManager_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const ForceField *res;
 			SnapShotManager *ptr;
@@ -718,7 +761,7 @@ static PyObject *sipDo_SnapShotManager_getForceField(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_getForceField);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_getForceField);
 
 	return NULL;
 }
@@ -726,6 +769,7 @@ static PyObject *sipDo_SnapShotManager_getForceField(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_SnapShotManager_setTrajectoryFile(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
@@ -734,7 +778,7 @@ static PyObject *sipDo_SnapShotManager_setTrajectoryFile(PyObject *sipThisObj,Py
 		TrajectoryFile *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_TrajectoryFile,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_TrajectoryFile,&a0obj))
 		{
 			SnapShotManager *ptr;
 
@@ -757,7 +801,7 @@ static PyObject *sipDo_SnapShotManager_setTrajectoryFile(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_setTrajectoryFile);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_setTrajectoryFile);
 
 	return NULL;
 }
@@ -765,12 +809,13 @@ static PyObject *sipDo_SnapShotManager_setTrajectoryFile(PyObject *sipThisObj,Py
 static PyObject *sipDo_SnapShotManager_getTrajectoryFile(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			TrajectoryFile *res;
 			SnapShotManager *ptr;
@@ -786,7 +831,7 @@ static PyObject *sipDo_SnapShotManager_getTrajectoryFile(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_getTrajectoryFile);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_getTrajectoryFile);
 
 	return NULL;
 }
@@ -794,6 +839,7 @@ static PyObject *sipDo_SnapShotManager_getTrajectoryFile(PyObject *sipThisObj,Py
 static PyObject *sipDo_SnapShotManager_setFlushToDiskFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
@@ -801,7 +847,7 @@ static PyObject *sipDo_SnapShotManager_setFlushToDiskFrequency(PyObject *sipThis
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			SnapShotManager *ptr;
 
@@ -817,7 +863,7 @@ static PyObject *sipDo_SnapShotManager_setFlushToDiskFrequency(PyObject *sipThis
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_setFlushToDiskFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_setFlushToDiskFrequency);
 
 	return NULL;
 }
@@ -825,12 +871,13 @@ static PyObject *sipDo_SnapShotManager_setFlushToDiskFrequency(PyObject *sipThis
 static PyObject *sipDo_SnapShotManager_getFlushToDiskFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			SnapShotManager *ptr;
@@ -846,7 +893,7 @@ static PyObject *sipDo_SnapShotManager_getFlushToDiskFrequency(PyObject *sipThis
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_getFlushToDiskFrequency);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_getFlushToDiskFrequency);
 
 	return NULL;
 }
@@ -854,12 +901,13 @@ static PyObject *sipDo_SnapShotManager_getFlushToDiskFrequency(PyObject *sipThis
 static PyObject *sipDo_SnapShotManager_takeSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			SnapShotManager *ptr;
 
@@ -875,7 +923,7 @@ static PyObject *sipDo_SnapShotManager_takeSnapShot(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_takeSnapShot);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_takeSnapShot);
 
 	return NULL;
 }
@@ -883,6 +931,7 @@ static PyObject *sipDo_SnapShotManager_takeSnapShot(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_SnapShotManager_applySnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
@@ -890,7 +939,7 @@ static PyObject *sipDo_SnapShotManager_applySnapShot(PyObject *sipThisObj,PyObje
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			bool res;
 			SnapShotManager *ptr;
@@ -906,7 +955,7 @@ static PyObject *sipDo_SnapShotManager_applySnapShot(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_applySnapShot);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_applySnapShot);
 
 	return NULL;
 }
@@ -914,12 +963,13 @@ static PyObject *sipDo_SnapShotManager_applySnapShot(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_SnapShotManager_applyFirstSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			SnapShotManager *ptr;
@@ -935,7 +985,7 @@ static PyObject *sipDo_SnapShotManager_applyFirstSnapShot(PyObject *sipThisObj,P
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_applyFirstSnapShot);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_applyFirstSnapShot);
 
 	return NULL;
 }
@@ -943,12 +993,13 @@ static PyObject *sipDo_SnapShotManager_applyFirstSnapShot(PyObject *sipThisObj,P
 static PyObject *sipDo_SnapShotManager_applyNextSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			SnapShotManager *ptr;
@@ -964,7 +1015,7 @@ static PyObject *sipDo_SnapShotManager_applyNextSnapShot(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_applyNextSnapShot);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_applyNextSnapShot);
 
 	return NULL;
 }
@@ -972,12 +1023,13 @@ static PyObject *sipDo_SnapShotManager_applyNextSnapShot(PyObject *sipThisObj,Py
 static PyObject *sipDo_SnapShotManager_applyLastSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			SnapShotManager *ptr;
@@ -993,7 +1045,7 @@ static PyObject *sipDo_SnapShotManager_applyLastSnapShot(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_applyLastSnapShot);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_applyLastSnapShot);
 
 	return NULL;
 }
@@ -1001,12 +1053,13 @@ static PyObject *sipDo_SnapShotManager_applyLastSnapShot(PyObject *sipThisObj,Py
 static PyObject *sipDo_SnapShotManager_flushToDisk(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SnapShotManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			SnapShotManager *ptr;
 
@@ -1022,7 +1075,7 @@ static PyObject *sipDo_SnapShotManager_flushToDisk(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SnapShotManager,sipName_BALL_flushToDisk);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SnapShotManager,sipName_BALL_flushToDisk);
 
 	return NULL;
 }
@@ -1063,6 +1116,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -1070,10 +1124,10 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipSnapShotManager();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1086,7 +1140,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a2obj;
 		long a3 = true;
 
-		if (sipParseArgs(sipArgs,"-III|l",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_TrajectoryFile,&a2obj,&a3))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III|l",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_TrajectoryFile,&a2obj,&a3))
 		{
 			int iserr = 0;
 
@@ -1098,7 +1152,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSnapShotManager( a0, a1, a2, (bool)a3);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1113,7 +1167,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a3obj;
 		long a4 = true;
 
-		if (sipParseArgs(sipArgs,"-IIII|l",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_Options,&a2obj,sipCanConvertTo_TrajectoryFile,&a3obj,&a4))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-IIII|l",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_Options,&a2obj,sipCanConvertTo_TrajectoryFile,&a3obj,&a4))
 		{
 			int iserr = 0;
 
@@ -1126,7 +1180,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSnapShotManager( a0, a1,* a2, a3, (bool)a4);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1134,7 +1188,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 		const SnapShotManager *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_SnapShotManager,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_SnapShotManager,&a0obj))
 		{
 			int iserr = 0;
 
@@ -1144,12 +1198,12 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSnapShotManager(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_SnapShotManager);
+		sipNoCtor(sipArgsParsed,sipName_BALL_SnapShotManager);
 		return NULL;
 	}
 
@@ -1241,17 +1295,15 @@ int sipCanConvertTo_SnapShotManager(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_SnapShotManager);
 }
 
-void sipConvertTo_SnapShotManager(PyObject *sipPy,SnapShotManager **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_SnapShotManager(PyObject *sipPy,SnapShotManager **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_SnapShotManager);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_SnapShotManager);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -19,11 +19,25 @@ static PyTypeObject sipType_Plane3 = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_Plane3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Plane3)) == NULL)
 		return NULL;
@@ -32,7 +46,7 @@ static PyObject *sipDo_Plane3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		Plane3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Plane3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Plane3,&a0obj))
 		{
 			Plane3 *ptr;
 
@@ -55,7 +69,7 @@ static PyObject *sipDo_Plane3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Plane3,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Plane3,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -63,6 +77,7 @@ static PyObject *sipDo_Plane3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Plane3)) == NULL)
 		return NULL;
@@ -71,7 +86,7 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const Plane3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Plane3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Plane3,&a0obj))
 		{
 			Plane3 *ptr;
 
@@ -98,7 +113,7 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const Vector3 *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
 		{
 			Plane3 *ptr;
 
@@ -128,7 +143,7 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const Vector3 *a2;
 		PyObject *a2obj;
 
-		if (sipParseArgs(sipArgs,"III",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"III",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
 		{
 			Plane3 *ptr;
 
@@ -153,7 +168,7 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Plane3,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Plane3,sipName_BALL_set);
 
 	return NULL;
 }
@@ -161,6 +176,7 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Plane3)) == NULL)
 		return NULL;
@@ -169,7 +185,7 @@ static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 		Plane3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Plane3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Plane3,&a0obj))
 		{
 			Plane3 *ptr;
 
@@ -196,7 +212,7 @@ static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 		Vector3 *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
 		{
 			Plane3 *ptr;
 
@@ -220,7 +236,7 @@ static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Plane3,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Plane3,sipName_BALL_get);
 
 	return NULL;
 }
@@ -228,12 +244,13 @@ static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Plane3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Plane3)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Plane3 *ptr;
 
@@ -249,7 +266,7 @@ static PyObject *sipDo_Plane3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Plane3,sipName_BALL_normalize);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Plane3,sipName_BALL_normalize);
 
 	return NULL;
 }
@@ -257,12 +274,13 @@ static PyObject *sipDo_Plane3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Plane3_hessify(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Plane3)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Plane3 *ptr;
 
@@ -278,7 +296,7 @@ static PyObject *sipDo_Plane3_hessify(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Plane3,sipName_BALL_hessify);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Plane3,sipName_BALL_hessify);
 
 	return NULL;
 }
@@ -286,6 +304,7 @@ static PyObject *sipDo_Plane3_hessify(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Plane3)) == NULL)
 		return NULL;
@@ -294,7 +313,7 @@ static PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
 		const Vector3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector3,&a0obj))
 		{
 			bool res;
 			Plane3 *ptr;
@@ -319,7 +338,7 @@ static PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
 		const Line3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Line3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Line3,&a0obj))
 		{
 			bool res;
 			Plane3 *ptr;
@@ -342,7 +361,7 @@ static PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Plane3,sipName_BALL_has);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Plane3,sipName_BALL_has);
 
 	return NULL;
 }
@@ -350,12 +369,13 @@ static PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Plane3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Plane3)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Plane3 *ptr;
@@ -371,7 +391,7 @@ static PyObject *sipDo_Plane3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Plane3,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Plane3,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -406,6 +426,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -413,10 +434,10 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new Plane3();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -424,7 +445,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 		const Plane3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Plane3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Plane3,&a0obj))
 		{
 			int iserr = 0;
 
@@ -434,7 +455,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Plane3(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -444,7 +465,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 		const Vector3 *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-II",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj))
 		{
 			int iserr = 0;
 
@@ -455,7 +476,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Plane3(* a0,* a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -467,7 +488,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 		const Vector3 *a2;
 		PyObject *a2obj;
 
-		if (sipParseArgs(sipArgs,"-III",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-III",sipCanConvertTo_Vector3,&a0obj,sipCanConvertTo_Vector3,&a1obj,sipCanConvertTo_Vector3,&a2obj))
 		{
 			int iserr = 0;
 
@@ -479,7 +500,7 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Plane3(* a0,* a1,* a2);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -489,15 +510,15 @@ PyObject *sipNew_Plane3(PyObject *sipSelf,PyObject *sipArgs)
 		float a2;
 		float a3;
 
-		if (sipParseArgs(sipArgs,"-ffff",&a0,&a1,&a2,&a3))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-ffff",&a0,&a1,&a2,&a3))
 		{
 			sipNew = new Plane3( a0, a1, a2, a3);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Plane3);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Plane3);
 		return NULL;
 	}
 
@@ -531,17 +552,15 @@ int sipCanConvertTo_Plane3(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Plane3);
 }
 
-void sipConvertTo_Plane3(PyObject *sipPy,Plane3 **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Plane3(PyObject *sipPy,Plane3 **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Plane3);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Plane3);
+		*sipCppPtr = NULL;
 
 		return;
 	}

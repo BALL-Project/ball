@@ -19,11 +19,25 @@ static PyTypeObject sipType_Quaternion = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Quaternion)) == NULL)
 		return NULL;
@@ -32,7 +46,7 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const Quaternion *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
 		{
 			Quaternion *ptr;
 
@@ -58,7 +72,7 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		float a1;
 
-		if (sipParseArgs(sipArgs,"If",sipCanConvertTo_Vector3,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"If",sipCanConvertTo_Vector3,&a0obj,&a1))
 		{
 			Quaternion *ptr;
 
@@ -85,7 +99,7 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 		float a2;
 		float a3;
 
-		if (sipParseArgs(sipArgs,"ffff",&a0,&a1,&a2,&a3))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"ffff",&a0,&a1,&a2,&a3))
 		{
 			Quaternion *ptr;
 
@@ -101,7 +115,7 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Quaternion,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Quaternion,sipName_BALL_set);
 
 	return NULL;
 }
@@ -109,6 +123,7 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Quaternion_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Quaternion)) == NULL)
 		return NULL;
@@ -117,7 +132,7 @@ static PyObject *sipDo_Quaternion_get(PyObject *sipThisObj,PyObject *sipArgs)
 		Quaternion *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
 		{
 			Quaternion *ptr;
 
@@ -140,7 +155,7 @@ static PyObject *sipDo_Quaternion_get(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Quaternion,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Quaternion,sipName_BALL_get);
 
 	return NULL;
 }
@@ -148,12 +163,13 @@ static PyObject *sipDo_Quaternion_get(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Quaternion_setIdentity(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Quaternion)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Quaternion *ptr;
 
@@ -169,7 +185,7 @@ static PyObject *sipDo_Quaternion_setIdentity(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Quaternion,sipName_BALL_setIdentity);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Quaternion,sipName_BALL_setIdentity);
 
 	return NULL;
 }
@@ -177,6 +193,7 @@ static PyObject *sipDo_Quaternion_setIdentity(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_Quaternion_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Quaternion)) == NULL)
 		return NULL;
@@ -185,7 +202,7 @@ static PyObject *sipDo_Quaternion_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		Quaternion *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Quaternion,&a0obj))
 		{
 			Quaternion *ptr;
 
@@ -208,7 +225,7 @@ static PyObject *sipDo_Quaternion_swap(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Quaternion,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Quaternion,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -216,12 +233,13 @@ static PyObject *sipDo_Quaternion_swap(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Quaternion_getAngle(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Quaternion)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			Quaternion *ptr;
@@ -237,7 +255,7 @@ static PyObject *sipDo_Quaternion_getAngle(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Quaternion,sipName_BALL_getAngle);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Quaternion,sipName_BALL_getAngle);
 
 	return NULL;
 }
@@ -245,12 +263,13 @@ static PyObject *sipDo_Quaternion_getAngle(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_Quaternion_getAxis(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Quaternion)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Vector3 *res;
 			Quaternion *ptr;
@@ -266,7 +285,7 @@ static PyObject *sipDo_Quaternion_getAxis(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Quaternion,sipName_BALL_getAxis);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Quaternion,sipName_BALL_getAxis);
 
 	return NULL;
 }
@@ -274,6 +293,7 @@ static PyObject *sipDo_Quaternion_getAxis(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Quaternion_getRotationMatrix(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Quaternion)) == NULL)
 		return NULL;
@@ -282,7 +302,7 @@ static PyObject *sipDo_Quaternion_getRotationMatrix(PyObject *sipThisObj,PyObjec
 		Matrix4x4 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
 		{
 			Matrix4x4 *res;
 			Quaternion *ptr;
@@ -305,7 +325,7 @@ static PyObject *sipDo_Quaternion_getRotationMatrix(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Quaternion,sipName_BALL_getRotationMatrix);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Quaternion,sipName_BALL_getRotationMatrix);
 
 	return NULL;
 }
@@ -313,12 +333,13 @@ static PyObject *sipDo_Quaternion_getRotationMatrix(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_Quaternion_getInverse(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Quaternion)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Quaternion *res;
 			Quaternion *ptr;
@@ -334,7 +355,7 @@ static PyObject *sipDo_Quaternion_getInverse(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Quaternion,sipName_BALL_getInverse);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Quaternion,sipName_BALL_getInverse);
 
 	return NULL;
 }
@@ -342,12 +363,13 @@ static PyObject *sipDo_Quaternion_getInverse(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_Quaternion_getConjugate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Quaternion)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Quaternion *res;
 			Quaternion *ptr;
@@ -363,7 +385,7 @@ static PyObject *sipDo_Quaternion_getConjugate(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Quaternion,sipName_BALL_getConjugate);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Quaternion,sipName_BALL_getConjugate);
 
 	return NULL;
 }
@@ -398,6 +420,7 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -405,10 +428,10 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new Quaternion();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -416,7 +439,7 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 		const Quaternion *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Quaternion,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Quaternion,&a0obj))
 		{
 			int iserr = 0;
 
@@ -426,7 +449,7 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Quaternion(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -435,7 +458,7 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		float a1;
 
-		if (sipParseArgs(sipArgs,"-If",sipCanConvertTo_Vector3,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-If",sipCanConvertTo_Vector3,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -445,7 +468,7 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Quaternion(* a0, a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -455,15 +478,15 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 		float a2;
 		float a3;
 
-		if (sipParseArgs(sipArgs,"-ffff",&a0,&a1,&a2,&a3))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-ffff",&a0,&a1,&a2,&a3))
 		{
 			sipNew = new Quaternion( a0, a1, a2, a3);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Quaternion);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Quaternion);
 		return NULL;
 	}
 
@@ -476,99 +499,6 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 
 		return NULL;
 	}
-
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
-static PyObject *sipGetSetVar_Quaternion_i(PyObject *sipThisObj,PyObject *valobj)
-{
-	float val;
-	Quaternion *ptr;
-
-	if ((ptr = (Quaternion *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Quaternion)) == NULL)
-		return NULL;
-
-	if (valobj == NULL)
-	{
-		val = ptr -> i;
-
-		valobj = PyFloat_FromDouble((double)val);
-
-		return valobj;
-	}
-
-	val = (float)PyFloat_AsDouble(valobj);
-
-	if (PyErr_Occurred() != NULL)
-	{
-		sipBadSetType(sipName_BALL_Quaternion,sipName_BALL_i);
-		return NULL;
-	}
-
-	ptr -> i = val;
-
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
-static PyObject *sipGetSetVar_Quaternion_j(PyObject *sipThisObj,PyObject *valobj)
-{
-	float val;
-	Quaternion *ptr;
-
-	if ((ptr = (Quaternion *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Quaternion)) == NULL)
-		return NULL;
-
-	if (valobj == NULL)
-	{
-		val = ptr -> j;
-
-		valobj = PyFloat_FromDouble((double)val);
-
-		return valobj;
-	}
-
-	val = (float)PyFloat_AsDouble(valobj);
-
-	if (PyErr_Occurred() != NULL)
-	{
-		sipBadSetType(sipName_BALL_Quaternion,sipName_BALL_j);
-		return NULL;
-	}
-
-	ptr -> j = val;
-
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
-static PyObject *sipGetSetVar_Quaternion_k(PyObject *sipThisObj,PyObject *valobj)
-{
-	float val;
-	Quaternion *ptr;
-
-	if ((ptr = (Quaternion *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Quaternion)) == NULL)
-		return NULL;
-
-	if (valobj == NULL)
-	{
-		val = ptr -> k;
-
-		valobj = PyFloat_FromDouble((double)val);
-
-		return valobj;
-	}
-
-	val = (float)PyFloat_AsDouble(valobj);
-
-	if (PyErr_Occurred() != NULL)
-	{
-		sipBadSetType(sipName_BALL_Quaternion,sipName_BALL_k);
-		return NULL;
-	}
-
-	ptr -> k = val;
 
 	Py_INCREF(Py_None);
 	return Py_None;
@@ -605,6 +535,99 @@ static PyObject *sipGetSetVar_Quaternion_angle(PyObject *sipThisObj,PyObject *va
 	return Py_None;
 }
 
+static PyObject *sipGetSetVar_Quaternion_k(PyObject *sipThisObj,PyObject *valobj)
+{
+	float val;
+	Quaternion *ptr;
+
+	if ((ptr = (Quaternion *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Quaternion)) == NULL)
+		return NULL;
+
+	if (valobj == NULL)
+	{
+		val = ptr -> k;
+
+		valobj = PyFloat_FromDouble((double)val);
+
+		return valobj;
+	}
+
+	val = (float)PyFloat_AsDouble(valobj);
+
+	if (PyErr_Occurred() != NULL)
+	{
+		sipBadSetType(sipName_BALL_Quaternion,sipName_BALL_k);
+		return NULL;
+	}
+
+	ptr -> k = val;
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+static PyObject *sipGetSetVar_Quaternion_j(PyObject *sipThisObj,PyObject *valobj)
+{
+	float val;
+	Quaternion *ptr;
+
+	if ((ptr = (Quaternion *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Quaternion)) == NULL)
+		return NULL;
+
+	if (valobj == NULL)
+	{
+		val = ptr -> j;
+
+		valobj = PyFloat_FromDouble((double)val);
+
+		return valobj;
+	}
+
+	val = (float)PyFloat_AsDouble(valobj);
+
+	if (PyErr_Occurred() != NULL)
+	{
+		sipBadSetType(sipName_BALL_Quaternion,sipName_BALL_j);
+		return NULL;
+	}
+
+	ptr -> j = val;
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+static PyObject *sipGetSetVar_Quaternion_i(PyObject *sipThisObj,PyObject *valobj)
+{
+	float val;
+	Quaternion *ptr;
+
+	if ((ptr = (Quaternion *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Quaternion)) == NULL)
+		return NULL;
+
+	if (valobj == NULL)
+	{
+		val = ptr -> i;
+
+		valobj = PyFloat_FromDouble((double)val);
+
+		return valobj;
+	}
+
+	val = (float)PyFloat_AsDouble(valobj);
+
+	if (PyErr_Occurred() != NULL)
+	{
+		sipBadSetType(sipName_BALL_Quaternion,sipName_BALL_i);
+		return NULL;
+	}
+
+	ptr -> i = val;
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
 PyMethodDef sipClassAttrTab_Quaternion[] = {
 	{sipName_BALL_set, sipDo_Quaternion_set, METH_VARARGS, NULL},
 	{sipName_BALL_get, sipDo_Quaternion_get, METH_VARARGS, NULL},
@@ -619,10 +642,10 @@ PyMethodDef sipClassAttrTab_Quaternion[] = {
 };
 
 PyMethodDef sipClassVarTab_Quaternion[] = {
-	{sipName_BALL_i, sipGetSetVar_Quaternion_i, 0, NULL},
-	{sipName_BALL_j, sipGetSetVar_Quaternion_j, 0, NULL},
-	{sipName_BALL_k, sipGetSetVar_Quaternion_k, 0, NULL},
 	{sipName_BALL_angle, sipGetSetVar_Quaternion_angle, 0, NULL},
+	{sipName_BALL_k, sipGetSetVar_Quaternion_k, 0, NULL},
+	{sipName_BALL_j, sipGetSetVar_Quaternion_j, 0, NULL},
+	{sipName_BALL_i, sipGetSetVar_Quaternion_i, 0, NULL},
 	{NULL}
 };
 
@@ -636,17 +659,15 @@ int sipCanConvertTo_Quaternion(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Quaternion);
 }
 
-void sipConvertTo_Quaternion(PyObject *sipPy,Quaternion **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Quaternion(PyObject *sipPy,Quaternion **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Quaternion);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Quaternion);
+		*sipCppPtr = NULL;
 
 		return;
 	}

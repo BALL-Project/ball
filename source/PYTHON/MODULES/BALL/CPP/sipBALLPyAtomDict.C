@@ -12,7 +12,7 @@ PyObject *sipConvertFrom_PyAtomDict(const PyAtomDict *sipCpp)
 	}
 
 #line 13 "pyAtomDict.sip"
-	cerr << "convert from" << endl;
+	std::cerr << "convert from" << std::endl;
 	PyObject* dict = PyDict_New();
 
 	if (dict == NULL)
@@ -35,7 +35,7 @@ PyObject *sipConvertFrom_PyAtomDict(const PyAtomDict *sipCpp)
 	}
 
 	return dict;
-#line 43 "../CPP/sipBALLPyAtomDict.cpp"
+#line 43 "sipBALLPyAtomDict.cpp"
 }
 
 PyObject *sipClass_PyAtomDict;
@@ -43,36 +43,26 @@ PyObject *sipClass_PyAtomDict;
 int sipCanConvertTo_PyAtomDict(PyObject *sipPy)
 {
 #line 39 "pyAtomDict.sip"
-	cerr << "can convert to" << endl;
+	std::cerr << "can convert to" << std::endl;
 	return PyDict_Check(sipPy);
-#line 53 "../CPP/sipBALLPyAtomDict.cpp"
+#line 53 "sipBALLPyAtomDict.cpp"
 }
 
-int sipConvertTo_PyAtomDict(PyObject *sipPy,PyAtomDict **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_PyAtomDict(PyObject *sipPy,PyAtomDict **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
-
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PyAtomDict);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
+		return 0;
 
 #line 44 "pyAtomDict.sip"
 	// Convert a Python dictionary to a PyAtomDict object on the
 	// heap.
  
-	cerr << "convert-to" << endl;
+	std::cerr << "convert-to" << std::endl;
 	// create a list of all keys
 	PyObject* key_list = PyDict_Keys(sipPy);
 	if (key_list == NULL)
 	{
-		cerr << "cannot create key list" << endl;
+		std::cerr << "cannot create key list" << std::endl;
 		return 0;
 	}
 		
@@ -83,30 +73,30 @@ int sipConvertTo_PyAtomDict(PyObject *sipPy,PyAtomDict **sipCppPtr,int sipNoNull
 		PyObject* key = PyList_GET_ITEM(key_list,i);
 		if (key == NULL)
 		{
-			cerr << "cannot get item" << endl;
+			std::cerr << "cannot get item" << std::endl;
 			break;
 		}
 		Atom* atom = sipForceConvertTo_Atom(key,sipIsErr);
 		if (*sipIsErr)
 		{
-			cerr << "cannot convert to atom" << endl;
+			std::cerr << "cannot convert to atom" << std::endl;
 			break;
 		}
 		PyObject* float_obj = PyDict_GetItem(sipPy,key);
 		if (!PyFloat_Check(float_obj))
 		{
-			cerr << "cannot get dict item" << endl;
+			std::cerr << "cannot get dict item" << std::endl;
 			break;
 		}
 		double value = PyFloat_AsDouble(float_obj);
 		atom_dict -> insert(pair<Atom*,float>(atom, value));
-		cerr << "converted 1 item" << endl;
+		std::cerr << "converted 1 item" << std::endl;
 	}
  
 	*sipCppPtr = atom_dict;
 
 	return 1;
-#line 114 "../CPP/sipBALLPyAtomDict.cpp"
+#line 104 "sipBALLPyAtomDict.cpp"
 }
 
 PyAtomDict *sipForceConvertTo_PyAtomDict(PyObject *valobj,int *iserrp)

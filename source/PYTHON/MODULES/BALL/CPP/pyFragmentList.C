@@ -1,4 +1,4 @@
-// $Id: pyFragmentList.C,v 1.2 2000/08/30 19:58:38 oliver Exp $
+// $Id: pyFragmentList.C,v 1.3 2001/07/25 11:34:51 oliver Exp $
 
 #include <BALL/PYTHON/pyFragmentList.h>
 #include <BALL/KERNEL/fragment.h>
@@ -18,6 +18,7 @@ namespace BALL
 	}
 
 	PyFragmentList::~PyFragmentList()
+		throw()
 	{
 	}
 

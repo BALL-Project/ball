@@ -1,4 +1,4 @@
-// $Id: vector3.sip,v 1.1 2000/07/18 21:28:33 oliver Exp $
+// $Id: vector3.sip,v 1.2 2001/07/25 11:32:37 oliver Exp $
 
 class Vector3
  : PersistentObject
@@ -36,10 +36,10 @@ class Vector3
   float operator [] (Index /index/) const;
   const Vector3& operator + () const;
   Vector3 operator - () const;
-  // Vector3& operator += (const Vector3& /vector/);
-  // Vector3& operator -= (const Vector3& /vector/);
-  // Vector3& operator *= (float /scalar/);
-  // Vector3& operator /= (float /lambda/);
+  Vector3& operator += (const Vector3& /vector/);
+  Vector3& operator -= (const Vector3& /vector/);
+  Vector3& operator *= (float /scalar/);
+  Vector3& operator /= (float /lambda/);
   // Vector3& operator %= (const Vector3& /vector/);
   Vector3 operator * (float /scalar/);
   Vector3 operator / (float /lambda/);
@@ -52,17 +52,24 @@ class Vector3
   static Vector3 getPerpendicularNormalization
    (const Vector3& /a/, const Vector3& /b/, const Vector3& /c/);
   static float getTripleProduct (const Vector3& /a/, const Vector3& /b/, const Vector3& /c/);
-  // bool operator == (const Vector3& /vector/) const;
+  bool operator == (const Vector3& /vector/) const;
   // bool operator != (const Vector3& /vector/) const;
   bool isZero() const;
   bool isOrthogonalTo(Vector3& /vector/) const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
   bool isValid() const;
 
-	operator const char* ();
+	Vector3 operator + (const Vector3&) const;
+	Vector3 operator - (const Vector3&) const;
+
+  float x;
+  float y;
+  float z;
+	PyMethods:
+	__str__
 %MemberCode
   Vector3* ptr;
-  if ((ptr = (Vector3*)sipGetCppPtr(sipThis,sipClass_Vector3)) == NULL)
+  if ((ptr = (Vector3*)sipGetCppPtr((sipThisType*)a0,sipClass_Vector3)) == NULL)
     return NULL;
 
   static String tmp;
@@ -73,21 +80,6 @@ class Vector3
   return PyString_FromString(tmp.c_str());
 %End
 
-	PyMethods:
-	// Vector3 operator + (const Vector3& a, const Vector3& b)
-	__add__(self,other):
-%PythonMemberCode
-	return Vector3(self.x + other.x, self.y + other.y, self.z + other.z)
-%End
-	// Vector3 operator - (const Vector3& a, const Vector3& b)
-	__sub__(self,other):
-%PythonMemberCode
-	return Vector3(self.x - other.x, self.y - other.y, self.z - other.z)
-%End
-
-  float x;
-  float y;
-  float z;
 };
 
 // Vector3 operator * (float scalar, const Vector3& vector)

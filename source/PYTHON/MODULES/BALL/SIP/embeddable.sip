@@ -1,4 +1,4 @@
-// $Id: embeddable.sip,v 1.1 2000/07/18 21:27:29 oliver Exp $
+// $Id: embeddable.sip,v 1.2 2001/07/25 11:32:32 oliver Exp $
 
 class Embeddable
 {
@@ -8,10 +8,8 @@ class Embeddable
 %End
   public:
   // typedef List<const Embeddable*> EmbeddableList;
-  ~Embeddable();
+  ~Embeddable() throw();
 
-  void unregisterThis();
-  virtual void registerThis();
-
-  protected:
+  void unregisterThis() throw();
+  virtual void registerThis() throw();
 };

@@ -1,4 +1,4 @@
-// $Id: selector.sip,v 1.1 2000/07/18 21:28:27 oliver Exp $
+// $Id: selector.sip,v 1.2 2001/07/25 11:32:36 oliver Exp $
 
 class Selector
 //  : UnaryProcessor<Composite>
@@ -14,8 +14,8 @@ class Selector
   Selector();
   Selector(const Selector& /selector/);
   Selector(const String& /expression_string/);
-  ~Selector();
-  virtual Processor::Result operator () (Composite& /composite/);
-  virtual bool start();
+  ~Selector() throw();
+  virtual Processor::Result operator () (Composite& /composite/) throw();
+  virtual bool start() throw();
   Size getNumberOfSelectedAtoms() const;
 };

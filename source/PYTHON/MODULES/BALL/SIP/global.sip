@@ -1,12 +1,13 @@
-// $Id: global.sip,v 1.3 2001/05/07 00:58:11 oliver Exp $
+// $Id: global.sip,v 1.4 2001/07/25 11:32:33 oliver Exp $
 
 class Index
 {
 	public:
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
 	Index* ptr;
-  if ((ptr = (Index*)sipGetCppPtr(sipThis,sipClass_Index)) == NULL)
+  if ((ptr = (Index*)sipGetCppPtr((sipThisType*)a0,sipClass_Index)) == NULL)
     return NULL;
 
   return PyString_FromString(String(*ptr).c_str());
@@ -32,10 +33,11 @@ class Index
 class Position
 {
 	public:
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
 	Position* ptr;
-  if ((ptr = (Position*)sipGetCppPtr(sipThis,sipClass_Position)) == NULL)
+  if ((ptr = (Position*)sipGetCppPtr((sipThisType*)a0,sipClass_Position)) == NULL)
     return NULL;
 
   return PyString_FromString(String(*ptr).c_str());
@@ -67,7 +69,7 @@ typedef double DoubleReal;
 // 	operator const char* ();
 // %MemberCode
 // 	Size* ptr;
-//   if ((ptr = (Size*)sipGetCppPtr(sipThis,sipClass_Size)) == NULL)
+//   if ((ptr = (Size*)sipGetCppPtr((sipThisType*)a0,sipClass_Size)) == NULL)
 //     return NULL;
 // 
 //   return PyString_FromString(String(*ptr).c_str());

@@ -19,33 +19,53 @@ static PyTypeObject sipType_CharmmStretch = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipCharmmStretch::sipCharmmStretch(): CharmmStretch()
+sipCharmmStretch::sipCharmmStretch()
+    : CharmmStretch()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipCharmmStretch::sipCharmmStretch(ForceField& a0): CharmmStretch(a0)
+sipCharmmStretch::sipCharmmStretch(ForceField& a0)
+    : CharmmStretch(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipCharmmStretch::sipCharmmStretch(const CharmmStretch& a0,bool a1): CharmmStretch(a0,a1)
+sipCharmmStretch::sipCharmmStretch(const CharmmStretch& a0,bool a1)
+    : CharmmStretch(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipCharmmStretch::sipCharmmStretch(const CharmmStretch& a0): CharmmStretch(a0)
+sipCharmmStretch::sipCharmmStretch(const CharmmStretch& a0)
+    : CharmmStretch(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmStretch::~sipCharmmStretch()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
+
 double sipCharmmStretch::getEnergy() const
+
 {
 	int relLock;
 
@@ -53,15 +73,20 @@ double sipCharmmStretch::getEnergy() const
 		sipForceFieldComponent::sipVH_getEnergy(&sipPyMethods[0],sipPyThis,relLock) :
 		ForceFieldComponent::getEnergy();
 }
-bool sipCharmmStretch::setup()
+
+void sipCharmmStretch::updateForces()
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipForceFieldComponent::sipVH_setup(&sipPyMethods[1],sipPyThis,relLock) :
-		CharmmStretch::setup();
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
+		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[1],sipPyThis,relLock);
+	else
+		CharmmStretch::updateForces();
 }
+
 double sipCharmmStretch::updateEnergy()
+
 {
 	int relLock;
 
@@ -69,25 +94,27 @@ double sipCharmmStretch::updateEnergy()
 		sipForceFieldComponent::sipVH_updateEnergy(&sipPyMethods[2],sipPyThis,relLock) :
 		CharmmStretch::updateEnergy();
 }
-void sipCharmmStretch::updateForces()
+
+bool sipCharmmStretch::setup()
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
-		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[3],sipPyThis,relLock);
-	else
-		CharmmStretch::updateForces();
+	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipForceFieldComponent::sipVH_setup(&sipPyMethods[3],sipPyThis,relLock) :
+		CharmmStretch::setup();
 }
 
 static PyObject *sipDo_CharmmStretch_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmStretch)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			CharmmStretch *ptr;
@@ -103,7 +130,7 @@ static PyObject *sipDo_CharmmStretch_setup(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmStretch,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmStretch,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -111,12 +138,13 @@ static PyObject *sipDo_CharmmStretch_setup(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_CharmmStretch_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmStretch)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmStretch *ptr;
@@ -132,7 +160,7 @@ static PyObject *sipDo_CharmmStretch_updateEnergy(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmStretch,sipName_BALL_updateEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmStretch,sipName_BALL_updateEnergy);
 
 	return NULL;
 }
@@ -140,12 +168,13 @@ static PyObject *sipDo_CharmmStretch_updateEnergy(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_CharmmStretch_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmStretch)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			CharmmStretch *ptr;
 
@@ -161,7 +190,7 @@ static PyObject *sipDo_CharmmStretch_updateForces(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmStretch,sipName_BALL_updateForces);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmStretch,sipName_BALL_updateForces);
 
 	return NULL;
 }
@@ -207,6 +236,7 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -214,10 +244,10 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipCharmmStretch();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -225,7 +255,7 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -235,7 +265,7 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmStretch(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -244,7 +274,7 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_CharmmStretch,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_CharmmStretch,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -254,7 +284,7 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmStretch(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -262,7 +292,7 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 		const CharmmStretch *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_CharmmStretch,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CharmmStretch,&a0obj))
 		{
 			int iserr = 0;
 
@@ -272,12 +302,12 @@ PyObject *sipNew_CharmmStretch(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmStretch(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_CharmmStretch);
+		sipNoCtor(sipArgsParsed,sipName_BALL_CharmmStretch);
 		return NULL;
 	}
 
@@ -313,17 +343,15 @@ int sipCanConvertTo_CharmmStretch(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_CharmmStretch);
 }
 
-void sipConvertTo_CharmmStretch(PyObject *sipPy,CharmmStretch **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_CharmmStretch(PyObject *sipPy,CharmmStretch **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_CharmmStretch);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_CharmmStretch);
+		*sipCppPtr = NULL;
 
 		return;
 	}

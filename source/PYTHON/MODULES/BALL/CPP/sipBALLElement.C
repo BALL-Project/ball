@@ -19,11 +19,25 @@ static PyTypeObject sipType_Element = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_Element_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
@@ -32,7 +46,7 @@ static PyObject *sipDo_Element_setName(PyObject *sipThisObj,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			Element *ptr;
 
@@ -58,7 +72,7 @@ static PyObject *sipDo_Element_setName(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_setName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_setName);
 
 	return NULL;
 }
@@ -66,12 +80,13 @@ static PyObject *sipDo_Element_setName(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Element_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const String *res;
 			Element *ptr;
@@ -87,7 +102,7 @@ static PyObject *sipDo_Element_getName(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_getName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_getName);
 
 	return NULL;
 }
@@ -95,6 +110,7 @@ static PyObject *sipDo_Element_getName(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Element_setSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
@@ -103,7 +119,7 @@ static PyObject *sipDo_Element_setSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			Element *ptr;
 
@@ -129,7 +145,7 @@ static PyObject *sipDo_Element_setSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_setSymbol);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_setSymbol);
 
 	return NULL;
 }
@@ -137,12 +153,13 @@ static PyObject *sipDo_Element_setSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Element_getSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const String *res;
 			Element *ptr;
@@ -158,7 +175,7 @@ static PyObject *sipDo_Element_getSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_getSymbol);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_getSymbol);
 
 	return NULL;
 }
@@ -166,6 +183,7 @@ static PyObject *sipDo_Element_getSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Element_setGroup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
@@ -173,7 +191,7 @@ static PyObject *sipDo_Element_setGroup(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			Element *ptr;
 
@@ -189,7 +207,7 @@ static PyObject *sipDo_Element_setGroup(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_setGroup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_setGroup);
 
 	return NULL;
 }
@@ -197,12 +215,13 @@ static PyObject *sipDo_Element_setGroup(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Element_getGroup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			Element *ptr;
@@ -218,7 +237,7 @@ static PyObject *sipDo_Element_getGroup(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_getGroup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_getGroup);
 
 	return NULL;
 }
@@ -226,6 +245,7 @@ static PyObject *sipDo_Element_getGroup(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Element_setPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
@@ -233,7 +253,7 @@ static PyObject *sipDo_Element_setPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			Element *ptr;
 
@@ -249,7 +269,7 @@ static PyObject *sipDo_Element_setPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_setPeriod);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_setPeriod);
 
 	return NULL;
 }
@@ -257,12 +277,13 @@ static PyObject *sipDo_Element_setPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Element_getPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			Element *ptr;
@@ -278,7 +299,7 @@ static PyObject *sipDo_Element_getPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_getPeriod);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_getPeriod);
 
 	return NULL;
 }
@@ -286,6 +307,7 @@ static PyObject *sipDo_Element_getPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Element_setAtomicNumber(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
@@ -293,7 +315,7 @@ static PyObject *sipDo_Element_setAtomicNumber(PyObject *sipThisObj,PyObject *si
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			Element *ptr;
 
@@ -309,7 +331,7 @@ static PyObject *sipDo_Element_setAtomicNumber(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_setAtomicNumber);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_setAtomicNumber);
 
 	return NULL;
 }
@@ -317,12 +339,13 @@ static PyObject *sipDo_Element_setAtomicNumber(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_Element_getAtomicNumber(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			Element *ptr;
@@ -338,7 +361,7 @@ static PyObject *sipDo_Element_getAtomicNumber(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_getAtomicNumber);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_getAtomicNumber);
 
 	return NULL;
 }
@@ -346,6 +369,7 @@ static PyObject *sipDo_Element_getAtomicNumber(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_Element_setAtomicWeight(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
@@ -353,7 +377,7 @@ static PyObject *sipDo_Element_setAtomicWeight(PyObject *sipThisObj,PyObject *si
 	{
 		float a0;
 
-		if (sipParseArgs(sipArgs,"f",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
 		{
 			Element *ptr;
 
@@ -369,7 +393,7 @@ static PyObject *sipDo_Element_setAtomicWeight(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_setAtomicWeight);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_setAtomicWeight);
 
 	return NULL;
 }
@@ -377,12 +401,13 @@ static PyObject *sipDo_Element_setAtomicWeight(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_Element_getAtomicWeight(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			Element *ptr;
@@ -398,7 +423,7 @@ static PyObject *sipDo_Element_getAtomicWeight(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_getAtomicWeight);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_getAtomicWeight);
 
 	return NULL;
 }
@@ -406,6 +431,7 @@ static PyObject *sipDo_Element_getAtomicWeight(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_Element_setAtomicRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
@@ -413,7 +439,7 @@ static PyObject *sipDo_Element_setAtomicRadius(PyObject *sipThisObj,PyObject *si
 	{
 		float a0;
 
-		if (sipParseArgs(sipArgs,"f",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
 		{
 			Element *ptr;
 
@@ -429,7 +455,7 @@ static PyObject *sipDo_Element_setAtomicRadius(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_setAtomicRadius);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_setAtomicRadius);
 
 	return NULL;
 }
@@ -437,12 +463,13 @@ static PyObject *sipDo_Element_setAtomicRadius(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_Element_getAtomicRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			Element *ptr;
@@ -458,7 +485,7 @@ static PyObject *sipDo_Element_getAtomicRadius(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_getAtomicRadius);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_getAtomicRadius);
 
 	return NULL;
 }
@@ -466,6 +493,7 @@ static PyObject *sipDo_Element_getAtomicRadius(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_Element_setCovalentRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
@@ -473,7 +501,7 @@ static PyObject *sipDo_Element_setCovalentRadius(PyObject *sipThisObj,PyObject *
 	{
 		float a0;
 
-		if (sipParseArgs(sipArgs,"f",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
 		{
 			Element *ptr;
 
@@ -489,7 +517,7 @@ static PyObject *sipDo_Element_setCovalentRadius(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_setCovalentRadius);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_setCovalentRadius);
 
 	return NULL;
 }
@@ -497,12 +525,13 @@ static PyObject *sipDo_Element_setCovalentRadius(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_Element_getCovalentRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			Element *ptr;
@@ -518,7 +547,7 @@ static PyObject *sipDo_Element_getCovalentRadius(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_getCovalentRadius);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_getCovalentRadius);
 
 	return NULL;
 }
@@ -526,6 +555,7 @@ static PyObject *sipDo_Element_getCovalentRadius(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_Element_setVanDerWaalsRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
@@ -533,7 +563,7 @@ static PyObject *sipDo_Element_setVanDerWaalsRadius(PyObject *sipThisObj,PyObjec
 	{
 		float a0;
 
-		if (sipParseArgs(sipArgs,"f",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
 		{
 			Element *ptr;
 
@@ -549,7 +579,7 @@ static PyObject *sipDo_Element_setVanDerWaalsRadius(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_setVanDerWaalsRadius);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_setVanDerWaalsRadius);
 
 	return NULL;
 }
@@ -557,12 +587,13 @@ static PyObject *sipDo_Element_setVanDerWaalsRadius(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_Element_getVanDerWaalsRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			Element *ptr;
@@ -578,7 +609,7 @@ static PyObject *sipDo_Element_getVanDerWaalsRadius(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_getVanDerWaalsRadius);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_getVanDerWaalsRadius);
 
 	return NULL;
 }
@@ -586,6 +617,7 @@ static PyObject *sipDo_Element_getVanDerWaalsRadius(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_Element_setElectronegativity(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
@@ -593,7 +625,7 @@ static PyObject *sipDo_Element_setElectronegativity(PyObject *sipThisObj,PyObjec
 	{
 		float a0;
 
-		if (sipParseArgs(sipArgs,"f",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
 		{
 			Element *ptr;
 
@@ -609,7 +641,7 @@ static PyObject *sipDo_Element_setElectronegativity(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_setElectronegativity);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_setElectronegativity);
 
 	return NULL;
 }
@@ -617,12 +649,13 @@ static PyObject *sipDo_Element_setElectronegativity(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_Element_getElectronegativity(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			Element *ptr;
@@ -638,7 +671,7 @@ static PyObject *sipDo_Element_getElectronegativity(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_getElectronegativity);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_getElectronegativity);
 
 	return NULL;
 }
@@ -646,12 +679,13 @@ static PyObject *sipDo_Element_getElectronegativity(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_Element_isUnknown(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Element *ptr;
@@ -667,7 +701,7 @@ static PyObject *sipDo_Element_isUnknown(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Element,sipName_BALL_isUnknown);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_isUnknown);
 
 	return NULL;
 }
@@ -707,6 +741,7 @@ PyObject *sipNew_Element(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -714,10 +749,10 @@ PyObject *sipNew_Element(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new Element();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -725,7 +760,7 @@ PyObject *sipNew_Element(PyObject *sipSelf,PyObject *sipArgs)
 		const Element *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Element,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Element,&a0obj))
 		{
 			int iserr = 0;
 
@@ -735,12 +770,12 @@ PyObject *sipNew_Element(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Element(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Element);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Element);
 		return NULL;
 	}
 
@@ -788,17 +823,15 @@ int sipCanConvertTo_Element(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Element);
 }
 
-void sipConvertTo_Element(PyObject *sipPy,Element **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Element(PyObject *sipPy,Element **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Element);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Element);
+		*sipCppPtr = NULL;
 
 		return;
 	}

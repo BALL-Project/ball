@@ -19,35 +19,53 @@ static PyTypeObject sipType_UnaryAtomPredicate = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipUnaryAtomPredicate::sipUnaryAtomPredicate(): UnaryAtomPredicate()
+sipUnaryAtomPredicate::sipUnaryAtomPredicate()
+   throw()  : UnaryAtomPredicate()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipUnaryAtomPredicate::sipUnaryAtomPredicate(const UnaryAtomPredicate& a0): UnaryAtomPredicate(a0)
+sipUnaryAtomPredicate::sipUnaryAtomPredicate(const UnaryAtomPredicate& a0)
+    : UnaryAtomPredicate(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipUnaryAtomPredicate::~sipUnaryAtomPredicate()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipUnaryAtomPredicate::operator()(const Atom& a0) const
+
+bool sipUnaryAtomPredicate::operator ()(const Atom& a0) const
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_Operator__call__,&relLock) ?
-		sipUnaryAtomPredicate::sipVH_Operator__call__(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		UnaryAtomPredicate::operator()(a0);
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
+		sipUnaryAtomPredicate::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		UnaryAtomPredicate::operator ()(a0);
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-bool sipUnaryAtomPredicate::sipVH_Operator__call__(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const Atom& a0)
+bool sipUnaryAtomPredicate::sipVH_CallOperator(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const Atom& a0)
 {
 	bool res;
 	PyObject *resobj;
@@ -78,7 +96,7 @@ bool sipUnaryAtomPredicate::sipVH_Operator__call__(const sipMethodCache *pymc,si
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_UnaryAtomPredicate,sipName_BALL_Operator__call__);
+		sipBadVirtualResultType(sipName_BALL_UnaryAtomPredicate,sipName_BALL___call__);
 	}
 
 reportError:
@@ -90,9 +108,10 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_UnaryAtomPredicate_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_UnaryAtomPredicate___call__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_UnaryAtomPredicate)) == NULL)
 		return NULL;
@@ -101,7 +120,7 @@ static PyObject *sipDo_UnaryAtomPredicate_Operator__call__(PyObject *sipThisObj,
 		const Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			bool res;
 			UnaryAtomPredicate *ptr;
@@ -116,7 +135,7 @@ static PyObject *sipDo_UnaryAtomPredicate_Operator__call__(PyObject *sipThisObj,
 			if (iserr)
 				return NULL;
 
-			res = ptr -> UnaryAtomPredicate::operator()(* a0);
+			res = ptr -> UnaryAtomPredicate::operator ()(* a0);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -124,7 +143,7 @@ static PyObject *sipDo_UnaryAtomPredicate_Operator__call__(PyObject *sipThisObj,
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_UnaryAtomPredicate,sipName_BALL_Operator__call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_UnaryAtomPredicate,sipName_BALL___call__);
 
 	return NULL;
 }
@@ -165,6 +184,7 @@ PyObject *sipNew_UnaryAtomPredicate(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -172,10 +192,10 @@ PyObject *sipNew_UnaryAtomPredicate(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipUnaryAtomPredicate();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -183,7 +203,7 @@ PyObject *sipNew_UnaryAtomPredicate(PyObject *sipSelf,PyObject *sipArgs)
 		const UnaryAtomPredicate *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_UnaryAtomPredicate,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_UnaryAtomPredicate,&a0obj))
 		{
 			int iserr = 0;
 
@@ -193,12 +213,12 @@ PyObject *sipNew_UnaryAtomPredicate(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipUnaryAtomPredicate(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_UnaryAtomPredicate);
+		sipNoCtor(sipArgsParsed,sipName_BALL_UnaryAtomPredicate);
 		return NULL;
 	}
 
@@ -223,7 +243,7 @@ PyObject *sipNew_UnaryAtomPredicate(PyObject *sipSelf,PyObject *sipArgs)
 }
 
 PyMethodDef sipClassAttrTab_UnaryAtomPredicate[] = {
-	{sipName_BALL_Operator__call__, sipDo_UnaryAtomPredicate_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL___call__, sipDo_UnaryAtomPredicate___call__, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -232,17 +252,15 @@ int sipCanConvertTo_UnaryAtomPredicate(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_UnaryAtomPredicate);
 }
 
-void sipConvertTo_UnaryAtomPredicate(PyObject *sipPy,UnaryAtomPredicate **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_UnaryAtomPredicate(PyObject *sipPy,UnaryAtomPredicate **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_UnaryAtomPredicate);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_UnaryAtomPredicate);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -1,4 +1,4 @@
-// $Id: pyWidget.sip,v 1.2 2000/10/05 22:33:36 oliver Exp $
+// $Id: pyWidget.sip,v 1.3 2001/07/25 11:32:35 oliver Exp $
 
 class PyWidget
   // : public QMultiLineEdit,
@@ -19,7 +19,7 @@ class PyWidget
 	
   // PyWidget(QWidget* /parent/ = 0, const char* /name/ = 0);
 	PyWidget(const PyWidget& /widget/);
- 	~PyWidget();
+ 	~PyWidget() throw();
 	
 	// public slots:
 	public:

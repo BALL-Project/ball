@@ -1,4 +1,4 @@
-// $Id: nucleotide.sip,v 1.1 2000/07/18 21:27:49 oliver Exp $
+// $Id: nucleotide.sip,v 1.2 2001/07/25 11:32:33 oliver Exp $
 class Nucleotide
   : Fragment
 {
@@ -13,10 +13,10 @@ using namespace BALL;
    (const String& /name/,
     const String& /id/ = "" ,
     char /insertion_code/ = ' ' );
-  // virtual ~Nucleotide();
+  ~Nucleotide() throw();
 
-  virtual void clear();
-  virtual void destroy();
+  virtual void clear() throw();
+  virtual void destroy() throw();
 
   // void persistentWrite(PersistenceManager& /pm/, const char* /name/ = 0) const;
   // void persistentRead(PersistenceManager& /pm/);
@@ -43,7 +43,7 @@ using namespace BALL;
   bool isTerminal() const;
   bool is3Prime() const;
   bool is5Prime() const;
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // virtual void read(std::istream& s);
   // virtual void write(std::ostream& s) const;

@@ -1,4 +1,4 @@
-// $Id: PDBAtom.sip,v 1.1 2000/07/18 21:26:56 oliver Exp $
+// $Id: PDBAtom.sip,v 1.2 2001/07/25 11:32:31 oliver Exp $
 
 class PDBAtom
   : Atom
@@ -25,9 +25,9 @@ class PDBAtom
     char,
     float,
     float);
-	~PDBAtom();
-  virtual void clear();
-  virtual void destroy();
+	~PDBAtom() throw();
+  virtual void clear() throw();
+  virtual void destroy() throw();
 	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
 	//  void persistentRead(PersistenceManager& pm);
   void set(const PDBAtom&, bool = true);
@@ -50,14 +50,15 @@ class PDBAtom
   float getOccupancy() const;
   void setTemperatureFactor(float);
   float getTemperatureFactor() const;
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   PDBAtom* ptr;
-  if ((ptr = (PDBAtom*)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+  if ((ptr = (PDBAtom*)sipGetCppPtr((sipThisType*)a0,sipClass_PDBAtom)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("PDBAtom ") + ptr->getName()

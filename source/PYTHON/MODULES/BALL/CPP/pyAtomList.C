@@ -1,4 +1,4 @@
-// $Id: pyAtomList.C,v 1.2 2000/08/30 19:58:37 oliver Exp $
+// $Id: pyAtomList.C,v 1.3 2001/07/25 11:34:51 oliver Exp $
 
 #include <BALL/PYTHON/pyAtomList.h>
 #include <BALL/KERNEL/atom.h>
@@ -19,6 +19,7 @@ namespace BALL
 	}
 
 	PyAtomList::~PyAtomList()
+		throw()
 	{
 	}
 

@@ -19,72 +19,97 @@ static PyTypeObject sipType_ForceFieldComponent = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipForceFieldComponent::sipForceFieldComponent(): ForceFieldComponent()
+sipForceFieldComponent::sipForceFieldComponent()
+    : ForceFieldComponent()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipForceFieldComponent::sipForceFieldComponent(ForceField& a0): ForceFieldComponent(a0)
+sipForceFieldComponent::sipForceFieldComponent(ForceField& a0)
+    : ForceFieldComponent(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipForceFieldComponent::sipForceFieldComponent(const ForceFieldComponent& a0,bool a1): ForceFieldComponent(a0,a1)
+sipForceFieldComponent::sipForceFieldComponent(const ForceFieldComponent& a0,bool a1)
+    : ForceFieldComponent(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipForceFieldComponent::sipForceFieldComponent(const ForceFieldComponent& a0): ForceFieldComponent(a0)
+sipForceFieldComponent::sipForceFieldComponent(const ForceFieldComponent& a0)
+    : ForceFieldComponent(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipForceFieldComponent::~sipForceFieldComponent()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipForceFieldComponent::setup()
-{
-	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipForceFieldComponent::sipVH_setup(&sipPyMethods[0],sipPyThis,relLock) :
-		ForceFieldComponent::setup();
-}
-double sipForceFieldComponent::getEnergy() const
-{
-	int relLock;
-
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_getEnergy,&relLock) ?
-		sipForceFieldComponent::sipVH_getEnergy(&sipPyMethods[1],sipPyThis,relLock) :
-		ForceFieldComponent::getEnergy();
-}
-double sipForceFieldComponent::updateEnergy()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_updateEnergy,&relLock) ?
-		sipForceFieldComponent::sipVH_updateEnergy(&sipPyMethods[2],sipPyThis,relLock) :
-		ForceFieldComponent::updateEnergy();
-}
 void sipForceFieldComponent::updateForces()
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
-		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[3],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
+		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[0],sipPyThis,relLock);
 	else
 		ForceFieldComponent::updateForces();
+}
+
+double sipForceFieldComponent::updateEnergy()
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_updateEnergy,&relLock) ?
+		sipForceFieldComponent::sipVH_updateEnergy(&sipPyMethods[1],sipPyThis,relLock) :
+		ForceFieldComponent::updateEnergy();
+}
+
+double sipForceFieldComponent::getEnergy() const
+
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_getEnergy,&relLock) ?
+		sipForceFieldComponent::sipVH_getEnergy(&sipPyMethods[2],sipPyThis,relLock) :
+		ForceFieldComponent::getEnergy();
+}
+
+bool sipForceFieldComponent::setup()
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipForceFieldComponent::sipVH_setup(&sipPyMethods[3],sipPyThis,relLock) :
+		ForceFieldComponent::setup();
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-bool sipForceFieldComponent::sipVH_setup(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+void sipForceFieldComponent::sipVH_updateForces(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
 {
-	bool res;
 	PyObject *resobj;
 	PyObject *sipArgs;
 
@@ -99,7 +124,42 @@ bool sipForceFieldComponent::sipVH_setup(const sipMethodCache *pymc,sipThisType 
 
 	if (resobj != NULL)
 	{
-		res = (bool)PyInt_AsLong(resobj);
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_ForceFieldComponent,sipName_BALL_updateForces);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+double sipForceFieldComponent::sipVH_updateEnergy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	double res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = PyFloat_AsDouble(resobj);
 
 		Py_DECREF(resobj);
 
@@ -108,7 +168,7 @@ bool sipForceFieldComponent::sipVH_setup(const sipMethodCache *pymc,sipThisType 
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_ForceFieldComponent,sipName_BALL_setup);
+		sipBadVirtualResultType(sipName_BALL_ForceFieldComponent,sipName_BALL_updateEnergy);
 	}
 
 reportError:
@@ -164,9 +224,9 @@ releaseLock:
 // The common handler for all classes that inherit this virtual member
 // function.
 
-double sipForceFieldComponent::sipVH_updateEnergy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+bool sipForceFieldComponent::sipVH_setup(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
 {
-	double res;
+	bool res;
 	PyObject *resobj;
 	PyObject *sipArgs;
 
@@ -181,7 +241,7 @@ double sipForceFieldComponent::sipVH_updateEnergy(const sipMethodCache *pymc,sip
 
 	if (resobj != NULL)
 	{
-		res = PyFloat_AsDouble(resobj);
+		res = (bool)PyInt_AsLong(resobj);
 
 		Py_DECREF(resobj);
 
@@ -190,7 +250,7 @@ double sipForceFieldComponent::sipVH_updateEnergy(const sipMethodCache *pymc,sip
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_ForceFieldComponent,sipName_BALL_updateEnergy);
+		sipBadVirtualResultType(sipName_BALL_ForceFieldComponent,sipName_BALL_setup);
 	}
 
 reportError:
@@ -202,49 +262,16 @@ releaseLock:
 	return res;
 }
 
-// The common handler for all classes that inherit this virtual member
-// function.
-
-void sipForceFieldComponent::sipVH_updateForces(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		Py_DECREF(resobj);
-
-		if (resobj == Py_None)
-			goto releaseLock;
-
-		sipBadVirtualResultType(sipName_BALL_ForceFieldComponent,sipName_BALL_updateForces);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-}
-
 static PyObject *sipDo_ForceFieldComponent_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceFieldComponent)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			ForceFieldComponent *ptr;
@@ -260,7 +287,7 @@ static PyObject *sipDo_ForceFieldComponent_setup(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceFieldComponent,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceFieldComponent,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -268,12 +295,13 @@ static PyObject *sipDo_ForceFieldComponent_setup(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_ForceFieldComponent_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceFieldComponent)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			ForceField *res;
 			ForceFieldComponent *ptr;
@@ -289,7 +317,7 @@ static PyObject *sipDo_ForceFieldComponent_getForceField(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceFieldComponent,sipName_BALL_getForceField);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceFieldComponent,sipName_BALL_getForceField);
 
 	return NULL;
 }
@@ -297,6 +325,7 @@ static PyObject *sipDo_ForceFieldComponent_getForceField(PyObject *sipThisObj,Py
 static PyObject *sipDo_ForceFieldComponent_setForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceFieldComponent)) == NULL)
 		return NULL;
@@ -305,7 +334,7 @@ static PyObject *sipDo_ForceFieldComponent_setForceField(PyObject *sipThisObj,Py
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			ForceFieldComponent *ptr;
 
@@ -328,7 +357,7 @@ static PyObject *sipDo_ForceFieldComponent_setForceField(PyObject *sipThisObj,Py
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceFieldComponent,sipName_BALL_setForceField);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceFieldComponent,sipName_BALL_setForceField);
 
 	return NULL;
 }
@@ -336,6 +365,7 @@ static PyObject *sipDo_ForceFieldComponent_setForceField(PyObject *sipThisObj,Py
 static PyObject *sipDo_ForceFieldComponent_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceFieldComponent)) == NULL)
 		return NULL;
@@ -344,7 +374,7 @@ static PyObject *sipDo_ForceFieldComponent_setName(PyObject *sipThisObj,PyObject
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			ForceFieldComponent *ptr;
 
@@ -370,7 +400,7 @@ static PyObject *sipDo_ForceFieldComponent_setName(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceFieldComponent,sipName_BALL_setName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceFieldComponent,sipName_BALL_setName);
 
 	return NULL;
 }
@@ -378,12 +408,13 @@ static PyObject *sipDo_ForceFieldComponent_setName(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_ForceFieldComponent_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceFieldComponent)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			String *res;
 			ForceFieldComponent *ptr;
@@ -399,7 +430,7 @@ static PyObject *sipDo_ForceFieldComponent_getName(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceFieldComponent,sipName_BALL_getName);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceFieldComponent,sipName_BALL_getName);
 
 	return NULL;
 }
@@ -407,12 +438,13 @@ static PyObject *sipDo_ForceFieldComponent_getName(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_ForceFieldComponent_getEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceFieldComponent)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			ForceFieldComponent *ptr;
@@ -428,7 +460,7 @@ static PyObject *sipDo_ForceFieldComponent_getEnergy(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceFieldComponent,sipName_BALL_getEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceFieldComponent,sipName_BALL_getEnergy);
 
 	return NULL;
 }
@@ -436,12 +468,13 @@ static PyObject *sipDo_ForceFieldComponent_getEnergy(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_ForceFieldComponent_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceFieldComponent)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			ForceFieldComponent *ptr;
@@ -457,7 +490,7 @@ static PyObject *sipDo_ForceFieldComponent_updateEnergy(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceFieldComponent,sipName_BALL_updateEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceFieldComponent,sipName_BALL_updateEnergy);
 
 	return NULL;
 }
@@ -465,12 +498,13 @@ static PyObject *sipDo_ForceFieldComponent_updateEnergy(PyObject *sipThisObj,PyO
 static PyObject *sipDo_ForceFieldComponent_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_ForceFieldComponent)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			ForceFieldComponent *ptr;
 
@@ -486,7 +520,7 @@ static PyObject *sipDo_ForceFieldComponent_updateForces(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_ForceFieldComponent,sipName_BALL_updateForces);
+	sipNoMethod(sipArgsParsed,sipName_BALL_ForceFieldComponent,sipName_BALL_updateForces);
 
 	return NULL;
 }
@@ -527,6 +561,7 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -534,10 +569,10 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipForceFieldComponent();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -545,7 +580,7 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -555,7 +590,7 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipForceFieldComponent(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -564,7 +599,7 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_ForceFieldComponent,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_ForceFieldComponent,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -574,7 +609,7 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipForceFieldComponent(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -582,7 +617,7 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 		const ForceFieldComponent *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceFieldComponent,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceFieldComponent,&a0obj))
 		{
 			int iserr = 0;
 
@@ -592,12 +627,12 @@ PyObject *sipNew_ForceFieldComponent(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipForceFieldComponent(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_ForceFieldComponent);
+		sipNoCtor(sipArgsParsed,sipName_BALL_ForceFieldComponent);
 		return NULL;
 	}
 
@@ -638,17 +673,15 @@ int sipCanConvertTo_ForceFieldComponent(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_ForceFieldComponent);
 }
 
-void sipConvertTo_ForceFieldComponent(PyObject *sipPy,ForceFieldComponent **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_ForceFieldComponent(PyObject *sipPy,ForceFieldComponent **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_ForceFieldComponent);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_ForceFieldComponent);
+		*sipCppPtr = NULL;
 
 		return;
 	}

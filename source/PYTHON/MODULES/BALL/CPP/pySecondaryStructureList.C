@@ -1,4 +1,4 @@
-// $Id: pySecondaryStructureList.C,v 1.2 2000/08/30 19:58:39 oliver Exp $
+// $Id: pySecondaryStructureList.C,v 1.3 2001/07/25 11:34:52 oliver Exp $
 
 #include <BALL/PYTHON/pySecondaryStructureList.h>
 #include <BALL/KERNEL/secondaryStructure.h>
@@ -18,6 +18,7 @@ namespace BALL
 	}
 
 	PySecondaryStructureList::~PySecondaryStructureList()
+		throw()
 	{
 	}
 

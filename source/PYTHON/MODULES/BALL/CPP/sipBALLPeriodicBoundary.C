@@ -19,17 +19,31 @@ static PyTypeObject sipType_PeriodicBoundary = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_PeriodicBoundary_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PeriodicBoundary)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			PeriodicBoundary *ptr;
@@ -45,7 +59,7 @@ static PyObject *sipDo_PeriodicBoundary_setup(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PeriodicBoundary,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PeriodicBoundary,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -53,12 +67,13 @@ static PyObject *sipDo_PeriodicBoundary_setup(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_PeriodicBoundary_generateMoleculesVector(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PeriodicBoundary)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			PeriodicBoundary *ptr;
@@ -74,7 +89,7 @@ static PyObject *sipDo_PeriodicBoundary_generateMoleculesVector(PyObject *sipThi
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PeriodicBoundary,sipName_BALL_generateMoleculesVector);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PeriodicBoundary,sipName_BALL_generateMoleculesVector);
 
 	return NULL;
 }
@@ -82,12 +97,13 @@ static PyObject *sipDo_PeriodicBoundary_generateMoleculesVector(PyObject *sipThi
 static PyObject *sipDo_PeriodicBoundary_enable(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PeriodicBoundary)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PeriodicBoundary *ptr;
 
@@ -103,7 +119,7 @@ static PyObject *sipDo_PeriodicBoundary_enable(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PeriodicBoundary,sipName_BALL_enable);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PeriodicBoundary,sipName_BALL_enable);
 
 	return NULL;
 }
@@ -111,12 +127,13 @@ static PyObject *sipDo_PeriodicBoundary_enable(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_PeriodicBoundary_disable(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PeriodicBoundary)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PeriodicBoundary *ptr;
 
@@ -132,7 +149,7 @@ static PyObject *sipDo_PeriodicBoundary_disable(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PeriodicBoundary,sipName_BALL_disable);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PeriodicBoundary,sipName_BALL_disable);
 
 	return NULL;
 }
@@ -140,12 +157,13 @@ static PyObject *sipDo_PeriodicBoundary_disable(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_PeriodicBoundary_getBox(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PeriodicBoundary)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Box3 *res;
 			PeriodicBoundary *ptr;
@@ -161,7 +179,7 @@ static PyObject *sipDo_PeriodicBoundary_getBox(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PeriodicBoundary,sipName_BALL_getBox);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PeriodicBoundary,sipName_BALL_getBox);
 
 	return NULL;
 }
@@ -169,6 +187,7 @@ static PyObject *sipDo_PeriodicBoundary_getBox(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_PeriodicBoundary_setBox(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PeriodicBoundary)) == NULL)
 		return NULL;
@@ -177,7 +196,7 @@ static PyObject *sipDo_PeriodicBoundary_setBox(PyObject *sipThisObj,PyObject *si
 		const Box3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
 		{
 			PeriodicBoundary *ptr;
 
@@ -200,7 +219,7 @@ static PyObject *sipDo_PeriodicBoundary_setBox(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PeriodicBoundary,sipName_BALL_setBox);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PeriodicBoundary,sipName_BALL_setBox);
 
 	return NULL;
 }
@@ -208,6 +227,7 @@ static PyObject *sipDo_PeriodicBoundary_setBox(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_PeriodicBoundary_addSolvent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PeriodicBoundary)) == NULL)
 		return NULL;
@@ -216,7 +236,7 @@ static PyObject *sipDo_PeriodicBoundary_addSolvent(PyObject *sipThisObj,PyObject
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			int res;
 			PeriodicBoundary *ptr;
@@ -242,7 +262,7 @@ static PyObject *sipDo_PeriodicBoundary_addSolvent(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PeriodicBoundary,sipName_BALL_addSolvent);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PeriodicBoundary,sipName_BALL_addSolvent);
 
 	return NULL;
 }
@@ -250,12 +270,13 @@ static PyObject *sipDo_PeriodicBoundary_addSolvent(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_PeriodicBoundary_removeSolvent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PeriodicBoundary)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			PeriodicBoundary *ptr;
@@ -271,7 +292,7 @@ static PyObject *sipDo_PeriodicBoundary_removeSolvent(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PeriodicBoundary,sipName_BALL_removeSolvent);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PeriodicBoundary,sipName_BALL_removeSolvent);
 
 	return NULL;
 }
@@ -279,12 +300,13 @@ static PyObject *sipDo_PeriodicBoundary_removeSolvent(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_PeriodicBoundary_isEnabled(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PeriodicBoundary)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			PeriodicBoundary *ptr;
@@ -300,7 +322,7 @@ static PyObject *sipDo_PeriodicBoundary_isEnabled(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PeriodicBoundary,sipName_BALL_isEnabled);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PeriodicBoundary,sipName_BALL_isEnabled);
 
 	return NULL;
 }
@@ -308,12 +330,13 @@ static PyObject *sipDo_PeriodicBoundary_isEnabled(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_PeriodicBoundary_updateMolecules(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PeriodicBoundary)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PeriodicBoundary *ptr;
 
@@ -329,7 +352,7 @@ static PyObject *sipDo_PeriodicBoundary_updateMolecules(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PeriodicBoundary,sipName_BALL_updateMolecules);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PeriodicBoundary,sipName_BALL_updateMolecules);
 
 	return NULL;
 }
@@ -364,6 +387,7 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -371,10 +395,10 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new PeriodicBoundary();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -382,7 +406,7 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 		const ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -392,7 +416,7 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PeriodicBoundary(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -400,7 +424,7 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 		const PeriodicBoundary *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_PeriodicBoundary,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PeriodicBoundary,&a0obj))
 		{
 			int iserr = 0;
 
@@ -410,12 +434,12 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PeriodicBoundary(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_PeriodicBoundary);
+		sipNoCtor(sipArgsParsed,sipName_BALL_PeriodicBoundary);
 		return NULL;
 	}
 
@@ -494,17 +518,15 @@ int sipCanConvertTo_PeriodicBoundary(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_PeriodicBoundary);
 }
 
-void sipConvertTo_PeriodicBoundary(PyObject *sipPy,PeriodicBoundary **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_PeriodicBoundary(PyObject *sipPy,PeriodicBoundary **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PeriodicBoundary);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_PeriodicBoundary);
+		*sipCppPtr = NULL;
 
 		return;
 	}

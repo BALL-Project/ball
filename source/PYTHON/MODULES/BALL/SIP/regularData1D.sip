@@ -8,7 +8,7 @@ class FloatRegularData1D
 	public:
 	FloatRegularData1D() throw();
 	FloatRegularData1D(const FloatRegularData1D& /data/) throw();
-	// virtual ~FloatRegularData1D() throw();
+	~FloatRegularData1D() throw();
 	virtual void clear() throw();
 	virtual void destroy() throw();
 	// const FloatRegularData1D& operator = (const FloatRegularData1D& data) throw();
@@ -19,8 +19,7 @@ class FloatRegularData1D
 	Size getSize() const throw();
 	double getLowerBound() const throw();
 	double getUpperBound() const throw();
-	void setUpperBound(double /upper/) throw();
-	void setLowerBound(double /lower/) throw();
+	void setBoundaries(double /upper/, double /lower/) throw();
 	// void resize(Size /new_size/) throw();
 };
 

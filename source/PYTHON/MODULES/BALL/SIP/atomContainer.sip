@@ -1,4 +1,4 @@
-// $Id: atomContainer.sip,v 1.1 2000/08/30 19:59:07 oliver Exp $
+// $Id: atomContainer.sip,v 1.2 2001/07/25 11:32:31 oliver Exp $
 
 class AtomContainer
   : Composite, 
@@ -17,9 +17,9 @@ class AtomContainer
   AtomContainer();
   AtomContainer(const AtomContainer&, bool = true);
   AtomContainer(const String&);
-	~AtomContainer();
-  virtual void clear();
-  virtual void destroy();
+	~AtomContainer() throw();
+  virtual void clear() throw();
+  virtual void destroy() throw();
 	//  virtual void persistentWrite(PersistenceManager& pm, const char* = 0) const;
 	//  virtual void persistentRead(PersistenceManager& pm);
   void set(const AtomContainer&, bool = true);
@@ -27,10 +27,7 @@ class AtomContainer
   void get(AtomContainer&, bool = true) const;
   void swap(AtomContainer&);
   void setName(const String&);
-  String& getName();
   const String& getName() const;
-  Molecule* getMolecule();
-  const Molecule* getMolecule() const;
   AtomContainer* getSuperAtomContainer();
   const AtomContainer* getSuperAtomContainer() const;
   AtomContainer* getAtomContainer(Position);
@@ -62,7 +59,7 @@ class AtomContainer
   void destroyBonds();
   bool isSubAtomContainerOf(const AtomContainer&) const;
   bool isSuperAtomContainerOf(const AtomContainer&) const;
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
 	//  virtual void dump(ostream& s = cout,unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
@@ -74,10 +71,11 @@ class AtomContainer
 	bool apply(ResidueProcessor& /processor/);
 
 	
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   AtomContainer* ptr;
-  if ((ptr = (AtomContainer*)sipGetCppPtr(sipThis,sipClass_AtomContainer)) == NULL)
+  if ((ptr = (AtomContainer*)sipGetCppPtr((sipThisType*)a0,sipClass_AtomContainer)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("AtomContainer ") + ptr->getName() 

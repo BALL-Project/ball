@@ -19,17 +19,31 @@ static PyTypeObject sipType_PropertyManager = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_PropertyManager_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PropertyManager *ptr;
 
@@ -45,7 +59,7 @@ static PyObject *sipDo_PropertyManager_clear(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -53,12 +67,13 @@ static PyObject *sipDo_PropertyManager_clear(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_PropertyManager_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			PropertyManager *ptr;
 
@@ -74,7 +89,7 @@ static PyObject *sipDo_PropertyManager_destroy(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -82,6 +97,7 @@ static PyObject *sipDo_PropertyManager_destroy(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_PropertyManager_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
@@ -89,9 +105,8 @@ static PyObject *sipDo_PropertyManager_set(PyObject *sipThisObj,PyObject *sipArg
 	{
 		const PropertyManager *a0;
 		PyObject *a0obj;
-		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_PropertyManager,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PropertyManager,&a0obj))
 		{
 			PropertyManager *ptr;
 
@@ -105,7 +120,7 @@ static PyObject *sipDo_PropertyManager_set(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
-			ptr -> PropertyManager::set(* a0, (bool)a1);
+			ptr -> PropertyManager::set(* a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -114,7 +129,7 @@ static PyObject *sipDo_PropertyManager_set(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_set);
 
 	return NULL;
 }
@@ -122,6 +137,7 @@ static PyObject *sipDo_PropertyManager_set(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_PropertyManager_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
@@ -129,9 +145,8 @@ static PyObject *sipDo_PropertyManager_get(PyObject *sipThisObj,PyObject *sipArg
 	{
 		PropertyManager *a0;
 		PyObject *a0obj;
-		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_PropertyManager,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PropertyManager,&a0obj))
 		{
 			PropertyManager *ptr;
 
@@ -145,7 +160,7 @@ static PyObject *sipDo_PropertyManager_get(PyObject *sipThisObj,PyObject *sipArg
 			if (iserr)
 				return NULL;
 
-			ptr -> PropertyManager::get(* a0, (bool)a1);
+			ptr -> PropertyManager::get(* a0);
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -154,7 +169,7 @@ static PyObject *sipDo_PropertyManager_get(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_get);
 
 	return NULL;
 }
@@ -162,6 +177,7 @@ static PyObject *sipDo_PropertyManager_get(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_PropertyManager_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
@@ -170,7 +186,7 @@ static PyObject *sipDo_PropertyManager_swap(PyObject *sipThisObj,PyObject *sipAr
 		PropertyManager *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PropertyManager,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PropertyManager,&a0obj))
 		{
 			PropertyManager *ptr;
 
@@ -193,7 +209,7 @@ static PyObject *sipDo_PropertyManager_swap(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -201,6 +217,7 @@ static PyObject *sipDo_PropertyManager_swap(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
@@ -208,7 +225,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			PropertyManager *ptr;
 
@@ -226,7 +243,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 		NamedProperty *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_NamedProperty,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_NamedProperty,&a0obj))
 		{
 			PropertyManager *ptr;
 
@@ -251,7 +268,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			PropertyManager *ptr;
 
@@ -280,7 +297,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 		PyObject *a0obj;
 		long a1;
 
-		if (sipParseArgs(sipArgs,"Il",sipCanConvertTo_String,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"Il",sipCanConvertTo_String,&a0obj,&a1))
 		{
 			PropertyManager *ptr;
 
@@ -309,7 +326,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 		PyObject *a0obj;
 		int a1;
 
-		if (sipParseArgs(sipArgs,"Ii",sipCanConvertTo_String,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"Ii",sipCanConvertTo_String,&a0obj,&a1))
 		{
 			PropertyManager *ptr;
 
@@ -338,7 +355,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 		PyObject *a0obj;
 		float a1;
 
-		if (sipParseArgs(sipArgs,"If",sipCanConvertTo_String,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"If",sipCanConvertTo_String,&a0obj,&a1))
 		{
 			PropertyManager *ptr;
 
@@ -368,7 +385,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 		String *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			PropertyManager *ptr;
 
@@ -402,7 +419,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 		PersistentObject *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_PersistentObject,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_String,&a0obj,sipCanConvertTo_PersistentObject,&a1obj))
 		{
 			PropertyManager *ptr;
 
@@ -429,7 +446,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_setProperty);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_setProperty);
 
 	return NULL;
 }
@@ -437,6 +454,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
@@ -444,7 +462,7 @@ static PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObje
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			PropertyManager *ptr;
 
@@ -462,7 +480,7 @@ static PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObje
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			PropertyManager *ptr;
 
@@ -488,7 +506,7 @@ static PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_clearProperty);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_clearProperty);
 
 	return NULL;
 }
@@ -496,6 +514,7 @@ static PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_PropertyManager_toggleProperty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
@@ -503,7 +522,7 @@ static PyObject *sipDo_PropertyManager_toggleProperty(PyObject *sipThisObj,PyObj
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			PropertyManager *ptr;
 
@@ -519,7 +538,7 @@ static PyObject *sipDo_PropertyManager_toggleProperty(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_toggleProperty);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_toggleProperty);
 
 	return NULL;
 }
@@ -527,12 +546,13 @@ static PyObject *sipDo_PropertyManager_toggleProperty(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_PropertyManager_countProperties(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			PropertyManager *ptr;
@@ -548,7 +568,7 @@ static PyObject *sipDo_PropertyManager_countProperties(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_countProperties);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_countProperties);
 
 	return NULL;
 }
@@ -556,6 +576,7 @@ static PyObject *sipDo_PropertyManager_countProperties(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_PropertyManager_getProperty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
@@ -564,7 +585,7 @@ static PyObject *sipDo_PropertyManager_getProperty(PyObject *sipThisObj,PyObject
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			const NamedProperty *res;
 			PropertyManager *ptr;
@@ -590,7 +611,7 @@ static PyObject *sipDo_PropertyManager_getProperty(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_getProperty);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_getProperty);
 
 	return NULL;
 }
@@ -598,12 +619,13 @@ static PyObject *sipDo_PropertyManager_getProperty(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_PropertyManager_countNamedProperties(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			PropertyManager *ptr;
@@ -619,7 +641,7 @@ static PyObject *sipDo_PropertyManager_countNamedProperties(PyObject *sipThisObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_countNamedProperties);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_countNamedProperties);
 
 	return NULL;
 }
@@ -627,6 +649,7 @@ static PyObject *sipDo_PropertyManager_countNamedProperties(PyObject *sipThisObj
 static PyObject *sipDo_PropertyManager_hasProperty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
@@ -634,7 +657,7 @@ static PyObject *sipDo_PropertyManager_hasProperty(PyObject *sipThisObj,PyObject
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			bool res;
 			PropertyManager *ptr;
@@ -652,7 +675,7 @@ static PyObject *sipDo_PropertyManager_hasProperty(PyObject *sipThisObj,PyObject
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			bool res;
 			PropertyManager *ptr;
@@ -678,7 +701,7 @@ static PyObject *sipDo_PropertyManager_hasProperty(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_hasProperty);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_hasProperty);
 
 	return NULL;
 }
@@ -686,12 +709,13 @@ static PyObject *sipDo_PropertyManager_hasProperty(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_PropertyManager_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PropertyManager)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			PropertyManager *ptr;
@@ -707,7 +731,7 @@ static PyObject *sipDo_PropertyManager_isValid(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PropertyManager,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PropertyManager,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -742,6 +766,7 @@ PyObject *sipNew_PropertyManager(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -749,29 +774,10 @@ PyObject *sipNew_PropertyManager(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new PropertyManager();
-	}
-	}
-
-	if (sipNew == NULL)
-	{
-		const PropertyManager *a0;
-		PyObject *a0obj;
-		long a1 = true;
-
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_PropertyManager,&a0obj,&a1))
-		{
-			int iserr = 0;
-
-			sipConvertTo_PropertyManager(a0obj,(PropertyManager **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new PropertyManager(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -779,7 +785,7 @@ PyObject *sipNew_PropertyManager(PyObject *sipSelf,PyObject *sipArgs)
 		const PropertyManager *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_PropertyManager,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PropertyManager,&a0obj))
 		{
 			int iserr = 0;
 
@@ -789,12 +795,12 @@ PyObject *sipNew_PropertyManager(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PropertyManager(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_PropertyManager);
+		sipNoCtor(sipArgsParsed,sipName_BALL_PropertyManager);
 		return NULL;
 	}
 
@@ -834,17 +840,15 @@ int sipCanConvertTo_PropertyManager(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_PropertyManager);
 }
 
-void sipConvertTo_PropertyManager(PyObject *sipPy,PropertyManager **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_PropertyManager(PyObject *sipPy,PropertyManager **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PropertyManager);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_PropertyManager);
+		*sipCppPtr = NULL;
 
 		return;
 	}

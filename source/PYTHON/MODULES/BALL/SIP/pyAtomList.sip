@@ -1,4 +1,4 @@
-// $Id: pyAtomList.sip,v 1.1 2000/07/18 21:28:03 oliver Exp $
+// $Id: pyAtomList.sip,v 1.2 2001/07/25 11:32:35 oliver Exp $
 
 class PyAtomList
 {
@@ -7,7 +7,10 @@ class PyAtomList
 	#include "sipBALLAtom.h"
   #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
+	public:
 
+	// dummy definition to get the throw specifier right
+	~PyAtomList() throw();
 %ConvertFromClassCode
 	PyObject *pl;
 

@@ -6,7 +6,7 @@
 PyObject *sipClass_Angle;
 
 static void sipDealloc_Angle(sipThisType *);
-static PyObject *sipPyInternalRepr_Angle(sipThisType *);
+static PyObject * sip__str__Angle(PyObject *a0);
 
 static PyTypeObject sipType_Angle = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,12 +19,26 @@ static PyTypeObject sipType_Angle = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_Angle,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__Angle,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_Angle_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
@@ -33,7 +47,7 @@ static PyObject *sipDo_Angle_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		Angle *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
 		{
 			Angle *ptr;
 
@@ -56,7 +70,7 @@ static PyObject *sipDo_Angle_swap(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -64,6 +78,7 @@ static PyObject *sipDo_Angle_swap(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Angle_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
@@ -72,7 +87,7 @@ static PyObject *sipDo_Angle_set(PyObject *sipThisObj,PyObject *sipArgs)
 		float a0;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"f|l",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f|l",&a0,&a1))
 		{
 			Angle *ptr;
 
@@ -90,7 +105,7 @@ static PyObject *sipDo_Angle_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const Angle *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
 		{
 			Angle *ptr;
 
@@ -113,7 +128,7 @@ static PyObject *sipDo_Angle_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_set);
 
 	return NULL;
 }
@@ -121,12 +136,13 @@ static PyObject *sipDo_Angle_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Angle_toRadian(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			Angle *ptr;
@@ -142,7 +158,7 @@ static PyObject *sipDo_Angle_toRadian(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_toRadian);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_toRadian);
 
 	return NULL;
 }
@@ -150,12 +166,13 @@ static PyObject *sipDo_Angle_toRadian(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Angle_toDegree(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			Angle *ptr;
@@ -171,7 +188,7 @@ static PyObject *sipDo_Angle_toDegree(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_toDegree);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_toDegree);
 
 	return NULL;
 }
@@ -179,6 +196,7 @@ static PyObject *sipDo_Angle_toDegree(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Angle_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
@@ -186,7 +204,7 @@ static PyObject *sipDo_Angle_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		long a0;
 
-		if (sipParseArgs(sipArgs,"l",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"l",&a0))
 		{
 			Angle *ptr;
 
@@ -202,7 +220,7 @@ static PyObject *sipDo_Angle_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_normalize);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_normalize);
 
 	return NULL;
 }
@@ -210,12 +228,13 @@ static PyObject *sipDo_Angle_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Angle_negate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Angle *ptr;
 
@@ -231,20 +250,21 @@ static PyObject *sipDo_Angle_negate(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_negate);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_negate);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Angle_Operator__pos__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Angle___pos__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Angle *res;
 			Angle *ptr;
@@ -252,7 +272,7 @@ static PyObject *sipDo_Angle_Operator__pos__(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Angle *)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
 				return NULL;
 
-			res = new Angle(ptr -> Angle::operator+());
+			res = new Angle(ptr -> Angle::operator +());
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -260,20 +280,21 @@ static PyObject *sipDo_Angle_Operator__pos__(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_Operator__pos__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___pos__);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Angle_Operator__neg__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Angle___neg__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Angle *res;
 			Angle *ptr;
@@ -281,7 +302,7 @@ static PyObject *sipDo_Angle_Operator__neg__(PyObject *sipThisObj,PyObject *sipA
 			if ((ptr = (Angle *)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
 				return NULL;
 
-			res = new Angle(ptr -> Angle::operator-());
+			res = new Angle(ptr -> Angle::operator -());
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -289,14 +310,15 @@ static PyObject *sipDo_Angle_Operator__neg__(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_Operator__neg__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___neg__);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Angle_Operator__add__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Angle___add__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
@@ -305,7 +327,7 @@ static PyObject *sipDo_Angle_Operator__add__(PyObject *sipThisObj,PyObject *sipA
 		const Angle *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
 		{
 			Angle *res;
 			Angle *ptr;
@@ -320,7 +342,7 @@ static PyObject *sipDo_Angle_Operator__add__(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
-			res = new Angle(ptr -> Angle::operator+(* a0));
+			res = new Angle(ptr -> Angle::operator +(* a0));
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -328,14 +350,15 @@ static PyObject *sipDo_Angle_Operator__add__(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_Operator__add__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___add__);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Angle_Operator__sub__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Angle___sub__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
@@ -344,7 +367,7 @@ static PyObject *sipDo_Angle_Operator__sub__(PyObject *sipThisObj,PyObject *sipA
 		const Angle *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
 		{
 			Angle *res;
 			Angle *ptr;
@@ -359,7 +382,7 @@ static PyObject *sipDo_Angle_Operator__sub__(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
-			res = new Angle(ptr -> Angle::operator-(* a0));
+			res = new Angle(ptr -> Angle::operator -(* a0));
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -367,14 +390,15 @@ static PyObject *sipDo_Angle_Operator__sub__(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_Operator__sub__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___sub__);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Angle_Operator__div__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Angle___div__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
@@ -383,7 +407,7 @@ static PyObject *sipDo_Angle_Operator__div__(PyObject *sipThisObj,PyObject *sipA
 		const Angle *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
 		{
 			Angle *res;
 			Angle *ptr;
@@ -398,7 +422,7 @@ static PyObject *sipDo_Angle_Operator__div__(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
-			res = new Angle(ptr -> Angle::operator/(* a0));
+			res = new Angle(ptr -> Angle::operator /(* a0));
 
 			return sipNewCppToSelf(res,sipClass_Angle,SIP_SIMPLE | SIP_PY_OWNED);
 		}
@@ -406,14 +430,15 @@ static PyObject *sipDo_Angle_Operator__div__(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_Operator__div__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___div__);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Angle_Operator__cmp__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Angle___cmp__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
@@ -422,7 +447,7 @@ static PyObject *sipDo_Angle_Operator__cmp__(PyObject *sipThisObj,PyObject *sipA
 		const Angle *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
 		{
 			bool res;
 			Angle *ptr;
@@ -437,7 +462,7 @@ static PyObject *sipDo_Angle_Operator__cmp__(PyObject *sipThisObj,PyObject *sipA
 			if (iserr)
 				return NULL;
 
-			res = ptr -> Angle::operator==(* a0);
+			res = ptr -> Angle::operator ==(* a0);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -445,7 +470,7 @@ static PyObject *sipDo_Angle_Operator__cmp__(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_Operator__cmp__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL___cmp__);
 
 	return NULL;
 }
@@ -453,6 +478,7 @@ static PyObject *sipDo_Angle_Operator__cmp__(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_Angle_isEquivalent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
@@ -461,7 +487,7 @@ static PyObject *sipDo_Angle_isEquivalent(PyObject *sipThisObj,PyObject *sipArgs
 		Angle *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Angle,&a0obj))
 		{
 			bool res;
 			Angle *ptr;
@@ -484,7 +510,7 @@ static PyObject *sipDo_Angle_isEquivalent(PyObject *sipThisObj,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_isEquivalent);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_isEquivalent);
 
 	return NULL;
 }
@@ -492,12 +518,13 @@ static PyObject *sipDo_Angle_isEquivalent(PyObject *sipThisObj,PyObject *sipArgs
 static PyObject *sipDo_Angle_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Angle)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Angle *ptr;
@@ -513,7 +540,7 @@ static PyObject *sipDo_Angle_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Angle,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Angle,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -538,16 +565,15 @@ static void sipDealloc_Angle(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_Angle(sipThisType *sipThis)
+static PyObject * sip__str__Angle(PyObject *a0)
 {
-#line 60 "angle.sip"
+#line 61 "angle.sip"
   Angle* ptr;
-  if ((ptr = (Angle*)sipGetCppPtr(sipThis,sipClass_Angle)) == NULL)
+  if ((ptr = (Angle*)sipGetCppPtr((sipThisType*)a0 ,sipClass_Angle)) == NULL)
     return NULL;
 
   return PyString_FromString(String(ptr->toRadian()).c_str());
-#line 555 "../CPP/sipBALLAngle.cpp"
+#line 581 "sipBALLAngle.cpp"
 }
 
 PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
@@ -559,6 +585,7 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -566,10 +593,10 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new Angle();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -577,7 +604,7 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 		const Angle *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Angle,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Angle,&a0obj))
 		{
 			int iserr = 0;
 
@@ -587,7 +614,7 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Angle(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -595,15 +622,15 @@ PyObject *sipNew_Angle(PyObject *sipSelf,PyObject *sipArgs)
 		float a0;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-f|l",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-f|l",&a0,&a1))
 		{
 			sipNew = new Angle( a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Angle);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Angle);
 		return NULL;
 	}
 
@@ -628,12 +655,12 @@ PyMethodDef sipClassAttrTab_Angle[] = {
 	{sipName_BALL_toDegree, sipDo_Angle_toDegree, METH_VARARGS, NULL},
 	{sipName_BALL_normalize, sipDo_Angle_normalize, METH_VARARGS, NULL},
 	{sipName_BALL_negate, sipDo_Angle_negate, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__pos__, sipDo_Angle_Operator__pos__, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__neg__, sipDo_Angle_Operator__neg__, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__add__, sipDo_Angle_Operator__add__, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__sub__, sipDo_Angle_Operator__sub__, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__div__, sipDo_Angle_Operator__div__, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__cmp__, sipDo_Angle_Operator__cmp__, METH_VARARGS, NULL},
+	{sipName_BALL___pos__, sipDo_Angle___pos__, METH_VARARGS, NULL},
+	{sipName_BALL___neg__, sipDo_Angle___neg__, METH_VARARGS, NULL},
+	{sipName_BALL___add__, sipDo_Angle___add__, METH_VARARGS, NULL},
+	{sipName_BALL___sub__, sipDo_Angle___sub__, METH_VARARGS, NULL},
+	{sipName_BALL___div__, sipDo_Angle___div__, METH_VARARGS, NULL},
+	{sipName_BALL___cmp__, sipDo_Angle___cmp__, METH_VARARGS, NULL},
 	{sipName_BALL_isEquivalent, sipDo_Angle_isEquivalent, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_Angle_isValid, METH_VARARGS, NULL},
 	{NULL}
@@ -644,17 +671,15 @@ int sipCanConvertTo_Angle(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Angle);
 }
 
-void sipConvertTo_Angle(PyObject *sipPy,Angle **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Angle(PyObject *sipPy,Angle **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Angle);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Angle);
+		*sipCppPtr = NULL;
 
 		return;
 	}

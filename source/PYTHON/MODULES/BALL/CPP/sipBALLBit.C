@@ -19,23 +19,41 @@ static PyTypeObject sipType_Bit = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipBit::sipBit(): Bit()
+sipBit::sipBit()
+   throw()  : Bit()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipBit::sipBit(const Bit& a0): Bit(a0)
+sipBit::sipBit(const Bit& a0)
+   throw()  : Bit(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipBit::~sipBit()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
+
 void sipBit::clear()
+ throw()
 {
 	int relLock;
 
@@ -82,12 +100,13 @@ releaseLock:
 static PyObject *sipDo_Bit_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bit)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Bit *ptr;
 
@@ -103,7 +122,7 @@ static PyObject *sipDo_Bit_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bit,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bit,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -144,6 +163,7 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -151,10 +171,10 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipBit();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -162,7 +182,7 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 		const Bit *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Bit,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Bit,&a0obj))
 		{
 			int iserr = 0;
 
@@ -172,12 +192,12 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipBit(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Bit);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Bit);
 		return NULL;
 	}
 
@@ -211,17 +231,15 @@ int sipCanConvertTo_Bit(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Bit);
 }
 
-void sipConvertTo_Bit(PyObject *sipPy,Bit **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Bit(PyObject *sipPy,Bit **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Bit);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Bit);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -6,7 +6,7 @@
 PyObject *sipClass_OpenMode;
 
 static void sipDealloc_OpenMode(sipThisType *);
-static PyObject *sipPyInternalRepr_OpenMode(sipThisType *);
+static PyObject * sip__str__OpenMode(PyObject *a0);
 
 static PyTypeObject sipType_OpenMode = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,7 +19,20 @@ static PyTypeObject sipType_OpenMode = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_OpenMode,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__OpenMode,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
@@ -42,12 +55,11 @@ static void sipDealloc_OpenMode(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_OpenMode(sipThisType *sipThis)
+static PyObject * sip__str__OpenMode(PyObject *a0)
 {
-#line 95 "file.sip"
+#line 106 "file.sip"
   OpenMode* ptr;
-  if ((ptr = (OpenMode*)sipGetCppPtr(sipThis,sipClass_OpenMode)) == NULL)
+  if ((ptr = (OpenMode*)sipGetCppPtr((sipThisType*)a0,sipClass_OpenMode)) == NULL)
     return NULL;
 	
 	String mode_string;
@@ -63,7 +75,7 @@ static PyObject *sipPyInternalRepr_OpenMode(sipThisType *sipThis)
 	}
 
   return PyString_FromString(mode_string.c_str());
-#line 71 "../CPP/sipBALLOpenMode.cpp"
+#line 83 "sipBALLOpenMode.cpp"
 }
 
 PyObject *sipNew_OpenMode(PyObject *sipSelf,PyObject *sipArgs)
@@ -75,6 +87,7 @@ PyObject *sipNew_OpenMode(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -82,10 +95,10 @@ PyObject *sipNew_OpenMode(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new OpenMode();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -93,7 +106,7 @@ PyObject *sipNew_OpenMode(PyObject *sipSelf,PyObject *sipArgs)
 		const OpenMode *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_OpenMode,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_OpenMode,&a0obj))
 		{
 			int iserr = 0;
 
@@ -106,12 +119,12 @@ PyObject *sipNew_OpenMode(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_OpenMode);
+		sipNoCtor(sipArgsParsed,sipName_BALL_OpenMode);
 		return NULL;
 	}
 
@@ -135,28 +148,18 @@ PyMethodDef sipClassAttrTab_OpenMode[] = {
 
 int sipCanConvertTo_OpenMode(PyObject *sipPy)
 {
-#line 114 "file.sip"
+#line 125 "file.sip"
   // automatic conversion of Py integers to Position
   return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_OpenMode));
-#line 146 "../CPP/sipBALLOpenMode.cpp"
+#line 159 "sipBALLOpenMode.cpp"
 }
 
-int sipConvertTo_OpenMode(PyObject *sipPy,OpenMode **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_OpenMode(PyObject *sipPy,OpenMode **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
+		return 0;
 
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_OpenMode);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
-
-#line 118 "file.sip"
+#line 129 "file.sip"
   if (PyInt_Check(sipPy))
   {
 		int mode = PyInt_AS_LONG(sipPy);
@@ -180,7 +183,7 @@ int sipConvertTo_OpenMode(PyObject *sipPy,OpenMode **sipCppPtr,int sipNoNull,int
   *sipCppPtr = (OpenMode*)sipConvertToCpp(sipPy, sipClass_OpenMode, sipIsErr);
 
   return 0;
-#line 188 "../CPP/sipBALLOpenMode.cpp"
+#line 191 "sipBALLOpenMode.cpp"
 }
 
 OpenMode *sipForceConvertTo_OpenMode(PyObject *valobj,int *iserrp)

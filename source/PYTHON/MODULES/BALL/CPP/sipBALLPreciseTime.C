@@ -6,7 +6,7 @@
 PyObject *sipClass_PreciseTime;
 
 static void sipDealloc_PreciseTime(sipThisType *);
-static PyObject *sipPyInternalRepr_PreciseTime(sipThisType *);
+static PyObject * sip__str__PreciseTime(PyObject *a0);
 
 static PyTypeObject sipType_PreciseTime = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,12 +19,26 @@ static PyTypeObject sipType_PreciseTime = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_PreciseTime,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__PreciseTime,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_PreciseTime_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PreciseTime)) == NULL)
 		return NULL;
@@ -33,7 +47,7 @@ static PyObject *sipDo_PreciseTime_set(PyObject *sipThisObj,PyObject *sipArgs)
 		long a0;
 		long a1;
 
-		if (sipParseArgs(sipArgs,"ll",&a0,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"ll",&a0,&a1))
 		{
 			PreciseTime *ptr;
 
@@ -51,7 +65,7 @@ static PyObject *sipDo_PreciseTime_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const PreciseTime *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
 		{
 			PreciseTime *ptr;
 
@@ -74,7 +88,7 @@ static PyObject *sipDo_PreciseTime_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PreciseTime,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PreciseTime,sipName_BALL_set);
 
 	return NULL;
 }
@@ -82,12 +96,13 @@ static PyObject *sipDo_PreciseTime_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_PreciseTime_getSeconds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PreciseTime)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			long res;
 			PreciseTime *ptr;
@@ -103,7 +118,7 @@ static PyObject *sipDo_PreciseTime_getSeconds(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PreciseTime,sipName_BALL_getSeconds);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PreciseTime,sipName_BALL_getSeconds);
 
 	return NULL;
 }
@@ -111,12 +126,13 @@ static PyObject *sipDo_PreciseTime_getSeconds(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_PreciseTime_getMicroSeconds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PreciseTime)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			long res;
 			PreciseTime *ptr;
@@ -132,16 +148,17 @@ static PyObject *sipDo_PreciseTime_getMicroSeconds(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PreciseTime,sipName_BALL_getMicroSeconds);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PreciseTime,sipName_BALL_getMicroSeconds);
 
 	return NULL;
 }
 
 static PyObject *sipDo_PreciseTime_now(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			const PreciseTime *res;
 
@@ -153,7 +170,7 @@ static PyObject *sipDo_PreciseTime_now(PyObject *,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_PreciseTime,sipName_BALL_now);
+	sipNoMethod(sipArgsParsed,sipName_BALL_PreciseTime,sipName_BALL_now);
 
 	return NULL;
 }
@@ -178,12 +195,11 @@ static void sipDealloc_PreciseTime(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_PreciseTime(sipThisType *sipThis)
+static PyObject * sip__str__PreciseTime(PyObject *a0)
 {
-#line 29 "timeStamp.sip"
+#line 30 "timeStamp.sip"
   PreciseTime* ptr;
-  if ((ptr = (PreciseTime*)sipGetCppPtr(sipThis,sipClass_PreciseTime)) == NULL)
+  if ((ptr = (PreciseTime*)sipGetCppPtr((sipThisType*)a0,sipClass_PreciseTime)) == NULL)
     return NULL;
 
 	char buf[128];
@@ -195,7 +211,7 @@ static PyObject *sipPyInternalRepr_PreciseTime(sipThisType *sipThis)
 	time_str.append(usec_str.after("."));
 
   return PyString_FromString(time_str.c_str());
-#line 203 "../CPP/sipBALLPreciseTime.cpp"
+#line 219 "sipBALLPreciseTime.cpp"
 }
 
 PyObject *sipNew_PreciseTime(PyObject *sipSelf,PyObject *sipArgs)
@@ -207,6 +223,7 @@ PyObject *sipNew_PreciseTime(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -214,10 +231,10 @@ PyObject *sipNew_PreciseTime(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new PreciseTime();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -225,7 +242,7 @@ PyObject *sipNew_PreciseTime(PyObject *sipSelf,PyObject *sipArgs)
 		const PreciseTime *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_PreciseTime,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_PreciseTime,&a0obj))
 		{
 			int iserr = 0;
 
@@ -235,12 +252,12 @@ PyObject *sipNew_PreciseTime(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new PreciseTime(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_PreciseTime);
+		sipNoCtor(sipArgsParsed,sipName_BALL_PreciseTime);
 		return NULL;
 	}
 
@@ -271,17 +288,15 @@ int sipCanConvertTo_PreciseTime(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_PreciseTime);
 }
 
-void sipConvertTo_PreciseTime(PyObject *sipPy,PreciseTime **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_PreciseTime(PyObject *sipPy,PreciseTime **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PreciseTime);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_PreciseTime);
+		*sipCppPtr = NULL;
 
 		return;
 	}

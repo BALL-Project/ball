@@ -19,28 +19,47 @@ static PyTypeObject sipType_AssignChargeProcessor = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipAssignChargeProcessor::sipAssignChargeProcessor(): AssignChargeProcessor()
+sipAssignChargeProcessor::sipAssignChargeProcessor()
+    : AssignChargeProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
-sipAssignChargeProcessor::sipAssignChargeProcessor(const String& a0): AssignChargeProcessor(a0)
+sipAssignChargeProcessor::sipAssignChargeProcessor(const String& a0)
+    : AssignChargeProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
-sipAssignChargeProcessor::sipAssignChargeProcessor(const AssignChargeProcessor& a0): AssignChargeProcessor(a0)
+sipAssignChargeProcessor::sipAssignChargeProcessor(const AssignChargeProcessor& a0)
+    : AssignChargeProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipAssignChargeProcessor::~sipAssignChargeProcessor()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
+
 bool sipAssignChargeProcessor::finish()
+
 {
 	int relLock;
 
@@ -48,32 +67,37 @@ bool sipAssignChargeProcessor::finish()
 		sipAssignRadiusProcessor::sipVH_finish(&sipPyMethods[0],sipPyThis,relLock) :
 		AssignRadiusProcessor::finish();
 }
-bool sipAssignChargeProcessor::start()
+
+Processor::Result sipAssignChargeProcessor::operator ()(Atom& a0)
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_start,&relLock) ?
-		sipAssignRadiusProcessor::sipVH_start(&sipPyMethods[1],sipPyThis,relLock) :
-		AssignChargeProcessor::start();
+	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
+		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[1],sipPyThis,relLock,a0) :
+		AssignChargeProcessor::operator ()(a0);
 }
-Processor::Result sipAssignChargeProcessor::operator()(Atom& a0)
+
+bool sipAssignChargeProcessor::start()
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_Operator__call__,&relLock) ?
-		sipAtomProcessor::sipVH_Operator__call__(&sipPyMethods[2],sipPyThis,relLock,a0) :
-		AssignChargeProcessor::operator()(a0);
+	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_start,&relLock) ?
+		sipAssignRadiusProcessor::sipVH_start(&sipPyMethods[2],sipPyThis,relLock) :
+		AssignChargeProcessor::start();
 }
 
 static PyObject *sipDo_AssignChargeProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AssignChargeProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			AssignChargeProcessor *ptr;
@@ -89,14 +113,15 @@ static PyObject *sipDo_AssignChargeProcessor_start(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AssignChargeProcessor,sipName_BALL_start);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AssignChargeProcessor,sipName_BALL_start);
 
 	return NULL;
 }
 
-static PyObject *sipDo_AssignChargeProcessor_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_AssignChargeProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AssignChargeProcessor)) == NULL)
 		return NULL;
@@ -105,7 +130,7 @@ static PyObject *sipDo_AssignChargeProcessor_Operator__call__(PyObject *sipThisO
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Processor::Result res;
 			AssignChargeProcessor *ptr;
@@ -120,7 +145,7 @@ static PyObject *sipDo_AssignChargeProcessor_Operator__call__(PyObject *sipThisO
 			if (iserr)
 				return NULL;
 
-			res = ptr -> AssignChargeProcessor::operator()(* a0);
+			res = ptr -> AssignChargeProcessor::operator ()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -128,7 +153,7 @@ static PyObject *sipDo_AssignChargeProcessor_Operator__call__(PyObject *sipThisO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AssignChargeProcessor,sipName_BALL_Operator__call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AssignChargeProcessor,sipName_BALL___call__);
 
 	return NULL;
 }
@@ -136,12 +161,13 @@ static PyObject *sipDo_AssignChargeProcessor_Operator__call__(PyObject *sipThisO
 static PyObject *sipDo_AssignChargeProcessor_getTotalCharge(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AssignChargeProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			float res;
 			AssignChargeProcessor *ptr;
@@ -157,7 +183,7 @@ static PyObject *sipDo_AssignChargeProcessor_getTotalCharge(PyObject *sipThisObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AssignChargeProcessor,sipName_BALL_getTotalCharge);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AssignChargeProcessor,sipName_BALL_getTotalCharge);
 
 	return NULL;
 }
@@ -203,6 +229,7 @@ PyObject *sipNew_AssignChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -210,10 +237,10 @@ PyObject *sipNew_AssignChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipAssignChargeProcessor();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -221,7 +248,7 @@ PyObject *sipNew_AssignChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
 		{
 			int iserr = 0;
 
@@ -234,7 +261,7 @@ PyObject *sipNew_AssignChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -242,7 +269,7 @@ PyObject *sipNew_AssignChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const AssignChargeProcessor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AssignChargeProcessor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AssignChargeProcessor,&a0obj))
 		{
 			int iserr = 0;
 
@@ -252,12 +279,12 @@ PyObject *sipNew_AssignChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAssignChargeProcessor(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_AssignChargeProcessor);
+		sipNoCtor(sipArgsParsed,sipName_BALL_AssignChargeProcessor);
 		return NULL;
 	}
 
@@ -283,7 +310,7 @@ PyObject *sipNew_AssignChargeProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 PyMethodDef sipClassAttrTab_AssignChargeProcessor[] = {
 	{sipName_BALL_start, sipDo_AssignChargeProcessor_start, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__call__, sipDo_AssignChargeProcessor_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL___call__, sipDo_AssignChargeProcessor___call__, METH_VARARGS, NULL},
 	{sipName_BALL_getTotalCharge, sipDo_AssignChargeProcessor_getTotalCharge, METH_VARARGS, NULL},
 	{NULL}
 };
@@ -293,17 +320,15 @@ int sipCanConvertTo_AssignChargeProcessor(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_AssignChargeProcessor);
 }
 
-void sipConvertTo_AssignChargeProcessor(PyObject *sipPy,AssignChargeProcessor **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_AssignChargeProcessor(PyObject *sipPy,AssignChargeProcessor **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_AssignChargeProcessor);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_AssignChargeProcessor);
+		*sipCppPtr = NULL;
 
 		return;
 	}

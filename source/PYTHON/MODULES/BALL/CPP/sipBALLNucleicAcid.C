@@ -19,86 +19,115 @@ static PyTypeObject sipType_NucleicAcid = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipNucleicAcid::sipNucleicAcid(): NucleicAcid()
+sipNucleicAcid::sipNucleicAcid()
+    : NucleicAcid()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipNucleicAcid::sipNucleicAcid(const NucleicAcid& a0,bool a1): NucleicAcid(a0,a1)
+sipNucleicAcid::sipNucleicAcid(const NucleicAcid& a0,bool a1)
+    : NucleicAcid(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipNucleicAcid::sipNucleicAcid(const String& a0,const String& a1): NucleicAcid(a0,a1)
+sipNucleicAcid::sipNucleicAcid(const String& a0,const String& a1)
+    : NucleicAcid(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipNucleicAcid::sipNucleicAcid(const NucleicAcid& a0): NucleicAcid(a0)
+sipNucleicAcid::sipNucleicAcid(const NucleicAcid& a0)
+    : NucleicAcid(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipNucleicAcid::~sipNucleicAcid()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipNucleicAcid::select()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_select,&relLock))
-		sipSelectable::sipVH_select(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		Composite::select();
-}
 void sipNucleicAcid::deselect()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
-		sipSelectable::sipVH_deselect(&sipPyMethods[1],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
+		sipSelectable::sipVH_deselect(&sipPyMethods[0],sipPyThis,relLock);
 	else
 		Composite::deselect();
 }
-void sipNucleicAcid::clear()
+
+void sipNucleicAcid::select()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipObject::sipVH_clear(&sipPyMethods[2],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_select,&relLock))
+		sipSelectable::sipVH_select(&sipPyMethods[1],sipPyThis,relLock);
 	else
-		NucleicAcid::clear();
+		Composite::select();
 }
+
+bool sipNucleicAcid::isValid() const
+ throw()
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipObject::sipVH_isValid(&sipPyMethods[2],sipPyThis,relLock) :
+		NucleicAcid::isValid();
+}
+
 void sipNucleicAcid::destroy()
+ throw()
 {
 	int relLock;
 
 	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_destroy,&relLock))
-		sipObject::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
+		sipComposite::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
 	else
 		NucleicAcid::destroy();
 }
-bool sipNucleicAcid::isValid() const
+
+void sipNucleicAcid::clear()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipObject::sipVH_isValid(&sipPyMethods[4],sipPyThis,relLock) :
-		NucleicAcid::isValid();
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipObject::sipVH_clear(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		NucleicAcid::clear();
 }
 
 static PyObject *sipDo_NucleicAcid_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			NucleicAcid *ptr;
 
@@ -114,7 +143,7 @@ static PyObject *sipDo_NucleicAcid_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -122,12 +151,13 @@ static PyObject *sipDo_NucleicAcid_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_NucleicAcid_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			NucleicAcid *ptr;
 
@@ -143,7 +173,7 @@ static PyObject *sipDo_NucleicAcid_destroy(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -151,6 +181,7 @@ static PyObject *sipDo_NucleicAcid_destroy(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_NucleicAcid_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
@@ -160,7 +191,7 @@ static PyObject *sipDo_NucleicAcid_set(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_NucleicAcid,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_NucleicAcid,&a0obj,&a1))
 		{
 			NucleicAcid *ptr;
 
@@ -183,7 +214,7 @@ static PyObject *sipDo_NucleicAcid_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_set);
 
 	return NULL;
 }
@@ -191,6 +222,7 @@ static PyObject *sipDo_NucleicAcid_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_NucleicAcid_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
@@ -200,7 +232,7 @@ static PyObject *sipDo_NucleicAcid_get(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_NucleicAcid,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_NucleicAcid,&a0obj,&a1))
 		{
 			NucleicAcid *ptr;
 
@@ -223,7 +255,7 @@ static PyObject *sipDo_NucleicAcid_get(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_get);
 
 	return NULL;
 }
@@ -231,6 +263,7 @@ static PyObject *sipDo_NucleicAcid_get(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_NucleicAcid_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
@@ -239,7 +272,7 @@ static PyObject *sipDo_NucleicAcid_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		NucleicAcid *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_NucleicAcid,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_NucleicAcid,&a0obj))
 		{
 			NucleicAcid *ptr;
 
@@ -262,7 +295,7 @@ static PyObject *sipDo_NucleicAcid_swap(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -270,6 +303,7 @@ static PyObject *sipDo_NucleicAcid_swap(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_NucleicAcid_getNucleotide(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
@@ -277,7 +311,7 @@ static PyObject *sipDo_NucleicAcid_getNucleotide(PyObject *sipThisObj,PyObject *
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			Nucleotide *res;
 			NucleicAcid *ptr;
@@ -294,7 +328,7 @@ static PyObject *sipDo_NucleicAcid_getNucleotide(PyObject *sipThisObj,PyObject *
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			const Nucleotide *res;
 			NucleicAcid *ptr;
@@ -310,7 +344,7 @@ static PyObject *sipDo_NucleicAcid_getNucleotide(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_getNucleotide);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_getNucleotide);
 
 	return NULL;
 }
@@ -318,12 +352,13 @@ static PyObject *sipDo_NucleicAcid_getNucleotide(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_NucleicAcid_get3Prime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Nucleotide *res;
 			NucleicAcid *ptr;
@@ -338,7 +373,7 @@ static PyObject *sipDo_NucleicAcid_get3Prime(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Nucleotide *res;
 			NucleicAcid *ptr;
@@ -354,7 +389,7 @@ static PyObject *sipDo_NucleicAcid_get3Prime(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_get3Prime);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_get3Prime);
 
 	return NULL;
 }
@@ -362,12 +397,13 @@ static PyObject *sipDo_NucleicAcid_get3Prime(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_NucleicAcid_get5Prime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Nucleotide *res;
 			NucleicAcid *ptr;
@@ -382,7 +418,7 @@ static PyObject *sipDo_NucleicAcid_get5Prime(PyObject *sipThisObj,PyObject *sipA
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Nucleotide *res;
 			NucleicAcid *ptr;
@@ -398,7 +434,7 @@ static PyObject *sipDo_NucleicAcid_get5Prime(PyObject *sipThisObj,PyObject *sipA
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_get5Prime);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_get5Prime);
 
 	return NULL;
 }
@@ -406,6 +442,7 @@ static PyObject *sipDo_NucleicAcid_get5Prime(PyObject *sipThisObj,PyObject *sipA
 static PyObject *sipDo_NucleicAcid_setID(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
@@ -414,7 +451,7 @@ static PyObject *sipDo_NucleicAcid_setID(PyObject *sipThisObj,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
 		{
 			NucleicAcid *ptr;
 
@@ -440,7 +477,7 @@ static PyObject *sipDo_NucleicAcid_setID(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_setID);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_setID);
 
 	return NULL;
 }
@@ -448,12 +485,13 @@ static PyObject *sipDo_NucleicAcid_setID(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_NucleicAcid_getID(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const String *res;
 			NucleicAcid *ptr;
@@ -469,7 +507,7 @@ static PyObject *sipDo_NucleicAcid_getID(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_getID);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_getID);
 
 	return NULL;
 }
@@ -477,12 +515,13 @@ static PyObject *sipDo_NucleicAcid_getID(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_NucleicAcid_countNucleotides(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			NucleicAcid *ptr;
@@ -498,7 +537,7 @@ static PyObject *sipDo_NucleicAcid_countNucleotides(PyObject *sipThisObj,PyObjec
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_countNucleotides);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_countNucleotides);
 
 	return NULL;
 }
@@ -506,12 +545,13 @@ static PyObject *sipDo_NucleicAcid_countNucleotides(PyObject *sipThisObj,PyObjec
 static PyObject *sipDo_NucleicAcid_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_NucleicAcid)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			NucleicAcid *ptr;
@@ -527,7 +567,7 @@ static PyObject *sipDo_NucleicAcid_isValid(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_NucleicAcid,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_NucleicAcid,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -573,6 +613,7 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -580,10 +621,10 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipNucleicAcid();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -592,7 +633,7 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_NucleicAcid,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_NucleicAcid,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -602,7 +643,7 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipNucleicAcid(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -612,7 +653,7 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 		const String *a1 = NULL;
 		PyObject *a1obj = NULL;
 
-		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_String,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			int iserr = 0;
 
@@ -629,7 +670,7 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -637,7 +678,7 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 		const NucleicAcid *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_NucleicAcid,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_NucleicAcid,&a0obj))
 		{
 			int iserr = 0;
 
@@ -647,12 +688,12 @@ PyObject *sipNew_NucleicAcid(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipNucleicAcid(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_NucleicAcid);
+		sipNoCtor(sipArgsParsed,sipName_BALL_NucleicAcid);
 		return NULL;
 	}
 
@@ -697,17 +738,15 @@ int sipCanConvertTo_NucleicAcid(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_NucleicAcid);
 }
 
-void sipConvertTo_NucleicAcid(PyObject *sipPy,NucleicAcid **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_NucleicAcid(PyObject *sipPy,NucleicAcid **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_NucleicAcid);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_NucleicAcid);
+		*sipCppPtr = NULL;
 
 		return;
 	}

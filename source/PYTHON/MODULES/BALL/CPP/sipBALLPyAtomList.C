@@ -11,7 +11,7 @@ PyObject *sipConvertFrom_PyAtomList(const PyAtomList *sipCpp)
 		return Py_None;
 	}
 
-#line 12 "pyAtomList.sip"
+#line 15 "pyAtomList.sip"
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -34,34 +34,24 @@ PyObject *sipConvertFrom_PyAtomList(const PyAtomList *sipCpp)
 	}
 
 	return pl;
-#line 42 "../CPP/sipBALLPyAtomList.cpp"
+#line 42 "sipBALLPyAtomList.cpp"
 }
 
 PyObject *sipClass_PyAtomList;
 
 int sipCanConvertTo_PyAtomList(PyObject *sipPy)
 {
-#line 37 "pyAtomList.sip"
+#line 40 "pyAtomList.sip"
 	return PyList_Check(sipPy);
-#line 51 "../CPP/sipBALLPyAtomList.cpp"
+#line 51 "sipBALLPyAtomList.cpp"
 }
 
-int sipConvertTo_PyAtomList(PyObject *sipPy,PyAtomList **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_PyAtomList(PyObject *sipPy,PyAtomList **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
+		return 0;
 
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PyAtomList);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
-
-#line 41 "pyAtomList.sip"
+#line 44 "pyAtomList.sip"
 	// Convert a Python list of Atom instances to an AtomList object on the
 	// heap.
  
@@ -85,7 +75,7 @@ int sipConvertTo_PyAtomList(PyObject *sipPy,PyAtomList **sipCppPtr,int sipNoNull
 	*sipCppPtr = atom_list;
 
 	return 1;
-#line 93 "../CPP/sipBALLPyAtomList.cpp"
+#line 83 "sipBALLPyAtomList.cpp"
 }
 
 PyAtomList *sipForceConvertTo_PyAtomList(PyObject *valobj,int *iserrp)

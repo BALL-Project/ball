@@ -6,7 +6,7 @@
 PyObject *sipClass_VersionInfo;
 
 static void sipDealloc_VersionInfo(sipThisType *);
-static PyObject *sipPyInternalRepr_VersionInfo(sipThisType *);
+static PyObject * sip__str__VersionInfo(PyObject *a0);
 
 static PyTypeObject sipType_VersionInfo = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,14 +19,28 @@ static PyTypeObject sipType_VersionInfo = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_VersionInfo,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__VersionInfo,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_VersionInfo_getVersion(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			const char *res;
 
@@ -44,16 +58,17 @@ static PyObject *sipDo_VersionInfo_getVersion(PyObject *,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_VersionInfo,sipName_BALL_getVersion);
+	sipNoMethod(sipArgsParsed,sipName_BALL_VersionInfo,sipName_BALL_getVersion);
 
 	return NULL;
 }
 
 static PyObject *sipDo_VersionInfo_getMajorRevision(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			int res;
 
@@ -65,16 +80,17 @@ static PyObject *sipDo_VersionInfo_getMajorRevision(PyObject *,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_VersionInfo,sipName_BALL_getMajorRevision);
+	sipNoMethod(sipArgsParsed,sipName_BALL_VersionInfo,sipName_BALL_getMajorRevision);
 
 	return NULL;
 }
 
 static PyObject *sipDo_VersionInfo_getMinorRevision(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			int res;
 
@@ -86,16 +102,17 @@ static PyObject *sipDo_VersionInfo_getMinorRevision(PyObject *,PyObject *sipArgs
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_VersionInfo,sipName_BALL_getMinorRevision);
+	sipNoMethod(sipArgsParsed,sipName_BALL_VersionInfo,sipName_BALL_getMinorRevision);
 
 	return NULL;
 }
 
 static PyObject *sipDo_VersionInfo_getType(PyObject *,PyObject *sipArgs)
 {
+	int sipArgsParsed = 0;
 
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			VersionInfo::Type res;
 
@@ -107,7 +124,7 @@ static PyObject *sipDo_VersionInfo_getType(PyObject *,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_VersionInfo,sipName_BALL_getType);
+	sipNoMethod(sipArgsParsed,sipName_BALL_VersionInfo,sipName_BALL_getType);
 
 	return NULL;
 }
@@ -132,12 +149,11 @@ static void sipDealloc_VersionInfo(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_VersionInfo(sipThisType *sipThis)
+static PyObject * sip__str__VersionInfo(PyObject *a0)
 {
-#line 25 "version.sip"
+#line 26 "version.sip"
   return PyString_FromString(VersionInfo::getVersion());  	
-#line 145 "../CPP/sipBALLVersionInfo.cpp"
+#line 161 "sipBALLVersionInfo.cpp"
 }
 
 PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)
@@ -149,6 +165,7 @@ PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -156,10 +173,10 @@ PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new VersionInfo();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -167,7 +184,7 @@ PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)
 		const VersionInfo *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_VersionInfo,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_VersionInfo,&a0obj))
 		{
 			int iserr = 0;
 
@@ -177,12 +194,12 @@ PyObject *sipNew_VersionInfo(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new VersionInfo(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_VersionInfo);
+		sipNoCtor(sipArgsParsed,sipName_BALL_VersionInfo);
 		return NULL;
 	}
 
@@ -213,17 +230,15 @@ int sipCanConvertTo_VersionInfo(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_VersionInfo);
 }
 
-void sipConvertTo_VersionInfo(PyObject *sipPy,VersionInfo **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_VersionInfo(PyObject *sipPy,VersionInfo **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_VersionInfo);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_VersionInfo);
+		*sipCppPtr = NULL;
 
 		return;
 	}

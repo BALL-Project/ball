@@ -19,121 +19,110 @@ static PyTypeObject sipType_AmberNonBonded = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipAmberNonBonded::sipAmberNonBonded(): AmberNonBonded()
+sipAmberNonBonded::sipAmberNonBonded()
+    : AmberNonBonded()
 {
 	sipCommonCtor(sipPyMethods,6);
 }
 
-sipAmberNonBonded::sipAmberNonBonded(ForceField& a0): AmberNonBonded(a0)
+sipAmberNonBonded::sipAmberNonBonded(ForceField& a0)
+    : AmberNonBonded(a0)
 {
 	sipCommonCtor(sipPyMethods,6);
 }
 
-sipAmberNonBonded::sipAmberNonBonded(const AmberNonBonded& a0,bool a1): AmberNonBonded(a0,a1)
+sipAmberNonBonded::sipAmberNonBonded(const AmberNonBonded& a0,bool a1)
+    : AmberNonBonded(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,6);
 }
 
-sipAmberNonBonded::sipAmberNonBonded(const AmberNonBonded& a0): AmberNonBonded(a0)
+sipAmberNonBonded::sipAmberNonBonded(const AmberNonBonded& a0)
+    : AmberNonBonded(a0)
 {
 	sipCommonCtor(sipPyMethods,6);
 }
 
 sipAmberNonBonded::~sipAmberNonBonded()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipAmberNonBonded::setup()
-{
-	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipForceFieldComponent::sipVH_setup(&sipPyMethods[0],sipPyThis,relLock) :
-		AmberNonBonded::setup();
-}
 double sipAmberNonBonded::getEnergy() const
+
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_getEnergy,&relLock) ?
-		sipForceFieldComponent::sipVH_getEnergy(&sipPyMethods[1],sipPyThis,relLock) :
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_getEnergy,&relLock) ?
+		sipForceFieldComponent::sipVH_getEnergy(&sipPyMethods[0],sipPyThis,relLock) :
 		ForceFieldComponent::getEnergy();
 }
-double sipAmberNonBonded::updateEnergy()
+
+bool sipAmberNonBonded::setup()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_updateEnergy,&relLock) ?
-		sipForceFieldComponent::sipVH_updateEnergy(&sipPyMethods[2],sipPyThis,relLock) :
-		AmberNonBonded::updateEnergy();
+	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipForceFieldComponent::sipVH_setup(&sipPyMethods[1],sipPyThis,relLock) :
+		AmberNonBonded::setup();
 }
-void sipAmberNonBonded::updateForces()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
-		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[3],sipPyThis,relLock);
-	else
-		AmberNonBonded::updateForces();
-}
-double sipAmberNonBonded::getElectrostaticEnergy() const
-{
-	int relLock;
-
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_getElectrostaticEnergy,&relLock) ?
-		sipAmberNonBonded::sipVH_getElectrostaticEnergy(&sipPyMethods[4],sipPyThis,relLock) :
-		AmberNonBonded::getElectrostaticEnergy();
-}
 double sipAmberNonBonded::getVdwEnergy() const
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_getVdwEnergy,&relLock) ?
-		sipAmberNonBonded::sipVH_getVdwEnergy(&sipPyMethods[5],sipPyThis,relLock) :
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_getVdwEnergy,&relLock) ?
+		sipAmberNonBonded::sipVH_getVdwEnergy(&sipPyMethods[2],sipPyThis,relLock) :
 		AmberNonBonded::getVdwEnergy();
 }
 
-// The common handler for all classes that inherit this virtual member
-// function.
-
-double sipAmberNonBonded::sipVH_getElectrostaticEnergy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+double sipAmberNonBonded::getElectrostaticEnergy() const
+ throw()
 {
-	double res;
-	PyObject *resobj;
-	PyObject *sipArgs;
+	int relLock;
 
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_getElectrostaticEnergy,&relLock) ?
+		sipAmberNonBonded::sipVH_getElectrostaticEnergy(&sipPyMethods[3],sipPyThis,relLock) :
+		AmberNonBonded::getElectrostaticEnergy();
+}
 
-	if (sipArgs == NULL)
-		goto reportError;
+void sipAmberNonBonded::updateForces()
+ throw()
+{
+	int relLock;
 
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
+		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		AmberNonBonded::updateForces();
+}
 
-	Py_DECREF(sipArgs);
+double sipAmberNonBonded::updateEnergy()
+ throw()
+{
+	int relLock;
 
-	if (resobj != NULL)
-	{
-		res = PyFloat_AsDouble(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_AmberNonBonded,sipName_BALL_getElectrostaticEnergy);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
+	return sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_updateEnergy,&relLock) ?
+		sipForceFieldComponent::sipVH_updateEnergy(&sipPyMethods[5],sipPyThis,relLock) :
+		AmberNonBonded::updateEnergy();
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -177,15 +166,57 @@ releaseLock:
 	return res;
 }
 
+// The common handler for all classes that inherit this virtual member
+// function.
+
+double sipAmberNonBonded::sipVH_getElectrostaticEnergy(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
+{
+	double res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+
+	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = PyFloat_AsDouble(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_AmberNonBonded,sipName_BALL_getElectrostaticEnergy);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
+}
+
 static PyObject *sipDo_AmberNonBonded_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberNonBonded)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			AmberNonBonded *ptr;
@@ -201,7 +232,7 @@ static PyObject *sipDo_AmberNonBonded_setup(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberNonBonded,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberNonBonded,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -209,12 +240,13 @@ static PyObject *sipDo_AmberNonBonded_setup(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_AmberNonBonded_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberNonBonded)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			AmberNonBonded *ptr;
@@ -230,7 +262,7 @@ static PyObject *sipDo_AmberNonBonded_updateEnergy(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberNonBonded,sipName_BALL_updateEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberNonBonded,sipName_BALL_updateEnergy);
 
 	return NULL;
 }
@@ -238,12 +270,13 @@ static PyObject *sipDo_AmberNonBonded_updateEnergy(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_AmberNonBonded_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberNonBonded)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			AmberNonBonded *ptr;
 
@@ -259,7 +292,7 @@ static PyObject *sipDo_AmberNonBonded_updateForces(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberNonBonded,sipName_BALL_updateForces);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberNonBonded,sipName_BALL_updateForces);
 
 	return NULL;
 }
@@ -267,12 +300,13 @@ static PyObject *sipDo_AmberNonBonded_updateForces(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_AmberNonBonded_getElectrostaticEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberNonBonded)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			AmberNonBonded *ptr;
@@ -288,7 +322,7 @@ static PyObject *sipDo_AmberNonBonded_getElectrostaticEnergy(PyObject *sipThisOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberNonBonded,sipName_BALL_getElectrostaticEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberNonBonded,sipName_BALL_getElectrostaticEnergy);
 
 	return NULL;
 }
@@ -296,12 +330,13 @@ static PyObject *sipDo_AmberNonBonded_getElectrostaticEnergy(PyObject *sipThisOb
 static PyObject *sipDo_AmberNonBonded_getVdwEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AmberNonBonded)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			AmberNonBonded *ptr;
@@ -317,7 +352,7 @@ static PyObject *sipDo_AmberNonBonded_getVdwEnergy(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AmberNonBonded,sipName_BALL_getVdwEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AmberNonBonded,sipName_BALL_getVdwEnergy);
 
 	return NULL;
 }
@@ -363,6 +398,7 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -370,10 +406,10 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipAmberNonBonded();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -381,7 +417,7 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -391,7 +427,7 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberNonBonded(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -400,7 +436,7 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_AmberNonBonded,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_AmberNonBonded,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -410,7 +446,7 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberNonBonded(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -418,7 +454,7 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 		const AmberNonBonded *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AmberNonBonded,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AmberNonBonded,&a0obj))
 		{
 			int iserr = 0;
 
@@ -428,12 +464,12 @@ PyObject *sipNew_AmberNonBonded(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAmberNonBonded(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_AmberNonBonded);
+		sipNoCtor(sipArgsParsed,sipName_BALL_AmberNonBonded);
 		return NULL;
 	}
 
@@ -471,17 +507,15 @@ int sipCanConvertTo_AmberNonBonded(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_AmberNonBonded);
 }
 
-void sipConvertTo_AmberNonBonded(PyObject *sipPy,AmberNonBonded **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_AmberNonBonded(PyObject *sipPy,AmberNonBonded **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_AmberNonBonded);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_AmberNonBonded);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -6,7 +6,7 @@
 PyObject *sipClass_SecondaryStructure;
 
 static void sipDealloc_SecondaryStructure(sipThisType *);
-static PyObject *sipPyInternalRepr_SecondaryStructure(sipThisType *);
+static PyObject * sip__str__SecondaryStructure(PyObject *a0);
 
 static PyTypeObject sipType_SecondaryStructure = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,87 +19,116 @@ static PyTypeObject sipType_SecondaryStructure = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_SecondaryStructure,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__SecondaryStructure,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipSecondaryStructure::sipSecondaryStructure(): SecondaryStructure()
+sipSecondaryStructure::sipSecondaryStructure()
+    : SecondaryStructure()
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipSecondaryStructure::sipSecondaryStructure(const SecondaryStructure& a0,bool a1): SecondaryStructure(a0,a1)
+sipSecondaryStructure::sipSecondaryStructure(const SecondaryStructure& a0,bool a1)
+    : SecondaryStructure(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipSecondaryStructure::sipSecondaryStructure(const String& a0): SecondaryStructure(a0)
+sipSecondaryStructure::sipSecondaryStructure(const String& a0)
+    : SecondaryStructure(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipSecondaryStructure::sipSecondaryStructure(const SecondaryStructure& a0): SecondaryStructure(a0)
+sipSecondaryStructure::sipSecondaryStructure(const SecondaryStructure& a0)
+    : SecondaryStructure(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
 
 sipSecondaryStructure::~sipSecondaryStructure()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipSecondaryStructure::select()
-{
-	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_select,&relLock))
-		sipSelectable::sipVH_select(&sipPyMethods[0],sipPyThis,relLock);
-	else
-		Composite::select();
-}
 void sipSecondaryStructure::deselect()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
-		sipSelectable::sipVH_deselect(&sipPyMethods[1],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_deselect,&relLock))
+		sipSelectable::sipVH_deselect(&sipPyMethods[0],sipPyThis,relLock);
 	else
 		Composite::deselect();
 }
-void sipSecondaryStructure::clear()
+
+void sipSecondaryStructure::select()
+ throw()
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_clear,&relLock))
-		sipObject::sipVH_clear(&sipPyMethods[2],sipPyThis,relLock);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_select,&relLock))
+		sipSelectable::sipVH_select(&sipPyMethods[1],sipPyThis,relLock);
 	else
-		SecondaryStructure::clear();
+		Composite::select();
 }
+
+bool sipSecondaryStructure::isValid() const
+ throw()
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
+		sipObject::sipVH_isValid(&sipPyMethods[2],sipPyThis,relLock) :
+		SecondaryStructure::isValid();
+}
+
 void sipSecondaryStructure::destroy()
+ throw()
 {
 	int relLock;
 
 	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_destroy,&relLock))
-		sipObject::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
+		sipComposite::sipVH_destroy(&sipPyMethods[3],sipPyThis,relLock);
 	else
 		SecondaryStructure::destroy();
 }
-bool sipSecondaryStructure::isValid() const
+
+void sipSecondaryStructure::clear()
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_isValid,&relLock) ?
-		sipObject::sipVH_isValid(&sipPyMethods[4],sipPyThis,relLock) :
-		SecondaryStructure::isValid();
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipObject::sipVH_clear(&sipPyMethods[4],sipPyThis,relLock);
+	else
+		SecondaryStructure::clear();
 }
 
 static PyObject *sipDo_SecondaryStructure_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			SecondaryStructure *ptr;
 
@@ -115,7 +144,7 @@ static PyObject *sipDo_SecondaryStructure_clear(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -123,12 +152,13 @@ static PyObject *sipDo_SecondaryStructure_clear(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_SecondaryStructure_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			SecondaryStructure *ptr;
 
@@ -144,7 +174,7 @@ static PyObject *sipDo_SecondaryStructure_destroy(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_destroy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_destroy);
 
 	return NULL;
 }
@@ -152,6 +182,7 @@ static PyObject *sipDo_SecondaryStructure_destroy(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_SecondaryStructure_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -161,7 +192,7 @@ static PyObject *sipDo_SecondaryStructure_set(PyObject *sipThisObj,PyObject *sip
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_SecondaryStructure,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_SecondaryStructure,&a0obj,&a1))
 		{
 			SecondaryStructure *ptr;
 
@@ -184,7 +215,7 @@ static PyObject *sipDo_SecondaryStructure_set(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_set);
 
 	return NULL;
 }
@@ -192,6 +223,7 @@ static PyObject *sipDo_SecondaryStructure_set(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_SecondaryStructure_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -201,7 +233,7 @@ static PyObject *sipDo_SecondaryStructure_get(PyObject *sipThisObj,PyObject *sip
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_SecondaryStructure,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_SecondaryStructure,&a0obj,&a1))
 		{
 			SecondaryStructure *ptr;
 
@@ -224,7 +256,7 @@ static PyObject *sipDo_SecondaryStructure_get(PyObject *sipThisObj,PyObject *sip
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_get);
 
 	return NULL;
 }
@@ -232,6 +264,7 @@ static PyObject *sipDo_SecondaryStructure_get(PyObject *sipThisObj,PyObject *sip
 static PyObject *sipDo_SecondaryStructure_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -240,7 +273,7 @@ static PyObject *sipDo_SecondaryStructure_swap(PyObject *sipThisObj,PyObject *si
 		SecondaryStructure *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
 		{
 			SecondaryStructure *ptr;
 
@@ -263,7 +296,7 @@ static PyObject *sipDo_SecondaryStructure_swap(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -271,12 +304,13 @@ static PyObject *sipDo_SecondaryStructure_swap(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_SecondaryStructure_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Protein *res;
 			SecondaryStructure *ptr;
@@ -291,7 +325,7 @@ static PyObject *sipDo_SecondaryStructure_getProtein(PyObject *sipThisObj,PyObje
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Protein *res;
 			SecondaryStructure *ptr;
@@ -307,7 +341,7 @@ static PyObject *sipDo_SecondaryStructure_getProtein(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_getProtein);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_getProtein);
 
 	return NULL;
 }
@@ -315,12 +349,13 @@ static PyObject *sipDo_SecondaryStructure_getProtein(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_SecondaryStructure_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Chain *res;
 			SecondaryStructure *ptr;
@@ -335,7 +370,7 @@ static PyObject *sipDo_SecondaryStructure_getChain(PyObject *sipThisObj,PyObject
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Chain *res;
 			SecondaryStructure *ptr;
@@ -351,7 +386,7 @@ static PyObject *sipDo_SecondaryStructure_getChain(PyObject *sipThisObj,PyObject
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_getChain);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_getChain);
 
 	return NULL;
 }
@@ -359,6 +394,7 @@ static PyObject *sipDo_SecondaryStructure_getChain(PyObject *sipThisObj,PyObject
 static PyObject *sipDo_SecondaryStructure_getResidue(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -366,7 +402,7 @@ static PyObject *sipDo_SecondaryStructure_getResidue(PyObject *sipThisObj,PyObje
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			Residue *res;
 			SecondaryStructure *ptr;
@@ -383,7 +419,7 @@ static PyObject *sipDo_SecondaryStructure_getResidue(PyObject *sipThisObj,PyObje
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			const Residue *res;
 			SecondaryStructure *ptr;
@@ -399,7 +435,7 @@ static PyObject *sipDo_SecondaryStructure_getResidue(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_getResidue);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_getResidue);
 
 	return NULL;
 }
@@ -407,12 +443,13 @@ static PyObject *sipDo_SecondaryStructure_getResidue(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_SecondaryStructure_getNTerminal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Residue *res;
 			SecondaryStructure *ptr;
@@ -427,7 +464,7 @@ static PyObject *sipDo_SecondaryStructure_getNTerminal(PyObject *sipThisObj,PyOb
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Residue *res;
 			SecondaryStructure *ptr;
@@ -443,7 +480,7 @@ static PyObject *sipDo_SecondaryStructure_getNTerminal(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_getNTerminal);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_getNTerminal);
 
 	return NULL;
 }
@@ -451,12 +488,13 @@ static PyObject *sipDo_SecondaryStructure_getNTerminal(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_SecondaryStructure_getCTerminal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Residue *res;
 			SecondaryStructure *ptr;
@@ -471,7 +509,7 @@ static PyObject *sipDo_SecondaryStructure_getCTerminal(PyObject *sipThisObj,PyOb
 	}
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			const Residue *res;
 			SecondaryStructure *ptr;
@@ -487,7 +525,7 @@ static PyObject *sipDo_SecondaryStructure_getCTerminal(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_getCTerminal);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_getCTerminal);
 
 	return NULL;
 }
@@ -495,6 +533,7 @@ static PyObject *sipDo_SecondaryStructure_getCTerminal(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_SecondaryStructure_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -502,7 +541,7 @@ static PyObject *sipDo_SecondaryStructure_getPDBAtom(PyObject *sipThisObj,PyObje
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			PDBAtom *res;
 			SecondaryStructure *ptr;
@@ -519,7 +558,7 @@ static PyObject *sipDo_SecondaryStructure_getPDBAtom(PyObject *sipThisObj,PyObje
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			const PDBAtom *res;
 			SecondaryStructure *ptr;
@@ -535,7 +574,7 @@ static PyObject *sipDo_SecondaryStructure_getPDBAtom(PyObject *sipThisObj,PyObje
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_getPDBAtom);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_getPDBAtom);
 
 	return NULL;
 }
@@ -543,12 +582,13 @@ static PyObject *sipDo_SecondaryStructure_getPDBAtom(PyObject *sipThisObj,PyObje
 static PyObject *sipDo_SecondaryStructure_countResidues(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			SecondaryStructure *ptr;
@@ -564,7 +604,7 @@ static PyObject *sipDo_SecondaryStructure_countResidues(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_countResidues);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_countResidues);
 
 	return NULL;
 }
@@ -572,12 +612,13 @@ static PyObject *sipDo_SecondaryStructure_countResidues(PyObject *sipThisObj,PyO
 static PyObject *sipDo_SecondaryStructure_countPDBAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			SecondaryStructure *ptr;
@@ -593,7 +634,7 @@ static PyObject *sipDo_SecondaryStructure_countPDBAtoms(PyObject *sipThisObj,PyO
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_countPDBAtoms);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_countPDBAtoms);
 
 	return NULL;
 }
@@ -601,6 +642,7 @@ static PyObject *sipDo_SecondaryStructure_countPDBAtoms(PyObject *sipThisObj,PyO
 static PyObject *sipDo_SecondaryStructure_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -609,7 +651,7 @@ static PyObject *sipDo_SecondaryStructure_prepend(PyObject *sipThisObj,PyObject 
 		Residue *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
 		{
 			SecondaryStructure *ptr;
 
@@ -632,7 +674,7 @@ static PyObject *sipDo_SecondaryStructure_prepend(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_prepend);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_prepend);
 
 	return NULL;
 }
@@ -640,6 +682,7 @@ static PyObject *sipDo_SecondaryStructure_prepend(PyObject *sipThisObj,PyObject 
 static PyObject *sipDo_SecondaryStructure_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -648,7 +691,7 @@ static PyObject *sipDo_SecondaryStructure_append(PyObject *sipThisObj,PyObject *
 		Residue *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
 		{
 			SecondaryStructure *ptr;
 
@@ -671,7 +714,7 @@ static PyObject *sipDo_SecondaryStructure_append(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_append);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_append);
 
 	return NULL;
 }
@@ -679,6 +722,7 @@ static PyObject *sipDo_SecondaryStructure_append(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SecondaryStructure_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -687,7 +731,7 @@ static PyObject *sipDo_SecondaryStructure_insert(PyObject *sipThisObj,PyObject *
 		Residue *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
 		{
 			SecondaryStructure *ptr;
 
@@ -710,7 +754,7 @@ static PyObject *sipDo_SecondaryStructure_insert(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_insert);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_insert);
 
 	return NULL;
 }
@@ -718,6 +762,7 @@ static PyObject *sipDo_SecondaryStructure_insert(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SecondaryStructure_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -728,7 +773,7 @@ static PyObject *sipDo_SecondaryStructure_insertBefore(PyObject *sipThisObj,PyOb
 		Composite *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Residue,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Residue,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
 			SecondaryStructure *ptr;
 
@@ -752,7 +797,7 @@ static PyObject *sipDo_SecondaryStructure_insertBefore(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_insertBefore);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_insertBefore);
 
 	return NULL;
 }
@@ -760,6 +805,7 @@ static PyObject *sipDo_SecondaryStructure_insertBefore(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_SecondaryStructure_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -770,7 +816,7 @@ static PyObject *sipDo_SecondaryStructure_insertAfter(PyObject *sipThisObj,PyObj
 		Composite *a1;
 		PyObject *a1obj;
 
-		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Residue,&a0obj,sipCanConvertTo_Composite,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"II",sipCanConvertTo_Residue,&a0obj,sipCanConvertTo_Composite,&a1obj))
 		{
 			SecondaryStructure *ptr;
 
@@ -794,7 +840,7 @@ static PyObject *sipDo_SecondaryStructure_insertAfter(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_insertAfter);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_insertAfter);
 
 	return NULL;
 }
@@ -802,6 +848,7 @@ static PyObject *sipDo_SecondaryStructure_insertAfter(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_SecondaryStructure_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -810,7 +857,7 @@ static PyObject *sipDo_SecondaryStructure_remove(PyObject *sipThisObj,PyObject *
 		Residue *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Residue,&a0obj))
 		{
 			bool res;
 			SecondaryStructure *ptr;
@@ -833,7 +880,7 @@ static PyObject *sipDo_SecondaryStructure_remove(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_remove);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_remove);
 
 	return NULL;
 }
@@ -841,6 +888,7 @@ static PyObject *sipDo_SecondaryStructure_remove(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SecondaryStructure_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -849,7 +897,7 @@ static PyObject *sipDo_SecondaryStructure_spliceBefore(PyObject *sipThisObj,PyOb
 		SecondaryStructure *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
 		{
 			SecondaryStructure *ptr;
 
@@ -872,7 +920,7 @@ static PyObject *sipDo_SecondaryStructure_spliceBefore(PyObject *sipThisObj,PyOb
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_spliceBefore);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_spliceBefore);
 
 	return NULL;
 }
@@ -880,6 +928,7 @@ static PyObject *sipDo_SecondaryStructure_spliceBefore(PyObject *sipThisObj,PyOb
 static PyObject *sipDo_SecondaryStructure_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -888,7 +937,7 @@ static PyObject *sipDo_SecondaryStructure_spliceAfter(PyObject *sipThisObj,PyObj
 		SecondaryStructure *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
 		{
 			SecondaryStructure *ptr;
 
@@ -911,7 +960,7 @@ static PyObject *sipDo_SecondaryStructure_spliceAfter(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_spliceAfter);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_spliceAfter);
 
 	return NULL;
 }
@@ -919,6 +968,7 @@ static PyObject *sipDo_SecondaryStructure_spliceAfter(PyObject *sipThisObj,PyObj
 static PyObject *sipDo_SecondaryStructure_splice(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
@@ -927,7 +977,7 @@ static PyObject *sipDo_SecondaryStructure_splice(PyObject *sipThisObj,PyObject *
 		SecondaryStructure *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_SecondaryStructure,&a0obj))
 		{
 			SecondaryStructure *ptr;
 
@@ -950,7 +1000,7 @@ static PyObject *sipDo_SecondaryStructure_splice(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_splice);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_splice);
 
 	return NULL;
 }
@@ -958,12 +1008,13 @@ static PyObject *sipDo_SecondaryStructure_splice(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_SecondaryStructure_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_SecondaryStructure)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			SecondaryStructure *ptr;
@@ -979,7 +1030,7 @@ static PyObject *sipDo_SecondaryStructure_isValid(PyObject *sipThisObj,PyObject 
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_SecondaryStructure,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_SecondaryStructure,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -1015,17 +1066,16 @@ static void sipDealloc_SecondaryStructure(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_SecondaryStructure(sipThisType *sipThis)
+static PyObject * sip__str__SecondaryStructure(PyObject *a0)
 {
-#line 52 "secondaryStructure.sip"
+#line 53 "secondaryStructure.sip"
   SecondaryStructure* ptr;
-  if ((ptr = (SecondaryStructure*)sipGetCppPtr(sipThis,sipClass_SecondaryStructure)) == NULL)
+  if ((ptr = (SecondaryStructure*)sipGetCppPtr((sipThisType*)a0,sipClass_SecondaryStructure)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("SecondaryStructure ") + ptr->getName() 
 				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
-#line 1033 "../CPP/sipBALLSecondaryStructure.cpp"
+#line 1083 "sipBALLSecondaryStructure.cpp"
 }
 
 PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
@@ -1037,6 +1087,7 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -1044,10 +1095,10 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipSecondaryStructure();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1056,7 +1107,7 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_SecondaryStructure,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_SecondaryStructure,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -1066,7 +1117,7 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSecondaryStructure(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1074,7 +1125,7 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 		const String *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_String,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_String,&a0obj))
 		{
 			int iserr = 0;
 
@@ -1087,7 +1138,7 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -1095,7 +1146,7 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 		const SecondaryStructure *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_SecondaryStructure,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_SecondaryStructure,&a0obj))
 		{
 			int iserr = 0;
 
@@ -1105,12 +1156,12 @@ PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipSecondaryStructure(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_SecondaryStructure);
+		sipNoCtor(sipArgsParsed,sipName_BALL_SecondaryStructure);
 		return NULL;
 	}
 
@@ -1166,17 +1217,15 @@ int sipCanConvertTo_SecondaryStructure(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_SecondaryStructure);
 }
 
-void sipConvertTo_SecondaryStructure(PyObject *sipPy,SecondaryStructure **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_SecondaryStructure(PyObject *sipPy,SecondaryStructure **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_SecondaryStructure);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_SecondaryStructure);
+		*sipCppPtr = NULL;
 
 		return;
 	}

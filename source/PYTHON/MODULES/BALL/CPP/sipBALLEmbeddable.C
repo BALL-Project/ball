@@ -19,23 +19,41 @@ static PyTypeObject sipType_Embeddable = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipEmbeddable::sipEmbeddable(): Embeddable()
+sipEmbeddable::sipEmbeddable()
+    : Embeddable()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipEmbeddable::sipEmbeddable(const Embeddable& a0): Embeddable(a0)
+sipEmbeddable::sipEmbeddable(const Embeddable& a0)
+    : Embeddable(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipEmbeddable::~sipEmbeddable()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
+
 void sipEmbeddable::registerThis()
+ throw()
 {
 	int relLock;
 
@@ -82,12 +100,13 @@ releaseLock:
 static PyObject *sipDo_Embeddable_unregisterThis(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Embeddable)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Embeddable *ptr;
 
@@ -103,7 +122,7 @@ static PyObject *sipDo_Embeddable_unregisterThis(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Embeddable,sipName_BALL_unregisterThis);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Embeddable,sipName_BALL_unregisterThis);
 
 	return NULL;
 }
@@ -111,12 +130,13 @@ static PyObject *sipDo_Embeddable_unregisterThis(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_Embeddable_registerThis(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Embeddable)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			Embeddable *ptr;
 
@@ -132,7 +152,7 @@ static PyObject *sipDo_Embeddable_registerThis(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Embeddable,sipName_BALL_registerThis);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Embeddable,sipName_BALL_registerThis);
 
 	return NULL;
 }
@@ -173,6 +193,7 @@ PyObject *sipNew_Embeddable(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -180,10 +201,10 @@ PyObject *sipNew_Embeddable(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipEmbeddable();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -191,7 +212,7 @@ PyObject *sipNew_Embeddable(PyObject *sipSelf,PyObject *sipArgs)
 		const Embeddable *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Embeddable,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Embeddable,&a0obj))
 		{
 			int iserr = 0;
 
@@ -201,12 +222,12 @@ PyObject *sipNew_Embeddable(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipEmbeddable(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Embeddable);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Embeddable);
 		return NULL;
 	}
 
@@ -241,17 +262,15 @@ int sipCanConvertTo_Embeddable(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Embeddable);
 }
 
-void sipConvertTo_Embeddable(PyObject *sipPy,Embeddable **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Embeddable(PyObject *sipPy,Embeddable **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Embeddable);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Embeddable);
+		*sipCppPtr = NULL;
 
 		return;
 	}

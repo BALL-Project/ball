@@ -19,55 +19,79 @@ static PyTypeObject sipType_RadiusRuleProcessor = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipRadiusRuleProcessor::sipRadiusRuleProcessor(): RadiusRuleProcessor()
+sipRadiusRuleProcessor::sipRadiusRuleProcessor()
+    : RadiusRuleProcessor()
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
-sipRadiusRuleProcessor::sipRadiusRuleProcessor(INIFile& a0,const String& a1): RadiusRuleProcessor(a0,a1)
+sipRadiusRuleProcessor::sipRadiusRuleProcessor(INIFile& a0,const String& a1)
+    : RadiusRuleProcessor(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
-sipRadiusRuleProcessor::sipRadiusRuleProcessor(const RadiusRuleProcessor& a0): RadiusRuleProcessor(a0)
+sipRadiusRuleProcessor::sipRadiusRuleProcessor(const RadiusRuleProcessor& a0)
+    : RadiusRuleProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,3);
 }
 
 sipRadiusRuleProcessor::~sipRadiusRuleProcessor()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipRadiusRuleProcessor::start()
-{
-	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_start,&relLock) ?
-		sipRuleProcessor::sipVH_start(&sipPyMethods[0],sipPyThis,relLock) :
-		RuleProcessor::start();
-}
 bool sipRadiusRuleProcessor::finish()
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_finish,&relLock) ?
-		sipRuleProcessor::sipVH_finish(&sipPyMethods[1],sipPyThis,relLock) :
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_finish,&relLock) ?
+		sipRuleProcessor::sipVH_finish(&sipPyMethods[0],sipPyThis,relLock) :
 		RuleProcessor::finish();
 }
-Processor::Result sipRadiusRuleProcessor::operator()(Atom& a0)
+
+bool sipRadiusRuleProcessor::start()
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_Operator__call__,&relLock) ?
-		sipAtomProcessor::sipVH_Operator__call__(&sipPyMethods[2],sipPyThis,relLock,a0) :
-		RadiusRuleProcessor::operator()(a0);
+	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_start,&relLock) ?
+		sipRuleProcessor::sipVH_start(&sipPyMethods[1],sipPyThis,relLock) :
+		RuleProcessor::start();
 }
 
-static PyObject *sipDo_RadiusRuleProcessor_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+Processor::Result sipRadiusRuleProcessor::operator ()(Atom& a0)
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
+		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[2],sipPyThis,relLock,a0) :
+		RadiusRuleProcessor::operator ()(a0);
+}
+
+static PyObject *sipDo_RadiusRuleProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_RadiusRuleProcessor)) == NULL)
 		return NULL;
@@ -76,7 +100,7 @@ static PyObject *sipDo_RadiusRuleProcessor_Operator__call__(PyObject *sipThisObj
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Processor::Result res;
 			RadiusRuleProcessor *ptr;
@@ -91,7 +115,7 @@ static PyObject *sipDo_RadiusRuleProcessor_Operator__call__(PyObject *sipThisObj
 			if (iserr)
 				return NULL;
 
-			res = ptr -> RadiusRuleProcessor::operator()(* a0);
+			res = ptr -> RadiusRuleProcessor::operator ()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -99,7 +123,7 @@ static PyObject *sipDo_RadiusRuleProcessor_Operator__call__(PyObject *sipThisObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_RadiusRuleProcessor,sipName_BALL_Operator__call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_RadiusRuleProcessor,sipName_BALL___call__);
 
 	return NULL;
 }
@@ -145,6 +169,7 @@ PyObject *sipNew_RadiusRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -152,10 +177,10 @@ PyObject *sipNew_RadiusRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipRadiusRuleProcessor();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -165,7 +190,7 @@ PyObject *sipNew_RadiusRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const String *a1 = NULL;
 		PyObject *a1obj = NULL;
 
-		if (sipParseArgs(sipArgs,"-I|I",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|I",sipCanConvertTo_INIFile,&a0obj,sipCanConvertTo_String,&a1obj))
 		{
 			int iserr = 0;
 
@@ -179,7 +204,7 @@ PyObject *sipNew_RadiusRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp1)
 				delete a1;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -187,7 +212,7 @@ PyObject *sipNew_RadiusRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const RadiusRuleProcessor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_RadiusRuleProcessor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_RadiusRuleProcessor,&a0obj))
 		{
 			int iserr = 0;
 
@@ -197,12 +222,12 @@ PyObject *sipNew_RadiusRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipRadiusRuleProcessor(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_RadiusRuleProcessor);
+		sipNoCtor(sipArgsParsed,sipName_BALL_RadiusRuleProcessor);
 		return NULL;
 	}
 
@@ -227,7 +252,7 @@ PyObject *sipNew_RadiusRuleProcessor(PyObject *sipSelf,PyObject *sipArgs)
 }
 
 PyMethodDef sipClassAttrTab_RadiusRuleProcessor[] = {
-	{sipName_BALL_Operator__call__, sipDo_RadiusRuleProcessor_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL___call__, sipDo_RadiusRuleProcessor___call__, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -236,17 +261,15 @@ int sipCanConvertTo_RadiusRuleProcessor(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_RadiusRuleProcessor);
 }
 
-void sipConvertTo_RadiusRuleProcessor(PyObject *sipPy,RadiusRuleProcessor **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_RadiusRuleProcessor(PyObject *sipPy,RadiusRuleProcessor **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_RadiusRuleProcessor);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_RadiusRuleProcessor);
+		*sipCppPtr = NULL;
 
 		return;
 	}

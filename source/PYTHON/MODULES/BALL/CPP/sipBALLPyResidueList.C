@@ -34,7 +34,7 @@ PyObject *sipConvertFrom_PyResidueList(const PyResidueList *sipCpp)
 	}
 
 	return pl;
-#line 42 "../CPP/sipBALLPyResidueList.cpp"
+#line 42 "sipBALLPyResidueList.cpp"
 }
 
 PyObject *sipClass_PyResidueList;
@@ -43,23 +43,13 @@ int sipCanConvertTo_PyResidueList(PyObject *sipPy)
 {
 #line 37 "pyResidueList.sip"
 	return PyList_Check(sipPy);
-#line 51 "../CPP/sipBALLPyResidueList.cpp"
+#line 51 "sipBALLPyResidueList.cpp"
 }
 
-int sipConvertTo_PyResidueList(PyObject *sipPy,PyResidueList **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_PyResidueList(PyObject *sipPy,PyResidueList **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
-
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_PyResidueList);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
+		return 0;
 
 #line 41 "pyResidueList.sip"
 	// Convert a Python list of Residue instances to an ResidueList object on the
@@ -85,7 +75,7 @@ int sipConvertTo_PyResidueList(PyObject *sipPy,PyResidueList **sipCppPtr,int sip
 	*sipCppPtr = residue_list;
 
 	return 1;
-#line 93 "../CPP/sipBALLPyResidueList.cpp"
+#line 83 "sipBALLPyResidueList.cpp"
 }
 
 PyResidueList *sipForceConvertTo_PyResidueList(PyObject *valobj,int *iserrp)

@@ -13,7 +13,7 @@ class Bit
   // throw(NullPointer);
   // Bit(const BitVector* /bitvector/, Index /index/ = 0) 
   // throw(NullPointer, IndexUnderflow, IndexOverflow);
-  // virtual ~Bit() throw();
+  ~Bit() throw();
   // operator bool() const throw(NullPointer);
   // const Bit& operator = (const Bit& bit) throw();
   // const Bit& operator = (bool bit) 

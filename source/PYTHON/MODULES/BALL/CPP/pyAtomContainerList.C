@@ -1,4 +1,4 @@
-// $Id: pyAtomContainerList.C,v 1.1 2000/08/30 19:58:36 oliver Exp $
+// $Id: pyAtomContainerList.C,v 1.2 2001/07/25 11:34:51 oliver Exp $
 
 #include <BALL/PYTHON/pyAtomContainerList.h>
 #include <BALL/KERNEL/atomContainer.h>
@@ -17,6 +17,7 @@ namespace BALL
 	}
 
 	PyAtomContainerList::~PyAtomContainerList()
+		throw()
 	{
 	}
 

@@ -19,35 +19,53 @@ static PyTypeObject sipType_UnaryCompositePredicate = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipUnaryCompositePredicate::sipUnaryCompositePredicate(): UnaryCompositePredicate()
+sipUnaryCompositePredicate::sipUnaryCompositePredicate()
+   throw()  : UnaryCompositePredicate()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipUnaryCompositePredicate::sipUnaryCompositePredicate(const UnaryCompositePredicate& a0): UnaryCompositePredicate(a0)
+sipUnaryCompositePredicate::sipUnaryCompositePredicate(const UnaryCompositePredicate& a0)
+    : UnaryCompositePredicate(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipUnaryCompositePredicate::~sipUnaryCompositePredicate()
+  throw()
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipUnaryCompositePredicate::operator()(const Composite& a0) const
+
+bool sipUnaryCompositePredicate::operator ()(const Composite& a0) const
+ throw()
 {
 	int relLock;
 
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_Operator__call__,&relLock) ?
-		sipUnaryCompositePredicate::sipVH_Operator__call__(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		UnaryCompositePredicate::operator()(a0);
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
+		sipUnaryCompositePredicate::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		UnaryCompositePredicate::operator ()(a0);
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-bool sipUnaryCompositePredicate::sipVH_Operator__call__(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const Composite& a0)
+bool sipUnaryCompositePredicate::sipVH_CallOperator(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const Composite& a0)
 {
 	bool res;
 	PyObject *resobj;
@@ -78,7 +96,7 @@ bool sipUnaryCompositePredicate::sipVH_Operator__call__(const sipMethodCache *py
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_UnaryCompositePredicate,sipName_BALL_Operator__call__);
+		sipBadVirtualResultType(sipName_BALL_UnaryCompositePredicate,sipName_BALL___call__);
 	}
 
 reportError:
@@ -90,9 +108,10 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_UnaryCompositePredicate_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_UnaryCompositePredicate___call__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_UnaryCompositePredicate)) == NULL)
 		return NULL;
@@ -101,7 +120,7 @@ static PyObject *sipDo_UnaryCompositePredicate_Operator__call__(PyObject *sipThi
 		const Composite *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Composite,&a0obj))
 		{
 			bool res;
 			UnaryCompositePredicate *ptr;
@@ -116,7 +135,7 @@ static PyObject *sipDo_UnaryCompositePredicate_Operator__call__(PyObject *sipThi
 			if (iserr)
 				return NULL;
 
-			res = ptr -> UnaryCompositePredicate::operator()(* a0);
+			res = ptr -> UnaryCompositePredicate::operator ()(* a0);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -124,7 +143,7 @@ static PyObject *sipDo_UnaryCompositePredicate_Operator__call__(PyObject *sipThi
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_UnaryCompositePredicate,sipName_BALL_Operator__call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_UnaryCompositePredicate,sipName_BALL___call__);
 
 	return NULL;
 }
@@ -165,6 +184,7 @@ PyObject *sipNew_UnaryCompositePredicate(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -172,10 +192,10 @@ PyObject *sipNew_UnaryCompositePredicate(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipUnaryCompositePredicate();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -183,7 +203,7 @@ PyObject *sipNew_UnaryCompositePredicate(PyObject *sipSelf,PyObject *sipArgs)
 		const UnaryCompositePredicate *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_UnaryCompositePredicate,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_UnaryCompositePredicate,&a0obj))
 		{
 			int iserr = 0;
 
@@ -193,12 +213,12 @@ PyObject *sipNew_UnaryCompositePredicate(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipUnaryCompositePredicate(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_UnaryCompositePredicate);
+		sipNoCtor(sipArgsParsed,sipName_BALL_UnaryCompositePredicate);
 		return NULL;
 	}
 
@@ -223,7 +243,7 @@ PyObject *sipNew_UnaryCompositePredicate(PyObject *sipSelf,PyObject *sipArgs)
 }
 
 PyMethodDef sipClassAttrTab_UnaryCompositePredicate[] = {
-	{sipName_BALL_Operator__call__, sipDo_UnaryCompositePredicate_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL___call__, sipDo_UnaryCompositePredicate___call__, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -232,17 +252,15 @@ int sipCanConvertTo_UnaryCompositePredicate(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_UnaryCompositePredicate);
 }
 
-void sipConvertTo_UnaryCompositePredicate(PyObject *sipPy,UnaryCompositePredicate **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_UnaryCompositePredicate(PyObject *sipPy,UnaryCompositePredicate **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_UnaryCompositePredicate);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_UnaryCompositePredicate);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.9 2001/05/07 00:58:10 oliver Exp $
+// $Id: BALL.sip,v 1.10 2001/07/25 11:32:31 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -57,14 +57,12 @@
 // list.h // ??
 // listStack.h // ?? 
 %Include options.sip
-// %Include pointGrid.sip //  float only! and obsolete
 %Include regularData1D.sip
 %Include regularData2D.sip
 %Include regularData3D.sip
-// quadruple.h // ??
-// redBlackTree.h // ??
+// triple.h -- generic, no way...
+// quadruple.h -- generic, no way...
 %Include regExp.sip
-// splayTree.h
 %Include string.sip
 // stringHashMap.h // ??
 // stringHashSet.h // ??
@@ -137,6 +135,7 @@
 %Include quaternion.sip
 %Include sphere3.sip
 %Include surface.sip
+%Include vector2.sip
 %Include vector3.sip
 %Include vector4.sip
 

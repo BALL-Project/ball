@@ -1,4 +1,4 @@
-// $Id: geometricProperties.sip,v 1.1 2000/07/18 21:27:37 oliver Exp $
+// $Id: geometricProperties.sip,v 1.2 2001/07/25 11:32:33 oliver Exp $
 
 class BoundingBoxProcessor
 //  : public UnaryProcessor<Atom>
@@ -10,9 +10,9 @@ class BoundingBoxProcessor
 	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
-  virtual bool start();
-  virtual bool finish();
-  virtual Processor::Result operator()(Atom& /atom/);
+  virtual bool start() throw();
+  virtual bool finish() throw();
+  virtual Processor::Result operator()(Atom& /atom/) throw();
 	Box3 getBox() const;
   const Vector3& getLower() const;
   const Vector3& getUpper() const;
@@ -28,9 +28,9 @@ class GeometricCenterProcessor
 	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
   public:
-  virtual bool start();
-  virtual bool finish();
-  virtual Processor::Result operator()(Atom& /atom/);
+  virtual bool start() throw();
+  virtual bool finish() throw();
+  virtual Processor::Result operator()(Atom& /atom/) throw();
   Vector3& getCenter();
 };
 
@@ -47,9 +47,10 @@ class FragmentDistanceCollector
   FragmentDistanceCollector();
   FragmentDistanceCollector(const Composite& /composite/);
   FragmentDistanceCollector(const Composite& /composite/, float /distance/);
-  virtual bool start();
-  virtual bool finish();
-  virtual Processor::Result operator()(Composite& /composite/);
+	~FragmentDistanceCollector() throw();
+  virtual bool start() throw();
+  virtual bool finish() throw();
+  virtual Processor::Result operator()(Composite& /composite/) throw();
   Size getNumberOfFragments();
   void setComposite(const Composite& /composite/);
   const Composite* getComposite() const;

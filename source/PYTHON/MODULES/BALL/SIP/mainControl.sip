@@ -1,4 +1,4 @@
-// $Id: mainControl.sip,v 1.4 2001/05/07 00:58:11 oliver Exp $
+// $Id: mainControl.sip,v 1.5 2001/07/25 11:32:33 oliver Exp $
 
 class MainControl
 //   :  QMainWindow,
@@ -24,10 +24,10 @@ class MainControl
 		USER
 	};
 	//MainControl(QWidget* /parent/ = 0, const char* /name/ = 0 , String /option_filename/ = ".BALL.options");
-	MainControl(const MainControl&);
-	~MainControl();
-	virtual void clear();
-	virtual void destroy();
+	MainControl(const MainControl&) throw();
+	~MainControl() throw();
+	virtual void clear() throw();
+	virtual void destroy() throw();
 	// class OptionsFileError
 	//	: public Exception::GeneralException
 	// {
@@ -68,7 +68,7 @@ class MainControl
 	//	virtual void onNotify(Message *message);
 	bool isInserted(const Composite& /composite/) const;
 	bool isInserted(const CompositeDescriptor& /compositeDescriptor/) const;
-	virtual bool isValid() const;
+	virtual bool isValid() const throw();
 	// virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 	// virtual void read(std::istream& s);
 	// virtual void write(std::ostream& s) const;

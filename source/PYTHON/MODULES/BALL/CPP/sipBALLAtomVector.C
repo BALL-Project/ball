@@ -19,17 +19,31 @@ static PyTypeObject sipType_AtomVector = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_AtomVector_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomVector)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			AtomVector *ptr;
 
@@ -45,7 +59,7 @@ static PyObject *sipDo_AtomVector_clear(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomVector,sipName_BALL_clear);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomVector,sipName_BALL_clear);
 
 	return NULL;
 }
@@ -53,6 +67,7 @@ static PyObject *sipDo_AtomVector_clear(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomVector)) == NULL)
 		return NULL;
@@ -61,7 +76,7 @@ static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const AtomVector *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomVector,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_AtomVector,&a0obj))
 		{
 			AtomVector *ptr;
 
@@ -87,7 +102,7 @@ static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1;
 
-		if (sipParseArgs(sipArgs,"Il",sipCanConvertTo_Composite,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"Il",sipCanConvertTo_Composite,&a0obj,&a1))
 		{
 			AtomVector *ptr;
 
@@ -110,7 +125,7 @@ static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomVector,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomVector,sipName_BALL_set);
 
 	return NULL;
 }
@@ -118,12 +133,13 @@ static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_AtomVector_size(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomVector)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			int res;
 			AtomVector *ptr;
@@ -139,7 +155,7 @@ static PyObject *sipDo_AtomVector_size(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomVector,sipName_BALL_size);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomVector,sipName_BALL_size);
 
 	return NULL;
 }
@@ -147,12 +163,13 @@ static PyObject *sipDo_AtomVector_size(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_AtomVector_savePositions(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomVector)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			AtomVector *ptr;
 
@@ -168,7 +185,7 @@ static PyObject *sipDo_AtomVector_savePositions(PyObject *sipThisObj,PyObject *s
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomVector,sipName_BALL_savePositions);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomVector,sipName_BALL_savePositions);
 
 	return NULL;
 }
@@ -176,12 +193,13 @@ static PyObject *sipDo_AtomVector_savePositions(PyObject *sipThisObj,PyObject *s
 static PyObject *sipDo_AtomVector_resetPositions(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomVector)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			AtomVector *ptr;
 
@@ -197,7 +215,7 @@ static PyObject *sipDo_AtomVector_resetPositions(PyObject *sipThisObj,PyObject *
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomVector,sipName_BALL_resetPositions);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomVector,sipName_BALL_resetPositions);
 
 	return NULL;
 }
@@ -205,6 +223,7 @@ static PyObject *sipDo_AtomVector_resetPositions(PyObject *sipThisObj,PyObject *
 static PyObject *sipDo_AtomVector_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomVector)) == NULL)
 		return NULL;
@@ -214,7 +233,7 @@ static PyObject *sipDo_AtomVector_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		float a1;
 
-		if (sipParseArgs(sipArgs,"If",sipCanConvertTo_Gradient,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"If",sipCanConvertTo_Gradient,&a0obj,&a1))
 		{
 			AtomVector *ptr;
 
@@ -237,7 +256,7 @@ static PyObject *sipDo_AtomVector_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomVector,sipName_BALL_moveTo);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomVector,sipName_BALL_moveTo);
 
 	return NULL;
 }
@@ -245,6 +264,7 @@ static PyObject *sipDo_AtomVector_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_AtomVector_push_back(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomVector)) == NULL)
 		return NULL;
@@ -253,7 +273,7 @@ static PyObject *sipDo_AtomVector_push_back(PyObject *sipThisObj,PyObject *sipAr
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			AtomVector *ptr;
 
@@ -276,7 +296,7 @@ static PyObject *sipDo_AtomVector_push_back(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomVector,sipName_BALL_push_back);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomVector,sipName_BALL_push_back);
 
 	return NULL;
 }
@@ -284,6 +304,7 @@ static PyObject *sipDo_AtomVector_push_back(PyObject *sipThisObj,PyObject *sipAr
 static PyObject *sipDo_AtomVector_resize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomVector)) == NULL)
 		return NULL;
@@ -291,7 +312,7 @@ static PyObject *sipDo_AtomVector_resize(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		int a0;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"i",&a0))
 		{
 			AtomVector *ptr;
 
@@ -307,7 +328,7 @@ static PyObject *sipDo_AtomVector_resize(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomVector,sipName_BALL_resize);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomVector,sipName_BALL_resize);
 
 	return NULL;
 }
@@ -342,6 +363,7 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -349,10 +371,10 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new AtomVector();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -361,7 +383,7 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1;
 
-		if (sipParseArgs(sipArgs,"-Il",sipCanConvertTo_Composite,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-Il",sipCanConvertTo_Composite,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -371,7 +393,7 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new AtomVector(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -380,7 +402,7 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1;
 
-		if (sipParseArgs(sipArgs,"-Il",sipCanConvertTo_AtomVector,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-Il",sipCanConvertTo_AtomVector,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -390,7 +412,7 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new AtomVector(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -398,7 +420,7 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 		const AtomVector *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AtomVector,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomVector,&a0obj))
 		{
 			int iserr = 0;
 
@@ -408,12 +430,12 @@ PyObject *sipNew_AtomVector(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new AtomVector(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_AtomVector);
+		sipNoCtor(sipArgsParsed,sipName_BALL_AtomVector);
 		return NULL;
 	}
 
@@ -448,17 +470,15 @@ int sipCanConvertTo_AtomVector(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_AtomVector);
 }
 
-void sipConvertTo_AtomVector(PyObject *sipPy,AtomVector **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_AtomVector(PyObject *sipPy,AtomVector **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_AtomVector);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_AtomVector);
+		*sipCppPtr = NULL;
 
 		return;
 	}

@@ -19,11 +19,25 @@ static PyTypeObject sipType_Sphere3 = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 static PyObject *sipDo_Sphere3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Sphere3)) == NULL)
 		return NULL;
@@ -32,7 +46,7 @@ static PyObject *sipDo_Sphere3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 		Sphere3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Sphere3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Sphere3,&a0obj))
 		{
 			Sphere3 *ptr;
 
@@ -55,7 +69,7 @@ static PyObject *sipDo_Sphere3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Sphere3,sipName_BALL_swap);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Sphere3,sipName_BALL_swap);
 
 	return NULL;
 }
@@ -63,6 +77,7 @@ static PyObject *sipDo_Sphere3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Sphere3)) == NULL)
 		return NULL;
@@ -71,7 +86,7 @@ static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 		const Sphere3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Sphere3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Sphere3,&a0obj))
 		{
 			Sphere3 *ptr;
 
@@ -97,7 +112,7 @@ static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		float a1;
 
-		if (sipParseArgs(sipArgs,"If",sipCanConvertTo_Vector3,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"If",sipCanConvertTo_Vector3,&a0obj,&a1))
 		{
 			Sphere3 *ptr;
 
@@ -120,7 +135,7 @@ static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Sphere3,sipName_BALL_set);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Sphere3,sipName_BALL_set);
 
 	return NULL;
 }
@@ -128,6 +143,7 @@ static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Sphere3)) == NULL)
 		return NULL;
@@ -136,7 +152,7 @@ static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 		Sphere3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Sphere3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Sphere3,&a0obj))
 		{
 			Sphere3 *ptr;
 
@@ -162,7 +178,7 @@ static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		float a1;
 
-		if (sipParseArgs(sipArgs,"If",sipCanConvertTo_Vector3,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"If",sipCanConvertTo_Vector3,&a0obj,&a1))
 		{
 			Sphere3 *ptr;
 
@@ -185,7 +201,7 @@ static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Sphere3,sipName_BALL_get);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Sphere3,sipName_BALL_get);
 
 	return NULL;
 }
@@ -193,6 +209,7 @@ static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Sphere3_has(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Sphere3)) == NULL)
 		return NULL;
@@ -202,7 +219,7 @@ static PyObject *sipDo_Sphere3_has(PyObject *sipThisObj,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"I|l",sipCanConvertTo_Vector3,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I|l",sipCanConvertTo_Vector3,&a0obj,&a1))
 		{
 			bool res;
 			Sphere3 *ptr;
@@ -225,7 +242,7 @@ static PyObject *sipDo_Sphere3_has(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Sphere3,sipName_BALL_has);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Sphere3,sipName_BALL_has);
 
 	return NULL;
 }
@@ -233,12 +250,13 @@ static PyObject *sipDo_Sphere3_has(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Sphere3_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Sphere3)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Sphere3 *ptr;
@@ -254,7 +272,7 @@ static PyObject *sipDo_Sphere3_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Sphere3,sipName_BALL_isEmpty);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Sphere3,sipName_BALL_isEmpty);
 
 	return NULL;
 }
@@ -262,12 +280,13 @@ static PyObject *sipDo_Sphere3_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_Sphere3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Sphere3)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			Sphere3 *ptr;
@@ -283,7 +302,7 @@ static PyObject *sipDo_Sphere3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Sphere3,sipName_BALL_isValid);
+	sipNoMethod(sipArgsParsed,sipName_BALL_Sphere3,sipName_BALL_isValid);
 
 	return NULL;
 }
@@ -318,6 +337,7 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -325,10 +345,10 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new Sphere3();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -336,7 +356,7 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 		const Sphere3 *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Sphere3,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Sphere3,&a0obj))
 		{
 			int iserr = 0;
 
@@ -346,7 +366,7 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Sphere3(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -355,7 +375,7 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		float a1;
 
-		if (sipParseArgs(sipArgs,"-If",sipCanConvertTo_Vector3,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-If",sipCanConvertTo_Vector3,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -365,12 +385,12 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new Sphere3(* a0, a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Sphere3);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Sphere3);
 		return NULL;
 	}
 
@@ -383,6 +403,37 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 
 		return NULL;
 	}
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+static PyObject *sipGetSetVar_Sphere3_radius(PyObject *sipThisObj,PyObject *valobj)
+{
+	float val;
+	Sphere3 *ptr;
+
+	if ((ptr = (Sphere3 *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Sphere3)) == NULL)
+		return NULL;
+
+	if (valobj == NULL)
+	{
+		val = ptr -> radius;
+
+		valobj = PyFloat_FromDouble((double)val);
+
+		return valobj;
+	}
+
+	val = (float)PyFloat_AsDouble(valobj);
+
+	if (PyErr_Occurred() != NULL)
+	{
+		sipBadSetType(sipName_BALL_Sphere3,sipName_BALL_radius);
+		return NULL;
+	}
+
+	ptr -> radius = val;
 
 	Py_INCREF(Py_None);
 	return Py_None;
@@ -420,37 +471,6 @@ static PyObject *sipGetSetVar_Sphere3_p(PyObject *sipThisObj,PyObject *valobj)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Sphere3_radius(PyObject *sipThisObj,PyObject *valobj)
-{
-	float val;
-	Sphere3 *ptr;
-
-	if ((ptr = (Sphere3 *)sipGetCppPtr((sipThisType *)sipThisObj,sipClass_Sphere3)) == NULL)
-		return NULL;
-
-	if (valobj == NULL)
-	{
-		val = ptr -> radius;
-
-		valobj = PyFloat_FromDouble((double)val);
-
-		return valobj;
-	}
-
-	val = (float)PyFloat_AsDouble(valobj);
-
-	if (PyErr_Occurred() != NULL)
-	{
-		sipBadSetType(sipName_BALL_Sphere3,sipName_BALL_radius);
-		return NULL;
-	}
-
-	ptr -> radius = val;
-
-	Py_INCREF(Py_None);
-	return Py_None;
-}
-
 PyMethodDef sipClassAttrTab_Sphere3[] = {
 	{sipName_BALL_swap, sipDo_Sphere3_swap, METH_VARARGS, NULL},
 	{sipName_BALL_set, sipDo_Sphere3_set, METH_VARARGS, NULL},
@@ -462,8 +482,8 @@ PyMethodDef sipClassAttrTab_Sphere3[] = {
 };
 
 PyMethodDef sipClassVarTab_Sphere3[] = {
-	{sipName_BALL_p, sipGetSetVar_Sphere3_p, 0, NULL},
 	{sipName_BALL_radius, sipGetSetVar_Sphere3_radius, 0, NULL},
+	{sipName_BALL_p, sipGetSetVar_Sphere3_p, 0, NULL},
 	{NULL}
 };
 
@@ -477,17 +497,15 @@ int sipCanConvertTo_Sphere3(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_Sphere3);
 }
 
-void sipConvertTo_Sphere3(PyObject *sipPy,Sphere3 **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_Sphere3(PyObject *sipPy,Sphere3 **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Sphere3);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_Sphere3);
+		*sipCppPtr = NULL;
 
 		return;
 	}

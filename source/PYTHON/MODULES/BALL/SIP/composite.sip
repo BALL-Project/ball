@@ -1,4 +1,4 @@
-// $Id: composite.sip,v 1.4 2000/10/24 20:29:17 oliver Exp $
+// $Id: composite.sip,v 1.5 2001/07/25 11:32:32 oliver Exp $
 
 class Composite
   :  PersistentObject,
@@ -16,9 +16,9 @@ class Composite
   // static KernelPredicateType DEFAULT_UNARY_PREDICATE;
   Composite();
   Composite(const Composite& /composite/, bool /deep/ = true);
-  ~Composite();
-  virtual void clear();
-  virtual void destroy();
+  ~Composite() throw();
+  virtual void clear() throw();
+  virtual void destroy() throw();
   void destroy(bool /virtual_destroy/);
   // void* clone(Composite& /root/, KernelPredicateType& /predicate/) const;
   // virtual void persistentWrite(PersistenceManager& /pm/, const char* /name/ = 0) const;
@@ -71,8 +71,8 @@ class Composite
   bool removeChild(Composite& /child/);
   void replace(Composite& /composite/);
   void swap(Composite& /composite/);
-  virtual void select();
-  virtual void deselect();
+  virtual void select() throw();
+  virtual void deselect() throw();
   bool isExpanded() const;
   bool isCollapsed() const;
   bool isEmpty() const;
@@ -99,7 +99,7 @@ class Composite
   bool isRelatedWith(const Composite& /composite/) const;
   bool isHomomorph(const Composite& /composite/) const;
   bool containsSelection() const;
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
   // virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
   // void host(Visitor<Composite>& visitor);
   // template <typename T> bool applyAncestor(UnaryProcessor<T>& processor);

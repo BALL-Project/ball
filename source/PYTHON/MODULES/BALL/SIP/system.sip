@@ -1,4 +1,4 @@
-// $Id: system.sip,v 1.2 2000/08/30 19:59:11 oliver Exp $
+// $Id: system.sip,v 1.3 2001/07/25 11:32:37 oliver Exp $
 
 class System
   : AtomContainer,
@@ -12,9 +12,9 @@ class System
   System();
   System(const System& /system/, bool /deep/ = true);
   System(const String& /name/);
-  ~System();
-  virtual void clear();
-  virtual void destroy();
+  ~System() throw();
+  virtual void clear() throw();
+  virtual void destroy() throw();
 //  void persistentWrite(PersistenceManager& pm, const char* = 0) const;
 //  void persistentRead(PersistenceManager& pm);
   void set(const System&, bool = true);
@@ -22,7 +22,6 @@ class System
   void get(System&, bool = true) const;
   void swap(System&);
   void setName(const String&);
-  String& getName();
   const String& getName() const;
   Size countMolecules() const;
   Size countFragments() const;
@@ -37,7 +36,7 @@ class System
   void spliceAfter(System&);
   void splice(System&);  
   void destroyBonds();
-  virtual bool isValid() const;
+  virtual bool isValid() const throw();
 	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
 	//  virtual void read(istream& s);
 	//  virtual void write(ostream& s) const;
@@ -45,10 +44,11 @@ class System
 	//  template <typename T>
 	//  bool apply(UnaryProcessor<T>& processor)
 
-	operator const char* ();
+	PyMethods:
+	__str__
 %MemberCode
   System* ptr;
-  if ((ptr = (System*)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
+  if ((ptr = (System*)sipGetCppPtr((sipThisType*)a0,sipClass_System)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("System ") + ptr->getName() 

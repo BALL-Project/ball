@@ -6,7 +6,7 @@
 PyObject *sipClass_Position;
 
 static void sipDealloc_Position(sipThisType *);
-static PyObject *sipPyInternalRepr_Position(sipThisType *);
+static PyObject * sip__str__Position(PyObject *a0);
 
 static PyTypeObject sipType_Position = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,7 +19,20 @@ static PyTypeObject sipType_Position = {
 	0,
 	0,
 	0,
-	(reprfunc)sipPyInternalRepr_Position,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	sip__str__Position,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
@@ -42,16 +55,15 @@ static void sipDealloc_Position(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-
-static PyObject *sipPyInternalRepr_Position(sipThisType *sipThis)
+static PyObject * sip__str__Position(PyObject *a0)
 {
-#line 37 "global.sip"
+#line 39 "global.sip"
 	Position* ptr;
-  if ((ptr = (Position*)sipGetCppPtr(sipThis,sipClass_Position)) == NULL)
+  if ((ptr = (Position*)sipGetCppPtr((sipThisType*)a0,sipClass_Position)) == NULL)
     return NULL;
 
   return PyString_FromString(String(*ptr).c_str());
-#line 59 "../CPP/sipBALLPosition.cpp"
+#line 71 "sipBALLPosition.cpp"
 }
 
 PyObject *sipNew_Position(PyObject *sipSelf,PyObject *sipArgs)
@@ -63,6 +75,7 @@ PyObject *sipNew_Position(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -70,10 +83,10 @@ PyObject *sipNew_Position(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new Position();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -81,7 +94,7 @@ PyObject *sipNew_Position(PyObject *sipSelf,PyObject *sipArgs)
 		const Position *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_Position,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_Position,&a0obj))
 		{
 			int iserr = 0;
 
@@ -94,12 +107,12 @@ PyObject *sipNew_Position(PyObject *sipSelf,PyObject *sipArgs)
 
 			if (istemp0)
 				delete a0;
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_Position);
+		sipNoCtor(sipArgsParsed,sipName_BALL_Position);
 		return NULL;
 	}
 
@@ -123,28 +136,18 @@ PyMethodDef sipClassAttrTab_Position[] = {
 
 int sipCanConvertTo_Position(PyObject *sipPy)
 {
-#line 44 "global.sip"
+#line 46 "global.sip"
 	// automatic conversion of Py integers to Position 
 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Position));
-#line 134 "../CPP/sipBALLPosition.cpp"
+#line 147 "sipBALLPosition.cpp"
 }
 
-int sipConvertTo_Position(PyObject *sipPy,Position **sipCppPtr,int sipNoNull,int *sipIsErr)
+int sipConvertTo_Position(PyObject *sipPy,Position **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
-		return false;
+		return 0;
 
-	if (sipPy == Py_None)
-	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_Position);
-		else
-			*sipCppPtr = NULL;
-
-		return false;
-	}
-
-#line 48 "global.sip"
+#line 50 "global.sip"
 	if (PyInt_Check(sipPy))
 	{
 		*sipCppPtr = new Position(PyInt_AS_LONG(sipPy));
@@ -155,7 +158,7 @@ int sipConvertTo_Position(PyObject *sipPy,Position **sipCppPtr,int sipNoNull,int
 	*sipCppPtr = (Position*)sipConvertToCpp(sipPy, sipClass_Position, sipIsErr);
 
 	return 0;
-#line 163 "../CPP/sipBALLPosition.cpp"
+#line 166 "sipBALLPosition.cpp"
 }
 
 Position *sipForceConvertTo_Position(PyObject *valobj,int *iserrp)

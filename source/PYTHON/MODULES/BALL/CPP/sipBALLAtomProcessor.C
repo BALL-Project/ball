@@ -19,35 +19,53 @@ static PyTypeObject sipType_AtomProcessor = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipAtomProcessor::sipAtomProcessor(): AtomProcessor()
+sipAtomProcessor::sipAtomProcessor()
+    : AtomProcessor()
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipAtomProcessor::sipAtomProcessor(const AtomProcessor& a0): AtomProcessor(a0)
+sipAtomProcessor::sipAtomProcessor(const AtomProcessor& a0)
+    : AtomProcessor(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
 
 sipAtomProcessor::~sipAtomProcessor()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
-Processor::Result sipAtomProcessor::operator()(Atom& a0)
+
+Processor::Result sipAtomProcessor::operator ()(Atom& a0)
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_Operator__call__,&relLock) ?
-		sipAtomProcessor::sipVH_Operator__call__(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		AtomProcessor::operator()(a0);
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL___call__,&relLock) ?
+		sipAtomProcessor::sipVH_CallOperator(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		AtomProcessor::operator ()(a0);
 }
 
 // The common handler for all classes that inherit this virtual member
 // function.
 
-Processor::Result sipAtomProcessor::sipVH_Operator__call__(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Atom& a0)
+Processor::Result sipAtomProcessor::sipVH_CallOperator(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Atom& a0)
 {
 	Processor::Result res;
 	PyObject *resobj;
@@ -78,7 +96,7 @@ Processor::Result sipAtomProcessor::sipVH_Operator__call__(const sipMethodCache 
 			goto releaseLock;
 		}
 
-		sipBadVirtualResultType(sipName_BALL_AtomProcessor,sipName_BALL_Operator__call__);
+		sipBadVirtualResultType(sipName_BALL_AtomProcessor,sipName_BALL___call__);
 	}
 
 reportError:
@@ -93,12 +111,13 @@ releaseLock:
 static PyObject *sipDo_AtomProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			AtomProcessor *ptr;
@@ -114,7 +133,7 @@ static PyObject *sipDo_AtomProcessor_start(PyObject *sipThisObj,PyObject *sipArg
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomProcessor,sipName_BALL_start);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomProcessor,sipName_BALL_start);
 
 	return NULL;
 }
@@ -122,12 +141,13 @@ static PyObject *sipDo_AtomProcessor_start(PyObject *sipThisObj,PyObject *sipArg
 static PyObject *sipDo_AtomProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomProcessor)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			AtomProcessor *ptr;
@@ -143,14 +163,15 @@ static PyObject *sipDo_AtomProcessor_finish(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomProcessor,sipName_BALL_finish);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomProcessor,sipName_BALL_finish);
 
 	return NULL;
 }
 
-static PyObject *sipDo_AtomProcessor_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_AtomProcessor___call__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_AtomProcessor)) == NULL)
 		return NULL;
@@ -159,7 +180,7 @@ static PyObject *sipDo_AtomProcessor_Operator__call__(PyObject *sipThisObj,PyObj
 		Atom *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Atom,&a0obj))
 		{
 			Processor::Result res;
 			AtomProcessor *ptr;
@@ -174,7 +195,7 @@ static PyObject *sipDo_AtomProcessor_Operator__call__(PyObject *sipThisObj,PyObj
 			if (iserr)
 				return NULL;
 
-			res = ptr -> AtomProcessor::operator()(* a0);
+			res = ptr -> AtomProcessor::operator ()(* a0);
 
 			return PyInt_FromLong((long)res);
 		}
@@ -182,7 +203,7 @@ static PyObject *sipDo_AtomProcessor_Operator__call__(PyObject *sipThisObj,PyObj
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_AtomProcessor,sipName_BALL_Operator__call__);
+	sipNoMethod(sipArgsParsed,sipName_BALL_AtomProcessor,sipName_BALL___call__);
 
 	return NULL;
 }
@@ -223,6 +244,7 @@ PyObject *sipNew_AtomProcessor(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -230,10 +252,10 @@ PyObject *sipNew_AtomProcessor(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipAtomProcessor();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -241,7 +263,7 @@ PyObject *sipNew_AtomProcessor(PyObject *sipSelf,PyObject *sipArgs)
 		const AtomProcessor *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AtomProcessor,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_AtomProcessor,&a0obj))
 		{
 			int iserr = 0;
 
@@ -251,12 +273,12 @@ PyObject *sipNew_AtomProcessor(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAtomProcessor(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_AtomProcessor);
+		sipNoCtor(sipArgsParsed,sipName_BALL_AtomProcessor);
 		return NULL;
 	}
 
@@ -283,7 +305,7 @@ PyObject *sipNew_AtomProcessor(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_AtomProcessor[] = {
 	{sipName_BALL_start, sipDo_AtomProcessor_start, METH_VARARGS, NULL},
 	{sipName_BALL_finish, sipDo_AtomProcessor_finish, METH_VARARGS, NULL},
-	{sipName_BALL_Operator__call__, sipDo_AtomProcessor_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL___call__, sipDo_AtomProcessor___call__, METH_VARARGS, NULL},
 	{NULL}
 };
 
@@ -292,17 +314,15 @@ int sipCanConvertTo_AtomProcessor(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_AtomProcessor);
 }
 
-void sipConvertTo_AtomProcessor(PyObject *sipPy,AtomProcessor **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_AtomProcessor(PyObject *sipPy,AtomProcessor **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_AtomProcessor);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_AtomProcessor);
+		*sipCppPtr = NULL;
 
 		return;
 	}

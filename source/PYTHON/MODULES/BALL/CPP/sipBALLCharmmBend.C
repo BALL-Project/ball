@@ -19,33 +19,53 @@ static PyTypeObject sipType_CharmmBend = {
 	0,
 	0,
 	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
 };
 
-sipCharmmBend::sipCharmmBend(): CharmmBend()
+sipCharmmBend::sipCharmmBend()
+    : CharmmBend()
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipCharmmBend::sipCharmmBend(ForceField& a0): CharmmBend(a0)
+sipCharmmBend::sipCharmmBend(ForceField& a0)
+    : CharmmBend(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipCharmmBend::sipCharmmBend(const CharmmBend& a0,bool a1): CharmmBend(a0,a1)
+sipCharmmBend::sipCharmmBend(const CharmmBend& a0,bool a1)
+    : CharmmBend(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
-sipCharmmBend::sipCharmmBend(const CharmmBend& a0): CharmmBend(a0)
+sipCharmmBend::sipCharmmBend(const CharmmBend& a0)
+    : CharmmBend(a0)
 {
 	sipCommonCtor(sipPyMethods,4);
 }
 
 sipCharmmBend::~sipCharmmBend()
+ 
 {
 	sipCommonDtor(sipPyThis);
 }
+
 double sipCharmmBend::getEnergy() const
+
 {
 	int relLock;
 
@@ -53,15 +73,20 @@ double sipCharmmBend::getEnergy() const
 		sipForceFieldComponent::sipVH_getEnergy(&sipPyMethods[0],sipPyThis,relLock) :
 		ForceFieldComponent::getEnergy();
 }
-bool sipCharmmBend::setup()
+
+void sipCharmmBend::updateForces()
+
 {
 	int relLock;
 
-	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
-		sipForceFieldComponent::sipVH_setup(&sipPyMethods[1],sipPyThis,relLock) :
-		CharmmBend::setup();
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
+		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[1],sipPyThis,relLock);
+	else
+		CharmmBend::updateForces();
 }
+
 double sipCharmmBend::updateEnergy()
+
 {
 	int relLock;
 
@@ -69,25 +94,27 @@ double sipCharmmBend::updateEnergy()
 		sipForceFieldComponent::sipVH_updateEnergy(&sipPyMethods[2],sipPyThis,relLock) :
 		CharmmBend::updateEnergy();
 }
-void sipCharmmBend::updateForces()
+
+bool sipCharmmBend::setup()
+
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_updateForces,&relLock))
-		sipForceFieldComponent::sipVH_updateForces(&sipPyMethods[3],sipPyThis,relLock);
-	else
-		CharmmBend::updateForces();
+	return sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_setup,&relLock) ?
+		sipForceFieldComponent::sipVH_setup(&sipPyMethods[3],sipPyThis,relLock) :
+		CharmmBend::setup();
 }
 
 static PyObject *sipDo_CharmmBend_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmBend)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			bool res;
 			CharmmBend *ptr;
@@ -103,7 +130,7 @@ static PyObject *sipDo_CharmmBend_setup(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmBend,sipName_BALL_setup);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmBend,sipName_BALL_setup);
 
 	return NULL;
 }
@@ -111,12 +138,13 @@ static PyObject *sipDo_CharmmBend_setup(PyObject *sipThisObj,PyObject *sipArgs)
 static PyObject *sipDo_CharmmBend_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmBend)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			double res;
 			CharmmBend *ptr;
@@ -132,7 +160,7 @@ static PyObject *sipDo_CharmmBend_updateEnergy(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmBend,sipName_BALL_updateEnergy);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmBend,sipName_BALL_updateEnergy);
 
 	return NULL;
 }
@@ -140,12 +168,13 @@ static PyObject *sipDo_CharmmBend_updateEnergy(PyObject *sipThisObj,PyObject *si
 static PyObject *sipDo_CharmmBend_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
+	int sipArgsParsed = 0;
 
 	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_CharmmBend)) == NULL)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
 			CharmmBend *ptr;
 
@@ -161,7 +190,7 @@ static PyObject *sipDo_CharmmBend_updateForces(PyObject *sipThisObj,PyObject *si
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_CharmmBend,sipName_BALL_updateForces);
+	sipNoMethod(sipArgsParsed,sipName_BALL_CharmmBend,sipName_BALL_updateForces);
 
 	return NULL;
 }
@@ -207,6 +236,7 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 	sipThisType *sipThis = NULL;
 	const void *sipNew = NULL;
 	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
 
 	// See if there is something pending.
 
@@ -214,10 +244,10 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 
 	if (sipNew == NULL)
 	{
-		if (sipParseArgs(sipArgs,"-"))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
 			sipNew = new sipCharmmBend();
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -225,7 +255,7 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 		ForceField *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_ForceField,&a0obj))
 		{
 			int iserr = 0;
 
@@ -235,7 +265,7 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmBend(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -244,7 +274,7 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_CharmmBend,&a0obj,&a1))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I|l",sipCanConvertTo_CharmmBend,&a0obj,&a1))
 		{
 			int iserr = 0;
 
@@ -254,7 +284,7 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmBend(* a0, (bool)a1);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
@@ -262,7 +292,7 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 		const CharmmBend *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_CharmmBend,&a0obj))
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_CharmmBend,&a0obj))
 		{
 			int iserr = 0;
 
@@ -272,12 +302,12 @@ PyObject *sipNew_CharmmBend(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmBend(* a0);
-	}
+		}
 	}
 
 	if (sipNew == NULL)
 	{
-		sipNoCtor(sipName_BALL_CharmmBend);
+		sipNoCtor(sipArgsParsed,sipName_BALL_CharmmBend);
 		return NULL;
 	}
 
@@ -313,17 +343,15 @@ int sipCanConvertTo_CharmmBend(PyObject *sipPy)
 	return sipIsSubClassInstance(sipPy,sipClass_CharmmBend);
 }
 
-void sipConvertTo_CharmmBend(PyObject *sipPy,CharmmBend **sipCppPtr,int sipNoNull,int *sipIsErr)
+void sipConvertTo_CharmmBend(PyObject *sipPy,CharmmBend **sipCppPtr,int sipWillDeref,int *sipIsErr)
 {
 	if (*sipIsErr || sipPy == NULL)
 		return;
 
 	if (sipPy == Py_None)
 	{
-		if (sipNoNull)
-			sipNullArgument(sipName_BALL_CharmmBend);
-		else
-			*sipCppPtr = NULL;
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_CharmmBend);
+		*sipCppPtr = NULL;
 
 		return;
 	}
