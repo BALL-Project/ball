@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.17 2000/07/18 17:22:39 oliver Exp $
+// $Id: socket.C,v 1.18 2000/10/20 14:54:50 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -77,7 +77,7 @@ namespace BALL
 			stmo (-1), 
 			rtmo (-1)
 	{
-#	ifdef _S_NOLIBGXX
+#	ifdef BALL_HAS_ANSI_IOSTREAM
 		xflags (0);
 #	endif
 		xsetflags (_S_LINE_BUF);
@@ -90,7 +90,7 @@ namespace BALL
 	{
 		int soc = ::socket(domain, st, proto);
 		rep = new sockcnt(soc, 1);
-#	ifdef _S_NOLIBGXX
+#	ifdef BALL_HAS_ANSI_IOSTREAM
 		xflags (0);
 #	endif
 		if (rep->sock == -1)
@@ -107,7 +107,7 @@ namespace BALL
 			stmo(sb.stmo), 
 			rtmo(sb.rtmo)
 	{
-#	ifdef _S_NOLIBGXX
+#	ifdef BALL_HAS_ANSI_IOSTREAM
 		xflags(0);
 #	endif
 		rep->cnt++;
@@ -123,7 +123,7 @@ namespace BALL
 			stmo = sb.stmo; 
 			rtmo = sb.rtmo;
 			rep->cnt++;
-#			ifdef _S_NOLIBGXX
+#			ifdef BALL_HAS_ANSI_IOSTREAM
 				xflags (sb.xflags());
 #			else
 				xflags (((SocketBuf&)sb).xflags());
