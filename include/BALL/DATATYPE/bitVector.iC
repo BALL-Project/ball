@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.21 2001/03/06 13:44:04 balltest Exp $
+// $Id: bitVector.iC,v 1.22 2001/10/11 00:32:54 oliver Exp $
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
@@ -100,14 +100,14 @@ void BitVector::get(BitVector& bit_vector, bool deep) const
 }
 
 BALL_INLINE 
-BALL::BitVector::BlockType* BitVector::getBitSet()
+BALL::BitVector::VectorType& BitVector::getBitSet()
 	throw()
 {
   return bitset_;
 }
 
 BALL_INLINE 
-const BALL::BitVector::BlockType* BitVector::getBitSet() const
+const BALL::BitVector::VectorType& BitVector::getBitSet() const
 	throw()
 {
   return bitset_;
@@ -184,7 +184,7 @@ BALL_INLINE
 bool BitVector::isValid() const
 	throw()
 {
-  return (bitset_ != 0);
+  return true;
 }
 
 BALL_INLINE

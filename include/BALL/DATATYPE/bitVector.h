@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.26 2001/07/16 02:18:54 oliver Exp $
+// $Id: bitVector.h,v 1.27 2001/10/11 00:32:54 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -193,7 +193,9 @@ namespace BALL
 
 		///
 		typedef unsigned char BlockType;
-			
+		///
+		typedef std::vector<BlockType>	VectorType;
+		///
 		static const Size BlockSize;
 
 		//@}
@@ -296,12 +298,12 @@ namespace BALL
 		/** Return a muteable pointer to the values of this instance.
 				@return unsigned char*	a muteable pointer to the values of this instance
 		*/
-		BlockType* getBitSet() throw();
+		VectorType& getBitSet() throw();
 
 		/** Return a constant pointer to the values of this instance.
 				@return unsigned char*	a constant pointer to the values of this instance
 		*/
-		const BlockType* getBitSet() const throw();
+		const VectorType& getBitSet() const throw();
 
 		/**	Random access to the components.
 				If the given index is greater than the size of this instance, this BitVector
@@ -416,56 +418,66 @@ namespace BALL
 		/** Compute {\em this or bit\_vector}.
 				The result is saved in this instance.
 		*/
-		void bitwiseOr(const BitVector& bit_vector) throw(Exception::OutOfMemory);
+		void bitwiseOr(const BitVector& bit_vector) 
+			throw(Exception::OutOfMemory);
 
 		/** Compute {\em this xor bit\_vector}.
 				The result is saved in this instance.
 		*/
-		void bitwiseXor(const BitVector& bit_vector) throw(Exception::OutOfMemory);
+		void bitwiseXor(const BitVector& bit_vector) 
+			throw(Exception::OutOfMemory);
 
 		/** Compute {\em this and bit\_vector}.
 				The result is saved in this instance.
 		*/
-		void bitwiseAnd(const BitVector& bit_vector) throw(Exception::OutOfMemory);
+		void bitwiseAnd(const BitVector& bit_vector) 
+			throw(Exception::OutOfMemory);
 
 		/** Or Operator.
 				Creates a new BitVector object and fills it with the result of
 				{\em this or bit\_Vector}.
 		*/
-		BitVector operator | (const BitVector& bit_vector) throw(Exception::OutOfMemory);
+		BitVector operator | (const BitVector& bit_vector) 
+			throw(Exception::OutOfMemory);
 
 		/** Compute {\em this or bit\_vector}.
 				The result is saved in this instance.
 		*/
-		BitVector& operator |= (const BitVector& bit_vector) throw(Exception::OutOfMemory);
+		BitVector& operator |= (const BitVector& bit_vector) 
+			throw(Exception::OutOfMemory);
 
 		/** And Operator.
 				Creates a new BitVector object and fills it with the result of
 				{\em this and bit\_Vector}.
 		*/
-		BitVector operator & (const BitVector& bit_vector) throw(Exception::OutOfMemory);
+		BitVector operator & (const BitVector& bit_vector) 
+			throw(Exception::OutOfMemory);
 
 		/** Compute {\em this and bit\_vector}.
 				The result is saved in this instance.
 		*/
-		BitVector& operator &= (const BitVector& bit_vector) throw(Exception::OutOfMemory);
+		BitVector& operator &= (const BitVector& bit_vector) 
+			throw(Exception::OutOfMemory);
 
 		/** Xor Operator.
 				Creates a new BitVector object and fills it with the result of
 				{\em this Xor bit\_Vector}.
 		*/
-		BitVector operator ^ (const BitVector& bit_vector) throw(Exception::OutOfMemory);
+		BitVector operator ^ (const BitVector& bit_vector) 
+			throw(Exception::OutOfMemory);
 
 		/** Compute {\em this xor bit\_vector}.
 				The result is saved in this instance.
 		*/
-		BitVector& operator ^= (const BitVector& bit_vector) throw(Exception::OutOfMemory);
+		BitVector& operator ^= (const BitVector& bit_vector) 
+			throw(Exception::OutOfMemory);
 
 		/** Negate Operator.
 				Creates a new BitVector object and fills it with the negate 
 				result of this instance.
 		*/
-		BitVector operator ~ () throw(Exception::OutOfMemory);
+		BitVector operator ~ () 
+			throw(Exception::OutOfMemory);
 
 		//@}
 		/**	@name	Predicates
@@ -557,13 +569,13 @@ namespace BALL
 		Index block_(Index index)
 			throw(Exception::IndexUnderflow, Exception::OutOfMemory);
 
-		BlockType mask_(Index index) const throw();
+		BlockType mask_(Index index) const
+			throw();
 
 		// --- ATTRIBUTES
 
-		Size 				size_;
-		Size 				block_size_;
-		BlockType* 	bitset_;
+		Size		size_;
+		VectorType	bitset_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
