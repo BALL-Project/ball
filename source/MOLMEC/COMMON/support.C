@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.42 2005/01/24 17:22:09 amoll Exp $
+// $Id: support.C,v 1.43 2005/01/24 22:36:56 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/support.h>
@@ -148,7 +148,7 @@ namespace BALL
 
 			// initialize the hash grid
 			// abort if grid becomes too big, here 10^4
-			if ((lower - upper).getSquareLength() > 10^16) 
+			if ((lower - upper).getSquareLength() > pow(10.0,16)) 
 			{
 				throw(Exception::OutOfMemory(__FILE__, __LINE__));
 			}
