@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.C,v 1.4 2003/09/02 16:06:16 amoll Exp $
+// $Id: trajectoryControl.C,v 1.5 2003/09/07 23:40:20 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/trajectoryControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -12,6 +12,7 @@
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qfiledialog.h>
+#include <qlistview.h>
 
 using std::endl;
 
@@ -22,26 +23,11 @@ namespace BALL
 
 TrajectoryControl::TrajectoryControl(QWidget* parent, const char* name)
 	throw()
-		:	QListView(parent, name),
-			ModularWidget(name),
+		:	GenericControl(parent, name),
 			context_trajectory_(0),
-			context_item_(0),
 			dialog_(0),
 			visualise_id_(0)
 {
-	// appearance
-	setRootIsDecorated(TRUE);
-	setSorting(-1);
-	setSelectionMode(QListView::Extended);
-	addColumn("Name");
-	addColumn("from");
-	setColumnWidth(0, 120);
-	setColumnWidth(1, 60);
-
-	connect(this, SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)), this,
-					SLOT(onContextMenu_(QListViewItem*, const QPoint&, int)));
-
-	registerWidget(this);
 }
 
 
@@ -126,9 +112,9 @@ void TrajectoryControl::insertTrajectory_(TrajectoryFile* file, System& system)
 	if (pos) pos++;
 	name = name.getSubstring(pos);
 	
-	QListViewItem* item = new QListViewItem(this, name.c_str(), system.getName().c_str());
+	QListViewItem* item = new QListViewItem(listview, name.c_str(), system.getName().c_str());
 	item_to_trajectory_[item] = manager;
-	updateContents();
+	listview->triggerUpdate();
 }
 
 
@@ -171,7 +157,7 @@ void TrajectoryControl::deleteTrajectory_()
 	delete ssm;
 	item_to_trajectory_.erase(context_item_);
 	delete context_item_;
-	updateContents();
+	listview->triggerUpdate();
 
 	setStatusbarText("deleted trajectory");
 }
@@ -190,40 +176,6 @@ void TrajectoryControl::onContextMenu_(QListViewItem* item,  const QPoint& point
 
 	// show the context menu if it is not empty
 	if (context_menu.count()) context_menu.exec(point);
-}
-
-
-void TrajectoryControl::switchShowWidget()
-	throw()
-{
-	QMenuBar* menu = getMainControl()->menuBar();
-	if (menu->isItemChecked(window_menu_entry_id_))
-	{
-		hide();
-		menu->setItemChecked(window_menu_entry_id_, false);
-	}
-	else
-	{
-		show();
-		menu->setItemChecked(window_menu_entry_id_, true);
-	}
-}
-
-void TrajectoryControl::writePreferences(INIFile& inifile)
-	throw()
-{
-	inifile.insertValue("WINDOWS", "TrajectoryControl::on", 
-		String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
-}
-
-void TrajectoryControl::fetchPreferences(INIFile & inifile)
-	throw()
-{
-	if (!inifile.hasEntry("WINDOWS", "TrajectoryControl::on")) return;
-	if (inifile.getValue("WINDOWS", "TrajectoryControl::on").toUnsignedInt() == 0) 
-	{
-		switchShowWidget();
-	}
 }
 
 void TrajectoryControl::visualiseTrajectory_()
@@ -258,6 +210,4 @@ void TrajectoryControl::saveTrajectory_()
 	setStatusbarText("Writen DCDFile");
 }
 
-
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces

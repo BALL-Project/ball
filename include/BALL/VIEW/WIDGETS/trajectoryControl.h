@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.h,v 1.3 2003/09/04 23:14:16 amoll Exp $
+// $Id: trajectoryControl.h,v 1.4 2003/09/07 23:40:41 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_TrajectoryControl_H
 #define BALL_VIEW_WIDGETS_TrajectoryControl_H
-
-#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
-#	include <BALL/VIEW/KERNEL/modularWidget.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
@@ -18,9 +14,9 @@
 # include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #endif
 
-#include <qlistview.h>
-#include <qmessagebox.h>
-#include <qpoint.h>
+#ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
+# include <BALL/VIEW/WIDGETS/genericControl.h>
+#endif
 
 namespace BALL
 {
@@ -46,8 +42,7 @@ namespace BALL
 				\ingroup ViewWidgets
 		*/
 		class TrajectoryControl
-			: public QListView, 
-				public ModularWidget
+			: public GenericControl
 		{
 			Q_OBJECT
 
@@ -109,14 +104,6 @@ namespace BALL
 			virtual void checkMenu(MainControl& main_control)
 				throw();
 			
-			///
-			virtual void fetchPreferences(INIFile& inifile)
-				throw();
-			
-			///
-			virtual void writePreferences(INIFile& inifile)
-				throw();
-
 			//@}
 			/** @name Public slots 
 			*/ 
@@ -124,10 +111,6 @@ namespace BALL
 			public slots:
 
 			void addTrajectory()
-				throw();
-
-			/// Show or hide widget (Called by menu entry in "WINDOWS")
-			void switchShowWidget()
 				throw();
 
 			//@} 
