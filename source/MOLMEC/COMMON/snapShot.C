@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.19 2001/01/24 12:27:18 amoll Exp $
+// $Id: snapShot.C,v 1.20 2001/02/21 14:35:31 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -591,10 +591,11 @@ namespace BALL
 	}
 
 
-	// This method takes a snapshot of the system's current state and stores it in
-	// memory. If no memory is available or a maximum number of snapshots has been
-	// taken, all snapshots so far are saved to disk 
-	// The first snapshot taken (and with no other previous snapshots in a file)
+	// The following is not true at the moment...
+	// This method takes a snapshot of the system's current state and stores
+	// it in memory. If no memory is available or a maximum number of
+	// snapshots has been taken, all snapshots so far are saved to disk The
+	// first snapshot taken (and with no other previous snapshots in a file)
 	// has index 1. 
 	void SnapShotManager::takeSnapShot()
 		throw(Exception::OutOfMemory)
