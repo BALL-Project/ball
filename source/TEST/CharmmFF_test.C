@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_test.C,v 1.13 2004/03/14 18:20:30 oliver Exp $
+// $Id: CharmmFF_test.C,v 1.14 2004/05/07 13:10:06 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -20,7 +20,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.13 2004/03/14 18:20:30 oliver Exp $")
+START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.14 2004/05/07 13:10:06 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ CHECK(specificSetup())
 	a.specificSetup();
 RESULT
 
-FragmentDB frag_db;
+FragmentDB frag_db("fragments/Fragments.db");
 {
 	// read the PDB file containing a single GLY
 	PDBFile f("data/CharmmFF_test_1.pdb");	

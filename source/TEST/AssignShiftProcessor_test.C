@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AssignShiftProcessor_test.C,v 1.14 2003/05/26 15:58:37 amoll Exp $
+// $Id: AssignShiftProcessor_test.C,v 1.15 2004/05/07 13:10:05 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/FORMAT/NMRStarFile.h>
 #include <BALL/SYSTEM/path.h>
 
-START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.14 2003/05/26 15:58:37 amoll Exp $")
+START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.15 2004/05/07 13:10:05 amoll Exp $")
 
 using namespace BALL;
 using namespace std;
@@ -26,6 +26,8 @@ CHECK(preparations)
 	f >> s;
 RESULT
 
+FragmentDB db("fragments/Fragments.db");
+
 CHECK(AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)/apply())
 	NMRStarFile rs("data/AssignShiftProcessor_test.str");
 	TEST_EQUAL(rs.getData()[0].atom_data.size(), 797)
@@ -33,6 +35,7 @@ CHECK(AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& ato
 	TEST_EQUAL(s.countAtoms(), 1944)
 
 	AssignShiftProcessor asp(rs.getData()[0].atom_data);
+	asp.setFragmentDB(&db);
 	s.apply(asp);
 RESULT
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: OoiEnergy_test.C,v 1.4 2002/12/19 21:01:35 oliver Exp $
+// $Id: OoiEnergy_test.C,v 1.5 2004/05/07 13:10:06 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(OoiEnergy, "$Id: OoiEnergy_test.C,v 1.4 2002/12/19 21:01:35 oliver Exp $")
+START_TEST(OoiEnergy, "$Id: OoiEnergy_test.C,v 1.5 2004/05/07 13:10:06 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ CHECK(calculateOoiEnergy() / BPTI)
 	f >> S;
 	f.close();
 
-	FragmentDB frag_db;
+	FragmentDB frag_db("fragments/Fragments.db");
 	S.apply(frag_db.normalize_names);
 	S.apply(frag_db.build_bonds);
 	
