@@ -48,6 +48,7 @@ Fixed:
 - Scene: mouse sensitivity was adjusted
 - now show the correct number of added bonds
 - prevent flicking on startup from MainControlPreferences dialog
+- ResidueIndexColorProcessor now no longer counts water Residues
 
 Changed:
 - inside of surfaces gets now correctly drawn

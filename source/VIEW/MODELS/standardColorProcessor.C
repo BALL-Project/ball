@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.41 2004/09/07 14:22:22 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.42 2004/09/13 17:12:50 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -352,6 +352,8 @@ namespace BALL
 
 				for (; +res_it; ++res_it)
 				{
+					if ((*res_it).getName() == "HOH") continue;
+
 					String id_string = (*res_it).getID();
 					Position id;
 					try
