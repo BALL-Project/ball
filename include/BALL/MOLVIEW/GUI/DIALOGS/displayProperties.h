@@ -105,11 +105,11 @@ namespace BALL
 				\end{itemize} 
 				The coloring methods:
 				\begin{itemize}
-				  \item  \Ref{ElementColorCalculator} color the molecular objects according to their atom elements
-				  \item  \Ref{ResidueNameColorCalculator} color the molecular objects according to their residue names
-				  \item  \Ref{AtomChargeColorCalculator} color the molecular objects according to their atom charge
-				  \item  \Ref{AtomDistanceColorCalculator} color the molecular objects according to their atom distance
-				  \item  \Ref{CustomColorCalculator} color the molecular objects according to selected color
+				  \item  \Ref{ElementColorCalculator} colors the molecular objects according to their atom elements
+				  \item  \Ref{ResidueNameColorCalculator} colors the molecular objects according to their residue names
+				  \item  \Ref{AtomChargeColorCalculator} colors the molecular objects according to their atom charge
+				  \item  \Ref{AtomDistanceColorCalculator} colors the molecular objects according to their atom distance
+				  \item  \Ref{CustomColorCalculator} colors the molecular objects according to selected color
 				\end{itemize} 
 				For information about the drawing precision see \Ref{GeometricObject}.\\
 				This dialog is also responsible for selecting and deselecting,
@@ -117,13 +117,13 @@ namespace BALL
 				to center the camera of the \Ref{Scene} to the geometric center of the selection
 				of molecular objects.
 				The class \Ref{MolecularControl} is responsible for creating such a selection.
-				If this dialog should be used create it with \Ref{MainControl} as parent.
+				If this dialog is used, it should be created with \Ref{MainControl} as parent.
 				The class DisplayPropertiesData contains the definition of the layout of
 				this dialog and is therefore not necessary for understanding.
 				@memo    DisplayProperties class (BALL MOLVIEW gui dialogs framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 14:55:23 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/07/06 13:26:28 $
 		*/
 		class DisplayProperties 
 			: public BALL::MOLVIEW::DisplayPropertiesData,
@@ -138,8 +138,8 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new displayProperties.
-					Set the combo box of the coloring method to the \Ref{ElementColorCalculator}.
+					Constructs new displayProperties.
+					Sets the combo box of the coloring method to the \Ref{ElementColorCalculator}.
 					This combo box as well as the others can be set differently according to saved
 					preferences. See \Ref{fetchPreferences}.
 					Calls \Ref{registerWidget}.
@@ -200,8 +200,8 @@ namespace BALL
 			*/
 			//@{
 			
-			/** Fetch the preferences.
-					Fetch the preferences (the position, the custom color, the model, the drawing 
+			/** Fetches the preferences.
+					Fetches the preferences (the position, the custom color, the model, the drawing 
 					precision, the drawing mode and the coloring method of {\em *this}
 					displayProperties) from the	\Ref{INIFile} {\em inifile}.
 					This method will be called inside the method \Ref{show} from the class
@@ -213,8 +213,8 @@ namespace BALL
 			virtual void fetchPreferences(INIFile &inifile)
 					throw();
 				
-			/** Write the preferences.
-					Write the preferences (the position, the custom color, the model, the drawing 
+			/** Writes the preferences.
+					Writes the preferences (the position, the custom color, the model, the drawing 
 					precision, the drawing mode and the coloring method of {\em *this}
 					displayProperties) to the	\Ref{INIFile} {\em inifile}.
 					This method will be called inside the method \Ref{aboutToExit} from the class
@@ -226,17 +226,17 @@ namespace BALL
 			virtual void writePreferences(INIFile &inifile)
 					throw();
 				
-			/**	Initialize the widget.
-					Initialize the popup menu {\em Display} with its checkable submenus
+			/**	Initializes the widget.
+					Initializes the popup menu {\em Display} with its checkable submenus
 					\begin{itemize}
-					  \item  {\em Display Properties} - open the dialog (indicates if open)
-					  \item  {\em Select} - mark the selected molecular objects in the selected color (See \Ref{GeometricObject})
-					  \item  {\em Deselect} - use the previously set color of the selected molecular objects
-					  \item  {\em Focus Camera} - center the camera of \Ref{Scene} to the geometric center of the molecular objects in the selection
-					  \item  {\em Build Bonds} - generate the \Ref{Bond} object to the molecular objects in the selection
-					  \item  {\em Add Hydrogens} - add hydrogens to the molecular objects in the selection
+					  \item  {\em Display Properties} - opens the dialog (indicates if open)
+					  \item  {\em Select} - marks the selected molecular objects in the selected color (See \Ref{GeometricObject})
+					  \item  {\em Deselect} - uses the previously set color of the selected molecular objects
+					  \item  {\em Focus Camera} - centers the camera of \Ref{Scene} to the geometric center of the molecular objects in the selection
+					  \item  {\em Build Bonds} - generates the \Ref{Bond} object to the molecular objects in the selection
+					  \item  {\em Add Hydrogens} - adds hydrogens to the molecular objects in the selection
 					\end{itemize}
-					and add them to the appropriate slots.
+					and adds them to the appropriate slots.
 					This method is called automatically	immediately before the main application 
 					is started. 
 					This method will be called by \Ref{show} from the \Ref{MainControl} object.
@@ -257,8 +257,8 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 					throw();
 				
-			/**	Remove the widget.
-					Remove the checkable submenus from the popup menu
+			/**	Removes the widget.
+					Removes the checkable submenus from the popup menu
 					{\em Display}	and cut the all previously registered connections.
 					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl}
 					object.
@@ -299,7 +299,7 @@ namespace BALL
 			*/
 			//@{
 
-			/** Color selected objects uniquely.
+			/** Colors selected objects uniquely.
 					If selected molecular objects are available they will be colored according to
 					the selected color as specified in \Ref{GeometricObject}.
 					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
@@ -315,7 +315,7 @@ namespace BALL
 			*/
 		  void select();
 
-			/** Color deselected objects in their own color.
+			/** Colors deselected objects in their own color.
 					If selected molecular objects are available they will be colored according to
 					their own color as specified in the objects. This method reverses the process
 					done in the \Ref{select} method.
@@ -332,8 +332,8 @@ namespace BALL
 			*/
 			void deselect();
 
-			/** Center the camera.
-					Center the camera of \Ref{Scene} to the geometric center of the molecular object
+			/** Centers the camera.
+					Centers the camera of \Ref{Scene} to the geometric center of the molecular object
 					in the selection list.
 					The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
 					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
@@ -344,7 +344,7 @@ namespace BALL
 			*/
 			void centerCamera();
 
-			/** Create bonds.
+			/** Creates bonds.
 					If selected molecular objects are available \Ref{Bond} objects will be created
 					for each object in the selection list
 					using the \Ref{build_bonds} processor of the \Ref{FragmentDB}
@@ -364,7 +364,7 @@ namespace BALL
 			*/
 			void buildBonds();
 			
-			/** Add hydrogens.
+			/** Adds hydrogens.
 					If selected molecular objects are available hydrogens will be created
 					for each object in the selection list
 					using the \Ref{add_hydrogens} processor of the \Ref{FragmentDB}
@@ -384,8 +384,8 @@ namespace BALL
 			*/
 			void addHydrogens();
 			
-			/** Start the displayProperties dialog.
-					Open {\em *this} displayProperties dialog.
+			/** Starts the displayProperties dialog.
+					Opens {\em *this} displayProperties dialog.
 					Calls \Ref{show} and \Ref{raise} from \Ref{QDialog} class.
 					See documentation of QT-library for information concerning QDialog widgets.
 			*/
@@ -398,7 +398,7 @@ namespace BALL
 		  */
 			//@{
 					
-			/** Change the drawing precision.
+			/** Changes the drawing precision.
 					This slot is connected to the drawing precision combo box and will be automatically
 					called if the contents of this combo box is changed.
 					This method changes the drawing precision of the selected model.
@@ -409,9 +409,9 @@ namespace BALL
 			*/
 			virtual void selectPrecision(const QString& string);
 				
-			/** Change the model.
+			/** Changes the model.
 					This slot is connected to the model combo box and will be automatically
-					called if the contents of this combo box is changed.
+					called if the content of this combo box is changed.
 					This method changes the model the will be created by pressing the apply button.
 					The selected drawing precision and the coloring method will be used for this model.
 					@param   string the string containing the new model
@@ -421,9 +421,9 @@ namespace BALL
 			*/
 			virtual void selectModel(const QString& string);
 			
-			/** Change the coloring method.
+			/** Changes the coloring method.
 					This slot is connected to the coloring method combo box and will be automatically
-					called if the contents of this combo box is changed.
+					called if the content of this combo box is changed.
 					This method changes the coloring method of the selected model.
 					@param   string the string containing the new coloring method
 					@see     selectPrecision
@@ -433,7 +433,7 @@ namespace BALL
 			virtual void selectColoringMethod(const QString& string);
 			
 			/** Indicates the apply button was pressed.
-					Apply the selected model with its selected properties to each \Ref{Composite} object
+					Applies the selected model with its selected properties to each \Ref{Composite} object
 					available in the molecular selection list.
 					The message \Ref{ChangedCompositeMessage} will be sent for each \Ref{Composite}
 					object in the	selection list.
@@ -450,10 +450,10 @@ namespace BALL
 			*/
 			virtual void applyButtonClicked();
 			
-			/** Open the edit color dialog.
-					Open the dialog for editing the color in which the model
+			/** Opens the edit color dialog.
+					Opens the dialog for editing the color in which the model
 					should be drawn (if coloring method: custom was chosen).
-					Open a \Ref{QColorDialog} from the QT-library.
+					Opens a \Ref{QColorDialog} from the QT-library.
 					See documentation of QT-library for information concerning QColorDialog widgets.
 					@see   selectColoringMethod
 			 */ 
