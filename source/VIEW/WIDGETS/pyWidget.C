@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.29 2004/04/21 15:06:14 amoll Exp $
+// $Id: pyWidget.C,v 1.30 2004/04/23 00:37:55 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -18,9 +18,6 @@
 #include <qfiledialog.h>
 #include <qapplication.h>
 
-// doesnt work right now in multithreaded mode
-#undef BALL_QT_HAS_THREADS
-
 namespace BALL
 {
 	namespace VIEW
@@ -36,7 +33,9 @@ namespace BALL
 
 		void RunPythonThread::run()
 		{
+			Log.disableOutput();
 			output = PyInterpreter::run(input, state);
+			Log.enableOutput();
 		}
 #endif
 
