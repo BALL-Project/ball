@@ -13,13 +13,13 @@
 
 namespace BALL 
 {
-	//using namespace std;
-
 	/** @name	NMRAtomData.
 			This structure includes all information for one atom 
 			delivered by a NMR-Star-File.
 			All members are public for easy access.
+			\\
 			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
+			\\
 	*/
 	//@{
 	struct NMRAtomData
