@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.10 2000/08/30 19:58:08 oliver Exp $
+// $Id: fragment.h,v 1.11 2000/12/11 21:13:20 oliver Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -56,7 +56,8 @@ namespace BALL
 		Fragment(const String& name);
 
 		/** Destructor */
-		virtual ~Fragment();
+		virtual ~Fragment()
+			throw();
 
 		//@}
 	
@@ -99,7 +100,8 @@ namespace BALL
 				@param   s - output stream where to output the internal state of {\em *this} Fragment
 				@param   depth - the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 		//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.6 2000/12/08 14:52:28 amoll Exp $
+// $Id: regularData2D.h,v 1.7 2000/12/11 21:14:22 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 #define BALL_DATATYPE_REGULARDATA2D_H
@@ -109,12 +109,12 @@ namespace BALL
 		
 		/** Return the position of the data point nearest to x, y.
 		 */
-		void getNearestPosition(double x, double y, pair<Position, Position>& dum)
+		void getNearestPosition(double x, double y, std::pair<Position, Position>& dum)
 			throw();
 
 		/** Return the position of x, y in the internal coordinate system.
 		 */
-		void getConvertedPosition(Position x, Position y, pair<T, T>& dum) const
+		void getConvertedPosition(Position x, Position y, std::pair<T, T>& dum) const
 			throw();
 
 		/** Return the value at coordinates x, y. If there's no data point at that location, 
@@ -416,7 +416,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	void TRegularData2D<T>::getNearestPosition(double x, double y, pair<Position, Position>& res)
+	void TRegularData2D<T>::getNearestPosition(double x, double y, std::pair<Position, Position>& res)
 		throw()
 	{
 	  if (x > xlower_)
@@ -454,7 +454,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	void TRegularData2D<T>::getConvertedPosition(Position x, Position y, pair<T, T>& dum) const
+	void TRegularData2D<T>::getConvertedPosition(Position x, Position y, std::pair<T, T>& dum) const
 		throw()
 	{
 	  dum.first =  (double) x * (xupper_ - xlower_) / xsize_ + xlower_;
@@ -668,7 +668,7 @@ namespace BALL
 	  
 	  num = data_.size();
 	  numsamples = (Size) (num / 100);
-	  vector<T> samplevals(numsamples);
+		std::vector<T> samplevals(numsamples);
 	  
 	  groundState_ = 0;
 	  sigmaGroundState_ = 0;

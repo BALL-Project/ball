@@ -1,6 +1,8 @@
-// $Id: bruker2DFile.C,v 1.9 2000/12/01 17:27:49 anhi Exp $
+// $Id: bruker2DFile.C,v 1.10 2000/12/11 21:16:00 oliver Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
+
+using namespace std;
 
 namespace BALL
 {

@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.9 2000/08/30 19:58:32 oliver Exp $
+// $Id: bond.C,v 1.10 2000/12/11 21:14:48 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 
@@ -104,11 +104,13 @@ namespace BALL
 	}
 
 	Bond::~Bond()
+		throw()
 	{ 
 		arrangeBonds_();
 	}
 
 	void Bond::clear()
+		throw()
 	{
 		PropertyManager::clear();
 		
@@ -117,6 +119,7 @@ namespace BALL
 	}
 
 	void Bond::destroy()
+		throw()
 	{
 		PropertyManager::destroy();
 
@@ -396,6 +399,7 @@ namespace BALL
 	}
 
 	void Bond::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.10 2000/10/26 15:40:43 anker Exp $
+// $Id: genericPDBFile.C,v 1.11 2000/12/11 21:16:00 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -93,6 +93,7 @@ namespace BALL
 	}
 
 	GenericPDBFile::~GenericPDBFile()
+		throw()
 	{
 		close();
 	}

@@ -1,4 +1,4 @@
-// $Id: atomContainer.C,v 1.1 2000/08/30 19:58:31 oliver Exp $
+// $Id: atomContainer.C,v 1.2 2000/12/11 21:14:48 oliver Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -36,11 +36,13 @@ namespace BALL
 	}
 
 	AtomContainer::~AtomContainer()
+		throw()
 	{
 		destroy();
 	}
 
 	void AtomContainer::clear()
+		throw()
 	{
 		Composite::clear();
 		PropertyManager::clear();
@@ -49,6 +51,7 @@ namespace BALL
 	}
 		
 	void AtomContainer::destroy()
+		throw()
 	{
 		Composite::destroy();
 		PropertyManager::destroy();
@@ -396,6 +399,7 @@ namespace BALL
 	}
 
 	void AtomContainer::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.13 2000/08/30 19:58:04 oliver Exp $
+// $Id: PDBAtom.h,v 1.14 2000/12/11 21:13:18 oliver Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -107,13 +107,16 @@ namespace BALL
 			 float temperature_factor = BALL_PDBATOM_DEFAULT_TEMPERATURE_FACTOR);
 
 		/// Destructor
-		virtual ~PDBAtom();
+		virtual ~PDBAtom()
+			throw();
 
 		/// Clears the contents of the atom.
-		virtual void clear();
+		virtual void clear()
+			throw();
 	
 		/// Clears the contents of the atom and removes it from all composite structures.
-		virtual void destroy();
+		virtual void destroy()
+			throw();
 
 		//@}
 
@@ -275,7 +278,8 @@ namespace BALL
 				@param	s output stream where to output the internal state of {\em *this} PDBAtom
 				@param  depth the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 		//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.C,v 1.6 2000/08/30 19:58:33 oliver Exp $
+// $Id: secondaryStructure.C,v 1.7 2000/12/11 21:14:49 oliver Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -27,16 +27,19 @@ namespace BALL
 	}
 
 	SecondaryStructure::~SecondaryStructure()
+		throw()
 	{
 		destroy();
 	}
 
 	void SecondaryStructure::clear()
+		throw()
 	{
 		AtomContainer::clear();
 	}
 		
 	void SecondaryStructure::destroy()
+		throw()
 	{
 		AtomContainer::destroy();
 	}
@@ -246,6 +249,7 @@ namespace BALL
 	}
 
 	void SecondaryStructure::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

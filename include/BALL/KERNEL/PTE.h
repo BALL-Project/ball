@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.9 2000/12/08 05:47:51 oliver Exp $
+// $Id: PTE.h,v 1.10 2000/12/11 21:13:19 oliver Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -349,7 +349,8 @@ namespace BALL
 
 			/**	Destructor
 			*/
-			virtual ~Element();
+			virtual ~Element()
+				throw();
 
 			//@}
 
@@ -644,7 +645,8 @@ namespace BALL
 
 			/**	Destructor
 			*/
-			virtual ~PTE_();
+			virtual ~PTE_()
+				throw();
 
 			//@}
 

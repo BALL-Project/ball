@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.15 2000/08/30 19:58:33 oliver Exp $
+// $Id: system.C,v 1.16 2000/12/11 21:14:50 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -43,6 +43,7 @@ namespace BALL
 	}
 
 	System::~System()
+		throw()
 	{
 		destroy();
 	}

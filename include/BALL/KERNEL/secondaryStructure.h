@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.15 2000/08/30 19:58:11 oliver Exp $
+// $Id: secondaryStructure.h,v 1.16 2000/12/11 21:13:21 oliver Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -67,13 +67,16 @@ namespace BALL
 		SecondaryStructure(const String& name);
 
 		///	Destructor
-		virtual ~SecondaryStructure();
+		virtual ~SecondaryStructure()
+			throw();
 
 		/// Clears the contents of the secondary structure.
-		virtual void clear();
+		virtual void clear()
+			throw();
 	
 		/// Clears the contents of the secondary structure and removes it from all composite structures.
-		virtual void destroy();
+		virtual void destroy()
+			throw();
 	
 		//@}
 
@@ -298,7 +301,8 @@ namespace BALL
 				@param	s output stream where to output the internal state of {\em *this}
 				@param  depth the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 		//@}
 
 		/** @name STORERS */

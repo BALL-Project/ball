@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.13 2000/08/30 19:58:09 oliver Exp $
+// $Id: molecule.h,v 1.14 2000/12/11 21:13:20 oliver Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -57,7 +57,8 @@ namespace BALL
 		Molecule(const String& name);
 
 		/** Destructor. */
-		virtual ~Molecule();
+		virtual ~Molecule()
+			throw();
 		
 		//@}
 
@@ -215,7 +216,8 @@ namespace BALL
 				@param	s output stream where to output the internal state of {\em *this} molecule
 				@param  depth the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 
 		//@}
 

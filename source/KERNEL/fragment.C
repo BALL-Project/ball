@@ -1,4 +1,4 @@
-// $Id: fragment.C,v 1.6 2000/08/30 19:58:32 oliver Exp $
+// $Id: fragment.C,v 1.7 2000/12/11 21:14:48 oliver Exp $
 
 #include <BALL/KERNEL/fragment.h>
 
@@ -23,6 +23,7 @@ namespace BALL
 	}
 
 	Fragment::~Fragment()
+		throw()
 	{
 		destroy();
 	}
@@ -49,6 +50,7 @@ namespace BALL
 	}
 			
 	void Fragment::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

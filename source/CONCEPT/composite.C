@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.25 2000/10/24 21:38:50 amoll Exp $
+// $Id: composite.C,v 1.26 2000/12/11 21:15:13 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -59,6 +59,7 @@ namespace BALL
 
 	// destructor
 	Composite::~Composite()
+		throw()
 	{
 		destroy();
 	}
@@ -332,6 +333,7 @@ namespace BALL
 	}
 
 	void Composite::select()
+		throw()
 	{
 		select_(true);
 	}
@@ -384,6 +386,7 @@ namespace BALL
 	}
 	
 	void Composite::deselect()
+		throw()
 	{
 		deselect_(true);
 	}
@@ -1134,6 +1137,7 @@ namespace BALL
 	}
 
 	void Composite::clear()
+		throw()
 	{
 		Composite* next_ptr = 0;
 		Composite* composite_ptr = first_child_;
@@ -1173,6 +1177,7 @@ namespace BALL
 	}
 
 	void Composite::destroy()
+		throw()
 	{
 		if (parent_ != 0)
 		{
@@ -1439,6 +1444,7 @@ namespace BALL
 	}
 
 	void Composite::dump(std::ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

@@ -1,4 +1,4 @@
-// $Id: molecule.C,v 1.6 2000/08/30 19:58:33 oliver Exp $
+// $Id: molecule.C,v 1.7 2000/12/11 21:14:49 oliver Exp $
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -24,6 +24,7 @@ namespace BALL
 	}
 
 	Molecule::~Molecule()
+		throw()
 	{
 		destroy();
 	}
@@ -160,6 +161,7 @@ namespace BALL
 	}
 
 	void Molecule::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

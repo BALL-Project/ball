@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.27 2000/10/26 14:41:48 anker Exp $
+// $Id: atom.h,v 1.28 2000/12/11 21:13:19 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -83,9 +83,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Atom class (BALL kernel framework)
-			@author  $Author: anker $
-			@version $Revision: 1.27 $
-			@date    $Date: 2000/10/26 14:41:48 $
+			@author  $Author: oliver $
+			@version $Revision: 1.28 $
+			@date    $Date: 2000/12/11 21:13:19 $
 	*/
 	class Atom
 		: public Composite,
@@ -235,7 +235,8 @@ namespace BALL
 					Calls \Ref{Atom::destroy}.
 					@see         Atom::destroy
 			*/
-			virtual ~Atom();
+			virtual ~Atom()
+				throw();
 
 			/** Explicit default initialization.
 					Set the state of {\em *this} atom to the default values.
@@ -255,7 +256,8 @@ namespace BALL
 						\end{itemize}
 						@see	Composite::clear
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 		
 			/** Explicit destructor.
 					Destroy {\em *this} atom explicitly without releasing its heap memory thus {\em *this} atom may exist further.
@@ -277,7 +279,8 @@ namespace BALL
 
 					@see         Composite::destroy
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 
 			//@}
 			
@@ -785,7 +788,8 @@ namespace BALL
 					@param   s - output stream where to output the internal state of {\em *this} atom
 					@param   depth - the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 
 			//@}
 

@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.10 2000/10/25 09:43:59 amoll Exp $
+// $Id: resourceFile.h,v 1.11 2000/12/11 21:14:27 oliver Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -79,7 +79,8 @@ namespace BALL
 
 		/**	
 		*/
-		virtual ~ResourceEntry();
+		virtual ~ResourceEntry()
+			throw();
 
 		/**	
 		*/

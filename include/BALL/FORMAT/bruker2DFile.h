@@ -1,11 +1,10 @@
-// $Id: bruker2DFile.h,v 1.9 2000/12/01 17:23:11 anhi Exp $
+// $Id: bruker2DFile.h,v 1.10 2000/12/11 21:14:27 oliver Exp $
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
 
 #include <vector>
-
-#include <list.h>
+#include <list>
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/DATATYPE/string.h>
@@ -63,17 +62,17 @@ class Bruker2D
   /**
    * Returns a list of peaks found in the spectrum.
    */
-  list< pair<int, int> > &GetPeakList();
+  std::list<std::pair<int, int> >& GetPeakList();
 
   /**
    * Returns the shift corresponding to a position in the bitmap.
    */
-  pair<double, double> GetShift(Position x, Position y);
+	std::pair<double, double> GetShift(Position x, Position y);
 
   /**
    * Returns the coordinates of a point in the original data next to the given coordinates.
    */
-  pair<Position, Position> GetPosition(double x, double y);
+  std::pair<Position, Position> GetPosition(double x, double y);
 
   /**
    * Set the parameters needed for conversion index<->shift.

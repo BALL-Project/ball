@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.7 2000/08/30 19:58:00 oliver Exp $ 
+// $Id: object.h,v 1.8 2000/12/11 21:12:49 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -48,13 +48,16 @@ namespace BALL
 		Object(const Object& object, bool deep = true);
  
 		/// Destructor
-		virtual ~Object();
+		virtual ~Object()
+			throw();
 
 		///
-		virtual void clear();
+		virtual void clear()
+			throw();
 
 		///
-		virtual void destroy();
+		virtual void destroy()
+			throw();
 
 		//@}
  

@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.16 2000/11/30 22:59:33 amoll Exp $
+// $Id: bitVector.iC,v 1.17 2000/12/11 21:14:22 oliver Exp $
 
 BALL_INLINE
 Bit::Bit() 
@@ -16,6 +16,13 @@ Bit::Bit(const Bit& bit)
 		index_(bit.index_),
 		bitvector_muteable_(bit.bitvector_muteable_)
 {
+}
+
+BALL_INLINE 
+BALL::Size BitVector::getSize() const
+	throw()
+{
+  return size_;
 }
 
 BALL_INLINE
@@ -108,13 +115,6 @@ void BitVector::get(BitVector& bit_vector, bool deep) const
   throw(Exception::OutOfMemory)
 {
   bit_vector.set(*this, deep);
-}
-
-BALL_INLINE 
-BALL::Size BitVector::getSize() const
-	throw()
-{
-  return size_;
 }
 
 BALL_INLINE 

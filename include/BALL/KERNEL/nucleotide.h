@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.13 2000/08/30 19:58:10 oliver Exp $
+// $Id: nucleotide.h,v 1.14 2000/12/11 21:13:21 oliver Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -67,13 +67,16 @@ namespace BALL
 			 char insertion_code = BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE);
 
 		/// Destructor
-		virtual ~Nucleotide();
+		virtual ~Nucleotide()
+			throw();
 
 		/// Clears the nucleotides contents.
-		virtual void clear();
+		virtual void clear()
+			throw();
 	
 		/// Clears the nucleotides contents and removes it from all composite structures.
-		virtual void destroy();
+		virtual void destroy()
+			throw();
 	
 		//@}
 
@@ -261,7 +264,8 @@ namespace BALL
 				@param	s output stream where to output the internal state of {\em *this} nucleotide
 				@param  depth the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 		//@}
 
 		/**	@name	Storers

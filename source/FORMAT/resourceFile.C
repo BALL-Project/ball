@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.18 2000/10/25 19:29:02 oliver Exp $
+// $Id: resourceFile.C,v 1.19 2000/12/11 21:16:00 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -57,6 +57,7 @@ namespace BALL
 	}
 
 	ResourceEntry::~ResourceEntry()
+		throw()
 	{
 		ResourceEntry::clear();
 	}

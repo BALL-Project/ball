@@ -1,4 +1,4 @@
-// $Id: nucleotide.C,v 1.5 2000/05/15 16:14:46 oliver Exp $
+// $Id: nucleotide.C,v 1.6 2000/12/11 21:14:49 oliver Exp $
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -31,11 +31,13 @@ namespace BALL
 	}
 
 	Nucleotide::~Nucleotide()
+		throw()
 	{
 		destroy();
 	}
 
 	void Nucleotide::clear()
+		throw()
 	{
 		Fragment::clear();
 
@@ -43,6 +45,7 @@ namespace BALL
 	}
 		
 	void Nucleotide::destroy()
+		throw()
 	{
 		Fragment::destroy();
 
@@ -236,6 +239,7 @@ namespace BALL
 	}
 
 	void Nucleotide::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

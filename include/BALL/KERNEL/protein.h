@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.11 2000/08/30 19:58:10 oliver Exp $ 
+// $Id: protein.h,v 1.12 2000/12/11 21:13:21 oliver Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -75,14 +75,17 @@ namespace BALL
 		Protein(const String& name, const String& id = BALL_PROTEIN_DEFAULT_ID);
 
 		///	Destructor
-		virtual ~Protein();
+		virtual ~Protein()
+			throw();
 	
 		/// Clears the contents of the protein
-		virtual void clear();
+		virtual void clear()
+			throw();
 	
 		/* Clears the contents of the protein and removes it from all composite structures.
 		*/
-		virtual void destroy();
+		virtual void destroy()
+			throw();
 
 		//@}
 
@@ -304,7 +307,8 @@ namespace BALL
 				@param	s output stream where to output the internal state of {\em *this}
 				@param  depth the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 		//@}
 
 		/**	@name	Storers

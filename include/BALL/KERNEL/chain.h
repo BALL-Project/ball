@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.17 2000/08/30 19:58:07 oliver Exp $
+// $Id: chain.h,v 1.18 2000/12/11 21:13:20 oliver Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -62,7 +62,8 @@ namespace BALL
 		Chain(const String& name);
 
 		/// Destructor
-		virtual ~Chain();
+		virtual ~Chain()
+			throw();
 			
 		//@}
 
@@ -316,7 +317,8 @@ namespace BALL
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 
 		//@}
 

@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.C,v 1.4 2000/05/11 16:16:06 amoll Exp $
+// $Id: nucleicAcid.C,v 1.5 2000/12/11 21:14:49 oliver Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -27,11 +27,13 @@ namespace BALL
 	}
 
 	NucleicAcid::~NucleicAcid()
+		throw()
 	{
 		destroy();
 	}
 
 	void NucleicAcid::clear()
+		throw()
 	{
 		Molecule::clear();
 
@@ -39,6 +41,7 @@ namespace BALL
 	}
 		
 	void NucleicAcid::destroy()
+		throw()
 	{
 		Molecule::destroy();
 
@@ -161,6 +164,7 @@ namespace BALL
 	}
 
 	void	NucleicAcid::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

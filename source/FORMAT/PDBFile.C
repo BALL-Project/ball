@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.18 2000/12/08 09:24:08 oliver Exp $
+// $Id: PDBFile.C,v 1.19 2000/12/11 21:15:59 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -83,6 +83,7 @@ namespace BALL
 
 
 	PDBFile::~PDBFile()
+		throw()
 	{
 		clear_();
 	}

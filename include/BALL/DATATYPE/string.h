@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.29 2000/12/10 21:39:11 amoll Exp $
+// $Id: string.h,v 1.30 2000/12/11 21:14:22 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -180,7 +180,7 @@ namespace BALL
 				successive construction of multiple strings from the same {\tt strstream}
 				object leads to identical copies.
 		*/
-		String(strstream& s)
+		String(::std::strstream& s)
 			throw();
 
 		/** Creates a new string from len copies of c.
@@ -263,7 +263,7 @@ namespace BALL
 		/** Assign a String from a {\bf strstream}.
 				The contents of the {\tt strstream} object are not modified.
 		*/
-		void set(strstream& s)
+		void set(::std::strstream& s)
 			throw();
 
 		/// Assign a String from the result of repeating {\bf c} {\bf len} times
@@ -321,7 +321,7 @@ namespace BALL
 		/** Assign a string from a {\bf strstream}.
 				The contents of the {\tt strstream} obejct are not modified.
 		*/
-		const String& operator = (strstream& s)
+		const String& operator = (::std::strstream& s)
 			throw();
 
 		/// Assign a String from a single char

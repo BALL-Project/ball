@@ -1,14 +1,14 @@
-// $Id: string.iC,v 1.28 2000/12/10 21:39:12 amoll Exp $
+// $Id: string.iC,v 1.29 2000/12/11 21:14:23 oliver Exp $
 
 BALL_INLINE 
-bool String::operator == (const char *char_ptr) const
+bool String::operator == (const char* char_ptr) const
 	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) == 0);
 }
 
 BALL_INLINE 
-bool String::operator != (const char *char_ptr) const
+bool String::operator != (const char* char_ptr) const
 	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) != 0);
@@ -61,7 +61,7 @@ bool Substring::operator == (const char* char_ptr) const
 }
 
 BALL_INLINE 
-bool Substring::operator != (const char *char_ptr) const
+bool Substring::operator != (const char* char_ptr) const
 	throw(Substring::UnboundSubstring, Exception::NullPointer)
 {
 	if (bound_ == 0)
@@ -452,7 +452,7 @@ const String& String::operator = (const String& s)
 }
 
 BALL_INLINE 
-const String& String::operator = (const char *char_ptr)
+const String& String::operator = (const char* char_ptr)
 	throw(Exception::NullPointer)
 {
   set(char_ptr, 0);
@@ -460,7 +460,7 @@ const String& String::operator = (const char *char_ptr)
 }
 
 BALL_INLINE 
-const String& String::operator = (strstream& s)
+const String& String::operator = (::std::strstream& s)
 	throw()
 {
   set(s);
@@ -837,28 +837,28 @@ bool String::operator == (const String& string) const
 }
 
 BALL_INLINE 
-bool String::operator < (const char *char_ptr) const
+bool String::operator < (const char* char_ptr) const
 	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) < 0);
 }
 
 BALL_INLINE
-bool String::operator <= (const char *char_ptr) const
+bool String::operator <= (const char* char_ptr) const
 	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) <= 0);
 }
 
 BALL_INLINE 
-bool String::operator >= (const char *char_ptr) const
+bool String::operator >= (const char* char_ptr) const
 	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) >= 0);
 }
 
 BALL_INLINE 
-bool String::operator > (const char *char_ptr) const
+bool String::operator > (const char* char_ptr) const
 	throw(Exception::NullPointer)
 {
   return (compare(char_ptr) > 0);
@@ -998,10 +998,10 @@ String::String(const String& s, Index from, Size len)
 }
 
 BALL_INLINE 
-void String::set(strstream& s)
+void String::set(::std::strstream& s)
 	throw()
 {
-	s << ends;
+	s << ::std::ends;
 	char* char_ptr = s.str();
 	assign(char_ptr);
 }
@@ -1028,7 +1028,7 @@ void String::swap(String& s)
 }
 
 BALL_INLINE 
-bool operator == (const char *char_ptr, const String &s)
+bool operator == (const char* char_ptr, const String &s)
 	throw(Exception::NullPointer)
 {
 	return (s.compare(char_ptr) == 0);
@@ -1063,7 +1063,7 @@ bool operator >= (const char* char_ptr, const String& s)
 }
 
 BALL_INLINE 
-bool operator > (const char *char_ptr, const String& s)
+bool operator > (const char* char_ptr, const String& s)
 	throw(Exception::NullPointer)
 {
 	return (s.compare(char_ptr) < 0);

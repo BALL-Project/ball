@@ -1,4 +1,4 @@
-// $Id: object.C,v 1.5 2000/10/24 21:38:51 amoll Exp $
+// $Id: object.C,v 1.6 2000/12/11 21:15:14 oliver Exp $
 
 #include <BALL/CONCEPT/object.h>
 
@@ -72,6 +72,7 @@ namespace BALL
 	}
 
 	Object::~Object()
+		throw()
 	{
 #		ifdef BALL_SUPPORT_OBJECT_MANAGER
 

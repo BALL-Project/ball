@@ -1,4 +1,4 @@
-// $Id: atomContainer.h,v 1.1 2000/08/30 19:58:05 oliver Exp $
+// $Id: atomContainer.h,v 1.2 2000/12/11 21:13:19 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -78,19 +78,22 @@ namespace BALL
 		AtomContainer(const String& name);
 
 		/** Destructor */
-		virtual ~AtomContainer();
+		virtual ~AtomContainer()
+			throw();
 
 		/** Clears the contents of this instance of AtomContainer.
 				This methods clears the base fragment's name, destroys all its children
 				(as in \Ref{Composite::clear}), but does not remove it from its parent composite structures.
 		*/
-		virtual void clear();
+		virtual void clear()
+			throw();
 	
 		/** Clears the contents of this instance of AtomContainer and removes it from parent composite structures.
 				This methods clears the base fragment's name, destroys all its children
 				(as in \Ref{Composite::destroy}), and removes it from its parent composite structures.
 		*/
-		virtual void destroy();
+		virtual void destroy()
+			throw();
 
 		//@}
 
@@ -410,7 +413,8 @@ namespace BALL
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 		//@}
 
 		/**	@name	Storers */

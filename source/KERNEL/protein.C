@@ -1,4 +1,4 @@
-// $Id: protein.C,v 1.6 2000/04/27 15:09:34 amoll Exp $
+// $Id: protein.C,v 1.7 2000/12/11 21:14:49 oliver Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -27,11 +27,13 @@ namespace BALL
 	}
 
 	Protein::~Protein()
+		throw()
 	{
 		destroy();
 	}
 
 	void Protein::clear()
+		throw()
 	{
 		Molecule::clear();
 
@@ -39,6 +41,7 @@ namespace BALL
 	}
 		
 	void Protein::destroy()
+		throw()
 	{
 		Molecule::destroy();
 
@@ -254,6 +257,7 @@ namespace BALL
 	}
 
 	void	Protein::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

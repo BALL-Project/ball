@@ -1,4 +1,4 @@
-// $Id: PDBAtom.C,v 1.6 2000/05/09 16:13:15 amoll Exp $
+// $Id: PDBAtom.C,v 1.7 2000/12/11 21:14:47 oliver Exp $
 
 #include <BALL/KERNEL/PDBAtom.h>
 
@@ -68,11 +68,13 @@ namespace BALL
 	}
 
 	PDBAtom::~PDBAtom()
+		throw()
 	{
 		destroy();
 	}
 
 	void PDBAtom::clear()
+		throw()
 	{
 		Atom::clear();
 
@@ -80,6 +82,7 @@ namespace BALL
 	}
 		
 	void PDBAtom::destroy()
+		throw()
 	{
 		Atom::destroy();
 
@@ -268,6 +271,7 @@ namespace BALL
 	}
 
 	void PDBAtom::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

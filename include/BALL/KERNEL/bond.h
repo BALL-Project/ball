@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.15 2000/08/30 19:58:07 oliver Exp $
+// $Id: bond.h,v 1.16 2000/12/11 21:13:19 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -62,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.15 $
-			@date    $Date: 2000/08/30 19:58:07 $
+			@version $Revision: 1.16 $
+			@date    $Date: 2000/12/11 21:13:19 $
 	*/
 	class Bond
 		: public Composite,
@@ -232,7 +232,8 @@ namespace BALL
 				Default destruction of {\em *this} bond.
 				If the bond is connecting two atoms, they are disconnected.
 		*/
-		virtual ~Bond();
+		virtual ~Bond()
+			throw();
 
 		/** Explicit default initialization.
 				Set the state of {\em *this} bond to the default values.
@@ -245,7 +246,8 @@ namespace BALL
 					\item bond type is unknown (=\Ref{Bond::TYPE__UNKNOWN})
 				\end{itemize}
 		*/
-		virtual void clear();
+		virtual void clear()
+			throw();
 
 		/** Explicit destructor.
 				Destroy {\em *this} bond explicitly without releasing its heap memory thus
@@ -263,7 +265,8 @@ namespace BALL
 
 				@see Bond::clear
 		*/
-		virtual void destroy();
+		virtual void destroy()
+			throw();
 		//@}
 
 		/**	@name Persistence */
@@ -622,7 +625,8 @@ namespace BALL
 					@param	s output stream where to output the internal state of {\em *this} bond
 					@param  depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 		
 			//@}
 

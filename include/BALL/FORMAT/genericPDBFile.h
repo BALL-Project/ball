@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.h,v 1.6 2000/10/23 23:31:01 amoll Exp $
+// $Id: genericPDBFile.h,v 1.7 2000/12/11 21:14:27 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -812,7 +812,8 @@ namespace BALL
 
 		GenericPDBFile();
 
-		virtual ~GenericPDBFile();
+		virtual ~GenericPDBFile()
+			throw();
 
 		virtual void clear(int state = 0);
 	

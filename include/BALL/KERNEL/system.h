@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.15 2000/08/30 19:58:12 oliver Exp $
+// $Id: system.h,v 1.16 2000/12/11 21:13:21 oliver Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -71,7 +71,8 @@ namespace BALL
 		System(const String& name);
 
 		///	Destructor
-		virtual ~System();
+		virtual ~System()
+			throw();
 
 		//@}
 	

@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.26 2000/12/01 23:15:48 amoll Exp $
+// $Id: composite.h,v 1.27 2000/12/11 21:12:48 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -132,7 +132,8 @@ namespace BALL
 				The destructor calls \Ref{destroy} to remove the composite from potential tree structures.
 				It also recursively destructs all children of the composite.
 		*/
-		virtual ~Composite();
+		virtual ~Composite()
+			throw();
 
 		/**	Clear the composite properties.	
 				This method removes the composite's children and destructs them if they are
@@ -143,7 +144,8 @@ namespace BALL
 				@see	AutoDeletable
 				@see	destroy
 		*/
-		virtual void clear();
+		virtual void clear()
+			throw();
 	
 		/**	Destroy the composite.
 				This method removes the composite from potential parental structures and
@@ -153,7 +155,8 @@ namespace BALL
 				@see	~Composite
 				@see	clear
 		*/
-		virtual void destroy();
+		virtual void destroy()
+			throw();
 
 		/**	Non-virtual destroy method.
 				This method behaves exactly like destroy except for a small difference:
@@ -551,7 +554,8 @@ namespace BALL
 				as well. The time stamps of descendants that changed their selection state 
 				are update, too.
 		*/	
-		virtual void select();
+		virtual void select()
+			throw();
 
 		/**	Deselect a composite.
 				This method deselects the composite and all the composites therein.
@@ -560,7 +564,8 @@ namespace BALL
 				as well. The time stamps of descendants that changed their selection state 
 				are update, too.
 		*/	
-		virtual void deselect();
+		virtual void deselect()
+			throw();
 
 		//@}
 	
@@ -695,7 +700,8 @@ namespace BALL
 
 		/** Dump the constent of this instance to an ostream.
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 		//@}
 
 

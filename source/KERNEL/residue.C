@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.15 2000/06/27 07:48:02 oliver Exp $
+// $Id: residue.C,v 1.16 2000/12/11 21:14:49 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -33,11 +33,13 @@ namespace BALL
 	}
 
 	Residue::~Residue()
+		throw()
 	{
 		destroy();
 	}
 
 	void Residue::clear()
+		throw()
 	{
 		Fragment::clear();
 
@@ -45,6 +47,7 @@ namespace BALL
 	}
 		
 	void Residue::destroy()
+		throw()
 	{
 		Fragment::destroy();
 
@@ -421,6 +424,7 @@ namespace BALL
 	}
 
 	void Residue::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
