@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.14 2001/08/01 01:28:10 oliver Exp $
+# $Id: Makefile,v 1.15 2001/08/01 23:56:26 oliver Exp $
 #
 all: libBALLc.so
 
@@ -259,5 +259,5 @@ depend:
 	@echo "" > .Dependencies
 	@/usr/local/bin/g++ -M  -fPIC   $(CPP_SOURCES) $(ADD_CPP_SOURCES) $(STD_CPP_INCLUDES) $(ADD_INCLUDES) $(SIP_INCLUDES) $(PYTHON_INCLUDES) $(BALL_INCLUDES)  >.Dependencies
 
-include .Dependencies
+-include .Dependencies
 
