@@ -1,6 +1,3 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
 // $Id: 
 
 #include <BALL/VIEW/GUI/WIDGETS/serverPreferences.h>
@@ -106,6 +103,8 @@ namespace BALL
 			bool server_status = server_status_->isChecked();
 			String port = String(port_->text().ascii());
 			
+			inifile.appendSection("NETWORK");
+
 			// save them to the inifile
 			if (server_status)
 			{
