@@ -128,14 +128,14 @@ namespace BALL
 		create_methods_.insert("chain", ChainPredicate::createDefault);
 		create_methods_.insert("nucleotide", NucleotidePredicate::createDefault);
 		create_methods_.insert("inRing", InRingPredicate::createDefault);
-		create_methods_.insert("doubleBonds", doubleBondsPredicate::createDefault);
-		create_methods_.insert("tripleBonds", tripleBondsPredicate::createDefault);
-		create_methods_.insert("aromaticBonds", aromaticBondsPredicate::createDefault);
-		create_methods_.insert("numberOfBonds", numberOfBondsPredicate::createDefault);
-		create_methods_.insert("connectedTo", connectedToPredicate::createDefault);
-		create_methods_.insert("sp3Hybridized", sp3HybridizedPredicate::createDefault);
-		create_methods_.insert("sp2Hybridized", sp2HybridizedPredicate::createDefault);
-		create_methods_.insert("spHybridized", spHybridizedPredicate::createDefault);
+		create_methods_.insert("doubleBonds", DoubleBondsPredicate::createDefault);
+		create_methods_.insert("tripleBonds", TripleBondsPredicate::createDefault);
+		create_methods_.insert("aromaticBonds", AromaticBondsPredicate::createDefault);
+		create_methods_.insert("numberOfBonds", NumberOfBondsPredicate::createDefault);
+		create_methods_.insert("connectedTo", ConnectedToPredicate::createDefault);
+		create_methods_.insert("sp3Hybridized", Sp3HybridizedPredicate::createDefault);
+		create_methods_.insert("sp2Hybridized", Sp2HybridizedPredicate::createDefault);
+		create_methods_.insert("spHybridized", SpHybridizedPredicate::createDefault);
 	}
 
 

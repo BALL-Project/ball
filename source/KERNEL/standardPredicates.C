@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.3 2000/05/22 17:42:39 anker Exp $
+// $Id: standardPredicates.C,v 1.4 2000/05/23 19:35:52 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -119,42 +119,53 @@ namespace BALL
 		return RTTI::isKindOf<Nucleotide>(atom);
 	}
 
-	Size InRingPredicate::limitcount = 0;
-	
 	InRingPredicate::InRingPredicate()
 	{
-		limitcount = 0;
 	}
 
 	bool InRingPredicate::dfs(const Atom* atom, const Atom* first_atom,
-		const int limit) const
+		const Size limit, HashSet<Atom*>& visited) const
 	{
 		// the following recursive function performs an ad-hoc dfs and returns
 		// true, if a ring was found and false otherwise.
 
-		if (++limitcount > limit)
+		// Log.info() << "Called with limit " << limit << endl;
+		if (limit < 0)
 		{
+			Log.info() << "limit exceeded: " << limit << endl;
 			return false;
 		}
 		else
 		{
-			if ((limitcount == limit) && (atom == first_atom)) 
+			if (limit == 0) 
 			{
-				return true;
-			}
-			else
-			{
-				return false;
+				if (atom == first_atom) 
+				{
+					Log.info() << "Found first atom at limit" << endl;
+					return true;
+				}
+				else
+				{
+					// Log.info() << "Reached limit" << endl;
+					return false;
+				}
 			}
 		}
 		Size i;
+		Atom* descend;
 		for (i = 0; i < atom->countBonds(); ++i)
 		{
-			if (dfs(atom->getBond(i)->getPartner(*atom), first_atom, limit))
+			descend = atom->getBond(i)->getPartner(*atom);
+			if (!visited.has(descend))
 			{
-				return true;
+				visited.insert(descend);
+				if (dfs(descend, first_atom, limit-1, visited))
+				{
+					return true;
+				}
 			}
 		}
+		// Log.info() << "No partner matched" << endl;
 		return false;
 	}
 
@@ -162,8 +173,14 @@ namespace BALL
 	bool InRingPredicate::operator () (const Atom& atom) const
 	{
 		int n = argument_.toInt();
-		limitcount = 0;
-		if (dfs (&atom,&atom,n))
+		// There are no rings with less than 3 atoms
+		if (n < 3) 
+		{
+			return false;
+		}
+
+		HashSet<Atom*> visited;
+		if (dfs (&atom,&atom,n,visited))
 		{
 			return true;
 		}
@@ -174,7 +191,7 @@ namespace BALL
 
 	}
 
-	bool doubleBondsPredicate::operator () (const Atom& atom) const
+	bool DoubleBondsPredicate::operator () (const Atom& atom) const
 	{
 		String s = argument_;
 		s.trim();
@@ -230,7 +247,7 @@ namespace BALL
 		return false;
 	}
 	
-	bool tripleBondsPredicate::operator () (const Atom& atom) const
+	bool TripleBondsPredicate::operator () (const Atom& atom) const
 	{
 		String s = argument_;
 		s.trim();
@@ -285,7 +302,7 @@ namespace BALL
 		return false;
 	}
 	
-	bool aromaticBondsPredicate::operator () (const Atom& atom) const
+	bool AromaticBondsPredicate::operator () (const Atom& atom) const
 	{
 		String s = argument_;
 		s.trim();
@@ -340,7 +357,7 @@ namespace BALL
 		return false;
 	}
 	
-	bool numberOfBondsPredicate::operator () (const Atom& atom) const
+	bool NumberOfBondsPredicate::operator () (const Atom& atom) const
 	{
 		String s = argument_;
 		s.trim();
@@ -387,13 +404,17 @@ namespace BALL
 		return false;
 	}
 	
-	bool connectedToPredicate::parse(const String& group, list<String>* subs) const
+	bool ConnectedToPredicate::parse(const String& group, 
+		std::list<std::pair<String,String> >& subs) const
 	{
 		// BAUSTELLE
+		// EIGENTLICH müssen hier Symbolfolgen erzeugt werden, keine Strings.
 
 		int depth = 0;
 		Size position = 0;
-		String* tmp;
+		std::pair<String, String> this_pair;
+		String current_bond;
+		String tmp;
 
 		for (; position < group.size(); ++position)
 		{
@@ -402,99 +423,254 @@ namespace BALL
 				case '(' : 
 					if (depth == 0)
 					{
-						tmp = new String;
+						// if there was no bond symbol, we assume any bond.
+						if (position < (group.size() - 1))
+						{
+							switch (group[position+1])
+							{
+								case '.' :
+								case '-' :
+								case '=' :
+								case '#' :
+								case '~' :
+									this_pair.first = group[position+1];
+									break;
+								default:
+									this_pair.first = '.';
+							}
+						} 
+						else
+						{
+							Log.error() << "Invalid String" << endl;
+							return false;
+						}
+						tmp = "";
 					}
-					if (depth > 1)
+					if (depth > 0)
 					{
 						// We're in depth 1, so append this char.
 						tmp = tmp + '(';
 					}
 					depth++;
 					break;
+
 				case ')' :
-					if (depth > 1)
+					depth--;
+					if (depth > 0)
 					{
 						// We're in depth 1, so append this char.
 						tmp = tmp + ')';
 					}
-					depth--;
 					if (depth == 0) 
 					{
-						subs->push_back((String) *tmp);
+						this_pair.second = tmp;
+						subs.push_back(this_pair);
 					}
 					if (depth < 0)
 					{
-						Log.error() << "connectedToPredicate::parse(): Got negative bracket count" << endl;
+						Log.error() << "ConnectedToPredicate::parse(): Got negative bracket count" << endl;
 						return false;
 					}
 					break;
+
+				case '.' :
+				case '-' :
+				case '=' :
+				case '#' :
+				case '~' :
+					if (depth > 1)
+					{
+						tmp = tmp + group[position];
+					}
+					break;
+
 				default :
-					// if (group(position).isAlpha())
-					// {
-						if (depth > 1)
-						{
-							tmp = tmp + group[position];
-						}
-					// }
-					// else
-					// {
-					//	Log.error() << "connectedToPredicate::parse(): Found an illegal character: " << group[position] << endl;
-					//	return false;
-					// }
+					current_bond = "";
+					if (depth > 0)
+					{
+						tmp = tmp + group[position];
+					}
 			}
+		}
+		if (depth > 0)
+		{
+			Log.error() << "ConnectedToPredicate::parse(): Got positive bracket count" << endl; 
+			return false;
 		}
 		return true;
 	}
 
-	bool connectedToPredicate::find(const String& group, HashSet<Bond*>* found) const
+	bool ConnectedToPredicate::bondOrderMatch(const String& bond_description,
+			const Bond::Order order) const
+	{
+		switch (bond_description[0]) 
+		{
+			case '.' :
+				return true;
+
+			case '-' :
+				if (order == Bond::ORDER__SINGLE)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				
+			case '=' :
+				if (order == Bond::ORDER__DOUBLE)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				
+			case '#' :
+				if (order == Bond::ORDER__TRIPLE)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+				
+			case '~' :
+				if (order == Bond::ORDER__AROMATIC)
+				{
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+		}
+		return false;
+	}
+
+	bool ConnectedToPredicate::findAndTest(const String& group, const Atom&
+			atom, HashSet<const Bond*>& found) const
+	{
+		if (group[0] == atom.getElement().getSymbol()) 
+		{
+			return find(group, atom, found);
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	bool ConnectedToPredicate::find(const String& group, const Atom& atom,
+			HashSet<const Bond*>& found) const
 	{
 		// BAUSTELLE
 
-		list<String>* subgroups = new list<String>;
-		if (!parse(group,subgroups))
+		// ANNAHME: Nur Elemente mit EINEM Buchstaben. Der Rest muss nuch
+		// irgendwie gefummelt werden. Wahrscheinlich über Symbolfolgen, die
+		// aus parse() rausfallen.
+
+		// Now we have to find pattern matches...
+
+		// subgroups is a pair consisting of a String describing the bond
+		// that is binding the subgroup described by another String.
+
+		std::list< std::pair<String, String> > subgroups;
+
+		if (!parse(group, subgroups))
 		{
-			Log.error() << "connectedToPredicate::find(): couldn't parse()." << endl;
+			Log.error() << "ConnectedToPredicate::find(): couldn't parse()." 
+				<< endl;
 			return false;
 		}
-		
-		list<HashSet <Bond*> > L;
-		list<String>::iterator subgroups_it=subgroups->begin();
 
-		// for every subgroup find a definite match
-		for (;subgroups_it != subgroups->end(); ++subgroups_it) 
+		// If the bond description matches a bond of the atom, descend the
+		// "tree" and search for subgroup matches
+
+		std::list< HashSet<const Bond*> > L;
+		std::list< std::pair<String, String> >::iterator subgroups_it;
+
+		// go through all bonds of this atom and through all substrings
+		// with matching bond.
+
+		for (subgroups_it = subgroups.begin(); subgroups_it !=
+				subgroups.end(); ++subgroups_it) 
 		{
-			HashSet<Bond*>* deeper = new HashSet<Bond*>;
-			if (find(*subgroups_it, deeper))
+			HashSet<const Bond*> deeper;
+			for (Size i = 0; i < atom.countBonds(); ++i)
 			{
-				Log.info() << "Subgroup " << *subgroups_it  << " found" << endl;
-				L.push_back(*deeper);
+				if (bondOrderMatch(subgroups_it->first, atom.getBond(i)->getOrder()))
+				{
+					if (subgroups_it->second.size() < 1) 
+					{
+						Log.error() << "subgroup too short: " <<
+							subgroups_it->second.size() << " " << subgroups_it->second <<
+							endl;
+						return false;
+					}
+
+					if (subgroups_it->second.size() == 1)
+					{
+						if (atom.getBond(i)->getPartner(atom)->getElement().getSymbol()
+								== subgroups_it->second)
+						{
+							deeper.insert(atom.getBond(i));
+						}
+						else 
+						{
+						}
+					}
+					else
+					{
+						if (findAndTest(subgroups_it->second,
+									*(atom.getBond(i)->getPartner(atom)), deeper))
+						{
+						}
+						else
+						{
+						}
+					}
+				}
 			}
-			else
+			if (!deeper.isEmpty())
 			{
-				// This subgroup couldn't be found, so the whole subgroup cannot be
-				// matched.
-				Log.info() << "Subgroup " << *subgroups_it  << " couldn't be found" << endl;
-				return false;
+				L.push_back(deeper);
 			}
+		}
+
+		if (L.empty()) 
+		{
+			return false;
+		}
+
+		if (L.size() != subgroups.size())
+		{
+			return false;
 		}
 
 		// Now L contains a list of size number of subgroups.
+
 		while (L.size() > 0) 
 		{
-			list<Bond*> del_list;
-			list<Bond*>::iterator del_it;
-			list<HashSet <Bond*> >::iterator it = L.begin();
-				
+
+			// FIRST BLOCK: delete all definite cases 
+
+			list<const Bond*> del_list;
+			list<const Bond*>::iterator del_it;
+			list<HashSet <const Bond*> >::iterator it = L.begin();
+
 			for (; it != L.end(); ++it)
 			{
 				if (it->size() == 1)
 				{
-					if (std::find(del_list.begin(), del_list.end(), *(it->begin())) != del_list.end())
+					if (std::find(del_list.begin(), del_list.end(),
+								*(it->begin())) != del_list.end())
 					{
 						// This match was assumed to be definite, but obviously
 						// isn't. So the pattern couldn't be applied.
-						// Log.info() << "del_list already has " << /* it->begin() */ << endl;
-						Log.info() << "del_list already has this..." << endl;
 						return false;
 					}
 					// this match is now assumed to be definite, so delete it from
@@ -502,12 +678,14 @@ namespace BALL
 					del_list.push_back(*(it->begin()));
 
 					// ... and save it for return
-					found->insert(*(it->begin()));
-					
+					found.insert(*(it->begin()));
+
 					// Now clear the hashset.
 					it->clear();
 				}
 			}
+
+			list< list< HashSet<const Bond*> >:: iterator > hash_del_list;
 
 			for (it = L.begin(); it != L.end(); ++it) 
 			{
@@ -520,21 +698,36 @@ namespace BALL
 					}
 					if (it->size() == 0)
 					{
-						// BAUSTELLE: Das könnte ins Auge gehen...
-						L.erase(it);
+						// Don't insert iterators twice!
+
+						if (std::find(hash_del_list.begin(), hash_del_list.end(),
+									it) == hash_del_list.end()) 
+						{
+							hash_del_list.push_back(it);
+						}
 					}
 				}
 			}
 
-			// If there are ambiguous results, just grab one and make it definite
-			// by deleting a hashset containing it and all occurrences in all
-			// other hashsets. 
-			// (GREEDY).
-	
+			// now erase the empty hashsets in L
+
+			list< list< HashSet<const Bond*> >:: iterator >::iterator
+				hash_del_it;
+
+			for (hash_del_it = hash_del_list.begin(); hash_del_it !=
+				hash_del_list.end(); ++hash_del_it)
+			{
+				L.erase(*hash_del_it);
+			}
+
+			// SECOND BLOCK: If there are ambiguous results, just grab one
+			// and make it definite by deleting a hashset containing it and
+			// all occurrences in all other hashsets. (GREEDY).
+
 			if (L.size() > 0)
 			{
-				Bond* grab = *(L.begin()->begin());
-				found->insert(grab);
+				const Bond* grab = *(L.begin()->begin());
+				found.insert(grab);
 				L.erase(L.begin());
 				for (it = L.begin(); it != L.end(); ++it)
 				{
@@ -544,18 +737,19 @@ namespace BALL
 					}
 				}
 			}
-		}
+
+		} while (L.size() > 0)
+
 		// L was emptied and no errors occurred, so return true.
+
 		return true;
-	}
-	
-	bool connectedToPredicate::operator () (const Atom& atom) const
+	} 
+
+	bool ConnectedToPredicate::operator () (const Atom& atom) const
 	{
 		//BAUSTELLE
-		return false;
-
-		HashSet<Bond*>* found = new HashSet<Bond*>;
-		if (find(argument_, found))
+		HashSet<const Bond*> found;
+		if (find(argument_, atom, found))
 		{
 			return true;
 		}
@@ -565,7 +759,7 @@ namespace BALL
 		}
 	}
 
-	bool sp3HybridizedPredicate::operator () (const Atom& atom) const
+	bool Sp3HybridizedPredicate::operator () (const Atom& atom) const
 	{
 		Size i;
 		for (i = 0; i < atom.countBonds(); ++i)
@@ -578,7 +772,7 @@ namespace BALL
 		return true;
 	}
 
-	bool sp2HybridizedPredicate::operator () (const Atom& atom) const
+	bool Sp2HybridizedPredicate::operator () (const Atom& atom) const
 	{
 		int dcount = 0;
 		int acount = 0;
@@ -604,7 +798,7 @@ namespace BALL
 		}
 	}
 
-	bool spHybridizedPredicate::operator () (const Atom& atom) const
+	bool SpHybridizedPredicate::operator () (const Atom& atom) const
 	{
 		int dcount = 0;
 		int tcount = 0;
