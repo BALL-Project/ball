@@ -1,0 +1,16 @@
+/* $Id */
+
+/**@name	Nuclear Magnetic Resonance Spectroscopy
+		This chapter contains all relevant information on 
+		BALL classes related to the prediction of NMR shifts.
+		@nonames
+*/
+//@{
+
+	/**@name	Ring current models
+	*/
+	//@{
+		//@Include: johnsonBovey.h
+	//@}
+
+//@}

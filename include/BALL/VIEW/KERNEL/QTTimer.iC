@@ -1,0 +1,41 @@
+// $Id: QTTimer.iC,v 1.2 1999/12/19 17:19:25 oliver Exp $
+
+BALL_INLINE
+int QTTimer::getIntervall() const
+{
+  return intervall_;
+}
+
+BALL_INLINE
+void QTTimer::startTimer()
+{
+  if (timer_enabled_ == false)
+  {
+    timer_id_ = QObject::startTimer(intervall_);
+
+    timer_enabled_ = true;
+  }
+}
+
+BALL_INLINE
+void QTTimer::stopTimer()
+{
+  if (timer_enabled_ == true)
+  {
+    QObject::killTimer(timer_id_);
+
+    timer_enabled_ = false;
+  }
+}
+
+BALL_INLINE
+bool QTTimer::isTimerEnabled() const
+{
+  return (bool)(timer_enabled_ == true);
+}
+
+BALL_INLINE
+bool QTTimer::isTimerDisabled() const
+{
+  return (bool)(timer_enabled_ == false);
+}

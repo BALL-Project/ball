@@ -1,0 +1,10 @@
+// $Id: view.doc,v 1.1 1999/08/26 07:53:14 oliver Exp $
+
+/**@name	BALLVIEW
+		This chapter contains all relevant information on 
+		BALLVIEW
+		@nonames
+*/
+//@{
+	// @Include: */*.doc
+//@}

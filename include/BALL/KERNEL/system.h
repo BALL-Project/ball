@@ -1,0 +1,238 @@
+// $Id: system.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+
+#ifndef BALL_KERNEL_SYSTEM_H
+#define BALL_KERNEL_SYSTEM_H
+
+#ifndef BALL_COMMON_H
+#	include <BALL/common.h>
+#endif
+
+#ifndef BALL_KERNEL_ATOM_H
+#	include <BALL/KERNEL/atomIterator.h>
+#endif
+
+#ifndef BALL_KERNEL_MOLECULE_H
+#	include <BALL/KERNEL/molecule.h>
+#endif
+
+#ifndef BALL_KERNEL_MOLECULEITERATOR_H
+#	include <BALL/KERNEL/moleculeIterator.h>
+#endif
+
+#ifndef BALL_KERNEL_PROTEIN_H
+#	include <BALL/KERNEL/protein.h>
+#endif
+
+#ifndef BALL_KERNEL_PROTEINITERATOR_H
+#	include <BALL/KERNEL/proteinIterator.h>
+#endif
+
+#define BALL_SYSTEM_DEFAULT_NAME   ""
+
+namespace BALL 
+{
+
+	class Molecule;
+
+	/**
+	*/
+	class System
+		: public Composite,
+			public PropertyManager,
+			public Selectable
+	{
+		public:
+
+		BALL_CREATE(System)
+
+		/**	@name	Enums
+		*/
+		//@{
+		
+		/**
+		*/
+		enum Property
+		{
+			NUMBER_OF_PROPERTIES
+		};
+		//@}
+
+		/**	@name	Constructors and Destructors*/
+		//@{
+
+		/// Default constructor
+		System(void);
+	
+		/// Copy constructor
+		System(const System& system, bool deep = true);
+	
+		/// Detailled constructor
+		System(const String& name);
+
+		///	Destructor
+		virtual ~System(void);
+
+		/// Clears the contents of the system
+		virtual void clear(void);
+	
+		/// Clears the contents of the system and removes all its composite structures
+		virtual void destroy(void);
+		//@}
+	
+		/** @name Persistence */
+		//@{
+
+		/// Persistent writing
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+
+		/// Persistent reading
+		void persistentRead(PersistenceManager& pm);
+
+		//@}
+
+	
+		/**	@name	Assignemnt */
+		//@{
+
+		///
+		void set(const System& system, bool deep = true);
+
+		///
+		System& operator = (const System& system);
+
+		///
+		void get(System& system, bool deep = true) const;
+
+		///
+		void swap(System& system);
+	
+		//@}
+
+
+		/**	@name	Accessors */
+		//@{
+
+		///
+		void setName(const String& name);
+
+		///
+		String& getName(void);
+
+		///
+		const String& getName(void) const;
+
+		///
+		Size countMolecules(void) const;
+
+		///
+		Size countFragments(void) const;
+
+		///
+		Size countAtoms(void) const;
+
+		///
+		void prepend(Molecule& molecule);
+
+		///
+		void append(Molecule& molecule);
+
+		///
+		void insert(Molecule& molecule);
+
+		///
+		void insertBefore(Molecule& molecule, Composite& before);
+
+		///
+		void insertAfter(Molecule& molecule, Composite& after);
+
+		///
+		bool remove(Molecule& molecule);
+
+		///
+		void spliceBefore(System& system);
+
+		///
+		void spliceAfter(System& system);
+
+		///
+		void splice(System& system);		
+		//@}
+
+		/**	@name 	Miscellaneous */
+		//@{
+
+		/// Removes all bonds contained in the system	
+		void destroyBonds(void);
+
+		//@}
+
+		/**	@name	Debugging and Diagnostics */
+		//@{
+	
+		/// 
+		virtual bool isValid(void) const;
+
+		/// 
+		virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+
+		//@}
+
+
+		/**	@name	Storers */
+		//@{
+
+		///
+		virtual void read(istream& s);
+
+		///
+		virtual void write(ostream& s) const;
+		//@}
+		
+		// --- INTERNAL ITERATORS ---
+		template <typename T>
+		bool apply(UnaryProcessor<T>& processor)
+		{
+			if (processor.start() == false)
+				return false;
+
+			Processor::Result  result;
+			SubcompositeIterator it = beginSubcomposite();
+			for (; it != endSubcomposite(); ++it)
+			{
+				T*  object = dynamic_cast<T*>(&(*it));
+				if (object != 0)
+				{
+					result = processor(*object);
+					if (result <= Processor::BREAK)
+						return (result == Processor::BREAK) ? true : false;
+				}
+			}
+
+			return processor.finish();
+		}
+		
+
+		// --- EXTERNAL ITERATORS ---
+
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Atom)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(BaseFragment)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Molecule)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Protein)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Residue)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Chain)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(SecondaryStructure)
+
+
+		private:
+
+		void clear_(void);
+
+		// --- ATTRIBUTES
+
+		String name_;
+	};
+
+} // namespace BALL
+
+#endif // BALL_KERNEL_SYSTEM_H

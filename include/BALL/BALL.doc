@@ -1,0 +1,32 @@
+/**	@name	General
+		@nonames
+*/
+//@{
+	//@Include: COMMON/common.doc
+	//@Include: CONCEPT/concept.doc
+	//@Include: DATATYPE/datatype.doc
+	//@Include: MATHS/maths.doc
+	//@Include: SYSTEM/system.doc
+//@}
+
+/**	@name	Molecular Modeling
+		@nonames
+*/
+//@{
+	//@Include: ENERGY/energy.doc
+	//@Include: FORMAT/format.doc
+	//@Include: KERNEL/kernel.doc
+	//@Include: MOLMEC/molmec.doc
+	//@Include: NMR/nmr.doc
+	//@Include: SOLVATION/solvation.doc
+	//@Include: STRUCTURE/structure.doc
+//@}
+
+/**	@name	Visualization
+		@nonames
+*/
+//@{
+	//@Include: MOLVIEW/molview.doc
+	//@Include: VIEW/view.doc
+//@}
+

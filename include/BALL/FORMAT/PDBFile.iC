@@ -1,0 +1,83 @@
+// $Id: PDBFile.iC,v 1.1 1999/08/26 07:53:20 oliver Exp $
+
+BALL_INLINE 
+bool PDBFile::readUnknownRecord(char * /* line */)
+{
+  return true;
+}
+  
+BALL_INLINE 
+bool PDBFile::readInvalidRecord(char* /* line */)
+{
+  return true;
+}
+
+BALL_INLINE 
+bool PDBFile::readRecordEND(void)
+{
+  return true;
+}
+  
+BALL_INLINE 
+bool PDBFile::readRecordENDMDL(void)
+{
+  return true;
+}
+
+BALL_INLINE 
+bool PDBFile::readRecordMODEL(PDB::Integer /* model_serial_number */)
+{
+  return true;
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator >>(Protein& protein)
+{
+  read(protein);
+  
+  return *this;
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator >> (System& system)
+{
+  read(system);
+  
+  return *this;
+}
+
+BALL_INLINE 
+void PDBFile::write(const Molecule& molecule)
+{
+  write_(molecule);
+}
+
+BALL_INLINE 
+void PDBFile::write(const Protein& protein)
+{
+  write_(protein);
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator << (const Molecule& molecule)
+{
+  write(molecule);
+  
+  return *this;
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator << (const Protein& protein)
+{
+  write(protein);
+  
+  return *this;
+}
+
+BALL_INLINE 
+PDBFile& PDBFile::operator << (const System& system)
+{
+  write(system);
+  
+  return *this;
+}

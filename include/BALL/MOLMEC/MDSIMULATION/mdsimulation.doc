@@ -1,0 +1,10 @@
+// $Id: mdsimulation.doc,v 1.1 1999/08/26 07:53:21 oliver Exp $
+
+/**	@name	Molecular Dynamics Simulation
+		@nonames
+*/
+//@{
+
+	// @Include: *.h
+
+//@}

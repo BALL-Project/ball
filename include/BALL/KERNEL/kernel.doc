@@ -1,0 +1,33 @@
+// $Id: kernel.doc,v 1.1 1999/08/26 07:53:19 oliver Exp $
+
+/**@name	Kernel
+		This chapter contains all relevant information on 
+		BALL kernel datastructures. 
+		@nonames
+*/
+//@{
+
+  //@Include: atom.h
+  //@Include: baseFragment.h
+  //@Include: bond.h
+  //@Include: chain.h
+  //@Include: defaultProcessors.h
+  //@Include: forEach.h
+  //@Include: fragment.h
+  //@Include: fragmentDB.h
+  //@Include: global.h
+  //@Include: iterator.h
+  //@Include: molecule.h
+	//@Inlcude:	nucleicAcid.h
+	//@Inlcude:	nucleotide.h
+  //@Include: PDBAtom.h
+  //@Include: predicate.h
+  //@Include: protein.h
+  //@Include: PSE.h
+  //@Include: residue.h
+  //@Include: secondaryStructure.h
+	//@Include:	selector.h
+  //@Include: system.h
+  //@Include: universe.h
+
+//@}

@@ -1,0 +1,386 @@
+// $Id: classTest.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+
+#include <BALL/common.h>
+#include <BALL/SYSTEM/file.h>
+
+#include <string>
+#include <list>
+
+/**	@name	Class Black Box Testing
+		To provide a maximum reliability for all BALL classes, each class
+		provides its own test program to ensure that each class compiles
+		and behaves (at least basically) as intended.\\
+		The testprograms reside in the directory source/TEST, they may 
+		be built and executed by calling {\bf make test}.\\
+		Each test program prints after execution either "PASSED" or "FAILED".
+		If any of the subtest contained in the test program fails, the whole 
+		test failed.\\ the result of the test program can also be check via its
+		exit code. An exit code of zero means "PASSED", non-zero exit code means 
+		"FAILED".\\
+		There are several macros defined to simplify the creation of a test program
+		and to provide a common interface.\\
+		Each test program consists of several subtests the usually test one
+		method or property of the class. Each of this subtests uses a series
+		of elementary tests to check the functionality of the method.\\
+		A number of elemntary tests has been implemented that is sufficient
+		for most cases:\begin{itemize}
+			\item \Ref{TEST_EQUAL}
+			\item \Ref{TEST_NOT_EQUAL}
+			\item \Ref{TEST_REAL_EQUAL}
+		\end{itemize}
+		A subtest is defined by calling the \Ref{CHECK} macro with the subtest name
+		as an argument. Then a series of calls to {\bf TEST} macros follows,
+		mixed with standard BALL code (remember to include all neccessary header files).
+		The subtest is terminated by calling \Ref{RESULT}.\\
+		Use the two macros \Ref{START_TEST} and \Ref{END_TEST} to generate a complete
+		test program.\\
+		To create a new test program, use the file 
+		\URL[source/TEST/Skeleton\_test.C]{../../source/BALL/TEST/Skeleton\_test.C}
+		\\ 
+		{\bf Definitions:} \URL{BALL/CONCEPT/classTest.h}
+*/
+//@{
+
+/**	Precision for floating point comparisons.
+		The macro \Ref{CHECK_REAL_EQUAL} checks whether the floating point number returned by
+		by the subtest is close to the expected result by comparing the absolute value
+		if the difference of the two values to {\bf PRECISION}.\\
+		The default value is $10^{-6}$.It is possible to redefine precision in the
+		test program by redefining it:\\
+		{\large
+		\#undef PRECISION\\
+		\#define PRECISION 1e-3\\
+		}
+*/
+#define PRECISION 1e-6
+
+/**	Create the test header for a certain class.
+		This macro defines the start of the test program for a given classname.
+		The classname is printed together with some information when calling the 
+		test program with any arguments (except for #-v# or #-V#).\\
+		This macro should be the first to call in a test program. It introduces a global {\tt try}
+		block to catch any unwanted exceptions. If any of these exceptions occurs, all tests failed.
+		Exceptions defined by BALL (i.e. exception classes derived from \ref{GeneralException}) provide
+		some additional information that is evaluated by the \ref{END_TEST} macro. The END\_TEST macro
+		also closes the {\tt try} block. This {\tt try} block should never catch an exception! 
+		All exceptions that are thrown due to some malfunction in one of the member functions should be 
+		caught by the {\tt try} block created by \ref{CHECK} and \ref{RESULT}.
+*/
+#define START_TEST(class_name,version)\
+/* define a special namespace for all internal variables */\
+/* to avoid potential collisions                         */\
+namespace TEST {\
+	int						verbose = 0;\
+	bool					all_tests = true;\
+  bool					test = true;\
+	bool					this_test;\
+	int 					exception = 0;\
+	string 				exception_name = "";\
+	char*					version_string = version;\
+	bool					newline = false;\
+	list<string>	tmp_file_list;\
+}\
+\
+\
+int main(int argc, char **argv)\
+{\
+\
+	if (argc == 2) {\
+		if (!strcmp(argv[1], "-v"))\
+			TEST::verbose = 1;\
+		if (!strcmp(argv[1], "-V"))\
+			TEST::verbose = 2;\
+	};\
+\
+	if ((argc > 2) || ((argc == 2) && (TEST::verbose == 0))) {\
+		cerr << "Checks " #class_name " class" << endl;\
+\
+		cerr << "On successful operation it simply returns OK," << endl;\
+		cerr << "otherwise FAILURE is printed." << endl;\
+		cerr << "If called with an argument of -v, " << argv[0] << " prints detailed" << endl;\
+		cerr << "information about individual tests." << endl;\
+		cerr << "Option -V provides verbose information on" << endl;\
+		cerr << "every subtest." << endl;\
+		return 1;\
+	}\
+\
+	if (TEST::verbose > 0)\
+		cout << "Version: " << TEST::version_string << endl;\
+\
+	try {\
+
+
+/**	Termination of test program.
+		This macro implements the correct termination of the 
+		test program and should therefore be the last macro to call.
+		It determines the exit code based on all previously run
+		subtests and prints out the message "PASSED" or "FAILED".
+		This macro also closes the global {\tt try} block opened by \ref{START_TEST}
+ 		and contains the related {\tt catch} clauses. If an exception is caught here,
+		the test program fails.
+*/
+#define END_TEST \
+	/* global try block */\
+	}\
+	/* catch BALL exceptions to retrieve additional information */\
+	catch (BALL::Exception::GeneralException e)\
+	{\
+		TEST::this_test = false;\
+		TEST::test = false;\
+		TEST::all_tests = false;\
+  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+			if (TEST::exception == 1) /* dummy to avoid compiler warnings */\
+				TEST::exception++;\
+    	cout << endl << "    (caught exception of type ";\
+			cout << e.getName();\
+			if ((e.getLine() > 0) && (!(e.getFile() == "")))\
+				cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
+			cout << " - unexpected!) " << endl;\
+		}\
+  }\
+	/* catch all non-BALL exceptions */\
+	catch (...)\
+	{\
+		TEST::this_test = false;\
+		TEST::test = false;\
+		TEST::all_tests = false;\
+  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+    	cout << endl << "    (caught unidentified and unexpected exception outside a subtest!) " << endl;\
+		}\
+	}\
+\
+	/* clean up all temporary files */\
+	while (TEST::tmp_file_list.size() > 0)\
+	{\
+		::BALL::File::remove(TEST::tmp_file_list.back());\
+		TEST::tmp_file_list.pop_back();\
+	}\
+	/* check for exit code */\
+	if (!TEST::all_tests)\
+	{\
+		cout << "FAILED" << endl;\
+		return 1;\
+	} else {\
+		cout << "PASSED" << endl;\
+		return 0;\
+	}\
+}\
+
+/**	Declare subtest name.
+		This macro is used to declare the name of a subtest.
+		If you want to check e.g. the setName method of a class,
+		insert a line\\
+			#CHECK(setName)#\\
+		in your test program. If the test program is called in verbose mode,
+		this leads to the name of the subtest being printed on execution.\\
+		This macro also opens a {\tt try} block to catch any unexpected exceptions thrown
+		in the course of a subtest. To catch {\em wanted} exceptions (i.e. to check for exceptions that are
+		the expected result of some command) use the \ref{TEST_EXCEPTION} macro.
+		The {\tt try} block opened by CHECK is closed in \ref{RESULT}, so these two macros
+		have to be balanced.
+*/
+#define CHECK(test_name)  \
+	TEST::test = true;\
+	TEST::newline = false;\
+	if (TEST::verbose > 0)\
+		cout << "checking " << #test_name << "... " << flush;\
+	try\
+	{\
+
+/**	Check subtest result.
+		Each elementary test macro updates an internal variable ({\bf TEST}, defined by 
+		\Ref{START_TEST}) that holds the state of the current subtest.\\
+		{\bf RESULT} prints a whether the subtest has failed or passed in verbose mode
+		and updates the internal variables {\bf TEST::all\_tests} that describes the state of
+		the whole class test. {\bf TEST::all\_tests} is initialized to be {\bf true}.
+		If any elementary test fails, {\bf TEST::test} becomes {\bf false}.
+		At the time of the next call to {\bf RESULT}, {\bf TEST::all\_tests} will be
+    set to false, if {\bf TEST::test} is false. One failed elementary test leads therefore
+		to a failed subtest, which leads to a failed class test.\\
+		This macro closes the {\tt try} block opened by CHECK, so CHECK and RESULT--if they are not balanced, 
+		ugly compile-time errors may occur.
+		RESULT first tries to catch all {\tt BALL} exceptions (i.e. exceptions derived from GeneralException).
+		If this fails, it tries to catch any exception. After the exception is thrown, the execution will continue with the 
+		next subtest, the current subtest will be marked as failed (as is the whole test program).
+*/
+#define RESULT \
+  }\
+  catch (::BALL::Exception::GeneralException e)\
+  {\
+    TEST::this_test = false;\
+    TEST::test = false;\
+    TEST::all_tests = false;\
+    if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+    {\
+			if (!TEST::newline) \
+			{\
+				TEST::newline = true;\
+				cout << endl;\
+			}\
+      cout << "    (caught exception of type ";\
+      cout << e.getName();\
+      if ((e.getLine() > 0) && (!(e.getFile() == "")))\
+        cout << ", which was thrown in line " << e.getLine() << " of file " << e.getFile();\
+      cout << " - unexpected!) " << endl;\
+    }\
+  }\
+  catch (...)\
+  {\
+    TEST::this_test = false;\
+    TEST::test = false;\
+    TEST::all_tests = false;\
+    if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+    {\
+			if (!TEST::newline) \
+			{\
+				TEST::newline = true;\
+				cout << endl;\
+			}\
+      cout << "    (caught unidentified and unexpected exception!)" << endl;\
+    }\
+  }\
+\
+	TEST::all_tests = TEST::all_tests && TEST::test;\
+	if (TEST::verbose > 0){\
+		if (TEST::newline)\
+			cout << "    ";\
+		if (TEST::test){\
+			cout << "passed" << endl;\
+		} else {\
+			cout << "FAILED" << endl;\
+		}\
+	}\
+
+/**	Create a temporary filename.
+		This macro assigns a new temporary filename to the string variable given as
+		its argument. The filename is created using \ref{File::createTemporaryFilename}.
+		All temporary files are deleted if \ref{END_TEST} is called.
+		@param	filename String will contain the filename on completion of the macro
+*/
+#define NEW_TMP_FILE(filename)\
+	::BALL::File::createTemporaryFilename(filename);\
+	TEST::tmp_file_list.push_back(filename);\
+	
+	
+/**	Floating point equality macro.
+		Checks whether the absolute value of the difference of the two floating point
+		values {\bf a} and {\bf b} is less or equal to the value defined by \Ref{PRECISION}.
+		@param	a floating point value to test
+		@param  b expected value
+*/
+#define TEST_REAL_EQUAL(a,b)  \
+	TEST::this_test = BALL_REAL_EQUAL((a), (b), PRECISION); \
+	TEST::test = TEST::test && TEST::this_test;\
+	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+	{\
+		if (!TEST::newline)\
+		{\
+			TEST::newline = true;\
+			cout << endl;\
+		}\
+ 		cout << "    (line " << __LINE__ << ": TEST_REAL_EQUAL("<< #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
+		if (TEST::this_test)\
+			cout << " + " << endl;\
+		else \
+			cout << " - " << endl;\
+	}\
+
+/**	Generic equality macro.
+		This macro uses the operator == to check its two arguments
+		for equality. Besides handling some internal stuff, it basically
+		evaluates #((a) == (b))#.\\ 
+		Remember that operator == has to be defined somehow for the two 
+		argument types.\\
+		@param	a value/object to test
+		@param	b expected value
+*/
+#define TEST_EQUAL(a,b)  \
+	TEST::this_test = ((a) == (b));\
+	TEST::test = TEST::test && TEST::this_test;\
+	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+	{\
+		if (!TEST::newline)\
+		{\
+			TEST::newline = true;\
+			cout << endl;\
+		}\
+		cout << "    (line " << __LINE__ << " TEST_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
+		if (TEST::this_test)\
+			cout << " + " << endl;\
+		else \
+			cout << " - " << endl;\
+	}\
+
+/**	Generic inequality macro.
+		This macro checks for inequality as \Ref{TEST_EQUAL} tests for equality.
+		The only difference between the two macros is that{\bf  TEST\_NOT\_EQUAL} evaluates
+		#!((a) == (b))#.\\
+		@param	a value/object to test
+		@param	b forbidden value
+*/
+#define TEST_NOT_EQUAL(a,b)  \
+	TEST::this_test = !((a) == (b));\
+	TEST::test = TEST::test && TEST::this_test;\
+	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+  {\
+		if (!TEST::newline)\
+		{\
+			TEST::newline = true;\
+			cout << endl;\
+		}\
+		cout << "    (line " << __LINE__ << " TEST_NOT_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", forbidden is " << (b) << ") ";\
+		if (TEST::this_test)\
+			cout << " + " << endl;\
+		else \
+			cout << " - " << endl;\
+	}
+
+
+/**	Exception test macro.
+*/
+#define TEST_EXCEPTION(exception_type, command) \
+	TEST::exception = 0;\
+	try\
+	{\
+		command;\
+	}\
+	catch (exception_type)\
+	{\
+		TEST::exception = 1;\
+	}\
+	catch (::BALL::Exception::GeneralException e)\
+	{\
+		TEST::exception = 2;\
+		TEST::exception_name = e.getName();\
+	}\
+	catch (...)\
+	{ \
+		TEST::exception = 3;\
+	}\
+	TEST::this_test = (TEST::exception == 1);\
+	TEST::test = TEST::test && TEST::this_test;\
+	\
+	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+	{\
+		if (!TEST::newline)\
+		{\
+			TEST::newline = true;\
+			cout << endl;\
+		}\
+		cout << "    (line " << __LINE__ << " TEST_EXCEPTION(" << #exception_type << ", " << #command << "): ";\
+		switch (TEST::exception)\
+		{\
+			case 0:	cout << " ERROR: no exception!) "; break;\
+			case 1:	cout << " OK) "; break;\
+			case 2:	cout << " ERROR: wrong exception: " << TEST::exception_name << ") "; break;\
+			case 3:	cout << " ERROR: wrong exception!) "; break;\
+		}\
+		if (TEST::this_test)\
+			cout << " + " << endl;\
+		else \
+			cout << " - " << endl;\
+	}\
+
+//@}

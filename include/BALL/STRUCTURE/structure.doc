@@ -1,0 +1,11 @@
+/* $Id */
+
+/**	@name	Molecular Structure
+		This chapter contains all relevant information on 
+		BALL classes related to the exploration of molecular
+		structures and geometries.
+		@nonames
+*/
+//@{
+	//@Include: *.h
+//@}

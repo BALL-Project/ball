@@ -1,0 +1,94 @@
+// $Id: elementColor.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+
+#ifndef BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
+#define BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
+
+#ifndef BALL_COMMON_H
+#	include <BALL/common.h>
+#endif
+
+#ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
+#	include <BALL/VIEW/DATATYPE/colorTable.h>
+#endif
+
+#include <iostream.h>
+
+namespace BALL
+{
+
+	namespace MOLVIEW
+	{
+
+		using VIEW::ColorTable;
+		using VIEW::ColorRGBA;
+		
+		/**
+		*/
+		class ElementColor	
+			: public VIEW::ColorTable
+		{
+			public:
+
+			/**	@name	Constructors and Destructors
+			*/
+			//@{
+
+			ElementColor();
+
+			ElementColor
+				(const ElementColor& element_color, bool deep = true);
+
+			ElementColor
+				(Size size, const ColorRGBA& color);
+
+			ElementColor
+				(const ElementColor& element_color, Index from, Index to);
+
+			ElementColor
+				(const ColorRGBA* array, Size array_size);
+
+			virtual ~ElementColor();
+			//@}
+
+
+
+			/**	@name	Debugging and Diagnostics
+			*/
+			//@{
+
+			virtual void dump
+				(ostream& s = cout, unsigned long depth = 0) const;
+			//@}
+
+			/**	@name Storers
+			*/
+			//@{
+
+			virtual void read(istream& s);
+
+			virtual void write(ostream& s) const;
+			//@}
+
+
+				
+			private:
+
+			void initializeColors_();
+
+			/* element color array */ 
+			// BAUSTELLE: Konstante fuer Anzahl Elemente
+			// aus PSE uebernehmen
+			static const unsigned char color_values_[111][3];
+		};
+
+
+#			ifndef BALL_NO_INLINE_FUNCTIONS
+#				include <BALL/MOLVIEW/COLORS/elementColor.iC>
+#			endif
+
+	} // namespace MOLVIEW
+
+} // namespace BALL
+			
+
+#endif // BALL_MOLVIEW_COLORS_ELEMENTCOLOR_H

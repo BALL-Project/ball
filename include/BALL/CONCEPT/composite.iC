@@ -1,0 +1,801 @@
+// $Id: composite.iC,v 1.1 1999/08/26 07:53:16 oliver Exp $
+
+BALL_INLINE 
+Handle AggregateCompositeItem::getHandle(void) const
+{
+  return handle_;
+}
+
+BALL_INLINE 
+Aggregate& AggregateCompositeItem::getAggregate(void)
+{
+  return *aggregate_;
+}
+
+BALL_INLINE 
+const Aggregate& AggregateCompositeItem::getAggregate(void) const
+{
+  return *aggregate_;
+}
+
+BALL_INLINE 
+Composite& AggregateCompositeItem::getComposite(void)
+{
+  return *composite_;
+}
+
+BALL_INLINE 
+const Composite& AggregateCompositeItem::getComposite(void) const
+{
+  return *composite_;
+}
+
+BALL_INLINE 
+AggregateCompositeItem* AggregateCompositeItem::getNextAggregate(void)
+{
+  return aggregate_next_;
+}
+
+BALL_INLINE 
+const AggregateCompositeItem* AggregateCompositeItem::getNextAggregate(void) const
+{
+  return aggregate_next_;
+}
+
+BALL_INLINE 
+AggregateCompositeItem* AggregateCompositeItem::getPreviousAggregate(void)
+{
+  return composite_next_;
+}
+
+BALL_INLINE 
+const AggregateCompositeItem* AggregateCompositeItem::getPreviousAggregate(void) const
+{
+  return composite_next_;
+}
+
+BALL_INLINE 
+AggregateCompositeItem* AggregateCompositeItem::getNextComposite(void)
+{
+  return aggregate_previous_;
+}
+
+BALL_INLINE 
+const AggregateCompositeItem* AggregateCompositeItem::getNextComposite(void) const
+{
+  return aggregate_previous_;
+}
+
+BALL_INLINE 
+AggregateCompositeItem* AggregateCompositeItem::getPreviousComposite(void)
+{
+  return composite_previous_;
+}
+
+BALL_INLINE 
+const AggregateCompositeItem* AggregateCompositeItem::getPreviousComposite(void) const
+{
+  return composite_previous_;
+}
+
+BALL_INLINE 
+void AggregateCompositeItem::clear(void)
+{
+}
+
+
+BALL_INLINE 
+void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
+{
+  composite.clone(*this, predicate);
+}
+
+BALL_INLINE 
+void Composite::set(const Composite& composite, bool deep)
+{
+	if (deep == true)
+	{
+		composite.clone(*this, Composite::DEFAULT_UNARY_PREDICATE);
+	} else {
+		destroy();
+		properties_ = composite.properties_;
+	}
+}
+
+BALL_INLINE 
+Composite& Composite::operator = (const Composite& composite)
+{
+  set(composite);
+
+  return *this;
+}    
+
+BALL_INLINE 
+void Composite::get(Composite& composite, UnaryPredicate<Composite>& predicate) const
+{
+  composite.set(*this, predicate);
+}
+
+BALL_INLINE 
+void Composite::get(Composite& composite, bool deep) const
+{
+  composite.set(*this, deep);
+}
+
+BALL_INLINE 
+Size Composite::getDegree(void) const
+{
+  return number_of_children_;
+}
+
+BALL_INLINE 
+Size Composite::getSize(void) const
+{
+  return number_of_children_;
+}
+
+BALL_INLINE 
+Size Composite::countChildren(void) const
+{
+  return number_of_children_;
+}
+
+BALL_INLINE 
+Size Composite::countDescendants(void) const
+{
+  return (countDescendants_() - 1);
+}
+
+BALL_INLINE 
+Size Composite::getDepth(void) const
+{
+  return Composite::getDepth(*this);
+}
+
+BALL_INLINE 
+Size Composite::getHeight(const Composite &composite)
+{
+  Size size = 0;
+
+  return composite.getHeight_(size, size);
+}
+
+BALL_INLINE 
+Size Composite::getHeight(void) const
+{
+  return Composite::getHeight(*this);
+}
+
+BALL_INLINE 
+Size Composite::getLevel(void) const
+{
+  return getLevel(*this);
+}
+
+BALL_INLINE 
+Composite& Composite::getRoot(void)
+{
+  return getRoot(*this);
+}
+
+BALL_INLINE 
+const Composite& Composite::getRoot(void) const
+{
+  return getRoot((Composite &)*this);
+}
+
+BALL_INLINE 
+const Composite* Composite::getLowestCommonAncestor(const Composite &composite) const
+{
+  return ((Composite *)this)->getLowestCommonAncestor((Composite &)composite);
+}
+
+BALL_INLINE 
+void Composite::setParent(Composite &composite)
+{
+  if (&composite == this || isAncestorOf(composite) == true)
+  {
+    return;
+  }
+      
+  if (&composite == parent_)
+  {
+    return;
+  }
+  
+  composite.prependChild(*this);
+}
+
+BALL_INLINE 
+Composite* Composite::getParent(void)
+{
+  return parent_;
+}
+
+BALL_INLINE 
+const Composite* Composite::getParent(void) const
+{
+  return parent_;
+}
+
+BALL_INLINE 
+void Composite::setChild(Composite &composite)
+{
+  composite.setParent(*this);
+}
+
+BALL_INLINE 
+Composite* Composite::getChild(Index index)
+{
+  if (first_child_ != 0)
+  {
+    if (index == 0)
+    {
+      return first_child_;
+    } else {
+      return first_child_->getNextSibling(index);
+    }
+  } else {
+    return 0;
+  }
+}
+
+BALL_INLINE 
+const Composite* Composite::getChild(Index index) const
+{
+  return ((Composite *)this)->getChild(index);
+}
+
+BALL_INLINE 
+void Composite::setPreviousSibling(Composite &composite)
+{
+  insertBefore(composite);
+}
+
+BALL_INLINE 
+const Composite* Composite::getPreviousSibling(Index index) const
+{
+  return ((Composite *)this)->getPreviousSibling(index);
+}
+
+BALL_INLINE 
+void Composite::setNextSibling(Composite &composite)
+{
+  insertAfter(composite);
+}
+
+BALL_INLINE 
+const Composite* Composite::getNextSibling(Index index) const
+{
+  return ((Composite *)this)->getNextSibling(index);
+}
+
+BALL_INLINE 
+Composite* Composite::getSibling(Index index)
+{
+  return (index < 0)
+         ? getPreviousSibling(-index)
+         : getNextSibling(index);
+}
+
+BALL_INLINE 
+const Composite* Composite::getSibling(Index index) const
+{
+  return ((Composite *)this)->getSibling(index);
+}
+
+BALL_INLINE 
+void Composite::setFirstChild(Composite &composite)
+{
+  prependChild(composite);
+}
+
+BALL_INLINE 
+Composite* Composite::getFirstChild(void)
+{
+  return first_child_;
+}
+
+BALL_INLINE 
+const Composite* Composite::getFirstChild(void) const
+{
+  return first_child_;
+}
+
+BALL_INLINE 
+void Composite::setLastChild(Composite &composite)
+{
+  appendChild(composite);
+}
+
+BALL_INLINE 
+Composite* Composite::getLastChild(void)
+{
+  return last_child_;
+}
+
+BALL_INLINE 
+const Composite* Composite::getLastChild(void) const
+{
+  return last_child_;
+}
+
+BALL_INLINE 
+void Composite::expand(void)
+{
+  BALL_BIT_CLEAR(properties_, PROPERTY__COLLAPSED_);
+}
+
+BALL_INLINE 
+void Composite::collapse(void)
+{
+  BALL_BIT_SET(properties_, PROPERTY__COLLAPSED_);
+}
+
+BALL_INLINE 
+void Composite::replace(Composite &composite)
+{
+  if (parent_ != 0)
+  {
+    insertBefore(composite);
+
+    parent_->removeChild(*this);
+  }
+}
+
+BALL_INLINE 
+void Composite::sortSiblings(const Comparator<Composite *> &comparator)
+{
+  if (parent_ != 0)
+  {
+    parent_->sortChildren(comparator);
+  }
+}
+
+BALL_INLINE 
+bool Composite::isExpanded(void) const
+{
+  return (bool)BALL_BIT_IS_CLEARED(properties_, PROPERTY__COLLAPSED_);
+}
+
+BALL_INLINE 
+bool Composite::isCollapsed(void) const
+{
+  return (bool)BALL_BIT_IS_SET(properties_, PROPERTY__COLLAPSED_);
+}
+
+BALL_INLINE 
+bool Composite::isEmpty(void) const
+{
+  return (bool)(number_of_children_ == 0);
+}
+
+BALL_INLINE 
+bool Composite::isFree(void) const
+{
+  return (bool)(parent_ == 0);
+}
+
+BALL_INLINE 
+bool Composite::isRoot(void) const
+{
+  return (bool)(parent_ == 0);
+}
+  
+BALL_INLINE 
+bool Composite::isRootOf(const Composite &composite) const
+{
+  return (bool)(parent_ == 0 && isAncestorOf(composite) == true);
+}
+  
+BALL_INLINE 
+bool Composite::isInterior(void) const
+{
+  return (bool)(parent_ != 0 && first_child_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isInteriorOf(const Composite &composite) const
+{
+  return (bool)(parent_ != 0 && first_child_ != 0 && isDescendantOf(composite) == true);
+}
+
+BALL_INLINE 
+bool Composite::isLeaf(void) const
+{
+  return (bool)(first_child_ == 0);
+}
+
+BALL_INLINE 
+bool Composite::isLeafOf(const Composite &composite) const
+{
+  return (bool)(first_child_ == 0 && isDescendantOf(composite) == true);
+}
+
+BALL_INLINE 
+bool Composite::hasChild(void) const
+{
+  return (bool)(first_child_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isChild(void) const
+{
+  return (bool)(parent_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isChildOf(const Composite &composite) const
+{
+  return (bool)(parent_ == &composite);
+}
+
+BALL_INLINE 
+bool Composite::isChildOf(const Aggregate &aggregate) const
+{
+  return (bool)(find_(aggregate) != 0);
+}
+
+BALL_INLINE 
+bool Composite::hasFirstChild(void) const
+{
+  return (bool)(first_child_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isFirstChild(void) const
+{
+  return (bool)(parent_ != 0 && parent_->first_child_ == this);
+}
+
+BALL_INLINE 
+bool Composite::isFirstChildOf(const Composite &composite) const
+{
+  return (bool)(composite.first_child_ == this);
+}
+
+BALL_INLINE 
+bool Composite::hasLastChild(void) const
+{
+  return (bool)(last_child_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isLastChild(void) const
+{
+  return (bool)(parent_ != 0 && parent_->last_child_ == this);
+}
+
+BALL_INLINE 
+bool Composite::isLastChildOf(const Composite &composite) const
+{
+  return (bool)(composite.last_child_ == this);
+}
+
+BALL_INLINE 
+bool Composite::hasParent(void) const
+{
+  return (bool)(parent_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isParent(void) const
+{
+  return (bool)(first_child_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isParentOf(const Composite &composite) const
+{
+  return (bool)(composite.parent_ == this);
+}
+
+BALL_INLINE 
+bool Composite::hasSibling(void) const
+{
+  return (bool)(parent_ != 0 && parent_->number_of_children_ > 1);
+}
+
+BALL_INLINE 
+bool Composite::isSibling(void) const
+{
+  return (bool)(parent_ != 0 && parent_->number_of_children_ > 1);
+}
+
+BALL_INLINE 
+bool Composite::isSiblingOf(const Composite &composite) const
+{
+  return (bool)(composite.parent_ == parent_);
+}
+
+BALL_INLINE 
+bool Composite::hasPreviousSibling(void) const
+{
+  return (bool)(previous_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isPreviousSibling(void) const
+{
+  return (bool)(next_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isPreviousSiblingOf(const Composite &composite) const
+{
+  return (bool)(next_ == &composite);
+}
+
+BALL_INLINE 
+bool Composite::hasNextSibling(void) const
+{
+  return (bool)(next_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isNextSibling(void) const
+{
+  return (bool)(previous_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isNextSiblingOf(const Composite &composite) const
+{
+  return (bool)(previous_ == &composite);
+}
+
+BALL_INLINE 
+bool Composite::hasPreceedingSibling(void) const
+{
+  return (bool)(previous_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isPreceedingSibling(void) const
+{
+  return (bool)(next_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::hasSucceedingSibling(void) const
+{
+  return (bool)(next_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isSucceedingSibling(void) const
+{
+  return (bool)(previous_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::hasDescendant(void) const
+{
+  return (bool)(first_child_ != 0);
+}
+  
+BALL_INLINE 
+bool Composite::isDescendant(void) const
+{
+  return (bool)(parent_ != 0);
+}
+  
+BALL_INLINE 
+bool Composite::hasAnyAncestor(void) const
+{
+  return (bool)(parent_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isAncestor(void) const
+{
+  return (bool)(first_child_ != 0);
+}
+
+BALL_INLINE 
+bool Composite::isRelatedWith(const Composite &composite) const
+{
+  return (bool)(&composite == this
+								|| composite.isAncestorOf(*this)
+								|| this->isAncestorOf(composite));
+}
+  
+BALL_INLINE 
+void Composite::host(Visitor<Composite>& visitor)
+{
+  visitor.visit(*this);
+}
+
+BALL_INLINE 
+bool Composite::applyPreorderNostart_(UnaryProcessor<Composite>& processor)
+{
+  Processor::Result result = processor(*this);
+
+  if (result <= Processor::BREAK)
+    return (result == Processor::BREAK) ? true : false;
+
+  return applyDescendantPreorderNostart_(processor);
+}
+
+BALL_INLINE 
+bool Composite::applyDescendant(UnaryProcessor<Composite>& processor)
+{
+  return applyDescendantPreorder(processor);
+}
+
+BALL_INLINE
+bool Composite::applyPreorder(UnaryProcessor<Composite>& processor)
+{
+	return processor.start() && applyPreorderNostart_(processor) && processor.finish();
+}
+
+BALL_INLINE 
+bool Composite::applyPostorder(UnaryProcessor<Composite>& processor)
+{
+	if (processor.start() == false)
+		return false;
+
+  if (applyDescendantPostorderNostart_(processor) == true
+      && processor(*this) < Processor::BREAK)
+  {
+    return processor.finish();
+  } else {
+    return false;
+  }
+}
+
+ 
+
+BALL_INLINE 
+bool Composite::apply(UnaryProcessor<Composite>& processor)
+{
+  return processor.start() && applyPreorderNostart_(processor) && processor.finish();
+}
+
+BALL_INLINE 
+Aggregate& Aggregate::operator = (const Aggregate& aggregate)
+{
+	set(aggregate);
+
+  return *this;
+}
+
+BALL_INLINE 
+void Aggregate::get(Aggregate& aggregate, bool deep) const
+{
+  aggregate.set(*this, deep);
+}
+
+BALL_INLINE 
+Size Aggregate::getSize(void) const
+{
+  return size_;
+}
+
+BALL_INLINE 
+void Aggregate::destroy(bool deep)
+{
+  clear(deep);
+}
+
+BALL_INLINE 
+bool Aggregate::remove(const Composite &composite)
+{
+  AggregateCompositeItem* aggregate_composite = composite.find_(*this);
+  
+  if (aggregate_composite != 0)
+  {
+    delete aggregate_composite;
+
+    return true;
+  } else {
+    return false;
+  }
+}
+
+BALL_INLINE 
+void Aggregate::clear(void)
+{
+  clear(false);
+}
+
+BALL_INLINE 
+void Aggregate::destroy(void)
+{
+  destroy(false);
+}
+
+BALL_INLINE 
+Aggregate Aggregate::operator | (Aggregate &aggregate) const
+{
+  Aggregate result;
+
+  return Aggregate::join((Aggregate &)*this, aggregate, result);
+}
+
+BALL_INLINE 
+Aggregate Aggregate::operator & (Aggregate &aggregate) const
+{
+  Aggregate result;
+
+  return Aggregate::intersect((Aggregate &)*this, aggregate, result);
+}
+
+BALL_INLINE 
+Aggregate Aggregate::operator - (Aggregate &aggregate) const
+{
+  Aggregate result;
+
+  return Aggregate::subtract((Aggregate &)*this, aggregate, result);
+}
+
+BALL_INLINE 
+Aggregate Aggregate::operator ^ (Aggregate &aggregate) const
+{
+  Aggregate result;
+
+  return Aggregate::symsubtract((Aggregate &)*this, aggregate,result);
+}
+
+BALL_INLINE 
+Aggregate& Aggregate::operator |= (const Aggregate &aggregate)
+{
+  return join(aggregate);
+}
+
+BALL_INLINE 
+Aggregate& Aggregate::operator &= (const Aggregate &aggregate)
+{
+  return intersect(aggregate);
+}
+
+BALL_INLINE 
+Aggregate& Aggregate::operator -= (const Aggregate &aggregate)
+{
+  return subtract(aggregate);
+}
+
+BALL_INLINE 
+Aggregate& Aggregate::operator ^= (const Aggregate &aggregate)
+{
+  return symsubtract(aggregate);
+}
+
+BALL_INLINE 
+bool Aggregate::isEmpty(void) const
+{
+  return (bool)(first_ != 0);
+}
+
+BALL_INLINE 
+bool Aggregate::isParent(void) const
+{
+  return (bool)(first_ != 0);
+}
+
+BALL_INLINE 
+bool Aggregate::isParentOf(const Composite &composite) const
+{
+  return (bool)(composite.find_(*this) != 0);
+}
+
+BALL_INLINE 
+bool Aggregate::hasChildren(void) const
+{
+  return (bool)(first_ != 0);
+}
+
+BALL_INLINE 
+void Aggregate::host(Visitor<Aggregate> &visitor)
+{
+  visitor.visit(*this);
+}
+
+BALL_INLINE 
+AggregateCompositeItem* Aggregate::newItem
+	(Aggregate &aggregate, Composite &composite,
+   AggregateCompositeItem* aggregate_next,
+   AggregateCompositeItem* composite_next) const
+{
+  return new AggregateCompositeItem(aggregate, composite, aggregate_next, composite_next);
+}

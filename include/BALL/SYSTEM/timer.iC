@@ -1,0 +1,43 @@
+// $Id: timer.iC,v 1.1 1999/08/26 07:53:20 oliver Exp $
+
+BALL_INLINE 
+bool Timer::isValid(void) const
+{
+  return true;
+}
+
+BALL_INLINE 
+bool Timer::isRunning(void) const
+{
+  return is_running_;
+}
+
+BALL_INLINE 
+float Timer::getCPUTime(void) const
+{ 
+  return (getUserTime() + getSystemTime());
+}
+
+BALL_INLINE 
+bool Timer::operator != (const Timer& timer) const
+{
+  return (bool)!(*this == timer);
+}
+
+BALL_INLINE 
+bool Timer::operator <= (const Timer& timer) const
+{
+  return (bool)!(timer < *this);
+}
+
+BALL_INLINE 
+bool Timer::operator >= (const Timer& timer) const
+{
+  return (bool)!(*this < timer);
+}
+
+BALL_INLINE 
+bool Timer::operator > (const Timer& timer) const
+{
+  return (timer < *this);
+}

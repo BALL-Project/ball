@@ -1,0 +1,26 @@
+// $Id: format.doc,v 1.1 1999/08/26 07:53:20 oliver Exp $
+
+/**@name	Fileformats
+		This chapter contains all relevant information on 
+		BALL file formats and how to use them.
+		@nonames
+*/
+//@{
+
+	//@Include: INIFile.h
+
+	/**	@name	Support for PDB files
+	*/
+	//@{
+
+		//@Include: genericPDBFile.h
+		//@Include: PDBFile.h
+
+	//@}
+
+	//@Include: INIFile.h
+	//@Include: HINFile.h
+	//@Include: MOL2File.h
+	//@Include: resourceFile.h
+	
+//@}

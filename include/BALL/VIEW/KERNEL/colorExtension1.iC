@@ -1,0 +1,48 @@
+// $Id: colorExtension1.iC,v 1.2 1999/12/19 17:19:26 oliver Exp $
+
+BALL_INLINE
+void ColorExtension::setColor(const ColorRGBA& color)
+{
+  color_ = color;
+}
+
+BALL_INLINE
+void ColorExtension::setColor
+  (const ColorUnit& red, const ColorUnit& green,
+   const ColorUnit& blue, const ColorUnit& alpha)
+{
+  color_.set(red, green, blue, alpha);
+}
+
+BALL_INLINE
+ColorRGBA& ColorExtension::getColor()
+{
+  return color_;
+}
+
+BALL_INLINE
+const ColorRGBA& ColorExtension::getColor() const
+{
+  return color_;
+}
+
+BALL_INLINE
+void ColorExtension::getColor(ColorRGBA& color) const
+{
+  color = color_;
+}
+
+BALL_INLINE
+void ColorExtension::getColor
+  (ColorUnit& red, ColorUnit& green,
+   ColorUnit& blue, ColorUnit& alpha) const
+{
+  color_.get(red, green, blue, alpha);
+}
+
+BALL_INLINE
+void ColorExtension::getColor
+  (ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
+{
+  color_.get(red, green, blue);
+}

@@ -1,0 +1,68 @@
+// $Id: vertex1.iC,v 1.2 1999/12/19 17:19:30 oliver Exp $
+
+BALL_INLINE
+void Vertex::setVertex(const Vector3& v)
+{
+  *vertex1_ptr_ = v;
+}
+
+BALL_INLINE
+void Vertex::setVertex
+  (const Real x, const Real y, const Real z)
+{
+  vertex1_ptr_->set(x, y, z);
+}
+
+BALL_INLINE
+Vector3& Vertex::getVertex()
+{
+  return *vertex1_ptr_;
+}
+
+BALL_INLINE
+const Vector3& Vertex::getVertex() const
+{
+  return *vertex1_ptr_;
+}
+
+BALL_INLINE
+void Vertex::getVertex(Vector3& v) const
+{
+  v = *vertex1_ptr_;
+}
+
+BALL_INLINE
+void Vertex::getVertex(Real &x, Real &y, Real &z) const
+{
+  vertex1_ptr_->get(x, y, z);
+}
+
+BALL_INLINE
+void Vertex::setVertexAddress(const Vector3& v)
+{
+  vertex1_ptr_ = (Vector3 *)&v;
+}
+
+BALL_INLINE
+void Vertex::setDefaultVertexAddress()
+{
+  vertex1_ptr_ = (Vector3 *)&vertex1_;
+}
+
+BALL_INLINE
+Vector3* Vertex::getVertexAddress() const
+{
+  return vertex1_ptr_;
+}
+
+BALL_INLINE
+void Vertex::getVertexAddress(Vector3*& vertex_ptr) const
+{
+  vertex_ptr = vertex1_ptr_;
+}
+
+BALL_INLINE
+bool Vertex::isDefaultVertexAddress() const
+{
+  return (bool)(vertex1_ptr_ == (Vector3 *)&vertex1_);
+}

@@ -1,0 +1,364 @@
+// $Id: resourceFile.iC,v 1.1 1999/08/26 07:53:20 oliver Exp $
+
+BALL_INLINE 
+void ResourceEntry::set(const ResourceEntry& entry, bool deep)
+{
+  key_ = entry.key_;
+  value_ = entry.value_;
+
+  if (deep == true)
+  {
+    ResourceEntry* cloned = (ResourceEntry *)entry.create();
+
+    mergeChildrenOf(*cloned, true);
+
+    delete cloned;
+  }
+}
+
+BALL_INLINE 
+ResourceEntry& ResourceEntry::operator = (const ResourceEntry &entry)
+{
+  set(entry);
+  
+  return *this;
+}
+  
+BALL_INLINE 
+void ResourceEntry::get(ResourceEntry& entry, bool deep) const
+{
+  entry.set(*this, deep);
+}
+
+BALL_INLINE 
+const ResourceEntry& ResourceEntry::getRoot(void) const
+{
+  return ((ResourceEntry *)this)->getRoot();
+}
+
+BALL_INLINE 
+ResourceEntry* ResourceEntry::getParent(void)
+{
+  return parent_;
+}
+
+BALL_INLINE 
+const ResourceEntry* ResourceEntry::getParent(void) const
+{
+  return parent_;
+}
+
+BALL_INLINE 
+ResourceEntry* ResourceEntry::getChild(BALL::Index index)
+{
+  if (index < (BALL::Index)number_children_) {
+    return child_[index];
+  } else {
+    return 0;
+  }
+}
+
+BALL_INLINE 
+const ResourceEntry* ResourceEntry::getChild(BALL::Index index) const
+{
+  return ((ResourceEntry *)this)->getChild(index);
+}
+
+BALL_INLINE 
+const ResourceEntry* ResourceEntry::getEntry(const String& key_path) const
+{
+  return ((ResourceEntry *)this)->getEntry(key_path);
+}
+
+BALL_INLINE 
+const String& ResourceEntry::getKey(void) const
+{
+  return key_;
+}
+
+BALL_INLINE 
+void ResourceEntry::setValue(const String& value)
+{
+  value_ = value;
+}
+
+BALL_INLINE 
+String& ResourceEntry::getValue(void)
+{
+  return value_;
+}
+
+BALL_INLINE 
+const String& ResourceEntry::getValue(void) const
+{
+  return value_;
+}
+
+BALL_INLINE 
+BALL::Size ResourceEntry::countChildren(void) const
+{
+  return number_children_;
+}
+
+BALL_INLINE 
+BALL::Size ResourceEntry::getSize(void) const
+{
+  return (countDescendants() + 1);
+}
+
+BALL_INLINE 
+ResourceEntry* ResourceEntry::insertSibling
+	(const String& key, const String& value, bool replace_value)
+{
+  if (parent_ != 0) {
+    return parent_->insertChild(key, value, replace_value);
+  } else {
+    return 0;
+  }
+}
+
+BALL_INLINE 
+void ResourceEntry::destroy(void)
+{
+  clear();
+}
+
+BALL_INLINE 
+ResourceEntry* ResourceEntry::findChild(const String& key)
+{
+  BALL::Index found = 0;
+  
+  if (number_children_ == 0 || findGreaterOrEqual_(key, found) == false) {
+    return 0;
+  } else {
+    return child_[found];
+  }
+}
+
+BALL_INLINE 
+const ResourceEntry* ResourceEntry::findChild(const String& key) const
+{
+  return ((ResourceEntry *)this)->findChild(key);
+}
+
+BALL_INLINE 
+const ResourceEntry* ResourceEntry::findDescendant(const String& key) const
+{
+  return ((ResourceEntry *)this)->findDescendant(key);
+}
+
+BALL_INLINE 
+ResourceEntry* ResourceEntry::findEntry(const String& key)
+{
+  if (key_ == key) {
+    return this;
+  } else {
+    return findDescendant(key);
+  }
+}
+
+BALL_INLINE 
+const ResourceEntry* 
+ResourceEntry::findEntry(const String& key) const
+{
+  return ((ResourceEntry *)this)->findEntry(key);
+}
+
+
+BALL_INLINE 
+void ResourceEntry::host(Visitor<ResourceEntry>& visitor)
+{
+  visitor.visit(*this);
+}
+
+BALL_INLINE 
+bool ResourceEntry::hasChild(const String& key) const
+{
+  return (bool)(findChild(key) != 0);
+}
+
+BALL_INLINE 
+bool ResourceEntry::isEmpty(void) const
+{
+  return (bool)(number_children_ == 0);
+}
+
+BALL_INLINE 
+bool ResourceEntry::isParentOf(const ResourceEntry& entry) const
+{
+  return (bool)(entry.parent_ == this);
+}
+
+BALL_INLINE 
+bool ResourceEntry::isChildOf(const ResourceEntry& entry) const
+{
+  return entry.isParentOf(*this);
+}
+  
+
+BALL_INLINE 
+bool ResourceEntry::isDescendantOf(const ResourceEntry& entry) const
+{
+  return entry.isAncestorOf(*this);
+}
+
+BALL_INLINE 
+bool ResourceEntry::isRelatedWith(const ResourceEntry& entry) const
+{
+  return (bool)(&entry == this || entry.isAncestorOf(*this) || this->isAncestorOf(entry));
+}
+  
+BALL_INLINE 
+bool ResourceEntry::isRoot(void) const
+{
+  return (bool)(parent_ == 0);
+}
+
+BALL_INLINE 
+ResourceEntry* ResourceEntry::newEntry
+  (const String& key, const String& value, ResourceEntry* parent) const
+{
+  return new ResourceEntry(key, value, parent);
+}
+
+BALL_INLINE 
+ResourceEntry** ResourceEntry::newEntryArray(BALL::Size size) const
+{
+  return (new ResourceEntry *[size]);
+}
+
+BALL_INLINE 
+void ResourceEntry::deleteEntry(ResourceEntry* entry) const
+{
+  delete entry;
+}
+  
+BALL_INLINE 
+void ResourceEntry::deleteEntryArray(ResourceEntry** entry_array) const
+{
+  delete [] entry_array;
+}
+  
+
+
+BALL_INLINE 
+void ResourceFile::close(void)
+{
+  destroy();
+
+  File::close();
+}
+
+BALL_INLINE 
+void ResourceFile::saveAs(const String& name)
+{
+  saveAs(root_, name);
+}
+
+BALL_INLINE 
+void ResourceFile::save(const Entry& entry)
+{
+  saveAs(entry, File::getName());
+}
+
+BALL_INLINE 
+void ResourceFile::save(void)
+{
+  saveAs(root_ ,File::getName());
+}
+
+BALL_INLINE 
+BALL::Size ResourceFile::getSize(void) const
+{
+  return root_.getSize();
+}
+
+BALL_INLINE 
+ResourceFile::Entry& ResourceFile::getRoot(void)
+{
+  return root_;
+}
+
+BALL_INLINE 
+const ResourceFile::Entry& ResourceFile::getRoot(void) const
+{
+  return root_;
+}
+
+BALL_INLINE 
+ResourceFile::Entry* ResourceFile::getEntry(const String& key_path)
+{
+  return root_.getEntry(key_path);
+}
+
+BALL_INLINE 
+const ResourceFile::Entry* ResourceFile::getEntry(const String& key_path) const
+{
+  return root_.getEntry(key_path);
+}
+
+BALL_INLINE 
+String* ResourceFile::getValue(const String& key_path)
+{
+  Entry* entry = getEntry(key_path);
+  
+	if (entry == 0) {
+		return 0;
+	} else {
+		return &(entry->getValue());
+	}
+}
+
+BALL_INLINE 
+ResourceFile::Entry* ResourceFile::insert(const String& key_path, const String& name)
+{
+  return root_.insert(key_path, name);
+}
+
+BALL_INLINE 
+bool ResourceFile::removeKey(const String& key_path)
+{
+  return root_.removeKey(key_path);
+}
+
+BALL_INLINE 
+const String* ResourceFile::getValue(const String& key_path) const
+{
+  return ((ResourceFile *)this)->getValue(key_path);
+}
+
+BALL_INLINE 
+void ResourceFile::host(Visitor<ResourceFile>& visitor)
+{
+  visitor.visit(*this);
+}
+
+BALL_INLINE 
+bool ResourceFile::hasKey(const String& key_path) const
+{
+  return (bool)(getEntry(key_path) != 0);
+}
+
+BALL_INLINE 
+bool ResourceFile::isEmpty(void) const
+{
+  return root_.isEmpty();
+}
+
+BALL_INLINE 
+bool ResourceFile::isValid(void) const
+{
+  return (File::isValid() && root_.isValid());
+}
+
+BALL_INLINE 
+bool ResourceFile::apply(UnaryProcessor<Entry>& processor)
+{
+  return root_.apply(processor);
+}
+
+BALL_INLINE 
+bool ResourceFile::applyChildren(Entry& entry, UnaryProcessor<Entry>& processor)
+{
+  return entry.applyChildren(processor);
+}

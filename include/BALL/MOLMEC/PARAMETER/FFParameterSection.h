@@ -1,0 +1,192 @@
+// $Id: FFParameterSection.h,v 1.1 1999/08/26 07:53:21 oliver Exp $ 
+// Molecular Mechanics: general force field parameter class
+
+#ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETER_H
+#define BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETER_H
+
+#ifndef BALL_COMMON_H
+#	include <BALL/common.h>
+#endif
+
+#ifndef BALL_FORMAT_INIFILE_H
+# include <BALL/FORMAT/INIFile.h>
+#endif
+
+#ifndef BALL_KERNEL_SYSTEM_H
+# include <BALL/KERNEL/system.h>
+#endif
+
+#ifndef BALL_DATATYPE_OPTIONS_H
+# include <BALL/DATATYPE/options.h>
+#endif
+
+namespace BALL 
+{
+
+	class ForceFieldParameters;
+
+	/**	Generic Force Field Parameter Section Class.
+			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/FFParameterSection.h}
+			\\
+	*/
+	class FFParameterSection 
+	{
+		public:
+
+		enum 
+		{
+			MAX_FIELDS = 20
+		};
+
+		/**	@name	Constructors and Destructors
+		*/
+		//@{
+
+		/**	Default constructor.
+		*/
+		FFParameterSection();
+
+		/**	Destructor.
+		*/
+		virtual ~FFParameterSection();
+
+		/**	Destroy method.
+		*/
+		virtual void destroy();
+
+		//@}
+		
+		/**	@name	Extracting Data from the Section
+		*/
+		//@{
+
+		/**	Reads a parameter section from an INI file.
+				This method reads the section given in section\_name from ini\_file,
+				interprets (if given) a format line, reads the data from this section according to 
+				the format, and builds some datastructures for fast and easy acces this data.
+				@param	ini_file the inifile to be read from
+				@param	section_name the name of the section to be read (without the squared brackets)
+				@return bool true if the section could be read, false otherwise
+		*/
+		bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+
+		/** Returns the value associated with the key and returns the value of the
+				given variable.
+				If the requested variable is not defined in the format line, an empty string is returned.
+		*/
+		const String& getValue(const String& key, const String& variable) const;
+		
+		/**	Query for a pair of key and variable.
+				False is returned if 
+				\begin{itemize}
+					\item the key could not be found
+					\item the the key was found but the variable name was not specified
+								in the format line
+				\end{itemize}
+		*/
+		bool has(const String& key, const String& variable) const;
+		
+		/**	Query for a key.
+				False is returned if the key could not be found.
+				@param key the key to serch in the hash table
+		*/
+		bool has(const String& key) const;
+		
+		/**	Query whether a specified variable was defined in the format line.
+		*/
+		bool hasVariable(const String& variable) const;
+
+		/**	Return the column index of a variable.
+		*/
+		Size getColumnIndex(const String& variable) const;
+
+		/**	Returns the number of defined variables.
+		*/
+		Size getNumberOfVariables() const;
+
+		/**	Returns the number of different keys defined.
+		*/
+		Size getNumberOfKeys() const;
+
+
+		/**	Fast access to the value array 
+		*/
+		const String& getValue(Size key_index, Size variable_index) const;
+
+		/**	Fast access to the key array 
+		*/
+		const String& getKey(Size key_index) const;
+
+		//@}
+
+		/**	@name	Predicates
+		*/
+		//@{
+			
+		/**	Validity predicate
+		*/
+		bool isValid() const;
+		//@}
+
+		/**	@name	Public Members
+		*/
+		//@{
+
+		/**	The options read in from options lines contained in this section.
+				Remember: options lines start with "@" as the first character
+				and must be of the form "@name=value".
+		*/
+		Options	options;
+		//@}
+
+		protected:
+
+		/*_	The name of the section.
+		*/
+		String	section_name_;
+
+		/*_	The format line.
+		*/
+		String	format_line_;
+
+		/*_	String hash map containing an index for each key.
+				This index is the index for the entries_ array.
+		*/
+		StringHashMap<Index>	section_entries_;
+
+		/*_	String has map relating a variable name to the index in entries_.
+		*/
+		StringHashMap<Index>	variable_names_;
+		
+		/*_	One-dimensional array of the values read from the section.
+				The index of a specific value is calculated as
+				section_entries_[key] * number_of_variables_ * variable_names_[name]
+		*/
+		String*	entries_;
+
+		/*_	One-dimensional array of the keys read from the section.
+		*/
+		String*	keys_;
+
+		/*_	The number of variables specified in the format line.
+				Variables also include "ver:" entries.
+		*/
+		Size		number_of_variables_;
+
+		/*_	The number of different keys read.
+		*/
+		Size		number_of_entries_;
+
+		/*_	The version numbers of each key.
+		*/
+		float*	version_;
+
+		/*_	The valid flag.
+		*/
+		bool		valid_;
+
+	};
+
+} // namespace BALL
+
+#endif // BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETER_H

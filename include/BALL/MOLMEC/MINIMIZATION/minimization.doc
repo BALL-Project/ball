@@ -1,0 +1,12 @@
+// $Id: minimization.doc,v 1.1 1999/08/26 07:53:21 oliver Exp $
+
+/**	@name	Energy Minimizer
+		@nonames
+*/
+//@{
+
+	//@Include: energyMinimizer.h
+	//@Include: lineSearch.h
+	//@Include: steepestDescent.h
+
+//@}

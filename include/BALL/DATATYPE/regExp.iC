@@ -1,0 +1,109 @@
+// $Id: regExp.iC,v 1.1 1999/08/26 07:53:13 oliver Exp $
+
+BALL_INLINE 
+void RegularExpression::set(const RegularExpression& regular_expression, bool deep)
+{
+  BALL_PRECONDITION
+    (deep == true, 
+     BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__NOT_IMPLEMENTED));
+
+  pattern_.set(regular_expression.pattern_);
+
+  freeCompiledPattern_();
+  compilePattern_();
+}
+
+BALL_INLINE 
+void RegularExpression::set(const String& pattern, bool wildcard_pattern)
+{
+  pattern_.set(pattern);
+
+  if (wildcard_pattern == true)
+    toExtendedRegularExpression_();
+
+  freeCompiledPattern_();
+  compilePattern_();
+}
+
+BALL_INLINE 
+void RegularExpression::get(RegularExpression& regular_expression, bool deep) const
+{
+  regular_expression.set(*this, deep);
+}
+
+BALL_INLINE 
+const String& RegularExpression::getPattern() const
+{
+  return pattern_;
+}
+
+BALL_INLINE 
+Size RegularExpression::countSubexpressions() const
+{
+  if (valid_pattern_ == true)
+  {
+    return (Size)regex_.re_nsub;
+  } else {
+    return 0;
+  }
+}
+
+BALL_INLINE 
+void RegularExpression::clear()
+{
+  set(BALL_REGULAR_EXPRESSION_DEFAULT_PATTERN);
+}
+
+BALL_INLINE 
+void RegularExpression::destroy()
+{
+  clear();
+}
+
+BALL_INLINE
+bool RegularExpression::isEmpty() const
+{
+  return pattern_.isEmpty();
+}
+
+BALL_INLINE 
+bool RegularExpression::operator == (const RegularExpression& regular_expression) const
+{
+  return (pattern_ == regular_expression.pattern_);
+}
+
+BALL_INLINE 
+bool RegularExpression::operator != (const RegularExpression& regular_expression) const
+{
+  return (pattern_ != regular_expression.pattern_);
+}
+
+BALL_INLINE 
+bool RegularExpression::operator < (const RegularExpression& regular_expression) const
+{
+  return (pattern_ < regular_expression.pattern_);
+}
+
+BALL_INLINE 
+bool RegularExpression::operator <= (const RegularExpression& regular_expression) const
+{
+  return (pattern_ <= regular_expression.pattern_);
+}
+
+BALL_INLINE 
+bool RegularExpression::operator >= (const RegularExpression& regular_expression) const
+{
+  return (pattern_ >= regular_expression.pattern_);
+}
+
+BALL_INLINE 
+bool RegularExpression::operator > (const RegularExpression& regular_expression) const
+{
+  return (pattern_ > regular_expression.pattern_);
+}
+
+BALL_INLINE 
+bool RegularExpression::isValid() const
+{
+  return (bool)(valid_pattern_ == true && pattern_.isValid());
+}

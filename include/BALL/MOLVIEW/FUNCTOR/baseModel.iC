@@ -1,0 +1,86 @@
+// $Id: baseModel.iC,v 1.2 1999/12/19 17:18:48 oliver Exp $
+
+BALL_INLINE
+void BaseModelProcessor::enableStaticModel()
+{
+  setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
+}
+
+BALL_INLINE
+void BaseModelProcessor::disableStaticModel()
+{
+  setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+}
+
+BALL_INLINE
+void BaseModelProcessor::enableDynamicModel()
+{
+  setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+}
+
+BALL_INLINE
+void BaseModelProcessor::disableDynamicModel()
+{
+  setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
+}
+
+BALL_INLINE
+void BaseModelProcessor::setColorCalculator
+  (const ColorCalculator& color_calculator)
+{
+  color_calculator_  = (ColorCalculator*)&color_calculator;
+}
+  
+BALL_INLINE
+void BaseModelProcessor::resetColorCalculator()
+{
+  color_calculator_ = const_cast<ColorCalculator*>((const ColorCalculator*)&RTTI<ColorCalculator>::getDefault());
+}
+  
+BALL_INLINE
+ColorCalculator* BaseModelProcessor::getColorCalculator() const
+{
+  return color_calculator_;
+}
+
+BALL_INLINE
+bool BaseModelProcessor::isStaticModelEnabled()
+{
+  return (bool)(hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC) == true);
+}
+
+BALL_INLINE
+bool BaseModelProcessor::isStaticModelDisabled()
+{
+  return (bool)(hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC) == false);
+}
+
+BALL_INLINE
+bool BaseModelProcessor::isDynamicModelEnabled()
+{
+  return (bool)(hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == true);
+}
+
+BALL_INLINE
+bool BaseModelProcessor::isDynamicModelDisabled()
+{
+  return (bool)(hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == false);
+}
+
+BALL_INLINE
+bool BaseModelProcessor::isDefaultColorCalculator()
+{
+  return (bool)(color_calculator_ == const_cast<ColorCalculator*>((ColorCalculator*)&RTTI<ColorCalculator>::getDefault()));
+}
+
+BALL_INLINE
+bool BaseModelProcessor::isOtherColorCalculator()
+{
+  return (bool)(color_calculator_ != const_cast<ColorCalculator*>((ColorCalculator*)&RTTI<ColorCalculator>::getDefault()));
+}
+
+BALL_INLINE
+FindGeometricObject& BaseModelProcessor::getSearcher()
+{
+  return find_geometric_object_;
+}

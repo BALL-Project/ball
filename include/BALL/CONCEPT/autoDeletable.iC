@@ -1,0 +1,13 @@
+// $Id: autoDeletable.iC,v 1.1 1999/08/26 07:53:16 oliver Exp $
+
+BALL_INLINE 
+void AutoDeletable::setAutoDeletable(bool enable)
+{
+  enabled_ = enable;
+}
+
+BALL_INLINE 
+bool AutoDeletable::isAutoDeletable(void) const
+{
+  return enabled_;
+}

@@ -1,0 +1,59 @@
+// $Id: selectable.iC,v 1.1 1999/08/26 07:53:17 oliver Exp $
+
+BALL_INLINE 
+void Selectable::clear(void)
+{
+  selected_ = false;
+}
+
+BALL_INLINE 
+void Selectable::destroy(void)
+{
+  clear();
+}
+
+BALL_INLINE 
+void Selectable::set(const Selectable& selectable, bool /* deep */)
+{
+  selected_ = selectable.selected_;
+}
+
+BALL_INLINE 
+Selectable& Selectable::operator =(const Selectable &selectable)
+{
+  set(selectable);
+
+  return *this;
+}
+    
+BALL_INLINE 
+void Selectable::get(Selectable &selectable, bool deep) const
+{
+  selectable.set(*this, deep);
+}
+
+BALL_INLINE 
+void Selectable::deselect(void)
+{
+  selected_ = false;
+}
+
+BALL_INLINE 
+void Selectable::select(void)
+{
+  selected_ = true;
+}
+
+BALL_INLINE 
+void Selectable::swap(Selectable &selectable)
+{
+  bool temp = selected_;
+  selected_ = selectable.selected_;
+  selectable.selected_ = temp;
+}
+
+BALL_INLINE 
+bool Selectable::isSelected(void) const
+{
+  return selected_;
+}

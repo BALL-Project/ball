@@ -1,0 +1,10 @@
+/* $Id */
+
+/**@name	Solvation methods
+		This chapter contains all relevant information on 
+		the use of BALL solvation methods.
+		@nonames
+*/
+//@{
+	//@Include: poissonBoltzmann.h
+//@}

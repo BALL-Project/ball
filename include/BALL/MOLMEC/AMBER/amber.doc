@@ -1,0 +1,14 @@
+// $Id: amber.doc,v 1.1 1999/08/26 07:53:21 oliver Exp $
+
+/**	@name	AMBER Force Field.
+		@nonames
+*/
+//@{
+
+	//@Include: amber.h
+	//@Include: amberBend.h
+	//@Include: amberNonBonded.h
+	//@Include: amberStretch.h
+	//@Include: amberTorsion.h
+
+//@}

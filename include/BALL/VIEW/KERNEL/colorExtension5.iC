@@ -1,0 +1,83 @@
+// $Id: colorExtension5.iC,v 1.2 1999/12/19 17:19:28 oliver Exp $
+
+BALL_INLINE
+void ColorExtension5::setColor5
+  (const ColorRGBA& color)
+{
+  color5_ = color;
+}
+
+BALL_INLINE
+void ColorExtension5::setColor5
+  (const ColorUnit& red,
+   const ColorUnit& green,
+   const ColorUnit& blue,
+   const ColorUnit& alpha)
+{
+  color5_.set(red,
+				   green,
+				   blue,
+				   alpha);
+}
+
+BALL_INLINE
+ColorRGBA& ColorExtension5::getColor5()
+{
+  return color5_;
+}
+
+BALL_INLINE
+const ColorRGBA& ColorExtension5::getColor5() const
+{
+  return color5_;
+}
+
+BALL_INLINE
+void ColorExtension5::getColor5(ColorRGBA& color) const
+{
+ color = color5_;
+}
+
+BALL_INLINE
+void ColorExtension5::getColor5
+  (ColorUnit& red,
+   ColorUnit& green,
+   ColorUnit& blue,
+   ColorUnit& alpha) const
+{
+  color5_.get(red, green, blue, alpha);
+}
+
+BALL_INLINE
+void ColorExtension5::getColor5
+  (ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
+{
+  color5_.get(red, green, blue);
+}
+
+BALL_INLINE
+void ColorExtension5::setColors
+  (const ColorRGBA& a,
+   const ColorRGBA& b,
+   const ColorRGBA& c,
+   const ColorRGBA& d,
+   const ColorRGBA& e)
+{
+  ColorExtension4::setColors(a, b, c, d);
+
+  color5_ = e;
+}
+      
+BALL_INLINE
+void ColorExtension5::getColors
+  (ColorRGBA& a,
+   ColorRGBA& b,
+   ColorRGBA& c,
+   ColorRGBA& d,
+   ColorRGBA& e) const
+{
+  ColorExtension4::getColors(a, b, c, d);
+
+  e = color5_;
+}
+

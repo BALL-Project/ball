@@ -1,0 +1,129 @@
+// $Id: bitVector.iC,v 1.1 1999/08/26 07:53:13 oliver Exp $
+
+BALL_INLINE 
+void BitVector::clear(void)
+{
+  fill(false);
+}
+
+BALL_INLINE 
+BitVector& BitVector::operator = (const BitVector& bit_vector)
+{
+  set(bit_vector);
+
+  return *this;
+}
+
+BALL_INLINE 
+BitVector& BitVector::operator = (const char* bit_string)
+{
+  set(bit_string);
+
+  return *this;
+}
+
+BALL_INLINE 
+void BitVector::get(BitVector& bit_vector, bool deep) const
+{
+  bit_vector.set(*this, deep);
+}
+
+BALL_INLINE 
+BALL::Size BitVector::getSize(void) const
+{
+  return size_;
+}
+
+BALL_INLINE 
+BALL::Index BitVector::getMaxIndex(void) const
+{
+  return size_ - 1;
+}
+  
+BALL_INLINE 
+BALL::BitVector::BlockType* BitVector::getBitSet(void)
+{
+  return bitset_;
+}
+
+BALL_INLINE 
+const BALL::BitVector::BlockType* BitVector::getBitSet(void) const
+{
+  return bitset_;
+}
+
+BALL_INLINE 
+BitVector BitVector::operator | (const BitVector& bit_vector)
+{
+  BitVector temp(*this);
+
+  temp.or(bit_vector);
+
+  return temp;
+}
+
+BALL_INLINE 
+BitVector& BitVector::operator |= (const BitVector &bit_vector)
+{
+  or(bit_vector);
+
+  return *this;
+}
+
+BALL_INLINE 
+BitVector BitVector::operator & (const BitVector& bit_vector)
+{
+  BitVector temp(*this);
+
+  temp.and(bit_vector);
+
+  return temp;
+}
+
+BALL_INLINE 
+BitVector& BitVector::operator &= (const BitVector &bit_vector)
+{
+  and(bit_vector);
+
+  return *this;
+}
+
+BALL_INLINE 
+BitVector BitVector::operator ^ (const BitVector& bit_vector)
+{
+  BitVector temp(*this);
+
+  temp.xor(bit_vector);
+
+  return temp;
+}
+
+BALL_INLINE 
+BitVector& BitVector::operator ^= (const BitVector &bit_vector)
+{
+  xor(bit_vector);
+
+  return *this;
+}
+
+BALL_INLINE 
+BitVector BitVector::operator ~ (void)
+{
+  BitVector temp(*this);
+
+  temp.toggle();
+
+  return temp;
+}
+
+BALL_INLINE 
+bool BitVector::operator != (const BitVector &bit_vector) const
+{
+  return (bool)!(*this == bit_vector);
+}
+
+BALL_INLINE 
+bool BitVector::isValid(void) const
+{
+  return (bitset_ != 0);
+}

@@ -1,0 +1,89 @@
+// $Id: property.iC,v 1.1 1999/08/26 07:53:17 oliver Exp $
+
+BALL_INLINE 
+void PropertyManager::destroy(void)
+{
+	// same as clear
+  clear();
+}
+
+BALL_INLINE 
+PropertyManager& PropertyManager::operator = (const PropertyManager &property_manager)
+{
+  set(property_manager);
+  
+  return *this;
+}
+
+BALL_INLINE 
+void PropertyManager::get(PropertyManager& property_manager, bool deep) const
+{
+  property_manager.set(*this, deep);
+}
+
+BALL_INLINE 
+BitVector& PropertyManager::getBitVector(void)
+{
+  return bitvector_;
+}
+
+BALL_INLINE 
+const BitVector& PropertyManager::getBitVector(void) const
+{
+  return bitvector_;
+}
+
+BALL_INLINE
+PropertyManager::operator BitVector & (void)
+{
+  return bitvector_;
+}
+
+BALL_INLINE 
+void PropertyManager::setProperty(Property property)
+{
+  bitvector_.setBit(property);
+}
+
+BALL_INLINE 
+void PropertyManager::clearProperty(Property property)
+{
+  bitvector_.setBit(property, false);
+}
+
+BALL_INLINE 
+void PropertyManager::toggleProperty(Property property)
+{
+  bitvector_.toggleBit(property);
+}
+
+BALL_INLINE 
+void PropertyManager::swap(PropertyManager& property_manager)
+{
+  bitvector_.swap(property_manager);
+	named_properties_.swap(property_manager.named_properties_);
+}
+
+BALL_INLINE 
+bool PropertyManager::hasProperty(Property property) const
+{
+  return bitvector_.getBit(property);
+}
+
+BALL_INLINE 
+bool PropertyManager::isValid() const
+{
+  return (bool)(bitvector_.isValid());
+}
+
+BALL_INLINE 
+Size PropertyManager::countProperties(void) const
+{
+  return (bitvector_.getSize() + named_properties_.size());
+}
+
+BALL_INLINE 
+Size PropertyManager::countNamedProperties(void) const
+{
+  return named_properties_.size();
+}

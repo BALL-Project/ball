@@ -1,0 +1,40 @@
+// $Id: normal.iC,v 1.2 1999/12/19 17:19:29 oliver Exp $
+
+BALL_INLINE
+void NormalVector::setNormalVector
+  (const Vector3& n)
+{
+  normal_ = n;
+}
+
+BALL_INLINE
+void NormalVector::setNormalVector
+  (const Real x, const Real y, const Real z)
+{
+  normal_.set(x, y, z);
+}
+
+BALL_INLINE
+Vector3& NormalVector::getNormalVector()
+{
+  return normal_;
+}
+
+BALL_INLINE
+const Vector3& NormalVector::getNormalVector() const
+{
+  return normal_;
+}
+
+BALL_INLINE
+void NormalVector::getNormalVector(Vector3& n) const
+{
+  n = normal_;
+}
+
+BALL_INLINE
+void NormalVector::getNormalVector
+  (Real& x, Real& y, Real& z) const
+{
+  normal_.get(x, y, z);
+}

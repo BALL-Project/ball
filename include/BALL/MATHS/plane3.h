@@ -1,0 +1,258 @@
+// $Id: plane3.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+
+#ifndef BALL_MATHS_PLANE3_H
+#define BALL_MATHS_PLANE3_H
+
+#ifndef BALL_COMMON_H
+#	include <BALL/common.h>
+#endif
+
+#ifdef BALL_INCLUDE_IEEEFP
+#	include <ieeefp.h>
+#endif
+
+#include <math.h>
+#include <iostream.h>
+
+#ifndef BALL_MATHS_LINE3_H
+#	include <BALL/MATHS/line3.h>
+#endif
+
+#ifndef BALL_MATHS_POINT3_H
+#	include <BALL/MATHS/point3.h>
+#endif
+
+#ifndef BALL_MATHS_VECTOR3_H
+#	include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_MATHS_COMMON_H
+#	include <BALL/MATHS/common.h>
+#endif
+
+namespace BALL 
+{
+
+	/**	Threedimensional plane.
+      {\bf Definition:} \URL{BALL/MATHS/.h}
+      \\
+ 	*/
+	template <class T>
+	class TPlane3
+	{
+		public:
+
+		BALL_CREATE(TPlane3<T>)
+
+
+		/**	@name	Enums
+		*/
+		//@{
+
+		///
+		enum Form
+		{
+			FORM__PARAMETER    = 0,
+			FORM__THREE_POINTS = 1,
+			FORM__NORMAL       = 2,
+			FORM__COORDINATE   = 3 
+		};
+		//@}
+
+
+		/**	@name	Constructors and Destructors
+		*/
+		//@{
+
+		///
+		TPlane3(void)
+			:	p(),
+				n()
+		{
+		}
+
+		///
+		TPlane3(const TPlane3& plane, bool /* deep */ = true)
+			:	p(plane.p),
+				n(plane.n)
+		{
+		}
+
+		///
+		TPlane3(const TPoint3<T>& point, const TVector3<T>& normal)
+			:	p(point),
+				n(normal)
+		{
+		}
+
+		///
+		TPlane3(const TPoint3<T>& a, const TPoint3<T>& b, const TPoint3<T>& c)
+			:	p(a),
+				n((a - b) % (b - c))
+		{
+		}
+
+		///
+		virtual ~TPlane3(void)
+		{
+		}
+		//@}
+
+		/**	@name	Assignment
+		*/
+		//@{
+
+		///
+		void swap(TPlane3 &plane)
+		{
+			TPoint3<T> temp_point(p);
+			p = plane.p;
+			plane.p = temp_point;
+
+			TVector3<T> temp_vector(n);
+			n = plane.n;
+			plane.n = temp_vector;
+		}
+
+		///
+		void set(const TPlane3& plane, bool /* deep */ = true)
+		{
+			p = plane.p;
+			n = plane.n;
+		}
+
+		///
+		void set(const TPoint3<T>& point, const TVector3<T>& normal)
+		{
+			p = point;
+			n = normal;
+		}
+
+		///
+		TPlane3& operator = (const TPlane3 &plane)
+		{
+			p = plane.p;
+			n = plane.n;
+
+			return *this;
+		}
+
+		///
+		void get(TPlane3 &plane, bool /* deep */ = true) const
+		{
+			plane.p = p;
+			plane.n = n;
+		}
+
+		///
+		void get(TPoint3<T>& point, TVector3<T>& normal) const
+		{
+			point = p;
+			normal = n;
+		}
+		//@}
+
+		/**	@name	Accessors
+		*/
+		//@{
+
+		///
+		void normalize(void)
+		{
+			T length = n.getLength();
+
+			p /= length;
+			n /= length;
+		}
+		//@}
+
+		/**	@name	Predicates
+		*/
+		//@{
+
+		///
+		bool operator == (const TPlane3& plane) const
+		{
+			return (bool)(p == plane.p && n == plane.n);
+		}
+
+		///
+		bool operator != (const TPlane3& plane) const
+		{
+			return (bool)(p != plane.p || n != plane.n);
+		}
+
+		///
+		bool has(const TPoint3<T>& point) const
+		{
+			return Maths::isZero(n * (point - p));
+		}
+
+		///
+		bool has(const TLine3<T>& line) const
+		{
+			return (bool)(Maths::isZero(n * line.d) && has(line.p));
+		}
+		//@}
+
+		/**	@name	Debugging and Diagnostics
+		*/
+		//@{
+
+		///
+		bool isValid(void) const
+		{
+			return true;
+		}
+
+		///
+		void dump(ostream& s = cout, unsigned long depth = 0) const
+		{
+			BALL_DUMP_STREAM_PREFIX(s);
+
+			BALL_DUMP_HEADER(s, this, this);
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "  position: " << p << endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "  normal: " << n << endl;
+
+			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+		//@}
+
+		/**	@name	Storers
+		*/
+		//@{
+
+		///
+		friend istream& operator >> (istream& s, TPlane3& plane)
+		{
+			return (s >> "PLANE(" >> plane.p >> ", " >> plane.n >> ")");
+		}
+
+		///
+		friend ostream& operator << (ostream& s, const TPlane3& plane)
+		{
+			return (s << plane.p  << plane.n);
+		}
+		//@}
+
+		/**	@name	Attributes
+		*/
+		//@{
+		///
+		TPoint3<T> p;
+
+		///
+		TVector3<T> n;
+		//@}
+	};
+
+	///
+	typedef TPlane3<Real> Plane3;
+
+} // namespace BALL
+
+#endif // BALL_MATHS_PLANE3_H

@@ -1,0 +1,19 @@
+// $Id: radius.iC,v 1.2 1999/12/19 17:19:29 oliver Exp $
+
+BALL_INLINE
+void Radius::setRadius(const Real r)
+{
+  radius_ = r;
+}
+
+BALL_INLINE
+Real Radius::getRadius()
+{
+  return radius_;
+}
+
+BALL_INLINE
+void Radius::getRadius(Real& r) const
+{
+  r = radius_;
+}

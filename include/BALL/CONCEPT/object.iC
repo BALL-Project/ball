@@ -1,0 +1,128 @@
+// $Id: object.iC,v 1.1 1999/08/26 07:53:16 oliver Exp $
+
+BALL_INLINE 
+Handle Object::getHandle (void) const
+{
+  return handle_;
+}
+  
+BALL_INLINE 
+Handle Object::getNextHandle(void)
+{
+  return (Object::global_handle_ + 1);
+}
+  
+BALL_INLINE 
+Handle Object::getNewHandle(void)
+{
+  return Object::global_handle_++;
+}
+  
+BALL_INLINE 
+void Object::clear(void)
+{
+}
+
+BALL_INLINE 
+void Object::destroy(void)
+{
+}
+  
+BALL_INLINE 
+bool Object::operator == (const Object &object) const
+{
+  return (bool)(RTTI<Object>::isInstanceOf(object) && (handle_ == object.handle_));
+}
+
+BALL_INLINE 
+bool Object::operator != (const Object &object) const
+{
+  return (bool)!(*this == object);
+}
+
+BALL_INLINE 
+bool Object::operator < (const Object &object) const
+{
+  return (bool)(RTTI<Object>::isInstanceOf(object) && (handle_ < object.handle_));
+}
+
+BALL_INLINE 
+bool Object::operator <= (const Object &object) const
+{
+  return (bool)!(object < *this);
+}
+
+BALL_INLINE 
+bool Object::operator >= (const Object &object) const
+{
+  return (bool)!(*this < object);
+}
+
+BALL_INLINE 
+bool Object::operator > (const Object &object) const
+{
+  return (bool)(object < *this);
+}
+
+BALL_INLINE 
+int Object::compare(const Object & object) const
+{
+  if (*this == object)
+  {
+    return 0;
+  } else if (*this < object)
+  {
+    return -1;
+  } else {
+    return 1;
+  }
+}
+
+BALL_INLINE
+bool Object::isValid(void) const
+{
+  return true;
+}
+
+BALL_INLINE 
+void Object::read(istream& /* s */)
+{
+	throw Exception::NotImplemented(__FILE__, __LINE__);
+}
+
+BALL_INLINE 
+void Object::write(ostream& /* s */) const
+{
+  throw Exception::NotImplemented(__FILE__, __LINE__);
+}
+
+
+
+#ifdef BALL_SUPPORT_OBJECT_MANAGER
+
+BALL_INLINE 
+Size ObjectManager::countInsertions(void)
+{
+  return number_of_insertions_;
+}
+
+BALL_INLINE 
+Size ObjectManager::countRemovals(void)
+{
+  return number_of_removals_;
+}
+
+BALL_INLINE 
+Size ObjectManager::countUpdates(void)
+{
+  return (number_of_insertions_
+	  + number_of_removals_);
+}
+
+BALL_INLINE 
+Size ObjectManager::countObjects(void)
+{
+  return number_of_objects_;
+}
+
+#endif // BALL_SUPPORT_OBJECT_MANAGER
