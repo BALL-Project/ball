@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.11 2000/12/04 21:20:41 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.12 2000/12/08 16:21:53 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -268,7 +268,6 @@ void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x
     double stepx, stepy;
     Size x, y;
     double actx, acty;
-    Size numpx_, numpy_;
 
     if (pm_)
       delete (pm_);
@@ -317,7 +316,7 @@ void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x
  * Creates a lorentzian peak in the data, having width xwidth, ywidth, amplitude amp, 
  * maximum in xpos, ypos.
  */
-void RegularData2DWidget::addLorentzian( double xpos, double ypos, double amp, int xwidth=1, int ywidth=1 )
+void RegularData2DWidget::addLorentzian( double xpos, double ypos, double amp, int xwidth, int ywidth )
 {
   Position x, y;
   
