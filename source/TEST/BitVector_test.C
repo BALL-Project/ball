@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BitVector_test.C,v 1.31 2003/06/12 05:56:55 oliver Exp $
+// $Id: BitVector_test.C,v 1.32 2003/06/17 10:53:41 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.31 2003/06/12 05:56:55 oliver Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.32 2003/06/17 10:53:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -692,18 +692,6 @@ CHECK(friend std::ostream& operator << (std::ostream& s, const BitVector& bit_ve
 	TEST_FILE(filename.c_str(), "data/BitVector_test.txt")
 RESULT
 
-CHECK(bool isValid() const throw())
-	std::ifstream instr("data/BitVector_test2.txt");
-	BitVector bv4_2;
-	bv4_2.read(instr);
-	instr.close();
-	TEST_EQUAL(bv4_2.getSize(), 4)
-	TEST_EQUAL(bv4_2.getBit(0), false)
-	TEST_EQUAL(bv4_2.getBit(1), false)
-	TEST_EQUAL(bv4_2.getBit(2), true)
-	TEST_EQUAL(bv4_2.getBit(3), false)
-RESULT
-
 CHECK(void write(std::ostream& s) const throw())
 	NEW_TMP_FILE(filename)
 	std::ofstream outstr(filename.c_str(), std::ios::out);
@@ -712,19 +700,8 @@ CHECK(void write(std::ostream& s) const throw())
 	TEST_FILE(filename.c_str(), "data/BitVector_test2.txt")
 RESULT
 
-CHECK(void write(std::ostream& s) const throw())
-	NEW_TMP_FILE(filename)
-	ofstream	ofile(filename.c_str(), ios::out);
-	pm.setOstream(ofile);
-	using namespace RTTI;
-	pm.registerClass(getStreamName<BitVector>(), BitVector::createDefault);
-	bv4.write(pm);
-	ofile.close();
-	TEST_FILE(filename.c_str(), "data/BitVector_test3.txt")
-RESULT
-
 CHECK(bool read(PersistenceManager& pm) throw(Exception::OutOfMemory))
-	ifstream	ifile(filename.c_str());
+	ifstream	ifile("data/BitVector_test3.txt");
 	pm.setIstream(ifile);
 	BitVector bv;
 	TEST_NOT_EQUAL(bv.read(pm), false);
@@ -737,12 +714,123 @@ CHECK(bool read(PersistenceManager& pm) throw(Exception::OutOfMemory))
 RESULT
 
 CHECK(void write(PersistenceManager& pm) const throw())
-	String newfile;
-	NEW_TMP_FILE(newfile)
-	std::ofstream outstr(newfile.c_str(), std::ios::out);
-	pm.setOstream(outstr);
+	NEW_TMP_FILE(filename)
+	ofstream	ofile(filename.c_str(), ios::out);
+	pm.setOstream(ofile);
+	using namespace RTTI;
+	pm.registerClass(getStreamName<BitVector>(), BitVector::createDefault);
 	bv4.write(pm);
-	TEST_FILE(newfile.c_str(), filename.c_str())
+	ofile.close();
+	TEST_FILE(filename.c_str(), "data/BitVector_test3.txt")
+RESULT
+
+// --------------------- Bit ------------------------------------
+CHECK(BALL_CREATE(Bit))
+ 	Bit bv;
+	bv = true;
+	Bit* v_ptr = (Bit*)bv.create(false, true);
+	TEST_EQUAL(*v_ptr == false, false)
+	delete v_ptr;
+	v_ptr = (Bit*)bv.create();
+	TEST_EQUAL(*v_ptr == true, true)
+	delete v_ptr;
+RESULT
+
+CHECK(Bit() throw())
+	Bit* bit = new Bit();
+	TEST_NOT_EQUAL(bit, 0)
+	TEST_EQUAL(*bit, false)
+RESULT
+
+CHECK(Bit(BitVector* bitvector, Index index = 0) throw(Exception::NullPointer))
+	BitVector* bv = 0;
+	TEST_EXCEPTION(Exception::NullPointer, Bit(bv,0))
+	Bit bit(&bv9, 0);
+	TEST_EQUAL(bit, true)
+	Bit bit2(&bv9, 1);
+	TEST_EQUAL(bit2, false)
+	
+RESULT
+
+CHECK(Bit(const Bit& bit) throw())
+	Bit bit;
+	bit = true;
+	Bit bit2(bit);
+	TEST_EQUAL(bit2, true)
+RESULT
+
+CHECK(Bit(const BitVector* const bitvector, Index index = 0) throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow))
+	const BitVector& bv = bv9;
+	Bit bit(&bv, 0);
+	TEST_EQUAL(bit, true)
+	Bit bit2(&bv, 1);
+	TEST_EQUAL(bit2, false)
+RESULT
+
+CHECK(IllegalOperation(const char* file, int line))
+	Bit::IllegalOperation* il = 0;
+	il = new Bit::IllegalOperation(__FILE__, __LINE__);
+	TEST_NOT_EQUAL(il, 0)
+RESULT
+
+CHECK(bool operator != (bool bit) const throw(Exception::NullPointer))
+	Bit bitx;
+	Bit bit2(&bv9);
+	TEST_EQUAL(bit2 != true, false)
+	TEST_EQUAL(bit2 != false, true)
+	TEST_EXCEPTION(Exception::NullPointer, bitx != true)
+RESULT
+
+CHECK(bool operator != (const Bit& bit) const throw())
+ 	Bit bitx;
+	Bit bit2(&bv9);
+	Bit bit3(&bv9,1);
+	TEST_EQUAL(bit2 != bit2, false)
+	TEST_EQUAL(bit2 != bit3, true)
+	TEST_EQUAL(bitx != bit3, true)
+RESULT
+
+CHECK(bool operator == (bool bit) const throw(Exception::NullPointer))
+ 	Bit bitx;
+	TEST_EXCEPTION(Exception::NullPointer, bitx == true)
+	Bit bit2(&bv9);
+	Bit bit3(&bv9,1);
+	TEST_EQUAL(bit2 == true, true)
+	TEST_EQUAL(bit3 == false, true)
+RESULT
+
+CHECK(bool operator == (const Bit& bit) const throw())
+ 	Bit bitx;
+	Bit bit2(&bv9);
+	Bit bit3(&bv9,1);
+	TEST_EQUAL(bit2 == bit2, true)
+	TEST_EQUAL(bit2 == bit3, false)
+	TEST_EQUAL(bitx == bit3, false)
+RESULT
+
+CHECK(const Bit& operator = (const Bit& bit) throw())
+ 	Bit bitx;
+	Bit bit2(&bv9);
+	bitx = bit2;
+	TEST_EQUAL(bitx == bit2, true)
+RESULT
+
+CHECK(const Bit& operator = (const bool bit) throw(Exception::NullPointer, IllegalOperation))
+	Bit bit2(&bv9);
+	bit2 = false;
+	TEST_EQUAL(bv9[0], false)
+	const BitVector bv;
+	Bit bitx(&bv);
+	TEST_EXCEPTION(Exception::NullPointer, bitx = true)
+RESULT
+
+CHECK(operator bool() const throw(Exception::NullPointer))
+	Bit bit2(&bv9, 8);
+	TEST_EQUAL(bit2, false)
+RESULT
+
+CHECK(~Bit() throw())
+	Bit bit;
 RESULT
 
 END_TEST
