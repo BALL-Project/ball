@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.12 2001/07/10 16:30:50 anker Exp $
+// $Id: expression.h,v 1.13 2001/07/11 17:05:48 anker Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -390,7 +390,7 @@ namespace BALL
 				of BAUSTELLE.
 		*/
 		void parse()
-			throw();
+			throw(Exception::ParseError);
 		
 		//@}
 		/** @name Public attributes
@@ -433,12 +433,12 @@ namespace BALL
 		/*_ BAUSTELLE
 		*/
 		void collapseANDs_()
-			throw();
+			throw(Exception::ParseError);
 		
 		/*_ BAUSTELLE
 		*/
 		void collapseORs_()
-			throw();
+			throw(Exception::ParseError);
 
 	};
 
@@ -513,6 +513,8 @@ namespace BALL
 
 		/**	Create a new predicate according to the name.
 				If the predicate is not known, return 0.
+				@param name the name of the predicate
+				@param args the optional argument of the predicate
 		*/
 		ExpressionPredicate* getPredicate(const String& name, 
 				const String& args = "") const 
@@ -521,17 +523,21 @@ namespace BALL
 		/**	Register a new predicate class.
 		*/
 		void registerPredicate(const String& name, CreationMethod creation_method)
-			
 			throw();
 
-		/** set the expression string
+		/** Set the expression and build a tree for it.
 		*/
 		void setExpression(const String& expression) 
+			throw(Exception::ParseError);
+
+		/** Get the expression string.
+		*/
+		const String& getExpressionString() const 
 			throw();
 
-		/** get the expression string
+		/** Get the expression tree.
 		*/
-		const String& getExpression() const 
+		const ExpressionTree* getExpressionTree() const
 			throw();
 
 		/** Get the creation methods.

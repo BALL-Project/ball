@@ -115,8 +115,8 @@ namespace BALL
 	}
 
 
-	ExpressionPredicate* Expression::getPredicate
-		(const String& name, const String& args) const 
+	ExpressionPredicate* Expression::getPredicate(const String& name,
+			const String& args) const 
 		throw()
   {
     CreationMethod create_method = create_methods_[name];
@@ -137,7 +137,7 @@ namespace BALL
 
 
 	void Expression::setExpression(const String& expression)
-		throw()
+		throw(Exception::ParseError)
 	{
 		// don't use clear() here, because it also would delete create_methods_
 		delete expression_tree_;
@@ -154,10 +154,17 @@ namespace BALL
 	}
 
 
-	const String& Expression::getExpression() const 
+	const String& Expression::getExpressionString() const 
 		throw()
 	{
 		return expression_string_;
+	}
+
+
+	const ExpressionTree* Expression::getExpressionTree() const
+		throw()
+	{
+		return expression_tree_;
 	}
 
 
@@ -349,7 +356,8 @@ namespace BALL
           {
             abort = true;
 					}
-				// AND expressions may be aborted, if the first subexpression yields false
+				// AND expressions may be aborted, if the first subexpression
+				// yields false
 				}
 				else
 				{
@@ -453,7 +461,8 @@ namespace BALL
 			argument(""),
 			evaluated(false),
 			negate(false),
-			type(ExpressionTree::INVALID)			
+			type(ExpressionTree::INVALID),
+			children()
 	{
 	}
 
@@ -553,7 +562,7 @@ namespace BALL
 	}
 
 	void SyntaxTree::parse()
-		throw()
+		throw(Exception::ParseError)
 	{
     if (!evaluated)
     {
@@ -579,7 +588,8 @@ namespace BALL
 			// BAUSTELLE
 			// Let the exception print the WHOLE expression.
 
-			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str());
+			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str(),
+					"conjunction without children");
 			return;
 		}
 
@@ -595,10 +605,8 @@ namespace BALL
     if (ex == string::npos)
     {
 			// we didn't find an opening bracket
-			// BAUSTELLE
-			// tell the user what went wrong.
-			// Log.error() << "Expression::setExpression: didn't find opening '(' in expression: {" << s << "}" << endl;
-			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str());
+			throw Exception::ParseError(__FILE__, __LINE__, s.c_str(),
+					"can't find opening '('");
       return;
 		}
 
@@ -623,20 +631,16 @@ namespace BALL
 		if (bracket_count > 0)
 		{
 			// we found too many opening brackets
-			// BAUSTELLE
-			// tell the user what happened.
-			// Log.error() << "Expression::setExpression: didn't find closing ')' in expression: {" << s << "}" << endl;
-			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str());
+			throw Exception::ParseError(__FILE__, __LINE__, s.c_str(),
+					"didn't find closing ')'");
 			return;
 		}
 
 		if (bracket_count < 0)
 		{
 			// we found too many closing brackets.
-			// BAUSTELLE
-			// tell the user what happened.
-			// Log.error() << "Expression::setExpression: found too many closing ')' in expression: {" << s << "}" << endl;
-			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str());
+			throw Exception::ParseError(__FILE__, __LINE__, s.c_str(),
+					"found too many closing ')'");
 			return;
 		}
 
@@ -773,20 +777,15 @@ namespace BALL
 	}
  
 	void SyntaxTree::collapseANDs_()
-		throw()
+		throw(Exception::ParseError)
 	{
-		// if we have less than 2 children, AND cannot be reasonable.
-		if (children.size() < 2)
-		{
-			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str());
-			return;
-		}
 
 		// if we have less than 3 children, we cannot collapse anything.
-		// BAUSTELLE
-		// is that correct? what about a tautology?
     if (children.size() < 3)
     {
+			// BAUSTELLE
+			// Maybe we should check here whether this node is a conjunction or not.
+			// If it is, throw() a ParseError.
       return;
 		}
 
@@ -837,7 +836,7 @@ namespace BALL
  
 
   void SyntaxTree::collapseORs_()
-		throw()
+		throw(Exception::ParseError)
   {
     Iterator  it = begin();
 
@@ -950,7 +949,7 @@ namespace BALL
 	}
 
 
-	bool ExpressionPredicate::operator () (BALL::Atom const &) const 
+	bool ExpressionPredicate::operator () (const Atom& /* atom */) const 
 		throw()
 	{
 		return true;
