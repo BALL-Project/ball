@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DataStructures_bench.C,v 1.1 2004/12/02 18:48:55 oliver Exp $
+// $Id: DataStructures_bench.C,v 1.2 2004/12/13 13:14:57 oliver Exp $
 //
 
 #include <BALL/CONCEPT/benchmark.h>
@@ -10,7 +10,6 @@
 
 #include <BALL/DATATYPE/hashMap.h>
 #include <BALL/DATATYPE/hashSet.h>
-#include <map>
 #include <utility>
 #include <stdlib.h>
 
@@ -18,15 +17,14 @@
 
 using namespace BALL;
 
-
-START_BENCHMARK(DataStructures, 10.0, "$Id: DataStructures_bench.C,v 1.1 2004/12/02 18:48:55 oliver Exp $")
+START_BENCHMARK(DataStructures, 11.0, "$Id: DataStructures_bench.C,v 1.2 2004/12/13 13:14:57 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 HashSet<Size> hashed_numbers;
-Size MAX_NUMBERS = 5000000;
+Size MAX_NUMBERS = 500000;
 while (hashed_numbers.size() < MAX_NUMBERS)
 {
 	hashed_numbers.insert(Size(random()));
@@ -56,7 +54,7 @@ END_SECTION
 
 /*
 START_SECTION(map::insert, 0.0)
-	std::map<Size, Size> m;
+	__gnu_cxx::hash_map<Size, Size> m;
 	for (Position i = 0; i < numbers.size(); ++i)
 	{
 		START_TIMER
