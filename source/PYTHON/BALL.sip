@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.7 2000/06/27 22:09:41 oliver Exp $
+// $Id: BALL.sip,v 1.8 2000/06/28 20:30:51 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -16,9 +16,8 @@
 // %Include hash.sip // ??
 // %Include limits.sip // ??
 // %Include logStream.sip // ??
-// %Include exceptions.sip // ??
 // %Include rtti.sip // ??
-// %Include version.sip 
+%Include version.sip 
 
 // CONCEPT
 // XDRPersistenceManager.h
@@ -48,7 +47,7 @@
 
 // DATATYPE
 // binarySearchTree.h // ??
-// %Include bitVector.sip 
+%Include bitVector.sip 
 // forEach.h // not supported -> extractors!
 // hashGrid.h // ??
 // hashMap.h // ??
@@ -67,9 +66,9 @@
 
 
 // ENERGY
-// %Include atomicContactEnergy.h
-// %Include coulomb.h
-// %Include distanceCoulomb.h
+%Include atomicContactEnergy.sip
+%Include coulomb.sip
+%Include distanceCoulomb.sip
 
 
 // FORMAT

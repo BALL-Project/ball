@@ -1,55 +1,83 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.10 2000/06/27 22:09:41 oliver Exp $
+# $Id: Makefile,v 1.11 2000/06/28 20:30:51 oliver Exp $
 #
 
 all: libBALLc.so
 
+SIP_SOURCES_COMMON=\
+	sipBALLSize.C\
+	sipBALLIndex.C\
+	sipBALLPosition.C\
+	sipBALLVersionInfo.C
 
-SIP_SOURCES=\
-	BALLcmodule.C\
-	sipBALLAmberFF.C\
-	sipBALLAngle.C\
-	sipBALLAtom.C\
-	sipBALLAtomVector.C\
-	sipBALLBaseFragment.C\
-	sipBALLBond.C\
-	sipBALLBox3.C\
-	sipBALLChain.C\
+SIP_SOURCES_CONCEPT=\
 	sipBALLComposite.C\
-	sipBALLConjugateGradientMinimizer.C\
-	sipBALLConstant.C\
-	sipBALLElement.C\
-	sipBALLEnergyMinimizer.C\
-	sipBALLFile.C\
-	sipBALLFragment.C\
-	sipBALLForceField.C\
-	sipBALLForceFieldComponent.C\
-	sipBALLGradient.C\
-	sipBALLHINFile.C\
-	sipBALLMolecule.C\
 	sipBALLNamedProperty.C\
 	sipBALLObject.C\
+	sipBALLPersistentObject.C\
+	sipBALLPropertyManager.C\
+	sipBALLSelectable.C
+
+SIP_SOURCES_DATATYPE=\
 	sipBALLOptions.C\
+	sipBALLString.C\
+	sipBALLBit.C\
+	sipBALLBitVector.C
+
+SIP_SOURCES_ENERGY=
+
+SIP_SOURCES_FORMAT=\
+	sipBALLHINFile.C\
 	sipBALLMOL2File.C\
-	sipBALLPDBAtom.C\
 	sipBALLPDBFile.C\
-	sipBALLProtein.C\
+	sipBALLXYZFile.C
+
+SIP_SOURCES_KERNEL=\
+	sipBALLAtom.C\
+	sipBALLBaseFragment.C\
+	sipBALLBond.C\
+	sipBALLChain.C\
+	sipBALLElement.C\
+	sipBALLFragment.C\
+	sipBALLMolecule.C\
 	sipBALLNucleotide.C\
 	sipBALLNucleicAcid.C\
+	sipBALLPDBAtom.C\
 	sipBALLPTE_.C\
-	sipBALLPersistentObject.C\
-	sipBALLPeriodicBoundary.C\
-	sipBALLPropertyManager.C\
+	sipBALLProtein.C\
 	sipBALLResidue.C\
-	sipBALLSelectable.C\
 	sipBALLSecondaryStructure.C\
+	sipBALLSystem.C
+
+SIP_SOURCES_MATHS=\
+	sipBALLAngle.C\
+	sipBALLBox3.C\
+	sipBALLVector3.C
+
+SIP_SOURCES_MOLMEC_AMBER=\
+	sipBALLAmberFF.C
+
+SIP_SOURCES_MOLMEC_MINIMIZATION=\
+	sipBALLConjugateGradientMinimizer.C\
+	sipBALLEnergyMinimizer.C
+
+SIP_SOURCES_MOLMEC_COMMON=\
+	sipBALLAtomVector.C\
+	sipBALLConstant.C\
+	sipBALLForceField.C\
+	sipBALLForceFieldComponent.C\
+	sipBALLPeriodicBoundary.C\
 	sipBALLSnapShotManager.C\
-	sipBALLString.C\
-	sipBALLSystem.C\
-	sipBALLVector3.C\
-	sipBALLXYZFile.C\
+	sipBALLGradient.C
+
+SIP_SOURCES_NMR=
+
+SIP_SOURCES_SYSTEM=\
+	sipBALLFile.C
+
+SIP_SOURCES_PYTHON=\
 	sipBALLPyAtomList.C\
 	sipBALLPyFragmentList.C\
 	sipBALLPyMoleculeList.C\
@@ -60,6 +88,27 @@ SIP_SOURCES=\
 	sipBALLPyProteinList.C\
 	sipBALLPyNucleotideList.C\
 	sipBALLPyNucleicAcidList.C
+
+SIP_SOURCES_SOLVATION=
+
+SIP_SOURCES_STRUCTURE=
+
+SIP_SOURCES=\
+	$(SIP_SOURCES_COMMON)\
+	$(SIP_SOURCES_CONCEPT)\
+	$(SIP_SOURCES_DATATYPE)\
+	$(SIP_SOURCES_FORMAT)\
+	$(SIP_SOURCES_KERNEL)\
+	$(SIP_SOURCES_MATHS)\
+	$(SIP_SOURCES_MOLMEC_AMBER)\
+	$(SIP_SOURCES_MOLMEC_COMMON)\
+	$(SIP_SOURCES_MOLMEC_MINIMIZATION)\
+	$(SIP_SOURCES_NMR)\
+	$(SIP_SOURCES_PYTHON)\
+	$(SIP_SOURCES_SOLVATION)\
+	$(SIP_SOURCES_STRUCTURE)\
+	$(SIP_SOURCES_SYSTEM)\
+	BALLcmodule.C
 
 PYBALL_SOURCES=\
 	extractors.C\

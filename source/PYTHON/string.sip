@@ -23,7 +23,17 @@ using namespace BALL;
 	const char* c_str() const;
 	int size() const;
 
-	// operator const char* () const;
+	operator const char* () const;
+	PyMethods:
+	__cmp__(self,other):
+%PythonMemberCode
+return cmp(str(self),str(other))
+%End
+  __repr__(self):
+%PythonMemberCode
+return repr(self.sipThis)
+%End
+ 
 %CanConvertToClassCode
 	// automatic conversion of Py-Strings to Strings
 	return (PyString_Check(sipPy) || sipIsSubClassInstance(sipPy,sipClass_String));
@@ -31,7 +41,7 @@ using namespace BALL;
 %ConvertToClassCode
   if (PyString_Check(sipPy))
   {
-    *sipCppPtr = new String(PyType_(sipPy));
+    *sipCppPtr = new String(PyString_AS_STRING(sipPy));
 
     return 1;
   }
