@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.11 2001/04/17 14:05:24 amoll Exp $
+// $Id: INIFile_test.C,v 1.12 2001/04/21 20:30:09 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.11 2001/04/17 14:05:24 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.12 2001/04/21 20:30:09 amoll Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -224,8 +224,7 @@ CHECK(INIFile::hasSection(const String& section_name) const )
 RESULT
 
 CHECK(INIFile::getSection(const String& section_name) const )
-	INIFile::Section_iterator it;
-	TEST_EQUAL(ini.getSection("replace test") == 0, true)
+	TEST_EQUAL(ini.isValid(ini.getSection("replace test")), false)
 	TEST_EQUAL(ini.getSection(ini.HEADER)->getName(), ini.HEADER)
   TEST_EQUAL(ini.getSection("Section1")->getName(), "Section1")
   TEST_EQUAL(ini.getSection("Section2")->getName(), "Section2")
@@ -239,7 +238,7 @@ CHECK(INIFile::getSection(Position pos) const )
 	TEST_EQUAL(ini.getSection(2)->getName(), "Section2")
   TEST_EQUAL(ini.getSection(3)->getName(), "Section3")
   TEST_EQUAL(ini.getSection(4)->getName(), "Section4")
-  TEST_EQUAL(ini.getSection(5) == 0, true)
+  TEST_EQUAL(ini.isValid(ini.getSection(5)), false)
 RESULT
 
 CHECK(INIFile::getNumberOfSections() const )
@@ -387,7 +386,7 @@ CHECK(INIFile::operator ==)
 	TEST_EQUAL(ini == ini2, false)
 RESULT
 
-CHECK(INIFile::isValid(LineIterator))
+CHECK(INIFile::isValid(Line_iterator))
 	INIFile ini("data/INIFile_test.ini");
 	ini.read();
 
@@ -400,7 +399,17 @@ CHECK(INIFile::isValid(LineIterator))
 	TEST_EQUAL(ini.isValid(it), false)
 RESULT
 
+CHECK(INIFile::isValid(Section_iterator))
+	INIFile ini("data/INIFile_test.ini");
+	ini.read();
+	INIFile::Section_iterator it;
+	TEST_EQUAL(ini.isValid(it), true)
 
+	it = ini.getSection(0);
+	TEST_EQUAL(ini.isValid(it), true)
+	it = ini.getSection("asd");
+	TEST_EQUAL(ini.isValid(it), false)
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
