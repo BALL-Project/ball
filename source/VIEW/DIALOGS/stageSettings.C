@@ -42,6 +42,8 @@ void StageSettings::updateFromStage()
 
 	slider_->setValue((int) Scene::getMouseSensitivity() - 1);
 	wheel_slider_->setValue((int) Scene::getMouseWheelSensitivity() - 1);
+
+//	 eye_distance_slider->setValue((int) (stage_->getEyeDistance() * 10.0));
 }
 
 
@@ -53,6 +55,8 @@ void StageSettings::apply()
 
 	Scene::setMouseSensitivity(slider_->value() + 1);
 	Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
+
+// 	stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
 }
 
 
@@ -63,6 +67,20 @@ void StageSettings::setDefaultValues()
 	coordinate_button->setChecked(false);
 
 	slider_->setValue(5);
+
+//	 eye_distance_slider->setValue(20);
+}
+
+void StageSettings::eyeDistanceChanged()
+{
+	/*
+	String text((float)( eye_distance_slider->value()) / 10.0);
+	while(text[text.size() -1] == '.' || text[text.size() -1] == '0')
+	{
+		text.truncate(text.size() - 1);
+	}
+	eye_distance_label->setText(text.ascii());
+	*/
 }
 
 // NAMESPACE
