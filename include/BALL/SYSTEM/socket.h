@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.21 2001/05/19 08:40:07 amoll Exp $
+// $Id: socket.h,v 1.22 2001/06/06 22:26:56 amoll Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -126,7 +126,6 @@ namespace BALL
 			throw();
 			
 		//@}
-
 		/**	@name Converters 
 		*/
 		//@{
@@ -443,7 +442,7 @@ namespace BALL
 		virtual int sync()
 			throw();
 
-		/// return EOF on eof, 0 on timeout, and # of chars read on success
+		/// return EOF on eof, 0 on timeout, and number of chars read on success
 		virtual _G_ssize_t sys_read (char* buf, _G_ssize_t len)
 			throw();
 
@@ -1139,8 +1138,8 @@ namespace BALL
 		/// Destructor
 		virtual ~IOSockStream()
 			throw();
+		
 		//@}
-
 		/**	@name	Miscellaneous 
 		*/
 		//@{

@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.8 2000/10/29 11:26:34 oliver Exp $
+// $Id: expression.h,v 1.9 2001/06/06 22:26:36 amoll Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -20,13 +20,12 @@ namespace BALL
 
 	/**	@name	Expression Trees.
 			Evaluate simple expressions on Atoms.
-			\\
 			{\bf Definition:}\URL{BALL/KERNEL/expression.h}
 	*/
 	//@{
 
 
-	/** \\
+	/** ExpressionPredicate. 
 			{\bf Definition} \URL{BALL/KERNEL/expression.h}
 	*/
 	class ExpressionPredicate
@@ -45,7 +44,8 @@ namespace BALL
 		*/
 		ExpressionPredicate() throw();
 		
-		/** Copy constructor */
+		/** Copy constructor 
+		 */
 		ExpressionPredicate(const ExpressionPredicate& predicate) throw();
 
 		/** Detailed Constructor.
@@ -61,31 +61,30 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		 */
 		//@{
 
-		/** Assignment operator */
+		/** Assignment operator 
+		 */
 		const ExpressionPredicate& operator = (const ExpressionPredicate& predicate) 
 			throw();
 
-		/** Clear method */
+		/** Clear method 
+		 */
 		virtual void clear() throw();
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		 */
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		 */
 		bool operator == (const ExpressionPredicate& predicate) const 
 			throw();
 
 		//@}
-
-
 		/** @name Accessors.
 		*/
 		//@{
@@ -111,10 +110,10 @@ namespace BALL
 
 		//@}
 		
-
 		protected:
 		
-		/*_ The argument of the predicate */
+		/*_ The argument of the predicate 
+		 */
 		String argument_;
 	};
 
@@ -164,7 +163,8 @@ namespace BALL
 		ExpressionTree() 
 			throw();
 			
-		/** Copy constructor */
+		/** Copy constructor 
+		 */
 		ExpressionTree(const ExpressionTree& tree) 
 			throw();
 
@@ -188,8 +188,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/**	@name	Predicates
 		*/
 		//@{
@@ -199,13 +197,12 @@ namespace BALL
 		virtual bool operator () (const Atom& atom) const 
 			throw();
 
-		/** Equality operator */
+		/** Equality operator 
+		 */
 		bool operator == (const ExpressionTree& tree) const 
 			throw();
 
 		//@}
-
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -215,7 +212,8 @@ namespace BALL
 		void setType(Type type) 
 			throw();
 
-		/** Get the expression node's type */
+		/** Get the expression node's type 
+		 */
 		Type getType() const 
 			throw();
 		
@@ -224,7 +222,8 @@ namespace BALL
 		void setNegate(bool negate) 
 			throw();
 
-		/** Get the expression node's negation mode. */
+		/** Get the expression node's negation mode. 
+		 */
 		bool getNegate() const 
 			throw();
 
@@ -233,7 +232,8 @@ namespace BALL
 		void setPredicate(ExpressionPredicate* predicate) 
 			throw();
 
-		/**	Get the predicate. */
+		/**	Get the predicate. 
+		 */
 		ExpressionPredicate* getPredicate() const 
 			throw();
 
@@ -243,22 +243,21 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/** @name Asignment */
+		/** @name Asignment 
+		 */
 		//@{
 
-		/** Asignment operator */
+		/** Asignment operator 
+		 */
 		const ExpressionTree& operator = (const ExpressionTree& tree) 
 			throw();
 
-		/** Clear method */
+		/** Clear method 
+		 */
 		virtual void clear() 
 			throw();
 
 		//@}
-
-
 		
 		protected:
 		
@@ -269,7 +268,8 @@ namespace BALL
 	};
 
 
-	/**
+	/** SyntaxTree.
+	 *  {\bf Definition} \URL{BALL/KERNEL/expression.h}
 	*/
 	class SyntaxTree
 	{
@@ -286,8 +286,8 @@ namespace BALL
 
 		///
 		typedef	list<SyntaxTree*>::const_iterator	ConstIterator;
+		
 		//@}
-
 		/**	@name	Constructors and Destructors	
 		*/
 		//@{
@@ -303,11 +303,12 @@ namespace BALL
 		/**
 		*/
 		virtual ~SyntaxTree();
+		
 		//@}
-
 		/**	@name	Accessors
 		*/
 		//@{
+		//
 		///
 		Iterator begin();
 
@@ -328,6 +329,7 @@ namespace BALL
 
 		///
 		void parse();
+		
 		//@}
 
 		String								expression;
@@ -345,12 +347,9 @@ namespace BALL
 
 	};
 
-
 	/** Expression class. 
-			This class provides a frontend to ExpressionTree.
-			\\
+			This class provides a frontend to ExpressionTree.	\\
 			@see ExpressionTree
-			\\
 			{\bf Definition:} \URL{BALL/KERNEL/expression.h}
 	*/
 	class Expression
@@ -369,9 +368,7 @@ namespace BALL
 		typedef void * (*CreationMethod) ();
 
 		//@}
- 
-
-		/**	@name	Constructors and Destructor
+ 		/**	@name	Constructors and Destructor
 		*/
 		//@{
 
@@ -392,8 +389,6 @@ namespace BALL
 		virtual ~Expression() throw();
 
 		//@}
-
-
 		/**	@name	Predicates
 		*/
 		//@{
@@ -402,12 +397,11 @@ namespace BALL
 		*/
 		bool hasPredicate(const String& name) const throw();
 
-		/** Equality operator */
+		/** Equality operator 
+		 */
 		bool operator == (const Expression& expression) const throw();
 
 		//@}
-
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -437,19 +431,19 @@ namespace BALL
 		const String& getExpression() const throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		 */
 		//@{ 
 
-		/** Assignment operator */
+		/** Assignment operator 
+		 */
 		const Expression& operator = (const Expression& expression) throw();
 
-		/** Clear method */
+		/** Clear method 
+		 */
 		virtual void clear() throw();
 
 		//@}
-
 
 		protected:
 

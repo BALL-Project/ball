@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.26 2001/05/30 15:15:18 anker Exp $
+// $Id: persistenceManager.h,v 1.27 2001/06/06 22:26:18 amoll Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -247,7 +247,7 @@ namespace BALL
 				RTTI and calling @see checkHeader.
 				@param object an Object of type T
 				@param name the expected name of the object
-				@return {\bf true} if the object header could be checked successfully
+				@return true if the object header could be checked successfully
 		*/
 		template <typename T>
 		bool checkObjectHeader(const T& /* object */, const char* name = 0)
@@ -255,7 +255,7 @@ namespace BALL
 
 		/** Check an object header by supplying its stream name.
 				@param	type_name the stream name of the object type
-				@return	{\bf true} if the object header could be checked successfully
+				@return	true if the object header could be checked successfully
 		*/
 		bool checkObjectHeader(const char* type_name)
 			throw();
@@ -296,7 +296,7 @@ namespace BALL
 				This method also checks header and trailer of the primitive.
 				@param	t a mutable reference of the primitive variable
 				@param	name the expected name of the variable
-				@return	{\bf true} if readng was successful
+				@return	true if readng was successful
 		*/
 		template <typename T>
 		bool readPrimitive(T& t, const char* name)
@@ -315,7 +315,7 @@ namespace BALL
 				of the object.
 				@param	t a mutable reference of the object
 				@param	name the expected name of the object
-				@return	{\bf true} if reading the object was successful.
+				@return	true if reading the object was successful.
 		*/
 		template <typename T>
 		bool readStorableObject(T& t, const char* name)
@@ -338,7 +338,7 @@ namespace BALL
 				This method also checks header and trailer.
 				@param	object a mutable pointer reference wa want to read.
 				@param	name the name of the object pointer
-				@return	{\bf true} if reading wass successful
+				@return	true if reading wass successful
 		*/
 		template <class T>
 		bool readObjectPointer(T*& object, const char* name)
@@ -357,7 +357,7 @@ namespace BALL
 				This method also checks header and trailer of the object reference.
 				@param	object a mutable reference
 				@param	name the name of the object
-				@return	{\bf true} if reading was successful
+				@return	true if reading was successful
 		*/
 		template <class T>
 		bool readObjectReference(T& object, const char* name)
@@ -418,10 +418,9 @@ namespace BALL
 				signature, the name and its {\tt this pointer}.  The name
 				information is required to differentiate between base classes of an
 				object and member objects or the object itself. If writeHeader is
-				called for a base class, name should be set to 0. {\tt type\_name}
+				called for a base class, name should be set to 0. {\tt type_name}
 				should refer to the stream name of an object (see
-				\Ref{getStreamName}).
-				\\
+				\Ref{getStreamName}). \\
 				When defining an object (i.e. when writing the first header to a
 				persistent stream), {\tt name} should be set to {\tt ""}. For base
 				classes, name has to be set to 0. The exact behaviour of this
@@ -434,9 +433,9 @@ namespace BALL
 		/**	Check an object header.
 				@param	type_name the stream name of the class to be read
 				@param	name the expected name of the object 
-				@param	ptr a reference to a {\tt PointerSizeInt} to store the {\tt
-								this} pointer of the object read from the stream
-				@return	bool {\bf true}, if the header was correct, {\bf false}
+				@param	ptr a reference to a {\tt PointerSizeInt} to store the {\tt this} 
+								pointer of the object read from the stream
+				@return	bool true, if the header was correct, {\bf false}
 								otherwise
 				@return	ptr the pointer is set to the value read from the file
 		*/
@@ -452,7 +451,7 @@ namespace BALL
 		/** Check an object trailer.
 				This method checks the trailer of an object.
 				@param	name the name of the object
-				@return	{\bf true} if the trailer was correct
+				@return	true if the trailer was correct
 		*/
 		virtual bool checkTrailer(const char* name = 0) = 0;
 
@@ -468,13 +467,13 @@ namespace BALL
 
 
 		/**	Check for the start marker in the input stream.
-				@return {\bf true} if the marker could be checked.
+				@return true if the marker could be checked.
 		*/
 		virtual bool checkStreamHeader() = 0;
 
 
 		/**	Check for the end marker in the output stream.
-				@return {\bf true} if the marker could be checked.
+				@return true if the marker could be checked.
 		*/
 		virtual bool checkStreamTrailer() = 0;
 
@@ -495,7 +494,7 @@ namespace BALL
 
 		/** Check for variable/member name.
 				@param	name the name we want to check
-				@return	{\bf true} if the name matches
+				@return	true if the name matches
 		*/
 		virtual bool checkName(const char* name) = 0;
 
@@ -520,7 +519,7 @@ namespace BALL
 
 
 		/**	Check for the trailer of a storable object.
-				@return {\bf true} if the trailer was correct
+				@return true if the trailer was correct
 		*/
 		virtual bool checkStorableTrailer() = 0;
 
@@ -535,7 +534,7 @@ namespace BALL
 		/**	Check for a type header and name for a primitive type.
 				@param	type_name the stream name of the primitive
 				@param	name the name of the primitive
-				@return	{\bf true} if type and name of the primitive match
+				@return	true if type and name of the primitive match
 		*/
 		virtual bool checkPrimitiveHeader(const char* type_name,
 				const char* name) = 0;
@@ -546,7 +545,7 @@ namespace BALL
 
 
 		/**	Check for the trailer of a primitive type.
-				@return {\bf true} if the trailer was correct
+				@return true if the trailer was correct
 		*/
 		virtual bool checkPrimitiveTrailer() = 0;
 
@@ -562,7 +561,7 @@ namespace BALL
 		/**	Check for header for a pointer to a PersistentObject.
 				@param	type_name the stream name of the object type
 				@param	name the name of the object
-				@return	{\bf true} if the header was correct
+				@return	true if the header was correct
 		*/
 		virtual bool checkObjectPointerHeader(const char* type_name,
 				const char* name) = 0;
@@ -579,7 +578,7 @@ namespace BALL
 		/**	Check for header for a reference to a PersistentObject.
 				@param	type_name the stream name of the object type
 				@param	name the name of the object
-				@return	{\bf true} if the header was correct
+				@return	true if the header was correct
 		*/
 		virtual bool checkObjectReferenceHeader(const char* type_name,
 				const char* name) = 0;
@@ -598,7 +597,7 @@ namespace BALL
 				@param	type_name the stream name of the object type
 				@param	name the name of the object array (?)
 				@param	size the size of the array
-				@return	{\bf true} if the header was correct
+				@return	true if the header was correct
 		*/
 		virtual bool checkObjectPointerArrayHeader(const char* type_name,
 				const char* name, Size& size) = 0;
@@ -610,7 +609,7 @@ namespace BALL
 
 
 		/**	Check for trailer for an array of pointers to PersistentObjects.
-				@return	{\bf true} if the trailer was correct
+				@return	true if the trailer was correct
 		*/
 		virtual bool checkObjectPointerArrayTrailer() = 0;
 
@@ -739,12 +738,6 @@ namespace BALL
 
 		//@}
 
-		/** @name Accessors
-		*/
-		//@{
-
-		//@}
-
 		protected:
 
 		/*_	Register all BALL kernel classes.
@@ -771,12 +764,15 @@ namespace BALL
 		/*_
 		*/
 		typedef	HashSet<const PersistentObject*>			ObjectSet;
+		
 		/*_
 		*/
 		typedef	list<const PersistentObject*>					ObjectList;
+		
 		/*_
 		*/
 		typedef	HashMap<PointerSizeInt, void*>				PointerMap;
+		
 		/*_
 		*/
 		typedef	list<pair<void**, PointerSizeInt> >		PointerList;

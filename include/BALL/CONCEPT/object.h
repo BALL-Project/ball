@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.12 2001/05/28 11:51:15 anker Exp $ 
+// $Id: object.h,v 1.13 2001/06/06 22:26:18 amoll Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -105,7 +105,7 @@ namespace BALL
 		/** Equality operator. This operator checks Object features only, i. e.
 				the handle.
 				@param 	object an Object
-				@return	{\bf true}, if object and this are the same, false ow.
+				@return	true, if object and this are the same, false ow.
 		*/
 		bool operator == (const Object& object) const
 			throw();
@@ -113,7 +113,7 @@ namespace BALL
 		/** Inequality operator. This operator checks Object features only, i. e.
 				the handle.
 				@param	object an Object
-				@return	{\bf true}, if object and this are not the same object,
+				@return	true, if object and this are not the same object,
 								false ow.
 		*/
 		bool operator != (const Object& object) const
@@ -122,7 +122,7 @@ namespace BALL
 		/** Less than operator. This method checks whether the handle of
 				{\bf this} object is less than the handle of {\tt object}
 				@param	object an Object
-				@return	{bf true}, if the handle of {\bf this} is less than the handle
+				@return	true, if the handle of {\bf this} is less than the handle
 								of {\tt object}
 		*/
 		bool operator < (const Object& object) const
@@ -131,7 +131,7 @@ namespace BALL
 		/** Less than or equal operator. This method checks whether the handle of
 				{\bf this} object is less than or equal to the handle of {\tt object}
 				@param	object an Object
-				@return	{bf true}, if the handle of {\bf this} is less than or equal 
+				@return	true, if the handle of {\bf this} is less than or equal 
 								to the handle of {\tt object}
 		*/
 		bool operator <= (const Object& object) const
@@ -141,7 +141,7 @@ namespace BALL
 				handle of {\bf this} object is greater than or equal to the handle
 				of {\tt object}
 				@param	object an Object
-				@return	{bf true}, if the handle of {\bf this} is greater than or 
+				@return	true, if the handle of {\bf this} is greater than or 
 								equal to the handle of {\tt object}
 		*/
 		bool operator >= (const Object& object) const
@@ -150,7 +150,7 @@ namespace BALL
 		/** Greater than operator. This method checks whether the handle of
 				{\bf this} object is greater than the handle of {\tt object}
 				@param	object an Object
-				@return	{bf true}, if the handle of {\bf this} is greater than the 
+				@return	true, if the handle of {\bf this} is greater than the 
 								handle of {\tt object}
 		*/
 		bool operator > (const Object& object) const
@@ -158,7 +158,7 @@ namespace BALL
 
 		/** Compare the handle of {\bf this} object with the handle of
 				another.
-				@param	{\tt object} an Object
+				@param	object an Object
 				@return 0, if both objects are equal, -1 if {\tt object}'s handle
 								is greater and 1 if {\bf this}'s handle is greater.
 		*/

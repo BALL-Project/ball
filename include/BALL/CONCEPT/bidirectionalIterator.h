@@ -1,4 +1,4 @@
-// $Id: bidirectionalIterator.h,v 1.7 2001/06/06 15:48:12 anker Exp $ 
+// $Id: bidirectionalIterator.h,v 1.8 2001/06/06 22:26:18 amoll Exp $ 
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -18,8 +18,7 @@ namespace BALL
 	*/
 	//@{
 
-	/**	@name Bidirectional Iterator
-			\\
+	/**	@name Bidirectional Iterator.	\\
 			{\bf Definition:} \URL{BALL/CONCEPT/bidirectionalIterator.h}
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -40,8 +39,6 @@ namespace BALL
 		typedef ::std::bidirectional_iterator_tag iterator_category;
 		
 		//@}
-
-
 		/** @name Constructors and Destructor
 		 */
 		//@{
@@ -63,13 +60,12 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/** @name Iterator methods
 		 */
 		//@{
 
 		/** BALL iterator validity check.
-				@return {\bf true} if the iterator is valid
+				@return true if the iterator is valid
 		*/
 		bool operator + () const
 			throw();
@@ -229,7 +225,6 @@ namespace BALL
 			throw(Exception::InvalidIterator);
 
 		//@}
-
 
 		protected:
 
@@ -568,8 +563,7 @@ namespace BALL
 	}
 
 
-	/**	Constant Bidirectional Iterator
-			\\
+	/**	Constant Bidirectional Iterator.\\
 			{\bf Definition:} \URL{BALL/CONCEPT/bidirectionalIterator.h}
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -616,13 +610,12 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/** @name Iterator methods
 		 */
 		//@{
 
 		/** BALL iterator validity check.
-				@return {\bf true} if the iterator is valid
+				@return true if the iterator is valid
 		*/
 		bool operator + () const
 			throw(Exception::InvalidIterator);
@@ -702,7 +695,6 @@ namespace BALL
 			throw(Exception::InvalidIterator);
 
 		//@}
-
 
 		protected:
 
