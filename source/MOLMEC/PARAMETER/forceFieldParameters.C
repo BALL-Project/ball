@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.C,v 1.6 2000/10/05 17:34:24 anker Exp $
+// $Id: forceFieldParameters.C,v 1.7 2000/10/16 20:04:15 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
@@ -39,6 +39,7 @@ namespace BALL
 
 
 	void ForceFieldParameters::clear()
+		throw()
 	{
 		// clean up everything
 		// BAUSTELLE: Sollte INIFile::clear() aufrufen
