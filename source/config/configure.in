@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.61 2000/02/04 17:47:04 oliver Exp $
+dnl    $Id: configure.in,v 1.62 2000/03/04 12:07:44 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -180,7 +180,7 @@ AC_DEFUN(AC_FIND_HEADER,[
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/include /opt/include $3 ; do
-			if test -f "$i/$2" && test "${_INCLUDES}" = ""; then
+			if test -f "$i/$2" -a test "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -188,7 +188,7 @@ AC_DEFUN(AC_FIND_HEADER,[
 
 	if test "${_INCLUDES}" = "" ; then
 		for i in /usr/*/include /opt/*/include ; do
-			if test -f "$i/$2" && test "${_INCLUDES}" = ""; then
+			if test -f "$i/$2" -a test "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
@@ -196,13 +196,13 @@ AC_DEFUN(AC_FIND_HEADER,[
 	
 	if test "${_INCLUDES}" = "" ; then
 		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
-			if test -f "$i/$2" && test "${_INCLUDES}" = ""; then
+			if test -f "$i/$2" -a test "${_INCLUDES}" = ""; then
 				_INCLUDES="$i"
 			fi
 		done
 	fi
 
-	if test "${_INCLUDES}" = "" && test "${FIND}" != "-" ; then
+	if test "${_INCLUDES}" = "" -a test "${FIND}" != "-" ; then
 		if test "${FIND_KNOWS_PATH}" = false ; then
 			FIND_OPT="-name"
 			_TMP_FIND_NAME="$2"
@@ -233,7 +233,7 @@ AC_DEFUN(AC_FIND_HEADER,[
 			done
 		fi
 
-		if test "${_INCLUDES}" = "" && test "$3" != ""; then
+		if test "${_INCLUDES}" = "" -a test "$3" != ""; then
 			for i in $3 /dev/null ; do
 				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
 				for j in ${_TMP} ; do
@@ -272,7 +272,7 @@ AC_DEFUN(AC_FIND_LIB,[
 	if test "${_LIBS}" = "" ; then
 		for i in $3 /usr/lib /opt/lib ; do
 			for j in $i/$2.* ; do
-				if test -f "$j" && test "${_LIBS}" = ""; then
+				if test -f "$j" -a test "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -282,7 +282,7 @@ AC_DEFUN(AC_FIND_LIB,[
 	if test "${_LIBS}" = "" ; then
 		for i in /usr/*/lib /opt/*/lib ; do
 			for j in $i/$2.* ; do
-				if test -f "$j" && test "${_LIBS}" = ""; then
+				if test -f "$j" -a test "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
@@ -292,15 +292,15 @@ AC_DEFUN(AC_FIND_LIB,[
 	if test "${_LIBS}" = "" ; then
 		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
 			for j in $i/$2.* ; do
-				if test -f "$j" && test "${_LIBS}" = ""; then
+				if test -f "$j" -a test "${_LIBS}" = ""; then
 					_LIBS="$i"
 				fi
 			done
 		done
 	fi
 
-	if test "${_LIBS}" = "" && test "${FIND}" != "-" ; then
-		if test "${_LIBS}" = "" && test "$3" != ""; then
+	if test "${_LIBS}" = "" -a test "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a test "$3" != ""; then
 			for i in $3 /dev/null; do
 				if test "${_LIBS}" = "" ; then
 					_TMP=`${FIND} $i -name "$2*" -print 2>/dev/null`
@@ -406,15 +406,24 @@ if test "$OS" = Linux ; then
 	fi
 fi
 
-if test ${OS} = IRIX64 ; then
+if test "${OS}" = IRIX64 ; then
 	OS=IRIX
 fi
 
-if test $OS = IRIX ; then
+if test "${OS}" = IRIX ; then
 	BINFMT=IRIX-${OSREV}
 fi
 
-if test "$OS" != Linux && test "$OS" != Solaris && test "$OS" != IRIX ; then
+if test "${OS}" = OSF1 ; then
+	BINFMT="OSF1-${OSREV}"
+	PROCESSOR=`${UNAME} -m`
+	ARCHITECTURE=unknown
+	if test `echo $PROCESSOR` = alpha ; then
+		ARCHITECTURE=alpha
+	fi
+fi
+
+if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX -a  "$OS" != OSF1 ; then
 	AC_MSG_RESULT(Sorry - your OS is currently not supported...)
 	AC_MSG_ERROR(aborted)
 fi
@@ -422,14 +431,17 @@ fi
 dnl
 dnl 	create OS defines in config.h:
 dnl
-if test "$OS" = Linux ; then
+if test "${OS}" = Linux ; then
 	AC_DEFINE(BALL_OS_LINUX,LINUX)
 fi
-if test "$OS" = Solaris ; then
+if test "${OS}" = Solaris ; then
 	AC_DEFINE(BALL_OS_SOLARIS,SOLARIS)
 fi
-if test "$OS" = IRIX ; then
+if test "${OS}" = IRIX ; then
 	AC_DEFINE(BALL_OS_IRIX,IRIX)
+fi
+if test "${OS}" = OSF1 ; then
+	AC_DEFINE(BALL_OS_OSF1,OSF1)
 fi
 
 dnl
@@ -499,11 +511,13 @@ dnl		CC (at least releases 5.0 and below) is not usable.
 if test "${OS}" = "Solaris" ; then
 	CXX_SEARCH_ORDER="egcs g++ eg++ CC "
 else 
-	CXX_SEARCH_ORDER="CC egcs g++ eg++ "
+	if test "${OS}" = "OSF1" ; then
+		CXX_SEARCH_ORDER="cxx CC egcs g++ eg++ "
+	else
+		CXX_SEARCH_ORDER="CC egcs g++ eg++ "
+	fi
 fi
 CXX_NAME=""
-
-
 
 dnl		
 dnl		If we are running IRIX, search for the older compilers, too
@@ -512,6 +526,7 @@ if test "${OS}" = "IRIX" ; then
 	CXX_SEARCH_ORDER="${CXX_SEARCH_ORDER} NCC DCC OCC"
 	CC_SEARCH_ORDER="${CC_SEARCH_ORDER} ncc dcc occ"
 fi
+
 
 
 dnl
@@ -632,6 +647,22 @@ if test "${IS_GXX}" = "false" ; then
 	fi
 fi
 
+dnl 
+dnl  	check for the Digital C++ compiler
+dnl
+dnl
+if test "${IS_GXX}" = false -a "${IS_KCC}" = false ; then
+	AC_MSG_CHECKING(for Digital/Compaq C++ compiler)
+	DIGITAL_CXX=`${CXX} -V | grep "C++" | cut -d" " -f-2` 
+	if test "${DIGITAL_CXX}" = "DIGITAL C++" -o "${DIGITAL_CXX}" = "Compaq C++"; then
+		IS_DIGITALCXX=true
+		AC_MSG_RESULT(yes)
+		CXX_NAME="Digital"
+	else
+		IS_DIGITALCXX=false
+		AC_MSG_RESULT(no: ${DIGITAL_CXX})
+	fi	
+fi
 
 dnl
 dnl 	Try to find out the exact compiler release on different
@@ -715,8 +746,39 @@ if test "${IS_KCC}" = true ; then
 	fi
 fi
 
-if test "${IS_GXX}" != true -a "${IS_KCC}" != true ; then
-	echo "IS_GXX=${IS_GXX} / IS_KCC=${IS_KCC}"
+dnl
+dnl identify the Digital C++ version
+dnl
+if test "${IS_DIGITALCXX}" = true ; then
+	AC_MSG_CHECKING(compiler version)
+	echo "int main(){}" > conftest.C
+	CXX_VERSION=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
+	CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1` 
+	VERSION_OUTPUT="${CXX_NAME} C++ ${CXX_VERSION}"
+	CXX_COMPILER_NAME="Digital"
+	
+	AC_MSG_RESULT(${VERSION_OUTPUT})
+
+	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.-]//g" | wc -c`
+	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2 | ${CUT} -d- -f1`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f2 | ${CUT} -d- -f2`
+	fi
+
+	if test "${CXX_VERSION_1}" -lt 6 -o "${CXX_VERSION_1}" -eq 6 -a "${CXX_VERSION_2}" -lt 2 ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Your version of Digital/Compaq C++ does not provide all)
+		AC_MSG_RESULT(ANSI C++ features required by BALL.)
+		AC_MSG_RESULT(Please upgrade to release 6.2 or above.)
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(aborted.)
+	fi
+fi
+
+if test "${IS_GXX}" != true -a "${IS_KCC}" != true -a "${IS_DIGITALCXX}" != true ; then
 	dnl
 	dnl		Now we got a problem: we have to identify the compiler
 	dnl		This is nearly impossible, but we give our best...
@@ -917,6 +979,28 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 			CXX_NAME="${CXX_NAME}_V8"
 		fi
 	fi
+
+	COMPILER_DONE=true
+fi
+
+dnl
+dnl		Digital C++ specific options
+dnl
+if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
+	dnl TEMPLATE_DIR="ti_files"  -- don't know yet...
+	AR="${CXX}"
+	DYNAR="${CXX}"
+	AROPTS="${AROPTS} -o"
+	DYNAROPTS="${DYNAROPTS} -o"
+	CXX_MAKEDEPEND="${CXX}"
+	MAKEDEP_CXX_OPTS="-M -D__USE_STD_IOSTREAM"
+	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+	CXXFLAGS="${CXXFLAGS} -D__USE_STD_IOSTREAM"
+	CXXFLAGS_O="${CXXFLAGS_O} -O5"
+	
+	CXXFLAGS_D="${CXXFLAGS_D}"
+	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 
 	COMPILER_DONE=true
 fi
@@ -1640,7 +1724,7 @@ if test "${USE_BALLVIEW}" = true ; then
 			
 			dnl prevent the use of -L/usr/lib - this may lead to problems with different
 			dnl binary formats (e.g. SGI O32/N32 format)
-			if test "${MESA_INCLUDES}" != /usr/include && test "${MESA_INCLUDES}" != "" ; then
+			if test "${MESA_INCLUDES}" != /usr/include -a test "${MESA_INCLUDES}" != "" ; then
 				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${MESA_INCLUDES}"
 			fi
 		fi
