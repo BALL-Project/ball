@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.6 2000/05/04 17:26:58 hekl Exp $
+// $Id: geometricObject.h,v 1.7 2000/06/13 18:22:17 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -65,28 +65,29 @@ namespace BALL
 			{
 				// Object Properties
 				PROPERTY__OBJECT_STATIC                    = 0,     // Default
-				PROPERTY__OBJECT_DYNAMIC                   = 1,
-				PROPERTY__OBJECT_TRANSPARENT               = 2,
-				PROPERTY__OBJECT_OPAQUE                    = 3,
-				PROPERTY__OBJECT_VISIBLE                   = 4,
-				PROPERTY__OBJECT_HIDDEN                    = 5,
-				PROPERTY__OBJECT_OPENED                    = 6,
-				PROPERTY__OBJECT_CLOSED                    = 7,
+				PROPERTY__OBJECT_DYNAMIC,                   
+				PROPERTY__OBJECT_ALWAYS_FRONT,               
+				PROPERTY__OBJECT_TRANSPARENT,               
+				PROPERTY__OBJECT_OPAQUE,                    
+				PROPERTY__OBJECT_VISIBLE,                   
+				PROPERTY__OBJECT_HIDDEN,                    
+				PROPERTY__OBJECT_OPENED,                    
+				PROPERTY__OBJECT_CLOSED,                    
 				
 				// DrawingMode Properties
-				PROPERTY__DRAWING_MODE_DOTS                = 8,
-				PROPERTY__DRAWING_MODE_WIREFRAME           = 9,
-				PROPERTY__DRAWING_MODE_SOLID               = 10, // Default
+				PROPERTY__DRAWING_MODE_DOTS                = 20,
+				PROPERTY__DRAWING_MODE_WIREFRAME,
+				PROPERTY__DRAWING_MODE_SOLID,    // Default
 				
 				// DrawingPrecision Properties
-				PROPERTY__DRAWING_PRECISION_LOW            = 11,
-				PROPERTY__DRAWING_PRECISION_MEDIUM         = 12,
-				PROPERTY__DRAWING_PRECISION_HIGH           = 13,  // Default
-				PROPERTY__DRAWING_PRECISION_ULTRA          = 14,
-				PROPERTY__DRAWING_PRECISION_USER_DEFINED   = 15,
-				PROPERTY__DRAWING_PRECISION_FIRST_VALUE    = 16,
-				PROPERTY__DRAWING_PRECISION_SECOND_VALUE   = 17,
-				PROPERTY__DRAWING_PRECISION_THIRD_VALUE    = 18,
+				PROPERTY__DRAWING_PRECISION_LOW            = 30,
+				PROPERTY__DRAWING_PRECISION_MEDIUM,
+				PROPERTY__DRAWING_PRECISION_HIGH,  // Default
+				PROPERTY__DRAWING_PRECISION_ULTRA,
+				PROPERTY__DRAWING_PRECISION_USER_DEFINED,
+				PROPERTY__DRAWING_PRECISION_FIRST_VALUE,
+				PROPERTY__DRAWING_PRECISION_SECOND_VALUE,
+				PROPERTY__DRAWING_PRECISION_THIRD_VALUE,
 				
 				NUMBER_OF_PROPERTIES
 			};
