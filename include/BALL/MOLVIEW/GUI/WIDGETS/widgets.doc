@@ -1,7 +1,0 @@
-// $Id: widgets.doc,v 1.7 2003/02/25 10:33:06 anhi Exp $
-
-/**	\defgroup MolviewGuiWidgets	Widget classes
-		\ingroup MolviewGui
-		This section contains some predefined widgets that are used
-		in the MOLVIEW application.
-*/
