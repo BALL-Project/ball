@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.5 2004/02/12 16:17:25 amoll Exp $
+// $Id: POVRenderer.C,v 1.6 2004/02/13 12:11:50 anhi Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
@@ -120,18 +121,13 @@ namespace BALL
 		String POVRenderer::POVVector3(Vector3 input)
 			throw()
 		{
-			// we convert into the new coordinate system: the camera looks
-			// down the negative z axis and sits at (0,0,0)
-			input += origin_;
-			input  = rotation_ * input;
-
 			String output = "";
 			output+="<";
 			output+=String(input.x);
 			output+=", ";
 			output+=String(input.y);
 			output+=", ";
-			output+=String(-1.*input.z);
+			output+=String(input.z);
 			output+=">";
 
 			return output;
@@ -152,70 +148,23 @@ namespace BALL
 								<< std::endl 
 								<< std::endl;
 
-			// Find out the position of the camera.
-			const Camera& camera = stage_->getCamera();
+			outfile_ << "camera {" << std::endl;
+			outfile_ << "\tperspective" << std::endl;
+			outfile_ << "\tdirection <0,0,-1>" << std::endl;
+			outfile_ << "\tangle 45.000000" << std::endl;
+			outfile_ << "\ttransform {" << std::endl;
+			outfile_ << "\t\tmatrix <" << std::endl;
 
-			// Build the translation vector so that we can put it
-			// into (0,0,0), pointing down the negative z axis
-			origin_ = camera.getViewPoint() * -1.;
-
-			// Build the rotation matrix for all vectors in the system
-			Vector3 view_point   = Vector3(0.,0.,0. );
-			Vector3 direction    = Vector3(0.,0.,-1.);
-
-			Vector3 old_pos      = camera.getLookAtPosition()+origin_;
-			old_pos.normalize();
-
-			Angle   rotation_angle(acos( old_pos * direction ));
-			Vector3 rotation_axis = old_pos % direction; 
+			GLdouble m[16];	
+			glGetDoublev(GL_MODELVIEW_MATRIX,m);
 			
-			if (rotation_axis.getLength() == 0)
-			{
-				rotation_.setRotation(Angle(0.), direction);
-			}
-			else
-			{
-				rotation_axis.normalize();
-				rotation_.setRotation(Angle(rotation_angle), rotation_axis);
-			}
-
-			view_point           = camera.getViewPoint();
-			Vector3 up_vector    = camera.getLookUpVector();
-			Vector3 right_vector = camera.getRightVector(); 
-			Vector3 look_at      = camera.getLookAtPosition();// camera.getLookAtPosition();
-
-			outfile_ << "camera {" << endl;
-			outfile_ << "\tlocation " << POVVector3(view_point) << endl;
-
-
-//			right_vector += origin_;
-			right_vector  = rotation_ * right_vector;
-			right_vector.normalize();
-			right_vector*=-1.;
-
-			outfile_ << "\tright    ";
-			String output = "<"; output+=String(right_vector.x);
-			output+=", "; output+=String(right_vector.y);
-			output+=", "; output+=String(-1.*right_vector.z);
-			output+=">";
-			outfile_ << output << endl;
-
-//			up_vector += origin_;
-			up_vector  = rotation_ * up_vector;
-			up_vector.normalize();
-			up_vector *= (float)height_ / (float)width_;
-
-			outfile_ << "\tup       ";
-			output = "<"; output+=String(up_vector.x);
-			output+=", "; output+=String(up_vector.y);
-			output+=", "; output+=String(-1.*up_vector.z);
-			output+=">";
-			outfile_ << output << endl;
-
-			outfile_ << "\trotate   <0, 0, 180>" << endl;
-
-			outfile_ << "\tlook_at  " << POVVector3(look_at) << endl;
-			outfile_ << "}" << endl;
+			outfile_ << "\t\t" << m[0] << ",  " << m[1] << ", " << m[2] << "," << std::endl;
+			outfile_ << "\t\t" << m[4] << ",  " << m[5] << ", " << m[6] << "," << std::endl;
+			outfile_ << "\t\t" << m[8] << ",  " << m[9] << ", " << m[10] << "," << std::endl;
+			outfile_ << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << std::endl;
+		  outfile_ << "\t\t>" << std::endl;
+			outfile_ << "\tinverse }" << std::endl;
+			outfile_ << "}" << std::endl << std::endl;
 
 			// Set the light sources
 			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
@@ -365,8 +314,6 @@ namespace BALL
 			outfile_ << "\t\t" << POVVector3(base_point) << ", ";
 			outfile_           << POVVector3( cap_point) << ", ";
 			outfile_           <<                 radius << endl;
-			//outfile_ <<"\t\ttexture {" << endl;
-			//outfile_ << "\t\t\t\tpigment { " << POVColorRGBA(color);
 			outfile_ << "\tpigment { " << POVColorRGBA(color) << " } " << endl;
 			outfile_ << "\t" << POVFinish("Tube", color) << endl; 
 			outfile_ << "\t} " << endl;
