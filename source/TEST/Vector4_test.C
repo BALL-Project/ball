@@ -1,4 +1,4 @@
-// $Id: Vector4_test.C,v 1.4 2000/02/19 21:22:03 oliver Exp $
+// $Id: Vector4_test.C,v 1.5 2000/02/20 12:19:11 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.4 2000/02/19 21:22:03 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.5 2000/02/20 12:19:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -300,7 +300,7 @@ RESULT
 CHECK(TVector4::T operator * (const TVector4& vector) const )
 	v2 = Vector4(1, 2, 3, 4);
 	v  = Vector4(1, 2, 3, 4);
-	TEST_EQUAL(v * v2 , 30)
+	TEST_REALEQUAL(v * v2 , 30.0)
 RESULT
 
 //line 289: method TVector4::getDistance(const TVector4& vector) const 
