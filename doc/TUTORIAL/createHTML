@@ -1,4 +1,5 @@
 #/bin/sh
+echo WARNING: latex2html version 1.71 or higher is needed
 rm -rf HTML
 rm -rf TEMP
 mkdir TEMP 
