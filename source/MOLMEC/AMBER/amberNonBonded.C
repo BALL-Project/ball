@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.18 2001/08/16 01:00:00 oliver Exp $
+// $Id: amberNonBonded.C,v 1.19 2001/12/14 01:19:39 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -107,8 +107,16 @@ namespace BALL
 	const AmberNonBonded& AmberNonBonded::operator = (const AmberNonBonded& anb)
 		throw()
 	{
+		// catch self assignment
+		if (&anb == this)
+		{
+			return *this;
+		}
+
+		// call the base class operator
 		ForceFieldComponent::operator = (anb);
 
+		// copy members
 		electrostatic_energy_ = anb.electrostatic_energy_;
 		vdw_energy_ = anb.vdw_energy_;
 		non_bonded_ = anb.non_bonded_;
@@ -130,7 +138,6 @@ namespace BALL
 
 		return *this;
 	}
-
 
 	void AmberNonBonded::clear()
 		throw()
@@ -256,9 +263,6 @@ namespace BALL
 		{
 			Box3 box = getForceField()->periodic_boundary.getBox();
 			float max_cut_off = 0.5 * Maths::min(box.getWidth(), box.getHeight(), box.getDepth());
-
-			Log.info() << "Box: " << box.getWidth() << "x" << box.getHeight() << "x" << box.getDepth() << endl;
-			Log.info() << "vdW cutoff: " << cut_off_vdw_ << "    ES cutoff: " << cut_off_electrostatic_ << endl;
 
 			if (cut_off_electrostatic_ > max_cut_off)
 			{
