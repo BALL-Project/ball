@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.24 2003/04/19 15:46:10 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.25 2003/05/03 17:29:26 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -1871,6 +1871,13 @@ AC_DEFUN(CF_CHECK_KILL, [
 	AC_CHECK_FUNCS(kill, HAS_KILL=1)
 	if test "${HAS_KILL}" = 1 ; then
 		AC_DEFINE(BALL_HAS_KILL,)
+	fi
+])
+
+AC_DEFUN(CF_CHECK_HYPOT, [
+	AC_CHECK_FUNCS(kill, HAS_HYPOT=1)
+	if test "${HAS_HYPOT}" = 1 ; then
+		AC_DEFINE(BALL_HAS_HYPOT,)
 	fi
 ])
 

@@ -11,6 +11,7 @@ EXECUTABLES = \
 	CharmmFF_bench\
 	PDB_bench\
 	PoissonBoltzmann_bench\
+	ContourSurface_bench\
 	MolmecSupport_bench
 
 # default target

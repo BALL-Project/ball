@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-/// $Id: config.h.in,v 1.38 2003/04/22 21:58:11 oliver Exp $ 
+/// $Id: config.h.in,v 1.39 2003/05/03 17:29:35 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -243,7 +243,7 @@
 
 #undef BALL_HAS_KILL
 #undef BALL_HAS_SYSCONF
-
+#undef BALL_HAS_HYPOT
 
 // Specific to the Windows port (and actually not used here,
 // included for completeness, rather).

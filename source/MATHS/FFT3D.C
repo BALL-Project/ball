@@ -1,4 +1,4 @@
-// $Id: FFT3D.C,v 1.3 2003/01/13 20:53:43 anhi Exp $
+// $Id: FFT3D.C,v 1.4 2003/05/03 17:29:32 oliver Exp $
 
 #include <BALL/MATHS/FFT3D.h>
 
@@ -700,7 +700,7 @@ namespace BALL
 			FFTW_COMPLEX dataIn;
 			Complex      dataOut;
 			
-			for (Position i=0; i<from.getSize(); i++)
+			for (Position i = 0; i < from.size(); i++)
 			{
 				Position x, y, z;
 
@@ -752,7 +752,7 @@ namespace BALL
 			FFTW_COMPLEX dataIn;
 			Complex      dataOut;
 	
-			for (Position i=0; i<from.getSize(); i++)
+			for (Position i = 0; i < from.size(); i++)
 			{
 				z =  i % lengthZ;
 				y = (i % (lengthY * lengthZ)) / lengthZ;
@@ -814,7 +814,7 @@ namespace BALL
 			FFTW_COMPLEX dataIn;
 			Complex      dataOut;
 			
-			for (Position i=0; i<from.getSize(); i++)
+			for (Position i = 0; i < from.size(); i++)
 			{
 				Position x, y, z;
 
@@ -867,7 +867,7 @@ namespace BALL
 			FFTW_COMPLEX dataIn;
 			Complex      dataOut;
 	
-			for (Position i=0; i<from.getSize(); i++)
+			for (Position i = 0; i < from.size(); i++)
 			{
 				z =  i % lengthZ;
 				y = (i % (lengthY * lengthZ)) / lengthZ;

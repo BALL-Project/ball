@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.C,v 1.14 2002/02/27 12:21:19 sturm Exp $
+// $Id: bruker1DFile.C,v 1.15 2003/05/03 17:29:32 oliver Exp $
 
 #include <BALL/FORMAT/bruker1DFile.h>
 
@@ -71,7 +71,8 @@ namespace BALL
 	  }
 	  
 	  spectrum_.resize( (Size)pars_->parameter( "SI" ) );
-	  spectrum_.setBoundaries(pars_->parameter("YMIN_p"), pars_->parameter("YMAX_p"));
+	  spectrum_.setOrigin(pars_->parameter("YMIN_p"));
+		spectrum_.setDimension(pars_->parameter("YMAX_p") - pars_->parameter("YMIN_p"));
 
 	  // back to beginning of file
 	  f.reopen();

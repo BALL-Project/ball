@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.16 2002/12/22 13:19:20 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.17 2003/05/03 17:29:33 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -53,10 +53,11 @@ namespace BALL
 		float origin_x, origin_y, origin_z;
 
 		// indices used in between to calculated the bounding boxes of spheres in the grid
-		TRegularData3D<char>::GridIndex upper_index, lower_index;
+		TRegularData3D<char>::IndexType upper_index;
+		TRegularData3D<char>::IndexType lower_index;
 
 		// pointer to grid data
-		char *grid_value;
+		char* grid_value;
 		
 		// vector, describing the atom's coordinates
 		Vector3 r0;
@@ -65,7 +66,7 @@ namespace BALL
 		// First, create the grid...
 		grid = new TRegularData3D<char>(lower, upper, spacing);
 		
-		if ((grid == 0) || (!grid->isValid()))
+		if (grid == 0)
 		{
 			return 0;
 		}
@@ -157,7 +158,7 @@ namespace BALL
 		// There will be three different marks: INSIDE(I), OUTSIDE(O), and BORDER(B)
 		// BORDER is just used temporarily. In the end, The grid will just contain INSIDEs and OUTSIDEs
 
-		memset((void*) grid->getData(0), CCONN__OUTSIDE, grid->getSize() * sizeof(char));
+		memset((void*) grid->getData(0), CCONN__OUTSIDE, grid->size() * sizeof(char));
 
 		// for each atom do...
 		AtomConstIterator	atom_iterator;
@@ -222,17 +223,17 @@ namespace BALL
 		border_count = 0;
 					
 		grid_begin = (PointerSizeInt)grid->getData(0);
-		grid_end = (PointerSizeInt)grid->getData(grid->getSize());
+		grid_end = (PointerSizeInt)grid->getData(grid->size());
 
 		PointerSizeInt s;
 		PointerSizeInt t;
 		PointerSizeInt q;
 
-		for (s = 1; s < grid->getMaxZIndex(); s++)
+		for (s = 1; s < grid->getSize().z - 1; s++)
 		{
-			for (t = 1; t < grid->getMaxYIndex(); t++)
+			for (t = 1; t < grid->getSize().y - 1; t++)
 			{
-				for (q = 1; q < grid->getMaxXIndex(); q++)
+				for (q = 1; q < grid->getSize().x - 1; q++)
 				{
 					// calculate the absolute grid index the hard way (faster!)
 					idx = q + Nx * t + s * Nxy;
@@ -280,7 +281,7 @@ namespace BALL
 		grid_value = grid->getData(0);
 		PointerSizeInt l;
 
-		for (l = 0; l < grid->getSize(); l++)
+		for (l = 0; l < grid->size(); l++)
 		{
 			*grid_value = (*grid_value == 0);
 			grid_value++;
@@ -320,7 +321,8 @@ namespace BALL
 
 
 		// indices used in between to calculated the bounding boxes of spheres in the grid
-		TRegularData3D<char>::GridIndex upper_index, lower_index;
+		TRegularData3D<char>::IndexType upper_index;
+		TRegularData3D<char>::IndexType lower_index;
 
 		// pointer to grid data
 		char *grid_value;
@@ -333,7 +335,7 @@ namespace BALL
 
 		grid = new TRegularData3D<char>(lower, upper, spacing);
 
-		if ((grid == 0) || !grid->isValid())
+		if (grid == 0)
 		{
 			throw Exception::OutOfMemory(__FILE__, __LINE__);
 		}
@@ -361,7 +363,7 @@ namespace BALL
 		// There will be three different marks: INSIDE(I), OUTSIDE(O), and BORDER(B)
 		// BORDER is just used temporarily. In the end, The grid will just contain INSIDEs and OUTSIDEs
 
-		memset((void*) grid->getData(0), CCONN__OUTSIDE, grid->getSize() * sizeof(char));
+		memset((void*) grid->getData(0), CCONN__OUTSIDE, grid->size() * sizeof(char));
 
 		// for each atom do...
 		AtomConstIterator	atom_iterator;

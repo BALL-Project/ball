@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.35 2003/02/24 16:57:31 anker Exp $ 
+// $Id: poissonBoltzmann.C,v 1.36 2003/05/03 17:29:33 oliver Exp $ 
 
 // FDPB: Finite Difference Poisson Solver
 
@@ -494,19 +494,19 @@ namespace BALL
 		eps_grid = new TRegularData3D<Vector3>(lower_, upper_, spacing_);
 
 		// check whether the grid is really cubic
-		if ((eps_grid->getMaxXIndex() != eps_grid->getMaxYIndex()) 
-				|| (eps_grid->getMaxXIndex() != eps_grid->getMaxZIndex()))
+		if ((eps_grid->getSize().x != eps_grid->getSize().y) 
+				|| (eps_grid->getSize().x != eps_grid->getSize().z))
 		{
-			Log.error() << "FDPB::setupEpsGrid: grid is not cubic (" << eps_grid->getMaxXIndex() 
-									<< "x" << eps_grid->getMaxYIndex()
-									<< "x" << eps_grid->getMaxZIndex() << ") - please check dimensions!" << endl;
+			Log.error() << "FDPB::setupEpsGrid: grid is not cubic (" << eps_grid->getSize().x - 1 
+									<< "x" << eps_grid->getSize().y - 1
+									<< "x" << eps_grid->getSize().z - 1 << ") - please check dimensions!" << endl;
 			return false;
 		}		
 					
 		if (verbosity > 1)
 		{
-			Log.info(2) << "grid dimensions: " << eps_grid->getMaxXIndex() << "x"
-								  << eps_grid->getMaxYIndex() << "x" << eps_grid->getMaxZIndex() << endl;	
+			Log.info(2) << "grid dimensions: " << eps_grid->getSize().x - 1 << "x"
+								  << eps_grid->getSize().y - 1 << "x" << eps_grid->getSize().z - 1 << endl;	
 		}
 
 		// determine the maximum radius of all atoms
@@ -533,23 +533,23 @@ namespace BALL
 
 		// the offsets of the thre eps points in a grid
 		Vector3 offsets[3];
-		offsets[0].set(eps_grid->getXSpacing() / 2.0, 0.0, 0.0);
-		offsets[1].set(0.0, eps_grid->getYSpacing() / 2.0, 0.0);
-		offsets[2].set(0.0, 0.0, eps_grid->getZSpacing() / 2.0);
+		offsets[0].set(eps_grid->getSpacing().x / 2.0, 0.0, 0.0);
+		offsets[1].set(0.0, eps_grid->getSpacing().y / 2.0, 0.0);
+		offsets[2].set(0.0, 0.0, eps_grid->getSpacing().z / 2.0);
 		
 		// iterators needed to walk the grid
 		HashGridBox3<Vector4>::BoxIterator box_it;
 		HashGridBox3<Vector4>::DataIterator data_it;
 
 		// walk over all grid points
-		for (Position i = 0; i < eps_grid->getSize(); ++i)	
+		for (Position i = 0; i < eps_grid->size(); ++i)	
 		{
 			for (Position j = 0; j < 3; ++j)
 			{
 				// everything is initially outside
 				bool outside = true;
 
-				Vector3 position(eps_grid->getGridCoordinates(i) + offsets[j]);
+				Vector3 position(eps_grid->getCoordinates(i) + offsets[j]);
 				HashGridBox3<Vector4>* box = atom_grid.getBox(position);
 				if (box != 0)
 				{
@@ -605,16 +605,16 @@ namespace BALL
 		results.setInteger("outside_points", (Index)outside_points);
 
 		// variables for fast index evaluation
-		Size Nx = eps_grid->getMaxXIndex() + 1;
-		Size Nxy = (eps_grid->getMaxYIndex() + 1) * Nx;
+		Size Nx = eps_grid->getSize().x;
+		Size Nxy = eps_grid->getSize().y * Nx;
 		Position s, t, q;
 		unsigned short border;
 		boundary_points_.clear();
-		for (s = 1; s < eps_grid->getMaxZIndex(); s++)
+		for (s = 1; s < eps_grid->getSize().z; s++)
 		{
-		  for (t = 1; t < eps_grid->getMaxYIndex(); t++)	
+		  for (t = 1; t < eps_grid->getSize().y; t++)	
 			{
-				for (q = 1; q < eps_grid->getMaxXIndex(); q++)
+				for (q = 1; q < eps_grid->getSize().x; q++)
 				{
 					// calculate the absolute grid index the hard way (faster!)
 					Position idx = q + Nx * t + s * Nxy;
@@ -646,7 +646,7 @@ namespace BALL
 		results.set("boundary points", boundary_points_.size());
 
 		// assign the dielectric constants
-		for (Position i = 0; i < eps_grid->getSize(); i++)
+		for (Position i = 0; i < eps_grid->size(); i++)
 		{
 			// we assign the solvent DC to all points that were outside 
 			// (marked by 1.0) and the solute DC to al points inside (0.0)
@@ -668,11 +668,11 @@ namespace BALL
 
 			// loop variables;
 			Position x, y, z;
-			for (z = 1; z < eps_grid->getMaxZIndex(); z++)
+			for (z = 1; z < eps_grid->getSize().z; z++)
 			{
-				for (y = 1; y < eps_grid->getMaxYIndex(); y++)
+				for (y = 1; y < eps_grid->getSize().y; y++)
 				{
-					for (x = 1; x < eps_grid->getMaxXIndex(); x++)
+					for (x = 1; x < eps_grid->getSize().x; x++)
 					{
 						Position idx = x + Nx * y + Nxy * z;
 							
@@ -881,7 +881,7 @@ namespace BALL
 
 		// set every grid point to zero
 		Index i;
-		for (i = 0; i < (Index)q_grid->getSize(); (*q_grid)[i++] = 0.0);
+		for (i = 0; i < (Index)q_grid->size(); (*q_grid)[i++] = 0.0);
 		
 		// fraction of charge assigned in x|y|z-direction
 		// needed for linear interpolation
@@ -897,9 +897,9 @@ namespace BALL
 		
 		// some commonly used variables
 		Position index;
-		Size Nx	= q_grid->getMaxXIndex() + 1;
-		Size Nxy = (q_grid->getMaxYIndex() + 1) * Nx;
-		TRegularData3D<float>::GridIndex	grid_index;
+		Size Nx	= q_grid->getSize().x;
+		Size Nxy = (q_grid->getSize().y) * Nx;
+		TRegularData3D<float>::IndexType	grid_index;
 		
 		Vector3	position;
 
@@ -923,7 +923,7 @@ namespace BALL
 					
 					
 					// check whether the charge is outside the grid
-					if (index >= ((*q_grid).getSize() - Nxy - Nx - 1))
+					if (index >= ((*q_grid).size() - Nxy - Nx - 1))
 					{
 						Log.warn() << "warning: atom outside grid at (" 
 											 << (*atom_array)[i].x << ","
@@ -938,7 +938,7 @@ namespace BALL
 
 					// calculate fractions of grid coordinates for
 					// linear interpolation
-					position		= phi_grid->getGridCoordinates(index);
+					position		= phi_grid->getCoordinates(index);
 					fraction_x	= ((*atom_array)[i].x - position.x) / spacing_;
 					fraction_y	= ((*atom_array)[i].y - position.y) / spacing_;
 					fraction_z	= ((*atom_array)[i].z - position.z) / spacing_;
@@ -960,7 +960,7 @@ namespace BALL
 				// distribute the charge uniform on each grid point
 				// inside the sphere given by an atom`s radius and position
 
-				TRegularData3D<float>::GridIndex		lower_grid_index, upper_grid_index;
+				TRegularData3D<float>::IndexType		lower_grid_index, upper_grid_index;
 
 				// the atom radius, and the squared atom radius
 				float atom_radius, atom_radius2;
@@ -1050,7 +1050,7 @@ namespace BALL
 										// every grid point inside the atom`s radius receives an
 										// equal portion of the atom`s total charge
 										Index index = (Index)(q + Nx * r + Nxy * s);
-										if ((index >= 0) && (index < (Index)q_grid->getSize()))
+										if ((index >= 0) && (index < (Index)q_grid->size()))
 										{
 											(*q_grid)[index] += (*atom_array)[i].q / (float)count;
 										}
@@ -1072,11 +1072,11 @@ namespace BALL
 													 + Nxy * lower_grid_index.z);
 						
 						// check whether the point is inside the grid
-						if ((index >= 0) && (index < (Index)(phi_grid->getSize() - Nxy - Nx - 1)))
+						if ((index >= 0) && (index < (Index)(phi_grid->size() - Nxy - Nx - 1)))
 						{
 							// calculate fractions if grid coordinates for
 							// linear interpolation
-							position		= phi_grid->getGridCoordinates(index);
+							position		= phi_grid->getCoordinates(index);
 							fraction_x	= ((*atom_array)[i].x - position.x) / spacing_;
 							fraction_y	= ((*atom_array)[i].y - position.y) / spacing_;
 							fraction_z	= ((*atom_array)[i].z - position.z) / spacing_;
@@ -1196,7 +1196,7 @@ namespace BALL
 		delete kappa_grid;
 		kappa_grid = new TRegularData3D<float>(lower_, upper_, spacing_);
 
-		if (kappa_grid->getSize() != SAS_grid->getSize())
+		if (kappa_grid->size() != SAS_grid->size())
 		{
 			Log.error() << "FDPB::setupKappaGrid() : "
 				<< "kappa_grid and SAS_grid seem to have different dimensions, aborting."
@@ -1204,7 +1204,7 @@ namespace BALL
 				return false;
 		}
 
-		for (Size i = 0; i < kappa_grid->getSize(); ++i)
+		for (Size i = 0; i < kappa_grid->size(); ++i)
 		{
 			if ((*SAS_grid)[i] == CCONN__INSIDE)
 			{
@@ -1263,7 +1263,7 @@ namespace BALL
 
 		// setting Phi to zero everywhere
 		Index i;
-		for (i = 0; i < (Index)phi_grid->getSize(); (*phi_grid)[i++] = 0.0);
+		for (i = 0; i < (Index)phi_grid->size(); (*phi_grid)[i++] = 0.0);
 
 		step_timer.stop();
 		if (print_timing && (verbosity > 1))
@@ -1408,9 +1408,9 @@ namespace BALL
 		// loop variables
 		Index x, y, z, i;
 				
-		Index Nx = (Index)phi_grid->getMaxXIndex() + 1;
-		Index Ny = (Index)phi_grid->getMaxYIndex() + 1;
-		Index Nz = (Index)phi_grid->getMaxZIndex() + 1;
+		Index Nx = (Index)phi_grid->getSize().x;
+		Index Ny = (Index)phi_grid->getSize().y;
+		Index Nz = (Index)phi_grid->getSize().z;
 		Index Nxy = Nx * Ny;
 
 		float charge;
@@ -1449,7 +1449,7 @@ namespace BALL
 														 (*atom_array)[i].z);
 
 								// calculate distance in meters
-								distance  = position.getDistance(phi_grid->getGridCoordinates(idx)) * 1e-10;
+								distance  = position.getDistance(phi_grid->getCoordinates(idx)) * 1e-10;
 
 								// now, calculate the potential caused by this atom at the grid point (x/y/z)
 								//		
@@ -1492,7 +1492,7 @@ namespace BALL
 							{
 								charge = (*atom_array)[i].q;
 								position.set((*atom_array)[i].x, (*atom_array)[i].y, (*atom_array)[i].z);
-								distance  = position.getDistance(phi_grid->getGridCoordinates(idx)) * 1e-10;
+								distance  = position.getDistance(phi_grid->getCoordinates(idx)) * 1e-10;
 								(*phi_grid)[idx] += e0 * charge / (4.0  * PI
 																	* solvent_dielectric_constant * VACUUM_PERMITTIVITY )
 																	* exp (- distance / beta) / distance;
@@ -1526,7 +1526,7 @@ namespace BALL
 														 (*atom_array)[i].y, 
 														 (*atom_array)[i].z);
 
-								distance  = position.getDistance(phi_grid->getGridCoordinates(idx)) * 1e-10;
+								distance  = position.getDistance(phi_grid->getCoordinates(idx)) * 1e-10;
 								(*phi_grid)[idx] += e0 * charge / (4.0  * PI
 																	* solvent_dielectric_constant * VACUUM_PERMITTIVITY )
 																	* exp (- distance / beta) / distance;
@@ -1618,7 +1618,7 @@ namespace BALL
 							(*phi_grid)[idx] = 0.0;
 						
 							// calculate distance in meters
-							distance = positive_vector.getDistance(phi_grid->getGridCoordinates(idx)) * 1e-10;
+							distance = positive_vector.getDistance(phi_grid->getCoordinates(idx)) * 1e-10;
 
 							/* now, calculate the potential caused by this atom at the grid point (x/y/z)
 										
@@ -1638,7 +1638,7 @@ namespace BALL
 																	 * exp(- distance / beta) / distance;
 
 								// and now for the negative charge
-								distance = negative_vector.getDistance(phi_grid->getGridCoordinates(idx)) * 1e-10;
+								distance = negative_vector.getDistance(phi_grid->getCoordinates(idx)) * 1e-10;
 
 								(*phi_grid)[idx] += e0 * negative_charge / (4.0  * PI 
 																	 * solvent_dielectric_constant * VACUUM_PERMITTIVITY )
@@ -1667,13 +1667,13 @@ namespace BALL
 							(*phi_grid)[idx] = 0.0;
 
 							// calculate distance in meters
-							distance = positive_vector.getDistance(phi_grid->getGridCoordinates(idx)) * 1e-10;
+							distance = positive_vector.getDistance(phi_grid->getCoordinates(idx)) * 1e-10;
 							(*phi_grid)[idx] += e0 * positive_charge / (4.0  * PI 
 																 * solvent_dielectric_constant * VACUUM_PERMITTIVITY )
 																 * exp(- distance / beta) / distance;
 
 							// and now for the negative charge
-							distance = negative_vector.getDistance(phi_grid->getGridCoordinates(idx)) * 1e-10;
+							distance = negative_vector.getDistance(phi_grid->getCoordinates(idx)) * 1e-10;
 
 							(*phi_grid)[idx] += e0 * negative_charge / (4.0  * PI 
 																 * solvent_dielectric_constant * VACUUM_PERMITTIVITY )
@@ -1701,13 +1701,13 @@ namespace BALL
 							(*phi_grid)[idx] = 0.0;
 
 							// calculate distance in meters
-							distance = positive_vector.getDistance(phi_grid->getGridCoordinates(idx)) * 1e-10;
+							distance = positive_vector.getDistance(phi_grid->getCoordinates(idx)) * 1e-10;
 							(*phi_grid)[idx] += e0 * positive_charge / (4.0  * PI 
 																 * solvent_dielectric_constant * VACUUM_PERMITTIVITY )
 																 * exp(- distance / beta) / distance;
 
 							// and now for the negative charge
-							distance = negative_vector.getDistance(phi_grid->getGridCoordinates(idx)) * 1e-10;
+							distance = negative_vector.getDistance(phi_grid->getCoordinates(idx)) * 1e-10;
 
 							(*phi_grid)[idx] += e0 * negative_charge / (4.0  * PI 
 																 * solvent_dielectric_constant * VACUUM_PERMITTIVITY )
@@ -1782,7 +1782,7 @@ namespace BALL
 								idx = x + y * Nx + z * Nxy;
 
 								// assign the interpolated value to the focusing grid
-								(*phi_grid)[idx] = focusing_grid.phi_grid->getInterpolatedValue(phi_grid->getGridCoordinates(idx));
+								(*phi_grid)[idx] = focusing_grid.phi_grid->getInterpolatedValue(phi_grid->getCoordinates(idx));
 							}
 						}
 					}
@@ -1907,9 +1907,9 @@ namespace BALL
 		// retrieve some basic grid properties and set the 
 		// corresponding variables
 
-		Size Nx = q_grid->getMaxXIndex() + 1;
-		Size Ny = q_grid->getMaxYIndex() + 1;
-		Size Nz = q_grid->getMaxZIndex() + 1;
+		Size Nx = q_grid->getSize().x;
+		Size Ny = q_grid->getSize().y;
+		Size Nz = q_grid->getSize().z;
 
 		Size Nxy = Nx * Ny;
 		Size N = Nxy * Nz;
@@ -2113,7 +2113,7 @@ namespace BALL
 		// point is calculated to speed up the evaluation of the
 		// electrostatic energy
 
-		TRegularData3D<float>::GridIndex		grid_index;
+		TRegularData3D<float>::IndexType		grid_index;
 		for ( i = 0; i < atom_array->size(); i++)
 		{
 			grid_index = phi_grid->getIndex((*atom_array)[i].x, (*atom_array)[i].y, (*atom_array)[i].z);
@@ -2513,7 +2513,7 @@ namespace BALL
 		Position i;
 		for (i = 0; i < boundary_points_.size(); i++) 
 		{
-			boundary_point = phi_grid->getGridCoordinates(boundary_points_[i]);
+			boundary_point = phi_grid->getCoordinates(boundary_points_[i]);
 
 			// 1. Calculate the nearest atom surface and the difference vector
 			min_distance = Limits<float>::max();
@@ -2547,9 +2547,9 @@ namespace BALL
 				if (phi_grid->has(image_position))
 				{
 					phi_grid->getBoxIndices(image_position, llf, rlf, luf, ruf, llb, rlb, lub, rub);
-					TRegularData3D<float>::GridIndex grid_index = phi_grid->getIndex(image_position);
-					Size Nx = phi_grid->getMaxXIndex() + 1;
-					Size Nxy = (phi_grid->getMaxYIndex() + 1) * Nx;
+					TRegularData3D<float>::IndexType grid_index = phi_grid->getIndex(image_position);
+					Size Nx = phi_grid->getSize().x;
+					Size Nxy = phi_grid->getSize().y * Nx;
 					Position idx = grid_index.x + grid_index.y * Nx + grid_index.z * Nxy;
 
 					double dPhi = phi_grid->data[idx]

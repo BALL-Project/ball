@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CreateSpectrumProcessor_test.C,v 1.8 2002/02/27 12:24:28 sturm Exp $
+// $Id: CreateSpectrumProcessor_test.C,v 1.9 2003/05/03 17:29:33 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(CreateSpectrumProcessor, "$Id: CreateSpectrumProcessor_test.C,v 1.8 2002/02/27 12:24:28 sturm Exp $")
+START_TEST(CreateSpectrumProcessor, "$Id: CreateSpectrumProcessor_test.C,v 1.9 2003/05/03 17:29:33 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -137,7 +137,8 @@ RESULT
 CHECK(const RegularData1D& operator << (RegularData1D& data, const PeakList1D& peak_list) throw())
 	RegularData1D data;
 	data.resize(100);
-	data.setBoundaries(0.0, 10.0);
+	data.setOrigin(0.0);
+	data.setDimension(10.0);
 	CreateSpectrumProcessor csp;
 	S.apply(csp);
 	data << csp.getPeakList();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.C,v 1.3 2002/12/18 16:00:34 sturm Exp $
+// $Id: FFT2D.C,v 1.4 2003/05/03 17:29:32 oliver Exp $
 
 #include <BALL/MATHS/FFT2D.h>
 
@@ -42,7 +42,8 @@ namespace BALL
 
 	FFT2D::FFT2D(Size ldnX, Size ldnY, double stepPhysX, double stepPhysY, Vector2 origin, bool inFourierSpace)
 		throw()
-		: TRegularData2D<FFTW_COMPLEX>(Vector2(-origin.x,-origin.y), Vector2((((1<<ldnX)-1)*stepPhysX_)-origin.x,(((1<<ldnX)-1)*stepPhysY_)-origin.y), (1<<ldnX), (1<<ldnY)),
+		: TRegularData2D<FFTW_COMPLEX>(Vector2(-origin.x,-origin.y), Vector2((((1<<ldnX)-1)*stepPhysX_)-origin.x,(((1<<ldnX)-1)*stepPhysY_)-origin.y), 
+																	 TRegularData2D<FFTW_COMPLEX>::IndexType((1<<ldnX), (1<<ldnY))),
 		  lengthX_(1<<ldnX),
 			lengthY_(1<<ldnY),
 			inFourierSpace_(inFourierSpace),
@@ -77,7 +78,7 @@ namespace BALL
 		//lower_ = fft2D.lower_;
 		//upper_ = fft2D.upper_;
 		//spacing_ = fft2D.spacing_;
-		data = fft2D.data;
+		data_ = fft2D.data_;
 		lengthX_ = fft2D.lengthX_;
 		lengthY_ = fft2D.lengthY_;
 		origin_ = fft2D.origin_;
@@ -168,8 +169,8 @@ namespace BALL
 	void FFT2D::doFFT()
 		throw()
 	{
-//		fftwnd_one(planForward_, &(*data.begin()), 0);
-		fftwnd_one(planForward_,data, 0); //TRegularData2D is *not* based on vector but on standard-arrays...
+		fftwnd_one(planForward_, &data_[0], 0); // Well, now it is!
+//		fftwnd_one(planForward_,data, 0); //TRegularData2D is *not* based on vector but on standard-arrays...
 		inFourierSpace_ = true;
 		numPhysToFourier_++;
 	}
@@ -177,8 +178,8 @@ namespace BALL
 	void FFT2D::doiFFT()
 		throw()
 	{
-		//fftwnd_one(planBackward_, &(*data.begin()), 0);
-		fftwnd_one(planBackward_,data,0);
+		fftwnd_one(planBackward_, &data_[0], 0);
+		// fftwnd_one(planBackward_,data,0);
 		inFourierSpace_ = false;
 		numFourierToPhys_++;
 	}
@@ -428,7 +429,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		return data[internalPos];
+		return data_[internalPos];
 	}
 
 	const FFTW_COMPLEX& FFT2D::operator[](const Vector2& pos) const
@@ -470,7 +471,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		return data[internalPos];
+		return data_[internalPos];
 	}
 	
 	Complex FFT2D::phase(const Vector2& pos) const

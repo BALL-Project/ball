@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.C,v 1.19 2002/02/27 12:21:19 sturm Exp $
+// $Id: bruker2DFile.C,v 1.20 2003/05/03 17:29:32 oliver Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -104,13 +104,11 @@ namespace BALL
 		double lower_y = (a<b) ? a : b;
 		double upper_y = (a>b) ? a : b;
 
-		Size nr_of_points_x = (Size) (upper_x - lower_x) / SIF2_  - 1;
-		Size nr_of_points_y = (Size) (upper_y - lower_y) / SIF1_  - 1;
-
 	  //spectrum_.setLowerBound(parsf1_->parameter( "YMIN_p" ));
 	  //spectrum_.setUpperBound(parsf1_->parameter( "YMAX_p" ));
 
-		spectrum_ = RegularData2D(lower_x, lower_y, upper_x, upper_y, nr_of_points_x, nr_of_points_y);
+		spectrum_ = RegularData2D(Vector2(lower_x, lower_y), Vector2(upper_x, upper_y), 
+															Vector2(SIF2_, SIF1_));
 
 	  // Back to the beginning of the file.
 	  f.reopen( );

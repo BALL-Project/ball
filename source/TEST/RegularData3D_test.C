@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.8 2002/12/18 11:19:52 anker Exp $
+// $Id: RegularData3D_test.C,v 1.9 2003/05/03 17:29:34 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.8 2002/12/18 11:19:52 anker Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.9 2003/05/03 17:29:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ CHECK(RegularData3D<T>(float, float, float, float, float, float, Size, Size, Siz
 															10.0, 10.0, 10.0,
 															11, 11, 11);
 	TEST_NOT_EQUAL(grid, 0)
-	TEST_EQUAL(grid->getSize(), 1331)
+	TEST_EQUAL(grid->size(), 1331)
 	delete grid;
 RESULT
 
@@ -42,7 +42,7 @@ Vector3	upper(10.0, 10.0, 10.0);
 CHECK(RegularData3D<T>(const Vector3& lower, const Vector3& upper, float spacing))
 	grid = new RegularData3D(lower, upper, 1.0);
 	TEST_NOT_EQUAL(grid, 0)
-	TEST_EQUAL(grid->getSize(), 1331)
+	TEST_EQUAL(grid->size(), 1331)
 	delete grid;
 RESULT
 
@@ -51,8 +51,8 @@ CHECK(RegularData3D<T>(const Vector3& lower, const Vector3& upper, Size, Size, S
 	TEST_NOT_EQUAL(grid, 0)
 RESULT
 
-CHECK(getSize())
-	TEST_EQUAL(grid->getSize(), 1331)
+CHECK(size())
+	TEST_EQUAL(grid->size(), 1331)
 RESULT
 
 RegularData3D g(0.0, 0.0, 0.0, 10.0, 10.0, 10.0,	11, 11, 11);
@@ -65,7 +65,7 @@ CHECK(resize())
 
 	g1.resize(lower, upper, nogp);
 
-	TEST_EQUAL(g1.getSize(), 60)
+	TEST_EQUAL(g1.size(), 60)
 	TEST_EQUAL(g1.getOrigin(), lower)
 	TEST_EQUAL(g1.getDimension(), upper - lower)
 
@@ -74,26 +74,8 @@ RESULT
 CHECK(operator = (const RegularData3D<T>& grid))
 	RegularData3D g1;
 	g1 = g;
-	TEST_EQUAL(g1.getSize(), 1331)
+	TEST_EQUAL(g1.size(), 1331)
 	TEST_EQUAL((g1 == g), true)
-RESULT
-
-CHECK(dump())
-  String filename;
-	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), std::ios::out);
-	// fill g with zero!
-	for (Position k = 0; k < g.getSize(); k++)
-	{
-		g[k] = 0.0;
-	}
-	g.dump(outfile);
-	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/RegularData3D_test.txt")
-RESULT
-
-CHECK(isValid())
-	TEST_EQUAL(g.isValid(), true)
 RESULT
 
 CHECK(getMaxX())
@@ -120,31 +102,25 @@ CHECK(getMinZ())
 	TEST_REAL_EQUAL(grid->getMinZ(), 0.0)
 RESULT
 
-CHECK(getMaxXIndex())
-	TEST_EQUAL(grid->getMaxXIndex(), 10)
+CHECK(getSize())
+	TEST_EQUAL(grid->getSize().x, 11)
+	TEST_EQUAL(grid->getSize().y, 11)
+	TEST_EQUAL(grid->getSize().z, 11)
 RESULT
 
-CHECK(getMaxYIndex())
-	TEST_EQUAL(grid->getMaxYIndex(), 10)
+CHECK(getSpacing().x)
+	TEST_REAL_EQUAL(grid->getSpacing().x, 1.0)
 RESULT
 
-CHECK(getMaxZIndex())
-	TEST_EQUAL(grid->getMaxZIndex(), 10)
+CHECK(getSpacing().y)
+	TEST_REAL_EQUAL(grid->getSpacing().y, 1.0)
 RESULT
 
-CHECK(getXSpacing())
-	TEST_REAL_EQUAL(grid->getXSpacing(), 1.0)
+CHECK(getSpacing().z)
+	TEST_REAL_EQUAL(grid->getSpacing().z, 1.0)
 RESULT
 
-CHECK(getYSpacing())
-	TEST_REAL_EQUAL(grid->getYSpacing(), 1.0)
-RESULT
-
-CHECK(getZSpacing())
-	TEST_REAL_EQUAL(grid->getZSpacing(), 1.0)
-RESULT
-
-BALL::RegularData3D::GridIndex	index;
+RegularData3D::IndexType	index;
 
 CHECK(getIndex(const Vector3& vector))
 	lower.set(3.49, 3.51, 3.0);
@@ -302,7 +278,6 @@ RegularData3D grid2 = *grid;
 
 CHECK(clear())
 	grid2.clear();
-	TEST_EQUAL(grid2.isValid(), false)
 	TEST_EQUAL(grid2.data, 0)
 RESULT
 
@@ -338,7 +313,6 @@ CHECK(has()1/1)
 	TEST_EQUAL(g.has(v), false)
 
 	RegularData3D h;
-	TEST_EQUAL(h.isValid(), false)
 	TEST_EQUAL(h.has(0.0, 0.0, 0.0), false)
 	v = Vector3(0.0, 0.0, 0.0);
 	TEST_EQUAL(h.has(v), false)
@@ -355,8 +329,8 @@ CHECK(operator << (ostream& os, const RegularData3D&))
 	
 	STATUS(2)
 	// fill the grid with something meaningful
-	for (Position i = 0; i < data.getSize(); data[i] = (float)((float)i /
-		data.getSize()), i++);
+	for (Position i = 0; i < data.size(); data[i] = (float)((float)i /
+		data.size()), i++);
 	
 	STATUS(3)
 	std::ofstream os(filename.c_str(), std::ios::out);
@@ -373,14 +347,14 @@ CHECK(operator << (ostream& os, const RegularData3D&))
 	is.close();
 	STATUS(5.3)
 
-	TEST_EQUAL(in_data.getSize(), data.getSize())
-	ABORT_IF(in_data.getSize() != data.getSize())
+	TEST_EQUAL(in_data.size(), data.size())
+	ABORT_IF(in_data.size() != data.size())
 	
 	STATUS(6)
 
-	TEST_REAL_EQUAL(data.getXSpacing(), in_data.getXSpacing())
-	TEST_REAL_EQUAL(data.getYSpacing(), in_data.getYSpacing())
-	TEST_REAL_EQUAL(data.getZSpacing(), in_data.getZSpacing())
+	TEST_REAL_EQUAL(data.getSpacing().x, in_data.getSpacing().x)
+	TEST_REAL_EQUAL(data.getSpacing().y, in_data.getSpacing().y)
+	TEST_REAL_EQUAL(data.getSpacing().z, in_data.getSpacing().z)
 
 	STATUS(7)
 	TEST_REAL_EQUAL(data.getMinX(), in_data.getMinX())
@@ -393,7 +367,7 @@ CHECK(operator << (ostream& os, const RegularData3D&))
 	TEST_REAL_EQUAL(data.getMaxZ(), in_data.getMaxZ())
 
 	STATUS(9)
-	for (Position i = 0; i < data.getSize(); i++)
+	for (Position i = 0; i < data.size(); i++)
 	{
 		STATUS(i)
 		TEST_REAL_EQUAL(data[i], in_data[i])
