@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.60 2004/07/26 21:57:17 amoll Exp $
+// $Id: molecularControl.C,v 1.61 2004/07/26 22:06:58 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1109,13 +1109,13 @@ void MolecularControl::countItems()
 	setStatusbarText(s);
 }
 
-void MolecularControl::applySelector()
+Size MolecularControl::applySelector()
 {
-	if (parentWidget() == 0) return;
+	if (parentWidget() == 0) return 0;
 	if (selector_edit_->text() == "")
 	{
 		getMainControl()->clearSelection();
-		return;
+		return 0;
 	}
 
 	Selector s;
@@ -1126,10 +1126,11 @@ void MolecularControl::applySelector()
 	catch(Exception::ParseError e)
 	{
 		setStatusbarText(String("Invalid expression ") + e.getMessage());
-		return;
+		return 0;
 	}
 
 	HashSet<Composite*> roots;
+	Size nr_of_atoms = 0;
 
 	CompositeManager::CompositeIterator it = getMainControl()->getCompositeManager().begin();
 	for(; it != getMainControl()->getCompositeManager().end(); it++)
@@ -1141,14 +1142,13 @@ void MolecularControl::applySelector()
 			getMainControl()->selectCompositeRecursive(*ait, true);
 			roots.insert(&(*ait)->getRoot());
 		}
+		nr_of_atoms += s.getSelectedAtoms().size();
 	}
 
 	HashSet<Composite*>::Iterator sit = roots.begin();
 	for (; sit != roots.end(); sit++)
 	{
-		// faster, but doesnt always work:
 	 	getMainControl()->updateRepresentationsOf(**sit, false);
-// 		getMainControl()->updateRepresentationsOf(**sit, true, true);
 	}
 
 	NewSelectionMessage* nm = new NewSelectionMessage;
@@ -1156,6 +1156,8 @@ void MolecularControl::applySelector()
 	getMainControl()->sendMessage(*nm);
 
 	setStatusbarText(String("Selected " + String(s.getNumberOfSelectedAtoms()) + " Atoms."));
+
+	return nr_of_atoms;
 }
 
 
@@ -1267,11 +1269,11 @@ void MolecularControl::deselect()
 	}	
 }
 
-void MolecularControl::applySelector(const String& expression)
+Size MolecularControl::applySelector(const String& expression)
 	throw()
 {
 	selector_edit_->setText(expression.c_str());
-	applySelector();
+	return applySelector();
 }
 
 

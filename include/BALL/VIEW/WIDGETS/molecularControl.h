@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.32 2004/07/26 21:17:32 amoll Exp $
+// $Id: molecularControl.h,v 1.33 2004/07/26 22:07:09 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -221,6 +221,11 @@ namespace BALL
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
 			
+			/** Apply a given regular expression
+			 		@return Size number of selected atoms
+			*/
+			Size applySelector(const String& expression)
+				throw();
 
 		public slots:
 				
@@ -311,8 +316,10 @@ namespace BALL
 			/// Expand all QListViewItem
 			void expandAll();
 
-			/// Apply the regular expression from the QLineEdit
-			void applySelector();
+			/** Apply the regular expression from the QLineEdit
+			 		@return Size number of selected atoms
+			*/
+			Size applySelector();
 
 			/// Show a help dialog for the Selector 
 			void showSelectorHelp();
