@@ -1,12 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.8.4.1 2004/12/30 19:30:25 amoll Exp $
+// $Id: colorRGBA.C,v 1.8.4.2 2004/12/30 19:32:30 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
-#include <BALL/COMMON/rtti.h>
-
 #include <qcolor.h>
 
 using namespace std;
@@ -75,8 +73,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-			cout << "Destructing object " << (void *)this << " of class " 
-					 << RTTI::getName<ColorRGBA>() << endl;
+			Log.error() << "Destructing object " << this << " of class ColorRGBA" << endl;
 			#endif 
 		}
 
@@ -161,8 +158,7 @@ namespace BALL
 			}
 		}
 
-		void ColorRGBA::set
-			(const String& s)
+		void ColorRGBA::set(const String& s)
 			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToRGBA_(s);
@@ -178,10 +174,8 @@ namespace BALL
 		void ColorRGBA::get(String& s) const
 			throw()
 		{
-			char temp[10];
-
+			char temp[8];
 			get(temp);
-
 			s.set(&temp[0]);
 		}
 
