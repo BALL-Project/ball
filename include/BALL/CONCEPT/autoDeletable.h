@@ -1,4 +1,4 @@
-// $Id: autoDeletable.h,v 1.6 2000/08/20 15:16:01 amoll Exp $
+// $Id: autoDeletable.h,v 1.7 2000/09/27 07:13:56 oliver Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -70,10 +70,19 @@ namespace BALL
 		void operator delete(void* ptr) throw();
 	
 		/**	Placement {\bf new} operator.
-				This operator create a new object in an already allocated memory
-				segment.
+				This operator allocates storage for the object and remembers its pointer.
+				This pointer is {\bf static} and is evaluated by the constructors.
+				As this operator is only invoked for the creation of single dynamic 
+				objects, arrays and static objects can be identified.
 		*/
 		void* operator new(size_t size, void* ptr) throw();
+	
+		/**	Placement {\bf delete} operator.
+				This operator frees the space allocated for an Autodeletable object. It is implemented
+				solely to achieve a consistent interface and to avoid warnings issued by some compilers
+				if operator new/delete do not appear in pairs.
+		*/
+		void operator delete(void* ptr, void*) throw();
 	
 		//@}
 	

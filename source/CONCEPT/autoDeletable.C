@@ -1,4 +1,4 @@
-// $Id: autoDeletable.C,v 1.5 2000/07/04 14:35:16 oliver Exp $
+// $Id: autoDeletable.C,v 1.6 2000/09/27 07:13:33 oliver Exp $
 
 #include <BALL/CONCEPT/autoDeletable.h>
 #include <new>
@@ -63,6 +63,11 @@ namespace BALL
 	{
 		last_ptr_ = ::operator new (size, ptr);
 		return last_ptr_;
+	}
+	
+	void AutoDeletable::operator delete (void* ptr, void*) throw()
+	{
+		::operator delete(ptr);
 	}
 	
 	void* AutoDeletable::last_ptr_ = 0;
