@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.28 2003/01/17 11:11:29 oliver Exp $
+// $Id: logStream.C,v 1.29 2003/05/23 06:52:45 oliver Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
@@ -276,18 +276,10 @@ namespace BALL
 	}
 
 	// keep the given buffer	
-	LogStream::LogStream(LogStreamBuf* buf)		
+	LogStream::LogStream(LogStreamBuf* buf, bool delete_buf, bool associate_stdio)
 		: BALL_IOS(buf),
 			BALL_OSTREAM(buf),
-			delete_buffer_(false)
-	{
-	}
-
-	// create a new buffer
-	LogStream::LogStream(bool associate_stdio)
-		: BALL_IOS(new LogStreamBuf),
-			BALL_OSTREAM(new LogStreamBuf),
-			delete_buffer_(true)
+			delete_buffer_(delete_buf)
 	{
 		if (associate_stdio == true) 
 		{
@@ -609,7 +601,7 @@ namespace BALL
 	}
 
 	// global default logstream
-	LogStream	Log(true);
+	LogStream	Log(new LogStreamBuf, true, true);
 
 #	ifdef	BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/COMMON/logStream.iC>
