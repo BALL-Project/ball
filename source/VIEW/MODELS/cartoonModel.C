@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.12 2005/01/04 22:41:48 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.13 2005/01/04 23:12:36 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -46,7 +46,7 @@ AddCartoonModel::AddCartoonModel()
 		DNA_ladder_radius_(0.8),
 		DNA_base_radius_(0.2),
 		ribbon_width_(1.8),
-		ribbon_radius_(0.05),
+		ribbon_radius_(0.1),
 		draw_DNA_as_ladder_(false),
 		draw_ribbon_(true)
 {
@@ -869,7 +869,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	// same data structures for faster access
 	////////////////////////////////////////////////////////////
 	Mesh::Triangle t;
-	Size s_old = 0;  // start position of the last points in the meshs vertices
+	Size s_old = 2;  // start position of the last points in the meshs vertices
 	Size s_new = 0;  // start position of the  new points in the meshs vertices
 
 	//------------------------------------------------------>
@@ -922,7 +922,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			geometric_objects_.push_back(mesh);
 
 			// insert the vertices and normals of the last points again into the new mesh
-			for (Position point_pos = old_mesh->vertex.size() - slides - 2;
+			for (Position point_pos = old_mesh->vertex.size() - slides * 2 - 2;
 										point_pos < old_mesh->vertex.size(); point_pos++)
 			{
 				mesh->vertex.push_back(old_mesh->vertex[point_pos]);
@@ -931,6 +931,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 
 			s_old = 0;
 		}
+		
 		
 		// insert connection between tubes
 		mesh->vertex.push_back(point + helix_dir);
@@ -942,12 +943,12 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		t.v1 = s - slides - 2;
 		t.v2 = s - slides - 1;
 		t.v3 = s;
-		mesh->triangle.push_back(t);
+ 		mesh->triangle.push_back(t);
 
 		t.v1 = s - slides - 1;
 		t.v2 = s;
 		t.v3 = s - 1;
-		mesh->triangle.push_back(t);
+ 		mesh->triangle.push_back(t);
 
 
 		////////////////////////////////////////////////////////////
@@ -955,6 +956,10 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		////////////////////////////////////////////////////////////
 		// we will add an other point next, so here we do an off by one :)
 		s_new = mesh->vertex.size();
+
+		helix_dir = r_new;
+		helix_dir.normalize();
+		helix_dir *= (ribbon_width_ * 0.5);
 
 		//------------------------------------------------------>
 		// iterate over all points of the circle
