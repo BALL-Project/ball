@@ -2,6 +2,7 @@ DIRECTORY=CONCEPT
 
 THISLIB=$(LIBNAME)
 
+XDR_SOURCES=$(BALL_HAS_XDR:true=XDRPersistenceManager.C)
 
 CPP_SOURCES= $(XDR_SOURCES)\
 	autoDeletable.C\
