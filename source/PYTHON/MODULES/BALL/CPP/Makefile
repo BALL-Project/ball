@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.16 2001/08/16 00:30:34 oliver Exp $
+# $Id: Makefile,v 1.17 2001/08/23 10:24:00 oliver Exp $
 #
 all: libBALLc.so
 
@@ -245,6 +245,7 @@ PYBALL_SOURCES=\
 	pyNucleicAcidList.C
 
 include ../../../../config.mak
+-include .Dependencies
 
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)
@@ -270,6 +271,4 @@ depend:
 	@echo "creating dependencies for $(DIRECTORY)..."
 	@echo "" > .Dependencies
 	@/usr/local/bin/g++ -M  -fPIC   $(CPP_SOURCES) $(ADD_CPP_SOURCES) $(STD_CPP_INCLUDES) $(ADD_INCLUDES) $(SIP_INCLUDES) $(PYTHON_INCLUDES) $(BALL_INCLUDES)  >.Dependencies
-
--include .Dependencies
 
