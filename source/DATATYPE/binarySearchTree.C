@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.C,v 1.2 2000/07/31 15:16:59 oliver Exp $
+// $Id: binarySearchTree.C,v 1.3 2000/08/01 08:05:07 oliver Exp $
 
 #include <BALL/DATATYPE/binarySearchTree.h>
 
@@ -912,10 +912,10 @@ namespace BALL
 		}
 		state_ = false;
 		current_ = root_;
-		path.clear();
+		path_.clear();
 		if (root_ && walk_order_ == BSTreeIterator::WALK_ORDER__LEVELORDER)
 		{
-			path.pushBottom(root_);
+			path_.pushBottom(root_);
 		}
 	}
 
@@ -927,14 +927,14 @@ namespace BALL
 		{
 			if (current_)
 			{
-				path.push(current_);
+				path_.push(current_);
 				const BSTreeItem *item = current_;
 				current_ = current_->left;
 				return item;
 			}
 			else
 			{
-				if (path.pop(current_) == 0)
+				if (path_.pop(current_) == 0)
 				{
 					return current_ = 0;
 				}
@@ -956,12 +956,12 @@ namespace BALL
 		{
 			if (current_)
 			{
-				path.push(current_);
+				path_.push(current_);
 				current_ = current_->left;
 			}
 			else
 			{
-				if (path.pop(current_) == 0)
+				if (path_.pop(current_) == 0)
 				{
 					return current_ = 0;
 				}
@@ -987,7 +987,7 @@ namespace BALL
 			{ // Ready to go down the tree to left
 				if (current_)
 				{
-					path.push(current_);
+					path_.push(current_);
 					current_ = current_->left;
 				}
 				else
@@ -998,11 +998,11 @@ namespace BALL
 			else
 			{ // Ready to come up the tree
 				const BSTreeItem *item = current_;
-				if (path.isEmpty())
+				if (path_.isEmpty())
 				{
 		return (current_ = 0); // At root
 				}
-				current_ = *path.top();
+				current_ = *path_.top();
 				if (item == current_->left
 			&& current_->right)
 				{ // Coming back up the tree from the left, and
@@ -1015,7 +1015,7 @@ namespace BALL
 				 { // Coming back up the tree from the right,
 		 // or there was no right child, so visit
 		 // the node, and continue on up. (state stays at true.)
-		 path.pop();
+		 path_.pop();
 		 return current_;
 				 }
 			}
@@ -1027,17 +1027,17 @@ namespace BALL
 	BSTreeIterator::forwardLevelOrder
 		()
 	{
-		if (path.pop(current_) == 0)
+		if (path_.pop(current_) == 0)
 		{
 			return 0;
 		}
 		if (current_->left != 0)
 		{
-			path.pushBottom(current_->left);
+			path_.pushBottom(current_->left);
 		}
 		if (current_->right != 0)
 		{
-			path.pushBottom(current_->right);
+			path_.pushBottom(current_->right);
 		}
 		return current_;
 	}
