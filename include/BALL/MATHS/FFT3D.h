@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.1.2.5 2002/10/16 11:06:11 amoll Exp $
+// $Id: FFT3D.h,v 1.1.2.6 2002/11/07 19:21:55 anhi Exp $
 
 #ifndef BALL_MATHS_FFT3D_H
 #define BALL_MATHS_FFT3D_H
@@ -110,7 +110,8 @@ namespace BALL
 			//@}
 			
 			// @name Accessors
-			
+		
+			//@{
 			/** Perform a single fast Fourier transform on the data.
 			 */
 			void doFFT()
@@ -227,6 +228,36 @@ namespace BALL
 			double getFourierSpaceMaxZ() const
 				throw();
 
+			/** Return the largest grid position for the x direction. 
+			 		This method returns the maximum position allowed in the grid. As the point 
+					in the origin has the indices (0, 0, 0), this method returns the number of 
+					points in X direction minus one.
+			  */
+			Size getMaxXIndex() const
+				throw();
+
+			/** Return the largest grid position for the y direction. 
+			 		This method returns the maximum position allowed in the grid. As the point 
+					in the origin has the indices (0, 0, 0), this method returns the number of 
+					points in Y direction minus one.
+			  */
+			Size getMaxYIndex() const
+				throw();
+
+			/** Return the largest grid position for the z direction. 
+			 		This method returns the maximum position allowed in the grid. As the point 
+					in the origin has the indices (0, 0, 0), this method returns the number of 
+					points in Z direction minus one.
+			  */
+			Size getMaxZIndex() const
+				throw();
+
+			/** Return the number of inverse transforms that have been carried out using this class.
+			 		This is an important factor for the normalization of the data.
+			 */
+			Size getNumberOfInverseTransforms() const
+				throw();
+			
 			/** Returns the grid coordinate corresponding to the position.
 			 */
 			Vector3 getGridCoordinates(Position position) const
@@ -267,13 +298,35 @@ namespace BALL
 			const FFTW_COMPLEX& operator[](const Vector3& pos) const
 				throw(Exception::OutOfGrid);
 			
+			/** Access the (raw) data at Position pos.
+			 */
+			FFTW_COMPLEX& operator[](const Position& pos)
+				throw(Exception::OutOfGrid);
+
+			/** Access the (raw) data at Position pos. Const method.
+				*/
+			const FFTW_COMPLEX& operator[](const Position& pos) const
+				throw(Exception::OutOfGrid);
+				
 			/** This computes the phase factor in Fourier space that results
 				if the origin of the coordinate system in physical space
 				is not in the "lower left corner".
 			 */
 			Complex phase(const Vector3& pos) const
 				throw();
+			//@}
+			
+			/** @name Predicates
+			 */
+			//@{
 
+			/** Returns {\bf true} if the data is considered to be in Fourier space,
+			 		{\bf false} otherwise.
+			 */
+			bool isInFourierSpace() const
+				throw();
+			//@}
+			
 		protected:
 			Size lengthX_, lengthY_, lengthZ_;
 			bool inFourierSpace_;
@@ -287,6 +340,19 @@ namespace BALL
 			fftwnd_plan planForward_;
 			fftwnd_plan planBackward_;
 	};
+
+	/** Global assignment operator from FFT3D to TRegularData3D<Complex>
+	 */
+	const TRegularData3D<Complex>& operator << (TRegularData3D<Complex>& to, const FFT3D& from)
+		throw();
+	
+	/** Global assignment operator from FFT3D to TRegularData3D<float>.
+	 		This operator assigns the {\bf real} part of the complex FFT3D-data to the
+			TRegularData3D<float> to.
+	 */
+	const RegularData3D& operator << (RegularData3D& to, const FFT3D& from)
+		throw();
+	
 }
 
 #endif // BALL_MATHS_FFT3D_H
