@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.15 2000/05/29 23:27:03 amoll Exp $
+// $Id: logStream.C,v 1.16 2000/05/30 18:27:08 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 #include <BALL/CONCEPT/notification.h>
@@ -549,8 +549,9 @@ namespace BALL
 		return non_const_this->rdbuf()->loglines_[index].time;	
 	}
 
-	list<int>	LogStream::filterLines(const int& min_level = INT_MIN, const int& max_level = INT_MAX,
-							const time_t& earliest = 0, const time_t& latest = LONG_MAX, const string& s = "") const
+	list<int>	LogStream::filterLines
+		(const int& min_level, const int& max_level,
+		 const time_t& earliest, const time_t& latest, const string& s) const
 	{
     using std::list;																																
 		list<int>	list_indices;
