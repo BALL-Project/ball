@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.14 2001/08/01 01:11:18 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.15 2001/08/01 23:28:00 oliver Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -684,20 +684,28 @@ namespace BALL
 		Size	getNumberOfIterations() const;
 
 		//@}
-		/**	@name	Debugging	
-		*/
-		//@{
-			
-		/**	Returns the last error code.
-				If a method fails, an internal error code is set in 
-				FDPB. This error code can be queried by calling this method.
-				If no error occured it should return FDPB::ERROR__NONE.
-				@see	getErrorMessage
-				@see	ErrorCodes
-		*/
-		int getErrorCode() const;
 
-		//@}
+    /** @name Debugging 
+    */
+    //@{
+
+    /** Return the last error code.
+        If a method fails, an internal error code is set in
+        FDPB. This error code can be queried by calling this method.
+        If no error occured it should return FDPB::ERROR__NONE.
+        @see  getErrorMessage
+        @see  ErrorCodes
+    */
+    Index getErrorCode() const;
+
+    /** Return the last error message.
+        @see  getErrorCode
+        @see  ErrorCodes
+    */
+    static String getErrorMessage(Index error_code);
+    //@}
+
+
 		/**	@name	Options and results of the calculation 
 		*/
 		//@{

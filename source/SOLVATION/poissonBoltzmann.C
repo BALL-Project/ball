@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.24 2001/08/01 01:11:44 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.25 2001/08/01 23:28:24 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -171,9 +171,14 @@ namespace BALL
 		return number_of_iterations_;
 	}
 
-	int FDPB::getErrorCode() const
+	Index FDPB::getErrorCode() const
 	{
 		return error_code_;
+	}
+
+	String FDPB::getErrorMessage(Index error_code) 
+	{
+		return (error_code >= 0 ? error_message_[error_code] : "illegal error code");
 	}
 
 	const char* FDPB::error_message_[] = 
