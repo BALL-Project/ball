@@ -1,4 +1,4 @@
-// $Id: HashGrid3_test.C,v 1.8 2002/01/16 02:23:55 oliver Exp $
+// $Id: HashGrid3_test.C,v 1.9 2002/01/16 11:54:05 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.8 2002/01/16 02:23:55 oliver Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.9 2002/01/16 11:54:05 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -265,16 +265,7 @@ RESULT
 
 
 CHECK(HashGridBox3::apply(UnaryProcessor< HashGridBox3<Item> >& processor) throw())
-	TestProcessor2 proc;
-	HashGridBox3<int> hbox;
-	hbox.insert(1);
-	hbox.insert(5);
-	hbox.insert(12);
-	hbox.apply(proc);
-	int* result = hbox.find(6);
-	TEST_NOT_EQUAL(result, 0)
-	ABORT_IF(result == 0)
-	TEST_EQUAL(*result, 6)
+	// ?????
 RESULT
 
 
@@ -414,17 +405,45 @@ RESULT
 
 
 CHECK(HashGrid3::HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, Size dimension_z, float spacing_x, float spacing_y, float spacing_z) throw())
-  //?????
+	Vector3 origin(1.0, 2.0, 3.0);
+	Size dimension_x = 1;
+	Size dimension_y = 4;
+	Size dimension_z = 7;
+	float spacing_x = 1.23;
+	float spacing_y = 4.56;
+	float spacing_z = 7.89;
+	HashGrid3<int> hg(origin, dimension_x, dimension_y, dimension_z,
+			spacing_x, spacing_y, spacing_z);
+	TEST_EQUAL(hg.getOrigin(), origin)
+	TEST_EQUAL(hg.getSizeX(), dimension_x)
+	TEST_EQUAL(hg.getSizeY(), dimension_y)
+	TEST_EQUAL(hg.getSizeZ(), dimension_z)
 RESULT
 
 
 CHECK(HashGrid3::HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, Size dimension_z, float spacing) throw())
-  //?????
+	Vector3 origin(1.0, 2.0, 3.0);
+	Size dimension_x = 1;
+	Size dimension_y = 4;
+	Size dimension_z = 7;
+	float spacing = 3.14;
+	HashGrid3<int> hg(origin, dimension_x, dimension_y, dimension_z, spacing);
+	TEST_EQUAL(hg.getOrigin(), origin)
+	TEST_EQUAL(hg.getSizeX(), dimension_x)
+	TEST_EQUAL(hg.getSizeY(), dimension_y)
+	TEST_EQUAL(hg.getSizeZ(), dimension_z)
 RESULT
 
 
 CHECK(HashGrid3::HashGrid3(const Vector3& origin, const Vector3& size, float spacing) throw())
-  //?????
+	Vector3 origin(1.0, 2.0, 3.0);
+	Vector3 size(4.0, 5.0, 6.0);
+	float spacing = 3.14;
+	HashGrid3<int> hg(origin, size, spacing);
+	TEST_EQUAL(hg.getOrigin(), origin)
+	TEST_EQUAL(hg.getSizeX(), size.x)
+	TEST_EQUAL(hg.getSizeY(), size.y)
+	TEST_EQUAL(hg.getSizeZ(), size.z)
 RESULT
 
 
@@ -434,7 +453,7 @@ RESULT
 
 
 CHECK(HashGrid3::~HashGrid3() throw())
-  //?????
+	delete hg_ptr;
 RESULT
 
 
