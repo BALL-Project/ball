@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.2 2000/02/15 18:15:52 oliver Exp $
+// $Id: parameterSection.C,v 1.3 2000/08/28 08:10:26 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -113,9 +113,9 @@ namespace BALL
 
 		if ((number_of_fields == 0) || (number_of_fields > ParameterSection::MAX_FIELDS))
 		{
-			Log.level(LogStream::ERROR) << "Error reading section " << section_name 
+			Log.error() << "ParameterSection::extractSection: error reading section " << section_name 
 				<< " of file " << ini_file.getFilename() << ": wrong number of fields in the format line: " << number_of_fields << endl;
-			Log.level(LogStream::ERROR) << "FORMAT: " << format_line_ << endl;
+			Log.error() << "FORMAT: " << format_line_ << endl;
 
 			return false;
 		}
@@ -141,10 +141,27 @@ namespace BALL
 			if (f[i].hasPrefix("key:"))
 			{
 				keys[number_of_keys++] = (Index)i;
-			} else if (f[i].hasPrefix("value:")) 
+			} 
+			else if (f[i].hasPrefix("value:")) 
 			{
-				variable_names_[f[i].after(":", 0)] = (Index)number_of_variables;
-				variables[number_of_variables++] = (Index)i;
+				// check whether a  variable name was given
+				String variable_name = f[i].after(":", 0);
+				if (variable_name == "")
+				{
+					Log.error() << "ParameterSection::extractSection: error while reading section "
+							<< section_name << ": empty variable name: " << f[i] << endl;	
+				}
+				else if (variable_names_.has(variable_name))
+				{	
+					Log.error() << "ParameterSection::extractSection: error while reading section "
+							<< section_name << ": duplicate variable name: " << f[i] << endl;	
+				}
+				else
+				{
+					// correct definition: store it.
+					variable_names_[variable_name] = (Index)number_of_variables;
+					variables[number_of_variables++] = (Index)i;
+				}
 			} 
 		}
 
