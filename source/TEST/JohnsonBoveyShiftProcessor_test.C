@@ -1,4 +1,4 @@
-// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.3 2000/09/22 12:01:54 oliver Exp $
+// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.4 2000/09/24 13:27:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,12 +9,13 @@
 
 ///////////////////////////
 
-START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.3 2000/09/22 12:01:54 oliver Exp $")
+START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.4 2000/09/24 13:27:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 JohnsonBoveyShiftProcessor* sp = 0;
 CHECK(JohnsonBoveyShiftProcessor::JohnsonBoveyShiftProcessor() throw())

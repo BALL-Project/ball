@@ -1,4 +1,4 @@
-// $Id: AnisotropyShiftProcessor_test.C,v 1.2 2000/09/22 11:15:11 amoll Exp $
+// $Id: AnisotropyShiftProcessor_test.C,v 1.3 2000/09/24 13:27:44 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,12 +10,13 @@
 
 ///////////////////////////
 
-START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.2 2000/09/22 11:15:11 amoll Exp $")
+START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.3 2000/09/24 13:27:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 AnisotropyShiftProcessor* ap = 0;
 CHECK(AnisotropyShiftProcessor::AnisotropyShiftProcessor() throw())
@@ -56,64 +57,56 @@ RESULT
 HINFile f("data/AnisotropyShiftProcessor_test.hin");
 System S;
 f >> S;
-ClearChargeProcessor clear_charge;
-S.apply(clear_charge);
 
 Parameters parameters("data/AnisotropyShiftProcessor_test.ini");
 
-CHECK(charge assignment)
-	AnisotropyShiftProcessor ap;
-	ap.setParameters(parameters);
-	ap.init();
-	TEST_EQUAL(S.countAtoms(), 31)
-	
-	if (S.countAtoms() == 31)
-	{
-		S.apply(ap);
-		AtomIterator atom_it = S.beginAtom();
-		TEST_REAL_EQUAL(atom_it->getCharge(), 0)
-		atom_it++;
-		//BAUSTELLE
-	}	
-RESULT
-
-CHECK(chemical shifts)
+CHECK(chemical shifts/with rings)
 	PRECISION(0.0001)
-	AnisotropyShiftProcessor ap;
-	ap.setParameters(parameters);
-	ap.init();
-	TEST_EQUAL(S.countAtoms(), 31)
+	StringHashMap<float> aniso_shifts;
+	ifstream infile("data/AnisotropyShiftProcessor_test.dat");
+	String name;
+	float shift;
+	while (infile.good())
+	{
+		infile >> name >> shift;
+		aniso_shifts.insert(name, shift);
+	}
+	TEST_EQUAL(aniso_shifts.size(), 13)
 
+	AnisotropyShiftProcessor sp;
+	sp.setParameters(parameters);
+	sp.init();
+	TEST_EQUAL(sp.isValid(), true)
+	TEST_EQUAL(S.countAtoms(), 31)
 	
 	if (S.countAtoms() == 31)
 	{
-		S.apply(ap);
+		S.apply(sp);
 
 		AtomIterator atom_it = S.beginAtom();
 		Position i = 0;
 		for (; +atom_it; ++atom_it)
 		{
-			if (atom_it->hasProperty("chemical_shift"))
+			if (atom_it->hasProperty(AnisotropyShiftProcessor::PROPERTY__ANISOTROPY_SHIFT))
 			{
-				float shift = atom_it->getProperty("chemical_shift").getFloat();
-				STATUS("shift of " << atom_it->getFullName() << ": " << shift)
-				switch (i++)
-				{//BAUSTELLE
-					case  0: TEST_REAL_EQUAL(shift, -0.02835) break;
-					case  1: TEST_REAL_EQUAL(shift, -0.01370) break;
-					case  2: TEST_REAL_EQUAL(shift, -0.01314) break;
-					case  3: TEST_REAL_EQUAL(shift, -0.04398) break;
-					case  4: TEST_REAL_EQUAL(shift,  0.03422) break;
-					case  5: TEST_REAL_EQUAL(shift, -0.04594) break;
-					case  6: TEST_REAL_EQUAL(shift, -0.03188) break;
-					case  7: TEST_REAL_EQUAL(shift, -0.03139) break;
-					case  8: TEST_REAL_EQUAL(shift, -0.03043) break;
-					case  9: TEST_REAL_EQUAL(shift,  0.01749) break;
-					case 10: TEST_REAL_EQUAL(shift, -0.03506) break;
-					case 11: TEST_REAL_EQUAL(shift,  0.11131) break;
+				shift = atom_it->getProperty(AnisotropyShiftProcessor::PROPERTY__ANISOTROPY_SHIFT).getFloat();
+				if (shift != 0)
+				{
+					STATUS("shift of " << atom_it->getFullName() << ": " << shift)
+					TEST_EQUAL(aniso_shifts.has(atom_it->getFullName()), true)
+					if (aniso_shifts.has(atom_it->getFullName()))
+					{
+						TEST_REAL_EQUAL(shift, aniso_shifts[atom_it->getFullName()])
+						i++;
+					}
+					else
+					{
+						TEST_REAL_EQUAL(shift, 0.0)
+					}
 				}
 			}
 		}
+		TEST_EQUAL(i, 13)
 	}	
 RESULT
 

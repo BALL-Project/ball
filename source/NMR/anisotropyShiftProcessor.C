@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.C,v 1.5 2000/09/22 12:05:31 oliver Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.6 2000/09/24 13:24:31 oliver Exp $
 
 #include<BALL/NMR/anisotropyShiftProcessor.h>
 
@@ -10,6 +10,8 @@ using namespace std;
 
 namespace BALL
 {
+
+	const char* AnisotropyShiftProcessor::PROPERTY__ANISOTROPY_SHIFT = "AnisotropyShift";
 
 	AnisotropyShiftProcessor::AnisotropyShiftProcessor()
 		throw()
@@ -24,12 +26,14 @@ namespace BALL
 	void AnisotropyShiftProcessor::init()
 		throw()
 	{
+		Log.info() << "ASP::init()" << endl;
 		valid_ = true;
 	}
 
 	bool AnisotropyShiftProcessor::finish()
 		throw()
 	{
+		Log.info() << "ASP::finish()" << endl;
 		if (!isValid())
 		{
 			return false;
@@ -48,7 +52,7 @@ namespace BALL
 		const float ndXN1 =  -7.0;
 		const float ndXN2 =   1.0;
 
-	  list<const PDBAtom*>::iterator proton_iter;
+	  list<const Atom*>::iterator proton_iter;
 	  list<const Bond*   >::iterator eff_iter;
 
 		// Iteriere über alle Protonen in proton_list_
@@ -59,12 +63,12 @@ namespace BALL
 			for (eff_iter = eff_list_.begin(); eff_iter != eff_list_.end(); ++eff_iter)
 			{
 				// Für jedes Proton iteriere über alle Effektorbindungen in eff_list_
-				const PDBAtom* patom = *proton_iter;
+				const Atom* patom = *proton_iter;
 				const Bond* bond = *eff_iter;
 				const Atom* c_atom = (bond->getFirstAtom());
 				const Atom* o_atom = (bond->getSecondAtom());
 				const Atom* x_atom = 0;
-				if ((*proton_iter)->getResidue() != c_atom->getFragment())
+				if ((*proton_iter)->getFragment() != c_atom->getFragment())
 				{
 					String name = c_atom->getName();
 					if (name == "C")
@@ -132,14 +136,14 @@ namespace BALL
 
 			for (eff_iter = eff_list_2_.begin(); eff_iter != eff_list_2_.end(); ++eff_iter)
 			{
-				const PDBAtom* patom = *proton_iter;
+				const Atom* patom = *proton_iter;
 				const Bond* bond = *eff_iter;
 				const Atom* c_atom = bond->getFirstAtom();
 				const Atom* n_atom = bond->getSecondAtom();
 				const Atom* o_atom = 0;
 
 				if ((*proton_iter)->getName() == "H" ||
-						(*proton_iter)->getResidue() == n_atom->getFragment())
+						(*proton_iter)->getFragment() == n_atom->getFragment())
 				{
 					continue;
 				}
@@ -150,46 +154,54 @@ namespace BALL
 					if (hbond.getBoundAtom(*c_atom)->getName() == "O")
 					{
 						o_atom = hbond.getBoundAtom(*c_atom);
+						break;
 					}
 				}
-				const Vector3& c_pos = c_atom->getPosition();
-				const Vector3& o_pos = o_atom->getPosition();
-				const Vector3& n_pos = n_atom->getPosition();
-
-				// baue rechtwinkliges Koordinatensystem auf
-				Vector3 vz = n_pos - c_pos;
-				const float vz_scalar = vz.getLength();
-				vz.normalize();
-				Vector3 vy = vz % (o_pos - c_pos);
-				vy.normalize();
-				Vector3 vx = vz % vy;
-				vx.normalize();
-				const Vector3 cen = c_pos + (vz * (0.85 * vz_scalar));
-				const Vector3 v1 = patom->getPosition() - cen;
-				const Vector3 v2 = v1 % vy;
-				const Vector3 v3 = v2 % vx;
-
-				const float& distance = v1.getLength();
-				const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
-				const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
-				float calc1, calc2;
-				if ((*proton_iter)->getName() == "H")
+				
+				if (o_atom != 0)
 				{
-					calc1 = ndXN1 * ((3.0 * stheta * stheta) - 2.0);
-					calc2 = ndXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
-				}
-				else
-				{
-					calc1 = ndX1 * ((3.0 * stheta * stheta) - 2.0);
-					calc2 = ndX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
-				}
+					Vector3 c_pos = c_atom->getPosition();
+					Vector3 o_pos = o_atom->getPosition();
+					Vector3 n_pos = n_atom->getPosition();
 
-				gs += (calc1 + calc2) / (3.0 * distance * distance * distance);
+					// baue rechtwinkliges Koordinatensystem auf
+					Vector3 vz = n_pos - c_pos;
+					const float vz_scalar = vz.getLength();
+					vz.normalize();
+					Vector3 vy = vz % (o_pos - c_pos);
+					vy.normalize();
+					Vector3 vx = vz % vy;
+					vx.normalize();
+					const Vector3 cen = c_pos + (vz * (0.85 * vz_scalar));
+					const Vector3 v1 = patom->getPosition() - cen;
+					const Vector3 v2 = v1 % vy;
+					const Vector3 v3 = v2 % vx;
+
+					const float& distance = v1.getLength();
+					const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
+					const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
+					float calc1, calc2;
+					if ((*proton_iter)->getName() == "H")
+					{
+						calc1 = ndXN1 * ((3.0 * stheta * stheta) - 2.0);
+						calc2 = ndXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+					}
+					else
+					{
+						calc1 = ndX1 * ((3.0 * stheta * stheta) - 2.0);
+						calc2 = ndX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+					}
+
+					gs += (calc1 + calc2) / (3.0 * distance * distance * distance);
+				}
 			}
-			float shift = (*proton_iter)->getProperty("chemical_shift").getFloat();
-			shift += gs;
-			(const_cast<PDBAtom*>(*proton_iter))->setProperty("chemical_shift", shift);
+			float shift = (*proton_iter)->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+			shift -= gs;
+			(const_cast<Atom*>(*proton_iter))->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
+			(const_cast<Atom*>(*proton_iter))->setProperty(PROPERTY__ANISOTROPY_SHIFT, -gs);
+			Log.info() << "Shift: " << (*proton_iter)->getFullName() << " = " << -gs << endl;
 		}
+
 		return true;
 	}
 
@@ -198,12 +210,13 @@ namespace BALL
 	{
 		// hier werden alle Effektorbindungen gesammelt( C=O ) und in eff_list_ gespeichert.
 		// hier werden alle Wasserstoffe in proton_list_ gespeichert.
-		if (!RTTI::isKindOf<PDBAtom>(composite))
+		if (!RTTI::isKindOf<Atom>(composite))
 		{
 			return Processor::CONTINUE;
 		}
 
-		const PDBAtom* patom = RTTI::castTo<PDBAtom>(composite);
+		const Atom* patom = RTTI::castTo<Atom>(composite);
+		Log.info() << "ASP::op()(" << patom->getFullName() << ")" << endl;
 
 		if (patom->getElement() == PTE[Element::H])
 		{
@@ -246,7 +259,7 @@ namespace BALL
 		}
 
 		// suche in der Seitenkette nach ASP ASN GLU GLN
-		const String& residue_name = patom->getResidue()->getName();
+		const String& residue_name = patom->getFragment()->getName();
 
 		if ((residue_name == "ASP" || residue_name == "ASN") &&
 				 patom->getName() == "CG" && patom->isBound()	)

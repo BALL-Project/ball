@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.C,v 1.4 2000/09/22 12:04:11 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.5 2000/09/24 13:24:32 oliver Exp $
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -303,7 +303,11 @@ namespace BALL
 				Residue* residue = *arom_iter;
 
 				// ignore the ring contribution in the aromatic residue itself
-				if ((*atom_iter)->getResidue() == residue)
+				// (except for H and HA atoms)
+				// BAUSTELLE: this should be parameterizable as well!
+				if (((*atom_iter)->getResidue() == residue)
+						&& ((*atom_iter)->getName() != "H")
+						&& ((*atom_iter)->getName() != "HA"))
 				{
 					continue;
 				}
