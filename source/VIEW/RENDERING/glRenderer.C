@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.49 2004/10/28 13:28:40 amoll Exp $
+// $Id: glRenderer.C,v 1.50 2004/10/29 20:24:23 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -692,17 +692,17 @@ namespace BALL
 				}
 				else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
 				{
-					glBegin(GL_LINE_STRIP);
 					// draw the triangles with lines
 					for (Size index = 0; index < mesh.triangle.size(); ++index)
 					{
+						glBegin(GL_LINE_STRIP);
 						normalVector3_(normal_vector_);
 
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+						glEnd();
 					}
-					glEnd();
 				}
 				else
 				{
@@ -758,10 +758,11 @@ namespace BALL
 			}
 			else if (drawing_mode_ == DRAWING_MODE_WIREFRAME)
 			{
-				glBegin(GL_LINE_STRIP);
 				// draw the triangles with lines
 				for (Size index = 0; index < mesh.triangle.size(); ++index)
 				{
+					glBegin(GL_LINE_STRIP);
+					
 					normalVector3_(normal_vector_);
 
 					setColorRGBA_(mesh.colorList[mesh.triangle[index].v1]);
@@ -772,8 +773,9 @@ namespace BALL
 
 					setColorRGBA_(mesh.colorList[mesh.triangle[index].v3]);
 					vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+					
+					glEnd();
 				}
-				glEnd();
 				// ------------------
 			}
 			else
