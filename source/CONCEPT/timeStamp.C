@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.4 2000/09/27 18:04:56 oliver Exp $
+// $Id: timeStamp.C,v 1.5 2000/10/16 20:00:50 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -41,6 +41,13 @@ namespace BALL
 	{
 		set(time);
 		return *this;
+	}
+
+	void Time::clear() 
+		throw()
+	{
+		secs_ = 0;
+		usecs_ = 0;
 	}
 
 	bool Time::operator < (const Time& time) const throw()
@@ -90,15 +97,23 @@ namespace BALL
 
  
 	TimeStamp::TimeStamp()
-		:	time_(Time::now())
+		:	time_()
 	{
 	}
 
 	TimeStamp::~TimeStamp()
 	{
+		clear();
 	}
 
-	void TimeStamp::stamp(const Time& time) throw ()
+	void TimeStamp::clear()
+		throw()
+	{
+		time_.clear();
+	}
+
+	void TimeStamp::stamp(const Time& time) 
+		throw ()
 	{
 		// in the default case, stamp with the current 
 		// time
