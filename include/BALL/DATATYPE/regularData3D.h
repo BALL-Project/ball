@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.5 2001/05/17 01:30:46 oliver Exp $ 
+// $Id: regularData3D.h,v 1.6 2001/06/24 14:16:46 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -259,7 +259,7 @@ namespace BALL
 		/**	Returns a pointer to the grid contents determined by the three indices.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridDataType* getData(const Position i, const Position j, const Position k)
+		GridDataType* getData(Position i, Position j, Position k)
 		  throw(Exception::OutOfGrid);
 
 		/**	Returns a pointer to the grid contents closest to a given vector.
@@ -271,7 +271,7 @@ namespace BALL
 		/**	Returns a pointer to the grid contents determined by the position.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridDataType* getData(const Position position) throw(Exception::OutOfGrid);
+		GridDataType* getData(Position position) throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
 				Returns the data of the grid point specified by its {\tt position}.
@@ -280,7 +280,7 @@ namespace BALL
 				@param		position Position, the grid position
 				@see			getData
 		*/
-		GridDataType& operator[](const Position position) throw(Exception::OutOfGrid);
+		GridDataType& operator[](Position position) throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
 				Returns the data of the grid point nearest to the given
@@ -299,7 +299,7 @@ namespace BALL
 				@param		j Position, grid y position
 				@param		k Position, grid z position
 		*/
-		Vector3 getGridCoordinates(const Position i, const Position j, const Position k) const
+		Vector3 getGridCoordinates(Position i, Position j, Position k) const
 		  throw(Exception::OutOfGrid);
 
 		/**	Returns the exact coordinates of the grid point near to a vector r.	
@@ -318,7 +318,7 @@ namespace BALL
 				@return		Vector3
 				@param		Position
 		*/
-		Vector3 getGridCoordinates(const Position position) const throw(Exception::OutOfGrid);
+		Vector3 getGridCoordinates(Position position) const throw(Exception::OutOfGrid);
 
 		/**	Return the indices of the grid points of the enclosing box.
 				This method calculates the grid box that contains the given vector
@@ -899,7 +899,7 @@ namespace BALL
 	template <class GridDataType>
 	BALL_INLINE 
 	GridDataType* RegularData3D<GridDataType>::getData
-		(const Position i, const Position j, const Position k) 
+		(Position i, Position j, Position k) 
 		throw(Exception::OutOfGrid)
 	{
 		if (i > number_of_points_x_ ||	j > number_of_points_y_ ||	k > number_of_points_z_
@@ -924,7 +924,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	GridDataType* RegularData3D<GridDataType>::getData(const Position position) 
+	GridDataType* RegularData3D<GridDataType>::getData(Position position) 
 		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
@@ -935,7 +935,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	GridDataType& RegularData3D<GridDataType>::operator[] (const Position position)
+	GridDataType& RegularData3D<GridDataType>::operator[] (Position position)
 		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
@@ -955,7 +955,7 @@ namespace BALL
 	template <class GridDataType>
 	BALL_INLINE 
 	Vector3 RegularData3D<GridDataType>::getGridCoordinates
-		(const Position i, const Position j, const Position k) const 
+		(Position i, Position j, Position k) const 
 		throw(Exception::OutOfGrid)
 	{
 		if (i > number_of_points_x_ ||	j > number_of_points_y_ ||	k > number_of_points_z_)
@@ -980,12 +980,15 @@ namespace BALL
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
-		return getGridCoordinates(v.x, v.y, v.z);
+		
+		return getGridCoordinates((Position)((v.x - origin_.x) / spacing_.x), 
+															(Position)((v.y - origin_.y) / spacing_.y), 
+															(Position)((v.z - origin_.z) / spacing_.z));
 	}
 
 	template <class GridDataType> 
 	BALL_INLINE 
-	Vector3 RegularData3D<GridDataType>::getGridCoordinates(const Position position) const 
+	Vector3 RegularData3D<GridDataType>::getGridCoordinates(Position position) const 
 		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
