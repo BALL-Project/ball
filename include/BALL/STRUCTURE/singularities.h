@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.6 2001/06/19 21:11:10 strobel Exp $
+// $Id: singularities.h,v 1.7 2001/06/21 02:15:56 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -136,7 +136,7 @@ namespace BALL
 				//					break;
 				case 2 :	;
 				case 3 :	rs->deleteSimilarFaces(face1->rsface,face2->rsface);
-									ofstream print("singularities.log");
+									std::ofstream print("singularities.log");
 									print << *rs;
 									print.close();
 									throw Exception::GeneralException(__FILE__,__LINE__,
