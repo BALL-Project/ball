@@ -201,4 +201,20 @@ bool MolecularDynamicsDialog::saveImages() const
 	return export_images->isChecked();
 }
 
+void MolecularDynamicsDialog::enableDCDFileSelected()
+{
+	dcd_file_edit->setEnabled(true);
+}
+
+String MolecularDynamicsDialog::getDCDFile() const
+{
+	if (!dcd_file_edit->isEnabled()) return "";
+	return String(dcd_file_edit->text().ascii());
+}
+
+Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const 
+{ 
+	return String(refresh_lineedit->text().ascii()).toUnsignedInt();
+}
+
 }} //namespaces

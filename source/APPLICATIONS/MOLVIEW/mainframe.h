@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.40 2003/08/26 18:35:35 amoll Exp $
+// $Id: mainframe.h,v 1.41 2003/08/27 12:23:18 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -27,8 +27,8 @@
 # include <BALL/VIEW/DIALOGS/displayProperties.h>
 #endif
 
-#ifndef BALL_VIEW_DIALOGS_LABELPROPERTIES_H
-# include <BALL/VIEW/DIALOGS/labelProperties.h>
+#ifndef BALL_VIEW_DIALOGS_LABELDIALOG_H
+# include <BALL/VIEW/DIALOGS/labelDialog.h>
 #endif
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -43,8 +43,8 @@
 # include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #endif
 
-#ifndef BALL_VIEW_FUNCTOR_POVRENDERER_H
-# include <BALL/VIEW/FUNCTOR/POVRenderer.h>
+#ifndef BALL_VIEW_RENDERING_POVRENDERER_H
+# include <BALL/VIEW/RENDERING/POVRenderer.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_FDPBDIALOG_H
@@ -179,28 +179,28 @@ class Mainframe
 
   private:
 
-	Scene*								scene_;
-	MolecularControl*			control_;
-	GeometricControl*			geometric_control_;
-	DisplayProperties*    display_properties_;
+	Scene*										scene_;
+	MolecularControl*					control_;
+	GeometricControl*					geometric_control_;
+	DisplayProperties*    		display_properties_;
 	AmberMinimizationDialog*	minimization_dialog_;
 	MolecularDynamicsDialog*	md_dialog_;
-  ContourSurfaceDialog* surface_dialog_;
-	LabelProperties*	    label_properties_;
-	MolecularProperties*  molecular_properties_;
-	MolecularFileDialog*  file_dialog_;
-	FDPBDialog*  					FDPB_dialog_;
-	Server*   						server_;
+  ContourSurfaceDialog* 		surface_dialog_;
+	LabelDialog*	    				label_dialog_;
+	MolecularProperties*  		molecular_properties_;
+	MolecularFileDialog*  		file_dialog_;
+	FDPBDialog*  							FDPB_dialog_;
+	Server*   								server_;
 
-	QSplitter*						hor_splitter_;
-	QSplitter*						vert_splitter_;
-	QSplitter*						vert_splitter2_;
-	QSplitter*						vert_splitter3_;
-	LogView*							logview_;
-	QThread* 							simulation_thread_;
+	QSplitter*								hor_splitter_;
+	QSplitter*								vert_splitter_;
+	QSplitter*								vert_splitter2_;
+	QSplitter*								vert_splitter3_;
+	LogView*									logview_;
+	QThread* 									simulation_thread_;
 	
-	bool 									fullscreen_;
-	bool 									stop_simulation_;
+	bool 											fullscreen_;
+	bool 											stop_simulation_;
 };
 
 }

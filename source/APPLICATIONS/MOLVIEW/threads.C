@@ -13,7 +13,8 @@ namespace BALL
 	using namespace VIEW;
 
 	SimulationThread::SimulationThread()
-		: QThread()
+		: QThread(),
+			main_frame_(0)
 	{
 	}
 
@@ -123,6 +124,15 @@ namespace BALL
 		}
 		AmberFF& amber =*(AmberFF*)md_->getForceField();
 
+		bool store_dcd = dcd_file_name_.size() != 0;
+		DCDFile dcd;
+		if (store_dcd) dcd.open(dcd_file_name_, File::OUT);
+			
+			
+		//	dcd = DCDFile(dcd_file_name_, File::OUT);
+		dcd.enableVelocityStorage();
+		SnapShotManager manager(amber.getSystem(), &amber, &dcd);
+		manager.setFlushToDiskFrequency(10);
 		// iterate until done and refresh the screen every "steps" iterations
 		
 		while (md_->getNumberOfIterations() < steps_ &&
@@ -144,7 +154,11 @@ namespace BALL
 				Scene* scene= (Scene*) Scene::getInstance(0);
 				scene->exportPNG();
 			}
+
+			if (store_dcd) manager.takeSnapShot();
 		}
+
+		if (store_dcd) manager.flushToDisk();
 
 		outputAmberResult_(*(AmberFF*)md_->getForceField());
 		output_("final RMS gadient    : " + String(amber.getRMSGradient()) + " kJ/(mol A)   after " 

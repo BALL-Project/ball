@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.38 2003/08/26 18:35:35 amoll Exp $
+# $Id: Makefile,v 1.39 2003/08/27 12:23:17 amoll Exp $
 #
 
 EXECUTABLE=molview
@@ -20,9 +20,9 @@ LIB_CXXFLAGS=$(NONLIB_CXXFLAGS) -DQT_THREAD_SUPPORT
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
+#	DIALOGS/DlgAbout.C\
+#	DIALOGS/DlgAboutData.C
 CPP_SOURCES=\
-//	DIALOGS/DlgAbout.C\
-//	DIALOGS/DlgAboutData.C\
 	icons.C\
 	main.C\
 	mainframe.C\

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.7 2003/08/27 11:04:16 amoll Exp $
+# $Id: Makefile,v 1.8 2003/08/27 12:23:19 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -15,7 +15,6 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	amberMinimizationDialog.C\
 	atomProperties.C\
-	preferences.C\
 	colorMeshDialog.C\
 	colorMeshDialogData.C\
 	contourSurfaceDialog.C\
@@ -24,64 +23,69 @@ CPP_SOURCES=\
 	displayPropertiesData.C\
 	dlgMoveOverlay.C\
 	dlgMoveOverlayData.C\
+	FDPBDialog.C\
+	FDPBDialogData.C\
 	labelDialog.C\
 	labelDialogData.C\
+	lightSettings.C\
+	lightSettingsData.C\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
-	snapShotVisualisation.C\
-	snapShotVisualisationData.C\
 	molecularFileDialog.C\
 	mouseSensitivity.C\
 	mouseSensitivityData.C\
+	parsedFunctionDialog.C\
+	parsedFunctionDialogData.C\
+	peptideDialog.C\
+	peptideDialogData.C\
+	preferences.C\
 	setCamera.C\
 	setCameraData.C\
-	lightSettings.C\
-	lightSettingsData.C\
-	stageSettings.C\
-	stageSettingsData.C\
 	pythonSettings.C\
 	pythonSettingsData.C\
-	FDPBDialog.C\
-	FDPBDialogData.C\
+	snapShotVisualisation.C\
+	snapShotVisualisationData.C\
+	stageSettings.C\
+	stageSettingsData.C\
 	transformationDialog.C\
-	transformationDialogData.C\
-	parsedFunctionDialog.C\
-	parsedFunctionDialogData.C
+	transformationDialogData.C
 
 MOC_SOURCES=\
 	amberMinimizationDialog_moc.C\
 	atomProperties_moc.C\
 	contourSurfaceDialog_moc.C\
-	preferences_moc.C\
 	colorMeshDialog_moc.C\
 	colorMeshDialogData_moc.C\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
 	dlgMoveOverlay_moc.C\
 	dlgMoveOverlayData_moc.C\
+	FDPBDialog_moc.C\
+	FDPBDialogData_moc.C\
 	labelDialog_moc.C\
 	labelDialogData_moc.C\
+	lightSettings_moc.C\
+	lightSettingsData_moc.C\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
-	snapShotVisualisation_moc.C\
-	snapShotVisualisationData_moc.C\
 	mouseSensitivity_moc.C\
 	mouseSensitivityData_moc.C\
-	setCamera_moc.C\
-	setCameraData_moc.C\
-	lightSettings_moc.C\
-	lightSettingsData_moc.C\
-	stageSettings_moc.C\
-	stageSettingsData_moc.C\
+	parsedFunctionDialog_moc.C\
+	parsedFunctionDialogData_moc.C\
+	peptideDialog_moc.C\
+	peptideDialogData_moc.C\
+	preferences_moc.C\
 	pythonSettings_moc.C\
 	pythonSettingsData_moc.C\
-	FDPBDialog_moc.C\
-	FDPBDialogData_moc.C\
+	setCamera_moc.C\
+	setCameraData_moc.C\
+	snapShotVisualisation_moc.C\
+	snapShotVisualisationData_moc.C\
+	stageSettings_moc.C\
+	stageSettingsData_moc.C\
 	transformationDialog_moc.C\
-	transformationDialogData_moc.C\
-	parsedFunctionDialog_moc.C\
-	parsedFunctionDialogData_moc.C
+	transformationDialogData_moc.C
 
 UIC_SOURCES=\
 	amberMinimizationDialogData.C\
@@ -95,6 +99,7 @@ UIC_SOURCES=\
 	molecularDynamicsDialogData.C\
 	mouseSensitivityData.C\
 	parsedFunctionDialogData.C\
+	peptideDialogData.C\
 	pythonSettingsData.C\
 	setCameraData.C\
 	snapShotVisualisationData.C\
@@ -141,6 +146,9 @@ molecularDynamicsDialog_moc.C:	$(HEADER_DIR)/molecularDynamicsDialog.h
 
 molecularFileDialog_moc.C:	$(HEADER_DIR)/molecularFileDialog.h
 	$(MOC) $(HEADER_DIR)/molecularFileDialog.h -o $@
+
+peptideDialog_moc.C:	$(HEADER_DIR)/peptideDialog.h
+	$(MOC) $(HEADER_DIR)/peptideDialog.h -o $@
 
 snapShotVisualisation_moc.C:	$(HEADER_DIR)/snapShotVisualisation.h
 	$(MOC) $(HEADER_DIR)/snapShotVisualisation.h -o $@

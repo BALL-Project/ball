@@ -1,8 +1,16 @@
-#ifndef BALL_APPLICATIONS_VIEW_THREADS_H
-#define BALL_APPLICATIONS_VIEW_THREADS_H
+#ifndef BALL_APPLICATIONS_MOLVIEW_THREADS_H
+#define BALL_APPLICATIONS_MOLVIEW_THREADS_H
 
 #ifndef BALL_COMMON_H
 	#include <BALL/common.h>
+#endif
+
+#ifndef BALL_DATATYPE_STRING_H
+ #include <BALL/DATATYPE/string.h>
+#endif
+
+#ifndef BALL_FORMAT_DCDFILE_H
+ #include <BALL/FORMAT/DCDFile.h>
 #endif
 
 #include <qthread.h>
@@ -48,6 +56,8 @@ namespace BALL
 			///
 			void setMainframe(Mainframe* mf) {main_frame_ = mf;}
 
+			void setDCDFileName(const String& name) {dcd_file_name_ = name;}
+
 		protected:
 
 			/// Provokes an update of the Scene with rebuild of the display-lists
@@ -64,6 +74,7 @@ namespace BALL
 
 			Size steps_between_updates_;
 			Mainframe* main_frame_;
+			String dcd_file_name_;
 		};
 
 

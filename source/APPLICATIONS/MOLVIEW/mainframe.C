@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.59 2003/08/26 18:35:35 amoll Exp $
+// $Id: mainframe.C,v 1.60 2003/08/27 12:23:18 amoll Exp $
 
 
 #include "mainframe.h"
@@ -16,9 +16,8 @@
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 
-#include <BALL/VIEW/DIALOGS/fileDialog.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
-#include <BALL/VIEW/PRIMITIV/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
@@ -45,18 +44,13 @@
 
 // testing
 #include <BALL/VIEW/DIALOGS/parsedFunctionDialog.h>
+#include <qlineedit.h>
+
+namespace BALL
+{
 
 using namespace std;
-namespace BALL
-{
 using namespace BALL::VIEW;
-using BALL::MOLVIEW::PeptideDialog;
-
-
-namespace BALL
-{
-
-using BALL::MOLVIEW::PeptideDialog;
 
 Mainframe::Mainframe(QWidget* parent, const char* name)
 	:	MainControl(parent, name, ".molview"),
@@ -65,7 +59,7 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 		geometric_control_(0),
 		display_properties_(0),
 		minimization_dialog_(0),
-		label_properties_(0),
+		label_dialog_(0),
 		molecular_properties_(0),
 		file_dialog_(0),
 		server_(0),
@@ -128,8 +122,8 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	surface_dialog_ = new ContourSurfaceDialog(this);
 	CHECK_PTR(surface_dialog_);
 
-	label_properties_ = new LabelProperties(this);
-	CHECK_PTR(label_properties_);
+	label_dialog_ = new LabelDialog(this);
+	CHECK_PTR(label_dialog_);
 	
 	file_dialog_ = new MolecularFileDialog(this);
 	CHECK_PTR(file_dialog_);
@@ -253,17 +247,22 @@ void Mainframe::checkMenuEntries()
 
 void Mainframe::exportPOVRay()
 {
-	FileDialog pov("Export POVRay File", QFileDialog::AnyFile, this);
-	if (pov.exec())
-	{
-		POVRenderer pr(pov.getFileName());
-		pr.width  = scene_->width();
-		pr.height = scene_->height(); 
-		pr.init(*(scene_->getStage()));
-		scene_->exportScene(pr);
-		pr.finish();
-	}
-	removeModularWidget(&pov);	
+	QFileDialog *fd = new QFileDialog(this, "", true);
+	fd->setMode(QFileDialog::ExistingFile);
+	fd->setCaption("Export POVRay File");
+	fd->setViewMode(QFileDialog::Detail);
+
+	if (!fd->exec()== QDialog::Accepted) return;
+
+	String filename(fd->selectedFile().ascii());
+	delete fd;
+
+	POVRenderer pr(filename);
+	pr.width  = scene_->width();
+	pr.height = scene_->height(); 
+	pr.init(*(scene_->getStage()));
+	scene_->exportScene(pr);
+	pr.finish();
 }
 	
 
@@ -588,8 +587,10 @@ void Mainframe::about()
 	pfd->show();
 	return;
 	
+	/*
 	DlgAbout about_box;
 	about_box.exec();
+	*/
 	
 }
 
