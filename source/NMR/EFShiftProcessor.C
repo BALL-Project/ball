@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.C,v 1.9 2000/09/22 11:59:48 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.10 2000/09/25 19:10:45 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -275,12 +275,6 @@ namespace BALL
 				}
 			}
 		
-			// Store all charged atoms in the effector list.
-			if (atom_ptr->getCharge() != 0.0)
-			{
-				effector_list_.push_back(atom_ptr);
-			}
-
 			// Assign the charge (if it is defined for this atom).
 			String full_name = atom_ptr->getFullName();
 			full_name.substitute(":", " ");
@@ -297,6 +291,13 @@ namespace BALL
 					atom_ptr->setCharge(charge_map_[full_name]);
 				}
 			}
+
+			// Store all charged atoms in the effector list.
+			if (atom_ptr->getCharge() != 0.0)
+			{
+				effector_list_.push_back(atom_ptr);
+			}
+
 		}
 		
 		return Processor::CONTINUE;
