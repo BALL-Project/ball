@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.2 2000/10/11 09:39:36 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.3 2000/10/17 10:11:04 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -253,8 +253,8 @@ namespace BALL
 			TSESVertex<T>* vertex;
 			vertex = createVertex(probe.p,atom,index);//,probe.radius);
 			face->vertex.push_back(vertex);
-			int tf1, tf2;
-			rsface->getEdges(index,tf1,tf2);
+			Index tf1, tf2;
+			rsface->getEdges(index, tf1, tf2);
 			toric_faces[tf1]->vertex.push_back(vertex);
 			toric_faces[tf2]->vertex.push_back(vertex);
 			contact_faces[index]->vertex.push_back(vertex);
@@ -262,8 +262,9 @@ namespace BALL
 		}
 		
 
-		TSESEdge<T>* createConcaveEdge(TSESFace<T>* spheric_face, Position p1, Position p2,
-																	 Index index, const T& radius_of_probe)
+		TSESEdge<T>* createConcaveEdge
+			(TSESFace<T>* spheric_face, Position p1, Position p2,
+			 Index index, const T& radius_of_probe)
 		{
 			TSESEdge<T>* edge = new TSESEdge<T>();
 			edge->vertex1 = spheric_face->vertex[p1];
@@ -277,10 +278,11 @@ namespace BALL
 			TVector3<T> normal = (rsface->getCenter()-edge->vertex1->p)%(rsface->getCenter()-edge->vertex2->p);
 			TVector3<T> test_point = spheric_face->vertex[3-p1-p2]->p;      // third vertex
 			if (Maths::isLess((test_point*normal),(rsface->getCenter()*normal)))
-				{
-					normal.negate();
-				}
+			{
+				normal.negate();
+			}
 			edge->circle = TCircle3<T>(rsface->getCenter(),normal,radius_of_probe);
+
 			return edge;
 		}
 
