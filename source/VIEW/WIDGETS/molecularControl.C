@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91 2004/12/19 13:33:58 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.1 2005/01/13 12:59:23 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
@@ -28,9 +29,11 @@ MolecularControl::SelectableListViewItem::SelectableListViewItem(QListViewItem* 
 	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 		composite_(composite),
 		control_reference_(control),
-		ignore_change_(false)
+		ignore_change_(true)
 {
 	setText(1, type);
+	setOn(composite->isSelected());
+	ignore_change_ = false;
 }
 
 
@@ -39,9 +42,11 @@ MolecularControl::SelectableListViewItem::SelectableListViewItem(QListView* pare
 	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 		composite_(composite),
 		control_reference_(control),
-		ignore_change_(false)
+		ignore_change_(true)
 {
 	setText(1, type);
+	setOn(composite->isSelected());
+	ignore_change_ = false;
 }
 
 void MolecularControl::SelectableListViewItem::setSelected(bool state)
@@ -389,12 +394,13 @@ void MolecularControl::compositeProperties()
 
 void MolecularControl::bondProperties()
 {
-	if (((Atom*) context_composite_)->countBonds() == 0) 
+	Atom* const atom = dynamic_cast<Atom*>(context_composite_);
+	if (atom->countBonds() == 0) 
 	{
 		setStatusbarText("Atom has no bonds!");
 		return;
 	}
-	BondProperties bs((Atom*) context_composite_, this);
+	BondProperties bs(atom, this);
 	bs.exec();
 }
 	
@@ -420,12 +426,12 @@ void MolecularControl::showFilename()
 {
 	if (context_composite_ == 0) return;
 
-	Composite* c_ptr = &context_composite_->getRoot();
+	const AtomContainer* const ac = dynamic_cast<AtomContainer*>(&context_composite_->getRoot());
 	
-	if (RTTI::isKindOf<AtomContainer>(*c_ptr))
+	if (ac != 0)
 	{
 		setStatusbarText("Composite is from file  " +
-											((const AtomContainer*)c_ptr)->getProperty("FROM_FILE").getString());
+											ac->getProperty("FROM_FILE").getString());
 	}
 	else
 	{
@@ -449,7 +455,7 @@ void MolecularControl::updateSelection()
 		if (item->isSelected())
 		{
 			// always add systems
-			Composite* composite = item->getComposite();
+			Composite* const composite = item->getComposite();
 			if (composite->getParent() == 0)
 			{
 				selected_.push_back(composite);
@@ -470,11 +476,16 @@ void MolecularControl::updateSelection()
 		}
 	}
 
-	
+
 	if (selected_.size() == 1 && RTTI::isKindOf<System>(**selected_.begin()))
 	{
 		context_composite_ = *selected_.begin();
-		showFilename();
+
+		bool is_in_move_mode = 
+			(Scene::getInstance(0) != 0) &&
+			(Scene::getInstance(0)->getMode() == Scene::MOVE__MODE);
+	
+		if (!is_in_move_mode) showFilename();
 	}
 
 	// sent new selection through tree
@@ -923,10 +934,8 @@ MolecularControl::SelectableListViewItem*
 		// no, insert into the current item
 		new_item = new SelectableListViewItem(parent, name, type, &composite, *this);
 	}
-	CHECK_PTR(new_item);
 
 	composite_to_item_[&composite] = new_item;
-
 	recurseGeneration_(new_item, composite);
 
 	return new_item;
