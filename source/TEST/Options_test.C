@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Options_test.C,v 1.7 2003/05/23 06:47:51 oliver Exp $
+// $Id: Options_test.C,v 1.8 2003/06/17 13:36:00 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/options.h>
 
-START_TEST(Options, "$Id: Options_test.C,v 1.7 2003/05/23 06:47:51 oliver Exp $")
+START_TEST(Options, "$Id: Options_test.C,v 1.8 2003/06/17 13:36:00 amoll Exp $")
 
 using BALL::Options;
 using BALL::Vector3;
@@ -17,62 +17,77 @@ using BALL::Vector3;
 using namespace BALL;
 
 Options*	options;
-CHECK(default constructor)
+CHECK(Options() throw())
 	options = new Options;
 	TEST_NOT_EQUAL(options, 0)
 RESULT
 
-CHECK(~Options())
+CHECK(~Options() throw())
 	delete options;
 RESULT
 
-CHECK(setname(String)/getName())
+CHECK(void setName(const String& name) throw())
 	options = new Options;
 	options->setName("ABCDEFG");
+RESULT
+
+CHECK(const String& getName() const throw())
 	TEST_EQUAL(options->getName(), "ABCDEFG");
 RESULT
 
 Options*	options2;
-CHECK(Options(Options&))
+CHECK(Options(const Options& options, bool deep = true) throw())
 	options2 = new Options(*options);
 	TEST_EQUAL(options2->getName(), options->getName())
 	TEST_EQUAL(options2->get("ABC"), options->get("ABC"))
 RESULT
 
-CHECK(setBool/getBool)
+CHECK(void setBool(const String& key, const bool value) throw())
 	options->setBool("BOOL", true);
 	TEST_EQUAL(options->getBool("BOOL"), true)
 	options->setBool("BOOL", false);
+RESULT
+
+CHECK(bool getBool(const String& key) const throw())
 	TEST_EQUAL(options->getBool("BOOL"), false)
 	TEST_EQUAL(options->getBool("UNDEFINED"), false)
 RESULT
 
-CHECK(setReal(String&, float)/getReal(String&))
+CHECK(void setReal(const String& key, const double value) throw())
 	options->setReal("REAL", 1.23456);
+RESULT
+
+CHECK(double getReal(const String& key) const throw())
 	TEST_REAL_EQUAL(1.23456, options->getReal("REAL"))
 	TEST_REAL_EQUAL(options->getReal("UNDEFINED"), 0.0)
 RESULT
 
 Vector3	vector(1.0, 2.0, 3.0);
-CHECK(setVector/getVector)
+CHECK(void setVector(const String& key, const Vector3& value) throw())
 	options->setVector("VECTOR", vector);
 	TEST_EQUAL(vector, options->getVector("VECTOR"))
+RESULT
+
+CHECK(Vector3 getVector(const String& key) const throw())
 	Vector3 v(0.0, 0.0, 0.0);
 	TEST_EQUAL(options->getVector("UNDEFINED"), v)
 RESULT
 
-CHECK(setInteger/getInteger)
+CHECK(void setInteger(const String& key, const long value) throw())
 	options->setInteger("INT", 1234567890);
 	TEST_EQUAL(1234567890, options->getInteger("INT"))
+RESULT
+
+CHECK(long getInteger(const String& key) const throw())
 	TEST_EQUAL(options->getInteger("UNDEFINED"), 0)
 RESULT
 
-CHECK(has)
+CHECK([EXTRA]has)
 	TEST_EQUAL(options->has("BOOL"), true)
 	TEST_EQUAL(options->has("UNDEFINED"), false)
 RESULT
 
-CHECK(isInteger)
+CHECK(bool isInteger(const String& key) const throw())
 	TEST_EQUAL(options->isInteger("INT"), true)
 	TEST_EQUAL(options->isInteger("REAL"), false)
 	TEST_EQUAL(options->isInteger("BOOL"), false)
@@ -80,7 +95,7 @@ CHECK(isInteger)
 	TEST_EQUAL(options->isInteger("undefined"), false)
 RESULT
 
-CHECK(isBool)
+CHECK(bool isBool(const String& key) const throw())
 	TEST_EQUAL(options->isBool("BOOL"), true)
 	TEST_EQUAL(options->isBool("UNDEFINED"), false)
 	TEST_EQUAL(options->isBool("INT"), false)
@@ -88,7 +103,8 @@ CHECK(isBool)
 	TEST_EQUAL(options->isBool("VECTOR"), false)
 RESULT
 
-CHECK(isReal)
+
+CHECK(bool isReal(const String& key) const throw())
 	TEST_EQUAL(options->isReal("REAL"), true)
 	TEST_EQUAL(options->isReal("INT"), true)
 	TEST_EQUAL(options->isReal("BOOL"), false)
@@ -96,7 +112,8 @@ CHECK(isReal)
 	TEST_EQUAL(options->isBool("VECTOR"), false)
 RESULT
 
-CHECK(isVector)
+
+CHECK(bool isVector(const String& key) const throw())
 	TEST_EQUAL(options->isVector("INT"), false)
 	TEST_EQUAL(options->isVector("REAL"), false)
 	TEST_EQUAL(options->isVector("BOOL"), false)
@@ -106,42 +123,42 @@ CHECK(isVector)
 	TEST_EQUAL(options->isVector("SVECTOR"), true)
 RESULT
 
-CHECK(isSet)
+CHECK(bool isSet(const String& key) const throw())
 	TEST_EQUAL(options->isSet("INT"), true)
 	TEST_EQUAL(options->isSet("undefined"), false)
 RESULT
 
-CHECK(set(String&, String&)/get(String&))
+CHECK(void set(const String& key, const String& value) throw())
 	options->set("ABC", "DEF");	
 	TEST_EQUAL("DEF", options->get("ABC"))
 	TEST_EQUAL(options->get("UNDEFINED"), "")
 RESULT
 
-CHECK(setDefault)
+CHECK(String setDefault(const String& key, const String& value) throw())
 	options->setDefault("DEF", "default");
 	options->setDefault("DEF", "default2");
 	TEST_EQUAL(options->get("DEF"), "default")
 RESULT
 
-CHECK(setDefaultInteger)
+CHECK(long setDefaultInteger(const String& key, const long value) throw())
 	options->setDefaultInteger("DEFINT", 123456);
 	options->setDefaultInteger("DEFINT", 234567);
 	TEST_EQUAL(options->getInteger("DEFINT"), 123456)
 RESULT
 
-CHECK(setDefaultReal)
+CHECK(double setDefaultReal(const String& key, const double value) throw())
 	options->setDefaultReal("DEFREAL", 1.23456);
 	options->setDefaultReal("DEFREAL", 2.34567);
 	TEST_REAL_EQUAL(options->getReal("DEFREAL"), 1.23456)
 RESULT
 
-CHECK(setDefaultBool)
+CHECK(bool setDefaultBool(const String& key, const bool value) throw())
 	options->setDefaultBool("DEFBOOL", true);
 	options->setDefaultBool("DEFBOOL", false);
 	TEST_EQUAL(options->getBool("DEFBOOL"), true)
 RESULT
 
-CHECK(readOptionFile)
+CHECK(bool readOptionFile(const String& filename) throw())
 	Options o;
 	TEST_EQUAL(o.readOptionFile("data/OptionsFile1.txt"), true)
 	TEST_EQUAL(o.getBool("BOOL"), true)
@@ -166,13 +183,13 @@ CHECK(readOptionFile)
 RESULT
 
 String filename;
-CHECK(writeOptionFile)
+CHECK(bool writeOptionFile(const String& filename) const throw())
 	NEW_TMP_FILE(filename)
 	options->writeOptionFile(filename);
 	TEST_FILE_REGEXP(filename.c_str(), "data/OptionsFile2.txt")
 RESULT
 
-CHECK(dump)
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	using std::ofstream;
 	using std::ios;
 	NEW_TMP_FILE(filename)
@@ -183,6 +200,40 @@ CHECK(dump)
 RESULT
 delete options;
 delete options2;
+
+
+Options o;
+o.setInteger("INT", 1234);
+CHECK(String get(const String& key) const throw())
+	TEST_EQUAL("1234", o.get("INT"))
+	TEST_EQUAL("", o.get(""))
+RESULT
+
+CHECK(bool operator != (const Options& option) const throw())
+	Options o2;
+	TEST_EQUAL(o2 != o, true)
+	o2 = o;
+	TEST_EQUAL(o2 != o, false)
+RESULT
+
+CHECK(bool operator == (const Options& option) const throw())
+	Options o2;
+	TEST_EQUAL(o2 == o, false)
+	o2 = o;
+	TEST_EQUAL(o2 == o, true)
+RESULT
+
+CHECK(const Options& operator = (const Options& options) throw())
+	Options o2(o);
+	TEST_EQUAL(o2 == o, true)
+RESULT
+
+CHECK(void clear() throw())
+	o.clear();
+	Options o2;
+	TEST_EQUAL(o2 == o, true)
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
