@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.19 2000/11/27 16:21:06 amoll Exp $
+// $Id: bitVector.h,v 1.20 2000/11/30 22:59:33 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -86,12 +86,17 @@ namespace BALL
 
 		/** Detailed constructor.
 				For use with nonconst bitvector.
+				The bitvector can be resized by accessing bits out of the bitvectors range.
+				@exception NullPointer if bitvector is equal to 0
 		*/
 		Bit(BitVector* bitvector, Index index = 0) 
 			throw(Exception::NullPointer);
 
 		/** Detailed constructor.
 				For use with const bitvector.
+				@exception NullPointer if bitvector is equal to 0
+				@exception IndexUnderflow if index is too small
+				@exception IndexOverflow	if index is greater than the size of bitvector
 		*/
 		Bit(const BitVector* const bitvector, Index index = 0) 
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
@@ -122,7 +127,9 @@ namespace BALL
 		const Bit& operator = (const Bit& bit) throw();
 
 		/** Assignment operator.
-				Assign a bool value to this instance
+				Assign a bool value to this instance.
+				The bit in the bitvector is set to the given value.
+				@exception IllegalOperation if instance points to a const bitvector
 		*/
 		const Bit& operator = (bool bit) 
 			throw(Exception::NullPointer, IllegalOperation);
