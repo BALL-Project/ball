@@ -5,6 +5,7 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	basetube.C\
 	line.C\
+	mesh.C\
 	point.C\
 	sphere.C\
 	tube.C
