@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.10 2000/08/06 15:27:52 amoll Exp $
+// $Id: binarySearchTree.h,v 1.11 2000/08/07 09:53:32 oliver Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -538,7 +538,7 @@ namespace BALL
 
 		DataType data_;
 
-		friend class TreeItemProcessor_
+		class TreeItemProcessor_
 			: public UnaryProcessor<BSTreeItem>
 		{
 			public:
@@ -555,6 +555,7 @@ namespace BALL
 
 			UnaryProcessor<DataType>* processor_;
 		};
+		friend class TreeItemProcessor_;
 
 	};
 
