@@ -1,4 +1,4 @@
-// $Id: atomVector.h,v 1.9 2001/06/21 02:24:27 oliver Exp $
+// $Id: atomVector.h,v 1.10 2001/06/26 02:46:56 oliver Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -113,7 +113,9 @@ namespace BALL
 		// BAUSTELLE: PROBLEM IN DOCU: using
     /* Random access operator
     */
-    using std::vector<Atom*>::operator [];
+		// BAUSTELLE: problem with GCC3 using std::vector<Atom*>::operator [];
+		Atom* const & operator [] (int i) const { return std::vector<Atom*>::operator [] (i); }
+    Atom*& operator [] (int i) { return std::vector<Atom*>::operator [] (i); }                                                            
 
 		/**	Store the current atom positions.
 				AtomVector also contains an array with positions	
