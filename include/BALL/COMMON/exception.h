@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.26 2001/07/15 13:44:54 oliver Exp $
+// $Id: exception.h,v 1.27 2001/07/25 11:23:51 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -54,6 +54,7 @@ namespace BALL
 		*/
 		
 		class GeneralException 
+			:	std::exception
 		{
 			public:
 
@@ -77,7 +78,7 @@ namespace BALL
 				throw();
 
 			/// Destructor
-			virtual ~GeneralException();
+			virtual ~GeneralException() throw();
 			//@}
 
 			/**	@name	Accessors
