@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.49 2004/03/02 01:00:15 amoll Exp $
+// $Id: molecularControl.C,v 1.50 2004/03/02 01:23:07 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -159,6 +159,7 @@ MolecularControl::~MolecularControl()
 void MolecularControl::checkMenu(MainControl& main_control)
 	throw()
 {
+	String hint;
 	// prevent changes to composites while simulations are running
 	
 	// check for paste-slot: enable only if one selected item &&
@@ -170,27 +171,56 @@ void MolecularControl::checkMenu(MainControl& main_control)
 										 main_control.compositesAreMuteable();
 	if (allow_paste)
 	{
+		hint = "Paste a copied or cuted object into current selected object.";
 		List<Composite*>::Iterator it = getCopyList_().begin();
 		for (; it != getCopyList_().end(); it++)
 		{
 			if (!pasteAllowedFor_(**it)) 
 			{
 				allow_paste = false;
+				hint = "Invalid Combination, cant paste into this entity.";
 				break;
 			}
 		}
 	}
+	else
+	{
+		if (getSelection().size() != 1)
+			hint = "One item must be selected to paste into.";
+		else if (getCopyList_().size() == 0)
+			hint = "No copied/cuted object.";
+		else if (!main_control.compositesAreMuteable())
+			hint = "Simulation running, cant copy meanwhile";
+	}
 	menuBar()->setItemEnabled(paste_id_, allow_paste);	
+ 	getMainControl()->setMenuHint(paste_id_, hint);
 
+	// ------------------------------------------------------------------
 	// check for clearClipboard-slot: enable only if copy_list_ not empty
 	bool copy_list_filled = (getCopyList_().size() > 0);
 	menuBar()->setItemEnabled(clipboard_id_, copy_list_filled && 
 																					 main_control.compositesAreMuteable());
+	if (!menuBar()->isItemEnabled(clipboard_id_))
+	{
+ 		hint = "No item copied/cuted or simulation running";
+	} 
+	else
+	{
+		hint = "Clear the items in the clipboard";
+	}
+ 	getMainControl()->setMenuHint(clipboard_id_, hint);
 
+	// ------------------------------------------------------------------
 	// check for cut and delete slot 
 	bool list_filled = (selected_.size() != 0 && main_control.compositesAreMuteable());
+	
+	if (list_filled) hint = "";
+	else hint = "No item selected or simulation running";
+	
 	menuBar()->setItemEnabled(cut_id_, list_filled);
+ 	getMainControl()->setMenuHint(cut_id_, hint);
 	menuBar()->setItemEnabled(copy_id_, list_filled);	
+ 	getMainControl()->setMenuHint(copy_id_, hint);
 
 	// enable global delete entry for all GenericControls.
 	if (list_filled) getMainControl()->enableDeleteEntry();
