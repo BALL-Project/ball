@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18 2004/07/21 13:01:28 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.1 2004/12/30 15:05:47 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -108,24 +108,14 @@ namespace BALL
 		String POVRenderer::POVColorRGBA(const ColorRGBA& input)
 			throw()
 		{
-			float color_val;
-			
 			String output = "rgbft <";
-			input.getRed().get(color_val);
-			output += String(color_val / 255.);
-			output += ", ";
-			input.getGreen().get(color_val);
-			output += String(color_val / 255.);
-			output += ", ";
-			input.getBlue().get(color_val);
-			output += String(color_val / 255.);
-			output += ", ";
+ 			output += trimFloatValue_(input.getRed()) + ", ";
+ 			output += trimFloatValue_(input.getGreen()) + ", ";
+ 			output += trimFloatValue_(input.getBlue()) + ", ";
 			// TODO: sensible parameter for "filter"
-			output += "0.00";
-			output += ", ";
+			output += "0.0 ,";
 			// TODO: transmit seems not to be linear in alpha
-			input.getAlpha().get(color_val);
-			output += String(1. - color_val / 255.);
+			output += trimFloatValue_(1. - (float) input.getAlpha());
 			output += ">";
 
 			return output;
@@ -137,10 +127,7 @@ namespace BALL
 			String output = "finish { BALLFinish";
 			output += object;
 
-			float color_val;
-			input.getAlpha().get(color_val);
-
-			if (color_val  >= 255)
+			if ((Size) input.getAlpha() >= 255)
 			{
 				output += "Solid";
 			}
@@ -158,12 +145,24 @@ namespace BALL
 			throw()
 		{
 			String output = "<";
-			output += String(input.x);
-			output += ", ";
-			output += String(input.y);
-			output += ", ";
-			output += String(input.z);
+			output += trimFloatValue_(input.x) + ", ";
+			output += trimFloatValue_(input.y) + ", ";
+			output += trimFloatValue_(input.z);
 			output += ">";
+
+			return output;
+		}
+
+		String POVRenderer::trimFloatValue_(float value)
+		{
+			String output = String(value).trimRight("0");
+			for (Position p = 0; p < output.size(); p++)
+			{
+				if (output[p] == '.')
+				{
+					return output.left(p + 3);
+				}
+			}
 
 			return output;
 		}
@@ -262,12 +261,16 @@ namespace BALL
 			// Define the finish we will use for our molecular objects (defining the molecular
 			// "material properties"
 			// TODO: allow for more than one finish in order to have seperate parameters for different objects
-			(*outfile_) << "#declare BALLFinish            		 = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
-			(*outfile_) << "#declare BALLFinishSphereSolid      = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
-			(*outfile_) << "#declare BALLFinishSphereTransp     = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
-			(*outfile_) << "#declare BALLFinishTubeSolid        = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
-			(*outfile_) << "#declare BALLFinishTubeTransp       = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
-			(*outfile_) << "#declare BALLFinishMesh             = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl << endl;
+			(*outfile_) << "#declare BALLFinish            		 = finish { ";
+			// stage uses opengl values for material parameters (-1.0 -> 1.0), so normalize these
+			(*outfile_) << "specular " 	<< stage.getSpecularIntensity() / 2.0 + 0.5 << " ";
+			(*outfile_) << "diffuse " 	<< stage.getDiffuseIntensity() 	/ 2.0 + 0.5 << " ";
+			(*outfile_) << "ambient "	 	<< stage.getAmbientIntensity() 	/ 2.0 + 0.5 << " }" << endl;
+			(*outfile_) << "#declare BALLFinishSphereSolid      = BALLFinish" << endl;
+			(*outfile_) << "#declare BALLFinishSphereTransp     = BALLFinish" << endl;
+			(*outfile_) << "#declare BALLFinishTubeSolid        = BALLFinish" << endl;
+			(*outfile_) << "#declare BALLFinishTubeTransp       = BALLFinish" << endl;
+			(*outfile_) << "#declare BALLFinishMesh             = BALLFinish" << endl;
 			
 			// now begin the CSG union containing all the geometric objects
 			(*outfile_) << "union {" << endl;
@@ -293,8 +296,7 @@ namespace BALL
 			(*outfile_) << "}" << endl;
 
 
-			if (outfile_ != 0 &&
-					RTTI::isKindOf<File>(*outfile_))
+			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
 			{
 				(*(File*)outfile_).close();
 			}
