@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.8 2002/12/03 15:53:39 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.9 2002/12/04 23:10:46 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -848,7 +848,7 @@ namespace BALL
 			}
 			NewSelectionMessage* new_message = new NewSelectionMessage;
 			notify_(new_message);
-			Log.info() << "Selected " + String(nr) + "items."<< std::endl;
+			Log.info() << "Selected " + String(nr) + " items."<< std::endl;
 		}
  
 		const HashSet<Composite*>& MainControl::getSelection() const
