@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GenericPDBFile_test.C,v 1.6 2004/11/07 14:44:15 oliver Exp $
+// $Id: GenericPDBFile_test.C,v 1.7 2004/11/07 19:54:59 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 #include <BALL/DATATYPE/options.h>
 ///////////////////////////
 
-START_TEST(GenericPDBFile, "$Id: GenericPDBFile_test.C,v 1.6 2004/11/07 14:44:15 oliver Exp $")
+START_TEST(GenericPDBFile, "$Id: GenericPDBFile_test.C,v 1.7 2004/11/07 19:54:59 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -117,9 +117,9 @@ PDB::Character my_character;
 PDB::ResidueName my_residue_name;
 PDB::AChar my_achar;
 PDB::LString4 my_lstring4;
-PDB::LString2 my_lstring2;
-PDB::Real my_real;
-PDB::Continuation my_cont;
+PDB::LString2 my_lstring2 = "  ";
+PDB::Real my_real = 0;
+PDB::Continuation my_cont = 0;
 PDB::PDBList my_list;
 
 CHECK(bool readRecordANISOU(PDB::Integer serial_number, PDB::Atom atom_name, PDB::Character alternate_location_indicator, PDB::ResidueName residue_name, PDB::Character chain_ID, PDB::Integer residue_sequence_number, PDB::AChar insertion_code, PDB::Integer u11, PDB::Integer u22, PDB::Integer u33, PDB::Integer u12, PDB::Integer u13, PDB::Integer u23, PDB::LString4 segment_ID, PDB::LString2 element_symbol, PDB::LString2 charge))

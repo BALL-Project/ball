@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.26 2004/09/15 11:44:24 amoll Exp $
+// $Id: DCDFile_test.C,v 1.27 2004/11/07 19:54:59 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.26 2004/09/15 11:44:24 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.27 2004/11/07 19:54:59 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,8 +23,7 @@ using namespace BALL;
 
 String dcd_test_file("data/DCD_test.dcd");
 
-DCDFile* p = new DCDFile;
-
+DCDFile* p = 0;
 CHECK(DCDFile() throw())
   p = new DCDFile;
 	TEST_NOT_EQUAL(p, 0)
@@ -228,9 +227,10 @@ RESULT
 
 CHECK(BALL_CREATE(DCDFile))
 	DCDFile dcd(filename);
-	DCDFile* dcd_ptr = (DCDFile*) dcd.create();
+	DCDFile* dcd_ptr = (DCDFile*)dcd.create();
 	TEST_NOT_EQUAL(dcd_ptr, 0)
 	TEST_EQUAL(dcd_ptr->getName(), filename)
+	delete dcd_ptr;
 RESULT
 
 CHECK(bool init() throw())

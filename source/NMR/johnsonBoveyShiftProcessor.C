@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.C,v 1.16 2003/08/26 09:18:09 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.17 2004/11/07 19:54:59 oliver Exp $
 //
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
@@ -29,15 +29,14 @@ namespace BALL
 	double JohnsonBoveyShiftProcessor::carlsonEllipticalIntegral1_(double x,double y,double z)
 	{
 		// Lokale Konstanten Definitionen :
-		
-		const double ERRTOL=0.08;
-		const double TINY=1.5e-38;
-		const double BIG=3.0e37;
-		const double THIRD=(1.0/3.0);
-		const double C1=(1.0/24.0);
-		const double C2=0.1;
-		const double C3=(3.0/44.0);
-		const double C4=(1.0/14.0);
+		const double ERRTOL = 0.08;
+		const double TINY = 1.5e-38;
+		const double BIG = 3.0e37;
+		const double THIRD = (1.0/3.0);
+		const double C1 = (1.0/24.0);
+		const double C2 = 0.1;
+		const double C3 = (3.0/44.0);
+		const double C4 = (1.0/14.0);
 		
 		/*
 		Computes Carlson's elliptic integral of the first kind, Rf(x,y,z). x,y,z must be nonnegative, and at most
@@ -49,7 +48,7 @@ namespace BALL
 		
 		if (BALL_MIN3(x, y, z)  < 0.0 || BALL_MIN3(x + y, x + z ,y + z) < TINY || BALL_MAX3(x, y, z) > BIG)
 		{
-			Log.error() << "JohnsonBoveyShiftProcessor::rf : arguemnt error" << endl;
+			Log.error() << "JohnsonBoveyShiftProcessor::rf : argument error" << endl;
 			return 0;
 		}
 		else 	
@@ -168,6 +167,12 @@ namespace BALL
 		
 	JohnsonBoveyShiftProcessor::JohnsonBoveyShiftProcessor()
 		throw()
+		:	proton_list_(),
+			atom_list_(),
+			aromat_list_(),
+			rings_(),
+			residues_with_rings_(),
+			expressions_()
 	{
 	}
 

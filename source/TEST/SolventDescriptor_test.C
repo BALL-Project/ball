@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SolventDescriptor_test.C,v 1.10 2003/05/25 21:38:12 oliver Exp $
+// $Id: SolventDescriptor_test.C,v 1.11 2004/11/07 19:55:00 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
  
 ///////////////////////////
 #include <BALL/SOLVATION/solventDescriptor.h>
 ///////////////////////////
 	  
-START_TEST(SolventDescriptor, "$Id: SolventDescriptor_test.C,v 1.10 2003/05/25 21:38:12 oliver Exp $")
+START_TEST(SolventDescriptor, "$Id: SolventDescriptor_test.C,v 1.11 2004/11/07 19:55:00 oliver Exp $")
 		 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,7 +37,7 @@ SAD.element_symbol="L";
 SAD.radius=1.999;
 SADVector.push_back(SAD);
 CHECK(SolventDescriptor(const String& name, float number_density, const std::vector<SolventAtomDescriptor>& atom_list))
-	s_ptr = new SolventDescriptor("SolvD1",1.234,SADVector);
+	s_ptr = new SolventDescriptor("SolvD1", 1.234, SADVector);
 	TEST_NOT_EQUAL(s_ptr, 0)
 	TEST_EQUAL(s_ptr->getName(), "SolvD1")
 	TEST_REAL_EQUAL(s_ptr->getNumberDensity(), 1.234)
@@ -93,7 +93,7 @@ CHECK(SolventDescriptor::getAtomDescriptor(Position index) const  throw())
 RESULT
 
 CHECK(SolventDescriptor::bool operator == (const SolventDescriptor& descriptor) const  throw())
-  TEST_EQUAL(*s_ptr==*s_ptr2,true)
+  TEST_EQUAL(*s_ptr == *s_ptr2, true)
 	s_ptr2->setName("SolvD1a");
 	TEST_EQUAL(*s_ptr==*s_ptr2, true)
 	s_ptr2->getAtomDescriptor(0).radius = 99.99;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.34 2004/05/27 19:49:59 oliver Exp $
+// $Id: forceField.C,v 1.35 2004/11/07 19:54:59 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -18,10 +18,14 @@ namespace BALL
 
 	// default constructor
 	ForceField::ForceField()
-		:	periodic_boundary(*this),
+		:	options(),
+			periodic_boundary(*this),
 			system_(0),
+			atoms_(),
+			parameters_(),
 			valid_(false),
 			name_("Force Field"),
+			energy_(0.0),
 			number_of_movable_atoms_(0),
 			use_selection_(false),
 			selection_enabled_(true),
@@ -120,7 +124,19 @@ namespace BALL
 
 	// Constructor initialized with a system
 	ForceField::ForceField(System& system)
-		:	periodic_boundary(*this)
+		:	options(),
+			periodic_boundary(*this),
+			system_(0),
+			atoms_(),
+			parameters_(),
+			valid_(false),
+			name_("Force Field"),
+			energy_(0.0),
+			number_of_movable_atoms_(0),
+			use_selection_(false),
+			selection_enabled_(true),
+			update_time_stamp_(),
+			setup_time_stamp_()
 	{
 		bool result = setup(system);
 
@@ -133,7 +149,19 @@ namespace BALL
 	
 	// Constructor intialized with a system and a set of options
 	ForceField::ForceField(System& system, const Options& new_options)
-		:	periodic_boundary(*this)
+		:	options(),
+			periodic_boundary(*this),
+			system_(0),
+			atoms_(),
+			parameters_(),
+			valid_(false),
+			name_("Force Field"),
+			energy_(0.0),
+			number_of_movable_atoms_(0),
+			use_selection_(false),
+			selection_enabled_(true),
+			update_time_stamp_(),
+			setup_time_stamp_()
 	{
 		bool result = setup(system, new_options);
 
@@ -160,7 +188,7 @@ namespace BALL
 	}
 
 	// setup methods
-	bool  ForceField::setup(System& system)
+	bool ForceField::setup(System& system)
 	{
 		// store the specified system
 		system_ = &system;

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pairExpRDFIntegrator.C,v 1.17 2002/02/27 12:24:06 sturm Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.18 2004/11/07 19:54:59 oliver Exp $
+//
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -111,7 +112,6 @@ namespace BALL
 
 	double PairExpRDFIntegrator::integrateToInf(double from) const throw()
 	{
-
 		PiecewisePolynomial poly = getRDF().getRepresentation();
 		Interval interval;
 		double FROM;
@@ -174,14 +174,12 @@ namespace BALL
 		return val;
 	}
 
-
 	double PairExpRDFIntegrator::integrateToInf(double from, double alpha, 
 			double C1, double C2, double R_ij_o, double k1, double k2) throw()
 	{
 		setConstants(alpha, C1, C2, R_ij_o, k1, k2);
 		return integrateToInf(from);
 	}
-
 
 	double PairExpRDFIntegrator::integrate(double from, double to) const
 		throw()
@@ -195,13 +193,6 @@ namespace BALL
 			double C1, double C2, double R_ij_o, double k1, double k2) throw()
 	{
 		setConstants(alpha, C1, C2, R_ij_o, k1, k2);
-		// DEBUG
-		/*
-		Log.info() << "alpha_ = " << alpha_ << endl;
-		Log.info() << "C1_ = " << C1_ << endl;
-		Log.info() << "C2_ = " << C2_ << endl;
-		Log.info() << "R_ij_o_ = " << R_ij_o_ << endl;
-		*/
 		return integrate(from, to);
 	}
 

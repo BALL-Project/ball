@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.h,v 1.15 2003/08/26 08:04:45 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.16 2004/11/07 19:54:58 oliver Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -101,10 +101,9 @@ namespace BALL
 		*/
 		//@{
 			
-		/**
+		/** Initialize all parameters required
 		*/
-		virtual void init() 
-			throw();
+		virtual void init() throw();
 			
 		//@}
 
@@ -113,7 +112,6 @@ namespace BALL
 		std::list<Atom*>				proton_list_;	
 		std::list<Atom*>				atom_list_;	
 		std::list<Residue*>			aromat_list_;
-		String**								asrings_;
 		StringHashMap<Ring>			rings_;
 		StringHashMap<Position>	residues_with_rings_;
 		vector<Expression>			expressions_;

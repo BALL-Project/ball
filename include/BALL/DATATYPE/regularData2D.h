@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.40 2004/11/07 14:44:08 oliver Exp $
+// $Id: regularData2D.h,v 1.41 2004/11/07 19:54:58 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -995,8 +995,8 @@ namespace BALL
 	void TRegularData2D<ValueType>::binaryWrite(const String& filename) const
 		throw(Exception::FileNotFound)
 	{
-		File outfile(filename, std::ios::out|std::ios::binary);
-		if (!outfile.isValid()) 
+		std::ofstream outfile(filename.c_str(), std::ios::out | std::ios::binary);
+		if (!outfile.good()) 
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		}
@@ -1035,7 +1035,7 @@ namespace BALL
 		}
 
 		// now we have to write the remaining data one by one
-		for (Size i=window_pos; i<data_.size(); i++)
+		for (Size i = window_pos; i < data_.size(); i++)
 		{
 			adapt_single.setData(data_[i]);
 			outfile << adapt_single;

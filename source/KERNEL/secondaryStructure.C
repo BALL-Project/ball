@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.C,v 1.23 2004/05/27 19:49:58 oliver Exp $
+// $Id: secondaryStructure.C,v 1.24 2004/11/07 19:54:58 oliver Exp $
 //
 
 #include <BALL/KERNEL/secondaryStructure.h>
@@ -15,19 +15,22 @@ namespace BALL
 
 	SecondaryStructure::SecondaryStructure()
 		throw()
-		:	AtomContainer()
+		:	AtomContainer(),
+			type_(SecondaryStructure::UNKNOWN)
 	{
 	}
 		
 	SecondaryStructure::SecondaryStructure(const SecondaryStructure& secondary_structure, bool deep)
 		throw()
-		:	AtomContainer(secondary_structure, deep)
+		:	AtomContainer(secondary_structure, deep),
+			type_(secondary_structure.type_)
 	{
 	}
 		
 	SecondaryStructure::SecondaryStructure(const String& name)
 		throw()
-		:	AtomContainer(name)
+		:	AtomContainer(name),
+			type_(SecondaryStructure::UNKNOWN)
 	{
 	}
 
@@ -41,12 +44,14 @@ namespace BALL
 		throw()
 	{
 		AtomContainer::clear();
+		type_ = UNKNOWN;
 	}
 		
 	void SecondaryStructure::destroy()
 		throw()
 	{
 		AtomContainer::destroy();
+		type_ = UNKNOWN;
 	}
 		
   void SecondaryStructure::persistentWrite(PersistenceManager& pm, const char* name) const
@@ -66,7 +71,7 @@ namespace BALL
     pm.checkObjectTrailer(0);
 		Index type;
  		pm.readPrimitive(type, "type_");
-		type_ = (Type) type;
+		type_ = (Type)type;
 	}
  
 	void SecondaryStructure::set(const SecondaryStructure& secondary_structure, bool deep)

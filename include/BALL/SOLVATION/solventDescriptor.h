@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventDescriptor.h,v 1.17 2004/02/18 18:19:05 anhi Exp $
+// $Id: solventDescriptor.h,v 1.18 2004/11/07 19:54:58 oliver Exp $
 //
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
@@ -25,8 +25,9 @@ namespace BALL
 	/** This struct contains the information for one atom type of the solvent 
 	\ingroup Solvation
 	*/
-	typedef struct 
+	class SolventAtomDescriptor
 	{
+		public:
 		/** Atom type needed for assignment of Lennard-Jones Parameters 
 		*/
 		Atom::Type type;
@@ -43,7 +44,14 @@ namespace BALL
 		*/
 		int number_of_atoms;
 
-	} SolventAtomDescriptor;
+		SolventAtomDescriptor()
+		{
+			type = Atom::UNKNOWN_TYPE;
+			element_symbol = "?";
+			radius = 0.0;
+			number_of_atoms = 0;
+		};
+	};
 
 
 	/** Solvent Description.

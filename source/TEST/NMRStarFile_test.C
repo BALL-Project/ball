@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NMRStarFile_test.C,v 1.13 2003/07/25 08:22:07 amoll Exp $
+// $Id: NMRStarFile_test.C,v 1.14 2004/11/07 19:54:59 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 using namespace BALL;
 
-START_TEST(String,"$Id: NMRStarFile_test.C,v 1.13 2003/07/25 08:22:07 amoll Exp $")
+START_TEST(String,"$Id: NMRStarFile_test.C,v 1.14 2004/11/07 19:54:59 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,6 +30,7 @@ CHECK(NMRStarFile(const NMRStarFile& f) throw(Exception::FileNotFound))
 	NMRStarFile f1;
 	NMRStarFile* f2 = new NMRStarFile(f1);
 	TEST_NOT_EQUAL(f2, 0)
+	delete f2;
 RESULT
 
 CHECK(const NMRStarFile& operator = (const NMRStarFile& f) throw())
