@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.31 2000/10/28 21:55:18 amoll Exp $
+// $Id: string.C,v 1.32 2000/12/07 21:32:04 amoll Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -60,6 +60,7 @@ namespace BALL
 	}
 
 	Substring::Substring()
+		throw()
 		:	bound_(0),
 			from_((Index)string::npos),
 			to_((Index)string::npos)
@@ -67,6 +68,7 @@ namespace BALL
 	}
 
 	Substring::Substring(const Substring& substring, bool /* deep */)
+		throw()
 		:	bound_(substring.bound_),
 			from_(substring.from_),
 			to_(substring.to_)
@@ -84,6 +86,7 @@ namespace BALL
 	}
 
 	Substring::~Substring()
+		throw()
 	{
 	}
 
@@ -120,6 +123,7 @@ namespace BALL
 	}
 
 	ostream& operator << (ostream &s, const Substring& substring)
+		throw()
 	{
 		if (substring.isBound() == false)
 		{
@@ -137,18 +141,9 @@ namespace BALL
 		return s;
 	}
 
-	bool operator != (const String& s, const Substring& substring)
-	{
-		return (substring != s);
-	}
-
-	bool operator == (const String& s, const Substring& substring)
-	{
-		return (substring == s);
-	}
-
 	// hand-coded create method
 	void* String::create(bool /* deep */, bool empty) const
+		throw()
 	{
 		void* ptr;
 		if (empty == true)
@@ -163,51 +158,6 @@ namespace BALL
 		return ptr;
 	}
  
-	String::String()
-		: string()
-	{
-	}
-
-	String::String(const String& s)
-		: string(s.c_str())
-	{
-	}
-
-	String::String(const char* char_ptr, Index from, Size len)
-		: string()
-	{
-		validateCharPtrRange_(from, len, char_ptr);
-		if (len > 0)
-		{
-			assign(char_ptr + from, len);
-		}
-	}
-	 
-	String::String(const unsigned char c)
-		: string(1, (char)c)
-	{
-	}
-
-	String::String(const char c, Size len)
-		: string(len, c)
-	{
-	}
-
-	String::String(const string& s)
-		: string(s)
-	{
-	}
-
-	String::String(const String& s, Index from, Size len)
-		: string("")
-	{
-		s.validateRange_(from, len);
-		if (len > 0)
-		{
-			assign(s.c_str() + from, len);
-		}
-	}
-
 	String::String(Size buffer_size, const char* format, ... )
 		throw(Exception::IndexUnderflow, Exception::NullPointer)
 		: string() 
@@ -235,6 +185,7 @@ namespace BALL
 	}
 
 	String::String(strstream& s)
+		throw()
 		: string("")
 	{
 		s << ends;
@@ -243,7 +194,7 @@ namespace BALL
 	}
 
 #	define BALL_STRING_DEFINE_CONSTRUCTOR_METHOD(type, format_string) \
-	String::String(type t) \
+	String::String(type t) 	throw()\
 	{ \
 		char buffer[128]; \
 	\
@@ -263,6 +214,7 @@ namespace BALL
 	#undef BALL_STRING_DEFINE_CONSTRUCTOR_METHOD
 
 	String::~String()
+		throw()
 	{
 		erase();
 	}
@@ -322,25 +274,8 @@ namespace BALL
 		delete [] buffer;
 	}
 
-	void String::set(strstream& s)
-	{
-		s << ends;
-		char* char_ptr = s.str();
-		assign(char_ptr);
-	}
-
-	void String::set(char c, Size len)
-	{
-		assign(len, c);
-	}
-
-	void String::set(unsigned char c)
-	{
-		assign(1, (char)c);
-	}
-
 #	define BALL_STRING_DEFINE_SET_METHOD(type, format_string) \
-	void String::set(type t) \
+	void String::set(type t) 	throw()\
 	{ \
 		char buffer[128]; \
 	\
@@ -387,6 +322,7 @@ namespace BALL
 	}
  
 	bool String::toBool() const
+		throw()
 	{
 		Size index = find_first_not_of(CHARACTER_CLASS__WHITESPACE);
 		
@@ -741,7 +677,7 @@ namespace BALL
 	}
 
 	String String::getField(Index index, const char* delimiters, Index* from_and_next_field) const
-			throw(Exception::IndexUnderflow, Exception::NullPointer)
+		throw(Exception::IndexUnderflow, Exception::NullPointer)
 	{
 		if ((from_and_next_field != 0) && (*from_and_next_field < 0))
 		{
@@ -835,6 +771,7 @@ namespace BALL
 	}
 
 	const char* eatDelimiters_(const char* start, const char* end, const char* delimiters)
+		throw()
 	{
 		const char* current_delimiter = (char*)strchr(delimiters, *start);
 		while ((current_delimiter != 0) && (start < end))
@@ -1018,6 +955,7 @@ namespace BALL
 	}
 
 	String& String::trimLeft(const char* trimmed_chars)
+		throw()
 	{
 		if (trimmed_chars == 0)
 		{
@@ -1045,6 +983,7 @@ namespace BALL
 	}
 
 	String& String::trimRight(const char* trimmed_chars)
+		throw()
 	{
 		if (trimmed_chars == 0)
 		{
@@ -1072,6 +1011,7 @@ namespace BALL
 	}
 
 	String operator + (const char* char_ptr, const String& s)
+		throw()
 	{
 		String result(char_ptr);
 		result.append(s);
@@ -1079,18 +1019,15 @@ namespace BALL
 	}
 
 	String operator + (char c, const String& s)
+		throw()
 	{
 		String result(c);
 		result.append(s);
 		return result;
 	}
 
-	void String::swap(String& s)
-	{
-		string::swap(s);
-	}
-
 	bool String::hasPrefix(const String& s) const
+		throw()
 	{
 		if (s.size() > size())
 		{
@@ -1105,6 +1042,7 @@ namespace BALL
 	}
 
 	bool String::hasSuffix(const String& s) const
+		throw()
 	{
 		if (s.size() > size())
 		{
@@ -1117,12 +1055,12 @@ namespace BALL
 
 		int result = memcmp(c_str() + size() - s.size(), s.c_str(), s.size());
 
-		return (bool)(result == 0);
+		return (result == 0);
 	}
 
 
 	#define BALL_STRING_DEFINE_IS_CLASS_METHOD(func, isclass) \
-	bool func() const \
+	bool func() const throw()\
 	{ \
 		const char* end = &c_str()[size()]; \
 	 \
@@ -1366,73 +1304,8 @@ namespace BALL
 		return result;
 	}
 
-	bool operator == (const char *char_ptr, const String &s)
-		throw(Exception::NullPointer)
-	{
-		return (bool)(s.compare(char_ptr) == 0);
-	}
-
-	bool operator != (const char* char_ptr, const String &s)
-		throw(Exception::NullPointer)
-	{
-		return (bool)(s.compare(char_ptr) != 0);
-	}
-
-	bool operator < (const char* char_ptr, const String& s)
-		throw(Exception::NullPointer)
-	{
-		return (bool)(s.compare(char_ptr) > 0);
-	}
-
-	bool operator <= (const char* char_ptr, const String &s)
-		throw(Exception::NullPointer)
-	{
-		return (bool)(s.compare(char_ptr) >= 0);
-	}
-
-	bool operator >= (const char* char_ptr, const String& s)
-		throw(Exception::NullPointer)
-	{
-		return (bool)(s.compare(char_ptr) <= 0);
-	}
-
-	bool operator > (const char *char_ptr, const String& s)
-		throw(Exception::NullPointer)
-	{
-		return (bool)(s.compare(char_ptr) < 0);
-	}
-
-	bool operator == (char c, const String& s)
-	{
-		return (bool)(s.compare(c) == 0);
-	}
-
-	bool operator != (char c, const String &s)
-	{
-		return (bool)(s.compare(c) != 0);
-	}
-
-	bool operator < (char c, const String& s)
-	{
-		return (bool)(s.compare(c) > 0);
-	}
-
-	bool operator <= (char c, const String &s)
-	{
-		return (bool)(s.compare(c) >= 0);
-	}
-
-	bool operator >= (char c, const String &s)
-	{
-		return (bool)(s.compare(c) <= 0);
-	}
-
-	bool operator > (char c, const String &s)
-	{
-		return (bool)(s.compare(c) < 0);
-	}
-
 	istream& getline(istream& s, String& str, char delimiter)
+		throw()
 	{
 		char c;
 		
@@ -1441,8 +1314,9 @@ namespace BALL
 		while (s.get(c)) 
 		{
 			if (c == delimiter) 
+			{
 				break;
-
+			}
 			str.append(1, c);
 		}
 
@@ -1450,6 +1324,7 @@ namespace BALL
 	}
 
 	void String::dump(ostream &s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -1473,6 +1348,7 @@ namespace BALL
 	}
 
 	Index String::substitute(const String& to_replace, const String& replacing)
+		throw()
 	{
 		Size replaced_size = to_replace.size();
 

@@ -1,17 +1,17 @@
-// $Id: string.iC,v 1.25 2000/07/24 21:42:40 oliver Exp $
+// $Id: string.iC,v 1.26 2000/12/07 21:31:57 amoll Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
 	throw(Exception::NullPointer)
 {
-  return (bool)(compare(char_ptr) == 0);
+  return (compare(char_ptr) == 0);
 }
 
 BALL_INLINE 
 bool String::operator != (const char *char_ptr) const
 	throw(Exception::NullPointer)
 {
-  return (bool)(compare(char_ptr) != 0);
+  return (compare(char_ptr) != 0);
 }
 
 BALL_INLINE 
@@ -80,6 +80,7 @@ bool Substring::operator != (const char *char_ptr) const
 
 BALL_INLINE
 Size Substring::size() const
+	throw()
 {
 	if (bound_ == 0)
 	{
@@ -103,6 +104,7 @@ Substring::operator String() const
 
 BALL_INLINE 
 void Substring::unbind()
+	throw()
 {
   bound_ = 0;
   from_ = to_ = (Index)string::npos;
@@ -110,6 +112,7 @@ void Substring::unbind()
 
 BALL_INLINE 
 void Substring::destroy()
+	throw()
 {
 	if (bound_ != 0)
 	{
@@ -117,6 +120,13 @@ void Substring::destroy()
 	}
 
   unbind();
+}
+
+BALL_INLINE 
+void Substring::clear()
+	throw()
+{
+	destroy();
 }
 
 BALL_INLINE 
@@ -210,7 +220,7 @@ void Substring::set(const char* char_ptr, Size size)
 }
 
 BALL_INLINE 
-Substring& Substring::operator = (const String& s)
+const Substring& Substring::operator = (const String& s)
 	throw(Substring::UnboundSubstring)
 {
   set(s);
@@ -218,7 +228,7 @@ Substring& Substring::operator = (const String& s)
 }
 
 BALL_INLINE 
-Substring& Substring::operator = (const Substring& s)
+const Substring& Substring::operator = (const Substring& s)
 	throw(Substring::UnboundSubstring)
 {
   set(s);
@@ -226,7 +236,7 @@ Substring& Substring::operator = (const Substring& s)
 }
 
 BALL_INLINE 
-Substring& Substring::operator = (const char* char_ptr)
+const Substring& Substring::operator = (const char* char_ptr)
 	throw(Substring::UnboundSubstring, Exception::NullPointer)
 {
   set(char_ptr);
@@ -235,12 +245,14 @@ Substring& Substring::operator = (const char* char_ptr)
 
 BALL_INLINE 
 String* Substring::getBoundString()
+	throw()
 {
   return bound_;
 }
 
 BALL_INLINE 
 const String* Substring::getBoundString() const
+	throw()
 {
   return bound_;
 }
@@ -325,14 +337,16 @@ char Substring::operator [] (Index index) const
 
 BALL_INLINE 
 bool Substring::isBound() const
+	throw()
 {
-  return (bool)(bound_ != 0);
+  return (bound_ != 0);
 }
 
 BALL_INLINE 
 bool Substring::isEmpty() const
+	throw()
 {
-  return (bool)(bound_ == 0);
+  return (bound_ == 0);
 }
 
 BALL_INLINE 
@@ -398,6 +412,7 @@ bool Substring::operator != (char c) const
 
 BALL_INLINE 
 bool Substring::isValid() const
+	throw()
 {
   return (bound_ != 0 && from_ >= 0 && from_ <= to_ && to_ < (Index)bound_->size()) ;
 }
@@ -427,14 +442,15 @@ Substring& Substring::toUpper()
 }
 
 BALL_INLINE 
-String& String::operator = (const String& s)
+const String& String::operator = (const String& s)
+	throw()
 {
   set(s);
   return *this;
 }
 
 BALL_INLINE 
-String& String::operator = (const char *char_ptr)
+const String& String::operator = (const char *char_ptr)
 	throw(Exception::NullPointer)
 {
   set(char_ptr, 0);
@@ -442,7 +458,8 @@ String& String::operator = (const char *char_ptr)
 }
 
 BALL_INLINE 
-String& String::operator = (std::strstream& s)
+const String& String::operator = (std::strstream& s)
+	throw()
 {
   set(s);
   return *this;
@@ -450,7 +467,7 @@ String& String::operator = (std::strstream& s)
 
 #define BALL_STRING_DEFINE_ASSIGNMENT_METHOD(Type) \
 BALL_INLINE \
-String& String::operator = (Type t) \
+const String& String::operator = (Type t) throw()\
 { \
   set(t); \
 \
@@ -472,24 +489,28 @@ BALL_STRING_DEFINE_ASSIGNMENT_METHOD(double)
 
 BALL_INLINE 
 void String::setCompareMode(CompareMode mode)
+	throw()
 {
   compare_mode_ = mode;
 }
 
 BALL_INLINE 
 String::CompareMode String::getCompareMode()
+	throw()
 {
   return compare_mode_;
 }
 
 BALL_INLINE 
 char String::toChar() const
+	throw()
 {
   return *c_str();
 }
 
 BALL_INLINE 
 unsigned char String::toUnsignedChar() const
+	throw()
 {
   return (unsigned char)*c_str();
 }
@@ -511,32 +532,41 @@ Substring String::operator () (Index from, Size len) const
 
 BALL_INLINE 
 Substring String::before(const String& s, Index from) const
+	throw()
 {
 	Position found = npos;
 	if (s != "")
+	{
 		found = find(s, from);
-
+	}
 	if (found == 0 || found == npos) 
+	{
 		return Substring(*this, 0, 0);
-
+	}
 	return getSubstring(0, found);
 }
 
 BALL_INLINE 
 Substring String::through (const String& s, Index from) const
+	throw()
 {
 	Position found = npos;
 	if (s != "")
+	{
 		found = find(s, from); 
+	}
 
 	if (found == npos) 
+	{
 		return Substring(*this, 0, 0);
+	}
 
   return getSubstring(0, found + s.size());
 }
 
 BALL_INLINE 
 Substring String::from(const String& s, Index from) const
+	throw()
 {
 	if (s == "")
 	{
@@ -555,6 +585,7 @@ Substring String::from(const String& s, Index from) const
 
 BALL_INLINE 
 Substring String::after(const String& s, Index from) const
+	throw()
 {
 	if (s == "")
 	{
@@ -573,6 +604,7 @@ Substring String::after(const String& s, Index from) const
 
 BALL_INLINE 
 String& String::trim(const char* trimmed)
+	throw()
 {
   trimLeft(trimmed);
   return trimRight(trimmed).trimLeft(trimmed);
@@ -580,40 +612,50 @@ String& String::trim(const char* trimmed)
 
 BALL_INLINE 
 String& String::truncate(Size max_size)
+	throw()
 {
   if (max_size < size())
+	{
     resize(max_size);
-	
+	}
 	return *this;
 }
 
 BALL_INLINE 
 Substring String::left(Size len) const
+	throw()
 {
 	if (len > size())
+	{
 		len = size();
-
+	}
   return Substring(*this, 0, len);
 }
 
 BALL_INLINE 
 Substring String::right(Size len) const
+	throw()
 {
 	// to save calls to size()
 	Size s = size();
 	if (len > s) 
+	{
 		len = s;
-
+	}
 	Index from = (Index)s - (Index)len;
 
 	if (len > 0) 
 	{
 	  from = (Index)s - (Index)len;
-	}	else {
+	}
+	else 
+	{
 		if (s > 0)
 		{
 			from = (Index)s - 1;
-		} else {
+		} 
+		else 
+		{
 			from = 0;
 		}
 	}
@@ -623,6 +665,7 @@ Substring String::right(Size len) const
 
 BALL_INLINE 
 Substring String::instr(const String& patterns, Index from) const
+	throw()
 {
   Size found = find(patterns, from); 
 
@@ -633,6 +676,7 @@ Substring String::instr(const String& patterns, Index from) const
 
 BALL_INLINE 
 String String::operator + (const string& s) const
+	throw()
 {
   String result(*this);
   result.append(s);
@@ -641,6 +685,7 @@ String String::operator + (const string& s) const
 
 BALL_INLINE 
 String String::operator +(const char* char_ptr) const
+	throw()
 {
   String result(*this);
   result.append(char_ptr);
@@ -649,6 +694,7 @@ String String::operator +(const char* char_ptr) const
 
 BALL_INLINE 
 String String::operator + (char c) const
+	throw()
 {
   String result(*this);
   result.append(1, c);
@@ -657,51 +703,67 @@ String String::operator + (char c) const
 
 BALL_INLINE 
 void String::destroy()
+	throw()
+{
+  assign("");
+}
+
+BALL_INLINE 
+void String::clear()
+	throw()
 {
   assign("");
 }
 
 BALL_INLINE 
 bool String::has(char c) const
+	throw()
 {
-  return (bool)((c != 0) && (find(c, 0) != npos));
+  return ((c != 0) && (find(c, 0) != npos));
 }
 
 BALL_INLINE 
 bool String::hasSubstring(const String& s, Index from) const
+	throw()
 {
 	if (s.size() == 0)
+	{
 		return true;
-
-  return (bool)(find(s, from) != npos);
+	}
+  return (find(s, from) != npos);
 }
 
 BALL_INLINE 
 bool String::isEmpty() const
+	throw()
 {
-  return (bool)(size() == 0);
+  return (size() == 0);
 }
 
 BALL_INLINE 
 bool String::isAlpha(char c)
+	throw()
 {
-	return (bool)((c != 0) && ((char*)strchr(CHARACTER_CLASS__ASCII_ALPHA, c) != 0));
+	return ((c != 0) && ((char*)strchr(CHARACTER_CLASS__ASCII_ALPHA, c) != 0));
 }
 
 BALL_INLINE 
 bool String::isAlnum(char c)
+	throw()
 {
-	return (bool)((c != 0) && ((char*)strchr(CHARACTER_CLASS__ASCII_ALPHANUMERIC, c) != 0));
+	return ((c != 0) && ((char*)strchr(CHARACTER_CLASS__ASCII_ALPHANUMERIC, c) != 0));
 }
 
 BALL_INLINE 
 bool String::isDigit(char c)
+	throw()
 {
-  return (bool)((c != 0) && ((char*)strchr(CHARACTER_CLASS__ASCII_NUMERIC, c) != 0));
+  return ((c != 0) && ((char*)strchr(CHARACTER_CLASS__ASCII_NUMERIC, c) != 0));
 }
 
 BALL_INLINE 
 bool String::isFloat() const 
+	throw()
 {
   char* test;
 	char* str = const_cast<char*>(c_str());
@@ -712,128 +774,331 @@ bool String::isFloat() const
 
 BALL_INLINE 
 bool String::isSpace(char c)
+	throw()
 {
-  return (bool)(c == ' ');
+  return (c == ' ');
 }
 
 BALL_INLINE 
 bool String::isWhitespace(char c)
+	throw()
 {
-  return (bool)((c != 0) && ((char*)strchr(CHARACTER_CLASS__WHITESPACE, c) != 0));
+  return ((c != 0) && ((char*)strchr(CHARACTER_CLASS__WHITESPACE, c) != 0));
 }
 
 BALL_INLINE 
 bool String::operator != (const String& s) const
+	throw()
 {
-  return (bool)(compare(s) != 0);
+  return (compare(s) != 0);
 }
 
 BALL_INLINE 
 bool String::operator < (const String& s) const
+	throw()
 {
-  return (bool)(compare(s) < 0);
+  return (compare(s) < 0);
 }
 
 BALL_INLINE 
 bool String::operator <= (const String& s) const
+	throw()
 {
-  return (bool)(compare(s) <= 0);
+  return (compare(s) <= 0);
 }
 
 BALL_INLINE 
 bool String::operator >= (const String& s) const
+	throw()
 {
-  return (bool)(compare(s) >= 0);
+  return (compare(s) >= 0);
 }
 
 BALL_INLINE 
 bool String::operator > (const String& s) const
+	throw()
 {
-  return (bool)(compare(s) > 0);
+  return (compare(s) > 0);
 }
 
 BALL_INLINE
 bool String::operator == (const String& string) const
+	throw()
 {
-	return (bool)(compare(string.c_str()) == 0);
+	return (compare(string.c_str()) == 0);
 }
 
 BALL_INLINE 
 bool String::operator < (const char *char_ptr) const
 	throw(Exception::NullPointer)
 {
-  return (bool)(compare(char_ptr) < 0);
+  return (compare(char_ptr) < 0);
 }
 
 BALL_INLINE
 bool String::operator <= (const char *char_ptr) const
 	throw(Exception::NullPointer)
 {
-  return (bool)(compare(char_ptr) <= 0);
+  return (compare(char_ptr) <= 0);
 }
 
 BALL_INLINE 
 bool String::operator >= (const char *char_ptr) const
 	throw(Exception::NullPointer)
 {
-  return (bool)(compare(char_ptr) >= 0);
+  return (compare(char_ptr) >= 0);
 }
 
 BALL_INLINE 
 bool String::operator > (const char *char_ptr) const
 	throw(Exception::NullPointer)
 {
-  return (bool)(compare(char_ptr) > 0);
+  return (compare(char_ptr) > 0);
 }
 
 BALL_INLINE 
 bool String::operator == (char c) const
+	throw()
 {
-  return (bool)(compare(c) == 0);
+  return (compare(c) == 0);
 }
 
 BALL_INLINE 
 bool String::operator != (char c) const
+	throw()
 {
-  return (bool)(compare(c) != 0);
+  return (compare(c) != 0);
 }
 
 BALL_INLINE 
 bool String::operator < (char c) const
+	throw()
 {
-  return (bool)(compare(c) < 0);
+  return (compare(c) < 0);
 }
 
 BALL_INLINE 
 bool String::operator <= (char c) const
+	throw()
 {
-  return (bool)(compare(c) <= 0);
+  return (compare(c) <= 0);
 }
 
 BALL_INLINE 
 bool String::operator >= (char c) const
+	throw()
 {
-  return (bool)(compare(c) >= 0);
+  return (compare(c) >= 0);
 }
 
 BALL_INLINE 
 bool String::operator > (char c) const
+	throw()
 {
-  return (bool)(compare(c) > 0);
+  return (compare(c) > 0);
 }
 
 BALL_INLINE 
 bool String::isValid() const
+	throw()
 {
-  return (bool)(c_str() != 0 && size() <= capacity()); 
+  return (c_str() != 0 && size() <= capacity()); 
 }
 
 BALL_INLINE 
 ::std::istream& String::getline(::std::istream& s,  char delimiter)
+	throw()
 {
 	static char line_buffer[8192];
   s.getline(line_buffer, 8191, delimiter);
 	set(line_buffer);
 	
 	return s;
+}
+
+BALL_INLINE 
+bool operator != (const String& s, const Substring& substring)
+	throw(Substring::UnboundSubstring)
+{
+	return (substring != s);
+}
+
+BALL_INLINE 
+bool operator == (const String& s, const Substring& substring)
+	throw(Substring::UnboundSubstring)
+{
+	return (substring == s);
+}
+
+BALL_INLINE 
+String::String()
+	throw()
+	: string()
+{
+}
+
+BALL_INLINE 
+String::String(const String& s)
+	throw()
+	: string(s.c_str())
+{
+}
+
+BALL_INLINE 
+String::String(const char* char_ptr, Index from, Size len)
+	throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
+	: string()
+{
+	validateCharPtrRange_(from, len, char_ptr);
+	if (len > 0)
+	{
+		assign(char_ptr + from, len);
+	}
+}
+ 
+BALL_INLINE 
+String::String(const unsigned char c)
+	throw()
+	: string(1, (char)c)
+{
+}
+
+BALL_INLINE 
+String::String(const char c, Size len)
+	throw()
+	: string(len, c)
+{
+}
+
+BALL_INLINE 
+String::String(const string& s)
+	throw()
+	: string(s)
+{
+}
+
+BALL_INLINE 
+String::String(const String& s, Index from, Size len)
+	throw(Exception::IndexUnderflow, Exception::IndexOverflow)
+	: string("")
+{
+	s.validateRange_(from, len);
+	if (len > 0)
+	{
+		assign(s.c_str() + from, len);
+	}
+}
+
+BALL_INLINE 
+void String::set(strstream& s)
+	throw()
+{
+	s << ends;
+	char* char_ptr = s.str();
+	assign(char_ptr);
+}
+
+BALL_INLINE 
+void String::set(char c, Size len)
+	throw()
+{
+	assign(len, c);
+}
+
+BALL_INLINE 
+void String::set(unsigned char c)
+	throw()
+{
+	assign(1, (char)c);
+}
+
+BALL_INLINE 
+void String::swap(String& s)
+	throw()
+{
+	string::swap(s);
+}
+
+BALL_INLINE 
+bool operator == (const char *char_ptr, const String &s)
+	throw(Exception::NullPointer)
+{
+	return (s.compare(char_ptr) == 0);
+}
+
+BALL_INLINE 
+bool operator != (const char* char_ptr, const String &s)
+	throw(Exception::NullPointer)
+{
+	return (s.compare(char_ptr) != 0);
+}
+
+BALL_INLINE 
+bool operator < (const char* char_ptr, const String& s)
+	throw(Exception::NullPointer)
+{
+	return (s.compare(char_ptr) > 0);
+}
+
+BALL_INLINE 
+bool operator <= (const char* char_ptr, const String &s)
+	throw(Exception::NullPointer)
+{
+	return (s.compare(char_ptr) >= 0);
+}
+
+BALL_INLINE 
+bool operator >= (const char* char_ptr, const String& s)
+	throw(Exception::NullPointer)
+{
+	return (s.compare(char_ptr) <= 0);
+}
+
+BALL_INLINE 
+bool operator > (const char *char_ptr, const String& s)
+	throw(Exception::NullPointer)
+{
+	return (s.compare(char_ptr) < 0);
+}
+
+BALL_INLINE 
+bool operator == (char c, const String& s)
+	throw()
+{
+	return (s.compare(c) == 0);
+}
+
+BALL_INLINE 
+bool operator != (char c, const String &s)
+	throw()
+{
+	return (s.compare(c) != 0);
+}
+
+BALL_INLINE 
+bool operator < (char c, const String& s)
+	throw()
+{
+	return (s.compare(c) > 0);
+}
+
+BALL_INLINE 
+bool operator <= (char c, const String &s)
+	throw()
+{
+	return (s.compare(c) >= 0);
+}
+
+BALL_INLINE 
+bool operator >= (char c, const String &s)
+	throw()
+{
+	return (s.compare(c) <= 0);
+}
+
+BALL_INLINE 
+bool operator > (char c, const String &s)
+	throw()
+{
+	return (s.compare(c) < 0);
 }
