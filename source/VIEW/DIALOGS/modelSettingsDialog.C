@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.32 2004/10/01 14:20:15 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.33 2004/10/18 14:58:21 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -155,11 +155,17 @@ namespace BALL
 					
 			if (RTTI::isKindOf<AddBallAndStickModel>(mp))
 			{
-				((AddBallAndStickModel*)&mp)->setStickRadius(getBallAndStickStickRadius());
-				((AddBallAndStickModel*)&mp)->setBallRadius(getBallRadius());
-				((AddBallAndStickModel*)&mp)->enableDashedBonds(
-												((AddBallAndStickModel*)&mp)->isBallAndStickModel() &&
-												ballAndStickDashedBondsEnabled());
+				AddBallAndStickModel& bsm = *((AddBallAndStickModel*)&mp);
+				if (bsm.isStickModel())
+				{
+					bsm.setStickRadius(getStickStickRadius());
+				}
+				else
+				{
+					bsm.setStickRadius(getBallAndStickStickRadius());
+					bsm.setBallRadius(getBallRadius());
+				}
+				bsm.enableDashedBonds(bsm.isBallAndStickModel() && ballAndStickDashedBondsEnabled());
 				return;
 			}
 					
