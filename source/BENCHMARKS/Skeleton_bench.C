@@ -1,4 +1,4 @@
-// $Id: Skeleton_bench.C,v 1.1 2001/04/10 16:16:56 oliver Exp $
+// $Id: Skeleton_bench.C,v 1.2 2001/06/24 14:50:55 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -9,11 +9,15 @@
 
 using namespace BALL;
 
-START_BENCHMARK(class_name, "$Id: Skeleton_bench.C,v 1.1 2001/04/10 16:16:56 oliver Exp $")
+// args: benchmark name (without '"'), reference time in seconds, CVS ID string
+START_BENCHMARK(BenchName, 10.0, "$Id: Skeleton_bench.C,v 1.2 2001/06/24 14:50:55 oliver Exp $")
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-START_SECTION(section_name)
+
+// args: section name, scaling factor for section timing
+START_SECTION(SectionName, 1.0)
 
 	START_TIMER
 		....
