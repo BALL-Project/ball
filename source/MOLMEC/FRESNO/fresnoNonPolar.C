@@ -1,4 +1,4 @@
-// $Id: fresnoNonPolar.C,v 1.1.2.5 2002/11/21 20:54:47 anker Exp $
+// $Id: fresnoNonPolar.C,v 1.1.2.6 2002/11/22 18:38:12 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -114,6 +114,10 @@ namespace BALL
 		}
 
     Options& options = force_field->options;
+
+		factor_
+			= options.setDefaultReal(FresnoFF::Option::NONPOLAR,
+					FresnoFF::Default::NONPOLAR);
 
 		probe_radius_ 
 			= options.setDefaultReal(FresnoFF::Option::PROBE_RADIUS,
@@ -232,6 +236,7 @@ namespace BALL
 				{
 					if (solvent_descriptor_file != "")
 					{
+						vdw_solvent_.options.set(Pair6_12InteractionEnergyProcessor::Option::VERBOSITY, verbosity_);
 						vdw_solvent_.options.set(Pair6_12InteractionEnergyProcessor::Option::SOLVENT_FILENAME, solvent_descriptor_file);
 						vdw_solvent_.options.set(Pair6_12InteractionEnergyProcessor::Option::LJ_FILENAME, solvent_descriptor_file);
 					}
@@ -267,13 +272,14 @@ namespace BALL
 
 		energy_ = dG_complex - (dG_protein + dG_ligand);
 
-		// DEBUG
-		Log.info() << "dG_protein = " << dG_protein << endl;
-		Log.info() << "dG_ligand = " << dG_ligand << endl;
-		Log.info() << "dG_complex = " << dG_complex << endl;
-		Log.info() << "NONPOLAR" << calculation_method_ << ": score is " 
-			<< energy_ << endl;
-		// /DEBUG
+		if (verbosity_ > 8)
+		{
+			Log.info() << "dG_protein = " << dG_protein << endl;
+			Log.info() << "dG_ligand = " << dG_ligand << endl;
+			Log.info() << "dG_complex = " << dG_complex << endl;
+			Log.info() << "NONPOLAR" << calculation_method_ << ": score is " 
+				<< energy_ << endl;
+		}
 
 		energy_ *= factor_;
 
@@ -285,9 +291,11 @@ namespace BALL
 	double FresnoNonPolar::updateEnergy()
 		throw()
 	{
-		// DEBUG
-		cout << "NONPOLAR: energy is " << energy_ << endl;
-		// /DEBUG
+		if (verbosity_ > 0)
+		{
+			Log.info() << "NONPOLAR" << calculation_method_ << ": energy is " 
+				<< energy_ << endl;
+		}
 
 		return energy_;
 	}
