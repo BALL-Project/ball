@@ -1,4 +1,4 @@
-// $Id: create.h,v 1.1 1999/08/26 07:53:14 oliver Exp $
+// $Id: create.h,v 1.2 2000/03/14 19:36:44 oliver Exp $
 
 #ifndef BALL_COMMON_CREATE_H
 #define BALL_COMMON_CREATE_H
@@ -17,9 +17,11 @@
 		or a copy of the object. The copy is either deep ({\tt deep == {\bf true}}) or shallow ({\tt deep == {\bf false}}).
 		By default, the create methods returns a pointer to a deep copy of the object.
 		The use of the create method requires a (public) default constructor (when creating an empty copy)
-		or a copy constructor.
-		@param	empty create an empty object or a copy of {\tt this} object
-		@param	deep	create a deep or shallow copy
+		or a copy constructor.\\
+		The macro also implements a static method {\tt createDefault} that returns a void pointer to
+		a new instance of {\tt name}.
+		
+		@param	name the class name
 */
 #define BALL_CREATE(name)\
 \
@@ -37,6 +39,11 @@
 		\
 		return ptr;\
 	}\
+	\
+	static void* createDefault()\
+	{\
+		return static_cast<void*>(new name);\
+	}
 
 /**	Virtual construction macro.
 		This macro is used to define the virtual {\bf create} method for classes that do
@@ -48,8 +55,9 @@
 		or a copy of the object.
 		The use of the create method requires a (public) default constructor (when creating an empty copy)
 		and a copy constructor taking a reference to an object.
-		@param	empty create an empty object or a copy of {\tt this} object
-		@param	deep	ignored
+		The macro also implements a static method {\tt createDefault} that returns a void pointer to
+		a new instance of {\tt name}.
+		@param	name the class name
 */
 #define BALL_CREATE_NODEEP(name)\
 \
@@ -67,15 +75,25 @@
 		\
 		return ptr;\
 	}\
+	\
+	static void* createDefault()\
+	{\
+		return static_cast<void*>(new name);\
+	}
 
 /**	Virtual cloning method definition macro.
 		If the create method has to be implemented by the user, this macro just defines 
-		the create method.
+		the create method and the createDefault method.
+		The function signatures are:
+		\begin{verbatim}
+			virtual void* create(bool deep = true, bool empty = false) const;
+			static void* createDefault();
+		\end{verbatim}
 */
 #define BALL_DEFINE_CREATE(name)\
 \
-	virtual void* create(bool deep = true, bool empty = false) const;
-
+	virtual void* create(bool deep = true, bool empty = false) const;\
+	static void* createDefault();
 
 //@}
 
