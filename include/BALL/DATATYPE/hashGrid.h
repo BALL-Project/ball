@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.41 2005/01/26 15:16:46 amoll Exp $
+// $Id: hashGrid.h,v 1.42 2005/01/26 21:17:49 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -1881,27 +1881,25 @@ namespace BALL
 		throw()
 	{
 		const HashGridBox3<Item>* box = getBox(point);
-		if (!box)
-		{
-			return 0;
-		}
+		if (!box) return 0;
 
 		Position x, y, z;
 		getIndices(*box, x, y, z);
 
 		const Item* item = 0;
 		float distance = FLT_MAX;
-		List<HashGridBox3<Item>* > box_list;
 
 		// iterator over neighbour boxes
 		for (Index xi = -(Index)dist; xi <= (Index)dist; xi++)
 		{
+			const Index xn = x + xi;
 			for (Index yi = -(Index)dist; yi <= (Index)dist; yi++)
 			{
+				const Index yn = y + yi;
 				for (Index zi = -(Index)dist; zi <= (Index)dist; zi++)
 				{
 					// iterate over all data items
-					const HashGridBox3<Item>* const box_ptr = getBox(x+xi, y+yi, z+zi);	
+					const HashGridBox3<Item>* const box_ptr = getBox(xn, yn, z+zi);	
 					if (box_ptr != 0 && !box_ptr->isEmpty())
 					{
 						typename HashGridBox3<Item>::ConstDataIterator hit = box_ptr->beginData();
