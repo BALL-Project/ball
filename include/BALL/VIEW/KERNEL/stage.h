@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.16 2005/02/10 22:44:12 amoll Exp $
+// $Id: stage.h,v 1.17 2005/02/11 16:29:54 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -161,6 +161,9 @@ namespace BALL
 			void translate(const Vector3& v3)
 				throw() { position_+=v3; direction_+=v3;}
 
+			///
+			LightSource& operator = (const LightSource& light) throw();
+
 			//@}
 			/**	@name Predicates
 			*/
@@ -237,6 +240,9 @@ namespace BALL
 			/// Destructor
 			virtual ~Camera()
 				throw() {}
+
+			///
+			Camera& operator = (const Camera& camera) throw();
 
 			//@}
 			/**	@name	Accessors

@@ -32,6 +32,20 @@ LightSource::LightSource(const LightSource& light_source)
 {
 }
 
+LightSource& LightSource::operator = (const LightSource& light) 
+	throw()
+{
+		position_ = light.position_;
+	 direction_ = light.direction_;
+			 angle_ = light.angle_,
+	 intensity_ = light.intensity_;
+			 color_ = light.color_,
+				type_ = light.type_;
+		relative_ = light.relative_;
+
+	return *this;
+}
+
 
 bool LightSource::operator == (const LightSource& light_source) const
 	throw()
@@ -103,6 +117,17 @@ Camera::Camera(const Vector3& view_point, const Vector3& look_at, const Vector3&
 		look_up_vector_(look_up_vector)
 {
 	calculateVectors_();
+}
+
+Camera& Camera::operator = (const Camera& camera) 
+	throw()
+{
+			 view_point_ = camera.view_point_;
+					look_at_ = camera.look_at_;
+	 look_up_vector_ = camera.look_up_vector_;
+
+	calculateVectors_();
+	return *this;
 }
 
 bool Camera::operator == (const Camera& camera) const
