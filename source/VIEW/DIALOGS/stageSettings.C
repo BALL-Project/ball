@@ -36,6 +36,7 @@ void StageSettings::colorPressed()
 void StageSettings::updateFromStage()
 	throw()
 {
+	if (stage_ == 0) return;
 	color_sample->setBackgroundColor(stage_->getBackgroundColor().getQColor());
 	coordinate_button->setChecked(stage_->coordinateSystemEnabled());
 
@@ -52,6 +53,7 @@ void StageSettings::updateFromStage()
 void StageSettings::apply()
 	throw()
 {
+	if (stage_ == 0) return;
 	stage_->setBackgroundColor(color_sample->backgroundColor());
 	stage_->showCoordinateSystem(coordinate_button->isChecked());
 
