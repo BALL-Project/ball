@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.C,v 1.5 2000/01/16 23:45:04 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.6 2000/05/04 13:32:36 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 
@@ -243,7 +243,8 @@ namespace BALL
 
 		for (s = 1; s < grid->getMaxZIndex(); s++)
 			for (t = 1; t < grid->getMaxYIndex(); t++)
-				for (q = 1; q < grid->getMaxXIndex(); q++){
+				for (q = 1; q < grid->getMaxXIndex(); q++)
+				{
 
 					// calculate the absolute grid index the hard way (faster!)
 					idx = q + Nx * t + s * Nxy;
@@ -259,11 +260,10 @@ namespace BALL
 
 						border &= 127;
 					
-						if ((border > 0) && (border < 6)){  ///TESTTEST
-									
-							border_count++;
+						if ((border > 0) && (border < 6))
+						{			
 							// Okay, we found a point on the boundary
-												
+							border_count++;												
 							grid_pointer = (long)&(grid->data[idx]);
 							fast_sphere_end = &(fast_sphere_relative[relative_count - 1]);
 
