@@ -27,3 +27,8 @@ def removeWater():
 		return
 	moc.cut()
 
+def run(file):
+	pw = PyWidget.getInstance(0)
+	pw.run(file)
+
+
