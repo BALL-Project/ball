@@ -53,6 +53,7 @@ EXECUTABLES = \
 	Residue_test\
 	ResourceFile_test\
 	RTTI_test\
+	SecondaryStructure_test\
 	Socket_test\
 	Sphere3_test\
 	String_test\
@@ -197,6 +198,9 @@ ResourceFile_test:	ResourceFile_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 RTTI_test:	RTTI_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+SecondaryStructure_test:	SecondaryStructure_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Socket_test:	Socket_test.o
