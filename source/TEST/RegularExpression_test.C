@@ -1,4 +1,4 @@
-// $Id: RegularExpression_test.C,v 1.7 2000/10/20 16:30:47 oliver Exp $
+// $Id: RegularExpression_test.C,v 1.8 2000/12/02 19:39:36 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.7 2000/10/20 16:30:47 oliver Exp $")
+START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.8 2000/12/02 19:39:36 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -76,6 +76,12 @@ RESULT
 CHECK(RegularExpression::get(RegularExpression& regular_expression, bool deep = true) const )
 	re2.clear();
 	re1.get(re2);
+	TEST_EQUAL(re2.getPattern(), "abc");
+RESULT
+
+CHECK(RegularExpression::operator = (const RegularExpression& expression) const )
+	re2.clear();
+	re2 = re1;
 	TEST_EQUAL(re2.getPattern(), "abc");
 RESULT
 
