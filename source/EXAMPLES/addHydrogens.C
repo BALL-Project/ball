@@ -12,10 +12,13 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
+	Log.setPrefix(cout, "[%T] ");
+	Log.setPrefix(cerr, "[%T] ERROR: ");
+
 	// issue a usage hint if called without parameters
 	if (argc != 3)
 	{
-		cout << argv[0] << " <PDB infile> <PDB outfile>" << endl;
+		Log << argv[0] << " <PDB infile> <PDB outfile>" << endl;
 		return 1;
 	}
 
@@ -25,7 +28,7 @@ int main(int argc, char** argv)
 	if (!file)
 	{
 		// if file does not exist: complain and abort
-		cerr << "error opening " << argv[1] << " for input." << endl;
+		Log.error() << "error opening " << argv[1] << " for input." << endl;
 		return 2;
 	}
 	
@@ -35,39 +38,40 @@ int main(int argc, char** argv)
 	file.close();
 
 	// print the number of atoms read from the file
-	cout << "read " << S.countAtoms() << " atoms." << endl;
+	Log << "read " << S.countAtoms() << " atoms." << endl;
 
 
 	// now we open a fragment database
-	cout << "reading fragment DB..." << endl;
+	Log << "reading fragment DB..." << endl;
 	FragmentDB fragment_db;
 
 	// and normalize the atom names, i.e. we convert different
 	// naming standards to the PDB naming scheme - just in case!
-	cout << "normalizing names..." << endl;
+	Log << "normalizing names..." << endl;
 	S.apply(fragment_db.normalize_names);
 
 	// now we create the bonds between the atoms (PDB files hardly
   // ever contain a complete set of CONECT records)																							
-	cout << "building bonds..." << endl;
+	Log << "building bonds..." << endl;
 	S.apply(fragment_db.build_bonds);
 
 	// now we add any missing hydrogens to the residues
 	// the data on the hydrogen positions stems from the
 	// fragment database. However the hydrogen positions 
 	// created in this way are only good estimates
-	cout << "adding hydrogens..." << endl;
-	S.apply(fragment_db.add_hydrogens);
+	Log << "adding hydrogens..." << endl;
+	bool res = S.apply(fragment_db.add_hydrogens);	
+	Log << "result = " << res << endl;
 
 	// now we check whether the model we built is consistent
 	// The ResidueChecker checks for charges, bond lengths,
 	// and missing atoms
-	cout << "checking the built model..." << endl;
+	Log << "checking the built model..." << endl;
 	ResidueChecker checker(fragment_db);
 	S.apply(checker);
 	
 	// now we create an AMBER force field 
-	cout << "setting up force field..." << endl;
+	Log << "setting up force field..." << endl;
 	AmberFF FF;
 	FF.setup(S);
 
@@ -88,7 +92,7 @@ int main(int argc, char** argv)
 			counter++;
 		}
 	}
-	cout << "optimizing " << counter << " hydrogen atoms." << endl;
+	Log << "optimizing " << counter << " hydrogen atoms." << endl;
 
 	
 	// now we create a minimizer object that uses
@@ -106,16 +110,17 @@ int main(int argc, char** argv)
 	// initialize the minimizer and perform (up to)
 	// 10000 optimization steps
 	minimizer.setup(FF);
+	minimizer.setEnergyOutputFrequency(1);
 	minimizer.minimize(10000);
 
 	// calculate the terminal energy and print it
 	float terminal_energy = FF.getEnergy();
 
-	cout << "energy before/after minimization: " << initial_energy << "/" << terminal_energy << " kJ/mol" << endl;
+	Log << "energy before/after minimization: " << initial_energy << "/" << terminal_energy << " kJ/mol" << endl;
 
 	// write the optimized structure to a file whose
 	// name is given as the second command line argument
-	cout << "writing PBD file " << argv[2] << endl;
+	Log << "writing PBD file " << argv[2] << endl;
 	file.open(argv[2], ios::out);
 	file << S;
 	file.close();
