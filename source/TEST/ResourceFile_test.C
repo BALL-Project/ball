@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.12 2001/07/15 17:32:41 amoll Exp $
+// $Id: ResourceFile_test.C,v 1.13 2001/12/17 01:29:19 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.12 2001/07/15 17:32:41 amoll Exp $")
+START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.13 2001/12/17 01:29:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -444,7 +444,9 @@ CHECK(ResourceFile::saveAs(const Entry&, const String&))
 	ResourceFile rf;
 	rf.open("data/test.db");
 	TEST_EQUAL(rf.isValid(), true)
-	rf.saveAs("test.xml");
+	String filename;
+	NEW_TMP_FILE(filename);
+	rf.saveAs(filename);
 RESULT
 
 CHECK(ResourceFile::save(const Entry&))
