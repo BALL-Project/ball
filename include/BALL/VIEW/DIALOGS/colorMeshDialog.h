@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.8 2004/01/18 21:55:31 oliver Exp $
+// $Id: colorMeshDialog.h,v 1.9 2004/02/05 14:15:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -100,8 +100,8 @@ namespace BALL
 			void getColor_(const ColorRGBA& color, QPushButton* button, QSpinBox* box);
 			void saveSettings_();
 			void loadSettings_();
-			void invalidateGrid_()
-				throw();
+			void invalidateGrid_() throw();
+			void invalidateMesh_() throw();
 
 			RegularData3D* grid_;
 			float min_value_;

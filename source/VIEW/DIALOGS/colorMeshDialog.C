@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.20 2003/12/20 15:57:38 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.21 2004/02/05 14:15:54 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -201,6 +201,7 @@ void ColorMeshDialog::removeGrid_(RegularData3D& grid)
 
 void ColorMeshDialog::gridSelected()
 {
+	if (mesh_ == 0) return;
 	Index pos = grids->currentItem();
 	if (pos == -1) 
 	{
@@ -213,7 +214,10 @@ void ColorMeshDialog::gridSelected()
 	{
 		it++;
 	}
+	
 	grid_ = *it;
+
+	if (grid_ == 0) return;
 
 	min_value_  = Limits<float>::max();
 	max_value_  = Limits<float>::min(); 
@@ -243,7 +247,6 @@ void ColorMeshDialog::gridSelected()
 	min_box->setText(String(min_value_).c_str());
 	mid_box->setText(String(mid_value_).c_str());
 	max_box->setText(String(max_value_).c_str());
-	return;
 }
 
 
@@ -454,16 +457,21 @@ void ColorMeshDialog::onNotify(Message *message)
 	{
 		RepresentationMessage *rm = RTTI::castTo<RepresentationMessage>(*message);
 		Representation* rep = rm->getRepresentation();
-		if (rm->getType() == RepresentationMessage::UPDATE && rep == rep_)
+		if (rep != rep_) return;
+
+		if (rm->getType() == RepresentationMessage::REMOVE)
+		{
+			invalidateMesh_();
+			return;
+		}
+
+		if (rm->getType() == RepresentationMessage::UPDATE)
 		{
 			// if current Representation changed from Surface to something else, invalidate
 			if (!isSurfaceModel(rep->getModelType()) ||
 					rep->getGeometricObjects().size() == 0)
 			{
-				apply_button->setEnabled(false);
-				mesh_ = 0;
-				rep_ = 0;
-				autoscale->setEnabled(false);
+				invalidateMesh_();
 				return;
 			}
 
@@ -503,6 +511,16 @@ void ColorMeshDialog::invalidateGrid_()
 	}
 }
 
+void ColorMeshDialog::invalidateMesh_()
+	throw()
+{
+	mesh_ = 0;
+	rep_ = 0;
+	apply_button->setEnabled(false);
+	autoscale->setEnabled(false);
+}
+
+
 void ColorMeshDialog::setMesh(Mesh* mesh, Representation* rep)
 	throw()
 {
@@ -518,8 +536,8 @@ void ColorMeshDialog::setMesh(Mesh* mesh, Representation* rep)
 			grids->count() != 0)
 	{
 		grids->setCurrentItem(grids->count()-1);
-		gridSelected();
 	}
+	gridSelected();
 	apply_button->setEnabled(grid_);
 }
 
