@@ -211,13 +211,7 @@ float TransformationDialog::getMaxRotation() const
 
 void TransformationDialog::update_()
 {
-	
-	Scene* scene= (Scene*) Scene::getInstance(0);
-	scene->update(true);
-	return;
-	
-	SceneMessage* new_message = new SceneMessage;
-	new_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
+	SceneMessage* new_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
 	notify_(new_message);
 }
 
@@ -229,7 +223,7 @@ void TransformationDialog::onNotify(Message *message)
 #endif
 	if (RTTI::isKindOf<ControlSelectionMessage>(*message))
   {
-		if (getMainControl()->getControlSelection().size() > 0)
+		if (getMainControl()->getControlSelection().size() != 0)
 		{
 			composite_ = *getMainControl()->getControlSelection().begin();
 		}
