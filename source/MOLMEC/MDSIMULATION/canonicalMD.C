@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.8 2000/07/25 21:14:23 oliver Exp $
+// $Id: canonicalMD.C,v 1.9 2001/01/29 17:44:01 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
@@ -120,17 +120,19 @@ namespace BALL
 		vector<Atom*>::iterator it;
 		Aux_Factors item;
 		Atom* atom_ptr;
-
-
-		for (it = atom_vector_.begin(); it != atom_vector_.end(); ++it)
+		Size index = 0;
+		mass_factor_.resize(atom_vector_.size());
+		for (it = atom_vector_.begin(); +it; ++it, ++index)
 		{
 			// Factor1 = time_step_ * time_step_ / (2 * mass)
 			// Factor2 = time_step_ / (2 * mass)
 			// Factors must be scaled by 6.022 * 10^12 to adjust units
 			atom_ptr = *it;
-      item.factor2 = Constants::AVOGADRO / 1e23 * 1e12 * 0.5 * time_step_ / atom_ptr->getElement().getAtomicWeight();
+			item.factor2 = Constants::AVOGADRO / 1e23 * 1e12 * 0.5 * time_step_ 
+				/ atom_ptr->getElement().getAtomicWeight();
 			item.factor1 = item.factor2 * time_step_;
-			mass_factor_.push_back(item); // BAUSTELLE: use op[] and resize instead of push_back
+			// BAUSTELLE: use op[] and resize instead of push_back
+			mass_factor_[index] = item;
 		}
 	}	// end of 'calculateFactors' 
 
@@ -203,7 +205,7 @@ namespace BALL
 	// It runs for the indicated number of iterations           
   // restart=true means that the counting of iterations is started with the end
   // value of the previous run
-	void CanonicalMD::simulateIterations (Size iterations, bool restart)
+	void CanonicalMD::simulateIterations(Size iterations, bool restart)
 	{
 		// local variables
 		double current_energy;
@@ -214,43 +216,44 @@ namespace BALL
 		Size force_update_freq;
 		Size iteration;
 
-	  vector < Atom * >::iterator atom_it;
-	  vector < Aux_Factors >::iterator factor_it;
+		vector < Atom * >::iterator atom_it;
+		vector < Aux_Factors >::iterator factor_it;
 
-    if (restart == false)
-    {
-      // reset the current number of iteration and the simulation time  to the values given
-      // in the options
-      number_of_iteration_  = options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
-      current_time_ = options.getReal(MolecularDynamics::Option::CURRENT_TIME);
-    }
-    else
+		if (restart == false)
 		{
-     // the values from the last simulation run are used; increase by one to start in the
-     // next iteration
-     number_of_iteration_++;
-    }
-
+			// reset the current number of iteration and the simulation time  to
+			// the values given in the options
+			number_of_iteration_
+				= options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
+			current_time_
+				= options.getReal(MolecularDynamics::Option::CURRENT_TIME);
+		}
+		else
+		{
+			// the values from the last simulation run are used; increase by one
+			// to start in the next iteration
+			number_of_iteration_++;
+		}
 
 		// determine the largest value for the iteration counter
-	  max_number = number_of_iteration_ + iterations;
+		max_number = number_of_iteration_ + iterations;
 
 		// First check whether the  force field and the MD instance
 		// are valid
-		if (valid_ == false || force_field_ptr_ == 0 || force_field_ptr_->isValid () == false)
+		if ((valid_ == false) || (force_field_ptr_ == 0) 
+				|| (force_field_ptr_->isValid () == false))
 		{
-			Log.level (LogStream::ERROR) << "MD simulation not possible! " << "MD class is  not valid." << endl;
+			Log.error() << "CanonicalMD::simulateIterations(): "
+				<< "MD simulation not possible, class is not valid." << endl;
 			return;
 		}
 
 		// pre-calculate some needed factors
 		calculateFactors();
 
-
 		// make sure that the MD simulation operates on the same set of atoms
-		// as the forcefield  does (this may have changed since setup was called)
-		atom_vector_ = force_field_ptr_->getAtoms ();
-
+		// as the forcefield does (this may have changed since setup was called)
+		atom_vector_ = force_field_ptr_->getAtoms();
 
 		// Get the frequency for updating the Force Field pair lists
 		force_update_freq = force_field_ptr_->getUpdateFrequency();
@@ -259,18 +262,17 @@ namespace BALL
 		// list and position of molecules
 		if (force_field_ptr_->periodic_boundary.isEnabled() == true)
 		{
-			force_field_ptr_->periodic_boundary.updateMolecules ();
+			force_field_ptr_->periodic_boundary.updateMolecules();
 		}
 
 		// Calculate the forces at the beginning of the simulation
 		force_field_ptr_->updateForces ();
 
-
 		// This is the main loop of the MD simulation. The Velocity-Verlet method
-		// is used for the propagation of atomic positions  and velocities 
+		// is used for the propagation of atomic positions and velocities.
 		// In addition, the temperature is kept roughly constant by applying 
 		// Berendsen's velocity rescaling method. 
-		for (iteration = number_of_iteration_; iteration < max_number; iteration++)
+		for (iteration = number_of_iteration_; iteration < max_number; ++iteration)
 		{
 			// The force field data structures must be  updated regularly
 			if (iteration % force_update_freq == 0)
@@ -295,25 +297,27 @@ namespace BALL
 
 				Log.info()
 					<< "Canonical MD simulation System has potential energy "
-					<< current_energy << " kJ/mol at time " << current_time_ + (double) iteration *time_step_ << " ps" << endl;
+					<< current_energy << " kJ/mol at time " 
+					<< current_time_ + (double) iteration *time_step_ << " ps" << endl;
 				Log.info()
 					<< "Canonical MD simulation System has temperature  "
-					<< current_temperature_ << " at time " << current_time_ + (double) iteration *time_step_ << " ps " << endl;
+					<< current_temperature_ << " at time " 
+					<< current_time_ + (double) iteration *time_step_ << " ps " << endl;
 			}
 
 			// The new velocities calculated a few lines further below will be
-			// rescaled by a certain factor. We use the temperature from the previous
-			// iteration for computing the factor. 
+			// rescaled by a certain factor. We use the temperature from the
+			// previous iteration for computing the factor. 
 			updateInstantaneousTemperature();
 
 			// check whether the rescaling will be successful
-			// We trap a special case: at the start of a simulation, the current temperature
-			// will be zero, so we do not rescale 
+			// We trap a special case: at the start of a simulation, the current
+			// temperature will be zero, so we do not rescale 
 			if ((bath_relaxation_time_ != 0.0) && (current_temperature_ != 0.0))
 			{
 				// calculate the scaling factor (Berendsen's velocity scaling)
 				scaling_factor = sqrt(1.0 + time_step_ / bath_relaxation_time_
-															* (reference_temperature_ / current_temperature_ - 1.0));
+						* (reference_temperature_ / current_temperature_ - 1.0));
 			}
 			else 
 			{
@@ -322,19 +326,21 @@ namespace BALL
 			}
 
 			// Calculate new atomic positions and new tentative velocities 
-			for (atom_it = atom_vector_.begin (),
-					 factor_it = mass_factor_.begin(); atom_it != atom_vector_.end (); ++atom_it, ++factor_it)
+			for (atom_it = atom_vector_.begin (), factor_it = mass_factor_.begin();
+					+atom_it; ++atom_it, ++factor_it)
 			{
 				atom_ptr = *atom_it;
 
 				// First calculate the new atomic position
 				// x(t+1) = x(t) + time_step_ * v(t) + time_step_^2/(2*mass) * F(t)
-				atom_ptr->setPosition (atom_ptr->getPosition()
-															 + (float)time_step_ * atom_ptr->getVelocity() + (float)factor_it->factor1 * atom_ptr->getForce());
+				atom_ptr->setPosition(atom_ptr->getPosition() 
+						+ (float)time_step_ * atom_ptr->getVelocity() 
+						+ (float)factor_it->factor1 * atom_ptr->getForce());
 
 				// calculate a tentative  velocity 'v_tent' for the next iteration
 				// v_tent(t+1) = v(t) + time_step_ / (2 * mass) * F(t)
-				atom_ptr->setVelocity (atom_ptr->getVelocity () + (float)factor_it->factor2 * atom_ptr->getForce());
+				atom_ptr->setVelocity (atom_ptr->getVelocity () 
+						+ (float)factor_it->factor2 * atom_ptr->getForce());
 
 			}	// next atom 
 
@@ -345,12 +351,12 @@ namespace BALL
 
 			// Calculate the final velocity for the next iteration
 			// and rescale it in order to keep the temperature constant 
-			for (atom_it = atom_vector_.begin(),
-					 factor_it = mass_factor_.begin(); atom_it != atom_vector_.end(); ++atom_it, ++factor_it)
+			for (atom_it = atom_vector_.begin(), factor_it = mass_factor_.begin();
+					+atom_it; ++atom_it, ++factor_it)
 			{
 				atom_ptr = *atom_it;
 				atom_ptr->setVelocity(scaling_factor * (atom_ptr->getVelocity()
-																								 + (float)factor_it->factor2 * atom_ptr->getForce()));
+							+ (float)factor_it->factor2 * atom_ptr->getForce()));
 			}	// next atom
 
 			// Take a snapshot in regular intervals if desired
@@ -364,7 +370,7 @@ namespace BALL
 
 		// The simulation is finished. Update the current time and temperature  
 		current_time_ += (double) iterations * time_step_;
-    number_of_iteration_ = iteration - 1; 
+		number_of_iteration_ = iteration - 1; 
 
 		force_field_ptr_->updateEnergy();
 		updateInstantaneousTemperature();
