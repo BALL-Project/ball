@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.9 2004/12/22 15:07:09 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.10 2004/12/28 17:44:48 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -1112,7 +1112,7 @@ void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
 	{
 		if (ait->getName() == "O5*")
 		{
-			spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
+			spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
 			base_atoms[&*rit] = &*ait;
 			break;
 		}
@@ -1125,7 +1125,7 @@ void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
 		{
 			if (ait->getName() == "P")
 			{
-				spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
+				spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
 				base_atoms[&*rit] = &*ait;
 				break;
 			}
@@ -1137,7 +1137,7 @@ void AddCartoonModel::drawDNA_(SecondaryStructure& ss)
 	{
 		if (ait->getName() == "O3*")
 		{
-			spline_vector_.push_back(SplinePoint((*ait).getPosition(), 0));
+			spline_vector_.push_back(SplinePoint((*ait).getPosition(), &*ait));
 			break;
 		}
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.27 2004/12/28 15:21:52 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.28 2004/12/28 17:48:27 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -393,7 +393,8 @@ namespace BALL
 				////////////////////////////////////////////////////////////
 				// create a new mesh if we have a different atom now
 				////////////////////////////////////////////////////////////
-				if (mesh->getComposite() != atoms_of_spline_points_[p]->getParent())
+				if (atoms_of_spline_points_[p] != 0 &&
+						mesh->getComposite() != atoms_of_spline_points_[p]->getParent())
 				{
 					const Mesh* old_mesh = mesh;
 					mesh = new Mesh();
