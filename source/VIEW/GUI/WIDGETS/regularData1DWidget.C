@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.8.2.1 2003/01/07 13:23:31 anker Exp $
+// $Id: regularData1DWidget.C,v 1.8.2.2 2003/02/05 13:14:51 anker Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
 #include <qpointarray.h>
@@ -10,6 +10,12 @@
 
 using std::endl;
 using std::cout;
+
+
+namespace BALL
+{
+	namespace VIEW
+	{
 
 NewRegularData1DMessage::NewRegularData1DMessage()
   :    CompositeMessage()
@@ -205,3 +211,6 @@ void RegularData1DWidget::resizeEvent(QResizeEvent *e)
   QScrollView::resizeEvent(e);
   repaint();
 }
+
+
+} } // namespaces

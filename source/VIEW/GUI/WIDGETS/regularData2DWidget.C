@@ -1,12 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.25.2.1 2003/01/07 13:23:31 anker Exp $
+// $Id: regularData2DWidget.C,v 1.25.2.2 2003/02/05 13:14:50 anker Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
 using std::cout;
 using std::endl;
+
+namespace BALL
+{
+	namespace VIEW
+	{
 
 /* Converts to RGB-Space */
 QColor con2rgb(double arg, double min, double max)
@@ -832,3 +837,5 @@ void RegularData2DWidget::drawSelectFrame()
   paint.end();
   viewport()->repaint(0);
 }
+
+} } // namespaces

@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.28.2.1 2003/01/07 13:23:41 anker Exp $ 
+// $Id: config.h.in,v 1.28.2.2 2003/02/05 13:12:23 anker Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -62,6 +62,30 @@
 #undef BALL_OS_IRIX32
 #undef BALL_OS_IRIX64
 #undef BALL_OS_FREEBSD
+
+// Define compiler specifics (used in VERY few places only, e.g. COMMON/rtti.C).
+// Microsoft Visual Studio .NET
+#undef BALL_COMPILER_MSVC
+// GNU g++
+#undef BALL_COMPILER_GXX
+// Intel C++
+#undef BALL_COMPILER_INTEL
+// SGI MipsPro
+#undef BALL_COMPILER_MIPSPRO
+// SUN SunPro (Forte, Workshop)
+#undef BALL_COMPILER_SUNPRO
+// Compaq cxx
+#undef BALL_COMPILER_COMPAQ
+// Kuck & Associate (KAI) C++
+#undef BALL_COMPILER_KAI
+
+// The compiler name.
+#define BALL_COMPILER "unknown"
+
+// Defines for the compiler version (major.minor.minor_minor)
+#define BALL_COMPILER_VERSION_MAJOR 0
+#define BALL_COMPILER_VERSION_MINOR 0
+#define BALL_COMPILER_VERSION_MINOR_MINOR 0
 
 // define if gethostname is supported
 #undef BALL_HAVE_GETHOSTNAME
@@ -156,6 +180,7 @@
 // either something like std::basic_ios<char> etc., or ios, istream etc.
 #undef BALL_HAS_ANSI_IOSTREAM
 
+<<<<<<< config.h.in
 // Define whether inline functions may be used as template parameters.
 #undef BALL_HAS_INLINE_TPL_ARGS
 
@@ -165,6 +190,18 @@
 
 // Define whether the FFTW library may be included.
 #undef BALL_HAS_FFTW
+=======
+// Define whether inline functions may be used as template parameters.
+#undef BALL_HAS_INLINE_TPL_ARGS
+
+// Define the precision for the BALL Complex type (has to be consistent
+// with the FFTW precision, if included).
+#define BALL_COMPLEX_PRECISION float
+
+// Define whether the FFTW library/header is available.
+#undef BALL_HAS_FFTW
+#undef BALL_HAS_FFTW_H
+>>>>>>> 1.35
 
 // Define whether to use the ARM style or ANSI style access modifications
 //   ARM style:   BaseClass::foo;
@@ -174,6 +211,7 @@
 // Define for activated PYTHON support
 #undef BALL_PYTHON_SUPPORT
 
+<<<<<<< config.h.in
 // Maximum line length for reading from files (see source/FORMAT)
 #define BALL_MAX_LINE_LENGTH 65535
 
@@ -223,4 +261,54 @@
 #undef BALL_COMPILER_MSVC
 #undef BALL_USE_WINSOCK
 
+=======
+// Maximum line length for reading from files (see source/FORMAT)
+#define BALL_MAX_LINE_LENGTH 65535
+
+// on some systems (e.g. Solaris) we need to include /usr/include/ieeefp.h
+// for some floating point functions
+#undef BALL_HAS_IEEEFP_H
+
+// on some systems (e.g. Solaris) we need to include /usr/include/values.h
+// for some floating point functions
+#undef BALL_HAS_VALUES_H
+
+// on some systems, we do not have regex.h, so we have to use regexp.h
+#undef BALL_HAS_REGEXP_H
+#undef BALL_HAS_REGEX_H
+
+// Define whether float.h has to be included along with limits.h
+#undef BALL_HAS_FLOAT_H 
+
+#undef BALL_HAS_UNISTD_H
+#undef BALL_HAS_PROCESS_H
+#undef BALL_HAS_TIME_H
+#undef BALL_HAS_LIMITS_H
+#undef BALL_HAS_FLOAT_H
+#undef BALL_HAS_DIRENT_H
+#undef BALL_HAS_DIRECT_H
+#undef BALL_HAS_PWD_H
+#undef BALL_HAS_SYS_IOCTL_H
+#undef BALL_HAS_SYS_TIME_H
+#undef BALL_HAS_SYS_STAT_H
+#undef BALL_HAS_SYS_TIMES_H
+#undef BALL_HAS_SYS_TYPES_H
+#undef BALL_HAS_SYS_PARAM_H
+#undef BALL_HAS_SYS_SOCKET_H
+
+#undef BALL_HAS_NETINET_IN_H
+#undef BALL_HAS_NETDB_H
+#undef BALL_HAS_ARPA_INET_H
+
+#undef BALL_HAS_KILL
+#undef BALL_HAS_SYSCONF
+
+
+// Specific to the Windows port (and actually not used here,
+// included for completeness, rather).
+#undef BALL_HAS_CLOCKS_PER_SEC
+#undef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+#undef BALL_USE_WINSOCK
+
+>>>>>>> 1.35
 #endif // BALL_CONFIG_CONFIG_H
