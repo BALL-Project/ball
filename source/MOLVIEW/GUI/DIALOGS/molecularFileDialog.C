@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.C,v 1.6 2002/12/15 01:12:08 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.7 2002/12/15 01:21:55 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -71,7 +71,7 @@ namespace BALL
 			fd->addFilter("MOL Files (*.mol)");
 			fd->addFilter("MOL2 Files (*.mol2)");
 
-			fd->setSelectedFilter(1);
+			fd->setSelectedFilter(0);
 
 			fd->setCaption("Select a molecular file");
 			fd->setViewMode(QFileDialog::Detail);
@@ -139,7 +139,7 @@ namespace BALL
 			fd->setMode(QFileDialog::AnyFile);
 			fd->setFilter("PDB Files (*.pdb)");
 
-			fd->setSelectedFilter(1);
+			fd->setSelectedFilter(0);
 
 			fd->setCaption("Select a filename for writing the system");
 			fd->setViewMode(QFileDialog::Detail);
