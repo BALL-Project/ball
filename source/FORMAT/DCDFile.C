@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.12 2001/03/29 08:20:19 anker Exp $
+// $Id: DCDFile.C,v 1.13 2001/04/04 09:39:46 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -12,7 +12,8 @@ namespace BALL
 		throw()
 		: TrajectoryFile(),
 			header_(),
-			swap_bytes_(false)
+			swap_bytes_(false),
+			has_velocities_(false)
 	{
 		init();
 	}
@@ -22,7 +23,8 @@ namespace BALL
 		throw()
 		:	TrajectoryFile(file),
 			header_(file.header_),
-			swap_bytes_(file.swap_bytes_)
+			swap_bytes_(file.swap_bytes_),
+			has_velocities_(file.has_velocities_)
 	{
 		init();
 	}
@@ -32,7 +34,8 @@ namespace BALL
 		throw()
 		: TrajectoryFile(name, open_mode),
 			header_(),
-			swap_bytes_(false)
+			swap_bytes_(false),
+			has_velocities_(false)
 	{
 		init();
 
@@ -45,28 +48,6 @@ namespace BALL
 			writeHeader();
 		}
 	}
-
-
-	/*
-	bool DCDFile::open(const String& name, File::OpenMode open_mode)
-		throw()
-	{
-		TrajectoryFile::open(name, open_mode);
-
-		// If we want to open the file for writing, we need a valid header for
-		// later use by readHeader(). If we open it for reading, we have to
-		// synchronize header and DCDFile by calling readHeader().
-		if ((open_mode & File::OUT) == 1)
-		{
-			// if this file is to be overwritten, write a default header.
-			writeHeader();
-		}
-		else
-		{
-			readHeader();
-		}
-	}
-	*/
 
 
 	DCDFile::~DCDFile()
@@ -82,6 +63,8 @@ namespace BALL
 	{
 		TrajectoryFile::operator = (file);
 		header_ = file.header_;
+		swap_bytes_ = file.swap_bytes_;
+		has_velocities_ = file.has_velocities_;
 
 		return *this;
 	}
@@ -92,16 +75,31 @@ namespace BALL
 	{
 		header_ = DCDHeader();
 		swap_bytes_ = false;
+		has_velocities_ = false;
 		TrajectoryFile::clear();
 	}
 
 
-	bool DCDFile::operator == (const DCDFile& file)
+	bool DCDFile::operator == (const DCDFile& file) const
 		throw()
 	{
 		// BAUSTELLE: Header vergleichen. Was heißt gleich eigentlich in diesem
 		// Fall?
 		return (TrajectoryFile::operator == (file));
+	}
+
+
+	bool DCDFile::isSwappingBytes() const
+		throw()
+	{
+		return swap_bytes_;
+	}
+
+
+	bool DCDFile::hasVelocities() const
+		throw()
+	{
+		return swap_bytes_;
 	}
 
 
@@ -166,8 +164,26 @@ namespace BALL
 		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		header_.steps_between_saves = adapt_Size.getData();
 
+		// is this really DCD or is it DC2?
+		*this >> adapt_Size;
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
+		if (adapt_Size.getData() != 0)
+		{
+			if (adapt_Size.getData() == 1)
+			{
+				Log.info() << "DCDFile contains velocities" << endl;
+				has_velocities_ = true;
+				header_.BALL_flag = true;
+			}
+			else
+			{
+				Log.error() << "This does not look like the BALL additional flag."
+					<< endl;
+			}
+		}
+
 		// skip unused fields
-		for (Size i = 0; i < 6; ++i)
+		for (Size i = 0; i < 5; ++i)
 		{
 			*this >> adapt_Size;
 		}
@@ -293,7 +309,8 @@ namespace BALL
 		*this << BinaryFileAdaptor<Size>(header_.number_of_coordinate_sets);
 		*this << BinaryFileAdaptor<Size>(header_.step_number_of_starting_time);
 		*this << BinaryFileAdaptor<Size>(header_.steps_between_saves);
-		for (i = 0; i < 6; ++i)
+		*this << BinaryFileAdaptor<Size>(header_.BALL_flag);
+		for (i = 0; i < 5; ++i)
 		{
 			*this << BinaryFileAdaptor<Size>(header_.unused_1[i]);
 		}
@@ -347,6 +364,36 @@ namespace BALL
 			*this << BinaryFileAdaptor<Real>((Real) positions[atom].z);
 		}
 		*this << BinaryFileAdaptor<Size>(4*noa);
+
+		if (has_velocities_)
+		{
+			const vector<Vector3>& velocities = snapshot.getAtomVelocities();
+			if (velocities.size() == 0)
+			{
+				Log.error() << "DC2File::append(): "
+					<< "No atom velocities available" << endl;
+				return false;
+			}
+
+			*this << BinaryFileAdaptor<Size>(4*noa);
+			for (Size atom = 0; atom < noa; ++atom)
+			{
+				*this << BinaryFileAdaptor<Real>((Real) velocities[atom].x);
+			}
+			*this << BinaryFileAdaptor<Size>(4*noa);
+			*this << BinaryFileAdaptor<Size>(4*noa);
+			for (Size atom = 0; atom < noa; ++atom)
+			{
+				*this << BinaryFileAdaptor<Real>((Real) velocities[atom].y);
+			}
+			*this << BinaryFileAdaptor<Size>(4*noa);
+			*this << BinaryFileAdaptor<Size>(4*noa);
+			for (Size atom = 0; atom < noa; ++atom)
+			{
+				*this << BinaryFileAdaptor<Real>((Real) velocities[atom].z);
+			}
+			*this << BinaryFileAdaptor<Size>(4*noa);
+		}
 
 		return true;
 	}
@@ -483,6 +530,120 @@ namespace BALL
 		}
 
 		snapshot.setAtomPositions(positions);
+
+		if (has_velocities_)
+		{
+			vector<Vector3> velocities(expected_noa);
+
+			// first read the x coordinates
+
+			// read the block "header"...
+
+			// BAUSTELLE
+			// *this >> BinaryFileAdaptor<Size>(tmp);
+
+			*this >> adapt_Size; 
+			if (swap_bytes_) swapBytes(adapt_Size.getData());
+			tmp = adapt_Size.getData();
+			// ...and compare it to what we would expect. This value stems from the
+			// information of the file header.
+			if (tmp != expected_size)
+			{
+				Log.error() << "DC2File::read(): "
+					<< "X block header: expected " << expected_size << " but got " 
+					<< tmp << endl;
+				return false;
+			}
+
+			// now read the x velocities
+			for (Size atom = 0; atom < expected_noa; ++atom)
+			{
+				*this >> adapt_Real; 
+				if (swap_bytes_) swapBytes(adapt_Real.getData());
+				velocities[atom].x = adapt_Real.getData();
+			}
+			// and the block "footer"
+			*this >> adapt_Size; 
+			if (swap_bytes_) swapBytes(adapt_Size.getData());
+			tmp = adapt_Size.getData();
+			if (tmp != expected_size)
+			{
+				Log.error() << "DC2File::read(): "
+					<< "X block footer: expected " << expected_size << " but got " 
+					<< tmp << endl;
+				return false;
+			}
+
+			// the same proceedure for y coordinates
+
+			// header
+			*this >> adapt_Size; 
+			if (swap_bytes_) swapBytes(adapt_Size.getData());
+			tmp = adapt_Size.getData();
+			// sanity check
+			if (tmp != expected_size)
+			{
+				Log.error() << "DC2File::read(): "
+					<< "Y block header: expected " << expected_size << " but got " 
+					<< tmp << endl;
+				return false;
+			}
+			// data
+			for (Size atom = 0; atom < expected_noa; ++atom)
+			{
+				*this >> adapt_Real; 
+				if (swap_bytes_) swapBytes(adapt_Real.getData());
+				velocities[atom].y = adapt_Real.getData();
+			}
+			// footer
+			*this >> adapt_Size; 
+			if (swap_bytes_) swapBytes(adapt_Size.getData());
+			tmp = adapt_Size.getData();
+			// sanity check
+			if (tmp != expected_size)
+			{
+				Log.error() << "DC2File::read(): "
+					<< "Y block footer: expected " << expected_size << " but got " 
+					<< tmp << endl;
+				return false;
+			}
+
+			// and z coordinates
+
+			// header
+			*this >> adapt_Size; 
+			if (swap_bytes_) swapBytes(adapt_Size.getData());
+			tmp = adapt_Size.getData();
+			// sanity check
+			if (tmp != expected_size)
+			{
+				Log.error() << "DC2File::read(): "
+					<< "Z block header: expected " << expected_size << " but got " 
+					<< tmp << endl;
+				return false;
+			}
+			// data
+			for (Size atom = 0; atom < expected_noa; ++atom)
+			{
+				*this >> adapt_Real; 
+				if (swap_bytes_) swapBytes(adapt_Real.getData());
+				velocities[atom].z = adapt_Real.getData();
+			}
+			// footer
+			*this >> adapt_Size; 
+			if (swap_bytes_) swapBytes(adapt_Size.getData());
+			tmp = adapt_Size.getData();
+			// sanity check
+			if (tmp != expected_size)
+			{
+				Log.error() << "DC2File::read(): "
+					<< "Z block footer: expected " << expected_size << " but got " 
+					<< tmp << endl;
+				return false;
+			}
+
+			snapshot.setAtomVelocities(velocities);
+		}
 		return true;
 	}
 
@@ -538,6 +699,42 @@ namespace BALL
 		// return readHeader();
 		return true;
 	}
+
+
+	const DCDFile::DCDHeader& DCDFile::getHeader() const
+		throw()
+	{
+		return header_;
+	}
+
+
+	void DCDFile::setHeader(const DCDFile::DCDHeader& header)
+		throw()
+	{
+		header_.number_of_coordinate_sets = header.number_of_coordinate_sets;
+		header_.step_number_of_starting_time = header.step_number_of_starting_time;
+		header_.steps_between_saves = header.steps_between_saves;
+		header_.BALL_flag = header.BALL_flag;
+		header_.time_step_length = header.time_step_length;
+		header_.number_of_atoms = header.number_of_atoms;
+	}
+
+	
+	void DCDFile::enableVelocityStorage()
+		throw()
+	{
+		has_velocities_ = true;
+		header_.BALL_flag = 1;
+	}
+
+	
+	void DCDFile::disableVelocityStorage()
+		throw()
+	{
+		has_velocities_ = false;
+		header_.BALL_flag = 0;
+	}
+
 
 
 } // namespace BALL
