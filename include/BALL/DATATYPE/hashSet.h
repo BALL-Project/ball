@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: hashSet.h,v 1.2 1999/12/22 17:00:09 oliver Exp $
 
 #ifndef BALL_DATATYPE_NEWHASHSET_H
 #define BALL_DATATYPE_NEWHASHSET_H
@@ -16,9 +16,9 @@
 namespace BALL {
 
 	template 
-		<typename Key, 
-		 typename Hasher = HashFunction<Key>, 
-	   typename EqualKey = equal_to<Key> >
+		<class Key, 
+		 class Hasher = HashFunction<Key>, 
+	   class EqualKey = equal_to<Key> >
 	class HashSet
 		:	public hash_set<Key, Hasher, EqualKey>
 	{

@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.2 1999/10/30 12:53:23 oliver Exp $
+// $Id: hashMap.h,v 1.3 1999/12/22 17:00:08 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -26,9 +26,9 @@ namespace BALL
 {
 
 	template 
-		<typename Key, typename Value, 
-		 typename Hasher = HashFunction<Key>, 
-	   typename EqualKey = equal_to<Key> >
+		<class Key, class Value, 
+		 class Hasher = HashFunction<Key>, 
+	   class EqualKey = equal_to<Key> >
 	class HashMap
 		:	public hash_map<Key, Value, Hasher, EqualKey>
 	{

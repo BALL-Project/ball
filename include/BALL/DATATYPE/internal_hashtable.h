@@ -1,4 +1,4 @@
-// $Id: internal_hashtable.h,v 1.2 1999/10/30 12:53:24 oliver Exp $
+// $Id: internal_hashtable.h,v 1.3 1999/12/22 17:00:09 oliver Exp $
 
 /*
  * Copyright (c) 1996,1997
@@ -36,17 +36,19 @@
 // Hashtable class, used to implement the hashed associative containers
 // hash_set, hash_map, hash_multiset, and hash_multimap.
 
-#include <stl_algobase.h>
+
+#include <algorithm>
+#include <vector>
+#include <function.h>
+
 #include <stl_alloc.h>
 #include <stl_construct.h>
 #include <stl_tempbuf.h>
-#include <stl_algo.h>
 #include <stl_uninitialized.h>
-#include <stl_function.h>
-#include <stl_vector.h>
 #include <stl_hash_fun.h>
 
-namespace BALL {
+namespace BALL 
+{
 	
 using namespace std;
 
