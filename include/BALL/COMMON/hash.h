@@ -1,4 +1,4 @@
-// $Id: hash.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: hash.h,v 1.2 1999/09/21 06:36:05 oliver Exp $
 
 #ifndef BALL_COMMON_HASH_H
 #define BALL_COMMON_HASH_H
@@ -78,7 +78,16 @@ namespace BALL
 	}
 
 	/** String hash function.
-			This method is optimized for the hashing of strings.
+			This method is optimized for the hashing of STL strings.
+			In fact, it is only an inline wrapper around \Ref{hashString}.
+	*/
+	inline HashIndex Hash(const string& s)
+	{
+		return hashString(s.c_str());
+	}
+
+	/** String hash function.
+			This method is optimized for the hashing of BALL strings.
 			In fact, it is only an inline wrapper around \Ref{hashString}.
 	*/
 	inline HashIndex Hash(const String& s)
