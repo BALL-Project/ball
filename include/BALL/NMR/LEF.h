@@ -1,10 +1,22 @@
-// $Id: LEF.h,v 1.4 2000/09/08 07:09:24 oliver Exp $
+// $Id: LEF.h,v 1.5 2000/09/15 08:52:19 oliver Exp $
 
 #ifndef BALL_NMR_LEF_H
 #define BALL_NMR_LEF_H
 
-#ifndef SHIFT_MODULE
+#ifndef BALL_NMR_SHIFT_MODULE
 #	include<BALL/NMR/shiftModule.h>
+#endif
+
+#ifndef BALL_KERNEL_EXPRESSION_H
+#	include<BALL/KERNEL/expression.h>
+#endif
+
+#ifndef BALL_FORMAT_PARAMETERS_H
+#	include<BALL/FORMAT/parameters.h>
+#endif
+
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include<BALL/FORMAT/parameterSection.h>
 #endif
 
 namespace BALL 
@@ -14,7 +26,7 @@ namespace BALL
 		
 	/**	Shift assignment processor implementing LEF.
 	*/
-	class LEFShift
+	class LEFShiftProcessor
 		:	public ShiftModule
 	{
 		public:
@@ -25,11 +37,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		LEFShift();
+		LEFShiftProcessor();
 	
 		/**	Destructor
 		*/
-		virtual ~LEFShift();
+		virtual ~LEFShiftProcessor();
 	
 		//@}
 
@@ -64,6 +76,10 @@ namespace BALL
 		*/
 		virtual bool finish();
 
+		/**	Processor start method
+		*/
+		virtual bool start();
+
 		/**	operator ().
 				PDBAtoms are assigned to two different lists, named {\tt proton\_list\_}
 				and {\tt atom\_list\_}. In {\tt proton\_list\_} every Hydrogen is stored except
@@ -72,15 +88,30 @@ namespace BALL
 		*/
 		virtual Processor::Result operator () (Composite& composite);
 		//@}
-	
 
+		/**	@name Accessors
+		*/
+		//@{
+		/**	
+		*/
+		const String& getFilename() const;
+			
+		/**	
+		*/
+		void setFilename(const String& filename);
+		//@}
+	
 		protected:
 	
-		list<Atom*> proton_list_;	
-		list<Atom*> atom_list_;
-		Atom* patom_;
-		System* system_;
-	};
+		list<Atom*>					proton_list_;	
+		list<Atom*>					effector_list_;
+		list<Atom*>					atom_list_;
+		String							ini_filename_;
+		vector<Expression>  first_atom_expressions_;
+		vector<Expression>  second_atom_expressions_;
+		Parameters					parameters_;
+		ParameterSection		parameter_section_;
+ 	};
 
 } // namespace BALL
 

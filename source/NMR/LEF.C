@@ -1,6 +1,7 @@
-// $Id: LEF.C,v 1.7 2000/09/15 07:42:34 oliver Exp $
+// $Id: LEF.C,v 1.8 2000/09/15 08:52:22 oliver Exp $
 
 #include<BALL/NMR/LEF.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
@@ -13,7 +14,7 @@ namespace BALL
 	// default ctor
 	LEFShiftProcessor::LEFShiftProcessor()
 	{	
-		ini_file_name_ = "/KM/fopra/compbio/burch/BALL/source/NMR/dat/nmr.ini";	
+		ini_filename_ = "/KM/fopra/compbio/burch/BALL/source/NMR/dat/nmr.ini";	
 	}
 
 		
@@ -25,6 +26,11 @@ namespace BALL
 	void LEFShiftProcessor::setFilename(const String& filename)
 	{
 		ini_filename_ = filename;
+	}
+		
+	const String& LEFShiftProcessor::getFilename() const
+	{
+		return ini_filename_;
 	}
 		
 	// Processor start method
@@ -40,102 +46,99 @@ namespace BALL
 		int counter;
 		String description;
 		
-		parameters_ = new Parameters(ini_file_name_);
-		parameter_section_ = new ParameterSection;
+		parameters_.setFilename(ini_filename_);
+		parameter_section_.extractSection(parameters_, "LEF-ShiftAtoms");
 		
-		parameter_section_->extractSection(*parameters_,"LEF-ShiftAtoms");
+		number_of_keys = parameter_section_.getNumberOfKeys();
+
+		// clear the arrays containing the expressions
+		first_atom_expressions_.clear();
+		second_atom_expressions_.clear();
 		
-		number_of_keys = parameter_section_->getNumberOfKeys();
-		number_of_expressions_ = number_of_keys;
-		
-		expressions_ = new Expression[MAX_EXPR];
-		
-		Position description_column = parameter_section_->getColumnIndex("description");
+		Position description_column = parameter_section_.getColumnIndex("description");
 		
 		for (counter = 0; counter < number_of_keys; counter++)
 		{
-			description = parameter_section_->getValue(counter,description_column);
+			description = parameter_section_.getValue(counter,description_column);
 			while (description.has('_'))
 			{
 				description.substitute("_"," ");
 			}
 				
-			expressions_[counter].setExpression(description);
+			first_atom_expressions_.push_back(Expression(description));
 		}	
 		
 		// Aufbau der Expression fuer die Bindungsatom der ShiftAtome
 		
-		isSecondAtom_ = new Expression[MAX_EXPR];
-		
-		Position second_atom_column = parameter_section_->getColumnIndex("second_atom");
+		Position second_atom_column = parameter_section_.getColumnIndex("second_atom");
 		
 		for (counter = 0; counter < number_of_keys; counter++)
 		{
-			description = parameter_section_->getValue(counter, second_atom_column);
+			description = parameter_section_.getValue(counter, second_atom_column);
 			while (description.has('_'))
 			{
 				description.substitute("_"," ");
 			}
 				
-			isSecondAtom_[counter].setExpression(description);
+			second_atom_expressions_.push_back(Expression(description));
 		}
 				
-		return 1;
+		return true;
 	}
 		
 
 	// Processor finish method
 	bool LEFShiftProcessor::finish()
 	{
-		parameter_section_->extractSection(*parameters_,"LEF-ShiftAtoms");
+		parameter_section_.extractSection(parameters_,"LEF-ShiftAtoms");
 
-		Vector3 proton,bindung,atom,prot_bin,prot_atom;
+		Vector3 proton, second_atom,atom,prot_bin,prot_atom;
 		float sigmaE,sc,theta,ladung,Ez,Efact,b_prot_bin,b_prot_atom,hshift;
-		int test=0;
-		int counter,key;
+		Position test=0;
+		Position counter, key;
 
-		int number_of_bonds;
 		Bond *bond;
 
-		list<PDBAtom*>::iterator atom_iter;
-		list<PDBAtom*>::iterator effector_iter;
-		atom_iter=atom_list_.begin();
+		list<Atom*>::iterator atom_iter;
+		list<Atom*>::iterator effector_iter;
+		atom_iter = atom_list_.begin();
 		
-		if ((atom_list_.begin() != NULL) && (effector_list_.begin() != NULL))
+		if ((atom_list_.size() > 0) && (effector_list_.size() > 0))
 		{
-			for (;atom_iter != atom_list_.end(); ++atom_iter)
+			for (; atom_iter != atom_list_.end(); ++atom_iter)
 			{
 				test = 0;
-				for(counter = 0; counter < number_of_expressions_; counter++)
+				for (counter = 0; counter < first_atom_expressions_.size(); counter++)
 				{
-					if (expressions_[counter](*(*atom_iter)))
+					if (first_atom_expressions_[counter](**atom_iter))
 					{
-						key=counter;
-						counter=MAX_EXPR+1;
+						// exit the loop if we found a matching expression
+						key = counter;
+						break;
 					}
 				}
 					
-				sigmaE = parameter_section_->getValue(key,"sigmaE").toFloat();
+				sigmaE = parameter_section_.getValue(key, "sigmaE").toFloat();
 				
-				proton=(*atom_iter)->getPosition();
+				proton = (*atom_iter)->getPosition();
 				
-				number_of_bonds = (*atom_iter)->countBonds();
-				for(counter=0;counter<number_of_bonds;counter++)
+				Size number_of_bonds = (*atom_iter)->countBonds();
+				for (counter = 0; counter < number_of_bonds; counter++)
 				{
 					bond = (*atom_iter)->getBond(counter);
-					if (isSecondAtom_[key](*bond->getBoundAtom(*(*atom_iter)))) 
+					if (second_atom_expressions_[key](*bond->getBoundAtom(*(*atom_iter)))) 
 					{
-						bindung = (*atom_iter)->getBond(counter)->getBoundAtom(*(*atom_iter))->getPosition();
+						second_atom = (*atom_iter)->getBond(counter)->getBoundAtom(*(*atom_iter))->getPosition();
 						counter = number_of_bonds + 1;
 					}
 				}
 									
-				bindung = (*atom_iter)->getBond(0)->getBoundAtom(*(*atom_iter))->getPosition();
-				prot_bin = proton-bindung;
+				second_atom = (*atom_iter)->getBond(0)->getBoundAtom(*(*atom_iter))->getPosition();
+				prot_bin = proton - second_atom;
 				Ez=0;
 				for(effector_iter=effector_list_.begin();effector_iter!=effector_list_.end();++effector_iter)
 				{
-					if ( (*effector_iter)->getResidue()!=(*atom_iter)->getResidue() )
+					if ( (*effector_iter)->getFragment()!=(*atom_iter)->getFragment() )
 					{
 						ladung = (*effector_iter)->getCharge();
 						
@@ -151,14 +154,14 @@ namespace BALL
 					}
 				}
 				hshift = -Ez*sigmaE;
-				shift_ = (*atom_iter)->getProperty("chemical_shift").getFloat();
-				shift_ -= hshift;
-				(*atom_iter)->setProperty("chemical_shift", shift_);
-				(*atom_iter)->setProperty("LEF",hshift);
+				double shift = (*atom_iter)->getProperty("chemical_shift").getFloat();
+				shift -= hshift;
+				(*atom_iter)->setProperty("chemical_shift", shift);
+				(*atom_iter)->setProperty("LEF", hshift);
 			}
 		}
 
-		return 1;
+		return true;
 	}
 		
 		
@@ -167,24 +170,26 @@ namespace BALL
 	{
 		// ist das Objekt ein Atom und noch dazu ein Wasserstoff
 		// und hängt es an einem Kohlenstoff, so wird es in der _proton_list gespeichert
-		int counter;
+		Position counter;
 	
 		if (RTTI::isKindOf<PDBAtom>(object))
 		{
-			patom_ = RTTI::castTo<PDBAtom>(object);
+			Atom* atom_ptr = RTTI::castTo<PDBAtom>(object);
 				
-			for(counter=0;counter<number_of_expressions_;counter++)
+			for (counter = 0; counter < first_atom_expressions_.size(); counter++)
 			{
-				if (expressions_[counter](*patom_))
+				if (first_atom_expressions_[counter](*atom_ptr))
 				{
-					atom_list_.push_back(patom_);
+					atom_list_.push_back(atom_ptr);
 					counter=MAX_EXPR+1;
 				}
 			}
 				
-			if (patom_->getCharge()!=0) effector_list_.push_back(patom_);
-				
-		} // Ende is kind of PDBAtom : die Liste wurde um alle entsprechenden Atome  erweitert
+			if (atom_ptr->getCharge() != 0.0)
+			{
+				effector_list_.push_back(atom_ptr);
+			}
+		}
 			
 				
 		return Processor::CONTINUE;
