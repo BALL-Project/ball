@@ -1,4 +1,4 @@
-// $Id: genericMolFile.h,v 1.7 2001/12/20 01:10:49 oliver Exp $
+// $Id: genericMolFile.h,v 1.8 2001/12/20 02:56:23 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -66,7 +66,7 @@ namespace BALL
 
 		/** Detailed constructor
 		*/
-		GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in)
+		GenericMolFile(const String& filename, File::OpenMode open_mode = File::IN)
 			throw(Exception::FileNotFound);
 
 		/**	Copy constructor
