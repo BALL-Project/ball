@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.116 2004/02/02 18:56:46 anhi Exp $
+// $Id: mainframe.C,v 1.117 2004/02/05 15:08:14 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -245,6 +245,12 @@ namespace BALL
 
 	void Mainframe::about()
 	{
+ 		if (geometric_control_->getSelection().size() == 0) return;
+		Representation* rep = *geometric_control_->getSelection().begin();
+		Mesh* mesh= (Mesh*) *rep->begin();
+		mesh->dump();
+		
+		return;
 		// showing about dialog
 		AboutDialog about;
 		about.exec(); 
