@@ -1,6 +1,7 @@
-// $Id: autoDeletable.C,v 1.3 2000/01/10 15:51:09 oliver Exp $
+// $Id: autoDeletable.C,v 1.4 2000/06/28 20:25:52 oliver Exp $
 
 #include <BALL/CONCEPT/autoDeletable.h>
+#include <new>
 
 namespace BALL 
 {
@@ -14,7 +15,9 @@ namespace BALL
 			// new operator, it should be on the heap
 			// and can be deleted automatically
 			enabled_ = true;
-		} else {
+		} 
+		else 
+		{
 			// otherwise it is on the stack or part of an
 			// array - we can't delete it automatically
 			enabled_ = false;
@@ -32,7 +35,9 @@ namespace BALL
 			// new operator, it should be on the heap
 			// and can be deleted automatically
 			enabled_ = true;
-		} else {
+		} 
+		else 
+		{
 			// otherwise it is on the stack or part of an
 			// array - we can't delete it automatically
 			enabled_ = false;
@@ -43,13 +48,24 @@ namespace BALL
 	{
 	}
 
-	void* AutoDeletable::operator new (size_t size)
+	void* AutoDeletable::operator new (size_t size) throw()
 	{
 		last_ptr_ = ::operator new(size);
 		return last_ptr_;
 	}
 	
-	void AutoDeletable::operator delete (void* ptr)
+	void AutoDeletable::operator delete (void* ptr) throw()
+	{
+		::operator delete(ptr);
+	}
+	
+	void* AutoDeletable::operator new (size_t size, void* ptr) throw()
+	{
+		last_ptr_ = ::operator new (size, ptr);
+		return last_ptr_;
+	}
+	
+	void AutoDeletable::operator delete (void* ptr, void*) throw()
 	{
 		::operator delete(ptr);
 	}
