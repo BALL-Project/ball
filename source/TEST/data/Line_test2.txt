@@ -1,1 +1,1 @@
-LINE((0 1 2) (3 4 5))
+LINE(VECTOR3(0 1 2) VECTOR3(3 4 5))
