@@ -7,6 +7,7 @@ CPP_SOURCES=\
 	baseFragment.C\
 	bond.C\
 	chain.C\
+	expression.C\
 	fragment.C\
 	global.C\
 	molecule.C\
@@ -18,6 +19,7 @@ CPP_SOURCES=\
 	residue.C\
 	secondaryStructure.C\
 	selector.C\
+	standardPredicates.C\
 	system.C
 
 include ../common.mak

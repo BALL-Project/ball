@@ -1,6 +1,6 @@
-// $Id: standardPredicates.C,v 1.1 2000/05/19 12:20:14 anker Exp $
+// $Id: standardPredicates.C,v 1.2 2000/05/19 13:19:49 anker Exp $
 
-#include <BALL/KERNEL/selector.h>
+#include <BALL/KERNEL/standardPredicates.h>
 
 #include <BALL/CONCEPT/selectable.h>
 #include <BALL/KERNEL/atom.h>

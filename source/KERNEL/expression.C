@@ -1,4 +1,5 @@
 #include <BALL/KERNEL/expression.h>
+#include <BALL/KERNEL/standardPredicates.h>
 
 #include <BALL/CONCEPT/selectable.h>
 #include <BALL/KERNEL/atom.h>
