@@ -7,7 +7,7 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>4</y>
+            <y>0</y>
             <width>562</width>
             <height>500</height>
         </rect>
@@ -206,120 +206,6 @@
                 <bool>true</bool>
             </property>
         </widget>
-    </widget>
-    <widget class="QLayoutWidget">
-        <property name="name">
-            <cstring>layout2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>5</x>
-                <y>6</y>
-                <width>547</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>Label_10</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>80</width>
-                        <height>29</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteBackground</enum>
-                </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
-                <property name="focusPolicy">
-                    <enum>NoFocus</enum>
-                </property>
-                <property name="lineWidth">
-                    <number>1</number>
-                </property>
-                <property name="text">
-                    <string>Parameter file</string>
-                </property>
-                <property name="textFormat">
-                    <enum>AutoText</enum>
-                </property>
-                <property name="alignment">
-                    <set>AlignVCenter|AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>parameter_file_edit</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>150</width>
-                        <height>0</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteBase</enum>
-                </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
-                <property name="focusPolicy">
-                    <enum>StrongFocus</enum>
-                </property>
-                <property name="text">
-                    <string>CHARMM/EEF1/param19_eef1.ini</string>
-                </property>
-                <property name="maxLength">
-                    <number>32767</number>
-                </property>
-                <property name="frame">
-                    <bool>true</bool>
-                </property>
-                <property name="echoMode">
-                    <enum>Normal</enum>
-                </property>
-                <property name="alignment">
-                    <set>AlignRight</set>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>browse_button</cstring>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>0</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="backgroundMode">
-                    <enum>PaletteButton</enum>
-                </property>
-                <property name="font">
-                    <font>
-                    </font>
-                </property>
-                <property name="focusPolicy">
-                    <enum>TabFocus</enum>
-                </property>
-                <property name="text">
-                    <string>Browse</string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
-        </hbox>
     </widget>
     <widget class="QGroupBox">
         <property name="name">
@@ -1193,6 +1079,126 @@
                 <cstring>scaling_electrostatic_1_4_line_edit</cstring>
             </property>
         </widget>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>Label_10</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>7</y>
+                <width>82</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>80</width>
+                <height>29</height>
+            </size>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteBackground</enum>
+        </property>
+        <property name="font">
+            <font>
+            </font>
+        </property>
+        <property name="focusPolicy">
+            <enum>NoFocus</enum>
+        </property>
+        <property name="lineWidth">
+            <number>1</number>
+        </property>
+        <property name="text">
+            <string>Parameter file</string>
+        </property>
+        <property name="textFormat">
+            <enum>AutoText</enum>
+        </property>
+        <property name="alignment">
+            <set>AlignVCenter|AlignRight</set>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>parameter_file_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>94</x>
+                <y>10</y>
+                <width>369</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>150</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteBase</enum>
+        </property>
+        <property name="font">
+            <font>
+            </font>
+        </property>
+        <property name="focusPolicy">
+            <enum>StrongFocus</enum>
+        </property>
+        <property name="text">
+            <string>CHARMM/EEF1/param19_eef1.ini</string>
+        </property>
+        <property name="maxLength">
+            <number>32767</number>
+        </property>
+        <property name="frame">
+            <bool>true</bool>
+        </property>
+        <property name="echoMode">
+            <enum>Normal</enum>
+        </property>
+        <property name="alignment">
+            <set>AlignRight</set>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>browse_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>469</x>
+                <y>7</y>
+                <width>82</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="backgroundMode">
+            <enum>PaletteButton</enum>
+        </property>
+        <property name="font">
+            <font>
+            </font>
+        </property>
+        <property name="focusPolicy">
+            <enum>TabFocus</enum>
+        </property>
+        <property name="text">
+            <string>Browse</string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
     </widget>
 </widget>
 <connections>
