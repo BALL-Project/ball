@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.64 2004/11/13 10:30:53 amoll Exp $
+// $Id: geometricControl.C,v 1.65 2004/11/13 12:06:29 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -331,6 +331,7 @@ namespace BALL
 			List<Representation*>::Iterator it = reps.begin();
 			for (; it != reps.end(); ++it)
 			{
+				removeRepresentation(**it);
 				if ((*it)->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 				{
 					SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
