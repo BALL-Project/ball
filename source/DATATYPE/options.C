@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.4 1999/12/04 18:34:27 oliver Exp $ 
+// $Id: options.C,v 1.5 1999/12/28 18:24:59 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -10,6 +10,8 @@
 #include <fstream>
 #include <list>
 #include <algorithm>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -146,16 +148,19 @@ namespace BALL
 		long value;
 
 		errno = 0;
-		const_iterator it = find(key);
+		ConstIterator it = find(key);
 		if (it == end())
 			return 0;
 
 		value = atol((*it).second.c_str());
 		
 		if (errno == 0)
+		{
 			return value;
-		else 
+		} else {
+			errno = 0;
 			return 0;
+		}
 	}
 
 
@@ -260,7 +265,7 @@ namespace BALL
 
 	String Options::get(const String& key) const
 	{
-		const_iterator it = find(key);
+		ConstIterator it = find(key);
 
 		if (it == end())
 			return "";
@@ -295,14 +300,14 @@ namespace BALL
 	}
 		
 
-	void Options::dump (ostream& stream, unsigned long /* depth */) const
+	void Options::dump (ostream& stream, Size /* depth */) const
 	{
 		std::list<String>		entry_list;
 		String							entry;
 
 		stream << "[OptionsTable: " << getName() << " (" << size() << " entries)]" << endl;
 
-		StringHashMap<String>::const_iterator	it(begin());
+		StringHashMap<String>::ConstIterator	it(begin());
 		for(; !(it == end()); ++it)
 		{
 			entry = (*it).first + ' ' + (*it).second;
