@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.4 2000/02/06 19:41:15 oliver Exp $
+// $Id: HINFile.h,v 1.5 2000/05/23 05:45:11 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -11,16 +11,8 @@
 #	include <BALL/SYSTEM/file.h>
 #endif
 
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
-#endif
-
 #ifndef BALL_DATATYPE_HASHMAP_H
 # include <BALL/DATATYPE/hashMap.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-# include <BALL/KERNEL/bond.h>
 #endif
 
 #ifndef BALL_MATHS_BOX_H
@@ -29,6 +21,10 @@
 
 namespace BALL 
 {
+
+
+	class System;
+	class Atom;
 
 	/**	HyperChem file class.
 			This class enables BALL to read and write HyperChem HIN files.
