@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.C,v 1.3 2000/12/19 15:22:58 anker Exp $
+// $Id: trajectoryFile.C,v 1.4 2001/03/11 19:41:03 anker Exp $
 
 #include <BALL/FORMAT/trajectoryFile.h>
 
@@ -73,15 +73,6 @@ namespace BALL
 	}
 
 
-	bool TrajectoryFile::updateHeader(const SnapShotManager& /* manager */)
-		throw()
-	{
-		Log.error() << "TrajectoryFile::updateHeader(): " 
-			<< "This method should not be called" << endl;
-		return false;
-	}
-
-
 	bool TrajectoryFile::writeHeader()
 		throw()
 	{
@@ -117,4 +108,29 @@ namespace BALL
 		return false;
 	}
 
+
+	bool TrajectoryFile::read(SnapShot& /* snapshot */)
+		throw()
+	{
+		Log.error() << "TrajectoryFile::read(): " 
+			<< "This method should not be called" << endl;
+		return false;
+	}
+
+
+	Size TrajectoryFile::getNumberOfSnapShots() const
+		throw()
+	{
+		return number_of_snapshots_;
+	}
+
+
+	bool TrajectoryFile::flushToDisk(const ::std::vector<SnapShot> /* buffer */)
+		throw()
+	{
+		Log.error() << "TrajectoryFile::flushToDisk(): "
+			<< "This method should not be called" << endl;
+		return false;
+	}
+	
 } // namespace BALL
