@@ -278,14 +278,13 @@ void Mainframe::assignCharges()
 
 void Mainframe::calculateAmberEnergy()
 {
-	if (!isSystemSelected())
+	// retrieve the system from the selection
+	System* system = getSelectedSystem();
+	if (system == 0)
 	{
 		statusBar()->message("to calculate AMBER energies, one system has to be selected");
 		return;
 	}
-
-	// retrieve the system from the selection
-	System& system = *RTTI::castTo<System>(**selection_.begin()); 
 
 	// set up the AMBER force field
 	statusBar()->message("setting up force field...");
@@ -300,7 +299,7 @@ void Mainframe::calculateAmberEnergy()
   amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
   amber.options[AmberFF::Option::FILENAME] = String(minimization_dialog_->getFilename());
 
-	if (!amber.setup(system))
+	if (!amber.setup(*system))
 	{
 		Log.error() << "Force field setup failed." << std::endl;
 		return;
@@ -396,15 +395,9 @@ void Mainframe::computeSurface()
 
 void Mainframe::amberMinimization()
 {
-	if (selection_.size() == 0)
-	{
-		return;
-	}
-
-	if (!isSystemSelected()) return;
 	// retrieve the system from the selection
-	System& system = *RTTI::castTo<System>(**selection_.begin());
-
+	System* system = getSelectedSystem();
+	if (system == 0) return;
 
 	// execute the minimization dialog
 	// and abort if cancel is clicked
@@ -427,7 +420,7 @@ void Mainframe::amberMinimization()
 	amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
 	amber.options[AmberFF::Option::FILENAME] = String(minimization_dialog_->getFilename());
 
- 	if (!amber.setup(system))
+ 	if (!amber.setup(*system))
 	{
 		Log.error() << "Setup of AMBER force field failed." << endl;
 		return;
@@ -470,7 +463,7 @@ void Mainframe::amberMinimization()
 	// 
 	while (!minimizer->minimize(steps, true))
 	{
-    MainControl::update(system.getRoot());
+    MainControl::update(system->getRoot());
 
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
@@ -511,14 +504,9 @@ void Mainframe::amberMinimization()
 
 void Mainframe::amberMDSimulation()
 {
-	if (!isSystemSelected())
-	{
-		return;
-	}
-
 	// retrieve the system from the selection
-	System& system = *RTTI::castTo<System>(**selection_.begin()); 
-
+	System* system = getSelectedSystem();
+	if (system == 0) return;
 
 	// execute the MD simulation dialog
 	// and abort if cancel is clicked
@@ -541,7 +529,7 @@ void Mainframe::amberMDSimulation()
 	// amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
 	// amber.options[AmberFF::Option::FILENAME] = String(minimization_dialog_->getFilename());
 
- 	if (!amber.setup(system))
+ 	if (!amber.setup(*system))
 	{
 		Log.error() << "Setup of AMBER force field failed." << endl;
 		return;
@@ -580,7 +568,7 @@ void Mainframe::amberMDSimulation()
 	while (mds->getNumberOfIteration() < 500)
 	{
 		mds->simulateIterations(steps, true);
-    MainControl::update(system.getRoot());
+    MainControl::update(system->getRoot());
 
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
