@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StringHashMap_test.C,v 1.5 2003/06/25 10:18:25 anker Exp $
+// $Id: StringHashMap_test.C,v 1.6 2003/06/27 11:35:23 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -33,7 +33,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(StringHashMap, "$Id: StringHashMap_test.C,v 1.5 2003/06/25 10:18:25 anker Exp $")
+START_TEST(StringHashMap, "$Id: StringHashMap_test.C,v 1.6 2003/06/27 11:35:23 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -113,7 +113,7 @@ RESULT
 
 StringHashMap<int> hm;
 
-CHECK(StringHashMap(const StringHashMap& map, bool /* deep = true */) throw())
+CHECK(StringHashMap(const StringHashMap& map) throw())
 	hm.insert("a", 0);
 	hm.insert("b", 1);
 	hm.insert("c", 2);
@@ -134,7 +134,7 @@ CHECK(void destroy() throw())
 	TEST_EQUAL(hm.getBucketSize(), 3)
 RESULT
 
-CHECK(void set(const StringHashMap& hash_map, bool /* deep */ = true) throw())
+CHECK(void set(const StringHashMap& hash_map) throw())
 	StringHashMap<int> hm2;
 	hm2.set(hm);
 	TEST_EQUAL(hm2["a"], 0)
@@ -143,7 +143,7 @@ CHECK(void set(const StringHashMap& hash_map, bool /* deep */ = true) throw())
 	TEST_EQUAL(hm2.getSize(), 3)
 RESULT
 
-CHECK(void get(StringHashMap& hash_map, bool deep = true) const throw())
+CHECK(void get(StringHashMap& hash_map) const throw())
 	StringHashMap<int> hm2;
 	hm.get(hm2);
 	TEST_EQUAL(hm2["a"], 0)
@@ -271,15 +271,17 @@ CHECK([EXTRA] apply(UnaryProcessor))
 	TEST_EQUAL(myproc.getPointer()->first, "a") myproc.forward();
 RESULT
 
-CHECK(BALL_CREATE_DEEP(StringHashMap))
+CHECK(BALL_CREATE(StringHashMap))
  	StringHashMap<int> hm;
 	hm.insert("a", 0);
-	StringHashMap<int> p = *(StringHashMap<int>*) hm.create(false, false);
+	StringHashMap<int>* p = (StringHashMap<int>*) hm.create(false, true);
 	StringHashMap<int> empty;
-	TEST_EQUAL(p == empty, true)
-	p = *(StringHashMap<int>*)hm.create();
-	bool test = (p == hm);
+	TEST_EQUAL(*p == empty, true)
+	delete p;
+	p = (StringHashMap<int>*)hm.create();
+	bool test = (*p == hm);
 	TEST_EQUAL(test, true)
+	delete p;
 RESULT
 
 CHECK(bool remove(const String& key) throw())
