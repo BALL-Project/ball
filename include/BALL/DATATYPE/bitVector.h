@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.2 1999/12/04 18:34:12 oliver Exp $
+// $Id: bitVector.h,v 1.3 1999/12/17 11:16:20 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -38,50 +38,77 @@
 #define BALL_BLOCK_SIZE(bits) (Size)(((bits) + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT)
 
 
-namespace BALL {
+namespace BALL 
+{
 
 	class BitVector;
 
-	/**	
+	/**	Bit Class
 	*/
 	class Bit
 	{
 		public:
 
-			// --- CONSTRUCTORS
+		/**	@name	Constructors and Destructors
+		*/
+		//@{
 
-			Bit(const BitVector& bitvector, Index index = 0);
+		/**	Copy constructor
+		*/
+		Bit(const BitVector& bitvector, Index index = 0);
+		//@}
 
-			// --- CONVERTERS
+		/**	@name	Converters
+		*/
+		//@{
+		
+		/**
+		*/
+		operator bool() const;
+		//@}
 
-			operator bool() const;
+		/**	Assignment
+		*/
+		//@{
+		
+		/**
+		*/
+		Bit& operator = (const Bit& bit);
 
-			// --- ASSIGNMENT METHODS
+		/**
+		*/
+		Bit& operator = (bool bit);
+		//@}
 
-			Bit& operator = (const Bit& bit);
+		/**	@name	 Predicates
+		*/
+		//@{
 
-			Bit& operator = (bool );
+		/**
+		*/
+		bool operator == (const Bit& bit) const;
 
-			// --- PREDICATES
+		/**
+		*/
+		bool operator == (bool bit) const;
 
-			bool operator == (const Bit& bit) const;
+		/**
+		*/
+		bool operator != (const Bit& bit) const;
 
-			bool operator == (bool bit) const;
-
-			bool operator != (const Bit& bit) const;
-
-			bool operator != (bool bit) const;
-
-		protected:
+		/**
+		*/
+		bool operator != (bool bit) const;
+		//@}
 
 		private:
 
-			Bit();
+		Bit();
 
-			// --- ATTRIBUTES
+		// --- ATTRIBUTES
 
-			BitVector* 	bitvector_;
-			Index 			index_;
+		BitVector* 	bitvector_;
+		Index 			index_;
 	};
 
 
@@ -130,7 +157,7 @@ namespace BALL {
 		void set(const BitVector& bit_vector, bool deep = true);
 
 		///
-		void set(const char *bit_string);
+		void set(const char* bit_string);
 
 		///
 		BitVector& operator = (const BitVector& bit_vector);
@@ -170,60 +197,25 @@ namespace BALL {
 		const BlockType* getBitSet() const;
 
 		///
-		Bit operator []	(Index index)
-		{
-			block_(index);
-	
-			return Bit(*this, index);
-		}
+		Bit operator []	(Index index);
 	
 		///
-		bool operator [] (Index index) const
-		{
-			validateIndex_(index);
-
-			return ((BitVector *)this)->getBit(index);
-		}
+		bool operator [] (Index index) const;
 
 		///
-		const char *get(char *bit_string_buffer, Size buffer_size, Index first = 0, Index last = -1) const;
+		const char* get(char* bit_string_buffer, Size buffer_size, Index first = 0, Index last = -1) const;
 
 		///
-		void setBit(Index index, bool value = true)
-		{
-			validateIndex_(index);
-
-			if (value == true)
-			{
-				bitset_[block_(index)] |= mask_(index);
-			} else {
-				bitset_[block_(index)] &= ~mask_(index);
-			}
-		}
+		void setBit(Index index, bool value = true);
 
 		///
-		bool getBit(Index index) const
-		{
-			validateIndex_(index);
-
-			BitVector* const	const_this = const_cast<BitVector *>(this);
-
-			return const_this->getBit(index);
-		}
+		bool getBit(Index index) const;
 
 		///
-		bool getBit(Index index)
-		{
-			return (bool)((bitset_[block_(index)] & mask_(index)) != 0);
-		}
+		bool getBit(Index index);
 
 		///
-		void toggleBit(Index index)
-		{
-			validateIndex_(index);
-
-			bitset_[block_(index)] ^= mask_(index);
-		}
+		void toggleBit(Index index);
 
 		///
 		void fill(bool value = true, Index first = 0 , Index last = -1);
@@ -268,29 +260,29 @@ namespace BALL {
 		BitVector operator | (const BitVector& bit_vector);
 
 		///
-		BitVector &operator |= (const BitVector& bit_vector);
+		BitVector& operator |= (const BitVector& bit_vector);
 
 		///
 		BitVector operator & (const BitVector& bit_vector);
 
 		///
-		BitVector &operator &= (const BitVector& bit_vector);
+		BitVector& operator &= (const BitVector& bit_vector);
 
 		///
-		BitVector operator ^(const BitVector& bit_vector);
+		BitVector operator ^ (const BitVector& bit_vector);
 
 		///
-		BitVector &operator ^= (const BitVector& bit_vector);
+		BitVector& operator ^= (const BitVector& bit_vector);
 
 		///
-		BitVector operator ~();
+		BitVector operator ~ ();
 		//@}
 
 		/**	@name	Predicates */
 		//@{
 
 		///
-		bool operator ==(const BitVector& bit_vector) const;
+		bool operator == (const BitVector& bit_vector) const;
 
 		///
 		bool operator != (const BitVector& bit_vector) const;
@@ -337,8 +329,6 @@ namespace BALL {
 
 		//@}
 
-
-
 		protected:
 	
 		void validateIndex_(Index& index) const;
@@ -346,15 +336,11 @@ namespace BALL {
 		void validateRange_(Index& first, Index& last) const;
 
 
-
 		private:
 	
 		Index block_(Index index);
 
-		BlockType mask_(Index index) const
-		{
-			return (1 << (index & BALL_BLOCK_MASK));
-		}
+		BlockType mask_(Index index) const;
 
 		// --- ATTRIBUTES
 
