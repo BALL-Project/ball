@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.30 2004/04/14 15:25:25 amoll Exp $
+// $Id: scene.h,v 1.31 2004/04/16 10:27:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -530,7 +530,10 @@ namespace BALL
 
 			Position screenshot_nr_,
 							 pov_nr_;
+
 			QPoint last_pos_;
+
+			static QGLFormat gl_format_;
 		};
 
 } } // namespaces

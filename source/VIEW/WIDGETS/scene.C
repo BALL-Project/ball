@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.52 2004/04/15 13:03:08 amoll Exp $
+// $Id: scene.C,v 1.53 2004/04/16 10:27:16 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -39,9 +39,11 @@ namespace BALL
 		#define  ROTATE_FACTOR    11
 		#define  TRANSLATE_FACTOR 6 
 
+ 		QGLFormat Scene::gl_format_(QGL::DepthBuffer | QGL::StereoBuffers);
+
 		Scene::Scene()
 			throw()
-			:	QGLWidget(),
+			:	QGLWidget(gl_format_),
 				ModularWidget("<Scene>"),
 				current_mode_(ROTATE__MODE),
 				rotate_id_(-1),
@@ -64,7 +66,7 @@ namespace BALL
 
 		Scene::Scene(QWidget* parent_widget, const char* name, WFlags w_flags)
 			throw()
-			:	QGLWidget(parent_widget, name, 0, w_flags),
+			:	QGLWidget(gl_format_, parent_widget, name, 0, w_flags),
 				ModularWidget(name),
 				current_mode_(ROTATE__MODE),
 				rotate_id_(-1),
@@ -94,7 +96,7 @@ namespace BALL
 
 		Scene::Scene(const Scene& scene, QWidget* parent_widget, const char* name, WFlags w_flags)
 			throw()
-			:	QGLWidget(parent_widget, name, 0, w_flags),
+			:	QGLWidget(gl_format_, parent_widget, name, 0, w_flags),
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
 				quaternion_(scene.quaternion_),
