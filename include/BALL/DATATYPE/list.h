@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.4 2000/07/07 04:20:42 amoll Exp $
+// $Id: list.h,v 1.5 2000/08/23 15:36:13 anker Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -23,7 +23,12 @@ namespace BALL
 	
 	using std::list;
 	
-	template <typename Value>
+	/** Extended list object.
+		This object is an improved version of the STL list class
+		{\bf Definition:} \URL{BALL/DATATYPE/list.h}
+	 */
+
+ 	template <typename Value>
 	class List
 		:	public list<Value>
 	{
@@ -123,10 +128,31 @@ namespace BALL
 		//@{
 
 		/** Return the size of the list.
+			@return Size the size of the list
 		*/
 		Size getSize() const
 		{
 			return size();
+		}
+
+		/** Remove an item from the list. The first item that matches 
+			{\tt item} will be removed.
+			@param 	item the item to be removed
+			@return bool {\bf true} if the item was removed
+		 */
+		bool remove(const Value& item)
+		{
+			Iterator it = begin();
+			for (; it != end(); ++it)
+			{
+				if (*it == item)
+				{
+					erase(it);
+					Log.info() << "returning 1" << endl;
+					return 1;
+				}
+			}
+			return 0;
 		}
 		
 		//@}
