@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.3 1999/12/04 14:12:24 oliver Exp $
+// $Id: property.h,v 1.4 1999/12/28 18:42:26 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -263,280 +263,282 @@ namespace BALL
 	{
 		public:
 
-			/**	@name	Constructors and Destructors */
-			//@{
+		/**	@name	Constructors and Destructors */
+		//@{
 
-			/// Default constructor
-			PropertyManager();
+		/// Default constructor
+		PropertyManager();
 
-			/// Copy constructor
-			PropertyManager(const PropertyManager& property_manager, bool deep = true);
+		/// Copy constructor
+		PropertyManager(const PropertyManager& property_manager, bool deep = true);
 
-			/// Destructor
-			virtual ~PropertyManager();
+		/// Destructor
+		virtual ~PropertyManager();
 
-			/// Clears all properties
-			void clear();
+		/// Clears all properties
+		void clear();
 
-			/// Clears all properties
-			void destroy();
-			//@}
+		/// Clears all properties
+		void destroy();
+		//@}
 
-			/**	@name	Assignment 
-			*/
-			//@{
-	
-			/** Assign properties from another property manager
-					@param property_manager the PropertyManager object to copy from
-					@param deep ignored (just for interface compatibility)
-			*/
-			void set(const PropertyManager& property_manager, bool deep = true);
+		/**	@name	Assignment 
+		*/
+		//@{
 
-			/** Assignment operator.
-					This operator calls {\tt set(property\_manager)} to assign
-					a new object.
-					@param property_manager the PropertyManager object to copy from
-					@return {\tt *this}
-			*/
-			PropertyManager& operator = (const PropertyManager& property_manager);
+		/** Assign properties from another property manager
+				@param property_manager the PropertyManager object to copy from
+				@param deep ignored (just for interface compatibility)
+		*/
+		void set(const PropertyManager& property_manager, bool deep = true);
 
-			/** Assign properties to another property manager.
-					This method copies the contents of the a PropertyManager object
-					to the given {\tt property\_manager}.
-					@param	property_manager the target object
-					@param	deep ignored (just for interface compatibility)
-			*/
-			void get(PropertyManager& property_manager, bool deep = true) const;
+		/** Assignment operator.
+				This operator calls {\tt set(property\_manager)} to assign
+				a new object.
+				@param property_manager the PropertyManager object to copy from
+				@return {\tt *this}
+		*/
+		PropertyManager& operator = (const PropertyManager& property_manager);
 
-			/** Swap the properties with another property manager.
-					@param property_manager the PropertyManager object to swap the properties with
-			*/
-			void swap(PropertyManager& property_manager);
+		/** Assign properties to another property manager.
+				This method copies the contents of the a PropertyManager object
+				to the given {\tt property\_manager}.
+				@param	property_manager the target object
+				@param	deep ignored (just for interface compatibility)
+		*/
+		void get(PropertyManager& property_manager, bool deep = true) const;
 
-			//@}
+		/** Swap the properties with another property manager.
+				@param property_manager the PropertyManager object to swap the properties with
+		*/
+		void swap(PropertyManager& property_manager);
 
-			/**	@name	Accessors 
-			*/
-			//@{
-				 
-			/** Return a mutable reference to the bit vector.
-					This method returns the bit vector containing the unnamed properties
-					of the property manager.
-					@return BitVector\& a mutable reference to the (private) BitVector containing 
-						the unnamed properties
-			*/
-			BitVector& getBitVector();
+		//@}
 
-			/** Return a const reference to the bit vector containing the unnamed properties.
-					This method returns the bit vector containing the unnamed properties
-					of the property manager.
-					@return BitVector\& a const reference to the (private) BitVector containing 
-						the unnamed properties
-			*/
-			const BitVector& getBitVector() const;
-				
+		/**	@name	Accessors 
+		*/
+		//@{
+			 
+		/** Return a mutable reference to the bit vector.
+				This method returns the bit vector containing the unnamed properties
+				of the property manager.
+				@return BitVector\& a mutable reference to the (private) BitVector containing 
+					the unnamed properties
+		*/
+		BitVector& getBitVector();
 
-			//@}
-
-			/**	@name Converters 
-			*/
-			//@{
-
-			/** Converter to BitVector.	
-					This operator converts a PropertyManager object to a BitVector
-					object containing the unnamed properties.
-					@return BitVector\& a reference to the BitVector containing the
-						unnamed properties of the property manager
-			*/
-			operator BitVector& ();
-			//@}
-
-
-			/**	@name	Handling unnamed bit properties 
-			*/
-			//@{
-
-			/** Set a property.
-					This method sets an unnamed property of a PropertyManager object by
-					calling {\tt BitVector::setBit(property)} for the private bit vector.
-					@param property the number of the property to be set
-			*/
-			void setProperty(Property property);
-
-			/** Clear a property.
-					This method clears an unnamed property of a PropertyManager object by
-					calling {\tt BitVector::clearBit(property)} for the private bit vector.
-					@param property the number of the property to be cleared
-			*/
-			void clearProperty(Property property);
-
-			/** Toggle (invert) a property.
-					This method clears an unnamed property of a PropertyManager object by
-					calling {\tt BitVector::toggleBit(property)} for the private bit vector.
-					@param property the number of the property to be toggled
-			*/
-			void toggleProperty(Property property);
-
-			/** Count all properties.
-					This method returns the sum of unnamed and named properties.
-					It counts the number of {\em ones} in the bit vector
-					and the number of properties stored in the named property vector.
-			*/
-			Size countProperties() const;
-			//@}
-		
-			/**	@name	Handling named properties 
-					PropertyManager contains an array of \Ref{NamedProperty} objects.
-					Each of the NamedProeprty objects has to have a {\em unique} name.
-					The setProperty methods ensure the uniqueness of theis name.
-					If a setProperty method is called for an existing name, the
-					existing object is destructed prior to the insertion of the new object.
-			*/
-			//@{
-			/**	Set a named property.
-					This method adds a new named property to the property manager's 
-					array of named properties or substitutes an already existing
-					named property by {\tt property}. If a property with the same name as 
-					{\tt property} already exists, it is destructed.
-					@param	property the new property to be set
-			*/
-			void setProperty(const NamedProperty& property);
-
-			/**	Set a named property without any data.
-					This method creates a new named property not containing any data
-					({\tt NamedProperty::Type == NONE}).
-					Already existing data using the same {\tt name} is overwritten.
-					@param	name the name to be used for the new property
-			*/
-			void setProperty(const string& name);
-
-			/**	Set a named property containing boolean data.
-					This method creates a new named property containing boolean
-					data ({\tt NamedProperty::Type == BOOL}).
-					Already existing data using the same {\tt name} is overwritten.
-					@param	name the name to be used for the new property
-					@param	value the boolean value 
-			*/
-			void setProperty(const string& name, bool value);
-
-			/**	Set a named property containing a signed integer number.
-					This method creates a new named property containing an 
-					int ({\tt NamedProperty::Type == INT}).
-					Already existing data using the same {\tt name} is overwritten.
-					@param	name the name to be used for the new property
-					@param	value the data 
-			*/
-			void setProperty(const string& name, int value);
-
-			/**	Set a named property containing an unsigned integer number.
-					This method creates a new named property containing an 
-					unsigned int ({\tt NamedProperty::Type == UNSIGNED\_INT}).
-					Already existing data using the same {\tt name} is overwritten.
-					@param	name the name to be used for the new property
-					@param	value the data 
-			*/
-			void setProperty(const string& name, unsigned int value);
-
-			/**	Set a named property containing a floating point number.
-					This method creates a new named property containing a
-					floating point number ({\tt NamedProperty::Type == FLOAT}).
-					Already existing data using the same {\tt name} is overwritten.
-					@param	name the name to be used for the new property
-					@param	value the data 
-			*/
-			void setProperty(const string& name, float value);
-
-			/**	Set a named property containing a string.
-					This method creates a new named property containing a
-					string ({\tt NamedProperty::Type == STRING}).
-					Already existing data using the same {\tt name} is overwritten.
-					@param	name the name to be used for the new property
-					@param	value the data 
-			*/
-			void setProperty(const string& name, const string& value);
-
-			/**	Set a named property containing a string.
-					This method creates a new named property containing a
-					string ({\tt NamedProperty::Type == STRING}).
-					Already existing data using the same {\tt name} is overwritten.
-					@param	name the name to be used for the new property
-					@param	value the data 
-			*/
-			void setProperty(const string& name, const PersistentObject& value);
-
-			/**	Retrieve a named property.
-					If the proeprty manager contains a property named {\tt name}
-					this property is returned. An empty property is returned
-					otherwise.
-					@param	name the name of the proeprty to be retrieved
-			*/
-			const NamedProperty& getProperty(const string& name) const;
-
-			/**	Remove a named property.
-					If the named property {\tt name} does exist, it is remove from
-					the array of properties.
-					@param name the name of the property to be removed
-			*/
-			void clearProperty(const string& name);
-
-			/**	Return the number of named properties.
-					@return Size the number of named properties stored in the ProprtyManager object
-			*/
-			Size countNamedProperties() const;
-			//@}
-
-			/**	@name	Predicates 
-			*/
-			//@{
-			/// Query for an unnamed property
-			bool hasProperty(Property property) const;
-
-			/// Query for a named property
-			bool hasProperty(const string& name) const;
-
-			//@}
-
-			/**	@name	Storers */
-			//@{
-
-			///
-			friend ostream& operator << (ostream& s, const PropertyManager& property_manager);
-
-			///
-			friend istream& operator >> (istream& s, PropertyManager& property_manager);
-			//@}
-
-
-			/**	@name Storable Model
-			*/
-			//@{
+		/** Return a const reference to the bit vector containing the unnamed properties.
+				This method returns the bit vector containing the unnamed properties
+				of the property manager.
+				@return BitVector\& a const reference to the (private) BitVector containing 
+					the unnamed properties
+		*/
+		const BitVector& getBitVector() const;
 			
-			/**	Persistent stream writing.
-			*/
-			void write(PersistenceManager& pm) const;
 
-			/**	Persistent stream reading.
-			*/
-			bool read(PersistenceManager& pm);
+		//@}
 
-			//@}
+		/**	@name Converters 
+		*/
+		//@{
+
+		/** Converter to BitVector.	
+				This operator converts a PropertyManager object to a BitVector
+				object containing the unnamed properties.
+				@return BitVector\& a reference to the BitVector containing the
+					unnamed properties of the property manager
+		*/
+		operator BitVector& ();
+		//@}
+
+
+		/**	@name	Handling unnamed bit properties 
+		*/
+		//@{
+
+		/** Set a property.
+				This method sets an unnamed property of a PropertyManager object by
+				calling {\tt BitVector::setBit(property)} for the private bit vector.
+				@param property the number of the property to be set
+		*/
+		void setProperty(Property property);
+
+		/** Clear a property.
+				This method clears an unnamed property of a PropertyManager object by
+				calling {\tt BitVector::clearBit(property)} for the private bit vector.
+				@param property the number of the property to be cleared
+		*/
+		void clearProperty(Property property);
+
+		/** Toggle (invert) a property.
+				This method clears an unnamed property of a PropertyManager object by
+				calling {\tt BitVector::toggleBit(property)} for the private bit vector.
+				@param property the number of the property to be toggled
+		*/
+		void toggleProperty(Property property);
+
+		/** Count all properties.
+				This method returns the sum of unnamed and named properties.
+				It counts the number of {\em ones} in the bit vector
+				and the number of properties stored in the named property vector.
+		*/
+		Size countProperties() const;
+		//@}
 	
+		/**	@name	Handling named properties 
+				PropertyManager contains an array of \Ref{NamedProperty} objects.
+				Each of the NamedProeprty objects has to have a {\em unique} name.
+				The setProperty methods ensure the uniqueness of theis name.
+				If a setProperty method is called for an existing name, the
+				existing object is destructed prior to the insertion of the new object.
+		*/
+		//@{
+		/**	Set a named property.
+				This method adds a new named property to the property manager's 
+				array of named properties or substitutes an already existing
+				named property by {\tt property}. If a property with the same name as 
+				{\tt property} already exists, it is destructed.
+				@param	property the new property to be set
+		*/
+		void setProperty(const NamedProperty& property);
 
-			/**	@name	Debugging and Diagnostics */
-			//@{
+		/**	Set a named property without any data.
+				This method creates a new named property not containing any data
+				({\tt NamedProperty::Type == NONE}).
+				Already existing data using the same {\tt name} is overwritten.
+				@param	name the name to be used for the new property
+		*/
+		void setProperty(const string& name);
 
-			///
-			bool isValid() const;
+		/**	Set a named property containing boolean data.
+				This method creates a new named property containing boolean
+				data ({\tt NamedProperty::Type == BOOL}).
+				Already existing data using the same {\tt name} is overwritten.
+				@param	name the name to be used for the new property
+				@param	value the boolean value 
+		*/
+		void setProperty(const string& name, bool value);
+
+		/**	Set a named property containing a signed integer number.
+				This method creates a new named property containing an 
+				int ({\tt NamedProperty::Type == INT}).
+				Already existing data using the same {\tt name} is overwritten.
+				@param	name the name to be used for the new property
+				@param	value the data 
+		*/
+		void setProperty(const string& name, int value);
+
+		/**	Set a named property containing an unsigned integer number.
+				This method creates a new named property containing an 
+				unsigned int ({\tt NamedProperty::Type == UNSIGNED\_INT}).
+				Already existing data using the same {\tt name} is overwritten.
+				@param	name the name to be used for the new property
+				@param	value the data 
+		*/
+		void setProperty(const string& name, unsigned int value);
+
+		/**	Set a named property containing a floating point number.
+				This method creates a new named property containing a
+				floating point number ({\tt NamedProperty::Type == FLOAT}).
+				Already existing data using the same {\tt name} is overwritten.
+				@param	name the name to be used for the new property
+				@param	value the data 
+		*/
+		void setProperty(const string& name, float value);
+
+		/**	Set a named property containing a string.
+				This method creates a new named property containing a
+				string ({\tt NamedProperty::Type == STRING}).
+				Already existing data using the same {\tt name} is overwritten.
+				@param	name the name to be used for the new property
+				@param	value the data 
+		*/
+		void setProperty(const string& name, const string& value);
+
+		/**	Set a named property containing a string.
+				This method creates a new named property containing a
+				string ({\tt NamedProperty::Type == STRING}).
+				Already existing data using the same {\tt name} is overwritten.
+				@param	name the name to be used for the new property
+				@param	value the data 
+		*/
+		void setProperty(const string& name, const PersistentObject& value);
+
+		/**	Retrieve a named property.
+				If the proeprty manager contains a property named {\tt name}
+				this property is returned. An empty property is returned
+				otherwise.
+				@param	name the name of the proeprty to be retrieved
+		*/
+		const NamedProperty& getProperty(const string& name) const;
+
+		/**	Remove a named property.
+				If the named property {\tt name} does exist, it is remove from
+				the array of properties.
+				@param name the name of the property to be removed
+		*/
+		void clearProperty(const string& name);
+
+		/**	Return the number of named properties.
+				@return Size the number of named properties stored in the ProprtyManager object
+		*/
+		Size countNamedProperties() const;
+		//@}
+
+		/**	@name	Predicates 
+		*/
+		//@{
+		/// Query for an unnamed property
+		bool hasProperty(Property property) const;
+
+		/// Query for a named property
+		bool hasProperty(const string& name) const;
+
+		//@}
+
+		/**	@name	Storers */
+		//@{
+
+		///
+		friend std::ostream& operator << (std::ostream& s, const PropertyManager& property_manager);
+
+		///
+		friend std::istream& operator >> (std::istream& s, PropertyManager& property_manager);
+		//@}
+
+
+		/**	@name Storable Model
+		*/
+		//@{
 		
-			///
-			void dump(ostream& s = cout, unsigned long depth = 0) const;
-			//@}
+		/**	Persistent stream writing.
+		*/
+		void write(PersistenceManager& pm) const;
+
+		/**	Persistent stream reading.
+		*/
+		bool read(PersistenceManager& pm);
+
+		//@}
+
+
+		/**	@name	Debugging and Diagnostics */
+		//@{
+
+		///
+		bool isValid() const;
+	
+		///
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		//@}
+
+
 
 		private:
 
-			BitVector							bitvector_;
+		BitVector							bitvector_;
 
-			vector<NamedProperty>	named_properties_;
+		vector<NamedProperty>	named_properties_;
 	};
 
 	//@}

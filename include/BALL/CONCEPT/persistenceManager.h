@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.4 1999/12/22 16:57:04 oliver Exp $
+// $Id: persistenceManager.h,v 1.5 1999/12/28 18:41:33 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -268,7 +268,9 @@ namespace BALL
 		void writeObjectPointer(const T* object, const char* name)
 	 	{
 			if (object != 0 && !object_out_.has(object))
+			{
 				object_out_needed_.push_back(object);
+			}
 
 			writeObjectPointerHeader(RTTI<T>::getStreamName(), name);
 			put((void*)object);
@@ -302,7 +304,9 @@ namespace BALL
 		void writeObjectReference(const T& object, const char* name)
 		{
 			if (&object != 0 && !object_out_.has(&object))
+			{
 				object_out_needed_.push_back(&object);
+			}
 
 			writeObjectReferenceHeader(RTTI<T>::getStreamName(), name);
 			put((void*)&object);
@@ -680,10 +684,10 @@ namespace BALL
 
 		bool updatePointers_();
 
-		typedef	HashSet<const PersistentObject*>		ObjectSet;
-		typedef	list<const PersistentObject*>				ObjectList;
-		typedef	HashMap<void*, void*>								PointerMap;
-		typedef	list<pair<void**, void*> >					PointerList;
+		typedef	HashSet<const PersistentObject*>	ObjectSet;
+		typedef	list<const PersistentObject*>			ObjectList;
+		typedef	HashMap<void*, void*>							PointerMap;
+		typedef	list<pair<void**, void*> >				PointerList;
 
 		StringHashMap<CreateMethod>		create_methods_;
 
