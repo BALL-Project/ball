@@ -1,4 +1,4 @@
-// $Id: client.C,v 1.4 1999/12/30 18:05:45 oliver Exp $
+// $Id: client.C,v 1.5 2000/01/13 22:32:43 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -12,18 +12,21 @@ namespace BALL
 
 
 		Client::Client()
-			:
-			host_(0),
-			port_(0)
+			:	host_(),
+				port_(VIEW_DEFAULT_PORT)
 		{
 		}
 
 		Client::Client
 			(const Client&  /* client */, bool /* deep */)
-			:
-			host_(0),
-			port_(0)
+			:	host_(),
+				port_(VIEW_DEFAULT_PORT)
 		{
+		}
+
+		Client::Client(const String& host, int port)
+		{
+			connect(host, port);
 		}
 
 		Client::~Client()
@@ -45,22 +48,16 @@ namespace BALL
 			clear();
 		}
 
-		void Client::connect(const char* host, int port)
+		void Client::connect(const String& host, int port)
 		{
-			host_ = (char *)host;
+			host_ = host;
 			port_ = port;
-
-			cout << endl;
-			cout << "------------------------------------------------" << endl;
-			cout << "Welcome to Client VIEW:" << endl;
-			cout << "------------------------------------------------" << endl;
-			cout << endl;
 		}
 
 		ClientScene Client::getScene()
 		{
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__OPEN_SCENE << endl;
 
@@ -76,8 +73,7 @@ namespace BALL
 
 		bool Client::isValid() const
 		{
-			return (bool)(host_ != 0
-										&& port_ != 0);
+			return (bool)(host_ != "" && port_ != 0);
 		}
 
 		void Client::dump

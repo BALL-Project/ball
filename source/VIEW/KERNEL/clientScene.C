@@ -1,4 +1,4 @@
-// $Id: clientScene.C,v 1.5 1999/12/30 18:05:45 oliver Exp $
+// $Id: clientScene.C,v 1.6 2000/01/13 22:32:43 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/clientScene.h>
 
@@ -20,12 +20,11 @@ namespace BALL
 		{
 		}
 
-		ClientScene::ClientScene(char *host, int port, SceneHandle scenehandle)
-			:
-			host_(host),
-			port_(port),
-			scenehandle_(scenehandle),
-			pm_()
+		ClientScene::ClientScene(const String& host, int port, SceneHandle scenehandle)
+			:	host_(host),
+				port_(port),
+				scenehandle_(scenehandle),
+				pm_()
 		{
 		}
 
@@ -94,7 +93,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__SHOW_SCENE << " ";
 			iostream_socket << scenehandle_ << endl;
@@ -114,7 +113,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__HIDE_SCENE << " ";
 			iostream_socket << scenehandle_ << endl;
@@ -134,7 +133,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__RESIZE_SCENE << " ";
 			iostream_socket << scenehandle_ << " ";
@@ -161,7 +160,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__SEND_OBJECT << " ";
 			iostream_socket << scenehandle_ << " ";
@@ -185,7 +184,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__UPDATE_SCENE << " ";
 			iostream_socket << scenehandle_ << " ";
@@ -212,7 +211,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__SET_CREATOR_VALUE << " ";
 			iostream_socket << address << " ";
@@ -233,7 +232,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__GET_CREATOR_VALUE << " ";
 			iostream_socket << address << endl;
@@ -259,7 +258,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__HAS_CREATOR_VALUE << " ";
 			iostream_socket << address << " ";
@@ -286,7 +285,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__SET_PROCESSOR_VALUE << " ";
 			iostream_socket << address << " ";
@@ -307,7 +306,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__GET_PROCESSOR_VALUE << " ";
 			iostream_socket << address << endl;
@@ -333,7 +332,7 @@ namespace BALL
 			#endif
 
 			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
+			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (int)COMMAND__HAS_PROCESSOR_VALUE << " ";
 			iostream_socket << address << " ";
@@ -350,9 +349,7 @@ namespace BALL
 
 		bool ClientScene::isValid() const
 		{
-			return (bool)(host_ != 0
-										&& port_ != 0
-										&& scenehandle_ != 0);
+			return (host_ != "" && port_ != 0 && scenehandle_ != 0);
 		}
 
 		void ClientScene::dump
