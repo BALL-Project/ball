@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.21 2003/03/03 14:17:54 anhi Exp $
+// $Id: surface.h,v 1.22 2003/03/14 11:49:18 sturm Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -29,7 +29,7 @@ namespace BALL
 			described by the  \link TSurface::Triangle TSurface::Triangle \endlink ). Each of the vertices has
 			a position and possibly a normal vector associated.
 			 \par
-			<b>Definition:</b> BALL/MATHS/surface.h
+			
 			 \par
 	*/
 	template <typename T>

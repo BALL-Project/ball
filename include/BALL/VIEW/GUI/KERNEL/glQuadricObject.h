@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glQuadricObject.h,v 1.13 2003/03/03 14:18:28 anhi Exp $
+// $Id: glQuadricObject.h,v 1.14 2003/03/14 11:50:14 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
@@ -27,7 +27,7 @@ namespace BALL
 				quadric objects.
 				See the documentation of the OpenGL graphical library for information
 				concerning quadric objects. \par
-				<b>Definition:</b> BALL/VIEW/GUI/KERNEL/glQuadricObject.h
+				
 		*/
 		class GLQuadricObject
 		{
@@ -101,12 +101,12 @@ namespace BALL
 			/** Default Constructor.
 					Construct new glQuadricObject.
 					The state of {\em *this} glQuadricObject is set to:
-					\begin{itemize}
-					  \item drawing style is set to <tt>GLU_FILL</tt> (Default)
-					  \item normal style is set to <tt>GLU_FLAT_FILL</tt> (Default)
-					  \item orientation style is set to <tt>GLU_OUTSIDE</tt> (Default)
-					  \item generate texture coordinates is set to <tt>false</tt> (Default)
-					\end{itemize}
+
+					  - drawing style is set to <tt>GLU_FILL</tt> (Default)
+					  - normal style is set to <tt>GLU_FLAT_FILL</tt> (Default)
+					  - orientation style is set to <tt>GLU_OUTSIDE</tt> (Default)
+					  - generate texture coordinates is set to <tt>false</tt> (Default)
+					
 					See the documentation of the OpenGL	graphical library for the various
 					styles of quadric objects.
 					@return      GLQuadricObject new constructed glQuadricObject

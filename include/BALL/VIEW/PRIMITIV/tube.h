@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.17 2003/03/03 14:18:36 anhi Exp $
+// $Id: tube.h,v 1.18 2003/03/14 11:50:26 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -33,17 +33,17 @@ namespace BALL
 		/** Tube class.				
 				An instance of Tube represents an instance of the geometric representation "tube".
 				A tube has the following properties. 
-				\begin{itemize}
-				  \item color   - the color of the tube
-					\item radius  - the radius of the tube
-					\item vertex1 - the first vertex of the tube
-					\item vertex2 - the second vertex of the tube
-				\end{itemize}
+
+				  - color   - the color of the tube
+					- radius  - the radius of the tube
+					- vertex1 - the first vertex of the tube
+					- vertex2 - the second vertex of the tube
+				
 				The class Tube is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink ,
 				 \link Radius Radius \endlink  and  \link Vertex2 Vertex2 \endlink . 
 				See these classes for further information concerning
 				interface and additional methods.  \par
-				<b>Definition:</b> BALL/VIEW/PRIMITIV/tube.h
+				
 		*/
 		class Tube
 			: public GeometricObject,
@@ -59,12 +59,12 @@ namespace BALL
 			/** Default Constructor.
 					Construct new tube.
 					The properties of {\em *this} tube are set to:
-					\begin{itemize}
-  				  \item color   - to the color black
-						\item radius  - set to 1
-		  			\item vertex1 - to the vector (0,0,0)
-		  			\item vertex2 - to the vector (0,0,0)
-					\end{itemize}
+
+  				  - color   - to the color black
+						- radius  - set to 1
+		  			- vertex1 - to the vector (0,0,0)
+		  			- vertex2 - to the vector (0,0,0)
+					
 					@return      Tube new constructed tube
 					@see         GeometricObject
 					@see         ColorExtension

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionPredicate.h,v 1.7 2003/03/03 14:17:47 anhi Exp $
+// $Id: expressionPredicate.h,v 1.8 2003/03/14 11:49:07 sturm Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPREDICATE_H
 #define BALL_KERNEL_EXPRESSIONPREDICATE_H
@@ -21,7 +21,6 @@ namespace BALL
 			this class if you want to use (and register) them with  \link Expression Expression \endlink .
 			 \par
 			@see Expression
-			<b>Definition</b> BALL/KERNEL/expressionPredicate.h
 	*/
 	class ExpressionPredicate
 		:	public UnaryPredicate<Atom>

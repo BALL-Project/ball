@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: claverieParameter.h,v 1.11 2003/03/03 14:18:15 anhi Exp $
+// $Id: claverieParameter.h,v 1.12 2003/03/14 11:49:52 sturm Exp $
 
 #ifndef BALL_SOLVATION_CLAVERIEPARAMETER_H
 #define BALL_SOLVATION_CLAVERIEPARAMETER_H
@@ -28,7 +28,7 @@ namespace BALL
 			van-der-Waals interaction energies according to the scheme by Huron and
 			Claverie. [missing: units, reference].
 			<b>Note:</b> Dispersion and repulsion terms are <b>not</b> distinguished.  \par
-			<b>Definition:</b> BALL/SOLVATION/claverieParameter.h
+			
 	 */
 	class ClaverieParameter
 		:	public ParameterSection

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.16 2003/03/03 14:18:35 anhi Exp $
+// $Id: point.h,v 1.17 2003/03/14 11:50:25 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #define BALL_VIEW_PRIMITIV_POINT_H
@@ -39,14 +39,14 @@ namespace BALL
 		/** Point class.
 				An instance of Point represents an instance of the geometric representation "point".
 				A point has the following properties. 
-				\begin{itemize}
-				  \item color - the color of the point
-					\item vertex - the position of the point
-				\end{itemize}
+
+				  - color - the color of the point
+					- vertex - the position of the point
+				
 				The class Point is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
 				and  \link Vertex Vertex \endlink . See these classes for further information concerning
 				interface and additional methods.  \par
-				<b>Definition:</b> BALL/VIEW/PRIMITIV/point.h
+				
 		*/
 		class Point
 			: public GeometricObject,
@@ -62,10 +62,10 @@ namespace BALL
 			/** Default Constructor.
 					Construct new point.
 					The properties of {\em *this} point are set to:
-					\begin{itemize}
-  				  \item color - to the color black
-		  			\item vertex - to the vector (0,0,0)
-					\end{itemize}
+
+  				  - color - to the color black
+		  			- vertex - to the vector (0,0,0)
+					
 					@return      Point new constructed point
 					@see         GeometricObject
 					@see         ColorExtension

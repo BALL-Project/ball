@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSAS.h,v 1.6 2003/03/03 14:18:23 anhi Exp $
+// $Id: triangulatedSAS.h,v 1.7 2003/03/14 11:50:05 sturm Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSAS_H
 #define BALL_STRUCTURE_TRIANGULATEDSAS_H
@@ -68,7 +68,7 @@ namespace BALL
 
 	/** Generic TriangulatedSAS Class.
 			 \par
-			<b>Definition:</b>BALL/STRUCTURE/triangulatedSAS.h
+			
 			 \par
 	*/
 	class TriangulatedSAS	:	public TriangulatedSurface
@@ -81,9 +81,9 @@ namespace BALL
 		#endif
 
 		/** @name Class friends
-				\begin{itemize}
-					\item class SASTriangulator
-				\end{itemize}
+
+					- class SASTriangulator
+				
 		*/
 		friend class SASTriangulator;
 
@@ -180,7 +180,7 @@ namespace BALL
 
 	/** Generic SASTriangulator Class.
 			 \par
-			<b>Definition:</b>BALL/STRUCTURE/triangulatedSAS.h
+			
 			 \par
 	*/
 	class SASTriangulator

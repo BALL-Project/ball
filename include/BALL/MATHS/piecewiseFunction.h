@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewiseFunction.h,v 1.16 2003/03/03 14:17:53 anhi Exp $
+// $Id: piecewiseFunction.h,v 1.17 2003/03/14 11:49:16 sturm Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -42,7 +42,7 @@ namespace BALL
 			Note that intervals {\em must} be disjunct and interval limits have to
 			meet. We require the intervals to be sorted such that the lowest interval
 			limit is the first interval of the vector. \par
-			<b>Definition:</b> BALL/MATHS/piecewiseFunction.h
+			
 	 */
 	class PiecewiseFunction
 	{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.32 2003/03/03 14:18:22 anhi Exp $
+// $Id: surfaceProcessor.h,v 1.33 2003/03/14 11:50:04 sturm Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -22,7 +22,7 @@ namespace BALL
      *  @{
      */
 	/** SurfaceProcessor.
-			<b>Definition:</b> BALL/STRUCTURE/surfaceProcessor.h
+			
 	*/
 	class SurfaceProcessor
 		:	public UnaryProcessor<Atom>,

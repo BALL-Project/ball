@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: filter.h,v 1.9 2003/03/03 14:18:26 anhi Exp $
+// $Id: filter.h,v 1.10 2003/03/14 11:50:10 sturm Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #define BALL_VIEW_FUNCTOR_FILTER_H
@@ -42,7 +42,7 @@ namespace BALL
 				<tt>false</tt>.
 				This class is used by the class  \link Control Control \endlink  to filter for  \link GeometricObject GeometricObject \endlink 
 				objects.  \par
-				<b>Definition:</b> BALL/VIEW/FUNCTOR/filter.h
+				
 				@see     Control
 		*/
 		class Filter: public Visitor<Composite>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.h,v 1.18 2003/03/03 14:17:44 anhi Exp $
+// $Id: bruker2DFile.h,v 1.19 2003/03/14 11:49:01 sturm Exp $
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
@@ -42,7 +42,7 @@ namespace BALL
 	/**	Bruker 2D spectrum format.
 			A class for reading Bruker two-dimensional NMR spectra.
 			 \par
-			<b>Definition:</b>BALL/FORMAT/bruker2DFile.h
+			
 	*/
 	// ?????
 	class Bruker2D 

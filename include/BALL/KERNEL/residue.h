@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.32 2003/03/03 14:17:49 anhi Exp $
+// $Id: residue.h,v 1.33 2003/03/14 11:49:11 sturm Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -41,7 +41,7 @@ namespace BALL
 	/** Residue class.
 			This class is used to represent residues in proteins.
 			 \par
-			<b>Definition:</b>BALL/KERNEL/residue.h
+			
 	*/
 	class Residue
 		: public Fragment
@@ -191,12 +191,12 @@ namespace BALL
 
 		/**	Return the fully qualified name.
 				Residue names are modified as follows:
-				\begin{itemize}
-					\item <tt>-N</tt> is added for N terminal residues
-					\item <tt>-C</tt> is added for C terminal residue
-					\item <tt>[-]S</tt> is added for CYS involved in a disulphide bridge
-					\item <tt>-M</tt> is added for individual amino acids (C and N terminal)
-				\end{itemize}
+
+					- <tt>-N</tt> is added for N terminal residues
+					- <tt>-C</tt> is added for C terminal residue
+					- <tt>[-]S</tt> is added for CYS involved in a disulphide bridge
+					- <tt>-M</tt> is added for individual amino acids (C and N terminal)
+				
 				@param	type if type is set to <tt>NO_VARIANT_EXTENSIONS</tt>,
 								the variant extension (<tt>-XX</tt>) is omitted.
 				@return String the full fragment name

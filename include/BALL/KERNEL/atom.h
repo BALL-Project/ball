@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.50 2003/03/03 14:17:45 anhi Exp $
+// $Id: atom.h,v 1.51 2003/03/14 11:49:04 sturm Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -74,23 +74,23 @@ namespace BALL
 			arbitrary, user-defined properties.
 			An atom may be inserted in a  \link Fragment Fragment \endlink  instance ("parent fragment").
 			The "state" of an atom is defined by its attributes:
-			\begin{itemize}
-				\item "element" - an instance of  \link Element Element \endlink 
-				\item "charge" - the charge in multiples of the the proton charge
-				\item "name" - a string identifier
-				\item "type name" - a string identifier, meaningful in the the
+
+				- "element" - an instance of  \link Element Element \endlink 
+				- "charge" - the charge in multiples of the the proton charge
+				- "name" - a string identifier
+				- "type name" - a string identifier, meaningful in the the
 							context of a forcefield only
-				\item "position" - the absolute position in cartesian coordinates
+				- "position" - the absolute position in cartesian coordinates
 							(Angstrom)
-				\item "radius" - the radius (Angstrom)
-				\item "type" - an integer type, meaningful only in the context of a
+				- "radius" - the radius (Angstrom)
+				- "type" - an integer type, meaningful only in the context of a
 							forcefield 
-				\item "velocity" - velocity the velocity of the atom (Angstrom/ps)
-				\item "force" - the force experienced by the atom (for forcefield
+				- "velocity" - velocity the velocity of the atom (Angstrom/ps)
+				- "force" - the force experienced by the atom (for forcefield
 							calculations, in units of Newton)
-				\item "bonds" - up to  \link MAX_NUMBER_OF_BONDS MAX_NUMBER_OF_BONDS \endlink  bonds to other atoms
-			\end{itemize}
-			<b>Definition:</b> BALL/KERNEL/atom.h
+				- "bonds" - up to  \link MAX_NUMBER_OF_BONDS MAX_NUMBER_OF_BONDS \endlink  bonds to other atoms
+			
+			
 			 \par
 			@see Bond
 			@see Molecule
@@ -103,9 +103,9 @@ namespace BALL
 		public:
 
 			/** @name Class friends
-					\begin{itemize}
-						\item class Bond
-					\end{itemize}
+			
+						- class Bond
+					
 			*/
 			friend class Bond;
 
@@ -165,18 +165,18 @@ namespace BALL
 
 			/** Default constructor.
 					The state of this instance is:
-					\begin{itemize}
-						\item element type is unknown (Element::UNKNOWN)
-						\item charge is 0
-						\item name is empty string
-						\item type name is "?"
-						\item position is  \link Vector3 Vector3 \endlink (0,0,0)
-						\item radius is 0
-						\item type  \link INVALID_TYPE INVALID_TYPE \endlink 
-						\item velocity is  \link Vector3 Vector3 \endlink (0,0,0)
-						\item force is  \link Vector3 Vector3 \endlink (0,0,0)
-						\item bond table is empty (atom has no bonds)
-					\end{itemize}
+
+						- element type is unknown (Element::UNKNOWN)
+						- charge is 0
+						- name is empty string
+						- type name is "?"
+						- position is  \link Vector3 Vector3 \endlink (0,0,0)
+						- radius is 0
+						- type  \link INVALID_TYPE INVALID_TYPE \endlink 
+						- velocity is  \link Vector3 Vector3 \endlink (0,0,0)
+						- force is  \link Vector3 Vector3 \endlink (0,0,0)
+						- bond table is empty (atom has no bonds)
+					
 					@return  Atom - new atom
 					@see     Composite::Composite
 					@see     PropertyManager::PropertyManager
@@ -447,16 +447,16 @@ namespace BALL
 					of the parent molecule is taken.
 					If the atom is not contained in any superstructure, getFullname returns getName. \par
 					Overview of the returned strings:
-					\begin{itemize}
-						\item <residue>:<atom>  -- if contained in a residue
-						\item <residue>-C:<atom>	-- for C terminal residues
-						\item <residue>-N:<atom>	-- for N terminal residues
-						\item CYS-S:<atom> -- for CYS residues involved in a SS bond
-						\item CYS-NS:<atom> -- for N terminal CYS residues involved in a SS bond
-						\item CYS-CS:<atom> -- for C terminal CYS residues involved in a SS bond
-						\item <fragment>:atom -- for atoms contained in a fragment, but not in a residue
-						\item <molecule>:atom -- for atoms contained in a molecule, but not in a fragment
-					\end{itemize}				
+
+						- <residue>:<atom>  -- if contained in a residue
+						- <residue>-C:<atom>	-- for C terminal residues
+						- <residue>-N:<atom>	-- for N terminal residues
+						- CYS-S:<atom> -- for CYS residues involved in a SS bond
+						- CYS-NS:<atom> -- for N terminal CYS residues involved in a SS bond
+						- CYS-CS:<atom> -- for C terminal CYS residues involved in a SS bond
+						- <fragment>:atom -- for atoms contained in a fragment, but not in a residue
+						- <molecule>:atom -- for atoms contained in a molecule, but not in a fragment
+									
 					@param	type if type is set to <tt>Atom::NO_VARIANT_EXTENSIONS</tt>, 
 									the variant extension (<tt>-XX</tt>) is omitted
 					@return	String the full name

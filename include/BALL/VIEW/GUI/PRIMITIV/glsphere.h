@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glsphere.h,v 1.15 2003/03/03 14:18:30 anhi Exp $
+// $Id: glsphere.h,v 1.16 2003/03/14 11:50:17 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
@@ -34,7 +34,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				sphere. OpenGL code is used for the visualization.
 				See these classes for further information. \par
-				<b>Definition:</b> BALL/VIEW/GUI/PRIMITIV/glsphere.h
+				
 		*/
 		class GLSphere
 			: public Sphere,

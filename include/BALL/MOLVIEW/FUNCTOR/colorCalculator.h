@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorCalculator.h,v 1.14 2003/03/03 14:18:03 anhi Exp $
+// $Id: colorCalculator.h,v 1.15 2003/03/14 11:49:34 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -42,7 +42,7 @@ namespace BALL
 				color map a default color	will be returned. 
 				This class and their derived classes will be used by the model processors to
 				calculate a color for each  \link Atom Atom \endlink  object they process.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/colorCalculator.h
+				
 		*/
 		class ColorCalculator
 			: public Visitor<Atom>,
@@ -103,11 +103,11 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the state of {\em *this} colorCalculator to:
-					\begin{itemize}
-					  \item  {\em color_} set to red (<tt>"FF0000FF"</tt>)
-					  \item  {\em default_color_} set to red (<tt>"FF0000FF"</tt>)
-					  \item  {\em color_map_} is cleared
-					\end{itemize}
+
+					  -  {\em color_} set to red (<tt>"FF0000FF"</tt>)
+					  -  {\em default_color_} set to red (<tt>"FF0000FF"</tt>)
+					  -  {\em color_map_} is cleared
+					
 					@see  color_
 					@see  default_color_
 					@see  color_map_

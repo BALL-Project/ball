@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.h,v 1.22 2003/03/03 14:17:57 anhi Exp $
+// $Id: snapShot.h,v 1.23 2003/03/14 11:49:25 sturm Exp $
 
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
@@ -34,7 +34,7 @@ namespace BALL
 			It consists of the posistions, velocities and forces for each atom
 			along with kinetic and potential energy of selected atoms. It is used
 			by the  \link SnapShotManager SnapShotManager \endlink .  \par
-			<b>Definition:</b> BALL/MOLMEC/COMMON/snapShot.h
+			
 	*/
   class SnapShot
   {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASEdge.h,v 1.4 2003/02/21 16:06:33 anhi Exp $
+// $Id: SASEdge.h,v 1.5 2003/03/14 11:49:57 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SASEDGE_H
 #define BALL_STRUCTURE_SASEDGE_H
@@ -29,20 +29,20 @@ namespace BALL
 	class SASTriangulator;
 
 	/** Generic SASEdge Class.
-			<b>Definition:</b> BALL/STRUCTURE/SASEdge.h
+			
 	*/
 	class SASEdge	:	public GraphEdge< SASVertex,SASEdge,SASFace >
 	{
 		public:
 
 		/** @name Class friends
-				\begin{itemize}
-					\item class SASFace
-					\item class SASVertex
-					\item class SolventAccessibleSurface
-					\item class TriangulatedSAS
-					\item class SASTriangulator
-				\end{itemize}
+		
+					- class SASFace
+					- class SASVertex
+					- class SolventAccessibleSurface
+					- class TriangulatedSAS
+					- class SASTriangulator
+				
 		*/
 		friend class SASVertex;
 		friend class SASFace;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.20 2003/03/03 14:17:45 anhi Exp $
+// $Id: PTE.h,v 1.21 2003/03/14 11:49:04 sturm Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -48,14 +48,14 @@ namespace BALL
 			(e.g., mass, nuclear charge, element symbol). Elements can be retrieved
 			from the  \link PTE PTE \endlink  object (<b>P</b>eriodic <b>T</b>able of <b>E</b>lements)
 			which is a global instance of  \link PTE_ PTE_ \endlink . \par
-			<b>Definition:</b>BALL/KERNEL/PTE.h
+			
 			@see Atom::setElement
 			@see Atom::getElement
 	*/
 	//@{
 
 	/**	Element class.
-			<b>Definition:</b>BALL/KERNEL/PTE.h
+			
 	*/
 	class Element
 		: public PropertyManager

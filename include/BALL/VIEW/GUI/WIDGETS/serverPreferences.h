@@ -29,7 +29,7 @@ namespace BALL
 				{\em *this} serverPreferences will be created by the  \link Server Server \endlink 
 				object in the  \link Server::initializePreferencesTab Server::initializePreferencesTab \endlink  and will be inserted
 				into the  \link Preferences Preferences \endlink  dialog by the  \link MainControl MainControl \endlink .
-				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h
+				
 		*/
 		class ServerPreferences : public QWidget
 		{
@@ -46,10 +46,10 @@ namespace BALL
 					{\em *this} serverPreferences contains the preferences of the 
 					 \link Server Server \endlink .
 					The attributs of {\em *this} serverPreferences are:
-					\begin{itemize}
-					  \item  server port set to <tt>VIEW_DEFAULT_PORT</tt>
-						\item  server status set to accept clients
-					\end{itemize}
+
+					  -  server port set to <tt>VIEW_DEFAULT_PORT</tt>
+						-  server status set to accept clients
+					
 					@param       parent the parent  \link QWidget QWidget \endlink  of {\em *this} serverPreferences (See QFileDialog in the QT documentation)
 					@param       name the name of {\em *this} serverPreferences (See QFileDialog in the QT documentation)
 					@return      ServerPreferences new constructed serverPreferences widget

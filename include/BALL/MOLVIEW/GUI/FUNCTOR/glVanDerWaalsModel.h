@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glVanDerWaalsModel.h,v 1.11 2003/03/03 14:18:07 anhi Exp $
+// $Id: glVanDerWaalsModel.h,v 1.12 2003/03/14 11:49:40 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
@@ -28,7 +28,7 @@ namespace BALL
 				OpenGL implementation to generate the graphical visualization of geometric
 				shapes they present.
 				This class has the same functionality as its base class  \link AddVanDerWaalsModel AddVanDerWaalsModel \endlink .  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h
+				
 		*/
 		class AddGLVanDerWaalsModel: public AddVanDerWaalsModel
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.14 2003/03/03 14:18:10 anhi Exp $
+// $Id: twoColoredTube.h,v 1.15 2003/03/14 11:49:45 sturm Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
@@ -37,12 +37,12 @@ namespace BALL
 				An instance of TwoColoredTube represents an instance of the geometric
 				representation of a two colored "tube".
 				A twoColoredTube has the following properties. 
-				\begin{itemize}
-				  \item color1 - the color for the first vertex of the tube
-				  \item color2 - the color for the second vertex of the tube
-					\item vertex1 - the first vertex of the tube
-					\item vertex2 - the second vertex of the tube
-				\end{itemize}
+
+				  - color1 - the color for the first vertex of the tube
+				  - color2 - the color for the second vertex of the tube
+					- vertex1 - the first vertex of the tube
+					- vertex2 - the second vertex of the tube
+				
 				The class TwoColoredTube is a tube that is half colored in the color 1 and
 				in color 2. The tube is exactly divided in the middle. One half (starting
 				from vertex1 til middle vertex) is colored by the color1 and the other half 
@@ -51,7 +51,7 @@ namespace BALL
 				 \link ColorExtension2 ColorExtension2 \endlink ,  \link Radius Radius \endlink 	and  \link Vertex2 Vertex2 \endlink .
 				See these classes for further information concerning
 				interface and additional methods.  \par
-				<b>Definition:</b> BALL/MOLVIEW/PRIMITIV/twoColoredTube.h
+				
 		*/
 		class TwoColoredTube
 			: public GeometricObject,
@@ -67,13 +67,13 @@ namespace BALL
 			/** Default Constructor.
 					Construct new twoColoredTube.
 					The properties of {\em *this} twoColoredTube are set to:
-					\begin{itemize}
-  				  \item color1 - set to the color black
-						\item color2 - set to the color black
-						\item radius - set to 1
-		  			\item vertex1 - set to the vector (0,0,0)
-		  			\item vertex2 - set to the vector (0,0,0)
-					\end{itemize}
+
+  				  - color1 - set to the color black
+						- color2 - set to the color black
+						- radius - set to 1
+		  			- vertex1 - set to the vector (0,0,0)
+		  			- vertex2 - set to the vector (0,0,0)
+					
 					@return      TwoColoredTube new constructed twoColoredTube
 					@see         GeometricObject
 					@see         ColorExtension2

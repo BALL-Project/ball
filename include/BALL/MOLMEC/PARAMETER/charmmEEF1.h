@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmEEF1.h,v 1.14 2003/03/03 14:17:59 anhi Exp $
+// $Id: charmmEEF1.h,v 1.15 2003/03/14 11:49:29 sturm Exp $
 // Molecular Mechanics Parameter: class describing parameters needed 
 // for the EEF1 solvation component in the CHARMM force field
  
@@ -24,7 +24,7 @@ namespace BALL
 	/**	Force Field Parameter Section for CHARMM EEF1.
 			This class reads and administers a parameter set of solvation
 			parameters for the CHARMM/EEF1 force field (Lazaridis, Karplus, ???).  \par
-			<b>Definition:</b> BALL/MOLMEC/PARAMETER/charmmEEF1.h
+			armmEEF1.h
 	*/
 	class CharmmEEF1 
 		:	public ParameterSection

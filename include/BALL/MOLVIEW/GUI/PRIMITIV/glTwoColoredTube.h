@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glTwoColoredTube.h,v 1.11 2003/03/03 14:18:08 anhi Exp $
+// $Id: glTwoColoredTube.h,v 1.12 2003/03/14 11:49:42 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
@@ -32,7 +32,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				twoColoredTube. OpenGL code is used for the visualization.
 				See these classes for further information.  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h
+				
 		*/
 		class GLTwoColoredTube
 			: public TwoColoredTube,

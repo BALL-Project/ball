@@ -41,7 +41,7 @@ namespace BALL
 				If this dialog is used, it should be created with  \link MainControl MainControl \endlink  as parent.
 				The class LabelPropertiesData contains the definition of the layout of
 				this dialog and is therefore not necessary for understanding.  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/DIALOGS/labelProperties.h
+				
 		*/
 		class LabelProperties : 
 			public LabelPropertiesData,

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtomIterator.h,v 1.16 2003/03/03 14:17:45 anhi Exp $ 
+// $Id: PDBAtomIterator.h,v 1.17 2003/03/14 11:49:04 sturm Exp $ 
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
 #define BALL_KERNEL_PDBATOMITERATOR_H
@@ -28,7 +28,7 @@ namespace BALL
      *  @{
      */
 	/** Traits class for the PDBAtomIterator.
-			<b>Definition:</b> BALL/KERNEL/PDBAtomIterator.h
+			
 	*/
 	class PDBAtomIteratorTraits_
 		:	public CompositeIteratorTraits_

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventDescriptor.h,v 1.13 2003/03/03 14:18:17 anhi Exp $
+// $Id: solventDescriptor.h,v 1.14 2003/03/14 11:49:55 sturm Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
 #define BALL_SOLVATION_SOLVENTDESCRIPTOR_H
@@ -49,7 +49,7 @@ namespace BALL
 	/** Solvent Description.
 			The calculation of van-der-Waals energies requires information about the
 			solvent which is stored in this structure.	 \par
-			<b>Definition:</b> BALL/SOLVATION/solventDescriptor.h
+			
 	*/
 	class SolventDescriptor
 	{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.h,v 1.31 2003/03/03 14:18:24 anhi Exp $
+// $Id: socket.h,v 1.32 2003/03/14 11:50:07 sturm Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -118,7 +118,7 @@ namespace BALL
 
 
 	/**	Socket addresses. This is an interface definition only.
-			<b>Definition:</b> BALL/SYSTEM/socket.h
+			
 	*/
 	class SockAddr 
 	{
@@ -178,7 +178,7 @@ namespace BALL
 
 
 	/**	Socket buffer class.
-			<b>Definition:</b> BALL/SYSTEM/socket.h
+			
 	*/
 	class SocketBuf
 		: public std::streambuf 
@@ -588,7 +588,7 @@ namespace BALL
 #endif
 
 	/**	Input stream from a socket
-			<b>Definition:</b> BALL/SYSTEM/socket.h
+			
 	*/
 	class ISockStream
 		: public std::istream 
@@ -646,7 +646,7 @@ namespace BALL
 
 
 	/**	Output stream from a socket.
-			<b>Definition:</b> BALL/SYSTEM/socket.h
+			
 	*/
 	class OSockStream
 		: public std::ostream 
@@ -698,7 +698,7 @@ namespace BALL
 
 
 	/**	INET socket address.
-			<b>Definition:</b> BALL/SYSTEM/socket.h
+			
 	*/
 	class SockInetAddr
 		: public SockAddr, 
@@ -794,7 +794,7 @@ namespace BALL
 
 
 	/**	INET socket buffer.
-			<b>Definition:</b> BALL/SYSTEM/socket.h
+			
 	*/
 	class SockInetBuf
 		: public SocketBuf 

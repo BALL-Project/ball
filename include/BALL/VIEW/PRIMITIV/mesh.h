@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.h,v 1.16 2003/03/03 14:18:35 anhi Exp $
+// $Id: mesh.h,v 1.17 2003/03/14 11:50:25 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -39,14 +39,14 @@ namespace BALL
 		/** Mesh class.			
 				An instance of Mesh represents an instance of the geometric representation "mesh".
 				A mesh has the following properties. 
-				\begin{itemize}
-				  \item color - the color of the mesh
-				\end{itemize}
+
+				  - color - the color of the mesh
+				
 				The class Mesh is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
 				and  \link Surface Surface \endlink . The data structures defining the mesh are implemented in
 				the class  \link Surface Surface \endlink . Therefore one can use {\em *this} mesh in the
 				same fashion as  \link Surface Surface \endlink .  \par
-				<b>Definition:</b> BALL/VIEW/PRIMITIV/mesh.h
+				
 		*/
 		class Mesh
 			: public GeometricObject,
@@ -62,9 +62,9 @@ namespace BALL
 			/** Default Constructor.
 					Construct new mesh.
 					The properties of {\em *this} mesh are set to:
-					\begin{itemize}
-  				  \item color - to the color black
-					\end{itemize}
+
+  				  - color - to the color black
+					
 					@return      Mesh new constructed mesh
 					@see         GeometricObject
 					@see         ColorExtension

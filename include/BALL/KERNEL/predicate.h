@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.13 2003/03/03 14:17:49 anhi Exp $
+// $Id: predicate.h,v 1.14 2003/03/14 11:49:10 sturm Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -32,15 +32,15 @@ namespace BALL
 			to a composite will yield <b>true</b>, if the given composite was an instance of  \link Molecule Molecule \endlink 
 			(or  \link Protein Protein \endlink , as Protein is derived from Molecule). Otherwise false is returned. \par
 			Each KernelPredicate possesses three methods:
-			\begin{itemize}
-				\item<b>operator (const Composite&)</b>
-				\item<b>operator (const Composite&) const</b>
-			\end{itemize}
+
+				-<b>operator (const Composite&)</b>
+				-<b>operator (const Composite&) const</b>
+			
 			The two operators are functionally identical (two methods are needed, because the class
 			is derived from TUnaryPredicate and we want to make sure both methods are overwritten).
 			<b>operator()</b> returns true, if the given composite is a kind of the class corresponding 
 			to the respective predicate, false otherwise. \par
-			<b>Definition:</b> BALL/KERNEL/predicate.h
+			
 			@see	UnaryPredicate
 			@see	RTTI	
 	*/

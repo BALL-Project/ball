@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.25 2003/03/03 14:18:05 anhi Exp $
+// $Id: displayProperties.h,v 1.26 2003/03/14 11:49:37 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -87,21 +87,21 @@ namespace BALL
 				The follwing properties are available: \par
   \par
 				The models:
-				\begin{itemize}
-				  \item   \link AddGLBallAndStickModel AddGLBallAndStickModel \endlink  the ball and stick model
-				  \item   \link AddGLBackboneModel AddGLBackboneModel \endlink  the backbone model
-				  \item   \link AddGLLineModel AddGLLineModel \endlink  the line model
-				  \item   \link AddGLSurfaceModel AddGLSurfaceModel \endlink  the surface model
-				  \item   \link AddGLVanDerWaalsModel AddGLVanDerWaalsModel \endlink  the van der waals model
-				\end{itemize} 
+
+				  -   \link AddGLBallAndStickModel AddGLBallAndStickModel \endlink  the ball and stick model
+				  -   \link AddGLBackboneModel AddGLBackboneModel \endlink  the backbone model
+				  -   \link AddGLLineModel AddGLLineModel \endlink  the line model
+				  -   \link AddGLSurfaceModel AddGLSurfaceModel \endlink  the surface model
+				  -   \link AddGLVanDerWaalsModel AddGLVanDerWaalsModel \endlink  the van der waals model
+				 
 				The coloring methods:
-				\begin{itemize}
-				  \item   \link ElementColorCalculator ElementColorCalculator \endlink  colors the molecular objects according to their atom elements
-				  \item   \link ResidueNameColorCalculator ResidueNameColorCalculator \endlink  colors the molecular objects according to their residue names
-				  \item   \link AtomChargeColorCalculator AtomChargeColorCalculator \endlink  colors the molecular objects according to their atom charge
-				  \item   \link AtomDistanceColorCalculator AtomDistanceColorCalculator \endlink  colors the molecular objects according to their atom distance
-				  \item   \link CustomColorCalculator CustomColorCalculator \endlink  colors the molecular objects according to selected color
-				\end{itemize} 
+
+				  -   \link ElementColorCalculator ElementColorCalculator \endlink  colors the molecular objects according to their atom elements
+				  -   \link ResidueNameColorCalculator ResidueNameColorCalculator \endlink  colors the molecular objects according to their residue names
+				  -   \link AtomChargeColorCalculator AtomChargeColorCalculator \endlink  colors the molecular objects according to their atom charge
+				  -   \link AtomDistanceColorCalculator AtomDistanceColorCalculator \endlink  colors the molecular objects according to their atom distance
+				  -   \link CustomColorCalculator CustomColorCalculator \endlink  colors the molecular objects according to selected color
+				 
 				For information about the drawing precision see  \link GeometricObject GeometricObject \endlink . \par
 				This dialog is also responsible for selecting and deselecting,
 				building bonds and adding hydrogens to molecular objects. Further it is possible
@@ -110,7 +110,7 @@ namespace BALL
 				If this dialog is used, it should be created with  \link MainControl MainControl \endlink  as parent.
 				The class DisplayPropertiesData contains the definition of the layout of
 				this dialog and is therefore not necessary for understanding.  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h
+				
 		*/
 		class DisplayProperties 
 			: public DisplayPropertiesData,
@@ -164,10 +164,10 @@ namespace BALL
 					If  \link NewMolecularMessage NewMolecularMessage \endlink  is catched the chosen graphical visualization
 					will be applied to the  \link Composite Composite \endlink  object and the follwing  \link Message Message \endlink 
 					objects will be sent through the  \link ConnectionObject ConnectionObject \endlink  tree:
-					\begin{itemize}
-						\item   \link ChangedMolecularMessage ChangedMolecularMessage \endlink  to indicate that the  \link Composite Composite \endlink  object has changed.
-						\item   \link SceneMessage SceneMessage \endlink  to force an update of the  \link Scene Scene \endlink  (and set the camera to new object)
-					\end{itemize}
+
+						-   \link ChangedMolecularMessage ChangedMolecularMessage \endlink  to indicate that the  \link Composite Composite \endlink  object has changed.
+						-   \link SceneMessage SceneMessage \endlink  to force an update of the  \link Scene Scene \endlink  (and set the camera to new object)
+					
 					If  \link MolecularSelectionMessage MolecularSelectionMessage \endlink  is catched the selection of this object will 
 					be used for changing the visualization.
 					If such a message is catched the apply button will be enabled and the graphical
@@ -217,15 +217,15 @@ namespace BALL
 				
 			/**	Initializes the widget.
 					Initializes the popup menu {\em Display} with its checkable submenus
-					\begin{itemize}
-						\item  {\em Display Properties} - opens the dialog (indicates if open)
-						\item  {\em Select} - marks the selected molecular objects in the selected color (See  \link GeometricObject GeometricObject \endlink )
-						\item  {\em Deselect} - uses the previously set color of the selected molecular objects
-						\item  {\em Focus Camera} - centers the camera of  \link Scene Scene \endlink  to the geometric center 
+
+						-  {\em Display Properties} - opens the dialog (indicates if open)
+						-  {\em Select} - marks the selected molecular objects in the selected color (See  \link GeometricObject GeometricObject \endlink )
+						-  {\em Deselect} - uses the previously set color of the selected molecular objects
+						-  {\em Focus Camera} - centers the camera of  \link Scene Scene \endlink  to the geometric center 
 										of the molecular objects in the selection
-						\item  {\em Build Bonds} - generates the  \link Bond Bond \endlink  object to the molecular objects in the selection
-						\item  {\em Add Hydrogens} - adds hydrogens to the molecular objects in the selection
-					\end{itemize}
+						-  {\em Build Bonds} - generates the  \link Bond Bond \endlink  object to the molecular objects in the selection
+						-  {\em Add Hydrogens} - adds hydrogens to the molecular objects in the selection
+					
 					and adds them to the appropriate slots.
 					This method is called automatically	immediately before the main application is started. 
 					This method will be called by  \link show show \endlink  from the  \link MainControl MainControl \endlink  object.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticBondStretch.h,v 1.14 2003/03/03 14:18:00 anhi Exp $
+// $Id: quadraticBondStretch.h,v 1.15 2003/03/14 11:49:31 sturm Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
 #define BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
@@ -20,7 +20,7 @@ namespace BALL
      *  @{
      */		
 	/** QuadraticBondStretch.
-			<b>Definition:</b>BALL/MOLMEC/PARAMETER/quadraticBondStretch.h
+			
 			Molecular Mechanics Parameter: class describing the parameters
 			required for a harmonic stretch potential.
 	*/

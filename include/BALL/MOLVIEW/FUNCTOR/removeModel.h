@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: removeModel.h,v 1.15 2003/03/03 14:18:04 anhi Exp $
+// $Id: removeModel.h,v 1.16 2003/03/14 11:49:36 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -24,7 +24,7 @@ namespace BALL
 				property. The method used for this action is  \link removeGeometricObjects_ removeGeometricObjects_ \endlink .
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL
 				documentation.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/removeModel.h
+				
 		*/
 		class RemoveModel: 
 			public AtomBondModelBaseProcessor,

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelConnector.h,v 1.10 2003/03/03 14:18:02 anhi Exp $
+// $Id: atomBondModelConnector.h,v 1.11 2003/03/14 11:49:33 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
@@ -44,19 +44,19 @@ namespace BALL
 				This class is a connector class which connects different models with each
 				other.
 				The following models are connected with the specified models:
-				\begin{itemize}
-				  \item  {\em Line Model} - {\em Line Model} : connected with {\em Line Model}
-				  \item  {\em Line Model} - {\em Ball And Stick Model} : connected with {\em Line Model}
-				  \item  {\em Ball And Stick Model} - {\em Ball And Stick Model} : connected with {\em Ball And Stick Model}
-				  \item  {\em Line Model} - {\em Van Der Waals Model} : connected with {\em Line Model}
-				  \item  {\em Ball And Stick Model} - {\em Van der Waals Model} : connected with {\em Ball And Stick Model}
-				  \item  {\em Van der Waals Model} - {\em Van der Waals Model} : connected with no model
-				\end{itemize}
+				
+				  -  {\em Line Model} - {\em Line Model} : connected with {\em Line Model}
+				  -  {\em Line Model} - {\em Ball And Stick Model} : connected with {\em Line Model}
+				  -  {\em Ball And Stick Model} - {\em Ball And Stick Model} : connected with {\em Ball And Stick Model}
+				  -  {\em Line Model} - {\em Van Der Waals Model} : connected with {\em Line Model}
+				  -  {\em Ball And Stick Model} - {\em Van der Waals Model} : connected with {\em Ball And Stick Model}
+				  -  {\em Van der Waals Model} - {\em Van der Waals Model} : connected with no model
+				
 				The connector model is used for the  \link Bond Bond \endlink  objects between the various models
 				of the adjacent  \link Atom Atom \endlink  objects.
 				This class is used by the model processors to determine the connector model
 				between different models.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h
+				
 		*/
 		class AtomBondModelConnector
 			: public BaseModelConnector
@@ -114,14 +114,14 @@ namespace BALL
 					objects is determined. The following connector model is created for
 					the bond. The first two models are the models of the adjacent atoms. The connector
 					model for the swapped atom models are the same.
-					\begin{itemize}
-				    \item  {\em Line Model} - {\em Line Model} : connected with {\em Line Model}
-						\item  {\em Line Model} - {\em Ball And Stick Model} : connected with {\em Line Model}
-						\item  {\em Ball And Stick Model} - {\em Ball And Stick Model} : connected with {\em Ball And Stick Model}
-						\item  {\em Line Model} - {\em Van Der Waals Model} : connected with {\em Line Model}
-						\item  {\em Ball And Stick Model} - {\em Van der Waals Model} : connected with {\em Ball And Stick Model}
-						\item  {\em Van der Waals Model} - {\em Van der Waals Model} : connected with no model
-					\end{itemize}
+
+				    -  {\em Line Model} - {\em Line Model} : connected with {\em Line Model}
+						-  {\em Line Model} - {\em Ball And Stick Model} : connected with {\em Line Model}
+						-  {\em Ball And Stick Model} - {\em Ball And Stick Model} : connected with {\em Ball And Stick Model}
+						-  {\em Line Model} - {\em Van Der Waals Model} : connected with {\em Line Model}
+						-  {\em Ball And Stick Model} - {\em Van der Waals Model} : connected with {\em Ball And Stick Model}
+						-  {\em Van der Waals Model} - {\em Van der Waals Model} : connected with no model
+					
 					@param  composite the  \link Composite Composite \endlink  object (the  \link Bond Bond \endlink  object) for which a connector model should be created
 					@exception  OutOfMemory thrown if the memory allocation for creating the connector model failed
 					@see        getModel_

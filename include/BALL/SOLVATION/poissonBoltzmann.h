@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.23 2003/03/03 14:18:17 anhi Exp $ 
+// $Id: poissonBoltzmann.h,v 1.24 2003/03/14 11:49:54 sturm Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -32,7 +32,7 @@ namespace BALL
      *  @{
      */
 	/** Finite Difference Poisson Boltzmann Solver.
-			<b>Definition:</b> BALL/SOLVATION/poissonBoltzmann.h
+			
 	*/			
 	class FDPB 
 	{
@@ -702,15 +702,15 @@ namespace BALL
 
 		/**	General setup method.
 				Setup calls (in this order!)
-				\begin{itemize}
-					\item setupAtomArray
-					\item setupEpsGrid
-					\item setupSASGrid
-					\item setupKappaGrid
-					\item setupPhiGrid
-					\item setupQGrid
-					\item setupBoundary
-				\end{itemize}
+
+					- setupAtomArray
+					- setupEpsGrid
+					- setupSASGrid
+					- setupKappaGrid
+					- setupPhiGrid
+					- setupQGrid
+					- setupBoundary
+				
 				If any of theses method invocations fail, it terminates at this point and
 				returns false. \par
 				On successful execution it returns true and the FDPB object is
@@ -748,10 +748,10 @@ namespace BALL
 				by setup. If you consider to call it by yourself, be sure to call 
 				the single setup methods in the correct order (as described for setup). \par
 				This method may set one of the following error codes and return false afterwards:
-				\begin{itemize}
-					\item ERROR__NOT_A_VECTOR_IN_UPPER_LOWER
-					\item ERROR__ILLEGAL_VALUE_FOR_LOWER_UPPER
-				\end{itemize}
+			
+					- ERROR__NOT_A_VECTOR_IN_UPPER_LOWER
+					- ERROR__ILLEGAL_VALUE_FOR_LOWER_UPPER
+				
 				@param	system the system to be evaluated
 				@return	true on success, call getErrorCode otherwise
 		*/

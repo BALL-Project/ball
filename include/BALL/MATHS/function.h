@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: function.h,v 1.20 2003/03/03 14:17:52 anhi Exp $
+// $Id: function.h,v 1.21 2003/03/14 11:49:15 sturm Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -17,7 +17,7 @@ namespace BALL
      */  
 	/** Constant function class. This function represents a constant that is
 			already known at compile time. 
-			<b>Definition:</b> BALL/MATHS/function.h
+			
 	*/
 	// ????? float templates sind nicht ANSI.
 	template <int constant_template>
@@ -51,7 +51,7 @@ namespace BALL
 	/** Constant function class. 
 			This class represents constants that are not known at 
 			compile time but must be set at running time.  \par
-			<b>Definition:</b> BALL/MATHS/function.h
+			
 	*/
 	template <typename DataType = float>
 	class MutableConstant
@@ -154,7 +154,7 @@ namespace BALL
 
 
 	/** Addition class.
-			<b>Definition:</b> BALL/MATHS/function.h
+			
 	*/
 	template <typename First, typename Second, typename DataType = float>
 	class Addition
@@ -289,7 +289,7 @@ namespace BALL
 
 
 	/** Subtraction class.
-			<b>Definition:</b> BALL/MATHS/function.h
+			
 	*/
 	template <typename First, typename Second, typename DataType = float>
 	class Subtraction
@@ -408,7 +408,7 @@ namespace BALL
 
 
 	/** Multiplication class.
-			<b>Definition:</b> BALL/MATHS/function.h
+			
 	*/
 	template <typename First, typename Second, typename DataType = float>
 	class Product
@@ -537,7 +537,7 @@ namespace BALL
 
 
 	/** Division class.
-			<b>Definition:</b> BALL/MATHS/function.h
+			
 	*/
 	template <typename First, typename Second, typename DataType = float>
 	class Division
@@ -664,7 +664,7 @@ namespace BALL
 
 
 	/** Reciprocal class.
-			<b>Definition:</b> BALL/MATHS/function.h
+			
 	*/
 	template <typename Function, typename DataType = float>
 	class Reciprocal
@@ -770,7 +770,7 @@ namespace BALL
 
 
 	/** SquareFunction class.
-			<b>Definition:</b> BALL/MATHS/function.h
+			
 	*/
 	template <typename Function, typename DataType = float>
 	class SquareFunction
@@ -870,7 +870,7 @@ namespace BALL
 
 
 	/** CubicFunction class.
-			<b>Definition:</b> BALL/MATHS/function.h
+			
 	*/
 	template <typename Function, typename DataType = float>
 	class CubicFunction
@@ -969,7 +969,7 @@ namespace BALL
 
 
 	/** MutablePower class.	
-			<b>Definition:</b> BALL/MATHS/function.h
+			
 	*/
 	template <typename Function, typename DataType = float>
 	class MutablePower

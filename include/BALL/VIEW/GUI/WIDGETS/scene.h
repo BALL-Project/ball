@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.14 2003/03/03 14:18:32 anhi Exp $
+// $Id: scene.h,v 1.15 2003/03/14 11:50:19 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -77,7 +77,7 @@ namespace BALL
 				scenes. These other scenes can have different camera angles or other properties.
 				The class  \link Events Events \endlink  is a container class of appropriate events that can
 				be assigned to a scene.
-				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/scene.h
+				
 		*/
 		class Scene
 			: public QGLWidget, public ModularWidget
@@ -121,16 +121,16 @@ namespace BALL
 					Construct new scene.
 					Initialize the width and height of {\em *this} scene to <tt>600</tt> and sets
 					the camera position to:
-					\begin{itemize}
-					  \item camera position set to <tt>Vector(1,0,0)</tt>
-					  \item camera look at position set to <tt>Vector(0,0,0)</tt>
-					\end{itemize}
+
+					  - camera position set to <tt>Vector(1,0,0)</tt>
+					  - camera look at position set to <tt>Vector(0,0,0)</tt>
+					
 					The following events are used initially:
-					\begin{itemize}
-					  \item  \link MouseLeftButtonPressed MouseLeftButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link RotateSystem RotateSystem \endlink 
-					  \item  \link MouseMiddleButtonPressed MouseMiddleButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link ZoomSystem ZoomSystem \endlink 
-					  \item  \link MouseRightButtonPressed MouseRightButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link TranslateSystem TranslateSystem \endlink 
-					\end{itemize}					
+
+					  -  \link MouseLeftButtonPressed MouseLeftButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link RotateSystem RotateSystem \endlink 
+					  -  \link MouseMiddleButtonPressed MouseMiddleButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link ZoomSystem ZoomSystem \endlink 
+					  -  \link MouseRightButtonPressed MouseRightButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link TranslateSystem TranslateSystem \endlink 
+										
 					Register a default  \link GLObjectCollector GLObjectCollector \endlink .
 					A  \link GLPrimitiveManager GLPrimitiveManager \endlink  is initialized for {\em *this} scene.
 					Calls  \link registerWidget registerWidget \endlink .
@@ -151,11 +151,11 @@ namespace BALL
 					of {\em *this} scene to the width, height, camera position and the 
 					 \link GLObjectCollector GLObjectCollector \endlink 	of {\em scene}
 					The following events are used initially:
-					\begin{itemize}
-					  \item  \link MouseLeftButtonPressed MouseLeftButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link RotateSystem RotateSystem \endlink 
-					  \item  \link MouseMiddleButtonPressed MouseMiddleButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link ZoomSystem ZoomSystem \endlink 
-					  \item  \link MouseRightButtonPressed MouseRightButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link TranslateSystem TranslateSystem \endlink 
-					\end{itemize}					
+
+					  -  \link MouseLeftButtonPressed MouseLeftButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link RotateSystem RotateSystem \endlink 
+					  -  \link MouseMiddleButtonPressed MouseMiddleButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link ZoomSystem ZoomSystem \endlink 
+					  -  \link MouseRightButtonPressed MouseRightButtonPressed \endlink  &  \link MouseMoved MouseMoved \endlink  are connected to  \link TranslateSystem TranslateSystem \endlink 
+										
 					A  \link GLPrimitiveManager GLPrimitiveManager \endlink  is initialized for {\em *this} scene.
 					Calls  \link registerWidget registerWidget \endlink .
 					@param  scene the scene to be copied
@@ -184,12 +184,12 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the default values of {\em *this} scene to:
-					\begin{itemize}
-					  \item  width is set to <tt>600</tt>
-					  \item  height is set to <tt>600</tt>
-					  \item camera position set to <tt>Vector(1,0,0)</tt>
-					  \item camera look at position set to <tt>Vector(0,0,0)</tt>
-					\end{itemize}
+
+					  - width is set to <tt>600</tt>
+					  - height is set to <tt>600</tt>
+					  - camera position set to <tt>Vector(1,0,0)</tt>
+					  - camera look at position set to <tt>Vector(0,0,0)</tt>
+					
 					Set the  \link GLObjectCollector GLObjectCollector \endlink  to the default object collector.
 			*/
 			virtual void clear()
@@ -483,10 +483,10 @@ namespace BALL
 			//@{
 			
 			/**	Initialize the popup menu {\em Display} and the menus of {\em *this} scene:
-					\begin{itemize}
-					  \item the {\em rotate mode} (all mouse actions are attached to rotating, translating and zooming the scene)
-					  \item the {\em picking mode} (all mouse actions are attached to picking objects from the scene)
-					\end{itemize}
+
+					  - the {\em rotate mode} (all mouse actions are attached to rotating, translating and zooming the scene)
+					  - the {\em picking mode} (all mouse actions are attached to picking objects from the scene)
+					
 					This method is called automatically	immediately before the main application 
 					is started. 
 					This method will be called by  \link show show \endlink  from the  \link MainControl MainControl \endlink  object.
@@ -545,10 +545,10 @@ namespace BALL
 					If the internal state of {\em *this} scene is correct 
 					(self-validated) and consistent <tt>true</tt> is returned, <tt>false</tt> otherwise. 
 					{\em *this} scene is valid if:
-					\begin{itemize}
-					  \item the  \link GLPrimitiveManager GLPrimitiveManager \endlink  is valid
-						\item {\em *this} scene has a parent
-					\end{itemize}
+
+					  - the  \link GLPrimitiveManager GLPrimitiveManager \endlink  is valid
+						- {\em *this} scene has a parent
+					
 					Calls  \link GLPrimitiveManager::isValid GLPrimitiveManager::isValid \endlink .
 					@return			bool <tt>true</tt> if the internal state of {\em *this} scene is correct (self-validated) and consistent,
 					 						<tt>false</tt> otherwise
@@ -661,10 +661,10 @@ namespace BALL
 
 			/** Catch key press events.
 					Catch the following key press events:
-					\begin{itemize}
-					  \item <tt>Key_Shift</tt> the SHIFT key was pressed
-					  \item <tt>Key_Control</tt> the SHIFT key was pressed
-					\end{itemize}
+
+					  - <tt>Key_Shift</tt> the SHIFT key was pressed
+					  - <tt>Key_Control</tt> the SHIFT key was pressed
+					
 					This events will be stored for later processing.
 					See QT-library for information concerning key press events.
 					@param qkey_event the QT-key event (See QT-library for key events)
@@ -677,10 +677,10 @@ namespace BALL
 
 			/** Catch key release events.
 					Catch the following key release events:
-					\begin{itemize}
-					  \item <tt>Key_Shift</tt> the SHIFT key was released
-					  \item <tt>Key_Control</tt> the SHIFT key was released
-					\end{itemize}
+
+					  - <tt>Key_Shift</tt> the SHIFT key was released
+					  - <tt>Key_Control</tt> the SHIFT key was released
+					
 					This events will be stored for later processing.
 					See QT-library for information concerning key released events.
 					@param qkey_event the QT-key event (See QT-library for key events)

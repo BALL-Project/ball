@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.h,v 1.11 2003/03/03 14:18:25 anhi Exp $
+// $Id: colorHSV.h,v 1.12 2003/03/14 11:50:08 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORHSV_H
 #define BALL_VIEW_DATATYPE_COLORHSV_H
@@ -40,14 +40,14 @@ namespace BALL
 				 \link ColorUnit ColorUnit \endlink 's. The component hue is of class type  \link ColorUnitHue ColorUnitHue \endlink .
 				See description of these classes for further informations concerning type
 				conversions.  \par
-				<b>Definition:</b> BALL/VIEW/DATATYPE/colorHSV.h
+				
 		*/
 		class ColorHSV
 		{
 			/** @name Class friends
-					\begin{itemize}
-						\item class ColorRGBA
-					\end{itemize}
+
+						- class ColorRGBA
+					
 			*/
 			friend class ColorRGBA;
 
@@ -143,11 +143,11 @@ namespace BALL
 			/** Explicit default initialization.
 					Sets the color of {\em *this} colorHSV to the default color (black).
 					The value of {\em *this} colorHSV is:
-					\begin{itemize}
-						\item hue component is zero (0)
-						\item staturation component is zero (0)
-						\item value component is zero (0)
-					\end{itemize}
+
+						- hue component is zero (0)
+						- staturation component is zero (0)
+						- value component is zero (0)
+					
 			*/
 			virtual void clear()
 				throw();

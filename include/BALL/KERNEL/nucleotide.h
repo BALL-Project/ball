@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.24 2003/03/03 14:17:48 anhi Exp $
+// $Id: nucleotide.h,v 1.25 2003/03/14 11:49:10 sturm Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -34,7 +34,7 @@ namespace BALL
 			This class is used to represent nucleotides within
 			an  \link NucleicAcid NucleicAcid \endlink  object.
 			 \par
-			<b>Definition:</b> BALL/KERNEL/nucleotide.h
+			
 	*/
 	class Nucleotide
 		: public Fragment

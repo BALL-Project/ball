@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ruleProcessor.h,v 1.13 2003/03/03 14:17:57 anhi Exp $
+// $Id: ruleProcessor.h,v 1.14 2003/03/14 11:49:25 sturm Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEPROCESSOR_H
@@ -21,7 +21,7 @@ namespace BALL
      *  @{
      */
 	/**	Rule Processor class.
-			<b>Definition:</b> BALL/MOLMEC/COMMON/ruleProcessor.h
+			
 	*/
 	class RuleProcessor
 		:	public UnaryProcessor<Atom>

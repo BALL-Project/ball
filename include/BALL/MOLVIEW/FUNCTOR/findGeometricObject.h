@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: findGeometricObject.h,v 1.13 2003/03/03 14:18:03 anhi Exp $
+// $Id: findGeometricObject.h,v 1.14 2003/03/14 11:49:34 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
 #define BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
@@ -44,7 +44,7 @@ namespace BALL
 				can be accessed by the method  \link getGeometricObjects getGeometricObjects \endlink .
 				This class is used by some model processors (e.g.  \link AddBallAndStickModelProcessor AddBallAndStickModelProcessor \endlink )
 				to find  \link GeometricObject GeometricObject \endlink  objects they will change or delete.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/findGeometricObject.h
+				
 		*/
 		class FindGeometricObjects
 			: public UnaryProcessor<Composite>,
@@ -92,10 +92,10 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the state of {\em *this} findGeometricObjects to:
-					\begin{itemize}
-					  \item  clears the properties
-					  \item  the list of  \link GeometricObject GeometricObject \endlink  objects is cleared
-					\end{itemize}
+
+					  -  clears the properties
+					  -  the list of  \link GeometricObject GeometricObject \endlink  objects is cleared
+					
 					Calls  \link ExtendedPropertyManager::clear ExtendedPropertyManager::clear \endlink .
 					@see  ExtendedPropertyManager
 			*/

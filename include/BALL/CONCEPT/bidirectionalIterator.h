@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bidirectionalIterator.h,v 1.19 2003/03/03 14:17:34 anhi Exp $ 
+// $Id: bidirectionalIterator.h,v 1.20 2003/03/14 11:48:46 sturm Exp $ 
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -25,7 +25,7 @@ namespace BALL
 	//@{
 
 	/**	@name Bidirectional Iterator.
-			<b>Definition:</b> BALL/CONCEPT/bidirectionalIterator.h
+			
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class BidirectionalIterator
@@ -458,7 +458,7 @@ namespace BALL
 
 
 	/**	Constant Bidirectional Iterator.
-			<b>Definition:</b> BALL/CONCEPT/bidirectionalIterator.h
+			
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstBidirectionalIterator

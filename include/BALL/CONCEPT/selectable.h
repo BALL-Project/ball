@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectable.h,v 1.14 2003/03/03 14:17:37 anhi Exp $
+// $Id: selectable.h,v 1.15 2003/03/14 11:48:51 sturm Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -28,7 +28,7 @@ namespace BALL
 
 			<b>Interface:</b> Storable
 			 \par
-			<b>Definition:</b> BALL/CONCEPT/selectable.h
+			
 			 \par
 			 \addtogroup  Concepts
 	*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.14 2003/03/03 14:17:59 anhi Exp $
+// $Id: lineSearch.h,v 1.15 2003/03/14 11:49:29 sturm Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
@@ -22,7 +22,7 @@ namespace BALL
 			Without being a true energy minimizer, this method minimizes
 			the energy of a system along a given direction using	
 			cubic interpolation.  \par
-			<b>Definition:</b> BALL/MOLMEC/MINIMIZATION/lineSearch.h
+			
 	*/
 	class LineSearch
 	{
@@ -96,11 +96,11 @@ namespace BALL
 
 		/**	Line search criterion.
 				This predicate implements the Armijo-Goldstein criterion:
-				\begin{itemize}
-					\item sufficient decrease of energy:
+				
+					- sufficient decrease of energy:
 							$E(i+1) \leq E(i) + \alpha \lambda <g(i), dir>$
-					\item sufficient gradient reduction: $|<g(i+1), dir>| \leq \beta <g(i), dir>$
-				\end{itemize}
+					- sufficient gradient reduction: $|<g(i+1), dir>| \leq \beta <g(i), dir>$
+				
 				
 				where $g(i)$ and $g(i+1)$ are the initial and the current gradient
 				$dir$ is the (normalized) search direction

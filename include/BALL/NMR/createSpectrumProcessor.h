@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: createSpectrumProcessor.h,v 1.20 2003/03/03 14:18:11 anhi Exp $
+// $Id: createSpectrumProcessor.h,v 1.21 2003/03/14 11:49:47 sturm Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -44,7 +44,6 @@ namespace BALL
 	/**	Processor creates peaklist_. 
 			Each atom´s chemical shift will create a new peak.
 			Thist peak´s <tt>atomlist_</tt> will contain the corresponding atom.  \par
-			<b>Definition</b> BALL/NMR/createSpectrumProcessor.h
 	*/
 	class CreateSpectrumProcessor
 		:	public ShiftModule

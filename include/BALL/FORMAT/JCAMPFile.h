@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.12 2003/03/03 14:17:42 anhi Exp $
+// $Id: JCAMPFile.h,v 1.13 2003/03/14 11:48:59 sturm Exp $
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -25,7 +25,7 @@ namespace BALL
      */
 	/**	JCAMP file.
 			This class....	 \par
-			<b>Definition:</b>BALL/FORMAT/JCAMPFile.h
+			
 	*/
 	class JCAMPFile 
 		: public File

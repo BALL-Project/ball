@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.36 2003/03/03 14:17:51 anhi Exp $
+// $Id: angle.h,v 1.37 2003/03/14 11:49:13 sturm Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -47,7 +47,7 @@ namespace BALL
 			Use this class to describe angles. The TAngle class permits the conversion
 			from degree to radians and is the return type of all functions used to calculate
 			angles. \par
-			<b>Definition:</b> BALL/MATHS/angle.h
+			
 	*/
 	template <typename T>
 	class TAngle

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: experiment.h,v 1.7 2003/03/03 14:18:11 anhi Exp $
+// $Id: experiment.h,v 1.8 2003/03/14 11:49:47 sturm Exp $
 
 #ifndef BALL_NMR_EXPERIMENT_H
 #define BALL_NMR_EXPERIMENT_H
@@ -28,7 +28,7 @@ namespace BALL
 			how a list of peaks is derived from the shifts calculated
 			for a system.
 			 \par
-			<b>Definition</b>BALL/NMR/experiment.h
+			
 			 \par
 	*/
 	template <typename PeakListType>

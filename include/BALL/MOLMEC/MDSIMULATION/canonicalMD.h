@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.h,v 1.20 2003/03/03 14:17:58 anhi Exp $
+// $Id: canonicalMD.h,v 1.21 2003/03/14 11:49:27 sturm Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -64,7 +64,7 @@ namespace BALL
 			Note that this approach does  not give all properties of a
 			true canonical system. In particular, the heat capacity 
 			cannot be calculated!	 \par
-			<b>Definition:</b>BALL/MOLMEC/MDSIMULATION/canonicalMD.h
+			
 	*/
   class CanonicalMD 
 		: public MolecularDynamics

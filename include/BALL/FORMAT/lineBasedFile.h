@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.h,v 1.24 2003/03/03 14:17:44 anhi Exp $
+// $Id: lineBasedFile.h,v 1.25 2003/03/14 11:49:02 sturm Exp $
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
@@ -23,7 +23,7 @@ namespace BALL
      *  @{
      */
 	/** A class for the convenient parsing of line-based file formats.
-			<b>Definition:</b> BALL/FORMAT/lineBasedFile.h
+			
 	*/
 	class LineBasedFile
 		:	public File

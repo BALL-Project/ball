@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.h,v 1.11 2003/03/03 14:18:26 anhi Exp $
+// $Id: information.h,v 1.12 2003/03/14 11:50:10 sturm Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H
@@ -67,7 +67,7 @@ namespace BALL
 				recognized.
 				This class is used by the class  \link Control Control \endlink  to retrieve informations
 				about the shown  \link Composite Composite \endlink  objects.  \par
-				<b>Definition:</b> BALL/VIEW/FUNCTOR/information.h
+				
 				@see     Control
 		*/
 		class Information: public Visitor<Composite>
@@ -140,11 +140,11 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Resets the state of {\em *this} information to:
-					\begin{itemize}
-					  \item  name_ is set to <tt>"unknown"</tt>
-					  \item  type_name_ is set to <tt>"unknown type"</tt>
-					  \item  type is set to <tt>TYPE__UNKNOWN</tt>
-					\end{itemize}
+
+					  -  name_ is set to <tt>"unknown"</tt>
+					  -  type_name_ is set to <tt>"unknown type"</tt>
+					  -  type is set to <tt>TYPE__UNKNOWN</tt>
+					
 			*/
 			virtual void clear()
 				throw();

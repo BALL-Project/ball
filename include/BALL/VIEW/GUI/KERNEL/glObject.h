@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glObject.h,v 1.14 2003/03/03 14:18:27 anhi Exp $
+// $Id: glObject.h,v 1.15 2003/03/14 11:50:13 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLOBJECT_H
@@ -20,7 +20,7 @@ namespace BALL
 		class CompositeDescriptor;
 		
 		/** GLObject class.
-				<b>Definition:</b> BALL/VIEW/GUI/KERNEL/glObject.h
+				
 				The class GLObject is the base class for all geometric primitives that have a 
 				graphical representation. GLObject declares an interface for the drawing mechanism
 				that is used for creating the visualisation.
@@ -33,9 +33,9 @@ namespace BALL
 		{
 			/** @name Class friends
 
-					\begin{itemize}
-						\item class CompositeDescriptor
-					\end{itemize}
+
+						- class CompositeDescriptor
+					
 			*/
 
 			friend class CompositeDescriptor;

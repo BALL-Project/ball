@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSVertex.h,v 1.29 2003/03/03 14:18:18 anhi Exp $
+// $Id: RSVertex.h,v 1.30 2003/03/14 11:49:57 sturm Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -36,33 +36,33 @@ namespace BALL
 	class SASTriangulator;
 
 	/** Generic RSVertex Class.
-			<b>Definition:</b> BALL/STRUCTURE/RSVertex.h
+			
 	*/
 	class RSVertex	:	public GraphVertex< RSVertex,RSEdge,RSFace >
 	{
 		public:
 
 		/** @name Class friends
-				\begin{itemize}
-					\item class RSEdge
-					\item class RSFace
-					\item class ReducedSurface
-					\item class RSComputer
-					\item class SESEdge
-					\item class SESFace
-					\item class SESVertex
-					\item class SolventExcludedSurface
-					\item class SESComputer
-					\item class SESSingularityCleaner
-					\item class TriangulatedSES
-					\item class SESTriangulator
-					\item class SASEdge
-					\item class SASFace
-					\item class SASVertex
-					\item class SolventAccessibleSurface
-					\item class TriangulatedSAS
-					\item class SASTriangulator
-				\end{itemize}
+
+					- class RSEdge
+					- class RSFace
+					- class ReducedSurface
+					- class RSComputer
+					- class SESEdge
+					- class SESFace
+					- class SESVertex
+					- class SolventExcludedSurface
+					- class SESComputer
+					- class SESSingularityCleaner
+					- class TriangulatedSES
+					- class SESTriangulator
+					- class SASEdge
+					- class SASFace
+					- class SASVertex
+					- class SolventAccessibleSurface
+					- class TriangulatedSAS
+					- class SASTriangulator
+				
 		*/
 		friend class RSEdge;
 		friend class RSFace;

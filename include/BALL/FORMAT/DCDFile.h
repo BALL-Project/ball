@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.22 2003/03/03 14:17:42 anhi Exp $
+// $Id: DCDFile.h,v 1.23 2003/03/14 11:48:58 sturm Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -31,7 +31,7 @@ namespace BALL
 			block consisting of 8 bytes starts with the number 8 followed by 8
 			bytes of data and ends with the number 8.	 \par
 			BASUTELLE: complete header description  \par
-			<b>Definition:</b> BALL/FORMAT/DCDFile.h
+			
 	*/
 	class DCDFile
 		:	public TrajectoryFile

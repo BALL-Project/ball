@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectSelector.h,v 1.8 2003/03/03 14:18:04 anhi Exp $
+// $Id: objectSelector.h,v 1.9 2003/03/14 11:49:36 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
@@ -25,7 +25,7 @@ namespace BALL
 				See  \link Selectable Selectable \endlink  for information about selecting or deselecting objects.
 				for information about the processor concept see  \link Processor Processor \endlink  in tbe BALL 
 				documentation.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/objectSelector.h
+				
 				@see  Selectable
 		*/
 		class ObjectSelector: public UnaryProcessor<Composite>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorCalculator.h,v 1.16 2003/03/03 14:18:04 anhi Exp $
+// $Id: standardColorCalculator.h,v 1.17 2003/03/14 11:49:36 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -28,7 +28,7 @@ namespace BALL
 				corresponding to the element symbols of atoms.
 				This colorCalculator can be set in the class  \link DisplayProperties DisplayProperties \endlink 
 				to color an entire object in its element colors.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h
+				
 		*/
 		class ElementColorCalculator
 			: public ColorCalculator
@@ -59,7 +59,7 @@ namespace BALL
 				corresponding to the residue names of the residues.
 				This colorCalculator can be set in the class  \link DisplayProperties DisplayProperties \endlink 
 				to color an entire object in its residue colors.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h
+				
 		*/
 		class ResidueNameColorCalculator
 			: public ColorCalculator
@@ -116,7 +116,7 @@ namespace BALL
 				<tt>-1</tt>.
 				This colorCalculator can be set in the class  \link DisplayProperties DisplayProperties \endlink 
 				to color an entire object in its atom charge colors.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h
+				
 		*/
 		class AtomChargeColorCalculator
 			: public ColorCalculator
@@ -130,11 +130,11 @@ namespace BALL
 			/** Default Constructor.
 					Construct new atomChargeColorCalculator.
 					Initialize the colors to:
-					\begin{itemize}
-					  \item  positive color set to blue <tt>"0000FFFF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
-					  \item  neutral color set to white <tt>"FFFFFFFF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
-					  \item  negative color set to red <tt>"FF0000FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
-					\end{itemize}
+
+					  -  positive color set to blue <tt>"0000FFFF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
+					  -  neutral color set to white <tt>"FFFFFFFF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
+					  -  negative color set to red <tt>"FF0000FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
+					
 					@return      AtomChargeColorCalculator new constructed atomChargeColorCalculator
 					@see         ColorCalculator
 					@see         ColorRGBA
@@ -168,11 +168,11 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the colors of {\em *this} atomChargeColorCalculator to:
-					\begin{itemize}
-					  \item  positive color set to blue <tt>"0000FFFF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
-					  \item  neutral color set to white <tt>"FFFFFFFF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
-					  \item  negative color set to red <tt>"FF0000FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
-					\end{itemize}
+
+					  -  positive color set to blue <tt>"0000FFFF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
+					  -  neutral color set to white <tt>"FFFFFFFF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
+					  -  negative color set to red <tt>"FF0000FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
+					
 					@see  ColorRGBA
 			*/
 			virtual void clear()
@@ -348,7 +348,7 @@ namespace BALL
 				according to their atom distances.
 				This colorCalculator can be set in the class  \link DisplayProperties DisplayProperties \endlink 
 				to color the atoms in multiple atom container according to their distance.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h
+				
 		*/
 		class AtomDistanceColorCalculator
 			:	public UnaryProcessor<Atom>,
@@ -364,12 +364,12 @@ namespace BALL
 			/** Default Constructor.
 					Construct new atomDistanceColorCalculator.
 					Initialize the colors to:
-					\begin{itemize}
-					  \item  internal structures cleared
-					  \item  distance set to <tt>10</tt>
-					  \item  null distance color set to red <tt>"FF0000FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
-					  \item  max distance color set to blue <tt>"00FF00FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
-					\end{itemize}
+
+					  -  internal structures cleared
+					  -  distance set to <tt>10</tt>
+					  -  null distance color set to red <tt>"FF0000FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
+					  -  max distance color set to blue <tt>"00FF00FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
+					
 					@return      AtomDistanceColorCalculator new constructed atomDistanceColorCalculator
 					@see         ColorCalculator
 					@see         ColorRGBA
@@ -403,12 +403,12 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the colors of {\em *this} atomDistanceColorCalculator to:
-					\begin{itemize}
-					  \item  internal structures cleared
-					  \item  distance set to <tt>10</tt>
-					  \item  null distance color set to red <tt>"FF0000FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
-					  \item  max distance color set to blue <tt>"00FF00FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
-					\end{itemize}
+
+					  -  internal structures cleared
+					  -  distance set to <tt>10</tt>
+					  -  null distance color set to red <tt>"FF0000FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
+					  -  max distance color set to blue <tt>"00FF00FF"</tt>. See  \link ColorRGBA ColorRGBA \endlink  for information on how to set colors
+					
 					@see  ColorRGBA
 			*/
 			virtual void clear()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: limits.h,v 1.14 2003/03/03 14:17:33 anhi Exp $
+// $Id: limits.h,v 1.15 2003/03/14 11:48:44 sturm Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
@@ -36,7 +36,7 @@ namespace BALL
 			this feature (or more precisely: the header file <limits> is not implemented).
 			If <limits> exists, Limits is just a wrapper around the <tt>numeric_limits</tt> class,
 			otherwise it returns the value from the standard C header <limits.h>. \par
-			<b>Definition:</b> BALL/COMMON/limits.h
+			
 	* 	 \addtogroup  Common
 	*/
 	template <typename T>

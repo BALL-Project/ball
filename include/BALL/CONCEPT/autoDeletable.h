@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: autoDeletable.h,v 1.18 2003/03/03 14:17:34 anhi Exp $
+// $Id: autoDeletable.h,v 1.19 2003/03/14 11:48:45 sturm Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -48,7 +48,7 @@ namespace BALL
 			call to  \link setAutoDeletable setAutoDeletable \endlink . This might be useful to protect
 			certain instances of objects, however usually this should not be
 			neccessary. \par
-			<b>Definition:</b> BALL/CONCEPT/autoDeletable.h
+			
 	* 	 \addtogroup  Concepts
 	*/
 	class AutoDeletable

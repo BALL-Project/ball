@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistentObject.h,v 1.11 2003/03/03 14:17:37 anhi Exp $
+// $Id: persistentObject.h,v 1.12 2003/03/14 11:48:49 sturm Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
 #define BALL_CONCEPT_PERSISTENTOBJECT_H
@@ -22,7 +22,7 @@ namespace BALL
 			 \par
 			The class itself has no functionality except for the <tt>operator >></tt>.
 			 \par
-			<b>Definition:</b> BALL/CONCEPT/persistentObject.h
+			
 	* 	 \addtogroup  Persistence
 	*/
 	class PersistentObject

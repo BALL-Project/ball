@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.7 2003/03/03 14:17:37 anhi Exp $
+// $Id: predicate.h,v 1.8 2003/03/14 11:48:49 sturm Exp $
 
 #ifndef BALL_CONCEPT_PREDICATE_H
 #define BALL_CONCEPT_PREDICATE_H
@@ -18,7 +18,7 @@ namespace BALL
 	using std::binary_function;
 		
 	/**	@name	Predicates
-			<b>Definition:</b> BALL/CONCEPT/predicate.h
+			
 	*/
 	//@{
 	

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glEntityDescriptor.h,v 1.16 2003/03/03 14:18:27 anhi Exp $
+// $Id: glEntityDescriptor.h,v 1.17 2003/03/14 11:50:13 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
@@ -31,33 +31,33 @@ namespace BALL
 				in  \link GLDisplayList GLDisplayList \endlink  objects. The class is used by the 
 				 \link CompositeDescriptor CompositeDescriptor \endlink  class.
 				The different visualization parts are:
-				\begin{itemize}
-				  \item  <b>static display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the 
+
+				  -  <b>static display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the 
 								 visualization of an object in the non-moveable state
-					\item  <b>static always front display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the 
+					-  <b>static always front display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the 
 								 visualization of an object in the non-moveable state that should be always in front of other objects
-					\item  <b>static wireframe display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the 
+					-  <b>static wireframe display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the 
 								 visualization of an object in the non-moveable state that should be drawn as wireframe
-					\item  <b>static always front wireframe display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the visualization 
+					-  <b>static always front wireframe display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the visualization 
 								 of an object in the non-moveable state that should be drawn as wireframe and should be always 
 								 in front of other objects.
-					\item  <b>dynamic display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the visualization of an object in the 
+					-  <b>dynamic display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the visualization of an object in the 
 								 moveable state
-					\item  <b>dynamic always front display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the visualization 
+					-  <b>dynamic always front display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the visualization 
 								 of an object in the moveable state that should be always in front of other objects
-	  			\item  <b>dynamic wireframe display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the 
+	  			-  <b>dynamic wireframe display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the 
 					 			 visualization of an object in the moveable state that should be drawn as wireframe
-	  			\item  <b>dynamic wireframe always front display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the 
+	  			-  <b>dynamic wireframe always front display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the 
 					 			 visualization of an object in the moveable state that should be drawn as wireframe and should be always
 								 in front of other objects
-				  \item  <b>transparent display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the visualization of 
+				  -  <b>transparent display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the visualization of 
 								 an object in the moveable state that should be drawn transparent
-					\item  <b>transparent always front display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the visualization
+					-  <b>transparent always front display list</b> - this  \link GLDisplayList GLDisplayList \endlink  stores the visualization
 								 of an object in the moveable state that should be drawn transparent and should be always in front 
 								 of other objects.
-				\end{itemize}
+				
 				This class is used internally by the  \link CompositeDescriptor CompositeDescriptor \endlink  class.  \par
-				<b>Definition:</b> BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h
+				
 		*/
 		class GLEntityDescriptor
 		{
@@ -72,10 +72,10 @@ namespace BALL
 					There is no copy constructor because  \link GLDisplayList GLDisplayList \endlink  objects
 					have no copy constructor.
 					The state of {\em *this} glEntityDescriptor is set to:
-					\begin{itemize}
-					  \item all display lists are empty
-						\item update is necessary
-					\end{itemize}
+
+					  - all display lists are empty
+						- update is necessary
+					
 					@return      GLEntityDescriptor new constructed glEntityDescriptor
 					@see         GLDisplayList
 			*/

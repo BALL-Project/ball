@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.h,v 1.15 2003/03/03 14:17:45 anhi Exp $
+// $Id: trajectoryFile.h,v 1.16 2003/03/14 11:49:03 sturm Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -30,7 +30,7 @@ namespace BALL
 			This is more an interface definition than an actual class, because it
 			would not make too much sense to create yet-another-trajectory-format.
 			This class will be specialized by actual formats, like DCD.	 \par
-			<b>Definition:</b> BALL/FORMAT/trajectoryFile.h
+			
 	*/
 	class TrajectoryFile
 		:	public File

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.25 2003/03/03 14:17:48 anhi Exp $
+// $Id: molecule.h,v 1.26 2003/03/14 11:49:09 sturm Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -27,7 +27,7 @@ namespace BALL
 
 	/**	Molecule class.
 			Used to represent general molecules without specific properties. \par
-			<b>Definition:</b>BALL/KERNEL/molecule.h
+			
 	*/
 	class Molecule
 		: public AtomContainer

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularMessage.h,v 1.12 2003/03/03 14:18:09 anhi Exp $
+// $Id: molecularMessage.h,v 1.13 2003/03/14 11:49:44 sturm Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
@@ -34,7 +34,7 @@ namespace BALL
 				this class is not derived from  \link NewCompositeMessage NewCompositeMessage \endlink . Otherwise every method
 				accepting  \link NewCompositeMessage NewCompositeMessage \endlink  object would also accept 
 				 \link NewMolecularMessage NewMolecularMessage \endlink  objects and that is not allowed.  \par
-				<b>Definition:</b> BALL/MOLVIEW/KERNEL/molecularMessage.h
+				
 		*/
 		class NewMolecularMessage: public CompositeMessage
 		{
@@ -89,7 +89,7 @@ namespace BALL
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class  \link RemovedCompositeMessage RemovedCompositeMessage \endlink .  \par
-				<b>Definition:</b> BALL/VIEW/KERNEL/message.h
+				
 		*/
 		class RemovedMolecularMessage: public RemovedCompositeMessage
 		{
@@ -146,7 +146,7 @@ namespace BALL
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class  \link ChangedCompositeMessage ChangedCompositeMessage \endlink .  \par
-				<b>Definition:</b> BALL/VIEW/KERNEL/message.h
+				
 		*/
 		class ChangedMolecularMessage: public ChangedCompositeMessage
 		{
@@ -203,7 +203,7 @@ namespace BALL
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class  \link SelectionMessage SelectionMessage \endlink .  \par
-				<b>Definition:</b> BALL/VIEW/KERNEL/message.h
+				
 		*/
 		class MolecularSelectionMessage: public SelectionMessage
 		{

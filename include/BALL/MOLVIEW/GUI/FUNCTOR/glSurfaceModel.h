@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glSurfaceModel.h,v 1.10 2003/03/03 14:18:07 anhi Exp $
+// $Id: glSurfaceModel.h,v 1.11 2003/03/14 11:49:40 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
@@ -27,7 +27,7 @@ namespace BALL
 				method used for creating the  \link Surface Surface \endlink . This new primitive contains
 				OpenGL implementation to generate the graphical visualization of the surface.
 				This class has the same functionality as its base class  \link AddSurfaceModel AddSurfaceModel \endlink .  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h
+				
 		*/
 		class AddGLSurfaceModel: public AddSurfaceModel
 		{

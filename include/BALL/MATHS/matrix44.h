@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.42 2003/03/03 14:17:52 anhi Exp $
+// $Id: matrix44.h,v 1.43 2003/03/14 11:49:15 sturm Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -57,7 +57,7 @@ namespace BALL
 		throw();
 	
 	/**	Generic 4x4 Matrix Class.
-      <b>Definition:</b> BALL/MATHS/matrix44.h
+      S/matrix44.h
  	*/
 	template <typename T>
 	class TMatrix4x4

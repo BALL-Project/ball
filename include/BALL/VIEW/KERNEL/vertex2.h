@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.12 2003/03/03 14:18:35 anhi Exp $
+// $Id: vertex2.h,v 1.13 2003/03/14 11:50:24 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX2_H
 #define BALL_VIEW_KERNEL_VERTEX2_H
@@ -31,7 +31,7 @@ namespace BALL
 				changes the values of the vectors of {\em *this} vertex2 changes 
 				as well. To avoid segmentation faults these vector addresses must be 
 				valid as long as {\em *this} vertex2 exists.  \par
-				<b>Definition:</b> BALL/VIEW/KERNEL/vertex2.h
+				
 		*/
 		class Vertex2
 		{

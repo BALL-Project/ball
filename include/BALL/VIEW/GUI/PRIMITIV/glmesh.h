@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glmesh.h,v 1.13 2003/03/03 14:18:29 anhi Exp $
+// $Id: glmesh.h,v 1.14 2003/03/14 11:50:16 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLMESH_H
 #define BALL_VIEW_GUI_PRIMITIV_GLMESH_H
@@ -33,7 +33,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				mesh. OpenGL code is used for the visualization.
 				See these classes for further information.
-				<b>Definition:</b> BALL/VIEW/GUI/PRIMITIV/glmesh.h
+				
 		*/
 		class GLMesh
 			: public Mesh,

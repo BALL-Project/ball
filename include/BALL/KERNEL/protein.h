@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.h,v 1.23 2003/03/03 14:17:49 anhi Exp $ 
+// $Id: protein.h,v 1.24 2003/03/14 11:49:10 sturm Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -47,7 +47,7 @@ namespace BALL
 			A protein may contain several  \link Chain Chain \endlink ,  \link SecondaryStructure SecondaryStructure \endlink ,
 			and  \link Residue Residue \endlink .
 			 \par
-			<b>Definition:</b> BALL/KERNEL/protein.h
+			
 	*/
 	class Protein
 		: public Molecule

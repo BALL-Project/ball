@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.30 2003/03/03 14:17:39 anhi Exp $
+// $Id: hashGrid.h,v 1.31 2003/03/14 11:48:53 sturm Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -44,7 +44,7 @@ namespace BALL
 			Every such box contains a linear list of the objects that are
 			contained in this box. This list is accessible through a
 			DataIterator. \par
-			<b>Definition:</b> BALL/DATATYPE/hashGrid.h
+			
 	*/
 	template <typename Item>
 	class HashGridBox3
@@ -1054,7 +1054,7 @@ namespace BALL
 
 	/**	Three-dimensional Hash Grid Class.
 			????? \par
-			<b>Definition:</b> BALL/DATATYPE/hashGrid.h
+			
 	*/
 	template <typename Item>
 	class HashGrid3

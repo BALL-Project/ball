@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomicContactEnergy.h,v 1.9 2003/03/03 14:17:41 anhi Exp $
+// $Id: atomicContactEnergy.h,v 1.10 2003/03/14 11:48:57 sturm Exp $
 
 #ifndef BALL_ENERGY_ATOMICCONTACTENERGY_H
 #define BALL_ENERGY_ATOMICCONTACTENERGY_H
@@ -26,7 +26,7 @@ namespace BALL
 			<b>Files:</b>  \par
 			Types are taken from <tt>data/energy/ACE\_types.dat</tt>  \par
 			Values for contact energies are in <tt>data/energy/AtomicContactEnergy.dat</tt>  \par
-			<b>Definition:</b> BALL/ENERGY/atomicContactEnergy.h
+			
 	*/ 
 	double calculateACE(AtomContainer& atoms);
   /** @} */

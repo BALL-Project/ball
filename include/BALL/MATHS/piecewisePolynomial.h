@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewisePolynomial.h,v 1.13 2003/03/03 14:17:53 anhi Exp $
+// $Id: piecewisePolynomial.h,v 1.14 2003/03/14 11:49:16 sturm Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -27,7 +27,7 @@ namespace BALL
 			the interval and \f$d\f$ is the overall degree of the PPCurve. Note that
 			there is no warranty that the defined curve is continuously
 			differentiable or even continuous.
-			<b>Definition:</b> BALL/MATHS/piecewisePolynomial.h
+			
 	 */
 
 	class PiecewisePolynomial

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModel.h,v 1.17 2003/03/03 14:18:03 anhi Exp $
+// $Id: baseModel.h,v 1.18 2003/03/14 11:49:33 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -44,7 +44,7 @@ namespace BALL
 				Every model must have a  \link ColorCalculator ColorCalculator \endlink  and a  \link BaseModelConnector BaseModelConnector \endlink  object
 				so interface methods are available too.
 				Some protected helper methods are included that are used by some model processors.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/baseModel.h
+				
 		*/
 		class BaseModelProcessor
 			: public UnaryProcessor<Composite>,
@@ -102,12 +102,12 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the state of {\em *this} baseModelProcessor to:
-					\begin{itemize}
-					  \item  clear the properties
-					  \item  clear the  \link FindGeometricObjects FindGeometricObjects \endlink 
-					  \item  set the  \link ColorCalculator ColorCalculator \endlink  to the default colorCalculator
-					  \item  set the  \link BaseModelConnector BaseModelConnector \endlink  to the default baseModelConnector
-					\end{itemize}
+
+					  -  clear the properties
+					  -  clear the  \link FindGeometricObjects FindGeometricObjects \endlink 
+					  -  set the  \link ColorCalculator ColorCalculator \endlink  to the default colorCalculator
+					  -  set the  \link BaseModelConnector BaseModelConnector \endlink  to the default baseModelConnector
+					
 					Calls  \link ExtendedPropertyManager::clear ExtendedPropertyManager::clear \endlink .
 					Calls  \link FindGeometricObjects::clear FindGeometricObjects::clear \endlink .
 					Calls  \link clear_ clear_ \endlink 
@@ -460,12 +460,12 @@ namespace BALL
 					Return <tt>true</tt> if a model property is set in {\em geometric_object}.
 					This method is called from the method  \link removeGeometricObjects_ removeGeometricObjects_ \endlink .
 					The following models are recognized:
-					\begin{itemize}
-					  \item {\em PROPERTY__MODEL_BALL_AND_STICK}
-					  \item {\em PROPERTY__MODEL_DOTS}
-					  \item {\em PROPERTY__MODEL_LINES}
-					  \item {\em PROPERTY__MODEL_VDW}
-					\end{itemize}
+
+					  - {\em PROPERTY__MODEL_BALL_AND_STICK}
+					  - {\em PROPERTY__MODEL_DOTS}
+					  - {\em PROPERTY__MODEL_LINES}
+					  - {\em PROPERTY__MODEL_VDW}
+					
 					@param  geometric_object the  \link GeometricObject GeometricObject \endlink  to be tested if a model property is present
 					@return bool <tt>true</tt> if a model property is set, <tt>false</tt> otherwise
 					@see    removeGeometricObjects_
@@ -491,14 +491,14 @@ namespace BALL
 			/** Resets the properties.
 					Resets the properties of {\em *this} baseModelProcessor.
 					Set the properties to:
-					\begin{itemize}
-					  \item <tt>PROPERTY__OBJECT_STATIC</tt>
-					  \item <tt>PROPERTY__OBJECT_OPAQUE</tt>
-					  \item <tt>PROPERTY__OBJECT_VISIBLE</tt>
-					  \item <tt>PROPERTY__OBJECT_CLOSED</tt>
-					  \item <tt>PROPERTY__DRAWING_MODE_SOLID</tt>
-					  \item <tt>PROPERTY__DRAWING_PRECISION_HIGH</tt>
-					\end{itemize}
+
+					  - <tt>PROPERTY__OBJECT_STATIC</tt>
+					  - <tt>PROPERTY__OBJECT_OPAQUE</tt>
+					  - <tt>PROPERTY__OBJECT_VISIBLE</tt>
+					  - <tt>PROPERTY__OBJECT_CLOSED</tt>
+					  - <tt>PROPERTY__DRAWING_MODE_SOLID</tt>
+					  - <tt>PROPERTY__DRAWING_PRECISION_HIGH</tt>
+					
 					Those properties are defined in the class  \link GeometricObject GeometricObject \endlink .
 					@see   GeometricObject
 			*/

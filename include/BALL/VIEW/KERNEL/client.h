@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.h,v 1.16 2003/03/03 14:18:32 anhi Exp $
+// $Id: client.h,v 1.17 2003/03/14 11:50:20 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -49,7 +49,7 @@ namespace BALL
 				of this  \link Composite Composite \endlink  changes as well.
 				The Client class connects to the  \link Server Server \endlink  class that is also a part of
 				the VIEW library. See  \link Server Server \endlink  for further information.
-				<b>Definition:</b> BALL/VIEW/KERNEL/client.h
+				
 				@see     Server
 		*/
 		class Client
@@ -104,10 +104,10 @@ namespace BALL
 			/** Detailed state initializing constructor.
 					Constructs new client.
 					The state of {\em *this} client is:
-					\begin{itemize}
-						\item host is {\em host}
-						\item port is {\em port} (Default = VIEW_DEFAULT_PORT)
-					\end{itemize}		
+
+						- host is {\em host}
+						- port is {\em port} (Default = VIEW_DEFAULT_PORT)
+							
      			@param       host the host to connect to
 					@param       port the port of the host to connect to
 					@return      Client new constructed client

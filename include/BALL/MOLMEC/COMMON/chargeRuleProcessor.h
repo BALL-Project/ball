@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chargeRuleProcessor.h,v 1.10 2003/03/03 14:17:56 anhi Exp $
+// $Id: chargeRuleProcessor.h,v 1.11 2003/03/14 11:49:23 sturm Exp $
 // Molecular Mechanics: rule-based assignment of charges 
 
 #ifndef BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
@@ -18,7 +18,7 @@ namespace BALL
      */
 
 	/**	Charge Rule Processor.
-			<b>Definition:</b> BALL/MOLMEC/COMMON/chargeRuleProcessor.h
+			
 	*/
 	class ChargeRuleProcessor
 		:	public RuleProcessor

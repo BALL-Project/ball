@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.h,v 1.12 2003/03/03 14:18:12 anhi Exp $
+// $Id: extractors.h,v 1.13 2003/03/14 11:49:50 sturm Exp $
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H
@@ -50,7 +50,7 @@ namespace BALL
 				for atom in atoms(S):
 					print atom.getFullName()
 			\end{verbatim}
-			<b>Definition:</b> BALL/PYTHON/extractors.h
+			
 	*/
 	//@{
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: descriptor.h,v 1.7 2003/03/03 14:18:15 anhi Exp $
+// $Id: descriptor.h,v 1.8 2003/03/14 11:49:51 sturm Exp $
 
 #ifndef BALL_QSAR_DESCRIPTOR_H
 #define BALL_QSAR_DESCRIPTOR_H
@@ -20,7 +20,7 @@ namespace BALL
      *  @{
      */
 	/**	Generic QSAR molecular descriptor class.
-			<b>Definition:</b>BALL/include/BALL/QSAR/descriptor.h
+			
 			 \par
 	*/
 	class Descriptor

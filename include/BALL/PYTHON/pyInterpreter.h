@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.6 2003/03/03 14:18:14 anhi Exp $ 
+// $Id: pyInterpreter.h,v 1.7 2003/03/14 11:49:51 sturm Exp $ 
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H
@@ -24,7 +24,7 @@ namespace BALL
 			so all methods are static. The use of subinterpreters
 			is not yet supported.
 			 \par
-			<b>Definition:</b>BALL/PYTHON/pyInterpreter.h
+			
 			 \par
 	*/
 	class PyInterpreter

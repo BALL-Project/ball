@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.h,v 1.17 2003/03/03 14:17:33 anhi Exp $
+// $Id: version.h,v 1.18 2003/03/14 11:48:44 sturm Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -32,7 +32,7 @@ namespace BALL
 			The VersionInfo class contains only static methods
 			that can be used to retrieve the desired information.
 			 \par
-			<b>Definition:</b>BALL/COMMON/version.h
+			
 	*/
 	class VersionInfo
 	{

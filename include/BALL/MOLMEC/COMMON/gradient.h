@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: gradient.h,v 1.15 2003/03/03 14:17:57 anhi Exp $ 
+// $Id: gradient.h,v 1.16 2003/03/14 11:49:24 sturm Exp $ 
 
 // A conjugate gradient minimizer for geometry optimisation
 
@@ -36,7 +36,7 @@ namespace BALL
 			flags the gradient as invalid, the data is untouched. This may be used to 
 			initiate automatic recalculations of the gradient.
 			This class is used by all minimizer classes.  \par
-			<b>Definition:</b>BALL/MOLMEC/COMMON/gradient.h
+			
 	*/
 	class Gradient
 		:	private std::vector<Vector3>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.h,v 1.16 2003/03/03 14:17:44 anhi Exp $
+// $Id: genericMolFile.h,v 1.17 2003/03/14 11:49:01 sturm Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -54,7 +54,7 @@ namespace BALL
 			 \link LineBasedFile LineBasedFile \endlink  provides a number of convenient methods
 			to parse that kind of format.
 			 \par
-			<b>Definition:</b> BALL/FORMAT/genericMolFile.h
+			
 	*/
 	class GenericMolFile
 		: public LineBasedFile

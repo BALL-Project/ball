@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.62 2003/03/03 14:17:54 anhi Exp $
+// $Id: vector3.h,v 1.63 2003/03/14 11:49:18 sturm Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -73,7 +73,7 @@ namespace BALL
 	//@}
 
 	/** Generic Three-Dimensional Vector.
-      <b>Definition:</b> BALL/MATHS/vector3.h
+      S/vector3.h
 	*/
 	template <typename T>
 	class TVector3

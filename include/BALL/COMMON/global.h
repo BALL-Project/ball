@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.16 2003/03/03 14:17:32 anhi Exp $
+// $Id: global.h,v 1.17 2003/03/14 11:48:43 sturm Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -45,7 +45,7 @@ namespace BALL
 	/**	@name Type aliases defined by BALL.
 			These predefined types are used in BALL for portability and
 			comprehensibility.
-			<b>Definition:</b> BALL/COMMON/global.h
+			
 	*/
 	//@{
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line3.h,v 1.38 2003/03/03 14:17:52 anhi Exp $
+// $Id: line3.h,v 1.39 2003/03/14 11:49:15 sturm Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -42,7 +42,7 @@ namespace BALL
 	
 	/**	Generic Line in Three-Dimensional Space.
 			 \par
-      <b>Definition:</b> BALL/MATHS/line3.h
+      S/line3.h
 			 \par
 	*/
 	template <typename T>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.12 2003/03/03 14:18:30 anhi Exp $
+// $Id: events.h,v 1.13 2003/03/14 11:50:18 sturm Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -942,7 +942,7 @@ namespace BALL
 				 \link Notification Notification \endlink  mechanism of BALL.
 				The names of the methods may seems a bit too long and unreadable but they are only
 				event names and will used and created automatically for the  \link Scene Scene \endlink  object.
-				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/events.h
+				
 		*/
 		class Events
 		{

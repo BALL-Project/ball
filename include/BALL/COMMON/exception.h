@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.36 2003/03/03 14:17:31 anhi Exp $
+// $Id: exception.h,v 1.37 2003/03/14 11:48:43 sturm Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -51,7 +51,7 @@ namespace BALL
 				core dump, you should set the environment variable {\tt
 				BALL_DUMP_CORE} to any (non empty) value.
 				 \par
-				<b>Definition:</b>BALL/COMMON/exception.h
+				
 				 \par
 		*/
 		

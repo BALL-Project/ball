@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: object.h,v 1.19 2003/03/03 14:17:36 anhi Exp $ 
+// $Id: object.h,v 1.20 2003/03/14 11:48:49 sturm Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -29,7 +29,7 @@ namespace BALL
 			object that is an instance of a derived class of object. Together
 			with the BALL object manager this class also provides a double linked
 			list of all objects.  \par
-			<b>Definition:</b> BALL/CONCEPT/object.h
+			
 	* 	 \addtogroup  Concepts
 	*/
 	class Object

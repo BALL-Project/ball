@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.30 2003/03/03 14:18:28 anhi Exp $
+// $Id: mainControl.h,v 1.31 2003/03/14 11:50:14 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -92,7 +92,7 @@ namespace BALL
 				It handles also the general preferences tab  \link Preferences Preferences \endlink  of the main
 				application and notifies all
 				registered  \link ModularWidget ModularWidget \endlink  objects if the preferences has changed.
-				<b>Definition:</b>BALL/VIEW/GUI/KERNEL/mainControl.h
+				
 		*/
 		class MainControl
 			: public QMainWindow,
@@ -179,11 +179,11 @@ namespace BALL
 					{\em aboutToQuit} with the slot  \link aboutToExit aboutToExit \endlink .
 					Initializes the internal data structures.
 					The state of {\em *this} mainControl is:
-					\begin{itemize}
-					  \item  no  \link Composite Composite \endlink  objects stored
-						\item  no general  \link Preferences Preferences \endlink  dialog added
-						\item  no  \link MainControlPreferences MainControlPreferences \endlink  dialog added
-					\end{itemize}
+
+					  -  no  \link Composite Composite \endlink  objects stored
+						-  no general  \link Preferences Preferences \endlink  dialog added
+						-  no  \link MainControlPreferences MainControlPreferences \endlink  dialog added
+					
 					@param  parent the new parent widget
 					@param  name the new name of the widget
 					@param  inifile the new preferences filename

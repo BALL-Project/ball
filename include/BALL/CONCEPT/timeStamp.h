@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.h,v 1.19 2003/03/03 14:17:38 anhi Exp $
+// $Id: timeStamp.h,v 1.20 2003/03/14 11:48:51 sturm Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -38,7 +38,7 @@ namespace BALL
 			This class  provides a higher precision than  \link Time Time \endlink 
 			(below seconds).  \par
 			<b>Interface:</b> <tt>Storable</tt>	 \par
-			<b>Definition:</b> BALL/CONCEPT/timeStamp.h
+			
 			 \addtogroup  Concepts
 	*/
 	class PreciseTime
@@ -188,7 +188,7 @@ namespace BALL
 			This class implements a so-called time stamp. It is used to 
 			store modification or creation times of objects.
 			<b>Interface:</b> <tt>Storable</tt>	 \par
-			<b>Definition:</b> BALL/CONCEPT/timeStamp.h
+			
 	*/
 	class TimeStamp
 	{

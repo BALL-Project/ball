@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueTorsions.h,v 1.14 2003/03/03 14:18:01 anhi Exp $
+// $Id: residueTorsions.h,v 1.15 2003/03/14 11:49:31 sturm Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
@@ -29,7 +29,7 @@ namespace BALL
 			to generate the torsions by itself (creating all torsions and
 			complaining about missing parameters) or whether they have to read them
 			from this section. \par
-			<b>Definition:</b> BALL/MOLMEC/PARAMETER/residueTorsions.h
+			
 	*/
 	class ResidueTorsions 
 		:	public ParameterSection

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldParameters.h,v 1.16 2003/03/03 14:18:00 anhi Exp $
+// $Id: forceFieldParameters.h,v 1.17 2003/03/14 11:49:30 sturm Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -27,7 +27,7 @@ namespace BALL
 	class AtomTypes;
 	
 	/**	Force field parameter class.
-			<b>Definition:</b> BALL/MOLMEC/PARAMETER/forceFieldParameters.h
+			
 	*/
 	class ForceFieldParameters
 		:	public Parameters

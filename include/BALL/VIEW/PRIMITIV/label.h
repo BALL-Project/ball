@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.14 2003/03/03 14:18:35 anhi Exp $
+// $Id: label.h,v 1.15 2003/03/14 11:50:24 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
 #define BALL_VIEW_PRIMITIV_LABEL_H
@@ -40,15 +40,15 @@ namespace BALL
 				 \link GeometricObject GeometricObject \endlink . A label is both visible in the dynamic and static render
 				mode of the  \link Scene Scene \endlink .
 				A label has the following properties. 
-				\begin{itemize}
-				  \item color  - the color of the label
-					\item text   - the text of the label
-					\item vertex - the position of the label			
-				\end{itemize}
+
+				  - color  - the color of the label
+					- text   - the text of the label
+					- vertex - the position of the label			
+				
 				The class Label is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
 				and  \link Vertex Vertex \endlink . See these classes for further information concerning
 				interface and additional methods.  \par
-				<b>Definition:</b> BALL/VIEW/PRIMITIV/label.h
+				
 		*/
 		class Label
 			: public GeometricObject,
@@ -64,11 +64,11 @@ namespace BALL
 			/** Default Constructor.
 					Construct new label.
 					The properties of {\em *this} label are set to:
-					\begin{itemize}
-  				  \item color  - to the color black
-						\item text   - to the text "unkown"
-		  			\item vertex - to the vector (0,0,0)
-					\end{itemize}
+
+  				  - color  - to the color black
+						- text   - to the text "unkown"
+		  			- vertex - to the vector (0,0,0)
+					
 					@return      Label new constructed label
 					@see         GeometricObject
 					@see         ColorExtension

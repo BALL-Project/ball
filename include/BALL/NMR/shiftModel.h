@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModel.h,v 1.11 2003/03/03 14:18:12 anhi Exp $
+// $Id: shiftModel.h,v 1.12 2003/03/14 11:49:49 sturm Exp $
 
 #ifndef BALL_NMR_SHIFTMODEL_H
 #define BALL_NMR_SHIFTMODEL_H
@@ -29,7 +29,7 @@ namespace BALL
 			by a separate  \link ShiftModule ShiftModule \endlink  object. ShiftModel contains a list of 
 			these processors and is also derived from ShiftModul. Hence, it can
 			be applied to arbitrary kernel objects in the same fashion as  \link ShiftModule ShiftModule \endlink s.	 \par
-			<b>Definition:</b> BALL/NMR/shiftModel.h
+			
 	*/
 	class ShiftModel 
 		: public ShiftModule		

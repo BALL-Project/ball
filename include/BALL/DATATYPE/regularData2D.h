@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.24 2003/03/03 14:17:40 anhi Exp $
+// $Id: regularData2D.h,v 1.25 2003/03/14 11:48:55 sturm Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -23,7 +23,7 @@ namespace BALL
 			This class represents a two-dimensional array. 
 			An instance of GridDataType will be created
 			for each point of the grid upon instantiation of TRegularData2D. \par
-			<b>Definition:</b> BALL/DATATYPE/regularData2D.h
+			
 	*/
 	template <typename GridDataType>
 	class TRegularData2D 

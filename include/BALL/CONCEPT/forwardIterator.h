@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forwardIterator.h,v 1.15 2003/03/03 14:17:36 anhi Exp $
+// $Id: forwardIterator.h,v 1.16 2003/03/14 11:48:48 sturm Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 
 	/**	@name	Generic Forward Iterator Classes.
-			<b>Definition:</b> BALL/CONCEPT/forwardIterator.h
+			
 	* 	 \addtogroup  ConceptsIterators
 	*/
 	//@{

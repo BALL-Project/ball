@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.h,v 1.9 2003/03/03 14:17:43 anhi Exp $
+// $Id: SDFile.h,v 1.10 2003/03/14 11:49:00 sturm Exp $
 
 #ifndef BALL_FORMAT_SDFILE_H
 #define BALL_FORMAT_SDFILE_H
@@ -24,7 +24,7 @@ namespace BALL
 			A description of this file format (and the related  \link MOLFile MOLFile \endlink  
 			format) can be obtained from the MDL webpage http://www.mdli.com
 			 \par
-			<b>Definition:</b> BALL/FORMAT/SDFile.h
+			
 	*/
 	class SDFile
 		: public MOLFile

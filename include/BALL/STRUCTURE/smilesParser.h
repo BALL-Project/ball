@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.h,v 1.8 2003/03/03 14:18:22 anhi Exp $
+// $Id: smilesParser.h,v 1.9 2003/03/14 11:50:02 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SMILES_PARSER_H
 #define BALL_STRUCTURE_SMILES_PARSER_H
@@ -33,7 +33,7 @@ namespace BALL
 			the molecule. At this time, there's no support in BALL to convert this 2D data
 			automatically to 3D data.
 			 \par
-			<b>Definition:</b> BALL/STRUCTURE/smilesParser.h
+			
 			 \par
 			<b>Status:</b> <b>experimental</b> \par
 			

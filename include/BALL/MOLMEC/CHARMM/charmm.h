@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.h,v 1.11 2003/03/03 14:17:55 anhi Exp $
+// $Id: charmm.h,v 1.12 2003/03/14 11:49:21 sturm Exp $
 // Molecular Mechanics: CHARMM force field class
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMM_H
@@ -26,7 +26,7 @@ namespace BALL
      *  @{
      */
 	/**	CHARMM force field class.
-			<b>Definition:</b> BALL/MOLMEC/CHARMM/charmm.h
+			
 	*/
 	class CharmmFF 
 		: public ForceField

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.17 2003/03/03 14:18:16 anhi Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.18 2003/03/14 11:49:52 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -44,7 +44,7 @@ namespace BALL
 			This processor uses a 6_12 pair potential for the calculation of
 			dispersion and repulsion energies.  \par
 			Energies are computed in units of kJ/mol.  \par
-			<b>Definition:</b> BALL/SOLVATION/pair6_12InteractionEnergyProcessor.h
+
 	 */
 	
 	class Pair6_12InteractionEnergyProcessor

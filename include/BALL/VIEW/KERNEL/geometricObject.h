@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.26 2003/03/03 14:18:34 anhi Exp $
+// $Id: geometricObject.h,v 1.27 2003/03/14 11:50:23 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -41,7 +41,7 @@ namespace BALL
 				in the base class  \link GLObject GLObject \endlink .  The class geometricObject
 				handles the different properties (see predefined properties), the
 				selected color, the name and the typename of a geometric object.
-				<b>Definition:</b> BALL/VIEW/KERNEL/geometricObject.h
+				
 		*/
 		class GeometricObject
 			: public Composite,
@@ -147,20 +147,20 @@ namespace BALL
 			/** Default Constructor.
 					Construct new geometricObject.
 					The state of {\em *this} geometricObject is:
-					\begin{itemize}
-					  \item selected color is set to yellow (1.0, 1.0, 0.0, 1.0)
-						\item name is set to "unknown"
-						\item typename is set to "GeometricObject"
-						\item properties are set to:
-						\begin{itemize}
-						  \item PROPERTY__OBJECT_STATIC
-						  \item PROPERTY__OBJECT_OPAQUE
-						  \item PROPERTY__OBJECT_VISIBLE
-						  \item PROPERTY__OBJECT_CLOSED
-						  \item PROPERTY__DRAWING_MODE_SOLID
-						  \item PROPERTY__DRAWING_PRECISION_HIGH
-						\end{itemize}
-					\end{itemize}
+
+					  - selected color is set to yellow (1.0, 1.0, 0.0, 1.0)
+						- name is set to "unknown"
+						- typename is set to "GeometricObject"
+						- properties are set to:
+
+						  - PROPERTY__OBJECT_STATIC
+						  - PROPERTY__OBJECT_OPAQUE
+						  - PROPERTY__OBJECT_VISIBLE
+						  - PROPERTY__OBJECT_CLOSED
+						  - PROPERTY__DRAWING_MODE_SOLID
+						  - PROPERTY__DRAWING_PRECISION_HIGH
+						
+					
 					@return      GeometricObject new constructed geometricObject
 					@see         ColorRGBA
 					@see         Composite
@@ -198,19 +198,19 @@ namespace BALL
 			/** Explicit default initialization.
 					Set the state of {\em *this} geometricObject to the default values.
 					The state of {\em *this} geometricObject is:
-					\begin{itemize}
-					  \item selected color is set to yellow (1.0, 1.0, 0.0, 1.0)
-						\item name is set to "unknown"
-						\item properties are set to:
-						\begin{itemize}
-						  \item PROPERTY__OBJECT_STATIC
-						  \item PROPERTY__OBJECT_OPAQUE
-						  \item PROPERTY__OBJECT_VISIBLE
-						  \item PROPERTY__OBJECT_CLOSED
-						  \item PROPERTY__DRAWING_MODE_SOLID
-						  \item PROPERTY__DRAWING_PRECISION_HIGH
-						\end{itemize}
-					\end{itemize}
+
+					  - selected color is set to yellow (1.0, 1.0, 0.0, 1.0)
+						- name is set to "unknown"
+						- properties are set to:
+
+						  - PROPERTY__OBJECT_STATIC
+						  - PROPERTY__OBJECT_OPAQUE
+						  - PROPERTY__OBJECT_VISIBLE
+						  - PROPERTY__OBJECT_CLOSED
+						  - PROPERTY__DRAWING_MODE_SOLID
+						  - PROPERTY__DRAWING_PRECISION_HIGH
+						
+					
 					Calls  \link Composite::clear Composite::clear \endlink .
 					Calls  \link PropertyManager::clear PropertyManager::clear \endlink .
 			*/

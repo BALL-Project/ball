@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pairExpRDFIntegrator.h,v 1.18 2003/03/03 14:18:17 anhi Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.19 2003/03/14 11:49:53 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -33,7 +33,7 @@ namespace BALL
 			calculated with the standard interaction energy processor is the
 			inclusion of a radial distribution function  \link RadialDistributionFunction RadialDistributionFunction \endlink  
 			into the computaion.  \par
-			<b>Definition:</b> BALL/SOLVATION/pairExpRDFIntegrator.h
+			
 	 */
 
 	class PairExpRDFIntegrator

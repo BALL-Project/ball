@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricTransformations.h,v 1.11 2003/03/03 14:18:20 anhi Exp $
+// $Id: geometricTransformations.h,v 1.12 2003/03/14 11:50:00 sturm Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
 #define BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
@@ -40,7 +40,7 @@ namespace BALL
 			The translation may be given in the constructor, or by calling setTranslation.
 			Applying the processor to a given Composite object will add the given
 			translation vector to the coordinates of each Atom object (and derived classes). \par
-			<b>Definition:</b> BALL/STRUCTURE/geometricTransformations.h
+			
 	*/
 	class TranslationProcessor
 		:	public UnaryProcessor<Atom> 
@@ -86,7 +86,7 @@ namespace BALL
 			Applying the applicator to a given Composite object will multiply the coordinates
 			of each Atom object (or objects derived from Atom) with the given transformation
 			matrix. \par
-			<b>Definition:</b> BALL/STRUCTURE/geometricTransformations.h
+			
 	*/
 	class TransformationProcessor
 		:public UnaryProcessor<Atom> 

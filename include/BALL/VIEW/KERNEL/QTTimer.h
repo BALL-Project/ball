@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.h,v 1.15 2003/03/03 14:18:32 anhi Exp $
+// $Id: QTTimer.h,v 1.16 2003/03/14 11:50:20 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
 #define BALL_VIEW_KERNEL_QTTIMER_H
@@ -34,7 +34,7 @@ namespace BALL
 				{\em timer} method.
 				The class is derived from the  \link QObject QObject \endlink  class from the QT library. 
 				Therefore it will only function within a qt application.
-				<b>Definition:</b> BALL/VIEW/KERNEL/QTTimer.h
+				
 		*/
 		class QTTimer: public QObject
 		{
@@ -65,10 +65,10 @@ namespace BALL
 			/** Default Constructor.
 					Constructs new QTTimer.
 					The state of {\em *this} qtTimer is:
-					\begin{itemize}
-					  \item interval is set to 100
-						\item timer is halted
-					\end{itemize}
+
+					  - interval is set to 100
+						- timer is halted
+					
 					See documentation of the QT-library for information about QObjects.
 					@return      QTTimer new constructed qtTimer
 			*/
@@ -100,10 +100,10 @@ namespace BALL
 			/** Explicit default initialization.
 					Sets the state of {\em *this} qtTimer to the default values.
 					The state of {\em *this} qtTimer is:
-					\begin{itemize}
-					  \item interval is set to 100
-						\item timer is halted
-					\end{itemize}
+
+					  - interval is set to 100
+						- timer is halted
+					
 			*/
 			virtual void clear()
 				throw();

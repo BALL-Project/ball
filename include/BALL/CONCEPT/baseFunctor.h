@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseFunctor.h,v 1.6 2003/03/03 14:17:34 anhi Exp $
+// $Id: baseFunctor.h,v 1.7 2003/03/14 11:48:45 sturm Exp $
 
 #ifndef BALL_CONCEPT_BASEFUNCTOR_H
 #define BALL_CONCEPT_BASEFUNCTOR_H
@@ -10,13 +10,13 @@ namespace BALL
 {
 
 	/**	@name Generic Functors.
-			<b>Definition:</b> BALL/CONCEPT/baseFunctor.h
+			
 	* 	 \addtogroup  Concepts
 	*/
 	//@{
 		
 	/**	Generic Unary Functor Class.
-			<b>Definition:</b> BALL/CONCEPT/baseFunctor.h
+			
 	*/
 	template <class ArgumentType, class ResultType>
 	class UnaryFunctor
@@ -55,7 +55,7 @@ namespace BALL
 	};
 
 	/**	Generic Binary Functor Class.
-			<b>Definition:</b> BALL/CONCEPT/baseFunctor.h
+			
 	*/
 	template <class FirstArgumentType, class SecondArgumentType, class ResultType>
 	class BinaryFunctor

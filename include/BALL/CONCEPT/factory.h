@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: factory.h,v 1.6 2003/03/03 14:17:36 anhi Exp $
+// $Id: factory.h,v 1.7 2003/03/14 11:48:48 sturm Exp $
 
 #ifndef BALL_CONCEPT_FACTORY_H
 #define BALL_CONCEPT_FACTORY_H
@@ -18,7 +18,7 @@ namespace BALL
 			The factory class is used to create objects of the type it 
 			was parameterized with.
 			 \par
-			<b>Definition:</b> BALL/CONCEPT/factory.h
+			
 	* 	 \addtogroup  Concepts
 	*/
 	template <typename T>

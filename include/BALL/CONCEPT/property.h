@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.h,v 1.31 2003/03/03 14:17:37 anhi Exp $
+// $Id: property.h,v 1.32 2003/03/14 11:48:50 sturm Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -29,7 +29,7 @@ namespace BALL
 	//@{
 	
 	/** Named Property Class.
-			<b>Definition:</b> BALL/CONCEPT/property.h
+			
 	*/
 	class NamedProperty
 		:	public PersistentObject
@@ -331,7 +331,7 @@ namespace BALL
 			 \par
 			<b>Interface:</b> Storable
 			 \par
-			<b>Definition:</b> BALL/CONCEPT/property.h
+			
 	*/
 	class PropertyManager
 	{

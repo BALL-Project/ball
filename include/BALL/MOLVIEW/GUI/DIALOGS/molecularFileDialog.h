@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.8 2003/03/03 14:18:05 anhi Exp $
+// $Id: molecularFileDialog.h,v 1.9 2003/03/14 11:49:38 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
@@ -31,7 +31,7 @@ namespace BALL
 				This class can also take a  \link System System \endlink  and write it in one of the
 				supported file formats.
 				This class is derived from  \link VIEW::ModularWidget VIEW::ModularWidget \endlink .
-				<b>Definition:</b> BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h
+				
 		 */
 		class MolecularFileDialog
 			: public QWidget,

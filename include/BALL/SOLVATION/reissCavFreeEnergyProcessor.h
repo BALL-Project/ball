@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reissCavFreeEnergyProcessor.h,v 1.14 2003/03/03 14:18:17 anhi Exp $
+// $Id: reissCavFreeEnergyProcessor.h,v 1.15 2003/03/14 11:49:54 sturm Exp $
 
 #ifndef BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
@@ -30,7 +30,7 @@ namespace BALL
 			76(15):2123-2133, 1972.  \par
  
 			Energies are returned in units of kJ/mol.	 \par
-			<b>Definition:</b> BALL/SOLVATION/reissCavFreeEnergyProcessor.h
+			
 	 */
 	class ReissCavFreeEnergyProcessor
 		:	public EnergyProcessor

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glAtomBondModelConnector.h,v 1.11 2003/03/03 14:18:06 anhi Exp $
+// $Id: glAtomBondModelConnector.h,v 1.12 2003/03/14 11:49:39 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
@@ -43,7 +43,7 @@ namespace BALL
 				OpenGL implementation to generate the graphical visualization of geometric
 				shapes they present.
 				This class has the same functionality as its base class  \link AtomBondModelConnector AtomBondModelConnector \endlink .  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.h
+				
 		*/
 		class GLAtomBondModelConnector: public AtomBondModelConnector
 		{

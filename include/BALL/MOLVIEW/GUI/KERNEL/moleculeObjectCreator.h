@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.h,v 1.9 2003/03/03 14:18:07 anhi Exp $
+// $Id: moleculeObjectCreator.h,v 1.10 2003/03/14 11:49:41 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -57,7 +57,7 @@ namespace BALL
 				The conversion will be executed in the method  \link convertObject convertObject \endlink .
 				This class is used by the class  \link Server Server \endlink  to convert incoming
 				 \link PersistentObject PersistentObject \endlink  objects to  \link Composite Composite \endlink  objects.  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h
+				
 		*/
 		class MoleculeObjectCreator: public ObjectCreator
 		{

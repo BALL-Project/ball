@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.16 2003/03/03 14:17:52 anhi Exp $
+// $Id: complex.h,v 1.17 2003/03/14 11:49:14 sturm Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -57,7 +57,7 @@ namespace BALL
 	//@}
 
 	/** Generic Complex Number.
-      <b>Definition:</b> BALL/MATHS/complex.h
+      
        \par
 	*/
 	template <typename T>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameterSection.h,v 1.20 2003/03/03 14:17:44 anhi Exp $
+// $Id: parameterSection.h,v 1.21 2003/03/14 11:49:02 sturm Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -38,7 +38,7 @@ namespace BALL
 		
 			Each value line may contain version information, indicated by a variable 
 			definition named "ver"; thus only the latest version will be version will be accessed.
-			<b>Definition:</b> BALL/FORMAT/parameterSection.h
+			
 	*/
 	class ParameterSection 
 	{
@@ -112,11 +112,11 @@ namespace BALL
 		
 		/**	Query for a pair of key and variable.
 				False is returned if 
-				\begin{itemize}
-					\item the key could not be found
-					\item the the key was found but the variable name was not specified
+
+					- the key could not be found
+					- the the key was found but the variable name was not specified
 								in the format line
-				\end{itemize}
+				
 		*/
 		bool has(const String& key, const String& variable) const throw();
 		

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: notification.h,v 1.16 2003/03/03 14:17:36 anhi Exp $
+// $Id: notification.h,v 1.17 2003/03/14 11:48:48 sturm Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -27,7 +27,7 @@ namespace BALL
 			each other of events by invoking methods of the other object (remotely similar to the
 			signal/slot mechanism of QT).
 			 \par
-			<b>Definition:</b> BALL/CONCEPT/notification.h
+			
 	*/
 	//@{
 	

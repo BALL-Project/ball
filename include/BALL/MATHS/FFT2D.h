@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.6 2003/03/03 14:17:51 anhi Exp $
+// $Id: FFT2D.h,v 1.7 2003/03/14 11:49:13 sturm Exp $
 
 #ifndef BALL_MATHS_FFT2D_H
 #define BALL_MATHS_FFT2D_H
@@ -37,7 +37,7 @@ namespace BALL
 			coordinate system can be handled automatically. The normaliztion is chosen
 			symmetrically.
 			 \par
-			<b>Definition:</b> BALL/MATHS/FFT2D.h
+			S/FFT2D.h
 	 */
 
 	class FFT2D : public TRegularData2D<FFTW_COMPLEX>

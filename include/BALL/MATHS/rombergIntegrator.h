@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rombergIntegrator.h,v 1.9 2003/03/03 14:17:54 anhi Exp $
+// $Id: rombergIntegrator.h,v 1.10 2003/03/14 11:49:17 sturm Exp $
 
 #ifndef BALL_MATHS_ROMBERGINTEGRATOR_H
 #define BALL_MATHS_ROMBERGINTEGRATOR_H
@@ -16,7 +16,7 @@ namespace BALL
      *  @{
      */  
 	/** A numerical integration of a BALL-Function using a Romberg integration scheme. 
-			<b>Definition:</b> BALL/MATHS/rombergIntegrator.h
+			
 	*/
 	template <typename Function, typename DataType>
 	class RombergIntegrator

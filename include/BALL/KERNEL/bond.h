@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.34 2003/03/03 14:17:46 anhi Exp $
+// $Id: bond.h,v 1.35 2003/03/14 11:49:05 sturm Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -54,14 +54,14 @@ namespace BALL
 			the atom with the lower  \link Handle Handle \endlink  thant the second atom.
 			 \par
 			The "state" of a bond is defined by its attributes:
-			\begin{itemize}
-				\item "first atom" ( \link Bond::first_ Bond::first_ \endlink )
-				\item "second atom" ( \link Bond::second_ Bond::second_ \endlink )
-				\item "bond name" ( \link Bond::name_ Bond::name_ \endlink )
-				\item "bond order" ( \link Bond::bond_order_ Bond::bond_order_ \endlink )
-				\item "bond type" ( \link Bond::bond_type_ Bond::bond_type_ \endlink )
-			\end{itemize}
-			<b>Definition:</b> BALL/KERNEL/bond.h
+			
+				- "first atom" ( \link Bond::first_ Bond::first_ \endlink )
+				- "second atom" ( \link Bond::second_ Bond::second_ \endlink )
+				- "bond name" ( \link Bond::name_ Bond::name_ \endlink )
+				- "bond order" ( \link Bond::bond_order_ Bond::bond_order_ \endlink )
+				- "bond type" ( \link Bond::bond_type_ Bond::bond_type_ \endlink )
+			
+			
 	*/
 	class Bond
 		: public Composite,
@@ -176,13 +176,13 @@ namespace BALL
 
 		/** Default constructor.
 				The state of this bond is:
-				\begin{itemize}
-					\item bond has no first atom (=0)
-					\item bond has no second atom (=0)
-					\item bond name is the empty string (="")
-					\item bond order is unknown (= \link Bond::ORDER__UNKNOWN Bond::ORDER__UNKNOWN \endlink )
-					\item bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
-				\end{itemize}
+
+					- bond has no first atom (=0)
+					- bond has no second atom (=0)
+					- bond name is the empty string (="")
+					- bond order is unknown (= \link Bond::ORDER__UNKNOWN Bond::ORDER__UNKNOWN \endlink )
+					- bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
+				
 		*/
 		Bond()
 			throw();
@@ -236,13 +236,13 @@ namespace BALL
 		/** Explicit default initialization.
 				Set the state of this bond to the default values.
 				The state of this bond is:
-				\begin{itemize}
-					\item bond has no connectivity with first atom (=0)
-					\item bond has no connectivity with second atom (=0)
-					\item bond name is the empty string (="")
-					\item bond order is unknown (= \link Bond::ORDER__UNKNOWN Bond::ORDER__UNKNOWN \endlink )
-					\item bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
-				\end{itemize}
+
+					- bond has no connectivity with first atom (=0)
+					- bond has no connectivity with second atom (=0)
+					- bond name is the empty string (="")
+					- bond order is unknown (= \link Bond::ORDER__UNKNOWN Bond::ORDER__UNKNOWN \endlink )
+					- bond type is unknown (= \link Bond::TYPE__UNKNOWN Bond::TYPE__UNKNOWN \endlink )
+				
 		*/
 		virtual void clear()
 			throw();

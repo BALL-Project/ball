@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.h,v 1.23 2003/03/03 14:18:00 anhi Exp $
+// $Id: lennardJones.h,v 1.24 2003/03/14 11:49:30 sturm Exp $
 
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
@@ -40,7 +40,7 @@ namespace BALL
 				A_{ij} = \frac{1}2{} B_{ij} (R_i + R_j)^6
 			\f]
 			 \par
-			<b>Definition:</b>BALL/MOLMEC/PARAMETER/lennardJones.h
+			
 	*/
 	class LennardJones 
 		:	public ParameterSection

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.11 2003/03/03 14:18:04 anhi Exp $
+// $Id: molecularInformation.h,v 1.12 2003/03/14 11:49:35 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
@@ -30,7 +30,7 @@ namespace BALL
 				the  \link Information Information \endlink  class.
 				This class is used by the class  \link MolecularControl MolecularControl \endlink  to retrieve names and types
 				of the displayed  \link Composite Composite \endlink  objects.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/molecularInformation.h
+				
 				@see     Information
 		*/
 		class MolecularInformation
@@ -105,9 +105,9 @@ namespace BALL
 			/** Explicit default initialization.
 					Reset the state of {\em *this} moleculareInformation to:
 					Calls  \link Information::clear Information::clear \endlink .
-					\begin{itemize}
-					  \item  type is set to <tt>TYPE__UNKNOWN</tt>
-					\end{itemize}
+
+					  -  type is set to <tt>TYPE__UNKNOWN</tt>
+					
 					@see   Filter::clear
 			*/
 			virtual void clear()

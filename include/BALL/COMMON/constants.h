@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: constants.h,v 1.11 2003/03/03 14:17:31 anhi Exp $
+// $Id: constants.h,v 1.12 2003/03/14 11:48:43 sturm Exp $
 
 #ifndef BALL_COMMON_CONSTANTS_H
 #define BALL_COMMON_CONSTANTS_H
@@ -19,7 +19,7 @@ namespace BALL
 			- shortcut via the <tt>using directive</tt>: \par
 			<tt>using namespace BALL::Constants;  \par
 			float my_pi = PI;</tt>
-			<b>Definition:</b> BALL/COMMON/constants.h
+			
 	* 	 \addtogroup  Common
 	*/
 	namespace Constants 

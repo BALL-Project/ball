@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.14 2003/03/03 14:18:34 anhi Exp $
+// $Id: connectionObject.h,v 1.15 2003/03/14 11:50:22 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -62,7 +62,7 @@ namespace BALL
 				always be created with the new command and the flag deletable must be set to {\em true}.
 				If a message if statically created in the {\em onNotify} method there is the possibility
 				that the message is already destroyed when it should be processed.
-				<b>Definition:</b> BALL/VIEW/KERNEL/connectionObject.h
+				
 		*/
 		class ConnectionObject
 		{

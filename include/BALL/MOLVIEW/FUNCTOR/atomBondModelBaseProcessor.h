@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.12 2003/03/03 14:18:02 anhi Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.13 2003/03/14 11:49:32 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
@@ -51,7 +51,7 @@ namespace BALL
 				 \link Atom Atom \endlink  objects can get their connecting models. This is
 				achieved by the class  \link BaseModelConnector BaseModelConnector \endlink  and its derived
 				classes.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h
+				
 				@see     finish
 				@see     buildBondModels_
 				@see     BaseModelConnector
@@ -103,10 +103,10 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the state of {\em *this} atomBondModelBaseProcessor to:
-					\begin{itemize}
-					  \item  clear the used atoms
-					  \item  clear the  \link BaseModelProcessor BaseModelProcessor \endlink 
-					\end{itemize}
+
+					  -  clear the used atoms
+					  -  clear the  \link BaseModelProcessor BaseModelProcessor \endlink 
+					
 					Calls  \link BaseModelProcessor::clear BaseModelProcessor::clear \endlink .
 					Calls  \link clearUsedAtoms_ clearUsedAtoms_ \endlink .
 					@see  BaseModelProcessor

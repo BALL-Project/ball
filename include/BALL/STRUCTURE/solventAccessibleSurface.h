@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventAccessibleSurface.h,v 1.7 2003/03/03 14:18:22 anhi Exp $
+// $Id: solventAccessibleSurface.h,v 1.8 2003/03/14 11:50:03 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
 #define BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
@@ -39,17 +39,17 @@ namespace BALL
 	class SASTriangulator;
 
 	/** Generic SolventAccessibleSurface Class.
-			<b>Definition:</b> BALL/STRUCTURE/solventAccessibleSurface.h
+			
 	*/
 	class SolventAccessibleSurface
 	{
 		public:
 
 		/** @name Class friends
-				\begin{itemize}
-					\item class TriangulatedSAS
-					\item class SASTriangulator
-				\end{itemize}
+
+					- class TriangulatedSAS
+					- class SASTriangulator
+				
 		*/
 		friend class TriangulatedSAS;
 		friend class SASTriangulator;

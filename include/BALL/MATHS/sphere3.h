@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.30 2003/03/03 14:17:54 anhi Exp $
+// $Id: sphere3.h,v 1.31 2003/03/14 11:49:17 sturm Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -35,7 +35,7 @@ namespace BALL
 	//@{
 
 	/** Generic Sphere Class.
-      <b>Definition:</b> BALL/MATHS/sphere3.h
+      ere3.h
 	*/
 	template <typename T>
 	class TSphere3

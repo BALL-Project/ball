@@ -28,7 +28,7 @@ namespace BALL
 				 \link MainControl MainControl \endlink . The  \link MainControl MainControl \endlink  will add other tab dialogs of
 				 \link ModularWidget ModularWidget \endlink  objects to {\em *this} preferences dialog if those
 				other  \link ModularWidget ModularWidget \endlink  objects have preferences tab dialogs.  \par
-				<b>Definition:</b> BALL/VIEW/GUI/DIALOGS/preferences.h
+				
 		*/
 		class Preferences 
 			: public QTabDialog
@@ -47,10 +47,10 @@ namespace BALL
 					Tab dialogs that are inserted must have their size accordingly adjusted to the
 					size given to {\em *this} preferences.
 					There are two buttons in {\em *this} preferences:
-					\begin{itemize}
-					  \item  apply - apply the preferences
-						\item  cancel - hide the preferences dialog
-					\end{itemize}
+
+					  -  apply - apply the preferences
+						-  cancel - hide the preferences dialog
+					
 					@param       parent the parent  \link QWidget QWidget \endlink  of {\em *this} preferences (See QFileDialog in the QT documentation)
 					@param       name the name of {\em *this} preferences (See QFileDialog in the QT documentation)
 					@param       width the width of {\em *this} preferences (Default <tt>width=400</tt>)

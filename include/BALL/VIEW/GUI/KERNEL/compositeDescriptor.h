@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeDescriptor.h,v 1.15 2003/03/03 14:18:27 anhi Exp $
+// $Id: compositeDescriptor.h,v 1.16 2003/03/14 11:50:13 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
@@ -89,18 +89,18 @@ namespace BALL
 			/** Default Constructor.
 					Construct new compositeDescriptor.
 					The state of {\em *this} compositeDescriptor is:
-					\begin{itemize}
-						\item name is set to "unknown"
-						\item center vector is set (0.0,0.0,0.0)
-						\item quaternion is set to (0.0,0.0,0.0,1.0)
-						\item composite pointer is set to 0
-						\item entities are cleared
-						\item objectCollector pointer is set to 0
-						\item primitiveManager pointer is set to 0
-						\item {\em *this} is shallow copy
-						\item no shallow copies
-						\item no parent 
-					\end{itemize}
+
+						- name is set to "unknown"
+						- center vector is set (0.0,0.0,0.0)
+						- quaternion is set to (0.0,0.0,0.0,1.0)
+						- composite pointer is set to 0
+						- entities are cleared
+						- objectCollector pointer is set to 0
+						- primitiveManager pointer is set to 0
+						- {\em *this} is shallow copy
+						- no shallow copies
+						- no parent 
+					
 					@return CompositeDescriptor new constructed compositeDescriptor
 					@see    Composite
 					@see    Quaternion

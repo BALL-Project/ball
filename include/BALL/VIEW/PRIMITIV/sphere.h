@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.h,v 1.17 2003/03/03 14:18:36 anhi Exp $
+// $Id: sphere.h,v 1.18 2003/03/14 11:50:26 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -38,15 +38,15 @@ namespace BALL
 		/** Sphere class.			
 				An instance of Sphere represents an instance of the geometric representation "sphere".
 				A sphere has the following properties. 
-				\begin{itemize}
-				  \item color - the color of the sphere
-					\item radius - the radius of the sphere
-					\item vertex - the position of the sphere
-				\end{itemize}
+
+				  - color - the color of the sphere
+					- radius - the radius of the sphere
+					- vertex - the position of the sphere
+				
 				The class Sphere is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink ,
 				 \link Vertex Vertex \endlink  and  \link Radius Radius \endlink . See these classes for further information concerning
 				interface and additional methods.  \par
-				<b>Definition:</b> BALL/VIEW/PRIMITIV/sphere.h
+				
 		*/
 		class Sphere
 			: public GeometricObject,
@@ -62,11 +62,11 @@ namespace BALL
 			/** Default Constructor.
 					Construct new sphere.
 					The properties of {\em *this} sphere are set to:
-					\begin{itemize}
-  				  \item color - to the color black
-	  				\item radius - to the value 1
-		  			\item vertex - to the vector (0,0,0)
-					\end{itemize}
+
+  				  - color - to the color black
+	  				- radius - to the value 1
+		  			- vertex - to the vector (0,0,0)
+					
 					@return      Sphere new constructed sphere
 					@see         GeometricObject
 					@see         ColorExtension

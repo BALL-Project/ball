@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.h,v 1.16 2003/03/03 14:18:25 anhi Exp $
+// $Id: colorUnit.h,v 1.17 2003/03/14 11:50:09 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -35,7 +35,7 @@ namespace BALL
 				ColorUnit provides certain conversion functions as well, that will convert
 				its value to the needed type.
 				This class is used by the class  \link ColorRGBA ColorRGBA \endlink  and  \link ColorHSV ColorHSV \endlink .  \par
-				<b>Definition:</b> BALL/VIEW/DATATYPE/colorUnit.h
+				
 		*/
 		class ColorUnit
 		{
@@ -216,9 +216,9 @@ namespace BALL
 			/** Explicit default initialization.
 					Sets the value of {\em *this} colorUnit to the default value.
 					The value of {\em *this} colorUnit is:
-					\begin{itemize}
-						\item value is zero (0)
-					\end{itemize}
+
+						- value is zero (0)
+					
 			*/
 			void clear()
 				throw();

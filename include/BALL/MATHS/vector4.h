@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.43 2003/03/03 14:17:54 anhi Exp $
+// $Id: vector4.h,v 1.44 2003/03/14 11:49:19 sturm Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -61,7 +61,7 @@ namespace BALL
 		throw();
 
 	/**	Generic Four-Dimensional Vector.
-			<b>Definition:</b> BALL/MATHS/vector4.h
+			S/vector4.h
 			 \par
 	*/
 	template <typename T>

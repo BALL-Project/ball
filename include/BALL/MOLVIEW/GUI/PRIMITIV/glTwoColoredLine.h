@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glTwoColoredLine.h,v 1.12 2003/03/03 14:18:08 anhi Exp $
+// $Id: glTwoColoredLine.h,v 1.13 2003/03/14 11:49:41 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
@@ -32,7 +32,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				twoColoredLine. OpenGL code is used for the visualization.
 				See these classes for further information.  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.h
+				
 		*/
 		class GLTwoColoredLine
 			: public TwoColoredLine,

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomAccessIterator.h,v 1.17 2003/03/03 14:17:37 anhi Exp $ 
+// $Id: randomAccessIterator.h,v 1.18 2003/03/14 11:48:50 sturm Exp $ 
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #define BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -23,7 +23,7 @@ namespace BALL
 
 	/**	@name	Generic Random Access Iterator Classes.
 			 \par
-			<b>Definition:</b> BALL/CONCEPT/randomAccessIterator.h
+			
 	* 	 \addtogroup  ConceptsIterators
 	*/
 	//@{
@@ -683,7 +683,7 @@ namespace BALL
 
 	/**	Generic Constant Random Access Iterator
 			 \par
-			<b>Definition:</b> BALL/CONCEPT/randomAccessIterator.h
+			
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstRandomAccessIterator

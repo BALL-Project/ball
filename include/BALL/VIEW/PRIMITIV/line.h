@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.h,v 1.15 2003/03/03 14:18:35 anhi Exp $
+// $Id: line.h,v 1.16 2003/03/14 11:50:25 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #define BALL_VIEW_PRIMITIV_LINE_H
@@ -36,15 +36,15 @@ namespace BALL
 		/** Line class.
 				An instance of Line represents an instance of the geometric representation "line".
 				A line has the following properties. 
-				\begin{itemize}
-				  \item color - the color of the line
-					\item vertex1 - the first vertex of the line
-					\item vertex2 - the second vertex of the line
-				\end{itemize}
+
+				  - color - the color of the line
+					- vertex1 - the first vertex of the line
+					- vertex2 - the second vertex of the line
+				
 				The class Line is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
 				and  \link Vertex2 Vertex2 \endlink . See these classes for further information concerning
 				interface and additional methods.  \par
-				<b>Definition:</b> BALL/VIEW/PRIMITIV/line.h
+				
 		*/
 		class Line
 			: public GeometricObject,
@@ -60,11 +60,11 @@ namespace BALL
 			/** Default Constructor.
 					Construct new line.
 					The properties of {\em *this} line are set to:
-					\begin{itemize}
-  				  \item color - to the color black
-		  			\item vertex1 - to the vector (0,0,0)
-		  			\item vertex2 - to the vector (0,0,0)
-					\end{itemize}
+
+  				  - color - to the color black
+		  			- vertex1 - to the vector (0,0,0)
+		  			- vertex2 - to the vector (0,0,0)
+					
 					@return      Line new constructed line
 					@see         GeometricObject
 					@see         ColorExtension

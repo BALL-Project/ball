@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.h,v 1.17 2003/03/03 14:17:57 anhi Exp $
+// $Id: periodicBoundary.h,v 1.18 2003/03/14 11:49:24 sturm Exp $
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
 #define BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -30,7 +30,7 @@ namespace BALL
 	/**	Periodic boundary class for force field simulations. 
 			Molecular Mechanics: class representing periodic boundary conditions.
 			 \par
-			<b>Definition:</b> BALL/MOLMEC/COMMON/periodicBoundary.h
+			
 	*/
 	class PeriodicBoundary
 	{

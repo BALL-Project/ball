@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.h,v 1.29 2003/03/03 14:17:50 anhi Exp $
+// $Id: secondaryStructure.h,v 1.30 2003/03/14 11:49:11 sturm Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -33,7 +33,7 @@ namespace BALL
 			This class is used to represent secondary structure elements
 			of protein chains.
 			 \par
-			<b>Definition:</b>BALL/KERNEL/secondaryStructure.h
+			
 	*/
 	class SecondaryStructure
 		: public AtomContainer

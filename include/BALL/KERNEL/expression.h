@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.24 2003/03/03 14:17:46 anhi Exp $
+// $Id: expression.h,v 1.25 2003/03/14 11:49:06 sturm Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -41,7 +41,7 @@ namespace BALL
 			 \par
 			Additionally brackets can be used for grouping. At least one bracket
 			pair must exist which encloses the argument of a predicate. Empty arguments are allowed.
-			<b>Definition:</b> BALL/KERNEL/expression.h
+			
 			@see ExpressionTree
 	*/
 	class Expression

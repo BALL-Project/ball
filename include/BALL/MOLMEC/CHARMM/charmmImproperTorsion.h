@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.h,v 1.12 2003/03/03 14:17:55 anhi Exp $
+// $Id: charmmImproperTorsion.h,v 1.13 2003/03/14 11:49:21 sturm Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMIMPROPERTORSION_H
@@ -38,7 +38,7 @@ namespace BALL
 			$ E_{imp} = k (\theta - \theta_0)^2 $
 			where $k$ and $\theta_0$ are constants read from the parameter section and depend on
 			the atom types of {\it A}, {\it B}, {\it C}, and {\it D}.	 \par
-			<b>Definition:</b>BALL/MOLMEC/CHARMM/charmmImproperTorsion.h
+			
 	*/
 	class CharmmImproperTorsion 
 		: public ForceFieldComponent

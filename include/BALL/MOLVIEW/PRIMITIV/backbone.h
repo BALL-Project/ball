@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backbone.h,v 1.13 2003/03/03 14:18:09 anhi Exp $
+// $Id: backbone.h,v 1.14 2003/03/14 11:49:44 sturm Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
@@ -58,7 +58,7 @@ namespace BALL
 				The class Backbone is derived from the class  \link GeometricObject GeometricObject \endlink .
 				See this class for further information concerning
 				interface and additional methods.  \par
-				<b>Definition:</b> BALL/MOLVIEW/PRIMITIV/backbone.h
+				
 		*/
 		class Backbone
 			: public GeometricObject

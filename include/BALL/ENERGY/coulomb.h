@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coulomb.h,v 1.9 2003/03/03 14:17:41 anhi Exp $
+// $Id: coulomb.h,v 1.10 2003/03/14 11:48:57 sturm Exp $
 
 #ifndef BALL_ENERGY_COULOMB_H
 #define BALL_ENERGY_COULOMB_H
@@ -22,7 +22,7 @@ namespace BALL
 			to calculateCoulomb()
 			@see	Atom::setCharge
 			@see	AssignChargeProcessor
-			<b>Definition:</b> BALL/ENERGY/coulomb.h
+			
 	*/
 	double calculateCoulomb(const AtomContainer& atoms);
   /** @} */

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.40 2003/03/03 14:18:21 anhi Exp $
+// $Id: reducedSurface.h,v 1.41 2003/03/14 11:50:01 sturm Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -65,23 +65,23 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic ReducedSurface Class.
-			<b>Definition:</b> BALL/STRUCTURE/reducedSurface.h
+			
 	*/
 	class ReducedSurface
 	{
 		public:
 
 		/** @name Class friends
-				\begin{itemize}
-					\item class RSComputer
-					\item class SolventExcludedSurface
-					\item class TriangulatedSES
-					\item class SESComputer
-					\item class SESSingularityCleaner
-					\item class SolventAccessibleSurface
-					\item class TriangulatedSAS
-					\item class SESTriangulator
-				\end{itemize}
+
+					- class RSComputer
+					- class SolventExcludedSurface
+					- class TriangulatedSES
+					- class SESComputer
+					- class SESSingularityCleaner
+					- class SolventAccessibleSurface
+					- class TriangulatedSAS
+					- class SESTriangulator
+				
 		*/
 		friend class RSComputer;
 		friend class SolventExcludedSurface;
@@ -380,7 +380,7 @@ namespace BALL
 
 
 	/** Generic RSComputer Class.
-			<b>Definition:</b> BALL/STRUCTURE/reducedSurface.h
+			
 	*/
 	class RSComputer
 	{

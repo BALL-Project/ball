@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.h,v 1.14 2003/03/03 14:18:09 anhi Exp $
+// $Id: twoColoredLine.h,v 1.15 2003/03/14 11:49:44 sturm Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
 #define BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
@@ -37,12 +37,12 @@ namespace BALL
 				An instance of TwoColoredLine represents an instance of the geometric
 				representation of a two colored "line".
 				A twoColoredLine has the following properties. 
-				\begin{itemize}
-				  \item color1 - the color for the first vertex of the line
-				  \item color2 - the color for the second vertex of the line
-					\item vertex1 - the first vertex of the line
-					\item vertex2 - the second vertex of the line
-				\end{itemize}
+				
+				  - color1 - the color for the first vertex of the line
+				  - color2 - the color for the second vertex of the line
+					- vertex1 - the first vertex of the line
+					- vertex2 - the second vertex of the line
+				
 				The class TwoColoredLine is a line that is half colored in the color 1 and
 				in color 2. The line is exactly divided in the middle. One half (starting
 				from vertex1 til middle vertex) is colored by the color1 and the other half 
@@ -51,7 +51,7 @@ namespace BALL
 				 \link ColorExtension2 ColorExtension2 \endlink 	and  \link Vertex2 Vertex2 \endlink .
 				See these classes for further information concerning
 				interface and additional methods.  \par
-				<b>Definition:</b> BALL/MOLVIEW/PRIMITIV/twoColoredLine.h
+				
 		*/
 		class TwoColoredLine
 			: public GeometricObject,
@@ -67,12 +67,12 @@ namespace BALL
 			/** Default Constructor.
 					Construct new twoColoredLine.
 					The properties of {\em *this} twoColoredLine are set to:
-					\begin{itemize}
-  				  \item color1 - set to the color black
-						\item color2 - set to the color black
-		  			\item vertex1 - set to the vector (0,0,0)
-		  			\item vertex2 - set to the vector (0,0,0)
-					\end{itemize}
+
+  				  - color1 - set to the color black
+						- color2 - set to the color black
+		  			- vertex1 - set to the vector (0,0,0)
+		  			- vertex2 - set to the vector (0,0,0)
+					
 					@return      TwoColoredLine new constructed twoColoredLine
 					@see         GeometricObject
 					@see         ColorExtension2

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.15 2003/03/03 14:17:40 anhi Exp $ 
+// $Id: regularData3D.h,v 1.16 2003/03/14 11:48:56 sturm Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -21,8 +21,6 @@ namespace BALL
 			Unlike BoxGrid this class represents a three-dimensional
 			array. An instance of GridDataType will be created
 			for each point of the grid upon instantiation of TRegularData3D. \par
-			<b>Definition:</b> \par
-			BALL/DATATYPE/regularData3D.h
 			@see	HashGrid3
 	*/
 	template <typename GridDataType>

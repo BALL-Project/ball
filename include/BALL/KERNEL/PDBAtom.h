@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.h,v 1.26 2003/03/03 14:17:45 anhi Exp $
+// $Id: PDBAtom.h,v 1.27 2003/03/14 11:49:03 sturm Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -38,7 +38,7 @@ namespace BALL
 			For details on the PDB format and the detailed meaning of those fields,
 			please refer to the PDB documentation at http://www.rcsb.org
 			 \par
-			<b>Definition:</b>BALL/KERNEL/PDBAtom.h
+			
 			@see PDBFile
 	*/
 	class PDBAtom

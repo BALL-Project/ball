@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.h,v 1.14 2003/03/03 14:18:25 anhi Exp $
+// $Id: colorUnitHue.h,v 1.15 2003/03/14 11:50:09 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
 #define BALL_VIEW_DATATYPE_COLORUNITHUE_H
@@ -38,7 +38,7 @@ namespace BALL
 				ColorUnitHue provides certain conversion functions as well that will convert
 				its value to the needed type.
 				This class is used by the class  \link ColorHSV ColorHSV \endlink .  \par
-				<b>Definition:</b> BALL/VIEW/DATATYPE/colorUnitHue.h
+				
 		*/
 		class ColorUnitHue
 		{
@@ -191,9 +191,9 @@ namespace BALL
 			/** Explicit default initialization.
 					Sets the value of {\em *this} colorUnitHue to the default value.
 					The value of {\em *this} colorUnitHue is:
-					\begin{itemize}
-						\item value is zero (0)
-					\end{itemize}
+
+						- value is zero (0)
+					
 			*/
 			virtual void clear()
 				throw();

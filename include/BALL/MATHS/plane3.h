@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.29 2003/03/03 14:17:53 anhi Exp $
+// $Id: plane3.h,v 1.30 2003/03/14 11:49:16 sturm Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -50,7 +50,7 @@ namespace BALL
 		throw();
 
 	/** Threedimensional plane.
-      <b>Definition:</b> BALL/MATHS/plane3.h
+      S/plane3.h
 			A plane is defined by a point and its normal.
 	*/
 	template <typename T>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.45 2003/03/03 14:18:24 anhi Exp $
+// $Id: file.h,v 1.46 2003/03/14 11:50:06 sturm Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -114,17 +114,17 @@ namespace BALL
 				command string that should be applied. The <tt>name</tt> argument
 				is then replaced with the contents of the matching command in the 
 				TransformationManager's map. The following rules apply (in that order):
-				\begin{itemize}
-					\item <tt>%s</tt> is replaced by the full content of <tt>name</tt>
-					\item <tt>%f</tt> is replaced by the full content of <tt>name</tt>, without any file type suffix (i.e. anything after
+
+					- <tt>%s</tt> is replaced by the full content of <tt>name</tt>
+					- <tt>%f</tt> is replaced by the full content of <tt>name</tt>, without any file type suffix (i.e. anything after
 								the last dot in the filename is removed)
-					\item <tt>%f[suffix]</tt> is replaced by the previous content of <tt>name</tt> without the <tt>suffix</tt>
-					\item <tt>%b</tt> and <tt>%b[suffix]</tt> like <tt>%f</tt> and {\tt %f[suffix]}, except that the
+					- <tt>%f[suffix]</tt> is replaced by the previous content of <tt>name</tt> without the <tt>suffix</tt>
+					- <tt>%b</tt> and <tt>%b[suffix]</tt> like <tt>%f</tt> and {\tt %f[suffix]}, except that the
 								path is removed as well, so it is only the {\em base name} of the file
-					\item <tt>%p</tt> the path to the file
-					\item <tt>%t</tt> a temporary file name (all occurences of <tt>%t</tt> are replace with the same file name for
+					- <tt>%p</tt> the path to the file
+					- <tt>%t</tt> a temporary file name (all occurences of <tt>%t</tt> are replace with the same file name for
 												the same invocation of  \link transform transform \endlink , but different file names on subsequent invocations)
-				\end{itemize}
+				
 		*/
 		String transform(const String& name);
 		//@}
@@ -136,7 +136,7 @@ namespace BALL
 	};
 		
 	/**	File Class.	
-			<b>Definition:</b> BALL/SYSTEM/file.h
+			
 	*/
 	class File
 		: public std::fstream
@@ -638,7 +638,7 @@ namespace BALL
 			<b>Caveat:</b> This concept relies on the C++ memory layout and thus 
 			is highly non-portable!
 			 \par
-			<b>Definition:</b> BALL/SYSTEM/file.h
+			
 	*/
 	template <typename T>
 	class BinaryFileAdaptor

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.h,v 1.26 2003/03/03 14:17:48 anhi Exp $ 
+// $Id: nucleicAcid.h,v 1.27 2003/03/14 11:49:09 sturm Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -29,7 +29,7 @@ namespace BALL
 
 	/**	Nucleic acid class.
 			 \par
-			<b>Definition:</b> BALL/KERNEL/nucleicAcid.h
+			
 			 \par
 	*/
 	class NucleicAcid

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.h,v 1.15 2003/03/03 14:18:35 anhi Exp $
+// $Id: simpleBox.h,v 1.16 2003/03/14 11:50:26 sturm Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
 #define BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -42,15 +42,15 @@ namespace BALL
 				two vertices are needed. The first vertex is the lower left corner and the second
 				vertex is the upper right corner of the box (in 3-dimensional space).
 				A simpleBox has the following properties. 
-				\begin{itemize}
-				  \item color - the color of the simpleBox
-					\item vertex1 - the first vertex of the simpleBox (lower left corner)
-					\item vertex2 - the second vertex of the simpleBox (upper right corner)
-				\end{itemize}
+
+				  - color - the color of the simpleBox
+					- vertex1 - the first vertex of the simpleBox (lower left corner)
+					- vertex2 - the second vertex of the simpleBox (upper right corner)
+				
 				The class SimpleBox is derived from the classes  \link GeometricObject GeometricObject \endlink ,  \link ColorExtension ColorExtension \endlink 
 				and  \link Vertex2 Vertex2 \endlink . See these classes for further information concerning
 				interface and additional methods.  \par
-				<b>Definition:</b> BALL/VIEW/PRIMITIV/simpleBox.h
+				
 		*/
 		class SimpleBox
 			: public GeometricObject,
@@ -66,11 +66,11 @@ namespace BALL
 			/** Default Constructor.
 					Construct new simpleBox.
 					The properties of {\em *this} simpleBox are set to:
-					\begin{itemize}
-  				  \item color - to the color black
-		  			\item vertex1 - to the vector (0,0,0)
-		  			\item vertex2 - to the vector (0,0,0)
-					\end{itemize}
+
+  				  - color - to the color black
+		  			- vertex1 - to the vector (0,0,0)
+		  			- vertex2 - to the vector (0,0,0)
+					
 					@return      SimpleBox new constructed simpleBox
 					@see         GeometricObject
 					@see         ColorExtension

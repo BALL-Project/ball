@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModelConnector.h,v 1.10 2003/03/03 14:18:03 anhi Exp $
+// $Id: baseModelConnector.h,v 1.11 2003/03/14 11:49:34 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
@@ -45,7 +45,7 @@ namespace BALL
 				its connections to the other models.
 				This class has access to the class  \link FindGeometricObjects FindGeometricObjects \endlink  and the class 
 				 \link ColorCalculator ColorCalculator \endlink .  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/baseModelConnector.h
+				
 		*/
 		class BaseModelConnector
 			: public Visitor<Composite>,
@@ -98,11 +98,11 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the state of {\em *this} baseModelConnector to:
-					\begin{itemize}
-					  \item  clear the properties
-					  \item  clear the  \link FindGeometricObjects FindGeometricObjects \endlink 
-					  \item  set the  \link ColorCalculator ColorCalculator \endlink  to the default colorCalculator
-					\end{itemize}
+
+					  -  clear the properties
+					  -  clear the  \link FindGeometricObjects FindGeometricObjects \endlink 
+					  -  set the  \link ColorCalculator ColorCalculator \endlink  to the default colorCalculator
+					
 					Calls  \link PropertyManager::clear PropertyManager::clear \endlink .
 					Calls  \link FindGeometricObjects::clear FindGeometricObjects::clear \endlink .
 					@see  FindGeometricObjects

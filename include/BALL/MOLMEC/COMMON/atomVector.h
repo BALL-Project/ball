@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.h,v 1.18 2003/03/03 14:17:56 anhi Exp $
+// $Id: atomVector.h,v 1.19 2003/03/14 11:49:23 sturm Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -25,7 +25,7 @@ namespace BALL
 	
 	/**	Atom vector class.
 			This class is used to store atom pointers.  \par
-			<b>Definition:</b>BALL/MOLMEC/COMMON/atomVector.h
+			
 	*/
 	class AtomVector
 		:	private ::std::vector<Atom*>

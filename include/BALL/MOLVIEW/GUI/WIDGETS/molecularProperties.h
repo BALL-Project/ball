@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.17 2003/03/03 14:18:08 anhi Exp $
+// $Id: molecularProperties.h,v 1.18 2003/03/14 11:49:43 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -35,7 +35,7 @@ namespace BALL
 				sent by  \link Scene Scene \endlink  to a molecular selection whose objects can be given a new
 				graphical representation by the  \link DisplayProperties DisplayProperties \endlink  dialog.
 				See  \link onNotify onNotify \endlink  for information concerning the conversion mechanism.  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h
+				
 		*/
 		class MolecularProperties
 			: public QWidget, 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldComponent.h,v 1.14 2003/03/03 14:17:56 anhi Exp $
+// $Id: forceFieldComponent.h,v 1.15 2003/03/14 11:49:24 sturm Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -28,7 +28,7 @@ namespace BALL
 	class ForceField;
 
 	/**	Generic force field component class.
-			<b>Definition:</b> BALL/MOLMEC/COMMON/forceFieldComponent.h
+			
 	*/
 	class ForceFieldComponent 
 	{

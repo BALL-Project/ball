@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBackboneModel.h,v 1.10 2003/03/03 14:18:06 anhi Exp $
+// $Id: glBackboneModel.h,v 1.11 2003/03/14 11:49:39 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
@@ -27,7 +27,7 @@ namespace BALL
 				method used for creating the  \link Backbone Backbone \endlink . This new primitive contains
 				OpenGL implementation to generate the graphical visualization of the backbone.
 				This class has the same functionality as its base class  \link AddBackboneModel AddBackboneModel \endlink .  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.h
+				
 		*/
 		class AddGLBackboneModel: public AddBackboneModel
 		{

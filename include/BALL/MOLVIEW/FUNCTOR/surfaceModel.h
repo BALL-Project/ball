@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.13 2003/03/03 14:18:04 anhi Exp $
+// $Id: surfaceModel.h,v 1.14 2003/03/14 11:49:36 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
@@ -34,7 +34,7 @@ namespace BALL
 				from the class  \link SurfaceProcessor SurfaceProcessor \endlink .
 				The derived class  \link AddGLSurfaceModel AddGLSurfaceModel \endlink  uses the  \link GLMesh GLMesh \endlink  with openGL implementation.
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL documentation.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/surfaceModel.h
+				
 				@see     Mesh
 				@see     SurfaceProcessor
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.h,v 1.13 2003/03/03 14:18:33 anhi Exp $
+// $Id: colorExtension2.h,v 1.14 2003/03/14 11:50:21 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION2_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION2_H
@@ -25,7 +25,7 @@ namespace BALL
 				The class ColorExtension2 is used as a base class for all geometric 
 				objects that needs two colors  \link ColorRGBA ColorRGBA \endlink . It provides the derived
 				class with methods for accessing these colors.
-				<b>Definition:</b> BALL/VIEW/KERNEL/colorExtension2.h
+				
 		*/
 		class ColorExtension2
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forEach.h,v 1.7 2003/03/03 14:17:39 anhi Exp $
+// $Id: forEach.h,v 1.8 2003/03/14 11:48:53 sturm Exp $
 
 #ifndef BALL_DATATYPE_FOREACH_H
 #define BALL_DATATYPE_FOREACH_H
@@ -24,7 +24,7 @@
 			cout << it->first << endl;
 		}
 \end{verbatim}
-		<b>Definition:</b> BALL/DATATYPE/forEach.h
+		
 		@param container an instance of a BALL container class
 		@param element_iterator an iterator of the container class
 */

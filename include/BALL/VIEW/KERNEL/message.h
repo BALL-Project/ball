@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.17 2003/03/03 14:18:34 anhi Exp $
+// $Id: message.h,v 1.18 2003/03/14 11:50:23 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -57,7 +57,7 @@ namespace BALL
 				for avoiding segmentation faults.
 				See  \link ConnectionObject ConnectionObject \endlink  for further information concerning message handling
 				and message posting.  \par
-				<b>Definition:</b> BALL/VIEW/KERNEL/message.h
+				
 		*/
 		class Message
 		{
@@ -70,10 +70,10 @@ namespace BALL
 			/** Default Constructor.
 					Construct new message.
 					The state of {\em *this} message is:
-					\begin{itemize}
-					  \item  sender    - set to 0
-						\item  deletable - set to <tt>false</tt> 
-					\end{itemize}
+
+					  -  sender    - set to 0
+						-  deletable - set to <tt>false</tt> 
+					
 					@return      Message new constructed message
 			*/
 			Message()
@@ -170,7 +170,7 @@ namespace BALL
 				The CompositeMessage class is a base class for messages that are relevant for
 				 \link ConnectionObject ConnectionObject \endlink  objects that must react to  \link Composite Composite \endlink  changes.
 				 \par
- <b>Definition:</b> BALL/VIEW/KERNEL/message.h
+ 
 		*/
 		class CompositeMessage: public Message
 		{
@@ -183,10 +183,10 @@ namespace BALL
 			/** Default Constructor.
 					Construct new compositeMessage.
 					The state of {\em *this} compositeMessage is:
-					\begin{itemize}
-					  \item  composite       - set to 0
-						\item  composite name  - set to "" 
-					\end{itemize}
+
+					  -  composite       - set to 0
+						-  composite name  - set to "" 
+					
 					@return      CompositeMessage new constructed compositeMessage
 					@see         Message
 			*/
@@ -279,7 +279,7 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				  \par
- <b>Definition:</b> BALL/VIEW/KERNEL/message.h
+ 
 		*/
 		class NewCompositeMessage: public CompositeMessage
 		{
@@ -332,7 +332,7 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				 \par
- <b>Definition:</b> BALL/VIEW/KERNEL/message.h
+ 
 		*/
 		class RemovedCompositeMessage: public CompositeMessage
 		{
@@ -385,7 +385,7 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				 \par
- <b>Definition:</b> BALL/VIEW/KERNEL/message.h
+ 
 		*/
 		class ChangedCompositeMessage: public CompositeMessage
 		{
@@ -440,7 +440,7 @@ namespace BALL
 				There are methods available that will tell the  \link Scene Scene \endlink  to update its contents
 				or change the camera positions.
 				 \par
- <b>Definition:</b> BALL/VIEW/KERNEL/message.h
+ 
 		*/
 		class SceneMessage: public Message
 		{
@@ -453,11 +453,11 @@ namespace BALL
 			/** Default Constructor.
 					Construct new sceneMessage.
 					The state of {\em *this} sceneMessage is set to:
-					\begin{itemize}
-					  \item  update flag     - set to <tt>false</tt>
-						\item  camera look at  - set to <tt>(0,0,0)</tt> 
-						\item  camera position - set to <tt>(0,0,0)</tt> 
-					\end{itemize}
+
+					  -  update flag     - set to <tt>false</tt>
+						-  camera look at  - set to <tt>(0,0,0)</tt> 
+						-  camera position - set to <tt>(0,0,0)</tt> 
+					
 					@return      SceneMessage new constructed sceneMessage
 					@see         Message
 			*/
@@ -580,7 +580,7 @@ namespace BALL
 				this message and extract the new contents of status bar that any other
 				 \link ConnectionObject ConnectionObject \endlink  object has sent through the  \link ConnectionObject ConnectionObject \endlink  tree.
 				 \par
- <b>Definition:</b> BALL/VIEW/KERNEL/message.h
+ 
 		*/
 		class WindowMessage: public Message
 		{
@@ -593,9 +593,9 @@ namespace BALL
 			/** Default Constructor.
 					Construct new windowMessage.
 					The state of {\em *this} windowMessage is set to:
-					\begin{itemize}
-					  \item  status bar - set to ""
-					\end{itemize}
+
+					  -  status bar - set to ""
+					
 					@return      WindowMessage new constructed windowMessage
 					@see         Message
 			*/
@@ -661,7 +661,7 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				 \par
- <b>Definition:</b> BALL/VIEW/KERNEL/message.h
+ 
 		*/
 		class SelectionMessage: public Message
 		{
@@ -674,9 +674,9 @@ namespace BALL
 			/** Default Constructor.
 					Construct new selectionMessage.
 					The state of {\em *this} selectionMessage is set to:
-					\begin{itemize}
-					  \item  composite list - empty
-					\end{itemize}
+
+					  -  composite list - empty
+					
 					@return      SelectionMessage new constructed selectionMessage
 					@see         Message
 			*/
@@ -778,7 +778,7 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
 				objects.
 				 \par
- <b>Definition:</b> BALL/VIEW/KERNEL/message.h
+ 
 		*/
 		class GeometricObjectSelectionMessage: public SelectionMessage
 		{

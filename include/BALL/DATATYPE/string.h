@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.47 2003/03/07 15:59:42 sneumann Exp $
+// $Id: string.h,v 1.48 2003/03/14 11:48:56 sturm Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -51,7 +51,7 @@ namespace BALL
 
 	/**	@name	String
 			An improved version of STL string.
-			<b>Definition:</b> BALL/DATATYPE/string.h
+			
 	*/
 	//@{
 				
@@ -127,14 +127,14 @@ namespace BALL
 
 		/**	Character class containing all whitespace characters.
 				Whitespace characters are: \par
-				\begin{itemize}
-					\item blank " "
-					\item horizontal tab $ "\backslash t" $
-					\item new-line $ "\backslash n" $
-					\item line-feed $ "\backslash r" $
-					\item vertical tab $ "\backslash v" $
-					\item form-feed $ "\backslash f" $
-				\end{itemize}
+
+					- blank " "
+					- horizontal tab $ "\backslash t" $
+					- new-line $ "\backslash n" $
+					- line-feed $ "\backslash r" $
+					- vertical tab $ "\backslash v" $
+					- form-feed $ "\backslash f" $
+				
 		*/
 		static const char* CHARACTER_CLASS__WHITESPACE;
 
@@ -976,7 +976,7 @@ namespace BALL
 			of  \link String String \endlink . Each Substring is bound to an instance of String and 
 			is defined by a start and end index. It can be used like a String (with several
 			restrictions) but only affects the given range of the string it is bount to. \par
-			<b>Definition:</b> BALL/DATATYPE/string.h
+			
 	*/
 	class Substring
 	{

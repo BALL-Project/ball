@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticAngleBend.h,v 1.15 2003/03/03 14:18:00 anhi Exp $
+// $Id: quadraticAngleBend.h,v 1.16 2003/03/14 11:49:30 sturm Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
 #define BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
@@ -26,7 +26,7 @@ namespace BALL
 	/** QuadraticAngleBend.
 			Molecular Mechanics Parameter: class describing the parameters required to
 			implement a harmonic potential describing angle bends. \par
-			<b>Definition:</b>BALL/MOLMEC/PARAMETER/quadraticAngleBend.h
+			
 	*/
 	class QuadraticAngleBend 
 		:	public ParameterSection

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.30 2003/03/03 14:17:42 anhi Exp $
+// $Id: INIFile.h,v 1.31 2003/03/14 11:48:58 sturm Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -32,7 +32,6 @@ namespace BALL
 	/**	INIFile.
 			This class provides support to read and evaluate
 			the contents of Windows-style INI files. \par
-			<b>Definition:</b>	BALL/FORMAT/INIFile.h
 	*/
 	class INIFile
 	{
@@ -374,19 +373,19 @@ namespace BALL
 				lines and are stored, but not interpreted.
 				Key-names and values are trimmed.
 				If a line starts with "[", but no closing bracket occurs, false is returned.
-				@return	bool \begin{itemize}
-												\item <b>true</b> if the file could be opened and read
-												\item <b>false</b> otherwise
-											\end{itemize}
+				@return	bool
+												- <b>true</b> if the file could be opened and read
+												- <b>false</b> otherwise
+											
 		*/	
 		bool read();
 
 		/**	Writes the buffer contents to a file.
 				If the file could not be writen, valid_ is set to false, ow true.
-				@return	bool - \begin{itemize}
-												\item <b>true</b> if the file could be succesfully written
-												\item <b>false</b> otherwise
-											\end{itemize}
+				@return	bool
+												- <b>true</b> if the file could be succesfully written
+												- <b>false</b> otherwise
+											
 		*/	
 		bool write();
 
@@ -445,10 +444,10 @@ namespace BALL
 				If line starts with "[" the method aborts.
 				@param	line_it iterator to the line to change
 				@param	line new content of the line
-				@return	bool \begin{itemize}
-											\item <b>true</b> if line_it is valid
-											\item <b>false</b> otherwise
-										\end{itemize}
+				@return	bool
+											- <b>true</b> if line_it is valid
+											- <b>false</b> otherwise
+										
 		*/	
 		bool setLine(LineIterator line_it, const String& line);
 		
@@ -498,26 +497,26 @@ namespace BALL
 				
 		/**	Queries for a certain section.
 				@param	section_name	the name of the section (without square brackets)
-				@return bool \begin{itemize}
-											\item <b>true</b> if the section exists (is hashed!)
-											\item <b>false</b>	if the section could not be found
-										\end{itemize}
+				@return bool
+											- <b>true</b> if the section exists (is hashed!)
+											- <b>false</b>	if the section could not be found
+										
 		*/	
 		bool hasSection(const String& section_name) const;
 
 		/** Return an iterator to a section with a given name.
-				@return String* \begin{itemize}
-											   \item iterator to the section
-											   \item 0, if no section with this name exists
-										    \end{itemize}
+				@return String*
+											   - iterator to the section
+											   - 0, if no section with this name exists
+										    
 		*/
 	  SectionIterator getSection(const String& section_name);
 
 		/** Return an iterator to a section at a given position.
-				@return String* \begin{itemize}
-											   \item iterator to the section
-											   \item 0, if pos is too high
-										    \end{itemize}
+				@return String*
+											   - iterator to the section
+											   - 0, if pos is too high
+										    
 		*/
 	  SectionIterator getSection(Position pos);
 
@@ -528,28 +527,28 @@ namespace BALL
 
 		/**	Returns an iterator to the first line of a section.
 				The first line of a section is the line with the section name (in square brackets).
-				@return	Size \begin{itemize}
-											\item iterator to the first line of the section
-											\item unvalid iterator, if section does not exist
-										 \end{itemize}
+				@return	Size
+											- iterator to the first line of the section
+											- unvalid iterator, if section does not exist
+										 
 				@param	section_name	the name of the section to be found
 		*/	
 		LineIterator getSectionFirstLine(const String& section_name);
 
 		/**	Returns an iterator to the last line of a section.
-				@return	Size \begin{itemize}
-											\item iterator to the last line of the section
-											\item unvalid iterator, if section does not exist
-											\end{itemize}
+				@return	Size
+											- iterator to the last line of the section
+											- unvalid iterator, if section does not exist
+											
 				@param	section_name	the name of the section to be found
 		*/	
 		LineIterator getSectionLastLine(const String& section_name);	
 
 		/**	Returns the number of lines in a section.
-				@return	Size \begin{itemize}
-											\item the number of lines, or 
-											\item INVALID_SIZE if the section could not be found
-										 \end{itemize}
+				@return	Size
+											- the number of lines, or 
+											- INVALID_SIZE if the section could not be found
+										 
 				@param	section_name	the name of the section to be found
 		*/	
 		Size getSectionLength(const String& section_name) const;
@@ -572,10 +571,10 @@ namespace BALL
 		//@{
 
 		/**	Check whether the given section contains a certain key.
-				@return	bool \begin{itemize}
-											\item <b>true</b> if the key could be found in the section, 
-											\item <b>false</b> if either key or section didn't exist
-										 \end{itemize}
+				@return	bool
+											- <b>true</b> if the key could be found in the section, 
+											- <b>false</b> if either key or section didn't exist
+										 
 				@param	section	the section to look in for the key
 				@param	key the key to look for
 		*/	
@@ -586,10 +585,10 @@ namespace BALL
 				the key are not defined, an empty string is returned.
 				@param	section	the section name to look in for the key
 				@param	key a key in the <b>section</b>
-				@return	String \begin{itemize} 
-												\item the value corresponding to the <b>key</b> in <b>section</b>
-												\item or  \link UNDEFINED UNDEFINED \endlink 
-											 \end{itemize}
+				@return	String
+												- the value corresponding to the <b>key</b> in <b>section</b>
+												- or  \link UNDEFINED UNDEFINED \endlink 
+											 
 		*/	
 		String getValue(const String& section, const String& key) const;
 
@@ -599,10 +598,10 @@ namespace BALL
 				@param	section	the section to look in for the key
 				@param	key	the key to look for
 				@param	value the new value
-				@return	bool - \begin{itemize}
-									\item <b>true</b> if the value was changed
-									\item <b>false</b> if key or section do not exist
-								\end{itemize}
+				@return	bool
+									- <b>true</b> if the value was changed
+									- <b>false</b> if key or section do not exist
+								
 		*/	
 		bool setValue(const String& section, const String& key, const String& value);
 
@@ -611,10 +610,10 @@ namespace BALL
 				@param	section	the section to insert the key
 				@param	key	the key to insert
 				@param	value the new value
-				@return	bool - \begin{itemize}
-									\item <b>true</b> if the value was inserted
-									\item <b>false</b> if key or section do not exist
-								\end{itemize}
+				@return	bool
+									- <b>true</b> if the value was inserted
+									- <b>false</b> if key or section do not exist
+								
 		*/
 		bool insertValue(const String& section, const String& key, const String& value);
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectCreator.h,v 1.11 2003/03/03 14:18:28 anhi Exp $
+// $Id: objectCreator.h,v 1.12 2003/03/14 11:50:15 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
 #define BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
@@ -41,7 +41,7 @@ namespace BALL
 				and conversion that must be overriden by the derived class. 
 				This class is used by the class  \link Server Server \endlink  to convert incoming
 				 \link PersistentObject PersistentObject \endlink  objects to  \link Composite Composite \endlink  objects.
-				<b>Definition:</b> BALL/VIEW/GUI/KERNEL/objectCreator.h
+				
 		*/
 		class ObjectCreator
 		{

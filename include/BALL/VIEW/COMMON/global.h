@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.12 2003/03/03 14:18:25 anhi Exp $
+// $Id: global.h,v 1.13 2003/03/14 11:50:07 sturm Exp $
 
 #ifndef BALL_VIEW_COMMON_GLOBAL_H
 #define BALL_VIEW_COMMON_GLOBAL_H
@@ -20,7 +20,7 @@ namespace BALL
 		/**     @name Type aliases defined by VIEW
 						These predefined types are used in VIEW for portability and
 						comprehensibility.
-						<b>Definition:</b> BALL/VIEW/COMMON/global.h
+						
 		*/
 		//@{
 		

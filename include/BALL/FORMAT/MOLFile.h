@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.h,v 1.8 2003/03/03 14:17:43 anhi Exp $
+// $Id: MOLFile.h,v 1.9 2003/03/14 11:48:59 sturm Exp $
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H
@@ -25,7 +25,7 @@ namespace BALL
 
 	/**	MDL MOL file class.
 			This class enables BALL to read and write MDL MOL files.  \par
-			<b>Definition:</b> BALL/FORMAT/MOLFile.h
+			
 	*/
 	class MOLFile
 		: public GenericMolFile

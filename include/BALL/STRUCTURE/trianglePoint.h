@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trianglePoint.h,v 1.7 2003/02/21 16:07:02 anhi Exp $
+// $Id: trianglePoint.h,v 1.8 2003/03/14 11:50:04 sturm Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGLEPOINT_H
 #define BALL_STRUCTURE_TRIANGLEPOINT_H
@@ -38,7 +38,7 @@ namespace BALL
 
 	/** Generic TriangleEdge Class.
 			 \par
-			<b>Definition:</b>BALL/STRUCTURE/triangle.h
+			
 			 \par
 	*/
 	class TrianglePoint
@@ -48,16 +48,16 @@ namespace BALL
 		public:
 
 		/** @name Class friends
-				\begin{itemize}
-					\item class Triangle
-					\item class TriangleEdge
-					\item class TriangulatedSurface
-					\item class TriangulatedSphere
-					\item class TriangulatedSES
-					\item class SESTriangulator
-					\item class TriangulatedSAS
-					\item class SASTriangulator
-				\end{itemize}
+
+					- class Triangle
+					- class TriangleEdge
+					- class TriangulatedSurface
+					- class TriangulatedSphere
+					- class TriangulatedSES
+					- class SESTriangulator
+					- class TriangulatedSAS
+					- class SASTriangulator
+				
 		*/
 		friend class Triangle;
 		friend class TriangleEdge;

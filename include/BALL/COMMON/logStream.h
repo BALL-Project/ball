@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.20 2003/03/03 14:17:33 anhi Exp $
+// $Id: logStream.h,v 1.21 2003/03/14 11:48:44 sturm Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -228,7 +228,7 @@ namespace BALL
 
 	/**	Log Stream Class.
 			 \par
-			<b>Definition:</b> BALL/COMMON/logStream.h
+			
 			 \par
 	*/
 	class LogStream
@@ -432,17 +432,17 @@ namespace BALL
 				format specifiers to include loglevel and time/date 
 				of the logged message. \par
 				The following format tags are recognized:
-				\begin{itemize}
-					\item <b>%l</b>	loglevel
-					\item <b>%y</b>	message type ("Error", "Warning", "Information", "-")
-					\item <b>%T</b>  time (HH:MM:SS)
-					\item <b>%t</b>  time in short format (HH:MM)
-					\item <b>%D</b>	date (DD.MM.YYYY)
-					\item <b>%d</b>  date in short format (DD.MM.)
-					\item <b>%S</b>  time and date (DD.MM.YYYY, HH:MM:SS)
-					\item <b>%s</b>  time and date in short format (DD.MM., HH:MM)
-					\item <b>%%</b>	percent sign (escape sequence)
-				\end{itemize}
+
+					- <b>%l</b>	loglevel
+					- <b>%y</b>	message type ("Error", "Warning", "Information", "-")
+					- <b>%T</b>  time (HH:MM:SS)
+					- <b>%t</b>  time in short format (HH:MM)
+					- <b>%D</b>	date (DD.MM.YYYY)
+					- <b>%d</b>  date in short format (DD.MM.)
+					- <b>%S</b>  time and date (DD.MM.YYYY, HH:MM:SS)
+					- <b>%s</b>  time and date in short format (DD.MM., HH:MM)
+					- <b>%%</b>	percent sign (escape sequence)
+				
 		*/
 		void setPrefix(const std::ostream& s, const string& prefix);
 		//@}		

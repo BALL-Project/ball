@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricCollector.h,v 1.11 2003/03/03 14:18:26 anhi Exp $
+// $Id: geometricCollector.h,v 1.12 2003/03/14 11:50:10 sturm Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
 #define BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
@@ -32,7 +32,7 @@ namespace BALL
 				 \link Composite Composite \endlink  objects. Overrides the	methods  \link operator operator \endlink ,
 				 \link start start \endlink  and  \link finish finish \endlink  to	change the collection filter criteria. 
 				This class is used by the class  \link Scene Scene \endlink  to collect picked objects.  \par
-				<b>Definition:</b> BALL/VIEW/FUNCTOR/geometricCollector.h
+				
 				@see     GeometricObject
 				@see     Scene
 		*/
@@ -68,10 +68,10 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Resets the state of {\em *this} geometricCollector to:
-					\begin{itemize}
-					  \item  collect all  \link GeometricObject GeometricObject \endlink  objects (independent of the selection property)
-					  \item  the collection list is empty
-					\end{itemize}
+
+					  -  collect all  \link GeometricObject GeometricObject \endlink  objects (independent of the selection property)
+					  -  the collection list is empty
+					
 			*/
 			virtual void clear()
 				throw();

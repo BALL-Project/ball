@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.23 2003/03/03 14:17:42 anhi Exp $
+// $Id: HINFile.h,v 1.24 2003/03/14 11:48:58 sturm Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -21,7 +21,7 @@ namespace BALL
      */
 	/**	HyperChem file class.
 			This class enables BALL to read and write HyperChem HIN files.  \par
-			<b>Definition:</b> BALL/FORMAT/HINFile.h
+			
 	*/
 	class HINFile
 		: public GenericMolFile

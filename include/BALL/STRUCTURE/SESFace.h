@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.h,v 1.23 2003/03/03 14:18:19 anhi Exp $
+// $Id: SESFace.h,v 1.24 2003/03/14 11:49:59 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -36,22 +36,22 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic SESFace Class.
-			<b>Definition:</b> BALL/STRUCTURE/SESFace.h
+			
 	*/
 	class SESFace	:	public GraphFace< SESVertex,SESEdge,SESFace >
 	{
 		public:
 
 		/** @name Class friends
-				\begin{itemize}
-					\item class SESEdge
-					\item class SESVertex
-					\item class SolventExcludedSurface
-					\item class SESComputer
-					\item class TSESSingularityCleaner
-					\item class TriangulatedSES
-					\item class SESTriangulator
-				\end{itemize}
+
+					- class SESEdge
+					- class SESVertex
+					- class SolventExcludedSurface
+					- class SESComputer
+					- class TSESSingularityCleaner
+					- class TriangulatedSES
+					- class SESTriangulator
+				
 		*/
 		friend class SESEdge;
 		friend class SESVertex;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.16 2003/03/03 14:18:28 anhi Exp $
+// $Id: server.h,v 1.17 2003/03/14 11:50:15 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -65,7 +65,7 @@ namespace BALL
 				 \link RemovedCompositeMessage RemovedCompositeMessage \endlink  will be sent through the  \link ConnectionObject ConnectionObject \endlink 
 				tree and after that the the message  \link NewCompositeMessage NewCompositeMessage \endlink  with the new
 				received composite will be sent.
-				<b>Definition:</b> BALL/VIEW/GUI/KERNEL/server.h
+				
 		*/
 		class Server
 			: public QTTimer,
@@ -82,10 +82,10 @@ namespace BALL
 			/** Default Constructor.
 					Construct new server.
 					The state of {\em *this} server is:
-					\begin{itemize}
-					  \item no object creator registered
-						\item server listening on <tt>VIEW_DEFAULT_PORT</tt> if activated
-					\end{itemize}
+
+					  - no object creator registered
+						- server listening on <tt>VIEW_DEFAULT_PORT</tt> if activated
+					
 					@return      Server new constructed server
 					@see         QTTimer
 					@see         ModularWidget

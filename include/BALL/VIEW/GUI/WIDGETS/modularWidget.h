@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.15 2003/03/03 14:18:31 anhi Exp $
+// $Id: modularWidget.h,v 1.16 2003/03/14 11:50:19 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -53,7 +53,7 @@ namespace BALL
 				macro in the public section	of your class declaration. Also make sure that the QT 
 				class you	derive from (e.g. QWidget) is the {\em first} base class and 
 				ModularWidget	second.  \par
-				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/modularWidget.h
+				
 				@see MainControl
 				@see Embeddable
 				@see PyInterpreter

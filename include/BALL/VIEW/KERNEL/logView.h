@@ -50,7 +50,7 @@ namespace BALL
 				Use the class LogView as a widget. There are no initializations necessary.
 				Just create this widget as a child widgets of your application and it will
 				record and show all messages sent to the  \link Log Log \endlink  object.
-				<b>Definition:</b> BALL/VIEW/KERNEL/logView.h
+				
 		*/
 		class LogView
 			: public NotificationTarget<LogStreamNotifier>,

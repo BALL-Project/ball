@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.18 2003/03/03 14:17:45 anhi Exp $
+// $Id: atomContainer.h,v 1.19 2003/03/14 11:49:05 sturm Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -49,7 +49,7 @@ namespace BALL
 			The <tt>AtomContainer</tt> class is the base class
 			of all kernel classes containing atoms.
 			 \par
-			<b>Definition:</b>BALL/KERNEL/atomContainer.h
+			
 	*/
 	class AtomContainer
 		: public Composite,

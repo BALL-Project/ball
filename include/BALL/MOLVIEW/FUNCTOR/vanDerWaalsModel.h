@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.16 2003/03/03 14:18:05 anhi Exp $
+// $Id: vanDerWaalsModel.h,v 1.17 2003/03/14 11:49:37 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -29,7 +29,7 @@ namespace BALL
 				This processor creates only the primitive objects without openGL implementation.
 				The derived class  \link AddGLVanDerWaalsModel AddGLVanDerWaalsModel \endlink  uses the primitives with openGL implementation.
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL documentation. \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h
+				
 		*/
 		class AddVanDerWaalsModel: public AtomBondModelBaseProcessor
 		{

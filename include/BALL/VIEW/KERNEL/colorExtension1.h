@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension1.h,v 1.12 2003/03/03 14:18:33 anhi Exp $
+// $Id: colorExtension1.h,v 1.13 2003/03/14 11:50:21 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION1_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION1_H
@@ -26,7 +26,7 @@ namespace BALL
 				The class ColorExtension is used as a base class for all geometric 
 				objects that need a single color  \link ColorRGBA ColorRGBA \endlink . It provides the derived
 				class with methods for accessing that color.
-				<b>Definition:</b> BALL/VIEW/KERNEL/colorExtension1.h
+				
 		*/
 		class ColorExtension
 		{

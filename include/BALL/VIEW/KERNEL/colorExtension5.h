@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension5.h,v 1.12 2003/03/03 14:18:34 anhi Exp $
+// $Id: colorExtension5.h,v 1.13 2003/03/14 11:50:22 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION5_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION5_H
@@ -30,7 +30,7 @@ namespace BALL
 				The class ColorExtension5 is used as a base class for all geometric 
 				objects that needs five colors  \link ColorRGBA ColorRGBA \endlink . It provides the derived
 				class with methods for accessing these colors.
-				<b>Definition:</b> BALL/VIEW/KERNEL/colorExtension5.h
+				
 		*/
 		class ColorExtension5: public ColorExtension4
 		{

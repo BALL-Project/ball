@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.23 2003/03/03 14:17:43 anhi Exp $
+// $Id: PDBFile.h,v 1.24 2003/03/14 11:49:00 sturm Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -57,7 +57,7 @@ namespace BALL
 	
 	/**	PDB file class.
 			 \par
-			<b>Definition:</b> BALL/FORMAT/PDBFile.h
+			
 	*/
 	class PDBFile
 		: public GenericPDBFile

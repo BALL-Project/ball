@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.10 2003/03/03 14:18:03 anhi Exp $
+// $Id: backboneModel.h,v 1.11 2003/03/14 11:49:33 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
@@ -43,7 +43,7 @@ namespace BALL
 				openGL implementation.
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL
 				documentation.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/backboneModel.h
+				
 		*/
 		class AddBackboneModel: public BaseModelProcessor
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ooiEnergy.h,v 1.8 2003/03/03 14:18:16 anhi Exp $
+// $Id: ooiEnergy.h,v 1.9 2003/03/14 11:49:52 sturm Exp $
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
 #define BALL_SOLVATION_OOIENERGY_H
@@ -27,7 +27,7 @@ namespace BALL
 			Unparametrized atoms are simply ignored, this leads to unreasonable values.  \par
 			<b>Files:</b> \par
  types are taken from <tt>solvation/Ooi.ini</tt> \par
-			<b>Definition:</b> BALL/SOLVATION/ooiEnergy.h
+			
 	*/ 
 	double calculateOoiEnergy(AtomContainer& atoms);
    /** @} */	

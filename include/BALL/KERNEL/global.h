@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.14 2003/03/03 14:17:47 anhi Exp $
+// $Id: global.h,v 1.15 2003/03/14 11:49:08 sturm Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -56,7 +56,7 @@ namespace BALL
 			 \par
 			<b>Namespace:</b> BALL
 			 \par
-			<b>Definition:</b> BALL/KERNEL/global.h
+			
 			 \par
 			@param atom_container	the atom_container containing the bonds
 			@param cloned a deep copy of <b>atom_container</b>
@@ -117,7 +117,7 @@ namespace BALL
 
 	/**	Global static variable needed for the cloning of kernel objects containing bonds.
 			<b>Namespace:</b> BALL \par
-			<b>Definition:</b> BALL/KERNEL/global.h
+			
 			@see	cloneBonds
 	*/
 	extern bool clone_bonds;

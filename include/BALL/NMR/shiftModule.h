@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: shiftModule.h,v 1.14 2003/03/03 14:18:12 anhi Exp $
+// $Id: shiftModule.h,v 1.15 2003/03/14 11:49:49 sturm Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -42,7 +42,7 @@ namespace BALL
 			Applying the same processor multiply will give incorrect results, as the ShiftModules
 			\emph{add} their shift contribution. Before applying a ShiftModule, these
 			properties can be reset to zero by applying a  \link ClearShiftProcessor ClearShiftProcessor \endlink .  \par
-			<b>Definition</b>BALL/NMR/shiftModule.h
+			
 	*/
 	class ShiftModule 
 		: public UnaryProcessor<Composite>

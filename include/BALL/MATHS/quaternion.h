@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.33 2003/03/03 14:17:53 anhi Exp $
+// $Id: quaternion.h,v 1.34 2003/03/14 11:49:17 sturm Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -30,7 +30,7 @@ namespace BALL
 	//@{
 
 	/**	Generic Quaternion Class. 
-      <b>Definition:</b> BALL/MATHS/quaternion.h
+      
 			Representing a rotation in three dimensional space.
 	*/
 	template <typename T>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.h,v 1.11 2003/03/03 14:18:25 anhi Exp $
+// $Id: colorRGBA.h,v 1.12 2003/03/14 11:50:08 sturm Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -36,14 +36,14 @@ namespace BALL
 				red, green, blue and alpha. The components are  \link ColorUnit ColorUnit \endlink 's. This class
 				allows many types of input parameters. See description of this class for further
 				informations.  \par
-				<b>Definition:</b> BALL/VIEW/DATATYPE/colorRGBA.h
+				
 		*/
 		class ColorRGBA
 		{
 			/** @name Class friends
-					\begin{itemize}
-						\item class ColorHSV
-					\end{itemize}
+
+						- class ColorHSV
+					
 			*/
 
 			friend class ColorHSV;
@@ -132,12 +132,12 @@ namespace BALL
 			/** Explicit default initialization.
 					Sets the color of {\em *this} colorRGBA to the default color (black).
 					The value of {\em *this} colorRGBA is:
-					\begin{itemize}
-						\item red component is zero (0)
-						\item green component is zero (0)
-						\item blue component is zero (0)
-						\item alpha component is 1 (1.0)
-					\end{itemize}
+
+						- red component is zero (0)
+						- green component is zero (0)
+						- blue component is zero (0)
+						- alpha component is 1 (1.0)
+					
 			*/
 			void clear()
 				throw();

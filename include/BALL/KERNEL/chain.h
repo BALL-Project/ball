@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.29 2003/03/03 14:17:46 anhi Exp $
+// $Id: chain.h,v 1.30 2003/03/14 11:49:06 sturm Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -36,7 +36,7 @@ namespace BALL
 			This class represents a polypeptide chain within a  \link Protein Protein \endlink .
 			Chains can contain  \link SecondaryStructure SecondaryStructure \endlink s or  \link Residue Residue \endlink s.
 			 \par
-			<b>Definition:</b>BALL/KERNEL/chain.h
+			
 	*/
 	class Chain
 		: public AtomContainer

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBackbone.h,v 1.12 2003/03/03 14:18:07 anhi Exp $
+// $Id: glBackbone.h,v 1.13 2003/03/14 11:49:41 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -45,7 +45,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				backbone. OpenGL code is used for the visualization.
 				See these classes for further information.  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h
+				
 		*/
 		class GLBackbone
 			: public Backbone,

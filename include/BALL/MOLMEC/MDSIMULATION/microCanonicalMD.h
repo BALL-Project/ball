@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.h,v 1.18 2003/03/03 14:17:58 anhi Exp $
+// $Id: microCanonicalMD.h,v 1.19 2003/03/14 11:49:27 sturm Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
@@ -58,7 +58,7 @@ namespace BALL
 			the total energy of the system is kept constant. Numerical
 			integration for new atom positions is done via the Velocity Verlet
 			method.  \par
-			<b>Definition:</b> BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h
+			
 	*/
   class MicroCanonicalMD : public MolecularDynamics
 	{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.36 2003/03/12 16:11:49 oliver Exp $
+// $Id: energyMinimizer.h,v 1.37 2003/03/14 11:49:28 sturm Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -214,10 +214,10 @@ namespace BALL
 				If the convergence criterion is fulfilled, this method
 				returns <b>true</b>. The convergence criterion is implemented as one
 				of three conditions:
-				\begin{itemize}
-					\item {RMS gradient} is below max_rms_gradient_
-					\item  \link same_energy_counter_ same_energy_counter_ \endlink  is above  \link max_same_energy_ max_same_energy_ \endlink 
-				\end{itemize}
+
+					- {RMS gradient} is below max_rms_gradient_
+					-  \link same_energy_counter_ same_energy_counter_ \endlink  is above  \link max_same_energy_ max_same_energy_ \endlink 
+				
 				If any of these conditions hold  \link isConverged isConverged \endlink  returns <b>true</b>.
 				This method should be reimplemented in derived classes for a different
 				convergence criterion.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFilter.h,v 1.11 2003/03/03 14:18:04 anhi Exp $
+// $Id: molecularFilter.h,v 1.12 2003/03/14 11:49:35 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
@@ -24,7 +24,7 @@ namespace BALL
 				that are of kind  \link Atom Atom \endlink  or of kind  \link AtomContainer AtomContainer \endlink .
 				This class is used by the class  \link MolecularControl MolecularControl \endlink  to filter
 				 \link Composite Composite \endlink  objects that are of the kind specified above.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/molecularFilter.h
+				
 		*/
 		class MolecularFilter: public VIEW::Filter
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: processor.h,v 1.13 2003/03/03 14:17:37 anhi Exp $
+// $Id: processor.h,v 1.14 2003/03/14 11:48:50 sturm Exp $
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #define BALL_CONCEPT_PROCESSOR_H
@@ -18,7 +18,7 @@ namespace BALL
 {
 
 	/**	@name Processor Concept
-			<b>Definition:</b> BALL/CONCEPT/processor.h
+			
 	* 	 \addtogroup  Concepts
 	*/
 	//@{

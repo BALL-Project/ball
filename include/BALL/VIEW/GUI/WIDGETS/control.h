@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.h,v 1.14 2003/03/03 14:18:30 anhi Exp $
+// $Id: control.h,v 1.15 2003/03/14 11:50:18 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -66,7 +66,7 @@ namespace BALL
 				To use this widget in the application just create it with  \link MainControl MainControl \endlink  as
 				parent and all inserted  \link Composite Composite \endlink  objects sent with  \link NewCompositeMessage NewCompositeMessage \endlink 
 				will be shown in the structure view of {\em *this} control.
-				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/control.h
+				
 		*/
 		class Control
 			: public QListView, 
@@ -276,12 +276,12 @@ namespace BALL
 
 			/**	Initialize the widget.
 					Initialize the menus of {\em *this} control:
-					\begin{itemize}
-					  \item the cut menu
-					  \item the copy menu
-					  \item the paste menu
-					  \item the clipboard menu
-					\end{itemize}
+
+					  - the cut menu
+					  - the copy menu
+					  - the paste menu
+					  - the clipboard menu
+					
 					This method is called automatically	immediately before the main application 
 					is started. 
 					This method will be called by  \link show show \endlink  from the  \link MainControl MainControl \endlink  object.
@@ -517,11 +517,11 @@ namespace BALL
 					<b>Note:</b> If this method is overriden, call this method at the end of the
 					new implementation to make sure the old messages are still catched properly. \par
 					Messages to be catched and the resulting reaction:
-					\begin{itemize}
-					  \item   \link NewCompositeMessage NewCompositeMessage \endlink  - update always necessary
-					  \item   \link RemovedCompositeMessage RemovedCompositeMessage \endlink  - update necessary if already inserted
-					  \item   \link ChangedCompositeMessage ChangedCompositeMessage \endlink  - update necessary if  \link Composite Composite \endlink  object has changed
-					\end{itemize}
+
+					  -   \link NewCompositeMessage NewCompositeMessage \endlink  - update always necessary
+					  -   \link RemovedCompositeMessage RemovedCompositeMessage \endlink  - update necessary if already inserted
+					  -   \link ChangedCompositeMessage ChangedCompositeMessage \endlink  - update necessary if  \link Composite Composite \endlink  object has changed
+					
 					@param   message a pointer to the  \link Message Message \endlink  object
 					@return  bool <tt>true</tt> if an update of {\em *this} control is necessary, <tt>false</tt> otherwise
 					@see     onNotify

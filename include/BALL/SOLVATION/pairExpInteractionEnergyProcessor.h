@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.16 2003/03/03 14:18:16 anhi Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.17 2003/03/14 11:49:53 sturm Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
@@ -50,7 +50,7 @@ namespace BALL
 			of a molecule.
 			This processor uses a 6-exp pair potential for the calculation of
 			dispersion and repulsion energies.  \par
-			<b>Definition:</b> BALL/SOLVATION/pairExpInteractionEnergyProcessor.h
+			
 	 */
 	
 	class PairExpInteractionEnergyProcessor

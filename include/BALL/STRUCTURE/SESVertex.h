@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESVertex.h,v 1.17 2003/03/03 14:18:19 anhi Exp $
+// $Id: SESVertex.h,v 1.18 2003/03/14 11:49:59 sturm Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -28,22 +28,22 @@ namespace BALL
 	class SESTriangulator;
 
 	/** Generic SESVertex Class.
-      <b>Definition:</b> BALL/STRUCTURE/SESVertex.h
+      
 	*/
 	class SESVertex : public GraphVertex< SESVertex,SESEdge,SESFace >
 	{
 		public:
 
 		/** @name Class friends
-				\begin{itemize}
-					\item class SESEdge
-					\item class SESFace
-					\item class SolventExcludedSurface
-					\item class SESComputer
-					\item class TSESSingulatityCleaner<double>
-					\item class TriangulatedSES
-					\item class SESTriangulator
-				\end{itemize}
+
+					- class SESEdge
+					- class SESFace
+					- class SolventExcludedSurface
+					- class SESComputer
+					- class TSESSingulatityCleaner<double>
+					- class TriangulatedSES
+					- class SESTriangulator
+				
 		*/
 		friend class SESEdge;
 		friend class SESFace;

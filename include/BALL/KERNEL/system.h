@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.28 2003/03/03 14:17:50 anhi Exp $
+// $Id: system.h,v 1.29 2003/03/14 11:49:12 sturm Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -54,7 +54,7 @@ namespace BALL
 	/** System class.
 			This class is used to represent a system, i.e., a collection
 			of molecules. \par
-			<b>Definition:</b>BALL/KERNEL/system.h
+			
 	*/
 	class System
 		: public AtomContainer

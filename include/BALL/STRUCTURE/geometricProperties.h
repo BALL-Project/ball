@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.h,v 1.17 2003/03/03 14:18:20 anhi Exp $
+// $Id: geometricProperties.h,v 1.18 2003/03/14 11:49:59 sturm Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -74,7 +74,7 @@ namespace BALL
 			The coordinates returned by  \link getLower getLower \endlink  and  \link getUpper getUpper \endlink  are only
 			valid, if the processor has been applied to a molecular object containing
 			atoms. \par
-			<b>Definition:</b> BALL/STRUCTURE/geometricProperties.h
+			
 			 \par
 	*/
 	class BoundingBoxProcessor
@@ -137,7 +137,7 @@ namespace BALL
 				\vec{C} = \frac{1}{N} \sum_{i}{N} \vec{r_i}
 			\]
 			Where $\vec{r_i}$ represents the coordinates of the ith atom. \par
-			<b>Definition:</b> BALL/STRUCTURE/geometricProperties.h
+			
 	*/
 	class GeometricCenterProcessor
 		:	public UnaryProcessor<Atom> 
@@ -195,7 +195,7 @@ namespace BALL
 			The reference fragment may either be given by a specialized constructor (also
 			together with the distance) or using  \link setFragment setFragment \endlink . \par
 			The fragment array is emptied prior to each collection run. \par
-			<b>Definition:</b> BALL/STRUCTURE/geometricProperties.h
+			
 			 \par
 	*/
 	class FragmentDistanceCollector

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomTypes.h,v 1.13 2003/03/03 14:17:59 anhi Exp $
+// $Id: atomTypes.h,v 1.14 2003/03/14 11:49:29 sturm Exp $
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
 #define BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -25,7 +25,7 @@ namespace BALL
 	class ForceFieldParameters;
 
 	/**	Force Field Atom Type Class. 
-			<b>Definition:</b> BALL/MOLMEC/PARAMETER/atomTypes.h
+			
 			Molecular Mechanics Parameter: class describing the atom type section of a parameter file.
 	*/
 	class AtomTypes

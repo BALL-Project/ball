@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileDialog.h,v 1.13 2003/03/03 14:18:26 anhi Exp $
+// $Id: fileDialog.h,v 1.14 2003/03/14 11:50:11 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
@@ -26,7 +26,7 @@ namespace BALL
 				what should be done with the selected file. With the method  \link exec exec \endlink 
 				{\em *this} fileDialog can be opened. If a file was selected the path and the file
 				name can be accessed with the methods  \link getPathName getPathName \endlink  and  \link getFileName getFileName \endlink .  \par
-				<b>Definition:</b> BALL/VIEW/GUI/DIALOGS/fileDialog.h
+				
 		*/
 		class FileDialog
 			: public QFileDialog,	public ModularWidget

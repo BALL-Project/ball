@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.11 2003/03/03 14:17:43 anhi Exp $
+// $Id: XYZFile.h,v 1.12 2003/03/14 11:49:01 sturm Exp $
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
@@ -35,7 +35,7 @@ namespace BALL
 			Similarly, on writing the system, it's name is written to this comment line.
 			All remaining lines contain the element symbol and the three coordinates
 			in free format.	 \par
-			<b>Definition:</b> BALL/FORMAT/XYZFile.h
+			
 	*/
 	class XYZFile
 		: public File

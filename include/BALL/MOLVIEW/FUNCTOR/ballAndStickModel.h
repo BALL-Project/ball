@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.15 2003/03/03 14:18:03 anhi Exp $
+// $Id: ballAndStickModel.h,v 1.16 2003/03/14 11:49:33 sturm Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
@@ -46,7 +46,7 @@ namespace BALL
 				openGL implementation.
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL
 				documentation.  \par
-				<b>Definition:</b> BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h
+				
 		*/
 		class AddBallAndStickModel: public AtomBondModelBaseProcessor
 		{
@@ -59,11 +59,11 @@ namespace BALL
 			/** Default Constructor.
 					Construct new addBallAndStickModel.
 					Set the appearance to:
-					\begin{itemize}
-					  \item  set the appearance to {\em ball and stick} model
-						\item  set the ball radius to <tt>0.4</tt>
-						\item  set the stick radius to <tt>0.2</tt>
-					\end{itemize}
+
+					  -  set the appearance to {\em ball and stick} model
+						-  set the ball radius to <tt>0.4</tt>
+						-  set the stick radius to <tt>0.2</tt>
+					
 					@return      AddBallAndStickModel new constructed addBallAndStickModel
 					@see         AtomBondModelBaseProcessor
 			*/
@@ -100,12 +100,12 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the state of {\em *this} addBallAndStickModel to:
-					\begin{itemize}
-					  \item  set the appearance to {\em ball and stick} model
-						\item  set the ball radius to <tt>0.4</tt>
-						\item  set the stick radius to <tt>0.2</tt>
-					  \item  clear the  \link BaseModelProcessor BaseModelProcessor \endlink 
-					\end{itemize}
+
+					  -  set the appearance to {\em ball and stick} model
+						-  set the ball radius to <tt>0.4</tt>
+						-  set the stick radius to <tt>0.2</tt>
+					  -  clear the  \link BaseModelProcessor BaseModelProcessor \endlink 
+					
 					Calls  \link AtomBondModelBaseProcessor::clear AtomBondModelBaseProcessor::clear \endlink .
 					@see  AtomBondModelBaseProcessor
 			*/

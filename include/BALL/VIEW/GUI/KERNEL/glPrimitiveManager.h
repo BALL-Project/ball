@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glPrimitiveManager.h,v 1.14 2003/03/03 14:18:28 anhi Exp $
+// $Id: glPrimitiveManager.h,v 1.15 2003/03/14 11:50:14 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -33,7 +33,7 @@ namespace BALL
 				 \link GLSimpleBoxDisplayLists_ GLSimpleBoxDisplayLists_ \endlink . It defines an interface that every display
 				list class must have.
 				This is an internally used class and should not be used in any programs.  \par
-				<b>Definition:</b>BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h
+				
 		*/
 		class GLDisplayListObject_
 		{
@@ -128,7 +128,7 @@ namespace BALL
 				It is derived from the class  \link GLDisplayListObject_ GLDisplayListObject_ \endlink  and creates the
 				different graphical visualizations of a sphere.
 				This is an internally used class and should not be used in any programs.  \par
-				<b>Definition:</b>BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h
+				
 		*/
 		class GLSphereDisplayLists_: public GLDisplayListObject_
 		{
@@ -141,9 +141,9 @@ namespace BALL
 			/** Default Constructor.
 					Construct new glSphereDisplayList_.
 					The state of {\em *this} glSphereDisplayList_ is:
-					\begin{itemize}
-					  \item no display lists allocated
-					\end{itemize}
+
+					  - no display lists allocated
+					
 			*/
  			GLSphereDisplayLists_()
 				throw();
@@ -263,7 +263,7 @@ namespace BALL
 				It is derived from the class  \link GLDisplayListObject_ GLDisplayListObject_ \endlink  and creates the
 				different graphical visualizations of a tube.
 				This is an internally used class and should not be used in any programs.  \par
-				<b>Definition:</b>BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h
+				
 		*/
 		class GLTubeDisplayLists_: public GLDisplayListObject_
 		{
@@ -276,9 +276,9 @@ namespace BALL
 			/** Default Constructor.
 					Construct new glTubeDisplayList_.
 					The state of {\em *this} glTubeDisplayList_ is:
-					\begin{itemize}
-					  \item no display lists allocated
-					\end{itemize}
+
+					  - no display lists allocated
+					
 			*/
 			GLTubeDisplayLists_()
 				throw();
@@ -381,7 +381,7 @@ namespace BALL
 				It is derived from the class  \link GLDisplayListObject_ GLDisplayListObject_ \endlink  and creates the
 				different graphical visualizations of a simpleBox.
 				This is an internally used class and should not be used in any programs.  \par
-				<b>Definition:</b>BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h
+				
 		*/
 		class GLSimpleBoxDisplayLists_: public GLDisplayListObject_
 		{
@@ -394,9 +394,9 @@ namespace BALL
 			/** Default Constructor.
 					Construct new glSimpleBoxDisplayList_.
 					The state of {\em *this} glSimpleBoxDisplayList_ is:
-					\begin{itemize}
-					  \item no display lists allocated
-					\end{itemize}
+
+					  - no display lists allocated
+					
 			*/
 			GLSimpleBoxDisplayLists_()
 				throw();
@@ -507,7 +507,7 @@ namespace BALL
 				Further it provides methods for naming and accessing  \link GeometricObject GeometricObject \endlink  objects.
 				This mechanism is used by the class  \link Scene Scene \endlink  to name all primitives to identify them
 				when picked.  \par
-				<b>Definition:</b>BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h
+				
 		*/
 		class GLPrimitiveManager
 		{
@@ -526,12 +526,12 @@ namespace BALL
 			/** Default Constructor.
 					Construct new glPrimitiveManager.
 					The state of {\em *this} glPrimitiveManager is:
-					\begin{itemize}
-					  \item sphere display lists empty
-					  \item tube display lists empty
-					  \item simpleBox display lists empty
-					  \item name management empty
-					\end{itemize}
+
+					  - sphere display lists empty
+					  - tube display lists empty
+					  - simpleBox display lists empty
+					  - name management empty
+					
 					@see     GLSphereDisplayLists_
 					@see     GLTubeDisplayLists_
 					@see     GLSimpleBoxDisplayLists_

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionTree.h,v 1.6 2003/03/03 14:17:47 anhi Exp $
+// $Id: expressionTree.h,v 1.7 2003/03/14 11:49:07 sturm Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONTREE_H
 #define BALL_KERNEL_EXPRESSIONTREE_H
@@ -17,7 +17,7 @@ namespace BALL
 			Represents the logical tree of an Expression. This is the backend of
 			Expression.
 			 \par
-			<b>Definition:</b> BALL/KERNEL/expressionTree.h
+			
 			@see Expression
 		 	 \addtogroup  Kernel
 	*/

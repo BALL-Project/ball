@@ -26,7 +26,7 @@ namespace BALL
 				of the  \link MainControl MainControl \endlink .
 				{\em *this} mainControlPreferences will be created in the  \link MainControl MainControl \endlink 
 				object and will be inserted into the  \link Preferences Preferences \endlink  dialog.
-				<b>Definition:</b> BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h
+				
 		*/
 		class MainControlPreferences : public QWidget
 		{

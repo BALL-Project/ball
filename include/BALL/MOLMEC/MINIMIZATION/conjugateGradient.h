@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.19 2003/03/12 16:11:49 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.20 2003/03/14 11:49:28 sturm Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -57,7 +57,7 @@ namespace BALL
      *  @{
      */
 	/**	Conjugate gradient (CG) minimizer. 
-			<b>Definition:</b> BALL/MOLMEC/MINIMIZATION/conjugateGradient.h
+			
 			A conjugate gradient minimizer for geometry optimisation.
 	*/
   class ConjugateGradientMinimizer 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.14 2003/03/03 14:18:08 anhi Exp $
+// $Id: molecularControl.h,v 1.15 2003/03/14 11:49:42 sturm Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -40,7 +40,7 @@ namespace BALL
 				only with  \link System System \endlink  objects. Further the internal selection mechanism
 				is reimplemented to work on molecular objects instead of  \link GeometricObject GeometricObject \endlink 
 				objects.  \par
-				<b>Definition:</b> BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h
+				
 		*/
 		class MolecularControl
 			: public VIEW::Control
@@ -204,11 +204,11 @@ namespace BALL
 			/** Message handling.
 					Catches the  \link Message Message \endlink  objects and reacts accordingly to the different
 					messages.
-					\begin{itemize}
-					  \item   \link NewMolecularMessage NewMolecularMessage \endlink  - update always necessary
-					  \item   \link RemovedCompositeMessage RemovedCompositeMessage \endlink  - update necessary if already inserted
-					  \item   \link ChangedCompositeMessage ChangedCompositeMessage \endlink  - update necessary if  \link Composite Composite \endlink  object has changed
-					\end{itemize}
+			
+					  -   \link NewMolecularMessage NewMolecularMessage \endlink  - update always necessary
+					  -   \link RemovedCompositeMessage RemovedCompositeMessage \endlink  - update necessary if already inserted
+					  -   \link ChangedCompositeMessage ChangedCompositeMessage \endlink  - update necessary if  \link Composite Composite \endlink  object has changed
+					
 					@param   message a pointer to the  \link Message Message \endlink  object
 					@return  bool <tt>true</tt> if an update of {\em *this} molecularControl is necessary, <tt>false</tt> otherwise
 					@see     onNotify

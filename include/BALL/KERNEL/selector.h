@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.h,v 1.21 2003/03/03 14:17:50 anhi Exp $
+// $Id: selector.h,v 1.22 2003/03/14 11:49:11 sturm Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -30,7 +30,7 @@ namespace BALL
      */
 	/**	@name	Kernel Object Selection.
 			These classes allow the convenient selection of kernel objects. \par
-			<b>Definition:</b>BALL/KERNEL/selector.h
+			
 	*/
 	//@{
 	class Selector

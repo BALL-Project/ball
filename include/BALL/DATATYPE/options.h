@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.17 2003/03/03 14:17:39 anhi Exp $
+// $Id: options.h,v 1.18 2003/03/14 11:48:55 sturm Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -36,7 +36,7 @@ namespace BALL
 				results of calculations can be given, retrieved, stored into a file
 				and retrieved from a file.  This simplifies the handling of such
 				complex parameter sets. \par
-				<b>Definition:</b> BALL/DATATYPE/options.h
+				
 	*/
 	class Options
 		: public StringHashMap<String> 
@@ -297,10 +297,10 @@ namespace BALL
 					Lines starting with '\#', '!', or ';' are ignored and may be used
 					as comments. \par
 					@param	filename the name of the file to be read
-					@return	bool	\begin{itemize}
-													\item <b>true</b> if the file could be read
-													\item <b>false</b> otherwise
-												\end{itemize}
+					@return	bool
+													- <b>true</b> if the file could be read
+													- <b>false</b> otherwise
+												
 		*/
 		bool readOptionFile(const String& filename) throw();
 
@@ -309,10 +309,10 @@ namespace BALL
 					If the file could not be opened, the method returns false.
 					The option table's name is writen in a line starting with '!'.
 					@param	filename the name of the file to write
-					@return	bool	\begin{itemize}
-													\item <b>true</b> if the file could be writen
-													\item <b>false</b> otherwise
-												\end{itemize}
+					@return	bool
+													- <b>true</b> if the file could be writen
+													- <b>false</b> otherwise
+												
 					@see readOptionFile
 		*/		
 		bool writeOptionFile(const String& filename) const throw();

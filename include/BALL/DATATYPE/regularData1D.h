@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.28 2003/03/03 14:17:40 anhi Exp $
+// $Id: regularData1D.h,v 1.29 2003/03/14 11:48:55 sturm Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -25,7 +25,7 @@ namespace BALL
 			equally spaced values. The data can be accessed in the same way as data of an STL vector
 			(i.e., using operator [] and iterators).
 			 \par
-			<b>Definition:</b> BALL/DATATYPE/regularData1D.h
+			
 	*/
 	template <typename T>
 	class TRegularData1D

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.12 2003/03/03 14:18:27 anhi Exp $
+// $Id: glDisplayList.h,v 1.13 2003/03/14 11:50:13 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
@@ -28,7 +28,7 @@ namespace BALL
 				It defines some useful methods for easy creation of a display list and
 				handles errors that can occur when using display lists. See the OpenGL
 				defintion of display lists for further information concerning display lists. \par
-				<b>Definition:</b> BALL/VIEW/GUI/KERNEL/glDisplayList.h
+				
 		*/
 		class GLDisplayList
 		{
@@ -109,10 +109,10 @@ namespace BALL
 					There is no copy constructor because the OpenGL display lists
 					cannot be copied.
 					The state of {\em *this} glDisplayList is set to:
-					\begin{itemize}
-					  \item display list empty
-						\item use compile mode instead of compile and execute mode
-					\end{itemize}
+
+					  - display list empty
+						- use compile mode instead of compile and execute mode
+					
 					@return      GLDisplayList new constructed glDisplayList
 			*/
 			GLDisplayList()

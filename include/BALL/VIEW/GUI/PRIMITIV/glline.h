@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glline.h,v 1.12 2003/03/03 14:18:29 anhi Exp $
+// $Id: glline.h,v 1.13 2003/03/14 11:50:16 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLINE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLINE_H
@@ -36,7 +36,7 @@ namespace BALL
 				The drawing method from  \link GLObject GLObject \endlink  is overridden to visualize the
 				line. OpenGL code is used for the visualization.
 				See these classes for further information.
-				<b>Definition:</b> BALL/VIEW/GUI/PRIMITIV/glline.h
+				
 		*/
 		class GLLine
 			: public Line,

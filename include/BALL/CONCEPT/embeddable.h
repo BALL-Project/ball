@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.h,v 1.10 2003/03/03 14:17:35 anhi Exp $
+// $Id: embeddable.h,v 1.11 2003/03/14 11:48:47 sturm Exp $
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #define BALL_CONCEPT_EMBEDDABLE_H
@@ -38,7 +38,7 @@ namespace BALL
 			This class defines a common interface for all classes that
 			have to be accessible from an embedded Python interpreter.
 			 \par
-			<b>Definition:</b> BALL/CONCEPT/embeddable.h
+			
 			 \par
 			@see PyInterpreter
 			@see MainControl
