@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.11 2000/05/23 14:21:34 oliver Exp $
+// $Id: string.h,v 1.12 2000/06/15 13:55:04 anker Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -37,6 +37,7 @@ namespace BALL
 
 	/**	@name	String.
 			An improved version of STL string.
+			{\bf Definition:} \URL{BALL/DATATYPE/string.h}
 	*/
 	//@{
 
