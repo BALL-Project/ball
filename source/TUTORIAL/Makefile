@@ -1,9 +1,12 @@
-# $Id: Makefile,v 1.6 2002/01/12 21:22:44 anker Exp $
+# $Id: Makefile,v 1.7 2002/01/15 00:41:21 oliver Exp $
 #========================
 # BALL/TUTORIAL Makefile
 #========================
 
-EXECUTABLES=tutorial1 tutorial2
+EXECUTABLES=\
+	tutorial1\
+	tutorial2\
+	tutorial3
 
 all:	$(EXECUTABLES)
 
@@ -19,6 +22,9 @@ tutorial1:	tutorial1.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 tutorial2:	tutorial2.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+tutorial3:	tutorial3.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 bounding_box:	bounding_box.o glBoundingBoxModel.o
