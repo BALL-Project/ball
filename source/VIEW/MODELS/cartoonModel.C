@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.34 2005/01/24 13:38:58 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.35 2005/01/28 14:54:42 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -183,12 +183,19 @@ void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 						}
 					}
 
-					if (!C || !nextN) break;
+					// now compute the spline point for this residue
+					Vector3 sv;
+					if (!nextN) 
+					{
+						sv = C->getPosition();
+					}
+					else
+					{
+						// we take the point between the current C (C) and the next N (nextN)
+						sv = C->getPosition() + (nextN->getPosition() - C->getPosition()) * 0.5;
+					}
 
-					// now compute the two spline points corresponding to this
-					// amino acid: we take the point between the current N (N) and the C atom (C)
-					const Vector3 sv = C->getPosition() + (nextN->getPosition() - C->getPosition()) * 0.5;
-					spline_vector_.push_back(SplinePoint(sv, nextN));	
+					spline_vector_.push_back(SplinePoint(sv, C));	
 					break;
 				}
 			}
@@ -434,7 +441,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	// iterate over all but the last amino acid (last amino acid becomes the arrow)
 	Position spline_point_nr = start;
 	Position res = 0;
-	const Position nr_res = ss.countResidues() - 2;
+	const Position nr_res = ss_nr_splines_[&ss] - 2;
 	for (; res < nr_res; res++)
 	{
 		if (res != 0) 
@@ -599,16 +606,16 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 
 	else if (ss.getType() == SecondaryStructure::HELIX)
 	{
+		Size start = ss_to_spline_start_[&ss];
 		if (draw_ribbon_)
 		{
-			Size start = ss_to_spline_start_[&ss];
-			drawRibbon_(start 											 * interpolation_steps_, 
-								 (start + ss_nr_splines_[&ss]) * interpolation_steps_);
-			last_spline_point_ = (ss_to_spline_start_[&ss] + ss_nr_splines_[&ss]) * interpolation_steps_ - 2;
+			Size end = start + ss_nr_splines_[&ss];
+			drawRibbon_(start * interpolation_steps_, 
+								  end 	* interpolation_steps_);
+			last_spline_point_ = end * interpolation_steps_ - 2;
 		}
 		else
 		{
-			Position start = ss_to_spline_start_[&ss];
 			buildGraphicalRepresentation_(last_spline_point_, (start	+ 1)* interpolation_steps_);
 
 			drawHelix_(ss);
@@ -742,14 +749,25 @@ void AddCartoonModel::drawStrand_(const Vector3& start,
 void AddCartoonModel::drawRibbon_(Size start, Size end)
 	throw()
 {
+	// sanity tests:
 	if (spline_points_.size() == 0) return;
-	if (spline_points_.size() != atoms_of_spline_points_.size() ||
-												end >= atoms_of_spline_points_.size() ||
-											start >= atoms_of_spline_points_.size() )
+	if (spline_points_.size() != atoms_of_spline_points_.size())
 	{
 		Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl;
 		return;
 	}
+
+	if (start >= atoms_of_spline_points_.size())
+	{
+		Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl;
+		return;
+	}
+
+	if (end >= atoms_of_spline_points_.size())
+	{
+		end = atoms_of_spline_points_.size() - 1;
+	}
+
 
 	if (last_spline_point_ != -1)
 	{
