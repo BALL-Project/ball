@@ -82,13 +82,9 @@ void DlgLabelProperties::onNotify(Message *message)
 	// selection => store last selection for later processing
 	if (RTTI::isKindOf<MolecularSelectionMessage>(*message))
 	{
-		cerr << "label: got molecular message" << endl;
-
 		MolecularSelectionMessage *selection = RTTI::castTo<MolecularSelectionMessage>(*message);
 
 		selection_ = selection->getSelection();
-
-		cerr << "size: " << selection_.size() << endl;
 	}
 
 	// disabled apply button, if selection is empty
@@ -123,7 +119,7 @@ void DlgLabelProperties::applyButtonClicked()
 	List<Composite*>::Iterator list_it = selection_.begin();
 	for (; list_it != selection_.end(); ++list_it)
 	{
-		(**list_it).apply(*((UnaryProcessor<Composite>*)&center_processor));
+		(*list_it)->apply(center_processor);
 
 		center += center_processor.getCenter();
 		++number_of_objects;
@@ -134,9 +130,7 @@ void DlgLabelProperties::applyButtonClicked()
 		center /= number_of_objects;
 	}
 
-	cerr << number_of_objects << "  " << center << endl;
-
-	// 	center.x += 0.05;
+	center.x += 0.05;
 
 	// create Label and attach it to the first object in the selection
 	GLLabel* label = new GLLabel;
