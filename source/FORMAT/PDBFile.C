@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: PDBFile.C,v 1.2 1999/09/21 12:23:05 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -332,8 +332,7 @@ namespace BALL
 		return true;
 	}
 
-	bool  
-	PDBFile::readRecordTER
+	bool PDBFile::readRecordTER
 		(PDB::Integer /* serial_number */,
 		 PDB::ResidueName /* residue_name */,
 		 PDB::Character /* chain_ID */,
@@ -746,52 +745,50 @@ namespace BALL
 				
 				if (current_sec_struc->hasProperty(SecondaryStructure::PROPERTY__TURN) == true)
 				{
-		residue_it = current_sec_struc->beginResidue();
-		if (residue_it.isEnd())
-		{
-			continue;
-		}
-		reverse_residue_it = current_sec_struc->rbeginResidue();
+					residue_it = current_sec_struc->beginResidue();
+					if (residue_it.isEnd())
+					{
+						continue;
+					}
+					reverse_residue_it = current_sec_struc->rbeginResidue();
 
-		current_sec_struc->getName().get(PDB_secstruc_name, 0, 4);
+					current_sec_struc->getName().get(PDB_secstruc_name, 0, 4);
 
-		residue[0] = &(*residue_it);
-		residue[1] = &(*reverse_residue_it);
-		residue[0]->getName().get(PDB_residue_name[0], 0, 4);
-		residue[1]->getName().get(PDB_residue_name[1], 0, 4);
+					residue[0] = &(*residue_it);
+					residue[1] = &(*reverse_residue_it);
+					residue[0]->getName().get(PDB_residue_name[0], 0, 4);
+					residue[1]->getName().get(PDB_residue_name[1], 0, 4);
 
-		for (length_of_secstruc = 1;
-				 !residue_it.isEnd()
-					 && residue_it != reverse_residue_it;
-				 ++length_of_secstruc,
-					 ++residue_it)
-		{
-		}
-		
-		chain_name = current_chain_->getName().c_str()[0];
-		if (chain_name == 0)
-		{
-			chain_name = BALL_CHAIN_DEFAULT_NAME;
-		}
+					for (length_of_secstruc = 1;
+							 !residue_it.isEnd() && residue_it != reverse_residue_it;
+							 ++length_of_secstruc, ++residue_it)
+					{
+					}
+					
+					chain_name = current_chain_->getName().c_str()[0];
+					if (chain_name == 0)
+					{
+						chain_name = BALL_CHAIN_DEFAULT_NAME;
+					}
 
-		
-		sprintf(line_buffer, 
-			record_type_format_[PDB::RECORD_TYPE__TURN].format_string,
-			record_type_format_[PDB::RECORD_TYPE__TURN].string,
-			++number_of_turn_records,
-			PDB_secstruc_name,
-			PDB_residue_name[0],
-			chain_name,
-			residue[0]->getID().toLong(),
-			residue[0]->getInsertionCode(),
-			PDB_residue_name[1],
-			chain_name,
-			residue[1]->getID().toLong(),
-			residue[1]->getInsertionCode(),
-			""); // comment not supported, yet
-				
-		line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-		File::getFileStream() << line_buffer << endl;
+					
+					sprintf(line_buffer, 
+						record_type_format_[PDB::RECORD_TYPE__TURN].format_string,
+						record_type_format_[PDB::RECORD_TYPE__TURN].string,
+						++number_of_turn_records,
+						PDB_secstruc_name,
+						PDB_residue_name[0],
+						chain_name,
+						residue[0]->getID().toLong(),
+						residue[0]->getInsertionCode(),
+						PDB_residue_name[1],
+						chain_name,
+						residue[1]->getID().toLong(),
+						residue[1]->getInsertionCode(),
+						""); // comment not supported, yet
+							
+					line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+					File::getFileStream() << line_buffer << endl;
 				}
 			}
 		}
@@ -802,8 +799,8 @@ namespace BALL
 
     BALL_FOREACH_BOND(*protein, atom_it, bond_it)
 		{
-			residue[0] = (Residue *)((*bond_it).getFirstAtom()->Composite::getAncestor(RTTI<Residue>::getDefault()));
-			residue[1] = (Residue *)((*bond_it).getSecondAtom()->Composite::getAncestor(RTTI<Residue>::getDefault()));
+			residue[0] = (Residue*)((*bond_it).getFirstAtom()->Composite::getAncestor(RTTI<Residue>::getDefault()));
+			residue[1] = (Residue*)((*bond_it).getSecondAtom()->Composite::getAncestor(RTTI<Residue>::getDefault()));
 
 			if (residue[0] == 0 || residue[1] == 0
 					|| residue[0] == residue[1]
@@ -818,17 +815,25 @@ namespace BALL
 
       if (residue[0]->getChain() != 0)
       {
-        chain_name = current_chain_->getName().c_str()[0];
-				if (chain_name == 0)
+        chain_name = residue[0]->getChain()->getName().c_str()[0];
+				if (chain_name == (char)0)
 				{
 					chain_name = BALL_CHAIN_DEFAULT_NAME;
 				}
-      } 
-			else 
-			{
+      } else {
         chain_name = BALL_CHAIN_DEFAULT_NAME;
       }
-
+			char chain_name_B;
+      if (residue[1]->getChain() != 0)
+      {
+        chain_name_B = residue[1]->getChain()->getName().c_str()[0];
+				if (chain_name_B == (char)0)
+				{
+					chain_name_B = BALL_CHAIN_DEFAULT_NAME;
+				}
+      } else {
+        chain_name_B = BALL_CHAIN_DEFAULT_NAME;
+      }
 
 			sprintf(line_buffer, 
 				record_type_format_[PDB::RECORD_TYPE__SSBOND].format_string,
@@ -839,7 +844,7 @@ namespace BALL
 				residue[0]->getID().toLong(),
 				residue[0]->getInsertionCode(),
 				PDB_residue_name[1],
-				chain_name,
+				chain_name_B,
 				residue[1]->getID().toLong(),
 				residue[1]->getInsertionCode(),
 				0L,  // Symmetry operator for 1st residue not supported, yet
@@ -960,7 +965,7 @@ namespace BALL
 				if (chain_name == 0)
 				{
 					chain_name = BALL_CHAIN_DEFAULT_NAME;
-					}
+				}
 
 				sprintf(line_buffer, 
 					record_type_format_[PDB::RECORD_TYPE__TER].format_string,
