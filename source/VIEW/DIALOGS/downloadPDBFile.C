@@ -163,6 +163,8 @@ void DownloadPDBFile::threadedDownload_(const String& url)
 	while (thread_->running())
 	{
 		qApp->processEvents();
+		/// currently not working: ....
+		/*
 		try
 		{
 			setStatusbarText("Downloaded: " + String(File::getSize(thread_->getFilename())));
@@ -170,6 +172,7 @@ void DownloadPDBFile::threadedDownload_(const String& url)
 		catch(...)
 		{
 		}
+		*/
 		thread_->wait(100);
 	}
 
