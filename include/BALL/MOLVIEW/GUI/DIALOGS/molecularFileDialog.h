@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.h,v 1.2 2002/12/12 09:48:50 oliver Exp $
+// $Id: molecularFileDialog.h,v 1.3 2002/12/15 14:03:59 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
@@ -135,8 +135,13 @@ namespace BALL
 			 */
 			bool readMOL2File(String filename, String system_name)
 				throw();
-
 			//@}
+			
+			protected:
+
+			bool finish_(const String& filename, const String& system_name, System* system)
+				throw();
+
 		};
 
 	} // namespace MOLVIEW
