@@ -1,5 +1,6 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.7 2000/10/23 10:24:52 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.8 2000/11/06 18:03:12 anker Exp $
 
+#include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
@@ -22,10 +23,6 @@ namespace BALL
 		= "rdf_filename";
 	const char* Pair6_12InteractionEnergyProcessor::Option::SOLVENT_FILENAME
 		= "solvent_filename";
-	const char* Pair6_12InteractionEnergyProcessor::Option::SOLVENT_NUMBER_DENSITY 
-		= "solvent_number_density";
-	const char* Pair6_12InteractionEnergyProcessor::Option::RADIUS_RULE_FILE
-		= "radius_rule_file";
 	const char* Pair6_12InteractionEnergyProcessor::Option::SURFACE_TYPE
 		= "surface_type";
 	const char* Pair6_12InteractionEnergyProcessor::Option::SURFACE_FILENAME
@@ -35,13 +32,9 @@ namespace BALL
 	const int Pair6_12InteractionEnergyProcessor::Default::VERBOSITY = 1;
 	const bool Pair6_12InteractionEnergyProcessor::Default::USE_RDF = false;
 	const char* Pair6_12InteractionEnergyProcessor::Default::RDF_FILENAME
-		= "rdf.ini";
+		= "data/solvation/RDF-AMBER.ini";
 	const char* Pair6_12InteractionEnergyProcessor::Default::SOLVENT_FILENAME
-		= "solvent.ini";
-	const float Pair6_12InteractionEnergyProcessor::Default::SOLVENT_NUMBER_DENSITY 
-		= 3.33253e-2;
-	const char* Pair6_12InteractionEnergyProcessor::Default::RADIUS_RULE_FILE
-		= "radius.rul";
+		= "data/solvents/PCM-water.ini";
 	const int Pair6_12InteractionEnergyProcessor::Default::SURFACE_TYPE
 		= SURFACE__SAS;
 	const char* Pair6_12InteractionEnergyProcessor::Default::SURFACE_FILENAME
@@ -59,10 +52,6 @@ namespace BALL
 		options.setDefaultInteger(Option::USE_RDF, Default::USE_RDF);
 		options.setDefault(Option::RDF_FILENAME, Default::RDF_FILENAME);
 		options.setDefault(Option::SOLVENT_FILENAME, Default::SOLVENT_FILENAME);
-		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, 
-				Default::SOLVENT_NUMBER_DENSITY);
-		options.setDefault(Option::RADIUS_RULE_FILE,
-				Default::RADIUS_RULE_FILE);
 		options.setDefault(Option::SURFACE_TYPE, Default::SURFACE_TYPE);
 		options.setDefault(Option::SURFACE_FILENAME, Default::SURFACE_FILENAME);
 	}
@@ -128,18 +117,23 @@ namespace BALL
 	bool Pair6_12InteractionEnergyProcessor::finish() throw()
 	{
 
-		// first check for user settings
-
 		// how loud will we cry?
 		int verbosity = (int) options.getInteger(Option::VERBOSITY);
 		// this is the flag stating whether the rdf information should be used
 		bool use_rdf = options.getBool(Option::USE_RDF);
 		// the file containing the rdf descriptions
-		String rdf_filename = options.get(Option::RDF_FILENAME);
+		Path path;
+		String rdf_filename = path.find(options.get(Option::RDF_FILENAME));
+		if (rdf_filename == "")
+		{
+			rdf_filename = options.get(Option::RDF_FILENAME);
+		}
 		// the file contacining the solvent description
-		String solvent_filename = options.get(Option::SOLVENT_FILENAME);
-		// rho is the number density of the solvent (i. e. water) [1/m^3]
-		double rho = options.getReal(Option::SOLVENT_NUMBER_DENSITY) * 1e30;
+		String solvent_filename = path.find(options.get(Option::SOLVENT_FILENAME));
+		if (solvent_filename == "")
+		{
+			solvent_filename = options.get(Option::SOLVENT_FILENAME);
+		}
 		int surface_type = options.getInteger(Option::SURFACE_TYPE);
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
 
@@ -155,7 +149,8 @@ namespace BALL
 		}
 		SolventDescriptor solvent_descriptor 
 			= solvent_parameter_section.getSolventDescriptor();
-		rho = solvent_descriptor.getNumberDensity();
+		// rho is the number density of the solvent (i. e. water) [1/m^3]
+		double rho = solvent_descriptor.getNumberDensity();
 		if (verbosity > 0)
 		{
 			Log.info() << "Using a number density of " << rho 
@@ -166,6 +161,24 @@ namespace BALL
 		ForceFieldParameters rdf_ff_param;
 		if (use_rdf)
 		{
+			// check whether there is an option set for the integration method
+			rdf_integrator_.options.setInteger
+				(Pair6_12RDFIntegrator::Option::VERBOSITY, verbosity);
+			int method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
+			if (method != Pair6_12RDFIntegrator::METHOD__UNKNOWN)
+			{
+				Log.info() << "method: " << method << endl;
+				rdf_integrator_.options.setInteger
+					(Pair6_12RDFIntegrator::Option::METHOD, method);
+				int samples =
+					options.getInteger(Pair6_12RDFIntegrator::Option::SAMPLES);
+				if (samples != 0)
+				{
+					rdf_integrator_.options.setInteger
+						(Pair6_12RDFIntegrator::Option::SAMPLES, samples);
+				}
+			}
+
 			rdf_ff_param.setFilename(rdf_filename);
 			rdf_ff_param.init();
 
@@ -329,12 +342,13 @@ namespace BALL
 				B_ij = values.B;
 
 				// DEBUG
-				/*
-				Log.info() << "A_ij (" << solute_iterator->getElement().getSymbol() <<
-					"," << solvent_atom.element_symbol << "): " << A_ij << endl;
-				Log.info() << "B_ij (" << solute_iterator->getElement().getSymbol() <<
-					"," << solvent_atom.element_symbol << "): " << B_ij << endl;
-				*/
+				if (verbosity > 9)
+				{
+					Log.info() << "A_ij (" << solute_iterator->getElement().getSymbol() <<
+						"," << solvent_atom.element_symbol << "): " << A_ij << endl;
+					Log.info() << "B_ij (" << solute_iterator->getElement().getSymbol() <<
+						"," << solvent_atom.element_symbol << "): " << B_ij << endl;
+				}
 
 
 				// iterate over all surface points
@@ -354,9 +368,11 @@ namespace BALL
 						{
 
 							// DEBUG
-							/*
-							Log.info() << "vertex.size() = " << current_surface.vertex.size() << endl;
-							*/
+							if (verbosity > 9)
+							{
+								Log.info() << "vertex.size() = " 
+									<< current_surface.vertex.size() << endl;
+							}
 							// r_k_vec is the vector from the center of the considered atom to
 							// the center of the current surface area
 							r_k_vec = (current_surface.vertex[k] - atom_center);
@@ -366,17 +382,20 @@ namespace BALL
 
 							if (use_rdf)
 							{
-								float A = (atom_center - sphere_center).getSquareLength();
-								float B = (current_surface.vertex[k] - atom_center).getLength();
-								float C = 
+								// compute the constants for the projection of the
+								// integration point onto the ray starting from the sphere
+								// center and running through the center of the current
+								// surface portion.
+
+								double A = 
+									(atom_center - sphere_center).getSquareLength();
+								double B = 
+									(current_surface.vertex[k] - atom_center).getLength();
+								double C = 
 									(sphere_center - current_surface.vertex[k]).getSquareLength();
 
-								float k1 = (B*B + A - C) / B;
-								float k2 = A;
-
-								// DEBUG
-								// A_ij = B_ij = rho = 1.0;
-								// k1 = k2 = 0.0;
+								double k1 = (C - A - B*B) / B;
+								double k2 = A;
 
 								rdf_integrator_.setConstants(A_ij, B_ij, k1, k2);
 								rdf_integrator_.setRDF(rdf_parameter_.getRDF(type_i, type_j));
@@ -389,22 +408,22 @@ namespace BALL
 								e_ij -= rho * rdf_integrator_(r_k)
 									* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
 
-
-								// DEBUG
-								/*
-								Log.info() << "sphere_center = " << sphere_center << endl;
-								Log.info() << "atom_center = " << atom_center << endl;
-								Log.info() << "A = " << A << endl;
-								Log.info() << "B = " << B << endl;
-								Log.info() << "C = " << C << endl;
-								Log.info() << "k1 = " << k1 << ", k2 = " << k2 << endl;
-								Log.info() << "rho = " << rho << endl;
-								Log.info() << "r_k = " << r_k << endl;
-								Log.info() << "r_k_vec * n_k_vec = " << r_k_vec * n_k_vec << endl;
-								Log.info() << "rdf_integrator_(r_k) = " 
-									<< rdf_integrator_(r_k) << endl;
-								Log.info() << "e_ij = " << e_ij << endl;
-								*/
+								if (verbosity > 9)
+								{
+									Log.info() << "sphere_center = " << sphere_center << endl;
+									Log.info() << "atom_center = " << atom_center << endl;
+									Log.info() << "A = " << A << endl;
+									Log.info() << "B = " << B << endl;
+									Log.info() << "C = " << C << endl;
+									Log.info() << "k1 = " << k1 << ", k2 = " << k2 << endl;
+									Log.info() << "rho = " << rho << endl;
+									Log.info() << "r_k = " << r_k << endl;
+									Log.info() << "r_k_vec * n_k_vec = " << r_k_vec * n_k_vec 
+										<< endl;
+									Log.info() << "rdf_integrator_(r_k) = " 
+										<< rdf_integrator_(r_k) << endl;
+									Log.info() << "e_ij = " << e_ij << endl;
+								}
 
 								if (verbosity > 0)
 								{
@@ -437,19 +456,21 @@ namespace BALL
 									e_ij_R += rho * A_ij * I_rep;
 									e_ij_D += - rho * B_ij * I_disp;
 								}
-								/*
-								// DEBUG
-								Log.info() << "rho = " << rho << endl;
-								Log.info() << "r_k_vec = " << r_k_vec << endl;
-								Log.info() << "r_k = " << r_k << endl;
-								Log.info() << "n_k_vec = " << n_k_vec << endl;
-								Log.info() << "r_k_vec * n_k_vec = " << r_k_vec * n_k_vec << endl;
-								Log.info() << "I_rep = " << I_rep << endl;
-								Log.info() << "I_disp = " << I_disp << endl;
-								Log.info() << "e_ij = " << e_ij << endl;
-								Log.info() << "e_ij_R = " << e_ij_R << endl;
-								Log.info() << "e_ij_D = " << e_ij_D << endl;
-								*/
+								if (verbosity > 9)
+								{
+									// DEBUG
+									Log.info() << "rho = " << rho << endl;
+									Log.info() << "r_k_vec = " << r_k_vec << endl;
+									Log.info() << "r_k = " << r_k << endl;
+									Log.info() << "n_k_vec = " << n_k_vec << endl;
+									Log.info() << "r_k_vec * n_k_vec = " << r_k_vec * n_k_vec 
+										<< endl;
+									Log.info() << "I_rep = " << I_rep << endl;
+									Log.info() << "I_disp = " << I_disp << endl;
+									Log.info() << "e_ij = " << e_ij << endl;
+									Log.info() << "e_ij_R = " << e_ij_R << endl;
+									Log.info() << "e_ij_D = " << e_ij_D << endl;
+								}
 							} 
 						} // surface
 					} // sphere
