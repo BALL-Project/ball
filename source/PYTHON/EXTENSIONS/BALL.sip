@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.35 2004/02/12 16:18:09 amoll Exp $
+// $Id: BALL.sip,v 1.36 2004/04/16 13:44:31 amoll Exp $
 //
 //
 //
@@ -335,6 +335,7 @@
 %Include modularWidget.sip
 %Include pyWidget.sip
 %Include scene.sip
+%Include molecularStructure.sip
 
 // Makefile
 //%Include Makefile.sip
