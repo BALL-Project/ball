@@ -15,18 +15,16 @@ namespace BALL
 	namespace VIEW
 	{
 
-SnapshotVisualisationDialog::SnapshotVisualisationDialog(QWidget* parent,  const char* name)
-	: SnapshotVisualisationDialogData(parent, name),//, modal, fl),
+SnapshotVisualisationDialog::SnapshotVisualisationDialog(QWidget* parent, const char* name)
+	: SnapshotVisualisationDialogData(parent, name),
 		ModularWidget(name),
-		snap_shot_manager_(0),
-		init_(true)
+		snap_shot_manager_(0)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new SnapshotVisualisationDialog" << this << std::endl;
 #endif
 	tmp_.setNum(1);
 	ModularWidget::registerWidget(this);
-	init_ = false;
 }
 
 SnapshotVisualisationDialog::~SnapshotVisualisationDialog() throw()
@@ -99,9 +97,8 @@ void SnapshotVisualisationDialog::animateClicked()
 	bool forward = true;
 	QProgressDialog progress("SnapShot Visualisation", "Abort Animation", tempo, 0, "progress", true);
 	
-	for (Size i = getStartSnapshot(); i < tempo && 
-			!error_ &&
-			!progress.wasCancelled(); )
+	for (Size i = getStartSnapshot(); 
+			 i < tempo && !error_ && !progress.wasCancelled(); )
 	{
 		progress.setProgress(i);
 			
@@ -185,11 +182,6 @@ void SnapshotVisualisationDialog::animateClicked()
 	setCaption("Snapshot Visualisation");
 }
 
-void SnapshotVisualisationDialog::close()
-{
-	// show last Snapshot
-  lastSnapshotClicked();
-}
 
 void SnapshotVisualisationDialog::backward(Size nr)
 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.29 2004/06/25 00:34:32 amoll Exp $
+// $Id: datasetControl.C,v 1.30 2004/08/27 12:55:48 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -52,7 +52,7 @@ DatasetControl::~DatasetControl()
 	  Log.error() << "Destructing object " << this << " of class DatasetControl" << std::endl;
   #endif 
 
-	if (dialog_) delete dialog_;
+	if (dialog_ != 0) delete dialog_;
 }
 
 
@@ -326,10 +326,11 @@ void DatasetControl::onContextMenu_(QListViewItem* item,  const QPoint& point, i
 
 void DatasetControl::visualiseTrajectory_()
 {
-	if (dialog_) 
+	if (dialog_ != 0) 
 	{
 		dialog_->hide();
 		delete dialog_;
+		dialog_ = 0;
 	}
 
 	SnapShotManager* ssm = item_to_trajectory_[context_item_];

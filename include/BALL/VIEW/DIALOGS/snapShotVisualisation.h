@@ -72,9 +72,6 @@ class BALL_EXPORT SnapshotVisualisationDialog
 	///Function to select the analogous Snapshot
 	virtual void animateClicked();
 
-	///
-	virtual void close();
-	
 	///test wether input in line edits startSnapshot or endSnapshot are valid
 	virtual void snapShotInputTest();
 	
@@ -106,7 +103,7 @@ class BALL_EXPORT SnapshotVisualisationDialog
 
 	QString 					tmp_;
   SnapShotManager* 	snap_shot_manager_;
-	Size 							number_of_snapshots_;
+	bool 							error_;
 };
 
 } } // namespaces
