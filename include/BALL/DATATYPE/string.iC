@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.12 2000/07/10 19:18:04 amoll Exp $
+// $Id: string.iC,v 1.13 2000/07/10 21:03:13 amoll Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -78,14 +78,12 @@ Substring::operator String() const
   return String(bound_->c_str(), from_, to_ - from_ + 1);
 }
 
-
 BALL_INLINE 
 void Substring::unbind()
 {
   bound_ = 0;
   from_ = to_ = (Index)string::npos;
 }
-
 
 BALL_INLINE 
 void Substring::destroy()
@@ -97,8 +95,6 @@ void Substring::destroy()
 
   unbind();
 }
-
-
 
 BALL_INLINE 
 String Substring::toString() const
@@ -193,7 +189,6 @@ BALL_INLINE
 Substring& Substring::operator = (const String& s)
 {
   set(s);
-
   return *this;
 }
 
@@ -201,7 +196,6 @@ BALL_INLINE
 Substring& Substring::operator = (const Substring& s)
 {
   set(s);
-
   return *this;
 }
 
@@ -209,7 +203,6 @@ BALL_INLINE
 Substring& Substring::operator = (const char* char_ptr)
 {
   set(char_ptr);
-
   return *this;
 }
 
@@ -317,36 +310,23 @@ int String::compare(char c, Index from) const
 	return (c_str()[from] - c);
 }
 
-
 BALL_INLINE 
 bool Substring::operator == (const Substring& s) const
 {
-  if (bound_ == 0)
+  if (bound_ == 0 || s.bound_ == 0)
   {
     throw UnboundSubstring(__FILE__, __LINE__);
 	}
-
-  if (s.bound_ == 0)
-  {
-    throw UnboundSubstring(__FILE__, __LINE__);
-	}
- 
   return (bound_->compare(s.bound_->c_str() + s.from_, from_, to_ - from_ + 1) == 0);
 }
 
 BALL_INLINE 
 bool Substring::operator != (const Substring& s) const
 {
-  if (bound_ == 0)
+  if (bound_ == 0 || s.bound_ == 0)
   {
     throw UnboundSubstring(__FILE__, __LINE__);
-	}
-
-  if (s.bound_ == 0)
-  {
-    throw UnboundSubstring(__FILE__, __LINE__);
-	}
- 
+	} 
   return (bound_->compare(s.bound_->c_str() + s.from_, from_, to_ - from_ + 1) != 0);
 
 }
@@ -397,7 +377,6 @@ BALL_INLINE
 String& String::operator = (const String& s)
 {
   set(s);
-
   return *this;
 }
 
@@ -405,7 +384,6 @@ BALL_INLINE
 String& String::operator = (const char *char_ptr)
 {
   set(char_ptr, 0);
-
   return *this;
 }
 
@@ -413,7 +391,6 @@ BALL_INLINE
 String& String::operator = (std::strstream& s)
 {
   set(s);
-
   return *this;
 }
 
@@ -579,7 +556,6 @@ BALL_INLINE
 Substring String::getSubstring(Index from, Size len) const
 {
 	validateRange_(from, len);
-
   return Substring(*this, from, len);
 }
 
@@ -681,10 +657,8 @@ Substring String::right(Size len) const
 {
 	// to save calls to size()
 	Size s = size();
-	if (len > s)
-	{
+	if (len > s) 
 		len = s;
-	}
 
 	Index from = (Index)s - (Index)len;
 
@@ -717,9 +691,7 @@ BALL_INLINE
 String String::operator + (const string& s) const
 {
   String result(*this);
-
   result.append(s);
-
   return result;
 }
 
@@ -727,9 +699,7 @@ BALL_INLINE
 String String::operator +(const char* char_ptr) const
 {
   String result(*this);
-
   result.append(char_ptr);
-
   return result;
 }
 
@@ -737,9 +707,7 @@ BALL_INLINE
 String String::operator + (char c) const
 {
   String result(*this);
-
   result.append(1, c);
-
   return result;
 }
 
