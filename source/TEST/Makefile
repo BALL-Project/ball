@@ -21,6 +21,7 @@ EXECUTABLES = \
 	Directory_test\
 	DefaultProcessors_test\
 	EnergyMinimizer_test\
+	Enumerator_test\
 	Expression_test\
 	File_test\
 	Fragment_test\
