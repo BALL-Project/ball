@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.7 2005/01/25 17:15:39 amoll Exp $
+// $Id: Sysinfo_test.C,v 1.8 2005/01/25 17:20:25 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,7 +10,7 @@
 #include <BALL/COMMON/limits.h>
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.7 2005/01/25 17:15:39 amoll Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.8 2005/01/25 17:20:25 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ RESULT
 
 CHECK(getNumberOfProcessors())
 	TEST_EQUAL(getNumberOfProcessors() >= 1, true)
- 	Log.error() <<getNumberOfProcessors() << std::endl;
+//    	Log.error() <<getNumberOfProcessors() << std::endl;
 RESULT		
 
  // doesnt work under Linux, no idea why: ????????? AM
@@ -92,6 +92,15 @@ CHECK(Extra3)
 	if (c != 0) delete[] c;
 RESULT
 
+
+CHECK(Extra4)
+	float i1 = getAvailableMemory() * 0.90;
+	char* c = new char[(long)i1];
+	i1 = getAvailableMemory() * 0.20;
+	char* d = new char[(long)i1];
+	delete[] c;
+	delete[] d;
+RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
