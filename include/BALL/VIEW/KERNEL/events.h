@@ -1,16 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.5 2003/09/04 23:14:10 amoll Exp $
+// $Id: events.h,v 1.6 2004/02/18 09:56:40 oliver Exp $
 //
-
-////////////////////////////////////////////////////////////////////////////////
-//
-//    !!! do not compile this class !!!
-//
-//		!!! class will be included in scene !!!
-//
-////////////////////////////////////////////////////////////////////////////////
 
 #ifndef BALL_VIEW_KERNEL_EVENTS_H
 #define BALL_VIEW_KERNEL_EVENTS_H

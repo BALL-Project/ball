@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: textPersistenceManager.C,v 1.17 2002/12/22 15:56:24 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.18 2004/02/18 09:56:40 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -291,7 +291,7 @@ namespace BALL
 		{
 #			ifdef BALL_DEBUG_PERSISTENCE
 				Log.error() << "Could not read a valid object pointer: " 
-										<< dec << (PointerInt)ptr << "!" << endl;
+										<< dec << (PointerSizeInt)ptr << "!" << endl;
 #			endif
 
 			return false;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.44 2003/09/02 12:46:16 oliver Exp $
+// $Id: File_test.C,v 1.45 2004/02/18 09:56:41 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,7 +21,7 @@ using namespace std;
 #	define sleep(a) _sleep(1000 * a)
 #endif
 
-START_TEST(File, "$Id: File_test.C,v 1.44 2003/09/02 12:46:16 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.45 2004/02/18 09:56:41 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -54,7 +54,8 @@ CHECK(File(const File& file) throw(Exception::FileNotFound))
 	TEST_EQUAL(f1 == f, true)
 
 	File f2;
-	TEST_EXCEPTION(Exception::FileNotFound, File f3(f2))
+	File* f3 = 0;
+	TEST_EXCEPTION(Exception::FileNotFound, f3 = new File(f2))
 RESULT
 
 CHECK(void close() throw())

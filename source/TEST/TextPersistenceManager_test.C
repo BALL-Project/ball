@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TextPersistenceManager_test.C,v 1.10 2002/12/22 15:56:24 oliver Exp $
+// $Id: TextPersistenceManager_test.C,v 1.11 2004/02/18 09:56:41 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.10 2002/12/22 15:56:24 oliver Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.11 2004/02/18 09:56:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -625,6 +627,7 @@ CHECK(TextPersistenceManager::get(PointerSizeUInt& p))
 	TEST_EQUAL(p, psi1)
 	pm.get(p);
 	TEST_EQUAL(p, psi2)
+	STATUS(setbase(16) << p << " " << psi2)
 RESULT
 
 pm.checkStreamTrailer();

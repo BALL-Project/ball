@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.47 2003/08/28 13:51:28 anker Exp $
+// $Id: file.C,v 1.48 2004/02/18 09:56:40 oliver Exp $
 //
 
 #include <BALL/SYSTEM/file.h>
@@ -218,11 +218,6 @@ namespace BALL
 			is_open_(file.is_open_),
 			is_temporary_(file.is_temporary_)
 	{
-		if (name_ == "")
-		{
-			throw (Exception::FileNotFound(__FILE__, __LINE__, name_));
-		}
-
 		open(name_, open_mode_);
 	}
 
