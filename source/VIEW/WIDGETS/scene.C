@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.120 2004/08/16 14:10:42 amoll Exp $
+// $Id: scene.C,v 1.121 2004/08/17 10:26:03 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -429,10 +429,9 @@ namespace BALL
 			Vector3 n(rep.getProperty("AX").getDouble(),
 								rep.getProperty("BY").getDouble(),
 								rep.getProperty("CZ").getDouble());
-			if (n.getSquareLength() != 0)
-			{
-				n.normalize();
-			}
+
+			if (n.getSquareLength() != 0) n.normalize();
+
 			float d = rep.getProperty("D").getDouble();
 
 
@@ -471,6 +470,17 @@ namespace BALL
 				glVertex3f(e[0].x + e[1].x, e[0].y + e[1].y, e[0].z + e[1].z);
 				glVertex3f(e[1].x, e[1].y, e[1].z);
 				glEnd();
+
+				// draw backside
+				glTranslatef(0.00001, 0.00001, 0.00001);
+				glBegin(GL_QUADS);
+				glNormal3f(-n.x, n.y, n.z);
+				glVertex3f(0.,0.,0.);
+				glVertex3f(e[0].x, e[0].y, e[0].z);
+				glVertex3f(e[0].x + e[1].x, e[0].y + e[1].y, e[0].z + e[1].z);
+				glVertex3f(e[1].x, e[1].y, e[1].z);
+				glEnd();
+
 				glPopMatrix();
 
 				return;
@@ -503,7 +513,7 @@ namespace BALL
 				renderClippingPlane_(**it);
 			}
 		
-			for (GLint i = current_clipping_plane_; i < GL_MAX_CLIP_PLANES; i++)
+			for (GLint i = current_clipping_plane_; i <= GL_CLIP_PLANE0 + GL_MAX_CLIP_PLANES; i++)
 			{
 				glDisable(i);
 			}
