@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.10 2000/05/24 09:21:41 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.11 2000/10/24 21:38:51 amoll Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -70,7 +70,9 @@ namespace BALL
     if (name == 0)
     {
       *ostr_ << "BASEOBJECT ";
-		} else {
+		} 
+		else 
+		{
       *ostr_ << "OBJECT ";
 		}
 
@@ -78,7 +80,9 @@ namespace BALL
     if ((name != 0) && (*name != (char)0))
     {
       *ostr_ << " " << name;
-		} else {
+		} 
+		else 
+		{
       *ostr_ << " -";
 		}
 
@@ -97,7 +101,9 @@ namespace BALL
 		if (name == 0) 
 		{
 			*ostr_ << "END_BASEOBJECT" << endl;
-		} else {
+		} 
+		else 
+		{
 			*ostr_ << "END_OBJECT" << endl;
 		}
 	}
@@ -148,7 +154,9 @@ namespace BALL
 			if (name != 0)
 			{
 				Log.info() << "entering checkTrailer(" << name << ")" << endl;
-			} else {
+			} 
+			else 
+			{
 				Log.info() << "entering checkTrailer()" << endl;
 			}
 #		endif
@@ -203,7 +211,8 @@ namespace BALL
 		if (s != type_name) 
 		{
 #			ifdef BALL_DEBUG_PERSISTENCE
-				Log.error() << "Expected object of type " << type_name << " but found definition for " << s << "!" << endl;
+				Log.error() << "Expected object of type " << type_name 
+										<< " but found definition for " << s << "!" << endl;
 #			endif
 
 			// we didn't find the right object - abort
@@ -222,7 +231,8 @@ namespace BALL
 		if (ptr == 0) 
 		{
 #			ifdef BALL_DEBUG_PERSISTENCE
-				Log.error() << "Could not read a valid object pointer: " << dec << (LongPointerType)ptr << "!" << endl;
+				Log.error() << "Could not read a valid object pointer: " 
+										<< dec << (LongPointerType)ptr << "!" << endl;
 #			endif
 
 			// abort if it was not a valid pointer
@@ -233,7 +243,9 @@ namespace BALL
 		if (name == 0)
 		{
 			if (!expect("-"))
+			{
 				return false;
+			}
 		} 
 		else 
 		{
@@ -283,7 +295,8 @@ namespace BALL
 		if (ptr == 0) 
 		{
 #			ifdef BALL_DEBUG_PERSISTENCE
-				Log.error() << "Could not read a valid object pointer: " << dec << (PointerInt)ptr << "!" << endl;
+				Log.error() << "Could not read a valid object pointer: " 
+										<< dec << (PointerInt)ptr << "!" << endl;
 #			endif
 
 			return false;

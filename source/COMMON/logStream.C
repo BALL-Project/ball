@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.18 2000/10/18 17:10:45 oliver Exp $
+// $Id: logStream.C,v 1.19 2000/10/24 21:38:47 amoll Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
@@ -121,9 +121,7 @@ namespace BALL
 					// update the line pointers (increment both)
 					line_start = ++line_end;
 					
-
-					// remove cr/lf from the end of the line
-					
+					// remove cr/lf from the end of the line				
 					while (outstring[outstring.size() - 1] == 10 || outstring[outstring.size() - 1] == 13)
 					{
 						outstring.erase(outstring.end());
@@ -148,7 +146,6 @@ namespace BALL
 			// remove all processed lines from the buffer
 			pbump((int)(pbase() - pptr()));
 		}
-
 	
 		return 0;
 	}
@@ -176,7 +173,6 @@ namespace BALL
 
 				switch (prefix[index + 1]) 
 				{
-	
 					case '%': // append a '%' (escape sequence)
 						result.append("%");
 						break;
@@ -190,12 +186,25 @@ namespace BALL
 						if (level >= LogStream::ERROR) 
 						{
 							result.append("ERROR");
-						} else if (level >= LogStream::WARNING) {
-							result.append("WARNING");
-						} else if (level >= LogStream::INFORMATION) {
-							result.append("INFORMATION");
-						} else {
-							result.append("LOG");						}
+						}
+						else 
+						{
+							if (level >= LogStream::WARNING) 
+							{
+								result.append("WARNING");
+							}
+							else 
+							{
+								if (level >= LogStream::INFORMATION) 
+								{
+									result.append("INFORMATION");
+								}
+								else 
+								{
+									result.append("LOG");
+								}
+							}
+						}
 						break;
 
 					case 'T':	// time: HH:MM:SS
@@ -236,7 +245,8 @@ namespace BALL
 			}
 		}
 
-		if (copied_index < prefix.size()) {
+		if (copied_index < prefix.size()) 
+		{
 			result.append(prefix.substr(copied_index, prefix.size() - copied_index));
 		}
 
@@ -480,10 +490,8 @@ namespace BALL
 	
 	Size LogStream::getNumberOfLines(int min_level, int max_level) const  
 	{
-
 		// cast this to const, to access non const method rdbuf() which
 		// is usually const, but declared non const
-
 		LogStream*	non_const_this = const_cast<LogStream*>(this);
 
 		// if rdbuf() is NULL, return

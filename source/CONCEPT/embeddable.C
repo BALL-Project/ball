@@ -1,4 +1,4 @@
-// $Id: embeddable.C,v 1.4 2000/07/18 21:30:23 oliver Exp $
+// $Id: embeddable.C,v 1.5 2000/10/24 21:38:50 amoll Exp $
 
 #include <BALL/CONCEPT/embeddable.h>
 
@@ -100,7 +100,8 @@ namespace BALL
 		else 
 		{
 			// complain if trying to unregister an unregistered instance
-			Log.warn() << "Embeddable::unregisterInstance_: trying to unregister unregistered instance at " << instance << endl;
+			Log.warn() << "Embeddable::unregisterInstance_: trying to unregister unregistered instance at " 
+								 << instance << endl;
 		}	
 	}
 

@@ -1,4 +1,4 @@
-// $Id: logStream.iC,v 1.7 2000/10/18 17:09:37 oliver Exp $
+// $Id: logStream.iC,v 1.8 2000/10/24 21:38:42 amoll Exp $
 
 BALL_INLINE
 int LogStreamBuf::overflow(int c)
@@ -42,7 +42,9 @@ int LogStream::getLevel()
 	if (rdbuf() != 0)
 	{
 		return rdbuf()->level_;
-	} else {
+	}
+	else 
+	{
 		return 0;
 	}
 }
@@ -98,5 +100,3 @@ LogStream& LogStream::info(int level)
 
 	return *this;
 }
-
-

@@ -1,4 +1,4 @@
-// $Id: Embeddable_test.C,v 1.1 2000/07/16 16:07:55 oliver Exp $
+// $Id: Embeddable_test.C,v 1.2 2000/10/24 21:38:54 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -107,11 +107,6 @@ CHECK(Embeddable::getInstance(Position index))
 	TEST_EQUAL(A::getInstance(1234), 0)
 RESULT											
 
-
-
-
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
-

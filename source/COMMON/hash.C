@@ -1,4 +1,4 @@
-// $Id: hash.C,v 1.6 2000/06/07 14:27:14 amoll Exp $
+// $Id: hash.C,v 1.7 2000/10/24 21:38:47 amoll Exp $
 
 #include <BALL/COMMON/hash.h>
 
@@ -22,7 +22,7 @@ namespace BALL
 	 * [0..255]. This algorithm was published by P. K. Pearson,
 	 * Comm. ACM, 33:6(1990), 677
 	 */
-	HashIndex hashString(register const char *s)
+	HashIndex hashString(const char *s)
 	{
 		static const unsigned char pseudo_random_permuted_key[256] = 
 		{ 
@@ -44,10 +44,12 @@ namespace BALL
 			51 ,65 ,28 ,144,254,221,93 ,189,194,139,112,43 ,71 ,109,184,209 
 		};
 
-		register Index index = 0;
+		Index index = 0;
 
 		for(;	*s != '\0'; )
+		{
 			index = pseudo_random_permuted_key[index ^ (*s++)];
+		}
 
 		return index;
 	}
@@ -57,10 +59,10 @@ namespace BALL
 	 * to a string to be hashed.
 	 * Taken from: Dr. Dobb's Journal, April 1996, p.26
 	 */
-	HashIndex hashPJWString(register const char *s)
+	HashIndex hashPJWString(const char *s)
 	{
-		register Index index = 0;
-		register Index temp_index;
+		Index index = 0;
+		Index temp_index;
 
 #		define BALL_BITS_IN_HASHVALUE_   (sizeof(Index) * CHAR_BIT)
 #		define BALL_THREE_QUARTERS_      ((Index)((BALL_BITS_IN_HASHVALUE_ * 3) / 4))
@@ -89,10 +91,10 @@ namespace BALL
 	 * Assumes a long pointer to have 4 bytes of 8 bits.
 	 * Taken from: Dr. Dobb's Journal, April 1996, p.26
 	 */
-	HashIndex hashElfString(register const char *s)
+	HashIndex hashElfString(const char *s)
 	{
-		register unsigned long l = 0;
-		register unsigned long temp;
+		unsigned long l = 0;
+		unsigned long temp;
 
 		while(*s)
 		{

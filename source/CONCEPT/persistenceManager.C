@@ -1,4 +1,4 @@
-// $Id: persistenceManager.C,v 1.8 2000/08/30 19:58:29 oliver Exp $
+// $Id: persistenceManager.C,v 1.9 2000/10/24 21:38:51 amoll Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/KERNEL/system.h>
@@ -15,27 +15,27 @@ namespace BALL
 
 	PersistenceManager::PersistenceManager()
 	{
-		// register all kernel classes	
+		// all kernel classes	
 		registerKernelClasses_();
 	}
 
 	PersistenceManager::PersistenceManager(istream& is)
 	{
-		// register all kernel classes	
+		// all kernel classes	
 		registerKernelClasses_();
 		setIstream(is);
 	}
 
 	PersistenceManager::PersistenceManager(ostream& os)
 	{
-		// register all kernel classes	
+		// all kernel classes	
 		registerKernelClasses_();
 		setOstream(os);
 	}
 
 	PersistenceManager::PersistenceManager(istream& is, ostream& os)
 	{
-		// register all kernel classes	
+		// all kernel classes	
 		registerKernelClasses_();
 		setIstream(is);
 		setOstream(os);
@@ -47,7 +47,7 @@ namespace BALL
 
 	void PersistenceManager::registerKernelClasses_()
 	{
-		// register all kernel classes, their base classes, 
+		// all kernel classes, their base classes, 
 		// and the classes used in kernel classes
 
 		#define REGISTER_CLASS(T) registerClass(RTTI::getStreamName<T>(), T::createDefault);
@@ -102,9 +102,10 @@ namespace BALL
 #			endif
 
 			return method();
-
 			
-		} else {
+		} 
+		else 
+		{
 			return 0;
 		}
 	}
@@ -117,7 +118,6 @@ namespace BALL
 	void PersistenceManager::setOstream(ostream& s) 
 	{
 		ostr_ = &s;
-
 		object_out_.clear();
 		object_out_needed_.clear();
 	}
@@ -125,7 +125,6 @@ namespace BALL
 	void PersistenceManager::setIstream(istream& s) 
 	{
 		istr_ = &s;
-
 		pointer_list_.clear();
 		pointer_map_.clear();
 	}
@@ -156,7 +155,6 @@ namespace BALL
 		return *this;
 	}
 	
-
 	PersistentObject*	PersistenceManager::readObject()
 	{
 		if (istr_ == 0)
@@ -189,7 +187,8 @@ namespace BALL
 			if (!create_methods_.has(type_name)) 
 			{
 				// something bad happend - abort everything and clean up!
-				Log.level(LogStream::ERROR) << "Cannot create object of unregistered class " << type_name << "!" << endl;
+				Log.level(LogStream::ERROR) << "Cannot create object of unregistered class " 
+																		<< type_name << "!" << endl;
 				error = true;
 				break;
 			} 
@@ -202,7 +201,8 @@ namespace BALL
 			// check whether the creation was successful
 			if (obj == 0)
 			{
-				Log.level(LogStream::ERROR) << "Could not create object of typ " << type_name << "!" << endl;
+				Log.level(LogStream::ERROR) << "Could not create object of typ " 
+																		<< type_name << "!" << endl;
 				error = false;
 				break;
 			}
@@ -261,7 +261,6 @@ namespace BALL
 		return first_object;
 	}
 
-
 	void PersistenceManager::addPointerPair_(LongPointerType old_ptr, void* new_ptr)
 	{
 #		ifdef DEBUG_PERSISTENCE
@@ -270,7 +269,6 @@ namespace BALL
 
 		pointer_map_.insert(pair<LongPointerType, void*>(old_ptr, new_ptr));
 	}
-
 
 	void PersistenceManager::addNeededObjects_() 
 	{
@@ -301,9 +299,11 @@ namespace BALL
 			{
 				// OK. We know the correct value for the pointer
 				(*(*it).first) = pointer_map_[(*it).second];
-			} else { 
+			} 
+			else 
+			{ 
 				Log.level(LogStream::ERROR) << "PersistenceManager: Could not assign object for pointer to "
-					<< (*it).second << endl;
+																		<< (*it).second << endl;
 				result = false;
 			}
 		}

@@ -1,4 +1,3 @@
-// $Id: callback.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: callback.C,v 1.2 2000/10/24 21:38:50 amoll Exp $
 
 #include <BALL/CONCEPT/callback.h>
-

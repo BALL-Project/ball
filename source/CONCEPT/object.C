@@ -1,4 +1,4 @@
-// $Id: object.C,v 1.4 1999/12/28 18:19:40 oliver Exp $
+// $Id: object.C,v 1.5 2000/10/24 21:38:51 amoll Exp $
 
 #include <BALL/CONCEPT/object.h>
 
@@ -54,7 +54,6 @@ namespace BALL
 #		ifdef BALL_SUPPORT_OBJECT_MANAGER
 
 		previous_ = next_= 0;
-		
 		ObjectManager::insert(*this);
 
 #		endif // BALL_SUPPORT_OBJECT_MANAGER
@@ -67,7 +66,6 @@ namespace BALL
 #		ifdef BALL_SUPPORT_OBJECT_MANAGER
 
 		previous_ = next_ = 0;
-
 		ObjectManager::insert(*this);
 
 #		endif // BALL_SUPPORT_OBJECT_MANAGER
@@ -142,17 +140,25 @@ namespace BALL
 			if (last_ == &object)
 			{
 				first_ = last_ = 0;
-			} else {
+			}
+			else 
+			{
 				first_ = object.next_;
 				first_->previous_ = 0;
 			}
-		} else if (last_ == &object)
+		} 
+		else 
 		{
-			last_ = object.previous_;
-			last_->next_ = 0;
-		} else {
-			object.previous_->next_ = object.next_;
-			object.next_->previous_ = object.previous_;
+			if (last_ == &object)
+			{
+				last_ = object.previous_;
+				last_->next_ = 0;
+			} 
+			else 
+			{
+				object.previous_->next_ = object.next_;
+				object.next_->previous_ = object.previous_;
+			}
 		}
 
 		--number_of_objects_;
@@ -165,15 +171,21 @@ namespace BALL
 		ObjectIterator object_it;
 		
 		for (object_it = begin(); !object_it.isEnd(); ++object_it)
+		{
 			++size;
+		}
 
 		if (size != number_of_objects_)
+		{
 			return false;
+		}
 
 		for (object_it = rbegin(), size = 0; !object_it.isREnd(); --object_it)
+		{
 			++size;
+		}
 
-		return (bool)(size == number_of_objects_);
+		return (size == number_of_objects_);
 	}
 
 	void ObjectManager::dump (ostream& s, Size depth)

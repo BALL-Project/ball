@@ -1,4 +1,4 @@
-// $Id: rtti.C,v 1.3 2000/01/14 20:28:59 oliver Exp $
+// $Id: rtti.C,v 1.4 2000/10/24 21:38:48 amoll Exp $
 
 #include <BALL/COMMON/rtti.h>
 #include <typeinfo>
@@ -135,11 +135,14 @@ namespace BALL
 						tmp.erase(tmp.end() - 1, tmp.end());
 						tmp.append(">");
 						break;
+
 					default:
 						tmp = "?";
 				}
 				return tmp;
-			} else {
+			} 
+			else 
+			{
 				i = s.find_first_not_of("0123456789");
 				len = atol(string(s, 0, i).c_str());
 				if (len == 0)
@@ -147,10 +150,16 @@ namespace BALL
 					s.erase(0,1);
 						
 					if (s.size() > 0)
+					{
 						return decode_mangling(s);
+					}
 					else 
+					{
 						return "";
-				} else {
+					}
+				}
+				else 
+				{
 					string h(s, i, len);
 					s.erase(0, i + len);
 				
@@ -158,19 +167,20 @@ namespace BALL
 				}
 			}
 		}
-				
-						
-						
 
 		string demangle(string s)
 		{
 			string tmp = decode_mangling(s);
 
 			while (tmp[tmp.size() - 1] == ':')
+			{
 				tmp.erase(tmp.end() - 1, tmp.end());
+			}
 
 			while (tmp[0] == ':')
+			{
 				tmp.erase(0, 1);
+			}
 
 			return tmp;
 		}

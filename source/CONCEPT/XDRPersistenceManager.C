@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.C,v 1.7 2000/03/14 22:46:23 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.8 2000/10/24 21:38:50 amoll Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -108,7 +108,8 @@ namespace BALL
 			if (s != type_name) 
 			{
 #				ifdef BALL_DEBUG_PERSISTENCE
-					Log.error() << "Expected object of type " << type_name << " but found definition for " << s << "!" << endl;
+					Log.error() << "Expected object of type " << type_name 
+											<< " but found definition for " << s << "!" << endl;
 #				endif
 
 				return false;
@@ -136,7 +137,8 @@ namespace BALL
 		if (ptr == 0) 
 		{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::ERROR) << "Could not read a valid object pointer: " << dec << (unsigned int)ptr << "!" << endl;
+			Log.level(LogStream::ERROR) << "Could not read a valid object pointer: " 
+																	<< dec << (unsigned int)ptr << "!" << endl;
 #		endif
 
 			return false;

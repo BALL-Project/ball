@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.24 2000/08/30 11:20:44 oliver Exp $
+// $Id: composite.C,v 1.25 2000/10/24 21:38:50 amoll Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -144,7 +144,8 @@ namespace BALL
 		}
 		
 		// if this didn't help, try to walk upwards from *this
-		for (composite_ptr = parent_, path_size = 1; composite_ptr != 0; composite_ptr = composite_ptr->parent_,  ++path_size)
+		for (composite_ptr = parent_, path_size = 1; composite_ptr != 0;
+				 composite_ptr = composite_ptr->parent_,  ++path_size)
 		{
 			if (composite_ptr == &composite)
 			{
@@ -234,7 +235,9 @@ namespace BALL
 			if (composites_a[index_a] == composites_b[index_b])
 			{
 				composite_ptr = composites_a[index_a];
-			} else {
+			} 
+			else 
+			{
 				// if the entries differ, the last equal entry was the lowest
 				// common ancestor - exit the loop
 				break;
@@ -259,15 +262,17 @@ namespace BALL
 			for (; ++index < 0 && composite_ptr != 0; 
 					 composite_ptr = composite_ptr->previous_);
 		} 
-		else if (index > 0) 
+		else 
 		{
-			// walk "index" steps along the next_ pointers
-			composite_ptr = composite_ptr->next_;
+			if (index > 0) 
+			{
+				// walk "index" steps along the next_ pointers
+				composite_ptr = composite_ptr->next_;
 
-			for (; --index > 0 && composite_ptr != 0; 
-					 composite_ptr = composite_ptr->next_);
+				for (; --index > 0 && composite_ptr != 0; 
+						 composite_ptr = composite_ptr->next_);
+			}
 		}
-
 		return composite_ptr;
 	}
 
@@ -337,6 +342,7 @@ namespace BALL
 		{
 			// select all children
 			Composite* child = first_child_;
+
 			for (; child != 0; child = child->next_)
 			{
 				if (!child->selected_)
@@ -466,36 +472,38 @@ namespace BALL
 					parent_->number_of_selected_children_--;
 				}
 			} 
-			else if (!selected_ && new_selected) 
-			{
-				// the node was deselected before and now is selected
-				if (!contains_selection_)
-				{
-					// the node didn`t contain selected nodes before
-					parent_->number_of_selected_children_++;
-					parent_->number_of_children_containing_selection_++;
-				} 
-				else 
-				{
-					// the node did contain selected nodes before
-					parent_->number_of_selected_children_++;
-				}
-			} 
 			else 
 			{
-				// selected didn`t change at all
-				if (contains_selection_ && !new_contains_selection)
+				if (!selected_ && new_selected) 
 				{
-					// there are no more selections left
-					parent_->number_of_children_containing_selection_--;
+					// the node was deselected before and now is selected
+					if (!contains_selection_)
+					{
+						// the node didn`t contain selected nodes before
+						parent_->number_of_selected_children_++;
+						parent_->number_of_children_containing_selection_++;
+					} 
+					else 
+					{
+						// the node did contain selected nodes before
+						parent_->number_of_selected_children_++;
+					}
 				} 
 				else 
 				{
-					// a child now contains a selection
-					parent_->number_of_children_containing_selection_++;
+					// selected didn`t change at all
+					if (contains_selection_ && !new_contains_selection)
+					{
+						// there are no more selections left
+						parent_->number_of_children_containing_selection_--;
+					} 
+					else 
+					{
+						// a child now contains a selection
+						parent_->number_of_children_containing_selection_++;
+					}
 				}
 			}
-
 			// store the new flags (have to be set prior to the recursive call 
 			// to updateSelection())
 			selected_ = new_selected;
@@ -684,23 +692,26 @@ namespace BALL
 
 			parent_ptr->first_child_ = &parent;
 		}
-		else if (parent_ptr->last_child_ == &last)
-		{
-			first.previous_->next_ = &parent;
-			parent.previous_  = first.previous_;
-			first.previous_ = 0;
-			
-			parent_ptr->last_child_ = &parent;
-		} 
 		else 
 		{
-			first.previous_->next_ = &parent;
-			parent.previous_ = first.previous_;
-			last.next_->previous_ = &parent;
-			parent.next_ = last.next_;
-			first.previous_ = last.next_ = 0;
-		}
+			if (parent_ptr->last_child_ == &last)
+			{
+				first.previous_->next_ = &parent;
+				parent.previous_  = first.previous_;
+				first.previous_ = 0;
 				
+				parent_ptr->last_child_ = &parent;
+			} 
+			else 
+			{
+				first.previous_->next_ = &parent;
+				parent.previous_ = first.previous_;
+				last.next_->previous_ = &parent;
+				parent.next_ = last.next_;
+				first.previous_ = last.next_ = 0;
+			}
+		}
+		
 		for (Composite* composite_ptr = &first; composite_ptr != &last; composite_ptr = composite_ptr->next_)
 		{
 			++(parent.number_of_children_);
@@ -1012,7 +1023,6 @@ namespace BALL
 				{
 					composite.next_->previous_ = composite.last_child_;
 				}
-
 			} 
 			else 
 			{
@@ -1020,7 +1030,6 @@ namespace BALL
 				last_child_ = composite.last_child_;
 			}
 		}
-		
 
 		// remove composite from this
 		composite.parent_ = composite.previous_ = composite.next_ 
@@ -1061,7 +1070,6 @@ namespace BALL
 			return false;
 		}
 		
-		
 		Composite* parent_ptr = child.parent_;
 
 		// if child has no parent, we cannot remove it
@@ -1086,20 +1094,22 @@ namespace BALL
 			
 			child.next_ = 0;
 		} 
-		else if (last_child_ == &child)
+		else 
 		{
-			last_child_ = child.previous_;
-			last_child_->next_ = child.previous_ = 0;
-		} 
-		else
-		{
-			child.previous_->next_ = child.next_;
-			
-			child.next_->previous_ = child.previous_;
-			
-			child.previous_ = child.next_ = 0;
+			if (last_child_ == &child)
+			{
+				last_child_ = child.previous_;
+				last_child_->next_ = child.previous_ = 0;
+			} 
+			else
+			{
+				child.previous_->next_ = child.next_;
+				
+				child.next_->previous_ = child.previous_;
+				
+				child.previous_ = child.next_ = 0;
+			}
 		}
-
 		// delete the child`s parent pointer
 		child.parent_ = 0;
 		
@@ -1478,7 +1488,8 @@ namespace BALL
 		s << "  number of selected children:" << number_of_selected_children_ << endl;
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  number of children containing selection:" << number_of_children_containing_selection_ << endl;
+		s << "  number of children containing selection:" 
+			<< number_of_children_containing_selection_ << endl;
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  children:" << endl;
@@ -1578,9 +1589,7 @@ namespace BALL
 			if (predicate(*composite_ptr) == true)
 			{
 				cloned_ptr = (Composite*)composite_ptr->create(false);
-
-				stack.appendChild(*cloned_ptr);
-				
+				stack.appendChild(*cloned_ptr);			
 				cloned_ptr->properties_ = composite_ptr->properties_;
 
 				if (composite_ptr->first_child_ != 0)

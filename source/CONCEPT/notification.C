@@ -1,4 +1,4 @@
-// $Id: notification.C,v 1.3 1999/12/04 18:34:26 oliver Exp $
+// $Id: notification.C,v 1.4 2000/10/24 21:38:50 amoll Exp $
 
 #include <BALL/CONCEPT/notification.h>
 
@@ -79,9 +79,9 @@ namespace BALL
 
 	void NotificationSource_::destroy()
 	{
-		register NotificationTarget_ *next = 0;
+		NotificationTarget_ *next = 0;
 		
-		for (register NotificationTarget_ *notification_target = first_;
+		for (NotificationTarget_ *notification_target = first_;
 				 notification_target != 0; notification_target = next)
 		{
 			next = notification_target->next_;
@@ -92,8 +92,6 @@ namespace BALL
 		number_of_targets_ = 0;
 	}
 
-
-
 	NotificationSlot_::~NotificationSlot_()
 	{
 	}
@@ -102,8 +100,6 @@ namespace BALL
 		:	first_(0)
 	{
 	}
-
-
 
 	NotificationManager_::NotificationManager_()
 		:	number_of_targets_(0),
@@ -120,8 +116,7 @@ namespace BALL
 		delete [] slots_;
 	}
 
-	Size NotificationManager_::getSize
-		()
+	Size NotificationManager_::getSize()
 	{
 		return number_of_targets_;
 	}
@@ -133,14 +128,16 @@ namespace BALL
 		
 		++number_of_targets_;
 
-		register NotificationSource_ *notification_source = 0;
+		NotificationSource_ *notification_source = 0;
 		NotificationSource_** first = &(slots_[hash_(source)].first_);
 				
 		for (notification_source = *first; notification_source != 0;
 				 notification_source = notification_source->next_)
 		{
 			if (notification_source->source_ == source)
+			{
 				break;
+			}
 		}
 
 		if (notification_source == 0)
@@ -160,7 +157,7 @@ namespace BALL
 		NotificationSource_ *previous = 0;
 		NotificationSource_ *next = 0;
 		
-		for (register NotificationSource_ *notification_source = *first;
+		for (NotificationSource_ *notification_source = *first;
 				 notification_source != 0; notification_source = next)
 		{
 			next = notification_source->next_;
@@ -179,7 +176,9 @@ namespace BALL
 				}
 
 				delete notification_source;
-			} else {
+			}
+			else 
+			{
 				previous = notification_source;
 			}
 		}
@@ -189,20 +188,20 @@ namespace BALL
 	{
 		NotificationSource_** first = &(slots_[hash_(source)].first_);
 				
-		register NotificationSource_* previous = 0;
-		register NotificationSource_* next = 0;
+		NotificationSource_* previous = 0;
+		NotificationSource_* next = 0;
 
-		for (register NotificationSource_* notification_source = *first;
+		for (NotificationSource_* notification_source = *first;
 				 notification_source != 0; notification_source = next)
 		{
 			next = notification_source->next_;
 			
 			if (notification_source->source_ == source)
 			{	  
-				register NotificationTarget_* previous_target = 0;
-				register NotificationTarget_* next_target = 0;
+				NotificationTarget_* previous_target = 0;
+				NotificationTarget_* next_target = 0;
 				
-				for (register NotificationTarget_ *notification_target = notification_source->first_;
+				for (NotificationTarget_ *notification_target = notification_source->first_;
 						notification_target != 0; notification_target = next_target)
 				{
 					next_target = notification_target->next_;
@@ -211,7 +210,6 @@ namespace BALL
 					if (notification_target->target_ == target)
 					{
 						--number_of_targets_;
-			
 						--(notification_source->number_of_targets_);
 			
 						if (previous_target != 0)
@@ -236,9 +234,13 @@ namespace BALL
 				if (notification_source->number_of_targets_ == 0)
 				{
 					if (previous != 0)
+					{
 						previous->next_ = notification_source->next_;
+					}
 					else
+					{
 						*first = notification_source->next_;
+					}
 		
 					delete notification_source;
 				}
@@ -252,11 +254,13 @@ namespace BALL
 
 	NotificationSource_ *NotificationManager_::findSource(void *source)
 	{
-		for (register NotificationSource_ *notification_source = slots_[hash_(source)].first_;
+		for (NotificationSource_ *notification_source = slots_[hash_(source)].first_;
 				 notification_source != 0; notification_source = notification_source->next_)
 		{
 			if (notification_source->source_ == source)
+			{
 				return notification_source;
+			}
 		}
 		
 		return 0;
@@ -264,11 +268,13 @@ namespace BALL
 
 	NotificationTarget_* NotificationManager_::findFirstTarget(void *source)
 	{
-		for (register NotificationSource_ *notification_source = slots_[hash_(source)].first_;
+		for (NotificationSource_ *notification_source = slots_[hash_(source)].first_;
 				 notification_source != 0; notification_source = notification_source->next_)
 		{
 			if (notification_source->source_ == source)
+			{
 				return notification_source->first_;
+			}
 		}
 
 		return 0;
@@ -280,7 +286,9 @@ namespace BALL
 				 notification_target != 0; notification_target = notification_target->next_)
 		{
 			if (notification_target->target_ == target)
+			{
 				return notification_target;
+			}
 		}
 				
 		return 0;
@@ -291,9 +299,13 @@ namespace BALL
 		NotificationSource_ *notification_source = findSource(source);
 		
 		if (notification_source != 0 && notification_source->enabled_ == true)
+		{
 			return notification_source;
+		}
 		else
+		{
 			return 0;
+		}
 	}
 
 	NotificationTarget_* NotificationManager_::findEnabledFirstTarget(void *source)
@@ -301,9 +313,13 @@ namespace BALL
 		NotificationSource_ *notification_source = findSource(source);
 		
 		if (notification_source != 0 && notification_source->enabled_ == true)
+		{
 			return notification_source->first_;
+		}
 		else
+		{
 			return 0;
+		}
 	}
 
 	NotificationTarget_* NotificationManager_::findEnabledTarget(void *source, void *target)
@@ -312,7 +328,9 @@ namespace BALL
 				 notification_target != 0; notification_target = notification_target->next_)
 		{
 			if (notification_target->target_ == target)
+			{
 				return notification_target;
+			}
 		}
 		
 		return 0;
@@ -320,11 +338,11 @@ namespace BALL
 
 	void NotificationManager_::destroy()
 	{
-		register NotificationSource_ *next = 0;
+		NotificationSource_ *next = 0;
 		
-		for (register Index index = 0; index < (Index)number_of_slots_; ++index)
+		for (Index index = 0; index < (Index)number_of_slots_; ++index)
 		{
-			for (register NotificationSource_ *notification_source = slots_[index].first_;
+			for (NotificationSource_ *notification_source = slots_[index].first_;
 					 notification_source != 0; notification_source = next)
 			{
 				next = notification_source->next_;
@@ -376,18 +394,18 @@ namespace BALL
 	{
 		Size number_of_sources = 0;
 		
-		for (register Size index = 0; index < number_of_slots_; ++index)
+		for (Size index = 0; index < number_of_slots_; ++index)
 		{
 			s << "slot[" << index << "] :" << endl;
 
-			for (register NotificationSource_ *notification_source = slots_[index].first_;
+			for (NotificationSource_ *notification_source = slots_[index].first_;
 					 notification_source != 0; notification_source = notification_source->next_)
 			{
 				s << "  source: " << notification_source->source_ << endl;
 
 				++number_of_sources;
 
-				for (register NotificationTarget_ *notification_target = notification_source->first_;
+				for (NotificationTarget_ *notification_target = notification_source->first_;
 						 notification_target != 0; notification_target = notification_target->next_)
 				{
 					s << "    target: " << notification_target->target_ << endl;
@@ -400,7 +418,6 @@ namespace BALL
 		s << "number of targets: " << number_of_targets_ << endl;
 		s << "growth threshold: " 
 		  << BALL_NOTIFICATION_MANAGER_GROWTH_THRESHOLD(number_of_slots_) << endl;
-		
 	}
 
 	bool NotificationManager_::needResize_()
@@ -419,17 +436,14 @@ namespace BALL
 		Index hash_index;
 		NotificationSource_ *next = 0;
 		
-		for (register Index index = 0; index < (Index)number_of_old_slots; ++index)
+		for (Index index = 0; index < (Index)number_of_old_slots; ++index)
 		{
-			for (register NotificationSource_ *notification_source = old_slots[index].first_;
+			for (NotificationSource_ *notification_source = old_slots[index].first_;
 					 notification_source != 0; notification_source = next)
 			{
 				next = notification_source->next_;
-				
 				hash_index = hash_(notification_source->source_);
-
-				notification_source->next_ = slots_[hash_index].first_;
-				
+				notification_source->next_ = slots_[hash_index].first_;			
 				slots_[hash_index].first_ = notification_source;
 			}
 		}
@@ -441,8 +455,6 @@ namespace BALL
 	{
 		return (Index)(long(ptr) % (number_of_slots_ - 1));
 	}
-
-
 
 	NotificationManager_& NotificationManager()
 	{
