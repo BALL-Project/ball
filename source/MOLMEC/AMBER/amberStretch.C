@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.24 2004/12/27 17:06:08 amoll Exp $
+// $Id: amberStretch.C,v 1.25 2005/01/24 23:40:43 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
@@ -117,10 +117,12 @@ namespace BALL
 						else 
 						{
 							getForceField()->error() << "cannot find stretch parameters for atom types " 
-													<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
-													<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B)
-													<< " (atoms are: " << stretch_.back().atom1->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) 
-													<< "/" << stretch_.back().atom2->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B)
+								<< " (atoms are: " 
+								<< stretch_.back().atom1->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) 
+								<< "/" << stretch_.back().atom2->ptr->getFullName(
+										Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
 
 							// we don't want to get any force or energy component
 							// from this stretch
