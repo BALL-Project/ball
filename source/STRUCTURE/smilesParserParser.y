@@ -244,5 +244,8 @@ opt_chirality:
 
 void yyerror(char* s)
 {
-	throw Exception::ParseError(__FILE__, 0, s, SmilesParser::state.buffer);
+	throw Exception::ParseError(__FILE__, 0, 
+															SmilesParser::state.buffer, 
+															String(s) + String(" (at position ") 
+																+ String(SmilesParser::state.char_count) + String(")"));
 }
