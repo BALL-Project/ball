@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.2 1999/12/18 12:32:11 oliver Exp $
+// $Id: list.h,v 1.3 2000/01/13 22:16:49 oliver Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -89,7 +89,7 @@ namespace BALL
 			const_iterator it = list.begin();
 			for ( ; it != list.end(); ++it)
 			{
-				insert(*it);
+				push_back(const_cast<Value&>(*it));
 			}
 		}
 
