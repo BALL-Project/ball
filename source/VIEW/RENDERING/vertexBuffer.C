@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.11 2005/01/19 12:52:32 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.12 2005/01/19 13:52:19 amoll Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -61,7 +61,7 @@ namespace BALL
 	PFNGLBUFFERDATAARBPROC glBufferDataARB = NULL;					// VBO Data Loading Procedure
 	PFNGLDELETEBUFFERSARBPROC glDeleteBuffersARB = NULL;			// VBO Deletion Procedure
 
-void MeshBuffer::initGL()
+bool MeshBuffer::initGL()
 {
 	// obtain gl method pointers
 #ifdef _WINDOWS
@@ -75,6 +75,8 @@ void MeshBuffer::initGL()
 		glBufferDataARB = (PFNGLBUFFERDATAARBPROC) glXGetProcAddressARB((const GLubyte*)"glBufferDataARB");
 		glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*)"glDeleteBuffersARB");
 #endif
+
+	return (glGenBuffersARB != 0);
 }
 
 
