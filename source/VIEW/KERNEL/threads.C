@@ -112,7 +112,9 @@ namespace BALL
 				d.setCurrent();
 			}
 			catch(...)
-			{}
+			{
+				output_(String("Exception in ") + String(__FILE__) + __LINE__, true);
+			}
 		}
 
 		// ==========================================
