@@ -24,7 +24,7 @@ fixed:
 - it was possible to delete molecular entities while simulation was running -> core dump
 - PeptideDialog: deletion of sequence
 - problem with normals in Cartoon model
-- issue with restoring window's geometry on X11
+- issue with restoring window's geometry on X11 (still buggy on some X-Servers)
 
 changed:
 - Scene Preferences
