@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.C,v 1.8 2004/09/27 15:29:15 oliver Exp $
+// $Id: HBondModel.C,v 1.9 2004/10/22 21:27:00 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/HBondModel.h>
@@ -20,7 +20,7 @@ namespace BALL
 		HBondModelProcessor::HBondModelProcessor()
 			throw()
 			: AtomBondModelBaseProcessor(),
-				radius_(0.3)
+				radius_((float)0.3)
 		{
 		}
 
@@ -44,7 +44,7 @@ namespace BALL
 			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
-			radius_ = 0.3;
+			radius_ = (float) 0.3;
 		}
 
 		void HBondModelProcessor::set(const HBondModelProcessor& model)
