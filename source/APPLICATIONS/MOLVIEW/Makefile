@@ -10,9 +10,6 @@ include .Dependencies
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
 
-PYTHON_LIBS=/opt/misc/lib/python1.5/config/libpython1.5.a -lsocket -lnsl -ldl  -lpthread -lthread -lreadline -ltermcap
-#PYTHON_LIBS=/opt/misc/lib/python1.5/config/libpython1.5.a -ldl  -lpthread  -lm
-
 CPP_SOURCES=\
 	DIALOGS/DlgAbout.C\
 	DIALOGS/DlgAboutData.C\
