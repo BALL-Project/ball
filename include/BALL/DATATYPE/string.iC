@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.23 2000/07/23 10:37:35 oliver Exp $
+// $Id: string.iC,v 1.24 2000/07/24 19:15:51 amoll Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -705,7 +705,6 @@ bool String::isFloat() const
 {
   char* test;
 	char* str = const_cast<char*>(c_str());
-  double x;
   errno = 0;
   x = strtod(str, &test);
 	return (errno == 0 && strlen(test) == 0);
