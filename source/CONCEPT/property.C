@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.12 2000/08/24 12:00:47 amoll Exp $
+// $Id: property.C,v 1.13 2000/08/24 20:25:41 amoll Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -77,6 +77,7 @@ namespace BALL
 		}
 	}
 
+	/// Output operator
 	ostream& operator << (std::ostream& s, const NamedProperty& property)
   {	
 		s << property.type_;
@@ -91,19 +92,22 @@ namespace BALL
 			case NamedProperty::FLOAT : s << property.data_.f; break;
 			case NamedProperty::DOUBLE :s << property.data_.d; break;
 			case NamedProperty::STRING :s << *property.data_.s; break;
-			case NamedProperty::OBJECT :s << property.data_.object; break;
+			case NamedProperty::OBJECT :/*
+				PersistenceManager pm;
+				pm.setOstream(s);
+				property.data_.object->write(pm);*/
+				//s << property.data_.object; 
+				break;
 			default:break;
 		}
 		return s;
 	}
-		/// Input operator
+
+	/// Input operator
 	istream& operator >> (std::istream& s, NamedProperty& property)
   {	
-		char c;
 		s >> (int)property.type_;
-		s >> c;
 		s >> property.name_;
-		s >> c;
 		switch (property.type_)
 		{
 			case NamedProperty::BOOL : 	s >> property.data_.b; break;
@@ -111,7 +115,9 @@ namespace BALL
 			case NamedProperty::UNSIGNED_INT : 	s >> property.data_.ui; break;
 			case NamedProperty::FLOAT : s >> property.data_.f; break;
 			case NamedProperty::DOUBLE :s >> property.data_.d; break;
-			case NamedProperty::OBJECT :/*s >> (PersistentObject*)property.data_.object;*/ break;
+			case NamedProperty::OBJECT :
+				/*s >> (PersistentObject*)property.data_.object;*/ 
+				break;
 			case NamedProperty::NONE: break;
 			case NamedProperty::STRING :
 				string str;
@@ -133,19 +139,16 @@ namespace BALL
 		vector<const NamedProperty>::iterator it = property_manager.named_properties_.begin();
 		for (; it != property_manager.named_properties_.end(); ++it)
 		{
-			s << it << endl;
+			s << *it << endl;
 		}
 		return s;
 	}
 
   istream& operator >> (istream& s, PropertyManager& property_manager)
   {	
-		char c;
 		int size;
     s >> property_manager.bitvector_;
-		s >> c;
 		s >> size;
-		s >> c;
 		for (int i = 0; i < size; i++)
 		{
 			NamedProperty np;
