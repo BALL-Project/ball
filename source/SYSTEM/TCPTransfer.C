@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.30 2003/08/28 13:23:12 oliver Exp $
+// $Id: TCPTransfer.C,v 1.31 2004/12/10 16:45:13 amoll Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -40,7 +40,7 @@
 #	define GLOBAL_CLOSE ::close
 #endif
 
-#include <fstream>				// ofstream
+#include <fstream>				// ostream
 #include <stdio.h>
 
 
@@ -54,7 +54,7 @@ namespace BALL
 	}
 
 
-	TCPTransfer::TCPTransfer(std::ofstream& file, const String& address)
+	TCPTransfer::TCPTransfer(std::ostream& file, const String& address)
 		throw(TCPTransfer::TransferFailed) 
 	:	host_address_(""),
 		file_address_(""),
@@ -104,7 +104,7 @@ namespace BALL
 	}
 
 
-	void TCPTransfer::set(std::ofstream&  file, 
+	void TCPTransfer::set(std::ostream&  file, 
 													 Protocol 			protocol, 
 													 const String& 	host_address, 
 													 const String& 	file_address,
@@ -151,7 +151,7 @@ namespace BALL
 	}
 
 
-	bool TCPTransfer::set(std::ofstream& file, const String& address)
+	bool TCPTransfer::set(std::ostream& file, const String& address)
 		throw()
 	{
 		if (socket_ != 0)

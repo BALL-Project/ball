@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.18 2003/08/26 08:04:55 oliver Exp $
+// $Id: TCPTransfer.h,v 1.19 2004/12/10 16:44:59 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
@@ -23,7 +23,7 @@ namespace BALL
 {
 	/** Class for TCPTransfers.
 	 * 	You can use http and ftp protocol to transfer files
-	 * 	from the internet and store them in an ofstream.
+	 * 	from the internet and store them in an ostream.
 	 * 	Support for login, password and port is build in for
 	 * 	FTP and HTTP. FTP transports are done by passive FTP, so
 	 * 	no problems with local firewalls are encountered.
@@ -96,12 +96,12 @@ namespace BALL
 				
 			/** Detailled constructor.
 			 *	The file from the given address is downloaded and
-			 *	stored in the ofstream instance.
+			 *	stored in the ostream instance.
 			 *	You can specify protocol, port and a login/pass by using
 			 *	the syntax:  \par
 			 *	http[ftp]://login:pass@server.com:port/fileaddress
 			 */
-			TCPTransfer(std::ofstream& file, const String& address)
+			TCPTransfer(std::ostream& file, const String& address)
 				throw(TransferFailed);
 			
 			/// Destructor.
@@ -119,14 +119,14 @@ namespace BALL
 			 * 	You can set a new file and address, but the transfer is not
 			 * 	yet done. To do that, use transfer() afterwards.
 			 */
-			bool set(::std::ofstream& file, const String& address)
+			bool set(::std::ostream& file, const String& address)
 				throw();
 			
 			
 			/** Detailled set method.
-			 *  @see set(ofstream& file, const String& address)
+			 *  @see set(ostream& file, const String& address)
 			 */
-			void set(::std::ofstream& file, 
+			void set(::std::ostream& file, 
 							 Protocol protocol, 
 							 const String& host_address, 
 							 const String& file_address,
@@ -197,7 +197,7 @@ namespace BALL
 			}
 
 			/// Get a pointer to the stream.
-			const ::std::ofstream* getStream() const
+			const ::std::ostream* getStream() const
 				throw()
 			{
 				return fstream_;
@@ -235,7 +235,7 @@ namespace BALL
 				Protocol 		protocol_;
 				char				buffer_[BUFFER_SIZE + 1];
 				Socket			socket_;
-				std::ofstream*  fstream_;
+				std::ostream*  fstream_;
 				
 				/*_ Send data through the socket.
 				 */
