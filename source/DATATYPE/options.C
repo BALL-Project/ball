@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.9 2000/07/11 08:32:24 oliver Exp $ 
+// $Id: options.C,v 1.10 2000/07/12 19:35:03 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -15,6 +15,7 @@ using namespace std;
 
 namespace BALL 
 {
+	const Size Options::MAX_ENTRY_LENGTH = 1024;
 
 	Options::Options()
 		:	StringHashMap<String>(),
