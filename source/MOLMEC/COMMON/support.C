@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.25 2001/03/21 12:27:32 anker Exp $
+// $Id: support.C,v 1.26 2001/05/16 01:46:48 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -355,6 +355,43 @@ namespace BALL
 			return counter;
 		}
 
+		
+    Size sortNonBondedAtomPairsAfterSelection
+      (vector< pair <Atom*, Atom*> >& pair_vector)
+		{
+			Size number_of_pairs_with_selection = 0;
+
+			if (pair_vector.size() > 0)
+			{
+				// sort the list such that those pairs where one of the atoms
+				// is selected appear at the beginning of the list and the 
+				// remaining atoms at the end
+				ForceField::PairVector::iterator current_it = pair_vector.begin();
+				ForceField::PairVector::iterator last_it = pair_vector.end();
+				last_it--;
+				while (!(current_it == last_it))
+				{
+					if (current_it->first->isSelected() || current_it->second->isSelected())
+					{
+						// increment the current_it iterator and the pair counter
+						current_it++;
+						number_of_pairs_with_selection++;
+					}
+					else
+					{
+						// this one was not selected, put it at the end of the list,
+						// increment the last_it iterator
+						swap(*current_it, *last_it);
+						last_it--;
+					}
+				}
+			}
+
+			// return the number of pairs where any atom is selected
+			// these pairs appear at the beginning of the list
+			return number_of_pairs_with_selection;
+		}
+ 
 
 		// Add solvent molecules from "solvent" to "system" if they lie 
 		// in the box "box" and if they do not overlap with molecules in 
