@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
 <class>PeptideDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -594,9 +594,9 @@
         </property>
         <property name="paletteBackgroundColor">
             <color>
-                <red>203</red>
-                <green>203</green>
-                <blue>203</blue>
+                <red>255</red>
+                <green>255</green>
+                <blue>255</blue>
             </color>
         </property>
         <property name="palette">
@@ -850,7 +850,7 @@
             </palette>
         </property>
         <property name="readOnly">
-            <bool>true</bool>
+            <bool>false</bool>
         </property>
     </widget>
 </widget>
@@ -1023,9 +1023,15 @@
         <receiver>PeptideBuilder</receiver>
         <slot>angle_changed()</slot>
     </connection>
+    <connection>
+        <sender>sequence</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>insert_seq()</slot>
+    </connection>
 </connections>
 <slots>
-    <slot>ala_pressed()</slot>
+    <slot>insert_seq()</slot>
     <slot>arg_pressed()</slot>
     <slot>asn_pressed()</slot>
     <slot>asp_pressed()</slot>
@@ -1048,6 +1054,7 @@
     <slot>back_pressed()</slot>
     <slot>close_pressed()</slot>
     <slot>angle_changed()</slot>
+    <slot>ala_pressed()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
