@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.10 2003/10/19 16:23:00 amoll Exp $
+// $Id: colorProcessor.C,v 1.11 2003/10/19 18:26:33 amoll Exp $
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/DATATYPE/colorExtension2.h>
@@ -196,25 +196,7 @@ void ColorProcessor::colorMeshFromGrid_(Mesh& mesh)
 	vector<Vector3>::iterator sit = mesh.vertex.begin();
 	for(; sit != mesh.vertex.end(); sit++)
 	{
-		AtomBox* box = atom_grid_.getBox(*sit);
-		float distance = 9999999;
-		const Atom* atom = 0;
-		
-		List<AtomBox*> boxes = getNeighbourBoxes_(*box);
-		List<AtomBox*>::Iterator boxes_it = boxes.begin();
-		for (; boxes_it != boxes.end(); boxes_it++)
-		{
-			AtomBox::DataIterator hit = (*boxes_it)->beginData();
-			for (;hit != box->endData(); hit++)
-			{
-				float new_dist = ((*hit)->getPosition() - *sit).getSquareLength();
-				if (new_dist < distance)
-				{
-					atom = *hit;
-					distance = new_dist;
-				}
-			}
-		}
+		const Atom* atom = *atom_grid_.getClosestItem(*sit, 1);
 
 		if (atom == 0)
 		{
@@ -233,30 +215,6 @@ void ColorProcessor::setComposites(const CompositeSet* composites)
 	composites_ = composites;
 	atom_grid_created_ = false;
 	atom_grid_.clear();
-}
-
-
-List<ColorProcessor::AtomBox*> ColorProcessor::getNeighbourBoxes_(ColorProcessor::AtomBox& box)
-	throw()
-{
-	List<ColorProcessor::AtomBox*> box_list;
-	Position x, y, z;
-	atom_grid_.getIndices(box, x, y, z);
-	for (Index xi = -1; xi <= 1; xi++)
-	{
-		for (Index yi = -1; yi <= 1; yi++)
-		{
-			for (Index zi = -1; zi <= 1; zi++)
-			{
-				AtomBox* box_ptr = atom_grid_.getBox(x+xi, y+yi, z+zi);	
-				if (box_ptr != 0 && !box_ptr->isEmpty())
-				{
-					box_list.push_back(box_ptr);
-				}
-			}
-		}
-	}
-	return box_list;
 }
 
 

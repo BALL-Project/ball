@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.9 2003/10/19 14:09:33 amoll Exp $
+// $Id: colorProcessor.h,v 1.10 2003/10/19 18:26:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -163,10 +163,6 @@ namespace BALL
 
 			//_ Colorize the mesh with the computed grid.
 			virtual void colorMeshFromGrid_(Mesh& mesh)
-				throw();
-
-			//_ Get the neighbour boxes of a box in its grid
-			List<AtomBox*> getNeighbourBoxes_(AtomBox& box)
 				throw();
 
 			//@} 
