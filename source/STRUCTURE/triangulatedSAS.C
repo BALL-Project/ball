@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSAS.C,v 1.2 2003/11/04 20:05:04 strobel Exp $
+// $Id: triangulatedSAS.C,v 1.3 2003/11/04 22:34:22 amoll Exp $
 
 #	include <BALL/KERNEL/atom.h>
 #	include <BALL/KERNEL/molecule.h>
@@ -84,7 +84,7 @@ void Circle2HIN(const TCircle3<double>& circle, const String& file)
 	molecule->insert(*a2);
 	System* system = new System;
 	system->insert(*molecule);
-	HINFile output(file,ios::out);
+	HINFile output(file,std::ios::out);
 	output << *system;
 	output.close();
 	delete system;
@@ -811,8 +811,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 	}
 
 
-	Size SASTriangulator::numberOfRefinements
-			(const double& density, const double& radius)
+	Size SASTriangulator::numberOfRefinements(const double& density, const double& radius)
 		throw()
 	{
 		double test0 = (4.0*density*Constants::PI*radius*radius-12.0)/30.0;
@@ -836,7 +835,7 @@ void Plane2HIN(const TPlane3<double>& plane, const String& file, Position size =
 		{
 			n = 4;
 		}
-if (n == 4) { cout << "numberOfRefinements: " << n << "\n"; }
+//if (n == 4) { cout << "numberOfRefinements: " << n << "\n"; }
 		return n;
 	}
 
