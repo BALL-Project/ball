@@ -485,7 +485,7 @@ void DisplayProperties::addHydrogens()
 	for (; list_it != temp_selection_.end(); ++list_it)
 	{	
 		(*list_it)->apply(object_processor_.fragmentdb.add_hydrogens);
-		number_of_hydrogens += object_processor_.fragmentdb.add_hydrogens.getNumberOfInsertedH();
+		number_of_hydrogens += object_processor_.fragmentdb.add_hydrogens.getNumberOfInsertedHydrogens();
 		(*list_it)->apply(object_processor_.fragmentdb.build_bonds);
 		object_processor_.applyOn(**list_it);
 
