@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.C,v 1.7 2000/07/25 21:14:22 oliver Exp $
+// $Id: forceFieldComponent.C,v 1.8 2000/07/26 08:25:50 oliver Exp $
 
 
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
@@ -84,6 +84,10 @@ namespace BALL
 	}
 
 	void ForceFieldComponent::updateForces() 
+	{
+	}
+
+	void ForceFieldComponent::update()
 	{
 	}
 
