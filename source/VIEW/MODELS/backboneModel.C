@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.22 2004/12/28 14:13:48 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.23 2004/12/28 14:35:22 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -313,16 +313,18 @@ namespace BALL
 			// initialise a first set of points in a circle around the start position
 			////////////////////////////////////////////////////////////
 			vector<Vector3> new_points;
-			Matrix4x4 m;
-			m.setRotation(slides_angle, n % r);
 			Vector3 x = r;
 			new_points.push_back(x);
+
+			Matrix4x4 m;
+			m.setRotation(slides_angle, n % r);
 			for (Position p = 0; p < slides - 1; p++)
 			{
 				x = m * x;
 				new_points.push_back(x);
 			}
-			// add also a dummy for closing of ring
+
+			// add also a dummy for the closing of the ring
 			new_points.push_back(new_points[0]);
 
 			////////////////////////////////////////////////////////////
@@ -337,7 +339,13 @@ namespace BALL
 			Mesh* mesh = new Mesh();
 			mesh->setComposite(atoms_of_spline_points_[start]->getParent());
 			geometric_objects_.push_back(mesh);
-				
+
+			for (Position p = 0; p < slides + 1; p++)
+			{
+				mesh->vertex.push_back(last_point_ + new_points[p]);
+				mesh->vertex.push_back(new_points[p]);
+			}
+
 			//------------------------------------------------------>
 			// iterate over all spline_points_
 			//------------------------------------------------------>
@@ -378,7 +386,7 @@ namespace BALL
 
 				// dont forget the dummy for closing the ring
  				new_points[new_points.size() - 1] = new_points[0];
-				
+
 				////////////////////////////////////////////////////////////
 				// create a new mesh if we have a different atom now
 				////////////////////////////////////////////////////////////
