@@ -1,7 +1,7 @@
-// $Id: assignShiftProcessor.C,v 1.16 2000/09/26 13:43:10 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.17 2000/09/27 07:20:39 oliver Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
-#include<BALL/KERNEL/PDBAtom.h>
+#include<BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/DATATYPE/string.h>
@@ -140,15 +140,14 @@ cout << "molekuel gesetzt" << endl;
 			return Processor::CONTINUE;
 		}
 
-		if (!RTTI::isKindOf<PDBAtom>(object))
+		if (!RTTI::isKindOf<Atom>(object))
 		{
-cout << "kein PDBAtom" << endl;
 			return Processor::CONTINUE;
 		}
 
 		// --------------------set the shift value--------------------------------------------
-		PDBAtom* patom_;
-		patom_= RTTI::castTo<PDBAtom>(object);
+		Atom* patom_;
+		patom_= RTTI::castTo<Atom>(object);
 		
 		String fullName(number_of_fragment_);
 		fullName += patom_->getFragment()->getName();

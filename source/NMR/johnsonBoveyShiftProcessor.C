@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.C,v 1.5 2000/09/24 13:24:32 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.6 2000/09/27 07:20:24 oliver Exp $
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -290,7 +290,7 @@ namespace BALL
 		Log.info() << "# nuclei: " << atom_list_.size() << endl;
 		Log.info() << "# rings: " << aromat_list_.size() << endl;
 		// iterate over all nuclei
-		for (list<PDBAtom*>::iterator atom_iter = atom_list_.begin();
+		for (list<Atom*>::iterator atom_iter = atom_list_.begin();
 				 atom_iter != atom_list_.end(); ++atom_iter)  
 		{
 			// iterate over all aromatic rings and add their contributions
@@ -440,9 +440,9 @@ namespace BALL
 		}
 		// Liste um Aromaten erweitert
 		
-		if (RTTI::isKindOf<PDBAtom>(composite))
+		if (RTTI::isKindOf<Atom>(composite))
 		{			
-			PDBAtom* atom_ptr = RTTI::castTo<PDBAtom>(composite);
+			Atom* atom_ptr = RTTI::castTo<Atom>(composite);
 			
 			for (Size counter = 0; counter < expressions_.size(); counter++)
 			{
