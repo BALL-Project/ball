@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.11 2001/03/06 00:12:23 amoll Exp $
+// $Id: fragmentDB.h,v 1.12 2001/07/20 08:01:09 oliver Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -15,8 +15,12 @@
 #	include <BALL/DATATYPE/stringHashSet.h>
 #endif
 
-#ifndef BALL_DATATYPE_QUADRUPLE_H
-#	include <BALL/DATATYPE/quadruple.h>
+#ifndef BALL_DATATYPE_TRIPLE_H
+#	include <BALL/DATATYPE/triple.h>
+#endif
+
+#ifndef BALL_MATHS_MATRIX44_H
+#	include <BALL/MATHS/matrix44.h>
 #endif
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
@@ -446,37 +450,16 @@ namespace BALL
 			*/
 			Size	number_of_inserted_h_;
 			
-
 			/*_	Maps the handle of the reference fragments onto StringHashMaps containing 
 					the hydrogen names in this fragment 
 			*/
 			HashMap<Handle, StringHashSet> reference_fragment_h_names_;
 
-			//_@}
-			/*_ @name private functions
-			*/	
-			//_@{
+		  static Matrix4x4 matchVectors_
+				(const Vector3& w1, const Vector3& w2, const Vector3& w3,
+				 const Vector3& v1, const Vector3& v2, const Vector3& v3);
 
-			/*_ turns passed vector around x1- axis
-			*/
-			void turn_x1_(Vector3&,const float);
-						
-			/*_ turns passed vector around x2- axis
-			*/
-			void turn_x2_(Vector3&,const float);
-						
-			/*_ turns passed vector around x3- axis
-			*/
-			void turn_x3_(Vector3&,const float);
-			
-			/*_ calculates angle of passed vector to x1_x2 plane
-			*/
-			float winkelx1_x2_(Vector3&);
-			
-			/*_ calculates angle of passed vector to x1_x3 plane
-			*/
-			float winkelx1_x3_(Vector3&);
-			
+			// BAUSTELLE: bull shit
 			/*_ Calculates position of hydrogen to be inserted based on geometric comparison.
 					Creates a new PDBAtom which is added to the atom list of the current residue.
 					Creates a new bond between inserted hydrogen and passed Bindungsatom.
@@ -502,17 +485,16 @@ namespace BALL
 			*/
 			PDBAtom* createNewHydrogen_
 				(const Atom& ref_hydrogen, 
-				 const Atom& center_atom, const Atom& atom_1, const Atom& atom_2, const Atom& atom_3,
-				 const Atom& ref_center_atom, const Atom& ref_atom_1, const Atom& ref_atom_2, const Atom& ref_atom_3)
+				 const Atom& center_atom, const Atom& atom_1, const Atom& atom_2,
+				 const Atom& ref_center_atom, const Atom& ref_atom_1, const Atom& ref_atom_2)
 				throw();
 
-			Quadruple<bool, const Atom*, const Atom*, const Atom*>
-				getThreeReferenceAtoms_(const Atom& ref_center_atom)
+			Triple<bool, const Atom*, const Atom*>
+				getTwoReferenceAtoms_(const Atom& ref_center_atom)
 				throw();
 
 			//_@}	
 		};
-
 
 		/**	Bond creation processor
 		*/
