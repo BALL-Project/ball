@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ooiEnergy.h,v 1.10 2003/03/26 13:08:26 sturm Exp $
+// $Id: ooiEnergy.h,v 1.11 2003/03/31 16:59:19 oliver Exp $
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
 #define BALL_SOLVATION_OOIENERGY_H
@@ -18,12 +18,22 @@ namespace BALL
 {
 	class AtomContainer;
 
-	/** Calculate the solvation energy after OOI et al. 
-			(Proc. of the National US Academy of Sciences)
+	/** Calculate the solvation energy after Ooi et al. 
+			This function computes the solvation energy using the empirical surface model 
+			proposed by Ooi et al.(T. Ooi, M. Oobatake, G. Nemethy, H. A. Scheraga:
+			Accessible surface areas as a measure off the thermodynamic parameters
+			of hydration of peptides, Proc. Natl. Acad. Sci. USA, Vol. 84 (1987), pp. 3086-3090).
+			\par
+
+			The method is parameterized for proteins only. Calling the function with different
+			structures probably yields results of arbitrary meaninglessness.
+			\pare
+
 			The energy is returned in units of kJ/mol.
-			Unparametrized atoms are simply ignored, this leads to unreasonable values.  \par
-			<b>Files:</b> \par
- types are taken from <tt>solvation/Ooi.ini</tt> \par
+			Unparametrized atoms are simply ignored, which might lead to unreasonable values.  
+			\par
+			<b>Files:</b> \par types and parameters are taken from <tt>data/solvation/Ooi.ini</tt> 
+			\par
 	\ingroup Solvation	
 	*/ 
 	double calculateOoiEnergy(AtomContainer& atoms);
