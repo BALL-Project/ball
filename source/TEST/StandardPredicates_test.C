@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.13 2000/05/26 17:15:31 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.14 2001/05/24 15:34:22 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.13 2000/05/26 17:15:31 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.14 2001/05/24 15:34:22 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -198,11 +198,19 @@ CHECK(SolventPredicate::operator () (const Atom& atom) const )
   //BAUSTELLE
 RESULT
 
-
 // tests for class MoleculePredicate::
 
 CHECK(MoleculePredicate::operator () (const Atom& atom) const )
-  //BAUSTELLE
+	Atom atom;
+	Molecule mol;
+	mol.insert(atom);
+	MoleculePredicate pred;
+	pred.setArgument("");
+	TEST_EQUAL(pred(atom), true)
+	mol.setName("TESTMOL");
+	TEST_NOT_EQUAL(pred(atom), true)
+	pred.setArgument("TESTMOL");
+	TEST_EQUAL(pred(atom), true)
 RESULT
 
 
@@ -223,8 +231,6 @@ HINFile f("data/L-Tryptophan.hin");
 System S;
 f >> S;
 f.close();
-
-// tests for class inRingPredicate::
 
 // tests for class BackBonePredicate::
 
@@ -249,6 +255,10 @@ CHECK(BackBonePredicate::operator () (const Atom& atom) const )
 	}
 RESULT
 
+// tests for InRingPredicate
+
+CHECK(InRingPredicate::dfs () (const Atom& first_atom, const Size limit, HashSet<const Bond*>& visited) const)
+RESULT
 
 CHECK(InRingPredicate::operator () (const Atom& atom) const )
 	InRingPredicate in0Ring;
