@@ -1,4 +1,4 @@
-// $Id: MOL2File.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: MOL2File.h,v 1.2 2000/02/17 09:47:40 oliver Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -18,7 +18,7 @@
 namespace BALL 
 {
 
-	/**	HyperChem file class.
+	/**	SYBYL MOL2 file class.
 			This class enables BALL to read and write SYBYL MOL2 files (Tripos).
 			\\
 			{\bf Definition:} \URL{BALL/FORMAT/MOL2File.h}
