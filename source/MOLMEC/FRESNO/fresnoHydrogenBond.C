@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.14 2004/06/13 14:19:32 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.15 2004/06/16 16:29:19 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -23,8 +23,7 @@ namespace BALL
 	FresnoHydrogenBond::FresnoHydrogenBond()
 		throw()
 		:	ForceFieldComponent(),
-			possible_hydrogen_bonds_(),
-			already_used_()
+			possible_hydrogen_bonds_()
 	{
 		// set component name
 		setName("Fresno HydrogenBond");
@@ -34,8 +33,7 @@ namespace BALL
 	FresnoHydrogenBond::FresnoHydrogenBond(ForceField& force_field)
 		throw()
 		:	ForceFieldComponent(force_field),
-			possible_hydrogen_bonds_(),
-			already_used_()
+			possible_hydrogen_bonds_()
 	{
 		// set component name
 		setName("Fresno HydrogenBond");
@@ -46,7 +44,6 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(fhb),
 			possible_hydrogen_bonds_(fhb.possible_hydrogen_bonds_),
-			already_used_(fhb.already_used_),
 			h_bond_distance_lower_(fhb.h_bond_distance_lower_),
 			h_bond_distance_upper_(fhb.h_bond_distance_upper_),
 			h_bond_angle_lower_(fhb.h_bond_angle_lower_),
@@ -66,7 +63,6 @@ namespace BALL
 		throw()
 	{
 		possible_hydrogen_bonds_.clear();
-		already_used_.clear();
 		h_bond_distance_lower_ = 0.0;
 		h_bond_distance_upper_ = 0.0;
 		h_bond_angle_lower_ = 0.0;
@@ -142,7 +138,6 @@ namespace BALL
 			{
 				if (fresno_types[&*A_it] == FresnoFF::HBOND_HYDROGEN)
 				{
-					already_used_.insert(pair<const Atom*, bool>(&*A_it, false));
 					for (B_it = B->beginAtom(); +B_it; ++B_it)
 					{
 						if (fresno_types.has(&*B_it))
@@ -175,7 +170,6 @@ namespace BALL
 			{
 				if (fresno_types[&*B_it] == FresnoFF::HBOND_HYDROGEN)
 				{
-					already_used_.insert(pair<const Atom*, bool>(&*B_it, false));
 					for (A_it = A->beginAtom(); +A_it; ++A_it)
 					{
 						if (fresno_types.has(&*A_it))
@@ -221,13 +215,6 @@ namespace BALL
 		Molecule debug_molecule;
 		#endif
 
-		// clear the already-used-flags
-		HashMap<const Atom*, bool>::Iterator au_it = already_used_.begin();
-		for (; +au_it; ++au_it)
-		{
-			au_it->second = false;
-		}
-
 		Size verbosity 
 			= getForceField()->options.getInteger(FresnoFF::Option::VERBOSITY);
 
@@ -249,129 +236,105 @@ namespace BALL
 			hydrogen = it->first;
 			// we could check for multiple scoring here, but it would cost a lot
 			// of performance. 
-			if (already_used_.has(hydrogen))
+			acceptor = it->second;
+
+			// h_bond is the vector of the hbond
+
+			h_bond = acceptor->getPosition() - hydrogen->getPosition();
+			distance = fabs(ideal_hbond_length_ - h_bond.getLength());
+
+			// if the distance is too large, the product of g1 and g2 is zero, so
+			// we can skip the rest
+
+			if (distance <= h_bond_distance_upper_)
 			{
-				if (already_used_[hydrogen] == false)
+				// calculate g1
+
+				val = ((FresnoFF*)getForceField())->base_function->calculate(distance,
+						h_bond_distance_lower_, h_bond_distance_upper_);
+
+				// calculate the angle of the hbond. It is necessary to find out
+				// which one of the atoms is the actual hydrogen in order to
+				// calculate the vector of the connection (in contrast to h bond)
+				// of the hydrogen to the molecule it is attached to
+
+				if (hydrogen->getElement().getSymbol() == "H")
 				{
-					acceptor = it->second;
+					h_connection = 
+						hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition()
+						- hydrogen->getPosition();
+				}
+				// PARANOIA
+				else
+				{
+					cerr << "FresnoHydrogenBond::updateEnergy(): "
+						<< "black magic: hydrogen bond without hydrogens:" << endl
+						<< hydrogen->getFullName() << ":" << acceptor->getFullName()
+						<< endl;
+					continue;
+				}
+				// /PARANOIA
 
-					// h_bond is the vector of the hbond
+				// angle is the angle of the h bond
+				angle = ideal_hbond_angle_ - h_bond.getAngle(h_connection).toDegree();
 
-					h_bond = acceptor->getPosition() - hydrogen->getPosition();
-					distance = fabs(ideal_hbond_length_ - h_bond.getLength());
-
-					// if the distance is too large, the product of g1 and g2 is zero, so
-					// we can skip the rest
-
-					if (distance <= h_bond_distance_upper_)
-					{
-						// calculate g1
-
-						val = ((FresnoFF*)getForceField())->base_function->calculate(distance,
-								h_bond_distance_lower_, h_bond_distance_upper_);
-
-						// calculate the angle of the hbond. It is necessary to find out
-						// which one of the atoms is the actual hydrogen in order to
-						// calculate the vector of the connection (in contrast to h bond)
-						// of the hydrogen to the molecule it is attached to
-
-						if (hydrogen->getElement().getSymbol() == "H")
-						{
-							h_connection = 
-								hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition()
-								- hydrogen->getPosition();
-						}
-						// PARANOIA
-						else
-						{
-							cerr << "FresnoHydrogenBond::updateEnergy(): "
-								<< "black magic: hydrogen bond without hydrogens:" << endl
-								<< hydrogen->getFullName() << ":" << acceptor->getFullName()
-								<< endl;
-							continue;
-						}
-						// /PARANOIA
-
-						// angle is the angle of the h bond
-						angle = ideal_hbond_angle_ - h_bond.getAngle(h_connection).toDegree();
-
-						// if angle is too large, skip the rest
-						if (angle <= h_bond_angle_upper_)
-						{
-							val *= ((FresnoFF*)getForceField())->base_function->calculate(angle,
-									h_bond_angle_lower_, h_bond_angle_upper_);
-							if (already_used_.has(hydrogen))
-							{
-								already_used_[hydrogen] = true;
-							}
-							// PARANOIA
-							else
-							{
-								Log.error() << "FresnoHydrogenBond::setup(): "
-									<< "already_used_ doesn't know this hydrogen." << endl;
-							}
-							// /PARANOIA
-					
+				// if angle is too large, skip the rest
+				if (angle <= h_bond_angle_upper_)
+				{
+					val *= ((FresnoFF*)getForceField())->base_function->calculate(angle,
+							h_bond_angle_lower_, h_bond_angle_upper_);
 #ifdef DEBUG
-							Atom* atom_ptr_H = new Atom();
-							atom_ptr_H->setElement(PTE[Element::Fe]);
-							atom_ptr_H->setName("H");
-							atom_ptr_H->setPosition(hydrogen->getPosition());
-							atom_ptr_H->setCharge(val);
+					Atom* atom_ptr_H = new Atom();
+					atom_ptr_H->setElement(PTE[Element::Fe]);
+					atom_ptr_H->setName("H");
+					atom_ptr_H->setPosition(hydrogen->getPosition());
+					atom_ptr_H->setCharge(val);
 
-							Atom* atom_ptr_acceptor = new Atom();
-							atom_ptr_acceptor->setElement(PTE[Element::Fe]);
-							atom_ptr_acceptor->setName("ACC");
-							atom_ptr_acceptor->setPosition(acceptor->getPosition());
-							atom_ptr_acceptor->setCharge(val);
+					Atom* atom_ptr_acceptor = new Atom();
+					atom_ptr_acceptor->setElement(PTE[Element::Fe]);
+					atom_ptr_acceptor->setName("ACC");
+					atom_ptr_acceptor->setPosition(acceptor->getPosition());
+					atom_ptr_acceptor->setCharge(val);
 
-							Atom* atom_ptr_donor = new Atom();
-							atom_ptr_donor->setElement(PTE[Element::Fe]);
-							atom_ptr_donor->setName("DON");
-							atom_ptr_donor->setPosition(hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition());
-							atom_ptr_donor->setCharge(val);
+					Atom* atom_ptr_donor = new Atom();
+					atom_ptr_donor->setElement(PTE[Element::Fe]);
+					atom_ptr_donor->setName("DON");
+					atom_ptr_donor->setPosition(hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition());
+					atom_ptr_donor->setCharge(val);
 
-							atom_ptr_H->createBond(*atom_ptr_acceptor);
-							atom_ptr_H->createBond(*atom_ptr_donor);
+					atom_ptr_H->createBond(*atom_ptr_acceptor);
+					atom_ptr_H->createBond(*atom_ptr_donor);
 
-							debug_molecule.insert(*atom_ptr_H);
-							debug_molecule.insert(*atom_ptr_acceptor);
-							debug_molecule.insert(*atom_ptr_donor);
+					debug_molecule.insert(*atom_ptr_H);
+					debug_molecule.insert(*atom_ptr_acceptor);
+					debug_molecule.insert(*atom_ptr_donor);
 #endif
 
-							// Print all single energy cotributions
-							if (verbosity >= 0)
-							{
-								Atom* donor = it->first->getBond(0)->getPartner(*it->first);
-								Log.info() << "HB: " << val << " " 
-									<< donor->getFullName() << "-"
-									<< it->first->getFullName();
-								if (it->first->getResidue() != 0)
-								{
-									Log.info() << "[" << it->first->getResidue()->getID()
-										<< "]";
-								}
-								Log.info() << "..."
-									<< it->second->getFullName();
-								if (it->second->getResidue() != 0)
-								{
-									Log.info() << "[" << it->second->getResidue()->getID()
-										<< "]";
-								}
-								Log.info() << " (delta d " << distance
-									<< ", delta phi " << angle << ")"
-									<< endl;
-							}
-							energy_ += val;
+					// Print all single energy cotributions
+					if (verbosity >= 0)
+					{
+						Atom* donor = it->first->getBond(0)->getPartner(*it->first);
+						Log.info() << "HB: " << val << " " 
+							<< donor->getFullName() << "-"
+							<< it->first->getFullName();
+						if (it->first->getResidue() != 0)
+						{
+							Log.info() << "[" << it->first->getResidue()->getID()
+								<< "]";
 						}
+						Log.info() << "..."
+							<< it->second->getFullName();
+						if (it->second->getResidue() != 0)
+						{
+							Log.info() << "[" << it->second->getResidue()->getID()
+								<< "]";
+						}
+						Log.info() << " (delta d " << distance
+							<< ", delta phi " << angle << ")"
+							<< endl;
 					}
+					energy_ += val;
 				}
-			}
-			else
-			{
-				Log.error() << "FresnoHydrogenBond::updateEnergy(): "
-					<< "ERROR: hydrogen not found in the already_used list." 
-					<< endl;
 			}
 		}
 
