@@ -93,26 +93,24 @@ namespace BALL
 				 */
 				//@{
 				
-				/**     Initialize the display properties dialog.
-								This method is called automatically
-								immediately before the main application 
-								is started. It adds the dialog's 
-								menu entries and connections.
+				/** Initialize the display properties dialog.
+						This method is called automatically	immediately before the main application 
+						is started. It adds the dialog's menu entries and connections.
 				*/
 				virtual void initializeWidget(MainControl& main_control);
 				
-				/**     Remove the dialog.
-								This method is called by the dialog's destructor.
-								It reverses all actions performed in 
-								initializeWidget (remove menu entries and connections).
+				/** Remove the dialog.
+						This method is called by the dialog's destructor.
+						It reverses all actions performed in initializeWidget 
+						(remove menu entries and connections).
 				*/
 				virtual void finalizeWidget(MainControl& main_control);
 				
-				/**     Update all menu entry states.
-								This method is called just before a popup menu
-								is shown (via the QT signal aboutToShow()).
-								It should be used to update the state of 
-								menu entries (e.g. disable or enable entries).
+				/** Update all menu entry states.
+						This method is called just before a popup menu is shown 
+						(via the QT signal aboutToShow()).
+						It should be used to update the state of menu entries 
+						(e.g. disable or enable entries).
 				*/
 				virtual void checkMenu(MainControl& main_control);
 				//@}
@@ -131,12 +129,12 @@ namespace BALL
 				
 				protected slots:
 					
-					/** @name Protected slots
-					 */
-					
-					/** changes the precision of the selected objects.
-					 */
-					virtual void selectPrecision(const QString& string);
+				/** @name Protected slots
+				 */
+				
+				/** changes the precision of the selected objects.
+				 */
+				virtual void selectPrecision(const QString& string);
 				
 				/** changes the model of the selected objects
 				 */
