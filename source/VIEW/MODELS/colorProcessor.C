@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.5 2003/10/17 16:17:37 amoll Exp $
+// $Id: colorProcessor.C,v 1.6 2003/10/18 10:22:43 amoll Exp $
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/DATATYPE/colorExtension2.h>
@@ -83,6 +83,11 @@ Processor::Result ColorProcessor::operator() (GeometricObject*& object)
 	if (object->getComposite() == 0)
 	{
 		object->setColor(default_color_); 
+		if (RTTI::isKindOf<ColorExtension2>(*object))
+		{
+			ColorExtension2* two_colored = dynamic_cast<ColorExtension2*>(object);
+			two_colored->setColor2(default_color_);
+		}
 		return Processor::CONTINUE;
 	}
 	
@@ -92,17 +97,19 @@ Processor::Result ColorProcessor::operator() (GeometricObject*& object)
 		return Processor::CONTINUE;
 	}
 
+	// ok, we have a two colored object
+	ColorExtension2* two_colored = dynamic_cast<ColorExtension2*>(object);
 	if (RTTI::isKindOf<Bond>(*object->getComposite()))
 	{
 		Bond* bond = (Bond*) object->getComposite();
 		object->setColor(getColor(bond->getFirstAtom()));
-		((ColorExtension2*)object)->setColor2(getColor(bond->getSecondAtom()));
+		two_colored->setColor2(getColor(bond->getSecondAtom()));
 	}
 	else
 	{
 		ColorRGBA color = getColor(object->getComposite());
 		object->setColor(color); 
-		((ColorExtension2*)object)->setColor2(color); 
+		two_colored->setColor2(color);
 	}
 	return Processor::CONTINUE;
 }
