@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.10 2000/04/27 19:10:05 oliver Exp $
+// $Id: BaseFragment_test.C,v 1.11 2000/04/28 06:49:23 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.10 2000/04/27 19:10:05 oliver Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.11 2000/04/28 06:49:23 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ CHECK(countBaseFragments())
 	TEST_EQUAL(bf2.countBaseFragments(), 0)
 RESULT
 
-CHECK(getBaseFragment(Index))
+CHECK(getBaseFragment(Position))
 	BaseFragment bf1("bf1");
 	BaseFragment bf2("bf2");
 	BaseFragment* bf3;
@@ -123,7 +123,7 @@ CHECK(getBaseFragment(Index))
 	TEST_EQUAL(bf3, 0)
 RESULT
 
-CHECK(getBaseFragment(Index) const)
+CHECK(getBaseFragment(Position) const)
 	BaseFragment bf1("bf1");
 	BaseFragment bf2("bf2");
 	const BaseFragment* bf3;
@@ -380,7 +380,7 @@ CHECK(remove(Atom&))
 	bf1.remove(a);
 RESULT
 
-CHECK(getAtom(Index))
+CHECK(getAtom(Position))
 	BaseFragment bf1;
 	Atom a;
 	Atom* ptr = bf1.getAtom(0);
@@ -395,7 +395,7 @@ CHECK(getAtom(Index))
 	TEST_EQUAL(ptr, 0)
 RESULT
 
-CHECK(getAtom(Index) const)
+CHECK(getAtom(Position) const)
 	BaseFragment bf1;
 	Atom a;
 	TEST_EQUAL(bf1.getAtom(0), 0)
