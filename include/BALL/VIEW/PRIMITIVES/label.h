@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.7 2004/02/26 08:41:43 anhi Exp $
+// $Id: label.h,v 1.9 2004/05/27 19:49:50 oliver Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -128,15 +128,6 @@ namespace BALL
 			*/
 			String getText() const
 				throw() { return getName();}
-
-			/** Return the type name of this label.
-					Virtually overridden method for specifying the type name of this label.
-					Important for identifying the type of the label by other objects.
-					\return  String the type name of this label ("Label")
-					\see     GeometricObject::getTypeName
-			*/
-				virtual String getTypeName() const
-				throw();
 
 			//@}
 			/**	@name	debuggers and diagnostics */
