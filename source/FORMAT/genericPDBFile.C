@@ -1,9 +1,12 @@
-// $Id: genericPDBFile.C,v 1.3 1999/12/17 13:57:16 oliver Exp $
+// $Id: genericPDBFile.C,v 1.4 1999/12/28 18:22:24 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
 #include <ctype.h>
 #include <stdarg.h>
+#include <stdlib.h>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -896,11 +899,11 @@ namespace BALL
 		{
 			memcpy(compare_record_type_format_.string, line, 6);
 
-			record_type_format = (PDB::RecordTypeFormat *)bsearch 
-				((char *)&compare_record_type_format_, 
-				 (char *)record_type_format_, 
-				 PDB::NUMBER_OF_REGISTERED_RECORD_TYPES, 
-				 sizeof(PDB::RecordTypeFormat), 
+			record_type_format = (PDB::RecordTypeFormat*)::bsearch 
+				((const void*)&compare_record_type_format_, 
+				 (const void*)record_type_format_, 
+				 (Size)PDB::NUMBER_OF_REGISTERED_RECORD_TYPES, 
+				 (Size)sizeof(PDB::RecordTypeFormat), 
 				 (ComparatorType)RecordNameComparator_);
 			
 			if (record_type_format == 0)
