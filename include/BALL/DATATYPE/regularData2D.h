@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.16.4.2 2002/12/11 11:30:57 anker Exp $
+// $Id: regularData2D.h,v 1.16.4.3 2002/12/11 14:06:44 anker Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -106,6 +106,26 @@ namespace BALL
 			throw();
 
 		//@}
+
+		///
+		void resize(Size i, Size j)
+			throw(Exception::OutOfMemory);
+
+		///
+		void resize(float lower_x, float lower_y, float upper_x, float upper_y, 
+				Size number_of_grid_points_x, Size number_of_grid_points_y)
+			throw(Exception::OutOfMemory);
+
+		///
+		void resize(Vector2 lower, Vector2 upper,
+				Size number_of_grid_points_x, Size number_of_grid_points_y)
+			throw(Exception::OutOfMemory);
+
+		///
+		void resize(Vector2 lower, Vector2 upper,
+				TVector2<Size> number_of_grid_points)
+			throw(Exception::OutOfMemory);
+
 		/**	@name Assignment
 		*/
 		//@{
@@ -482,50 +502,100 @@ namespace BALL
 		return *this;
 	}
 
-	// set method
 	template <typename GridDataType>
-	BALL_INLINE
-	void TRegularData2D<GridDataType>::set(const TRegularData2D<GridDataType>& grid)
+	void TRegularData2D<GridDataType>::resize(Size i, Size j)
 		throw(Exception::OutOfMemory)
 	{
-		// throw away the old data 
+		// 
 		if (data != 0)
 		{
 			delete [] data;
+			data = 0;
 		}
 
-		// create a new array to hold the contents of the grid
-		data = new GridDataType[grid.number_of_grid_points_];
+		// set the number of grid points in all directions
+		number_of_points_x_ = i;
+		number_of_points_y_ = j;
 
-		// if the alloc failed, mark this instance as invalid
-		valid_ = (data != 0);
+		// if the number of grid points in any direction is below 2
+		// (which means that the grid is not three-dimensional!)
+		// then increase to at least one point in each dimension
+		if (number_of_points_x_ < 2)
+		{
+			number_of_points_x_ = 2;
+		}
+		if (number_of_points_y_ < 2)
+		{
+			number_of_points_y_ = 2;
+		}
+
+		// calculate the total number of grid points
+		number_of_grid_points_ 
+			= number_of_points_x_ * number_of_points_y_;
 		
+		// allocate space for the array containing pointers to the objects
+		data = new GridDataType[number_of_grid_points_];
+
+		// mark this instance as invalid if the alloc failed
+		valid_ = (data != 0);			
+
 		if (!valid_)
 		{
 			throw Exception::OutOfMemory(__FILE__, __LINE__, 
-									grid.number_of_grid_points_ * sizeof(GridDataType));
+					number_of_grid_points_ * (Size)sizeof(GridDataType));
 		}
+	}
 
-		// copy the remaining attributes
-		origin_ = grid.origin_;
-		size_   = grid.size_;
+	template <typename GridDataType>
+	BALL_INLINE
+	void TRegularData2D<GridDataType>::resize(float lower_x, float lower_y, 
+			float upper_x, float upper_y, 
+			Size number_of_grid_points_x, Size number_of_grid_points_y)
+		throw(Exception::OutOfMemory)
+	{
 
-		spacing_ = Vector2(grid.getXSpacing(), grid.getYSpacing());
+		// throw away the old data
+		clear();
 
-		number_of_points_x_ = grid.number_of_points_x_;
-		number_of_points_y_ = grid.number_of_points_y_;
-		number_of_grid_points_ = grid.number_of_grid_points_;
-		upper_ = grid.upper_;
+		// resize the data section and set the internal variables holding the
+		// number of grid points for every direction
+		resize(number_of_grid_points_x, number_of_grid_points_y);
 
-		// copy the contents of grid (if enough memory could be allocated)
-		if (valid_)
-		{
-			for (Position i = 0; i < number_of_grid_points_; i++)
-			{
-				data[i] = grid.data[i];
-			}
-		}
+		// calculate the origin as the lowest given coordinates
+		// of each direction
+		origin_.x = ( lower_x < upper_x ) ? lower_x : upper_x;
+		origin_.y = ( lower_y < upper_y ) ? lower_y : upper_y;
+
+		// calculate the box sizes
+		size_.x = fabs(upper_x - lower_x);
+		size_.y = fabs(upper_y - lower_y);
+
+		// calculate the topmost edge
+		upper_.set(origin_.x + size_.x, origin_.y + size_.y); 
+
+		// calculate the grid spacing in all directions
+		spacing_.x = size_.x / (number_of_points_x_ - 1);
+		spacing_.y = size_.y / (number_of_points_y_ - 1);
   }
+
+	template <typename GridDataType>
+	BALL_INLINE
+	void TRegularData2D<GridDataType>::resize(Vector2 lower, Vector2 upper,
+			Size number_of_grid_points_x, Size number_of_grid_points_y)
+		throw(Exception::OutOfMemory)
+	{
+		resize(lower.x, lower.y, upper.x, upper.y, 
+				number_of_grid_points_x, number_of_grid_points_y);
+	}
+
+	template <typename GridDataType>
+	BALL_INLINE
+	void TRegularData2D<GridDataType>::resize(Vector2 lower, Vector2 upper, TVector2<Size> number_of_grid_points)
+		throw(Exception::OutOfMemory)
+	{
+		resize(lower.x, lower.y, upper.x, upper.y, 
+				number_of_grid_points.x, number_of_grid_points.y);
+	}
 
 	template <class GridDataType>
 	BALL_INLINE
