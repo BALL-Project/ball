@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.76 2004/06/13 19:44:01 amoll Exp $
+// $Id: scene.C,v 1.77 2004/06/13 20:56:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -471,6 +471,7 @@ namespace BALL
 			{
 				if (rep.hasProperty(Representation::PROPERTY__HIDDEN)) 
 				{
+					glDisable(current_clipping_plane_);
 					current_clipping_plane_++;
 					return;
 				}
