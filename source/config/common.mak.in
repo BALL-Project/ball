@@ -1,5 +1,5 @@
 # 
-# $Id: common.mak.in,v 1.10 2000/09/05 20:56:32 oliver Exp $
+# $Id: common.mak.in,v 1.11 2002/01/08 15:34:31 anker Exp $
 #
 
 include @BALL_PATH@/source@BINFMT_PATH@/config.mak
@@ -29,7 +29,7 @@ collectlib:	default
 	@for i in $(OBJECTS); do echo $(DIRECTORY)/$$i >>@BALL_PATH@/source@BINFMT_PATH@/$(THISLIB).objects ; done
 
 
-depend:
+depend: $(CPP_SOURCES)
 	@echo "creating dependencies for $(DIRECTORY)..."
 	@echo "" > .Dependencies
 	@@CXX_MAKEDEPEND@ @MAKEDEP_CXX_OPTS@ @BINFMT_INDEX@ $(CPP_SOURCES) $(ADD_CPP_SOURCES) $(STD_CPP_INCLUDES) $(ADD_INCLUDES) $(BALL_INCLUDES) @MAKEDEP_CXX_SUFFIX@
