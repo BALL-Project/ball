@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.22 2004/02/16 17:12:41 amoll Exp $
+// $Id: glRenderer.C,v 1.23 2004/02/17 15:27:56 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -802,14 +802,6 @@ namespace BALL
 			width = pixel_width;
 			return text_array;
 		}
-
-
-		BALL_INLINE
-		void GLRenderer::setColor4ub_(const GeometricObject& object)
-			throw()
-		{
-		}
-
 
 		#		define BALL_OPENGL_SPHERE_X .525731112119133606
 		#		define BALL_OPENGL_SPHERE_Z .850650808352039932

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.10 2004/02/16 17:12:32 amoll Exp $
+// $Id: glRenderer.h,v 1.11 2004/02/17 15:27:52 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -16,6 +16,10 @@
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
+#	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
 #include <qgl.h>
