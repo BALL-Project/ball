@@ -26,7 +26,7 @@ namespace BALL
 				If this dialog is used, it should be created with MainControl as parent.
     		\ingroup  ViewDialogs
 		*/
-		class BALL_EXPORT BALLViewDemo : 
+		class BALLViewDemo : 
 			public BALLViewDemoData,
 			public ModularWidget
 		{
