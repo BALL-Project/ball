@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.85 2000/04/22 10:03:25 oliver Exp $
+dnl    $Id: configure.in,v 1.86 2000/04/28 07:54:19 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2506,6 +2506,11 @@ else
 			${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 		fi
 	else 
+		dnl
+		dnl  create the directory BALL/include/CONFIG
+		dnl  and move config.h to that directory
+		dnl
+		mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
 		${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 	fi
 fi

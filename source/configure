@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.95 2000/04/22 10:03:28 oliver Exp $
+#  $Id: configure,v 1.96 2000/04/28 07:54:22 oliver Exp $
 
 
 ##################################################
@@ -6642,6 +6642,7 @@ else
 			${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 		fi
 	else 
+										mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
 		${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 	fi
 fi
