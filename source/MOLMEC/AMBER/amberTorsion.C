@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.23 2001/06/27 10:41:06 oliver Exp $
+// $Id: amberTorsion.C,v 1.24 2001/12/14 01:20:02 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -406,7 +406,7 @@ namespace BALL
 						cosphi = -1.0;
 					}
 
-					energy_ += it->V * ( 1 + cos(it->f * acos(cosphi) - it->phase));
+					energy_ += it->V * (1 + cos(it->f * acos(cosphi) - it->phase));
 				}
 			}
 		}
