@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashSet.h,v 1.32 2002/12/12 09:48:43 oliver Exp $ 
+// $Id: hashSet.h,v 1.33 2002/12/18 11:42:24 anker Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -809,19 +809,27 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	const HashSet<Key>& HashSet<Key>::operator -= (const HashSet<Key>& rhs) 
+	const HashSet<Key>& HashSet<Key>::operator -= (const HashSet<Key>& hash_set) 
 		throw()
 	{
-		// erase all elements contained in rhs as well
-		HashSet<Key>::ConstIterator it = rhs.begin();
-		for (; it != rhs.end(); ++it)
+		// avoid memory corruption caused by iterating over freed space when
+		// deleting myself
+		if (this == &hash_set)
 		{
-			if (has(*it))
+			clear();
+		}
+		else
+		{
+			// erase all elements which are contained in this and hash_set 
+			HashSet<Key>::ConstIterator it = hash_set.begin();
+			for (; it != hash_set.end(); ++it)
 			{
-				erase(*it);
+				if (has(*it))
+				{
+					erase(*it);
+				}
 			}
 		}
-
 		return *this;
 	}
 
