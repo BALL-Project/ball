@@ -1,0 +1,12 @@
+![OptionsTable: ABCDEFG (10 entries)]
+ABC DEF
+BOOL false
+DEF default
+DEFBOOL true
+DEFINT 123456
+DEFREAL 1.234560
+INT 1234567890
+REAL 1.234560
+SVECTOR (0.0 1.0 2.0) 
+VECTOR (1.000000 2.000000 3.000000)
+!-----------------------------------
