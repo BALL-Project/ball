@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.13 2003/06/20 14:43:22 amoll Exp $
+// $Id: RegularData3D_test.C,v 1.14 2003/06/23 12:22:08 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.13 2003/06/20 14:43:22 amoll Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.14 2003/06/23 12:22:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -95,16 +95,19 @@ CHECK(IndexType getClosestIndex(const CoordinateType& v) const throw(Exception::
 	TEST_EQUAL(index.x, 3)
 	TEST_EQUAL(index.y, 4)
 	TEST_EQUAL(index.z, 3)
+	TEST_EXCEPTION(Exception::OutOfGrid, g.getClosestIndex(Vector3(1111, 1,1)))
 RESULT
 
 CHECK(ValueType& getClosestValue(const CoordinateType& x) throw(Exception::OutOfGrid))
 	g.getClosestValue(Vector3(1.2, 2.3, 4.3)) = 1.232;
 	TEST_REAL_EQUAL(g[RegularData3D::IndexType(1,2,4)], 1.232)
+	TEST_EXCEPTION(Exception::OutOfGrid, g.getClosestValue(Vector3(1111, 1,1)))
 RESULT
 
 CHECK(const ValueType& getClosestValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
 	const RegularData3D& rd = g;
 	TEST_REAL_EQUAL(rd.getClosestValue(Vector3(1.2, 2.3, 4.3)), 1.232)
+	TEST_EXCEPTION(Exception::OutOfGrid, rd.getClosestValue(Vector3(1111, 1,1)))
 RESULT
 
 CHECK(ValueType& getData(Position index) throw(Exception::OutOfGrid))
@@ -112,7 +115,17 @@ CHECK(ValueType& getData(Position index) throw(Exception::OutOfGrid))
 	lower = grid->getOrigin();
 	TEST_REAL_EQUAL(grid->getData(0), 5.4321);
 	TEST_REAL_EQUAL(grid->getData(0), grid->getData(grid->getClosestIndex(lower)));
+	TEST_EXCEPTION(Exception::OutOfGrid, grid->getData(1331))
 RESULT
+
+CHECK(const ValueType& getData(Position index) const throw(Exception::OutOfGrid))
+  RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
+	g.getData(1) = 1.23;
+	const RegularData3D& d = g;
+	TEST_REAL_EQUAL(d.getData(1), 1.23)
+	TEST_EXCEPTION(Exception::OutOfGrid, d.getData(8))
+RESULT
+
 
 CHECK(ValueType& operator [] (Position index) throw())
 	(*grid)[3 + 11 * 3 + 11 * 11 * 3] = 1.2345;
@@ -246,6 +259,16 @@ CHECK(ValueType getInterpolatedValue(const CoordinateType& x) const throw(Except
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getInterpolatedValue(lower))
 RESULT
 
+CHECK(ValueType operator () (const CoordinateType& x) const throw())
+	lower.set(2, 2, 2);
+	TEST_EQUAL(g(lower), 1)
+	lower.set(0, 0, 0);
+	TEST_EQUAL(g(lower), 0)
+	lower.set(3, 3, 3);
+	TEST_EQUAL(g(lower), 8)
+	lower.set(10.1, 0, 0);
+RESULT
+
 RegularData3D grid2 = *grid;
 
 CHECK(void clear() throw())
@@ -349,7 +372,7 @@ CHECK([EXTRA]operator << (ostream& os, const RegularData3D&))
 	for (Position i = 0; i < data.size(); i++)
 	{
 		//STATUS(i)
-		//TEST_REAL_EQUAL(data[i], in_data[i])
+		TEST_REAL_EQUAL(data[i], in_data[i])
 	}
 RESULT
 
@@ -357,7 +380,22 @@ CHECK([EXTRA]operator >> (instream& os, RegularData3D&))
 RESULT
 
 CHECK(BALL_CREATE(TRegularData3D<ValueType>))
-  // ???
+  RegularData3D g(Vector3(1.0, 2.0, 3.0), Vector3(4.0, 5.0, 6.0), Vector3(0.1, 0.2, 0.3));
+	g[0] = 1.23;
+	RegularData3D* p = (RegularData3D*)g.create(false, true);
+	RegularData3D empty;
+	TEST_EQUAL(*p, empty)
+	p = (RegularData3D*)g.create();
+	TEST_REAL_EQUAL(p->getOrigin().x, 1.0)
+	TEST_REAL_EQUAL(p->getOrigin().y, 2.0)
+	TEST_REAL_EQUAL(p->getOrigin().z, 3.0)
+	TEST_REAL_EQUAL(p->getDimension().x, 4.0)
+	TEST_REAL_EQUAL(p->getDimension().y, 5.0)
+	TEST_REAL_EQUAL(p->getDimension().z, 6.0)
+	TEST_REAL_EQUAL(p->getSpacing().x, 0.1)
+	TEST_REAL_EQUAL(p->getSpacing().y, 0.2)
+	TEST_REAL_EQUAL(p->getSpacing().z, 0.3)
+	TEST_REAL_EQUAL((*p)[0], 1.23)
 RESULT
 
 CHECK(ConstIterator begin() const throw())
@@ -432,59 +470,147 @@ CHECK(IndexType(Position p, Position q, Position r))
 RESULT
 
 CHECK(TRegularData3D(const TRegularData3D<ValueType>& grid) throw(Exception::OutOfMemory))
-  // ???
-RESULT
-
-CHECK(ValueType operator () (const CoordinateType& x) const throw())
-  // ???
+  RegularData3D g(Vector3(1.0, 2.0, 3.0), Vector3(4.0, 5.0, 6.0), Vector3(0.1, 0.2, 0.3));
+	g[0] = 1.23;
+	RegularData3D g2(g);
+	TEST_REAL_EQUAL(g2.getOrigin().x, 1.0)
+	TEST_REAL_EQUAL(g2.getOrigin().y, 2.0)
+	TEST_REAL_EQUAL(g2.getOrigin().z, 3.0)
+	TEST_REAL_EQUAL(g2.getDimension().x, 4.0)
+	TEST_REAL_EQUAL(g2.getDimension().y, 5.0)
+	TEST_REAL_EQUAL(g2.getDimension().z, 6.0)
+	TEST_REAL_EQUAL(g2.getSpacing().x, 0.1)
+	TEST_REAL_EQUAL(g2.getSpacing().y, 0.2)
+	TEST_REAL_EQUAL(g2.getSpacing().z, 0.3)
+	TEST_REAL_EQUAL(g2[0], 1.23)
 RESULT
 
 CHECK(ValueType& getData(const IndexType& index) throw(Exception::OutOfGrid))
-  // ???
-RESULT
-
-CHECK(ValueType& operator [] (const IndexType& index) throw())
-  // ???
-RESULT
-
-CHECK(const ValueType& operator [] (const IndexType& index) const throw())
-  // ???
-RESULT
-
-CHECK(bool empty() const throw())
-  // ???
-RESULT
-
-CHECK(const ValueType& getData(Position index) const throw(Exception::OutOfGrid))
-  // ???
+  RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
+	TEST_REAL_EQUAL(g.getSize().x, 2.0)
+	TEST_REAL_EQUAL(g.getSize().y, 2.0)
+	TEST_REAL_EQUAL(g.getSize().z, 2.0)
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(0,0,0)), 0)
+	g.getData(RegularData3D::IndexType(1,1,1)) = 1.23;
+	TEST_REAL_EQUAL(g.getData(RegularData3D::IndexType(1,1,1)), 1.23)
+	TEST_REAL_EQUAL(g[7], 1.23)
+	TEST_EXCEPTION(Exception::OutOfGrid, g.getData(RegularData3D::IndexType(2,1,1)));
 RESULT
 
 CHECK(const ValueType& getData(const IndexType& index) const throw(Exception::OutOfGrid))
-  // ???
+  RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
+	g.getData(RegularData3D::IndexType(1,1,1)) = 1.23;
+	const RegularData3D& rd = g;
+	TEST_REAL_EQUAL(rd.getData(RegularData3D::IndexType(1,1,1)), 1.23)
+	TEST_EXCEPTION(Exception::OutOfGrid, rd.getData(RegularData3D::IndexType(2,1,1)));
+RESULT
+
+CHECK(ValueType& operator [] (const IndexType& index) throw())
+  RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
+	TEST_REAL_EQUAL(g[RegularData3D::IndexType(0,0,0)], 0)
+	g[RegularData3D::IndexType(1,1,1)] = 1.23;
+	TEST_REAL_EQUAL(g[RegularData3D::IndexType(1,1,1)], 1.23)
+	TEST_REAL_EQUAL(g[7], 1.23)
+	TEST_REAL_EQUAL(g.getSize().x, 2.0)
+	TEST_REAL_EQUAL(g.getSize().y, 2.0)
+	TEST_REAL_EQUAL(g.getSize().z, 2.0)
+RESULT
+
+CHECK(const ValueType& operator [] (const IndexType& index) const throw())
+  RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
+	TEST_REAL_EQUAL(g[RegularData3D::IndexType(0,0,0)], 0)
+	g[RegularData3D::IndexType(1,1,1)] = 1.23;
+	const RegularData3D& d = g;
+	TEST_REAL_EQUAL(d[RegularData3D::IndexType(1,1,1)], 1.23)
+RESULT
+
+CHECK(bool empty() const throw())
+  RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
+	TEST_EQUAL(g.empty(), false)
+	g[RegularData3D::IndexType(1,1,1)] = 1.23;
+	TEST_EQUAL(g.empty(), false)
+	RegularData3D empty;
+	TEST_EQUAL(empty.empty(), true)
 RESULT
 
 CHECK(size_type max_size() const throw())
-  // ???
-RESULT
-
-CHECK(void binaryRead(const String& filename) throw())
-  // ???
+	RegularData3D g;
+	TEST_EQUAL(g.max_size() > 1000, true)
 RESULT
 
 CHECK(void binaryWrite(const String& filename) const throw())
-  // ???
+	NEW_TMP_FILE(filename)
+  RegularData3D g(Vector3(1.0, 2.0, 3.0), Vector3(4.0, 5.0, 6.0), Vector3(0.1, 0.2, 0.3));
+	for (Position x = 0; x < g.getSize().x; x++)
+		for (Position y = 0; y < g.getSize().y; y++)
+			for (Position z = 0; z < g.getSize().z; z++)
+	{
+		g[RegularData3D::IndexType(x,y,z)] = x*y*z;
+	}
+
+	g.binaryWrite(filename);
+	TEST_EXCEPTION(Exception::FileNotFound, g.binaryWrite("/not/there/strange_file!"))
+RESULT
+
+CHECK(void binaryRead(const String& filename) throw())
+	RegularData3D g;
+	RegularData3D empty;
+	TEST_EQUAL(g == empty, true)
+	TEST_EXCEPTION(Exception::FileNotFound, g.binaryRead("/not/there/strange_file!"))
+	g.binaryRead(filename);
+
+	for (Position x = 0; x < g.getSize().x; x++)
+		for (Position y = 0; y < g.getSize().y; y++)
+			for (Position z = 0; z < g.getSize().z; z++)
+	{
+		TEST_REAL_EQUAL(g[RegularData3D::IndexType(x,y,z)], x*y*z)
+	}
+
+	TEST_REAL_EQUAL(g.getOrigin().x, 1.0)
+	TEST_REAL_EQUAL(g.getOrigin().y, 2.0)
+	TEST_REAL_EQUAL(g.getOrigin().z, 3.0)
+	TEST_REAL_EQUAL(g.getDimension().x, 4.0)
+	TEST_REAL_EQUAL(g.getDimension().y, 5.0)
+	TEST_REAL_EQUAL(g.getDimension().z, 6.0)
+	TEST_REAL_EQUAL(g.getSpacing().x, 0.1)
+	TEST_REAL_EQUAL(g.getSpacing().y, 0.2)
+	TEST_REAL_EQUAL(g.getSpacing().z, 0.3)
 RESULT
 
 CHECK(void rescale(const IndexType& new_size) throw(Exception::OutOfMemory))
-  // ???
+  RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
+	g[RegularData3D::IndexType(0,0,1)] = 1;
+	g[RegularData3D::IndexType(0,1,1)] = 1;
+	g[RegularData3D::IndexType(1,0,1)] = 1;
+	g[RegularData3D::IndexType(1,1,1)] = 1;
+	g.resize(RegularData3D::IndexType(1,1,2));
+	TEST_REAL_EQUAL(g[RegularData3D::IndexType(0,0,2)], 1) // got 0
+	TEST_REAL_EQUAL(g[RegularData3D::IndexType(0,2,2)], 1)
+	TEST_REAL_EQUAL(g[RegularData3D::IndexType(2,0,2)], 1)
+	TEST_REAL_EQUAL(g[RegularData3D::IndexType(2,2,2)], 1)
+	TEST_REAL_EQUAL(g[RegularData3D::IndexType(0,0,1)], 0.5) // got 1
 RESULT
 
 CHECK(void setDimension(const CoordinateType& dimension) throw())
-  // ???
+  RegularData3D g(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 1.0, 1.0), Vector3(1, 1, 1));
+	g.setDimension(Vector3(2.0,3.0,4.0));
+	TEST_EQUAL(g.getDimension(), Vector3(2.0, 3.0, 4.0))
+	TEST_REAL_EQUAL(g.getSpacing().x, 2.0)
+	TEST_REAL_EQUAL(g.getSpacing().y, 3.0)
+	TEST_REAL_EQUAL(g.getSpacing().z, 4.0)
 RESULT
 
 CHECK(void swap(TRegularData3D<ValueType>& grid))
-  // ???
+  RegularData3D h(Vector3(1.0, 2.0, 3.0), Vector3(4.0, 5.0, 6.0), Vector3(0.1, 0.2, 0.3));
+	h[RegularData3D::IndexType(0,0,0)] = 1.0;
+	RegularData3D h2(h);
+  RegularData3D g(Vector3(1.1, 2.1, 3.1), Vector3(4.1, 5.1, 6.1), Vector3(1.1, 1.2, 1.3));
+	g[RegularData3D::IndexType(0,0,0)] = 1.1;
+	RegularData3D g2(g);
+
+	g.swap(h);
+	TEST_EQUAL(g2 == h, true)
+	TEST_EQUAL(h2 == g, true)
 RESULT
 
 
