@@ -84,7 +84,15 @@ void ColorMeshDialog::apply_clicked()
 			return;
 		}
 	}
+	if (surface_tab->currentPage() == by_color)
+	{
+		ColorRGBA col(red_box->value(), green_box->value(), blue_box->value(), alpha_box->value());
 
+		mesh->colorList.resize(1);
+
+		mesh->colorList[0] = col;
+	}
+		
 	// repaint of the scene and the composites needed
 	MainControl::getMainControl(this)->repaint();
 
