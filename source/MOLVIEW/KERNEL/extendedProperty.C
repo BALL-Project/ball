@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extendedProperty.C,v 1.10 2002/12/12 10:57:47 oliver Exp $
+// $Id: extendedProperty.C,v 1.11 2002/12/16 16:09:51 amoll Exp $
 
 #include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 #include <BALL/MOLVIEW/COMMON/common.h>
@@ -54,12 +54,11 @@ namespace BALL
 				clearProperty(GeometricObject::PROPERTY__OBJECT_CLOSED);
 			}
 			else if (property >= GeometricObject::PROPERTY__DRAWING_PRECISION_LOW
-							 && property <= GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA)
+							 && property <= GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH)
 			{
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
-				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA);
 			}
 			else if (property >= GeometricObject::PROPERTY__DRAWING_MODE_DOTS 
 							 && property <= GeometricObject::PROPERTY__DRAWING_MODE_SOLID)

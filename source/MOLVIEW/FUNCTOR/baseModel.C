@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModel.C,v 1.14 2002/02/27 12:21:48 sturm Exp $
+// $Id: baseModel.C,v 1.15 2002/12/16 16:10:09 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -245,12 +245,6 @@ namespace BALL
 			s << "   dprecision high: " 
 					 << BALL_MOLVIEW_PRINT_PROPERTY
 											(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH) 
-					 << endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "  dprecision ultra: " 
-					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA) 
 					 << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: findGeometricObject.C,v 1.14 2002/02/27 12:21:49 sturm Exp $
+// $Id: findGeometricObject.C,v 1.15 2002/12/16 16:10:44 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -207,12 +207,6 @@ namespace BALL
 			s << "drawing precision high: "
 					 << BALL_MOLVIEW_PRINT_PROPERTY
 											(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH) 
-					 << endl;
-					
-			BALL_DUMP_DEPTH(s, depth);
-			s << "drawing precision ultra: "
-					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA) 
 					 << endl;
 					
 			BALL_DUMP_DEPTH(s, depth);
