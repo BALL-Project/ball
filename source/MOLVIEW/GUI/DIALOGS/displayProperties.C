@@ -518,7 +518,10 @@ void DisplayProperties::addHydrogens()
 		(*list_it)->apply(fragmentdb_.add_hydrogens);
 		number_of_hydrogens += fragmentdb_.add_hydrogens.getNumberOfInsertedHydrogens();
 		(*list_it)->apply(fragmentdb_.build_bonds);
-		applyOn_(**list_it);
+		try
+		{
+			applyOn_(**list_it);	
+		}
 
 		// mark composite for update
 		ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
@@ -931,13 +934,22 @@ void DisplayProperties::applyOn_(Composite &composite)
 			}
 			else
 			{
+				
 				//				if (getValue_(ADDRESS__STATIC_MODEL) != VALUE__SELECT
 				//						&& getValue_(ADDRESS__STATIC_MODEL) != VALUE__DESELECT)
 				//				{
 				//					applyOnComposite_(composite, &remove_model);
 				//				}
 
-				applyOnComposite_(composite, static_base_model_pointer);
+				try 
+				{	
+					applyOnComposite_(composite, static_base_model_pointer);
+				}
+				catch (Exception::GeneralException e)
+				{
+					Log.error() << "DisplayProperties: caught exception while constructing graphical representation." << std::endl;
+					Log.error() << "DisplayProperties: " << e << std:::endl;
+				}
 			}
 
 			
@@ -1093,8 +1105,15 @@ void DisplayProperties::applyOn_(Composite &composite)
 					//				{
 					//					applyOnComposite_(composite, &remove_model);
 					//				}
-					
-					applyOnComposite_(composite, dynamic_base_model_pointer);
+					try
+					{
+						applyOnComposite_(composite, dynamic_base_model_pointer);
+					}
+					catch (Exception::GeneralException e)
+					{
+						Log.error() << "DisplayProperties: caught exception while constructing graphical representation." << std::endl;
+						Log.error() << "DisplayProperties: " << e << std:::endl;
+					}
 				}
 			}
 }
