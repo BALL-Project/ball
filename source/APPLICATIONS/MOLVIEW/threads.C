@@ -23,13 +23,21 @@ SimulationThread::SimulationThread()
 
 void SimulationThread::run()
 {
+	// overloaded in derived classes
 }
 
 void SimulationThread::updateScene_()
 {
+	Mainframe::UpdateCompositeEvent* se = new Mainframe::UpdateCompositeEvent;
+	se->setComposite(composite_);
+	postEvent(main_frame_, se);
+
+	/*
+	// old behavior: no rebuilding of surfaces
 	Scene* scene= (Scene*) Scene::getInstance(0);
 	Scene::SceneUpdateEvent* su = new Scene::SceneUpdateEvent;
 	postEvent(scene, su);  // Qt will delete it when done
+	*/
 }
 
 void SimulationThread::output_(const String& string)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.90 2003/10/16 11:54:29 amoll Exp $
+// $Id: mainframe.C,v 1.91 2003/11/03 16:49:33 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -648,13 +648,6 @@ void Mainframe::amberMDSimulation()
 
 void Mainframe::about()
 {
-	/*
-	ParsedFunctionDialog* pfd = new ParsedFunctionDialog();
-	pfd->show();
-	return;
-	*/
-	dump();
-
 	AboutDialog about;
 	about.exec();
 }
@@ -766,15 +759,21 @@ void Mainframe::printAmberResults(const AmberFF& amber)
 
 void Mainframe::customEvent( QCustomEvent * e )
 {
-	if ( e->type() == 65431 )   // It must be a SimulationThreadFinished
+	if ( e->type() == (QEvent::Type)SIMULATION_THREAD_FINISHED_EVENT)
 	{
 		stopSimulation();
 		return;
 	}
-	if ( e->type() == 65430 )   // It must be a SimulationThreadFinished
+	if ( e->type() == (QEvent::Type)SIMULATION_OUTPUT_EVENT)
 	{
 		SimulationOutput* so = (SimulationOutput*) e;
 		Log.info() << so->getMessage() << std::endl;
+		return;
+	}
+	if ( e->type() == (QEvent::Type)UPDATE_COMPOSITE_EVENT)
+	{
+		UpdateCompositeEvent* so = (UpdateCompositeEvent*) e;
+		update(*(Composite*)so->getComposite());
 		return;
 	}
 }

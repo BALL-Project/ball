@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.54 2003/10/15 14:32:40 amoll Exp $
+// $Id: mainframe.h,v 1.55 2003/11/03 16:49:33 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -91,21 +91,44 @@ namespace BALL
 		{
 			public:
 				SimulationThreadFinished()
-					: QCustomEvent( 65431 ){}
+					: QCustomEvent( SIMULATION_THREAD_FINISHED_EVENT ){}
 		};
 
+		///
 		class SimulationOutput: public QCustomEvent
 		{
 			public:
+				///
 				SimulationOutput()
-					: QCustomEvent( 65430 ){}
+					: QCustomEvent( SIMULATION_OUTPUT_EVENT ){}
 
+				///
 				void setMessage(const String& msg) {message_ = msg;}
 
+				///
 				String getMessage() {return message_;}
 
 			protected:
 				String message_;
+		};
+
+		///
+		class UpdateCompositeEvent: public QCustomEvent
+		{
+			public:
+				///
+				UpdateCompositeEvent()
+					:QCustomEvent(UPDATE_COMPOSITE_EVENT),
+					 composite_(0){}
+
+				///
+				void setComposite(const Composite* composite) { composite_ = composite;}
+				
+				///
+				const Composite* getComposite() const { return composite_;}
+
+			protected:
+				const Composite* composite_;
 		};
 
 
