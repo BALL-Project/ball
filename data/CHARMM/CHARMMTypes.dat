@@ -1,4 +1,4 @@
-#  $Id: CHARMMTypes.dat,v 1.1 2000/12/06 11:41:02 oliver Exp $
+#  $Id: CHARMMTypes.dat,v 1.2 2000/12/07 12:20:09 oliver Exp $
 #
 #  CHARMM atom types
 #  initial list taken from p. 210 of:
@@ -42,3 +42,38 @@ OM
 LP
 HT
 OT
+CA
+CE1
+CE2
+CT1
+CT2
+CT3
+CP1
+CC
+CD
+CP2
+CP3
+CPB
+CPA
+CPH1
+CPM
+CPT
+CS
+CY
+HE1
+HE2
+HB
+HP
+HR1
+HR2
+HR3
+CPH2
+NPH
+NR1
+NR2
+NR3
+NY
+OB
+HS
+SM
+SS
