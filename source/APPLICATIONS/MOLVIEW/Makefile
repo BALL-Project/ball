@@ -2,7 +2,6 @@ EXECUTABLE=molview
 
 all:	$(EXECUTABLE)
 
-include .Dependencies
 include ../../common.mak
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES)
