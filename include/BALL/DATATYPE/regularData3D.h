@@ -1,7 +1,7 @@
-// $Id: pointGrid.h,v 1.21 2000/12/02 16:40:59 amoll Exp $ 
+// $Id: regularData3D.h,v 1.1 2000/12/05 12:35:06 amoll Exp $ 
 
-#ifndef BALL_DATATYPE_POINTGRID_H
-#define BALL_DATATYPE_POINTGRID_H
+#ifndef BALL_DATATYPE_REGULARDATA3D_H
+#define BALL_DATATYPE_REGULARDATA3D_H
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
@@ -13,30 +13,30 @@ namespace BALL
 	/**	Simple 3D grid class.
 			Unlike BoxGrid this class represents a three-dimensional
 			array. An instance of GridDataType will be created
-			for each point of the grid upon instantiation of PointGrid.\\
+			for each point of the grid upon instantiation of RegularData3D.\\
 		
 			{\bf Definition:}\\
-			\URL{BALL/DATATYPE/pointGrid.h}
+			\URL{BALL/DATATYPE/RegularData3D.h}
 			\\
 			@see	HashGrid3
 	*/
 	template <typename GridDataType>
-	class PointGrid 
+	class RegularData3D 
 	{
 		public:
 
-		BALL_CREATE_DEEP(PointGrid<GridDataType>)
+		BALL_CREATE_DEEP(RegularData3D<GridDataType>)
 
 		/**	@name	Type Definitions
 		*/
 		//@{
 
 		/**	PositionStruct
-				PointGrid position type.
+				RegularData3D position type.
 				This struct is used to represent the indices of a
 				grid point.
-				@see		PointGrid
-				@see		GridPoint::getPosition
+				@see		RegularData3D
+				@see		RegularData3D::getPosition
 		*/
 		struct PositionStruct 
 		{
@@ -60,20 +60,20 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
-				Creates a PointGrid object without allocating a grid.
+				Creates a RegularData3D object without allocating a grid.
 				The instance is not valid.
 		*/
-		PointGrid() throw();	
+		RegularData3D() throw();	
 
 		/**	Copy constructor.
-				Creates a copy of an existing PointGrid object.
+				Creates a copy of an existing RegularData3D object.
 				@param grid the grid to be copied
 				@param bool ignored
 		*/
-		PointGrid(const PointGrid<GridDataType>& grid, bool deep = true)
+		RegularData3D(const RegularData3D<GridDataType>& grid, bool deep = true)
 			throw(Exception::OutOfMemory);	
 
-		/**	Constructor for PointGrid.
+		/**	Constructor for RegularData3D.
 				{\em lower_[x|y|z]} should be set to the coordinates of
 				the "lower" corner of the box represented by the grid
 				{\em upper_[x|y|z]} should likewise contain the "upper" corner
@@ -90,7 +90,7 @@ namespace BALL
 				@param	upper_y	float, the y coordinate of the upper corner of the grid
 				@param	upper_z	float, the z coordinate of the upper corner of the grid
 		*/
-		PointGrid
+		RegularData3D
 			(const float lower_x, 
 			 const float lower_y, 
 			 const float lower_z,
@@ -106,7 +106,7 @@ namespace BALL
 				The grid's origin is at lower, it has grid_points_[x|y|z]
 				points in each direction.
 		*/
-		PointGrid
+		RegularData3D
 			(const Vector3& lower, 
 			 const Vector3& upper,
 			 const Size grid_points_x, 
@@ -120,13 +120,13 @@ namespace BALL
 				Its origin is in the lower corner, it may extend up to spacing over
 				the upper corner.
 		*/
-		PointGrid(const Vector3& lower, const Vector3& upper, const float spacing)
+		RegularData3D(const Vector3& lower, const Vector3& upper, const float spacing)
 			throw(Exception::OutOfMemory);
 
 		/**	Destructor. 
 				Frees all allocated memory.
 		*/
-		virtual ~PointGrid() throw()
+		virtual ~RegularData3D() throw()
 		{
 			delete [] data;
 		}
@@ -149,13 +149,13 @@ namespace BALL
 				If copying the grid fails (e.g., due to insufficient memory),
 				\Ref{isValid} returns {\bf false} after this operation.
 		*/
-		void set(const PointGrid& grid) throw(Exception::OutOfMemory);
+		void set(const RegularData3D& grid) throw(Exception::OutOfMemory);
 
 		/**	Assignment operator.
 				Implemented using \Ref{set}.
 				@see set
 		*/
-		const PointGrid& operator = (const PointGrid& grid) throw(Exception::OutOfMemory);
+		const RegularData3D& operator = (const RegularData3D& grid) throw(Exception::OutOfMemory);
 		//@}
 
 		/**	@name	Debugging and Diagnostics
@@ -163,7 +163,7 @@ namespace BALL
 		//@{
 
 			/** Internal state dump.
-					Dump the current internal state of {\em *this} PointGrid to 
+					Dump the current internal state of {\em *this} RegularData3D to 
 					the output ostream {\em s}.
 					@param   s - output stream where to output the internal state of {\em *this}
 			*/
@@ -438,15 +438,15 @@ namespace BALL
 		
 		/** Equality operator
 				Two point grids are equal if they have the same number of points in all three
-				dimensions and the data fields are equal.
+				dimensions, same origin, spacing  and the data fields are equal.
 				Both grids have to be valid or false is returned.
 		*/
-		bool operator == (const PointGrid<GridDataType>& grid) const throw();
+		bool operator == (const RegularData3D<GridDataType>& grid) const throw();
 
 		/** Inequality operator
 				@see operator ==
 		*/
-		bool operator != (const PointGrid<GridDataType>& grid) const throw();
+		bool operator != (const RegularData3D<GridDataType>& grid) const throw();
 
 		//@}
 
@@ -490,7 +490,7 @@ namespace BALL
 
 	// default constructor.
 	template <class GridDataType>
-	PointGrid<GridDataType>::PointGrid()
+	RegularData3D<GridDataType>::RegularData3D()
 		throw()
 		: data(0),
 			origin_(0,0,0),
@@ -507,8 +507,8 @@ namespace BALL
 
 	// copy constructor
 	template <class GridDataType>
-	PointGrid<GridDataType>::PointGrid
-		(const PointGrid<GridDataType>& grid, bool /* deep */)
+	RegularData3D<GridDataType>::RegularData3D
+		(const RegularData3D<GridDataType>& grid, bool /* deep */)
 		throw(Exception::OutOfMemory)
 		: data(0),
 			origin_(0,0,0),
@@ -527,7 +527,8 @@ namespace BALL
 	// assignment operator
 	template <typename GridDataType>
 	BALL_INLINE
-	const PointGrid<GridDataType>& PointGrid<GridDataType>::operator = (const PointGrid<GridDataType>& grid)
+	const RegularData3D<GridDataType>& RegularData3D<GridDataType>::operator = 
+		(const RegularData3D<GridDataType>& grid)
 		throw(Exception::OutOfMemory)
 	{
 		set(grid);
@@ -537,7 +538,7 @@ namespace BALL
 	// set method
 	template <typename GridDataType>
 	BALL_INLINE
-	void PointGrid<GridDataType>::set(const PointGrid<GridDataType>& grid)
+	void RegularData3D<GridDataType>::set(const RegularData3D<GridDataType>& grid)
 		throw(Exception::OutOfMemory)
 	{
 		// throw away the old data 
@@ -578,7 +579,7 @@ namespace BALL
 		}
   }
 
-	//  First constructor for PointGrid
+	//  First constructor for RegularData3D
 	//  lower_[x|y|z] should be set to the coordinates of
 	//  the "lower" corner of the box represented by the grid
 	//  upper_[x|y|z] should likewise contain the "upper" corner
@@ -590,7 +591,7 @@ namespace BALL
 	//  either direction.
 	template <class GridDataType>
 	BALL_INLINE
-	PointGrid<GridDataType>::PointGrid
+	RegularData3D<GridDataType>::RegularData3D
 		(float lower_x, float lower_y, float lower_z,
 		 float upper_x, float upper_y, float upper_z,
 		 Size grid_points_x, Size grid_points_y, Size grid_points_z)
@@ -658,32 +659,32 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	PointGrid<GridDataType>::PointGrid
+	RegularData3D<GridDataType>::RegularData3D
 		(const Vector3& lower, const Vector3& upper,
 		 Size grid_points_x, Size grid_points_y, Size grid_points_z) 
 		throw(Exception::OutOfMemory)
 		: data(0)
 	{
-		*this = PointGrid(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
+		*this = RegularData3D(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
 											grid_points_x, grid_points_y, grid_points_z);
 	}
 
 	template <class GridDataType>
-	PointGrid<GridDataType>::PointGrid
+	RegularData3D<GridDataType>::RegularData3D
 		(const Vector3& lower,
 		 const Vector3& upper,
 		 const float spacing) 
 		throw(Exception::OutOfMemory)
 		: data(0)
 	{
-		*this = PointGrid(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
+		*this = RegularData3D(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
 											(Size)((upper.x - lower.x) / spacing + 1), 
 											(Size)((upper.y - lower.y) / spacing + 1), 
 											(Size)((upper.z - lower.z) / spacing + 1));
 	}
 			
 	template <class GridDataType>
-	void PointGrid<GridDataType>::dump(std::ostream& stream) const throw()
+	void RegularData3D<GridDataType>::dump(std::ostream& stream) const throw()
 	{
 		stream << "Dump of " << typeid(this).name()<< " (" << getMaxXIndex() 
 					 << "x" << getMaxYIndex() << "x" << getMaxZIndex() 
@@ -699,7 +700,7 @@ namespace BALL
 	// returns the state of this instance
 	template <class GridDataType>
 	BALL_INLINE 
-	bool PointGrid<GridDataType>::isValid() const throw()
+	bool RegularData3D<GridDataType>::isValid() const throw()
 	{
 		return valid_;
 	}
@@ -708,21 +709,21 @@ namespace BALL
 	// the box, i.e. origin + size
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMaxX() const throw()
+	float RegularData3D<GridDataType>::getMaxX() const throw()
 	{
 		return upper_.x;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMaxY() const throw()
+	float RegularData3D<GridDataType>::getMaxY() const throw()
 	{
 		return upper_.y;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMaxZ() const throw()
+	float RegularData3D<GridDataType>::getMaxZ() const throw()
 	{
 		return upper_.x;
 	}
@@ -731,21 +732,21 @@ namespace BALL
 	// the box, i.e. origin + size
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMinX() const throw()
+	float RegularData3D<GridDataType>::getMinX() const throw()
 	{
 		return origin_.x;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMinY() const throw()
+	float RegularData3D<GridDataType>::getMinY() const throw()
 	{
 		return origin_.y;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMinZ() const throw()
+	float RegularData3D<GridDataType>::getMinZ() const throw()
 	{
 		return origin_.z;
 	}
@@ -754,21 +755,21 @@ namespace BALL
 	// first point has position 0, getMax[X|Y|Z]Position therefore returns number_of_points
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getMaxXIndex() const throw()
+	Size RegularData3D<GridDataType>::getMaxXIndex() const throw()
 	{
 		return number_of_points_x_ - 1;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getMaxYIndex() const throw()
+	Size RegularData3D<GridDataType>::getMaxYIndex() const throw()
 	{
 		return number_of_points_y_ - 1;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getMaxZIndex() const throw()
+	Size RegularData3D<GridDataType>::getMaxZIndex() const throw()
 	{
 		return number_of_points_z_ - 1;
 	}
@@ -776,13 +777,13 @@ namespace BALL
 	// getSize() returns the total number of grid points
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getSize() const throw()
+	Size RegularData3D<GridDataType>::getSize() const throw()
 	{
 		return number_of_grid_points_;
 	}
 
 	template <class GridDataType>
-	PointGrid<GridDataType>::GridIndex PointGrid<GridDataType>::getIndex(const Vector3& r) const 
+	RegularData3D<GridDataType>::GridIndex RegularData3D<GridDataType>::getIndex(const Vector3& r) const 
 		throw(Exception::OutOfGrid)
 	{
 		return getIndex(r.x, r.y, r.z);
@@ -792,67 +793,67 @@ namespace BALL
 	// between two grid points in the given direction
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getXSpacing() const  	throw()
+	float RegularData3D<GridDataType>::getXSpacing() const  	throw()
 	{
 		return spacing_.x;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getYSpacing() const  	throw()
+	float RegularData3D<GridDataType>::getYSpacing() const  	throw()
 	{
 		return spacing_.y;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getZSpacing() const  	throw()
+	float RegularData3D<GridDataType>::getZSpacing() const  	throw()
 	{
 		return spacing_.z;
 	}
 
 	template <class GridDataType> 
 	BALL_INLINE
-	const Vector3& PointGrid<GridDataType>::getOrigin() const  	throw()
+	const Vector3& RegularData3D<GridDataType>::getOrigin() const  	throw()
 	{
 		return origin_;
 	}
 
 	template <class GridDataType> 
 	BALL_INLINE
-	Vector3& PointGrid<GridDataType>::getOrigin()  	throw()
+	Vector3& RegularData3D<GridDataType>::getOrigin()  	throw()
 	{
 		return origin_;
 	}
 
 	template <class GridDataType>
-	void PointGrid<GridDataType>::setOrigin(const Vector3& origin) 	throw()
+	void RegularData3D<GridDataType>::setOrigin(const Vector3& origin) 	throw()
 	{
 		origin_ = origin;
 	}
 
 	template <class GridDataType>
-	void PointGrid<GridDataType>::setOrigin(const float x, const float y, const float z) 
+	void RegularData3D<GridDataType>::setOrigin(const float x, const float y, const float z) 
 	 	throw()
 	{
 		origin_.set(x, y, z);
 	}
 
 	template <class GridDataType> 
-	const Vector3& PointGrid<GridDataType>::getDimension() const  throw()
+	const Vector3& RegularData3D<GridDataType>::getDimension() const  throw()
 	{
 		return size_;
 	}
 
 	template <class GridDataType> 
-	Vector3& PointGrid<GridDataType>::getDimension() 	throw()
+	Vector3& RegularData3D<GridDataType>::getDimension() 	throw()
 	{
 		return size_;
 	}
 
 	template <class GridDataType> 
 	BALL_INLINE
-	bool PointGrid<GridDataType>::has(const float& x, const float& y,const float& z) const		
+	bool RegularData3D<GridDataType>::has(const float& x, const float& y,const float& z) const		
 		throw()
 	{
 		if (x > upper_.x  ||	y > upper_.y  ||	z > upper_.z  ||
@@ -866,7 +867,7 @@ namespace BALL
 
 	template <class GridDataType> 
 	BALL_INLINE
-	bool PointGrid<GridDataType>::has(const Vector3& vector) const
+	bool RegularData3D<GridDataType>::has(const Vector3& vector) const
 		throw()
 	{
 		if (vector.x > upper_.x  ||	vector.y > upper_.y  ||	vector.z > upper_.z  ||
@@ -880,7 +881,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	PointGrid<GridDataType>::GridIndex PointGrid<GridDataType>::getIndex
+	RegularData3D<GridDataType>::GridIndex RegularData3D<GridDataType>::getIndex
 		(const float x, const float y, const float z) const 
 		throw(Exception::OutOfGrid)
 	{
@@ -900,7 +901,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	GridDataType* PointGrid<GridDataType>::getData
+	GridDataType* RegularData3D<GridDataType>::getData
 		(const Position i, const Position j, const Position k) 
 		throw(Exception::OutOfGrid)
 	{
@@ -917,7 +918,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	GridDataType* PointGrid<GridDataType>::getData(const Vector3& r) 
+	GridDataType* RegularData3D<GridDataType>::getData(const Vector3& r) 
 		throw(Exception::OutOfGrid)
 	{	
 		GridIndex	position = getIndex(r);
@@ -926,7 +927,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	GridDataType* PointGrid<GridDataType>::getData(const Position position) 
+	GridDataType* RegularData3D<GridDataType>::getData(const Position position) 
 		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
@@ -937,7 +938,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	GridDataType& PointGrid<GridDataType>::operator[] (const Position position)
+	GridDataType& RegularData3D<GridDataType>::operator[] (const Position position)
 		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
@@ -948,7 +949,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	GridDataType& PointGrid<GridDataType>::operator[](const Vector3& v)
+	GridDataType& RegularData3D<GridDataType>::operator[](const Vector3& v)
 		throw(Exception::OutOfGrid)
 	{
 		return *(getData(v));
@@ -956,7 +957,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	Vector3 PointGrid<GridDataType>::getGridCoordinates
+	Vector3 RegularData3D<GridDataType>::getGridCoordinates
 		(const Position i, const Position j, const Position k) const 
 		throw(Exception::OutOfGrid)
 	{
@@ -975,7 +976,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	Vector3 PointGrid<GridDataType>::getGridCoordinates(const Vector3& v) const 
+	Vector3 RegularData3D<GridDataType>::getGridCoordinates(const Vector3& v) const 
 		throw(Exception::OutOfGrid)
 	{
 		if (v.x < 0 || v.y < 0 || v.z < 0 )
@@ -987,7 +988,7 @@ namespace BALL
 
 	template <class GridDataType> 
 	BALL_INLINE 
-	Vector3 PointGrid<GridDataType>::getGridCoordinates(const Position position) const 
+	Vector3 RegularData3D<GridDataType>::getGridCoordinates(const Position position) const 
 		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
@@ -1010,7 +1011,7 @@ namespace BALL
 
 	template <typename GridDataType>
 	BALL_INLINE
-	void PointGrid<GridDataType>::getBoxIndices
+	void RegularData3D<GridDataType>::getBoxIndices
 		(const Vector3& vector,
 		Position& llf, Position& rlf, Position& luf, Position& ruf,
 		Position& llb, Position& rlb, Position& lub, Position& rub) const
@@ -1042,7 +1043,7 @@ namespace BALL
 
 	template <typename GridDataType>
 	BALL_INLINE
-	void PointGrid<GridDataType>::getBoxData
+	void RegularData3D<GridDataType>::getBoxData
 		(const Vector3& vector,
 		GridDataType& llf, GridDataType& rlf, GridDataType& luf, GridDataType& ruf,
 		GridDataType& llb, GridDataType& rlb, GridDataType& lub, GridDataType& rub) const
@@ -1070,7 +1071,7 @@ namespace BALL
 
 	template <typename GridDataType>
 	BALL_INLINE
-	GridDataType PointGrid<GridDataType>::getInterpolatedValue(const Vector3& vector) const
+	GridDataType RegularData3D<GridDataType>::getInterpolatedValue(const Vector3& vector) const
 		throw(Exception::OutOfGrid)
 	{
 		if (!has(vector))
@@ -1103,7 +1104,7 @@ namespace BALL
 	}
 
 	template <typename GridDataType>
-	void PointGrid<GridDataType>::clear() throw()
+	void RegularData3D<GridDataType>::clear() throw()
 	{
 		delete [] data;
 		data = 0;
@@ -1122,13 +1123,15 @@ namespace BALL
 	}
 
 	template <typename GridDataType>	
-	bool PointGrid<GridDataType>::operator == (const PointGrid<GridDataType>& grid) const 
+	bool RegularData3D<GridDataType>::operator == (const RegularData3D<GridDataType>& grid) const 
 		throw()
 	{
 		if (!valid_ || !grid.valid_ ||
 				number_of_points_x_ != grid.number_of_points_x_ ||
 				number_of_points_y_ != grid.number_of_points_y_ ||
-				number_of_points_z_ != grid.number_of_points_z_ )
+				number_of_points_z_ != grid.number_of_points_z_ ||
+				origin_							!= grid.origin_							||
+				spacing_						!= grid.spacing_							)
 		{
 			return false;
 		}
@@ -1145,7 +1148,7 @@ namespace BALL
 	}	
 
 	template <typename GridDataType>	
-	bool PointGrid<GridDataType>::operator != (const PointGrid<GridDataType>& grid) const 
+	bool RegularData3D<GridDataType>::operator != (const RegularData3D<GridDataType>& grid) const 
 		throw()
 	{
 		return !(*this == grid);
@@ -1153,4 +1156,4 @@ namespace BALL
 
  } // namespace BALL
 
-#endif // BALL_DATATYPE_POINTGRID_H
+#endif // BALL_DATATYPE_REGULARDATA3D_H

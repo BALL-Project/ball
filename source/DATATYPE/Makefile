@@ -7,8 +7,8 @@ CPP_SOURCES=\
 	string.C\
 	hashGrid.C\
 	options.C\
-	pointGrid.C\
-	regExp.C
+	regExp.C\
+	regularData3D.C
 
 include ../common.mak
 include .Dependencies
