@@ -1,4 +1,4 @@
-// $Id: Box3_test.C,v 1.8 2000/05/26 19:25:01 amoll Exp $
+// $Id: Box3_test.C,v 1.9 2000/06/27 23:06:31 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Box3_test.C,v 1.8 2000/05/26 19:25:01 amoll Exp $")
+START_TEST(class_name, "$Id: Box3_test.C,v 1.9 2000/06/27 23:06:31 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -144,10 +144,6 @@ CHECK(TBox3::isValid() const )
 	TEST_EQUAL(box.isValid(), true)
 RESULT
 
-CHECK(TBox3::dump(std::ostream& s = std::cout, Size depth = 0) const )
-  //BAUSTELLE
-RESULT
-
 CHECK(TBox3::set(const TBox3<T>& box, bool /* deep */))
 	box = Box3(v1, v2);
 	box2.set(box);
@@ -179,7 +175,7 @@ CHECK(TBox3::get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const )
 	TEST_EQUAL(box == box2, true)
 RESULT
 
-CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(TBox3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Box3 v(1.0, 2.0, 3.0, 4.0, 5.0, 6.0);
   String filename;
 	NEW_TMP_FILE(filename)
