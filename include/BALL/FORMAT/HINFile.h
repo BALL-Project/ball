@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.6 2000/06/20 21:32:28 oliver Exp $
+// $Id: HINFile.h,v 1.7 2000/06/20 22:00:30 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -100,7 +100,7 @@ namespace BALL
 				it is returned. Otwerwise 0 is returned.
 				@return	the final simulation temperature
 		*/
-		Box3	getTemperature() const;
+		float	getTemperature() const;
 		//@}
 
 		protected:
