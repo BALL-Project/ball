@@ -713,10 +713,10 @@
                         </size>
                     </property>
                     <property name="minValue">
-                        <number>5</number>
+                        <number>2</number>
                     </property>
                     <property name="maxValue">
-                        <number>25</number>
+                        <number>40</number>
                     </property>
                     <property name="orientation">
                         <enum>Horizontal</enum>
@@ -725,7 +725,7 @@
                         <enum>Above</enum>
                     </property>
                     <property name="tickInterval">
-                        <number>10</number>
+                        <number>6</number>
                     </property>
                 </widget>
                 <widget class="QLabel">
