@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.19 2001/06/08 16:57:13 anker Exp $
+// $Id: bond.C,v 1.20 2001/06/13 14:04:30 anker Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -61,23 +61,8 @@ namespace BALL
 	Bond* Bond::createBond(Bond& bond, Atom& first, Atom& second)
 		throw(Bond::TooManyBonds)
 	{
-		if ((Size)first.number_of_bonds_ > (Size)Atom::MAX_NUMBER_OF_BONDS)
-		{
-			throw TooManyBonds(__FILE__, __LINE__);
-		}
-		
-		if ((Size)second.number_of_bonds_ > (Size)Atom::MAX_NUMBER_OF_BONDS)
-		{
-			throw TooManyBonds(__FILE__, __LINE__);
-		}
 
-		// if the bond is already bonded, delete it and create 
-		// it anew
-		if (bond.isBound()) 
-		{
-			bond.clear();
-		}
-
+		// first check the cases where no new bond will be created.
 		if (&first == &second)
 		{
 			return 0;
@@ -90,13 +75,39 @@ namespace BALL
 			return bond_ptr;
 		}
 		
+		// throw an exception if there is no possibility to create another bond
+		// for one of the atoms
+		if ((Size)first.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
+		{
+			throw TooManyBonds(__FILE__, __LINE__);
+		}
+		
+		if ((Size)second.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
+		{
+			throw TooManyBonds(__FILE__, __LINE__);
+		}
+
+		// if the bond is already bonded, delete it and create 
+		// it anew
+		if (bond.isBound()) 
+		{
+			bond.clear();
+		}
+
 		first.bond_[first.number_of_bonds_]
 			= second.bond_[second.number_of_bonds_]
 			= &bond;
 		
 		++(first.number_of_bonds_);
 		++(second.number_of_bonds_);
+		// DEBUG
+		if (first.number_of_bonds_ > Atom::MAX_NUMBER_OF_BONDS)
+		{
+			Log.error() << "number_of_bonds_ > " << Atom::MAX_NUMBER_OF_BONDS
+				<< endl;
+		}
 
+		// keep the order 
 		if (first < second)
 		{
 			bond.first_ = &first;
