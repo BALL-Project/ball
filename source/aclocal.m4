@@ -1156,14 +1156,14 @@ AC_DEFUN(CF_CHECK_NUM_LIMITS, [
 		[
 			float f = std::numeric_limits<float>::min();
 		],
-		BALL_HAVE_NUMERIC_LIMITS=true
+		BALL_HAS_NUMERIC_LIMITS=true
 	)
-	if test "${BALL_HAVE_NUMERIC_LIMITS}" = true ; then
+	if test "${HAS_NUMERIC_LIMITS}" = true ; then
 		AC_MSG_RESULT(available)
-		AC_DEFINE(BALL_HAVE_NUMERIC_LIMITS)
+		AC_DEFINE(BALL_HAS_NUMERIC_LIMITS)
 	else
 		AC_MSG_RESULT(not available)
-		BALL_HAVE_NUMERIC_LIMITS=false
+		BALL_HAS_NUMERIC_LIMITS=false
 
 		dnl
 		dnl  we didn't find a numeric limits class, so we implement
@@ -1522,13 +1522,23 @@ dnl
 dnl   Check whether unistd.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_UNISTD_H, [
-	if test "$BALL_HAS_UNISTD_H" = true ; then
-		AC_CHECK_HEADERS(unistd.h,
-				[BALL_HAS_UNISTD_H=true],
-				[BALL_HAS_UNISTD_H=false])
-		if test ${BALL_HAS_UNISTD_H} = true ; then
-			AC_DEFINE(BALL_HAS_UNISTD_H,)
-		fi
+	AC_CHECK_HEADERS(unistd.h,
+			[BALL_HAS_UNISTD_H=true],
+			[BALL_HAS_UNISTD_H=false])
+	if test ${BALL_HAS_UNISTD_H} = true ; then
+		AC_DEFINE(BALL_HAS_UNISTD_H,)
+	fi
+])
+
+dnl
+dnl   Check whether limits.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_LIMITS_H, [
+	AC_CHECK_HEADERS(limits.h,
+			[BALL_HAS_LIMITS_H=true],
+			[BALL_HAS_LIMITS_H=false])
+	if test ${BALL_HAS_LIMITS_H} = true ; then
+		AC_DEFINE(BALL_HAS_LIMITS_H,)
 	fi
 ])
 
@@ -1536,13 +1546,11 @@ dnl
 dnl   Check whether process.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_PROCESS_H, [
-	if test "$BALL_HAS_PROCESS_H" = true ; then
-		AC_CHECK_HEADERS(process.h,
+	AC_CHECK_HEADERS(process.h,
 				[BALL_HAS_PROCESS_H=true],
 				[BALL_HAS_PROCESS_H=false])
-		if test ${BALL_HAS_PROCESS_H} = true ; then
-			AC_DEFINE(BALL_HAS_PROCESS_H,)
-		fi
+	if test ${BALL_HAS_PROCESS_H} = true ; then
+		AC_DEFINE(BALL_HAS_PROCESS_H,)
 	fi
 ])
 
@@ -1550,13 +1558,11 @@ dnl
 dnl   Check whether sys/time.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_TIME_H, [
-	if test "$BALL_HAS_SYS_TIME_H" = true ; then
-		AC_CHECK_HEADERS(sys/time.h,
-				[BALL_HAS_SYS_TIME_H=true],
-				[BALL_HAS_SYS_TIME_H=false])
-		if test ${BALL_HAS_SYS_TIME_H} = true ; then
-			AC_DEFINE(BALL_HAS_SYS_TIME_H,)
-		fi
+	AC_CHECK_HEADERS(sys/time.h,
+			[BALL_HAS_SYS_TIME_H=true],
+			[BALL_HAS_SYS_TIME_H=false])
+	if test ${BALL_HAS_SYS_TIME_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_TIME_H,)
 	fi
 ])
 
@@ -1564,13 +1570,11 @@ dnl
 dnl   Check whether time.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_TIME_H, [
-	if test "$BALL_HAS_TIME_H" = true ; then
-		AC_CHECK_HEADERS(time.h,
-				[BALL_HAS_TIME_H=true],
-				[BALL_HAS_TIME_H=false])
-		if test ${BALL_HAS_TIME_H} = true ; then
-			AC_DEFINE(BALL_HAS_TIME_H,)
-		fi
+	AC_CHECK_HEADERS(time.h,
+			[BALL_HAS_TIME_H=true],
+			[BALL_HAS_TIME_H=false])
+	if test ${BALL_HAS_TIME_H} = true ; then
+		AC_DEFINE(BALL_HAS_TIME_H,)
 	fi
 ])
 
@@ -1578,13 +1582,11 @@ dnl
 dnl   Check whether sys/param.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_PARAM_H, [
-	if test "$BALL_HAS_SYS_PARAM_H" = true ; then
-		AC_CHECK_HEADERS(sys/param.h,
-				[BALL_HAS_SYS_PARAM_H=true],
-				[BALL_HAS_SYS_PARAM_H=false])
-		if test ${BALL_HAS_SYS_PARAM_H} = true ; then
-			AC_DEFINE(BALL_HAS_SYS_PARAM_H,)
-		fi
+	AC_CHECK_HEADERS(sys/param.h,
+			[BALL_HAS_SYS_PARAM_H=true],
+			[BALL_HAS_SYS_PARAM_H=false])
+	if test ${BALL_HAS_SYS_PARAM_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_PARAM_H,)
 	fi
 ])
 
@@ -1592,13 +1594,11 @@ dnl
 dnl   Check whether dirent.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_DIRENT_H, [
-	if test "$BALL_HAS_DIRENT_H" = true ; then
-		AC_CHECK_HEADERS(dirent.h,
-				[BALL_HAS_DIRENT_H=true],
-				[BALL_HAS_DIRENT_H=false])
-		if test ${BALL_HAS_DIRENT_H} = true ; then
-			AC_DEFINE(BALL_HAS_DIRENT_H,)
-		fi
+	AC_CHECK_HEADERS(dirent.h,
+			[BALL_HAS_DIRENT_H=true],
+			[BALL_HAS_DIRENT_H=false])
+	if test ${BALL_HAS_DIRENT_H} = true ; then
+		AC_DEFINE(BALL_HAS_DIRENT_H,)
 	fi
 ])
 
@@ -1606,13 +1606,11 @@ dnl
 dnl   Check whether direct.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_DIRECT_H, [
-	if test "$BALL_HAS_DIRECT_H" = true ; then
-		AC_CHECK_HEADERS(direct.h,
-				[BALL_HAS_DIRECT_H=true],
-				[BALL_HAS_DIRECT_H=false])
-		if test ${BALL_HAS_DIRECT_H} = true ; then
-			AC_DEFINE(BALL_HAS_DIRECT_H,)
-		fi
+	AC_CHECK_HEADERS(direct.h,
+			[BALL_HAS_DIRECT_H=true],
+			[BALL_HAS_DIRECT_H=false])
+	if test ${BALL_HAS_DIRECT_H} = true ; then
+		AC_DEFINE(BALL_HAS_DIRECT_H,)
 	fi
 ])
 
@@ -1620,13 +1618,11 @@ dnl
 dnl   Check whether io.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_IO_H, [
-	if test "$BALL_HAS_IO_H" = true ; then
-		AC_CHECK_HEADERS(io.h,
-				[BALL_HAS_IO_H=true],
-				[BALL_HAS_IO_H=false])
-		if test ${BALL_HAS_IO_H} = true ; then
-			AC_DEFINE(BALL_HAS_IO_H,)
-		fi
+	AC_CHECK_HEADERS(io.h,
+			[BALL_HAS_IO_H=true],
+			[BALL_HAS_IO_H=false])
+	if test ${BALL_HAS_IO_H} = true ; then
+		AC_DEFINE(BALL_HAS_IO_H,)
 	fi
 ])
 
@@ -1634,13 +1630,11 @@ dnl
 dnl   Check whether sys/socket.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_SOCKET_H, [
-	if test "$BALL_HAS_SYS_SOCKET_H" = true ; then
-		AC_CHECK_HEADERS(sys/socket.h,
-				[BALL_HAS_SYS_SOCKET_H=true],
-				[BALL_HAS_SYS_SOCKET_H=false])
-		if test ${BALL_HAS_SYS_SOCKET_H} = true ; then
-			AC_DEFINE(BALL_HAS_SYS_SOCKET_H,)
-		fi
+	AC_CHECK_HEADERS(sys/socket.h,
+			[BALL_HAS_SYS_SOCKET_H=true],
+			[BALL_HAS_SYS_SOCKET_H=false])
+	if test ${BALL_HAS_SYS_SOCKET_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_SOCKET_H,)
 	fi
 ])
 
@@ -1648,13 +1642,11 @@ dnl
 dnl   Check whether netinet/in.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_NETINET_IN_H, [
-	if test "$BALL_HAS_NETINET_IN_H" = true ; then
-		AC_CHECK_HEADERS(netinet/in.h,
-				[BALL_HAS_NETINET_IN_H=true],
-				[BALL_HAS_NETINET_IN_H=false])
-		if test ${BALL_HAS_NETINET_IN_H} = true ; then
-			AC_DEFINE(BALL_HAS_NETINET_IN_H,)
-		fi
+	AC_CHECK_HEADERS(netinet/in.h,
+			[BALL_HAS_NETINET_IN_H=true],
+			[BALL_HAS_NETINET_IN_H=false])
+	if test ${BALL_HAS_NETINET_IN_H} = true ; then
+		AC_DEFINE(BALL_HAS_NETINET_IN_H,)
 	fi
 ])
 
@@ -1662,13 +1654,11 @@ dnl
 dnl   Check whether netdb.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_NETDB_H, [
-	if test "$BALL_HAS_NETDB_H" = true ; then
-		AC_CHECK_HEADERS(netdb.h,
-				[BALL_HAS_NETDB_H=true],
-				[BALL_HAS_NETDB_H=false])
-		if test ${BALL_HAS_NETDB_H} = true ; then
-			AC_DEFINE(BALL_HAS_NETDB_H,)
-		fi
+	AC_CHECK_HEADERS(netdb.h,
+			[BALL_HAS_NETDB_H=true],
+			[BALL_HAS_NETDB_H=false])
+	if test ${BALL_HAS_NETDB_H} = true ; then
+		AC_DEFINE(BALL_HAS_NETDB_H,)
 	fi
 ])
 
@@ -1676,18 +1666,27 @@ dnl
 dnl   Check whether arpa/inet.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_ARPA_INET_H, [
-	if test "$BALL_HAS_ARPA_INET_H" = true ; then
-		AC_CHECK_HEADERS(arpa/inet.h,
-				[BALL_HAS_ARPA_INET_H=true],
-				[BALL_HAS_ARPA_INET_H=false])
-		if test ${BALL_HAS_ARPA_INET_H} = true ; then
-			AC_DEFINE(BALL_HAS_ARPA_INET_H,)
-		fi
+	AC_CHECK_HEADERS(arpa/inet.h,
+			[BALL_HAS_ARPA_INET_H=true],
+			[BALL_HAS_ARPA_INET_H=false])
+	if test ${BALL_HAS_ARPA_INET_H} = true ; then
+		AC_DEFINE(BALL_HAS_ARPA_INET_H,)
 	fi
 ])
 
-AC_DEFUN(CF_CHECK_SYSCONF, [])
-AC_DEFUN(CF_CHECK_KILL, [])
+AC_DEFUN(CF_CHECK_SYSCONF, [
+	AC_CHECK_FUNCS(sysconf, HAS_SYSCONF=1)
+	if test "${HAS_SYSCONF}" = 1 ; then
+		AC_DEFINE(BALL_HAS_SYSCONF,)
+	fi
+])
+
+AC_DEFUN(CF_CHECK_KILL, [
+	AC_CHECK_FUNCS(kill, HAS_KILL=1)
+	if test "${HAS_KILL}" = 1 ; then
+		AC_DEFINE(BALL_HAS_KILL,)
+	fi
+])
 
 dnl
 dnl   check whether vsnprintf is defined

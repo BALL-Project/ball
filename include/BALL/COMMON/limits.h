@@ -1,4 +1,4 @@
-// $Id: limits.h,v 1.9 2001/07/18 20:44:27 amoll Exp $
+// $Id: limits.h,v 1.9.4.1 2002/11/30 09:57:24 oliver Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
@@ -7,11 +7,16 @@
 #	include <BALL/CONFIG/config.h>
 #endif
 
-#ifdef BALL_HAVE_NUMERIC_LIMITS
+#ifdef BALL_HAS_NUMERIC_LIMITS
 #	include <limits>
 #else
-#	include <limits.h>
-#	ifdef BALL_INCLUDE_FLOAT_H
+#	ifdef BALL_HAS_LIMITS_H
+#		include <limits.h>
+#	endif
+#	ifdef BALL_HAS_VALUES_H
+#		include <limits.h>
+#	endif
+#	ifdef BALL_HAS_FLOAT_H
 #		include <float.h>
 #	endif
 #endif
