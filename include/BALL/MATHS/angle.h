@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.17 2000/03/17 14:24:26 amoll Exp $
+// $Id: angle.h,v 1.18 2000/03/26 21:57:33 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -82,7 +82,6 @@ namespace BALL
 				Create a copy of an TAngle object. Copies are always
 				shallow.
 				@param	angle the object to be copied
-				@param	deep ignored
 		*/
 		TAngle(const TAngle& angle);
 
@@ -121,9 +120,8 @@ namespace BALL
 
 		/**	Assign an Angle object from another.
 				@param	angle the angle object to be assigned from
-				@param	deep no effect
 		*/
-		void set(const TAngle& angle, bool deep = true);
+		void set(const TAngle& angle);
 
 
 		/**	Assignment operator
@@ -140,9 +138,8 @@ namespace BALL
 
 		/**	Assign the value to another angle.
 				@param	angle the angle to assign the value to
-				@param	deep ignored
 		*/
-		void get(TAngle& angle, bool deep = true) const;
+		void get(TAngle& angle) const;
 
 		/**	Assign the value to an {\tt T} variable.
 				Variable can get the radian or degree value
@@ -387,7 +384,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TAngle<T>::set(const TAngle& angle, bool/* deep */)
+	void TAngle<T>::set(const TAngle& angle)
 	{
 		value = angle.value;
 	}
@@ -419,7 +416,7 @@ namespace BALL
 
 
 	template <typename T>
-	void TAngle<T>::get(TAngle& angle, bool /* deep */) const
+	void TAngle<T>::get(TAngle& angle) const
 	{
 		angle.value = value;
 	}

@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.10 2000/03/15 08:53:15 oliver Exp $
+// $Id: box3.h,v 1.11 2000/03/26 21:57:33 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -79,9 +79,8 @@ namespace BALL
 
 		/**	Assign from another TBox3.
 				@param vector	the TBox3 object to assign from
-				@param deep ignored
 		*/
-		void set(const TBox3& box, bool deep = true);
+		void set(const TBox3& box);
 
 		/**	Assign from two TVector3.
 				@param a	the TVector3 a
@@ -110,9 +109,8 @@ namespace BALL
 		/**	Assign to another TBox3.
 				Assigns the box components to another box.
 				@param box	the box to be asigned to
-				@param deep ignored
 		*/
-		void get(TBox3& box, bool deep = true) const;
+		void get(TBox3& box) const;
 
 		/**	Assign to two variables of type {\tt TVector3}.
 				@param	a the first vector
@@ -249,7 +247,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TBox3<T>::set(const TBox3<T>& box, bool /* deep */)
+	void TBox3<T>::set(const TBox3<T>& box)
 	{
 		a.set(box.a);
 		b.set(box.b);
@@ -284,9 +282,9 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TBox3<T>::get(TBox3<T>& box, bool deep) const
+	void TBox3<T>::get(TBox3<T>& box) const
 	{
-		box.set(*this, deep);
+		box.set(*this);
 	}
 
 	template <class T>

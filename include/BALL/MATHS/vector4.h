@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.20 2000/03/14 21:35:11 oliver Exp $
+// $Id: vector4.h,v 1.21 2000/03/26 21:57:34 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -120,9 +120,8 @@ namespace BALL
 
 		/**	Assign from another TVector4.
 				@param vector	the TVector4 object to assign from
-				@param deep ignored
 		*/
-		void set(const TVector4& vector, bool deep = true);
+		void set(const TVector4& vector);
 
 		/**	Array assignment operator.
 				Assigns the first four elements of an array to the vector components.
@@ -156,9 +155,8 @@ namespace BALL
 		/**	Assign to another Vector4.
 				Assigns the vector components to another vector.
 				@param vector	the vector to be asigned to
-				@param deep ignored
 		*/
-		void get(TVector4& vector, bool deep = true) const;
+		void get(TVector4& vector) const;
 
 		/**	Swap the contents of two vectors.
 				@param	vector the vector to swap contents with
@@ -418,7 +416,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TVector4<T>::set(const TVector4<T>& v, bool deep)
+	void TVector4<T>::set(const TVector4<T>& v)
 	{
 		x = v.x;
 		y = v.y;
@@ -478,7 +476,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TVector4<T>::get(TVector4<T>& v, bool deep) const
+	void TVector4<T>::get(TVector4<T>& v) const
 	{
 		v.x = x;
 		v.y = y;

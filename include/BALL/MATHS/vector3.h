@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.29 2000/03/22 00:47:56 amoll Exp $
+// $Id: vector3.h,v 1.30 2000/03/26 21:57:34 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -207,9 +207,8 @@ namespace BALL
 
 		/**	Assign from another TVector3.
 				@param vector	the TVector3 object to assign from
-				@param deep ignored
 		*/
-		void set(const TVector3& vector, bool deep = true);
+		void set(const TVector3& vector);
 
 		/**	Set from spherical polar coordinates.
 				The radius describes the distance of the point from the origin, {\tt phi}
@@ -259,9 +258,8 @@ namespace BALL
 		/**	Assign to another Vector3.
 				Assigns the vector components to another vector.
 				@param vector	the vector to be asigned to
-				@param deep ignored
 		*/
-		void get(TVector3& vector, bool deep = true) const;
+		void get(TVector3& vector) const;
 
 		/**	Assign polar coordinates.
 				Sets {\tt r}, {\tt phi}, and {\tt theta} to the
@@ -579,7 +577,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TVector3<T>::set(const TVector3<T>& vector, bool /* deep */)
+	void TVector3<T>::set(const TVector3<T>& vector)
 	{
 		x = vector.x;
 		y = vector.y;
@@ -641,7 +639,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TVector3<T>::get(TVector3<T>& vector, bool /* deep */) const
+	void TVector3<T>::get(TVector3<T>& vector) const
 	{
 		vector.x = x;
 		vector.y = y;
