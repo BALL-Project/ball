@@ -1,4 +1,4 @@
-// $Id: forwardIterator.h,v 1.3 2001/06/05 15:40:28 anker Exp $
+// $Id: forwardIterator.h,v 1.4 2001/06/06 10:56:12 anker Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -28,6 +28,18 @@ namespace BALL
 	{
 		public:
 	
+		BALL_CREATE(ConstForwardIterator)
+
+		/** @name Typedefs
+		 */
+		//@{
+
+		/** Tag this iterator as a forward iterator according to the STL scheme
+		 */
+		typedef ::std::forward_iterator_tag iterator_category;
+
+		//@}
+
 		/**	@name Constructors and Destructors
 		*/
 		//@{
@@ -291,6 +303,18 @@ namespace BALL
 		: public BaseIterator<Container, DataType, Position, Traits>
 	{
 		public:
+
+		BALL_CREATE(ForwardIterator)
+
+		/** @name Typedefs
+		 */
+		//@{
+
+		/** Tag this iterator as a forward iterator according to the STL scheme
+		 */
+		typedef ::std::forward_iterator_tag iterator_category;
+
+		//@}
 
 		/**	@name Constructors and Destructors
 		*/
