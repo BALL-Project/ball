@@ -1,11 +1,23 @@
-// $Id: enumerator.C,v 1.7 2000/12/19 12:51:05 amoll Exp $
+// $Id: enumerator.C,v 1.8 2001/07/10 16:33:41 anker Exp $
 
 #include <BALL/COMMON/global.h>
+#include <BALL/COMMON/exception.h>
 #include <BALL/CONCEPT/enumerator.h>
 
 
 namespace BALL 
 {
+
+	EnumeratorIndex::IncompatibleIndex::IncompatibleIndex(const char* file,
+			int line)
+		throw()
+		: GeneralException(file, line, "IncompatibleIndex")
+	{
+		message_ = "different enumerator moduli occured.";
+
+		Exception::globalHandler.setMessage(message_);
+	}
+
 
 	EnumeratorIndex::EnumeratorIndex()
 		throw()
@@ -20,20 +32,14 @@ namespace BALL
 	{
 	}
 
-	EnumeratorIndex::IncompatibleIndex::IncompatibleIndex
-		(const char* /* file */, int /* line */)
-		throw()
-	{
-		// BAUSTELLE
-	}
-
 
 	EnumeratorIndex& EnumeratorIndex::operator ++ ()
 		throw(Exception::IndexOverflow)
 	{
+
 		Index i;
 		bool add_one = true;
-		for (i = (Index)size() - 1; (i >= 0) && add_one; i--)
+		for (i = (Index) size() - 1; (i >= 0) && add_one; i--)
 		{
 			operator[](i)++;
 			add_one = false;
