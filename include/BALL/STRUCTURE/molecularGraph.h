@@ -1,4 +1,4 @@
-// $Id: molecularGraph.h,v 1.1.2.1 2002/05/28 00:05:10 oliver Exp $
+// $Id: molecularGraph.h,v 1.1.2.2 2002/05/28 02:18:54 oliver Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -50,48 +50,30 @@ namespace BALL
 
 		friend class MolecularGraph<Node, Edge>;
 
-		NodeItem();
-			: atom_(0)
-		{
-		}
+		NodeItem() throw();
+		NodeItem(const Atom& atom) throw();
 
-		NodeItem(const Atom& atom)
-			:	atom_(const_cast<Atom*>(&atom))
-		{
-		}
+		Node& getData() throw();
+		const Node& getData() const throw();
+		void setData(const Node& data) throw();
 
-		Node& getData() {return data_;}
-		const Node& getData() const {return data_;}
-		void setData(const Node& data) { data_ = data; };
+		const Atom* getAtom() const throw();
+		Atom* getAtom() throw();
 
-		const Atom* getAtom() const { return atom_;}
-		Atom* getAtom() { return atom_;}
+		Iterator begin() throw();
+		ConstIterator begin() const throw();
+		Iterator end() throw();
+		ConstIterator end() const throw();
 
-		Iterator begin() { return adjacent_edges_.begin(); }
-		ConstIterator begin() const { return adjacent_edges_.begin(); }
-		Iterator end() { return adjacent_edges_.end(); }
-		ConstIterator end() const { return adjacent_edges_.end(); }
+		Size getDegree() const throw();
 
-		Size getDegree() const { return (Size)adjacent_edges_.size(); }
-
-		bool operator == (const NodeItem& item) const { return (atom_ == item.atom_); }
+		bool operator == (const NodeItem& item) const throw();
 
 		protected:
 
 		void deleteEdge_(EdgeItemType* item)
-		{
-			cout << "entering deleteEdge_(atom = " << getAtom() << ", bond = " << item->getBond() << ")" << endl;
-			Iterator it(find(adjacent_edges_.begin(), adjacent_edges_.end(), item));
-			if (it != adjacent_edges_.end())
-			{
-				cout << "erasing edge " << item->getBond() << endl;
-				adjacent_edges_.erase(it);
-			}
-			else
-			{
-				cout << "cannot erase edge " << item->getBond() << endl;
-			}
-		}
+			throw();
+
 		Node	data_;
 		Atom* atom_;
 		std::list<EdgeItemType*> adjacent_edges_;
@@ -258,7 +240,7 @@ namespace BALL
 	{		
 		os << "Nodes:" << std::endl;
 
-		MolecularGraph<Node, Edge>::NodeConstIterator node = G.beginNode();
+		typename MolecularGraph<Node, Edge>::NodeConstIterator node = G.beginNode();
 		Size count = 0;
 		for (; node != G.endNode(); ++node)
 		{
@@ -267,7 +249,7 @@ namespace BALL
 
 		os << "Edges:" << std::endl;	
 
-		MolecularGraph<Node, Edge>::EdgeConstIterator edge = G.beginEdge();
+		typename MolecularGraph<Node, Edge>::EdgeConstIterator edge = G.beginEdge();
 		count = 0;
 		for (; edge != G.endEdge(); ++edge)
 		{
@@ -325,66 +307,115 @@ namespace BALL
 	}
 
 
-	template <typename T>
-	NodeItem<T>::NodeItem();
+	template <typename Node, typename Edge>
+	NodeItem<Node, Edge>::NodeItem()
+		throw()
 		: atom_(0)
 	{
 	}
 
-	template <typename T>
-	NodeItem<T>::NodeItem(const Atom& atom)
+	template <typename Node, typename Edge>
+	NodeItem<Node, Edge>::NodeItem(const Atom& atom)
+		throw()
 		:	atom_(const_cast<Atom*>(&atom))
 	{
 	}
 
-	template <typename T>
-	typename NodeItem<T>::Node& NodeItem<T>::getData() 
+	template <typename Node, typename Edge>
+	Node& NodeItem<Node, Edge>::getData()
+		throw()
 	{
 		return data_;
 	}
 
-	template <typename T>
-	const typename NodeItem<T>::Node& NodeItem<T>::getData() const 
+	template <typename Node, typename Edge>
+	const Node& NodeItem<Node, Edge>::getData() const 
+		throw()
 	{	
 		return data_;
 	}
 
 
-	template <typename T>
-	void NodeItem<T>::setData(const typename NodeItem<T>::Node& data) 
+	template <typename Node, typename Edge>
+	void NodeItem<Node, Edge>::setData(const Node& data) 
+		throw()
 	{ 
 		data_ = data; 
 	};
 
-	//???
-	const Atom* getAtom() const { return atom_;}
-	Atom* getAtom() { return atom_;}
+	
+	template <typename Node, typename Edge>
+	const Atom* NodeItem<Node, Edge>::getAtom() const 
+		throw()
+	{ 
+		return atom_;
+	}
 
-		Iterator begin() { return adjacent_edges_.begin(); }
-		ConstIterator begin() const { return adjacent_edges_.begin(); }
-		Iterator end() { return adjacent_edges_.end(); }
-		ConstIterator end() const { return adjacent_edges_.end(); }
+	template <typename Node, typename Edge>
+	Atom* NodeItem<Node, Edge>::getAtom() 
+		throw()
+	{ 
+		return atom_;
+	}
 
-		Size getDegree() const { return (Size)adjacent_edges_.size(); }
+	template <typename Node, typename Edge>
+	typename NodeItem<Node, Edge>::Iterator NodeItem<Node, Edge>::begin() 
+		throw()
+	{ 
+		return adjacent_edges_.begin(); 
+	}
+	
+	template <typename Node, typename Edge>
+	typename NodeItem<Node, Edge>::ConstIterator NodeItem<Node, Edge>::begin() const 
+		throw()
+	{ 
+		return adjacent_edges_.begin(); 
+	}
 
-		bool operator == (const NodeItem& item) const { return (atom_ == item.atom_); }
+	template <typename Node, typename Edge>
+	typename NodeItem<Node, Edge>::Iterator NodeItem<Node, Edge>::end() 
+		throw()
+	{ 
+		return adjacent_edges_.end(); 
+	}
 
-		protected:
+	template <typename Node, typename Edge>
+	typename NodeItem<Node, Edge>::ConstIterator NodeItem<Node, Edge>::end() const		
+		throw()
+	{ 
+		return adjacent_edges_.end(); 
+	}
 
-		void deleteEdge_(EdgeItemType* item)
+	template <typename Node, typename Edge>
+	Size NodeItem<Node, Edge>::getDegree() const 
+		throw()
+	{ 
+		return (Size)adjacent_edges_.size(); 
+	}
+
+	template <typename Node, typename Edge>
+	bool NodeItem<Node, Edge>::operator == (const NodeItem& item) const 
+		throw()
+	{ 
+		return (atom_ == item.atom_); 
+	}
+
+	template <typename Node, typename Edge>
+	void NodeItem<Node, Edge>::deleteEdge_(EdgeItemType* item)
+		throw()
+	{
+		cout << "entering deleteEdge_(atom = " << getAtom() << ", bond = " << item->getBond() << ")" << endl;
+		Iterator it(find(adjacent_edges_.begin(), adjacent_edges_.end(), item));
+		if (it != adjacent_edges_.end())
 		{
-			cout << "entering deleteEdge_(atom = " << getAtom() << ", bond = " << item->getBond() << ")" << endl;
-			Iterator it(find(adjacent_edges_.begin(), adjacent_edges_.end(), item));
-			if (it != adjacent_edges_.end())
-			{
-				cout << "erasing edge " << item->getBond() << endl;
-				adjacent_edges_.erase(it);
-			}
-			else
-			{
-				cout << "cannot erase edge " << item->getBond() << endl;
-			}
+			cout << "erasing edge " << item->getBond() << endl;
+			adjacent_edges_.erase(it);
 		}
+		else
+		{
+			cout << "cannot erase edge " << item->getBond() << endl;
+		}
+	}
 
 
 } // namespace BALL
