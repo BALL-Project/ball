@@ -35,6 +35,7 @@ EXECUTABLES = \
 	NumericalSAS_test\
 	Options_test\
 	PDBFile_test\
+  Plane3_test\
 	PointGrid_test\
 	PoissonBoltzmann_test\
 	PropertyManager_test\
@@ -134,6 +135,9 @@ NumericalSAS_test:	NumericalSAS_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 PDBFile_test:	PDBFile_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Plane3_test:	Plane3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 PointGrid_test:	PointGrid_test.o
