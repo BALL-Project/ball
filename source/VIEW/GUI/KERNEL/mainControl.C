@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.35 2002/12/18 20:30:50 amoll Exp $
+// $Id: mainControl.C,v 1.36 2002/12/18 23:18:32 amoll Exp $
 
 // this is required for QMenuItem
-#define INCLUDE_MENUITEM_DEF
+//#define iNCLUDE_MENUITEM_DEy
 
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
@@ -822,6 +822,7 @@ namespace BALL
 			modular_widgets_.remove(widget);
 		}
 
+
 		void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 			throw()
 		{
@@ -841,17 +842,27 @@ namespace BALL
 				}				
 			}
 
+			setStatusbarText("Selected " + String(nr) + " items.");
+			printSelectionInfos();
+
+			#ifdef BALL_DEBUG_VIEW
+				Log.info() << "Selected " + String(nr) + " items."<< std::endl;
+			#endif
+
+			NewSelectionMessage* new_message = new NewSelectionMessage;
+			new_message->setDeletable(true);
+			notify_(new_message);
+		}
+
+		
+		void MainControl::printSelectionInfos()
+			throw()
+		{
 			if (selection_.size() > 4)
 			{
-				NewSelectionMessage* new_message = new NewSelectionMessage;
-				new_message->setDeletable(true);
-				notify_(new_message);
-				setStatusbarText("Selected " + String(nr) + " items.");
-				#ifdef BALL_DEBUG_VIEW
-					Log.info() << "Selected " + String(nr) + " items."<< std::endl;
-				#endif
 				return;
 			}
+
 			Atom* atoms[4];
 			Size nr_of_atoms = 0;
 			HashSet<Composite*>::Iterator it = selection_.begin();
@@ -864,88 +875,86 @@ namespace BALL
 				it++;
 			}
 
-			if (nr_of_atoms == 1)
+			switch(nr_of_atoms)
 			{
-				// if one atom was picked, show its properties
-				Atom& atom = *atoms[0];
-				setStatusbarText("Properties of atom " + atom.getFullName() + "  Type: " + 
-												 String(atom.getType()) + "  Typename: " + 
-												 String(atom.getTypeName()) + ":  Position: (" + 
-												 String(atom.getPosition().x) + "|" +
-												 String(atom.getPosition().y) + "|" +
-												 String(atom.getPosition().z) + ")" + "  Charge: " + 
-												 String(atom.getCharge()));
-			}
-			else if (nr_of_atoms == 2)
-			{
-				// if two atoms were picked, show their distance
-				setStatusbarText("Distance between atom " + 
-													atoms[0]->getFullName() + " and " + 
-													atoms[1]->getFullName() + ": " + 
-													String(GetDistance(atoms[0]->getPosition(), atoms[1]->getPosition())));
-			}
-			else if (nr_of_atoms == 3)
-			{
-				PreciseTime min_time = Maths::min(atoms[0]->getSelectionTime(),
-																	 				atoms[1]->getSelectionTime(),
-																	 				atoms[2]->getSelectionTime());
-				PreciseTime max_time = Maths::max(atoms[0]->getSelectionTime(),
-																				  atoms[1]->getSelectionTime(),
-																	 				atoms[2]->getSelectionTime());
-
-				Atom* ordered_atoms[3];
-
-				for (int pos = 0; pos < 3; pos++)
+				case 1:
 				{
-					if 			(atoms[pos]->getSelectionTime() == min_time)  ordered_atoms[0] = atoms[pos];
-					else if (atoms[pos]->getSelectionTime() == max_time)  ordered_atoms[2] = atoms[pos];
-					else 																									ordered_atoms[1] = atoms[pos];
+					// if one atom was picked, show its properties
+					Atom& atom = *atoms[0];
+					setStatusbarText("Properties of atom " + atom.getFullName() + "  Type: " + 
+													 String(atom.getType()) + "  Typename: " + 
+													 String(atom.getTypeName()) + ":  Position: (" + 
+													 String(atom.getPosition().x) + "|" +
+													 String(atom.getPosition().y) + "|" +
+													 String(atom.getPosition().z) + ")" + "  Charge: " + 
+													 String(atom.getCharge()));
+					break;
 				}
+				case 2:
+				{
+					// if two atoms were picked, show their distance
+					setStatusbarText("Distance between atom " + 
+														atoms[0]->getFullName() + " and " + 
+														atoms[1]->getFullName() + ": " + 
+														String(GetDistance(atoms[0]->getPosition(), atoms[1]->getPosition())));
+					break;
+				}
+				case 3:
+				{
+					PreciseTime min_time = Maths::min(atoms[0]->getSelectionTime(),
+																						atoms[1]->getSelectionTime(),
+																						atoms[2]->getSelectionTime());
+					PreciseTime max_time = Maths::max(atoms[0]->getSelectionTime(),
+																						atoms[1]->getSelectionTime(),
+																						atoms[2]->getSelectionTime());
 
-				Vector3 vector1(ordered_atoms[1]->getPosition() - ordered_atoms[2]->getPosition());
-				Vector3 vector2(ordered_atoms[1]->getPosition() - ordered_atoms[0]->getPosition());
-				Angle result;
-				GetAngle(vector1, vector2, result);
-				setStatusbarText("Angle between atoms " + 
-													atoms[0]->getFullName() + ", " + 
-													atoms[1]->getFullName() + ", " +
-													atoms[2]->getFullName() + ": " +
-													String(result.toDegree())); 
-			}
-			else if (nr_of_atoms == 4)
-			{
-				// if tree atoms were picked, show their torsion angle
-				Angle result = getTorsionAngle(atoms[0]->getPosition().x, atoms[0]->getPosition().y, atoms[0]->getPosition().z,
-																			 atoms[1]->getPosition().x, atoms[1]->getPosition().y, atoms[1]->getPosition().z,
-																			 atoms[2]->getPosition().x, atoms[2]->getPosition().y, atoms[2]->getPosition().z,
-																			 atoms[3]->getPosition().x, atoms[3]->getPosition().y, atoms[3]->getPosition().z);
+					Atom* ordered_atoms[3];
 
-				setStatusbarText("Torsion angle between atoms " + 
-													atoms[0]->getFullName() + ", " + 
-													atoms[1]->getFullName() + ", " +
-													atoms[2]->getFullName() + ", " +
-													atoms[3]->getFullName() + ": " +
-													String(result.toDegree()));
-			}
-			else
-			{
-				setStatusbarText("Selected " + String(nr) + " items.");
-			}
+					for (int pos = 0; pos < 3; pos++)
+					{
+						if 			(atoms[pos]->getSelectionTime() == min_time)  ordered_atoms[0] = atoms[pos];
+						else if (atoms[pos]->getSelectionTime() == max_time)  ordered_atoms[2] = atoms[pos];
+						else 																									ordered_atoms[1] = atoms[pos];
+					}
 
-			NewSelectionMessage* new_message = new NewSelectionMessage;
-			new_message->setDeletable(true);
-			notify_(new_message);
-			#ifdef BALL_DEBUG_VIEW
-				Log.info() << "Selected " + String(nr) + " items."<< std::endl;
-			#endif
+					Vector3 vector1(ordered_atoms[1]->getPosition() - ordered_atoms[2]->getPosition());
+					Vector3 vector2(ordered_atoms[1]->getPosition() - ordered_atoms[0]->getPosition());
+					Angle result;
+					GetAngle(vector1, vector2, result);
+					setStatusbarText("Angle between atoms " + 
+														atoms[0]->getFullName() + ", " + 
+														atoms[1]->getFullName() + ", " +
+														atoms[2]->getFullName() + ": " +
+														String(result.toDegree())); 
+					break;
+				}
+				case 4:
+				{
+					// if tree atoms were picked, show their torsion angle
+					Angle result = getTorsionAngle(atoms[0]->getPosition().x, atoms[0]->getPosition().y, atoms[0]->getPosition().z,
+																				 atoms[1]->getPosition().x, atoms[1]->getPosition().y, atoms[1]->getPosition().z,
+																				 atoms[2]->getPosition().x, atoms[2]->getPosition().y, atoms[2]->getPosition().z,
+																				 atoms[3]->getPosition().x, atoms[3]->getPosition().y, atoms[3]->getPosition().z);
+
+					setStatusbarText("Torsion angle between atoms " + 
+														atoms[0]->getFullName() + ", " + 
+														atoms[1]->getFullName() + ", " +
+														atoms[2]->getFullName() + ", " +
+														atoms[3]->getFullName() + ": " +
+														String(result.toDegree()));
+					break;
+				}
+			}
 		}
  
+
 		const HashSet<Composite*>& MainControl::getSelection() const
 			throw()
 		{
 			return selection_;
 		}
   
+		
 		System* MainControl::getSelectedSystem()
 			throw()
 		{
