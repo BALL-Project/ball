@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.12 2005/01/15 10:55:15 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.13 2005/01/17 00:08:55 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -26,10 +26,11 @@
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qimage.h>
+#include <GL/glext.h>
 
 using namespace std;
 
-//   #define BALL_BENCHMARKING
+ #define BALL_BENCHMARKING
 
 namespace BALL
 {
@@ -49,8 +50,12 @@ namespace BALL
 				all_names_(0),
 				last_color_(&dummy_color_),
 				stereo_(NO_STEREO),
-				render_mode_(RENDER_MODE_UNDEFINED)
+				render_mode_(RENDER_MODE_UNDEFINED),
+ 				use_vertex_buffer_(false)
 		{
+#ifdef GL_ARB_vertex_buffer_object
+			use_vertex_buffer_ = true;
+#endif
 		}
 
 		GLRenderer::~GLRenderer()
@@ -267,6 +272,13 @@ namespace BALL
 		void GLRenderer::removeDisplayListFor(const Representation& rep)
 			throw()
 		{
+			if (vertexBuffersEnabled() &&
+					isSurfaceModel(rep.getModelType()))
+			{
+				clearVertexBuffersFor(*(Representation*)&rep);
+				return;
+			}
+
 			if (display_lists_.size() == 1)
 			{
 				// we can use a faster approach
@@ -291,6 +303,13 @@ namespace BALL
 		void GLRenderer::rebuildDisplayListFor(const Representation& rep)
 			throw()
 		{
+			if (vertexBuffersEnabled() &&
+					isSurfaceModel(rep.getModelType()))
+			{
+				clearVertexBuffersFor(*(Representation*)&rep);
+				return;
+			}
+
 #ifdef BALL_BENCHMARKING
 	Timer t;
 	t.start();
@@ -726,48 +745,54 @@ namespace BALL
 				{
 					glEnable(GL_CULL_FACE);
 				}
-				
-				glBegin(GL_TRIANGLES);
 
-				Size nr_triangles = mesh.triangle.size();
-
-				if (!multiple_colors)
+				if (use_vertex_buffer_)
 				{
-					for (Size index = 0; index < nr_triangles; ++index)
-					{
-						normalVector3_(mesh.normal[mesh.triangle[index].v1]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
-
-						normalVector3_(mesh.normal[mesh.triangle[index].v2]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
-
-						normalVector3_(mesh.normal[mesh.triangle[index].v3]);
-						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-					}
+					renderMeshWithVertexArray_(mesh);
 				}
 				else
-				{
-					for (Size index = 0; index < nr_triangles; ++index)
+				{	
+					glBegin(GL_TRIANGLES);
+
+					Size nr_triangles = mesh.triangle.size();
+
+					if (!multiple_colors)
 					{
-						Position p = mesh.triangle[index].v1;
-						setColorRGBA_(mesh.colorList[p]);
-						normalVector3_(  mesh.normal[p]);
-						vertexVector3_(  mesh.vertex[p]);
+						for (Size index = 0; index < nr_triangles; ++index)
+						{
+							normalVector3_(mesh.normal[mesh.triangle[index].v1]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
 
-						p = mesh.triangle[index].v2;
-						setColorRGBA_(mesh.colorList[p]);
-						normalVector3_(  mesh.normal[p]);
-						vertexVector3_(  mesh.vertex[p]);
+							normalVector3_(mesh.normal[mesh.triangle[index].v2]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
 
-						p = mesh.triangle[index].v3;
-						setColorRGBA_(mesh.colorList[p]);
-						normalVector3_(  mesh.normal[p]);
-						vertexVector3_(  mesh.vertex[p]);
+							normalVector3_(mesh.normal[mesh.triangle[index].v3]);
+							vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+						}
 					}
+					else
+					{
+						for (Size index = 0; index < nr_triangles; ++index)
+						{
+							Position p = mesh.triangle[index].v1;
+							setColorRGBA_(mesh.colorList[p]);
+							normalVector3_(  mesh.normal[p]);
+							vertexVector3_(  mesh.vertex[p]);
+
+							p = mesh.triangle[index].v2;
+							setColorRGBA_(mesh.colorList[p]);
+							normalVector3_(  mesh.normal[p]);
+							vertexVector3_(  mesh.vertex[p]);
+
+							p = mesh.triangle[index].v3;
+							setColorRGBA_(mesh.colorList[p]);
+							normalVector3_(  mesh.normal[p]);
+							vertexVector3_(  mesh.vertex[p]);
+						}
+					}
+
+					glEnd();
 				}
-
-				glEnd();
-
 				if (render_mode_ == RENDER_MODE_SOLID)
 				{
 					glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
@@ -783,6 +808,21 @@ namespace BALL
 			}
 		}
 
+		void GLRenderer::renderMeshWithVertexArray_(const Mesh& mesh)
+			throw()
+		{
+			if (mesh_to_buffer_.has(&mesh)) 
+			{
+				mesh_to_buffer_[&mesh]->draw();
+				return;
+			}
+
+			MeshBuffer* buffer = new MeshBuffer;
+			buffer->setMesh(mesh);
+			buffer->initialize();
+ 			buffer->draw();
+			mesh_to_buffer_[&mesh] = buffer;
+		}
 
 		GLubyte* GLRenderer::generateBitmapFromText_(const String& text, int& width, int& height) const
 			throw()
@@ -1378,6 +1418,90 @@ namespace BALL
 
 			return false;
 		}
+
+		String GLRenderer::getVendor()
+		{
+			return (char*)glGetString(GL_VENDOR);
+		}
+
+		String GLRenderer::getRenderer()
+		{
+			return (char*)glGetString(GL_RENDER);
+		}
+
+		String GLRenderer::getOpenGLVersion() 
+		{
+			return (char*)glGetString(GL_VERSION);
+		}
+
+		vector<String> GLRenderer::getExtensions()
+		{
+			String exts = (char*)glGetString(GL_EXTENSIONS);
+			vector<String> string_vector;
+			exts.split(string_vector);
+			return string_vector;
+		}
+		
+		bool GLRenderer::enableVertexBuffers(bool state)
+		{
+			#ifdef GL_ARB_vertex_buffer_object
+ 				use_vertex_buffer_ = false;
+				return false;
+			#endif
+
+			use_vertex_buffer_ = state;
+			return true;
+		}
+
+		void GLRenderer::clearVertexBuffersFor(Representation& rep)
+		{
+			List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
+			List<GeometricObject*>::Iterator it = geometric_objects.begin();
+			for (; it != geometric_objects.end(); it++)
+			{
+				Mesh* mesh = dynamic_cast<Mesh*>(*it);
+				if (mesh == 0) continue;
+
+				HashMap<const Mesh*, MeshBuffer*>::Iterator hit = mesh_to_buffer_.find(mesh);
+
+				if (hit != mesh_to_buffer_.end())
+				{
+					MeshBuffer* buffer = hit->second;
+					delete buffer;
+					mesh_to_buffer_.erase(hit);
+				}
+			}
+		}
+
+	void GLRenderer::drawFromDisplayList(const Representation& rep)
+		throw()
+	{
+		if (use_vertex_buffer_ && 
+				VIEW::isSurfaceModel(rep.getModelType()))
+		{
+			const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
+			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
+			for (; it != geometric_objects.end(); it++)
+			{
+				Mesh* mesh = dynamic_cast<Mesh*>(*it);
+				if (mesh == 0) continue;
+
+				HashMap<const Mesh*, MeshBuffer*>::Iterator hit = mesh_to_buffer_.find(mesh);
+
+				if (hit != mesh_to_buffer_.end())
+				{
+					hit->second->draw();
+				}
+			}
+		}
+
+		if (!display_lists_.has(&rep) || rep.isHidden()) 
+		{
+			return;
+		}
+
+		display_lists_[&rep]->draw();
+	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/RENDERING/glRenderer.iC>

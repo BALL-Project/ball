@@ -32,17 +32,6 @@ void GLRenderer::initAlwaysFront()
 }
 
 
-BALL_INLINE
-void GLRenderer::drawFromDisplayList(const Representation& rep)
-	throw()
-{
-	if (!display_lists_.has(&rep) || rep.isHidden()) 
-	{
-		return;
-	}
-
-	display_lists_[&rep]->draw();
-}
 
 // ############################ NAMING ###################################
 BALL_INLINE

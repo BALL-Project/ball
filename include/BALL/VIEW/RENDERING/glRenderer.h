@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.6 2005/01/16 22:57:22 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.7 2005/01/17 00:08:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -241,6 +241,9 @@ namespace BALL
 			*/
 			bool isExtensionSupported(const String& extension);
 
+			/// 
+			void clearVertexBuffersFor(Representation& rep);
+
 			///
 			String getVendor();
 
@@ -407,11 +410,12 @@ namespace BALL
 			typedef HashMap<const GeometricObject*, Name> NameHashMap;
 			typedef HashMap<Name, const GeometricObject*> GeometricObjectHashMap;
 			typedef HashMap<const Representation*, GLDisplayList*> DisplayListHashMap;
+			typedef HashMap<const Mesh*, MeshBuffer*> MeshBufferHashMap;
 
 			GeometricObjectHashMap	name_to_object_;
 			NameHashMap							object_to_name_;
 			DisplayListHashMap 			display_lists_;
-			HashMap<const Mesh*, MeshBuffer*> mesh_to_buffer_;
+			MeshBufferHashMap 			mesh_to_buffer_;
 			Name 										all_names_;
 			GLuint 									object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
 			Vector3 								normal_vector_;
