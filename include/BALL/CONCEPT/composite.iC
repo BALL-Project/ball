@@ -1,4 +1,4 @@
-// $Id: composite.iC,v 1.13 2000/10/18 12:39:58 oliver Exp $
+// $Id: composite.iC,v 1.14 2000/10/19 20:10:15 oliver Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
@@ -149,6 +149,12 @@ bool Composite::isRoot() const
 }
   
 BALL_INLINE 
+bool Composite::isAncestorOf(const Composite& composite) const
+{
+	return composite.isDescendantOf(*this);
+}
+
+BALL_INLINE 
 bool Composite::isRootOf(const Composite& composite) const
 {
   return ((parent_ == 0) && (isAncestorOf(composite) == true) || (&composite == this));
@@ -264,8 +270,3 @@ void Composite::host(Visitor<Composite>& visitor)
   visitor.visit(*this);
 }
 
-BALL_INLINE 
-bool Composite::isAncestorOf(const Composite& composite) const
-{
-	return composite.isDescendantOf(*this);
-}

@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.7 2000/09/03 20:02:37 oliver Exp $
+// $Id: property.iC,v 1.8 2000/10/19 20:10:15 oliver Exp $
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name)	
@@ -80,14 +80,6 @@ NamedProperty::~NamedProperty()
 	}
 }
 	
-BALL_INLINE 
-NamedProperty::NamedProperty() 
-	: PersistentObject(),
-		type_(NONE),
-		name_("")
-{
-}
-
 BALL_INLINE 
 int NamedProperty::getInt() const
 {
