@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.18 2003/10/15 14:31:35 amoll Exp $
+// $Id: displayProperties.C,v 1.19 2003/10/16 09:32:45 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -58,6 +58,13 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	{
 		model_type_combobox->insertItem(VIEW::getModelName((VIEW::ModelTypes)p).c_str());
 	}
+
+	coloring_method_combobox->clear();
+	for (Index p = 0; p < COLORING_UNKNOWN; p++)
+	{
+		coloring_method_combobox->insertItem(VIEW::getColoringName((VIEW::ColoringMethod)p).c_str());
+	}
+
 }
 
 
@@ -389,7 +396,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 			color_processor = new ResidueNameColorProcessor;
 			break;
 
-		case COLORING_RESIDUE_NUMBER:
+		case COLORING_RESIDUE_INDEX:
 			color_processor = new ResidueNumberColorProcessor;
 			break;
 

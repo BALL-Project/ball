@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.8 2003/10/15 14:21:47 amoll Exp $
+// $Id: common.h,v 1.9 2003/10/16 09:33:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -152,7 +152,7 @@ enum ColoringMethod
 	COLORING_ELEMENT          = 0,
 
 	///
-	COLORING_RESIDUE_NUMBER,
+	COLORING_RESIDUE_INDEX,
 
 	///
 	COLORING_RESIDUE_NAME,
@@ -164,10 +164,16 @@ enum ColoringMethod
 	COLORING_DISTANCE,
 
 	///
-	COLORING_CUSTOM
+	COLORING_CUSTOM,
+
+	///
+	COLORING_UNKNOWN
 };
 
 String getModelName(ModelTypes type) 
+	throw();
+
+String getColoringName(ColoringMethod type) 
 	throw();
 
 //@}

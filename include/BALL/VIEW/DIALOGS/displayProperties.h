@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.10 2003/10/15 14:17:21 amoll Exp $
+// $Id: displayProperties.h,v 1.11 2003/10/16 09:33:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -32,9 +32,9 @@ namespace BALL
 				the graphical visualization (the model, the drawing precision, the drawing mode,
 				the coloring method and the custom color).
 				For information about the drawing precision see Represenation.\par
-				If this dialog is used, it should be created with MainControl as parent.
-				The class DisplayPropertiesData contains the definition of the layout of
-				this dialog and is therefore not necessary for understanding. \par
+				If this dialog is used, it should be created with MainControl as parent.\par
+				If you want to add a new coloring method or type of representation, have a look at
+				VIEW/KERNEL/common.h.
 				\ingroup ViewDialogs
 		*/
 		class DisplayProperties 

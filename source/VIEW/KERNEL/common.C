@@ -41,5 +41,27 @@ String getModelName(ModelTypes type)
 	return "Unknown";
 }
 
+String getColoringName(ColoringMethod type) 
+	throw()
+{
+	switch (type)
+	{
+		case COLORING_ELEMENT:
+			return "by element";
+		case COLORING_RESIDUE_INDEX:
+			return "by residue index";
+		case COLORING_RESIDUE_NAME:
+			return "by residue name";
+		case COLORING_ATOM_CHARGE:
+			return "by atom charge";
+		case COLORING_DISTANCE:
+			return "by atom distance";
+		case COLORING_CUSTOM:
+			return "custom";
+		case COLORING_UNKNOWN:
+			return "Unknown";
+	}
+	return "Unknown";
+}
 
 } } //namespaces
