@@ -1,4 +1,4 @@
-// $Id: rules.h,v 1.4 2000/05/19 15:59:31 oliver Exp $
+// $Id: ruleEvaluator.h,v 1.1 2000/05/24 12:15:16 oliver Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULES_H
@@ -81,6 +81,10 @@ namespace BALL
 		/**	Return the prefix of the INI file sections
 		*/
 		const String& getPrefix() const;
+			
+		/**	Set the prefix of the INI file sections
+		*/
+		void setPrefix(const String& prefix);
 			
 		//@}
 
