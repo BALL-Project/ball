@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.5 1999/12/19 17:32:45 oliver Exp $
+// $Id: bitVector.iC,v 1.6 1999/12/28 18:32:13 oliver Exp $
 
 BALL_INLINE
 BitVector::BlockType BitVector::mask_(Index index) const
@@ -63,7 +63,7 @@ BitVector BitVector::operator | (const BitVector& bit_vector)
 {
   BitVector temp(*this);
 
-  temp.or(bit_vector);
+  temp.bitwiseOr(bit_vector);
 
   return temp;
 }
@@ -71,7 +71,7 @@ BitVector BitVector::operator | (const BitVector& bit_vector)
 BALL_INLINE 
 BitVector& BitVector::operator |= (const BitVector &bit_vector)
 {
-  or(bit_vector);
+  bitwiseOr(bit_vector);
 
   return *this;
 }
@@ -81,7 +81,7 @@ BitVector BitVector::operator & (const BitVector& bit_vector)
 {
   BitVector temp(*this);
 
-  temp.and(bit_vector);
+  temp.bitwiseAnd(bit_vector);
 
   return temp;
 }
@@ -89,7 +89,7 @@ BitVector BitVector::operator & (const BitVector& bit_vector)
 BALL_INLINE 
 BitVector& BitVector::operator &= (const BitVector &bit_vector)
 {
-  and(bit_vector);
+  bitwiseAnd(bit_vector);
 
   return *this;
 }
@@ -99,7 +99,7 @@ BitVector BitVector::operator ^ (const BitVector& bit_vector)
 {
   BitVector temp(*this);
 
-  temp.xor(bit_vector);
+  temp.bitwiseXor(bit_vector);
 
   return temp;
 }
@@ -107,7 +107,7 @@ BitVector BitVector::operator ^ (const BitVector& bit_vector)
 BALL_INLINE 
 BitVector& BitVector::operator ^= (const BitVector &bit_vector)
 {
-  xor(bit_vector);
+  bitwiseXor(bit_vector);
 
   return *this;
 }

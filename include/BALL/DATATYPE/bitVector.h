@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.4 1999/12/19 17:17:22 oliver Exp $
+// $Id: bitVector.h,v 1.5 1999/12/28 18:32:13 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -250,13 +250,13 @@ namespace BALL
 		unsigned long getUnsignedLong() const;
 
 		///
-		void or(const BitVector& bit_vector);
+		void bitwiseOr(const BitVector& bit_vector);
 
 		///
-		void xor(const BitVector& bit_vector);
+		void bitwiseXor(const BitVector& bit_vector);
 
 		///
-		void and(const BitVector& bit_vector);
+		void bitwiseAnd(const BitVector& bit_vector);
 
 		///
 		BitVector operator | (const BitVector& bit_vector);
@@ -310,16 +310,16 @@ namespace BALL
 		//@{
 
 		///
-		friend istream& operator >> (istream& s, BitVector& bit_vector);
+		friend std::istream& operator >> (std::istream& s, BitVector& bit_vector);
 
 		///
-		friend ostream& operator << (ostream& s, const BitVector& bit_vector);
+		friend std::ostream& operator << (std::ostream& s, const BitVector& bit_vector);
 
 		///
-		virtual void read(istream& s);
+		virtual void read(std::istream& s);
 
 		///
-		virtual void write(ostream& s) const;
+		virtual void write(std::ostream& s) const;
 
 		/**	Storable write method.
 		*/
