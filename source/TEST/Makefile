@@ -59,6 +59,7 @@ EXECUTABLES = \
 	SecondaryStructure_test\
 	Socket_test\
 	Sphere3_test\
+	StandardPredicates_test\
 	String_test\
 	StructureMapper_test\
 	TransformationApplicator_test\
@@ -222,6 +223,9 @@ Skeleton_test:	Skeleton_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Sphere3_test:	Sphere3_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+StandardPredicates_test:	StandardPredicates_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 StructureMapper_test:	StructureMapper_test.o
