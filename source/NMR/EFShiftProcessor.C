@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.C,v 1.3 2000/09/20 11:11:03 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.4 2000/09/21 07:53:33 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/SYSTEM/path.h>
@@ -10,7 +10,7 @@ using namespace std;
 namespace BALL 
 {
 	
-	const char* PROPERTY__EF_SHIFT = "ElectricFieldShift";
+	const char* EFShiftProcessor::PROPERTY__EF_SHIFT = "ElectricFieldShift";
 
 	EFShiftProcessor::EFShiftProcessor()
 		throw()
@@ -61,6 +61,7 @@ namespace BALL
 		if (parameter_section.options.has("exclude_residue_field"))
 		{
 			exclude_residue_field_ = parameter_section.options.getBool("exclude_residue_field");
+			Log.info() << "excluding charges from same residue!" << endl;
 		}
 
 		// clear the arrays containing the expressions, the parameters, and the charge map
@@ -86,14 +87,38 @@ namespace BALL
 
 		// extract the charge assignment map
 		bool result = parameter_section.extractSection(*parameters_, "Charges");
+
+		// default factor is 1.0 - default unit are elementary charges (e0)
+		float charge_factor = 1.0;
+		if (parameter_section.options.has("unit"))
+		{
+			String unit = parameter_section.options["unit"];
+			if (unit == "e0")
+			{
+				charge_factor = 1.0;
+			}
+			else if (unit == "ESU")
+			{
+				charge_factor = 1.0 / 4.8;
+			}
+			else
+			{
+				Log.warn() << "EFShiftProcessor::init: unknown unit for charges in file " 
+									 << parameters_->getFilename() << ", section [Charges]: " 
+									 << unit << " - using default unit elemtary charges (e0)." << endl;
+			}
+		}
+
+		// built the hash map
 		if ((result == true) && parameter_section.hasVariable("charge"))
 		{
 			Position charge_column = parameter_section.getColumnIndex("charge");
 			for (Position i = 0; i < parameter_section.getNumberOfKeys(); i++)
 			{
-				charge_map_[parameter_section.getKey(i)] = parameter_section.getValue(i, charge_column).toFloat();
+				charge_map_[parameter_section.getKey(i)] = charge_factor * parameter_section.getValue(i, charge_column).toFloat();
 			}
 		}
+		Log.info() << "charge_map_.size() = " << charge_map_.size() << endl;
 	}
 		
 	bool EFShiftProcessor::start()
@@ -134,6 +159,10 @@ namespace BALL
 			Position bond_type = INVALID_POSITION;
 			Atom*	first_atom;
 			Atom* second_atom;
+
+			Log.info() << "bond: " << (*bond_it)->getFirstAtom()->getFullName() << " - " 
+														 << (*bond_it)->getSecondAtom()->getFullName() << endl; 
+
 			
 			// Iterate over all expressions and try to match them
 			// with the bond's atoms.
@@ -161,6 +190,7 @@ namespace BALL
 				}
 			}
 			
+			Log.info() << "bond type: " << bond_type << endl;
 			if (bond_type != INVALID_POSITION)
 			{
 				// We found parameters for a bond -- 
@@ -188,10 +218,12 @@ namespace BALL
 						E += charge / distance.getSquareLength();
 					}
 				}
-				
+					
+
 				// Calculate the field component E_z along the bond axis
 				// 
-				float Ez = (bond_vector * E) / bond_vector.getSquareLength();
+				float Ez = (bond_vector * E) / bond_vector.getLength();
+				Log.info() << "Field: E = " << E << "   Ez = " << Ez << endl;
 				
 				// calculate the secondary shift induced by this field
 				float delta_EF = - epsilon1_[bond_type] * Ez - epsilon2_[bond_type] * E.getSquareLength();
@@ -240,9 +272,21 @@ namespace BALL
 
 			// Assign the charge (if it is defined for this atom).
 			String full_name = atom_ptr->getFullName();
+			full_name.substitute(":", " ");
+			Log.info() << "matching " << full_name << endl;
 			if (charge_map_.has(full_name))
 			{
 				atom_ptr->setCharge(charge_map_[full_name]);
+			}
+			else
+			{
+				// Try wildcard match for the residue name.
+				full_name = "* " + atom_ptr->getName();
+				Log.info() << "matching " << full_name << endl;
+				if (charge_map_.has(full_name))
+				{
+					atom_ptr->setCharge(charge_map_[full_name]);
+				}
 			}
 		}
 		

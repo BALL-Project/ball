@@ -2,6 +2,8 @@ DIRECTORY=NMR
 
 THISLIB=$(LIBNAME)
 
+XCPP_SOURCES=EFShiftProcessor.C
+
 CPP_SOURCES=\
 	anisotropyShiftProcessor.C\
 	assignShiftProcessor.C\
