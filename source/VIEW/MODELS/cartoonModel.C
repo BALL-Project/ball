@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.29 2005/01/11 16:31:46 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.30 2005/01/11 16:41:16 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -220,11 +220,9 @@ void AddCartoonModel::collectAtoms_(SecondaryStructure& ss)
 void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	throw()
 {
-	vector<Vector3> 			peptide_normals;
-
-	ResidueIterator ri;
-
 	// calculate the normals of the peptide bonds for all residues of the SecondaryStructure
+	vector<Vector3> 			peptide_normals;
+	ResidueIterator ri;
 	BALL_FOREACH_RESIDUE(ss, ri)
 	{
 		// we have to find the following atoms:
@@ -310,8 +308,8 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		}
 
 		// calculate the normal of this peptide bond
-		Vector3 normal =   (O->getPosition() - C->getPosition()) 
-										 % (nextN->getPosition()  - C->getPosition()) ;
+		Vector3 normal =   (O->getPosition() 			- C->getPosition()) 
+										 % (nextN->getPosition()  - C->getPosition());
 
 		if (Maths::isZero(normal.getSquareLength())) 
 		{
@@ -321,10 +319,6 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 
 		peptide_normals.push_back(normal.normalize());
 
-		// we have computed the normal. now compute the two spline points corresponding to this
-		// amino acid: we take the point between the current N (N) and the C_alpha (CA) and
-		// the point between the C_alpha and C
-		
 	} // iteration over all residues of secondary structure
 
 	peptide_normals[peptide_normals.size() - 1] = 
@@ -364,6 +358,12 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 
 	// start of spline_points_ of this SS
 	const Position start = ss_to_spline_start_[&ss] * interpolation_steps_;
+
+	// prevent problems if we had a Helix before the strand: draw the connection as tube
+	if (last_spline_point_ != -1)
+	{
+		buildGraphicalRepresentation_(last_spline_point_, start);
+	}
 	 
 	// put first four points into the mesh (and first two triangles)
 	Vector3 right = spline_points_[start + 1] - spline_points_[start];
@@ -427,11 +427,12 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	normals.push_back(-normal);
 
 	Mesh* last_mesh = 0;
+
 	// iterate over all but the last amino acid (last amino acid becomes the arrow)
-	Position res;
 	Position spline_point_nr = start;
+	Position res = 0;
 	const Position nr_res = ss.countResidues() - 2;
-	for (res = 0; res < nr_res; res++)
+	for (; res < nr_res; res++)
 	{
 		if (res != 0) 
 		{
