@@ -1,4 +1,4 @@
-// $Id: bond.sip,v 1.1 2000/07/18 21:27:13 oliver Exp $
+// $Id: bond.sip,v 1.2 2000/07/25 21:20:35 oliver Exp $
 
 class Bond
 	: Composite,
@@ -74,10 +74,10 @@ class Bond
   Type getType() const;
   float getLength() const;
   static Bond* getBond(Atom& /first/, Atom& /second/);
-  Atom* getBondedAtomOf(const Atom& /atom/);
-  const Atom* getBondedAtomOf(const Atom& /atom/) const;
+  Atom* getBoundAtom(const Atom& /atom/);
+  const Atom* getBoundAtom(const Atom& /atom/) const;
   bool isBondOf(const Atom& /atom/) const;
-  bool isBonded() const;
+  bool isBound() const;
   bool isInterBond() const;
   bool isInterBondOf(const BaseFragment& /base_fragment/) const;
   bool isInterBondOf(const System& /system/) const;

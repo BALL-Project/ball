@@ -518,7 +518,7 @@ char sipName_BALL_isIntraBond[] = "isIntraBond";
 char sipName_BALL_isInterBondOf[] = "isInterBondOf";
 char sipName_BALL_isInterBond[] = "isInterBond";
 char sipName_BALL_isBondOf[] = "isBondOf";
-char sipName_BALL_getBondedAtomOf[] = "getBondedAtomOf";
+char sipName_BALL_getBoundAtom[] = "getBoundAtom";
 char sipName_BALL_getLength[] = "getLength";
 char sipName_BALL_getOrder[] = "getOrder";
 char sipName_BALL_setOrder[] = "setOrder";
@@ -532,8 +532,7 @@ char sipName_BALL_Bond[] = "Bond";
 char sipName_BALL_AtomType[] = "AtomType";
 char sipName_BALL_isVicinal[] = "isVicinal";
 char sipName_BALL_isGeminal[] = "isGeminal";
-char sipName_BALL_isBonded[] = "isBonded";
-char sipName_BALL_isBondedTo[] = "isBondedTo";
+char sipName_BALL_isBoundTo[] = "isBoundTo";
 char sipName_BALL_hasBond[] = "hasBond";
 char sipName_BALL_destroyBonds[] = "destroyBonds";
 char sipName_BALL_destroyBond[] = "destroyBond";
@@ -934,7 +933,7 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}
-#line 942 "../CPP/BALLcmodule.cpp"
+#line 941 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -973,7 +972,7 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 
 		return resobj;
 	}
-#line 981 "../CPP/BALLcmodule.cpp"
+#line 980 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.

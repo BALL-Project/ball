@@ -793,7 +793,7 @@ static PyObject *sipDo_Bond_getBond(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Bond_getBondedAtomOf(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Bond_getBoundAtom(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 
@@ -819,7 +819,7 @@ static PyObject *sipDo_Bond_getBondedAtomOf(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
-			res = ptr -> Bond::getBondedAtomOf(* a0);
+			res = ptr -> Bond::getBoundAtom(* a0);
 
 			return sipMapCppToSelf(res,sipClass_Atom);
 		}
@@ -844,7 +844,7 @@ static PyObject *sipDo_Bond_getBondedAtomOf(PyObject *sipThisObj,PyObject *sipAr
 			if (iserr)
 				return NULL;
 
-			res = ptr -> Bond::getBondedAtomOf(* a0);
+			res = ptr -> Bond::getBoundAtom(* a0);
 
 			return sipMapCppToSelf(res,sipClass_Atom);
 		}
@@ -852,7 +852,7 @@ static PyObject *sipDo_Bond_getBondedAtomOf(PyObject *sipThisObj,PyObject *sipAr
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getBondedAtomOf);
+	sipNoMethod(sipName_BALL_Bond,sipName_BALL_getBoundAtom);
 
 	return NULL;
 }
@@ -896,7 +896,7 @@ static PyObject *sipDo_Bond_isBondOf(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Bond_isBonded(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Bond_isBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 
@@ -912,7 +912,7 @@ static PyObject *sipDo_Bond_isBonded(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Bond *)sipGetCppPtr(sipThis,sipClass_Bond)) == NULL)
 				return NULL;
 
-			res = ptr -> Bond::isBonded();
+			res = ptr -> Bond::isBound();
 
 			return sipConvertFromBool((int)res);
 		}
@@ -920,7 +920,7 @@ static PyObject *sipDo_Bond_isBonded(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Bond,sipName_BALL_isBonded);
+	sipNoMethod(sipName_BALL_Bond,sipName_BALL_isBound);
 
 	return NULL;
 }
@@ -1351,9 +1351,9 @@ PyMethodDef sipClassAttrTab_Bond[] = {
 	{sipName_BALL_getType, sipDo_Bond_getType, METH_VARARGS, NULL},
 	{sipName_BALL_getLength, sipDo_Bond_getLength, METH_VARARGS, NULL},
 	{sipName_BALL_getBond, sipDo_Bond_getBond, METH_VARARGS, NULL},
-	{sipName_BALL_getBondedAtomOf, sipDo_Bond_getBondedAtomOf, METH_VARARGS, NULL},
+	{sipName_BALL_getBoundAtom, sipDo_Bond_getBoundAtom, METH_VARARGS, NULL},
 	{sipName_BALL_isBondOf, sipDo_Bond_isBondOf, METH_VARARGS, NULL},
-	{sipName_BALL_isBonded, sipDo_Bond_isBonded, METH_VARARGS, NULL},
+	{sipName_BALL_isBound, sipDo_Bond_isBound, METH_VARARGS, NULL},
 	{sipName_BALL_isInterBond, sipDo_Bond_isInterBond, METH_VARARGS, NULL},
 	{sipName_BALL_isInterBondOf, sipDo_Bond_isInterBondOf, METH_VARARGS, NULL},
 	{sipName_BALL_isIntraBond, sipDo_Bond_isIntraBond, METH_VARARGS, NULL},

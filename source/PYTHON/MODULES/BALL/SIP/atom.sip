@@ -1,4 +1,4 @@
-// $Id: atom.sip,v 1.1 2000/07/18 21:27:08 oliver Exp $
+// $Id: atom.sip,v 1.2 2000/07/25 21:20:34 oliver Exp $
 
 class Atom
   : Composite,
@@ -85,8 +85,8 @@ class Atom
    bool destroyBond(const Atom& /atom/);
    void destroyBonds();
    bool hasBond(const Bond& /bond/) const;
-   bool isBondedTo(const Atom& /atom/) const;
-   bool isBonded() const;
+   bool isBoundTo(const Atom& /atom/) const;
+   bool isBound() const;
    bool isGeminal(const Atom& /atom/) const;
    bool isVicinal(const Atom& /atom/) const;
    virtual bool isValid() const;

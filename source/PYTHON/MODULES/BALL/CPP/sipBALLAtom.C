@@ -1402,7 +1402,7 @@ static PyObject *sipDo_Atom_hasBond(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Atom_isBondedTo(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Atom_isBoundTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 
@@ -1428,7 +1428,7 @@ static PyObject *sipDo_Atom_isBondedTo(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = ptr -> Atom::isBondedTo(* a0);
+			res = ptr -> Atom::isBoundTo(* a0);
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1436,12 +1436,12 @@ static PyObject *sipDo_Atom_isBondedTo(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Atom,sipName_BALL_isBondedTo);
+	sipNoMethod(sipName_BALL_Atom,sipName_BALL_isBoundTo);
 
 	return NULL;
 }
 
-static PyObject *sipDo_Atom_isBonded(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_Atom_isBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 
@@ -1457,7 +1457,7 @@ static PyObject *sipDo_Atom_isBonded(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Atom *)sipGetCppPtr(sipThis,sipClass_Atom)) == NULL)
 				return NULL;
 
-			res = ptr -> Atom::isBonded();
+			res = ptr -> Atom::isBound();
 
 			return sipConvertFromBool((int)res);
 		}
@@ -1465,7 +1465,7 @@ static PyObject *sipDo_Atom_isBonded(PyObject *sipThisObj,PyObject *sipArgs)
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_Atom,sipName_BALL_isBonded);
+	sipNoMethod(sipName_BALL_Atom,sipName_BALL_isBound);
 
 	return NULL;
 }
@@ -1790,8 +1790,8 @@ PyMethodDef sipClassAttrTab_Atom[] = {
 	{sipName_BALL_destroyBond, sipDo_Atom_destroyBond, METH_VARARGS, NULL},
 	{sipName_BALL_destroyBonds, sipDo_Atom_destroyBonds, METH_VARARGS, NULL},
 	{sipName_BALL_hasBond, sipDo_Atom_hasBond, METH_VARARGS, NULL},
-	{sipName_BALL_isBondedTo, sipDo_Atom_isBondedTo, METH_VARARGS, NULL},
-	{sipName_BALL_isBonded, sipDo_Atom_isBonded, METH_VARARGS, NULL},
+	{sipName_BALL_isBoundTo, sipDo_Atom_isBoundTo, METH_VARARGS, NULL},
+	{sipName_BALL_isBound, sipDo_Atom_isBound, METH_VARARGS, NULL},
 	{sipName_BALL_isGeminal, sipDo_Atom_isGeminal, METH_VARARGS, NULL},
 	{sipName_BALL_isVicinal, sipDo_Atom_isVicinal, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_Atom_isValid, METH_VARARGS, NULL},
