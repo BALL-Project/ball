@@ -1,12 +1,14 @@
-// $Id: common.doc,v 1.2 1999/12/17 18:32:24 pmueller Exp $
+// $Id: common.doc,v 1.3 2000/03/26 12:41:46 oliver Exp $
 
 /**	@name	General Force Field Classes.
 		@nonames
 */
 //@{
 
+	//@Inlcude: atomVector.h
 	//@Include: forceField.h
 	//@Include: forceFieldComponent.h
+	//@Include: gradient.h
 	//@Include: periodicBoundary.h
 	//@Include: support.h
 	//@Include: snapShot.h
