@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.26 2004/02/16 17:12:22 amoll Exp $
+// $Id: colorProcessor.C,v 1.27 2004/02/17 15:36:51 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -245,11 +245,8 @@ namespace BALL
 		{
 			if (composite->isSelected())
 			{
-				float t = (255.0 -transparency_)/255.0;
-				ColorRGBA color(((float)BALL_SELECTED_COLOR.getRed())*t,
-												((float)BALL_SELECTED_COLOR.getGreen())*t,
-												((float)BALL_SELECTED_COLOR.getBlue())*t,
-												255 - transparency_);
+				ColorRGBA color(BALL_SELECTED_COLOR);
+				color.setAlpha(255 - transparency_);
 				return color;
 			}
 			else
