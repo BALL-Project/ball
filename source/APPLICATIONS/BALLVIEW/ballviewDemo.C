@@ -20,6 +20,7 @@ BALLViewDemo::BALLViewDemo(QWidget* parent, const char* name)
 	throw()
 	:	BALLViewDemoData( parent, name ),
 		ModularWidget(name),
+		first_selection_(true),
 		step_(0)
 {
 #ifdef BALL_VIEW_DEBUG
@@ -58,15 +59,14 @@ void BALLViewDemo::show()
 
 void BALLViewDemo::next()
 {
-	nextButton()->setEnabled(false);
 	step_ ++;
 	QWizard::next();
+	nextButton()->setEnabled(false);
 }
 
 
 void BALLViewDemo::enableNextStep_()
 {
-//   	label->setText(label->text() + "<blockquote><br><b>You finished this step. Click \"Next\" when you are ready to proceed.</b></blockquote>");
 	nextButton()->setEnabled(true);
 }
 
@@ -78,18 +78,15 @@ void BALLViewDemo::onNotify(Message *message)
 	Log.error() << "BALLViewDemo " << this << " onNotify " << message << std::endl;
 #endif
 
+	CompositeMessage* cmsg = RTTI::castTo<CompositeMessage>(*message);
 	switch (step_)
 	{
 		case 0:
 		{
-			if (RTTI::isKindOf<CompositeMessage>(*message))
+			if (cmsg != 0 && cmsg->getType() == CompositeMessage::NEW_MOLECULE)
 			{
-				CompositeMessage* msg = RTTI::castTo<CompositeMessage>(*message);
-				if (msg->getType() == CompositeMessage::NEW_MOLECULE)
-				{
-					enableNextStep_();
-					return;
-				}
+				enableNextStep_();
+				return;
 			}
 		}
 
@@ -97,18 +94,38 @@ void BALLViewDemo::onNotify(Message *message)
 		{
 			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
 			{
-				ControlSelectionMessage* msg = RTTI::castTo<ControlSelectionMessage>(*message);
-Log.error() << "#~~#   5 " << msg->getSelection().size()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-
-				if (msg->getSelection().size() == 1 &&
-						RTTI::isKindOf<System>(**msg->getSelection().begin()))
+				if (first_selection_) 
 				{
-Log.error() << "#~~#   7 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-					enableNextStep_();
+					first_selection_ = false;
 					return;
 				}
+
+				ControlSelectionMessage* msg = RTTI::castTo<ControlSelectionMessage>(*message);
+
+				nextButton()->setEnabled(msg->getSelection().size() == 1 &&
+																 RTTI::isKindOf<System>(**msg->getSelection().begin()));
+				return;
 			}
 		}
+
+		case 2:
+		{
+			if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
+			{
+				enableNextStep_();
+				return;
+			}
+		}
+
+		case 3:
+		{
+			if (cmsg != 0 && cmsg->getType() == CompositeMessage::CHANGED_COMPOSITE)
+			{
+				enableNextStep_();
+				return;
+			}
+		}
+
 
 	} // switch
 }

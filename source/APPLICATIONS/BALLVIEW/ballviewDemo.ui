@@ -141,6 +141,51 @@ The next step becomes available, when the simulation has finished.
             </property>
         </widget>
     </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>WizardPage</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_3_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>3</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+To visualise the resulting trajectory, we will have a look at the 
+DatasetControl. It is one of the listviews in the main window and
+has the caption "Datasets". 
+(Maybe it is hidden, if you dont find it, have a look at the menu
+entry Windows-&gt;Datasets.)&lt;br&gt;&lt;br&gt;
+The DatasetControl should have an entry for the trajectory.
+To visualise it, click on the entry and open the context menu with
+the right mouse button. First choose "&lt;b&gt;Load into RAM&lt;/b&gt;" and than 
+"&lt;b&gt;Visualise&lt;/b&gt;". In the Snapshot Visualisation dialog press "&lt;b&gt;Animate&lt;/b&gt;".
+&lt;/blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>WizardPage</string>
+        </attribute>
+    </widget>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
