@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.19 2004/01/13 19:09:09 amoll Exp $
+// $Id: glRenderer.C,v 1.20 2004/01/14 11:24:16 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -282,7 +282,7 @@ namespace BALL
 		{
 			if (!display_lists_.has(&rep)) 
 			{
-				buildDisplayListFor(rep);
+				return;
 			}
 
 			if (rep.hasProperty(Representation::PROPERTY__HIDDEN))
@@ -299,7 +299,6 @@ namespace BALL
 		{
 			if (representation.hasProperty(Representation::PROPERTY__HIDDEN))
 			{
-				display_lists_.erase(&representation);
 				return true;
 			}
 
