@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.123 2000/12/24 09:27:41 oliver Exp $
+dnl    $Id: configure.in,v 1.124 2001/04/10 16:20:50 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2953,10 +2953,13 @@ AC_SUBST(SUBDIRS)
 
 if test "${MULTI_BUILD}" = "true" ; then
 	AC_MSG_RESULT(creating shadow directories...)
-	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST EXAMPLES TUTORIAL APPLICATIONS"
+	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST BENCHMARKS EXAMPLES TUTORIAL APPLICATIONS"
 	${RM} -fr `pwd`/${BINFMT}/TEST/data 2>/dev/null
+	${RM} -fr `pwd`/${BINFMT}/BENCHMARKS/data 2>/dev/null
 	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST 2>/dev/null
 	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST 2>/dev/null
+	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
+	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
 
 	${CP} config/Makefile.multiplatform Makefile
 

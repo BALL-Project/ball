@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.131 2000/12/24 09:27:44 oliver Exp $
+#  $Id: configure,v 1.132 2001/04/10 16:20:53 oliver Exp $
 
 
 ##################################################
@@ -7229,10 +7229,13 @@ SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR SOLVATION
 
 if test "${MULTI_BUILD}" = "true" ; then
 	echo "$ac_t""creating shadow directories..." 1>&6
-	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST EXAMPLES TUTORIAL APPLICATIONS"
+	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST BENCHMARKS EXAMPLES TUTORIAL APPLICATIONS"
 	${RM} -fr `pwd`/${BINFMT}/TEST/data 2>/dev/null
+	${RM} -fr `pwd`/${BINFMT}/BENCHMARKS/data 2>/dev/null
 	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST 2>/dev/null
 	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST 2>/dev/null
+	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
+	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
 
 	${CP} config/Makefile.multiplatform Makefile
 

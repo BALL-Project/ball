@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.21 2000/08/03 21:52:50 oliver Exp $
+# $Id: Makefile.in,v 1.22 2001/04/10 16:20:56 oliver Exp $
 #
 
 include config.mak
@@ -40,7 +40,7 @@ amber:
 
 clean:
 	@echo "Cleaning up object files, cores,  and (uninstalled) library files..."
-	@$(MAKE) subdirs SUBDIRS="$(DIRS) TEST" TARGET=default_clean
+	@$(MAKE) subdirs SUBDIRS="$(DIRS) TEST BENCHMARKS" TARGET=default_clean
 	@-$(RM) -f  $(STATIC_LIBS) $(SHARED_LIBS)
 	@-$(RM) -rf .Dependencies */.Dependencies *.objects *~ @TEMPLATE_DIR@
 
@@ -130,8 +130,8 @@ delete.shared:
 depend:
 	@echo "creating dependencies..."
 	@echo "" >.Dependencies
-	@for i in $(DIRS) TEST APPLICATIONS/MOLVIEW APPLICATIONS/PB APPLICATIONS/AMBER; do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
-	@set -e; for i in $(DIRS) TEST ; do ( cd $$i; $(MAKE) depend; cd .. ) ; done
+	@for i in $(DIRS) TEST BENCHMARKS APPLICATIONS/MOLVIEW APPLICATIONS/PB APPLICATIONS/AMBER; do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
+	@set -e; for i in $(DIRS) TEST BENCHMARKS ; do ( cd $$i; $(MAKE) depend; cd .. ) ; done
 
 
 dirs:		dummy
@@ -143,6 +143,9 @@ subdirs:	dummy
 
 test:	dummy
 	@cd TEST ; $(MAKE) test
+
+bench:	dummy
+	@cd BENCHMARKS ; $(MAKE) bench
 
 
 #
