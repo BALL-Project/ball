@@ -1,4 +1,4 @@
-// $Id: clip_protein_around_ligand.C,v 1.2 2003/06/02 17:24:23 anker Exp $
+// $Id: clip_protein_around_ligand.C,v 1.3 2003/07/02 16:08:38 anker Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -118,13 +118,22 @@ Residue* transform_residue_to_cap(PDBAtom& atom, FragmentDB& fragment_db)
 		if (partner->getResidue() == atom.getResidue())
 		{
 			// Copy the connected atoms
-			PDBAtom* new_partner = new PDBAtom(*partner);
-			if (new_partner == 0) return (0);
-			if (new_partner->getName() == "CA")
+			// Special case: proline. Don't copy CD.
+			if (partner->getName() != "CD")
 			{
-				new_partner->setName("CH3");
+				PDBAtom* new_partner = new PDBAtom(*partner);
+				if (new_partner == 0) return (0);
+				if (new_partner->getName() == "CA")
+				{
+					new_partner->setName("CH3");
+				}
+				// special case: proline
+				if (new_partner->getName() == "CD")
+				{
+					new_partner->setName("CH3");
+				}
+				new_residue->insert(*new_partner);
 			}
-			new_residue->insert(*new_partner);
 		}
 	}
 
