@@ -1,4 +1,4 @@
-// $Id: notification.h,v 1.6 2000/01/28 16:38:51 oliver Exp $
+// $Id: notification.h,v 1.7 2000/05/30 10:42:12 oliver Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -431,7 +431,7 @@ namespace BALL
 	}
 
 	template <class NotificationSource, class T1, class T2>
-	bool Notify (NotificationSource &notification_source, const T1 &data1, const T2 &data2)
+	bool Notify (NotificationSource& notification_source, const T1& data1, const T2& data2)
 	{
 		if (NotificationManager().isDisabled() == true)
 			return true;
