@@ -1,7 +1,7 @@
-// $Id: expressionParser.h,v 1.2 2002/01/27 21:36:38 oliver Exp $
+// $Id: expressionParser.h,v 1.2.4.1 2002/08/13 10:42:52 oliver Exp $
 
-#ifndef BALL_KERNEL_EXPRESSION_PARSER_H
-#define BALL_KERNEL_EXPRESSION_PARSER_H
+#ifndef BALL_KERNEL_EXPRESSIONPARSER_H
+#define BALL_KERNEL_EXPRESSIONPARSER_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -207,4 +207,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_KERNEL_EXPRESSION_PARSER_H
+#endif // BALL_KERNEL_EXPRESSIONPARSER_H
