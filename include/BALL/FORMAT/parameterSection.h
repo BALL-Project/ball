@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.4 2000/09/19 16:01:47 oliver Exp $
+// $Id: parameterSection.h,v 1.5 2000/10/05 17:30:12 anker Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -48,10 +48,6 @@ namespace BALL
 		/**	Destructor.
 		*/
 		virtual ~ParameterSection();
-
-		/**	Destroy method.
-		*/
-		virtual void destroy();
 
 		//@}
 		
@@ -119,6 +115,19 @@ namespace BALL
 
 		//@}
 
+
+		/** @name Assignment */
+		//@{
+
+		/**	Clear method.  */
+		virtual void clear();
+
+		/** Assignment operator */
+		const ParameterSection& operator = (const ParameterSection& section);
+
+		//@}
+
+
 		/**	@name	Predicates
 		*/
 		//@{
@@ -126,6 +135,9 @@ namespace BALL
 		/**	Validity predicate
 		*/
 		virtual bool isValid() const;
+
+		/** Equality operator */
+		bool operator == (const ParameterSection& parameter_section) const;
 		//@}
 
 		/**	@name	Public Members
@@ -138,6 +150,7 @@ namespace BALL
 		*/
 		Options	options;
 		//@}
+
 
 		protected:
 

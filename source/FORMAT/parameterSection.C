@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.8 2000/09/19 21:42:11 oliver Exp $
+// $Id: parameterSection.C,v 1.9 2000/10/05 17:30:14 anker Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -22,14 +22,14 @@ namespace BALL
 
 	ParameterSection::~ParameterSection()
 	{
-		destroy();
+		clear();
 	}
 
-	void ParameterSection::destroy()
+	void ParameterSection::clear()
 	{
 		// destroy all hash maps
-		section_entries_.destroy();
-		variable_names_.destroy();
+		section_entries_.clear();
+		variable_names_.clear();
 
 		// clear all allocated entries
 		delete [] entries_;
@@ -379,9 +379,44 @@ namespace BALL
 		}
 	}
 
+
+	const ParameterSection& ParameterSection::operator = 
+		(const ParameterSection& section)
+	{
+		options = section.options;
+		section_name_ = section.section_name_;
+		format_line_ = section.format_line_;
+		section_entries_ = section.section_entries_;
+		variable_names_ = section.variable_names_;
+		entries_ = section.entries_;
+		keys_ = section.keys_;
+		number_of_variables_ = section.number_of_variables_;
+		version_ = section.version_;
+		valid_ = section.valid_;
+
+		return *this;
+	}
+
+
 	bool ParameterSection::isValid() const
 	{
 		return valid_;
+	}
+
+
+	bool ParameterSection::operator == (const ParameterSection& parameter_section) const
+	{
+		// BAUSTELLE: Müssen options auch gleichsein, damit eine Instanz
+		// gleich einer anderen ist?
+		return ( (section_name_ == parameter_section.section_name_)
+				&& (format_line_ == parameter_section.format_line_)
+				&& (section_entries_ == parameter_section.section_entries_)
+				&& (variable_names_ == parameter_section.variable_names_)
+				&& (entries_ == parameter_section.entries_)
+				&& (keys_ == parameter_section.keys_)
+				&& (number_of_variables_ == parameter_section.number_of_variables_)
+				&& (version_ == parameter_section.version_)
+				&& (valid_ == parameter_section.valid_) );
 	}
 
 } // namespace BALL
