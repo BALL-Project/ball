@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.4 2005/01/19 14:04:34 haid Exp $
+# $Id: Makefile,v 1.1.2.5 2005/01/25 16:36:36 leonhardt Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -19,8 +19,10 @@ BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 CPP_SOURCES=\
 	aboutDialog.C\
 	dockDialog.C\
+	geometricFitDialog.C\
 	dockingAlgorithm.C\
 	dockDialogData.C\
+	geometricFitDialogData.C\
 	icons.C\
 	main.C\
 	mainframe.C
@@ -29,13 +31,17 @@ MOC_SOURCES=\
 	aboutDialog_moc.C\
 	dockDialog_moc.C\
 	dockDialogData_moc.C\
+	geometricFitDialog_moc.C\
+	geometricFitDialogData_moc.C\
 	mainframe_moc.C
 	
 UIC_FILES=\
 	aboutDialog.C\
 	aboutDialog.h\
 	dockDialogData.C\
-	dockDialogData.h
+	dockDialogData.h\
+	geometricFitDialogData.C\
+	geometricFitDialogData.h
 
 DOCKView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS)
@@ -49,6 +55,9 @@ aboutDialog.h: aboutDialog.ui
 dockDialogData.h: dockDialog.ui
 	$(UIC) dockDialog.ui > dockDialogData.h
 
+geometricFitDialogData.h: geometricFitDialog.ui
+	$(UIC) geometricFitDialog.ui > geometricFitDialogData.h
+	
 #moc C files
 mainframe_moc.C:	mainframe.h
 	$(MOC) mainframe.h -o $@
@@ -62,6 +71,12 @@ dockDialog_moc.C: dockDialog.h
 dockDialogData_moc.C: dockDialogData.h
 	$(MOC) dockDialogData.h -o $@
 
+geometricFitDialog_moc.C: geometricFitDialog.h
+	$(MOC) geometricFitDialog.h -o $@	
+		
+geometricFitDialogData_moc.C: geometricFitDialogData.h
+	$(MOC) geometricFitDialogData.h -o $@
+
 #C files
 aboutDialog.C: aboutDialog.h
 	$(UIC) -impl aboutDialog.h aboutDialog.ui > aboutDialog.C
@@ -69,6 +84,8 @@ aboutDialog.C: aboutDialog.h
 dockDialogData.C: dockDialogData.h
 	$(UIC) -impl dockDialogData.h dockDialog.ui > dockDialogData.C
 
+geometricFitDialogData.C: geometricFitDialogData.h
+	$(UIC) -impl geometricFitDialogData.h geometricFitDialog.ui > geometricFitDialogData.C
 
 clean: clean_moc_uic
 

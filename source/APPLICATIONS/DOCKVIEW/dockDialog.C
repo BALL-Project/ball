@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.7 2005/01/19 14:04:34 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.8 2005/01/25 16:36:36 leonhardt Exp $
 //
 
 #include "dockDialog.h"
+#include "geometricFitDialog.h"
+
 #include <qpushbutton.h>
 #include <qcombobox.h>
 #include <qstringlist.h>
@@ -13,6 +15,7 @@
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qfiledialog.h>
+#include <qtabwidget.h>
 
 #ifndef BALL_KERNEL_SYSTEM_H
 # include <BALL/KERNEL/system.h>
@@ -83,7 +86,7 @@ namespace BALL
 		{
 			main_control.initPopupMenu(MainControl::MOLECULARMECHANICS)->setCheckable(true);
 			
-			String hint = "Dock two systems";
+			String hint = "Dock two systems.";
 			id_ = main_control.insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Docking", this,
 																				 SLOT(show()), CTRL+Key_D, -1, hint);
 		}
@@ -189,6 +192,8 @@ namespace BALL
 			{
 				systems2->setCurrentText(docking_partner2_->getName());
 			}
+			
+			tab_pages->setCurrentPage(0);
 			//show dialog to user
 			DockDialogData::show();
 		}
@@ -372,7 +377,22 @@ namespace BALL
 		///
 		void DockDialog::genAdvancedPressed()
 		{
-		
+			//check which generator is currentText of the combobox
+			if (generators->currentText() == "Geometric Fit")
+			{
+				GeometricFitDialog dialog();
+				dialog.exec();
+				
+				
+				
+			}
+			
+			//generate object of GeometricFitDialog
+			//ausführen mit exec()
+			//test, ob exec erfolgreich war
+			//ja -> ok wurde gedrückt
+			//nein -> cancel wurde gedrückt
+			//hole werte vom dialog und speichere sie in options_
 		}
 		//
 		void DockDialog::evalAdvancedPressed()

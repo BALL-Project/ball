@@ -61,6 +61,8 @@ namespace BALL
 
 				public:
 				
+				enum StructureGenerator {GEOMETRIC_FIT};
+				
 				/// Constructor
 				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 					throw();
@@ -96,7 +98,6 @@ namespace BALL
 				void writePreferences(INIFile& file)
 					throw();
 				
-					
 				/// Reset the dialog to the standard values
 				void reset()
 					throw();
@@ -157,11 +158,14 @@ namespace BALL
 					virtual void browseRadiiRules();
 				
 				protected:
-				
+					
 					bool applyProcessors_() throw();
+					
 					//set options_ with values user has chosen  
 					void applyValues_() throw();
+					
 					void selectFile_(QLineEdit& lineedit) throw();
+					
 					//find chosen system
 					System* partnerChosen_(QString qstr) throw();
 					

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>474</width>
-            <height>502</height>
+            <width>404</width>
+            <height>429</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -33,22 +33,22 @@
         </size>
     </property>
     <property name="caption">
-        <string>Docking options</string>
+        <string>Docking Options</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QTabWidget">
+        <widget class="QTabWidget" row="0" column="0" rowspan="1" colspan="3">
             <property name="name">
-                <cstring>tab_sides</cstring>
+                <cstring>tab_pages</cstring>
             </property>
             <property name="margin">
                 <number>0</number>
             </property>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>general_tab</cstring>
+                    <cstring>general_page</cstring>
                 </property>
                 <attribute name="title">
                     <string>General</string>
@@ -57,27 +57,6 @@
                     <property name="name">
                         <cstring>unnamed</cstring>
                     </property>
-                    <widget class="QButtonGroup" row="4" column="0">
-                        <property name="name">
-                            <cstring>options_group</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Options</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QCheckBox" row="0" column="0">
-                                <property name="name">
-                                    <cstring>checkBox6</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>checkBox6</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
                     <widget class="QButtonGroup" row="1" column="0">
                         <property name="name">
                             <cstring>generator_group</cstring>
@@ -90,6 +69,11 @@
                                 <cstring>unnamed</cstring>
                             </property>
                             <widget class="QComboBox" row="0" column="0">
+                                <item>
+                                    <property name="text">
+                                        <string>Geometric Fit</string>
+                                    </property>
+                                </item>
                                 <property name="name">
                                     <cstring>generators</cstring>
                                 </property>
@@ -133,32 +117,6 @@
                             </widget>
                         </hbox>
                     </widget>
-                    <widget class="QButtonGroup" row="3" column="0">
-                        <property name="name">
-                            <cstring>ranking_group</cstring>
-                        </property>
-                        <property name="title">
-                            <string>Ranking</string>
-                        </property>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QComboBox" row="0" column="0">
-                                <property name="name">
-                                    <cstring>rank_functions</cstring>
-                                </property>
-                            </widget>
-                            <widget class="QPushButton" row="0" column="1">
-                                <property name="name">
-                                    <cstring>rank_advanced_button</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>Advanced...</string>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
                     <widget class="QButtonGroup" row="2" column="0">
                         <property name="name">
                             <cstring>evaluation_group</cstring>
@@ -185,11 +143,69 @@
                             </widget>
                         </grid>
                     </widget>
+                    <widget class="QButtonGroup" row="3" column="0">
+                        <property name="name">
+                            <cstring>ranking_group</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Ranking</string>
+                        </property>
+                        <grid>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QComboBox" row="0" column="0">
+                                <property name="name">
+                                    <cstring>rank_functions</cstring>
+                                </property>
+                            </widget>
+                            <widget class="QPushButton" row="0" column="1">
+                                <property name="name">
+                                    <cstring>rank_advanced_button</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Advanced...</string>
+                                </property>
+                            </widget>
+                        </grid>
+                    </widget>
+                    <widget class="QButtonGroup" row="4" column="0">
+                        <property name="name">
+                            <cstring>options_group</cstring>
+                        </property>
+                        <property name="title">
+                            <string>Options</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>best_num_label</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>number of best docked structures </string>
+                                </property>
+                            </widget>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>best_num</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>100</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignRight</set>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
                 </grid>
             </widget>
             <widget class="QWidget">
                 <property name="name">
-                    <cstring>processor_tab</cstring>
+                    <cstring>processor_page</cstring>
                 </property>
                 <attribute name="title">
                     <string>Processors</string>
@@ -424,44 +440,34 @@
                 </grid>
             </widget>
         </widget>
-        <widget class="QLayoutWidget">
+        <widget class="QPushButton" row="1" column="0">
             <property name="name">
-                <cstring>layout8</cstring>
+                <cstring>ok_button</cstring>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>ok_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>OK</string>
-                    </property>
-                    <property name="default">
-                        <bool>true</bool>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>cancel_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Cancel</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>reset_button</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Reset</string>
-                    </property>
-                </widget>
-            </hbox>
+            <property name="text">
+                <string>OK</string>
+            </property>
+            <property name="default">
+                <bool>true</bool>
+            </property>
         </widget>
-    </vbox>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>cancel_button</cstring>
+            </property>
+            <property name="text">
+                <string>Cancel</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="1" column="2">
+            <property name="name">
+                <cstring>reset_button</cstring>
+            </property>
+            <property name="text">
+                <string>Reset</string>
+            </property>
+        </widget>
+    </grid>
 </widget>
 <connections>
     <connection>
