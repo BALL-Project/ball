@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.15 2002/12/05 13:37:15 anhi Exp $
+dnl    $Id: configure.ac,v 1.1.2.16 2002/12/05 16:02:26 anhi Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -676,7 +676,8 @@ AC_OUTPUT([Makefile \
 					 MOLVIEW/PRIMITIV/Makefile \
 					 TUTORIAL/Makefile \
 					 EXAMPLES/Makefile \
-					 TEST/Makefile])
+					 TEST/Makefile \
+					 APPLICATIONS/MOLVIEW/Makefile])
  
 dnl AC_PREFIX_DEFAULT(${BALL_PATH})
 AC_PREFIX_DEFAULT(`cd ..; pwd`)
