@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.7 2003/10/31 23:15:47 oliver Exp $
+// $Id: pyWidget.h,v 1.8 2003/11/12 12:17:03 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -111,9 +111,6 @@ namespace BALL
 			///
 			virtual bool returnPressed();
 
-			///
-			virtual void mousePressEvent(QMouseEvent* m);
-			
 			/** Internal state dump.
 					Dump the current internal state of this to 
 					the output ostream <b> s</b> with dumping depth <b> depth</b>.
@@ -127,7 +124,11 @@ namespace BALL
 
 			protected:
 
-			void keyPressEvent(QKeyEvent* e);
+			//_ Avoid set of cursor with mouse
+			virtual void mousePressEvent(QMouseEvent* m);
+			virtual void contentsMousePressEvent(QMouseEvent* m);
+
+			virtual void keyPressEvent(QKeyEvent* e);
 
 			void parseLine_();
 
@@ -187,7 +188,6 @@ namespace BALL
 			PyWidget(QWidget* parent = 0, const char* name = 0)
 				throw();
 
-
 			/**	@name	ModularWidget related methods
 			*/
 			//@{
@@ -236,7 +236,7 @@ namespace BALL
 			PyWidgetData* text_edit_;
 		};
 
-		
-}	} // namespaces
+	} // namespaces	
+} // namespaces
 	
 #endif // BALL_VIEW_WIDGETS_PYWIDGET_H

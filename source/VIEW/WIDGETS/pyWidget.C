@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.11 2003/11/01 09:27:41 oliver Exp $
+// $Id: pyWidget.C,v 1.12 2003/11/12 12:17:21 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
 #include <Python.h>
-
 
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -83,6 +82,7 @@ namespace BALL
 				{
 					sb->setValue(sb->maxValue());
 				}
+				removeParagraph(row +1);
 				return;
 			}
 
@@ -100,11 +100,20 @@ namespace BALL
 
 			// update the history position
 			history_position_ = index;
+			removeParagraph(row +1);
 		}
 
 
+		void PyWidgetData::contentsMousePressEvent(QMouseEvent* /* m */)
+		{
+			setCursorPosition(lines() - 1, 4);
+			// we ignore the mouse events! 
+			// they might place the cursor anywhere!
+		}
+	
 		void PyWidgetData::mousePressEvent(QMouseEvent* /* m */) 
 		{
+			setCursorPosition(lines() - 1, 4);
 			// we ignore the mouse events! 
 			// they might place the cursor anywhere!
 		}
@@ -226,6 +235,7 @@ namespace BALL
 		void PyWidgetData::newPrompt_()
 		{
 			append(getPrompt_());
+			//scrollToBottom();
 			setCursorPosition(lines() - 1, 4);
 		}
 
@@ -262,6 +272,11 @@ namespace BALL
 			else if (e->key() == Key_Return)
 			{
 				if (!returnPressed()) return;
+			}
+			else if (e->key() == Key_PageUp || 
+							 e->key() == Key_PageDown)
+			{
+				return;
 			}
 
 			QTextEdit::keyPressEvent(e);
@@ -501,5 +516,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL
