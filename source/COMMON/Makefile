@@ -11,3 +11,4 @@ CPP_SOURCES=\
 	rtti.C
 
 include ../common.mak
+include .Dependencies

@@ -18,3 +18,4 @@ CPP_SOURCES=\
 	XDRPersistenceManager.C
 
 include ../common.mak
+include .Dependencies

@@ -13,4 +13,4 @@ CPP_SOURCES=\
 	splayTree.C
 
 include ../common.mak
-
+include .Dependencies

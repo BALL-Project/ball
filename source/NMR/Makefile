@@ -6,3 +6,4 @@ CPP_SOURCES=\
 	johnsonBovey.C
 
 include ../common.mak
+include .Dependencies

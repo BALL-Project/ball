@@ -10,3 +10,4 @@ CPP_SOURCES=\
 	resourceFile.C
 
 include ../common.mak
+include .Dependencies
