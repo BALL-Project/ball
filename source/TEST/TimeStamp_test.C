@@ -1,4 +1,4 @@
-// $Id: TimeStamp_test.C,v 1.11 2002/01/05 03:36:59 oliver Exp $
+// $Id: TimeStamp_test.C,v 1.12 2002/01/05 03:42:02 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.11 2002/01/05 03:36:59 oliver Exp $")
+START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.12 2002/01/05 03:42:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -142,7 +142,7 @@ CHECK(TimeStamp::write(PersistenceManager& pm) const )
 	// a very nasty way to break the encapsulation, but simplifies
 	// things a great deal....!
 	PreciseTime& t_ref = const_cast<PreciseTime&>(t.getTime());
-	t_ref.set(12345678, 23456789);
+	t_ref.set(12345678, 456789);
 	String filename;
 	NEW_TMP_FILE(filename)
 	std::ofstream of(filename.c_str(), std::ios::out);
@@ -160,7 +160,7 @@ CHECK(TimeStamp::read(PersistenceManager& pm))
 	t.read(pm);
 	inf.close();
 	TEST_EQUAL(t.getTime().getSeconds(), 12345678)
-	TEST_EQUAL(t.getTime().getMicroSeconds(), 23456789)
+	TEST_EQUAL(t.getTime().getMicroSeconds(), 456789)
 RESULT
 
 CHECK(TimeStamp::operator << (std::ostream& os, const TimeStamp& ts))
@@ -168,7 +168,7 @@ CHECK(TimeStamp::operator << (std::ostream& os, const TimeStamp& ts))
 	// a very nasty way to break the encapsulation, but simplifies
 	// things a great deal....!
 	PreciseTime& t_ref = const_cast<PreciseTime&>(t.getTime());
-	t_ref.set(12345678, 23456789);
+	t_ref.set(12345678, 456789);
 	String filename;
 	NEW_TMP_FILE(filename);
 	ofstream of(filename.c_str(), std::ios::out);
