@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.12 2001/06/06 14:00:56 amoll Exp $
+// $Id: regularData2D.h,v 1.13 2001/07/09 21:14:44 amoll Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -33,7 +33,7 @@ namespace BALL
 
 		/**	Grid position type
 		*/
-		typedef struct TVector2<Position> GridIndex;
+		typedef TVector2<Position> GridIndex;
 		
 		//@}
 		/**	@name	Constructors and Destructors
