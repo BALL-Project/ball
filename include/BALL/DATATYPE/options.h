@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.6 2000/07/12 19:29:18 oliver Exp $
+// $Id: options.h,v 1.7 2000/07/26 14:38:21 amoll Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -90,7 +90,7 @@ namespace BALL
 		bool isInteger(const String& key) const;
 
 		/**		Returns true, if the value associated with the 
-					given key is a a boolean.
+					given key is a boolean.
 					A boolean entry has either the value {\tt true}
 					or {\tt false}. 
 					@param					key String
@@ -99,7 +99,7 @@ namespace BALL
 		*/
 		bool isBool(const String& key) const;
 
-		/**		returns true, if the value associated with the 
+		/**		Returns true, if the value associated with the 
 					given key is a real number
 					@param					key String
 					@return					bool, true/false
@@ -108,7 +108,7 @@ namespace BALL
 		bool isReal(const String& key) const;
 
 
-		/**		returns true, if the value associated with the given key 
+		/**		Returns true, if the value associated with the given key 
 					can be read as a vector.
 					This method simply checks whether the value is of the form
 					#(<float> <float> <float>)# where #<float>#
@@ -119,7 +119,7 @@ namespace BALL
 		*/
 		bool isVector(const String& key) const;
 
-		/**		returns true, if a value is defined for the given 
+		/**		Returns true, if a value is defined for the given 
 					key
 					@param					key String
 					@return					bool, true/false
@@ -143,7 +143,6 @@ namespace BALL
 		*/
 		const String& getName() const;
 
-		
 		/**		Returns the value associated with the key.
 					@param	key the key
 					@return	String, the value
@@ -235,7 +234,7 @@ namespace BALL
 				If {\bf key} didn't already exist, it is created.\\
 				@param	key the key
 				@param	value the integer value
-					@memo
+				@memo
 		*/
 		void setInteger(const String& key, const long value);
 
@@ -245,11 +244,9 @@ namespace BALL
 				If {\bf key} didn't already exist, it is created.\\	
 				@param	key the key
 				@param	value the boolean value
-					@memo
+				@memo
 		*/
 		void setBool(const String& key, const bool value);
-
-
 
 		/**	Assigns the value only, if the key is not yet defined. 
 				If an entry for {\bf key} exists, it is not modified.
@@ -283,7 +280,6 @@ namespace BALL
 		*/
 		double setDefaultReal(const String& key, const double value);
 
-
 		/**	Assigns the value only if the key is not yet defined.
 				If an entry for {\bf key} exists, it is not modified.
 				It is set to value otherwise.
@@ -295,10 +291,9 @@ namespace BALL
 		*/
 		bool setDefaultBool(const String& key, const bool value);
 
-
 		/**		Reads options from a file. 
 					This method opens the file specified by {\bf filename}.
-					If the file could not be opened, the method returns with false.
+					If the file could not be opened, the method returns false.
 					Otherwise, the file is read line by line and each line is interpreted
 					as a key (starting with the first non-blank character and	terminated
 					by the next blank) separated by a blank from a value (starting
@@ -306,16 +301,29 @@ namespace BALL
 					by the end of the line).
 					For each line either an existing key is updated with the value read,
 					or a new key-value pair is created.\\
-					lines starting with '\#', '!', or ';' are ignored and may be used
+					Lines starting with '\#', '!', or ';' are ignored and may be used
 					as comments.\\
 					@param	filename the name of the file to be read
-					@return	bool \begin{itemize}
+					@return	bool	\begin{itemize}
 													\item {\bf true} if the file could be read
 													\item {\bf false} otherwise
 												\end{itemize}
 					@memo
 		*/
 		bool readOptionFile(const String& filename);
+
+		/**		Writes options to a file.
+					This method opens or creates the file specified by {\bf filename}.
+					If the file could not be opened, the method returns false.
+					The option table's name is writen in a line starting with '!'.
+					@param	filename the name of the file to write
+					@return	bool	\begin{itemize}
+													\item {\bf true} if the file could be writen
+													\item {\bf false} otherwise
+												\end{itemize}
+					@see readOptionFile
+		*/		
+		bool writeOptionFile(const String& filename) const;
 
 		//@}
 
@@ -324,7 +332,6 @@ namespace BALL
 		
 		/** 	Dumps the whole content of the object */
 		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
-
 
 		//@}
 

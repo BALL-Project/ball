@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.12 2000/07/26 10:28:47 amoll Exp $ 
+// $Id: options.C,v 1.13 2000/07/26 14:38:14 amoll Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -12,6 +12,8 @@
 #include <algorithm>
 
 using namespace std;
+using std::ofstream;
+using std::ios;
 
 namespace BALL 
 {
@@ -22,7 +24,6 @@ namespace BALL
 			name_("")
 	{
 	}
-
 
 	Options::Options(const Options& options, bool deep)
 		:	StringHashMap<String>(options, deep),
@@ -82,7 +83,6 @@ namespace BALL
 		s.toLower();
 		return (s.compare("true") == 0 || s.compare("false") == 0);
 	}
-
 
 	bool Options::isSet(const String& key) const
 	{
@@ -179,7 +179,6 @@ namespace BALL
 			return 0;
 		}
 	}
-
 
 	void Options::set(const String& key, const String& value)
 	{
@@ -292,10 +291,11 @@ namespace BALL
 	bool Options::readOptionFile(const String& filename)
 	{
 		ifstream		infile;
-
 		infile.open(filename.c_str(), ios::in);
 		if (!infile)
+		{
 			return false;
+		}
 
 		char		buffer[MAX_ENTRY_LENGTH + 1];
 		String	s, key;
@@ -311,10 +311,44 @@ namespace BALL
 		}
 					
 		infile.close();
-
 		return true;
 	}
 		
+	bool Options::writeOptionFile(const String& filename) const
+	{
+		std::list<String>		entry_list;
+		String							entry;
+
+		std::ofstream stream(filename.c_str());//, File::OUT);
+		if (!stream.is_open())
+		{
+			return false;
+		}
+
+		stream << "![OptionsTable: " << getName() << " (" << size() << " entries)]" << endl;
+
+		StringHashMap<String>::ConstIterator	it(begin());
+		for(; !(it == end()); ++it)
+		{
+			entry = (*it).first + ' ' + (*it).second;
+			entry_list.push_back(entry);
+		}
+
+		entry_list.sort();
+
+		std::list<String>::iterator	list_it = entry_list.begin();
+		for (; list_it != entry_list.end(); ++list_it) 
+		{
+	  	stream << *list_it << endl;
+		}
+
+		stream << "!-----------------------------------" << endl;
+		
+		filename.close();
+		entry_list.clear();
+		return true;
+	}
+
 	void Options::dump (ostream& stream, Size /* depth */) const
 	{
 		std::list<String>		entry_list;
