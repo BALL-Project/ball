@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.2 1999/10/30 12:53:28 oliver Exp $
+// $Id: file.h,v 1.3 1999/12/28 18:52:37 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -217,16 +217,17 @@ namespace BALL
 		}
 		//@}
 		
-		protected:
-
 		private:
 
 		File(const File& file);
 
 		File& operator = (const File& file);
 
+		public:
+
 		class Action_
 		{
+			friend class ActionManager;
 			public:
 
 			Action_()
@@ -282,6 +283,7 @@ namespace BALL
 		class ActionManager
 		{
 			public:
+			friend class Action_;
 
 			ActionManager()
 				:	first_action_(0)
