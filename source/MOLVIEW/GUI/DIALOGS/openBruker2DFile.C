@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.C,v 1.10 2003/04/17 15:29:21 oliver Exp $
+// $Id: openBruker2DFile.C,v 1.11 2003/04/17 16:36:15 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
 #include <BALL/FORMAT/bruker2DFile.h>
@@ -25,7 +25,7 @@ namespace BALL
 			throw()
     {
       #ifdef BALL_VIEW_DEBUG
-      cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<OpenBruker2DFile>() << endl;
+      cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<OpenBruker2DFile>() << std::endl;
       #endif
     }
 
@@ -55,14 +55,14 @@ namespace BALL
       String mydir = dirPath().latin1();
 
       try
-			{
-				 myfile->read(mydir);
+      {
+				myfile->read(mydir);
 			}
-      catch(...)
+      catch (...)
 			{
-				 Log.info() << "> read Bruker2D file failed." << std::endl;
-				 delete myfile;
-				 return;
+				Log.info() << "> read Bruker2D file failed." << std::endl;
+				delete myfile;
+				return;
 			}
 
       // writing info to log

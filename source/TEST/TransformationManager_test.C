@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TransformationManager_test.C,v 1.6 2002/02/27 12:25:01 sturm Exp $
+// $Id: TransformationManager_test.C,v 1.7 2003/04/17 16:36:15 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.6 2002/02/27 12:25:01 sturm Exp $")
+START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.7 2003/04/17 16:36:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -60,6 +61,7 @@ CHECK(TransformationManager::transform(const String& name))
 	TEST_EQUAL(tm.transform(test_test), test_test + " " + test_test)
 	TEST_EQUAL(tm.transform(" "), "   ")
 	TEST_EQUAL(tm.transform(""), " ")
+
 	// check whether we really avoid infinite recursion	
 	TEST_EQUAL(tm.transform("%s-").hasPrefix("%s---"), true)
 	tm.unregisterTransformation("");

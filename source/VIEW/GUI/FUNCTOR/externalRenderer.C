@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: externalRenderer.C,v 1.3 2002/12/18 16:00:43 sturm Exp $
+// $Id: externalRenderer.C,v 1.4 2003/04/17 16:36:15 oliver Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
 
@@ -68,7 +68,7 @@ namespace BALL
 			return true;
 		}
 
-		Processor::Result ExternalRenderer::operator() (Composite& composite)
+		Processor::Result ExternalRenderer::operator() (Composite& /* composite */)
 			throw()
 		{
 			return Processor::CONTINUE;
