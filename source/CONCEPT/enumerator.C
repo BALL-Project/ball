@@ -1,17 +1,18 @@
-// $Id: enumerator.C,v 1.9 2001/07/10 16:48:24 anker Exp $
+// $Id: enumerator.C,v 1.10 2001/07/29 17:35:28 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/exception.h>
+#include <BALL/DATATYPE/string.h>
 #include <BALL/CONCEPT/enumerator.h>
 
 
 namespace BALL 
 {
 
-	EnumeratorIndex::IncompatibleIndex::IncompatibleIndex(const char* file,
-			int line)
+	EnumeratorIndex::IncompatibleIndex::IncompatibleIndex
+		(const char* file, int line)
 		throw()
-		: Exception::GeneralException(file, line, "IncompatibleIndex")
+		: Exception::GeneralException(file, line, "IncompatibleIndex", "")
 	{
 		message_ = "different enumerator moduli occured.";
 
