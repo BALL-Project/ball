@@ -56,9 +56,6 @@ namespace BALL
 			*/
 			virtual void clear();
 
-			/** destroy method.
-			*/
-			virtual void destroy();
 			//@}
 
 			/**	@name	Exceptions
