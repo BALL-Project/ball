@@ -1,4 +1,4 @@
-// $Id: nucleotide.C,v 1.4 2000/05/15 16:01:01 amoll Exp $
+// $Id: nucleotide.C,v 1.5 2000/05/15 16:14:46 oliver Exp $
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -101,20 +101,22 @@ namespace BALL
 
 	NucleicAcid* Nucleotide::getNucleicAcid()
 	{
+		NucleicAcid* nucleic_acid_ptr = 0;
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
-			if (RTTI::isKindOf<NucleicAcid>(*ancestor_it))
+			nucleic_acid_ptr = dynamic_cast<NucleicAcid*>(&*ancestor_it);
+			if (nucleic_acid_ptr != 0)
 			{
-				return (NucleicAcid*)&*ancestor_it;
+				break;
 			}
 		}
 
-		return 0;
+		return nucleic_acid_ptr;
 	}
 
 	const NucleicAcid* Nucleotide::getNucleicAcid() const
 	{
-		return (const_cast<const Nucleotide*>(this)->getNucleicAcid());
+		return (const_cast<Nucleotide*>(this)->getNucleicAcid());
 	}
 
 	void Nucleotide::setID(const String &id)
@@ -185,14 +187,14 @@ namespace BALL
 	bool Nucleotide::isTerminal() const
 	{
 		const NucleicAcid* parent = (*this).getNucleicAcid();
-		/*if (parent != 0)
+		if (parent != 0)
 		{
 			if (parent->get3Prime() == this ||
 					parent->get5Prime() == this)
 			{
 				return true;
 			}
-		}*/
+		}
 		return false;
 	}
 
