@@ -2694,22 +2694,16 @@
 </widget>
 <connections>
     <connection>
-        <sender>apply_button</sender>
-        <signal>clicked()</signal>
-        <receiver>DisplayPropertiesData</receiver>
-        <slot>applyButtonClicked()</slot>
-    </connection>
-    <connection>
         <sender>close_button</sender>
         <signal>clicked()</signal>
         <receiver>DisplayPropertiesData</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
-        <sender>coloring_method_combobox</sender>
-        <signal>activated(int)</signal>
+        <sender>apply_button</sender>
+        <signal>clicked()</signal>
         <receiver>DisplayPropertiesData</receiver>
-        <slot>selectColoringMethod(int)</slot>
+        <slot>applyButtonClicked()</slot>
     </connection>
     <connection>
         <sender>coloring_options</sender>
@@ -2730,10 +2724,10 @@
         <slot>modelOptionsPressed()</slot>
     </connection>
     <connection>
-        <sender>model_type_combobox</sender>
+        <sender>precision_combobox</sender>
         <signal>activated(int)</signal>
         <receiver>DisplayPropertiesData</receiver>
-        <slot>selectModel(int)</slot>
+        <slot>precisionBoxChanged()</slot>
     </connection>
     <connection>
         <sender>precision_slider</sender>
@@ -2742,16 +2736,28 @@
         <slot>precisionSliderChanged()</slot>
     </connection>
     <connection>
+        <sender>coloring_method_combobox</sender>
+        <signal>activated(int)</signal>
+        <receiver>DisplayPropertiesData</receiver>
+        <slot>selectColoringMethod(int)</slot>
+    </connection>
+    <connection>
+        <sender>mode_combobox</sender>
+        <signal>activated(int)</signal>
+        <receiver>DisplayPropertiesData</receiver>
+        <slot>selectMode(int)</slot>
+    </connection>
+    <connection>
+        <sender>model_type_combobox</sender>
+        <signal>activated(int)</signal>
+        <receiver>DisplayPropertiesData</receiver>
+        <slot>selectModel(int)</slot>
+    </connection>
+    <connection>
         <sender>transparency_slider</sender>
         <signal>valueChanged(int)</signal>
         <receiver>DisplayPropertiesData</receiver>
         <slot>transparencySliderChanged()</slot>
-    </connection>
-    <connection>
-        <sender>precision_combobox</sender>
-        <signal>activated(int)</signal>
-        <receiver>DisplayPropertiesData</receiver>
-        <slot>precisionBoxChanged()</slot>
     </connection>
 </connections>
 <tabstops>
