@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.33 2003/08/26 09:17:46 oliver Exp $
+// $Id: INIFile.C,v 1.34 2004/11/03 17:04:14 amoll Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -31,6 +31,7 @@ namespace BALL
 			valid_(false),
 			filename_(filename)
 	{
+    appendSection(HEADER);
 	}
 
 	void INIFile::clear()
