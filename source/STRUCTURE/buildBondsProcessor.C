@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.6 2005/03/03 12:17:05 bertsch Exp $
+// $Id: buildBondsProcessor.C,v 1.7 2005/03/14 16:20:33 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -86,23 +86,15 @@ namespace BALL
 		return num_bonds_;
 	}
 
-	bool BuildBondsProcessor::finish()
-	{
-		return true;
-	}
 
 	Processor::Result BuildBondsProcessor::operator () (AtomContainer& ac)
 	{
 		if (options.getBool(BuildBondsProcessor::Option::DELETE_EXISTING_BONDS))
 		{
-			while (ac.countBonds() != 0)
+			AtomIterator ait;
+			BALL_FOREACH_ATOM(ac, ait)
 			{
-				AtomIterator ait;
-				Atom::BondIterator bit;
-				BALL_FOREACH_BOND(ac, ait, bit)
-				{
-					bit->destroy();
-				}
+				ait->destroyBonds();
 			}
 		}
 		
@@ -120,7 +112,7 @@ namespace BALL
 			deleteOverestimatedBonds_(ac);
 		}
 		
-		return Processor::CONTINUE;
+		return Processor::BREAK;
 	}
 
 	Size BuildBondsProcessor::buildBondsHashGrid3_(AtomContainer& ac)
@@ -132,94 +124,107 @@ namespace BALL
 		ac.apply(bbox);		
 		Vector3 size = bbox.getUpper() - bbox.getLower();
 
-		// check if size is nan
-		if (Maths::isNan(size.x) || Maths::isNan(size.y) || Maths::isNan(size.z))
-		{
-			// now we try to find bonds with a simple method, iterating over all atom pairs
-			// which is quite expensive if the atomcontainer contains a lot of atoms
-			AtomIterator ait1, ait2;
-			BALL_FOREACH_ATOM_PAIR(ac, ait1, ait2)
-			{
-				float dist = ait1->getPosition().getDistance(ait2->getPosition());
-				float max_dist(0), min_dist(0);
-				Size an1(ait1->getElement().getAtomicNumber());
-				Size an2(ait2->getElement().getAtomicNumber());
-
-				if (getMaxBondLength_(max_dist, an1, an2) &&
-						getMinBondLength_(min_dist, an1, an2) &&
-						max_dist != 0 && min_dist != 0)
-				{
-					if (dist <= max_dist && dist >= min_dist)
-					{
-						if (!ait1->isBoundTo(*ait2))
-						{
-							Bond * b = ait1->createBond(*ait2);
-							b->setOrder(Bond::ORDER__UNKNOWN);
-							num_bonds++;
-						}
-					}
-				}
-			}
-			return num_bonds;
-		}
-		
 		// build HashGrid
-		HashGrid3<Atom*> grid(bbox.getLower() - Vector3(max_length_+1.0), size + Vector3((max_length_+1.0)*2), max_length_);
+		HashGrid3<Atom*> grid(bbox.getLower() - Vector3(1.0), size + Vector3(2.0), max_length_ + 0.01);
 	
 		// fill in the atom pointers into the grid
-		AtomIterator a_it(ac.beginAtom());
-		for (; +a_it; ++a_it)
+		for (AtomIterator a_it(ac.beginAtom()); +a_it; ++a_it)
 		{
 			grid.insert(a_it->getPosition(), &*a_it);
 		}
 	
-		Atom * atom1 = 0;
-		// iterate over all boxes
-		HashGrid3<Atom*>::BoxIterator box_it1(grid.beginBox());
-		for (; +box_it1; ++box_it1)
-		{
-			HashGridBox3<Atom*>::DataIterator data_it1;
-			HashGridBox3<Atom*>::BoxIterator box_it2;
-			HashGridBox3<Atom*>::DataIterator data_it2;
-			
-			// over all items of the box
-			for (data_it1 = box_it1->beginData(); +data_it1; ++data_it1)
-			{
-				atom1 = *data_it1;
-				// over all neighbor boxes
-				for (box_it2 = box_it1->beginBox(); +box_it2; ++box_it2)
-				{
-					// over all items 
-					for (data_it2 = box_it2->beginData(); +data_it2; ++data_it2)
-					{
-						// test every pair only once
-						if (atom1->getHandle() < (*data_it2)->getHandle())
-						{
-							// test the distance criterion for the specific element pair
-							float dist = atom1->getPosition().getDistance((*data_it2)->getPosition());
-							float max_dist(0), min_dist(0);
-							Size an1(atom1->getElement().getAtomicNumber());
-							Size an2((*data_it2)->getElement().getAtomicNumber());
 
-							if (getMaxBondLength_(max_dist, an1, an2) &&
-									getMinBondLength_(min_dist, an1, an2) &&
-									max_dist != 0 && min_dist != 0)
+		// iterate over all boxes
+		HashGrid3<Atom*>::BoxIterator box_it = grid.beginBox();
+		for (; +box_it; ++box_it) 
+		{
+			Position x, y, z;
+			grid.getIndices(*box_it, x, y, z);
+
+			// iterator over neighbour boxes
+			for (Index xi = -1; xi <= 1; xi++)
+			{
+				const Position nx = x + xi;
+				
+				for (Index yi = -1; yi <= 1; yi++)
+				{
+					const Position ny = y + yi;
+
+					for (Index zi = -1; zi <= 1; zi++)
+					{
+						HashGridBox3<Atom*>* const bbox = grid.getBox(nx, ny, z+zi);
+						// smaller operator also checks for 0 !
+						if (bbox < &*box_it || bbox->isEmpty()) 
+						{
+							continue;
+						}
+
+						if (bbox == &*box_it)
+						{
+							HashGridBox3<Atom*>::ConstDataIterator ait1 = box_it->beginData();
+							for (;+ait1; ait1++)
 							{
-								if (dist <= max_dist && dist >= min_dist)
+								const Vector3& atom_pos1 = (*ait1)->getPosition();
+								Atom& atom1 = **ait1;
+
+								HashGridBox3<Atom*>::ConstDataIterator ait2 = bbox->beginData();
+								for (;+ait2; ait2++)
 								{
-									if (!atom1->isBoundTo(**data_it2))
+									if (*ait1 <= *ait2) continue;
+									// test the distance criterion for the specific element pair
+									const float dist = atom_pos1.getSquareDistance((*ait2)->getPosition());
+									float max_dist, min_dist;
+									const Size& an1 = atom1.getElement().getAtomicNumber();
+									const Size& an2 = (*ait2)->getElement().getAtomicNumber();
+
+									if (getMaxBondLength_(max_dist, an1, an2) &&
+											getMinBondLength_(min_dist, an1, an2) &&
+											dist <= max_dist && 
+											dist >= min_dist &&
+											!atom1.isBoundTo(**ait2))
 									{
-										Bond * b = atom1->createBond(**data_it2);
+										Bond* const b = atom1.createBond(**ait2);
 										b->setOrder(Bond::ORDER__UNKNOWN);
 										num_bonds++;
 									}
 								}
 							}
+							continue;
 						}
-					}
-				}
-			}
-		}
+
+						// iterate over all atoms of current box
+						HashGridBox3<Atom*>::ConstDataIterator ait1 = box_it->beginData();
+						for (;+ait1; ait1++)
+						{
+							const Vector3& atom_pos1 = (*ait1)->getPosition();
+							Atom& atom1 = **ait1;
+
+							HashGridBox3<Atom*>::ConstDataIterator ait2 = bbox->beginData();
+							for (;+ait2; ait2++)
+							{
+								// test the distance criterion for the specific element pair
+								const float dist = atom_pos1.getSquareDistance((*ait2)->getPosition());
+								float max_dist, min_dist;
+								const Size& an1 = atom1.getElement().getAtomicNumber();
+								const Size& an2 = (*ait2)->getElement().getAtomicNumber();
+
+								if (getMaxBondLength_(max_dist, an1, an2) &&
+										getMinBondLength_(min_dist, an1, an2) &&
+										dist <= max_dist && 
+										dist >= min_dist &&
+										!atom1.isBoundTo(**ait2))
+								{
+									Bond* const b = atom1.createBond(**ait2);
+									b->setOrder(Bond::ORDER__UNKNOWN);
+									num_bonds++;
+								}
+							} // data iterator ait2
+						} // data iterator ait1
+					} // zi
+				} // yi
+			}  // xi
+		} // for all boxes
+
 		return num_bonds;
 	}
 	
@@ -246,85 +251,84 @@ namespace BALL
 	{
 		RingPerceptionProcessor rpp;
 		vector<vector<Atom*> > sssr;
-		typedef vector<vector<Atom*> >::iterator rit;
-		Size num_rings = rpp.calculateSSSR(sssr, ac);
-		if (num_rings != 0)
+
+		// abort if no ring calculated
+		if (rpp.calculateSSSR(sssr, ac) == 0) return;
+	
+		vector<vector<Atom*> >::iterator it = sssr.begin();
+		for (; it!=sssr.end(); ++it)
 		{
-			for (rit it=sssr.begin();it!=sssr.end();++it)
+			// count bonds and aromatic bonds
+			Size num_bonds(0), num_aro(0);
+			HashSet<Bond*> bonds;
+			for (vector<Atom*>::iterator ait1=it->begin();ait1!=it->end();++ait1)
 			{
-				// count bonds and aromatic bonds
-				Size num_bonds(0), num_aro(0);
-				HashSet<Bond*> bonds;
-				for (vector<Atom*>::iterator ait1=it->begin();ait1!=it->end();++ait1)
+				vector<Atom*>::iterator ait2=ait1;
+				++ait2;
+				for (;ait2!=it->end();++ait2)
 				{
-					vector<Atom*>::iterator ait2=ait1;
-					++ait2;
-					for (;ait2!=it->end();++ait2)
+					if ((*ait1)->isBoundTo(**ait2))
 					{
-						if ((*ait1)->isBoundTo(**ait2))
+						++num_bonds;
+						Bond* const b = (*ait1)->getBond(**ait2);
+						bonds.insert(b);
+						if (b->getOrder() == Bond::ORDER__AROMATIC)
 						{
-							++num_bonds;
-							Bond * b = (*ait1)->getBond(**ait2);
-							bonds.insert(b);
-							if (b->getOrder() == Bond::ORDER__AROMATIC)
-							{
-								++num_aro;
-							}
+							++num_aro;
 						}
 					}
 				}
-				// estimate if ring is aromatic or not
-				if (double(num_aro)/double(num_bonds) >= 0.5)
+			}
+
+			// estimate if ring is aromatic or not
+			if (double(num_aro)/double(num_bonds) >= 0.5)
+			{
+				for (HashSet<Bond*>::Iterator bit=bonds.begin();bit!=bonds.end();++bit)
 				{
-					for (HashSet<Bond*>::Iterator bit=bonds.begin();bit!=bonds.end();++bit)
-					{
-						(*bit)->setOrder(Bond::ORDER__AROMATIC);
-					}
+					(*bit)->setOrder(Bond::ORDER__AROMATIC);
 				}
-				else
+			}
+			else
+			{
+				for (HashSet<Bond*>::Iterator bit=bonds.begin(); +bit;++bit)
 				{
-					for (HashSet<Bond*>::Iterator bit=bonds.begin(); +bit;++bit)
+					if ((*bit)->getOrder() == Bond::ORDER__AROMATIC)
 					{
-						if ((*bit)->getOrder() == Bond::ORDER__AROMATIC)
-						{
-							(*bit)->setOrder(Bond::ORDER__SINGLE);
-						}
+						(*bit)->setOrder(Bond::ORDER__SINGLE);
 					}
 				}
 			}
 		}
 	}
 
+
 	void BuildBondsProcessor::deleteOverestimatedBonds_(AtomContainer& ac)
 	{
 		AtomIterator ait;
 		BALL_FOREACH_ATOM(ac, ait)
 		{
-			Size group = ait->getElement().getGroup();
-			if (group == 1 || group == 17)
+ 			if (!ait->isBound()) continue;
+			
+			const Size group = ait->getElement().getGroup();
+			if (group != 1 && group != 17) continue;
+
+			Bond* min_bond = 0;
+			float length= Limits<float>::max();
+			HashSet<Bond*> bonds;
+			for (Atom::BondIterator bit = ait->beginBond(); +bit;++bit)
 			{
-				if (ait->countBonds() > 1)
+				if (length > bit->getLength())
 				{
-					Atom::BondIterator bit;
-					Bond * min_bond = 0;
-					float length= Limits<float>::max();
-					HashSet<Bond*> bonds;
-					for (bit=ait->beginBond(); +bit;++bit)
-					{
-						if (length > bit->getLength())
-						{
-							min_bond = &*bit;
-							length = bit->getLength();
-						}
-						bonds.insert(&*bit);
-					}
-					for (HashSet<Bond*>::ConstIterator it=bonds.begin(); +it; ++it)
-					{
-						if (*it != min_bond)
-						{
-							(*it)->destroy();
-						}
-					}
+					min_bond = &*bit;
+					length = bit->getLength();
+				}
+				bonds.insert(&*bit);
+			}
+			for (HashSet<Bond*>::ConstIterator it=bonds.begin(); +it; ++it)
+			{
+				if (*it != min_bond)
+				{
+					(*it)->destroy();
 				}
 			}
 		}
@@ -337,18 +341,14 @@ namespace BALL
 			length = min_bond_lengths_[an1][an2];
 			return true;
 		}
-		else
+		
+		if (min_bond_lengths_.has(an2) && min_bond_lengths_[an2].has(an1))
 		{
-			if (min_bond_lengths_.has(an2) && min_bond_lengths_[an2].has(an1))
-			{
-				length = min_bond_lengths_[an2][an1];
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			length = min_bond_lengths_[an2][an1];
+			return true;
 		}
+		
+		return false;
 	}
 
 	bool BuildBondsProcessor::getMaxBondLength_(float& length, Size an1, Size an2)
@@ -358,18 +358,14 @@ namespace BALL
 			length = max_bond_lengths_[an1][an2];
 			return true;
 		}
-		else
+
+		if (max_bond_lengths_.has(an2) && max_bond_lengths_[an2].has(an1))
 		{
-			if (max_bond_lengths_.has(an2) && max_bond_lengths_[an2].has(an1))
-			{
-				length = max_bond_lengths_[an2][an1];
-				return true;
-			}
-			else
-			{
-				return false;
-			}
+			length = max_bond_lengths_[an2][an1];
+			return true;
 		}
+
+		return false;
 	}
 
 	Bond::BondOrder BuildBondsProcessor::getNearestBondOrder_(float length, Size elem1, Size elem2)
@@ -437,6 +433,7 @@ namespace BALL
 		{
 			filename = String(options.get(BuildBondsProcessor::Option::BONDLENGTHS_FILENAME));
 		}
+
 		Path path;
 		String filepath = path.find(filename);
 		if (filepath == "")
@@ -481,65 +478,65 @@ namespace BALL
 		for (; +it; ++it)
 		{
 			// test if we are in the bond partner depth
-			if (it->getDepth() == 2)
+			if (it->getDepth() != 2) continue;
+		
+			const Size an1 = it->getKey().toUnsignedInt();
+			entry1 = it->getEntry("Partners");
+
+			// iterate over all bond partners
+			ResourceEntry::Iterator entry_it;
+			for (entry_it = ++entry1->begin(); +entry_it; ++entry_it)
 			{
-				Size an1 = it->getKey().toUnsignedInt();
-				entry1 = it->getEntry("Partners");
+				// test if we are in the bond length section depth
+				if (entry_it->getDepth() != entry1->getDepth() + 1) continue;
+			
+				const Size an2 = entry_it->getKey().toUnsignedInt();
+				ResourceEntry* entry2 = entry_it->getEntry("BondLengths");
 
-				// iterate over all bond partners
-				ResourceEntry::Iterator entry_it;
-				for (entry_it = ++entry1->begin(); +entry_it; ++entry_it)
+				// iterator over all bond lengths and orders
+				ResourceEntry::Iterator bond_it;
+				for (bond_it = ++entry2->begin(); +bond_it; ++bond_it)
 				{
-					// test if we are in the bond length section depth
-					if (entry_it->getDepth() == entry1->getDepth() + 1)
-					{
-						Size an2 = entry_it->getKey().toUnsignedInt();
-						ResourceEntry * entry2;
-						entry2 = entry_it->getEntry("BondLengths");
+					if (bond_it->getDepth() != entry2->getDepth() + 1) continue;
+				
+					// now fill the bond_lengths, min and, max structs
+					const String& key = bond_it->getKey();
+					Bond::BondOrder order = Bond::ORDER__UNKNOWN;
+					const float value = bond_it->getValue().toFloat();
 
-						// iterator over all bond lengths and orders
-						ResourceEntry::Iterator bond_it;
-						for (bond_it = ++entry2->begin(); +bond_it; ++bond_it)
+					if (name_to_order.has(key))
+					{
+						order = name_to_order[key];
+						bond_lengths_[an1][an2][order] = value;
+						continue;
+					}
+					
+					if (key == "max")
+					{
+						if (value > max_length_) max_length_ = value;
+						max_bond_lengths_[an1][an2] = value * value;
+
+						continue;
+					}
+
+					if (key == "min")
+					{
+						if (value == 0) 
 						{
-							if (bond_it->getDepth() == entry2->getDepth() + 1)
-							{
-								// now fill the bond_lengths, min and, max structs
-								String key = bond_it->getKey();
-								Bond::BondOrder order = Bond::ORDER__UNKNOWN;
-								float value = bond_it->getValue().toFloat();
-								if (name_to_order.has(key))
-								{
-									order = name_to_order[key];
-									bond_lengths_[an1][an2][order] = value;
-								}
-								else
-								{
-									if (key == "max")
-									{
-										max_bond_lengths_[an1][an2] = value;
-										if (value > max_length_)
-										{
-											max_length_ = value;
-										}
-									}
-									else
-									{
-										if (key == "min")
-										{
-											min_bond_lengths_[an1][an2] = value;
-										}
-										else
-										{
-											Log.error() << "Read unknown entry: " << key << endl;
-										}
-									}
-								}
-							}
+							min_bond_lengths_[an1][an2] = LONG_MAX;
+							continue;
 						}
+
+						min_bond_lengths_[an1][an2] = value * value;
+					}
+					else
+					{
+						Log.error() << "Read unknown entry: " << key << endl;
 					}
 				}
 			}
 		}
+
 		delete tree;
 	}
 	
