@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.5 2003/11/23 17:50:10 amoll Exp $
+// $Id: genericControl.h,v 1.6 2003/12/09 13:48:05 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -27,8 +27,7 @@ namespace BALL
 				structure changing methods. 
 				The method buildContextMenu() can create a customizable context menu.
 				To use this widget in the application just create it with MainGenericControl as
-				parent and all inserted Composite objects sent with NewCompositeMessage
-				will be shown in the structure view of the GenericControl.
+				parent.
 				\ingroup ViewWidgets
 		*/
 		class GenericControl
