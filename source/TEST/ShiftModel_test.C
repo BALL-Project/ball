@@ -1,4 +1,4 @@
-// $Id: ShiftModel_test.C,v 1.6 2000/09/25 19:08:16 oliver Exp $
+// $Id: ShiftModel_test.C,v 1.7 2001/04/24 22:05:29 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.6 2000/09/25 19:08:16 oliver Exp $")
+START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.7 2001/04/24 22:05:29 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,9 +53,9 @@ CHECK(ShiftModel::getParameters() throw())
 	TEST_EQUAL(sm.getParameters().isValid(), false)
 RESULT
 
-CHECK(ShiftModel::setFilename(const String& filename) throw(Exception::FileNotFound))
+CHECK(ShiftModel::setFilename(const String& filename))
 	ShiftModel sm;
-	TEST_EXCEPTION(Exception::FileNotFound, sm.setFilename("XXXXXX"))
+	sm.setFilename("XXXXXX");
 	TEST_EQUAL(sm.isValid(), false)
 	TEST_EQUAL(sm.getParameters().isValid(), false)
 	sm.setFilename("data/ShiftModel_test.ini");
@@ -65,7 +65,7 @@ RESULT
 
 CHECK(ShiftModel::getFilename() const  throw())
 	ShiftModel sm;
-	TEST_EXCEPTION(Exception::FileNotFound, sm.setFilename("XXXXXX"))
+	sm.setFilename("XXXXXX");
 	TEST_EQUAL(sm.isValid(), false)
 	TEST_EQUAL(sm.getFilename(), "XXXXXX")
 	sm.setFilename("data/ShiftModel_test.ini");
