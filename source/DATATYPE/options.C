@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.15 2000/10/17 17:16:06 anker Exp $ 
+// $Id: options.C,v 1.16 2000/10/25 19:27:14 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -53,7 +53,7 @@ namespace BALL
 		}
 		
 		// try to convert it to a number
-		strtod(value.c_str(), &endptr);
+		::strtod(value.c_str(), &endptr);
 
 		// return and tell whether it happend to work
 		return (errno == 0) && (endptr != value.c_str());
@@ -109,12 +109,14 @@ namespace BALL
 					
 		
 		// check wheter it is an integer
-		long_value = atol(get(key).c_str());
-		double_value = atof(get(key).c_str());
+		long_value = ::atol(get(key).c_str());
+		double_value = ::atof(get(key).c_str());
 
 		// check if it is an integer (cutoff is 1e-7)
 		if (fabs(double_value - ((double)long_value)) <= 1e-7)
+		{
 			return true;
+		}
 
 		// it is a floating point number, but no integer
 		return false;
@@ -129,9 +131,10 @@ namespace BALL
 		}
 		double value;
 		errno = 0;
-		value = atof((*find(key)).second.c_str());
+		value = ::atof((*find(key)).second.c_str());
 		
-		if (errno == 0){
+		if (errno == 0)
+		{
 			return value;
 		} 
 		else 
