@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.21 2000/11/27 16:21:44 amoll Exp $
+// $Id: BitVector_test.C,v 1.22 2001/07/16 00:22:21 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.21 2000/11/27 16:21:44 amoll Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.22 2001/07/16 00:22:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ CHECK(BitVector::BitVector(const BitVector&, bool))
 RESULT
 
 CHECK(BitVector::BitVector(const char*))
-	char c[9] = {'1', '0', '0', '1', '0', '1', '0', '1', '1'};
+	const char* c = "100101011";
 	BitVector bv9_2 = BitVector(c);
 	TEST_EQUAL(bv9_2.getSize(), 9)
 	TEST_EQUAL(bv9_2.getBit(0), true)
@@ -94,7 +94,7 @@ CHECK(BitVector::set(const BitVector&, bool))
 RESULT
 
 CHECK(BitVector::set(const char*))
-	char c[9] = {'1', '0', '0', '1', '0', '1', '0', '1', '1'};
+	const char* c = "100101011";
 	BitVector bv9_2;
 	bv9_2.set(c);
 	TEST_EQUAL(bv9_2.getSize(), 9)
@@ -114,7 +114,7 @@ CHECK(BitVector::BitVector& operator = (const BitVector&))
 RESULT
 
 CHECK(BitVector::BitVector& operator = (const char*))
-	char c[9] = {'1', '0', '0', '1', '0', '1', '0', '1', '1'};
+	const char* c = "100101011";
 	BitVector bv9_2;
 	bv9_2 = c;
 	TEST_EQUAL(bv9_2.getSize(), 9)
