@@ -3,7 +3,7 @@
 ############################################################
 # source directory shadow builder for multiplatform builds #
 ############################################################
-# $Id: binfmt.sh,v 1.3 1999/08/26 15:33:24 oliver Exp $
+# $Id: binfmt.sh,v 1.4 1999/09/03 08:52:31 oliver Exp $
 ############################################################
 
 UNAME=uname
@@ -109,7 +109,6 @@ FORMATS=`${GREP} "^${BINFMT}-" ${BINFORMAT_FILE}`
 if test "${FORMATS}" = "" ; then
 	echo "no binary format defined for this platform - run configure first!" >&2
 	FORMAT="undefined"
-	set
 else
 	if test "${FORMATS}" != "`echo ${FORMATS} | cut -d\  -f1`" ; then
 		if test "${COMPILER_NAME}" != "" ; then
