@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.162 2005/02/14 23:41:38 amoll Exp $
+// $Id: mainControl.C,v 1.163 2005/02/15 18:00:18 anne Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -943,8 +943,13 @@ namespace BALL
 			#ifdef BALL_DEBUG_VIEW
 				Log.info() << "MainControl::addModularWidget(" << widget << ")" << endl;
 			#endif
-			modular_widgets_.push_back(widget);
 			widget->registerThis();
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin();
+			for (; it != modular_widgets_.end(); it++)
+			{
+				if (*it == widget) return;
+			}
+			modular_widgets_.push_back(widget);
 			registerConnectionObject(*widget);
 		}
 
