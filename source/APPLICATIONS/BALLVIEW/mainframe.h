@@ -1,58 +1,26 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.5 2004/10/07 17:14:23 amoll Exp $
+// $Id: mainframe.h,v 1.6 2004/10/09 09:07:22 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_BALLVIEW_MAINFRAME_H
 
-#ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
-#	include <BALL/VIEW/WIDGETS/logView.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
 # include <BALL/VIEW/KERNEL/mainControl.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_SERVER_H
-# include <BALL/VIEW/KERNEL/server.h>
 #endif
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
 # include <BALL/VIEW/WIDGETS/scene.h>
 #endif
 
-#ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
-# include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
-#endif
-
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 # include <BALL/VIEW/DIALOGS/displayProperties.h>
 #endif
 
-#ifndef BALL_VIEW_DIALOGS_LABELDIALOG_H
-# include <BALL/VIEW/DIALOGS/labelDialog.h>
-#endif
-
-#ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
-# include <BALL/VIEW/WIDGETS/molecularControl.h>
-#endif
-
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
 # include <BALL/VIEW/WIDGETS/datasetControl.h>
-#endif
-
-#ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
-# include <BALL/VIEW/WIDGETS/geometricControl.h>
-#endif
-
-#ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
-# include <BALL/VIEW/WIDGETS/molecularStructure.h>
-#endif
-
-#ifndef BALL_VIEW_DIALOGS_FDPBDIALOG_H
-# include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_CONTOURSURFACEDIALOG_H
@@ -126,18 +94,10 @@ namespace BALL
 			throw();
 
 		Scene*										scene_;
-		MolecularControl*					control_;
 		DatasetControl* 					dataset_control_;
-		GeometricControl*					geometric_control_;
 		DisplayProperties*    		display_properties_;
 		ContourSurfaceDialog* 		surface_dialog_;
-		LabelDialog*	    				label_dialog_;
-		MolecularStructure*  			molecular_structure_;
 		MolecularFileDialog*  		file_dialog_;
-		DownloadPDBFile*					download_pdb_dialog_;
-		FDPBDialog*  							FDPB_dialog_;
-		Server*   								server_;
-		LogView*									logview_;
 		bool 											fullscreen_;
 
 		Index menu_cs_, menu_FPDB_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.32 2004/10/07 17:14:23 amoll Exp $
+// $Id: mainframe.C,v 1.33 2004/10/09 09:07:22 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -10,10 +10,18 @@
 
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/KERNEL/moleculeObjectCreator.h>
+#include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
-#include <BALL/COMMON/version.h>
+#include <BALL/VIEW/WIDGETS/molecularStructure.h>
+#include <BALL/VIEW/WIDGETS/molecularControl.h>
+#include <BALL/VIEW/WIDGETS/geometricControl.h>
+#include <BALL/VIEW/WIDGETS/logView.h>
+#include <BALL/VIEW/DIALOGS/downloadPDBFile.h>
+#include <BALL/VIEW/DIALOGS/labelDialog.h>
+#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 
+#include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/contourSurface.h>
 
 #ifdef BALL_PYTHON_SUPPORT
@@ -26,7 +34,6 @@
 #include <qpainter.h>
 #include <qimage.h>
 
-#include <BALL/CONCEPT/XDRPersistenceManager.h>
 #include <sstream>
 
 namespace BALL
@@ -37,22 +44,17 @@ namespace BALL
 	Mainframe::Mainframe(QWidget* parent, const char* name)
 		:	MainControl(parent, name, ".BALLView"),
 			scene_(0),
-			control_(0),
 			dataset_control_(0),
-			geometric_control_(0),
 			display_properties_(0),
-			label_dialog_(0),
-			molecular_structure_(0),
 			file_dialog_(0),
-			server_(0),
-			logview_(0),
 			fullscreen_(false),
 			menu_cs_(-1),
 			menu_FPDB_(-1)
 	{
-	#ifdef BALL_VIEW_DEBUG
-	Log.error() << "new Mainframe " << this << std::endl;
-	#endif
+		#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new Mainframe " << this << std::endl;
+		#endif
+
 		// ---------------------
 		// setup main window
 		// ---------------------
@@ -78,13 +80,10 @@ namespace BALL
 //		Lo g.remove(std::cout);
 // 		Log.remove(std::cerr);
 		setLoggingFilename("BALLView.log");
-
-		control_ = new MolecularControl(this, "Structures");
 		setAcceptDrops(true);
-		CHECK_PTR(control_);
 
-		geometric_control_ = new GeometricControl(this, "Representations");
-		CHECK_PTR(geometric_control_);
+		CHECK_PTR(new MolecularControl(this, "Structures"));
+		CHECK_PTR(new GeometricControl(this, "Representations"));
 
 		dataset_control_ = new DatasetControl(this, "Datasets");
 		CHECK_PTR(dataset_control_);
@@ -101,27 +100,28 @@ namespace BALL
 		surface_dialog_->setDatasetControl(dataset_control_);
 		CHECK_PTR(surface_dialog_);
 
-		label_dialog_ = new LabelDialog(this, "LabelDialog");
-		CHECK_PTR(label_dialog_);
+		CHECK_PTR(new LabelDialog(this, "LabelDialog"));
 		
 		file_dialog_ = new MolecularFileDialog(this, "MolecularFileDialog");
 		CHECK_PTR(file_dialog_);
 
-		download_pdb_dialog_ = new DownloadPDBFile(this, "DownloadPDBFile", false);
-		CHECK_PTR(download_pdb_dialog_);
+		CHECK_PTR(new DownloadPDBFile(this, "DownloadPDBFile", false));
 
-		molecular_structure_ = new MolecularStructure(this, "MolecularStructure");
-		CHECK_PTR(molecular_structure_);
+		CHECK_PTR(new MolecularStructure(this, "MolecularStructure"));
 
-		server_ = new Server(this);
-		CHECK_PTR(server_);
+		// setup the VIEW server
+		Server* server = new Server(this);
+		CHECK_PTR(server);
+		// registering object generator
+		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
+		server->registerObjectCreator(*object_creator);
 
-		logview_ = new LogView(this, "Logs");
-		CHECK_PTR(logview_);
-		logview_->setMinimumSize(10, 10);
+		LogView* logview = new LogView(this, "Logs");
+		CHECK_PTR(logview);
+		logview->setMinimumSize(10, 10);
 
-		FDPB_dialog_ = new FDPBDialog(this);
-		CHECK_PTR(FDPB_dialog_);
+		FDPBDialog* FDPB_dialog = new FDPBDialog(this);
+		CHECK_PTR(FDPB_dialog);
 
 		#ifdef BALL_PYTHON_SUPPORT
 			PyWidget* pywidget = new PyWidget(this, "Python Interpreter");
@@ -149,7 +149,7 @@ namespace BALL
 
 		// Tools Menu -------------------------------------------------------------------
 		hint = "Calculate the Electrostatics with FDPB, if one System selected.";
-		menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", FDPB_dialog_, SLOT(show()), 0,
+		menu_FPDB_ = insertMenuEntry(MainControl::TOOLS , "FDPB Electrostatics", FDPB_dialog, SLOT(show()), 0,
 				-1, hint);
 				
 		insertPopupMenuSeparator(MainControl::TOOLS);
@@ -164,13 +164,6 @@ namespace BALL
 		// Menu ------------------------------------------------------------------------
 		menuBar()->setSeparator(QMenuBar::InWindowsStyle);
 
-		//--------------------------------
-		// setup the VIEW server
-		//--------------------------------
-
-		// registering object generator
-		MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
-		server_->registerObjectCreator(*object_creator);
 
 		setStatusbarText("Ready.");
 	}
@@ -279,6 +272,19 @@ namespace BALL
 		throw()
 	{
 		setStatusbarText(String("Opening file ") + file + "...");
+
+		if (file.hasSuffix(".bvp"))
+		{
+			loadBALLViewProjectFile(file);
+			return;
+		}
+
+		if (file.hasSuffix(".py"))
+		{
+			PyWidget::getInstance(0)->run(file);
+			return;
+		}
+
 		file_dialog_->openFile(file);
 	}
 
