@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.13 2001/07/20 08:05:57 oliver Exp $
+// $Id: genericPDBFile.C,v 1.14 2001/07/31 00:31:51 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -137,8 +137,6 @@ namespace BALL
 				element_symbol[0] = element_symbol[1];
 				element_symbol[1] = '\0';
 			}
-			// BAUSTELLE
-			Log.info() << "valid element symbol: " << element_symbol << std::endl;
 		}
 
 		return (const char*)element_symbol;
