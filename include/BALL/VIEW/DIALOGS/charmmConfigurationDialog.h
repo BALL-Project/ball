@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.h,v 1.3 2004/02/26 08:41:32 anhi Exp $
+// $Id: charmmConfigurationDialog.h,v 1.4 2004/04/22 23:30:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
@@ -117,6 +117,10 @@ namespace BALL
 
 			/// apply the settings to a given CHARMM force field
 			void applyTo(CharmmFF& charmm)
+				throw();
+			
+			///
+			void chooseSolventFile()
 				throw();
 
 			protected:

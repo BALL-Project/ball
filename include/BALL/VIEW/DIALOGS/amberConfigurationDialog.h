@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.h,v 1.4 2004/02/26 08:41:31 anhi Exp $
+// $Id: amberConfigurationDialog.h,v 1.5 2004/04/22 23:30:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
@@ -84,12 +84,6 @@ namespace BALL
 			bool getOverwriteTypenames() const;
 
 			///
-			void setOptions(float nonbonded_cutoff, float vdw_cutoff, float vdw_cuton, float electrostatic_cutoff, 
-											float electrostatic_cuton, float scaling_electrostatic_1_4, float scaling_vdw_1_4, 
-											bool use_dddc, bool assign_charges, bool assign_typenames, bool assign_types, 
-											bool overwrite_charges, bool overwrite_typenames);
-
-			///
 			void writePreferences(INIFile& inifile) const
 				throw();
 				
@@ -116,6 +110,9 @@ namespace BALL
 			virtual void browseParameterFiles();
 
 			void setAmberFF(AmberFF& amber)
+				throw();
+
+			void chooseSolventFile()
 				throw();
 
 			private:
