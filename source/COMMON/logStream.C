@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.9 1999/12/21 01:30:09 oliver Exp $
+// $Id: logStream.C,v 1.10 1999/12/21 09:50:12 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 
@@ -249,7 +249,7 @@ namespace BALL
 	// keep the given buffer	
 	LogStream::LogStream(LogStreamBuf* buf)		
 		: BALL_IOS(buf),
-			BALL_OSTREAM(0),
+			BALL_OSTREAM(buf),
 			delete_buffer_(false)
 	{
 	}
@@ -257,7 +257,7 @@ namespace BALL
 	// create a new buffer
 	LogStream::LogStream(bool associate_stdio)
 		: BALL_IOS(new LogStreamBuf),
-			BALL_OSTREAM(0),
+			BALL_OSTREAM(new LogStreamBuf),
 			delete_buffer_(true)
 	{
 		if (associate_stdio == true) 
