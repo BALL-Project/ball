@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.32 2003/02/08 15:56:32 oliver Exp $
+// $Id: PDBFile.C,v 1.33 2003/05/07 13:33:17 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -1401,7 +1401,8 @@ namespace BALL
 			} 
 			else 
 			{
-				Log.warn() << "PDBFile::postprocessSSBonds_: could not assign SSBOND for " << *it << endl;
+				Log.warn() << "PDBFile::postprocessSSBonds_: could not assign SSBOND for " 
+									 << it->first << ":" << it->third << " - " << it->second << "/" << it->fourth << endl;
 			}
 		}
 	}
