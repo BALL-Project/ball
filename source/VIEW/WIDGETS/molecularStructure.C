@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.17 2004/02/18 17:38:26 amoll Exp $
+// $Id: molecularStructure.C,v 1.18 2004/02/18 18:45:46 oliver Exp $
+//
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -47,8 +48,8 @@ namespace BALL
 		:	QWidget(parent, name),
 			ModularWidget(name),
 			view_distance_(25),
-			amber_(0),
-			charmm_(0),
+			amber_(),
+			charmm_(),
 			amber_dialog_(this),
 			charmm_dialog_(this),
 			minimization_dialog_(this),
@@ -104,7 +105,6 @@ namespace BALL
 		amber_mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
 															SLOT(amberMDSimulation()), CTRL+Key_D, MainControl::MOLECULARMECHANICS + 11, hint);
 
-		// Molecular Mechanics Menu
 		getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 		(main_control.initPopupMenu(MainControl::CHOOSE_FF))->setCheckable(true);
 		hint = "Use Amber Force Field";
@@ -116,8 +116,8 @@ namespace BALL
 		charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, 
 											SLOT(chooseCharmmFF()),0,-1, hint);
 
-		hint = "Setup Force Field";
-		insertMenuEntry(MainControl::MOLECULARMECHANICS, "Setup Force Field", this, 
+		hint = "Configure the force field";
+		insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
 											SLOT(setupForceField()),0,-1, hint);
 		getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 
@@ -126,13 +126,13 @@ namespace BALL
 		hint = "Map two proteins.";
 		map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
 
-		hint = "Calculate RMSD for two Molecules or Fragments of Molecules.";
+		hint = "Calculate RMSD for two molecules or fragments of molecules.";
 		calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
 		
 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
 		hint = "Recalculate the secondary structure for a structure.";
-		calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate Secondary Structure", this,
+		calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate secondary structure", this,
 																								 SLOT(calculateSecondaryStructure()), ALT+Key_2, -1, hint);
 
 		hint = "To assign H-bonds, one System has to be selected.";
@@ -173,9 +173,6 @@ namespace BALL
 
 		main_control.removeMenuEntry(MainControl::BUILD, "Map two Proteins", this,
 																										SLOT(mapProteins()));
-
-		if (charmm_ != 0) delete charmm_;
-		if (amber_  != 0) delete amber_;
 	}
 
 	void MolecularStructure::onNotify(Message *message)
@@ -724,14 +721,10 @@ namespace BALL
 	AmberFF& MolecularStructure::getAMBERFF()
 		throw()
 	{
-		if (amber_ == 0) 
-		{
-			amber_ = new AmberFF;
-			amber_dialog_.setAmberFF(*amber_);
-			amber_dialog_.accept();
-		}
+		amber_dialog_.setAmberFF(amber_);
+		amber_dialog_.accept();
 
-		return *amber_;
+		return amber_;
 	}
 
 	AmberConfigurationDialog& MolecularStructure::getAmberConfigurationDialog()
@@ -749,14 +742,10 @@ namespace BALL
 	CharmmFF& MolecularStructure::getCHARMMFF()
 		throw()
 	{
+		charmm_dialog_.setCharmmFF(charmm_);
+		charmm_dialog_.accept();
 
-		if (charmm_ == 0)
-		{
-			charmm_ = new CharmmFF;
-			charmm_dialog_.setCharmmFF(*charmm_);
-			charmm_dialog_.accept();
-		}
-		return *charmm_;
+		return charmm_;
 	}
 
 	void MolecularStructure::printAmberResults()

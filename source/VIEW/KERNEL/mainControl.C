@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.67 2004/02/18 11:45:12 bender Exp $
+// $Id: mainControl.C,v 1.68 2004/02/18 18:45:46 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -207,7 +207,7 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 				menuBar()->insertItem("&Molecular Mechanics", menu, MOLECULARMECHANICS, -1);
 				break;
 			case CHOOSE_FF:
-				initPopupMenu(MainControl::MOLECULARMECHANICS)->insertItem("Choose Force Field", menu, CHOOSE_FF);
+				initPopupMenu(MainControl::MOLECULARMECHANICS)->insertItem("Force Field", menu, CHOOSE_FF);
 				break;
 			case TOOLS:
 				menuBar()->insertItem("&Tools", menu, TOOLS, -1);

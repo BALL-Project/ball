@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.5 2004/02/18 17:37:42 amoll Exp $
+// $Id: molecularStructure.h,v 1.6 2004/02/18 18:45:46 oliver Exp $
+//
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
 #define BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -30,6 +31,14 @@
 # include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
 #endif
 
+#ifndef BALL_MOLMEC_AMBER_AMBER_H
+# include <BALL/MOLMEC/AMBER/amber.h>
+#endif
+
+#ifndef BALL_MOLMEC_CHARMM_CHARMM_H
+# include <BALL/MOLMEC/CHARMM/charmm.h>
+#endif
+
 #include <qwidget.h>
 
 namespace BALL
@@ -41,253 +50,255 @@ namespace BALL
 	namespace VIEW
 	{
 
-/**	MolecularStructure is a widget that reacts to Messages itself and converts some
-		to other Message objects.
-		The widget itself is invisible, but it has severeal menu entries:
-		- checkResidue
-		- centerCamera
-		- buildBonds
-		- addHydrogens
-		- select
-		- deselect
-		- createGridFromDistance
-		- calculateSecondaryStructure
-		This class is also necessary to add certain properties to new Composite objects, which were opened with the 
-		MolecularFileDialog.
-		Further it converts the geometric selection sent by Scene to a molecular selection 
-		whose objects can be given a new graphical representation by the DisplayProperties dialog.
-		See onNotify for information concerning the conversion mechanism. \par
-		\ingroup ViewWidgets
-*/
-class MolecularStructure
-	: public QWidget, 
-		public ModularWidget
-{
-	Q_OBJECT
+		/**	MolecularStructure is a widget that reacts to Messages itself and converts some
+				to other Message objects.
+				The widget itself is invisible, but it has severeal menu entries:
+				- checkResidue
+				- centerCamera
+				- buildBonds
+				- addHydrogens
+				- select
+				- deselect
+				- createGridFromDistance
+				- calculateSecondaryStructure
+				This class is also necessary to add certain properties to new Composite objects, which were opened with the 
+				MolecularFileDialog.
+				Further it converts the geometric selection sent by Scene to a molecular selection 
+				whose objects can be given a new graphical representation by the DisplayProperties dialog.
+				See onNotify for information concerning the conversion mechanism. \par
+				\ingroup ViewWidgets
+		*/
+		class MolecularStructure
+			: public QWidget, 
+				public ModularWidget
+		{
+			Q_OBJECT
 
-	public:
+			public:
 
-	BALL_EMBEDDABLE(MolecularStructure, ModularWidget)
+			BALL_EMBEDDABLE(MolecularStructure, ModularWidget)
 
-	
-	/**	@name	Constructors
-	*/	
-	//@{
-
-	/** Default Constructor.
-			Calls registerWidget.
-			\see        ModularWidget
-	*/
-	MolecularStructure(QWidget* parent = 0, const char* name = 0)
-		throw();
-	
-	//@}
-	/** @name Destructors 
-	*/
-	//@{
-
-	/** Destructor.
-	*/
-	virtual ~MolecularStructure()
-		throw();
-
-	//@}
-	/**	@name	Accessors: inspectors and mutators 
-	 */
-	//@{
-
-	/** Handles messages sent by other registered ConnectionObject objects.
-			Converts CompositeMessage if the
-			retrieved Composite object is kind of AtomContainer and
-			applies molecular properties to it (like normalize_names and
-			build_bonds).\par
-			\param message the pointer to the message that should be processed
-			\see   CompositeMessage
-			\see   GeometricObjectSelectionMessage
-			\see   MolecularTaskMessage
-	*/
-	void onNotify(Message *message)
-		throw();
-
-	/**	Check the menu entries.
-			The menus <b>Select</b>, <b>Deselect</b>, <b>Add Hydrogens</b> and <b>Build Bonds</b>
-			will be enabled if the selection of molecular objects is not empty.
-			The menu <b>Focus camera</b> will be enabled only if only one molecular object
-			is in the selection list.
-	*/
-	void checkMenu(MainControl& main_control)
-		throw();
-
-	/** Get the instance of the AMBER forcefield.
-	 		The forcefield will be created, when this function is called the first time.
-	*/
-	AmberFF& getAMBERFF() 
-		throw();
-	
-	/** Get the instance of the CHARMM forcefield.
-	 		The forcefield will be created, when this function is called the first time.
-	*/
-	CharmmFF& getCHARMMFF() 
-		throw();
-
-	///
-	AmberConfigurationDialog& getAmberConfigurationDialog()
-		throw();
-	
-	///
-	CharmmConfigurationDialog& getCharmmConfigurationDialog()
-		throw();
-
-	/// Print the results of the AMBER forcefield.
-	void printAmberResults()
-		throw();
-		
-	/// Print the results of the CHARMM forcefield
-	void printCharmmResults()
-		throw();
-	
-	/** Fetch the widgets preferences from the INIfile.
-			\param  inifile the INIFile that contains the needed values
-	*/
-	virtual void fetchPreferences(INIFile &inifile)
-		throw();
 			
-	/** Writes the widgets preferences to the INIFile.
-			\param  inifile the INIFile that contains the needed values
-	*/
-	virtual void writePreferences(INIFile &inifile)
-		throw();
+			/**	@name	Constructors
+			*/	
+			//@{
+
+			/** Default Constructor.
+					Calls registerWidget.
+					\see        ModularWidget
+			*/
+			MolecularStructure(QWidget* parent = 0, const char* name = 0)
+				throw();
 			
-	public slots:
+			//@}
+			/** @name Destructors 
+			*/
+			//@{
 
-	/** Centers the camera of Scene to the geometric center of the molecular objects
-			in the selection list.
-			A SceneMessage will be sent to inform the Scene.
-	*/
-	void centerCamera(Composite* composite = 0);
+			/** Destructor.
+			*/
+			virtual ~MolecularStructure()
+				throw();
 
-	/** Creates bonds.
-			If selected molecular objects are available Bond objects will be created
-			for each object in the selection list using the build_bonds processor of the FragmentDB.
-			A CompositeMessage will be sent for each object in the
-			selection list.
-			The number of bonds created will be written into the Log object.
-	*/
-	void buildBonds();
-	
-	/** Adds hydrogens.
-			If selected molecular objects are available hydrogens will be created
-			for each object in the selection list
-			using the add_hydrogens processor of the FragmentDB.
-			A CompositeMessage will be sent for each object in the selection list.
-			The number of hydrogens created will be written into the Log object.
-	*/
-	void addHydrogens();
-	
-	/** Colors selected objects uniquely.
-			If selected molecular objects are available they will be colored according to
-			the BALL_SELECTED_COLOR.
-			A CompositeMessage will be sent for each object in the selection list.
-	*/
-	void select();
+			//@}
+			/**	@name	Accessors: inspectors and mutators 
+			 */
+			//@{
 
-	/** Colors deselected objects in their own color.
-			If selected molecular objects are available they will be colored according to
-			their own color as specified in the objects. This method reverses the process
-			done in the select method.
-			A CompositeMessage will be sent for each object in the selection list.
-	*/
-	void deselect();
+			/** Handles messages sent by other registered ConnectionObject objects.
+					Converts CompositeMessage if the
+					retrieved Composite object is kind of AtomContainer and
+					applies molecular properties to it (like normalize_names and
+					build_bonds).\par
+					\param message the pointer to the message that should be processed
+					\see   CompositeMessage
+					\see   GeometricObjectSelectionMessage
+					\see   MolecularTaskMessage
+			*/
+			void onNotify(Message *message)
+				throw();
 
-	/** Check the residues
-	 */
-	virtual bool checkResidue();
+			/**	Check the menu entries.
+					The menus <b>Select</b>, <b>Deselect</b>, <b>Add Hydrogens</b> and <b>Build Bonds</b>
+					will be enabled if the selection of molecular objects is not empty.
+					The menu <b>Focus camera</b> will be enabled only if only one molecular object
+					is in the selection list.
+			*/
+			void checkMenu(MainControl& main_control)
+				throw();
 
-	///
-	virtual void createGridFromDistance();
+			/** Get the instance of the AMBER forcefield.
+					The forcefield will be created, when this function is called the first time.
+			*/
+			AmberFF& getAMBERFF() 
+				throw();
+			
+			/** Get the instance of the CHARMM forcefield.
+					The forcefield will be created, when this function is called the first time.
+			*/
+			CharmmFF& getCHARMMFF() 
+				throw();
 
-	///
-	virtual void calculateSecondaryStructure();
+			///
+			AmberConfigurationDialog& getAmberConfigurationDialog()
+				throw();
+			
+			///
+			CharmmConfigurationDialog& getCharmmConfigurationDialog()
+				throw();
 
-	///
-	virtual void mapProteins();
+			/// Print the results of the AMBER forcefield.
+			void printAmberResults()
+				throw();
+				
+			/// Print the results of the CHARMM forcefield
+			void printCharmmResults()
+				throw();
+			
+			/** Fetch the widgets preferences from the INIfile.
+					\param  inifile the INIFile that contains the needed values
+			*/
+			virtual void fetchPreferences(INIFile &inifile)
+				throw();
+					
+			/** Writes the widgets preferences to the INIFile.
+					\param  inifile the INIFile that contains the needed values
+			*/
+			virtual void writePreferences(INIFile &inifile)
+				throw();
+					
+			public slots:
 
-	///
-	virtual void calculateRMSD();
+			/** Centers the camera of Scene to the geometric center of the molecular objects
+					in the selection list.
+					A SceneMessage will be sent to inform the Scene.
+			*/
+			void centerCamera(Composite* composite = 0);
 
-	///
-	void buildPeptide();
+			/** Creates bonds.
+					If selected molecular objects are available Bond objects will be created
+					for each object in the selection list using the build_bonds processor of the FragmentDB.
+					A CompositeMessage will be sent for each object in the
+					selection list.
+					The number of bonds created will be written into the Log object.
+			*/
+			void buildBonds();
+			
+			/** Adds hydrogens.
+					If selected molecular objects are available hydrogens will be created
+					for each object in the selection list
+					using the add_hydrogens processor of the FragmentDB.
+					A CompositeMessage will be sent for each object in the selection list.
+					The number of hydrogens created will be written into the Log object.
+			*/
+			void addHydrogens();
+			
+			/** Colors selected objects uniquely.
+					If selected molecular objects are available they will be colored according to
+					the BALL_SELECTED_COLOR.
+					A CompositeMessage will be sent for each object in the selection list.
+			*/
+			void select();
 
-	///
-	void calculateHBonds();
+			/** Colors deselected objects in their own color.
+					If selected molecular objects are available they will be colored according to
+					their own color as specified in the objects. This method reverses the process
+					done in the select method.
+					A CompositeMessage will be sent for each object in the selection list.
+			*/
+			void deselect();
 
-	///
-	void assignCharges();
+			/** Check the residues
+			 */
+			virtual bool checkResidue();
 
-	///
-	//void calculateAmberEnergy();
-	void calculateForceFieldEnergy();
+			///
+			virtual void createGridFromDistance();
 
-	///
-	void runMinimization();
+			///
+			virtual void calculateSecondaryStructure();
 
-	///
-	void amberMDSimulation();
+			///
+			virtual void mapProteins();
 
-	///
-	void showAmberForceFieldOptions();
-	
-	///
-	void showCharmmForceFieldOptions();
-	
-	///
-	void chooseAmberFF();
+			///
+			virtual void calculateRMSD();
 
-	///
-	void chooseCharmmFF();
-		
-	///
-	void setupForceField();
-		
-	//@}
-	
-private:
-	
-	virtual void calculateCenter_(Composite& composite);
+			///
+			void buildPeptide();
 
-	virtual void addComposite_(Composite& composite, const String& name)
-		throw();
+			///
+			void calculateHBonds();
 
-	Index center_camera_id_, 
-				build_bonds_id_, 
-				add_hydrogens_id_, 
-				check_structure_id_,
-				select_id_, 
-				deselect_id_, 
-				create_distance_grid_id_,
- 				calculate_ss_id_,
-				map_proteins_id_,
-				calculate_RMSD_id_,
-				assign_charges_id_,
-				amber_energy_id_,
-				amber_minimization_id_,
-				amber_mdsimulation_id_,
-				build_peptide_id_,
-				calculate_hbonds_id_,
-				amber_ff_id_,
-				charmm_ff_id_;
-	
-	bool use_amber_;
-	Vector3 										view_center_vector_;
-	float 											view_distance_;
-	AmberFF* 										amber_;
-	CharmmFF*										charmm_;
-	AmberConfigurationDialog    amber_dialog_;
-	CharmmConfigurationDialog 	charmm_dialog_;
-	MinimizationDialog 					minimization_dialog_;
-	MolecularDynamicsDialog 		md_dialog_;
-};
+			///
+			void assignCharges();
 
-} } // namespaces
+			///
+			void calculateForceFieldEnergy();
+
+			///
+			void runMinimization();
+
+			///
+			void amberMDSimulation();
+
+			///
+			void showAmberForceFieldOptions();
+			
+			///
+			void showCharmmForceFieldOptions();
+			
+			///
+			void chooseAmberFF();
+
+			///
+			void chooseCharmmFF();
+				
+			///
+			void setupForceField();
+				
+			//@}
+			
+			private:
+			
+			virtual void calculateCenter_(Composite& composite);
+
+			virtual void addComposite_(Composite& composite, const String& name)
+				throw();
+
+			Index center_camera_id_;
+			Index build_bonds_id_;
+			Index add_hydrogens_id_;
+			Index check_structure_id_;
+			Index	select_id_;
+			Index	deselect_id_; 
+			Index	create_distance_grid_id_;
+			Index	calculate_ss_id_;
+			Index	map_proteins_id_;
+			Index	calculate_RMSD_id_;
+			Index	assign_charges_id_;
+			Index	amber_energy_id_;
+			Index	amber_minimization_id_;
+			Index	amber_mdsimulation_id_;
+			Index	build_peptide_id_;
+			Index	calculate_hbonds_id_;
+			Index	amber_ff_id_;
+			Index	charmm_ff_id_;
+			
+			bool use_amber_;
+
+			Vector3 										view_center_vector_;
+			float 											view_distance_;
+			AmberFF 										amber_;
+			CharmmFF										charmm_;
+			AmberConfigurationDialog    amber_dialog_;
+			CharmmConfigurationDialog 	charmm_dialog_;
+			MinimizationDialog 					minimization_dialog_;
+			MolecularDynamicsDialog 		md_dialog_;
+		};
+
+	} // namespace VIEW
+
+} // namespace BALL
 
 #endif // BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
