@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.7 2000/02/25 19:38:07 amoll Exp $
+// $Id: quaternion.h,v 1.8 2000/03/03 16:47:54 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -42,19 +42,39 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Default constructor.
+				This method creates a new TQuaternion object. The axis-components
+				are initialized to {\tt 0}, the angle is set to  {\tt 1}.
+		*/
 		TQuaternion();
 
-		///
+		/**	Copy constructor.
+				Create a new TQuaternion object from another.
+				@param TQuaternion the TQuaternion object to be copied
+				@param bool ignored - just for interface consistency
+		*/	
 		TQuaternion(const TQuaternion& q, bool deep = true);
 
-		///
+		/**	Detailled constructor.
+				Create a new TQuaternion object from a TVector3 and an angle.
+				@param axis assigned to the axis
+				@param angle assigned to the angle
+		*/
 		TQuaternion(const TVector3<T>& axis, const T &angle);
 
-		///
+		/**	Detailled constructor.
+				Create a new TQuaternion object from three {\tt T} values and an angle.
+				@param x assigned to the x-component of the axis
+				@param y assigned to the y-component of the axis
+				@param z assigned to the z-component of the axis
+				@param angle assigned to the angle
+		*/
 		TQuaternion(const T& x, const T& y, const T& z, const T& angle);
 
-		///
+		/**	Destructor.	
+				Destructs the TQuaternion object. As there are no dynamic
+				data structures, nothing happens.
+		*/
 		virtual ~TQuaternion();
 		//@}
 
@@ -64,51 +84,88 @@ namespace BALL
 		///
 		void set(const TQuaternion& q, bool deep = true);
 
-		///
+		/**	Assign the TQuaternion components.
+				@param axis the new axis component
+				@param angle the new angle component
+		*/
 		void set(const TVector3<T>& axis, const T& angle);
 
-		///
+		/**	Assign the TQuaternion components.
+				@param x assigned to the x-component of the axis
+				@param y assigned to the y-component of the axis
+				@param z assigned to the z-component of the axis
+				@param angle assigned to the angle
+		*/
 		void set(const T& x, const T& y, const T& z, const T& angle);
 
-		///
+		/**	Assign from another TQuaternion.
+				@param q the TQuaternion object to assign from
+				@param deep ignored
+		*/
 		TQuaternion& operator = (const TQuaternion& q);
 
-		///
+		/**	Assign to another TQuaternion.
+				Assigns the components to another TQuaternion.
+				@param q the TQuaternion to be asigned to
+				@param deep ignored
+		*/
 		void get(TQuaternion& q, bool deep = true);
 
-		///
+		/**	Assign the components to the standard values.
+				The axis-compnents are set to {\tt 0}, the angle is set to {\tt 1}.
+		*/
 		void setIdentity();
 
-		///
+		/**	Swap the contents of two TQuaternion.
+				@param q the TQuaternion to swap contents with
+		*/
 		void swap(TQuaternion& q);
 		//@}
 
 
-		/**	@name	Accessots
+		/**	@name	Accessors
 		*/
 		//@{
-		///
+		/**	Get the positive angle rotation.
+				@return T the angle value
+		*/
 		T getAngle() const;
 
-		///
+		/**	Get the normalized direction vector of axis of rotation.
+				@return TVector3 the Axis
+		*/
 		TVector3<T> getAxis(TVector3<T> &v);
 
-		///
+		/**	Get the rotation matrix.
+				@return TMatrix4x4 the matrix
+		*/
 		TMatrix4x4<T>& getRotationMatrix(TMatrix4x4<T>& m) const;
 
-		///
+		/**	Negative sign.
+		*/
 		TQuaternion operator - () const;
 
-		///
+		/**	Get the inverse TQuaternion.
+				@return TQuaternion the inverse TQuaternion
+		*/
 		TQuaternion getInverse() const;
 
-		///
+		/**	Return the conjugate TQuaternion.
+				(The axis components are negated.)
+				@return TQuaternion&, the conjugate TQuaternion
+		*/
 		TQuaternion getConjugate() const;
 
-		///
+		/**	Add a TQuaternion to this TQuaternion.
+				@param q the TQuaternion to add
+				@return TQuaternion&, {\tt *this}
+		*/
 		TQuaternion& operator += (const TQuaternion& q);
 
-		///
+		/**	Substract a TQuaternion from this TQuaternion.
+				@param q the TQuaternion to substract
+				@return TQuaternion&, {\tt *this}
+		*/
 		TQuaternion& operator -= (const TQuaternion& q);
 
 		//@}
@@ -117,10 +174,14 @@ namespace BALL
 		/**	@name	Predicates
 		*/
 		//@{
-		///
+		/**	Equality operator.
+				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+		*/
 		bool operator == (const TQuaternion& q) const;
 
-		///
+		/**	Inequality operator.
+				@return bool, {\bf true} if the two TQuaternion differ in at least on component, {\bf false} otherwise
+		*/
 		bool operator != (const TQuaternion& q) const;
 		//@}
 
@@ -136,16 +197,20 @@ namespace BALL
 		/**	@name	Attributes
 		*/
 		//@{
-		///
+		/**	x component of the axis.
+		*/
 		T i;
 
-		///
+		/**	y component of the axis.
+		*/
 		T j;
 
-		///
+		/**	z component of the axis.
+		*/
 		T k;
 
-		/// 
+		/**	angle component.
+		*/
 		T angle;
 		//@}
 
@@ -249,15 +314,11 @@ namespace BALL
 		angle = (T)1;
 	}
 
-	// getAngle() -- get positive angle rotation
-
 	template <class T>
 	T TQuaternion<T>::getAngle() const
 	{
 		return (T)(2.0 * atan2(sqrt(i * i + j * j + k * k), angle));
 	}
-
-	// getAxis() -- get normalized direction vector of axis of rotation.
 
 	template <class T>
 	TVector3<T> TQuaternion<T>::getAxis(TVector3<T>& v)
@@ -327,8 +388,7 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	TQuaternion<T>
-	TQuaternion<T>::getConjugate() const
+	TQuaternion<T> TQuaternion<T>::getConjugate() const
 	{
 		TQuaternion<T> tmp;
 
@@ -435,10 +495,12 @@ namespace BALL
 	template <class T>
 	std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
 	{
-		s >> q.i;
-		s >> q.j;
-		s >> q.k;
-		s >> q.angle;
+		char c;
+		for (int i=0; i<11 ; i++)
+		{
+			s >> c;
+		}
+		s >> q.i >> q.j >> q.k >> q.angle >> c;
 
 		return s;
 	}
@@ -446,7 +508,7 @@ namespace BALL
 	template <class T>
 	std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)
 	{
-		s << '(' << q.i << ' ' << q.j << ' '
+		s << "QUATERNION(" << q.i << ' ' << q.j << ' '
 				 << q.k << ' ' << q.angle << ')';
 
 		return s;
@@ -474,7 +536,10 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	///
+	/**	The Default TQuaternion Type.
+			If double precision is not needed, {\tt TQuaternion<float>} should
+			be used. It is predefined as {\tt Quaternion} for convenience.
+	*/
 	typedef TQuaternion<float> Quaternion;
 	//@}
 
