@@ -1,5 +1,5 @@
-// $Id: analyticalSES.C,v 1.8 2000/06/27 08:27:21 oliver Exp $
-// $Id: analyticalSES.C,v 1.8 2000/06/27 08:27:21 oliver Exp $
+// $Id: analyticalSES.C,v 1.9 2000/06/27 11:08:44 oliver Exp $
+// $Id: analyticalSES.C,v 1.9 2000/06/27 11:08:44 oliver Exp $
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>
@@ -8,8 +8,8 @@
 namespace BALL
 {
 
-	extern int connolly_ (int number_of_atoms, float* coordinates, float* radius,
-												float& volume, float& area, float probe, float exclude_radius, float* atom_areas);
+  extern int connolly_ (int number_of_atoms, double *coordinates, double *radius,
+												double *volume, double *area, double probe, double exclude, double* atom_areas);
 
 	float calculateSESArea	
 		(const BaseFragment& fragment, float probe_radius)
@@ -33,9 +33,9 @@ namespace BALL
 		}
 				
 		// create the field required by nsc and fill it with the atom coordinates
-		float* coordinates = new float[atoms.size() * 3];
-		float* radii = new float[atoms.size()];
-		float* atom_areas = new float[atoms.size()];
+		double* coordinates = new double[atoms.size() * 3];
+		double* radii = new double[atoms.size()];
+		double* atom_areas = new double[atoms.size()];
 		for (Size i = 0; i < atoms.size(); i++)
 		{
 			float tmp[3];
@@ -46,14 +46,16 @@ namespace BALL
 			radii[i] = atoms[i]->getRadius();
 		}
 
-		float area;
-		float volume;
+		double area;
+		double volume;
 		int number_of_atoms = (int)atoms.size();
 
 
+		// int connolly_ (int number_of_atoms, double *coordinates, double *radius,
+		//								double *volume, double *area, double probe, double exclude, double* atom_areas);
 		// call connolly_
-		connolly_(number_of_atoms, coordinates, radii, volume, 
-							area, probe_radius, 0.0, atom_areas);
+		connolly_(number_of_atoms, coordinates, radii, 
+							&volume, &area, probe_radius, 0.0, atom_areas);
 							
 		// free the input fields
 		delete [] coordinates;
@@ -85,9 +87,9 @@ namespace BALL
 		}
 				
 		// create the field required by nsc and fill it with the atom coordinates
-		float* coordinates = new float[atoms.size() * 3];
-		float* radii = new float[atoms.size()];
-		float* tmp_atom_areas = new float[atoms.size()];
+		double* coordinates = new double[atoms.size() * 3];
+		double* radii = new double[atoms.size()];
+		double* tmp_atom_areas = new double[atoms.size()];
 		for (Size i = 0; i < atoms.size(); i++)
 		{
 			float tmp[3];
@@ -98,14 +100,14 @@ namespace BALL
 			radii[i] = atoms[i]->getRadius();
 		}
 
-		float area;
-		float volume;
+		double area;
+		double volume;
 		int number_of_atoms = (int)atoms.size();
 
 
 		// call connolly_
-		connolly_(number_of_atoms, coordinates, radii, volume, 
-							area, probe_radius, 0.0, tmp_atom_areas);
+		connolly_(number_of_atoms, coordinates, radii, 
+							&volume, &area, probe_radius, 0.0, tmp_atom_areas);
 							
 
 		// extract the atom areas and store them in the hash map
@@ -145,9 +147,9 @@ namespace BALL
 		}
 				
 		// create the field required by nsc and fill it with the atom coordinates
-		float* coordinates = new float[atoms.size() * 3];
-		float* radii = new float[atoms.size()];
-		float* tmp_atom_areas = new float[atoms.size()];
+		double* coordinates = new double[atoms.size() * 3];
+		double* radii = new double[atoms.size()];
+		double* tmp_atom_areas = new double[atoms.size()];
 		for (Size i = 0; i < atoms.size(); i++)
 		{
 			float tmp[3];
@@ -158,13 +160,13 @@ namespace BALL
 			radii[i] = atoms[i]->getRadius();
 		}
 
-		float area;
-		float volume;
+		double area;
+		double volume;
 		int number_of_atoms = (int)atoms.size();
 
 		// call connolly_
-		connolly_(number_of_atoms, coordinates, radii, volume, 
-							area, probe_radius, 0.0, tmp_atom_areas);
+		connolly_(number_of_atoms, coordinates, radii, 
+							&volume, &area, probe_radius, 0.0, tmp_atom_areas);
 							
 		// free the input fields
 		delete [] coordinates;
