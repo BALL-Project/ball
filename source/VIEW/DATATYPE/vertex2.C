@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.C,v 1.4 2003/08/29 15:37:04 amoll Exp $
+// $Id: vertex2.C,v 1.4.8.1 2005/03/20 18:41:39 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/vertex2.h>
 
@@ -26,8 +26,16 @@ namespace BALL
 			:	vertex1_(v.vertex1_),
 				vertex2_(v.vertex2_)
 		{
-			vertex1_ptr_ = v.vertex1_ptr_;
-			vertex2_ptr_ = v.vertex2_ptr_;
+			if (v.vertex1_ptr_ != &v.vertex1_)
+			{
+				vertex1_ptr_ = v.vertex1_ptr_;
+				vertex2_ptr_ = v.vertex2_ptr_;
+			}
+			else
+			{
+				vertex1_ptr_ = &vertex1_;
+				vertex2_ptr_ = &vertex2_;
+			}
 		}
 
 		Vertex2::~Vertex2()
