@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.16 2005/02/11 17:28:12 amoll Exp $
+// $Id: lightSettings.C,v 1.17 2005/02/13 16:58:13 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -116,7 +116,7 @@ void LightSettings::addLightPressed()
  	pos += up;
 	
 	light.setPosition(pos);
-	light.setDirection(camera.getLookAtPosition());
+	light.setDirection(camera.getViewPoint());
 
 	lights_.push_back(light);
 	update();
@@ -157,7 +157,7 @@ void LightSettings::saveSettingsToLight_()
 		if (relative)
 		{
 			pos = stage_->calculateAbsoluteCoordinates(pos);
-			dir = stage_->calculateAbsoluteCoordinates(dir) + pos;
+			dir = stage_->calculateAbsoluteCoordinates(dir);
 		}
 		light.setPosition(pos);
 		light.setDirection(dir);
@@ -246,9 +246,8 @@ void LightSettings::getValues_()
 
 	if (light.isRelativeToCamera())
 	{
-		Vector3 diff = dir - pos;
 		pos = stage_->calculateRelativeCoordinates(pos);
-		dir = stage_->calculateRelativeCoordinates(diff);
+		dir = stage_->calculateRelativeCoordinates(dir);
 	}
 
 	setPosition_(pos);
@@ -372,16 +371,16 @@ void LightSettings::positionTypeChanged()
 
 void LightSettings::setPosition_(const Vector3& v)
 {
-	position_x->setText(String(v.x).c_str());
-	position_y->setText(String(v.y).c_str());
-	position_z->setText(String(v.z).c_str());
+	position_x->setText(createFloatString(v.x, 1).c_str());
+	position_y->setText(createFloatString(v.y, 1).c_str());
+	position_z->setText(createFloatString(v.z, 1).c_str());
 }
 
 void LightSettings::setDirection_(const Vector3& v)
 {
-	direction_x->setText(String(v.x).c_str());
-	direction_y->setText(String(v.y).c_str());
-	direction_z->setText(String(v.z).c_str());
+	direction_x->setText(createFloatString(v.x, 1).c_str());
+	direction_y->setText(createFloatString(v.y, 1).c_str());
+	direction_z->setText(createFloatString(v.z, 1).c_str());
 }
 
 Vector3 LightSettings::getPosition_() 

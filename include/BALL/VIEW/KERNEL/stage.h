@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.17 2005/02/11 16:29:54 amoll Exp $
+// $Id: stage.h,v 1.18 2005/02/13 17:02:39 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -516,15 +516,19 @@ namespace BALL
 			bool operator == (const Stage& stage) const
 				throw();
 
-			/** Calculate coordiantes relative to the current camera in units of right_vector, view_vector and look_up_vector.
-					by calculating the normals to three planes, spaned by these three vectors.
-					(Used to store the coordinates of the realtive light sources in the INIFile.)
+			/** Calculate coordiantes relative to the position of the camera in units of 
+			 		right_vector, look_up_vector and view_vector.
+					This is done by calculating the normals to three planes, spaned by these three vectors.
+					This method is e.g. used to store the coordinates of the relative light sources in the INIFile,
+					or in the LightSettings dialog.
+					@return Vector3(times right_vector, times look_up_vector, times view_vector)
 			*/
 			Vector3 calculateRelativeCoordinates(Vector3 pos);
 
-			///
+			/** Calculate absolute room coordinates from relative coordinates.
+			 		@see calculateRelativeCoordinates
+			*/
 			Vector3 calculateAbsoluteCoordinates(Vector3 pos);
-	
 
 			//@}
 			
