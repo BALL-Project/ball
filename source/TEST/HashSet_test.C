@@ -1,9 +1,10 @@
-// $Id: HashSet_test.C,v 1.3 2000/09/04 12:47:21 oliver Exp $
+// $Id: HashSet_test.C,v 1.4 2000/09/04 16:13:50 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/DATATYPE/hashSet.h>
 #include <BALL/CONCEPT/visitor.h>
+#include "ItemCollector.h"
 ///////////////////////////
 
 using namespace BALL;
@@ -24,7 +25,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.3 2000/09/04 12:47:21 oliver Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.4 2000/09/04 16:13:50 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -211,19 +212,47 @@ CHECK(HashSet::find(const int& key) const)
 RESULT
 
 CHECK(HashSet::erase(const ValueType& entry))
-	HashSet<int> hs, hs2;
+	HashSet<int> hs;
 	hs.insert(0);
 	hs.erase(0);
 	TEST_EQUAL(hs.has(0), false)
 	TEST_EQUAL(hs.getSize(), 0)
 RESULT
 
-CHECK(HashSet::erase(Iterator first, Iterator last))
-	// BAUSTELLE
+CHECK(HashSet::erase(Iterator first, Iterator last))/*
+	HashSet<int> hs;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	hs.insert(3);
+
+
+	HashSet<int>::Iterator it1 = hs.begin();
+	HashSet<int>::Iterator it2 = hs.end();
+	--it2;
+	++it1;
+
+	hs.erase(it1, it2);
+	TEST_EQUAL(hs.has(0), true)
+	TEST_EQUAL(hs.has(3), true)
+	TEST_EQUAL(hs.has(1), false)
+	TEST_EQUAL(hs.has(2), false)
+	TEST_EQUAL(hs.getSize(), 2)*/
 RESULT
 
-CHECK(HashSet::erase(Iterator first, Iterator last))
-	// BAUSTELLE not yet implemented
+CHECK(HashSet::erase(Iterator pos))/*
+	HashSet<int> hs;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	hs.insert(3);
+	HashSet<int>::Iterator it1 = hs.begin();
+	++it1;
+	hs.erase(it1);
+	TEST_EQUAL(hs.has(0), true)
+	TEST_EQUAL(hs.has(2), true)
+	TEST_EQUAL(hs.has(1), false)
+	TEST_EQUAL(hs.getSize(), 3)*/
 RESULT
 
 CHECK(HashSet::host(Visitor<int>&))
@@ -320,6 +349,24 @@ CHECK(HashSet::isValid() const)
 	HashSet<int> hs;
 	TEST_EQUAL(hs.isValid(), true)
 RESULT
+
+CHECK(HashSet::apply(UnaryProcessor))
+	HashSet<int> hs;
+	hs.insert(1);
+	hs.insert(2);
+	hs.insert(3);
+	ItemCollector<int> myproc;
+	myproc.start();
+	TEST_EQUAL(hs.apply(myproc), true)
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 3)
+	TEST_EQUAL(*myproc.getPointer(), 3) myproc.forward();
+	TEST_EQUAL(*myproc.getPointer(), 1) myproc.forward();
+	TEST_EQUAL(*myproc.getPointer(), 2) myproc.forward();
+RESULT
+
+
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
