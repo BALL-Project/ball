@@ -30,6 +30,7 @@ EXECUTABLES = \
 	DefaultProcessors_test\
 	EnergyMinimizer_test\
 	Expression_test\
+	File_test\
 	Fragment_test\
 	FragmentDB_test\
 	Gradient_test\
