@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.2 2004/12/27 16:13:30 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.3 2005/01/03 13:05:03 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -308,11 +308,20 @@ namespace BALL
 		void GLRenderer::removeDisplayListFor(const Representation& rep)
 			throw()
 		{
-			List<GeometricObject*>::ConstIterator it = rep.getGeometricObjects().begin();
-			for (; it != rep.getGeometricObjects().end(); it++)
+			if (display_lists_.size() == 1)
 			{
-				name_to_object_.erase(object_to_name_[*it]);
-				object_to_name_.erase(*it);
+				// we can use a faster approach
+				name_to_object_.clear();
+				object_to_name_.clear();
+			}
+			else
+			{
+				List<GeometricObject*>::ConstIterator it = rep.getGeometricObjects().begin();
+				for (; it != rep.getGeometricObjects().end(); it++)
+				{
+					name_to_object_.erase(object_to_name_[*it]);
+					object_to_name_.erase(*it);
+				}
 			}
 
 			if (!display_lists_.has(&rep)) return;
@@ -345,8 +354,7 @@ namespace BALL
 		void GLRenderer::drawFromDisplayList(const Representation& rep)
 			throw()
 		{
-			if (!display_lists_.has(&rep) ||
-					rep.isHidden()) 
+			if (!display_lists_.has(&rep) || rep.isHidden()) 
 			{
 				return;
 			}
@@ -421,8 +429,9 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);     
 		}
 
-
+		// =================================================================================
 		// --------------------------render methods-----------------------------------------
+		// =================================================================================
 
 		void GLRenderer::renderSphere_(const Sphere& sphere)
 			throw() 
@@ -1218,14 +1227,14 @@ namespace BALL
 		GLRenderer::Name GLRenderer::getName(const GeometricObject& object)
 			throw()
 		{
-			NameHashMap::Iterator name_iterator = object_to_name_.find(&object);
+			const NameHashMap::Iterator name_iterator = object_to_name_.find(&object);
 
 			if (name_iterator != object_to_name_.end())
 			{
 				return name_iterator->second;
 			}
 
-			Name name = ++all_names_;
+			const Name name = ++all_names_;
 
 			object_to_name_.insert(NameHashMap::ValueType(&object, name));
 			name_to_object_.insert(GeometricObjectHashMap::ValueType(name, &object));
@@ -1237,15 +1246,12 @@ namespace BALL
 		GeometricObject* GLRenderer::getObject(GLRenderer::Name name) const
 			throw()
 		{
-			if (name == 0) return 0;
-			if (!name_to_object_.has(name))
+			if (name == 0 || !name_to_object_.has(name))
 			{
 				return 0;
 			}
 
-			GeometricObjectHashMap::ConstIterator it = name_to_object_.find(name);
-
-			return (GeometricObject*) it->second;
+			return (GeometricObject*) name_to_object_.find(name)->second;
 		}
 
 
