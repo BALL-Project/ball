@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.h,v 1.3 2000/09/22 12:07:38 oliver Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.4 2000/09/24 13:16:47 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -82,6 +82,16 @@ namespace BALL
 				each proton in a list called _proton_list
 		*/
 		virtual Processor::Result operator () (Composite& atom) throw();
+		//@}
+
+		/**	@name	Accessors
+		*/
+		//@{
+
+		/**	Initialization method
+		*/
+		virtual void init()
+			throw();
 		//@}
 		
 		private:

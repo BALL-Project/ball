@@ -1,11 +1,14 @@
-// $Id: anisotropyShiftProcessor.h,v 1.4 2000/09/22 12:06:31 oliver Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.5 2000/09/24 13:16:47 oliver Exp $
+
+#ifndef BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
+#define BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
 
 #ifndef BALL_KERNEL_BOND_H
 # include <BALL/KERNEL/bond.h>
 #endif
 
-#ifndef BALL_KERNEL_PDBATOM_H
-#include<BALL/KERNEL/PDBAtom.h>
+#ifndef BALL_KERNEL_ATOM_H
+#include<BALL/KERNEL/atom.h>
 #endif
 
 #ifndef BALL_NMR_SHIFT_MODULE
@@ -24,6 +27,19 @@ namespace BALL
 	{
 		public:
 		
+
+    BALL_CREATE(AnisotropyShiftProcessor)
+
+    /** @name Enums and Constants
+    */
+    //@{
+
+    /** A symbolic name for the electric field contribution to the chemical shift
+        @see ShiftModule::PROPERTY__SHIFT
+    */
+    static const char* PROPERTY__ANISOTROPY_SHIFT;
+    //@}
+ 
 		/**@name	Constructors and Destructors
 		*/
 		//@{
@@ -101,7 +117,7 @@ namespace BALL
 		virtual bool finish() throw();
 
 		/**	Application method
-			PDBAtoms are stored in three different lists , named
+			Atoms are stored in three different lists , named
 			{\tt proton\_list\_} that contains all Hydrogens,
 			{\tt eff\_list\_} that contains all effectors of C=O anisotropy
 			and {\tt eff\_list\_2\_} that contains all effectors of C=N anisotropy.
@@ -124,9 +140,11 @@ namespace BALL
 		//@}
 		
 		protected:
-		std::list<const PDBAtom*> proton_list_;	
+		std::list<const Atom*> proton_list_;	
 		std::list<const Bond*> eff_list_;
 		std::list<const Bond*> eff_list_2_;
 	};
 
 } // namespace BALL
+
+#endif // BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
