@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.8 2000/05/18 07:55:22 oliver Exp $
+// $Id: Residue_test.C,v 1.9 2000/05/22 20:26:48 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,13 +12,17 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.8 2000/05/18 07:55:22 oliver Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.9 2000/05/22 20:26:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 using namespace std;
+
+#undef PRECISION
+#define PRECISION 1E-5
+
 
 String filename;
 NEW_TMP_FILE(filename)
@@ -204,9 +208,9 @@ CHECK(Residue::getTorsionPhi() const )
 	ResidueIterator res_it = s.beginResidue();
 	TEST_EQUAL(res_it->getTorsionPhi(), 0)
 	res_it++;
-	TEST_EQUAL(Maths::isNear((double)res_it->getTorsionPhi().value, 3.14159, 0.00001), true)
+	TEST_REAL_EQUAL(res_it->getTorsionPhi().value, 3.14159)
 	res_it++;
-	TEST_EQUAL(Maths::isNear((double)res_it->getTorsionPhi().value, -3.1411, 0.00001), true)
+	TEST_REAL_EQUAL(res_it->getTorsionPhi().value, -3.14111)
 RESULT
 
 CHECK(Residue::hasTorsionPsi() const )
@@ -232,9 +236,9 @@ CHECK(Residue::getTorsionPsi() const )
 	infile >> s;
 	TEST_EQUAL(s.countResidues(), 3)
 	ResidueIterator res_it = s.beginResidue();
-	TEST_EQUAL(Maths::isNear((double)res_it->getTorsionPsi().value, -3.12846, 0.00001), true)
+  TEST_REAL_EQUAL(res_it->getTorsionPsi().value, -3.12846)
 	res_it++;
-	TEST_EQUAL(Maths::isNear((double)res_it->getTorsionPsi().value, 3.14099, 0.00001), true)
+	TEST_REAL_EQUAL(res_it->getTorsionPsi().value, 3.14099)
 	res_it++;
 	TEST_EQUAL(res_it->getTorsionPsi(), 0)
 RESULT
