@@ -1,19 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AmberFF_test.C,v 1.13 2003/06/22 10:21:47 oliver Exp $
+// $Id: AmberFF_test.C,v 1.14 2004/03/08 21:44:03 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
+
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/FORMAT/HINFile.h>
+
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.13 2003/06/22 10:21:47 oliver Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.14 2004/03/08 21:44:03 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -161,7 +163,6 @@ AmberFF amber94;
 amber94.options[AmberFF::Option::FILENAME] = "Amber/amber94.ini";
 amber94.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
 amber94.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
-amber94.options[AmberFF::Option::ASSIGN_TYPES] = "true";
 amber94.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
 amber94.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
 
@@ -363,6 +364,36 @@ CHECK(force test 4: VdW switching function [AMBER91])
 	}	
 RESULT
 
+CHECK([EXTRA] Energies w/ selection)
+	HINFile f("data/AA.hin");
+	System S;
+	f.read(S);
+
+	ABORT_IF(S.countAtoms() != 23)
+	AmberFF ff;
+	ff.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
+	ff.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+	ff.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+	ff.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
+
+	S.beginAtom()->select();
+	ff.setup(S);
+	TEST_EQUAL(ff.getNumberOfMovableAtoms(), 1)
+	S.beginResidue()->select();
+	ff.updateEnergy();
+	TEST_REAL_EQUAL(ff.getEnergy(), 0.7434)
+	TEST_REAL_EQUAL(ff.getVdWEnergy(), 0.0)
+	TEST_REAL_EQUAL(ff.getESEnergy(), 0.0)
+
+	S.deselect();
+	S.beginResidue()->select();
+	ff.setup(S);
+	TEST_EQUAL(ff.getNumberOfMovableAtoms(), 12)
+	ff.updateEnergy();
+	TEST_REAL_EQUAL(ff.getEnergy(), -3.140)
+	TEST_REAL_EQUAL(ff.getVdWEnergy(), 5.741)
+	TEST_REAL_EQUAL(ff.getESEnergy(), -11.394)
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

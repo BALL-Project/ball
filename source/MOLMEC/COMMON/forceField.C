@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.32 2003/08/26 09:17:52 oliver Exp $
+// $Id: forceField.C,v 1.33 2004/03/08 21:44:13 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -19,7 +19,7 @@ namespace BALL
 	// default constructor
 	ForceField::ForceField()
 		:	periodic_boundary(*this),
-			system_( 0 ),
+			system_(0),
 			valid_(false),
 			name_("Force Field"),
 			number_of_movable_atoms_(0),
@@ -158,8 +158,6 @@ namespace BALL
 	// setup methods
 	bool  ForceField::setup(System& system)
 	{
-		bool  success = true;
-
 		// store the specified system
 		system_ = &system;
 
@@ -170,7 +168,7 @@ namespace BALL
 			return false;
 		}
 			
-		// collect the atoms of the system in the atoms_ vector
+		// collect the atoms of the system in the atoms_vector_
 		collectAtoms_(system);
 		Size old_size = (Size)atoms_.size();
 
@@ -181,21 +179,22 @@ namespace BALL
 		}
 
 		// force field specific parts
-		success = specificSetup();
+		bool success = specificSetup();
 		if (!success) 
 		{
 			Log.error() << "Force Field specificSetup failed!" << endl;
 			return false;
 		}
 
-		// if specificSetup cleared this array, it wants to tell us 
+		// If specificSetup cleared this array, it wants to tell us 
 		// that it had to change the system a bit (e.g. CHARMM replacing
 	  // hydrogens by united atoms). So, we have to recalculated the vector.
 		if (atoms_.size() != old_size)
 		{
 			collectAtoms_(system);
 		}
-		// call the setup method for each force field component
+
+		// Call the setup method for each force field component.
 		vector<ForceFieldComponent*>::iterator  it;
 		for (it = components_.begin(); (it != components_.end()) && success; ++it)
 		{
@@ -207,10 +206,10 @@ namespace BALL
 			}
 		}
 
-		// remember the setup time
+		// Remember the setup time
 		setup_time_stamp_.stamp();
 
-		// if the setup failed, our force field becomes invalid!
+		// If the setup failed, our force field becomes invalid!
 		valid_ = success;
 		return success;
 	}
@@ -227,10 +226,11 @@ namespace BALL
 		// the selected atoms first (0 < i < number_of_movable_atoms_) 
 		use_selection_ = system.containsSelection();
 		number_of_movable_atoms_ = 0;
-		AtomConstIterator atom_it = system.beginAtom();
+		AtomConstIterator atom_it;
 		bool use_selection = getUseSelection();
 		if (use_selection)
 		{
+			AtomConstIterator atom_it = system.beginAtom();
 			for (; +atom_it; ++atom_it)
 			{
 				if (atom_it->isSelected())
@@ -240,16 +240,15 @@ namespace BALL
 			}
 			number_of_movable_atoms_ = (Size)atoms_.size();
 		}
-		
-		for (atom_it = system.beginAtom(); +atom_it; ++atom_it)
+		else
 		{
-			if (!use_selection || !atom_it->isSelected())
+			for (atom_it = system.beginAtom(); +atom_it; ++atom_it)
 			{
-				atoms_.push_back(const_cast<Atom*>(&(*atom_it)));
+				if (!use_selection || !atom_it->isSelected())
+				{
+					atoms_.push_back(const_cast<Atom*>(&(*atom_it)));
+				}
 			}
-		}
-		if (!use_selection)
-		{
 			number_of_movable_atoms_ = (Size)atoms_.size();
 		}
 	}
