@@ -1,4 +1,4 @@
-// $Id: mesh.C,v 1.1 2000/04/25 15:10:08 hekl Exp $
+// $Id: mesh.C,v 1.2 2000/04/30 15:13:25 hekl Exp $
 
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 
@@ -12,19 +12,22 @@ namespace BALL
 
 		Mesh::Mesh()
 			:	GeometricObject(),
-				ColorExtension()
+				ColorExtension(),
+				Surface()
 		{
 		}
 
 		Mesh::Mesh(const Mesh& mesh, bool deep)
 			:	GeometricObject(mesh, deep),
-				ColorExtension(mesh, deep)
+				ColorExtension(mesh, deep),
+				Surface(mesh)
 		{
 		}
 
 		Mesh::Mesh(const GeometricObject& geometric_object)
 			:	GeometricObject(geometric_object),
-				ColorExtension()
+				ColorExtension(),
+				Surface()
 		{
 		}
 
@@ -45,7 +48,7 @@ namespace BALL
 		}
 
 		void Mesh::destroy()
-		{
+		{ 
 			GeometricObject::destroy();
 			ColorExtension::destroy();
 		}
@@ -54,6 +57,7 @@ namespace BALL
 		{
 			GeometricObject::set(mesh, deep);
 			ColorExtension::set(mesh, deep);
+			//			Surface::set(mesh);
 		}
 
 		Mesh& Mesh::operator = (const Mesh& mesh)
@@ -72,12 +76,14 @@ namespace BALL
 		{
 			GeometricObject::swap(mesh);
 			ColorExtension::swap(mesh);
+			//			Surface::swap(mesh);
 		}
 
 		bool Mesh::isValid() const
 		{
 			return (bool)(GeometricObject::isValid() == true
 										&& ColorExtension::isValid() == true);
+										//										&& Surface::isValid() == true);
 		}
 
 		void Mesh::dump
