@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.4 2005/03/24 13:53:11 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.5 2005/03/24 16:17:34 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -31,6 +31,12 @@ namespace BALL
 		: is_initialized_(false)
 	{
 	}
+
+	MMFF94AtomTypesContainer::~MMFF94AtomTypesContainer()
+	{
+		data_.clear();
+	}
+
 
 	MMFF94AtomTypesContainer::MMFF94AtomTypesContainer(const MMFF94AtomTypesContainer& to_copy)
 	{
@@ -219,5 +225,107 @@ namespace BALL
 		return atom_type1 * nr_of_atom_types_ + atom_type2;
 	}
 
+	///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
+
+	MMFF94BendParameters::MMFF94BendParameters()
+		: is_initialized_(false),
+			nr_of_atom_types_(100)
+	{
+	}
+
+	MMFF94BendParameters::~MMFF94BendParameters()
+	{
+		clear();
+	}
 	
+	void MMFF94BendParameters::clear()
+		throw()
+	{
+		parameters_.clear();
+	}
+	
+	const MMFF94BendParameters& MMFF94BendParameters::operator = (const MMFF94BendParameters& param)
+		throw()
+	{
+		parameters_ = param.parameters_;
+		return *this;
+	}
+
+	bool MMFF94BendParameters::getParameters(Position atom_type1, Position atom_type2, Position atom_type3, float& ka, float& angle) const
+	{
+		// take the standard value
+		BendMap::ConstIterator it = parameters_.find(getIndex_(atom_type1, atom_type2, atom_type3));
+		if (it == parameters_.end()) return false;
+
+		ka = it->second[1];
+		angle = it->second[2];
+
+		return true;
+	}
+
+	bool MMFF94BendParameters::readParameters(const String& filename)
+		throw(Exception::FileNotFound)
+	{
+		parameters_.clear();
+
+		LineBasedFile infile(filename);
+		vector<String> fields;
+
+		try
+		{
+			while (infile.readLine())
+			{
+				// comments
+				if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
+				{
+					continue;
+				}
+				
+				if (infile.getLine().split(fields) < 7)
+				{
+					Log.error() << "Error in " << filename << " Not 6 fields in one line " << infile.getLine() << std::endl;
+					return false;
+				}
+
+				const Position type1 = fields[1].toUnsignedInt();
+				const Position type2 = fields[2].toUnsignedInt();
+				const Position type3 = fields[3].toUnsignedInt();
+				const Position index = getIndex_(type1, type2, type3);
+
+				parameters_[index] = vector<float>();
+				parameters_[index].resize(3);
+				parameters_[index][0] = fields[0].toUnsignedInt(); // bond type
+				parameters_[index][1] = fields[4].toFloat(); // ka
+				parameters_[index][2] = fields[5].toFloat(); // theta
+			}
+		}
+		catch(...)
+		{
+			Log.error() << "Error while parsing line " << infile.readLine() << std::endl;
+			Log.error() << " in File " << filename << std::endl;
+			infile.close();
+			return false;
+		}
+
+		infile.close();
+
+		is_initialized_ = true;
+		return true;
+	}
+
+	Position MMFF94BendParameters::getIndex_(Position atom_type1, Position atom_type2, Position atom_type3) const
+	{ 
+		vector<Position> types;
+		
+		types.push_back(atom_type1);
+		types.push_back(atom_type2);
+		types.push_back(atom_type3);
+
+		sort(types.begin(), types.end());
+
+		return types[0] * nr_of_atom_types_ * nr_of_atom_types_ + types[1] * nr_of_atom_types_ + types[2];
+	}
+
+
 } // namespace BALL

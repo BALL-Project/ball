@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.2.1 2005/03/17 13:48:47 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.2.2 2005/03/24 16:17:38 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -25,10 +25,13 @@
 # include <BALL/COMMON/exception.h>
 #endif
 
+#ifndef BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H
+# include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
+#endif
+
 namespace BALL 
 {
 	/**	MMFF94 force field class.
-			
       \ingroup  MMFF94
 	*/
 	class MMFF94 
@@ -155,13 +158,16 @@ namespace BALL
 		virtual String getResults() const
 			throw();
 
+		///
+		const vector<MMFF94AtomTypeData>& getAtomTypes() const { return atom_types_.getAtomTypes();}
+
 		//@}
 
 		protected:
 			
-		String	folder_;
-
-		bool		parameters_initialized_;
+		String										folder_;
+		MMFF94AtomTypesContainer 	atom_types_;
+		bool											parameters_initialized_;
 
 	};
 } // namespace BALL

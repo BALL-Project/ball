@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.3 2005/03/24 13:53:11 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.4 2005/03/24 16:17:33 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
 
 #include <BALL/SYSTEM/path.h>
+#include <BALL/SYSTEM/fileSystem.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -33,8 +34,8 @@ namespace BALL
 		setName("MMFF94");
 
 		// create the component list
-		insertComponent(new MMFF94Stretch(*this));
-//   		insertComponent(new MMFF94Bend(*this));
+//   		insertComponent(new MMFF94Stretch(*this));
+   		insertComponent(new MMFF94Bend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 	}
@@ -46,8 +47,8 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-		insertComponent(new MMFF94Stretch(*this));
-//   		insertComponent(new MMFF94Bend(*this));
+//   		insertComponent(new MMFF94Stretch(*this));
+   		insertComponent(new MMFF94Bend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 
@@ -70,10 +71,10 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-		insertComponent(new MMFF94Stretch(*this));
+//   		insertComponent(new MMFF94Stretch(*this));
 		insertComponent(new MMFF94Bend(*this));
-		insertComponent(new MMFF94Torsion(*this));
-		insertComponent(new MMFF94NonBonded(*this));
+//   		insertComponent(new MMFF94Torsion(*this));
+//   		insertComponent(new MMFF94NonBonded(*this));
 
     bool result = setup(system, new_options);
 
@@ -153,7 +154,7 @@ namespace BALL
 
 		if (!atom_types_.isInitialized())
 		{
-			atom_types_.readDataSet(folder + "MMFFPROP.PAR");
+			atom_types_.readDataSet(folder + FileSystem::PATH_SEPARATOR + "MMFFPROP.PAR");
 		}
 
 		return true;

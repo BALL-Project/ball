@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.12 2005/03/24 13:53:12 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.13 2005/03/24 16:17:34 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -19,6 +19,16 @@ using namespace std;
 
 namespace BALL 
 {
+
+	// Constant CS
+	#define CUBIC_STRENGTH_CONSTANT -2.0
+
+	// Constant 7 / 12 * CS^2
+	#define KCS 7.0 / 3.0
+
+	// Constant 143.9325 / 2
+	#define K0 71.96625
+
 
 	// default constructor
 	MMFF94Stretch::MMFF94Stretch()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.7 2005/03/23 16:13:27 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.8 2005/03/24 16:17:26 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -96,6 +96,139 @@ vector<float> getResults(String filename)
 	return results;
 }
 
+bool testStretch(MMFF94& mmff, const String& filename)
+{
+	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".stretch");
+	LineBasedFile infile(full_file_name);
+	vector<String> atoms1, atoms2;
+	vector<bool>   is_sbmb;
+	vector<float>  r0s, kbs;
+	while (infile.readLine())
+	{
+		vector<String> fields;
+		infile.getLine().split(fields);
+		atoms1.push_back(fields[0]);
+		atoms2.push_back(fields[1]);
+		is_sbmb.push_back(fields[2].toUnsignedShort());
+		r0s.push_back(fields[3].toFloat());
+		kbs.push_back(fields[4].toFloat());
+	}
+
+	MMFF94Stretch* stretch = (MMFF94Stretch*) mmff.getComponent("MMFF94 Stretch");
+	for (Position poss = 0; poss < stretch->getStretches().size(); poss++)
+	{
+		const MMFF94Stretch::Stretch& s = stretch->getStretches()[poss];
+		bool found = false;
+
+		for (Position poss2 = 0; poss2 < atoms1.size(); poss2++)
+		{
+			if (atoms1[poss2] != s.atom1->getName() ||
+					atoms2[poss2] != s.atom2->getName())
+			{
+				continue;
+			}
+
+			found = true;
+			if (s.r0 != r0s[poss2] ||
+					s.kb != kbs[poss2])
+			{
+				Log.error() << std::endl
+										<< "Problem Stretch:   " << filename << "   " 
+										<< s.atom1->getName() << " " << s.atom2->getName() << std::endl
+										<< "got " << s.r0 << "   " << s.kb << "   " << s.sbmb << "    " << s.reason<< std::endl
+										<< "was " << r0s[poss2] << "   " << kbs[poss2] << "   " << is_sbmb[poss2]
+										<< std::endl;
+			}
+
+			break;
+		}
+		
+		if (!found) 
+		{
+			Log.error() << "Could not find atoms " << atoms1[poss] << " " << atoms2[poss] << std::endl;
+		}
+	}
+
+	vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
+
+	float stretch_diff = std::fabs(mmff.getEnergy() - results[1]);
+
+	if (std::fabs(stretch_diff / results[1]) > 1.0 / 100.0 && stretch_diff > 0.0001)
+	{
+		Log.error() << filename << "   " << results[1] << "  " << mmff.getEnergy() << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
+bool testBend(MMFF94& mmff, const String& filename)
+{
+	/*
+	String full_file_name = (dir +FileSystem::PATH_SEPARATOR + filename + ".bend");
+	LineBasedFile infile(full_file_name);
+	vector<String> atoms1, atoms2;
+	vector<bool>   is_sbmb;
+	vector<float>  r0s, kbs;
+	while (infile.readLine())
+	{
+		vector<String> fields;
+		infile.getLine().split(fields);
+		atoms1.push_back(fields[0]);
+		atoms2.push_back(fields[1]);
+		is_sbmb.push_back(fields[2].toUnsignedShort());
+		r0s.push_back(fields[3].toFloat());
+		kbs.push_back(fields[4].toFloat());
+	}
+
+	MMFF94Stretch* stretch = (MMFF94Stretch*) mmff.getComponent("MMFF94 Stretch");
+	for (Position poss = 0; poss < stretch->getStretches().size(); poss++)
+	{
+		const MMFF94Stretch::Stretch& s = stretch->getStretches()[poss];
+		bool found = false;
+
+		for (Position poss2 = 0; poss2 < atoms1.size(); poss2++)
+		{
+			if (atoms1[poss2] != s.atom1->getName() ||
+					atoms2[poss2] != s.atom2->getName())
+			{
+				continue;
+			}
+
+			found = true;
+			if (s.r0 != r0s[poss2] ||
+					s.kb != kbs[poss2])
+			{
+				Log.error() << std::endl
+										<< "Problem Stretch:   " << filename << "   " 
+										<< s.atom1->getName() << " " << s.atom2->getName() << std::endl
+										<< "got " << s.r0 << "   " << s.kb << "   " << s.sbmb << "    " << s.reason<< std::endl
+										<< "was " << r0s[poss2] << "   " << kbs[poss2] << "   " << is_sbmb[poss2]
+										<< std::endl;
+			}
+
+			break;
+		}
+		
+		if (!found) 
+		{
+			Log.error() << "Could not find atoms " << atoms1[poss] << " " << atoms2[poss] << std::endl;
+		}
+	}
+*/
+	vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filename);
+
+	float bend_diff = std::fabs(mmff.getEnergy() - results[2]);
+
+	if (std::fabs(bend_diff / results[1]) > 1.0 / 100.0 && bend_diff > 0.0001)
+	{
+		Log.error() << filename << "   " << results[2] << "  " << mmff.getEnergy() << std::endl;
+		return false;
+	}
+
+	return true;
+}
+
 int runtests(const vector<String>& filenames)
 {
 	MMFF94 mmff;
@@ -119,76 +252,12 @@ int runtests(const vector<String>& filenames)
 
 		mmff.updateEnergy();
 
-		
-		full_file_name = (dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".stretch");
-		LineBasedFile infile(full_file_name);
-		vector<String> atoms1, atoms2;
-		vector<bool>   is_sbmb;
-		vector<float>  r0s, kbs;
-		while (infile.readLine())
-		{
-			vector<String> fields;
-			infile.getLine().split(fields);
-			atoms1.push_back(fields[0]);
-			atoms2.push_back(fields[1]);
-			is_sbmb.push_back(fields[2].toUnsignedShort());
-			r0s.push_back(fields[3].toFloat());
-			kbs.push_back(fields[4].toFloat());
-		}
-
-		MMFF94Stretch* stretch = (MMFF94Stretch*) mmff.getComponent("MMFF94 Stretch");
-		for (Position poss = 0; poss < stretch->getStretches().size(); poss++)
-		{
-			const MMFF94Stretch::Stretch& s = stretch->getStretches()[poss];
-			bool found = false;
-
-			for (Position poss2 = 0; poss2 < atoms1.size(); poss2++)
-			{
-				if (atoms1[poss2] != s.atom1->getName() ||
-				    atoms2[poss2] != s.atom2->getName())
-				{
-					continue;
-				}
-
-				found = true;
-				if (s.r0 != r0s[poss2] ||
-						s.kb != kbs[poss2])
-				{
-					Log.error() << std::endl
-											<< "Problem Stretch:   " << filenames[pos] << "   " 
-											<< s.atom1->getName() << " " << s.atom2->getName() << std::endl
-											<< "got " << s.r0 << "   " << s.kb << "   " << s.sbmb << "    " << s.reason<< std::endl
-											<< "was " << r0s[poss2] << "   " << kbs[poss2] << "   " << is_sbmb[poss2]
-											<< std::endl;
-				}
-
-				break;
-			}
-			
-			if (!found) 
-			{
-				Log.error() << "Could not find atoms " << atoms1[pos] << " " << atoms2[pos] << std::endl;
-			}
-		}
-
-		vector<float> results = getResults(dir +FileSystem::PATH_SEPARATOR + filenames[pos]);
-
-		float stretch_diff = std::fabs(mmff.getEnergy() - results[1]);
-
-		if (std::fabs(stretch_diff / results[1]) > 1.0 / 100.0 && stretch_diff > 0.0001)
-		{
-			Log.error() << filenames[pos] << "   " << results[1] << "  " << mmff.getEnergy() << std::endl;
-		}
-		else
-		{
-			ok++;
-		}
-
-		delete system;
+//   		if (testStretch(mmff, filenames[pos])) ok++;
+ 		if (testBend(mmff, filenames[pos])) ok++;
 	}
 
 	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;
-
+		
 	return 0;
 }
 

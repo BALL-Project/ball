@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.h,v 1.1.2.1 2005/03/17 13:48:48 amoll Exp $
+// $Id: MMFF94Bend.h,v 1.1.2.2 2005/03/24 16:17:38 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -21,6 +21,10 @@
 #	include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
+#ifndef BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H
+#	include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
+#endif
+
 namespace BALL 
 {
 	/**	MMFF94 bond stretch component
@@ -30,6 +34,19 @@ namespace BALL
 		: public ForceFieldComponent
 	{
 		public:
+
+		/// 0.043844 / 2
+		#define K0 0.021922
+		///
+		struct Bend
+		{
+			float theta0;
+			float ka;
+			Atom::StaticAtomAttributes*	atom1;
+			Atom::StaticAtomAttributes*	atom2;
+			Atom::StaticAtomAttributes*	atom3;
+			bool is_linear;
+		};
 
 		BALL_CREATE(MMFF94Bend)
 
@@ -47,14 +64,13 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		MMFF94Bend(const MMFF94Bend& MMFF94_stretch);
+		MMFF94Bend(const MMFF94Bend& to_copy);
 
 		/**	Destructor.
 		*/
 		virtual ~MMFF94Bend();
 
 		//@}
-
 		/**	@name	Setup Methods	
 		*/
 		//@{
@@ -65,8 +81,6 @@ namespace BALL
 			throw(Exception::TooManyErrors);
 
 		//@}
-
-
 		/**	@name	Accessors	
 		*/
 		//@{
@@ -79,17 +93,14 @@ namespace BALL
 		*/
 		virtual void updateForces();
 
+		///
+		const vector<Bend>& getBends() const { return bends_;}
 		//@}
 
 		private:
 
-		/*_	@name	Private Attributes	
-		*/
-		//_@{
-
-		/*_	pointer to the array of bends
-		*/	
-		//_@}
+		vector<Bend> bends_;
+		MMFF94BendParameters parameters_;
 	 
 	};
 } // namespace BALL
