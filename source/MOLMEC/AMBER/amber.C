@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.12 2000/02/14 22:44:02 oliver Exp $
+// $Id: amber.C,v 1.13 2000/02/15 18:13:59 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -42,7 +42,8 @@ namespace BALL
 	// Default constructor
 	AmberFF::AmberFF() 
 		: ForceField(),
-			filename_(Default::FILENAME)
+			filename_(Default::FILENAME),
+			parameters_initialized_(false)
 	{
 		// set the force field name
 		setName("Amber [" + filename_ + "]");
@@ -57,7 +58,8 @@ namespace BALL
   // Constructor initialized with a system
   AmberFF::AmberFF(System& system)
     : ForceField(),
-			filename_(Default::FILENAME)
+			filename_(Default::FILENAME),
+			parameters_initialized_(false)
   {
 		// create the component list
 		insertComponent(new AmberStretch(this));
@@ -80,7 +82,8 @@ namespace BALL
   // Constructor intialized with a system and a set of options
   AmberFF::AmberFF(System& system, const Options& new_options)
     : ForceField(),
-			filename_(Default::FILENAME)
+			filename_(Default::FILENAME),
+			parameters_initialized_(false)
   {
 		// create the component list
 		insertComponent(new AmberStretch(this));
@@ -104,7 +107,8 @@ namespace BALL
 	// copy constructor  
 	AmberFF::AmberFF(const AmberFF& force_field, bool clone_deep)
 		:	ForceField( force_field, clone_deep),
-			filename_(force_field.filename_)
+			filename_(force_field.filename_),
+			parameters_initialized_(false)
 	{
 	}
 
@@ -143,7 +147,7 @@ namespace BALL
 
 		// initialize the force field parameters
 		// and retrieve the atom types
-		if (parameters_.getFilename() != filename)
+		if (parameters_.getFilename() != filename || !parameters_initialized_)
 		{
 			parameters_.setFilename(filename);
 			parameters_.init();
@@ -180,9 +184,6 @@ namespace BALL
 			{
 				options.setDefault(Option::DISTANCE_DEPENDENT_DIELECTRIC, global_options.options[Option::DISTANCE_DEPENDENT_DIELECTRIC]);
 			}
-		} else {
-			// parameters_ are already initialized, tell all components about it
-			parameters_initialized_ = true;
 		}
 
 		// check the options whether types, type names, or charges 
