@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.55 2003/12/01 07:35:11 oliver Exp $
+// $Id: standardPredicates.C,v 1.56 2004/02/23 20:50:21 anker Exp $
 //
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -582,8 +582,6 @@ namespace BALL
 	void ConnectedToPredicate::CTPNode::setBondType(Size type)
 		throw()
 	{
-		// ?????
-		// TODO: check whether type exists...
 		bond_type_ = type;
 	}
 
