@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.63 2005/02/06 20:57:05 oliver Exp $
+// $Id: message.h,v 1.63.2.1 2005/04/04 16:14:55 haid Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -31,6 +31,7 @@ namespace BALL
 {
 	class Composite;
 	class TrajectoryFile;
+	class DockResult;
 
 	namespace VIEW
 	{
@@ -696,6 +697,28 @@ class BALL_EXPORT NewTrajectoryMessage
 
 	protected:
 		TrajectoryFile* file_;
+};
+
+
+/// Message to notify about a new DockResult
+class BALL_EXPORT NewDockResultMessage
+	:public CompositeMessage
+{
+	public:
+		///
+		NewDockResultMessage()
+			throw();
+
+		///
+		void setDockResult(DockResult& dock_res)
+			throw() { dock_res_ = &dock_res;}
+
+		///
+		DockResult* getDockResult()
+			throw() { return dock_res_;}
+
+	protected:
+		DockResult* dock_res_;
 };
 
 
