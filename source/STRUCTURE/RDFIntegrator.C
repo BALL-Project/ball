@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator.C,v 1.4 2000/09/02 16:18:02 anker Exp $
+// $Id: RDFIntegrator.C,v 1.5 2000/09/25 16:32:33 anker Exp $
 
 #include <BALL/STRUCTURE/RDFIntegrator.h>
 
@@ -54,7 +54,7 @@ namespace BALL
 	}
 
 
-	RadialDistributionFunction& RDFIntegrator::getRDF() 
+	const RadialDistributionFunction& RDFIntegrator::getRDF() const 
 	{
 		return rdf_;
 	}

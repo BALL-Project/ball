@@ -1,4 +1,4 @@
-// $Id: radialDistributionFunction.C,v 1.5 2000/09/25 11:19:21 anker Exp $
+// $Id: radialDistributionFunction.C,v 1.6 2000/09/25 16:32:34 anker Exp $
 
 #include <BALL/STRUCTURE/radialDistributionFunction.h>
 
@@ -93,7 +93,7 @@ namespace BALL
 	}
 
 
-	bool RadialDistributionFunction::isValid()
+	bool RadialDistributionFunction::isValid() const
 	{
 		// BAUSTELLE
 		return representation_.isValid();
