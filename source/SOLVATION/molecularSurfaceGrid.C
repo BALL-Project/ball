@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.C,v 1.10 2001/08/01 01:11:44 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.10.4.1 2002/10/11 14:45:00 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -270,7 +270,7 @@ namespace BALL
 		return &(*grid);
 	}
 
-	TRegularData3D<char> *calculateSASGrid(
+	TRegularData3D<char>* calculateSASGrid(
 				const Vector3 &lower, 
 				const Vector3 &upper,
 				const float spacing,
@@ -369,9 +369,12 @@ namespace BALL
 																		 r0.y + R_b + d, 
 																		 r0.z + R_b + d);
 
-				for(unsigned long k = lower_index.z; k <= upper_index.z; k++)
-					for(unsigned long j = lower_index.y; j <= upper_index.y; j++)
-						for(unsigned long i = lower_index.x; i <= upper_index.x; i++){
+				for (unsigned long k = lower_index.z; k <= upper_index.z; k++)
+				{
+					for (unsigned long j = lower_index.y; j <= upper_index.y; j++)
+					{
+						for (unsigned long i = lower_index.x; i <= upper_index.x; i++)
+						{
 							x = (float)i * spacing + origin_x;
 							y = (float)j * spacing + origin_y;
 							z = (float)k * spacing + origin_z;
@@ -390,6 +393,8 @@ namespace BALL
 								}
 							}
 						}
+					}
+				}
 			}
 		}
 
