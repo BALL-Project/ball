@@ -5,9 +5,9 @@ documentation. For a full documentation, please refer to the \newterm{Reference
 Manual}~\cite{BALL-RM} which can be obtained in HTML, PDF, or postscript format.
 
 There are also several papers and technical reports published on
-BALL~\cite{BKL2000,BKL99a,BKL99b,KL99} that give a cursory overview of its design
-principles and illustrate its use in Rapid Software Prototyping. If you
-publish results that were obtained using BALL, please cite it as follows
+BALL~\cite{BKL2000,BKL99a,BKL99b,KL99,Koh2000} that give a cursory overview 
+of its design principles and illustrate its use in Rapid Software Prototyping. If you
+publish results that were obtained using BALL, please cite it as follows:
 \begin{enumerate}
 	\item[] O. Kohlbacher, H.-P. Lenhof: BALL -- Rapid Software Prototyping
   in Computational Molecular Biology, {\em Bioinformatics} 2000,
@@ -15,7 +15,7 @@ publish results that were obtained using BALL, please cite it as follows
 \end{enumerate}
 
 \noindent
-The latest version of BALL, bugfixes and updates are available from our website
+The latest version of BALL, bug fixes, and updates are available from our website
 
 \begin{enumerate}
   \item[] \URL{http://www.mpi-sb.mpg.de/BALL/}
@@ -81,4 +81,13 @@ using OpenGL and QT~\cite{QT}. Hence, it is highly portable and enables the
 user to produce state-of-the-art graphical user interfaces with a minimum
 effort.
 
-
+THe fourth layer in BALL consistes of Python bindings. Python is an
+object-oriented scripting language that is easy to learn and very readable.
+BALL provides Python bindings for most of its classes, which allow the use of
+the BALL \CPP classes from Python. This approach drastically reduces the
+turn-around times (no compiling and linking phase is required) and adds
+scripting capabilities to BALL without introducing a new and exotic scripting
+language. The Python bindings use the same class names as the BALL classes,
+therefore after the initial rapid development of a methodology, the existing
+Python code can be easily ported back to \CPP for production purposes.
+Chapter \ref{chapter:python} gives a short introduction to this feature.

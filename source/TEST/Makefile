@@ -38,9 +38,10 @@ EXECUTABLES_SYSTEM = \
 	Path_test\
 	PreciseTime_test\
 	Socket_test\
+	TCPTransfer_test\
 	Timer_test\
 	TimeStamp_test\
-	TCPTransfer_test
+	TransformationManager_test
 
 EXECUTABLES_DATATYPES = \
 	String_test\

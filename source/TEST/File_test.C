@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.24 2001/10/29 19:58:01 amoll Exp $
+// $Id: File_test.C,v 1.25 2001/12/29 01:07:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(File, "$Id: File_test.C,v 1.24 2001/10/29 19:58:01 amoll Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.25 2001/12/29 01:07:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -381,6 +381,13 @@ CHECK(TCPTransfer)
 	File::createTemporaryFilename(filename);
 	f.copyTo(filename);
 	TEST_EQUAL(f.getSize(), 3453)
+RESULT
+
+CHECK(TCPTransfer/2)
+	File f1("ftp://ftp.rcsb.org/pub/pdb/data/structures/all/pdb/4pti.brk");
+	f.copyTo("4pti.brk");
+	File f2("PDB:4pti.brk");
+	f.copyTo("4pti.brk");
 RESULT
 
 /////////////////////////////////////////////////////////////

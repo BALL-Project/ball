@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.20 2001/10/29 19:59:14 amoll Exp $
+// $Id: file.C,v 1.21 2001/12/29 01:07:05 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -35,7 +35,7 @@ namespace BALL
 		}
 	}
 
-	String TransformationManager::findTransformationCommand(const String& name) const
+	String TransformationManager::findTransformation(const String& name) const
 	{		
 		std::map<String, String>::const_iterator it(transformation_methods_.begin());
 
@@ -183,7 +183,7 @@ namespace BALL
 				}
 
 				// check
-				String transformation_command = transformation_manager_.findTransformationCommand(name_);
+				String transformation_command = transformation_manager_.findTransformation(name_);
 				if (transformation_command != "")
 				{
 					if (BALL_BIT_IS_CLEARED(transformation_methods_, File::TRANSFORMATION__FILTER))

@@ -38,8 +38,8 @@ tutorial.bbl: *.bib
 tutorial.ind: tutorial.idx
 	makeindex -s indexstyle.ids tutorial.idx
 
-faq.tex:	/www/pub/www.mpi-sb.mpg.de/BALL/doc/FAQ/faq.tex
-	cat /www/pub/www.mpi-sb.mpg.de/BALL/doc/FAQ/faq.tex | sed "s/http:\/\/[^ ]*/\\\\FAQURL{&}/g" > faq.tex
+#faq.tex:	/www/pub/www.mpi-sb.mpg.de/BALL/doc/FAQ/faq.tex
+#	cat /www/pub/www.mpi-sb.mpg.de/BALL/doc/FAQ/faq.tex | sed "s/http:\/\/[^ ]*/\\\\FAQURL{&}/g" > faq.tex
 
 	
 tutorial.dvi:	*.tex tutorial.ind

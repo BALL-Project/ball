@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.36 2001/12/18 01:17:28 oliver Exp $
+// $Id: file.h,v 1.37 2001/12/29 01:07:05 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -60,25 +60,25 @@ namespace BALL
 		~TransformationManager();
 		
 		//@}
+
 		/**	Accessors
 		*/
 		//@{
 		
-		///
+		/// Add a new transformation 
 		void registerTransformation(const String& pattern, const String& command);
 		
-		///
+		/// Delete a transformation
 		void unregisterTransformation(const String& pattern);
 		
-		///
-		String findTransformationCommand(const String& name) const;
-		
+		/// Find a transformation matching a given file name
+		String findTransformation(const String& name) const;
 		//@}
 
 		protected:
 		
+		/// The map containing all transformation methods
 		std::map<String, String>	transformation_methods_;
-	
 	};
 		
 	/**	File Class.	
@@ -443,9 +443,6 @@ namespace BALL
 		/**	
 		*/
 		static void unregisterTransformation(const String& pattern);
-		/**	
-		*/
-		static void dumpRegisteredTransformations(std::ostream& s = std::cout);
 		//@}
 
 		/**	@name Predicates 

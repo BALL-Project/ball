@@ -2,21 +2,21 @@
 
 \subsection{Compiler}
 \index{compiler}
-  BALL requires an ANSI compliant \CPP compiler or GNU gcc
+  BALL requires a (more or less) ANSI compliant \CPP compiler.
   (version above 2.95 or above).
   It has been successfully built and tested on the following platforms:
 	\begin{itemize}	
-   	\item Linux/x86 2.x using g{\tt ++} 2.95.x and 3.0
-   	\item Linux/x86 2.x using Kuck \& Associate (KAI) \CPP 4.0b
+   	\item Linux/x86 2.x using g{\tt ++} 3.0
+   	\item Linux/x86 2.x using Kuck \& Associate (KAI) \CPP 4.0
    	\item Solaris/SPARC 8 using g{\tt ++} 2.95.3
-   	\item Solaris/SPARC 8 using Kuck \& Associate (KAI) \CPP 4.0b
+   	\item Solaris/SPARC 8 using Kuck \& Associate (KAI) \CPP 4.0
    	\item IRIX 6.5 using CC 7.3.1.1m (32 and 64 bit)
    	\item Compaq Tru64 Unix V4.0f using Compaq \CPP 6.3
  	\end{itemize}
 
 \subsection{External software and libraries}
 The compilation of the visualization component BALLVIEW also requires
-the QT library (version 2.x) which is available from
+the QT library (version 2.3.2) which is available from
 \URL{http://www.troll.no/qt}/.
 
 If QT was not installed in one of the standard library paths or the
@@ -33,7 +33,16 @@ QT also requires OpenGL. On platforms that do not provide OpenGL, MESA can
 be used (e.g. Linux). Mesa is a 3-D graphics library with an API which is 
 very similar to that of OpenGL. It can be obtained from \URL{http://www.mesa3d.org}.
 \index{MESA}
-If MESA is used, please call configure with the option "\option{--with-mesa}"
+
+To use the Python extensions of BALL (Python is an object oriented scripting
+language), you will also need Python 2.1 installed
+(\URL{http://www.python.org}) and a special version of SIP 3.0distributed through 
+our website (\URL{http://www.mpi-sb.mpg.de/BALL/}). 
+
+Please make sure that the required external \CPP libraries (i.e. QT and SIP)
+have been compiled with the same compiler (and compiler version!) as the BALL
+libraries. Otherwise you will most likely see a plethora of strange error
+messages, either while linking applications or at runtime.
 
 \section{Installation}
 \label{section:building-ball}
@@ -79,9 +88,9 @@ An overview of these options can also be obtained by executing "{\tt configure
   \option{--enable-64}&                    build 64 bit objects (if allowed
                                            by the compiler)\\\vspace{3mm}
 
-  \option{--with-compiler}{\tt{}=CXX}&     use CXX to compile BALL\\\vspace{3mm}
+  \option{--with-compiler}{\tt{}=CXX}& use CXX to compile BALL\\\vspace{3mm}
 
-  \option{--with-cxxflags}{\tt{}=FLAGS}&   add FLAGS to the C++ compiler flags
+  \option{--with-cxxflags}{\tt{}=FLAGS}&   add FLAGS to the \CPP compiler flags
                                            (commas are converted to blanks)
                                            \\\vspace{3mm}
 
@@ -101,7 +110,14 @@ An overview of these options can also be obtained by executing "{\tt configure
                                            \vspace{3mm}
 
   \option{--with-qt-libs}{\tt{}=DIR}&      QT libraries are in DIR\\\vspace{3mm}
+	\option{--with-moc}{\tt{}=MOC}& 					The absolute path to the QT meta object
+																						compiler (moc, typically found in
+																						{\tt\$QTDIR/bin/moc})\\\vspace{3mm}
 
+	\option{--with-threadsafe-qt}& 						Set this flag if you the multi-threaded
+																						version of Mesa and you compiled
+																						the thread-safe version of QT\\\vspace{3mm}
+			
   \option{--with-opengl-incl}{\tt{}=DIR}&  OpenGL/Mesa header files are in DIR/GL\\\vspace{3mm}
 
   \option{--with-opengl-libs}{\tt{}=DIR}&  OpenGL/Mesa libraries are in DIR/GL\\\vspace{3mm}
@@ -114,7 +130,11 @@ An overview of these options can also be obtained by executing "{\tt configure
                                            \Index{libxnet} (under Solaris)
                                            \\\vspace{3mm}
 
-  \option{--with-python}&                  enable Python support\\\vspace{3mm}
+  \option{--with-python=EXE}& 							Enable Python support using the
+																						Python executable in EXE.
+Typically, from the executable {\tt configure} can figure out where the
+headers and the library are hidden, so that the following two options are
+usually not required.\\\vspace{3mm}
   
   \option{--with-python-incl=DIR}&         Python includes (Python.h) is in
                                            DIR\\\vspace{3mm}
