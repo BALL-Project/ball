@@ -1,7 +1,7 @@
-// $Id: logStream.iC,v 1.4 1999/12/22 16:56:02 oliver Exp $
+// $Id: logStream.iC,v 1.5 2000/05/29 23:42:49 amoll Exp $
 
 BALL_INLINE
-int LogStreamBuf::overflow(int c)
+int LogStreamBuf::overflow(const int& c)
 {
 	sync();
 	return ::std::streambuf::overflow(c);
@@ -20,7 +20,7 @@ LogStreamBuf* LogStream::operator -> ()
 }
 
 BALL_INLINE
-void LogStream::setLevel(int level) 
+void LogStream::setLevel(const int& level) 
 {
 	if (rdbuf() == 0)
 	{
@@ -48,7 +48,7 @@ int LogStream::getLevel()
 }
 
 BALL_INLINE
-LogStream& LogStream::level(int n) 
+LogStream& LogStream::level(const int& n) 
 {
 	// set the temporary level 
 	// will be reset by sync(), i.e. at the end of the next line
@@ -61,7 +61,7 @@ LogStream& LogStream::level(int n)
 }
 
 BALL_INLINE
-LogStream& LogStream::error(int n)
+LogStream& LogStream::error(const int& n)
 {
 	// set the temporary level to ERROR
 	// will be reset by sync(), i.e. at the end of the next line
@@ -74,7 +74,7 @@ LogStream& LogStream::error(int n)
 }
 
 BALL_INLINE
-LogStream& LogStream::warn(int n)
+LogStream& LogStream::warn(const int& n)
 {
 	// set the temporary level to WARNING
 	// will be reset by sync(), i.e. at the end of the next line
@@ -87,7 +87,7 @@ LogStream& LogStream::warn(int n)
 }
 
 BALL_INLINE
-LogStream& LogStream::info(int n)
+LogStream& LogStream::info(const int& n)
 {
 	// set the temporary level to INFORMATION
 	// will be reset by sync(), i.e. at the end of the next line
