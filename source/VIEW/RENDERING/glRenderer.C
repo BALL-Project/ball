@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.14 2003/12/12 15:31:15 amoll Exp $
+// $Id: glRenderer.C,v 1.15 2003/12/15 15:13:40 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -462,11 +462,13 @@ namespace BALL
 		void GLRenderer::renderPoint_(const Point& point)
 			throw()
 		{
+			glDisable(GL_LIGHTING);
 			setColor4ub_(point);
 			glBegin(GL_POINTS);
 			normalVector3_(normal_vector_);
 			vertexVector3_(point.getVertex());
 			glEnd();
+			glEnable(GL_LIGHTING);
 		}
 
 
@@ -588,11 +590,7 @@ namespace BALL
 
 			glDisable(GL_LIGHTING);
 			glBegin(GL_LINE_STRIP);
-Log.error() << "#~~#   3 " << std::endl;
-Log.error() << ((Bond*)line.getComposite())->getFirstAtom()->getPosition() << std::endl;
-Log.error() << "#~~#   6 " << std::endl;
-			Log.error() << line.getVertex1Address()<< std::endl;
-Log.error() << "#~~#   5 " << std::endl;
+			
 			vertexVector3_(line.getVertex1());
 			vertexVector3_(line.getMiddleVertex());
 

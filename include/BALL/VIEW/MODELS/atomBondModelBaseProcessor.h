@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.7 2003/12/15 01:09:17 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.8 2003/12/15 15:11:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -157,17 +157,11 @@ namespace BALL
 				throw();
 
 			/** Mutable inspection of the list of used atoms.
-					Access the mutable reference of the list of used Atom objects inserted with
-					the method insertAtom_().
-					\return  the list of used Atom objects.
 			*/
 			List<const Atom*>& getAtomList_()
 				throw();
 
 			/** Mutable inspection of the hash set of used atoms.
-					Access the mutable reference of the hast set of used Atom objects inserted with
-					the method insertAtom_().
-					\return  the hash set of used Atom objects.
 			*/
 			HashSet<const Atom*>& getAtomSet_()
 				throw();
