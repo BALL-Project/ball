@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.15 2000/01/16 17:31:42 oliver Exp $
+# $Id: Makefile.in,v 1.16 2000/01/16 21:18:43 oliver Exp $
 #
 
 include config.mak
@@ -115,8 +115,8 @@ install.static:
 
 install.shared:	
 	@echo Installing shared libraries under $(BALL_PATH)/lib/$(BINFMT)...
-	@-mkdir $(BALL_PATH)/lib 2>/dev/null
-	@-mkdir $(BALL_PATH)/lib/$(BINFMT) 2>/dev/null
+	@-mkdir $(BALL_PATH)/lib 2>/dev/null | cat >/dev/null 
+	@-mkdir $(BALL_PATH)/lib/$(BINFMT) 2>/dev/null | cat >/dev/null
 	@$(MV) -f $(SHARED_LIBS) $(BALL_PATH)/lib/$(BINFMT)
 
 delete.static:	
