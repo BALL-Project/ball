@@ -20,7 +20,7 @@ class Bit
   //   throw(NullPointer, IllegalOperation);
   virtual void clear() throw();
   bool operator == (const Bit& /bit/) const throw();
-  // bool operator == (bool bit) const throw(NullPointer);
+  bool operator == (bool /bit/) const throw(NullPointer);
 	// bool operator != (const Bit& bit) const throw();
   // bool operator != (bool bit) const throw(NullPointer);
 };

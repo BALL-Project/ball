@@ -1,4 +1,4 @@
-// $Id: string.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
+// $Id: string.sip,v 1.3 2001/12/27 00:25:44 oliver Exp $
 
 class Substring
 {
@@ -51,15 +51,15 @@ class Substring
   Substring& toUpper();
   bool isBound() const;
   bool isEmpty() const;
-  // bool operator == (const Substring& substring) const;
+  bool operator == (const Substring& /substring/) const;
   // bool operator != (const Substring& substring) const;
-  // bool operator == (const String& string) const;
+  bool operator == (const String& /string/) const;
   // bool operator != (const String& string) const;
   // friend bool operator == (const String& string, const Substring& substring);
   // friend bool operator != (const String& string, const Substring& substring);
-  // bool operator == (const char* char_ptr) const;
+  bool operator == (const char* /char_ptr/) const;
   // bool operator != (const char* char_ptr) const;
-  // bool operator == (char c) const;
+  bool operator == (char /c/) const;
   // bool operator != (char c) const;
   // friend ::std::ostream& operator << (::std::ostream& s, const Substring& substring);
   bool isValid() const;
@@ -78,22 +78,26 @@ class String
    CASE_SENSITIVE   = 0, 
    CASE_INSENSITIVE = 1 
   };
-  // static const char* CHARACTER_CLASS__ASCII_ALPHA;
-  // static const char* CHARACTER_CLASS__ASCII_ALPHANUMERIC;
-  // static const char* CHARACTER_CLASS__ASCII_LOWER;
-  // static const char* CHARACTER_CLASS__ASCII_UPPER;
-  // static const char* CHARACTER_CLASS__ASCII_NUMERIC;
-  // static const char* CHARACTER_CLASS__WHITESPACE;
+  static const char* CHARACTER_CLASS__ASCII_ALPHA;
+  static const char* CHARACTER_CLASS__ASCII_ALPHANUMERIC;
+  static const char* CHARACTER_CLASS__ASCII_LOWER;
+  static const char* CHARACTER_CLASS__ASCII_UPPER;
+  static const char* CHARACTER_CLASS__ASCII_NUMERIC;
+  static const char* CHARACTER_CLASS__WHITESPACE;
 
   String();
 
-  // String(const String& /string/);
+  String(const String& /string/);
   // String(const string& string);
 
   String(const String& /s/, Index /from/, Size /len/ = string::npos)
 		throw(NullPointer, IndexOverflow, IndexUnderflow);
 
-  String(const char* /char_ptr/, Index /from/ = 0, Size /len/ = string::npos) 
+	String(const char* /char_ptr/)
+		throw(NullPointer, IndexOverflow, IndexUnderflow);
+  String(const char* /char_ptr/, Index /from/) 
+		throw(NullPointer, IndexOverflow, IndexUnderflow);
+  String(const char* /char_ptr/, Index /from/, Size /len/) 
 		throw(NullPointer, IndexOverflow, IndexUnderflow);
 
   // String(Size buffer_size, const char* format, ... );
@@ -197,7 +201,7 @@ class String
   int compare(const char* /char_ptr/, Index /from/ = 0) const;
   int compare(const char* /char_ptr/, Index /from/, Size /len/) const;
   int compare(char /c/, Index /from/ = 0) const;
-  // bool operator == (const String& string) const;
+  bool operator == (const String& /string/) const;
   // bool operator != (const String& string) const;
   // bool operator < (const String& string) const;
   // bool operator <= (const String& string) const;
@@ -209,7 +213,7 @@ class String
   // friend bool operator <= (const char* char_ptr, const String& string);
   // friend bool operator > (const char* char_ptr, const String& string);
   // friend bool operator >= (const char* char_ptr, const String& string);
-  // bool operator == (const char* char_ptr) const;
+  bool operator == (const char* /char_ptr/) const;
   // bool operator != (const char* char_ptr) const;
   // bool operator < (const char* char_ptr) const;
   // bool operator <= (const char* char_ptr) const;
@@ -221,7 +225,7 @@ class String
   // friend bool operator <= (char c, const String& string);
   // friend bool operator > (char c, const String& string);
   // friend bool operator >= (char c, const String& string);
-  // bool operator == (char c) const;
+  bool operator == (char /c/) const;
   // bool operator != (char c) const;
   // bool operator < (char c) const;
   // bool operator <= (char c) const;

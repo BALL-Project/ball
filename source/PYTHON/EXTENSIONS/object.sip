@@ -12,7 +12,7 @@ using namespace BALL;
   Size getHandle() const throw();
   static Size getNextHandle() throw();
   static Size getNewHandle() throw();
-  // virtual bool operator == (const Object& object) const;
+  virtual bool operator == (const Object& /object/) const;
   // bool operator != (const Object& object) const;
   // virtual bool operator < (const Object& object) const;
   // bool operator <= (const Object& object) const;

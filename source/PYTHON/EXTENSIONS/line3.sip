@@ -1,4 +1,4 @@
-// $Id: line3.sip,v 1.1 2001/09/03 16:53:09 oliver Exp $
+// $Id: line3.sip,v 1.2 2001/12/27 00:25:43 oliver Exp $
 
 class Line3
 {
@@ -24,7 +24,7 @@ class Line3
   void get(Line3& /line/);
   void get(Vector3& /point/,Vector3& /vector/, Form /form/ = FORM__PARAMETER) const;
   void normalize();
-  // bool operator ==(const Line3& line) const;
+  bool operator ==(const Line3& /line/) const;
   // bool operator != (const Line3& line) const;
   bool has(const Vector3& /point/) const;
   bool isValid() const;

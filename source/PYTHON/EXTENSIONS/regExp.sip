@@ -1,4 +1,4 @@
-// $Id: regExp.sip,v 1.1 2001/09/03 16:53:15 oliver Exp $
+// $Id: regExp.sip,v 1.2 2001/12/27 00:25:44 oliver Exp $
 
 class RegularExpression
 {
@@ -60,7 +60,7 @@ class RegularExpression
   // (const char* /text/, const char** found_substrings_from = 0,
   //  const char** found_substring_to = 0, int execute_flags = 0) const;
   bool isEmpty() const;
-  //bool operator == (const RegularExpression& regular_expression) const;
+  bool operator == (const RegularExpression& /regular_expression/) const;
   //bool operator != (const RegularExpression& regular_expression) const;
   //bool operator < (const RegularExpression& regular_expression) const;
   //bool operator <= (const RegularExpression& regular_expression) const;

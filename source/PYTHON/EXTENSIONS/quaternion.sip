@@ -1,4 +1,4 @@
-// $Id: quaternion.sip,v 1.1 2001/09/03 16:53:15 oliver Exp $
+// $Id: quaternion.sip,v 1.2 2001/12/27 00:25:44 oliver Exp $
 
 class Quaternion
 {
@@ -26,9 +26,9 @@ class Quaternion
   // Quaternion operator - () const;
   Quaternion getInverse() const;
   Quaternion getConjugate() const;
-  // Quaternion& operator += (const Quaternion& q);
-  // Quaternion& operator -= (const Quaternion& q);
-  // bool operator == (const Quaternion& q) const;
+  Quaternion& operator += (const Quaternion& /q/);
+  Quaternion& operator -= (const Quaternion& /q/);
+  bool operator == (const Quaternion& /q/) const;
   // bool operator != (const Quaternion& q) const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
   float i;

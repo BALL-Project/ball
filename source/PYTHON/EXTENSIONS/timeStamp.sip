@@ -1,4 +1,4 @@
-// $Id: timeStamp.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
+// $Id: timeStamp.sip,v 1.3 2001/12/27 00:25:44 oliver Exp $
 
 class PreciseTime
 {
@@ -18,7 +18,7 @@ class PreciseTime
   // const PreciseTime& operator = (const PreciseTime& /time/) throw();
 	//  bool operator < (const PreciseTime& /time/) const throw();
 	//  bool operator > (const PreciseTime& /time/) const throw();
- 	// bool operator == (const PreciseTime& /time/) const throw();
+ 	bool operator == (const PreciseTime& /time/) const throw();
   long getSeconds() const throw();
   long getMicroSeconds() const throw();
   static PreciseTime now() throw();

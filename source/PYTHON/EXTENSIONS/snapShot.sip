@@ -1,4 +1,4 @@
-// $Id: snapShot.sip,v 1.1 2001/09/03 16:53:16 oliver Exp $
+// $Id: snapShot.sip,v 1.2 2001/12/27 00:25:44 oliver Exp $
 
 class SnapShot
 {
@@ -14,18 +14,12 @@ class SnapShot
  ~SnapShot() throw();
  // const SnapShot& operator = (const SnapShot& /snapshot/)
  //  throw();
- virtual void clear()
-   throw();
- // bool operator == (const SnapShot& /snapshot/) const
- //   throw();
-    bool isValid() const
-   throw();
-  void setIndex(Size /index/)
-   throw();
-  Size getIndex() const
-   throw();
-  void setNumberOfAtoms(Size /number_of_atoms/)
-   throw();
+	virtual void clear() throw();
+	bool operator == (const SnapShot& /snapshot/) const throw();
+  bool isValid() const throw();
+  void setIndex(Size /index/) throw();
+  Size getIndex() const throw();
+  void setNumberOfAtoms(Size /number_of_atoms/) throw();
   Size getNumberOfAtoms() const
    throw();
   void setPotentialEnergy(DoubleReal /potential_energy/) 

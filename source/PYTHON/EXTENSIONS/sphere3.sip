@@ -16,7 +16,7 @@ class Sphere3
   // Sphere3& operator = (const Sphere3& /sphere3/);
   void get(Sphere3& /sphere3/) const;
   void get(Vector3& /point/, float /rhs/) const;
-  // bool operator == (const Sphere3& sphere3) const;
+  bool operator == (const Sphere3& /sphere3/) const;
   // bool operator != (const Sphere3& sphere3) const;
   bool has(const Vector3& /point/, bool /on_surface/ = false) const;
   bool isEmpty() const;

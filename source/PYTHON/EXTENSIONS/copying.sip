@@ -1,0 +1,27 @@
+// $Id: copying.sip,v 1.1 2001/12/27 00:25:43 oliver Exp $
+
+%Copying
+You are installing the RESEARCH version (BALL-R) of BALL that can
+be used free of charge for academic research and teaching.       
+                                                                 
+  FOR ANY COMMERCIAL USE OF THIS SOFTWARE A LICENSE IS 
+  REQUIRED. ANY KIND OF USE BY A COMPANY OR OTHER NON-
+  ACADEMIC INSTITUTION IS CONSIDERED TO BE COMMERCIAL
+  USE. YOU ARE BREAKING A LAW WHEN USING BALL COMMERCIALLY 
+  WITHOUT OWNING A LICENSE.                   
+
+These terms are valid for all BALL versions following version 0.95a
+For more information about the license terms please contact      
+                                                                 
+                 Algorithmic Solutions Software GmbH 
+                 Postfach 151101 
+                 66041 Saarbruecken 
+                 Germany
+                 http://www.algorithmic-solutions.com
+                 email:leda@algorithmic-solutions.com
+                 fax: +49 681 842502
+
+You are allowed to continue with the installation of BALL only if you are 
+owner of a valid license or if you intend to use BALL for academic research 
+or teaching. Otherwise, you must stop the installation now.
+%End
