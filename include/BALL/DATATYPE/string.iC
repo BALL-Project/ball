@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.18 2000/07/17 09:36:35 oliver Exp $
+// $Id: string.iC,v 1.19 2000/07/17 13:43:11 oliver Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -474,7 +474,7 @@ short String::toShort() const
 {
 	if (!isFloat())
 	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__);
+		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
 
 	errno = 0;
@@ -482,7 +482,7 @@ short String::toShort() const
 
 	if (errno == ERANGE)
 	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__);
+		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
   
   return s;
@@ -493,7 +493,7 @@ unsigned short String::toUnsignedShort() const
 {
 	if (!isFloat())
 	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__);
+		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
 
 	errno = 0;
@@ -501,7 +501,7 @@ unsigned short String::toUnsignedShort() const
 
   if (errno == ERANGE)
 	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__);
+    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
   
   return us;
@@ -512,7 +512,7 @@ int String::toInt() const
 {
 	if (!isFloat())
 	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__);
+		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
 
 	errno = 0;
@@ -520,7 +520,7 @@ int String::toInt() const
 
   if (errno == ERANGE)
 	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__);
+    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
   
   return i;
@@ -531,7 +531,7 @@ unsigned int String::toUnsignedInt() const
 {
 	if (!isFloat())
 	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__);
+		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
 
 	errno = 0;
@@ -539,7 +539,7 @@ unsigned int String::toUnsignedInt() const
 
   if (errno == ERANGE)
 	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__);
+    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
   
   return ui;
@@ -550,7 +550,7 @@ long String::toLong() const
 {
 	if (!isFloat())
 	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__);
+		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
 
 	errno = 0;
@@ -558,7 +558,7 @@ long String::toLong() const
 
   if (errno == ERANGE)
 	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__);
+    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
   
   return l;
@@ -569,7 +569,7 @@ unsigned long String::toUnsignedLong() const
 {
 	if (!isFloat())
 	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__);
+		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
 
 	errno = 0;
@@ -577,7 +577,7 @@ unsigned long String::toUnsignedLong() const
 
   if (errno == ERANGE)
 	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__);
+    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
   
   return ul;
@@ -588,7 +588,7 @@ float String::toFloat() const
 {
 	if (!isFloat())
 	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__);
+		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
 
 	errno = 0;
@@ -596,7 +596,7 @@ float String::toFloat() const
 
   if (errno == ERANGE)
 	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__);
+    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
   
   return f;
@@ -607,14 +607,14 @@ double String::toDouble() const
 {
 	if (!isFloat())
 	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__);
+		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
 	errno = 0;
   double d = atof(c_str());
 
   if (errno == ERANGE)
 	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__);
+    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
 	}
   
   return d;
