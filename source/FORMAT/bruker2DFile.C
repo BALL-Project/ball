@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.C,v 1.12 2001/02/06 18:12:35 anhi Exp $
+// $Id: bruker2DFile.C,v 1.13 2001/02/21 13:20:58 anhi Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -188,8 +188,8 @@ namespace BALL
   {
     pair<Position, Position> res;
 
-    res.first = ((double)(soffsetf2_ - x)) * spointnumf2_ * bfreqf2_ / swidthf2_;
-    res.second = ((double)(soffsetf1_ - y)) * spointnumf1_ * bfreqf1_ / swidthf1_;
+    res.first = (Position) (((double)(soffsetf2_ - x)) * spointnumf2_ * bfreqf2_ / swidthf2_);
+    res.second = (Position) (((double)(soffsetf1_ - y)) * spointnumf1_ * bfreqf1_ / swidthf1_);
 
     return res;
   }
