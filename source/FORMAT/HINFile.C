@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.56 2003/05/23 06:48:23 oliver Exp $
+// $Id: HINFile.C,v 1.57 2003/07/09 12:56:13 amoll Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -56,7 +56,7 @@ namespace BALL
 	}
 	
 	const HINFile& HINFile::operator = (const HINFile& rhs)
-		throw()
+		throw(Exception::FileNotFound)
 	{
 		box_ = Box3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		temperature_ = 0.0;
@@ -1025,7 +1025,7 @@ namespace BALL
 		return molecule;
 	}
 
-	void HINFile::initRead()
+	void HINFile::initRead_()
 	{
 		// reset some private members
 		box_.a.set(0.0);
