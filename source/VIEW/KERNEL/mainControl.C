@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158.2.8 2005/02/01 13:33:04 amoll Exp $
+// $Id: mainControl.C,v 1.158.2.9 2005/02/02 11:24:14 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1133,9 +1133,9 @@ namespace BALL
 			if (RTTI::isKindOf<Bond>(*composite)) return;
 			selection_.insert(composite);
 
-			if (RTTI::isKindOf<Atom> (*composite))
+			Atom* const atom = dynamic_cast<Atom*>(composite);
+			if (atom != 0)
 			{
-				Atom *atom = dynamic_cast<Atom*>(composite);
 				AtomBondIterator bi;		
 				BALL_FOREACH_ATOM_BOND(*atom, bi)
 				{
@@ -1158,12 +1158,15 @@ namespace BALL
 				Composite* parent = composite->getParent();
 				while (parent != 0 && !selection_.has(parent))
 				{
-					for (Size i=0; i < parent->getDegree();i++)
+					Composite* child = parent->getFirstChild();
+					while (child != 0)
 					{
-						if (!selection_.has(parent->getChild(i)))
+						if (!selection_.has(child))
 						{
 							return;
 						}
+
+						child = child->getSibling(1);
 					}
 					
 					selection_.insert(parent);
@@ -1181,7 +1184,8 @@ namespace BALL
 			if (RTTI::isKindOf<Bond>(*composite)) return;
 			selection_.erase(composite);
 
-			if (RTTI::isKindOf<Atom> (*composite))
+			Atom* const atom = dynamic_cast<Atom*>(composite);
+			if (atom != 0)
 			{
 				AtomBondIterator bi;		
 				BALL_FOREACH_ATOM_BOND(*dynamic_cast<Atom*>(composite), bi)
@@ -1191,9 +1195,11 @@ namespace BALL
 			}		
 			else if (RTTI::isKindOf<AtomContainer> (*composite))
 			{
-				for (Size i=0; i< composite->getDegree();i++)
+				Composite* child = composite->getFirstChild();
+				while (child != 0)
 				{
-					deselectCompositeRecursive(composite->getChild(i), false);
+					deselectCompositeRecursive(child, false);
+					child = child->getSibling(1);
 				}
 			}		
 
