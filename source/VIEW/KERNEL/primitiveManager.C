@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.28 2004/11/15 02:07:04 amoll Exp $
+// $Id: primitiveManager.C,v 1.29 2004/11/15 17:14:02 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -27,8 +27,11 @@ PrimitiveManager::PrimitiveManager(MainControl* mc)
 		main_control_(mc),
 		update_running_(false),
 		update_pending_(false),
-		multi_threading_mode_(false)
+		multi_threading_mode_(true)
 {
+#ifndef BALL_QT_HAS_THREADS
+	multi_threading_mode_ = false;
+#endif
 }
 
 PrimitiveManager::~PrimitiveManager()
