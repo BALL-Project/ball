@@ -214,11 +214,16 @@ file is opened for reading only).
 The second line uses the stream operator {\tt <<} to write the contents
 of system {\tt S} to this file. The file is closed in the third line.
 
-Finally, we have to delete all the objects we created. This is very simple:
+% ????? [anker]
+% The following is not true. If we use a pointer here, then it's OK, but
+% with a System it simply doesn't work. What do we want here? I'd prefer a
+% Sytsem instead of a System*.
 
-\begin{lstlisting}{}
-	delete S;
-\end{lstlisting}
+% Finally, we have to delete all the objects we created. This is very simple:
+% 
+% \begin{lstlisting}{}
+% 	delete S;
+% \end{lstlisting}
 
 \noindent 
 As all molecules and atoms we created are inside the system, they are deleted
