@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.14 2000/03/03 02:20:36 amoll Exp $
+// $Id: line3.h,v 1.15 2000/03/26 21:36:19 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -41,7 +41,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TLine3<T>)
+		BALL_CREATE_NODEEP(TLine3<T>)
 
 		/**	@name	Enums
 		*/
@@ -76,8 +76,7 @@ namespace BALL
 				@param TLine3 the TLine3 object to be copied
 				@param bool ignored - just for interface consistency
 		*/	
-		TLine3(const TLine3& line,
-					 bool /* deep */ = true)
+		TLine3(const TLine3& line)
 			:	p(line.p),
 				d(line.d)
 		{
@@ -130,9 +129,8 @@ namespace BALL
 
 		/**	Assign from another TLine3.
 				@param line	the TLine3 object to assign from
-				@param deep ignored
 		*/
-		void set(const TLine3& line, bool /* deep */ = true)
+		void set(const TLine3& line)
 		{
 			p = line.p;
 			d = line.d;
@@ -170,9 +168,8 @@ namespace BALL
 		/**	Assign to another TLine3.
 				Assigns the vector components to another vector.
 				@param line	the line to be asigned to
-				@param deep ignored
 		*/
-		void get(TLine3& line, bool /* deep */ = true) const
+		void get(TLine3& line)
 		{
 			line.p = p;
 			line.d = d;
