@@ -1,4 +1,4 @@
-// $Id: composite.iC,v 1.4 1999/09/07 19:35:33 oliver Exp $
+// $Id: composite.iC,v 1.5 1999/09/08 15:28:27 oliver Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
@@ -283,7 +283,7 @@ bool Composite::hasSibling() const
 BALL_INLINE 
 bool Composite::isSiblingOf(const Composite &composite) const
 {
-  return (composite.parent_ == parent_);
+  return ((composite.parent_ == parent_) && (parent_ != 0) && (&composite != this));
 }
 
 BALL_INLINE 
