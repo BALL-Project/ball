@@ -1,4 +1,4 @@
-// $Id: canonicalMD.h,v 1.8 2001/01/16 17:19:22 anker Exp $
+// $Id: canonicalMD.h,v 1.9 2001/01/24 12:21:38 amoll Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -217,4 +217,4 @@ namespace BALL
 
   } // end of namespace BALL 
 
-#endif // _BALL_MOLMEC_CANONICALMD_H  
+#endif // BALL_MOLMEC_CANONICALMD_H  
