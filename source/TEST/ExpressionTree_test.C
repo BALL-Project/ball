@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ExpressionTree_test.C,v 1.1 2003/06/30 12:09:02 amoll Exp $
+// $Id: ExpressionTree_test.C,v 1.2 2003/06/30 14:21:58 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +15,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: ExpressionTree_test.C,v 1.1 2003/06/30 12:09:02 amoll Exp $")
+START_TEST(Expression, "$Id: ExpressionTree_test.C,v 1.2 2003/06/30 14:21:58 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -271,11 +271,13 @@ CHECK(BALL_CREATE(ExpressionTree))
 	et1.setNegate(true);
 	et1.setPredicate(ep);
 	et1.appendChild(child);
-	ExpressionTree empty,test;
-	test = *(ExpressionTree*) et1.create(false, true);
-	TEST_EQUAL(test == empty, true)
-	test = *(ExpressionTree*) et1.create(true, false);
-	TEST_EQUAL(test == et1, true)
+	ExpressionTree empty;
+	ExpressionTree* test = (ExpressionTree*) et1.create(false, true);
+	TEST_EQUAL(*test == empty, true)
+	delete test;
+	test = (ExpressionTree*) et1.create(true, false);
+	TEST_EQUAL(*test == et1, true)
+	delete test;
 RESULT
 
 CHECK(void dump(std::ostream& is = std::cout, Size depth = 0) const throw())
