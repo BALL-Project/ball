@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.15 2003/06/09 22:40:49 oliver Exp $
+// $Id: vector2.h,v 1.16 2003/07/02 11:16:09 amoll Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR2_H
@@ -106,6 +106,16 @@ namespace BALL
 		*/	
 		TVector2(const TVector2& vector)
 			throw();
+
+		/**	Array constructor.
+				This constructor creates a TVector3 object from the first
+				two elements pointed to by <tt>ptr</tt>.
+				@param ptr the array to construct from
+				@exception NullPointer if <tt>ptr == 0</tt>
+		*/
+		TVector2(const T* ptr)
+			throw(Exception::NullPointer);
+
 
 		/**	Destructor.	
 				Destructs the TVector2 object. As there are no dynamic
@@ -460,6 +470,20 @@ namespace BALL
 	TVector2<T>::~TVector2()
 		throw()
 	{
+	}
+
+	template <typename T>
+	BALL_INLINE
+	TVector2<T>::TVector2(const T* ptr)
+		throw(Exception::NullPointer)
+	{
+		if (ptr == 0) 
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+
+		x = *ptr++;
+		y = *ptr;
 	}
 
 	template <typename T>
