@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.138 2001/05/09 16:18:28 oliver Exp $
+#  $Id: configure,v 1.139 2001/05/10 23:35:14 oliver Exp $
 
 
 ##################################################
@@ -2360,7 +2360,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 	MAKEDEP_CXX_OPTS="-M -noimplicit_include"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-	CXXFLAGS="${CXXFLAGS} -ieee"
+	CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
 	BALL_CXXFLAGS="${BALL_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
 	CXXFLAGS_O="${CXXFLAGS_O} -O5"
 	
@@ -4747,20 +4747,51 @@ rm -f conftest*
 			if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
 				echo "$ac_t""(char*, char*, int)" 1>&6
 			else
-				echo "$ac_t""not found!" 1>&6
-				{ echo "configure: error: Aborted" 1>&2; exit 1; }
+				cat > conftest.$ac_ext <<EOF
+#line 4651 "configure"
+#include "confdefs.h"
+
+						#include <rpc/types.h>
+						#include <rpc/xdr.h>
+						extern "C" int dummy() {return 0;}
+						void foo(){
+							XDR xdrs;
+							xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+						}
+					
+int main() {
+
+					
+; return 0; }
+EOF
+if { (eval echo configure:4667: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+  rm -rf conftest*
+  BALL_XDRREC_VOID=true
+else
+  echo "configure: failed program was:" >&5
+  cat conftest.$ac_ext >&5
+  rm -rf conftest*
+  BALL_XDRREC_VOID=false
+				
+fi
+rm -f conftest*
+				if test "${BALL_XDRREC_VOID}" = true ; then
+					echo "$ac_t""()" 1>&6
+				else
+					echo "$ac_t""not found!" 1>&6
+					{ echo "configure: error: Aborted" 1>&2; exit 1; }
+				fi
 			fi
 		fi
 	else
 		echo "$ac_t""(void*, void*, unsigned int)" 1>&6
 	fi
 
-
 					echo $ac_n "checking for xdr_u_hyper function""... $ac_c" 1>&6
-echo "configure:4660: checking for xdr_u_hyper function" >&5
+echo "configure:4691: checking for xdr_u_hyper function" >&5
 	BALL_HAS_XDR_U_HYPER=false
 	cat > conftest.$ac_ext <<EOF
-#line 4663 "configure"
+#line 4694 "configure"
 #include "confdefs.h"
 
 			#include <rpc/types.h>
@@ -4772,7 +4803,7 @@ int main() {
 		
 ; return 0; }
 EOF
-if { (eval echo configure:4675: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:4706: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   BALL_HAS_XDR_U_HYPER=true
 	
@@ -4786,10 +4817,10 @@ rm -f conftest*
 		echo "$ac_t""found" 1>&6
 
 		echo $ac_n "checking for 64-bit XDR type (for xdr_u_hyper)""... $ac_c" 1>&6
-echo "configure:4689: checking for 64-bit XDR type (for xdr_u_hyper)" >&5
+echo "configure:4720: checking for 64-bit XDR type (for xdr_u_hyper)" >&5
 		BALL_U_QUAD_TYPE=""
 		cat > conftest.$ac_ext <<EOF
-#line 4692 "configure"
+#line 4723 "configure"
 #include "confdefs.h"
 
 				#include <rpc/types.h>
@@ -4802,7 +4833,7 @@ int main() {
 			
 ; return 0; }
 EOF
-if { (eval echo configure:4705: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:4736: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   BALL_U_QUAD_TYPE=u_quad_t
 		
@@ -4814,7 +4845,7 @@ rm -f conftest*
 
 		if test "${BALL_U_QUAD_TYPE}" = "" ; then
 			cat > conftest.$ac_ext <<EOF
-#line 4717 "configure"
+#line 4748 "configure"
 #include "confdefs.h"
 
 					#include <rpc/types.h>
@@ -4827,7 +4858,7 @@ int main() {
 				
 ; return 0; }
 EOF
-if { (eval echo configure:4730: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:4761: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   BALL_U_QUAD_TYPE=u_longlong_t
 			
@@ -4840,7 +4871,7 @@ rm -f conftest*
 
 		if test "${BALL_U_QUAD_TYPE}" = "" ; then
 			cat > conftest.$ac_ext <<EOF
-#line 4743 "configure"
+#line 4774 "configure"
 #include "confdefs.h"
 
 					#include <rpc/types.h>
@@ -4853,7 +4884,7 @@ int main() {
 				
 ; return 0; }
 EOF
-if { (eval echo configure:4756: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:4787: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   BALL_U_QUAD_TYPE="unsigned long long int"
 			
@@ -4866,7 +4897,7 @@ rm -f conftest*
 
 		if test "${BALL_U_QUAD_TYPE}" = "" ; then
 			cat > conftest.$ac_ext <<EOF
-#line 4769 "configure"
+#line 4800 "configure"
 #include "confdefs.h"
 
 					#include <rpc/types.h>
@@ -4879,7 +4910,7 @@ int main() {
 				
 ; return 0; }
 EOF
-if { (eval echo configure:4782: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:4813: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   BALL_U_QUAD_TYPE=__uint64_t
 			
@@ -4907,7 +4938,7 @@ EOF
 	else
 
 														cat > conftest.$ac_ext <<EOF
-#line 4810 "configure"
+#line 4841 "configure"
 #include "confdefs.h"
 
 			
@@ -4917,7 +4948,7 @@ int main() {
 			
 ; return 0; }
 EOF
-if { (eval echo configure:4820: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:4851: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   BALL_U_QUAD_TYPE="unsigned long long int"
 		
@@ -4952,11 +4983,17 @@ EOF
 EOF
 
 	fi
+	if test "${BALL_XDRREC_VOID}" = true ; then
+		cat >> confdefs.h <<\EOF
+#define BALL_XDRREC_CREATE_VOID 1
+EOF
 
+	fi
+	
 					echo $ac_n "checking for XDR symbols in libc""... $ac_c" 1>&6
-echo "configure:4857: checking for XDR symbols in libc" >&5
+echo "configure:4894: checking for XDR symbols in libc" >&5
 	cat > conftest.$ac_ext <<EOF
-#line 4859 "configure"
+#line 4896 "configure"
 #include "confdefs.h"
 
 			#include <rpc/types.h>
@@ -4970,7 +5007,7 @@ int main() {
 		
 ; return 0; }
 EOF
-if { (eval echo configure:4873: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:4910: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   XDR_IN_LIBC=true
 	
@@ -4982,12 +5019,12 @@ rm -f conftest*
 	if test "${XDR_IN_LIBC}" != true ; then
 		echo "$ac_t""not found!" 1>&6
 		echo $ac_n "checking for XDR symbols in libnsl""... $ac_c" 1>&6
-echo "configure:4885: checking for XDR symbols in libnsl" >&5
+echo "configure:4922: checking for XDR symbols in libnsl" >&5
 
 		SAVE_LIBS=${LIBS}
 		LIBS="-lnsl ${LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 4890 "configure"
+#line 4927 "configure"
 #include "confdefs.h"
 
 				#include <rpc/types.h>
@@ -5001,7 +5038,7 @@ int main() {
 			
 ; return 0; }
 EOF
-if { (eval echo configure:4904: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:4941: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   XDR_IN_LIBNSL=true
 		
@@ -5034,17 +5071,17 @@ if test "$INCLUDE_IEEEFP" = true ; then
 do
 ac_safe=`echo "$ac_hdr" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for $ac_hdr""... $ac_c" 1>&6
-echo "configure:4937: checking for $ac_hdr" >&5
+echo "configure:4974: checking for $ac_hdr" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4942 "configure"
+#line 4979 "configure"
 #include "confdefs.h"
 #include <$ac_hdr>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4947: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:4984: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5078,17 +5115,17 @@ fi
 
 ac_safe=`echo "regex.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for regex.h""... $ac_c" 1>&6
-echo "configure:4981: checking for regex.h" >&5
+echo "configure:5018: checking for regex.h" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 4986 "configure"
+#line 5023 "configure"
 #include "confdefs.h"
 #include <regex.h>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:4991: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5028: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5113,17 +5150,17 @@ fi
 if test "${HAS_REGEX_H}" = "false" ; then
 	ac_safe=`echo "regexp.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for regexp.h""... $ac_c" 1>&6
-echo "configure:5016: checking for regexp.h" >&5
+echo "configure:5053: checking for regexp.h" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 5021 "configure"
+#line 5058 "configure"
 #include "confdefs.h"
 #include <regexp.h>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5026: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5063: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5169,7 +5206,7 @@ if test "${USE_BALLVIEW}" = true ; then
 # Uses ac_ vars as temps to allow command line to override cache and checks.
 # --without-x overrides everything else, but does not touch the cache.
 echo $ac_n "checking for X""... $ac_c" 1>&6
-echo "configure:5072: checking for X" >&5
+echo "configure:5109: checking for X" >&5
 
 # Check whether --with-x or --without-x was given.
 if test "${with_x+set}" = set; then
@@ -5231,12 +5268,12 @@ if test "$ac_x_includes" = NO; then
 
   # First, try using that file with no special directory specified.
 cat > conftest.$ac_ext <<EOF
-#line 5134 "configure"
+#line 5171 "configure"
 #include "confdefs.h"
 #include <$x_direct_test_include>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:5139: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:5176: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out | grep -v "^conftest.${ac_ext}\$"`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -5305,14 +5342,14 @@ if test "$ac_x_libraries" = NO; then
   ac_save_LIBS="$LIBS"
   LIBS="-l$x_direct_test_library $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 5208 "configure"
+#line 5245 "configure"
 #include "confdefs.h"
 
 int main() {
 ${x_direct_test_function}()
 ; return 0; }
 EOF
-if { (eval echo configure:5215: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:5252: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   LIBS="$ac_save_LIBS"
 # We can link X programs with no special library path.
@@ -5417,7 +5454,7 @@ fi
 	if test "${USE_BALLVIEW}" = true ; then
 		if test "${BALLVIEW_PLATFORM}" = Mesa ; then
 			echo $ac_n "checking for Mesa includes""... $ac_c" 1>&6
-echo "configure:5320: checking for Mesa includes" >&5
+echo "configure:5357: checking for Mesa includes" >&5
 			
 	_INCLUDES=
 
@@ -5507,7 +5544,7 @@ echo "configure:5320: checking for Mesa includes" >&5
 
 			if test "${USE_BALLVIEW}" = true ; then
 				echo $ac_n "checking for Mesa library""... $ac_c" 1>&6
-echo "configure:5410: checking for Mesa library" >&5
+echo "configure:5447: checking for Mesa library" >&5
 				
 	_LIBS=
 
@@ -5676,7 +5713,7 @@ echo "configure:5410: checking for Mesa library" >&5
 
 		if test ${BALLVIEW_PLATFORM} = OpenGL ; then
 			echo $ac_n "checking for OpenGL includes""... $ac_c" 1>&6
-echo "configure:5579: checking for OpenGL includes" >&5
+echo "configure:5616: checking for OpenGL includes" >&5
 			
 	_INCLUDES=
 
@@ -5763,7 +5800,7 @@ echo "configure:5579: checking for OpenGL includes" >&5
 			fi
 
 			echo $ac_n "checking for OpenGL library""... $ac_c" 1>&6
-echo "configure:5666: checking for OpenGL library" >&5
+echo "configure:5703: checking for OpenGL library" >&5
 			
 	_LIBS=
 
@@ -5854,7 +5891,7 @@ echo "configure:5666: checking for OpenGL library" >&5
 
 		if test "${USE_BALLVIEW}" = true ; then
 			echo $ac_n "checking for QT headers""... $ac_c" 1>&6
-echo "configure:5757: checking for QT headers" >&5
+echo "configure:5794: checking for QT headers" >&5
 			if test "${QTDIR}" != "" ; then
 				
 	_INCLUDES=
@@ -6024,7 +6061,7 @@ echo "configure:5757: checking for QT headers" >&5
 			fi
 
 			echo $ac_n "checking for libqt${QT_MT_SUFFIX}""... $ac_c" 1>&6
-echo "configure:5927: checking for libqt${QT_MT_SUFFIX}" >&5
+echo "configure:5964: checking for libqt${QT_MT_SUFFIX}" >&5
 			if test "${QTDIR}" != "" ; then
 				
 	_LIBS=
@@ -6195,7 +6232,7 @@ echo "configure:5927: checking for libqt${QT_MT_SUFFIX}" >&5
 			
 			QGL_LIBPATH=${QT_LIBPATH}
 			echo $ac_n "checking for libqgl""... $ac_c" 1>&6
-echo "configure:6098: checking for libqgl" >&5
+echo "configure:6135: checking for libqgl" >&5
 			if test "${QTDIR}" != "" ; then
 				
 	_LIBS=
@@ -6381,19 +6418,19 @@ fi
 if test "${USE_BALLVIEW}" = true ; then		
 						
 	echo $ac_n "checking linking against X11 libraries""... $ac_c" 1>&6
-echo "configure:6284: checking linking against X11 libraries" >&5
+echo "configure:6321: checking linking against X11 libraries" >&5
 				if test "${X11_LIBS}" != "" ; then
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 6289 "configure"
+#line 6326 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:6296: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6333: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   X_LINKING_OK=1
 else
@@ -6409,14 +6446,14 @@ rm -f conftest*
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 6312 "configure"
+#line 6349 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:6319: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6356: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   X_LINKING_OK=1
 else
@@ -6432,14 +6469,14 @@ rm -f conftest*
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 6335 "configure"
+#line 6372 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:6342: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6379: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   X_LINKING_OK=1
 else
@@ -6455,14 +6492,14 @@ rm -f conftest*
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 6358 "configure"
+#line 6395 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:6365: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6402: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   X_LINKING_OK=1
 else
@@ -6478,14 +6515,14 @@ rm -f conftest*
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 6381 "configure"
+#line 6418 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:6388: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6425: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   X_LINKING_OK=1
 else
@@ -6530,7 +6567,7 @@ if test "${USE_BALLVIEW}" = true ; then
 			LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
 		fi
 		echo $ac_n "checking for XMesaGarbageCollect in -lGL""... $ac_c" 1>&6
-echo "configure:6433: checking for XMesaGarbageCollect in -lGL" >&5
+echo "configure:6470: checking for XMesaGarbageCollect in -lGL" >&5
 ac_lib_var=`echo GL'_'XMesaGarbageCollect | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -6538,7 +6575,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lGL  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 6441 "configure"
+#line 6478 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 #ifdef __cplusplus
@@ -6552,7 +6589,7 @@ int main() {
 XMesaGarbageCollect()
 ; return 0; }
 EOF
-if { (eval echo configure:6455: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6492: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -6576,18 +6613,18 @@ fi
 		LDFLAGS=${SAVE_LDFLAGS}
 		if test "${BALLVIEW_PLATFORM}" != Mesa ; then
 			echo $ac_n "checking linking against OpenGL libraries""... $ac_c" 1>&6
-echo "configure:6479: checking linking against OpenGL libraries" >&5
+echo "configure:6516: checking linking against OpenGL libraries" >&5
 			SAVE_LIBS=${LIBS}
 			LIBS="${OPENGL_LIBOPTS} ${LIBS}"
 			cat > conftest.$ac_ext <<EOF
-#line 6483 "configure"
+#line 6520 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:6490: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6527: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   OPENGL_LINKING_OK=1
 else
@@ -6627,18 +6664,18 @@ if test "${USE_BALLVIEW}" = true ; then
 								OPENGL_LIBS="-lGLU -lGL"
 
 								echo $ac_n "checking linking against Mesa libs""... $ac_c" 1>&6
-echo "configure:6530: checking linking against Mesa libs" >&5
+echo "configure:6567: checking linking against Mesa libs" >&5
 		SAVE_LIBS=${LIBS}
 		LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
 		cat > conftest.$ac_ext <<EOF
-#line 6534 "configure"
+#line 6571 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:6541: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6578: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   HAVE_MESALIBS=1
 else
@@ -6653,14 +6690,14 @@ rm -f conftest*
 			SAVE_LIBS=${LIBS}
 			LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
 			cat > conftest.$ac_ext <<EOF
-#line 6556 "configure"
+#line 6593 "configure"
 #include "confdefs.h"
 
 int main() {
 
 ; return 0; }
 EOF
-if { (eval echo configure:6563: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6600: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   HAVE_MESALIBS=1
 else
@@ -6696,20 +6733,20 @@ if test "${USE_BALLVIEW}" = true ; then
 fi
 if test "${USE_BALLVIEW}" = true ; then
 	echo $ac_n "checking linking against QT libraries""... $ac_c" 1>&6
-echo "configure:6599: checking linking against QT libraries" >&5
+echo "configure:6636: checking linking against QT libraries" >&5
 
 
 	SAVE_LIBS=${LIBS}
 	LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 	cat > conftest.$ac_ext <<EOF
-#line 6605 "configure"
+#line 6642 "configure"
 #include "confdefs.h"
 const char* qGLVersion();
 int main() {
 qGLVersion();
 ; return 0; }
 EOF
-if { (eval echo configure:6612: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6649: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   QT_LINKING_OK=1
 else
@@ -6724,14 +6761,14 @@ rm -f conftest*
 		SAVE_LIBS=${LIBS}
 		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 		cat > conftest.$ac_ext <<EOF
-#line 6627 "configure"
+#line 6664 "configure"
 #include "confdefs.h"
 const char* qGLVersion();
 int main() {
 qGLVersion();
 ; return 0; }
 EOF
-if { (eval echo configure:6634: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+if { (eval echo configure:6671: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
   rm -rf conftest*
   QT_LINKING_OK=1
 else
@@ -6756,7 +6793,7 @@ rm -f conftest*
 		echo "$ac_t""yes" 1>&6
 		
 								echo $ac_n "checking QT library version""... $ac_c" 1>&6
-echo "configure:6659: checking QT library version" >&5
+echo "configure:6696: checking QT library version" >&5
 		SAVE_LIBS=${LIBS}
 		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 		LD_LIBRARY_PATH="${X11_LIBPATH}:${OPENGL_LIBPATH}:${QT_LIBPATH}:${LD_LIBRARY_PATH}"
@@ -6767,7 +6804,7 @@ echo "configure:6659: checking QT library version" >&5
 		
 else
   cat > conftest.$ac_ext <<EOF
-#line 6670 "configure"
+#line 6707 "configure"
 #include "confdefs.h"
 #ifdef __cplusplus
 extern "C" void exit(int);
@@ -6784,7 +6821,7 @@ extern "C" void exit(int);
 				}
 			
 EOF
-if { (eval echo configure:6687: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:6724: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext} && (./conftest; exit) 2>/dev/null
 then
   QT_VERSION_OK=1
 else
@@ -6854,7 +6891,7 @@ if test "${USE_BALLVIEW}" = true ; then
 				# Extract the first word of "moc", so it can be a program name with args.
 set dummy moc; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:6757: checking for $ac_word" >&5
+echo "configure:6794: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_MOC'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -6921,11 +6958,11 @@ fi
 
 if test "${PYTHON_SUPPORT}" = true ; then
 	echo $ac_n "checking stuff required for Python extensions""... $ac_c" 1>&6
-echo "configure:6824: checking stuff required for Python extensions" >&5
+echo "configure:6861: checking stuff required for Python extensions" >&5
 	echo "$ac_t""." 1>&6
 	
 				echo $ac_n "checking for Python.h""... $ac_c" 1>&6
-echo "configure:6828: checking for Python.h" >&5
+echo "configure:6865: checking for Python.h" >&5
 	
 	_INCLUDES=
 
@@ -7013,7 +7050,7 @@ echo "configure:6828: checking for Python.h" >&5
 	fi
 
 				echo $ac_n "checking for libpython""... $ac_c" 1>&6
-echo "configure:6916: checking for libpython" >&5
+echo "configure:6953: checking for libpython" >&5
 	PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
 	if test "${PYTHON_LIBS}" = "" ; then
 			echo "$ac_t""" 1>&6
@@ -7045,11 +7082,11 @@ echo "configure:6916: checking for libpython" >&5
 	echo "$ac_t""Linker options for Python library: ${PYTHON_LIBS}" 1>&6
 		
 				echo $ac_n "checking sip executable""... $ac_c" 1>&6
-echo "configure:6948: checking sip executable" >&5
+echo "configure:6985: checking sip executable" >&5
 	echo "$ac_t""${SIP}" 1>&6
 
 				echo $ac_n "checking libsip.a""... $ac_c" 1>&6
-echo "configure:6952: checking libsip.a" >&5
+echo "configure:6989: checking libsip.a" >&5
 	if test -r "${SIP_LIBPATH}/libsip.a" ; then
 		SIP_LIB=${SIP_LIBPATH}/libsip.a
 		echo "$ac_t""${SIP_LIB}" 1>&6
@@ -7065,7 +7102,7 @@ echo "configure:6952: checking libsip.a" >&5
 	fi
 	
 				echo $ac_n "checking sip headers (sip.h)""... $ac_c" 1>&6
-echo "configure:6968: checking sip headers (sip.h)" >&5
+echo "configure:7005: checking sip headers (sip.h)" >&5
 	
 	_INCLUDES=
 

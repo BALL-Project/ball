@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.132 2001/05/09 16:18:24 oliver Exp $
+dnl    $Id: configure.in,v 1.133 2001/05/10 23:35:11 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1082,7 +1082,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 	MAKEDEP_CXX_OPTS="-M -noimplicit_include"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-	CXXFLAGS="${CXXFLAGS} -ieee"
+	CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
 	BALL_CXXFLAGS="${BALL_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
 	CXXFLAGS_O="${CXXFLAGS_O} -O5"
 	
@@ -1878,14 +1878,32 @@ else
 			if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
 				AC_MSG_RESULT([(char*, char*, int)])
 			else
-				AC_MSG_RESULT(not found!)
-				AC_MSG_ERROR(Aborted)
+				AC_TRY_COMPILE(
+					[
+						#include <rpc/types.h>
+						#include <rpc/xdr.h>
+						extern "C" int dummy() {return 0;}
+						void foo(){
+							XDR xdrs;
+							xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+						}
+					],
+					[
+					],
+					BALL_XDRREC_VOID=true,
+					BALL_XDRREC_VOID=false
+				)
+				if test "${BALL_XDRREC_VOID}" = true ; then
+					AC_MSG_RESULT(())
+				else
+					AC_MSG_RESULT(not found!)
+					AC_MSG_ERROR(Aborted)
+				fi
 			fi
 		fi
 	else
 		AC_MSG_RESULT([(void*, void*, unsigned int)])
 	fi
-
 
 	dnl
 	dnl  check whether there is a function to store 64bit
@@ -2008,7 +2026,10 @@ else
 	if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
 		AC_DEFINE(BALL_XDRREC_CREATE_CHAR_CHAR_INT)
 	fi
-
+	if test "${BALL_XDRREC_VOID}" = true ; then
+		AC_DEFINE(BALL_XDRREC_CREATE_VOID)
+	fi
+	
 	dnl
 	dnl		Try to guess the library required for the XDR stuff.
 	dnl   It is often in libc, but Solaris hides it in libnsl.
