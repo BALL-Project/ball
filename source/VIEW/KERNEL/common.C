@@ -267,7 +267,7 @@ Vector3 getNormal(const Vector3& v)
 	return n;
 }
 
-void log(const String& data)
+void logString(const String& data)
 {
 	if (MainControl::getInstance(0) == 0) return;
 	LogEvent* su = new LogEvent;

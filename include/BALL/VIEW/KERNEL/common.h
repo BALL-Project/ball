@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.32.2.2 2005/01/10 13:21:07 amoll Exp $
+// $Id: common.h,v 1.32.2.3 2005/01/10 13:27:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -364,7 +364,7 @@ namespace BALL
 		};
 
 		/// thread safe output to logview
-		void log(const String& data);
+		void logString(const String& data);
 		
 		//@}
 

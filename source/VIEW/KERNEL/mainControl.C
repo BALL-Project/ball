@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158.2.1 2004/12/27 14:55:00 amoll Exp $
+// $Id: mainControl.C,v 1.158.2.2 2005/01/10 13:23:59 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1515,9 +1515,9 @@ namespace BALL
 				return;
 			}
 			
-			if (e->type() == (QEvent::Type)SIMULATION_OUTPUT_EVENT)
+			if (e->type() == (QEvent::Type)LOG_EVENT)
 			{
-				SimulationOutput* so = dynamic_cast<SimulationOutput*>(e);
+				LogEvent* so = dynamic_cast<LogEvent*>(e);
 				if (!so->isImportant())
 				{
 					Log.info() << so->getMessage() << std::endl;

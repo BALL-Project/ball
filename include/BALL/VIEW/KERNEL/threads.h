@@ -283,32 +283,6 @@ namespace VIEW
 		};
 
 		///
-		class BALL_EXPORT SimulationOutput
-			: public QCustomEvent
-		{
-			public:
-
-				///
-				SimulationOutput();
-
-				///
-				void setMessage(const String& msg) {message_ = msg;}
-
-				///
-				String getMessage() {return message_;}
-
-				/// will allways be shown in Statusbar or just when no other message shown?
-				bool isImportant() { return important_;}
-
-				///
-				void setImportant(bool state) { important_ = state;}
-
-			protected:
-				String message_;
-				bool   important_;
-		};
-
-		///
 		class BALL_EXPORT UpdateCompositeEvent
 			: public QCustomEvent
 		{
