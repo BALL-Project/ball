@@ -1,4 +1,4 @@
-// $Id: glQuadricObject.h,v 1.5 2001/05/13 13:57:02 hekl Exp $
+// $Id: glQuadricObject.h,v 1.6 2001/06/29 06:03:49 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLQUADRICOBJECT_H
@@ -27,9 +27,9 @@ namespace BALL
 				See the documentation of th OpenGL graphical library for information
 				concerning quadric objects.
 				@memo    GLQuadricObject class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:57:02 $
+				@author  $Author: sturm $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/06/29 06:03:49 $
 		*/
 		class GLQuadricObject
 		{
@@ -312,8 +312,8 @@ namespace BALL
 					on the function {\em gluPartialDisk} in the quadric object section.
 					@param    inner_radius the inner radius of the partial disk.
 					@param    outer_radius the outer radius of the partial disk.
-					@param    slices the number of slices the partial disk have
-					@param    rings the number of rings the partial disk have
+					@param    slices the number of slices the partial disk has
+					@param    rings the number of rings the partial disk has
 					@param    start_angle the start angle of the partial disk.
 					@param    sweep_angle the sweep angle of the partial disk.
 					@exception  NoQuadricObjectAvailable thrown if no memory is available for {\em *this} glQuadricObject
@@ -333,8 +333,8 @@ namespace BALL
 					on the function {\em gluDisk} in the quadric object section.
 					@param    inner_radius the inner radius of the disk.
 					@param    outer_radius the outer radius of the disk.
-					@param    slices the number of slices the disk have
-					@param    rings the number of rings the disk have
+					@param    slices the number of slices the disk has
+					@param    rings the number of rings the disk has
 					@exception  NoQuadricObjectAvailable thrown if no memory is available for {\em *this} glQuadricObject
 			*/
 			void drawDisk
@@ -352,8 +352,8 @@ namespace BALL
 					@param    base_radius the base radius of the cylinder.
 					@param    top_radius the top radius of the cylinder.
 					@param    height the height of the cylinder.
-					@param    slices the number of slices the cylinder have
-					@param    stacks the number of stacks the cylinder have
+					@param    slices the number of slices the cylinder has
+					@param    stacks the number of stacks the cylinder has
 					@exception  NoQuadricObjectAvailable thrown if no memory is available for {\em *this} glQuadricObject
 			*/
 			void drawCylinder
@@ -369,8 +369,8 @@ namespace BALL
 					See documentation of the OpenGL graphical library for information
 					on the function {\em gluSphere} in the quadric object section.
 					@param    radius the radius of the sphere.
-					@param    slices the number of slices the sphere have
-					@param    stacks the number of stacks the sphere have
+					@param    slices the number of slices the sphere has
+					@param    stacks the number of stacks the sphere has
 					@exception  NoQuadricObjectAvailable thrown if no memory is available for {\em *this} glQuadricObject
 			*/
 			void drawSphere(GLdouble radius, int slices, int stacks)
