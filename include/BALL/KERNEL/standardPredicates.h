@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.37 2003/07/07 09:38:01 anker Exp $
+// $Id: standardPredicates.h,v 1.38 2003/07/07 11:17:50 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -374,11 +374,11 @@ namespace BALL
 					@return true, if the predicate is true, false otherwise
 			*/
 			virtual bool operator () (const Atom& atom) const
-				throw(Exception::InvalidFormat);
+				throw();
 
 		protected:
 			bool testPredicate_(const Atom& atom, Bond::Order order) const
-				throw(Exception::InvalidFormat);
+				throw();
 	};
 
 
@@ -397,7 +397,7 @@ namespace BALL
 					@return true, if the predicate is true, false otherwise
 			*/
 			virtual bool operator () (const Atom& atom) const
-				throw(Exception::InvalidFormat);
+				throw();
 	};
 
 
@@ -416,7 +416,7 @@ namespace BALL
 					@return true, if the predicate is true, false otherwise
 			*/
 			virtual bool operator () (const Atom& atom) const
-				throw(Exception::InvalidFormat);
+				throw();
 
 	};
 
@@ -436,7 +436,7 @@ namespace BALL
 					@return true, if the predicate is true, false otherwise
 				*/
 			virtual bool operator () (const Atom& atom) const
-				throw(Exception::InvalidFormat);
+				throw();
 	};
 
 
@@ -455,7 +455,7 @@ namespace BALL
 					@return true, if the predicate is true, false otherwise
 			*/
 			virtual bool operator () (const Atom& atom) const
-				throw(Exception::InvalidFormat);
+				throw();
 	};
 
 

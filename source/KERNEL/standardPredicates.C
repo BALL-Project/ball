@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.52 2003/07/07 09:38:01 anker Exp $
+// $Id: standardPredicates.C,v 1.53 2003/07/07 11:17:50 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -224,7 +224,16 @@ namespace BALL
 		{
 			if (argument_.isDigit())
 			{
-				n = argument_.toInt();
+				try
+				{
+					n = argument_.toInt();
+				}
+				catch (Exception::InvalidFormat& e)
+				{
+					Log.error() << "InRingPredicate::operator () (): "
+						<< "argument format is broken: " << argument_ << endl;
+					return(false);
+				}
 				// There are no rings with less than 3 atoms
 				if (n < 3) 
 				{
@@ -281,7 +290,7 @@ namespace BALL
 
 	bool NumberOfBondsPredicate::testPredicate_(const Atom& atom, 
 			Bond::Order order) const
-		throw(Exception::InvalidFormat)
+		throw()
 	{
 		String s = argument_;
 		s.trim();
@@ -311,7 +320,16 @@ namespace BALL
 		Size n;
 		if (s.size() == 2)
 		{
-			n = ((String) s[1]).toInt();
+			try
+			{
+				n = ((String) s[1]).toInt();
+			}
+			catch (Exception::InvalidFormat& e)
+			{
+				Log.error() << "NumberOfBondsPredicate::testPredicate_(): "
+					<< "argument format is broken: " << argument_ << endl;
+				return(false);
+			}
 			switch (s[0]) 
 			{
 				case '<' :
@@ -352,7 +370,16 @@ namespace BALL
 		}
 		else 
 		{
-			n = ((String) s[0]).toInt();
+			try
+			{
+				n = ((String) s[0]).toInt();
+			}
+			catch (Exception::InvalidFormat& e)
+			{
+				Log.error() << "InRingPredicate::operator () (): "
+					<< "argument format is broken: " << argument_ << endl;
+				return(false);
+			}
 			if (count == n)
 			{
 				return true;
@@ -365,31 +392,31 @@ namespace BALL
 	}
 
 	bool NumberOfBondsPredicate::operator () (const Atom& atom) const
-		throw(Exception::InvalidFormat)
+		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__ANY);
 	}
 
 	bool SingleBondsPredicate::operator () (const Atom& atom) const
-		throw(Exception::InvalidFormat)
+		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__SINGLE);
 	}
 
 	bool DoubleBondsPredicate::operator () (const Atom& atom) const
-		throw(Exception::InvalidFormat)
+		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__DOUBLE);
 	}
 
 	bool TripleBondsPredicate::operator () (const Atom& atom) const
-		throw(Exception::InvalidFormat)
+		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__TRIPLE);
 	}
 
 	bool AromaticBondsPredicate::operator () (const Atom& atom) const
-		throw(Exception::InvalidFormat)
+		throw()
 	{
 		return testPredicate_(atom, Bond::ORDER__AROMATIC);
 	}
