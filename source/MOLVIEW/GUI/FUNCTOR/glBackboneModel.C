@@ -1,4 +1,4 @@
-// $Id: glBackboneModel.C,v 1.3.4.1 2002/10/18 14:48:26 amoll Exp $
+// $Id: glBackboneModel.C,v 1.3.4.2 2002/12/08 22:35:18 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.h>
 
@@ -10,17 +10,13 @@ namespace BALL
 
 		AddGLBackboneModel::AddGLBackboneModel()
 			throw()
-				:
-				AddBackboneModel()
+			: AddBackboneModel()
 		{
 		}
 
-		AddGLBackboneModel::AddGLBackboneModel
-			(const AddGLBackboneModel &add_gl_backbone_model,
-			 bool deep)
+		AddGLBackboneModel::AddGLBackboneModel(const AddGLBackboneModel &add_gl_backbone_model, bool deep)
 			throw()
-				:
-				AddBackboneModel(add_gl_backbone_model, deep)
+			: AddBackboneModel(add_gl_backbone_model, deep)
 		{
 		}
 
@@ -28,16 +24,14 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<AddGLBackboneModel>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<AddGLBackboneModel>() << endl;
 			#endif 
 
 			AddBackboneModel::destroy();
 		}
 
-		Backbone *
-		AddGLBackboneModel::createBackbone_
-			()
+		Backbone* AddGLBackboneModel::createBackbone_()
 		{
 			return (Backbone *)(new GLBackbone());
 		}
