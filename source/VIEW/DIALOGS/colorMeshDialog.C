@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.47 2005/02/28 20:25:43 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.48 2005/02/28 20:29:56 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -611,6 +611,11 @@ void ColorMeshDialog::gridTransparencyChanged()
 void ColorMeshDialog::customColorTransparencyChanged()
 {
 	alpha_box->setEnabled(alpha_button_custom->isChecked());
+}
+
+void ColorMeshDialog::setMinValue(float value)
+{
+	min_label->setText(String(value).c_str());
 }
 
 

@@ -150,7 +150,7 @@ void BALLViewDemo::accept()
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
 	bool disable_button = true;
 
-//   	if (id < MODEL_HBONDS + 1)
+	if (id < MODEL_HBONDS + 8)
 	{
 		// remove representations
 		PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
@@ -165,8 +165,8 @@ void BALLViewDemo::accept()
 
 	if (id < MODEL_HBONDS)
 	{
-//   		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, (ModelType) id, COLORING_ELEMENT);
-CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
+ 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, (ModelType) id, COLORING_ELEMENT);
+//   CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
 	}
 	else if (id == MODEL_HBONDS)
@@ -203,8 +203,7 @@ CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_
 
 		ms->chooseAmberFF();
 		ms->getMDSimulationDialog().setTimeStep(0.001);
-//   		ms->getMDSimulationDialog().setNumberOfSteps(50);
-		ms->getMDSimulationDialog().setNumberOfSteps(10);
+ 		ms->getMDSimulationDialog().setNumberOfSteps(30);
 		ms->MDSimulation(false);
 	}
 	else if (id == MODEL_HBONDS + 6) //FDPB
@@ -225,6 +224,8 @@ CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_
 		ColorMeshDialog* cdialog = ColorMeshDialog::getInstance(0);
 		cdialog->setMesh(mesh, rep);
 		cdialog->setGrid(grid_);
+		cdialog->setMinValue(-0.7);
+		cdialog->setMaxValue(3.0);
 		cdialog->applyPressed();
 
 		rep->setColorProcessor(0);
@@ -284,6 +285,11 @@ CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_
 */
  		disable_button = false;
 		
+	}
+	else if (id == MODEL_HBONDS + 8) // last
+	{
+		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
+		notify_(crmsg);
 	}
 
 	buttonOk->setEnabled(!disable_button);
