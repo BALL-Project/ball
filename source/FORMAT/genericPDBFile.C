@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.4 1999/12/28 18:22:24 oliver Exp $
+// $Id: genericPDBFile.C,v 1.5 2000/01/17 09:42:00 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -10,6 +10,13 @@ using namespace std;
 
 namespace BALL 
 {
+
+	extern "C" int GenericPDBFileRecordNameComparator_
+		(const PDB::RecordTypeFormat* a, const PDB::RecordTypeFormat* b)
+	{
+		return memcmp(a->string, b->string, 6);
+	}
+
 
 	const PDB::RecordTypeFormat
 	GenericPDBFile::record_type_format_[] =
@@ -882,12 +889,6 @@ namespace BALL
 		}
 
 		return true;
-	}
-
-	int GenericPDBFile::RecordNameComparator_
-		(const PDB::RecordTypeFormat* a, const PDB::RecordTypeFormat* b)
-	{
-		return memcmp(a->string, b->string, 6);
 	}
 
 	bool GenericPDBFile::readLine(char* line, Size size, bool extract_values)

@@ -1,6 +1,6 @@
-// $Id: PSE.C,v 1.4 1999/12/28 18:17:49 oliver Exp $
+// $Id: PSE.C,v 1.5 2000/01/17 09:42:05 oliver Exp $
 
-#	include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PSE.h>
 
 #include <ctype.h>			// toupper, tolower
 #include <stdlib.h>			// bsearch
@@ -12,6 +12,14 @@ using namespace std;
 
 namespace BALL 
 {
+
+	extern "C" int PSEcompare_
+		(const PSE_::SymbolToElement_* a,
+		 const PSE_::SymbolToElement_* b)
+	{
+		return strcmp(a->symbol, b->symbol);
+	}
+
 
 	Element Element::UNKNOWN
 						("Unknown",                  "?",         0,    0,       0,       0.0,       0.0,   0.0,  0.0,  0.0);
@@ -516,15 +524,6 @@ namespace BALL
 
 		return processor.finish();
 	}
-
-	int PSE_::compare_
-		(const PSE_::SymbolToElement_* a,
-		 const PSE_::SymbolToElement_* b)
-	{
-		return strcmp(a->symbol, b->symbol);
-	}
-
-
 
 	PSE_ PSE; // not conform to naming convention but fakes operator[] and operator() to be static functions.
 
