@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.11 2003/08/26 08:05:04 oliver Exp $
+// $Id: mainControlPreferences.h,v 1.1 2003/08/26 12:26:57 oliver Exp $
 //
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MAINCONTROLPREFERENCES_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.h,v 1.10 2003/08/26 08:05:05 oliver Exp $
+// $Id: serverPreferences.h,v 1.1 2003/08/26 12:26:58 oliver Exp $
 //
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SERVERPREFERENCES_H
