@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.68 2004/12/09 16:17:37 amoll Exp $
+// $Id: geometricControl.C,v 1.69 2004/12/14 12:55:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -335,6 +335,8 @@ namespace BALL
 
 		void GeometricControl::deleteRepresentation_()
 		{
+			if (getSelection().size() == 0) return;
+
 			if (creating_representations_) 
 			{
 				setStatusbarText("Can not modify representations, while creating a new one!");

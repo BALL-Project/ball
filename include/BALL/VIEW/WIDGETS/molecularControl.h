@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.42 2004/12/13 23:14:33 amoll Exp $
+// $Id: molecularControl.h,v 1.43 2004/12/14 12:56:01 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -473,7 +473,7 @@ namespace BALL
 		  protected:
 
 			//
-			void removeRecursiveComposite_(Composite& composite, bool first_call)
+			void removeRecursiveComposite_(Composite& composite)
 				throw();
 
 			// only for Python Interface
