@@ -1,4 +1,4 @@
-// $Id: format.doc,v 1.5 2000/10/10 20:40:13 oliver Exp $
+// $Id: format.doc,v 1.6 2001/01/16 17:18:08 anker Exp $
 
 /**@name	Fileformats
 		This chapter contains all relevant information on 
@@ -35,6 +35,13 @@
 		//@Include: JCAMPFile.h
 		//@Include: bruker1DFile.h
 		//@Include: bruker2DFile.h
+	//@}
+
+	/** @name Molecular Dynamics file formats
+	*/
+	//@{
+		//@Include: trajectoryFile.h
+		//@Include: DCDFile.h
 	//@}
 	
 //@}
