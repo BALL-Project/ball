@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.14 2005/01/05 15:29:27 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.15 2005/01/05 15:59:34 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -928,12 +928,12 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 				mesh->vertex.push_back(old_mesh->vertex[point_pos]);
 				mesh->normal.push_back(old_mesh->normal[point_pos]);
 			}
-
-			s_old = 2;
 		}
 		
 		
+		////////////////////////////////////////////////////////////
 		// insert connection between tubes
+		////////////////////////////////////////////////////////////
 		mesh->vertex.push_back(point + helix_dir);
 		mesh->normal.push_back(r_new);
 		mesh->vertex.push_back(point - helix_dir);
@@ -951,9 +951,10 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		t.v3 = so + 1;
  		mesh->triangle.push_back(t);
 
+		s_old = so + 2;
 
 		////////////////////////////////////////////////////////////
-		// insert only the new points, the old ones are already stored in the mesh
+		// insert the points of the two new circles
 		////////////////////////////////////////////////////////////
 		// we will add an other point next, so here we do an off by one :)
 		s_new = mesh->vertex.size();
