@@ -10,6 +10,7 @@
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/MOLMEC/COMMON/snapShotManager.h>
 
 #include <qapplication.h>
 
