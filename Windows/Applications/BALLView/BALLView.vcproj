@@ -81,7 +81,7 @@
 				OptimizeForProcessor="0"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_QT_HAS_THREADS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_QT_HAS_THREADS;BALL_PYTHON_SUPPORT"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
@@ -95,7 +95,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt333.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libview.lib libball.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt334.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libview.lib libball.lib"
 				OutputFile="$(OutDir)/BALLView.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -283,6 +283,24 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewDemo.C">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewDemoData.C">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\icons.C">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -380,6 +398,28 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewDemo.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running MOC on $(InputFileName)"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;"
+						Outputs="$(InputDir)\$(InputName)_moc.C"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewDemoData.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running MOC on $(InputFileName)"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;"
+						Outputs="$(InputDir)\$(InputName)_moc.C"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\icons.h">
 			</File>
 			<File
@@ -412,9 +452,6 @@
 						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
 			</File>
-			<File
-				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\threads.h">
-			</File>
 		</Filter>
 		<Filter
 			Name="MOC Files"
@@ -435,6 +472,24 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewDemo_moc.C">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewDemoData_moc.C">
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						CompileAs="2"/>
@@ -500,6 +555,19 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName).C&quot; -impl &quot;$(InputDi
 			</File>
 			<File
 				RelativePath="BALLView.rc">
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewDemo.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<File
