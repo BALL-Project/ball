@@ -1,4 +1,4 @@
-// $Id: fresnoNonPolar.h,v 1.1.2.3 2002/11/19 01:48:57 anker Exp $
+// $Id: fresnoNonPolar.h,v 1.1.2.4 2003/05/07 16:10:40 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNONONPOLAR_H
 #define BALL_MOLMEC_FRESNO_FRESNONONPOLAR_H
@@ -63,7 +63,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		FresnoNonPolar(const FresnoNonPolar& fhb, bool clone_deep = true)
+		FresnoNonPolar(const FresnoNonPolar& fhb)
 			throw();
 
 		/**	Destructor.

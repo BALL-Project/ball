@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.18 2003/02/24 16:58:16 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.19 2003/05/07 16:10:40 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -50,9 +50,9 @@ namespace BALL
 	}
 
 
-	FresnoDesolvation::FresnoDesolvation(const FresnoDesolvation& fd, bool deep)
+	FresnoDesolvation::FresnoDesolvation(const FresnoDesolvation& fd)
 		throw()
-		:	ForceFieldComponent(fd, deep),
+		:	ForceFieldComponent(fd),
 			factor_(0.0),
 			calculation_method_(0),
 			verbosity_(0),

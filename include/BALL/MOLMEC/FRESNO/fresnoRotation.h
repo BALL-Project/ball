@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.h,v 1.1.2.7 2003/02/14 11:02:13 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.8 2003/05/07 16:10:40 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
@@ -46,7 +46,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		FresnoRotation(const FresnoRotation& fr, bool clone_deep = true)
+		FresnoRotation(const FresnoRotation& fr)
 			throw();
 
 		/**	Destructor.

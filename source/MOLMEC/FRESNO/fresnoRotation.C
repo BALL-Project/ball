@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.15 2003/02/17 14:51:58 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.16 2003/05/07 16:10:41 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -56,9 +56,9 @@ namespace BALL
 	}
 
 
-	FresnoRotation::FresnoRotation(const FresnoRotation& fr, bool deep)
+	FresnoRotation::FresnoRotation(const FresnoRotation& fr)
 		throw()
-		:	ForceFieldComponent(fr, deep),
+		:	ForceFieldComponent(fr),
 			rotatable_bonds_(fr.rotatable_bonds_),
 			N_rot_(fr.N_rot_),
 			is_frozen_(fr.is_frozen_),

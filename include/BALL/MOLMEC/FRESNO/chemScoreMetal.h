@@ -1,4 +1,4 @@
-// $Id: chemScoreMetal.h,v 1.1.2.1 2002/04/20 12:26:40 anker Exp $
+// $Id: chemScoreMetal.h,v 1.1.2.2 2003/05/07 16:10:39 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_CHEMSCOREMETAL_H
 #define BALL_MOLMEC_FRESNO_CHEMSCOREMETAL_H
@@ -33,7 +33,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		ChemScoreMetal(const ChemScoreMetal& csm, bool clone_deep = true)
+		ChemScoreMetal(const ChemScoreMetal& csm)
 			throw();
 
 		/**	Destructor.

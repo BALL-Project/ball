@@ -1,4 +1,4 @@
-// $Id: fresnoConstant.h,v 1.1.2.1 2002/03/15 14:47:51 anker Exp $
+// $Id: fresnoConstant.h,v 1.1.2.2 2003/05/07 16:10:39 anker Exp $
 // Molecular Mechanics: Fresno force field, additive constant
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOCONSTANT_H
@@ -34,7 +34,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		FresnoConstant(const FresnoConstant& fhb, bool clone_deep = true)
+		FresnoConstant(const FresnoConstant& fhb)
 			throw();
 
 		/**	Destructor.

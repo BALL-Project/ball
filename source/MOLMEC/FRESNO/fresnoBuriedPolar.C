@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.11 2002/11/23 16:32:22 anker Exp $
+// $Id: fresnoBuriedPolar.C,v 1.1.2.12 2003/05/07 16:10:40 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -36,9 +36,9 @@ namespace BALL
 	}
 
 
-	FresnoBuriedPolar::FresnoBuriedPolar(const FresnoBuriedPolar& fl, bool deep)
+	FresnoBuriedPolar::FresnoBuriedPolar(const FresnoBuriedPolar& fl)
 		throw()
-		:	ForceFieldComponent(fl, deep),
+		:	ForceFieldComponent(fl),
 			possible_buried_polar_interactions_(fl.possible_buried_polar_interactions_),
 			r1_offset_(fl.r1_offset_),
 			r2_offset_(fl.r2_offset_)

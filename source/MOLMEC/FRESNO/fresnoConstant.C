@@ -1,4 +1,4 @@
-// $Id: fresnoConstant.C,v 1.1.2.2 2002/04/03 16:44:50 anker Exp $
+// $Id: fresnoConstant.C,v 1.1.2.3 2003/05/07 16:10:40 anker Exp $
 // Molecular Mechanics: Fresno force field, additive constant
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -31,9 +31,9 @@ namespace BALL
 	}
 
 
-	FresnoConstant::FresnoConstant(const FresnoConstant& fd, bool deep)
+	FresnoConstant::FresnoConstant(const FresnoConstant& fd)
 		throw()
-		:	ForceFieldComponent(fd, deep)
+		:	ForceFieldComponent(fd)
 	{
 	}
 

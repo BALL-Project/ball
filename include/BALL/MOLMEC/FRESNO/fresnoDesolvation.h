@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.h,v 1.1.2.6 2002/11/21 20:46:58 anker Exp $
+// $Id: fresnoDesolvation.h,v 1.1.2.7 2003/05/07 16:10:39 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
 #define BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
@@ -91,7 +91,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		FresnoDesolvation(const FresnoDesolvation& fhb, bool clone_deep = true)
+		FresnoDesolvation(const FresnoDesolvation& fhb)
 			throw();
 
 		/**	Destructor.

@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.C,v 1.1.2.9 2002/11/22 16:05:28 anker Exp $
+// $Id: fresnoLipophilic.C,v 1.1.2.10 2003/05/07 16:10:40 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -36,9 +36,9 @@ namespace BALL
 	}
 
 
-	FresnoLipophilic::FresnoLipophilic(const FresnoLipophilic& fl, bool deep)
+	FresnoLipophilic::FresnoLipophilic(const FresnoLipophilic& fl)
 		throw()
-		:	ForceFieldComponent(fl, deep),
+		:	ForceFieldComponent(fl),
 			possible_lipophilic_interactions_(fl.possible_lipophilic_interactions_),
 			r1_offset_(fl.r1_offset_),
 			r2_offset_(fl.r2_offset_)

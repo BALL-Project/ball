@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.h,v 1.1.2.3 2002/03/15 14:47:52 anker Exp $
+// $Id: fresnoHydrogenBond.h,v 1.1.2.4 2003/05/07 16:10:39 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOHYDROGENBOND_H
@@ -38,7 +38,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		FresnoHydrogenBond(const FresnoHydrogenBond& fhb, bool clone_deep = true)
+		FresnoHydrogenBond(const FresnoHydrogenBond& fhb)
 			throw();
 
 		/**	Destructor.

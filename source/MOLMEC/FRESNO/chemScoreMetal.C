@@ -1,4 +1,4 @@
-// $Id: chemScoreMetal.C,v 1.1.2.3 2002/11/22 15:11:26 anker Exp $
+// $Id: chemScoreMetal.C,v 1.1.2.4 2003/05/07 16:10:40 anker Exp $
 // 
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -36,9 +36,9 @@ namespace BALL
 	}
 
 
-	ChemScoreMetal::ChemScoreMetal(const ChemScoreMetal& csm, bool deep)
+	ChemScoreMetal::ChemScoreMetal(const ChemScoreMetal& csm)
 		throw()
-		:	ForceFieldComponent(csm, deep),
+		:	ForceFieldComponent(csm),
 			possible_metal_interactions_(csm.possible_metal_interactions_),
 			r1_(csm.r1_),
 			r2_(csm.r2_)

@@ -1,4 +1,4 @@
-// $Id: fresnoNonPolar.C,v 1.1.2.8 2003/02/22 12:56:37 anker Exp $
+// $Id: fresnoNonPolar.C,v 1.1.2.9 2003/05/07 16:10:40 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -59,9 +59,9 @@ namespace BALL
 	}
 
 
-	FresnoNonPolar::FresnoNonPolar(const FresnoNonPolar& fd, bool deep)
+	FresnoNonPolar::FresnoNonPolar(const FresnoNonPolar& fd)
 		throw()
-		:	ForceFieldComponent(fd, deep),
+		:	ForceFieldComponent(fd),
 			verbosity_(fd.verbosity_),
 			factor_(fd.factor_),
 			calculation_method_(fd.calculation_method_),

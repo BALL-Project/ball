@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.10 2002/11/22 16:05:27 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.11 2003/05/07 16:10:40 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -36,9 +36,9 @@ namespace BALL
 	}
 
 
-	FresnoHydrogenBond::FresnoHydrogenBond(const FresnoHydrogenBond& fhb, bool deep)
+	FresnoHydrogenBond::FresnoHydrogenBond(const FresnoHydrogenBond& fhb)
 		throw()
-		:	ForceFieldComponent(fhb, deep),
+		:	ForceFieldComponent(fhb),
 			possible_hydrogen_bonds_(fhb.possible_hydrogen_bonds_),
 			already_used_(fhb.already_used_),
 			h_bond_distance_lower_(fhb.h_bond_distance_lower_),

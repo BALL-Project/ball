@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.19 2003/02/10 17:13:01 anker Exp $
+// $Id: fresno.C,v 1.1.2.20 2003/05/07 16:10:40 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -107,7 +107,7 @@ namespace BALL
 	const float FresnoFF::Default::SOLVENT_NUMBER_DENSITY = 0;
 	const float FresnoFF::Default::ABSOLUTE_TEMPERATURE = 0;
 	const Size FresnoFF::Default::NONPOLAR_METHOD = 0;
-	const Size FresnoFF::Default::VERBOSITY = 9;
+	const Size FresnoFF::Default::VERBOSITY = 0;
 	const String FresnoFF::Default::SOLVENT_DESCRIPTOR_FILE 
 		= "solvents/PCM-water.ini";
 	const String FresnoFF::Default::LJ_PARAM_FILE 
@@ -126,7 +126,7 @@ namespace BALL
 		insertComponent(new FresnoRotation(*this));
 		insertComponent(new FresnoDesolvation(*this));
 		insertComponent(new ChemScoreMetal(*this));
-		// insertComponent(new CharmmNonBonded(*this));
+		insertComponent(new CharmmNonBonded(*this));
 		insertComponent(new FresnoNonPolar(*this));
 	}
 

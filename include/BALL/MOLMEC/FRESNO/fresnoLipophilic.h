@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.h,v 1.1.2.2 2002/03/15 14:47:52 anker Exp $
+// $Id: fresnoLipophilic.h,v 1.1.2.3 2003/05/07 16:10:39 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOLIPOPHILIC_H
@@ -34,7 +34,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		FresnoLipophilic(const FresnoLipophilic& fhb, bool clone_deep = true)
+		FresnoLipophilic(const FresnoLipophilic& fhb)
 			throw();
 
 		/**	Destructor.
