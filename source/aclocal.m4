@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.28 2003/05/27 14:03:23 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.29 2003/05/27 18:47:13 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -170,8 +170,14 @@ AC_DEFUN(CF_FIND_LIB,[
 		_LIBS=${$1}
 	fi
 
+	if test "$3" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib"
+	else
+		_LIBDIRS="$3"
+	fi
+		
 	if test "${_LIBS}" = "" ; then
-		for i in $3 ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/$2.* ; do
 				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
@@ -2673,7 +2679,7 @@ AC_DEFUN(CF_BALLVIEW, [
 					AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
 					AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
 					AC_MSG_RESULT([path - configure will recognize this, too.])
-					AC_MSG_RESULT([If the QT library was built with thread support enabled (liqt-mt])
+					AC_MSG_RESULT([If the QT library was built with thread support enabled (libqt-mt])
 					AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
 					AC_MSG_RESULT([The QT package can be found under the following URL:])
 					AC_MSG_RESULT(  http://www.troll.no/qt)
@@ -2739,7 +2745,7 @@ AC_DEFUN(CF_BALLVIEW, [
 						fi
 						if test "${QGL_PATH}" != "${QT_PATH}" ; then
 							QT_PATH=${QGL_PATH}
-							AC_MSG_RESULT(using ${QT_PATH} to look for liqt.so and libqgl.s)
+							AC_MSG_RESULT(using ${QT_PATH} to look for libqt.so and libqgl.s)
 						fi
 					fi
 				fi

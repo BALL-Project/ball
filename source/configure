@@ -14782,8 +14782,14 @@ echo $ECHO_N "checking for FFT library... $ECHO_C" >&6
 		_LIBS=${FFTW_LIB}
 	fi
 
+	if test "${FFTW_LIBPATH}" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib"
+	else
+		_LIBDIRS="${FFTW_LIBPATH}"
+	fi
+
 	if test "${_LIBS}" = "" ; then
-		for i in ${FFTW_LIBPATH} ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/libfftw.* ; do
 				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
@@ -15408,8 +15414,14 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 		_LIBS=${MESA_LIBS}
 	fi
 
+	if test "${OPENGL_LIBPATH} ${X11_LIBPATH}" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib"
+	else
+		_LIBDIRS="${OPENGL_LIBPATH} ${X11_LIBPATH}"
+	fi
+
 	if test "${_LIBS}" = "" ; then
-		for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/libMesaGL.* ; do
 				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
@@ -15483,8 +15495,14 @@ echo $ECHO_N "checking for Mesa library... $ECHO_C" >&6
 		_LIBS=${MESA_LIBS}
 	fi
 
+	if test "${OPENGL_LIBPATH} ${X11_LIBPATH}" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib"
+	else
+		_LIBDIRS="${OPENGL_LIBPATH} ${X11_LIBPATH}"
+	fi
+
 	if test "${_LIBS}" = "" ; then
-		for i in ${OPENGL_LIBPATH} ${X11_LIBPATH} ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/libGL.* ; do
 				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
@@ -15679,8 +15697,14 @@ echo $ECHO_N "checking for OpenGL library... $ECHO_C" >&6
 		_LIBS=${OPENGL_LIBPATH}
 	fi
 
+	if test "" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib"
+	else
+		_LIBDIRS=""
+	fi
+
 	if test "${_LIBS}" = "" ; then
-		for i in  ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/libGL.* ; do
 				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
@@ -15968,8 +15992,14 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 		_LIBS=${QT_LIBPATH}
 	fi
 
+	if test "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib"
+	else
+		_LIBDIRS="${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include"
+	fi
+
 	if test "${_LIBS}" = "" ; then
-		for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
 				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
@@ -16051,8 +16081,14 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 		_LIBS=${QT_LIBPATH}
 	fi
 
+	if test "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib"
+	else
+		_LIBDIRS="${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include"
+	fi
+
 	if test "${_LIBS}" = "" ; then
-		for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
 				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
@@ -16128,8 +16164,14 @@ echo $ECHO_N "checking for libqt${QT_MT_SUFFIX}... $ECHO_C" >&6
 		_LIBS=${QT_LIBPATH}
 	fi
 
+	if test "${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib"
+	else
+		_LIBDIRS="${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}"
+	fi
+
 	if test "${_LIBS}" = "" ; then
-		for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/libqt${QT_MT_SUFFIX}.* ; do
 				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
@@ -16210,8 +16252,8 @@ echo "${ECHO_T}by passing the option --with-qt-libs=DIR to configure." >&6
 echo "${ECHO_T}You may also set the environment variable QTDIR to the correct" >&6
 					echo "$as_me:$LINENO: result: path - configure will recognize this, too." >&5
 echo "${ECHO_T}path - configure will recognize this, too." >&6
-					echo "$as_me:$LINENO: result: If the QT library was built with thread support enabled (liqt-mt" >&5
-echo "${ECHO_T}If the QT library was built with thread support enabled (liqt-mt" >&6
+					echo "$as_me:$LINENO: result: If the QT library was built with thread support enabled (libqt-mt" >&5
+echo "${ECHO_T}If the QT library was built with thread support enabled (libqt-mt" >&6
 					echo "$as_me:$LINENO: result: instead of libqt), please specify the option --with-threadsafe-qt." >&5
 echo "${ECHO_T}instead of libqt), please specify the option --with-threadsafe-qt." >&6
 					echo "$as_me:$LINENO: result: The QT package can be found under the following URL:" >&5
@@ -16273,8 +16315,14 @@ echo $ECHO_N "checking for libqgl... $ECHO_C" >&6
 		_LIBS=${QGL_LIBPATH}
 	fi
 
+	if test "${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib"
+	else
+		_LIBDIRS="${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include"
+	fi
+
 	if test "${_LIBS}" = "" ; then
-		for i in ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/libqgl.* ; do
 				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
@@ -16348,8 +16396,14 @@ echo $ECHO_N "checking for libqgl... $ECHO_C" >&6
 		_LIBS=${QGL_LIBPATH}
 	fi
 
+	if test "${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}" = "" ; then
+		_LIBDIRS="/usr/lib /opt/lib"
+	else
+		_LIBDIRS="${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT}"
+	fi
+
 	if test "${_LIBS}" = "" ; then
-		for i in ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT} ; do
+		for i in ${_LIBDIRS} ; do
 			for j in $i/libqgl.* ; do
 				echo "checking for ${_LIBS} in $j..."
 				if test -f "$j" -a "${_LIBS}" = ""; then
@@ -16453,8 +16507,8 @@ echo "${ECHO_T}(${QT_LIBPATH})" >&6
 						fi
 						if test "${QGL_PATH}" != "${QT_PATH}" ; then
 							QT_PATH=${QGL_PATH}
-							echo "$as_me:$LINENO: result: using ${QT_PATH} to look for liqt.so and libqgl.s" >&5
-echo "${ECHO_T}using ${QT_PATH} to look for liqt.so and libqgl.s" >&6
+							echo "$as_me:$LINENO: result: using ${QT_PATH} to look for libqt.so and libqgl.s" >&5
+echo "${ECHO_T}using ${QT_PATH} to look for libqt.so and libqgl.s" >&6
 						fi
 					fi
 				fi
