@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.13 2000/02/20 20:58:56 oliver Exp $
+// $Id: vector4.h,v 1.14 2000/02/21 18:21:06 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -315,7 +315,10 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
-		///
+		/**	Test if instance is valid.
+				always retruns true
+				@return bool {\bf true}
+		*/
 		bool isValid() const;
 
 		///
@@ -327,16 +330,20 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	x component of the vector
+		*/
 		T x;
 
-		///
+		/**	y component of the vector
+		*/
 		T y;
 
-		///
+		/**	z component of the vector
+		*/
 		T z;
 
-		///
+		/**	height component of the vector
+		*/
 		T h;
 		//@}
 	};
@@ -762,7 +769,7 @@ namespace BALL
 	/**	@name	Operators
 	*/
 	//@{
-	/**
+	/**	Addition operator for a scalar with a vector
 	*/
 	template <class T>
 	BALL_INLINE 
@@ -771,7 +778,8 @@ namespace BALL
 		return TVector4<T>(a.x + b.x, a.y + b.y, a.z + b.z, a.h + b.h);
 	}
 
-	/**
+	/** Subtraction operator for two vectors
+  		@return TVector4 the new vector
 	*/
 	template <class T>
 	BALL_INLINE 
@@ -780,7 +788,8 @@ namespace BALL
 		return TVector4<T>(a.x - b.x, a.y - b.y, a.z - b.z, a.h - b.h);
 	}
 
-	/**
+	/**	Multiply operator for a scalar with a vector
+  		@return TVector4 the new vector
 	*/
 	template <class T>
 	BALL_INLINE 
@@ -789,7 +798,19 @@ namespace BALL
 		return TVector4<T>(scalar * v.x, scalar * v.y, scalar * v.z, scalar * v.h);
 	}
 
-	/**
+	/**	Multiply operator for a vector with a scalar
+  		@return TVector4 the new vector
+	*/
+	template <class T>
+	BALL_INLINE 
+	TVector4<T> operator * (const TVector4<T>& v, const T& scalar)
+	{
+		return TVector4<T>(scalar * v.x, scalar * v.y, scalar * v.z, scalar * v.h);
+	}
+
+
+	/**	Input- Operator
+			reads in four {\bf T} : x, y, z, h
 	*/
 	template <class T>
 	std::istream& operator >> (std::istream& s, TVector4<T>& v)
@@ -799,7 +820,8 @@ namespace BALL
 		return s;
 	}
 
-	/**
+	/**	Output- Operator
+			gives four {\bf T} out: x, y, z, h
 	*/
 	template <class T>
 	std::ostream& operator << (std::ostream& s, const TVector4<T>& v)
