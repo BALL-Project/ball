@@ -140,6 +140,8 @@ namespace BALL
 					while (update_vis_running_ && !main_control_->stopedSimulation()) msleep(10);
 				}
 
+				updateScene_();
+
 				output_(ff.getResults());
 				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(minimizer_->getNumberOfIterations()) + " iterations\n");
@@ -219,6 +221,8 @@ namespace BALL
 
 					if (dcd_file_) manager.takeSnapShot();
 				}
+
+				updateScene_();
 
 				if (dcd_file_) manager.flushToDisk();
 
