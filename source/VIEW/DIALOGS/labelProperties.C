@@ -8,22 +8,18 @@
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <BALL/VIEW/DIALOGS/labelProperties.h>
-#include <BALL/VIEW/PRIMITIV/label.h>
-#include <BALL/VIEWKERNEL/mainControl.h>
+#include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/FORMAT/INIFile.h>
-
-#define Inherited LabelPropertiesData
 
 namespace BALL
 {
-	using namespace VIEW;
-
 	namespace VIEW
 	{
 
 		LabelProperties::LabelProperties(QWidget* parent, const char* name)
 			throw()
-			:	Inherited( parent, name ),
+			:	LabelPropertiesData( parent, name ),
 				ModularWidget(name),
 				id_(-1),
 				selection_()

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.5 2003/08/26 18:35:36 amoll Exp $
+# $Id: Makefile,v 1.6 2003/08/27 08:59:36 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -25,10 +25,13 @@ CPP_SOURCES=\
 	displayPropertiesData.C\
 	dlgMoveOverlay.C\
 	dlgMoveOverlayData.C\
+	labelProperties.C\
+	labelPropertiesData.C\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	snapShotVisualisation.C\
 	snapShotVisualisationData.C\
+	molecularFileDialog.C\
 	mouseSensitivity.C\
 	mouseSensitivityData.C\
 	setCamera.C\
@@ -58,6 +61,9 @@ MOC_SOURCES=\
 	displayPropertiesData_moc.C\
 	dlgMoveOverlay_moc.C\
 	dlgMoveOverlayData_moc.C\
+	labelProperties_moc.C\
+	labelPropertiesData_moc.C\
+	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
 	snapShotVisualisation_moc.C\
@@ -121,6 +127,9 @@ displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
 
 fileDialog_moc.C:	$(HEADER_DIR)/fileDialog.h
 	$(MOC) $(HEADER_DIR)/fileDialog.h -o $@
+
+labelProperties_moc.C:	$(HEADER_DIR)/labelProperties.h
+	$(MOC) $(HEADER_DIR)/labelProperties.h -o $@
 
 preferences_moc.C:	$(HEADER_DIR)/preferences.h
 	$(MOC) $(HEADER_DIR)/preferences.h -o $@
