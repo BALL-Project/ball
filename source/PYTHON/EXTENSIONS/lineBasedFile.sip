@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.sip,v 1.2 2001/12/20 01:20:41 oliver Exp $
+// $Id: lineBasedFile.sip,v 1.3 2001/12/20 11:49:35 oliver Exp $
 
 
 class LineBasedFile
@@ -42,7 +42,7 @@ class LineBasedFile
 				bool search(const String& /text/, const String& /stop/, 
 										bool /return_to_point/ = false)
 								throw(ParseError);
-				bool goToLine(Position /line_number/)
+				bool goooLine(Position /line_number/)
 								throw(ParseError);
 				void rewind()
 								throw(ParseError);
@@ -50,9 +50,9 @@ class LineBasedFile
 				void test(const char* /file/, int /line/, bool /condition/, const String& /msg/)
 								const throw(ParseError);
 
-				String getField(Index /pos/ = 0, const String& /quotes/ = "",
-												const String& /delimiters/ = String::CHARACTER_CLASS__WHITESPACE)
-								const throw(IndexUnderflow);
+				//String getField(Index /pos/ = 0, const String& /quotes/ = "",
+				//								const String& /delimiters/ = String::CHARACTER_CLASS__WHITESPACE)
+				//				const throw(IndexUnderflow);
 
 				bool startsWith(const String& /text/)
 								const throw();
