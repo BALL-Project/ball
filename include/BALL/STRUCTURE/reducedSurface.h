@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.26 2001/11/08 16:44:45 strobel Exp $
+// $Id: reducedSurface.h,v 1.27 2001/12/08 17:07:23 strobel Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -7,7 +7,7 @@
 //#define debug_surface_processor
 #ifdef debug_surface_processor
 #	define debug_surface_processor_verbose
-//#	define debug_surface_processor_print
+#	define debug_surface_processor_print
 #endif
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
@@ -120,6 +120,9 @@ namespace BALL
 	template <typename T>
 	class TSolventExcludedSurface;
 
+	template <typename T>
+	class TTriangulatedSES;
+
 	/** Generic ReducedSurface Class.
 			{\bf Definition:} \URL{BALL/STRUCTURE/reducedSurface.h}
 	*/
@@ -131,9 +134,11 @@ namespace BALL
 		/** @name Class friends
 				\begin{itemize}
 					\item class TSolventExcludedSurface<T>
+					\item class TTriangulatedSES<T>
 				\end{itemize}
 		*/
 		friend class TSolventExcludedSurface<T>;
+		friend class TTriangulatedSES<T>;
 
 		BALL_CREATE(TReducedSurface)
 
@@ -1029,19 +1034,19 @@ namespace BALL
 		}
 		for (Position i = 0; i < number_of_edges_; i++)
 		{
-			edges_[i]->vertex0_ = vertices_[reduced_surface.edges_[i]->vertex0_->index_];
-			edges_[i]->vertex1_ = vertices_[reduced_surface.edges_[i]->vertex1_->index_];
-			edges_[i]->face0_ = faces_[reduced_surface.edges_[i]->face0_->index_];
-			edges_[i]->face1_ = faces_[reduced_surface.edges_[i]->face1_->index_];
+			edges_[i]->vertex_[0] = vertices_[reduced_surface.edges_[i]->vertex_[0]->index_];
+			edges_[i]->vertex_[1] = vertices_[reduced_surface.edges_[i]->vertex_[1]->index_];
+			edges_[i]->face_[0] = faces_[reduced_surface.edges_[i]->face_[0]->index_];
+			edges_[i]->face_[1] = faces_[reduced_surface.edges_[i]->face_[1]->index_];
 		}
 		for (Position i = 0; i < number_of_faces_; i++)
 		{
-			faces_[i]->vertex0_ = vertices_[reduced_surface.faces_[i]->vertex0_->index_];
-			faces_[i]->vertex1_ = vertices_[reduced_surface.faces_[i]->vertex1_->index_];
-			faces_[i]->vertex2_ = vertices_[reduced_surface.faces_[i]->vertex2_->index_];
-			faces_[i]->edge0_ = edges_[reduced_surface.faces_[i]->edge0_->index_];
-			faces_[i]->edge1_ = edges_[reduced_surface.faces_[i]->edge1_->index_];
-			faces_[i]->edge2_ = edges_[reduced_surface.faces_[i]->edge2_->index_];
+			faces_[i]->vertex_[0] = vertices_[reduced_surface.faces_[i]->vertex_[0]->index_];
+			faces_[i]->vertex_[1] = vertices_[reduced_surface.faces_[i]->vertex_[1]->index_];
+			faces_[i]->vertex_[2] = vertices_[reduced_surface.faces_[i]->vertex_[2]->index_];
+			faces_[i]->edge_[0] = edges_[reduced_surface.faces_[i]->edge_[0]->index_];
+			faces_[i]->edge_[1] = edges_[reduced_surface.faces_[i]->edge_[1]->index_];
+			faces_[i]->edge_[2] = edges_[reduced_surface.faces_[i]->edge_[2]->index_];
 		}
 	}
 
@@ -1207,19 +1212,19 @@ namespace BALL
 		}
 		for (Position i = 0; i < number_of_edges_; i++)
 		{
-			edges_[i]->vertex0_ = vertices_[reduced_surface.edges_[i]->vertex0_->index_];
-			edges_[i]->vertex1_ = vertices_[reduced_surface.edges_[i]->vertex1_->index_];
-			edges_[i]->face0_ = faces_[reduced_surface.edges_[i]->face0_->index_];
-			edges_[i]->face1_ = faces_[reduced_surface.edges_[i]->face1_->index_];
+			edges_[i]->vertex_[0] = vertices_[reduced_surface.edges_[i]->vertex_[0]->index_];
+			edges_[i]->vertex_[1] = vertices_[reduced_surface.edges_[i]->vertex_[1]->index_];
+			edges_[i]->face_[0] = faces_[reduced_surface.edges_[i]->face_[0]->index_];
+			edges_[i]->face_[1] = faces_[reduced_surface.edges_[i]->face_[1]->index_];
 		}
 		for (Position i = 0; i < number_of_faces_; i++)
 		{
-			faces_[i]->vertex0_ = vertices_[reduced_surface.faces_[i]->vertex0_->index_];
-			faces_[i]->vertex1_ = vertices_[reduced_surface.faces_[i]->vertex1_->index_];
-			faces_[i]->vertex2_ = vertices_[reduced_surface.faces_[i]->vertex2_->index_];
-			faces_[i]->edge0_ = edges_[reduced_surface.faces_[i]->edge0_->index_];
-			faces_[i]->edge1_ = edges_[reduced_surface.faces_[i]->edge1_->index_];
-			faces_[i]->edge2_ = edges_[reduced_surface.faces_[i]->edge2_->index_];
+			faces_[i]->vertex_[0] = vertices_[reduced_surface.faces_[i]->vertex_[0]->index_];
+			faces_[i]->vertex_[1] = vertices_[reduced_surface.faces_[i]->vertex_[1]->index_];
+			faces_[i]->vertex_[2] = vertices_[reduced_surface.faces_[i]->vertex_[2]->index_];
+			faces_[i]->edge_[0] = edges_[reduced_surface.faces_[i]->edge_[0]->index_];
+			faces_[i]->edge_[1] = edges_[reduced_surface.faces_[i]->edge_[1]->index_];
+			faces_[i]->edge_[2] = edges_[reduced_surface.faces_[i]->edge_[2]->index_];
 		}
 	}
 
@@ -1485,9 +1490,9 @@ namespace BALL
 			// find the similar edges
 			std::vector<TRSEdge<T>*> rsedge1(3);
 			std::vector<TRSEdge<T>*> rsedge2(3);
-			rsedge1[0] = face1->edge0_;
-			rsedge1[1] = face1->edge1_;
-			rsedge1[2] = face1->edge2_;
+			rsedge1[0] = face1->edge_[0];
+			rsedge1[1] = face1->edge_[1];
+			rsedge1[2] = face1->edge_[2];
 			for (Position j = 0; j < 3; j++)
 			{
 				for (Position i = 0; i < 3; i++)
@@ -1501,9 +1506,9 @@ namespace BALL
 			// find the similar vertices
 			std::vector<TRSVertex<T>*> rsvertex1(3);
 			std::vector<TRSVertex<T>*> rsvertex2(3);
-			rsvertex1[0] = face1->vertex0_;
-			rsvertex1[1] = face1->vertex1_;
-			rsvertex1[2] = face1->vertex2_;
+			rsvertex1[0] = face1->vertex_[0];
+			rsvertex1[1] = face1->vertex_[1];
+			rsvertex1[2] = face1->vertex_[2];
 			for (Position j = 0; j < 3; j++)
 			{
 				for (Position i = 0; i < 3; i++)
@@ -1532,22 +1537,22 @@ namespace BALL
 			{
 				if (rsedge1[i] == rsedge2[i])
 				{
-					rsedge1[i]->vertex0_->edges_.erase(rsedge1[i]);
-					rsedge1[i]->vertex1_->edges_.erase(rsedge1[i]);
+					rsedge1[i]->vertex_[0]->edges_.erase(rsedge1[i]);
+					rsedge1[i]->vertex_[1]->edges_.erase(rsedge1[i]);
 					edges_[rsedge1[i]->index_] = NULL;
 					delete rsedge1[i];
 				}
 				else
 				{
 					// ACHTUNG: evtl. hier exception
-					TRSFace<T>* neighbour2 = rsedge2[i]->other(face2);
-					if (rsedge1[i]->face0_ == face1)
+					TRSFace<T>* neighbour2 = rsedge2[i]->otherFace(face2);
+					if (rsedge1[i]->face_[0] == face1)
 					{
-						rsedge1[i]->face0_ = neighbour2;
+						rsedge1[i]->face_[0] = neighbour2;
 					}
 					else
 					{
-						rsedge1[i]->face1_ = neighbour2;
+						rsedge1[i]->face_[1] = neighbour2;
 					}
 					for (Position j = 0; j < 3; j++)
 					{
@@ -1556,8 +1561,8 @@ namespace BALL
 							neighbour2->setEdge(j,rsedge1[i]);
 						}
 					}
-					rsedge2[i]->vertex0_->edges_.erase(rsedge2[i]);
-					rsedge2[i]->vertex1_->edges_.erase(rsedge2[i]);
+					rsedge2[i]->vertex_[0]->edges_.erase(rsedge2[i]);
+					rsedge2[i]->vertex_[1]->edges_.erase(rsedge2[i]);
 					edges_[rsedge2[i]->index_] = NULL;
 					delete rsedge2[i];
 					// ACHTUNG
@@ -1603,9 +1608,9 @@ namespace BALL
 				case 3 :
 									#ifdef print_rs_debug_info
 									std::cout << "Start-Face gefunden: " << *start_face << "\n";
-									std::cout << *(start_face->vertex0_) << "\n";
-									std::cout << *(start_face->vertex1_) << "\n";
-									std::cout << *(start_face->vertex2_) << "\n";
+									std::cout << *(start_face->vertex_[0]) << "\n";
+									std::cout << *(start_face->vertex_[1]) << "\n";
+									std::cout << *(start_face->vertex_[2]) << "\n";
 									if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 									#endif
 									getRSComponent(new_vertices,vertices);
@@ -1653,7 +1658,7 @@ namespace BALL
 		for (Position i = 0; i < 3; i++)
 		{
 			edge = face->getEdge(i);
-			if (edge->face1_ == NULL)
+			if (edge->face_[1] == NULL)
 			{
 				treatEdge(edge,new_vertices,vertices);
 			}
@@ -1690,13 +1695,13 @@ namespace BALL
 		// find third atom
 		TAngle<T> phi;
 		TSphere3<T> probe;
-		TRSFace<T>* start_face(edge->face0_);			// the edge already knows the
+		TRSFace<T>* start_face(edge->face_[0]);			// the edge already knows the
 				#ifdef print_rs_debug_info
 				std::cout << "starting face: " << *start_face;
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 				#endif
-		TRSVertex<T>* vertex1(edge->vertex0_);		// starting face and their
-		TRSVertex<T>* vertex2(edge->vertex1_);		// two vertices
+		TRSVertex<T>* vertex1(edge->vertex_[0]);		// starting face and their
+		TRSVertex<T>* vertex2(edge->vertex_[1]);		// two vertices
 		TRSVertex<T>* vertex3(NULL);
 		Index atom1(vertex1->atom_);
 		Index atom2(vertex2->atom_);
@@ -1789,20 +1794,20 @@ namespace BALL
 					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 					#endif
 			edge1 = new TRSEdge<T>;
-			edge1->vertex0_ = vertex2;
-			edge1->vertex1_ = vertex3;
-			edge1->face0_ = new_face;
+			edge1->vertex_[0] = vertex2;
+			edge1->vertex_[1] = vertex3;
+			edge1->face_[0] = new_face;
 			edge2 = new TRSEdge<T>;
-			edge2->vertex0_ = vertex3;
-			edge2->vertex1_ = vertex1;
-			edge2->face0_ = new_face;
+			edge2->vertex_[0] = vertex3;
+			edge2->vertex_[1] = vertex1;
+			edge2->face_[0] = new_face;
 					#ifdef print_rs_debug_info
 					std::cout << "zwei neue Edges erzeugt";
 					if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 					#endif
-			new_face->edge0_ = edge;
-			new_face->edge1_ = edge1;
-			new_face->edge2_ = edge2;
+			new_face->edge_[0] = edge;
+			new_face->edge_[1] = edge1;
+			new_face->edge_[2] = edge2;
 			TPlane3<T> plane(sphere1.p,sphere2.p,sphere3.p);
 			new_face->singular_ = Maths::isLess(GetDistance(probe.p,plane),probe_radius_);
 			new_face->index_ = number_of_faces_;
@@ -1841,7 +1846,7 @@ namespace BALL
 			// built face exitsts already
 			// the corresponding edge in the existing face has to be found
 			Index i = 0;
-			TRSEdge<T>* test_edge(test->edge0_);
+			TRSEdge<T>* test_edge(test->edge_[0]);
 			while (test_edge->similar(*edge) == false)
 			{
 				i++;
@@ -1861,8 +1866,8 @@ namespace BALL
 			// have to be joined and one of them has to be deleted (if they are not
 			// equal). This is neccessary since creating a new face always creates
 			// a new vertex.
-			TRSVertex<T>* test_vertex1 = test_edge->vertex0_;
-			TRSVertex<T>* test_vertex2 = test_edge->vertex1_;
+			TRSVertex<T>* test_vertex1 = test_edge->vertex_[0];
+			TRSVertex<T>* test_vertex2 = test_edge->vertex_[1];
 					#ifdef print_rs_debug_info
 					std::cout << "Vertices der korrespondierenden Edge:\n";
 					std::cout << "  " << *test_vertex1 << "\n";
@@ -2029,7 +2034,7 @@ namespace BALL
 		{										// ip1 is the intersection point next to the first
 			ip1.swap(ip2);		// vertex of the edge
 		}
-		edge->face1_ = new_face;
+		edge->face_[1] = new_face;
 		edge->center_of_torus_ = circle1.p;
 		edge->radius_of_torus_ = circle1.radius;
 		edge->phi_ = phi;
@@ -2053,13 +2058,13 @@ namespace BALL
 				if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 				std::cout << "Ergebnis:\n"
 						 << *start_face << "\n  "
-						 << *start_face->edge0_ << "\n  "
-						 << *start_face->edge1_ << "\n  "
-						 << *start_face->edge2_ << "\n"
+						 << *start_face->edge_[0] << "\n  "
+						 << *start_face->edge_[1] << "\n  "
+						 << *start_face->edge_[2] << "\n"
 						 << *new_face << "\n  "
-						 << *new_face->edge0_ << "\n  "
-						 << *new_face->edge1_ << "\n  "
-						 << *new_face->edge2_ << "\n"
+						 << *new_face->edge_[0] << "\n  "
+						 << *new_face->edge_[1] << "\n  "
+						 << *new_face->edge_[2] << "\n"
 						 << *vertex1 << "\n" << *vertex2 << "\n"
 						 << *start_face->thirdVertex(vertex1,vertex2) << "\n"
 						 << *new_face->thirdVertex(vertex1,vertex2) << "\n";
@@ -2103,14 +2108,14 @@ namespace BALL
 			faces = vertex->faces_;
 			for (f = faces.begin(); f != faces.end(); f++)
 			{
-				(*f)->vertex0_->faces_.erase(*f);
-				(*f)->vertex1_->faces_.erase(*f);
-				(*f)->vertex2_->faces_.erase(*f);
+				(*f)->vertex_[0]->faces_.erase(*f);
+				(*f)->vertex_[1]->faces_.erase(*f);
+				(*f)->vertex_[2]->faces_.erase(*f);
 						#ifdef print_rs_debug_info
 						std::cout << "  lösche " << **f << "aus\n"
-											<< "    " << *(*f)->vertex0_ << ",\n"
-											<< "    " << *(*f)->vertex1_ << ",\n"
-											<< "    " << *(*f)->vertex2_;
+											<< "    " << *(*f)->vertex_[0] << ",\n"
+											<< "    " << *(*f)->vertex_[1] << ",\n"
+											<< "    " << *(*f)->vertex_[2];
 						if (HALT == 0) std::cin >> HALT; else {HALT--; std::cout << "\n";}
 						#endif
 				for (Position i = 0; i < 3; i++)
@@ -2121,17 +2126,17 @@ namespace BALL
 								#ifdef print_rs_debug_info
 								std::cout << "  " << i << ". edge: " << *edge << "\n";
 								#endif
-						if (edge->face1_ == NULL)
+						if (edge->face_[1] == NULL)
 						{
-							edge->vertex0_->edges_.erase(edge);
-							edge->vertex1_->edges_.erase(edge);
+							edge->vertex_[0]->edges_.erase(edge);
+							edge->vertex_[1]->edges_.erase(edge);
 									#ifdef print_rs_debug_info
 									std::cout << "    hat nur eine face, lösche aus\n      "
-														<< *edge->vertex0_ << ",\n      "
-														<< *edge->vertex1_ << "\n    füge diese in test_vertices ein\n";
+														<< *edge->vertex_[0] << ",\n      "
+														<< *edge->vertex_[1] << "\n    füge diese in test_vertices ein\n";
 									#endif
-							test_vertices.insert(edge->vertex0_);
-							test_vertices.insert(edge->vertex1_);
+							test_vertices.insert(edge->vertex_[0]);
+							test_vertices.insert(edge->vertex_[1]);
 							Index index = edge->index_;
 							if (index != -1)
 							{
@@ -2465,9 +2470,7 @@ namespace BALL
 		// If no atom can be found an exception is thrown.
 		Index atom1(vertex1->atom_);
 		Index atom2(vertex2->atom_);
-		//::std::list<Index> atom_list;
 		neighboursOfTwoAtoms(atom1,atom2);
-		//if (atom_list.size() == 0)
 		if (neighbours_of_two_[atom1][atom2].size() == 0)
 		{
 			throw Exception::GeneralException
@@ -2475,7 +2478,6 @@ namespace BALL
 							 "CanNotFindThirdAtom","no atom close enougth");
 		}
 		list< pair< Index,TSphere3<T> > > candidates;
-		//findThirdAtom(atom1,atom2,atom_list,candidates);
 		findThirdAtom(atom1,atom2,neighbours_of_two_[atom1][atom2],candidates);
 		typename std::list< std::pair< Index,TSphere3<T> > >::iterator k;
 		Index back(-1);
@@ -2487,7 +2489,7 @@ namespace BALL
 				#endif
 		TAngle<double> old_angle(3*Constants::PI,true);
 		TAngle<double> new_angle;
-		TAngle<double> pi(Constants::PI,true);
+		TAngle<double> two_pi(2*Constants::PI,true);
 		TVector3<T> norm_ = atom_[atom1].p-atom_[atom2].p;
 		TVector3<T> test_vector = face->normal_%norm_;
 		Index third_face_atom = face->thirdVertex(vertex1,vertex2)->atom_;
@@ -2528,20 +2530,13 @@ namespace BALL
 			{
 				TVector3<T> v2_ = k->second.p-circle.p;
 				TVector3<double> v2((double)v2_.x,(double)v2_.y,(double)v2_.z);
-						// ACHTUNG !!!
-				new_angle = getOrientedAngle(v1,v2,norm)+pi;
-				//new_angle = getOrientedAngle(v1,v2,norm);
-				//if (Maths::isLess(new_angle.toRadian(),(T)0))
-				//{
-				//	new_angle += pi;
-				//	new_angle += pi;
-				//}
+				new_angle = getOrientedAngle(v1,v2,norm);
 						#ifdef print_rs_debug_info
 						//std::cout << "{" << k->first << "," << k->second << "} ... getOrientedAngle("
-						//					<< v1 << "," << v2 << "," << norm << ")+pi ... " << new_angle << "\n";
+						//					<< v1 << "," << v2 << "," << norm << ") ... " << new_angle << "\n";
 						std::cout << "{" << k->first << "," << k->second << "} ... " << new_angle << "\n";
 						#endif
-				if ((new_angle == TAngle<double>(0,true)) || (new_angle == 2*pi))
+				if (Maths::isZero(new_angle.value) || (new_angle == two_pi))
 				{
 							#ifdef debug_surface_processor_verbose
 							std::cerr << "    ProbeSphere berührt vier Atome, korrigiere ...\n";
@@ -2639,9 +2634,9 @@ namespace BALL
 		face = findFirstFace();
 		if (face != NULL)
 		{
-			TRSVertex<T>* vertex1 = face->vertex0_;
-			TRSVertex<T>* vertex2 = face->vertex1_;
-			TRSVertex<T>* vertex3 = face->vertex2_;
+			TRSVertex<T>* vertex1 = face->vertex_[0];
+			TRSVertex<T>* vertex2 = face->vertex_[1];
+			TRSVertex<T>* vertex3 = face->vertex_[2];
 			new_vertices.insert(vertex1);
 			new_vertices.insert(vertex2);
 			new_vertices.insert(vertex3);
@@ -2656,8 +2651,8 @@ namespace BALL
 		edge = findFirstEdge();
 		if (edge != NULL)
 		{
-			TRSVertex<T>* vertex1 = edge->vertex0_;
-			TRSVertex<T>* vertex2 = edge->vertex1_;
+			TRSVertex<T>* vertex1 = edge->vertex_[0];
+			TRSVertex<T>* vertex2 = edge->vertex_[1];
 			new_vertices.insert(vertex1);
 			new_vertices.insert(vertex2);
 			vertices[vertex1->atom_].push_back(vertex1);
@@ -3411,22 +3406,22 @@ namespace BALL
 		TVector3<T> vector(0,0,0);
 		TAngle<T> angle(0,true);
 		TCircle3<T> circle(vector,vector,0);
-		e1->vertex0_ = v1;
-		e1->vertex1_ = v2;
-		e1->face0_ = f;
-		e2->vertex0_ = v2;
-		e2->vertex1_ = v3;
-		e2->face0_ = f;
-		e3->vertex0_ = v3;
-		e3->vertex1_ = v1;
-		e3->face0_ = f;
+		e1->vertex_[0] = v1;
+		e1->vertex_[1] = v2;
+		e1->face_[0] = f;
+		e2->vertex_[0] = v2;
+		e2->vertex_[1] = v3;
+		e2->face_[0] = f;
+		e3->vertex_[0] = v3;
+		e3->vertex_[1] = v1;
+		e3->face_[0] = f;
 		TCircle3<T> dummy;
-		f->vertex0_ = v1;
-		f->vertex1_ = v2;
-		f->vertex2_ = v3;
-		f->edge0_ = e1;
-		f->edge1_ = e2;
-		f->edge2_ = e3;
+		f->vertex_[0] = v1;
+		f->vertex_[1] = v2;
+		f->vertex_[2] = v3;
+		f->edge_[0] = e1;
+		f->edge_[1] = e2;
+		f->edge_[2] = e3;
 		f->center_ = probe.p;
 		TPlane3<T> plane(atom_[v1->atom_].p,atom_[v2->atom_].p,atom_[v3->atom_].p);
 		f->normal_ = plane.n;
