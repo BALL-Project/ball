@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.22 2001/06/05 15:55:26 anker Exp $
+// $Id: forceField.C,v 1.23 2001/06/21 02:41:54 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -356,7 +356,7 @@ namespace BALL
 	double	ForceField::getRMSGradient() const
 	{
 		double sum = 0;
-		AtomConstVector::ConstIterator it = atoms_.begin();
+		AtomVector::ConstIterator it(atoms_.begin());
 		for (; it != atoms_.end(); ++it)
 		{
 			sum += (*it)->getForce().getSquareLength();
