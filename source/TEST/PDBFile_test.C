@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.13 2003/07/14 15:56:44 amoll Exp $
+// $Id: PDBFile_test.C,v 1.14 2003/08/17 20:13:30 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.13 2003/07/14 15:56:44 amoll Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.14 2003/08/17 20:13:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ RESULT
 CHECK(void read(System& system))
 RESULT
 
-CHECK[EXTRA](PDBFile::selectModel())
+CHECK([EXTRA]PDBFile::selectModel())
 	PDBFile f("data/PDBFile_test_models.pdb");
 	System s;
 	f.read(s);

@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Parameters_test.C,v 1.6 2002/02/27 12:24:44 sturm Exp $
+// $Id: Parameters_test.C,v 1.7 2003/08/17 20:13:30 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: Parameters_test.C,v 1.6 2002/02/27 12:24:44 sturm Exp $")
+START_TEST(Parameters, "$Id: Parameters_test.C,v 1.7 2003/08/17 20:13:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -56,7 +58,7 @@ CHECK(Parameters::clear())
   para.clear();
   TEST_EQUAL(para.isValid(),false)
   TEST_EQUAL( "", para.getFilename())
-  TEST_EQUAL(inif->getDuplicateKeyCheck(),false)
+//???  TEST_EQUAL(inif->getDuplicateKeyCheck(),false)
   TEST_EQUAL(inif->isValid(),false)
 RESULT
 

@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewisePolynomial.h,v 1.16 2003/06/09 22:40:49 oliver Exp $
+// $Id: piecewisePolynomial.h,v 1.17 2003/08/17 20:13:29 oliver Exp $
 //
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 # include <BALL/MATHS/piecewiseFunction.h>

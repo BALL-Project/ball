@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.C,v 1.23 2003/05/26 15:43:36 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.24 2003/08/17 20:13:30 oliver Exp $
 //
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
@@ -18,9 +18,9 @@ namespace BALL
 {
 
 #ifdef BALL_XDRREC_CREATE_VOID
-	extern "C" int (*XDRReadStreamPtr) () = 0;
-	extern "C" int (*XDRWriteStreamPtr) () = 0;
-	extern "C" int (*XDRErrorPtr) () = 0;
+	int (*XDRReadStreamPtr) () = 0;
+	int (*XDRWriteStreamPtr) () = 0;
+	int (*XDRErrorPtr) () = 0;
 #endif
 
 	

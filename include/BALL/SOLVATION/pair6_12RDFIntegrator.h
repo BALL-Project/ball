@@ -1,20 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12RDFIntegrator.h,v 1.18 2003/03/26 13:08:27 sturm Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.19 2003/08/17 20:13:29 oliver Exp $
+//
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
-
-#ifndef BALL__RDFINTEGRATOR_H
+#ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
 # include <BALL/STRUCTURE/RDFIntegrator.h>
 #endif
 
-#ifndef BALL__PIECEWISEFUNCTION_H
+#ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 # include <BALL/MATHS/piecewiseFunction.h>
 #endif
 

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.24 2003/05/08 09:11:54 sneumann Exp $
+// $Id: common.h,v 1.25 2003/08/17 20:13:29 oliver Exp $
+//
 
 #ifndef BALL_MATHS_COMMON_H
 #define BALL_MATHS_COMMON_H
@@ -179,7 +180,11 @@ namespace BALL
 			#ifdef BALL_COMPILER_MSVC
 				return (_isnan(t) != 0);
 			#else
+			#	ifdef BALL_OS_DARWIN
+				return (__isnan(t) != 0);
+			#	else
 				return (isnan(t) != 0);
+			#	endif
 			#endif
 		}
 
