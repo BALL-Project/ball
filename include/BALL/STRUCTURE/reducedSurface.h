@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.20 2001/07/15 17:03:24 oliver Exp $
+// $Id: reducedSurface.h,v 1.21 2001/07/15 18:57:35 amoll Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -54,42 +54,41 @@
 
 #include <vector>
 #include <list>
-#include <fstream>
 
 namespace BALL
 {
 
-			// debuging
-			template <class T>
-			string IndexToString(Index nr, const T& /*dummy*/)
+	// debuging
+	template <class T>
+	string IndexToString(Index nr, const T& /*dummy*/)
+	{
+		if (nr == 0) return "0";
+		string back = "";
+		while (nr != 0)
+		{
+			Index rest = nr % 10;
+			switch (rest)
 			{
-				if (nr == 0) return "0";
-				string back = "";
-				while (nr != 0)
-				{
-					Index rest = nr % 10;
-					switch (rest)
-					{
-						case 0 :	back += "0"; break;
-						case 1 :	back += "1"; break;
-						case 2 :	back += "2"; break;
-						case 3 :	back += "3"; break;
-						case 4 :	back += "4"; break;
-						case 5 :	back += "5"; break;
-						case 6 :	back += "6"; break;
-						case 7 :	back += "7"; break;
-						case 8 :	back += "8"; break;
-						case 9 :	back += "9"; break;
-					}
-					nr = nr / 10;
-				}
-				string number = "";
-				for (Position i = back.size(); i > 0;)
-				{
-					number += back[--i];
-				}
-				return number;
+				case 0 :	back += "0"; break;
+				case 1 :	back += "1"; break;
+				case 2 :	back += "2"; break;
+				case 3 :	back += "3"; break;
+				case 4 :	back += "4"; break;
+				case 5 :	back += "5"; break;
+				case 6 :	back += "6"; break;
+				case 7 :	back += "7"; break;
+				case 8 :	back += "8"; break;
+				case 9 :	back += "9"; break;
 			}
+			nr = nr / 10;
+		}
+		string number = "";
+		for (Position i = back.size(); i > 0;)
+		{
+			number += back[--i];
+		}
+		return number;
+	}
 
 
 	/** Generic ReducedSurface Class.
@@ -255,12 +254,12 @@ namespace BALL
 		//@{
 
 		/*_ Compute the RSComponent of a given face
-			@param	face					the starting face
-			@param	indices				a HashSet of the indices of all atoms wich are not
-														yet part of the reduced surface
-			@param	new_vertices	a HashSet of all new created RSVertices
-			@param	vertices			a list of RSVertices for each atom
-		*/
+				@param	face					the starting face
+				@param	indices				a HashSet of the indices of all atoms wich are not
+															yet part of the reduced surface
+				@param	new_vertices	a HashSet of all new created RSVertices
+				@param	vertices			a list of RSVertices for each atom
+			*/
 		void getRSComponent
 			 (TRSFace<T>*																	 face,
 				HashSet<Index>&															 indices,
@@ -269,12 +268,12 @@ namespace BALL
 			throw();
 
 		/*_ treat all edges of a face
-			@param	face					the RSFace to be treated
-			@param	indices				a HashSet of the indices of all atoms wich are not
-														yet part of the reduced surface
-			@param	new_vertices	a HashSet of all new created RSVertices
-			@param	vertices			a list of RSVertices for each atom
-		*/
+				@param	face					the RSFace to be treated
+				@param	indices				a HashSet of the indices of all atoms wich are not
+															yet part of the reduced surface
+				@param	new_vertices	a HashSet of all new created RSVertices
+				@param	vertices			a list of RSVertices for each atom
+			*/
 		void treatFace
 			 (TRSFace<T>*																	 face,
 				HashSet<Index>&															 indices,
@@ -283,11 +282,11 @@ namespace BALL
 			throw();
 
 		/*_ roll over an edge that belongs to onlyone face and find the other one
-			@param	edge					the RSEdge to be treated
-			@param	indices				a HashSet of the indices of all atoms wich are not
-														yet part of the reduced surface
-			@param	new_vertices	a HashSet of all new created RSVertices
-			@param	vertices			a list of RSVertices for each atom
+				@param	edge					the RSEdge to be treated
+				@param	indices				a HashSet of the indices of all atoms wich are not
+															yet part of the reduced surface
+				@param	new_vertices	a HashSet of all new created RSVertices
+				@param	vertices			a list of RSVertices for each atom
 		*/
 		void treatEdge
 			 (TRSEdge<T>*																	 edge,
@@ -297,11 +296,11 @@ namespace BALL
 			throw(Exception::GeneralException);
 
 		/*_ Check all new created vertices for extensions
-			@param	indices				a HashSet of the indices of all atoms wich are not
-														yet part of the reduced surface
-			@param	new_vertices	a HashSet of all new created RSVertices
-			@param	vertices			a list of RSVertices for each atom
-		*/
+				@param	indices				a HashSet of the indices of all atoms wich are not
+															yet part of the reduced surface
+				@param	new_vertices	a HashSet of all new created RSVertices
+				@param	vertices			a list of RSVertices for each atom
+			*/
 		void extendComponent
 			 (HashSet<Index>&															 indices,
 				HashSet<TRSVertex<T>*>&											 new_vertices,
@@ -310,13 +309,13 @@ namespace BALL
 
 
 		/*_ Find a third atom rolling over two vertices starting on a face
-			@param	vertex1	the first vertex
-			@param	vertex2	the second vertex
-			@param	face		the starting face
-			@param	probe		the new probe sphere
-			@param	phi			the rotation angle
-			@return	Index		index of the found atom
-		*/
+				@param	vertex1	the first vertex
+				@param	vertex2	the second vertex
+				@param	face		the starting face
+				@param	probe		the new probe sphere
+				@param	phi			the rotation angle
+				@return	Index		index of the found atom
+			*/
 		Index thirdAtom
 			 (TRSVertex<T>* vertex1,
 				TRSVertex<T>* vertex2,
@@ -331,19 +330,19 @@ namespace BALL
 		//@{
 
 		/*_ Find a start position
-			@param	indices				a HashSet of the indices of all atoms wich are not
-														yet part of the reduced surface
-			@param	new_vertices	a HashSet of all new created RSVertices
-			@param	vertex				a pointer to the found vertex, if only a vertex
-														can be found
-			@param	edge					a pointer to the found edge, if only an edge can be
-														found
-			@param	face					a pointer to the found face, if a face can be found
-			@param	vertices			a list of RSVertices for each atom
-			@return Byte					0, if no start position is found,
-														1, if a single vertex is found,
-														2, if an edge is found,
-														3, if a face is found
+				@param	indices				a HashSet of the indices of all atoms wich are not
+															yet part of the reduced surface
+				@param	new_vertices	a HashSet of all new created RSVertices
+				@param	vertex				a pointer to the found vertex, if only a vertex
+															can be found
+				@param	edge					a pointer to the found edge, if only an edge can be
+															found
+				@param	face					a pointer to the found face, if a face can be found
+				@param	vertices			a list of RSVertices for each atom
+				@return Byte					0, if no start position is found,
+															1, if a single vertex is found,
+															2, if an edge is found,
+															3, if a face is found
 		*/
 		Byte getStartPosition
 			 (HashSet<Index>&														 indices,
@@ -360,24 +359,24 @@ namespace BALL
 		//@{
 
 		/*_ Try to find a starting face
-			@param	indices			a HashSet of the indices of all atoms that are not
-													yet part of the reduced surface
-			@return	TRSFace<T>*	a pointer to the found face, if a face can be found,
-													NULL otherwise
+				@param	indices			a HashSet of the indices of all atoms that are not
+														yet part of the reduced surface
+				@return	TRSFace<T>*	a pointer to the found face, if a face can be found,
+														NULL otherwise
 		*/
 		TRSFace<T>* findFirstFace(HashSet<Index>& indices)
 			throw();
 
 		/*_ Try to find a starting face in a given direction
-			@param	indices			a HashSet of the indices of all atoms wich are not
-													yet part of the reduced surface
-			@param	direction		search in x-direction, if direction is 0,
-													search in y-direction, if direction is 1,
-													search in z-direction, if direction is 2
-			@param	extrem			search in min direction, if extrem is 0,
-													search in max direction, if extrem is 1
-			@return	TRSFace<T>*	a pointer to the found face, if a face can be found,
-													NULL otherwise
+				@param	indices			a HashSet of the indices of all atoms wich are not
+														yet part of the reduced surface
+				@param	direction		search in x-direction, if direction is 0,
+														search in y-direction, if direction is 1,
+														search in z-direction, if direction is 2
+				@param	extrem			search in min direction, if extrem is 0,
+														search in max direction, if extrem is 1
+				@return	TRSFace<T>*	a pointer to the found face, if a face can be found,
+														NULL otherwise
 		*/
 		TRSFace<T>* findFace
 			 (HashSet<Index>& indices,
@@ -391,24 +390,24 @@ namespace BALL
 		//@{
 
 		/*_ Try to find a starting edge
-			@param	indices			a HashSet of the indices of all atoms that are not
-													yet part of the reduced surface
-			@return	TRSEdge<T>*	a pointer to the found edge, if a face can be found,
-													NULL otherwise
+				@param	indices			a HashSet of the indices of all atoms that are not
+														yet part of the reduced surface
+				@return	TRSEdge<T>*	a pointer to the found edge, if a face can be found,
+														NULL otherwise
 		*/
 		TRSEdge<T>* findFirstEdge(HashSet<Index>& indices)
 			throw();
 
 		/*_ Try to find a starting edge in a given direction
-			@param	indices			a HashSet of the indices of all atoms that are not
-													yet part of the reduced surface
-			@param	direction		search in x-direction, if direction is 0,
-													search in y-direction, if direction is 1,
-													search in z-direction, if direction is 2
-			@param	extrem			search in min direction, if extrem is 0,
-													search in max direction, if extrem is 1
-			@return	TRSEdge<T>*	a pointer to the found edge, if a face can be found,
-													NULL otherwise
+				@param	indices			a HashSet of the indices of all atoms that are not
+														yet part of the reduced surface
+				@param	direction		search in x-direction, if direction is 0,
+														search in y-direction, if direction is 1,
+														search in z-direction, if direction is 2
+				@param	extrem			search in min direction, if extrem is 0,
+														search in max direction, if extrem is 1
+				@return	TRSEdge<T>*	a pointer to the found edge, if a face can be found,
+														NULL otherwise
 		*/
 		TRSEdge<T>* findEdge(HashSet<Index>& indices, Byte direction, Byte extrem)
 			throw();
@@ -419,55 +418,50 @@ namespace BALL
 		//@{
 
 		/*_ Try to find a single atom
-			@param	indices				a HashSet of the indices of all atoms that are not
-														yet part of the reduced surface
-			@return	TRSVertex<T>*	a pointer to the found vertex, if a vertex can be
-														found, NULL otherwise
+				@param	indices				a HashSet of the indices of all atoms that are not
+															yet part of the reduced surface
+				@return	TRSVertex<T>*	a pointer to the found vertex, if a vertex can be
+															found, NULL otherwise
 		*/
 		TRSVertex<T>* findFirstVertex(HashSet<Index>& indices)
 			throw();
 
 		/*_ Find a single atom in a given direction
-			@param	indices		a HashSet of the indices of all atoms that are not
-												yet part of the reduced surface
-			@param	direction	search in x-direction, if direction is 0,
-												search in y-direction, if direction is 1,
-												search in z-direction, if direction is 2
-			@param	extrem		search in min direction, if extrem is 0,
-												search in max direction, if extrem is 1
-			@return	Index			the index of the found atom
+				@param	indices		a HashSet of the indices of all atoms that are not
+													yet part of the reduced surface
+				@param	direction	search in x-direction, if direction is 0,
+													search in y-direction, if direction is 1,
+													search in z-direction, if direction is 2
+				@param	extrem		search in min direction, if extrem is 0,
+													search in max direction, if extrem is 1
+				@return	Index			the index of the found atom
 		*/
 		Index findFirstAtom(const HashSet<Index>& indices, Byte direction, Byte extrem)
 			throw();
 
 		/*_ Find a second atom close enougth to the first atom in a given direction
-			@param	atom1			the index of the first atom
-			@param	atom_list	a HashSet of the indices of all candidate atoms
-			@param	direction	search in x-direction, if direction is 0,
-												search in y-direction, if direction is 1,
-												search in z-direction, if direction is 2
-			@param	extrem		search in min direction, if extrem is 0,
-												search in max direction, if extrem is 1
-			@return	Index			the index of the found atom
+				@param	atom1			the index of the first atom
+				@param	atom_list	a HashSet of the indices of all candidate atoms
+				@param	direction	search in x-direction, if direction is 0,
+													search in y-direction, if direction is 1,
+													search in z-direction, if direction is 2
+				@param	extrem		search in min direction, if extrem is 0,
+													search in max direction, if extrem is 1
+				@return	Index			the index of the found atom
 		*/
-		Index findSecondAtom
-			 (Index					 atom1,
-				HashSet<Index> atom_list,
-				Byte					 direction,
-				Byte					 extrem)
+		Index findSecondAtom (Index atom1, HashSet<Index> atom_list,
+													Byte	direction, Byte	extrem)
 			throw();
 
 		/*_ Find a second atom close enougth to the first two atoms
-			@param	atom1			the index of the first atom
-			@param	atom2			the index of the second atom
-			@param	atom_list	a HashSet of the indices of all candidate atoms
-			@return	::std::list< ::std::pair< Index,TSphere3<T> > >
-												a list of all candidates with their probe spheres
+				@param	atom1			the index of the first atom
+				@param	atom2			the index of the second atom
+				@param	atom_list	a HashSet of the indices of all candidate atoms
+				@return	::std::list< ::std::pair< Index,TSphere3<T> > >
+													a list of all candidates with their probe spheres
 		*/
 		::std::list< ::std::pair< Index,TSphere3<T> > > findThirdAtom
-			 (Index									atom1,
-				Index									atom2,
-				const HashSet<Index>& third)
+			 					(Index	atom1, Index atom2, const HashSet<Index>& third)
 			throw(Exception::GeneralException);
 
 		//@}
@@ -476,9 +470,9 @@ namespace BALL
 		//@{
 
 		/*_ Find all atoms close enougth to a given atom
-			@param	atom0				the index of the given atom
-			@param	input_set		HashSet of candidate atoms
-			@param	output_set	HashSet of all atoms close enougth to the given atom
+				@param	atom0				the index of the given atom
+				@param	input_set		HashSet of candidate atoms
+				@param	output_set	HashSet of all atoms close enougth to the given atom
 		*/
 		void neighboursOfOneAtom
 			 (Index									atom0,
@@ -487,27 +481,24 @@ namespace BALL
 			throw();
 
 		/*_ Find all atoms close enougth to two given atoms
-			@param	atom1				the index of the first given atom
-			@param	atom2				the index of the second given atom
-			@param	input_set		HashSet of candidate atoms
-			@param	output_set	HashSet of all atoms close enougth to the given atoms
+				@param	atom1				the index of the first given atom
+				@param	atom2				the index of the second given atom
+				@param	input_set		HashSet of candidate atoms
+				@param	output_set	HashSet of all atoms close enougth to the given atoms
 		*/
-		void neighboursOfTwoAtoms
-			 (Index									atom1,
-				Index									atom2,
-				const HashSet<Index>& input_set,
-				HashSet<Index>&				output_set)
+		void neighboursOfTwoAtoms (Index atom1, Index	atom2,
+					const HashSet<Index>& input_set, HashSet<Index>& output_set)
 			throw();
 
 
     /*_ Get the extrem coordinate of a circle in a given direction
-    	@param	circle		the circle
-			@param	direction	search in x-direction, if direction is 0,
-												search in y-direction, if direction is 1,
-												search in z-direction, if direction is 2
-			@param	extrem		search in min direction, if extrem is 0,
-												search in max direction, if extrem is 1
-			@return	T					the extrem coordinate
+				@param	circle		the circle
+				@param	direction	search in x-direction, if direction is 0,
+													search in y-direction, if direction is 1,
+													search in z-direction, if direction is 2
+				@param	extrem		search in min direction, if extrem is 0,
+													search in max direction, if extrem is 1
+				@return	T					the extrem coordinate
     */
 		T getCircleExtremum
 			 (const TCircle3<T>& circle,
@@ -521,12 +512,12 @@ namespace BALL
 		//@{
 
 		/*_ Create a free edge from two vertices if it is a free edge
-			@param	vertex1			a pointer to the first vertex
-			@param	vertex2			a pointer to the second vertex
-			@param	neighbours	HashSet of indices of atoms in environment of the two
-													vertices
-			@return	TRSEdge<T>* a pointer to the created free edge, if there is one,
-													NULL otherwise
+				@param	vertex1			a pointer to the first vertex
+				@param	vertex2			a pointer to the second vertex
+				@param	neighbours	HashSet of indices of atoms in environment of the two
+														vertices
+				@return	TRSEdge<T>* a pointer to the created free edge, if there is one,
+														NULL otherwise
 		*/
 		TRSEdge<T>* createFreeEdge
 				 (TRSVertex<T>*					vertex1,
@@ -554,11 +545,11 @@ namespace BALL
 			throw();
 
 		/*_ Get the normal vector of the face described by three atoms and a probe
-			@param	atom1				the index of the first atom
-			@param	atom2				the index of the second atom
-			@param	atom3				the index of the third atom
-			@param	probe				the probe sphere lying on atom1, atom2, atom3
-			@return	TVector3<T>	the normal vector
+				@param	atom1				the index of the first atom
+				@param	atom2				the index of the second atom
+				@param	atom3				the index of the third atom
+				@param	probe				the probe sphere lying on atom1, atom2, atom3
+				@return	TVector3<T>	the normal vector
 		*/
 		TVector3<T> getFaceNormal
 			 (const TSphere3<T>& atom1,
@@ -568,18 +559,15 @@ namespace BALL
 			throw();
 
 		/*_ Update a face and it's edges
-			@param	v1		the first vertex of the face
-			@param	v2		the second vertex of the face
-			@param	v3		the third vertex of the face
-			@param	probe	the probe sphere of the face
-			@param	mode	
-			@param	f			the face
-			@param	e1		the first edge. it is updated if mode & 1 == 1. it's the
-										edge from v1 to v2
-			@param	e2		the second edge. it is updated if mode & 2 == 2. it's the
-										edge from v2 to v3
-			@param	e3		the third edge. it is updated if mode & 4 == 4. it's the
-										edge from v3 to v1
+				@param	v1		the first vertex of the face
+				@param	v2		the second vertex of the face
+				@param	v3		the third vertex of the face
+				@param	probe	the probe sphere of the face
+				@param	mode	
+				@param	f			the face
+				@param	e1		the first edge. it is updated if mode & 1 == 1. it's the edge from v1 to v2
+				@param	e2		the second edge. it is updated if mode & 2 == 2. it's the edge from v2 to v3
+				@param	e3		the third edge. it is updated if mode & 4 == 4. it's the edge from v3 to v1
 		*/
 		void updateFaceAndEdges
 			 (TRSVertex<T>* v1,
@@ -594,9 +582,9 @@ namespace BALL
 			throw();
 
 		/*_ Test, weather a face exists or not
-			@param	face				a pointer to the face to be tested
-			@param	vertices		a list of RSVertices for each atom
-			@return	TRSFace<T>*	a pointer to the face, if it exists, otherwise NULL
+				@param	face				a pointer to the face to be testeD
+				@param	vertices		a list of RSVertices for each atom
+				@return	TRSFace<T>*	a pointer to the face, if it exists, otherwise NULL
 		*/
 		TRSFace<T>* faceExists
 			 (TRSFace<T>* face,
@@ -609,13 +597,12 @@ namespace BALL
 		//@{
 
 		/*_ Get the centers of the probe sphere when it lies on three atoms
-			@param	a1		the first atom
-			@param	a2		the second atom
-			@param	a3		the third atom
-			@param	c1		the first center
-			@param	c2		the second center
-			@return	bool	true, if the probe sphere can touch the three atoms,
-										false, otherwise
+				@param	a1		the first atom
+				@param	a2		the second atom
+				@param	a3		the third atom
+				@param	c1		the first center
+				@param	c2		the second center
+				@return	bool	true, if the probe sphere can touch the three atoms, false, otherwise
 		*/
 		bool centerOfProbe
 			 (Index				 a1,
@@ -626,9 +613,9 @@ namespace BALL
 			throw();
 
 		/*_ Check,weather a probe sphere is inside an atom
-			@param	probe	the probe sphere to be tested
-			@return	bool	true, if the probe sphere is not intersecting any atom
-										false, otherwise
+				@param	probe	the probe sphere to be tested
+				@return	bool	true, if the probe sphere is not intersecting any atom
+											false, otherwise
 		*/
 		bool checkProbe(const TSphere3<T>& probe)
 			throw();
@@ -640,36 +627,44 @@ namespace BALL
     /*_ the atoms of the molecule
     */
     std::vector< TSphere3<T> > atom_;
+		
     /*_	probe radius
     */
     T probe_radius_;
-    /*_ BSDTree of the atoms
+    
+		/*_ BSDTree of the atoms
     */
     TBSDTree<T>* tree_;
-    /*_ the vertices of the reduced surface
+    
+		/*_ the vertices of the reduced surface
     */
     std::vector< TRSVertex<T>* > vertices_;
-    /*_ the edges of the reduced surface
+    
+		/*_ the edges of the reduced surface
     */
     std::vector< TRSEdge<T>* > edges_;
-    /*_ the faces of the reduced surface
+    
+		/*_ the faces of the reduced surface
     */
     std::vector< TRSFace<T>* > faces_;
-    /*_ maximal radius of all atoms
+    
+		/*_ maximal radius of all atoms
     */
     T r_max_;
-    /*_ the number of vertices of the reduced surface
+    
+		/*_ the number of vertices of the reduced surface
     */
     Size number_of_vertices_;
-    /*_ the number of edges of the reduced surface
+    
+		/*_ the number of edges of the reduced surface
     */
     Size number_of_edges_;
-    /*_ the number of faces of the reduced surface
+    
+		/*_ the number of faces of the reduced surface
     */
     Size number_of_faces_;
 	
 	};
-
 
 	/**	@name	Storers
 	*/
@@ -737,7 +732,6 @@ namespace BALL
 		}
 
 	//@}
-
 	
 	/**	The Default ReducedSurface Type.
 			If double precision is not needed, {\tt TReducedSurface<float>} should
