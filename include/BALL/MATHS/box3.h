@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.41 2004/02/23 15:19:59 anhi Exp $
+// $Id: box3.h,v 1.42 2004/02/25 18:46:45 anhi Exp $
 //
 
 #ifndef BALL_MATHS_BOX3_H
@@ -307,22 +307,13 @@ namespace BALL
 	void TBox3<T>::swap(TBox3<T>& box)
 		throw()
 	{
-		point_.swap(box.swap);
+		point_.swap(box.point_);
 		right_vector_.swap(box.right_vector_);
 		height_vector_.swap(box.height_vector_);
-		T tmp;
 
-		tmp = width_;
-		width_ = box.width_;
-		box.width_ = tmp;
-
-		tmp = height_;
-		height_ = box.height_;
-		box.height_ = tmp.height_;
-
-		tmp = depth_;
-		depth_ = box.depth_;
-		box.depth_ = tmp;
+		std::swap(width_, box.width_);
+		std::swap(height_, box.height_);
+		std::swap(depth_, box.depth_);
 	}
 
 	template <typename T>
