@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.31 2002/12/17 13:36:42 amoll Exp $
+// $Id: mainControl.C,v 1.32 2002/12/17 13:40:18 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -891,20 +891,20 @@ namespace BALL
 													atoms[0]->getFullName() + ", " + 
 													atoms[1]->getFullName() + ", " +
 													atoms[2]->getFullName() + ": " +
-													String(result) + ")"); 
+													String(result)); 
 			}
 			else if (nr_of_atoms == 4)
 			{
-				// if tree atoms were picked, show their angle
+				// if tree atoms were picked, show their torsion angle
 				Angle result = getTorsionAngle(atoms[0]->getPosition().x, atoms[0]->getPosition().y, atoms[0]->getPosition().z,
 																			 atoms[1]->getPosition().x, atoms[1]->getPosition().y, atoms[1]->getPosition().z,
 																			 atoms[2]->getPosition().x, atoms[2]->getPosition().y, atoms[2]->getPosition().z,
 																			 atoms[3]->getPosition().x, atoms[3]->getPosition().y, atoms[3]->getPosition().z);
 
-				setStatusbarText("Angle between atoms " + 
+				setStatusbarText("Torsion angle between atoms " + 
 													atoms[0]->getFullName() + ", " + 
 													atoms[1]->getFullName() + ", " +
-													atoms[2]->getFullName() + ": " +
+													atoms[2]->getFullName() + ", " +
 													atoms[3]->getFullName() + ": " +
 													String(result));
 			}
