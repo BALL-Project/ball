@@ -1119,7 +1119,7 @@
                     <enum>ToolBarPanel</enum>
                 </property>
                 <property name="text">
-                    <string>0</string>
+                    <string>0%</string>
                 </property>
                 <property name="alignment">
                     <set>AlignCenter</set>

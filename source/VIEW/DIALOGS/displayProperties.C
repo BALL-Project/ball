@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.27 2003/10/27 16:54:35 amoll Exp $
+// $Id: displayProperties.C,v 1.28 2003/10/27 22:08:01 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -562,11 +562,17 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 
 void DisplayProperties::transparencySliderChanged()
 {
-	transparency_label->setText(String(transparency_slider->value()).c_str());
+	String text = String(transparency_slider->value());
+	text += String("%");
+	transparency_label->setText(text.c_str());
 }
+
 void DisplayProperties::precisionSliderChanged()
 {
-	precision_label->setText(String(precision_slider->value() / 10).c_str());
+	String text = String((float)precision_slider->value() / 10.0).trimRight("0");
+	if (text.right(1) == ".") text = text + "0";
+
+	precision_label->setText(text.c_str());
 	custom_precision_button->setChecked(true);
 }
 
