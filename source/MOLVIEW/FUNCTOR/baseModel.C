@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModel.C,v 1.15 2002/12/16 16:10:09 amoll Exp $
+// $Id: baseModel.C,v 1.16 2002/12/17 16:09:58 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -109,7 +109,7 @@ namespace BALL
 
 		bool BaseModelProcessor::start()
 		{
-			if (hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == true)
+			if (hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC))
 			{
 				getSearcher_().setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
 				getSearcher_().clearProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
