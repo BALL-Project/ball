@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.11.4.6 2002/11/17 18:35:28 amoll Exp $
+// $Id: displayProperties.h,v 1.11.4.7 2002/11/29 00:58:57 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -553,9 +553,6 @@ namespace BALL
 			
 			bool 							distance_coloring_;
 			
-			List<Composite*> 	selection_;
-
-
 			// --------------------------------------------------------------------------------
 			// Attributs for the model processors
 			// --------------------------------------------------------------------------------
