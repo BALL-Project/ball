@@ -10,3 +10,7 @@
 /**	\defgroup Electrostatic Electrostatic energy
 	* \ingroup Energy
 	*/
+
+/** \defgroup EnergyMiscellaneous Miscellaneous
+ * 	\ingroup Energy
+ */

@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.18 2003/03/26 15:59:22 anhi Exp $
+// $Id: kernel.doc,v 1.19 2003/03/26 16:11:55 anhi Exp $
 
 /** \defgroup Kernel Kernel Classes
 		\ingroup Foundation
@@ -24,6 +24,6 @@
 	* 	\ingroup Kernel
 	*/
 
-	/** \defgroup KernelContainers Atoms and AtomContainers
+	/** \defgroup KernelContainers Molecular Datastructures
 	 		\ingroup Kernel
 	*/

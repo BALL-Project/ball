@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composedEnergyProcessor.h,v 1.10 2003/03/26 13:56:21 anhi Exp $
+// $Id: composedEnergyProcessor.h,v 1.11 2003/03/26 16:11:54 anhi Exp $
 
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 #define BALL_ENERGY_COMPOSEDENERGYPROCESSOR
@@ -22,7 +22,7 @@ namespace BALL
 {
 	
 	/** EnergyProcessorList
-	 		\ingroup Energy
+			\ingroup EnergyMiscellaneous
 	*/
 	typedef List<EnergyProcessor*> EnergyProcessorList;
 
@@ -32,7 +32,7 @@ namespace BALL
 			given list of energy contributions.
 			@see EnergyProcessor
     	
-			\ingroup  Energy
+			\ingroup EnergyMiscellaneous
 	 */	
 	class ComposedEnergyProcessor
 		: public EnergyProcessor
