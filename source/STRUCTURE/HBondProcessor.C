@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.C,v 1.10 2005/03/01 18:28:06 amoll Exp $
+// $Id: HBondProcessor.C,v 1.11 2005/03/02 14:55:04 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -111,7 +111,6 @@ namespace BALL
 		//create a grid inside the bounding box
 		HashGrid3<POS> atom_grid(lower_, upper_ - lower_, MAX_LENGTH);
 
-
 		// insert all protein-residues in respect of N-atom
 		// the last residue does not _have_ an O.  = > don't use it
 		for (Size i = 0; i < vec_.size(); i++) 
@@ -122,9 +121,9 @@ namespace BALL
 			}
 		}                   
 
-		HashGridBox3<POS>::DataIterator data_it;       // iterate over residues of neighbouring boxes
-		HashGridBox3<POS>::BoxIterator box_it;         // iterator
-		float energy, dist_ON, dist_CH, dist_OH, dist_CN;
+		const Index size_x = atom_grid.getSizeX();
+		const Index size_y = atom_grid.getSizeY();
+		const Index size_z = atom_grid.getSizeZ();
 
  		// now compute the energies and see whether we have a hydrogen bond
 		for (Size i = 0; i < vec_.size(); i++)
@@ -135,72 +134,82 @@ namespace BALL
 
 			// We iterate over the grid ourselves, since the beginBox()... didn't work... :-(
 			Position x, y, z;                            // indices of the actual box
-			int size_x = atom_grid.getSizeX();           // size of x dimension
-			int size_y = atom_grid.getSizeY();           // size of y dimension
-			int size_z = atom_grid.getSizeZ();           // size of z dimension
-
 			atom_grid.getIndices(*box, x, y, z);         // compute the indices of the actual box
 
 			// Iterate over all the neighbouring boxes
 			// for (box_it = box->beginBox(); +box_it; ++box_it) //as mentioned beginBox doesn't work
 			for (int nx = x-1; (nx < size_x) && (nx < (int)x+2); nx++)
 			{
+				if (nx < 0) continue;
+
 				for (int ny = y-1; (ny < size_y) && (ny < (int)y+2); ny++)
 				{
+					if (ny < 0) continue;
+
 					for (int nz = z-1; (nz < size_z) && (nz < (int)z+2); nz++)
 					{
-						// we shouldn't run outside the box
-						if (!((nx >= 0) && (ny >= 0) && (nz >= 0))) continue;
+						if (nz < 0) continue;
 
 						// compute the neighbour box
-						HashGridBox3<POS> *nb = atom_grid.getBox(nx, ny, nz); 
+						HashGridBox3<POS>* const nb = atom_grid.getBox(nx, ny, nz); 
 
 						//iterate over all residues of the neighbouring box
+						HashGridBox3<POS>::DataIterator data_it;
 						for (data_it = nb->beginData(); +data_it; ++data_it)
 						{
 							// TODO: We don't want H-bonds between neighboring residues!
 							//       Does this criterion always work? We should check for
 							//       an existing bond between data_it and vec[i] instead!
 
-							if (((int)abs((int)(data_it->number - vec_[i].number)) > 1) && (data_it->number!= 0))
+							if (abs((Index)data_it->number - (Index)vec_[i].number) <= 1 || 
+									data_it->number == 0)
 							{
-								// compute the distances between the relevant atoms
-								dist_ON = (vec_[i].pos_O - data_it->pos_N).getLength();
-								dist_CH = (vec_[i].pos_C - data_it->pos_H).getLength();
-								dist_OH = (vec_[i].pos_O - data_it->pos_H).getLength();
-								dist_CN = (vec_[i].pos_C - data_it->pos_N).getLength();
-
-								// compute the electrostatic energy of the bond-building groups
-								energy  = 0.42 * 0.20 * 332.;
-								energy *=  (1./dist_ON + 1./dist_CH - 1./dist_OH - 1./dist_CN);
-
-								if (energy >= -0.5) continue;
-								{
-									h_bond_pairs_[vec_[i].number].push_back(data_it->number);
-									AtomIterator ai;
-									Atom *acceptor = 0;
-									Atom* donor = 0; 
-									for (ai = vec_[i].res->beginAtom(); +ai; ++ai)
-									{
-										if (ai->getName() == "O") acceptor = &(*ai);
-									}	
-
-									for (ai = data_it->res->beginAtom(); +ai; ++ai)
-									{
-										if (ai->getName() == "N") donor = &*ai;
-									}		
-
-									if (!donor || !acceptor) continue;
-
-									Bond* bond = donor->createBond(*acceptor);
-									bond->setType(Bond::TYPE__HYDROGEN);
-									bond->setOrder(1);
-									bond->setName("calculated H-Bond");
-
-									donor->setProperty("HBOND_DONOR", *acceptor);
-								}
+								continue;
 							}
-						} 
+							
+							// compute the distances between the relevant atoms
+							const float dist_ON = (vec_[i].pos_O - data_it->pos_N).getLength();
+							const float dist_CH = (vec_[i].pos_C - data_it->pos_H).getLength();
+							const float dist_OH = (vec_[i].pos_O - data_it->pos_H).getLength();
+							const float dist_CN = (vec_[i].pos_C - data_it->pos_N).getLength();
+
+							// compute the electrostatic energy of the bond-building groups
+							float energy  = 0.42 * 0.20 * 332.;
+							energy *=  (1./dist_ON + 1./dist_CH - 1./dist_OH - 1./dist_CN);
+
+							if (energy >= -0.5) continue;
+
+							Atom *acceptor = 0;
+							for (AtomIterator ai = vec_[i].res->beginAtom(); +ai; ++ai)
+							{
+								if (ai->getName() == "O") 
+								{
+									acceptor = &(*ai);
+									break;
+								}
+							}	
+
+							Atom* donor = 0; 
+							for (AtomIterator ai = data_it->res->beginAtom(); +ai; ++ai)
+							{
+								if (ai->getName() == "N") 
+								{
+									donor = &*ai;
+									break;
+								}
+							}		
+
+							if (!donor || !acceptor) continue;
+
+							h_bond_pairs_[vec_[i].number].push_back(data_it->number);
+
+							Bond* bond = donor->createBond(*acceptor);
+							bond->setType(Bond::TYPE__HYDROGEN);
+							bond->setOrder(1);
+							bond->setName("calculated H-Bond");
+
+							donor->setProperty("HBOND_DONOR", *acceptor);
+						}
 					}
 				}
 			}
@@ -213,7 +222,6 @@ namespace BALL
 
 	Processor::Result HBondProcessor::operator() (Composite &composite)
 	{
-
 		ResidueIterator ri;
 		
 	  // create a mantel box (bounding box)  which should include the composite
@@ -231,14 +239,12 @@ namespace BALL
 			Protein *s = RTTI::castTo<Protein>(composite);
 			s->apply(bp);
       ri = s->beginResidue();
-		
 		}else
 		if (RTTI::isKindOf<Chain>(composite))
 		{
 			Chain *s = RTTI::castTo<Chain>(composite);
 			s->apply(bp);
 			ri = s->beginResidue();
-		
 		}
 		
 		if (!(+ri))// ri doesn't seem to exist
