@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.14 2000/12/15 00:37:26 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.15 2000/12/19 22:07:24 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -44,14 +44,12 @@ QColor con2rgb(double arg, double min, double max)
 }
 
 NewRegularData2DMessage::NewRegularData2DMessage()
-  :
-  CompositeMessage()
+  :	CompositeMessage()
 {
 }
 
 NewRegularData2DMessage::NewRegularData2DMessage(const CompositeMessage &message, bool /* deep */)
-  :
-  CompositeMessage(message)
+  :	CompositeMessage(message)
 {
 }
 
@@ -63,7 +61,8 @@ NewRegularData2DMessage::~NewRegularData2DMessage()
   #endif
 }
 
-PixWid::PixWid( QWidget *w ) : QWidget( w ), select_(false)
+PixWid::PixWid( QWidget *w ) 
+	: QWidget( w ), select_(false)
 {
   setMouseTracking(true);
 };
@@ -108,30 +107,36 @@ void PixWid::mouseMoveEvent( QMouseEvent *e )
 
 RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double max, QWidget *parent) 
   : QScrollView(parent), 
-  ModularWidget("RegularData2DWidget"), 
-  pm_(0), 
-  legend_map_(0), 
-  buffer_map_(0), 
-  lengthx_(lx_), 
-  lengthy_(ly_), 
-  min_(min), 
-  max_(max), 
-  showMousePos_(true), 
-  posLabel_(0), 
-  act_lower_left_x_(0), 
-  act_lower_left_y_(0), 
-  zoom_x_(1), 
-  zoom_y_(1), 
-  cont_(0), 
-  mvover_(0), 
-  ind_side_(0), 
-  ind_updown_(0), 
-  spec_length_x_(0), 
-  spec_length_y_(0), 
-  pm_cont_(0), 
-  plot_cont_(false), 
-  plot_data_(true),
-  select_(false)
+		ModularWidget("RegularData2DWidget"), 
+		pm_(0), 
+		legend_map_(0), 
+		buffer_map_(0), 
+		pix_wid_(0),
+		legend_last_x_(0),
+		legend_last_y_(0),
+		lengthx_(lx_), 
+		lengthy_(ly_), 
+		full_length_x_(0),
+		full_length_y_(0),
+		min_(min), 
+		max_(max), 
+		showMousePos_(true), 
+		posLabel_(0), 
+		act_lower_left_x_(0), 
+		act_lower_left_y_(0), 
+		zoom_x_(1), 
+		zoom_y_(1), 
+		cont_(0), 
+		mvover_(0), 
+		ind_side_(0), 
+		ind_updown_(0), 
+		spec_length_x_(0), 
+		spec_length_y_(0), 
+		spec_(0),
+		pm_cont_(0), 
+		plot_cont_(false), 
+		plot_data_(true),
+		select_(false)
 {
   createLegend( 20, 40 );
 
@@ -149,7 +154,8 @@ RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double ma
   viewport()->setMouseTracking(true);
 }
 
-RegularData2DWidget::RegularData2DWidget(const RegularData2DWidget& widget) : QScrollView(), ModularWidget(widget)
+RegularData2DWidget::RegularData2DWidget(const RegularData2DWidget& widget) 
+	: QScrollView(), ModularWidget(widget), spec_(0)
 {
 }
 

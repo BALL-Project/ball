@@ -1,4 +1,4 @@
-// $Id: point.C,v 1.5 2000/12/12 16:18:46 oliver Exp $
+// $Id: point.C,v 1.6 2000/12/19 22:07:28 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/point.h>
 
@@ -86,6 +86,7 @@ namespace BALL
 		}
 
 		bool Point::isValid() const
+			throw()
 		{
 			return (bool)(GeometricObject::isValid() == true
 										&& ColorExtension::isValid() == true

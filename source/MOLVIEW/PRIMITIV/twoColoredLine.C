@@ -1,4 +1,4 @@
-// $Id: twoColoredLine.C,v 1.5 2000/12/12 16:19:35 oliver Exp $
+// $Id: twoColoredLine.C,v 1.6 2000/12/19 22:07:44 oliver Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.h>
 
@@ -91,6 +91,7 @@ namespace BALL
 		}
 
 		bool TwoColoredLine::isValid() const
+			throw()
 		{
 			return (bool)(VIEW::GeometricObject::isValid() == true
 										&& ColorExtension2::isValid() == true

@@ -1,4 +1,4 @@
-// $Id: mesh.C,v 1.3 2000/12/12 16:18:46 oliver Exp $
+// $Id: mesh.C,v 1.4 2000/12/19 22:07:28 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 
@@ -83,6 +83,7 @@ namespace BALL
 		}
 
 		bool Mesh::isValid() const
+			throw()
 		{
 			return (bool)(GeometricObject::isValid() == true
 										&& ColorExtension::isValid() == true);

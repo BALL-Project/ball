@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.C,v 1.5 2000/12/12 16:19:35 oliver Exp $
+// $Id: twoColoredTube.C,v 1.6 2000/12/19 22:07:45 oliver Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 
@@ -84,6 +84,7 @@ namespace BALL
 		}
 
 		bool TwoColoredTube::isValid() const
+			throw()
 		{
 			return (bool)(BaseTube::isValid() == true
 										&& ColorExtension2::isValid() == true);

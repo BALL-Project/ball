@@ -1,4 +1,4 @@
-// $Id: tube.C,v 1.5 2000/12/12 16:18:46 oliver Exp $
+// $Id: tube.C,v 1.6 2000/12/19 22:07:29 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/tube.h>
 
@@ -78,6 +78,7 @@ namespace BALL
 		}
 
 		bool Tube::isValid() const
+			throw()
 		{
 			return (bool)(BaseTube::isValid() == true
 										&& ColorExtension::isValid() == true);

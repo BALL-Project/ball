@@ -1,4 +1,4 @@
-// $Id: simpleBox.C,v 1.2 2000/12/12 16:18:46 oliver Exp $
+// $Id: simpleBox.C,v 1.3 2000/12/19 22:07:28 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/simpleBox.h>
 
@@ -85,6 +85,7 @@ namespace BALL
 		}
 
 		bool SimpleBox::isValid() const
+			throw()
 		{
 			return (bool)(GeometricObject::isValid() == true
 										&& ColorExtension::isValid() == true

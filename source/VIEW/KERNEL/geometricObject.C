@@ -1,4 +1,4 @@
-// $Id: geometricObject.C,v 1.7 2000/12/12 16:18:45 oliver Exp $
+// $Id: geometricObject.C,v 1.8 2000/12/19 22:07:28 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -139,6 +139,7 @@ namespace BALL
     }
 
 		bool GeometricObject::isValid() const
+			throw()
 		{
 			return (bool)(Composite::isValid() == true
 										&& PropertyManager::isValid() == true);

@@ -1,4 +1,4 @@
-// $Id: twoColoredLine.h,v 1.4 2000/12/12 16:16:58 oliver Exp $
+// $Id: twoColoredLine.h,v 1.5 2000/12/19 22:06:47 oliver Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
 #define BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
@@ -87,7 +87,8 @@ namespace BALL
 			*/
 			//@{
 
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			virtual void dump
 				(std::ostream& s = std::cout, Size depth = 0) const

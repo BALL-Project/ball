@@ -1,4 +1,4 @@
-// $Id: basetube.C,v 1.5 2000/12/12 16:18:46 oliver Exp $
+// $Id: basetube.C,v 1.6 2000/12/19 22:07:28 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/basetube.h>
 
@@ -85,6 +85,7 @@ namespace BALL
 		}
 
 		bool BaseTube::isValid() const
+			throw()
 		{
 			return (bool)(GeometricObject::isValid() == true
 										&& Vertex2::isValid() == true
