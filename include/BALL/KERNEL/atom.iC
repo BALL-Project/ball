@@ -1,4 +1,4 @@
-// $Id: atom.iC,v 1.10 2001/06/27 01:33:11 oliver Exp $
+// $Id: atom.iC,v 1.10.4.1 2002/02/27 00:32:49 oliver Exp $
 
 	BALL_INLINE
   void Atom::setElement(const Element& element)
@@ -18,14 +18,14 @@
   void Atom::setCharge(float charge)
 		throw()
   {
-    charge_ = charge;
+    static_attributes_[index_].charge = charge;
 	}
 
 	BALL_INLINE
   float Atom::getCharge() const
 		throw()
   {
-    return charge_;
+    return static_attributes_[index_].charge;
 	}
 
 	BALL_INLINE
@@ -50,31 +50,31 @@
 	}
 
 	BALL_INLINE
-  void Atom::setName(const String &name)
+  void Atom::setName(const String& name)
 		throw()
   {
     name_ = name;
 	}
  
 	BALL_INLINE
-  void Atom::setPosition(const Vector3 &position)
+  void Atom::setPosition(const Vector3& position)
 		throw()
   {
-    position_.set(position);
+    static_attributes_[index_].position.set(position);
 	}
 
 	BALL_INLINE
   Vector3& Atom::getPosition()
 		throw()
   {
-    return position_;
+    return static_attributes_[index_].position;
 	}
 
 	BALL_INLINE
   const Vector3& Atom::getPosition() const
 		throw()
   {
-    return position_;
+    return static_attributes_[index_].position;
 	}
 
 	BALL_INLINE
@@ -92,17 +92,17 @@
 	}
 
 	BALL_INLINE
-  void Atom::setType(Type atom_type)
+  void Atom::setType(Type type)
 		throw()
   {
-    type_ = atom_type;
+    static_attributes_[index_].type = type;
 	}
 
 	BALL_INLINE
   Atom::Type Atom::getType() const
 		throw()
   {
-    return type_;
+    return static_attributes_[index_].type;
 	}
 
 	BALL_INLINE
@@ -120,36 +120,49 @@
 	}
 
 	BALL_INLINE
-  void Atom::setVelocity(const Vector3 &velocity)
+  void Atom::setVelocity(const Vector3& velocity)
 		throw()
   {
-    velocity_.set(velocity);
+    static_attributes_[index_].velocity.set(velocity);
 	}
 
 	BALL_INLINE
   const Vector3& Atom::getVelocity() const
 		throw()
   {
-    return velocity_;
+    return static_attributes_[index_].velocity;
 	}
 
 	BALL_INLINE
   void Atom::setForce(const Vector3& force)
 		throw()
   {
-    force_.set(force);
+    static_attributes_[index_].force.set(force);
 	}
 
  	BALL_INLINE
   Vector3& Atom::getForce()
 		throw()
   {
-    return force_;
+    return static_attributes_[index_].force;
 	}
 
 	BALL_INLINE
   const Vector3& Atom::getForce() const
 		throw()
   {
-    return force_;
+    return static_attributes_[index_].force;
 	}
+
+	BALL_INLINE
+	Position Atom::getIndex() const
+	{
+		return index_;
+	}
+
+	BALL_INLINE
+	Atom::AtomAttributeVector& Atom::getAttributes()
+	{
+		return static_attributes_;
+	}
+

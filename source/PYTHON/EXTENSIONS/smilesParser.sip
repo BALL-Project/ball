@@ -1,5 +1,4 @@
-// $Id: smilesParser.sip,v 1.2 2002/02/15 01:57:28 oliver Exp $
-
+// $Id: smilesParser.sip,v 1.2.2.1 2002/02/27 00:32:52 oliver Exp $
 
 class SmilesParser
 {
@@ -15,6 +14,7 @@ class SmilesParser
 		Z,
 		E
 	};
+
 	enum ChiralClass
 	{
 		NONCHIRAL,
@@ -24,25 +24,18 @@ class SmilesParser
 		TB,
 		OH
 	};
+
 	enum
 	{
 		MAX_CONNECTIONS = 100
 	};
+
 	//typedef std::pair<ChiralClass, Position> ChiralDef;
 	class ChiralDef
 	{
 		public:
 		SmilesParser::ChiralClass first;
 		Position second;
-	};
-	class SPBond
-		: Bond
-	{
-		public:
-		~SPBond() throw();
-		SPBond(SmilesParser::SPAtom* /first/, SmilesParser::SPAtom* /second/, Index /order/ = 1);
-		SmilesParser::ZEIsomerType getZEType() const;
-		void setZEType(SmilesParser::ZEIsomerType /type/);
 	};
 
 	class SPAtom
@@ -64,6 +57,17 @@ class SmilesParser
 		bool isInBrackets() const;
 		void setInBrackets(bool /in_brackets/);
 	};
+
+	class SPBond
+		: Bond
+	{
+		public:
+		~SPBond() throw();
+		SPBond(SmilesParser::SPAtom* /first/, SmilesParser::SPAtom* /second/, Index /order/ = 1);
+		SmilesParser::ZEIsomerType getZEType() const;
+		void setZEType(SmilesParser::ZEIsomerType /type/);
+	};
+
 	public:
 
 	typedef std::list<Position> ConnectionList;

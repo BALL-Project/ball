@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.16 2001/07/11 23:59:33 amoll Exp $
+// $Id: lennardJones.h,v 1.16.4.1 2002/02/27 00:32:49 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -67,9 +67,9 @@ namespace BALL
 
 		struct Data
 		{
-			Atom*		atom1;
-			Atom*		atom2;
-			Values	values;
+			Atom::StaticAtomAttributes* atom1;
+			Atom::StaticAtomAttributes* atom2;
+			Values	 values;
 		};
 
 		//@}

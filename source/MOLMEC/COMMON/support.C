@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.30 2002/01/18 01:35:55 oliver Exp $
+// $Id: support.C,v 1.30.4.1 2002/02/27 00:32:51 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -47,10 +47,9 @@ namespace BALL
 			Vector3 period;
 
 			// Are there atoms stored in atom_vector at all?
-			if (atom_vector.size() == 0)
+			if (atom_vector.empty())
 			{
-				Log.warn() << "calculateNonBondedAtomPairs: atom_vector is empty " 
-					<< endl;
+				Log.warn() << "calculateNonBondedAtomPairs: atom_vector is empty " << endl;
 				return 0;
 			}
 
@@ -313,7 +312,7 @@ namespace BALL
 					// Algorithm using a 3d hash grid
 					//
 					// Use a hash grid with box length "distance" to determine all
-					// neigboured atom pairs
+					// neighboring atom pairs
 
 					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
 							++atom_it) 

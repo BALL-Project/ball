@@ -31,3 +31,5 @@ bench:	$(EXECUTABLES)
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
  
+AmberFF_bench:	AmberFF_bench.o ../MOLMEC/AMBER/amberNonBonded.o
+	$(CXX) $(CXXFLAGS) AmberFF_bench.o ../MOLMEC/AMBER/amberNonBonded.o $(LDFLAGS) -o $@ $(LIBS)
