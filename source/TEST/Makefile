@@ -54,6 +54,8 @@ EXECUTABLES = \
 	Options_test\
 	PairExpInteractionEnergyProcessor_test\
 	PairExpRDFIntegrator_test\
+	Parameters_test\
+	ParameterSection_test\
 	Path_test\
 	PDBFile_test\
 	PiecewiseFunction_test\
