@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: support.C,v 1.2 1999/09/07 13:52:48 len Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -102,7 +102,7 @@ namespace BALL {
 			float  squared_distance = distance * distance;
 
 			// initialize the hash grid
-			HashGrid3<Atom*>	grid(lower, upper, distance);
+			HashGrid3<Atom*>	grid(lower, upper - lower, distance);
 			HashGridBox3<Atom*>* hbox;
 
 			// Iterators and hash box pointer for the grid search
@@ -247,7 +247,8 @@ namespace BALL {
 								}
 							}
 						} else {
-							cerr << "hbox = 0 for position " << position << endl;
+							Log.warn() << "calculateNonBondedAtomPairs: hbox = 0 for position " << position
+													<< " (grid dimensions: " << grid.getOrigin() << ")" << endl;
 						}
 
 						// Insert the new atom into the hash grid
