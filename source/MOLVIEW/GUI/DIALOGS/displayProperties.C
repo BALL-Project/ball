@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.12 2002/11/29 00:52:13 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.13 2002/12/06 01:02:47 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -196,7 +196,8 @@ namespace BALL
 		{
 			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
-			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, SLOT(openDialog()), CTRL+Key_I);   
+			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
+																				 SLOT(openDialog()), CTRL+Key_I);   
 			select_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
 			deselect_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
 			center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, 
@@ -225,17 +226,8 @@ namespace BALL
 		{
 			(main_control.menuBar())->setItemChecked(id_, isVisible());
 
-			bool selected = true;
-			int number_of_selected_objects = 0;
-
-			if (MainControl::getMainControl(this)->getSelection().size() == 0)
-			{
-				selected = false;
-			}
-			else
-			{
-				number_of_selected_objects = MainControl::getMainControl(this)->getSelection().size();
-			}
+			Size number_of_selected_objects = MainControl::getMainControl(this)->getSelection().size(); 
+			bool selected = (number_of_selected_objects != 0);
 
 			(main_control.menuBar())->setItemEnabled(select_id_, selected);
 			(main_control.menuBar())->setItemEnabled(deselect_id_, selected);
@@ -243,7 +235,7 @@ namespace BALL
 			(main_control.menuBar())->setItemEnabled(build_bonds_id_, selected);
 
 			// these menu points for single items only
-			(main_control.menuBar()) ->setItemEnabled(center_camera_id_, selected && (number_of_selected_objects == 1));
+			(main_control.menuBar()) ->setItemEnabled(center_camera_id_, number_of_selected_objects == 1);
 		}
 
 
@@ -505,16 +497,6 @@ namespace BALL
 				// notify scene to perform an update and set the camera to the new object
 				notify_(scene_message);
 			}
-			// selection => store last selection for later processing
-			else if (RTTI::isKindOf<MolecularSelectionMessage>(*message))
-			{
-//				MolecularSelectionMessage *selection = RTTI::castTo<MolecularSelectionMessage>(*message);
-//				selection_ = selection->getSelection();
-			}
-			else
-			{
-//				selection_.clear();
-			}
 
 			// disable apply button if selection is empty
 			if (MainControl::getMainControl(this)->getSelection().size() == 0)
@@ -754,35 +736,35 @@ namespace BALL
 				distance_color_calculator_.calculateDistances();
 			}
 			
-			HashSet<Composite*> update_list;
 
-			// for each element in the selection => perform generation
-			HashSet<Composite*>::ConstIterator it = MainControl::getMainControl(this)->getSelection().begin();
+			// for top elements in the selection => perform generation
 			setupStaticProcessor_();
 			setupDynamicProcessor_();
+			List<Composite*> updates;
+			HashSet<Composite*>::ConstIterator it = MainControl::getMainControl(this)->getSelection().begin();
 			for (; it != MainControl::getMainControl(this)->getSelection().end(); ++it)
 			{
-				applyOn_(**it);
-
-				// move composite pointer to update list for later update
-				update_list.insert(*it);
+				if ( (*it)->getParent() == 0 ||
+						//!MainControl::getMainControl(this)->getSelection().has((*it)->getParent())) 
+						!(*it)->getParent()->isSelected()) 
+				{
+					updates.push_back(*it);
+				}
 			}
 
-			// perform update of the composites
-			it = update_list.begin();
-			ChangedCompositeMessage change_message;
-			for (; it != update_list.end(); ++it)
+			List<Composite*>::Iterator updates_it = updates.begin();
+			for (; updates_it != updates.end(); updates_it++)
 			{
-				// mark composite for update
-				change_message.setComposite((*it));
-				notify_(change_message);
+				applyOn_(**updates_it);
+			
+				// perform update of the composites
+				MainControl::getMainControl(this)->update(**updates_it);
 			}
-
+			
 			// update scene
 			SceneMessage scene_message;
 			scene_message.updateOnly();
 			notify_(scene_message);
-			
 			setStatusbarText_("");
 			hide();
 		}
@@ -949,7 +931,6 @@ namespace BALL
 
 			// register the color calculator ------------------------------------------------
 			static_base_model_pointer_->registerColorCalculator(*color_calculator_);
-
 		}
 
 
