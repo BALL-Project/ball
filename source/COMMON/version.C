@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.C,v 1.13 2003/08/26 09:17:44 oliver Exp $
+// $Id: version.C,v 1.14 2004/02/19 12:24:33 oliver Exp $
 //
 
 #include <BALL/COMMON/version.h>
@@ -56,13 +56,13 @@ namespace BALL
 		
 		String minor = release.getField(1, ".");
 		String tmp = minor;
-		tmp.trimRight(String::CHARACTER_CLASS__ASCII_NUMERIC);
+		tmp.trimLeft(String::CHARACTER_CLASS__ASCII_NUMERIC);
 		if (tmp.size() == 0)
 		{
 			return STABLE;
 		}
 
-		String type = minor.trimRight(String::CHARACTER_CLASS__ASCII_ALPHA);
+		String type = tmp.trimRight("0123456789.");
 		if (type_mapper.has(type))
 		{
 			return(type_mapper[type]);
