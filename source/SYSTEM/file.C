@@ -1,18 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.38 2002/12/20 06:36:16 oliver Exp $
+// $Id: file.C,v 1.39 2003/04/22 12:45:13 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
-#include <BALL/SYSTEM/TCPTransfer.h>
-#include <math.h>
 
-using std::ios;
-using std::fstream;
-using std::ifstream;
-using std::ofstream;
-using std::streampos;
-using std::endl;
+#include <BALL/SYSTEM/TCPTransfer.h>
+#include <stdlib.h>     // 'getenv'
+#include <sys/types.h>
+#include <sys/stat.h>   // 'stat', 'lstat'
+#include <stdio.h>      // 'rename'
 
 // maximum number of substitutions performed in TransformationManager::transform()
 // (in order to avoid infinite recursion)
@@ -166,32 +163,32 @@ namespace BALL
 
 	File::File()
 		throw()
-		:	fstream(),
+		:	std::fstream(),
 			name_(),
-			open_mode_(ios::in),
+			open_mode_(std::ios::in),
 			is_open_(false),
 			is_temporary_(false)
 	{
 	}
 
 	File::File(const String& name, File::OpenMode open_mode)
-		throw (Exception::FileNotFound)
-		:	fstream(),
+		throw(Exception::FileNotFound)
+		:	std::fstream(),
 			name_(),
-			open_mode_(ios::in),
+			open_mode_(open_mode),
 			is_open_(false),
 			is_temporary_(false)
 	{
 		if (name == "")
 		{
-			throw (Exception::FileNotFound(__FILE__, __LINE__, name_));
+			throw Exception::FileNotFound(__FILE__, __LINE__, "<empty name>");
 		}
 		open(name, open_mode);
 	}
 
 	File::File(const File& file)
 		throw (Exception::FileNotFound)
-		: fstream(),
+		: std::fstream(),
 			name_(file.name_),
 			open_mode_(file.open_mode_),
 			is_open_(file.is_open_),
@@ -239,7 +236,7 @@ namespace BALL
 				// create a temporary file and redirect the file-transfer to that file
 				String tmp_file;
 				createTemporaryFilename(tmp_file);
-				ofstream os(tmp_file.c_str(), std::ios::out);
+				std::ofstream os(tmp_file.c_str(), std::ios::out);
 				try
 				{
 					TCPTransfer tcp_t(os, name_);
@@ -296,7 +293,7 @@ namespace BALL
 			}	
 		}
 
-		fstream::open(name_.c_str(), open_mode);
+		std::fstream::open(name_.c_str(), open_mode);
 		open_mode_ = open_mode;
 		is_open_ = is_open();
 
@@ -339,8 +336,8 @@ namespace BALL
 		}
 
 		char* buffer = new char[buffer_size];
-		ifstream source(source_name.c_str(), ios::in);
-		ofstream destination(destination_name.c_str(), ios::out | ios::trunc);
+		std::ifstream source(source_name.c_str(), std::ios::in);
+		std::ofstream destination(destination_name.c_str(), std::ios::out | std::ios::trunc);
 
 		if (!source || !destination)
 		{
@@ -369,8 +366,8 @@ namespace BALL
 	{
 		if (is_open_ == true)
 		{
-			fstream::clear();
-			fstream::close();
+			std::fstream::clear();
+			std::fstream::close();
 
 			if (is_temporary_ == true)
 			{
@@ -392,10 +389,10 @@ namespace BALL
 				return 0;
 			}		
 		}
-		streampos old_position = ((fstream*)this)->tellg();
-		((fstream*)this)->seekg(0, ios::end);
-		Size size = (Size)((Size)((fstream*)this)->tellg() - old_position);
-		((fstream*)this)->seekg(old_position);
+		std::streampos old_position = ((std::fstream*)this)->tellg();
+		((std::fstream*)this)->seekg(0, std::ios::end);
+		Size size = (Size)((Size)((std::fstream*)this)->tellg() - old_position);
+		((std::fstream*)this)->seekg(old_position);
 		
 		return size;
 	}
