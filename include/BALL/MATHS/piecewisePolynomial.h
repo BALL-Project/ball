@@ -1,4 +1,4 @@
-// $Id: piecewisePolynomial.h,v 1.1 2000/08/31 12:28:09 anker Exp $
+// $Id: piecewisePolynomial.h,v 1.2 2000/08/31 20:47:43 oliver Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -31,7 +31,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PiecewisePolynomial)
+		BALL_CREATE(PiecewisePolynomial)
 
 		/**	@name	Constructors and Destructors
 		*/
