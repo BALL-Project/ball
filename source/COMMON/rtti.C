@@ -1,4 +1,4 @@
-// $Id: rtti.C,v 1.6 2001/06/22 11:06:37 oliver Exp $
+// $Id: rtti.C,v 1.7 2001/06/28 14:13:34 oliver Exp $
 
 #include <BALL/COMMON/rtti.h>
 #include <typeinfo>
@@ -14,15 +14,18 @@ namespace BALL
 	string streamClassName(const std::type_info& t)
 	{
 #ifdef __GNUC__
-    // s = GNUDemangling::demangle(s);
-		string s("_Z");
-		s += t.name();		
-		char* name = cplus_demangle(s.c_str(), 1 << 8);
-		if (name != 0)
-		{
-			 s = name;
-		} 
-	
+    #if (__GNUC__ < 3)
+			string s(t.name());
+      s = GNUDemangling::demangle(s);
+    #else
+      string s("_Z");
+      s += t.name();
+      char* name = cplus_demangle(s.c_str(), 1 << 8);
+      if (name != 0)
+      {
+        s = name;
+			}
+    #endif                                                                                                                                   
 #else
 		string s(t.name());
 #endif
