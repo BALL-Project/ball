@@ -26,6 +26,10 @@
  #include <BALL/STRUCTURE/defaultProcessors.h>
 #endif
 
+#ifndef BALL_STRUCTURE_FRAGMENTDB_H
+ #include <BALL/STRUCTURE/fragmentDB.h>
+#endif
+
 class QLineEdit;
 
 namespace BALL
@@ -102,6 +106,8 @@ namespace BALL
 
 				///
 				virtual void resetPressed();
+				
+				FragmentDB& getFragmentDB() {return fragment_db_;}
 
 		protected:
 
@@ -119,6 +125,7 @@ namespace BALL
 				ChargeRuleProcessor 			charge_rule_processor_;
 				AssignRadiusProcessor 		radius_processor_;
 				AssignChargeProcessor 		charge_processor_;
+				FragmentDB 								fragment_db_;
 		};
 
 } } // Namespaces
