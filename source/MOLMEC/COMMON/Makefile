@@ -14,6 +14,7 @@ CPP_SOURCES=\
 	ruleEvaluator.C\
 	ruleProcessor.C\
 	snapShot.C\
+	snapShotManager.C\
 	support.C\
 	typenameRuleProcessor.C\
 	typeRuleProcessor.C
