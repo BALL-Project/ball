@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.5 1999/10/01 12:53:09 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.6 1999/10/26 11:35:54 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -834,8 +834,10 @@ namespace BALL
 																 + ((z_u + spacing_ * (float)s) - (*atom_array)[i].z)
 																 * ((z_u + spacing_ * (float)s) - (*atom_array)[i].z);
 
-								if (squared_distance < atom_radius2)
+								if (squared_distance <= atom_radius2)	
+								{
 									count++;
+								}
 							}
 
 					if (count > 8)
@@ -852,7 +854,7 @@ namespace BALL
 																	 + ((z_u + spacing_ * (float)s) - (*atom_array)[i].z)
 																	 * ((z_u + spacing_ * (float)s) - (*atom_array)[i].z);
 		
-									if (squared_distance < atom_radius2)
+									if (squared_distance <= atom_radius2)
 									{
 										// every grid point inside the atom`s radius receives an
 										// equal portion of the atom`s total charge
@@ -1081,6 +1083,12 @@ namespace BALL
 		}	else if (options[Option::BOUNDARY] == FDPB::Boundary::FOCUSING) {
 			boundary_condition = 4;
 		} else {
+			Log.error() << "FDPB::setupBoundary: unknown boundary condition type: " << options[Option::BOUNDARY]
+							    << " (possible types: " << FDPB::Boundary::DEBYE << " " 
+									<< FDPB::Boundary::ZERO << " "
+									<< FDPB::Boundary::DIPOLE << " "
+									<< FDPB::Boundary::COULOMB << " "
+									<< FDPB::Boundary::FOCUSING << ")" << endl;
 			error_code_ = FDPB::ERROR__UNKNOWN_BOUNDARY_CONDITION_TYPE;
 			return false;
 		}
@@ -1571,14 +1579,14 @@ namespace BALL
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 		int verbosity = (int)options.getInteger(Option::VERBOSITY);
 
-		float													*phi;
-		float													*T;
-		float													*Q;
-		float													*tmp_phi;
+		float*	phi;
+		float*	T;
+		float*	Q;
+		float*	tmp_phi;
 
 		// some generally used loop variables
-		unsigned long									i;
-		unsigned long									j, k, l;
+		unsigned long	i;
+		unsigned long	j, k, l;
 
 		// retrieve some basic grid properties and set the 
 		// corresponding variables
@@ -1831,7 +1839,7 @@ namespace BALL
 				{
 					black = ((y % 2) + (z % 2)) % 2;
 					i = y * Nx + z * Nxy + 1 + black;
-					for (x = 1 + black; x < (long)(Nx - 1 - black); x += 2)
+					for (x = 1 + black; x < (long)(Nx - 1); x += 2)
 					{
 						phi[i] = omega * (T[6 * i    ] * phi[i + 1 ]
 															+ T[6 * i + 1] * phi[i - 1 ]
@@ -1872,7 +1880,7 @@ namespace BALL
 				{
 					white = 1 - ((y % 2) + (z % 2)) % 2;
 					i = y * Nx + z * Nxy + 1 + white;
-					for (x = 1 + white; x < (long)(Nx - 1 - white); x += 2)
+					for (x = 1 + white; x < (long)(Nx - 1); x += 2)
 					{
 						phi[i] = omega * (T[6 * i    ] * phi[i + 1 ]
 															+ T[6 * i + 1] * phi[i - 1 ]
