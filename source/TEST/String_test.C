@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.21 2000/07/15 17:12:42 amoll Exp $
+// $Id: String_test.C,v 1.22 2000/07/16 20:06:22 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.21 2000/07/15 17:12:42 amoll Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.22 2000/07/16 20:06:22 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -859,9 +859,9 @@ CHECK(String::getField(Index, char*, Index*))
 	TEST_EQUAL(s4.getField(0), "")
 	s4 = "    \t   \t  a";
 	TEST_EQUAL(s4.getField(0), "a")
-
+	Index index = -1;
 	Index* i;
-	*i = -1;
+	i = &index;
 	char* c = 0;
 	TEST_EXCEPTION(Exception::IndexUnderflow, s4.getField(0, ",", i))	
 	*i = 1;
