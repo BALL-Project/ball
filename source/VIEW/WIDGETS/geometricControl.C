@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.18 2003/11/23 16:41:25 amoll Exp $
+// $Id: geometricControl.C,v 1.19 2003/11/23 17:52:21 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -150,10 +150,13 @@ void GeometricControl::onNotify(Message *message)
 void GeometricControl::buildContextMenu(Representation& rep)
 	throw()
 {
-	insertContextMenuEntry("Delete", this, SLOT(deleteRepresentation_()));
-	if (rep.getModelType() < MODEL_LABEL)
+	insertContextMenuEntry("Delete", this, SLOT(deleteRepresentation_()), 10);
+	insertContextMenuEntry("Properties", this, SLOT(modifyRepresentation_()), 20);	
+	if (getSelectedItems().size() > 1 ||
+			rep.getModelType() >= MODEL_LABEL)
 	{
-		insertContextMenuEntry("Properties", this, SLOT(modifyRepresentation_()));	
+Log.error() << "#~~#   1 " << getSelectedItems().size() << std::endl;
+		context_menu_.setItemEnabled(20, false); 
 	}
 
 	// This is used to provide the coloring for meshes...
@@ -249,19 +252,25 @@ void GeometricControl::generateListViewItem_(Representation& rep)
 void GeometricControl::deleteRepresentation_()
 {
 	if (context_representation_ == 0)  return; 
+	ItemList selected = getSelectedItems();
+	for (ItemList::Iterator it = selected.begin(); it != selected.end(); ++it)
+	{
+		Representation* rep = ((SelectableListViewItem*) *it)->getRepresentation();
+		if (context_representation_->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
+		{
+			SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
+			notify_(scene_message);
+		}
+			
+		RepresentationMessage* message = new RepresentationMessage(context_representation_, 
+																															 RepresentationMessage::REMOVE);
+		notify_(message);
+
+		getMainControl()->getPrimitiveManager().remove(*rep);
+		removeRepresentation(*rep);
+	}
 
 	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
-	if (context_representation_->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
-	{
-		scene_message->setType(SceneMessage::REMOVE_COORDINATE_SYSTEM);
-	}
-		
-	RepresentationMessage* message = new RepresentationMessage(context_representation_, RepresentationMessage::REMOVE);
-	notify_(message);
-
-	getMainControl()->getPrimitiveManager().remove(*context_representation_);
-	removeRepresentation(*context_representation_);
-
 	notify_(scene_message);
 	setStatusbarText("Deleted representation.");
 }
