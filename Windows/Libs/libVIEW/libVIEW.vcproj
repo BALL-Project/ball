@@ -515,9 +515,6 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\bondProperties_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\WIDGETS\canvasWidget_moc.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\charmmConfigurationDialogData_moc.C">
 				</File>
 				<File
@@ -623,24 +620,6 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\molecularStructure_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\openBruker1DFile_moc.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\openBruker2DFile_moc.C">
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialogData_moc.C">
 				</File>
 				<File
@@ -679,24 +658,6 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettings_moc.C">
 					<FileConfiguration
 						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\WIDGETS\regularData1DWidget_moc.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\WIDGETS\regularData2DWidget_moc.C">
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32"
-						ExcludedFromBuild="TRUE">
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
@@ -907,24 +868,6 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularFileDialog.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\openBruker1DFile.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\openBruker2DFile.C">
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog.C">
 				</File>
 				<File
@@ -1038,9 +981,6 @@
 				Name="WIDGETS"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\VIEW\WIDGETS\canvasWidget.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\datasetControl.C">
 				</File>
 				<File
@@ -1081,30 +1021,6 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							AdditionalIncludeDirectories="C:\Programme\Python23\include"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\WIDGETS\regularData1DWidget.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\WIDGETS\regularData2DWidget.C">
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
 				</File>
 				<File
@@ -1487,6 +1403,13 @@
 "
 							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\UIC\compositePropertiesData.h">
@@ -1497,6 +1420,13 @@
 							Description="Running MOC on $(InputFileName)"
 							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;"
 							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
 					</FileConfiguration>
 				</File>
@@ -2006,66 +1936,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\molecularFileDialog.h">
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\openBruker1DFile.h">
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\openBruker2DFile.h">
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
@@ -2781,27 +2651,6 @@
 				Name="WIDGETS"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\canvasWidget.h">
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\datasetControl.h">
 					<FileConfiguration
 						Name="Release|Win32">
@@ -3022,48 +2871,6 @@
 "
 							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
 					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\regularData1DWidget.h">
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\WIDGETS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\WIDGETS\regularData2DWidget.h">
 					<FileConfiguration
 						Name="Python Multithreaded|Win32">
 						<Tool
