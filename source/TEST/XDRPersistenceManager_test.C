@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager_test.C,v 1.1 2000/10/30 21:51:33 oliver Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.2 2000/11/01 09:20:55 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,14 +8,13 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.1 2000/10/30 21:51:33 oliver Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.2 2000/11/01 09:20:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-
-// tests for class XDRPersistenceManager::
+using namespace std;
 
 CHECK(XDRPersistenceManager::XDRPersistenceManager())
   //BAUSTELLE
