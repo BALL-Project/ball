@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.63 2004/11/10 16:07:53 amoll Exp $
+// $Id: mainControl.h,v 1.64 2004/11/11 22:46:27 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -32,34 +32,20 @@
 #endif
 
 #ifndef BALL_SYSTEM_FILE_H
-#include <BALL/SYSTEM/file.h>
-#endif
-
-#ifndef BALL_MATHS_VECTOR3_H
-# include <BALL/MATHS/vector3.h>
+# include <BALL/SYSTEM/file.h>
 #endif
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
- #include <BALL/STRUCTURE/fragmentDB.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_QTTIMER_H
- #include <BALL/VIEW/KERNEL/QTTimer.h>
+# include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
 #include <qmainwindow.h>
 #include <qapplication.h>
-#include <qlabel.h>			 // statusbar
 #include <qmenubar.h>    // menus
-
-
-class QLabel;
+#include <qlabel.h>			 // statusbar
 
 namespace BALL
 {
-	class Composite;
-	class System;
-
 	namespace VIEW
 	{
 		class ModularWidget;
@@ -67,38 +53,6 @@ namespace BALL
 		class MainControlPreferences;
 		class GeometricObjectSelectionMessage;
 		class SimulationThread;
-
-		/** Timer class to clear the statusbar of the MainControl after a given time
-		*/
-		class BALL_EXPORT StatusbarTimer
-			: public QTTimer
-		{
-			public:
-
-				///
-				StatusbarTimer(QObject* parent=0)
-					throw();
-				
-				/// Set the label of the statusbar (e.g. of the MainControl) which is cleared by the timer.
-				void setLabel(QLabel* label)
-					throw();
-
-				/// Important messages are shown first in red, and then for an other 4 seconds in black
-				void setImportant(bool state)
-					throw();
-
-				///
-				bool isImportant() const
-					throw() { return important_;}
-
-			protected:
-				virtual void timer()
-					throw();
-
-			private:
-				QLabel* label_;
-				bool 		important_;
-		};
 
 		/**	MainControl is the main administration unit for a program and must be
 				used by all	applications.
@@ -872,11 +826,13 @@ namespace BALL
 			*/
 			List<ModularWidget*>				modular_widgets_;
 
-			private:
+			protected slots:
+
+			void clearStatusBarText_();
+
+			protected:
 
 			HashMap<Index, String>      menu_entries_hints_;
-
-			StatusbarTimer  						timer_;
 
 			QLabel*             simulation_icon_;
 			static const char  *simulation_running_xpm_[];
@@ -888,7 +844,8 @@ namespace BALL
 			bool 								logging_to_file_;
 			File 								logging_file_;
 
-			bool about_to_quit_;
+			bool 								about_to_quit_;
+			bool 								important_text_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.129 2004/11/11 22:19:06 amoll Exp $
+// $Id: mainControl.C,v 1.130 2004/11/11 22:46:54 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -39,6 +39,8 @@
 #include <qmessagebox.h> 
 
 #include <algorithm> // sort
+
+#include <qtimer.h>
 
 using std::istream;
 using std::ostream;
@@ -95,12 +97,12 @@ namespace BALL
 				simulation_thread_(0),
 				modular_widgets_(),
 				menu_entries_hints_(),
-				timer_(this),
 				simulation_icon_(0),
 				working_dir_(),
 				logging_file_name_("VIEW.log"),
 				logging_to_file_(false),
-				about_to_quit_(false)
+				about_to_quit_(false),
+				important_text_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new MainControl " << this << std::endl;
@@ -175,9 +177,6 @@ namespace BALL
 			font.setBold(true);
 			message_label_->setFont(font); 
 			message_label_->setFrameShape(QLabel::NoFrame);
-
-			timer_.setLabel(message_label_);
-			timer_.setInterval(2000);
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 			connect(menuBar(), SIGNAL(highlighted(int)), this, SLOT(menuItemHighlighted(int)));
@@ -1185,16 +1184,36 @@ namespace BALL
 				QApplication::beep();
 			}
 
-			if (!important && timer_.isImportant())
+			if (!important && important_text_)
 			{
 				return;
 			}
 
-			message_label_->setText(text.c_str());
+			important_text_ = important;
 
-			timer_.setImportant(important);
-			timer_.startTimer();
-			QWidget::update();
+			message_label_->setText(text.c_str());
+			if (important)
+			{
+				message_label_->setPaletteForegroundColor( QColor(255,0,0) );
+				QTimer::singleShot(4000, this, SLOT(clearStatusBarText_()));
+			}
+			else
+			{
+				message_label_->setPaletteForegroundColor( QColor(0,0,0) );
+				QTimer::singleShot(4000, this, SLOT(clearStatusBarText_()));
+			}
+		}
+
+		void MainControl::clearStatusBarText_()
+		{
+			if (important_text_)
+			{
+				message_label_->setPaletteForegroundColor( QColor(0,0,0) );
+				important_text_ = false;
+				QTimer::singleShot(4000, this, SLOT(clearStatusBarText_()));
+			}
+
+			message_label_->setText("");
 		}
 
 		void MainControl::restoreWindows(const INIFile& inifile)
@@ -1574,61 +1593,6 @@ namespace BALL
 				enableLoggingToFile();
 			}
 		}
-
-		// ======================= StatusbarTimer =========================
-		StatusbarTimer::StatusbarTimer(QObject* parent)
-			throw()
-			: QTTimer(parent),
-				label_(0),
-				important_(false)
-		{}
-
-		void StatusbarTimer::timer()
-			throw()
-		{
-			stopTimer();
-
-			if (!label_ || label_->text() == "")
-			{
-				return;
-			}
-
-			if (important_)
-			{
-				label_->setPaletteForegroundColor( QColor(0,0,0) );
-				setInterval(10000);
-				important_ = false;
-				startTimer();
-				return;
-			}
-
-			label_->setText("");
-		}
-
-		void StatusbarTimer::setLabel(QLabel* label)
-			throw()
-		{
-			label_ = label;
-		}
-
-		void StatusbarTimer::setImportant(bool state)
-			throw() 
-		{ 
-			important_ = state;
-			if (state)
-			{
-				label_->setPaletteForegroundColor( QColor(255, 0, 0) );
-				setInterval(1000);
-			}
-			else
-			{
-				label_->setPaletteForegroundColor( QColor(0, 0, 0) );
-				setInterval(4000);
-			}
-		}
-
-		// ----------------------------------------------------
-
 
 		void MainControl::setWorkingDir(const String& dir)
 			throw() 
