@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.32 2001/07/15 16:36:46 oliver Exp $
+// $Id: persistenceManager.h,v 1.33 2001/07/16 00:33:32 amoll Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #define BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -45,11 +45,10 @@ namespace BALL
 					or more complex data structures using Layer 0. To implement
 					object persistence for a user defined object, methods from layer
 					0 and layer 1 are needed
-				\item {\bf Layer 2} implements the persistence manager's {\em user
-					interface}.  These are the methods needed to register classes,
+				\item {\bf Layer 2} implements the persistence manager's {\em user interface}.
+					These are the methods needed to register classes,
 					set the associated streams, and to store or retrieve objects.
 			\end{itemize}
-			\\
 			When writing a pointer to a persistent object, the serialization of
 			the referenced object is automatically initiated after the objects
 			holding the pointer has been written. Hence, pointers between persistent 
@@ -58,7 +57,6 @@ namespace BALL
 			{\bf Note:} This class is mainly an interface definition and contains
 			abstract methods. Do not try to instantiate a PersistenceManager,
 			your compiler will be complaining.
-			\\
 			@see	PersistentObject
 			@see	XDRPersistenceManager
 			@see	TextPersistenceManager
