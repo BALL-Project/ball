@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.50.2.7 2005/01/21 13:34:02 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.50.2.8 2005/01/24 12:48:29 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -364,12 +364,10 @@ namespace BALL
 					}
 					catch(...)
 					{
-						continue;
 					}
 				}
 			}
 
-			max_++;
 			table_.setRange((float)min_, (float)max_);
 			table_.createTable();
 
