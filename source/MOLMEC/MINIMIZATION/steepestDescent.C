@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.19 2003/12/29 12:14:37 oliver Exp $
+// $Id: steepestDescent.C,v 1.20 2004/01/16 13:45:22 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/COMMON/limits.h>
 
-#define BALL_DEBUG
-//#undef BALL_DEBUG
+// #define BALL_DEBUG
+#undef BALL_DEBUG
 
 using namespace std;
 
