@@ -1,4 +1,4 @@
-// $Id: Enumerator_test.C,v 1.11 2002/01/15 00:39:31 oliver Exp $
+// $Id: Enumerator_test.C,v 1.11.4.1 2002/06/05 00:29:02 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ void char_assign(char& c1, char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.11 2002/01/15 00:39:31 oliver Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.11.4.1 2002/06/05 00:29:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ using namespace BALL;
 
 EnumeratorIndex::IncompatibleIndex* ex_ptr;
 
-CHECK(EnumeratorIndex::IncompatibleIndex(const char* file, int line))
+CHECK(EnumeratorIndex::IncompatibleIndex::IncompatibleIndex(const char* file, int line))
 	ex_ptr = new EnumeratorIndex::IncompatibleIndex(__FILE__,__LINE__);
 	TEST_NOT_EQUAL(ex_ptr, 0)
 RESULT
@@ -35,74 +35,71 @@ delete ex_ptr;
 
 EnumeratorIndex* enumerator_index_ptr;
 
-CHECK(EnumeratorIndex())
+CHECK(EnumeratorIndex::EnumeratorIndex())
   enumerator_index_ptr = new EnumeratorIndex;
 	TEST_NOT_EQUAL(enumerator_index_ptr, 0)
 RESULT
 
-CHECK(~EnumeratorIndex())
+CHECK(EnumeratorIndex::~EnumeratorIndex())
   delete enumerator_index_ptr;
 RESULT
 
 Enumerator<String, String::iterator, char>::SiteList variant_list;
-CHECK(EnumeratorIndex(const list<pair<VariantIterator, vector<Variant> > >& variant_list))
+CHECK(EnumeratorIndex::EnumeratorIndex(const list<pair<VariantIterator, vector<Variant> > >& variant_list))
   enumerator_index_ptr = new EnumeratorIndex(variant_list);
   TEST_NOT_EQUAL(enumerator_index_ptr, 0)
 RESULT
 
 
-CHECK(getModulus() const )
+CHECK(EnumeratorIndex::getModulus() const)
   vector<Size> modulus = enumerator_index_ptr->getModulus();
   TEST_EQUAL(modulus.size(), 0)
 RESULT
 
-CHECK(set(Position index))
+CHECK(EnumeratorIndex::set(Position index))
 	EnumeratorIndex ei;
+RESULT
+
+
+CHECK(EnumeratorIndex::EnumeratorIndex& operator ++ ())
 	//????
 RESULT
 
 
-CHECK(EnumeratorIndex& operator ++ ())
-	//????
-RESULT
-
-
-CHECK(EnumeratorIndex& operator -- ())
+CHECK(EnumeratorIndex::EnumeratorIndex& operator -- ())
   //?????
 RESULT
 
 
-CHECK(EnumeratorIndex& operator = (Position index))
+CHECK(const EnumeratorIndex& EnumeratorIndex::operator = (Position rhs))
   //?????
 RESULT
 
 
-CHECK(bool operator == (const EnumeratorIndex& x, const EnumeratorIndex& y))
+CHECK(bool EnumeratorIndex::operator != (const EnumeratorIndex& rhs))
   //?????
 RESULT
 
 
-CHECK(bool operator != (const EnumeratorIndex& x, const EnumeratorIndex& y))
+CHECK(bool EnumeratorIndex::operator == (const EnumeratorIndex& rhs))
+  //?????
+RESULT
+
+CHECK(bool EnumeratorIndex::operator < (const EnumeratorIndex& rhs))
   //?????
 RESULT
 
 
-CHECK(bool operator < (const EnumeratorIndex& x, const EnumeratorIndex& y))
+CHECK(bool EnumeratorIndex::operator > (const EnumeratorIndex& rhs))
+  //?????
+RESULT
+
+CHECK(bool EnumeratorIndex::operator <= (const EnumeratorIndex& rhs))
   //?????
 RESULT
 
 
-CHECK(bool operator > (const EnumeratorIndex& x, const EnumeratorIndex& y))
-  //?????
-RESULT
-
-
-CHECK(bool operator <= (const EnumeratorIndex& x, const EnumeratorIndex& y))
-  //?????
-RESULT
-
-
-CHECK(bool operator >= (const EnumeratorIndex& x, const EnumeratorIndex& y))
+CHECK(bool EnumeratorIndex::operator >= (const EnumeratorIndex& rhs))
   //?????
 RESULT
 

@@ -197,8 +197,8 @@ EXECUTABLES = \
 	$(EXECUTABLES_SOLVATION)
 
 # default target
-#all:	$(EXECUTABLES)
-all:	MolecularGraph_test
+all:	$(EXECUTABLES)
+#all:	MolecularGraph_test
 
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:=.C)

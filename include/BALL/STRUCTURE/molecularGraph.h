@@ -1,4 +1,4 @@
-// $Id: molecularGraph.h,v 1.1.2.3 2002/05/31 22:50:44 oliver Exp $
+// $Id: molecularGraph.h,v 1.1.2.4 2002/06/05 00:29:00 oliver Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -150,6 +150,9 @@ namespace BALL
 		bool deleteNode(NodeItemType& node);
 		bool deleteEdge(EdgeItemType& edge);
 				
+		bool deleteNode(const Atom& atom);
+		bool deleteEdge(const Bond& bond);
+				
 		NodeIterator beginNode() { return nodes_.begin(); }
 		NodeConstIterator beginNode() const { return nodes_.begin(); }
 		EdgeIterator beginEdge() { return edges_.begin(); }
@@ -159,8 +162,8 @@ namespace BALL
 		EdgeIterator endEdge() { return edges_.end(); }
 		EdgeConstIterator endEdge() const { return edges_.end(); }
 		
-		bool has(const Atom& atom) const {return atom_to_node_.has(const_cast<Atom*>(&atom));}
-		bool has(const Bond& atom) const {return bond_to_bond_.has(const_cast<Bond*>(&bond));}
+		bool has(const Atom& atom) const { return atom_to_node_.has(const_cast<Atom*>(&atom)); }
+		bool has(const Bond& atom) const { return bond_to_bond_.has(const_cast<Bond*>(&bond)); }
 
 		NodeItemType& getNode(Position index) { return nodes_[index]; };
 		const NodeItemType& getNode(Position index) const { return nodes_[index]; };
@@ -283,6 +286,28 @@ namespace BALL
 		}
 
 		return os;
+	}
+
+	template <typename Node, typename Edge>
+	bool TMolecularGraph<Node, Edge>::deleteNode(const Atom& atom)
+	{
+		if (atom_to_node_.has(const_cast<Atom*>(&atom)))
+		{
+			return false;
+		}
+		
+		return deleteNode(*atom_to_node_[const_cast<Atom*>(&atom)]);
+	}
+
+	template <typename Node, typename Edge>
+	bool TMolecularGraph<Node, Edge>::deleteEdge(const Bond& bond)
+	{
+		if (bond_to_edge_.has(const_cast<Bond*>(&bond)))
+		{
+			return false;
+		}
+		
+		return deleteEdge(*bond_to_edge_[const_cast<Bond*>(&bond)]);
 	}
 
 	template <typename Node, typename Edge>

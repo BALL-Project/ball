@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.19 2002/01/16 11:33:10 oliver Exp $
+// $Id: enumerator.h,v 1.19.4.1 2002/06/05 00:28:59 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -84,43 +84,95 @@ namespace BALL
 		 */
 		//@{
 
-		/** access the modulus part of the enumerator
+		/** Access the modulus part of the enumerator
 		 */
 		const std::vector<Size>& getModulus() const
 			throw();
 
-		/** increment an instance of EnumeratorIndex. 
+		/**	Access the modulus of a specific position
+		*/
+		Size getModulus(Position pos) const
+			throw();
+			
+		/** Increment an instance of EnumeratorIndex. 
 				Increment the least significant component and apply any overflow to
 				more signficant components.
 		 */
 		EnumeratorIndex& operator ++ ()
 			throw(Exception::IndexOverflow);
 
-		/** decrement an instance of EnumeratorIndex. Decrement the least
-			  significant component and apply any underflow to more signficant components.
+		/** Decrement an instance of EnumeratorIndex. 
+				Decrement the least significant component and 
+				apply any underflow to more signficant components.
 		 */
 		EnumeratorIndex& operator -- ()
 			throw(Exception::IndexUnderflow);
 
-		/** Set an instance of EnumeratorIndex to the value corresponding to 
-			  the number {\tt index}.
-			  @param index the number of the permutation to which the instance 
-			  should be set
+		//@}
+		
+		/**	@name Assignment
+		*/
+		//@{
+		/** Assignment operator.
 		 */
-		void set(Position index)
+		const EnumeratorIndex& operator = (const EnumeratorIndex& rhs)
 			throw();
 
-		/** Assign from a number. 
-				@param index the number to assign from
-			  @see EnumeratorIndex::set
+		/** Assignment operator for Position.
 		 */
 		const EnumeratorIndex& operator = (Position index)
-			throw()
-		{
-			set(index);
-			return *this;
-		}
+			throw();
+		//@}
 
+		/** @name Predicates for EnumeratorIndex class
+		 */
+		//@{
+
+		/** Equality operator.
+		 * @param rhs
+		 * @return true, if {\tt rhs} is equal to {\tt this} instance
+		 */
+		bool operator == (const EnumeratorIndex& rhs)
+			throw();
+
+		/** Inequality operator.
+		 * @param rhs
+		 * @return true, if {\tt rhs} is not equal to {\tt this} instance
+		 */
+		bool operator != (const EnumeratorIndex& rhs)
+			throw();
+
+		/** Greater than operator.
+		 * @param rhs
+		 * @return true, if {\tt rhs} is greater than {\tt this} instance
+			 @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
+		 */
+		bool operator > (const EnumeratorIndex& rhs)
+			throw(EnumeratorIndex::IncompatibleIndex);
+
+		/** Lesser than operator.
+		 * @param rhs
+		 * @return true, if {\tt rhs} is lesser than {\tt this} instance
+		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
+		 */
+		bool operator < (const EnumeratorIndex& rhs)
+			throw(EnumeratorIndex::IncompatibleIndex);
+				
+		/** Greater or equal operator.
+		 * @param rhs
+		 * @return true, if {\tt rhs} is greater than or equal to {\tt this} instance
+		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
+		 */
+		bool operator >= (const EnumeratorIndex& rhs)
+			throw(EnumeratorIndex::IncompatibleIndex);
+
+		/** Lesser or equal operator.
+		 * @param rhs
+		 * @return true, if {\tt rhs} is lesser than or equal to {\tt this} instance
+		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
+		 */
+		bool operator <= (const EnumeratorIndex& rhs)
+			throw(EnumeratorIndex::IncompatibleIndex);
 		//@}
 
 		private:
@@ -132,7 +184,7 @@ namespace BALL
        that have different bases. The bases are the numbers of
        possibilities for each variant in the list. Most significant
        component is operator[](0), so incrementing starts with
-       operator[](size())
+       operator[](size() - 1)
 		*/
 		std::vector<Size>	modulus_;
 		std::vector<Size>	base_multipliers_;
@@ -160,60 +212,9 @@ namespace BALL
 		}
 	}
 
-	/** @name Predicates for EnumeratorIndex class
-	 */
-	//@{
 
-	/** Equality of two instances of EnumeratorIndex.
-			@param x
-			@param y
-			@return true, if the instances are equal, false ow.
-	 */
-	bool operator == (const EnumeratorIndex& x, const EnumeratorIndex& y)
-		throw(EnumeratorIndex::IncompatibleIndex);
-
-	/** Inequality of two instances of EnumeratorIndex.
-			@param x
-			@param y
-			@return true, if the instances are not equal, false ow.
-	 */
-	bool operator != (const EnumeratorIndex& x, const EnumeratorIndex& y)
-		throw(EnumeratorIndex::IncompatibleIndex);
-
-	/** Test whether instance {\tt x} is less than {\tt y}
-			@param x
-			@param y
-			@return true, if {\tt x} is less than {\tt y}
-	 */
-	bool operator < (const EnumeratorIndex& x, const EnumeratorIndex& y)
-		throw(EnumeratorIndex::IncompatibleIndex);
-
-	/** Test whether instance {\tt x} is greater than {\tt y}
-			@param x
-			@param y
-			@return true, if {\tt x} is greater than {\tt y}
-	 */
-	bool operator > (const EnumeratorIndex& x, const EnumeratorIndex& y)
-		throw(EnumeratorIndex::IncompatibleIndex);
-
-	/** Test whether instance {\tt x} is less than or equal to {\tt y}
-	 * @param x
-	 * @param y
-	 * @return true, if {\tt x} is less than or equal to {\tt y}
-	 */
-	bool operator <= (const EnumeratorIndex& x, const EnumeratorIndex& y)
-		throw(EnumeratorIndex::IncompatibleIndex);
-	
-	/** Test whether an instance {\tt x} is greater than or equal to {\tt y}
-	 * @param x
-	 * @param y
-	 * @return true, if {\tt x} is greater than or equal to {\tt y}
-	 */
-	bool operator >= (const EnumeratorIndex& x, const EnumeratorIndex& y)
-		throw(EnumeratorIndex::IncompatibleIndex);
-
-	//@}
-
+	/**
+	*/
 	template <class Container, class VariantIterator, class Variant>
 	class Enumerator
 	{	
@@ -332,54 +333,41 @@ namespace BALL
        @return a reference to the container class of this enumerator
 		 */
 		Container& getCurrent()
-			throw()
-		{
-			return container_;
-		}
+			throw();
 
 		/** Create a permuatation denoted by its number.
 		    @param index the number of the permutation to be created
 		 */
 		void createPermutation(const Position index)
-			throw()
-		{
-			EnumeratorIndex enumerator_index(variant_sites_);
-			enumerator_index = index;
-			createPermutation(enumerator_index);
-		}
+			throw();
 
 		/** Create a permutation denoted by an instance of EnumeratorIndex.
 				@param index the instance of EnumeratorIndex that describes the
 				permutation to be created
 		 */
 		void createPermutation(const EnumeratorIndex& index)
-			throw(EnumeratorIndex::IncompatibleIndex)
-		{
-			if (index.size() != variant_sites_.size())
-			{
-				throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
-			}
+			throw(EnumeratorIndex::IncompatibleIndex);
+		//@}
 
-			typename SiteList::iterator it = variant_sites_.begin();
-			Position i((Position)(index.size() - 1));
-			for (; it != variant_sites_.end(); ++it, --i)
-			{
-				mutate_(it->first, it->second[index[i]]);
-			}
-		}
-
+		/**	@name Iterators
+		*/
+		//@{
+		
+		///
 		Iterator begin()
-			throw()
-		{
-			return Iterator::begin(this);
-		}
+			throw();
 
+		///
 		Iterator end()
-			throw()
-		{
-			return Iterator::end(this);
-		}
+			throw();
 
+		///
+		ConstIterator begin()
+			throw();
+
+		///
+		ConstIterator end()
+			throw();
 		//@}
 
 		protected:
@@ -548,6 +536,80 @@ namespace BALL
 		MutatorFunction mutator_;
 		SiteList				variant_sites_;
 	};
+
+	template <typename Container, typename VariantIterator, typename Variant>
+	BALL_INLINE
+	Container& Enumerator<Container, VariantIterator, Variant>::getCurrent()
+		throw()
+	{
+		return container_;
+	}
+	
+	template <typename Container, typename VariantIterator, typename Variant>
+	void Enumerator<Container, VariantIterator, Variant>::createPermutation(const Position index)
+		throw()
+	{
+		EnumeratorIndex enumerator_index(variant_sites_);
+		enumerator_index = index;
+		try
+		{
+			createPermutation(enumerator_index);
+		}
+		catch (EnumeratorIndex::IncompatibleIndex&)
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, index);
+		}
+	}
+
+	template <typename Container, typename VariantIterator, typename Variant>
+	void Enumerator<Container, VariantIterator, Variant>::createPermutation(const EnumeratorIndex& index)
+		throw(EnumeratorIndex::IncompatibleIndex)
+	{
+		if (index.size() != variant_sites_.size())
+		{
+			throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
+		}
+
+		typename SiteList::iterator it = variant_sites_.begin();
+		Position i((Position)(index.size() - 1));
+		for (; it != variant_sites_.end(); ++it, --i)
+		{
+			mutate_(it->first, it->second[index[i]]);
+		}
+	}
+
+	template <typename Container, typename VariantIterator, typename Variant>
+	BALL_INLINE
+	typename Enumerator<Container, VariantIterator, Variant>::Iterator Enumerator<Container, VariantIterator, Variant>::begin()
+		throw()
+	{
+		return Iterator::begin(this);
+	}
+
+	template <typename Container, typename VariantIterator, typename Variant>
+	BALL_INLINE
+	typename Enumerator<Container, VariantIterator, Variant>::Iterator Enumerator<Container, VariantIterator, Variant>::end()
+		throw()
+	{
+		return Iterator::end(this);
+	}
+
+	template <typename Container, typename VariantConstIterator, typename Variant>
+	BALL_INLINE
+	typename Enumerator<Container, VariantConstIterator, Variant>::ConstIterator Enumerator<Container, VariantConstIterator, Variant>::begin()
+		throw()
+	{
+		return ConstIterator::begin(this);
+	}
+
+	template <typename Container, typename VariantConstIterator, typename Variant>
+	BALL_INLINE
+	typename Enumerator<Container, VariantConstIterator, Variant>::ConstIterator Enumerator<Container, VariantConstIterator, Variant>::end()
+		throw()
+	{
+		return ConstIterator::end(this);
+	}
+
 	
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/CONCEPT/enumerator.iC>

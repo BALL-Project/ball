@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.43.4.2 2002/05/31 22:41:26 oliver Exp $
+// $Id: atom.h,v 1.43.4.3 2002/06/05 00:29:00 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -152,6 +152,7 @@ namespace BALL
 			};
 
 			//@}  
+
 			/** @name Constructors 
 			*/
 			//@{
@@ -1076,11 +1077,24 @@ namespace BALL
 
 			/// Set the attributes to their default values
 			void clear();
+
+			/** Swap the contents of the two attributes.
+					Adjusts the {\tt ptr} and {\tt index_} members of
+					\Ref{StaticAtomAttributes} and \Ref{Atom}.
+			*/
+			void swap(StaticAtomAttributes& attr);
+
+			/** Assign the contents from a different atom attribute.
+			*/
+			void set(StaticAtomAttributes& attr);
 		};
 
 		
 		///
 		typedef std::vector<StaticAtomAttributes> AttributeVector;
+
+		///
+		typedef std::list<Atom*> AtomPtrList;
 
 		///
 		typedef std::list<Position> AtomIndexList;
@@ -1090,7 +1104,8 @@ namespace BALL
 				range into a contiguous memory segment in order to increase 
 				locality.
 		*/
-		Position compact(const AtomIndexList& indices);
+		static Position compact(const AtomIndexList& indices)
+			throw(Exception::OutOfRange);
 
 		/** Access to the static attribute array
 		*/

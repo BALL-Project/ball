@@ -1,4 +1,4 @@
-// $Id: MolecularGraph_test.C,v 1.1.2.1 2002/05/31 22:59:27 oliver Exp $
+// $Id: MolecularGraph_test.C,v 1.1.2.2 2002/06/05 00:29:02 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(MolecularGraph, "$Id: MolecularGraph_test.C,v 1.1.2.1 2002/05/31 22:59:27 oliver Exp $")
+START_TEST(MolecularGraph, "$Id: MolecularGraph_test.C,v 1.1.2.2 2002/06/05 00:29:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -66,6 +66,91 @@ CHECK(MolecularGraph::newNode(const Atom& atom))
 	TEST_EQUAL(mg.getNumberOfEdges(), 0)
 	mg.newNode(a2);
 	TEST_EQUAL(mg.getNumberOfNodes(), 2)
+	TEST_EQUAL(mg.getNumberOfEdges(), 0)
+RESULT
+
+CHECK(MolecularGraph::newEdge(const Bond& atom))
+	MolecularGraph mg;
+	Atom a1;
+	Atom a2;
+	Atom a3;
+	Bond& bond1 = *a1.createBond(a2);
+	Bond& bond2 = *a1.createBond(a3);
+	
+	mg.newNode(a1);
+	mg.newNode(a2);
+	mg.newNode(a3);
+
+	mg.newEdge(bond1);
+	TEST_EQUAL(mg.getNumberOfNodes(), 3)
+	TEST_EQUAL(mg.getNumberOfEdges(), 1)
+
+	mg.newEdge(bond1);
+	TEST_EQUAL(mg.getNumberOfNodes(), 3)
+	TEST_EQUAL(mg.getNumberOfEdges(), 1)
+
+	mg.newEdge(bond2);
+	TEST_EQUAL(mg.getNumberOfNodes(), 3)
+	TEST_EQUAL(mg.getNumberOfEdges(), 2)
+RESULT
+
+CHECK(MolecularGraph::deleteNode(const Atom& atom))
+	MolecularGraph mg;
+	Atom a1;
+	Atom a2;
+	mg.newNode(a1);
+	mg.newNode(a2);
+	TEST_EQUAL(mg.getNumberOfNodes(), 2)
+	TEST_EQUAL(mg.getNumberOfEdges(), 0)
+
+	mg.deleteNode(a1);
+	TEST_EQUAL(mg.getNumberOfNodes(), 1)
+	TEST_EQUAL(mg.getNumberOfEdges(), 0)
+
+	mg.deleteNode(a1);
+	TEST_EQUAL(mg.getNumberOfNodes(), 1)
+	TEST_EQUAL(mg.getNumberOfEdges(), 0)
+
+	mg.deleteNode(a2);
+	TEST_EQUAL(mg.getNumberOfNodes(), 0)
+	TEST_EQUAL(mg.getNumberOfEdges(), 0)
+
+	mg.deleteNode(a2);
+	TEST_EQUAL(mg.getNumberOfNodes(), 0)
+	TEST_EQUAL(mg.getNumberOfEdges(), 0)
+RESULT
+
+CHECK(MolecularGraph::deleteEdge(const Bond& atom))
+	MolecularGraph mg;
+	Atom a1;
+	Atom a2;
+	Atom a3;
+	Bond& bond1 = *a1.createBond(a2);
+	Bond& bond2 = *a1.createBond(a3);
+	
+	mg.newNode(a1);
+	mg.newNode(a2);
+	mg.newNode(a3);
+
+	mg.newEdge(bond1);
+	mg.newEdge(bond2);
+	TEST_EQUAL(mg.getNumberOfNodes(), 3)
+	TEST_EQUAL(mg.getNumberOfEdges(), 2)
+
+	mg.deleteEdge(bond2);
+	TEST_EQUAL(mg.getNumberOfNodes(), 3)
+	TEST_EQUAL(mg.getNumberOfEdges(), 1)
+
+	mg.deleteEdge(bond2);
+	TEST_EQUAL(mg.getNumberOfNodes(), 3)
+	TEST_EQUAL(mg.getNumberOfEdges(), 1)
+
+	mg.deleteEdge(bond1);
+	TEST_EQUAL(mg.getNumberOfNodes(), 3)
+	TEST_EQUAL(mg.getNumberOfEdges(), 0)
+
+	mg.deleteEdge(bond1);
+	TEST_EQUAL(mg.getNumberOfNodes(), 3)
 	TEST_EQUAL(mg.getNumberOfEdges(), 0)
 RESULT
 

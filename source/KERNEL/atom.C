@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.35.4.4 2002/06/01 21:22:42 oliver Exp $
+// $Id: atom.C,v 1.35.4.5 2002/06/05 00:29:01 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -7,6 +7,9 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/PTE.h> 
+
+#include <algorithm>
+#include <functional>
 
 using namespace std;
 
@@ -23,6 +26,26 @@ namespace BALL
 		position.set(BALL_ATOM_DEFAULT_POSITION);
 		velocity.set(BALL_ATOM_DEFAULT_VELOCITY);
 		force.set(BALL_ATOM_DEFAULT_FORCE);
+	}
+
+	void Atom::StaticAtomAttributes::swap(Atom::StaticAtomAttributes& attr)
+	{
+		std::swap(charge, attr.charge);
+		std::swap(type, attr.type);
+		std::swap(ptr, attr.ptr);
+		position.swap(attr.position);
+		velocity.swap(attr.velocity);
+		force.swap(attr.force);		
+	}
+
+	void Atom::StaticAtomAttributes::set(Atom::StaticAtomAttributes& attr)
+	{
+		charge = attr.charge;
+		type = attr.type;
+		ptr = attr.ptr;
+		position = attr.position;
+		velocity = attr.velocity;
+		force = attr.force;		
 	}
 
 	
@@ -672,6 +695,71 @@ namespace BALL
 			}
 		}
 	}
+
+	Position Atom::compact(const Atom::AtomIndexList& indices)
+		throw(Exception::OutOfRange)
+	{
+		// create a sorted copy of the indices
+		AtomIndexList sorted_indices(indices);
+		sorted_indices.sort();	
+
+		// Remove all indices in the range of [i...i+indices.size()],
+		// where i is the smalles index in the list. Those entries
+		// are already in the correct range and won't have to be
+		// reassigned.
+		Position first_pos = sorted_indices.front();
+
+	
+		// sort the free list to achieve higher locality 
+		free_list_.sort();
+				
+		Atom::AtomIndexList::const_iterator idx_it = indices.begin();
+		Atom::AtomIndexList::iterator free_it = free_list_.begin();
+		for (Position i = first_pos; (idx_it != indices.end()) && (i < static_attributes_.size()); ++i, ++idx_it)
+		{
+			// The atom is already where it's supposed to be. Fine.
+			if (*idx_it == i)
+			{
+				continue;
+			}
+
+			if (*idx_it >= static_attributes_.size())
+			{
+				throw Exception::OutOfRange(__FILE__, __LINE__);
+			}
+
+			// Make sure that we are at the right position in the free list.
+			while (free_it != free_list_.end() && (*free_it < i)) 
+			{
+				++free_it;
+			}
+
+			// 
+			if ((free_it != free_list_.end()) && (i == *free_it))
+			{
+				// Copy the contents of the next atom to the current
+				// position (which is free) and adjust the atom's index.
+				static_attributes_[i].set(static_attributes_[*idx_it]);
+				static_attributes_[i].ptr->index_ = i;
+				
+				// Mark the old position as free.
+				*free_it = *idx_it;
+				
+				// Resort the free_list and re-initialize the invalidated iterator.
+				free_list_.sort();
+				free_it = free_list_.begin();
+			}
+			else
+			{
+				// Default case: we just swap the atoms and their index_ attributes.
+				static_attributes_[i].swap(static_attributes_[*idx_it]);
+				std::swap(static_attributes_[i].ptr->index_, static_attributes_[*idx_it].ptr->index_);
+			}
+		}	
+
+		return first_pos;
+	}
+
 
 # ifdef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/KERNEL/atom.iC>

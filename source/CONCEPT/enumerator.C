@@ -1,4 +1,4 @@
-// $Id: enumerator.C,v 1.10 2001/07/29 17:35:28 oliver Exp $
+// $Id: enumerator.C,v 1.10.4.1 2002/06/05 00:29:00 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/exception.h>
@@ -37,7 +37,6 @@ namespace BALL
 	EnumeratorIndex& EnumeratorIndex::operator ++ ()
 		throw(Exception::IndexOverflow)
 	{
-
 		Index i;
 		bool add_one = true;
 		for (i = (Index) size() - 1; (i >= 0) && add_one; i--)
@@ -86,8 +85,16 @@ namespace BALL
 		return *this;
 	}
 
+	const EnumeratorIndex& EnumeratorIndex::operator = (const EnumeratorIndex& rhs)
+		throw()
+	{
+		modulus_ = rhs.modulus_;
+		base_multipliers_ = rhs.base_multipliers_;
+		
+		return *this;
+	}
 
-	void EnumeratorIndex::set(Position index)
+	const EnumeratorIndex& EnumeratorIndex::operator = (Position index)
 		throw()
 	{	
 		for (Position i = 0; i < size(); ++i)
@@ -120,48 +127,48 @@ namespace BALL
 		return (static_cast<const vector<Position>&>(x) != static_cast<const vector<Position>&>(y));
 	}
 
-	bool operator < (const EnumeratorIndex& x, const EnumeratorIndex& y)
+	bool EnumeratorIndex::operator < (const EnumeratorIndex& rhs)
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
-		if (x.getModulus() != y.getModulus())
+		if (modulus_ != rhs.modulus_)
 		{
 			throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
 		}
 
-		return (static_cast<const vector<Position>&>(x) < static_cast<const vector<Position>&>(y));
+		return (static_cast<const vector<Position>&>(*this) < static_cast<const vector<Position>&>(rhs));
 	}
 
-	bool operator > (const EnumeratorIndex& x, const EnumeratorIndex& y)
+	bool EnumeratorIndex::operator > (const EnumeratorIndex& rhs)
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
-		if (x.getModulus() != y.getModulus())
+		if (modulus_ != rhs.modulus_)
 		{
 			throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
 		}
 
-		return (static_cast<const vector<Position>&>(x) > static_cast<const vector<Position>&>(y));
+		return (static_cast<const vector<Position>&>(*this) > static_cast<const vector<Position>&>(rhs));
 	}
 
-	bool operator <= (const EnumeratorIndex& x, const EnumeratorIndex& y)
+	bool EnumeratorIndex::operator <= (const EnumeratorIndex& rhs)
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
-		if (x.getModulus() != y.getModulus())
+		if (modulus_  != rhs.modulus_)
 		{
 			throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
 		}
 
-		return (static_cast<const vector<Position>&>(x) <= static_cast<const vector<Position>&>(y));
+		return (static_cast<const vector<Position>&>(*this) <= static_cast<const vector<Position>&>(rhs));
 	}
 
-	bool operator >= (const EnumeratorIndex& x, const EnumeratorIndex& y)
+	bool EnumeratorIndex::operator >= (const EnumeratorIndex& rhs)
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
-		if (x.getModulus() != y.getModulus())
+		if (modulus_ != rhs.modulus_)
 		{
 			throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
 		}
 
-		return (static_cast<const vector<Position>&>(x) >= static_cast<const vector<Position>&>(y));
+		return (static_cast<const vector<Position>&>(*this) >= static_cast<const vector<Position>&>(rhs));
 	}
 	
 

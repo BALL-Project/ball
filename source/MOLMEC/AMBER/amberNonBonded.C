@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.9 2002/05/22 22:56:50 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.10 2002/06/05 00:29:01 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -9,6 +9,8 @@ using namespace std;
 
 // define a macro for the square function
 #define SQR(x) ((x) * (x))
+
+#define TPL_ARG_INLINE
 
 namespace BALL 
 {
@@ -598,23 +600,23 @@ namespace BALL
 		float B;
 	};
 		
-	inline float distanceDependentCoulomb(float inverse_square_distance, float charge_product)
+	TPL_ARG_INLINE float distanceDependentCoulomb(float inverse_square_distance, float charge_product)
 	{
 		return charge_product * inverse_square_distance;
 	}
 
-	inline float coulomb(float inverse_square_distance, float charge_product)
+	TPL_ARG_INLINE float coulomb(float inverse_square_distance, float charge_product)
 	{
 		return charge_product * sqrt(inverse_square_distance);
 	}
 
-	inline float vdwSixTwelve(float inverse_square_distance, float A, float B)
+	TPL_ARG_INLINE float vdwSixTwelve(float inverse_square_distance, float A, float B)
 	{
 		register float inv_dist_6(inverse_square_distance * inverse_square_distance * inverse_square_distance);
 		return (inv_dist_6 * (inv_dist_6 * A - B)); 
 	}
 
-	inline float vdwTenTwelve(float inverse_square_distance, float A, float B)
+	TPL_ARG_INLINE float vdwTenTwelve(float inverse_square_distance, float A, float B)
 	{
 		register float inv_dist_10 = inverse_square_distance * inverse_square_distance;
 		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
@@ -644,7 +646,7 @@ namespace BALL
 		}
 	}
 
-	inline float cubicSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
+	TPL_ARG_INLINE float cubicSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
 	{
 		return SQR(cutoffs.cutoff_2 - square_distance) 
 						* (cutoffs.cutoff_2 + 2.0 * square_distance - 3.0 * cutoffs.cuton_2)
@@ -652,14 +654,14 @@ namespace BALL
 	}
 
 	template <SwitchingFct Switch>
-	inline float switchMultiplier(double square_distance, const SwitchingCutOnOff& cutoffs)
+	TPL_ARG_INLINE float switchMultiplier(double square_distance, const SwitchingCutOnOff& cutoffs)
 	{
 		float below_off = ((square_distance < cutoffs.cutoff_2) ? 1.0 : 0.0);
 		float below_on = ((square_distance < cutoffs.cuton_2) ? 1.0 : 0.0);
 		return below_off * (below_on + (1.0 - below_on) * Switch(square_distance, cutoffs));
 	}
 
-	inline float cutoffSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
+	TPL_ARG_INLINE float cutoffSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
 	{
 		return ((square_distance <= cutoffs.cutoff_2) ? 1.0 : 0.0);
 	}
