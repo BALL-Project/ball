@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.12 2004/11/12 15:40:31 amoll Exp $
+// $Id: primitiveManager.h,v 1.13 2004/11/12 17:33:06 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -176,7 +176,7 @@ namespace BALL
 			
 			protected:
 
-			void startUpdateThread_(Representation& rep)
+			void startUpdateThread_()
 				throw();
 
 			void update_(Representation& rep)

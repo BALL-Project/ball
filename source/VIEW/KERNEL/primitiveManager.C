@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.21 2004/11/12 15:40:35 amoll Exp $
+// $Id: primitiveManager.C,v 1.22 2004/11/12 17:33:02 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -61,7 +61,7 @@ bool PrimitiveManager::insert(Representation& representation)
 	representations_.push_back(&representation);
 
 	RepresentationMessage* rm = new RepresentationMessage(representation, RepresentationMessage::ADD);
-	main_control_->sendMessage(*rm);
+	main_control_->notify_(*rm);
 
 	return true;
 }
@@ -95,8 +95,10 @@ bool PrimitiveManager::remove(Representation& representation)
 
 	if (!found) return false;
 
+	representations_.erase(it);
+
 	RepresentationMessage* rm = new RepresentationMessage(representation, RepresentationMessage::REMOVE);
-	main_control_->sendMessage(*rm);
+	main_control_->notify_(*rm);
 
 	if (willBeUpdated(representation))
 	{
@@ -104,7 +106,6 @@ bool PrimitiveManager::remove(Representation& representation)
 	}
 	else
 	{
-		representations_.erase(it);
 		delete &representation;
 	}
 
@@ -231,27 +232,23 @@ void PrimitiveManager::update_(Representation& rep)
 		// update of GeometricControl, also if Representation is hidden
 		RepresentationMessage* msg = new RepresentationMessage(rep, 
 																				RepresentationMessage::UPDATE);
-		main_control_->sendMessage(*msg);
+		main_control_->notify_(*msg);
 		return;
 	}
 
-//   	if (willBeUpdated(rep)) return;
+	if (!has(rep)) insert(rep);
 
 	representations_to_be_updated_.push_back(&rep);
 
-	if (representations_to_be_updated_.size() == 1)
-	{
-		startUpdateThread_(rep);
-		return;
-	}
+	if (!updateRunning()) startUpdateThread_();
 #endif
 }
 
-void PrimitiveManager::startUpdateThread_(Representation& rep)
+void PrimitiveManager::startUpdateThread_()
 	throw()
 {
 #ifdef BALL_QT_HAS_THREADS
-	update_still_to_be_started_ = false;
+	if (!representations_to_be_updated_.size()) return;
 
 	if (updateRunning())
 	{
@@ -260,17 +257,25 @@ void PrimitiveManager::startUpdateThread_(Representation& rep)
 		return;
 	}
 
-	thread_.setRepresentation(rep);
-	thread_.start();
-
-	// no statusbar changes while beeing otherwise busy
-	if (main_control_->compositesAreLocked()) 
+	Representation* rep = *representations_to_be_updated_.begin();
+	if (!has(*rep)) 
 	{
+ 		delete rep;
+		representations_to_be_updated_.pop_front();
+		startUpdateThread_();
 		return;
 	}
 
+	update_still_to_be_started_ = false;
 
-	// keep the user informed: we are still building the Representation
+	// start the UpdateRepresentationThread
+	thread_.setRepresentation(*rep);
+	thread_.start();
+
+	// no statusbar changes while beeing otherwise busy
+	if (main_control_->compositesAreLocked()) return;
+
+	// keep the user informed: we are still building the Representation -> Statusbar text
 	Position pos = 3;
 	String dots;
 	while (thread_.running())
@@ -301,44 +306,31 @@ void PrimitiveManager::finishedUpdate_()
 #ifdef BALL_QT_HAS_THREADS
 	if (representations_to_be_updated_.size() == 0)
 	{
-		Log.error() << "Problem while updateing Representations in " 
-								<< __FILE__ << " " << __LINE__ << std::endl;
 		return;
 	}
 
 	Representation* rep = *representations_to_be_updated_.begin();
 	representations_to_be_updated_.pop_front();
 
-	if (representations_to_be_deleted_.has(rep))
+	// Representation might have been deleted
+	if (has(*rep))
 	{
-		RepresentationList::Iterator it = representations_to_be_updated_.begin();
-		for (; it != representations_to_be_updated_.end(); ++it)
-		{
-			if (*it == rep)
-			{
-				representations_to_be_updated_.erase(it);
-			}
-		}
-//   		main_control_->remove(*rep);
+		// no it wasnt, so update all widgets
+		RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
+		main_control_->notify_(*msg);
 	}
-	else 
+	else
 	{
-		if (!has(*rep)) 
-		{
-			main_control_->insert(*rep);
-			return;
-		}
-
-		RepresentationMessage* msg = new RepresentationMessage(*rep, 
-																				RepresentationMessage::UPDATE);
-		main_control_->sendMessage(*msg);
+		delete rep;
 	}
 
-	if (!updateRunning() &&
-			representations_to_be_updated_.size() > 0)
+	// shouldnt happen
+	if (updateRunning())
 	{
-		startUpdateThread_(**representations_to_be_updated_.begin());
+		return;
 	}
+
+	startUpdateThread_();
 #endif
 }
 

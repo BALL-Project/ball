@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.64 2004/11/11 22:46:27 amoll Exp $
+// $Id: mainControl.h,v 1.65 2004/11/12 17:33:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -84,6 +84,8 @@ namespace BALL
 				public ConnectionObject,
 				public Embeddable
 		{
+			friend class PrimitiveManager;
+
 			Q_OBJECT
 
 			public:

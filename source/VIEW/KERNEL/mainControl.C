@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.130 2004/11/11 22:46:54 amoll Exp $
+// $Id: mainControl.C,v 1.131 2004/11/12 17:33:02 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1308,13 +1308,7 @@ namespace BALL
 		bool MainControl::insert(Representation& rep)
 			throw()
 		{
-			if (primitive_manager_.has(rep)) return false;
-			primitive_manager_.insert(rep);
-
-			RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::ADD);
-			notify_(rm);
-
-			return true;
+			return primitive_manager_.insert(rep);
 		}
 
 		bool MainControl::update(Representation& rep)
@@ -1333,14 +1327,7 @@ namespace BALL
 		bool MainControl::remove(Representation& rep)
 			throw()
 		{
-			if (!primitive_manager_.has(rep)) return false;
-
-			RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::REMOVE);
-			notify_(rm);
-
-			primitive_manager_.remove(rep);
-
-			return true;
+			return primitive_manager_.remove(rep);
 		}
 
 		void MainControl::sendMessage(Message& message)
@@ -1417,9 +1404,26 @@ namespace BALL
 			stop_simulation_ = true;
 			if (simulation_thread_ != 0)
 			{
-				if (simulation_thread_->running()) 
+				// keep the user informed: we are still terminating the calculation
+				Position pos = 3;
+				String dots;
+				while (simulation_thread_->running()) 
 				{
-					simulation_thread_->wait();
+					setStatusbarText("Terminating calculation " + dots, true);
+					setStatusbarText("Creating Model " + dots);
+					qApp->wakeUpGuiThread();
+					qApp->processEvents();
+					if (pos < 40) 
+					{
+						pos ++;
+						dots +="..";
+					}
+					else 
+					{
+						pos = 3;
+						dots = "...";
+					}
+					simulation_thread_->wait(500); 
 				}
 
 				DCDFile* file = simulation_thread_->getDCDFile();
