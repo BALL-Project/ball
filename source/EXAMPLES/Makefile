@@ -1,11 +1,9 @@
 
-EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran
+EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens
 
 all:	$(EXECUTABLES)
 
 include ../common.mak
-
-
 
 
 clean:	default_clean
@@ -24,5 +22,11 @@ bindingEnergy:	bindingEnergy.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 ramachandran:	ramachandran.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+PDBChecker:	PDBChecker.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+addHydrogens:	addHydrogens.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
