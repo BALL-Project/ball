@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.8 2003/10/04 09:38:16 anker Exp $
+# $Id: Makefile,v 1.9 2004/05/14 16:16:18 oliver Exp $
 # Makefile for BALL utilities
 #
 
@@ -13,7 +13,8 @@ EXECUTABLES = \
 	export_fragment\
 	pdb2amber_naming\
 	pdb2dcd\
-	reconstruct_fragment
+	reconstruct_fragment\
+	solvent_accessibility
 
 # default target
 all:	$(EXECUTABLES)
