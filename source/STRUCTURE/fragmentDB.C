@@ -1,23 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.56 2004/05/05 15:35:29 amoll Exp $
+// $Id: fragmentDB.C,v 1.57 2004/05/06 12:54:36 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
-
-#include <list>
-#include <vector>
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/nucleotide.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
-#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/MATHS/matrix44.h>
-#include <BALL/MATHS/quaternion.h>
-#include <BALL/DATATYPE/stringHashMap.h>
 #include <BALL/FORMAT/resourceFile.h>
 	
 /*			Things still missing (among others)
@@ -35,8 +29,7 @@ using namespace std;
 namespace BALL 
 {
 
-	FragmentDB::NoFragmentNode::NoFragmentNode
-		(const char* file, int line, const string& filename)
+	FragmentDB::NoFragmentNode::NoFragmentNode(const char* file, int line, const string& filename)
 		throw()
 		: Exception::GeneralException(file, line, "NoFragmentNode", 
 											 "the resource database does not contain a valid Fragment entry"),
@@ -64,6 +57,7 @@ namespace BALL
 	}
 
 	bool FragmentDB::expandFirst_(ResourceEntry& root_entry)
+		throw(Exception::FileNotFound)
 	{
 		String key = root_entry.getKey();
 		String value = root_entry.getValue();
@@ -124,18 +118,17 @@ namespace BALL
 
 	// default constructor
 	FragmentDB::FragmentDB()
-		: valid_(false),
+		: tree(0),
+			valid_(false),
 			filename_("")
 	{
-		normalize_names.setFragmentDB(*this);
-		add_hydrogens.setFragmentDB(*this);
-		build_bonds.setFragmentDB(*this);
 	}
 
 
 	FragmentDB::FragmentDB(const String& filename)
 		throw(Exception::FileNotFound)
-		: valid_(false),
+		: tree(0),
+			valid_(false),
 			filename_("")
 	{
 		if (filename == "")
@@ -153,6 +146,9 @@ namespace BALL
 	}
 
 	FragmentDB::FragmentDB(const FragmentDB& db, bool /* deep */)
+		: tree(0),
+			valid_(false),
+			filename_("")
 	{
 		destroy();
 		filename_ = db.getFilename();
@@ -170,7 +166,11 @@ namespace BALL
 		valid_ = false;
 		filename_ = "";
 
-		delete tree;
+		if (tree != 0) 
+		{
+			delete tree;
+			tree = 0;
+		}
 
 		name_to_path_.destroy();
 		name_to_frag_pointer_.destroy();
@@ -187,6 +187,7 @@ namespace BALL
 	}
 
 	void FragmentDB::setFilename(const String& filename)
+		throw(Exception::FileNotFound)
 	{
 		// search for the standard fragment DB file
 		Path path;
@@ -205,35 +206,28 @@ namespace BALL
 
 	bool FragmentDB::isValid() const 
 	{
-		return valid_;
+		return valid_ && tree != 0;
 	}
 
 	bool FragmentDB::has(const String& fragment_name) const 
 	{
-		if (!isValid())
-			return false;
+		if (!isValid()) return false;
 
 		return name_to_path_.has(fragment_name);
 	}
 
 	FragmentDB::Type FragmentDB::getFragmentType(const String& fragment_name) const 
 	{
-		ResourceEntry*	entry;
-		String					path;
-					
-		if (!isValid() || !tree->isValid())
+		if (!isValid() || 
+				!tree->isValid() ||
+				!has(fragment_name))
 		{
 			return FragmentDB::TYPE__UNKNOWN;
 		}
 
-		if (!has(fragment_name))
-		{
-			return FragmentDB::TYPE__UNKNOWN;
-		}
-		
-		path = (*name_to_path_.find(fragment_name)).second;
+		String path = (*name_to_path_.find(fragment_name)).second;
 		path += "/Type";
-		entry = tree->findChild(path);
+		ResourceEntry* entry = tree->findChild(path);
 		entry = tree->findChild("");
 			
 		if (entry != 0)
@@ -450,6 +444,15 @@ namespace BALL
 		}
 	}
 
+	FragmentDB& FragmentDB::operator = (const FragmentDB& db)
+		throw()
+	{
+		destroy();
+		filename_ = db.filename_;
+		init();
+		return *this;
+	}
+
 	void FragmentDB::parseProperties_(ResourceEntry&  entry, PropertyManager& property_man)
 	{
 		ResourceEntry::Iterator	entry_iterator;
@@ -536,6 +539,7 @@ namespace BALL
 
 		
 	void FragmentDB::init()
+		throw(Exception::FileNotFound, NoFragmentNode)
 	{
 		// we are invalid until we're sure we're not...
 		valid_ = false;
@@ -546,11 +550,13 @@ namespace BALL
 		// check for success and terminate on failure
 		if (!resource_db->isValid())
 		{
+			delete resource_db;
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename_);
 		}
 
 
 		// copy the contents of the resource file into a tree
+		if (tree != 0) delete tree;
 		tree = new ResourceEntry();			
 		tree->mergeChildrenOf(resource_db->getRoot());				
 
@@ -750,6 +756,11 @@ namespace BALL
 		
 		// OK. Everything went well, so we might consider ourselves as valid.
 		valid_ = true;
+		
+		normalize_names.setFragmentDB(*this);
+		add_hydrogens.setFragmentDB(*this);
+		build_bonds.setFragmentDB(*this);
+
 		return;
 	}
 
