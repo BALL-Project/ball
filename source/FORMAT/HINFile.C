@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.61 2004/02/17 16:07:18 oliver Exp $
+// $Id: HINFile.C,v 1.62 2004/02/18 13:57:29 oliver Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -40,15 +40,19 @@ namespace BALL
 			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
 			temperature_(0.0)
 	{
-		GenericMolFile::open(name, open_mode);
+		open(name, open_mode);
 	}
 
 	HINFile::HINFile(const HINFile& file)
 		throw(Exception::FileNotFound)
-		: GenericMolFile(file),
+		: GenericMolFile(),
 			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
 			temperature_(0.0)
 	{
+		if (file.getName() != "")
+		{
+			open(file.getName());
+		}
 	}
 
 	HINFile::~HINFile()
