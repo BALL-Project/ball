@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.4 2000/01/28 10:55:17 oliver Exp $
+// $Id: regExp.h,v 1.5 2000/02/06 19:40:43 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -34,30 +34,6 @@ namespace BALL
 		public:
 
 		BALL_CREATE(RegularExpression)
-
-
-		/**	@name Enums
-		*/
-		//@{
-
-		/**	
-		*/
-		enum ErrorCode
-		{
-			ERROR__NONE              = -1,
-			ERROR__UNKNOWN           = 0,
-			ERROR__POINTER_IS_NULL   = 1,
-			ERROR__INVALID_PATTERN   = 2,
-			ERROR__INDEX_UNDERFLOW   = 3,
-			ERROR__INDEX_OVERFLOW    = 4,
-			ERROR__SIZE_UNDERFLOW    = 5,
-			ERROR__SIZE_OVERFLOW     = 6,
-			ERROR__INVALID_SUBSTRING = 7,
-			ERROR__NOT_IMPLEMENTED   = 8,
-			
-			NUMBER_OF_ERRORS
-		};
-		//@}
 
 		/**	@name	String constants 
 		*/
