@@ -1,4 +1,4 @@
-// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.4 2000/09/24 13:27:45 oliver Exp $
+// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.5 2000/10/18 13:41:39 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.4 2000/09/24 13:27:45 oliver Exp $")
+START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.5 2000/10/18 13:41:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ System S;
 f >> S;
 f.close();
 
-/*
+
 CHECK(JohnsonBoveyShiftProcessor::JohnsonBoveyShiftProcessor(const JohnsonBoveyShiftProcessor& processor) throw())
   //BAUSTELLE
 RESULT
@@ -88,9 +88,10 @@ CHECK(chemical shifts/without rings)
 			if (atom_it->hasProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT))
 			{
 				i++;
+				TEST_EQUAL(atom_it->getProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat(), 0.0)
 			}
 		}
-		TEST_EQUAL(i, 0)
+		TEST_EQUAL(i, 15)
 	}	
 RESULT
 
@@ -107,7 +108,7 @@ CHECK(chemical shifts/with rings)
 		infile >> name >> shift;
 		rc_shifts.insert(name, shift);
 	}
-	TEST_EQUAL(rc_shifts.size(), 79)
+	TEST_EQUAL(rc_shifts.size(), 80)
 
 	JohnsonBoveyShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -138,10 +139,10 @@ CHECK(chemical shifts/with rings)
 				}
 			}
 		}
-		TEST_EQUAL(i, 79)
+		TEST_EQUAL(i, 80)
 	}	
 RESULT
-*/
+
 
 f.open("data/JohnsonBoveyShiftProcessor_test3.hin");
 f >> S;
@@ -158,7 +159,7 @@ CHECK(chemical shifts/with rings)
 		infile >> name >> shift;
 		rc_shifts.insert(name, shift);
 	}
-	TEST_EQUAL(rc_shifts.size(), 79)
+	TEST_EQUAL(rc_shifts.size(), 80)
 
 	JohnsonBoveyShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -189,7 +190,7 @@ CHECK(chemical shifts/with rings)
 				}
 			}
 		}
-		TEST_EQUAL(i, 79)
+		TEST_EQUAL(i, 80)
 	}	
 RESULT
 
