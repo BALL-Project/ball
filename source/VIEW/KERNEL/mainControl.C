@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.118 2004/10/19 09:23:50 oliver Exp $
+// $Id: mainControl.C,v 1.119 2004/11/09 15:56:09 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -87,7 +87,8 @@ namespace BALL
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
-				composites_muteable_(true),
+				composites_locked_by_main_control_(false),
+				locking_widget_(0),
 				stop_simulation_(false),
 				simulation_thread_(0),
 				timer_(new StatusbarTimer(this)),
@@ -200,7 +201,8 @@ namespace BALL
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
-				composites_muteable_(main_control.composites_muteable_),
+				composites_locked_by_main_control_(main_control.composites_locked_by_main_control_),
+				locking_widget_(0),
 				about_to_quit_(false)
 		{
 			setup_();
@@ -409,7 +411,11 @@ namespace BALL
 			if (delete_id_ != 0) menuBar()->setItemEnabled(delete_id_, false);
 
 			#ifdef BALL_QT_HAS_THREADS
-			setCompositesMuteable(simulation_thread_ == 0 && Representation::getUpdateThread() ==0);
+			/*
+			setCompositesMuteable(simulation_thread_ == 0 && 
+														Representation::getUpdateThread() == 0 &&
+														locking_widget_ == 0);
+														*/
 			#endif
 
 			// checks all modular widgets 
@@ -419,10 +425,10 @@ namespace BALL
 				(*it)->checkMenu(*this);
 			}
 
-			if (composites_muteable_) simulation_icon_->hide();
-			else 											simulation_icon_->show();
+			if (compositesAreLocked()) 	simulation_icon_->hide();
+			else 												simulation_icon_->show();
 
-			menuBar()->setItemEnabled(MENU_STOPSIMULATION, !composites_muteable_);
+			menuBar()->setItemEnabled(MENU_STOPSIMULATION, simulation_thread_ != 0);
 		}
 
 		void MainControl::applyPreferencesTab()
@@ -658,7 +664,7 @@ namespace BALL
 			}
 			else if (RTTI::isKindOf<TransformationMessage> (*message))
 			{
-				if (!composites_muteable_) return;
+				if (compositesAreLocked()) return;
 				moveItems(((TransformationMessage*) message)->getMatrix());
 			}
 			else if (RTTI::isKindOf<RepresentationMessage>(*message))
@@ -1389,24 +1395,19 @@ namespace BALL
 			menuBar()->setItemEnabled(delete_id_, state);
 		}
 
-		void MainControl::setCompositesMuteable(bool state) 
+		void MainControl::setBusyMode_(bool state) 
 		{
-			if (state == composites_muteable_) return;
-
-			// prevent reseting to normal mode while simulation is still running
-			if (state && simulation_thread_ != 0) return;
-
-			composites_muteable_ = state;
 			if (state)
-			{
-				QApplication::restoreOverrideCursor();
-				simulation_icon_->hide();
-			}
-			else
 			{
 				QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
 				simulation_icon_->show();
 			}
+			else
+			{
+				QApplication::restoreOverrideCursor();
+				simulation_icon_->hide();
+			}
+
 		}
 
 		void MainControl::stopSimulation() 
@@ -1439,7 +1440,9 @@ namespace BALL
 
 			setStatusbarText("Calculation terminated.");
 			stop_simulation_ = false;
-			checkMenus();
+			composites_locked_by_main_control_ = false;
+			locking_widget_ = 0;
+			setBusyMode_(false);
 		#endif
 		}
 
@@ -1506,10 +1509,11 @@ namespace BALL
 				{
 					thread->setMainControl(this);
 				}
-				checkMenus();
-			#else
-				simulation_thread_ = thread;
 			#endif
+
+			composites_locked_by_main_control_ = true;
+			checkMenus();
+			setBusyMode_(true);
 
 			return true;
 		}
@@ -1708,6 +1712,53 @@ namespace BALL
  			QApplication::exit();
 			about_to_quit_ = true;
 		}
+
+		bool MainControl::compositesAreLocked()
+			throw()
+		{
+			return (composites_locked_by_main_control_ || locking_widget_ != 0);
+		}
+
+		bool MainControl::lockCompositesFor(ModularWidget* widget)
+			throw()
+		{
+			if (locking_widget_ == widget) return true;
+			if (composites_locked_by_main_control_ || locking_widget_ != 0) return false;
+
+			locking_widget_ = widget;
+			setBusyMode_(true);
+			return true;
+		}
+
+		bool MainControl::unlockCompositesFor(ModularWidget* widget)
+			throw()
+		{
+			if (composites_locked_by_main_control_) return false;
+			if (locking_widget_ == 0) return true;
+			if (locking_widget_ != widget) return false;
+
+			locking_widget_ = 0;
+			setBusyMode_(false);
+			return true;
+		}
+
+		ModularWidget* MainControl::getLockingWidget() 
+			throw()
+		{
+			return locking_widget_;
+		}
+
+		bool MainControl::lockCompositesForMainControl_()
+			throw()
+		{
+			if (locking_widget_ != 0) return false;
+			composites_locked_by_main_control_ = true;
+			setBusyMode_(true);
+			return true;
+		}
+
+
+
 
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.60 2004/10/21 13:33:55 amoll Exp $
+// $Id: geometricControl.C,v 1.61 2004/11/09 15:55:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -376,7 +376,7 @@ namespace BALL
 		{
 			if (item == 0) return;
 
-			if (!getMainControl()->compositesAreMuteable() ||
+			if (getMainControl()->compositesAreLocked() ||
 					creating_representations_)
 			{
 				setStatusbarText("No changes to representations allowed, while simulation is running or creating new representations!");
@@ -497,7 +497,7 @@ namespace BALL
 			throw()
 		{
 			ItemList item_list = getSelectedItems(); 
-			if (item_list.size() > 0 && main_control.compositesAreMuteable()) main_control.setDeleteEntryEnabled(true);
+			if (item_list.size() > 0 && !main_control.compositesAreLocked()) main_control.setDeleteEntryEnabled(true);
 		}
 
 		void GeometricControl::focusRepresentation()

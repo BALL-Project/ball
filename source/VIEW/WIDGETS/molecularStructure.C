@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.64 2004/11/09 08:49:50 oliver Exp $
+// $Id: molecularStructure.C,v 1.65 2004/11/09 15:55:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -483,7 +483,7 @@ namespace BALL
 			bool selected = (number_of_selected_objects != 0);
 			bool one_item = (number_of_selected_objects == 1);
 			bool one_system = (getMainControl()->getSelectedSystem() != 0);
-			bool composites_muteable = main_control.compositesAreMuteable();
+			bool composites_muteable = !main_control.compositesAreLocked();
 
 	// 		menuBar()->setItemEnabled(assign_charges_id_, one_system && composites_muteable);
 
@@ -888,7 +888,7 @@ namespace BALL
 		void MolecularStructure::runMinimization()
 		{
 			// Make sure we run one instance of a simulation at a time only.
-			if (!getMainControl()->compositesAreMuteable())
+			if (getMainControl()->compositesAreLocked())
 			{
 				Log.error() << "Simulation already running or still rendering!" << std::endl;
 				return;
@@ -1032,7 +1032,7 @@ namespace BALL
 		void MolecularStructure::MDSimulation()
 		{
 			// Make sure we run just one instance at a time.
-			if (!getMainControl()->compositesAreMuteable())
+			if (getMainControl()->compositesAreLocked())
 			{
 				Log.error() << "Simulation already running or still rendering!" << std::endl;
 				return;

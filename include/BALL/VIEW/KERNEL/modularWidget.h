@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.17 2004/10/22 20:39:54 amoll Exp $
+// $Id: modularWidget.h,v 1.18 2004/11/09 15:55:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -222,6 +222,16 @@ namespace BALL
 					Implemented for convenience.
 			*/
 			FragmentDB& getFragmentDB() const
+				throw();
+
+			/** Try to get an exclusive lock on the Composites, so that they can not be altered by
+			 		any other ModularWidget.
+			*/
+			bool lockComposites()
+				throw();
+
+			/// Unlock the Composites.
+			bool unlockComposites()
 				throw();
 
 			/// Wrapper for MainControl::insertMenuEntry

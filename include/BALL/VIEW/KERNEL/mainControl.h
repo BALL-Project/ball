@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.58 2004/10/09 15:36:16 amoll Exp $
+// $Id: mainControl.h,v 1.59 2004/11/09 15:55:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -675,16 +675,19 @@ namespace BALL
 			const FragmentDB& getFragmentDB() const
 				throw() { return fragment_db_;}
 
-			/** Set a property, which defines, if the stored composites can be changed at the moment.
-			 		This is used e.g. to prevent changes in the composite hierarchy while a simulation is running.
-					@see compositesAreMuteable
-			*/
-			void setCompositesMuteable(bool state);
-
 			/** Check wheter the stored composites can be modified at the moment.
-					This method returns false e.g. while a MD simulation is running.
+					This method returns true e.g. while a MD simulation is running.
 			*/
-			bool compositesAreMuteable() {return composites_muteable_;}
+			bool compositesAreLocked() throw();
+
+			///
+			bool lockCompositesFor(ModularWidget* widget) throw();
+
+			///
+			bool unlockCompositesFor(ModularWidget* widget) throw();
+
+			///
+			ModularWidget* getLockingWidget() throw();
 					
 			/// Returns true, if the simulation was told to stop, but hasnt done this so far.
 			bool stopedSimulation() { return stop_simulation_;}
@@ -802,7 +805,15 @@ namespace BALL
 				throw();
 
 			void complementSelectionHelper_(Composite& c);
-			
+
+			/** Show a busy cursor and a busy icon in the statusbar.
+			*/
+			void setBusyMode_(bool state);
+
+			///
+			bool lockCompositesForMainControl_()
+				throw();
+		
 			//_
 			FragmentDB fragment_db_;
 
@@ -831,7 +842,8 @@ namespace BALL
 			INIFile		 									preferences_;
 			
 			static int 									current_id_;
-			bool 												composites_muteable_;
+			bool 												composites_locked_by_main_control_;
+			ModularWidget*							locking_widget_;
 			bool 											  stop_simulation_;
 
 			SimulationThread* 					simulation_thread_;

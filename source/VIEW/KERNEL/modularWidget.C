@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.16 2004/10/22 20:40:09 amoll Exp $
+// $Id: modularWidget.C,v 1.17 2004/11/09 15:56:09 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -213,5 +213,18 @@ void ModularWidget::setWorkingDirFromFilename_(String filename)
 	setWorkingDir(filename.getSubstring(0, filename.size() - (suffix.size() + 1)));
 }
 
+bool ModularWidget::lockComposites()
+	throw()
+{
+	if (getMainControl() == 0) return false;
+	return getMainControl()->lockCompositesFor(this);
+}
+
+bool ModularWidget::unlockComposites()
+	throw()
+{
+	if (getMainControl() == 0) return false;
+	return getMainControl()->unlockCompositesFor(this);
+}
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.151 2004/11/09 14:07:36 amoll Exp $
+// $Id: scene.C,v 1.152 2004/11/09 15:55:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1402,7 +1402,7 @@ namespace BALL
 			
 			menuBar()->setItemEnabled(start_animation_id_, 
 																animation_points_.size() > 0 && 
-																getMainControl()->compositesAreMuteable() &&
+																!getMainControl()->compositesAreLocked() &&
 																!animation_running);
 			
 			menuBar()->setItemEnabled(clear_animation_id_, animation_points_.size() > 0 && !animation_running);
@@ -2010,6 +2010,7 @@ namespace BALL
 		void Scene::animate_()
 			throw()
 		{
+			if (!lockComposites()) return;
 			menuBar()->setItemChecked(record_animation_id_, false);
 			menuBar()->setItemEnabled(record_animation_id_, false);
 
@@ -2087,6 +2088,7 @@ namespace BALL
 			menuBar()->setItemEnabled(animation_export_POV_id_, true);
 			menuBar()->setItemEnabled(animation_export_PNG_id_, true);
 			menuBar()->setItemEnabled(clear_animation_id_, true);
+			unlockComposites();
 		}
 
 		void Scene::animationRepeatClicked()

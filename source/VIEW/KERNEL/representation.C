@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.48 2004/11/03 16:34:09 amoll Exp $
+// $Id: representation.C,v 1.49 2004/11/09 15:56:09 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -321,7 +321,7 @@ namespace BALL
 			thread_->setRebuild(rebuild);
 			thread_->start();
 
-			mc->setCompositesMuteable(false);
+//   			mc->setCompositesMuteable(false); ??????
 			
 			
 			Position pos = 3;
@@ -349,7 +349,7 @@ namespace BALL
 			delete thread_;
 			thread_ = 0;
 			mc->setStatusbarText("");
-			mc->setCompositesMuteable(true);
+//   			mc->setCompositesMuteable(true);
 			
  			if (mc->getPrimitiveManager().has(*this))
 			{

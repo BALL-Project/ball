@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.38 2004/10/22 20:32:17 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.39 2004/11/09 15:56:08 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -204,8 +204,7 @@ void ColorMeshDialog::gridSelected()
 
 	// prevent freezing, if clicking on representation, while
 	// an other is still rendering
-	if (!getMainControl()->compositesAreMuteable() ||
-	     rep_->updateRunning())
+	if (getMainControl()->compositesAreLocked() || rep_->updateRunning())
 	{
 		return;
 	}
@@ -318,7 +317,7 @@ void ColorMeshDialog::colorByGrid_()
 {
 	if (grid_ == 0 ||
 			mesh_ == 0 ||
-			!getMainControl()->compositesAreMuteable() ||
+			getMainControl()->compositesAreLocked() ||
 			rep_ == 0 ||
 			rep_->updateRunning())
 	{

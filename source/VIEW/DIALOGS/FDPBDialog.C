@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.14 2004/06/10 16:43:44 amoll Exp $
+// $Id: FDPBDialog.C,v 1.15 2004/11/09 15:56:08 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -251,7 +251,7 @@ namespace BALL
 				return false;
 			}
 
-			getMainControl()->setCompositesMuteable(false);
+			if (lockComposites()) return false;
 			
 			applyValues_();
 			applyProcessors_();
@@ -265,7 +265,7 @@ namespace BALL
 			fdpb_.phi_grid = 0;
 			system_ = 0;
 
-			getMainControl()->setCompositesMuteable(true);
+			unlockComposites();
 			return true;
 		}
 

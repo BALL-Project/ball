@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.53 2004/10/23 18:33:57 amoll Exp $
+// $Id: cartoonModel.C,v 1.54 2004/11/09 15:56:10 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -462,7 +462,7 @@ namespace BALL
 			Mesh* mesh = new Mesh;
 			if (mesh == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
 			mesh->colorList.clear();
-			mesh->colorList.push_back(ColorRGBA(0,1.,0));
+			mesh->colorList.push_back(ColorRGBA(0.0, 1.0, 1.0, 1.0));
 			mesh->setComposite(ss.getResidue(0));
 
 			vector<Vector3>* vertices = &mesh->vertex;

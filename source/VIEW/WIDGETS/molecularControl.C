@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.75 2004/10/21 13:31:37 amoll Exp $
+// $Id: molecularControl.C,v 1.76 2004/11/09 15:55:49 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -67,7 +67,7 @@ void MolecularControl::SelectableListViewItem::stateChange(bool state)
 		return;
 	}
 
-	if (!control_reference_.getMainControl()->compositesAreMuteable())
+	if (control_reference_.getMainControl()->compositesAreLocked())
 	{
 		ignore_change_ = true;
 		setOn(!state);
@@ -186,7 +186,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// 																			it makes sense
 	bool allow_paste = getSelection().size() == 1 &&
 										 getCopyList_().size() > 0 &&
-										 main_control.compositesAreMuteable();
+										 !main_control.compositesAreLocked();
 	if (allow_paste)
 	{
 		hint = "Paste a copied or cuted object into current selected object.";
@@ -207,7 +207,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 			hint = "One item must be selected to paste into.";
 		else if (getCopyList_().size() == 0)
 			hint = "No copied/cuted object.";
-		else if (!main_control.compositesAreMuteable())
+		else if (main_control.compositesAreLocked())
 			hint = "Simulation running, cant copy meanwhile";
 	}
 	menuBar()->setItemEnabled(paste_id_, allow_paste);	
@@ -217,7 +217,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// check for clearClipboard-slot: enable only if copy_list_ not empty
 	bool copy_list_filled = (getCopyList_().size() > 0);
 	menuBar()->setItemEnabled(clipboard_id_, copy_list_filled && 
-																					 main_control.compositesAreMuteable());
+																					 !main_control.compositesAreLocked());
 	if (!menuBar()->isItemEnabled(clipboard_id_))
 	{
  		hint = "No item copied/cuted or simulation running";
@@ -230,7 +230,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 
 	// ------------------------------------------------------------------
 	// check for cut and delete slot 
-	bool list_filled = (selected_.size() != 0 && main_control.compositesAreMuteable());
+	bool list_filled = (selected_.size() != 0 && !main_control.compositesAreLocked());
 	
 	if (list_filled) hint = "";
 	else hint = "No item selected or simulation running";
@@ -243,7 +243,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	if (selected_.size() > 0)
 	{
 		// enable global delete entry for all GenericControls, if this Control has the selection
-		getMainControl()->setDeleteEntryEnabled(main_control.compositesAreMuteable());
+		getMainControl()->setDeleteEntryEnabled(!main_control.compositesAreLocked());
 	}
 }
 
@@ -326,7 +326,7 @@ void MolecularControl::activatedItem_(int pos)
 void MolecularControl::buildContextMenu(Composite& composite)
 	throw()
 {
-	bool composites_muteable = getMainControl()->compositesAreMuteable();
+	bool composites_muteable = !getMainControl()->compositesAreLocked();
 	bool one_item = (getSelection().size() == 1);
 
 	context_menu_.insertItem("Create Representation", &model_menu_, 0, CREATE_REPRESENTATION);

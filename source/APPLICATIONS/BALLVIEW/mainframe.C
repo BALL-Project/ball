@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.37 2004/11/03 15:25:39 amoll Exp $
+// $Id: mainframe.C,v 1.38 2004/11/09 15:57:09 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -164,7 +164,6 @@ namespace BALL
 		// Menu ------------------------------------------------------------------------
 		menuBar()->setSeparator(QMenuBar::InWindowsStyle);
 
-
 		setStatusbarText("Ready.");
 	}
 
@@ -176,8 +175,8 @@ namespace BALL
 	void Mainframe::checkMenus()
 	{
 		if (menu_cs_ == -1) return;
-		menuBar()->setItemEnabled( menu_FPDB_, (getSelectedSystem() != 0) && composites_muteable_);
- 	  menuBar()->setItemEnabled(menu_cs_, composites_muteable_ && (dataset_control_->count3DGrids() != 0));
+		menuBar()->setItemEnabled(menu_FPDB_, !compositesAreLocked() && (getSelectedSystem() != 0));
+ 	  menuBar()->setItemEnabled(menu_cs_,   !compositesAreLocked() && (dataset_control_->count3DGrids() != 0));
 		MainControl::checkMenus();
 	}
 
