@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.18 2003/06/05 09:15:02 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.19 2003/06/13 14:38:48 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -186,17 +186,40 @@ namespace BALL
 			= options.setDefaultInteger(FresnoFF::Option::ROT_ALGORITHM,
 					FresnoFF::Default::ROT_ALGORITHM);
 
+		calculation_method_ 
+			= options.setDefaultInteger(FresnoFF::Option::ROT_METHOD,
+					FresnoFF::Default::ROT_METHOD);
+
 		Size verbosity
 			= options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
 					FresnoFF::Default::VERBOSITY);
 
-		algorithm_type_
-			= options.setDefaultInteger(FresnoFF::Option::ROT_ALGORITHM,
-					FresnoFF::Default::ROT_ALGORITHM);
-
-		calculation_method_ 
-			= options.setDefaultInteger(FresnoFF::Option::NONPOLAR_METHOD,
-					FresnoFF::Default::ROT_METHOD);
+		// What do we calculate here?
+		if (verbosity >= 1)
+		{
+			Log.info() << "Switching rotational term to ";
+			switch (calculation_method_)
+			{
+				case CALCULATION__ORIGINAL:
+					Log.info() << "original term" << endl;
+					break;
+				case CALCULATION__BOEHM:
+					Log.info() << "Boehm term" << endl;
+					break;
+				case CALCULATION__GLYCOSIDIC_BONDS:
+					Log.info() << "number of glycosidic bonds term" << endl;
+					break;
+				case CALCULATION__FROZEN_GLYCOSIDIC_BONDS:
+					Log.info() << "number of frozen glycosidic bonds term" << endl;
+					break;
+				case CALCULATION__GLYCOSIDIC_CONTRIBUTION:
+					Log.info() << "glycosidic contribution to the original term" << endl;
+					break;
+				default: 
+					Log.info() << "UNKNOWN!" << endl;
+					break;
+			}
+		}
 
 		// create a grid for the receptor and insert all its atoms
 		// this grid is needed to find out whether an atom of the ligand is
@@ -370,7 +393,6 @@ namespace BALL
 							{
 								if (bondlengths.has(sym1))
 								{
-									// DEBUG
 									if (verbosity >= 100)
 									{
 										if (sym2 == "N")
@@ -380,7 +402,6 @@ namespace BALL
 											Log.info() << "length: " << dist << endl;
 										}
 									}
-									// /DEBUG
 									float lower = bondlengths[sym1].first;
 									float upper = bondlengths[sym1].second;
 									if ((dist > (lower * 0.975)) && (dist <= (upper * 1.025)))
@@ -412,7 +433,6 @@ namespace BALL
 							A_CO = (isCarbon(*atom1) & hasAromaticBondedOxygen(*atom1));
 							B_CO = (isCarbon(*atom2) & hasAromaticBondedOxygen(*atom2));
 
-							// DEBUG
 							if (verbosity >= 100)
 							{
 								Log.info() << "A SP2: " << A_sp2 << endl;
@@ -422,20 +442,17 @@ namespace BALL
 								Log.info() << "A CO: " << A_CO << endl;
 								Log.info() << "B CO: " << B_CO << endl;
 							}
-							// /DEBUG
 
 							if (((A_sp2 & B_sp3) | (B_sp2 & A_sp3) | (A_sp3 & B_sp3))
 									| ((A_CO & B_sp3 & isCarbon(*atom2)) 
 										| (A_sp3 & B_CO & isCarbon(*atom1))) == true)
 							{
-								// DEBUG
 								if (verbosity >= 100)
 								{
 									Log.info() << "found possible rotatable bond: " 
 										<< atom1->getFullName() << "---" << atom2->getFullName()
 										<< endl;
 								}
-								// /DEBUG
 								found_rotatable_bond = true;
 							}
 						}
@@ -457,7 +474,7 @@ namespace BALL
 				// If this bond is a glycosidic bond, save it in the respective
 				// hash set.
 
-				ExpressionPredicate is_glycosidic("!inRing() AND ( ( element(O) AND connectedTo(R) AND ( connectedTo(R) OR connectedTo(CR) ) ) OR ( element(C) AND connectedTo(R) AND connectedTo(OR) ) )");
+				Expression is_glycosidic("!inRing() AND ( ( element(O) AND ( connectedTo((R)(R)) OR connectedTo((R)(CR)) ) ) OR ( element(C) AND ( connectedTo((R)(R)) OR connectedTo((R)(OR)) ) ) )");
 
 				const Bond* tmp = *tree_it;
 
@@ -465,13 +482,6 @@ namespace BALL
 					is_glycosidic(*(tmp->getSecondAtom())))
 				{
 					glycosidic_bonds_.insert(*tree_it);
-					// DEBUG
-					Log.info() << "Found part of a glycosidic bond: " 
-						<< tmp->getFirstAtom()->getFullName()
-						<< "-"
-						<< tmp->getSecondAtom()->getFullName()
-						<< endl;
-					// /DEBUG
 				}
 
 				visited.clear();
@@ -509,6 +519,31 @@ namespace BALL
 		N_rot_ = rotatable_bonds_.size();
 		is_frozen_.resize(rotatable_bonds_.size());
 
+		switch(calculation_method_)
+		{
+			case CALCULATION__ORIGINAL:
+				// The original term needs recalculation in updateEnergy().
+				break;
+
+			case CALCULATION__BOEHM:
+				// Boehm's term is constant.
+				energy_ = N_rot_;
+				break;
+
+			case CALCULATION__GLYCOSIDIC_BONDS:
+				// The number of glycosidic bonds is constant.
+				energy_ = glycosidic_bonds_.size();
+				break;
+
+			case CALCULATION__FROZEN_GLYCOSIDIC_BONDS:
+				// We have to recalculate the number of *frozen* glycosidic bonds
+				// in every updateEnergy() call.
+				break;
+
+			default:
+			  break;
+		}
+
 		if (verbosity >= 9)
 		{
 			Log.info() << "FresnoRotation setup statistics:" << endl;
@@ -532,66 +567,97 @@ namespace BALL
 			= getForceField()->options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
 					FresnoFF::Default::VERBOSITY);
 
-		// 
-		double glycosidic_contribution = 0.0;
-		//
-		double non_glycosidic_contribution = 0.0;
-
-		if (N_rot_ == 0)
-		{
-			energy_ = 0.0;
-			return energy_;
-		}
-		else
+		switch (calculation_method_)
 		{
 
-			energy_ = 0.0;
-			float val;
+			case CALCULATION__ORIGINAL:
+			case CALCULATION__GLYCOSIDIC_CONTRIBUTION:
 
-			updateFrozenBonds_();
-
-			for (Size i = 0; i < rotatable_bonds_.size(); ++i)
-			{
-				if (is_frozen_[i] == true)
+				// if there aren't any rotatable bonds we cannot freeze them.
+				if (N_rot_ == 0)
 				{
-					val = heavy_atom_fractions_[i].first + heavy_atom_fractions_[i].second;
-					val /= 2.0;
-					if (verbosity >= 90)
-					{
-						Log.info() << "ROT: adding score of " << val << endl;
-					}
-					energy_ += val;
+					energy_ = 0.0;
+					return energy_;
+				}
+				else
+				{
 
-					if (glycosidic_bonds_.has(rotatable_bonds_[i]))
+					energy_ = 0.0;
+					float val;
+
+					updateFrozenBonds_();
+
+					for (Size i = 0; i < rotatable_bonds_.size(); ++i)
 					{
-						glycosidic_contribution += val;
+						if (is_frozen_[i] == true)
+						{
+							val = heavy_atom_fractions_[i].first + heavy_atom_fractions_[i].second;
+							val /= 2.0;
+							if (verbosity >= 90)
+							{
+								Log.info() << "ROT: adding score of " << val << endl;
+							}
+							if (calculation_method_ == CALCULATION__ORIGINAL)
+							{
+								energy_ += val;
+							}
+							else
+							{
+								if (glycosidic_bonds_.has(rotatable_bonds_[i]))
+								{
+									energy_ += val;
+								}
+							}
+						}
 					}
-					else
+
+					energy_ *= (1 - 1/N_rot_);
+					energy_ += 1.0;
+					energy_ = factor_ * energy_;
+
+				}
+
+				break;
+
+			case CALCULATION__BOEHM:
+				// We already stored the number of bonds in energy_, so we don't
+				// need to do anything here.
+				// PARANOIA
+				energy_ = N_rot_;
+				// /PARANOIA
+				break;
+
+			case CALCULATION__GLYCOSIDIC_BONDS:
+				// We already stored the number of bonds in energy_, so we don't
+				// need to do anything here.
+				// PARANOIA
+				energy_ = glycosidic_bonds_.size();
+				// /PARANOIA
+				break;
+
+			case CALCULATION__FROZEN_GLYCOSIDIC_BONDS:
+				// Update frozen bonds...
+				updateFrozenBonds_();
+				energy_ = 0;
+				// ...and count them.
+				for (Size i = 0; i < rotatable_bonds_.size(); ++i)
+				{
+					if ((is_frozen_[i] == true) 
+						&& (glycosidic_bonds_.has(rotatable_bonds_[i])))
 					{
-						non_glycosidic_contribution += val;
+						energy_ += 1;
 					}
 				}
-			}
+				break;
 
-			energy_ *= (1 - 1/N_rot_);
-			energy_ += 1.0;
-			energy_ = factor_ * energy_;
-
-			if (verbosity > 0)
-			{
-				Log.info() << "ROT: energy is " << energy_ << endl;
-				Log.info() << "glycosidic contribution (without prefactor) " 
-					<< glycosidic_contribution << endl;
-				Log.info() << "non-glycosidic contribution (without prefactor) " 
-					<< non_glycosidic_contribution << endl;
-				Log.info() << "glycosidic contribution (with prefactor) " 
-					<< glycosidic_contribution * (1 - 1/N_rot_) + 1.0 << endl;
-				Log.info() << "non-glycosidic contribution (with prefactor) " 
-					<< non_glycosidic_contribution * (1 - 1/N_rot_) + 1.0 << endl;
-			}
-
-			return energy_;
 		}
+
+		if (verbosity > 0)
+		{
+			Log.info() << "ROT: energy is " << energy_ << endl;
+		}
+
+		return energy_;
 
 	}
 
@@ -776,8 +842,21 @@ namespace BALL
 		for (Size i = 0; i < rotatable_bonds_.size(); ++i)
 		{
 			const Bond* bond = rotatable_bonds_[i];
-			bool result = (frozenBondsDFS_(bond->getFirstAtom(), visited)
-					&& frozenBondsDFS_(bond->getSecondAtom(), visited));
+
+			bool result = false;
+
+			visited.clear();
+			visited.insert(bond->getSecondAtom());
+			if (frozenBondsDFS_(bond->getFirstAtom(), visited))
+			{
+				visited.clear();
+				visited.insert(bond->getFirstAtom());
+				if (frozenBondsDFS_(bond->getSecondAtom(), visited))
+				{
+					result = true;
+				}
+			}
+
 			if (result == true)
 			{
 				is_frozen_[i] = true;
@@ -786,6 +865,7 @@ namespace BALL
 			{
 				is_frozen_[i] = false;
 			}
+
 		}
 	}
 
@@ -795,14 +875,15 @@ namespace BALL
 		throw()
 	{
 
-		// ?????
-		// make a private member from this
 		Size verbosity 
 			= getForceField()->options.getInteger(FresnoFF::Option::VERBOSITY);
+
 		// mark this atom as visited
 		visited.insert(atom);
 
-		// if this is atom is bound, then return true
+		// Check, whether this atom is bound to an atom of the receptor
+		// molecule.
+
 		Vector3 position = atom->getPosition();
 		float dist, bind_distance;
 
@@ -854,8 +935,10 @@ namespace BALL
 			// if our partner atom wasn't visited yet, start dfs() with it
 			if (visited.has(partner) == false)
 			{
+
 				// apply dfs() to the partner atom
 				bool result = frozenBondsDFS_(partner, visited);
+
 				if (result == true)
 				{
 					return true;
