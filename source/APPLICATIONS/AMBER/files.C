@@ -1,4 +1,4 @@
-// $Id: files.C,v 1.5 2001/07/17 12:48:40 oliver Exp $
+// $Id: files.C,v 1.6 2001/07/17 13:18:36 anker Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
@@ -105,7 +105,7 @@ void SingleFile::write() const
 		} 
 		else 
 		{
-			hin_file << S;
+			hin_file.write(system);
 		}
 	}
 	else 
