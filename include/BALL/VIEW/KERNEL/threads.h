@@ -23,7 +23,6 @@ namespace BALL
 {
 class EnergyMinimizer;
 class MolecularDynamics;
-class AmberFF;
 class Composite;
 
 namespace VIEW
