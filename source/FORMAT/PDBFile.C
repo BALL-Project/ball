@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.22 2001/06/05 15:45:20 anker Exp $
+// $Id: PDBFile.C,v 1.23 2001/06/24 16:40:47 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -137,7 +137,7 @@ namespace BALL
 			current_residue_->setInsertionCode(insertion_code_);
 		}
 
-		current_PDB_atom_ = new PDBAtom();
+		current_PDB_atom_ = new PDBAtom;
 		current_residue_->insert(*current_PDB_atom_);
 		PDB_atom_map_[serial_number] = current_PDB_atom_;
 		
