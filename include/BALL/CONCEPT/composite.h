@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.17 2000/08/24 11:58:50 amoll Exp $
+// $Id: composite.h,v 1.18 2000/08/27 16:05:34 amoll Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -209,35 +209,52 @@ namespace BALL
 		*/
 		Size countDescendants() const;
 
-		/**
+		/** Get the length of the path between two composite objects.
+				If no path exists {\tt INVALID_SIZE} is returned.
+				@param a the first composite object
+				@param b the second composite object
+				@return Size the size of the path
 		*/
 		static Size getPathLength(const Composite& a, const Composite& b);
 
-		/**
+		/** Get the depth of {\tt composite} in its tree.
+				The depth of a root item is 0.
+				@param a the composite object
+				@return Size the depth of {\tt composite}
 		*/
 		static Size getDepth(const Composite& composite);
 
-		/**
+		/** Get the depth of this item in its tree.
+				The depth of a root item is 0.
+				@return Size the depth
 		*/
 		Size getDepth() const;
 
-		/**
+		/** Get the height of this item in its tree.
+				The hight of a leaf is 0.
+				@return Size the height
 		*/
 		Size getHeight() const;
 
-		/**
+		/** Get the root of this item.
+				@return Composite& the root
 		*/
 		Composite& getRoot();
 
-		/**
+		/** Get a const reference to the root of this item.
+				@return Composite& the root
 		*/
 		const Composite& getRoot() const;
 
-		/**
+		/** Get the lowest common ancestor of this item with an other.
+				If no comman ancestor exists 0 is returned.
+				@return Composite& the lowest common ancestor
 		*/
 		Composite* getLowestCommonAncestor(Composite& composite);
 
-		/**
+		/** Get a const reference to the lowest common ancestor of this item with an other.
+				If no comman ancestor exists 0 is returned.
+				@return Composite& the lowest common ancestor
 		*/
 		const Composite* getLowestCommonAncestor(const Composite& composite) const;
 
@@ -431,7 +448,9 @@ namespace BALL
 		*/
 		bool removeChild(Composite& child);
 
-		///
+		/** This instance and its subtree is removed form its tree and 
+				replaced by {\tt composite} and its subtree.
+		*/
 		void replace(Composite& composite);
 
 		///
@@ -471,86 +490,118 @@ namespace BALL
 		*/
 		bool isRoot() const;
 	
-		///
+		/** Return true if the node is root of composite.
+		*/
 		bool isRootOf(const Composite& composite) const;
 	
-		///
+		/** Return true if the node is not the root or a leaf.
+		*/
 		bool isInterior() const;
 	
-		///
+		/** Return true if the node has a child.
+		*/
 		bool hasChild() const;
 
-		///
+		/** Return true if the node has a parent.
+		*/
 		bool isChild() const;
 	
-		///
+		/** Return true if the node has the parent {\tt composite}.
+		*/
 		bool isChildOf(const Composite& composite) const;
 	
-		///
+		/** Return true if the node is the first child of its parent.
+		*/
 		bool isFirstChild() const;
 	
-		///
+		/** Return true if the node is the first child of {\tt composite}.
+		*/
 		bool isFirstChildOf(const Composite& composite) const;
 	
-		///
+		/** Return true if the node is the last child of its parent.
+		*/
 		bool isLastChild() const;
 	
-		///
+		/** Return true if the node is the last child of {\tt composite}.
+		*/
 		bool isLastChildOf(const Composite& composite) const;
 	
-		///
+		/** Return true if the node has a parent.
+		*/
 		bool hasParent() const;
 
-		///
+		/** Return true if the node has a child.
+		*/
 		bool isParent() const;
 
-		///
+		/** Return true if the node is the parent of {\tt composite}.
+		*/
 		bool isParentOf(const Composite& composite) const;
 
-		///
+		/** Return true if the node has a sibling.
+				(Its parent has other childs.)
+		*/
 		bool hasSibling() const;
 			
-		///
+		/** Return true if the node is a sibling of {\tt composite}.
+		*/
 		bool isSiblingOf(const Composite& composite) const;
 			
-		///
+		/** Return true if the node has a previous sibling.
+				(Its parent has a child before this.)
+		*/
 		bool hasPreviousSibling() const;
 	
-		///
+		/** Return true if the node is a previous sibling of {\tt composite}.
+		*/
 		bool isPreviousSiblingOf(const Composite& composite) const;
 	
-		///
+		/** Return true if the node has a previous sibling.
+				(Its parent has a child after this.)
+		*/
 		bool hasNextSibling() const;
 
-		///
+		/** Return true if the node is a next sibling of {\tt composite}.
+		*/
 		bool isNextSiblingOf(const Composite& composite) const;
 	
-		///
+		/** Return true if the node has childs.
+		*/
 		bool hasDescendant() const;
 	
-		///
+		/** Return true if the node has a parent.
+		*/
 		bool isDescendant() const;
 	
-		///
+		/** Return true if the node is a descendent of {\tt composite}.
+		*/
 		bool isDescendantOf(const Composite& composite) const;
 
-		///
+		/** Return true if the node has a parent.
+		*/
 		bool hasAnyAncestor() const;
 
-		///
+		/** Return true if the node has a parent of the same type as dummy.
+		*/
 		template <typename T>
 		bool hasAncestor(const T& dummy ) const; 
 
-		///
+		/** Return true if the node has a child.
+		*/
 		bool isAncestor() const;
 
-		///
+		/** Return true if the node has composite as descendent.
+		*/
 		bool isAncestorOf(const Composite& composite) const;
 
-		///
+		/** Return true if the node has is ancestor or composite or
+				composite is ancestor of this node.
+		*/
 		bool isRelatedWith(const Composite& composite) const;
 	
-		///
+		/** Return true if composite is homomorph to this node.
+				(The subtrees of the two instances have to be of the same form.)
+		*/
 		bool isHomomorph(const Composite& composite) const;
 
 		/**	Return true if any descendant is selected.
@@ -565,10 +616,13 @@ namespace BALL
 
 		/**	@name	Debugging and Diagnostics */
 		//@{
-		///
+		/** Test if the subtree with this node as root is valid.
+				(The structure of the subtree has to be valid.)
+		*/
 		virtual bool isValid() const;
 
-		///
+		/** Dump the constent of this instance to an ostream.
+		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
@@ -580,39 +634,72 @@ namespace BALL
 		void host(Visitor<Composite>& visitor);
 
 
-		///
+		/** Apply a processor to all ancestors of this node.
+				@return true if the processor could be applied.
+		*/
 		template <typename T>
 		bool applyAncestor(UnaryProcessor<T>& processor);
 
-		///
+		/** Apply a processor to all childs of this node.
+				@return true if the processor could be applied.
+		*/
 		template <typename T>
 		bool applyChild(UnaryProcessor<T>& processor);
 		
-		///
+		/** Apply a processor to all descendents of this node.
+				The node itself is not processed.
+				The root of a subtree is accessed before the nodes in its left 
+				and right subtree.
+				@return true if the processor could be applied.
+		*/
 		template <typename T>
 		bool applyDescendantPreorder(UnaryProcessor<T>& processor);
 
-		///
+		/** Apply a processor to all descendents of this node.
+				The node itself is not processed.
+				The root of a subtree is accessed after the nodes in its left 
+				and right subtree.
+				@return true if the processor could be applied.
+		*/
 		template <typename T>
 		bool applyDescendantPostorder(UnaryProcessor<T>& processor);
 	
-		///
+		/** Apply a processor to all descendents of this node.
+				The node itself is not processed.
+				applyDescendantPreorder is used.
+				@see applyDescendantPreorder
+				@return true if the processor could be applied.
+		*/
 		template <typename T>
 		bool applyDescendant(UnaryProcessor<T>& processor);
 		
-		///
+		/** Apply a processor to the node and its subtree.
+				The root of a subtree is accessed before the nodes in its left 
+				and right subtree.
+				@return true if the processor could be applied.
+		*/
 		template <typename T>
 		bool applyPreorder(UnaryProcessor<T>& processor);
 		
-		///
+		/** Apply a processor to the node and its subtree.
+				The root of a subtree is accessed after the nodes in its left 
+				and right subtree.
+				@return true if the processor could be applied.
+		*/
 		template <typename T>
 		bool applyPostorder(UnaryProcessor<T>& processor);
 
-		///
+		/** Apply a processor to the node and its subtree.
+				applyPreorder is used.
+				@see applyPreorder
+				@return true if the processor could be applied.
+		*/
 		template <typename T>
 		bool apply(UnaryProcessor<T>& processor);
 		
-		///
+		/** Apply a processor to the node and its siblings.
+				@return true if the processor could be applied.
+		*/
 		template <typename T>
 		bool applyLevel(UnaryProcessor<T>& processor, long level);
 		//@}			
@@ -1678,11 +1765,11 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE 
 	bool Composite::apply(UnaryProcessor<T>& processor)
 	{
-		return processor.start() && applyPreorderNostart_(processor) && processor.finish();
+		return applyPreorder(processor)
 	}
-
 
 	template <typename T>
 	BALL_INLINE 
