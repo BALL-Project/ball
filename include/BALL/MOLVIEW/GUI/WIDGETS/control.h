@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.1.4.1 2002/10/18 14:48:19 amoll Exp $
+// $Id: control.h,v 1.1.4.2 2002/10/18 18:48:31 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_CONTROL_H
@@ -65,11 +65,12 @@ using namespace BALL::VIEW;
 using namespace BALL::MOLVIEW;
 
 
-//namespace BALL
-//{
+namespace BALL
+{
 
-//	namespace MOLVIEW
-//	{
+	namespace MOLVIEW
+	{
+
 		/**
 		 */
 		class Control
@@ -176,8 +177,8 @@ using namespace BALL::MOLVIEW;
 			bool selection_changed_;
 		};
 
-//	} // namespace MOLVIEW
+	} // namespace MOLVIEW
 
-//} // namespace BALL
+} // namespace BALL
 
 #endif // BALL_MOLVIE_MOLVIEW_GUI_WIDGETS_CONTROL_H_
