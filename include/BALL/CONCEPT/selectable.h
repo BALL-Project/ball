@@ -1,4 +1,4 @@
-// $Id: selectable.h,v 1.9 2001/02/10 20:01:27 amoll Exp $
+// $Id: selectable.h,v 1.9.4.1 2002/05/01 10:31:14 oliver Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -141,21 +141,7 @@ namespace BALL
 			throw();
 
 		//@}
-		/**	@name Storers 
-		*/
-		//@{
 
-		/**
-		*/
-		friend ::std::ostream&	operator << (::std::ostream& s, const Selectable& selectable)
-			throw();
-
-		/**
-		*/
-		friend ::std::istream&	operator >> (::std::istream& s, Selectable& selectable)
-			throw();
-
-		//@}
 		/**	@name Storable interface.
 		*/
 		//@{
