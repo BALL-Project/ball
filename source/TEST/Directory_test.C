@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.11 2003/07/02 12:06:13 amoll Exp $
+// $Id: Directory_test.C,v 1.12 2003/07/02 19:14:33 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.11 2003/07/02 12:06:13 amoll Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.12 2003/07/02 19:14:33 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -363,12 +363,16 @@ RESULT
 
 CHECK(bool remove())
 	Directory d(test_dir + PS); 
-	TEST_EQUAL(d.create("dir_x"), true)
+	bool result = d.create("dir_x");
+	TEST_EQUAL(result, true)
 	d.set(test_dir + PS + "dir_x");
 	TEST_EQUAL(d.isValid(), true)
-	TEST_EQUAL(d.remove(), true)
+	result = d.remove();
+	TEST_EQUAL(result, true)
+	TEST_EQUAL(d.isValid(), false)
 	d.set("this_directory_should_not_exist");
-	TEST_EQUAL(d.remove(), false)
+	result = d.remove();
+	TEST_EQUAL(result, false)
 RESULT
 
 CHECK(bool setCurrent())

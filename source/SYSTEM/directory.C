@@ -1,22 +1,31 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.24 2003/06/22 10:27:47 oliver Exp $
+// $Id: directory.C,v 1.25 2003/07/02 19:14:33 oliver Exp $
+//
 
 #include <BALL/SYSTEM/directory.h>
 
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
+
 #ifdef BALL_HAS_SYS_TYPES_H
 #	include <sys/types.h>
 #endif
+
 #ifdef BALL_HAS_UNISTD_H
 #	include <unistd.h>
 #endif
 
 #include <iostream>
 #include <errno.h>
+
+#ifdef BALL_COMPILER_MSVC
+#	define chdir _chdir
+# define rmdir _rmdir
+#endif
+
 
 namespace BALL 
 {
@@ -615,23 +624,18 @@ namespace BALL
 	bool Directory::remove()
 	{
 		synchronize_();	
-#ifdef BALL_COMPILER_MSVC
-		if (::_chdir("..") != 0) return desynchronize_(false);
-		bool result1 = (::_rmdir(directory_path_.data()) == 0);
-#else
-		if (::chdir("..") != 0) return desynchronize_(false);
+		if (::chdir("..") != 0)
+		{
+			return desynchronize_(false);
+		}
 		bool result1 = (::rmdir(directory_path_.data()) == 0);
-#endif
-		bool result2 = false;
+		bool result2 = true;
 		if (backup_path_ != "")
 		{
-#ifdef BALL_COMPILER_MSVC
-			result2 = (::_chdir(backup_path_.data()) != 0);
-#else
-			result2 = (::chdir(backup_path_.data()) != 0);
-#endif
+			result2 = (::chdir(backup_path_.c_str()) == 0);
 			backup_path_ = "";
 		}
+
 #ifdef BALL_COMPILER_MSVC
 		dir_ = INVALID_HANDLE_VALUE;
 		dirent_ = INVALID_HANDLE_VALUE;
@@ -648,13 +652,11 @@ namespace BALL
 	{
 		synchronize_();
 		FileSystem::canonizePath(new_path);
+		if (::chdir("..") != 0)	return desynchronize_(false);
 #ifdef BALL_COMPILER_MSVC
-		if (::_chdir("..") != 0)	return desynchronize_(false);
 		CloseHandle(dir_);
 		FindClose(dirent_);
 		dir_ = dirent_ = INVALID_HANDLE_VALUE;
-#else
-		if (::chdir("..") != 0)	return desynchronize_(false);
 #endif
 		if (::rename(directory_path_.data(), new_path.data()) == 0)
 		{
@@ -675,7 +677,7 @@ namespace BALL
 							FILE_FLAG_BACKUP_SEMANTICS,        
 							NULL                                
 							);
-			if (dir==INVALID_HANDLE_VALUE)
+			if (dir == INVALID_HANDLE_VALUE)
 			{
 				return false;
 			}
