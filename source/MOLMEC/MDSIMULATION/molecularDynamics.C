@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.C,v 1.20 2005/02/07 19:30:26 amoll Exp $
+// $Id: molecularDynamics.C,v 1.21 2005/02/18 13:01:52 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -42,7 +42,7 @@ namespace BALL
 			force_field_ptr_(0),
 			system_ptr_(0),
 			abort_by_energy_enabled_(true),
-			abort_energy_(100000000.0)
+			abort_energy_(10000000000.0)
 	{
 		// As no force field has been named, there is not much to do. 
 		// Just indicate that the MD simulation is not ready yet. 
@@ -50,7 +50,7 @@ namespace BALL
 
 	// Constructor expecting a force field 
 	MolecularDynamics::MolecularDynamics(ForceField& force_field)
-		:	abort_energy_(100000000.0)
+		:	abort_energy_(10000000000.0)
 	{
 		valid_ = true;
 		force_field_ptr_ = &force_field;
