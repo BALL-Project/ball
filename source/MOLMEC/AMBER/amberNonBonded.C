@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.22 2002/12/03 10:19:41 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.23 2002/12/08 20:23:01 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -12,7 +12,7 @@ using namespace std;
 
 // ???? Relics induced by SGI/CC
 // #define BALL_TPL_ARG_INLINE inline
-#define BALL_TPL_ARG_INLINE inline
+#define BALL_TPL_ARG_INLINE
 
 namespace BALL 
 {
@@ -549,7 +549,7 @@ namespace BALL
 
 	// Determine the closest pair of images under cubic periodic 
 	// boundary conditions.
-	inline
+	BALL_INLINE
 	void AMBERcalculateMinimumImage(Vector3& difference, const Vector3& period)
 		throw()
 	{
@@ -632,7 +632,7 @@ namespace BALL
 	template <ESEnergyFunction ESEnergy, 
 						VdwEnergyFunction VdwEnergy,
 						SwitchingFunction Switch>
-	inline void AmberNBEnergy
+	BALL_INLINE void AmberNBEnergy
 		(LennardJones::Data* ptr, LennardJones::Data* end_ptr, 
 		 double& es_energy, double& vdw_energy, 
 		 const SwitchingCutOnOff& switching_es, const SwitchingCutOnOff& switching_vdw)
@@ -649,7 +649,7 @@ namespace BALL
 	}
 
 	
-	inline float cubicSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
+	BALL_TPL_ARG_INLINE float cubicSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
 	{
 		float below_off = ((square_distance < cutoffs.cutoff_2) ? 1.0 : 0.0);
 		float below_on = ((square_distance < cutoffs.cuton_2) ? 1.0 : 0.0);
@@ -661,7 +661,8 @@ namespace BALL
 	template <ESEnergyFunction ESEnergyFct, 
 						VdwEnergyFunction VdwEnergyFct,
 						SwitchingFunction SwitchFct>
-	inline void AmberNBEnergyPeriodic
+	BALL_INLINE 
+	void AmberNBEnergyPeriodic
 		(LennardJones::Data* ptr, LennardJones::Data* end_ptr, 
 		 double& es_energy, double& vdw_energy, 
 		 SwitchingCutOnOff es_switching, SwitchingCutOnOff vdw_switching,

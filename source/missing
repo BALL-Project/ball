@@ -160,6 +160,7 @@ WARNING: \`$1' is missing on your system.  You should only need it if
        # We have it, but it failed.
        exit 1
     fi
+		exit 1
 
     echo 1>&2 "\
 WARNING: \`$1' is needed, and you do not seem to have it handy on your
