@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.7 2000/01/19 17:55:36 oliver Exp $
+// $Id: bitVector.C,v 1.8 2000/07/20 21:42:38 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
@@ -212,7 +212,6 @@ namespace BALL
 		for (tmp = bit_string; *tmp != 0; tmp++);
 
 		size = (BALL::Size)(tmp - bit_string);
-		
 		for (tmp--, size--; tmp >= bit_string; tmp--)
 		{
 			if (*tmp != '0')
@@ -590,6 +589,34 @@ namespace BALL
 
 	}
  
+	bool Bit::operator == (bool bit) const
+	{
+		if (bitvector_ == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+		return bitvector_->getBit(index_) == bit;
+	}
+
+	bool Bit::operator != (bool bit) const
+	{
+		if (bitvector_ == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+		return bitvector_->getBit(index_) != bit;
+	}
+
+	Bit::operator bool() const
+	{
+		if (bitvector_ == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+
+		return bitvector_->getBit(index_);
+	}
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/bitVector.iC>
