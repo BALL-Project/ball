@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.18 2000/10/28 21:55:17 amoll Exp $
+// $Id: bitVector.C,v 1.19 2000/11/13 01:54:15 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -10,50 +10,70 @@ using namespace std;
 namespace BALL 
 {
 
-	Bit::Bit(const BitVector& bit_vector, Index index)
+	Bit::Bit(const BitVector& bit_vector, Index index) 
+		throw()
 		:	bitvector_((BitVector *)&bit_vector),
 			index_(index)
+	{
+	}
+
+	Bit::~Bit()
+		throw()
 	{
 	}
 
 	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
 
 	BitVector::BitVector()
+		throw()
 		:	size_(0),
 			block_size_(BALL_BLOCK_SIZE(BlockSize)),
 			resizable_(true)
 	{
 		bitset_ = new BlockType[block_size_];
-		memset
-			(bitset_, 
-			 BALL_BLOCK_ALL_BITS_CLEARED, 
-			 block_size_ << (sizeof(BlockType) - 1));
+
+		if (bitset_ == 0)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, size_);
+		}
+
+		memset(bitset_, BALL_BLOCK_ALL_BITS_CLEARED, block_size_ << (sizeof(BlockType) - 1));
 	}
 
 	BitVector::BitVector(Size size)
+		throw(Exception::OutOfMemory)
 		:	size_(size),
 			block_size_(BALL_BLOCK_SIZE(size)),
 			resizable_(true)
 	{				
 		bitset_ = new BlockType[block_size_];
-		memset
-			(bitset_, BALL_BLOCK_ALL_BITS_CLEARED, 
-			 block_size_ << (sizeof(BlockType) - 1));
+
+		if (bitset_ == 0)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, size_);
+		}
+
+		memset(bitset_, BALL_BLOCK_ALL_BITS_CLEARED, block_size_ << (sizeof(BlockType) - 1));
 	}
 
 	BitVector::BitVector(const BitVector& bit_vector, bool /* deep */)
+		throw(Exception::OutOfMemory)
 		:	size_(bit_vector.size_),
 			block_size_(bit_vector.block_size_),
 			resizable_(bit_vector.resizable_)
 	{
 		bitset_ = new BlockType[block_size_];
 
-		memcpy
-			(bitset_, bit_vector.bitset_, 
-			 block_size_ << (sizeof(BlockType) - 1));
+		if (bitset_ == 0)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, size_);
+		}
+
+		memcpy(bitset_, bit_vector.bitset_, block_size_ << (sizeof(BlockType) - 1));
 	}
 
 	BitVector::BitVector(const char* bit_string)
+		throw(Exception::OutOfMemory)
 		: size_(BALL_BLOCK_BITS),
 			block_size_(BALL_BLOCK_SIZE(BALL_BLOCK_BITS)),
 			bitset_(new BlockType[1]),
@@ -63,48 +83,55 @@ namespace BALL
 	}
 
 	BitVector::~BitVector()
+		throw()
 	{
-		delete [] bitset_;
+		delete[] bitset_;
 		bitset_ = 0;
 	}
 
 	void BitVector::set(const BitVector& bit_vector, bool /* deep */)
+  	throw(Exception::OutOfMemory)
 	{
-		Size block_size = bit_vector.block_size_;
-
-		if (block_size_ != block_size) 
+		if (block_size_ != bit_vector.block_size_) 
 		{
-			delete [] bitset_;
-			bitset_ = new BlockType[block_size];
-			block_size_ = block_size;
+			delete[] bitset_;
+			bitset_ = new BlockType[bit_vector.block_size_];
+
+			if (bitset_ == 0)
+			{
+				throw Exception::OutOfMemory(__FILE__, __LINE__, bit_vector.block_size_);
+			}
+
+			block_size_ = bit_vector.block_size_;
 		}
 
-		memcpy(bitset_, bit_vector.bitset_, 
-					 block_size << (sizeof(BlockType) - 1));
+		memcpy(bitset_, bit_vector.bitset_, block_size_ << (sizeof(BlockType) - 1));
 
-		size_ = bit_vector.size_;
-		resizable_ = bit_vector.resizable_;
+		size_				= bit_vector.size_;
+		resizable_	= bit_vector.resizable_;
 	}
 
 	void BitVector::swap(BitVector& bit_vector)
+		throw()
 	{
-		BALL::Size temp = size_;
-		BALL::Size temp_block = block_size_;
-		BlockType *temp_bitset = bitset_;
-		bool temp_resizable = resizable_;
+		BALL::Size temp				 = size_;
+		BALL::Size temp_block	 = block_size_;
+		BlockType* temp_bitset = bitset_;
+		bool temp_resizable		 = resizable_;
 
-		size_= bit_vector.size_;
+		size_				= bit_vector.size_;
 		block_size_ = bit_vector.block_size_;
-		bitset_ = bit_vector.bitset_;
-		resizable_ = bit_vector.resizable_;
+		bitset_			= bit_vector.bitset_;
+		resizable_	= bit_vector.resizable_;
 
-		bit_vector.size_ = temp;
-		bit_vector.block_size_ = temp_block;
-		bit_vector.bitset_ = temp_bitset;
-		bit_vector.resizable_ = temp_resizable;
+		bit_vector.size_				= temp;
+		bit_vector.block_size_  = temp_block;
+		bit_vector.bitset_			= temp_bitset;
+		bit_vector.resizable_		= temp_resizable;
 	}
 
 	void BitVector::validateRange_(Index& first, Index& last) const
+	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
@@ -148,6 +175,7 @@ namespace BALL
 	}
 
 	void BitVector::validateIndex_(Index& index)
+	 throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 	{
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
@@ -170,6 +198,7 @@ namespace BALL
 	}
 
 	void BitVector::validateIndex_(Index& index) const
+	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
@@ -192,6 +221,7 @@ namespace BALL
 	}
 
 	BitVector BitVector::operator ()(Index first, Index last) const
+	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		using std::min;
 
@@ -211,6 +241,7 @@ namespace BALL
 	}
 
 	BALL::Size BitVector::countValue(bool value) const
+		throw()
 	{
 		Size size = 0;
 
@@ -226,6 +257,7 @@ namespace BALL
 	}
 
 	void BitVector::set(const char* bit_string)
+	 throw(Exception::OutOfMemory)
 	{
 		if (bit_string == 0)
 		{
@@ -242,6 +274,7 @@ namespace BALL
 	}
 
 	void BitVector::fill(bool bit, Index first, Index last)
+	 throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 	{
 		if (size_ == 0)
 		{
@@ -255,6 +288,7 @@ namespace BALL
 	}
 
 	void BitVector::toggle(Index first, Index last)
+	 throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 	{
 		validateRange_(first, last);
 		for (Index i = first; i <= last; i++)
@@ -264,6 +298,7 @@ namespace BALL
 	}
 
 	void BitVector::setUnsignedChar(unsigned char bit_pattern)
+		throw()
 	{
 		setSize(BALL_CHAR_BITS, false);
 		unsigned char c = bit_pattern;
@@ -278,6 +313,7 @@ namespace BALL
 	}
 
 	unsigned char BitVector::getUnsignedChar() const
+		throw()
 	{
 		unsigned char c = 0;
 
@@ -296,6 +332,7 @@ namespace BALL
 	}
 
 	void BitVector::setUnsignedShort(unsigned short bit_pattern)
+		throw()
 	{
 		setSize(sizeof(unsigned short) * BALL_CHAR_BITS, false);
 		unsigned short c = bit_pattern;
@@ -308,10 +345,11 @@ namespace BALL
 	}
 
 	unsigned short BitVector::getUnsignedShort() const
+		throw()
 	{
 		unsigned short c = 0;
-
-		for (Index i = (Index)Maths::min((Size)(sizeof(unsigned short) * BALL_CHAR_BITS), getSize()) - 1; i >= 0; i--)
+		Index i = (Index)Maths::min((Size)(sizeof(unsigned short) * BALL_CHAR_BITS), getSize()) - 1;
+		for (; i >= 0; i--)
 		{
 			c = c << 1;
 			if (getBit((Index)i) == true)
@@ -323,7 +361,8 @@ namespace BALL
 		return c;
 	}
 
-	void BitVector::setUnsignedInt (unsigned int bit_pattern)
+	void BitVector::setUnsignedInt(unsigned int bit_pattern)
+		throw()
 	{
 		setSize(sizeof(unsigned int) * BALL_CHAR_BITS, false);
 		unsigned int c = bit_pattern;
@@ -336,10 +375,12 @@ namespace BALL
 	}
 
 	unsigned int BitVector::getUnsignedInt() const
+		throw()
 	{
 		unsigned int c = 0;
 
-		for (Index i = (Index)Maths::min((Size)(sizeof(unsigned int) * BALL_CHAR_BITS), getSize()) - 1; i >= 0; i--)
+		Index i = (Index)Maths::min((Size)(sizeof(unsigned int) * BALL_CHAR_BITS), getSize()) - 1;
+		for (; i >= 0; i--)
 		{
 			c = c << 1;
 			if (getBit((Index)i) == true)
@@ -352,6 +393,7 @@ namespace BALL
 	}
 
 	void BitVector::setUnsignedLong(unsigned long bit_pattern)
+		throw()
 	{
 		setSize(sizeof(unsigned long) * BALL_CHAR_BITS, false);
 		unsigned long c = bit_pattern;
@@ -364,10 +406,12 @@ namespace BALL
 	}
 
 	unsigned long BitVector::getUnsignedLong() const
+		throw()
 	{
 		unsigned long c = 0;
 
-		for (Index i = (Index)Maths::min((Size)(sizeof(unsigned long) * BALL_CHAR_BITS), getSize()) - 1; i >= 0; i--)
+		Index i = (Index)Maths::min((Size)(sizeof(unsigned long) * BALL_CHAR_BITS), getSize()) - 1;
+		for (; i >= 0; i--)
 		{
 			c = c << 1;
 			if (getBit((Index)i) == true)
@@ -380,13 +424,13 @@ namespace BALL
 	}
 
 	void BitVector::bitwiseXor(const BitVector& bit_vector)
+		throw(Exception::OutOfMemory)
 	{
 		BALL::Size block_size = block_size_;
 
 		if (block_size_ < bit_vector.block_size_)
 		{
 			setSize(bit_vector.size_, true);
-			
 			block_size = block_size_;
 		} 
 		else 
@@ -413,13 +457,13 @@ namespace BALL
 	}
 
 	void BitVector::bitwiseOr(const BitVector& bit_vector)
+		throw(Exception::OutOfMemory)
 	{
 		BALL::Size block_size = block_size_;
 
 		if (block_size_ < bit_vector.block_size_)
 		{
 			setSize(bit_vector.size_, true);
-			
 			block_size = block_size_;
 		}
 		else 
@@ -446,13 +490,13 @@ namespace BALL
 	}
 
 	void BitVector::bitwiseAnd(const BitVector& bit_vector)
+		throw(Exception::OutOfMemory)
 	{
 		BALL::Size block_size = block_size_;
 
 		if (block_size_ < bit_vector.block_size_)
 		{
 			setSize(bit_vector.size_, true);
-			
 			block_size = block_size_;
 		}
 		else 
@@ -479,14 +523,14 @@ namespace BALL
 	}
 
 	bool BitVector::operator == (const BitVector& bit_vector) const
+		throw()
 	{
 		if (size_ != bit_vector.size_)
 		{
 			return false;
 		}
 
-		Index	i;
-		for (i = 0; i < (Index)size_; i++) 
+		for (Index i = 0; i < (Index)size_; i++) 
 		{
 			if ((*this)[i] != bit_vector[i])
 			{
@@ -498,6 +542,7 @@ namespace BALL
 	}
 
 	bool BitVector::isAnyBit(bool bit, Index first, Index last) const
+	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		validateRange_(first, last);
 
@@ -514,6 +559,7 @@ namespace BALL
 	}
 
 	bool BitVector::isEveryBit(bool bit, Index first, Index last) const
+	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		validateRange_(first, last);
 
@@ -530,18 +576,21 @@ namespace BALL
 	}
 
 	istream& operator >> (istream& s, BitVector& bit_vector)
+		throw(Exception::OutOfMemory)
 	{
 		bit_vector.read(s);
 		return s;
 	}
 
 	ostream& operator << (ostream& s, const BitVector& bit_vector)
+		throw()
 	{
 		bit_vector.write(s);
 		return s;
 	}
 
 	void BitVector::read(istream& s)
+		throw(Exception::OutOfMemory)
 	{
 		Size size = 0;
 		s >> size;
@@ -550,7 +599,7 @@ namespace BALL
 
 		char c;
 		s.get(c); // read leading blank
-		for (Index i = (Index)size ; i >= 0 ; i--) 
+		for (Index i = (Index)size; i >= 0; i--) 
 		{
 			s.get(c);
 
@@ -562,10 +611,12 @@ namespace BALL
 	}
 
 	void BitVector::write(ostream& s) const
+		throw()
 	{
 		s << getSize() << ' ';
 
-		for (Index i = (Index)size_ - 1; i >= 0; i--) {
+		for (Index i = (Index)size_ - 1; i >= 0; i--) 
+		{
 			if (getBit(i) == true)
 			{
 				s << '1';
@@ -580,6 +631,7 @@ namespace BALL
 	}
 
 	bool BitVector::read(PersistenceManager& pm)
+	  throw(Exception::OutOfMemory)
 	{
 		Size size = 0;
 		
@@ -600,6 +652,7 @@ namespace BALL
 	}
 
 	void BitVector::write(PersistenceManager& pm) const
+		throw()
 	{
 		Size size = getSize();
 		pm.writePrimitive(size, "size");
@@ -612,6 +665,7 @@ namespace BALL
 	}
 
 	Index BitVector::block_(Index index)
+	 throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 	{
 		if (index < 0)
 		{
@@ -631,15 +685,20 @@ namespace BALL
 			{
 				BlockType* bitset = new BlockType[block_size]; 
 
+				if (bitset == 0)
+				{
+					throw Exception::OutOfMemory(__FILE__, __LINE__, index);
+				}
+
 				memset(bitset + block_size_, BALL_BLOCK_ALL_BITS_CLEARED, 
 							 (block_size - block_size_) << (sizeof(BlockType) - 1));
 
 				memcpy(bitset, bitset_, 
 							 block_size_ << (sizeof(BlockType) - 1));
 
-				delete [] bitset_;
+				delete[] bitset_;
 
-				bitset_ = bitset;
+				bitset_			= bitset;
 				block_size_ = block_size;
 			}
 		
@@ -650,10 +709,11 @@ namespace BALL
 	}
 
 	void BitVector::setSize(Size size, bool keep) 
+	 throw(Exception::OutOfMemory)
 	{
 		// calculate new block size
-		Size	block_size			= (Size)((size + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT);
-		Size	old_block_size	= (Size)((size_ + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT);
+		Size	block_size		 = (Size)((size  + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT);
+		Size	old_block_size = (Size)((size_ + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT);
 
 		if (keep) 
 		{
@@ -666,19 +726,27 @@ namespace BALL
 			// allocate a new Block
 			BlockType*	tmp = new BlockType[block_size];
 
+			if (tmp == 0)
+			{
+				throw Exception::OutOfMemory(__FILE__, __LINE__, size);
+			}
+
 			memset(tmp, BALL_BLOCK_ALL_BITS_CLEARED, block_size << (sizeof(BlockType) - 1));
 			memcpy(tmp, bitset_, old_block_size << (sizeof(BlockType) - 1));
 			
-			delete [] bitset_;	
+			delete[] bitset_;	
 			bitset_ = tmp;
 
 		} 
 		else 
 		{
-
-			delete [] bitset_;
-
+			delete[] bitset_;
 			bitset_ = new BlockType[block_size];
+
+			if (bitset_ == 0)
+			{
+				throw Exception::OutOfMemory(__FILE__, __LINE__, size);
+			}
 
 			memset(bitset_, BALL_BLOCK_ALL_BITS_CLEARED,
 						 block_size << (sizeof(BlockType) - 1));

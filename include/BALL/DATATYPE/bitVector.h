@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.16 2000/08/30 19:58:01 oliver Exp $
+// $Id: bitVector.h,v 1.17 2000/11/13 01:54:10 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -10,6 +10,11 @@
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #	include <BALL/CONCEPT/persistenceManager.h>
 #endif
+
+#ifndef BALL_COMMON_EXCEPTION_H
+#	include <BALL/COMMON/exception.h>
+#endif
+
 
 #include <string.h>
 
@@ -53,9 +58,16 @@ namespace BALL
 		*/
 		//@{
 
+		BALL_CREATE(Bit);
+
 		/**	Copy constructor
 		*/
-		Bit(const BitVector& bitvector, Index index = 0);
+		Bit(const BitVector& bitvector, Index index = 0) throw();
+
+		/** Destructor
+		*/
+		virtual ~Bit() throw();
+
 		//@}
 
 		/**	@name	Converters
@@ -64,7 +76,7 @@ namespace BALL
 		
 		/** Casting operator from Bit to bool.
 		*/
-		operator bool() const;
+		operator bool() const throw(Exception::NullPointer);
 		//@}
 
 		/**	Assignment
@@ -74,12 +86,13 @@ namespace BALL
 		/** Assignment operator.
 				Assign the bool value from a Bit to this instance
 		*/
-		Bit& operator = (const Bit& bit);
+		const Bit& operator = (const Bit& bit) throw(Exception::NullPointer);
 
 		/** Assignment operator.
 				Assign a bool value to this instance
 		*/
-		Bit& operator = (bool bit);
+		const Bit& operator = (bool bit) throw(Exception::NullPointer);
+
 		//@}
 
 		/**	@name	 Predicates
@@ -89,27 +102,29 @@ namespace BALL
 		/** Equality operator.
 				Test if two instances have the same bool value
 		*/
-		bool operator == (const Bit& bit) const;
+		bool operator == (const Bit& bit) const throw(Exception::NullPointer);
 
 		/** Equality operator.
 				Test if this instance has the given bool value
 		*/
-		bool operator == (bool bit) const;
+		bool operator == (bool bit) const throw(Exception::NullPointer);
 
 		/** Inequality operator.
 				Test if two instances have different bool values
 		*/
-		bool operator != (const Bit& bit) const;
+		bool operator != (const Bit& bit) const throw(Exception::NullPointer);
 
 		/** Inequality operator.
 				Test if this instance has not the given bool value
 		*/
-		bool operator != (bool bit) const;
+		bool operator != (bool bit) const throw(Exception::NullPointer);
 		//@}
 
 		private:
 
-		Bit();
+		Bit() throw();
+
+		virtual void clear() throw();
 
 		// --- ATTRIBUTES
 
@@ -148,28 +163,30 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		BitVector();
+		BitVector() throw();
 
 		/**	Detailled constructor
 		*/
-		BitVector(Size size);
+		BitVector(Size size) throw(Exception::OutOfMemory);
 
 		/** Copy constructor
 		*/
-		BitVector(const BitVector& bit_vector, bool deep = true);
+		BitVector(const BitVector& bit_vector, bool deep = true) 
+			throw(Exception::OutOfMemory);
 
 		/** Detailled constructor from an array of char.
 		*/
-		BitVector(const char* bit_string);
+		BitVector(const char* bit_string)
+		 throw(Exception::OutOfMemory);
 
 		/**	Destructor
 		*/
-		virtual ~BitVector();
+		virtual ~BitVector() throw();
 
 		/**	Clear method.
 				This method will set the size of this instance to a size of 0.
 		*/
-		void clear();
+		void clear() throw();
 		//@}
 
 
@@ -177,26 +194,31 @@ namespace BALL
 		//@{
 
 		/// Assignment from an other BitVector instance.
-		void set(const BitVector& bit_vector, bool deep = true);
+		void set(const BitVector& bit_vector, bool deep = true)
+		  throw(Exception::OutOfMemory);
 
 		/** Assignment from a char string.
 				If a char is different from '0', it is interpreted as true.
 		*/
-		void set(const char* bit_string);
+		void set(const char* bit_string)
+		  throw(Exception::OutOfMemory);
 
 		/// Assignment from an other BitVector instance.
-		BitVector& operator = (const BitVector& bit_vector);
+		BitVector& operator = (const BitVector& bit_vector)
+		  throw(Exception::OutOfMemory);
 
 		/** Assignment from a char string.
 				If a char is different from '0', it is interpreted as true.
 		*/
-		BitVector& operator = (const char *bit_string);
+		const BitVector& operator = (const char *bit_string)
+		  throw(Exception::OutOfMemory);
 
 		/// Assignment to an other BitVector.
-		void get(BitVector& bitvector, bool deep = true) const;
+		void get(BitVector& bitvector, bool deep = true) const
+		  throw(Exception::OutOfMemory);
 
 		/// Swapping of two BitVector instances.
-		void swap(BitVector& bitvector);
+		void swap(BitVector& bitvector) throw();
 		//@}
 
 		/**	@name	Accessors */
@@ -208,46 +230,50 @@ namespace BALL
 				@param last, the index of the last element to be copied
 				@return BitVector a partial copy of this instance
 		*/
-		BitVector operator () (Index first,Index last) const;
+		BitVector operator () (Index first,Index last) const
+		  throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Set the size of this instance.
 				@param size the new size
 				@param keep ???
 		*/
-		void setSize(Size size, bool keep = true);
+		void setSize(Size size, bool keep = true)
+		  throw(Exception::OutOfMemory);
 
 		/**	Return the size of this instance.
 		*/
-		Size getSize() const;
+		Size getSize() const throw();
 
 		/** Count a given bool value in this instance.
 				@param value the value to be counted
 				@return Size the number of the given value
 		*/
-		Size countValue(bool value) const;
+		Size countValue(bool value) const throw();
 
 		/** Return a muteable pointer to the values of this instance.
 				@return unsigned char*	a muteable pointer to the values of this instance
 		*/
-		BlockType* getBitSet();
+		BlockType* getBitSet() throw();
 
 		/** Return a constant pointer to the values of this instance.
 				@return unsigned char*	a constant pointer to the values of this instance
 		*/
-		const BlockType* getBitSet() const;
+		const BlockType* getBitSet() const throw();
 
 		/**	Random access to the components.
 				If the given index is greater than the size of this instance, this BitVector
 				is increased to the given index.
 				@return Bit a Bit pointing to the given element of this instance
 		*/
-		Bit operator []	(Index index);
+		Bit operator []	(Index index)
+		  throw(Exception::IndexUnderflow, Exception::OutOfMemory);
 
 		/**	Constant random access to the components.
 				If the given index is greater than the size of this instance an exception is thrown.
 				@return bool the value of the given index
 		*/
-		bool operator [] (Index index) const;
+		bool operator [] (Index index) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Set the given Bit.
 				The element at the given position is set to the given value.
@@ -256,7 +282,8 @@ namespace BALL
 				@param index the index of the element
 				@param value the value to be set
 		*/
-		void setBit(Index index, bool value = true);
+		void setBit(Index index, bool value = true)
+		  throw(Exception::IndexUnderflow, Exception::OutOfMemory);
 
 		/** Get the value of an element.
 				If the given index is greater than the size of this instance, this BitVector
@@ -264,20 +291,23 @@ namespace BALL
 				@param index the index of the element
 				@return bool the value of the element
 		*/
-		bool getBit(Index index);
+		bool getBit(Index index)
+		  throw(Exception::IndexUnderflow, Exception::OutOfMemory);
 
 		/** Get the value of an element.
 				If the given index is greater than the size of this instance an exception is thrown.
 				@param index the index of the element
 				@return bool the value of the element
 		*/
-		bool getBit(Index index) const;
+		bool getBit(Index index) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Toggle the value of an element.
 				If the given index is greater than the size of this instance an exception is thrown.
 				@param index the index of the element
 		*/
-		void toggleBit(Index index);
+		void toggleBit(Index index)
+		  throw(Exception::IndexUnderflow, Exception::OutOfMemory);
 
 		/** Fill a part of this instance with a given value.
 				If a given index is greater than the size of this instance an exception is thrown.
@@ -285,7 +315,8 @@ namespace BALL
 				@param first the starting position
 				@param last the last element to be filled
 		*/
-		void fill(bool value = true, Index first = 0 , Index last = -1);
+		void fill(bool value = true, Index first = 0 , Index last = -1)
+		  throw(Exception::IndexUnderflow, Exception::OutOfMemory);
 
 		/** Toggle the values of a part of this instance.
 				If a given index is greater than the size of this instance an exception is thrown.
@@ -293,127 +324,130 @@ namespace BALL
 				@param first the starting position
 				@param last the last element to be filled
 		*/
-		void toggle(Index first = 0, Index last = -1);
+		void toggle(Index first = 0, Index last = -1)
+			throw(Exception::IndexUnderflow, Exception::OutOfMemory);
 
 		/** Set a unsigned char as the bit pattern.
 				For example: 22 => 00010110.
 				@param bit_pattern the new pattern.
 		*/
-		void setUnsignedChar(unsigned char bit_pattern);
+		void setUnsignedChar(unsigned char bit_pattern) throw();
 
 		/** Get the bit pattern as unsigned char.
 				For example: 00010110 => 22.
 				@return unsigned char the bit-pattern
 		*/
-		unsigned char getUnsignedChar() const;
+		unsigned char getUnsignedChar() const throw();
 
 		/** Set a unsigned short as the bit pattern.
 				@see setUnsignedChar
 		*/
-		void setUnsignedShort(unsigned short bit_pattern);
+		void setUnsignedShort(unsigned short bit_pattern) throw();
 
 		/** Get the bit pattern as unsigned short.
 				@see getUnsignedChar
 		*/
-		unsigned short getUnsignedShort() const;
+		unsigned short getUnsignedShort() const throw();
 
 		/** Set a unsigned int as the bit pattern.
 				@see setUnsignedChar
 		*/
-		void setUnsignedInt(unsigned int bit_pattern);
+		void setUnsignedInt(unsigned int bit_pattern) throw();
 
 		/** Get the bit pattern as unsigned int.
 				@see getUnsignedChar
 		*/
-		unsigned int getUnsignedInt() const;
+		unsigned int getUnsignedInt() const throw();
 
 		/** Set a unsigned long as the bit pattern.
 				@see setUnsignedChar
 		*/
-		void setUnsignedLong(unsigned long bit_pattern);
+		void setUnsignedLong(unsigned long bit_pattern) throw();
 
 		/** Get the bit pattern as unsigned long.
 				@see getUnsignedChar
 		*/
-		unsigned long getUnsignedLong() const;
+		unsigned long getUnsignedLong() const throw();
 
 		/** Compute {\em this or bit_vector}.
 				The result is saved in this instance.
 		*/
-		void bitwiseOr(const BitVector& bit_vector);
+		void bitwiseOr(const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** Compute {\em this xor bit_vector}.
 				The result is saved in this instance.
 		*/
-		void bitwiseXor(const BitVector& bit_vector);
+		void bitwiseXor(const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** Compute {\em this and bit_vector}.
 				The result is saved in this instance.
 		*/
-		void bitwiseAnd(const BitVector& bit_vector);
+		void bitwiseAnd(const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** Or Operator.
 				Creates a new BitVector object and fills it with the result of
 				{\em this or bit_Vector).
 		*/
-		BitVector operator | (const BitVector& bit_vector);
+		BitVector operator | (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** Compute {\em this or bit_vector}.
 				The result is saved in this instance.
 		*/
-		BitVector& operator |= (const BitVector& bit_vector);
+		BitVector& operator |= (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** And Operator.
 				Creates a new BitVector object and fills it with the result of
 				{\em this and bit_Vector).
 		*/
-		BitVector operator & (const BitVector& bit_vector);
+		BitVector operator & (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** Compute {\em this and bit_vector}.
 				The result is saved in this instance.
 		*/
-		BitVector& operator &= (const BitVector& bit_vector);
+		BitVector& operator &= (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** Xor Operator.
 				Creates a new BitVector object and fills it with the result of
 				{\em this Xor bit_Vector).
 		*/
-		BitVector operator ^ (const BitVector& bit_vector);
+		BitVector operator ^ (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** Compute {\em this xor bit_vector}.
 				The result is saved in this instance.
 		*/
-		BitVector& operator ^= (const BitVector& bit_vector);
+		BitVector& operator ^= (const BitVector& bit_vector) throw(Exception::OutOfMemory);
 
 		/** Negate Operator.
 				Creates a new BitVector object and fills it with the negate 
 				result of this instance.
 		*/
-		BitVector operator ~ ();
+		BitVector operator ~ () throw(Exception::OutOfMemory);
 		//@}
 
 		/**	@name	Predicates */
 		//@{
 
 		/// Equality operator
-		bool operator == (const BitVector& bit_vector) const;
+		bool operator == (const BitVector& bit_vector) const throw();
 
 		/// Inequality operator
-		bool operator != (const BitVector& bit_vector) const;
+		bool operator != (const BitVector& bit_vector) const throw();
 
 		/** Test if any bit in a given range has the given value.
 				@param value the value to look for
 				@param first the index to start searching
 				@param last the index to stop searching
 		*/
-		bool isAnyBit(bool value, Index first = 0, Index last = -1) const;
+		bool isAnyBit(bool value, Index first = 0, Index last = -1) const
+		  throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Test if every bit in a given range has the given value
 				@param value the value to look for
 				@param first the index to start searching
 				@param last the index to stop searching
 		*/
-		bool isEveryBit(bool value, Index first = 0, Index last = -1) const;
+		bool isEveryBit(bool value, Index first = 0, Index last = -1) const
+		  throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		//@}
 
@@ -422,7 +456,7 @@ namespace BALL
 
 		/** Test if this instance is valid.
 		*/
-		bool isValid() const;
+		bool isValid() const throw();
 		//@}
 
 
@@ -432,44 +466,53 @@ namespace BALL
 		/**	Input- Operator.
 				Reads the values of of type {\em bool} from an istream.
 		*/
-		friend std::istream& operator >> (std::istream& s, BitVector& bit_vector);
+		friend std::istream& operator >> (std::istream& s, BitVector& bit_vector)
+			throw(Exception::OutOfMemory);
 
 		/**	Output- Operator.
 				Writes the values of type {\em bool} to an ostream.
 		*/
-		friend std::ostream& operator << (std::ostream& s, const BitVector& bit_vector);
+		friend std::ostream& operator << (std::ostream& s, const BitVector& bit_vector)
+			throw();
 
 		/**	Read the values of of type {\em bool} from an istream.
 		*/
-		virtual void read(std::istream& s);
+		virtual void read(std::istream& s)
+			throw(Exception::OutOfMemory);
 
 		/**	Write the values of of type {\em bool} to an ostream.
 		*/
-		virtual void write(std::ostream& s) const;
+		virtual void write(std::ostream& s) const throw();
 
 		/**	Storable write method.
 		*/
-		virtual void write(PersistenceManager& pm) const;
+		virtual void write(PersistenceManager& pm) const throw();
 
 		/**	Storable read method.
 		*/
-		virtual bool read(PersistenceManager& pm);
+		virtual bool read(PersistenceManager& pm)
+		  throw(Exception::OutOfMemory);
 
 		//@}
 
 		protected:
 	
-		void validateIndex_(Index& index);
-		void validateIndex_(Index& index) const;
+		void validateIndex_(Index& index)
+			throw(Exception::IndexUnderflow, Exception::OutOfMemory);
 
-		void validateRange_(Index& first, Index& last) const;
+		void validateIndex_(Index& index) const
+		  throw(Exception::IndexUnderflow, Exception::IndexOverflow);
+
+		void validateRange_(Index& first, Index& last) const
+		  throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 
 		private:
 	
-		Index block_(Index index);
+		Index block_(Index index)
+			throw(Exception::IndexUnderflow, Exception::OutOfMemory);
 
-		BlockType mask_(Index index) const;
+		BlockType mask_(Index index) const throw();
 
 		// --- ATTRIBUTES
 

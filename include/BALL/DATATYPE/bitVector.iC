@@ -1,26 +1,30 @@
-// $Id: bitVector.iC,v 1.12 2000/08/24 12:05:13 amoll Exp $
+// $Id: bitVector.iC,v 1.13 2000/11/13 01:54:10 amoll Exp $
 
 BALL_INLINE
 BitVector::BlockType BitVector::mask_(Index index) const
+	throw()
 {
 	return (1 << (index & BALL_BLOCK_MASK));
 }
 
 BALL_INLINE 
 void BitVector::clear()
+	throw()
 {
 	setSize(0, false);
 }
 
 BALL_INLINE 
 BitVector& BitVector::operator = (const BitVector& bit_vector)
+  throw(Exception::OutOfMemory)
 {
   set(bit_vector);
   return *this;
 }
 
 BALL_INLINE 
-BitVector& BitVector::operator = (const char* bit_string)
+const BitVector& BitVector::operator = (const char* bit_string)
+  throw(Exception::OutOfMemory)
 {
   set(bit_string);
   return *this;
@@ -28,30 +32,35 @@ BitVector& BitVector::operator = (const char* bit_string)
 
 BALL_INLINE 
 void BitVector::get(BitVector& bit_vector, bool deep) const
+  throw(Exception::OutOfMemory)
 {
   bit_vector.set(*this, deep);
 }
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
+	throw()
 {
   return size_;
 }
 
 BALL_INLINE 
 BALL::BitVector::BlockType* BitVector::getBitSet()
+	throw()
 {
   return bitset_;
 }
 
 BALL_INLINE 
 const BALL::BitVector::BlockType* BitVector::getBitSet() const
+	throw()
 {
   return bitset_;
 }
 
 BALL_INLINE 
 BitVector BitVector::operator | (const BitVector& bit_vector)
+  throw(Exception::OutOfMemory)
 {
   BitVector temp(*this);
   temp.bitwiseOr(bit_vector);
@@ -60,6 +69,7 @@ BitVector BitVector::operator | (const BitVector& bit_vector)
 
 BALL_INLINE 
 BitVector& BitVector::operator |= (const BitVector &bit_vector)
+  throw(Exception::OutOfMemory)
 {
   bitwiseOr(bit_vector);
   return *this;
@@ -67,6 +77,7 @@ BitVector& BitVector::operator |= (const BitVector &bit_vector)
 
 BALL_INLINE 
 BitVector BitVector::operator & (const BitVector& bit_vector)
+  throw(Exception::OutOfMemory)
 {
   BitVector temp(*this);
   temp.bitwiseAnd(bit_vector);
@@ -75,6 +86,7 @@ BitVector BitVector::operator & (const BitVector& bit_vector)
 
 BALL_INLINE 
 BitVector& BitVector::operator &= (const BitVector &bit_vector)
+  throw(Exception::OutOfMemory)
 {
   bitwiseAnd(bit_vector);
   return *this;
@@ -82,6 +94,7 @@ BitVector& BitVector::operator &= (const BitVector &bit_vector)
 
 BALL_INLINE 
 BitVector BitVector::operator ^ (const BitVector& bit_vector)
+  throw(Exception::OutOfMemory)
 {
   BitVector temp(*this);
   temp.bitwiseXor(bit_vector);
@@ -90,6 +103,7 @@ BitVector BitVector::operator ^ (const BitVector& bit_vector)
 
 BALL_INLINE 
 BitVector& BitVector::operator ^= (const BitVector &bit_vector)
+  throw(Exception::OutOfMemory)
 {
   bitwiseXor(bit_vector);
   return *this;
@@ -97,6 +111,7 @@ BitVector& BitVector::operator ^= (const BitVector &bit_vector)
 
 BALL_INLINE 
 BitVector BitVector::operator ~ ()
+  throw(Exception::OutOfMemory)
 {
   BitVector temp(*this);
   temp.toggle();
@@ -105,18 +120,21 @@ BitVector BitVector::operator ~ ()
 
 BALL_INLINE 
 bool BitVector::operator != (const BitVector &bit_vector) const
+	throw()
 {
   return (bool)!(*this == bit_vector);
 }
 
 BALL_INLINE 
 bool BitVector::isValid() const
+	throw()
 {
   return (bitset_ != 0);
 }
 
 BALL_INLINE
 Bit BitVector::operator [] (Index index)
+  throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 {
 	block_(index);
 	return Bit(*this, index);
@@ -124,6 +142,7 @@ Bit BitVector::operator [] (Index index)
 
 BALL_INLINE
 bool BitVector::getBit(Index index)
+	throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 {
 	validateIndex_(index);
 	return (bool)((bitset_[block_(index)] & mask_(index)) != 0);
@@ -131,6 +150,7 @@ bool BitVector::getBit(Index index)
 
 BALL_INLINE
 bool BitVector::getBit(Index index) const
+  throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 {
 	validateIndex_(index);
 	BitVector* const  const_this = const_cast<BitVector *>(this);
@@ -139,79 +159,103 @@ bool BitVector::getBit(Index index) const
 
 BALL_INLINE
 bool BitVector::operator [] (Index index) const
+  throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 {
 	return getBit(index);
 }
  
 BALL_INLINE
 void BitVector::setBit(Index index, bool value)
+	throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 {
 	validateIndex_(index);
 
 	if (value == true)
 	{
 		bitset_[block_(index)] |= mask_(index);
-	} else {
+	}
+	else 
+	{
 		bitset_[block_(index)] &= ~mask_(index);
 	}
 }
 
 BALL_INLINE
 void BitVector::toggleBit(Index index)
+	throw(Exception::IndexUnderflow, Exception::OutOfMemory)
 {
 	validateIndex_(index);
 	bitset_[block_(index)] ^= mask_(index);
 }
 
 BALL_INLINE
-bool Bit::operator == (bool bit) const
+bool Bit::operator == (bool bit) const 
+	throw(Exception::NullPointer)
 {
 	if (bitvector_ == 0)
+	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
-	
+	}
+
 	return bitvector_->getBit(index_) == bit;
 }
 
 BALL_INLINE
-bool Bit::operator != (bool bit) const
+bool Bit::operator != (bool bit) const 
+	throw(Exception::NullPointer)
 {
 	if (bitvector_ == 0)
+	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 	
 	return bitvector_->getBit(index_) != bit;
 }
 
 BALL_INLINE
-bool Bit::operator == (const Bit& bit) const
+bool Bit::operator == (const Bit& bit) const 
+	throw(Exception::NullPointer)
 {
 	if (bitvector_ == 0)
+	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 
 	return bitvector_->getBit(index_) == bit.bitvector_->getBit(index_);
 }
 
 BALL_INLINE
-bool Bit::operator != (const Bit& bit) const
+bool Bit::operator != (const Bit& bit) const 
+	throw(Exception::NullPointer)
 {
 	if (bitvector_ == 0)
+	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 
 	return bitvector_->getBit(index_) != bit.bitvector_->getBit(index_);
 }
 
 BALL_INLINE
-Bit::operator bool() const
+Bit::operator bool() const 
+	throw(Exception::NullPointer)
 {
 	if (bitvector_ == 0)
+	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 
 	return bitvector_->getBit(index_);
 }
 
 BALL_INLINE
-Bit& Bit::operator = (const Bit& bit)	{
+const Bit& Bit::operator = (const Bit& bit)	
+	throw(Exception::NullPointer)
+{
 	if (bitvector_ == 0)
+	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 
 	bitvector_ = bit.bitvector_;
 	index_ = bit.index_;
@@ -219,10 +263,13 @@ Bit& Bit::operator = (const Bit& bit)	{
 }
 
 BALL_INLINE
-Bit& Bit::operator = (const bool bit)
+const Bit& Bit::operator = (const bool bit)
+	throw(Exception::NullPointer)
 {
 	if (bitvector_ == 0)
+	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 
 	bitvector_->setBit(index_, bit);
 	return *this;
