@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.h,v 1.6 2001/06/07 01:33:10 amoll Exp $
+// $Id: regularData1DWidget.h,v 1.7 2001/06/21 23:22:48 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
@@ -57,6 +57,7 @@ class NewRegularData1DMessage: public CompositeMessage
   virtual ~NewRegularData1DMessage()
     throw();
 	
+	//@}
 };
 
 
