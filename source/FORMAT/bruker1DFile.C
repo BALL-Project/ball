@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.C,v 1.4 2000/11/10 17:17:50 anhi Exp $
+// $Id: bruker1DFile.C,v 1.6 2000/11/28 17:29:10 anhi Exp $
 
 
 #include <BALL/FORMAT/bruker1DFile.h>
@@ -31,6 +31,17 @@ namespace BALL
 		signed long int &numdum = *(signed long int*) (&c[0]);
 		Position actpos=0;
 		File& f = static_cast<File&> (*this);
+		bool littleEndian;
+
+			  // first we will have to find out whether we are using big or little endian on this machine.
+		int endTest = 1;
+		if (*(char *) &endTest == 1)
+		  {
+		    littleEndian = true;
+		  } else {
+		    littleEndian = false;
+		  };
+
 		
 		dat.resize( pars_->parameter( "SI" ) );
 				
@@ -44,13 +55,27 @@ namespace BALL
 		  {
 			f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
 			if ( pars_->parameter( "BYTORDP" ) == 1 ) {
-				numdum=GINT32_FROM_BE(numdum);
+			  if (littleEndian == true) // no conversion needed;
+			    {
+			    } else { // conversion from little to big
+			      numdum = ( ((numdum & 0x000000FFL) << 24)
+					 |((numdum & 0x0000FF00L) << 16)
+					 |((numdum & 0x00FF0000L) >> 16)
+					 |((numdum & 0xFF000000L) >> 24));
+			    };
 			} else {
-				numdum=GINT32_FROM_LE(numdum);
+			  if (littleEndian == true) // conversion from big to little
+			    {
+			      numdum = ( ((numdum & 0x000000FFL) << 24)
+					 |((numdum & 0x0000FF00L) << 16)
+					 |((numdum & 0x00FF0000L) >> 16)
+					 |((numdum & 0xFF000000L) >> 24));
+			    } else { // no conversion needed;
+			    };
 			};
 			
 			if ((max_ - min_) != 0) {
-			dat[actpos] = ((double) (numdum - min_)) / (max_ - min_);
+			  dat[actpos] = ((double) (numdum - min_)) / (max_ - min_);
 			}
 			actpos++;
 		   }

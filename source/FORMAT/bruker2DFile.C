@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.C,v 1.5 2000/11/24 16:42:05 anhi Exp $
+// $Id: bruker2DFile.C,v 1.6 2000/11/24 17:24:52 anhi Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -95,7 +95,17 @@ namespace BALL
 	  int matNumF1, matNumF2, f1, f2;
 	  File& f = static_cast<File&> (*this);
 	  int SIF1_, SIF2_, XDIMF1_, XDIMF2_;
-	  
+	  bool littleEndian;
+
+	  // first we will have to find out whether we are using big or little endian on this machine.
+	  int endTest = 1;
+	  if (*(char *) &endTest == 1)
+	  {
+	    littleEndian = true;
+	  } else {
+	    littleEndian = false;
+	  };
+
 	  SIF1_   = (int) parsf1_->parameter( "SI"   );
 	  SIF2_   = (int) parsf2_->parameter( "SI"   );
 	  XDIMF1_ = (int) parsf1_->parameter( "XDIM" );
@@ -121,9 +131,23 @@ namespace BALL
 		
 		f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
 		if ( parsf1_->parameter( "BYTORDP" ) == 1 ) {
-		  numdum=GINT32_FROM_LE(numdum);
+		  if (littleEndian == true) // no conversion needed;
+		  {
+		  } else { // conversion from little to big
+		    numdum = ( ((numdum & 0x000000FFL) << 24)
+              		      |((numdum & 0x0000FF00L) << 16)
+              		      |((numdum & 0x00FF0000L) >> 16)
+			      |((numdum & 0xFF000000L) >> 24));
+		  };
 		} else {
-		  numdum=GINT32_FROM_BE(numdum);
+		  if (littleEndian == true) // conversion from big to little
+		  {
+		    numdum = ( ((numdum & 0x000000FFL) << 24)
+              		      |((numdum & 0x0000FF00L) << 16)
+              		      |((numdum & 0x00FF0000L) >> 16)
+			      |((numdum & 0xFF000000L) >> 24));
+		  } else { // no conversion needed;
+		  };
 		};
 		
 		// We need to know the number of the matrix we are looking at right now.
@@ -149,7 +173,19 @@ namespace BALL
     int matNumF1, matNumF2, f1, f2;
     File& f = static_cast<File&> (*this);
     int SIF1_, SIF2_, XDIMF1_, XDIMF2_;
-	  
+    bool littleEndian;
+
+  
+    // first we will have to find out whether we are using big or little endian on this machine.
+    int endTest = 1;
+    if (*(char *) &endTest == 1)
+      {
+	littleEndian = true;
+      } else {
+	littleEndian = false;
+      };
+
+
     SIF1_   = (int) parsf1_->parameter( "SI"   );
     SIF2_   = (int) parsf2_->parameter( "SI"   );
     XDIMF1_ = (int) parsf1_->parameter( "XDIM" );
@@ -174,10 +210,24 @@ namespace BALL
 		
 	  f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
 	  if ( parsf1_->parameter( "BYTORDP" ) == 1 ) {
-	    numdum=GINT32_FROM_LE(numdum);
-	  } else {
-	    numdum=GINT32_FROM_BE(numdum);
-	  };
+		  if (littleEndian == true) // no conversion needed;
+		  {
+		  } else { // conversion from little to big
+		    numdum = ( ((numdum & 0x000000FFL) << 24)
+              		      |((numdum & 0x0000FF00L) << 16)
+              		      |((numdum & 0x00FF0000L) >> 16)
+			      |((numdum & 0xFF000000L) >> 24));
+		  };
+		} else {
+		  if (littleEndian == true) // conversion from big to little
+		  {
+		    numdum = ( ((numdum & 0x000000FFL) << 24)
+              		      |((numdum & 0x0000FF00L) << 16)
+              		      |((numdum & 0x00FF0000L) >> 16)
+			      |((numdum & 0xFF000000L) >> 24));
+		  } else { // no conversion needed;
+		  };
+		};
 		
 	  // Die wievielte Matrix in der aktuellen Zeile/Spalte haben wir erreicht?
 	  actMatF2 = (actMat % matNumF2);

@@ -1,10 +1,9 @@
-// $Id: bruker2DFile.h,v 1.6 2000/11/24 16:32:12 anhi Exp $
+// $Id: bruker2DFile.h,v 1.7 2000/11/24 17:23:52 anhi Exp $
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
 
 #include <vector>
-#include <glib.h>
 
 #include <list.h>
 
