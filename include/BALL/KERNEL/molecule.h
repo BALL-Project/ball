@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.31 2003/08/26 08:04:18 oliver Exp $
+// $Id: molecule.h,v 1.32 2004/05/17 14:36:09 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_MOLECULE_H
@@ -152,15 +152,15 @@ namespace BALL
 			throw();
 
 		/** Insert an atom before a Composite object.
-				@param atom, the atom to insert
-				@param before, the Composite object to insert before
+				@param atom the atom to insert
+				@param before the Composite object to insert before
 		*/
 		void insertBefore(Atom& atom, Composite& before)
 			throw();
 
 		/** Insert an atom after a Composite object.
-				@param atom, the atom to insert
-				@param after, the Composite object to insert after
+				@param atom the atom to insert
+				@param after the Composite object to insert after
 		*/
 		void insertAfter(Atom& atom, Composite& after)
 			throw();
@@ -190,15 +190,15 @@ namespace BALL
 			throw();
 
 		/** Insert an AtomContainer before a given Composite object.
-				@param atom_container, the AtomContainer to insert
-				@param before, the Composite object to insert before
+				@param atom_container the AtomContainer to insert
+				@param before the Composite object to insert before
 		*/
 		void insertBefore(AtomContainer& atom_container, Composite& before)
 			throw();
 
 		/** Insert an AtomContainer after a given Composite object.
-				@param atom_container, the AtomContainer to insert
-				@param after, the Composite object to insert after
+				@param atom_container the AtomContainer to insert
+				@param after the Composite object to insert after
 		*/
 		void insertAfter(AtomContainer& atom_container, Composite& after)
 			throw();

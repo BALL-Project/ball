@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.h,v 1.38 2004/02/23 17:58:28 oliver Exp $
+// $Id: secondaryStructure.h,v 1.39 2004/05/17 14:36:09 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -243,29 +243,29 @@ namespace BALL
 		Size countPDBAtoms() const throw();
 
 		/** Prepend a Residue at position 0.
-				@param residue, the Residue to prepend
+				@param residue the Residue to prepend
 		*/
 		void prepend(Residue& residue) throw();
 
 		/** Append a Residue after the last position.
-				@param residue, the Residue to append
+				@param residue the Residue to append
 		*/
 		void append(Residue& residue) throw();
 
 		/** Insert a Residue after the last position.
-				@param residue, the Residue to insert
+				@param residue the Residue to insert
 		*/
 		void insert(Residue& residue) throw();
 
 		/** Insert a Residue before a given Composite object.
-				@param residue, the Residue to insert
-				@param before, the Composite object to insert before
+				@param residue the Residue to insert
+				@param before the Composite object to insert before
 		*/
 		void insertBefore(Residue& residue, Composite& before) throw();
 
 		/** Insert a Residue after a given Composite object.
-				@param residue, the Residue to insert
-				@param after, the Composite object to insert before
+				@param residue the Residue to insert
+				@param after the Composite object to insert before
 		*/
 		void insertAfter(Residue& residue, Composite& after) throw();
 

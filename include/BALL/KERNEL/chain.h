@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.35 2003/08/26 08:04:17 oliver Exp $
+// $Id: chain.h,v 1.36 2004/05/17 14:36:08 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_CHAIN_H
@@ -256,33 +256,33 @@ namespace BALL
 			throw();
 
 		/** Prepend a SecondaryStructure at position 0.
-				@param secondary_structure, the SecondaryStructure to prepend
+				@param secondary_structure the SecondaryStructure to prepend
 		*/
 		void prepend(SecondaryStructure& secondary_structure)
 			throw();
 
 		/** Append a SecondaryStructure after the last position.
-				@param secondary_structure, the SecondaryStructure to append
+				@param secondary_structure the SecondaryStructure to append
 		*/
 		void append(SecondaryStructure& secondary_structure)
 			throw();
 
 		/** Insert a SecondaryStructure after the last position.
-				@param secondary_structure, the SecondaryStructure to insert
+				@param secondary_structure the SecondaryStructure to insert
 		*/
 		void insert(SecondaryStructure& secondary_structure)
 			throw();
 
 		/** Insert a SecondaryStructure before a given Composite object.
-				@param secondary_structure, the SecondaryStructure to insert
-				@param before, the Composite object to insert before
+				@param secondary_structure the SecondaryStructure to insert
+				@param before the Composite object to insert before
 		*/
 		void insertBefore(SecondaryStructure& secondary_structure, Composite& before)
 			throw();
 
 		/** Insert a SecondaryStructure after a given Composite object.
-				@param secondary_structure, the SecondaryStructure to insert
-				@param after, the Composite object to insert after
+				@param secondary_structure the SecondaryStructure to insert
+				@param after the Composite object to insert after
 		*/
 		void insertAfter(SecondaryStructure& secondary_structure, Composite& after)
 			throw();
@@ -294,33 +294,33 @@ namespace BALL
 			throw();
 
 		/** Prepend a Residue at position 0.
-				@param residue, the Residue to prepend
+				@param residue the Residue to prepend
 		*/
 		void prepend(Residue& residue)
 			throw();
 
 		/** Append a Residue after the last position.
-				@param residue, the Residue to append
+				@param residue the Residue to append
 		*/
 		void append(Residue& residue)
 			throw();
 
 		/** Insert a Residue after the last position.
-				@param residue, the Residue to insert
+				@param residue the Residue to insert
 		*/
 		void insert(Residue& residue)
 			throw();
 
 		/** Insert a Residue before a given Composite object.
-				@param residue, the Residue to insert
-				@param before, the Composite object to insert before
+				@param residue the Residue to insert
+				@param before the Composite object to insert before
 		*/
 		void insertBefore(Residue& residue, Composite& before)
 			throw();
 
 		/** Insert a Residue after a given Composite object.
-				@param residue, the Residue to insert
-				@param after, the Composite object to insert after
+				@param residue the Residue to insert
+				@param after the Composite object to insert after
 		*/
 		void insertAfter(Residue& residue, Composite& after)
 			throw();

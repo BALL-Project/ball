@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.26 2003/08/26 08:04:16 oliver Exp $
+// $Id: PTE.h,v 1.27 2004/05/17 14:36:08 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_PTE_H
@@ -495,7 +495,7 @@ namespace BALL
 
 			/** Equality operator.
 					Tests if the atomic number of two elements are equal.
-					@param element, the Element to compare with
+					@param element the Element to compare with
 					@return bool
 			*/
 			bool operator == (const Element& element) const
@@ -503,7 +503,7 @@ namespace BALL
 
 			/** Inequality operator.
 					Tests if the atomic number of two elements are inequal.
-					@param element, the Element to compare with
+					@param element the Element to compare with
 					@return bool
 			*/
 			bool operator != (const Element& element) const
@@ -512,7 +512,7 @@ namespace BALL
 			/** Less operator.
 					Tests if the atomic number of this instance is less
 					compared with {\em element}.
-					@param element, the Element to compare with
+					@param element the Element to compare with
 					@return bool
 			*/
 			bool operator < (const Element& element) const
@@ -521,7 +521,7 @@ namespace BALL
 			/** Less or equal operator.
 					Tests if the atomic number of this instance is less
 					or equal compared with {\em element}.
-					@param element, the Element to compare with
+					@param element the Element to compare with
 					@return bool
 			*/
 			bool operator <= (const Element& element) const
@@ -530,7 +530,7 @@ namespace BALL
 			/** Greater or equal operator.
 					Tests if the atomic number of this instance is greater
 					or equal compared with {\em element}.
-					@param element, the Element to compare with
+					@param element the Element to compare with
 					@return bool
 			*/
 			bool operator >= (const Element& element) const
@@ -539,7 +539,7 @@ namespace BALL
 			/** Greater operator.
 					Tests if the atomic number of this instance is greater
 					than {\em element}.
-					@param element, the Element to compare with
+					@param element the Element to compare with
 					@return bool
 			*/
 			bool operator >(const Element& element) const

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.41 2004/02/23 21:29:08 oliver Exp $
+// $Id: residue.h,v 1.42 2004/05/17 14:36:09 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_RESIDUE_H
@@ -306,39 +306,39 @@ namespace BALL
 			throw();
 
 		/** Prepend a PDBAtom at position 0.
-				@param atom, the PDBAtom to prepend
+				@param atom the PDBAtom to prepend
 		*/
 		void prepend(PDBAtom& atom)
 			throw();
 
 		/** Append a PDBAtom at the last position.
-				@param atom, the PDBAtom to append
+				@param atom the PDBAtom to append
 		*/
 		void append(PDBAtom& atom)
 			throw();
 
 		/** Insert a PDBAtom at the last position.
-				@param atom, the PDBAtom to append
+				@param atom the PDBAtom to append
 		*/
 		void insert(PDBAtom& atom)
 			throw();
 
 		/** Insert a PDBAtom before a given Composite object.
-				@param atom, the PDBAtom to insert
-				@param before, the Composite object to insert before
+				@param atom the PDBAtom to insert
+				@param before the Composite object to insert before
 		*/
 		void insertBefore(PDBAtom& atom, Composite& before)
 			throw();
 
 		/** Insert a PDBAtom after a given Composite object.
-				@param atom, the PDBAtom to insert
-				@param after, the Composite object to insert after
+				@param atom the PDBAtom to insert
+				@param after the Composite object to insert after
 		*/
 		void insertAfter(PDBAtom& atom, Composite& after)
 			throw();
 
 		/** Remove a PDBAtom.
-				@param atom, the PDBAtom to remove
+				@param atom the PDBAtom to remove
 		*/
 		bool remove(PDBAtom& atom)
 			throw();

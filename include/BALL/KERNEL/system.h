@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.34 2003/08/26 08:04:20 oliver Exp $
+// $Id: system.h,v 1.35 2004/05/17 14:36:09 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_SYSTEM_H
@@ -198,33 +198,33 @@ namespace BALL
 			throw();
 
 		/** Prepend a molecule at position 0.
-				@param molecule, the molecule to prepend
+				@param molecule the molecule to prepend
 		*/
 		void prepend(Molecule& molecule)
 			throw();
 
 		/** Append a molecule after the last position.
-				@param molecule, the molecule to append
+				@param molecule the molecule to append
 		*/
 		void append(Molecule& molecule)
 			throw();
 
 		/** Insert a molecule after the last position.
-				@param molecule, the molecule to insert
+				@param molecule the molecule to insert
 		*/
 		void insert(Molecule& molecule)
 			throw();
 
 		/** Insert a molecule before a given Composite object.
-				@param molecule, the molecule to insert
-				@param before, the Composite object to insert before
+				@param molecule the molecule to insert
+				@param before the Composite object to insert before
 		*/
 		void insertBefore(Molecule& molecule, Composite& before)
 			throw();
 
 		/** Insert a molecule after a given Composite object.
-				@param molecule, the molecule to insert
-				@param after, the Composite object to insert before
+				@param molecule the molecule to insert
+				@param after the Composite object to insert before
 		*/
 		void insertAfter(Molecule& molecule, Composite& after)
 			throw();

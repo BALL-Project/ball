@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.65 2004/05/11 07:28:57 oliver Exp $
+// $Id: atom.h,v 1.66 2004/05/17 14:36:08 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -512,14 +512,12 @@ namespace BALL
 				throw();
 
 			/**	Set the type name of the atom.
-					@param the new type name
 			*/
 			void setTypeName(const String& name)
 				throw();
 
 			/** Set the atom velocity
 					BALL uses units of {\AA}/ps for the velocity.
-					@param   velocity the new velocity vector
 			*/
 			void setVelocity(const Vector3& velocity)
 				throw();
@@ -533,7 +531,6 @@ namespace BALL
 
 			/** Change the atom's force vector.
 					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
-					@param   force the new force vector
 			*/
 			void setForce(const Vector3& force)
 				throw();
@@ -739,7 +736,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Internal iteration
 			*/
 			//@{
@@ -753,7 +749,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name External iteration
 			*/
 			//@{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.33 2004/02/26 18:12:09 oliver Exp $
+// $Id: nucleotide.h,v 1.34 2004/05/17 14:36:09 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
@@ -201,33 +201,33 @@ namespace BALL
 			throw();
 
 		/** Prepend an atom at position 0.
-				@param atom, the atom to prepend
+				@param atom the atom to prepend
 		*/
 		void prepend(Atom& atom)
 			throw();
 
 		/** Append an atom after the last position.
-				@param atom, the atom to append
+				@param atom the atom to append
 		*/
 		void append(Atom& atom)
 			throw();
 
 		/** Insert an atom after the last position.
-				@param atom, the atom to insert
+				@param atom the atom to insert
 		*/
 		void insert(Atom& atom)
 			throw();
 
 		/** Insert an atom before a given Composite object.
-				@param atom, the atom to insert
-				@param before, the Composite object to insert before
+				@param atom the atom to insert
+				@param before the Composite object to insert before
 		*/
 		void insertBefore(Atom& atom, Composite& before)
 			throw();
 
 		/** Insert an atom after a given Composite object.
-				@param atom, the atom to insert
-				@param after, the Composite object to insert after
+				@param atom the atom to insert
+				@param after the Composite object to insert after
 		*/
 		void insertAfter(Atom& atom, Composite& after)
 			throw();
