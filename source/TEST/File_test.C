@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.23 2001/08/23 10:31:38 oliver Exp $
+// $Id: File_test.C,v 1.24 2001/10/29 19:58:01 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(File, "$Id: File_test.C,v 1.23 2001/08/23 10:31:38 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.24 2001/10/29 19:58:01 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -373,6 +373,14 @@ CHECK(isClosed())
 	TEST_EQUAL(f2.isClosed(), false)	
 	f2.close();
 	TEST_EQUAL(f2.isClosed(), true)	
+RESULT
+
+CHECK(TCPTransfer)
+	File f("http://postino.mpi-sb.mpg.de/index.html");
+	String filename;
+	File::createTemporaryFilename(filename);
+	f.copyTo(filename);
+	TEST_EQUAL(f.getSize(), 3453)
 RESULT
 
 /////////////////////////////////////////////////////////////
