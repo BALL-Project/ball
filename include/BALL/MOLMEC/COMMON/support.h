@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.26 2004/02/23 15:20:01 anhi Exp $
+// $Id: support.h,v 1.27 2005/01/24 21:55:54 amoll Exp $
 //
 
 
@@ -86,7 +86,8 @@ namespace BALL
 			(ForceField::PairVector& pair_vector, 
 			 const AtomVector& atom_vector, const SimpleBox3& box, 
 			 double distance,	bool periodic_boundary_enabled, 
-			 PairListAlgorithmType type);
+			 PairListAlgorithmType type)
+			throw(Exception::OutOfMemory);
 
 		/**	Sort the pair list.
 				The atom pairs in the list ar sorted in such a way, that those atom pairs
