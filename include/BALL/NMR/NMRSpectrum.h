@@ -1,3 +1,5 @@
+// $Id: NMRSpectrum.h,v 1.2 2000/07/03 21:08:49 oliver Exp $
+
 #define NMR_SPECTRUM
 
 #include<BALL/KERNEL/system.h>
@@ -8,15 +10,15 @@
 #include<BALL/NMR/names.h>
 
 #ifndef CREATE_SPECTRUM_PROCESSOR
-#include<BALL/NMR/CreateSpectrumProcessor.h>
+#	include<BALL/NMR/createSpectrumProcessor.h>
 #endif
 
 #ifndef SHIFT_MODULE
-#include<BALL/NMR/ShiftModule.h>
+#	include<BALL/NMR/shiftModule.h>
 #endif
 
 #ifndef BALL_NMR_PEAK
-#include<BALL/NMR/peak.h>
+#	include<BALL/NMR/peak.h>
 #endif
 
 #include <list>

@@ -1,3 +1,5 @@
+// $Id: anisotropy.h,v 1.2 2000/07/03 21:08:49 oliver Exp $
+
 #include<BALL/COMMON/constants.h>
 #include<BALL/KERNEL/system.h>
 #include<BALL/KERNEL/atom.h>
@@ -12,7 +14,7 @@
 #include<BALL/KERNEL/PTE.h>
 
 #ifndef SHIFT_MODULE
-#include<BALL/NMR/ShiftModule.h>
+#	include<BALL/NMR/shiftModule.h>
 #endif
 
 #include <list>

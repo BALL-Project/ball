@@ -1,3 +1,5 @@
+// $Id: peak.h,v 1.2 2000/07/03 21:08:51 oliver Exp $
+
 #define BALL_NMR_PEAK
 
 #include<BALL/KERNEL/PDBAtom.h>

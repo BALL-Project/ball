@@ -1,3 +1,5 @@
+// $Id: createSpectrumProcessor.h,v 1.2 2000/07/03 21:08:50 oliver Exp $
+
 #define CREATE_SPECTRUM_PROCESSOR
 
 #include<BALL/COMMON/constants.h>
@@ -14,7 +16,7 @@
 #include<BALL/KERNEL/PTE.h>
 
 #ifndef BALL_NMR_PEAK
-#include<BALL/NMR/peak.h>
+#	include<BALL/NMR/peak.h>
 #endif
 
 #include <list>

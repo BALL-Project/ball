@@ -1,8 +1,10 @@
+// $Id: names.h,v 1.2 2000/07/03 21:08:50 oliver Exp $
+
 #include<BALL/DATATYPE/string.h>
 #include<BALL/KERNEL/system.h>
 
 #ifndef SHIFT_MODULE
-#include<BALL/NMR/ShiftModule.h>
+#	include<BALL/NMR/shiftModule.h>
 #endif
 ///////////////////////////////////////////////
 

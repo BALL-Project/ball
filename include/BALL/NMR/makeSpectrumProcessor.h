@@ -1,14 +1,16 @@
+// $Id: makeSpectrumProcessor.h,v 1.2 2000/07/03 21:08:50 oliver Exp $
+
 #define MAKE_SPECTRUM_PROCESSOR
 
 #include<BALL/KERNEL/system.h>
 #include<BALL/KERNEL/PTE.h>
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
-#include <BALL/CONCEPT/processor.h>
+#	include <BALL/CONCEPT/processor.h>
 #endif
 
 #ifndef NMR_SPECTRUM
-#include<BALL/NMR/NMRSpectrum.h>
+#	include<BALL/NMR/NMRSpectrum.h>
 #endif
 
 namespace BALL

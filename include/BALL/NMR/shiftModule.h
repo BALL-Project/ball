@@ -1,3 +1,5 @@
+// $Id: shiftModule.h,v 1.2 2000/07/03 21:08:51 oliver Exp $
+
 #define SHIFT_MODULE
 
 #include<BALL/KERNEL/system.h>

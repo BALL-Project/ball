@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.h,v 1.4 2000/07/03 16:13:43 oliver Exp $
+// $Id: johnsonBovey.h,v 1.5 2000/07/03 21:08:50 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -25,7 +25,7 @@
 #endif
 
 #ifndef SHIFT_MODULE
-#include<BALL/NMR/ShiftModule.h>
+#	include<BALL/NMR/shiftModule.h>
 #endif
 
 #include <list>
