@@ -1,5 +1,5 @@
 %{
-	// $Id: check_test.l,v 1.9 2003/06/19 19:20:02 oliver Exp $
+	// $Id: check_test.l,v 1.10 2003/06/28 17:40:11 oliver Exp $
 	// C++ scanner
 
 	#define YY_NO_UNPUT 
@@ -1254,10 +1254,20 @@ int main(int argc, char** argv)
 	{
 		if (create_test_bodies)
 		{
-			cout << "CHECK(" << *it << ")\n"
-					 << "  // ???\n"
-					 << "RESULT\n"
-           << endl;
+			if (it->find(',') == string::npos)
+			{		
+				cout << "CHECK(" << *it << ")\n"
+						 << "  // ???\n"
+						 << "RESULT\n"
+						 << endl;
+			}
+			else	
+			{
+				cout << "CHECK((" << *it << "))\n"
+						 << "  // ???\n"
+						 << "RESULT\n"
+						 << endl;
+			}
 		}
 		else	
 		{
