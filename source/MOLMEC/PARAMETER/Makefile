@@ -7,7 +7,6 @@ CPP_SOURCES=\
 	charmmEEF1.C\
 	cosineTorsion.C\
 	forceFieldParameters.C\
-	FFParameterSection.C\
 	lennardJones.C\
 	potential1210.C\
 	quadraticAngleBend.C\

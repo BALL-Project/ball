@@ -1,8 +1,10 @@
-// $Id: assignTypes.C,v 1.8 1999/12/30 18:05:35 oliver Exp $
+// $Id: assignTypes.C,v 1.9 2000/02/14 22:44:10 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 
 #include <iostream>
+
+#include <BALL/KERNEL/fragment.h>
 
 using namespace std;
 
@@ -40,54 +42,38 @@ namespace BALL
 
 	Processor::Result	AssignTypeNameProcessor::operator () (Atom& atom)
 	{
+		// if the atom type shall be overwritten or the type is not yet assigned:
+		// assign it
 		if (overwrite_ || atom.getTypeName() == BALL_ATOM_DEFAULT_TYPE_NAME)
 		{
-			
-			String name;
-			String base_name;
-			Fragment* frag = atom.getFragment();
-			if (frag != 0)
-			{
-				name = frag->getName().trim();
-				base_name = name;
-				if (RTTI::isKindOf<Residue>(*frag))
-				{
-					String suffix = "-";
-					Residue*	res = RTTI::castTo<Residue>(*frag);
-					if (res->isNTerminal())
-					{
-						suffix += "N";
-					} else if (res->isCTerminal())
-					{
-						suffix += "C";
-					}
-					if (res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
-					{
-						suffix += "S";
-					}
-					
-					if (suffix != "-")
-					{
-						name += suffix;
-					}
-				}
-			}
-
-			name += ":";
-			base_name += ":";
-			name += atom.getName().trim();
-			base_name += atom.getName().trim();
-			
+			// retrieve the full atom name
+			String name  = atom.getFullName();
+				
+			// if this name is in the hash map, assign it
 			if (type_map_.has(name))
 			{
 				atom.setTypeName(type_map_[name]);
-			} else if (type_map_.has(base_name)) {
-				atom.setTypeName(type_map_[base_name]);				
-			} else {
-				if (atom.getTypeName() == BALL_ATOM_DEFAULT_TYPE_NAME)
+			} 
+			else 
+			{
+				// try to match the full name without variant extensions (-xxx)
+				name = atom.getFullName(Atom::NO_VARIANT_EXTENSIONS);
+				if (type_map_.has(name)) 
 				{
-					Log.warn() << "Could not assign atom type name for " << name << " (could not match "
-										 << name << " or " << base_name << ")" << endl;
+					atom.setTypeName(type_map_[name]);				
+				}
+				else 
+				{
+					// last, not least: try wildcard matching for the residue
+					name = "*:" + atom.getName();
+					if (type_map_.has(name))
+					{
+						atom.setTypeName(type_map_[name]);				
+					} else {	
+						// we could not assign a type name - complain!
+						Log.warn() << "AssignTypeNameProcessor: could not assign atom type name for atom " 
+								<< atom.getFullName(Atom::NO_VARIANT_EXTENSIONS) << endl;
+					}
 				}
 			}
 		}
@@ -96,7 +82,7 @@ namespace BALL
 	}
 
 	AssignTypeProcessor::AssignTypeProcessor
-		(const FFPSAtomTypes& atom_types)
+		(const AtomTypes& atom_types)
 	{
 		atom_types_ = atom_types;
 	}
@@ -106,7 +92,7 @@ namespace BALL
 		Atom::Type type = atom_types_.getType(atom.getTypeName());
 		if (type == Atom::UNKNOWN_TYPE)
 		{
-			Log.level(LogStream::WARNING) << "Could not assign atom type for " << atom.getTypeName() << endl;
+			Log.warn() << "AssignypeProcessor: could not assign atom type for " << atom.getTypeName() << endl;
 		} else {
 			atom.setType(type);
 		}

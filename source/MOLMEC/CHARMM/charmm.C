@@ -1,4 +1,4 @@
-// $Id: charmm.C,v 1.3 2000/02/10 16:02:32 oliver Exp $
+// $Id: charmm.C,v 1.4 2000/02/14 22:44:06 oliver Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -185,7 +185,7 @@ namespace BALL
 		// extract template section (containing charges and atom types)
 		if (assign_charges || assign_type_names || remove_hydrogens)
 		{
-			FFPSTemplates templates;
+			Templates templates;
 			templates.extractSection(parameters_, "ChargesAndTypeNames");
 			
 			// remove all hydrogens bound to extended atom types

@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.C,v 1.2 2000/02/10 10:46:41 oliver Exp $
+// $Id: charmmTorsion.C,v 1.3 2000/02/14 22:44:09 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -257,8 +257,8 @@ namespace BALL
 										Atom::Type type_a2 = a2->getType();
 										Atom::Type type_a3 = a3->getType();
 										Atom::Type type_a4 = a4->getType();
-										FFPSCosineTorsion::Values values;
-										FFPSCosineTorsion::SingleTorsion tmp;
+										CosineTorsion::Values values;
+										CosineTorsion::SingleData tmp;
 										tmp.atom1 = a1;
 										tmp.atom2 = a2;
 										tmp.atom3 = a3;

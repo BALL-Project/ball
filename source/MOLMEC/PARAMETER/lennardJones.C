@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.5 2000/02/10 15:16:56 oliver Exp $
+// $Id: lennardJones.C,v 1.6 2000/02/14 22:42:46 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -9,8 +9,8 @@ using namespace std;
 namespace BALL 
 {
 
-	FFPSLennardJones::FFPSLennardJones()
-		:	FFParameterSection(),
+	LennardJones::LennardJones()
+		:	ParameterSection(),
 			A_(0),
 			B_(0),
 			Aij_(0),
@@ -19,12 +19,12 @@ namespace BALL
 	{
 	}
 
-	FFPSLennardJones::~FFPSLennardJones()
+	LennardJones::~LennardJones()
 	{
 		destroy();
 	}
 
-	void FFPSLennardJones::destroy() 
+	void LennardJones::destroy() 
 	{
 		// clear allocated parameter fields
 		delete [] A_;
@@ -33,10 +33,16 @@ namespace BALL
 		delete [] Bij_;
 		delete [] is_defined_;
 
-		FFParameterSection::destroy();
+		ParameterSection::destroy();
 	}
 
-	bool FFPSLennardJones::extractSection(ForceFieldParameters& parameters, const String& section_name)
+	bool LennardJones::extractSection
+		(Parameters& parameters, const String& section_name)
+	{
+		return ParameterSection::extractSection(parameters, section_name);
+	}
+	bool LennardJones::extractSection
+		(ForceFieldParameters& parameters, const String& section_name)
 	{
 		// check whether the parameters are valid
 		if (!parameters.isValid())
@@ -45,7 +51,7 @@ namespace BALL
 		}
 		
 		// extract the basis information
-		FFParameterSection::extractSection(parameters, section_name);
+		ParameterSection::extractSection(parameters, section_name);
 
 		// check whether all variables we need are defined, terminate otherwise
 		if ((!hasVariable("A") || !hasVariable("B"))
@@ -73,7 +79,7 @@ namespace BALL
 			{
 				// BAUSTELLE
 				format_ = SLATER_KIRKWOOD_FORMAT;
-				Log.error() << "FFPSLennardJones::extractSection: Slater Kirkwood format not yet supported!" << endl;
+				Log.error() << "LennardJones::extractSection: Slater Kirkwood format not yet supported!" << endl;
 
 				return false;
 			}
@@ -83,7 +89,7 @@ namespace BALL
 		// build a two dimensional array of the atom types
 		// loop variable
 		Size	i;
-		const FFPSAtomTypes&	atom_types = parameters.getAtomTypes();
+		const AtomTypes&	atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 		
 		// allocate two onedimensional fields for the two parameters
@@ -158,7 +164,7 @@ namespace BALL
 
 		Atom::Type		atom_type;
 		String				key;
-		for (i = 1; i <= getNumberOfKeys(); ++i)
+		for (i = 0; i < getNumberOfKeys(); ++i)
 		{
 			// get the key
 			key = getKey(i);
@@ -238,7 +244,7 @@ namespace BALL
 	}
 
 
-	bool FFPSLennardJones::hasParameters(Atom::Type I, Atom::Type J) const 
+	bool LennardJones::hasParameters(Atom::Type I, Atom::Type J) const 
 	{
 		if ((I < 0) && ((Size)I >= number_of_atom_types_))
 		{
@@ -254,17 +260,17 @@ namespace BALL
 	}
 
 
-	FFPSLennardJones::Values FFPSLennardJones::getParameters
+	LennardJones::Values LennardJones::getParameters
 		(Atom::Type I, Atom::Type J) const 
 	{
-		FFPSLennardJones::Values parameters;
+		LennardJones::Values parameters;
 		assignParameters(parameters, I, J);
 		return parameters;
 	}
 
 
-	bool FFPSLennardJones::assignParameters
-		(FFPSLennardJones::Values& parameters,
+	bool LennardJones::assignParameters
+		(LennardJones::Values& parameters,
 		 Atom::Type I, Atom::Type J) const 
 	{
 		if (hasParameters(I, J)) 

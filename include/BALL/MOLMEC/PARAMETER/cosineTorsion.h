@@ -1,4 +1,4 @@
-// $Id: cosineTorsion.h,v 1.4 2000/02/14 09:37:58 oliver Exp $
+// $Id: cosineTorsion.h,v 1.5 2000/02/14 22:42:39 oliver Exp $
 // Molecular Mechanics Parameter: class describing the parameter
 // section required for torsions using a cosine type potential function
  
@@ -6,7 +6,7 @@
 #define BALL_MOLMEC_PARAMETER_COSINETORSION_H
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
-#	include <BALL/FORMAT/ParameterSection.h>
+#	include <BALL/FORMAT/parameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -19,7 +19,7 @@ namespace BALL
 	/**
 	*/
 	class CosineTorsion 
-		:	public FFParameterSection
+		:	public ParameterSection
 	{
 		public:
 
@@ -100,7 +100,7 @@ namespace BALL
 			}
 		};
 
-		struct Torsion
+		struct Data
 		{
 			Atom*		atom1;
 			Atom*		atom2;
@@ -110,7 +110,7 @@ namespace BALL
 			Values	values;
 		};
 
-		struct SingleTorsion
+		struct SingleData
 		{
 			Atom*					atom1;
 			Atom*					atom2;
@@ -145,6 +145,7 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/

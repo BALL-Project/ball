@@ -1,4 +1,4 @@
-// $Id: charmmStretch.C,v 1.2 2000/02/10 10:46:41 oliver Exp $
+// $Id: charmmStretch.C,v 1.3 2000/02/14 22:44:08 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -41,7 +41,7 @@ namespace BALL
 		:	ForceFieldComponent(component, clone_deep)
 	{
 		number_of_stretches_ = component.number_of_stretches_;
-		stretch_ = new FFPSQuadraticBondStretch::QuadraticStretch[number_of_stretches_];
+		stretch_ = new QuadraticBondStretch::Data[number_of_stretches_];
 
 		for (Size i = 0; i < number_of_stretches_; i++) 
 		{
@@ -100,7 +100,7 @@ namespace BALL
 		}
 
 		// allocate space for all stretches
-		stretch_ = new FFPSQuadraticBondStretch::QuadraticStretch[number_of_stretches_];
+		stretch_ = new QuadraticBondStretch::Data[number_of_stretches_];
 		
 		CharmmFF* charmm_force_field = dynamic_cast<CharmmFF*>(force_field_);
 		if ((charmm_force_field == 0) || !charmm_force_field->hasInitializedParameters())
@@ -114,7 +114,7 @@ namespace BALL
 			}
 		}
 
-		FFPSQuadraticBondStretch::Values values;
+		QuadraticBondStretch::Values values;
 
 		// retrieve all stretch parameters
 		atom_it = getForceField()->getAtoms().begin();

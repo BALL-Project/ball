@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.11 1999/12/28 17:51:09 oliver Exp $
+// $Id: amber.C,v 1.12 2000/02/14 22:44:02 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -153,7 +153,7 @@ namespace BALL
 			parameters_initialized_ = false;
 
 			// retrieve global force field options
-			FFParameterSection global_options;
+			ParameterSection global_options;
 			global_options.extractSection(parameters_, "Options");
 			// BAUSTELLE: Iterator ueber global_options.options
 			if (global_options.options.has(Option::NONBONDED_CUTOFF))
@@ -201,7 +201,7 @@ namespace BALL
 		// extract template section (containing charges and atom types)
 		if (assign_charges || assign_type_names)
 		{
-			FFPSTemplates templates;
+			Templates templates;
 			templates.extractSection(parameters_, "ChargesAndTypeNames");
 			if (assign_charges && assign_type_names)
 			{

@@ -1,4 +1,4 @@
-// $Id: assignTypes.h,v 1.3 2000/01/10 15:51:03 oliver Exp $
+// $Id: assignTypes.h,v 1.4 2000/02/14 22:44:00 oliver Exp $
 // Molecular Mechanics: atom type assignment
 
 #ifndef BALL_MOLMEC_COMMON_ASSIGNTYPES_H
@@ -22,14 +22,14 @@ namespace BALL
 	{
 		public:
 
-		AssignTypeProcessor(const FFPSAtomTypes& atom_types);
+		AssignTypeProcessor(const AtomTypes& atom_types);
 
 		virtual Processor::Result operator () (Atom& atom);
 
 		
 		protected:
 		
-		FFPSAtomTypes atom_types_;
+		AtomTypes atom_types_;
 	};
 
 	/**	Assign type names to atoms.

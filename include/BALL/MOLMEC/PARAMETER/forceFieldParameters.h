@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.h,v 1.5 2000/02/14 09:37:58 oliver Exp $
+// $Id: forceFieldParameters.h,v 1.6 2000/02/14 22:42:39 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -18,7 +18,8 @@
 
 namespace BALL 
 {
-
+	class AtomTypes;
+	
 	/**	Force field parameter class.
 	*/
 	class ForceFieldParameters

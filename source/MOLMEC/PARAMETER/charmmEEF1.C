@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.C,v 1.2 2000/02/06 20:00:35 oliver Exp $
+// $Id: charmmEEF1.C,v 1.3 2000/02/14 22:42:45 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
@@ -9,8 +9,8 @@ using namespace std;
 namespace BALL 
 {
 
-	FFPSCharmmEEF1::FFPSCharmmEEF1()
-		:	FFParameterSection(),
+	CharmmEEF1::CharmmEEF1()
+		:	ParameterSection(),
 			V_(0),
 			dG_ref_(0),
 			dG_free_(0),
@@ -22,12 +22,12 @@ namespace BALL
 	{
 	}
 
-	FFPSCharmmEEF1::~FFPSCharmmEEF1()
+	CharmmEEF1::~CharmmEEF1()
 	{
 		destroy();
 	}
 
-	void FFPSCharmmEEF1::destroy() 
+	void CharmmEEF1::destroy() 
 	{
 		// clear allocated parameter fields
 		delete [] V_;
@@ -38,10 +38,15 @@ namespace BALL
 		delete [] sig_w_;
 		delete [] R_min_;
 
-		FFParameterSection::destroy();
+		ParameterSection::destroy();
 	}
 
-	bool FFPSCharmmEEF1::extractSection(ForceFieldParameters& parameters, const String& section_name)
+	bool CharmmEEF1::extractSection(Parameters& parameters, const String& section_name)
+	{
+		return ParameterSection::extractSection(parameters, section_name);
+	}
+
+	bool CharmmEEF1::extractSection(ForceFieldParameters& parameters, const String& section_name)
 	{
 		// check whether the parameters are valid
 		if (!parameters.isValid())
@@ -50,7 +55,7 @@ namespace BALL
 		}
 		
 		// extract the basis information
-		FFParameterSection::extractSection(parameters, section_name);
+		ParameterSection::extractSection(parameters, section_name);
 
 		// check whether all variables we need are defined, terminate otherwise
 		if (!hasVariable("V") || !hasVariable("dG_free") || !hasVariable("R_min")
@@ -64,7 +69,7 @@ namespace BALL
 		}
 
 		// determine the number of atom types
-		const FFPSAtomTypes&	atom_types = parameters.getAtomTypes();
+		const AtomTypes&	atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 		
 		// allocate two onedimensional fields for the two parameters
@@ -114,7 +119,7 @@ namespace BALL
 			}
 			else if (options["unit_dG_ref"] != "kJ/mol")
 			{
-				Log.error() << "FFPSCharmmEEF1: unknown unit for parameter column dG_ref: " 
+				Log.error() << "CharmmEEF1: unknown unit for parameter column dG_ref: " 
 										<< options["unit_dG_ref"] << ". Assuming kJ/mol as default unit." << endl;
 			}
 		}
@@ -136,7 +141,7 @@ namespace BALL
 			}
 			else if (options["unit_dG_free"] != "kJ/mol")
 			{
-				Log.error() << "FFPSCharmmEEF1: unknown unit for parameter column dG_free: " 
+				Log.error() << "CharmmEEF1: unknown unit for parameter column dG_free: " 
 										<< options["unit_dG_free"] << ". Assuming kJ/mol as default unit." << endl;
 			}
 		}
@@ -158,7 +163,7 @@ namespace BALL
 			}
 			else if (options["unit_dH_ref"] != "kJ/mol")
 			{
-				Log.error() << "FFPSCharmmEEF1: unknown unit for parameter column dH_ref: " 
+				Log.error() << "CharmmEEF1: unknown unit for parameter column dH_ref: " 
 										<< options["unit_dH_ref"] << ". Assuming kJ/mol as default unit." << endl;
 			}
 		}
@@ -180,7 +185,7 @@ namespace BALL
 			}
 			else if (options["unit_Cp_ref"] != "kJ/(molK)")
 			{
-				Log.error() << "FFPSCharmmEEF1: unknown unit for parameter column Cp_ref: " 
+				Log.error() << "CharmmEEF1: unknown unit for parameter column Cp_ref: " 
 										<< options["unit_Cp_ref"] << ". Assuming kJ/(molK) as default unit." << endl;
 			}
 		}
@@ -195,7 +200,7 @@ namespace BALL
 			else if (options["unit_sig_w"] != "A"
 							 && options["unit_sig_w"] != "Angstrom")
 			{
-				Log.error() << "FFPSCharmmEEF1: unknown unit for parameter column sig_w: " 
+				Log.error() << "CharmmEEF1: unknown unit for parameter column sig_w: " 
 										<< options["unit_sig_w"] << ". Assuming Angstrom as default unit." << endl;
 			}
 		}
@@ -210,7 +215,7 @@ namespace BALL
 			else if (options["unit_R_min"] != "A"
 							 && options["unit_R_min"] != "Angstrom")
 			{
-				Log.error() << "FFPSCharmmEEF1: unknown unit for parameter column R_min: " 
+				Log.error() << "CharmmEEF1: unknown unit for parameter column R_min: " 
 										<< options["unit_R_min"] << ". Assuming Angstrom as default unit." << endl;
 			}
 		}
@@ -221,13 +226,13 @@ namespace BALL
 			if (options["unit_V"] != "A^3"
 							 && options["unit_V"] != "Angstrom^3")
 			{
-				Log.error() << "FFPSCharmmEEF1: unknown unit for parameter column V: " 
+				Log.error() << "CharmmEEF1: unknown unit for parameter column V: " 
 										<< options["unit_V"] << ". Assuming Angstrom^3 as default unit." << endl;
 			}
 		}
 
 		String key;
-		for (i = 1; i <= getNumberOfKeys(); ++i)
+		for (i = 0; i < getNumberOfKeys(); ++i)
 		{
 			// get the key
 			key = getKey(i);
@@ -254,7 +259,7 @@ namespace BALL
 	}
 
 
-	bool FFPSCharmmEEF1::hasParameters(Atom::Type I) const 
+	bool CharmmEEF1::hasParameters(Atom::Type I) const 
 	{
 		if ((I < 0) && ((Size)I >= number_of_atom_types_))
 		{
@@ -265,17 +270,17 @@ namespace BALL
 	}
 
 
-	FFPSCharmmEEF1::Values FFPSCharmmEEF1::getParameters
+	CharmmEEF1::Values CharmmEEF1::getParameters
 		(Atom::Type I) const 
 	{
-		FFPSCharmmEEF1::Values parameters;
+		CharmmEEF1::Values parameters;
 		assignParameters(parameters, I);
 		return parameters;
 	}
 
 
-	bool FFPSCharmmEEF1::assignParameters
-		(FFPSCharmmEEF1::Values& parameters, Atom::Type I) const 
+	bool CharmmEEF1::assignParameters
+		(CharmmEEF1::Values& parameters, Atom::Type I) const 
 	{
 		if (hasParameters(I)) 
 		{

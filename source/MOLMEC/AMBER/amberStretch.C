@@ -1,4 +1,4 @@
-// $Id: amberStretch.C,v 1.6 2000/01/14 13:16:59 oliver Exp $
+// $Id: amberStretch.C,v 1.7 2000/02/14 22:44:05 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -41,7 +41,7 @@ namespace BALL
 		:	ForceFieldComponent(component, clone_deep)
 	{
 		number_of_stretches_ = component.number_of_stretches_;
-		stretch_ = new FFPSQuadraticBondStretch::QuadraticStretch[number_of_stretches_];
+		stretch_ = new QuadraticBondStretch::Data[number_of_stretches_];
 
 		for (Size i = 0; i < number_of_stretches_; i++) 
 		{
@@ -99,7 +99,7 @@ namespace BALL
 		}
 
 		// allocate space for all stretches
-		stretch_ = new FFPSQuadraticBondStretch::QuadraticStretch[number_of_stretches_];
+		stretch_ = new QuadraticBondStretch::Data[number_of_stretches_];
 		
 		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
 		if ((amber_force_field == 0) || !amber_force_field->hasInitializedParameters())
@@ -113,7 +113,7 @@ namespace BALL
 			}
 		}
 
-		FFPSQuadraticBondStretch::Values values;
+		QuadraticBondStretch::Values values;
 
 		// retrieve all stretch parameters
 		atom_it = getForceField()->getAtoms().begin();

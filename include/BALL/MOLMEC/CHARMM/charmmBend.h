@@ -1,4 +1,4 @@
-// $Id: charmmBend.h,v 1.1 2000/02/10 15:29:58 oliver Exp $
+// $Id: charmmBend.h,v 1.2 2000/02/14 22:43:57 oliver Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMBEND_H
@@ -83,9 +83,9 @@ namespace BALL
 
 		/*_	pointer to the array of bends
 		*/	
-		vector<FFPSQuadraticAngleBend::QuadraticAngleBend> bend_;
+		vector<QuadraticAngleBend::Data>	bend_;
 
-		FFPSQuadraticAngleBend	bend_parameters_;
+		QuadraticAngleBend								bend_parameters_;
 		//_@}
 	 
 	};

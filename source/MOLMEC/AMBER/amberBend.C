@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.6 1999/12/28 17:51:09 oliver Exp $
+// $Id: amberBend.C,v 1.7 2000/02/14 22:44:02 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -57,17 +57,18 @@ namespace BALL
 			return false;
 		}
 
-		// extract parameter section (if necessary)
+		static QuadraticAngleBend bend_parameters;
+		static bool result = false;
 		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
 		if ((amber_force_field == 0) || !amber_force_field->hasInitializedParameters())
 		{
-			bool result = false;
-			result = bend_parameters_.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
+			result = bend_parameters.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
 
 			if (result == false) 
 			{
 				Log.level(LogStream::ERROR) << "cannot find section QuadraticAngleBend" << endl;
 				return false;
+		
 			}
 		}
 
@@ -75,7 +76,7 @@ namespace BALL
 		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
 		Atom::BondIterator it1;
 		Atom::BondIterator it2;
-		FFPSQuadraticAngleBend::QuadraticAngleBend	this_bend;
+		QuadraticAngleBend::Data	this_bend;
 		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
 		{
 			for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
@@ -96,15 +97,15 @@ namespace BALL
 						Atom::Type atom_type_a2 = this_bend.atom2->getType();
 						Atom::Type atom_type_a3 = this_bend.atom3->getType();
 
-						FFPSQuadraticAngleBend::Values values;
+						QuadraticAngleBend::Values values;
 
-						if (bend_parameters_.hasParameters(atom_type_a1, atom_type_a2, atom_type_a3))
+						if (bend_parameters.hasParameters(atom_type_a1, atom_type_a2, atom_type_a3))
 						{
-							bend_parameters_.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3);
+							bend_parameters.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3);
 						}
-						else if (bend_parameters_.hasParameters(atom_type_a3, atom_type_a2, atom_type_a1))
+						else if (bend_parameters.hasParameters(atom_type_a3, atom_type_a2, atom_type_a1))
 						{
-							bend_parameters_.assignParameters(values, atom_type_a3, atom_type_a2, atom_type_a1);
+							bend_parameters.assignParameters(values, atom_type_a3, atom_type_a2, atom_type_a1);
 						}
 						else 
 						{

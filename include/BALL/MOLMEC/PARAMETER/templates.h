@@ -1,15 +1,16 @@
-// $Id: templates.h,v 1.2 2000/02/14 09:38:00 oliver Exp $
+// $Id: templates.h,v 1.3 2000/02/14 22:42:41 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
-
-#ifndef BALL_FORMAT_TEMPLATES_H
-#define BALL_FORMAT_TEMPLATES_H
-
-#ifndef BALL_FORMAT_PARAMETERSECTION_H
-#	include <BALL/FORMAT/ParameterSection.h>
-#endif
 
 #ifndef BALL_MOLMEC_PARAMETER_TEMPLATES_H
 #define BALL_MOLMEC_PARAMETER_TEMPLATES_H
+
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include <BALL/FORMAT/parameterSection.h>
+#endif
+
+#ifndef BALL_KERNEL_SYSTEM_H
+#	include <BALL/KERNEL/system.h>
+#endif
 
 namespace BALL 
 {
@@ -55,7 +56,7 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces this data.
 				The section is typically entitled {\bf ChargesAndTypeNames}.
 		*/
-		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 		/**	Returns the numeric type for a given string.
 		*/

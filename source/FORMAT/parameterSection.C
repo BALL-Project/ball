@@ -1,33 +1,31 @@
-// $Id: FFParameterSection.C,v 1.6 2000/02/12 16:30:58 oliver Exp $
+// $Id: parameterSection.C,v 1.1 2000/02/14 22:47:09 oliver Exp $
 //
 
-#include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
-#include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
+#include <BALL/FORMAT/parameterSection.h>
+#include <BALL/FORMAT/parameters.h>
 
 using namespace std;
 
 namespace BALL 
 {
 
-	FFParameterSection::FFParameterSection()
+	ParameterSection::ParameterSection()
 	{
-		number_of_entries_ = 0;
 		number_of_variables_ = 0;
 
 		entries_ = 0;
-		keys_ = 0;
 		version_ = 0;
 
 		
 		valid_ = false;
 	}
 
-	FFParameterSection::~FFParameterSection()
+	ParameterSection::~ParameterSection()
 	{
 		destroy();
 	}
 
-	void FFParameterSection::destroy()
+	void ParameterSection::destroy()
 	{
 		// destroy all hash maps
 		section_entries_.destroy();
@@ -37,24 +35,19 @@ namespace BALL
 		delete [] entries_;
 		entries_ = 0;
 
-		// clear all allocated keys
-		delete [] keys_;
-		keys_ = 0;
-
 		// delete the version array
 		delete [] version_;
 		version_ = 0;
 
 		// clear the number of entries/variables
 		number_of_variables_ = 0;
-		number_of_entries_ = 0;
 
 		// tag this instance as invalid
 		valid_ = false;
 	}
 
 
-	bool FFParameterSection::extractSection(ForceFieldParameters& parameters, const String& section_name)
+	bool ParameterSection::extractSection(Parameters& parameters, const String& section_name)
  	{
 		if (!parameters.isValid())
 		{
@@ -115,10 +108,10 @@ namespace BALL
 		//
 	
 		// f contains the field resulting from a split format line
-		String	f[FFParameterSection::MAX_FIELDS];
-		Size number_of_fields = format_line_.split(f, FFParameterSection::MAX_FIELDS, String::CHARACTER_CLASS__WHITESPACE);
+		String	f[ParameterSection::MAX_FIELDS];
+		Size number_of_fields = format_line_.split(f, ParameterSection::MAX_FIELDS, String::CHARACTER_CLASS__WHITESPACE);
 
-		if ((number_of_fields == 0) || (number_of_fields > FFParameterSection::MAX_FIELDS))
+		if ((number_of_fields == 0) || (number_of_fields > ParameterSection::MAX_FIELDS))
 		{
 			Log.level(LogStream::ERROR) << "Error reading section " << section_name 
 				<< " of file " << ini_file.getFilename() << ": wrong number of fields in the format line: " << number_of_fields << endl;
@@ -128,11 +121,11 @@ namespace BALL
 		}
 
 		// keys is an array containing the fields that will we assembled to the line key
-		Index	keys[FFParameterSection::MAX_FIELDS];
+		Index	keys[ParameterSection::MAX_FIELDS];
 		Size	number_of_keys = 0;
 
 		// variables is an array containing the fields that represent variables
-		Index	variables[FFParameterSection::MAX_FIELDS];
+		Index	variables[ParameterSection::MAX_FIELDS];
 		Size	number_of_variables = 0;
 
 
@@ -160,7 +153,7 @@ namespace BALL
 		// store for faster access
 		number_of_variables_ = variable_names_.size();
 		
-		if ((number_of_keys == 0) || (number_of_keys == FFParameterSection::MAX_FIELDS))
+		if ((number_of_keys == 0) || (number_of_keys == ParameterSection::MAX_FIELDS))
 		{
 			return false;
 		}
@@ -168,8 +161,8 @@ namespace BALL
 		// allocate space for all entries
 		entries_ = new String[number_of_lines * number_of_variables];
 		
-		// allocate space for all keys
-		keys_ = new String[number_of_lines];
+		// cleaer all former contest of the keys_ array
+		keys_.clear();
 		
 		// now extract all non-comment lines
 		bool ignore_entry;
@@ -187,7 +180,7 @@ namespace BALL
 					if (number_of_lines > 0) 
 					{
 						// now split the line...
-						number_of_fields = line.split(f, FFParameterSection::MAX_FIELDS, String::CHARACTER_CLASS__WHITESPACE);
+						number_of_fields = line.split(f, ParameterSection::MAX_FIELDS, String::CHARACTER_CLASS__WHITESPACE);
 						
 						// assemble the keys
 						Size	j;	// loop variable
@@ -221,7 +214,7 @@ namespace BALL
 								} else {
 									if (old_version == new_version)
 									{
-										Log.warn() << "FFParameterSection: repeated entry with same version number in line " << number_of_lines 
+										Log.warn() << "ParameterSection: repeated entry with same version number in line " << number_of_lines 
 															 << " of section [" << section_name << "] " << endl;
 										Log.warn() << "  in file " << ini_file.getFilename() << ":" << endl;
 										Log.warn() << " > " << line << endl;
@@ -236,11 +229,12 @@ namespace BALL
 							// if this key is new, remember it!
 							if (!section_entries_.has(key))
 							{
-								keys_[section_entries_.size()] = key;
-							}
+								// add the key to the array of kes
+								keys_.push_back(key);
 
-							// insert the key into the hash map
-							section_entries_[key] = number_of_lines;
+								// insert the key into the hash map
+								section_entries_[key] = number_of_lines;
+							}
 
 							// copy all variable fields to the corresponding array
 							for (j = 0; j < (Position)number_of_variables; j++)
@@ -264,10 +258,6 @@ namespace BALL
 				}
 			}
 		}
-				
-
-		// store the sizes for faster access
-		number_of_entries_ = section_entries_.size();
 
 		// mark as valid
 		valid_ = true;
@@ -275,17 +265,17 @@ namespace BALL
 		return true;
 	}
 
-	bool FFParameterSection::has(const String& key, const String& variable) const 
+	bool ParameterSection::has(const String& key, const String& variable) const 
 	{
 		return section_entries_.has(key) && variable_names_.has(variable);
 	}
 
-	bool FFParameterSection::has(const String& key) const
+	bool ParameterSection::has(const String& key) const
 	{
 		return section_entries_.has(key);
 	}
 
-	const String& FFParameterSection::getValue(const String& key, const String& variable) const 
+	const String& ParameterSection::getValue(const String& key, const String& variable) const 
 	{
 		// define a dummy value returned, if a undefined key/variable
 		// pair is requested
@@ -301,16 +291,15 @@ namespace BALL
 		return entries_[section_entries_[key] * number_of_variables_ + variable_names_[variable]];
 	}
 		
-	const String& FFParameterSection::getValue(Size key_index, Size variable_index) const
+	const String& ParameterSection::getValue(Size key_index, Size variable_index) const
 	{
 		// define a dummy value returned, if a undefined key/variable
 		// pair is requested
 		static const String undefined("(undefined)");
 		
 		// check whether the entry exists
-		if ((key_index <= number_of_entries_) 
-				&& (variable_index < number_of_variables_) 
-				&& (key_index > 0))
+		if ((key_index < keys_.size()) 
+				&& (variable_index < number_of_variables_))
 		{
 			return entries_[key_index * number_of_variables_ + variable_index];
 		} else {
@@ -318,38 +307,38 @@ namespace BALL
 		}
 	}
 		
-	const String& FFParameterSection::getKey(Size key_index) const 
+	const String& ParameterSection::getKey(Position key_index) const 
 	{
 		// define a dummy value returned, if an undefined key/variable
 		// pair is requested
 		static const String undefined("(undefined)");
 		
 		// check whether the entry exists
-		if ((key_index > section_entries_.size()) || (key_index == 0))
+		if ((key_index >= section_entries_.size()))
 		{
 			return undefined;
 		}
 
 		// return the value
-		return keys_[key_index - 1];
+		return keys_[key_index];
 	}
 		
-	Size FFParameterSection::getNumberOfKeys() const 
+	Size ParameterSection::getNumberOfKeys() const 
 	{
-		return number_of_entries_;
+		return keys_.size();
 	}
 
-	Size FFParameterSection::getNumberOfVariables() const 
+	Size ParameterSection::getNumberOfVariables() const 
 	{
 		return number_of_variables_;
 	}
 
-	bool FFParameterSection::hasVariable(const String& variable) const 
+	bool ParameterSection::hasVariable(const String& variable) const 
 	{
 		return variable_names_.has(variable);
 	}
 
-	Size FFParameterSection::getColumnIndex(const String& variable) const 
+	Position ParameterSection::getColumnIndex(const String& variable) const 
 	{
 		if (variable_names_.has(variable))
 		{
@@ -359,7 +348,7 @@ namespace BALL
 		}
 	}
 
-	bool FFParameterSection::isValid() const
+	bool ParameterSection::isValid() const
 	{
 		return valid_;
 	}

@@ -1,4 +1,4 @@
-// $Id: cosineTorsion.C,v 1.2 1999/12/28 17:52:37 oliver Exp $
+// $Id: cosineTorsion.C,v 1.3 2000/02/14 22:42:45 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
@@ -9,23 +9,28 @@ using namespace std;
 namespace BALL 
 {
 
-	FFPSCosineTorsion::FFPSCosineTorsion()
-		:	FFParameterSection(),
+	CosineTorsion::CosineTorsion()
+		:	ParameterSection(),
 			torsions_()
 	{
 	}
 
-	FFPSCosineTorsion::~FFPSCosineTorsion()
+	CosineTorsion::~CosineTorsion()
 	{
 		destroy();
 	}
 
-	void FFPSCosineTorsion::destroy() 
+	void CosineTorsion::destroy() 
 	{
-		FFParameterSection::destroy();
+		ParameterSection::destroy();
 	}
 
-	bool FFPSCosineTorsion::extractSection(ForceFieldParameters& parameters, const String& section_name)
+	bool CosineTorsion::extractSection(Parameters& parameters, const String& section_name)
+	{
+		return ParameterSection::extractSection(parameters, section_name);
+	}
+
+	bool CosineTorsion::extractSection(ForceFieldParameters& parameters, const String& section_name)
 	{
 		// check whether the parameters are valid
 		if (!parameters.isValid())
@@ -34,9 +39,9 @@ namespace BALL
 		}
 		
 		// extract the section information
-		if (!FFParameterSection::extractSection(parameters, section_name))
+		if (!ParameterSection::extractSection(parameters, section_name))
 		{
-			Log.level(LogStream::ERROR) << "Could not find section " 
+			Log.error() << "CosineTorison::extractSection: Could not find section " 
 				<< section_name << " in parameter file!" << endl;
 			return false;
 		}
@@ -45,7 +50,7 @@ namespace BALL
 		if (!hasVariable("div") || !hasVariable("V")
 				|| !hasVariable("phi0") || !hasVariable("f"))
 		{
-			Log.level(LogStream::ERROR) << "CosineTorsion section (" << section_name 
+			Log.error() << "CosineTorsion::extractSection: CosineTorsion section (" << section_name 
 				<< ") needs columns div, V, phi0, and f!" << endl;
 			return false;
 		}
@@ -53,7 +58,7 @@ namespace BALL
 		// build a two dimensional array of the atom types
 		// loop variable
 		Size	i;
-		const FFPSAtomTypes&	atom_types = parameters.getAtomTypes();
+		const AtomTypes&	atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 
 		// clear all old torsions
@@ -111,7 +116,7 @@ namespace BALL
 					Size n = getValue(key, "div").toUnsignedInt();
 					if ((n < 1) || (n > 3))
 					{
-						Log.level(LogStream::ERROR) << "Wrong number of torsion of torsion terms for "
+						Log.error() << "CosineTorsion::extractSection: wrong number of torsion of torsion terms for "
 							<< key << ": " << n << endl;
 					} else {
 
@@ -146,7 +151,7 @@ namespace BALL
 					}
 				}
 			} else {
-				Log.level(LogStream::ERROR) << "Could not interpret key " << key << endl;
+				Log.error() << "CosineTorsion::extractSection: could not interpret key " << key << endl;
 			}
 		}
 
@@ -154,7 +159,7 @@ namespace BALL
 	}
 
 
-	bool FFPSCosineTorsion::hasParameters
+	bool CosineTorsion::hasParameters
 		(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const 
 	{
 		if ((I < 0) || ((Size)I >= number_of_atom_types_))
@@ -225,17 +230,17 @@ namespace BALL
 		return result;
 	}
 
-	FFPSCosineTorsion::Values FFPSCosineTorsion::getParameters
+	CosineTorsion::Values CosineTorsion::getParameters
 		(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const 
 	{
-		FFPSCosineTorsion::Values parameters;
+		CosineTorsion::Values parameters;
 		assignParameters(parameters, I, J, K, L);
 		return parameters;
 	}
 
 
-	bool FFPSCosineTorsion::assignParameters
-		(FFPSCosineTorsion::Values& parameters,
+	bool CosineTorsion::assignParameters
+		(CosineTorsion::Values& parameters,
 		 Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const 
 	{
 		// calculate the key for this combination of atom types

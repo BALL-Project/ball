@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.16 2000/01/30 18:26:42 oliver Exp $
+// $Id: amberTorsion.C,v 1.17 2000/02/14 22:44:06 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -141,8 +141,8 @@ namespace BALL
 										Atom::Type type_a2 = a2->getType();
 										Atom::Type type_a3 = a3->getType();
 										Atom::Type type_a4 = a4->getType();
-										FFPSCosineTorsion::Values values;
-									 	FFPSCosineTorsion::SingleTorsion tmp;
+										CosineTorsion::Values values;
+									 	CosineTorsion::SingleData tmp;
 										tmp.atom1 = a1;
 										tmp.atom2 = a2;
 										tmp.atom3 = a3;
@@ -150,13 +150,11 @@ namespace BALL
 
 										bool found = false;
 
-										if (torsion_parameters_.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
+										if (torsion_parameters_.assignParameters(values, type_a1, type_a2, type_a3, type_a4)) 
 										{
-											torsion_parameters_.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
 											found = true;
-										} else if (torsion_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
+										} else if (torsion_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
 										{
-											torsion_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
 											found = true;
 										}
 										if (found) 
@@ -276,8 +274,8 @@ namespace BALL
 								a1 = it3->getPartner(**atom_it);
 
 								// test if (a1,a2,a3,a4) is improper torsion and search torsion parameters for (a1,a2,a3,a4)
-								FFPSCosineTorsion::SingleTorsion tmp;
-								FFPSCosineTorsion::Values values;
+								CosineTorsion::SingleData tmp;
+								CosineTorsion::Values values;
 
 								tmp.atom1 = a1;
 								tmp.atom2 = a2;

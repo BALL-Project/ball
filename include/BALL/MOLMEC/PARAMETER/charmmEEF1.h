@@ -1,12 +1,12 @@
-// $Id: charmmEEF1.h,v 1.4 2000/02/14 09:37:58 oliver Exp $
+// $Id: charmmEEF1.h,v 1.5 2000/02/14 22:42:39 oliver Exp $
 // Molecular Mechanics Parameter: class describing parameters needed 
 // for the EEF1 solvation component in the CHARMM force field
  
 #ifndef BALL_MOLMEC_PARAMETER_CHARMMEEF1_H
 #define BALL_MOLMEC_PARAMETER_CHARMMEEF1_H
 
-#ifndef BALL_MOLMEC_PARAMETER_FFPARAMETERSECTION_H
-#	include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include <BALL/FORMAT/parameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -16,9 +16,9 @@
 namespace BALL 
 {
 
-	/**	Force Field Parameter Section for CHARMm EEF1.
+	/**	Force Field Parameter Section for CHARMM EEF1.
 			This class reads and administers a aparameter set of solvation
-			parameters for the CHARMm/EEF1 force field (Lazaridis, Karplus, ???).
+			parameters for the CHARMM/EEF1 force field (Lazaridis, Karplus, ???).
 	*/
 	class CharmmEEF1 
 		:	public ParameterSection
@@ -40,7 +40,7 @@ namespace BALL
 
 		/**
 		*/
-		struct EEF1
+		struct Data
 		{
 			Atom*		atom;
 			Values	values;
@@ -65,6 +65,7 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 		/** Queries whether a parameter set is defined for the given atom type.
 		*/

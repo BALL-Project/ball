@@ -1,4 +1,4 @@
-// $Id: ooiEnergy.C,v 1.3 2000/02/13 16:56:42 oliver Exp $
+// $Id: ooiEnergy.C,v 1.4 2000/02/14 22:44:11 oliver Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
 
@@ -10,8 +10,8 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
-#include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
-#include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
+#include <BALL/FORMAT/parameters.h>
+#include <BALL/FORMAT/parameterSection.h>
 
 #define OOI_PARAMETER_FILENAME "solvation/Ooi.ini"
 
@@ -47,9 +47,9 @@ namespace BALL
 			{
 				filename = OOI_PARAMETER_FILENAME;
 			}
-			ForceFieldParameters parameters(filename);
+			Parameters parameters(filename);
 
-			FFParameterSection parameter_section;
+			ParameterSection parameter_section;
 			if (!parameter_section.extractSection(parameters, "OoiParameters"))
 			{
 				Log.error() << "calculateOoiEnergy: cannot find section [OoiParameters] in file "
@@ -63,7 +63,7 @@ namespace BALL
 				return;
 			}							
 
-			FFParameterSection type_section;
+			ParameterSection type_section;
 			if (!type_section.extractSection(parameters, "OoiTypes"))
 			{
 				Log.error() << "calculateOoiEnergy: cannot find section [OoiTypes] in file "

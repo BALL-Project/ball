@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.C,v 1.4 2000/02/10 14:47:35 oliver Exp $
+// $Id: charmmImproperTorsion.C,v 1.5 2000/02/14 22:44:07 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -115,7 +115,7 @@ namespace BALL
 			String res_name = res_it->getFullName();
 
 			// if we have impropers for this residue, iterate over all
-			FFPSResidueTorsions::ResidueTorsion torsion;
+			ResidueTorsions::Data torsion;
 			for (Size i = 0; i < improper_atoms_.getNumberOfResidueTorsions(res_name); i++)
 			{
 				// retrieve the names for the four atoms
@@ -290,7 +290,7 @@ namespace BALL
 						Atom::Type type_a3 = a3->getType();
 						Atom::Type type_a4 = a4->getType();
 
-						FFPSQuadraticImproperTorsion::Torsion values;
+						QuadraticImproperTorsion::Data values;
 						values.atom1 = a1;
 						values.atom2 = a2;
 						values.atom3 = a3;
@@ -370,7 +370,7 @@ namespace BALL
 
 		energy_ = 0;
 
-		vector<FFPSQuadraticImproperTorsion::Torsion>::const_iterator it = impropers_.begin(); 
+		vector<QuadraticImproperTorsion::Data>::const_iterator it = impropers_.begin(); 
 
 		for ( ; it != impropers_.end(); it++) 
 		{
@@ -426,7 +426,7 @@ namespace BALL
 		Vector3 bcxbd;
 		Vector3 bcxba;
 
-		vector<FFPSQuadraticImproperTorsion::Torsion>::const_iterator it = impropers_.begin(); 
+		vector<QuadraticImproperTorsion::Data>::const_iterator it = impropers_.begin(); 
 
 		for (; it != impropers_.end(); it++) 
 		{

@@ -1,4 +1,4 @@
-// $Id: atomTypes.h,v 1.2 2000/02/14 09:37:57 oliver Exp $
+// $Id: atomTypes.h,v 1.3 2000/02/14 22:42:39 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -8,17 +8,23 @@
 #	include <BALL/FORMAT/parameterSection.h>
 #endif
 
+#ifndef BALL_KERNEL_ATOM_H
+#	include <BALL/KERNEL/atom.h>
+#endif
+
 #define	BALL_ATOM_WILDCARD_NAME "*"
 #define	BALL_ATOM_UNKNOWN_NAME "?"
 
 namespace BALL 
 {
-	
+		
+	class ForceFieldParameters;
+
 	/**	Force Field Atom Type Class.	
 			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/atomTypes.h}
 			\\
 	*/
-	class AtomTypesSection
+	class AtomTypes
 		:	public ParameterSection
 	{
 		public:
@@ -29,15 +35,15 @@ namespace BALL
 		
 		/**	Default constructor.
 		*/
-		AtomTypesSection();
+		AtomTypes();
 
 		/**	Copy constructor.
 		*/
-		AtomTypesSection(const AtomTypesSection& atom_types, bool deep = true);
+		AtomTypes(const AtomTypes& atom_types, bool deep = true);
 
 		/**	Destructor.
 		*/
-		virtual ~AtomTypesSection();
+		virtual ~AtomTypes();
 
 		/**	Destroy method.
 		*/
@@ -54,7 +60,7 @@ namespace BALL
 				interprets (if given) a format line, reads the data from this section according to 
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
-		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 		/**	Returns the numeric type for a given string.
 		*/
@@ -82,7 +88,7 @@ namespace BALL
 				atom types object.
 				@param	atom_types the atom types object to be copied
 		*/
-		AtomTypesSection& operator = (const AtomTypesSection& atom_types);
+		AtomTypes& operator = (const AtomTypes& atom_types);
 		//@}
 		protected:
 		

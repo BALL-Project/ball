@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.h,v 1.1 2000/02/10 15:29:58 oliver Exp $
+// $Id: charmmImproperTorsion.h,v 1.2 2000/02/14 22:43:57 oliver Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMIMPROPERTORSION_H
@@ -97,11 +97,11 @@ namespace BALL
 
 		/*_	array with the torsions
 		*/
-		vector<FFPSQuadraticImproperTorsion::Torsion> 	impropers_;
+		vector<QuadraticImproperTorsion::Data>	impropers_;
 
-		FFPSQuadraticImproperTorsion										improper_parameters_;
+		QuadraticImproperTorsion								improper_parameters_;
 
-		FFPSResidueTorsions															improper_atoms_;
+		ResidueTorsions													improper_atoms_;
 		//@}
 	 
 	};

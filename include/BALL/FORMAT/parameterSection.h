@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.1 2000/02/14 09:14:54 oliver Exp $
+// $Id: parameterSection.h,v 1.2 2000/02/14 22:43:53 oliver Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -155,20 +155,16 @@ namespace BALL
 				The index of a specific value is calculated as
 				section_entries_[key] * number_of_variables_ * variable_names_[name]
 		*/
-		String*	entries_;
+		String*					entries_;
 
 		/*_	One-dimensional array of the keys read from the section.
 		*/
-		String*	keys_;
+		vector<String>	keys_;
 
 		/*_	The number of variables specified in the format line.
 				Variables also include "ver:" entries.
 		*/
 		Size		number_of_variables_;
-
-		/*_	The number of different keys read.
-		*/
-		Size		number_of_entries_;
 
 		/*_	The version numbers of each key.
 		*/

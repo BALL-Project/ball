@@ -1,4 +1,4 @@
-// $Id: charmmStretch.h,v 1.1 2000/02/10 15:29:59 oliver Exp $ 
+// $Id: charmmStretch.h,v 1.2 2000/02/14 22:43:58 oliver Exp $ 
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMSTRETCH_H
@@ -84,15 +84,15 @@ namespace BALL
 
 		/*_
 		*/
-		FFPSQuadraticBondStretch::QuadraticStretch*	stretch_;
+		QuadraticBondStretch::Data*	stretch_;
 
 		/*_	The number of stretches in the system 
 		*/
-		Size number_of_stretches_;
+		Size												number_of_stretches_;
 
 		/*_	The stretch parameters section
 		*/
-		FFPSQuadraticBondStretch  stretch_parameters_;
+		QuadraticBondStretch				stretch_parameters_;
 		//_@}
 		
 	};

@@ -1,11 +1,11 @@
-// $Id: lennardJones.h,v 1.5 2000/02/14 09:37:58 oliver Exp $
+// $Id: lennardJones.h,v 1.6 2000/02/14 22:42:40 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
 #define BALL_MOLMEC_PARAMETER_LENNARDJONES_H
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
-#	include <BALL/FORAMT/parameterSection.h>
+#	include <BALL/FORMAT/parameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -61,7 +61,7 @@ namespace BALL
 			float B;
 		};
 
-		struct LennardJones
+		struct Data
 		{
 			Atom*		atom1;
 			Atom*		atom2;
@@ -92,6 +92,7 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/
@@ -99,13 +100,13 @@ namespace BALL
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		LennardJones::Values getParameters(Atom::Type I, Atom::Type J) const;
+		Values getParameters(Atom::Type I, Atom::Type J) const;
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
-		bool assignParameters(LennardJones::Values& parameters, Atom::Type I, Atom::Type J) const;
+		bool assignParameters(Values& parameters, Atom::Type I, Atom::Type J) const;
 
 
 		protected:

@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.C,v 1.5 2000/02/11 18:18:17 oliver Exp $
+// $Id: quadraticAngleBend.C,v 1.6 2000/02/14 22:42:46 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
@@ -9,30 +9,36 @@ using namespace std;
 namespace BALL 
 {
 
-	FFPSQuadraticAngleBend::FFPSQuadraticAngleBend()
-		:	FFParameterSection(),
+	QuadraticAngleBend::QuadraticAngleBend()
+		:	ParameterSection(),
 			k_(0),
 			theta0_(0),
 			is_defined_(0)
 	{
 	}
 
-	FFPSQuadraticAngleBend::~FFPSQuadraticAngleBend()
+	QuadraticAngleBend::~QuadraticAngleBend()
 	{
 		destroy();
 	}
 
-	void FFPSQuadraticAngleBend::destroy() 
+	void QuadraticAngleBend::destroy() 
 	{
 		// clear allocatd parameter fields
 		delete [] k_;
 		delete [] theta0_;
 		delete [] is_defined_;
 
-		FFParameterSection::destroy();
+		ParameterSection::destroy();
 	}
 
-	bool FFPSQuadraticAngleBend::extractSection
+	bool QuadraticAngleBend::extractSection
+		(Parameters& parameters, const String& section_name)
+	{
+		return ParameterSection::extractSection(parameters, section_name);
+	}
+
+	bool QuadraticAngleBend::extractSection
 		(ForceFieldParameters& parameters, const String& section_name)
 	{
 		// check whether the parameters are valid
@@ -42,29 +48,28 @@ namespace BALL
 		}
 		
 		// extract the basis information
-		FFParameterSection::extractSection(parameters, section_name);
+		ParameterSection::extractSection(parameters, section_name);
 		
 		// check whether all variables we need are defined, terminate otherwise
 		if (!hasVariable("theta0") || !hasVariable("k"))
 		{
-			Log.level(LogStream::ERROR) << "quadratic angle bend section needs two variable columns: theta0, and k" << endl;
+			Log.error() << "QuadraticAngleBend::extractSection: quadratic angle bend "
+				<< "section needs two variable columns: theta0, and k" << endl;
 			return false;
 		}
 
 		// build a two dimensional array of the atom types
-		// loop variable
-		Size	i;
-		FFPSAtomTypes& atom_types = parameters.getAtomTypes();
+		AtomTypes& atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
-		Size number_of_entries = number_of_atom_types_ * number_of_atom_types_ 
-                                                                    * number_of_atom_types_;
+		Size number_of_entries = number_of_atom_types_ * number_of_atom_types_ * number_of_atom_types_;
 		
 		// allocate two one-dimensional fields for the two parameters
 		k_  = new float[number_of_entries];
 		theta0_ = new float[number_of_entries];
 		is_defined_ = new bool[number_of_entries];
 
-		for (i = 0; i < number_of_entries_; i++) 
+		Size	i;
+		for (i = 0; i < number_of_entries; i++) 
 		{
 			is_defined_[i] = false;
 		}
@@ -114,9 +119,10 @@ namespace BALL
 		String	fields[4];
 
 		// start with line 1: skip the format line!
-		for (i = 1; i <= getNumberOfKeys(); i++)
+		for (i = 0; i < getNumberOfKeys(); i++)
 		{
 			key = getKey(i);
+			Log.info() << "Key: " << key << endl;
 
 			// split the key into the three type names
 			if (key.split(fields, 3) == 3)
@@ -144,10 +150,10 @@ namespace BALL
 					k_[sym_index] = getValue(i, index_k).toFloat() * factor_k;
 					theta0_[sym_index] = getValue(i, index_theta0).toFloat() * factor_theta0;
 				} else {
-					Log.level(LogStream::WARNING) << "could not identify atom types for key " << key << endl;
+					Log.error() << "QuadraticAngleBend::extractSection: could not identify atom types for key " << key << endl;
 				}
 			} else {
-				Log.level(LogStream::ERROR) << "Wrong number of fields in the key: " << key << endl;
+				Log.error() << "QuadraticAngleBend::extractSection: wrong number of fields in the key: " << key << endl;
 			}
 		}
 
@@ -155,40 +161,51 @@ namespace BALL
 	}
 
 
-	bool FFPSQuadraticAngleBend::hasParameters(Atom::Type I, Atom::Type J, Atom::Type K) const 
+	bool QuadraticAngleBend::hasParameters(Atom::Type I, Atom::Type J, Atom::Type K) const 
 	{
 		if ((I < 0) || ((Size)I >= number_of_atom_types_))
+		{
 			return false;
+		}
 
 		if ((J < 0) || ((Size)J >= number_of_atom_types_))
+		{
 			return false;
+		}
 
 		if ((K < 0) || ((Size)K >= number_of_atom_types_))
+		{
 			return false;
-
+		}
 
 		return is_defined_[I + number_of_atom_types_ * J + number_of_atom_types_ * number_of_atom_types_ * K];
 	}
 
 
-	FFPSQuadraticAngleBend::Values FFPSQuadraticAngleBend::getParameters
+	QuadraticAngleBend::Values QuadraticAngleBend::getParameters
 		(Atom::Type I, Atom::Type J, Atom::Type K) const 
 	{
-		FFPSQuadraticAngleBend::Values parameters;
+		QuadraticAngleBend::Values parameters;
 		assignParameters(parameters, I, J, K);
 		return parameters;
 	}
 
 
-	bool FFPSQuadraticAngleBend::assignParameters
-		(FFPSQuadraticAngleBend::Values& parameters,
+	bool QuadraticAngleBend::assignParameters
+		(QuadraticAngleBend::Values& parameters,
 		 Atom::Type I, Atom::Type J, Atom::Type K) const 
 	{
+		// check whether the parameters are defined
 		Index index = (Index)(I + number_of_atom_types_ * J + number_of_atom_types_ * number_of_atom_types_ * K);
 		if (is_defined_[index]) 
-		{
+		{	
+			// assign the parameters
 			parameters.k = k_[index];
 			parameters.theta0 = theta0_[index];
+
+			Log.info() << "Assigned: " << I << "-" << J << "-" << K << " :  k = " 
+				<< parameters.k << "  theta0 = " << parameters.theta0 << endl;
+
 			return true;
 		}
 

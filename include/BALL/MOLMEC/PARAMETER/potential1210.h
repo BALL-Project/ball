@@ -1,4 +1,4 @@
-// $Id: potential1210.h,v 1.4 2000/02/14 09:37:59 oliver Exp $
+// $Id: potential1210.h,v 1.5 2000/02/14 22:42:40 oliver Exp $
 // Molecular Mechanics Parameter: class describing the parameters required
 // for a 12-10 (hydrogen bond) potential
  
@@ -6,7 +6,7 @@
 #define BALL_MOLMEC_PARAMETER_POTENTIAL1210_H
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
-#	include <BALL/FORMAT/ParameterSection.h>
+#	include <BALL/FORMAT/parameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -34,7 +34,7 @@ namespace BALL
 			float B;
 		};
 
-		struct Interaction1210
+		struct Data
 		{
 			Atom*		atom1;
 			Atom*		atom2;
@@ -60,6 +60,7 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 		/** Queries whether a parameter set is defined for the given atom types.
 		*/

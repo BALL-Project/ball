@@ -1,4 +1,4 @@
-// $Id: charmmBend.C,v 1.2 2000/02/10 10:46:40 oliver Exp $
+// $Id: charmmBend.C,v 1.3 2000/02/14 22:44:07 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmBend.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -75,7 +75,7 @@ namespace BALL
 		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
 		Atom::BondIterator it1;
 		Atom::BondIterator it2;
-		FFPSQuadraticAngleBend::QuadraticAngleBend	this_bend;
+		QuadraticAngleBend::Data	this_bend;
 		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
 		{
 			for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
@@ -97,10 +97,10 @@ namespace BALL
 						Atom::Type atom_type_a3 = this_bend.atom3->getType();
 
 
-						// retrieve the parameters. FFPSQuadraticAngleBend assumes
+						// retrieve the parameters. QuadraticAngleBend assumes
 						// that the second atom is the central atom, the order
 						// of the other two atoms doesn't matter
-						FFPSQuadraticAngleBend::Values values;
+						QuadraticAngleBend::Values values;
 						if (!bend_parameters_.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3))
 						{
 							Log.warn() << "cannot find bend parameters for atoms "

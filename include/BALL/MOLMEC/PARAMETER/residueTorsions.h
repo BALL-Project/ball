@@ -1,11 +1,11 @@
-// $Id: residueTorsions.h,v 1.3 2000/02/14 09:38:00 oliver Exp $
+// $Id: residueTorsions.h,v 1.4 2000/02/14 22:42:41 oliver Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
 #define BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
-#	include <BALL/FORMAT/ParameterSection.h>
+#	include <BALL/FORMAT/parameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -38,7 +38,7 @@ namespace BALL
 
 		/**	Strcuture containing the names of the residue and the atoms for a torsion.	
 		*/
-		struct ResidueTorsion
+		struct Data
 		{
 			String	residue_name;
 			String	atom_name_A;
@@ -46,7 +46,7 @@ namespace BALL
 			String	atom_name_C;
 			String	atom_name_D;
 			
-			ResidueTorsion(const String& name, const String& A, const String& B, const String& C, const String& D)
+			Data(const String& name, const String& A, const String& B, const String& C, const String& D)
 				:	residue_name(name),
 					atom_name_A(A),
 					atom_name_B(B),
@@ -55,7 +55,7 @@ namespace BALL
 			{
 			}
 
-			ResidueTorsion()
+			Data()
 				:	residue_name(""),
 					atom_name_A(""),
 					atom_name_B(""),
@@ -92,6 +92,7 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
+		virtual bool extractSection(Parameters& parameters, const String& section_name);
 
 		/**	Return the number of torsions for this residue.
 		*/
@@ -103,12 +104,13 @@ namespace BALL
 				@param	{struct ResidueTorsion} the torsion to be assigned to
 				@return {\bf true} if the torsion was found, {\bf false} otherwise
 		*/
-		bool assignTorsion(const String& name, Position i, ResidueTorsion& torsion) const;
+		bool assignTorsion(const String& name, Position i, Data& torsion) const;
 
 		/**	Return true if the torsion has to be considered for the residue.
 		*/
-		bool hasTorsion(const String& residue, const String& atom_A, const String& atom_B,
-										const String& atom_C, const String& atom_D) const;
+		bool hasTorsion
+			(const String& residue, const String& atom_A, const String& atom_B,
+			 const String& atom_C, const String& atom_D) const;
 		//@}
 
 		protected:
@@ -117,13 +119,13 @@ namespace BALL
 				All torsions for a given residue name are collected in 
 				a vector and accessed via the residue name through a StringHashMap.
 		*/
-		StringHashMap<vector<ResidueTorsion> >	torsions_;
+		StringHashMap<vector<Data> >	torsions_;
 
 		/**	Hash set of all torsion identifiers.
 				This hash set contains all entries in the form of strings.
 				It is used by \Ref{hasTorsion}.
 		*/
-		HashSet<String>													all_torsions_;
+		HashSet<String>								all_torsions_;
 	};
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: atomTypes.C,v 1.5 2000/02/10 15:16:26 oliver Exp $
+// $Id: atomTypes.C,v 1.6 2000/02/14 22:42:45 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>
@@ -10,36 +10,36 @@ namespace BALL
 {
 
 
-	FFPSAtomTypes::FFPSAtomTypes()
-		: FFParameterSection()
+	AtomTypes::AtomTypes()
+		: ParameterSection()
 	{
 	}
 
 
-	FFPSAtomTypes::FFPSAtomTypes(const FFPSAtomTypes& atom_types, bool /* deep */)
-		: FFParameterSection(atom_types)
+	AtomTypes::AtomTypes(const AtomTypes& atom_types, bool /* deep */)
+		: ParameterSection(atom_types)
 	{
 		names_ = atom_types.names_;
 		type_map_ = atom_types.type_map_;
 	}
 
 
-	void FFPSAtomTypes::destroy()
+	void AtomTypes::destroy()
 	{
 		names_.clear();
 		type_map_.destroy();
 
-		FFParameterSection::destroy();
+		ParameterSection::destroy();
 	}
 
 		
 
-	FFPSAtomTypes::~FFPSAtomTypes()
+	AtomTypes::~AtomTypes()
 	{
 		destroy();
 	}
 
-	FFPSAtomTypes& FFPSAtomTypes::operator = (const FFPSAtomTypes& atom_types)
+	AtomTypes& AtomTypes::operator = (const AtomTypes& atom_types)
 	{
 		destroy();
 
@@ -49,75 +49,68 @@ namespace BALL
 		return *this;
 	}
 
-	bool FFPSAtomTypes::extractSection
-		(ForceFieldParameters& parameters, 
-		 const String& section_name)
+	bool AtomTypes::extractSection
+		(Parameters& parameters, const String& section_name)
 	{
-		// the atom types have to be valid, as this is checked by extractSection
-		// (ugly circular dependence, but works OK)
 		valid_ = true;
-
 		// extract the basis information
-		if (!FFParameterSection::extractSection(parameters, section_name))
+		if (!ParameterSection::extractSection(parameters, section_name))
 		{
-			Log.level(LogStream::ERROR) << "Didn't find section for " << section_name << endl;
+			Log.error() << "AtomTypes::extractSection: didn't find section for " << section_name << endl;
 			return false;
 		}
 
-		type_map_.destroy();
+		// clear type map and name array
+		type_map_.clear();
+		names_.clear();
 
-		names_.resize(getNumberOfKeys() + 1);
+		// insert the wildcard name for type 0 (ANY_TYPE)
+		names_.push_back(BALL_ATOM_UNKNOWN_NAME);
+		type_map_[BALL_ATOM_WILDCARD_NAME] = (Atom::Type)0;
+		type_map_[BALL_ATOM_UNKNOWN_NAME] = (Atom::Type)0;
 
-		StringHashMap<Index>::Iterator	it;
-
-		names_[0] = BALL_ATOM_UNKNOWN_NAME;
-		type_map_[BALL_ATOM_WILDCARD_NAME] = Atom::ANY_TYPE;
-		type_map_[BALL_ATOM_UNKNOWN_NAME] = Atom::ANY_TYPE;
-
-		Size	index = 1;
-		for (it = section_entries_.begin(); !(it == section_entries_.end()); ++it)
+		// iterate over all entries and insert them into
+		// the hash map and the names_ array
+		for (Size i = 0; i < getNumberOfKeys(); i++)
 		{
-			names_[index] = it->first;
-			type_map_[it->first] = (Atom::Type)(index++);
+			// insert the name into the hash map
+			// and the names array
+			type_map_[getKey(i)] = (Atom::Type)(names_.size());
+			names_.push_back(getKey(i));
 		}
 		
 		return true;
 	}
 
-	bool FFPSAtomTypes::hasType(const String& name) const 
+	bool AtomTypes::hasType(const String& name) const 
 	{
 		return type_map_.has(name);
 	}
 
-	Atom::Type FFPSAtomTypes::getType(const String& name) const 
+	Atom::Type AtomTypes::getType(const String& name) const 
 	{
-		if (type_map_.has(name)) 
+		// try to find the name in the hash map
+		StringHashMap<Atom::Type>::ConstIterator it = type_map_.find(name);
+		if (it != type_map_.end())
 		{
-			return (*type_map_.find(name)).second;
+			return it->second;
 		} else {
 			return Atom::UNKNOWN_TYPE;
 		}
 	}
 
-	String FFPSAtomTypes::getTypeName(Atom::Type type) const 
+	String AtomTypes::getTypeName(Atom::Type type) const 
 	{
 		static const String empty_string;
-		if ((type < Atom::ANY_TYPE) || (type >= (Index)names_.size()))
+		if ((type < 0) || (type >= (Index)names_.size()))
 		{
 			return empty_string;
 		}
 		
-		if (type == Atom::ANY_TYPE)
-		{
-			return BALL_ATOM_WILDCARD_NAME;
-		}
-		else 
-		{
-			return names_[type];
-		}
+		return names_[type];
 	}
 
-	Size FFPSAtomTypes::getNumberOfTypes() const 
+	Size AtomTypes::getNumberOfTypes() const 
 	{
 		return names_.size();
 	}

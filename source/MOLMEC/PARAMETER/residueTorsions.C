@@ -1,4 +1,4 @@
-// $Id: residueTorsions.C,v 1.3 2000/02/11 18:18:17 oliver Exp $
+// $Id: residueTorsions.C,v 1.4 2000/02/14 22:42:47 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/residueTorsions.h>
@@ -9,22 +9,29 @@ using namespace std;
 namespace BALL 
 {
 
-	FFPSResidueTorsions::FFPSResidueTorsions()
-		:	FFParameterSection()
+	ResidueTorsions::ResidueTorsions()
+		:	ParameterSection()
 	{
 	}
 
-	FFPSResidueTorsions::~FFPSResidueTorsions()
+	ResidueTorsions::~ResidueTorsions()
 	{
 		destroy();
 	}
 
-	void FFPSResidueTorsions::destroy() 
+	void ResidueTorsions::destroy() 
 	{
-		FFParameterSection::destroy();
+		ParameterSection::destroy();
 	}
 
-	bool FFPSResidueTorsions::extractSection(ForceFieldParameters& parameters, const String& section_name)
+	bool ResidueTorsions::extractSection
+		(Parameters& parameters, const String& section_name)
+	{
+		return ParameterSection::extractSection(parameters, section_name);
+	}
+
+	bool ResidueTorsions::extractSection
+		(ForceFieldParameters& parameters, const String& section_name)
 	{
 		// check whether the parameters are valid
 		if (!parameters.isValid())
@@ -33,10 +40,10 @@ namespace BALL
 		}
 		
 		// extract the basis information
-		FFParameterSection::extractSection(parameters, section_name);
+		ParameterSection::extractSection(parameters, section_name);
 
 		// iterate over all keys and construct the hash map of vectors
-		for (Size i = 1; i <= getNumberOfKeys(); i++)
+		for (Size i = 0; i < getNumberOfKeys(); i++)
 		{
 			String key = getKey(i);
 			String residue = key.getField(0);
@@ -45,18 +52,18 @@ namespace BALL
 			if (!torsions_.has(residue))
 			{	
 				// create the vector
-				torsions_.insert(pair<String, vector<ResidueTorsion> >(residue, vector<ResidueTorsion>()));
+				torsions_.insert(pair<String, vector<Data> >(residue, vector<Data>()));
 			} 
 
 			// insert the torsions 
-			torsions_[residue].push_back(ResidueTorsion(residue, key.getField(1), key.getField(2), key.getField(3), key.getField(4)));
+			torsions_[residue].push_back(Data(residue, key.getField(1), key.getField(2), key.getField(3), key.getField(4)));
 			all_torsions_.insert(key);
 		}
 
 		return true;
 	}
 
-	Size FFPSResidueTorsions::getNumberOfResidueTorsions(const String& residue_name) const
+	Size ResidueTorsions::getNumberOfResidueTorsions(const String& residue_name) const
 	{
 		// if we know this residue...
 		if (torsions_.has(residue_name))
@@ -69,7 +76,8 @@ namespace BALL
 	}
 
 
-	bool FFPSResidueTorsions::assignTorsion(const String& name, Position i, ResidueTorsion& torsion) const
+	bool ResidueTorsions::assignTorsion
+		(const String& name, Position i, Data& torsion) const
 	{
 		// if we know this residue...
 		if (torsions_.has(name))
@@ -88,7 +96,7 @@ namespace BALL
 		return false;
 	}
 
-	bool FFPSResidueTorsions::hasTorsion
+	bool ResidueTorsions::hasTorsion
 		(const String& residue, const String& atom_A, const String& atom_B,
 		 const String& atom_C, const String& atom_D) const
 	{

@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.h,v 1.1 2000/02/10 15:30:00 oliver Exp $
+// $Id: charmmTorsion.h,v 1.2 2000/02/14 22:43:59 oliver Exp $
 // Molecular Mechanics: CHARMM force field, proper torsion component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMTORSION_H
@@ -56,7 +56,7 @@ namespace BALL
 			}
 				
 
-			SingleCharmmTorsion(FFPSCosineTorsion::SingleTorsion& t)
+			SingleCharmmTorsion(CosineTorsion::SingleData& t)
 			{
 				atom1 = t.atom1;
 				atom2 = t.atom2;
@@ -128,11 +128,11 @@ namespace BALL
 
 		/*_ Contents of the [Torsions] section of the parameter file.
 		*/
-		FFPSCosineTorsion		torsion_parameters_;		
+		CosineTorsion									torsion_parameters_;		
 
 		/*_ Contents of the [ResidueTorsions] section of the parameter file.
 		*/
-		FFPSResidueTorsions	residue_torsions_;
+		ResidueTorsions								residue_torsions_;
 
 		/*_	Set to true, if the torsions are read from the ResidueTorsions section.
 		*/

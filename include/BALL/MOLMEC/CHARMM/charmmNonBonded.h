@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.h,v 1.1 2000/02/10 15:29:59 oliver Exp $
+// $Id: charmmNonBonded.h,v 1.2 2000/02/14 22:43:58 oliver Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -144,11 +144,11 @@ namespace BALL
 
 		/**	Vector array with all atom pairs whose distance is smaller than cut_off
 		*/
-		vector<FFPSLennardJones::LennardJones>	non_bonded_;
+		vector<LennardJones::Data>	non_bonded_;
 
 		/**	Vector with parameters for the solvation component
 		*/
-		vector<FFPSCharmmEEF1::Values> solvation_values_;
+		vector<CharmmEEF1::Values> solvation_values_;
  
 		/**	Number of 1-4 interactions in the vector non_bonded
 		*/
@@ -189,13 +189,13 @@ namespace BALL
 		*/
 		MolmecSupport::PairListAlgorithmType	algorithm_type_;
 		
-		FFPSLennardJones								van_der_waals_parameters_;
+		LennardJones								van_der_waals_parameters_;
 
-		FFPSLennardJones								van_der_waals_parameters_14_;
+		LennardJones								van_der_waals_parameters_14_;
 
-		FFPSCharmmEEF1									solvation_parameters_;
+		CharmmEEF1									solvation_parameters_;
 
-		vector<FFPSCharmmEEF1::Values>	solvation_;
+		vector<CharmmEEF1::Values>	solvation_;
 
 		bool use_solvation_component_;
 		//_@}

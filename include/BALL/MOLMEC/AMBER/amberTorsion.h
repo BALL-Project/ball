@@ -1,4 +1,4 @@
-// $Id: amberTorsion.h,v 1.5 2000/02/06 19:45:01 oliver Exp $
+// $Id: amberTorsion.h,v 1.6 2000/02/14 22:43:56 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERTORSION_H
@@ -36,9 +36,9 @@ namespace BALL
 			Atom*	atom3;
 			Atom*	atom4;
 
-			float		V;
+			float					V;
 			unsigned char	f;
-			float		phase;
+			float					phase;
 
 			SingleAmberTorsion()
 				:	atom1(0),
@@ -52,7 +52,7 @@ namespace BALL
 			}
 				
 
-			SingleAmberTorsion(FFPSCosineTorsion::SingleTorsion& t)
+			SingleAmberTorsion(CosineTorsion::SingleData& t)
 			{
 				atom1 = t.atom1;
 				atom2 = t.atom2;
@@ -121,11 +121,11 @@ namespace BALL
 		*/
 		vector<SingleAmberTorsion> 	torsion_;
 
-		FFPSCosineTorsion		torsion_parameters_;
+		CosineTorsion			torsion_parameters_;
 		
-		FFPSCosineTorsion		improper_parameters_;
+		CosineTorsion			improper_parameters_;
 
-		FFParameterSection	impropers_;
+		ParameterSection	impropers_;
 		//@}
 	 
 	};

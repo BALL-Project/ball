@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.3 2000/02/10 15:13:35 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.4 2000/02/14 22:44:08 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -252,7 +252,7 @@ namespace BALL
 		}
 
 		vector< bool >::iterator bool_it = is_torsion.begin(); 
-		FFPSLennardJones::LennardJones tmp;
+		LennardJones::Data tmp;
 		Atom*	atom1;
 		Atom* atom2;
 		Atom::Type	type_atom1;
@@ -382,7 +382,7 @@ namespace BALL
 
 	BALL_INLINE 
 	void CHARMMcalculateVdWAndElectrostaticEnergy
-		(vector<FFPSLennardJones::LennardJones>::const_iterator it,
+		(vector<LennardJones::Data>::const_iterator it,
 		 Vector3& period, Vector3& half_period,
 		 float& cut_off_vdw_2, float& cut_off_electrostatic_2,
 		 float& vdw_energy, float& electrostatic_energy, 
@@ -390,7 +390,7 @@ namespace BALL
 		 bool use_periodic_boundary, 
 		 bool use_dist_depend, 
 		 bool use_solvation, 
-		 vector<FFPSCharmmEEF1::Values>& solvation,
+		 vector<CharmmEEF1::Values>& solvation,
 		 float& solvation_energy)
 	{
 		Vector3 difference = it->atom1->getPosition() - it->atom2->getPosition();      
@@ -446,8 +446,8 @@ namespace BALL
 		// Calculate the solvation energy contribution
 		if (use_solvation && it->atom1->getElement() !=  PSE[Element::H] && it->atom2->getElement() !=  PSE[Element::H])
 		{
-			FFPSCharmmEEF1::Values a1 = solvation[it->atom1->getType()];
-			FFPSCharmmEEF1::Values a2 = solvation[it->atom2->getType()];
+			CharmmEEF1::Values a1 = solvation[it->atom1->getType()];
+			CharmmEEF1::Values a2 = solvation[it->atom2->getType()];
 
 			float factor = BALL::Constants::PI * sqrt(BALL::Constants::PI) * distance_2;
 			float distance = sqrt(distance_2);
@@ -471,7 +471,7 @@ namespace BALL
 	// resulting from non-bonded interactions between two atoms 
 	BALL_INLINE 
 	void CHARMMcalculateVdWAndElectrostaticForce
-		(vector<FFPSLennardJones::LennardJones>::iterator it, 
+		(vector<LennardJones::Data>::iterator it, 
 		 Vector3& period, Vector3& half_period, 
 		 bool use_selection,		
 		 const float& e_scaling_factor, const float& vdw_scaling_factor, 
@@ -479,7 +479,7 @@ namespace BALL
 		 const float& cut_on_vdw_2, const float& inverse_difference_on_off_3,
 		 bool use_periodic_boundary, 
 		 bool use_dist_depend, 
-		 bool use_solvation, vector<FFPSCharmmEEF1::Values>& solvation)
+		 bool use_solvation, vector<CharmmEEF1::Values>& solvation)
 	{
 		float factor = 0;
 		float distance;
@@ -546,8 +546,8 @@ namespace BALL
 
 			if (use_solvation && it->atom1->getElement() !=  PSE[Element::H] && it->atom2->getElement() !=  PSE[Element::H])
 			{
-				FFPSCharmmEEF1::Values a1 = solvation[it->atom1->getType()];
-				FFPSCharmmEEF1::Values a2 = solvation[it->atom2->getType()];
+				CharmmEEF1::Values a1 = solvation[it->atom1->getType()];
+				CharmmEEF1::Values a2 = solvation[it->atom2->getType()];
 
 				distance = sqrt(distance_2);
 				inverse_distance = 1/distance;
@@ -625,7 +625,7 @@ namespace BALL
 		solvation_energy_ = 0;
 
 		Vector3 difference,period,half_period;
-		vector<FFPSLennardJones::LennardJones>::iterator it; 
+		vector<LennardJones::Data>::iterator it; 
 		Size i;                                                                                       
 
 		bool use_periodic_boundary = force_field_->periodic_boundary.isEnabled(); 
@@ -851,7 +851,7 @@ namespace BALL
 		float vdw_scaling_factor_1_4 = vdw_scaling_factor * scaling_vdw_1_4_;
 
 		Size i;
-		vector<FFPSLennardJones::LennardJones>::iterator it;  
+		vector<LennardJones::Data>::iterator it;  
 		Vector3 period; 
 		Vector3 half_period; 
 

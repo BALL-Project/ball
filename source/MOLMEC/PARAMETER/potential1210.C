@@ -1,4 +1,4 @@
-// $Id: potential1210.C,v 1.4 1999/12/28 17:52:37 oliver Exp $
+// $Id: potential1210.C,v 1.5 2000/02/14 22:42:46 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/potential1210.h>
@@ -9,30 +9,36 @@ using namespace std;
 namespace BALL 
 {
 
-	FFPSPotential1210::FFPSPotential1210()
-		:	FFParameterSection(),
+	Potential1210::Potential1210()
+		:	ParameterSection(),
 			A_(0),
 			B_(0),
 			is_defined_(0)
 	{
 	}
 
-	FFPSPotential1210::~FFPSPotential1210()
+	Potential1210::~Potential1210()
 	{
 		destroy();
 	}
 
-	void FFPSPotential1210::destroy() 
+	void Potential1210::destroy() 
 	{
 		// clear parameter fields
 		delete [] A_;
 		delete [] B_;
 		delete [] is_defined_;
 
-		FFParameterSection::destroy();
+		ParameterSection::destroy();
 	}
 
-	bool FFPSPotential1210::extractSection
+	bool Potential1210::extractSection
+		(Parameters& parameters, const String& section_name)
+	{
+		return ParameterSection::extractSection(parameters, section_name);
+	}
+
+	bool Potential1210::extractSection
 		(ForceFieldParameters& parameters, const String& section_name)
 	{
 		// check whether the parameters are valid
@@ -43,7 +49,7 @@ namespace BALL
 			
 
 		// extract the basis information
-		FFParameterSection::extractSection(parameters, section_name);
+		ParameterSection::extractSection(parameters, section_name);
 		
 		// check whether all variables we need are defined, terminate otherwise
 		if (!hasVariable("A") || !hasVariable("B"))
@@ -55,7 +61,7 @@ namespace BALL
 		// loop variable
 		Size	i;
 
-		FFPSAtomTypes& atom_types = parameters.getAtomTypes();
+		AtomTypes& atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 		
 		// allocate two onedimensional fields for the two parameters
@@ -129,7 +135,7 @@ namespace BALL
 	}
 
 
-	bool FFPSPotential1210::hasParameters(Atom::Type I, Atom::Type J) const 
+	bool Potential1210::hasParameters(Atom::Type I, Atom::Type J) const 
 	{
 		if ((I < 0) || ((Size)I >= number_of_atom_types_))
 			return false;
@@ -141,17 +147,17 @@ namespace BALL
 	}
 
 
-	FFPSPotential1210::Values FFPSPotential1210::getParameters
+	Potential1210::Values Potential1210::getParameters
 		(Atom::Type I, Atom::Type J) const 
 	{
-		FFPSPotential1210::Values parameters;
+		Potential1210::Values parameters;
 		assignParameters(parameters, I, J);
 		return parameters;
 	}
 
 
-	bool FFPSPotential1210::assignParameters
-		(FFPSPotential1210::Values& parameters,
+	bool Potential1210::assignParameters
+		(Potential1210::Values& parameters,
 		 Atom::Type I, Atom::Type J) const 
 	{
 		if (hasParameters(I, J)) 

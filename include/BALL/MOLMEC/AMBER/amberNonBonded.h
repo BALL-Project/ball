@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.7 2000/02/10 15:03:56 oliver Exp $
+// $Id: amberNonBonded.h,v 1.8 2000/02/14 22:43:55 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -105,8 +105,8 @@ namespace BALL
 		*/
 		virtual void buildVectorOfNonBondedAtomPairs
 			(const vector< pair<Atom*, Atom*> >& atom_vector,
-			 const FFPSLennardJones& lennard_jones,
-			 const FFPSPotential1210& hydrogen_bond);
+			 const LennardJones& lennard_jones,
+			 const Potential1210& hydrogen_bond);
 
 
 		//@}
@@ -134,7 +134,7 @@ namespace BALL
 
 		/**	Vector array with all atom pairs whose distance is smaller than cut_off
 		*/
-		vector<FFPSLennardJones::LennardJones>	non_bonded_;
+		vector<LennardJones::Data>	non_bonded_;
 
     /** Vector of flags deciding whether the pair forms a hydrogen bond or a
 				standard VdW interaction.
@@ -176,9 +176,9 @@ namespace BALL
     */
     MolmecSupport::PairListAlgorithmType  algorithm_type_;
  		
-		FFPSLennardJones van_der_waals_;
+		LennardJones	van_der_waals_;
 
-		FFPSPotential1210 hydrogen_bond_;
+		Potential1210 hydrogen_bond_;
 
 		//_@}
 

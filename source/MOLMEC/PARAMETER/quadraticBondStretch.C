@@ -1,4 +1,4 @@
-// $Id: quadraticBondStretch.C,v 1.4 1999/12/28 17:52:38 oliver Exp $
+// $Id: quadraticBondStretch.C,v 1.5 2000/02/14 22:42:46 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticBondStretch.h>
@@ -9,30 +9,36 @@ using namespace std;
 namespace BALL 
 {
 
-	FFPSQuadraticBondStretch::FFPSQuadraticBondStretch()
-		:	FFParameterSection(),
+	QuadraticBondStretch::QuadraticBondStretch()
+		:	ParameterSection(),
 			k_(0),
 			r0_(0),
 			is_defined_(0)
 	{
 	}
 
-	FFPSQuadraticBondStretch::~FFPSQuadraticBondStretch()
+	QuadraticBondStretch::~QuadraticBondStretch()
 	{
 		destroy();
 	}
 
-	void FFPSQuadraticBondStretch::destroy() 
+	void QuadraticBondStretch::destroy() 
 	{
 		// clear allocated parameter fields
 		delete [] k_;
 		delete [] r0_;
 		delete [] is_defined_;
 
-		FFParameterSection::destroy();
+		ParameterSection::destroy();
 	}
 
-	bool FFPSQuadraticBondStretch::extractSection
+	bool QuadraticBondStretch::extractSection
+		(Parameters& parameters, const String& section_name)
+	{
+		return ParameterSection::extractSection(parameters, section_name);
+	}
+
+	bool QuadraticBondStretch::extractSection
 		(ForceFieldParameters& parameters, const String& section_name)
 	{
 		// check whether the parameters are valid
@@ -43,7 +49,7 @@ namespace BALL
 			
 
 		// extract the basis information
-		FFParameterSection::extractSection(parameters, section_name);
+		ParameterSection::extractSection(parameters, section_name);
 		
 		// check whether all variables we need are defined, terminate otherwise
 		if (!hasVariable("r0") || !hasVariable("k"))
@@ -55,7 +61,7 @@ namespace BALL
 		// loop variable
 		Size	i;
 
-		FFPSAtomTypes& atom_types = parameters.getAtomTypes();
+		AtomTypes& atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 		
 		// allocate two onedimensional fields for the two parameters
@@ -135,7 +141,7 @@ namespace BALL
 	}
 
 
-	bool FFPSQuadraticBondStretch::hasParameters(Atom::Type I, Atom::Type J) const 
+	bool QuadraticBondStretch::hasParameters(Atom::Type I, Atom::Type J) const 
 	{
 		if ((I < 0) || ((Size)I >= number_of_atom_types_))
 		{
@@ -151,17 +157,17 @@ namespace BALL
 	}
 
 
-	FFPSQuadraticBondStretch::Values FFPSQuadraticBondStretch::getParameters
+	QuadraticBondStretch::Values QuadraticBondStretch::getParameters
 		(Atom::Type I, Atom::Type J) const 
 	{
-		FFPSQuadraticBondStretch::Values parameters;
+		QuadraticBondStretch::Values parameters;
 		assignParameters(parameters, I, J);
 		return parameters;
 	}
 
 
-	bool FFPSQuadraticBondStretch::assignParameters
-		(FFPSQuadraticBondStretch::Values& parameters,
+	bool QuadraticBondStretch::assignParameters
+		(QuadraticBondStretch::Values& parameters,
 		 Atom::Type I, Atom::Type J) const 
 	{
 		if (hasParameters(I, J)) 

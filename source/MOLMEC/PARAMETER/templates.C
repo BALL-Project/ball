@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.6 2000/02/13 16:54:47 oliver Exp $
+// $Id: templates.C,v 1.7 2000/02/14 22:42:47 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -9,36 +9,36 @@ using namespace std;
 namespace BALL 
 {
 
-	FFPSTemplates::FFPSTemplates()
-		: FFParameterSection()
+	Templates::Templates()
+		: ParameterSection()
 	{
 	}
 
 
-	FFPSTemplates::FFPSTemplates(const FFPSTemplates& templates, bool /* deep */)
-		: FFParameterSection(templates)
+	Templates::Templates(const Templates& templates, bool /* deep */)
+		: ParameterSection(templates)
 	{
 		charges_ = templates.charges_;
 		type_names_ = templates.type_names_;
 	}
 
 
-	void FFPSTemplates::destroy()
+	void Templates::destroy()
 	{
 		charges_.destroy();
 		type_names_.destroy();
 
-		FFParameterSection::destroy();
+		ParameterSection::destroy();
 	}
 
 		
 
-	FFPSTemplates::~FFPSTemplates()
+	Templates::~Templates()
 	{
 		destroy();
 	}
 
-	FFPSTemplates& FFPSTemplates::operator = (const FFPSTemplates& templates)
+	Templates& Templates::operator = (const Templates& templates)
 	{
 		charges_.set(templates.charges_);
 		type_names_.set(templates.type_names_);
@@ -46,16 +46,15 @@ namespace BALL
 		return *this;
 	}
 
-	bool FFPSTemplates::extractSection
-		(ForceFieldParameters& parameters, 
-		 const String& section_name)
+	bool Templates::extractSection
+		(Parameters& parameters, const String& section_name)
 	{
 		// clean up first
 		type_names_.destroy();
 		charges_.destroy();
 
 		// extract the basis information
-		if (!FFParameterSection::extractSection(parameters, section_name))
+		if (!ParameterSection::extractSection(parameters, section_name))
 		{
 			Log.level(LogStream::ERROR) << "Didn't find section for " << section_name << endl;
 			return false;
@@ -88,12 +87,12 @@ namespace BALL
 		return true;
 	}
 
-	bool FFPSTemplates::has(const String& name) const 
+	bool Templates::has(const String& name) const 
 	{
 		return type_names_.has(name);
 	}
 
-	float FFPSTemplates::getCharge(const String& name) const 
+	float Templates::getCharge(const String& name) const 
 	{
 		if (charges_.has(name)) 
 		{
@@ -103,7 +102,7 @@ namespace BALL
 		}
 	}
 
-	String FFPSTemplates::getTypeName(const String& name) const 
+	String Templates::getTypeName(const String& name) const 
 	{
 		if (type_names_.has(name)) 
 		{
@@ -113,7 +112,7 @@ namespace BALL
 		}
 	}
 	
-	void FFPSTemplates::assign(System& system, bool overwrite_existing_type_names, bool overwrite_non_zero_charges) const
+	void Templates::assign(System& system, bool overwrite_existing_type_names, bool overwrite_non_zero_charges) const
 	{
 		// remember the current parent to avoid
 		// the recalculation of the parent`s name
@@ -130,7 +129,7 @@ namespace BALL
 				{
 					it->setCharge(charges_[name]);
 				} else {
-					Log.warn() << "FFPSTemplates::assign: cannot assign charge for atom " << name << endl;
+					Log.warn() << "Templates::assign: cannot assign charge for atom " << name << endl;
 				}
 			}
 			if (overwrite_existing_type_names || (it->getTypeName() == BALL_ATOM_DEFAULT_TYPE_NAME))
@@ -139,7 +138,7 @@ namespace BALL
 				{
 					it->setTypeName(type_names_[name]);
 				} else {
-					Log.warn() << "FFPSTemplates::assign: cannot assign type name for atom " << name << endl;
+					Log.warn() << "Templates::assign: cannot assign type name for atom " << name << endl;
 				}
 			}
 		}	
@@ -147,7 +146,7 @@ namespace BALL
 
 
 
-	void FFPSTemplates::assignTypeNames(System& system, bool overwrite_existing_type_names) const
+	void Templates::assignTypeNames(System& system, bool overwrite_existing_type_names) const
 	{
 		// remember the current parent to avoid
 		// the recalculation of the parent`s name
@@ -202,14 +201,14 @@ namespace BALL
 				{
 					it->setTypeName(type_names_[name]);
 				} else {
-					Log.warn() << "FFPSTemplates::assignTypeNames: cannot assign type name for atom " << name << endl;
+					Log.warn() << "Templates::assignTypeNames: cannot assign type name for atom " << name << endl;
 				}
 			}
 		}	
 	}
 
 
-	void FFPSTemplates::assignCharges(System& system, bool overwrite_non_zero_charges) const
+	void Templates::assignCharges(System& system, bool overwrite_non_zero_charges) const
 	{
 		// remember the current parent to avoid
 		// the recalculation of the parent`s name
@@ -264,7 +263,7 @@ namespace BALL
 				{
 					it->setCharge(charges_[name]);
 				} else {
-					Log.warn() << "FFPSTemplates::assignCharges: cannot assign charge for atom " << name << endl;
+					Log.warn() << "Templates::assignCharges: cannot assign charge for atom " << name << endl;
 				}
 			}
 		}	
