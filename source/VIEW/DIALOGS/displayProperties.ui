@@ -1520,40 +1520,6 @@
             <property name="exclusive">
                 <bool>true</bool>
             </property>
-            <widget class="QSlider">
-                <property name="name">
-                    <cstring>precision_slider</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>78</x>
-                        <y>51</y>
-                        <width>121</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="minValue">
-                    <number>10</number>
-                </property>
-                <property name="maxValue">
-                    <number>300</number>
-                </property>
-                <property name="lineStep">
-                    <number>1</number>
-                </property>
-                <property name="value">
-                    <number>30</number>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="tickmarks">
-                    <enum>NoMarks</enum>
-                </property>
-                <property name="tickInterval">
-                    <number>20</number>
-                </property>
-            </widget>
             <widget class="QComboBox">
                 <item>
                     <property name="text">
@@ -1680,6 +1646,40 @@
                 </property>
                 <property name="checked">
                     <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QSlider">
+                <property name="name">
+                    <cstring>precision_slider</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>78</x>
+                        <y>51</y>
+                        <width>121</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="minValue">
+                    <number>1</number>
+                </property>
+                <property name="maxValue">
+                    <number>300</number>
+                </property>
+                <property name="lineStep">
+                    <number>1</number>
+                </property>
+                <property name="value">
+                    <number>30</number>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="tickmarks">
+                    <enum>NoMarks</enum>
+                </property>
+                <property name="tickInterval">
+                    <number>20</number>
                 </property>
             </widget>
         </widget>
