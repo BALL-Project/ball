@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.8 2001/03/05 01:55:44 amoll Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.9 2001/03/12 00:47:05 amoll Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -243,7 +243,8 @@ namespace BALL
 
 		/** 
 		*/
-		virtual bool finish() throw();
+		virtual bool finish() 
+			throw(Exception::DivisionByZero);
 
 		//@}
 		/** @name Options 
