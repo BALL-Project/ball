@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.15 2004/12/25 18:45:23 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.16 2004/12/27 13:21:51 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -261,11 +261,10 @@ namespace BALL
 			if (!have_start_point_)
 			{
 				last_point_ = spline_points_[start];
-				
-				// create sphere for the point
 				start++;
 			}
 
+			// create sphere for the point
 			Sphere* sphere = new Sphere;
 			if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
 			sphere->setRadius(tube_radius_);
@@ -334,6 +333,11 @@ namespace BALL
 			vector<Vector3>* last_points = &points1;
 			vector<Vector3>* dummy = 0;
 				
+			// create a new mesh with the points and triangles
+			Mesh* mesh = new Mesh();
+			mesh->setComposite(atoms_of_spline_points_[start]->getParent());
+			geometric_objects_.push_back(mesh);
+				
 			//------------------------------------------------------>
 			// iterate over all spline_points_
 			for (Position p = start; p < end -1; p++)
@@ -373,9 +377,14 @@ namespace BALL
 				// dont forget the dummy for closing the ring
  				(*new_points)[new_points->size() - 1] = (*new_points)[0];
 				////////////////////////////////////////////////////////////
+				
+				if (mesh->getComposite() != atoms_of_spline_points_[p])
+				{
+					mesh = new Mesh();
+					mesh->setComposite(atoms_of_spline_points_[p]->getParent());
+					geometric_objects_.push_back(mesh);
+				}
 
-				// create a new mesh with the points and triangles
-				Mesh* mesh = new Mesh();
 				for (Position point_pos = 0; point_pos < slides; point_pos++)
 				{
 					mesh->vertex.push_back(last_point_ + (*last_points)[point_pos]);
@@ -400,9 +409,6 @@ namespace BALL
 					mesh->triangle.push_back(t);
 				}
 
-				mesh->setComposite(atoms_of_spline_points_[p]);
-				geometric_objects_.push_back(mesh);
-
 				// swap between the two point vectors
 				dummy = new_points;
 				new_points  = last_points;
@@ -412,6 +418,7 @@ namespace BALL
 				last_point_ = point;
 			}
 
+			geometric_objects_.push_back(mesh);
 			have_start_point_ = true;
 			
 			// create sphere for the point
