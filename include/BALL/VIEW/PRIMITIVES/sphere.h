@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.h,v 1.4 2003/09/04 23:14:13 amoll Exp $
+// $Id: sphere.h,v 1.5 2003/09/22 13:46:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
@@ -53,7 +53,6 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Default destruction of this sphere.
 			*/
 			virtual ~Sphere()
 				throw();
@@ -81,7 +80,6 @@ namespace BALL
 				throw();
 
 			/** Swapping of sphere's.
-					Swap the value of this sphere with the sphere <b> sphere</b>.
 			*/
 			void swap(Sphere& sphere)
 				throw();
@@ -151,8 +149,6 @@ namespace BALL
 			Vector3* point_ptr_;
 		};
 
-	} // namespace VIEW
-
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_PRIMITIV_SPHERE_H
