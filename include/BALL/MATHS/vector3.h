@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.9 2000/01/16 17:28:43 oliver Exp $
+// $Id: vector3.h,v 1.10 2000/01/26 16:17:26 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -64,7 +64,7 @@ namespace BALL
 
 		BALL_CREATE(TVector3<T>)
 
-		/**	@name	Constructors and Destructors
+		/**	@name	Constructors  Destructors
 		*/
 		//@{
 
