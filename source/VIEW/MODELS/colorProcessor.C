@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.27 2004/02/17 15:36:51 amoll Exp $
+// $Id: colorProcessor.C,v 1.28 2004/02/24 18:48:11 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -95,12 +95,14 @@ namespace BALL
 					return Processor::CONTINUE;
 				}
 
-				if (!atom_grid_created_)
+				if (!atom_grid_created_ || mesh->getComposite() != 0)
 				{
-					createAtomGrid_();
+					const Composite* c = mesh->getComposite();
+					createAtomGrid_(c);
 				}
 
 				colorMeshFromGrid_(*mesh);
+
 				return Processor::CONTINUE;
 			}
 			
@@ -138,33 +140,57 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void ColorProcessor::createAtomGrid_()
+		void ColorProcessor::createAtomGrid_(const Composite* from_mesh)
 			throw()
 		{
 			atom_grid_.clear();
-			if (composites_ == 0)
+			if (composites_ == 0 && from_mesh == 0)
 			{
 				return;
 			}
+			
 			List<const Atom*> atoms;
-			CompositeSet::ConstIterator it = composites_->begin();
-			for(; it != composites_->end(); it++)
+
+			if (from_mesh == 0)
 			{
-				if (RTTI::isKindOf<AtomContainer>(**it))
+				CompositeSet::ConstIterator it = composites_->begin();
+				for(; it != composites_->end(); it++)
+				{
+					if (RTTI::isKindOf<AtomContainer>(**it))
+					{
+						AtomIterator ait;
+						AtomContainer* acont = (AtomContainer*)(*it);
+						BALL_FOREACH_ATOM(*acont, ait)
+						{
+							atoms.push_back(&*ait);
+						}
+					}
+					else if (RTTI::isKindOf<Atom>(**it))
+					{
+						const Atom* atom = dynamic_cast<const Atom*> (*it);
+						atoms.push_back(atom);
+					}
+				}
+			}
+			else 
+			{
+				// composite from mesh
+				if (RTTI::isKindOf<AtomContainer>(*from_mesh))
 				{
 					AtomIterator ait;
-					AtomContainer* acont = (AtomContainer*)(*it);
+					AtomContainer* acont = (AtomContainer*)(from_mesh);
 					BALL_FOREACH_ATOM(*acont, ait)
 					{
 						atoms.push_back(&*ait);
 					}
 				}
-				else if (RTTI::isKindOf<Atom>(**it))
+				else if (RTTI::isKindOf<Atom>(*from_mesh))
 				{
-					const Atom* atom = dynamic_cast<const Atom*> (*it);
+					const Atom* atom = dynamic_cast<const Atom*> (from_mesh);
 					atoms.push_back(atom);
 				}
 			}
+
 
 			BoundingBoxProcessor boxp;
 			boxp.start();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.27 2004/02/24 10:47:39 amoll Exp $
+// $Id: molecularStructure.C,v 1.28 2004/02/24 18:49:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -155,8 +155,6 @@ namespace BALL
 		charmm_dialog_.setCharmmFF(charmm_);
 		charmm_dialog_.accept();
 
-
-amber_.getResults();
 		use_amber_= true; // use amber force field by default
 	}
 

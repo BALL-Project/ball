@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.20 2004/02/24 18:39:45 amoll Exp $
+// $Id: cartoonModel.C,v 1.21 2004/02/24 18:47:58 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -28,7 +28,7 @@ namespace BALL
 			: AddBackboneModel(),
 				last_chain_(0),
 				helix_radius_(2.4),
-				arrow_width_(2.6),
+				arrow_width_(2),
 				arrow_height_(0.5)
 		{
 		}
@@ -261,10 +261,6 @@ namespace BALL
 
 			Position last_vertices=0;
 
-			// TODO: configurable!!!
-			arrow_height_ = 0.5;
-			arrow_width_  = 2.0;
-
 			last_points[0] = spline_[0] - (perpendic * arrow_width_/2.) - normal * arrow_height_/2.;
 			last_points[1] = last_points[0] + normal * arrow_height_;
 			last_points[2] = last_points[1] + perpendic * arrow_width_;
@@ -274,6 +270,7 @@ namespace BALL
 			if (mesh == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
 			mesh->colorList.clear();
 			mesh->colorList.push_back(ColorRGBA(0,1.,0));
+			mesh->setComposite(ss.getResidue(0));
 
 			for (Position i = 0; i < 4; i++)
 			{

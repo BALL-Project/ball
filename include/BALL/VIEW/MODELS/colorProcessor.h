@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.22 2004/02/23 17:26:10 anhi Exp $
+// $Id: colorProcessor.h,v 1.23 2004/02/24 18:48:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -180,8 +180,8 @@ namespace BALL
 
 			protected:
 			
-			//_ Create the threedimensional grid from the CompositeSet.
-			virtual void createAtomGrid_()
+			//_ Create the threedimensional grid from the CompositeSet, or a given Composite 
+			virtual void createAtomGrid_(const Composite* from_mesh = 0)
 				throw();
 
 			//_ Colorize the mesh with the computed grid.
