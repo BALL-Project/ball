@@ -1,0 +1,37 @@
+// $Id: timeStamp.iC,v 1.1 2000/09/27 10:01:44 oliver Exp $
+
+BALL_INLINE
+long Time::getSeconds() const throw()
+{
+	return secs_;
+}
+
+BALL_INLINE
+long Time::getMicroSeconds() const throw()
+{
+	return usecs_;
+}
+
+BALL_INLINE
+bool TimeStamp::isOlderThan(const Time& time) const throw()
+{
+	return (time_ < time);
+}
+
+BALL_INLINE
+bool TimeStamp::isNewerThan(const Time& time) const throw()
+{
+	return (time_ > time);
+}
+
+BALL_INLINE
+bool TimeStamp::isOlderThan(const TimeStamp& stamp) const throw()
+{
+	return (time_ < stamp.time_);
+}
+
+BALL_INLINE
+bool TimeStamp::isNewerThan(const TimeStamp& stamp) const throw()
+{
+	return (time_ > stamp.time_);
+}
