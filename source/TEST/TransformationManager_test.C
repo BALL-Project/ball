@@ -1,4 +1,4 @@
-// $Id: TransformationManager_test.C,v 1.1 2001/12/29 01:07:05 oliver Exp $
+// $Id: TransformationManager_test.C,v 1.2 2001/12/29 03:09:30 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.1 2001/12/29 01:07:05 oliver Exp $")
+START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.2 2001/12/29 03:09:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,21 +31,21 @@ RESULT
 
 CHECK(TransformationManager::findTransformation(const String& name) const)
 	TEST_EQUAL(tm.findTransformation("asd"), "asd_command")
-	TEST_EQUAL(tm.findTransformation("asdasd"), "")
+	TEST_EQUAL(tm.findTransformation("ascasc"), "")
 	tm.registerTransformation(".*\\.gz", "exec:gunzip -c %s");
 	TEST_EQUAL(tm.findTransformation("asd"), "asd_command")
-	TEST_EQUAL(tm.findTransformation("asdasd"), "")
+	TEST_EQUAL(tm.findTransformation("ascasc"), "")
 	TEST_EQUAL(tm.findTransformation("asd.gz"), "exec:gunzip -c %s")
 RESULT
 
 CHECK(TransformationManager::unregisterTransformation(const String& pattern))
 	tm.unregisterTransformation("asd");
 	TEST_EQUAL(tm.findTransformation("asd"), "")
-	TEST_EQUAL(tm.findTransformation("asdasd"), "")
+	TEST_EQUAL(tm.findTransformation("ascasc"), "")
 	TEST_EQUAL(tm.findTransformation("asd.gz"), "exec:gunzip -c %s")
 	tm.unregisterTransformation(".*\\.gz");
 	TEST_EQUAL(tm.findTransformation("asd"), "")
-	TEST_EQUAL(tm.findTransformation("asdasd"), "")
+	TEST_EQUAL(tm.findTransformation("ascasc"), "")
 	TEST_EQUAL(tm.findTransformation("asd.gz"), "")
 RESULT
 
