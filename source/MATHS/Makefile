@@ -10,7 +10,8 @@ CPP_SOURCES=\
 	line3.C\
 	matrix44.C\
 	plane3.C\
-	pPCurve.C\
+	piecewiseFunction.C\
+	piecewisePolynomial.C\
 	quaternion.C\
 	sphere3.C\
 	surface.C\
