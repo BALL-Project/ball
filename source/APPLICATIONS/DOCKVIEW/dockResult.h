@@ -49,8 +49,8 @@ namespace BALL
 				const ConformationSet& getConformationSet() const
 					throw();
 					
-				/*ConformationSet& getConformationSet()
-					throw();*/
+				ConformationSet& getConformationSet()
+					throw();
 					
 				const Options& getDockingOptions() const
 					throw();

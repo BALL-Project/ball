@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockResult.C,v 1.1.2.2 2005/04/04 15:59:53 haid Exp $
+// $Id: dockResult.C,v 1.1.2.3 2005/04/05 11:41:09 haid Exp $
 //
 
 #include "dockResult.h"
@@ -61,9 +61,9 @@ namespace BALL
 			throw()
 		{return conformation_set_;}
 		
-		/*ConformationSet& DockResult::getConformationSet()
+		ConformationSet& DockResult::getConformationSet()
 			throw()
-		{return conformation_set_;}*/
+		{return conformation_set_;}
 					
 		const Options& DockResult::getDockingOptions() const
 			throw()

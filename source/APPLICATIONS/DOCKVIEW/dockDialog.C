@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.16 2005/04/04 15:59:53 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.17 2005/04/05 11:41:09 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -63,7 +63,6 @@ namespace BALL
 			registerObject_(scoring_functions);
 			registerObject_(best_num);
 			registerObject_(verbosity);
-			registerObject_(traject_file);
 			registerObject_(radii_data_lineedit);
 			registerObject_(radii_rules_lineedit);
 			registerObject_(charges_data_lineedit);
@@ -194,8 +193,15 @@ namespace BALL
 				}
 			}
 
-			//no systems loaded, disable menu entry "Docking"
-			menuBar()->setItemEnabled(id_, num_systems);
+			//if no or only one system loaded, disable menu entry "Docking"
+			if(num_systems > 1)
+			{
+				menuBar()->setItemEnabled(id_, true);
+			}
+			else
+			{
+				menuBar()->setItemEnabled(id_, false);
+			}
 		}
 		
 		/// Reset the dialog to the standard values
@@ -216,9 +222,6 @@ namespace BALL
 				//options
 				best_num->setText("100");
 				verbosity->setText("1");
-				
-				//trajectories
-				traject_file->setText("trajectories.dcd");
 			}
 			
 			if (tab_pages->currentPageIndex() == 1)
