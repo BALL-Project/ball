@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.7 2003/11/13 19:30:51 amoll Exp $
+// $Id: backboneModel.C,v 1.8 2003/11/23 16:42:14 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -229,11 +229,8 @@ namespace BALL
 				tube->setComposite(atom);
 				geometric_objects_.push_back(tube);
 			}
-			else
-			{
-				have_start_point_ = true;
-			}
 
+			have_start_point_ = true;
 			last_point_ = point;
 
 			// create sphere for the point
