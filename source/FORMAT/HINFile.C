@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.32 2001/05/07 18:05:06 anker Exp $
+// $Id: HINFile.C,v 1.33 2001/06/05 15:43:53 anker Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -112,14 +112,14 @@ namespace BALL
 	{
 		// the atom_vector contains the atoms in the order of
 		// the atom iterator
-		vector<Atom*>		atom_vector;
+		vector<const Atom*>		atom_vector;
 
 		// create a vector containing pointers to the atoms
-		AtomIterator	atom_it;		
+		AtomConstIterator	atom_it;		
 		for (atom_it = system.beginAtom(); +atom_it; ++atom_it)
 		{
 			atom_vector.push_back(&(*atom_it));
-			atom_it->setProperty("__HINFILE_INDEX", (unsigned int)atom_vector.size());
+			(const_cast<Atom&>(*atom_it)).setProperty("__HINFILE_INDEX", (unsigned int)atom_vector.size());
 		}
 
 		// the index_vector contains the index of the connected component
@@ -166,10 +166,10 @@ namespace BALL
 				{
 					// check all bonds of this atom
 					// and remove it from the stack
-					Atom& current_atom = *atom_vector[atom_stack.top()];
+					const Atom& current_atom = *atom_vector[atom_stack.top()];
 					atom_stack.pop();
 
-					Atom::BondIterator	bond_it = current_atom.beginBond();
+					Atom::BondConstIterator	bond_it = current_atom.beginBond();
 					for (; +bond_it; ++bond_it) 
 					{
 						// add the atom if it is not marked yet
@@ -206,7 +206,7 @@ namespace BALL
 			
 			// and set the atom's HINFILE_INDEX properly
 			// (i.e. to the index in the right connected component
-			atom_vector[i]->setProperty("__HINFILE_INDEX", 
+			(const_cast<Atom*>(atom_vector[i]))->setProperty("__HINFILE_INDEX", 
 																	(unsigned int)components[index_vector[i]].size());
 		}
 
@@ -230,7 +230,7 @@ namespace BALL
 			atom_offset = atom_count;
 
 			// try to find a name for the molecule
-			Molecule* mol = atom_vector[components[j].front()]->getMolecule();
+			const Molecule* mol = atom_vector[components[j].front()]->getMolecule();
 			String name = "-";
 			if (mol != 0)
 			{
@@ -242,7 +242,7 @@ namespace BALL
 			*(File*)this << "mol " << j + 1 << " " << name << endl;
 			
 			// now iterate over all atoms and write them
-			Residue* current_residue = 0;
+			const Residue* current_residue = 0;
 
 			// the residues start at zero in each molecule as do the atoms
 			Size res_count = 0;			
@@ -250,9 +250,9 @@ namespace BALL
 			for (; comp_it != components[j].end(); comp_it++)
 			{
 				// counter for the residues
-				Atom* this_atom = atom_vector[*comp_it];
+				const Atom* this_atom = atom_vector[*comp_it];
 					
-				Residue* this_residue = this_atom->Composite::getAncestor(RTTI::getDefault<Residue>());
+				const Residue* this_residue = this_atom->Composite::getAncestor(RTTI::getDefault<Residue>());
 				if (this_residue != current_residue)
 				{
 					if (current_residue != 0)
@@ -288,7 +288,7 @@ namespace BALL
 						*(File*)this << name << " - ";
 						
 						// write the chain name
-						Chain*	chain = this_residue->getChain();
+						const Chain*	chain = this_residue->getChain();
 						if ((chain != 0)) 
 						{
 							name = chain->getName();
@@ -327,7 +327,7 @@ namespace BALL
 		// clear the atom properties
 		for (atom_it = system.beginAtom(); +atom_it; ++atom_it)
 		{
-			atom_it->clearProperty("__HINFILE_INDEX");
+			(const_cast<Atom&>(*atom_it)).clearProperty("__HINFILE_INDEX");
 		}
 	}
 
@@ -337,7 +337,7 @@ namespace BALL
 		return *this;
 	}
  
-	HINFile& HINFile::operator << (const System& system)
+	HINFile& HINFile::operator << (System& system)
 	{
 		write(system);
 		return *this;
