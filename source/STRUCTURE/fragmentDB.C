@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.16 2000/03/28 15:35:29 oliver Exp $
+// $Id: fragmentDB.C,v 1.17 2000/04/30 15:07:43 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1932,10 +1932,14 @@ namespace BALL
 						if ((fabs(distance - s1[2].toFloat()) < s1[3].toFloat())
 								&& (fabs(distance - s2[2].toFloat()) < s2[3].toFloat()))
 						{
-							// create the bond
-							if (a1->createBond(*a2))
+							// create the bond only if it does not exist
+							if (!a1->isBondedTo(*a2))
 							{
-								bonds_built++;
+								// create the bond
+								if (a1->createBond(*a2))
+								{
+									bonds_built++;
+								}
 							}
 						}
 					}
