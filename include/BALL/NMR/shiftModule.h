@@ -1,4 +1,4 @@
-// $Id: shiftModule.h,v 1.5 2000/09/18 11:02:51 oliver Exp $
+// $Id: shiftModule.h,v 1.6 2000/09/19 19:06:43 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -53,6 +53,18 @@ namespace BALL
 		public:	
 
 		BALL_CREATE(ShiftModule)
+
+		/**	@name	Enums and Constants
+		*/
+		//@{
+		/**	Named property to store the shift values.
+				Use this string constant to access the shift values stored in the single
+				atoms.\\
+				{\bf Example:}
+				{\tt atom.setProperty(ShiftModule::PROPERTY__SHIFT, 0.0);}\\
+		*/
+		static const char* PROPERTY__SHIFT;
+		//@}
 
 		/**@name	Constructors and Destructors
 		*/
