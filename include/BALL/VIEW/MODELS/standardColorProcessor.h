@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.8 2003/10/20 10:45:04 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.9 2003/10/20 15:42:01 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -314,8 +314,7 @@ namespace BALL
 			*/ 
 			//@{
 
-			/**	Operator ().
-			*/
+			///	Operator ().
 			virtual ColorRGBA getColor(const Composite* composite);
 
 			/** Collect all atoms from the geometric objects
@@ -355,6 +354,48 @@ namespace BALL
 				void colorMeshFromGrid_(Mesh& mesh)
 					throw();
 		};
+
+
+		class TemperatureFactorColorProcessor
+			: public ColorProcessor
+		{
+			public:
+				TemperatureFactorColorProcessor();
+
+			///	Operator ().
+			virtual ColorRGBA getColor(const Composite* composite);
+
+			///
+			void setMinColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setMaxColor(const ColorRGBA& color)
+				throw();
+
+			///
+			const ColorRGBA& getMinColor() const
+				throw();
+			
+			///
+			const ColorRGBA& getMaxColor() const
+				throw();
+
+			///
+			void setMaxValue(float value)
+				throw();
+
+			///
+			float getMaxValue() const
+				throw();
+
+			protected:
+
+			ColorRGBA min_color_;
+			ColorRGBA max_color_;
+			float 		max_value_;
+		};
+
 				
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>

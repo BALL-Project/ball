@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.20 2003/10/17 16:17:32 amoll Exp $
+// $Id: displayProperties.C,v 1.21 2003/10/20 15:42:24 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -407,12 +407,6 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		case COLORING_CUSTOM:
 		{
 			color_processor = new CustomColorProcessor;
-			QColor qcolor = color_sample->backgroundColor();
-			custom_color_.set(qcolor.red(),
-												qcolor.green(),
-												qcolor.blue(),
-												255 - transparency->value());
-			color_processor->setDefaultColor(custom_color_);
 			break;
 		}
 
@@ -420,10 +414,21 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 			color_processor = new AtomDistanceColorProcessor;
 			break;
 
+		case COLORING_TEMPERATURE_FACTOR:
+			color_processor = new TemperatureFactorColorProcessor;
+			break;
+
 		default:
 			throw(InvalidOption(__FILE__, __LINE__, coloring_method_));
 	}
 			
+
+	QColor qcolor = color_sample->backgroundColor();
+	custom_color_.set(qcolor.red(),
+										qcolor.green(),
+										qcolor.blue(),
+										255 - transparency->value());
+	color_processor->setDefaultColor(custom_color_);
 
 	PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
 	Representation* rep = 0;

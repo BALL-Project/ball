@@ -56,6 +56,8 @@ String getColoringName(ColoringMethod type)
 			return "by atom charge";
 		case COLORING_DISTANCE:
 			return "by atom distance";
+		case COLORING_TEMPERATURE_FACTOR:
+			return "by temperature factor";
 		case COLORING_CUSTOM:
 			return "custom";
 		case COLORING_UNKNOWN:

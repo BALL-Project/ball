@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.8 2003/10/20 13:26:31 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.9 2003/10/20 15:41:52 amoll Exp $
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -508,6 +508,76 @@ void CustomColorProcessor::colorMeshFromGrid_(Mesh& mesh)
 {
 	mesh.colorList.clear();
 	mesh.colorList.push_back(default_color_);
+}
+
+
+TemperatureFactorColorProcessor::TemperatureFactorColorProcessor()
+	: ColorProcessor(),
+		min_color_(ColorRGBA(0,0,1.0)),
+		max_color_(ColorRGBA(1.0,1.0,0)),
+		max_value_(50)
+{
+}
+
+ColorRGBA TemperatureFactorColorProcessor::getColor(const Composite* composite)
+{
+	if (!RTTI::isKindOf<PDBAtom>(*composite))
+	{
+		return default_color_;
+	}
+
+	float value = (dynamic_cast<const PDBAtom*>(composite))->getTemperatureFactor();
+	if (value < 0) 					value = 0;
+	if (value > max_value_) value = max_value_;
+
+	float red1   = min_color_.getRed();
+	float green1 = min_color_.getGreen();
+	float blue1  = min_color_.getBlue();
+
+	float red2   = max_color_.getRed();
+	float green2 = max_color_.getGreen();
+	float blue2  = max_color_.getBlue();
+
+	return ColorRGBA(red1 + (value * (red2 - red1)) 			/ max_value_,
+									 green1 + (value * (green2 - green1))	/ max_value_,
+									 blue1 + (value * (blue2 - blue1)) 		/ max_value_);
+}
+
+
+void TemperatureFactorColorProcessor::setMinColor(const ColorRGBA& color)
+	throw()
+{
+	min_color_ = color;
+}
+
+void TemperatureFactorColorProcessor::setMaxColor(const ColorRGBA& color)
+	throw()
+{
+	max_color_ = color;
+}
+
+const ColorRGBA& TemperatureFactorColorProcessor::getMinColor() const
+	throw()
+{
+	return min_color_;
+}
+
+const ColorRGBA& TemperatureFactorColorProcessor::getMaxColor() const
+	throw()
+{
+	return max_color_;
+}
+
+float TemperatureFactorColorProcessor::getMaxValue() const
+	throw()
+{
+	return max_value_;
+}
+
+void TemperatureFactorColorProcessor::setMaxValue(float value)
+	throw()
+{
+	max_value_ = value;
 }
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
