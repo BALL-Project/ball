@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.15 2000/08/30 19:58:30 oliver Exp $
+// $Id: PDBFile.C,v 1.16 2000/10/20 14:05:16 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -99,7 +99,7 @@ namespace BALL
 		 PDB::Real occupancy,
 		 PDB::Real temperature_factor,
 		 PDB::LString4 /* segment_ID */,
-		 PDB::LString2 /* element_symbol */,
+		 PDB::LString2 element_symbol,
 		 PDB::LString2 /* charge */)
 	{
 		if (chain_ID != chain_ID_)
@@ -146,8 +146,7 @@ namespace BALL
 		current_PDB_atom_->setAlternateLocationIndicator(alternate_location_indicator);
 		current_PDB_atom_->setOccupancy(occupancy);
 		current_PDB_atom_->setTemperatureFactor(temperature_factor);
-		current_PDB_atom_->setElement(PTE[GenericPDBFile::getAtomElementSymbol(atom_name, atom_name)]);
-		//  current_PDB_atom_->setElement(Element::UNKNOWN);
+		current_PDB_atom_->setElement(PTE[GenericPDBFile::getAtomElementSymbol(atom_name, element_symbol)]);
 		current_PDB_atom_->setRadius(current_PDB_atom_->getElement().getVanDerWaalsRadius());
 		current_PDB_atom_->setPosition(Vector3(orthogonal_vector[0], orthogonal_vector[1], orthogonal_vector[2]));
 		
