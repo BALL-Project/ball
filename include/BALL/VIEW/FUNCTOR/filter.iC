@@ -1,0 +1,38 @@
+// $Id: filter.iC,v 1.1 2000/05/16 21:12:47 hekl Exp $
+
+BALL_INLINE
+bool Filter::getResult() const
+{
+	return object_passed_;
+}
+
+BALL_INLINE
+Filter::operator bool () const
+{
+	return object_passed_;
+}
+
+BALL_INLINE
+Filter::operator int () const
+{
+	return (int)((object_passed_ == true) ? 1 : 0);
+}
+
+BALL_INLINE
+Filter::operator long () const
+{
+	return (long)((object_passed_ == true) ? 1 : 0);
+}
+
+BALL_INLINE
+Filter::operator void* () const
+{
+	return (void*)((object_passed_ == true) ? 1 : 0);
+}
+
+BALL_INLINE
+void Filter::setResult_(bool result)
+{
+	object_passed_ = result;
+}
+
