@@ -4,8 +4,10 @@
 #   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
 #   Using Macroscopic Solvent Models, H. Phys. Chem, (1994), 98, 1978-1988
 #
-# $Id: PARSE.rul,v 1.4 2000/11/15 14:23:00 anker Exp $
+# $Id: PARSE.rul,v 1.5 2000/11/21 16:20:59 anker Exp $
 #
+
+
 [ChargeRules:H]
 ; -NH-CH=NH+-CH= (imidazolium) - NH hydrogen
  0.45  = connectedTo((-N(-*)(-C(-*)(=N(-H)(-C(-*)(=*)))))) OR connectedTo((-N(-*)(=C(-*)(-N(-H)(-C(-*)(=*))))))
@@ -17,7 +19,7 @@
  0.125 = connectedTo((-C(~N(-*)(-*))(~N(~C(-*)(~*))))) OR connectedTo((-C(~*)(~N(~C(-*)(~N(-*)(~*))))))
 ; -C-NH-C+(NH2)2 (guanidinium)
  0.45  = connectedTo((-N(-C(-*))(-C(~N(-H)(-H))(~N(-H)(-H)))))
- 0.40  = connectedTo((-N(-H)(~C(~N(-H)(-H))(-N(-H)(-C(-*))))))
+ 0.40  = connectedTo((-N(-H)(~C(~N(-H)(-H))(-N(-H)(-C(-*)))))) 
 ; carboxylic acid groups
  0.435 = connectedTo((-O(-C(=O))))
 ; hydroxyl group at aromatic rings (e.g. TYR)
@@ -51,13 +53,15 @@
  0.39  = connectedTo((-N(-H)))
 ; amide group
  0.50  = connectedTo((-N(-*)(-*)))
+; default
+ 0.0 = true()
+
 
 [ChargeRules:C]
 ; -NH-CH=NH+-CH= (imidazolium)
  0.14166667 = connectedTo((-*)(=*)(-N(-H)(=C(-*)(-N(-H)(-*))))) OR connectedTo((-*)(-N(-H)(-*))(=N(-H)(-C(-*)(=*))))
- 0.14166667 = true(imi1) AND connectedTo((-*)(~*)(~N(-H)(~C(-*)(~N(-H)(~*))))) 
- 0.14166667 = true(miniimi2) AND connectedTo((-*)(~N(-H)(~*))(~N(-H)(~*)))
-; 0.14166667 = true(imi2) AND connectedTo((-*)(~N(-H)(~*))(~N(-H)(~C(-*)(~*))))
+ 0.14166667 = connectedTo((-*)(~*)(~N(-H)(~C(-*)(~N(-H)(~*))))) 
+ 0.14166667 = connectedTo((-*)(~N(-H)(~*))(~N(-H)(~*)))
 ; -NH-CH=N-CH= (imidazole)
  0.155 = true(imidazole) AND (connectedTo((-N(-H)(-*))(-H)(=N(-C(-H)(=*)))) OR connectedTo((=*)(-H)(-N(=C(-H)(-N(-H)(-*))))))
  0.155 = true(imidazole) AND (connectedTo((~N(-H)(~*))(-H)(~N(~C(-H)(~*)))) OR connectedTo((~*)(-H)(~N(~C(-H)(~N(-H)(~*))))))
@@ -72,7 +76,7 @@
 ; aldehyde carbon  
  0.49   = connectedTo((-H)(=O)(-*))
 ; carboxylic acid carbons
- 0.55   = connectedTo((=O)(-O(H))(-*))
+ 0.55   = connectedTo((=O)(-O(H))(-*)) 
 ; carboxylate carbons
  0.10   = connectedTo((~O)(~O)(-*)) OR connectedTo((=O)(-O)(-*))
 ; carbonyl carbons
@@ -84,24 +88,29 @@
  0.125  = sp3Hybridized() AND connectedTo((-C(~*)(~*))) AND !connectedTo((-C(.O)(.O)))
 ; carbons at the hydroxyl group in aromatic rings (e.g. TYR:CZ)
  0.055 = connectedTo((~*)(~*)(O(H)))
+; sulfur bridge (e. g. CYS-CYS)
+ 0.29  = connectedTo((-S(-S(-C)))))
 ; carbons at the fusion points of condensed aromatic and heteroaromatic rings do not bear any charge
 0.000   = sp2Hybridized() AND (connectedTo((~C)(~C)(~C)) OR connectedTo((~C)(~N)(~C)) OR connectedTo((~C)(~N)(~N)))
 ; carbons in aromatic rings are assigned a negative charge
 -0.125  = sp2Hybridized() AND inRing(4)
 -0.125  = sp2Hybridized() AND inRing(5) 
 -0.125  = sp2Hybridized() AND inRing(6) 
+; PRO:CA/CD
+ 0.28  = inRing(5) AND connectedTo((-*)(-*)(-*)(-N(-C(-*)(-*)(-*))))
 ; aliphatic CHn groups are neutral
  0.0    = sp3Hybridized() AND connectedTo((H))
 ; primary carboxylic acid amide
  0.55  = connectedTo((=O)(-N(-H)(-H))(-*)) OR connectedTo((~O)(.N(-H)(-H))(-*))
-; secondary carboxylic acid amide
- 0.55  = connectedTo((=O)(-N(H)(-*))(-*)) OR connectedTo((~O)(.N(-H)(-*))(-*))
+; secondary carboxylic acid amide / backbone (peptide group)
+ 0.55  = connectedTo((=O)(-N(-*)(-*))(-*)) OR connectedTo((~O)(.N(.*)(.*))(.*))
 ; aromatic carbons and aromatic carbons with aliphatic groups (benzene, methylbenzene)
 -0.125 = connectedTo((-H)(~*)(~*)) OR connectedTo((-C(-H)(-H)(-H))(~*)(~*))
 ; pyridine carbons 
  0.055 = connectedTo((-*)(-H)(=N(-C(-H)(=*)))) OR connectedTo((~*)(-H)(~N(~C(-H)(~*))))
-; 
+; Hier fehlt ein Kommentar
  0.055 = connectedTo((-N(H)(=C(H)(-*)))(H)(=*))
+ 815 = true()
 
 [ChargeRules:N]
 ; -NH-CH=NH+-CH= (imidazolium)
@@ -114,6 +123,8 @@
 -0.78   = connectedTo((-C(=O)(-*))(-H)(-H))
 ; N-substituted amide
 -0.40   = connectedTo((-C(=O)(-*))(-H)(-*)) OR connectedTo((.C(~O)(.*))(-H)(-*))
+: ARG
+-0.40   = connectedTo((-H)(-C(-H)(-C(~O))))
 ; guanidine 
 -0.56   = connectedTo((-C(-*))(=C(-N(-H)(-H))(-N(-H)(-H))))
 ; guanidine: amino N
@@ -132,39 +143,44 @@
 -0.78   = connectedTo((-H)(-H)(-*))
 ; secondary amines
 -0.50   = connectedTo((-H)(-*)(-*))
+; [anker] PRO
+-0.56   = connectedTo((-C)(-C))
 
 
 [ChargeRules:O]
 ; carboxylic acid / carbonyl O
- -0.495  = connectedTo((=C(-O(-H))))
+-0.495  = connectedTo((=C(-O(-H))))
 ; aldehyde oxygen  
- -0.49   = connectedTo((=C(-H)))
+-0.49   = connectedTo((=C(-H)))
 ; carboxylic acid / Hydroxyl O
- -0.49   = connectedTo((-H)(-C(=O)))
+-0.49   = connectedTo((-H)(-C(=O)))
 ; carboxylate oxygens (three different possibilities for bond description)
- -0.55   = connectedTo((~C(~O))) OR connectedTo((=C(-O))) OR connectedTo((-C(=O)))
+-0.55   = connectedTo((~C(~O))) OR connectedTo((=C(-O))) OR connectedTo((-C(=O)))
 ; carbonyl oxygens
- -0.55   = connectedTo((=C))
+-0.55   = connectedTo((=C))
 ; hydroxyl oxygen
- -0.49   = numberOfBonds(=2) AND connectedTo((-H))
+-0.49   = numberOfBonds(=2) AND connectedTo((-H))
 ; amide 
 -0.55   = connectedTo((=C(-N(-H)(-H)))) OR connectedTo((~C(.N(-H)(-H))))
-; N-substituted amide
--0.55   = connectedTo((=C(-N(-H)(-*)))) OR connectedTo((~C(.N(-H)(-*))))
+; N-substituted amide / protein backbone (peptide group)
+-0.55   = connectedTo((=C(-N(-*)(-*)))) OR connectedTo((~C(.N(-*)(-*))))
 ; phenol
 -0.49   = connectedTo((-C(~*)(~*))(-H)) OR connectedTo((-C(=*)(-*))(-H))
 
+
 [ChargeRules:S]
 ; dialkylsufide (MET)
- -0.53   = connectedTo((-C)(-C)) AND numberOfBonds(=2)
+-0.53   = connectedTo((-C)(-C)) AND numberOfBonds(=2)
 ; thiol group
- -0.29   = connectedTo((H)) AND numberOfBonds(=2)
+-0.29   = connectedTo((H)) AND numberOfBonds(=2)
 ; methylthiol anion
- -0.92   = numberOfBonds(=1) AND connectedTo((-C))
+-0.92   = numberOfBonds(=1) AND connectedTo((-C))
 ; missing: CYS-CYS (CHn-S-S-CHn)
+-0.29   = connectedTo((-S(-C))(-C))
+
 
 [ChargeRules:*]
-
+ 4711 = true()
 
 
 [RadiusRules:H]
