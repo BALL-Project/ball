@@ -1,4 +1,4 @@
-// $Id: format.doc,v 1.8 2001/03/07 22:19:44 amoll Exp $
+// $Id: format.doc,v 1.9 2001/12/17 01:42:08 oliver Exp $
 
 /**@name	Fileformats
 		This chapter contains all relevant information on 
@@ -13,6 +13,8 @@
 		//@Include: genericPDBFile.h
 		//@Include: PDBFile.h
 		//@Include: HINFile.h
+		//@Include: MOLFile.h
+		//@Include: SDFile.h
 		//@Include: MOL2File.h
 		//@Include: XYZFile.h
 
@@ -42,6 +44,7 @@
 	//@{
 		//@Include: trajectoryFile.h
 		//@Include: DCDFile.h
+		//@Include: TRRFile.h
 	//@}
 	
 //@}
