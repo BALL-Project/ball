@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.25 2004/12/28 14:47:59 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.26 2004/12/28 15:14:54 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -312,26 +312,27 @@ namespace BALL
 			////////////////////////////////////////////////////////////
 			// initialise a first set of points in a circle around the start position
 			////////////////////////////////////////////////////////////
+			const Position middle = (Position)(slides / 2.0);
 			vector<Vector3> new_points;
+			new_points.resize(slides + 1);
 			Vector3 x = r;
 			new_points.push_back(x);
+			new_points[middle] = -x;
+			new_points[slides] = x; // dummy for closing of ring
 
 			Matrix4x4 m;
 			m.setRotation(slides_angle, n % r);
-			for (Position p = 0; p < slides - 1; p++)
+			// second half of points can be calculated by negating first half
+			for (Position i= 1; i < middle; i++)
 			{
 				x = m * x;
-				new_points.push_back(x);
+				new_points[i] = x;
+				new_points[i + middle] = -x;
 			}
 
 			////////////////////////////////////////////////////////////
-			// same data structures for faster access
-			////////////////////////////////////////////////////////////
-			Mesh::Triangle t;
-			Size s_old = 0;  // start position of the last points in the meshs vertices
-			Size s_new = 0;  // start position of the  new points in the meshs vertices
-				
 			// create a new mesh with the points and triangles
+			////////////////////////////////////////////////////////////
 			// every residue get its own mesh to enable picking for the tube model
 			Mesh* mesh = new Mesh();
 			mesh->setComposite(atoms_of_spline_points_[start]->getParent());
@@ -342,7 +343,14 @@ namespace BALL
 				mesh->vertex.push_back(last_point_ + new_points[p]);
 				mesh->normal.push_back(new_points[p]);
 			}
-
+			
+			////////////////////////////////////////////////////////////
+			// same data structures for faster access
+			////////////////////////////////////////////////////////////
+			Mesh::Triangle t;
+			Size s_old = 0;  // start position of the last points in the meshs vertices
+			Size s_new = 0;  // start position of the  new points in the meshs vertices
+	
 			//------------------------------------------------------>
 			// iterate over all spline_points_
 			//------------------------------------------------------>
@@ -368,11 +376,11 @@ namespace BALL
 				m.setRotation(slides_angle, dir_new);
 				x = r_new;
 				new_points[0] = x;
+				new_points[slides] = x; // dummy
 
 				// second half of points can be calculated by negating first half
-				const Position middle = (Position)(slides / 2.0);
 				new_points[middle] = -x;
-				for (Position i= 1; i < middle; i++)
+				for (Position i = 1; i < middle; i++)
 				{
 					x = m * x;
 					new_points[i] = x;
@@ -389,15 +397,15 @@ namespace BALL
 					mesh->setComposite(atoms_of_spline_points_[p]->getParent());
 					geometric_objects_.push_back(mesh);
 
-					s_old = 0;
-
 					// insert the vertices and normals of the last points again into the new mesh
-					for (Position point_pos = old_mesh->vertex.size() - 1 - slides;
+					for (Position point_pos = s_new - slides - 1;
 							 					point_pos < old_mesh->vertex.size() - 1; point_pos++)
 					{
 						mesh->vertex.push_back(old_mesh->vertex[point_pos]);
 						mesh->normal.push_back(old_mesh->normal[point_pos]);
 					}
+
+					s_old = 0;
 				}
 				
 				////////////////////////////////////////////////////////////
