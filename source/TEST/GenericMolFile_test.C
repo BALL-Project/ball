@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GenericMolFile_test.C,v 1.5 2003/07/07 15:08:49 amoll Exp $
+// $Id: GenericMolFile_test.C,v 1.6 2003/07/14 15:56:43 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(GenericMolFile, "$Id: GenericMolFile_test.C,v 1.5 2003/07/07 15:08:49 amoll Exp $")
+START_TEST(GenericMolFile, "$Id: GenericMolFile_test.C,v 1.6 2003/07/14 15:56:43 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ CHECK(bool read(System& system) throw(Exception::ParseError))
   TEST_EQUAL(mol2.read(system), false)
 RESULT
 
-CHECK(void write(const System& system))
+CHECK(bool write(const System& system) throw(File::CanNotWrite))
   String filename;
   NEW_TMP_FILE(filename)
   GenericMolFile mol2(filename, std::ios::out);
@@ -60,17 +60,19 @@ CHECK(GenericMolFile& operator >> (System& system) throw(Exception::ParseError))
 RESULT
 
 
-CHECK(GenericMolFile& operator << (const System& system))
+CHECK(GenericMolFile& operator << (const System& system) throw(File::CanNotWrite))
   String filename;
   NEW_TMP_FILE(filename)
   GenericMolFile mol2(filename, std::ios::out);
-  mol2 << system;
+	 mol2 << system;
+  GenericMolFile mol3;
+  TEST_EXCEPTION(File::CanNotWrite, mol3 << system)
 RESULT
 
 Molecule m;
 
-CHECK(GenericMolFile& operator << (const Molecule& molecule))
-	mol << m;
+CHECK(GenericMolFile& operator << (const Molecule& molecule) throw(File::CanNotWrite))
+	TEST_EXCEPTION(File::CanNotWrite, mol << m)
 RESULT
 
 CHECK(GenericMolFile& operator >> (Molecule& molecule) throw(Exception::ParseError))
@@ -89,7 +91,7 @@ CHECK(Molecule* read() throw(Exception::ParseError))
 	TEST_EQUAL(mol.read(), 0)
 RESULT
 
-CHECK(const GenericMolFile& operator = (const GenericMolFile& rhs) throw())
+CHECK(const GenericMolFile& operator = (const GenericMolFile& rhs) throw(Exception::FileNotFound))
   String filename;
   NEW_TMP_FILE(filename)
   GenericMolFile mol(filename, std::ios::out);
@@ -97,16 +99,8 @@ CHECK(const GenericMolFile& operator = (const GenericMolFile& rhs) throw())
 	TEST_EQUAL(mol2.getName(), filename)
 RESULT
 
-CHECK(void initRead())
-	mol.initRead();
-RESULT
-
-CHECK(void initWrite())
-	mol.initWrite();
-RESULT
-
-CHECK(void write(const Molecule& molecule))
-	mol.write(m);
+CHECK(bool write(const Molecule& molecule) throw(File::CanNotWrite))
+	TEST_EXCEPTION(File::CanNotWrite, mol.write(m))
 RESULT
 
 /////////////////////////////////////////////////////////////

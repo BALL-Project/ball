@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.12 2003/03/03 10:13:25 oliver Exp $
+// $Id: PDBFile_test.C,v 1.13 2003/07/14 15:56:44 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.12 2003/03/03 10:13:25 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.13 2003/07/14 15:56:44 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,19 +21,19 @@ START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.12 2003/03/03 10:13:25 oliver Exp $
 using namespace BALL;
 
 PDBFile* pdb_file;
-CHECK(PDBFile::PDBFile())											
+CHECK(PDBFile())
 	pdb_file = new PDBFile;
 	TEST_NOT_EQUAL(pdb_file, 0)
 RESULT
 
-CHECK(PDBFile::~PDBFile())
+CHECK(~PDBFile() throw())
 	delete pdb_file;
 RESULT
 
-CHECK(PDBFile::read(System& system))
+CHECK(void read(System& system))
 RESULT
 
-CHECK(PDBFile::selectModel())
+CHECK[EXTRA](PDBFile::selectModel())
 	PDBFile f("data/PDBFile_test_models.pdb");
 	System s;
 	f.read(s);
@@ -93,7 +93,7 @@ CHECK(PDBFile::selectModel())
 	TEST_EQUAL(s.countAtoms(), 0)
 RESULT
 
-CHECK(PDBFile strict line checking)
+CHECK([EXTRA]PDBFile strict line checking)
 	PDBFile f("data/PDBFile_test_line_checking.pdb");
 	System s;
 	f.read(s);
@@ -104,7 +104,7 @@ CHECK(PDBFile strict line checking)
 	TEST_EQUAL(s.countAtoms(), 2)
 RESULT
 
-CHECK(PDBFile::write(const System& system))
+CHECK(bool write(const System& system) throw(File::CanNotWrite))
 	PDBFile f;
 	f.open("data/PDBFile_test2.pdb");
 	String tmp_filename;
@@ -125,10 +125,13 @@ CHECK(PDBFile::write(const System& system))
 	f.close();
 
 	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/PDBFile_test2.txt")
+
+	PDBFile out(tmp_filename);
+	TEST_EXCEPTION(File::CanNotWrite, out.write(S))
 RESULT
 
 
-CHECK(writing of Systems containing Atoms instead of PDBAtoms)
+CHECK([EXTRA]writing of Systems containing Atoms instead of PDBAtoms)
 	FragmentDB db;
 	System* system = new System;
 	Protein* protein = new Protein;
@@ -165,6 +168,55 @@ CHECK(writing of Systems containing Atoms instead of PDBAtoms)
 	delete system;
 RESULT
 
+/*
+CHECK(PDBFile& operator << (const Molecule& molecule))
+
+CHECK(PDBFile& operator << (const Protein& protein))
+
+CHECK(PDBFile& operator << (const System& system))
+
+CHECK(PDBFile& operator >> (Protein& protein))
+
+CHECK(PDBFile& operator >> (System& system))
+
+CHECK(PDBFile(const PDBFile& PDB_file) throw(Exception::FileNotFound))
+
+CHECK(PDBFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
+
+CHECK(bool readInvalidRecord(const char* line))
+
+CHECK(bool readRecordATOM(PDB::Integer serial_number, PDB::Atom atom_name, PDB::Character alternate_location_indicator, PDB::ResidueName residue_name, PDB::Character chain_ID, PDB::Integer residue_sequence_number, PDB::AChar insertion_code, PDB::Real orthogonal_vector[3], PDB::Real occupancy, PDB::Real temperature_factor, PDB::LString4 segment_ID, PDB::LString2 element_symbol, PDB::LString2 charge))
+
+CHECK(bool readRecordCONECT(PDB::Integer atom_serial_number, PDB::Integer bonded_atom_serial_number[4], PDB::Integer hydrogen_bonded_atom_serial_number[4], PDB::Integer salt_bridged_atom_serial_number[2]))
+
+CHECK(bool readRecordEND())
+
+CHECK(bool readRecordENDMDL())
+
+CHECK(bool readRecordHEADER(PDB::String40 classification, PDB::Date deposition_date, PDB::IDcode ID_code))
+
+CHECK(bool readRecordHELIX(PDB::Integer serial_number, PDB::LString3 helix_ID, PDB::RecordHELIX::InitialResidue& initial_residue, PDB::RecordHELIX::TerminalResidue& terminal_residue, PDB::Integer helix_class, PDB::PDBString comment, PDB::Integer length))
+
+CHECK(bool readRecordHETATM(PDB::Integer serial_number, PDB::Atom atom_name, PDB::Character alternate_location_indicator, PDB::ResidueName residue_name, PDB::Character chain_ID, PDB::Integer residue_sequence_number, PDB::AChar insertion_code, PDB::Real orthogonal_vector[3], PDB::Real occupancy, PDB::Real temperature, PDB::LString4 segment_ID, PDB::LString2 element_symbol, PDB::LString2 charge))
+
+CHECK(bool readRecordMODEL(PDB::Integer model_serial_number))
+
+CHECK(bool readRecordSHEET(PDB::Integer strand_number, PDB::LString3 sheet_ID, PDB::Integer number_of_strands, PDB::RecordSHEET::InitialResidue& initial_residue, PDB::RecordSHEET::TerminalResidue& terminal_residue, PDB::Integer sense_of_strand, PDB::Atom atom_name_in_current_strand, PDB::RecordSHEET::ResidueInCurrentStrand& residue_in_current_strand, PDB::Atom atom_name_in_previous_strand, PDB::RecordSHEET::ResidueInPreviousStrand& residue_in_previous_strand))
+
+CHECK(bool readRecordSSBOND(PDB::Integer serial_number, PDB::RecordSSBOND::PartnerResidue partner_residue[2]))
+
+CHECK(bool readRecordTER(PDB::Integer serial_number, PDB::ResidueName residue_name, PDB::Character chain_ID, PDB::Integer residue_sequence_number, PDB::AChar insertion_code))
+
+CHECK(bool readRecordTURN(PDB::Integer sequence_number, PDB::LString3 turn_ID, PDB::RecordTURN::InitialResidue& initial_residue, PDB::RecordTURN::TerminalResidue& terminal_residue, PDB::PDBString comment))
+
+CHECK(bool readUnknownRecord(const char* line))
+
+CHECK(bool write(const Protein& protein) throw(File::CanNotWrite))
+
+CHECK(void read(Protein& protein))
+
+CHECK(void write(const Molecule& molecule))
+*/
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

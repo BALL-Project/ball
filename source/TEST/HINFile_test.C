@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile_test.C,v 1.24 2003/07/09 12:53:44 amoll Exp $
+// $Id: HINFile_test.C,v 1.25 2003/07/14 15:56:43 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.24 2003/07/09 12:53:44 amoll Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.25 2003/07/14 15:56:43 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -91,14 +91,14 @@ CHECK(bool read(System& system) throw(Exception::ParseError))
 	TEST_EQUAL(empty.read(S2), false)
 RESULT
 
-CHECK(void write(const System& system))
+CHECK(bool write(const System& system) throw(File::CanNotWrite))
   String filename;
   NEW_TMP_FILE(filename)
   HINFile hin2(filename, std::ios::out);
 	hin2.write(system);
   TEST_FILE_REGEXP(filename.c_str(), "data/HINFile_test2.hin")
 
-	empty.write(system);
+	TEST_EXCEPTION(File::CanNotWrite, empty.write(system))
 RESULT
 
 CHECK([EXTRA]HINFile::HINFile& operator >> (System& system))
@@ -132,7 +132,7 @@ CHECK([EXTRA]HINFile::HINFile& operator << (const System& system))
 	COMPARE_OUTPUT("HINFile::write: truncated atom name 'NAME TEST' to 'NAME'.\n")
 	TEST_FILE_REGEXP(filename.c_str(), "data/HINFile_test3.hin")
 
-	empty << system;
+	TEST_EXCEPTION(File::CanNotWrite, empty << system)
 RESULT
 
 CHECK([EXTRA]robust reading)	
@@ -192,8 +192,8 @@ CHECK(const HINFile& operator = (const HINFile& rhs) throw(Exception::FileNotFou
 	TEST_EXCEPTION(Exception::FileNotFound, f2 = f3)
 RESULT
 
-CHECK(void write(const Molecule& molecule))
-	empty.write(Molecule());
+CHECK(bool write(const Molecule& molecule) throw(File::CanNotWrite))
+	TEST_EXCEPTION(File::CanNotWrite, empty.write(Molecule()))
 	String filename;
 	NEW_TMP_FILE(filename);
 	Molecule m;

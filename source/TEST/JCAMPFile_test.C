@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile_test.C,v 1.2 2003/06/01 17:06:01 oliver Exp $
+// $Id: JCAMPFile_test.C,v 1.3 2003/07/14 15:56:43 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: JCAMPFile_test.C,v 1.2 2003/06/01 17:06:01 oliver Exp $")
+START_TEST(class_name, "$Id: JCAMPFile_test.C,v 1.3 2003/07/14 15:56:43 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,47 +23,92 @@ CHECK(JCAMPFile() throw())
 	TEST_NOT_EQUAL(ptr, 0)
 RESULT
 
-CHECK(virtual ~JCAMPFile() throw())
+CHECK(~JCAMPFile() throw())
 	delete ptr;
 RESULT
 
 CHECK(JCAMPFile(const String& name, OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
-	// ????
+	TEST_EXCEPTION(Exception::FileNotFound, JCAMPFile("asddddddddddddaaaaaaaacasdd"))
+	JCAMPFile jcamp(String("data") + FileSystem::PATH_SEPARATOR + "JCAMPFile_test.dat");
 RESULT
 
 CHECK(JCAMPFile(const JCAMPFile& file) throw(Exception::FileNotFound))
-	// ????
+	JCAMPFile jcamp(String("data") + FileSystem::PATH_SEPARATOR + "JCAMPFile_test.dat");
+	JCAMPFile f2(jcamp);
 RESULT
 
 CHECK(void read() throw(Exception::ParseError))
 	JCAMPFile jcamp(String("data") + FileSystem::PATH_SEPARATOR + "JCAMPFile_test.dat");
 	jcamp.read();
+
+	/*
+	StringHashMap<JCAMPFile::JCAMPValue>::Iterator it = jcamp.getEntries().begin();
+	for(;+it;++it)
+	{
+		Log.error() << it->first << "  " << it->second.string_value << "         ";
+		if (it->second.numeric_value.size() > 0) Log.error() << it->second.numeric_value[0] << std::endl;
+		else Log.error() << std::endl;
+	}
+	*/
+	TEST_EQUAL(jcamp.hasEntry("SYMM"), true)
+	TEST_EQUAL(jcamp.getIntValue("SYMM"), 0)
+	TEST_EQUAL(jcamp.hasEntry("ML3"), true)
+	TEST_REAL_EQUAL(jcamp.getDoubleValue("ML3"), 0.00542953585106775)
+
+	JCAMPFile empty;
+	TEST_EXCEPTION(Exception::ParseError, empty.read())
 RESULT
 
-CHECK(void write())
+CHECK(bool write() throw(File::CanNotWrite))
+	JCAMPFile jcamp(String("data") + FileSystem::PATH_SEPARATOR + "JCAMPFile_test.dat");
+	jcamp.read();
+	jcamp.close();
+	String filename;
+	NEW_TMP_FILE(filename);
+	JCAMPFile out(filename, File::OUT);
+	out.getHeader() = jcamp.getHeader();
+	out.getEntries() = jcamp.getEntries();
+	out.write();
+
+	JCAMPFile empty;
+	TEST_EXCEPTION(File::CanNotWrite, empty.write())
+RESULT
+
+CHECK(HeaderMap& getHeader() throw())
 	// ????
 RESULT
 
-CHECK(JCAMPFile::HeaderMap& getHeader() throw())
+CHECK(const HeaderMap& getHeader() const throw())
 	// ????
 RESULT
 
-CHECK(const JCAMPFile::HeaderMap& getHeader() const throw())
+CHECK(EntryMap& getEntries() throw())
 	// ????
 RESULT
 
-CHECK(JCAMPFile::EntryMap& getEntries() throw())
+CHECK(const EntryMap& getEntries() const throw())
 	// ????
 RESULT
 
-CHECK(const JCAMPFile::EntryMap& getEntries() const throw())
-	// ????
-RESULT
-
-CHECK(bool has(const String& name) const)
+CHECK(bool hasEntry(const String& name) const throw())
 	// ????
 RESULT
 											
+CHECK(Index getIntValue(const String& name) const throw(Exception::InvalidFormat))
+	// ????
+RESULT
+
+CHECK(bool hasHeader(const String& name) const throw())
+	// ????
+RESULT
+
+CHECK(const JCAMPValue& operator [] (const String& name) const)
+	// ????
+RESULT
+
+CHECK(double getDoubleValue(const String& name) const throw(Exception::InvalidFormat))
+	// ????
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

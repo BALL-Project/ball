@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LineBasedFile_test.C,v 1.16 2003/01/15 07:31:48 oliver Exp $
+// $Id: LineBasedFile_test.C,v 1.17 2003/07/14 15:56:43 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,13 +9,14 @@
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.16 2003/01/15 07:31:48 oliver Exp $")
+START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.17 2003/07/14 15:56:43 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
+String PS = FileSystem::PATH_SEPARATOR;
 
 LineBasedFile* fl;
 
@@ -36,7 +37,7 @@ RESULT
 
 CHECK(LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound))
-	LineBasedFile f1("data/LineBasedFile_test.txt");
+	LineBasedFile f1("data"+PS+"LineBasedFile_test.txt");
 	TEST_EQUAL(f1.getLineNumber(), 0)
 	TEST_EQUAL(f1.getLine(), "")
 	f1.readLine();
@@ -55,7 +56,7 @@ RESULT
 LineBasedFile fx;
 
 CHECK(LineBasedFile(const LineBasedFile& f) throw())
-	LineBasedFile f1("data/LineBasedFile_test.txt");
+	LineBasedFile f1("data"+PS+"LineBasedFile_test.txt");
 	TEST_EQUAL(f1.readLine(), true)
 	TEST_EQUAL(f1.getLine(), "line1")
 	f1.close();
@@ -71,7 +72,7 @@ CHECK(LineBasedFile(const LineBasedFile& f) throw())
 RESULT
 
 CHECK(LineBasedFile& operator = (const LineBasedFile& file) throw())
-	LineBasedFile f1("data/LineBasedFile_test.txt");
+	LineBasedFile f1("data"+PS+"LineBasedFile_test.txt");
 	f1.readLine();
 	TEST_EQUAL(f1.getLine(), "line1")
 
@@ -82,7 +83,7 @@ CHECK(LineBasedFile& operator = (const LineBasedFile& file) throw())
 RESULT
 
 CHECK(clear() throw())
-	LineBasedFile f1("data/LineBasedFile_test.txt");
+	LineBasedFile f1("data"+PS+"LineBasedFile_test.txt");
 	f1.readLine();
 	f1.clear();
 	TEST_EQUAL(f1.getLineNumber(), 0)
@@ -92,7 +93,7 @@ CHECK(clear() throw())
 RESULT
 
 CHECK(getLineNumber() const  throw())
-	LineBasedFile f1("data/LineBasedFile_test.txt");
+	LineBasedFile f1("data"+PS+"LineBasedFile_test.txt");
 	TEST_EQUAL(f1.getLineNumber(), 0)
 	f1.readLine();
 	TEST_EQUAL(f1.getLineNumber(), 1)
@@ -100,7 +101,7 @@ CHECK(getLineNumber() const  throw())
 	TEST_EQUAL(fx.getLineNumber(), 0)
 RESULT
 
-LineBasedFile f1("data/LineBasedFile_test.txt");
+LineBasedFile f1("data"+PS+"LineBasedFile_test.txt");
 
 CHECK(getLine() const  throw())
 	TEST_EQUAL(f1.getLine(), "")
@@ -301,7 +302,29 @@ CHECK(gotoLine(Position line_number) throw(LineBasedFileError))
 	TEST_EQUAL(fx.getLineNumber(), 0)
 RESULT
 
+CHECK([EXTRA] triming whitespaces)
+	LineBasedFile f1("data"+PS+"LineBasedFile_test2.txt", File::IN, true);
+	f1.readLine();
+	TEST_EQUAL(f1.getLine(), "line1")
+	f1.readLine();
+	TEST_EQUAL(f1.getLine(), "line2")
+	f1.readLine();
+	TEST_EQUAL(f1.getLine(), "line 3")
+RESULT
 
+CHECK(bool trimWhiteSpacesEnabled() const throw())
+	LineBasedFile f1;
+	TEST_EQUAL(f1.trimWhiteSpacesEnabled(), false)
+RESULT
+
+CHECK(void enableTrimWhitespaces(bool state) throw())
+	LineBasedFile f1;
+	TEST_EQUAL(f1.trimWhiteSpacesEnabled(), false)
+	f1.enableTrimWhitespaces(true);
+	TEST_EQUAL(f1.trimWhiteSpacesEnabled(), true)
+	f1.enableTrimWhitespaces(false);
+	TEST_EQUAL(f1.trimWhiteSpacesEnabled(), false)
+RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

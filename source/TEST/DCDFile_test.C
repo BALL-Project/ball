@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.17 2003/07/06 16:29:10 amoll Exp $
+// $Id: DCDFile_test.C,v 1.18 2003/07/14 15:56:43 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.17 2003/07/06 16:29:10 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.18 2003/07/14 15:56:43 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ CHECK(bool append(const SnapShot& snapshot) throw())
 RESULT
 
 
-CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw())
+CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw(File::CanNotWrite))
 	vector<SnapShot> v;
 	v.push_back(ss);
 	TEST_EQUAL(ss.getNumberOfAtoms(), 892)
@@ -204,6 +204,9 @@ CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw())
 	TEST_EQUAL(dcd.getNumberOfSnapShots(), 2)
 	dcd.close();
 	TEST_NOT_EQUAL(dcd.getSize(), 0)   // got 0
+
+	DCDFile empty;
+	TEST_EXCEPTION(File::CanNotWrite, empty.flushToDisk(v))
 RESULT
 
 CHECK(BALL_CREATE(DCDFile))
@@ -225,9 +228,8 @@ CHECK(bool isSwappingBytes() const throw())
 	d.isSwappingBytes();
 RESULT
 
-CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) throw())
+CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
 	DCDFile dcd;
-Log.error() << "#~~#   1" << std::endl;
 	TEST_EXCEPTION(Exception::FileNotFound, dcd.open(""))
 RESULT
 
