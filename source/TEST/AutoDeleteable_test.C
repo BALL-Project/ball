@@ -1,4 +1,4 @@
-// $Id: AutoDeleteable_test.C,v 1.1 2000/08/22 16:59:43 amoll Exp $
+// $Id: AutoDeleteable_test.C,v 1.2 2000/08/23 01:02:07 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ class A: public AutoDeletable
 {
 };
 
-START_TEST(class_name, "$Id: AutoDeleteable_test.C,v 1.1 2000/08/22 16:59:43 amoll Exp $")
+START_TEST(class_name, "$Id: AutoDeleteable_test.C,v 1.2 2000/08/23 01:02:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ array_ptr = new A[12];
 
 CHECK(AutoDeletable::~AutoDeletable())
 	delete a_ptr;
-	delete array_ptr; // segfault ???
+	delete [] array_ptr;
 RESULT
 
 a_ptr = new A;
