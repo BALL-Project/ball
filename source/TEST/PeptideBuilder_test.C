@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PeptideBuilder_test.C,v 1.3 2003/06/06 14:00:43 anne Exp $
+// $Id: PeptideBuilder_test.C,v 1.4 2003/06/06 14:21:46 anne Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.3 2003/06/06 14:00:43 anne Exp $")
+START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.4 2003/06/06 14:21:46 anne Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -195,11 +195,11 @@ CHECK(construct())
 
 	TEST_EQUAL(resIt->getName(), "PRO")
 	TEST_EQUAL(resIt->getTorsionPhi(), Angle(0,false));
-  TEST_EQUAL(resIt->getTorsionPsi(), Angle(-58.,false));
+  TEST_EQUAL(resIt->getTorsionPsi(), Angle(-80.,false));
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "PRO")
   TEST_EQUAL(resIt->getTorsionPhi(), Angle(-12, false));
-	TEST_EQUAL(resIt->getTorsionPsi(), Angle(42, false));
+	TEST_EQUAL(resIt->getTorsionPsi(), Angle(-80, false));
   ++resIt;
 	TEST_EQUAL(resIt->getName(), "PRO")
 	TEST_EQUAL(resIt->getTorsionPhi(), Angle(28,false));
