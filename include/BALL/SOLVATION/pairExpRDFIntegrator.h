@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.h,v 1.5 2000/09/25 11:15:21 anker Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.6 2000/09/25 16:26:47 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -128,6 +128,14 @@ namespace BALL
 		/** */
 		Options options;
 
+		/** @name Debugging and diagnostics */
+		//@{
+
+		/** Dumps the whole content of the object */
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
+		
+		//@}
+
 
 		protected:
 
@@ -137,7 +145,6 @@ namespace BALL
 		double R_ij_o_;
 		double k1_;
 		double k2_;
-		RadialDistributionFunction rdf_;
 
 		bool valid_;
 
