@@ -99,9 +99,9 @@ NotificationTarget                  DI          Z
 NotificationTarget1                 DI          Z
 NotificationTarget2                 DI          Z
 
-Object                              DX,         Z       read/write
+Object                              (/)         (/)       read/write fehlen
 PersistenceManager                  I           Z
-PersistentObject                    I           Z
+PersistentObject                    I           /
 RandomAccessIterator                DI          Z
 ConstRandomAccessIterator           DI          Z
 ReverseRandomAccessIterator         DI          Z
@@ -194,8 +194,8 @@ System                              X           /           read, write fehlt
  ElementPredicate                   /           /           OCI nicht notwendig
  InRingPredicate                    /           /           OCI nicht notwendig
  MoleculePredicate                  /           /           OCI nicht notwendig
- NucleicAcidPredicate               /           Z           OCI nicht notwendig
- NucleotidePredicate                /           Z           OCI nicht notwendig
+ NucleicAcidPredicate               /           /           OCI nicht notwendig
+ NucleotidePredicate                /           /           OCI nicht notwendig
  NumberOfBondsPredicate             /           /           OCI nicht notwendig
  ProteinPredicate                   /           /           OCI nicht notwendig
  ResidueIDPredicate                 /           /           OCI nicht notwendig
