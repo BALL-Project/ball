@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.C,v 1.2 1999/09/25 12:15:04 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.3 1999/12/29 01:39:58 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 
@@ -51,7 +51,7 @@ namespace BALL {
 
 		// indices used in between to calculated the bounding boxes of spheres in the grid
 		
-		GridIndex upper_index, lower_index;
+		PointGrid<char>::GridIndex upper_index, lower_index;
 
 
 		// pointer to grid data
@@ -327,7 +327,7 @@ namespace BALL {
 
 
 		// indices used in between to calculated the bounding boxes of spheres in the grid
-		GridIndex upper_index, lower_index;
+		PointGrid<char>::GridIndex upper_index, lower_index;
 
 
 		// pointer to grid data
