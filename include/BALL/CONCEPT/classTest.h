@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.47 2003/07/03 13:30:32 oliver Exp $
+// $Id: classTest.h,v 1.48 2003/07/03 13:30:48 amoll Exp $
 //
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_SYSTEM_H
 # include <BALL/SYSTEM/file.h>
+#endif
+
+#ifndef BALL_DATATYPE_REGULAREXPRESSION_H
+# include <BALL/DATATYPE/regularExpression.h>
 #endif
 
 #include <string>
