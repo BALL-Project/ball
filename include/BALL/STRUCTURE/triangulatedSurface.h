@@ -1,7 +1,9 @@
-// $Id: triangulatedSurface.h,v 1.17 2001/03/01 14:56:23 balltest Exp $
+// $Id: triangulatedSurface.h,v 1.18 2001/06/19 21:13:15 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
+
+//#define with_indices
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
@@ -32,7 +34,10 @@ namespace BALL
 	class TTriangleEdge
 	{
 		public:
-		TTriangleEdge() :  point(2), triangle(2), index(-1)
+		TTriangleEdge() :  point(2), triangle(2)
+				#ifdef with_indices
+				, index(-1)
+				#endif
 		{
 		}
 		~TTriangleEdge()
@@ -57,6 +62,7 @@ namespace BALL
 		}
 		void print()
 		{
+			#ifdef with_indices
 			std::cout << index << ": " << point[0]->index << "-" << point[1]->index << " ";
 			if (triangle.size() > 0)
 			{
@@ -66,17 +72,23 @@ namespace BALL
 			{
 				std::cout << "|"<< (triangle[i] == NULL ? -2 : triangle[i]->index);
 			}
+			#endif
 		}
 		vector<TTrianglePoint<T>*> point;
 		vector<TTriangle<T>*> triangle;
+		#ifdef with_indices
 		long int index;
+		#endif
 	};
 
 	template <class T>
 	class TTriangle
 	{
 		public:
-		TTriangle() :  point(3), edge(3)/*, triangle(3)*/, index(-1)
+		TTriangle() :  point(3), edge(3)
+				#ifdef with_indices
+				, index(-1)
+				#endif
 		{
 		}
 		~TTriangle()
@@ -109,23 +121,29 @@ namespace BALL
 		}
 		void print()
 		{
+			#ifdef with_indices
 			std::cout << index << "( ["
 					 << point[0]->index << " " << point[1]->index << " " << point[2]->index << "] {"
 					 << (edge[0] == NULL ? -2 : edge[0]->index) << " "
 					 << (edge[1] == NULL ? -2 : edge[1]->index) << " "
 					 << (edge[2] == NULL ? -2 : edge[2]->index) << "} )";
+			#endif
 		}
 		vector<TTrianglePoint<T>*> point;
 		vector<TTriangleEdge<T>*> edge;
-		//vector<TTriangle*> triangle;
+		#ifdef with_indices
 		long int index;
+		#endif
 	};
 
 	template <class T>
 	class TTrianglePoint
 	{
 		public:
-		TTrianglePoint() :  p(), n(), edge(), triangle(), index(-1)
+		TTrianglePoint() :  p(), n(), edge(), triangle()
+					#ifdef with_indices
+					, index(-1)
+					#endif
 		{
 		}
 		~TTrianglePoint()
@@ -134,7 +152,8 @@ namespace BALL
 		TTriangleEdge<T>* has(TTriangleEdge<T>* test)
 		{
 			//std::cout << "*****************************************************\n";
-			//std::cout << "TTrianglePoint( "; print(); std::cout << " )->has(  TTriangleEdge( "; test->print(); cout << " )  )\n";
+			//std::cout << "TTrianglePoint( "; print();
+			//std::cout << " )->has(  TTriangleEdge( "; test->print(); cout << " )  )\n";
 			for (std::list<TTriangleEdge<T>*>::iterator e = edge.begin(); e != edge.end(); e++)
 			{
 				//std::cout << "  "; (*e)->print(); std::cout << "\n";
@@ -155,6 +174,7 @@ namespace BALL
 		}
 		void print()
 		{
+			#ifdef with_indices
 			std::list<TTriangleEdge<T>*>::iterator e;
 			std::list<TTriangle<T>*>::iterator t;
 			std::cout << index << "( {";
@@ -168,13 +188,16 @@ namespace BALL
 				std::cout << (*t)->index << " ";
 			}
 			std::cout << "] )";
+			#endif
 		}
 		TVector3<T> p;
 		TVector3<T> n;
 		std::list<TTriangleEdge<T>*> edge;
 		std::list<TTriangle<T>*> triangle;
 		Index state;
+		#ifdef with_indices
 		long int index;
+		#endif
 	};
 
 	/** Generic TriangulatedSurface Class.
@@ -234,22 +257,18 @@ namespace BALL
 		*/
 		virtual ~TTriangulatedSurface()
 		{
-				std::cout << "########\n";
 			for (list<TTrianglePoint<T>*>::iterator i = points.begin(); i != points.end(); i++)
 			{
 				delete *i;
 			}
-				std::cout << "########\n";
 			for (list<TTriangleEdge<T>*>::iterator i = edges.begin(); i != edges.end(); i++)
 			{
 				delete *i;
 			}
-				std::cout << "########\n";
 			for (list<TTriangle<T>*>::iterator i = triangles.begin(); i != triangles.end(); i++)
 			{
 				delete *i;
 			}
-				std::cout << "########\n";
 		}
 		//@}
 
@@ -291,6 +310,8 @@ namespace BALL
 		void exportSurface(TSurface<T>& surface);
 
 		TTriangulatedSurface<T>& operator += (TTriangulatedSurface<T>& surface);
+
+		void join(TTriangulatedSurface<T>& source);
 
 		void icosaeder(const bool out);
 
@@ -340,9 +361,12 @@ namespace BALL
 		template <class T>
 		std::ostream& operator << (std::ostream& s, const TTrianglePoint<T>& point)
 		{
+			#ifdef with_indices
 			std::list<TTriangleEdge<T>*>::iterator e;
 			std::list<TTriangle<T>*>::iterator t;
-			s << "POINT" << point.index << "( " << point.p << " {";
+			s << "POINT";
+			s << point.index;
+			s << "( " << point.p << " {";
 			for (e = point.edge.begin(); e != point,edge.end(); e++)
 			{
 				s << (*e)->index << " ";
@@ -354,11 +378,13 @@ namespace BALL
 			}
 			s << "] )";
 			return s;
+			#endif
 		}
 
 		template <class T>
 		std::ostream& operator << (std::ostream& s, const TTriangleEdge<T>& edge)
 		{
+			#ifdef with_indices
 			s << "EDGE" << edge.index << "( [" << edge.point[0]->index << " " << edge.point[1]->index << "] {";
 			for (Position i = 0; i < edge.triangle.size(); i++)
 			{
@@ -366,11 +392,13 @@ namespace BALL
 			}
 			s << "} )";
 			return s;
+			#endif
 		}
 
 		template <class T>
 		std::ostream& operator << (std::ostream& s, const TTriangle<T>& triangle)
 		{
+			#ifdef with_indices
 			s << "TRIANGLE" << triangle.index << "( ["
 				<< triangle.point[0]->index << " "
 				<< triangle.point[1]->index << " "
@@ -379,15 +407,17 @@ namespace BALL
 				<< (triangle.edge[1] == NULL ? -2 : triangle.edge[1]->index) << " "
 				<< (triangle.edge[2] == NULL ? -2 : triangle.edge[2]->index) << "} )";
 			return s;
+			#endif
 		}
 
 		template <typename T>
 		std::ostream& operator << (std::ostream& s, const TTriangulatedSurface<T>& surface)
 		{
-			surface.setIndices();
-			std::list<TTrianglePoint<T>*>::iterator p;
-			std::list<TTriangleEdge<T>*>::iterator e;
-			std::list<TTriangle<T>*>::iterator t;
+			#ifdef with_indices
+			//surface.setIndices();
+			std::list<TTrianglePoint<T>*>::const_iterator p;
+			std::list<TTriangleEdge<T>*>::const_iterator e;
+			std::list<TTriangle<T>*>::const_iterator t;
 			s << "Points: " << surface.points.size() << "\n";
 			for (p = surface.points.begin(); p != surface.points.end(); p++)
 			{
@@ -429,6 +459,7 @@ namespace BALL
 					<< ((*t)->edge[2] == NULL ? -2 : (*t)->edge[2]->index) << "} )\n";
 			}
 			return s;
+			#endif
 		}
 
 	/**	The Default TriangulatedSurface type.
@@ -447,18 +478,21 @@ namespace BALL
 		std::vector< TSurface<T>::Triangle > surface_triangles;
 		std::vector< TVector3<T> > surface_normals;
 		std::list<TTrianglePoint<T>*>::iterator p;
+		Index i = 0;
 		for (p = points.begin(); p != points.end(); p++)
 		{
 			surface_points.push_back((*p)->p);
 			surface_normals.push_back((*p)->n);
+			(*p)->state = i;
+			i++;
 		}
 		std::list<TTriangle<T>*>::iterator t;
 		for (t = triangles.begin(); t != triangles.end(); t++)
 		{
 			TSurface<T>::Triangle triangle;
-			triangle.v1 = (*t)->point[0]->index;
-			triangle.v2 = (*t)->point[1]->index;
-			triangle.v3 = (*t)->point[2]->index;
+			triangle.v1 = (*t)->point[0]->state;
+			triangle.v2 = (*t)->point[1]->state;
+			triangle.v3 = (*t)->point[2]->state;
 			surface_triangles.push_back(triangle);
 		}
 		surface.vertex = surface_points;
@@ -485,7 +519,19 @@ namespace BALL
 		{
 			triangles.push_back(*t);
 		}
+		/*points.splice(points.end(),surface.points);
+		edges.splice(edges.end(),surface.edges);
+		triangles.splice(triangles.end(),surface.triangles);*/
 		return *this;
+	}
+
+
+	template <class T>
+	void TTriangulatedSurface<T>::join(TTriangulatedSurface<T>& source)
+	{
+		points.splice(points.end(),source.points);
+		edges.splice(edges.end(),source.edges);
+		triangles.splice(triangles.end(),source.triangles);
 	}
 
 
@@ -717,6 +763,7 @@ namespace BALL
 	template <class T>
 	void TTriangulatedSurface<T>::setIndices()
 	{
+		#ifdef with_indices
 		Index i = 0;
 		std::list<TTrianglePoint<T>*>::iterator p;
 		for (p = points.begin(); p != points.end(); p++)
@@ -738,6 +785,7 @@ namespace BALL
 			(*t)->index = i;
 			i++;
 		}
+		#endif
 	}
 
 
