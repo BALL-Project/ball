@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.14 2000/09/04 16:32:42 oliver Exp $ 
+// $Id: hashSet.h,v 1.15 2000/09/04 20:55:23 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -39,7 +39,6 @@ namespace BALL
 
   /** Generic Hash Set Class.
       {\bf Definition:} \URL{BALL/DATATYPE/hashSet.h}
-			\\
   */
  	template <class Key>
 	class HashSet
@@ -155,7 +154,7 @@ namespace BALL
 		/** Assign this HashSet with the contents of another HashSet
 				@param hash_set the HashSet to assign from
 		*/
-		const HashSet& operator = (const HashSet& hash_set);
+		HashSet& operator = (const HashSet& hash_set);
 
 		/** Assing another HashSet with the contents of this HashSet
 				@param hash_set the HashSet to assign to
@@ -209,8 +208,7 @@ namespace BALL
 		void erase(Iterator pos);
 
 		/**	Erase a range of elements.
-				Erase all elemntes in the range {\tt \[f, l)}.
-				Not yet implemented.
+				Erase all elements in the range {\tt \[f, l)}.
 		*/
 		void erase(Iterator f, Iterator l);
 		//@}
@@ -260,6 +258,13 @@ namespace BALL
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
+		// --- INTERNAL ITERATORS
+
+		/** Apply a processor to all keys in this instance.
+				@return true if the processor could be applied.
+		*/
+		bool apply(UnaryProcessor<ValueType>& processor);
+
 		// --- STORERS
 
 		/*
@@ -271,10 +276,6 @@ namespace BALL
 
 		void write(std::ostream& s) const;
 		*/      
-
-		// --- INTERNAL ITERATORS
-
-		bool apply(UnaryProcessor<ValueType>& processor);
 
 		// --- EXTERNAL ITERATORS
 		struct Node
@@ -539,11 +540,21 @@ namespace BALL
 			capacity_(hash_set.capacity_),
 			bucket_(hash_set.bucket_.size())
 	{
-		set(hash_set);
+		Node* item = 0;
+		
+		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
+		{
+			bucket_[bucket] = 0;
+
+			for (item = hash_set.bucket_[bucket]; item != 0; item = item->next)
+			{
+				bucket_[bucket]	= newNode_(item->value, bucket_[bucket]);
+			}
+		}
+
 	}
 
 	template <class Key>
-	BALL_INLINE 
 	void HashSet<Key>::set(const HashSet& hash_set)
 	{
 		if (&hash_set == this)
@@ -601,7 +612,7 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	const HashSet<Key>& HashSet<Key>::operator = (const HashSet& hash_set)
+	HashSet<Key>& HashSet<Key>::operator = (const HashSet& hash_set)
 	{
 		set(hash_set);
 		return *this;
@@ -615,6 +626,7 @@ namespace BALL
 	}
 
 	template <class Key>
+	BALL_INLINE 
 	void HashSet<Key>::swap(HashSet& hash_set)
 	{
 		std::swap(size_, hash_set.size_);
@@ -651,7 +663,6 @@ namespace BALL
 	}
 
 	template <class Key>
-	BALL_INLINE 
 	HashSet<Key>::Iterator HashSet<Key>::find(const Key& key)
 	{
 		Iterator it = end();
@@ -709,33 +720,27 @@ namespace BALL
 		Node*			previous = 0;
 		Node*			node_ptr = bucket_[bucket];
 		
-		for (; node_ptr != 0; node_ptr = node_ptr->next)
+		while (node_ptr != 0 && node_ptr->value != key)
 		{
-			if (node_ptr->value == key)
-			{
-				break;
-			}
-
 			previous = node_ptr;
+			node_ptr = node_ptr->next;
 		}
 
-		if (node_ptr != 0)
+		if (node_ptr == 0)
 		{
-			if (node_ptr == bucket_[bucket])
-			{
-				bucket_[bucket] = node_ptr->next;
-			} else {
-				previous->next = node_ptr->next;
-			}
-
-			deleteNode_(node_ptr);
-
-			--size_;
-
-			return true;
+			return false;
 		}
 
-		return false;
+		if (node_ptr == bucket_[bucket])
+		{
+			bucket_[bucket] = node_ptr->next;
+		} else {
+			previous->next = node_ptr->next;
+		}
+
+		deleteNode_(node_ptr);
+		--size_;
+		return true;
 	}
 
 	template <class Key>
@@ -782,18 +787,18 @@ namespace BALL
 
 		if (f == bucket_[f.bucket_])
 		{
-			bucket_[f.bucket_] = l->next;
+			bucket_[f.bucket_] = l;
 		} else {
-			(f-1)->next = l->next;
+			(f-1)->next = l;
 		}
 
 		int diff = f.position_ - l.position_;
-		while (f.position_ <= l.position_)
+		while (f.position_ < l.position_)
 		{
 			deleteNode_(f);
 			f++;
 		}
-		size_ -= diff +1;
+		size_ -= diff;
 	}
 
 	template <class Key>
@@ -822,7 +827,6 @@ namespace BALL
 	}
 
 	template <class Key>
-	BALL_INLINE 
 	bool HashSet<Key>::operator == (const HashSet& hash_set) const
 	{
 		if (size_ != hash_set.size_)
@@ -902,7 +906,6 @@ namespace BALL
 	} 
  
 	template <class Key>
-	BALL_INLINE 
 	bool HashSet<Key>::apply(UnaryProcessor<ValueType>& processor)
 	{
     if (processor.start() == false)
@@ -941,7 +944,6 @@ namespace BALL
 	}
 
   template <class Key>
-  BALL_INLINE
   void HashSet<Key>::deleteBuckets_()
   {
     Size i = 0;
