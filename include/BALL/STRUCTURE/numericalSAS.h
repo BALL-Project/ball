@@ -1,10 +1,14 @@
-// $Id: numericalSAS.h,v 1.9 2000/08/30 19:58:26 oliver Exp $
+// $Id: numericalSAS.h,v 1.10 2000/08/31 17:14:35 anker Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+
+#ifndef BALL_MATHS_VECTOR3_H
+#include <BALL/MATHS/vector3.h>
 #endif
 
 namespace BALL 
@@ -97,8 +101,8 @@ namespace BALL
 			@return the total SAS area in $\AA^2$
 	*/
 	float calculateSASAtomPoints
-					(const AtomContainer& fragment, 
-					HashMap<Atom*, Surface>& atom_surfaces,
+					(const BaseFragment& fragment, 
+					std::vector< std::pair<Vector3, Surface> >& atom_surfaces,
 					float probe_radius = 1.5,  Size number_of_dots = 400);
 
 } // namespace BALL
