@@ -23,6 +23,17 @@ namespace BALL
 		typedef unsigned long    SceneHandle;      
 		//@}
 
+		/**			@name Constant definition
+		*/	
+		//@{
+
+		/**	The default port for the VIEW server.
+				Default port is 20000.
+		*/
+		#define VIEW_DEFAULT_PORT 20000
+
+		//@}
+
 		/**     @name Enums defined by VIEW.
 		*/
 		//@{
