@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.h,v 1.4 2000/10/19 11:10:44 anker Exp $
+// $Id: piecewiseFunction.h,v 1.5 2000/10/23 10:20:06 anker Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -11,19 +11,18 @@
 #include <BALL/COMMON/limits.h>
 #endif
 
+#ifndef BALL_COMMON_EXCEPTION_H
+#include <BALL/COMMON/exception.h>
+#endif
+
 namespace BALL
 {
 
 	/** Every piece of a piecewise function needs a bunch of coefficients */
-
 	typedef std::vector<double> Coefficients;
-	// BAUSTELLE: Nicht schön.
-	static const Coefficients INVALID_COEFFICIENTS;
 
 	/** An interval is defined by its limits */
-	
 	typedef std::pair<double,double> Interval;
-	static const Interval INVALID_INTERVAL(0.0,0.0);
 	static const double INFINITY = Limits<double>::max();
 
 	/** Piecewise function object.
@@ -86,13 +85,16 @@ namespace BALL
 		const std::vector<Interval>& getIntervals() const throw();
 
 		/** Get the interval a given x belongs to */
-		const Interval& getInterval(double x) const throw();
+		const Interval& getInterval(double x) const
+			throw();
 
 		/** Get interval limits by index */
-		const Interval& getInterval(Position index) const throw();
+		const Interval& getInterval(Position index) const 
+			throw(Exception::IndexOverflow);
 
 		/** Get the interval index for a given x */
-		Position getIntervalIndex(double x) const throw();
+		Position getIntervalIndex(double x) const 
+			throw(Exception::OutOfRange);
 
 		/** Return the range of the definition */
 		const Interval& getRange() const throw();
@@ -110,7 +112,8 @@ namespace BALL
 		const Coefficients& getCoefficients(double x) const throw();
 
 		/** get coefficients from index */
-		const Coefficients& getCoefficients(Position index) const throw();
+		const Coefficients& getCoefficients(Position index) const 
+			throw(Exception::IndexOverflow);
 		
 		/** compute the value of the piecewise function ata given x */
 		virtual double operator () (double x) const throw();
