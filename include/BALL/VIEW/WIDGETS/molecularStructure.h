@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.19 2004/08/31 14:33:13 amoll Exp $
+// $Id: molecularStructure.h,v 1.20 2004/09/03 13:25:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -134,8 +134,7 @@ namespace BALL
 					\param main_control the MainControl object to be initialized
 					\see   finalizeWidget
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
 		
 			/**	Remove the widget.
 					Reverse all actions performed in initializeWidget (remove menu entries of this scene).
@@ -144,8 +143,7 @@ namespace BALL
 					\see   initializeWidget
 					\see   aboutToExit
 			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
+			virtual void finalizeWidget(MainControl& main_control);
 				
 			/**	Get the currently selected force field instance.
 					This returns either a reference to the amber_ff_ member or to the charmm_ff_ member,

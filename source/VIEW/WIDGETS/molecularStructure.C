@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.55 2004/08/31 14:33:07 amoll Exp $
+// $Id: molecularStructure.C,v 1.56 2004/09/03 13:25:55 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -56,7 +56,6 @@ namespace BALL
 
 
 		void MolecularStructure::initializeWidget(MainControl& main_control)
-			throw()
 		{
 			// cant use ModularWidget::getMainControl() here, no idea why
 			String hint;
@@ -164,7 +163,6 @@ namespace BALL
 
 
 		void MolecularStructure::finalizeWidget(MainControl& main_control)
-			throw()
 		{
 			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																											SLOT(centerCamera()), CTRL+Key_F);
