@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.14 2000/10/21 10:34:33 oliver Exp $
+// $Id: resourceFile.C,v 1.15 2000/10/23 17:37:42 amoll Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -639,7 +639,7 @@ namespace BALL
 			*this >> *this;
 			if (eof())
 			{
-				clear();
+				::std::fstream::clear(rdstate() | ios::failbit);
 			}
 		}
 	}
@@ -657,7 +657,7 @@ namespace BALL
 			
 			if (eof())
 			{
-				clear();
+				::std::fstream::clear(rdstate() | ios::failbit);
 			}
 		} 
 		else 

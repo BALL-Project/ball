@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.14 2000/10/20 18:08:53 amoll Exp $
+// $Id: file.h,v 1.15 2000/10/23 17:37:39 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -446,6 +446,9 @@ namespace BALL
 		bool isExecutable()
 			const throw (Exception::FileNotFound);
  
+		void setName(const String& name)
+			throw (Exception::FileNotFound);
+
 		/**	@name	Debugging and Diagnostics */
 		//@{
 
@@ -458,13 +461,9 @@ namespace BALL
 
 		//@}
 
-		protected:
-		void setName(const String& name)
-			throw();
-
 		private:
-		String name_;
 
+		String		name_;
 		OpenMode	open_mode_;
 		bool			is_open_;
 		bool			is_temporary_;

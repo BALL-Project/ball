@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.6 2000/08/30 19:58:04 oliver Exp $
+// $Id: resourceFile.h,v 1.7 2000/10/23 17:37:29 amoll Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -339,25 +339,25 @@ namespace BALL
 					stack_capacity_(traits.stack_capacity_),
 					stack_size_(traits.stack_size_)
 			{
-				for (register Index index = 0; index < (Index)stack_capacity_; ++index)
+				for (Index index = 0; index < (Index)stack_capacity_; ++index)
 					stack_index_[index] = traits.stack_index_[index];
 			}
 
 			virtual ~IteratorTraits_()
 			{
-				delete [] stack_index_;
+				delete[] stack_index_;
 			}
 			
 			IteratorTraits_ &operator = (const IteratorTraits_ &traits)
 			{
 				bound_ = traits.bound_;
 				position_ = traits.position_;
-				delete [] stack_index_;
+				delete[] stack_index_;
 				stack_index_ = new Index[traits.stack_capacity_];
 				stack_capacity_ = traits.stack_capacity_;
 				stack_size_ = traits.stack_size_;
 		
-				for (register Index index = 0; index < (Index)stack_capacity_; ++index)
+				for (Index index = 0; index < (Index)stack_capacity_; ++index)
 				{
 					stack_index_[index] = traits.stack_index_[index];
 				}
@@ -392,20 +392,20 @@ namespace BALL
 
 			bool operator == (const IteratorTraits_& traits) const
 			{
-				return (bool)(position_ == traits.position_);
+				return (position_ == traits.position_);
 			}
 
 			bool operator != (const IteratorTraits_& traits) const
 			{
-				return (bool)(position_ != traits.position_);
+				return (position_ != traits.position_);
 			}
 			
 			bool isValid() const
 			{
-				return (bool)(bound_ != 0 && position_ != 0
-											&& stack_index_ != 0 
-											&& stack_size_ <= stack_capacity_
-											&& stack_capacity_ > 0);
+				return (bound_ != 0 && position_ != 0
+								&& stack_index_ != 0 
+								&& stack_size_ <= stack_capacity_
+								&& stack_capacity_ > 0);
 			}
 
 			void invalidate()
@@ -423,7 +423,7 @@ namespace BALL
 
 			bool isBegin() const
 			{
-				return (bool)(position_ == bound_);
+				return (position_ == bound_);
 			}
 
 			void toEnd()
@@ -433,7 +433,7 @@ namespace BALL
 			
 			bool isEnd() const
 			{
-				return (bool)(position_ == 0);
+				return (position_ == 0);
 			}
 
 			ResourceEntry& getData()
@@ -451,12 +451,12 @@ namespace BALL
 				if (position_->number_children_ > 0)
 				{
 					position_ = position_->child_[0];
-
 					push(0);
 
-				} else {
-
-					register Index next_child = INVALID_INDEX;
+				} 
+				else 
+				{
+					Index next_child = INVALID_INDEX;
 
 					do 
 					{
@@ -464,18 +464,16 @@ namespace BALL
 						if (next_child == INVALID_INDEX)
 						{
 							position_ = 0;
-
 							return;
-
-						} else {
-
+						} 
+						else 
+						{
 							position_ = position_->parent_;
-
 						}
+
 					} while(++next_child >= (Index)position_->number_children_);
 
 					push(next_child);
-
 					position_ = position_->child_[next_child];
 				}
 			}
@@ -494,12 +492,12 @@ namespace BALL
 				{
 					Index *new_stack_index = new Index[stack_capacity_ << 1];
 
-					for (register Index index = 0; index < (Index)stack_capacity_; ++index)
+					for (Index index = 0; index < (Index)stack_capacity_; ++index)
 					{
 						new_stack_index[index] = stack_index_[index];
 					}
 
-					delete [] stack_index_;
+					delete[] stack_index_;
 					stack_index_ = new_stack_index;
 					stack_capacity_ <<= 1;
 				}
@@ -514,7 +512,9 @@ namespace BALL
 				if (stack_size_ == 0)
 				{
 					return INVALID_INDEX;
-				} else {
+				}
+				else 
+				{
 					return stack_index_[--stack_size_];
 				}
 			}
@@ -541,7 +541,6 @@ namespace BALL
 		}
 
 
-
 		typedef ConstForwardIterator<ResourceEntry, ResourceEntry, ResourceEntry*, IteratorTraits_> ConstIterator;
 
 		ConstIterator begin() const
@@ -553,7 +552,6 @@ namespace BALL
 		{
 			return ConstIterator::end(*this);
 		}
-
 
 
 		protected:
@@ -568,7 +566,6 @@ namespace BALL
 		virtual void deleteEntryArray(ResourceEntry** entry_array) const;
 	
 		bool applyNostart_(UnaryProcessor<ResourceEntry>& processor);
-
 
 
 		private:
@@ -637,9 +634,13 @@ namespace BALL
 		*/
 		virtual ~ResourceFile();
 
-		/*	Destroy method
+		/**	Destroy method
 		*/
 		void destroy();
+
+		/**	Clear method
+		*/
+		void clear();
 
 		//@}
 
@@ -793,7 +794,6 @@ namespace BALL
 		{
 			return ConstIterator::end(root_);
 		}
-
 
 
 		private:
