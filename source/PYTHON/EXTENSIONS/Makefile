@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.4 2001/12/28 02:25:52 oliver Exp $
+# $Id: Makefile,v 1.5 2001/12/28 03:31:40 oliver Exp $
 #
 
 DIRECTORY=PYTHON_EXTENSIONS
@@ -52,6 +52,7 @@ sip_helper.C:	Makefile.inc
 pyBALLSipHelper.C: sipBALLVersion.h
 
 sip:
+	@if ! test -d SIP ; then mkdir SIP 2>/dev/null ; fi
 	@echo "running SIP..."
 	@$(SIP) $(SIP_OPTS) BALL.sip
 	@echo "removing SIP headers..."
