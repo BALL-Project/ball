@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.20 2000/07/06 14:39:42 oliver Exp $
+// $Id: HINFile.C,v 1.21 2000/07/12 19:37:54 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -824,6 +824,59 @@ namespace BALL
 
 				// if the tag was not recognized: complain about it
 				Log.warn() << "HINFile: unknown tag " << tag << " ignored." << endl;
+			}
+		}
+
+		// if desired, try to remove thelone pairs from
+		// old AMBER HC-Files 
+		if (true) // BAUSTELLE
+		{
+			// a list to hold the lone pairs (for deletion)
+			list<Atom*> del_list;
+			
+			// iterate over all atoms
+			AtomIterator it = system.beginAtom();
+			for (; +it; ++it)
+			{
+				if (it->getElement().getSymbol() == "Lp")
+				{
+					// store lone pair in the del_list
+					del_list.push_back(&*it);
+					
+					// sum the lone pair charge into the
+					// heavy atom it is bound to
+					if (it->countBonds() > 0)
+					{
+						float charge = it->getCharge() / it->countBonds();
+						for (Atom::BondIterator bond_it = it->beginBond(); +bond_it; ++bond_it)
+						{
+							Atom* partner = bond_it->getPartner(*it);
+							if (partner != 0)
+							{
+								partner->setCharge(partner->getCharge() + charge);
+							}
+						}
+					}
+
+					// remove all bonds to the lone pair
+					it->destroyBonds();
+				}
+			}
+			
+			// remove the lone pairs
+			list<Atom*>::iterator list_it = del_list.begin();
+			for (; list_it != del_list.end(); ++list_it)
+			{
+				if ((*list_it)->isAutoDeletable())
+				{
+					// delete dynamically created objects
+					delete *list_it;
+				} 
+				else 
+				{
+					// destroy static atoms
+					(*list_it)->destroy();
+				}
 			}
 		}
 
