@@ -1,10 +1,14 @@
-// $Id: mesh.h,v 1.1 2000/04/25 15:25:11 hekl Exp $
+// $Id: mesh.h,v 1.2 2000/04/30 15:21:26 hekl Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+
+#ifndef BALL_MATHS_SURFACE_H
+#	include <BALL/MATHS/surface.h>
 #endif
 
 #ifndef BALL_VIEW_DATATYPE_COLOR_H
@@ -19,8 +23,6 @@
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
-
-
 namespace BALL
 {
 	
@@ -31,7 +33,8 @@ namespace BALL
 		*/
 		class Mesh
 			: public GeometricObject,
-				public ColorExtension
+				public ColorExtension,
+			  public Surface
 		{
 			public:
 
