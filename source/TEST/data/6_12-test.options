@@ -1,0 +1,5 @@
+verbosity 2
+rdf_filename data/6_12-test.rdf-fake.ini
+use_rdf false
+solvent_filename data/6_12-test.solvent.ini
+surface_type 1
