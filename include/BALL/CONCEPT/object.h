@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.13 2001/06/06 22:26:18 amoll Exp $ 
+// $Id: object.h,v 1.14 2001/07/05 17:49:47 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -31,12 +31,6 @@ namespace BALL
 	class Object
 		: public AutoDeletable
 	{
-#		ifdef BALL_SUPPORT_OBJECT_MANAGER
-
-			friend class ObjectManager;
-
-#		endif // BALL_SUPPORT_OBJECT_MANAGER
-		
 		public:
 
 		BALL_CREATE_DEEP(Object)
@@ -165,37 +159,6 @@ namespace BALL
 		int compare(const Object& object) const
 			throw();
 		//@}
-
-		/**	@name	I/O operations */
-		//@{
-
-		/** Read an object from a stream. {\bf Note:} This method is not yet
-				implemented.
-				@param istream a stream from which the object will be read
-		*/
-		virtual void read(::std::istream& s)
-			throw();
-
-		/** Write an object to a stream. {\bf Note:} This method is not yet
-				implemented.
-				@param ostream a stream to which the object will be written
-		*/
-		virtual void write(::std::ostream& s) const
-			throw();
-
-		// BAUSTELLE:
-		// Shouldn't friends be avoided?
-
-		///
-		friend ::std::istream& operator >> (::std::istream& s, Object& object)
-			throw();
-
-		///
-		friend ::std::ostream& operator << (::std::ostream& s, const Object& object)
-			throw();
-		//@}
-	
-		
 		/**	@name Debugging and Diagnostics 
 		*/
 		//@{
@@ -209,41 +172,6 @@ namespace BALL
 			throw();
 		//@}
 
-#		ifdef BALL_SUPPORT_OBJECT_MANAGER
-
-		/** @name Methods related to the BALL object manager
-		*/
-		//@{
-
-		/** Return the previous object in the list.
-				@return a pointer to the previous object
-		*/
-		Object* getPrevious()
-			throw();
-		
-		/** Return the previous object in the list.
-				@return a const pointer to the previous object
-		*/
-		const Object* getPrevious() const
-			throw();
-		
-		/** Return the next object in the list.
-				@return a pointer to the next object
-		*/
-		Object* getNext()
-			throw();
-		
-		/** Return the next object in the list.
-				@return a const pointer to the next object
-		*/
-		const Object* getNext() const
-			throw();
-		//@}
-
-#		endif // BALL_SUPPORT_OBJECT_MANAGER
-		
-
-
 		private:
 
 		//_ The handle of this instance
@@ -251,16 +179,6 @@ namespace BALL
 
 		//_ The global handle
 		static Handle global_handle_;
-
-#		ifdef BALL_SUPPORT_OBJECT_MANAGER
-	
-		//_ A pointer to the previous object in the managed list
-		Object* previous_;
-		//
-		//_ A pointer to the next object in the managed list
-		Object* next_;
-
-#		endif // BALL_SUPPORT_OBJECT_MANAGER
 	};
 
 

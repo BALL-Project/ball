@@ -1,4 +1,4 @@
-// $Id: object.iC,v 1.10 2001/05/29 12:22:55 anker Exp $
+// $Id: object.iC,v 1.11 2001/07/05 17:49:47 oliver Exp $
 
 BALL_INLINE 
 Handle Object::getHandle () const
@@ -75,22 +75,6 @@ bool Object::isValid() const
 	throw()
 {
   return true;
-}
-
-BALL_INLINE 
-void Object::read(::std::istream& /* s */)
-	throw()
-{
-	// BAUSTELLE
-	throw Exception::NotImplemented(__FILE__, __LINE__);
-}
-
-BALL_INLINE 
-void Object::write(::std::ostream& /* s */) const
-	throw()
-{
-	// BAUSTELLE
-  throw Exception::NotImplemented(__FILE__, __LINE__);
 }
 
 BALL_INLINE 

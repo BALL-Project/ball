@@ -1,4 +1,4 @@
-// $Id: object.C,v 1.8 2001/01/22 20:50:32 amoll Exp $
+// $Id: object.C,v 1.9 2001/07/05 17:49:50 oliver Exp $
 
 #include <BALL/CONCEPT/object.h>
 
@@ -13,34 +13,6 @@ namespace BALL
 
 	Handle Object::global_handle_ = (Handle)0;
 
-	// the following four methods
-	// may not be inlined - they are called
-	// in object.h
-
-	Object* Object::getPrevious()
-		throw()
-	{
-		return previous_;
-	}
-			
-	const Object* Object::getPrevious() const
-		throw()
-	{
-		return previous_;
-	}
-			
-	Object* Object::getNext()
-		throw()
-	{
-		return next_;
-	}
-			
-	const Object* Object::getNext() const
-		throw()
-	{
-		return next_;
-	}
-
 	Object::Object()
 		throw()
 		:	AutoDeletable(),
@@ -48,7 +20,7 @@ namespace BALL
 	{
 	}
 
-	Object::Object(const Object&, bool)
+	Object::Object(const Object& /* object */, bool)
 		throw()
 		:	AutoDeletable(),
 			handle_(Object::global_handle_++)
@@ -75,20 +47,6 @@ namespace BALL
 		s << "  auto-deletable: " << AutoDeletable::isAutoDeletable() << endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
-	}
-
-	istream& operator >> (istream &s, Object &object)
-		throw()
-	{
-		object.read(s);
-		return s;
-	}
-
-	ostream& operator << (ostream &s, const Object &object)
-		throw()
-	{
-		object.write(s);
-		return s;
 	}
 
 	int Object::compare(const Object & object) const
