@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.57 2002/02/27 12:18:57 sturm Exp $
+// $Id: vector3.h,v 1.58 2002/03/20 15:00:56 anker Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -567,7 +567,7 @@ namespace BALL
 		{
 			TAngle<T> angle;
 	
-			if (Maths::isNotZero(x))
+			if (Maths::isNotZero(a))
 			{
 				angle = atan(b / a);
 			} 
