@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.17 2000/03/01 21:26:04 oliver Exp $
+// $Id: vector4.h,v 1.18 2000/03/02 23:08:18 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -759,7 +759,7 @@ namespace BALL
 		s << "x= " << x 
 			<< ", y = " << y
 			<< ", z = " << z
-			<< ", h = " << h << endl;
+			<< ", h = " << h << std::endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
