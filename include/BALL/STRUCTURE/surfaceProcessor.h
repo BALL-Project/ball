@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.3 2000/10/19 17:03:20 oliver Exp $
+// $Id: surfaceProcessor.h,v 1.4 2000/10/31 09:11:23 oliver Exp $
 
 #include "reducedSurface.h"
 #include "solventExcludedSurface.h"
@@ -44,6 +44,7 @@ namespace BALL
 
 	bool SurfaceProcessor::start()
 	{
+		std::cerr << "SurfaceProcessor::start()" << std::endl;
 		spheres_.clear();
 		return true;
 	}
@@ -53,12 +54,14 @@ namespace BALL
 	{
 		// spheres_.push_back(Sphere3(atom.getPosition(), atom.getRadius()));
 		spheres_.push_back(Sphere3(atom.getPosition(), 1.2));
+		std::cerr << "SurfaceProcessor::operator (" << atom.getFullName() << ")" << std::endl;
 		return Processor::CONTINUE;
 	}
 
 
 	bool SurfaceProcessor::finish()
 	{
+		std::cerr << "SurfaceProcessor::finish()" << std::endl;
 		ReducedSurface* rs = new ReducedSurface(spheres_,probe_radius_);
 		rs->compute();
 		SolventExcludedSurface* ses = new SolventExcludedSurface(rs);
