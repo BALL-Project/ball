@@ -1,6 +1,7 @@
-// $Id: amberTorsion.C,v 1.7 1999/09/05 09:03:23 oliver Exp $
+// $Id: amberTorsion.C,v 1.8 1999/09/19 20:54:57 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
+#include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/KERNEL/atom.h>
@@ -63,13 +64,17 @@ namespace BALL
 		torsion_.clear();
 
 		// extract the torsion parameters from the parameter file
-		FFPSCosineTorsion	torsion_parameters;
-		bool result = torsion_parameters.extractSection(getForceField()->getParameters(), "Torsions");
-
-		if (result == false) 
+		bool result;
+		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
+		if ((amber_force_field == 0) || !amber_force_field->hasInitializedParameters())
 		{
-			Log.error() << "cannot find section Torsions" << endl;
-			return false;
+			result = torsion_parameters_.extractSection(getForceField()->getParameters(), "Torsions");
+
+			if (result == false) 
+			{
+				Log.error() << "cannot find section Torsions" << endl;
+				return false;
+			}
 		}
 
 		// calculate the torsions
@@ -138,13 +143,13 @@ namespace BALL
 
 										bool found = false;
 
-										if (torsion_parameters.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
+										if (torsion_parameters_.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
 										{
-											torsion_parameters.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
+											torsion_parameters_.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
 											found = true;
-										} else if (torsion_parameters.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
+										} else if (torsion_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
 										{
-											torsion_parameters.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
+											torsion_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
 											found = true;
 										}
 										if (found) 
@@ -208,20 +213,30 @@ namespace BALL
 					if ((*atom_it)->getFragment() != 0)
 					{
 						res_name = (*atom_it)->getFragment()->getName();
+						res_name.trim();
 					}
 				} else {
 					res_name = res->getName();
+					res_name.trim();
 
+					String suffix = "-";
 					if (res->isNTerminal())
 					{
-						terminal = 1;
+						suffix = "-N";
 					}
 					if (res->isCTerminal())
 					{
-						terminal = 2;
+						suffix = "-C";
+					}
+					if (res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+					{
+						suffix += "S";
+					}
+					if (suffix != "-")
+					{
+						res_name += suffix;
 					}
 				}
-				res_name.trim();
 
 				String key;
 				if (res_name != "")

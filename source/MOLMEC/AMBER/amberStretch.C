@@ -1,7 +1,7 @@
-// $Id: amberStretch.C,v 1.2 1999/09/03 07:49:21 oliver Exp $
+// $Id: amberStretch.C,v 1.3 1999/09/19 20:54:57 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
-
+#include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 
@@ -43,12 +43,13 @@ namespace BALL
 		:	ForceFieldComponent(component, clone_deep)
 	{
 		// clear the stretches array
-                delete [] stretch_;
+		delete [] stretch_;
 
 		number_of_stretches_ = component.number_of_stretches_;
-		stretch_ = new FFPSQuadraticBondStretch::QuadraticStretch[ number_of_stretches_ ];
+		stretch_ = new FFPSQuadraticBondStretch::QuadraticStretch[number_of_stretches_];
 
-		for (Size i = 0; i < number_of_stretches_; i++) {
+		for (Size i = 0; i < number_of_stretches_; i++) 
+		{
 			stretch_[i] = component.stretch_[i];
 		}
 	}
@@ -103,15 +104,18 @@ namespace BALL
 		}
 
 		// allocate space for all stretches
-		stretch_ = new FFPSQuadraticBondStretch::QuadraticStretch[ number_of_stretches_ ];
+		stretch_ = new FFPSQuadraticBondStretch::QuadraticStretch[number_of_stretches_];
 		
-		FFPSQuadraticBondStretch	stretch_parameters;
-		bool result = stretch_parameters.extractSection(getForceField()->getParameters(), "QuadraticBondStretch");
-
-		if (result == false) 
+		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
+		if ((amber_force_field == 0) || !amber_force_field->hasInitializedParameters())
 		{
-			Log.level(LogStream::ERROR) << "cannot find section QuadraticBondStretch" << endl;
-			return false;
+			bool result = stretch_parameters_.extractSection(getForceField()->getParameters(), "QuadraticBondStretch");
+
+			if (result == false) 
+			{
+				Log.level(LogStream::ERROR) << "cannot find section QuadraticBondStretch" << endl;
+				return false;
+			}
 		}
 
 		FFPSQuadraticBondStretch::Values values;
@@ -123,7 +127,8 @@ namespace BALL
 		{
 			for (Atom::BondIterator it = (*atom_it)->beginBond(); +it ; ++it) 
 			{
-				if (*atom_it == (*it).getFirstAtom()) {
+				if (*atom_it == (*it).getFirstAtom()) 
+				{
 					
 					Bond&	bond = const_cast<Bond&>(*it);
 
@@ -139,14 +144,14 @@ namespace BALL
 						stretch_[i].atom2 = bond.getSecondAtom();
 			
 						// Pay attention to the symmetric database input
-						if ( stretch_parameters.hasParameters(atom_type_A, atom_type_B)) {
-							stretch_parameters.assignParameters(values, atom_type_A, atom_type_B);
-						} else if (stretch_parameters.hasParameters(atom_type_A, Atom::ANY_TYPE)) {
-							stretch_parameters.assignParameters(values, atom_type_A, Atom::ANY_TYPE);
-						} else if (stretch_parameters.hasParameters(Atom::ANY_TYPE, atom_type_B)) {
-							stretch_parameters.assignParameters(values, Atom::ANY_TYPE, atom_type_B); 
-						} else if (stretch_parameters.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE)) {
-							stretch_parameters.assignParameters(values,Atom::ANY_TYPE, Atom::ANY_TYPE);
+						if ( stretch_parameters_.hasParameters(atom_type_A, atom_type_B)) {
+							stretch_parameters_.assignParameters(values, atom_type_A, atom_type_B);
+						} else if (stretch_parameters_.hasParameters(atom_type_A, Atom::ANY_TYPE)) {
+							stretch_parameters_.assignParameters(values, atom_type_A, Atom::ANY_TYPE);
+						} else if (stretch_parameters_.hasParameters(Atom::ANY_TYPE, atom_type_B)) {
+							stretch_parameters_.assignParameters(values, Atom::ANY_TYPE, atom_type_B); 
+						} else if (stretch_parameters_.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE)) {
+							stretch_parameters_.assignParameters(values,Atom::ANY_TYPE, Atom::ANY_TYPE);
 						} else {
 							Log.level(LogStream::ERROR) << "cannot find stretch parameters for atom types " 
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 

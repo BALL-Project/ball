@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.4 1999/09/19 18:54:49 oliver Exp $
+// $Id: amberBend.C,v 1.5 1999/09/19 20:54:57 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -55,12 +55,12 @@ namespace BALL
 			return false;
 		}
 
-		static FFPSQuadraticAngleBend bend_parameters;
-		static bool result = false;
+		// extract parameter section (if necessary)
 		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
 		if ((amber_force_field == 0) || !amber_force_field->hasInitializedParameters())
 		{
-			result = bend_parameters.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
+			bool result = false;
+			result = bend_parameters_.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
 
 			if (result == false) 
 			{
@@ -70,7 +70,6 @@ namespace BALL
 		}
 
 		// retrieve all bend parameters
-		
 		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
 		Atom::BondIterator it1;
 		Atom::BondIterator it2;
@@ -97,13 +96,13 @@ namespace BALL
 
 						FFPSQuadraticAngleBend::Values values;
 
-						if (bend_parameters.hasParameters(atom_type_a1, atom_type_a2, atom_type_a3))
+						if (bend_parameters_.hasParameters(atom_type_a1, atom_type_a2, atom_type_a3))
 						{
-							bend_parameters.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3);
+							bend_parameters_.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3);
 						}
-						else if (bend_parameters.hasParameters(atom_type_a3, atom_type_a2, atom_type_a1))
+						else if (bend_parameters_.hasParameters(atom_type_a3, atom_type_a2, atom_type_a1))
 						{
-							bend_parameters.assignParameters(values, atom_type_a3, atom_type_a2, atom_type_a1);
+							bend_parameters_.assignParameters(values, atom_type_a3, atom_type_a2, atom_type_a1);
 						}
 						else 
 						{

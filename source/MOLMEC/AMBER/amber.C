@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.8 1999/09/18 19:11:47 oliver Exp $
+// $Id: amber.C,v 1.9 1999/09/19 20:54:57 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -7,30 +7,43 @@
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
+#include <BALL/MOLMEC/PARAMETER/templates.h>
 
 namespace BALL 
 {
-
+	const char* AmberFF::Option::FILENAME = "filename";
 	const char* AmberFF::Option::NONBONDED_CUTOFF = "nonbonded_cutoff";
 	const char* AmberFF::Option::VDW_CUTOFF = "vdw_cutoff";
 	const char* AmberFF::Option::ELECTROSTATIC_CUTOFF = "electrostatic_cutoff";
 	const char* AmberFF::Option::SCALING_VDW_1_4 = "SCAB";
 	const char* AmberFF::Option::SCALING_ELECTROSTATIC_1_4 = "SCEE";
 	const char* AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC = "DDDC"; 
+	const char* AmberFF::Option::ASSIGN_CHARGES = "assign_charges"; 
+	const char* AmberFF::Option::ASSIGN_TYPENAMES = "assign_type_names"; 
+	const char* AmberFF::Option::ASSIGN_TYPES = "assign_types"; 
+	const char* AmberFF::Option::OVERWRITE_CHARGES = "overwrite_non-zero_charges"; 
+	const char* AmberFF::Option::OVERWRITE_TYPENAMES = "overwrite_non-empty_typenames"; 
  
+	const char* AmberFF::Default::FILENAME = "Amber/amber96.ini";
 	const float AmberFF::Default::NONBONDED_CUTOFF = 20.0;
 	const float AmberFF::Default::VDW_CUTOFF = 15.0;
 	const float AmberFF::Default::ELECTROSTATIC_CUTOFF = 15.0;
-	const float AmberFF::Default::SCALING_ELECTROSTATIC_1_4 = 0.5;
-	const float AmberFF::Default::SCALING_VDW_1_4 = 0.5;
+	const float AmberFF::Default::SCALING_ELECTROSTATIC_1_4 = 2.0;
+	const float AmberFF::Default::SCALING_VDW_1_4 = 2.0;
   const bool  AmberFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = false;   
+	const bool	AmberFF::Default::ASSIGN_CHARGES = true;
+	const bool	AmberFF::Default::ASSIGN_TYPENAMES = true;
+	const bool	AmberFF::Default::ASSIGN_TYPES = true;
+	const bool	AmberFF::Default::OVERWRITE_CHARGES = true;
+	const bool	AmberFF::Default::OVERWRITE_TYPENAMES = false;
  
 	// Default constructor
 	AmberFF::AmberFF() 
-		: ForceField()
+		: ForceField(),
+			filename_(Default::FILENAME)
 	{
 		// set the force field name
-		setName("Amber");
+		setName("Amber [" + filename_ + "]");
 
 		// create the component list
 		insertComponent(new AmberStretch(this));
@@ -41,11 +54,9 @@ namespace BALL
 
   // Constructor initialized with a system
   AmberFF::AmberFF(System& system)
-    : ForceField()
+    : ForceField(),
+			filename_(Default::FILENAME)
   {
-		// set the force field name
-		setName("Amber");
-
 		// create the component list
 		insertComponent(new AmberStretch(this));
 		insertComponent(new AmberBend(this));
@@ -53,6 +64,9 @@ namespace BALL
 		insertComponent(new AmberNonBonded(this));
 
     bool result = setup(system);
+
+		// set the force field name
+		setName("Amber [" + filename_ + "]");
 
     if (!result)
     {
@@ -63,11 +77,9 @@ namespace BALL
 
   // Constructor intialized with a system and a set of options
   AmberFF::AmberFF(System& system, const Options& new_options)
-    : ForceField()
+    : ForceField(),
+			filename_(Default::FILENAME)
   {
-		// set the force field name
-		setName("Amber");
-
 		// create the component list
 		insertComponent(new AmberStretch(this));
 		insertComponent(new AmberBend(this));
@@ -75,6 +87,10 @@ namespace BALL
 		insertComponent(new AmberNonBonded(this));
 
     bool result = setup(system, new_options);
+
+		// set the force field name (this has to be done after(!) setup,
+		// otherwise filename_ is not yet set if it is used in options)
+		setName("Amber [" + filename_ + "]");
 
     if (!result)
     {
@@ -85,9 +101,9 @@ namespace BALL
  
 	// copy constructor  
 	AmberFF::AmberFF(const AmberFF& force_field, bool clone_deep)
-		 :	ForceField( force_field, clone_deep) 
+		:	ForceField( force_field, clone_deep),
+			filename_(force_field.filename_)
 	{
-		
 	}
 
 	// destructor 
@@ -98,35 +114,112 @@ namespace BALL
 	// force field specific setup method BAUSTELLE
 	bool AmberFF::specificSetup()
 	{
-
 		// check whether the system is assigned
 		if (getSystem() == 0)
 		{
 			return false;
 		}
  
+		// check whether the parameter file name
+		// is set in the options
+		if (options.has(Option::FILENAME))
+		{
+			filename_ = options[Option::FILENAME];
+			setName("Amber [" + filename_ + "]");
+		} else {
+			options[Option::FILENAME] = filename_;
+		}
+
 		// open parameter file
 		Path    path;
-		String  filename(path.find("Amber/amber94.ini"));
+		String  filename(path.find(filename_));
 
 		if (filename == "") 
 		{
-			Log.level(LogStream::ERROR) << "cannot open parameter file Amber/amber94.ini" << endl;
-			return false;
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename_);
 		}
 
 		// initialize the force field parameters
 		// and retrieve the atom types
-		parameters_.setFilename(filename);
-		parameters_.init();
+		if (parameters_.getFilename() != filename)
+		{
+			parameters_.setFilename(filename);
+			parameters_.init();
 
-		// assign atom types and respect existing atom type names
-		AssignTypeNameProcessor type_name_proc("/KM/comp-bio/BALL-data/Amber/amber94.types", false);
-		getSystem()->apply(type_name_proc);
+			// this is the first time, parameters was initialized
+			// tell all components about it
+			parameters_initialized_ = false;
 
-		// convert the type names to types
-		AssignTypeProcessor type_proc(parameters_.getAtomTypes());
-		getSystem()->apply(type_proc);
+			// retrieve global force field options
+			FFParameterSection global_options;
+			global_options.extractSection(parameters_, "Options");
+			// BAUSTELLE: Iterator ueber global_options.options
+			if (global_options.options.has(Option::NONBONDED_CUTOFF))
+			{
+				options.setDefault(Option::NONBONDED_CUTOFF, global_options.options[Option::NONBONDED_CUTOFF]);
+			}
+			if (global_options.options.has(Option::VDW_CUTOFF))
+			{
+				options.setDefault(Option::VDW_CUTOFF, global_options.options[Option::VDW_CUTOFF]);
+			}
+			if (global_options.options.has(Option::ELECTROSTATIC_CUTOFF))
+			{
+				options.setDefault(Option::ELECTROSTATIC_CUTOFF, global_options.options[Option::ELECTROSTATIC_CUTOFF]);
+			}
+			if (global_options.options.has(Option::SCALING_VDW_1_4))
+			{
+				options.setDefault(Option::SCALING_VDW_1_4, global_options.options[Option::SCALING_VDW_1_4]);
+			}
+			if (global_options.options.has(Option::SCALING_ELECTROSTATIC_1_4))
+			{
+				options.setDefault(Option::SCALING_ELECTROSTATIC_1_4, global_options.options[Option::SCALING_ELECTROSTATIC_1_4]);
+			}
+			if (global_options.options.has(Option::DISTANCE_DEPENDENT_DIELECTRIC))
+			{
+				options.setDefault(Option::DISTANCE_DEPENDENT_DIELECTRIC, global_options.options[Option::DISTANCE_DEPENDENT_DIELECTRIC]);
+			}
+		} else {
+			// parameters_ are already initialized, tell all components about it
+			parameters_initialized_ = true;
+		}
+
+		// check the options whether types, type names, or charges 
+		// have to be (re)asigned
+		options.setDefaultBool(Option::ASSIGN_CHARGES, Default::ASSIGN_CHARGES);
+		bool assign_charges = options.getBool(Option::ASSIGN_CHARGES);
+		options.setDefaultBool(Option::ASSIGN_TYPES, Default::ASSIGN_TYPES);
+		bool assign_types = options.getBool(Option::ASSIGN_TYPES);
+		options.setDefaultBool(Option::ASSIGN_TYPENAMES, Default::ASSIGN_TYPENAMES);
+		bool assign_type_names = options.getBool(Option::ASSIGN_TYPENAMES);
+		options.setDefaultBool(Option::OVERWRITE_TYPENAMES, Default::OVERWRITE_TYPENAMES);
+		bool overwrite_type_names = options.getBool(Option::OVERWRITE_TYPENAMES);
+		options.setDefaultBool(Option::OVERWRITE_CHARGES, Default::OVERWRITE_CHARGES);
+		bool overwrite_charges = options.getBool(Option::OVERWRITE_CHARGES);
+		
+
+		// extract template section (containing charges and atom types)
+		if (assign_charges || assign_type_names)
+		{
+			FFPSTemplates templates;
+			templates.extractSection(parameters_, "ChargesAndTypeNames");
+			if (assign_charges && assign_type_names)
+			{
+				templates.assign(*system_, overwrite_type_names, overwrite_charges);
+			} else {
+				if (assign_type_names)
+				{
+					templates.assignTypeNames(*system_, overwrite_type_names);
+				} else {
+					templates.assignCharges(*system_, overwrite_charges);
+				}
+			}
+		}
+		if (assign_types)
+		{
+			// convert the type names to types
+			AssignTypeProcessor type_proc(parameters_.getAtomTypes());
+			getSystem()->apply(type_proc);			
+		}
 		
 		return true;
 	}
@@ -205,4 +298,10 @@ namespace BALL
 		return 0;
 	}
 
+	bool AmberFF::hasInitializedParameters() const
+	{
+		return parameters_initialized_;
+	}
+
+	
 } // namespace BALL
