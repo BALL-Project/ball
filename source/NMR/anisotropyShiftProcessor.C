@@ -1,10 +1,11 @@
-// $Id: anisotropyShiftProcessor.C,v 1.7 2000/09/25 19:11:40 oliver Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.8 2000/09/30 16:42:54 oliver Exp $
 
-#include<BALL/NMR/anisotropyShiftProcessor.h>
+#include <BALL/NMR/anisotropyShiftProcessor.h>
 
-#include<BALL/KERNEL/atom.h>
-#include<BALL/KERNEL/PTE.h>
-#include<BALL/DATATYPE/string.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/FORMAT/parameterSection.h>
+#include <BALL/DATATYPE/string.h>
 
 using namespace std;
 
@@ -15,6 +16,7 @@ namespace BALL
 
 	AnisotropyShiftProcessor::AnisotropyShiftProcessor()
 		throw()
+		:	ignore_other_chain_(false)
 	{
 	}
 
@@ -26,6 +28,21 @@ namespace BALL
 	void AnisotropyShiftProcessor::init()
 		throw()
 	{
+		valid_ = false;
+
+		if (parameters_ == 0)
+		{
+			return;
+		}
+
+		ParameterSection parameter_section;
+		parameter_section.extractSection(*parameters_, "Anisotropy");
+
+		if (parameter_section.options.has("ignore_other_chain"))
+		{
+			ignore_other_chain_ = parameter_section.options.getBool("ignore_other_chain");
+		}
+
 		valid_ = true;
 	}
 
@@ -64,8 +81,14 @@ namespace BALL
 				// Für jedes Proton iteriere über alle Effektorbindungen in eff_list_
 				const Atom* patom = *proton_iter;
 				const Bond* bond = *eff_iter;
-				const Atom* c_atom = (bond->getFirstAtom());
-				const Atom* o_atom = (bond->getSecondAtom());
+				const Atom* c_atom = bond->getFirstAtom();
+				const Atom* o_atom = bond->getSecondAtom();
+				if (c_atom->getElement() != PTE[Element::C])
+				{
+					o_atom = bond->getFirstAtom();
+					c_atom = bond->getSecondAtom();
+				}
+				
 				const Atom* x_atom = 0;
 				if ((*proton_iter)->getFragment() != c_atom->getFragment())
 				{
@@ -88,7 +111,7 @@ namespace BALL
 							}
 						}
 					}
-					for (Position pos = 0; pos < patom->countBonds(); pos++)
+					for (Position pos = 0; pos < c_atom->countBonds(); pos++)
 					{
 						const Bond& hbond = *c_atom->getBond(pos);
 						if (hbond.getBoundAtom(*c_atom)->getName() == name)
@@ -97,39 +120,68 @@ namespace BALL
 							break;
 						}
 					}
+					for (Position pos = 0; (x_atom == 0) && (pos < o_atom->countBonds()); pos++)
+					{
+						const Bond& hbond = *o_atom->getBond(pos);
+						if (hbond.getBoundAtom(*o_atom)->getName() == name)
+						{
+							x_atom = hbond.getBoundAtom(*o_atom);
+							break;
+						}
+					}
 					// was passiert wenn x_atom nicht gesetzt ???
 
-					const Vector3& c_pos = c_atom->getPosition();
-					const Vector3& o_pos = o_atom->getPosition();
-					const Vector3& x_pos = x_atom->getPosition();
-
-					// baue rechtwinkliges Koordinatensystem auf :
-					Vector3 vz = o_pos - c_pos;
-					vz /= vz.getLength();
-					Vector3 vy = vz % (x_pos - c_pos);
-					vy /= vy.getLength();
-					Vector3 vx = vz % vy;
-					vx /= vx.getLength();
-					const Vector3 cen = c_pos + (vz * 1.1);
-					const Vector3 v1 = patom->getPosition() - cen;
-					const Vector3 v2 = v1 % vy;
-					const Vector3 v3 = v2 % vx;
-
-					const float& distance = v1.getLength();
-					const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
-					const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
-					float calc1, calc2;
-					if ((*proton_iter)->getName() == "H")
+					if ((c_atom == 0) || (o_atom == 0) || (x_atom == 0))	
 					{
-						calc1 = dXN1 * ((3.0 * stheta * stheta) - 2.0);
-						calc2 = dXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+						Log.error() << "Could not set all atoms in ASP! c_atom = " << c_atom << "  o_atom = " << o_atom << "  x_atom = " << x_atom << endl;
+						Log.error() << "c_atom->getName() = "<< c_atom->getFullName() << "    o_atom->getName() = " << o_atom->getFullName() << endl;
+						continue;
 					}
-					else
+					else 
 					{
-						calc1 = dX1 * ((3.0 * stheta * stheta) - 2.0);
-						calc2 = dX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+						const Vector3& c_pos = c_atom->getPosition();
+						const Vector3& o_pos = o_atom->getPosition();
+						const Vector3& x_pos = x_atom->getPosition();
+
+						// baue rechtwinkliges Koordinatensystem auf :
+						Vector3 vz = o_pos - c_pos;
+						vz /= vz.getLength();
+						Vector3 vy = vz % (x_pos - c_pos);
+						vy /= vy.getLength();
+						Vector3 vx = vz % vy;
+						vx /= vx.getLength();
+						const Vector3 cen = c_pos + (vz * 1.1);
+						const Vector3 v1 = patom->getPosition() - cen;
+						const Vector3 v2 = v1 % vy;
+						const Vector3 v3 = v2 % vx;
+
+						const float& distance = v1.getLength();
+						const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
+						const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
+						float calc1, calc2;
+						if ((*proton_iter)->getName() == "H")
+						{
+							calc1 = dXN1 * ((3.0 * stheta * stheta) - 2.0);
+							calc2 = dXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+						}
+						else
+						{
+							calc1 = dX1 * ((3.0 * stheta * stheta) - 2.0);
+							calc2 = dX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
+						}
+
+						float shift = (calc1 + calc2) / (3.0 * distance * distance * distance);
+						// BAUSTELLE
+						// check whether effector and nucleus are in the same chain
+						if ((ignore_other_chain_) && ((*proton_iter)->getResidue() != 0) && (c_atom->getResidue() != 0))
+						{
+							if ((*proton_iter)->getResidue()->getChain() == c_atom->getResidue()->getChain())
+							{
+								shift = 0.0;
+							}
+						}
+						gs += shift;	
 					}
-					gs += (calc1 + calc2) / (3.0 * distance * distance * distance);
 				}
 			}
 
@@ -197,7 +249,17 @@ namespace BALL
 						calc2 = ndX2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
 					}
 
-					gs += (calc1 + calc2) / (3.0 * distance * distance * distance);
+					// BAUSTELLE
+					float shift = (calc1 + calc2) / (3.0 * distance * distance * distance);	
+					// check whether effector and nucleus are in the same chain
+					if (ignore_other_chain_ && ((*proton_iter)->getResidue() != 0) && (c_atom->getResidue() != 0))
+					{
+						if ((*proton_iter)->getResidue()->getChain() == c_atom->getResidue()->getChain())
+						{
+							shift = 0.0;
+						}
+					}
+					gs += shift;
 				}
 				else 
 				{
@@ -241,7 +303,7 @@ namespace BALL
 		{
 			bool foundN = false;
 			bool foundO = false;
-			Position bondN;
+			Position bondN = 0;
 
 			// laufe alle Bindungen des Atoms durch und suche nach Sauerstoff-Doppelbindung
 			for (Position pos = 0; pos < patom->countBonds(); pos++)
