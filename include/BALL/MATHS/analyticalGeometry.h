@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.28 2000/05/04 20:49:05 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.29 2000/05/04 20:50:59 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -180,7 +180,7 @@ namespace BALL
 			The elements of {\bf A} are row-ordered, i.e., they are ordered like this:
 			\[
 					a_{1,1}, a_{1,2},\cdot,a_{1,(n+1)},a_{2,1},\ldots a_{n,(n+1)}
-			\}
+			\]
 			{\tt x} points to a C-style array that will contain the solution vector {\bf x} 
 			upon successful termination of the function.
 			If there is no solution or the system is under-determined, return {\bf false}.
