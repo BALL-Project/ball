@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="7.00"
-	Name="Tests"
+	Name="Benchmarks"
 	ProjectGUID="{253B8927-6644-43B8-A48F-847A4D338C59}"
 	Keyword="MakeFileProj">
 	<Platforms>
@@ -17,16 +17,16 @@
 			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cd ..\..\source\TEST
+				BuildCommandLine="cd ..\..\source\BENCHMARKS
 nmake /F &quot;$(ProjectDir)\Makefile.win&quot; BALL_PATH=&quot;$(ProjectDir)..\BALL&quot;"
-				ReBuildCommandLine="cd ..\..\source\TEST
+				ReBuildCommandLine="cd ..\..\source\BENCHMARKS
 del *.obj
 del *.exe
 nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
-				CleanCommandLine="cd ..\..\source\TEST
+				CleanCommandLine="cd ..\..\source\BENCHMARKS
 del *.obj
 del *.exe"
-				Output="Test.log"/>
+				Output="BENCHMARKS.log"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -35,16 +35,16 @@ del *.exe"
 			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="cd ..\..\source\TEST
+				BuildCommandLine="cd ..\..\source\BENCHMARKS
 nmake /F &quot;$(ProjectDir)\Makefile.win&quot; BALL_PATH=&quot;$(ProjectDir)..\BALL&quot;"
-				ReBuildCommandLine="cd ..\..\source\TEST
+				ReBuildCommandLine="cd ..\..\source\BENCHMARKS
 del *.obj
 del *.exe
 nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
-				CleanCommandLine="cd ..\..\source\TEST
+				CleanCommandLine="cd ..\..\source\BENCHMARKS
 del *.obj
 del *.exe"
-				Output="Test.log"/>
+				Output="BENCHMARKS.log"/>
 		</Configuration>
 	</Configurations>
 	<Files>
@@ -52,16 +52,22 @@ del *.exe"
 			Name="Quelldateien"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
-				RelativePath="..\..\source\TEST\GenericMolFile_test.C">
-			</File>
-			<File
 				RelativePath="Make.lst">
+				<FileConfiguration
+					Name="Release|Win32">
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Makefile.win">
+				<FileConfiguration
+					Name="Release|Win32">
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="vsvars32.bat">
+				<FileConfiguration
+					Name="Release|Win32">
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter

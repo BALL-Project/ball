@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.19 2002/12/12 09:48:44 oliver Exp $
+// $Id: HINFile.h,v 1.20 2002/12/17 16:40:42 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -48,6 +48,15 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~HINFile()
+			throw();
+		//@}
+
+		/**	@name Assignment.
+		*/
+		//@{
+		/** Assignment operator.
+		*/
+		const HINFile& operator = (const HINFile& rhs)
 			throw();
 		//@}
 

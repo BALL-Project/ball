@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Path_test.C,v 1.6 2002/12/12 11:34:43 oliver Exp $
+// $Id: Path_test.C,v 1.7 2002/12/17 16:40:43 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 #include <BALL/SYSTEM/path.h>
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.6 2002/12/12 11:34:43 oliver Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.7 2002/12/17 16:40:43 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,13 +22,15 @@ CHECK(Path())
 RESULT
 
 Path p = Path();
-string data_suffix(" data ");
-data_suffix[0] = FileSystem::PATH_SEPARATOR;
-data_suffix[5] = FileSystem::PATH_SEPARATOR;
+string data_suffix1("/data/");
+string data_suffix2("/data/");
+data_suffix2[0] = FileSystem::PATH_SEPARATOR;
+data_suffix2[5] = FileSystem::PATH_SEPARATOR;
 
 CHECK(getDataPath())
 	STATUS(p.getDataPath())
-	TEST_EQUAL(String(p.getDataPath()).hasSuffix(data_suffix), true)
+	TEST_EQUAL(String(p.getDataPath()).hasSuffix(data_suffix1)
+	 		|| String(p.getDataPath()).hasSuffix(data_suffix2), true)
 RESULT
 
 CHECK(setDataPath(const string& path))
@@ -44,7 +46,8 @@ CHECK(addDataPath(const string& path))
 RESULT
 
 CHECK(getDefaultDataPath())
-	TEST_EQUAL(String(p.getDefaultDataPath()).hasSuffix(data_suffix), true)
+	TEST_EQUAL(String(p.getDefaultDataPath()).hasSuffix(data_suffix1)
+			|| String(p.getDefaultDataPath()).hasSuffix(data_suffix2), true)
 RESULT
 
 CHECK(find(const string& name))

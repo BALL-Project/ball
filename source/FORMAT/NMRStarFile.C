@@ -134,10 +134,10 @@ namespace BALL
 
 	SampleCondition::SampleCondition()
 		throw()
-		: name(),
-			temperature(),
-			pH(),
-			pressure()
+		: name(""),
+			temperature(0.0),
+			pH(7.0),
+			pressure(0.0)
 	{
 	}
 

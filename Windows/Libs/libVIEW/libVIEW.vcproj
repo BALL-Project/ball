@@ -69,10 +69,10 @@
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="4"
+				DebugInformationFormat="0"
 				CompileAs="2"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
@@ -881,8 +881,9 @@
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"
 						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\colorMeshDialogData.C&quot; -impl &quot;..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h&quot; &quot;$(InputPath)&quot;
 "
-						Outputs="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h"/>
+						Outputs="..\..\..\include\BALL\VIEW\GUI\DIALOGS\colorMeshDialogData.h;$(InputDir)\colorMeshDialogData.C"/>
 				</FileConfiguration>
 			</File>
 		</Filter>

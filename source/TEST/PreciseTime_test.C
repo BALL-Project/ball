@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PreciseTime_test.C,v 1.9 2002/02/27 12:24:47 sturm Exp $
+// $Id: PreciseTime_test.C,v 1.10 2002/12/17 16:40:43 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.9 2002/02/27 12:24:47 sturm Exp $")
+START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.10 2002/12/17 16:40:43 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -155,6 +155,8 @@ CHECK(PreciseTime::now())
 	PreciseTime t2(PreciseTime::now());
 	TEST_NOT_EQUAL(t2.getSeconds(), 0)
 	TEST_NOT_EQUAL(t2.getMicroSeconds(), 0)
+	STATUS(t2.getSeconds() << "/" << t2.getMicroSeconds())
+	STATUS(t2.getSeconds() << "/" << t2.getMicroSeconds())
 	TEST_EQUAL((t1 < t2), true)
 	TEST_EQUAL((t1 == t2), false)
 RESULT

@@ -71,7 +71,7 @@
 				RuntimeLibrary="1"
 				BufferSecurityCheck="FALSE"
 				RuntimeTypeInfo="TRUE"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="FALSE"
 				DebugInformationFormat="0"

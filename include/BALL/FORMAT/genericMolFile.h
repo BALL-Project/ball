@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.h,v 1.12 2002/12/12 09:48:44 oliver Exp $
+// $Id: genericMolFile.h,v 1.13 2002/12/17 16:40:42 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -81,6 +81,16 @@ namespace BALL
 		virtual ~GenericMolFile()
 			throw();
 		
+		//@}
+
+		/**	@name Assignment
+		*/
+		//@{
+		/**	Assignment operator.
+				Create a new object pointing to the same filename.
+		*/
+		const GenericMolFile& operator = (const GenericMolFile& rhs)
+			throw();
 		//@}
 
 		/**	@name Reading and Writing of Kernel Datastructures

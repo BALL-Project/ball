@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.19 2002/12/16 18:12:45 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.20 2002/12/17 16:40:43 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -203,6 +203,7 @@ namespace BALL
 		// ?????: missing OCI
 		// ForceFieldComponent::clear();
 	}
+
 
 	bool CharmmNonBonded::operator == (const CharmmNonBonded& cnb)
 		throw()

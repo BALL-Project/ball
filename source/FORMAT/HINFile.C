@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.47 2002/05/12 13:58:45 oliver Exp $
+// $Id: HINFile.C,v 1.48 2002/12/17 16:40:42 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -55,6 +55,19 @@ namespace BALL
 		throw()
 	{
 	}
+	
+	const HINFile& HINFile::operator = (const HINFile& rhs)
+		throw()
+	{
+		box_ = Box3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		temperature_ = 0.0;
+
+		GenericMolFile::operator = (rhs);
+		
+		return *this;
+	}
+
+	
 
 	void HINFile::writeAtom_(const Atom& atom, Size number, Size atom_offset)
 	{

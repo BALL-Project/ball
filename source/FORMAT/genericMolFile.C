@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.C,v 1.5 2002/02/27 12:21:19 sturm Exp $
+// $Id: genericMolFile.C,v 1.6 2002/12/17 16:40:42 oliver Exp $
 
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/KERNEL/system.h>
@@ -29,6 +29,14 @@ namespace BALL
 	GenericMolFile::~GenericMolFile()
 		throw()
 	{
+	}
+
+	const GenericMolFile& GenericMolFile::operator = (const GenericMolFile& rhs)
+		throw()
+	{
+		LineBasedFile::operator = (rhs);
+
+		return *this;
 	}
 
 	bool GenericMolFile::read(System& system)

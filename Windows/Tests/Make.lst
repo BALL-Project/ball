@@ -136,8 +136,8 @@ EXECUTABLES_FORMATS =\
 	Parameters_test$(e)\
 	ParameterSection_test$(e)\
 	ResourceFile_test$(e)\
-#	GenericMolFile_test$(e)\
-#	HINFile_test$(e)\
+	GenericMolFile_test$(e)\
+	HINFile_test$(e)\
 	MOLFile_test$(e)\
 	SDFile_test$(e)\
 	MOL2File_test$(e)\

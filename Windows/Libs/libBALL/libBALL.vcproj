@@ -58,6 +58,7 @@
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zm800"
 				Optimization="2"
 				GlobalOptimizations="FALSE"
 				InlineFunctionExpansion="1"
@@ -612,6 +613,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\NMRStarFile.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							WarningLevel="4"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\PDBFile.C">

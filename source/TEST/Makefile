@@ -210,8 +210,8 @@ all:	$(EXECUTABLES)
 CPP_SOURCES=$(EXECUTABLES:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
 
-include ../common.mak
-include .Dependencies
+-include ../common.mak
+-include .Dependencies
 
 # remove the library specific flags
 # and replace them by the aplication specific
@@ -227,28 +227,30 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 %%.C:
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
 
+dummy:
+
 test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
 	@./runtests -success
 
 info:
 	@./runtests -info
 
-basic_test:	$(EXECUTABLES_BASIC)
+basic_test:	$(EXECUTABLES_BASIC) dummy
 	@./runtests -section "BASIC" $(TEST_OPTIONS) $(EXECUTABLES_BASIC)
 
-system_test:	$(EXECUTABLES_SYSTEM)
+system_test:	$(EXECUTABLES_SYSTEM) dummy
 	@./runtests -section "SYSTEM" $(TEST_OPTIONS) $(EXECUTABLES_SYSTEM)
 
-maths_test:	$(EXECUTABLES_MATHS)
+maths_test:	$(EXECUTABLES_MATHS) dummy
 	@./runtests -section "MATHS" $(TEST_OPTIONS) $(EXECUTABLES_MATHS)
 
-datatypes_test:	$(EXECUTABLES_DATATYPES)
+datatypes_test:	$(EXECUTABLES_DATATYPES) dummy
 	@./runtests -section "DATATYPES" $(TEST_OPTIONS) $(EXECUTABLES_DATATYPES)
 	
-concepts_test:	$(EXECUTABLES_CONCEPTS)
+concepts_test:	$(EXECUTABLES_CONCEPTS) dummy
 	@./runtests -section "CONCEPTS" $(TEST_OPTIONS) $(EXECUTABLES_CONCEPTS)
 	
-kernel_test:	$(EXECUTABLES_KERNEL)
+kernel_test:	$(EXECUTABLES_KERNEL) dummy
 	@./runtests -section "KERNEL" $(TEST_OPTIONS) $(EXECUTABLES_KERNEL)
 	
 formats_test:	$(EXECUTABLES_FORMATS)
