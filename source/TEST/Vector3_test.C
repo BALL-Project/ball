@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.19 2000/03/16 08:51:35 amoll Exp $
+// $Id: Vector3_test.C,v 1.20 2000/03/17 13:47:03 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.19 2000/03/16 08:51:35 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.20 2000/03/17 13:47:03 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -463,36 +463,6 @@ CHECK(TVector3<T> TVector3<T>::getOrthogonalProjection(const TVector3<T>& direct
 	v1 = Vector3(1.0, 2.0, 4.0);
 	v2 = v.getOrthogonalProjection(v1);
 	TEST_EQUAL(v2 == (v1 * v / (v1 * v1) * v1), true)
-RESULT
-
-//line 436
-CHECK(TAngle<T> TVector3<T>::getTorsionAngle())
-	Vector3 a, b, c, d, e;
-	Angle angle;
-	a = Vector3(0, 1.0, 2.0);
-	b = Vector3(100.0, 201.0, 302.0);
-	c = Vector3(50.0, 101.0, 202.0);
-	d = Vector3(200.0, 401.0, 602.0);
-	angle = a.getTorsionAngle(a, b, c, d);
-  TEST_EQUAL(angle, Constants::PI)
-	a = Vector3(0.0, 0.0, 0.0);
-	b = Vector3(100.0, 0.0, 0.0);
-	c = Vector3(50.0, 0.0, 0.0);
-	d = Vector3(50.0, 0.0, 112.1);
-	angle = a.getTorsionAngle(a, b, c, d);
-  TEST_EQUAL(angle, Constants::PI/2)
-	a = Vector3(0.0, 0.0, 0.0);
-	b = Vector3(0.0, 100.0, 0.0);
-	c = Vector3(0.0, 50.0, 0.0);
-	d = Vector3(112.1, 50.0, 112.1);
-	angle = a.getTorsionAngle(a, b, c, d);
-  TEST_EQUAL(angle, Constants::PI/2)
-	a = Vector3(0.0, 0.0, 0.0);
-	b = Vector3(0.0, 0.0, 100.0);
-	c = Vector3(0.0, 0.0, 50.0);
-	d = Vector3(0.0, 112.1, 50.0);
-	angle = a.getTorsionAngle(a, b, c, d);
-  TEST_EQUAL(angle, Constants::PI/2)
 RESULT
 
 //line 449
