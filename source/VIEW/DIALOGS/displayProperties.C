@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.61 2004/01/18 12:43:08 amoll Exp $
+// $Id: displayProperties.C,v 1.62 2004/01/19 12:44:34 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -284,6 +284,13 @@ void DisplayProperties::selectModel(int index)
 		throw(InvalidOption(__FILE__, __LINE__, index));
 	}
 
+	// enable usage from python
+	if (index != model_type_combobox->currentItem())
+	{
+		model_type_combobox->setCurrentItem(index);
+		return;
+	}
+
 	checkDrawingPrecision_();
 }
 
@@ -292,6 +299,13 @@ void DisplayProperties::selectMode(int index)
 	if (index > VIEW::DRAWING_MODE_SOLID)
 	{
 		throw(InvalidOption(__FILE__, __LINE__, index));
+	}
+
+	// enable usage from python
+	if (index != mode_combobox->currentItem())
+	{
+		mode_combobox->setCurrentItem(index);
+		return;
 	}
 
 	transparency_slider->setEnabled(index == VIEW::DRAWING_MODE_SOLID);
@@ -303,8 +317,15 @@ void DisplayProperties::selectColoringMethod(int index)
 	{
 		throw(InvalidOption(__FILE__, __LINE__, index));
 	}
-}
 
+
+	// enable usage from python
+	if (index != coloring_method_combobox->currentItem())
+	{
+		coloring_method_combobox->setCurrentItem(index);
+		return;
+	}
+}
 
 void DisplayProperties::onNotify(Message *message)
 	throw()
