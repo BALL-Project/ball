@@ -1,11 +1,11 @@
-// $Id: amberTorsion.C,v 1.4 1999/09/01 13:39:05 oliver Exp $
+// $Id: amberTorsion.C,v 1.5 1999/09/03 07:20:22 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
-    
+
 #include <algorithm>
 
 namespace BALL 
@@ -118,43 +118,49 @@ namespace BALL
 										a4 = (*it3).getFirstAtom();
 									}
 
-									// search torsion parameters for (a1,a2,a3,a4)
-
-									Atom::Type type_a1 = a1->getType();
-									Atom::Type type_a2 = a2->getType();
-									Atom::Type type_a3 = a3->getType();
-									Atom::Type type_a4 = a4->getType();
-									FFPSCosineTorsion::Values values;
-								 	FFPSCosineTorsion::SingleTorsion tmp;
-									tmp.atom1 = a1;
-									tmp.atom2 = a2;
-									tmp.atom3 = a3;
-									tmp.atom4 = a4;
-
-									bool found = false;
-
-									if (torsion_parameters.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
+									if (getForceField()->getUseSelection() == false ||
+										(getForceField()->getUseSelection() == true &&
+										(a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
 									{
-										torsion_parameters.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
-										found = true;
-									} else if (torsion_parameters.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
-									{
-										torsion_parameters.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
-										found = true;
-									}
-									if (found) 
-									{
-										for (unsigned char j = 0; j < values.n; j++) 
+
+										// search torsion parameters for (a1,a2,a3,a4)
+	
+										Atom::Type type_a1 = a1->getType();
+										Atom::Type type_a2 = a2->getType();
+										Atom::Type type_a3 = a3->getType();
+										Atom::Type type_a4 = a4->getType();
+										FFPSCosineTorsion::Values values;
+									 	FFPSCosineTorsion::SingleTorsion tmp;
+										tmp.atom1 = a1;
+										tmp.atom2 = a2;
+										tmp.atom3 = a3;
+										tmp.atom4 = a4;
+
+										bool found = false;
+
+										if (torsion_parameters.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
 										{
-											tmp.values = values.values[j];
-											torsion_.push_back(tmp);
+											torsion_parameters.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
+											found = true;
+										} else if (torsion_parameters.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
+										{
+											torsion_parameters.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
+											found = true;
 										}
-									} else {
-										Log.level(LogStream::ERROR) << "cannot find torsion parameter for:"
-											<< force_field_->getParameters().getAtomTypes().getTypeName(type_a1) << "-"
-											<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
-											<< force_field_->getParameters().getAtomTypes().getTypeName(type_a3) << "-"
-											<< force_field_->getParameters().getAtomTypes().getTypeName(type_a4) << endl;
+										if (found) 
+										{
+											for (unsigned char j = 0; j < values.n; j++) 
+											{
+												tmp.values = values.values[j];
+												torsion_.push_back(tmp);
+											}
+										} else {
+											Log.level(LogStream::ERROR) << "cannot find torsion parameter for:"
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a1) << "-"
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a3) << "-"
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a4) << endl;
+										}
 									}
 								} 
 							}
@@ -197,7 +203,7 @@ namespace BALL
 				String res_name;
 				int terminal = 0;
 				Residue* res = (Residue*)(*atom_it)->getAncestor(RTTI<Residue>::getDefault());
-				if (res != 0)
+				if (res == 0)
 				{
 					if ((*atom_it)->getFragment() != 0)
 					{
@@ -268,40 +274,45 @@ namespace BALL
 									std::swap(a2, a4);
 								}
 
-								Atom::Type type_a1 = a1->getType();
-								Atom::Type type_a2 = a2->getType();
-								Atom::Type type_a3 = a3->getType();
-								Atom::Type type_a4 = a4->getType();
-
-								bool found = false;
-
-								if (improper_parameters.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
+								if	( getForceField()->getUseSelection() == false ||
+									(getForceField()->getUseSelection() == true &&
+									(a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
 								{
-									improper_parameters.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
+									Atom::Type type_a1 = a1->getType();
+									Atom::Type type_a2 = a2->getType();
+									Atom::Type type_a3 = a3->getType();
+									Atom::Type type_a4 = a4->getType();
 
-									found = true;
-								} else if (improper_parameters.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, type_a4))
-								{
-									improper_parameters.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, type_a4);
+									bool found = false;
 
-									found = true;
-								} else if (improper_parameters.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4)) 
-								{
-									improper_parameters.assignParameters(values, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4);
-
-									found = true;
-								} else if (improper_parameters.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
-								{
-									improper_parameters.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
-
-									found = true;
-								}
-								if (found)	
-								{
-									for (int j = 0; j < values.n; j++) 
+									if (improper_parameters.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
 									{
-										tmp.values = values.values[j];
-										torsion_.push_back(tmp);
+										improper_parameters.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
+	
+										found = true;
+									} else if (improper_parameters.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, type_a4))
+									{
+										improper_parameters.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, type_a4);
+
+										found = true;
+									} else if (improper_parameters.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4)) 
+									{
+										improper_parameters.assignParameters(values, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4);
+	
+										found = true;
+									} else if (improper_parameters.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
+									{
+										improper_parameters.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
+	
+										found = true;
+									}
+									if (found)	
+									{
+										for (int j = 0; j < values.n; j++) 
+										{
+											tmp.values = values.values[j];
+											torsion_.push_back(tmp);
+										}
 									}
 								}
 							}
@@ -333,60 +344,65 @@ namespace BALL
 
 		for ( ; it != torsion_.end(); it++) 
 		{
-			a21 = it->atom1->getPosition() - it->atom2->getPosition();
-			a23 = it->atom3->getPosition() - it->atom2->getPosition();
-			a34 = it->atom4->getPosition() - it->atom3->getPosition();
-
-			cross2321 = a23 % a21;
-			cross2334 = a23 % a34;
-
-			float length_cross2321 = cross2321.getLength();
-			float length_cross2334 = cross2334.getLength();
-
-
-			// QUESTION: Only two test for the cross products seem to be necessary
-			if (length_cross2321 != 0 && length_cross2334 != 0) 
+			if ( getForceField()->getUseSelection() == false ||
+					( getForceField()->getUseSelection() == true &&
+					(it->atom1->isSelected() || it->atom2->isSelected() || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
-				cross2321 /= length_cross2321;
-				cross2334 /= length_cross2334;
+				a21 = it->atom1->getPosition() - it->atom2->getPosition();
+				a23 = it->atom3->getPosition() - it->atom2->getPosition();
+				a34 = it->atom4->getPosition() - it->atom3->getPosition();
 
-				cosphi = cross2321 * cross2334;
+				cross2321 = a23 % a21;
+				cross2334 = a23 % a34;
 
-				switch(it->f) 
+				float length_cross2321 = cross2321.getLength();
+				float length_cross2334 = cross2334.getLength();
+
+
+				// QUESTION: Only two test for the cross products seem to be necessary
+				if (length_cross2321 != 0 && length_cross2334 != 0) 
 				{
-					case 1:
-						factor = cosphi;
-						break;
+					cross2321 /= length_cross2321;
+					cross2334 /= length_cross2334;
 
-					case 2:
-						cosphi2 = cosphi * cosphi;
-						factor  = cosphi2 + cosphi2 - 1;
-						break;
+					cosphi = cross2321 * cross2334;
+
+					switch(it->f) 
+					{
+						case 1:
+							factor = cosphi;
+							break;
+	
+						case 2:
+							cosphi2 = cosphi * cosphi;
+							factor  = cosphi2 + cosphi2 - 1;
+							break;
 								
-					case 3:
-						cosphi2 = cosphi * cosphi;
-						factor = (4 * cosphi2 - 3) * cosphi;
-						break;
-								
-					case 4:
-						cosphi2 = cosphi * cosphi;
-						factor  = (cosphi2 - 1) * 8 * cosphi2 + 1;
-						break;
+						case 3:
+							cosphi2 = cosphi * cosphi;
+							factor = (4 * cosphi2 - 3) * cosphi;
+							break;
+									
+						case 4:
+							cosphi2 = cosphi * cosphi;
+							factor  = (cosphi2 - 1) * 8 * cosphi2 + 1;
+							break;
 
-					default:
-						if (cosphi > 1.0)
-							cosphi = 1.0;
-						if (cosphi < -1.0)
-							cosphi = -1.0;
+						default:
+							if (cosphi > 1.0)
+								cosphi = 1.0;
+							if (cosphi < -1.0)
+								cosphi = -1.0;
 
-						factor = cos(it->f * acos(cosphi));
-				};
+							factor = cos(it->f * acos(cosphi));
+					};
 
-				if (it->phase == 0) 
-				{
-					energy_ += it->V * (1 + factor);
-				} else {
-					energy_ += it->V * (1 - factor);
+					if (it->phase == 0) 
+					{
+						energy_ += it->V * (1 + factor);
+					} else {
+						energy_ += it->V * (1 - factor);
+					}
 				}
 			}
 		}
@@ -411,86 +427,106 @@ namespace BALL
 
 		for ( ; it != torsion_.end(); it++) 
 		{
-			ab = it->atom1->getPosition() - it->atom2->getPosition();
-			float length_ab = ab.getLength();
-			Vector3 ba = it->atom2->getPosition() - it->atom1->getPosition();
-			cb = it->atom3->getPosition() - it->atom2->getPosition();
-			float length_cb = cb.getLength();
-			dc = it->atom4->getPosition() - it->atom3->getPosition();
-			float length_dc = dc.getLength();
-
-			if (length_ab != 0 && length_cb != 0 && length_dc != 0) 
+			if ( getForceField()->getUseSelection() == false ||
+ 					( getForceField()->getUseSelection() == true &&
+					(it->atom1->isSelected() || it->atom2->isSelected() || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
-				Vector3  t = ba % cb;   // cross product of cb and ba
-				Vector3  u = cb % dc;   // cross product of cb and dc
+				ab = it->atom1->getPosition() - it->atom2->getPosition();
+				float length_ab = ab.getLength();
+				Vector3 ba = it->atom2->getPosition() - it->atom1->getPosition();
+				cb = it->atom3->getPosition() - it->atom2->getPosition();
+				float length_cb = cb.getLength();
+				dc = it->atom4->getPosition() - it->atom3->getPosition();
+				float length_dc = dc.getLength();
 
-				float length_t2 = t.getSquareLength();
-				float length_u2 = u.getSquareLength();
-
-				float length_t = sqrt(length_t2);
-				float length_u = sqrt(length_u2);
-
-				if (length_t != 0 && length_u != 0) 
+				if (length_ab != 0 && length_cb != 0 && length_dc != 0) 
 				{
+					Vector3  t = ba % cb;   // cross product of cb and ba
+					Vector3  u = cb % dc;   // cross product of cb and dc
 
-					cosphi = (t * u) / (length_t * length_u);
-					cosphi2 = cosphi * cosphi;
-					if (cosphi2 > 1.0)
+					float length_t2 = t.getSquareLength();
+					float length_u2 = u.getSquareLength();
+
+					float length_t = sqrt(length_t2);
+					float length_u = sqrt(length_u2);
+
+					if (length_t != 0 && length_u != 0) 
 					{
-						cosphi2 = 1.0;
-					}
-					sinphi = sqrt(1 - cosphi2);
+						cosphi = (t * u) / (length_t * length_u);
+						cosphi2 = cosphi * cosphi;
+						if (cosphi2 > 1.0)
+						{
+							cosphi2 = 1.0;
+						}
+						sinphi = sqrt(1 - cosphi2);
 
-					switch (it->f) 
-					{
-						case 1:
-									dEdphi = sinphi;
-									break;
+						
+						float direction = (t % u) * cb;
+						if (direction > 0.0)
+						{
+								sinphi = -sinphi;
+						}
 
-						case 2:
-									dEdphi = 4 * cosphi * sinphi;
-									break;
+						switch (it->f) 
+						{
+							case 1:
+										dEdphi = sinphi;
+										break;
+
+							case 2:
+										dEdphi = 4 * cosphi * sinphi;
+										break;
+									
+							case 3:
+										sinphi2 = 1 - cosphi2;
+										dEdphi = 3 * (sinphi * (3 - 4 * sinphi2));
+										break;
 								
-						case 3:
-									sinphi2 = 1 - cosphi2;
-									dEdphi = 3 * (sinphi * (3 - 4 * sinphi2));
-									break;
-								
-						case 4:
-									dEdphi  = 16 * (cosphi * sinphi * (2 * cosphi2 - 1));
-									break;
+							case 4:
+										dEdphi  = 16 * (cosphi * sinphi * (2 * cosphi2 - 1));
+										break;
+	
+							default:
+										if (cosphi > 1.0)
+										{
+											cosphi = 1.0;
+										}
+										if (cosphi < -1.0)
+										{
+											cosphi = -1.0;
+										}
+										dEdphi = it->f * sin(it->f * acos(cosphi));
+						};
 
-						default:
-									if (cosphi > 1.0)
-									{
-										cosphi = 1.0;
-									}
-									if (cosphi < -1.0)
-									{
-										cosphi = -1.0;
-									}
-									dEdphi = it->f * sin(it->f * acos(cosphi));
-					};
+						// multiply with the barrier height and a factor
+						// for unit conversion: 1e13: kJ/(mol A) -> J/(mol m)
+						//  AVOGADRO: J/mol -> J
+						dEdphi *= - it->V * 1e13 / Constants::AVOGADRO;
+	
+						if (it->phase != 0) 
+						{
+							dEdphi = -dEdphi;
+						}
+	
+						Vector3 ca = it->atom3->getPosition() - it->atom1->getPosition();
+						Vector3 db = it->atom4->getPosition() - it->atom2->getPosition();
+						Vector3 dEdt =   dEdphi / (length_t2 * cb.getLength()) * (t % cb);
+						Vector3 dEdu = - dEdphi / (length_u2 * cb.getLength()) * (u % cb);
+	
 
-					// multiply with the barrier height and a factor
-					// for unit conversion: 1e13: kJ/(mol A) -> J/(mol m)
-					//  AVOGADRO: J/mol -> J
-					dEdphi *= it->V * 1e13 / Constants::AVOGADRO;
-
-					if (it->phase != 0) 
-					{
-						dEdphi = -dEdphi;
+						if (getForceField()->getUseSelection() == false)
+						{
+							it->atom1->getForce() += dEdt % cb;
+							it->atom2->getForce() += ca % dEdt + dEdu % dc;
+							it->atom3->getForce() += dEdt % ba + db % dEdu;
+							it->atom4->getForce() += dEdu % cb; 
+						} else {
+							if (it->atom1->isSelected()) it->atom1->getForce() += dEdt % cb;
+							if (it->atom2->isSelected()) it->atom2->getForce() += ca % dEdt + dEdu % dc;
+							if (it->atom3->isSelected()) it->atom3->getForce() += dEdt % ba + db % dEdu;
+							if (it->atom4->isSelected()) it->atom4->getForce() += dEdu % cb;
+						}
 					}
-
-					Vector3 ca = it->atom3->getPosition() - it->atom1->getPosition();
-					Vector3 db = it->atom4->getPosition() - it->atom2->getPosition();
-					Vector3 dEdt =   dEdphi / (length_t2 * cb.getLength()) * (t % cb);
-					Vector3 dEdu = - dEdphi / (length_u2 * cb.getLength()) * (u % cb);
-
-					it->atom1->getForce() += dEdt % cb;
-					it->atom2->getForce() += ca % dEdt + dEdu % dc;
-					it->atom3->getForce() += dEdt % ba + db % dEdu;
-					it->atom4->getForce() += dEdu % cb; 
 				}
 			}
 		}
