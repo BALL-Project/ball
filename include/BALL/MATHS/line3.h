@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.18 2000/04/18 13:57:05 oliver Exp $
+// $Id: line3.h,v 1.19 2000/04/18 18:50:26 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -338,7 +338,8 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TLine3<T>& line)
 	{
-		return s << '(' << line.p << ' ' << line.d << ')');
+		s << '(' << line.p << ' ' << line.d << ')';
+		return s;
 	}
 	//@}
 

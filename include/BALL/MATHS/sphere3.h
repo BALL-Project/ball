@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.13 2000/04/18 13:57:07 oliver Exp $
+// $Id: sphere3.h,v 1.14 2000/04/18 18:50:36 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -271,7 +271,8 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere3)
 	{
-		return (s << '(' << sphere3.p << ' ' << sphere3.radius << ')';
+		s << '(' << sphere3.p << ' ' << sphere3.radius << ')';
+		return s;
 	}
 	//@}
 
