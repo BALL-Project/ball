@@ -101,7 +101,6 @@ namespace BALL
 			virtual void write(std::ostream& s) const;
 			//@}
 
-			
 			protected:
 
 			/** overridden notify call.
