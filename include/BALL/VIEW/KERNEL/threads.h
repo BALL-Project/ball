@@ -2,17 +2,17 @@
 #define BALL_VIEW_KERNEL_THREADS_H
 
 #ifndef BALL_COMMON_H
-	#include <BALL/common.h>
+#include <BALL/common.h>
 #endif
 
 #ifdef BALL_QT_HAS_THREADS
 
 #ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
- #include <BALL/VIEW/KERNEL/representation.h>
+#include <BALL/VIEW/KERNEL/representation.h>
 #endif
 
 #ifndef BALL_FORMAT_DCDFILE_H
- #include <BALL/FORMAT/DCDFile.h>
+#include <BALL/FORMAT/DCDFile.h>
 #endif
 
 #include <qthread.h>
@@ -21,45 +21,45 @@
 
 namespace BALL
 {
-	class EnergyMinimizer;
-	class MolecularDynamics;
-	class AmberFF;
-	class Composite;
+class EnergyMinimizer;
+class MolecularDynamics;
+class AmberFF;
+class Composite;
 
-	namespace VIEW
+namespace VIEW
+{
+	class MainControl;
+
+	///
+	class UpdateRepresentationThread
+		: public QThread
 	{
-		class MainControl;
+		public:
 
-		///
-		class UpdateRepresentationThread
-			: public QThread
-		{
-			public:
+			///
+			UpdateRepresentationThread()
+				throw();
 
-				///
-				UpdateRepresentationThread()
-					throw();
+			///
+			virtual void run();
 
-				///
-				virtual void run();
+			///
+			void setRepresentation(Representation& rep)
+				throw() { rep_ = &rep;}
 
-				///
-				void setRepresentation(Representation& rep)
-					throw() { rep_ = &rep;}
+			///
+			void setRebuild(bool rebuild)
+				throw(){ rebuild_ = rebuild;}
 
-				///
-				void setRebuild(bool rebuild)
-					throw(){ rebuild_ = rebuild;}
+		protected:
 
-			protected:
+			Representation* rep_;
 
-				Representation* rep_;
-
-				bool rebuild_;
-		};
+			bool rebuild_;
+	};
 
 	/** Baseclass for threads, which perform a simulation.
-	 		To use multithreading in BALL, there are several problems arising from
+			To use multithreading in BALL, there are several problems arising from
 			the fact, that QT itself is not threadsafe:
 			1. Prevent any output to Log, stdout or sterr.
 				 If a simulation has to print some informations, use the method output_,
@@ -108,16 +108,13 @@ namespace BALL
 			///
 			QMutex& getMutex() throw() { return mutex_;}
 
-		protected:
+			protected:
 
 			/// Provokes an update of the Scene with rebuild of the display-lists
 			void updateScene_();
 
 			/// Sends the string as outout to Log.info
 			void output_(const String& string);
-
-			/// Prints the results from an AMBER-forcefield
-			void outputAmberResult_(const AmberFF& amber);
 
 			/// Notifies the main thread to delete the simulating thread
 			void finish_();
