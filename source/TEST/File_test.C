@@ -1,19 +1,19 @@
-// $Id: File_test.C,v 1.6 2000/07/04 09:30:10 oliver Exp $
+// $Id: File_test.C,v 1.7 2000/07/05 12:31:33 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/file.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-//#include <fstream>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.6 2000/07/04 09:30:10 oliver Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.7 2000/07/05 12:31:33 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 	
 File* f1;
 
@@ -75,7 +75,7 @@ CHECK(static getSize(String filename))
 RESULT
 
 CHECK(int getOpenMode() const)
-	TEST_EQUAL(f.getOpenMode(), 1)
+	TEST_EQUAL(f.getOpenMode(), ios::in)
 	TEST_EQUAL(f.getSize(), 100)
 RESULT
 
