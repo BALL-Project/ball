@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.45 2004/05/12 13:04:31 amoll Exp $
+// $Id: molecularStructure.C,v 1.46 2004/05/12 13:06:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -123,8 +123,8 @@ namespace BALL
 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
 		hint = "Recalculate the secondary structure for a structure.";
-		calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate secondary structure", this,
-																								 SLOT(calculateSec&ondaryStructure()), ALT+Key_O, -1, hint);
+		calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate sec&ondary structure", this,
+																								 SLOT(calculateSecondaryStructure()), ALT+Key_O, -1, hint);
 
 		hint = "To assign H-bonds, one System has to be selected.";
 		calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-B&onds", this, SLOT(calculateHBonds()),
