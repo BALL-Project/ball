@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.14 2000/07/26 15:07:40 amoll Exp $ 
+// $Id: options.C,v 1.15 2000/10/17 17:16:06 anker Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -17,13 +17,16 @@ using std::ios;
 
 namespace BALL 
 {
+
 	const Size Options::MAX_ENTRY_LENGTH = 1024;
+
 
 	Options::Options()
 		:	StringHashMap<String>(),
 			name_("")
 	{
 	}
+
 
 	Options::Options(const Options& options, bool deep)
 		:	StringHashMap<String>(options, deep),
@@ -35,6 +38,7 @@ namespace BALL
 	Options::~Options()
 	{
 	}
+
 
 	bool Options::isReal(const String& key) const
 	{
@@ -55,6 +59,7 @@ namespace BALL
 		return (errno == 0) && (endptr != value.c_str());
 	}
 
+
 	bool Options::isVector(const String& key) const 
 	{
 		// if the key does not exist - then the nonexistent value	
@@ -74,6 +79,7 @@ namespace BALL
 		return false;
 	}
 
+
 	bool Options::isBool(const String& key) const
 	{
 		String s = get(key);
@@ -84,11 +90,13 @@ namespace BALL
 		return (s.compare("true") == 0 || s.compare("false") == 0);
 	}
 
+	
 	bool Options::isSet(const String& key) const
 	{
 		return (StringHashMap<String>::find(key) != StringHashMap<String>::end());
 	}
 
+	
 	bool Options::isInteger(const String& key) const 
 	{
 		double double_value;
@@ -112,6 +120,7 @@ namespace BALL
 		return false;
 	}
 
+
 	double Options::getReal(const String& key) const 
 	{
 		if (!has(key))
@@ -124,7 +133,9 @@ namespace BALL
 		
 		if (errno == 0){
 			return value;
-		} else {
+		} 
+		else 
+		{
 			return 0.0;
 		}
 	}
@@ -152,17 +163,21 @@ namespace BALL
 		return h;
 	}
 
+
 	bool Options::getBool(const String& key) const 
 	{
 		if (!has(key))
 		{
 			return false;
 		}
+
 		ConstIterator it = find(key);
 		if ((it != end()) && (it->second == "true"))
 		{
 			return true;
-		} else {
+		}
+		else 
+		{
 			return false;
 		}
 	}
@@ -173,6 +188,7 @@ namespace BALL
 		{
 			return 0;
 		}
+
 		long value;
 		errno = 0;
 		ConstIterator it = find(key);
@@ -185,7 +201,9 @@ namespace BALL
 		if (errno == 0)
 		{
 			return value;
-		} else {
+		} 
+		else 
+		{
 			errno = 0;
 			return 0;
 		}
@@ -228,7 +246,9 @@ namespace BALL
 		if (value)
 		{
 			set(key, "true");
-		} else {
+		}
+		else
+		{
 			set(key, "false");
 		}
 	}
@@ -239,7 +259,9 @@ namespace BALL
 		{
 			set(key, value);
 			return key;
-		} else {
+		} 
+		else 
+		{
 			return get(key);
 		}
 	}
@@ -250,7 +272,9 @@ namespace BALL
 		{
 			setReal(key, value);
 			return value;
-		} else {
+		} 
+		else 
+		{
 			return getReal(key);
 		}
 	}
@@ -261,7 +285,9 @@ namespace BALL
 		{
 			setBool(key, value);
 			return value;
-		} else {
+		} 
+		else 
+		{
 			return getBool(key);
 		}
 	}
@@ -272,7 +298,9 @@ namespace BALL
 		{
 			setInteger(key, value);
 			return value;
-		} else {
+		}
+		else
+		{
 			return getInteger(key);
 		}
 	}
@@ -298,7 +326,9 @@ namespace BALL
 		if (it == end())
 		{
 			return "";
-		} else {
+		}
+		else
+		{
 			return (*it).second;
 		}
 	}
