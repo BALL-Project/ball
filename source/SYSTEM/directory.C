@@ -1,13 +1,13 @@
-// $Id: directory.C,v 1.4 2000/06/13 14:12:56 amoll Exp $
+// $Id: directory.C,v 1.5 2000/06/15 19:12:41 amoll Exp $
 
-//#include <assert.h>
+#include <assert.h>
 #include <dirent.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
-//#include <sys/types.h>
-//#include <unistd.h>
-//#include <iostream>
+#include <sys/types.h>
+#include <unistd.h>
+#include <iostream>
 #include <BALL/SYSTEM/directory.h>
 
 #define BALL_DIRECTORY_STAT   ::lstat
@@ -20,8 +20,15 @@ namespace BALL
 		::getcwd(buffer_, sizeof(buffer_));
 		dir_ = 0;
 		dirent_ = 0;
-		directory_path_.set(buffer_);
-		cout<<endl<<buffer_;
+		if (buffer_ != 0)
+		{
+			directory_path_ = buffer_;
+		}
+		else
+		{
+			directory_path_ = "";
+		}
+		//cout<<endl<<buffer_;
 	}
 
 	Directory::Directory(const String& directory_path, bool set_current = false)
@@ -46,47 +53,6 @@ namespace BALL
 		if (dir_ != 0) ::closedir(dir_);
 	}
 
-	void Directory::clear()
-	{
-		dir_ = 0;
-		dirent_ = 0;
-		directory_depth_ = 0;
-		directory_path_ = "";
-	}
-
-	void Directory::destroy()
-	{
-		clear();
-	}
-	
-	void Directory::set(const String& directory_path, bool set_current)
-	{
-		dir_ = 0;
-		dirent_ = 0;
-		directory_depth_ = 0;
-		directory_path_ = directory_path;
-		if (set_current) ::chdir(directory_path_.data());
-	}
-
-	void Directory::set(const Directory& directory)
-	{
-		dir_ = 0;
-		dirent_ = 0;
-		directory_depth_ = 0;
-		directory_path_ = directory.directory_path_;
-	}
-
-	Directory& Directory::operator = (const Directory& directory)
-	{
-		set(directory);
-		return *this;
-	}
-
-	void Directory::get(Directory& directory) const
-	{
-		directory.set(*this);
-	}
-
 	void Directory::swap(Directory& directory)
 	{
 		DIR* temp_dir = dir_;
@@ -104,49 +70,6 @@ namespace BALL
 		directory_path_.swap(directory.directory_path_);
 	}
 
-	const String& Directory::getPath() const
-	{
-		return directory_path_;
-	}
-
-	bool Directory::rename(String old_path, String new_path)
-	{ 
-		FileSystem::canonizePath(old_path);
-		FileSystem::canonizePath(new_path);
-		return (::rename(old_path.data(), new_path.data()) == 0);
-	}
-
-	bool Directory::renameTo(String new_path)
-	{
-		if (rename(directory_path_, new_path))
-		{
-			directory_path_ = new_path;
-			return true;
-		} else return false;
-	}
-
-	bool Directory::setCurrent(String directory_path)
-	{
-		FileSystem::canonizePath(directory_path);
-		return (bool)(::chdir(directory_path.data()) == 0);
-	}
-
-	bool Directory::setCurrent()
-	{
-		return Directory::setCurrent(directory_path_);
-	}
-
-	bool Directory::create(String path, const mode_t& mode)
-	{
-		FileSystem::canonizePath(path);
-		return (bool)(::mkdir(path.data(), mode) == 0);
-	}
-
-	bool Directory::remove(String path)
-	{
-		FileSystem::canonizePath(path);
-		return (bool)(::rmdir(path.data()) == 0);
-	}
 
 	bool Directory::getFirstEntry(String& entry) 
 	{
@@ -196,8 +119,7 @@ namespace BALL
 		Size size = 0;
 		DIR* dir = ::opendir(directory_path_.data());
 		if (dir == 0)	return 0;
-		dirent* dir_entry = 0;
-		while((dir_entry = ::readdir(dir)) != 0)
+		while(::readdir(dir) != 0)
 		{
 			++size;
 		}
@@ -209,7 +131,6 @@ namespace BALL
 	{
 		struct stat stats;
 		Size size = 0;
-		
 		DIR* dir = ::opendir(directory_path_.data());
 		if (dir == 0)	return 0;
 
@@ -217,10 +138,8 @@ namespace BALL
 		while((dir_entry = ::readdir(dir)) != 0)
 		{
 			char* c;
-			if (BALL_DIRECTORY_STAT(c, &stats) < 0) /* BALL_DIRECTORY_STAT error */
-			{ 
-				continue;
-			}
+			/* BALL_DIRECTORY_STAT error */
+			if (BALL_DIRECTORY_STAT(c, &stats) < 0)	continue;
 			if (S_ISDIR(stats.st_mode) == 0) ++size;
 		}
 
@@ -232,18 +151,14 @@ namespace BALL
 	{
 		struct stat stats;
 		Size size = 0;
-
 		DIR *dir = ::opendir(directory_path_.data());
 		if (dir == 0)	return 0;
 
-		dirent *dir_entry = 0;
-		while((dir_entry = ::readdir(dir)) != 0)
+		while(::readdir(dir) != 0)
 		{
 			char* c;
-			if (BALL_DIRECTORY_STAT(c, &stats) < 0) /* BALL_DIRECTORY_STAT error */
-			{
-				continue;
-			}
+			/* BALL_DIRECTORY_STAT error */
+			if (BALL_DIRECTORY_STAT(c, &stats) < 0)	continue;
 			if (S_ISDIR(stats.st_mode) != 0) ++size;
 		}
 
@@ -277,10 +192,6 @@ namespace BALL
 		}*/
 	}
 
-	bool Directory::find(const String &filename, String &filepath, bool recursive) const
-	{
-		return find(filename, filepath, recursive);
-	}
 /*
 	bool Directory::apply(DirectoryApplicator &directoryApplicator)
 	{
@@ -329,20 +240,17 @@ namespace BALL
 		return (bool)(directory_path_ == buffer_);
 	}
 
-	bool Directory::isEmpty() const
+	BALL::Processor::Result Directory::FileFinder_::operator() (const String& path)
 	{
-		return (bool)(countItems() == 0);
+		const char* filename = strrchr(path.data(), FileSystem::PATH_SEPARATOR);
+
+		if ((filename != 0 && strcmp(filename + 1, filename_.data()) == 0)
+				|| path == filename_)
+		{
+			return Processor::ABORT;
+		} else return Processor::CONTINUE;
 	}
 
-	bool Directory::operator == (const Directory& directory) const
-	{
-		return (bool)(directory_path_ == directory.directory_path_);
-	}
-
-	bool Directory::operator != (const Directory& directory) const
-	{
-		return (bool)(directory_path_ != directory.directory_path_);
-	}
 /*
 	BALLApplicator::Result Directory::apply_
 		(DirectoryRecursiveApplicator &directoryRecursiveApplicator,
