@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.9 2001/06/28 17:15:43 strobel Exp $
+// $Id: singularities.h,v 1.10 2001/06/28 17:32:50 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -71,7 +71,9 @@ namespace BALL
 			if (e.getMessage() == "reduced surface modified")
 			{
 				rs->clean();
+						#ifdef debug_singularities
 						std::cout << *rs;
+						#endif
 				delete ses;
 				ses = new SolventExcludedSurface(rs);
 				ses->get(rs);
