@@ -1,86 +1,76 @@
 
-1.1pre3: 28.10.2004
+1.1pre3: 03.11.2004
+
+1.1 mostly features changes related to the Python support, some bugfixes and
+a larg numer of prominent fixes and improvements in BALLView.
+Most of these improvements are related to an improved user interface and some
+new models and animation possibilities.
 
 Added:
-	- Documentation for BALLView in the folder BALL/doc/BALLView
-	- Stereo Modi: Side-by-Side and for shutter googles 
-	- Clipping Planes
-	- new Move-Mode for molecular entities and Clipping Planes
-	- Writing and loading of BALLView project files
-	- Esc key now switches to last used mode in Scene
-	- Python:
-		- Hotkey support for starting any (BALL-)Python command from BALLView
-		- support to quit program from Python interpreter
-		- support for starting Python script from command line
-		- added more classes to the Python SIP interface
-		- Benchmark scripts for BALLView
+	- FragmentDatabase
+    - added fragments for nucleotides
+    - fixed some minor details in other fragments
+  - Python support: added more classes to the Python SIP interface
 	- new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
-	- new rotate mode for Scene
-	- Backbone Model for DNA
-	- two new Cartoon Models for DNA and RNA
-	- support for drag and drop of molecular files
-	- DataSetControl:
-		- management of 1D and 2D grids 
-		- ability to start visualisation of 1D and 2D grids
-		- ability to load the SnapShot from file into RAM to accelerate their visualisation
-	- 1D and 2D RegularDataWidgets update their contents automaticaly
-	- Ramachandran Plot
-	- Ability to create animations, either as on-screen presentations or for movies
-	- Fog in Scene and its settings to Preferences
-	- new model: visualisation of forces
-	- Visualisation for double-, triple- and aromatic bonds in BallAndStick model
-	- Coloring by residue name now also works for DNA
-	- Preferences for material parameters in OpenGL
-	- multiple loading of the same file will create enumerated names for the Systems
+  - BALLView
+  	- Documentation for BALLView in the folder BALL/doc/BALLView  
+    - new models for rendering nucleic acids and for visualizing forces
+  	- calculation of Ramachandran plots for proteins
+		- improved ball&stick model now renders double-, triple- and aromatic bonds
+		- ability to create animations, either as on-screen presentations or for movies
+		- OpenGL rendering now allows for depth cueing, material paramters may be adjusted
+  	- Stereo display using side-by-side mode or shutter glasses
+  	- Clipping planes
+  	- storing and loading of BALLView project files
+  	- support for drag and drop of molecular files
+  	- new move mode for (partial) structures
+  	- Esc key now switches to last used mode in Scene
+  	- Python scripting
+  		- Hotkey support for starting any (BALL-)Python command from BALLView
+	  	- support to quit program from Python interpreter
+  		- support for starting Python script from command line
+  		- Benchmark scripts for BALLView
 
-Bugs Fixed:
-	- selection in MolecularControl with CRTG and SHIFT modifier
-	- several problems in Cartoon model
-	- creation of models for several selected items
-	- overall cleanup of RegularDataWidgets
-	- export of PNGs could result in strange problems e.g. with empty images
-	- its now possible to create transparent wireframe and dot models
-	- AtomDistanceColorProcessor
-	- PeptideDialog: deletion of sequence
-	- increased performance of SnapShot visualisation, especially for large numbers of SnapShots
-	- A click on the "default" button in Preferences now only works on currently selected page
-	- it was not possible to reset the Element-Coloring-Scheme to the default values 
-	- issue with restoring window's geometry on X11 (still buggy on some X-Servers)
-	- restoring of working dir
-	- MDS dialog: switching off storing to trajectory file
-	- Scene: mouse sensitivity was adjusted
-	- now show the correct number of added bonds
-	- prevent flicking on startup from MainControlPreferences dialog
-	- ResidueIndexColorProcessor now no longer counts water Residues 
-	- ResidueNameColorProcessor now supports RNA
-	- visualisation of Contour Surfaces had sometimes strange normals
-	- fixed drawing of Boxes
-	- core dumps:
-	 - when starting a simulation, while a Representation was still updateing
-	 - when removing a Representation, while a simulation was running
-	 - after deleting trajectory when SnapShotVisualisation Dialog was still open
-	 - from SnapShotVisualisation Dialog
-	 - from deleting molecular entities while simulation was running
-	 - in RingPerception Processesor
+
+
+Fixed:
+  - CygWin support was temporarily broken
+  - fixed the Python support to work with an official SIP release (4.1.1)  
+  - BALLView
+	  - selection in MolecularControl with CTRL and SHIFT modifier
+	  - several problems in Cartoon model
+	  - creation of models for several selected items
+	  - overall cleanup of RegularDataWidgets
+  	- export of PNGs could result in strange problems e.g. with empty images
+	  - its now possible to create transparent wireframe and dot models
+  	- AtomDistanceColorProcessor [???WAS???]
+  	- PeptideDialog: deletion of sequence in entry field
+  	- increased performance of SnapShot visualisation, especially for large numbers of SnapShots
+  	- A click on the "default" button in Preferences now only works on currently selected page
+		- multiple loading of the same file will create enumerated names for the Systems
+		- it was not possible to reset the by-element coloring scheme to the default values 
+		- issue with restoring window geometry on X11
+		- MDS dialog: toggling export to trajectory file was broken
+		- now show the correct number of bonds added when building bonds for a structure
+		- ResidueIndexColorProcessor now no longer considers water residues 
+		- visualization of contour surfaces had sometimes incorrect normals
+		- several core dumps related to missing mutex locks
+		- seg fault in RingPerceptionProcessesor
 
 Changed:
-	- improved focus camera on molecular structures
-	- Layout of Preferences 
-	- inside of surfaces gets now correctly drawn
-	- increased OpenGL performance 
-	- .BALLView config files are now always stored in the users homedir
-	- changed Coloring or Model settings are now visible after pressing apply
-	- Scene Preferences
-	- disabled Server in BALLView by default
-	- GeometricObjects no longe have names
-	- cleanup for storing of settings from dialogs
-	- removed Information Processor for GeometricObjects
-	- interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
-	- interface for the property "hidden" of Representations
+  - BALLView
+		- improved focus camera on molecular structures
+	  - general improvements in the user interface
+		- inside of surfaces is now correctly drawn
+		- improved the code for the BALLView termination process
+		- removed the old Move-Dialog
+		- .BALLView config files are now always stored in the users homedir
+		- changed Coloring or Model settings are now visible after pressing apply
+		- disabled Server in BALLView by default
+		- cleanup for storing of settings from dialogs
 	- ~ModularWidget now calls MainControl::removeModularWidget, so
 		from ModularWidget derived classes no longer have to deregister themselves
-	- improved the code for the BALLView termination process
-	- removed the old Move-Dialog
+
 
 1.0: 24.05.2004
 

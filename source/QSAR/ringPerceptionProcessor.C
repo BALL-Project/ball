@@ -1,13 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.6 2004/10/29 15:18:00 amoll Exp $
+// $Id: ringPerceptionProcessor.C,v 1.7 2004/10/29 19:36:19 oliver Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/CONCEPT/composite.h>
+#include <BALL/KERNEL/fragment.h>
 #include <BALL/COMMON/limits.h>
 
 #include <vector>
