@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.1 2003/09/08 15:16:30 amoll Exp $
+// $Id: dockWidget.C,v 1.2 2003/09/08 16:27:08 amoll Exp $
 
-#include <BALL/VIEW/WIDGETS/dockableWidget.h>
+#include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <qmenubar.h>
 #include <qlabel.h>
@@ -28,30 +28,35 @@ DockWidget::DockWidget(QWidget* parent, const char* name)
 		setName( "DockWidget" );
 	}
 
-  layout_ = new QVBoxLayout( this, 0, 0, "DockWidgetDataLayout"); 
   caption_label_ = new QLabel( this, "caption_label" );
-  caption_label_->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, 
-					(QSizePolicy::SizeType)5, 0, 0, caption_label_->sizePolicy().hasHeightForWidth() ) );
+	caption_label_->resize(120, 12);
+  caption_label_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
   caption_label_->setPaletteBackgroundColor( QColor( 255, 255, 127 ) );
   QFont caption_label_font(  caption_label_->font() );
-  caption_label_font.setFamily( "Helvetica" );
+  //caption_label_font.setFamily( "Helvetica" );
   caption_label_font.setPointSize( 11 );
   caption_label_->setFont( caption_label_font ); 
   caption_label_->setFrameShape( QLabel::NoFrame );
-  caption_label_->setAlignment( int( QLabel::AlignCenter ) );
-  layout_->addWidget( caption_label_ );
-
+  caption_label_->setAlignment(QLabel::AlignCenter);
+	setOrientation(Qt::Horizontal);
+	boxLayout()->addWidget(caption_label_);
+	
   resize( QSize(132, 293).expandedTo(minimumSizeHint()) );
+
+	registerWidget(this);
 }
 
 void DockWidget::setGuest(QWidget& guest)
 {
 	QPoint p;
-	guest.reparent(this, p, TRUE);
+	guest.reparent(this, p, true);
+	guest.resize(120,1000);
 	setWidget(&guest);
+	boxLayout()->addWidget(&guest);
+  guest.setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
 	setMinimumSize(20, 20);
 	setCloseMode(QDockWindow::Always);
-	setResizeEnabled(TRUE);
+	setResizeEnabled(true);
 }
 
 void DockWidget::initializeWidget(MainControl& main_control)
@@ -103,5 +108,11 @@ void DockWidget::fetchPreferences(INIFile & inifile)
 	}
 }
 
+
+void DockWidget::close()
+{
+Log.error() << "#~~#   1" << std::endl;
+	QDockWindow::close();
+}
 
 } } // namespaces

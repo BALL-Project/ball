@@ -1,20 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.3 2003/09/08 02:07:37 amoll Exp $
+// $Id: genericControl.h,v 1.4 2003/09/08 16:27:24 amoll Exp $
 
-#ifndef BALL_VIEW_WIDGETS_GenericControl_H
-#define BALL_VIEW_WIDGETS_GenericControl_H
+#ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
+#define BALL_VIEW_WIDGETS_GENERICCONTROL_H
 
-#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
-#	include <BALL/VIEW/KERNEL/modularWidget.h>
+#ifndef BALL_VIEW_WIDGETS_DOCKWIDGET_H
+# include <BALL/VIEW/WIDGETS/dockWidget.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_COMMON_H
-//# include <BALL/VIEW/KERNEL/common.h>
-#endif
-
-#include <BALL/VIEW/UIC/genericControlData.h>
+#include <qlistview.h>
 
 namespace BALL
 {
@@ -36,8 +32,7 @@ namespace BALL
 				\ingroup ViewWidgets
 		*/
 		class GenericControl
-			: public GenericControlData, 
-				public ModularWidget
+			: public DockWidget
 		{
 			Q_OBJECT
 
@@ -74,44 +69,7 @@ namespace BALL
 			virtual ~GenericControl()
 				throw();
 
-			//@} 
-			/**	@name	Accessors: inspectors and mutators 
-			*/ 
-			//@{
-
-			/**	Initialize the widget.
-			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
-
-			/**	Remove the widget.
-					Reverse all actions performed in initializeWidget
-					(remove menu entries of this GenericControl).
-					This method will be called by MainGenericControl::aboutToExit.
-					\param main_GenericControl the MainTrajectoryControl object to be finalized with this TrajectoryControl
-			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
-
-			///
-			virtual void fetchPreferences(INIFile& inifile)
-				throw();
-			
-			///
-			virtual void writePreferences(INIFile& inifile)
-				throw();
-
 			//@}
-			/** @name Public slots 
-			*/ 
-			//@{
-			public slots:
-
-			/// Show or hide widget (Called by menu entry in "WINDOWS")
-			void switchShowWidget()
-				throw();
-
-			//@} 
 
 		  protected slots:
 			
@@ -119,7 +77,8 @@ namespace BALL
 
 		  protected:
 			QListViewItem* 								context_item_;
+			QListView* 										listview;
 		};
 		
 } } // namespaces
-#endif // BALL_VIEW_WIDGETS_GenericControl_H
+#endif // BALL_VIEW_WIDGETS_GENERICCONTROL_H

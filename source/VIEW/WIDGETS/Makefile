@@ -12,7 +12,6 @@ CPP_SOURCES=\
 	dockWidget.C\
 	geometricControl.C\
 	genericControl.C\
-	genericControlData.C\
 	logView.C\
 	molecularControl.C\
 	molecularProperties.C\
@@ -27,7 +26,6 @@ MOC_SOURCES=\
 	dockWidget_moc.C\
 	geometricControl_moc.C\
 	genericControl_moc.C\
-	genericControlData_moc.C\
 	logView_moc.C\
 	molecularControl_moc.C\
 	molecularProperties_moc.C\

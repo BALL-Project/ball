@@ -63,6 +63,8 @@ class DockWidget
 	void switchShowWidget()
 		throw();
 
+	void close();
+
 	//@} 
 
 	virtual ~DockWidget() throw() {}
