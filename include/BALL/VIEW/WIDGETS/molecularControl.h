@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.13 2003/12/23 13:14:25 amoll Exp $
+// $Id: molecularControl.h,v 1.14 2004/01/15 10:08:13 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -98,12 +98,12 @@ namespace BALL
 				protected:
 
 				// overriden function, used to message to Control
-				virtual void stateChange(bool)
+				virtual void stateChange(bool state)
 					throw();
 
-				Composite* composite_;
-
-				MolecularControl& control_reference_;
+				Composite* 					composite_;
+				MolecularControl& 	control_reference_;
+				bool 								ignore_change_;
 
 				private: 
 				
