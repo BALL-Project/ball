@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.3 1999/12/28 21:29:21 oliver Exp $
+// $Id: selector.h,v 1.4 2000/02/12 09:32:54 oliver Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -11,8 +11,8 @@
 #	include <BALL/DATATYPE/stringHashMap.h>
 #endif
 
-#ifndef BALL_CONCEPT_COMPOSITE_H
-#	include <BALL/CONCEPT/composite.h>
+#ifndef BALL_KERNEL_ATOM_H
+#	include <BALL/KERNEL/atom.h>
 #endif
 
 namespace BALL 
@@ -48,7 +48,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual bool operator () (const Composite& composite) const = 0;
+		virtual bool operator () (const Atom& atom) const = 0;
 
 		/**
 		*/
@@ -120,7 +120,7 @@ namespace BALL
 			
 			/** Evaluate the (sub)expression.
 			*/
-			virtual bool operator () (const Composite& composite) const;
+			virtual bool operator () (const Atom& atom) const;
 			//@}
 
 			/**	@name	Accessors
@@ -305,7 +305,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -315,7 +315,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -325,7 +325,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -335,7 +335,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -345,7 +345,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -355,7 +355,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -365,7 +365,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -375,7 +375,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -385,7 +385,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -395,7 +395,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -405,7 +405,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	
@@ -416,7 +416,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	/**
@@ -426,7 +426,7 @@ namespace BALL
 	{
 		public:
 
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Atom& atom) const;
 	};
 
 	
