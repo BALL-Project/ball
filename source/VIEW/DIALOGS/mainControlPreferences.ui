@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MainControlPreferencesData</class>
 <widget class="QWidget">
     <property name="name">
@@ -35,83 +35,147 @@
     <property name="caption">
         <string>MainControlPreferences</string>
     </property>
-    <widget class="QLabel">
+    <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>textLabel2</cstring>
+            <cstring>layout118</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>24</x>
+                <x>5</x>
                 <y>10</y>
-                <width>250</width>
-                <height>17</height>
+                <width>270</width>
+                <height>103</height>
             </rect>
         </property>
-        <property name="text">
-            <string>GUI Style</string>
-        </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
-        </property>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>show_labels</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>23</x>
-                <y>74</y>
-                <width>351</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>show labels in docked widgets</string>
-        </property>
-        <property name="checked">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>logging_to_file</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>25</x>
-                <y>131</y>
-                <width>356</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>enable logging to file</string>
-        </property>
-    </widget>
-    <widget class="QComboBox">
-        <property name="name">
-            <cstring>style_box_</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>24</x>
-                <y>28</y>
-                <width>250</width>
-                <height>27</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>Select a GUI style to alter the appearance of BALLView</string>
-        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="spacing">
+                <number>5</number>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel2</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>250</width>
+                        <height>17</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>250</width>
+                        <height>17</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>GUI Style</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignCenter</set>
+                </property>
+            </widget>
+            <widget class="QComboBox">
+                <property name="name">
+                    <cstring>style_box_</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>250</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>250</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Select a GUI style to alter the appearance of BALLView</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>show_labels</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>250</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>250</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>show labels in docked widgets</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>logging_to_file</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>0</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>250</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>250</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>enable logging to file</string>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Writes the information from the Logs window into a file</string>
+                </property>
+            </widget>
+        </vbox>
     </widget>
 </widget>
 <includes>

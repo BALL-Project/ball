@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MaterialSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -21,390 +21,521 @@
     <property name="caption">
         <string>MaterialSettings</string>
     </property>
-    <widget class="QLabel">
+    <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>textLabel1</cstring>
+            <cstring>layout123</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>4</x>
-                <y>143</y>
-                <width>223</width>
-                <height>25</height>
+                <x>5</x>
+                <y>5</y>
+                <width>405</width>
+                <height>125</height>
             </rect>
         </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="text">
-            <string>Shininess</string>
-        </property>
-    </widget>
-    <widget class="QSlider">
-        <property name="name">
-            <cstring>shininess_slider</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>233</x>
-                <y>145</y>
-                <width>120</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>120</width>
-                <height>32767</height>
-            </size>
-        </property>
-        <property name="maxValue">
-            <number>1280</number>
-        </property>
-        <property name="lineStep">
-            <number>10</number>
-        </property>
-        <property name="pageStep">
-            <number>100</number>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="tickmarks">
-            <enum>Above</enum>
-        </property>
-        <property name="tickInterval">
-            <number>400</number>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>shininess_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>359</x>
-                <y>143</y>
-                <width>40</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>40</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="font">
-            <font>
-                <bold>1</bold>
-            </font>
-        </property>
-        <property name="frameShape">
-            <enum>TabWidgetPanel</enum>
-        </property>
-        <property name="text">
-            <string>0</string>
-        </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>4</x>
-                <y>101</y>
-                <width>223</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="text">
-            <string>Ambient Intensity</string>
-        </property>
-    </widget>
-    <widget class="QSlider">
-        <property name="name">
-            <cstring>ambient_slider</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>233</x>
-                <y>103</y>
-                <width>120</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>70</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>120</width>
-                <height>32767</height>
-            </size>
-        </property>
-        <property name="minValue">
-            <number>-10</number>
-        </property>
-        <property name="maxValue">
-            <number>10</number>
-        </property>
-        <property name="pageStep">
-            <number>1</number>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="tickmarks">
-            <enum>Above</enum>
-        </property>
-        <property name="tickInterval">
-            <number>5</number>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>ambient_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>359</x>
-                <y>101</y>
-                <width>40</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>40</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="font">
-            <font>
-                <bold>1</bold>
-            </font>
-        </property>
-        <property name="frameShape">
-            <enum>TabWidgetPanel</enum>
-        </property>
-        <property name="text">
-            <string>0</string>
-        </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1_3</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>4</x>
-                <y>59</y>
-                <width>223</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="text">
-            <string>Diffuse Intensity</string>
-        </property>
-    </widget>
-    <widget class="QSlider">
-        <property name="name">
-            <cstring>diffuse_slider</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>233</x>
-                <y>61</y>
-                <width>120</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>120</width>
-                <height>32767</height>
-            </size>
-        </property>
-        <property name="minValue">
-            <number>-10</number>
-        </property>
-        <property name="maxValue">
-            <number>10</number>
-        </property>
-        <property name="pageStep">
-            <number>1</number>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="tickmarks">
-            <enum>Above</enum>
-        </property>
-        <property name="tickInterval">
-            <number>5</number>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>diffuse_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>359</x>
-                <y>59</y>
-                <width>40</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>40</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="font">
-            <font>
-                <bold>1</bold>
-            </font>
-        </property>
-        <property name="frameShape">
-            <enum>TabWidgetPanel</enum>
-        </property>
-        <property name="text">
-            <string>0</string>
-        </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1_4</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>4</x>
-                <y>17</y>
-                <width>223</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="text">
-            <string>Specular Intensity</string>
-        </property>
-    </widget>
-    <widget class="QSlider">
-        <property name="name">
-            <cstring>specular_slider</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>233</x>
-                <y>19</y>
-                <width>120</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>120</width>
-                <height>32767</height>
-            </size>
-        </property>
-        <property name="minValue">
-            <number>-10</number>
-        </property>
-        <property name="maxValue">
-            <number>10</number>
-        </property>
-        <property name="pageStep">
-            <number>1</number>
-        </property>
-        <property name="value">
-            <number>0</number>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="tickmarks">
-            <enum>Above</enum>
-        </property>
-        <property name="tickInterval">
-            <number>5</number>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>specular_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>359</x>
-                <y>17</y>
-                <width>40</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>40</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="font">
-            <font>
-                <bold>1</bold>
-            </font>
-        </property>
-        <property name="frameShape">
-            <enum>TabWidgetPanel</enum>
-        </property>
-        <property name="text">
-            <string>0</string>
-        </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
-        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="spacing">
+                <number>5</number>
+            </property>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout119</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="spacing">
+                        <number>5</number>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1_4</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>220</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>220</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>Specular Intensity</string>
+                        </property>
+                    </widget>
+                    <widget class="QSlider">
+                        <property name="name">
+                            <cstring>specular_slider</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>120</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>120</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="minValue">
+                            <number>-10</number>
+                        </property>
+                        <property name="maxValue">
+                            <number>10</number>
+                        </property>
+                        <property name="pageStep">
+                            <number>1</number>
+                        </property>
+                        <property name="value">
+                            <number>0</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="tickmarks">
+                            <enum>Above</enum>
+                        </property>
+                        <property name="tickInterval">
+                            <number>5</number>
+                        </property>
+                    </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>specular_label</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>40</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>40</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
+                        <property name="frameShape">
+                            <enum>TabWidgetPanel</enum>
+                        </property>
+                        <property name="text">
+                            <string>0</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignCenter</set>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout120</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="spacing">
+                        <number>5</number>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1_3</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>220</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>220</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>Diffuse Intensity</string>
+                        </property>
+                    </widget>
+                    <widget class="QSlider">
+                        <property name="name">
+                            <cstring>diffuse_slider</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>120</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>120</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="minValue">
+                            <number>-10</number>
+                        </property>
+                        <property name="maxValue">
+                            <number>10</number>
+                        </property>
+                        <property name="pageStep">
+                            <number>1</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="tickmarks">
+                            <enum>Above</enum>
+                        </property>
+                        <property name="tickInterval">
+                            <number>5</number>
+                        </property>
+                    </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>diffuse_label</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>40</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>40</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
+                        <property name="frameShape">
+                            <enum>TabWidgetPanel</enum>
+                        </property>
+                        <property name="text">
+                            <string>0</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignCenter</set>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout121</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="spacing">
+                        <number>5</number>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1_2</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>220</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>220</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>Ambient Intensity</string>
+                        </property>
+                    </widget>
+                    <widget class="QSlider">
+                        <property name="name">
+                            <cstring>ambient_slider</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>120</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>120</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="minValue">
+                            <number>-10</number>
+                        </property>
+                        <property name="maxValue">
+                            <number>10</number>
+                        </property>
+                        <property name="pageStep">
+                            <number>1</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="tickmarks">
+                            <enum>Above</enum>
+                        </property>
+                        <property name="tickInterval">
+                            <number>5</number>
+                        </property>
+                    </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>ambient_label</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>40</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>40</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
+                        <property name="frameShape">
+                            <enum>TabWidgetPanel</enum>
+                        </property>
+                        <property name="text">
+                            <string>0</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignCenter</set>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout122</cstring>
+                </property>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="spacing">
+                        <number>5</number>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>220</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>220</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>Shininess</string>
+                        </property>
+                    </widget>
+                    <widget class="QSlider">
+                        <property name="name">
+                            <cstring>shininess_slider</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>120</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>120</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="maxValue">
+                            <number>1280</number>
+                        </property>
+                        <property name="lineStep">
+                            <number>10</number>
+                        </property>
+                        <property name="pageStep">
+                            <number>100</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="tickmarks">
+                            <enum>Above</enum>
+                        </property>
+                        <property name="tickInterval">
+                            <number>400</number>
+                        </property>
+                    </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>shininess_label</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>40</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>40</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="font">
+                            <font>
+                                <bold>1</bold>
+                            </font>
+                        </property>
+                        <property name="frameShape">
+                            <enum>TabWidgetPanel</enum>
+                        </property>
+                        <property name="text">
+                            <string>0</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignCenter</set>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+        </vbox>
     </widget>
 </widget>
 <connections>
