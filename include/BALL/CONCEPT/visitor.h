@@ -1,4 +1,4 @@
-// $Id: visitor.h,v 1.3 2000/02/16 19:13:06 oliver Exp $
+// $Id: visitor.h,v 1.4 2000/12/09 21:27:27 amoll Exp $
 
 #ifndef BALL_CONCEPT_VISITOR_H
 #define BALL_CONCEPT_VISITOR_H
@@ -24,15 +24,18 @@ namespace BALL
 		//@{
 		/**	Default constructor
 		*/
-		Visitor();
+		Visitor()
+			throw();
 
 		/**	Copy constructor
 		*/
-		Visitor(const Visitor& visitor);
+		Visitor(const Visitor& visitor)
+			throw();
 
 		/**	Destructor
 		*/
-		virtual ~Visitor();
+		virtual ~Visitor()
+			throw();
 
 		//@}
 		
@@ -47,18 +50,21 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	Visitor<T>::Visitor()
+		throw()
 	{
 	}
 
 	template <typename T>
 	BALL_INLINE
 	Visitor<T>::Visitor(const Visitor<T>& /* visitor */)
+		throw()
 	{
 	}
 
 	template <typename T>
 	BALL_INLINE
 	Visitor<T>::~Visitor()
+		throw()
 	{
 	}
 }
