@@ -1,8 +1,9 @@
-// $Id: HINFile.C,v 1.14 2000/05/20 13:32:57 oliver Exp $
+// $Id: HINFile.C,v 1.15 2000/05/23 05:44:15 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PDBAtom.h>
