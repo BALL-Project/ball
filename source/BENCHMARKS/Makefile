@@ -1,7 +1,8 @@
 DIRECTORY=BENCHMARKS
 
 EXECUTABLES = \
-	AmberFF_bench
+	AmberFF_bench\
+	PoissonBoltzmann_bench
 
 # default target
 all:	$(EXECUTABLES)
