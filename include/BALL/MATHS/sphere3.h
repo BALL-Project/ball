@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.9 2000/03/03 18:36:25 oliver Exp $
+// $Id: sphere3.h,v 1.10 2000/03/26 21:44:43 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -34,7 +34,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TSphere3)
+		BALL_CREATE_NODEEP(TSphere3)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -53,9 +53,8 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new Sphere3 object from another.
 				@param sphere3 the Sphere3 object to be copied
-				@param bool ignored - just for interface consistency
 		*/	
-		TSphere3(const TSphere3& sphere3,bool /* deep */ = true)
+		TSphere3(const TSphere3& sphere3)
 			: p(sphere3.p),
 				radius(sphere3.radius)
 		{
@@ -101,9 +100,8 @@ namespace BALL
 
 		/**	Assign from another Sphere3.
 				@param sphere3	the Sphere3 object to assign from
-				@param deep ignored
 		*/
-		void set(const TSphere3& sphere3, bool /* deep */ = true)
+		void set(const TSphere3& sphere)
 		{
 			p = sphere3.p;
 			radius = sphere3.radius;
@@ -136,9 +134,8 @@ namespace BALL
 		/**	Assign to another Sphere.
 				Assigns the components to another Sphere.
 				@param sphere	the vector to be asigned to
-				@param deep ignored
 		*/
-		void get(TSphere3& sphere3, bool /* deep */ = true) const
+		void get(TSphere3& sphere3) const
 		{
 			sphere3.p = p;
 			sphere3.radius = radius;

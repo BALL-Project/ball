@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.11 2000/03/21 23:08:06 amoll Exp $
+// $Id: circle3.h,v 1.12 2000/03/26 21:44:43 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -44,7 +44,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TCircle3<T>)
+		BALL_CREATE_NODEEP(TCircle3<T>)
 
 
 		/**	@name	Constructors and Destructors
@@ -65,9 +65,8 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new TCircle3 object from another.
 				@param vector the TCircle3 object to be copied
-				@param bool ignored - just for interface consistency
 		*/	
-		TCircle3(const TCircle3& circle, bool /* deep */ = true)
+		TCircle3(const TCircle3& circle)
 			:	p(circle.p),
 				n(circle.n),
 				radius(circle.radius)
@@ -121,9 +120,8 @@ namespace BALL
 
 		/**	Assign from another TCircle3.
 				@param vector	the TCirce3 object to assign from
-				@param deep ignored
 		*/
-		void set(const TCircle3& circle, bool /* deep */ = true)
+		void set(const TCircle3& circle)
 		{
 			p = circle.p;
 			n = circle.n;
@@ -158,9 +156,8 @@ namespace BALL
 		/**	Assign to another TCircle3.
 				Assigns the components to another circle.
 				@param circle	the circle to be asigned to
-				@param deep ignored
 		*/
-		void get(TCircle3& circle, bool /* deep */ = true) const
+		void get(TCircle3& circle) const
 		{
 			circle.p = p;
 			circle.n = n;
