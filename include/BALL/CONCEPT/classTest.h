@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.16 2000/09/19 15:58:05 oliver Exp $
+// $Id: classTest.h,v 1.17 2000/10/06 07:32:08 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -42,7 +42,7 @@
 
 		To create a new test program, use the file 
 		\URL[source/TEST/Skeleton_test.C]{../../source/BALL/TEST/Skeleton_test.C}
-		\\ 
+		\\
 		{\bf Definitions:} \URL{BALL/CONCEPT/classTest.h}
 */
 //@{
@@ -356,7 +356,7 @@ int main(int argc, char **argv)\
 /**	Generic equality macro.
 		This macro uses the operator == to check its two arguments
 		for equality. Besides handling some internal stuff, it basically
-		evaluates #((a) == (b))#.\\ 
+		evaluates #((a) == (b))#.\\
 		Remember that operator == has to be defined somehow for the two 
 		argument types.\\
 		@param	a value/object to test
