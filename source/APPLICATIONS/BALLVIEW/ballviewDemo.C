@@ -174,7 +174,6 @@ void BALLViewDemo::accept()
 	{
 		HBondProcessor proc;
 		system_->apply(proc);
-		getMainControl()->update(*system_);
    	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
    	notify_(crmsg);
  		crmsg = new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT);

@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.16 2004/12/10 16:04:28 amoll Exp $
+// $Id: main.C,v 1.17 2005/03/01 16:12:53 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
 #include <qapplication.h>
 #include <qmessagebox.h>
+#include <qgl.h>
 
 #include "mainframe.h"
 #include <BALL/SYSTEM/path.h>
@@ -42,6 +43,17 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	qInstallMsgHandler(myMessageOutput);
 
 	QApplication application(argc, argv);
+
+
+	// =============== testing for opengl support ======================================
+	if (!QGLFormat::hasOpenGL())
+	{
+		QMessageBox::critical(0, "Error while starting BALLView", 
+				"Your computer has no OpenGL support, please install the correct drivers. Aborting for now...",
+				QMessageBox::Ok, QMessageBox::NoButton, QMessageBox::NoButton);
+		return -1;
+	}
+
 
 	// =============== testing if we can write in current directoy =====================
 	BALL::String home_dir = BALL::Directory::getUserHomeDir();
