@@ -1,4 +1,4 @@
-// $Id: typeRuleProcessor.C,v 1.1 2000/05/29 11:19:58 oliver Exp $
+// $Id: typeRuleProcessor.C,v 1.2 2000/06/02 08:32:52 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/typeRuleProcessor.h>
 
@@ -8,8 +8,8 @@ namespace BALL
 	{
 	}
 
-	TypeRuleProcessor::TypeRuleProcessor(INIFile& file,
-			const String& prefix = "TypeRules")
+	TypeRuleProcessor::TypeRuleProcessor
+		(INIFile& file, const String& prefix)
 	{
 		initialize(file, prefix);
 	}

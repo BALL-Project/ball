@@ -1,4 +1,4 @@
-// $Id: chargeRuleProcessor.C,v 1.1 2000/05/24 12:12:53 anker Exp $
+// $Id: chargeRuleProcessor.C,v 1.2 2000/06/02 08:32:52 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
 
@@ -8,14 +8,14 @@ namespace BALL
 	{
 	}
 
-	ChargeRuleProcessor::ChargeRuleProcessor(INIFile& file,
-			const String& prefix = "ChargeRules")
+	ChargeRuleProcessor::ChargeRuleProcessor
+		(INIFile& file, const String& prefix)
 	{
 		initialize(file, prefix);
 	}
 
-	ChargeRuleProcessor::ChargeRuleProcessor(
-			const ChargeRuleProcessor& rule_processor)
+	ChargeRuleProcessor::ChargeRuleProcessor
+		(const ChargeRuleProcessor& rule_processor)
 		: RuleProcessor(rule_processor)
 	{
 	}
