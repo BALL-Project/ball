@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.29.2.2 2002/11/12 16:52:02 anker Exp $ 
+// $Id: poissonBoltzmann.C,v 1.29.2.3 2002/11/22 14:23:45 anker Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -1136,7 +1136,6 @@ namespace BALL
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		float ionic_strength = options.getReal(Option::IONIC_STRENGTH);
-		float ion_radius = options.getReal(Option::ION_RADIUS);
 		float T = options.getReal(Option::TEMPERATURE);
 		float solvent_dielectric_constant = options.getReal(Option::SOLVENT_DC);
 
@@ -1191,7 +1190,7 @@ namespace BALL
 				return false;
 		}
 
-		for (Index i = 0; i < kappa_grid->getSize(); ++i)
+		for (Size i = 0; i < kappa_grid->getSize(); ++i)
 		{
 			if ((*SAS_grid)[i] == CCONN__OUTSIDE)
 			{
@@ -1867,6 +1866,7 @@ namespace BALL
 						
 	bool FDPB::solve()
   {
+
 		// determine the run time
 		Timer	solve_timer;
 		solve_timer.start();
@@ -1880,6 +1880,7 @@ namespace BALL
 
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 		int verbosity = (int)options.getInteger(Option::VERBOSITY);
+		float ionic_strength = options.getReal(Option::IONIC_STRENGTH);
 
 		float*	phi;
 		float*	T;
@@ -1931,16 +1932,25 @@ namespace BALL
 				{
           l = i + j * Nx + k * Nxy;
 					// if kappa was spatial dependent we should use somethign like 
-					// if (ionic_strength >= 0.0) { d = ... } here.
-					d = 1 / ((*eps_grid)[(Index)l].x
-										+ (*eps_grid)[(Index)l].y
-										+ (*eps_grid)[(Index)l].z
-										+ (*eps_grid)[(Index)(l - 1)].x
-										+ (*eps_grid)[(Index)(l - Nx)].y
-					//					+ (*eps_grid)[(Index)(l - Nxy)].z);
-					// ADDING KAPPA
-										+ (*eps_grid)[(Index)(l - Nxy)].z
-										+ (*kappa_grid)[l]);
+					if (ionic_strength == 0.0) 
+					{
+						d = 1 / ((*eps_grid)[(Index)l].x
+								+ (*eps_grid)[(Index)l].y
+								+ (*eps_grid)[(Index)l].z
+								+ (*eps_grid)[(Index)(l - 1)].x
+								+ (*eps_grid)[(Index)(l - Nx)].y
+								+ (*eps_grid)[(Index)(l - Nxy)].z);
+					}
+					else
+					{
+						d = 1 / ((*eps_grid)[(Index)l].x
+								+ (*eps_grid)[(Index)l].y
+								+ (*eps_grid)[(Index)l].z
+								+ (*eps_grid)[(Index)(l - 1)].x
+								+ (*eps_grid)[(Index)(l - Nx)].y
+								+ (*eps_grid)[(Index)(l - Nxy)].z
+								+ (*kappa_grid)[l]);
+					}
 									
 					Q[l] = e0 * *(q_grid->getData((Index)l)) / (1e-10 * VACUUM_PERMITTIVITY * spacing_) * d;
 				}
@@ -1964,15 +1974,25 @@ namespace BALL
 				for (k = 1; k < (Nx - 1); k++)
 				{
 					l = i + j * Nx + k * Nxy;
-					d = 1 / ((*eps_grid)[(Index)l].x
-										+ (*eps_grid)[(Index)l].y
-										+ (*eps_grid)[(Index)l].z
-										+ (*eps_grid)[(Index)(l - 1)].x
-										+ (*eps_grid)[(Index)(l - Nx)].y
-					//					+ (*eps_grid)[(Index)(l - Nxy)].z);
-					// ADDING KAPPA
-										+ (*eps_grid)[(Index)(l - Nxy)].z
-										+ (*kappa_grid)[l]);
+					if (ionic_strength == 0.0)
+					{
+						d = 1 / ((*eps_grid)[(Index)l].x
+								+ (*eps_grid)[(Index)l].y
+								+ (*eps_grid)[(Index)l].z
+								+ (*eps_grid)[(Index)(l - 1)].x
+								+ (*eps_grid)[(Index)(l - Nx)].y
+								+ (*eps_grid)[(Index)(l - Nxy)].z);
+					}
+					else
+					{
+						d = 1 / ((*eps_grid)[(Index)l].x
+								+ (*eps_grid)[(Index)l].y
+								+ (*eps_grid)[(Index)l].z
+								+ (*eps_grid)[(Index)(l - 1)].x
+								+ (*eps_grid)[(Index)(l - Nx)].y
+								+ (*eps_grid)[(Index)(l - Nxy)].z
+								+ (*kappa_grid)[l]);
+					}
 
 					T[(Index)(6 * l)    ]  = (*eps_grid)[(Index)l].x * d;
 					T[(Index)(6 * l + 1)]  = (*eps_grid)[(Index)(l - 1)].x * d;
