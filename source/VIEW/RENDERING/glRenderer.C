@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.52 2004/12/13 16:19:47 amoll Exp $
+// $Id: glRenderer.C,v 1.53 2004/12/13 16:46:59 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -407,13 +407,6 @@ namespace BALL
 
 
 		// --------------------------render methods-----------------------------------------
-		void GLRenderer::render_(const GeometricObject* object)
-			throw()
-		{
-		 	glLoadName(getName(*object));
-			Renderer::render_(object);
-		}
-
 
 		void GLRenderer::renderSphere_(const Sphere& sphere)
 			throw() 
@@ -455,9 +448,6 @@ namespace BALL
 		{
 			glDisable(GL_LIGHTING);
 			setColor4ub_(line);
-
-			// BAUSTELLE
-			// drawing mode dots must be implemented
 
 			glBegin(GL_LINES);
 				vertexVector3_(line.getVertex1());
@@ -1443,5 +1433,13 @@ namespace BALL
 			if (state == stereo_) return;
 			stereo_ = state;
 		}
+
+		void GLRenderer::render_(const GeometricObject* object)
+			throw()
+		{
+			glLoadName(getName(*object));
+			Renderer::render_(object);
+		}
+
 
 } } // namespaces
