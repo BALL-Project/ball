@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourLine.h,v 1.15 2003/08/26 08:04:10 oliver Exp $
+// $Id: contourLine.h,v 1.16 2004/03/17 00:11:15 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
@@ -304,7 +304,7 @@ namespace BALL
     }
 
     template <typename T>
-    bool TContourLine<T>::getNextPoint(TContourLine<T>::PointType &p)
+    bool TContourLine<T>::getNextPoint(typename TContourLine<T>::PointType &p)
     {
       if (index_ < data_.size()) 
 			{
