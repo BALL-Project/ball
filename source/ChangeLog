@@ -70,7 +70,7 @@ Changed:
 	  - general improvements in the user interface
 		- inside of surfaces is now correctly drawn
 		- PovRay files are now much smaller, especially for meshes and are faster rendered by PovRay
-		- improved Backbone and Cartoon model quality
+		- improved Backbone and Cartoon model quality by using a triangulated tube model
 		- improved the code for the BALLView termination process
 		- removed the old Move-Dialog
 		- .BALLView config files are now always stored in the users homedir
