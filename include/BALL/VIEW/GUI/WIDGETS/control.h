@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.6 2002/11/08 18:52:13 oliver Exp $
+// $Id: control.h,v 1.10.4.7 2002/11/29 01:00:34 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -39,6 +39,10 @@
 # include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
 #endif
 
+#ifndef BALL_VIEW_COMMON_GLOBAL_H
+# include <BALL/VIEW/COMMON/global.h>
+#endif 
+
 #include <qlistview.h>
 #include <qmessagebox.h>
 #include <qpoint.h>
@@ -65,8 +69,37 @@ namespace BALL
 			: public QListView, 
 				public ModularWidget
 		{
-			
 			Q_OBJECT
+
+			class MyListViewItem
+				: public QCheckListItem
+			{
+				public:
+
+				MyListViewItem(QListViewItem* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
+					throw();
+
+				MyListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
+					throw();
+
+				Composite* getComposite() { return composite_;};
+
+				protected:
+
+				// overriden function, used to message to Control
+				virtual void stateChange(bool)
+					throw();
+
+				Composite* composite_;
+
+				VIEW::Control& control_reference_;
+
+				private: 
+				
+				// prevent use of default cstr
+				MyListViewItem();
+			};
+
 				
 			public:
 			
@@ -413,6 +446,9 @@ namespace BALL
 			*/
 			void eraseGeometricObject();
 		
+			void selectedComposite(Composite* composite, bool state)
+				throw();
+
 
 		  signals:
 			
@@ -422,6 +458,9 @@ namespace BALL
 			/** @name Protected members
 			*/
 			//@{
+
+			void setSelection_()
+				throw(MainControlMissing);
 
 			/** Access the information visitor.
 					Access the \Ref{Information} visitor of {\em *this} control.
@@ -614,8 +653,7 @@ namespace BALL
 			enum ColumnID
 			{
 				COLUMN_ID__NAME      = 0,
-				COLUMN_ID__TYPE      = 1,
-				COLUMN_ID__ADDRESS   = 6
+				COLUMN_ID__TYPE      = 1
 			};
 
 
