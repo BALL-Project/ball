@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.18 2001/01/15 10:38:54 amoll Exp $
+// $Id: property.h,v 1.19 2001/01/20 00:25:18 amoll Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -175,6 +175,11 @@ namespace BALL
 		*/
 		~NamedProperty()
 			throw();
+
+		/** Clear method
+		*/
+		void clear()
+			throw();
 		//@}	
 
 		/**	@name Persistence
@@ -266,9 +271,15 @@ namespace BALL
 		friend std::istream& operator >> (std::istream& s, NamedProperty& property)
 			throw();
 
+		/** Equality operator
+				Two instances are equal if they have the same name and the same value.
+		*/
 		bool operator == (const NamedProperty& np) const 
 			throw();
 
+		/** Inequality operator
+				@see operator ==
+		*/
 		bool operator != (const NamedProperty& np) const 
 			throw();
 
@@ -597,9 +608,15 @@ namespace BALL
 		bool hasProperty(const string& name) const
 			throw();
 
+		/** Equality operator
+				Two instances are equal if they have the same named and unnamed properties.
+		*/
 		bool operator == (const PropertyManager& pm) const
 			throw();
 
+		/** Inequality operator
+				@see operator ==
+		*/
 		bool operator != (const PropertyManager& pm) const
 			throw();
 

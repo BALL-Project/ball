@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.14 2001/01/15 12:53:39 amoll Exp $
+// $Id: property.iC,v 1.15 2001/01/20 00:25:19 amoll Exp $
 
 using namespace std;
 
@@ -89,6 +89,14 @@ NamedProperty::~NamedProperty()
 	{
 		delete data_.s;
 	}
+}
+
+BALL_INLINE 
+void NamedProperty::clear()
+	throw()
+{
+	type_ = NONE;
+	name_ = "";
 }
 
 BALL_INLINE 
