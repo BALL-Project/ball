@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.120 2004/11/09 21:35:24 amoll Exp $
+// $Id: mainControl.C,v 1.121 2004/11/10 01:07:37 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1195,6 +1195,7 @@ namespace BALL
 		void MainControl::setStatusbarText(const String& text, bool beep)
 			throw()
 		{
+			Log.error() << text << std::endl;
 			if (beep) QApplication::beep();
 			message_label_->setText(text.c_str());
 			message_label_->setPaletteForegroundColor( QColor(255, 0, 0) );
@@ -1769,6 +1770,12 @@ namespace BALL
 			throw()
 		{
 			return primitive_manager_.updateRunning();
+		}
+
+		String MainControl::getStatusbarText() const
+			throw()
+		{
+			return message_label_->text().ascii();
 		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.12 2004/11/09 21:54:01 amoll Exp $
+// $Id: primitiveManager.C,v 1.13 2004/11/10 01:07:29 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -244,24 +244,33 @@ void PrimitiveManager::startUpdateThread_(Representation& rep)
 	String dots;
 	while (thread_.running())
 	{
-		qApp->wakeUpGuiThread();
-		qApp->processEvents();
-		if (pos < 40) 
+		// prevent statusbar changes while beeing otherwise busy
+		if (!main_control_->compositesAreLocked())
 		{
-			pos ++;
-			dots +="..";
+			qApp->wakeUpGuiThread();
+			qApp->processEvents();
+			if (pos < 40) 
+			{
+				pos ++;
+				dots +="..";
+			}
+			else 
+			{
+				pos = 3;
+				dots = "...";
+			}
+
+			main_control_->setStatusbarText("Creating Model " + dots);
 		}
-		else 
-		{
-			pos = 3;
-			dots = "...";
-		}
-	
-		main_control_->setStatusbarText("Creating Model " + dots);
+		
 		thread_.wait(500); 
 	}
 
-	main_control_->setStatusbarText("");
+	// prevent statusbar changes while beeing otherwise busy
+	if (!main_control_->compositesAreLocked())
+	{
+		main_control_->setStatusbarText("");
+	}
 }
 
 void PrimitiveManager::finishedUpdate_()
