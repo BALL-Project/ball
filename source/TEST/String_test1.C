@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test1.C,v 1.4 2003/03/07 16:33:55 sneumann Exp $
+// $Id: String_test1.C,v 1.5 2003/03/08 08:03:43 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test1.C,v 1.4 2003/03/07 16:33:55 sneumann Exp $")
+START_TEST(String,"$Id: String_test1.C,v 1.5 2003/03/08 08:03:43 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -194,7 +194,7 @@ CHECK(String::String(Size, char*, ... ))
 RESULT
 
 CHECK(String::String(stringstream))
-#ifdef HAS_SSTREAM
+#ifdef BALL_HAS_SSTREAM
 	std::stringstream instream("ABC DEF");
 #else
 	std::strstream instream("ABC DEF", strlen("ABC DEF"), ios::app);
@@ -368,7 +368,7 @@ RESULT
 delete s2;
 
 CHECK(String::set(stringstream&))
-#ifdef HAS_SSTREAM
+#ifdef BALL_HAS_SSTREAM
 	std::stringstream instream("ABC DEF GHI jkl mno");
 #else
 	std::strstream instream("ABC DEF GHI jkl mno", strlen("ABC DEF GHI jkl mno"), ios::app);
@@ -495,7 +495,7 @@ CHECK(String::operator = (char*))
 RESULT
 
 CHECK(String::operator = (stringstream&))
-#ifdef HAS_SSTREAM
+#ifdef BALL_HAS_SSTREAM
 	std::stringstream instream("ABC DEF GHI jkl mni");
 #else
 	std::strstream instream("ABC DEF GHI jkl mni", strlen("ABC DEF GHI jkl mni"),ios::app);
