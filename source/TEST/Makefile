@@ -14,6 +14,7 @@ EXECUTABLES = \
 	EnergyMinimizer_test\
 	Fragment_test\
 	FragmentDB_test\
+	KernelPredicate_test\
 	Limits_test\
 	NumericalSAS_test\
 	Options_test\
@@ -65,7 +66,13 @@ Fragment_test:	Fragment_test.o
 FragmentDB_test:	FragmentDB_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+KernelPredicate_test:	KernelPredicate_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 Limits_test:	Limits_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+NucleicAcid_test:	NucleicAcid_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Options_test:	Options_test.o
