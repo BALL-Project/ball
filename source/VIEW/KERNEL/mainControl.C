@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158.2.10 2005/02/02 15:19:28 amoll Exp $
+// $Id: mainControl.C,v 1.158.2.11 2005/02/02 15:33:37 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1764,7 +1764,7 @@ namespace BALL
 			HashSet<Composite*>::Iterator rit = roots.begin();
 			for(; rit != roots.end(); rit++)
 			{
-				update(**rit, false);
+				updateRepresentationsOf(**rit, true, false);
 			}
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.70.2.2 2005/01/13 13:12:00 amoll Exp $
+// $Id: mainControl.h,v 1.70.2.3 2005/02/02 15:30:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -803,6 +803,8 @@ namespace BALL
 			 */
 			void selectComposites_(GeometricObjectSelectionMessage& message)
 				throw();
+
+			void reduceSelection_(Composite* const composite);
 
 			//_ Called by constructors
 			void setup_()

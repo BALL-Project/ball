@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.11 2005/02/02 15:23:15 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.12 2005/02/02 15:29:36 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -678,9 +678,11 @@ void MolecularControl::onNotify(Message *message)
 		// if message makes an update of the control necessary
 		// sends new selection through tree
 		updateSelection();
+		listview->setUpdatesEnabled(true);
+		listview->triggerUpdate();
+		return;
 	}
 	listview->setUpdatesEnabled(true);
-	listview->triggerUpdate();
 }
 
 
