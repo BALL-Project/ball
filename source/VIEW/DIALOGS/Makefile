@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.14 2003/08/28 15:13:26 amoll Exp $
+# $Id: Makefile,v 1.15 2003/08/28 16:44:14 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -23,6 +23,8 @@ CPP_SOURCES=\
 	contourSurfaceDialogData.C\
 	displayProperties.C\
 	displayPropertiesData.C\
+	moveOverlayDialog.C\
+	moveOverlayDialogData.C\
 	FDPBDialog.C\
 	FDPBDialogData.C\
 	labelDialog.C\
@@ -65,6 +67,8 @@ MOC_SOURCES=\
 	contourSurfaceDialogData_moc.C\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
+	moveOverlayDialog_moc.C\
+	moveOverlayDialogData_moc.C\
 	FDPBDialog_moc.C\
 	FDPBDialogData_moc.C\
 	labelDialog_moc.C\
@@ -96,7 +100,8 @@ MOC_SOURCES=\
 	transformationDialog_moc.C\
 	transformationDialogData_moc.C
 
-UIC_SOURCES=amberMinimizationDialogData.C\
+UIC_SOURCES=\
+	amberMinimizationDialogData.C\
 	atomPropertiesData.C\
 	colorMeshDialogData.C\
 	contourSurfaceDialogData.C\
@@ -105,6 +110,7 @@ UIC_SOURCES=amberMinimizationDialogData.C\
 	labelDialogData.C\
 	lightSettingsData.C\
 	molecularDynamicsDialogData.C\
+	moveOverlayDialogData.C\
 	mouseSensitivityData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
@@ -136,6 +142,12 @@ contourSurfaceDialog_moc.C:	$(HEADER_DIR)/contourSurfaceDialog.h
 
 displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
 	$(MOC) $(HEADER_DIR)/displayProperties.h -o $@
+
+dlgMoveOverlay_moc.C:	$(HEADER_DIR)/dlgMoveOverlay.h
+	$(MOC) $(HEADER_DIR)/dlgMoveOverlay.h -o $@
+
+dlgMoveOverlayData_moc.C:	$(HEADER_DIR)/dlgMoveOverlayData.h
+	$(MOC) $(HEADER_DIR)/dlgMoveOverlayData.h -o $@
 
 labelDialog_moc.C:	$(HEADER_DIR)/labelDialog.h
 	$(MOC) $(HEADER_DIR)/labelDialog.h -o $@
