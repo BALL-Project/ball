@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.34 2001/07/13 13:37:44 oliver Exp $
+// $Id: fragmentDB.C,v 1.35 2001/07/20 08:02:58 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -10,6 +10,8 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/MATHS/matrix44.h>
+#include <BALL/MATHS/quaternion.h>
 	
 /*			Things still missing (among others)
 				===================================
@@ -1227,315 +1229,195 @@ namespace BALL
 		fragment_db_ = &const_cast<FragmentDB&>(db);
 	}
 
-	// turns vector around x1-axis
-	void FragmentDB::AddHydrogensProcessor::turn_x1_
-		(Vector3& v, const float winkel) 
+#define EPSILON 0.00001
+#define EPSILON2 0.00000001
+
+	Matrix4x4 FragmentDB::AddHydrogensProcessor::matchVectors_
+		(const Vector3& w1, const Vector3& w2, const Vector3& w3, 
+		 const Vector3& v1, const Vector3& v2, const Vector3& v3)
 	{
-		float hilf_y = v.y * cos(winkel) + v.z * -sin(winkel);
-		float hilf_z = v.y * sin(winkel) + v.z * cos(winkel);
-		v.y = hilf_y;
-		v.z = hilf_z;
+		// initialize transformation matrix
+		Matrix4x4 transformation(1, 0, 0, -w1.x, 0, 1, 0, -w1.y, 0, 0, 1, -w1.z, 0, 0, 0, 1);
+
+		// Compute the translations that map v1 and w1 onto the origin 
+		// and apply them to v2,v3 and w2,w3
+
+		Vector3 tw2(w2.x - w1.x, w2.y - w1.y, w2.z - w1.z);
+		Vector3 tw3(w3.x - w1.x, w3.y - w1.y, w3.z - w1.z);
+
+		Vector3 tv2(v2.x - v1.x, v2.y - v1.y, v2.z - v1.z);
+		Vector3 tv3(v3.x - v1.x, v3.y - v1.y, v3.z - v1.z);
+
+		double dist_v2_v1 = tv2.getSquareLength();
+		double dist_w2_w1 = tw2.getSquareLength();
+		double dist_w3_w1 = tw3.getSquareLength();
+		double dist_v3_v1 = tv3.getSquareLength();
+
+		Vector3 rotation_axis;
+		Quaternion rotation_quat;
+		Matrix4x4 rotation;
+
+		// check (v2 != v1) 
+		if(dist_v2_v1 < EPSILON2)
+		{
+			// v1 = v2
+
+			if(dist_v3_v1 < EPSILON2)
+			{
+				// v1 = v2 = v3
+
+
+			}
+			else
+			{
+				// v1 = v2 != v3
+				tv2.swap(tv3);
+			}
+		}
+
+		// check (w2 != w1) 
+		if(dist_w2_w1 < EPSILON2)
+		{
+			// w1 = w2
+
+			if(dist_w3_w1 < EPSILON2)
+			{
+				// w1 = w2 = w3
+
+
+			}
+			else
+			{
+				// w1 = w2 != w3
+				tw2.swap(tw3);
+			}
+		}
+
+		if((tv2.getSquareLength() > EPSILON2) &&(tw2.getSquareLength() > EPSILON2))
+		{
+			// calculate the rotation axis: orthogonal to tv2 and tw2
+			tw2.normalize();
+			tv2.normalize();
+
+			rotation_axis = tw2 + tv2;
+
+			if(rotation_axis.getSquareLength() < EPSILON)
+			{
+				// the two axes seem to be antiparallel -
+				// invert the second vector
+				rotation.setIdentity();
+				rotation.m11 = -1.0;
+				rotation.m22 = -1.0;
+				rotation.m33 = -1.0;
+			}
+			else
+			{
+				// rotate around the rotation axis
+				rotation_quat.set(rotation_axis.x, rotation_axis.y, rotation_axis.z, Constants::PI);
+
+				// Compute the matrix4x4 form of the rotation and apply it to tv3,tw2,tw3
+				rotation_quat.getRotationMatrix(rotation);
+			}
+
+			tw2 = rotation * tw2;
+			tw3 = rotation * tw3;
+
+			transformation = rotation * transformation;
+
+			if((tw3.getSquareLength() > EPSILON2) &&(tv3.getSquareLength() > EPSILON2))
+			{
+
+				tw3.normalize();
+				tv3.normalize();
+
+				Vector3 axis_w = tv2 % tw3;
+				Vector3 axis_v = tv2 % tv3;
+
+				if((axis_v.getSquareLength() > EPSILON2) &&(axis_w.getSquareLength() > EPSILON2))
+				{
+					axis_v.normalize();
+					axis_w.normalize();
+
+					rotation_axis = axis_w % axis_v;
+
+					if(rotation_axis.getSquareLength() < EPSILON2)
+					{
+						double scalar_prod = axis_w * axis_v;
+						if(scalar_prod < 0.0)
+						{
+							rotation_quat.set(tv2.x, tv2.y, tv2.z, Constants::PI);
+							rotation_quat.getRotationMatrix(rotation);
+						}
+						else
+						{
+							rotation.setIdentity();
+						}
+					}
+					else
+					{
+
+						// Compute the quaternion form of the rotation that maps tw3 onto tv3
+						rotation_quat.set(rotation_axis.x, rotation_axis.y, rotation_axis.z, acos(axis_w * axis_v));
+
+						// Compute the matrix4x4 form of the rotation
+						// and add it to the transformation
+						rotation_quat.getRotationMatrix(rotation);
+					}
+
+					transformation = rotation * transformation;
+				}
+			}
+		}
+
+		transformation.m14 += v1.x;
+		transformation.m24 += v1.y;
+		transformation.m34 += v1.z;
+
+		return transformation;
 	}
 
-	// turns vector around x2-axis
-	void FragmentDB::AddHydrogensProcessor::turn_x2_(Vector3& v,const float winkel)
-	{
-		float hilf_x = v.x * cos(winkel) + v.z * -sin(winkel);
-		float hilf_z = v.x * sin(winkel) + v.z * cos(winkel);
-		v.x = hilf_x;
-		v.z = hilf_z;
-	}
+#undef EPSILON
+#undef EPSILON2
 
-	// turns vector around x3-axis
-	void FragmentDB::AddHydrogensProcessor::turn_x3_(Vector3& v,const float winkel) 
-	{
-		float hilf_x = v.x * cos(winkel) + v.y * -sin(winkel);
-		float hilf_y = v.x * sin(winkel) + v.y * cos(winkel);
-		v.x = hilf_x;
-		v.y = hilf_y;
-	}
-
-	// calculates angle to x1x2 plane
-	float FragmentDB::AddHydrogensProcessor::winkelx1_x2_(Vector3& v) 
-	{
-		float hilf = v.x;
-		float alpha;
-		v.x = 0;
-		alpha = asin(v.z / v.getLength());
-		v.x = hilf;
-		return alpha;
-	}
-
-	// calculates angle to x1x3 plane
-	float FragmentDB::AddHydrogensProcessor::winkelx1_x3_(Vector3& v) 
-	{
-		float hilf = v.z;
-		float beta;
-		v.z = 0;
-		beta = asin(v.y / v.getLength());
-		v.z = hilf;
-
-		return beta;
-	}
 
 	// calculates position of hydrogen to be added
 	PDBAtom* FragmentDB::AddHydrogensProcessor::createNewHydrogen_	
 		(const Atom& ref_hydrogen,
-		 const Atom& center_atom, const Atom& atom_1, const Atom& atom_2, const Atom& atom_3,
-		 const Atom& ref_center_atom, const Atom& ref_atom_1, const Atom& ref_atom_2, const Atom& ref_atom_3)
+		 const Atom& center_atom, const Atom& atom_1, const Atom& atom_2,
+		 const Atom& ref_center_atom, const Atom& ref_atom_1, const Atom& ref_atom_2)
 		throw()
 	{
-		// setting of local variables    
-		// variables beginning with x, are related to             
-		// the prototypes of the fragment database
-		int mirror1 = 0;	
-		int mirror2 = 0;
-		int xmirror1 = 0;
-		int xmirror2 = 0;
-		int xxmirror = 0;	
-
 		// moving first point to coordinate center
 		// actual residue 
 		Vector3 b_a = atom_1.getPosition() - center_atom.getPosition();	
 		Vector3 c_a = atom_2.getPosition() - center_atom.getPosition();
-		Vector3 d_a = atom_3.getPosition() - center_atom.getPosition();
 
 		// residue prototype    
 		Vector3 xb_a = ref_atom_1.getPosition() - ref_center_atom.getPosition();
 		Vector3 xc_a = ref_atom_2.getPosition() - ref_center_atom.getPosition();
-		Vector3 xd_a = ref_atom_3.getPosition() - ref_center_atom.getPosition();
+
 		// hydrogen to be added
 		Vector3 xtarget = ref_hydrogen.getPosition();
 		Vector3 xtarget_a = xtarget - ref_center_atom.getPosition();
 
-		// turning the second point onto x1_x2 plane
-		// actual residue
-		float alpha = winkelx1_x2_(b_a);
-		// checking turn direction
-		if (b_a.y > 0)
-		{
-			alpha =-alpha; 
-		}
-		
-		turn_x1_(b_a,alpha);	
-		// residue prototype
-		float xalpha = winkelx1_x2_(xb_a);
-		// checking turn direction
-		if (xb_a.y>0) 
-		{
-			xalpha=-xalpha; 
-		}
-			
-
-		turn_x1_(xb_a,xalpha);	
-	 
-	 	// turning second point onto x-axis
-		// actual residue
-		float beta = winkelx1_x3_(b_a);
-		if (b_a.x>0)
-		{
-			beta=-beta; 
-		}
-		turn_x3_(b_a, beta);	
-
-		// residue prototype    
-		float xbeta = winkelx1_x3_(xb_a);
-		if (xb_a.x > 0)
-		{
-			xbeta = -xbeta; 
-		}
-		turn_x3_(xb_a, xbeta);	
-		
-		// turning third point with alpha and beta			
-		// turning third point onto x1_x2 plane
-		// actual residue
-		turn_x1_(c_a, alpha);
-		turn_x3_(c_a, beta);	
-		float gamma = winkelx1_x2_(c_a);
-		if (c_a.y > 0) 
-		{
-			gamma=-gamma; 
-		}
-		turn_x1_(c_a, gamma);
-
-		// residue prototype
-		turn_x1_(xc_a, xalpha);
-		turn_x3_(xc_a, xbeta);	       
-
-		float xgamma = winkelx1_x2_(xc_a);
-		if(xc_a.y > 0) 
-		{
-			xgamma=-xgamma; 
-		}
-		turn_x1_(xc_a, xgamma);	
-
-		// setting the mirrors
-		// third point lies in first quadrant of x1x2-plane	
-		// actual residue
-		if (c_a.x < 0) 
-		{
-			mirror1 = 1;
-		}
-	
-		if (c_a.y < 0)
-		{
-			mirror2 = 1;
-		}
-
-		// residue prototype
-		if (xc_a.x < 0)
-		{
-			xmirror1 = 1;
-		}
-
-		if (xc_a.y < 0)
-		{
-			xmirror2 = 1;
-		}
-			
-		// using mirrors
-		// actual residue
-		if (mirror1)
-		{
-			b_a.x = -b_a.x;
-			c_a.x = -c_a.x;
-		}
-		if (mirror2)
-		{
-			b_a.y = -b_a.y;
-			c_a.y = -c_a.y;
-		}
-		// residue prototype
-		if (xmirror1)
-		{
-			xb_a.x = -xb_a.x;
-			xc_a.x = -xc_a.x;
-		}
-		if (xmirror2)
-		{
-			xb_a.y = -xb_a.y;
-			xc_a.y = -xc_a.y;
-		}
-
-		// error distance of both points on plane is corrected
-		float w;
-		float n,z;
-		float abstand1, abstand2;
-		Vector3 test1, test2;
-					
-		z = c_a * xc_a;
-		n = c_a.getLength() * xc_a.getLength();
-				
-		if (fabs(z - n) > 0.0001)
-		{
-			w = -(acos(z / n)) / 2;
-											 
-			test1 = c_a - xc_a;
-			abstand1 = test1.getLength();
-
-			turn_x3_(xb_a, w);                     
-			test2 = c_a - xc_a;
-			abstand2 = test2.getLength();
- 
-			if (abstand2 > abstand1)
-			{
-				w = -w;
-				turn_x3_(xc_a, 2 * w);
-				turn_x2_(xb_a, 2 * w);
-			}
-		} 
-		else 
-		{
-			w = 0;
-		}
-			
-		
-		// turning and using mirrors with forth point
-		// check wether there is need of another mirror at x1x2 plane
-		
-		// actual residue
-		turn_x1_(d_a, alpha);
-		turn_x3_(d_a, beta);
-		turn_x1_(d_a, gamma);
-		if (mirror1)
-		{
-			d_a.x = -d_a.x;
-		}
-		if (mirror2)
-		{
-			d_a.y = -d_a.y;
-		}
-		// residue prototype
-		turn_x1_(xd_a, xalpha);
-		turn_x3_(xd_a, xbeta);
-		turn_x1_(xd_a, xgamma);
-		turn_x3_(xd_a, w);		       
-		if (xmirror1)
-		{
-			xd_a.x = -xd_a.x;
-		}
-		if (xmirror2)
-		{
-			xd_a.y = -xd_a.y;
-		}
-						
-		// check for mirror
-		if (d_a.z * xd_a.z < 0) 
-		{
-			if ((d_a.z + xd_a.z < 0.2) && (d_a.z + xd_a.z > -0.2)) 
-			{
-				xxmirror=1;
-			}
-		}
-	 
-		//
-		
-		// calculating of xtarget : coordinates of hydrogen to be added are calculated			
-					
-		turn_x1_(xtarget_a, xalpha);
-		turn_x3_(xtarget_a, xbeta);
-		turn_x1_(xtarget_a, xgamma);
-		turn_x3_(xtarget_a, w);		
-		//checking the mirrors
-		if (xmirror1)
-		{
-			xtarget_a.x = -xtarget_a.x;
-		}
-		if (xmirror2)
-		{
-			xtarget_a.y = -xtarget_a.y; 
-		}
-		if (xxmirror)
-		{
-			xtarget_a.z = -xtarget_a.z;
-		}
-		if (mirror1)
-		{
-			xtarget_a.x = -xtarget_a.x;
-		}
-		if (mirror2)
-		{
-			xtarget_a.y = -xtarget_a.y;  
-		}
-		turn_x1_(xtarget_a, -gamma);
-		turn_x3_(xtarget_a, -beta);
-		turn_x1_(xtarget_a, -alpha);
-		xtarget = xtarget_a + center_atom.getPosition();
+		Matrix4x4 T = matchVectors_
+										(ref_center_atom.getPosition(), ref_atom_1.getPosition(), ref_atom_2.getPosition(),
+										 center_atom.getPosition(), atom_1.getPosition(), atom_2.getPosition());
 
 		// creating new atom and inserting it 
 		PDBAtom& new_hydrogen = *new PDBAtom;
 		((Atom&)new_hydrogen).set(ref_hydrogen);
-		new_hydrogen.setPosition(xtarget);
+		new_hydrogen.setPosition(T * ref_hydrogen.getPosition());
 
 		return &new_hydrogen;
 	}
 
-	Quadruple<bool, const Atom*, const Atom*, const Atom*> 
-	FragmentDB::AddHydrogensProcessor::getThreeReferenceAtoms_
+	Triple<bool, const Atom*, const Atom*> 
+	FragmentDB::AddHydrogensProcessor::getTwoReferenceAtoms_
 		(const Atom& ref_center_atom)
 		throw()
 	{
-		Quadruple<bool, const Atom*, const Atom*, const Atom*> result(false, 0, 0, 0);
+		Triple<bool, const Atom*, const Atom*> result(false, 0, 0);
 		
 		// a hash set to remember all those atoms we have already visited
 		list<const Atom*> atom_list;
@@ -1544,7 +1426,7 @@ namespace BALL
 		// abort if we found the three first atoms (beyond the center atom)
 		// or we are running out of fresh atoms
 		list<const Atom*>::iterator current(atom_list.begin());
-		while ((atom_list.size() < 4) && (current != atom_list.end()))
+		while ((atom_list.size() < 3) && (current != atom_list.end()))
 		{
 			Atom::BondConstIterator bond((*current)->beginBond());
 			for (; +bond; ++bond)
@@ -1554,7 +1436,7 @@ namespace BALL
 						&& (find(atom_list.begin(), atom_list.end(), next_atom) == atom_list.end()))
 				{
 					atom_list.push_back(next_atom);
-					if (atom_list.size() > 3)
+					if (atom_list.size() > 2)
 					{
 						bond = (*current)->endBond();
 						break;
@@ -1566,9 +1448,9 @@ namespace BALL
 			current++;
 		}
 		
-		// copy the three reference atoms to the result 
+		// copy the two  reference atoms to the result 
 		// (omit the first atom, which is the center atom!)
-		result.first = (atom_list.size() == 4);
+		result.first = (atom_list.size() == 3);
 		current = atom_list.begin();
 		current++;
 		if (current != atom_list.end())
@@ -1579,11 +1461,6 @@ namespace BALL
 		if (current != atom_list.end())
 		{
 			result.third  = *current;
-			current++;
-		}
-		if (current != atom_list.end())
-		{
-			result.fourth = *current;
 		}
 
 		return result;
@@ -1632,6 +1509,7 @@ namespace BALL
 		{
 			Log.warn() << "FragmentDB::AddHydrogensProcessor: no reference fragment found for " 
 							   << residue.getName() << ":" << residue.getID() << std::endl;
+			return Processor::CONTINUE;
 		}
 
 		// check whether this reference fragment is already known
@@ -1705,7 +1583,7 @@ namespace BALL
 			Atom& center_atom = *atom_name_map[ref_center_atom.getName()];
 
 			// Go, BFS, go!
-			Quadruple<bool, const Atom*, const Atom*, const Atom*> result(getThreeReferenceAtoms_(ref_center_atom));
+			Triple<bool, const Atom*, const Atom*> result(getTwoReferenceAtoms_(ref_center_atom));
 
 			const Atom* ref_atom_1 = result.second;
 			const Atom* atom_1 = 0;
@@ -1719,7 +1597,7 @@ namespace BALL
 				}
 				else
 				{
-					Log.error() << "AddHydrogenProcessor: cannot identify reference atom for " << ref_hydrogen.getName() << endl;
+					Log.error() << "AddHydrogensProcessor: cannot identify reference atom for " << ref_hydrogen.getName() << endl;
 					continue;
 				}
 			} 
@@ -1744,7 +1622,7 @@ namespace BALL
 				}
 				else
 				{
-					Log.error() << "AddHydrogenProcessor: cannot identify reference atom for " << ref_hydrogen.getName() << endl;
+					Log.error() << "AddHydrogensProcessor: cannot identify reference atom for " << ref_hydrogen.getName() << endl;
 					continue;
 				}
 			} 
@@ -1757,34 +1635,13 @@ namespace BALL
 			}
 
 
-			const Atom* ref_atom_3 = result.fourth;
-			const Atom* atom_3 = 0;
-			static Atom dummy_ref_atom_3;
-			static Atom dummy_atom_3;
-			if (result.fourth != 0)
-			{
-				if (atom_name_map.has(ref_atom_3->getName()))
-				{
-					atom_3 = atom_name_map[ref_atom_3->getName()];
-				}
-				else
-				{
-					Log.error() << "AddHydrogenProcessor: cannot identify reference atom for " << ref_hydrogen.getName() << endl;
-					continue;
-				}
-			} 
-			else
-			{
-				ref_atom_3 = &dummy_ref_atom_3;
-				dummy_ref_atom_3.setPosition(ref_center_atom.getPosition() + Vector3(0.0, 0.0, 1.0));
-				atom_3 = &dummy_atom_3;
-				dummy_atom_3.setPosition(center_atom.getPosition() + Vector3(0.0, 0.0, 1.0));
-			}
-
-
 			// create a new hydrogen at an appropriate position
-			PDBAtom* new_hydrogen = createNewHydrogen_(ref_hydrogen, center_atom, *atom_1, *atom_2, *atom_3,
-																							ref_center_atom, *ref_atom_1, *ref_atom_2, *ref_atom_3);
+			PDBAtom* new_hydrogen = createNewHydrogen_(ref_hydrogen, center_atom, *atom_1, *atom_2,
+																								 ref_center_atom, *ref_atom_1, *ref_atom_2);
+			if (new_hydrogen == 0)
+			{
+				Log.info() << "AddHydrogensProcessor: Could not create hydrogen " << ref_hydrogen.getFullName() << std::endl;
+			}
 			
 			// check whether we could create the new hydrogen
 			if (new_hydrogen != 0)
@@ -2076,7 +1933,7 @@ namespace BALL
 					if ((a1 != 0) && (a2 != 0))
 					{
 						// check the distance conditions for both Connection data sets
-						float distance = a1->getPosition().getDistance(a2->getPosition());
+						double distance = a1->getPosition().getDistance(a2->getPosition());
 						if ((fabs(distance - s1[3].toFloat()) < s1[4].toFloat())
 								&& (fabs(distance - s2[3].toFloat()) < s2[4].toFloat()))
 						{
