@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.17 2000/10/25 15:03:13 anker Exp $
+// $Id: resourceFile.C,v 1.18 2000/10/25 19:29:02 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -798,7 +798,8 @@ namespace BALL
 					{
 						value = last_string;
 						value_set = true;
-					} else
+					} 
+					else
 					{
 						Log.error() << "ResourceFile: unknown tag " << tag << endl;
 					}
