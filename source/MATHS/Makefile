@@ -21,4 +21,4 @@ CPP_SOURCES=\
 	vector4.C
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies

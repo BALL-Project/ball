@@ -11,4 +11,4 @@ CPP_SOURCES=\
 	version.C
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies

@@ -20,4 +20,4 @@ CPP_SOURCES= $(XDR_SOURCES)\
 	visitor.C
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies

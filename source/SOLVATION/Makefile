@@ -20,5 +20,5 @@ CPP_SOURCES=\
 	uhligCavFreeEnergyProcessor.C
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
 

@@ -26,7 +26,7 @@ PYTHON_MOC_SOURCES=\
 	pyWidget_moc.C
 
 include ../../../common.mak
-include .Dependencies
+-include .Dependencies
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
 

@@ -2,6 +2,7 @@
 
 #include <BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h>
 
+#include <qwidget.h>
 #include <qplatinumstyle.h>
 #include <qwindowsstyle.h>
 #include <qmotifstyle.h>
@@ -27,7 +28,7 @@ namespace BALL
 			qtarch_VButtonGroup_1->setFocusPolicy(QWidget::NoFocus);
 			qtarch_VButtonGroup_1->setBackgroundMode(QWidget::PaletteBackground);
 			qtarch_VButtonGroup_1->setFontPropagation(QWidget::SameFont);
-			qtarch_VButtonGroup_1->setPalettePropagation(QWidget::SameFont);
+			qtarch_VButtonGroup_1->setPalettePropagation(QWidget::SamePalette);
 			qtarch_VButtonGroup_1->setFrameStyle( 33 );
 			qtarch_VButtonGroup_1->setLineWidth( 1 );
 			qtarch_VButtonGroup_1->setMidLineWidth( 0 );

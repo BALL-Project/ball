@@ -39,7 +39,7 @@ CPP_SOURCES= $(SMILES_SOURCES)\
 
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
 
 depend:	$(SMILES_SOURCES)
 

@@ -8,4 +8,4 @@ CPP_SOURCES=\
 	canonicalMD.C 
 
 include ../../common.mak
-include .Dependencies
+-include .Dependencies

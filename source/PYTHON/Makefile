@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.20 2000/07/20 19:34:10 oliver Exp $
+# $Id: Makefile,v 1.21 2002/01/15 03:29:19 oliver Exp $
 
 DIRECTORY=PYTHON
 
@@ -8,6 +8,6 @@ CPP_SOURCES=\
 	pyInterpreter.C
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
 
 ADD_INCLUDES=$(PYTHON_INCLUDES)

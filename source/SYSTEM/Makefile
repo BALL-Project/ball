@@ -12,4 +12,4 @@ CPP_SOURCES=\
 	timer.C
 
 include ../common.mak
-include .Dependencies
+-include .Dependencies
