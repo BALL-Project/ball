@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.10 2003/11/14 13:51:38 amoll Exp $
+// $Id: cartoonModel.C,v 1.11 2003/11/22 17:42:27 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -15,11 +15,6 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 
-/*
-#include <BALL/DATATYPE/hashGrid.h>
-#include <BALL/STRUCTURE/geometricProperties.h>
-*/
-
 using namespace std;
 
 namespace BALL
@@ -30,6 +25,7 @@ namespace BALL
 		AddCartoonModel::AddCartoonModel()
 			throw()
 			: AddBackboneModel(),
+				last_chain_(0),
 				helix_radius_(2.4),
 				arrow_width_(0.6),
 				arrow_height_(1.5)
@@ -39,6 +35,7 @@ namespace BALL
 		AddCartoonModel::AddCartoonModel(const AddCartoonModel& cartoon)
 			throw()
 			:	AddBackboneModel(cartoon),
+				last_chain_(0),
 				helix_radius_(cartoon.helix_radius_),
 				arrow_width_(cartoon.arrow_width_),
 				arrow_height_(cartoon.arrow_height_)
@@ -85,8 +82,7 @@ namespace BALL
 				if ((it->getName() == "C"))
 				{
 					c_position.push_back(&*it);
-					// now we can find the corresponding nitrogen
-					// and oxygen
+					// now we can find the corresponding nitrogen and oxygen
 					Atom* N = 0;
 					Atom* O = 0;
 
@@ -125,6 +121,7 @@ namespace BALL
 					peptide_normals.push_back(normal.normalize());
 				}
 
+
 				if (last_residue)
 				{
 					if (peptide_normals.size() == 0) 
@@ -137,6 +134,14 @@ namespace BALL
 				}
 			}
 
+			if (c_position.size() == 0) 
+			{
+Log.error() << "#~~#   9 " << std::endl;
+Log.error() << "#~~#   10 " << peptide_normals.size()<< std::endl;
+Log.error() << "#~~#   11 " << ss.countResidues()<< std::endl;
+Log.error() << "#~~#   12 " << ss.countAtoms()<< std::endl;
+				return;
+			}
 			Atom* first = c_position[0];
 			Atom* last  = c_position[c_position.size() - 1];
 
@@ -232,6 +237,14 @@ namespace BALL
 			normals.push_back(perpendic);
 			vertices.push_back(last_points[3]);
 			normals.push_back(normal*-1.);
+
+			// error checking for debugging (just to be sure we dont get a nasty core dump)
+			if ((last_c-1)*9+8+1 >= spline_.size())
+			{
+				Log.error() << "Calculation of strand stop because of error in " 
+										<< __FILE__ << __LINE__ << std::endl;
+				return;
+			}
 
 			// iterate over all but the last amino acid (last amino acid becomes the arrow)
 			Position i;
@@ -351,11 +364,22 @@ namespace BALL
 
 			// now we just need to connect the strand to the rest of the backbone
 			if (first_c >= 1)
+			{
 				createSplineSegment_(spline_vector_[first_c-1], spline_vector_[first_c]);
+			}
 
 			last_point_ = spline_[i*9+6];
-			for (Position k=7; k<=9; k++)
-				buildGraphicalRepresentation_(spline_[i*9+k], spline_vector_[i].getAtom());
+			if (!((Residue*)last->getParent())->isTerminal())//ss.countResidues() > 2)
+			{
+				for (Position k=7; k<=9; k++)
+				{
+					buildGraphicalRepresentation_(spline_[i*9+k], spline_vector_[i].getAtom()); 
+				}
+			}
+			else
+			{
+				buildGraphicalRepresentation_(spline_[i*9], spline_vector_[i].getAtom()); 
+			}
 
 			last_point_ = last->getPosition();
 		}
@@ -394,11 +418,12 @@ namespace BALL
 			List<const Atom*>::ConstIterator lit = catoms.begin();
 			lit++;
 			Vector3 normal = last->getPosition() - first->getPosition();
+
+			// calcluate slices for the helix cylinder according to the C-atoms
 			Vector3 last_pos = first->getPosition();
-			Tube* tube = 0;
 			for (Position p = 1; lit != catoms.end(); p++)
 			{
-				tube = new Tube;
+				Tube* tube = new Tube;
 				tube->setRadius(helix_radius_);
 				tube->setVertex1(last_pos);
 				last_pos += (normal / (catoms.size() -1));
@@ -408,17 +433,20 @@ namespace BALL
 				lit++;
 			}
 				
-			Disc* disc = new Disc( Circle3(first->getPosition(), Vector3(first->getPosition() - last->getPosition()), helix_radius_));
+			// add a disc at the beginning and the end of the cylinder to close it
+			Disc* disc = new Disc( Circle3(first->getPosition(), normal, helix_radius_));
 			if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
 			disc->setComposite(first);
 			geometric_objects_.push_back(disc);
 
-			disc = new Disc(Circle3(last->getPosition(), Vector3(last->getPosition() - first->getPosition() ), helix_radius_));
+			disc = new Disc(Circle3(last->getPosition(), normal, helix_radius_));
 			if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
 			disc->setComposite(last);
 			geometric_objects_.push_back(disc);
 
-			Position p1=0, p2=0;
+			// calculate start and end position in the spline_vector_ for 
+			// first and last C-atom
+			Position p1=0, p2=0; 
 			for (Position i=0; i<spline_vector_.size(); i++)
 			{
 				if (spline_vector_[i].getVector() == first->getPosition())
@@ -434,19 +462,21 @@ namespace BALL
 			}
 
 
+			// smooth the normals of the neighbouring spline segment to the value of the cylinder normal
 			if (p1 != 0)
 			{
-				spline_vector_[p1].setTangentialVector(last->getPosition() - first->getPosition());
+				spline_vector_[p1].setTangentialVector(normal);
 				createSplineSegment_(spline_vector_[p1-1], spline_vector_[p1]);
 			}
 
 			if (p2 < spline_vector_.size()-1 )
 			{
-				spline_vector_[p2].setTangentialVector(last->getPosition() - first->getPosition());
-				createSplineSegment_(spline_vector_[p2], spline_vector_[p2+1]);
+				spline_vector_[p2].setTangentialVector(normal);
+  	 		createSplineSegment_(spline_vector_[p2], spline_vector_[p2+1]);
 			}	
-
-			last_point_ = spline_vector_[p2+1].getVector();
+//			last_point_ = spline_vector_[p2+1].getVector(); // ???
+ 			last_point_ = spline_vector_[p2].getVector();
+			have_start_point_ = false;
 		}
 
 				
@@ -454,14 +484,26 @@ namespace BALL
 		{
 			if (RTTI::isKindOf<Chain>(composite))
 			{
+				last_chain_ = &composite;
 				computeSpline_(*RTTI::castTo<Chain>(composite));
 				return Processor::CONTINUE;
 			}
 
 			if (!RTTI::isKindOf<SecondaryStructure>(composite))  return Processor::CONTINUE;
+
+			// if called for a SS and no calculation done for the parent chain
+			if (last_chain_ != composite.getParent())
+			{
+				if (composite.getParent() == 0)
+				{
+					computeSpline_(*RTTI::castTo<SecondaryStructure>(composite));
+				}
+
+				last_chain_ = composite.getParent();
+				computeSpline_(*RTTI::castTo<AtomContainer>(composite));
+			}
+
 			SecondaryStructure& ss(*RTTI::castTo<SecondaryStructure>(composite));
-
-
 			if (ss.hasProperty(SecondaryStructure::PROPERTY__HELIX))
 			{
 				drawHelix_(ss);
@@ -484,8 +526,7 @@ namespace BALL
 					}
 				}
 
-				// Calculate start of spline points in the vector for the residues of this SS
-				Position index = 0; 
+				Position index = 0; // start of spline points in the vector for the residues of this SS
 				for (; index<spline_vector_.size(); index++)
 				{
 					if (spline_vector_[index].getVector() == position) break;
@@ -519,13 +560,13 @@ namespace BALL
 		}
 
 
-		void AddCartoonModel::computeSpline_(Chain& chain)
+		void AddCartoonModel::computeSpline_(AtomContainer& ac)
 		{
 			have_start_point_ = false;
 			spline_vector_.clear();
 			spline_.clear();
 			AtomIterator it;
-			BALL_FOREACH_ATOM(chain, it)
+			BALL_FOREACH_ATOM(ac, it)
 			{
 				if (it->getName() == "C")
 				{
@@ -534,7 +575,7 @@ namespace BALL
 				}
 			}
 
-			if (spline_vector_.size() == 0) return;
+			if (spline_vector_.size() < 2) return;
 
 			calculateTangentialVectors_();
 
@@ -549,11 +590,11 @@ namespace BALL
 
 		void AddCartoonModel::createSplineSegment2_(const SplinePoint &a, const SplinePoint &b)
 		{
-			int max_step = 9;
+			Size max_step = 9;
 			double time = 0.0;
 			double step = (double)1 / (double)max_step;
 
-			for (int index = 0; index <= max_step; ++index, time += step)
+			for (Position index = 0; index <= max_step; ++index, time += step)
 			{
 				double t_2 = time * time;
 				double t_3 = t_2 * time;
