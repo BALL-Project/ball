@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.16 2000/08/24 12:07:27 amoll Exp $
+// $Id: bitVector.C,v 1.17 2000/10/17 10:15:50 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -236,7 +236,7 @@ namespace BALL
 		setSize(strlen(bit_string));
 		for (Size i = 0; i < size_ ; i++)
 		{
-			setBit(i, (bool)(*tmp != '0'));
+			setBit((Index)i, (bool)(*tmp != '0'));
 			tmp++;
 		}
 	}
@@ -272,7 +272,7 @@ namespace BALL
 		// problems with differing byte orders (big endian/little endian)
 		for (Position i = 0; i < BALL_CHAR_BITS; i++)
 		{
-			setBit(i, (((int)c & (int)0x1) == 1));
+			setBit((Index)i, (((int)c & (int)0x1) == 1));
 			c = c >> 1;
 		}
 	}
@@ -286,7 +286,7 @@ namespace BALL
 		for (Index i = (Index)Maths::min((Size)BALL_CHAR_BITS, getSize()) - 1; i >= 0; i--)
 		{
 			c = c << 1;
-			if (getBit((Position)i) == true)
+			if (getBit((Index)i) == true)
 			{
 				c |= 1;
 			}
@@ -302,7 +302,7 @@ namespace BALL
 
 		for (Position i = 0; i < sizeof(unsigned short) * BALL_CHAR_BITS; i++)
 		{
-			setBit(i, (((int)c & (int)0x1) == 1));
+			setBit((Index)i, (((int)c & (int)0x1) == 1));
 			c = c >> 1;
 		}
 	}
@@ -314,7 +314,7 @@ namespace BALL
 		for (Index i = (Index)Maths::min((Size)(sizeof(unsigned short) * BALL_CHAR_BITS), getSize()) - 1; i >= 0; i--)
 		{
 			c = c << 1;
-			if (getBit((Position)i) == true)
+			if (getBit((Index)i) == true)
 			{
 				c |= 1;
 			}
@@ -330,7 +330,7 @@ namespace BALL
 
 		for (Position i = 0; i < sizeof(unsigned int) * BALL_CHAR_BITS; i++)
 		{
-			setBit(i, (((int)c & (int)0x1) == 1));
+			setBit((Index)i, (((int)c & (int)0x1) == 1));
 			c = c >> 1;
 		}
 	}
@@ -342,7 +342,7 @@ namespace BALL
 		for (Index i = (Index)Maths::min((Size)(sizeof(unsigned int) * BALL_CHAR_BITS), getSize()) - 1; i >= 0; i--)
 		{
 			c = c << 1;
-			if (getBit((Position)i) == true)
+			if (getBit((Index)i) == true)
 			{
 				c |= 1;
 			}
@@ -358,7 +358,7 @@ namespace BALL
 
 		for (Position i = 0; i < sizeof(unsigned long) * BALL_CHAR_BITS; i++)
 		{
-			setBit(i, (((int)c & (int)0x1) == 1));
+			setBit((Index)i, (((int)c & (int)0x1) == 1));
 			c = c >> 1;
 		}
 	}
@@ -370,7 +370,7 @@ namespace BALL
 		for (Index i = (Index)Maths::min((Size)(sizeof(unsigned long) * BALL_CHAR_BITS), getSize()) - 1; i >= 0; i--)
 		{
 			c = c << 1;
-			if (getBit((Position)i) == true)
+			if (getBit((Index)i) == true)
 			{
 				c |= 1;
 			}
