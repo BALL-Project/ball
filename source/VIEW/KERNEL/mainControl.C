@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.31 2003/12/10 17:16:53 amoll Exp $
+// $Id: mainControl.C,v 1.32 2003/12/10 17:19:44 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -464,6 +464,9 @@ void MainControl::onNotify(Message *message)
 				notify_(nws_message); // send to MolecularControl
 			}
 			return;
+
+			default:
+				return;
 		}
 	}
 	else if (RTTI::isKindOf<ControlSelectionMessage> (*message))

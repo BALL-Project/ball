@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.12 2003/12/10 15:10:27 amoll Exp $
+// $Id: molecularProperties.C,v 1.13 2003/12/10 17:16:54 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -104,6 +104,9 @@ void MolecularProperties::onNotify(Message *message)
 			case CompositeMessage::CENTER_CAMERA:
 				centerCamera(cmessage->getComposite());
 				return;
+
+			default:
+				return;
 		}
 	}
 	else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
@@ -143,6 +146,8 @@ void MolecularProperties::onNotify(Message *message)
 			case MolecularTaskMessage::CREATE_DISTANCE_GRID:
 				createGridFromDistance();
 				return;
+
+	
 			default:
 				Log.error() << "Unknown type of MolecularTaskMessage in " 
 										<< __FILE__ << "  " << __LINE__ << std::endl;

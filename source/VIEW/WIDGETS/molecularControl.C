@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.23 2003/12/07 18:37:44 amoll Exp $
+// $Id: molecularControl.C,v 1.24 2003/12/10 17:16:53 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -166,6 +166,9 @@ bool MolecularControl::reactToMessages_(Message* message)
 			case CompositeMessage::DESELECTED_COMPOSITE:
 				updateListViewItem_(0, *composite_message->getComposite());
 				return true;
+
+			default:
+				return false;
 		}
 	}
 	else if (RTTI::isKindOf<NewSelectionMessage> (*message))
@@ -404,7 +407,7 @@ void MolecularControl::selectedComposite_(Composite* composite, bool state)
 		}
 	}
 
-	Index id = CompositeMessage::DESELECTED_COMPOSITE;
+	CompositeMessage::CompositeMessageType id = CompositeMessage::DESELECTED_COMPOSITE;
 	if (state) id = CompositeMessage::SELECTED_COMPOSITE;
 	CompositeMessage* message = new CompositeMessage(*composite, id);
 	notify_(message);

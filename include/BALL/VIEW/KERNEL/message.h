@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.34 2003/12/10 15:09:16 amoll Exp $
+// $Id: message.h,v 1.35 2003/12/10 17:17:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -137,7 +137,7 @@ class CompositeMessage: public Message
 {
 	public:
 
-	enum Types
+	enum CompositeMessageType
 	{
 		/// undefinded (default) type
 		UNDEFINED = -1,
@@ -170,7 +170,7 @@ class CompositeMessage: public Message
 	CompositeMessage()
 		throw();
 
-	CompositeMessage(const Composite& composite, Index type)
+	CompositeMessage(const Composite& composite, CompositeMessageType type)
 		throw();
 
 	/// Copy constructor.
@@ -208,19 +208,19 @@ class CompositeMessage: public Message
 		throw();
 
 	///
-	void setType(Index type)
+	void setType(CompositeMessageType type)
 		throw() { type_ = type;}
 
 	///
-	Index getType() const
+	CompositeMessageType getType() const
 		throw() { return type_;}
 	//@}
 
 	protected:
 
-	Index 			type_;
-	Composite* 	composite_;
-	String 			composite_name_;
+	CompositeMessageType 	type_;
+	Composite* 						composite_;
+	String 								composite_name_;
 };
 
 
@@ -242,7 +242,7 @@ class SceneMessage: public Message
 	//@{
 	
 	/// Types for SceneMessages
-	enum Type
+	enum SceneMessageType
 	{
 		///
 		UNDEFINED = 0,
@@ -274,7 +274,7 @@ class SceneMessage: public Message
 				-  camera - set to defaults
 			\par
 	*/
-	SceneMessage(Type type = UNDEFINED)
+	SceneMessage(SceneMessageType type = UNDEFINED)
 		throw();
 
 	/** Copy constructor.
@@ -298,11 +298,11 @@ class SceneMessage: public Message
 	//@{
 	
 	/// Set the type of the Message
-	void setType(Type type)
+	void setType(SceneMessageType type)
 		throw();
 
 	/// Get the type of the message
-	Type getType() const
+	SceneMessageType getType() const
 		throw() { return type_;}
 
 	/** Set the Camera in this message.
@@ -327,7 +327,7 @@ class SceneMessage: public Message
 
 	private:
 
-	Type   type_;
+	SceneMessageType   type_;
 	Camera camera_;
 };
 
@@ -469,8 +469,8 @@ class RepresentationMessage: public Message
 {
 	public:
 
-	/// Types of RepresentationMessages
-	enum Type
+	/// Types of RepresentationMessage
+	enum RepresentationMessageType
 	{
 		/// Default Value
 		UNDEFINED = -1,
@@ -493,7 +493,7 @@ class RepresentationMessage: public Message
 		throw();
 
 	///
-	RepresentationMessage(Representation& rep, Type type)
+	RepresentationMessage(Representation& rep, RepresentationMessageType type)
 		throw();
 
 	///
@@ -505,17 +505,17 @@ class RepresentationMessage: public Message
 		throw() {return representation_;}
 
 	///
-	void setType(Type type)
+	void setType(RepresentationMessageType type)
 		throw();
 
 	///
-	Type getType() const
+	RepresentationMessageType getType() const
 		throw() { return type_;}
 	
 	private:
 
-	Representation* representation_;
-	Type 						type_;
+	Representation* 					representation_;
+	RepresentationMessageType type_;
 };
 	
 /** Message to perform specific tasks for molecular items.
@@ -527,7 +527,7 @@ class MolecularTaskMessage
 	public:
 
 	/// Enum for the different molecular tasks
-	enum Type
+	enum MolecularTaskMessageType
 	{
 		///
 		UNDEFINED = -1,
@@ -542,20 +542,20 @@ class MolecularTaskMessage
 	};
 
 	///
-	MolecularTaskMessage(Type type = UNDEFINED)
+	MolecularTaskMessage(MolecularTaskMessageType type = UNDEFINED)
 		throw();
 
 	///
-	void setType(Type type)
+	void setType(MolecularTaskMessageType type)
 		throw();
 
 	///
-	Index getType() const
+	MolecularTaskMessageType getType() const
 		throw() {return type_;}
 
 	protected:
 	
-	Index type_;
+	MolecularTaskMessageType type_;
 };
 
 
@@ -632,7 +632,7 @@ class RegularData3DMessage
 	public:
 
 		///
-		enum Type
+		enum RegularData3DMessageType
 		{
 			///
 			UNDEFINED = -1,
@@ -647,7 +647,7 @@ class RegularData3DMessage
 		};
 		
 		///
-		RegularData3DMessage(Type type = UNDEFINED)
+		RegularData3DMessage(RegularData3DMessageType type = UNDEFINED)
 			throw();
 
 		///

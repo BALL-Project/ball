@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.15 2003/12/10 15:09:31 amoll Exp $
+// $Id: message.C,v 1.16 2003/12/10 17:16:53 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -44,7 +44,7 @@ CompositeMessage::CompositeMessage()
 	#endif
 }
 
-CompositeMessage::CompositeMessage(const Composite& composite, Index type)
+CompositeMessage::CompositeMessage(const Composite& composite, CompositeMessageType type)
 	throw()
 	: Message(),
 		type_(type),
@@ -73,7 +73,7 @@ CompositeMessage::~CompositeMessage()
 {
 }
 
-SceneMessage::SceneMessage(Type type)
+SceneMessage::SceneMessage(SceneMessageType type)
 	throw()
 	: Message(),
 		type_(type)
@@ -103,7 +103,7 @@ SceneMessage::~SceneMessage()
 	#endif 
 }
 
-void SceneMessage::setType(Type type)
+void SceneMessage::setType(SceneMessageType type)
 	throw() 
 { 
 	#ifdef BALL_VIEW_DEBUG
@@ -179,7 +179,7 @@ RepresentationMessage::RepresentationMessage()
 	#endif
 }
 
-RepresentationMessage::RepresentationMessage(Representation& rep, Type type)
+RepresentationMessage::RepresentationMessage(Representation& rep, RepresentationMessageType type)
 	throw()
 	: representation_(&rep),
 		type_(type)
@@ -189,7 +189,7 @@ RepresentationMessage::RepresentationMessage(Representation& rep, Type type)
 	#endif
 }
 
-void RepresentationMessage::setType(Type type)
+void RepresentationMessage::setType(RepresentationMessageType type)
 	throw() 
 { 
 	#ifdef BALL_VIEW_DEBUG
@@ -199,7 +199,7 @@ void RepresentationMessage::setType(Type type)
 	type_ = type;
 }
 
-MolecularTaskMessage::MolecularTaskMessage(Type type)
+MolecularTaskMessage::MolecularTaskMessage(MolecularTaskMessageType type)
 	throw()
 	: type_(type)
 {
@@ -208,7 +208,7 @@ MolecularTaskMessage::MolecularTaskMessage(Type type)
 	#endif 
 }
 
-void MolecularTaskMessage::setType(Type type)
+void MolecularTaskMessage::setType(MolecularTaskMessageType type)
 	throw() 
 {
 	#ifdef BALL_VIEW_DEBUG
@@ -229,7 +229,7 @@ NewTrajectoryMessage::NewTrajectoryMessage()
 	#endif
 }
 	
-RegularData3DMessage::RegularData3DMessage(Type type)
+RegularData3DMessage::RegularData3DMessage(RegularData3DMessageType type) 
 	throw()
 	: CompositeMessage(),
 		data_(0)
@@ -237,7 +237,7 @@ RegularData3DMessage::RegularData3DMessage(Type type)
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new RegularData3DMessage" << std::endl;		
 	#endif
-	setType(type);
+	setType((CompositeMessageType)type);
 }
 
 
