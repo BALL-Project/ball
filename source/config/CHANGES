@@ -36,5 +36,6 @@ changed:
 - Scene Preferences
 - GeometricObjects no longe have names
 - removed Information Processor for GeometricObjects
+- disabled Server in BALLView by default
 - interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
 - interface for the property "hidden" of Representation's

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.4 2003/11/21 01:22:52 amoll Exp $
+// $Id: serverPreferences.C,v 1.5 2004/07/27 13:01:27 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
@@ -21,19 +21,19 @@ namespace BALL
 			throw()
 			: QWidget(parent, name, 0)
 		{
-			QLabel *qtarch_Label_1 = new QLabel(this, "Label_1");
-			qtarch_Label_1->setGeometry(30, 20, 73, 27);
-			qtarch_Label_1->setMinimumSize(0, 0);
-			qtarch_Label_1->setMaximumSize(32767, 32767);
-			qtarch_Label_1->setFocusPolicy(QWidget::NoFocus);
-			qtarch_Label_1->setBackgroundMode(QWidget::PaletteBackground);
-			qtarch_Label_1->setFrameStyle( 0 );
-			qtarch_Label_1->setLineWidth( 1 );
-			qtarch_Label_1->setMidLineWidth( 0 );
-			qtarch_Label_1->QFrame::setMargin( 0 );
-			qtarch_Label_1->setText( tr( "server port" ) );
-			qtarch_Label_1->setAlignment( AlignLeft|AlignVCenter|ExpandTabs );
-			qtarch_Label_1->setMargin( 0 );
+			QLabel* port_label = new QLabel(this, "Label_1");
+			port_label->setGeometry(30, 20, 73, 27);
+			port_label->setMinimumSize(0, 0);
+			port_label->setMaximumSize(32767, 32767);
+			port_label->setFocusPolicy(QWidget::NoFocus);
+			port_label->setBackgroundMode(QWidget::PaletteBackground);
+			port_label->setFrameStyle(0);
+			port_label->setLineWidth(1);
+			port_label->setMidLineWidth(0);
+			port_label->QFrame::setMargin(0);
+			port_label->setText("server port");
+			port_label->setAlignment( AlignLeft|AlignVCenter|ExpandTabs );
+			port_label->setMargin(0);
 			
 			port_ = new QLineEdit(this, "LineEdit_1");
 			port_->setGeometry(120, 20, 50, 30);
@@ -93,13 +93,13 @@ namespace BALL
 		void ServerPreferences::fetchPreferences(INIFile& inifile)
 			throw()
 		{
-			bool server_status = true;
+			bool server_status = false;
 			int port = VIEW_DEFAULT_PORT;
 			if (inifile.hasEntry("NETWORK", "start_server"))
 			{
 				server_status = (inifile.getValue("NETWORK", "start_server") == "true");
 			}
-			if (inifile.hasEntry("NETWORK", "start_server"))
+			if (inifile.hasEntry("NETWORK", "server_port"))
 			{
 				port = inifile.getValue("NETWORK", "server_port").toInt();
 			}

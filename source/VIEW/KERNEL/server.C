@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.12 2004/07/03 12:09:30 amoll Exp $
+// $Id: server.C,v 1.13 2004/07/27 13:05:51 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -63,10 +63,10 @@ namespace BALL
 				server_preferences_(0),
 				server_icon_(0)
 		{
+			#ifdef BALL_VIEW_DEBUG
+				Log.error() << "new Server " << this << std::endl;
+			#endif
 
-#ifdef BALL_VIEW_DEBUG
-	Log.error() << "new Server " << this << std::endl;
-#endif
 			// register ModularWidget
 			registerWidget(this);
 			
@@ -93,7 +93,7 @@ namespace BALL
 
 		// initializes a new socket and starts the timer
 		void Server::activate()
-				throw()
+			throw()
 		{
 			static SockInetBuf sock_inet_buf(SocketBuf::sock_stream);
 			
@@ -136,19 +136,19 @@ namespace BALL
 		}
 			
 		int Server::getPort() const
-				throw()
+			throw()
 		{
 			return port_;
 		}
 		
 		void Server::setPort(const int port)
-				throw()
+			throw()
 		{
 			port_ = port;
 		}
 		
 		void Server::initializeWidget(MainControl& main_control)
-				throw()
+			throw()
 		{
 			server_icon_ = new QLabel(main_control.statusBar());
 			main_control.statusBar()->addWidget(server_icon_, 1, TRUE );
@@ -162,19 +162,19 @@ namespace BALL
  		}
 
 		void Server::finalizeWidget(MainControl& main_control)
-				throw()
+			throw()
 		{
 			main_control.statusBar()->removeWidget(server_icon_);	
 			delete server_icon_;
 		}
 			
 		void Server::checkMenu(MainControl& /* main_control */)
-				throw()
+			throw()
 		{
 		}
 
 		void Server::initializePreferencesTab(Preferences &preferences)
-				throw()
+			throw()
 		{
 			server_preferences_ = new ServerPreferences();
 			CHECK_PTR(server_preferences_);
@@ -183,7 +183,7 @@ namespace BALL
 		}
 
 		void Server::finalizePreferencesTab(Preferences &preferences)
-				throw()
+			throw()
 		{
 			if (server_preferences_ != 0)
 			{
@@ -195,7 +195,7 @@ namespace BALL
 		}
 		
 		void Server::applyPreferences()
-				throw()
+			throw()
 		{
 			if (server_preferences_ == 0) return;
 
@@ -222,12 +222,11 @@ namespace BALL
 
 				// hide the icon
 				server_icon_->hide();
-				QToolTip::add(server_icon_, "VIEW Server disabled");
 			}
 		}
 		
 		void Server::fetchPreferences(INIFile &inifile)
-				throw()
+			throw()
 		{
 			// the default preferences tab (if existent)
 			if (server_preferences_ != 0)
@@ -237,7 +236,7 @@ namespace BALL
 		}
 		
 		void Server::writePreferences(INIFile &inifile)
-				throw()
+			throw()
 		{
 			// the default preferences tab (if existent)
 			if (server_preferences_ != 0)
