@@ -1,4 +1,4 @@
-// $Id: baseModel.h,v 1.5 2000/05/04 17:29:12 hekl Exp $
+// $Id: baseModel.h,v 1.6 2000/06/18 16:37:49 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -150,7 +150,11 @@ namespace BALL
 			
 			protected:
 
-			FindGeometricObject& getSearcher_();
+			FindGeometricObjects& getSearcher_();
+
+			bool isModel_(VIEW::GeometricObject& geometric_object);
+
+			void removeGeometricObjects_(Composite& composite, bool only_models = false);
 
 			void clear_();
 
@@ -162,7 +166,7 @@ namespace BALL
 
 
 			/* search processor */ 
-			FindGeometricObject find_geometric_object_;
+			FindGeometricObjects find_geometric_object_;
 
 			/* pointer to userdefinable table of colors */
 			ColorCalculator* color_calculator_;

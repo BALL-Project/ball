@@ -1,4 +1,4 @@
-// $Id: baseModel.C,v 1.6 2000/04/25 15:17:00 hekl Exp $
+// $Id: baseModel.C,v 1.7 2000/06/18 16:34:28 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -243,6 +243,65 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
+
+  	bool BaseModelProcessor::isModel_(VIEW::GeometricObject& geometric_object)
+    {
+			if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK))
+			{
+				return true;
+			}
+			else if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_DOTS))
+			{
+				return true;
+			}
+			else if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_LINES))
+			{
+				return true;
+			}
+			else if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_STARS))
+			{
+				return true;
+			}
+			else if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_VDW))
+			{
+				return true;
+			}
+
+			return false;
+    }
+
+	  void BaseModelProcessor::removeGeometricObjects_(Composite& composite, bool only_models)
+    {
+			// get geometric objects
+			composite.applyChild(getSearcher_());
+
+			// if geometric objects found, delete them
+			if (getSearcher_().geometricObjectsFound())
+			{
+				// get geometric objects
+				List<VIEW::GeometricObject*>::Iterator it = getSearcher_().getGeometricObjects().begin();
+				
+				for(; it != getSearcher_().getGeometricObjects().end(); ++it)
+				{
+					if (only_models)
+					{
+						if (!isModel_(**it))
+						{
+							continue;
+						}
+					}
+
+					Composite *composite_ptr = RTTI::castTo<Composite>(**it);
+					
+					// remove geometric object from composite
+					if(composite_ptr != 0)
+					{
+						// delete geometric object
+						delete composite_ptr;
+					}
+				}
+			}
+   }
 
 		void BaseModelProcessor::clear_()
 		{
