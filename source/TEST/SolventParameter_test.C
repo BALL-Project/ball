@@ -1,11 +1,11 @@
-// $Id: SolventParameter_test.C,v 1.10 2001/08/22 10:54:53 sturm Exp $
+// $Id: SolventParameter_test.C,v 1.11 2001/08/22 11:14:15 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/solventParameter.h>
 ///////////////////////////
 
-START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.10 2001/08/22 10:54:53 sturm Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.11 2001/08/22 11:14:15 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -119,7 +119,7 @@ CHECK(getSolventDescriptor() const )
 	param.init();
 	s_ptr.extractSection(param,"SolventDescription");
 	const SolventDescriptor sd = s_ptr.getSolventDescriptor();
-	TEST_EQUAL(sd.getName().getSubstring(0,3),"PCM")
+	TEST_EQUAL(sd.getName(),"PCM")
 RESULT
 
 
