@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.21 2004/02/05 14:15:54 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.22 2004/02/06 14:05:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -307,23 +307,40 @@ void ColorMeshDialog::colorByGrid_()
 
 	// now do the colorizing stuff...
 	mesh_->colorList.resize(mesh_->vertex.size());
-	ColorRGBA list[3];
+ 	ColorRGBA list[2];
 
-	list[0] = min_color;
-	list[1] = mid_color;
-	list[2] = max_color;
+ 	list[0] = min_color;
+ 	list[1] = mid_color;
 
-	ColorTable table(list, 3);
-	table.setMinMaxColors(min_min_color, max_max_color);
-	table.setAlphaBlending(true);
-	table.setNumberOfColors(levels_box->value());
-	table.setRange(String((min_box->text().ascii())).toFloat(), String((max_box->text().ascii())).toFloat());
-	table.createTable();
+	ColorTable lower_table(list, 2);
+	lower_table.setMinMaxColors(min_min_color, max_max_color);
+	lower_table.setAlphaBlending(true);
+	lower_table.setNumberOfColors(levels_box->value()/2);
+	lower_table.setRange(String((min_box->text().ascii())).toFloat(), String((mid_box->text().ascii())).toFloat());
+	lower_table.createTable();
+
+ 	list[0] = mid_color;
+ 	list[1] = max_color;
+
+	ColorTable upper_table(list, 2);
+	upper_table.setMinMaxColors(min_min_color, max_max_color);
+	upper_table.setAlphaBlending(true);
+	upper_table.setNumberOfColors(levels_box->value()/2);
+	upper_table.setRange(String((mid_box->text().ascii())).toFloat(), String((max_box->text().ascii())).toFloat());
+	upper_table.createTable();
+
 	try 
 	{
 		for (Position i=0; i<mesh_->colorList.size(); i++)
 		{
-			mesh_->colorList[i] = table.map((*grid_)(mesh_->vertex[i]));
+			if ((*grid_)(mesh_->vertex[i]) <= String(mid_box->text().ascii()).toFloat())
+			{
+				mesh_->colorList[i] = lower_table.map((*grid_)(mesh_->vertex[i]));
+			}
+			else
+			{
+				mesh_->colorList[i] = upper_table.map((*grid_)(mesh_->vertex[i]));
+			}
 		}
 	}	
 	catch (Exception::OutOfGrid)
