@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.h,v 1.2 2000/02/14 22:43:58 oliver Exp $
+// $Id: charmmNonBonded.h,v 1.3 2000/03/26 12:48:10 oliver Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -80,7 +80,7 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual float updateEnergy();
+		virtual double updateEnergy();
 
 		/**	Calculates and returns the component's forces.
 		*/
@@ -88,15 +88,15 @@ namespace BALL
 
 		/**	Return the electrostatic energy.
 		*/
-		virtual float getElectrostaticEnergy() const;
+		virtual double getElectrostaticEnergy() const;
 
 		/**	Return the Van-der-Waals energy.
 		*/
-		virtual float getVdwEnergy() const;
+		virtual double getVdwEnergy() const;
 
 		/** Return the solvation energy.
 		*/
-		virtual float getSolvationEnergy() const;
+		virtual double getSolvationEnergy() const;
 
 
 		//@}
@@ -124,15 +124,15 @@ namespace BALL
 
 		/**	Value of the electrostatic energy
 		*/
-		float	electrostatic_energy_;
+		double	electrostatic_energy_;
 
 		/**	Value of the vdw energy
 		*/
-		float	vdw_energy_;
+		double	vdw_energy_;
 
 		/** Value of the solvation energy
 		*/
-		float solvation_energy_;
+		double solvation_energy_;
 
 		//@}
 
@@ -154,11 +154,11 @@ namespace BALL
 		*/
 		Size	number_of_1_4_;	
 
-		/**	Cut_off distance for non-bonded interactions
+		/**	Cutoff distance for non-bonded interactions
 		*/
 		float	cut_off_;
 
-		/**	Cut_off distance for vdw interactions
+		/**	Cutoff distance for vdw interactions
 		*/
 		float	cut_off_vdw_;
 
@@ -166,9 +166,33 @@ namespace BALL
 		*/
 		float	cut_on_vdw_;
 
-		/**	Cut_off distance for electrostatic interactions
+		/**	Cutoff distance for electrostatic interactions
 		*/
 		float	cut_off_electrostatic_;
+
+		/**	Start of the switch function for the vdw interactions
+		*/
+		float	cut_on_electrostatic_;
+
+		/**	Cutoff distance for solvation contribution (EEF1)
+		*/
+		float	cut_off_solvation_;
+
+		/**	Inverse cube of the difference of cutoff and cuton for vdW
+		*/
+		float inverse_difference_off_on_vdw_3_;
+
+		/**	Inverse cube of the difference of cutoff and cuton for solvation
+		*/
+		float inverse_difference_off_on_solvation_3_;
+
+		/**	Inverse cube of the difference of cutoff and cuton for electrostatic
+		*/
+		float inverse_difference_off_on_electrostatic_3_;
+
+		/**	Start of the switch function for the solvation contribution (EEF1)
+		*/
+		float	cut_on_solvation_;
 
 		/**	Scaling factor for vdw_1_4_interactions
 		*/

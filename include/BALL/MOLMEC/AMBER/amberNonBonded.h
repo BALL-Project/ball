@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.8 2000/02/14 22:43:55 oliver Exp $
+// $Id: amberNonBonded.h,v 1.9 2000/03/26 12:46:43 oliver Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -76,7 +76,7 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual float updateEnergy();
+		virtual double updateEnergy();
 
 		/**	Calculates and returns the component's forces.
 		*/
@@ -84,11 +84,11 @@ namespace BALL
 
 		/**	Return the electrostatic energy.
 		*/
-		virtual float getElectrostaticEnergy() const;
+		virtual double getElectrostaticEnergy() const;
 
 		/**	Return the Van-der-Waals energy.
 		*/
-		virtual float getVdwEnergy() const;
+		virtual double getVdwEnergy() const;
 
 		//@}
 
@@ -118,11 +118,11 @@ namespace BALL
 
 		/**	Value of the electrostatic energy
 		*/
-		float	electrostatic_energy_;
+		double	electrostatic_energy_;
 
 		/**	Value of the vdw energy
 		*/
-		float	vdw_energy_;
+		double	vdw_energy_;
 
 		//@}
 
@@ -145,30 +145,48 @@ namespace BALL
 		*/
 		Size	number_of_1_4_;	
 
-		/**	Cut_off distance for non-bonded interactions
+		/**	Cutoff distance for non-bonded interactions
 		*/
-		float	cut_off_;
+		double	cut_off_;
 
-		/**	Cut_off distance for vdw interactions
+		/**	Cutoff distance for vdw interactions
 		*/
-		float	cut_off_vdw_;
+		double	cut_off_vdw_;
 
-		/**	Cut_off distance for electrostatic interactions
+		/**	Cuton distance for vdw interactions
 		*/
-		float	cut_off_electrostatic_;
+		double	cut_on_vdw_;
 
+		/**	Cutoff distance for electrostatic interactions
+		*/
+		double	cut_off_electrostatic_;
+
+		/**	Cuton distance for electrostatic interactions
+		*/
+		double	cut_on_electrostatic_;
+
+		/**	Inverse cube of the difference of squares of cuton and cutoff for vdW.
+				This value is required for the switching function
+		*/
+		double inverse_distance_off_on_vdw_3_;
+		
+		/**	Inverse cube of the difference of squares of cuton and cutoff for eletrostatic.
+				This value is required for the switching function
+		*/
+		double inverse_distance_off_on_electrostatic_3_;
+		
 		/**	Scaling factor for vdw_1_4_interactions
 		*/
-		float	scaling_vdw_1_4_;
+		double	scaling_vdw_1_4_;
 
 		/**	Scaling factor for electrostatic_1_4_interactions
 		*/
-		float	scaling_electrostatic_1_4_;
+		double	scaling_electrostatic_1_4_;
 
-                /*_     Flag for using constant or distance dependent dielectric constant 
-                        True = distance dependent
-                */
-                bool    use_dist_depend_dielectric_; 
+		/*_     Flag for using constant or distance dependent dielectric constant.
+            True = distance dependent
+    */
+    bool    use_dist_depend_dielectric_; 
 
     /** The most efficient algorithm to calculate the non-bonded atom pairs.
         {\tt BRUTE\_FORCE}: brute force: all against all\\
