@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.22 2004/02/26 17:44:26 amoll Exp $
+// $Id: cartoonModel.C,v 1.23 2004/02/26 19:05:33 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -56,7 +56,7 @@ namespace BALL
 
 		bool AddCartoonModel::finish()
 		{
-			clear_();
+ 			clear_();
 			return true;
 		}
 
@@ -164,9 +164,7 @@ namespace BALL
 				if (!nextN) // we are at the last residue
 				{
 					last_residue = true;
-					if (ri->isTerminal())
-						is_terminal_segment = true;
-
+					if (ri->isTerminal()) is_terminal_segment = true;
 					continue;
 				}
 
@@ -228,9 +226,7 @@ namespace BALL
 				{
 					Vector3 rotaxis = (peptide_normals[i]%peptide_normals[i+1]).normalize();
 					Matrix4x4 rotmat;
-
 					rotmat.rotate(Angle(M_PI), rotaxis);
-
 					peptide_normals[i+1] = rotmat * peptide_normals[i+1];
 				}
 			}
@@ -267,8 +263,6 @@ namespace BALL
 			if (!Maths::isZero(right.getSquareLength()))  right.normalize();
 
 			Vector3 perpendic = normal % right; // perpendicular to spline
-
-			
 			Vector3 last_points[4];
 			Vector3 current_points[4];
 
@@ -566,9 +560,6 @@ namespace BALL
 			calculateTangentialVectors_();
  			createSplineSegment_(spline_vector_[p2-1], spline_vector_[p2]);
 
-			spline_.clear();
-			spline_.push_back(spline_vector_[0].getVector());
-			
  			last_spline_point_ = spline_vector_[p2];
 			last_point_ = last_spline_point_.getVector();
 			have_start_point_ = true;
@@ -587,24 +578,22 @@ namespace BALL
 			}
 
 			if (!RTTI::isKindOf<SecondaryStructure>(composite))  return Processor::CONTINUE;
+			SecondaryStructure& ss = *RTTI::castTo<SecondaryStructure>(composite);
 
 			// if called for a SS and no calculation done for the parent chain
-			if (last_chain_ != composite.getParent())
+			if (last_chain_ != ss.getParent())
 			{
 				clear_();
-
-				last_chain_ = composite.getParent();
-				computeSpline_(*RTTI::castTo<AtomContainer>(composite));
+				computeSpline_(ss);
 			}
 
-			SecondaryStructure& ss(*RTTI::castTo<SecondaryStructure>(composite));
 			if (ss.getType() == SecondaryStructure::HELIX)
 			{
-				drawHelix_(ss);
+				 drawHelix_(ss);
 			}
 			else if ((ss.getType() == SecondaryStructure::STRAND) && (ss.countResidues() > 3))
 			{
-				drawStrand_(ss);
+ 			 	drawStrand_(ss);
 			}
 			else
 			{
@@ -656,32 +645,23 @@ namespace BALL
 			Position nr_of_residues = ss.countResidues();
 			for (Position res = 0; res < nr_of_residues; res++)
 			{
-				// dont draw the last residue of the chain, or we get a line to (0,0,0)
-				if (((Chain*)ss.getParent())->getCTerminal() == ss.getResidue(res)) 
+				// dont draw the last residue or we get a line to (0,0,0)
+				if (last_chain_ == 0) 
 				{
- 				 	break;
+					if (ss.getCTerminal() == ss.getResidue(res)) 
+					{
+					 	continue;
+					}
+				}
+				else if (((Chain*)ss.getParent())->getCTerminal() == ss.getResidue(res)) 
+				{
+ 					continue;
 				}
 				
 
 				Position pos = res + index;
 				for (Position j = 0; j < 9; j++)
 				{
-					if (spline_.size() < pos*9 +j)
-					{
-						break;
-Log.error() << "#~~#   20 " << std::endl;
-					}
-					
-					if (spline_vector_.size() < pos +1)
-Log.error() << "#~~#   21 " << std::endl;
-
-					if (spline_vector_[pos + 1].getAtom() == 0)
-					{
-						break;
-Log.error() << "#~~#   22 " << std::endl;
-					}
-
-
 					buildGraphicalRepresentation_(
 						spline_[pos*9 + j], (j < 5) ? 
 						spline_vector_[pos].getAtom() : 
