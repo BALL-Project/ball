@@ -1,3 +1,19 @@
+1.0: 24.05.2004
+---------------
+Changed:
+  - molview has been renamed to BALLView in order to avoid
+    name collisions
+  - ????
+
+Added + improved:
+  - ????
+
+Installation:
+  - Additional platform: Mac OS X (Panther)
+  - Support for G++ 3.4
+  - Windows installer for BALLView and BALL
+  - Debian and RPM packages for several Linux distributions
+
 1.0pre2: 20.02.2004
 -------------------
 Added + improved:
@@ -22,7 +38,6 @@ Added + improved:
   -	Loading of molecules from the command line
   -	Calculation and visualisation of H-bonds
   -	DSSP algorithm for secondary structure determination
-
 
 1.0pre1: 23.12.2002
 -------------------
