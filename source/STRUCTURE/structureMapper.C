@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.21 2002/12/16 09:08:29 oliver Exp $
+// $Id: structureMapper.C,v 1.22 2003/05/22 21:58:48 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -149,8 +149,8 @@ namespace BALL
 
 
 	bool StructureMapper::mapFragments
-		(const vector < Fragment * >&A,
-		 const vector < Fragment * >&B, Matrix4x4 * transformation, double upper_bound, double lower_bound)
+		(const vector<Fragment*>& A,
+		 const vector<Fragment*>& B, Matrix4x4* transformation, double upper_bound, double lower_bound)
 	{
 		StructureMapper::AtomBijection fragment_bijection = calculateFragmentBijection(A, B);
 
