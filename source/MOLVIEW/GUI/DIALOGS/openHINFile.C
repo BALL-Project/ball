@@ -1,4 +1,4 @@
-// $Id: openHINFile.C,v 1.6.4.2 2002/10/21 15:40:10 amoll Exp $
+// $Id: openHINFile.C,v 1.6.4.3 2002/11/28 17:16:23 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 
@@ -64,7 +64,7 @@ namespace BALL
 			// memory allocation failed ?
 			if (system == 0)
 			{
-				Log.info() << "> system memory allocation failed." << endl;
+				Log.info() << "> system memory allocation failed." << std::endl;
 				return;
 			}
 
@@ -81,7 +81,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.info() << "> read HIN file failed." << endl;
+				Log.info() << "> read HIN file failed." << std::endl;
 				delete system;
 
 				return;
@@ -95,7 +95,7 @@ namespace BALL
 
 				bounding_box.get(first.x, first.y, first.z,
 												 second.x, second.y, second.z);
-				Log.info() << "> creating bounding box (" << first << ", " << second << ")" << endl;
+				Log.info() << "> creating bounding box (" << first << ", " << second << ")" << std::endl;
 
 				simple_box->setVertex1(first);
 				simple_box->setVertex2(second);
@@ -107,7 +107,7 @@ namespace BALL
 			}
 
 			// writing info to log
-			Log.info() << "> read " << system->countAtoms() << " atoms from HIN file \"" << getFileName() << "\"" << endl;
+			Log.info() << "> read " << system->countAtoms() << " atoms from HIN file \"" << getFileName() << "\"" << std::endl;
 
 
 			QString filename = getFileName().c_str();
