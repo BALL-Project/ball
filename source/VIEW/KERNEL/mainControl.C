@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.86 2004/05/05 18:09:11 amoll Exp $
+// $Id: mainControl.C,v 1.87 2004/05/15 10:58:01 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -14,6 +14,7 @@
 #include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
+#include <BALL/VIEW/WIDGETS/molecularStructure.h>
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/forEach.h>
@@ -1205,8 +1206,19 @@ namespace BALL
 			if (composite_manager_.has(composite)) return false;
 
 			composite_manager_.insert(composite);
-			CompositeMessage* cm = new CompositeMessage(composite, 
-					CompositeMessage::NEW_COMPOSITE);
+			CompositeMessage* cm; 
+		
+			if (MolecularStructure::getInstance(0) != 0)
+			{
+				cm = new CompositeMessage(composite, 
+						CompositeMessage::NEW_COMPOSITE);
+			}
+			else
+			{
+				cm = new CompositeMessage(composite, 
+						CompositeMessage::NEW_MOLECULE);
+			}
+
 			cm->setCompositeName(name);
 			notify_(cm);
 			
