@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.19 2001/04/23 21:59:03 amoll Exp $
+// $Id: INIFile.h,v 1.20 2001/05/05 21:09:49 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -451,7 +451,7 @@ namespace BALL
 				Lines starting with "[" cannot be added (to prevent problems with
 				section headers).
 				If the line contains a key and the section contains already this key
-				the method sets the key to the new value.
+				the method aborts and returns false, use setValue() instead.
 				@param line_it the iterator to insert after
 				@param line the line to be added
 				@return true, if line could be added
@@ -469,7 +469,7 @@ namespace BALL
 				Lines starting with "[" cannot be added (to prevent problems with
 				section headers).
 				If the line contains a key and the section contains already this key
-				the method sets the key to the new value. 
+				the method aborts and returns false, use setValue() instead.
 				If an empty string is given as value for section_name, the last section
 				is used.
 				@param section_name the section to add the line
@@ -619,8 +619,18 @@ namespace BALL
 		*/
 		bool apply(UnaryProcessor<LineIterator>& processor);
 
+		/** Set checking for duplicate keys mode
+		*/
+		void setDuplicateKeyCheck(bool mode);
+
+		/** Get checking mode for duplicate keys
+		*/
+		bool getDuplicateKeyCheck() const;
+
 
 		protected:
+
+		bool															check_duplicate_keys_;
 
 		bool															valid_;
 

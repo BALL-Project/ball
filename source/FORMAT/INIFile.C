@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.22 2001/04/23 21:59:52 amoll Exp $
+// $Id: INIFile.C,v 1.23 2001/05/05 21:09:57 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -15,14 +15,16 @@ namespace BALL
 
 	// Default constructor
 	INIFile::INIFile()
-		: valid_(false),
+		:	check_duplicate_keys_(false),
+			valid_(false),
 			filename_("")
 	{	
 		appendSection(HEADER);
 	}
 
 	INIFile::INIFile(const String& filename)
-		: valid_(false),
+		: check_duplicate_keys_(false),
+			valid_(false),
 			filename_(filename)
 	{
 	}
@@ -39,6 +41,7 @@ namespace BALL
 		sections_.destroy();
 		section_index_.destroy();
 		valid_ = false;
+		check_duplicate_keys_ = false;
 
     appendSection(HEADER);
 	}
@@ -246,11 +249,12 @@ namespace BALL
 			String key(line.before("="));
 			key.trim();
 
-			if (section.key_map_.has(key))
+			if (section.key_map_.has(key) && check_duplicate_keys_)
 			{
 
-        Log.info() << "In INIFile " << filename_ << " , while appending line: "
+        Log.error() << "In INIFile " << filename_ << " , error while appending line: "
                     << line << " . Key '" << key << "' already exists in section." << endl;
+				return false;
 			}
 
 			line_it.getSectionNextLine();
@@ -311,11 +315,11 @@ namespace BALL
 			String key(line.before("="));
 			key.trim();
 
-			if (section.key_map_.has(key))
+			if (section.key_map_.has(key) && check_duplicate_keys_)
 			{
-
-				Log.info() << "In INIFile " << filename_ << " , while appending line: "
+				Log.error() << "In INIFile " << filename_ << " , error while appending line: "
 										<< line << " . Key '" << key << "' already exists in section." << endl;   
+				return false;
 			}
 			
 			section.lines_.push_back(line);
@@ -560,6 +564,16 @@ namespace BALL
 	bool INIFile::isValid(const Section_iterator& it) const
 	{
 		return ((List<Section>::ConstIterator)it != sections_.end());
+	}
+
+	void INIFile::setDuplicateKeyCheck(bool mode)
+	{
+		check_duplicate_keys_ = mode;
+	}
+
+	bool INIFile::getDuplicateKeyCheck() const
+	{
+		return check_duplicate_keys_;
 	}
 
 } // namespace BALL
