@@ -1,6 +1,10 @@
-// $Id: electrostaticPotentialCalculator.C,v 1.1.2.1 2002/09/01 09:58:38 anhi Exp $
+// $Id: electrostaticPotentialCalculator.C,v 1.1.2.2 2002/12/01 09:06:12 oliver Exp $
 
 #include <BALL/SOLVATION/electrostaticPotentialCalculator.h>
+
+#define _USE_MATH_DEFINES
+#include <math.h>
+
 
 namespace BALL
 {

@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.14.4.2 2002/11/30 10:31:59 oliver Exp $
+// $Id: regExp.h,v 1.14.4.3 2002/12/01 09:06:12 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -28,6 +28,10 @@
 #endif
 
 #define BALL_REGULAR_EXPRESSION_DEFAULT_PATTERN   ""
+
+#ifdef BALL_COMPILER_MSVC
+#include <atlrx.h>
+#endif
 
 namespace BALL 
 {
@@ -297,7 +301,11 @@ namespace BALL
 		void toExtendedRegularExpression_() 
 			throw();
 
-		regex_t regex_;
+		#ifndef BALL_COMPILER_MSVC
+			regex_t regex_;
+		#else
+			CAtlRegExp<> regex_;
+		#endif
 		String 	pattern_;
 		bool 		valid_pattern_;
 	};

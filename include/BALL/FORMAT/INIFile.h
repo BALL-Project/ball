@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.25.4.1 2002/10/29 17:30:22 amoll Exp $
+// $Id: INIFile.h,v 1.25.4.2 2002/12/01 09:06:12 oliver Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -21,6 +21,8 @@
 
 namespace BALL 
 {
+
+	class INIFile;
 
 	/**	INIFile.
 			This class provides support to read and evaluate
@@ -47,7 +49,7 @@ namespace BALL
 			public:
 
 			friend class INIFile;
-			friend class INIFile::IteratorTraits_;
+			friend class IteratorTraits_;
 
 			const String& getName() const
 			{
