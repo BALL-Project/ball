@@ -1,4 +1,4 @@
-// $Id: surface.C,v 1.7 2000/06/30 06:02:13 oliver Exp $
+// $Id: surface.C,v 1.8 2000/08/03 12:24:52 anker Exp $
 
 #include <BALL/MATHS/surface.h>
 
@@ -44,6 +44,15 @@ namespace BALL
 		normal = surface.normal;
 		triangle = surface.triangle;
 		valid_ = surface.valid_;
+	}
+
+	const Surface& Surface::operator = (const Surface& surface)
+	{
+		vertex = surface.vertex;
+		normal = surface.normal;
+		triangle = surface.triangle;
+		valid_ = surface.valid_;
+		return *this;
 	}
 	
 	void Surface::get(Surface& surface) const
