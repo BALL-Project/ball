@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.17 2004/11/09 15:56:09 amoll Exp $
+// $Id: modularWidget.C,v 1.18 2004/11/24 13:32:07 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -90,7 +90,6 @@ void ModularWidget::initializeWidget(MainControl& /*main_control*/)
 }
 
 void ModularWidget::finalizeWidget(MainControl& /* main_control */)
-//	throw()
 {
 }
 
@@ -151,19 +150,19 @@ void ModularWidget::setStatusbarText(String text)
 MainControl* ModularWidget::getMainControl() const
 	throw()
 { 
-	if (((ConnectionObject*) this)->getParent() == 0) return 0;
+	if (getParent() == 0) return 0;
 	
-	ConnectionObject* root = ((ConnectionObject*)this)->getRoot();
+	ConnectionObject* root = (const_cast<ModularWidget*>(this))->getRoot();
 	
 	if (!RTTI::isKindOf<MainControl>(*root)) return 0;
 
-	return (MainControl*) root;
+	return (dynamic_cast<MainControl*>(root));
 }
 
 FragmentDB& ModularWidget::getFragmentDB() const
 	throw()
 {
-	return *((FragmentDB*)&getMainControl()->getFragmentDB());
+ 	return * const_cast<FragmentDB*>(&getMainControl()->getFragmentDB());
 }
 
 void ModularWidget::dump(ostream& s, Size depth) const
