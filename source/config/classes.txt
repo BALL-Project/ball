@@ -28,8 +28,8 @@ OutOfGrid
 FileNotFound
 GlobalExceptionHandler
 
-HashFunction                        EI          /
-Limits                              EI          /
+HashFunction                        /           /
+Limits                              E           /
 LogStreamNotifier                   EI,         X
 LogStreamBuf                        EI,         X
 LogStream                           EI,         X
@@ -44,15 +44,15 @@ HashGridBox3                        DEIX        Z
       DataIteratorTraits_
 HashGrid3                           DEI         Z
       BoxIteratorTraits_
-HashMap                             DEI         /
+HashMap                             D           /
       IllegalKey
       IteratorTraits_
-HashSet                             DEI         /
+HashSet                             DX          /       store methods
       IllegalKey
       Node
       IteratorTraits_
-List                                EI          /
-Options                             EI          /
+List                                X           /       apply?
+Options                             /           /
 PointGrid                           EI          /
 Quadruple                           EI          /
 OrderedQuadruple                    EI          /
@@ -61,7 +61,7 @@ String                              DEI         /
 Substring                           DEI         /
       UnboundSubstring
       InvalidSubstring
-StringHashMap                       EI          Z
+StringHashMap                       /           Z
 StackListItem                       DEI         /
 StackList                           DEI         /
 TStackListItem                      DEI         /
