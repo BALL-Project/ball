@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.40 2003/01/22 17:16:51 anker Exp $
+// $Id: standardPredicates.C,v 1.41 2003/03/28 14:42:20 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -1200,7 +1200,10 @@ namespace BALL
 					{
 						partner = bond->getPartner(atom);
 						if (((*child_it)->getSymbol() == "*")
-								|| (partner->getElement().getSymbol() == (*child_it)->getSymbol()))
+								|| (partner->getElement().getSymbol() == (*child_it)->getSymbol())
+								|| (((*child_it)->getSymbol() == "E") 
+										&& (partner->getElement().getElectronegativity()
+											> atom.getElement().getElectronegativity())))
 						{
 							visited.insert(bond);
 							this_result = find_(*partner, *child_it, visited);
