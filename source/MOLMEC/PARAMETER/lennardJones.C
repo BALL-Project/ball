@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.6 2000/02/14 22:42:46 oliver Exp $
+// $Id: lennardJones.C,v 1.7 2000/02/15 18:10:59 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -57,7 +57,7 @@ namespace BALL
 		if ((!hasVariable("A") || !hasVariable("B"))
 				&& (!hasVariable("epsilon") || !hasVariable("R")))
 		{
-			Log.error() << "Lennard Jones parameter section requires two variable columns:"		
+			Log.error() << "LennardJones::extractSection: Lennard Jones parameter section requires two variable columns:"		
 				<< "A/B or epsilon/R" << endl;
 
 			return false;
@@ -177,27 +177,29 @@ namespace BALL
 				float A = getValue(i, index_A).toFloat() * factor_A;
 				float B = getValue(i, index_B).toFloat() * factor_B;
 
+
 				// store the values
 				is_defined_[atom_type] = true;
 				A_[atom_type] = A;
 				B_[atom_type] = B;
+
 
 				// check for the sign of the parameters: they have to be positive!
 				if ((A < 0) || (B < 0))
 				{
 					if (format_ == EPSILON_R_FORMAT)
 					{
-						Log.warn() << "VdW parameter may not be negative: type = " << atom_type << " (" << key << "), eps = " << A 
+						Log.warn() << "LennardJones::extractSection: VdW parameter may not be negative: type = " << atom_type << " (" << key << "), eps = " << A 
 											 << ", r = " << B << endl;
 					} else {
-						Log.warn() << "VdW parameter may not be negative: type = " << atom_type << " (" << key << "), A = " << A 
+						Log.warn() << "LennardJones::extractSection: VdW parameter may not be negative: type = " << atom_type << " (" << key << "), A = " << A 
 											 << ", B = " << B << endl;
 					}
 				}
 
 			} else {
 
-				Log.warn() << "unknown atom type in Lennard Jones parameters: " << key << "   i = " << i << endl;
+				Log.warn() << "LennardJones::extractSection: unknown atom type in Lennard Jones parameters: " << key << "   i = " << i << endl;
 			}
 		}
 
