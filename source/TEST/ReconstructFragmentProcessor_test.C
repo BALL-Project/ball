@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ReconstructFragmentProcessor_test.C,v 1.5 2004/03/20 13:22:25 oliver Exp $
+// $Id: ReconstructFragmentProcessor_test.C,v 1.5.2.1 2004/05/07 13:09:48 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,7 +21,7 @@
 
 ///////////////////////////
 
-START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.5 2004/03/20 13:22:25 oliver Exp $")
+START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.5.2.1 2004/05/07 13:09:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,7 +43,7 @@ CHECK(const FragmentDB* ReconstructFragmentProcessor::getFragmentDB() const)
 	TEST_EQUAL(rfp.getFragmentDB(), 0)
 RESULT
 
-FragmentDB frag_db;
+FragmentDB frag_db("fragments/Fragments.db");
 CHECK(void ReconstructFragmentProcessor::getFragmentDB(FragmentDB& frag_db))
 	ReconstructFragmentProcessor rfp;
 	TEST_EQUAL(rfp.getFragmentDB(), 0)

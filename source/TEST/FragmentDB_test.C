@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_test.C,v 1.12 2004/02/26 21:10:11 oliver Exp $
+// $Id: FragmentDB_test.C,v 1.12.2.1 2004/05/07 13:09:47 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,12 +21,12 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.12 2004/02/26 21:10:11 oliver Exp $")
+START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.12.2.1 2004/05/07 13:09:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-FragmentDB db;
+FragmentDB db("fragments/Fragments.db");
 CHECK(getResidue(const String&))
 	const Residue* res = db.getResidue("GLY");
 	TEST_NOT_EQUAL(res, 0)

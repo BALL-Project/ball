@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.17 2004/02/23 17:58:38 oliver Exp $
+// $Id: PDBFile_test.C,v 1.17.2.1 2004/05/07 13:09:48 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.17 2004/02/23 17:58:38 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.17.2.1 2004/05/07 13:09:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -176,7 +176,7 @@ RESULT
 
 
 CHECK([EXTRA]writing of Systems containing Atoms instead of PDBAtoms)
-	FragmentDB db;
+	FragmentDB db("fragments/Fragments.db");
 	System* system = new System;
 	Protein* protein = new Protein;
 	Chain* chain = new Chain;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.7 2003/10/22 13:31:05 oliver Exp $
+// $Id: RotamerLibrary_test.C,v 1.7.2.1 2004/05/07 13:09:48 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,14 +17,14 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.7 2003/10/22 13:31:05 oliver Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.7.2.1 2004/05/07 13:09:48 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-FragmentDB frag_db;
+FragmentDB frag_db("fragments/Fragments.db");
 
 Rotamer* rot_ptr = 0;
 CHECK(Rotamer::Rotamer())
