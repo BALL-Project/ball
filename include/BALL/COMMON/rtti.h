@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.h,v 1.17 2002/12/23 08:26:12 oliver Exp $
+// $Id: rtti.h,v 1.18 2003/02/08 16:07:30 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -36,7 +36,7 @@ namespace BALL
 			@param	t the {\tt type_info} structure as returned by {\tt typeid}
 			@return	string the coverted class name
 	*/ 
-	string streamClassName(const ::std::type_info& t);
+	string streamClassName(const std::type_info& t);
 
 	/**	@name Simplified RunTime Type Identification.
 			ANSI C++ provides support for runtime type identification (RTTI). However, the support

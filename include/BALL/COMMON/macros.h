@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: macros.h,v 1.6 2002/02/27 12:18:21 sturm Exp $
+// $Id: macros.h,v 1.7 2003/02/08 16:07:30 oliver Exp $
 
 #ifndef BALL_COMMON_MACROS_H
 #define BALL_COMMON_MACROS_H
@@ -80,7 +80,7 @@
 #define BALL_DUMP_DEPTH(os, depth)               for (dump_indent_depth_ = 0; dump_indent_depth_ < depth; ++dump_indent_depth_) { os << "    "; }
 #define BALL_DUMP_STREAM_PREFIX(os)              Size dump_indent_depth_ = 0;
 
-#define BALL_DUMP_HEADER(os,cl,ob)               os << "Object: " << (void *)ob << " is instance of class: " << typeid(*ob).name() << std::endl;
+#define BALL_DUMP_HEADER(os,cl,ob)               os << "Object: " << (void *)ob << " is instance of class: " << streamClassName(typeid(*ob)) << std::endl;
 #define BALL_DUMP_CLASS_HEADER(os,cl,ob)         os << "Object: " << (void *)ob << " is instance of class: " << #cl << ::std::endl;
 #define BALL_DUMP_STREAM_SUFFIX(os)              
 
