@@ -1,4 +1,4 @@
-// $Id: message.C,v 1.4.4.2 2002/11/29 00:45:02 amoll Exp $
+// $Id: message.C,v 1.4.4.3 2002/12/02 16:37:30 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -105,6 +105,7 @@ namespace BALL
 			throw()
 			: CompositeMessage()
 		{
+Log.error() << "ChangedCompositeMessage::ChangedCompositeMessage" << std::endl;		
 		}
 
 	  ChangedCompositeMessage::ChangedCompositeMessage(const CompositeMessage& message)
@@ -138,6 +139,7 @@ namespace BALL
 				camera_look_at_(message.camera_look_at_),
 				camera_view_point_(message.camera_view_point_)
 		{
+Log.error() << "SceneMessage::SceneMessage" << std::endl;		
 		}
 
 		SceneMessage::~SceneMessage()
@@ -154,6 +156,7 @@ namespace BALL
 			: Message(),
 				status_bar_()
 		{
+Log.error() << "WindowMessage::WindowMessage" << std::endl;		
 		}
 
 		WindowMessage::WindowMessage(const WindowMessage& message)
@@ -200,6 +203,9 @@ namespace BALL
 			throw()
 			: SelectionMessage()
 		{
+			#ifdef	BALL_DEBUG_VIEW_MESSAGES
+				Log.error() << "new GeometricObjectSelectionMessage" << std::endl;		
+			#endif				
 		}
 
 		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage(const SelectionMessage& message)
@@ -215,6 +221,23 @@ namespace BALL
 				Log.error() << "Destructing object " << (void *)this 
 										<< " of class " << RTTI::getName<GeometricObjectSelectionMessage>() << endl;
 			#endif 
+		}
+
+		NewSelectionMessage::NewSelectionMessage() 
+		{ 
+			#ifdef  BALL_DEBUG_VIEW_MESSAGES		
+			  Log.error() << "new NewSelectionMessage" << std::endl;
+			#endif				
+		}
+
+		CompositeSelectedMessage::CompositeSelectedMessage(Composite* composite, bool selected) 
+			throw()
+			:	composite_(composite),
+				selected_(selected)
+		{
+		 #ifdef  BALL_DEBUG_VIEW_MESSAGES		
+			  Log.error() << "CompositeSelectedMessage" << std::endl;		
+		 #endif  				
 		}
 
 
