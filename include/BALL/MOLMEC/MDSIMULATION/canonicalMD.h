@@ -1,4 +1,5 @@
-// $Id: canonicalMD.h,v 1.4 2000/05/10 08:40:18 pmueller Exp $
+// $Id: canonicalMD.h,v 1.5 2000/07/06 14:01:45 oliver Exp $
+
 // Canonical MD: A class for doing molecular dynamics simulations      
 // according to the principle of a canonical ensemble (NVT), i.e., 
 // the temperature is kept constant. 
