@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.17 2001/04/30 13:41:32 oliver Exp $
+// $Id: socket.h,v 1.18 2001/05/18 16:20:32 anker Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -99,20 +99,31 @@ namespace BALL
 
 	typedef int sockexcept;
 
-	/**	
+
+	/**	Socket addresses. This is an interface definition only.
+			{\bf Definition:} \URL{BALL/SYSTEM/socket.h}
 	*/
 	class SockAddr 
 	{
 		public:
 		
+		BALL_CREATE(SockAddr)
+
 		/** @name	Constructors and Destructors 
 		*/
 		//@{
 
-		///
-		virtual	~SockAddr() 
-		{
-		}
+		/// Default constructor
+		SockAddr()
+			throw();
+
+		/// Copy constructor
+		SockAddr(const SockAddr& sock_addr)
+			throw();
+
+		/// Destructor
+		virtual	~SockAddr()
+			throw();
 			
 		//@}
 
@@ -120,30 +131,40 @@ namespace BALL
 		*/
 		//@{
 		
-		///
-		virtual operator void* () const = 0;
+		/// Convert a SockAddr into void*
+		virtual operator void* () const
+			throw();
 
-		///
+		/// Convert a SockAddr to standard sockaddr*
 		operator sockaddr* () const 
-		{ 
-			return getAddr(); 
-		}
+			throw();
 
 		//@}
 		/**	@name	Accessors 
 		*/
 		//@{
 
-		///
-		virtual int getSize() const = 0;
+		/// Get the size (of what?)
+		virtual int getSize() const
+			throw();
 
-		///
-		virtual int getFamily() const = 0;
+		/// Get the socket family
+		virtual int getFamily() const
+			throw();
 
-		///
-		virtual sockaddr* getAddr() const = 0;
+		/// Get the actual address as a standard sockaddr
+		virtual sockaddr* getAddr() const
+			throw();
+
 		//@}
 	};
+
+	BALL_INLINE
+	SockAddr::operator sockaddr* () const 
+		throw()
+	{ 
+		return getAddr(); 
+	}
 
 	/**	
 	*/

@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.20 2001/04/30 13:42:18 oliver Exp $
+// $Id: socket.C,v 1.21 2001/05/18 16:20:35 anker Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -71,6 +71,54 @@ namespace BALL
 		// reset the error flag
 		errno = 0;
 	}
+
+	SockAddr::SockAddr()
+		throw()
+	{
+	}
+
+	SockAddr::SockAddr(const SockAddr& /* sock_addr */)
+		throw()
+	{
+	}
+
+	SockAddr::~SockAddr()
+		throw()
+	{
+	}
+
+	SockAddr::operator void* () const
+		throw()
+	{
+		Log.error() << "SockAddr::operator void* () "
+			<< "This method should not be called." << endl;
+		return 0;
+	}
+
+	int SockAddr::getSize() const
+		throw()
+	{
+		Log.error() << "SockAddr::getSize() "
+			<< "This method should not be called." << endl;
+		return 0;
+	}
+
+	int SockAddr::getFamily() const
+		throw()
+	{
+		Log.error() << "SockAddr::getFamily() "
+			<< "This method should not be called." << endl;
+		return 0;
+	}
+
+	sockaddr* SockAddr::getAddr() const
+		throw()
+	{
+		Log.error() << "SockAddr::getAddr() "
+			<< "This method should not be called." << endl;
+		return 0;
+	}
+
 
 	SocketBuf::SocketBuf(int soc)
 		: rep (new sockcnt (soc, 1)),
