@@ -15,7 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class AmberConfigurationDialog;
-
+		class CharmmConfigurationDialog;
 /** Dialog for performing MD simulations
 		\ingroup ViewDialogs
 */
@@ -79,6 +79,21 @@ class MolecularDynamicsDialog
 
 		///
 		void setAmberDialog(AmberConfigurationDialog* amber_dialog);
+		
+		///
+		void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
+		
+		///
+		void setForceField(bool sel);
+		
+		///
+		void useAmberFF();
+		
+		///
+		void useCharmmFF();
+		
+		///
+		bool getUseAmber();
 	
 		protected slots:
 
@@ -88,6 +103,7 @@ class MolecularDynamicsDialog
 
 		private:
 		AmberConfigurationDialog* amber_dialog_;
+		CharmmConfigurationDialog* charmm_dialog_;
 };
 
 } } // namespaces

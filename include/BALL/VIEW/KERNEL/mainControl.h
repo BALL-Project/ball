@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.36 2004/02/11 16:19:11 amoll Exp $
+// $Id: mainControl.h,v 1.37 2004/02/18 11:47:30 bender Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -157,6 +157,9 @@ namespace BALL
 
 				/// Simulations menu
 				MOLECULARMECHANICS = 10400,
+				
+				/// Molmec submenu for force field selection
+				CHOOSE_FF,
 
 				/// Tools menu
 				TOOLS = 10500,

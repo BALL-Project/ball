@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.2 2004/02/09 13:51:49 amoll Exp $
+// $Id: molecularStructure.h,v 1.3 2004/02/18 11:47:30 bender Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
 #define BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -24,6 +24,10 @@
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
 # include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
+#endif
+
+#ifndef BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
+# include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
 #endif
 
 #include <qwidget.h>
@@ -130,8 +134,16 @@ class MolecularStructure
 	AmberConfigurationDialog& getAmberConfigurationDialog()
 		throw();
 	
+	///
+	CharmmConfigurationDialog& getCharmmConfigurationDialog()
+		throw();
+
 	/// Print the results of the AMBER forcefield.
 	void printAmberResults()
+		throw();
+		
+	/// Print the results of the CHARMM forcefield
+	void printCharmmResults()
 		throw();
 	
 	/** Fetch the widgets preferences from the INIfile.
@@ -213,7 +225,8 @@ class MolecularStructure
 	void assignCharges();
 
 	///
-	void calculateAmberEnergy();
+	//void calculateAmberEnergy();
+	void calculateForceFieldEnergy();
 
 	///
 	void amberMinimization();
@@ -222,8 +235,11 @@ class MolecularStructure
 	void amberMDSimulation();
 
 	///
-	void showForceFieldOptions();
-
+	void showAmberForceFieldOptions();
+	
+	///
+	void showCharmmForceFieldOptions();
+	
 	//@}
 	
 private:
@@ -248,17 +264,17 @@ private:
 				amber_minimization_id_,
 				amber_mdsimulation_id_,
 				build_peptide_id_,
-				calculate_hbonds_id_,
-				force_field_options_id_;
+				calculate_hbonds_id_;
 	
+	bool use_amber_;
 	Vector3 										view_center_vector_;
 	float 											view_distance_;
 	AmberFF* 										amber_;
 	CharmmFF*										charmm_;
 	AmberConfigurationDialog    amber_dialog_;
+	CharmmConfigurationDialog charmm_dialog_;
 	AmberMinimizationDialog 		minimization_dialog_;
 	MolecularDynamicsDialog 		md_dialog_;
-
 };
 
 } } // namespaces

@@ -15,6 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 		class AmberConfigurationDialog;
+		class CharmmConfigurationDialog;
 
 /** Dialog for performing energy minimisations
 		\ingroup ViewDialogs
@@ -58,24 +59,40 @@ class AmberMinimizationDialog
 	
 		///
 		double getEnergyDifference() const;
-		
+	
 		///
 		void setEnergyDifference(double energy_difference);
-	
+		
 		///
 		bool getUseConjugateGradient() const;
 		
 		///
 		void setUseConjugateGradient(bool use_CG);
-
-		///
-		void setAmberDialog(AmberConfigurationDialog* amber_dialog);
-	
+		
 		///
 		void advancedOptions();
 		
+		///
+		void setAmberDialog(AmberConfigurationDialog* amber_dialog);
+		
+		///
+		void setCharmmDialog(CharmmConfigurationDialog* charmm_dialog);
+		
+		///
+		void setForceField(bool sel);
+		
+		///
+		void useAmberFF();
+		
+		///
+		void useCharmmFF();
+		
+		///
+		bool getUseAmber();
+		
 		private:
 		AmberConfigurationDialog* amber_dialog_;
+		CharmmConfigurationDialog* charmm_dialog_;
 };
 
 } } // namespaces
