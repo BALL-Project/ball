@@ -26,9 +26,6 @@
 #	include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 #endif
 
-
-
-
 #include <qlabel.h>
 #include <qmenubar.h>
 #include <qsplitter.h>
@@ -39,8 +36,7 @@
 using namespace std;
 
 
-Mainframe::Mainframe
-	(QWidget* parent, const char* name)
+Mainframe::Mainframe(QWidget* parent, const char* name)
 	:	MainControl(parent, name, ".options"),
 		scene_(0),
 		control_(0),
@@ -103,7 +99,6 @@ Mainframe::Mainframe
 	CHECK_PTR(new MolecularFileDialog(this));
 	CHECK_PTR(new OpenPDBFile(this));
 	CHECK_PTR(new OpenMOL2File(this));
-	//CHECK_PTR(new OpenMOLFile(this));
 	CHECK_PTR(new OpenHINFile(this));
 
 	molecular_properties_ = new MolecularProperties(this);
@@ -135,23 +130,27 @@ Mainframe::Mainframe
 	// ---------------------
 
 	// File Menu
-	insertMenuEntry(MainControl::FILE, "Export POVRay &file", this, SLOT(exportPOVRay()), CTRL+Key_F, MENU__FILE_EXPORT_POVRAYFILE);
+	insertMenuEntry(MainControl::FILE, "Export POVRay &file", this, SLOT(exportPOVRay()), 
+									CTRL+Key_F, MENU__FILE_EXPORT_POVRAYFILE);
 
 	// Build Menu -------------------------------------------------------------------
-	insertMenuEntry(MainControl::BUILD, "Check St&ructure", this, SLOT(checkResidue()), CTRL+Key_R, MENU__BUILD_CHECK_RESIDUE);
-
-	insertMenuEntry(MainControl::BUILD, "Assign &Charges", this, SLOT(assignCharges()), CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
-	insertMenuEntry(MainControl::BUILD, "Calculate AMBER &Energy", this, SLOT(calculateAmberEnergy()), CTRL+Key_U, MENU__BUILD_AMBER_ENERGY);
-	insertMenuEntry(MainControl::BUILD, "Perform Energy &Minimization", this, SLOT(amberMinimization()), CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
-	insertMenuEntry(MainControl::BUILD, "Perform MD &Simulation", this, SLOT(amberMDSimulation()), CTRL+Key_S, MENU__BUILD_AMBER_MDSIMULATION);
-  insertMenuEntry(MainControl::DISPLAY, "Contour Surface", this,  SLOT(computeSurface()), CTRL+Key_S,MENU__DISPLAY_OPEN_SURFACE_DIALOG);
+	insertMenuEntry(MainControl::BUILD, "Check St&ructure", this, SLOT(checkResidue()), 
+									CTRL+Key_R, MENU__BUILD_CHECK_RESIDUE);
+	insertMenuEntry(MainControl::BUILD, "Assign &Charges", this, SLOT(assignCharges()), 
+									CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
+	insertMenuEntry(MainControl::BUILD, "Calculate AMBER &Energy", this, SLOT(calculateAmberEnergy()), 
+									CTRL+Key_U, MENU__BUILD_AMBER_ENERGY);
+	insertMenuEntry(MainControl::BUILD, "Perform Energy &Minimization", this, SLOT(amberMinimization()), 
+									CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
+	insertMenuEntry(MainControl::BUILD, "Perform MD &Simulation", this, SLOT(amberMDSimulation()), 
+									CTRL+Key_S, MENU__BUILD_AMBER_MDSIMULATION);
+  insertMenuEntry(MainControl::DISPLAY, "Contour Surface", this,  SLOT(computeSurface()), 
+									CTRL+Key_S,MENU__DISPLAY_OPEN_SURFACE_DIALOG);
 			
 	// Help-Menu -------------------------------------------------------------------
-
 	insertMenuEntry(MainControl::HELP, "&About", this, SLOT(about()), CTRL+Key_A, MENU__HELP_ABOUT);
 
 	// Menu ------------------------------------------------------------------------
-
 	menuBar()->setSeparator(QMenuBar::InWindowsStyle);
 
 	// ---------------------
@@ -175,7 +174,6 @@ Mainframe::Mainframe
 Mainframe::~Mainframe()
 	throw()
 {
-	// clean up
 	List<QPopupMenu *>::Iterator list_it = popup_menus_.begin();
 
 	for (; list_it != popup_menus_.end(); ++list_it)
@@ -189,10 +187,7 @@ Mainframe::~Mainframe()
 void Mainframe::onNotify(Message *message)
 	throw()
 {
-	if (message == 0)
-	{
-		return;
-	}
+	if (message == 0) return;
 
 	MainControl::onNotify(message);
 }
@@ -242,10 +237,7 @@ void Mainframe::exportPOVRay()
 
 void Mainframe::checkResidue()
 {
-	if (selection_.size() == 0)
-	{
-		return;
-	}
+	if (selection_.size() == 0)  return;
 
 	QString message;
 	message.sprintf("selecting %d objects...", selection_.size());
@@ -298,7 +290,8 @@ void Mainframe::calculateAmberEnergy()
 	amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
 	amber.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
 	amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
-  amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
+  amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] 
+		= String(minimization_dialog_->getUseDistanceDependentDC());
   amber.options[AmberFF::Option::FILENAME] = String(minimization_dialog_->getFilename());
 
 	if (!amber.setup(*system))
@@ -358,11 +351,6 @@ void Mainframe::computeSurface()
 	NewCompositeMessage ncm;
 	ncm.setComposite(system);
 	notify_(ncm);
-
-	/*NewMolecularMessage nmm;
-	nmm.setComposite(system);
-	notify_(nmm);
-*/
 
 	// notify tree of the changes
 	ChangedMolecularMessage changed_message; 
@@ -460,9 +448,7 @@ void Mainframe::amberMinimization()
 	// we update everything every so and so steps
 	Size steps = minimization_dialog_->getRefresh();
 
-	//
 	// iterate until done and refresh the screen every "steps" iterations
-	// 
 	while (!minimizer->minimize(steps, true))
 	{
     MainControl::update(system->getRoot());
@@ -598,7 +584,7 @@ void Mainframe::amberMDSimulation()
 	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
 	Log.info() << endl;
 	Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
-		<< mds->getNumberOfIteration() << " iterations" << endl;
+						 << mds->getNumberOfIteration() << " iterations" << endl;
 
 	// clean up
 	delete mds;
@@ -612,6 +598,7 @@ void Mainframe::about()
 {
 	DlgAbout about_box;
 	about_box.exec();
+
 	statusBar()->message("MolVIEW V1.0", 1500);
 }
 
@@ -673,6 +660,7 @@ void Mainframe::writePreferences(INIFile& inifile)
 
 	MainControl::writePreferences(inifile);
 	display_properties_->writePreferences(inifile);
+	minimization_dialog_->writePreferences(inifile);
 }
 
 
