@@ -82,6 +82,7 @@ Changed:
 		- cleanup for storing of settings from dialogs
 		- storing PNG and POV export filenames in config file, so no 
 		  files will be overwritten by accident
+		- now showing unmatched atoms after RMSD calculation
 	- ~ModularWidget now calls MainControl::removeModularWidget, so
 		from ModularWidget derived classes no longer have to deregister themselves
 

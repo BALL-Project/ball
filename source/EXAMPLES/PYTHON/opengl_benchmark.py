@@ -5,6 +5,7 @@ pm = m.getPrimitiveManager()
 py = PyWidget.getInstance(0)
 dp = DisplayProperties.getInstance(0)
 fd = MolecularFileDialog.getInstance(0)
+pm.setMultithreadingMode(0)
 
 result = 0
 nr_runs = 70
