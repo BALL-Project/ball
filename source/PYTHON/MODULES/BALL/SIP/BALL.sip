@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.3 2000/08/07 17:46:19 oliver Exp $
+// $Id: BALL.sip,v 1.4 2000/08/28 15:46:28 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -44,6 +44,7 @@
 %Include selectable.sip
 // singleton.h // not supported
 // textPersistenceManager.h // ??
+%Include timeStamp.sip
 // visitor.h // not supported
 
 // DATATYPE
