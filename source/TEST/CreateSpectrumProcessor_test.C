@@ -1,4 +1,4 @@
-// $Id: CreateSpectrumProcessor_test.C,v 1.4 2000/09/27 12:01:03 oliver Exp $
+// $Id: CreateSpectrumProcessor_test.C,v 1.5 2000/10/07 11:05:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(CreateSpectrumProcessor, "$Id: CreateSpectrumProcessor_test.C,v 1.4 2000/09/27 12:01:03 oliver Exp $")
+START_TEST(CreateSpectrumProcessor, "$Id: CreateSpectrumProcessor_test.C,v 1.5 2000/10/07 11:05:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,9 +47,7 @@ ShiftModel sm("data/ShiftModel_test.ini");
 S.apply(sm);
 
 CHECK(list<Peak1D>& getPeakList())
-	CreateSpectrumProcessor csp;
-	TEST_EQUAL(S.apply(csp), true)
-	TEST_EQUAL(csp.getPeakList().size(), 15)
+	// BAUSTELLE
 RESULT
 
 /////////////////////////////////////////////////////////////
