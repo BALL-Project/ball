@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.40 2004/02/15 18:44:05 anhi Exp $
+// $Id: scene.C,v 1.41 2004/02/18 16:08:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1049,8 +1049,8 @@ void Scene::initializeWidget(MainControl& main_control)
 		MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P, -1, hint);
 	main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-	stereo_id_ = main_control.insertMenuEntry(
-		MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()));
+// 	stereo_id_ = main_control.insertMenuEntry(
+// 		MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()));
 
 	hint = "Print the coordinates of the current viewpoint";
 	main_control.insertMenuEntry(
@@ -1071,7 +1071,7 @@ void Scene::initializeWidget(MainControl& main_control)
 	window_menu_entry_id_ = 
 		main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 	menuBar()->setItemChecked(window_menu_entry_id_, true);
-	menuBar()->setItemChecked(stereo_id_, false);
+//	menuBar()->setItemChecked(stereo_id_, false) ;
 
 	setCursor(QCursor(Qt::SizeAllCursor));
 }
@@ -1087,7 +1087,7 @@ void Scene::finalizeWidget(MainControl& main_control)
 																										SLOT(setViewPoint_()), CTRL+Key_N);		
 	main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
 																										SLOT(resetCamera_()), CTRL+Key_T);		
-	main_control.removeMenuEntry(MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()), CTRL+Key_T);		
+//	main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT(switchStereo()), CTRL+Key_T);		
 	main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
 	main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 }
