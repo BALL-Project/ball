@@ -1,6 +1,8 @@
-// $Id: simpleDescriptors.C,v 1.1 2001/12/17 02:59:44 oliver Exp $
+// $Id: simpleDescriptors.C,v 1.2 2001/12/17 03:17:37 oliver Exp $
 
 #include <BALL/QSAR/simpleDescriptors.h>
+#include <BALL/KERNEL/PTE.h>
+
 
 namespace BALL
 {
@@ -13,7 +15,7 @@ namespace BALL
 	double MolecularMass::compute(const Molecule& molecule)
 	{
 		double mass = 0.0;
-		AtomIterator it = molecule.beginAtom();
+		AtomConstIterator it = molecule.beginAtom();
 		for (; +it; ++it)
 		{
 			if (it->getElement() == Element::UNKNOWN)
@@ -23,7 +25,7 @@ namespace BALL
 			}
 			else
 			{
-				mass += it->getElement().getMass();
+				mass += it->getElement().getAtomicWeight();
 			}
 		}
 		

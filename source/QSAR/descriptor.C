@@ -1,6 +1,6 @@
-// $Id: descriptor.C,v 1.3 2001/12/17 02:50:03 oliver Exp $
+// $Id: descriptor.C,v 1.4 2001/12/17 03:17:36 oliver Exp $
 
-#include <BALL/QSAR/descriptor.C>
+#include <BALL/QSAR/descriptor.h>
 
 namespace BALL
 {
@@ -22,7 +22,7 @@ namespace BALL
 		return name_;
 	}
 
-	void Descriptor::setName(const String& name) const
+	void Descriptor::setName(const String& name)
 	{
 		name_ = name;
 	}
@@ -33,7 +33,7 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	double Descriptor::compute(const Molecule& molecule)
+	double Descriptor::compute(const Molecule& /* molecule */)
 	{
 		return 0.0;
 	}
