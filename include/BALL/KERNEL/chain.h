@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.5 2000/03/30 10:16:06 oliver Exp $
+// $Id: chain.h,v 1.6 2000/04/14 00:10:30 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -86,16 +86,35 @@ namespace BALL
 		/**	@name Assignment */
 		//@{
 
-		///
+		/** Assignment with cloning facility.
+				Assign the BaseFragment {\em base_fragment} to {\em *this} chain.
+				The assignment is either deep or shallow (default).
+				@param  chain the chain to be copied (cloned)
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em chain}
+		*/
 		void set(const Chain& chain, bool deep = true);
 
-		///
+		/** Assignment operator.
+				Assign the chain {\em chain} to {\em *this} chain.
+				The assignment is either deep or shallow (default).
+				@param   chain the chain to be copied (cloned)
+				@return  chain& - {\em *this} chain
+				@see     chain::set
+		*/
 		Chain& operator = (const Chain& chain);
 
-		///
+		/** Copying with cloning facility.
+				Copy {\em *this} chain to the chain {\em chain}.
+				The assignment is either deep or shallow (default).
+				@param  chain the chain to be assigned to
+				@see    chain::set
+		*/
 		void get(Chain& chain, bool deep = true) const;
 
-		///
+		/** Swapping of chain.
+				Swap the states of {\em *this} chain with the chain {\em chain}.
+				@param  chain the chain {\em *this} chain is being swapped with
+		*/
 		void swap(Chain& chain);
 
 		//@}
@@ -103,94 +122,200 @@ namespace BALL
 		/**	@name	Accessors */
 		//@{
 
-		///
+		/** Get a pointer to the superior protein.
+				The reference is 0 if {\em *this} chain does not have a parent protein.
+				@return  Protein* -
+								 mutable reference to the parent protein of {\em *this} chain,
+		*/
 		Protein* getProtein();
 
-		///
+		/** Get a constant pointer to the superior chain.
+				The reference is 0 if {\em *this} chain does not have a parent protein.
+				@return  Protein* -
+								 constant reference to the parent protein of {\em *this} chain,
+		*/
 		const Protein* getProtein() const;
 
-		///
+		/** Get a pointer to a subaltern SecondaryStructure at a given position.
+				The reference is 0 if {\em *this} chain does not have a SecondaryStructure at the given position.
+				@param   index the position of the subaltern SecondaryStructure
+				@exception IndexUnderflow if {\tt index < 0}
+				@return  SecondaryStructure* -
+								 mutable reference to the subaltern SecondaryStructure at positon {\em index} of {\em *this} chain,
+		*/
 		SecondaryStructure* getSecondaryStructure(Index index);
 	
-		///
+		/** Get a pointer to a subaltern SecondaryStructure at a given position.
+				The reference is 0 if {\em *this} chain does not have a SecondaryStructure at the given position.
+				@param   index the position of the subaltern SecondaryStructure
+				@exception IndexUnderflow if {\tt index < 0}
+				@return  SecondaryStructure* -
+								 constant reference to the subaltern SecondaryStructure at positon {\em index} of {\em *this} chain,
+		*/
 		const SecondaryStructure* getSecondaryStructure(Index index) const;
 	
-		///
+		/** Get a pointer to a subaltern Residue at a given position.
+				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+				@param   index the position of the subaltern Residue
+				@exception IndexUnderflow if {\tt index < 0}
+				@return  Residue* -
+								 mutable reference to the subaltern Residue at positon {\em index} of {\em *this} chain,
+		*/
 		Residue* getResidue(Index index);
 	
-		///
+		/** Get a pointer to a subaltern Residue at a given position.
+				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+				@param   index the position of the subaltern Residue
+				@exception IndexUnderflow if {\tt index < 0}
+				@return  Residue* -
+								 constant reference to the subaltern Residue at positon {\em index} of {\em *this} chain,
+		*/
 		const Residue* getResidue(Index index) const;
 	
-		///
+		/** Get a pointer to the N-terminal Residue.
+				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+
+				@return  Residue* -
+								 mutable reference to the N-terminal Residue
+		*/
 		Residue* getNTerminal();
 	
-		///
+		/** Get a pointer to the N-terminal Residue.
+				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+
+				@return  Residue* -
+								 constant reference to the N-terminal Residue
+		*/
 		const Residue* getNTerminal() const;
 
-		///
+		/** Get a pointer to the C-terminal Residue.
+				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+
+				@return  Residue* -
+								 mutable reference to the C-terminal Residue
+		*/
 		Residue* getCTerminal();
 	
-		///
+		/** Get a pointer to the C-terminal Residue.
+				The reference is 0 if {\em *this} chain does not have a Residue at the given position.
+
+				@return  Residue* -
+								 constant reference to the C-terminal Residue
+		*/
 		const Residue* getCTerminal() const;
 
-		///
+		/** Get a pointer to a subaltern PDBAtom at a given position.
+				The reference is 0 if {\em *this} chain does not have a PDBAtom at the given position.
+				@param   index the position of the subaltern PDBAtom
+				@exception IndexUnderflow if {\tt index < 0}
+				@return  PDBAtom* -
+								 constant reference to the subaltern PDBAtom at positon {\em index} of {\em *this} chain,
+		*/
 		PDBAtom* getPDBAtom(Index index);
 	
-		///
+		/** Get a pointer to a subaltern PDBAtom at a given position.
+				The reference is 0 if {\em *this} chain does not have a PDBAtom at the given position.
+				@param   index the position of the subaltern PDBAtom
+				@exception IndexUnderflow if {\tt index < 0}
+				@return  PDBAtom* -
+								 mutable reference to the subaltern PDBAtom at positon {\em index} of {\em *this} chain,
+		*/
 		const PDBAtom* getPDBAtom(Index index) const;
 	
-		///
+		/** Count the SecondaryStructures
+				@return  Size the number of secondary structures
+		*/
 		Size countSecondaryStructures() const;
 
-		///
+		/** Count the Residues
+				@return  Size the number of residues
+		*/
 		Size countResidues() const;
 
-		///
+		/** Count the PDBAtoms
+				@return  Size the number of PDBAtoms
+		*/
 		Size countPDBAtoms() const;
 
-		///
+		/** Prepend a SecondaryStructure at position 0.
+				@param secondary_structure, the SecondaryStructure to prepend
+		*/
 		void prepend(SecondaryStructure& secondary_structure);
 
-		///
+		/** Append a SecondaryStructure after the last position.
+				@param secondary_structure, the SecondaryStructure to append
+		*/
 		void append(SecondaryStructure& secondary_structure);
 
-		///
+		/** Insert a SecondaryStructure after the last position.
+				@param secondary_structure, the SecondaryStructure to insert
+		*/
 		void insert(SecondaryStructure& secondary_structure);
 
-		///
+		/** Insert a SecondaryStructure before an given {\em Comosite} object.
+				@param secondary_structure, the SecondaryStructure to insert
+				@param before, the {\em Comosite} object to insert before
+		*/
 		void insertBefore(SecondaryStructure& secondary_structure, Composite& before);
 
-		///
+		/** Insert a SecondaryStructure after an given {\em Comosite} object.
+				@param secondary_structure, the SecondaryStructure to insert
+				@param after, the {\em Comosite} object to insert before
+		*/
 		void insertAfter(SecondaryStructure& secondary_structure, Composite& after);
 
-		///
+		/** Remove a SecondaryStructure
+				@param secondary_structure the SecondaryStructure to remove
+		*/
 		bool remove(SecondaryStructure& secondary_structure);
 
-		///
+		/** Prepend a Residue at position 0.
+				@param residue, the Residue to prepend
+		*/
 		void prepend(Residue& residue);
 
-		///
+		/** Append a Residue after the last position.
+				@param residue, the Residue to append
+		*/
 		void append(Residue& residue);
 
-		///
+		/** Insert a Residue after the last position.
+				@param residue, the Residue to insert
+		*/
 		void insert(Residue& residue);
 
-		///
+		/** Insert a Residue before an given {\em Comosite} object.
+				@param residue, the Residue to insert
+				@param before, the {\em Comosite} object to insert before
+		*/
 		void insertBefore(Residue& residue,Composite& before);
 
-		///
+		/** Insert a Residue after an given {\em Comosite} object.
+				@param residue, the Residue to insert
+				@param after, the {\em Comosite} object to insert before
+		*/
 		void insertAfter(Residue& residue, Composite& after);
 
-		///
+		/** Remove a Residue
+				@param residue the Residue to remove
+		*/
 		bool remove(Residue& residue);
 
-		///
+		/**	Prepend all children of {\tt chain} to the children of this chain.
+				@param chain the chain to access
+		*/
 		void spliceBefore(Chain& chain);
 
-		///
+		/**	Append all children of {\tt chain} to the children of this chain.
+				@param chain the chain to access
+		*/
 		void spliceAfter(Chain &chain);
 
-		///
+		/**	Insert the children of {\tt chain} into this chain.
+				The children of {\tt chain} are inserted at the position of 
+				{\tt chain} if {\tt chain} is a child of {\tt this}.
+				Otherwise the children are inserted using \Ref{spliceBefore}.
+		*/
 		void splice(Chain &chain);
 		
 		//@}
@@ -198,7 +323,14 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics */
 		//@{
 
-		///
+		/** Internal state and consistency self-validation.
+				Initiate self-validation of the internal state and data structure consistencies of {\em *this} chain.
+				If the internal state of {\em *this} chain is correct (self-validated) and consistent {\tt true} is returned,
+				{\tt false} otherwise. 
+				@return			bool -
+										{\tt true} if the internal state of {\em *this} chain is correct (self-validated) and consistent,
+										{\tt false} otherwise
+		*/
 		virtual bool isValid() const;
 		
 		///
@@ -208,10 +340,20 @@ namespace BALL
 
 		// --- STORERS
 
-		///
+		/* Persistent stream input and state restorage.
+				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this} chain.
+				\\
+				{\bf Note:} Not yet implemented.
+				@param  s input stream from where to restore the internal state of {\em *this} chain
+		*/
 		virtual void read(std::istream& s);
 
-		///
+		/* Persistent stream output and state storage.
+				Write persistent bond data to the output stream {\em s} and store the state of {\em *this} chain.
+				\\
+				{\bf Note:} Not yet implemented.	
+				@param  s input stream from where to restore the internal state of {\em *this} chain
+		*/
 		virtual void write(std::ostream& s) const;
 
 		// --- EXTERNAL ITERATORS
