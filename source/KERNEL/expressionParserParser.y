@@ -9,6 +9,12 @@ using namespace std;
 extern int ExpressionParserlex();
 extern void ExpressionParsererror(char* s);
 
+/* ??? */
+/* There is some nasty problem with alloca under Intel/icc/Linux */
+/* so we use (inefficient) malloc instead. */
+#undef alloca
+#define alloca malloc
+
 %}
 %union {
 	char*	text;
