@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.24 2002/12/16 15:52:10 oliver Exp $
+// $Id: mainControl.h,v 1.25 2002/12/16 16:07:53 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -824,6 +824,9 @@ namespace BALL
 			//@}
 			
 			void selectCompositeRecursive(Composite* composite, bool state)
+				throw();
+
+			void setStatusbarText(const String& text)
 				throw();
 
 			protected:
