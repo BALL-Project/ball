@@ -1,4 +1,4 @@
-// $Id: removeModel.C,v 1.4 2000/04/25 15:17:01 hekl Exp $
+// $Id: removeModel.C,v 1.5 2000/06/18 16:33:38 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 
@@ -95,8 +95,6 @@ namespace BALL
 			used_atoms_.clear();
 			getSearcher_().clear();
 
-			//			getSearcher_().setProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
-
 			return BaseModelProcessor::start();
 		}
 				
@@ -127,36 +125,13 @@ namespace BALL
 					// use only atoms with greater handles than first atom
 					if (*first__pAtom < *second__pAtom)
 					{
-						// get bond model
-						__pBond->applyChild(getSearcher_());
-
-						// if found, delete bond model 
-						if (getSearcher_().geometricObjectFound() == true)
-						{
-							// get bond model
-							Composite *bond_composite 
-								= (Composite *)(getSearcher_().getGeometricObject());
-
-							// remove bond model from bond
-							__pBond->Composite::removeChild(*bond_composite);
-							
-							// delete bond model
-							delete bond_composite;
-						}
+						// remove models
+						removeGeometricObjects_(*__pBond);
 					}
 				}
 
-				// get the geometric object
-				first__pAtom->applyChild(getSearcher_());
-
-				Composite *atom_model
-					= (Composite *)(getSearcher_().getGeometricObject());
-
-				// remove atom model from atom
-				first__pAtom->Composite::removeChild(*atom_model);
-
-				// delete atom model
-				delete atom_model;
+				// remove atom models
+				removeGeometricObjects_(*first__pAtom);
 			}
 			
 			return true;
@@ -178,7 +153,7 @@ namespace BALL
 			atom->applyChild(getSearcher_());
 
 			// geometric object is not existent => do nothing
-			if (getSearcher_().geometricObjectFound() == false)
+			if (getSearcher_().geometricObjectsFound() == false)
 			{
 				return Processor::CONTINUE;
 			}

@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.C,v 1.4 2000/04/25 15:17:01 hekl Exp $
+// $Id: vanDerWaalsModel.C,v 1.5 2000/06/18 16:33:38 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 
@@ -57,6 +57,8 @@ namespace BALL
 		AddVanDerWaalsModel::start
 			()
 		{
+			getSearcher_().setProperty(GeometricObject::PROPERTY__MODEL_VDW);
+
 			return BaseModelProcessor::start();
 		}
 				
@@ -79,14 +81,8 @@ namespace BALL
 
 			Atom *atom = RTTI::castTo<Atom>(composite);
 
-			// check if there are already VanDerWaals models appended
-			atom->applyChild(getSearcher_());
-
-			// geometric object is already existent => do nothing
-			if (getSearcher_().geometricObjectFound() == true)
-			{
-				return Processor::CONTINUE;
-			}
+			// remove all models appended to atom
+			removeGeometricObjects_(*atom, true);
 
 			Sphere *__pSphere = createSphere_();
 

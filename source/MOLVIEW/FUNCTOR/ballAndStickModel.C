@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.6 2000/04/25 15:17:00 hekl Exp $
+// $Id: ballAndStickModel.C,v 1.7 2000/06/18 16:33:37 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -19,7 +19,7 @@ namespace BALL
 				ball_and_stick_(true),
 				used_atoms_()
 		{
-			setProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
+			setProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
 		}
 
 		AddBallAndStickModel::AddBallAndStickModel
@@ -50,8 +50,6 @@ namespace BALL
 			()
 		{
 			BaseModelProcessor::clear();
-
-			setProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
 
 			ball_radius_ = (Real)0.4;
 			stick_radius_ = (Real)0.2;
@@ -163,9 +161,6 @@ namespace BALL
 
 			List<Atom*>::Iterator list_iterator;
 
-			// search for BallAndStick primitives
-			getSearcher_().setProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
-
 			// for all used atoms
 			for (list_iterator = used_atoms_.begin();
 					 list_iterator != used_atoms_.end(); ++list_iterator)
@@ -176,16 +171,22 @@ namespace BALL
 				BALL_FOREACH_ATOM_BOND(*first__pAtom, bond__Iterator)
 				{
 					__pBond = &(*bond__Iterator);
+					
 					second__pAtom = __pBond->getSecondAtom();
 
 					// use only atoms with greater handles than first atom
 					if (*first__pAtom < *second__pAtom)
 					{
+						// remove all models append to bond
+						getSearcher_().clearProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);				
+						removeGeometricObjects_(*__pBond, true);
+
 						// search for BallAndStick representants
+						getSearcher_().setProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
 						second__pAtom->applyChild(getSearcher_());
 
 						// if found, build a Tube between them
-						if (getSearcher_().geometricObjectFound() == true)
+						if (getSearcher_().geometricObjectsFound() == true)
 						{
 							// get colors from both atoms
 							first__pAtom->host(*getColorCalculator());
@@ -238,7 +239,7 @@ namespace BALL
 			}
 			
 			// clear search model
-			getSearcher_().clearProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
+			getSearcher_().clearProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
 
 			return true;
 		}
@@ -255,14 +256,8 @@ namespace BALL
 
 			Atom *atom = RTTI::castTo<Atom>(composite);
 
-			// check if there are already BallAndStick models appended
-			atom->applyChild(getSearcher_());
-
-			// geometric object is already existent => do nothing
-			if (getSearcher_().geometricObjectFound() == true)
-			{
-				return Processor::CONTINUE;
-			}
+			// remove only models appended to atom
+			removeGeometricObjects_(*atom, true);
 
 			// generate BallPrimitive
 			Sphere *__pSphere = createSphere_();

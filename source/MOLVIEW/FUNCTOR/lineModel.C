@@ -1,4 +1,4 @@
-// $Id: lineModel.C,v 1.5 2000/04/25 15:17:01 hekl Exp $
+// $Id: lineModel.C,v 1.6 2000/06/18 16:33:38 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
 
@@ -18,7 +18,6 @@ namespace BALL
 				used_atoms_()
 		{
 			setProperty(GeometricObject::PROPERTY__MODEL_LINES);
-			getSearcher_().setProperty(GeometricObject::PROPERTY__MODEL_LINES);
 		}
 
 		AddLineModel::AddLineModel
@@ -48,7 +47,6 @@ namespace BALL
 			BaseModelProcessor::clear();
 
 			setProperty(GeometricObject::PROPERTY__MODEL_LINES);
-			getSearcher_().setProperty(GeometricObject::PROPERTY__MODEL_LINES);
 
 			used_atoms_.clear();
 		}
@@ -132,16 +130,22 @@ namespace BALL
 				BALL_FOREACH_ATOM_BOND(*first__pAtom, bond__Iterator)
 				{
 					__pBond = &(*bond__Iterator);
+
 					second__pAtom = __pBond->getSecondAtom();
 
 					// use only atoms with greater handles than first atom
 					if (*first__pAtom < *second__pAtom)
 					{
+						// remove all models appended to bond
+						getSearcher_().clearProperty(GeometricObject::PROPERTY__MODEL_LINES);
+						removeGeometricObjects_(*__pBond, true);
+
 						// search for Line representants
+						getSearcher_().setProperty(GeometricObject::PROPERTY__MODEL_LINES);
 						second__pAtom->applyChild(getSearcher_());
 						
 						// if found, build a Line between them
-						if (getSearcher_().geometricObjectFound() == true)
+						if (getSearcher_().geometricObjectsFound() == true)
 						{
 							// get colors from both atoms
 							first__pAtom->host(*getColorCalculator());
@@ -206,17 +210,8 @@ namespace BALL
 
 			Atom *atom = RTTI::castTo<Atom>(composite);
 
-			// test if there are already Line models appended
-			if (atom->countDescendants() > (Size)0)
-			{
-				atom->applyChild(getSearcher_());
-
-				// geometric object is already existent => do nothing
-				if (getSearcher_().geometricObjectFound() == true)
-				{
-					return Processor::CONTINUE;
-				}
-			}
+			// remove all models appended to atom
+			removeGeometricObjects_(*atom, true);
 
 			// generate help BallPrimitive
 			Point *__pPoint = createPoint_();
