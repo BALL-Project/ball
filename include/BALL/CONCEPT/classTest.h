@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.21 2001/05/07 15:57:16 oliver Exp $
+// $Id: classTest.h,v 1.22 2001/05/12 01:10:07 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -80,7 +80,7 @@ namespace TEST {\
 	bool					this_test;\
 	int 					exception = 0;\
 	string 				exception_name = "";\
-	char*					version_string = version;\
+	const char*		version_string = version;\
 	bool					newline = false;\
 	list<string>	tmp_file_list;\
 	std::ifstream	infile;\
