@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.h,v 1.3 2000/09/07 19:37:04 oliver Exp $
+// $Id: createSpectrumProcessor.h,v 1.4 2000/09/07 21:04:28 oliver Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -62,11 +62,6 @@ namespace BALL
 			nothing is done here
 		*/
 		virtual bool start();
-		
-		/**	finish-function
-			noting is done here
-		*/
-		virtual bool finish();
 		
 		/**	operator-function
 			if object is kind of PDBAtom a new peak is created ,
