@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.13 2004/04/18 15:29:45 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.14 2004/04/21 15:06:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -154,14 +154,6 @@ namespace BALL
 				throw();
 			
 			/// Overloaded from ModularWidget
-			virtual void fetchPreferences(INIFile &inifile)
-				throw();
-				
-			/// Overloaded from ModularWidget
-			virtual void writePreferences(INIFile &inifile)
-				throw();
-
-			/// Overloaded from ModularWidget
 			virtual void checkMenuEntries()
 				throw();
 				
@@ -186,7 +178,6 @@ namespace BALL
 			};
 
 			Index save_id_;
-			String working_dir_;
 		};
 
 	} // namespace VIEW

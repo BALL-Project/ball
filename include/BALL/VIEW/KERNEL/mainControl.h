@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.43 2004/04/16 11:30:41 amoll Exp $
+// $Id: mainControl.h,v 1.44 2004/04/21 15:06:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -698,6 +698,14 @@ namespace BALL
 			*/
 			void insertDeleteEntry()
 				throw();
+
+			///
+			String getWorkingDir() const
+				throw() { return working_dir_;}
+
+			///
+			void setWorkingDir(const String& dir)
+				throw() { working_dir_ = dir;}
 			
 			//@}
 			/**	@name	Debugging and Diagnostics
@@ -801,6 +809,7 @@ namespace BALL
 			static const char  *simulation_running_xpm_[];
 			static const char  *simulation_stoped_xpm_[];
 
+			String 							working_dir_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

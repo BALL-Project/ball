@@ -19,19 +19,15 @@ PythonSettings::PythonSettings( QWidget* parent,  const char* name, WFlags fl )
 
 void PythonSettings::fileSelected()
 {
-	QFileDialog *fd = new QFileDialog(this, "Choose Python Script", true);
-	fd->setMode(QFileDialog::ExistingFile);
-	fd->addFilter("Python scripts (*.py)");
-	fd->setSelectedFilter(1);
+	QString s = QFileDialog::getSaveFileName(
+								"",
+								"Python scripts (*.py)",
+								this,	
+								"Choose a Startup Python Script",
+								"" );
 
-	fd->setCaption("Choose Python Script");
-	fd->setViewMode(QFileDialog::Detail);
-	fd->setGeometry(300, 150, 400, 400);
-
-	int result_dialog = fd->exec();
-	if (!result_dialog == QDialog::Accepted) return;
-
-	script_edit->setText(fd->selectedFile());
+	if (s == QString::null) return;
+	script_edit->setText(s);
 	QWidget::update();
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.9 2003/12/10 15:10:13 amoll Exp $
+// $Id: FDPBDialog.C,v 1.10 2004/04/21 15:06:13 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -85,14 +85,17 @@ namespace BALL
 		void FDPBDialog::selectFile_(QLineEdit& lineedit)
 			throw()
 		{
-			QFileDialog *fd = new QFileDialog(this, "Choose file", true);
-			fd->setMode(QFileDialog::ExistingFile);
+			QString s = QFileDialog::getOpenFileName(
+										getWorkingDir().c_str(),
+										"",
+										getMainControl(),
+										"",
+										"Choose a file" );
 
-			int result_dialog = fd->exec();
-			if (!result_dialog == QDialog::Accepted) return;
+			if (s == QString::null) return;
+			setWorkingDirFromFilename_(s.ascii());
+			lineedit.setText(s);
 
-			lineedit.setText(fd->selectedFile());
-			delete fd;
 			QWidget::update();
 		}
 

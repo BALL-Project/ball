@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.28 2004/04/21 13:59:42 amoll Exp $
+// $Id: pyWidget.C,v 1.29 2004/04/21 15:06:14 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -18,7 +18,7 @@
 #include <qfiledialog.h>
 #include <qapplication.h>
 
-// doesnt work right now
+// doesnt work right now in multithreaded mode
 #undef BALL_QT_HAS_THREADS
 
 namespace BALL
@@ -431,39 +431,34 @@ namespace BALL
 
 		void PyWidgetData::scriptDialog()
 		{
+			PyWidget* p = (PyWidget*) parent();
 			// no throw specifier because of that #$%@* moc
-			QFileDialog *fd = new QFileDialog(this, "Run Python Script", true);
-			fd->setMode(QFileDialog::ExistingFile);
-			fd->addFilter("Python Scripts(*.py)");
-			fd->setSelectedFilter(1);
+			QString s = QFileDialog::getOpenFileName(
+										p->getWorkingDir().c_str(),
+										"Python Scripts(*.py)",
+										p->getMainControl(),
+										"Run Python Script",
+										"Choose a file" );
 
-			fd->setCaption("Run Python Script");
-			fd->setViewMode(QFileDialog::Detail);
-			fd->setGeometry(300, 150, 400, 400);
+		 	if (s == QString::null) return;
+			p->setWorkingDirFromFilename_(s.ascii());
 
-			int result_dialog = fd->exec();
-			if (!result_dialog == QDialog::Accepted) return;
-
-			String filename(fd->selectedFile().ascii());
-
-			runFile(filename);
+			runFile(s.ascii());
 		}
 
 		void PyWidgetData::exportHistory()
 		{
-			QFileDialog *fd = new QFileDialog(this, "Export History", true);
-			fd->setMode(QFileDialog::AnyFile);
-			fd->addFilter("Python Scripts(*.py)");
-			fd->setSelectedFilter(1);
+			PyWidget* p = (PyWidget*) parent();
+			QString s = QFileDialog::getOpenFileName(
+										p->getWorkingDir().c_str(),
+										"",
+										p->getMainControl(),
+										"Export History",
+										"");
 
-			fd->setCaption("Export History");
-			fd->setViewMode(QFileDialog::Detail);
-			fd->setGeometry(300, 150, 400, 400);
-
-			int result_dialog = fd->exec();
-			if (!result_dialog == QDialog::Accepted) return;
-
-			String filename(fd->selectedFile().ascii());
+		 	if (s == QString::null) return;
+			String filename(s.ascii());
+			p->setWorkingDirFromFilename_(filename);
 
 			File file(filename, std::ios::out);
 			if (!file.isOpen()) 

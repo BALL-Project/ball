@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.22 2004/04/21 13:43:28 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.23 2004/04/21 15:06:13 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -69,7 +69,7 @@ namespace BALL
 		{
 			QStringList files = QFileDialog::getOpenFileNames(
 													"*.pdb *.brk *.ent *.hin *.mol *.mol2",
-													working_dir_.c_str(),
+													getWorkingDir().c_str(),
 													getMainControl(),
 													"Molecular File Dialog",
 													"Choose a file to open" );
@@ -78,6 +78,11 @@ namespace BALL
 			{
 				// construct a name for the system(the filename without the dir path)
 				openFile((*it).ascii());
+			}
+
+			if (files.size() > 0) 
+			{
+				setWorkingDirFromFilename_((*files.begin()).ascii());
 			}
 		}
 
@@ -94,7 +99,7 @@ namespace BALL
 #endif
 			Position p = file.split(fields, seperators.c_str()) -1;
 			String filename = fields[p];				
-			working_dir_ = file.getSubstring(0, file.size() - (filename.size() + 1));
+			setWorkingDir(file.getSubstring(0, file.size() - (filename.size() + 1)));
 			String extension = fields[filename.split(fields, ".") -1];
 			filename = filename.getSubstring(0, filename.size() - (extension.size() + 1));
 			openFile(file, extension, filename);
@@ -162,13 +167,15 @@ namespace BALL
 			setStatusbarText("writing file...");
 
 			QString s = QFileDialog::getSaveFileName(
-										working_dir_.c_str(),
+										getWorkingDir().c_str(),
 										"*.pdb *.brk *.ent *.hin *.mol *.mol2",
 										getMainControl(),
 										"Molecular File Dialog",
 										"Choose a filename to save under" );
 
+		 	if (s == QString::null) return false;
 			String filename = s.ascii();
+			setWorkingDirFromFilename_(filename);
 
 			String filter(filename);
 			while (filter.has(FileSystem::PATH_SEPARATOR))
@@ -432,7 +439,7 @@ namespace BALL
 
 			if (!filename[0] == FileSystem::PATH_SEPARATOR)
 			{
-				system->setProperty("FROM_FILE", working_dir_ + FileSystem::PATH_SEPARATOR + filename);
+				system->setProperty("FROM_FILE", getWorkingDir() + FileSystem::PATH_SEPARATOR + filename);
 			}
 			else
 			{
@@ -447,23 +454,6 @@ namespace BALL
 			notify_(new_message);
 
 			return true;
-		}
-
-
-		void MolecularFileDialog::writePreferences(INIFile& inifile)
-			throw()
-		{
-			inifile.insertValue("WINDOWS", "File::working_dir", working_dir_);
-		}
-		
-
-		void MolecularFileDialog::fetchPreferences(INIFile& inifile)
-			throw()
-		{
-			if (inifile.hasEntry("WINDOWS", "File::working_dir"))
-			{
-				working_dir_ = inifile.getValue("WINDOWS", "File::working_dir");
-			}
 		}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.12 2004/02/26 08:41:38 anhi Exp $
+// $Id: modularWidget.h,v 1.13 2004/04/21 15:06:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -206,6 +206,14 @@ namespace BALL
 			MainControl* getMainControl() const
 				throw();
 
+			///	Implemented for convenience.
+			String getWorkingDir()
+				throw();
+
+			///	Implemented for convenience.
+			void setWorkingDir(const String& dir)
+				throw();
+
 			/** Return the FragmentDB.
 			 		<b>Note:</b> The ModularWidget must be registered to a MainControl.
 					Implemented for convenience.
@@ -239,8 +247,12 @@ namespace BALL
 					
 			//@}
 
-			protected:
+
+			void setWorkingDirFromFilename_(String filename)
+				throw();
 			
+			protected:
+
 			//_ id in the menubar entry "WINDOWS" for every widget
 			Index window_menu_entry_id_;
 

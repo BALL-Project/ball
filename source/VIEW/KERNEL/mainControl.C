@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.78 2004/04/21 11:14:36 amoll Exp $
+// $Id: mainControl.C,v 1.79 2004/04/21 15:06:14 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -731,6 +731,11 @@ namespace BALL
 				w = inifile.getValue("WINDOWS", "Main::width").toInt();
 			}
 
+			if (inifile.hasEntry("WINDOWS", "File::working_dir"))
+			{
+				setWorkingDir(inifile.getValue("WINDOWS", "File::working_dir"));
+			}
+
 		#ifdef BALL_PLATFORM_WINDOWS
 			// workaround for strange microsoft windows behaviour
 			x_pos += 4;
@@ -753,7 +758,8 @@ namespace BALL
 			inifile.insertValue("WINDOWS", "Main::x", String(x()));
 			inifile.insertValue("WINDOWS", "Main::y", String(y()));
 			inifile.insertValue("WINDOWS", "Main::width", String(width()));
-			inifile.insertValue("WINDOWS", "Main::height", String(height()));
+	 		inifile.insertValue("WINDOWS", "Main::height", String(height()));
+			inifile.insertValue("WINDOWS", "File::working_dir", getWorkingDir());
 
 			QString s;
 			QTextStream stream( &s, IO_ReadWrite);

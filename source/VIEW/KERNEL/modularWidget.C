@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.8 2004/02/02 17:22:32 amoll Exp $
+// $Id: modularWidget.C,v 1.9 2004/04/21 15:06:14 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -178,5 +178,33 @@ QMenuBar* ModularWidget::menuBar()
 {
 	return getMainControl()->menuBar();
 }
+
+String ModularWidget::getWorkingDir()
+	throw() 
+{ 
+	return getMainControl()->getWorkingDir();
+}
+
+void ModularWidget::setWorkingDir(const String& dir)
+	throw() 
+{ 
+	getMainControl()->setWorkingDir(dir);
+}
+
+void ModularWidget::setWorkingDirFromFilename_(String filename)
+	throw()
+{
+	String seperators(FileSystem::PATH_SEPARATOR);
+	// workaround on windows: QT returns the filename in linux style
+	// but I am not sure, if this will stay this way.
+#ifdef BALL_PLATFORM_WINDOWS
+	 seperators += "/";
+#endif
+	vector<String> fields;
+	Position p = filename.split(fields, seperators.c_str()) -1;
+	String suffix = fields[p];				
+	setWorkingDir(filename.getSubstring(0, filename.size() - (suffix.size() + 1)));
+}
+
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.23 2004/04/19 16:51:11 amoll Exp $
+// $Id: datasetControl.C,v 1.24 2004/04/21 15:06:14 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -88,19 +88,19 @@ void DatasetControl::addTrajectory()
 	throw()
 {
 	if (!getMainControl()->getSelectedSystem()) return;
-	QFileDialog *fd = new QFileDialog(this, "", true);
-	fd->setMode(QFileDialog::ExistingFile);
-	fd->setFilter("DCD files(*.dcd)");
-	fd->setCaption("Select a DCD file");
-	fd->setViewMode(QFileDialog::Detail);
 
-	if (!fd->exec()== QDialog::Accepted) return;
+	QString file = QFileDialog::getOpenFileName(
+											"DCD files(*.dcd)",
+											getWorkingDir().c_str(),
+											this,
+											"Trajectory File Dialog",
+											"Select a DCD file" );
 
-	String filename(fd->selectedFile().ascii());
-	delete fd;
+	if (file == QString::null) return;
+	setWorkingDirFromFilename_(file.ascii());
 
 	// construct a name for the system(the filename without the dir path)
-	DCDFile* dcd = new DCDFile(filename, std::ios::in);
+	DCDFile* dcd = new DCDFile(file.ascii(), std::ios::in);
 	insertTrajectory_(dcd, *getMainControl()->getSelectedSystem());
 }
 
@@ -281,15 +281,17 @@ void DatasetControl::saveTrajectory_()
 {
 	SnapShotManager* ssm = item_to_trajectory_[context_item_];
 
-	QFileDialog *fd = new QFileDialog(this, "", true);
-	fd->setMode(QFileDialog::AnyFile);
-	fd->setFilter("DCD files(*.dcd)");
-	fd->setCaption("Write to a DCD file");
-	fd->setViewMode(QFileDialog::Detail);
+	QString s = QFileDialog::getSaveFileName(
+								getWorkingDir().c_str(),
+								"DCD files(*.dcd)",
+								getMainControl(),
+								"Trajectory File Dialog",
+								"Choose a filename to save" );
 
-	if (!fd->exec()== QDialog::Accepted) return;
+	if (s == QString::null) return;
+	String filename = s.ascii();
+	setWorkingDirFromFilename_(filename);
 
-	String filename(fd->selectedFile().ascii());
 	ssm->getTrajectoryFile()->copyTo(filename);
 	setStatusbarText("Writen DCDFile");
 }
@@ -298,7 +300,8 @@ void DatasetControl::add3DGrid()
 	throw()
 {
 	QString result = QFileDialog::getOpenFileName("", "*", 0, "Select a RegularData file");
-	if (result.isEmpty()) return;
+	if (result == QString::null) return;
+	setWorkingDirFromFilename_(result.ascii());
 
 	RegularData3D* dat = new RegularData3D;
 	File infile;
@@ -343,6 +346,7 @@ void DatasetControl::save3DGrid_()
 {
 	QString qs = QFileDialog::getSaveFileName("", "*", 0, "Select a RegularData file");
 	if (qs == QString::null) return;
+	setWorkingDirFromFilename_(qs.ascii());
 
 	String result = qs.ascii();
 	if (result.isEmpty()) return;
