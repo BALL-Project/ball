@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.C,v 1.19 2003/08/26 09:17:47 oliver Exp $
+// $Id: bruker1DFile.C,v 1.20 2004/03/09 12:41:54 anhi Exp $
 //
 
 #include <BALL/FORMAT/bruker1DFile.h>
@@ -29,6 +29,7 @@ namespace BALL
 		min_ = (Size)pars_.getDoubleValue("YMIN_p");
 		max_ = (Size)pars_.getDoubleValue("YMAX_p");
 		pars_.close();
+		read();
 	}
 
 	Bruker1DFile::Bruker1DFile(const Bruker1DFile& file) 

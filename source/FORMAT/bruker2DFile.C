@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.C,v 1.23 2003/08/26 09:17:47 oliver Exp $
+// $Id: bruker2DFile.C,v 1.24 2004/03/09 12:42:20 anhi Exp $
 //
 
 #include <BALL/FORMAT/bruker2DFile.h>
@@ -28,6 +28,7 @@ namespace BALL
 		maxy_ = (int)parsf1_.getIntValue("YMAX_p");
 		minx_ = (int)parsf2_.getIntValue("YMIN_p");
 		maxx_ = (int)parsf2_.getIntValue("YMAX_p");
+		read();
 	}
 
 	Bruker2DFile::Bruker2DFile(const Bruker2DFile& file) 
