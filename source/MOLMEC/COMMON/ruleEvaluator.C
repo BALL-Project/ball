@@ -1,4 +1,4 @@
-// $Id: ruleEvaluator.C,v 1.8 2000/10/28 15:40:28 anker Exp $
+// $Id: ruleEvaluator.C,v 1.9 2001/04/09 11:28:11 amoll Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -120,16 +120,17 @@ namespace BALL
 		}
 
 		// iterate over all lines of the respective section
-		Position i = file.getSectionFirstLine(section_name);
-		for (; i < file.getSectionLastLine(section_name); i++)
+		INIFile::LineIterator it = file.getSectionFirstLine(section_name);
+		++it;//skip section line
+		for (; +it ; it.getSectionNextLine())
 		{
-			String line(*file.getLine(i));
+			String line(*it);
 			// empty lines or comment lines (starting with ';' or '#') are ignored
 			if (line.has('=') && (line[0] != ';') && (line[0] != '#'))
 			{
 				if (line[0] == '=')
 				{
-					Log.error() << "RuleEvaluator:: invalid rule in line " << i << ": " << line << endl;
+					Log.error() << "RuleEvaluator:: invalid rule in line: " << line << endl;
 					continue;
 				}
 
