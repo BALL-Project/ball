@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.33 2004/06/03 13:40:22 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.34 2004/06/03 13:58:48 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -306,7 +306,7 @@ void ColorMeshDialog::colorByCustomColor_()
 	}
 	else if (transparency_group_custom->selected() == alpha_button_custom)
 	{
-		rep_->setTransparency(min_min_color.getAlpha());
+		rep_->setTransparency(255 - (int) min_min_color.getAlpha());
 	}
 
 	mesh_->colorList.resize(1);
