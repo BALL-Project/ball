@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.12 2001/05/18 20:53:11 oliver Exp $
+// $Id: rtti.h,v 1.13 2001/05/29 12:21:01 anker Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -10,7 +10,7 @@
 
 #include <string>
 #include <typeinfo>
-using std::string;
+using ::std::string;
 
 namespace BALL 
 {
@@ -33,7 +33,7 @@ namespace BALL
 			@param	t the {\tt type_info} structure as returned by {\tt typeid}
 			@return	string the coverted class name
 	*/ 
-	string streamClassName(const std::type_info& t);
+	string streamClassName(const ::std::type_info& t);
 
 	/**	@name Simplified RunTime Type Identification.
 			ANSI C++ provides support for runtime type identification (RTTI). However, the support
@@ -132,9 +132,9 @@ namespace BALL
 			{
 				return "BALL::Index";
 			}
-			if (typeid(T) == typeid(std::string))
+			if (typeid(T) == typeid(::std::string))
 			{
-				return "std::string";
+				return "::std::string";
 			}
 			if (typeid(T) == typeid(PointerSizeInt))
 			{
