@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.26 2002/01/15 03:22:50 oliver Exp $
+// $Id: property.h,v 1.26.4.1 2002/05/01 10:30:37 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -262,16 +262,9 @@ namespace BALL
 			throw();
 
 		//@}
-		/**	@name	Storers */
+
+		/**	@name	Predicates */
 		//@{
-
-		/// Output operator
-		friend std::ostream& operator << (std::ostream& s, const NamedProperty& property)
-			throw();
-
-		/// Input operator
-		friend std::istream& operator >> (std::istream& s, NamedProperty& property)
-			throw();
 
 		/** Equality operator
 				Two instances are equal if they have the same name and the same value.
@@ -635,18 +628,6 @@ namespace BALL
 		//@}
 
 
-		/**	@name	Storers */
-		//@{
-
-		/// Output operator
-		friend std::ostream& operator << (std::ostream& s, const PropertyManager& property_manager)
-			throw();
-
-		/// Input operator
-		friend std::istream& operator >> (std::istream& s, PropertyManager& property_manager)
-			throw();
-		
-		//@}
 		/**	@name Storable Interface
 		*/
 		//@{
