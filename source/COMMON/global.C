@@ -1,8 +1,9 @@
-// $Id: global.C,v 1.1 1999/08/26 08:02:33 oliver Exp $
+// $Id: global.C,v 1.2 2000/01/08 12:22:58 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	const char* Version::RELEASE                   = BALL_RELEASE_STRING;
 	const short Version::MAJOR_RELEASE             = BALL_MAJOR_RELEASE;
