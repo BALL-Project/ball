@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.14 2000/10/23 23:28:46 amoll Exp $
+// $Id: File_test.C,v 1.15 2001/02/06 12:30:13 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.14 2000/10/23 23:28:46 amoll Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.15 2001/02/06 12:30:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -143,12 +143,12 @@ CHECK(move(const String& source_name, const String& destination_name))
 	TEST_EQUAL(f.move("", "XXX"), false)
 	TEST_EQUAL(f.move("XXX", ""), false)
 
-	TEST_EQUAL(f.move("XXX", "YYY"), true)
-	TEST_EQUAL(f.isAccessible("XXX"), false)
-	TEST_EQUAL(f.getSize("YYY"), 100)
+	TEST_EQUAL(f.move("XXX", "YYY") && f.move("YYY", "XXX"), true)
+	TEST_EQUAL(f.isAccessible("YYY"), false)
+	TEST_EQUAL(f.getSize("XXX"), 100)
 
 	file.copyTo("XXX");
-	TEST_EQUAL(f.move("XXX", "YYY"), true)
+	TEST_EQUAL(f.move("XXX", "YYY") && f.move("YYY", "XXX"), true)
 	TEST_EQUAL(file.getSize(), 100)
 
 	TEST_EQUAL(f.move("YYY", ""), false)
@@ -195,9 +195,10 @@ CHECK(rename(String old_path, String new_path))
 	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.rename("XXX", "XXX"), true)
-	TEST_EQUAL(f1.rename("XXX", "YYY"), true)
-	TEST_EQUAL(f1.isAccessible("XXX"), false)
-	TEST_EQUAL(f1.isAccessible("YYY"), true)
+	TEST_EQUAL(f1.rename("XXX", "YYY") && f1.rename("YYY", "XXX"), true)
+
+	TEST_EQUAL(f1.isAccessible("YYY"), false)
+	TEST_EQUAL(f1.isAccessible("XXX"), true)
 	f1.remove();
 	TEST_EQUAL(file.getSize(), 100)
 	f.remove("YYY");
