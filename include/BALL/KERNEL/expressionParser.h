@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.h,v 1.9 2003/03/26 15:59:21 anhi Exp $
+// $Id: expressionParser.h,v 1.10 2003/06/30 13:54:01 amoll Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPARSER_H
 #define BALL_KERNEL_EXPRESSIONPARSER_H
@@ -190,7 +190,8 @@ namespace BALL
 
 		/**	Return the parsed system
 		*/
-		const SyntaxTree& getSyntaxTree() const;
+		const SyntaxTree& getSyntaxTree() const
+			throw(Exception::NullPointer);
 		//@}
 		
 		struct State
