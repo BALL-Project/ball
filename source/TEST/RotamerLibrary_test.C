@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.6 2003/05/06 20:56:15 oliver Exp $
+// $Id: RotamerLibrary_test.C,v 1.7 2003/10/22 13:31:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.6 2003/05/06 20:56:15 oliver Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.7 2003/10/22 13:31:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -387,8 +387,8 @@ CHECK(side-chain conformations for Dunbrack library)
 	S.apply(cc);
 
 	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
-	TEST_EQUAL(rl.getNumberOfVariants(), 57)
-	ABORT_IF((rl.getNumberOfVariants() != 57) || (S.countResidues() != 20))
+	TEST_EQUAL(rl.getNumberOfVariants(), 75)
+	ABORT_IF((rl.getNumberOfVariants() != 75) || (S.countResidues() != 20))
 
 	ResidueIterator res_it(S.beginResidue());
 	for (; +res_it; ++res_it)
