@@ -1,4 +1,4 @@
-// $Id: BinarySearchTree_test.C,v 1.6 2000/08/05 15:17:18 oliver Exp $
+// $Id: BinarySearchTree_test.C,v 1.7 2000/08/05 23:57:36 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,8 +10,7 @@
 using namespace BALL;
 
 // helper class: a processor counting tree items
-class BSTreeItemCollector
-	: public UnaryProcessor<BSTreeItem>
+class BSTreeItemCollector	: public UnaryProcessor<BSTreeItem>
 {
 	public:
 	bool start()
@@ -28,19 +27,18 @@ class BSTreeItemCollector
 	}
 
 	Processor::Result operator () (BSTreeItem& item)
-	{
-		// store the item
+	{	// store the item
 		list_.push_back(&item);
 		return Processor::CONTINUE;
 	}
 
 	list<BSTreeItem*> getList()
-	{
+	{ // get a pointer to the list
 		return list_;
 	}
 	
 	BSTreeItem* getPointer()
-	{
+	{	// get a pointer to the first element in the list
 		if (list_it_ == list_.end())
 		{
 			return 0;
@@ -50,23 +48,41 @@ class BSTreeItemCollector
 		return temp;
 	}
 	Size getSize()
-	{
+	{	// get the size of the list
 		return list_.size();
 	}
 	
 	void reset()
-	{
+	{ // reset the iterator to the first element of the list
 		list_it_ = list_.begin();
 	}
-
 
 	private:
 	list<BSTreeItem*>	list_;
 	list<BSTreeItem*>::iterator list_it_;
 };
 
+//			     	  	   		item
+//	    			left              right
+//               rleft    lright    rright
+//                      llright         rrright
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.6 2000/08/05 15:17:18 oliver Exp $")
+BSTreeItem item, left, right, rleft, lright, llright, rright, rrright;
+
+void initialize()
+{
+	item  = BSTreeItem(&left, &right, BSTreeItem::RED);
+	left  = BSTreeItem(0, &rleft, BSTreeItem::RED);
+	rleft = BSTreeItem(0, 0, BSTreeItem::BLACK);
+	right = BSTreeItem(&lright, &rright, BSTreeItem::BLACK);
+	lright = BSTreeItem(&llright, 0, BSTreeItem::RED);
+	llright = BSTreeItem(0, 0, BSTreeItem::RED);
+	rright = BSTreeItem(0, &rrright, BSTreeItem::BLACK);
+	rrright = BSTreeItem(0, 0, BSTreeItem::BLACK);
+}
+
+
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.7 2000/08/05 23:57:36 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -92,26 +108,15 @@ CHECK(BSTreeItem(BSTreeItem* left_item, BSTreeItem* right_item, char color = BST
 	TEST_EQUAL(item->getLeftChild(), item2)
 	TEST_EQUAL(item->getRightChild(), item3)
 RESULT
-{
-//			     	  	   		item
-//	    			left              right
-//               rleft    lright    rright
-//                                     rrright
-BSTreeItem item, left, right, rleft, lright, rright, rrright;
-item  = BSTreeItem(&left, &right, BSTreeItem::RED);
-left  = BSTreeItem(0, &rleft, BSTreeItem::RED);
-rleft = BSTreeItem(0, 0, BSTreeItem::BLACK);
-right = BSTreeItem(&lright, &rright, BSTreeItem::BLACK);
-lright = BSTreeItem(0, 0, BSTreeItem::RED);
-rright = BSTreeItem(0, &rrright, BSTreeItem::BLACK);
-rrright = BSTreeItem(0, 0, BSTreeItem::BLACK);
 
+initialize();
 cout <<endl;
 cout << "item " << &item<<endl;
 cout << "left " << &left<<endl;
 cout << "rleft " <<&rleft <<endl;
 cout << "right " <<&right <<endl;
 cout << "lright " <<&lright <<endl;
+cout << "llright " <<&llright <<endl;
 cout << "rright " <<&rright <<endl;
 cout << "rrright " <<&rrright <<endl;
 cout <<endl;
@@ -134,7 +139,8 @@ CHECK(setLeftChild(BSTreeItem* item))
 	TEST_EQUAL(item.getLeftChild(), 0)
   item.setLeftChild(&left);
 	TEST_EQUAL(item.getLeftChild(), &left)
-	//BAUSTELLE: EXCEPTION
+	TEST_EXCEPTION(Exception::GeneralException, item.setLeftChild(&item))
+	TEST_EXCEPTION(Exception::GeneralException, item.setLeftChild(&right))
 RESULT
 
 CHECK(getRightChild())
@@ -147,10 +153,12 @@ CHECK(setRightChild(BSTreeItem *item))
 	TEST_EQUAL(item.getRightChild(), 0)
   item.setRightChild(&right);
 	TEST_EQUAL(item.getRightChild(), &right)
+	TEST_EXCEPTION(Exception::GeneralException, item.setRightChild(&item))
+	TEST_EXCEPTION(Exception::GeneralException, item.setRightChild(&left))
 RESULT
 
 CHECK(getSize())
-	TEST_EQUAL(item.getSize(), 7)
+	TEST_EQUAL(item.getSize(), 8)
 	TEST_EQUAL(rleft.getSize(), 1)
 RESULT
 
@@ -185,67 +193,209 @@ CHECK(getParentOfPredecessor())
 RESULT
 
 CHECK(getParentOfSuccessor())
-	TEST_EQUAL(item.getParentOfSuccessor(), &right)
+	TEST_EQUAL(item.getParentOfSuccessor(), &lright)
 	TEST_EQUAL(left.getParentOfSuccessor(), &left)
 	TEST_EQUAL(rrright.getParentOfSuccessor(), 0)
 RESULT
 
-CHECK(detachNode(BSTreeItem*& root, BSTreeItem* t, 
-			 BSTreeItem* p, bool right_side))
-	//BSTreeItem* pointer;
-//	TEST_EQUAL(item.detachNode(pointer, &left, ), &right) //???
-RESULT
-
-CHECK(rotateRight())
-  /*TEST_EQUAL(right.rotateRight(), &item)
+CHECK(detachNode(BSTreeItem*& root, BSTreeItem* t, BSTreeItem* p, bool right_side))
+	BSTreeItem* x = 0;
+	TEST_EQUAL(item.detachNode(x, &right, &item, true), &right)
+	TEST_EQUAL(x, 0)
+	TEST_EQUAL(item.getRightChild(), &rright)
+	TEST_EQUAL(item.getLeftChild(), &left)
+	TEST_EQUAL(right.getRightChild(), 0) // ??? rright child von right und item
 	TEST_EQUAL(right.getLeftChild(), &lright)
-	TEST_EQUAL(right.getRightChild(), &rright)*/ //??? segmentation fault
+	TEST_EQUAL(rright.getRightChild(), &rrright)
+	initialize();
+
+	TEST_EQUAL(item.detachNode(x, &right, &item, false), &right)
+	TEST_EQUAL(x, 0)
+	TEST_EQUAL(item.getLeftChild(), &rright)
+	TEST_EQUAL(item.getRightChild(), &rrright) // ??? right nach wie vor child von item
+	initialize();
+
+	TEST_EQUAL(item.detachNode(x, &rright, &right, true), &rright)
+	TEST_EQUAL(x, 0)
+	TEST_EQUAL(right.getRightChild(), &rrright)
+	TEST_EQUAL(rright.getLeftChild(), 0)
+	TEST_EQUAL(rright.getRightChild(), 0) // s.o.
+	initialize();
+
+	TEST_EQUAL(item.detachNode(x, &rrright, &rright, true), &rrright)
+	TEST_EQUAL(x, 0)
+	TEST_EQUAL(rright.getRightChild(), 0)
+	TEST_EQUAL(rright.getLeftChild(), 0)
+	TEST_EQUAL(rrright.getRightChild(), 0)
+	TEST_EQUAL(rrright.getLeftChild(), 0)
+	initialize();
+
+	TEST_EQUAL(item.detachNode(x, 0, &item, true), 0)
+	TEST_EQUAL(x, 0)
+	initialize();
+
+	TEST_EQUAL(item.detachNode(x, &right, 0, false), &right)
+	TEST_EQUAL(x, &rright)
+	initialize();
 RESULT
 
-CHECK(rotateLeft())
-  //BAUSTELLE
+CHECK(rotateRight())/*
+  TEST_EQUAL(right.rotateRight(), &lright)
+	right = *right.rotateRight();
+  TEST_EQUAL(lright.getColor(), BSTreeItem::RED)
+	TEST_EQUAL(lright.getLeftChild(), &rright)
+	TEST_EQUAL(lright.getRightChild(), &right)
+	TEST_EQUAL(lright.getLeftChild()->getRightChild(), &rrright)
+
+  TEST_EQUAL(lright.rotateRight(), &lright)
+  TEST_EQUAL(lright.getColor(), BSTreeItem::BLACK)
+	TEST_EQUAL(lright.getRightChild(), &rrright)
+
+  TEST_EQUAL(rright.rotateRight(), &rright)
+  TEST_EQUAL(rright.getColor(), BSTreeItem::BLACK)
+	TEST_EQUAL(rright.getLeftChild()->getRightChild(), 0)
+	initialize();*/
+RESULT
+
+CHECK(rotateLeft())/*
+  TEST_EQUAL(item.rotateLeft(), &right)
+	TEST_EQUAL(right.getLeftChild(), &item)
+	TEST_EQUAL(item.getLeftChild(), 0)	
+	TEST_EQUAL(item.getRightChild(), &lright)	
+	TEST_EQUAL(right.getRightChild(), &rright)	*/
+	initialize();
 RESULT
 
 BSTreeItemCollector myproc;
 
+// von oben nach links unten, rechts und hoch
 CHECK(applyPreorder(UnaryProcessor<BSTreeItem>& processor))
 	myproc.start();
 	item.applyPreorder(myproc);
 	myproc.reset();
-	TEST_EQUAL(myproc.getSize(), 7)
-	void* ptr_a = (void*)myproc.getPointer();
-	void* ptr_b = (void*)&left;
-	STATUS(ptr_a)
-	STATUS(ptr_b)
-	TEST_EQUAL((int)ptr_a, (int)ptr_b)
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(myproc.getPointer(), &item)
+	TEST_EQUAL(myproc.getPointer(), &left)
+	TEST_EQUAL(myproc.getPointer(), &rleft)
+	TEST_EQUAL(myproc.getPointer(), &right)
+	TEST_EQUAL(myproc.getPointer(), &lright)
+	TEST_EQUAL(myproc.getPointer(), &llright)
+	TEST_EQUAL(myproc.getPointer(), &rright)
+	TEST_EQUAL(myproc.getPointer(), &rrright)
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(applyInorder(UnaryProcessor<BSTreeItem>& processor))
-  //BAUSTELLE
+	myproc.start();
+	item.applyInorder(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(myproc.getPointer(), &left)
+	TEST_EQUAL(myproc.getPointer(), &rleft)
+	TEST_EQUAL(myproc.getPointer(), &item)
+	TEST_EQUAL(myproc.getPointer(), &llright)
+	TEST_EQUAL(myproc.getPointer(), &lright)
+	TEST_EQUAL(myproc.getPointer(), &right)
+	TEST_EQUAL(myproc.getPointer(), &rright)
+	TEST_EQUAL(myproc.getPointer(), &rrright)
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(applyPostorder(UnaryProcessor<BSTreeItem>& processor))
-  //BAUSTELLE
+	myproc.start();
+	item.applyPostorder(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(myproc.getPointer(), &rleft)
+	TEST_EQUAL(myproc.getPointer(), &left)
+	TEST_EQUAL(myproc.getPointer(), &llright)
+	TEST_EQUAL(myproc.getPointer(), &lright)
+	TEST_EQUAL(myproc.getPointer(), &rrright)
+	TEST_EQUAL(myproc.getPointer(), &rright)
+	TEST_EQUAL(myproc.getPointer(), &right)
+	TEST_EQUAL(myproc.getPointer(), &item)
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(applyLevelorder(UnaryProcessor<BSTreeItem>& processor))
-  //BAUSTELLE
+	myproc.start();
+	item.applyLevelorder(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(myproc.getPointer(), &item)
+	TEST_EQUAL(myproc.getPointer(), &left)
+	TEST_EQUAL(myproc.getPointer(), &right)
+	TEST_EQUAL(myproc.getPointer(), &rleft)
+	TEST_EQUAL(myproc.getPointer(), &lright)
+	TEST_EQUAL(myproc.getPointer(), &rright)
+	TEST_EQUAL(myproc.getPointer(), &llright)
+	TEST_EQUAL(myproc.getPointer(), &rrright)
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(applyPreorderFlat(UnaryProcessor<BSTreeItem>& processor))
-  //BAUSTELLE
+	myproc.start();
+	item.applyPreorderFlat(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(myproc.getPointer(), &item)
+	TEST_EQUAL(myproc.getPointer(), &left)
+	TEST_EQUAL(myproc.getPointer(), &rleft)
+	TEST_EQUAL(myproc.getPointer(), &right)
+	TEST_EQUAL(myproc.getPointer(), &lright)
+	TEST_EQUAL(myproc.getPointer(), &llright)
+	TEST_EQUAL(myproc.getPointer(), &rright)
+	TEST_EQUAL(myproc.getPointer(), &rrright)
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(applyInorderFlat(UnaryProcessor<BSTreeItem>& processor))
-  //BAUSTELLE
+	myproc.start();
+	item.applyInorderFlat(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(myproc.getPointer(), &left)
+	TEST_EQUAL(myproc.getPointer(), &rleft)
+	TEST_EQUAL(myproc.getPointer(), &item)
+	TEST_EQUAL(myproc.getPointer(), &llright)
+	TEST_EQUAL(myproc.getPointer(), &lright)
+	TEST_EQUAL(myproc.getPointer(), &right)
+	TEST_EQUAL(myproc.getPointer(), &rright)
+	TEST_EQUAL(myproc.getPointer(), &rrright)
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(applyPostorderFlat(UnaryProcessor<BSTreeItem>& processor))
-  //BAUSTELLE
+	myproc.start();
+	item.applyPostorderFlat(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(myproc.getPointer(), &rleft)
+	TEST_EQUAL(myproc.getPointer(), &left)
+	TEST_EQUAL(myproc.getPointer(), &llright)
+	TEST_EQUAL(myproc.getPointer(), &lright)
+	TEST_EQUAL(myproc.getPointer(), &rrright)
+	TEST_EQUAL(myproc.getPointer(), &rright)
+	TEST_EQUAL(myproc.getPointer(), &right)
+	TEST_EQUAL(myproc.getPointer(), &item)
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(apply(UnaryProcessor<BSTreeItem>& processor))
-  //BAUSTELLE
+	myproc.start();
+	item.apply(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+	TEST_EQUAL(myproc.getPointer(), &item)
+	TEST_EQUAL(myproc.getPointer(), &left)
+	TEST_EQUAL(myproc.getPointer(), &rleft)
+	TEST_EQUAL(myproc.getPointer(), &right)
+	TEST_EQUAL(myproc.getPointer(), &lright)
+	TEST_EQUAL(myproc.getPointer(), &llright)
+	TEST_EQUAL(myproc.getPointer(), &rright)
+	TEST_EQUAL(myproc.getPointer(), &rrright)
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(isLeaf() const )
@@ -273,13 +423,48 @@ CHECK(replace(BSTreeItem* root, BSTreeItem::Pack& pp))
 RESULT
 
 CHECK(detachMinimum(BSTreeItem*& root))
-  //BAUSTELLE
+	BSTreeItem* root = &item;
+	TEST_EQUAL(item.detachMinimum(root), &left) //warum pointer angeben, warum nicht auch die addresse eines objekts???
+	TEST_EQUAL(item.getLeftChild(), &rleft)
+	TEST_EQUAL(left.getLeftChild(), 0)
+	TEST_EQUAL(left.getRightChild(), 0) //??? rleft child von item und left
+
+	initialize();
+	root = &left;
+	TEST_EQUAL(item.detachMinimum(root), &left)
+
+	initialize();
+	root = &lright;
+	TEST_EQUAL(item.detachMinimum(root), &llright)
+
+	initialize();
+	root = &rleft;
+	TEST_EQUAL(item.detachMinimum(root), &rleft)
 RESULT
 
 CHECK(detachMaximum(BSTreeItem*& root))
-  //BAUSTELLE
+	BSTreeItem* root = &item;/*
+	TEST_EQUAL(item.detachMaximum(root), &rrright) //warum pointer angeben???
+	TEST_EQUAL(right.getRightChild(), &rright)
+	TEST_EQUAL(rright.getRightChild(), 0)
+	TEST_EQUAL(rright.getLeftChild(), 0)
+
+	TEST_EQUAL(rrright.getRightChild(), 0)
+	TEST_EQUAL(rrright.getLeftChild(), 0)
+
+	initialize();
+	root = &left;
+	TEST_EQUAL(item.detachMaximum(root), &rleft)
+
+	initialize();
+	root = &lright;
+	TEST_EQUAL(item.detachMaximum(root), &llright)
+
+	initialize();
+	root = &rrright;
+	TEST_EQUAL(item.detachMaximum(root), &rrright)*/
 RESULT
-}
+
 // tests for class TBSTreeItem::
 
 TBSTreeItem<int>* tbsitem;
@@ -387,209 +572,209 @@ CHECK(TBSTreeItem::bool operator == (const BSTreeIterator& iterator) const )
   //BAUSTELLE
 RESULT
 
-// tests for class TBSTreeItem::TBSTreeIterator::
+// tests for class TBSTreeIterator::
 
-CHECK(TBSTreeItem::TBSTreeIterator::TBSTreeIterator(const BSTreeItemType* itemType = 0))
+CHECK(TBSTreeIterator::TBSTreeIterator(const BSTreeItemType* itemType = 0))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTreeIterator::TBSTreeIterator(const BSTreeItemType* itemType, BSTreeIterator::WalkOrder walk_order))
+CHECK(TBSTreeIterator::TBSTreeIterator(const BSTreeItemType* itemType, BSTreeIterator::WalkOrder walk_order))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTreeIterator::TBSTreeIterator(const TBSTreeIterator& iterator))
+CHECK(TBSTreeIterator::TBSTreeIterator(const TBSTreeIterator& iterator))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTreeIterator::~TBSTreeIterator())
+CHECK(TBSTreeIterator::~TBSTreeIterator())
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTreeIterator::forward())
+CHECK(TBSTreeIterator::forward())
   //BAUSTELLE
 RESULT
 
-// tests for class TBSTreeItem::TBSTree::
+// tests for class TBSTree::
 
-CHECK(TBSTreeItem::TBSTree::BALL_CREATE(TBSTree))
+CHECK(TBSTree::BALL_CREATE(TBSTree))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::setComparator(const Comparator<DataType>& comparator))
+CHECK(TBSTree::setComparator(const Comparator<DataType>& comparator))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::resetComparator())
+CHECK(TBSTree::resetComparator())
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::getComparator() const )
+CHECK(TBSTree::getComparator() const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::getRoot() const )
+CHECK(TBSTree::getRoot() const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::getHeight() const )
+CHECK(TBSTree::getHeight() const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::getSize() const )
+CHECK(TBSTree::getSize() const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::getMinimum() const )
+CHECK(TBSTree::getMinimum() const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::getMaximum() const )
+CHECK(TBSTree::getMaximum() const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::find(const DataType& data) const )
+CHECK(TBSTree::find(const DataType& data) const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::count(const DataType& data) const )
+CHECK(TBSTree::count(const DataType& data) const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::insert(const DataType& data, bool multiple = true))
+CHECK(TBSTree::insert(const DataType& data, bool multiple = true))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::detach(const DataType& data))
+CHECK(TBSTree::detach(const DataType& data))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::detachMinimum())
+CHECK(TBSTree::detachMinimum())
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::detachMaximum())
+CHECK(TBSTree::detachMaximum())
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::remove(const DataType& data))
+CHECK(TBSTree::remove(const DataType& data))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::removeAll(const DataType& data))
+CHECK(TBSTree::removeAll(const DataType& data))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::removeMinimum())
+CHECK(TBSTree::removeMinimum())
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::removeMaximum())
+CHECK(TBSTree::removeMaximum())
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::host(Visitor<TBSTree>& visitor))
+CHECK(TBSTree::host(Visitor<TBSTree>& visitor))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::bool operator == (const TBSTree& tree) const )
+CHECK(TBSTree::bool operator == (const TBSTree& tree) const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::bool operator != (const TBSTree& tree) const )
+CHECK(TBSTree::bool operator != (const TBSTree& tree) const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::has(const DataType& data) const )
+CHECK(TBSTree::has(const DataType& data) const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::isEmpty() const )
+CHECK(TBSTree::isEmpty() const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::isValid() const )
+CHECK(TBSTree::isValid() const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(TBSTree::dump(std::ostream& s = std::cout, Size depth = 0) const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::applyPreorder(UnaryProcessor<DataType>& processor))
+CHECK(TBSTree::applyPreorder(UnaryProcessor<DataType>& processor))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::applyInorder(UnaryProcessor<DataType>& processor))
+CHECK(TBSTree::applyInorder(UnaryProcessor<DataType>& processor))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::applyPostorder(UnaryProcessor<DataType>& processor))
+CHECK(TBSTree::applyPostorder(UnaryProcessor<DataType>& processor))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::applyLevelorder(UnaryProcessor<DataType>& processor))
+CHECK(TBSTree::applyLevelorder(UnaryProcessor<DataType>& processor))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::applyPreorderFlat(UnaryProcessor<DataType>& processor))
+CHECK(TBSTree::applyPreorderFlat(UnaryProcessor<DataType>& processor))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::applyInorderFlat(UnaryProcessor<DataType>& processor))
+CHECK(TBSTree::applyInorderFlat(UnaryProcessor<DataType>& processor))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::applyPostorderFlat(UnaryProcessor<DataType>& processor))
+CHECK(TBSTree::applyPostorderFlat(UnaryProcessor<DataType>& processor))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::apply(UnaryProcessor<DataType>& processor))
+CHECK(TBSTree::apply(UnaryProcessor<DataType>& processor))
   //BAUSTELLE
 RESULT
 
-// tests for class TBSTreeItem::TBSTree::PreorderIteratorTraits_::
+// tests for class TBSTree::PreorderIteratorTraits_::
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::(PreorderIteratorTraits_)())
+CHECK(TBSTree::PreorderIteratorTraits_::(PreorderIteratorTraits_)())
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::PreorderIteratorTraits_(const TBSTree& tree))
+CHECK(TBSTree::PreorderIteratorTraits_::PreorderIteratorTraits_(const TBSTree& tree))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::PreorderIteratorTraits_(const PreorderIteratorTraits_& traits))
+CHECK(TBSTree::PreorderIteratorTraits_::PreorderIteratorTraits_(const PreorderIteratorTraits_& traits))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::PreorderIteratorTraits_& operator =  (const PreorderIteratorTraits_& traits))
+CHECK(TBSTree::PreorderIteratorTraits_::PreorderIteratorTraits_& operator =  (const PreorderIteratorTraits_& traits))
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::getContainer() const )
+CHECK(TBSTree::PreorderIteratorTraits_::getContainer() const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::getPosition())
+CHECK(TBSTree::PreorderIteratorTraits_::getPosition())
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::bool operator == (const PreorderIteratorTraits_& traits) const )
+CHECK(TBSTree::PreorderIteratorTraits_::bool operator == (const PreorderIteratorTraits_& traits) const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::isValid() const )
+CHECK(TBSTree::PreorderIteratorTraits_::isValid() const )
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::toBegin())
+CHECK(TBSTree::PreorderIteratorTraits_::toBegin())
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::toEnd())
+CHECK(TBSTree::PreorderIteratorTraits_::toEnd())
   //BAUSTELLE
 RESULT
 
-CHECK(TBSTreeItem::TBSTree::PreorderIteratorTraits_::getData() const )
+CHECK(TBSTree::PreorderIteratorTraits_::getData() const )
   //BAUSTELLE
 RESULT
 
@@ -653,3 +838,9 @@ RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
+
+/*
+	void* ptr_a = (void*)(item.detachMinimum(root));
+	void* ptr_b = (void*)&rleft;
+	TEST_EQUAL(ptr_a, ptr_b)*/
+
