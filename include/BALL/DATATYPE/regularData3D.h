@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.8.4.1 2002/05/23 23:55:11 oliver Exp $ 
+// $Id: regularData3D.h,v 1.8.4.2 2002/09/02 07:54:43 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -6,6 +6,8 @@
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
 #endif
+
+#include <iostream>
 
 namespace BALL 
 {
@@ -429,7 +431,7 @@ namespace BALL
 		bool operator != (const TRegularData3D<GridDataType>& grid) const throw();
 
 		//@}
-
+		
 		/**	The grid data
 		*/
 		GridDataType* data;
@@ -467,6 +469,36 @@ namespace BALL
 		*/
 		bool valid_;
 	};
+
+	template <typename T>
+	std::ostream& operator << (std::ostream& os, const TRegularData3D<T>& data) 
+		throw()
+	{
+		os << data.getOrigin() << std::endl;
+		os << data.getSize() << std::endl;
+		os << data.getSpacing() << std::endl;
+		os << data.getNumberOfPointsX() << std::endl;
+		os << data.getNumberOfPointsY() << std::endl;
+		os << data.getNumberOfPointsZ() << std::endl;
+		for (Position i = 0; i < number_of_grid_points_; i++)	
+		{
+			os << data.data[i] << std::endl;
+		}
+		return os;
+	}
+
+	template <typename T>
+	std::ostream& operator << (std::ostream& os, TRegularData3D<T>& data) 
+		throw()
+	{
+		Vector3 v;
+		os >> v;
+		data.setOrigin(v);
+		os >> v;
+
+		return os;
+	}
+	
 
 	/**	Default type
 	*/
