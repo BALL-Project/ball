@@ -1,10 +1,9 @@
-// $Id: bruker1DFile.h,v 1.8 2000/11/28 17:25:22 anhi Exp $
+// $Id: bruker1DFile.h,v 1.9 2000/11/28 18:04:05 anhi Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
 
 #include <vector>
-#include <glib.h>
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #       include <BALL/SYSTEM/fileSystem.h>
