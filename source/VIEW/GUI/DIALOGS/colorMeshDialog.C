@@ -74,8 +74,12 @@ void ColorMeshDialog::applyPressed()
 	}
 		
 	// repaint of the scene and the composites needed
-	Scene* scene= (Scene*) Scene::getInstance(0);
-	scene->update(true);
+	for (Position p = 0; ; p++)
+	{
+		Scene* scene= (Scene*) Scene::getInstance(p);
+		if (scene == 0) return;
+		scene->update(true);
+	}
 }
 
 

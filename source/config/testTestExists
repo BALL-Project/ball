@@ -30,8 +30,8 @@ fi
 
 if [ $2 = "-c" ]
 then
-	check_test $1 $testfile -c 2>/dev/null
+	check_test $1 $testfile $3 -c 2>/dev/null
 	exit 1
 fi
 
-check_test $1 $testfile 2>/dev/null
+check_test $1 $testfile $3 2>/dev/null
