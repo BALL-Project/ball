@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.106 2004/07/14 18:05:09 amoll Exp $
+// $Id: scene.C,v 1.107 2004/07/14 18:18:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -213,7 +213,6 @@ namespace BALL
 #endif
 			if (RTTI::isKindOf<RepresentationMessage>(*message)) 
 			{
-				makeCurrent();
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				Representation* rep = rm->getRepresentation();
 				switch (rm->getType())
@@ -237,8 +236,6 @@ namespace BALL
 
 			// react now only to SceneMessage
 			if (!RTTI::isKindOf<SceneMessage>(*message)) return;
-
-			makeCurrent();
 
 			SceneMessage *scene_message = RTTI::castTo<SceneMessage>(*message);
 
@@ -370,6 +367,7 @@ namespace BALL
 			stereo_camera_.setViewPoint(old_view_point + diff);
 			stereo_camera_.setLookAtPosition(old_look_at + diff);
 			gl_renderer_.updateCamera(&stereo_camera_);
+ 			gl_renderer_.setLights();
 			renderRepresentations_(mode);
 			glPopMatrix();
 
@@ -410,6 +408,8 @@ namespace BALL
 			stereo_camera_.setViewPoint(old_view_point - diff);
 			stereo_camera_.setLookAtPosition(old_look_at - diff);
 			gl_renderer_.updateCamera(&stereo_camera_);
+ 			gl_renderer_.setLights();
+ 			light_settings_->updateFromStage();
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
 		}
@@ -808,6 +808,7 @@ namespace BALL
  				gl_renderer_.setLights();
  				light_settings_->updateFromStage();
 			}
+
 			updateGL();
 		}
 
