@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.48 2004/10/23 18:10:22 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.49 2004/10/23 18:22:19 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -845,41 +845,41 @@ namespace BALL
 			const Residue* residue = composite->getAncestor(dummy); 
 			if (residue == 0) return default_color_;
 			String name = residue->getName();
-			if (name == "Lys" || 
-					name == "Arg" || 
-					name == "His") 
+			if (name == "LYS" || 
+					name == "ARG" || 
+					name == "HIS") 
 			{
 				return basic_color_;
 			}
 			
-			if (name == "Phe" || 
-					name == "Tyr" || 
-					name == "Trp") 
+			if (name == "PHE" || 
+					name == "TYR" || 
+					name == "TRP") 
 			{
 				return aromatic_color_;
 			}
 			
-			if (name == "Val" || 
-					name == "Leu" || 
-					name == "Met" || 
-					name == "Ile")
+			if (name == "VAL" || 
+					name == "LEU" || 
+					name == "MET" || 
+					name == "ILE")
 			{
 				return hydrophobic_color_;
 			}
 			
-			if (name == "Asp" || 
-					name == "Glu" || 
-					name == "Gln" || 
-					name == "Asn")
+			if (name == "ASP" || 
+					name == "GLU" || 
+					name == "GLN" || 
+					name == "ASN")
 			{
 				return acidic_color_;
 			}
 
-			if (name == "Ala" || 
-					name == "Gly" || 
-					name == "Ser" ||
-					name == "Thr" || 
-					name == "Pro")
+			if (name == "ALA" || 
+					name == "GLY" || 
+					name == "SER" ||
+					name == "THR" || 
+					name == "PRO")
 			{
 				return polar_color_;
 			}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.C,v 1.32 2004/10/19 09:23:49 oliver Exp $
+// $Id: coloringSettingsDialog.C,v 1.33 2004/10/23 18:15:30 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/coloringSettingsDialog.h>
@@ -595,6 +595,9 @@ namespace BALL
 					color_processor = new ForceColorProcessor;
 					break;
 
+				case COLORING_RESIDUE_TYPE:
+					color_processor = new ResidueTypeColorProcessor;
+					break;
 
 				default:
 					throw(Exception::InvalidOption(__FILE__, __LINE__, method));

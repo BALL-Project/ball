@@ -75,6 +75,8 @@ String getColoringName(ColoringMethod type)
 			return "by occupancy";
 		case COLORING_FORCES:
 			return "by forces";
+		case COLORING_RESIDUE_TYPE:
+			return "by residue type";
 		case COLORING_CUSTOM:
 			return "custom";
 		case COLORING_UNKNOWN:

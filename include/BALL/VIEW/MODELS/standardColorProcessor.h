@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.26 2004/09/01 14:14:11 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.27 2004/10/23 18:10:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -512,7 +512,84 @@ namespace BALL
 								turn_color_;
 		};
 			
-				
+	
+		/** Coloring by the type of a Residue
+				\ingroup  ViewModels
+		*/
+		class ResidueTypeColorProcessor
+			: public ColorProcessor
+		{
+			public:
+
+			///
+			ResidueTypeColorProcessor();
+
+			/// Operator ()
+			virtual ColorRGBA getColor(const Composite* composite);
+
+			///
+			void setBasicColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setAcidicColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setPolarColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setHydrophobicColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setAromaticColor(const ColorRGBA& color)
+				throw();
+
+			///
+			void setOtherColor(const ColorRGBA& color)
+				throw();
+
+			///
+			const ColorRGBA& getBasicColor() const
+				throw();
+
+			///
+			const ColorRGBA& getAcidicColor() const
+				throw();
+
+			///
+			const ColorRGBA& getPolarColor() const
+				throw();
+
+			///
+			const ColorRGBA& getHydrophobicColor() const
+				throw();
+
+			///
+			const ColorRGBA& getAromaticColor() const
+				throw();
+
+			///
+			const ColorRGBA& getOtherColor() const
+				throw();
+
+			///
+			virtual void setTransparency(Size t)
+				throw();
+
+			private:
+
+			///
+			ColorRGBA basic_color_,
+								acidic_color_,
+								polar_color_,
+								hydrophobic_color_,
+								aromatic_color_,
+								other_color_;
+		};
+			
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>
 #	endif
