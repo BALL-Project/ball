@@ -30,7 +30,7 @@ BSTreeItem::~BSTreeItem()
 BALL_INLINE
 void BSTreeItem::setLeftChild(BSTreeItem* item)
 {
-	if (item == this || item == right_)
+	if (item == this || (item == right_ && item != 0) )
 	{
 		throw Exception::GeneralException(__FILE__, __LINE__);
 	}
@@ -46,7 +46,7 @@ BSTreeItem*& BSTreeItem::getLeftChild() const
 BALL_INLINE
 void BSTreeItem::setRightChild(BSTreeItem *item)
 {
-	if (item == this || item == left_)
+	if (item == this || (item == left_ && item != 0) )
 	{
 		throw Exception::GeneralException(__FILE__, __LINE__);
 	}
