@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.13 2000/05/02 14:03:50 amoll Exp $
+// $Id: residue.h,v 1.14 2000/05/09 23:10:35 amoll Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -69,7 +69,7 @@ namespace BALL
 		};
 
 		/**	Enum used to describe the kind of
-				name constructed by \Ref{getFullName}
+				name constructed by \Ref{getFullName}.
 		*/
 		enum FullNameType
 		{
@@ -99,10 +99,10 @@ namespace BALL
 		/// Destructor
 		virtual ~Residue();
 
-		/// Clears the residues contents
+		/// Clears the residues contents.
 		virtual void clear();
 	
-		/// Clears the residues contents and removes it from all composite structures
+		/// Clears the residues contents and removes it from all composite structures.
 		virtual void destroy();
 	
 		//@}
@@ -131,10 +131,10 @@ namespace BALL
 		/**	Assignment operator	*/
 		Residue &operator = (const Residue& residue);
 
-		/**	Assign a Residue object from another */
+		/**	Assign a Residue object from another instance.*/
 		void get(Residue& residue, bool deep = true) const;
 
-		/**	Swap the contents of two NucleicAcid objects */
+		/**	Swap the contents of two NucleicAcid objects. */
 		void swap(Residue& residue);
 	
 		//@}
@@ -173,35 +173,35 @@ namespace BALL
 		Angle getTorsionPsi() const;		
 
 		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} residue does not have a parent protein.
+				The reference is 0 if {\em *this} instance does not have a parent protein.
 				@return  Protein* -
 								 mutable reference to the parent protein of {\em *this}
 		*/
 		Protein* getProtein();
 
 		/** Get a constant pointer to the parent protein.
-				The reference is 0 if {\em *this} residue does not have a parent protein.
+				The reference is 0 if {\em *this} instance does not have a parent protein.
 				@return  Protein* -
 								 constant reference to the parent protein of {\em *this}
 		*/
 		const Protein* getProtein() const;
 
 		/** Get a pointer to the parent chain.
-				The reference is 0 if {\em *this} residue does not have a parent chain.
+				The reference is 0 if {\em *this} instance does not have a parent chain.
 				@return  Chain* -
 								 mutable reference to the parent chain of {\em *this}
 		*/
 		Chain* getChain();
 
 		/** Get a pointer to the parent chain.
-				The reference is 0 if {\em *this} residue does not have a parent chain.
+				The reference is 0 if {\em *this} instance does not have a parent chain.
 				@return  Chain* -
 								 constant reference to the parent chain of {\em *this}
 		*/
 		const Chain* getChain() const;
 
 		/** Get a pointer to a child PDBAtom at a given position.
-				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
+				The reference is 0 if {\em *this} instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
 				@return  PDBAtom* -
 								 mutable reference to the child PDBAtom at {\em position} of {\em *this}
@@ -209,34 +209,34 @@ namespace BALL
 		PDBAtom* getPDBAtom(Position position);
 	
 		/** Get a pointer to a child PDBAtom at a given position.
-				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
+				The reference is 0 if {\em *this} instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
 				@return  PDBAtom* -
 								 constant reference to the child PDBAtom at {\em position} of {\em *this}
 		*/
 		const PDBAtom* getPDBAtom(Position position) const;
 	
-		/**	Set the ID of the residue.
+		/**	Set the ID of {\em *this} instance.
 				@param id the new ID
 		*/
 		void setID(const String& id);
 
-		/**	Retrieve the ID of the residue.
+		/**	Retrieve the ID of {\em *this} instance.
 				@return String the ID
 		*/
 		const String& getID() const;
 
-		/**	Set the insertion code of the residue.
+		/**	Set the insertion code of {\em *this} instance.
 				@param insertion_code the new insertion code
 		*/
 		void setInsertionCode(char insertion_code);
 
-		/**	Get the insertion code of the residue.
+		/**	Get the insertion code of {\em *this} instance.
 				@return  char the insertion code
 		*/
 		char getInsertionCode() const;
 
-		/**	Count the PDB-Atoms of this residue.
+		/**	Count the child PDB-Atoms of {\em *this} instance.
 				@return  Size the number of PDB-Atoms
 		*/
 		Size countPDBAtoms() const;
@@ -292,27 +292,31 @@ namespace BALL
 
 		//@}
 
-
-	
 		/**	@name	Predicates */
 		//@{
 
-		/** Test if this residue is an amino acid
+		/** Test if this residue is an amino acid.
 				return bool
 		*/
 		bool isAminoAcid() const;
 	
-		/** Test if this residue is terminal
+		/** Test if this residue is terminal.
+				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
+				and is the first or last Residue in a parent chain.
 				return bool
 		*/
 		bool isTerminal() const;
 	
-		/** Test if this residue is N-terminal
+		/** Test if this residue is N-terminal.
+				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
+				and is the first Residue in a parent chain.
 				return bool
 		*/
 		bool isNTerminal() const;
 	
-		/** Test if this residue is C-terminal
+		/** Test if this residue is C-terminal.
+				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
+				and is the last Residue in a parent chain.
 				return bool
 		*/
 		bool isCTerminal() const;
