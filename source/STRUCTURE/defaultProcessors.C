@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.14 2001/07/16 00:34:23 amoll Exp $
+// $Id: defaultProcessors.C,v 1.15 2001/07/31 12:56:06 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
@@ -157,16 +157,26 @@ namespace BALL
 					
 		String line;
 		String fields[2];
-		while (infile)
-		{
-			line.getline(infile);
-			line.split(fields, 2);
-			table_[fields[0]] = fields[1].toFloat();
+    try
+    {
+      while (infile)
+      {
+        line.getline(infile);
+        line.split(fields, 2);
+        table_[fields[0]] = fields[1].toFloat();
+			}
 		}
-					
-		infile.close();
+    catch (Exception::InvalidFormat e)
+    { 
+      Log.error() << "AssignRadiusProcessor::buildTable_: " << e.getMessage()
+                  << " (while reading " << filename_ << ")" << std::endl;
+      infile.close();
+      return false;
+		}
+          
+    infile.close();
 
-		return true;
+    return true;
 	}
 
 	Size AssignRadiusProcessor::getNumberOfErrors()
