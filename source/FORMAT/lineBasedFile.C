@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.13 2000/10/21 17:19:30 amoll Exp $
+// $Id: lineBasedFile.C,v 1.14 2000/10/25 19:28:23 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -66,7 +66,7 @@ namespace BALL
 	}
 
 	bool LineBasedFile::search(const String& text, bool return_to_point)
-		throw(LineBasedFileError)
+		throw(LineBasedFile::LineBasedFileError)
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
@@ -91,7 +91,7 @@ namespace BALL
 	}
 
 	bool LineBasedFile::search(const String& text, const String& stop, bool return_to_point)
-		throw(LineBasedFileError)
+		throw(LineBasedFile::LineBasedFileError)
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
@@ -128,7 +128,7 @@ namespace BALL
 	}
 
 	bool LineBasedFile::readLine()
-		throw(LineBasedFileError)
+		throw(LineBasedFile::LineBasedFileError)
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
@@ -149,7 +149,7 @@ namespace BALL
 	}
 
 	bool LineBasedFile::skipLines(Size number)
-		throw(LineBasedFileError)
+		throw(LineBasedFile::LineBasedFileError)
 	{
 		for (Position i = 0; i < number +1; i++)
 		{
@@ -163,7 +163,7 @@ namespace BALL
 	}
 
 	void LineBasedFile::rewind()
-		 throw(LineBasedFileError)
+		 throw(LineBasedFile::LineBasedFileError)
 	{
 		if (!isOpen())
 		{
@@ -176,7 +176,7 @@ namespace BALL
 	}
 
 	bool LineBasedFile::goToLine(Position line_number)
-		 throw(LineBasedFileError)
+		 throw(LineBasedFile::LineBasedFileError)
 	{
 		if (!isOpen())
 		{
@@ -225,7 +225,7 @@ namespace BALL
 	}
 
 	void LineBasedFile::test(const char* file, int line, bool condition, const String& msg)
-		const throw(LineBasedFileError)
+		const throw(LineBasedFile::LineBasedFileError)
 	{
 		if (!condition)
 		{
