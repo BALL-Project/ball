@@ -1,4 +1,4 @@
-// $Id: atomIterator.h,v 1.5 2001/07/03 20:47:28 anker Exp $
+// $Id: atomIterator.h,v 1.6 2001/07/03 21:00:32 anker Exp $
 
 #ifndef BALL_KERNEL_ATOMITERATOR_H
 #define BALL_KERNEL_ATOMITERATOR_H
@@ -23,6 +23,7 @@ namespace BALL
 {
 
 	/** Traits class for the AtomIterators
+			{\bf Definition:} \URL{BALL/KERNEL/atomIterator.h}
 	*/
 	class AtomIteratorTraits_
 		: public CompositeIteratorTraits_ 
