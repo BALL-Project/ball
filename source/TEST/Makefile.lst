@@ -1,0 +1,251 @@
+#
+# $Id: Makefile.lst,v 1.1 2003/06/30 19:12:49 oliver Exp $
+#
+
+XDR_DEPENDENT_EXECUTABLES=\
+	XDRPersistenceManager_test$(EXEEXT)
+
+VIEW_EXECUTABLES=
+
+EXECUTABLES_BASIC =	\
+	ClassTest_test$(EXEEXT)\
+	RegularExpression_test$(EXEEXT)\
+	GlobalTypes_test$(EXEEXT)\
+	Limits_test$(EXEEXT)\
+	VersionInfo_test$(EXEEXT)\
+	RTTI_test$(EXEEXT)
+
+
+EXECUTABLES_MATHS = \
+	MathsCommon_test$(EXEEXT)\
+	AnalyticalGeometry_test$(EXEEXT)\
+	Angle_test$(EXEEXT)\
+	Vector2_test$(EXEEXT)\
+	Vector3_test$(EXEEXT)\
+	Vector4_test$(EXEEXT)\
+	Quaternion_test$(EXEEXT)\
+	Matrix44_test$(EXEEXT)\
+	NumericalIntegrator_test$(EXEEXT)\
+	Line3_test$(EXEEXT)\
+	Circle3_test$(EXEEXT)\
+	Box3_test$(EXEEXT)\
+	Plane3_test$(EXEEXT)\
+	Sphere3_test$(EXEEXT)\
+	Surface_test$(EXEEXT)\
+	Function_test$(EXEEXT)\
+	PiecewiseFunction_test$(EXEEXT)\
+	PiecewisePolynomial_test$(EXEEXT)
+
+EXECUTABLES_SYSTEM = \
+	BinaryFileAdaptor_test$(EXEEXT)\
+	Directory_test$(EXEEXT)\
+	FileSystem_test$(EXEEXT)\
+	File_test$(EXEEXT)\
+	Path_test$(EXEEXT)\
+	PreciseTime_test$(EXEEXT)\
+	Socket_test$(EXEEXT)\
+	TCPTransfer_test$(EXEEXT)\
+	Timer_test$(EXEEXT)\
+	TimeStamp_test$(EXEEXT)\
+	TransformationManager_test$(EXEEXT)
+
+EXECUTABLES_DATATYPES = \
+	Bit_test$(EXEEXT)\
+	BitVector_test$(EXEEXT)\
+	Contour_test$(EXEEXT)\
+	ContourLine_test$(EXEEXT)\
+	List_test$(EXEEXT)\
+	Hash_test$(EXEEXT)\
+	HashMap_test$(EXEEXT)\
+	StringHashMap_test$(EXEEXT)\
+	HashSet_test$(EXEEXT)\
+	HashGrid3_test$(EXEEXT)\
+	HashGridBox3_test$(EXEEXT)\
+	HashGrid3DataIteratorTraits_test$(EXEEXT)\
+	HashGrid3BoxIteratorTraits_test$(EXEEXT)\
+	HashGrid3DataItem_test$(EXEEXT)\
+	HashGrid3NeighborBoxItem_test$(EXEEXT)\
+	Options_test$(EXEEXT)\
+	String_test$(EXEEXT)1\
+	String_test$(EXEEXT)2\
+	String_test$(EXEEXT)3\
+	String_test$(EXEEXT)4\
+	Substring_test$(EXEEXT)\
+	Triple_test$(EXEEXT)\
+	Quadruple_test$(EXEEXT)\
+	RegularData1D_test$(EXEEXT)\
+	RegularData2D_test$(EXEEXT)\
+	RegularData3D_test$(EXEEXT)\
+	ContourSurface_test$(EXEEXT)
+
+EXECUTABLES_CONCEPTS = \
+	$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
+	LogStream_test$(EXEEXT)\
+	AutoDeletable_test$(EXEEXT)\
+	Factory_test$(EXEEXT)\
+	Object_test$(EXEEXT)\
+	PersistentObject_test$(EXEEXT)\
+	PersistenceManager_test$(EXEEXT)\
+	TextPersistenceManager_test$(EXEEXT)\
+	Selectable_test$(EXEEXT)\
+	NamedProperty_test$(EXEEXT)\
+	PropertyManager_test$(EXEEXT)\
+	Composite_test$(EXEEXT)1\
+	Composite_test$(EXEEXT)2\
+	CompositeCompositeIteratorTraits_test$(EXEEXT)\
+	CompositeChildcompositeIteratorTraits_test$(EXEEXT)\
+	CompositeAncestorIteratorTraits_test$(EXEEXT)\
+	Embeddable_test$(EXEEXT)\
+	BaseIterator_test$(EXEEXT)\
+	ConstForwardIterator_test$(EXEEXT)\
+	ForwardIterator_test$(EXEEXT)\
+	ConstBidirectionalIterator_test$(EXEEXT)\
+	BidirectionalIterator_test$(EXEEXT)\
+	ConstRandomAccessIterator_test$(EXEEXT)\
+	RandomAccessIterator_test$(EXEEXT)
+
+EXECUTABLES_KERNEL = \
+	PTE_test$(EXEEXT)\
+	Atom_test$(EXEEXT)\
+	AtomStaticAtomAttributes_test$(EXEEXT)\
+	AtomAttributeVector_test$(EXEEXT)\
+	Bond_test$(EXEEXT)\
+	AtomContainer_test$(EXEEXT)\
+	Fragment_test$(EXEEXT)\
+	Chain_test$(EXEEXT)\
+	Molecule_test$(EXEEXT)\
+	SecondaryStructure_test$(EXEEXT)\
+	System_test$(EXEEXT)\
+	Protein_test$(EXEEXT)\
+	PDBAtom_test$(EXEEXT)\
+	NucleicAcid_test$(EXEEXT)\
+	Nucleotide_test$(EXEEXT)\
+	Residue_test$(EXEEXT)\
+	Expression_test$(EXEEXT)\
+	ExpressionParser_test$(EXEEXT)\
+	ExpressionPredicate_test$(EXEEXT)\
+	ExpressionTree_test$(EXEEXT)\
+	KernelPredicate_test$(EXEEXT)\
+	Selector_test$(EXEEXT)\
+	RuleEvaluator_test$(EXEEXT)\
+	StandardPredicates_test$(EXEEXT)\
+	DefaultProcessors_test$(EXEEXT)\
+	FragmentDB_test$(EXEEXT)\
+	ForEach_test$(EXEEXT)\
+	GlobalKernel_test$(EXEEXT)\
+	CompositeIteratorTraits_test$(EXEEXT)\
+	AtomIterator_test$(EXEEXT)\
+	AtomBondIteratorTraits_test$(EXEEXT)
+
+
+EXECUTABLES_MOLMEC = \
+	Gradient_test$(EXEEXT)\
+	AtomVector_test$(EXEEXT)\
+	MolmecSupport_test$(EXEEXT)\
+	SnapShot_test$(EXEEXT)\
+	SnapShotManager_test$(EXEEXT)\
+	ForceField_test$(EXEEXT)\
+	AmberFF_test$(EXEEXT)\
+	CharmmFF_test$(EXEEXT)\
+	EnergyMinimizer_test$(EXEEXT)\
+	LineSearch_test$(EXEEXT)\
+	SteepestDescentMinimizer_test$(EXEEXT)\
+	ConjugateGradientMinimizer_test$(EXEEXT)\
+	AtomTypes_test$(EXEEXT)
+
+EXECUTABLES_NMR = \
+	AssignShiftProcessor_test$(EXEEXT)\
+	RandomCoilShiftProcessor_test$(EXEEXT)\
+	AnisotropyShiftProcessor_test$(EXEEXT)\
+	ClearShiftProcessor_test$(EXEEXT)\
+	CreateSpectrumProcessor_test$(EXEEXT)\
+	EFShiftProcessor_test$(EXEEXT)\
+	HaighMallionShiftProcessor_test$(EXEEXT)\
+	JohnsonBoveyShiftProcessor_test$(EXEEXT)\
+	ShiftModel_test$(EXEEXT)\
+	ShiftModule_test$(EXEEXT)\
+	Spectrum_test$(EXEEXT)\
+	Peak_test$(EXEEXT)\
+	PeakList_test$(EXEEXT)
+
+EXECUTABLES_FORMATS =\
+	LineBasedFile_test$(EXEEXT)\
+	BinaryFileAdaptor_test$(EXEEXT)\
+	Bruker1DFile_test$(EXEEXT)\
+	Bruker2DFile_test$(EXEEXT)\
+	INIFile_test$(EXEEXT)\
+	JCAMPFile_test$(EXEEXT)\
+	Parameters_test$(EXEEXT)\
+	ParameterSection_test$(EXEEXT)\
+	ResourceFile_test$(EXEEXT)\
+	GenericMolFile_test$(EXEEXT)\
+	HINFile_test$(EXEEXT)\
+	MOLFile_test$(EXEEXT)\
+	SDFile_test$(EXEEXT)\
+	MOL2File_test$(EXEEXT)\
+	NMRStarFile_test$(EXEEXT)\
+	DCDFile_test$(EXEEXT)\
+	PDBFile_test$(EXEEXT)\
+	TrajectoryFile_test$(EXEEXT)\
+	XYZFile_test$(EXEEXT)
+
+EXECUTABLES_ENERGY = \
+	AtomicContactEnergy_test$(EXEEXT)\
+	ComposedEnergyProcessor_test$(EXEEXT)\
+	EnergyProcessor_test$(EXEEXT)\
+	OoiEnergy_test$(EXEEXT)
+
+EXECUTABLES_STRUCTURE = \
+	Enumerator_test$(EXEEXT)\
+	EnumeratorIndex_test$(EXEEXT)\
+	AnalyticalSES_test$(EXEEXT)\
+	MolecularGraph_test$(EXEEXT)\
+	NumericalSAS_test$(EXEEXT)\
+	PeptideBuilder_test$(EXEEXT)\
+	Peptides_test$(EXEEXT)\
+	RadialDistributionFunction_test$(EXEEXT)\
+	RDFIntegrator_test$(EXEEXT)\
+	RDFParameter_test$(EXEEXT)\
+	RDFSection_test$(EXEEXT)\
+	ReconstructFragmentProcessor_test$(EXEEXT)\
+	ResidueChecker_test$(EXEEXT)\
+	RotamerLibrary_test$(EXEEXT)\
+	SmilesParser_test$(EXEEXT)\
+	StructureMapper_test$(EXEEXT)\
+	TransformationProcessor_test$(EXEEXT)\
+	TranslationProcessor_test$(EXEEXT)\
+	SurfaceProcessor_test$(EXEEXT)
+
+EXECUTABLES_SOLVATION = \
+	PoissonBoltzmann_test$(EXEEXT)\
+	SolventDescriptor_test$(EXEEXT)\
+	SolventParameter_test$(EXEEXT)\
+	ClaverieParameter_test$(EXEEXT)\
+	ReissCavFreeEnergyProcessor_test$(EXEEXT)\
+  UhligCavFreeEnergyProcessor_test$(EXEEXT)\
+  PCMCavFreeEnergyProcessor_test$(EXEEXT)\
+  PierottiCavFreeEnergyProcessor_test$(EXEEXT)\
+	Pair6_12RDFIntegrator_test$(EXEEXT)\
+	Pair6_12InteractionEnergyProcessor_test$(EXEEXT)\
+	PairExpInteractionEnergyProcessor_test$(EXEEXT)\
+	PairExpRDFIntegrator_test$(EXEEXT)\
+	PARSE_test$(EXEEXT)
+
+EXECUTABLES_QSAR = \
+	Descriptor_test$(EXEEXT)\
+	SimpleDescriptors_test$(EXEEXT)
+
+EXECUTABLES = \
+	$(EXECUTABLES_BASIC)\
+	$(EXECUTABLES_SYSTEM)\
+	$(EXECUTABLES_MATHS)\
+	$(EXECUTABLES_DATATYPES)\
+	$(EXECUTABLES_CONCEPTS)\
+	$(EXECUTABLES_KERNEL)\
+	$(EXECUTABLES_FORMATS)\
+	$(EXECUTABLES_MOLMEC)\
+	$(EXECUTABLES_NMR)\
+	$(EXECUTABLES_ENERGY)\
+	$(EXECUTABLES_STRUCTURE)\
+	$(EXECUTABLES_QSAR)\
+	$(EXECUTABLES_SOLVATION)

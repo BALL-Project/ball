@@ -1,9 +1,14 @@
 #
-# $Id: Makefile,v 1.206 2003/06/30 19:09:21 oliver Exp $
+# $Id: Makefile,v 1.207 2003/06/30 19:12:49 oliver Exp $
 #
 
 DIRECTORY=TEST
 
+# Include the list of test programs.
+# This file is also included by the corresponding
+# Windows makefile to build the tests under Windows.
+# Please remember to include the $(EXEEXT) at the end
+# of the executable name!
 include Makefile.lst
 
 EXECUTABLES = \
