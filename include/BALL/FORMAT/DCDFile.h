@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.6 2001/02/28 01:17:12 amoll Exp $
+// $Id: DCDFile.h,v 1.7 2001/03/11 19:23:27 anker Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -35,6 +35,7 @@ namespace BALL
 				with the number of bytes enclosed between those numbers, i. e. a
 				block consisting of 8 bytes starts with the number 8 followed by 8
 				bytes of data and ends with the number 8.	\\
+				BASUTELLE: complete header description \\
 				{\bf Definition:} \URL{BALL/Format/DCDFile.h}	\\
 		*/
 		class DCDHeader
@@ -208,21 +209,26 @@ namespace BALL
 			throw();
 
 		//@}
-		/** @name Public methods for file handling
-		*/
+		/// @name Public methods for file handling
 		//@{
+
+		// BAUSTELLE
+		/** open a DCDFile
+		*/
+		/*
+		virtual bool open(const String& name, File::OpenMode open_mode)
+			throw();
+		*/
+
+		/** Initialize this instance, i. e. read the header and update members
+		*/
+		bool init()
+			throw();
 
 		/** Read the header of an existing file.
 				Return true if the header could be read successfully, false ow.
 		*/
 		virtual bool readHeader()
-			throw();
-
-		/** Update the internal header with information from the SnapShotManager
-				@param manager the snapshot manager from which data will be written
-				@return true, if the update was successful, false ow.
-		*/
-		virtual bool updateHeader(const SnapShotManager& manager)
 			throw();
 
 		/** Write a header
@@ -245,6 +251,8 @@ namespace BALL
 		virtual bool write(const SnapShotManager& manager)
 			throw(Exception::NotImplemented);
 
+		// BAUSTELLE:
+		// should append() also write the header? what is more intuitive?
 		/** Append a SnapShot to an existing file
 				@param buffer the list os SnapShots we want to save
 				@return true, if writing was successful
@@ -252,6 +260,17 @@ namespace BALL
 		virtual bool append(const SnapShot& snapshot)
 			throw();
 
+		/** Read the next snapshot from the file
+				@param snapshot a buffer for result delivery
+				@return true, if a snapshot could be read, false ow.
+		*/
+		virtual bool read(SnapShot& snapshot)
+			throw();
+
+		/**
+		*/
+		virtual bool flushToDisk(const ::std::vector<SnapShot> buffer)
+			throw();
 		//@}
 
 		protected:
