@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.4 1999/09/19 20:54:12 oliver Exp $
+// $Id: string.C,v 1.5 1999/09/29 09:02:05 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -1013,7 +1013,7 @@ namespace BALL
 			}
 		}
 
-    if (((Size)from > string_size) || ((string_size > 0) && ((Size)from == string_size)))
+    if (((Size)from > string_size) || ((string_size > 0) && ((Size)from == string_size) && (len != 0)))
 		{
       throw Exception::IndexOverflow(__FILE__, __LINE__, from, string_size);
 		}
