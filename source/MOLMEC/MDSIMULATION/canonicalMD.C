@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.C,v 1.21 2005/01/24 17:22:09 amoll Exp $
+// $Id: canonicalMD.C,v 1.22 2005/03/01 10:07:54 oliver Exp $
 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -339,12 +339,10 @@ namespace BALL
 				snapshot_manager_ptr_->takeSnapShot ();
 			}
 
-			if (Maths::isNan(force_field_ptr_->getEnergy())) return false;
-
 			if (abort_by_energy_enabled_)
 			{
-				if (force_field_ptr_->getEnergy() > abort_energy_ ||
-						force_field_ptr_->getEnergy() < abort_energy_) 
+				if ((Maths::isNan(force_field_ptr_->getEnergy()))
+						|| (force_field_ptr_->getEnergy() > abort_energy_))
 				{
 					return false;
 				}
@@ -359,6 +357,7 @@ namespace BALL
 
 		force_field_ptr_->updateEnergy();
 		updateInstantaneousTemperature();
+
 		return true;
 	}	// end of simulateIterations() 
 

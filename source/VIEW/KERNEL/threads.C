@@ -212,7 +212,7 @@ namespace BALL
 								!converged && ok)
 				{
 					converged = minimizer_->minimize(steps_between_updates_, true);
-					ok = 			 !minimizer_->wasAborted();
+					ok = !minimizer_->wasAborted();
 
 					updateScene_();
 					waitForUpdateOfRepresentations_();
@@ -234,13 +234,13 @@ namespace BALL
 
 				if (!ok)
 				{
-					output_("Aborted EnergyMinimizer because of strange energy values.", true);
+					output_("Aborted minimization because convergence could not be reached. Try to restart the minimization.", true);
 					return;
 				}
 			}
 			catch(Exception::GeneralException e)
 			{
-				String txt = String("Calculation aborted because of throwed exception: ")
+				String txt = String("Exception was thrown during minimization: ")
 											+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
 				output_(txt, true);
 				finish_();
@@ -319,14 +319,14 @@ namespace BALL
 
 				if (!ok)
 				{
-					output_("Aborted MDSimulation because of strange energy values.", true);
+					output_("Simulation aborted to to strange energy values.", true);
 				}
 
 				finish_();
 			}
 			catch(Exception::GeneralException e)
 			{
-				String txt = String("Calculation aborted because of throwed exception: ")
+				String txt = String("Exception was thrown during MD simulation: ")
 											+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
 				output_(txt, true);
 				finish_();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: microCanonicalMD.C,v 1.13 2005/01/24 17:22:09 amoll Exp $
+// $Id: microCanonicalMD.C,v 1.14 2005/03/01 10:07:54 oliver Exp $
 //
 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
@@ -284,12 +284,10 @@ namespace BALL
 				snapshot_manager_ptr_->takeSnapShot();
 			}
 
-			if (Maths::isNan(force_field_ptr_->getEnergy())) return false;
-
 			if (abort_by_energy_enabled_)
 			{
-				if (force_field_ptr_->getEnergy() > abort_energy_ ||
-						force_field_ptr_->getEnergy() < -abort_energy_) 
+				if ((Maths::isNan(force_field_ptr_->getEnergy()))
+					|| (force_field_ptr_->getEnergy() > abort_energy_))
 				{
 					return false;
 				}
@@ -306,6 +304,7 @@ namespace BALL
 		// update the current temperature in the system
 		force_field_ptr_->updateEnergy();
 		updateInstantaneousTemperature();
+
 		return true;
 	}	// end of simulateIterations() 
 
