@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.45 2003/04/02 12:01:09 anker Exp $
+// $Id: standardPredicates.C,v 1.46 2003/04/23 08:23:58 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -858,7 +858,7 @@ namespace BALL
 
 			if (input[position] == '(')
 			{
-				if (bond_chars.has(input[position - 1]))
+				if ((position > 0) && bond_chars.has(input[position - 1]))
 				{
 					Log.error() << "ConnectedToPredicate:parse_(): " << std::endl
 						<< "\tparse error: bond char before bracket." << std::endl;
