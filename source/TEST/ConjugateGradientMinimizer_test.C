@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.13 2003/03/22 11:51:39 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.14 2003/03/24 09:29:38 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.13 2003/03/22 11:51:39 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.14 2003/03/24 09:29:38 oliver Exp $")
 
 using namespace BALL;
 
@@ -230,8 +230,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 	cgm.setEnergyOutputFrequency(5);
 	cgm.setMaxGradient(0.01);
 	cgm.setEnergyDifferenceBound(0.00000001);
-	bool result = cgm.setUpdateMethod("SHANNO");
-	TEST_EQUAL(result, true)
+	cgm.setUpdateMethod(ConjugateGradientMinimizer::SHANNO);
 	ConjugateGradientMinimizer::UpdateMethod um;
 	um = cgm.getUpdateMethod();
 	TEST_EQUAL(um, ConjugateGradientMinimizer::SHANNO);
@@ -239,7 +238,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	result = cgm.minimize(55);
+	bool result = cgm.minimize(55);
 
 	TEST_EQUAL(result, true)
 	float energy = FF.updateEnergy();
@@ -283,7 +282,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 	TEST_REAL_EQUAL(tet.toRadian(), 1.902)
 RESULT
 
-CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO))// AlaAla)
+CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 	System S;
 	HINFile f("data/AA.hin");
 	f >> S;
@@ -303,16 +302,111 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO))// AlaAla)
 	TEST_EQUAL(FF.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	PRECISION(1E-4)
-	TEST_REAL_EQUAL(FF.getEnergy(), -139.0)
+	PRECISION(1E-2)
+	TEST_REAL_EQUAL(FF.getEnergy(), -135.909)
 
 	ConjugateGradientMinimizer cgm(FF);
 
 	cgm.setEnergyOutputFrequency(5);
 	cgm.setMaxGradient(0.01);
 	cgm.setEnergyDifferenceBound(0.00000001);
-	bool result = cgm.setUpdateMethod("SHANNO");
+	cgm.setMaximumDisplacement(20.0);
+	cgm.setUpdateMethod(ConjugateGradientMinimizer::FLETCHER_REEVES);
+	ConjugateGradientMinimizer::UpdateMethod um;
+	um = cgm.getUpdateMethod();
+	TEST_EQUAL(um, ConjugateGradientMinimizer::FLETCHER_REEVES);
+	
+	TEST_EQUAL(cgm.isValid(), true)
+	FF.updateEnergy();
+	FF.updateForces();
+	bool result = cgm.minimize(5000);
+
 	TEST_EQUAL(result, true)
+	float energy = FF.updateEnergy();
+	FF.updateForces();
+	
+	PRECISION(1E-1)
+	TEST_REAL_EQUAL(energy, -415.5)
+RESULT
+
+
+CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
+	System S;
+	HINFile f("data/AA.hin");
+	f >> S;
+	S.deselect();
+	
+	FragmentDB fd;
+	S.apply(fd.normalize_names);
+	ResidueChecker checker(fd);
+	S.apply(checker);
+	
+	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+	FF.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+	FF.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
+	FF.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
+	FF.setup(S);
+
+	TEST_EQUAL(FF.isValid(), true)
+	FF.updateEnergy();
+	FF.updateForces();
+	PRECISION(1E-2)
+	TEST_REAL_EQUAL(FF.getEnergy(), -135.909)
+
+	ConjugateGradientMinimizer cgm(FF);
+
+	cgm.setEnergyOutputFrequency(5);
+	cgm.setMaxGradient(0.01);
+	cgm.setEnergyDifferenceBound(0.00000001);
+	cgm.setUpdateMethod(ConjugateGradientMinimizer::POLAK_RIBIERE);
+	cgm.setMaximumDisplacement(20.0);
+	ConjugateGradientMinimizer::UpdateMethod um;
+	um = cgm.getUpdateMethod();
+	TEST_EQUAL(um, ConjugateGradientMinimizer::POLAK_RIBIERE);
+	
+	TEST_EQUAL(cgm.isValid(), true)
+	FF.updateEnergy();
+	FF.updateForces();
+	bool result = cgm.minimize(500);
+
+	TEST_EQUAL(result, true)
+	float energy = FF.updateEnergy();
+	FF.updateForces();
+	
+	PRECISION(1E-1)
+	TEST_REAL_EQUAL(energy, -415.5)
+RESULT
+
+CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) AlaAla)
+	System S;
+	HINFile f("data/AA.hin");
+	f >> S;
+	S.deselect();
+	
+	FragmentDB fd;
+	S.apply(fd.normalize_names);
+	ResidueChecker checker(fd);
+	S.apply(checker);
+	
+	FF.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+	FF.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+	FF.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
+	FF.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
+	FF.setup(S);
+
+	TEST_EQUAL(FF.isValid(), true)
+	FF.updateEnergy();
+	FF.updateForces();
+	PRECISION(1E-2)
+	TEST_REAL_EQUAL(FF.getEnergy(), -135.909)
+
+	ConjugateGradientMinimizer cgm(FF);
+
+	cgm.setEnergyOutputFrequency(5);
+	cgm.setMaxGradient(0.01);
+	cgm.setEnergyDifferenceBound(0.00000001);
+	cgm.setUpdateMethod(ConjugateGradientMinimizer::SHANNO);
+	cgm.setMaximumDisplacement(20.0);
 	ConjugateGradientMinimizer::UpdateMethod um;
 	um = cgm.getUpdateMethod();
 	TEST_EQUAL(um, ConjugateGradientMinimizer::SHANNO);
@@ -320,14 +414,14 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO))// AlaAla)
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	result = cgm.minimize(500);
+	bool result = cgm.minimize(500);
 
 	TEST_EQUAL(result, true)
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(1E-3)
-	TEST_REAL_EQUAL(energy, 5.906)
+	PRECISION(1E-1)
+	TEST_REAL_EQUAL(energy, -415.5)
 RESULT
 
 
@@ -349,8 +443,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 	cgm.setEnergyOutputFrequency(5);
 	cgm.setMaxGradient(0.01);
 	cgm.setEnergyDifferenceBound(0.00000001);
-	bool result = cgm.setUpdateMethod("FLETCHER_REEVES");
-	TEST_EQUAL(result, true)
+	cgm.setUpdateMethod(ConjugateGradientMinimizer::FLETCHER_REEVES);
 	ConjugateGradientMinimizer::UpdateMethod um;
 	um = cgm.getUpdateMethod();
 	TEST_EQUAL(um, ConjugateGradientMinimizer::FLETCHER_REEVES);
@@ -359,7 +452,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	result = cgm.minimize(100);
+	bool result = cgm.minimize(500);
 
 	TEST_EQUAL(result, true)
 	float energy = FF.updateEnergy();
@@ -422,8 +515,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 	cgm.setEnergyOutputFrequency(5);
 	cgm.setMaxGradient(0.01);
 	cgm.setEnergyDifferenceBound(0.00000001);
-	bool result = cgm.setUpdateMethod("POLAK_RIBIERE");
-	TEST_EQUAL(result, true)
+	cgm.setUpdateMethod(ConjugateGradientMinimizer::POLAK_RIBIERE);
 	ConjugateGradientMinimizer::UpdateMethod um;
 	um = cgm.getUpdateMethod();
 	TEST_EQUAL(um, ConjugateGradientMinimizer::POLAK_RIBIERE);
@@ -432,7 +524,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	result = cgm.minimize(100);
+	bool result = cgm.minimize(100);
 
 	TEST_EQUAL(result, true)
 	float energy = FF.updateEnergy();

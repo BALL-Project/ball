@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.25 2003/03/21 17:20:37 anhi Exp $
+// $Id: conjugateGradient.C,v 1.26 2003/03/24 09:29:37 oliver Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -11,8 +11,8 @@
 #include <BALL/MOLMEC/COMMON/gradient.h>
 #include <BALL/COMMON/limits.h>
 
-//#define BALL_DEBUG
-#undef BALL_DEBUG
+#define BALL_DEBUG
+//#undef BALL_DEBUG
 
 // The default method to use for the CG direction update
 // (FLETCHER_REEVES | POLAK_RIBIERE | SHANNO)
@@ -207,28 +207,9 @@ namespace BALL
     return step_; 
 	}
 
-	bool ConjugateGradientMinimizer::setUpdateMethod(const String& method)
+	void ConjugateGradientMinimizer::setUpdateMethod(ConjugateGradientMinimizer::UpdateMethod method)
 	{
-		if (method == "SHANNO")
-		{
-			method_ = SHANNO;
-		
-			return true;
-		}
-		if (method == "POLAK_RIBIERE")
-		{
-			method_ = POLAK_RIBIERE;
-		
-			return true;
-		}
-		if (method == "FLETCHER_REEVES")
-		{
-			method_ = FLETCHER_REEVES;
-
-			return true;
-		}
-
-		return false;
+		method_ = method;
 	}
 
 	ConjugateGradientMinimizer::UpdateMethod ConjugateGradientMinimizer::getUpdateMethod() const
@@ -292,6 +273,7 @@ namespace BALL
 
 
 		float beta = 0.0;
+		float denom = 0.0;
 		Size i;
 		switch (method_)
 		{
@@ -303,16 +285,16 @@ namespace BALL
 				//
 				//     \beta = \frac{<g_{k}, g_{k}>}{<g_{k-1}, g_{k-1}>}
 				//  
-				beta = initial_grad_.norm * initial_grad_.norm / (old_grad_.norm * old_grad_.norm);
+				beta = initial_grad_.norm * initial_grad_.norm * old_grad_.inv_norm * old_grad_.inv_norm;
 
 				// calculate the new conjugate gradient search direction:
 				// direction_ = - initial_gradient_ + beta * direction_;
 				// 
-				// we do it a bit more efficient:
+				// we do it a bit more efficiently:
 				direction_.norm = 0.0;
 				for (i = 0; i < number_of_atoms_; i++)
 				{
-					direction_[i] = - initial_grad_[i] + beta * direction_[i];
+					direction_[i] = - initial_grad_[i] + (float)beta * direction_[i];
 					direction_.norm += direction_[i] * direction_[i];
 				}
 
@@ -673,25 +655,23 @@ namespace BALL
 			// (e.g. by using the negative gradient as is done by findStep)
 			// it is flagged as valid (since it is new!)
 			//
-//			if (!direction_.isValid())
-			{
-				updateDirection();
-			}
+			updateDirection();
 
+/*
 			// non-constant step size option
 			//
 			double dir_grad = initial_grad_ * direction_;
 			if (old_dir_grad_valid)
 			{
-/*				step_ = lambda_ * step_ * old_dir_grad / dir_grad;
+				step_ = lambda_ * step_ * old_dir_grad / dir_grad;
 
 				// we have to capture those cases where step_ would be zero
 				if (step_ == 0.0)
 				{
 					step_ = 0.01;
 				}
-	*/
-				}
+	
+			}
 			else
 			{
 				// for restart steps, we reset the step size 
@@ -700,6 +680,7 @@ namespace BALL
 			}
 			old_dir_grad = dir_grad;
 			old_dir_grad_valid = true;
+*/
 
 			#ifdef BALL_DEBUG
 				Log << "CGM: end of main: current grad RMS = " << current_grad_.rms << std::endl;
@@ -711,6 +692,7 @@ namespace BALL
 			// increment iteration counter, take snapshots, print energy,
 			// update pair lists, and check the same-energy counter
 			finishIteration();
+			Log.info() << "CG: step_ = " << step_ << std::endl;
 		}	
 
 		// check for convergence
@@ -734,11 +716,6 @@ namespace BALL
 		bool success = true;
 		bool step_too_large = false;
 
-		if (lambda_ > 0.0)
-		{
-			step_ *= lambda_;
-		}
-
 		// In order to find a sensible starting step, we take a full step along direction_,
 		// and if the energy decreases after that step, we double the step width. We iterate
 		// this as long as the energy increases and our step width stays below maximum_displacement
@@ -746,9 +723,9 @@ namespace BALL
 		{
 			// We have to catch those cases where at least one atom might be
 			// translated more than getMaximumDisplacement().
-			if (step_<=getMaximumDisplacement())
+			if (step_ <= getMaximumDisplacement())
 			{
-				atoms.moveTo(direction_, step_*direction_.inv_norm);
+				atoms.moveTo(direction_, step_ * direction_.inv_norm);
 			}
 			else
 			{
@@ -769,16 +746,16 @@ namespace BALL
 					}
 				}
 				
-				if (sqrt(max)*step_*direction_.inv_norm >= getMaximumDisplacement())
+				if (sqrt(max) * step_ * direction_.inv_norm >= getMaximumDisplacement())
 				{
 					step_ = getMaximumDisplacement() / (direction_.inv_norm * sqrt(max));
 				}
 
 				#ifdef BALL_DEBUG
-					Log.info() << "CG: new step = " << step_ << " " << max << " " << step_*direction_.inv_norm << endl;
+					Log.info() << "CG: new step = " << step_ << " " << max << " " << step_ * direction_.inv_norm << endl;
 				#endif
 
-				atoms.moveTo(direction_, step_*direction_.inv_norm);
+				atoms.moveTo(direction_, step_ * direction_.inv_norm);
 				step_too_large = true;
 			}
 
@@ -829,7 +806,7 @@ namespace BALL
 			current_grad_.invalidate();
 
 			// ...and try another line search
-			result = line_search.minimize(lambda_, step_*direction_.inv_norm);
+			result = line_search.minimize(lambda_, step_ * direction_.inv_norm);
 			#ifdef BALL_DEBUG
 				Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
 			#endif
@@ -840,7 +817,7 @@ namespace BALL
 			#ifdef BALL_DEBUG
 				Log.info() << "resetting step length" << endl;
 			#endif
-			step_ = 0.01;
+			// step_ = 0.01;
 			
 			// invalidate the current gradient (LineSearch::minimize())
 			// recalculate it for lambda = 1.0;
@@ -868,27 +845,33 @@ namespace BALL
 
 	void ConjugateGradientMinimizer::updateStepSize(bool result)
 	{
+		// ???
+		Log.info() << "updateStepSize: result = " << result << " lambda_ = " << lambda_;
 		if (result)
 		{
 			if (lambda_ < 0.1)
 			{
-				if (lambda_ < 1e-3)
+				if (lambda_ < 1e-2)
 				{
-					step_ *= 1e-3;
-					lambda_ *= 1e3;
+					step_ *= 1e-2;
+					lambda_ *= 1e2;
+					Log.info() << " dividing step by 100 ";
 				}
 				else 
 				{
 					step_ *= 0.5;
 					lambda_ *= 2.0;
+					Log.info() << " halving step ";
 				}
 			}
 			else if (lambda_ > 0.9)
 			{
 				step_ *= 2.0;
 				lambda_ *= 0.5;
+				Log.info() << " doubling step ";
 			}
 		}
+		Log.info() << " -- step = " << step_ << std::endl;
 	}
 
 } // end of namespace BALL

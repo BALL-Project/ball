@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.22 2003/03/21 17:20:36 anhi Exp $ 
+// $Id: conjugateGradient.h,v 1.23 2003/03/24 09:29:36 oliver Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -183,7 +183,7 @@ namespace BALL
 		/** Set explicitly the criterion used for updateDirection. If the
 		  	method is not recognized, this function fails.
 		*/
-		bool setUpdateMethod(const String &method);
+		void setUpdateMethod(UpdateMethod method);
 
 		/** Returns the current method for updateDirection.
 		 */
