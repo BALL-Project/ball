@@ -3,9 +3,10 @@
 # by Andreas Crauser 
 #---------------------------------------------------------------
 
-CC = cl -c -nologo -MD -Zm1200 -TP -EHsc -GR -Zi /D "WIN32"
+
+CC = cl -c -nologo -MD -Zm1200 -TP -EHsc -GR -Zi /D "WIN32" -Od
 LD = cl -nologo -MD
-LDOPTS = /link /OPT:NOREF /DEBUG 
+LDOPTS = /link /OPT:NOREF /DEBUG /ASSEMBLYDEBUG /MAP
 BALL_LIB = ..\..\lib\libBall.lib
 
 #XLIB = user32.lib gdi32.lib comdlg32.lib shell32.lib advapi32.lib wsock32.lib 
