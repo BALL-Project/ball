@@ -1,10 +1,13 @@
-// $Id: FFParameterSection.C,v 1.2 1999/08/31 22:01:17 oliver Exp $
+// $Id: FFParameterSection.C,v 1.3 1999/12/28 17:52:37 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 
-namespace BALL {
+using namespace std;
+
+namespace BALL 
+{
 
 	FFParameterSection::FFParameterSection()
 	{

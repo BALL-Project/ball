@@ -1,10 +1,13 @@
-// $Id: quadraticBondStretch.C,v 1.3 1999/09/22 12:46:59 pmueller Exp $
+// $Id: quadraticBondStretch.C,v 1.4 1999/12/28 17:52:38 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticBondStretch.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 
-namespace BALL {
+using namespace std;
+
+namespace BALL 
+{
 
 	FFPSQuadraticBondStretch::FFPSQuadraticBondStretch()
 		:	FFParameterSection(),
@@ -65,7 +68,7 @@ namespace BALL {
 			is_defined_[i] = false;
 		}
 
-		StringHashMap<Index>::iterator it;
+		StringHashMap<Index>::Iterator it;
 
 		// determine the factor to convert the parameters to the standard units used
 		// as a default, energies are assumend to be in kJ/mol and distances in Angstrom

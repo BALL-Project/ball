@@ -1,10 +1,13 @@
-// $Id: quadraticAngleBend.C,v 1.3 1999/09/22 12:46:44 pmueller Exp $
+// $Id: quadraticAngleBend.C,v 1.4 1999/12/28 17:52:38 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 
-namespace BALL {
+using namespace std;
+
+namespace BALL 
+{
 
 	FFPSQuadraticAngleBend::FFPSQuadraticAngleBend()
 		:	FFParameterSection(),

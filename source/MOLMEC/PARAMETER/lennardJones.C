@@ -1,10 +1,13 @@
-// $Id: lennardJones.C,v 1.3 1999/09/22 12:57:37 pmueller Exp $
+// $Id: lennardJones.C,v 1.4 1999/12/28 17:52:37 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 
-namespace BALL {
+using namespace std;
+
+namespace BALL 
+{
 
 	FFPSLennardJones::FFPSLennardJones()
 		:	FFParameterSection(),

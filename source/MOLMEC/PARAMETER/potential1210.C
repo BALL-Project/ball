@@ -1,10 +1,13 @@
-// $Id: potential1210.C,v 1.3 1999/09/22 12:58:26 pmueller Exp $
+// $Id: potential1210.C,v 1.4 1999/12/28 17:52:37 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/potential1210.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 
-namespace BALL {
+using namespace std;
+
+namespace BALL 
+{
 
 	FFPSPotential1210::FFPSPotential1210()
 		:	FFParameterSection(),
@@ -65,7 +68,7 @@ namespace BALL {
 			is_defined_[i] = false;
 		}
 
-		StringHashMap<Index>::iterator it;
+		StringHashMap<Index>::Iterator it;
 
 		// determine the factor to convert the parameters to the standard units used
 		// as a default, energies are assumend to be in kJ/mol and distances in Angstrom

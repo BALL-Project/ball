@@ -1,10 +1,13 @@
-// $Id: cosineTorsion.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: cosineTorsion.C,v 1.2 1999/12/28 17:52:37 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 
-namespace BALL {
+using namespace std;
+
+namespace BALL 
+{
 
 	FFPSCosineTorsion::FFPSCosineTorsion()
 		:	FFParameterSection(),
@@ -88,7 +91,7 @@ namespace BALL {
 		String				key;
 		String				fields[5];
 
-		StringHashMap<Index>::iterator it;
+		StringHashMap<Index>::Iterator it;
 		for (it = section_entries_.begin(); it != section_entries_.end(); ++it)
 		{
 			key = it->first;

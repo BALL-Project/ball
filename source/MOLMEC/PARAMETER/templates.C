@@ -1,8 +1,10 @@
-// $Id: templates.C,v 1.3 1999/12/04 18:34:32 oliver Exp $
+// $Id: templates.C,v 1.4 1999/12/28 17:52:38 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
 #include <BALL/KERNEL/residue.h>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -76,7 +78,7 @@ namespace BALL
 
 		// iterate over all entries and store charges and types in the
 		// corresponding hash maps
-		StringHashMap<Index>::iterator	it;
+		StringHashMap<Index>::Iterator	it;
 		for (it = section_entries_.begin(); it != section_entries_.end(); ++it)
 		{
 			type_names_[it->first] = getValue(it->first, "type");

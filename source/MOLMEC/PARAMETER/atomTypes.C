@@ -1,8 +1,10 @@
-// $Id: atomTypes.C,v 1.3 1999/12/04 18:34:32 oliver Exp $
+// $Id: atomTypes.C,v 1.4 1999/12/28 17:52:37 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -66,7 +68,7 @@ namespace BALL
 
 		names_.resize(getNumberOfKeys() + 1);
 
-		StringHashMap<Index>::iterator	it;
+		StringHashMap<Index>::Iterator	it;
 
 		names_[0] = BALL_ATOM_UNKNOWN_NAME;
 		type_map_[BALL_ATOM_WILDCARD_NAME] = Atom::ANY_TYPE;
