@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.6 2005/01/21 12:43:49 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.7 2005/01/23 09:49:20 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -678,6 +678,8 @@ void MolecularControl::onNotify(Message *message)
 	Log.error() << "MolecularControl " << this << " onNotify " << message << std::endl;
 #endif
 
+	listview->setUpdatesEnabled(false);
+
  	GenericControl::onNotify(message);
 
 	// react accordingly to the given message
@@ -687,17 +689,21 @@ void MolecularControl::onNotify(Message *message)
 		// sends new selection through tree
 		updateSelection();
 	}
+	listview->setUpdatesEnabled(true);
+	listview->triggerUpdate();
 }
 
 
 void MolecularControl::invalidateSelection()
 {
+	listview->setUpdatesEnabled(false);
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
-		it.current()->setSelected(FALSE);
+		it.current()->setSelected(false);
 	}
 
+	listview->setUpdatesEnabled(true);
 	listview->triggerUpdate();
 }
 
@@ -706,15 +712,16 @@ void MolecularControl::invalidateSelection()
 void MolecularControl::setSelection_(bool open, bool force)
 	throw()
 {	
-	listview->clearSelection();
-	
 	const HashSet<Composite*>& selection = getMainControl()->getSelection();
 	if (selection.size() == 0)
 	{
+		listview->clearSelection();
+
 		QListViewItemIterator it(listview);
 		for (; it.current(); ++it)
 		{
-			((QCheckListItem*) it.current())->setOn(false);
+			SelectableListViewItem* item = (SelectableListViewItem*) it.current();
+			item->setOn(false);
 		}
 		return;
 	}
@@ -731,12 +738,11 @@ void MolecularControl::setSelection_(bool open, bool force)
 			item->setSelected(true);
 			if (open)
 			{
-				item->setSelected(true);
 				QListViewItem* parent = item->parent();
-				while (parent != 0)
+				while (parent != 0 && !parent->isOpen())
 				{
 					parent->setOpen(true);
-					parent = (QListViewItem*)parent->parent();
+					parent = parent->parent();
 				}
 			}
 		}
@@ -1236,14 +1242,7 @@ Size MolecularControl::applySelector(const String& expression)
 void MolecularControl::highlightSelection()
 	throw()
 {
-	QListViewItemIterator it1(listview);
-	for (; it1.current(); ++it1)
-	{
-		SelectableListViewItem* item = (SelectableListViewItem*) it1.current();
-		item->setOpen(false);
-		listview->setSelected(item, false);
-	}
-
+	listview->setUpdatesEnabled(false);
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
@@ -1259,7 +1258,15 @@ void MolecularControl::highlightSelection()
 				parent = parent->parent();
 			}
 		}
+		else
+		{
+			item->setOpen(false);
+			listview->setSelected(item, false);
+		}
+			
 	}
+	listview->setUpdatesEnabled(true);
+	listview->triggerUpdate();
 }
 
 } } // namespaces
