@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.100 2003/12/12 12:17:45 amoll Exp $
+// $Id: mainframe.C,v 1.101 2003/12/16 17:58:49 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -43,7 +43,7 @@
 #include <qaccel.h> 
 #include <qsettings.h>
 
-#ifdef QT_THREAD_SUPPORT
+#ifdef BALL_QT_HAS_THREADS
 #	include "threads.h"
 #endif
 
@@ -177,7 +177,7 @@ Log.error() << "new Mainframe " << this << std::endl;
 	insertMenuEntry(MainControl::TOOLS, "Molecular &Dynamics", this, SLOT(amberMDSimulation()), 
 									CTRL+Key_D, MENU_AMBER_MDSIMULATION, hint);
 
-#ifdef QT_THREAD_SUPPORT
+#ifdef BALL_QT_HAS_THREADS
 	hint = "Abort a running simulation thread";
 	insertMenuEntry(MainControl::TOOLS, "Abort Calculation", this, SLOT(stopSimulation()),
 			ALT+Key_C, MENU_STOPSIMULATION, hint);
@@ -226,7 +226,7 @@ Log.error() << "new Mainframe " << this << std::endl;
 Mainframe::~Mainframe()
 	throw()
 {
-#ifdef QT_THREAD_SUPPORT
+#ifdef BALL_QT_HAS_THREADS
 	stop_simulation_ = true;
 	if (simulation_thread_ != 0)
 	{
@@ -744,7 +744,7 @@ void Mainframe::buildPeptide()
 
 void Mainframe::stopSimulation() 
 {
-#ifdef QT_THREAD_SUPPORT
+#ifdef BALL_QT_HAS_THREADS
 	stop_simulation_ = true;
 	if (simulation_thread_ != 0)
 	{
@@ -793,6 +793,9 @@ void Mainframe::printAmberResults(const AmberFF& amber)
 
 void Mainframe::customEvent( QCustomEvent * e )
 {
+	e->type(); // prevent warning for single thread build
+
+#ifdef BALL_QT_HAS_THREADS
 	if ( e->type() == (QEvent::Type)SIMULATION_THREAD_FINISHED_EVENT)
 	{
 		stopSimulation();
@@ -813,10 +816,21 @@ void Mainframe::customEvent( QCustomEvent * e )
 			return;
 		}
 
+		qApp->wakeUpGuiThread();
+ 		qApp->processEvents();
+		if (simulation_thread_ == 0) return;
+
 		updateRepresentationsOf(*(Composite*)so->getComposite(), true);
+
+		qApp->wakeUpGuiThread();
+ 		qApp->processEvents();
+		if (simulation_thread_ == 0) return;
+
+		// ok, continue simulation
 		simulation_thread_->getMutex().unlock();
 		return;
 	}
+#endif
 }
 
 } 

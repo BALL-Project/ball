@@ -1,5 +1,5 @@
 // Do nothing, if no thread support
-#ifdef QT_THREAD_SUPPORT
+#ifdef BALL_QT_HAS_THREADS
 
 #include "threads.h"
 #include "mainframe.h"
@@ -29,21 +29,20 @@ void SimulationThread::run()
 void SimulationThread::updateScene_()
 {
 	if (main_frame_->stopedSimulation()) return;
+
+	// notify MainControl to update all Representations for the Composite
 	Mainframe::UpdateCompositeEvent* se = new Mainframe::UpdateCompositeEvent;
 	se->setComposite(composite_);
 	qApp->postEvent(main_frame_, se);
 
-	/*
-	// old behavior: no rebuilding of surfaces
-	Scene* scene= (Scene*) Scene::getInstance(0);
-	Scene::SceneUpdateEvent* su = new Scene::SceneUpdateEvent;
-	qApp->postEvent(scene, su);  // Qt will delete it when done
-	*/
+	// wait until Mainframe tell us we can continue
+	mutex_.lock();
 }
 
 void SimulationThread::output_(const String& string)
 {
 	if (main_frame_->stopedSimulation()) return;
+
 	Mainframe::SimulationOutput* su = new Mainframe::SimulationOutput;
 	su->setMessage(string);
 	qApp->postEvent(main_frame_, su);  // Qt will delete it when done
@@ -92,7 +91,6 @@ void EnergyMinimizerThread::run()
 										minimizer_->getNumberOfIterations(), 
 										amber.getEnergy(), amber.getRMSGradient());
 		output_(message.ascii());
-		mutex_.lock();
 	}
 
 	outputAmberResult_(amber);
@@ -160,7 +158,6 @@ void MDSimulationThread::run()
 		}
 
 		if (dcd_file_) manager.takeSnapShot();
-		mutex_.lock();
 	}
 
 	if (dcd_file_) manager.flushToDisk();
