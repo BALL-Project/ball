@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.9 2001/05/10 22:16:47 amoll Exp $
+// $Id: HINFile_test.C,v 1.10 2001/05/22 20:26:54 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.9 2001/05/10 22:16:47 amoll Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.10 2001/05/22 20:26:54 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -58,7 +58,7 @@ CHECK(HINFile::write(const System& system))
   NEW_TMP_FILE(filename)
   HINFile hin2(filename, std::ios::out);
 	hin2.write(system);
-  TEST_FILE("data/HINFile_test2.hin", filename.c_str(), false)
+  TEST_FILE(filename.c_str(), "data/HINFile_test2.hin", true)
 RESULT
 
 CHECK(HINFile::HINFile& operator >> (System& system))
@@ -73,7 +73,7 @@ CHECK(HINFile::HINFile& operator << (const System& system))
   NEW_TMP_FILE(filename)
   HINFile hin2(filename, std::ios::out);
   hin2 << system;
-  TEST_FILE("data/HINFile_test2.hin", filename.c_str(), false)
+  TEST_FILE(filename.c_str(), "data/HINFile_test2.hin", true)
 RESULT
 
 
