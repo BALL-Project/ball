@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.15 2002/05/12 14:07:22 oliver Exp $
+// $Id: displayProperties.C,v 1.16 2002/09/06 10:48:52 aubertin Exp $
 
 
 #include <BALL/KERNEL/molecule.h>
@@ -978,7 +978,7 @@ namespace BALL
 							break;
 							
 						case VALUE__MODEL_SURFACE:
-							dynamic_base_model_pointer = (BaseModelProcessor *)&surface_model;
+							dynamic_base_model_pointer = (BaseModelProcessor *)&line_model;
 							break;
 							
 						case VALUE__MODEL_VAN_DER_WAALS:
