@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.4 2003/10/21 15:37:51 amoll Exp $
+// $Id: primitiveManager.C,v 1.5 2003/12/06 00:02:16 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 
@@ -170,7 +170,7 @@ List<Representation*> PrimitiveManager::removedComposite(const Composite& compos
 	return removed_representations;
 }
 
-List<Representation*> PrimitiveManager::changedComposite(const Composite& composite)
+List<Representation*> PrimitiveManager::getRepresentationsOf(const Composite& composite)
 	throw()
 {
 	List<Representation*> changed_representations;
@@ -181,7 +181,8 @@ List<Representation*> PrimitiveManager::changedComposite(const Composite& compos
 		for(; composite_it != (*rep_it)->end(); composite_it++)
 		{
 			if (&composite == *composite_it ||
-					composite.isAncestorOf(**composite_it))
+					composite.isAncestorOf(**composite_it) ||
+					composite.isDescendantOf(**composite_it))
 			{
 				changed_representations.push_back(*rep_it);
 				break;
@@ -189,11 +190,6 @@ List<Representation*> PrimitiveManager::changedComposite(const Composite& compos
 		}
 	}
 
-	rep_it = changed_representations.begin();
-	for (; rep_it != changed_representations.end(); rep_it++)
-	{
-		(*rep_it)->update(true);
-	}
 	return changed_representations;
 }
 
