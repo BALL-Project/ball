@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.29 2004/02/05 14:16:07 amoll Exp $
+// $Id: geometricControl.C,v 1.30 2004/02/05 15:41:16 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -396,6 +396,19 @@ void GeometricControl::updateSelection()
 	{
 		colorMeshDlg_->setMesh((Mesh*)*(rep->getGeometricObjects().begin()), rep);
 	}
+}
+
+List<Representation*> GeometricControl::getSelection() const
+	throw()
+{
+	List<Representation*> selection;
+	ItemList selected = ((GeometricControl*)this)->getSelectedItems();
+	for (ItemList::Iterator it = selected.begin(); it != selected.end(); ++it)
+	{
+		Representation* rep = ((SelectableListViewItem*) *it)->getRepresentation();
+		selection.push_back(rep);
+	}
+	return selection;
 }
 
 } } // namespaces
