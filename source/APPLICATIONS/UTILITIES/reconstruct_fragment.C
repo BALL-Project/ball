@@ -1,4 +1,4 @@
-// $Id: reconstruct_fragment.C,v 1.2 2003/03/04 18:24:30 anker Exp $
+// $Id: reconstruct_fragment.C,v 1.3 2003/05/09 12:54:27 anker Exp $
 //
 // A little helper program that tries to reconstruct broken fragments in a
 // molecule. This program assumes that there is only *one* chain in the
@@ -27,7 +27,7 @@ int main(int argc, char** argv)
 		Log.info() << argv[0] << " infile.pdb outfile.pdb"
 			<< "\n" << endl;
 		Log.info() << " or\n" << endl;
-		Log.info() << argv[0] << " fragment-name residue-id infile.pdb outfile.pdb"
+		Log.info() << argv[0] << " fragment-name residue-id infile.pdb outfile.pdb";
 		return(1);
 	}
 
