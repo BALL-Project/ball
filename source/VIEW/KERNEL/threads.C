@@ -230,8 +230,6 @@ namespace BALL
 					if (dcd_file_) 		manager.takeSnapShot();
 				}
 
-				updateScene_();
-
 				if (dcd_file_) manager.flushToDisk();
 
  				output_(ff.getResults());
