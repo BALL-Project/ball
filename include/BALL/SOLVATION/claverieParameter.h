@@ -1,4 +1,4 @@
-// $Id: claverieParameter.h,v 1.4 2001/03/05 01:57:10 amoll Exp $
+// $Id: claverieParameter.h,v 1.5 2001/07/13 18:13:45 anker Exp $
 
 #ifndef BALL_SOLVATION_CLAVERIEPARAMETER_H
 #define BALL_SOLVATION_CLAVERIEPARAMETER_H
@@ -43,15 +43,18 @@ namespace BALL
 
 		/** Detailed constructor 
 		*/
-		ClaverieParameter(Parameters& parameters) throw();
+		ClaverieParameter(const Parameters& parameters) 
+			throw();
 
 		/** Copy constructor 
 		*/
-		ClaverieParameter(const ClaverieParameter& param) throw();
+		ClaverieParameter(const ClaverieParameter& param) 
+			throw();
 
 		/** Destructor 
 		*/
-		virtual ~ClaverieParameter() throw();
+		virtual ~ClaverieParameter() 
+			throw();
 
 		//@}
 		/** @name Assignment 
@@ -65,42 +68,58 @@ namespace BALL
 
 		/** Clear method 
 		*/
-		virtual void clear() throw();
+		virtual void clear() 
+			throw();
 
 		//@}
 		/** @name Accessors 
 		*/
 		//@{
 
-		/** 
+		/** Indicate, whether this parameter set has parameters for the
+				specified atom types.
 		*/
-		bool hasParameters(Atom::Type solvent_type, Atom::Type solute_type)
-			const throw();
+		bool hasParameters(Atom::Type solvent_type, Atom::Type solute_type) const
+			throw();
 
-		/** 
+		/** Get the parameters for the specified atom types.
 		*/
 		std::pair<float, float> getParameters(Atom::Type solvent_type,
-				Atom::Type solute_type) const throw();
+				Atom::Type solute_type) const 
+			throw();
 
-		/** 
+		/** BAUSTELLE
 		*/
-		std::pair<float, float> getParameters(Atom::Type type) const throw();
+		std::pair<float, float> getParameters(Atom::Type type) const 
+			throw();
+
+		/** Return the whole parameter set.
+		*/
+		const ::std::vector< ::std::pair<float, float> >& getParameters() const
+			throw();
+
+		/** Return the indices used for mapping types to numbers
+		*/
+		const HashMap<Atom::Type, Index>& getIndices() const
+			throw();
 
 		//@}
 		/** @name Predicates 
 		*/
 		//@{
 
-		/** Equality operator 
+		/** Equality operator.
 		*/
-		bool operator == (const ClaverieParameter& param) const throw();
+		bool operator == (const ClaverieParameter& param) const 
+			throw();
 
 		//@}
 
-		/** 
+		/** Extract the parameter file section (@see ParameterSection).
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters,
-				const String& section_name) throw();
+				const String& section_name) 
+			throw();
 
 		protected:
 
@@ -112,7 +131,6 @@ namespace BALL
 		/*_ Here the atom types are mapped to the indices of the vector 
 		*/
 		HashMap<Atom::Type, Index> indices_;
-
 
 	};
 } // namespace BALL
