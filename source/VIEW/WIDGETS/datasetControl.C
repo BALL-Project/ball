@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.13 2003/10/15 13:26:13 amoll Exp $
+// $Id: datasetControl.C,v 1.14 2003/12/01 19:36:35 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -178,67 +178,78 @@ void DatasetControl::onNotify(Message *message)
 		HashSet<QListViewItem*>::Iterator lit = to_delete.begin();
 		for (;lit != to_delete.end(); lit++)
 		{
-			context_item_ = *lit;
-			deleteTrajectory_();
-			deleteGrid_();
+			deleteItem_(**lit);
 		}
 	}   
 }
 
-void DatasetControl::deleteTrajectory_()
+void DatasetControl::deleteItems_()
 {
-	if (!item_to_trajectory_.has(context_item_)) return;
-	SnapShotManager* ssm = item_to_trajectory_[context_item_];
-	delete ssm;
-	deleteItem_(context_item_);
-	setStatusbarText("deleted trajectory");
+	ItemList item_list = getSelectedItems(); 
+	ItemList::Iterator it = item_list.begin();
+	for (; it != item_list.end(); it++)
+	{
+		deleteItem_(**it);
+	}
 }
 
-void DatasetControl::deleteItem_(QListViewItem* item)
-	throw()
+void DatasetControl::deleteItem_(QListViewItem& item)
 {
-	Composite* composite = item_to_composite_[item];
-	composite_to_items_[composite].erase(item);
-	item_to_trajectory_.erase(item);
-	item_to_grid_.erase(item);
-	item_to_composite_.erase(item);
-	delete item;
+	if (!item_to_trajectory_.has(&item) &&
+			!item_to_grid_.has(&item))
+	{
+		return;
+	}
+
+	if (item_to_trajectory_.has(&item))
+	{
+		SnapShotManager* ssm = item_to_trajectory_[&item];
+		item_to_trajectory_.erase(&item);
+		delete ssm;
+		setStatusbarText("deleted trajectory");
+	}
+	else
+	{
+		RegularData3D* ssm = item_to_grid_[&item];
+
+		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::REMOVE);
+		msg->setRegularData3D(ssm);
+		notify_(msg);
+
+		item_to_grid_.erase(&item);
+		delete ssm;
+		setStatusbarText("deleted 3D grid");
+	}
+
+	Composite* composite = item_to_composite_[&item];
+	composite_to_items_[composite].erase(&item);
+	item_to_composite_.erase(&item);
+	delete &item;
 	listview->triggerUpdate();
 }
 
-void DatasetControl::deleteGrid_()
-{
-	if (!item_to_grid_.has(context_item_)) return;
-
-	RegularData3D* ssm = item_to_grid_[context_item_];
-
-	RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::REMOVE);
-	msg->setRegularData3D(ssm);
-	notify_(msg);
-
-	delete ssm;
-	deleteItem_(context_item_);
-	setStatusbarText("deleted 3D grid");
-}
 
 void DatasetControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* column */)
 {
 	if (item == 0) return;
 	context_item_ = item;
-
+	
+	Position menu_entry_pos; 
+	Size nr_items = getSelectedItems().size();
 	QPopupMenu context_menu;
 	if (item_to_trajectory_.has(item))
 	{
-		context_menu.insertItem("Save", this, SLOT(saveTrajectory_()));
-		context_menu.insertItem("Visualise/Export", this, SLOT(visualiseTrajectory_()));
-		context_menu.insertItem("Delete", this, SLOT(deleteTrajectory_()));
-		//	insertContextMenuEntry("Export to PNGs", this, SLOT(visualiseTrajectory_()));
+		menu_entry_pos = context_menu.insertItem("Save", this, SLOT(saveTrajectory_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
+		menu_entry_pos = context_menu.insertItem("Visualise/Export", this, SLOT(visualiseTrajectory_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
 	}
 	else if (item_to_grid_.has(item))
 	{
-		context_menu.insertItem("Save", this, SLOT(save3DGrid_()));
-		context_menu.insertItem("Delete", this, SLOT(deleteGrid_()));
+		menu_entry_pos = context_menu.insertItem("Save", this, SLOT(save3DGrid_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
 	}
+	context_menu.insertItem("Delete", this, SLOT(deleteItems_()));
 
 	// show the context menu if it is not empty
 	if (context_menu.count()) context_menu.exec(point);
@@ -324,7 +335,10 @@ void DatasetControl::insertGrid_(RegularData3D* data, System* system, const Stri
 void DatasetControl::save3DGrid_()
 	throw()
 {
-	String result = QFileDialog::getSaveFileName("", "*", 0, "Select a RegularData file").ascii();
+	QString qs = QFileDialog::getSaveFileName("", "*", 0, "Select a RegularData file");
+	if (qs == QString::null) return;
+
+	String result = qs.ascii();
 	if (result.isEmpty()) return;
 
 	File outfile;
