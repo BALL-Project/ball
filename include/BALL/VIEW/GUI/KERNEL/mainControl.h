@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.6 2000/10/22 15:25:36 hekl Exp $
+// $Id: mainControl.h,v 1.7 2000/10/24 20:33:28 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -140,6 +140,12 @@ namespace BALL
 					@return	MainControl - new constructed MainControl				
 			*/
 			MainControl(QWidget* parent = 0, const char* name = 0 , String option_filename = ".BALL.options");
+
+			/**	Copy constructor.
+					BAUSTELLE: what does the copy ctor do exactly? 
+					How to solve problems arising from the fact that QMainWindow's copy ctor is private?
+			*/
+			MainControl(const MainControl& main_control);
 
 			/** Destructor
 					Default destruction of {\em *this} MainControl.

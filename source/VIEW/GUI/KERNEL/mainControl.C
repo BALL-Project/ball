@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.4 2000/10/22 15:16:37 hekl Exp $
+// $Id: mainControl.C,v 1.5 2000/10/24 20:33:56 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -42,12 +42,19 @@ namespace BALL
 			//					throw ::BALL::VIEW::MainControl::OptionsFileError(__FILE__, __LINE__, "file error.");			
 			//			}
 		}
-		/*
+		
 		MainControl::MainControl(const MainControl& main_control)
+			:	QMainWindow(main_control.parentWidget(), main_control.name()),
+				ConnectionObject(main_control),
+				Embeddable(main_control),
+				composite_map_(main_control.composite_map_),
+				descriptor_map_(main_control.descriptor_map_),
+				descriptors_(main_control.descriptors_),
+				options_(main_control.options_),
+				modular_widgets_(main_control.modular_widgets_)
 		{	
-			// BAUSTELLE
 		}
-		*/
+		
 		MainControl::~MainControl()
 		{
 			#ifdef BALL_VIEW_DEBUG
