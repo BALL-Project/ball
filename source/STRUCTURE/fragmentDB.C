@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.18 2000/05/15 19:18:54 oliver Exp $
+// $Id: fragmentDB.C,v 1.19 2000/05/30 10:40:17 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -57,7 +57,9 @@ namespace BALL
 					
 			return false;
 
-		} else {
+		} 
+		else 
+		{
 
 			String	key = root_entry.getKey();
 			String	value = root_entry.getValue();
@@ -72,7 +74,9 @@ namespace BALL
 
 				return false;
 
-			} else {
+			} 
+			else 
+			{
 				key.split(key_fields, 2, ":");
 				value.split(value_fields, 2, ":");
 					
@@ -108,7 +112,9 @@ namespace BALL
 				if (tree_entry == 0)
 				{
 					Log.error() << "FragmentDB: cannot find node " << value_fields[1] << " in file " << value_fields[0] << endl;
-				} else {
+				} 
+				else 
+				{
 					entry = parent->insertChild(key_fields[1], tree_entry->getValue());
 					entry->mergeChildrenOf(*tree_entry);
 				}
@@ -254,7 +260,9 @@ namespace BALL
 				{
 					Log.error() << "FragmentDB: wrong entry for atom " << (*entry_iterator).getKey() 
 							 << ": " << (*entry_iterator).getValue() << endl;
-				} else {
+				} 
+				else 
+				{
 					// create a new atom...
 					Atom*	 atom;
 					atom = new Atom;
@@ -313,17 +321,49 @@ namespace BALL
 				{
 					// if at least on of the atoms doesn`t exist: complain about it
 					Log.error() << "FragmentDB: Bond to a non-existing atom: " 
-																			<< fields[0] << "-"
-																			<< fields[1] << endl;
-				} else {
+											<< fields[0] << "-" << fields[1] 
+											<< " (in " << entry_iterator->getPath() << ")" << endl;
+				} 
+				else	
+				{
 					// otherwise create the bond, if valences free
-					if ((atom1->countBonds() > 7) || (atom2->countBonds() > 7))
+					if ((atom1->countBonds() > Atom::MAX_NUMBER_OF_BONDS) || (atom2->countBonds() > Atom::MAX_NUMBER_OF_BONDS))
 					{
 						Log.error() << "FragmentDB: too many bonds - cannot create bond: " 
-																				<< atom1->getName() << "-" << atom2->getName()
-																				<< " in fragment " << fragment.getName() << endl;
-					} else {
-						atom1->createBond(*atom2);
+												<< atom1->getName() << "-" << atom2->getName()
+												<< " in fragment " << fragment.getName() 
+												<< " (in " << entry_iterator->getPath() << ")" << endl;
+					} 
+					else 
+					{
+						// create the bond
+						Bond* bond = atom1->createBond(*atom2);
+
+						if (bond != 0)
+						{
+							// by default, we create single bonds
+							bond->setOrder(Bond::ORDER__SINGLE);
+
+							// if the bond order is specified, set it
+							// s == single, a == aromatic, d = double, t = triple
+							if (fields[2] != "")
+							{
+								switch (fields[2][0])
+								{
+									case 'a':
+										bond->setOrder(Bond::ORDER__AROMATIC); break;
+									case 'd':
+										bond->setOrder(Bond::ORDER__DOUBLE); break;
+									case 't':
+										bond->setOrder(Bond::ORDER__TRIPLE); break;
+									case 's':
+										bond->setOrder(Bond::ORDER__SINGLE); break;
+									default:
+										Log.error() << "FragmentDB::parseBonds_: unknown bond type " 
+																<< fields[2] << " (in " << entry_iterator->getPath() << ")" << endl;
+								}
+							}
+						}
 					}
 				}
 			}
@@ -355,7 +395,9 @@ namespace BALL
 					// if the atom to be deleted doesn`t exist - complain about it!
 					Log.error() << "FragmentDB: cannot delete non-existing atom: "
 																			<< (*entry_iterator).getKey() << endl;
-				} else {
+				} 
+				else 
+				{
 					// otherwise delete the atom
 					fragment.remove(*atom);
 					delete atom;
@@ -389,7 +431,9 @@ namespace BALL
 					// if the atom to be renamed doesn`t exist - complain about it!
 					Log.error() << "FragmentDB: cannot rename non-existing atom: "
 																			<< (*entry_iterator).getKey() << endl;
-				} else {
+				} 
+				else 
+				{
 					// otherwise rename the atom
 					atom->setName((*entry_iterator).getValue());
 				}
@@ -415,7 +459,9 @@ namespace BALL
 				{
 					property.erase(0, 1);
 					invert = true;
-				} else {
+				} 
+				else 
+				{
 					invert = false;
 				}
 				
@@ -456,14 +502,20 @@ namespace BALL
 					if (invert)
 					{
 						property_man.clearProperty(property.c_str());
-					} else {
+					} 
+					else	
+					{
 						property_man.setProperty(property.c_str());
 					}
-				} else {
+				} 
+				else 
+				{
 					if (invert)
 					{
 						property_man.clearProperty(prop);
-					} else {
+					} 
+					else 
+					{
 						property_man.setProperty(prop);
 					}
 				}
@@ -540,7 +592,9 @@ namespace BALL
 					Log.error() << "FragmentDB: cannot find Atoms entry for " 
 						<< fragment_name << endl;
 					return;
-				} else {
+				} 
+				else	
+				{
 					parseAtoms_(*entry, *fragment);
 				}
 
@@ -606,7 +660,9 @@ namespace BALL
 								name_to_frag_pointer_[fragment_name] = variant;
 								name_to_path_[fragment_name] = "/Fragments/" 
 									+ fragment_name + "/Variants/" + variant_name;
-							} else {
+							} 
+							else 
+							{
 								variant = new Residue(*original_fragment);
 								variant->setName(variant_name);
 
@@ -679,9 +735,12 @@ namespace BALL
 
 		// check for a default naming standard
 		entry = tree->getEntry("/Defaults/Naming");
-		if (entry == 0){
+		if (entry == 0)
+		{
 			default_standard_ = "PDB";
-		} else {
+		} 
+		else 
+		{
 			default_standard_ = entry->getValue();
 		}
 		
@@ -699,7 +758,9 @@ namespace BALL
 	{
 		if (name_to_frag_pointer_.has(fragment_name)){
 			return (*name_to_frag_pointer_.find(fragment_name)).second;
-		} else {
+		} 
+		else	
+		{
 			return 0;		
 		}
 	}
@@ -778,9 +839,12 @@ namespace BALL
 
 	const Residue* FragmentDB::getResidue(const String& fragment_name) const 
 	{
-		if (name_to_frag_pointer_.has(fragment_name)){
+		if (name_to_frag_pointer_.has(fragment_name))
+		{
 			return (*name_to_frag_pointer_.find(fragment_name)).second;
-		} else {
+		} 
+		else 
+		{
 			return 0;		
 		}
 	}
@@ -1141,7 +1205,7 @@ namespace BALL
 
 	// calculates position of hydrogen to be added
 	void FragmentDB::AddHydrogensProcessor::calculate_	
-		(String atom_name, Atom* bindungs_atom, Vector3& a, Vector3& b,Vector3& c, Vector3& d,
+		(String atom_name, Atom* bond_atom, Vector3& a, Vector3& b,Vector3& c, Vector3& d,
 		 Vector3& xa, Vector3& xb,Vector3& xc, Vector3& xd, Vector3& xtarget)
 	{
 		// setting of local variables    
@@ -1389,12 +1453,12 @@ namespace BALL
 
 		try 
 		{
-			atom.createBond(*bindungs_atom);
+			atom.createBond(*bond_atom);
 		} 
 		catch (Bond::TooManyBonds)
 		{
 			Log.error() << "FragmentDB: cannot create bond between "
-				<< atom_name << " and " << bindungs_atom->getName() << ": too many bonds!" << endl;
+				<< atom_name << " and " << bond_atom->getName() << ": too many bonds!" << endl;
 		}
 
 		residue_->insert(atom);
@@ -1458,7 +1522,7 @@ namespace BALL
 		Vector3 xtarget;
 		static Vector3 old_C;
 		AtomIterator atom_iter;
-		Atom bindungs_atom;
+		Atom bond_atom;
 		Atom* atom;
 		Atom** atom_feld=new Atom*[4];
 		// some counting variables
@@ -1656,14 +1720,14 @@ namespace BALL
 										x[i] = (*atom_iter).getPosition();
 										if (!i)
 										{
-											bindungs_atom = (*atom_iter);	
+											bond_atom = (*atom_iter);	
 										}
 									}
 								}
 							}
 		
 						// xtarget is calculated
-							calculate_(h_atoms_[k], &bindungs_atom,
+							calculate_(h_atoms_[k], &bond_atom,
 												 x[0], x[1], x[2], x[3],
 												 xx[0], xx[1], xx[2], xx[3], 
 												 xtarget); 
@@ -1816,7 +1880,6 @@ namespace BALL
 
 		// get the fragment`s name
 		String	name = fragment.getName();
-
 		
 		// check whether our DB knows the fragment and retrieve the template
 		const Fragment* tplate = fragment_db_->getReferenceFragment(fragment);
@@ -1862,15 +1925,28 @@ namespace BALL
 							AtomIterator	second_frag_it;
 							for (second_frag_it = fragment.beginAtom(); +second_frag_it; ++second_frag_it) 
 							{
-								if ((*second_frag_it).getName().trim() == name) 
+								if (second_frag_it->getName().trim() == name) 
 								{
-									if (!second_frag_it->isBondedTo(*frag_atom_it))
+									Bond* bond = second_frag_it->getBond(*frag_atom_it);
+									if (bond == 0)
 									{
 										// if the bond did not yet exist, create it											
-										(*frag_atom_it).createBond(*second_frag_it);
-										bonds_built++;
-										break;
+										bond = frag_atom_it->createBond(*second_frag_it);
 									}
+
+									// assign the correct bond order, name, and type
+									// (even if the bond exists -- too correct PDB CONECT entries)
+									if (bond != 0)
+									{
+										// assign the bond type and order
+										bond->setOrder(tplate_bond_it->getOrder());
+										bond->setType(tplate_bond_it->getType());
+										bond->setName(tplate_bond_it->getName());
+
+										// count this bond 
+										bonds_built++;
+									}
+									break;
 								}
 							}
 						}
@@ -1908,8 +1984,8 @@ namespace BALL
 		// count the bonds we build
 		Size bonds_built = 0;
 
-		String	s1[5];
-		String	s2[5];
+		String	s1[6];
+		String	s2[6];
 		ResourceEntry::Iterator	it1 = first_entry->begin();
 		ResourceEntry::Iterator	it2;
 		for (++it1; +it1; ++it1)
@@ -1919,16 +1995,17 @@ namespace BALL
 			//   (<name> <atom_name> <match_name> <distance> <tolerance>)
 			//	<name>:				Name of the connection type (eg C-term)
 			//	<atom_name>:	Name of the atom that might create the connection
+			//  <bond_order>: s/d/t/a (single/double/triple/aromatic)
 			//	<match_name>:	Name of a matching connection type: this connection is 
 			//								created if the two names match
 			//	<distance>:		Distance of the connection in Angstrom
 			//	<tolerance>:	Tolerance: connection will be built only if the distance
 			//								of the two atoms within <tolerance> of <distance>
 			//	Example entry:
-			//		(C-term C N-term 1.33 0.5):
+			//		(C-term C s N-term 1.33 0.5):
 			//			This will build a connection to a fragment with a N-term connection
-			//			if the two atoms are 1.33+/-0.5 Angstrom apart.
-			it1->getValue().split(s1, 5);
+			//			if the two atoms are 1.33+/-0.5 Angstrom apart. The bond is a single bond.
+			it1->getValue().split(s1, 6);
 
 			// check if the connection of the first fragment
 			// matches any connection type of the second fragment
@@ -1938,23 +2015,41 @@ namespace BALL
 				// check for distance condition and the two atoms
 				if (it2->getKey() == s1[1])
 				{
-					it2->getValue().split(s2, 5);
+					it2->getValue().split(s2, 6);
 					Atom* a1 = first.getAtom(s1[0]);
 					Atom* a2 = second.getAtom(s2[0]);
 					if ((a1 != 0) && (a2 != 0))
 					{
 						// check the distance conditions for both Connection data sets
 						float distance = a1->getPosition().getDistance(a2->getPosition());
-						if ((fabs(distance - s1[2].toFloat()) < s1[3].toFloat())
-								&& (fabs(distance - s2[2].toFloat()) < s2[3].toFloat()))
+						if ((fabs(distance - s1[3].toFloat()) < s1[4].toFloat())
+								&& (fabs(distance - s2[3].toFloat()) < s2[4].toFloat()))
 						{
 							// create the bond only if it does not exist
 							if (!a1->isBondedTo(*a2))
 							{
+								Bond* bond = a1->createBond(*a2);
 								// create the bond
-								if (a1->createBond(*a2))
+								if (bond != 0)
 								{
+									// count the bond
 									bonds_built++;
+
+									// set the bond order
+									switch (s1[2][0])
+									{
+										case 's':
+											bond->setOrder(Bond::ORDER__SINGLE); break;
+										case 'd':
+											bond->setOrder(Bond::ORDER__DOUBLE); break;
+										case 't':
+											bond->setOrder(Bond::ORDER__TRIPLE); break;
+										case 'a':
+											bond->setOrder(Bond::ORDER__AROMATIC); break;
+										default:
+											Log.warn() << "FragmentDB::BuildBondsProcessor: unknown bond order " 
+																 << s1[2] << " (in " << first_entry->getPath() << ")" << endl;
+									}
 								}
 							}
 						}
