@@ -21,7 +21,7 @@ collectlib:	dummy
 	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=collectlib LIBNAME="$(THISLIB)"
 
 depend:	dummy
-	@echo "" > .Dependencies
+	@for i in $(DIRS) ; do ( cd $i ; echo "" >.Dependencies ) ; done
 	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=depend
 
 subdirs:	dummy
