@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.9 2000/03/21 12:43:21 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.10 2000/03/22 00:47:23 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -806,13 +806,13 @@ namespace BALL
 	/**	Get the intersection circle between a sphere and a plane.
 			@param	sphere the sphere
 			@param	plane the plane
-			@param	intersection_Circle the intersection circle
+			@param	intersection_circle the intersection circle
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <class T>
 	bool GetIntersection
 		(const TSphere3<T>& sphere, const TPlane3<T>& plane,
-		 TCircle3<T>& intersectionCircle)
+		 TCircle3<T>& intersection_circle)
 	{
 		T distance = GetDistance(sphere.p, plane);
 
@@ -826,7 +826,7 @@ namespace BALL
 
 			Vector3.normalize();
 
-			intersection_Circle.set(sphere.p + sphere.radius * Vector3, plane.n, 0);
+			intersection_circle.set(sphere.p + sphere.radius * Vector3, plane.n, 0);
 
 			return true;
 		} else {
@@ -834,7 +834,7 @@ namespace BALL
 
 			Vector3.normalize();
 
-			intersection_Circle.set
+			intersection_circle.set
 				(sphere.p + distance * Vector3,
 				 plane.n,
 				 sqrt(sphere.radius * sphere.radius - distance * distance));
@@ -846,7 +846,7 @@ namespace BALL
 	/**	Get the intersection circle between a plane and a sphere.
 			@param	plane the plane
 			@param	sphere the sphere
-			@param	intersection_Circle the intersection circle
+			@param	intersection_circle the intersection circle
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <class T>
@@ -860,13 +860,13 @@ namespace BALL
 	 
 	/**	Get the intersection circle between two spheres.
 			@param	a the first sphere
-			@param	intersection_Circle the intersection circle
+			@param	intersection_circle the intersection circle
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <class T>
 	bool GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& intersection_circle)
 	{
-		TPlane3<T> Plane3
+		TPlane3<T> Plane
 			(-2 * b.p.x + 2 * a.p.x,
 			 -2 * b.p.y + 2 * a.p.y,
 			 -2 * b.p.z + 2 * a.p.z,
@@ -879,13 +879,13 @@ namespace BALL
 			 - a.p.z * a.p.z
 			 + a.radius * a.radius);
 
-		Plane3.hessify();
+		Plane.hessify();
 
 		T tmp_a, tmp_b, c, d;
 
-		Plane3.get(tmp_a, tmp_b, c, d);
+		Plane.get(tmp_a, tmp_b, c, d);
 
-		intersection_Circle.set(- d * Plane3.n, Plane3.n, sqrt(tmp_a.radius * tmp_a.radius - d * d));
+		intersection_circle.set(- d * Plane.n, Plane.n, sqrt(tmp_a.radius * tmp_a.radius - d * d));
 
 		return true;
 	}
@@ -1200,9 +1200,9 @@ namespace BALL
 		T neaz = cby * cdx - cbx * cdy;
 
 		// Calculate the length of the two normals 
-		T bl = sqrt((double)ndax * ndax + nday * nday + ndaz * ndaz);
-		T el = sqrt((double)neax * neax + neay * neay + neaz * neaz);
-		T bel = ndax * neax + nday * neay + ndaz * neaz;
+		T bl = (T) sqrt((double)ndax * ndax + nday * nday + ndaz * ndaz);
+		T el = (T) sqrt((double)neax * neax + neay * neay + neaz * neaz);
+		T bel = (T) (ndax * neax + nday * neay + ndaz * neaz);
 		
 		// if one or both planes are degenerated
 		if (bl * el == 0)
@@ -1219,7 +1219,7 @@ namespace BALL
 			bel = -1;
 		}
 
-		T acosbel = acos(bel);
+		T acosbel = (T) acos(bel);
 
 		if ((cbx * (ndaz * neay - nday * neaz) 
 				 + cby * (ndax * neaz - ndaz * neax) 
