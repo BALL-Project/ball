@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.35.4.1 2002/02/27 00:32:50 oliver Exp $
+// $Id: atom.C,v 1.35.4.2 2002/02/27 11:32:24 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -143,9 +143,9 @@ namespace BALL
 			pm.writePrimitive(type_name_, "type_name_");
 			pm.writePrimitive((Index)static_attributes_[index_].type, "type_");
 
-			static_attributes_[index_].position.persistentWrite(pm, "position_");
-			static_attributes_[index_].velocity.persistentWrite(pm, "velocity_");
-			static_attributes_[index_].force.persistentWrite(pm, "force_");
+			pm.writeStorableObject(static_attributes_[index_].position, "position_");
+			pm.writeStorableObject(static_attributes_[index_].velocity, "velocity_");
+			pm.writeStorableObject(static_attributes_[index_].force, "force_");
 
 			pm.writePrimitive(number_of_bonds_, "number_of_bonds_");
 			pm.writeObjectPointerArray((Bond**)bond_, "bond_", (Size)number_of_bonds_);
@@ -172,17 +172,9 @@ namespace BALL
 		pm.readPrimitive(tmp_type, "type_");
 		static_attributes_[index_].type = (Atom::Type)tmp_type;
 
-		pm.checkObjectHeader(static_attributes_[index_].position, "position_");
-			static_attributes_[index_].position.persistentRead(pm);
-		pm.checkObjectTrailer("position_");
-
-		pm.checkObjectHeader(static_attributes_[index_].velocity, "velocity_");
-			static_attributes_[index_].velocity.persistentRead(pm);
-		pm.checkObjectTrailer("velocity_");
-
-		pm.checkObjectHeader(static_attributes_[index_].force, "force_");
-			static_attributes_[index_].force.persistentRead(pm);
-		pm.checkObjectTrailer("force_");
+		pm.readStorableObject(static_attributes_[index_].position, "position_");
+		pm.readStorableObject(static_attributes_[index_].velocity, "velocity_");
+		pm.readStorableObject(static_attributes_[index_].force, "force_");
 
 		pm.readPrimitive(number_of_bonds_, "number_of_bonds_");
 		Size n;
