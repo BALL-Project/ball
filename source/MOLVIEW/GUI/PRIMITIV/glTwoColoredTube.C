@@ -1,4 +1,4 @@
-// $Id: glTwoColoredTube.C,v 1.3 2000/12/22 19:12:16 amoll Exp $
+// $Id: glTwoColoredTube.C,v 1.4 2001/02/04 16:19:04 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h>
 
@@ -21,7 +21,7 @@ namespace BALL
 		GLTwoColoredTube::GLTwoColoredTube
 			(const GLTwoColoredTube& GL_two_colored_tube, bool deep)
 			:	TwoColoredTube(GL_two_colored_tube, deep),
-				GLObject(GL_two_colored_tube, deep)
+				GLObject(GL_two_colored_tube)
 		{
 		}
 
@@ -131,15 +131,6 @@ namespace BALL
 			glScalef((GLfloat)getRadius(),
 							 (GLfloat)getRadius(),
 							 (GLfloat)getLength() / (Real)2);
-
-			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED))
-			{
-				drawUserDefined();
-
-				glPopMatrix();
-
-				return;
-			}
 
 			unsigned int precision;
 			unsigned int mode;

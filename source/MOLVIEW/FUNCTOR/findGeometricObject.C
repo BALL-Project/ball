@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.9 2001/01/26 00:43:32 amoll Exp $
+// $Id: findGeometricObject.C,v 1.10 2001/02/04 16:19:04 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -206,12 +206,6 @@ namespace BALL
 											(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA) 
 					 << endl;
 					
-			BALL_DUMP_DEPTH(s, depth);
-			s << "drawing precision user defined: "
-					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_USER_DEFINED) 
-					 << endl;
-
 			BALL_DUMP_DEPTH(s, depth);
 			s << "number of objects: " << geometric_objects_.size() << endl;
 

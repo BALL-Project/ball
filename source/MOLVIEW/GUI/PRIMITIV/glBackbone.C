@@ -1,4 +1,4 @@
-// $Id: glBackbone.C,v 1.2 2001/01/08 17:29:43 anker Exp $
+// $Id: glBackbone.C,v 1.3 2001/02/04 16:19:04 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h>
 #include <GL/gl.h>
@@ -18,7 +18,7 @@ namespace BALL
 
 		GLBackbone::GLBackbone(const GLBackbone& GL_backbone, bool deep)
 			:	Backbone(GL_backbone, deep),
-				GLObject(GL_backbone, deep)
+				GLObject(GL_backbone)
 		{
 		}
 

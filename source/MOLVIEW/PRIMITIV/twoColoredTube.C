@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.C,v 1.7 2000/12/22 19:12:16 amoll Exp $
+// $Id: twoColoredTube.C,v 1.8 2001/02/04 16:19:04 hekl Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 
@@ -19,7 +19,7 @@ namespace BALL
 		TwoColoredTube::TwoColoredTube
 			(const TwoColoredTube& two_colored_tube, bool deep)
 			:	BaseTube(two_colored_tube, deep),
-				ColorExtension2(two_colored_tube, deep)
+				ColorExtension2(two_colored_tube)
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace BALL
 		void TwoColoredTube::set(const TwoColoredTube& two_colored_tube, bool deep)
 		{
 			BaseTube::set(two_colored_tube, deep);
-			ColorExtension2::set(two_colored_tube, deep);
+			ColorExtension2::set(two_colored_tube);
 		}
 
 		const TwoColoredTube& TwoColoredTube::operator = (const TwoColoredTube& two_colored_tube)
@@ -81,7 +81,7 @@ namespace BALL
 		bool TwoColoredTube::isValid() const
 			throw()
 		{
-			return (BaseTube::isValid()	&& ColorExtension2::isValid());
+			return (BaseTube::isValid());
 		}
 
 		void TwoColoredTube::dump(ostream& s, Size depth) const

@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.C,v 1.3 2000/12/22 19:12:16 amoll Exp $
+// $Id: glTwoColoredLine.C,v 1.4 2001/02/04 16:19:04 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.h>
 
@@ -19,7 +19,7 @@ namespace BALL
 		GLTwoColoredLine::GLTwoColoredLine
 			(const GLTwoColoredLine& GL_two_colored_line, bool deep)
 			:	TwoColoredLine(GL_two_colored_line, deep),
-				GLObject(GL_two_colored_line, deep)
+				GLObject(GL_two_colored_line)
 		{
 		}
 

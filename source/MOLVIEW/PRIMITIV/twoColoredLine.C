@@ -1,4 +1,4 @@
-// $Id: twoColoredLine.C,v 1.7 2000/12/22 19:12:16 amoll Exp $
+// $Id: twoColoredLine.C,v 1.8 2001/02/04 16:19:04 hekl Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.h>
 
@@ -20,8 +20,8 @@ namespace BALL
 		TwoColoredLine::TwoColoredLine
 			(const TwoColoredLine& two_colored_line, bool deep)
 			:	VIEW::GeometricObject(two_colored_line, deep),
-				ColorExtension2(two_colored_line, deep),
-				Vertex2(two_colored_line, deep)
+				ColorExtension2(two_colored_line),
+				Vertex2(two_colored_line)
 		{
 		}
 
@@ -63,8 +63,8 @@ namespace BALL
 		void TwoColoredLine::set(const TwoColoredLine& two_colored_line, bool deep)
 		{
 			VIEW::GeometricObject::set(two_colored_line, deep);
-			ColorExtension2::set(two_colored_line, deep);
-			Vertex2::set(two_colored_line, deep);
+			ColorExtension2::set(two_colored_line);
+			Vertex2::set(two_colored_line);
 		}
 
 		const TwoColoredLine& TwoColoredLine::operator = (const TwoColoredLine &two_colored_line)
@@ -88,9 +88,7 @@ namespace BALL
 		bool TwoColoredLine::isValid() const
 			throw()
 		{
-			return (VIEW::GeometricObject::isValid() &&
-										ColorExtension2::isValid() &&
-										        Vertex2::isValid());
+			return (VIEW::GeometricObject::isValid());
 		}
 
 		void TwoColoredLine::dump(ostream& s, Size depth) const
