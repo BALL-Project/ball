@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.29 2002/12/13 12:44:15 anker Exp $
+// $Id: PDBFile.C,v 1.30 2002/12/16 11:59:14 anker Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -443,10 +443,22 @@ namespace BALL
 		
 		if (number_of_proteins == 0)
 		{
-			Protein p;
-			((Composite&)p).splice((Composite&)system);
-			write_(p, true);
-			((Composite&)system).splice((Composite&)p);
+			if (system.countMolecules() != 1)
+			{
+				Log.error() << "PDBFile::write(System): "
+					<< "Cannot write empty/multiple molecules to a PDB file." << endl;
+					return;
+			}
+			else
+			{
+				// this loop is for future releases which are able to write
+				// multiple molecules as different models or chains.
+				MoleculeConstIterator it = system.beginMolecule();
+				for (; +it; ++it)
+				{
+					write_(*it);
+				}
+			}
 		} 
 		else 
 		{
@@ -1145,49 +1157,49 @@ namespace BALL
 		{
 			BALL_FOREACH_ATOM(molecule, atom_it)
 			{
-      ++number_of_atomic_coordinate_records;
+				++number_of_atomic_coordinate_records;
 
-      current_atom = &(*atom_it);
-      current_atom->getName().get(PDB_atom_name, 0, 3);
-      PDB_atom_name[2] = BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR;
-      PDB_atom_name[3] = BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR;
-      PDB_atom_name[4] = '\0';
-      strcpy(element_symbol, current_atom->getElement().getSymbol().c_str());
-      
-      current_fragment = current_atom->getAncestor(RTTI::getDefault<Fragment>());
-      if (current_fragment != 0)
-      {
-				current_fragment->getName().get(PDB_residue_name[0], 0, 4);
-      } 
-			else 
-			{
-				PDB_residue_name[0][0] = '\0';
-      }
+				current_atom = &(*atom_it);
+				current_atom->getName().get(PDB_atom_name, 0, 3);
+				PDB_atom_name[2] = BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR;
+				PDB_atom_name[3] = BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR;
+				PDB_atom_name[4] = '\0';
+				strcpy(element_symbol, current_atom->getElement().getSymbol().c_str());
 
-      sprintf(line_buffer, 
-	      record_type_format_[PDB::RECORD_TYPE__HETATM].format_string,
-	      record_type_format_[PDB::RECORD_TYPE__HETATM].string,
-	      ++atom_serial_number,
-	      PDB_atom_name,
-	      BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR,
-	      PDB_residue_name[0],
-	      BALL_CHAIN_DEFAULT_NAME,
-	      0L,
-	      BALL_RESIDUE_DEFAULT_INSERTION_CODE,
-	      current_atom->getPosition().x,
-	      current_atom->getPosition().y,
-	      current_atom->getPosition().z,
-	      1.0f,
-	      20.0f,
-	      "",
-	      "",
-	      ""); // CHARGE NOT YET SUPPORTED
-      
-      line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-      File::getFileStream() << line_buffer << endl;
-      
-      atom_map[(void *)current_atom] = (long)atom_serial_number;
-    }
+				current_fragment = current_atom->getAncestor(RTTI::getDefault<Fragment>());
+				if (current_fragment != 0)
+				{
+					current_fragment->getName().get(PDB_residue_name[0], 0, 4);
+				} 
+				else 
+				{
+					PDB_residue_name[0][0] = '\0';
+				}
+
+				sprintf(line_buffer, 
+						record_type_format_[PDB::RECORD_TYPE__HETATM].format_string,
+						record_type_format_[PDB::RECORD_TYPE__HETATM].string,
+						++atom_serial_number,
+						PDB_atom_name,
+						BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR,
+						PDB_residue_name[0],
+						BALL_CHAIN_DEFAULT_NAME,
+						0L,
+						BALL_RESIDUE_DEFAULT_INSERTION_CODE,
+						current_atom->getPosition().x,
+						current_atom->getPosition().y,
+						current_atom->getPosition().z,
+						1.0f,
+						20.0f,
+						"",
+						"",
+						""); // CHARGE NOT YET SUPPORTED
+
+				line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+				File::getFileStream() << line_buffer << endl;
+
+				atom_map[(void *)current_atom] = (long)atom_serial_number;
+			}
   }
 
   // --- ENDMDL ---
