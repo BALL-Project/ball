@@ -1,4 +1,4 @@
- // $Id: peakList.h,v 1.7.4.2 2002/12/01 13:49:10 oliver Exp $
+ // $Id: peakList.h,v 1.7.4.3 2002/12/02 06:23:47 oliver Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -187,6 +187,19 @@ namespace BALL
 
 		return max;
 	}
+
+	// partial specializations:
+	template <>
+	PeakList<Peak2D>::Position PeakList<Peak2D>::getMinPosition() const;
+
+	template <>
+	PeakList<Peak2D>::Position PeakList<Peak2D>::getMaxPosition() const;
+
+	template <>
+	PeakList<Peak3D>::Position PeakList<Peak3D>::getMinPosition() const;
+
+	template <>
+	PeakList<Peak3D>::Position PeakList<Peak3D>::getMaxPosition() const;
 
 } // namespace BALL
 
