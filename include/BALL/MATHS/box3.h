@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.24 2000/09/06 19:58:26 amoll Exp $
+// $Id: box3.h,v 1.25 2000/09/27 08:00:26 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -433,7 +433,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	bool TBox3<T>::has(const TVector3<T>& point, bool on_surface = false) const
+	bool TBox3<T>::has(const TVector3<T>& point, bool on_surface) const
 	{
 		if (!on_surface)
 		{
