@@ -1,4 +1,4 @@
-; $Id: PB.options,v 1.1.2.2 2002/12/05 17:33:16 anker Exp $
+; $Id: PB.options,v 1.1.2.3 2002/12/06 11:04:02 anker Exp $
 ; Example options file for the PB application
 ;
 ; all options are commented out
@@ -11,8 +11,8 @@
 ; print the timing of all computationally expensive functions
 ;print_timing true
 
-; set the grid spacing, i. e. the distance between two grid points of the
-; same plane (in Angstrom)
+; set the grid spacing, i. e. the distance between every two grid points of
+; the same axis-parralel line (in Angstrom)
 ;spacing 0.5
 
 ; set the border of the system, i. e. the space between the bounding box of
