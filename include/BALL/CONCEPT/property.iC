@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.16 2001/02/06 13:18:13 amoll Exp $
+// $Id: property.iC,v 1.17 2001/03/02 14:52:38 anker Exp $
 
 using namespace std;
 
@@ -116,7 +116,7 @@ bool NamedProperty::operator == (const NamedProperty& np) const
 		case	UNSIGNED_INT:	return(data_.ui			== np.data_.ui);
 		case	BOOL:					return(data_.b			== np.data_.b);
 		case	OBJECT:				return(data_.object == np.data_.object);
-		case	NONE:					return(true);	break;
+		case	NONE:					return(true);	
 		case	STRING:				return(*data_.s == *np.data_.s);	
 		default:
 		{
