@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.1 2000/12/05 12:35:06 amoll Exp $ 
+// $Id: regularData3D.h,v 1.2 2001/02/10 20:01:00 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -14,10 +14,8 @@ namespace BALL
 			Unlike BoxGrid this class represents a three-dimensional
 			array. An instance of GridDataType will be created
 			for each point of the grid upon instantiation of RegularData3D.\\
-		
 			{\bf Definition:}\\
-			\URL{BALL/DATATYPE/RegularData3D.h}
-			\\
+			\URL{BALL/DATATYPE/RegularData3D.h}	\\
 			@see	HashGrid3
 	*/
 	template <typename GridDataType>
@@ -52,9 +50,8 @@ namespace BALL
 				@memo Grid position type
 		*/
 		typedef struct PositionStruct GridIndex;
+
 		//@}
-
-
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -74,14 +71,14 @@ namespace BALL
 			throw(Exception::OutOfMemory);	
 
 		/**	Constructor for RegularData3D.
-				{\em lower_[x|y|z]} should be set to the coordinates of
+				{\em lower_[x,y,z]} should be set to the coordinates of
 				the "lower" corner of the box represented by the grid
-				{\em upper_[x|y|z]} should likewise contain the "upper" corner
+				{\em upper_[x,y,z]} should likewise contain the "upper" corner
 				In fact, it doesn't really matter which coordinates are
 				which, as this method always takes the lowest coordinates (x,y,z)
 				for the lower corner and the highest coordinates for
 				the upper corner.\\
-				{\em grid_points_[x|y|z]} gives the number of grid points in 
+				{\em grid_points_[x,y,z]} gives the number of grid points in 
 				either direction. 
 				@param	lower_x	float, the x coordinate of the lower corner of the grid
 				@param	lower_y	float, the y coordinate of the lower corner of the grid
@@ -103,7 +100,7 @@ namespace BALL
 			 throw(Exception::OutOfMemory);
 
 		/**	Constructor.
-				The grid's origin is at lower, it has grid_points_[x|y|z]
+				The grid's origin is at lower, it has grid_points_[x,y,z]
 				points in each direction.
 		*/
 		RegularData3D
@@ -138,10 +135,10 @@ namespace BALL
 		virtual void clear() throw();
 
 		//@}
-
 		/**	@name Assignment
 		*/
 		//@{
+
 		/**	Copy the contents of another grid.
 				Replaces the contents and dimensions of the current
 				grid with those of {\tt grid}. The previous content
@@ -156,17 +153,17 @@ namespace BALL
 				@see set
 		*/
 		const RegularData3D& operator = (const RegularData3D& grid) throw(Exception::OutOfMemory);
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
 
-			/** Internal state dump.
-					Dump the current internal state of {\em *this} RegularData3D to 
-					the output ostream {\em s}.
-					@param   s - output stream where to output the internal state of {\em *this}
-			*/
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} RegularData3D to 
+				the output ostream {\em s}.
+				@param   s - output stream where to output the internal state of {\em *this}
+		*/
 		virtual void dump(std::ostream& stream) const throw(); 
 
 		/**	Returns the current stat of the object.	
@@ -175,8 +172,8 @@ namespace BALL
 				of the constructors.
 		*/
 		bool isValid() const throw();
-		//@}
 
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
@@ -307,9 +304,9 @@ namespace BALL
 
 		/**	Returns the exact coordinates of the grid point near to a vector r.	
 				This function calculates the exact coordinates of the 
-				closest grid point whose x-, y, and z-coordinates are smaller
+				closest grid point whose x, y, and z-coordinates are smaller
 				than the vector`s coordinates. With this function it is easily
-				possible to determine the "box" of points that enclose the given 
+				possible to determine the "box" of points that encloses the given 
 				vector.
 				@return		Vector3
 				@exception OutOfGrid if the point is outside the grid
@@ -345,7 +342,7 @@ namespace BALL
 			Position& llb, Position& rlb, Position& lub, Position& rub) const
 			throw(Exception::OutOfGrid);
 													
-		/**	Return the data at the grid points of the enclosing box.
+		/**	Return the data at the grid points of the enclosing box. (Const method)
 				This method calculates the grid box that contains the given vector
 				and returns the values at the grid points forming this box.
 				The given point lies either in the box or is the lower left front edge of the box.
@@ -420,30 +417,30 @@ namespace BALL
 				with $0 \le dx, dy, dz \le 1$. It then calculates the weighted average of 
 				the values at the eight surrounding grid points $v_i$:
 				\TEX{
-				\begin{eqnarray*}
-					{\mathrm value} & = & v_1 dx dy dz\\
-													& + & v_2 (1 - dx) dy dz\\
-													& + & v_3 dx (1 - dy) dz\\
-													& + & v_4 (1 - dx) (1 - dy) dz\\
-													& + & v_5 dx dy (1 - dz)\\
-													& + & v_6 (1 - dx) dy (1 - dz)\\
-													& + & v_7 dx (1 - dy) (1 - dz)\\
-													& + & v_8 (1 - dx) (1 - dy) (1 - dz)\\
-				\end{eqnarray*}
+					\begin{eqnarray*}
+						{\mathrm value} & = & v_1 dx dy dz\\
+														& + & v_2 (1 - dx) dy dz\\
+														& + & v_3 dx (1 - dy) dz\\
+														& + & v_4 (1 - dx) (1 - dy) dz\\
+														& + & v_5 dx dy (1 - dz)\\
+														& + & v_6 (1 - dx) dy (1 - dz)\\
+														& + & v_7 dx (1 - dy) (1 - dz)\\
+														& + & v_8 (1 - dx) (1 - dy) (1 - dz)\\
+					\end{eqnarray*}
 				}
 				@exception OutOfGrid if the point is outside the grid
 				@param	vector the position to evaluate
 		*/
 		GridDataType getInterpolatedValue(const Vector3& vector) const throw(Exception::OutOfGrid);
 		
-		/** Equality operator
+		/** Equality operator.
 				Two point grids are equal if they have the same number of points in all three
 				dimensions, same origin, spacing  and the data fields are equal.
 				Both grids have to be valid or false is returned.
 		*/
 		bool operator == (const RegularData3D<GridDataType>& grid) const throw();
 
-		/** Inequality operator
+		/** Inequality operator.
 				@see operator ==
 		*/
 		bool operator != (const RegularData3D<GridDataType>& grid) const throw();
@@ -580,14 +577,14 @@ namespace BALL
   }
 
 	//  First constructor for RegularData3D
-	//  lower_[x|y|z] should be set to the coordinates of
+	//  lower_[x,y,z] should be set to the coordinates of
 	//  the "lower" corner of the box represented by the grid
-	//  upper_[x|y|z] should likewise contain the "upper" corner
+	//  upper_[x,y,z] should likewise contain the "upper" corner
 	//  In fact, it doesn't really matter which coordinates are
 	//  which, as it always takes the lowest coordinates (x,y,z)
 	//  for the lower corner and the highest coordinates for
 	//  the upper corner.
-	//  grid_points_[x|y|z] gives the number of grid points in
+	//  grid_points_[x,y,z] gives the number of grid points in
 	//  either direction.
 	template <class GridDataType>
 	BALL_INLINE
@@ -705,7 +702,7 @@ namespace BALL
 		return valid_;
 	}
 
-	// getMax[X|Y|Z] returns the maximum possible coordinates for
+	// getMax[x,y,z] returns the maximum possible coordinates for
 	// the box, i.e. origin + size
 	template <class GridDataType>
 	BALL_INLINE 
@@ -728,7 +725,7 @@ namespace BALL
 		return upper_.x;
 	}
 
-	// getMax[X|Y|Z] returns the maximum possible coordinates for
+	// getMax[x,y,z] returns the maximum possible coordinates for
 	// the box, i.e. origin + size
 	template <class GridDataType>
 	BALL_INLINE 
@@ -751,8 +748,8 @@ namespace BALL
 		return origin_.z;
 	}
 
-	// getMax[X|Y|Z]Position returns the maximum grid position for the box.
-	// first point has position 0, getMax[X|Y|Z]Position therefore returns number_of_points
+	// getMax[x,y,z]Position returns the maximum grid position for the box.
+	// first point has position 0, getMax[x,y,z]Position therefore returns number_of_points
 	template <class GridDataType>
 	BALL_INLINE 
 	Size RegularData3D<GridDataType>::getMaxXIndex() const throw()
@@ -789,7 +786,7 @@ namespace BALL
 		return getIndex(r.x, r.y, r.z);
 	}
 
-	// get[X|Y|Z]Spacing returns the grid spacing, i.e. the distance
+	// get[x,y,z]Spacing returns the grid spacing, i.e. the distance
 	// between two grid points in the given direction
 	template <class GridDataType>
 	BALL_INLINE 

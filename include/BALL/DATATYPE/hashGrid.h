@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.13 2001/02/06 21:27:44 amoll Exp $
+// $Id: hashGrid.h,v 1.14 2001/02/10 20:00:59 amoll Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -38,7 +38,7 @@ namespace BALL
 			These boxes represent the buckets of a threedimensional hash grid.
 			Every such box contains a linear list of the objects that are
 			contained in this box. This list is accessible through 
-			\Ref{DataIterator} objects.	\\
+			@see DataIterator objects.	\\
 			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
 	*/
 	template <class Item>
@@ -58,10 +58,9 @@ namespace BALL
 		HashGridBox3(const HashGridBox3& grid_box, bool deep = true)
 			throw();
 
-
 		// BUG in egcs: destructor may not be virtual, if a template class contains
 		// structs/classes and is contained in a namespace
-		/// Destructor
+		// Destructor
 		virtual ~HashGridBox3()
 			throw();
 
@@ -99,13 +98,13 @@ namespace BALL
 
 		/** Find an item in the item list of this grid box.
 				@param item the item to be searched for
-				@return a pointer to the desired item or a NULL pointer, if the
+				@return a pointer to the desired item or a NULL pointer, if the 
 								item could not be found.
 		*/
 		Item* find(const Item &item)
 			throw();
 
-		/// The const verision of find()
+		/// The const version of find()
 		const Item* find(const Item& item) const
 			throw();
 
@@ -124,7 +123,7 @@ namespace BALL
 		/** Remove the first occurrence of a certain item from the data item
 				list of a grid box.
 				@param item the item to be removed
-				@return bool, {\tt true}, if the item could be removed, {\tt false}
+				@return bool - {\tt true}, if the item could be removed, {\tt false} 
 								otherwise.
 		*/
 		bool remove(const Item& item)
@@ -133,13 +132,13 @@ namespace BALL
 		/** Remove all occurences of a certain item from the data item list of
 				a grid box.
 				@param item the item to be removed
-				@return bool, {\tt true}, if the item could be removed, {\tt false}
-											otherwise.
+				@return bool - {\tt true}, if the item could be removed, {\tt false} 
+								otherwise.
 		*/
 		bool removeAll(const Item& item)
 			throw();
 			
-		//@}	
+		//@}			
 		/**	@name	Miscellaneous 
 		*/
 		//@{
@@ -163,15 +162,15 @@ namespace BALL
 
 		/** Test whether an item is in the data item list
 				@param item
-				@return bool, {\tt true} if {\tt this} has item {\tt item}, {\tt false}
-								otherwise.
+				@return bool - {\tt true} if {\tt this} has item {\tt item}, {\tt false} 
+				otherwise.
 		*/
 		bool has(const Item& item) const
 			throw();
 
 		/** Test, whether this box is empty, i. e. the data item list contains
 				nothing
-				@return bool, {\tt true}, if {\tt this} is empty. {\tt false} otherwise.
+				@return bool - {\tt true}, if {\tt this} is empty. {\tt false} otherwise. 
 		*/
 		bool isEmpty() const
 			throw();
@@ -425,24 +424,21 @@ namespace BALL
 			return BoxIterator::end(*this);
 		}
 
-		/** This is the const version of BoxIterator
-				@see BoxIterator
-		*/
+
+		/// This is the const version of @see BoxIterator
 		typedef ConstForwardIterator
 			<HashGridBox3<Item>, HashGridBox3<Item>,
 			BoxIteratorPosition, BoxIteratorTraits_>
 				ConstBoxIterator;
 
-		/** get the first non-empty box 
-		*/
+		/// get the first non-empty box 
 		ConstBoxIterator beginBox() const
 			throw()
 		{
 			return ConstBoxIterator::begin(*this);
 		}
 
-		/** get the last non-empty box
-		*/
+		/// get the last non-empty box
 		ConstBoxIterator endBox() const
 			throw()
 		{
@@ -593,8 +589,8 @@ namespace BALL
 		friend class DataIteratorTraits_;
 
 		/** Data iterator for grid boxes.
-				This iterator traverses the list of data items store in a 
-				\Ref{HashGridBox3}.
+				This iterator traverses the list of data items store in a @see
+				HashGridBox3.
 		*/
 		typedef ForwardIterator
 			<HashGridBox3<Item>, Item,
@@ -617,7 +613,7 @@ namespace BALL
 
 
 		/** Const data iterator for grid boxes.
-				This is the const version of \Ref{DataIterator}.
+				This is the const version of @see DataIterator
 		*/
 		typedef ConstForwardIterator
 			<HashGridBox3<Item>, Item,
@@ -642,9 +638,9 @@ namespace BALL
 			
 
 		//_
-		HashGridBox3* previous_;
+		HashGridBox3 *previous_;
 		//_
-		HashGridBox3* next_;
+		HashGridBox3 *next_;
 
 		//  private:
 	
@@ -1064,8 +1060,7 @@ namespace BALL
 	}
 
 
-	/**	Three-dimensional Hash Grid Class.
-			\\
+	/**	Three-dimensional Hash Grid Class.\\
 			BAUTELLE
 			\\
 			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
@@ -1108,13 +1103,12 @@ namespace BALL
 
 		/** Constructor using two vectors and a single spacing.
 				This constructor creates a hash grid at {\tt origin} with spacing
-				{\tt spacing}. The vector {\tt size} has to be relative to 
-				{\tt origin} and defines the opposite corner of the grid, thereby
-				setting the size of the grid.
+				{\tt spacing}. The vector {\tt size} has to be relative to {\tt origin}
+				and defines the opposite corner of the grid, thereby setting the size 
+				of the grid.
 				@param origin a vector defining the origin of our cubic hash grid
 				@param size a vector defining the opposite corner of the cubic grid
-				@param spacing this float will be used as spacing in all three
-								dimensions
+				@param spacing this float will be used as spacing in all three dimensions
 		*/
 		HashGrid3(const Vector3& origin, const Vector3& size, float spacing)
 			throw();
@@ -1255,12 +1249,13 @@ namespace BALL
 		bool remove(Position x, Position y, Position z, const Item& item)
 			throw();
 
-		/// Remova an item from position {\tt vector}
+		/// Remov an item from position {\tt vector}
 		bool remove(const Vector3& vector, const Item& item)
 			throw();
 
 		//@}
-		/**	@name Miscellaneous */
+		/**	@name Miscellaneous 
+		*/
 		//@{
 
 		///

@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.23 2001/02/06 21:27:44 amoll Exp $ 
+// $Id: hashMap.h,v 1.24 2001/02/10 20:00:59 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -44,9 +44,12 @@ namespace BALL
 	{
 		public:
 
+		class IteratorTraits_;
+
 		/**	@name	 Enums and Constants
 		*/
 		//@{
+
 		enum
 		{
 			/// Initial capacity of the empty hash map
@@ -55,8 +58,8 @@ namespace BALL
 			/// Initial number of buckets of the empty hash map
 			INITIAL_NUMBER_OF_BUCKETS = 3
 		};
-		//@}
 
+		//@}
 		/**	@name	Exceptions
 		*/
 		//@{
@@ -70,13 +73,12 @@ namespace BALL
 			IllegalKey(const char* file, int line)
 				:	Exception::GeneralException(file, line) {}
 		};
+
 		//@}
-
-		class IteratorTraits_;
-
 		/**	@name	Type definitions
 		*/
 		//@{
+
 		/**
 		*/
 		typedef ::std::pair<Key, T> ValueType;
@@ -100,8 +102,8 @@ namespace BALL
 		typedef 
 				ConstForwardIterator <HashMap<Key, T>, ValueType, PointerType, IteratorTraits_>
 			ConstIterator;
-		//@}
 
+		//@}
 		/**	@name Constructors and Destructors 
 		*/
 		//@{
@@ -139,11 +141,11 @@ namespace BALL
 		/**	Clear the hash map.
 				Remove all nodes from all buckets.
 				The capacity and the number of buckets remain unchanged.
-				Simply calls clear;
+				Simply calls clear.
 		*/
 		void destroy() throw();
+
 		//@}
-		
 		/**	@name Assignment 
 		*/
 		//@{
@@ -166,8 +168,8 @@ namespace BALL
 		/**	Swap the contents of two hash maps.
 		*/
 		void swap(HashMap& hash_map) throw();
-		//@}
 
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
@@ -226,8 +228,8 @@ namespace BALL
 				Erase all elements in the range {\tt first - last}.
 		*/
 		void erase(Iterator first, Iterator last) throw(Exception::IncompatibleIterators);
-		//@}
 
+		//@}
 		/**	@name Miscellaneous
 		*/
 		//@{
@@ -235,13 +237,13 @@ namespace BALL
 		/**	Host a visitor for all map entries.
 		*/
 		void host(Visitor<HashMap<Key, T> >& visitor) throw();
+
 		//@}
-	
 		/**	@name	Predicates
 		*/
 		//@{
 
-		/**	Test whether the map contains the key {\tt key}.
+		/**	Test whether the map contains the given key.
 		*/
 		bool has(const Key& key) const throw();
 
@@ -256,8 +258,8 @@ namespace BALL
 		/**	Compare two hash maps.
 		*/
 		bool operator != (const HashMap& hash_map) const throw();
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -271,8 +273,8 @@ namespace BALL
 		/** Dump the constent of this instance to an ostream.
 		*/
 		virtual void dump(::std::ostream& s = ::std::cout, Size depth = 0) const throw();
-		//@}
 
+		//@}
 		/**	@name	Iternal iterators
 		*/
 		//@{
@@ -281,6 +283,7 @@ namespace BALL
 				@return true if the processor could be applied.
 		*/
 		bool apply(UnaryProcessor<ValueType>& processor) throw();
+
 		//@}
 
 		// --- EXTERNAL ITERATORS
@@ -533,6 +536,7 @@ namespace BALL
 		/**	@name Attributes
 		*/
 		//@{
+
 		/**	The number of entries in the map
 		*/
 		Size size_;
@@ -543,6 +547,7 @@ namespace BALL
 		/**	Buckets are stored as a vector of linked lists of Nodes 
 		*/
 		vector<Node*> bucket_;
+
 		//@}
 	};
 

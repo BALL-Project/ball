@@ -1,4 +1,4 @@
-// $Id: selectable.iC,v 1.4 2000/12/10 00:25:55 amoll Exp $
+// $Id: selectable.iC,v 1.5 2001/02/10 20:01:27 amoll Exp $
 
 BALL_INLINE 
 void Selectable::clear()
@@ -66,10 +66,17 @@ bool Selectable::isSelected() const
 {
   return selected_;
 }
-/*
+
 BALL_INLINE 
 bool Selectable::operator == (const Selectable& selectable) const 
 	throw()
 {
 	return (selected_ == selectable.selected_);
-}*/
+}
+
+BALL_INLINE 
+bool Selectable::operator != (const Selectable& selectable) const 
+	throw()
+{
+	return !(selected_ == selectable.selected_);
+}

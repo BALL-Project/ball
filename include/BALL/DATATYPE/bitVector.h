@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.22 2001/02/07 08:40:36 amoll Exp $
+// $Id: bitVector.h,v 1.23 2001/02/10 20:00:58 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -48,9 +48,9 @@ namespace BALL
 
 	class BitVector;
 
-	/**	Bit Class. This class represents a bit within a BitVector
+	/**	Bit Class. This class represents a bit within a BitVector.
+			{\bf Definition:} \URL{BALL/DATATYPE/bitVector.h} \\
 			@see BitVector. 
-			{\bf Definition:} \URL{BALL/DATATYPE/bitVector.h}
 	*/
 	class Bit
 	{
@@ -173,7 +173,7 @@ namespace BALL
 	};
 
 
-	/**	Bit vector class 
+	/**	Bit vector class.
 			Indices may be given as negative arguments: start from the end
 			-1 therefore means the last bit.
 			Some functions resize the instance if a index greater than the
@@ -224,7 +224,7 @@ namespace BALL
 		virtual ~BitVector() throw();
 
 		/**	Clear method.
-				This method will set the size of this instance to a size of 0.
+				This method will set the size of this instance to 0.
 		*/
 		void clear() throw();
 
@@ -244,7 +244,7 @@ namespace BALL
 		  throw(Exception::OutOfMemory);
 
 		/// Assignment from an other BitVector instance.
-		BitVector& operator = (const BitVector& bit_vector)
+		const BitVector& operator = (const BitVector& bit_vector)
 		  throw(Exception::OutOfMemory);
 
 		/** Assignment from a char string.
@@ -266,7 +266,7 @@ namespace BALL
 		//@{
 
 		/** Return a sub-BitVector.
-				A new BitVector is created an filled with elements of this instance.
+				A new BitVector is created and filled with elements of this instance.
 				@param first, the index of the first element to be copied
 				@param last, the index of the last element to be copied
 				@return BitVector a partial copy of this instance
@@ -335,8 +335,9 @@ namespace BALL
 		bool getBit(Index index)
 		  throw(Exception::IndexUnderflow, Exception::OutOfMemory);
 
-		/** Get the value of an element.
+		/** Get the value of an element (const version).
 				If the given index is greater than the size of this instance an exception is thrown.
+				No resizing is done.
 				@param index the index of the element
 				@return bool the value of the element
 		*/
@@ -370,7 +371,7 @@ namespace BALL
 
 		/** Set a unsigned char as the bit pattern.
 				For example: 22 => 00010110.
-				@param bit\_pattern the new pattern.
+				@param bit_pattern the new pattern.
 		*/
 		void setUnsignedChar(unsigned char bit_pattern) throw();
 
@@ -506,7 +507,7 @@ namespace BALL
 		//@{
 
 		/**	Input- Operator.
-				Reads the values of of type {\em bool} from an istream.
+				Reads the values of type {\em bool} from an istream.
 		*/
 		friend std::istream& operator >> (std::istream& s, BitVector& bit_vector)
 			throw(Exception::OutOfMemory);

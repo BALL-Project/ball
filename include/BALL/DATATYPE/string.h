@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.30 2000/12/11 21:14:22 oliver Exp $
+// $Id: string.h,v 1.31 2001/02/10 20:01:00 amoll Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -319,7 +319,7 @@ namespace BALL
 			throw(Exception::NullPointer);
 
 		/** Assign a string from a {\bf strstream}.
-				The contents of the {\tt strstream} obejct are not modified.
+				The contents of the {\tt strstream} object are not modified.
 		*/
 		const String& operator = (::std::strstream& s)
 			throw();

@@ -1,4 +1,4 @@
-// $Id: selectable.h,v 1.8 2000/12/10 00:25:55 amoll Exp $
+// $Id: selectable.h,v 1.9 2001/02/10 20:01:27 amoll Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -83,13 +83,13 @@ namespace BALL
 
 		/**	Assignment operator.
 				Assigns the contents of another Selectable object
-				to this obejct.
+				to this object.
 				@param selectable the object to be copied
 		*/
 		const Selectable& operator = (const Selectable& selectable)
 			throw();
 		
-		/**	Copy the contents od this object into another.
+		/**	Copy the contents of this object into another.
 				@param selectable the object to be assigned to
 				@param deep ignored
 		*/
@@ -97,7 +97,7 @@ namespace BALL
 			throw();
 
 		/**	Swap the contents of two objects.
-				@param selectable the obejct to swap contents with
+				@param selectable the object to swap contents with
 		*/
 		void swap(Selectable& selectable)
 			throw();
@@ -132,26 +132,30 @@ namespace BALL
 
 		/** Equality operator
 		*/
-/*		bool operator == (const Selectable& selectable) const 
-			throw();*/
+		bool operator == (const Selectable& selectable) const 
+			throw();
+
+		/** Inequality operator
+		*/
+		bool operator != (const Selectable& selectable) const 
+			throw();
 
 		//@}
-	
 		/**	@name Storers 
 		*/
 		//@{
 
-		///
+		/**
+		*/
 		friend ::std::ostream&	operator << (::std::ostream& s, const Selectable& selectable)
 			throw();
 
-		///
+		/**
+		*/
 		friend ::std::istream&	operator >> (::std::istream& s, Selectable& selectable)
 			throw();
 
 		//@}
-
-
 		/**	@name Storable interface.
 		*/
 		//@{
@@ -175,14 +179,14 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name Debugging and Diagnostics 
 		*/
 		//@{
 		
 		///
-		virtual void dump(::std::ostream& s = std::cout, Size depth = 0L) const
+		virtual void dump(::std::ostream& s = std::cout, Size depth = 0) const
 			throw();
+
 		//@}
 	
 		protected:

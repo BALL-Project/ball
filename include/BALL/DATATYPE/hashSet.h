@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.24 2001/02/06 21:27:44 amoll Exp $ 
+// $Id: hashSet.h,v 1.25 2001/02/10 20:01:00 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -45,6 +45,8 @@ namespace BALL
 	{
 		public:
 
+		class IteratorTraits_;
+
 		/**	@name	Enums
 		*/
 		//@{
@@ -56,8 +58,8 @@ namespace BALL
 			/// Initial number of buckets
 			INITIAL_NUMBER_OF_BUCKETS = 3
 		};
-		//@}
 
+		//@}
 		/**	@name	Exceptions
 		*/
 		//@{
@@ -75,13 +77,12 @@ namespace BALL
 			{
 			}
 		};
-		//@}
-		
-		class IteratorTraits_;
 
+		//@}
 		/**	@name	Type definitions
 		*/
 		//@{
+
 		/**
 		*/
 		typedef Key ValueType;
@@ -105,8 +106,8 @@ namespace BALL
 		typedef 
 				ConstForwardIterator <HashSet<Key>, ValueType, PointerType, IteratorTraits_>
 			ConstIterator;
-		//@}
 
+		//@}
 		/**	@name Constructors and Destructors 
 		*/
 		//@{
@@ -140,8 +141,8 @@ namespace BALL
 				Simply calls clear;
 		*/
 		void destroy()	throw();
+
 		//@}
-		
 		/**	@name Assignment 
 		*/
 		//@{
@@ -156,7 +157,7 @@ namespace BALL
 		*/
 		const HashSet& operator = (const HashSet& hash_set)	throw();
 
-		/** Assing another HashSet with the contents of this HashSet
+		/** Assign another HashSet with the contents of this HashSet
 				@param hash_set the HashSet to assign to
 		*/
 		void get(HashSet& hash_set) const	throw();
@@ -164,11 +165,12 @@ namespace BALL
 		/**	Swap the contents of two hash sets.
 		*/
 		void swap(HashSet& hash_set)	throw();
-		//@}
 
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
+
 		/**	Return the number of buckets.
 		*/
 		Size getBucketSize() const	throw();
@@ -211,8 +213,8 @@ namespace BALL
 				Erase all elements in the range {\tt f - l}.
 		*/
 		void erase(Iterator f, Iterator l) throw(Exception::IncompatibleIterators);
-		//@}
 
+		//@}
 		/**	@name Miscellaneous
 		*/
 		//@{
@@ -220,8 +222,8 @@ namespace BALL
 		/**	Host a visitor for all set entries.
 		*/
 		void host(Visitor<HashSet<Key> >& visitor)	throw();
+
 		//@}
-	
 		/**	@name	Predicates
 		*/
 		//@{
@@ -241,8 +243,8 @@ namespace BALL
 		/**	Compare two hash sets.
 		*/
 		bool operator != (const HashSet& hash_set) const	throw();
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -256,6 +258,7 @@ namespace BALL
 		/** Dump the constent of this instance to an ostream.
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const	throw();
+
 		//@}
 
 		// --- INTERNAL ITERATORS

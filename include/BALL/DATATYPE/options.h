@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.12 2000/12/18 12:21:05 anker Exp $
+// $Id: options.h,v 1.13 2001/02/10 20:01:00 amoll Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -25,15 +25,13 @@ namespace BALL
 	/**		Options class.
 				This object is intended to store options for complex
 				method calls. These options are stored as key/value pairs
-				of \Ref{String}s.\\
+				of \Ref{String}.\\
 				Using this datastructure, options for force fields (\Ref{ForceField}),
 				finit difference Poisson Boltzmann calculations (\Ref{FDPB}), or the 
 				results of calculations can be given, retrieved, stored into a file
 				and retrieved from a file.  This simplifies the handling of such
 				complex parameter sets.\\
-
-				{\bf Definition:} \URL{BALL/DATATYPE/options.h}
-				\\
+				{\bf Definition:} \URL{BALL/DATATYPE/options.h} \\
 	*/
 	class Options
 		: public StringHashMap<String> 
@@ -41,7 +39,8 @@ namespace BALL
 		
 		public:
 
-		/**	@name	Constants */
+		/**	@name	Constants 
+		*/
 		//@{
 
 		/**	Maximum length for each entry (key + value): 1024 byte.
@@ -50,13 +49,11 @@ namespace BALL
 		static const Size MAX_ENTRY_LENGTH;
 
 		//@}
-
 		/**	@name Constructors and Destructors	
 		*/
 		//@{			
 
 		/**	Default constructor. Creates a new and empty Options object.
-				@memo
 		*/
 		Options() throw();
 
@@ -64,7 +61,6 @@ namespace BALL
 				Creates a new option table from an existing one.
 				@param	options the options to be copied
 				@param	deep bool, no effect		
-				@memo
 		*/
 		Options(const Options& options, bool deep = true) throw();
 
@@ -72,13 +68,11 @@ namespace BALL
 					Destructs the option table and frees all 
 					allocated memory.
 					@see	clear
-					@memo
 		*/
 		virtual ~Options() throw();
 
 		//@}
-
-		/**@name		Assignment
+		/**@name Assignment
 		*/
 		//@{
 		
@@ -91,15 +85,14 @@ namespace BALL
 		virtual void clear() throw();
 
 		//@}
-
-		/**@name		Predicates
+		/** @name	Predicates
 		*/
 		//@{
+
 		/**		Returns true, if the value associated with the 
 					given key is an integer
 					@param	key String
 					@return	true, if {\em key} is an integer
-					@memo
 		*/
 		bool isInteger(const String& key) const throw();
 
@@ -109,7 +102,6 @@ namespace BALL
 					or {\tt false}. 
 					@param	key String
 					@return	true, if {\em key} is a boolean value
-					@memo
 		*/
 		bool isBool(const String& key) const throw();
 
@@ -117,7 +109,6 @@ namespace BALL
 					given key is a real number
 					@param	key String
 					@return	true, if {\em key} is a real number
-					@memo
 		*/
 		bool isReal(const String& key) const throw();
 
@@ -128,30 +119,25 @@ namespace BALL
 					represents an arbitrary floating point number.
 					@param					key String
 					@return					true, if {\em} key represents a 3D vector of reals
-					@memo
 		*/
 		bool isVector(const String& key) const throw();
 
 		/**		Returns true, if a value is defined for the given key.
 					@param					key String
 					@return					bool, true/false
-					@memo
 		*/
 		bool isSet(const String& key) const throw();
 
 		//@}
-
-		/**@name Inspectors and mutators
+		/** @name Inspectors and mutators
 		*/
 		//@{
 
 		/**		Sets the option table's name.
-					@memo
 		*/
 		void setName(const String& name) throw();
 
 		/**		Returns the option table's name.
-					@memo
 		*/
 		const String& getName() const throw();
 
@@ -159,7 +145,6 @@ namespace BALL
 					If the key does not exists an empty string is returned.
 					@param	key the key
 					@return	String, the value
-					@memo
 		*/
 		String get(const String& key) const throw();
 
@@ -172,7 +157,6 @@ namespace BALL
 					by calling \Ref{isBool}.
 					@param	key the key
 					@return	bool, boolean value
-					@memo
 		*/
 		bool	getBool(const String& key) const throw();
 
@@ -183,7 +167,6 @@ namespace BALL
 					number first by calling \Ref{isReal}.
 					@param	key the key
 					@return float, floating point value
-					@memo
 		*/
 		double getReal(const String& key) const throw();
 
@@ -198,7 +181,6 @@ namespace BALL
 					by calling \Ref{isVector}.
 					@param	key the key
 					@return	Vector3	vector containing the three coordinates
-					@memo
 		*/
 		Vector3	getVector(const String& key) const throw();
 
@@ -209,7 +191,6 @@ namespace BALL
 					of this conversion by calling \Ref{isInteger}.
 					@return 	long the integer value
 					@param	key the key
-					@memo
 		*/
 		long getInteger(const String& key) const throw();
 
@@ -218,7 +199,6 @@ namespace BALL
 					If {\bf key} didn't exist in the internal hash table, it 
 					is inserted.
 					@param key the key
-					@memo
 		*/
 		void set(const String& key, const String& value) throw();
 
@@ -228,7 +208,6 @@ namespace BALL
 					If {\bf key} didn't already exist, it is created.
 					@param	value the new value
 					@param key the key
-					@memo
 		*/
 		void setReal(const String& key, const double value) throw();
 
@@ -240,7 +219,6 @@ namespace BALL
 					If {\bf key} didn't already exist, it is created.
 					@param	key the key
 					@param	value a vector
-					@memo
 		*/
 		void setVector(const String& key, const Vector3& value) throw();
 
@@ -250,17 +228,15 @@ namespace BALL
 				If {\bf key} didn't already exist, it is created.\\
 				@param	key the key
 				@param	value the integer value
-				@memo
 		*/
 		void setInteger(const String& key, const long value) throw();
 
 		/**	Assigns the boolean value given by value to the table entry key.
-				The value assocaited with {\bf key} is either set to
+				The value associated with {\bf key} is either set to
 				the string "true" or the string "false".\\
 				If {\bf key} didn't already exist, it is created.\\
 				@param	key the key
 				@param	value the boolean value
-				@memo
 		*/
 		void setBool(const String& key, const bool value) throw();
 
@@ -270,7 +246,6 @@ namespace BALL
 				@see	set
 				@param	key the key
 				@param 	value	a new value
-				@memo
 		*/
 		String setDefault(const String& key, const String& value) throw();
 
@@ -281,7 +256,6 @@ namespace BALL
 				@param	key the key
 				@param 	value	a new value
 				@return	the value of {\tt key}
-				@memo
 		*/
 		long setDefaultInteger(const String& key, const long value) throw();
 
@@ -292,7 +266,6 @@ namespace BALL
 				@param	key the key
 				@param 	value	a new value
 				@return	the value of {\tt key}
-				@memo
 		*/
 		double setDefaultReal(const String& key, const double value) throw();
 
@@ -303,7 +276,6 @@ namespace BALL
 				@param	key the key
 				@param 	value	a new value
 				@return	the value of {\tt key}
-				@memo
 		*/
 		bool setDefaultBool(const String& key, const bool value) throw();
 
@@ -324,7 +296,6 @@ namespace BALL
 													\item {\bf true} if the file could be read
 													\item {\bf false} otherwise
 												\end{itemize}
-					@memo
 		*/
 		bool readOptionFile(const String& filename) throw();
 
@@ -349,16 +320,16 @@ namespace BALL
 
 
 		//@}
-
-		/**@name	Debugging */
+		/**@name	Debugging 
+		*/
 		//@{
 		
-		/** 	Dumps the whole content of the object */
+		/** Dumps the whole content of the object 
+		*/
 		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const 
 			throw();
 
 		//@}
-
 
 		protected:
 

@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.9 2001/01/29 19:00:57 anhi Exp $
+// $Id: regularData1D.h,v 1.10 2001/02/10 20:01:00 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -14,8 +14,7 @@ namespace BALL
 
 	/**	A class to store regularaly spaced data.
 			This class can is intended to hold regularly spaced, one-dimensional data sets.
-			It might be useful to hold data sets like spectra, or precomputed function values.
-			\\
+			It might be useful to hold data sets like spectra, or precomputed function values.\\
 			{\bf Definition:} \URL{BALL/DATATYPE/regularData1D.h}
 	*/
 	template <typename T>
@@ -28,12 +27,13 @@ namespace BALL
 		/**	@name Type definitions
 		*/
 		//@{
+
 		/**	The vector type.
 				This type is used to store the data.
 		*/
 		typedef std::vector<T>	VectorType;
+
 		//@}
-	
 		/** @name Constructors and Destructors.
 		*/
 		//@{
@@ -64,7 +64,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name Assignment
 		*/
 		//@{
@@ -80,17 +79,18 @@ namespace BALL
 		*/
 		const TRegularData1D& operator = (const VectorType& data)
 			throw();
+
 		//@}
-		
 		/**	@name Predicates
 		*/
 		//@{
+
 		/**	Equality operator
 		*/
 		bool operator == (const TRegularData1D& data) const
 			throw();
+
 		//@}
-	
 		/**	@name	Accessors
 		*/
 		//@{	
@@ -136,16 +136,15 @@ namespace BALL
 				If {\tt new_size} is larger than the current size, the data 
 				{\tt vector} is extended to the new size and filled with default
 				constructed items of type {\tt T}. Resizing to a value lesser than
-				the current size truncates the vector.
-				\\
-				The boundaries are adapted keep the positions of the retained items
+				the current size truncates the vector. \\
+				The boundaries are adapted and the positions of the retained items
 				fixed, i.e.  the upper bound is increased or decreased
 				proportionally while the lower bound remains unchanged.
-				
 				@param new_size the new size
 		*/
 		void resize(Size new_size)
 			throw();
+
 		//@}
 	
 		protected:

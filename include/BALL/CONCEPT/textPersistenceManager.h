@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.h,v 1.7 2000/12/12 16:18:08 oliver Exp $
+// $Id: textPersistenceManager.h,v 1.8 2001/02/10 20:01:27 amoll Exp $
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -50,7 +50,7 @@ namespace BALL
 		//@{
 
 		/**	Write an object header.
-				This method write an obejct header. It starts with the current number of spaces
+				This method write an object header. It starts with the current number of spaces
 				needed for a correct indentation.
 				If {\tt name} is a null pointer, the object is a base object of the current
 				object. This method then writes the string {\tt BASEOBJECT}. If {\tt name}
