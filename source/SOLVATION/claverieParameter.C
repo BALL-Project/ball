@@ -1,4 +1,4 @@
-// $Id: claverieParameter.C,v 1.5 2000/10/17 17:20:44 anker Exp $
+// $Id: claverieParameter.C,v 1.6 2001/07/13 18:14:27 anker Exp $
 
 #include <BALL/SOLVATION/claverieParameter.h>
 
@@ -98,6 +98,20 @@ namespace BALL
 		const throw()
 	{
 		return parameters_[indices_[type]];
+	}
+
+
+	const ::std::vector< ::std::pair<float, float> >& ClaverieParameter::getParameters() const
+		throw()
+	{
+		return parameters_;
+	}
+
+	
+	const HashMap<Atom::Type, Index>& ClaverieParameter::getIndices() const
+		throw()
+	{
+		return indices_;
 	}
 
 
