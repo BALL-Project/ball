@@ -5,7 +5,7 @@
 		<node>Arg</node>
 		<node>R</node>
 	</node>
-		<node>Atoms
+	<node>Atoms
 		<node>N<value>N 0.04658213 1.228698 -0.008203848</value></node>
 		<node>3H<value>H 1.029144 1.468065 -0.01885969</value></node>
 		<node>CA<value>C -0.651675 1.900984 -1.120636</value></node>
@@ -78,6 +78,12 @@
 			</node>
 			<node>Rename
 				<node>3H<value>H</value></node>
+			</node>
+		</node>
+		<node>ARG-M
+			<node>Properties
+				<node>C_TERMINAL</node>
+				<node>N_TERMINAL</node>
 			</node>
 		</node>
 		<node>ARG-C

@@ -1,4 +1,4 @@
- <node>CHARMM<value>PDB</value>
+<node>CHARMM<value>PDB</value>
  <node>*:H1<value>*:1H</value></node>
  <node>*:H2<value>*:2H</value></node>
  <node>*:H3<value>*:3H</value></node>
@@ -276,4 +276,4 @@
  <node>VAL:HB<value>VAL:HB</value></node>
  <node>VAL:CG1<value>VAL:CG1</value></node>
  <node>VAL:CG2<value>VAL:CG2</value></node>
- </node>
+</node>

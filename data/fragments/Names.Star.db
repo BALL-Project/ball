@@ -1,4 +1,4 @@
- <node>Star<value>PDB</value>
+<node>Star<value>PDB</value>
  <node>*:H1<value>*:1H</value></node>
  <node>*:H2<value>*:2H</value></node>
  <node>*:H3<value>*:3H</value></node>
