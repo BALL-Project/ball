@@ -1,4 +1,4 @@
-// $Id: bidirectionalIterator.h,v 1.8 2001/06/06 22:26:18 amoll Exp $ 
+// $Id: bidirectionalIterator.h,v 1.9 2001/06/07 15:15:16 anker Exp $ 
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -721,6 +721,12 @@ namespace BALL
 	ConstBidirectionalIterator<Container, DataType, Position, Traits>::ConstBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator)
 		throw()
 		:	ConstBaseIterator <Container, DataType, Position, Traits>(iterator)
+	{
+	}
+
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstBidirectionalIterator<Container, DataType, Position, Traits>::~ConstBidirectionalIterator()
+		throw()
 	{
 	}
 
