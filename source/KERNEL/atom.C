@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.42 2003/06/19 13:24:02 oliver Exp $
+// $Id: atom.C,v 1.43 2003/06/26 14:23:53 amoll Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -338,7 +338,7 @@ namespace BALL
 	{
 		return Composite::getAncestor(RTTI::getDefault<Residue>());
 	}
-					                                                                                                                              
+ 
 	String Atom::getFullName(Atom::FullNameType type) const
 		throw()
 	{
@@ -535,6 +535,8 @@ namespace BALL
 	bool Atom::isGeminal(const Atom& atom) const
 		throw()
 	{
+		if (atom == *this) return false;
+
 		// an atom is geminal to another, if it 
 		// is not directly bonded to it
 		bool is_geminal = !isBoundTo(atom);
@@ -564,12 +566,14 @@ namespace BALL
 	bool Atom::isVicinal(const Atom& atom) const
 		throw()
 	{ 
+		if (atom == *this) return false;
+
 		// an atom is vicinal to another, if it 
 		// is not directly bonded to it
 		bool is_vicinal = !isBoundTo(atom);
 
 		// second, it has to be bonded to an atom
-		// that is bonded to and atom that is bonded 
+		// that is bonded to an atom that is bonded 
 		// to *this atom
 		if (is_vicinal)	
 		{
