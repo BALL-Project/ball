@@ -1,4 +1,4 @@
-// $Id: BSDTree.h,v 1.8 2001/02/23 01:40:29 amoll Exp $
+// $Id: BSDTree.h,v 1.9 2001/03/06 00:43:42 amoll Exp $
 
 #define DEBUG_BSDTREE
 
@@ -20,7 +20,7 @@ namespace BALL
 {
 
 	/** Generic BSD Tree Class.	\\
-			{\bf Definition:}\URL{BALL/STRUCTURE/BSDTree.h}	\\
+			{\bf Definition:}\URL{BALL/STRUCTURE/BSDTree.h}
 	*/
 	template <typename T>
 	class TBSDTree

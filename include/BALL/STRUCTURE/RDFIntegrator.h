@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator.h,v 1.8 2001/02/03 15:24:04 amoll Exp $
+// $Id: RDFIntegrator.h,v 1.9 2001/03/06 00:43:43 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
 #define BALL_STRUCTURE_RDFINTEGRATOR_H
@@ -13,7 +13,7 @@ namespace BALL
 	/** Integrator class for radial distribution functions.
 			This class provides the integration functionality needed for the
 			computation of interaction energies.	\\
-			{\bf Definition:} \URL{BALL/.../RDFIntegrator.h}
+			{\bf Definition:} \URL{BALL/STRUCTURE/RDFIntegrator.h}
   */
 	class RDFIntegrator
 	{
@@ -37,8 +37,7 @@ namespace BALL
 			throw();
 
 		/** Detailed constructor.
-				@param rdf the radial distribution function to 
-							 initialize {\em	this} with
+				@param rdf the radial distribution function to initialize {\em this} with
 		*/
 		RDFIntegrator(const RadialDistributionFunction& rdf)
 			throw();
@@ -69,7 +68,7 @@ namespace BALL
 		/// Predicates
 		//@{
 
-		/** Equality operator. Tests whether two instances are the same.
+		/** Equality operator
 				@param integrator the integrator which we want to compare to {\em	this}
 				@return true, if the instances are equal, false ow.
 		*/
@@ -77,7 +76,7 @@ namespace BALL
 			throw();
 
 		/** Validity test. Return the valid flag.
-				@return treu, if this instance is valid.
+				@return true, if this instance is valid.
 		*/
 		virtual bool isValid() const 
 			throw();
@@ -87,8 +86,8 @@ namespace BALL
 		//@{
 
 		/** Set the radial distribution function of this instance.
-				@param rdf a radial distribution function (@see
-				RadialDistributionFunction)
+				@param rdf a radial distribution function
+				@see RadialDistributionFunction
 		*/
 		void setRDF(const RadialDistributionFunction& rdf)
 			throw();
@@ -109,7 +108,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 
 		protected:
 
