@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.12 2000/03/11 16:55:55 amoll Exp $
+// $Id: matrix44.h,v 1.13 2000/03/13 18:11:07 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -9,6 +9,9 @@
 
 #include <math.h>
 #include <iostream>
+
+#include <iostream.h>
+#include <stdlib.h>
 
 #ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>
@@ -282,7 +285,7 @@ namespace BALL
 				@exception IndexUnderflow if {\tt row < 0}
 				@exception IndexOverflow if {\tt row > 3}
 		*/
-		void setRow(Index row, TVector4<T> row_value);
+		void setRow(Index row, const TVector4<T> row_value);
 
 		/** Set a column of the matrix
 				@param col the number of the column (0-3)
@@ -290,7 +293,16 @@ namespace BALL
 				@exception IndexUnderflow if {\tt col < 0}
 				@exception IndexOverflow if {\tt col > 3}
 		*/
-		void setColumn(Index col, TVector4<T> col_value);
+		void setColumn(Index col, const TVector4<T> col_value);
+
+
+		/** Test if two matrices are equal,
+				@param m the matrix to compare with
+				@param max_diff the allowed maximum between two values
+				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+		*/
+		bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T> m, const T maxDiff) const;
+
 
 		/** Get the diagonal of the matrix
 				@return TVector4 the diagonal
@@ -942,6 +954,7 @@ namespace BALL
 		*ptr   = m44; 
 	}
 
+
 	template <class T>
 	void TMatrix4x4<T>::get(TMatrix4x4<T>& m, bool deep) const
 	{
@@ -1155,6 +1168,30 @@ namespace BALL
 		*comp_ptr_[3][col] = col_value.h;
 	}
 
+	template <class T>
+	bool TMatrix4x4<T>::isEqual(TMatrix4x4<T> m, T maxDiff) const
+	{
+	using std::ofstream;
+using std::ios;
+	std::ofstream outstr("test2.txt", std::ios::out);
+
+		for (int i=0; i<4; i++ )
+		{
+			for (int j=0; j<4; j++  )
+			{
+				outstr << (*this)(i, j) <<" "<< m(i, j)<<" "<< maxDiff<<" "<<Maths::isNear((*this)(i, j), m(i, j), maxDiff)<<endl;
+
+				if (Maths::isNear((*this)(i, j), m(i, j), maxDiff) == false)
+				{ 		outstr.close();
+
+					return false;
+				} 
+			}
+		}
+		outstr.close();
+
+		return true;
+	}
 
 	template <class T>
 	TVector4<T>TMatrix4x4<T>::getDiagonal() const
