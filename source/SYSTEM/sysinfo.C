@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.7 2005/01/27 15:29:54 oliver Exp $
+// $Id: sysinfo.C,v 1.8 2005/01/28 13:29:04 amoll Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -33,7 +33,7 @@ namespace BALL
 #ifdef BALL_PLATFORM_WINDOWS
 			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return static_cast<LongIndex>(statex.ullAvailPhys)
+			return static_cast<LongIndex>(statex.ullAvailPhys);
 #else
 			try
 			{
@@ -73,7 +73,7 @@ namespace BALL
 #ifdef BALL_PLATFORM_WINDOWS
  			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return static_cast<LongIndex>(statex.ullFullPhys);
+			return static_cast<LongIndex>(statex.ullTotalPhys);
 #else
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
@@ -88,6 +88,7 @@ namespace BALL
 		LongIndex getBufferedMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
+			return -1;
 #else
 			try
 			{
@@ -182,6 +183,5 @@ namespace BALL
 		}
 
 	} // namespace SysInfo
-
 } // namespace BALL
 
