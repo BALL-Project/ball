@@ -11,6 +11,7 @@ CPP_SOURCES=\
 	lineModel.C\
 	removeModel.C\
 	standardColorCalculator.C\
+	surfaceModel.C\
 	vanDerWaalsModel.C
 
 include ../../common.mak

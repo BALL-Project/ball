@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.C,v 1.3 1999/12/28 18:00:46 oliver Exp $
+// $Id: vanDerWaalsModel.C,v 1.4 2000/04/25 15:17:01 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 
@@ -69,13 +69,21 @@ namespace BALL
 				
 		Processor::Result 
 		AddVanDerWaalsModel::operator()
-			(Atom &__rAtom)
+			(Composite &composite)
 		{
+			// composite is an atom ?
+			if (!RTTI::isKindOf<Atom>(composite))
+			{
+				return Processor::CONTINUE;
+			}
+
+			Atom *atom = RTTI::castTo<Atom>(composite);
+
 			// check if there are already VanDerWaals models appended
-			__rAtom.applyChild(getSearcher());
+			atom->applyChild(getSearcher_());
 
 			// geometric object is already existent => do nothing
-			if (getSearcher().geometricObjectFound() == true)
+			if (getSearcher_().geometricObjectFound() == true)
 			{
 				return Processor::CONTINUE;
 			}
@@ -88,14 +96,14 @@ namespace BALL
 				 (AddVanDerWaalsModel::ERROR__CANNOT_CREATE_SPHERE));
 
 			__pSphere->PropertyManager::set(*this);
-			__pSphere->setRadius((__rAtom.getElement()).getVanDerWaalsRadius());
-			__pSphere->setVertexAddress(__rAtom.getPosition());
+			__pSphere->setRadius((atom->getElement()).getVanDerWaalsRadius());
+			__pSphere->setVertexAddress(atom->getPosition());
 
-			__rAtom.host(*getColorCalculator());
+			atom->host(*getColorCalculator());
 
 			__pSphere->setColor(getColorCalculator()->getColor());
 			
-			__rAtom.Composite::appendChild(*__pSphere);
+			composite.appendChild(*__pSphere);
 			
 			return Processor::CONTINUE;
 		}

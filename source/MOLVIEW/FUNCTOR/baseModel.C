@@ -1,4 +1,4 @@
-// $Id: baseModel.C,v 1.5 2000/03/15 08:44:34 oliver Exp $
+// $Id: baseModel.C,v 1.6 2000/04/25 15:17:00 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -11,7 +11,7 @@ namespace BALL
 	{
 
 		BaseModelProcessor::BaseModelProcessor()
-			:	UnaryProcessor<Atom>(),
+			:	UnaryProcessor<Composite>(),
 				ExtendedPropertyManager(),
 				find_geometric_object_(),
 				color_calculator_(const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>()))
@@ -21,7 +21,7 @@ namespace BALL
 
 		BaseModelProcessor::BaseModelProcessor
 			(const BaseModelProcessor& base_model_processor, bool deep)
-			:	UnaryProcessor<Atom>(base_model_processor),
+			:	UnaryProcessor<Composite>(),
 				ExtendedPropertyManager(base_model_processor, deep),
 				find_geometric_object_(base_model_processor.find_geometric_object_, deep),
 				color_calculator_(base_model_processor.color_calculator_)
@@ -32,7 +32,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<baseModelProcessor>() << endl;
+					<< " of class " << RTTI::getName<BaseModelProcessor>() << endl;
 			#endif 
 
 			destroy();
@@ -92,11 +92,11 @@ namespace BALL
 		{
 			if (hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == true)
 			{
-				find_geometric_object_.setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+				getSearcher_().setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
 			}
 			else // default
 			{
-				find_geometric_object_.setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
+				getSearcher_().setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			}
 
 			return true;
@@ -107,7 +107,7 @@ namespace BALL
 			return true;
 		}
 				
-		Processor::Result BaseModelProcessor::operator()(Atom & /* atom */)
+		Processor::Result BaseModelProcessor::operator()(Composite & /* composite */)
 		{
 			return Processor::CONTINUE;
 		}
@@ -136,13 +136,13 @@ namespace BALL
 			s << "-----------------------------------------------------" << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "use default colorCalculator: " 
+			s << "default colorCalculator registered: " 
 					 << ((color_calculator_ == 
 								(const_cast<ColorCalculator*>((const ColorCalculator *)(&RTTI::getDefault<ColorCalculator>())))) ? "yes" : "no")
 					 << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "use user colorCalculator : " 
+			s << "user colorCalculator registered: " 
 					 << ((color_calculator_ != 
 								(const_cast<ColorCalculator*>((const ColorCalculator *)(&RTTI::getDefault<ColorCalculator>())))) ? "yes" : "no")
 					 << endl;

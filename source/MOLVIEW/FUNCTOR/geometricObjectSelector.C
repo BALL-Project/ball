@@ -1,4 +1,4 @@
-// $Id: geometricObjectSelector.C,v 1.1 2000/01/08 20:32:52 hekl Exp $
+// $Id: geometricObjectSelector.C,v 1.2 2000/04/25 15:17:01 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/geometricObjectSelector.h>
 
@@ -115,7 +115,7 @@ namespace BALL
 		{
 			hashed_atoms_.clear();
 			used_atoms_.clear();
-			getSearcher().clear();
+			getSearcher_().clear();
 
 			return BaseModelProcessor::start();
 		}
@@ -150,14 +150,14 @@ namespace BALL
 						if (hashed_atoms_.has(second__pAtom))
 						{
 							// get bond model
-							__pBond->applyChild(getSearcher());
+							__pBond->applyChild(getSearcher_());
 
 							// if found, select bond model 
-							if (getSearcher().geometricObjectFound() == true)
+							if (getSearcher_().geometricObjectFound() == true)
 							{
 								// get bond model
 								::BALL::VIEW::GeometricObject *bond_geometricObject 
-									= (::BALL::VIEW::GeometricObject *)(getSearcher().getGeometricObject());
+									= (::BALL::VIEW::GeometricObject *)(getSearcher_().getGeometricObject());
 
 								bond_geometricObject->setSelectedColor(selection_color_);
 
@@ -175,10 +175,10 @@ namespace BALL
 				}
 
 				// get the geometric object
-				first__pAtom->applyChild(getSearcher());
+				first__pAtom->applyChild(getSearcher_());
 
 				::BALL::VIEW::GeometricObject *atom_geometricObject
-					= (::BALL::VIEW::GeometricObject *)(getSearcher().getGeometricObject());
+					= (::BALL::VIEW::GeometricObject *)(getSearcher_().getGeometricObject());
 
 				atom_geometricObject->setSelectedColor(selection_color_);
 
@@ -197,29 +197,37 @@ namespace BALL
 				
 		Processor::Result 
 		GeometricObjectSelector::operator()
-			(Atom &atom)
+			(Composite &composite)
 		{
+			// composite is an atom ?
+			if (!RTTI::isKindOf<Atom>(composite))
+			{
+				return Processor::CONTINUE;
+			}
+
+			Atom *atom = RTTI::castTo<Atom>(composite);
+
 			// check if there are already models appended
-			atom.applyChild(getSearcher());
+			atom->applyChild(getSearcher_());
 
 			if (selection_ == true)
 			{
-				atom.select();
+				atom->select();
 			}
 			else
 			{
-				atom.deselect();
+				atom->deselect();
 			}
 
 			// geometric object is not existent => do nothing
-			if (getSearcher().geometricObjectFound() == false)
+			if (getSearcher_().geometricObjectFound() == false)
 			{
 				return Processor::CONTINUE;
 			}
 
 			// collect atom with geometric object for selection
-			hashed_atoms_.insert(&atom);
-			used_atoms_.push_back(&atom);
+			hashed_atoms_.insert(atom);
+			used_atoms_.push_back(atom);
 
 			return Processor::CONTINUE;
 		}

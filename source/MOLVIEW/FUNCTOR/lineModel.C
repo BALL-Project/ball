@@ -1,4 +1,4 @@
-// $Id: lineModel.C,v 1.4 2000/01/15 18:59:42 oliver Exp $
+// $Id: lineModel.C,v 1.5 2000/04/25 15:17:01 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
 
@@ -18,7 +18,7 @@ namespace BALL
 				used_atoms_()
 		{
 			setProperty(GeometricObject::PROPERTY__MODEL_LINES);
-			getSearcher().setProperty(GeometricObject::PROPERTY__MODEL_LINES);
+			getSearcher_().setProperty(GeometricObject::PROPERTY__MODEL_LINES);
 		}
 
 		AddLineModel::AddLineModel
@@ -48,7 +48,7 @@ namespace BALL
 			BaseModelProcessor::clear();
 
 			setProperty(GeometricObject::PROPERTY__MODEL_LINES);
-			getSearcher().setProperty(GeometricObject::PROPERTY__MODEL_LINES);
+			getSearcher_().setProperty(GeometricObject::PROPERTY__MODEL_LINES);
 
 			used_atoms_.clear();
 		}
@@ -138,10 +138,10 @@ namespace BALL
 					if (*first__pAtom < *second__pAtom)
 					{
 						// search for Line representants
-						second__pAtom->applyChild(getSearcher());
+						second__pAtom->applyChild(getSearcher_());
 						
 						// if found, build a Line between them
-						if (getSearcher().geometricObjectFound() == true)
+						if (getSearcher_().geometricObjectFound() == true)
 						{
 							// get colors from both atoms
 							first__pAtom->host(*getColorCalculator());
@@ -196,15 +196,23 @@ namespace BALL
 				
 		Processor::Result 
 		AddLineModel::operator()
-			(Atom &__rAtom)
+			(Composite &composite)
 		{
-			// test if there are already Line models appended
-			if (__rAtom.countDescendants() > (Size)0)
+			// composite is an atom ?
+			if (!RTTI::isKindOf<Atom>(composite))
 			{
-				__rAtom.applyChild(getSearcher());
+				return Processor::CONTINUE;
+			}
+
+			Atom *atom = RTTI::castTo<Atom>(composite);
+
+			// test if there are already Line models appended
+			if (atom->countDescendants() > (Size)0)
+			{
+				atom->applyChild(getSearcher_());
 
 				// geometric object is already existent => do nothing
-				if (getSearcher().geometricObjectFound() == true)
+				if (getSearcher_().geometricObjectFound() == true)
 				{
 					return Processor::CONTINUE;
 				}
@@ -219,17 +227,17 @@ namespace BALL
 				 (AddLineModel::ERROR__CANNOT_CREATE_POINT));
 
 			__pPoint->PropertyManager::set(*this);
-			__pPoint->setVertexAddress(__rAtom.getPosition());
+			__pPoint->setVertexAddress(atom->getPosition());
 			
-			__rAtom.host(*getColorCalculator());
+			atom->host(*getColorCalculator());
 
 			__pPoint->setColor(getColorCalculator()->getColor());
 
 			// append line in Atom
-			__rAtom.Composite::appendChild(*__pPoint);
+			composite.appendChild(*__pPoint);
 
 			// collect used atoms
-			used_atoms_.push_back(&__rAtom);
+			used_atoms_.push_back(atom);
 
 			return Processor::CONTINUE;
 		}

@@ -1,4 +1,4 @@
-// $Id: removeModel.C,v 1.3 2000/01/08 20:32:53 hekl Exp $
+// $Id: removeModel.C,v 1.4 2000/04/25 15:17:01 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 
@@ -93,9 +93,9 @@ namespace BALL
 			()
 		{
 			used_atoms_.clear();
-			getSearcher().clear();
+			getSearcher_().clear();
 
-			//			getSearcher().setProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
+			//			getSearcher_().setProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
 
 			return BaseModelProcessor::start();
 		}
@@ -128,14 +128,14 @@ namespace BALL
 					if (*first__pAtom < *second__pAtom)
 					{
 						// get bond model
-						__pBond->applyChild(getSearcher());
+						__pBond->applyChild(getSearcher_());
 
 						// if found, delete bond model 
-						if (getSearcher().geometricObjectFound() == true)
+						if (getSearcher_().geometricObjectFound() == true)
 						{
 							// get bond model
 							Composite *bond_composite 
-								= (Composite *)(getSearcher().getGeometricObject());
+								= (Composite *)(getSearcher_().getGeometricObject());
 
 							// remove bond model from bond
 							__pBond->Composite::removeChild(*bond_composite);
@@ -147,10 +147,10 @@ namespace BALL
 				}
 
 				// get the geometric object
-				first__pAtom->applyChild(getSearcher());
+				first__pAtom->applyChild(getSearcher_());
 
 				Composite *atom_model
-					= (Composite *)(getSearcher().getGeometricObject());
+					= (Composite *)(getSearcher_().getGeometricObject());
 
 				// remove atom model from atom
 				first__pAtom->Composite::removeChild(*atom_model);
@@ -164,19 +164,27 @@ namespace BALL
 				
 		Processor::Result 
 		RemoveModel::operator()
-			(Atom &atom)
+			(Composite &composite)
 		{
+			// composite is an atom ?
+			if (!RTTI::isKindOf<Atom>(composite))
+			{
+				return Processor::CONTINUE;
+			}
+
+			Atom *atom = RTTI::castTo<Atom>(composite);
+
 			// check if there are already models appended
-			atom.applyChild(getSearcher());
+			atom->applyChild(getSearcher_());
 
 			// geometric object is not existent => do nothing
-			if (getSearcher().geometricObjectFound() == false)
+			if (getSearcher_().geometricObjectFound() == false)
 			{
 				return Processor::CONTINUE;
 			}
 
 			// collect atom with geometric object for deletion
-			used_atoms_.push_back(&atom);
+			used_atoms_.push_back(atom);
 
 			return Processor::CONTINUE;
 		}

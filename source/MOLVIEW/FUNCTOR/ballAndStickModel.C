@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.5 2000/01/15 18:59:42 oliver Exp $
+// $Id: ballAndStickModel.C,v 1.6 2000/04/25 15:17:00 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -164,7 +164,7 @@ namespace BALL
 			List<Atom*>::Iterator list_iterator;
 
 			// search for BallAndStick primitives
-			getSearcher().setProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
+			getSearcher_().setProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
 
 			// for all used atoms
 			for (list_iterator = used_atoms_.begin();
@@ -182,10 +182,10 @@ namespace BALL
 					if (*first__pAtom < *second__pAtom)
 					{
 						// search for BallAndStick representants
-						second__pAtom->applyChild(getSearcher());
+						second__pAtom->applyChild(getSearcher_());
 
 						// if found, build a Tube between them
-						if (getSearcher().geometricObjectFound() == true)
+						if (getSearcher_().geometricObjectFound() == true)
 						{
 							// get colors from both atoms
 							first__pAtom->host(*getColorCalculator());
@@ -238,20 +238,28 @@ namespace BALL
 			}
 			
 			// clear search model
-			getSearcher().clearProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
+			getSearcher_().clearProperty(GeometricObject::PROPERTY__MODELBALL_AND_STICK);
 
 			return true;
 		}
 				
 		Processor::Result 
 		AddBallAndStickModel::operator()
-			(Atom &atom)
+			(Composite &composite)
 		{
+			// composite is an atom ?
+			if (!RTTI::isKindOf<Atom>(composite))
+			{
+				return Processor::CONTINUE;
+			}
+
+			Atom *atom = RTTI::castTo<Atom>(composite);
+
 			// check if there are already BallAndStick models appended
-			atom.applyChild(getSearcher());
+			atom->applyChild(getSearcher_());
 
 			// geometric object is already existent => do nothing
-			if (getSearcher().geometricObjectFound() == true)
+			if (getSearcher_().geometricObjectFound() == true)
 			{
 				return Processor::CONTINUE;
 			}
@@ -275,17 +283,17 @@ namespace BALL
 				__pSphere->setRadius(stick_radius_);
 			}
 
-			__pSphere->setVertexAddress(atom.getPosition());
+			__pSphere->setVertexAddress(atom->getPosition());
 			
-			atom.host(*getColorCalculator());
+			atom->host(*getColorCalculator());
 
 			__pSphere->setColor(getColorCalculator()->getColor());
 			
 			// append sphere in Atom
-			atom.Composite::appendChild(*__pSphere);
+			composite.appendChild(*__pSphere);
 
 			// collect used atoms
-			used_atoms_.push_back(&atom);
+			used_atoms_.push_back(atom);
 
 			return Processor::CONTINUE;
 		}
