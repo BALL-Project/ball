@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.2 2000/03/28 15:32:57 oliver Exp $
+// $Id: MOL2File.C,v 1.3 2000/05/15 19:16:27 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -11,16 +11,16 @@
 
 #include <stack>
 
+using namespace std;
+
 namespace BALL 
 {
-
-
 	MOL2File::MOL2File()
 	{
 	}
 
-	MOL2File::MOL2File(const String& name)
-		: File(name)
+	MOL2File::MOL2File(const String& name, File::OpenMode open_mode)
+		: File(name, open_mode)
 	{
 	}
 
@@ -28,7 +28,7 @@ namespace BALL
 	{
 	}
 	
-	void MOL2File::write(const System& /*system */)
+	void MOL2File::write(const System& /* system */)
 	{
 	}
 
@@ -36,7 +36,6 @@ namespace BALL
 	// the Tripos record type identifier: RTI
 	const String MOL2File::TRIPOS = "@<TRIPOS>";
 	const Size MOL2File::MAX_LENGTH_ = 4096;
-
 
 	void MOL2File::read(System& system)
 	{
@@ -55,36 +54,50 @@ namespace BALL
 			
 			while (line.hasPrefix(TRIPOS))
 			{
-				// we found a record type identifier
+				// we found a "Record Type Identifier" (RTI)
 				String RTI = line.after(TRIPOS);
 				RTI.trim();
 				
-				Log.info() << "MOL2File::read: reading record " << RTI << " in line " << number_of_lines_ << endl;
+				#ifdef BALL_DEBUG
+					// BAUSTELLE: debug code
+					Log.info() << "MOL2File::read: reading record " << RTI << " in line " << number_of_lines_ << endl;
+				#endif
 				
+				// interpret the RTI (at least the known ones)
 				if (RTI == "ATOM")
 				{
 					line = readAtomSection_();
-				} else if (RTI == "BOND") {
+				} 
+				else if (RTI == "BOND") 
+				{
 					line = readBondSection_();
-				}	else if (RTI == "MOLECULE") {
+				}	
+				else if (RTI == "MOLECULE") 
+				{
 					line = readMoleculeSection_();
-				}	else if (RTI == "SET") {
+				}	
+				else if (RTI == "SET") 
+				{
 					line = readSetSection_();
-				}	else if (RTI == "SUBSTRUCTURE") {
+				}	
+				else if (RTI == "SUBSTRUCTURE") 
+				{
 					line = readSubstructureSection_();
-				} else {
-					Log.info() << "MOL2File::read: section ignored." << endl;
+				} 
+				else 
+				{	
+					// we found an unknown MOL2 section: print a warning message and ignore it!
+					Log.warn() << "MOL2File::read: section ignored: " << line << endl;
 				}
 			}
 		}
 	}
-
 				
 	String MOL2File::readAtomSection_()
 	{
 		String line;
 		Size number_of_fields = 1;
-		while(getline(buffer_, MAX_LENGTH_) && (number_of_fields > 0) && !line.hasPrefix(TRIPOS))
+		while (getline(buffer_, MAX_LENGTH_) && (number_of_fields > 0) && !line.hasPrefix(TRIPOS))
 		{
 			number_of_lines_++;
 			line = buffer_;
@@ -95,8 +108,10 @@ namespace BALL
 				if (number_of_fields < 6)
 				{
 					Log.error() << "MOL2File::readAtomSection_: too few fields for an atom entry in line " 
-						<< number_of_lines_ << endl;
-				} else {
+											<< number_of_lines_ << endl;
+				} 
+				else 
+				{	
 					// split the line into fields
 					String	fields[10];
 					line.split(fields, 10);
@@ -127,7 +142,7 @@ namespace BALL
 	{
 		String line;
 		Size number_of_fields = 1;
-		while(getline(buffer_, MAX_LENGTH_) && (number_of_fields > 0) && !line.hasPrefix(TRIPOS))
+		while (getline(buffer_, MAX_LENGTH_) && (number_of_fields > 0) && !line.hasPrefix(TRIPOS))
 		{
 			number_of_lines_++;
 			line = buffer_;
@@ -138,8 +153,10 @@ namespace BALL
 				if (number_of_fields < 4)
 				{
 					Log.error() << "MOL2File::readBondSection_: too few fields for a bond entry in line " 
-						<< number_of_lines_ << endl;
-				} else {
+											<< number_of_lines_ << endl;
+				} 
+				else 
+				{
 					// split the line into fields
 					String	fields[4];
 					line.split(fields, 4);
@@ -165,7 +182,7 @@ namespace BALL
 	{
 		String line;
 		Size number_of_fields = 1;
-		while(getline(buffer_, MAX_LENGTH_) && (number_of_fields > 0) && !line.hasPrefix(TRIPOS))
+		while (getline(buffer_, MAX_LENGTH_) && (number_of_fields > 0) && !line.hasPrefix(TRIPOS))
 		{
 			number_of_lines_++;
 			line = buffer_;
@@ -176,8 +193,10 @@ namespace BALL
 				if (number_of_fields < 3)
 				{
 					Log.error() << "MOL2File::readBondSection_: too few fields for a bond entry in line " 
-						<< number_of_lines_ << endl;
-				} else {
+											<< number_of_lines_ << endl;
+				} 
+				else 
+				{
 					// split the line into fields
 					String	fields[6];
 					line.split(fields, 6);
@@ -196,7 +215,7 @@ namespace BALL
 						line.trim();
 						Size number_of_fields = line.countFields();
 
-						for (i = 1; i <= line.getField(0).toInt(); i++)
+						for (Size i = 1; (i <= (Size)line.getField(0).toInt()) && (i < number_of_fields); i++)
 						{
 							set.members.push_back(line.getField(i).toInt());
 						}
@@ -204,8 +223,9 @@ namespace BALL
 						// remember this set
 						sets_.push_back(set);
 
-					} else {
-						
+					} 
+					else 
+					{	
 						// we cannot read dynamic sets. What is the syntax of these rules?
 						Log.warn() << "MOL2File::readSetSection: unsupported set type: " << fields[2] << ". Ignored." << endl;
 					}					
@@ -222,7 +242,7 @@ namespace BALL
 	{
 		String line;
 		Size number_of_fields = 1;
-		while(getline(buffer_, MAX_LENGTH_) && (number_of_fields > 0) && !line.hasPrefix(TRIPOS))
+		while (getline(buffer_, MAX_LENGTH_) && (number_of_fields > 0) && !line.hasPrefix(TRIPOS))
 		{
 			number_of_lines_++;
 			line = buffer_;
@@ -234,7 +254,9 @@ namespace BALL
 				{
 					Log.error() << "MOL2File::readBondSection_: too few fields for a bond entry in line " 
 						<< number_of_lines_ << endl;
-				} else {
+				} 
+				else 
+				{
 					// split the line into fields
 					String	fields[6];
 					line.split(fields, 6);
@@ -253,7 +275,7 @@ namespace BALL
 						line.trim();
 						Size number_of_fields = line.countFields();
 
-						for (i = 1; i <= line.getField(0).toInt(); i++)
+						for (Size i = 1; (i <= (Size)line.getField(0).toInt()) && (i < number_of_fields); i++)
 						{
 							set.members.push_back(line.getField(i).toInt());
 						}
@@ -261,8 +283,9 @@ namespace BALL
 						// remember this set
 						sets_.push_back(set);
 
-					} else {
-						
+					} 
+					else 
+					{
 						// we cannot read dynamic sets. What is the syntax of these rules?
 						Log.warn() << "MOL2File::readSetSection: unsupported set type: " << fields[2] << ". Ignored." << endl;
 					}					

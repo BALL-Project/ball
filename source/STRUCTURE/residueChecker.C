@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.7 2000/01/13 22:36:03 oliver Exp $
+// $Id: residueChecker.C,v 1.8 2000/05/15 19:18:15 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -96,7 +96,9 @@ namespace BALL
 			{
 				Log.warn() << "ResidueChecker: didn't find a reference fragment for " << res_name << endl;
 				status_ = false;	
-			} else {
+			} 
+			else 
+			{
 				// first, check for completeness
 				HashSet<String> reference_names;
 				for (atom_it = reference->beginAtom(); +atom_it; ++atom_it)

@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.30 2000/05/05 17:39:04 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.31 2000/05/15 19:15:09 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -760,7 +760,7 @@ namespace BALL
 	BALL_INLINE 
 	bool GetIntersection
 		(const TLine3<T>& line, const TPlane3<T>& plane,
-		 TVector3<T> &intersection_point)
+		 TVector3<T>& intersection_point)
 	{
 		return GetIntersection(plane, line, intersection_point);
 	}
