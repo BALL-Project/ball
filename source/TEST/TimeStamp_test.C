@@ -1,4 +1,4 @@
-// $Id: TimeStamp_test.C,v 1.10 2002/01/04 01:22:00 oliver Exp $
+// $Id: TimeStamp_test.C,v 1.11 2002/01/05 03:36:59 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.10 2002/01/04 01:22:00 oliver Exp $")
+START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.11 2002/01/05 03:36:59 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -174,7 +174,7 @@ CHECK(TimeStamp::operator << (std::ostream& os, const TimeStamp& ts))
 	ofstream of(filename.c_str(), std::ios::out);
 	of << t << std::endl;
 	of.close();
-	TEST_FILE(filename.c_str(), "data/TimeStamp_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/TimeStamp_test.txt", true)
 RESULT
 
 /////////////////////////////////////////////////////////////
