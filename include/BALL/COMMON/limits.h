@@ -1,4 +1,4 @@
-// $Id: limits.h,v 1.7 2000/03/27 16:53:28 oliver Exp $
+// $Id: limits.h,v 1.8 2001/07/18 08:24:51 sturm Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
@@ -39,7 +39,7 @@ namespace BALL
 
 
 		/**	Return the minimum value.
-				@return the minimum value for this datatype
+				@return T the minimum value for this datatype
 		*/
 		static T min() throw() 
 		{ 
@@ -47,7 +47,7 @@ namespace BALL
 		}
 
 		/**	Return the maximum value.
-				@return the maximum value for this datatype
+				@return T the maximum value for this datatype
 		*/
 		static T max() throw() 
 		{ 
