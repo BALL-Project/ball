@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.C,v 1.13 2001/02/21 13:20:58 anhi Exp $
+// $Id: bruker2DFile.C,v 1.14 2001/03/14 17:26:54 anhi Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -257,14 +257,14 @@ namespace BALL
     spointnumf2_ = (Size) spointnumf2;
 
     double dum1, dum2;
-    spectrum_.setXSize(spointnumf2);
-    spectrum_.setYSize(spointnumf1);
+    spectrum_.setXSize(spointnumf2_);
+    spectrum_.setYSize(spointnumf1_);
     dum1 = GetShift(0,0).first;
-    dum2 = GetShift(spointnumf2,0).first;
+    dum2 = GetShift(spointnumf2_,0).first;
     spectrum_.setXLower((dum1<dum2) ? dum1 : dum2);
     spectrum_.setXUpper((dum1>dum2) ? dum1 : dum2);
     dum1 = GetShift(0,0).second;
-    dum2 = GetShift(0, spointnumf1).second;
+    dum2 = GetShift(0, spointnumf1_).second;
     spectrum_.setYLower((dum1<dum2) ? dum1 : dum2);
     spectrum_.setYUpper((dum1>dum2) ? dum1 : dum2);
   }

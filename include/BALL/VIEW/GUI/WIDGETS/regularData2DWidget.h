@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.11 2001/03/12 22:37:01 anker Exp $
+// $Id: regularData2DWidget.h,v 1.12 2001/03/14 17:20:30 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -95,31 +95,6 @@ class NewRegularData2DMessage: public CompositeMessage
  private:
 };
 
-/**
- * Must be implemented to pass mouse position upwards.
- */
-class PixWid 
-      : public QWidget
-{
-  Q_OBJECT
-    
-  public:
-    PixWid( QWidget *parent );
-  public slots:
-		// BAUSTELLE
-		//void mouseMoveEvent( QMouseEvent *e );
-		//void mousePressEvent( QMouseEvent *e );
-		//void mouseReleaseEvent( QMouseEvent *e );
-  signals:
-    void mouseMoved(Position, Position);
-    void selected( QPoint, QPoint );
-    void context(QMouseEvent* e);
-
-  private:
-    QPoint beg_old_, beg_, end_old_, end_;
-    bool select_;
-};
-
 class RegularData2DWidget 
       : public QScrollView,
         public ModularWidget
@@ -206,9 +181,10 @@ class RegularData2DWidget
   void mouseReleaseEvent(QMouseEvent *e);
 
  protected:
-  QPixmap *pm_, *legend_map_, *buffer_map_;
+  void eraseSelectFrame();
+  void drawSelectFrame();
 
-  PixWid *pix_wid_;
+  QPixmap *pm_, *legend_map_;
 
   Position legend_last_x_, legend_last_y_;
 
@@ -275,7 +251,18 @@ class RegularData2DWidget
   */
   QPoint last_selection_;
 
+  /* If a selection is in progress, the coordinate of the actual endpoint of the 
+     selected rectangle is stored in here.
+  */
+  QPoint selection_;
+
   bool select_;
+
+  QStatusBar *stat_;
+
+  QWidget *legend_wid_;
+
+  bool isOverlay_;
 };
 
 #endif
