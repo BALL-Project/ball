@@ -1,4 +1,4 @@
-// $Id: RDFParameter_test.C,v 1.1 2000/08/31 13:43:08 anker Exp $
+// $Id: RDFParameter_test.C,v 1.2 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RDFParameter_test.C,v 1.1 2000/08/31 13:43:08 anker Exp $")
+START_TEST(RDFParameter, "$Id: RDFParameter_test.C,v 1.2 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

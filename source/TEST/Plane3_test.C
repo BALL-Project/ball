@@ -1,4 +1,4 @@
-// $Id: Plane3_test.C,v 1.9 2000/07/26 16:49:47 amoll Exp $
+// $Id: Plane3_test.C,v 1.10 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Plane3_test.C,v 1.9 2000/07/26 16:49:47 amoll Exp $")
+START_TEST(Plane3, "$Id: Plane3_test.C,v 1.10 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

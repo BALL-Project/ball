@@ -1,4 +1,4 @@
-// $Id: AtomVector_test.C,v 1.5 2001/07/15 11:16:30 amoll Exp $
+// $Id: AtomVector_test.C,v 1.6 2001/07/15 17:32:38 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/atom.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AtomVector_test.C,v 1.5 2001/07/15 11:16:30 amoll Exp $")
+START_TEST(AtomVector, "$Id: AtomVector_test.C,v 1.6 2001/07/15 17:32:38 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,11 +1,11 @@
-// $Id: SolventDescriptor_test.C,v 1.2 2001/07/10 13:36:25 amoll Exp $
+// $Id: SolventDescriptor_test.C,v 1.3 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
  
 ///////////////////////////
 #include <BALL/SOLVATION/solventDescriptor.h>
 ///////////////////////////
 	  
-START_TEST(class_name, "$Id: SolventDescriptor_test.C,v 1.2 2001/07/10 13:36:25 amoll Exp $")
+START_TEST(SolventDescriptor, "$Id: SolventDescriptor_test.C,v 1.3 2001/07/15 17:32:41 amoll Exp $")
 		 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

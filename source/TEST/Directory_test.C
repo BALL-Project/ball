@@ -1,11 +1,11 @@
-// $Id: Directory_test.C,v 1.4 2000/07/04 08:53:27 oliver Exp $
+// $Id: Directory_test.C,v 1.5 2001/07/15 17:32:38 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/directory.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Directory_test.C,v 1.4 2000/07/04 08:53:27 oliver Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.5 2001/07/15 17:32:38 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,11 +1,11 @@
-// $Id: LineBasedFile_test.C,v 1.10 2001/02/10 19:07:52 amoll Exp $
+// $Id: LineBasedFile_test.C,v 1.11 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LineBasedFile_test.C,v 1.10 2001/02/10 19:07:52 amoll Exp $")
+START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.11 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

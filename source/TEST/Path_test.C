@@ -1,11 +1,11 @@
-// $Id: Path_test.C,v 1.3 2000/06/21 14:16:15 amoll Exp $
+// $Id: Path_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/path.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Path_test.C,v 1.3 2000/06/21 14:16:15 amoll Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: Object_test.C,v 1.5 2001/07/07 02:51:26 oliver Exp $
+// $Id: Object_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Object_test.C,v 1.5 2001/07/07 02:51:26 oliver Exp $")
+START_TEST(Object, "$Id: Object_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: Matrix44_test.C,v 1.15 2000/12/23 17:02:59 oliver Exp $
+// $Id: Matrix44_test.C,v 1.16 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Matrix44_test.C,v 1.15 2000/12/23 17:02:59 oliver Exp $")
+START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.16 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

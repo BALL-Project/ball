@@ -1,4 +1,4 @@
-// $Id: DCDFile_test.C,v 1.5 2001/05/15 09:40:41 anker Exp $
+// $Id: DCDFile_test.C,v 1.6 2001/07/15 17:32:38 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: DCDFile_test.C,v 1.5 2001/05/15 09:40:41 anker Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.6 2001/07/15 17:32:38 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

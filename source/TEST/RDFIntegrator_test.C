@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator_test.C,v 1.3 2000/12/01 11:56:56 anker Exp $
+// $Id: RDFIntegrator_test.C,v 1.4 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RDFIntegrator_test.C,v 1.3 2000/12/01 11:56:56 anker Exp $")
+START_TEST(RDFIntegrator, "$Id: RDFIntegrator_test.C,v 1.4 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,11 +1,11 @@
-// $Id: Quadruple_test.C,v 1.3 2001/01/31 05:53:33 oliver Exp $
+// $Id: Quadruple_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/DATATYPE/quadruple.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Quadruple_test.C,v 1.3 2001/01/31 05:53:33 oliver Exp $")
+START_TEST(Quadruple, "$Id: Quadruple_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: SecondaryStructure_test.C,v 1.7 2001/06/27 10:46:01 oliver Exp $
+// $Id: SecondaryStructure_test.C,v 1.8 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/protein.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: SecondaryStructure_test.C,v 1.7 2001/06/27 10:46:01 oliver Exp $")
+START_TEST(SecondaryStructure, "$Id: SecondaryStructure_test.C,v 1.8 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

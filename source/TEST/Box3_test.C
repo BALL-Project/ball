@@ -1,4 +1,4 @@
-// $Id: Box3_test.C,v 1.15 2001/02/06 12:57:30 amoll Exp $
+// $Id: Box3_test.C,v 1.16 2001/07/15 17:32:38 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Box3_test.C,v 1.15 2001/02/06 12:57:30 amoll Exp $")
+START_TEST(Box3, "$Id: Box3_test.C,v 1.16 2001/07/15 17:32:38 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

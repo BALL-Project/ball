@@ -1,4 +1,4 @@
-// $Id: HashGrid3_test.C,v 1.1 2001/04/27 15:20:05 anker Exp $
+// $Id: HashGrid3_test.C,v 1.2 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: HashGrid3_test.C,v 1.1 2001/04/27 15:20:05 anker Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.2 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

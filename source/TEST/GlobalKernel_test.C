@@ -1,4 +1,4 @@
-// $Id: GlobalKernel_test.C,v 1.1 2001/06/26 20:32:00 amoll Exp $
+// $Id: GlobalKernel_test.C,v 1.2 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/KERNEL/chain.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: GlobalKernel_test.C,v 1.1 2001/06/26 20:32:00 amoll Exp $")
+START_TEST(GlobalKernel, "$Id: GlobalKernel_test.C,v 1.2 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

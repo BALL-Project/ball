@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.19 2001/07/05 18:46:33 oliver Exp $
+// $Id: File_test.C,v 1.20 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.19 2001/07/05 18:46:33 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.20 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

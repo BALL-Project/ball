@@ -1,11 +1,11 @@
-// $Id: MathsCommon_test.C,v 1.5 2000/06/27 23:20:49 amoll Exp $
+// $Id: MathsCommon_test.C,v 1.6 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: MathsCommon_test.C,v 1.5 2000/06/27 23:20:49 amoll Exp $")
+START_TEST(MathsCommon, "$Id: MathsCommon_test.C,v 1.6 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

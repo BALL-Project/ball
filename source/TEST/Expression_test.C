@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.9 2001/07/14 13:39:18 oliver Exp $
+// $Id: Expression_test.C,v 1.10 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Expression_test.C,v 1.9 2001/07/14 13:39:18 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.10 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

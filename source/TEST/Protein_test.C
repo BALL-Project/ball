@@ -1,4 +1,4 @@
-// $Id: Protein_test.C,v 1.7 2001/06/27 10:46:00 oliver Exp $
+// $Id: Protein_test.C,v 1.8 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Protein_test.C,v 1.7 2001/06/27 10:46:00 oliver Exp $")
+START_TEST(Protein, "$Id: Protein_test.C,v 1.8 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

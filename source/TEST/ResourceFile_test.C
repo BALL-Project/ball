@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.11 2000/10/23 23:28:47 amoll Exp $
+// $Id: ResourceFile_test.C,v 1.12 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.11 2000/10/23 23:28:47 amoll Exp $")
+START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.12 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: PeakList_test.C,v 1.2 2001/07/09 17:10:21 oliver Exp $
+// $Id: PeakList_test.C,v 1.3 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PeakList_test.C,v 1.2 2001/07/09 17:10:21 oliver Exp $")
+START_TEST(PeakList, "$Id: PeakList_test.C,v 1.3 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

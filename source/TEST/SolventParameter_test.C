@@ -1,4 +1,4 @@
-// $Id: SolventParameter_test.C,v 1.2 2000/09/01 09:59:34 oliver Exp $
+// $Id: SolventParameter_test.C,v 1.3 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: SolventParameter_test.C,v 1.2 2000/09/01 09:59:34 oliver Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.3 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

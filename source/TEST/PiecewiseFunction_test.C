@@ -1,4 +1,4 @@
-// $Id: PiecewiseFunction_test.C,v 1.4 2000/10/23 09:50:22 anker Exp $
+// $Id: PiecewiseFunction_test.C,v 1.5 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PiecewiseFunction_test.C,v 1.4 2000/10/23 09:50:22 anker Exp $")
+START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.5 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -63,7 +63,7 @@ RESULT
 
 CHECK(PiecewiseFunction::PiecewiseFunction(const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs))
 	PiecewiseFunction PWF2(intervals, coefs);
-	// Unter der Annahme, daß operator== für std::vector definiert ist und
+	// Unter der Annahme, daÿ operator== für std::vector definiert ist und
 	// funktioniert.
 	bool test = (PWF2.getIntervals() == intervals);
 	TEST_EQUAL(test, true);

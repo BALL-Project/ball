@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.14 2001/07/14 18:44:37 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.15 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.14 2001/07/14 18:44:37 oliver Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.15 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: ForEach_test.C,v 1.2 2001/06/29 18:49:04 amoll Exp $
+// $Id: ForEach_test.C,v 1.3 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -16,7 +16,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ForEach_test.C,v 1.2 2001/06/29 18:49:04 amoll Exp $")
+START_TEST(ForEach, "$Id: ForEach_test.C,v 1.3 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

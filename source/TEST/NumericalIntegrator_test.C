@@ -1,4 +1,4 @@
-// $Id: NumericalIntegrator_test.C,v 1.3 2001/07/13 17:35:01 anker Exp $
+// $Id: NumericalIntegrator_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: NumericalIntegrator_test.C,v 1.3 2001/07/13 17:35:01 anker Exp $")
+START_TEST(NumericalIntegrator, "$Id: NumericalIntegrator_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

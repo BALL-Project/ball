@@ -1,4 +1,4 @@
-// $Id: Quaternion_test.C,v 1.9 2000/07/26 16:49:47 amoll Exp $
+// $Id: Quaternion_test.C,v 1.10 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Quaternion_test.C,v 1.9 2000/07/26 16:49:47 amoll Exp $")
+START_TEST(Quaternion, "$Id: Quaternion_test.C,v 1.10 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: Function_test.C,v 1.6 2001/06/09 11:48:09 amoll Exp $
+// $Id: Function_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Function_test.C,v 1.6 2001/06/09 11:48:09 amoll Exp $")
+START_TEST(Function, "$Id: Function_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,11 +1,11 @@
-// $Id: Hash_test.C,v 1.6 2000/06/16 08:48:32 oliver Exp $
+// $Id: Hash_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/COMMON/hash.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Hash_test.C,v 1.6 2000/06/16 08:48:32 oliver Exp $")
+START_TEST(Hash, "$Id: Hash_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

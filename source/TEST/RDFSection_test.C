@@ -1,4 +1,4 @@
-// $Id: RDFSection_test.C,v 1.2 2000/08/31 13:35:37 anker Exp $
+// $Id: RDFSection_test.C,v 1.3 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RDFSection_test.C,v 1.2 2000/08/31 13:35:37 anker Exp $")
+START_TEST(RDFSection, "$Id: RDFSection_test.C,v 1.3 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

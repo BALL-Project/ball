@@ -1,4 +1,4 @@
-// $Id: RadialDistributionFunction_test.C,v 1.3 2000/10/18 19:23:54 oliver Exp $
+// $Id: RadialDistributionFunction_test.C,v 1.4 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RadialDistributionFunction_test.C,v 1.3 2000/10/18 19:23:54 oliver Exp $")
+START_TEST(RadialDistributionFunction, "$Id: RadialDistributionFunction_test.C,v 1.4 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

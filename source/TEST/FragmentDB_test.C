@@ -1,4 +1,4 @@
-// $Id: FragmentDB_test.C,v 1.6 2001/06/05 15:53:33 anker Exp $
+// $Id: FragmentDB_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(class_name, "$Id: FragmentDB_test.C,v 1.6 2001/06/05 15:53:33 anker Exp $")
+START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

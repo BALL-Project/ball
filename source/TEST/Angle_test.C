@@ -1,11 +1,11 @@
-// $Id: Angle_test.C,v 1.15 2001/01/21 21:27:27 amoll Exp $
+// $Id: Angle_test.C,v 1.16 2001/07/15 17:32:38 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.15 2001/01/21 21:27:27 amoll Exp $")
+START_TEST(Angle, "$Id: Angle_test.C,v 1.16 2001/07/15 17:32:38 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

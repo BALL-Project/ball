@@ -1,4 +1,4 @@
-// $Id: PersistentObject_test.C,v 1.1 2001/05/28 15:30:45 anker Exp $
+// $Id: PersistentObject_test.C,v 1.2 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PersistentObject_test.C,v 1.1 2001/05/28 15:30:45 anker Exp $")
+START_TEST(PersistentObject, "$Id: PersistentObject_test.C,v 1.2 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: Selector_test.C,v 1.4 2001/07/13 15:48:58 anker Exp $
+// $Id: Selector_test.C,v 1.5 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Selector_test.C,v 1.4 2001/07/13 15:48:58 anker Exp $")
+START_TEST(Selector, "$Id: Selector_test.C,v 1.5 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

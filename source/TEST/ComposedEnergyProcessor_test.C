@@ -1,4 +1,4 @@
-// $Id: ComposedEnergyProcessor_test.C,v 1.1 2000/08/31 18:45:31 anker Exp $
+// $Id: ComposedEnergyProcessor_test.C,v 1.2 2001/07/15 17:32:38 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ComposedEnergyProcessor_test.C,v 1.1 2000/08/31 18:45:31 anker Exp $")
+START_TEST(ComposedEnergyProcessor_test, "$Id: ComposedEnergyProcessor_test.C,v 1.2 2001/07/15 17:32:38 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

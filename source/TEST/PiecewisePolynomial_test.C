@@ -1,4 +1,4 @@
-// $Id: PiecewisePolynomial_test.C,v 1.5 2000/10/26 10:51:38 anker Exp $
+// $Id: PiecewisePolynomial_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PiecewisePolynomial_test.C,v 1.5 2000/10/26 10:51:38 anker Exp $")
+START_TEST(PiecewisePolynomial, "$Id: PiecewisePolynomial_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: StructureMapper_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: StructureMapper_test.C,v 1.2 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/STRUCTURE/structureMapper.h>
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/quaternion.h>
 #include <vector>
 
-START_TEST(class_name, "$Id: StructureMapper_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.2 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.24 2001/06/20 11:37:08 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.25 2001/07/15 17:32:38 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.24 2001/06/20 11:37:08 amoll Exp $")
+START_TEST(AnalyticalGeometry, "$Id: AnalyticalGeometry_test.C,v 1.25 2001/07/15 17:32:38 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

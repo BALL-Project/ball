@@ -1,4 +1,4 @@
-// $Id: Sphere3_test.C,v 1.6 2000/07/26 16:49:48 amoll Exp $
+// $Id: Sphere3_test.C,v 1.7 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Sphere3_test.C,v 1.6 2000/07/26 16:49:48 amoll Exp $")
+START_TEST(Sphere3, "$Id: Sphere3_test.C,v 1.7 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

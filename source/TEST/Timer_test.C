@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.9 2001/05/18 02:30:05 oliver Exp $
+// $Id: Timer_test.C,v 1.10 2001/07/15 17:32:41 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/SYSTEM/file.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Timer_test.C,v 1.9 2001/05/18 02:30:05 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.10 2001/07/15 17:32:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: PersistenceManager_test.C,v 1.3 2001/07/05 17:56:26 oliver Exp $
+// $Id: PersistenceManager_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -244,7 +244,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PersistenceManager_test.C,v 1.3 2001/07/05 17:56:26 oliver Exp $")
+START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

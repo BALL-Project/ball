@@ -1,4 +1,4 @@
-// $Id: PDBAtom_test.C,v 1.5 2001/07/05 17:54:24 oliver Exp $
+// $Id: PDBAtom_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -29,7 +29,7 @@ bool testEqual(const PDBAtom& a, const PDBAtom& b)
 				 a.getTemperatureFactor() == b.getTemperatureFactor();
 }
 
-START_TEST(class_name, "$Id: PDBAtom_test.C,v 1.5 2001/07/05 17:54:24 oliver Exp $")
+START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

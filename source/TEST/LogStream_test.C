@@ -1,4 +1,4 @@
-// $Id: LogStream_test.C,v 1.14 2001/07/05 18:23:19 oliver Exp $
+// $Id: LogStream_test.C,v 1.15 2001/07/15 17:32:39 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/notification.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LogStream_test.C,v 1.14 2001/07/05 18:23:19 oliver Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.15 2001/07/15 17:32:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

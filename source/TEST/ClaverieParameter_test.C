@@ -1,4 +1,4 @@
-// $Id: ClaverieParameter_test.C,v 1.2 2001/07/15 15:17:13 anker Exp $
+// $Id: ClaverieParameter_test.C,v 1.3 2001/07/15 17:32:38 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ClaverieParameter_test.C,v 1.2 2001/07/15 15:17:13 anker Exp $")
+START_TEST(ClaverieParameter, "$Id: ClaverieParameter_test.C,v 1.3 2001/07/15 17:32:38 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
