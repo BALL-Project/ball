@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.4 2003/09/18 03:53:39 oliver Exp $
+// $Id: glRenderer.C,v 1.5 2003/10/15 13:56:01 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -196,6 +196,7 @@ namespace BALL
 				{
 					glLightfv(light_nr, GL_AMBIENT, intensity);
 					glLightfv(light_nr, GL_DIFFUSE, zero);
+					glLightfv(light_nr, GL_SPECULAR, zero);
 					glEnable(light_nr);
 					light_nr++;
 					continue;
@@ -203,6 +204,7 @@ namespace BALL
 					
 				glLightfv(light_nr, GL_AMBIENT, zero);
 				glLightfv(light_nr, GL_DIFFUSE, intensity);
+				glLightfv(light_nr, GL_SPECULAR, intensity);
 				// setup the direction of the light
 				GLfloat dir[] = { it->getDirection().x,
 													it->getDirection().y,
@@ -211,7 +213,6 @@ namespace BALL
 				// setup the angle of the light cone
 				GLfloat angle = it->getAngle().toDegree();
 				glLightfv(light_nr, GL_SPOT_CUTOFF, &angle);
-
 				// ---------------------------------------------------------------
 				if (it->getType() == LightSource::POSITIONAL)
 				{
@@ -242,8 +243,6 @@ namespace BALL
 				glEnable(light_nr);
 				light_nr++;
 			}
-			
-			glEnable(GL_LIGHTING);
 		}
 
 
@@ -1413,11 +1412,6 @@ namespace BALL
 		{
 			if (on == stereo_) return;
 			stereo_ = on;
-
-			char* trash = "trash";
-			int trash_int = 0;
 		}
 
-	} // namespace VIEW
-
-} // namespace BALL
+} } // namespaces
