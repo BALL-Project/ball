@@ -1,4 +1,4 @@
-// $Id: PTE_test.C,v 1.4 2000/07/12 19:36:47 oliver Exp $
+// $Id: PTE_test.C,v 1.5 2000/12/08 09:21:13 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -6,7 +6,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.4 2000/07/12 19:36:47 oliver Exp $")
+START_TEST(Element, "$Id: PTE_test.C,v 1.5 2000/12/08 09:21:13 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,10 +23,10 @@ CHECK(~Element())
 	delete e;
 RESULT
 
-CHECK(Element(Element&, bool))
+CHECK(Element(Element& element))
 	Element* e1 = new Element;
 	e1->setName("testname");
-	Element* e2 = new Element(*e1, true);
+	Element* e2 = new Element(*e1);
 	TEST_NOT_EQUAL(e2, 0)
 	if (e2 != 0)
 	{
@@ -35,6 +35,8 @@ CHECK(Element(Element&, bool))
 	}
 RESULT
 
+
+Element static_element("Aluminum", "Al", 13, 3, 13, 26.981539,  1.43,  1.25, 2.05, 1.61);
 CHECK(Element(const String& name,
 						 const String& symbol,
 						 Group group,
@@ -45,6 +47,18 @@ CHECK(Element(const String& name,
 						 float covalent_radius,
 						 float van_der_waals_radius,
 						 float electronegativity))
+
+	TEST_EQUAL(static_element.getName(), "Aluminum")
+	TEST_EQUAL(static_element.getSymbol(), "Al")
+	TEST_EQUAL(static_element.getGroup(), 13)
+	TEST_EQUAL(static_element.getPeriod(), 3)
+	TEST_EQUAL(static_element.getAtomicNumber(), 13)
+	TEST_REAL_EQUAL(static_element.getAtomicWeight(), 26.9815390)
+	TEST_REAL_EQUAL(static_element.getAtomicRadius(), 1.43)
+	TEST_REAL_EQUAL(static_element.getCovalentRadius(), 1.25)
+	TEST_REAL_EQUAL(static_element.getVanDerWaalsRadius(), 2.05)
+	TEST_REAL_EQUAL(static_element.getElectronegativity(), 1.61)
+
 	Element* e1 = new Element("e1", "id", 2, 3, 25, 25.0, 2.0, 3.0, 4.0, 5.0);
 	TEST_NOT_EQUAL(e1, 0)
 	if (e1 != 0)
@@ -220,23 +234,32 @@ CHECK(std::ostream& operator << (std::ostream& s, const Element& element))
 RESULT
 
 CHECK(getElement(Position position))
-	TEST_EQUAL(PTE.getElement(1).getName(), "Aluminium")
+	TEST_EQUAL(PTE.getElement(1).getName(), "Aluminum")
+	TEST_EQUAL(PTE.getElement(1).getSymbol(), "Al")
+	TEST_EQUAL(PTE.getElement(1).getGroup(), 13)
+	TEST_EQUAL(PTE.getElement(1).getPeriod(), 3)
+	TEST_EQUAL(PTE.getElement(1).getAtomicNumber(), 13)
+	TEST_REAL_EQUAL(PTE.getElement(1).getAtomicWeight(), 26.9815390)
+	TEST_REAL_EQUAL(PTE.getElement(1).getAtomicRadius(), 1.43)
+	TEST_REAL_EQUAL(PTE.getElement(1).getCovalentRadius(), 1.25)
+	TEST_REAL_EQUAL(PTE.getElement(1).getVanDerWaalsRadius(), 2.05)
+	TEST_REAL_EQUAL(PTE.getElement(1).getElectronegativity(), 1.61)
 RESULT
 
 CHECK(getElement(const String& symbol))
-	TEST_EQUAL(PTE.getElement("Al").getName(), "Aluminium")
+	TEST_EQUAL(PTE.getElement("Al").getName(), "Aluminum")
 RESULT
 
-CHECK(Element &operator [](const String& symbol))
-	TEST_EQUAL(PTE["Al"].getName(), "Aluminium")
+CHECK(Element& operator [] (const String& symbol))
+	TEST_EQUAL(PTE["Al"].getName(), "Aluminum")
 RESULT
 
-CHECK(Element &operator [](Element::Symbol symbol))
-	TEST_EQUAL(PTE[Element::Al].getName(), "Aluminium")
+CHECK(Element& operator [] (Element::Symbol symbol))
+	TEST_EQUAL(PTE[Element::Al].getName(), "Aluminum")
 RESULT
 
-CHECK(Element &operator [](Position position))
-	TEST_EQUAL(PTE[13].getName(), "Aluminium")
+CHECK(Element& operator [] (Position position))
+	TEST_EQUAL(PTE[13].getName(), "Aluminum")
 RESULT
 
 /////////////////////////////////////////////////////////////
