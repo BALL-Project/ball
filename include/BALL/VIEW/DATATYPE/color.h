@@ -1,4 +1,4 @@
-// $Id: color.h,v 1.1 1999/08/26 07:53:14 oliver Exp $
+// $Id: color.h,v 1.2 1999/12/19 17:19:22 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLOR_H
 #define BALL_VIEW_DATATYPE_COLOR_H
@@ -19,7 +19,7 @@
 #	include <BALL/VIEW/DATATYPE/colorUnitHue.h>
 #endif
 
-#include <iostream.h>
+#include <iostream>
 #include <stdio.h>
 
 namespace BALL 
@@ -201,20 +201,20 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(ostream& s = cout, unsigned long depth = 0) const;
+				(std::ostream& s = std::cout, unsigned long depth = 0) const;
 			//@}
 
 			/**	@name	Storers
 			*/
 			//@{
 
-			virtual void read(istream& s);
+			virtual void read(std::istream& s);
 
-			virtual void write(ostream& s) const;
+			virtual void write(std::ostream& s) const;
 
-			friend istream& operator >> (istream& s, ColorRGBA& color);
+			friend std::istream& operator >> (std::istream& s, ColorRGBA& color);
 
-			friend ostream& operator << (ostream& s, const ColorRGBA& color);
+			friend std::ostream& operator << (std::ostream& s, const ColorRGBA& color);
 			//@}
 
 			private:
@@ -387,22 +387,22 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(ostream& s = cout, unsigned long depth = 0) const;
+				(std::ostream& s = std::cout, unsigned long depth = 0) const;
 
 			//@}
 
 			/**	@name	Storers
 			*/
 			//@{
-			virtual void read(istream& s);
+			virtual void read(std::istream& s);
 
-			virtual void write(ostream& s) const;
+			virtual void write(std::ostream& s) const;
 
-			friend istream& operator >>
-				(istream& s, ColorHSV& color);
+			friend std::istream& operator >>
+				(std::istream& s, ColorHSV& color);
 
-			friend ostream& operator <<
-				(ostream& s, const ColorHSV& color);
+			friend std::ostream& operator <<
+				(std::ostream& s, const ColorHSV& color);
 			//@}
 
 			private:

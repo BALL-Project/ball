@@ -1,4 +1,4 @@
-// $Id: sphere.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: sphere.h,v 1.2 1999/12/19 17:19:42 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -12,7 +12,7 @@
 #endif
 
 #ifndef BALL_VIEW_EXPORT_H
-//#	include <BALL/VIEW/export.h>
+//#	include <BALL/VIEW/extract.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION1_H
@@ -101,7 +101,7 @@ namespace BALL
 
 			protected:
 
-			virtual bool export();
+			virtual bool extract();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

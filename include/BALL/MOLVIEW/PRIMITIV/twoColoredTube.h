@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: twoColoredTube.h,v 1.2 1999/12/19 17:19:02 oliver Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
@@ -101,7 +101,7 @@ namespace BALL
 			
 			protected:
 
-			virtual bool export();
+			virtual bool extract();
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS

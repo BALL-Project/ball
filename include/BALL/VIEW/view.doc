@@ -1,4 +1,4 @@
-// $Id: view.doc,v 1.1 1999/08/26 07:53:14 oliver Exp $
+// $Id: view.doc,v 1.2 1999/12/19 17:19:20 oliver Exp $
 
 /**@name	BALLVIEW
 		This chapter contains all relevant information on 
@@ -6,5 +6,5 @@
 		@nonames
 */
 //@{
-	// @Include: */*.doc
+	//@Include: */*.doc
 //@}

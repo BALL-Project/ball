@@ -1,4 +1,4 @@
-// $Id: client.h,v 1.1 1999/08/26 07:53:14 oliver Exp $
+// $Id: client.h,v 1.2 1999/12/19 17:19:25 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -53,9 +53,9 @@ namespace BALL
 			*/
 			void connect(const char* host, int port);
 
-			/** creates a new scene on the server and returns it.
+			/** returns a clientscene from the server.
 			*/
-			ClientScene getNewScene();
+			ClientScene getScene();
 
 			//@}
 

@@ -1,4 +1,4 @@
-// $Id: tube.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: tube.h,v 1.2 1999/12/19 17:19:42 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -83,7 +83,7 @@ namespace BALL
 				
 			protected:
 
-			virtual bool export();
+			virtual bool extract();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,4 +1,4 @@
-// $Id: line.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: line.h,v 1.2 1999/12/19 17:19:41 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #define BALL_VIEW_PRIMITIV_LINE_H
@@ -89,7 +89,7 @@ namespace BALL
 
 			protected:
 
-			virtual bool export();
+			virtual bool extract();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.1 1999/08/26 07:53:14 oliver Exp $
+// $Id: geometricObject.h,v 1.2 1999/12/19 17:19:28 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -49,8 +49,7 @@ namespace BALL
 		*/
 		class GeometricObject
 			: public Composite,
-				public PropertyManager,
-				public Selectable
+				public PropertyManager
 		{
 			friend class GLObject;
 			friend class Scene;
@@ -180,7 +179,7 @@ namespace BALL
 			
 			protected:
 
-			virtual bool export();
+			virtual bool extract();
 
 			void getDrawingModeAndPrecision
 				(unsigned int& mode, unsigned int& precision) const;

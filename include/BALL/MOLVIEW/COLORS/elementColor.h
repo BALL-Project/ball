@@ -1,4 +1,4 @@
-// $Id: elementColor.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: elementColor.h,v 1.2 1999/12/19 17:18:41 oliver Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
 #define BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
@@ -11,7 +11,7 @@
 #	include <BALL/VIEW/DATATYPE/colorTable.h>
 #endif
 
-#include <iostream.h>
+#include <iostream>
 
 namespace BALL
 {
@@ -57,16 +57,16 @@ namespace BALL
 			//@{
 
 			virtual void dump
-				(ostream& s = cout, unsigned long depth = 0) const;
+				(std::ostream& s = std::cout, unsigned long depth = 0) const;
 			//@}
 
 			/**	@name Storers
 			*/
 			//@{
 
-			virtual void read(istream& s);
+			virtual void read(std::istream& s);
 
-			virtual void write(ostream& s) const;
+			virtual void write(std::ostream& s) const;
 			//@}
 
 
