@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.31 2004/03/29 17:12:23 oliver Exp $ 
+// $Id: regularData3D.h,v 1.32 2004/05/02 20:59:48 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -670,12 +670,10 @@ namespace BALL
 			{
 				try
 				{
-					Log.error() << "rescale: rescaled for i = " << i << " coord = " << getCoordinates(i) << std::endl;
 					data_[i] = old_data.getInterpolatedValue(getCoordinates(i));
 				}
 				catch (Exception::OutOfGrid&)
 				{
-					Log.error() << "rescale: caught exception for i = " << i << " coord = " << getCoordinates(i) << std::endl;
 					data_[i] = old_data.getClosestValue(getCoordinates(i));
 				}
 			}
@@ -871,27 +869,29 @@ namespace BALL
 		Position x = (Position)(h.x / spacing_.x);
 		Position y = (Position)(h.y / spacing_.y);
 		Position z = (Position)(h.z / spacing_.z);
+		while (x >= (size_.x - 1)) x--;
+		while (y >= (size_.y - 1)) y--;
+		while (z >= (size_.z - 1)) z--;
 
 		Position Nx = size_.x;
 		Position Nxy = size_.z * Nx;
 		Position l = x + Nx * y + Nxy * z;
-		Vector3 r_0(origin_.x + x * spacing_.x,
-								origin_.y + y * spacing_.y,
-								origin_.z + z * spacing_.z);
-
+		TVector3<double> r_0(origin_.x + x * spacing_.x,
+												 origin_.y + y * spacing_.y,
+												 origin_.z + z * spacing_.z);
 
 		double dx = 1. - ((double)(r.x - r_0.x) / spacing_.x);
 		double dy = 1. - ((double)(r.y - r_0.y) / spacing_.y);
 		double dz = 1. - ((double)(r.z - r_0.z) / spacing_.z);
 
 		return  data_[l] * dx * dy * dz
-					+ data_[l + 1] * (1 - dx) * dy * dz
-					+ data_[l + Nx] * dx * (1 - dy) * dz
-					+ data_[l + Nx + 1] * (1 - dx) * (1 - dy) * dz
-					+ data_[l + Nxy] * dx * dy * (1 - dz)
-					+ data_[l + Nxy + 1] * (1 - dx) * dy * (1 - dz)
-					+ data_[l + Nxy + Nx] * dx * (1 - dy) * (1 - dz)
-					+ data_[l + Nxy + Nx + 1] * (1 - dx) * (1 - dy) * (1 - dz);
+					+ data_[l + 1] * (1. - dx) * dy * dz
+					+ data_[l + Nx] * dx * (1. - dy) * dz
+					+ data_[l + Nx + 1] * (1. - dx) * (1. - dy) * dz
+					+ data_[l + Nxy] * dx * dy * (1. - dz)
+					+ data_[l + Nxy + 1] * (1. - dx) * dy * (1. - dz)
+					+ data_[l + Nxy + Nx] * dx * (1. - dy) * (1. - dz)
+					+ data_[l + Nxy + Nx + 1] * (1. - dx) * (1. - dy) * (1. - dz);
 	}
 
   template <typename ValueType>
