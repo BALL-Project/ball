@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.13 2000/12/19 12:50:54 amoll Exp $
+// $Id: selector.h,v 1.14 2001/02/27 01:57:54 amoll Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -28,8 +28,6 @@ namespace BALL
 			{\bf Definition:}\URL{BALL/KERNEL/selector.h}
 	*/
 	//@{
-
-
 	class Selector
 		:	public UnaryProcessor<Composite>
 	{
@@ -39,7 +37,9 @@ namespace BALL
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
+
 		BALL_CREATE(Selector)
+
 		/**	Default constructor.
 		*/
 		Selector()
@@ -51,7 +51,9 @@ namespace BALL
 			throw();
 
 		/** Construct a Selector with a string.
+				Note: Implementation of using the expression not yet implemented.
 		*/
+		// BAUSTELLE
 		Selector(const String& expression_string)
 			throw();
 
@@ -59,13 +61,18 @@ namespace BALL
 		*/
 		virtual ~Selector()
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Processor related methods
 		*/
 		//@{
-		/**
+
+		/** Access operator.
+				All atom instances contained in the given composite instance are
+				selected and counted.
+				@see Composite::select
 		*/
+		// BAUSTELLE
 		virtual Processor::Result operator () (Composite& composite)
 			throw();
 		
@@ -75,8 +82,8 @@ namespace BALL
 		*/
 		virtual bool start()
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{

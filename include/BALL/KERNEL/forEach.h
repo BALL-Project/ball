@@ -1,4 +1,4 @@
-// $Id: forEach.h,v 1.5 2000/08/30 19:58:08 oliver Exp $
+// $Id: forEach.h,v 1.6 2001/02/27 01:57:54 amoll Exp $
 
 #ifndef BALL_KERNEL_FOREACH_H
 #define BALL_KERNEL_FOREACH_H
@@ -13,15 +13,11 @@
 
 /** Molecule iterator macro.
     Convenience macro for easy iteration over all molecules of {\em molecule_container}.\\
-
-    {\bf Framework:} BALL/KERNEL\\
-    {\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+    {\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
     {\bf Category:} \Ref{Molecule} iterator\\
     {\bf Concept:} iterator design pattern\\
   	{\bf Implementation notes:} Macro is implemented by one \Ref{MoleculeIterator} instance.\\
     {\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em molecule_container}"\\
-
     @param   molecule_container container of \Ref{Molecule} instances
     @param   molecule_iterator \Ref{MoleculeIterator} instance
     @see     Molecule
@@ -34,15 +30,11 @@ for (molecule_iterator = (molecule_container).beginMolecule(); \
 
 /** Fragment iterator macro.
     Convenience macro for easy iteration over all fragments of {\em fragment_container}.\\
-
-		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{Fragment} iterator\\
     {\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{FragmentIterator} instance.\\
     {\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em fragment_container}"\\
-
     @param   fragment_container container of \Ref{Fragment} instances
     @param   fragment_iterator \Ref{FragmentIterator} instance
     @see     Fragment
@@ -55,15 +47,11 @@ for (fragment_iterator = (fragment_container).beginFragment(); \
 
 /** AtomContainer iterator macro.
     Convenience macro for easy iteration over all atom containers of {\em atom_container}.\\
-
-		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{AtomContainer} iterator\\
     {\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{AtomContainerIterator} instance.\\
     {\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em atom_containers}"\\
-
     @param   atom_containers container of \Ref{AtomContainer} instances
     @param   atom_container_iterator \Ref{AtomContainerIterator} instance
     @see     AtomContainer
@@ -76,15 +64,11 @@ for (atom_container_iterator = (atom_containers).beginAtomContainer(); \
 
 /** Atom iterator macro.
     Convenience macro for easy iteration over all atoms of {\em atom_container}.
-
-		{\bf Framework:} BALL/KERNEL\\
-    {\bf Definition:} \URL{BALL/KERNEL/foreach.h}
-		\\
+    {\bf Definition:} \URL{BALL/KERNEL/foreach.h}	\\
 		{\bf Category:} \Ref{Atom} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{AtomIterator} instance.\\
 		{\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em atom_container}"\\
-
     @param   atom_container container of \Ref{Atom} instances
     @param   atom_iterator \Ref{AtomIterator} instance
     @see     Atom
@@ -97,17 +81,13 @@ for (atom_iterator = (atom_container).beginAtom(); \
 
 /** Atom bond iterator macro.
     Convenience macro for easy iteration over all bonds of {\em bond_container}.\\
-
-		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{Bond} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{AtomBondIterator} instance.\\
 		{\bf Complexity:} O(1)="max. 8 \Ref{Bond} instances in {\em bond_container}"\\
-
     @param   bond_container \Ref{Atom} instance container of \Ref{Bond} instances
-    @param   atom_iterator \Ref{AtomBondIterator} instance
+    @param   bond_iterator \Ref{AtomBondIterator} instance
     @see     Atom
     @see     Bond
     @see     AtomBondIterator
@@ -119,14 +99,11 @@ for (bond_iterator = (bond_container).beginBond(); \
 
 /** Atom pair iterator macro.
     Convenience macro for easy iteration over all atom pairs of {\em atom_container}.\\
-
-		{\bf Framework:} BALL/KERNEL\\
 		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
 		{\bf Category:} \Ref{Atom} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by two \Ref{AtomIterator} instances. All atom pairs are unique. The linear order of the \Ref{Atom} instances determines the pairing.\\
 		{\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em atom_container}"\\
-
     @param   atom_container container of \Ref{Atom} instances
     @param   first_atom_iterator first \Ref{AtomIterator} instance
     @param   second_atom_iterator second \Ref{AtomIterator} instance
@@ -143,15 +120,11 @@ for (first_atom_iterator = (atom_container).beginAtom(); \
 
 /** Bond iterator macro.
     Convenience macro for easy iteration over all bonds of {\em atom_container} that is also a bond-container.\\
-
-		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{Bond} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{AtomIterator} instance and one \Ref{AtomBondIterator} instance.\\
 		{\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em atom_container}"\\
-
     @param   atom_container container of \Ref{Atom} instances
     @param   atom_iterator \Ref{AtomIterator} instance which is the container of \Ref{Bond} instances
     @param   bond_iterator \Ref{AtomBondIterator} instance
@@ -171,15 +144,11 @@ for (atom_iterator = (atom_container).beginAtom(); \
 
 /** Intermolecular bond iterator macro.
     Convenience macro for easy iteration over all intermolecular bonds of {\em atom_container} that is also a bond-container.\\
-
-		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{Bond} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{AtomIterator} instance and one \Ref{AtomBondIterator} instance.\\
 		{\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em atom_container}"\\
-
     @param   atom_container container of \Ref{Atom} instances
     @param   atom_iterator \Ref{AtomIterator} instance which is the container of \Ref{Bond} instances
     @param   bond_iterator \Ref{AtomBondIterator} instance
@@ -200,15 +169,11 @@ for (atom_iterator = (atom_container).beginAtom(); \
 
 /** Intramolecular bond iterator macro.
     Convenience macro for easy iteration over all intramolecular (internal) bonds of {\em atom_container} that is also a bond-container.\\
-
-		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{Bond} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{AtomIterator} instance and one \Ref{AtomBondIterator} instance.\\
 		{\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em atom_container}"\\
-
     @param   atom_container container of \Ref{Atom} instances
     @param   atom_iterator \Ref{AtomIterator} instance which is the container of \Ref{Bond} instances
     @param   bond_iterator \Ref{AtomBondIterator} instance
@@ -228,15 +193,12 @@ for (atom_iterator = (atom_container).beginAtom(); \
       
 /** Protein iterator macro.
     Convenience macro for easy iteration over all proteins of {\em protein_container}.\\
-
 		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{Protein} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{ProteinIterator} instance.\\
 		{\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em protein_container}"\\
-
     @param   protein_container container of \Ref{Protein} instances
     @param   protein_iterator \Ref{ProteinIterator} instance
     @see     Protein
@@ -249,15 +211,12 @@ for (protein_iterator = (protein_container).beginProtein(); \
 
 /** Chain iterator macro.
     Convenience macro for easy iteration over all chains of {\em chain_container}.\\
-
 		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{Chain} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{ChainIterator} instance.\\
 		{\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em chain_container}"\\
-
     @param   chain_container container of \Ref{Chain} instances
     @param   chain_iterator \Ref{ChainIterator} instance
     @see     Chain
@@ -270,15 +229,12 @@ for (chain_iterator = (chain_container).beginChain(); \
 
 /** SecondaryStructure iterator macro.
     Convenience macro for easy iteration over all secondary structures of {\em secondary_structure_container}.\\
-
 		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{SecondaryStructure} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{SecondaryStructureIterator} instance.\\
 		{\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em secondary_structure_container}"\\
-
     @param   secondary_structure_container container of \Ref{SecondaryStructure} instances
     @param   secondary_structure_iterator \Ref{SecondaryStructureIterator} instance
     @see     SecondaryStructure
@@ -291,15 +247,12 @@ for (secondary_structure_iterator = (secondary_structure_container).beginSeconda
 
 /** Residue iterator macro.
     Convenience macro for easy iteration over all residues of {\em residue_container}.\\
-
 		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{Residue} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{ResidueIterator} instance.\\
 		{\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em residue_container}"\\
-
     @param   residue_container container of \Ref{Residue} instances
     @param   residue_iterator \Ref{ResidueIterator} instance
     @see     Residue
@@ -313,15 +266,12 @@ for (residue_iterator = (residue_container).beginResidue(); \
 
 /** PDBAtom iterator macro.
     Convenience macro for easy iteration over all \Ref{PDBAtom}s of {\em pdb_atom_container}.\\
-
 		{\bf Framework:} BALL/KERNEL\\
-		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}
-		\\
+		{\bf Definition:} \URL{BALL/KERNEL/forEach.h}	\\
 		{\bf Category:} \Ref{PDBAtom} iterator\\
 		{\bf Concept:} iterator design pattern\\
 		{\bf Implementation notes:} Macro is implemented by one \Ref{PDBAtomIterator} instance.\\
 		{\bf Complexity:} O(n), n:="number of \Ref{Composite} instances in {\em pdb_atom_container}"\\
-
     @param   pdb_atom_container container of \Ref{PDBAtom} instances
     @param   pdb_atom_iterator \Ref{PDBAtomIterator} instance
     @see     PDBAtom

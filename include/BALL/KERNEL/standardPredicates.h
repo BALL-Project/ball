@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.13 2001/02/05 16:56:48 amoll Exp $
+// $Id: standardPredicates.h,v 1.14 2001/02/27 01:57:54 amoll Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -28,10 +28,8 @@ namespace BALL
 {
 
 	/**	@name	Predefined Predicates
-			@see ExpressionPredicate
-			\\
-			{\bf Definition:}\URL{BALL/KERNEL/standardPredicates.h}
-			\\
+			@see ExpressionPredicate \\
+			{\bf Definition:}\URL{BALL/KERNEL/standardPredicates.h}	\\
 	*/
 	//@{
 
@@ -475,7 +473,6 @@ namespace BALL
 	};
 
 	//@}	
-
 
 } // namespace BALL
 

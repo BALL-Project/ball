@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.13 2001/01/22 20:48:00 amoll Exp $
+// $Id: PTE.h,v 1.14 2001/02/27 01:57:54 amoll Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -6,9 +6,6 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
-
-#include <ctype.h> 	//  toupper, tolower
-#include <stdlib.h> //  bsearch
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #	include <BALL/CONCEPT/property.h>
@@ -21,6 +18,9 @@
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
 #endif
+
+#include <ctype.h> 	//  toupper, tolower
+#include <stdlib.h> //  bsearch
 
 #define BALL_ELEMENT_NAME_DEFAULT                "Unknown"
 #define BALL_ELEMENT_SYMBOL_DEFAULT              "?"
@@ -59,15 +59,15 @@ namespace BALL
 
 			BALL_CREATE(Element)
 
-			/**		Group
+			/**	Group
 			*/
 			typedef short Group;
 
-			/**	 Period
+			/**	Period
 			*/
 			typedef short Period;
 
-			/**	 AtomicNumber
+			/**	AtomicNumber
 			*/
 			typedef short AtomicNumber;
 
@@ -312,7 +312,7 @@ namespace BALL
 			};
 
 			/**	@name	Property
-					 Enum to define atom element properties.
+					Enum to define atom element properties.
 			*/
 			enum Property
 			{
@@ -326,6 +326,8 @@ namespace BALL
 			//@{
 			
 			/**	Default constructor
+					The instance is set to the default values
+					(= \Ref{UNKNOWN} element).
 			*/
 			Element()
 				throw();
@@ -355,28 +357,27 @@ namespace BALL
 			virtual ~Element()
 				throw();
 
-			/** Clear method
-					The instance is set to the default values.
+			/** Clear method.
+					The instance is set to the default values
+					(= \Ref{UNKNOWN} element).
 			*/
 			virtual void clear()
 				throw();
 			
 			//@}
-
-			/**	@name	Assignment */
+			/**	@name	Assignment 
+			*/
 			//@{
 
 			/** Assignment operator.
-					Assign {\em element} to {\em *this} instance.
 					@param   element the Element to be copied (cloned)
-					@return  Element& - {\em *this} instance
+					@return  Element& - this instance
 			*/
 			const Element& operator = (const Element& element)
 				throw();
 
 			//@}
-
-			/**@name	Inspectors and Mutators
+			/** @name	Inspectors and Mutators
 			*/
 			//@{
 		
@@ -434,7 +435,7 @@ namespace BALL
 			void setAtomicNumber(AtomicNumber atomic_number)
 				throw();
 
-			/** Get the atomic period.
+			/** Get the atomic number.
 					@return AtomicNumber (short) - the atomic number
 			*/
 			AtomicNumber getAtomicNumber() const
@@ -501,8 +502,7 @@ namespace BALL
 				throw();
 
 			//@}
-
-			/**@name	Operators
+			/** @name	Operators
 			*/
 			//@{
 
@@ -565,12 +565,11 @@ namespace BALL
 				throw();
 
 			//@}
-
-			/**@name	Predicates
+			/** @name	Predicates
 			*/
 			//@{
 
-			/** Test if this intance is unknown.
+			/** Test if this instance is unknown.
 					Returns true if instance is equal the static Element UNKNOWN
 					(The default constructor returns such an element).
 					@return bool
@@ -588,76 +587,85 @@ namespace BALL
 
 		private:
 
-			/** the name of the element */
+			/** the name of the element 
+			*/
 			String name_;
 
-			/** the uppercased symbol of the element */
+			/** the uppercased symbol of the element 
+			*/
 			String symbol_;
 
 			/** The group number is an identifier used to describe the 
-			 * column of the standard periodic table in which the 
-			 * element appears. 
-			 *
-			 * NOTES:
-			 * There is considerable confusion surrounding the Group 
-			 * labels. The scheme used in WebElements is numeric and 
-			 * is the current IUPAC convention. The other two systems 
-			 * are less desirable since they are confusing, but still 
-			 * in common usage. The designations A and B are completely
-			 * arbitrary. The first of these (A left, B right) is based 
-			 * upon older IUPAC recommendations and frequently used in 
-			 * Europe. The last set (main group elements A, transition 
-			 * elements B) was in common use in America.
-			 *
-			 * IUPAC, European, and American Group labelling schemes
-			 *
-			 *  Group   European  American
-			 *  1       IA        IA    
-			 *  2       IIA       IIA            
-			 *  3       IIIA      IIIB    
-			 *  4       IVA       IVAB   
-			 *  5       VA        VB  
-			 *  6       VIA       VIB   
-			 *  7       VIIA      VIIB    
-			 *  8       VIIIA     VIIIB     
-			 *  9       VIIIA     VIIIB     
-			 *  10      VIIIA     VIIIB      
-			 *  11      IB        IB   
-			 *  12      IIB       IIB    
-			 *  13      IIIB      IIIA     
-			 *  14      IVB       IVA    
-			 *  15      VB        VA                    
-			 *  16      VIB       VIA    
-			 *  17      VIIB      VIIA     
-			 *  18      VIIIB     VIIIA      
-			 */
+					column of the standard periodic table in which the 
+				  element appears. 
+
+				  NOTES:
+				  There is considerable confusion surrounding the Group 
+				  labels. The scheme used in WebElements is numeric and 
+				  is the current IUPAC convention. The other two systems 
+				  are less desirable since they are confusing, but still 
+				  in common usage. The designations A and B are completely
+				  arbitrary. The first of these (A left, B right) is based 
+				  upon older IUPAC recommendations and frequently used in 
+				  Europe. The last set (main group elements A, transition 
+				  elements B) was in common use in America.
+
+				  IUPAC, European, and American Group labelling schemes
+
+					Group   European  American
+					1       IA        IA    
+					2       IIA       IIA            
+					3       IIIA      IIIB    
+					4       IVA       IVAB   
+					5       VA        VB  
+					6       VIA       VIB   
+					7       VIIA      VIIB    
+					8       VIIIA     VIIIB     
+					9       VIIIA     VIIIB     
+					10      VIIIA     VIIIB      
+					11      IB        IB   
+					12      IIB       IIB    
+					13      IIIB      IIIA     
+					14      IVB       IVA    
+					15      VB        VA                    
+					16      VIB       VIA    
+					17      VIIB      VIIA     
+					18      VIIIB     VIIIA      
+			*/
 			Group 	group_;
 
-			/** the period of the element */
+			/** the period of the element 
+			*/
 			Period	period_;
 
 			/** The atomic number corresponds to the number of protons 
-			 * in the nucleus of an atom of that element. */
+			    in the nucleus of an atom of that element. 
+			 */
 			AtomicNumber atomic_number_;
 
 			/** The atomic weight of an element (resp. of its most stabile 
-			 * isotope) is the ratio of the mass of one mole of the 
-			 * element in a defined source to 1/12 of the mass of 
-			 * chemically unbound C-12 in its nuclear and electronic
-			 * ground state. Adapted from the 1993 report of the IUPAC 
-			 * Commission on Atomic Weights and Isotopic Abundances */
+			    isotope) is the ratio of the mass of one mole of the 
+			    element in a defined source to 1/12 of the mass of 
+			    chemically unbound C-12 in its nuclear and electronic
+			    ground state. Adapted from the 1993 report of the IUPAC 
+			    Commission on Atomic Weights and Isotopic Abundances 
+			*/
 			float atomic_weight_;
 		
-			/** atomic radius (in Angstrom) */
+			/** atomic radius (in Angstrom) 
+			*/
 			float atomic_radius_;
 
-			/** covalent radius (in Angstrom) */
+			/** covalent radius (in Angstrom) 
+			*/
 			float  covalent_radius_;
 
-			/** van der Waals radius (in Angstrom) */
+			/** van der Waals radius (in Angstrom) 
+			*/
 			float van_der_waals_radius_;
 
-			/** electronegativity (according to the Pauling scale) */
+			/** electronegativity (according to the Pauling scale) 
+			*/
 			float electronegativity_;
 	};
 
@@ -697,13 +705,15 @@ namespace BALL
 			virtual ~PTE_()
 				throw();
 
-			/** Clear method
+			/** Clear method.
+					This method just calls \Ref{PropertyManager::clear}.
 			*/
 			virtual void clear()
 				throw();
-			//@}
 
-			/**	@name	Assignment */
+			//@}
+			/**	@name	Assignment 
+			*/
 			//@{
 		
 			/** Assignment operator
@@ -714,7 +724,6 @@ namespace BALL
 				throw();
 			
 			//@}
-
 			/**	@name	Accessors
 			*/
 			//@{
@@ -733,7 +742,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/**	@name	Operators
 			*/
 			//@{
@@ -794,12 +802,14 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/**	@name	Application methods
 			*/
 			//@{
 		
-			/**
+			/** Application of an unary processor on every contained element.
+					@param  processor a typed unary processor for Element instances
+					@return  bool - {\tt true} if application has been terminated successfully,
+													{\tt false} otherwise
 			*/
 			static bool apply(UnaryProcessor<Element>& applicator)
 				throw();
