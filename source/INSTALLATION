@@ -5,11 +5,14 @@ Compiler:
   (version above 2.95 or above).
   It has been successfully built and tested on the following platforms:
 
-    - Linux 2.0 using g++ 2.95.1 and 2.95.2
-    - Solaris 2.6 and 7/SPARC using g++ 2.95.2
-    - Solaris 7/SPARC using Kuck & Associate (KAI) C++ 3.4g
-    - Solaris 7/x86 using g++ 2.95.2
-    - IRIX 6.5 using CC 7.3.1.1m 
+    - Linux/x86 2.x using g++ 2.95.1 and 2.95.2
+    - Solaris/SPARC 2.6 and 7 using g++ 2.95.2
+    - Solaris/SPARC 7 using Kuck & Associate (KAI) C++ 3.4g
+		- Solaris/SPARC 7 using SUN Workshop CC 6.0ea
+    - Solaris/x86 2.6 using g++ 2.95.2
+    - IRIX 6.5 using CC 7.3.1.1m
+    - IRIX 6.5 using g++ 2.95.2
+		- Compaq Tru64 Unix V5.0 using CXX 6.2
 
 External software and libraries:
   The compilation of the visualization component BALLVIEW also requires
@@ -185,4 +188,4 @@ and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa 
 (libGL.so, libGLU.so).
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.7 2000/01/30 12:56:59 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.8 2000/03/29 09:45:35 oliver Exp $
