@@ -1,4 +1,4 @@
-// $Id: NMRStarFile.h,v 1.13 2001/02/28 01:17:12 amoll Exp $
+// $Id: NMRStarFile.h,v 1.14 2001/06/21 22:07:50 amoll Exp $
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
@@ -117,7 +117,6 @@ namespace BALL
 
 			BALL_CREATE(NMRStarFile)
 
-			//@}
 			/**	@name	Constructors and Destructors
 			*/
 			//@{
