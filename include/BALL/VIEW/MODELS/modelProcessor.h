@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.4 2003/09/07 17:24:00 oliver Exp $
+// $Id: modelProcessor.h,v 1.5 2003/10/15 14:54:43 amoll Exp $
 //
 
 #ifndef BALL_VIEW_GUI_MODELS_ModelProcessor_H
@@ -70,7 +70,7 @@ namespace BALL
 
 				///
 				void setColorProcessor(ColorProcessor* processor)
-					throw();
+					throw() { color_processor_ = processor;}
 
 				///
 				ColorProcessor* getColorProcessor()
