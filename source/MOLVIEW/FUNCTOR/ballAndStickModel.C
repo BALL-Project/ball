@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.9 2000/12/12 16:19:24 oliver Exp $
+// $Id: ballAndStickModel.C,v 1.10 2001/01/26 00:20:01 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -6,7 +6,6 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -19,10 +18,8 @@ namespace BALL
 		}
 
 		AddBallAndStickModel::AddBallAndStickModel
-			(const AddBallAndStickModel &add_ball_and_stick,
-			 bool deep)
-				:
-				AtomBondModelBaseProcessor(add_ball_and_stick, deep),
+			(const AddBallAndStickModel &add_ball_and_stick, bool deep)
+			: AtomBondModelBaseProcessor(add_ball_and_stick, deep),
 				ball_radius_(add_ball_and_stick.ball_radius_),
 				stick_radius_(add_ball_and_stick.stick_radius_),
 				ball_and_stick_(add_ball_and_stick.ball_and_stick_)
@@ -60,10 +57,8 @@ namespace BALL
 			ball_and_stick_ = true;
 		}
 
-		void 
-		AddBallAndStickModel::set
-			(const AddBallAndStickModel &add_ball_and_stick,
-			 bool deep)
+		void AddBallAndStickModel::set
+			(const AddBallAndStickModel &add_ball_and_stick, bool deep)
 		{
 			AtomBondModelBaseProcessor::set(add_ball_and_stick, deep);
 
@@ -72,8 +67,7 @@ namespace BALL
 			ball_and_stick_ = add_ball_and_stick.ball_and_stick_;
 		}
 
-		AddBallAndStickModel &
-		AddBallAndStickModel::operator =
+		AddBallAndStickModel &AddBallAndStickModel::operator = 
 			(const AddBallAndStickModel &add_ball_and_stick)
 		{
 			set(add_ball_and_stick);
@@ -81,36 +75,29 @@ namespace BALL
 			return *this;
 		}
 
-		void 
-		AddBallAndStickModel::get
-			(AddBallAndStickModel &add_ball_and_stick,
-			 bool deep) const
+		void AddBallAndStickModel::get(AddBallAndStickModel &add_ball_and_stick, bool deep) const
 		{
 			add_ball_and_stick.set(*this, deep);
 		}
 
-		void 
-		AddBallAndStickModel::swap
-			(AddBallAndStickModel &add_ball_and_stick)
+		void AddBallAndStickModel::swap(AddBallAndStickModel &add_ball_and_stick)
 		{
 			AtomBondModelBaseProcessor::swap(add_ball_and_stick);
 
-			Real temp__Real = ball_radius_;
+			Real temp_Real = ball_radius_;
 			ball_radius_ = add_ball_and_stick.ball_radius_;
-			add_ball_and_stick.ball_radius_ = temp__Real;
+			add_ball_and_stick.ball_radius_ = temp_Real;
 
-			temp__Real = stick_radius_;
+			temp_Real = stick_radius_;
 			stick_radius_ = add_ball_and_stick.stick_radius_;
-			add_ball_and_stick.stick_radius_ = temp__Real;
+			add_ball_and_stick.stick_radius_ = temp_Real;
 
-			bool temp__bool = ball_and_stick_;
+			bool temp_bool = ball_and_stick_;
 			ball_and_stick_ = add_ball_and_stick.ball_and_stick_;
-			add_ball_and_stick.ball_and_stick_ = temp__bool;
+			add_ball_and_stick.ball_and_stick_ = temp_bool;
 		}
 
-		void 
-		AddBallAndStickModel::setBallRadius
-			(const Real radius)
+		void AddBallAndStickModel::setBallRadius(const Real radius)
 		{
 			BALL_PRECONDITION
 				(radius > (Real)0,
@@ -120,21 +107,17 @@ namespace BALL
 			ball_radius_ = radius;
 		}
 
-		void 
-		AddBallAndStickModel::setStickRadius
-			(const Real radius)
+		void AddBallAndStickModel::setStickRadius(const Real radius)
 		{
 			BALL_PRECONDITION
 				(radius > (Real)0,
 				 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
-				 (AddBallAndStickModel::ERROR__STICK_RADIUS_LOWER_OR_EQUAL_ZERO));
+				 (AddBallAndStickModel::ERROR_STICK_RADIUS_LOWER_OR_EQUAL_ZERO));
 			
 			stick_radius_ = radius;
 		}
 
-		bool 
-		AddBallAndStickModel::start
-			()
+		bool AddBallAndStickModel::start()
 		{
 			// init model connector
 			getModelConnector()->setProperties(*this);
@@ -144,18 +127,14 @@ namespace BALL
 			return AtomBondModelBaseProcessor::start();
 		}
 				
-		bool 
-		AddBallAndStickModel::finish
-			()
+		bool AddBallAndStickModel::finish()
 		{
 			buildBondModels_();
 			
 			return true;
 		}
 				
-		Processor::Result 
-		AddBallAndStickModel::operator()
-			(Composite &composite)
+		Processor::Result AddBallAndStickModel::operator() (Composite &composite)
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -169,36 +148,36 @@ namespace BALL
 			removeGeometricObjects_(*atom, true);
 
 			// generate BallPrimitive
-			Sphere *__pSphere = createSphere_();
+			Sphere* pSphere = createSphere_();
 
 			BALL_PRECONDITION
-				(__pSphere != 0,
+				(pSphere != 0,
 				 BALL_MOLVIEW_BALLANDSTICKMODEL_ERROR_HANDLER
-				 (AddBallAndStickModel::ERROR__CANNOT_CREATE_SPHERE));
+				 (AddBallAndStickModel::ERROR_CANNOT_CREATE_SPHERE));
 
 			// carry on selected flag
-			__pSphere->Selectable::set(*atom);
+			pSphere->Selectable::set(*atom);
 
-			__pSphere->PropertyManager::set(*this);
-			__pSphere->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
+			pSphere->PropertyManager::set(*this);
+			pSphere->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK);
 
 			if (ball_and_stick_ == true)
 			{
-				__pSphere->setRadius(ball_radius_);
+				pSphere->setRadius(ball_radius_);
 			}
 			else
 			{
-				__pSphere->setRadius(stick_radius_);
+				pSphere->setRadius(stick_radius_);
 			}
 
-			__pSphere->setVertexAddress(atom->getPosition());
+			pSphere->setVertexAddress(atom->getPosition());
 			
 			atom->host(*getColorCalculator());
 
-			__pSphere->setColor(getColorCalculator()->getColor());
+			pSphere->setColor(getColorCalculator()->getColor());
 			
 			// append sphere in Atom
-			composite.appendChild(*__pSphere);
+			composite.appendChild(*pSphere);
 
 			// collect used atoms
 			insertAtom_(atom);
@@ -206,8 +185,7 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void AddBallAndStickModel::dump
-			(std::ostream& s, Size depth) const
+		void AddBallAndStickModel::dump(std::ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -232,37 +210,27 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void 
-		AddBallAndStickModel::read
-			(std::istream & /* s */)
+		void AddBallAndStickModel::read(std::istream & /* s */)
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		void 
-		AddBallAndStickModel::write
-			(std::ostream & /* s */) const
+		void AddBallAndStickModel::write(std::ostream & /* s */) const
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		Sphere *
-		AddBallAndStickModel::createSphere_
-			()
+		Sphere* AddBallAndStickModel::createSphere_()
 		{
 			return (Sphere *)(new Sphere());
 		}
 
-		Tube *
-		AddBallAndStickModel::createTube_
-			()
+		Tube* AddBallAndStickModel::createTube_()
 		{
 			return (Tube *)(new Tube());
 		}
 
-		TwoColoredTube *
-		AddBallAndStickModel::createTwoColoredTube_
-			()
+		TwoColoredTube*AddBallAndStickModel::createTwoColoredTube_()
 		{
 			return (TwoColoredTube *)(new TwoColoredTube());
 		}
