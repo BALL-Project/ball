@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.95 2004/07/02 14:16:52 amoll Exp $
+// $Id: scene.C,v 1.96 2004/07/02 15:01:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1122,7 +1122,7 @@ namespace BALL
 			else
 			{
 				glEnable(GL_FOG);
-				GLfloat color[4] = {0.0, 0.0, 0.0, 1};
+				GLfloat color[4] = {0.0, 0.0, 0.0, 0.4};
 				glFogfv(GL_FOG_COLOR, color);
 				glFogf(GL_FOG_START, 2.0);
 				glFogf(GL_FOG_END, 401 - stage_->getFogIntensity());
