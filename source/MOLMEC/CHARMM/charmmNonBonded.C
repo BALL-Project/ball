@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.11 2001/05/17 01:30:52 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.12 2001/05/17 18:25:21 anker Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -18,7 +18,33 @@ namespace BALL
 
 	// default constructor
 	CharmmNonBonded::CharmmNonBonded()
-		:	ForceFieldComponent()
+		throw()
+		:	ForceFieldComponent(),
+			electrostatic_energy_(0.0),
+			vdw_energy_(0.0),
+			solvation_energy_(0.0),
+			non_bonded_(),
+			is_torsion_(),
+			number_of_1_4_(0),
+			cut_off_(0.0),
+			cut_off_vdw_(0.0),
+			cut_on_vdw_(0.0),
+			cut_off_electrostatic_(0.0),
+			cut_on_electrostatic_(0.0),
+			cut_off_solvation_(0.0),
+			cut_on_solvation_(0.0),
+			inverse_difference_off_on_vdw_3_ (0.0),
+			inverse_difference_off_on_solvation_3_ (0.0),
+			inverse_difference_off_on_electrostatic_3_ (0.0),
+			scaling_vdw_1_4_(0.0),
+			scaling_electrostatic_1_4_(0.0),
+			use_dist_depend_dielectric_(),
+			// algorithm_type_(),
+			van_der_waals_parameters_(),
+			van_der_waals_parameters_14_(),
+			solvation_parameters_(),
+			solvation_(),
+			use_solvation_component_()
 	{	
 		// set component name
 		setName("CHARMM NonBonded");
@@ -27,7 +53,33 @@ namespace BALL
 
 	// constructor
 	CharmmNonBonded::CharmmNonBonded(ForceField& force_field)
-		:	ForceFieldComponent(force_field)
+		throw()
+		:	ForceFieldComponent(force_field),
+			electrostatic_energy_(0.0),
+			vdw_energy_(0.0),
+			solvation_energy_(0.0),
+			non_bonded_(),
+			is_torsion_(),
+			number_of_1_4_(0),
+			cut_off_(0.0),
+			cut_off_vdw_(0.0),
+			cut_on_vdw_(0.0),
+			cut_off_electrostatic_(0.0),
+			cut_on_electrostatic_(0.0),
+			cut_off_solvation_(0.0),
+			cut_on_solvation_(0.0),
+			inverse_difference_off_on_vdw_3_ (0.0),
+			inverse_difference_off_on_solvation_3_ (0.0),
+			inverse_difference_off_on_electrostatic_3_ (0.0),
+			scaling_vdw_1_4_(0.0),
+			scaling_electrostatic_1_4_(0.0),
+			use_dist_depend_dielectric_(),
+			// algorithm_type_(),
+			van_der_waals_parameters_(),
+			van_der_waals_parameters_14_(),
+			solvation_parameters_(),
+			solvation_(),
+			use_solvation_component_()
 	{
 		// set component name
 		setName("CHARMM NonBonded");
@@ -36,46 +88,138 @@ namespace BALL
 
 	// copy constructor
 	CharmmNonBonded::CharmmNonBonded(const CharmmNonBonded&	component, bool clone_deep)
-		:	ForceFieldComponent(component, clone_deep)
+		throw()
+		:	ForceFieldComponent(component, clone_deep),
+			electrostatic_energy_(component.electrostatic_energy_),
+			vdw_energy_(component.vdw_energy_),
+			solvation_energy_(component.solvation_energy_),
+			non_bonded_(component.non_bonded_),
+			is_torsion_(component.is_torsion_),
+			number_of_1_4_(component.number_of_1_4_),
+			cut_off_(component.cut_off_),
+			cut_off_vdw_(component.cut_off_vdw_),
+			cut_on_vdw_(component.cut_on_vdw_),
+			cut_off_electrostatic_(component.cut_off_electrostatic_),
+			cut_on_electrostatic_(component.cut_on_electrostatic_),
+			cut_off_solvation_(component.cut_off_solvation_),
+			cut_on_solvation_(component.cut_on_solvation_),
+			inverse_difference_off_on_vdw_3_
+				(component.inverse_difference_off_on_vdw_3_),
+			inverse_difference_off_on_solvation_3_
+				(component.inverse_difference_off_on_solvation_3_),
+			inverse_difference_off_on_electrostatic_3_
+				(component.inverse_difference_off_on_electrostatic_3_),
+			scaling_vdw_1_4_(component.scaling_vdw_1_4_),
+			scaling_electrostatic_1_4_(component.scaling_electrostatic_1_4_),
+			use_dist_depend_dielectric_(component.use_dist_depend_dielectric_),
+			algorithm_type_(component.algorithm_type_),
+			van_der_waals_parameters_(component.van_der_waals_parameters_),
+			van_der_waals_parameters_14_(component.van_der_waals_parameters_14_),
+			solvation_parameters_(component.solvation_parameters_),
+			solvation_(component.solvation_),
+			use_solvation_component_(component.use_solvation_component_)
 	{
-		non_bonded_ = component.non_bonded_;
-		number_of_1_4_ = component.number_of_1_4_;
-		solvation_ = component.solvation_;
-
-		electrostatic_energy_ = component.electrostatic_energy_;
-		vdw_energy_ = component.vdw_energy_;
-		solvation_energy_ = component.solvation_energy_;
-		algorithm_type_ = component.algorithm_type_;
-
-		cut_off_ = component.cut_off_;
-		cut_off_electrostatic_ = component.cut_off_electrostatic_;
-		cut_on_electrostatic_ = component.cut_on_electrostatic_;
-		cut_off_solvation_ = component.cut_off_solvation_;
-		cut_on_solvation_ = component.cut_on_solvation_;
-		cut_off_vdw_ = component.cut_off_vdw_;
-		cut_on_vdw_ = component.cut_on_vdw_;
-		inverse_difference_off_on_vdw_3_ = component.inverse_difference_off_on_vdw_3_;
-		inverse_difference_off_on_solvation_3_ = component.inverse_difference_off_on_solvation_3_;
-		inverse_difference_off_on_electrostatic_3_ = component.inverse_difference_off_on_electrostatic_3_;
-		scaling_vdw_1_4_ = component.scaling_vdw_1_4_;
-		scaling_electrostatic_1_4_ = component.scaling_electrostatic_1_4_;
-		use_solvation_component_ = component.use_solvation_component_;
 	}
 
 	// destructor
 	CharmmNonBonded::~CharmmNonBonded()
+		throw()
 	{
+		clear();
 	}
 
-	// This function determines the most efficient way to calculate all non-bonded atom pairs
-	// that depends on the number of atoms of the system.
-	// The function return value 0 if the number of atoms is so small that the brute force all against
-	// all comparison is the most efficient way. Otherwise it returns 1. 
+	// assignemnt
+	const CharmmNonBonded& CharmmNonBonded::operator = 
+		(const CharmmNonBonded& charmm_non_bonded)
+		throw()
+	{
+		ForceFieldComponent::operator = (charmm_non_bonded);
+
+		electrostatic_energy_ = charmm_non_bonded.electrostatic_energy_;
+		vdw_energy_ = charmm_non_bonded.vdw_energy_;
+		solvation_energy_ = charmm_non_bonded.solvation_energy_;
+		non_bonded_ = charmm_non_bonded.non_bonded_;
+		is_torsion_ = charmm_non_bonded.is_torsion_;
+		number_of_1_4_ = charmm_non_bonded.number_of_1_4_;
+		cut_off_ = charmm_non_bonded.cut_off_;
+		cut_off_vdw_ = charmm_non_bonded.cut_off_vdw_;
+		cut_on_vdw_ = charmm_non_bonded.cut_on_vdw_;
+		cut_off_electrostatic_ = charmm_non_bonded.cut_off_electrostatic_;
+		cut_on_electrostatic_ = charmm_non_bonded.cut_on_electrostatic_;
+		cut_off_solvation_ = charmm_non_bonded.cut_off_solvation_;
+		cut_on_solvation_ = charmm_non_bonded.cut_on_solvation_;
+		inverse_difference_off_on_vdw_3_
+			 = charmm_non_bonded.inverse_difference_off_on_vdw_3_;
+		inverse_difference_off_on_solvation_3_
+			 = charmm_non_bonded.inverse_difference_off_on_solvation_3_;
+		inverse_difference_off_on_electrostatic_3_
+			 = charmm_non_bonded.inverse_difference_off_on_electrostatic_3_;
+		scaling_vdw_1_4_ = charmm_non_bonded.scaling_vdw_1_4_;
+		scaling_electrostatic_1_4_ = charmm_non_bonded.scaling_electrostatic_1_4_;
+		use_dist_depend_dielectric_ = charmm_non_bonded.use_dist_depend_dielectric_;
+		algorithm_type_ = charmm_non_bonded.algorithm_type_;
+		van_der_waals_parameters_ = charmm_non_bonded.van_der_waals_parameters_;
+		van_der_waals_parameters_14_ = charmm_non_bonded.van_der_waals_parameters_14_;
+		solvation_parameters_ = charmm_non_bonded.solvation_parameters_;
+		solvation_ = charmm_non_bonded.solvation_;
+		use_solvation_component_ = charmm_non_bonded.use_solvation_component_;
+
+		return *this;
+	}
+
+	// clear function
+	void CharmmNonBonded::clear()
+		throw()
+	{
+		electrostatic_energy_ = 0.0;
+		vdw_energy_ = 0.0;
+		solvation_energy_ = 0.0;
+		non_bonded_.clear();
+		is_torsion_.clear();
+		number_of_1_4_ = 0;
+		cut_off_ = 0.0;
+		cut_off_vdw_ = 0.0;
+		cut_on_vdw_ = 0.0;
+		cut_off_electrostatic_ = 0.0;
+		cut_on_electrostatic_ = 0.0;
+		cut_off_solvation_ = 0.0;
+		cut_on_solvation_ = 0.0;
+		inverse_difference_off_on_vdw_3_  = 0.0;
+		inverse_difference_off_on_solvation_3_  = 0.0;
+		inverse_difference_off_on_electrostatic_3_  = 0.0;
+		scaling_vdw_1_4_ = 0.0;
+		scaling_electrostatic_1_4_ = 0.0;
+		use_dist_depend_dielectric_ = false;
+		// algorithm_type_.clear();
+		van_der_waals_parameters_.clear();
+		van_der_waals_parameters_14_.clear();
+		solvation_parameters_.clear();
+		solvation_.clear();
+		use_solvation_component_ = false;
+
+		// BAUSTELLE: missing OCI
+		// ForceFieldComponent::clear();
+	}
+
+	bool CharmmNonBonded::operator == (const CharmmNonBonded& /* cnb */)
+		throw(Exception::NotImplemented)
+	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
+	}
+
+	// This function determines the most efficient way to calculate all
+	// non-bonded atom pairs that depends on the number of atoms of the
+	// system.  The function return value 0 if the number of atoms is so
+	// small that the brute force all against all comparison is the most
+	// efficient way. Otherwise it returns 1. 
 
 	MolmecSupport::PairListAlgorithmType	
 		CharmmNonBonded::determineMethodOfAtomPairGeneration()
+		throw()
 	{
-		MolmecSupport::PairListAlgorithmType algorithm_type = MolmecSupport::HASH_GRID;
+		MolmecSupport::PairListAlgorithmType algorithm_type 
+			= MolmecSupport::HASH_GRID;
+
 		if (force_field_->getAtoms().size() < 200) 
 		{ 
 			algorithm_type = MolmecSupport::BRUTE_FORCE;
@@ -87,15 +231,17 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmNonBonded::setup()
+		throw()
 	{
 		if (getForceField() == 0) 
 		{
-			Log.error() << "CharmmNonBonded::setup(): component not bound to a force field" << endl;
+			Log.error() << "CharmmNonBonded::setup(): "
+				<< "component not bound to a force field" << endl;
 			return false;
 		}
 
-		// clear vector of non-bonded atom pairs
-		non_bonded_.clear();
+		// clear everything
+		clear();
  
 		// create a shorthand for the options
 		Options& options = getForceField()->options;
@@ -103,7 +249,8 @@ namespace BALL
 		// extract the Lennard-Jones parameters
 		CharmmFF* charmm_force_field = dynamic_cast<CharmmFF*>(force_field_);
 		bool has_initialized_parameters = false;
-		if ((charmm_force_field != 0) && (charmm_force_field->hasInitializedParameters()))
+		if ((charmm_force_field != 0) 
+				&& (charmm_force_field->hasInitializedParameters()))
 		{
 			has_initialized_parameters = true;
 		}
@@ -114,7 +261,8 @@ namespace BALL
 
 			if (result == false) 
 			{	
-				Log.error() << "CharmmNonBonded::setup: cannot find section LennardJones" << endl;
+				Log.error() << "CharmmNonBonded::setup(): "
+					<< "cannot find section LennardJones" << endl;
 				return false;
 			}
 
@@ -123,7 +271,8 @@ namespace BALL
 
 			if (result == false) 
 			{	
-				Log.error() << "CharmmNonBonded::setup: cannot find section LennardJones14" << endl;
+				Log.error() << "CharmmNonBonded::setup(): "
+					<< "cannot find section LennardJones14" << endl;
 				return false;
 			}
 
@@ -177,8 +326,9 @@ namespace BALL
 				String value = van_der_waals_parameters_.options["ATOM"];
 				if ((value != "CDIEL") && (value != "RDIEL"))
 				{
-					Log.warn() << "CharmmNonBonded::setup: unknown CHARMM argument for ATOM: " << value 
-							<< "   - using distance dependent electrostatics." << endl;
+					Log.warn() << "CharmmNonBonded::setup(): "
+						<< "unknown CHARMM argument for ATOM: " << value 
+						<< "   - using distance dependent electrostatics." << endl;
 				}
 				
 				if (value == "CDIEL")
@@ -331,34 +481,49 @@ namespace BALL
 			{
 				if (!solvation_parameters_.assignParameters(solvation_[i], i)) 
 				{
-					Log.warn() << "CharmmNonBonded::setup: no solvation parameters for atom type "
-											<< i << " (" << getForceField()->getParameters().getAtomTypes().getTypeName(i) << ")" << endl;
+					Log.warn() << "CharmmNonBonded::setup(): "
+						<< "no solvation parameters for atom type "
+						<< i << " (" 
+						<< getForceField()->getParameters().getAtomTypes().getTypeName(i) 
+						<< ")" << endl;
 				}
 			} 
 		}
 
 		return true;
-	}
+
+	} // CharmmNonBonded::setup()
 
 
 	// Build a vector of non-bonded atom pairs with the vdw parameters 
 	// The vector starts with 1-4 interactions
 	void CharmmNonBonded::buildVectorOfNonBondedAtomPairs
 		(const vector< pair<Atom*, Atom*> >& atom_vector)
+		throw()
 	{
+		// throw away the old rubbish
+		non_bonded_.clear();
+		is_torsion_.clear();
+
+		// resize non_bonded_ if necessary
+		if (non_bonded_.capacity() < atom_vector.size())
+		{
+			// reserve the required size plus 20% 
+			// to avoid frequent resizing)
+			non_bonded_.reserve((Size)((double)atom_vector.size() * 1.2));
+		}
 		// bool vector for storing torsion information
-		vector<bool> is_torsion;
-		is_torsion.reserve(atom_vector.size());
+		is_torsion_.reserve(atom_vector.size());
 
 		// Iterate over all atom pairs in atom_vector and test if the atoms build a torsion
 		vector< pair <Atom*, Atom*> >::const_iterator pair_it = atom_vector.begin();
 
 		for ( ; pair_it != atom_vector.end(); ++pair_it) 
 		{
-			is_torsion.push_back(pair_it->first->isVicinal(*pair_it->second));
+			is_torsion_.push_back(pair_it->first->isVicinal(*pair_it->second));
 		}
 
-		vector< bool >::iterator bool_it = is_torsion.begin(); 
+		vector< bool >::iterator bool_it = is_torsion_.begin(); 
 		LennardJones::Data tmp;
 		Atom*	atom1;
 		Atom* atom2;
@@ -418,7 +583,7 @@ namespace BALL
 		number_of_1_4_ = (Size)non_bonded_.size();
 
 		// Iterate and search non torsions, fill them in the vector non_bonded_
-		bool_it = is_torsion.begin();
+		bool_it = is_torsion_.begin();
  
 		for (pair_it = atom_vector.begin(); pair_it != atom_vector.end(); ++pair_it, ++bool_it) 
 		{
@@ -452,6 +617,7 @@ namespace BALL
 	BALL_INLINE 
 	void CHARMMcalculateMinimumImage
 		(Vector3& difference, Vector3& period, Vector3& half_period)
+		throw()
 	{
 		if (difference.x < -half_period.x) 
 		{	
@@ -503,6 +669,7 @@ namespace BALL
 		 double& electrostatic_energy,
 		 double& vdw_energy,
 		 double& solvation_energy)
+		throw()
 	{
 		Vector3 difference = it->atom1->getPosition() - it->atom2->getPosition();      
 
@@ -616,6 +783,7 @@ namespace BALL
 		 bool use_selection,		
 		 bool use_periodic_boundary, 
 		 bool use_dist_depend)
+		throw()
 	{
 		// calculate the difference vector between the two atoms
 		Vector3 direction = it->atom1->getPosition() - it->atom2->getPosition(); 
@@ -876,6 +1044,7 @@ namespace BALL
 
 	// This method calculates the current energy resulting from non-bonded interactions 
 	double CharmmNonBonded::updateEnergy()
+		throw()
 	{
 		// Calculate squared cut_off values
 		double	cut_off_vdw_2 = SQR(cut_off_vdw_);
@@ -1074,6 +1243,7 @@ namespace BALL
 		solvation_
 
 	void CharmmNonBonded::updateForces()
+		throw()
 	{
 		// Define variables for the squared cut_offs, the unit factors and so on
 		double cut_off_electrostatic_2 = SQR(cut_off_electrostatic_);
@@ -1228,16 +1398,19 @@ namespace BALL
 
 
 	double CharmmNonBonded::getElectrostaticEnergy() const
+		throw()
 	{
 		return electrostatic_energy_;
 	}
 
 	double CharmmNonBonded::getVdwEnergy() const
+		throw()
 	{
 		return vdw_energy_;
 	}
  
 	double CharmmNonBonded::getSolvationEnergy() const
+		throw()
 	{
 		return solvation_energy_;
 	}
