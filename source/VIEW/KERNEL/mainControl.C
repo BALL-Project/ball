@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.160 2005/02/06 20:57:09 oliver Exp $
+// $Id: mainControl.C,v 1.161 2005/02/08 06:09:29 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -899,12 +899,6 @@ namespace BALL
 				enableLoggingToFile();
 			}
 
-		#ifdef BALL_PLATFORM_WINDOWS
-			// workaround for strange microsoft windows behaviour
-// 			x_pos += 4;
-// 			y_pos += 23;
-		#endif
-			
 			resize(QSize(w,h));
 			move(QPoint(x_pos, y_pos));
 

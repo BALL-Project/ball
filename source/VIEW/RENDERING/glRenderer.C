@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.60 2005/02/07 16:41:07 amoll Exp $
+// $Id: glRenderer.C,v 1.61 2005/02/08 06:09:30 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -21,6 +21,8 @@
 
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/KERNEL/system.h>
+
+#include <unistd.h> // sleep
 
 #include <qfont.h>
 #include <qpainter.h>
@@ -1654,7 +1656,7 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 #ifdef BALL_PLATFORM_WINDOWS
 			Sleep(1);
 #else
-			sleep(1);
+//			sleep(1);
 #endif
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.2 2005/02/06 20:57:11 oliver Exp $
+// $Id: vertexBuffer.C,v 1.3 2005/02/08 06:09:30 oliver Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -208,7 +208,7 @@ void MeshBuffer::clear()
 #ifdef BALL_PLATFORM_WINDOWS
 		Sleep(1);
 #else
-		sleep(1);
+		// sleep(1);
 #endif
 	}
 	mesh_ = 0;
