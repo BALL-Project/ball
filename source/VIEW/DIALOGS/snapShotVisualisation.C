@@ -17,13 +17,16 @@ namespace BALL
 
 SnapshotVisualisationDialog::SnapshotVisualisationDialog(QWidget* parent,  const char* name)
 	: SnapshotVisualisationDialogData(parent, name),//, modal, fl),
-		ModularWidget(name)
+		ModularWidget(name),
+		snap_shot_manager_(0),
+		init_(true)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new SnapshotVisualisationDialog" << this << std::endl;
 #endif
 	tmp_.setNum(1);
 	ModularWidget::registerWidget(this);
+	init_ = false;
 }
 
 SnapshotVisualisationDialog::~SnapshotVisualisationDialog() throw()
@@ -184,13 +187,8 @@ void SnapshotVisualisationDialog::animateClicked()
 
 void SnapshotVisualisationDialog::close()
 {
+	// show last Snapshot
   lastSnapshotClicked();
-	update_();
-	if (snap_shot_manager_->getTrajectoryFile())
-	{
-		delete snap_shot_manager_->getTrajectoryFile();
-	}
-	delete snap_shot_manager_;
 }
 
 void SnapshotVisualisationDialog::backward(Size nr)
@@ -256,12 +254,13 @@ Size SnapshotVisualisationDialog::getEndSnapshot() const
 	catch(...)
 	{
 		Log.error() << "Invalid End-Snapshot" << std::endl;
-		return number_of_snapshots_;
+		return 0;
 	}
 }
 
 void SnapshotVisualisationDialog::sliderMovedToPos()
 {
+	if (snap_shot_manager_ == 0) return;
 	currentSnapshot->setText(String(snapShotSlider->value()).c_str());
 	Position tmpnr = (currentSnapshot->text().toInt());	
 	
