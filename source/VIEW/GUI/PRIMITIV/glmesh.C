@@ -1,4 +1,4 @@
-// $Id: glmesh.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
+// $Id: glmesh.C,v 1.5.4.1 2002/08/16 15:33:37 anhi Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 #include <GL/gl.h>
@@ -113,90 +113,227 @@ namespace BALL
 
 			glPushMatrix();
 
-			glColor4ub(255,255,255,255);
-			
-			unsigned int precision;
-			unsigned int mode;
-
-			getDrawingModeAndPrecision(mode, precision);
-
-			Triangle t;
-			Vector3 v, n;
-
-			if (mode == GeometricObject::PROPERTY__DRAWING_MODE_DOTS)
-			{
-				glBegin(GL_POINTS);
-					
-				// draw the triangles with lines
-				for (Size index = 0; index < triangle.size(); ++index)
+			// If we have only one color for the whole mesh, this can
+			// be assigned efficiently
+			if (colorList.size() < vertex.size())
+			{	
+				if (colorList.size() == 0)
 				{
-					t = triangle[index];
-					
-					v = vertex[t.v1];
-					
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+					glColor4ub(255,255,255,255);
 				}
-
-				glEnd();
-				// ------------------
-			}
-			else if (mode == GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME)
-			{
-				// draw the triangles with lines
-				for (Size index = 0; index < triangle.size(); ++index)
+				else
 				{
-					glBegin(GL_LINE_STRIP);
+					glColor4ub((unsigned char)colorList[0].getRed(),
+										 (unsigned char)colorList[0].getGreen(),
+										 (unsigned char)colorList[0].getBlue(),
+										 (unsigned char)colorList[0].getAlpha());
+				}
 					
-					t = triangle[index];
-					
-					v = vertex[t.v1];
-					
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					v = vertex[t.v2];
-					
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					v = vertex[t.v3];
+				unsigned int precision;
+				unsigned int mode;
 
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
+				getDrawingModeAndPrecision(mode, precision);
+
+				Triangle t;
+				Vector3 v, n;
+
+				if (mode == GeometricObject::PROPERTY__DRAWING_MODE_DOTS)
+				{
+					glBegin(GL_POINTS);
+
+					// draw the triangles with lines
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						t = triangle[index];
+
+						v = vertex[t.v1];
+
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+					}
+
 					glEnd();
+					// ------------------
 				}
-				// ------------------
-			}
-			else
-			{
-				// draw the triangles
-				for (Size index = 0; index < triangle.size(); ++index)
+				else if (mode == GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME)
 				{
-					glBegin(GL_TRIANGLES);
-					
-					t = triangle[index];
-					
-					v = vertex[t.v1];
-					n = normal[t.v1];
-					
-					glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					v = vertex[t.v2];
-					n = normal[t.v2];
-					
-					glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					v = vertex[t.v3];
-					n = normal[t.v3];
-					
-					glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					glEnd();
-				}
-				// ------------------
-			}
+					// draw the triangles with lines
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						glBegin(GL_LINE_STRIP);
 
+						t = triangle[index];
+
+						v = vertex[t.v1];
+
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v2];
+
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v3];
+
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						glEnd();
+					}
+					// ------------------
+				}
+				else
+				{
+					// draw the triangles
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						glBegin(GL_TRIANGLES);
+
+						t = triangle[index];
+
+						v = vertex[t.v1];
+						n = normal[t.v1];
+
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v2];
+						n = normal[t.v2];
+
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v3];
+						n = normal[t.v3];
+
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						glEnd();
+					}
+					// ------------------
+				}
+			}
+			else // we have a different color for each vertex
+			{	
+				unsigned int precision;
+				unsigned int mode;
+
+				getDrawingModeAndPrecision(mode, precision);
+
+				Triangle t;
+				Vector3 v, n;
+
+				if (mode == GeometricObject::PROPERTY__DRAWING_MODE_DOTS)
+				{
+					glBegin(GL_POINTS);
+
+					// draw the triangles with lines
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						t = triangle[index];
+
+						v = vertex[t.v1];
+						// set the color
+						ColorRGBA col = colorList[t.v1];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+		
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+					}
+
+					glEnd();
+					// ------------------
+				}
+				else if (mode == GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME)
+				{
+					// draw the triangles with lines
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						glBegin(GL_LINE_STRIP);
+
+						t = triangle[index];
+
+						v = vertex[t.v1];
+
+						ColorRGBA col = colorList[t.v1];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v2];
+						
+						col = colorList[t.v2];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v3];
+
+						col = colorList[t.v3];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						glEnd();
+					}
+					// ------------------
+				}
+				else
+				{
+					// draw the triangles
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						glBegin(GL_TRIANGLES);
+
+						t = triangle[index];
+
+						v = vertex[t.v1];
+						n = normal[t.v1];
+						ColorRGBA col = colorList[t.v1];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v2];
+						n = normal[t.v2];
+						col = colorList[t.v2];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v3];
+						n = normal[t.v3];
+						col = colorList[t.v3];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						glEnd();
+					}
+					// ------------------
+				}
+			}
 			glPopMatrix();
 
 			return true;

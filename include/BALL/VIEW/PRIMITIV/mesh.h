@@ -1,4 +1,4 @@
-// $Id: mesh.h,v 1.10 2001/07/16 14:49:33 amoll Exp $
+// $Id: mesh.h,v 1.10.4.1 2002/08/16 15:33:37 anhi Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -202,6 +202,17 @@ namespace BALL
 				throw();
 
 			//@}
+			/** @name Attributes
+			 */
+			//@{
+			
+			/** The colors belonging to each vertex. If this list has *less* entries than
+					there are vertices in this mesh, we take the first element to color the whole
+					mesh. If it is *empty*, we use the color white.
+			 */
+			vector<ColorRGBA> colorList;
+			//@}
+			
 			/**	@name	Storers
 			*/
 			//@{
