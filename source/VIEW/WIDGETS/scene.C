@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.155 2004/11/26 23:12:45 amoll Exp $
+// $Id: scene.C,v 1.156 2004/12/16 13:18:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -527,6 +527,8 @@ namespace BALL
 	Timer t;
 	t.start();
 #endif
+			gl_renderer_.initSolid();
+
 			PrimitiveManager::RepresentationList::ConstIterator it;
 			// ============== render Clipping planes ==============================
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();

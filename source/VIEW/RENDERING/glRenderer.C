@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.53 2004/12/13 16:46:59 amoll Exp $
+// $Id: glRenderer.C,v 1.54 2004/12/16 13:18:50 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -774,9 +774,13 @@ namespace BALL
 				if (render_mode_ == RENDER_MODE_SOLID)
 				{
 		 			glDisable(GL_CULL_FACE);
+					glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+				}
+				else
+				{
+					glEnable(GL_CULL_FACE);
 				}
 					
- 			  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
 				glBegin(GL_TRIANGLES);
 				for (Size index = 0; index < mesh.triangle.size(); ++index)
 				{
@@ -793,12 +797,13 @@ namespace BALL
 					vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
 				}
 				glEnd();
- 			  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
 
 				if (render_mode_ == RENDER_MODE_SOLID)
 				{
-		 			glEnable(GL_CULL_FACE);
+					glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
 				}
+
+		 		glEnable(GL_CULL_FACE);
 					
 				// ------------------
 			}
