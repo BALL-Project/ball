@@ -1,17 +1,21 @@
-// $Id: dialogs.doc,v 1.6 2003/12/15 02:39:22 amoll Exp $
+// $Id: dialogs.doc,v 1.6.2.1 2004/05/18 14:16:43 amoll Exp $
 
 /** \defgroup ViewDialogs QT Dialogs
 		\ingroup Visualisation
 		This section contains all dialogs, which are created with QT.
 		All dialogs should be constructed with the QT designer and the 
 		implementation has to be sourced out to a derived class.
-		This has two goals:
-		- Seperate the design of the dialogs from the implementation
-		- Make the dialogs independent from a specific version of the QT libary
-			(There are serious problems otherwise, because QT is inconsistent between
-			 different version of the libary)
-		<p>
 		(This sound worse, than it is. Just have a look at a simple dialog 
 		(e.g. SetCamera) and you will see its not that bad.)
+		This outsourcing has two goals:
+		- Seperate the design of the dialogs from the implementation. This accelerates
+			the redesign of existing dialogs.
+		- Make the dialogs independent from a specific version of the QT libary
+			(Otherwise there are serious problems, because QT is inconsistent between
+			 different versions of the libary.)
+		<p>
+		Some dialogs are derived from ModularWidget to participate in the sending and receiving
+		of Message 's. The other dialogs have to be informed manualy, it something happend, that
+		they need to know, e.g. to disable certain controls.
  */
 
