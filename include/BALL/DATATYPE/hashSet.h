@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.4 1999/12/28 21:29:14 oliver Exp $ 
+// $Id: hashSet.h,v 1.5 1999/12/29 00:31:13 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -218,19 +218,13 @@ namespace BALL
 		// --- STORERS
 
 		/*
-		friend istream &operator >>
-			(istream &s,
-			 HashSet &hash_set);
+		friend istream& operator >> BALL_TEMPLATE_NULL_ARGS (std::istream& s, HashSet& hash_set);
+			
+		friend ostream& operator << BALL_TEMPLATE_NULL_ARGS (std::ostream& s, const HashSet& hash_set);
 
-		friend ostream &operator <<
-			(ostream &s,
-			 const HashSet &hash_set);
+		void read(std::istream& s);
 
-		void read
-			(istream &s);
-
-		void write
-			(ostream &s) const;
+		void write(std::ostream& s) const;
 		*/      
 
 		// --- INTERNAL ITERATORS
@@ -450,19 +444,20 @@ namespace BALL
 
 		private:
 
-		PointerType find_(const Key& key, HashIndex& index);
-			
-		PointerType find_(const Key& key, HashIndex& index) const;
-
 		void deleteBuckets_();
 
-		HashIndex hash_(const Key& key) const;
+		Position hashBucket_(const Key& key) const;
 
 		void rehash_();
 
 		// --- ATTRIBUTES
 
+		/*_	The number of elements in the hash set
+		*/
 		Size					size_;
+
+		/*_	The capacity - usually the number of buckets
+		*/
 		Size					capacity_;
 
 		/*_	Buckets are stored as a vector of linked lists of Nodes 
@@ -625,7 +620,7 @@ namespace BALL
 	HashSet<Key>::Iterator HashSet<Key>::find(const Key& key)
 	{
 		Iterator it = end();
-		HashIndex bucket = hash_(key);
+		Position bucket = hashBucket_(key);
 		Node* node_ptr = bucket_[bucket];
 		while (node_ptr != 0)
 		{
@@ -660,7 +655,7 @@ namespace BALL
 				rehash_();
 			}
 			
-			HashIndex bucket = hash_(item);
+			Position bucket = hashBucket_(item);
 			
 			bucket_[bucket] = newNode_(item, bucket_[bucket]);
 			
@@ -675,9 +670,9 @@ namespace BALL
 	template <class Key>
 	Size HashSet<Key>::erase(const KeyType& key)
 	{
-		HashIndex bucket = hash_(key);
-		Node*		previous = 0;
-		Node*		node_ptr = bucket_[bucket];
+		Position	bucket = hashBucket_(key);
+		Node*			previous = 0;
+		Node*			node_ptr = bucket_[bucket];
 		
 		for (; node_ptr != 0; node_ptr = node_ptr->next)
 		{
@@ -860,9 +855,9 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	HashIndex HashSet<Key>::hash_(const Key& key) const
+	HashIndex HashSet<Key>::hashBucket_(const Key& key) const
 	{
-		return (HashIndex)(hash(key) % bucket_.size());
+		return (Position)((HashIndex)hash(key) % (HashIndex)bucket_.size());
 	}
 
  
@@ -892,7 +887,7 @@ namespace BALL
       for (node = old_buckets[i]; node != 0; node = next_node)
       {
         next_node = node->next;
-        Position new_bucket = (Position)hash_(node->value);
+        Position new_bucket = hashBucket_(node->value);
         node->next = bucket_[new_bucket];
         bucket_[new_bucket] = node;
 			}
