@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ReconstructFragmentProcessor_test.C,v 1.4 2003/10/13 19:06:33 oliver Exp $
+// $Id: ReconstructFragmentProcessor_test.C,v 1.5 2004/03/20 13:22:25 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,7 +21,7 @@
 
 ///////////////////////////
 
-START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.4 2003/10/13 19:06:33 oliver Exp $")
+START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.5 2004/03/20 13:22:25 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -94,6 +94,7 @@ RESULT
 CHECK([EXTRA]Contents of FragmentDB -- proteinogenous amino acids)
 	ReconstructFragmentProcessor rfp(frag_db);
 	ResidueChecker rc(frag_db);
+	rc.disable(ResidueChecker::OVERLAPPING_ATOMS);
 
 	String aa_names[20] = {"ALA", "ARG", "ASN", "ASP", "CYS", 
 												 "GLN", "GLU", "GLY", "HIS", "ILE",
@@ -115,7 +116,10 @@ CHECK([EXTRA]Contents of FragmentDB -- proteinogenous amino acids)
 		protein->insert(*chain);
 		protein->setName("P");
 		S.insert(*protein);
+		S.apply(frag_db.normalize_names);
+		S.apply(frag_db.build_bonds);
 		S.apply(rfp);
+		S.apply(frag_db.build_bonds);
 		S.apply(rc);
 		TEST_EQUAL(rc.getStatus(), true)
 	}

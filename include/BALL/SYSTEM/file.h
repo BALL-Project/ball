@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.61 2004/02/23 17:26:08 anhi Exp $
+// $Id: file.h,v 1.62 2004/03/20 13:22:25 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_FILE_H
@@ -733,7 +733,7 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& os, const BinaryFileAdaptor<T>& data)
 	{
-		os.write((const char*)&(data.getData()), sizeof(T));
+		os.write(reinterpret_cast<const char*>(&data.getData()), sizeof(T));
 		return os;
 	}
 
@@ -741,7 +741,7 @@ namespace BALL
 	template <typename T>
 	std::istream& operator >> (std::istream& is, BinaryFileAdaptor<T>& data)
 	{
-		is.read((char*)&(data.getData()), sizeof(T));
+		is.read(reinterpret_cast<char*>(&data.getData()), sizeof(T));
 		return is;
 	}
 

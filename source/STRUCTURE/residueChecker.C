@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.C,v 1.23 2003/08/26 09:18:28 oliver Exp $
+// $Id: residueChecker.C,v 1.24 2004/03/20 13:22:25 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/residueChecker.h>
@@ -20,7 +20,8 @@ namespace BALL
 	ResidueChecker::ResidueChecker()
 		:	fragment_db_(0),
 			status_(true),
-			tests_(ResidueChecker::NUMBER_OF_TESTS)
+			tests_(ResidueChecker::NUMBER_OF_TESTS),
+			selection_(false)
 	{
 		// Enable all tests by default.
 		tests_.fill();
@@ -30,7 +31,8 @@ namespace BALL
 		:	UnaryProcessor<Residue>(),
 			fragment_db_(&fragment_db),
 			status_(true),
-			tests_(ResidueChecker::NUMBER_OF_TESTS)
+			tests_(ResidueChecker::NUMBER_OF_TESTS),
+			selection_(false)
 	{
 		// Enable all tests by default.
 		tests_.fill();		
@@ -41,7 +43,8 @@ namespace BALL
 		:	UnaryProcessor<Residue>(),
 			fragment_db_(residue_checker.fragment_db_),
 			status_(residue_checker.status_),
-			tests_(ResidueChecker::NUMBER_OF_TESTS)
+			tests_(residue_checker.tests_),
+			selection_(residue_checker.selection_)
 	{
 	}
 
@@ -111,7 +114,13 @@ namespace BALL
 				if (isEnabled(UNKNOWN_RESIDUES))
 				{
 					Log.warn() << "ResidueChecker: didn't find a reference fragment for " << res_name << endl;
-					status_ &= false;	
+					status_ = false;
+
+					// If selection is enabled, mark the whol residue
+					if (selection_)
+					{
+						residue.select();
+					}
 				}
 			} 
 			else 
@@ -147,6 +156,11 @@ namespace BALL
 				Log.warn() << "ResidueChecker: suspect charge of " << atom_it->getCharge()
 					<< " for " << atom_it->getName() << " in " << res_name << std::endl;
 				result = false;
+				// If selection is enabled, mark the atom
+				if (selection_)
+				{
+					const_cast<Atom&>(*atom_it).select();
+				}
 			}
 		}
 
@@ -156,6 +170,11 @@ namespace BALL
 			Log.warn() << "ResidueChecker: in residue " << res_name << ": total charge of " 
 								 << total_charge << " is too negative." << endl;
 			result = false;
+			// If selection is enabled, mark the residue
+			if (selection_)
+			{
+				const_cast<Residue&>(residue).select();
+			}
 		}
 
 		if (isEnabled(LARGE_NET_CHARGE) && (total_charge > 2.0))
@@ -163,6 +182,11 @@ namespace BALL
 			Log.warn() << "ResidueChecker: in residue " << res_name << ": total charge of " 
 								 << total_charge << " is too positive." << endl;
 			result = false;
+			// If selection is enabled, mark the residue
+			if (selection_)
+			{
+				const_cast<Residue&>(residue).select();
+			}
 		}
 
 		// check for integrality of charges
@@ -172,6 +196,11 @@ namespace BALL
 			Log.warn() << "ResidueChecker: in residue " << res_name << ": residue total charge of " 
 								 << total_charge << " is not integral." << endl;
 			result = false;
+			// If selection is enabled, mark the residue
+			if (selection_)
+			{
+				const_cast<Residue&>(residue).select();
+			}
 		}
 	
 		return result;
@@ -209,6 +238,12 @@ namespace BALL
 				Log.warn() << "ResidueChecker: did not find atom " << atom_it->getName() << " of " 
 									 << res_name  << " in the reference residue " << reference.getName() << endl;
 				status_ = false;
+
+				// If selection is enabled, mark the residue
+				if (selection_)
+				{
+					const_cast<Residue&>(residue).select();
+				}
 			}
 		}
 
@@ -223,6 +258,12 @@ namespace BALL
 			}
 			Log.warn() << " (template was " << reference.getName() << ")" << endl;
 			status_ = false;
+
+			// If selection is enabled, mark the residue
+			if (selection_)
+			{
+				const_cast<Residue&>(residue).select();
+			}
 		}
 
 		return result;
@@ -232,7 +273,8 @@ namespace BALL
 		throw()
 	{
 		// Make sure we are suppose to do this.
-		if (!isEnabled(NAN_POSITIONS) && !isEnabled(OVERLAPPING_ATOMS) && !isEnabled(DUPLICATE_ATOM_NAMES))
+		if (!isEnabled(NAN_POSITIONS) && !isEnabled(STRONGLY_OVERLAPPING_ATOMS) 
+				&& !isEnabled(OVERLAPPING_ATOMS) && !isEnabled(DUPLICATE_ATOM_NAMES))
 		{
 			return true;
 		}
@@ -250,6 +292,11 @@ namespace BALL
 			{
 				Log.warn() << "ResidueChecker: illegal atom position (not a number) for atom "
 									 << atom_it->getName() << " of " << res_name << endl;
+				// Mark the atoms affected
+				if (selection_)
+				{
+					const_cast<Atom&>(*atom_it).select();
+				}
 				result = false;
 			}
 			
@@ -257,15 +304,61 @@ namespace BALL
 			AtomConstIterator atom_it2;
 			for (atom_it2 = atom_it, ++atom_it2; +atom_it2; ++atom_it2)
 			{
-				
-				// Check for overlapping atoms (closer than 0.5 Angstrom)
-				if (isEnabled(OVERLAPPING_ATOMS)
-						&& (pos.getSquareDistance(atom_it2->getPosition()) < 0.5))
+	
+				// Check for strongly overlapping atoms (closer than 0.2 Angstrom)
+				if (isEnabled(STRONGLY_OVERLAPPING_ATOMS)
+						&& (pos.getSquareDistance(atom_it2->getPosition()) < 0.04))
 				{
-					Log.warn() << "ResidueChecker: atoms too close -- distance between " 
+					Log.warn() << "ResidueChecker: atoms far too close -- distance between " 
 										 << atom_it->getName() << " and " << atom_it2->getName() 
 										 << " in " << res_name << " is " << pos.getDistance(atom_it2->getPosition()) 
 										 << " A." << std::endl;
+					// Mark the atoms affected
+					if (selection_)
+					{
+						const_cast<Atom&>(*atom_it).select();
+						const_cast<Atom&>(*atom_it2).select();
+					}
+					result = false;
+				}
+
+				// Check for overlapping atoms (closer than vdW radii minus 0.5 Angstrom)
+				if (isEnabled(OVERLAPPING_ATOMS) && (!atom_it->isBoundTo(*atom_it2)))
+				{
+					double radius1 = atom_it->getElement().getVanDerWaalsRadius();
+					if (radius1 == 0.0)
+					{
+						radius1 = atom_it->getElement().getAtomicRadius();
+					}
+					double radius2 = atom_it2->getElement().getVanDerWaalsRadius();
+					if (radius2 == 0.0)
+					{
+						radius2 = atom_it2->getElement().getAtomicRadius();
+					}
+
+					// Computte the square of the sum of the vdw radii minus 0.5 Angstrom
+					// overlap.
+					double min_dist = radius1 + radius2 - 0.5;
+					min_dist *= min_dist;
+
+					// If the atoms are further apart, skip them.
+					if (pos.getSquareDistance(atom_it2->getPosition()) > min_dist)
+					{
+						continue;
+					}
+
+					// Complain about the overlap and mark the two atoms.
+					Log.warn() << "ResidueChecker: atoms too close -- distance between " 
+										 << atom_it->getName() << " and " << atom_it2->getName() 
+										 << " in " << res_name << " is " << pos.getDistance(atom_it2->getPosition()) 
+										 << " A (min: " << sqrt(min_dist) << ")." << std::endl;
+
+					// Mark the atoms affected
+					if (selection_)
+					{
+						const_cast<Atom&>(*atom_it).select();
+						const_cast<Atom&>(*atom_it2).select();
+					}
 					result = false;
 				}
 
@@ -276,6 +369,8 @@ namespace BALL
 					Log.warn() << "ResidueChecker: duplicate atom name " << atom_it->getName()
 										 << " in " << res_name << "." << std::endl;
 					result = false;
+					const_cast<Atom&>(*atom_it).select();
+					const_cast<Atom&>(*atom_it2).select();
 				}
 			}
 		}
@@ -325,6 +420,12 @@ namespace BALL
 										 << "between " << first->getName() << " and " << second->getName() << " suspect: " 
 										 << distance << " A instead of " << bond_it->getLength() << " A" << endl;
 					result = false;
+					// If selection is enabled, mark the two atoms
+					if (selection_)
+					{
+						const_cast<Atom*>(first)->select();
+						const_cast<Atom*>(second)->select();
+					}
 				}
 
 				// Check for the element type of each atom
@@ -338,6 +439,11 @@ namespace BALL
 										 // This could be the anchor of a ResidueRectfifier...
 										 // (const_cast<Atom*> (first))->setElement(bond_it->getFirstAtom()->getElement());
 					result = false;
+					// If selection is enabled, mark the atom
+					if (selection_)
+					{
+						const_cast<Atom*>(first)->select();
+					}
 				}
 				if (isEnabled(ELEMENTS)
 						&& (second->getElement() != bond_it->getSecondAtom()->getElement()))
@@ -347,6 +453,11 @@ namespace BALL
 										 << second->getElement().getSymbol() << " should be "
 										 << bond_it->getSecondAtom()->getElement().getSymbol() << endl;
 					result = false;
+					// If selection is enabled, mark the atom
+					if (selection_)
+					{
+						const_cast<Atom*>(second)->select();
+					}
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.h,v 1.20 2004/02/23 17:26:07 anhi Exp $
+// $Id: residueChecker.h,v 1.21 2004/03/20 13:22:25 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -91,10 +91,15 @@ namespace BALL
 					error after failing simulations, minimizations, etc.
 				</p>
 				<li>
-					overlapping atoms
+					strongly overlapping atoms
 				</li>
 				<p>
 					Check whether any pair of atoms within a residue is closer than 0.5 Angstrom.
+				</p>
+				<li> overlapping atoms
+				</li>
+				<p>
+					Check whether any pair of atoms not sharing a bond is further apart then the sum of their vdW radii minus 0.4 Ansgtrom
 				</p>
 				<li>
 					duplicate atom names
@@ -149,6 +154,8 @@ namespace BALL
 			///
 			OVERLAPPING_ATOMS,
 			///
+			STRONGLY_OVERLAPPING_ATOMS,
+			///
 			DUPLICATE_ATOM_NAMES,
 			/// 
 			UNKNOWN_RESIDUES,
@@ -176,11 +183,12 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~ResidueChecker();
-
 		//@}
+
 		/**	Accessors
 		*/
 		//@{
+
 		/**	Enable a specific test
 		*/
 		void enable(TestType t) throw();
@@ -188,11 +196,18 @@ namespace BALL
 		/**	Disable a specific test
 		*/
 		void disable(TestType t) throw();
-		//@}
-		
-		/**	@name	Predicates
+
+		/**	Enable selection of problematic atoms
 		*/
-		//@{
+		void enableSelection() throw() { selection_ = true; }
+
+		/**	Disable selection of problematic atoms
+		*/
+		void disableSelection() throw() { selection_ = false; }
+
+		/**	Return the status of the selection
+		*/
+		bool isSelectionEnabled() throw() { return selection_; }
 
 		/**	Return true if the last application did not produce any warning.
 				The getStatus method may be called after applying the ResidueChecker 
@@ -201,13 +216,14 @@ namespace BALL
 		*/
 		bool getStatus() const;
 
-		/**	Check whether a specific test is enabled.
+
+
+		/**	Check whether a specific test is enabled
 		*/
 		bool isEnabled(TestType t) const throw();
-
 		//@}
 
-		/**	Processor related methods
+		/**	Processor-related methods
 		*/
 		//@{
 
@@ -251,10 +267,18 @@ namespace BALL
 		//@}
 			
 		protected:
-
+		
+		// The fragment database
 		FragmentDB*	fragment_db_;
+
+		// Bool flag indicating whether any of the tests failed
 		bool				status_;
+
+		// A bitvector containing the flags for the tests
 		BitVector		tests_;
+
+		// If this flag is set, all atoms/residues having problems will be selected
+		bool				selection_;
 	}; 
   					
 } // namespace BALL
