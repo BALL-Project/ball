@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.62 2005/02/07 22:55:54 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.63 2005/02/21 16:26:21 anhi Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -1416,9 +1416,14 @@ AC_DEFUN(CF_CHECK_INLINE_TPL_ARGS, [
 		[
 			double d = bar< foo<3> >(2.0);
 		],
-		PROJECT[]_HAS_INLINE_TPL_ARGS=yes
+		PROJECT[]_HAS_INLINE_TPL_ARGS=true
 	)
-	AC_MSG_RESULT($PROJECT[]_HAS_INLINE_TPL_ARGS)
+	if test "${PROJECT[]_HAS_INLINE_TPL_ARGS}" = true ; then
+		AC_MSG_RESULT(yes)
+		AC_DEFINE(PROJECT[]_HAS_INLINE_TPL_ARGS)
+	else
+		AC_MSG_RESULT(no)
+	fi
 ])
 
 dnl
