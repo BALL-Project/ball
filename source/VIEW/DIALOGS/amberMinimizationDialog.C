@@ -351,7 +351,7 @@ void AmberMinimizationDialog::setUseConjugateGradient(bool use_CG)
 
 void AmberMinimizationDialog::advancedOptions()
 {
-	advancedOptionsDialog* dialog = new advancedOptionsDialog();
+	AdvancedOptionsDialog* dialog = new AdvancedOptionsDialog();
 	
 	//restore previos changes  in dialog
 	dialog->setOptions( nonbonded_cutoff, vdw_cutoff, vdw_cuton, electrostatic_cutoff, electrostatic_cuton,
