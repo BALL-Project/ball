@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.C,v 1.5 2000/09/21 09:28:52 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.6 2000/09/21 10:40:20 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/SYSTEM/path.h>
@@ -28,7 +28,9 @@ namespace BALL
 			second_atom_expressions_(processor.second_atom_expressions_),
 			epsilon1_(processor.epsilon1_),
 			epsilon2_(processor.epsilon2_),
-			charge_map_(processor.charge_map_)
+			charge_map_(processor.charge_map_),
+			exclude_residue_field_(processor.exclude_residue_field_),
+			cut_off2_(processor.cut_off2_)
 	{
 	}
 	
