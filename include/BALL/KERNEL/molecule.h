@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.10 2000/05/02 14:03:50 amoll Exp $
+// $Id: molecule.h,v 1.11 2000/05/04 13:32:02 oliver Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -84,7 +84,7 @@ namespace BALL
 
 		/**	Assign from an other Molecule.
 				@param molecule	the Molecule object to assign from
-				@param deep
+				@param deep deep copy if {\bf true}
 		*/
 		void set(const Molecule& molecule, bool deep = true);
 
@@ -97,7 +97,7 @@ namespace BALL
 		/**	Assign to another Molecule.
 				Assigns the components to an other Molecule.
 				@param molecule	the Molecule to be assigned to
-				@param deep
+				@param deep deep copy if {\bf true}
 		*/
 		void get(Molecule& molecule, bool deep = true) const;
 
