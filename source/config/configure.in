@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.140 2001/06/23 01:06:00 oliver Exp $
+dnl    $Id: configure.in,v 1.141 2001/06/28 14:15:08 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -799,7 +799,9 @@ if test "${IS_GXX}" = "true" ; then
 		AC_MSG_ERROR(aborted)
 	fi
 
-	LIBS="${LIBS} -liberty"
+	if test "${CXX_VERSION_1}" -ge 3 ; then
+		LIBS="${LIBS} -liberty"	
+	fi
 fi
 
 dnl
