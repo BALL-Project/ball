@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.4 2003/09/18 19:07:48 amoll Exp $
+// $Id: colorMeshDialog.h,v 1.5 2003/09/19 23:53:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -71,20 +71,8 @@ namespace BALL
 					throw();
 
 				///
-				void setRepresentation(Representation& rep)
+				void setMesh(Mesh* mesh, Representation* rep)
 					throw();
-
-				///
-				Representation* getRepresentation()
-					throw() { return rep_;}
-
-				///
-				void setMesh(Mesh& mesh)
-					throw() {mesh_ = &mesh;}
-
-				///
-				Mesh* getMesh()
-					throw() { return mesh_;}
 				
 		public slots:
 				void applyPressed();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.12 2003/09/19 18:18:00 amoll Exp $
+// $Id: geometricControl.C,v 1.13 2003/09/19 23:54:58 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -61,8 +61,6 @@ GeometricControl::~GeometricControl()
   #ifdef BALL_VIEW_DEBUG
 	  Log.error() << "Destructing object " << this << " of class GeometricControl" << std::endl;
   #endif 
-
-	delete colorMeshDlg_;
 }
 
 void GeometricControl::addRepresentation(Representation& rep)
@@ -154,8 +152,7 @@ void GeometricControl::buildContextMenu(Representation& rep)
 	if ((rep.getModelType() == MODEL_SE_SURFACE || rep.getModelType() == MODEL_SA_SURFACE)	
 			&& rep.getGeometricObjects().size() > 0)
 	{
-		colorMeshDlg_->setMesh(*(Mesh*)*(rep.getGeometricObjects().begin()));
-		colorMeshDlg_->setRepresentation(rep);
+		colorMeshDlg_->setMesh((Mesh*)*(rep.getGeometricObjects().begin()), &rep);
 		insertContextMenuEntry("Color Surface", colorMeshDlg_, SLOT(show()));	
 	}
 }
@@ -330,6 +327,7 @@ void GeometricControl::updateSelection()
 	if (item == 0) 
 	{
 		setStatusbarText("");
+		colorMeshDlg_->setMesh(0,0);
 		return;
 	}
 
@@ -373,10 +371,10 @@ void GeometricControl::updateSelection()
 	setStatusbarText("Representation from " + name);
 
 	// update ColorMeshDialog if representation is a surface
-	if (colorMeshDlg_ && rep->getModelName() == "Surface" && rep->getGeometricObjects().size() > 0)
+	if ((rep->getModelType() == MODEL_SE_SURFACE || rep->getModelType() == MODEL_SA_SURFACE) &&
+			rep->getGeometricObjects().size() > 0)
 	{
-		colorMeshDlg_->setMesh(*(Mesh*)*(rep->getGeometricObjects().begin()));
-		colorMeshDlg_->setRepresentation(*rep);
+		colorMeshDlg_->setMesh((Mesh*)*(rep->getGeometricObjects().begin()), rep);
 	}
 }
 
