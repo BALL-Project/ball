@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.29 2004/02/26 20:01:00 amoll Exp $
+// $Id: colorProcessor.C,v 1.30 2004/09/02 11:41:18 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -408,6 +408,18 @@ namespace BALL
 			throw()
 		{
 			max_value_ = value;
+		}
+
+		float InterpolateColorProcessor::getMinValue() const
+			throw()
+		{
+			return min_value_;
+		}
+
+		void InterpolateColorProcessor::setMinValue(float value)
+			throw()
+		{
+			min_value_ = value;
 		}
 
 		void InterpolateColorProcessor::setMinMinColor(const ColorRGBA& color)

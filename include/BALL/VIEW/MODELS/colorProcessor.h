@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.26 2004/05/27 19:49:49 oliver Exp $
+// $Id: colorProcessor.h,v 1.27 2004/09/02 11:41:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -268,7 +268,16 @@ namespace BALL
 			///
 			float getMaxValue() const
 				throw();
+		
 
+			///
+			void setMinValue(float value)
+				throw();
+
+			///
+			float getMinValue() const
+				throw();
+		
 			///
 			virtual ColorRGBA interpolateColor(float value);
 
