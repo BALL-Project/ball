@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.11.4.9 2002/12/10 00:12:26 amoll Exp $
+// $Id: displayProperties.h,v 1.11.4.10 2002/12/12 11:17:31 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -272,91 +272,6 @@ namespace BALL
 			*/
 			//@{
 
-			/** Colors selected objects uniquely.
-					If selected molecular objects are available they will be colored according to
-					the selected color as specified in \Ref{GeometricObject}.
-					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
-					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
-					@see  deselect
-					@see  initializeWidget
-					@see  onNotify
-					@see  ChangedCompositeMessage
-					@see  SceneMessage
-					@see  WindowMessage
-					@see  MainControl
-			*/
-			void select();
-
-			/** Colors deselected objects in their own color.
-					If selected molecular objects are available they will be colored according to
-					their own color as specified in the objects. This method reverses the process
-					done in the \Ref{select} method.
-					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
-					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
-					@see  select
-					@see  initializeWidget
-					@see  onNotify
-					@see  ChangedCompositeMessage
-					@see  SceneMessage
-					@see  WindowMessage
-					@see  MainControl
-			*/
-			void deselect();
-
-			/** Centers the camera.
-					Centers the camera of \Ref{Scene} to the geometric center of the molecular objects
-					in the selection list.
-					The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
-					@see  initializeWidget
-					@see  onNotify
-					@see  SceneMessage
-					@see  WindowMessage
-			*/
-			void centerCamera();
-
-			/** Creates bonds.
-					If selected molecular objects are available \Ref{Bond} objects will be created
-					for each object in the selection list
-					using the \Ref{build_bonds} processor of the \Ref{FragmentDB}
-					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
-					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
-					The number of bonds created will be written into the \Ref{Log} object.
-					@see  Log
-					@see  build_bonds
-					@see  FragmentDB
-					@see  initializeWidget
-					@see  onNotify
-					@see  ChangedCompositeMessage
-					@see  SceneMessage
-					@see  WindowMessage
-					@see  MainControl
-			*/
-			void buildBonds();
-			
-			/** Adds hydrogens.
-					If selected molecular objects are available hydrogens will be created
-					for each object in the selection list
-					using the \Ref{add_hydrogens} processor of the \Ref{FragmentDB}
-					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
-					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
-					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
-					The number of hydrogens created will be written into the \Ref{Log} object.
-					@see  Log
-					@see  add_hydrogens
-					@see  FragmentDB
-					@see  initializeWidget
-					@see  onNotify
-					@see  ChangedCompositeMessage
-					@see  SceneMessage
-					@see  WindowMessage
-					@see  MainControl
-			*/
-			void addHydrogens();
-			
 			/** Starts the displayProperties dialog.
 					Opens {\em *this} displayProperties dialog.
 					Calls \Ref{show} and \Ref{raise} from \Ref{QDialog} class.
@@ -498,22 +413,11 @@ namespace BALL
 				COLORCALCULATOR_VALUES__CUSTOM           = 3
 			};
 
-			void setValue_(int address, int value);
 			int getValue_(int address);
+			void setValue_(int address, int value);
 			bool hasValue_(int address, int value);
 
-			void setViewCenter_(const Vector3 &vector3);
-			Vector3 getViewCenter_() const;
-
-			void setViewDirection_(int view_direction);
-			// ????? muss noch verbessert werden (VIEW_DIRECTION)
-			int getViewDirection_() const;
-			void setViewDistance_(Real view_distance);
-			Real getViewDistance_() const;
-
 			virtual void applyOn_(Composite& composite);
-			virtual void calculateCenter_(Composite& composite);
-			virtual bool checkResidue_(Composite& composite);
 			virtual void setColorCalculator_(ColorCalculatorValues values,
 																			 const ColorRGBA &first_color = ColorRGBA(),
 																			 const ColorRGBA &second_color = ColorRGBA(),
@@ -533,9 +437,6 @@ namespace BALL
 			int id_;
 			int select_id_;
 			int deselect_id_;
-			int center_camera_id_;
-			int build_bonds_id_;
-			int add_hydrogens_id_;
 			
 			QString  					model_string_static_;
 			QString  					model_string_dynamic_;
@@ -551,9 +452,6 @@ namespace BALL
 			// --------------------------------------------------------------------------------
 		
 			// general
-			Vector3 										view_center_vector_;
-			int 												view_direction_;
-			Real 												view_distance_;
 			vector<int> 								address_array_;
 
 			// model specific
