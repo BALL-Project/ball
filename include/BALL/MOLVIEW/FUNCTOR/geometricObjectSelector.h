@@ -1,18 +1,10 @@
-// $Id: geometricObjectSelector.h,v 1.3 2000/04/25 15:28:11 hekl Exp $
+// $Id: geometricObjectSelector.h,v 1.4 2000/06/25 19:15:11 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GEOMETRICOBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GEOMETRICOBJECTSELECTOR_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
-#endif
-
-#ifndef BALL_DATATYPE_LIST_H
-#	include <BALL/DATATYPE/list.h>
-#endif
-
-#ifndef BALL_DATATYPE_NEWHASHSET_H
-#	include <BALL/DATATYPE/hashSet.h>
 #endif
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -39,8 +31,8 @@
 #	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
-#	include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
+#ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
+#	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 #endif
 
 
@@ -56,7 +48,7 @@ namespace BALL
 		/**
 		*/
 		class GeometricObjectSelector
-			: public BaseModelProcessor
+			: public AtomBondModelBaseProcessor
 		{
 			public:
 
@@ -156,10 +148,6 @@ namespace BALL
 			bool selection_;
 
 			ColorRGBA selection_color_;
-
-			HashSet<Atom*> hashed_atoms_;
-
-			List<Atom*> used_atoms_;
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS
