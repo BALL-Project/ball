@@ -1,0 +1,246 @@
+// $Id: bond.iC,v 1.1 2001/06/28 18:33:16 amoll Exp $
+
+	BALL_INLINE
+	void Bond::clear()
+		throw()
+	{
+		PropertyManager::clear();
+		
+		arrangeBonds_();
+		clear_();
+	}
+
+	BALL_INLINE
+	void Bond::destroy()
+		throw()
+	{
+		PropertyManager::destroy();
+		arrangeBonds_();
+		clear_();
+	}
+
+	BALL_INLINE
+	void Bond::finalize()
+		throw()
+	{
+		if (*first_ > *second_)
+		{
+			Atom* tmp = first_;
+			first_ = second_;
+			second_ = tmp;
+		}
+	}
+
+	BALL_INLINE
+	void Bond::setFirstAtom(Atom* atom)
+		throw()
+	{
+		first_ = atom;
+	}
+	
+	BALL_INLINE	 
+	const Atom* Bond::getFirstAtom() const
+		throw()
+	{
+		return first_;
+	}
+	
+	BALL_INLINE	 
+	Atom* Bond::getPartner(const Atom& atom) const
+		throw()
+	{
+		Atom* partner = 0;
+		if (&atom == first_)
+		{
+			partner = second_;
+		} 
+		else 
+		{
+			if (&atom == second_)
+			{
+				partner = first_;
+			}
+		}		
+		return partner;
+	}
+	
+	BALL_INLINE
+	void Bond::setSecondAtom(Atom* atom)
+		throw()
+	{
+		second_ = atom;
+	}
+	
+	BALL_INLINE	 
+	const Atom* Bond::getSecondAtom() const
+		throw()
+	{
+		return second_;
+	}
+
+	BALL_INLINE
+	void Bond::setName(const String& name)
+		throw()
+	{
+		name_ = name;
+	}
+
+	BALL_INLINE
+	const String& Bond::getName() const
+		throw()
+	{
+		return name_;
+	}
+
+	BALL_INLINE
+	void Bond::setOrder(Bond::Order bond_order)
+		throw()
+	{
+		bond_order_ = bond_order;
+	}
+		
+	BALL_INLINE	
+	Bond::Order Bond::getOrder() const
+		throw()
+	{
+		return bond_order_;
+	}
+		
+	BALL_INLINE
+	void Bond::setType(Type bond_type)
+		throw()
+	{
+		bond_type_ = bond_type;
+	}
+		
+	BALL_INLINE
+	Bond::Type Bond::getType() const
+		throw()
+	{
+		return bond_type_;
+	}
+
+	BALL_INLINE
+	Real Bond::getLength() const
+		throw(Bond::NotBound)
+	{
+		if (first_ == 0 || second_ == 0)
+		{
+			throw NotBound(__FILE__, __LINE__);
+		}
+		
+		return first_->position_.getDistance(second_->position_);
+	}
+
+	BALL_INLINE
+	const Atom* Bond::getBoundAtom(const Atom& atom) const
+		throw()
+  {
+    if (first_ == &atom)
+    {
+      return second_;
+		}
+    else
+    {
+      if (second_ == &atom)
+      {
+        return first_;
+			}
+		}
+ 
+    return 0;
+	}                                                                                                                                           
+
+	BALL_INLINE
+	bool Bond::isBondOf(const Atom& atom) const
+		throw()
+	{
+		return atom.hasBond(*this);
+	}
+
+	BALL_INLINE
+	bool Bond::isBound() const
+		throw()
+	{
+		return (first_ != 0);
+	}
+
+	BALL_INLINE
+	bool Bond::isInterBond() const
+		throw()
+	{
+		// the two atoms have to be inside the same (non-NULL) composite
+		return (isBound() && (first_->Composite::getRoot() != second_->Composite::getRoot())
+						&& (&first_->Composite::getRoot() != first_));
+	}
+
+	BALL_INLINE
+	bool Bond::isInterBondOf(const AtomContainer& atom_container) const
+		throw()
+	{
+		if (isBound())
+		{
+  		bool first_atom_is_descendant  = first_->Composite::isDescendantOf(atom_container);
+			bool second_atom_is_descendant = second_->Composite::isDescendantOf(atom_container);
+
+			return (( first_atom_is_descendant && !second_atom_is_descendant) ||
+							(!first_atom_is_descendant &&  second_atom_is_descendant));
+		} 
+
+		return false;
+	}
+
+	BALL_INLINE
+	bool Bond::isIntraBond() const
+		throw()
+	{	
+		// the two atoms have to be inside two different (non-NULL) composite
+		return (isBound() && (first_->Composite::getRoot() == second_->Composite::getRoot()) 
+						&& (&first_->Composite::getRoot() != first_) && (&second_->Composite::getRoot() != second_));
+	}
+
+	BALL_INLINE
+	bool Bond::isIntraBondOf(const AtomContainer &atom_container) const
+		throw()
+	{
+		return (isBound() &&  first_->Composite::isDescendantOf(atom_container)
+											&& second_->Composite::isDescendantOf(atom_container));
+	}
+
+	BALL_INLINE
+	bool Bond::isValid () const
+		throw()
+	{
+		return (PropertyManager::isValid()
+									&& first_  != 0
+									&& second_ != 0
+									&& first_  != second_
+									&& first_->hasBond(*this)
+									&& second_->hasBond(*this));
+	}
+
+	BALL_INLINE
+	void Bond::clear_()
+		throw()
+	{
+		first_ = BALL_BOND_DEFAULT_FIRST_ATOM;
+		second_ = BALL_BOND_DEFAULT_SECOND_ATOM;
+		name_ = BALL_BOND_DEFAULT_NAME;
+		bond_order_ = BALL_BOND_DEFAULT_ORDER;
+		bond_type_ = BALL_BOND_DEFAULT_TYPE;
+	}
+
+	BALL_INLINE
+	bool Bond::operator == (const Bond& bond) const
+		throw()
+	{
+		return(Object::operator ==(bond));
+	}
+
+	BALL_INLINE
+	bool Bond::operator != (const Bond& bond) const
+		throw()
+	{
+		return ! (*this == bond);
+	}
+
