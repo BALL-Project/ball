@@ -1,4 +1,4 @@
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.4 2000/10/06 11:51:49 anker Exp $
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.5 2000/10/06 15:22:31 anker Exp $
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
@@ -169,6 +169,11 @@ namespace BALL
 		Options options;
 
 		//@}
+
+
+		private:
+
+		void setDefaultOptions() throw();
 
 	};
 }

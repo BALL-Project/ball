@@ -1,4 +1,4 @@
-// $Id: reissCavFreeEnergyProcessor.h,v 1.4 2000/10/06 11:51:49 anker Exp $
+// $Id: reissCavFreeEnergyProcessor.h,v 1.5 2000/10/06 15:22:31 anker Exp $
 
 #ifndef BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
@@ -171,6 +171,11 @@ namespace BALL
 		Options options;
 
 		//@}
+
+
+		private:
+
+		void setDefaultOptions() throw();
 
 	};
 }
