@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.2 1999/10/30 12:53:15 oliver Exp $
+// $Id: logStream.h,v 1.3 1999/11/03 12:11:26 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -15,9 +15,13 @@
 #	include <BALL/COMMON/debug.h>
 #endif
 
-#include <iostream>
+#ifndef BALL_CONCEPT_NOTIFICATION_H
+#	include <BALL/CONCEPT/notification.h>
+#endif
+
 #include <sys/time.h>
 
+#include <iostream>
 #include <list>
 #include <vector>
 #include <string>
@@ -56,6 +60,18 @@ namespace BALL
 
 	class LogStream;
 
+	class LogStreamNotifier
+	{
+		public:
+			
+		LogStreamNotifier(const NotificationTarget<LogStreamNotifier>& target);
+		
+		~LogStreamNotifier();
+
+		void notify() const;
+	};
+
+
 	/** Stream buffer used by LogStream.
 			This class implements the low level behaviour of
 			\Ref{LogStream}. It takes care of the buffers and stores
@@ -76,7 +92,7 @@ namespace BALL
 			flushed, too.
 	*/
 	class LogStreamBuf
-		: public ::std::streambuf
+		: public std::streambuf
 	{
 
 		friend class LogStream;
@@ -137,15 +153,17 @@ namespace BALL
 
 			struct Stream 
 			{
-				::std::ostream*	stream;
-				string					prefix;
-				int							min_level;
-				int							max_level;
+				std::ostream*				stream;
+				string							prefix;
+				int									min_level;
+				int									max_level;
+				LogStreamNotifier*	target;
 			
 				Stream()
 					:	stream(0),
 						min_level(INT_MIN),
-						max_level(INT_MAX)
+						max_level(INT_MAX),
+						target(0)
 				{
 				}
 			};
@@ -194,9 +212,18 @@ namespace BALL
 			\\
 	*/
 	class LogStream
-		: public ::std::ostream
+		: public std::ostream
 	{
 		public:
+
+		/**	@name	Type definitions
+		*/
+		//@{
+			
+		/**
+		*/
+		typedef NotificationTarget<LogStreamNotifier>	Target;
+		//@}
 
 		/**	@name Enums
 		*/
@@ -209,7 +236,8 @@ namespace BALL
 				and \Ref{INFORMATION} for messages that do not indicate nay problem 
 				(e.g. progress messages).
 		*/
-		enum {
+		enum 
+		{
 			/** Loglevels >= ERROR should be used to indicate errors
 			*/
 			ERROR = 2000,
@@ -349,6 +377,14 @@ namespace BALL
 		*/
 		void remove(::std::ostream& s);
 
+		/**	Add a notification target for the stream.	
+		*/
+		void insertNotification(const std::ostream& s, const Target& target);
+
+		/**	Remove a notification target for the stream.
+		*/
+		void removeNotification(const std::ostream& s);
+
 		/**	Set the maximum log level of an associated stream.
 				This method changes the minimum log level of an already
 				associated stream. However, if the stream is not
@@ -451,6 +487,7 @@ namespace BALL
 		// also deletes the buffer.
 		bool	delete_buffer_;
 	};
+
 
 	/** Global static instance of a logstream.
 			This instance of LogStream is by default bound to {\bf cout} {\bf cerr} by calling

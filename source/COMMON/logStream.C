@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.6 1999/10/30 12:53:30 oliver Exp $
+// $Id: logStream.C,v 1.7 1999/11/03 12:12:13 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 
@@ -92,6 +92,10 @@ namespace BALL
 						{
 							*(list_it->stream) << expandPrefix_(list_it->prefix, tmp_level_, time(0)).c_str()
 																 << outstring.c_str() << endl;
+							if (list_it->target != 0)
+							{
+								list_it->target->notify();
+							}
 						}
 					}
 			
@@ -219,6 +223,21 @@ namespace BALL
 		return result;
 	}
 
+	LogStreamNotifier::LogStreamNotifier(const LogStream::Target& target)
+	{
+		NotificationRegister(*this, target);
+	}
+
+	LogStreamNotifier::~LogStreamNotifier()
+	{
+		NotificationUnregister(*this);
+	}
+
+	void LogStreamNotifier::notify() const
+	{
+		Notify(*this);
+	}
+
 	// keep the given buffer	
 	LogStream::LogStream(LogStreamBuf* buf)		
 		: ostream(buf),
@@ -303,7 +322,58 @@ namespace BALL
 		// if the stream is not found nothing happens!		
 	}
 
+	void LogStream::insertNotification(const ostream& s, const LogStream::Target& target)
+	{
+		// return if no LogStreamBuf is defined!
+		if (rdbuf() == 0)
+		{
+			return;
+		}
+			
+		// find the stream in the LogStreamBuf's list
+		
+    using std::list;																																
+		list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
+		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
+		{
+			if (list_it->stream == &s) 
+			{
+				// set the notification target
+				list_it->target = new LogStreamNotifier(target);
+				break;
+			}
+		}
+		
+		// if the stream is not found nothing happens!		
+	}
+
 	
+	void LogStream::removeNotification(const ostream& s) 
+	{
+		// return if no LogStreamBuf is defined!
+		if (rdbuf() == 0)
+		{
+			return;
+		}
+			
+		// find the stream in the LogStreamBuf's list
+		
+    using std::list;																																
+		list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
+		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
+		{
+			if (list_it->stream == &s) 
+			{
+				// destroy and remove the notification target
+				delete list_it->target;
+				list_it->target = 0;
+				break;
+			}
+		}
+		
+		// if the stream is not found nothing happens!		
+	}
+
 	void LogStream::setMinLevel(const ostream& stream, int level) 
 	{
 		// return if no LogStreamBuf is defined!
