@@ -1,11 +1,7 @@
-// $Id: displayProperties.h,v 1.11.4.3 2002/11/06 21:28:09 amoll Exp $
+// $Id: displayProperties.h,v 1.11.4.4 2002/11/07 14:34:24 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
-
-#ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
-# include <BALL/STRUCTURE/geometricProperties.h>
-#endif
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 # include <BALL/STRUCTURE/fragmentDB.h>
@@ -13,10 +9,6 @@
 
 #ifndef BALL_FORMAT_INIFILE_H
 #	include <BALL/FORMAT/INIFile.h>
-#endif
-
-#ifndef BALL_STRUCTURE_RESIDUECHECKER_H
-# include <BALL/STRUCTURE/residueChecker.h>
 #endif
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
@@ -29,10 +21,6 @@
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
-#endif
-
-#ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
-# include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 #endif
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIESDATA_H
@@ -71,6 +59,14 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
+
+			/// Exception to be thrown if invalid option is given for a modelprocessor
+ 			class InvalidOption: public Exception::GeneralException
+			{
+  			public:
+	   			InvalidOption(const char* file, int line, int option)
+					throw();
+			};
 
 		/**	The DisplayProperties class.
 				The class DisplayProperties is a dialog used for changing the graphical
@@ -522,8 +518,6 @@ namespace BALL
 			virtual void setupDynamicProcessor_()
 				throw();
 
-			void applyOnComposite_(Composite &composite, UnaryProcessor<Composite> *processor);
-			void applyOnComposite_(Composite &composite, UnaryProcessor<Atom> *processor);
 			// --------------------------------------------------------------------------------
 			// attributs
 			// --------------------------------------------------------------------------------
@@ -564,7 +558,6 @@ namespace BALL
 			AddGLBackboneModel 					backbone_model_;
 			AddGLLineModel 							line_model_;
 			AddGLSurfaceModel 					surface_model_static_;
-			AddGLSurfaceModel 					surface_model_dynamic_;
 			AddGLVanDerWaalsModel 			van_der_waals_model_;
 			RemoveModel 								remove_model_static_;
 			RemoveModel 								remove_model_dynamic_;

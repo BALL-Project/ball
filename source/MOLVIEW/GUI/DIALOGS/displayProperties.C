@@ -1,6 +1,9 @@
-// $Id: displayProperties.C,v 1.13.4.7 2002/11/06 21:27:41 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.8 2002/11/07 14:34:08 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/STRUCTURE/residueChecker.h>
+#include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 
 #include <qcolordialog.h>
 #include <qmenubar.h>
@@ -16,6 +19,12 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
+	  InvalidOption::InvalidOption(const char* file, int line, int option)
+			throw()
+			: Exception::GeneralException(file, line, "Invalid option: ", option)
+		{
+    }
+    
 		DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 			throw()
 			:	Inherited( parent, name ),
@@ -45,7 +54,6 @@ namespace BALL
 				backbone_model_(),
 				line_model_(),
 				surface_model_static_(),
-				surface_model_dynamic_(),
 				van_der_waals_model_(),
 				remove_model_static_(),
 				remove_model_dynamic_(),
@@ -70,12 +78,26 @@ namespace BALL
 			 van_der_waals_model_.registerModelConnector(model_connector_);
 			ball_and_stick_model_.registerModelConnector(model_connector_);
 								line_model_.registerModelConnector(model_connector_);
+
+			// seting up defaults
+			ball_and_stick_model_.enableStickModel();
+
+			setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_HIGH);
+			setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
+
+			setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_STICK);
+			setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+
+			setValue_(ADDRESS__STATIC_DRAWING_MODE, VALUE__DRAWING_MODE_SOLID);
+			setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_WIREFRAME);
 		}
+
 
 		DisplayProperties::~DisplayProperties()
 			throw()
 		{
 		}
+
 
 		void DisplayProperties::fetchPreferences(INIFile& inifile)
 			throw()
@@ -127,6 +149,7 @@ namespace BALL
 			}
 		}
 
+
 		void DisplayProperties::writePreferences(INIFile& inifile)
 			throw()
 		{
@@ -141,6 +164,207 @@ namespace BALL
 			inifile.insertValue("WINDOWS", "Display::customcolor", custom_color_);
 		}
 
+
+		void DisplayProperties::initializeWidget(MainControl& main_control)
+			throw()
+		{
+			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
+
+			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, SLOT(openDialog()), CTRL+Key_I);   
+			select_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
+			deselect_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
+			center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A);
+			build_bonds_id_ = main_control.insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B);
+			add_hydrogens_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H);
+		}
+
+
+		void DisplayProperties::finalizeWidget(MainControl& main_control)
+			throw()
+		{
+			main_control.removeMenuEntry (MainControl::DISPLAY, "D&isplay Properties", this, SLOT(openDialog()), CTRL+Key_I);   
+			main_control.removeMenuEntry (MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
+			main_control.removeMenuEntry (MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
+			main_control.removeMenuEntry (MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A);
+			main_control.removeMenuEntry (MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B);
+			main_control.removeMenuEntry (MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H);
+		}
+
+
+		void DisplayProperties::checkMenu(MainControl& main_control)
+			throw()
+		{
+			(main_control.menuBar())->setItemChecked(id_, isVisible());
+
+			bool selected = true;
+			int number_of_selected_objects = 0;
+
+			if (selection_.empty())
+			{
+				selected = false;
+			}
+			else
+			{
+				number_of_selected_objects = selection_.size();
+			}
+
+			(main_control.menuBar())->setItemEnabled(select_id_, selected);
+			(main_control.menuBar())->setItemEnabled(deselect_id_, selected);
+			(main_control.menuBar())->setItemEnabled(add_hydrogens_id_, selected);
+			(main_control.menuBar())->setItemEnabled(build_bonds_id_, selected);
+
+			// these menu points for single items only
+			(main_control.menuBar()) ->setItemEnabled(center_camera_id_, selected && (number_of_selected_objects == 1));
+		}
+
+
+		void DisplayProperties::openDialog()
+		{
+			show();
+			raise();
+		}
+
+
+		void DisplayProperties::selectPrecision(const QString& string)
+		{
+			precision_string_ = string;
+
+			if (string == "low")
+			{
+				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
+				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
+			}
+			else if (string == "medium")
+			{
+				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_MEDIUM);
+				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
+			}
+			else if (string == "high")
+			{
+				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_HIGH);
+				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
+			}
+			else if (string == "ultra")
+			{
+				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_ULTRA);
+				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
+			}
+		}
+		 
+
+		void DisplayProperties::selectModel(const QString& string)
+		{
+			model_string_ = string;
+
+			setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_SOLID);
+
+			if (string == "none")
+			{
+				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
+			}
+			else if (string == "line")
+			{
+				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_LINES);
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+			}
+			else if (string == "stick")
+			{
+				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_STICK);
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+			}
+			else if (string == "ball and stick")
+			{
+				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_BALL_AND_STICK);
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+			}
+			else if (string == "backbone")
+			{
+				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_BACKBONE);
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+			}
+			else if (string == "surface")
+			{
+				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_SURFACE);
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_SURFACE);
+				setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_DOTS);
+			}
+			else if (string == "van der Waals")
+			{
+				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
+				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+			}
+		}
+
+		void DisplayProperties::selectColoringMethod(const QString& string)
+		{
+			coloring_method_string_ = string;
+			distance_coloring_ = false;
+
+			if (string == "by element")
+			{
+				setColorCalculator_(COLORCALCULATOR_VALUES__ELEMENT);
+			}
+			else if (string == "by residue name")
+			{
+				setColorCalculator_(COLORCALCULATOR_VALUES__RESIDUE_NAME);
+			}
+			else if (string == "by atom charge")
+			{
+				setColorCalculator_(COLORCALCULATOR_VALUES__ATOM_CHARGE);
+			}
+			else if (string == "by atom distance")
+			{
+				setColorCalculator_(distance_color_calculator_);
+				
+				distance_coloring_ = true;
+			}
+			else if (string == "custom")
+			{
+				ColorRGBA color;
+				QColor qcolor = color_sample->backgroundColor();
+
+				color.set((float)qcolor.red() / 255.0,
+									(float)qcolor.green() / 255.0,
+									(float)qcolor.blue() / 255.0);
+
+				setColorCalculator_(COLORCALCULATOR_VALUES__CUSTOM, color);
+			}
+		}
+
+
+		void DisplayProperties::setColorCalculator_(ColorCalculatorValues values,
+																								const ColorRGBA &first_color,
+																								const ColorRGBA & /* second_color */,
+																								const ColorRGBA & /* third_color */)
+		{
+			switch (values)
+			{
+				case COLORCALCULATOR_VALUES__CUSTOM:
+					color_calculator_ = &custom_color_calculator_;
+					color_calculator_->setDefaultColor(first_color);
+					break;
+
+				case COLORCALCULATOR_VALUES__ELEMENT:
+					color_calculator_ = &element_color_calculator_;
+					break;
+
+				case COLORCALCULATOR_VALUES__RESIDUE_NAME:
+					color_calculator_ = &residue_name_color_calculator_;
+					break;
+
+				case COLORCALCULATOR_VALUES__ATOM_CHARGE:
+					color_calculator_ = &atom_charge_color_calculator_;
+					break;
+				
+				default:
+					throw(InvalidOption(__FILE__, __LINE__, values));
+			}
+		}
+
+//////////////////////////////////////////////////////////////////////////////////////////
+//----------------------------------------------------to be moved:
+//////////////////////////////////////////////////////////////////////////////////////////
 		void DisplayProperties::onNotify(Message *message)
 			throw()
 		{
@@ -198,55 +422,6 @@ namespace BALL
 			}
 		}
 
-		void DisplayProperties::initializeWidget(MainControl& main_control)
-			throw()
-		{
-			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
-
-			id_ = main_control.insertMenuEntry (MainControl::DISPLAY, "D&isplay Properties", this, SLOT(openDialog()), CTRL+Key_I);   
-			select_id_ = main_control.insertMenuEntry (MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
-			deselect_id_ = main_control.insertMenuEntry (MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
-			center_camera_id_ = main_control.insertMenuEntry (MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A);
-			build_bonds_id_ = main_control.insertMenuEntry (MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B);
-			add_hydrogens_id_ = main_control.insertMenuEntry (MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H);
-		}
-
-		void DisplayProperties::finalizeWidget(MainControl& main_control)
-			throw()
-		{
-			main_control.removeMenuEntry (MainControl::DISPLAY, "D&isplay Properties", this, SLOT(openDialog()), CTRL+Key_I);   
-			main_control.removeMenuEntry (MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
-			main_control.removeMenuEntry (MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
-			main_control.removeMenuEntry (MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A);
-			main_control.removeMenuEntry (MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B);
-			main_control.removeMenuEntry (MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H);
-		}
-
-		void DisplayProperties::checkMenu(MainControl& main_control)
-			throw()
-		{
-			(main_control.menuBar())->setItemChecked(id_, isVisible());
-
-			bool selected = true;
-			int number_of_selected_objects = 0;
-
-			if (selection_.empty())
-			{
-				selected = false;
-			}
-			else
-			{
-				number_of_selected_objects = selection_.size();
-			}
-
-			(main_control.menuBar())->setItemEnabled(select_id_, selected);
-			(main_control.menuBar())->setItemEnabled(deselect_id_, selected);
-			(main_control.menuBar())->setItemEnabled(add_hydrogens_id_, selected);
-			(main_control.menuBar())->setItemEnabled(build_bonds_id_, selected);
-
-			// these menu points for single items only
-			(main_control.menuBar()) ->setItemEnabled(center_camera_id_, selected && (number_of_selected_objects == 1));
-		}
 
 		void DisplayProperties::select()
 		{
@@ -303,6 +478,7 @@ namespace BALL
 			notify_(window_message_2);
 		}
 
+
 		void DisplayProperties::deselect()
 		{
 			if (selection_.size() == 0)
@@ -358,6 +534,7 @@ namespace BALL
 			notify_(window_message_2);
 		}
 
+
 		void DisplayProperties::centerCamera()
 		{
 			if (selection_.size() != 1)
@@ -380,6 +557,7 @@ namespace BALL
 			notify_(scene_message);
 		}
 
+
 		void DisplayProperties::buildBonds()
 		{
 			if (selection_.size() == 0)
@@ -397,10 +575,11 @@ namespace BALL
 
 			// copy list because the selection_ list can change after a changemessage event
 			List<Composite*> temp_selection_ = selection_;
-
 			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
+			
 			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
+			
 			setupStaticProcessor_();
 			setupDynamicProcessor_();
 			Size number_of_bonds = 0;
@@ -430,14 +609,13 @@ namespace BALL
 			Log.info() << "Added " << number_of_bonds << " bonds." << std::endl;
 		}
 
+
 		void DisplayProperties::addHydrogens()
 		{
 			if (selection_.size() == 0)
 			{
 				return;
 			}
-
-			Size number_of_hydrogens = 0;
 
 			// notify the main window
 			WindowMessage *window_message = new WindowMessage;
@@ -449,12 +627,16 @@ namespace BALL
 
 			// copy list because the selection_ list can change after a changemessage event
 			List<Composite*> temp_selection_ = selection_;
-
 			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
+
 			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
+
 			setupStaticProcessor_();
 			setupDynamicProcessor_();
+
+			Size number_of_hydrogens = 0;
+
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{	
 				(*list_it)->apply(fragmentdb_.add_hydrogens);
@@ -482,118 +664,6 @@ namespace BALL
 			notify_(window_message_2);
 		}
 
-		void DisplayProperties::openDialog()
-		{
-			show();
-			raise();
-		}
-
-		void DisplayProperties::selectPrecision(const QString& string)
-		{
-			precision_string_ = string;
-
-			if (string == "low")
-			{
-				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
-				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
-			}
-			else if (string == "medium")
-			{
-				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_MEDIUM);
-				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
-			}
-			else if (string == "high")
-			{
-				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_HIGH);
-				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
-			}
-			else if (string == "ultra")
-			{
-				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_ULTRA);
-				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_LOW);
-			}
-		}
-		 
-		void DisplayProperties::selectModel(const QString& string)
-		{
-			model_string_ = string;
-
-			setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_SOLID);
-
-			if (string == "none")
-			{
-				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_REMOVE);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_REMOVE);
-			}
-			else if (string == "line")
-			{
-				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_LINES);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
-			}
-			else if (string == "stick")
-			{
-				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_STICK);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
-			}
-			else if (string == "ball and stick")
-			{
-				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_BALL_AND_STICK);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
-			}
-			else if (string == "backbone")
-			{
-				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_BACKBONE);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
-			}
-			else if (string == "surface")
-			{
-				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_SURFACE);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_SURFACE);
-				setValue_(ADDRESS__DYNAMIC_DRAWING_MODE, VALUE__DRAWING_MODE_DOTS);
-			}
-			else if (string == "van der Waals")
-			{
-				setValue_(ADDRESS__STATIC_MODEL, VALUE__MODEL_VAN_DER_WAALS);
-				setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
-			}
-		}
-
-		void DisplayProperties::selectColoringMethod(const QString& string)
-		{
-			coloring_method_string_ = string;
-
-			distance_coloring_ = false;
-
-			if (string == "by element")
-			{
-				setColorCalculator_(COLORCALCULATOR_VALUES__ELEMENT);
-			}
-			else if (string == "by residue name")
-			{
-				setColorCalculator_(COLORCALCULATOR_VALUES__RESIDUE_NAME);
-			}
-			else if (string == "by atom charge")
-			{
-				setColorCalculator_(COLORCALCULATOR_VALUES__ATOM_CHARGE);
-			}
-			else if (string == "by atom distance")
-			{
-				setColorCalculator_(distance_color_calculator_);
-				
-				distance_coloring_ = true;
-			}
-			else if (string == "custom")
-			{
-				ColorRGBA color;
-				QColor qcolor = color_sample->backgroundColor();
-
-				color.set((float)qcolor.red() / 255.0,
-									(float)qcolor.green() / 255.0,
-									(float)qcolor.blue() / 255.0);
-
-				setColorCalculator_(COLORCALCULATOR_VALUES__CUSTOM, color);
-			}
-		}
 
 		void DisplayProperties::applyButtonClicked()
 		{
@@ -652,6 +722,7 @@ namespace BALL
 			notify_(window_message);
 		}
 
+
 		void DisplayProperties::editColor()
 		{
 			color_sample->setBackgroundColor(QColorDialog::getColor(color_sample->backgroundColor()));
@@ -670,6 +741,7 @@ namespace BALL
 			selectColoringMethod(coloring_method_string_);
 			update();
 		}
+
 
 		void DisplayProperties::setComboBoxIndex_(QComboBox* combo_box, QString& item_string)
 		{
@@ -699,15 +771,14 @@ namespace BALL
 		void DisplayProperties::applyOn_(Composite& composite)
 		{
 			// apply static visualization processor
-			applyOnComposite_(composite, static_base_model_pointer_);
+			composite.apply(*static_base_model_pointer_);
 
-			if (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_BACKBONE)// || 
-				//	getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_SURFACE  )
+			if (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_BACKBONE)
 			{
 				return;
 			}
 
-			applyOnComposite_(composite, dynamic_base_model_pointer_);
+			composite.apply(*dynamic_base_model_pointer_);
 		}
 
 
@@ -759,9 +830,7 @@ namespace BALL
 
 				default:
 				{
-					// ??????? hier kommen exceptions hin
-					ball_and_stick_model_.enableStickModel();
-					static_base_model_pointer_ = &ball_and_stick_model_;
+					throw(InvalidOption(__FILE__, __LINE__, getValue_(ADDRESS__STATIC_MODEL)));
 				}
 			}
 
@@ -785,7 +854,7 @@ namespace BALL
 					break;
 					
 				default:
-					static_base_model_pointer_->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
+					throw(InvalidOption(__FILE__, __LINE__, getValue_(ADDRESS__STATIC_DRAWING_PRECISION)));
 			}
 			
 			// setup static drawing mode ----------------
@@ -804,7 +873,7 @@ namespace BALL
 					break;
 					
 				default:
-					static_base_model_pointer_->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
+					throw(InvalidOption(__FILE__, __LINE__, getValue_(ADDRESS__STATIC_DRAWING_MODE)));
 			}
 			
 			// switch to dynamic model
@@ -837,7 +906,7 @@ namespace BALL
 					break;
 					
 				case VALUE__MODEL_SURFACE:
-					dynamic_base_model_pointer_ = &surface_model_dynamic_;
+					dynamic_base_model_pointer_ = &line_model_;
 					break;
 					
 				case VALUE__MODEL_VAN_DER_WAALS:
@@ -859,7 +928,7 @@ namespace BALL
 					break;
 
 				default:
-					dynamic_base_model_pointer_ = &line_model_;
+					throw(InvalidOption(__FILE__, __LINE__, getValue_(ADDRESS__DYNAMIC_MODEL)));
 			}
 
 			// switch to dynamic model
@@ -885,8 +954,7 @@ namespace BALL
 					break;
 					
 				default:
-					dynamic_base_model_pointer_->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
-					break;
+					throw(InvalidOption(__FILE__, __LINE__, getValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION)));
 			}
 			
 			// setup dynamic drawing mode ---------------
@@ -905,7 +973,7 @@ namespace BALL
 					break;
 					
 				default:
-					dynamic_base_model_pointer_->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_MODE_SOLID);
+					throw(InvalidOption(__FILE__, __LINE__, getValue_(ADDRESS__DYNAMIC_DRAWING_MODE)));
 			}
 			
 			// register the color calculator ------------------------------------------------
@@ -916,7 +984,7 @@ namespace BALL
 		void DisplayProperties::calculateCenter_(Composite &composite)
 		{
 			GeometricCenterProcessor center;
-			applyOnComposite_(composite, &center);
+			composite.apply((UnaryProcessor<Atom>&) center);			
 					
 			setViewCenter_(center.getCenter());
 			setViewDirection_(2);
@@ -928,10 +996,11 @@ namespace BALL
 			else
 			{
 				BoundingBoxProcessor bbox;
-				applyOnComposite_(composite, &bbox);
+				composite.apply(bbox);				
 				setViewDistance_((bbox.getUpper() - bbox.getLower()).getLength() - center.getCenter().z + 3);
 			}
 		}
+
 
 		bool DisplayProperties::checkResidue_(Composite &composite)
 		{
@@ -956,32 +1025,8 @@ namespace BALL
 			return false;
 		}
 
-		void DisplayProperties::setColorCalculator_(ColorCalculatorValues values,
-																								const ColorRGBA &first_color,
-																								const ColorRGBA & /* second_color */,
-																								const ColorRGBA & /* third_color */)
-		{
-			switch (values)
-			{
-				default:
-				case COLORCALCULATOR_VALUES__CUSTOM:
-					color_calculator_ = &custom_color_calculator_;
-					color_calculator_->setDefaultColor(first_color);
-					break;
 
-				case COLORCALCULATOR_VALUES__ELEMENT:
-					color_calculator_ = &element_color_calculator_;
-					break;
 
-				case COLORCALCULATOR_VALUES__RESIDUE_NAME:
-					color_calculator_ = &residue_name_color_calculator_;
-					break;
-
-				case COLORCALCULATOR_VALUES__ATOM_CHARGE:
-					color_calculator_ = &atom_charge_color_calculator_;
-					break;
-			}
-		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.iC>
