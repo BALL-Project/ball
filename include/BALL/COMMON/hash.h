@@ -1,4 +1,4 @@
-// $Id: hash.h,v 1.7 2000/11/30 23:00:01 amoll Exp $
+// $Id: hash.h,v 1.8 2000/12/12 16:15:13 oliver Exp $
 
 #ifndef BALL_COMMON_HASH_H
 #define BALL_COMMON_HASH_H
@@ -66,7 +66,7 @@ namespace BALL
 	template <typename T>
 	inline HashIndex Hash(const T& key) throw()
 	{
-		return (HashIndex)((PointerInt)key);
+		return (HashIndex)(key);
 	}
 
 	/** String hash function.
