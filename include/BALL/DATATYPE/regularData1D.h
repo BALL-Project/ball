@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.13 2001/06/22 10:50:53 oliver Exp $
+// $Id: regularData1D.h,v 1.14 2001/07/07 19:32:44 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -192,6 +192,9 @@ namespace BALL
 	template <typename T>
 	TRegularData1D<T>::TRegularData1D()
 		throw()
+		: lower_(T()),
+		  upper_(T()),
+			data_(VectorType())
 	{
 	}
 
@@ -242,6 +245,8 @@ namespace BALL
 		data_ = data.data_;
 		lower_ = data.lower_;
 		upper_ = data.upper_;
+
+		return *this;
 	}
 
 	template <typename T>
@@ -250,6 +255,8 @@ namespace BALL
 	{
 		// Copy the data. The boundaries remain unchanged.
 		data_ = data;
+		
+		return *this;
 	}
 
 	template <typename T>
