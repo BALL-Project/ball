@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.7 2004/01/26 16:16:45 anne Exp $
+// $Id: regularData1DWidget.C,v 1.8 2004/03/03 18:49:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/COMMON/limits.h>
 #include <qpointarray.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
@@ -57,8 +58,8 @@ namespace BALL
 			if (data_.size() == 0) return;
 
 			// find the data min and max
-			float min = std::numeric_limits<float>::max();
-			float max = std::numeric_limits<float>::min();
+			float min = Limits<float>::max();
+			float max = Limits<float>::min();
 			float dif_min = min;
 			float old = min; //last point
 
@@ -94,7 +95,7 @@ namespace BALL
 			int x_new;
 			int y_new;
 			int x_old = 5;
-			int y_old = height_+5 - (int)round(((data_[0]-min)/dif_min)*5);
+			int y_old = height_+5 - (int)/*round*/(((data_[0]-min)/dif_min)*5);
 			QCanvasLine *ql;
 			QBrush br(QColor(black));
 			//			ql.setBrush(br);
@@ -102,7 +103,7 @@ namespace BALL
 			for (int i=1; i<(int)data_.size(); i++)
 			{
 				x_new = 5*(i+1);
-				y_new = height_+5 - (int)round(((data_[i]-min)/dif_min)*5);
+				y_new = height_+5 - (int)/*round*/(((data_[i]-min)/dif_min)*5);
 				
 				ql = new QCanvasLine(&canvas_);
 				ql->setPoints(x_old, y_old, x_new, y_new);
