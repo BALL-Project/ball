@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.11 2000/06/27 07:34:10 oliver Exp $
+// $Id: string.iC,v 1.12 2000/07/10 19:18:04 amoll Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -377,6 +377,20 @@ BALL_INLINE
 bool Substring::isValid() const
 {
   return (bound_ != 0 && from_ >= 0 && from_ <= to_ && to_ < (Index)bound_->size()) ;
+}
+
+BALL_INLINE 
+Substring& Substring::toLower()
+{
+	(*bound_).toLower(from_, to_ - from_);
+  return *this;
+}
+
+BALL_INLINE 
+Substring& Substring::toUpper()
+{
+	(*bound_).toUpper(from_, to_ - from_);
+  return *this;
 }
 
 BALL_INLINE 
