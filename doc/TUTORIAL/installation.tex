@@ -65,57 +65,90 @@ Table \ref{table:options}.
 An overview of these options can also be obtained by executing "{\tt configure
 --help}"
 
-\begin{table}
-\begin{center}
-\begin{tabular}{lp{7cm}}\hline
+% \begin{center}
+\begin{longtable}{lp{7cm}}\hline
   \option{--x-includes}{\tt{}=DIR}&        X include files are in DIR\\\vspace{3mm}
 
   \option{--x-libraries}{\tt{}=DIR}&       X library files are in DIR\\\vspace{3mm}
 
-  \option{--enable-optimization}& optimize the library for speed, remove debug info\\\vspace{3mm}
+  \option{--enable-optimization}&          optimize the library for speed, remove debug info\\\vspace{3mm}
 
-  \option{--disable-debuginfo}& remove -g from the compiler flags (omit debug information)\\\vspace{3mm}
+  \option{--enable-debuginfo}&             add -g to the compiler flags (to create debug information)\\\vspace{3mm}
 
-  \option{--disable-BALLVIEW}& disable the compilation of BALLVIEW, the visualization
-												component\\\vspace{3mm}
+  \option{--disable-BALLVIEW}&             disable the compilation of BALLVIEW, the visualization
+                                           component\\\vspace{3mm}
 
-  \option{--enable-64}&             build 64 bit objects (currently only supported for IRIX MipsPro 
-                          compiler and SUNPro compiler)\\\vspace{3mm}
+  \option{--enable-64}&                    build 64 bit objects (if allowed
+                                           by the compiler)\\\vspace{3mm}
 
   \option{--with-compiler}{\tt{}=CXX}&     use CXX to compile BALL\\\vspace{3mm}
 
-  \option{--with-cxxflags}{\tt{}=FLAGS}&   add \CPP compiler FLAGS to compile BALL\\\vspace{3mm}
+  \option{--with-cxxflags}{\tt{}=FLAGS}&   add FLAGS to the C++ compiler flags
+                                           (commas are converted to blanks)
+                                           \\\vspace{3mm}
 
-  \option{--with-ldflags}{\tt{}=FLAGS}&    add FLAGS to the linker flags used to link the library and
-        									                 applications\\\vspace{3mm}
+  \option{--with-ldflags}{\tt{}=FLAGS}&    add FLAGS to the linker flags
+                                           (commas are converted to blanks)
+                                           \\\vspace{3mm}
 
-  \option{--with-qt-incl}{\tt{}=DIR}&      QT header files are in DIR\\\vspace{3mm}
+  \option{--with-arflags}{\tt{}=FLAGS}&    add FLAGS to the flags for the
+                                           creation of the static libraries
+                                           \\\vspace{3mm}
+
+  \option{--with-dynarflags}{\tt{}=FLAGS}& add FLAGS to the flags for the
+                                           creation of the shared libraries
+                                           \\\vspace{3mm}
+
+  \option{--with-qt-incl}{\tt{}=DIR}&      QT header files are in DIR\\
+                                           \vspace{3mm}
 
   \option{--with-qt-libs}{\tt{}=DIR}&      QT libraries are in DIR\\\vspace{3mm}
 
   \option{--with-opengl-incl}{\tt{}=DIR}&  OpenGL/Mesa header files are in DIR/GL\\\vspace{3mm}
 
-  \option{--with-opengl-libs}{\tt{}=DIR}&  	OpenGL/Mesa libraries are in DIR/GL\\\vspace{3mm}
+  \option{--with-opengl-libs}{\tt{}=DIR}&  OpenGL/Mesa libraries are in DIR/GL\\\vspace{3mm}
 
-  \option{--with-mesa}&    				         	use MESA instead of OpenGL
-								                  	       	If this option is specified, configure looks for libMesaGLU/libMesaGL.
-									                         	If no libraries with these names are found, configure looks for
-                  									       	libGLU and libGL.
-									                         	This switch also add X11 libraries when trying to link agains the Mesa
-									                         	libraries.\\\vspace{3mm}
+  \option{--with-mesa}&                    use MESA instead of OpenGL\\
+                                           \vspace{3mm}
 
-  \option{--without-libxnet}&							 	use \Index{libsocket}/\Index{libnsl} for linking
-										  										 	rather than \Index{libxnet}
-							  	                         	this option is useful if some of your libraries (e.g. X11 libs)
-									                         	were linked against libsocket/libnsl
-																					 	\\\vspace{3mm}
+  \option{--without-libxnet}&              use \Index{libsocket}/\Index{libnsl}
+                                           for linking rather than 
+                                           \Index{libxnet} (under Solaris)
+                                           \\\vspace{3mm}
 
-  \option{--help}&                  display help information\\\hline
-\end{tabular}
-\end{center}
+  \option{--with-python}&                  enable Python support\\\vspace{3mm}
+  
+  \option{--with-python-incl=DIR}&         Python includes (Python.h) is in
+                                           DIR\\\vspace{3mm}
+
+  \option{--with-python-libs=DIR}&         Python library (libpython*.a) is
+                                           in DIR\\\vspace{3mm}
+
+  \option{--with-python-ldopts=X}&         Use additional options X when
+                                           linking with the Python library
+                                           \\\vspace{3mm}
+
+  \option{--with-sip-lib=DIR}&             the SIP library resides in DIR
+                                           \\\vspace{3mm}
+
+  \option{--with-sip-incl=DIR}&            the SIP header file resides in DIR
+                                           \\\vspace{3mm}
+
+  \option{--with-sip=DIR}&                 the SIP executable resides in DIR
+                                           \\\vspace{3mm}
+
+  \option{--without-xdr}&                  no RPC/XDR headers available - do
+                                           not build portable binary
+                                           persistence support
+                                           \\\vspace{3mm}
+
+  \option{--help}&                         display help information\\\hline
 \caption{options for {\tt configure}}
 \label{table:options}
-\end{table}
+\end{longtable}
+%\end{center}
+%\caption{options for {\tt configure}}
+%\label{table:options}
 
 For example, to compile BALL without the visualization component BALLVIEW,
 specify 
