@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.17 2001/04/08 23:30:25 amoll Exp $
+// $Id: parameterSection.C,v 1.18 2001/04/09 11:27:13 amoll Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -93,6 +93,9 @@ namespace BALL
 		// check for the existence of the required section
 		if (!ini_file.hasSection(section_name))
 		{
+			 Log.error() << "ParameterSectionFile " << ini_file.getFilename() 
+									<< " has no Section " << section_name << " ." << endl;
+
 			return false;
 		}
 
@@ -113,15 +116,12 @@ namespace BALL
 		int	number_of_lines = 0;
 		String line;
 
-		INIFile::LineIterator it = ini_file.getSectionFirstLine(section_name);
-
-		for (; +it ; ++it)
+		INIFile::LineIterator it(ini_file.getSectionFirstLine(section_name));
+		++it;//skip section line
+		for (; +it; it.getSectionNextLine())
 		{						
-			// get the line and remove leading white spaces
-		
-			const INIFile::LineIterator& cit(it);
-
-			String line(*cit);
+			// get the line and remove leading white spaces	
+			String line(*it);
 			line.trimLeft();
 
 			// skip all empty lines, comments and option lines
@@ -148,7 +148,7 @@ namespace BALL
 	
 		// f contains the fields resulting from a splitQuoted of the format line
 		vector<String> f;
-		Size number_of_fields = format_line_.split(f, String::CHARACTER_CLASS__WHITESPACE);
+		Size number_of_fields(format_line_.split(f, String::CHARACTER_CLASS__WHITESPACE));
 
 		if (number_of_fields == 0 || number_of_fields > 20)
 		{
@@ -165,9 +165,11 @@ namespace BALL
 		// keys is an array containing the fields that will be assembled to the line key
 		Index	keys[ParameterSection::MAX_FIELDS];
 		Size	number_of_keys = 0;
+
 		// variables is an array containing the fields that represent variables
 		Index	variables[ParameterSection::MAX_FIELDS];
 		Size number_of_variables = 0;
+
 		// clear the old contents of variable_names_
 		variable_names_.clear();
 
@@ -222,6 +224,7 @@ namespace BALL
 		// allocate space for all entries
 		entries_.clear();
 		entries_.resize(number_of_lines * number_of_variables);	
+
 		// clear all former contest of the keys_ array
 		keys_.clear();
 		section_entries_.clear();
@@ -229,11 +232,10 @@ namespace BALL
 		number_of_lines = -1; // skip format line
 
 		it = ini_file.getSectionFirstLine(section_name);
-		for (; +it ; ++it)
+		++it;//skip section line
+		for (; +it ; it.getSectionNextLine())
 		{
-			const INIFile::LineIterator& cit(it);
-
-			line = *cit;
+			line = *it;
 			line.trimLeft();
 
 			// if line is empty or is a comment line, nothing to be done
