@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.29 2004/03/04 12:41:16 amoll Exp $
+// $Id: molecularStructure.C,v 1.30 2004/03/04 13:01:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1218,7 +1218,14 @@ namespace BALL
 				if ((**it1).isBoundTo(**it2)) continue;
 
 				float square_distance = Vector3((**it1).getPosition() - (**it2).getPosition()).getSquareLength();
-				float radius_sum = (**it1).getElement().getAtomicRadius() + (**it2).getElement().getAtomicRadius();
+
+				float radius1 = ((**it1).getElement().getVanDerWaalsRadius());
+				if (radius1 == 0) radius1 = ((**it1).getElement().getAtomicRadius());
+
+				float radius2 = ((**it2).getElement().getVanDerWaalsRadius());
+				if (radius2 == 0) radius2 = ((**it2).getElement().getAtomicRadius());
+
+				float radius_sum = (radius1 + radius2 * 0.25);
 				if (square_distance >= radius_sum * radius_sum) continue;
 
 				// ok, now we found 2 atoms which are too near
@@ -1250,18 +1257,28 @@ namespace BALL
 				(**it2).select();
 
 				CompositeMessage* msg = new CompositeMessage(**it1, CompositeMessage::SELECTED_COMPOSITE);
-				notify_(msg);
-
-				CompositeMessage* msg2 = new CompositeMessage(**it2, CompositeMessage::SELECTED_COMPOSITE);
-				notify_(msg2);
+				msg->setUpdateRepresentations(false);
+ 				notify_(msg);
+ 
+ 				CompositeMessage* msg2 = new CompositeMessage(**it2, CompositeMessage::SELECTED_COMPOSITE);
+				msg->setUpdateRepresentations(false);
+ 				notify_(msg2);
 
 				if (!found) centerCamera(*it1);
 				found = true;
 			}
 		}
 
-		if (found) setStatusbarText("Found some overlapping atoms. See Logs...");
-		else  		 setStatusbarText("No overlapping atoms found.");
+		if (found) 
+		{
+			setStatusbarText("Found some overlapping atoms. See Logs...");
+		 	CompositeMessage* msg = new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE);
+ 			notify_(msg);
+		}
+		else 
+		{ 
+			setStatusbarText("No overlapping atoms found.");
+		}
 	}
 
 } } // namespaces
