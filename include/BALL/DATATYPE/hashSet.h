@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashSet.h,v 1.38 2003/03/26 13:56:18 anhi Exp $ 
+// $Id: hashSet.h,v 1.39 2003/04/17 16:32:16 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -156,7 +156,7 @@ namespace BALL
 			{
 				bound_ = 0;
 				position_ = 0;
-				bucket_ = INVALID_INDEX;
+				bucket_ = INVALID_POSITION;
 			}
 			
 			void toBegin()	throw()
