@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.8 2001/10/16 23:37:44 amoll Exp $
+// $Id: TCPTransfer.C,v 1.9 2001/10/29 19:59:38 amoll Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -713,6 +713,28 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	}
 	setBlock_(socket2, false);
 	
+	// ----------------------------------- setting binary mode
+	query = "TYPE I\n";
+	sendData_(query, socket_);	
+
+	received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
+	if (received_bytes_ < 0)
+	{
+		return RECV_ERROR;
+	}
+	buffer_[received_bytes_] = '\0';
+	
+	if (debug_)
+	{
+		(*fstream_) << "<<" << buffer_ << endl;
+	}
+	
+	// we get a code 200 if FTP-server will use binary mode
+	if (getFTPStatus_() != 200)
+	{
+		return status_;
+	}
+
 	// ----------------------------------- test if server will send file
 	query = "RETR " + file_address_ + '\n';
 	
