@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.42 2003/05/08 10:30:50 oliver Exp $
+// $Id: persistenceManager.h,v 1.43 2003/05/08 14:28:50 sneumann Exp $
 //
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -988,10 +988,10 @@ namespace BALL
 		T* ptr = const_cast<T*>(array);
 		for (Position i = 0; i < size; i++) 
 		{
-			(*this).readObject(ptr[i], "");
+			(*this) >> ptr[i];
 		}
 
-		bool result = checkPointerObjectArrayTrailer();
+		bool result = checkObjectPointerArrayTrailer();
 		return result;
 	} 
 
