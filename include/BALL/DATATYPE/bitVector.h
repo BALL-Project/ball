@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.6 2000/01/19 17:54:45 oliver Exp $
+// $Id: bitVector.h,v 1.7 2000/06/28 20:26:37 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -211,9 +211,6 @@ namespace BALL
 	
 		///
 		bool operator [] (Index index) const;
-
-		///
-		const char* get(char* bit_string_buffer, Size buffer_size, Index first = 0, Index last = -1) const;
 
 		///
 		void setBit(Index index, bool value = true);
