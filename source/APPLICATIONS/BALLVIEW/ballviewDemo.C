@@ -141,7 +141,7 @@ void BALLViewDemo::accept()
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
 	bool disable_button = true;
 
-	if (id < MODEL_HBONDS + 8)
+	if (id < MODEL_HBONDS + 7)
 	{
 		// remove representations
 		PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
