@@ -1,4 +1,4 @@
-// $Id: pyWidget.C,v 1.3 2001/03/02 14:50:45 anker Exp $
+// $Id: pyWidget.C,v 1.4 2001/07/15 15:18:17 oliver Exp $
 
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
@@ -52,7 +52,7 @@ void PyWidget::stopInterpreter()
 
 void PyWidget::startInterpreter()
 {
-	cerr << "starting Py interpreter..." << endl;
+	std::cerr << "starting Py interpreter..." << std::endl;
 	// initialize the interpreter
 	PyInterpreter::initialize();
 
@@ -146,7 +146,7 @@ void PyWidget::cursorDown(bool /* mark */)
 
 void PyWidget::newLine()
 {
-	cerr << "parsing line..." << endl;
+	std::cerr << "parsing line..." << std::endl;
 	// move the cursor to the end of the line
 	end();
 
