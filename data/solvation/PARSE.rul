@@ -4,7 +4,7 @@
 #   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
 #   Using Macroscopic Solvent Models, J. Phys. Chem, (1994), 98, 1978-1988
 #
-# $Id: PARSE.rul,v 1.6 2003/02/07 14:28:39 anker Exp $
+# $Id: PARSE.rul,v 1.7 2003/02/22 13:27:23 anker Exp $
 #
 
 
@@ -149,8 +149,6 @@
 -0.78   = connectedTo((-C(=O)(-*))(-H)(-H))
 ; N-substituted amide
 -0.40   = connectedTo((-C(=O)(-*))(-H)(-*)) OR connectedTo((.C(~O)(.*))(-H)(-*))
-: ARG
--0.40   = connectedTo((-H)(-C(-H)(-C(~O))))
 ; guanidine 
 -0.56   = connectedTo((CH2)(C(H)(NH2)(NH2)))
 ; guanidine: amino N
