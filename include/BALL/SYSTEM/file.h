@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.52 2003/06/16 12:01:56 anker Exp $
+// $Id: file.h,v 1.53 2003/07/03 10:06:35 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -332,11 +332,12 @@ namespace BALL
 				@param  name the new file
 		*/
 		void setName(const String& name)
-			throw (Exception::FileNotFound);
+			throw();
 
 		/**
 		*/
-		const String& getOriginalName() const;
+		const String& getOriginalName() const
+			throw();
 
 		/**	Return the size of the file.
 				If the file does not exist, 0 is returned.
@@ -546,7 +547,7 @@ namespace BALL
 				@exception FileNotFound is thrown if name is an empty string
 		*/
 		static bool isAccessible(String name)
-			throw (Exception::FileNotFound);
+			throw ();
 
 		/**	Test if the file can be accessed.
 				@return bool true if the file can be accessed

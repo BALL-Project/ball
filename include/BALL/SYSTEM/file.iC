@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.iC,v 1.18 2002/12/12 09:27:23 oliver Exp $
+// $Id: file.iC,v 1.19 2003/07/03 10:06:35 amoll Exp $
 
 BALL_INLINE 
 void File::clear()
@@ -20,7 +20,7 @@ const String& File::getName()
 
 BALL_INLINE 
 void File::setName(const String& name)
-	throw(Exception::FileNotFound)
+	throw()
 {
 	File::close();
   name_ = name;
@@ -102,7 +102,7 @@ bool File::moveTo(const String& destination_name)
 
 BALL_INLINE 
 bool File::isAccessible(String name)
-	throw (Exception::FileNotFound)
+	throw ()
 {
   FileSystem::canonizePath(name);
 #ifdef BALL_COMPILER_MSVC
@@ -238,6 +238,8 @@ BALL_INLINE
 bool File::isCanonized() const 
 	throw (Exception::FileNotFound)
 {
+	if (!isAccessible()) throw(Exception::FileNotFound(__FILE__, __LINE__, name_));
+
   String canonized_name(name_);
 
   FileSystem::canonizePath(canonized_name);
@@ -249,6 +251,8 @@ BALL_INLINE
 bool File::isReadable(String name)
 	throw (Exception::FileNotFound)
 {
+	if (!File::isAccessible(name)) throw(Exception::FileNotFound(__FILE__, __LINE__, name));
+
   FileSystem::canonizePath(name);
   
   return (::access(name.c_str(), R_OK) == 0);
@@ -265,6 +269,8 @@ BALL_INLINE
 bool File::isWritable(String name)
 	throw (Exception::FileNotFound)
 {
+	if (!File::isAccessible(name)) throw(Exception::FileNotFound(__FILE__, __LINE__, name));
+
   FileSystem::canonizePath(name);
   
   return (::access(name.c_str(), W_OK) == 0);
@@ -281,6 +287,8 @@ BALL_INLINE
 bool File::isExecutable(String name)
 	throw (Exception::FileNotFound)
 {
+	if (!isAccessible(name)) throw(Exception::FileNotFound(__FILE__, __LINE__, name));
+
   FileSystem::canonizePath(name);
   #ifdef BALL_COMPILER_MSVC
 	return false;
@@ -309,3 +317,11 @@ std::fstream& File::getFileStream()
 {
   return *this;
 }
+
+BALL_INLINE 
+const String& File::getOriginalName()	const	
+	throw()
+{
+  return original_name_;
+}
+
