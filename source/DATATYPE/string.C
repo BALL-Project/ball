@@ -1,6 +1,7 @@
-// $Id: string.C,v 1.22 2000/07/16 19:26:41 oliver Exp $
+// $Id: string.C,v 1.23 2000/07/17 21:26:43 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/limits.h>
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -398,6 +399,162 @@ namespace BALL
 
 		return false;
 	}
+
+	 
+	short String::toShort() const
+	{
+		if (!isFloat())
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+
+		errno = 0;
+		int i = atoi(c_str());
+
+		if ((errno == ERANGE) || (i < (int)Limits<short>::min()) || (i > (int)Limits<short>::max()))
+		{
+			errno = 0;
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string("out of range: ") + c_str());
+		}
+		errno = 0;
+
+		return (short)i;
+	}
+
+	 
+	unsigned short String::toUnsignedShort() const
+	{
+		if (!isFloat())
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+
+		errno = 0;
+		int i = atoi(c_str());
+
+		if ((errno == ERANGE) || (i < (int)0) || (i > (int)Limits<unsigned short>::max()))
+		{
+			errno = 0;
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string("out of range: ") + c_str());
+		}
+		errno = 0;
+
+		return (unsigned short)i;
+	}
+
+	
+	int String::toInt() const
+	{
+		if (!isFloat())
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+
+		errno = 0;
+		int i = atoi(c_str());
+
+		if (errno == ERANGE)
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string("out of range: ") + string(c_str()));
+		}
+		
+		return i;
+	}
+
+	 
+	unsigned int String::toUnsignedInt() const
+	{
+		if (!isFloat())
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+
+		errno = 0;
+		unsigned int ui = (unsigned int)strtoul(c_str(), (char **)0, 10);
+
+		if (errno == ERANGE)
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+		
+		return ui;
+	}
+
+	 
+	long String::toLong() const
+	{
+		if (!isFloat())
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+
+		errno = 0;
+		long l = atol(c_str());
+
+		if (errno == ERANGE)
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+		
+		return l;
+	}
+
+	 
+	unsigned long String::toUnsignedLong() const
+	{
+		if (!isFloat())
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+
+		errno = 0;
+		unsigned long ul = strtoul(c_str(), (char **)0, 10);
+
+		if (errno == ERANGE)
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+		
+		return ul;
+	}
+
+	 
+	float String::toFloat() const
+	{
+		if (!isFloat())
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+
+		errno = 0;
+		float f = (float)atof(c_str());
+
+		if (errno == ERANGE)
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+		
+		return f;
+	}
+
+	
+	double String::toDouble() const
+	{
+		if (!isFloat())
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+		errno = 0;
+		double d = atof(c_str());
+
+		if (errno == ERANGE)
+		{
+			throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
+		}
+		
+		return d;
+	}
+
 
 	void String::toLower(Index from, Size len)
 	{
