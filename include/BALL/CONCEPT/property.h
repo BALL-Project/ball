@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.21 2001/06/14 11:46:24 oliver Exp $
+// $Id: property.h,v 1.22 2001/06/25 12:48:18 anker Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -24,7 +24,8 @@ namespace BALL
 	*/
 	//@{
 	
-	/** Named Property Class
+	/** Named Property Class.
+			{\bf Definition:} \URL{BALL/CONCEPT/property.h}
 	*/
 	class NamedProperty
 		:	public PersistentObject
@@ -41,7 +42,8 @@ namespace BALL
 		*/
 		enum Type
 		{
-			/**	@doc Bool-type properties can have the value {\bf true} or {\bf false}.
+			/**	@doc Bool-type properties can have the value {\bf true} or 
+					{\bf false}.
 			*/
 			BOOL,
 
@@ -49,7 +51,8 @@ namespace BALL
 			*/
 			INT,
 
-			/** @doc Unsigned-int-type properties contain a variable of type {\bf unsigned int}
+			/** @doc Unsigned-int-type properties contain a variable of type 
+					{\bf unsigned int}
 			*/
 			UNSIGNED_INT,
 
@@ -319,20 +322,21 @@ namespace BALL
 			on the kind of data stored. The simplest kind of property 
 			is just stored as a boolean information: Either an object {\em has}
 			a certain property, or it does not. These properties are obviously coded 
-			as a BitVector. However the meaning of the different bits has to be defined
-			and the uniqueness of this meaning has to be guaranteed. In order to avoid
-			this, all kernel classes derived from PropertyManager contain a public enum
-			that defines a value NUMBER_OF_PROPERTIES. All user defined properties should	
-			refer to this constant (e.g. by defining {\tt MY_PROPERTY = Molecule::NUMBER_OF_PROPERTIES + 1}).\\
-			The second way of storing properties is much more flexible, but less efficient. 
-			It uses the class NamedProperty that also allows to store additional information 
-			along with the property. In this case, each property is accessed via a 
-			unique name.\\
-			
+			as a BitVector. However the meaning of the different bits has to be
+			defined and the uniqueness of this meaning has to be guaranteed. In
+			order to avoid this, all kernel classes derived from PropertyManager
+			contain a public enum that defines a value NUMBER_OF_PROPERTIES. All
+			user defined properties should	refer to this constant (e.g. by
+			defining {\tt MY_PROPERTY = Molecule::NUMBER_OF_PROPERTIES + 1}).
+			\\
+			The second way of storing properties is much more flexible, but less
+			efficient.  It uses the class NamedProperty that also allows to store
+			additional information along with the property. In this case, each
+			property is accessed via a unique name.
+			\\
 			{\bf Interface:} Storable
 			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/property.h}
-			\\
 	*/
 	class PropertyManager
 	{
