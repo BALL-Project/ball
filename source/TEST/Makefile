@@ -59,6 +59,7 @@ EXECUTABLES = \
 	Residue_test\
 	ResourceFile_test\
 	RTTI_test\
+	RuleEvaluator_test\
 	SecondaryStructure_test\
 	Socket_test\
 	Sphere3_test\
@@ -224,6 +225,9 @@ ResourceFile_test:	ResourceFile_test.o
 
 RTTI_test:	RTTI_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+RuleEvaluator_test:	RuleEvaluator_test.o ../MOLMEC/COMMON/ruleEvaluator.o ../KERNEL/expression.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o ../MOLMEC/COMMON/ruleEvaluator.o ../KERNEL/expression.o $(LIBS)
 
 SecondaryStructure_test:	SecondaryStructure_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
