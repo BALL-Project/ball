@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.5 2000/10/19 14:49:03 strobel Exp $
+// $Id: triangulatedSurface.h,v 1.6 2000/10/19 17:03:21 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -206,7 +206,7 @@ namespace BALL
 		*/
 		//@{
 
-/*		TSurface<T> exportSurface()
+		TSurface<T> exportSurface()
 		{
 			setIndices();
 			std::vector<TVector3<T> > surface_points;
@@ -234,7 +234,7 @@ namespace BALL
 			surface.normal = surface_normals;
 
 			return surface;
-		}*/
+		}
 
 
 		TTriangulatedSurface<T>& operator += (TTriangulatedSurface<T>& surface)
@@ -355,12 +355,12 @@ namespace BALL
 
 		void refineSphere(const T& radius, bool out)
 		{
-			list<Edge<T>*> new_edges;
+			list<Edge*> new_edges;
 			for (list<Edge*>::iterator i = edges.begin(); i != edges.end(); i++)
 				{
-					Point<T>* point1 = (*i)->point[0];
-					Point<T>* point2 = (*i)->point[1];
-					Point<T>* new_point = new Point<T>();
+					Point* point1 = (*i)->point[0];
+					Point* point2 = (*i)->point[1];
+					Point* new_point = new Point;
 					new_point->p = (point1->p+point2->p).normalize();
 					new_point->p *= radius;
 					if (out == true) 
@@ -374,13 +374,13 @@ namespace BALL
 					(*i)->triangle[0]->point.push_back(new_point);
 					(*i)->triangle[1]->point.push_back(new_point);
 					points.push_back(new_point);
-					Edge<T>* new_edge1 = new Edge<T>();
+					Edge* new_edge1 = new Edge;
 					new_edge1->point[0] = point1;
 					new_edge1->point[1] = new_point;
 					(*i)->triangle[0]->edge.push_back(new_edge1);
 					(*i)->triangle[1]->edge.push_back(new_edge1);
 					new_edges.push_back(new_edge1);
-					Edge<T>* new_edge2 = new Edge<T>();
+					Edge* new_edge2 = new Edge;
 					new_edge2->point[0] = point2;
 					new_edge2->point[1] = new_point;
 					(*i)->triangle[0]->edge.push_back(new_edge2);
@@ -391,15 +391,15 @@ namespace BALL
 			for (list<Triangle*>::iterator i = triangles.begin(); i != triangles.end(); i++)
 				{
 					Triangle current = *(*i);
-					vector< Triangle<T>* > t(4);
+					vector< Triangle* > t(4);
 					for (int k = 0; k < 4; k++)				// create four new triangles
 						{
-							t[k] = new Triangle<T>();
+							t[k] = new Triangle;
 						}
-					vector< Edge<T>* > e(3);
+					vector<Edge* > e(3);
 					for (int k = 0; k < 3; k++)				// create three new edges
 						{
-							e[k] = new Edge<T>();
+							e[k] = new Edge;
 						}
 					list<Edge*> edge_list;
 					for (int k = 3; k < 9; k++)				// list of edges created in the first for-loop

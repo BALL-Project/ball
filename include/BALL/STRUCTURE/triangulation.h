@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.5 2000/10/19 14:24:52 strobel Exp $
+// $Id: triangulation.h,v 1.6 2000/10/19 17:03:21 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -234,8 +234,8 @@ surface->setIndices();
 	void TriangulateContactFace(TSESFace<T>* face, const TSphere3<T> atom, const T& size,
 															HashMap< T,TTriangulatedSurface<T> >& spheres,
 															std::vector<TTriangulatedSurface<T>*>& triangulated_faces,
-															std::vector< std::set<TTriangulatedSurface<T>::Edge*> >& borders,
-															std::vector< std::vector< TSESEdge<T>* > >& contours)
+															std::vector< std::set<typename TTriangulatedSurface<T>::Edge*> >& borders,
+															std::vector< std::vector<TSESEdge<T>* > >& contours)
 	{
 		std::vector< std::vector< TSESEdge<T>* > > this_contours = GetFaceContours(face);
 		for (Position c = 0; c < this_contours.size(); c++)
@@ -270,7 +270,7 @@ surface->setIndices();
 //															TTriangulatedSurface<T>*& triangulated_probe,
 															TTriangulatedSurface<T>* triangulated_probe,
 															std::vector<TTriangulatedSurface<T>*>& triangulated_faces,
-															std::vector< std::set<TTriangulatedSurface<T>::Edge*> >& borders,
+															std::vector< std::set<typename TTriangulatedSurface<T>::Edge*> >& borders,
 															std::vector< std::vector< TSESEdge<T>* > >& contours)
 	{
 		std::vector< std::vector< TSESEdge<T>* > > this_contours = GetFaceContours(face);
@@ -724,8 +724,8 @@ surface->setIndices();
 
 
 	template <class T>
-	void Sew(std::set< TTriangulatedSurface<T>::Edge* > contour, std::vector< TSESEdge<T>* > border,
-					 std::vector< std::list< TTriangulatedSurface<T>::Point* > > edge_contours,
+	void Sew(std::set<typename TTriangulatedSurface<T>::Edge* > contour, std::vector< TSESEdge<T>* > border,
+					 std::vector< std::list<typename TTriangulatedSurface<T>::Point* > > edge_contours,
 					 TTriangulatedSurface<T>* surface)
 	{
 		std::list< TTriangulatedSurface<T>::Point* > contour_out;
@@ -753,7 +753,7 @@ surface->setIndices();
 
 	template <class T>
 	void GetContour(std::vector< TSESEdge<T>* >& border,
-									std::vector< std::list< TTriangulatedSurface<T>::Point* > > edge_contours,
+									std::vector< std::list<typename TTriangulatedSurface<T>::Point* > > edge_contours,
 									std::list< typename TTriangulatedSurface<T>::Point* >& contour)
 	{
 		if (border.size() == 1)

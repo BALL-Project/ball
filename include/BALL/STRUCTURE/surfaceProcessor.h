@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.2 2000/10/11 09:40:20 oliver Exp $
+// $Id: surfaceProcessor.h,v 1.3 2000/10/19 17:03:20 oliver Exp $
 
 #include "reducedSurface.h"
 #include "solventExcludedSurface.h"
@@ -64,7 +64,7 @@ namespace BALL
 		SolventExcludedSurface* ses = new SolventExcludedSurface(rs);
 		ses->get(rs);
 		TreatSingularities(ses,probe_radius_);
-		TriangulatedSurface* surface = new TriangulatedSurface(Triangulate(ses,rs,density_));
+		TriangulatedSurface* surface = new TriangulatedSurface(*Triangulate(ses,rs,density_));
 		surface_ = surface->exportSurface();
 		delete surface;
 		delete ses;
