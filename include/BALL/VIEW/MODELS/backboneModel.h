@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.14.2.6 2005/01/09 17:45:44 amoll Exp $
+// $Id: backboneModel.h,v 1.14.2.7 2005/01/10 13:48:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -177,6 +177,8 @@ namespace BALL
 
 			//_
 			Size 	interpolation_steps_;
+
+			Index last_spline_point_;
 		};
 
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.23 2005/01/09 17:45:35 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.24 2005/01/10 13:48:21 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -90,7 +90,6 @@ void AddCartoonModel::clear_()
 	last_chain_ = 0;
 	ss_to_spline_start_.clear();
 	ss_nr_splines_.clear();
-	was_strand_ = false;
 }
 
 void AddCartoonModel::collectAtomsForChain_(Chain& chain)
@@ -397,7 +396,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	const Position start = ss_to_spline_start_[&ss] * interpolation_steps_;
 	if (start != 0)
 	{
-		buildGraphicalRepresentation_(start - 10, start);
+//   		buildGraphicalRepresentation_(start - 10, start);
 	}
 	 
 	// put first four points into the mesh (and first two triangles)
@@ -620,43 +619,41 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 								<< " spline points and " << spline_points_.size() 
 								<< " interpolated points in" 
 								<< __FILE__ << " " << __LINE__ << std::endl;
-		return Processor::ABORT;
 	}
 
-	if ((ss.getType() == SecondaryStructure::STRAND) && (ss.countResidues() > 3))
+	else if ((ss.getType() == SecondaryStructure::STRAND) && (ss.countResidues() > 3))
 	{
 		drawStrand_(ss);
-		was_strand_ = true;
-		return Processor::CONTINUE;
+		last_spline_point_ = (ss_to_spline_start_[&ss] + ss_nr_splines_[&ss] - 1) * interpolation_steps_ - 1;
 	}
 
-	if (ss.getType() == SecondaryStructure::HELIX)
+	else if (ss.getType() == SecondaryStructure::HELIX)
 	{
 		if (draw_ribbon_)
 		{
 			Size start = ss_to_spline_start_[&ss];
 			drawRibbon_(start 											 * interpolation_steps_, 
 								 (start + ss_nr_splines_[&ss]) * interpolation_steps_);
-			was_strand_ = false;
-			return Processor::CONTINUE;
+			last_spline_point_ = (ss_to_spline_start_[&ss] + ss_nr_splines_[&ss]) * interpolation_steps_ - 2;
 		}
-
-	  drawHelix_(ss);
-		was_strand_ = false;
-		return Processor::CONTINUE;
+		else
+		{
+			drawHelix_(ss);
+		}
 	}
-
-	const String name = ss.getResidue(0)->getName();
-	if ((name.size() == 1) &&
-			(name == "A" || name == "C" || name == "G" || name == "T" || name == "U"))
+	else
 	{
-		drawDNA_(ss);
-		was_strand_ = false;
-		return Processor::CONTINUE;
+		const String name = ss.getResidue(0)->getName();
+		if ((name.size() == 1) &&
+				(name == "A" || name == "C" || name == "G" || name == "T" || name == "U"))
+		{
+			drawDNA_(ss);
+		}
+		else
+		{
+ 			drawTube_(ss) ;
+		}
 	}
-
-	drawTube_(ss) ;
-	was_strand_ = false;
 
 	return Processor::CONTINUE;
 }
@@ -667,7 +664,6 @@ void AddCartoonModel::drawTube_(SecondaryStructure& ss)
 	throw()
 {
 	Position start = ss_to_spline_start_[&ss];
-	if (was_strand_) start--;
 	buildGraphicalRepresentation_(start 												* interpolation_steps_, 
 																(start + ss_nr_splines_[&ss])	* interpolation_steps_);
 }
@@ -784,8 +780,8 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 
 	if (start != 0)
 	{
-		start--;
-		buildGraphicalRepresentation_(start - 10, start);
+//   		start--;
+//   		buildGraphicalRepresentation_(start - 10, start);
 	}
 
 	// overall direction of the helix
