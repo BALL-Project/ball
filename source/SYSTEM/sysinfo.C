@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.13 2005/03/01 10:31:04 oliver Exp $
+// $Id: sysinfo.C,v 1.14 2005/03/01 14:54:52 amoll Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -89,7 +89,7 @@ namespace BALL
 
 		LongIndex getAvailableMemory()
 		{
-			return getFreememory();
+			return getFreeMemory();
 		}
 
 		LongIndex getFreeMemory()
