@@ -1,4 +1,4 @@
-// $Id: molecularGraph.h,v 1.1.2.5 2002/06/27 02:38:27 oliver Exp $
+// $Id: molecularGraph.h,v 1.1.2.6 2002/11/26 16:00:46 oliver Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -68,6 +68,7 @@ namespace BALL
 		Size getDegree() const throw();
 
 		bool operator == (const NodeItem& item) const throw();
+		bool operator != (const NodeItem& item) const throw();
 
 		protected:
 
@@ -108,6 +109,7 @@ namespace BALL
 		const Bond* getBond() const { return bond_; }
 
 		bool operator == (const EdgeItem& item) const { return (bond_ == item.bond_); }
+		bool operator != (const EdgeItem& item) const { return (bond_ != item.bond_); }
 
 		protected:
 		Edge	data_;
@@ -448,10 +450,17 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
+	bool NodeItem<Node, Edge>::operator != (const NodeItem& item) const 
+		throw()
+	{ 
+		return (atom_ != item.atom_); 
+	}
+
+	template <typename Node, typename Edge>
 	void NodeItem<Node, Edge>::deleteEdge_(EdgeItemType* item)
 		throw()
 	{
-		Iterator it(find(adjacent_edges_.begin(), adjacent_edges_.end(), item));
+		Iterator it(std::find(adjacent_edges_.begin(), adjacent_edges_.end(), item));
 		if (it != adjacent_edges_.end())
 		{
 			adjacent_edges_.erase(it);
