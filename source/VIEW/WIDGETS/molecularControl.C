@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.9 2003/10/05 14:48:44 amoll Exp $
+// $Id: molecularControl.C,v 1.10 2003/10/05 15:37:38 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -253,7 +253,6 @@ void MolecularControl::showFilename()
 
 void MolecularControl::updateSelection()
 {
-	setStatusbarText("");
 	selected_.clear();
 
 	// we have to prevent, to insert child items of already selected parents,
@@ -639,7 +638,7 @@ void MolecularControl::copy()
 	const List<Composite*> selection = getSelection();
 	if (selection.size() == 0) return;
 
-	setStatusbarText("copying " + String(selection.size()) + " objects ...");
+	setStatusbarText("copied " + String(selection.size()) + " objects ...");
 
 	// delete old cutted composites
 	if (copy_list_.size() > 0)
@@ -662,8 +661,6 @@ void MolecularControl::copy()
 			copy_list_.push_back((Composite*)(*it)->create());
 		}
 	}
-	
-	setStatusbarText("");
 }
 
 
@@ -671,7 +668,7 @@ void MolecularControl::paste()
 {
 	if (copy_list_.size() == 0) return;
 
-	setStatusbarText("pasting " + String(copy_list_.size()) + " objects...");
+	setStatusbarText("pasted " + String(copy_list_.size()) + " objects...");
 
 	// copying composites
 	List<Composite*>::ConstIterator list_it = copy_list_.begin();	
@@ -686,14 +683,12 @@ void MolecularControl::paste()
 		new_message->setCompositeName(getInformationVisitor_().getName());
 		notify_(new_message);
 	}
-
-	setStatusbarText("");
 }
 
 
 void MolecularControl::clearClipboard()
 {
-	setStatusbarText("clearing clipboard...");
+	setStatusbarText("cleared clipboard");
 
 	// delete old composites
 	if (copy_list_.size() > 0)
@@ -706,8 +701,6 @@ void MolecularControl::clearClipboard()
 
 		copy_list_.clear();
 	}
-
-	setStatusbarText("");
 }
 
 
