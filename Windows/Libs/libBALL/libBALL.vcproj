@@ -20,7 +20,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;,&quot;C:\Programme\Qt\3.3.0b1\include&quot;,&quot;C:\Programme\Qt\3.3.0b1\mkspecs\win32-msvc.net&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;,&quot;C:\Programme\Qt\3.3.0b1\include&quot;,&quot;C:\Programme\Qt\3.3.0b1\mkspecs\win32-msvc.net&quot;;$(SIPDIR)/include"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBBALL_EXPORTS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -28,11 +28,11 @@
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="2"
 				ObjectFile=".tmp\obj"
-				WarningLevel="3"
+				WarningLevel="0"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
 				CompileAs="2"
-				DisableSpecificWarnings="4311;4129;4355;4267;4244;4305"/>
+				DisableSpecificWarnings="4311;4129;4355;4267;4244;4305;4006"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -197,7 +197,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"/>
+				OutputFile="c:\molview\$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
