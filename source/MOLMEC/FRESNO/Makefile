@@ -11,6 +11,7 @@ CPP_SOURCES=\
 	fresnoRotation.C\
 	fresnoDesolvation.C\
 	fresnoNonPolar.C\
+	fresnoRingStacking.C\
 	chemScoreMetal.C
 
 include ../../common.mak

@@ -1,4 +1,4 @@
-// $Id: fresnoRingStacking.h,v 1.1.2.1 2004/05/13 10:06:36 anker Exp $
+// $Id: fresnoRingStacking.h,v 1.1.2.2 2004/06/12 15:15:32 anker Exp $
 // Molecular Mechanics: Fresno force field, CH---pi interaction
 
 #ifndef BALL_MOLMEC_FRESNO_RINGSTACKING_H
@@ -140,6 +140,48 @@ namespace BALL
 			};
 
 
+			struct Option
+			{
+
+				///
+				static const String VERBOSITY;
+
+				///
+				static const String CX_DISTANCE_UPPER;
+
+				///
+				static const String CHX_ANGLE_LOWER;
+
+				///
+				static const String HX_PROJECTED_DISTANCE_LOWER;
+
+				///
+				static const String HX_PROJECTED_DISTANCE_UPPER;
+
+			};
+
+
+			struct Default
+			{
+
+				///
+				static const Size VERBOSITY;
+
+				///
+				static const float CX_DISTANCE_UPPER;
+
+				///
+				static const float CHX_ANGLE_LOWER;
+
+				///
+				static const float HX_PROJECTED_DISTANCE_LOWER;
+
+				///
+				static const float HX_PROJECTED_DISTANCE_UPPER;
+
+			};
+
+
 			/** @name	Constructors and Destructors	
 			 */
 			//@{ 
@@ -203,6 +245,9 @@ namespace BALL
 			virtual void dump(std::ostream s = std::cout) const
 				throw();
 
+			///
+			Options options;
+
 		private:
 
 			//_ A vector containing all possible interactions between aliphatic
@@ -214,6 +259,18 @@ namespace BALL
 
 			//_ A vector containing all aromatic rings of the receptor.
 			std::vector<AromaticRing> all_aromatic_rings_;
+
+			//_
+			float CX_distance_upper_;
+
+			//_
+			float CHX_angle_lower_;
+
+			//_
+			float HX_projected_distance_lower_;
+
+			//_
+			float HX_projected_distance_upper_;
 
 	};
 

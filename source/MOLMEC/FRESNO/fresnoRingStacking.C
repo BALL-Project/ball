@@ -1,4 +1,4 @@
-// $Id: fresnoRingStacking.C,v 1.1.2.1 2004/05/13 10:06:37 anker Exp $
+// $Id: fresnoRingStacking.C,v 1.1.2.2 2004/06/12 15:15:32 anker Exp $
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 
@@ -20,6 +20,7 @@
 #include <BALL/KERNEL/protein.h>
 
 #define DEBUG 1
+// #define STATISTICS 1
 
 #ifdef DEBUG
 #include <BALL/FORMAT/HINFile.h>
@@ -165,13 +166,45 @@ namespace BALL
 	}
 
 
+	const String FresnoRingStacking::Option::VERBOSITY = "verbosity";
+	const String FresnoRingStacking::Option::CX_DISTANCE_UPPER 
+		= "CX_distance_upper";
+	const String FresnoRingStacking::Option::CHX_ANGLE_LOWER 
+		= "CHX_angle_lower";
+	const String FresnoRingStacking::Option::HX_PROJECTED_DISTANCE_LOWER
+		= "HX_projected_distance_lower";
+	const String FresnoRingStacking::Option::HX_PROJECTED_DISTANCE_UPPER
+		= "HX_projected_distance_upper";
+
+	const Size FresnoRingStacking::Default::VERBOSITY = 0;
+#ifndef STATISTICS
+	const float FresnoRingStacking::Default::CX_DISTANCE_UPPER = 4.5f;
+	const float FresnoRingStacking::Default::CHX_ANGLE_LOWER = 110.0f;
+	const float FresnoRingStacking::Default::HX_PROJECTED_DISTANCE_LOWER
+		= 0.7f;
+	const float FresnoRingStacking::Default::HX_PROJECTED_DISTANCE_UPPER
+		= 1.7f;
+#else
+	const float FresnoRingStacking::Default::CX_DISTANCE_UPPER = 5.5f;
+	const float FresnoRingStacking::Default::CHX_ANGLE_LOWER = 100.0f;
+	const float FresnoRingStacking::Default::HX_PROJECTED_DISTANCE_LOWER
+		= 0.0f;
+	const float FresnoRingStacking::Default::HX_PROJECTED_DISTANCE_UPPER
+		= 2.2f;
+#endif
+
+
 	// Default constructor
 	FresnoRingStacking::FresnoRingStacking ()  
 		throw ()
 		:	ForceFieldComponent(),
 			possible_interactions_(),
 			all_CH_groups_(),
-			all_aromatic_rings_()
+			all_aromatic_rings_(),
+			CX_distance_upper_(0.0f),
+			CHX_angle_lower_(0.0f),
+			HX_projected_distance_lower_(0.0f),
+			HX_projected_distance_upper_(0.0f)
 	{ 
 		setName("Fresno RingStacking");
 	}
@@ -183,7 +216,11 @@ namespace BALL
 		: ForceFieldComponent(force_field),
 			possible_interactions_(),
 			all_CH_groups_(),
-			all_aromatic_rings_()
+			all_aromatic_rings_(),
+			CX_distance_upper_(0.0f),
+			CHX_angle_lower_(0.0f),
+			HX_projected_distance_lower_(0.0f),
+			HX_projected_distance_upper_(0.0f)
 	{ 
 		setName("Fresno RingStacking");
 	}
@@ -195,7 +232,11 @@ namespace BALL
 		: ForceFieldComponent(frs),
 			possible_interactions_(frs.possible_interactions_),
 			all_CH_groups_(frs.all_CH_groups_),
-			all_aromatic_rings_(frs.all_aromatic_rings_)
+			all_aromatic_rings_(frs.all_aromatic_rings_),
+			CX_distance_upper_(frs.CX_distance_upper_),
+			CHX_angle_lower_(frs.CHX_angle_lower_),
+			HX_projected_distance_lower_(frs.HX_projected_distance_lower_),
+			HX_projected_distance_upper_(frs.HX_projected_distance_upper_)
 	{
 	}
 
@@ -244,20 +285,41 @@ namespace BALL
 		// Clear all data structures
 		clear();
 
+		// Set all paramters
+		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		options.setDefaultReal(Option::CX_DISTANCE_UPPER,
+				Default::CX_DISTANCE_UPPER);
+		options.setDefaultReal(Option::CHX_ANGLE_LOWER,
+				Default::CHX_ANGLE_LOWER);
+		options.setDefaultReal(Option::HX_PROJECTED_DISTANCE_LOWER,
+				Default::HX_PROJECTED_DISTANCE_LOWER);
+		options.setDefaultReal(Option::HX_PROJECTED_DISTANCE_UPPER,
+				Default::HX_PROJECTED_DISTANCE_UPPER);
+
+		CX_distance_upper_ = options.getReal(Option::CX_DISTANCE_UPPER);
+		CHX_angle_lower_ = options.getReal(Option::CHX_ANGLE_LOWER);
+		HX_projected_distance_lower_ 
+			= options.getReal(Option::HX_PROJECTED_DISTANCE_LOWER);
+		HX_projected_distance_upper_ 
+			= options.getReal(Option::HX_PROJECTED_DISTANCE_UPPER);
+
+
 		// read the protein and the ligand 
 		// of which the binding sites have to be found 
 		const Protein& protein 
 			= (const Protein&)*((FresnoFF*)force_field)->getProtein();
 
-		// [anker] Grober Unfug
-		// vector <AromaticRing> all_aromatic_rings_;		
+		std::vector<const Atom*> current_atoms;
+		std::vector<const Atom*> current_atoms2;
+		AromaticRing* current_ring = 0;
 
 		// Iterate over all residues and find aromatic ones
 		ResidueConstIterator res_it = protein.beginResidue();
 		for (; +res_it; ++res_it)
 		{ 
 			string residue_name = res_it->getFullName();  
-			std::vector<const Atom*> current_atoms;
+			current_atoms.clear();
+			current_atoms2.clear();
 
 			// Find aromatic rings by their names: Trp, Phe, Tyr
 			if (residue_name == "TRP") 
@@ -277,10 +339,12 @@ namespace BALL
 					if (AtomName =="CE2" || AtomName ==" CD2" || AtomName == "CE3"
 							|| AtomName == "CZ2"|| AtomName == "CZ3"|| AtomName == "CH2")
 					{
-						current_atoms.push_back(&*at_it);
+						current_atoms2.push_back(&*at_it);
 					}
 				}
-				AromaticRing* current_ring = new AromaticRing(current_atoms);
+				current_ring = new AromaticRing(current_atoms);
+				all_aromatic_rings_.push_back(*current_ring);
+				current_ring = new AromaticRing(current_atoms2);
 				all_aromatic_rings_.push_back(*current_ring);
 			}
 			else
@@ -300,7 +364,7 @@ namespace BALL
 							current_atoms.push_back(&*at_it);
 						}
 					}
-					AromaticRing* current_ring = new AromaticRing(current_atoms);
+					current_ring = new AromaticRing(current_atoms);
 					all_aromatic_rings_.push_back(*current_ring);
 				}
 			}
@@ -309,13 +373,23 @@ namespace BALL
 		// The following piece of code only works for simple sugars, i. e.
 		// those wihtout aromatic side chains and only aliphatic carbons. 
 
+#ifndef STATISTICS
 		const Molecule& ligand = *((FresnoFF*)force_field)->getLigand();
+#else
+		const System& ligand = *(force_field->getSystem());
+#endif
+
 		AtomConstIterator lig_it(ligand.beginAtom());
 		for (; +lig_it; ++lig_it) 
 		{ 
-			if (lig_it->getElement() == PTE[Element::C])
+			if ((lig_it->getElement() == PTE[Element::C])
+				&& (lig_it->countBonds() == 4))
 			{	
-				const Atom* aliphatic_C = &*lig_it;	//Zeiger auf ein C-Atom		
+				// The aliphatic C-Atom of this putative interaction
+				const Atom* aliphatic_C = &*lig_it;
+
+				// Now iterate over all bonds and add every bound hydrogen to the
+				// list of CH groups
 				AtomBondConstIterator bnd_it = aliphatic_C->beginBond();
 				for (; +bnd_it; ++bnd_it)
 				{ 
@@ -372,8 +446,7 @@ namespace BALL
 			const Vector3& C_atom = inter_it->second->getCAtom()->getPosition();
 
 			// Check distance C --- X
-			// ????? Thes constants schouldn't be constants
-			if ((ring_centre - C_atom).getLength() < 4.5)
+			if ((ring_centre - C_atom).getLength() < CX_distance_upper_)
 			{
 #ifdef DEBUG
 					Log.info() << "distance C --- x: " 
@@ -386,8 +459,7 @@ namespace BALL
 				HC = C_atom - H_atom;
 				HX = ring_centre - H_atom;
 				float angle_CHX = HC.getAngle(HX).toDegree();
-				// ????? This constant shouldn't be a constant
-				if (angle_CHX >= 120)
+				if (angle_CHX >= CHX_angle_lower_)
 				{
 #ifdef DEBUG
 					Log.info() << "angle (C, H, X):  " << angle_CHX << endl;
@@ -426,16 +498,38 @@ namespace BALL
 					debug_molecule.insert(*atom_ptr_X);
 					debug_molecule.insert(*atom_ptr_N);
 					debug_molecule.insert(*atom_ptr_L);
-					Log.info() << "projected distance H --- X: " 
-						<< projected_distance_XH << endl;
+					Log.info() << "[projected distance H --- X: " 
+						<< projected_distance_XH << "]" << endl;
 #endif
 
-					if (projected_distance_XH >= 1.0 && projected_distance_XH <= 1.2)
+					if (projected_distance_XH >= HX_projected_distance_lower_ 
+						&& projected_distance_XH <= HX_projected_distance_upper_)
 					{
 						// Found an interaction, count it.
 #ifdef DEBUG
 						Log.info() << "projected distance H --- X: " 
 							<< projected_distance_XH << endl;
+
+						Atom* atom_ptr_H = new Atom();
+						atom_ptr_H->setElement(PTE[Element::Fe]);
+						atom_ptr_H->setName("CHPI");
+						atom_ptr_H->setPosition(H_atom);
+
+						Atom* atom_ptr_X = new Atom();
+						atom_ptr_X->setElement(PTE[Element::Fe]);
+						atom_ptr_X->setName("CHPI");
+						atom_ptr_X->setPosition(ring_centre);
+
+						atom_ptr_H->createBond(*atom_ptr_X);
+
+						debug_molecule.insert(*atom_ptr_H);
+						debug_molecule.insert(*atom_ptr_X);
+#endif
+#ifdef STATISTICS
+							Log.info() << "STATISTICS:\t" 
+								<< (ring_centre - C_atom).getLength() << "\t"
+								<< angle_CHX << "\t"
+								<< projected_distance_XH << endl;
 #endif
 						energy_ += 1.0f;
 					}
