@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.10 2003/10/05 15:37:38 amoll Exp $
+// $Id: molecularControl.C,v 1.11 2003/10/15 13:31:12 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -395,11 +395,15 @@ void MolecularControl::recurseUpdate_(SelectableListViewItem* item, Composite& c
 void MolecularControl::initializeWidget(MainControl& main_control)
 	throw()
 {
+	String hint;
+	main_control.insertPopupMenuSeparator(MainControl::EDIT);
 	cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cut", this, SLOT(cut()), CTRL+Key_X);
 	copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
 	paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Paste", this, SLOT(paste()), CTRL+Key_V);
+	main_control.insertPopupMenuSeparator(MainControl::EDIT);
+	hint = "Clear the items in the clipboard";
 	clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Clear Clipboard", this, 
-																							 SLOT(clearClipboard()));
+																							 SLOT(clearClipboard()), 0, -1, hint);
 	GenericControl::initializeWidget(main_control);
 }
 
