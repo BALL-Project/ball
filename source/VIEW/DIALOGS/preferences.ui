@@ -191,16 +191,16 @@
         <slot>close()</slot>
     </connection>
     <connection>
-        <sender>entries_listview</sender>
-        <signal>clicked(QListViewItem*)</signal>
-        <receiver>PreferencesData</receiver>
-        <slot>entrySelected(QListViewItem*)</slot>
-    </connection>
-    <connection>
         <sender>defaults_button</sender>
         <signal>clicked()</signal>
         <receiver>PreferencesData</receiver>
         <slot>setDefaultValues()</slot>
+    </connection>
+    <connection>
+        <sender>entries_listview</sender>
+        <signal>selectionChanged(QListViewItem*)</signal>
+        <receiver>PreferencesData</receiver>
+        <slot>entrySelected(QListViewItem*)</slot>
     </connection>
 </connections>
 <includes>

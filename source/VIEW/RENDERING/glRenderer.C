@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.51 2004/12/09 22:14:39 amoll Exp $
+// $Id: glRenderer.C,v 1.52 2004/12/13 16:19:47 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -363,10 +363,10 @@ namespace BALL
 				glEnable(GL_LIGHTING);
 			}
 
-			List<GeometricObject*>::ConstIterator it;
-			for (it =  representation.getGeometricObjects().begin();
-					 it != representation.getGeometricObjects().end();
-					 it++)
+			// accelerate things a little by calling getGeometricObjects() only once
+			const List<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
+			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
+			for (; it != geometric_objects.end(); it++)
 			{
 				render_(*it);
 			}
