@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.13 2005/01/21 13:34:21 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.14 2005/01/21 17:23:02 amoll Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -70,10 +70,12 @@ bool MeshBuffer::initGL()
 		glBufferDataARB = (PFNGLBUFFERDATAARBPROC) wglGetProcAddress("glBufferDataARB");
 		glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) wglGetProcAddress("glDeleteBuffersARB");
 #else
+	#ifdef GLX_ARB_get_proc_address
 		glGenBuffersARB = (PFNGLGENBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*)"glGenBuffersARB");
 		glBindBufferARB = (PFNGLBINDBUFFERARBPROC) glXGetProcAddressARB((const GLubyte*)"glBindBufferARB");
 		glBufferDataARB = (PFNGLBUFFERDATAARBPROC) glXGetProcAddressARB((const GLubyte*)"glBufferDataARB");
 		glDeleteBuffersARB = (PFNGLDELETEBUFFERSARBPROC) glXGetProcAddressARB((const GLubyte*)"glDeleteBuffersARB");
+	#endif
 #endif
 
 	return (glGenBuffersARB != 0);
