@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.11 2003/11/03 00:27:49 amoll Exp $
+// $Id: representation.C,v 1.12 2003/11/03 16:50:34 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -20,9 +20,9 @@ namespace BALL
 					drawing_mode_(DRAWING_MODE_SOLID),
 					drawing_precision_(DRAWING_PRECISION_HIGH),
 					surface_drawing_precision_(-1),
-					transparency_(0),
 					model_type_(MODEL_UNKNOWN),
 					coloring_type_(COLORING_UNKNOWN),
+					transparency_(0),
 					model_processor_(0),
 					color_processor_(0),
 					geometric_objects_(),

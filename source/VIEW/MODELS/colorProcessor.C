@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.20 2003/11/03 02:05:45 amoll Exp $
+// $Id: colorProcessor.C,v 1.21 2003/11/03 16:53:50 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -101,9 +101,9 @@ namespace BALL
 				}
 
 				colorMeshFromGrid_(*mesh);
+				return Processor::CONTINUE;
 			}
 			
-
 			if (object->getComposite() == 0)
 			{
 				object->setColor(default_color_); 
@@ -209,7 +209,7 @@ namespace BALL
 
 				if (atom == 0)
 				{
-					mesh.colorList.push_back(ColorRGBA(0.0, 0.0, 1.0));
+					mesh.colorList.push_back(default_color_);
 				}
 				else
 				{
