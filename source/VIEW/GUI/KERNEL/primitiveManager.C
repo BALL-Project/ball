@@ -1,8 +1,10 @@
-// $Id: primitiveManager.C,v 1.1.2.1 2002/11/23 17:39:22 amoll Exp $
+// $Id: primitiveManager.C,v 1.1.2.2 2002/11/24 20:32:07 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/primitiveManager.h>
+#include <stdio.h>
 
 using std::endl;
+using std::cout;
 using std::ostream;
 using std::istream;
 
@@ -33,8 +35,10 @@ namespace BALL
 		}
 
 		bool PrimitiveManager::insertGeometricObject(GeometricObject* object, Composite* composite)
-			throw()		
+			throw(NullPointer)
 		{		
+			if (object == 0) throw(NullPointer(__FILE__, __LINE__));
+
 			if (hasGeometricObject(object)) return false;
 			
 			object->setComposite(composite);
@@ -47,15 +51,15 @@ namespace BALL
 				composite_to_objects_[composite];
 
 				// parent->childs schachteln
-				Composite* parent = composite->getParent();
-				
 				List_it start_it;
-				if (parent == 0 || ! hasComposite(parent))
+				if (composite == 0 || composite->getParent() || ! hasComposite(composite->getParent()))
 				{
 		   		start_it = objects_list_.insert(objects_list_.end(), object);
 				}
 				else
 				{
+					Composite* parent = composite->getParent();
+
 					// insert childs geometric objects after parents objects
 					start_it = objects_list_.insert(getSecondIterator(parent), object);
 
@@ -94,6 +98,7 @@ namespace BALL
 		PrimitiveManager::List_const_it PrimitiveManager::getFirstIterator(Composite* composite) const
 			throw()
 		{
+			if (!hasComposite(composite)) return objects_list_.end();
 			return (List_const_it) composite_to_objects_[composite].first;
 		}
 
@@ -101,12 +106,14 @@ namespace BALL
 		PrimitiveManager::List_const_it PrimitiveManager::getSecondIterator(Composite* composite) const
 			throw()		
 		{
+			if (!hasComposite(composite)) return objects_list_.end();
 			return composite_to_objects_[composite].second;
 		}
 					
 		PrimitiveManager::List_it PrimitiveManager::getFirstIterator(Composite* composite)
 			throw()
 		{
+			if (!hasComposite(composite)) return objects_list_.end();
 			return composite_to_objects_[composite].first;
 		}
 
@@ -114,12 +121,23 @@ namespace BALL
 		PrimitiveManager::List_it PrimitiveManager::getSecondIterator(Composite* composite)
 			throw()		
 		{
+			if (!hasComposite(composite)) return objects_list_.end();
 			return composite_to_objects_[composite].second;
 		}
 				
 		void PrimitiveManager::dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw()
 		{
+			BALL_DUMP_STREAM_PREFIX(s);
+			BALL_DUMP_DEPTH(s, depth);
+			
+			List_const_it it = objects_list_.begin();
+			for(;it != objects_list_.end(); it++)
+			{
+				s << "GeometricObject: " << *it <<	" Composite: " << (*it)->getComposite() << endl;
+			}
+
+			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
 		void PrimitiveManager::read(std::istream& s)
@@ -195,7 +213,7 @@ namespace BALL
 			List_const_it it = getFirstIterator(composite);
 			for (; it != getSecondIterator(composite); it++)
 			{
-				nr++;
+				++nr;
 			}
 
 			return nr;
@@ -207,6 +225,17 @@ namespace BALL
 			return object_set_.size();
 		}
 
+		PrimitiveManager::List_it PrimitiveManager::getEndIterator()
+			throw()
+		{
+			return objects_list_.end();
+		}
+
+		PrimitiveManager::List_const_it PrimitiveManager::getEndIterator() const
+			throw()
+		{
+			return objects_list_.end();
+		}
 //#ifdef BALL_NO_INLINE_FUNCTIONS
 //#	include <BALL/VIEW/GUI/KERNEL/primitiveManager.iC>
 //#	endif 
