@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.23 2000/10/25 19:26:15 oliver Exp $
+// $Id: property.C,v 1.24 2000/12/09 21:56:15 amoll Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -11,6 +11,7 @@ namespace BALL
 
 
 	NamedProperty::NamedProperty()
+		throw()
 		: PersistentObject(),
 			type_(NONE),
 			name_("")
@@ -18,6 +19,7 @@ namespace BALL
 	}
 
 	NamedProperty::NamedProperty(const NamedProperty& property) 
+		throw()
 		: PersistentObject(property),
 			type_(property.type_),
 			name_(property.name_)
@@ -33,6 +35,7 @@ namespace BALL
 	}
  
 	void NamedProperty::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw()
 	{
 		pm.writeObjectHeader(this, name);
 			pm.writePrimitive((int)type_, "type_");
@@ -55,6 +58,7 @@ namespace BALL
 	}
 	
 	void NamedProperty::persistentRead(PersistenceManager& pm)
+		throw()
 	{
 		int type;
 		pm.readPrimitive(type, "type_");
@@ -91,6 +95,7 @@ namespace BALL
 
 	/// Output operator
 	ostream& operator << (std::ostream& s, const NamedProperty& property)
+		throw()
   {	
 		s << property.type_;
 		s << endl;
@@ -120,6 +125,7 @@ namespace BALL
 
 	/// Input operator
 	istream& operator >> (std::istream& s, NamedProperty& property)
+		throw()
   {	
 		Index tmp;
 		s >> tmp;
@@ -153,8 +159,8 @@ namespace BALL
 		return s;
 	}
 
-
   ostream& operator << (ostream& s, const PropertyManager& property_manager)
+		throw()
   {	
     s << property_manager.bitvector_;		
 		
@@ -170,6 +176,7 @@ namespace BALL
 	}
 
   istream& operator >> (istream& s, PropertyManager& property_manager)
+		throw()
   {	
 		int size;
     s >> property_manager.bitvector_;
@@ -185,6 +192,7 @@ namespace BALL
 	}
  
   void PropertyManager::write(PersistenceManager& pm) const
+		throw()
   {
 		pm.writeStorableObject(bitvector_, "bitvector_");
 		Size size = named_properties_.size();
@@ -196,6 +204,7 @@ namespace BALL
 	}
 
   bool PropertyManager::read(PersistenceManager& pm)
+		throw()
   {
 		if (!pm.readStorableObject(bitvector_, "bitvector_"))
 		{
@@ -218,12 +227,14 @@ namespace BALL
 	}
   
 	void PropertyManager::set(const PropertyManager& property_manager, bool /* deep */)
+		throw()
 	{
 		bitvector_ = property_manager.bitvector_;
 		named_properties_ = property_manager.named_properties_;
 	}
 
 	void PropertyManager::setProperty(const NamedProperty& property)
+		throw()
 	{
 		// search whether the property already exists
 		vector<NamedProperty>::iterator it = named_properties_.begin();
@@ -242,6 +253,7 @@ namespace BALL
 	}
 
 	void PropertyManager::setProperty(const string& name)
+		throw()
 	{
 		// search whether a property with the same name already exists
 		vector<NamedProperty>::iterator it = named_properties_.begin();
@@ -260,6 +272,7 @@ namespace BALL
 	}
 
 	const NamedProperty& PropertyManager::getProperty(const string& name) const
+		throw()
 	{
 		for (Size i = 0; i < named_properties_.size(); ++i)
 		{
@@ -273,6 +286,7 @@ namespace BALL
 	}
 	
 	void PropertyManager::clearProperty(const string& name)
+		throw()
 	{
     vector<NamedProperty>::iterator it = named_properties_.begin();
 		for (; it != named_properties_.end(); ++it)
@@ -286,6 +300,7 @@ namespace BALL
 	}
 
 	bool PropertyManager::hasProperty(const string& name) const
+		throw()
 	{
 		for (Size i = 0; i < named_properties_.size(); i++)
 		{
@@ -299,6 +314,7 @@ namespace BALL
 	}
 
 	void PropertyManager::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
