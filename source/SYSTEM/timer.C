@@ -1,4 +1,4 @@
-// $Id: timer.C,v 1.7.4.7 2002/12/09 19:35:39 oliver Exp $
+// $Id: timer.C,v 1.7.4.8 2002/12/10 10:48:40 crauser Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -109,8 +109,8 @@ namespace BALL
 			last_usecs_ = (double)(tms.QuadPart - (last_secs_*cpu_speed_))/(double)(cpu_speed_)*1000000.0;
 			//last_user_time_ = timeval / clock_speed_;
 			//last_system_time_ = 0;
-			last_user_time_ = user_time.QuadPart/10000000;
-			last_system_time_ = kernel_time.QuadPart/10000000;
+			last_user_time_ = user_time.QuadPart/10;
+			last_system_time_ = kernel_time.QuadPart/10;
 		#else
 
 			struct tms tms_buffer; 
@@ -162,9 +162,8 @@ namespace BALL
 			current_usecs_ += usecs_to_add -last_usecs_;
 			//current_user_time_  += timeval / clock_speed_ - last_user_time_;
 			//last_system_time_ = 0;
-			current_user_time_ += user_time.QuadPart/10000000 - last_user_time_;
-			current_system_time_ += kernel_time.QuadPart/10000000 - last_system_time_;
-			
+			current_user_time_ += user_time.QuadPart/10 - last_user_time_;
+			current_system_time_ += kernel_time.QuadPart/10 - last_system_time_;
 		#else
 			struct tms tms_buffer;
 			struct timeval timeval_buffer;
@@ -297,7 +296,7 @@ namespace BALL
 				user_time.LowPart = ut.dwLowDateTime;
 				
 				//temp_value = (float)(current_user_time_ + tms/clock_speed_ - last_user_time_);
-				temp_value = (float)(current_user_time_ + user_time.QuadPart/10000000 - last_user_time_);
+				temp_value = (float)(current_user_time_ + user_time.QuadPart/10 - last_user_time_);
 			#else
 				times(&tms_buffer);
 				temp_value = (float)(current_user_time_ + tms_buffer.tms_utime - last_user_time_);
@@ -305,7 +304,7 @@ namespace BALL
 		}
 
 		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-			return temp_value;
+			return (float)(temp_value/1000000.0);
 		#else
 		
 			/* convert from clock ticks to seconds using the */
@@ -352,7 +351,7 @@ namespace BALL
 				user_time.HighPart = ut.dwHighDateTime;
 				user_time.LowPart = ut.dwLowDateTime;
 				//temp_value = (float)(current_system_time_ + tms_buffer.tms_stime - last_system_time_);
-				temp_value = (float)(current_system_time_ + kernel_time.QuadPart/10000000 - last_system_time_);
+				temp_value = (float)(current_system_time_ + kernel_time.QuadPart/10 - last_system_time_);
 			#endif
 		}
 
@@ -360,7 +359,7 @@ namespace BALL
 		/* cpu-speed value obtained by the constructor   */
 		#ifndef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 			//return (temp_value / (float)cpu_speed_);
-			return temp_value;
+			return (float)(temp_value/1000000.0);
 		#else 
 			return 0.0;
 		#endif
