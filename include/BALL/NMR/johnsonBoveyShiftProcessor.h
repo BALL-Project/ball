@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.h,v 1.3 2000/09/22 12:08:09 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.4 2000/09/26 19:27:19 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -102,8 +102,8 @@ namespace BALL
 
 		protected:
 
-		std::list<PDBAtom*>			proton_list_;	
-		std::list<PDBAtom*>			atom_list_;	
+		std::list<Atom*>				proton_list_;	
+		std::list<Atom*>				atom_list_;	
 		std::list<Residue*>			aromat_list_;
 		String**								asrings_;
 		StringHashMap<Ring>			rings_;
