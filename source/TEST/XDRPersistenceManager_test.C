@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.18 2004/11/05 10:04:38 oliver Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.19 2004/11/05 11:47:40 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.18 2004/11/05 10:04:38 oliver Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.19 2004/11/05 11:47:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -547,12 +547,22 @@ CHECK([EXTRA] full_test2)
 RESULT
 
 
-// this time with bonds
+// this time with bonds and all properties !
 CHECK([Extra] full_test3)
 	String filename;
 	HINFile hin("data/AlaGlySer.hin");
 	System s;
 	hin >> s;
+
+	AtomIterator ai = s.beginAtom();
+	Vector3 v(1.1, 2.2, 3.3);
+	(*ai).setVelocity(v);
+	v.set(4.4, 5.5, 6.6);
+	(*ai).setForce(v);
+	(*ai).setCharge(3.456);
+	(*ai).setTypeName("blub");
+	(*ai).setRadius(4.56);
+	(*ai).setType(2);
 
 	NEW_TMP_FILE(filename);
 	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
@@ -571,7 +581,6 @@ CHECK([Extra] full_test3)
 	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
 	TEST_EQUAL(s.countBonds(), s2->countBonds())
 
-	AtomIterator ai = s.beginAtom();
 	AtomIterator ai2 = s2->beginAtom();
 	for (; +ai; ai++, ai2++)
 	{
@@ -581,6 +590,8 @@ CHECK([Extra] full_test3)
 		TEST_EQUAL((*ai).getTypeName(), (*ai2).getTypeName())
 		TEST_EQUAL((*ai).getVelocity(), (*ai2).getVelocity())
 		TEST_EQUAL((*ai).getForce(), 		(*ai2).getForce())
+		TEST_EQUAL((*ai).getCharge(), 	(*ai2).getCharge())
+		TEST_EQUAL((*ai).getRadius(), 	(*ai2).getRadius())
 		TEST_EQUAL((*ai2).isValid(), 		true)
 
 		// sometimes bonds get switched

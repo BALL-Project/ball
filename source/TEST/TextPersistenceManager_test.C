@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TextPersistenceManager_test.C,v 1.14 2004/11/03 13:53:48 amoll Exp $
+// $Id: TextPersistenceManager_test.C,v 1.15 2004/11/05 11:49:02 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.14 2004/11/03 13:53:48 amoll Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.15 2004/11/05 11:49:02 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -637,7 +637,7 @@ pm.checkStreamTrailer();
 pm.finalizeInputStream();
 infile.close();
 
-CHECK([EXTRA] full_test)
+CHECK([EXTRA] full_test1)
 	String filename;
 	PDBFile in("data/bpti.pdb");
 	System s;
@@ -672,12 +672,22 @@ CHECK([EXTRA] full_test)
 RESULT
 
 
-// this time with bonds
+// this time with bonds and all properties !
 CHECK([Extra] full_test2)
 	String filename;
 	HINFile hin("data/AlaGlySer.hin");
 	System s;
 	hin >> s;
+
+	AtomIterator ai = s.beginAtom();
+	Vector3 v(1.1, 2.2, 3.3);
+	(*ai).setVelocity(v);
+	v.set(4.4, 5.5, 6.6);
+	(*ai).setForce(v);
+	(*ai).setCharge(3.456);
+	(*ai).setTypeName("blub");
+	(*ai).setRadius(4.56);
+	(*ai).setType(2);
 
 	NEW_TMP_FILE(filename);
 	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
@@ -685,15 +695,17 @@ CHECK([Extra] full_test2)
 	s >> pm;
 	os.close();
 
-	ifstream is(filename.c_str(), std::ios::in);
+	ifstream is(filename.c_str(), std::ios::in | std::ios::binary);
 	TextPersistenceManager pm2(is);
 	System* s2 = (System*) pm2.readObject();
 	is.close();
 
+	TEST_NOT_EQUAL(s2, 0)
+	ABORT_IF(s2 == 0)
+
 	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
 	TEST_EQUAL(s.countBonds(), s2->countBonds())
 
-	AtomIterator ai = s.beginAtom();
 	AtomIterator ai2 = s2->beginAtom();
 	for (; +ai; ai++, ai2++)
 	{
@@ -703,6 +715,8 @@ CHECK([Extra] full_test2)
 		TEST_EQUAL((*ai).getTypeName(), (*ai2).getTypeName())
 		TEST_EQUAL((*ai).getVelocity(), (*ai2).getVelocity())
 		TEST_EQUAL((*ai).getForce(), 		(*ai2).getForce())
+		TEST_EQUAL((*ai).getCharge(), 	(*ai2).getCharge())
+		TEST_EQUAL((*ai).getRadius(), 	(*ai2).getRadius())
 		TEST_EQUAL((*ai2).isValid(), 		true)
 
 		// sometimes bonds get switched
