@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.17 2002/01/26 22:01:27 oliver Exp $
+// $Id: INIFile_test.C,v 1.17.4.1 2002/10/29 17:36:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.17 2002/01/26 22:01:27 oliver Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.17.4.1 2002/10/29 17:36:47 amoll Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -351,6 +351,18 @@ CHECK(INIFile::setValue(const String& section, const String& key, const String& 
   TEST_EQUAL(*(ini.getLine(5)), "test1=YYY")
   TEST_EQUAL(ini.getValue("Section3", "test1"), "YYY")
   TEST_EQUAL(ini.setValue("Section3", "test1", "XXX"), true)
+RESULT
+
+CHECK(INIFile::insertValue(const String& section, const String& key, const String& value))
+	INIFile ini("data/INIFile_test.ini");
+	ini.read();
+	TEST_EQUAL(ini.insertValue("nonsense", "test", "insertValue_test"), false)
+	TEST_EQUAL(ini.insertValue("Section1", "test", "insertValue_test"), true)
+	TEST_EQUAL(ini.getValue("Section1", "test"), "insertValue_test")
+	TEST_EQUAL(*(ini.getLine(1)), "test=insertValue_test")
+	TEST_EQUAL(ini.insertValue("Section1", "test", "setValue_test"), false)
+	ini.setFilename("asdasd");
+	TEST_EQUAL(ini.write(), true)
 RESULT
 
 CHECK(INIFile::write())
