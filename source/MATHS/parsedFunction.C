@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunction.C,v 1.4 2002/12/18 16:00:34 sturm Exp $
+// $Id: parsedFunction.C,v 1.5 2002/12/20 21:00:57 anhi Exp $
 
 #include <BALL/MATHS/parsedFunction.h>
 
@@ -26,7 +26,7 @@ namespace BALL
 	}
 
 	template <typename arg>
-	ParsedFunction<arg>::ParsedFunction(String expression)
+	ParsedFunction<arg>::ParsedFunction(const String& expression)
 		throw()
 		:	constants_(),
 			functions_(),
@@ -35,9 +35,9 @@ namespace BALL
 		initTable();
 	}
 
-	/** Strange... gcc-3.0.1 needs this constructor as a non-template version... **/
+	/* Strange... gcc-3.0.1 needs this constructor as a non-template version... */
 	template <>
-	ParsedFunction<float>::ParsedFunction(String expression)
+	ParsedFunction<float>::ParsedFunction(const String& expression)
 		throw()
 		: constants_(),
 			functions_(),
