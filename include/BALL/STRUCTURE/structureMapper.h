@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.h,v 1.19 2003/03/26 15:59:29 anhi Exp $
+// $Id: structureMapper.h,v 1.20 2003/05/25 21:38:07 oliver Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -110,7 +110,7 @@ namespace BALL
 
 		/**	Calculates a bijection to map two arrays of fragments onto each other.
 		*/
-		StructureMapper::AtomBijection& calculateFragmentBijection
+		StructureMapper::AtomBijection calculateFragmentBijection
 			(const vector<Fragment*>& A, const vector<Fragment*>& B);
 
 		/**	Maps two fragments onto each other

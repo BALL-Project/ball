@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Path_test.C,v 1.10 2003/04/30 06:05:18 oliver Exp $
+// $Id: Path_test.C,v 1.11 2003/05/25 21:38:11 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.10 2003/04/30 06:05:18 oliver Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.11 2003/05/25 21:38:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,6 +21,7 @@ using namespace BALL;
 CHECK(Path())
 	Path* p = new Path();
 	TEST_NOT_EQUAL(p, 0)
+	delete p;
 RESULT
 
 Path p = Path();

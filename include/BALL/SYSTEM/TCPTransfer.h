@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.16 2003/05/23 06:52:41 oliver Exp $
+// $Id: TCPTransfer.h,v 1.17 2003/05/25 21:38:07 oliver Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -210,7 +210,7 @@ namespace BALL
 			const char* getBuffer() const
 				throw()
 			{
-				return buffer_;
+				return &(buffer_[0]);
 			}
 
 			/** Transfer method.
@@ -232,9 +232,9 @@ namespace BALL
 				Status			status_;
 				int			 		received_bytes_;
 				Protocol 		protocol_;
-				char* 			buffer_;
+				char				buffer_[BUFFER_SIZE + 1];
 				Socket			socket_;
-				::std::ofstream*  fstream_;
+				std::ofstream*  fstream_;
 				
 				/*_ Send data through the socket.
 				 */

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PCMCavFreeEnergyProcessor_test.C,v 1.3 2002/02/27 12:24:41 sturm Exp $
+// $Id: PCMCavFreeEnergyProcessor_test.C,v 1.4 2003/05/25 21:38:11 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(PCMCavFreeEnergyProcessor, "$Id: PCMCavFreeEnergyProcessor_test.C,v 1.3 2002/02/27 12:24:41 sturm Exp $")
+START_TEST(PCMCavFreeEnergyProcessor, "$Id: PCMCavFreeEnergyProcessor_test.C,v 1.4 2003/05/25 21:38:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,6 +24,7 @@ CHECK(PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor())
 	TEST_NOT_EQUAL(proc, 0)
 	TEST_EQUAL(proc->isValid(), true)
 	TEST_REAL_EQUAL(proc->getEnergy(), 0)
+	delete proc;
 RESULT 
 
 CHECK(PCMCavFreeEnergyProcessor::PCMCavFreeEnergyProcessor(const PCMCavFreeEnergyProcessor& proc))

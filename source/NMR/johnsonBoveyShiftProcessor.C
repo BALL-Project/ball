@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.C,v 1.14 2002/12/16 09:08:28 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.15 2003/05/25 21:38:09 oliver Exp $
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -309,7 +309,7 @@ namespace BALL
 		Position vcounter;
 		double  p, z, lambda, k, e, hshift;
 		Vector3 left, center, right;
-		Vector3* vector_field = new Vector3[RING_MAX_ATOMS];
+		Vector3 vector_field[RING_MAX_ATOMS];
 
 
 		// iterate over all nuclei
@@ -355,9 +355,9 @@ namespace BALL
 						for (AtomIterator atomiterator = residue->beginAtom();
 								+atomiterator; ++atomiterator)
 						{
-							if ((*atomiterator).getName() == ring_atoms[counter2])
+							if (atomiterator->getName() == ring_atoms[counter2])
 							{
-								vector_field[vcounter] = (*atomiterator).getPosition();
+								vector_field[vcounter] = atomiterator->getPosition();
 								vcounter++;
 								break;  // found
 							}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.C,v 1.9 2002/12/16 09:08:29 oliver Exp $
+// $Id: smilesParser.C,v 1.10 2003/05/25 21:38:09 oliver Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -115,19 +115,32 @@ namespace BALL
 		}
 		catch (Exception::ParseError& e)
 		{
+			// Clean up the parser buffer.
 			SmilesParser_delBuffer();
+
+			// Clean up allocated memory (atoms).
+			for (Position i = 0; i < all_atoms_.size(); i++)
+			{
+				delete all_atoms_[i];
+			}
+
+			// Propagate the parse error upwards.
 			throw e;
 		}		
 
 		// fill up empty valences with hydrogens
 		addMissingHydrogens();
 
+		// Transfer all atoms into a new molecule.
 		Molecule* molecule = new Molecule;
 		system_.insert(*molecule);
 		for (Position i = 0; i < all_atoms_.size(); i++)
 		{
 			molecule->insert(*all_atoms_[i]);
 		}
+		
+		// Clean up the pointers to these atoms.
+		all_atoms_.clear();
 	}
 	
 	void SmilesParser::addMissingHydrogens()

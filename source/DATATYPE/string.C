@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.C,v 1.45 2003/05/21 14:37:23 oliver Exp $
+// $Id: string.C,v 1.46 2003/05/25 21:38:08 oliver Exp $
 //
 
 #include <BALL/DATATYPE/string.h>
@@ -1770,38 +1770,41 @@ int String::Index_64_[128] = {
 String String::encodeBase64()
 	throw()
 {
-	Size in_lenght((Size)this->size());
+	Size in_length((Size)this->size());
 	const char* in = this->c_str();
-	char* out = new char[in_lenght * 2];
+	char* out = new char[in_length * 2];
 	char* out_pos = out;
 
-  while (in_lenght >= 3)
+  while (in_length >= 3)
   {
     *out++ = B64Chars_[in[0] >> 2];
     *out++ = B64Chars_[((in[0] << 4) & 0x30) | (in[1] >> 4)];
     *out++ = B64Chars_[((in[1] << 2) & 0x3c) | (in[2] >> 6)];
     *out++ = B64Chars_[in[2] & 0x3f];
-    in_lenght   -= 3;
+    in_length   -= 3;
     in    			+= 3;
   }
 
-  if (in_lenght > 0)
+  if (in_length > 0)
   {
     unsigned char fragment;
 
     *out++ = B64Chars_[in[0] >> 2];
     fragment = (in[0] << 4) & 0x30;
-    if (in_lenght > 1)
+    if (in_length > 1)
 		{
       fragment |= in[1] >> 4;
 		}
 		*out++ = B64Chars_[fragment];
-    *out++ = (in_lenght < 2) ? '=' : B64Chars_[(in[1] << 2) & 0x3c];
+    *out++ = (in_length < 2) ? '=' : B64Chars_[(in[1] << 2) & 0x3c];
     *out++ = '=';
   }
   *out = '\0';
 
-	return String(out_pos);
+	// Free allocated memory.
+	String result(out_pos);
+	delete [] out_pos;
+	return result;
 }
 
 String String::decodeBase64()

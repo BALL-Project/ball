@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.26 2003/05/08 13:55:52 anhi Exp $
+// $Id: TCPTransfer.C,v 1.27 2003/05/25 21:38:10 oliver Exp $
+//
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -63,7 +64,7 @@ namespace BALL
 		status_(UNINITIALIZED_ERROR),
 		received_bytes_(0),
 		protocol_(UNKNOWN_PROTOCOL),
-		buffer_(new char[BUFFER_SIZE + 1]),
+		buffer_(),
 		socket_(0),
 		fstream_(0)
 	{
@@ -85,8 +86,6 @@ namespace BALL
 			GLOBAL_CLOSE(socket_);
 			socket_ = 0;
 		}
-
-		delete [] buffer_;
 	}
 				
 				
@@ -100,7 +99,7 @@ namespace BALL
 		status_(UNINITIALIZED_ERROR),
 		received_bytes_(0),
 		protocol_(UNKNOWN_PROTOCOL),
-		buffer_(new char[BUFFER_SIZE + 1]),
+		buffer_(),
 		socket_(0),
 		fstream_(0)
 	{	
@@ -318,11 +317,11 @@ namespace BALL
 		}
 
 		// now cutting of the head
-		int bytes = received_bytes_;
+		Size bytes = received_bytes_;
 		Position pos = 0; 
-		for (;pos < (Position)bytes; pos++)
+		for (; pos < (Position)bytes; pos++)
 		{
-			if (buffer_[pos] == '\n' && buffer_[pos + 1] == '\r')
+			if ((buffer_[pos] == '\n') && (buffer_[pos + 1] == '\r'))
 			{
 				break;
 			}
@@ -484,7 +483,10 @@ namespace BALL
 		Log.info() << "<<";
 		for (Position pos = 0; pos < (Position) received_bytes_; pos++)
 		{
-			if (buffer_[pos] == '\0' || buffer_[pos] == '\n' || buffer_[pos] == '\r') break;
+			if (buffer_[pos] == '\0' || buffer_[pos] == '\n' || buffer_[pos] == '\r') 
+			{
+				break;
+			}
 			Log.info() << buffer_[pos];
 		}
 		Log.info() << "|" << received_bytes_;

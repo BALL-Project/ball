@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom_test.C,v 1.10 2003/05/23 06:47:52 oliver Exp $
+// $Id: PDBAtom_test.C,v 1.11 2003/05/25 21:38:11 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -33,7 +33,7 @@ bool testEqual(const PDBAtom& a, const PDBAtom& b)
 				 a.getTemperatureFactor() == b.getTemperatureFactor();
 }
 
-START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.10 2003/05/23 06:47:52 oliver Exp $")
+START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.11 2003/05/25 21:38:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -79,6 +79,7 @@ CHECK(cpy cstr)
 	PDBAtom* p2 = new PDBAtom(pdba);
 	TEST_NOT_EQUAL(p2, 0)
 	TEST_EQUAL(testEqual(pdba, *p2), true)
+	delete p2;
 RESULT
 
 

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.39 2003/01/15 20:14:10 oliver Exp $
+// $Id: atom.C,v 1.40 2003/05/25 21:38:08 oliver Exp $
+//
 
 #include <BALL/KERNEL/atom.h>
 
@@ -21,6 +22,10 @@ namespace BALL
 
 	Atom::AttributeVector			Atom::static_attributes_;
 	Atom::AtomIndexList				Atom::free_list_;
+
+	Atom::AttributeVector::~AttributeVector() throw()
+	{
+	}
 	
 	void Atom::StaticAtomAttributes::clear()
 	{

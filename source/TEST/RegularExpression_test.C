@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularExpression_test.C,v 1.12 2002/12/12 11:34:44 oliver Exp $
+// $Id: RegularExpression_test.C,v 1.13 2003/05/25 21:38:11 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.12 2002/12/12 11:34:44 oliver Exp $")
+START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.13 2003/05/25 21:38:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

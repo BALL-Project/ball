@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.22 2003/05/24 05:51:21 oliver Exp $
+// $Id: directory.C,v 1.23 2003/05/25 21:38:10 oliver Exp $
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -25,13 +25,14 @@ namespace BALL
 	Directory::Directory()
 	{
 		#ifdef BALL_PLATFORM_WINDOWS
-			dir_= INVALID_HANDLE_VALUE;
+			dir_ = INVALID_HANDLE_VALUE;
 			dirent_ = INVALID_HANDLE_VALUE;
-			char* buffer_;
+			char* buffer;
 
-			if ((buffer_ = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
+			if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
 			{
-				directory_path_ = buffer_;
+				directory_path_ = buffer;
+				free(buffer);
 				dir_ = CreateFile(buffer_,
 													FILE_LIST_DIRECTORY,                // access (read/write) mode
 													FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
@@ -40,6 +41,7 @@ namespace BALL
 													FILE_FLAG_BACKUP_SEMANTICS,         // file attributes
 													NULL                                // file with attributes to copy
 													);
+				
 				
 
 			}
@@ -50,10 +52,11 @@ namespace BALL
 		#else
 			dir_ = 0;
 			dirent_ = 0;
-			char* buffer_;
-			if ((buffer_ = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
+			char* buffer;
+			if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
 			{
-				directory_path_ = buffer_;
+				directory_path_ = buffer;
+				free(buffer);
 			}
 			else 
 			{
@@ -71,7 +74,7 @@ namespace BALL
 		}
 		
 		#ifdef BALL_PLATFORM_WINDOWS
-			dir_= INVALID_HANDLE_VALUE;
+			dir_ = INVALID_HANDLE_VALUE;
 			dirent_ = INVALID_HANDLE_VALUE;
 			dir_ = CreateFile(directory_path_.data(),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
@@ -111,7 +114,7 @@ namespace BALL
 	{
 		#ifdef BALL_PLATFORM_WINDOWS
 			synchronize_();
-			if(dir_ != INVALID_HANDLE_VALUE) 
+			if (dir_ != INVALID_HANDLE_VALUE) 
 			{	
 				CloseHandle(dir_);
 			}
@@ -138,10 +141,10 @@ namespace BALL
 		
 	
 			dirent_ = FindFirstFile(pat.data(),&fd);
-			if (dirent_==INVALID_HANDLE_VALUE)
+			if (dirent_ == INVALID_HANDLE_VALUE)
 			{
 				CloseHandle(dir_);
-				dir_=INVALID_HANDLE_VALUE;
+				dir_ = INVALID_HANDLE_VALUE;
 				return desynchronize_(false);
 			}
 			else
@@ -182,7 +185,7 @@ namespace BALL
 #ifdef BALL_COMPILER_MSVC
 		synchronize_();
 		
-		if(dir_==INVALID_HANDLE_VALUE)
+		if (dir_ == INVALID_HANDLE_VALUE)
 		{
 			
 			dir_ = CreateFile(directory_path_.data(),
@@ -194,36 +197,36 @@ namespace BALL
 												NULL                                
 												);
 			
-			if(dir_==INVALID_HANDLE_VALUE) return desynchronize_(false);
-			if(dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
+			if (dir_ == INVALID_HANDLE_VALUE) return desynchronize_(false);
+			if (dirent_ != INVALID_HANDLE_VALUE) FindClose(dirent_);
 
 			String pat=directory_path_ + FileSystem::PATH_SEPARATOR + "*";
 			WIN32_FIND_DATA fd;
 			
 			dirent_=FindFirstFile(pat.data(),&fd);
 			
-			if(dirent_==INVALID_HANDLE_VALUE)
+			if (dirent_==INVALID_HANDLE_VALUE)
 			{
 				CloseHandle(dir_);
-				dir_=INVALID_HANDLE_VALUE;
+				dir_ = INVALID_HANDLE_VALUE;
 				return desynchronize_(false);
 			}
 		}
-		if(dir_==INVALID_HANDLE_VALUE) return desynchronize_(false);
+		if (dir_ == INVALID_HANDLE_VALUE) return desynchronize_(false);
 		
 		WIN32_FIND_DATA fd;
 		
-		if(dirent_ == INVALID_HANDLE_VALUE)
+		if (dirent_ == INVALID_HANDLE_VALUE)
 		{
 			// someone has forgot to call FirstEntry
 
 			String pat=directory_path_ + FileSystem::PATH_SEPARATOR + "*";
 			dirent_=FindFirstFile(pat.data(),&fd);
 			
-			if(dirent_==INVALID_HANDLE_VALUE)
+			if (dirent_==INVALID_HANDLE_VALUE)
 			{
 				CloseHandle(dir_);
-				dir_=INVALID_HANDLE_VALUE;
+				dir_ = INVALID_HANDLE_VALUE;
 				return desynchronize_(false);
 			}
 			else
@@ -231,7 +234,7 @@ namespace BALL
 		}
 		else
 		{
-			if(FindNextFile(dirent_,&fd)==0) return desynchronize_(false);
+			if (FindNextFile(dirent_,&fd)==0) return desynchronize_(false);
 			entry=fd.cFileName;
 		}
 		return desynchronize_(true);
@@ -274,21 +277,24 @@ namespace BALL
 												FILE_FLAG_BACKUP_SEMANTICS,        
 												NULL                                
 												);
-			if(dir_==INVALID_HANDLE_VALUE)
+			if (dir_ == INVALID_HANDLE_VALUE)
 			{
 				desynchronize_();
 				return 0;
 			}
 		}
 		
-		if(dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
-		String pat=directory_path_+"\\*";
+		if (dirent_ != INVALID_HANDLE_VALUE) 
+		{
+			FindClose(dirent_);
+		}
+		String pat = directory_path_ + "\\*";
 		WIN32_FIND_DATA fd;
-		dirent_=FindFirstFile(pat.data(),&fd);
-		if(dirent_==INVALID_HANDLE_VALUE)
+		dirent_ = FindFirstFile(pat.data(),&fd);
+		if (dirent_ == INVALID_HANDLE_VALUE)
 		{
 			CloseHandle(dir_);
-			dir_=INVALID_HANDLE_VALUE;
+			dir_ = INVALID_HANDLE_VALUE;
 			desynchronize_();
 			return 0;
 		}
@@ -319,7 +325,7 @@ namespace BALL
 #ifdef BALL_COMPILER_MSVC
 		synchronize_();
 		Size size =0;
-		if(dir_==INVALID_HANDLE_VALUE)
+		if (dir_ == INVALID_HANDLE_VALUE)
 		{
 			dir_ = CreateFile(directory_path_.data(),
 												FILE_LIST_DIRECTORY,                
@@ -329,7 +335,7 @@ namespace BALL
 												FILE_FLAG_BACKUP_SEMANTICS,        
 												NULL                                
 												);
-			if(dir_==INVALID_HANDLE_VALUE)
+			if (dir_ == INVALID_HANDLE_VALUE)
 			{
 				desynchronize_();
 				return 0;
@@ -339,19 +345,19 @@ namespace BALL
 		String pat=directory_path_+"\\*";
 		WIN32_FIND_DATA fd;
 		
-		if(dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
+		if (dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
 		dirent_=FindFirstFile(pat.data(),&fd);
-		if(dirent_==INVALID_HANDLE_VALUE)
+		if (dirent_==INVALID_HANDLE_VALUE)
 		{
 			CloseHandle(dir_);
-			dir_=INVALID_HANDLE_VALUE;
+			dir_ = INVALID_HANDLE_VALUE;
 			desynchronize_();
 			return 0;
 		}
 		do
 		{
 			bool isfile=(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)==0;
-			if(isfile) ++size;
+			if (isfile) ++size;
 		}
 		while(FindNextFile(dirent_,&fd));
 		FindClose(dirent_);
@@ -383,8 +389,8 @@ namespace BALL
 	{
 #ifdef BALL_COMPILER_MSVC
 		synchronize_();
-		Size size =0;
-		if(dir_==INVALID_HANDLE_VALUE)
+		Size size = 0;
+		if (dir_ == INVALID_HANDLE_VALUE)
 		{
 			dir_ = CreateFile(directory_path_.data(),
 												FILE_LIST_DIRECTORY,                
@@ -394,7 +400,7 @@ namespace BALL
 												FILE_FLAG_BACKUP_SEMANTICS,        
 												NULL                                
 												);
-			if(dir_==INVALID_HANDLE_VALUE)
+			if (dir_ == INVALID_HANDLE_VALUE)
 			{
 				desynchronize_();
 				return 0;
@@ -404,19 +410,19 @@ namespace BALL
 		String pat=directory_path_+"\\*";
 		WIN32_FIND_DATA fd;
 		
-		if(dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
+		if (dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
 		dirent_=FindFirstFile(pat.data(),&fd);
-		if(dirent_==INVALID_HANDLE_VALUE)
+		if (dirent_==INVALID_HANDLE_VALUE)
 		{
 			CloseHandle(dir_);
-			dir_=INVALID_HANDLE_VALUE;
+			dir_ = INVALID_HANDLE_VALUE;
 			desynchronize_();
 			return 0;
 		}
 		do
 		{
 			bool isfile=(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)!=0;
-			if(isfile) ++size;
+			if (isfile) ++size;
 		}
 		while(FindNextFile(dirent_,&fd));
 		FindClose(dirent_);
@@ -446,14 +452,16 @@ namespace BALL
 
 	bool Directory::isCurrent() const
 	{
-		char* buffer_;
+		char* buffer;
 		
 #ifdef BALL_COMPILER_MSVC
-		if ((buffer_ = ::_getcwd(NULL, MAX_PATH_LENGTH)) == 0) return false;
+		if ((buffer = ::_getcwd(NULL, MAX_PATH_LENGTH)) == 0) return false;
 #else
-		if ((buffer_ = ::getcwd(NULL, MAX_PATH_LENGTH)) == 0) return false;
+		if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) == 0) return false;
 #endif
-		return (buffer_ == directory_path_);
+		bool result = (buffer == directory_path_);
+		free(buffer);
+		return result;
 	}
 
 	bool Directory::has(const String& item) //const
@@ -494,14 +502,14 @@ namespace BALL
 												FILE_FLAG_BACKUP_SEMANTICS,        
 												NULL                                
 												);
-		if(dir == INVALID_HANDLE_VALUE)  return desynchronize_(false);
+		if (dir == INVALID_HANDLE_VALUE)  return desynchronize_(false);
 		HANDLE mydirent;
 		WIN32_FIND_DATA fd;
 		
 		mydirent=FindFirstFile("*",&fd);
 		do
 		{
-			if((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) !=0 &&
+			if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) !=0 &&
 				strcmp(fd.cFileName, FileSystem::CURRENT_DIRECTORY) != 0 &&
 				strcmp(fd.cFileName, FileSystem::PARENT_DIRECTORY ) != 0)
 			{
@@ -565,12 +573,12 @@ namespace BALL
 		backup_path_ = "";
 		char * buffer_;
 
-		if((directory_path[0] == FileSystem::PATH_SEPARATOR)|| (directory_path[1] == ':' && directory_path[2] == FileSystem::PATH_SEPARATOR))
+		if ((directory_path[0] == FileSystem::PATH_SEPARATOR)|| (directory_path[1] == ':' && directory_path[2] == FileSystem::PATH_SEPARATOR))
 #else
 		dir_ = 0;
 		dirent_ = 0;
 		backup_path_ = "";
-		char* buffer_;
+		char* buffer;
 		if (directory_path[0] == FileSystem::PATH_SEPARATOR)		//absolute path
 #endif
 		{
@@ -578,9 +586,10 @@ namespace BALL
 			FileSystem::canonizePath(directory_path_);
 			return isValid();
 		}
-		if ((buffer_ = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)
+		if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)
 		{
-			directory_path_ = buffer_;
+			directory_path_ = buffer;
+			free(buffer);
 			directory_path_ += FileSystem::PATH_SEPARATOR;
 			directory_path_ += directory_path;
 			FileSystem::canonizePath(directory_path_);
@@ -594,8 +603,15 @@ namespace BALL
 			directory_path_ = "";
 			return false;
 		}
-		if (!isValid())	return false;
-		if (set_current) return (::chdir(directory_path_.data()) == 0);
+		if (!isValid())	
+		{
+			return false;
+		}
+		if (set_current) 
+		{
+			return (::chdir(directory_path_.data()) == 0);
+		}
+
 		return true;
 	}
 

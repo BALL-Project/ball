@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SolventDescriptor_test.C,v 1.9 2003/05/23 10:26:05 oliver Exp $
+// $Id: SolventDescriptor_test.C,v 1.10 2003/05/25 21:38:12 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
  
 ///////////////////////////
 #include <BALL/SOLVATION/solventDescriptor.h>
 ///////////////////////////
 	  
-START_TEST(SolventDescriptor, "$Id: SolventDescriptor_test.C,v 1.9 2003/05/23 10:26:05 oliver Exp $")
+START_TEST(SolventDescriptor, "$Id: SolventDescriptor_test.C,v 1.10 2003/05/25 21:38:12 oliver Exp $")
 		 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -102,6 +102,7 @@ CHECK(SolventDescriptor::bool operator == (const SolventDescriptor& descriptor) 
 	TEST_EQUAL(*s_ptr==*s_ptr2, false)
 RESULT
 delete s_ptr;
+delete s_ptr2;
 
 //?????: after changes in class: need to test const and mutable methods
 

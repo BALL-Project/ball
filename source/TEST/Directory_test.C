@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.9 2003/04/28 19:21:27 oliver Exp $
+// $Id: Directory_test.C,v 1.10 2003/05/25 21:38:10 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +17,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.9 2003/04/28 19:21:27 oliver Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.10 2003/05/25 21:38:10 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,20 +28,26 @@ String PS = FileSystem::PATH_SEPARATOR;
 Directory* dd;
 String test_dir;
 CHECK(prerequisites)
-	test_dir = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	char* ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	test_dir = ptr;
+	free(ptr);
 	#ifdef BALL_PLATFORM_WINDOWS
 		test_dir += "\\data\\Directory_test";
 	#else
 		test_dir += "/data/Directory_test";
 	#endif
 	TEST_EQUAL(::chdir(test_dir.c_str()), 0)
-	test_dir = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);	
+	test_dir = ptr;
+	free(ptr);
 RESULT
 
 CHECK(Directory::Directory())
 	dd = new Directory();
 	TEST_NOT_EQUAL(dd, 0)
-	TEST_EQUAL(dd->getPath(), String(::getcwd(NULL, Directory::MAX_PATH_LENGTH)))
+	char* ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	TEST_EQUAL(dd->getPath(), String(ptr))
+	free(ptr);
 	TEST_EQUAL(dd->isCurrent(), true)
 RESULT
 
@@ -53,16 +60,22 @@ CHECK(Directory::setCurrent(const String& path))
 	Directory d;
 	bool result = d.setCurrent(test_dir);
 	TEST_EQUAL(result, true);
-	String path  = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	char* ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	String path  = ptr;
+	free(ptr);
 	TEST_EQUAL(path, test_dir)
 	result = d.setCurrent("dir_a");
 	TEST_EQUAL(result, true);
-	path = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	path = ptr;
+	free(ptr);
 	const String& PS = FileSystem::PATH_SEPARATOR;
 	TEST_EQUAL(path, test_dir + PS+"dir_a")
 	result = d.setCurrent("c");
 	TEST_EQUAL(result, false);
-	path = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	path = ptr;
+	free(ptr);
 	TEST_EQUAL(path, test_dir + PS+ "dir_a")
 RESULT
 
@@ -70,8 +83,10 @@ CHECK(Directory::Directory(const String& directory_path, bool set_current = fals
 	::chdir(test_dir.c_str());
 	Directory d("dir_a");
 	TEST_EQUAL(d.isValid(), true)
-	
-	String s = String(::getcwd(NULL, Directory::MAX_PATH_LENGTH)) + PS + "dir_a";
+
+	char* ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	String s = String(ptr) + PS + "dir_a";
+	free(ptr);
 	TEST_EQUAL(d.getPath(), s)
 
 	Directory d1("dir_a"+PS, true);

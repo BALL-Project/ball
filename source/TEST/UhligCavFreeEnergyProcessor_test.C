@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UhligCavFreeEnergyProcessor_test.C,v 1.4 2002/02/27 12:25:02 sturm Exp $
+// $Id: UhligCavFreeEnergyProcessor_test.C,v 1.5 2003/05/25 21:38:12 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(UhligCavFreeEnergyProcessor, "$Id: UhligCavFreeEnergyProcessor_test.C,v 1.4 2002/02/27 12:25:02 sturm Exp $")
+START_TEST(UhligCavFreeEnergyProcessor, "$Id: UhligCavFreeEnergyProcessor_test.C,v 1.5 2003/05/25 21:38:12 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -36,6 +36,7 @@ CHECK(UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor())
 	TEST_NOT_EQUAL(proc, 0)
 	TEST_EQUAL(proc->isValid(), true)
 	TEST_REAL_EQUAL(proc->getEnergy(), 0)
+	delete proc;
 RESULT 
 
 CHECK(UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor(const UhligCavFreeEnergyProcessor& proc))

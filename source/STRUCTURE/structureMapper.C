@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.22 2003/05/22 21:58:48 oliver Exp $
+// $Id: structureMapper.C,v 1.23 2003/05/25 21:38:09 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -111,10 +111,10 @@ namespace BALL
 		return true;
 	}
 
-	StructureMapper::AtomBijection & StructureMapper::calculateFragmentBijection
-		(const vector < Fragment * >&A, const vector < Fragment * >&B)
+	StructureMapper::AtomBijection StructureMapper::calculateFragmentBijection
+		(const vector <Fragment*>& A, const vector<Fragment*>& B)
 	{
-		AtomBijection& pair_array = *new AtomBijection;
+		AtomBijection pair_array;
 		AtomPairType pair;
 
 		Size minimum = (Size)min(A.size(), B.size());
