@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBdefs.C,v 1.4 2005/02/16 14:09:40 oliver Exp $
+// $Id: PDBdefs.C,v 1.5 2005/02/23 11:34:18 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBdefs.h>
@@ -38,7 +38,7 @@ namespace BALL
 		const char* FORMAT_JRNL    = "      %58.58s";
 		const char* FORMAT_KEYWDS  = "  %2ld%60.60s";
 		const char* FORMAT_LINK    = "      %4.4s%c%3.3s %c%4ld%c               %4.4s%c%3.3s %c%4ld%c  %6ld %6ld";
-		const char* FORMAT_MASTER  = "    %5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld%5ld";
+		const char* FORMAT_MASTER  = "    %5d%5d%5d%5d%5d%5d%5d%5d%5d%5d%5d%5d";
 		const char* FORMAT_MODEL   = "    %4ld";
 		const char* FORMAT_MODRES  = " %3.3s %3.3s %c %4ld%c %3.3s  %41.41s";
 		const char* FORMAT_MTRIX1  = " %3ld%10f%10f%10f     %10f    %1ld";

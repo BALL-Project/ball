@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBdefs.h,v 1.6 2005/02/21 21:36:46 oliver Exp $
+// $Id: PDBdefs.h,v 1.7 2005/02/23 11:34:17 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBDEFS_H
@@ -1197,11 +1197,10 @@ namespace BALL
 			LString4 pdb_id;
 			Position number; // number of the ATOM/HETATM/TER record
 			
-
 			AdditionalAtomInfo()
 				:	current_chain(0x0),
 					current_residue(0x0),
-					residue_id(0),
+					residue_id(1),
 					residue_insertion_code(' '),
 					chain_id(' '),
 					number(1)
