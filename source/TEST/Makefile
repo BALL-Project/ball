@@ -41,7 +41,8 @@ EXECUTABLES = \
 	StructureMapper_test\
 	TransformationApplicator_test\
 	TranslationApplicator_test\
-	Vector3_test
+	Vector3_test\
+	Vector4_test
 
 CPP_SOURCES=$(EXECUTABLES:=.C)
 
@@ -153,6 +154,9 @@ TransformationApplicator_test:	TransformationApplicator_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Vector3_test:	Vector3_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Vector4_test:	Vector4_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 
