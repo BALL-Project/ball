@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.34 2003/07/10 12:49:31 amoll Exp $
+// $Id: INIFile.h,v 1.35 2003/07/11 00:13:07 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -43,15 +43,17 @@ namespace BALL
 
 		class IteratorTraits_;
 		class Section;
+
+		///
 		typedef List<Section>::Iterator SectionIterator;
 
 		/** An iterator for the lines in an INIFile.
-				With a LineIterator it is easy to iterator over all lines
+				With a LineIterator it is easy to iterate over all lines
 				in an instance of INIFile.
 		*/
 		typedef IteratorTraits_ LineIterator;
 
-		/** Return type: undefined:
+		/** Return type for undefined keys
 				"[UNDEFINED!]"
 		*/
 		static const String UNDEFINED;
@@ -71,7 +73,8 @@ namespace BALL
 		*/
 		INIFile();
 
-		/**	Constructor
+		/**	Constructor with filename
+		 		The file is not opend.
 		*/
 		INIFile(const String& filename);
 
@@ -93,40 +96,38 @@ namespace BALL
 		/**	Open a file and read its contents.
 				This method destroys all existing data in memory and
 				then tries to open the file specified by setFilename.
-				If the file could not be opened, the method returns immediately false,
-				leaving the INIFile instance in invalid state (as returned by  \link isValid isValid \endlink ).  \par
+				If the file could not be opened, the method returns false,
+				leaving the INIFile instance in invalid state 
+				(as returned by  \link isValid isValid \endlink ).  \par
 				If the file could be opened, the whole file is read into an 
 				internal buffer and the different sections are interpreted.
-				Then, internal datastructures for fast acces to the stored data
-				are built (hash table containing the sections). \par
-				Line starting with '!', ';', or '\#' are treated as comment
-				lines and are stored, but not interpreted.
+				Then, internal datastructures for fast access to the stored data
+				are build (Hashtable containing the sections). \par
+				Lines starting with '!', ';', or '\#' are treated as comment
+				lines and stored, but not interpreted.
 				Key-names and values are trimmed.
 				If a line starts with "[", but no closing bracket occurs, false is returned.
 				@return	bool
-												- <b>true</b> if the file could be opened and read
-												- <b>false</b> otherwise
+					- <b>true</b> if the file could be opened and read
+					- <b>false</b> otherwise
 											
 		*/	
 		bool read();
 
 		/**	Writes the buffer contents to a file.
-				If the file could not be writen, valid_ is set to false, ow true.
+				If the file could not be written, valid_ is set to false, ow true.
 				@return	bool
-												- <b>true</b> if the file could be succesfully written
-												- <b>false</b> otherwise
-											
+					- <b>true</b> if the file could be succesfully written
+					- <b>false</b> otherwise
 		*/	
 		bool write();
 
 		/**	Returns the current filename.
-				@return String& -  the filename
 		*/	
 		const String& getFilename() const;
 
 		/**	Sets a new filename.
 				The state of valid_ is set to false.
-				@param	filename String - the new filename
 		*/	
 		void setFilename(const String& filename);
 
@@ -142,7 +143,7 @@ namespace BALL
 
 		//@}
 		/** @name	Methods for line-wise access.	
-				The INI file can be accessed line-wise (ignoring the section structure). 
+				The INIFile can be accessed line-wise (ignoring the section structure). 
 				Each line can be accessed via its index (starting with 0)	by  \link getLine getLine \endlink  
 				and modified by  \link setLine setLine \endlink . 
 				The index has to be less than	the value returned by  \link getNumberOfLines getNumberOfLines \endlink .
@@ -151,10 +152,9 @@ namespace BALL
 
 		/**	Return the contents of the specified line.
 				If the <b>line_number</b> given is not valid (less than
-				0 or greater or equal to the number returned by  \link getNumberOfLines getNumberOfLines \endlink )
+				0 or greater/equal to the number returned by  \link getNumberOfLines getNumberOfLines \endlink )
 				a non-valid iterator is returned.
-				Use of this method is not recommended, because in the worst case, it could
-				be O(n).
+				Use of this method is not recommended, because in the worst case, it could be O(n).
 				@param	line_number, first line starts with 0
 				@return	LineIterator to the specified line
 		*/	
@@ -162,22 +162,18 @@ namespace BALL
 
 		//@}
 		/** @name	Methods for access with an iterator.
-				The INI file may be also accessed with an LineIterator.			
+				The INIFile may be also accessed with an LineIterator.			
 		*/
 		//@{		
 		
 		/**	Change the contents of a line.
 				Replaces the line given by <b>line_it</b> by the text in <b>line</b>.
 				Section lines cannot be changed with this method.
-				If the line contains a key, the old one is deleted and the new one
+				If the line contains a key, the old key is deleted and the new 
 				(if any) is set.
-				If line starts with "[" the method aborts.
+				If the line starts with "[" the method aborts.
 				@param	line_it iterator to the line to change
 				@param	line new content of the line
-				@return	bool
-											- <b>true</b> if line_it is valid
-											- <b>false</b> otherwise
-										
 		*/	
 		bool setLine(LineIterator line_it, const String& line);
 		
@@ -192,7 +188,7 @@ namespace BALL
 		/** Add a line after a given iterator.
 				Lines starting with "[" cannot be added (to prevent problems with
 				section headers).
-				If the line contains a key and the section contains already this key
+				If the line contains a key and the section already contains this key
 				the method aborts and returns false, use setValue() instead.
 				@param line_it the iterator to insert after
 				@param line the line to be added
@@ -210,43 +206,41 @@ namespace BALL
 				If the given section does not exists, false is returned.
 				Lines starting with "[" cannot be added (to prevent problems with
 				section headers).
-				If the line contains a key and the section contains already this key
+				If checking for duplicate keys is enabled and
+				line contains a key, the section already contains, 
 				the method aborts and returns false, use setValue() instead.
 				If an empty string is given as value for section_name, the last section
 				is used.
 				@param section_name the section to add the line
 				@param line the line to be added
+				@see setDuplicateKeyCheck
 				@return true, if line could be added
 		*/
 		bool appendLine(const String& section_name, const String& line);
 
 		/**	Return number of lines.
-				@return	Size number of lines in the INIFile
 		*/	
 		Size getNumberOfLines() const;
 				
 		/**	Queries for a certain section.
 				@param	section_name	the name of the section (without square brackets)
 				@return bool
-											- <b>true</b> if the section exists (is hashed!)
-											- <b>false</b>	if the section could not be found
+					- <b>true</b>  if the section exists (is hashed!)
+					- <b>false</b> if the section could not be found
 										
 		*/	
 		bool hasSection(const String& section_name) const;
 
 		/** Return an iterator to a section with a given name.
-				@return String*
-											   - iterator to the section
-											   - 0, if no section with this name exists
+				@return SectionIterator
+					- iterator to the section
 										    
 		*/
 	  SectionIterator getSection(const String& section_name);
 
 		/** Return an iterator to a section at a given position.
-				@return String*
-											   - iterator to the section
-											   - 0, if pos is too high
-										    
+				@return SectionIterator
+					- iterator to the section
 		*/
 	  SectionIterator getSection(Position pos);
 
@@ -257,28 +251,26 @@ namespace BALL
 
 		/**	Returns an iterator to the first line of a section.
 				The first line of a section is the line with the section name (in square brackets).
-				@return	Size
-											- iterator to the first line of the section
-											- unvalid iterator, if section does not exist
+				@return	LineIterator
+					- iterator to the first line of the section
+					- unvalid iterator, if section does not exist
 										 
 				@param	section_name	the name of the section to be found
 		*/	
 		LineIterator getSectionFirstLine(const String& section_name);
 
 		/**	Returns an iterator to the last line of a section.
-				@return	Size
-											- iterator to the last line of the section
-											- unvalid iterator, if section does not exist
-											
+				@return	LineIterator
+					- iterator to the last line of the section
+					- unvalid iterator, if section does not exist
 				@param	section_name	the name of the section to be found
 		*/	
 		LineIterator getSectionLastLine(const String& section_name);	
 
 		/**	Returns the number of lines in a section.
 				@return	Size
-											- the number of lines, or 
-											- INVALID_SIZE if the section could not be found
-										 
+					- the number of lines, or 
+					- INVALID_SIZE if the section could not be found
 				@param	section_name	the name of the section to be found
 		*/	
 		Size getSectionLength(const String& section_name) const;
@@ -302,9 +294,8 @@ namespace BALL
 
 		/**	Check whether the given section contains a certain key.
 				@return	bool
-											- <b>true</b> if the key could be found in the section, 
-											- <b>false</b> if either key or section didn't exist
-										 
+					- <b>true</b> if the key could be found in the section, 
+					- <b>false</b> if either key or section didn't exist
 				@param	section	the section to look in for the key
 				@param	key the key to look for
 		*/	
@@ -312,13 +303,12 @@ namespace BALL
 		
 		/** Query the value corresponding to a given key.
 				If no value exists for the given key, or either the section or 
-				the key are not defined, an empty string is returned.
+				the key are not defined, UNDEFINED is returned.
 				@param	section	the section name to look in for the key
 				@param	key a key in the <b>section</b>
 				@return	String
-												- the value corresponding to the <b>key</b> in <b>section</b>
-												- or  \link UNDEFINED UNDEFINED \endlink 
-											 
+					- the value corresponding to the <b>key</b> in <b>section</b>
+					- or  \link UNDEFINED UNDEFINED \endlink 
 		*/	
 		String getValue(const String& section, const String& key) const;
 
@@ -329,21 +319,19 @@ namespace BALL
 				@param	key	the key to look for
 				@param	value the new value
 				@return	bool
-									- <b>true</b> if the value was changed
-									- <b>false</b> if key or section do not exist
-								
+					- <b>true</b> if the value was changed
+					- <b>false</b> if key or section do not exist
 		*/	
 		bool setValue(const String& section, const String& key, const String& value);
 
 		/** Insert a new value in a given section
-		 		If the key exists allready or the sections doesnt exist, nothing happens.
+		 		If the key exists already or the sections doesnt exist, nothing happens.
 				@param	section	the section to insert the key
 				@param	key	the key to insert
 				@param	value the new value
 				@return	bool
-									- <b>true</b> if the value was inserted
-									- <b>false</b> if key or section do not exist
-								
+					- <b>true</b> if the value was inserted
+					- <b>false</b> if key or section do not exist
 		*/
 		bool insertValue(const String& section, const String& key, const String& value);
 
@@ -358,12 +346,11 @@ namespace BALL
 		*/
 		bool operator == (const INIFile& inifile) const;
 
-		/** Test if the given iterator is valid for this instance.
+		/** Test if the given LineIterator is valid for this instance.
 		*/
 		bool isValid(const LineIterator& it) const;
 
-
-    /** Test if the given iterator is valid for this instance.
+    /** Test if the given SectionIterator is valid for this instance.
     */
     bool isValid(const SectionIterator& it) const;
 
@@ -431,7 +418,7 @@ namespace BALL
 			StringHashMap<List<String>::Iterator>		key_map_;
 		};
 
-	
+		/// Interface for the LineIterator
 		class IteratorTraits_
 		{
 			friend class INIFile;
@@ -440,220 +427,87 @@ namespace BALL
 
 			BALL_CREATE(IteratorTraits_)
 
-			IteratorTraits_()
-				:	bound_(0),
-					section_(),
-					position_()
-					
-			{
-			}
-			
+			///
+			IteratorTraits_();
+
+			///
 			IteratorTraits_(List<Section>& list, 
 											SectionIterator section, 
-											List<String>::Iterator line)
-				:	bound_(&list),
-					section_(section),
-					position_(line)
-			{
-			}
+											List<String>::Iterator line);
 			
-			IteratorTraits_(const IteratorTraits_& traits)
-				:	bound_(traits.bound_),
-					section_(traits.section_),
-					position_(traits.position_)
-			{
-			}
+			///
+			IteratorTraits_(const IteratorTraits_& traits);
 
-			virtual ~IteratorTraits_()
-			{
-			}
+			///
+			virtual ~IteratorTraits_();
 			
-			const IteratorTraits_& operator = (const IteratorTraits_ &traits)
-			{
-				bound_		= traits.bound_;
-				section_  = traits.section_;
-				position_ = traits.position_;
+			///
+			const IteratorTraits_& operator = (const IteratorTraits_ &traits);
 
-				return *this;
-			}
+			///
+			List<String>::Iterator getPosition();
 
-			List<String>::Iterator getPosition()
-			{
-				return position_;
-			}
-
-			SectionIterator getSection()
-			{
-				return section_;
-			}
+			///
+			SectionIterator getSection();
 		
-			const String& operator * () const
-			{
-				return *position_;
-			}
+			///
+			const String& operator * () const;
 
-			const String& operator -> () const
-			{
-				return *position_;
-			}
-				
-			IteratorTraits_& operator ++ ()
-			{
-				if (bound_ == 0)
-				{
-					return *this;
-				}
+			///
+			IteratorTraits_& operator ++ ();
 
-				if (!isSectionLastLine())
-				{
-					position_++;
+			///
+			IteratorTraits_& operator -- ();
 
-					return *this;
-				}
+			///
+			IteratorTraits_& getSectionNextLine();
 
-				section_++;
+			///
+			bool operator == (const IteratorTraits_& traits) const;
 
-				if (section_ == bound_->end())
-				{
-					return *this;
-				}
-
-				position_ = section_->lines_.begin();
-
-				return *this;
-			}
-
-			IteratorTraits_& operator -- ()
-			{
-				if (bound_ == 0)
-				{
-					return *this;
-				}
-
-				if (!isSectionFirstLine())
-				{
-					position_--;
-
-					return *this;
-				}
-
-				// if we are at the first line in the file, invalidate the iterator
-				if (section_ == bound_->begin())
-				{
-					position_ = section_->lines_.end();
-					return *this;
-				}
-
-				section_--;
-
-				toSectionLastLine();
-
-				return *this;
-			}
-
-
-			IteratorTraits_& getSectionNextLine()
-			{
-				if (bound_ == 0)
-				{
-					return *this;
-				}
-
-				position_++;
-
-				return *this;
-			}
-
-			bool operator == (const IteratorTraits_& traits) const
-			{
-				return (bound_ == traits.bound_			&&
-								section_ == traits.section_ &&
-								position_ == traits.position_);
-			}
-
-			bool operator != (const IteratorTraits_& traits) const
-			{
-				return !(*this == traits);
-			}
+			///
+			bool operator != (const IteratorTraits_& traits) const;
 			
-			bool operator + () const
-			{
-				return (bound_ != 0 && 
-								section_ != bound_->end() &&
-								position_ != section_->lines_.end());
-			}
+			///
+			bool operator + () const;
 
-			bool isValid() const
-			{
-				return (+ (*this));
-			}
+			///
+			bool isValid() const;
 
-			void toSectionFirstLine()
-			{
-				position_ = section_->lines_.begin();
-			}
+			///
+			void toSectionFirstLine();
 
-			void toSectionLastLine()
-			{
-				List<String>::Iterator it = section_->lines_.end();
-				--it;
-				position_ = it;
-			}
+			///
+			void toSectionLastLine();
 
-			void toSectionEnd()
-			{
-				position_ = section_->lines_.end();
-			}
+			///
+			void toSectionEnd();
 
+			///
+			bool isSectionFirstLine() const;
 
-			bool isSectionLastLine() const
-			{
-				List<String>::Iterator it = section_->lines_.end();
-				it--;
-				return (position_ == it);
-			}				
+			///
+			bool isSectionLastLine() const;
 
-			bool isSectionFirstLine() const
-			{
-				return (position_ == section_->lines_.begin());
-			}
+			///
+			bool isSectionEnd() const;
 
-			bool isSectionEnd() const
-			{
-				return (position_ == section_->lines_.end());
-			}
+			///
+			void toFirstLine();
 
-			void toFirstLine()
-			{
-				section_->lines_.begin();
-				position_ = section_->lines_.begin();
-			}
+			///
+			void toLastLine();
 
-			void toLastLine()
-			{
-				toEnd();
-				--section_;
-				toSectionLastLine();
-			}
-
-			void toEnd()
-			{
-				section_->lines_.end();
-				toSectionEnd();
-			}
-
+			///
+			void toEnd();
 
 			protected:
 
-			const List<Section>* getBound_() const
-			{
-				return bound_;
-			}
+			///
+			const List<Section>* getBound_() const;
 
-			void setLine_(const String& line)
-			{
-				(*position_) = line;
-			}
+			///
+			void setLine_(const String& line);
 
 			private:
 
@@ -661,9 +515,7 @@ namespace BALL
 			SectionIterator					section_;
 			List<String>::Iterator	position_;
 		};
-
 	};
-
 
 } // namespace BALL
 

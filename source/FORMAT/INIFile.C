@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.31 2003/07/10 12:49:54 amoll Exp $
+// $Id: INIFile.C,v 1.32 2003/07/11 00:13:28 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -570,7 +570,7 @@ namespace BALL
 
 	bool INIFile::isValid(const LineIterator& it) const
 	{
-		return (+it && it.getBound_() == &sections_);
+		return (it.isValid() && it.getBound_() == &sections_);
 	}
 
 	bool INIFile::operator == (const INIFile& inifile) const
@@ -592,5 +592,210 @@ namespace BALL
 	{
 		return check_duplicate_keys_;
 	}
+
+	// ===================== IteratorTraits_ ==========================
+
+	INIFile::IteratorTraits_::IteratorTraits_()
+		:	bound_(0),
+			section_(),
+			position_()
+			
+	{
+	}
+	
+	INIFile::IteratorTraits_::IteratorTraits_(List<INIFile::Section>& list, 
+																					  INIFile::SectionIterator section, 
+																						List<String>::Iterator line)
+		:	bound_(&list),
+			section_(section),
+			position_(line)
+	{
+	}
+	
+	INIFile::IteratorTraits_::IteratorTraits_(const INIFile::IteratorTraits_& traits)
+		:	bound_(traits.bound_),
+			section_(traits.section_),
+			position_(traits.position_)
+	{
+	}
+
+	INIFile::IteratorTraits_::~IteratorTraits_()
+	{
+	}
+	
+	const INIFile::IteratorTraits_& INIFile::IteratorTraits_::operator = 
+		(const INIFile::IteratorTraits_ &traits)
+	{
+		bound_		= traits.bound_;
+		section_  = traits.section_;
+		position_ = traits.position_;
+
+		return *this;
+	}
+
+	List<String>::Iterator INIFile::IteratorTraits_::getPosition()
+	{
+		return position_;
+	}
+
+	INIFile::SectionIterator INIFile::IteratorTraits_::getSection()
+	{
+		return section_;
+	}
+
+	const String& INIFile::IteratorTraits_::operator * () const
+	{
+		return *position_;
+	}
+
+	INIFile::IteratorTraits_& INIFile::IteratorTraits_::operator ++ ()
+	{
+		if (!isValid()) return *this;
+
+		if (!isSectionLastLine())
+		{
+			position_++;
+			return *this;
+		}
+
+		section_++;
+
+		if (section_ == bound_->end()) return *this;
+
+		position_ = section_->lines_.begin();
+		return *this;
+	}
+
+	INIFile::IteratorTraits_& INIFile::IteratorTraits_::operator -- ()
+	{
+		if (!bound_) return *this;
+		if (section_ == bound_->end()) toLastLine();
+
+		if (!isSectionFirstLine())
+		{
+			position_--;
+			return *this;
+		}
+
+		// if we are at the first line in the file, invalidate the iterator
+		if (section_ == bound_->begin())
+		{
+			position_ = section_->lines_.end();
+			return *this;
+		}
+
+		section_--;
+		toSectionLastLine();
+		return *this;
+	}
+
+
+	INIFile::IteratorTraits_& INIFile::IteratorTraits_::getSectionNextLine()
+	{
+		if (!isValid()) return *this;
+
+		position_++;
+		return *this;
+	}
+
+	bool INIFile::IteratorTraits_::operator == (const INIFile::IteratorTraits_& traits) const
+	{
+		return (bound_ == traits.bound_			&&
+						section_ == traits.section_ &&
+						position_ == traits.position_);
+	}
+
+	bool INIFile::IteratorTraits_::operator != (const INIFile::IteratorTraits_& traits) const
+	{
+		return !(*this == traits);
+	}
+	
+	bool INIFile::IteratorTraits_::operator + () const
+	{
+		return (isValid() &&
+						position_ != section_->lines_.end());
+	}
+
+	bool INIFile::IteratorTraits_::isValid() const
+	{
+		return (bound_ != 0 && section_ != bound_->end());
+	}
+
+	void INIFile::IteratorTraits_::toSectionFirstLine()
+	{
+		if (!isValid()) return;
+		position_ = section_->lines_.begin();
+	}
+
+	void INIFile::IteratorTraits_::toSectionLastLine()
+	{
+		if (!isValid()) return;
+		position_ = section_->lines_.end();
+		position_--;
+	}
+
+	void INIFile::IteratorTraits_::toSectionEnd()
+	{
+		if (!isValid()) return;
+		position_ = section_->lines_.end();
+	}
+
+	bool INIFile::IteratorTraits_::isSectionFirstLine() const
+	{
+		return (isValid() && position_ == section_->lines_.begin());
+	}
+
+	bool INIFile::IteratorTraits_::isSectionLastLine() const
+	{
+		if (!isValid()) return false;
+		List<String>::Iterator it = section_->lines_.end();
+		it--;
+		return (position_ == it);
+	}				
+
+	bool INIFile::IteratorTraits_::isSectionEnd() const
+	{
+		if (!isValid()) return false;
+		return (position_ == section_->lines_.end());
+	}
+
+	void INIFile::IteratorTraits_::toFirstLine()
+	{
+		if (!bound_) return;
+		section_ = bound_->begin();
+		position_ = section_->lines_.begin();
+
+		// avoid problem with empty HEADER
+		if (position_ == section_->lines_.end()) ++*this;
+	}
+
+	void INIFile::IteratorTraits_::toLastLine()
+	{
+		if (!bound_) return;
+		section_ = bound_->end();
+		section_--;
+		position_ = section_->lines_.end();
+		position_--;
+	}
+
+	void INIFile::IteratorTraits_::toEnd()
+	{
+		if (!bound_) return;
+		section_ = bound_->end();
+		section_--;
+		position_ = section_->lines_.end();
+	}
+
+
+	const List<INIFile::Section>* INIFile::IteratorTraits_::getBound_() const
+	{
+		return bound_;
+	}
+
+	void INIFile::IteratorTraits_::setLine_(const String& line)
+	{
+		(*position_) = line;
+	}
+
 
 } // namespace BALL
