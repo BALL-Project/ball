@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.85 2005/02/28 17:24:05 amoll Exp $
+// $Id: molecularStructure.C,v 1.86 2005/03/10 11:14:43 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -422,13 +422,9 @@ namespace BALL
 
 			Vector3 max_distance_point;
 			float max_square_distance = -1;
-			if (RTTI::isKindOf<Atom>(*composite)) 
+			AtomContainer* ai = dynamic_cast<AtomContainer*>(to_center_on);
+			if (ai != 0)
 			{
-				max_distance_point = ((Atom*) composite)->getPosition() - Vector3(1,1,1);
-			}
-			else
-			{
-				AtomContainer* ai = (AtomContainer*) composite;
 				AtomIterator ait = ai->beginAtom();
 				for (; ait != ai->endAtom(); ait++)
 				{
@@ -439,6 +435,12 @@ namespace BALL
 						max_distance_point = (*ait).getPosition();
 					}
 				}
+			}
+			else
+			{
+				Atom* atom = dynamic_cast<Atom*>(to_center_on);
+				if (atom == 0) return;
+				max_distance_point = atom->getPosition() - Vector3(1,1,1);
 			}
 
  			Vector3 max_distance_vector(max_distance_point - view_point);

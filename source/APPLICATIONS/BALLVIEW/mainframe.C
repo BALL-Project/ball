@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.54 2005/03/01 16:46:25 amoll Exp $
+// $Id: mainframe.C,v 1.55 2005/03/10 11:18:00 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -308,6 +308,19 @@ namespace BALL
 			Scene::getInstance(0)->switchToLastMode();
 			return;
 		}
+
+		if (e->key() == Key_Enter) 
+		{
+			if (composite_manager_.getNumberOfComposites() == 0) return;
+			if (getMolecularControlSelection().size() == 0)
+			{
+				control_selection_.push_back(*composite_manager_.begin());
+			}
+				
+			MolecularStructure::getInstance(0)->centerCamera();
+			return;
+		}
+
 
 		#ifdef BALL_PYTHON_SUPPORT
 			PyWidget::getInstance(0)->reactTo(*e);

@@ -30,6 +30,7 @@ Added:
 		- possibility to highlight the selected molecular items
   	- new move mode for (partial) structures (also much less CPU consumption)
   	- Esc key now switches to last used mode in Scene
+		- Enter key now focus on selection or on first loaded system if no selection exists
   	- calculation of Ramachandran plots for proteins
   	- Python scripting
   		- Hotkey support for starting any (BALL-)Python command from BALLView
