@@ -1,4 +1,4 @@
-// $Id: PairExpRDFIntegrator_test.C,v 1.5 2000/09/25 16:34:00 anker Exp $
+// $Id: PairExpRDFIntegrator_test.C,v 1.6 2000/09/26 12:11:00 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PairExpRDFIntegrator_test.C,v 1.5 2000/09/25 16:34:00 anker Exp $")
+START_TEST(class_name, "$Id: PairExpRDFIntegrator_test.C,v 1.6 2000/09/26 12:11:00 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -178,7 +178,6 @@ CHECK(PairExpRDFIntegrator::integrateToInf(double from) const )
 	TEST_REAL_EQUAL(rel_err, 0.01);
 
 	val = integrator.integrateToInf(2);
-	Log.info() << "val = " << val << endl;
 	rel_err = fabs((val - (-2.09822)) / -2.09822);
 	TEST_REAL_EQUAL(rel_err, 0.01);
   //BAUSTELLE
@@ -219,14 +218,14 @@ CHECK(PairExpRDFIntegrator::integrate(double from, double to, double alpha, doub
 	val = integrator.integrate(0.1, 0.9, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
 	TEST_REAL_EQUAL(val, 0.0)
 	val = integrator.integrate(1.0, 1.5, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
-	rel_err = fabs((val - (-0.080510343)) / -0.080510343);
+	rel_err = fabs((val - (-0.023580702)) / 0.023580702);
 	TEST_REAL_EQUAL(rel_err, 0.01);
 	val = integrator.integrate(2.3, 2.7, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
-	rel_err = fabs((val - 0.012745294) / 0.012745294);
+	rel_err = fabs((val - 0.0837784) / 0.0837784);
 	TEST_REAL_EQUAL(rel_err, 0.01);
 	val = integrator.integrate(1.3, 2.3, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0);
-	rel_err = fabs((val - 0.3282713538) / 0.3282713538);
-	TEST_REAL_EQUAL(rel_err, 0.01);
+	rel_err = fabs((val - 0.93246306) / 0.93246306);
+	TEST_REAL_EQUAL(rel_err, 0.03);
 
 	// now come the tests involving geometric correction (and therefore
 	// numerical integration)
