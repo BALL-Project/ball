@@ -1,4 +1,4 @@
-// $Id: PDBChecker.C,v 1.2 2000/01/17 13:12:17 oliver Exp $
+// $Id: PDBChecker.C,v 1.3 2000/02/16 19:18:32 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/STRUCTURE/defaultProcessors.h>
@@ -37,13 +37,13 @@ int main(int argc, char** argv)
 	// normalize the names
 	// This processor converts the atom names from several naming
 	// conventions to the standard PDB names
-	S.apply(*db.normalizeNames);
+	S.apply(db.normalize_names);
 
 	// build bonds
 	// Since PDB files normally do not contain bond information
 	// we have to reconstruct the bonds from the templates in
 	// the fragment database
-	S.apply(*db.buildBonds);
+	S.apply(db.build_bonds);
 	
 	
 	// now we create a ResidueChecker object and apply it

@@ -1,4 +1,4 @@
-// $Id: amberEnergy.C,v 1.3 2000/01/07 22:01:57 oliver Exp $
+// $Id: amberEnergy.C,v 1.4 2000/02/16 19:18:32 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -32,8 +32,8 @@ int main(int argc, char** argv)
 	// normalize the names and build all bonds
 	Log.info() << "normalizing names and building bonds..." << endl;
 	FragmentDB db;
-	S.apply(*db.normalizeNames);
-	S.apply(*db.buildBonds);
+	S.apply(db.normalize_names);
+	S.apply(db.build_bonds);
 
 	// create an AMBER force field and set its options from a file 
 	AmberFF amber;

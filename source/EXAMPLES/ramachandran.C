@@ -1,4 +1,4 @@
-// $Id: ramachandran.C,v 1.4 2000/02/02 15:12:03 oliver Exp $
+// $Id: ramachandran.C,v 1.5 2000/02/16 19:18:33 oliver Exp $
 
 //============================================================================
 // BALL - Ramachandran plot example
@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 	// normalize the names and build all bonds
 	Log.info() << "normalizing names and building bonds..." << endl;
 	FragmentDB db;
-	S.apply(*db.normalizeNames);
+	S.apply(db.normalize_names);
 	
 	// now, iterate over all residues
 	ResidueIterator res_it = S.beginResidue();

@@ -1,4 +1,4 @@
-// $Id: PDB2discover.C,v 1.5 2000/01/31 16:06:06 oliver Exp $
+// $Id: PDB2discover.C,v 1.6 2000/02/16 19:18:32 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
@@ -36,11 +36,11 @@ int main(int argc, char** argv)
 	FragmentDB	db;
 
 	Log << "adding hydrogens..." << endl;
-	S.apply(*db.addHydrogens);
+	S.apply(db.add_hydrogens);
 
 	Log << "normalizing atom names" << endl;
-	db.normalizeNames->setNamingStandard("Discover");
-	S.apply(*db.normalizeNames);
+	db.normalize_names.setNamingStandard("Discover");
+	S.apply(db.normalize_names);
 
 	Log << "writing file " << argv[2] << endl;
 	PDBFile out_file(argv[2], ios::out);

@@ -1,4 +1,4 @@
-// $Id: bindingEnergy.C,v 1.2 2000/01/10 15:51:11 oliver Exp $
+// $Id: bindingEnergy.C,v 1.3 2000/02/16 19:18:32 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -48,10 +48,10 @@ int main(int argc, char** argv)
 	// normalize the names and build all bonds
 	Log.info() << "normalizing names and building bonds..." << endl;
 	FragmentDB db;
-	A.apply(*db.normalizeNames);
-	A.apply(*db.buildBonds);
-	B.apply(*db.normalizeNames);
-	B.apply(*db.buildBonds);
+	A.apply(db.normalize_names);
+	A.apply(db.build_bonds);
+	B.apply(db.normalize_names);
+	B.apply(db.build_bonds);
 	
 
 	// calculate the atomic contact energies of A and B

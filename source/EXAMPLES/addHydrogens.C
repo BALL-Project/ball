@@ -44,19 +44,19 @@ int main(int argc, char** argv)
 	// and normalize the atom names, i.e. we convert different
 	// naming standards to the PDB naming scheme - just in case!
 	cout << "normalizing names..." << endl;
-	S.apply(*fragment_db.normalizeNames);
+	S.apply(fragment_db.normalize_names);
 
 	// now we add any missing hydrogens to the residues
 	// the data on the hydrogen positions stems from the
 	// fragment database. However the hydrogen positions 
 	// created in this way are only good estimates
 	cout << "adding hydrogens..." << endl;
-	S.apply(*fragment_db.addHydrogens);
+	S.apply(fragment_db.add_hydrogens);
 
 	// now we create the bonds between teh atoms (PDB files hardly
   // contain a complete set of CONECT records)																							
 	cout << "building bonds..." << endl;
-	S.apply(*fragment_db.buildBonds);
+	S.apply(fragment_db.build_bonds);
 
 	// now we check whether the model we built is consistent
 	// The ResidueChecker checks for charges, bond lengths,

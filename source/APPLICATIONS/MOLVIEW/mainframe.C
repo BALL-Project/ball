@@ -354,11 +354,11 @@ void Mainframe::importPDB()
 								 << filename.ascii() << "\"" << endl;
 
 			statusBar()->message("normalizing names...");
-	    system.apply(*fragment_db_.normalizeNames);
+	    system.apply(fragment_db_.normalize_names);
 			Log.info() << "> normalized names" << endl;
 
 			statusBar()->message("generating missing bonds...");
-	    system.apply(*fragment_db_.buildBonds);
+	    system.apply(fragment_db_.build_bonds);
 			Log.info() << "> generated missing bonds" << endl;
   
 			// construct a name (the filename without the dir path)
@@ -771,8 +771,8 @@ void Mainframe::buildBonds()
 	List<Composite*>::ConstIterator list_it = selection.begin();	
 	for (; list_it != selection.end(); ++list_it)
 	{	
-		(*list_it)->apply(*fragment_db_.buildBonds);
-		number_of_bonds += fragment_db_.buildBonds->getNumberOfBondsBuilt();
+		(*list_it)->apply(fragment_db_.build_bonds);
+		number_of_bonds += fragment_db_.build_bonds->getNumberOfBondsBuilt();
 		object_processor_.applyOn(**list_it);
 		scene_->getCompositeManager()->update((*list_it)->getRoot());
 	}
@@ -796,9 +796,9 @@ void Mainframe::addHydrogens()
 	List<Composite*>::ConstIterator list_it = selection.begin();	
 	for (; list_it != selection.end(); ++list_it)
 	{	
-		(*list_it)->apply(*fragment_db_.addHydrogens);
-		number_of_hydrogens += fragment_db_.addHydrogens->getNumberOfInsertedH();
-		(*list_it)->apply(*fragment_db_.buildBonds);
+		(*list_it)->apply(fragment_db_.add_hydrogens);
+		number_of_hydrogens += fragment_db_.add_hydrogens.getNumberOfInsertedH();
+		(*list_it)->apply(fragment_db_.build_bonds);
 		object_processor_.applyOn(**list_it);
 		scene_->getCompositeManager()->update((*list_it)->getRoot());
 	}
