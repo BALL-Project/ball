@@ -40,6 +40,7 @@ EXECUTABLES = \
 	List_test\
 	MathsCommon_test\
 	Matrix44_test\
+	MOL2File_test\
 	Molecule_test\
 	NumericalSAS_test\
 	Nucleotide_test\
@@ -63,7 +64,8 @@ EXECUTABLES = \
 	TransformationApplicator_test\
 	TranslationApplicator_test\
 	Vector3_test\
-	Vector4_test
+	Vector4_test\
+	XYZFile_test
 
 CPP_SOURCES=$(EXECUTABLES:=.C)
 
@@ -159,6 +161,9 @@ MathsCommon_test:	MathsCommon_test.o
 Matrix44_test:	Matrix44_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+MOL2File_test:	MOL2File_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 Molecule_test:	Molecule_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
@@ -235,6 +240,9 @@ Vector3_test:	Vector3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Vector4_test:	Vector4_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+XYZFile_test:	XYZFile_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 
