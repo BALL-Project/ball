@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.28 2001/12/12 11:29:48 oliver Exp $
+// $Id: bitVector.C,v 1.29 2001/12/13 01:54:15 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -221,19 +221,19 @@ namespace BALL
 			return;
 		}
 
-		bitset_.resize((Size)((strlen(bit_string) + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT));
+		size_ = strlen(bit_string);
+		bitset_.resize((Size)((size_ + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT));
 		for (Position i = 0; i < bitset_.size(); i++)
 		{
 			bitset_[i] = (BlockType)0;
 		}
-
+				
 		const char* tmp = bit_string;
 		for (Index i = size_ - 1; i >= 0; i--)
 		{
 			if (*tmp != '0')
 			{
 				bitset_[block_(i)] |= mask_(i);
-				std::cout << "setting bit #" << i << ": " << (int)bitset_[block_(i)] << std::endl;
 			}
 			tmp++;
 		}
@@ -398,7 +398,7 @@ namespace BALL
 			setSize(bit_vector.size_, true);
 		} 
 
-		for (Position i = 0; i < bitset_.size(); i++)
+		for (Position i = 0; i < std::min(bitset_.size(), bit_vector.bitset_.size()); i++)
 		{
 			bitset_[i] ^= bit_vector.bitset_[i];
 		}
@@ -413,26 +413,18 @@ namespace BALL
 			setSize(bit_vector.size_, true);
 		}
 
-		for (Position i = 0; i < bitset_.size(); i++)
+		for (Position i = 0; i < std::min(bitset_.size(), bit_vector.bitset_.size()); i++)
 		{
-			std::cout << (int)bitset_[i] << " | " << (int)bit_vector.bitset_[i] << " = ";
 			bitset_[i] |= bit_vector.bitset_[i];
-			std::cout << (int) bitset_[i] << std::endl;
 		}
 	}
 
 	void BitVector::bitwiseAnd(const BitVector& bit_vector)
 		throw (Exception::OutOfMemory) // in setSize below
 	{
-		// adjust the bitvector size to that of the longest vector!
-		if (size_ < bit_vector.size_)
-		{
-			setSize(bit_vector.size_, true);
-		}
-
 		for (Position i = 0; i < bitset_.size(); i++)
 		{
-			bitset_[i] &= bit_vector.bitset_[i];
+			bitset_[i] &= ((i < bit_vector.bitset_.size()) ? bit_vector.bitset_[i] : (BlockType)0);
 		}
 	}
 
