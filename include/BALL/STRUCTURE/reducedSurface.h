@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.44 2003/04/17 06:07:21 oliver Exp $
+// $Id: reducedSurface.h,v 1.45 2003/08/19 16:01:55 amoll Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -10,8 +10,8 @@
 #	include <BALL/MATHS/common.h>
 #endif
 
-#ifndef BALL_MATHS_BOX3_H
-#	include <BALL/MATHS/box3.h>
+#ifndef BALL_MATHS_SIMPLEBOX3_H
+#	include <BALL/MATHS/simpleBox3.h>
 #endif
 
 #ifndef BALL_MATHS_CIRCLE3_H
@@ -241,9 +241,9 @@ namespace BALL
 			throw();
 
 		/** Return the bounding box of the centers of te atoms of te molecule
-				@return TBox3<double>	the bounding box
+				@return TSimpleBox3<double>	the bounding box
 		*/
-		TBox3<double> getBoundingBox() const
+		TSimpleBox3<double> getBoundingBox() const
 			throw();
 
 		/** Delete a pair of similar faces.
@@ -361,7 +361,7 @@ namespace BALL
     double r_max_;
     /*_ bounding box of the atom centers of the molecule
     */
-		TBox3<double> bounding_box_;
+		TSimpleBox3<double> bounding_box_;
 
 	};
 

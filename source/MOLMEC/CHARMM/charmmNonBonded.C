@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.24 2003/04/30 15:01:27 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.25 2003/08/19 16:06:50 amoll Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -1069,7 +1069,7 @@ namespace BALL
 			// Periodic boundary is enabled and use distance dependent dielectric 
 
 			// calculate the box period (half of the box period)
-			Box3 box = force_field_->periodic_boundary.getBox();
+			SimpleBox3 box = force_field_->periodic_boundary.getBox();
 			period = box.b - box.a;
 			half_period = period * 0.5; 
 
@@ -1099,7 +1099,7 @@ namespace BALL
 		{
 			// Periodic boundary is enabled and use a constant dielectric 
 			// calculate the box period (half of the box period)
-			Box3 box = force_field_->periodic_boundary.getBox();
+			SimpleBox3 box = force_field_->periodic_boundary.getBox();
 			period = box.b - box.a;
 			half_period = period * 0.5; 
 
@@ -1266,7 +1266,7 @@ namespace BALL
 		{
 			// periodic boundary is enabled; use a distance dependent dielectric constant 
 			// Calculate periods and half periods
-			Box3 box = force_field_->periodic_boundary.getBox();
+			SimpleBox3 box = force_field_->periodic_boundary.getBox();
 			period = box.b - box.a; 
 			half_period = period * 0.5; 
 
@@ -1301,7 +1301,7 @@ namespace BALL
 		{
 			// periodic boundary is enabled; use a distance dependent dielectric constant 
 			// Calculate periods and half periods
-			Box3 box = force_field_->periodic_boundary.getBox();
+			SimpleBox3 box = force_field_->periodic_boundary.getBox();
 			period = box.b - box.a; 
 			half_period = period * 0.5; 
 			
