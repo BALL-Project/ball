@@ -8,6 +8,7 @@ namespace BALL
 {
 
 	ostream& operator << (ostream &s, const NMRAtomData& ad)
+		throw()
 	{
 		s << "atom_ID: "					  << ad.atom_ID;
 		s << " residue_seq_code: "  << ad.residue_seq_code;
@@ -20,6 +21,7 @@ namespace BALL
 	}
 
 	ostream& operator << (::std::ostream& s, const SampleCondition& sc)
+		throw()
 	{
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 		s << "name "				<< sc.name << endl;;
@@ -31,6 +33,7 @@ namespace BALL
 	}
 
 	ostream& operator << (::std::ostream& s, const ShiftReferenceElement& sre)
+		throw()
 	{
 		s << endl;
 		s << "mol_common_name "		<< sre.mol_common_name << endl;
@@ -62,6 +65,7 @@ namespace BALL
 	}
 	
 	ostream& operator << (::std::ostream& s, const ShiftReferenceSet& sr)
+		throw()
 	{
 		s << endl<< "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<" << endl;
 		s << "name " << sr.name << endl << endl;
@@ -74,6 +78,7 @@ namespace BALL
 	}
 
 	ostream& operator << (::std::ostream& s, const NMRAtomDataSet& set)
+		throw()
 	{
 		s << endl << "name " << set.name << endl << endl;
 
@@ -112,6 +117,7 @@ namespace BALL
 	}
 
 	ShiftReferenceElement::ShiftReferenceElement()
+		throw()
 		: atom_type(),
 			isotope_number(0),
 			atom_group(),
@@ -124,6 +130,7 @@ namespace BALL
 	}
 
 	SampleCondition::SampleCondition()
+		throw()
 		: name(),
 			temperature(),
 			pH(),
@@ -132,6 +139,7 @@ namespace BALL
 	}
 
 	NMRAtomDataSet::NMRAtomDataSet()
+		throw()
 		: name(),
 			condition(0),
 			reference(0)
@@ -140,7 +148,8 @@ namespace BALL
 
 	std::vector<String> NMRStarFile::reference_options_;
 
-	Size NMRStarFile::getNumberOfAtoms() const
+	Size NMRStarFile::getNumberOfAtoms() 
+		const	throw()
 	{
 		Size max = 0;
 		for (Position pos = 0;  pos < atom_data_sets_.size(); pos++)
@@ -154,78 +163,81 @@ namespace BALL
 		return max;
 	}
 
-	const std::vector<NMRAtomDataSet*>& NMRStarFile::getData() const
+	const std::vector<NMRAtomDataSet*>& NMRStarFile::getData() 
+		const	throw()
 	{
 		return atom_data_sets_;
 	}
 
 	void NMRStarFile::readEntryInformation_()
+		throw (LineBasedFileError, Exception::InvalidFormat)
 	{
 		try
 		{
-			rewind_();
-			test_(__FILE__, __LINE__, 
-				search_("       assigned_chemical_shifts"),
+			rewind();
+			test(__FILE__, __LINE__, 
+				search("       assigned_chemical_shifts"),
 				"Number of assigned chemical shifts could not be found");
 
-			Position _position_ = 31;
-			number_of_shifts_ = getToken_(_position_).toUnsignedInt();
+			number_of_shifts_ = getField(1).toUnsignedInt();
 		}
-		catch (ReadFile::ReadFileError)
+		catch (LineBasedFile::LineBasedFileError)
 		{
-			Log.warn() << "Number of assigned chemical shifts could not be read" << endl;
+			Log.warn() << "Number of assigned chemical shifts could not be found" << endl;
+		}
+		catch (Exception::InvalidFormat e)
+		{
+			Log.warn() << "Number of assigned chemical shifts could not be transformed into a number: " 
+								 << e.getMessage() << endl;
 		}
 	}
 
 	void NMRStarFile::readMolSystem_()
+		throw()
 	{
 		try
 		{
-			rewind_();
-			test_(__FILE__, __LINE__, 
-						search_("#  Molecular system description  #"),
+			rewind();
+			test(__FILE__, __LINE__, 
+						search("#  Molecular system description  #"),
 						"Molecular system description could not be found");
 
-			skipLines_();
+			skipLines();
 
-			test_(__FILE__, __LINE__,
-						search_("   _Mol_system_name", "#"),
+			test(__FILE__, __LINE__,
+						search("   _Mol_system_name", "#"),
 						"Molecular system description could not be found");
-
-			Position _position_ = 21;
 
 			// systemname can be enclosed with ' '
-			String word = getToken_(_position_);
-			if (word[0] == '\'')
+			system_name_ = getField(1, "'");
+
+			if (system_name_ == "")
 			{
-				_position_ = 21;
-				word = getToken_(_position_, '\'');
-				word.erase(word.size()), 1;
+				Log.warn() << "The name of the molecular system could not be read." << endl;
 			}
-			system_name_ = word;
 		}
-		catch (ReadFile::ReadFileError)
+		catch (LineBasedFile::LineBasedFileError e)
 		{
-			Log.warn() << "The name of the molecular system could not be read." << endl;
+			Log.warn() << e.getMessage() << endl;
 		}
 	}
 
 	void NMRStarFile::readSampleConditions_()
+		throw()
 	{
 		try
 		{
-			rewind_();
-			test_(__FILE__, __LINE__, 
-						search_("#  Sample conditions  #"),
+			rewind();
+			test(__FILE__, __LINE__, 
+						search("#  Sample conditions  #"),
 						"sample conditions could not be found");
 
-			skipLines_();
+			skipLines();
 
-			Position _position_;
-			String temp;
+			String word;
 			float value;
 
-			while (search_("save_", "#"))
+			while (search("save_", "#"))
 			{
 				if (line_ == "save_")
 				{
@@ -233,59 +245,62 @@ namespace BALL
 				}
 
 				SampleCondition* condition = new SampleCondition();
-				condition->name = copyString_(5);
-				if (!search_("      _Variable_value_units", "#"))
+				condition->name = copyString(5);
+				if (!search("      _Variable_value_units", "#"))
 				{
 					break;
 				}
-				skipLines_(1);
+				skipLines(1);
 
 				// reading samples set until empty line
 				while (line_.size() > 0)
 				{ 
-					_position_ = 0;
-					temp = getToken_(_position_);
+					word = getField(1);
 					try
 					{
-						value = getToken_(_position_).toFloat();
+						value = word.toFloat();
 					}
 					catch (Exception::InvalidFormat)
 					{
+						Log.warn() << "Sample Condition value could not be transformed to a number: " 
+											 << word << endl;
 						value = 0;
 					}
 					
-					if (temp == "pH")
+					if (word == "pH")
 					{
 						condition->pH = value;
 					}
 					else
 					{
-						if (temp == "temperature")
+						if (word == "temperature")
 						{
 							condition->temperature = value;
 						}
 						else 
 						{
-							if (temp == "pressure")
+							if (word == "pressure")
 							{
 									condition->pressure = value;
 							}
 						}
 					}
 
-					readLine_();
+					readLine();
 				}
 
 				sample_conditions_.push_back(condition);
 			}
 		}
-		catch (ReadFile::ReadFileError)
+		catch (LineBasedFile::LineBasedFileError e)
 		{
-			Log.warn() << "Sample Conditions could not be read." << endl;
+			Log.warn() << "Sample Conditions could not be read.\n" 
+								 << e.getMessage() << endl;
 		}
 	}
 
 	void NMRStarFile::initializeReferenceOptions_()
+		throw()
 	{
 		if (reference_options_.size() > 0)
 		{
@@ -304,23 +319,23 @@ namespace BALL
 	}
 
 	void NMRStarFile::readShiftReferences_()
+		throw()
 	{
 		try
 		{
-			rewind_();
+			rewind();
 			NMRStarFile::initializeReferenceOptions_();
 
-			test_(__FILE__, __LINE__, 
-						search_("	#  Chemical shift referencing  #"),
+			test(__FILE__, __LINE__, 
+						search("	#  Chemical shift referencing  #"),
 						"Chemical shift referencing could not be found.");
 
-			skipLines_();
+			skipLines();
 
-			Position _position_;
 			String word;
 			std::vector<int> reference_positions;
 
-			while (search_("save_", "#"))
+			while (search("save_", "#"))
 			{
 				if (line_ == "save_")
 				{
@@ -328,37 +343,31 @@ namespace BALL
 				}
 
 				ShiftReferenceSet* shift_reference = new ShiftReferenceSet();
-				shift_reference->name = copyString_(5);
-				if (!search_("   loop_", "#"))
+				shift_reference->name = copyString(5);
+				if (!search("   loop_", "#"))
 				{
 					break;
 				}
-				readLine_();
-				// data format of the references set until empty line occurs
+				readLine();
+				// read data format of the references set until empty line occurs
 				while (line_.size() > 0)
 				{ 
-					reference_positions.push_back(switch_(reference_options_));
-					readLine_();
+					reference_positions.push_back(switchString(reference_options_));
+					readLine();
 				}
 
-				skipLines_();
-				int lastpos;
+				skipLines();
+				Position pos_field = 0;
 
 				// read references set until empty line occurs
 				while (line_.size() > 0)
 				{ 
 					ShiftReferenceElement*  reference_element = new ShiftReferenceElement();
-					_position_ = 0;
 					for (Position pos = 0; pos < reference_positions.size(); pos++)
 					{
-						lastpos = _position_;
-						word = getToken_(_position_);
-						if (word[0] == '\'')
-						{
-							_position_ = lastpos;
-							word = getToken_(_position_, '\'');
-							reference_element->atom_group = word;
-						}
+						// _Atom_group may be quoted
+						word = getField(pos_field, "'");
+						pos_field++;
 						
 						if (reference_positions[pos] == -1)
 						{
@@ -380,6 +389,8 @@ namespace BALL
 										catch (Exception::InvalidFormat)
 										{
 											reference_element->isotope_number = 0;
+											Log.warn() << "isotope number could not be transformed into a number: " 
+																 << word << endl;
 										}
 										break;
 							case ATOM_GROUP:
@@ -396,6 +407,8 @@ namespace BALL
 										catch (Exception::InvalidFormat)
 										{
 											reference_element->shift_value = 0;
+											Log.warn() << "shift value could not be transformed into a number: " 
+																 << word << endl;
 										}
 										break;
 							case REFERENCE_METHOD:
@@ -440,6 +453,8 @@ namespace BALL
 										catch (Exception::InvalidFormat)
 										{
 											reference_element->indirect_shift_ratio = 0;
+											Log.warn() << "shift ratio could not be transformed into a number: " 
+																 << word << endl;
 										}
 										break;
 							default:
@@ -447,40 +462,41 @@ namespace BALL
 								exit(1);
 						}
 					}
-					readLine_();
+					readLine();
 					shift_reference->elements.push_back(reference_element);
 				}
 
-				test_(__FILE__, __LINE__, 
+				test(__FILE__, __LINE__, 
 							shift_reference->elements.size() > 0,
 							"no data for shift references found");
 
 				shift_references_.push_back(shift_reference);
-				skipLines_(4); // skip save_
+				skipLines(4); // skip save_
 			}
 		}
-		catch (...)
+		catch (Exception::GeneralException e)
 		{
-			Log.warn() << "Shift References could not be read." << endl;
+			Log.warn() << "Shift References could not be read." << e.getMessage() << endl;
 		}
 	}
 
 	NMRAtomData* NMRStarFile::processShiftLine_()
+		throw (LineBasedFileError)
 	{
 		NMRAtomData* ad = new NMRAtomData();
 		Position pos = 0;
 
 		try
 		{
-			ad->atom_ID = getToken_(pos).toUnsignedInt();
-			ad->residue_seq_code = getToken_(pos).toUnsignedInt();
-			ad->residue_label = getToken_(pos);
-			ad->atom_name = getToken_(pos);
-			ad->atom_type = (getToken_(pos))[0];
-			ad->shift_value = getToken_(pos).toFloat();
+			ad->atom_ID = getField(pos).toUnsignedInt();
+			ad->residue_seq_code = getField(pos).toUnsignedInt();
+			ad->residue_label = getField(pos);
+			ad->atom_name = getField(pos);
+			ad->atom_type = (getField(pos))[0];
+			ad->shift_value = getField(pos).toFloat();
 			try
 			{
-				ad->error_value = getToken_(pos).toFloat();			
+				ad->error_value = getField(pos).toFloat();			
 			}
 			catch (Exception::InvalidFormat)
 			{
@@ -488,7 +504,7 @@ namespace BALL
 			}
 			try
 			{
-				ad->ambiguity_code = getToken_(pos).toUnsignedInt();
+				ad->ambiguity_code = getField(pos).toUnsignedInt();
 			}
 			catch (Exception::InvalidFormat)
 			{
@@ -496,46 +512,48 @@ namespace BALL
 			}
 
 		}
-		catch (Exception::GeneralException e)
+		catch (Exception::InvalidFormat e)
 		{
 			Log.error() << "An error occured while reading shift data:" << endl;
-			throw e;
+			throw LineBasedFileError(__FILE__, __LINE__, this, e.getMessage());
 		}
-		readLine_();
+		readLine();
 		return ad;
 	}
 
 	void NMRStarFile::readShifts_()
+		throw (LineBasedFileError)
 	{
-		rewind_();
+		rewind();
 
-		test_(__FILE__, __LINE__, 
-					search_("#      9             Ambiguous, specific ambiguity not defined    #"),
-					"Assigned chemical shift lists could not be found");
+		test(__FILE__, __LINE__, 
+				search("#      9             Ambiguous, specific ambiguity not defined    #"),
+				"Assigned chemical shift lists could not be found");
 
-		skipLines_(2);
+		skipLines(2);
 
 		String word;
-		Position _position_;
 
-		while (search_("save_", "#"))
+		while (search("save_", "#"))
 		{
 			if (line_ == "save_")
 			{
 				continue;
 			}
 			NMRAtomDataSet* atom_data_sets = new NMRAtomDataSet();
-			atom_data_sets->name = copyString_(5);
-			_position_ = 35;
+			atom_data_sets->name = copyString(5);
 			
 			try
 			{
-				test_(__FILE__, __LINE__,
-							search_("   _Sample_conditions_label", "#"),
+				test(__FILE__, __LINE__,
+							search("   _Sample_conditions_label", "#"),
 							"chemical shift does not contain Sample_conditions_label");
 
-				word = getToken_(_position_);
-				word.erase(0, 1);
+				word = getField(1);
+				if (word[0] == '$')
+				{
+					word.erase(0, 1);
+				}
 
 				for (Position pos = 0; pos < sample_conditions_.size(); pos++)
 				{
@@ -545,20 +563,22 @@ namespace BALL
 					}
 				}				
 			}
-			catch (ReadFile::ReadFileError)
+			catch (LineBasedFile::LineBasedFileError)
 			{
-				rewind_();
+				rewind();
 			}
 
 			try
 			{
-				test_(__FILE__, __LINE__,
-							search_("   _Chem_shift_reference_set_label"),
+				test(__FILE__, __LINE__,
+							search("   _Chem_shift_reference_set_label"),
 							"chemical shift does not contain _Chem_shift_reference_set_label");
 
-				_position_ = 35;
-				word = getToken_(_position_);
-				word.erase(0, 1);
+				word = getField(1);
+				if (word[0] == '$')
+				{
+					word.erase(0, 1);
+				}
 
 				for (Position pos = 0; pos < shift_references_.size() ; pos++)
 				{
@@ -568,16 +588,16 @@ namespace BALL
 					}
 				}			
 			}
-			catch (ReadFile::ReadFileError)
+			catch (LineBasedFile::LineBasedFileError)
 			{
-				rewind_();
+				rewind();
 			}
 
-			test_(__FILE__, __LINE__, 
-						search_("      _Chem_shift_ambiguity_code"),
+			test(__FILE__, __LINE__, 
+						search("      _Chem_shift_ambiguity_code"),
 						"chemical shift does not contain _Chem_shift_ambiguity_code");
 
-			skipLines_(1);
+			skipLines(1);
 			while (line_.size() > 0)
 			{
 				atom_data_sets->atom_data.push_back(processShiftLine_());
@@ -587,20 +607,22 @@ namespace BALL
 
 		if (number_of_shifts_ > 0)
 		{
-			test_(__FILE__, __LINE__, 
+			test(__FILE__, __LINE__, 
 						atom_data_sets_.size() == number_of_shifts_,
 						"wrong number of shift sets found");
 		}
 	}
 
 	NMRStarFile::NMRStarFile()
-		:	ReadFile(),
+		throw ()
+		:	LineBasedFile(),
 			number_of_shifts_(0)
 	{
 	}
 
 	NMRStarFile::NMRStarFile(const NMRStarFile& f)
-		:	ReadFile(f),
+		throw ()
+		:	LineBasedFile(f),
 			number_of_shifts_		(f.number_of_shifts_),
 			atom_data_sets_			(f.atom_data_sets_),
 			sample_conditions_  (f.sample_conditions_),
@@ -610,7 +632,8 @@ namespace BALL
 	}
 
 	NMRStarFile::NMRStarFile(const String& file_name)
-		:	ReadFile(file_name),
+		throw (Exception::FileNotFound)
+		:	LineBasedFile(file_name),
 			number_of_shifts_(0)
 	{
 		readEntryInformation_();
@@ -621,15 +644,16 @@ namespace BALL
 	}
 
 	NMRStarFile& NMRStarFile::operator = (const NMRStarFile& f)
+		throw ()
 	{
-		file_name_ = f.file_name_;
-		rewind_();
+		LineBasedFile::operator = (f);
 
 		number_of_shifts_		= f.number_of_shifts_;;
 		atom_data_sets_			= f.atom_data_sets_;
 		sample_conditions_  = f.sample_conditions_ ;
 		shift_references_   = f.shift_references_;
 		system_name_				= f.system_name_ ;
+
 		return *this;
 	}
 
