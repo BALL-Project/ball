@@ -1,7 +1,6 @@
-// $Id: fragmentDB.C,v 1.3 1999/09/17 06:41:17 oliver Exp $
+// $Id: fragmentDB.C,v 1.1 1999/09/17 11:17:49 oliver Exp $
 
-#include <BALL/KERNEL/fragmentDB.h>
-
+#include <BALL/STRUCTURE/fragmentDB.h>
 
 #include <list>
 #include <vector>
@@ -114,15 +113,9 @@ namespace BALL
 	// default constructor
 	FragmentDB::FragmentDB()
 	{
-		// search for the standard fragment DB file
-		Path path;
-		filename_ = path.find("fragments/Fragment.db");
-		
-		if (filename_ == "")
-		{
-			throw Exception::FileNotFound(__FILE__, __LINE__, "fragments/Fragment.db");
-		}
-		valid_ = true;
+		setFilename("fragments/Fragments.db");
+
+		init();
 
 		normalizeNames = new NormalizeNamesProcessor(*this);
 		addHydrogens = new AddHydrogensProcessor(*this);
@@ -180,7 +173,6 @@ namespace BALL
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		}
-		filename_ = filename;
 	}
 
 	const String& FragmentDB::getFilename() const 

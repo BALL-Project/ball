@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.2 1999/09/07 13:48:29 len Exp $
+// $Id: defaultProcessors.C,v 1.1 1999/09/17 11:17:49 oliver Exp $
 
 #include <BALL/KERNEL/defaultProcessors.h>
 
@@ -20,7 +20,8 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	Processor::Result ClearRadiusProcessor::operator()(Atom& atom){
+	Processor::Result ClearRadiusProcessor::operator()(Atom& atom)
+	{
 		atom.setRadius(0);
 
 		return Processor::CONTINUE;
@@ -36,10 +37,18 @@ namespace BALL
 	}
 
 	AssignRadiusProcessor::AssignRadiusProcessor(const String& filename)
-		:	filename_(filename),
-			number_of_errors_(0),
+		:	number_of_errors_(0),
 			number_of_assignments_(0)
 	{
+		// find the file in the data path
+		Path path;
+		filename_ = path.find(filename);
+		
+		if (filename_ == "")
+		{
+			// throw FileNotFound if the file could not be found in the DATA_PATH
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		}
 	}
 
 	bool AssignRadiusProcessor::start()
@@ -158,7 +167,13 @@ namespace BALL
 
 	void AssignRadiusProcessor::setFilename(const String& filename)
 	{
-		filename_ = filename;
+		Path path;
+		filename_ = path.find(filename);
+
+		if (filename_ == "")
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		}
 	}
 
 	 

@@ -7,9 +7,7 @@ CPP_SOURCES=\
 	baseFragment.C\
 	bond.C\
 	chain.C\
-	defaultProcessors.C\
 	fragment.C\
-	fragmentDB.C\
 	global.C\
 	molecule.C\
 	PDBAtom.C\

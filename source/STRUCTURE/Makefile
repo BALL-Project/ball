@@ -8,6 +8,7 @@ CPP_SOURCES=\
 	geometricProperties.C\
 	geometricTransformations.C\
 	numericalSAS.C\
+	residueChecker.C\
 	rotamerLibrary.C\
 	structureMapper.C
 
