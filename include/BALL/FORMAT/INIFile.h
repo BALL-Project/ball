@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.16 2001/04/09 23:04:09 amoll Exp $
+// $Id: INIFile.h,v 1.17 2001/04/17 14:08:41 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -302,36 +302,6 @@ namespace BALL
 				in an instance of INIFile.
 		*/
 		typedef IteratorTraits_ LineIterator;
-/*
-		friend class IteratorTraits_;
-
-		typedef ForwardIterator<ResourceEntry, ResourceEntry, ResourceEntry*, IteratorTraits_> Iterator;
-
-		Iterator begin()
-		{
-			return Iterator::begin(*this);
-		}
-
-		Iterator end()
-		{
-			return Iterator::end(*this);
-		}
-
-
-		typedef ConstForwardIterator<ResourceEntry, ResourceEntry, ResourceEntry*, IteratorTraits_> ConstIterator;
-
-		ConstIterator begin() const
-		{
-			return ConstIterator::begin(*this);
-		}
-
-		ConstIterator end() const
-		{
-			return ConstIterator::end(*this);
-		}
-
-*/
-		//friend class LineIterator;
 
 		/** Return type: undefined:
 				"[UNDEFINED!]"
@@ -390,7 +360,7 @@ namespace BALL
 				Line starting with '!', ';', or '\#' are treated as comment
 				lines and are stored, but not interpreted.
 				Key-names and values are trimmed.
-				IF a line starts with "[", but no closing bracket occurs, the line is skipped.
+				If a line starts with "[", but no closing bracket occurs, false is returned.
 				@return	bool \begin{itemize}
 												\item {\bf true} if the file could be opened and read
 												\item {\bf false} otherwise
@@ -500,6 +470,8 @@ namespace BALL
 				section headers).
 				If the line contains a key and the section contains already this key
 				the method aborts and returns false, use setValue() instead.
+				If an empty string is given as value for section_name, the last section
+				is used.
 				@param section_name the section to add the line
 				@param line the line to be added
 				@return true, if line could be added
