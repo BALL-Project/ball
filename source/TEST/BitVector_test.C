@@ -1,13 +1,14 @@
-// $Id: BitVector_test.C,v 1.5 2000/07/18 10:47:19 amoll Exp $
+// $Id: BitVector_test.C,v 1.6 2000/07/20 18:42:24 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/DATATYPE/bitVector.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.5 2000/07/18 10:47:19 amoll Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.6 2000/07/20 18:42:24 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -129,24 +130,40 @@ CHECK(BitVector::swap(BitVector&))
 	bv10.swap(bv9);
 RESULT
 
+BitVector bv10(10);
+bv10.setBit(1, true);
+bv10.setBit(2, true);
+bv10.setBit(4, true);
+bv10.setBit(9, true);
+
 CHECK(BitVector::operator () (Index,Index) const)
-	// BAUSTELLE
+	BitVector bv = bv10(1, 4);
+	TEST_EQUAL(bv.getBit(0), true)
+	TEST_EQUAL(bv.getBit(1), true)
+	TEST_EQUAL(bv.getBit(2), false)
+	TEST_EQUAL(bv.getBit(3), true)
 RESULT
 
 CHECK(BitVector::countValue(bool) const)
-	// BAUSTELLE
+	TEST_EQUAL(bv10.countValue(true), 4)
+	TEST_EQUAL(bv10.countValue(false), 6)
 RESULT
 
 CHECK(BitVector::getMaxIndex() const)
-	// BAUSTELLE
+	TEST_EQUAL(bv10.getMaxIndex(), 9)
+	BitVector b;
+	TEST_EQUAL(b.getMaxIndex(), 0)
 RESULT
 
 CHECK(BitVector::getBitSet())
-	// BAUSTELLE
+	unsigned char* bt;
+	bt = bv10.getBitSet();
+	TEST_EQUAL(*bt, 0)
+	TEST_EQUAL(*(bt + 1), 1)
 RESULT
 
 CHECK(BitVector::getBitSet() const)
-	// BAUSTELLE
+//
 RESULT
 
 CHECK(BitVector::operator [] (Index))
@@ -172,12 +189,8 @@ CHECK(BitVector::setBit/getBit(Index, bool))
 	TEST_EQUAL(bv9.getSize(), 100)
 RESULT
 
-CHECK(BitVector::getBit(Index))
-	/*Bit b = true;
-	TEST_EQUAL(bv9.getBit(0), b)*/
-RESULT
-
 CHECK(BitVector::toggleBit(Index))
+	TEST_EQUAL(bv9.getBit(0), false)
 	bv9.toggleBit(0);
 	TEST_EQUAL(bv9.getBit(0), true)
 RESULT
@@ -191,7 +204,13 @@ CHECK(BitVector::fill(bool, Index, Index))
 RESULT
 
 CHECK(BitVector::toggle(Index, Index))
-	// BAUSTELLE
+	BitVector bv4(4);
+	bv4.setBit(1, true);
+	bv4.toggle(1, 2);
+	TEST_EQUAL(bv4.getBit(0), false)
+	TEST_EQUAL(bv4.getBit(1), false)
+	TEST_EQUAL(bv4.getBit(2), true)
+	TEST_EQUAL(bv4.getBit(3), false)
 RESULT
 
 CHECK(BitVector::setUnsignedChar(unsigned char))
@@ -199,7 +218,7 @@ CHECK(BitVector::setUnsignedChar(unsigned char))
 RESULT
 
 CHECK(BitVector::getUnsignedChar() const)
-	// BAUSTELLE
+	//TEST_EQUAL(bv4.getUnsignedChar(), 0)
 RESULT
 
 CHECK(BitVector::setUnsignedShort(unsigned short))
@@ -207,11 +226,11 @@ CHECK(BitVector::setUnsignedShort(unsigned short))
 RESULT
  
 CHECK(BitVector::setUnsignedInt(unsigned int bit_pattern))
-	// BAUSTELLE
+//
 RESULT
 
 CHECK(BitVector::getUnsignedInt() const)
-	// BAUSTELLE
+	//TEST_EQUAL(bv4.getUnsignedInt(), 0)
 RESULT
 
 CHECK(BitVector::setUnsignedLong(unsigned long))
@@ -219,7 +238,7 @@ CHECK(BitVector::setUnsignedLong(unsigned long))
 RESULT
 
 CHECK(BitVector::getUnsignedLong() const)
-	// BAUSTELLE
+	//TEST_EQUAL(bv4.getUnsignedLong(), 0)
 RESULT
 
 CHECK(BitVector::or(const BitVector&))
@@ -282,28 +301,85 @@ CHECK(BitVector::isValid() const)
 	TEST_EQUAL(bv9.isValid(), true)
 RESULT
 
+using std::ofstream;
+using std::ios;
+String filename;
+TextPersistenceManager	pm;
+using namespace RTTI;
+BitVector bv4(4);
+bv4.setBit(2, true);
+
 CHECK(BitVector::operator >> (istream&, BitVector&))
-	// BAUSTELLE
+	std::ifstream instr("data/BitVector_test.txt");
+	BitVector bv4_2;
+	instr >> bv4_2;
+	instr.close();
+	TEST_EQUAL(bv4_2.getSize(), 4)
+	TEST_EQUAL(bv4_2.getBit(0), false)
+	TEST_EQUAL(bv4_2.getBit(1), false)
+	TEST_EQUAL(bv4_2.getBit(2), true)
+	TEST_EQUAL(bv4_2.getBit(3), false)
 RESULT
  
 CHECK(BitVector::operator << (ostream&, const BitVector&))
-	// BAUSTELLE
+	NEW_TMP_FILE(filename)
+	std::ofstream outstr(filename.c_str(), std::ios::out);
+	outstr << bv4;
+	outstr.close();
+	TEST_FILE(filename.c_str(), "data/BitVector_test.txt", false)
 RESULT
 
 CHECK(BitVector::read(istream&))
-	// BAUSTELLE
+	std::ifstream instr("data/BitVector_test2.txt");
+	BitVector bv4_2;
+	bv4_2.read(instr);
+	instr.close();
+	TEST_EQUAL(bv4_2.getSize(), 4)
+	TEST_EQUAL(bv4_2.getBit(0), false)
+	TEST_EQUAL(bv4_2.getBit(1), false)
+	TEST_EQUAL(bv4_2.getBit(2), true)
+	TEST_EQUAL(bv4_2.getBit(3), false)
 RESULT
 
 CHECK(BitVector::write(ostream&) const)
-	// BAUSTELLE
+	NEW_TMP_FILE(filename)
+	std::ofstream outstr(filename.c_str(), std::ios::out);
+	bv4.write(outstr);
+	outstr.close();
+	TEST_FILE(filename.c_str(), "data/BitVector_test2.txt", false)
 RESULT
 
 CHECK(BitVector::write(PersistenceManager&) const)
-	// BAUSTELLE
+	NEW_TMP_FILE(filename)
+	ofstream	ofile(filename.c_str(), ios::out);
+	pm.setOstream(ofile);
+	using namespace RTTI;
+	pm.registerClass(getStreamName<BitVector>(), BitVector::createDefault);
+	bv4.write(pm);
+	ofile.close();
+	TEST_FILE(filename.c_str(), "data/BitVector_test3.txt", false)
 RESULT
 
 CHECK(BitVector::read(PersistenceManager&))
-	// BAUSTELLE
+	ifstream	ifile(filename.c_str());
+	pm.setIstream(ifile);
+	PersistentObject*	ptr;
+	ptr = pm.readObject();
+	ifile.close();
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<BitVector>(*ptr), true)
+		if (isKindOf<BitVector>(*ptr))
+		{
+			BitVector* bv4_2 = castTo<BitVector>(*ptr);
+			TEST_EQUAL(bv4_2->getSize(), 4)
+			TEST_EQUAL(bv4_2->getBit(0), false)
+			TEST_EQUAL(bv4_2->getBit(1), false)
+			TEST_EQUAL(bv4_2->getBit(2), true)
+			TEST_EQUAL(bv4_2->getBit(3), false)
+		}
+	}
 RESULT
 
 CHECK(BitVector::setSize())
