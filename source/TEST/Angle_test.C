@@ -1,4 +1,4 @@
-// $Id: Angle_test.C,v 1.5 2000/03/02 22:12:49 oliver Exp $
+// $Id: Angle_test.C,v 1.6 2000/03/02 23:17:42 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.5 2000/03/02 22:12:49 oliver Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.6 2000/03/02 23:17:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -378,8 +378,8 @@ RESULT
 //line 244: method TAngle::bool operator <        (const T& val) const 
 CHECK(TAngle::bool operator <   (const T& val) const )
 	b = Angle(1);
-	TEST_EQUAL(b < 1.0, false)
-	TEST_EQUAL(b < 2.0, true)
+	TEST_EQUAL(b < (float)1.0, false)
+	TEST_EQUAL(b < (float)2.0, true)
 RESULT
 
 
