@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.13 2000/03/13 18:11:07 amoll Exp $
+// $Id: matrix44.h,v 1.14 2000/03/13 22:40:22 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -1171,25 +1171,16 @@ namespace BALL
 	template <class T>
 	bool TMatrix4x4<T>::isEqual(TMatrix4x4<T> m, T maxDiff) const
 	{
-	using std::ofstream;
-using std::ios;
-	std::ofstream outstr("test2.txt", std::ios::out);
-
 		for (int i=0; i<4; i++ )
 		{
 			for (int j=0; j<4; j++  )
 			{
-				outstr << (*this)(i, j) <<" "<< m(i, j)<<" "<< maxDiff<<" "<<Maths::isNear((*this)(i, j), m(i, j), maxDiff)<<endl;
-
 				if (Maths::isNear((*this)(i, j), m(i, j), maxDiff) == false)
-				{ 		outstr.close();
-
+				{
 					return false;
 				} 
 			}
 		}
-		outstr.close();
-
 		return true;
 	}
 
