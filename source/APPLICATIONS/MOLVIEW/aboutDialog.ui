@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>AboutDialog</class>
 <widget class="QDialog">
     <property name="name">
@@ -6,10 +6,10 @@
     </property>
     <property name="geometry">
         <rect>
-            <x>348</x>
-            <y>254</y>
+            <x>0</x>
+            <y>2</y>
             <width>228</width>
-            <height>370</height>
+            <height>375</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -23,13 +23,7 @@
     <property name="minimumSize">
         <size>
             <width>228</width>
-            <height>370</height>
-        </size>
-    </property>
-    <property name="maximumSize">
-        <size>
-            <width>228</width>
-            <height>370</height>
+            <height>375</height>
         </size>
     </property>
     <property name="paletteBackgroundColor">
@@ -292,31 +286,23 @@
     <property name="caption">
         <string>About Molview</string>
     </property>
-    <widget class="QLabel">
+    <widget class="QPushButton">
         <property name="name">
-            <cstring>TextLabel1</cstring>
+            <cstring>PushButton1</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>7</x>
-                <y>210</y>
+                <x>6</x>
+                <y>342</y>
                 <width>213</width>
-                <height>113</height>
+                <height>28</height>
             </rect>
         </property>
         <property name="text">
-            <string>molview 1.0
-
-(BALL 1.0)
-
-Andreas Moll, Andreas Hildebrandt, 
-Heiko Klein, Oliver Kohlbacher</string>
+            <string>O&amp;K</string>
         </property>
-        <property name="textFormat">
-            <enum>AutoText</enum>
-        </property>
-        <property name="alignment">
-            <set>WordBreak|AlignCenter</set>
+        <property name="accel">
+            <string>Alt+K</string>
         </property>
     </widget>
     <widget class="QLabel">
@@ -325,9 +311,9 @@ Heiko Klein, Oliver Kohlbacher</string>
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>6</y>
-                <width>213</width>
+                <x>0</x>
+                <y>-7</y>
+                <width>227</width>
                 <height>196</height>
             </rect>
         </property>
@@ -340,21 +326,36 @@ Heiko Klein, Oliver Kohlbacher</string>
         <property name="scaledContents">
             <bool>false</bool>
         </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
     </widget>
-    <widget class="QPushButton">
+    <widget class="QLabel">
         <property name="name">
-            <cstring>PushButton1</cstring>
+            <cstring>TextLabel1</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>7</x>
-                <y>334</y>
-                <width>213</width>
-                <height>28</height>
+                <x>-3</x>
+                <y>195</y>
+                <width>232</width>
+                <height>143</height>
             </rect>
         </property>
         <property name="text">
-            <string>O&amp;K</string>
+            <string>molview 1.0
+(BALL 1.0)
+
+Andreas Moll,
+Andreas Hildebrandt, 
+Heiko Klein, 
+Oliver Kohlbacher</string>
+        </property>
+        <property name="textFormat">
+            <enum>AutoText</enum>
+        </property>
+        <property name="alignment">
+            <set>WordBreak|AlignCenter</set>
         </property>
     </widget>
 </widget>
@@ -371,5 +372,9 @@ Heiko Klein, Oliver Kohlbacher</string>
         <slot>close()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>PixmapLabel1</tabstop>
+    <tabstop>PushButton1</tabstop>
+</tabstops>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

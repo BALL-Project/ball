@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>ModelSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>441</width>
-            <height>295</height>
+            <height>298</height>
         </rect>
     </property>
     <property name="caption">
@@ -67,42 +67,6 @@
                 <property name="frameShadow">
                     <enum>Raised</enum>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1_2_2_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>12</x>
-                            <y>14</y>
-                            <width>120</width>
-                            <height>16</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>120</width>
-                            <height>0</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>120</width>
-                            <height>32767</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>cylinder radius:</string>
-                    </property>
-                </widget>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>stick_radius_slider</cstring>
@@ -185,36 +149,9 @@
                         <set>AlignCenter</set>
                     </property>
                 </widget>
-            </widget>
-        </widget>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>tab</cstring>
-            </property>
-            <attribute name="title">
-                <string>Ball &amp;&amp; Stick</string>
-            </attribute>
-            <widget class="QFrame">
-                <property name="name">
-                    <cstring>frame3_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>51</y>
-                        <width>277</width>
-                        <height>41</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Raised</enum>
-                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2_2_2_2_2</cstring>
+                        <cstring>textLabel1_2_2_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -245,9 +182,36 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>sphere radius:</string>
+                        <string>cylinder radius</string>
                     </property>
                 </widget>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>tab</cstring>
+            </property>
+            <attribute name="title">
+                <string>Ball &amp;&amp; Stick</string>
+            </attribute>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>51</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>ball_stick_sphere_radius_slider</cstring>
@@ -330,28 +294,9 @@
                         <set>AlignCenter</set>
                     </property>
                 </widget>
-            </widget>
-            <widget class="QFrame">
-                <property name="name">
-                    <cstring>frame3_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>277</width>
-                        <height>41</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Raised</enum>
-                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2_2_2_2</cstring>
+                        <cstring>textLabel1_2_2_2_2_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -382,9 +327,28 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>cylinder radius:</string>
+                        <string>sphere radius</string>
                     </property>
                 </widget>
+            </widget>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>ball_stick_cylinder_radius_slider</cstring>
@@ -467,36 +431,9 @@
                         <set>AlignCenter</set>
                     </property>
                 </widget>
-            </widget>
-        </widget>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>TabPage</cstring>
-            </property>
-            <attribute name="title">
-                <string>VDW</string>
-            </attribute>
-            <widget class="QFrame">
-                <property name="name">
-                    <cstring>frame3_2_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>277</width>
-                        <height>41</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Raised</enum>
-                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2_2_2_2_3</cstring>
+                        <cstring>textLabel1_2_2_2_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -527,9 +464,36 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>radius factor:</string>
+                        <string>cylinder radius</string>
                     </property>
                 </widget>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>TabPage</cstring>
+            </property>
+            <attribute name="title">
+                <string>VDW</string>
+            </attribute>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>vdw_radius_factor_slider</cstring>
@@ -609,36 +573,9 @@
                         <set>AlignCenter</set>
                     </property>
                 </widget>
-            </widget>
-        </widget>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>tab</cstring>
-            </property>
-            <attribute name="title">
-                <string>Surface</string>
-            </attribute>
-            <widget class="QFrame">
-                <property name="name">
-                    <cstring>frame3_2_3_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>277</width>
-                        <height>41</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Raised</enum>
-                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2_2_2_2_3_2</cstring>
+                        <cstring>textLabel1_2_2_2_2_3</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -669,9 +606,36 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>probe radius:</string>
+                        <string>radius factor</string>
                     </property>
                 </widget>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>tab</cstring>
+            </property>
+            <attribute name="title">
+                <string>Surface</string>
+            </attribute>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>surface_probe_radius_slider</cstring>
@@ -754,36 +718,9 @@
                         <set>AlignCenter</set>
                     </property>
                 </widget>
-            </widget>
-        </widget>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>tab</cstring>
-            </property>
-            <attribute name="title">
-                <string>Tube</string>
-            </attribute>
-            <widget class="QFrame">
-                <property name="name">
-                    <cstring>frame3_2_3_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>277</width>
-                        <height>41</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Raised</enum>
-                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2_2_2_2_3_2_2</cstring>
+                        <cstring>textLabel1_2_2_2_2_3_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -814,9 +751,36 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>radius:</string>
+                        <string>probe radius</string>
                     </property>
                 </widget>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>tab</cstring>
+            </property>
+            <attribute name="title">
+                <string>Tube</string>
+            </attribute>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>tube_radius_slider</cstring>
@@ -899,36 +863,9 @@
                         <set>AlignCenter</set>
                     </property>
                 </widget>
-            </widget>
-        </widget>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>tab</cstring>
-            </property>
-            <attribute name="title">
-                <string>Cartoon</string>
-            </attribute>
-            <widget class="QFrame">
-                <property name="name">
-                    <cstring>frame3_2_3_2_2_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>51</y>
-                        <width>277</width>
-                        <height>41</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Raised</enum>
-                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2</cstring>
+                        <cstring>textLabel1_2_2_2_2_3_2_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -959,9 +896,36 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>helix radius:</string>
+                        <string>radius</string>
                     </property>
                 </widget>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>tab</cstring>
+            </property>
+            <attribute name="title">
+                <string>Cartoon</string>
+            </attribute>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3_2_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>51</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>cartoon_helix_radius_slider</cstring>
@@ -1044,28 +1008,9 @@
                         <set>AlignCenter</set>
                     </property>
                 </widget>
-            </widget>
-            <widget class="QFrame">
-                <property name="name">
-                    <cstring>frame3_2_3_2_2_2_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>92</y>
-                        <width>277</width>
-                        <height>41</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Raised</enum>
-                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2</cstring>
+                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -1096,9 +1041,28 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>arrow width:</string>
+                        <string>helix radius</string>
                     </property>
                 </widget>
+            </widget>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3_2_2_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>92</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>cartoon_arrow_width_slider</cstring>
@@ -1181,28 +1145,9 @@
                         <set>AlignCenter</set>
                     </property>
                 </widget>
-            </widget>
-            <widget class="QFrame">
-                <property name="name">
-                    <cstring>frame3_2_3_2_2_2_2_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>133</y>
-                        <width>277</width>
-                        <height>41</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Raised</enum>
-                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2</cstring>
+                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -1233,9 +1178,28 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>arrow height:</string>
+                        <string>arrow width</string>
                     </property>
                 </widget>
+            </widget>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3_2_2_2_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>133</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>cartoon_arrow_height_slider</cstring>
@@ -1318,28 +1282,9 @@
                         <set>AlignCenter</set>
                     </property>
                 </widget>
-            </widget>
-            <widget class="QFrame">
-                <property name="name">
-                    <cstring>frame3_2_3_2_2_2</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>277</width>
-                        <height>41</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Raised</enum>
-                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2_2_2_2_3_2_2_2</cstring>
+                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -1370,9 +1315,28 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>tube radius:</string>
+                        <string>arrow height</string>
                     </property>
                 </widget>
+            </widget>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>cartoon_tube_radius_slider</cstring>
@@ -1452,36 +1416,9 @@
                         <set>AlignCenter</set>
                     </property>
                 </widget>
-            </widget>
-        </widget>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>TabPage</cstring>
-            </property>
-            <attribute name="title">
-                <string>H-Bonds</string>
-            </attribute>
-            <widget class="QFrame">
-                <property name="name">
-                    <cstring>frame3_2_3_2_2_2_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>277</width>
-                        <height>41</height>
-                    </rect>
-                </property>
-                <property name="frameShape">
-                    <enum>StyledPanel</enum>
-                </property>
-                <property name="frameShadow">
-                    <enum>Raised</enum>
-                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>textLabel1_2_2_2_2_3_2_2_2_3</cstring>
+                        <cstring>textLabel1_2_2_2_2_3_2_2_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
@@ -1512,9 +1449,36 @@
                         </size>
                     </property>
                     <property name="text">
-                        <string>cylinder radius:</string>
+                        <string>tube radius</string>
                     </property>
                 </widget>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>TabPage</cstring>
+            </property>
+            <attribute name="title">
+                <string>H-Bonds</string>
+            </attribute>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3_2_2_2_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
                 <widget class="QSlider">
                     <property name="name">
                         <cstring>hbonds_radius_slider</cstring>
@@ -1595,6 +1559,42 @@
                     </property>
                     <property name="alignment">
                         <set>AlignCenter</set>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_2_3_2_2_2_3</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>cylinder radius</string>
                     </property>
                 </widget>
             </widget>

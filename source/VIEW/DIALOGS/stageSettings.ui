@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>StageSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>435</width>
-            <height>286</height>
+            <height>292</height>
         </rect>
     </property>
     <property name="caption">
@@ -22,8 +22,8 @@
         <property name="geometry">
             <rect>
                 <x>5</x>
-                <y>162</y>
-                <width>181</width>
+                <y>173</y>
+                <width>244</width>
                 <height>20</height>
             </rect>
         </property>
@@ -44,7 +44,7 @@
             </rect>
         </property>
         <property name="frameShape">
-            <enum>StyledPanel</enum>
+            <enum>NoFrame</enum>
         </property>
         <property name="frameShadow">
             <enum>Sunken</enum>
@@ -95,7 +95,7 @@
                 <rect>
                     <x>9</x>
                     <y>2</y>
-                    <width>141</width>
+                    <width>156</width>
                     <height>20</height>
                 </rect>
             </property>

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>SetCameraData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,39 +8,13 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>280</width>
-            <height>116</height>
+            <width>322</width>
+            <height>112</height>
         </rect>
     </property>
     <property name="caption">
         <string>Set Camera</string>
     </property>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>view_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>80</x>
-                <y>10</y>
-                <width>190</width>
-                <height>22</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>look_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>80</x>
-                <y>40</y>
-                <width>190</width>
-                <height>22</height>
-            </rect>
-        </property>
-    </widget>
     <widget class="QLabel">
         <property name="name">
             <cstring>TextLabel1_2</cstring>
@@ -65,12 +39,90 @@
             <rect>
                 <x>7</x>
                 <y>10</y>
-                <width>73</width>
+                <width>80</width>
                 <height>20</height>
             </rect>
         </property>
         <property name="text">
             <string>View point</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>view_x</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>89</x>
+                <y>9</y>
+                <width>68</width>
+                <height>23</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>view_y</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>169</x>
+                <y>8</y>
+                <width>68</width>
+                <height>23</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>view_z</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>248</x>
+                <y>8</y>
+                <width>68</width>
+                <height>23</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>look_x</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>89</x>
+                <y>38</y>
+                <width>68</width>
+                <height>23</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>look_y</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>169</x>
+                <y>37</y>
+                <width>68</width>
+                <height>23</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>look_z</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>248</x>
+                <y>37</y>
+                <width>68</width>
+                <height>23</height>
+            </rect>
         </property>
     </widget>
     <widget class="QPushButton">
@@ -79,11 +131,19 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>40</x>
-                <y>76</y>
-                <width>90</width>
-                <height>30</height>
+                <x>41</x>
+                <y>74</y>
+                <width>115</width>
+                <height>29</height>
             </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
         </property>
         <property name="text">
             <string>OK</string>
@@ -98,11 +158,19 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>150</x>
-                <y>76</y>
-                <width>90</width>
-                <height>30</height>
+                <x>162</x>
+                <y>74</y>
+                <width>115</width>
+                <height>29</height>
             </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>7</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
         </property>
         <property name="text">
             <string>Cancel</string>
@@ -123,6 +191,16 @@
         <slot>close()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>view_x</tabstop>
+    <tabstop>view_y</tabstop>
+    <tabstop>view_z</tabstop>
+    <tabstop>look_x</tabstop>
+    <tabstop>look_y</tabstop>
+    <tabstop>look_z</tabstop>
+    <tabstop>ok_button</tabstop>
+    <tabstop>cancel_button</tabstop>
+</tabstops>
 <slots>
     <slot>okPressed()</slot>
 </slots>
