@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.16 2001/05/27 10:31:24 hekl Exp $
+// $Id: mainControl.C,v 1.17 2001/07/15 15:17:06 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -75,7 +75,9 @@ namespace BALL
 								this,
 								SLOT(checkMenus()));
 
-				Log.info() << "new menu entry: " << ID << endl;
+				#ifdef BALL_VIEW_DEBUG
+					Log.info() << "new menu entry: " << ID << endl;	
+				#endif
 				int max_id = menuBar()->count();
 				switch (ID)
 				{
@@ -666,9 +668,10 @@ namespace BALL
 				mc = dynamic_cast<MainControl*>(const_cast<QObject*>(object));
 			}
 
-			// BAUSTELLE
-			cout << "Top level widget : mc = " << mc << endl;
-			// 
+			#ifdef BALL_DEBUG_VIEW
+				Log << "Top level widget : mc = " << mc << endl;
+			#endif
+
 			return mc;
 		}
 		
@@ -826,14 +829,18 @@ namespace BALL
 		void MainControl::addModularWidget(ModularWidget* widget)
 			throw()
 		{
-			cerr << "MainControl::addModularWidget(" << widget << ")" << endl;
+			#ifdef BALL_DEBUG_VIEW
+				Log << "MainControl::addModularWidget(" << widget << ")" << endl;
+			#endif
 			modular_widgets_.push_back(widget);
 		}
 
 		void MainControl::removeModularWidget(ModularWidget* widget)
 			throw()
 		{
-			cerr << "MainControl::removeModularWidget(" << widget << ")" << endl;
+			#ifdef BALL_DEBUG_VIEW
+				cerr << "MainControl::removeModularWidget(" << widget << ")" << endl;
+			#endif
 			modular_widgets_.remove(widget);
 		}
  
