@@ -1,16 +1,18 @@
-// $Id: BinarySearchTree_test.C,v 1.7 2000/08/05 23:57:36 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.8 2000/08/06 15:29:04 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/DATATYPE/binarySearchTree.h>
 #include <iostream>
+#include <BALL/CONCEPT/comparator.h>
 ///////////////////////////
 
 using namespace BALL;
 
 // helper class: a processor counting tree items
-class BSTreeItemCollector	: public UnaryProcessor<BSTreeItem>
+template<typename DataType>
+class ItemCollector	: public UnaryProcessor<DataType>
 {
 	public:
 	bool start()
@@ -26,24 +28,24 @@ class BSTreeItemCollector	: public UnaryProcessor<BSTreeItem>
 		return true;
 	}
 
-	Processor::Result operator () (BSTreeItem& item)
+	Processor::Result operator () (DataType& item)
 	{	// store the item
 		list_.push_back(&item);
 		return Processor::CONTINUE;
 	}
 
-	list<BSTreeItem*> getList()
+	list<DataType*> getList()
 	{ // get a pointer to the list
 		return list_;
 	}
 	
-	BSTreeItem* getPointer()
+	DataType* getPointer()
 	{	// get a pointer to the first element in the list
 		if (list_it_ == list_.end())
 		{
 			return 0;
 		}
-		BSTreeItem* temp = *list_it_;
+		DataType* temp = *list_it_;
 		list_it_++;
 		return temp;
 	}
@@ -58,9 +60,10 @@ class BSTreeItemCollector	: public UnaryProcessor<BSTreeItem>
 	}
 
 	private:
-	list<BSTreeItem*>	list_;
-	list<BSTreeItem*>::iterator list_it_;
+	list<DataType*>	list_;
+	list<DataType*>::iterator list_it_;
 };
+
 
 //			     	  	   		item
 //	    			left              right
@@ -81,14 +84,27 @@ void initialize()
 	rrright = BSTreeItem(0, 0, BSTreeItem::BLACK);
 }
 
+TBSTreeItem<int> item_, left_, right_, rleft_, lright_, llright_, rright_, rrright_;
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.7 2000/08/05 23:57:36 amoll Exp $")
+void initialize_()
+{
+	item_  = TBSTreeItem<int>(1, &left_, &right_, BSTreeItem::RED);
+	left_  = TBSTreeItem<int>(2, 0, &rleft_, BSTreeItem::RED);
+	rleft_ = TBSTreeItem<int>(3, 0, 0, BSTreeItem::BLACK);
+	right_ = TBSTreeItem<int>(4, &lright_, &rright_, BSTreeItem::BLACK);
+	lright_ = TBSTreeItem<int>(5, &llright_, 0, BSTreeItem::RED);
+	llright_ = TBSTreeItem<int>(6, 0, 0, BSTreeItem::RED);
+	rright_ = TBSTreeItem<int>(7, 0, &rrright_, BSTreeItem::BLACK);
+	rrright_ = TBSTreeItem<int>(8, 0, 0, BSTreeItem::BLACK);
+}
+
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.8 2000/08/06 15:29:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace std;
-
+{
 BSTreeItem* itemp;
 CHECK(BSTreeItem())
 	itemp = new BSTreeItem();
@@ -266,7 +282,7 @@ CHECK(rotateLeft())/*
 	initialize();
 RESULT
 
-BSTreeItemCollector myproc;
+ItemCollector<BSTreeItem> myproc;
 
 // von oben nach links unten, rechts und hoch
 CHECK(applyPreorder(UnaryProcessor<BSTreeItem>& processor))
@@ -415,7 +431,7 @@ CHECK(insertBalance(BSTreeItem* root, BSTreeItem::Pack& pp))
 RESULT
 
 CHECK(removeBalance(BSTreeItem* root, BSTreeItem::Pack& pp))
-  //BAUSTELLE
+//	TEST_EQUAL(item.removeBalance(item, pack), 0)
 RESULT
 
 CHECK(replace(BSTreeItem* root, BSTreeItem::Pack& pp))
@@ -428,24 +444,27 @@ CHECK(detachMinimum(BSTreeItem*& root))
 	TEST_EQUAL(item.getLeftChild(), &rleft)
 	TEST_EQUAL(left.getLeftChild(), 0)
 	TEST_EQUAL(left.getRightChild(), 0) //??? rleft child von item und left
-
 	initialize();
+
 	root = &left;
 	TEST_EQUAL(item.detachMinimum(root), &left)
-
 	initialize();
+
 	root = &lright;
 	TEST_EQUAL(item.detachMinimum(root), &llright)
-
 	initialize();
+
 	root = &rleft;
 	TEST_EQUAL(item.detachMinimum(root), &rleft)
+	initialize();
 RESULT
 
 CHECK(detachMaximum(BSTreeItem*& root))
-	BSTreeItem* root = &item;/*
-	TEST_EQUAL(item.detachMaximum(root), &rrright) //warum pointer angeben???
-	TEST_EQUAL(right.getRightChild(), &rright)
+	//BSTreeItem* root = &item;
+//	TEST_EQUAL(item.detachMaximum(root), &rrright) 
+//warum pointer angeben???
+// =>segfault
+/*	TEST_EQUAL(right.getRightChild(), &rright)
 	TEST_EQUAL(rright.getRightChild(), 0)
 	TEST_EQUAL(rright.getLeftChild(), 0)
 
@@ -464,48 +483,112 @@ CHECK(detachMaximum(BSTreeItem*& root))
 	root = &rrright;
 	TEST_EQUAL(item.detachMaximum(root), &rrright)*/
 RESULT
-
+}
 // tests for class TBSTreeItem::
 
 TBSTreeItem<int>* tbsitem;
 CHECK(TBSTreeItem())
 	tbsitem = new TBSTreeItem<int>;
 	TEST_NOT_EQUAL(tbsitem, 0)
+	tbsitem->getData();
+	TEST_EQUAL(tbsitem->getLeftChild(), 0)
+	TEST_EQUAL(tbsitem->getRightChild(), 0)
 RESULT
 
 CHECK(~TBSTreeItem())
   delete tbsitem;
 RESULT
 
-TBSTreeItem<int> item;
+
+TBSTreeItem<int>* it;
+TBSTreeItem<int>* l;
+TBSTreeItem<int>* r;
 
 CHECK(TBSTreeItem(const DataType& data, TBSTreeItem* left_item, 
 								 TBSTreeItem* right_item, char color = BSTreeItem::BLACK))
-  
+  it = new TBSTreeItem<int>(0, l, 0);
+	TEST_EQUAL(it->getRightChild(), 0)
+	delete it;
+  l = new TBSTreeItem<int>(999, 0, 0);
+  r = new TBSTreeItem<int>(9999, 0, 0);
+  it = new TBSTreeItem<int>(99, l, r, BSTreeItem::RED);
+	TEST_EQUAL(it->getData(), 99)
+	TEST_EQUAL(it->getLeftChild(), l)
+	TEST_EQUAL(it->getRightChild(), r)
+	TEST_EQUAL(it->getColor(), BSTreeItem::RED)
 RESULT
 
-CHECK(BALL_CREATE(TBSTreeItem))
-	//
+CHECK(BALL_CREATE_NODEEP(TBSTreeItem))
+	TBSTreeItem<int>* v_ptr = (TBSTreeItem<int>*)it->create();
+	TEST_EQUAL(v_ptr->getData(), 99)
+	TEST_EQUAL(v_ptr->getLeftChild(), l)
+	TEST_EQUAL(v_ptr->getRightChild(), r)
+	TEST_EQUAL(v_ptr->getColor(), BSTreeItem::RED)
+	delete v_ptr;
 RESULT
 
 CHECK(getData())
-  //BAUSTELLE
+	TEST_EQUAL(it->getData(), 99)	  
 RESULT
 
 CHECK(getLeftChild())
-  //BAUSTELLE
+	TEST_EQUAL(it->getLeftChild(), l)
+	TEST_EQUAL(it->getLeftChild()->getData(), 999)
+  it = new TBSTreeItem<int>(0, 0, 0);
+	TEST_EQUAL(it->getLeftChild(), 0)
 RESULT
 
 CHECK(getRightChild())
-  //BAUSTELLE
+  it = new TBSTreeItem<int>(0, l, r);
+	TEST_EQUAL(it->getRightChild(), r)
+	TEST_EQUAL(it->getRightChild()->getData(), 9999)
+  it = new TBSTreeItem<int>(0, l, 0);
+	TEST_EQUAL(it->getRightChild(), 0)
+RESULT
+
+CHECK(setLeftChild())
+  it = new TBSTreeItem<int>();
+	it->setLeftChild(0);
+	TEST_EQUAL(it->getLeftChild(), 0)
+	it->setLeftChild(l);
+	TEST_EQUAL(it->getLeftChild(), l)
+RESULT
+
+CHECK(setRightChild())
+  it = new TBSTreeItem<int>();
+	it->setRightChild(l);
+	TEST_EQUAL(it->getRightChild(), l)
+	it->setRightChild(0);
+	TEST_EQUAL(it->getRightChild(), 0)
 RESULT
 
 CHECK(count(const DataType& data, const Comparator<DataType>* comparator))
-  //BAUSTELLE
+	initialize_();
+	Comparator<int>* comp;
+	TEST_EXCEPTION(Exception::NullPointer, item_.count(1, 0))
+	comp = new Comparator<int>();
+	TEST_EQUAL(item_.count(1, comp), 1)
+	TEST_EQUAL(item_.count(999, comp), 0)
 RESULT
 
+//ItemCollector< TBSTreeItem<int> > myproc;
+ItemCollector< int > myproc;
+
 CHECK(applyPreorder)
-  //BAUSTELLE
+	initialize();
+	myproc.start();
+	item_.applyPreorder(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 8)
+/*	TEST_EQUAL(myproc.getPointer(), &item_)
+	TEST_EQUAL(myproc.getPointer(), &left_)
+	TEST_EQUAL(myproc.getPointer(), &rleft_)
+	TEST_EQUAL(myproc.getPointer(), &right_)
+	TEST_EQUAL(myproc.getPointer(), &lright_)
+	TEST_EQUAL(myproc.getPointer(), &llright_)
+	TEST_EQUAL(myproc.getPointer(), &rright_)
+	TEST_EQUAL(myproc.getPointer(), &rrright_)*/
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(applyInorder)
