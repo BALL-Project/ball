@@ -1,4 +1,4 @@
-// $Id: peak.h,v 1.3 2000/09/07 19:37:04 oliver Exp $
+// $Id: peak.h,v 1.4 2000/09/07 20:57:30 oliver Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -111,7 +111,7 @@ namespace BALL
 
 	/**	Output operator
 	*/
-	ostream& operator << (ostream& os, const Peak1D& peak);
+	std::ostream& operator << (std::ostream& os, const Peak1D& peak);
 
 //@}
 

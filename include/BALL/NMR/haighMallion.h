@@ -1,4 +1,4 @@
-// $Id: haighMallion.h,v 1.2 2000/07/03 21:08:50 oliver Exp $
+// $Id: haighMallion.h,v 1.3 2000/09/07 20:57:30 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -95,7 +95,7 @@ class HaighMallionShift:public ShiftModule
 		it stores the systems aromatic rings in a list called _aromat_list and
 		each proton in a list called _proton_list
 	*/
-	virtual Processor::Result operator()(Object&);
+	virtual Processor::Result operator () (Atom& atom);
 	//@}
 	
 

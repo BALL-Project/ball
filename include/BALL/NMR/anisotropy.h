@@ -1,4 +1,4 @@
-// $Id: anisotropy.h,v 1.2 2000/07/03 21:08:49 oliver Exp $
+// $Id: anisotropy.h,v 1.3 2000/09/07 20:57:30 oliver Exp $
 
 #include<BALL/COMMON/constants.h>
 #include<BALL/KERNEL/system.h>
@@ -131,7 +131,7 @@ class AnIsoShift:public ShiftModule
 		Effectors of C=N anisotropy are all bounds between atoms named "C" and "N".
 		
 	*/
-	virtual Processor::Result operator()(Object&);
+	virtual Processor::Result operator() (Atom& atom);
 	//@}
 	
 
