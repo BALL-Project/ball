@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.6 2000/09/18 09:58:07 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.7 2000/09/18 12:16:29 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 
@@ -11,7 +11,11 @@
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
-# include<BALL/DATATYPE/string.h>
+# include <BALL/DATATYPE/string.h>
+#endif
+
+#ifndef BALL_COMMON_PATH_H
+# include <BALL/SYSTEM/path.h>
 #endif
 
 using namespace std;
@@ -28,7 +32,9 @@ namespace BALL
 		}
 
 		// ---------------------read translate table ------------------------
-		ifstream tableFile("../../data/NMR/translate.dat",ios::in);
+		Path path;
+		ifstream tableFile(path.find("NMR/translate.dat").c_str(),ios::in);
+
 		if (!tableFile)
 		{
 			Log.error() << "AssignShiftProcessor: translate.dat not found:" << endl;   
@@ -80,7 +86,7 @@ cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
 
 			if (!transformTable[entry].has('/'))
 			{
-				String atomName(atom_data_[atompos]->residueSeqCode);//prefix);
+				String atomName(atom_data_[atompos]->residueSeqCode);
 				atomName += transformTable[entry];
 				shift_table_[atomName] = atom_data_[atompos]->shiftValue;
 cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
