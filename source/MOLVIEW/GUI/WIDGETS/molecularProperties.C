@@ -1,4 +1,4 @@
-// $Id: molecularProperties.C,v 1.2 2000/11/05 14:35:25 hekl Exp $
+// $Id: molecularProperties.C,v 1.3 2000/11/12 15:27:36 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 
@@ -84,6 +84,44 @@ namespace BALL
 				mol_message->setDeletable(true);
 				
 				notify_(mol_message);
+			}
+			else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
+			{
+				GeometricObjectSelectionMessage* geometric_selection 
+					= RTTI::castTo<GeometricObjectSelectionMessage>(*message);
+
+				// geometric selection is not empty
+				if (!geometric_selection->getSelection().empty())
+				{
+					List<Composite*> selection;
+					List<Composite*>::ConstIterator it = geometric_selection->getSelection().begin();
+					
+					for (; it != geometric_selection->getSelection().end(); ++it)
+					{
+						Atom* atom = (**it).getAncestor(RTTI::getDefault<Atom>());
+						AtomContainer* fragment = (**it).getAncestor(RTTI::getDefault<AtomContainer>());
+
+						if (atom != 0)
+						{
+							selection.push_back(atom);
+						}
+						else if (fragment != 0)
+						{
+							selection.push_back(fragment);
+						}
+					}
+
+					// new collection not empty
+					if (!selection.empty())
+					{
+						// create a molecular selection message and sent molecular objects
+						MolecularSelectionMessage *molecular_selection = new MolecularSelectionMessage;
+						molecular_selection->setDeletable(true);
+						molecular_selection->setSelection(selection);
+
+						notify_(molecular_selection);
+					}
+				}
 			}
     }
 
