@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.56.4.1 2002/02/27 11:32:23 oliver Exp $
+// $Id: vector3.h,v 1.56.4.2 2002/05/31 22:49:57 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -584,6 +584,7 @@ namespace BALL
 
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3()
 		throw()
 		:	x(0),
@@ -593,6 +594,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3(const T* ptr)
 		throw(Exception::NullPointer)
 	{
@@ -607,6 +609,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3(const T& value)
 		throw()
 		:	x(value),
@@ -616,6 +619,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3(const T& vx, const T& vy, const T& vz)
 		throw()
 		:	x(vx),
@@ -625,6 +629,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3(const TVector3& vector)
 		throw()
 		:	x(vector.x),
@@ -634,6 +639,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
 		throw()
 		:	x(r * cos(phi) * sin(theta)),
@@ -643,12 +649,14 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::~TVector3()
 		throw()
 	{
 	}
 
 	template <typename T>
+	BALL_INLINE
 	void TVector3<T>::clear()
 		throw()
 	{
@@ -699,6 +707,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	void TVector3<T>::set(const T& r, const TAngle<T> &phi, const TAngle<T> &theta)
 		throw()
 	{
@@ -708,6 +717,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	const TVector3<T>& TVector3<T>::operator = (const T* ptr)
 		throw(Exception::NullPointer)
 	{
@@ -791,6 +801,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	void TVector3<T>::swap(TVector3<T>& vector)
 		throw()
 	{
@@ -842,6 +853,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>& TVector3<T>::negate()
 		throw()
 	{
