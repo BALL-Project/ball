@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.4 2003/08/28 15:13:26 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.5 2003/09/14 17:50:23 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -19,10 +19,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		MolecularFileDialog::MolecularFileDialog(QWidget *parent)
+		MolecularFileDialog::MolecularFileDialog(QWidget *parent, const char* name)
 			throw()
 			:	QWidget(parent),
-				ModularWidget(),
+				ModularWidget(name),
 				file_format_(0),
 				x_(100),
 				y_(100),

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.4 2003/09/04 22:17:46 amoll Exp $
+// $Id: molecularFileDialog.h,v 1.5 2003/09/14 17:49:57 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -49,7 +49,7 @@ namespace BALL
 					\return			MolecularFileDialog new constructed MolecularFileDialog
 					\see				VIEW::ModularWidget
 			 */
-			MolecularFileDialog(QWidget* parent)
+			MolecularFileDialog(QWidget* parent, const char* name = "<MolecularFileDialog>")
 				throw();
 
 			//@} /** @name Destructors */ //@{ 
