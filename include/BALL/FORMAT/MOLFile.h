@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.h,v 1.11 2003/07/11 15:27:03 amoll Exp $
+// $Id: MOLFile.h,v 1.12 2003/07/25 12:46:17 amoll Exp $
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H
@@ -193,13 +193,13 @@ namespace BALL
 			throw(Exception::ParseError);
 
 		/// Read the Counts line of a MOL file
-		void readCountsLine_(CountsStruct& counts);
+		bool readCountsLine_(CountsStruct& counts);
 
 		/// Read a line from the atom block
-		void readAtomLine_(AtomStruct& atom);
+		bool readAtomLine_(AtomStruct& atom);
 
 		/// Read a line from the bond block
-		void readBondLine_(BondStruct& bond);
+		bool readBondLine_(BondStruct& bond);
 
 		/// Write the Counts line
 		void writeCountsLine_(const CountsStruct& counts);

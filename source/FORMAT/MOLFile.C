@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.14 2003/07/11 15:27:43 amoll Exp $
+// $Id: MOLFile.C,v 1.15 2003/07/25 12:45:55 amoll Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -229,7 +229,7 @@ namespace BALL
 		#endif
 		// read the counts line
 		CountsStruct counts;
-		readCountsLine_(counts);
+		if (!readCountsLine_(counts)) return false;
 
 		// resize the array to the number of atoms
 		atom_map.resize(counts.number_of_atoms);
@@ -240,7 +240,7 @@ namespace BALL
 			AtomStruct atom_struct;
 			for (Position i = 0; i < counts.number_of_atoms; i++)
 			{
-				readAtomLine_(atom_struct);
+				if (!readAtomLine_(atom_struct)) return false;
 
 				// create the atom
 				Atom* atom = new Atom(PTE[atom_struct.symbol.trim()], 
@@ -289,7 +289,7 @@ namespace BALL
 			BondStruct bond_struct;
 			for (Position i = 0; i < counts.number_of_bonds; i++)
 			{
-				readBondLine_(bond_struct);
+				if (!readBondLine_(bond_struct)) return false;
 
 				// ensure the atoms referenced do exist
 				if ((bond_struct.first_atom < 1) || (bond_struct.first_atom > counts.number_of_atoms))
@@ -464,11 +464,12 @@ namespace BALL
 			throw e;
 		}
 
+		if (!molecule) return false;
+
 		// add the molecule to the system
 		system.append(*molecule);
 
-		// if we read a molecule, return true
-		return (molecule != 0);
+		return true;
 	}
 
 	Molecule* MOLFile::read()
@@ -494,44 +495,47 @@ namespace BALL
 		}
 		static vector<Atom*> atom_map;
 		Molecule* mol = readCTAB_(atom_map);
-		mol->setName(name);
+		if (mol) mol->setName(name);
 
 		return mol;
 	}
 	
-	void MOLFile::readCountsLine_(MOLFile::CountsStruct& counts)
+	bool MOLFile::readCountsLine_(MOLFile::CountsStruct& counts)
 	{
 		// read the next line
 		readLine();
 
+		bool ok = true;
 		// parse the line according to the Counts format
 		counts.number_of_atoms = 0;
-		parseColumnFormat("%3d", 0, 3, (void*)&counts.number_of_atoms);
+		ok &= parseColumnFormat("%3d", 0, 3, (void*)&counts.number_of_atoms);
 
 		counts.number_of_bonds = 0;
-		parseColumnFormat("%3d", 3, 3, (void*)&counts.number_of_bonds);
+		ok &= parseColumnFormat("%3d", 3, 3, (void*)&counts.number_of_bonds);
 
 		counts.number_of_atom_lists = 0;
-		parseColumnFormat("%3d", 6, 3, (void*)&counts.number_of_atom_lists);
+		ok &= parseColumnFormat("%3d", 6, 3, (void*)&counts.number_of_atom_lists);
 
 		Size chiral = 0;
-		parseColumnFormat("%3d", 12, 3, (void*)&chiral);
+		ok &= parseColumnFormat("%3d", 12, 3, (void*)&chiral);
 		counts.chiral = (chiral == 0);
 		
 		counts.number_of_stext_entries = 0;
-		parseColumnFormat("%3d", 15, 3, (void*)&counts.number_of_stext_entries);
+		ok &= parseColumnFormat("%3d", 15, 3, (void*)&counts.number_of_stext_entries);
 
 		counts.number_of_reaction_components = 0;
-		parseColumnFormat("%3d", 18, 3, (void*)&counts.number_of_reaction_components);
+		ok &= parseColumnFormat("%3d", 18, 3, (void*)&counts.number_of_reaction_components);
 
 		counts.number_of_reactants = 0;
-		parseColumnFormat("%3d", 21, 3, (void*)&counts.number_of_reactants);
+		ok &= parseColumnFormat("%3d", 21, 3, (void*)&counts.number_of_reactants);
 
 		counts.number_of_products = 0;
-		parseColumnFormat("%3d", 24, 3, (void*)&counts.number_of_products);
+		ok &= parseColumnFormat("%3d", 24, 3, (void*)&counts.number_of_products);
 
 		counts.number_of_intermediates = 0;
-		parseColumnFormat("%3d", 27, 3, (void*)&counts.number_of_intermediates);
+		ok &= parseColumnFormat("%3d", 27, 3, (void*)&counts.number_of_intermediates);
+
+		return ok;
 	}
 
 	void MOLFile::writeCountsLine_(const MOLFile::CountsStruct& counts)
@@ -553,39 +557,41 @@ namespace BALL
 		getFileStream() << buf;
 	}
 
-	void MOLFile::readAtomLine_(MOLFile::AtomStruct& atom)
+	bool MOLFile::readAtomLine_(MOLFile::AtomStruct& atom)
 	{
 		// read the next line
 		readLine();
 
+		bool ok = true;
+
 		// parse the line according to the atom block format:
 		// "%10.4f%10.4f%10.4f %3s%2d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d\n"
 		atom.position.x = 0.0;
-		parseColumnFormat("%f", 0, 10, (void*)&(atom.position.x));
+		ok &= parseColumnFormat("%f", 0, 10, (void*)&(atom.position.x));
 		
 		atom.position.y = 0.0;
-		parseColumnFormat("%f", 10, 10, (void*)&(atom.position.y));
+		ok &= parseColumnFormat("%f", 10, 10, (void*)&(atom.position.y));
 
 		atom.position.z = 0.0;
-		parseColumnFormat("%f", 20, 10, (void*)&(atom.position.z));
+		ok &= parseColumnFormat("%f", 20, 10, (void*)&(atom.position.z));
 		
 		atom.symbol = "?";
 		atom.symbol = String(getLine(), 31, 3);
 
 		atom.mass_difference = 0;
-		parseColumnFormat("%d", 34, 2, (void*)&atom.mass_difference);
+		ok &= parseColumnFormat("%d", 34, 2, (void*)&atom.mass_difference);
 
 		atom.charge = 0;
-		parseColumnFormat("%d", 36, 3, (void*)&atom.charge);
+		ok &= parseColumnFormat("%d", 36, 3, (void*)&atom.charge);
 
 		atom.parity = 0;
-		parseColumnFormat("%d", 39, 3, (void*)&atom.parity);
+		ok &= parseColumnFormat("%d", 39, 3, (void*)&atom.parity);
 
 		atom.hydrogen_count = 0;
-		parseColumnFormat("%d", 42, 3, (void*)&atom.hydrogen_count);
+		ok &= parseColumnFormat("%d", 42, 3, (void*)&atom.hydrogen_count);
 
 		atom.stereo_care_box = 0;
-		parseColumnFormat("%d", 45, 3, (void*)&atom.stereo_care_box);
+		ok &= parseColumnFormat("%d", 45, 3, (void*)&atom.stereo_care_box);
 
 		atom.valence = 0;
 		atom.reaction_component_type = 0;
@@ -595,13 +601,15 @@ namespace BALL
 		atom.inversion_retention = 0;
 		atom.exact_change = 0;
 		Size len = getLine().size();
-		if (len >= 51) parseColumnFormat("%d", 48, 3, (void*)&atom.valence);
-		if (len >= 54) parseColumnFormat("%d", 51, 3, (void*)&atom.H0_designator);
-		if (len >= 57) parseColumnFormat("%d", 54, 3, (void*)&atom.reaction_component_type);
-		if (len >= 60) parseColumnFormat("%d", 57, 3, (void*)&atom.reaction_component_number);
-		if (len >= 63) parseColumnFormat("%d", 60, 3, (void*)&atom.number);
-		if (len >= 66) parseColumnFormat("%d", 63, 3, (void*)&atom.inversion_retention);
-		if (len >= 69) parseColumnFormat("%d", 66, 3, (void*)&atom.exact_change);
+		if (len >= 51) ok &= parseColumnFormat("%d", 48, 3, (void*)&atom.valence);
+		if (len >= 54) ok &= parseColumnFormat("%d", 51, 3, (void*)&atom.H0_designator);
+		if (len >= 57) ok &= parseColumnFormat("%d", 54, 3, (void*)&atom.reaction_component_type);
+		if (len >= 60) ok &= parseColumnFormat("%d", 57, 3, (void*)&atom.reaction_component_number);
+		if (len >= 63) ok &= parseColumnFormat("%d", 60, 3, (void*)&atom.number);
+		if (len >= 66) ok &= parseColumnFormat("%d", 63, 3, (void*)&atom.inversion_retention);
+		if (len >= 69) ok &= parseColumnFormat("%d", 66, 3, (void*)&atom.exact_change);
+
+		return ok;
 	}
 
 	void MOLFile::writeAtomLine_(const MOLFile::AtomStruct& atom)
@@ -627,29 +635,33 @@ namespace BALL
 		getFileStream() << buf;		
 	}
 
-	void MOLFile::readBondLine_(MOLFile::BondStruct& bond)
+	bool MOLFile::readBondLine_(MOLFile::BondStruct& bond)
 	{
 		// read the next line
 		readLine();
 
+		bool ok = true;
+
 		// parse the line according to the bond block format
 		bond.first_atom = 0;
-		parseColumnFormat("%3d", 0, 3, (void*)&bond.first_atom);
+		ok &= parseColumnFormat("%3d", 0, 3, (void*)&bond.first_atom);
 
 		bond.second_atom = 0;
-		parseColumnFormat("%3d", 3, 3, (void*)&bond.second_atom);
+		ok &= parseColumnFormat("%3d", 3, 3, (void*)&bond.second_atom);
 
 		bond.type = 0;
-		parseColumnFormat("%3d", 6, 3, (void*)&bond.type);
+		ok &= parseColumnFormat("%3d", 6, 3, (void*)&bond.type);
 
 		bond.stereo = 0;
-		parseColumnFormat("%3d", 9, 3, (void*)&bond.stereo);
+		ok &= parseColumnFormat("%3d", 9, 3, (void*)&bond.stereo);
 
 		bond.topology = 0;
-		parseColumnFormat("%3d", 15, 3, (void*)&bond.topology);
+		ok &= parseColumnFormat("%3d", 15, 3, (void*)&bond.topology);
 
 		bond.reacting_center_status = 0;
-		parseColumnFormat("%3d", 15, 3, (void*)&bond.reacting_center_status);
+		ok &= parseColumnFormat("%3d", 15, 3, (void*)&bond.reacting_center_status);
+
+		return ok;
 	}
 
 	void MOLFile::writeBondLine_(const MOLFile::BondStruct& bond)
