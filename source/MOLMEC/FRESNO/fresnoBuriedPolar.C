@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.13 2003/08/25 17:06:28 anker Exp $
+// $Id: fresnoBuriedPolar.C,v 1.1.2.14 2004/04/28 15:52:07 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -195,14 +195,25 @@ namespace BALL
 			{
 				// we could possibly speed up the next step by using the fact that the
 				// difference between R1 and R2 is constant
-				val = FresnoFF::calculateBaseFunction(distance, R1, R2);
+				val = ((FresnoFF*)getForceField())->base_function->calculate(distance, R1, R2);
 
-				if (verbosity >= 90)
+				if (verbosity >= 0)
 				{
-					Log.info() << "BP: adding score of " << val << ": "
-						<< atom1->getFullName() << "..." << atom2->getFullName()
-						<< " (d " << distance << ", R1 " << R1 << ", R2 " << R2 << ")"
-						<< endl;
+					Log.info() << "BP: " << val << " "
+						<< atom1->getFullName() << " " 
+						<< ((FresnoFF*)getForceField())->getFresnoTypeString(atom1);
+					if (atom1->getResidue() != 0)
+					{
+						Log.info() << "[" << atom1->getResidue()->getID() << "]";
+					}
+					Log.info() << "..." << atom2->getFullName() << " "
+						<< ((FresnoFF*)getForceField())->getFresnoTypeString(atom2);
+					if (atom2->getResidue() != 0)
+					{
+						Log.info() << "[" << atom2->getResidue()->getID() << "]";
+					}
+					Log.info() << " (d " << distance << ", R1 " << R1 
+						<< ", R2 " << R2 << ")" << endl;
 				}
 
 				energy_ += val;
