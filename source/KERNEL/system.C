@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.12 2000/05/24 09:17:46 oliver Exp $
+// $Id: system.C,v 1.13 2000/05/26 20:22:32 amoll Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -230,15 +230,7 @@ namespace BALL
 	{
 		Composite::splice(system);
 	}
-/*
-	void System::destroyBonds()
-	{
-		 for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
-		 {
-						 atom_it->destroyBonds();
-		 }
-	}
-*/
+
 	void System::read(istream& /* s */)
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
