@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.23 2000/09/06 00:10:17 amoll Exp $
+// $Id: box3.h,v 1.24 2000/09/06 19:58:26 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -435,28 +435,27 @@ namespace BALL
 	template <typename T>
 	bool TBox3<T>::has(const TVector3<T>& point, bool on_surface = false) const
 	{
-		const TVector3<T>* lower;
-		const TVector3<T>* higher;
-
-		if (Maths::isLess(b[0],a[0]) || Maths::isLess(b[1],a[1]) || Maths::isLess(b[2],a[2]))
-		{
-			lower  = &b;
-			higher = &a;
-		}
-		else
-		{
-			lower  = &a;
-			higher = &b;
-		}
-
 		if (!on_surface)
 		{
-			for (int i = 0; i < 3; i++)
+			if (Maths::isLess(b[0],a[0]) || Maths::isLess(b[1],a[1]) || Maths::isLess(b[2],a[2]))
 			{
-				if (Maths::isLess(point[i],(*lower)[i]) || Maths::isLess((*higher)[i],point[i]))
+				for (int i = 0; i < 3; i++)
 				{
-					return false;
-				}						
+					if (Maths::isLess(point[i],b[i]) || Maths::isLess(a[i],point[i]))
+					{
+						return false;
+					}						
+				}
+			}
+			else
+			{
+				for (int i = 0; i < 3; i++)
+				{
+					if (Maths::isLess(point[i],a[i]) || Maths::isLess(b[i],point[i]))
+					{
+						return false;
+					}						
+				}
 			}
 			return true;
 		}
