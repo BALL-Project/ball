@@ -1,4 +1,4 @@
-// $Id: events.h,v 1.5 2001/06/29 06:16:07 sturm Exp $
+// $Id: events.h,v 1.6 2001/07/04 00:15:40 oliver Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -26,1055 +26,884 @@
 #include <iostream>
 
 
-#define BALL_VIEW_DECLARE_OPERATOR(event_a, event_b) \
-friend _##event_a##event_b##Event &operator & \
-  (const _##event_a##Event &__r_##event_a##Event, \
-   const _##event_b##Event &__r_##event_b##Event) \
+#define BALL_VIEW_DECLARE_OPERATOR(EventTypeA, EventTypeB) \
+friend EventTypeA##EventTypeB##Event_& operator & \
+  (const EventTypeA##Event_& event_a , \
+   const EventTypeB##Event_& event_b) \
   throw(Events::EventCombinationNotAllowed); \
 \
-friend _##event_a##event_b##Event &operator & \
-  (const _##event_b##Event &__r_##event_b##Event, \
-   const _##event_a##Event &__r_##event_a##Event) \
+friend EventTypeA##EventTypeB##Event_& operator & \
+  (const EventTypeB##Event_& event_b, \
+   const EventTypeA##Event_& event_a) \
   throw(Events::EventCombinationNotAllowed)
 
 
 
-#define BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE(event_a, event_b, returntype) \
-friend _##returntype##Event &operator & \
-  (const _##event_a##Event &__r_##event_a##Event, \
-   const _##event_b##Event &__r_##event_b##Event) \
+#define BALL_VIEW_DECLARE_OPERATOR_WITH_RETURN_TYPE(EventTypeA, EventTypeB, ReturnType) \
+friend ReturnType##Event_& operator& \
+  (const EventTypeA##Event_& event_a, \
+   const EventTypeB##Event_& event_b) \
   throw(Events::EventCombinationNotAllowed); \
 \
-friend _##returntype##Event &operator & \
-  (const _##event_b##Event &__r_##event_b##Event, \
-   const _##event_a##Event &__r_##event_a##Event) \
+friend ReturnType##Event_& operator & \
+  (const EventTypeB##Event_& event_b, \
+   const EventTypeA##Event_& event_a) \
   throw(Events::EventCombinationNotAllowed)
 
 
 
-#define BALL_VIEW_IMPLEMENT_OPERATOR(event_a, event_b) \
-Events::_##event_a##event_b##Event & \
-operator & \
-  (const Events::_##event_a##Event &__r_##event_a##Event, \
-   const Events::_##event_b##Event &__r_##event_b##Event) \
+#define BALL_VIEW_IMPLEMENT_OPERATOR(EventTypeA, EventTypeB) \
+Events::EventTypeA##EventTypeB##Event_& operator & \
+  (const Events::EventTypeA##Event_& event_a, \
+   const Events::EventTypeB##Event_& event_b) \
   throw(Events::EventCombinationNotAllowed) \
 { \
-  if (__r_##event_a##Event.getScene() \
-      != __r_##event_b##Event.getScene()) \
+  if (event_a.getScene() != event_b.getScene()) \
   { \
     throw Events::EventCombinationNotAllowed(__FILE__, __LINE__); \
   } \
 \
-  return __r_##event_a##Event.getEvent()->##event_a##event_b; \
+  return event_a.getEvent()->EventTypeA##EventTypeB; \
 } \
 \
-Events::_##event_a##event_b##Event & \
+Events::EventTypeA##EventTypeB##Event_& \
 operator & \
-  (const Events::_##event_b##Event &__r_##event_b##Event, \
-   const Events::_##event_a##Event &__r_##event_a##Event) \
+  (const Events::EventTypeB##Event_& event_b, \
+   const Events::EventTypeA##Event_& event_a) \
   throw(Events::EventCombinationNotAllowed) \
 { \
-  return operator &(__r_##event_a##Event, __r_##event_b##Event); \
+  return operator & (event_a, event_b); \
 }
 
 
 
-#define BALL_VIEW_IMPLEMENT_OPERATOR_WITH_RETURN_TYPE(event_a, event_b, returntype) \
-Events::_##returntype##Event & \
+#define BALL_VIEW_IMPLEMENT_OPERATOR_WITH_RETURN_TYPE(EventTypeA, EventTypeB, ReturnType) \
+Events::ReturnType##Event_ & \
 operator & \
-  (const Events::_##event_a##Event &__r_##event_a##Event, \
-   const Events::_##event_b##Event &__r_##event_b##Event) \
+  (const Events::EventTypeA##Event_& event_a, \
+   const Events::EventTypeB##Event_& event_b) \
   throw(Events::EventCombinationNotAllowed) \
 { \
-  if (__r_##event_a##Event.getScene() \
-      != __r_##event_b##Event.getScene()) \
+  if (event_a.getScene() \
+      != event_b.getScene()) \
   { \
     throw Events::EventCombinationNotAllowed(__FILE__, __LINE__); \
   } \
 \
-  return __r_##event_a##Event.getEvent()->##returntype; \
+  return event_a.getEvent()->ReturnType; \
 } \
 \
-Events::_##returntype##Event & \
+Events::ReturnType##Event_ & \
 operator & \
-  (const Events::_##event_b##Event &__r_##event_b##Event, \
-   const Events::_##event_a##Event &__r_##event_a##Event) \
+  (const Events::EventTypeB##Event_& event_b, \
+   const Events::EventTypeA##Event_& event_a) \
   throw(Events::EventCombinationNotAllowed) \
 { \
-  return operator &(__r_##event_a##Event, __r_##event_b##Event); \
+  return operator & (event_a, event_b); \
 }
 
 
 
 
-#define BALL_VIEW_DECLARE_EVENT_CLASS(name) \
-class _##name##Event \
+#define BALL_VIEW_DECLARE_EVENT_CLASS(EventName) \
+class EventName##Event_ \
 { \
   public: \
 \
-    _##name##Event \
-      () \
+    EventName##Event_() \
       throw() \
-	: \
+		: \
         __mpEvents_(0) \
     { \
     } \
 \
-    _##name##Event \
-      (Events *__pEvents) \
+    EventName##Event_(Events *__pEvents) \
       throw() \
-	: \
-        __mpEvents_(__pEvents) \
+			: __mpEvents_(__pEvents) \
     { \
     } \
 \
-    ~_##name##Event \
-      () \
+    ~EventName##Event_() \
       throw() \
     { \
     } \
 \
-    Scene *getScene \
-      () const\
+    Scene* getScene() const\
       throw() \
     { \
       return __mpEvents_->getScene(); \
     } \
 \
-    Events *getEvent \
-      () const\
+    Events* getEvent() const\
       throw() \
     { \
       return __mpEvents_; \
     } \
 \
-    Events *__mpEvents_; \
-} name
+    Events* __mpEvents_; \
+} EventName
 
 
 
 
-#define BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(name) \
-class _##name##Event: \
-  public NotificationTarget<_MouseLeftButtonPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseMiddleButtonPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseRightButtonPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseRightButtonPressedControlKeyPressedMouseMovedEvent>, \
-  public NotificationTarget<_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent>, \
-  public NotificationTarget<_##name##Event> \
+#define BALL_VIEW_DECLARE_PRESSED_MOVED_EVENT_CLASS(EventName) \
+class EventName##Event_: \
+  public NotificationTarget<MouseLeftButtonPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseLeftButtonPressedControlKeyPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseMiddleButtonPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseRightButtonPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseRightButtonPressedShiftKeyPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseRightButtonPressedControlKeyPressedMouseMovedEvent_>, \
+  public NotificationTarget<MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent_>, \
+  public NotificationTarget<EventName##Event_> \
 { \
   public: \
 \
-    _##name##Event \
-      () \
-      throw() \
-      : \
-      __mfp(0), \
-      __mpScene_(0), \
-      transmitter__mpScene_(0) \
+    EventName##Event_() \
+			throw() \
+			:	method_(0), \
+				scene_(0), \
+				transmitter_scene_(0) \
     { \
     } \
 \
-    _##name##Event \
-      (Scene *__pScene) \
+    EventName##Event_(Scene* scene) \
       throw() \
-      : \
-      __mfp(0), \
-      __mpScene_(__pScene), \
-      transmitter__mpScene_(__pScene) \
+      : method_(0), \
+				scene_(scene), \
+				transmitter_scene_(scene) \
     { \
     } \
 \
-    virtual ~_##name##Event \
-      () \
+    virtual ~EventName##Event_() \
       throw() \
     { \
     } \
 \
-    Scene *getScene \
-      () const \
+    Scene* getScene() const \
       throw(); \
 \
-    Scene *getTransmitterScene \
-      () const \
-      throw(); \
-\
-    bool onNotify \
-      (_MouseLeftButtonPressedMouseMovedEvent & \
-       __r_MouseLeftButtonPressedMouseMovedEvent) \
+    Scene* getTransmitterScene() const \
       throw(); \
 \
     bool onNotify \
-      (_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent & \
-       __r_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent) \
+      (MouseLeftButtonPressedMouseMovedEvent_ & event)\
       throw(); \
 \
     bool onNotify \
-      (_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent) \
+      (MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+      (MouseLeftButtonPressedControlKeyPressedMouseMovedEvent_& event)\
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonPressedMouseMovedEvent & \
-       __r_MouseMiddleButtonPressedMouseMovedEvent) \
+      (MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent_& event)\
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent & \
-       __r_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent) \
+      (MouseMiddleButtonPressedMouseMovedEvent_& event)\
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent) \
+      (MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent_&  event)\
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+      (MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent_& event)\
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonPressedMouseMovedEvent & \
-       __r_MouseRightButtonPressedMouseMovedEvent) \
+      (MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent_& event)\
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent & \
-       __r_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent) \
+      (MouseRightButtonPressedMouseMovedEvent_& event)\
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseRightButtonPressedControlKeyPressedMouseMovedEvent) \
+      (MouseRightButtonPressedShiftKeyPressedMouseMovedEvent_& event)\
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
-       __r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+      (MouseRightButtonPressedControlKeyPressedMouseMovedEvent_& event)\
       throw(); \
 \
     bool onNotify \
-      (_##name##Event & \
-       __r_##name##Event) \
+      (MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent_& event)\
       throw(); \
 \
-    void register##name## \
-      (void (Scene::*__fp)(Scene *__pScene)) \
+    bool onNotify \
+      (EventName##Event_& event) \
       throw(); \
 \
- private: \
-\
-    bool _onNotify \
-      (Scene *__pScene) \
+    void register##EventName \
+      (void (Scene::*method) (Scene *scene)) \
       throw(); \
 \
-    void (Scene::*__mfp)(Scene *__pScene); \
+		private: \
 \
-    Scene *__mpScene_; \
-    Scene *transmitter__mpScene_; \
-} name
+    bool onNotify_ \
+      (Scene* scene) \
+      throw(); \
+\
+    void (Scene::*method_) (Scene *scene); \
+\
+    Scene* scene_; \
+    Scene* transmitter_scene_; \
+} EventName
 
 
 
-#define BALL_VIEW_IMPLEMENT_INLINE_PRESSED_MOVED_EVENT_CLASS(name) \
+#define BALL_VIEW_IMPLEMENT_INLINE_PRESSED_MOVED_EVENT_CLASS(EventName) \
 BALL_INLINE \
-Scene * \
-Events::_##name##Event::getScene \
-  () const \
+Scene* Events::EventName##Event_::getScene() const \
   throw() \
 { \
-  return __mpScene_; \
+  return scene_; \
 } \
 \
 BALL_INLINE \
-Scene * \
-Events::_##name##Event::getTransmitterScene \
-  () const \
+Scene* Events::EventName##Event_::getTransmitterScene() const \
   throw() \
 { \
-  return transmitter__mpScene_; \
+  return transmitter_scene_; \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonPressedMouseMovedEvent & \
-   __r_MouseLeftButtonPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonPressedMouseMovedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent & \
-   __r_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonPressedShiftKeyPressedMouseMovedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent & \
-   __r_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonPressedControlKeyPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonPressedControlKeyPressedMouseMovedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
-   __r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonPressedMouseMovedEvent & \
-   __r_MouseMiddleButtonPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonPressedMouseMovedEvent.getScene()); \
+	return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent & \
-   __r_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonPressedShiftKeyPressedMouseMovedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent & \
-   __r_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonPressedControlKeyPressedMouseMovedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
-   __r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent. \
-		   getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonPressedMouseMovedEvent & \
-   __r_MouseRightButtonPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonPressedMouseMovedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent & \
-   __r_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonPressedShiftKeyPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonPressedShiftKeyPressedMouseMovedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonPressedControlKeyPressedMouseMovedEvent & \
-   __r_MouseRightButtonPressedControlKeyPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonPressedControlKeyPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonPressedControlKeyPressedMouseMovedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent & \
-   __r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedMouseMovedEvent. \
-		   getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_##name##Event & \
-   __r_##name##Event) \
+bool Events::EventName##Event_::onNotify \
+  (EventName##Event_& event) \
   throw() \
 { \
-  if (__r_##name##Event.getTransmitterScene()  \
-      == transmitter__mpScene_) \
+  if (event.getTransmitterScene() == transmitter_scene_) \
   { \
     return true; \
   } \
  \
-  return _onNotify(__r_##name##Event.getTransmitterScene()); \
+  return onNotify_(event.getTransmitterScene()); \
 } \
 \
 BALL_INLINE \
-void \
-Events::_##name##Event::register##name## \
-  (void (Scene::*__fp)(Scene *__pScene)) \
+void Events::EventName##Event_::register##EventName \
+  (void (Scene::*method)(Scene *scene)) \
   throw() \
 { \
-  __mfp = __fp; \
+  method_ = method; \
 }
     
 
 
-#define BALL_VIEW_DECLARE_PRESSED_EVENT_CLASS(name) \
-class _##name##Event: \
-  public NotificationTarget<_MouseLeftButtonPressedEvent>, \
-  public NotificationTarget<_MouseLeftButtonPressedShiftKeyPressedEvent>, \
-  public NotificationTarget<_MouseLeftButtonPressedControlKeyPressedEvent>, \
-  public NotificationTarget<_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent>, \
-  public NotificationTarget<_MouseMiddleButtonPressedShiftKeyPressedEvent>, \
-  public NotificationTarget<_MouseMiddleButtonPressedControlKeyPressedEvent>, \
-  public NotificationTarget<_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent>, \
-  public NotificationTarget<_MouseRightButtonPressedEvent>, \
-  public NotificationTarget<_MouseRightButtonPressedShiftKeyPressedEvent>, \
-  public NotificationTarget<_MouseRightButtonPressedControlKeyPressedEvent>, \
-  public NotificationTarget<_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent>, \
-  public NotificationTarget<_##name##Event> \
+#define BALL_VIEW_DECLARE_PRESSED_EVENT_CLASS(EventName) \
+class EventName##Event_: \
+  public NotificationTarget<MouseLeftButtonPressedEvent_>, \
+  public NotificationTarget<MouseLeftButtonPressedShiftKeyPressedEvent_>, \
+  public NotificationTarget<MouseLeftButtonPressedControlKeyPressedEvent_>, \
+  public NotificationTarget<MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent_>, \
+  public NotificationTarget<MouseMiddleButtonPressedShiftKeyPressedEvent_>, \
+  public NotificationTarget<MouseMiddleButtonPressedControlKeyPressedEvent_>, \
+  public NotificationTarget<MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent_>, \
+  public NotificationTarget<MouseRightButtonPressedEvent_>, \
+  public NotificationTarget<MouseRightButtonPressedShiftKeyPressedEvent_>, \
+  public NotificationTarget<MouseRightButtonPressedControlKeyPressedEvent_>, \
+  public NotificationTarget<MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent_>, \
+  public NotificationTarget<EventName##Event_> \
 { \
   public: \
 \
-    _##name##Event \
-      () \
+    EventName##Event_() \
       throw() \
-      : \
-      __mfp(0), \
-      __mpScene_(0), \
-      transmitter__mpScene_(0) \
+      :	method_(0), \
+				scene_(0), \
+				transmitter_scene_(0) \
     { \
     } \
 \
-    _##name##Event \
-      (Scene *__pScene) \
+    EventName##Event_(Scene* scene) \
       throw() \
-      : \
-      __mfp(0), \
-      __mpScene_(__pScene), \
-      transmitter__mpScene_(__pScene) \
+      :	method_(0), \
+				scene_(scene), \
+				transmitter_scene_(scene) \
     { \
     } \
 \
-    virtual ~_##name##Event \
-      () \
+    virtual ~EventName##Event_() \
       throw() \
     { \
     } \
 \
-    Scene *getScene \
-      () const \
+    Scene* getScene() const \
       throw(); \
 \
-    Scene *getTransmitterScene \
-      () const \
-      throw(); \
-\
-    bool onNotify \
-      (_MouseLeftButtonPressedEvent & \
-       __r_MouseLeftButtonPressedEvent) \
+    Scene* getTransmitterScene() const \
       throw(); \
 \
     bool onNotify \
-      (_MouseLeftButtonPressedShiftKeyPressedEvent & \
-       __r_MouseLeftButtonPressedShiftKeyPressedEvent) \
+      (MouseLeftButtonPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseLeftButtonPressedControlKeyPressedEvent & \
-       __r_MouseLeftButtonPressedControlKeyPressedEvent) \
+      (MouseLeftButtonPressedShiftKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+      (MouseLeftButtonPressedControlKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonPressedEvent & \
-       __r_MouseMiddleButtonPressedEvent) \
+      (MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonPressedShiftKeyPressedEvent & \
-       __r_MouseMiddleButtonPressedShiftKeyPressedEvent) \
+      (MouseMiddleButtonPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonPressedControlKeyPressedEvent & \
-       __r_MouseMiddleButtonPressedControlKeyPressedEvent) \
+      (MouseMiddleButtonPressedShiftKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+      (MouseMiddleButtonPressedControlKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonPressedEvent & \
-       __r_MouseRightButtonPressedEvent) \
+      (MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonPressedShiftKeyPressedEvent & \
-       __r_MouseRightButtonPressedShiftKeyPressedEvent) \
+      (MouseRightButtonPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonPressedControlKeyPressedEvent & \
-       __r_MouseRightButtonPressedControlKeyPressedEvent) \
+      (MouseRightButtonPressedShiftKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+      (MouseRightButtonPressedControlKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_##name##Event & \
-       __r_##name##Event) \
+      (MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent_& event) \
       throw(); \
 \
-    void register##name## \
-      (void (Scene::*__fp)(Scene *__pScene)) \
+    bool onNotify \
+      (EventName##Event_& event) \
       throw(); \
 \
- private: \
-\
-    bool _onNotify \
-      (Scene *__pScene) \
+    void register##EventName \
+      (void (Scene::*method) (Scene* scene)) \
       throw(); \
 \
-    void (Scene::*__mfp)(Scene *__pScene); \
+		private: \
 \
-    Scene *__mpScene_; \
-    Scene *transmitter__mpScene_; \
-} name
+    bool onNotify_(Scene* scene) \
+      throw(); \
+\
+    void (Scene::*method_) (Scene* scene); \
+\
+    Scene* scene_; \
+    Scene* transmitter_scene_; \
+} EventName
 
 
 
-#define BALL_VIEW_IMPLEMENT_INLINE_PRESSED_EVENT_CLASS(name) \
+#define BALL_VIEW_IMPLEMENT_INLINE_PRESSED_EVENT_CLASS(EventName) \
 BALL_INLINE \
-Scene * \
-Events::_##name##Event::getScene \
-  () const \
+Scene*  Events::EventName##Event_::getScene() const \
   throw() \
 { \
-  return __mpScene_; \
+  return scene_; \
 } \
 \
 BALL_INLINE \
-Scene * \
-Events::_##name##Event::getTransmitterScene \
-  () const \
+Scene* Events::EventName##Event_::getTransmitterScene() const \
   throw() \
 { \
-  return transmitter__mpScene_; \
+  return transmitter_scene_; \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonPressedEvent & \
-   __r_MouseLeftButtonPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonPressedShiftKeyPressedEvent & \
-   __r_MouseLeftButtonPressedShiftKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonPressedShiftKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonPressedShiftKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonPressedControlKeyPressedEvent & \
-   __r_MouseLeftButtonPressedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonPressedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonPressedControlKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent & \
-   __r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonPressedShiftKeyPressedControlKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonPressedEvent & \
-   __r_MouseMiddleButtonPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonPressedShiftKeyPressedEvent & \
-   __r_MouseMiddleButtonPressedShiftKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonPressedShiftKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonPressedShiftKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonPressedControlKeyPressedEvent & \
-   __r_MouseMiddleButtonPressedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonPressedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonPressedControlKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent & \
-   __r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonPressedShiftKeyPressedControlKeyPressedEvent. \
-		   getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonPressedEvent & \
-   __r_MouseRightButtonPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonPressedShiftKeyPressedEvent & \
-   __r_MouseRightButtonPressedShiftKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonPressedShiftKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonPressedShiftKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonPressedControlKeyPressedEvent & \
-   __r_MouseRightButtonPressedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonPressedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonPressedControlKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent & \
-   __r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonPressedShiftKeyPressedControlKeyPressedEvent. \
-		   getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_##name##Event & \
-   __r_##name##Event) \
+bool Events::EventName##Event_::onNotify \
+  (EventName##Event_& event) \
   throw() \
 { \
-  if (__r_##name##Event.getTransmitterScene()  \
-      == transmitter__mpScene_) \
+  if (event.getTransmitterScene() == transmitter_scene_) \
   { \
     return true; \
   } \
  \
-  return _onNotify(__r_##name##Event.getTransmitterScene()); \
+  return onNotify_(event.getTransmitterScene()); \
 } \
 \
 BALL_INLINE \
-void \
-Events::_##name##Event::register##name## \
-  (void (Scene::*__fp)(Scene *__pScene)) \
+void Events::EventName##Event_::register##EventName \
+  (void (Scene::*method)(Scene *scene)) \
   throw() \
 { \
-  __mfp = __fp; \
+  method_ = method; \
 }
     
 
 
-#define BALL_VIEW_DECLARE_RELEASED_EVENT_CLASS(name) \
-class _##name##Event: \
-  public NotificationTarget<_MouseLeftButtonReleasedEvent>, \
-  public NotificationTarget<_MouseLeftButtonReleasedShiftKeyPressedEvent>, \
-  public NotificationTarget<_MouseLeftButtonReleasedControlKeyPressedEvent>, \
-  public NotificationTarget<_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent>, \
-  public NotificationTarget<_MouseMiddleButtonReleasedShiftKeyPressedEvent>, \
-  public NotificationTarget<_MouseMiddleButtonReleasedControlKeyPressedEvent>, \
-  public NotificationTarget<_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent>, \
-  public NotificationTarget<_MouseRightButtonReleasedEvent>, \
-  public NotificationTarget<_MouseRightButtonReleasedShiftKeyPressedEvent>, \
-  public NotificationTarget<_MouseRightButtonReleasedControlKeyPressedEvent>, \
-  public NotificationTarget<_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent>, \
-  public NotificationTarget<_##name##Event> \
+#define BALL_VIEW_DECLARE_RELEASED_EVENT_CLASS(EventName) \
+class EventName##Event_: \
+  public NotificationTarget<MouseLeftButtonReleasedEvent_>, \
+  public NotificationTarget<MouseLeftButtonReleasedShiftKeyPressedEvent_>, \
+  public NotificationTarget<MouseLeftButtonReleasedControlKeyPressedEvent_>, \
+  public NotificationTarget<MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent_>, \
+  public NotificationTarget<MouseMiddleButtonReleasedShiftKeyPressedEvent_>, \
+  public NotificationTarget<MouseMiddleButtonReleasedControlKeyPressedEvent_>, \
+  public NotificationTarget<MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent_>, \
+  public NotificationTarget<MouseRightButtonReleasedEvent_>, \
+  public NotificationTarget<MouseRightButtonReleasedShiftKeyPressedEvent_>, \
+  public NotificationTarget<MouseRightButtonReleasedControlKeyPressedEvent_>, \
+  public NotificationTarget<MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent_>, \
+  public NotificationTarget<EventName##Event_> \
 { \
   public: \
 \
-    _##name##Event \
-      () \
+    EventName##Event_() \
       throw() \
-      : \
-      __mfp(0), \
-      __mpScene_(0), \
-      transmitter__mpScene_(0) \
+      :	method_(0), \
+				scene_(0), \
+				transmitter_scene_(0) \
     { \
     } \
 \
-    _##name##Event \
-      (Scene *__pScene) \
+    EventName##Event_(Scene* scene) \
       throw() \
-      : \
-      __mfp(0), \
-      __mpScene_(__pScene), \
-      transmitter__mpScene_(__pScene) \
+      :	method_(0), \
+				scene_(scene), \
+				transmitter_scene_(scene) \
     { \
     } \
 \
-    virtual ~_##name##Event \
-      () \
+    virtual ~EventName##Event_() \
       throw() \
     { \
     } \
 \
-    Scene *getScene \
-      () const \
+    Scene* getScene() const \
       throw(); \
 \
-    Scene *getTransmitterScene \
-      () const \
-      throw(); \
-\
-    bool onNotify \
-      (_MouseLeftButtonReleasedEvent & \
-       __r_MouseLeftButtonReleasedEvent) \
+    Scene* getTransmitterScene() const \
       throw(); \
 \
     bool onNotify \
-      (_MouseLeftButtonReleasedShiftKeyPressedEvent & \
-       __r_MouseLeftButtonReleasedShiftKeyPressedEvent) \
+      (MouseLeftButtonReleasedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseLeftButtonReleasedControlKeyPressedEvent & \
-       __r_MouseLeftButtonReleasedControlKeyPressedEvent) \
+      (MouseLeftButtonReleasedShiftKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+      (MouseLeftButtonReleasedControlKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonReleasedEvent & \
-       __r_MouseMiddleButtonReleasedEvent) \
+      (MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonReleasedShiftKeyPressedEvent & \
-       __r_MouseMiddleButtonReleasedShiftKeyPressedEvent) \
+      (MouseMiddleButtonReleasedEvent_& \
+       event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonReleasedControlKeyPressedEvent & \
-       __r_MouseMiddleButtonReleasedControlKeyPressedEvent) \
+      (MouseMiddleButtonReleasedShiftKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+      (MouseMiddleButtonReleasedControlKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonReleasedEvent & \
-       __r_MouseRightButtonReleasedEvent) \
+      (MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonReleasedShiftKeyPressedEvent & \
-       __r_MouseRightButtonReleasedShiftKeyPressedEvent) \
+      (MouseRightButtonReleasedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonReleasedControlKeyPressedEvent & \
-       __r_MouseRightButtonReleasedControlKeyPressedEvent) \
+      (MouseRightButtonReleasedShiftKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
-       __r_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+      (MouseRightButtonReleasedControlKeyPressedEvent_& event) \
       throw(); \
 \
     bool onNotify \
-      (_##name##Event & \
-       __r_##name##Event) \
+      (MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent_& event) \
       throw(); \
 \
-    void register##name## \
-      (void (Scene::*__fp)(Scene *__pScene)) \
+    bool onNotify \
+      (EventName##Event_& event) \
       throw(); \
 \
- private: \
-\
-    bool _onNotify \
-      (Scene *__pScene) \
+    void register##EventName \
+      (void (Scene::*method) (Scene *scene)) \
       throw(); \
 \
-    void (Scene::*__mfp)(Scene *__pScene); \
+		private: \
 \
-    Scene *__mpScene_; \
-    Scene *transmitter__mpScene_; \
-} name
+    bool onNotify_(Scene* scene) \
+      throw(); \
+\
+    void (Scene::*method_) (Scene *scene); \
+\
+    Scene* scene_; \
+    Scene* transmitter_scene_; \
+} EventName
 
 
 
-#define BALL_VIEW_IMPLEMENT_INLINE_RELEASED_EVENT_CLASS(name) \
+#define BALL_VIEW_IMPLEMENT_INLINE_RELEASED_EVENT_CLASS(EventName) \
 BALL_INLINE \
-Scene * \
-Events::_##name##Event::getScene \
-  () const \
+Scene* Events::EventName##Event_::getScene() const \
   throw() \
 { \
-  return __mpScene_; \
+  return scene_; \
 } \
 \
 BALL_INLINE \
-Scene * \
-Events::_##name##Event::getTransmitterScene \
-  () const \
+Scene* Events::EventName##Event_::getTransmitterScene() const \
   throw() \
 { \
-  return transmitter__mpScene_; \
+  return transmitter_scene_; \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonReleasedEvent & \
-   __r_MouseLeftButtonReleasedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonReleasedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonReleasedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonReleasedShiftKeyPressedEvent & \
-   __r_MouseLeftButtonReleasedShiftKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonReleasedShiftKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonReleasedShiftKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonReleasedControlKeyPressedEvent & \
-   __r_MouseLeftButtonReleasedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonReleasedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonReleasedControlKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
-   __r_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseLeftButtonReleasedShiftKeyPressedControlKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonReleasedEvent & \
-   __r_MouseMiddleButtonReleasedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonReleasedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonReleasedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonReleasedShiftKeyPressedEvent & \
-   __r_MouseMiddleButtonReleasedShiftKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonReleasedShiftKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonReleasedShiftKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonReleasedControlKeyPressedEvent & \
-   __r_MouseMiddleButtonReleasedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonReleasedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonReleasedControlKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
-   __r_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseMiddleButtonReleasedShiftKeyPressedControlKeyPressedEvent. \
-		   getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonReleasedEvent & \
-   __r_MouseRightButtonReleasedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonReleasedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonReleasedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonReleasedShiftKeyPressedEvent & \
-   __r_MouseRightButtonReleasedShiftKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonReleasedShiftKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonReleasedShiftKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonReleasedControlKeyPressedEvent & \
-   __r_MouseRightButtonReleasedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonReleasedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonReleasedControlKeyPressedEvent.getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent & \
-   __r_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent) \
+bool Events::EventName##Event_::onNotify \
+  (MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent_& event) \
   throw() \
 { \
-  return _onNotify(__r_MouseRightButtonReleasedShiftKeyPressedControlKeyPressedEvent. \
-		   getScene()); \
+  return onNotify_(event.getScene()); \
 } \
 \
 BALL_INLINE \
-bool \
-Events::_##name##Event::onNotify \
-  (_##name##Event & \
-   __r_##name##Event) \
+bool Events::EventName##Event_::onNotify \
+  (EventName##Event_& event) \
   throw() \
 { \
-  if (__r_##name##Event.getTransmitterScene()  \
-      == transmitter__mpScene_) \
+  if (event.getTransmitterScene() == transmitter_scene_) \
   { \
     return true; \
   } \
  \
-  return _onNotify(__r_##name##Event.getTransmitterScene()); \
+  return onNotify_(event.getTransmitterScene()); \
 } \
 \
 BALL_INLINE \
-void \
-Events::_##name##Event::register##name## \
-  (void (Scene::*__fp)(Scene *__pScene)) \
+void Events::EventName##Event_::register##EventName \
+  (void (Scene::*method) (Scene *scene)) \
   throw() \
 { \
-  __mfp = __fp; \
+  method_ = method; \
 }
     
 
 
-#define BALL_VIEW_IMPLEMENT_NOTIFY_FUNCTION_FOR_EVENT_CLASS(name) \
-bool \
-Events::_##name##Event::_onNotify \
-  (Scene *__pScene) \
+#define BALL_VIEW_IMPLEMENT_NOTIFY_FUNCTION_FOR_EVENT_CLASS(EventName) \
+bool Events::EventName##Event_::onNotify_(Scene* scene) \
   throw() \
 { \
-  transmitter__mpScene_ = __pScene; \
+  transmitter_scene_ = scene; \
 \
-  if (__mfp != 0) \
-    (__mpScene_->*__mfp)(__pScene); \
+  if (method_ != 0)	\
+  {\
+		(scene_->*method_)(scene); \
+	}\
 \
   Notify(*this); \
 \
-  transmitter__mpScene_ = __mpScene_; \
+  transmitter_scene_ = scene_; \
 \
   return true;\
 }
@@ -1111,9 +940,9 @@ namespace BALL
 				The names of the methods may seems a bit too long and unreadable but they are only
 				event names and will used and created automatically for the \Ref{Scene} object.
 				@memo    Events class (BALL VIEW gui widgets framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/06/29 06:16:07 $
+				@author  $Author: oliver $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/04 00:15:40 $
 		*/
 		class Events
 		{
@@ -1128,7 +957,8 @@ namespace BALL
 					@see GeneralException
 					@see Scene
 			*/
- 			class EventCombinationNotAllowed: public Exception::GeneralException
+ 			class EventCombinationNotAllowed
+				:	public Exception::GeneralException
 			{
   			public:
 	   			EventCombinationNotAllowed(const char* file, int line)
@@ -1680,8 +1510,7 @@ namespace BALL
 					{\em ShiftKeyPressedControlKeyPressed}.
 			*/
 			BALL_VIEW_DECLARE_OPERATOR
-				(ShiftKeyPressed,
-				 ControlKeyPressed);
+				(ShiftKeyPressed, ControlKeyPressed);
 			
 			/** Declare combine operator for events ShiftKeyPressed and MouseMoved.
 					Declare operator & for the two events 
