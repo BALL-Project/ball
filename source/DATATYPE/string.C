@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.39 2001/09/13 15:08:12 amoll Exp $
+// $Id: string.C,v 1.40 2002/01/05 03:59:09 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -1759,7 +1759,7 @@ int String::Index_64_[128] = {
 String String::encodeBase64()
 	throw()
 {
-	Size in_lenght(this->size());
+	Size in_lenght((Size)this->size());
 	const char* in = this->c_str();
 	char* out = new char[in_lenght * 2];
 	char* out_pos = out;

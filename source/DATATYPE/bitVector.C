@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.29 2001/12/13 01:54:15 oliver Exp $
+// $Id: bitVector.C,v 1.30 2002/01/05 03:59:09 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -221,7 +221,7 @@ namespace BALL
 			return;
 		}
 
-		size_ = strlen(bit_string);
+		size_ = (Size)strlen(bit_string);
 		bitset_.resize((Size)((size_ + BALL_BLOCK_MASK) >> BALL_BLOCK_SHIFT));
 		for (Position i = 0; i < bitset_.size(); i++)
 		{
