@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.C,v 1.13 2003/08/26 09:17:53 oliver Exp $
+// $Id: snapShotManager.C,v 1.14 2004/08/29 16:25:54 amoll Exp $
 //
 
 #include <BALL/KERNEL/PTE.h>
@@ -29,7 +29,9 @@ namespace BALL
 			force_field_ptr_(0),
 			snapshot_buffer_(0),
 			trajectory_file_ptr_(0),
-			flush_to_disk_frequency_(0)
+			flush_to_disk_frequency_(0),
+			buffer_counter_(0),
+			current_snapshot_(0)
 	{
 		options.setDefaultInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY,
 				SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY);
@@ -41,13 +43,13 @@ namespace BALL
 	// snapshot file along with a boolean that indicates if an existing file
 	// shall be overwritten.  If the file does not exist yet, it will be
 	// created and a header consisting of the system and some internal
-	// information will be written to it.  It the file is already existent
-	// and overwrite is set to false, the header will read in and compared
+	// information will be written to it.  If the file is already existent,
+	// the header will read in and compared
 	// with the given system. They must match.  Subsequent snapshots will
 	// then be appended to the file.
 	SnapShotManager::SnapShotManager
 		(System* my_system, const ForceField* my_forcefield, 
-		 TrajectoryFile* file, bool /* overwrite */)
+		 TrajectoryFile* file)
 		throw()
 		: options(),
 			system_ptr_(my_system),
@@ -55,7 +57,8 @@ namespace BALL
 			snapshot_buffer_(0),
 			trajectory_file_ptr_(file),
 			flush_to_disk_frequency_(0),
-			buffer_counter_(0)
+			buffer_counter_(0),
+			current_snapshot_(0)
 	{
 		options.setDefaultInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY,
 				SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY);
@@ -70,14 +73,13 @@ namespace BALL
 	// file along with a boolean that indicates if an existing file shall be
 	// overwritten, and the options.  If the file does not exist yet, it will
 	// be created and a header consisting of the system and some internal
-	// information will be written to it.  It the file is already existent
-	// and overwrite is set to false, the header will read in and compared
+	// information will be written to it.  If the file is already existent
+	// the header will read in and compared
 	// with the given system. They must match. Subsequent snapshots will be
 	// appended to the file. 
 	SnapShotManager::SnapShotManager 
 		(System* my_system, const ForceField* my_forcefield, 
-		 const Options& my_options, TrajectoryFile* file,
-		 bool /* overwrite */) 
+		 const Options& my_options, TrajectoryFile* file)
 		throw()
 		: options(my_options),
 			system_ptr_(my_system),
@@ -85,7 +87,8 @@ namespace BALL
 			snapshot_buffer_(0),
 			trajectory_file_ptr_(file),
 			flush_to_disk_frequency_(0),
-			buffer_counter_(0)
+			buffer_counter_(0),
+			current_snapshot_(0)
 	{
 		// simply call the setup method
 		setup();
@@ -106,7 +109,8 @@ namespace BALL
 			snapshot_buffer_(manager.snapshot_buffer_),
 			trajectory_file_ptr_(manager.trajectory_file_ptr_),
 			flush_to_disk_frequency_(manager.flush_to_disk_frequency_),
-			buffer_counter_(0)
+			buffer_counter_(0),
+			current_snapshot_(0)
 	{
 	}
 
@@ -129,7 +133,8 @@ namespace BALL
 		snapshot_buffer_ = manager.snapshot_buffer_;
 		trajectory_file_ptr_ = manager.trajectory_file_ptr_;
 		flush_to_disk_frequency_ = manager.flush_to_disk_frequency_;
-		buffer_counter_ = manager.buffer_counter_;
+		buffer_counter_ = 0;
+		current_snapshot_ = 0;
 
 		return *this;
 	}
@@ -138,10 +143,7 @@ namespace BALL
 	void SnapShotManager::clear()
 		throw()
 	{
-		// ?????
-		flushToDisk();
-
-		// now bring the instance to initial state
+		// bring the instance to initial state
 		options.clear();
 		system_ptr_ = 0;
 		force_field_ptr_ = 0;
@@ -152,6 +154,7 @@ namespace BALL
 		flush_to_disk_frequency_ = (Size)
 			options.getInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY);
 		buffer_counter_ = 0;
+		current_snapshot_ = 0;
 	}
 
 
@@ -164,12 +167,16 @@ namespace BALL
 			Log.error() << "SnapShotManager::setup(): No/invalid system." << endl;
 			return false;
 		}
-		if (force_field_ptr_ == 0 || !force_field_ptr_->isValid())
+		
+		/// we dont really always need a force field, do we ?????
+		if (force_field_ptr_ == 0) return true;
+		
+		if (!force_field_ptr_->isValid())
 		{
 			Log.error() << "SnapShotManager::setup(): No/invald force field." << endl;
 			return false;
 		}
-
+		
 		// now check that the force field is assigned to the system
 		if (force_field_ptr_->getSystem() != system_ptr_)
 		{
@@ -207,17 +214,18 @@ namespace BALL
 		// clear() does too much... Should I rewrite setup()? Or do I believe,
 		// that setup is called only(!) in a constructor?
 		snapshot_buffer_.clear();
-		// snapshot_buffer_.resize(flush_to_disk_frequency_);
-
+		current_snapshot_ = 0;
+		buffer_counter_ = 0;
 		return true;
-
-	}	// end of SnapShotManager::setup
+	}	
 
 
 	// This method calculates the current kinetic energy of the system
 	// (only selected atoms are considered) 
 	double SnapShotManager::calculateKineticEnergy_()
 	{
+		if (force_field_ptr_ == 0) return 0;
+
 		// First define some local variables 
 		double sq_velocity;
 		double sum, result;
@@ -243,8 +251,6 @@ namespace BALL
 
 			Molecule *old, *current;
 			Vector3 centre_velocity;
-
-
 			centre_velocity.x = centre_velocity.y = centre_velocity.z = 0;
 
 			// Get the molecule of the first atom in the system 
@@ -285,7 +291,6 @@ namespace BALL
 				molecule_mass += mass;
 				centre_velocity += mass * (*atom_it)->getVelocity();
 
-
 				// go on to the next atom
 				++atom_it;
 			}
@@ -306,7 +311,6 @@ namespace BALL
 
 			// 0.01 scales Da*A^2/ps^2 to kJ/mol 
 			result = 0.5 * sum * 0.01;
-
 		}
 		else
 		{
@@ -391,25 +395,29 @@ namespace BALL
 	void SnapShotManager::takeSnapShot()
 		throw()
 	{
-		// create a new Snapshot-Object
-		SnapShot snapshot;
+		if (system_ptr_ == 0) return;
+
+		// One more snapshot. Add it to the current list of snapshots
+		// The way we do it here should be faster, than filling the 
+		// SnapShot with data first and pushing it into the vector afterwards.
+		snapshot_buffer_.push_back(SnapShot());
+		SnapShot& snapshot = snapshot_buffer_[snapshot_buffer_.size() - 1];
 
 		// store all current positions, forces, velocities in the
 		// snapshot object
 		snapshot.takeSnapShot(*system_ptr_);
 
 		// store the potential energies      
-		// snapshot_ptr->potential_energy_ = force_field_ptr_->getEnergy();
-		snapshot.setPotentialEnergy(force_field_ptr_->getEnergy());
+		if (force_field_ptr_ != 0)
+		{
+			snapshot.setPotentialEnergy(force_field_ptr_->getEnergy());
+		}
 
 		// store the kinetic energy of all selected atoms in the system 
 		// the current value must be calculated as it is not provided by
 		// the force field 
 		snapshot.setKineticEnergy(calculateKineticEnergy_());
 
-		// One more snapshot. Add it to the current list of snapshots
-		snapshot_buffer_.push_back(snapshot);
-		// snapshot_buffer_[buffer_counter_] = snapshot;
 		buffer_counter_++;
 
 		// We could! use pushback() and size() to determine when to flush the
@@ -418,10 +426,6 @@ namespace BALL
 		{
 			// write all snapshots to disk in order to prevent memory overflow
 			flushToDisk();
-			snapshot_buffer_.clear();
-			// ????? is that REALLY necessary?
-			// snapshot_buffer_.resize(flush_to_disk_frequency_);
-			buffer_counter_ = 0;
 		}
 	}	// end of SnapShotManager::takeSnapShot() 
 
@@ -429,15 +433,34 @@ namespace BALL
 	bool SnapShotManager::applySnapShot(Size number)
 		throw()
 	{
+		// we start at SnapShot number 1!
+		if (number > 0) number --;
+		
+		if (system_ptr_ == 0) return false;
+
+		// if we have read the Snapshots from the trajectory file
+		// use these, otherwise "seek" to the correct file position
+		if (snapshot_buffer_.size() != 0)
+		{
+			if (snapshot_buffer_.size() < number) return false;
+
+			snapshot_buffer_[number].applySnapShot(*system_ptr_);
+			current_snapshot_ = number;
+			return true;
+		}
+
+		// ok, we are gone read from the file
+		if (trajectory_file_ptr_ == 0) return false;
+
 		SnapShot buffer;
 
 		if (number > trajectory_file_ptr_->getNumberOfSnapShots())
 		{
 			Log.error() << "SnapShotManager::applySnapShot(): "
-				<< "requested SnapShot number " << number 
-				<< " while the file only contains " 
-				<< trajectory_file_ptr_->getNumberOfSnapShots() 
-				<< " SnapShots" << endl;
+									<< "requested SnapShot number " << number 
+									<< " while the file only contains " 
+									<< trajectory_file_ptr_->getNumberOfSnapShots() 
+									<< " SnapShots" << endl;
 			return false;
 		}
 
@@ -450,7 +473,7 @@ namespace BALL
 			if (!trajectory_file_ptr_->read(buffer))
 			{
 				Log.error() << "SnapShotManager::applySnapShot(): "
-					<< "error reading from the TrajectoryFile" << endl;
+										<< "error reading from the TrajectoryFile" << endl;
 				return false;
 			}
 		}
@@ -463,13 +486,25 @@ namespace BALL
 	bool SnapShotManager::applyFirstSnapShot()
 		throw()
 	{
-		SnapShot buffer;
+		if (system_ptr_ == 0) return false;
 
-		// ?????:
-		// We should check for file validity here
+		// if we have read the Snapshots from the trajectory file
+		// use these, otherwise read one Snapshot from the file
+		if (snapshot_buffer_.size() != 0)
+		{
+			snapshot_buffer_[0].applySnapShot(*system_ptr_);
+			current_snapshot_ = 0;
+			return true;
+		}
+
+		// ok, we are gone read from the file
+		if (trajectory_file_ptr_ == 0) return false;
 
 		trajectory_file_ptr_->reopen();
 		trajectory_file_ptr_->readHeader();
+		
+		if (trajectory_file_ptr_->getNumberOfSnapShots() == 0) return false;
+		
 		return applyNextSnapShot();
 	}
 
@@ -477,6 +512,22 @@ namespace BALL
 	bool SnapShotManager::applyNextSnapShot()
 		throw()
 	{
+		if (system_ptr_ == 0) return false;
+
+		// if we have read the Snapshots from the trajectory file
+		// use these, otherwise read one Snapshot from the file
+		if (snapshot_buffer_.size() != 0)
+		{
+			current_snapshot_++;
+			if (current_snapshot_ > snapshot_buffer_.size()) return false;
+
+			snapshot_buffer_[current_snapshot_].applySnapShot(*system_ptr_);
+			return true;
+		}
+
+		// ok, we are gone read from the file
+		if (trajectory_file_ptr_ == 0) return false;
+
 		SnapShot buffer;
 
 		if (trajectory_file_ptr_->read(buffer))
@@ -487,7 +538,7 @@ namespace BALL
 		else
 		{
 			Log.error() << "SnapShotManager::applyNextSnapShot() "
-				<< "error reading from the TrajectoryFile" << endl;
+									<< "error reading from the TrajectoryFile" << endl;
 			return false;
 		}
 	}
@@ -496,6 +547,20 @@ namespace BALL
 	bool SnapShotManager::applyLastSnapShot()
 		throw()
 	{
+		if (system_ptr_ == 0) return false;
+
+		// if we have read the Snapshots from the trajectory file
+		// use these, otherwise read one Snapshot from the file
+		if (snapshot_buffer_.size() != 0)
+		{
+			snapshot_buffer_[snapshot_buffer_.size() - 1].applySnapShot(*system_ptr_);
+			current_snapshot_ = snapshot_buffer_.size() - 1;
+			return true;
+		}
+
+		// ok, we are gone read from the file
+		if (trajectory_file_ptr_ == 0) return false;
+
 		Size count = 0;
 		SnapShot buffer;
 
@@ -507,17 +572,16 @@ namespace BALL
 		if (count == trajectory_file_ptr_->getNumberOfSnapShots())
 		{
 			buffer.applySnapShot(*system_ptr_);
+			return true;
 		}
-		else
-		{
-			Log.error() << "SnapShotManager::applyLastSnapShot(): "
-				<< "read " << count 
-				<< " SnapShots while TrajectoryFile claims to have "
-				<< trajectory_file_ptr_->getNumberOfSnapShots()
-				<< " SnapShots" << endl;
-			return false;
-		}
-		return true;
+
+		Log.error() << "SnapShotManager::applyLastSnapShot(): "
+								<< "read " << count 
+								<< " SnapShots while TrajectoryFile claims to have "
+								<< trajectory_file_ptr_->getNumberOfSnapShots()
+								<< " SnapShots" << endl;
+
+		return false;
 	}
 
 
@@ -526,13 +590,48 @@ namespace BALL
 		throw()
 	{
 		// if no snapshots are in main memory, then there is nothing to do
-		if (snapshot_buffer_.size() == 0)
+		// also abort, if no trajectory file was set
+		if (snapshot_buffer_.size() == 0 ||
+				trajectory_file_ptr_    == 0)
 		{
 			return;
 		}
 
 		trajectory_file_ptr_->flushToDisk(snapshot_buffer_);
+		snapshot_buffer_.clear();
+		buffer_counter_ = 0;
+	}	
 
-	}	// end of SnapShotManager::flushToDisk()
+	bool SnapShotManager::readFromFile()
+		throw()
+	{
+		if (trajectory_file_ptr_ == 0) return false;
+		snapshot_buffer_.clear();
+
+		trajectory_file_ptr_->reopen();
+		trajectory_file_ptr_->readHeader();
+		Size number = trajectory_file_ptr_->getNumberOfSnapShots();
+		for (Size count = 0; count < number; ++count)
+		{
+			SnapShot buffer;
+			if (!trajectory_file_ptr_->read(buffer))
+			{
+				Log.error() << "SnapShotManager::Could not read "
+										<< "from the TrajectoryFile (Out of memory?)" << endl;
+				return false;
+			}
+			snapshot_buffer_.push_back(buffer);
+		}
+
+		return true;
+	}
+
+	void SnapShotManager::clearBuffer()
+		throw()
+	{
+		snapshot_buffer_.clear();
+		current_snapshot_ = 0;
+		buffer_counter_ = 0;
+	}
 
 } 
