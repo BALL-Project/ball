@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.14 2000/03/24 18:58:06 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.15 2000/03/26 12:12:20 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -669,7 +669,9 @@ namespace BALL
 		if (Maths::isZero(dot_product))
 		{
 			return false;
-		} else {
+		} 
+		else 
+		{
 			intersection_point.set(line.p + (plane.n * (plane.p - line.p)) * line.d / dot_product);
 
 			return true;
@@ -698,7 +700,8 @@ namespace BALL
 			@return bool, true if an intersection can be calculated, otherwise false
 	*/
 	template <class T>
-	bool GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
+	bool GetIntersection
+		(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
 	{
 		TVector3<T> p;
 		T aa, ab, ac, ad;
@@ -736,49 +739,6 @@ namespace BALL
 
 		return true;
 	}
-
-	/**	Get the intersection point between three planes.
-			@param	a the first plane
-			@param	b the second plane
-			@param	b the third plane
-			@param	point the resulting intersection
-			@return bool, true if an intersection can be calculated, otherwise false
-	*/
-	template <class T>
-	bool GetIntersection
-		(const TPlane3<T>& a, const TPlane3<T>& b,
- 		 const TPlane3<T>& c, TVector3<T>& point)
-	{
-		T aa, ab, ac, ad;
-		T ba, bb, bc, bd;
-		T ca, cb, cc, cd;
-
-		aa = a.n.x;
-		ab = a.n.y;
-		ac = a.n.z;
-		ad = -(a.n * a.p);
-
-		ba = b.n.x;
-		bb = b.n.y;
-		bc = b.n.z;
-		bd = -(b.n * b.p);
-
-		T quot = GetDeterminant3(aa, ab, ac, ba, bb, bc, ca, cb, cc);
-		
-		if (Maths::isZero(quot))
-		{
-			return false;
-		} else {
-			point.x  = -GetDeterminant3(ad, ab, ac, bd, bb, bc, cd, cb, cc) / quot;
-
-			point.y = -GetDeterminant3(aa, ad, ac, ba, bd, bc, ca, cd, cc) / quot;
-
-			point.z = -GetDeterminant3(aa, ab, ad, ba, bb, bd, ca, cb, cd) / quot;
-
-			return true;
-		}
-	}
-
 	/**	Get the intersection point between a sphere and a line.
 			@param	sphere the sphere
 			@param	line the line
@@ -907,9 +867,9 @@ namespace BALL
 		plane.hessify();
 
 
-		T d = -(plane.n * plane.n);
+		T d = plane.n * plane.p;
 
-		intersection_circle.set(- d * plane.n, plane.n, sqrt(a.radius * a.radius - d * d));
+		intersection_circle.set(d * plane.n, plane.n, sqrt(a.radius * a.radius - d * d));
 
 		return true;
 	}
