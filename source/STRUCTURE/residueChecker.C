@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.2 1999/09/17 13:47:09 oliver Exp $
+// $Id: residueChecker.C,v 1.3 1999/09/17 14:49:52 len Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -68,7 +68,7 @@ namespace BALL
 		}
 
 		// check for integrality of charges
-		float tmp = fabs(fabs(total_charge) - truncf(fabs(total_charge) + 0.5));
+		float tmp = fabs(fabs(total_charge) - (float)((int)(fabs(total_charge) + 0.5)));
 		if (tmp > 0.05)
 		{
 			Log.warn() << "ResidueChecker: in residue " << res_name << ": residue total charge of " << total_charge << " is not integral." << endl;
