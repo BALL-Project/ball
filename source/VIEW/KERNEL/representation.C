@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.14 2003/12/02 14:43:37 amoll Exp $
+// $Id: representation.C,v 1.15 2003/12/15 00:50:21 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
-#include <BALL/MATHS/common.h>
 
 namespace BALL
 {
@@ -29,6 +28,7 @@ namespace BALL
 		{
 		}
 
+					
 		Representation::Representation(const Representation& rp)
 			throw()
 				: PropertyManager(rp)
@@ -75,6 +75,8 @@ namespace BALL
 		const Representation& Representation::operator = (const Representation& representation)
 			throw()
 		{
+			clear();
+
 			drawing_mode_= representation.drawing_mode_;
 			drawing_precision_= representation.drawing_precision_;
 			model_type_ = representation.model_type_;
@@ -110,11 +112,7 @@ namespace BALL
 				geometric_objects_.push_back(object);
 			}
 
-			CompositeSet::ConstIterator comp_it = representation.composites_.begin();
-			for (;comp_it != representation.composites_.end(); comp_it++)
-			{
-				composites_.insert(*comp_it);
-			}
+			composites_ = representation.composites_;
 
 			return *this;
 		}
@@ -156,6 +154,11 @@ namespace BALL
 				delete *it;
 			}
 			geometric_objects_.clear();
+
+			if (model_processor_ != 0)
+			{
+				model_processor_->getGeometricObjects().clear();
+			}
 		}
 					
 
@@ -217,7 +220,7 @@ namespace BALL
 		void Representation::update(bool rebuild) 
 			throw()
 		{
-			// if no modelprocessor was given, there can only exist 
+			// if no ModelProcessor was given, there can only exist 
 			// handmade GeometricObjects, which dont need to be updated
 			if (model_processor_ != 0 && rebuild) 
 			{
@@ -241,12 +244,14 @@ namespace BALL
 			}
 		}
 
+		
 		String Representation::getModelName() const
 			throw()
 		{
 			return VIEW::getModelName(model_type_);
 		}
 
+		
 		String Representation::getColoringName() const
 			throw()
 		{
@@ -276,6 +281,7 @@ namespace BALL
 			}
 		}
 
+
 		void Representation::setColorProcessor(ColorProcessor* processor)
 			throw() 
 		{ 
@@ -292,6 +298,7 @@ namespace BALL
 			}
 		}
 
+		
 		void Representation::setDrawingPrecision(DrawingPrecision precision)
 			throw() 
 		{
@@ -299,6 +306,7 @@ namespace BALL
 			if (model_processor_ != 0) model_processor_->setDrawingPrecision(drawing_precision_);
 		}
 
+		
 		void Representation::setSurfaceDrawingPrecision(float precision)
 			throw() 
 		{
@@ -306,6 +314,7 @@ namespace BALL
 			if (model_processor_ != 0) model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
 		}
 
+		
 		void Representation::setTransparency(Size value)
 			throw()
 		{
@@ -313,6 +322,11 @@ namespace BALL
 			if (transparency_ > 255)
 			{
 				transparency_ = 255;
+			}
+
+			if (color_processor_ != 0)
+			{
+				color_processor_->setTransparency(transparency_);
 			}
 		}
 
