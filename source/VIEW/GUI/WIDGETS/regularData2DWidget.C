@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.31 2003/07/03 14:47:34 oliver Exp $
+// $Id: regularData2DWidget.C,v 1.32 2003/07/03 18:49:26 oliver Exp $
+//
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 #include <qpopupmenu.h>
@@ -733,7 +734,7 @@ namespace BALL
 					}
 
 					QString message, dummy;
-					double nx, ny;
+					double nx, ny, num_dum;
 
 					Vector2 vec = spec_->getCoordinates(spec_->getClosestIndex(Vector2(x, y)));
 					nx = vec.x;
@@ -746,10 +747,10 @@ namespace BALL
 					message += "z: ";
 					if (spec_ && (y < full_length_y_)) 
 					{
-						numDum = (*spec_)[x + full_length_x_ * y];
+						num_dum = (*spec_)[x + full_length_x_ * y];
 					}
 
-					message += dummy.setNum(numDum, 'e', 5);
+					message += dummy.setNum(num_dum, 'e', 5);
 
 					posLabel_ = new QLabel(message, stat_);
 					stat_->addWidget(posLabel_, 0);
