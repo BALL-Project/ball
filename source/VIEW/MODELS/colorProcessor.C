@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.13 2003/10/21 13:03:31 amoll Exp $
+// $Id: colorProcessor.C,v 1.14 2003/10/21 15:38:24 amoll Exp $
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/DATATYPE/colorExtension2.h>
@@ -46,8 +46,7 @@ void ColorProcessor::clear()
 {
 	default_color_.set("FF0000FF");
 	composites_ = 0;
-	atom_grid_.clear();
-	atom_grid_created_ = false;
+	clearAtomGrid();
 }
 
 void ColorProcessor::set(const ColorProcessor& color_Processor)
@@ -213,11 +212,17 @@ void ColorProcessor::setComposites(const CompositeSet* composites)
 	throw() 
 { 
 	composites_ = composites;
-	atom_grid_created_ = false;
-	atom_grid_.clear();
+	clearAtomGrid();
 }
 
+void ColorProcessor::clearAtomGrid()
+	throw()
+{
+	atom_grid_.clear();
+	atom_grid_created_ = false;
+}
 
+//////////////////////////////////////////////////////////////////////
 InterpolateColorProcessor::InterpolateColorProcessor()
 	: ColorProcessor(),
 		min_color_(ColorRGBA(0,0,1.0)),
@@ -249,7 +254,6 @@ ColorRGBA InterpolateColorProcessor::interpolateColor(float value)
 									 green1 + (value * (green2 - green1))	/ max_value_,
 									 blue1 + (value * (blue2 - blue1)) 		/ max_value_);
 }
-
 
 void InterpolateColorProcessor::setMinColor(const ColorRGBA& color)
 	throw()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.12 2003/10/21 13:03:40 amoll Exp $
+// $Id: colorProcessor.h,v 1.13 2003/10/21 15:38:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -140,6 +140,10 @@ namespace BALL
 			/// Return a pointer to the CompositeSet.
 			const CompositeSet* getComposites()
 				throw() { return composites_;}
+
+			///
+			void clearAtomGrid()
+				throw();
 
 			//@} 
 			/**	@name	debuggers and diagnostics 
