@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.22 2000/01/03 18:58:15 oliver Exp $
+dnl    $Id: configure.in,v 1.23 2000/01/03 22:03:22 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -965,7 +965,6 @@ else
 
 			TEMPLATE_DIR="SunWS_cache"
 			DEF_BOOL=true
-			NO_ARROW_OPERATOR="true"
 			AR="${CXX}"
 			DYNAR="${CXX}"
 			AROPTS="-xar -o"
@@ -1001,14 +1000,13 @@ if test "$DEBUG" != "" ; then
 		dnl  if debug information is also required, add the corresponding flag
 		dnl
 		if test "$DEBUG_INFO" = true -a "$CPP_FLAGS_DI" != "" ; then
-			CPP_FLAGS_D="${CPP_FLAGS_D} ${CPP_FLAGS_DI}
+			CPP_FLAGS_D="${CPP_FLAGS_D} ${CPP_FLAGS_DI}"
 		fi
 		AC_DEFINE(BALL_DEBUG,)
 		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
 		AC_MSG_RESULT(enabled)
 		CPP_MODE_FLAGS="${CPPFLAGS_D}"
 		CPP_MODE_FLAGS_NO_OPTIMIZATION="${CPPFLAGS_D}"
-		if test "$DEBUG_INFO" = true ; then
 	else
 		AC_MSG_RESULT(disabled)
 		CPP_MODE_FLAGS="${CPPFLAGS_O}"
@@ -1850,15 +1848,6 @@ if test "$BALL_HAS_ANSI_IOSTREAM" = yes ; then
 	AC_DEFINE(BALL_HAS_ANSI_IOSTREAM)
 fi
 
-dnl			Some compilers don't like
-dnl			the way we use the arrow operator (->)
-dnl  		
-if test "${NO_ARROW_OPERATOR}" = "" ; then
-	AC_DEFINE(BALL_SUPPORT_ARROW_OPERATOR,)
-fi
-
-
-	
 dnl	
 dnl		 make target "clean" should also remove 
 dnl    template repositories. The name of this directory 
