@@ -186,23 +186,22 @@ namespace BALL
 
 		Protein* PeptideBuilder::construct()
 		{
+			int id = 1;
 			Protein *protein = new Protein(proteinname_);
 			Chain *chain = new Chain(chainname_);
 			
 			// create the first residue
-			Residue* residue = createResidue_(sequence_[0].getType(), 0);
+			Residue* residue = createResidue_(sequence_[0].getType(), id);
 			chain->insert(*residue);
 			Residue* residueold = residue;
 			std::vector<AminoAcidDescriptor>::iterator i = sequence_.begin();
+			++id;
 			
 			// consistency check for empty sequences and sequences of length < 2!!	
 			// ????
-			// loop for the remaining residues 
-			int id = 0;
-			
+			// loop for the remaining residues ;
 			for (++i; i != sequence_.end(); ++i)
 			{
-				id++;
 				// We have to take care of two special cases:
 				// 		- the residue we are looking at is proline
 				// 		- the last residue was proline
@@ -235,6 +234,7 @@ namespace BALL
 				setOmega_(*residueold, *residue2, i->getOmega());
 
 				residueold=residue2;
+				++id;
 			}
 
 			protein->insert(*chain); 
