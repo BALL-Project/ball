@@ -1,4 +1,4 @@
-// $Id: pyAtomList.h,v 1.2 2000/07/06 14:04:29 oliver Exp $
+// $Id: pyAtomList.h,v 1.3 2000/07/10 14:09:00 oliver Exp $
 
 #ifndef BALL_PYTHON_PYATOMLIST_H
 #define BALL_PYTHON_PYATOMLIST_H
@@ -66,11 +66,17 @@ namespace BALL
 		*/
 		PyAtomList(const PyAtomList& new_list);
 			
-		/**	Construct from a BaseFragment
+		/**	Construct from a BaseFragment.
 				This constructor creates an PyAtomList object from
 				all atoms of a \Ref{BaseFragment} object.
 		*/
-		PyAtomList(const BaseFragment& fragment, const String& expression = "");
+		PyAtomList(const BaseFragment& fragment);
+
+		/**	Construct from a BaseFragment with expression.
+				This constructor creates an PyAtomList object from
+				the atoms of a \Ref{BaseFragment} object that match {\tt expression}.
+		*/
+		PyAtomList(const BaseFragment& fragment, const String& expression);
 
 		/**	Destructor
 		*/

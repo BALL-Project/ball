@@ -1,4 +1,4 @@
-// $Id: extractors.h,v 1.4 2000/07/06 14:04:29 oliver Exp $
+// $Id: extractors.h,v 1.5 2000/07/10 14:08:59 oliver Exp $
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H
@@ -50,19 +50,35 @@ namespace BALL
 			{\bf Framework:} PYTHON scripting
 	*/
 	//@{
-	/**	Extract all atoms from a kernel data structure.
+	/**	Extract atoms matching an expression.
 			This method extracts all atoms of a kernel data structure into
-			a list. If {\tt expression} is given, only thos atoms are extracted 
-			that match the \Ref{Expression} {\tt expression}.
+			a list that match the \Ref{Expression} {\tt expression}.
+			@param fragment the BaseFragment containing the atoms
+			@param expression the expression that selects the atoms
 	*/
-	PyAtomList* atoms(const BaseFragment& fragment, const String& expression = "");
+	PyAtomList* atoms(const BaseFragment& fragment, const String& expression);
+			
+	/**	Extract all atoms.
+			This method extracts all atoms of a kernel data structure into
+			a list. 
+			@param fragment the BaseFragment containing the atoms
+	*/
+	PyAtomList* atoms(const BaseFragment& fragment);
 
-	/**	Extract all PDB atoms from a kernel data structure.
+	/**	Extract PDB atoms matching an expression.
 			This method extracts all PDB atoms of a kernel data structure into
-			a list. If {\tt expression} is given, only thos atoms are extracted 
-			that match the \Ref{Expression} {\tt expression}.
+			a list that match the \Ref{Expression} {\tt expression}.
+			@param fragment the BaseFragment containing the atoms
+			@param expression the expression that selects the atoms
 	*/
-	PyPDBAtomList* PDBAtoms(const BaseFragment& fragment, const String& expression = "");
+	PyPDBAtomList* PDBAtoms(const BaseFragment& fragment, const String& expression);
+			
+	/**	Extract all PDB atoms.
+			This method extracts all PDB atoms of a kernel data structure into
+			a list. 
+			@param fragment the BaseFragment containing the atoms
+	*/
+	PyPDBAtomList* PDBAtoms(const BaseFragment& fragment);
 
 	/**	Extract all bonds from a kernel data structure.
 			This function extracts all bonds from the atoms contained in the base fragment.
