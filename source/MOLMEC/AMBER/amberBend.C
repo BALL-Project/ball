@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.C,v 1.21 2004/03/10 20:15:38 oliver Exp $
+// $Id: amberBend.C,v 1.21.2.1 2004/05/22 21:33:16 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
@@ -70,7 +70,8 @@ namespace BALL
 			}
 		}
 
-		// retrieve all bend parameters
+		// Assign all bend parameters.
+		bool use_selection = getForceField()->getUseSelection();
 		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
 		Atom::BondIterator it1;
 		Atom::BondIterator it2;
@@ -85,8 +86,8 @@ namespace BALL
 					this_bend.atom2 = &Atom::getAttributes()[(*atom_it)->getIndex()];
 					this_bend.atom3 = &Atom::getAttributes()[it1->getPartner(**atom_it)->getIndex()];
 
-					if (getForceField()->getUseSelection() == false ||
-					   (getForceField()->getUseSelection() == true && 
+					if ((use_selection == false) ||
+					   (use_selection == true && 
 					   (this_bend.atom1->ptr->isSelected() 
 							&& this_bend.atom2->ptr->isSelected() 
 							&& this_bend.atom3->ptr->isSelected())))
@@ -188,15 +189,18 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void AmberBend::updateForces()
 	{
-		double length;
+		if ((getForceField() == 0) || (getForceField()->getSystem() == 0))
+		{
+			return;
+		}
 
+		bool use_selection = getForceField()->getUseSelection();
 		for (Size i = 0; i < bend_.size(); i++) 
 		{
-			if (getForceField()->getUseSelection() == false ||
-					(getForceField()->getUseSelection() == true  &&
-					(bend_[i].atom1->ptr->isSelected() 
-					 || bend_[i].atom2->ptr->isSelected() 
-					 || bend_[i].atom3->ptr->isSelected())))
+			if ((use_selection == false) 
+					|| bend_[i].atom1->ptr->isSelected() 
+					|| bend_[i].atom2->ptr->isSelected() 
+					|| bend_[i].atom3->ptr->isSelected())
 			{
 
 				// Calculate the vector between atom1 and atom2,
@@ -204,26 +208,35 @@ namespace BALL
 
 				Vector3 v1 = bend_[i].atom1->position - bend_[i].atom2->position;
 				Vector3 v2 = bend_[i].atom3->position - bend_[i].atom2->position;
-				length = v1.getLength();
+				double length = v1.getLength();
 
 				if (length == 0) continue;
-				double inverse_length_v1 = 1/length;
+				double inverse_length_v1 = 1.0 / length;
 				v1 *= inverse_length_v1 ;
 
 				// Calculate the vector between atom3 and atom2,
 				// test if the vector has length larger than 0 and normalize it
 
 				length = v2.getLength();
-				if (length == 0) continue;
+				if (length == 0.0) continue;
 				double inverse_length_v2 = 1/length;
 				v2 *= inverse_length_v2;
 
 				// Calculate the cos of theta and then theta
 				double costheta = v1 * v2;
 				double theta;
-				if (costheta > 1.0) theta = 0.0;
-				else if (costheta < -1.0) theta = Constants::PI;
-				else theta = acos(costheta);
+				if (costheta > 1.0) 
+				{
+					theta = 0.0;
+				}
+				else if (costheta < -1.0) 
+				{
+					theta = Constants::PI;
+				}
+				else 
+				{
+					theta = acos(costheta);
+				}
 
 				// unit conversion: kJ/(mol A) -> N
 				// kJ -> J: 1e3
@@ -237,7 +250,7 @@ namespace BALL
 				Vector3 cross = v1 % v2;
 				if ((length = cross.getLength()) != 0) 
 				{
-					cross *= (1/length);
+					cross *= (1.0 / length);
 				} 
 				else 
 				{
@@ -249,7 +262,7 @@ namespace BALL
 				n1 *= factor * inverse_length_v1;
 				n2 *= factor * inverse_length_v2;
 
-				if (getForceField()->getUseSelection() == false)
+				if (use_selection == false)
 				{
 					bend_[i].atom1->force -= n1;
 					bend_[i].atom2->force += n1;

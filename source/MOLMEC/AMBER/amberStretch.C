@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.20 2004/03/10 20:15:38 oliver Exp $
+// $Id: amberStretch.C,v 1.20.2.1 2004/05/22 21:33:17 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
@@ -86,9 +86,9 @@ namespace BALL
 				{
 					Bond&	bond = const_cast<Bond&>(*it);
 
-					if (use_selection == false ||
-					   (use_selection == true && 
-					   (bond.getFirstAtom()->isSelected() && bond.getSecondAtom()->isSelected())))
+					if ((use_selection == false) 
+							|| ((use_selection == true) 
+									&& (bond.getFirstAtom()->isSelected() && bond.getSecondAtom()->isSelected())))
 					{
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
 						Atom::Type atom_type_B = bond.getSecondAtom()->getType();
@@ -157,11 +157,16 @@ namespace BALL
 		// initial energy is zero
 		energy_ = 0;
 
+		bool use_selection = getForceField()->getUseSelection();
+
 		// iterate over all bonds, sum up the energies
 		for (Size i = 0; i < stretch_.size(); i++)
 		{
 			double distance = (stretch_[i].atom1->position).getDistance(stretch_[i].atom2->position);
-			energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
+			if (!use_selection || stretch_[i].atom1->ptr->isSelected() || stretch_[i].atom2->ptr->isSelected())
+			{
+				energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
+			}
 		}
 		
 		return energy_;
