@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.18 2003/08/28 21:15:50 amoll Exp $
+# $Id: Makefile,v 1.19 2003/08/29 09:33:19 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -131,5 +131,20 @@ include .Dependencies
 BALL_INCLUDES=$(VIEW_INCLUDES)
 
 $(UIC_SOURCES):	$(UIC_HDR)
+
+molecularFileDialog_moc.C: $(HEADER_DIR)/molecularFileDialog.h
+	$(MOC) $(HEADER_DIR)/molecularFileDialog.h -o $@
+
+serverPreferences_moc.C: $(HEADER_DIR)/serverPreferences.h
+	$(MOC) $(HEADER_DIR)/serverPreferences.h -o $@
+
+openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
+	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
+
+openBruker2DFile_moc.C: $(HEADER_DIR)/openBruker2DFile.h
+	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
+
+preferences_moc.C: $(HEADER_DIR)/preferences.h
+	$(MOC) $(HEADER_DIR)/preferences.h -o $@
 
 depend: $(UIC_SOURCES) $(MOC_SOURCES)
