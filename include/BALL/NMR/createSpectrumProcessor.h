@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.h,v 1.8 2000/09/27 13:34:15 oliver Exp $
+// $Id: createSpectrumProcessor.h,v 1.9 2000/09/30 16:37:55 oliver Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_KERNEL_ATOM_H
 # include <BALL/KERNEL/atom.h>
+#endif
+
+#ifndef BALL_KERNEL_EXPRESSION_H
+# include <BALL/KERNEL/expression.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRINGHASHSET_H
@@ -78,15 +82,34 @@ namespace BALL
 		*/
 		virtual void init()
 			throw();
+
+		void setWidth(float width)
+			throw();
+
+		float getWidth() const
+			throw();
+
+		void enableAveraging(bool flag = true)
+			throw();
+			
+		void enableIgnoreTable(bool flag = true)
+			throw();
+
+		void setExpression(const String& expression)
+			throw();
 		//@}
 		protected:
 
 		std::list<Peak1D> peaklist_;
 
-		StringHashSet			ignore_atoms_;
+		StringHashSet						ignore_atoms_;
 
 		vector<String>						equivalency_residues_;
 		vector<vector<String> >		equivalency_atoms_;
+		float width_;
+		float use_averaging_;
+		float use_ignore_table_;
+		Expression expression_;
 	};
 
 } //namespace BALL
