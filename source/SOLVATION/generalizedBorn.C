@@ -1,12 +1,23 @@
 #include <BALL/SOLVATION/generalizedBorn.h>
+#include <BALL/KERNEL/forEach.h>
 
 #include <cmath>
 #include <vector>
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
-using namespace std;
+#define DEBUG 1
+// This flag deactivates the (at the moment probably incorrect)
+// sophisticated iteration over near boxes.
+#define BRUTE_FORCE 1
 
+#ifdef DEBUG
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/FORMAT/HINFile.h>
+#endif
+
+using namespace std;
 
 namespace BALL
 {
@@ -67,8 +78,8 @@ namespace BALL
 
 	bool GeneralizedBorn::setup()
 	{
-		// k is in units of A*kcal/(mol * (atomic charge)^2)
-		k_ = -166.0f;
+		// k is in units of A * kcal / (mol * (atomic charge)^2)
+		k_ = 166.0f;
 
 		beta_ = -100.0f;
 		lambda_ = 0.1f;
@@ -131,11 +142,6 @@ namespace BALL
 		retval = retval && setupIntegrationPoints_();
 		retval = retval && setupIntegrationWeights_();
 
-		// DEBUG
-		Log.info() << "Wild guess: "
-			<< 20 * shell_radii_.size() * atom_container_->countAtoms()
-			<< " iterations" << endl;
-		// /DEBUG
 		dump();
 
 		return(retval);
@@ -156,31 +162,109 @@ namespace BALL
 		eps_solvent_ = solvent_dc;
 	}
 
+	void GeneralizedBorn::calculateBornRadii_()
+	{
+		born_radii_.clear();
+
+		float integration_value;
+		AtomConstIterator it = atom_container_->beginAtom();
+
+		for (; +it; ++it)
+		{
+			integration_value = integrate_(&*it);
+			if (integration_value == 0.0f)
+			{
+				// ????? Make this an exception later
+				Log.error() << "Division by zero! Integration yielded 0.0" << endl;
+			}
+			else
+			{
+				born_radii_[&*it] = 1.0f / integration_value + alpha_0_;
+#ifdef DEBUG
+				cout << "alpha = " << born_radii_[&*it] << endl;
+				born_radii_[&*it] *= 3.70f;
+				cout << "modified alpha = " << born_radii_[&*it] << endl;
+#endif
+			}
+		}
+	}
+
 	float GeneralizedBorn::calculateEnergy()
 	{
-		return(k_prime_ * 4.184f * integrate_());
+
+		// ????? should this method be run here or somewhere else?
+		calculateBornRadii_();
+
+		float e = 0.0f;
+		float E = 0.0f;
+
+		AtomConstIterator it1;
+		AtomConstIterator it2;
+
+		BALL_FOREACH_ATOM_PAIR(*atom_container_, it1, it2)
+		{
+			float q_i = it1->getCharge();
+			float q_j = it2->getCharge();
+			float square_distance 
+				= (it1->getPosition() - it2->getPosition()).getSquareLength();
+			float alpha_i_alpha_j = born_radii_[&*it1] * born_radii_[&*it2];
+
+			e = q_i * q_j / sqrt(square_distance + alpha_i_alpha_j 
+					* exp(-(square_distance/(4.0f * alpha_i_alpha_j))));
+
+#ifdef DEBUG
+			cout << "e = " << e << endl;
+#endif
+
+			E += e;
+			
+		}
+#ifdef DEBUG
+		cout << "E = " << E << endl;
+#endif
+
+		E = - k_prime_ * E * 4.184f;
+
+#ifdef DEBUG
+		cout << "E' = " << E << endl;
+#endif
+
+		return(E);
 	}
 
 	float GeneralizedBorn::calculateAtomicVolumeContribution_(const Vector3& r)
 	{
 		float s = 0.0f;
 		float gamma_0_ln_lambda = gamma_0_ * log(lambda_);
-		float distance_4;
-		float radius_sq;
+#ifdef DEBUG
+		cout << "gamma_0 * log(lambda) = " << gamma_0_ln_lambda << endl;
+		cout << "r = " << r << endl;
+#endif
+		float distance;
 
+#ifdef BRUTE_FORCE
 		AtomConstIterator it = atom_container_->beginAtom();
+#else
+		// ????
+		// This is not correct. Should we iterate over boxes?
+		HashGridBox3<const Atom*>* box;
+		box = lookup_grid_.getBox(it->getPosition());
+		HashGridBox3<const Atom*>::ConstDataIterator it = box->beginData();
+#endif
 		for (; +it; ++it)
 		{
-			distance_4 = (r - it->getPosition()).getLength();
-			distance_4 *= distance_4;
-			distance_4 *= distance_4;
-			distance_4 *= distance_4;
-			radius_sq = it->getRadius();
-			radius_sq *= radius_sq;
-			// s += exp(gamma_0_ln_lambda / (it->getRadius() * it->getRadius())
-			// 		* pow(distance, 4.0f));
-			s += exp(gamma_0_ln_lambda / radius_sq * distance_4);
+			distance = (r - it->getPosition()).getLength();
+			float s_j = exp(gamma_0_ln_lambda / (pow(it->getRadius(), 4.0f))
+					* pow(distance, 4.0f));
+			s += s_j;
+#ifdef DEBUG
+			cout << "x_j = " << it->getPosition() << endl;
+			cout << "s_j = " << s_j << " @ " << distance << " A" << endl;
+#endif
 		}
+#ifdef DEBUG
+		cout << "s = " << s << endl;
+#endif
 		float H = 1.0f/(1.0f + exp(beta_ * (s - lambda_)));
 
 		return(H);
@@ -192,7 +276,8 @@ namespace BALL
 			<< std::endl;
 		// This might move to the paramters.
 		epsilon_ = 1e-8f;
-		grid_spacing_ = 2.0f;
+		// grid_spacing_ = 0.2f;
+		grid_spacing_ = 3.0f;
 		r_buffer_ = 0.3;
 		// Two constants used in the calculation of r_iw
 		C_ = pow(log(epsilon_) / log(lambda_ * gamma_0_), 0.25f);
@@ -276,7 +361,7 @@ namespace BALL
 								if ((box_centre - current_atom->getPosition()).getLength() 
 										< r_iw)
 								{
-									if (verbosity_ > 99)
+									if (verbosity_ > 199)
 									{
 										Log.info() << "Inserting " << current_atom->getFullName()
 											<< "@" << current_atom->getPosition() 
@@ -332,7 +417,7 @@ namespace BALL
 	bool GeneralizedBorn::setupIntegrationWeights_()
 	{
 		Log.info() << "Setting up integration weights...";
-		float factor = -1.0f/(80.0f * Constants::PI);
+		float factor = - 1.0f / (80.0f * Constants::PI);
 		float rk_rec;
 		float rk1_rec;
 		float weight_CFA;
@@ -360,53 +445,69 @@ namespace BALL
 		return(true);
 	}
 
-	float GeneralizedBorn::integrate_()
+
+	float GeneralizedBorn::integrate_(const Atom* atom)
 	{
 		// The two contributions, CFA and non-CFA correction term
-		float G0 = 0.0f;
-		float G1 = 0.0f;
+		float G0_i = 0.0f;
+		float G1_i = 0.0f;
 
-		HashGridBox3<const Atom*>* box;
-		HashGridBox3<const Atom*>::ConstDataIterator data_it;
-		AtomConstIterator it = atom_container_->beginAtom();
-		for (; +it; ++it)
+#ifdef DEBUG
+		Molecule ip;
+#endif
+
+		// Only count atoms that have non-vanishing radius. Be sure to condense
+		// charged hydrogens with zero radius (like those of the PARSE
+		// parameter set) onto the heavy atoms they are connected to.
+		if (atom->getRadius() > 0.0)
 		{
-			// Only count atoms that have non-vanishing radius. Be sure to condense
-			// charged hydrogens with zero radius (like those of the PARSE
-			// parameter set) onto the heavy atoms they are connected to.
-			if (it->getRadius() > 0.0)
+			float sum_CFA = 0.0f;
+			float sum_CT = 0.0f;
+
+			for (Size shell_index = 0; shell_index < shell_radii_.size() - 1;
+					++shell_index)
 			{
-				float sum_CFA = 0.0f;
-				float sum_CT = 0.0f;
-				box = lookup_grid_.getBox(it->getPosition());
-				for (data_it = box->beginData(); +data_it; ++data_it)
+				Vector3 r;
+				double V;
+				for (Size point_index = 0; point_index < integration_points_.size();
+						++point_index)
 				{
-					for (Size shell_index = 0; shell_index < shell_radii_.size() - 1;
-							++shell_index)
-					{
-						Vector3 r;
-						double V;
-						for (Size point_index = 0; point_index < integration_points_.size();
-								++point_index)
-						{
-							r = it->getPosition() 
-								+ shell_radii_[shell_index] * integration_points_[point_index];
-							V = calculateAtomicVolumeContribution_(r);
-							sum_CFA += integration_weights_CFA_[shell_index] * V;
-							sum_CT += integration_weights_CT_[shell_index] * V;
-						}
-					}
+					r = atom->getPosition() 
+						+ shell_radii_[shell_index] * integration_points_[point_index];
+					V = calculateAtomicVolumeContribution_(r);
+					sum_CFA += integration_weights_CFA_[shell_index] * V;
+					sum_CT += integration_weights_CT_[shell_index] * V;
+#ifdef DEBUG
+					cout << "V" << r << " [" << shell_index << "/" << point_index 
+						<< "]: " << V << endl;
+
+					Atom* point = new Atom;
+					point->setPosition(r);
+					point->setElement(PTE[Element::Fe]);
+					point->setCharge(V);
+					point->setName("IP" + String(shell_index) + "/" 
+							+ String(point_index));
+					ip.insert(*point);
+#endif
 				}
-				// Splitting up G into several variables is for debugging purposes.
-				// Should be changed as soon as the code functions.
-				float G0_i = nearest_radius_rec_[&*it] - sum_CFA;
-				G0 += G0_i;
-				float G1_i = nearest_radius_rec_[&*it] - sum_CT;
-				G1 += G1_i;
 			}
+			// Splitting up G into several variables is for debugging purposes.
+			// Should be changed as soon as the code functions.
+			G0_i += nearest_radius_rec_[&*atom] - sum_CFA;
+			G1_i += sqrt(0.5f * nearest_radius_rec_[&*atom] 
+					* nearest_radius_rec_[&*atom] - sum_CT);
 		}
-		return(G0 + G1);
+
+#ifdef DEBUG
+		HINFile ip_file("integration_points.hin", std::ios::out);
+		ip_file << ip;
+		ip_file.close();
+#endif
+
+		return(- G0_i + P_ * G1_i);
+
 	}
+
 
 	void GeneralizedBorn::dump(ostream& os)
 	{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: generalizedBorn.h,v 1.1 2004/04/30 09:29:41 anker Exp $
+// $Id: generalizedBorn.h,v 1.2 2004/10/30 08:27:38 anker Exp $
 //
 
 #ifndef BALL_SOLVATION_GENERALIZED_BORN_H
@@ -55,8 +55,9 @@ namespace BALL
 			bool setupIntegrationPoints_();
 			bool setupIntegrationWeights_();
 
+			void calculateBornRadii_();
 			float calculateAtomicVolumeContribution_(const Vector3& r);
-			float integrate_();
+			float integrate_(const Atom* atom);
 
 			// Constants that describe the physical properties
 			float k_;
@@ -65,6 +66,7 @@ namespace BALL
 			float eps_solute_;
 
 			const AtomContainer* atom_container_;
+			HashMap<const Atom*, float> born_radii_;
 			HashGrid3<const Atom*> lookup_grid_;
 			// The helper grid is used for sppeding up the update of the lookup_grid_
 			HashGrid3<const Atom*> helper_grid_;
