@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.30 2001/01/22 13:18:57 oliver Exp $
+// $Id: Vector3_test.C,v 1.31 2001/05/09 16:19:20 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.30 2001/01/22 13:18:57 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.31 2001/05/09 16:19:20 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ CHECK(TVector3::T& operator [] (Index index) const)
 	TEST_REAL_EQUAL(v[0], 1.0)
 	TEST_REAL_EQUAL(v[1], 2.0)
 	TEST_REAL_EQUAL(v[2], 3.0)
-	TEST_EXCEPTION(Exception::IndexOverflow, v[-1])
+	TEST_EXCEPTION(Exception::IndexOverflow, v[12354])
 	TEST_EXCEPTION(Exception::IndexOverflow,  v[3])
 RESULT
 
@@ -302,7 +302,7 @@ CHECK(TVector3::T& operator [] (Index index) )
 	TEST_REAL_EQUAL(v[0], 5.0)
 	TEST_REAL_EQUAL(v[1], 6.0)
 	TEST_REAL_EQUAL(v[2], 7.0)
-	TEST_EXCEPTION(Exception::IndexOverflow, v[-1] = 5.0)
+	TEST_EXCEPTION(Exception::IndexOverflow, v[32472] = 5.0)
 	TEST_EXCEPTION(Exception::IndexOverflow, v[3] = 5.0)
 RESULT
 
