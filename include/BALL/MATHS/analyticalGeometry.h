@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalGeometry.h,v 1.57 2003/03/03 14:17:51 anhi Exp $
+// $Id: analyticalGeometry.h,v 1.58 2003/03/26 09:31:56 sturm Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -39,12 +39,11 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Mathematics
-     *  @{
-     */
+
 	/**	@name Analytical Geometry
 			representation of analytical geometry functions,
 			using the classes: TAngle, TCircle3, TLine3, TPlane3, TSphere3, TVector3.
+	  \ingroup Mathematics
 	*/
 	//@{
 
@@ -1487,7 +1486,6 @@ namespace BALL
 		return TAngle<T>(acosbel);
 	}
 	//@}
-  /** @} */
 } // namespace BALL
 
 

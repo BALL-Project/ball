@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: function.h,v 1.21 2003/03/14 11:49:15 sturm Exp $
+// $Id: function.h,v 1.22 2003/03/26 09:31:56 sturm Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -12,12 +12,10 @@
 
 namespace BALL
 {
-    /**  \addtogroup  FunctionClasses
-     *  @{
-     */  
+
 	/** Constant function class. This function represents a constant that is
 			already known at compile time. 
-			
+	\ingroup FunctionClasses
 	*/
 	// ????? float templates sind nicht ANSI.
 	template <int constant_template>
@@ -1492,7 +1490,6 @@ namespace BALL
 	{
 		exponent_ = exp;
 	}
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_FUNCTION_H

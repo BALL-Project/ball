@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line3.h,v 1.39 2003/03/14 11:49:15 sturm Exp $
+// $Id: line3.h,v 1.40 2003/03/26 09:31:56 sturm Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -23,10 +23,8 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  GeometricObjects
-     *  @{
-     */
 	/** @name Line
+  \ingroup GeometricObjects
 	 */
 	//@{
 	template <typename T>
@@ -393,7 +391,6 @@ namespace BALL
 	
 	//@}
 
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_LINE3_H

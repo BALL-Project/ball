@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.63 2003/03/14 11:49:18 sturm Exp $
+// $Id: vector3.h,v 1.64 2003/03/26 09:31:59 sturm Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -31,11 +31,9 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Primitives
-     *  @{
-     */
 	/**	@name	Three-dimensional vector.
 			@memo representation of points and vectors in three-dimensional space: class  \link TVector3 TVector3 \endlink  and class  \link Vector3 Vector3 \endlink 
+	\ingroup Primitives
 	*/
 	//@{
 
@@ -1243,7 +1241,6 @@ namespace BALL
 	}
 
 	//@}
-  /** @} */
 }// namespace BALL
 
 #endif // BALL_MATHS_VECTOR3_H

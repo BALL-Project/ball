@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.31 2003/03/14 11:49:17 sturm Exp $
+// $Id: sphere3.h,v 1.32 2003/03/26 09:31:58 sturm Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -27,10 +27,8 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  GeometricObjects
-     *  @{
-     */
 	/** @name Sphere
+    \ingroup GeometricObjects
 	 */
 	//@{
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.43 2003/03/14 11:49:15 sturm Exp $
+// $Id: matrix44.h,v 1.44 2003/03/26 09:31:57 sturm Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -28,11 +28,9 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Primitives
-     *  @{
-     */
 	/**	@name	4x4 Matrix
 			@memo matrix representing transformations: class  \link TMatrix4x4 TMatrix4x4 \endlink  and class  \link Matrix4x4 Matrix4x4 \endlink 
+  \ingroup Primitives
 	*/
 	//@{
 	template <typename T>
@@ -2462,7 +2460,6 @@ namespace BALL
 	typedef TMatrix4x4<float> Matrix4x4;
 
 	//@}
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_MATRIX44_H

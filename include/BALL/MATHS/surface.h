@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.22 2003/03/14 11:49:18 sturm Exp $
+// $Id: surface.h,v 1.23 2003/03/26 09:31:59 sturm Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -16,9 +16,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  GeometricObjects
-     *  @{
-     */
 	/** @name Surface
 	 */
 	//@{
@@ -31,6 +28,7 @@ namespace BALL
 			 \par
 			
 			 \par
+	\ingroup GeometricObjects
 	*/
 	template <typename T>
 	class TSurface
@@ -538,7 +536,6 @@ namespace BALL
 	typedef TSurface<float> Surface;
 
 	//@}
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_SURFACE_H

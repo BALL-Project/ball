@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewisePolynomial.h,v 1.14 2003/03/14 11:49:16 sturm Exp $
+// $Id: piecewisePolynomial.h,v 1.15 2003/03/26 09:31:57 sturm Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -16,9 +16,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  FunctionClasses
-     *  @{
-     */  
 	/** Piecewise polynomial curve object.
 			This class provides a trivial implementation of piecewise polynomial
 			curves. More useful spline/B-spline implementations might follow in the
@@ -27,7 +24,7 @@ namespace BALL
 			the interval and \f$d\f$ is the overall degree of the PPCurve. Note that
 			there is no warranty that the defined curve is continuously
 			differentiable or even continuous.
-			
+		\ingroup 	FunctionClasses
 	 */
 
 	class PiecewisePolynomial
@@ -120,7 +117,7 @@ namespace BALL
 		Size degree_;
 
 	};
-  /** @} */
+
 }
 
 #endif // BALL_MATHS_PPPOLYNOMIAL_H

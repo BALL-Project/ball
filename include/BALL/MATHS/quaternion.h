@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.34 2003/03/14 11:49:17 sturm Exp $
+// $Id: quaternion.h,v 1.35 2003/03/26 09:31:58 sturm Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -22,10 +22,9 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Primitives
-     *  @{
-     */
+
 	/** @name Quaternions
+	 \ingroup Primitives
 	 */
 	//@{
 
@@ -625,7 +624,6 @@ namespace BALL
 	typedef TQuaternion<float> Quaternion;
 
 	//@}
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_QUATERNION_H
