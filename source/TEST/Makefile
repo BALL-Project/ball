@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.212 2004/02/25 10:40:29 oliver Exp $
+# $Id: Makefile,v 1.213 2004/06/15 04:40:03 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -37,9 +37,9 @@ echo:
 	echo $(EXECUTABLES)
 
 # required for clean and depend
-CPP_SOURCES=$(EXECUTABLES:=.C)
-OBJECTS=$(EXECUTABLES:=.o)
-VALGRINDS=$(EXECUTABLES:=.vgr)
+CPP_SOURCES=$(EXECUTABLES:$(EXEEXT)=.C)
+OBJECTS=$(EXECUTABLES:$(EXEEXT)=.o)
+VALGRINDS=$(EXECUTABLES:$(EXEEXT)=.vgr)
 
 include ../common.mak
 include .Dependencies
