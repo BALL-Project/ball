@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.16 2005/01/07 12:52:05 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.17 2005/01/07 13:31:58 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -841,44 +841,40 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	}
 
 	////////////////////////////////////////////////////////////
-	// create a new mesh with the points and triangles
+	// create two new mesh with the points and triangles
 	////////////////////////////////////////////////////////////
-	// every residue get its own mesh to enable picking for the tube model
-	Mesh* mesh = new Mesh();
+	// every residue get its own meshes to enable picking for the tube model
+	Mesh* mesh1 = new Mesh(); // the two tubes
+	Mesh* mesh2 = new Mesh(); // connection between tubes
 	if (atoms_of_spline_points_[start] != 0)
 	{
-		mesh->setComposite(atoms_of_spline_points_[start]->getParent());
+		mesh1->setComposite(atoms_of_spline_points_[start]->getParent());
+		mesh2->setComposite(atoms_of_spline_points_[start]->getParent());
 	}
-	geometric_objects_.push_back(mesh);
+	geometric_objects_.push_back(mesh1);
+	geometric_objects_.push_back(mesh2);
 	
 	// insert connection between tubes 2 times, because of trouble with normals
-	Vector3 vr(r * 0.1);
 	Vector3 vn(-(dir % helix_dir));
-	mesh->vertex.push_back(last_point_ + helix_dir + vr);
-	mesh->normal.push_back(vn);
-	mesh->vertex.push_back(last_point_ - helix_dir + vr);
-	mesh->normal.push_back(vn);
-
-	mesh->vertex.push_back(last_point_ + helix_dir - vr);
-	mesh->normal.push_back(vn);
-	mesh->vertex.push_back(last_point_ - helix_dir - vr);
-	mesh->normal.push_back(vn);
-
+	mesh2->vertex.push_back(last_point_ + helix_dir);
+	mesh2->normal.push_back(vn);
+	mesh2->vertex.push_back(last_point_ - helix_dir);
+	mesh2->normal.push_back(vn);
 
 	for (Position p = 0; p < slides; p++)
 	{
-		mesh->vertex.push_back(last_point_ + helix_dir + new_points[p]);
-		mesh->normal.push_back(new_points[p]);
-		mesh->vertex.push_back(last_point_ - helix_dir + new_points[p]);
-		mesh->normal.push_back(new_points[p]);
+		mesh1->vertex.push_back(last_point_ + helix_dir + new_points[p]);
+		mesh1->normal.push_back(new_points[p]);
+		mesh1->vertex.push_back(last_point_ - helix_dir + new_points[p]);
+		mesh1->normal.push_back(new_points[p]);
 	}
 	
 	////////////////////////////////////////////////////////////
 	// same data structures for faster access
 	////////////////////////////////////////////////////////////
 	Mesh::Triangle t;
-	Size s_old = 4;  // start position of the last points in the meshs vertices
-	Size s_new = 4;  // start position of the  new points in the meshs vertices
+	Size s_old = 0;  // start position of the last points in the meshs vertices
+	Size s_new = 0;  // start position of the  new points in the meshs vertices
 
 	//------------------------------------------------------>
 	// iterate over all spline_points_
@@ -919,106 +915,98 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		// create a new mesh if we have a different atom now
 		////////////////////////////////////////////////////////////
 		if (atoms_of_spline_points_[p] != 0 &&
-				mesh->getComposite() != atoms_of_spline_points_[p]->getParent())
+				mesh1->getComposite() != atoms_of_spline_points_[p]->getParent())
 		{
-			const Mesh* old_mesh = mesh;
-			mesh = new Mesh();
+			const Mesh* old_mesh1 = mesh1;
+			mesh1 = new Mesh();
+			// insert the vertices and normals of the last points again into the new mesh
+			for (Position point_pos = old_mesh1->vertex.size() - (slides * 2);
+										point_pos < old_mesh1->vertex.size(); point_pos++)
+			{
+				mesh1->vertex.push_back(old_mesh1->vertex[point_pos]);
+				mesh1->normal.push_back(old_mesh1->normal[point_pos]);
+			}
+
+			const Mesh* old_mesh2 = mesh2;
+			mesh2 = new Mesh();
+			const Size vs = old_mesh2->vertex.size() - 2;
+			mesh2->vertex.push_back(old_mesh2->vertex[vs]);
+			mesh2->vertex.push_back(old_mesh2->vertex[vs + 1]);
+			mesh2->normal.push_back(old_mesh2->normal[vs]);
+			mesh2->normal.push_back(old_mesh2->normal[vs + 1]);
+
+			geometric_objects_.push_back(mesh1);
+			geometric_objects_.push_back(mesh2);
+
 			if (atoms_of_spline_points_[p] != 0)
 			{
-				mesh->setComposite(atoms_of_spline_points_[p]->getParent());
+				mesh1->setComposite(atoms_of_spline_points_[p]->getParent());
+				mesh2->setComposite(atoms_of_spline_points_[p]->getParent());
 			}
-			geometric_objects_.push_back(mesh);
 
-			// insert the vertices and normals of the last points again into the new mesh
-			for (Position point_pos = old_mesh->vertex.size() - (slides * 2 + 4);
-										point_pos < old_mesh->vertex.size(); point_pos++)
-			{
-				mesh->vertex.push_back(old_mesh->vertex[point_pos]);
-				mesh->normal.push_back(old_mesh->normal[point_pos]);
-			}
+			s_old = 0;
 		}
 		
 		
 		////////////////////////////////////////////////////////////
 		// insert connection between tubes
 		////////////////////////////////////////////////////////////
-		Vector3 vr(r_new * 0.1);
 		Vector3 vn(-(dir_new % helix_dir));
-		mesh->vertex.push_back(point + helix_dir + vr);
-		mesh->normal.push_back(vn);
-		mesh->vertex.push_back(point - helix_dir + vr);
-		mesh->normal.push_back(vn);
+		mesh2->vertex.push_back(point + helix_dir);
+		mesh2->normal.push_back(vn);
+		mesh2->vertex.push_back(point - helix_dir);
+		mesh2->normal.push_back(vn);
 
-		mesh->vertex.push_back(point + helix_dir - vr);
-		mesh->normal.push_back(vn);
-		mesh->vertex.push_back(point - helix_dir - vr);
-		mesh->normal.push_back(vn);
+		const Size sn = mesh2->vertex.size() - 1;
+		t.v1 = sn - 1;
+		t.v2 = sn;
+		t.v3 = sn - 2;
+ 		mesh2->triangle.push_back(t);
 
-
-		const Size sn = mesh->vertex.size() - 4;
-		const Size so = mesh->vertex.size() - 4 - slides * 2 - 4;
-		t.v1 = sn;
-		t.v2 = so + 1;
-		t.v3 = so;
- 		mesh->triangle.push_back(t);
-
-		t.v1 = sn;
-		t.v2 = sn + 1;
-		t.v3 = so + 1;
- 		mesh->triangle.push_back(t);
-
-		t.v1 = sn + 2;
-		t.v2 = so + 3;
-		t.v3 = so + 2;
- 		mesh->triangle.push_back(t);
-
-		t.v1 = sn + 2;
-		t.v2 = sn + 3;
-		t.v3 = so + 3;
- 		mesh->triangle.push_back(t);
-
-
-		s_old = so + 4;
+		t.v1 = sn - 1;
+		t.v2 = sn - 2;
+		t.v3 = sn - 3;
+		mesh2->triangle.push_back(t);
 
 		////////////////////////////////////////////////////////////
 		// insert the points of the two new circles
 		////////////////////////////////////////////////////////////
 		// we will add an other point next, so here we do an off by one :)
-		s_new = mesh->vertex.size();
+		s_new = mesh1->vertex.size();
 
 		//------------------------------------------------------>
 		// iterate over all points of the circle
 		//------------------------------------------------------>
 		for (Position point_pos = 0; point_pos < slides ; point_pos++)
 		{
-			mesh->vertex.push_back(point + helix_dir + new_points[point_pos]);
-			mesh->normal.push_back(new_points[point_pos]);
+			mesh1->vertex.push_back(point + helix_dir + new_points[point_pos]);
+			mesh1->normal.push_back(new_points[point_pos]);
 
 			t.v1 = s_old;			// last lower
 			t.v2 = s_old + 2;	// last upper
 			t.v3 = s_new;			// new upper
- 			mesh->triangle.push_back(t);
+ 			mesh1->triangle.push_back(t);
 
 			t.v1 = s_new;			// new upper
 			t.v2 = s_new - 2;	// new lower
 			t.v3 = s_old; 		// last lower
- 			mesh->triangle.push_back(t);
+ 			mesh1->triangle.push_back(t);
 
 			s_old++;
 			s_new++;
 
-			mesh->vertex.push_back(point - helix_dir + new_points[point_pos]);
-			mesh->normal.push_back(new_points[point_pos]);
+			mesh1->vertex.push_back(point - helix_dir + new_points[point_pos]);
+			mesh1->normal.push_back(new_points[point_pos]);
 
 			t.v1 = s_old;			// last lower
 			t.v2 = s_old + 2;	// last upper
 			t.v3 = s_new;			// new upper
- 			mesh->triangle.push_back(t);
+ 			mesh1->triangle.push_back(t);
 
 			t.v1 = s_new;			// new upper
 			t.v2 = s_new - 2;	// new lower
 			t.v3 = s_old; 		// last lower
- 			mesh->triangle.push_back(t);
+ 			mesh1->triangle.push_back(t);
 
 			s_old++;
 			s_new++;
