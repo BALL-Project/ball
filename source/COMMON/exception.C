@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.16 2000/10/03 18:56:13 amoll Exp $
+// $Id: exception.C,v 1.17 2000/10/05 08:42:05 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -173,8 +173,8 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 		
-			ReadFileError::ReadFileError(const char* file, int line, const string& message = "",
-																	 const string& line_contents = "", int file_line = -1)
+			ReadFileError::ReadFileError(const char* file, int line, const string& message,
+																	 const string& line_contents, int file_line)
 				: GeneralException(file, line, "ReadFileError", "")
 			{
 				message_ = message;
