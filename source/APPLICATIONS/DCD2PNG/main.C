@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.5 2004/07/16 11:18:18 amoll Exp $
+// $Id: main.C,v 1.6 2004/07/16 13:55:32 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -179,51 +179,90 @@ int main(int argc, char **argv)
 	
 	int writepipe[2];
 	pid_t childpid;
-#define PARENT_WRITE 	writepipe[0]
-#define CHILD_READ 		writepipe[1]
-	int status;
-// 	if (pipe(writepipe) < 0 ) return -1;
+ 	if (pipe(writepipe) < 0 ) 
+	{
+		std::cerr << "Could not pipe!" << std::endl;
+		return -1;
+	}
 	
 
 	String povray_options;
-	povray_options = "-V -D +Imytemp +W" + String(width) + " +H" + String(height) + " +O" + working_dir + "/";
-
-	std::cout << povray_options << std::endl;
+	povray_options = "-V -D +I- +W" + String(width) + " +H" + String(height) + " +O" + working_dir + "/";
 
 	SnapShotManager sm(system, 0, &dcdfile, false);
 	POVRenderer pov;
-	pov.setFileName("mytemp");
+	std::stringstream pov_renderer_output;
+	pov.setOstream(pov_renderer_output);
+	pov.setHumanReadable(false);
 	Position nr2 = 0;
 	sm.applyFirstSnapShot();
+
+	
 	while(sm.applyNextSnapShot())
 	{
 		String pov_arg = povray_options + String(nr) + ".png" ;
  		Scene::getInstance(0)->exportScene(pov);
-		nr++;
-		nr2++;
 
 		// abort, if we can not fork!
 		if ( (childpid = fork()) < 0) 
 		{
-			std::cout << "Could not fork!" << std::endl;
+			std::cerr << "Could not fork!" << std::endl;
 			return -1;
 		}
-		// we are in the parent process and wait for the child to finish
 		else if (childpid != 0)
 		{
+			// we are in the parent process and wait for the child to finish
+			
+			// Parent closes it's read end of the pipe
+ 			close (writepipe[0]); 
+			
+			sleep(1);
+
+			while (pov_renderer_output.good())
+			{
+				char buffer[1000];
+				pov_renderer_output.getline(buffer, 1000);
+
+				Size n = strlen(buffer);
+				if(write(writepipe[1], buffer, n) != (int) n) 
+				{ 
+					std::cerr << "Could not write to pipe!" << std::endl;
+					return -1;
+				}
+
+				write(writepipe[1], "\n", 1);	
+			}
+
+			// Parent closes it's write end of the pipe, this sends EOF to reader
+			close (writepipe[1]); 
+
+			int status;
 			waitpid( -1, &status, 0 );
 		}
-		// we are in the child process and start povray
 		else
 		{
-//		  	close(1);
-			execl ("/home/student/amoll/bin/povray", "povray", pov_arg.c_str(), 0);
+			// we are in the child process and start povray
+			
+			// Child closes it's write end of the pipe
+		 	close (writepipe[1]); 
+
+			// handle stdin already closed
+			if(writepipe[0] != STDIN_FILENO) 
+			{
+				if(dup2(writepipe[0], STDIN_FILENO) < 0) 
+				{ 
+					std::cout << "Could not dup2!" << std::endl;
+					return -1;
+				} 
+
+				close(writepipe[0]);
+			}
+
+	  	execl ("/home/student/amoll/bin/povray", "povray", pov_arg.c_str(), 0);
 		}
 
-//		 	close(1);
-//  			dup (writepipe[1]);
-// 			execl ("/home/student/amoll/bin/mytest", "mytest", "+I- +Oa.png", 0);
-
+		nr++;
+		nr2++;
 	}
 
 	std::cout << "Written " + String(nr2) + " images." << std::endl;
