@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.109 2004/07/20 11:32:45 amoll Exp $
+// $Id: scene.C,v 1.110 2004/07/20 21:23:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -304,6 +304,7 @@ namespace BALL
 		{
 			makeCurrent();
 
+			glDepthMask(GL_TRUE);
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
