@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.8 2004/02/05 17:02:31 amoll Exp $
+// $Id: molecularStructure.C,v 1.9 2004/02/09 13:53:20 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -95,10 +95,10 @@ namespace BALL
 		
 		hint = "Deselect a molecular object.";
 		deselect_id_ = insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D, -1, hint);
-		// Tools Menu -------------------------------------------------------------------
+		// MOLECULARMECHANICS Menu -------------------------------------------------------------------
 		hint = "Calculate the energy of a System with the AMBER force field.";
-		insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Energy", this, SLOT(calculateAmberEnergy()), 
-										CTRL+Key_A, MainControl::MOLECULARMECHANICS + 12, hint);
+		amber_energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
+																			 SLOT(calculateAmberEnergy()), CTRL+Key_A, MainControl::MOLECULARMECHANICS + 12, hint);
 			
 		hint = "To perform an Energy Minimization, first select the molecular structures.";
 		amber_minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", this, 
@@ -107,6 +107,10 @@ namespace BALL
 		hint = "To perform a MD simulation , first select the molecular structures.";
 		amber_mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
 															SLOT(amberMDSimulation()), CTRL+Key_D, MainControl::MOLECULARMECHANICS + 11, hint);
+
+		hint = "Options for the used force fields.";
+		force_field_options_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Force Field &Options", this,
+															SLOT(showForceFieldOptions()), 0, MainControl::MOLECULARMECHANICS +14, hint);
 
 		// Tools Menu -------------------------------------------------------------------
 		hint = "Create a grid with the distance to the geometric center of a structure.";
@@ -451,7 +455,8 @@ namespace BALL
 		}
 		catch (Exception::GeneralException e)
 		{
-			Log.error() << " > normalize named failed: " <<endl; //<< e << endl;
+			Log.error() << " > normalize named failed: " <<endl; 
+			Log.error() << e << endl;
 		}
 		catch (...)
 		{
@@ -467,7 +472,8 @@ namespace BALL
 		}
 		catch (Exception::GeneralException e)
 		{
-			Log.error() << " > generate missing bonds - failed: " <<endl; //<< e << endl;
+			Log.error() << " > generate missing bonds - failed: " <<endl; 
+			Log.error() << e << endl;
 		}
 		catch (...)
 		{
@@ -859,47 +865,57 @@ namespace BALL
 		minimizer->setup(amber);
 		minimizer->setMaxNumberOfIterations(minimization_dialog_.getMaxIterations());
 
-		// perform an initial step (no restart step)
-		minimizer->minimize(1, false);
+		try
+		{
+			// perform an initial step (no restart step)
+			minimizer->minimize(1, false);
 
-		// ============================= WITH MULTITHREADING ====================================
+			// ============================= WITH MULTITHREADING ====================================
 	#ifdef BALL_QT_HAS_THREADS
-		EnergyMinimizerThread* thread = new EnergyMinimizerThread;
-		getMainControl()->setSimulationThread(thread);
+			EnergyMinimizerThread* thread = new EnergyMinimizerThread;
+			getMainControl()->setSimulationThread(thread);
 
-		thread->setEnergyMinimizer(minimizer);
-		thread->setNumberOfStepsBetweenUpdates(minimization_dialog_.getRefresh());
-		thread->setComposite(system);
+			thread->setEnergyMinimizer(minimizer);
+			thread->setNumberOfStepsBetweenUpdates(minimization_dialog_.getRefresh());
+			thread->setComposite(system);
 
 		#if BALL_QT_VERSION >=	0x030200
-			thread->start(QThread::LowPriority);
+				thread->start(QThread::LowPriority);
 		#else
-			thread->start();
+				thread->start();
 		#endif
-		
+			
 	#else
-		// ============================= WITHOUT MULTITHREADING =================================
-		// iterate until done and refresh the screen every "steps" iterations
-		while (!minimizer->minimize(minimization_dialog_.getRefresh(), true) &&
-						minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
-		{
-			getMainControl()->update(*system);
+			// ============================= WITHOUT MULTITHREADING =================================
+			// iterate until done and refresh the screen every "steps" iterations
+			while (!minimizer->minimize(minimization_dialog_.getRefresh(), true) &&
+							minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
+			{
+				getMainControl()->update(*system);
 
-			QString message;
-			message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A",
-											minimizer->getNumberOfIterations(), amber.getEnergy(), amber.getRMSGradient());
-			setStatusbarText(String(message.ascii()));
-		}
+				QString message;
+				message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A",
+												minimizer->getNumberOfIterations(), amber.getEnergy(), amber.getRMSGradient());
+				setStatusbarText(String(message.ascii()));
+			}
 
-		Log.info() << endl << "minimization terminated." << endl << endl;
-		printAmberResults();
-		Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after "
-							 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
-		setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
+			Log.info() << endl << "minimization terminated." << endl << endl;
+			printAmberResults();
+			Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after "
+								 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
+			setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
 
-		// clean up
-		delete minimizer;
+			// clean up
+			delete minimizer;
 	#endif
+		}
+		catch(Exception::GeneralException e)
+		{
+			String txt = "Calculation aborted because of throwed exception";
+			setStatusbarText(txt + ". See Logs");
+			Log.error() << txt << ":" << std::endl;
+			Log.error() << e << std::endl;
+		}
 	}
 
 	void MolecularStructure::amberMDSimulation()
@@ -951,95 +967,105 @@ namespace BALL
 		options[MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY] = 99999999;
 		options[MolecularDynamics::Option::TIME_STEP] = md_dialog_.getTimeStep();
 
-		// setup the simulation
-		mds->setup(amber, 0, options);
-		if (!mds->isValid())
+		try
 		{
-			Log.error() << "Setup for MD simulation failed!" << std::endl;
-			return;
-		}
-		
-		// perform an initial step (no restart step)
-		mds->simulateIterations(1, false);
-
-		// we update everything every so and so steps
-		Size steps = md_dialog_.getStepsBetweenRefreshs();
-
-		DCDFile* dcd = 0;
-		if (md_dialog_.getDCDFile().size() != 0) 
-		{
-			dcd = new DCDFile;
-			dcd->open(md_dialog_.getDCDFile(), File::OUT);
-			dcd->enableVelocityStorage();
-		}
-		// ============================= WITH MULTITHREADING ===================================
-	#ifdef BALL_QT_HAS_THREADS
-		MDSimulationThread* thread = new MDSimulationThread;
-		getMainControl()->setSimulationThread(thread);
-
-		thread->setMolecularDynamics(mds);
-		thread->setNumberOfSteps(md_dialog_.getNumberOfSteps());
-		thread->setNumberOfStepsBetweenUpdates(steps);
-		thread->setSaveImages(md_dialog_.saveImages());
-		thread->setDCDFile(dcd);
-		thread->setComposite(system);
-
-		#if BALL_QT_VERSION >=	0x030200
-			thread->start(QThread::LowPriority);
-		#else
-			thread->start();
-		#endif
-
-	#else
-		// ============================= WITHOUT MULTITHREADING ==============================
-		// iterate until done and refresh the screen every "steps" iterations
-		
-		SnapShotManager manager(amber.getSystem(), &amber, dcd);
-		manager.setFlushToDiskFrequency(10);
-		while (mds->getNumberOfIterations() < md_dialog_.getNumberOfSteps())
-		{
-			mds->simulateIterations(steps, true);
-			getMainControl()->update(*system);
-			if (md_dialog_.saveImages()) 
+			// setup the simulation
+			mds->setup(amber, 0, options);
+			if (!mds->isValid())
 			{
-				SceneMessage* msg = new SceneMessage(SceneMessage::EXPORT_PNG);
-				notify_(msg);
+				Log.error() << "Setup for MD simulation failed!" << std::endl;
+				return;
 			}
 			
-			if (dcd != 0) 
+			// perform an initial step (no restart step)
+			mds->simulateIterations(1, false);
+
+			// we update everything every so and so steps
+			Size steps = md_dialog_.getStepsBetweenRefreshs();
+
+			DCDFile* dcd = 0;
+			if (md_dialog_.getDCDFile().size() != 0) 
 			{
-				manager.takeSnapShot();
+				dcd = new DCDFile;
+				dcd->open(md_dialog_.getDCDFile(), File::OUT);
+				dcd->enableVelocityStorage();
+			}
+			// ============================= WITH MULTITHREADING ===================================
+		#ifdef BALL_QT_HAS_THREADS
+			MDSimulationThread* thread = new MDSimulationThread;
+			getMainControl()->setSimulationThread(thread);
+
+			thread->setMolecularDynamics(mds);
+			thread->setNumberOfSteps(md_dialog_.getNumberOfSteps());
+			thread->setNumberOfStepsBetweenUpdates(steps);
+			thread->setSaveImages(md_dialog_.saveImages());
+			thread->setDCDFile(dcd);
+			thread->setComposite(system);
+
+			#if BALL_QT_VERSION >=	0x030200
+				thread->start(QThread::LowPriority);
+			#else
+				thread->start();
+			#endif
+
+		#else
+			// ============================= WITHOUT MULTITHREADING ==============================
+			// iterate until done and refresh the screen every "steps" iterations
+			
+			SnapShotManager manager(amber.getSystem(), &amber, dcd);
+			manager.setFlushToDiskFrequency(10);
+			while (mds->getNumberOfIterations() < md_dialog_.getNumberOfSteps())
+			{
+				mds->simulateIterations(steps, true);
+				getMainControl()->update(*system);
+				if (md_dialog_.saveImages()) 
+				{
+					SceneMessage* msg = new SceneMessage(SceneMessage::EXPORT_PNG);
+					notify_(msg);
+				}
+				
+				if (dcd != 0) 
+				{
+					manager.takeSnapShot();
+				}
+
+				QString message;
+				message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
+												mds->getNumberOfIterations(), amber.getEnergy(), amber.getRMSGradient());
+				setStatusbarText(String(message.ascii()));
 			}
 
-			QString message;
-			message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-											mds->getNumberOfIterations(), amber.getEnergy(), amber.getRMSGradient());
-			setStatusbarText(String(message.ascii()));
+			if (dcd) manager.flushToDisk();
+
+			Log.info() << std::endl << "simulation terminated." << std::endl << endl;
+			printAmberResults();
+			Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
+								 << mds->getNumberOfIterations() << " iterations" << endl << endl;
+			setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
+
+			// clean up
+			delete mds;
+
+			if (dcd != 0)
+			{
+				dcd->close();
+				delete dcd;
+				dcd = new DCDFile(md_dialog_.getDCDFile(), File::IN);
+
+				NewTrajectoryMessage* message = new NewTrajectoryMessage;
+				message->setComposite(*amber.getSystem());
+				message->setTrajectoryFile(*dcd);
+				notify_(message);
+			}
+		#endif
 		}
-
-		if (dcd) manager.flushToDisk();
-
-		Log.info() << std::endl << "simulation terminated." << std::endl << endl;
-		printAmberResults();
-		Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
-							 << mds->getNumberOfIterations() << " iterations" << endl << endl;
-		setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
-
-		// clean up
-		delete mds;
-
-		if (dcd != 0)
+		catch(Exception::GeneralException e)
 		{
-			dcd->close();
-			delete dcd;
-			dcd = new DCDFile(md_dialog_.getDCDFile(), File::IN);
-
-			NewTrajectoryMessage* message = new NewTrajectoryMessage;
-			message->setComposite(*amber.getSystem());
-			message->setTrajectoryFile(*dcd);
-			notify_(message);
+			String txt = "Calculation aborted because of throwed exception";
+			setStatusbarText(txt + ". See Logs");
+			Log.error() << txt << ":" << std::endl;
+			Log.error() << e << std::endl;
 		}
-	#endif
 	}
 
 
@@ -1054,6 +1080,12 @@ namespace BALL
 		System* system = new System;
 		system->insert(*protein);
 		getMainControl()->insert(*system, dialog->getSequence());
+	}
+
+	void MolecularStructure::showForceFieldOptions()
+	{
+		amber_dialog_.raise();
+		amber_dialog_.show();
 	}
 
 } } // namespaces
