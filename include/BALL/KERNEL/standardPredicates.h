@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.2 2000/05/22 17:41:11 anker Exp $
+// $Id: standardPredicates.h,v 1.3 2000/05/23 19:39:32 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_KERNEL_ATOM_H
 #	include <BALL/KERNEL/atom.h>
+#endif
+
+#ifndef BALL_KERNEL_BOND_H
+#	include <BALL/KERNEL/bond.h>
 #endif
 
 #ifndef BALL_KERNEL_EXPRESSION_H
@@ -228,20 +232,19 @@ namespace BALL
 				virtual bool operator () (const Atom& atom) const;
 
 			private:
-				static Size limitcount;
 				bool dfs(const Atom* atom, const Atom* first_atom, 
-					const int limit) const;
+					const Size limit, HashSet<Atom*>& visited) const;
 		};
 
 	/** Predicate for bearing double bonds. Arguments of this class are
 			\emph{required} to consist of an relational operator and a number
 			between 1 and 8.
 	 */
-	class doubleBondsPredicate
+	class DoubleBondsPredicate
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(doubleBondsPredicate)
+				BALL_CREATE_NODEEP(DoubleBondsPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -251,11 +254,11 @@ namespace BALL
 
 	/** Predicate class for atoms bearing triple bonds.
 	 */
-	class tripleBondsPredicate
+	class TripleBondsPredicate
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(tripleBondsPredicate)
+				BALL_CREATE_NODEEP(TripleBondsPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -269,11 +272,11 @@ namespace BALL
 
 	/** Predicate class for atoms bearing aromatic bonds.
 	 */
-	class aromaticBondsPredicate
+	class AromaticBondsPredicate
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(aromaticBondsPredicate)
+				BALL_CREATE_NODEEP(AromaticBondsPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -283,11 +286,11 @@ namespace BALL
 
 	/** Predicate class for atoms bearing a certain number of bonds.
 	 */
-	class numberOfBondsPredicate
+	class NumberOfBondsPredicate
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(numberOfBondsPredicate)
+				BALL_CREATE_NODEEP(NumberOfBondsPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -297,6 +300,7 @@ namespace BALL
 
 	/** Predicate class for atoms being connected to a constellation defined
 			by an expression. Syntax:
+			\TEX{
 			\begin{tabular}{cl}
 				Bonds \\
 				{\tt -} & single \\
@@ -311,13 +315,14 @@ namespace BALL
 				Groups \\
 				{\tt ( )} & symbols enlosed by brackets denote groups \\
 			\end{tabular}
+			}
 
 	 */
-	class connectedToPredicate
+	class ConnectedToPredicate
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(connectedToPredicate)
+				BALL_CREATE_NODEEP(ConnectedToPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -325,17 +330,23 @@ namespace BALL
 				virtual bool operator () (const Atom& atom) const;
 			
 			private:
-				bool parse(const String& group, list<String>* subs) const;
-				bool find(const String& group, HashSet<Bond*>* found) const;
+				bool parse(const String& group, 
+						std::list< std::pair<String, String> >& subs) const;
+				bool bondOrderMatch(const String& bond_description, 
+						const Bond::Order order) const;
+				bool find(const String& group, const Atom& atom, HashSet<const Bond*>&
+						found) const;
+				bool findAndTest(const String& group, const Atom& atom,
+						HashSet<const Bond*>& found) const;
 		};
 
 	/** Predicate class for atoms being sp hybridized ...
 	 */
-	class spHybridizedPredicate
+	class SpHybridizedPredicate
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(spHybridizedPredicate)
+				BALL_CREATE_NODEEP(SpHybridizedPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -345,11 +356,11 @@ namespace BALL
 
 	/** Predicate class for atoms being sp2 hybridized
 	 */
-	class sp2HybridizedPredicate
+	class Sp2HybridizedPredicate
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(sp2HybridizedPredicate)
+				BALL_CREATE_NODEEP(Sp2HybridizedPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
@@ -359,11 +370,11 @@ namespace BALL
 
 	/** Predicate class for atoms being sp3 hybridized
 	 */
-	class sp3HybridizedPredicate
+	class Sp3HybridizedPredicate
 		:	public	ExpressionPredicate
 		{
 			public:
-				BALL_CREATE_NODEEP(sp3HybridizedPredicate)
+				BALL_CREATE_NODEEP(Sp3HybridizedPredicate)
 				/** Evaluate the predicate for the atom {\tt atom}
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
