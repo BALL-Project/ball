@@ -1,4 +1,4 @@
-// $Id: mesh.C,v 1.6.4.1 2002/08/16 15:33:37 anhi Exp $
+// $Id: mesh.C,v 1.6.4.2 2002/08/29 10:50:45 anhi Exp $
 
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 
@@ -54,7 +54,7 @@ namespace BALL
 		{
 			GeometricObject::clear();
 			ColorExtension::clear();
-			colorList.clear();
+	//		colorList.clear();
 		}
 
 		void Mesh::destroy()
@@ -62,7 +62,7 @@ namespace BALL
 		{ 
 			GeometricObject::destroy();
 			ColorExtension::destroy();
-			colorList.clear();
+//			colorList.clear();
 		}
 
 		void Mesh::set(const Mesh& mesh, bool deep)
