@@ -1,4 +1,4 @@
-// $Id: embeddable.C,v 1.3 2000/07/17 21:25:31 oliver Exp $
+// $Id: embeddable.C,v 1.4 2000/07/18 21:30:23 oliver Exp $
 
 #include <BALL/CONCEPT/embeddable.h>
 
@@ -6,13 +6,13 @@ using namespace std;
 
 namespace BALL
 {
-	Embeddable::Embeddable()
-		:	identifier_("<none>")
+	Embeddable::Embeddable(const String& identifier)
+		:	identifier_(identifier)
 	{
 	}
 	
-	Embeddable::Embeddable(const String& identifier)
-		:	identifier_(identifier)
+	Embeddable::Embeddable(const Embeddable& embeddable)
+		:	identifier_(embeddable.identifier_)
 	{
 	}
 	
