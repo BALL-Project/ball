@@ -1,14 +1,13 @@
-// $Id: control.C,v 1.7.4.2 2002/09/25 15:03:00 anhi Exp $
+// $Id: control.C,v 1.7.4.3 2002/10/27 20:31:17 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 
-using namespace std;
+using std::endl;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -31,9 +30,8 @@ Control::Control
 {
 	// appearance
 	setRootIsDecorated(TRUE);
-	setMultiSelection(TRUE);
 	setSorting(-1);
-
+	setSelectionMode(QListView::Extended);
 	addColumn("Name");
 	addColumn("Type");
 	setColumnWidth(0, 80);
@@ -48,7 +46,7 @@ Control::Control
 					SLOT(updateSelection()));
 
 	connect(this,
-					SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&, int)),
+				  SIGNAL(contextMenuRequested(QListViewItem*, const QPoint&, int)),
 					this,
 					SLOT(onContextMenu(QListViewItem*, const QPoint&, int)));
 
@@ -192,6 +190,7 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* item)
 		String entry = String("erase ") + getTypeName_(item).ascii();
 		insertContextMenuEntry(entry, this, SLOT(eraseGeometricObject()));
 	}
+
 	// This is used to provide the coloring for meshes...
 	if (RTTI::isKindOf<Mesh>(*composite))
 	{	
@@ -208,9 +207,7 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* item)
 
 }
 
-void Control::insertContextMenuEntry
-  (const String& name, const QObject* receiver, 
-	 const char* slot, int accel, int entry_ID)
+void Control::insertContextMenuEntry(const String& name, const QObject* receiver, const char* slot, int accel, int entry_ID)
 	throw()
 {
 	context_menu_.insertItem(name.c_str(), receiver, slot, accel, entry_ID);
@@ -230,7 +227,6 @@ void Control::invalidateSelection()
 void Control::updateSelection()
 {
 	filterSelection_(geometric_filter_);
-
 	sentSelection();
 }
 
@@ -507,9 +503,7 @@ bool Control::updateListViewItem_
 	if (attached_item == 0)
 	{
 		generateListViewItem_(item, composite);
-
 		attached_item = item;
-
 		tree_updated = true;
 	}
 
@@ -726,7 +720,6 @@ void Control::onContextMenu(QListViewItem* item,  const QPoint& point, int /* co
 
 	// get composite address
 	Composite* composite = getCompositeAddress_(item);
-
 	// create the context menu
 	if (composite != 0
 			&& item != 0)
