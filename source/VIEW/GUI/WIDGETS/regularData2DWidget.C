@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.6 2000/12/04 17:08:21 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.7 2000/12/04 20:53:40 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -97,16 +97,16 @@ void PixWid::mouseMoveEvent( QMouseEvent *e )
 {
   if (select_) // we first have to draw the current selection
   {
-    QPainter q(this);
+//     QPainter q(this);
     
-    q.setPen(QColor(white));
-    q.drawRect(beg_.x(), beg_.y(), beg_.x() - end_.x(), beg_.y() - end_.y());
+//     q.setPen(QColor(white));
+//     q.drawRect(beg_.x(), beg_.y(), beg_.x() - end_.x(), beg_.y() - end_.y());
   };
 
   emit (mouseMoved(e->x(), e->y()));
 }
 
-RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double max, QWidget *parent) : QScrollView(parent), ModularWidget("RegularData2DWidget"), lengthx(lx_), lengthy(ly_), min_(min), max_(max), showMousePos_(true), posLabel_(0), soffsetf1_(0), soffsetf2_(0), swidthf1_(0), swidthf2_(0), bfreqf1_(0), bfreqf2_(0), pm(0), legendMap(0), bufferMap(0), act_lower_left_x_(0), act_lower_left_y_(0), zoom_x_(1), zoom_y_(1), cont_(0)
+RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double max, QWidget *parent) : QScrollView(parent), ModularWidget("RegularData2DWidget"), pm_(0), legend_map_(0), buffer_map_(0), lengthx_(lx_), lengthy_(ly_), min_(min), max_(max), showMousePos_(true), posLabel_(0), soffsetf1_(0), soffsetf2_(0), swidthf1_(0), swidthf2_(0), bfreqf1_(0), bfreqf2_(0), act_lower_left_x_(0), act_lower_left_y_(0), zoom_x_(1), zoom_y_(1), cont_(0), mvover_(0), ind_side_(0), ind_updown_(0)
 {
   createLegend( 20, 40 );
 
@@ -119,10 +119,11 @@ RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double ma
   ModularWidget::registerWidget(this);
 
   // create the context menu
-  men_ = new QPopupMenu(this);
+  men_ = new QPopupm_enu(this);
   men_->insertItem("Create Baseline");
   men_->insertItem("Zoom out", this, SLOT(slotZoomOut()));
-  men_->insertItem("Contourplot", this, SLOT(plotContour()));
+  men_->insertItem("Contourplot", this, SLOT(createContour()));
+  men_->insertItem("Construct overlay", this, SLOT(plotOverlay()));
 }
 
 RegularData2DWidget::RegularData2DWidget(const RegularData2DWidget& widget) : QScrollView(), ModularWidget(widget)
@@ -153,6 +154,24 @@ void RegularData2DWidget::onNotify(Message *message)
   reactToMessages_(message);
 }
 
+bool RegularData2DWidget::isVisibleAs(double x, double y, pair<Position, Position> res)
+{
+  // we need the information stored in xvis & yvis, step_x_ & step_y_
+  if ((x > xvis_low_) && (x < xvis_high_) && (y > yvis_low_) && (y < yvis_high_))
+  {
+    spec_->getNearestPosition(x, y, res); // this would be the position with a zoom of 1
+
+    res.first  -= act_lower_left_x_;      // move the origin
+    res.second -= act_lower_left_y_;
+    
+    res.first  *= zoom_x_;
+    res.second *= zoom_y_;
+
+    return true;
+  }
+  return false;
+}
+
 bool RegularData2DWidget::reactToMessages_(Message* message)
 {
   bool update = false;
@@ -167,25 +186,36 @@ bool RegularData2DWidget::reactToMessages_(Message* message)
       spec_ = (RegularData2D *)composite_message->getComposite();
       min_ = spec_->getLowerBound();
       max_ = spec_->getUpperBound();
-      lengthx = spec_->getXSize();
-      lengthy = spec_->getYSize();
+      lengthx_ = spec_->getXSize();
+      lengthy_ = spec_->getYSize();
 
-      if (pm)
+      if (pm_)
       {
-	delete (pm);
-	pm = 0;
+	delete (pm_);
+	pm_ = 0;
       };
-      if (pixWid)
+      if (pix_wid_)
       {
-	delete (pixWid);
-	pixWid = 0;
+	delete (pix_wid_);
+	pix_wid_ = 0;
       };
 
-      lengthx = spec_->getXSize();
-      lengthy = spec_->getYSize();
+      lengthx_ = spec_->getXSize();
+      lengthy_ = spec_->getYSize();
       
-      fullLengthx = width();
-      fullLengthy = height();
+      full_length_x_ = width();
+      full_length_y_ = height();
+
+      pair<float, float> dum;
+
+      spec_->getConvertedPosition(0, 0, dum);
+      xvis_low_ = dum.first;
+      yvis_low_ = dum.second;
+      spec_->getConvertedPosition(lengthx_, lengthy_, dum);
+      xvis_high_ = dum.first;
+      yvis_high_ = dum.second;
+
+      createPlot();
 
       update = true;
     }
@@ -202,15 +232,15 @@ void RegularData2DWidget::createLegend( int w, int h )
   QPainter paint;
   QColor pCol;
 
-  if ( legendMap )
-    delete ( legendMap );
-  if ( bufferMap )
-    delete ( bufferMap );
+  if ( legend_map_ )
+    delete ( legend_map_ );
+  if ( buffer_map_ )
+    delete ( buffer_map_ );
 
-  legendMap = new QPixmap( w, h );
-  bufferMap = new QPixmap( w + 4, h + 4 ); // save Background which is about to be destroyed by legend
-  legendMap->fill();
-  paint.begin( legendMap );
+  legend_map_ = new QPixmap( w, h );
+  buffer_map_ = new QPixmap( w + 4, h + 4 ); // save Background which is about to be destroyed by legend
+  legend_map_->fill();
+  paint.begin( legend_map_ );
 
   // Transformation: (0, 0) -> lower lefthand corner
   QWMatrix m(1, 0, 0, -1, 0, h);
@@ -231,8 +261,6 @@ void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x
 {
   if (nx && ny && spec_)
   {
-    cout << "HALLO! " << x1 << " " << y1 << " " << x2 << " " << y2 << endl;
-
     QPainter paint;
     QColor pCol;
     pair<Position, Position> pos_dummy;
@@ -242,28 +270,20 @@ void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x
     double actx, acty;
     Size numpx_, numpy_;
 
-    if (pm)
-      delete (pm);
-    if (pixWid)
-      delete (pixWid);
+    if (pm_)
+      delete (pm_);
+    if (pix_wid_)
+      delete (pix_wid_);
 
-    pixWid = new PixWid( viewport() );
-    connect(pixWid, SIGNAL(mouseMoved(Position, Position)), this, SLOT(NewMousePos(Position,Position)));
-    connect(pixWid, SIGNAL(context(QMouseEvent*)), this, SLOT(mousePressEvent(QMouseEvent*)));
-    connect(pixWid, SIGNAL(selected(QPoint, QPoint)), this, SLOT(Selected(QPoint, QPoint)));
-    pixWid->resize(nx, ny);
+    pix_wid_ = new PixWid( viewport() );
+    connect(pix_wid_, SIGNAL(mouseMoved(Position, Position)), this, SLOT(NewMousePos(Position,Position)));
+    connect(pix_wid_, SIGNAL(context(QMouseEvent*)), this, SLOT(mousePressEvent(QMouseEvent*)));
+    connect(pix_wid_, SIGNAL(selected(QPoint, QPoint)), this, SLOT(Selected(QPoint, QPoint)));
+    pix_wid_->resize(nx, ny);
 
-    pm = new QPixmap(nx, ny);
-    pm->fill();
+    pm_ = new QPixmap(nx, ny);
+    pm_->fill();
 
-    fullLengthx = nx;
-    fullLengthy = ny;
-
-    lengthx = (Position) spec_->getXSize();
-    lengthy = (Position) spec_->getYSize();
-    
-    numpx_ = (Position) (lengthx * fabs(x2 - x1) / fabs(spec_->getXUpper() - spec_->getXLower()));
-    numpy_ = (Position) (lengthy * fabs(y2 - y1) / fabs(spec_->getYUpper() - spec_->getYLower()));
 
     stepx = (x2 - x1) / nx;
     stepy = (y2 - y1) / ny;
@@ -271,13 +291,7 @@ void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x
     actx = x1;
     acty = y1;
 
-    spec_->getNearestPosition(actx, acty, pos_dummy);
-    act_lower_left_x_ = pos_dummy.first;
-    act_lower_left_y_ = pos_dummy.second;
-    zoom_x_ = (double) nx / numpx_;
-    zoom_y_ = (double) ny / numpy_;
-
-    paint.begin( pm );
+    paint.begin( pm_ );
     
     paint.setViewport(0, 0, nx, ny);
     
@@ -293,8 +307,8 @@ void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x
 	    };
 	};
     paint.end();
-    addChild( pixWid );
-    pixWid->show();
+    addChild( pix_wid_ );
+    pix_wid_->show();
     QScrollView::resizeEvent(new QResizeEvent(size(), size()));
   };
 }
@@ -307,10 +321,10 @@ void RegularData2DWidget::addLorentzian( double xpos, double ypos, double amp, i
 {
   Position x, y;
   
-  for (y=0; y<lengthy; y++) {
+  for (y=0; y<lengthy_; y++) {
     if (spec_) {
-      for (x=0; x<lengthx; x++) {
-	(*spec_)[x + lengthx*y] += amp/(1 + pow(((x - xpos)/xwidth), 2) + pow(((y - ypos)/ywidth), 2));
+      for (x=0; x<lengthx_; x++) {
+	(*spec_)[x + lengthx_*y] += amp/(1 + pow(((x - xpos)/xwidth), 2) + pow(((y - ypos)/ywidth), 2));
       };
     };
   };
@@ -331,8 +345,8 @@ void RegularData2DWidget::addLorentzian( double xpos, double ypos, double amp, i
 //   min_ = spectrum_->parsf1_->parameter( "YMIN_p" );
 //   max_ = spectrum_->parsf1_->parameter( "YMAX_p" );
 
-//   lengthx = (int) spectrum_->parsf2_->parameter( "SI" );
-//   lengthy = (int) spectrum_->parsf1_->parameter( "SI" );
+//   lengthx_ = (int) spectrum_->parsf2_->parameter( "SI" );
+//   lengthy_ = (int) spectrum_->parsf1_->parameter( "SI" );
 
 //   soffsetf1_ = spectrum_->parsf1_->parameter( "OFFSET" );
 //   soffsetf2_ = spectrum_->parsf2_->parameter( "OFFSET" );
@@ -343,12 +357,58 @@ void RegularData2DWidget::addLorentzian( double xpos, double ypos, double amp, i
 //   bfreqf1_ = spectrum_->parsf1_->parameter( "SF" );
 //   bfreqf2_ = spectrum_->parsf2_->parameter( "SF" );
 
-//   spectrum_->SetShiftRange(soffsetf1_, soffsetf2_, swidthf1_, swidthf2_, bfreqf1_, bfreqf2_, lengthy, lengthx);
+//   spectrum_->SetShiftRange(soffsetf1_, soffsetf2_, swidthf1_, swidthf2_, bfreqf1_, bfreqf2_, lengthy_, lengthx_);
   
 //   // TEST!!!
 //   //  spec_->createGroundState();
 //   //cout << "gr: " << spec_->getGroundState() << "sigma: " << spec_->getSigmaGroundState() << endl;
 // }
+
+void RegularData2DWidget::plotOverlay()
+{
+  mvover_ = new DlgMoveOverlay(this, "Overlay");
+
+  connect(mvover_, SIGNAL(sigMove(int)), this, SLOT(slotOverlayMove(int)));
+  mvover_->show();
+  createPlot();
+
+  // This should be replaced by setting the variables via a dialog
+  cont_num_ = 5;
+
+  spec_->createGroundState();
+  cont_start_ = spec_->getGroundState() + 0.5*spec_->getSigmaGroundState();
+  //cont_start_   = spec_->getUpperBound() / 2;
+  cont_end_   = spec_->getUpperBound();
+  // up to here...
+
+  cont_ = new Contour(cont_num_, cont_start_, cont_end_);
+  cont_->apply(*spec_);
+
+  plotContour();
+}  
+
+void RegularData2DWidget::slotOverlayMove(int i)
+{
+  switch(i) {
+    case 1 : // move to the left
+      ind_side_ += 1;
+      break;
+    case 2 :  // move to the right
+      ind_side_ -= 1;
+      break;
+    case 3: // move up
+      ind_updown_ += 1;
+      break;
+    case 4: // move down
+      ind_updown_ -= 1;
+      break;
+  };
+
+  cout << i << " " <<  ind_side_ << " " << ind_updown_ << endl;
+
+  createPlot();
+  plotContour();
+}
 
 void RegularData2DWidget::createPlot()
 {
@@ -357,10 +417,10 @@ void RegularData2DWidget::createPlot()
   QColor pCol;
 
   // cleanup needed?
-  if (pm)
-    delete (pm); 
-  if (pixWid)
-    delete (pixWid);
+  if (pm_)
+    delete (pm_); 
+  if (pix_wid_)
+    delete (pix_wid_);
 
   spec_->createGroundState();
   min_ = spec_->getGroundState() + spec_->getSigmaGroundState();
@@ -370,38 +430,38 @@ void RegularData2DWidget::createPlot()
   zoom_x_ = 1;
   zoom_y_ = 1;
 
-  fullLengthx = lengthx;
-  fullLengthy = lengthy;
+  full_length_x_ = lengthx_;
+  full_length_y_ = lengthy_;
 
-  pixWid = new PixWid( viewport() );
-  connect(pixWid, SIGNAL(mouseMoved(Position,Position)), this, SLOT(NewMousePos(Position,Position)));
-  connect(pixWid, SIGNAL(context(QMouseEvent*)), this, SLOT(mousePressEvent(QMouseEvent*)));
-  connect(pixWid, SIGNAL(selected(QPoint, QPoint)), this, SLOT(Selected(QPoint, QPoint)));
-  pixWid->resize( fullLengthx, fullLengthy );
+  pix_wid_ = new PixWid( viewport() );
+  connect(pix_wid_, SIGNAL(mouseMoved(Position,Position)), this, SLOT(NewMousePos(Position,Position)));
+  connect(pix_wid_, SIGNAL(context(QMouseEvent*)), this, SLOT(mousePressEvent(QMouseEvent*)));
+  connect(pix_wid_, SIGNAL(selected(QPoint, QPoint)), this, SLOT(Selected(QPoint, QPoint)));
+  pix_wid_->resize( full_length_x_, full_length_y_ );
 
   // Draw the points
-  pm = new QPixmap( fullLengthx, fullLengthy );
-  pm->fill();
-  paint.begin( pm );
+  pm_ = new QPixmap( full_length_x_, full_length_y_ );
+  pm_->fill();
+  paint.begin( pm_ );
 
-  paint.setViewport(0, 0, fullLengthx, fullLengthy);
+  paint.setViewport(0, 0, full_length_x_, full_length_y_);
 
   // Transformation: (0,0) -> lower left corner
-  QWMatrix m(1, 0, 0, -1, 0, fullLengthy);
+  QWMatrix m(1, 0, 0, -1, 0, full_length_y_);
   paint.setWorldMatrix( m );
 
-  for (y=0; y<fullLengthy; y++) {
-    for (x=0; x<fullLengthx; x++) {
-      pCol = con2rgb((*spec_)[x + y*fullLengthx], min_, max_);
+  for (y=0; y<full_length_y_; y++) {
+    for (x=0; x<full_length_x_; x++) {
+      pCol = con2rgb((*spec_)[x + y*full_length_x_], min_, max_);
       paint.setPen( pCol );
       paint.drawPoint( x, y );
     };
   };
 
   paint.end();
-  addChild( pixWid );
+  addChild( pix_wid_ );
   // Hack to enable display of scrollbars etc...
-  pixWid->show();
+  pix_wid_->show();
   QScrollView::resizeEvent(new  QResizeEvent( size(), size() ));
 }
 
@@ -409,58 +469,30 @@ void RegularData2DWidget::plotContour()
 {
   QPainter paint;
 
-  // This should be replaced by setting the variables via a dialog
-  cont_num_ = 5;
-
-  spec_->createGroundState();
-  cont_start_ = spec_->getGroundState() + 0.5 * spec_->getSigmaGroundState();
-  cont_end_   = spec_->getUpperBound();
-  // up to here...
-
-  cont_ = new Contour(cont_num_, cont_start_, cont_end_);
-  cont_->apply(*spec_);
-
   // now draw the data.
   ContourLine l(0);
   pair<float, float> p, p2;
 
-  if (pm)
-    delete pm;
-  if (pixWid)
-    delete pixWid;
+  paint.begin( pm_ );
 
-  act_lower_left_x_ = 0;
-  act_lower_left_y_ = 0;
-  zoom_x_ = 1;
-  zoom_y_ = 1;
-
-  fullLengthx = lengthx;
-  fullLengthy = lengthy;
-
-  pixWid = new PixWid( viewport() );
-  connect(pixWid, SIGNAL(mouseMoved(Position,Position)), this, SLOT(NewMousePos(Position,Position)));
-  connect(pixWid, SIGNAL(context(QMouseEvent*)), this, SLOT(mousePressEvent(QMouseEvent*)));
-  connect(pixWid, SIGNAL(selected(QPoint, QPoint)), this, SLOT(Selected(QPoint, QPoint)));
-  pixWid->resize( fullLengthx, fullLengthy );
-
-  pm = new QPixmap( fullLengthx, fullLengthy );
-  pm->fill();
-  paint.begin( pm );
-
-  paint.setViewport(0, 0, fullLengthx, fullLengthy);
+  paint.setViewport(0, 0, full_length_x_, full_length_y_);
 
   // Transformation: (0,0) -> lower left corner
-  QWMatrix m(1, 0, 0, -1, 0, fullLengthy);
+  QWMatrix m(1, 0, 0, -1, 0, full_length_y_);
   paint.setWorldMatrix( m );
 
   Position i=0;
 
+  cont_->resetCounter();
+
   // naive algorithm: draw *every part* of the line... should be changed asap.
   while(cont_->getNextContourLine(l))
   {
+    l.resetCounter();
+
     // set it's colour
-    QColor pcol = con2rgb(cont_start_ + (cont_end_ - cont_start_) / cont_num_ * i, min_, max_);
-    paint.setPen( pcol );
+    QColor pcol = con2rgb(cont_start_ + (cont_end_ - cont_start_) / cont_num_ * i, cont_start_, max_);
+    paint.setPen( red );
     ++i;
 
     // draw this ContourLine.
@@ -470,60 +502,73 @@ void RegularData2DWidget::plotContour()
       {
 	// draw a line from p to p2
 	pair<Position, Position> qp1, qp2;
-	
+
+	/// TEST!
+	isVisibleAs(p.first, p.second, qp1);
+	cout << qp1.first << " " << qp1.second << endl;
+
 	spec_->getNearestPosition(p.first, p.second, qp1);
 	spec_->getNearestPosition(p2.first, p2.second, qp2);
-
-	paint.drawLine(qp1.first, qp1.second, qp2.first, qp2.second);
+	cout << qp1.first << " " << qp1.second << endl;
+	//if ((isVisibleAs(p.first, p.second, qp1)) && (isVisibleAs(p2.first, p2.second, qp2)))
+	{
+	  paint.drawLine(qp1.first+ind_side_, qp1.second+ind_updown_, qp2.first+ind_side_, qp2.second+ind_updown_);
+	};
       };
     };
   };
+
+  paint.end();
+  addChild( pix_wid_ );
+  // Hack to enable display of scrollbars etc...
+  pix_wid_->show();
+  QScrollView::resizeEvent(new  QResizeEvent( size()-QSize(1,0), size() ));
 }
 
 void RegularData2DWidget::drawContents( QPainter *paint, int clipx, int clipy, int clipw, int cliph )
 {
-  if (pm && (pm->size() != QSize( 0, 0 ))) { // do we have something to paint?
+  if (pm_ && (pm_->size() != QSize( 0, 0 ))) { // do we have something to paint?
     paint->end();
-    paint->begin( pixWid );
-    paint->drawPixmap(clipx, clipy, *pm, clipx, clipy, clipw, cliph);
+    paint->begin( pix_wid_ );
+    paint->drawPixmap(clipx, clipy, *pm_, clipx, clipy, clipw, cliph);
 
     // Zeichnen der Bildlegende.
-    if (legendMap) {
-      bitBlt( pixWid, legendLastX, legendLastY, bufferMap );
+    if (legend_map_) {
+      bitBlt( pix_wid_, legendLastX, legendLastY, buffer_map_ );
 
-      legendLastX = contentsX() + visibleWidth() - legendMap->width() - 12;
+      legendLastX = contentsX() + visibleWidth() - legend_map_->width() - 12;
       legendLastY = contentsY() + 8;
       
-      bitBlt( bufferMap, 0, 0, pixWid, legendLastX, legendLastY );
+      bitBlt( buffer_map_, 0, 0, pix_wid_, legendLastX, legendLastY );
       
       paint->setPen( QColor( black ) );
-      paint->drawRect( legendLastX, legendLastY, legendMap->width() + 4, legendMap->height() + 4 );
+      paint->drawRect( legendLastX, legendLastY, legend_map_->width() + 4, legend_map_->height() + 4 );
       paint->setPen( QColor( white ) );
-      paint->drawRect( legendLastX + 1, legendLastY + 1, legendMap->width() + 2, legendMap->height() + 2 );
-      paint->drawPixmap( legendLastX + 2, legendLastY + 2, *legendMap );
+      paint->drawRect( legendLastX + 1, legendLastY + 1, legend_map_->width() + 2, legend_map_->height() + 2 );
+      paint->drawPixmap( legendLastX + 2, legendLastY + 2, *legend_map_ );
     };
   };
 }
 
 void RegularData2DWidget::paintEvent( QPaintEvent *e )
 {
-  if (pm && (pm->size() != QSize( 0, 0 ))) { // is there something to paint?
-    QPainter paint( pixWid );
+  if (pm_ && (pm_->size() != QSize( 0, 0 ))) { // is there something to paint?
+    QPainter paint( pix_wid_ );
     paint.setClipRect( contentsX(), contentsY(), contentsWidth(), contentsHeight() );
-    paint.drawPixmap( contentsX(), contentsY(), *pm, contentsX(), contentsY(), contentsWidth(), contentsHeight() );
+    paint.drawPixmap( contentsX(), contentsY(), *pm_, contentsX(), contentsY(), contentsWidth(), contentsHeight() );
 
     // draw the legend.
-    if (legendMap) {
-      legendLastX = contentsX() + visibleWidth() - legendMap->width() - 12;
+    if (legend_map_) {
+      legendLastX = contentsX() + visibleWidth() - legend_map_->width() - 12;
       legendLastY = contentsY() + 8;
 
-      bitBlt( bufferMap, 0, 0, pixWid, contentsX() + visibleWidth() - legendMap->width() - 12, contentsY() + 8, legendMap->width() + 4, legendMap->height() + 4 );
+      bitBlt( buffer_map_, 0, 0, pix_wid_, contentsX() + visibleWidth() - legend_map_->width() - 12, contentsY() + 8, legend_map_->width() + 4, legend_map_->height() + 4 );
 
       paint.setPen( QColor( black ) );
-      paint.drawRect( legendLastX, legendLastY, legendMap->width() + 4, legendMap->height() + 4 );
+      paint.drawRect( legendLastX, legendLastY, legend_map_->width() + 4, legend_map_->height() + 4 );
       paint.setPen( QColor( white ) );
-      paint.drawRect( legendLastX + 1, legendLastY + 1, legendMap->width() + 2, legendMap->height() + 2 );
-      paint.drawPixmap( legendLastX + 2, legendLastY + 2, *legendMap );
+      paint.drawRect( legendLastX + 1, legendLastY + 1, legend_map_->width() + 2, legend_map_->height() + 2 );
+      paint.drawPixmap( legendLastX + 2, legendLastY + 2, *legend_map_ );
     };
   };
 }
@@ -533,13 +578,37 @@ void RegularData2DWidget::Selected(QPoint beg, QPoint end)
   // The user has selected a rectangle in the data -> zoom into it
   // first: convert the position into position in the data
   pair<float, float> dummy, dummy2;
+  pair<Position, Position> pos_dummy;
+  double numpx_, numpy_;
 
   spec_->getConvertedPosition(beg.x() / zoom_x_ + act_lower_left_x_, beg.y() / zoom_y_ + act_lower_left_y_, dummy);
   spec_->getConvertedPosition(end.x() / zoom_x_ + act_lower_left_x_, end.y() / zoom_y_ + act_lower_left_y_, dummy2);
   
   cout << dummy.first << " " << dummy.second << " " << dummy2.first << " " << dummy2.second << endl;
 
+  xvis_low_  = dummy.first;
+  xvis_high_ = dummy2.first;
+  yvis_low_  = dummy.second;
+  yvis_high_ = dummy2.second;
+
+  spec_->getNearestPosition(xvis_low_, yvis_low_, pos_dummy);
+  act_lower_left_x_ = pos_dummy.first;
+  act_lower_left_y_ = pos_dummy.second;
+
+  lengthx_ = (Position) spec_->getXSize();
+  lengthy_ = (Position) spec_->getYSize();
+
+  numpx_ = (Position) (lengthx_ * fabs(xvis_high_ - xvis_low_) / fabs(spec_->getXUpper() - spec_->getXLower()));
+  numpy_ = (Position) (lengthy_ * fabs(yvis_high_ - yvis_low_) / fabs(spec_->getYUpper() - spec_->getYLower()));
+
+  full_length_x_ = width();
+  full_length_y_ = height();
+
+  zoom_x_ = (double) width() / numpx_;
+  zoom_y_ = (double) height() / numpy_;
+
   scale(width(), height(), dummy.first, dummy.second, dummy2.first, dummy2.second);
+  plotContour();
 }
 
 void RegularData2DWidget::slotZoomOut()
@@ -570,16 +639,55 @@ void RegularData2DWidget::leaveEvent(QEvent *)
   //  showMousePos_ = false;
 }
 
+void RegularData2DWidget::createContour()
+{
+  if (pm_)
+    delete pm_;
+  if (pix_wid_)
+    delete pix_wid_;
+
+  act_lower_left_x_ = 0;
+  act_lower_left_y_ = 0;
+  zoom_x_ = 1;
+  zoom_y_ = 1;
+
+  full_length_x_ = lengthx_;
+  full_length_y_ = lengthy_;
+
+  pix_wid_ = new PixWid( viewport() );
+  connect(pix_wid_, SIGNAL(mouseMoved(Position,Position)), this, SLOT(NewMousePos(Position,Position)));
+  connect(pix_wid_, SIGNAL(context(QMouseEvent*)), this, SLOT(mousePressEvent(QMouseEvent*)));
+  connect(pix_wid_, SIGNAL(selected(QPoint, QPoint)), this, SLOT(Selected(QPoint, QPoint)));
+  pix_wid_->resize( full_length_x_, full_length_y_ );
+
+  pm_ = new QPixmap( full_length_x_, full_length_y_ );
+  pm_->fill();
+
+  // This should be replaced by setting the variables via a dialog
+  cont_num_ = 5;
+
+  spec_->createGroundState();
+  cont_start_ = spec_->getGroundState() + 0.5*spec_->getSigmaGroundState();
+  //  cont_start_   = spec_->getUpperBound() / 2;
+  cont_end_   = spec_->getUpperBound();
+  // up to here...
+
+  cont_ = new Contour(cont_num_, cont_start_, cont_end_);
+  cont_->apply(*spec_);
+
+  plotContour();
+}
+
 void RegularData2DWidget::NewMousePos( Position x, Position y )
 {
-  y = fullLengthy - y;
-  x = fullLengthx - x; // is this always the case???
+  y = full_length_y_ - y;
+  x = full_length_x_ - x; // is this always the case???
   
   x = x/zoom_x_ + act_lower_left_x_;
   y = y/zoom_y_ + act_lower_left_y_;
     
   if (showMousePos_) {
-    if (MainControl::getMainControl( this )->statusBar() && fullLengthx && fullLengthy) {
+    if (MainControl::getMainControl( this )->statusBar() && full_length_x_ && full_length_y_) {
       if (posLabel_)
 	{
 	  MainControl::getMainControl( this )->statusBar()->removeWidget( posLabel_ );
@@ -599,12 +707,12 @@ void RegularData2DWidget::NewMousePos( Position x, Position y )
       message += "y: ";
       message += dummy.setNum( numDum2.second, 'e', 5 );
       message += "z: ";
-      if (spec_ && (y < fullLengthy)) {
-	numDum = (*spec_)[x + fullLengthx * y];
+      if (spec_ && (y < full_length_y_)) {
+	numDum = (*spec_)[x + full_length_x_ * y];
       };
       message += dummy.setNum( numDum, 'e', 5 );
       posLabel_ = new QLabel( message, MainControl::getMainControl(this)->statusBar() );
-      MainControl::getMainControl(this)->statusBar()->addWidget(posLabel_, 0);
+      MainControl::getMainControl(this)->statusBar()->addWidget( posLabel_ );
       posLabel_->show();
     };
   };
