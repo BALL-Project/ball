@@ -145,7 +145,7 @@ namespace BALL
 		int ServerPreferences::getPort()
 			throw()
 		{
-			return String(port_->text()).toInt();
+			return String(port_->text().latin1()).toInt();
 		}
 		
 		bool ServerPreferences::getServerStatus()
