@@ -63,22 +63,32 @@
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			CharacterSet="2"
-			ManagedExtensions="TRUE">
+			ManagedExtensions="TRUE"
+			WholeProgramOptimization="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
-				InlineFunctionExpansion="1"
-				PreprocessorDefinitions="WIN32;NDEBUG"
-				MinimalRebuild="FALSE"
-				WarningLevel="3"/>
+				Optimization="0"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG"
+				MinimalRebuild="TRUE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="1"
+				RuntimeTypeInfo="TRUE"
+				WarningLevel="0"
+				Detect64BitPortabilityProblems="TRUE"
+				DebugInformationFormat="3"
+				CompileAsManaged="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt306.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libmolview.lib libview.lib libball.lib"
 				OutputFile="$(OutDir)/molview.exe"
-				LinkIncremental="1"
+				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
-				GenerateDebugInformation="TRUE"/>
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(ProjectDir)..\..\..\lib\&quot;"
+				GenerateDebugInformation="TRUE"
+				TerminalServerAware="1"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -108,11 +118,25 @@
 						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
 						CompileAs="2"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
+						CompileAs="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAboutData.C">
 				<FileConfiguration
 					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
+						CompileAs="2"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
@@ -128,6 +152,13 @@
 						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
 						CompileAs="2"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
+						CompileAs="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAmberMinimizationData.C">
@@ -138,11 +169,25 @@
 						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
 						CompileAs="2"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
+						CompileAs="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\icons.C">
 				<FileConfiguration
 					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
+						CompileAs="2"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
@@ -160,11 +205,27 @@
 						CompileAs="2"
 						ForcedIncludeFiles=""/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
+						PreprocessorDefinitions="QT_DLL"
+						CompileAs="2"
+						ForcedIncludeFiles=""/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\mainframe.C">
 				<FileConfiguration
 					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
+						CompileAs="2"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalIncludeDirectories="&quot;..\Packages\onc rpc&quot;;..\BALL\include\WIN;..\BALL\include;..\Packages\regex-0.12"
@@ -186,11 +247,29 @@
 "
 						Outputs="$(InputDir)$(InputName)_moc.C"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running MOC on $(InputFileName)"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+						Outputs="$(InputDir)$(InputName)_moc.C"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAboutData.h">
 				<FileConfiguration
 					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running MOC on $(InputFileName)"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+						Outputs="$(InputDir)$(InputName)_moc.C"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running MOC on $(InputFileName)"
@@ -210,11 +289,29 @@
 "
 						Outputs="$(InputDir)$(InputName)_moc.C"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running MOC on $(InputFileName)"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+						Outputs="$(InputDir)$(InputName)_moc.C"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAmberMinimizationData.h">
 				<FileConfiguration
 					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running MOC on $(InputFileName)"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+						Outputs="$(InputDir)$(InputName)_moc.C"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running MOC on $(InputFileName)"
@@ -237,6 +334,15 @@
 "
 						Outputs="$(InputDir)$(InputName)_moc.C"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running MOC on $(InputFileName)"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+						Outputs="$(InputDir)$(InputName)_moc.C"/>
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter
@@ -250,11 +356,23 @@
 						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAbout_moc.C">
 				<FileConfiguration
 					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						CompileAs="2"/>
@@ -268,6 +386,12 @@
 						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\DIALOGS\DlgAmberMinimization_moc.C">
@@ -277,11 +401,23 @@
 						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\APPLICATIONS\MOLVIEW\mainframe_moc.C">
 				<FileConfiguration
 					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						CompileAs="2"/>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.41 2002/12/12 09:27:23 oliver Exp $
+// $Id: file.h,v 1.42 2002/12/16 17:15:33 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -20,6 +20,15 @@
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #	include <BALL/SYSTEM/fileSystem.h>
+#endif
+
+#ifdef BALL_COMPILER_MSVC
+#	define S_ISREG _S_ISREG
+#	define S_ISDIR _S_ISDIR
+#	define S_ISCHR _S_ISCHR
+#	define S_ISBLK _S_ISBLK
+#	define S_ISFIFO _S_ISFIFO
+#	define access _access
 #endif
 
 #include <iostream>

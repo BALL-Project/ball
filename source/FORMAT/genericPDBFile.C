@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.C,v 1.20 2002/12/13 12:44:15 anker Exp $
+// $Id: genericPDBFile.C,v 1.21 2002/12/16 17:15:33 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -15,7 +15,11 @@ namespace BALL
 {
 
 
-	extern "C" int GenericPDBFileRecordNameComparator_
+	extern "C" int 
+#ifdef BALL_COMPILER_MSVC
+	__cdecl
+#endif
+	GenericPDBFileRecordNameComparator_
 		(const void* a_ptr, const void* b_ptr)
 	{
 		return memcmp

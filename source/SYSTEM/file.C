@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.36 2002/12/16 09:08:29 oliver Exp $
+// $Id: file.C,v 1.37 2002/12/16 17:15:33 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -18,14 +18,6 @@ using std::endl;
 // (in order to avoid infinite recursion)
 #define MAX_SUBSTITUTIONS 10
 
-#ifdef BALL_COMPILER_MSVC
-#	define S_ISREG _S_ISREG
-#	define S_ISDIR _S_ISDIR
-#	define S_ISCHR _S_ISCHR
-#	define S_ISBLK _S_ISBLK
-#	define S_ISFIFO _S_ISFIFO
-#	define access _access
-#endif
 
 namespace BALL 
 {

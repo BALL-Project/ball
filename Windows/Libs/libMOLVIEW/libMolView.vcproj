@@ -52,34 +52,35 @@
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
-				InlineFunctionExpansion="1"
+				GlobalOptimizations="FALSE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBMOLVIEW_EXPORTS"
+				OptimizeForWindowsApplication="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;LIBMOLVIEW_EXPORTS;_WINDOWS;UNICODE;QT_THREAD_SUPPORT;QT_DLL;NO_DEBUG"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="3"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="1"
+				BufferSecurityCheck="FALSE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				WarningLevel="0"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="0"
+				CompileAs="2"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/libMolView.dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				GenerateDebugInformation="TRUE"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/libMolView.lib"
-				TargetMachine="1"/>
+				Name="VCLibrarianTool"
+				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -92,8 +93,6 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
 		</Configuration>
 	</Configurations>
 	<Files>
@@ -422,7 +421,17 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -430,6 +439,15 @@
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h">
 						<FileConfiguration
 							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
@@ -449,11 +467,29 @@
 "
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h">
 						<FileConfiguration
 							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
@@ -473,11 +509,29 @@
 "
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h">
 						<FileConfiguration
 							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
@@ -497,6 +551,15 @@
 "
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\labelPropertiesData.h">
@@ -509,11 +572,29 @@
 "
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\molecularFileDialog.h">
 						<FileConfiguration
 							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
@@ -584,11 +665,29 @@
 "
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\WIDGETS\molecularProperties.h">
 						<FileConfiguration
 							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
@@ -651,11 +750,31 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\
 "
 						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h"/>
 				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h"/>
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\displayProperties.ui">
 				<FileConfiguration
 					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h&quot; &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\displayPropertiesData.C&quot; -impl &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData.h"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"

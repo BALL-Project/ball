@@ -35,7 +35,16 @@ del *.exe"
 			ConfigurationType="0">
 			<Tool
 				Name="VCNMakeTool"
-				BuildCommandLine="nmake"/>
+				BuildCommandLine="cd ..\..\source\TEST
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot; BALL_PATH=&quot;$(ProjectDir)..\BALL&quot;"
+				ReBuildCommandLine="cd ..\..\source\TEST
+del *.obj
+del *.exe
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
+				CleanCommandLine="cd ..\..\source\TEST
+del *.obj
+del *.exe"
+				Output="Test.log"/>
 		</Configuration>
 	</Configurations>
 	<Files>
@@ -44,12 +53,21 @@ del *.exe"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
 				RelativePath="Make.lst">
+				<FileConfiguration
+					Name="Release|Win32">
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="Makefile.win">
+				<FileConfiguration
+					Name="Release|Win32">
+				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="vsvars32.bat">
+				<FileConfiguration
+					Name="Release|Win32">
+				</FileConfiguration>
 			</File>
 		</Filter>
 		<Filter

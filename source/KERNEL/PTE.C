@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE.C,v 1.13 2002/02/27 12:21:21 sturm Exp $
+// $Id: PTE.C,v 1.14 2002/12/16 17:15:33 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -16,7 +16,11 @@ using namespace std;
 namespace BALL 
 {
 
-	extern "C" int PTEcompare_(const void* a_ptr, const void* b_ptr)
+	extern "C" int 
+#ifdef BALL_COMPILER_MSVC
+	__cdecl
+#endif
+	PTEcompare_(const void* a_ptr, const void* b_ptr)
 		throw()
 	{
 		return strcmp(((PTE_::SymbolToElement*)a_ptr)->symbol,

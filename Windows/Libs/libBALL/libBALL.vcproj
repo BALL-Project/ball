@@ -54,34 +54,36 @@
 			Name="Release|Win32"
 			OutputDirectory="Release"
 			IntermediateDirectory="Release"
-			ConfigurationType="2"
+			ConfigurationType="4"
 			CharacterSet="2">
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="2"
+				GlobalOptimizations="FALSE"
 				InlineFunctionExpansion="1"
+				EnableIntrinsicFunctions="FALSE"
+				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_USRDLL;LIBBALL_EXPORTS"
+				OptimizeForWindowsApplication="FALSE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;LIBBALL_EXPORTS;YY_NEVER_INTERACTIVE"
 				StringPooling="TRUE"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="TRUE"
-				UsePrecompiledHeader="3"
-				WarningLevel="3"
-				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"/>
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="1"
+				BufferSecurityCheck="FALSE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="2"
+				WarningLevel="0"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="0"
+				CompileAs="2"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLinkerTool"
-				OutputFile="$(OutDir)/libBALL.dll"
-				LinkIncremental="1"
-				SuppressStartupBanner="TRUE"
-				GenerateDebugInformation="TRUE"
-				SubSystem="2"
-				OptimizeReferences="2"
-				EnableCOMDATFolding="2"
-				ImportLibrary="$(OutDir)/libBALL.lib"
-				TargetMachine="1"/>
+				Name="VCLibrarianTool"
+				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"
+				SuppressStartupBanner="FALSE"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -94,8 +96,6 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
-			<Tool
-				Name="VCWebDeploymentTool"/>
 		</Configuration>
 	</Configurations>
 	<Files>
@@ -131,11 +131,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\COMMON\exception.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -149,11 +161,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\COMMON\logStream.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -167,11 +191,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\COMMON\version.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -189,11 +225,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\autoDeletable.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -207,11 +255,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\composite.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -225,11 +285,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\enumerator.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -243,11 +315,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\object.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -261,11 +345,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\processor.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -279,11 +375,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\selectable.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -297,6 +405,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\timeStamp.C">
@@ -306,11 +420,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\visitor.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -328,6 +454,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\DATATYPE\contourSurface.C">
@@ -336,6 +468,12 @@
 					RelativePath="..\..\..\source\DATATYPE\hashGrid.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -349,11 +487,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\DATATYPE\regExp.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -367,11 +517,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\DATATYPE\regularData2D.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -385,11 +547,23 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\DATATYPE\string.C">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -514,11 +688,26 @@
 							Name="VCCLCompilerTool"
 							AdditionalIncludeDirectories="$(ProjectDir)"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="$(ProjectDir)"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\KERNEL\expressionParserLexer.l">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running flex on $(InputFileName)"
+							CommandLine="&quot;$(ProjectDir)..\..\Contrib\flex-2.5.4\MISC\MSVC\bin\release\flex&quot; -PExpressionParser -o&quot;$(InputDir)expressionParserLexer.C&quot; &quot;$(InputPath)&quot;
+"
+							Outputs="$(InputDir)expressionParserLexer.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running flex on $(InputFileName)"
@@ -534,6 +723,15 @@
 					RelativePath="..\..\..\source\KERNEL\expressionParserParser.y">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running bison on $(InputFileName)"
+							CommandLine="c:\cygwin\bin\bison -y -p ExpressionParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)expressionParserParser.C&quot;
+"
+							Outputs="$(InputDir)expressionParserParser.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
@@ -596,6 +794,12 @@
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\FFT2D.C">
@@ -605,11 +809,23 @@
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\FFT3D.C">
 					<FileConfiguration
 						Name="Debug|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
 						ExcludedFromBuild="TRUE">
 						<Tool
 							Name="VCCLCompilerTool"/>
@@ -635,6 +851,12 @@
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\function.C">
@@ -656,11 +878,26 @@
 							Name="VCCLCompilerTool"
 							AdditionalIncludeDirectories="$(ProjectDir)"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="$(ProjectDir)"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\parsedFunctionLexer.l">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running flex on $(InputFileName)"
+							CommandLine="&quot;$(ProjectDir)..\..\Contrib\flex-2.5.4\MISC\MSVC\bin\release\flex&quot; -PparsedFunction -o&quot;$(InputDir)parsedFunctionLexer.C&quot; &quot;$(InputPath)&quot;
+"
+							Outputs="$(InputDir)parsedFunctionLexer.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running flex on $(InputFileName)"
@@ -676,6 +913,15 @@
 					RelativePath="..\..\..\source\MATHS\parsedFunctionParser.y">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running bison on $(InputFileName)"
+							CommandLine="c:\cygwin\bin\bison -y -p parsedFunction -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)parsedFunctionParser.C&quot;
+"
+							Outputs="$(InputDir)parsedFunctionParser.C;$(InputDir)parsedFunctionParser.h"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
@@ -738,6 +984,19 @@
 						RelativePath="..\..\..\source\MOLMEC\AMBER\amberNonBonded.C">
 						<FileConfiguration
 							Name="Debug|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="3"
+								GlobalOptimizations="TRUE"
+								InlineFunctionExpansion="2"
+								OmitFramePointers="TRUE"
+								OptimizeForProcessor="2"
+								MinimalRebuild="FALSE"
+								BasicRuntimeChecks="0"
+								DebugInformationFormat="0"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Release|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								Optimization="3"
@@ -1113,11 +1372,26 @@
 							Name="VCCLCompilerTool"
 							AdditionalIncludeDirectories="$(ProjectDir)"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="$(ProjectDir)"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\smilesParserLexer.l">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running flex on $(InputFileName)"
+							CommandLine="&quot;$(ProjectDir)..\..\Contrib\flex-2.5.4\MISC\MSVC\bin\release\flex&quot; -PSmilesParser -o&quot;$(InputDir)smilesParserLexer.C&quot; &quot;$(InputPath)&quot;
+"
+							Outputs="$(InputDir)smilesParserLexer.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running flex on $(InputFileName)"
@@ -1133,6 +1407,15 @@
 					RelativePath="..\..\..\source\STRUCTURE\smilesParserParser.y">
 					<FileConfiguration
 						Name="Debug|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running bison on $(InputFileName)"
+							CommandLine="c:\cygwin\bin\bison -y -p SmilesParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)smilesParserParser.C&quot;
+"
+							Outputs="$(InputDir)smilesParserParser.C;$(InputDir)smilesParserParser.h"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
@@ -2150,6 +2433,13 @@
 				RelativePath="$(ProjectDir)..\..\Contrib\regex-0.12\regex.c">
 				<FileConfiguration
 					Name="Debug|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions="HAVE_STRING_H;__STDC__;REGEX_MALLOC"
+						CompileAs="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						PreprocessorDefinitions="HAVE_STRING_H;__STDC__;REGEX_MALLOC"

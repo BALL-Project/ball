@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.12 2002/12/12 11:04:08 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.13 2002/12/16 17:15:33 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -10,7 +10,11 @@ namespace BALL
 {
 
 	// needed for quicksort (below)
-	extern "C" int compareLong_(const void* a, const void* b)
+	extern "C" int 
+#ifdef BALL_COMPILER_MSVC
+	__cdecl 
+#endif
+	compareLong_(const void* a, const void* b)
 	{
 		return (int)(*(long*)a - *(long*)b);
 	}

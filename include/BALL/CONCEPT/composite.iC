@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.iC,v 1.18 2002/12/12 09:46:22 oliver Exp $
+// $Id: composite.iC,v 1.19 2002/12/16 17:15:32 oliver Exp $
 
 BALL_INLINE 
 const Composite& Composite::operator = (const Composite& composite)
@@ -134,14 +134,14 @@ BALL_INLINE
 bool Composite::isExpanded() const
 	throw()
 {
-  return BALL_BIT_IS_CLEARED(properties_, PROPERTY__COLLAPSED_);
+  return (BALL_BIT_IS_CLEARED(properties_, PROPERTY__COLLAPSED_) != 0);
 }
 
 BALL_INLINE 
 bool Composite::isCollapsed() const
 	throw()
 {
-  return BALL_BIT_IS_SET(properties_, PROPERTY__COLLAPSED_);
+  return (BALL_BIT_IS_SET(properties_, PROPERTY__COLLAPSED_) != 0);
 }
 
 BALL_INLINE 
