@@ -1,4 +1,4 @@
-// $Id: minimization.doc,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: minimization.doc,v 1.2 1999/12/17 18:35:28 pmueller Exp $
 
 /**	@name	Energy Minimizer
 		@nonames
@@ -6,7 +6,7 @@
 //@{
 
 	//@Include: energyMinimizer.h
-	//@Include: lineSearch.h
+	//@Include: conjugateGradient.h 
 	//@Include: steepestDescent.h
 
 //@}
