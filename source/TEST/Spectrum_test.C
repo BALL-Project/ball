@@ -1,4 +1,4 @@
-// $Id: Spectrum_test.C,v 1.1 2001/07/05 18:17:59 oliver Exp $
+// $Id: Spectrum_test.C,v 1.2 2001/07/05 18:59:03 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,14 +11,14 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Spectrum1D, "$Id: Spectrum_test.C,v 1.1 2001/07/05 18:17:59 oliver Exp $")
+START_TEST(Spectrum1D, "$Id: Spectrum_test.C,v 1.2 2001/07/05 18:59:03 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 using namespace std;
-
+/*  BAUSTELLE
 Spectrum1D* p;
 
 CHECK(Spectrum1D::Spectrum1D())
@@ -137,7 +137,7 @@ RESULT
 CHECK(Spectrum1D::makeDifference(const float&, const String&, const String&, const String&))
   //BAUSTELLE
 RESULT
-
+*/
 CHECK(Spectrum1D::setDifference(Spectrum1D*, Spectrum1D*, String, String))
   //BAUSTELLE
 RESULT
