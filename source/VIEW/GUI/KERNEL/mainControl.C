@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.6 2002/11/30 11:37:30 oliver Exp $
+// $Id: mainControl.C,v 1.22.4.7 2002/12/02 20:57:50 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -440,8 +440,6 @@ namespace BALL
 				(*it)->update();
 			}
 
-			
-			// ?????!!
 			// update scene
 			SceneMessage *scene_message = new SceneMessage;
 			scene_message->updateOnly();
@@ -523,21 +521,22 @@ namespace BALL
 				{
 					selection_.erase(selection_message->composite_);
 				}
+								
+				// sending of scene message and geometric object selector is done in MolecularProperties, because
+				// ObjectSelector is part of MOLVIEW
 			}
     }
 
 		bool MainControl::isInserted(const Composite& composite) const
 			throw()
 		{
-			return (composite_map_.find((void*)&composite)
-							!= composite_map_.end());
+			return (composite_map_.find((void*)&composite) != composite_map_.end());
 		}
 
 		bool MainControl::isInserted(const CompositeDescriptor& composite_descriptor) const
 			throw()
 		{
-			return (descriptor_map_.find((void*)&composite_descriptor)
-							!= descriptor_map_.end());
+			return (descriptor_map_.find((void*)&composite_descriptor) != descriptor_map_.end());
 		}
 
 		bool MainControl::isValid() const
@@ -547,7 +546,7 @@ namespace BALL
 
 			for ( ; it != descriptors_.end();++it)
 			{
-				if ((*it)->isValid() == false)
+				if (!(*it)->isValid())
 				{
 					return false;
 				}
@@ -589,7 +588,7 @@ namespace BALL
 		CompositeDescriptor*  MainControl::insert_(const Composite& composite, const String& s, const Vector3& v)
 			throw()
 		{
-			if (composite_map_.has((void *)&composite) == true)
+			if (composite_map_.has((void *)&composite))
 			{
 				return 0;
 			}
@@ -606,17 +605,15 @@ namespace BALL
 			list_iterator--;
 
 			composite_map_.insert(ListIteratorHashMap::ValueType((void *)&composite, list_iterator));
-
 			descriptor_map_.insert(ListIteratorHashMap::ValueType((void *)composite_descriptor, list_iterator));
 
 			return composite_descriptor;
 		}
 
-		CompositeDescriptor* MainControl::insert_
-			(CompositeDescriptor& composite_descriptor, bool deep)
+		CompositeDescriptor* MainControl::insert_(CompositeDescriptor& composite_descriptor, bool deep)
 			throw()
 		{
-			if (descriptor_map_.has((void*)&composite_descriptor) == true && deep == false)
+			if (descriptor_map_.has((void*)&composite_descriptor) && !deep)
 			{
 				return 0;
 			}
@@ -669,8 +666,7 @@ namespace BALL
 		
 		int MainControl::current_id_ = 15000;
 
-    int MainControl::insertMenuEntry
-			(int ID, const String& name, const QObject* receiver, const char* slot, int accel, int entry_ID)
+    int MainControl::insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, int accel, int entry_ID)
 			throw()
 		{
 			QMenuBar* menu_bar = menuBar();
@@ -835,16 +831,22 @@ namespace BALL
 		void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 			throw()
 		{
+			selection_.clear();		
 			// wird GeometricObject list
 			List<Composite*>& objects = const_cast<List<Composite*>&>(message.getSelection());
 			List<Composite*>::Iterator it = objects.begin();
 
-			selection_.clear();
-
 			for (; it != objects.end(); it++)
 			{
-				if ((*it)->getParent() == 0) continue;
-				if (!selection_.has((*it)->getParent())) selection_.insert(*it);
+				if (RTTI::isKindOf<GeometricObject>(**it) && (*it)->getParent() == 0) 
+				{
+					continue;
+				}					
+				if (!RTTI::isKindOf<GeometricObject>(*(*it)->getParent()) &&
+						!selection_.has((*it)->getParent())) 
+				{	
+					selection_.insert(*it);
+				}				
 			}
 			NewSelectionMessage* new_message = new NewSelectionMessage;
 			notify_(new_message);
@@ -861,6 +863,19 @@ namespace BALL
 		{
 			return (selection_.size() == 1 && RTTI::isKindOf<System>(**selection_.begin()));
 		}
+
+		void MainControl::selectComposite(Composite* composite, bool state)
+			throw()
+		{
+			if (state)
+			{
+				selection_.insert(composite);
+			}
+			else			
+			{
+				selection_.erase(composite);			
+			}				
+		}			
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
