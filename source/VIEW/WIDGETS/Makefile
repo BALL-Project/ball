@@ -11,7 +11,6 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	dockWidget.C\
 	genericControl.C\
-	genericControlData.C\
 	logView.C\
 	geometricControl.C\
 	datasetControl.C\
@@ -22,18 +21,12 @@ CPP_SOURCES=\
 	scene.C\
 	regularData1DWidget.C
 
-UIC_SOURCES=\
-  genericControlData.C
-
-UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
-
 PYTHON_CPP_SOURCES=\
 	pyWidget.C
 
 MOC_SOURCES=\
 	dockWidget_moc.C\
 	genericControl_moc.C\
-	genericControlData_moc.C\
 	logView_moc.C\
 	datasetControl_moc.C\
 	geometricControl_moc.C\
@@ -53,12 +46,13 @@ include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
-$(UIC_SOURCES):	$(UIC_HDR)
-
-depend: $(UIC_SOURCES) $(MOC_SOURCES)
+depend: $(MOC_SOURCES)
 
 dockWidget_moc.C:	$(HEADER_DIR)/dockWidget.h
 	$(MOC) $(HEADER_DIR)/dockWidget.h -o $@
+
+genericControl_moc.C:	$(HEADER_DIR)/genericControl.h
+	$(MOC) $(HEADER_DIR)/genericControl.h -o $@
 
 geometricControl_moc.C:	$(HEADER_DIR)/geometricControl.h
 	$(MOC) $(HEADER_DIR)/geometricControl.h -o $@
