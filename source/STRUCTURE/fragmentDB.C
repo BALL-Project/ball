@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.53 2004/02/26 21:10:11 oliver Exp $
+// $Id: fragmentDB.C,v 1.54 2004/02/26 21:17:35 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -27,8 +27,8 @@
 */
 
 #define FRAGMENT_DB_INCLUDE_TAG "#include:"
-//#undef DEBUG
-#define DEBUG
+#undef DEBUG
+//#define DEBUG
 
 using namespace std;
 
