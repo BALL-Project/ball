@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.13 2004/06/10 16:51:00 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.14 2004/06/10 17:06:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
@@ -15,33 +15,23 @@ namespace BALL
 
 RegularData1DWidget::RegularData1DWidget(const RegularData1D* data, QWidget *parent)
 	throw()
-	:CanvasWidget(parent),
-	 data_(data),
-	 diagram_color_(QColor(black)),
-	 background_color_(QColor(white)),
-	 axis_color_(QColor(red))
+	: CanvasWidget(parent),
+		ModularWidget("RegularData1DWidget"),
+	 	data_(data),
+	 	diagram_color_(QColor(black)),
+	 	background_color_(QColor(white)),
+	 	axis_color_(QColor(red))
 {
+	registerWidget(this);
 }
 
-//!!!!!!!!!!!!!!!TODO cant work until copyconstructor of pixmap works
-RegularData1DWidget::RegularData1DWidget(RegularData1DWidget* widget)
-	throw() 
-	: //pixmapWidget(widget),
-		data_(widget->data_),
-		diagram_color_(widget->diagram_color_),
-		background_color_(widget->background_color_),
-		axis_color_(widget->axis_color_)
-{ 
-}
-
-// Destructor
 RegularData1DWidget::~RegularData1DWidget()
  throw()
 {
 }
 
 // creates a polygon from a given vector RegularData1D * data
-void RegularData1DWidget::createPolygon()
+void RegularData1DWidget::createPlot()
 	throw()
 {
 	// no data => no polygon
@@ -140,7 +130,7 @@ void RegularData1DWidget::onNotify(Message *message)
 	if ((RegularData1DMessage::RegularDataMessageType) msg.getType() 
 				== RegularData1DMessage::UPDATE)
 	{
-		createPolygon();
+		createPlot();
 	}
 	else if ((RegularData1DMessage::RegularDataMessageType) msg.getType() 
 							== RegularData1DMessage::REMOVE)

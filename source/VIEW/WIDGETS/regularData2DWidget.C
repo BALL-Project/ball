@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.6 2004/06/10 16:51:01 amoll Exp $
+// $Id: regularData2DWidget.C,v 1.7 2004/06/10 17:06:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h> 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
+#include <BALL/VIEW/KERNEL/message.h>
 
 #include <qpointarray.h>
 #include <qpainter.h>
@@ -16,26 +17,17 @@ namespace BALL
 	namespace VIEW
 	{
 
-RegularData2DWidget::RegularData2DWidget(const RegularData2D& data, QWidget *parent)
+RegularData2DWidget::RegularData2DWidget(const RegularData2D* data, QWidget *parent)
 	throw()
-	:CanvasWidget(parent),
-	 data_(data),
-	 diagram_color_(QColor(red)),
-	 background_color_(QColor(white))
+	: CanvasWidget(parent),
+		ModularWidget("RegularData2DWidget"),
+	 	data_(data),
+	 	diagram_color_(QColor(black)),
+	 	background_color_(QColor(white)),
+	 	axis_color_(QColor(red))
 {
+	registerWidget(this);
 }
-
-//!!!!!!!!!!!!!!!TODO cant work until copyconstructor of pixmap works
-/*	RegularData2DWidget::RegularData2DWidget(RegularData2DWidget* widget)
-	throw() 
-	:pixmapWidget(widget),
-	data_(widget->data),
-	diagram_color_(widget->diagram_color_),
-	background_color_(widget->background_color_)//,
-//	heigth_(widget->heigth_),
-//	line_style_(widget->line_style)
-{ 
-}*/ 
 
 RegularData2DWidget::~RegularData2DWidget()
  throw()
@@ -43,12 +35,16 @@ RegularData2DWidget::~RegularData2DWidget()
 }
 
 // creates a polygon from a given vector RegularData1D * data
-void RegularData2DWidget::createPixmap()
+void RegularData2DWidget::createPlot()
 	throw()
 {
 	// no data => no polygon
-	if (data_.size() == 0) return;
-	
+	if (data_ == 0 ||
+			data_->size() == 0) 
+	{
+		return;
+	}
+
 	// set up the ColorTable... TODO: This should be done by a dialog or something similar
 	
 	ColorRGBA colorList[3];
@@ -71,12 +67,12 @@ void RegularData2DWidget::createPixmap()
 	float min; 
 	float max;
 
-	min = data_[0];
-	max = data_[0];
+	min = (*data_)[0];
+	max = (*data_)[0];
 
-	for (Position i=1; i<data_.size(); i++)
+	for (Position i=1; i < (*data_).size(); i++)
 	{
-		float cur = data_[i];
+		float cur = (*data_)[i];
 
 		if (cur < min)
 		{
@@ -90,8 +86,8 @@ void RegularData2DWidget::createPixmap()
 	
 	Size max_x, max_y; //maximal number of Lines and Columns
 
-	max_x = data_.getSize().x;
-	max_y = data_.getSize().y;
+	max_x = (*data_).getSize().x;
+	max_y = (*data_).getSize().y;
 
 	// Draw the points
 	QPixmap pixmap;// = pixItem->getPixmap();
@@ -106,7 +102,7 @@ void RegularData2DWidget::createPixmap()
 		for (x=0; x<=max_x; x++) 
 		{
 			//get the QTColor from BallColor
-			mapcolor = color_table_.map(data_[x + y*max_x]);
+			mapcolor = color_table_.map((*data_)[x + y*max_x]);
 			pCol = QColor(mapcolor.getRed(), mapcolor.getGreen(), mapcolor.getBlue());
 
 			paint.setPen(pCol);
@@ -130,6 +126,37 @@ void RegularData2DWidget::createPixmap()
 	
 		//insert the polygon into vector<canvasItem*> of canvasWidget
 	//				objects_.push_back(dynamic_cast<QCanvasItem*> (polygon_));
+}
+
+
+void RegularData2DWidget::onNotify(Message *message)
+	throw()
+{
+	if (!RTTI::isKindOf<RegularData2DMessage>(*message))
+	{
+		return;
+	}
+
+	RegularData2DMessage& msg = *(RegularData2DMessage*) message;
+	if (msg.getData() != data_) return;
+
+	if ((RegularData2DMessage::RegularDataMessageType) msg.getType() 
+				== RegularData2DMessage::UPDATE)
+	{
+		createPlot();
+	}
+	else if ((RegularData2DMessage::RegularDataMessageType) msg.getType() 
+							== RegularData2DMessage::REMOVE)
+	{
+		data_ = 0;
+
+    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it) 
+		{
+      if ( *it ) delete *it;
+    }
+	}
 }
 
 	}//end of namespace VIEW

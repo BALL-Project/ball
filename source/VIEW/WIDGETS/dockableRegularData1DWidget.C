@@ -1,3 +1,9 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: dockableRegularData2DWidget.C
+//
+
 #include <BALL/VIEW/WIDGETS/dockableRegularData1DWidget.h>
 #include <qpopupmenu.h>
 #include <qapplication.h>
