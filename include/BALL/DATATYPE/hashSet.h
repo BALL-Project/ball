@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.28 2001/05/22 15:38:53 oliver Exp $ 
+// $Id: hashSet.h,v 1.29 2001/06/05 15:41:48 anker Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -950,8 +950,8 @@ namespace BALL
 			return false;
 		}
 
-		Iterator it1 = begin();
-		Iterator it2 = hash_set.begin();
+		ConstIterator it1 = begin();
+		ConstIterator it2 = hash_set.begin();
 		while (it1 != end())
 		{
 			if (*it1 != *it2)
