@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>ModelSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -15,65 +15,6 @@
     <property name="caption">
         <string>ModelSettingsDialog</string>
     </property>
-    <widget class="QListBox">
-        <item>
-            <property name="text">
-                <string>Stick</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Ball &amp; Stick</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>VDW</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Surface</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Tube</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Cartoon</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>H-Bonds</string>
-            </property>
-        </item>
-        <item>
-            <property name="text">
-                <string>Forces</string>
-            </property>
-        </item>
-        <property name="name">
-            <cstring>list_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>13</x>
-                <y>8</y>
-                <width>100</width>
-                <height>169</height>
-            </rect>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>100</width>
-                <height>32767</height>
-            </size>
-        </property>
-    </widget>
     <widget class="QWidgetStack">
         <property name="name">
             <cstring>widget_stack</cstring>
@@ -1534,9 +1475,6 @@
                 <property name="alignment">
                     <set>AlignHCenter</set>
                 </property>
-                <property name="checkable">
-                    <bool>false</bool>
-                </property>
                 <property name="exclusive">
                     <bool>true</bool>
                 </property>
@@ -2013,6 +1951,65 @@
                 </widget>
             </widget>
         </widget>
+    </widget>
+    <widget class="QListBox">
+        <item>
+            <property name="text">
+                <string>Stick</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Ball &amp; Stick</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>VDW</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Surface</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Tube</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Cartoon</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>H-Bonds</string>
+            </property>
+        </item>
+        <item>
+            <property name="text">
+                <string>Forces</string>
+            </property>
+        </item>
+        <property name="name">
+            <cstring>list_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>13</x>
+                <y>8</y>
+                <width>100</width>
+                <height>169</height>
+            </rect>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>100</width>
+                <height>32767</height>
+            </size>
+        </property>
     </widget>
 </widget>
 <connections>
