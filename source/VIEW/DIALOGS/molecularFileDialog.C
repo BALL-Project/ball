@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.19 2004/04/18 15:30:11 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.20 2004/04/18 17:44:10 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -83,16 +83,14 @@ namespace BALL
 					filename = filename.after(FileSystem::PATH_SEPARATOR);
 				}
 
-				QString qfilename = filename.c_str();
-				QString filter;
-
-				if (qfilename.find('.') != -1)
+				String filter(filename);
+				while (filter.has('.'))
 				{
-					filter = qfilename.right(qfilename.find('.'));
-					qfilename = qfilename.left(qfilename.find('.'));
+					filter = filter.after(".");
 				}
 
-				openFile((*it).ascii(), filter.ascii(), qfilename.ascii());
+				filename = filename.left(filename.size() - filter.size() - 1);
+				openFile((*it).ascii(), filter, filename);
 			}
 		}
 
@@ -162,7 +160,7 @@ namespace BALL
 			List<Composite*>& selection = 
 				getMainControl()->getMolecularControlSelection();
 
-			if (selection.size() == 0 || !RTTI::isKindOf<System> (**selection.begin()))
+			if (selection.size() != 1 || !RTTI::isKindOf<System> (**selection.begin()))
 			{
 				Log.error() << "Not a single system selected! Aborting writing..." << std::endl;
 				return false;
@@ -179,24 +177,15 @@ namespace BALL
 
 			String filename = s.ascii();
 
-			if (filename == "/" || filename == "\\") 
+			String filter(filename);
+			while (filter.has(FileSystem::PATH_SEPARATOR))
 			{
-				return false;
+				filter = filter.after(FileSystem::PATH_SEPARATOR);
 			}
 
-			String temp(filename);
-			if (filename.has(FileSystem::PATH_SEPARATOR))
+			while (filter.has('.'))
 			{
-				while (temp.has(FileSystem::PATH_SEPARATOR))
-				{
-					temp = temp.after(FileSystem::PATH_SEPARATOR);
-				}
-			}
-
-			String filter;
-			if (temp.hasSubstring("."))
-			{
-				filter = temp.after(".");
+				filter = filter.after(".");
 			}
 
 			const System& system = *(const System*) (*selection.begin());
@@ -222,7 +211,8 @@ namespace BALL
 			}
 			else
 			{
-				setStatusbarText("Unknown file format, aborting...");
+				setStatusbarText("Unknown file format, please set the file " +
+											   "extension accordingly to type, aborting...");
 				return false;
 			}
 
@@ -231,7 +221,8 @@ namespace BALL
 				return false;
 			}
 		
-			Log.info() << "> " << system.countAtoms() << " atoms written to file \"" << filename << "\"" << std::endl;
+			Log.info() << "> " << system.countAtoms() << " atoms written to file \"" 
+							   << filename << "\"" << std::endl;
 			setStatusbarText("Finished writing.");
 			return true;
 		}
