@@ -7,7 +7,6 @@ EXECUTABLES = \
 	Angle_test\
 	AnisotropyShiftProcessor_test\
 	AssignShiftProcessor_test\
-	AssignShiftProcessor_test2\
 	Atom_test\
 	AtomContainer_test\
 	AtomicContactEnergy_test\
@@ -62,6 +61,7 @@ EXECUTABLES = \
 	Nucleotide_test\
 	OoiEnergy_test\
 	Options_test\
+	Pair6_12RDFIntegrator_test\
 	PairExpInteractionEnergyProcessor_test\
 	PairExpRDFIntegrator_test\
 	Parameters_test\
