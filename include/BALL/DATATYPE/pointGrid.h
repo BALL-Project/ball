@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.20 2000/11/21 16:22:30 anker Exp $ 
+// $Id: pointGrid.h,v 1.21 2000/12/02 16:40:59 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -61,15 +61,17 @@ namespace BALL
 
 		/**	Default constructor.
 				Creates a PointGrid object without allocating a grid.
+				The instance is not valid.
 		*/
-		PointGrid();	
+		PointGrid() throw();	
 
 		/**	Copy constructor.
 				Creates a copy of an existing PointGrid object.
 				@param grid the grid to be copied
 				@param bool ignored
 		*/
-		PointGrid(const PointGrid<GridDataType>& grid, bool deep = true);	
+		PointGrid(const PointGrid<GridDataType>& grid, bool deep = true)
+			throw(Exception::OutOfMemory);	
 
 		/**	Constructor for PointGrid.
 				{\em lower_[x|y|z]} should be set to the coordinates of
@@ -97,7 +99,8 @@ namespace BALL
 			 const float upper_z,
 			 const Size grid_points_x, 
 			 const Size grid_points_y, 
-			 const Size grid_points_z);
+			 const Size grid_points_z)
+			 throw(Exception::OutOfMemory);
 
 		/**	Constructor.
 				The grid's origin is at lower, it has grid_points_[x|y|z]
@@ -108,7 +111,8 @@ namespace BALL
 			 const Vector3& upper,
 			 const Size grid_points_x, 
 			 const Size grid_points_y, 
-			 const Size grid_points_z);
+			 const Size grid_points_z)
+			 throw(Exception::OutOfMemory);
 
 		/**	Constructor. 
 				Takes lower and upper corners and the grid spacing
@@ -116,15 +120,22 @@ namespace BALL
 				Its origin is in the lower corner, it may extend up to spacing over
 				the upper corner.
 		*/
-		PointGrid(const Vector3& lower, const Vector3& upper, const float spacing);
+		PointGrid(const Vector3& lower, const Vector3& upper, const float spacing)
+			throw(Exception::OutOfMemory);
 
 		/**	Destructor. 
 				Frees all allocated memory.
 		*/
-		virtual ~PointGrid()
+		virtual ~PointGrid() throw()
 		{
 			delete [] data;
 		}
+
+		/** Clear method.
+				Frees all allocated memory.
+				The instance is set to not valid.
+		*/
+		virtual void clear() throw();
 
 		//@}
 
@@ -138,13 +149,13 @@ namespace BALL
 				If copying the grid fails (e.g., due to insufficient memory),
 				\Ref{isValid} returns {\bf false} after this operation.
 		*/
-		void set(const PointGrid& grid);
+		void set(const PointGrid& grid) throw(Exception::OutOfMemory);
 
 		/**	Assignment operator.
 				Implemented using \Ref{set}.
 				@see set
 		*/
-		const PointGrid& operator = (const PointGrid& grid);
+		const PointGrid& operator = (const PointGrid& grid) throw(Exception::OutOfMemory);
 		//@}
 
 		/**	@name	Debugging and Diagnostics
@@ -156,14 +167,14 @@ namespace BALL
 					the output ostream {\em s}.
 					@param   s - output stream where to output the internal state of {\em *this}
 			*/
-		virtual void dump(std::ostream& stream) const; 
+		virtual void dump(std::ostream& stream) const throw(); 
 
 		/**	Returns the current stat of the object.	
 				isValid() returns false, if the grid couldn't be initialized 
 				correctly. Usually this is due to an allocation error in one
 				of the constructors.
 		*/
-		bool isValid() const;
+		bool isValid() const throw();
 		//@}
 
 		/**	@name	Accessors
@@ -172,64 +183,64 @@ namespace BALL
 
 		/**	Returns the largest possible x coordinate for the box.
 		*/
-		float getMaxX() const;
+		float getMaxX() const throw();
 
 		/**	Returns the largest possible y coordinate for the box.
 		*/
-		float getMaxY() const;
+		float getMaxY() const throw();
 
 		/**	Returns the largest possible z coordinate for the box.
 		*/
-		float getMaxZ() const;
+		float getMaxZ() const throw();
 
 		/**	Returns the x coordinate of the grid origin.
 		*/
-		float getMinX() const;
+		float getMinX() const throw();
 
 		/**	Returns the y coordinate of the grid origin.
 		*/
-		float getMinY() const;
+		float getMinY() const throw();
 
 		/**	Returns the z coordinate of the grid origin.
 		*/
-		float getMinZ() const;
+		float getMinZ() const throw();
 
 		/**	Return the largest grid position for the x direction.
 				This method returns the maximum position allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
 				method returns the number of points in X direction minus one.
 		*/
-		Size getMaxXIndex() const;
+		Size getMaxXIndex() const throw();
 
 		/**	Return the largest grid position for the y direction.
 				This method returns the maximum position allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
 				method returns the number of points in Y direction minus one.
 		*/
-		Size getMaxYIndex() const;
+		Size getMaxYIndex() const throw();
 
 		/**	Return the largest grid position for the z direction.
 				This method returns the maximum position allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
 				method returns the number of points in Z direction minus one.
 		*/
-		Size getMaxZIndex() const;
+		Size getMaxZIndex() const throw();
 
 		/**	Returns the total number of grid points.
 		*/
-		Size getSize() const;
+		Size getSize() const throw();
 
 		/**	Returns the grid spacing in x direction.
 		*/	
-		float getXSpacing() const;
+		float getXSpacing() const throw();
 
 		/**	Returns the grid spacing in y direction.
 		*/	
-		float getYSpacing() const;
+		float getYSpacing() const throw();
 
 		/**	Returns the grid spacing in z direction.
 		*/	
-		float getZSpacing() const;
+		float getZSpacing() const throw();
 
 		/**	Returns the position of the grid point closest to the given vector.
 				If there are multiple grid points with equal distance, the
@@ -237,7 +248,7 @@ namespace BALL
 				returned.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridIndex getIndex(const Vector3&) const;
+		GridIndex getIndex(const Vector3&) const throw(Exception::OutOfGrid);
 
 		/**	Returns the position of the grid point closest to three given coordinates.
 				If there are multiple grid points with equal distance, the
@@ -245,23 +256,25 @@ namespace BALL
 				returned.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridIndex getIndex(const float, const float, const float) const;
+		GridIndex getIndex(const float, const float, const float) const
+			throw(Exception::OutOfGrid);
 		
 		/**	Returns a pointer to the grid contents determined by the three indices.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridDataType* getData(const Position i, const Position j, const Position k);
+		GridDataType* getData(const Position i, const Position j, const Position k)
+		  throw(Exception::OutOfGrid);
 
 		/**	Returns a pointer to the grid contents closest to a given vector.
 				Determination of the selected grid point is made via getPosition.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridDataType* getData(const Vector3& r);
+		GridDataType* getData(const Vector3& r) throw(Exception::OutOfGrid);
 
 		/**	Returns a pointer to the grid contents determined by the position.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridDataType* getData(const Position position);
+		GridDataType* getData(const Position position) throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
 				Returns the data of the grid point specified by its {\tt position}.
@@ -270,7 +283,7 @@ namespace BALL
 				@param		position Position, the grid position
 				@see			getData
 		*/
-		GridDataType& operator[](const Position position);
+		GridDataType& operator[](const Position position) throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
 				Returns the data of the grid point nearest to the given
@@ -280,7 +293,7 @@ namespace BALL
 				@param		vector Vector3, a position in the grid
 				@see			getData
 		*/
-		GridDataType& operator[](const Vector3& vector);
+		GridDataType& operator[](const Vector3& vector) throw(Exception::OutOfGrid);
 
 		/**	Returns the exact coordinates of a grid point.	
 				@return		Vector3
@@ -289,7 +302,8 @@ namespace BALL
 				@param		j Position, grid y position
 				@param		k Position, grid z position
 		*/
-		Vector3 getGridCoordinates(const Position i, const Position j, const Position k) const;
+		Vector3 getGridCoordinates(const Position i, const Position j, const Position k) const
+		  throw(Exception::OutOfGrid);
 
 		/**	Returns the exact coordinates of the grid point near to a vector r.	
 				This function calculates the exact coordinates of the 
@@ -301,13 +315,13 @@ namespace BALL
 				@exception OutOfGrid if the point is outside the grid
 				@param		r Vector3
 		*/
-		Vector3 getGridCoordinates(const Vector3& r) const;
+		Vector3 getGridCoordinates(const Vector3& r) const throw(Exception::OutOfGrid);
 
 		/**	Returns the exact coordinates of a grid point.	
 				@return		Vector3
 				@param		Position
 		*/
-		Vector3 getGridCoordinates(const Position position) const;
+		Vector3 getGridCoordinates(const Position position) const throw(Exception::OutOfGrid);
 
 		/**	Return the indices of the grid points of the enclosing box.
 				This method calculates the grid box that contains the given vector
@@ -328,7 +342,8 @@ namespace BALL
 		void getBoxIndices
 			(const Vector3& vector,
 			Position& llf, Position& rlf, Position& luf, Position& ruf,
-			Position& llb, Position& rlb, Position& lub, Position& rub) const;
+			Position& llb, Position& rlb, Position& lub, Position& rub) const
+			throw(Exception::OutOfGrid);
 													
 		/**	Return the data at the grid points of the enclosing box.
 				This method calculates the grid box that contains the given vector
@@ -350,51 +365,54 @@ namespace BALL
 		void getBoxData
 			(const Vector3& vector,
 			GridDataType& llf, GridDataType& rlf, GridDataType& luf, GridDataType& ruf,
-			GridDataType& llb, GridDataType& rlb, GridDataType& lub, GridDataType& rub) const;
+			GridDataType& llb, GridDataType& rlb, GridDataType& lub, GridDataType& rub) const
+			throw(Exception::OutOfGrid);
 													
 		/**	Returns a vector to the grid's origin.
 				@return		Vector3& the grid origin
 		*/
-		Vector3& getOrigin();
+		Vector3& getOrigin() throw();
 
 		/**	Returns a vector to the grid's origin (const method).
 				@return		Vector3&
 		*/
-		const Vector3& getOrigin() const;
+		const Vector3& getOrigin() const throw();
 
 		/**	Modifies the grid's origin
 				@param		origin, new origin
 		*/
-		void setOrigin(const Vector3& origin);
+		void setOrigin(const Vector3& origin) throw();
 
 		/**	Modifies the grid's origin
 				@param		x new origin x
 				@param		y new origin y
 				@param		z new origin z
 		*/
-		void setOrigin(const float x, const float y, const float z);
+		void setOrigin(const float x, const float y, const float z) throw();
 
 		/**	Returns a vector containing the grid's dimensions.
 				@return		Vector3&
 		*/
-		Vector3& getDimension();
+		Vector3& getDimension() throw();
 		
 		/**	Returns a vector containing the grid's dimensions (const method).
 				@return		Vector3&
 		*/
-		const Vector3& getDimension() const;
+		const Vector3& getDimension() const throw();
 
 		/** Test if a given point is inside the grid.
+				Also returns false if instance is not valid.
 				@param vector the point
 				@return bool
 		*/
-		bool has(const Vector3& vector) const;
+		bool has(const Vector3& vector) const throw();
 
 		/** Test if a given point is inside the grid.
+				Also returns false if instance is not valid.
 				@param x, y, z the coordinates
 				@return bool
 		*/
-		bool has(const float& x, const float& y,const float& z) const;
+		bool has(const float& x, const float& y,const float& z) const throw();
 
 		/**	Returns the linear interpolation of the eight surrounding grid points.
 				This method calculates the corresponding box to a vector and linearly.
@@ -416,8 +434,20 @@ namespace BALL
 				@exception OutOfGrid if the point is outside the grid
 				@param	vector the position to evaluate
 		*/
-		GridDataType getInterpolatedValue(const Vector3& vector) const;
+		GridDataType getInterpolatedValue(const Vector3& vector) const throw(Exception::OutOfGrid);
 		
+		/** Equality operator
+				Two point grids are equal if they have the same number of points in all three
+				dimensions and the data fields are equal.
+				Both grids have to be valid or false is returned.
+		*/
+		bool operator == (const PointGrid<GridDataType>& grid) const throw();
+
+		/** Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const PointGrid<GridDataType>& grid) const throw();
+
 		//@}
 
 		/**	The grid data
@@ -452,7 +482,7 @@ namespace BALL
 
 		/*_ is set to true, if the grid has been set up correctly.
 				If the requested memory couldn't be allocated, valid_ is set to
-				false. The state of thei flag can be queried by isValid()
+				false. The state of this flag can be queried by isValid()
 				@see	isValid
 		*/
 		bool valid_;
@@ -461,6 +491,7 @@ namespace BALL
 	// default constructor.
 	template <class GridDataType>
 	PointGrid<GridDataType>::PointGrid()
+		throw()
 		: data(0),
 			origin_(0,0,0),
 			size_(0,0,0),
@@ -469,7 +500,8 @@ namespace BALL
 			number_of_points_y_(0),
 			number_of_points_z_(0),
 			number_of_grid_points_(0),
-			upper_(0,0,0)
+			upper_(0,0,0),
+			valid_(false)
 	{
 	}
 
@@ -477,6 +509,7 @@ namespace BALL
 	template <class GridDataType>
 	PointGrid<GridDataType>::PointGrid
 		(const PointGrid<GridDataType>& grid, bool /* deep */)
+		throw(Exception::OutOfMemory)
 		: data(0),
 			origin_(0,0,0),
 			size_(0,0,0),
@@ -485,7 +518,8 @@ namespace BALL
 			number_of_points_y_(0),
 			number_of_points_z_(0),
 			number_of_grid_points_(0),
-			upper_(0,0,0)
+			upper_(0,0,0),
+			valid_(false)
 	{
 		set(grid);
 	}
@@ -494,6 +528,7 @@ namespace BALL
 	template <typename GridDataType>
 	BALL_INLINE
 	const PointGrid<GridDataType>& PointGrid<GridDataType>::operator = (const PointGrid<GridDataType>& grid)
+		throw(Exception::OutOfMemory)
 	{
 		set(grid);
 		return *this;
@@ -503,6 +538,7 @@ namespace BALL
 	template <typename GridDataType>
 	BALL_INLINE
 	void PointGrid<GridDataType>::set(const PointGrid<GridDataType>& grid)
+		throw(Exception::OutOfMemory)
 	{
 		// throw away the old data 
 		if (data != 0)
@@ -515,7 +551,12 @@ namespace BALL
 
 		// if the alloc failed, mark this instance as invalid
 		valid_ = (data != 0);
-		// BAUSTELLE: What about an exception?
+		
+		if (!valid_)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, 
+																	 grid.number_of_grid_points_ * sizeof(GridDataType));
+		}
 
 		// copy the remaining attributes
 		origin_ = grid.getOrigin();
@@ -553,6 +594,7 @@ namespace BALL
 		(float lower_x, float lower_y, float lower_z,
 		 float upper_x, float upper_y, float upper_z,
 		 Size grid_points_x, Size grid_points_y, Size grid_points_z)
+		throw(Exception::OutOfMemory)
 	{
 
 		// set data and number_of_grid_points_ to 0/0, just to be sure 
@@ -607,12 +649,19 @@ namespace BALL
 
 		// mark this instance as invalid if the alloc failed
 		valid_ = (data != 0);			
+
+		if (!valid_)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, 
+																	 number_of_grid_points_ * sizeof(GridDataType));
+		}
 	}
 
 	template <class GridDataType>
 	PointGrid<GridDataType>::PointGrid
 		(const Vector3& lower, const Vector3& upper,
 		 Size grid_points_x, Size grid_points_y, Size grid_points_z) 
+		throw(Exception::OutOfMemory)
 		: data(0)
 	{
 		*this = PointGrid(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
@@ -624,6 +673,7 @@ namespace BALL
 		(const Vector3& lower,
 		 const Vector3& upper,
 		 const float spacing) 
+		throw(Exception::OutOfMemory)
 		: data(0)
 	{
 		*this = PointGrid(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
@@ -633,7 +683,7 @@ namespace BALL
 	}
 			
 	template <class GridDataType>
-	void PointGrid<GridDataType>::dump(std::ostream& stream) const
+	void PointGrid<GridDataType>::dump(std::ostream& stream) const throw()
 	{
 		stream << "Dump of " << typeid(this).name()<< " (" << getMaxXIndex() 
 					 << "x" << getMaxYIndex() << "x" << getMaxZIndex() 
@@ -649,7 +699,7 @@ namespace BALL
 	// returns the state of this instance
 	template <class GridDataType>
 	BALL_INLINE 
-	bool PointGrid<GridDataType>::isValid() const
+	bool PointGrid<GridDataType>::isValid() const throw()
 	{
 		return valid_;
 	}
@@ -658,21 +708,21 @@ namespace BALL
 	// the box, i.e. origin + size
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMaxX() const 
+	float PointGrid<GridDataType>::getMaxX() const throw()
 	{
 		return upper_.x;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMaxY() const 
+	float PointGrid<GridDataType>::getMaxY() const throw()
 	{
 		return upper_.y;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMaxZ() const 
+	float PointGrid<GridDataType>::getMaxZ() const throw()
 	{
 		return upper_.x;
 	}
@@ -681,21 +731,21 @@ namespace BALL
 	// the box, i.e. origin + size
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMinX() const 
+	float PointGrid<GridDataType>::getMinX() const throw()
 	{
 		return origin_.x;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMinY() const 
+	float PointGrid<GridDataType>::getMinY() const throw()
 	{
 		return origin_.y;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getMinZ() const 
+	float PointGrid<GridDataType>::getMinZ() const throw()
 	{
 		return origin_.z;
 	}
@@ -704,21 +754,21 @@ namespace BALL
 	// first point has position 0, getMax[X|Y|Z]Position therefore returns number_of_points
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getMaxXIndex() const 
+	Size PointGrid<GridDataType>::getMaxXIndex() const throw()
 	{
 		return number_of_points_x_ - 1;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getMaxYIndex() const 
+	Size PointGrid<GridDataType>::getMaxYIndex() const throw()
 	{
 		return number_of_points_y_ - 1;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getMaxZIndex() const 
+	Size PointGrid<GridDataType>::getMaxZIndex() const throw()
 	{
 		return number_of_points_z_ - 1;
 	}
@@ -726,13 +776,14 @@ namespace BALL
 	// getSize() returns the total number of grid points
 	template <class GridDataType>
 	BALL_INLINE 
-	Size PointGrid<GridDataType>::getSize() const 
+	Size PointGrid<GridDataType>::getSize() const throw()
 	{
 		return number_of_grid_points_;
 	}
 
 	template <class GridDataType>
 	PointGrid<GridDataType>::GridIndex PointGrid<GridDataType>::getIndex(const Vector3& r) const 
+		throw(Exception::OutOfGrid)
 	{
 		return getIndex(r.x, r.y, r.z);
 	}
@@ -741,59 +792,60 @@ namespace BALL
 	// between two grid points in the given direction
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getXSpacing() const 
+	float PointGrid<GridDataType>::getXSpacing() const  	throw()
 	{
 		return spacing_.x;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getYSpacing() const 
+	float PointGrid<GridDataType>::getYSpacing() const  	throw()
 	{
 		return spacing_.y;
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
-	float PointGrid<GridDataType>::getZSpacing() const 
+	float PointGrid<GridDataType>::getZSpacing() const  	throw()
 	{
 		return spacing_.z;
 	}
 
 	template <class GridDataType> 
 	BALL_INLINE
-	const Vector3& PointGrid<GridDataType>::getOrigin() const 
+	const Vector3& PointGrid<GridDataType>::getOrigin() const  	throw()
 	{
 		return origin_;
 	}
 
 	template <class GridDataType> 
 	BALL_INLINE
-	Vector3& PointGrid<GridDataType>::getOrigin() 
+	Vector3& PointGrid<GridDataType>::getOrigin()  	throw()
 	{
 		return origin_;
 	}
 
 	template <class GridDataType>
-	void PointGrid<GridDataType>::setOrigin(const Vector3& origin)
+	void PointGrid<GridDataType>::setOrigin(const Vector3& origin) 	throw()
 	{
 		origin_ = origin;
 	}
 
 	template <class GridDataType>
 	void PointGrid<GridDataType>::setOrigin(const float x, const float y, const float z) 
+	 	throw()
 	{
 		origin_.set(x, y, z);
 	}
 
 	template <class GridDataType> 
-	const Vector3& PointGrid<GridDataType>::getDimension() const 
+	const Vector3& PointGrid<GridDataType>::getDimension() const  throw()
 	{
 		return size_;
 	}
 
 	template <class GridDataType> 
-	Vector3& PointGrid<GridDataType>::getDimension() 
+	Vector3& PointGrid<GridDataType>::getDimension() 	throw()
 	{
 		return size_;
 	}
@@ -801,9 +853,11 @@ namespace BALL
 	template <class GridDataType> 
 	BALL_INLINE
 	bool PointGrid<GridDataType>::has(const float& x, const float& y,const float& z) const		
+		throw()
 	{
 		if (x > upper_.x  ||	y > upper_.y  ||	z > upper_.z  ||
-				x < origin_.x ||	y < origin_.y ||	z < origin_.z)
+				x < origin_.x ||	y < origin_.y ||	z < origin_.z ||
+				!valid_)
 		{
 			return false;
 		}		
@@ -813,9 +867,11 @@ namespace BALL
 	template <class GridDataType> 
 	BALL_INLINE
 	bool PointGrid<GridDataType>::has(const Vector3& vector) const
+		throw()
 	{
 		if (vector.x > upper_.x  ||	vector.y > upper_.y  ||	vector.z > upper_.z  ||
-				vector.x < origin_.x ||	vector.y < origin_.y ||	vector.z < origin_.z)
+				vector.x < origin_.x ||	vector.y < origin_.y ||	vector.z < origin_.z ||
+				!valid_)
 		{
 			return false;
 		}		
@@ -826,6 +882,7 @@ namespace BALL
 	BALL_INLINE 
 	PointGrid<GridDataType>::GridIndex PointGrid<GridDataType>::getIndex
 		(const float x, const float y, const float z) const 
+		throw(Exception::OutOfGrid)
 	{
 		if (!has(x, y, z))
 		{
@@ -845,20 +902,24 @@ namespace BALL
 	BALL_INLINE 
 	GridDataType* PointGrid<GridDataType>::getData
 		(const Position i, const Position j, const Position k) 
+		throw(Exception::OutOfGrid)
 	{
-		if (i > number_of_points_x_ ||	j > number_of_points_y_ ||	k > number_of_points_z_)
+		if (i > number_of_points_x_ ||	j > number_of_points_y_ ||	k > number_of_points_z_
+				|| !valid_)
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}		
 
-		return &(data[i + j * number_of_points_x_ + k * number_of_points_x_ 
-									* number_of_points_y_]);
+		return &(data[i + j * number_of_points_x_ + k 
+												* number_of_points_x_ 
+												* number_of_points_y_]);
 	}
 
 	template <class GridDataType>
 	BALL_INLINE 
 	GridDataType* PointGrid<GridDataType>::getData(const Vector3& r) 
-	{
+		throw(Exception::OutOfGrid)
+	{	
 		GridIndex	position = getIndex(r);
 		return getData(position.x, position.y, position.z);
 	}
@@ -866,6 +927,7 @@ namespace BALL
 	template <class GridDataType>
 	BALL_INLINE 
 	GridDataType* PointGrid<GridDataType>::getData(const Position position) 
+		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
 		{
@@ -876,6 +938,7 @@ namespace BALL
 
 	template <class GridDataType>
 	GridDataType& PointGrid<GridDataType>::operator[] (const Position position)
+		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
 		{
@@ -886,6 +949,7 @@ namespace BALL
 
 	template <class GridDataType>
 	GridDataType& PointGrid<GridDataType>::operator[](const Vector3& v)
+		throw(Exception::OutOfGrid)
 	{
 		return *(getData(v));
 	}
@@ -894,6 +958,7 @@ namespace BALL
 	BALL_INLINE 
 	Vector3 PointGrid<GridDataType>::getGridCoordinates
 		(const Position i, const Position j, const Position k) const 
+		throw(Exception::OutOfGrid)
 	{
 		if (i > number_of_points_x_ ||	j > number_of_points_y_ ||	k > number_of_points_z_)
 		{
@@ -911,6 +976,7 @@ namespace BALL
 	template <class GridDataType>
 	BALL_INLINE 
 	Vector3 PointGrid<GridDataType>::getGridCoordinates(const Vector3& v) const 
+		throw(Exception::OutOfGrid)
 	{
 		if (v.x < 0 || v.y < 0 || v.z < 0 )
 		{
@@ -922,6 +988,7 @@ namespace BALL
 	template <class GridDataType> 
 	BALL_INLINE 
 	Vector3 PointGrid<GridDataType>::getGridCoordinates(const Position position) const 
+		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
 		{
@@ -932,11 +999,11 @@ namespace BALL
 		
 		x = position % number_of_points_x_;
 		y = (position % (number_of_points_x_ * number_of_points_y_)) / number_of_points_x_;
-		z = position / (number_of_points_x_ * number_of_points_y_);
+		z =  position / (number_of_points_x_ * number_of_points_y_);
 
 		r.set(origin_.x + (float)x * spacing_.x,
-						 origin_.y + (float)y * spacing_.y,
-						 origin_.z + (float)z * spacing_.z);
+					origin_.y + (float)y * spacing_.y,
+					origin_.z + (float)z * spacing_.z);
 
 		return r;
 	}
@@ -947,6 +1014,7 @@ namespace BALL
 		(const Vector3& vector,
 		Position& llf, Position& rlf, Position& luf, Position& ruf,
 		Position& llb, Position& rlb, Position& lub, Position& rub) const
+		throw(Exception::OutOfGrid)
 	{
 		if (!has(vector))
 		{
@@ -978,6 +1046,7 @@ namespace BALL
 		(const Vector3& vector,
 		GridDataType& llf, GridDataType& rlf, GridDataType& luf, GridDataType& ruf,
 		GridDataType& llb, GridDataType& rlb, GridDataType& lub, GridDataType& rub) const
+		throw(Exception::OutOfGrid)
 	{
 		if (!has(vector))
 		{
@@ -1002,6 +1071,7 @@ namespace BALL
 	template <typename GridDataType>
 	BALL_INLINE
 	GridDataType PointGrid<GridDataType>::getInterpolatedValue(const Vector3& vector) const
+		throw(Exception::OutOfGrid)
 	{
 		if (!has(vector))
 		{
@@ -1031,7 +1101,56 @@ namespace BALL
 					+ data[l + Nxy + Nx] * dx * (1 - dy) * (1 - dz)
 					+ data[l + Nxy + Nx + 1] * (1 - dx) * (1 - dy) * (1 - dz);
 	}
-		
+
+	template <typename GridDataType>
+	void PointGrid<GridDataType>::clear() throw()
+	{
+		delete [] data;
+		data = 0;
+
+		origin_		=
+		size_			=
+		spacing_  =
+		upper_		=	Vector3(0, 0, 0);
+
+		number_of_points_x_ =
+		number_of_points_y_ =
+		number_of_points_z_ =
+		number_of_grid_points_ = 0;
+
+		valid_ = false;
+	}
+
+	template <typename GridDataType>	
+	bool PointGrid<GridDataType>::operator == (const PointGrid<GridDataType>& grid) const 
+		throw()
+	{
+		if (!valid_ || !grid.valid_ ||
+				number_of_points_x_ != grid.number_of_points_x_ ||
+				number_of_points_y_ != grid.number_of_points_y_ ||
+				number_of_points_z_ != grid.number_of_points_z_ )
+		{
+			return false;
+		}
+
+		for (Position pos = 0; pos < number_of_grid_points_; pos++)
+		{
+			if (data[pos] != grid.data[pos])
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}	
+
+	template <typename GridDataType>	
+	bool PointGrid<GridDataType>::operator != (const PointGrid<GridDataType>& grid) const 
+		throw()
+	{
+		return !(*this == grid);
+	}
+
  } // namespace BALL
 
 #endif // BALL_DATATYPE_POINTGRID_H
