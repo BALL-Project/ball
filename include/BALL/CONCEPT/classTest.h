@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.44 2003/06/19 13:06:55 oliver Exp $
+// $Id: classTest.h,v 1.45 2003/06/19 16:12:35 oliver Exp $
 //
 
 #ifndef BALL_COMMON_H
@@ -513,7 +513,7 @@ int main(int argc, char **argv)\
 				TEST::newline = true;\
 				std::cout << std::endl;\
 			}\
-			std::cout << "    (line " << __LINE__ << " TEST_EXCEPTION(" << #exception_type << ", " << #command << "): ";\
+			std::cout << "    (line " << __LINE__ << " TEST_PRECONDITION_EXCEPTION(" << ", " << #command << "): ";\
 			switch (TEST::exception)\
 			{\
 				case 0:	std::cout << " ERROR: no exception!) "; break;\
