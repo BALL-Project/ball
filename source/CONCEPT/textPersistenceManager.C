@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: textPersistenceManager.C,v 1.18 2004/02/18 09:56:40 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.19 2005/01/04 13:27:18 oliver Exp $
+//
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 

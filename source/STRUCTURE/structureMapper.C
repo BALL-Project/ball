@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.28 2004/01/18 17:22:52 oliver Exp $
+// $Id: structureMapper.C,v 1.29 2005/01/04 13:27:19 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/structureMapper.h>
@@ -312,7 +312,7 @@ namespace BALL
 		Matrix4x4 transformation(1, 0, 0, -w1.x, 0, 1, 0, -w1.y, 0, 0, 1, -w1.z, 0, 0, 0, 1);
 
 		// Compute the translations that map v1 and w1 onto the origin 
-		// and apply them to v2, v3 and w2, w3
+		// and apply them to v2, v3 and w2, w3.
 		Vector3 tw2(w2.x - w1.x, w2.y - w1.y, w2.z - w1.z);
 		Vector3 tw3(w3.x - w1.x, w3.y - w1.y, w3.z - w1.z);
 
@@ -324,13 +324,14 @@ namespace BALL
 		double dist_w3_w1 = tw3.getSquareLength();
 		double dist_v3_v1 = tv3.getSquareLength();
 
-		// try to remove nasty singularities
-		// check (v2 != v1) 
+		// Try to remove nasty singularities arising if the first two
+		// points in each point set are too close to each other:
+		//   (a) ensure (v2 != v1) 
 		if ((dist_v2_v1 < EPSILON2) && (dist_v3_v1 >= EPSILON2))
 		{
 			tv2.swap(tv3);
 		}
-		// check (w2 != w1) 
+		//   (b) ensure (w2 != w1) 
 		if ((dist_w2_w1 < EPSILON2) && (dist_w3_w1 >= EPSILON2))
 		{
 			tw2.swap(tw3);
@@ -401,11 +402,20 @@ namespace BALL
 					else
 					{
 						// Compute the quaternion form of the rotation that maps tw3 onto tv3
-						rotation_quat.set(rotation_axis.x, rotation_axis.y, rotation_axis.z, acos(axis_w * axis_v));
+						double angle = acos(axis_w * axis_v);
+						if (angle > EPSILON)
+						{
+							rotation_quat.set(rotation_axis.x, rotation_axis.y, rotation_axis.z, acos(axis_w * axis_v));
 
-						// Compute the matrix4x4 form of the rotation
-						// and add it to the transformation
-						rotation_quat.getRotationMatrix(rotation);
+							// Compute the matrix4x4 form of the rotation
+							// and add it to the transformation
+							rotation_quat.getRotationMatrix(rotation);
+						}
+						else
+						{
+							// Use the identity matrix instead.
+							rotation.setIdentity();
+						}
 					}
 
 					transformation = rotation * transformation;

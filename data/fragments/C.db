@@ -63,7 +63,7 @@
 		<node>24<value>C1* H1* s</value></node>
 		<node>25<value>C3* H3* s</value></node>
 		<node>26<value>C2* 1H2* s</value></node>
-                <node>27<value>C2* 2H2* s</value></node>
+    <node>27<value>C2* 2H2* s</value></node>
 		<node>28<value>C6 H6 s</value></node>
 		<node>29<value>C5 H5 s</value></node>
 		<node>30<value>N4 H41 s</value></node>

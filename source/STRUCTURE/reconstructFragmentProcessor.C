@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.C,v 1.4 2003/08/26 09:18:27 oliver Exp $
+// $Id: reconstructFragmentProcessor.C,v 1.5 2005/01/04 13:27:18 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
@@ -21,6 +21,14 @@
 #include <BALL/STRUCTURE/structureMapper.h>
 	
 using namespace std;
+
+// #define BALL_DEBUG_RECONSTRUCTFRAGMENTPROCESSOR
+
+#ifdef BALL_DEBUG_RECONSTRUCTFRAGMENTPROCESSOR
+#	define DEBUG(a) Log.info() << "ReconstructFragmentProcessor: " << a << std::endl;
+#else
+#	define DEBUG(a)
+#endif
 
 namespace BALL 
 {
@@ -211,7 +219,7 @@ namespace BALL
 		for (; +it; ++it)
 		{
 			name_to_atom.insert(pair<String, Atom*>(it->getName(), const_cast<Atom*>(&*it)));
-			//??? cerr << "inserting " << it->getName() << " = " << (void*)(&*it) << " into name_to_atom map. " << endl;
+			DEBUG("inserting " << it->getName() << " = " << (void*)(&*it) << " into name_to_atom map. ")
 		}
 		
 		// ...and remove the names of existing atoms.
@@ -228,7 +236,7 @@ namespace BALL
 				Atom* res_atom = name_to_atom[cit->getName()];
 				transformed.insert(&*cit);
 				tpl_to_res.insert(std::pair<const Atom*, Atom*>(&*cit, res_atom));
-				//??? cerr << "inserting " << (void*)&*cit << " = " << (void*)(res_atom) << " into tpl_to_res map. " << endl;
+				DEBUG("inserting " << (void*)&*cit << " = " << (void*)(res_atom) << " into tpl_to_res map. ")
 			}
 			else
 			{
@@ -241,7 +249,7 @@ namespace BALL
 				// update the atom count
 				number_of_inserted_atoms++;
 				inserted_atoms.push_back(new_atom);
-				//??? cerr << "creating atom " << (void*)(new_atom) << " for tpl atom " << cit->getName() << " (" << (void*)&*cit << ")" << endl;
+				DEBUG("creating atom " << (void*)(new_atom) << " for tpl atom " << cit->getName() << " (" << (void*)&*cit << ")")
 			}
 		}
 
@@ -266,39 +274,47 @@ namespace BALL
 				stack.erase(stack.begin());
 				visited.insert(current);
 
-				//??? cerr << "center is " << (void*)current << " (" << current->getFullName() << ") visited = " 
-				//			 << (visited.has(current)) << " transformed = " << transformed.has(current) 
-				//			 << " @ " << current->getPosition() << endl;
-				//??? cerr << "residue atom is @ " << tpl_to_res[current]->getPosition()  << " (dist = " 
-				//		 << tpl_to_res[current]->getPosition().getDistance(current->getPosition()) << ")" << endl;
+				DEBUG("center is " << (void*)current << " (" << current->getFullName() << ") visited = " 
+							<< (visited.has(current)) << " transformed = " << transformed.has(current) 
+							<< " @ " << current->getPosition())
+				DEBUG("residue atom is @ " << tpl_to_res[current]->getPosition()  << " (dist = " 
+							<< tpl_to_res[current]->getPosition().getDistance(current->getPosition()) << ")")
 
 				for (Atom::BondConstIterator bond = current->beginBond(); +bond; ++ bond)
 				{
 					const Atom* next = bond->getPartner(*current);
-					//??? cerr << "examining " << (void*)next << " (" << next->getFullName() << ") visited = " 
-					//		 << (visited.has(next)) << " transformed = " << transformed.has(next) << endl;
+					DEBUG("examining " << (void*)next << " (" << next->getFullName() << ") visited = " 
+								<< (visited.has(next)) << " transformed = " << transformed.has(next))
 					if (!visited.has(next))
 					{
 						stack.push_back(next);
 						visited.insert(next);
 						if (!transformed.has(next))
 						{
-							//??? cerr << "searching reference atoms for "<< next->getFullName() << endl;
+							DEBUG("searching reference atoms for "<< next->getFullName())
 							Triple<bool, const Atom*, const Atom*> ref_atoms;
 							ref_atoms = getTwoReferenceAtoms(*current, transformed);
-							//??? cerr << "reference atoms: " << (ref_atoms.second == 0 ? String("-") : ref_atoms.second->getFullName())
-							//		 << " / " << (ref_atoms.third == 0 ? String("-") : ref_atoms.third->getFullName()) << endl;
+							DEBUG("reference atoms: " << (ref_atoms.second == 0 ? String("-") : ref_atoms.second->getFullName())
+										<< " / " << (ref_atoms.third == 0 ? String("-") : ref_atoms.third->getFullName()))
 
 							Matrix4x4 T;
 							if (ref_atoms.first == true)
 							{
 								// we can map all three atoms, great!
+								DEBUG("mapping three atoms: " << tpl_to_res[current]->getFullName() << "/" 
+											<< tpl_to_res[ref_atoms.second]->getFullName() << "/" << tpl_to_res[ref_atoms.third]->getFullName())
+								DEBUG("onto:                " << current->getFullName() << "/" 
+											<< ref_atoms.second->getFullName() << "/" << ref_atoms.third->getFullName())
+								DEBUG("from: " << tpl_to_res[current]->getPosition() << "/" 
+											<< tpl_to_res[ref_atoms.second]->getPosition() << "/" << tpl_to_res[ref_atoms.third]->getPosition())
+								DEBUG("to:   " << current->getPosition() << "/" 
+											<< ref_atoms.second->getPosition() << "/" << ref_atoms.third->getPosition())
 								T = StructureMapper::matchPoints
 											(current->getPosition(), ref_atoms.second->getPosition(), ref_atoms.third->getPosition(),
 											 tpl_to_res[current]->getPosition(), 
 											 tpl_to_res[ref_atoms.second]->getPosition(), 
 											 tpl_to_res[ref_atoms.third]->getPosition());
-								//??? cerr << "found two reference atoms, mapped with T =\n" << T << endl;
+								DEBUG("found two reference atoms, mapped with T =\n" << T)
 							}
 							else 
 							{
@@ -306,7 +322,7 @@ namespace BALL
 								// a simple translation by the difference of the two atom positions.
 								T.setIdentity();
 								T.setTranslation(tpl_to_res[current]->getPosition() - current->getPosition());
-								//??? cerr << "translating by " << T << endl;
+								DEBUG("translating by " << T)
 							}
 
 							// Transform the coordinates of the atom we're interest in
@@ -314,8 +330,8 @@ namespace BALL
 
 							// Remember that we already took care of that guy.
 							transformed.insert(next);
-							//??? cerr << next->getFullName() << " is transformed: " << tpl_to_res[next]->getPosition() << "/" << next->getPosition() << endl;
-							//??? cerr << "distance = " << tpl_to_res[next]->getPosition().getDistance(next->getPosition()) << endl;
+							DEBUG(next->getFullName() << " is transformed: " << tpl_to_res[next]->getPosition() << "/" << next->getPosition())
+							DEBUG("distance = " << tpl_to_res[next]->getPosition().getDistance(next->getPosition()))
 						}
 					}
 				}

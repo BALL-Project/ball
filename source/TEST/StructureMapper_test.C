@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StructureMapper_test.C,v 1.11 2004/11/07 08:25:38 oliver Exp $
+// $Id: StructureMapper_test.C,v 1.12 2005/01/04 13:27:19 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.11 2004/11/07 08:25:38 oliver Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.12 2005/01/04 13:27:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -178,6 +178,27 @@ CHECK(static Matrix4x4 matchPoints(const Vector3& w1, const Vector3& w2, const V
 
 	TEST_REAL_EQUAL((T * w1 - v1).getSquareLength(), 0.0)
 	TEST_REAL_EQUAL((T * w2 - v2).getSquareLength(), 0.0)
+
+	// Test some weird pathological case found in 1BNA
+	// when using ReconstructFragmentProcessor
+	v1.set(17.221, 25.499, 18.629);
+	v2.set(18.217, 24.603, 18.897);
+	v3.set(19.526, 24.945, 18.571);
+	w1.set(22.167, 23.241, 33.694);
+	w2.set(21.100, 23.907, 33.243);
+	w3.set(20.022, 24.211, 34.147);
+	T = StructureMapper::matchPoints(w1, w2, w3, v1, v2, v3);
+	STATUS(T)
+	TEST_EQUAL(Maths::isNan(T(0,0)), false)
+	TEST_EQUAL(Maths::isNan(T(1,0)), false)
+	TEST_EQUAL(Maths::isNan(T(2,0)), false)
+	TEST_EQUAL(Maths::isNan(T(0,1)), false)
+	TEST_EQUAL(Maths::isNan(T(1,1)), false)
+	TEST_EQUAL(Maths::isNan(T(2,1)), false)
+	TEST_EQUAL(Maths::isNan(T(0,2)), false)
+	TEST_EQUAL(Maths::isNan(T(1,2)), false)
+	TEST_EQUAL(Maths::isNan(T(2,2)), false)
+	TEST_REAL_EQUAL(T(3,3), 1.0)
 RESULT
 
 CHECK(double calculateRMSD())
