@@ -1,4 +1,4 @@
-// $Id: lineModel.C,v 1.8 2000/12/12 16:19:24 oliver Exp $
+// $Id: lineModel.C,v 1.9 2001/01/26 00:43:32 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
 
@@ -6,23 +6,16 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
-
-		AddLineModel::AddLineModel
-			()
-				: 
-				AtomBondModelBaseProcessor()
+		AddLineModel::AddLineModel()
+			: AtomBondModelBaseProcessor()
 		{
 		}
 
-		AddLineModel::AddLineModel
-			(const AddLineModel &__rAddLineModel,
-			 bool deep)
-				:
-				AtomBondModelBaseProcessor(__rAddLineModel, deep)
+		AddLineModel::AddLineModel(const AddLineModel& rAddLineModel, bool deep)
+			: AtomBondModelBaseProcessor(rAddLineModel, deep)
 		{
 		}
 
@@ -30,8 +23,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-			 << " of class " << getBallClass().getName() << endl;
+				cout << "Destructing object " << (void *)this << " of class " << getBallClass().getName() << endl;
 			#endif 
 
 			destroy();
@@ -49,41 +41,31 @@ namespace BALL
 			AtomBondModelBaseProcessor::destroy();
 		}
 
-		void 
-		AddLineModel::set
-			(const AddLineModel &__rAddLineModel,
-			 bool deep)
+		void AddLineModel::set(const AddLineModel &rAddLineModel, bool deep)
 		{
-			AtomBondModelBaseProcessor::set(__rAddLineModel, deep);
+			AtomBondModelBaseProcessor::set(rAddLineModel, deep);
 		}
 
-		AddLineModel &
-		AddLineModel::operator =
-			(const AddLineModel &__rAddLineModel)
+		AddLineModel& AddLineModel::operator = (const AddLineModel &rAddLineModel)
 		{
-			set(__rAddLineModel);
+			set(rAddLineModel);
 
 			return *this;
 		}
 
-		void 
-		AddLineModel::get
-			(AddLineModel &__rAddLineModel,
-			 bool deep) const
+		void AddLineModel::get(AddLineModel &rAddLineModel, bool deep) const
 		{
-			__rAddLineModel.set(*this, deep);
+			rAddLineModel.set(*this, deep);
 		}
 
-		void 
-		AddLineModel::swap
-			(AddLineModel &__rAddLineModel)
+		void AddLineModel::swap(AddLineModel &rAddLineModel)
 		{
-			AtomBondModelBaseProcessor::swap(__rAddLineModel);
+			AtomBondModelBaseProcessor::swap(rAddLineModel);
 		}
 
 		bool AddLineModel::start()
 		{
-			if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID) == true)
+			if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID))
 			{
 				setProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
 			}
@@ -101,9 +83,7 @@ namespace BALL
 			return true;
 		}
 				
-		Processor::Result 
-		AddLineModel::operator()
-			(Composite &composite)
+		Processor::Result AddLineModel::operator() (Composite &composite)
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -117,26 +97,26 @@ namespace BALL
 			removeGeometricObjects_(*atom, true);
 
 			// generate help BallPrimitive
-			Point *__pPoint = createPoint_();
+			Point *pPoint = createPoint_();
 
 			BALL_PRECONDITION
-				(__pPoint != 0,
+				(pPoint != 0,
 				 BALL_MOLVIEW_LINEMODEL_ERROR_HANDLER
 				 (AddLineModel::ERROR__CANNOT_CREATE_POINT));
 
 			// carry on selected flag
-			__pPoint->Selectable::set(*atom);
+			pPoint->Selectable::set(*atom);
 
-			__pPoint->PropertyManager::set(*this);
-			__pPoint->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_LINES);
-			__pPoint->setVertexAddress(atom->getPosition());
+			pPoint->PropertyManager::set(*this);
+			pPoint->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_LINES);
+			pPoint->setVertexAddress(atom->getPosition());
 			
 			atom->host(*getColorCalculator());
 
-			__pPoint->setColor(getColorCalculator()->getColor());
+			pPoint->setColor(getColorCalculator()->getColor());
 
 			// append line in Atom
-			composite.appendChild(*__pPoint);
+			composite.appendChild(*pPoint);
 
 			// collect used atoms
 			insertAtom_(atom);
@@ -144,8 +124,7 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void AddLineModel::dump
-			(ostream& s, Size depth) const
+		void AddLineModel::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -158,37 +137,27 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void 
-		AddLineModel::read
-			(istream & /* s */)
+		void AddLineModel::read(istream & /* s */)
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		void 
-		AddLineModel::write
-			(ostream & /* s */) const
+		void AddLineModel::write(ostream & /* s */) const
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		Point *
-		AddLineModel::createPoint_
-			()
+		Point* AddLineModel::createPoint_()
 		{
 			return (Point *)(new Point());
 		}
 
-		Line *
-		AddLineModel::createLine_
-			()
+		Line* AddLineModel::createLine_()
 		{
 			return (Line *)(new Line());
 		}
 
-		TwoColoredLine *
-		AddLineModel::createTwoColoredLine_
-			()
+		TwoColoredLine* AddLineModel::createTwoColoredLine_()
 		{
 			return (TwoColoredLine *)(new TwoColoredLine());
 		}

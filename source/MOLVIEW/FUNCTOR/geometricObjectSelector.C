@@ -1,4 +1,4 @@
-// $Id: geometricObjectSelector.C,v 1.5 2000/12/12 16:19:24 oliver Exp $
+// $Id: geometricObjectSelector.C,v 1.6 2001/01/26 00:43:32 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/geometricObjectSelector.h>
 
@@ -10,20 +10,16 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-		GeometricObjectSelector::GeometricObjectSelector
-			()
-				: 
-				AtomBondModelBaseProcessor(),
+		GeometricObjectSelector::GeometricObjectSelector()
+			: AtomBondModelBaseProcessor(),
 				selection_(true),
 				selection_color_(255,255,0,255)
 		{
 		}
 
 		GeometricObjectSelector::GeometricObjectSelector
-			(const GeometricObjectSelector &selector,
-			 bool deep)
-				:
-				AtomBondModelBaseProcessor(selector, deep),
+			(const GeometricObjectSelector &selector, bool deep)
+			: AtomBondModelBaseProcessor(selector, deep),
 				selection_(selector.selection_),
 				selection_color_(selector.selection_color_)
 		{
@@ -55,10 +51,7 @@ namespace BALL
 			selection_color_.set(255,255,0,255);
 		}
 
-		void 
-		GeometricObjectSelector::set
-			(const GeometricObjectSelector &selector,
-			 bool deep)
+		void GeometricObjectSelector::set(const GeometricObjectSelector &selector, bool deep)
 		{
 			AtomBondModelBaseProcessor::set(selector, deep);
 
@@ -66,51 +59,40 @@ namespace BALL
 			selection_color_ = selector.selection_color_;
 		}
 
-		GeometricObjectSelector &
-		GeometricObjectSelector::operator =
-			(const GeometricObjectSelector &selector)
+		GeometricObjectSelector& GeometricObjectSelector::operator = (const GeometricObjectSelector &selector)
 		{
 			set(selector);
 
 			return *this;
 		}
 
-		void 
-		GeometricObjectSelector::get
-			(GeometricObjectSelector &selector,
-			 bool deep) const
+		void GeometricObjectSelector::get(GeometricObjectSelector &selector, bool deep) const
 		{
 			selector.set(*this, deep);
 		}
 
-		void 
-		GeometricObjectSelector::swap
-			(GeometricObjectSelector &selector)
+		void GeometricObjectSelector::swap (GeometricObjectSelector &selector)
 		{
 			AtomBondModelBaseProcessor::swap(selector);
 
-			bool __bool = selection_;
+			bool _bool = selection_;
 			selection_ = selector.selection_;
-			selector.selection_ = __bool;
+			selector.selection_ = _bool;
 
 			selection_color_.swap(selector.selection_color_);
 		}
 
-		bool 
-		GeometricObjectSelector::start
-			()
+		bool GeometricObjectSelector::start()
 		{
 			getSearcher_().clear();
 
 			return AtomBondModelBaseProcessor::start();
 		}
 				
-		bool 
-		GeometricObjectSelector::finish
-			()
+		bool GeometricObjectSelector::finish()
 		{
-			Atom *first__pAtom = 0;
-			Atom *second__pAtom = 0;
+			Atom *first_pAtom = 0;
+			Atom *second_pAtom = 0;
 			Bond *__pBond = 0;
 			AtomBondIterator bond__Iterator;
 
@@ -120,19 +102,19 @@ namespace BALL
 			for (list_iterator = getAtomList_().begin();
 					 list_iterator != getAtomList_().end(); ++list_iterator)
 			{
-				first__pAtom = *list_iterator;
+				first_pAtom = *list_iterator;
 
 				// for all bonds connected from first- to second atom
-				BALL_FOREACH_ATOM_BOND(*first__pAtom, bond__Iterator)
+				BALL_FOREACH_ATOM_BOND(*first_pAtom, bond__Iterator)
 				{
 					__pBond = &(*bond__Iterator);
-					second__pAtom = __pBond->getSecondAtom();
+					second_pAtom = __pBond->getSecondAtom();
 
 					// use only atoms with greater handles than first atom
-					if (*first__pAtom < *second__pAtom)
+					if (*first_pAtom < *second_pAtom)
 					{
 						// select bond only if second atom is selected too
-						if (getAtomSet_().has(second__pAtom))
+						if (getAtomSet_().has(second_pAtom))
 						{
 							if (selection_ == true)
 							{
@@ -148,20 +130,18 @@ namespace BALL
 
 				if (selection_ == true)
 				{
-					first__pAtom->select();
+					first_pAtom->select();
 				}
 				else
 				{
-					first__pAtom->deselect();
+					first_pAtom->deselect();
 				}
 			}
 			
 			return true;
 		}
 				
-		Processor::Result 
-		GeometricObjectSelector::operator()
-			(Composite &composite)
+		Processor::Result GeometricObjectSelector::operator() (Composite &composite)
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -186,8 +166,7 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void GeometricObjectSelector::dump
-			(ostream& s, Size depth) const
+		void GeometricObjectSelector::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -209,16 +188,12 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void 
-		GeometricObjectSelector::read
-			(istream & /* s */)
+		void GeometricObjectSelector::read(istream & /* s */)
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		void 
-		GeometricObjectSelector::write
-			(ostream & /* s */) const
+		void GeometricObjectSelector::write(ostream & /* s */) const
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

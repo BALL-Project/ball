@@ -1,4 +1,4 @@
-// $Id: scene.C,v 1.3 2000/12/22 19:12:17 amoll Exp $
+// $Id: scene.C,v 1.4 2001/01/26 00:45:03 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 
@@ -1029,26 +1029,26 @@ namespace BALL
 			x_window_pick_pos_second_ = x_window_pos_new_;
 			y_window_pick_pos_second_ = y_window_pos_new_;
 
-			int x_pick_old__i = (int)x_window_pick_pos_first_;
-			int y_pick_old__i = (int)y_window_pick_pos_first_;
-			int x_pos_old__i  = (int)x_window_pos_old_;
-			int y_pos_old__i  = (int)y_window_pos_old_;
-			int x_pos_new__i  = (int)x_window_pos_new_;
-			int y_pos_new__i  = (int)y_window_pos_new_;
+			int x_pick_old_i = (int)x_window_pick_pos_first_;
+			int y_pick_old_i = (int)y_window_pick_pos_first_;
+			int x_pos_old_i  = (int)x_window_pos_old_;
+			int y_pos_old_i  = (int)y_window_pos_old_;
+			int x_pos_new_i  = (int)x_window_pos_new_;
+			int y_pos_new_i  = (int)y_window_pos_new_;
 
 			QPainter painter(this);
 			painter.setPen(white);
 			painter.setRasterOp(XorROP);
   
-			painter.drawRect(x_pick_old__i,
-											 y_pick_old__i,
-											 x_pos_old__i - x_pick_old__i,
-											 y_pos_old__i - y_pick_old__i);
+			painter.drawRect(x_pick_old_i,
+											 y_pick_old_i,
+											 x_pos_old_i - x_pick_old_i,
+											 y_pos_old_i - y_pick_old_i);
 			
-			painter.drawRect(x_pick_old__i,
-											 y_pick_old__i,
-											 x_pos_new__i - x_pick_old__i,
-											 y_pos_new__i - y_pick_old__i);
+			painter.drawRect(x_pick_old_i,
+											 y_pick_old_i,
+											 x_pos_new_i - x_pick_old_i,
+											 y_pos_new_i - y_pick_old_i);
 			
 			painter.end();
     }
@@ -1077,26 +1077,26 @@ namespace BALL
 			x_window_pick_pos_second_ = x_window_pos_new_;
 			y_window_pick_pos_second_ = y_window_pos_new_;
 
-			int x_pick_old__i = (int)x_window_pick_pos_first_;
-			int y_pick_old__i = (int)y_window_pick_pos_first_;
-			int x_pos_old__i  = (int)x_window_pos_old_;
-			int y_pos_old__i  = (int)y_window_pos_old_;
-			int x_pos_new__i  = (int)x_window_pos_new_;
-			int y_pos_new__i  = (int)y_window_pos_new_;
+			int x_pick_old_i = (int)x_window_pick_pos_first_;
+			int y_pick_old_i = (int)y_window_pick_pos_first_;
+			int x_pos_old_i  = (int)x_window_pos_old_;
+			int y_pos_old_i  = (int)y_window_pos_old_;
+			int x_pos_new_i  = (int)x_window_pos_new_;
+			int y_pos_new_i  = (int)y_window_pos_new_;
 
 			QPainter painter(this);
 			painter.setPen(white);
 			painter.setRasterOp(XorROP);
   
-			painter.drawRect(x_pick_old__i,
-											 y_pick_old__i,
-											 x_pos_old__i - x_pick_old__i,
-											 y_pos_old__i - y_pick_old__i);
+			painter.drawRect(x_pick_old_i,
+											 y_pick_old_i,
+											 x_pos_old_i - x_pick_old_i,
+											 y_pos_old_i - y_pick_old_i);
 			
-			painter.drawRect(x_pick_old__i,
-											 y_pick_old__i,
-											 x_pos_new__i - x_pick_old__i,
-											 y_pos_new__i - y_pick_old__i);
+			painter.drawRect(x_pick_old_i,
+											 y_pick_old_i,
+											 x_pos_new_i - x_pick_old_i,
+											 y_pos_new_i - y_pick_old_i);
 
 			painter.end();
     }

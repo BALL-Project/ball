@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.8 2000/12/12 16:19:24 oliver Exp $
+// $Id: findGeometricObject.C,v 1.9 2001/01/26 00:43:32 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -50,18 +50,15 @@ namespace BALL
 			clear();
 		}
 
-		void 
-		FindGeometricObjects::set
-			(const FindGeometricObjects &find_geometric_objects,
-			 bool deep)
+		void FindGeometricObjects::set
+			(const FindGeometricObjects &find_geometric_objects, bool deep)
 		{
 			clear();
 
 			ExtendedPropertyManager::set(find_geometric_objects, deep);
 		}
 
-		FindGeometricObjects &
-		FindGeometricObjects::operator =
+		FindGeometricObjects& FindGeometricObjects::operator =
 			(const FindGeometricObjects &find_geometric_objects)
 		{
 			set(find_geometric_objects);
@@ -69,40 +66,30 @@ namespace BALL
 			return *this;
 		}
 
-		void 
-		FindGeometricObjects::get
-			(FindGeometricObjects &find_geometric_objects,
-			 bool deep) const
+		void FindGeometricObjects::get
+			(FindGeometricObjects& find_geometric_objects, bool deep) const
 		{
 			find_geometric_objects.set(*this, deep);
 		}
 
-		void 
-		FindGeometricObjects::swap
-			(FindGeometricObjects &find_geometric_objects)
+		void FindGeometricObjects::swap(FindGeometricObjects& find_geometric_objects)
 		{
 			ExtendedPropertyManager::swap(find_geometric_objects);
 		}
 
-		bool 
-		FindGeometricObjects::start
-			()
+		bool FindGeometricObjects::start()
 		{
 			geometric_objects_.clear();
 
 			return true;
 		}
 				
-		bool 
-		FindGeometricObjects::finish
-			()
+		bool FindGeometricObjects::finish()
 		{
 			return true;
 		}
 				
-		Processor::Result 
-		FindGeometricObjects::operator ()
-			(Composite &composite)
+		Processor::Result FindGeometricObjects::operator () (Composite &composite)
 		{
 			// skip composites that are not instances of geometricObject
 			if (RTTI::isKindOf<VIEW::GeometricObject>(composite) == false)
@@ -110,31 +97,27 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
-			VIEW::GeometricObject *__pGeometricObject 
-				= RTTI::castTo<VIEW::GeometricObject>(composite);
+			VIEW::GeometricObject* pGeometricObject = RTTI::castTo<VIEW::GeometricObject>(composite);
 
-			BitVector and_bitvector = getBitVector().operator&(__pGeometricObject->getBitVector());
+			BitVector and_bitvector = getBitVector().operator&(pGeometricObject->getBitVector());
 			BitVector help_bitvector(and_bitvector.getSize());
 
 			help_bitvector.bitwiseOr(getBitVector());
 
 			if (and_bitvector == help_bitvector)
 			{
-				geometric_objects_.push_back(__pGeometricObject);
+				geometric_objects_.push_back(pGeometricObject);
 			}
 			
 			return Processor::CONTINUE;
 		}
 
-		bool 
-		FindGeometricObjects::isValid
-			() const
+		bool FindGeometricObjects::isValid() const
 		{
 			return true;
 		}
 
-		void FindGeometricObjects::dump
-			(ostream& s, Size depth) const
+		void FindGeometricObjects::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);

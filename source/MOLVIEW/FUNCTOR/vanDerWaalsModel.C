@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.C,v 1.7 2000/12/12 16:19:25 oliver Exp $
+// $Id: vanDerWaalsModel.C,v 1.8 2001/01/26 00:43:32 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 
@@ -6,22 +6,16 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
-		AddVanDerWaalsModel::AddVanDerWaalsModel
-			()
-				:
-				AtomBondModelBaseProcessor()
+		AddVanDerWaalsModel::AddVanDerWaalsModel()
+			: AtomBondModelBaseProcessor()
 		{
  		}
 
-		AddVanDerWaalsModel::AddVanDerWaalsModel
-			(const AddVanDerWaalsModel &__rAddVanDerWaalsModel,
-			 bool deep)
-				:
-				AtomBondModelBaseProcessor(__rAddVanDerWaalsModel, deep)
+		AddVanDerWaalsModel::AddVanDerWaalsModel(const AddVanDerWaalsModel& _rAddVanDerWaalsModel, bool deep)
+			: AtomBondModelBaseProcessor(_rAddVanDerWaalsModel, deep)
 		{
 		}
 
@@ -29,8 +23,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-			 << " of class " << getBallClass().getName() << endl;
+				cout << "Destructing object " << (void *)this << " of class " << getBallClass().getName() << endl;
 			#endif 
 
 			destroy();
@@ -40,7 +33,6 @@ namespace BALL
 			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
-
 			setProperty(GeometricObject::PROPERTY__MODEL_VDW);
 		}
 
@@ -50,9 +42,7 @@ namespace BALL
 			AtomBondModelBaseProcessor::destroy();
 		}
 
-		bool 
-		AddVanDerWaalsModel::start
-			()
+		bool AddVanDerWaalsModel::start()
 		{
 			// init model connector
 			getModelConnector()->setProperties(*this);
@@ -60,18 +50,14 @@ namespace BALL
 			return AtomBondModelBaseProcessor::start();
 		}
 				
-		bool 
-		AddVanDerWaalsModel::finish
-			()
+		bool AddVanDerWaalsModel::finish()
 		{
 			buildBondModels_();
 
 			return true;
 		}
 				
-		Processor::Result 
-		AddVanDerWaalsModel::operator()
-			(Composite &composite)
+		Processor::Result AddVanDerWaalsModel::operator() (Composite &composite)
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -79,39 +65,38 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
-			Atom *atom = RTTI::castTo<Atom>(composite);
+			Atom* atom = RTTI::castTo<Atom>(composite);
 
 			// remove all models appended to atom
 			removeGeometricObjects_(*atom, true);
 
-			Sphere *__pSphere = createSphere_();
+			Sphere* pSphere = createSphere_();
 
 			BALL_PRECONDITION
-				(__pSphere != 0,
+				(pSphere != 0,
 				 BALL_MOLVIEW_VANDERWAALSMODEL_ERROR_HANDLER
 				 (AddVanDerWaalsModel::ERROR__CANNOT_CREATE_SPHERE));
 
 			// carry on selected flag
-			__pSphere->Selectable::set(*atom);
+			pSphere->Selectable::set(*atom);
 
-			__pSphere->PropertyManager::set(*this);
-			__pSphere->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_VDW);
-			__pSphere->setRadius((atom->getElement()).getVanDerWaalsRadius());
-			__pSphere->setVertexAddress(atom->getPosition());
+			pSphere->PropertyManager::set(*this);
+			pSphere->PropertyManager::setProperty(GeometricObject::PROPERTY__MODEL_VDW);
+			pSphere->setRadius((atom->getElement()).getVanDerWaalsRadius());
+			pSphere->setVertexAddress(atom->getPosition());
 
 			atom->host(*getColorCalculator());
 
-			__pSphere->setColor(getColorCalculator()->getColor());
+			pSphere->setColor(getColorCalculator()->getColor());
 			
-			composite.appendChild(*__pSphere);
+			composite.appendChild(*pSphere);
 			
 			insertAtom_(atom);
 			
 			return Processor::CONTINUE;
 		}
 
-		void AddVanDerWaalsModel::dump
-			(ostream& s, Size depth) const
+		void AddVanDerWaalsModel::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -124,23 +109,17 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void 
-		AddVanDerWaalsModel::read
-			(istream & /* s */)
+		void AddVanDerWaalsModel::read(istream & /* s */)
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		void 
-		AddVanDerWaalsModel::write
-			(ostream & /* s */) const
+		void AddVanDerWaalsModel::write(ostream & /* s */) const
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		Sphere *
-		AddVanDerWaalsModel::createSphere_
-			()
+		Sphere* AddVanDerWaalsModel::createSphere_()
 		{
 			return (Sphere *)(new Sphere());
 		}

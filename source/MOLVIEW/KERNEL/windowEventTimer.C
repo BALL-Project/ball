@@ -1,58 +1,45 @@
-// $Id: windowEventTimer.C,v 1.2 1999/12/19 17:14:29 oliver Exp $
+// $Id: windowEventTimer.C,v 1.3 2001/01/26 00:43:56 amoll Exp $
 #include <BALL/MOLVIEW/KERNEL/windowEventTimer.h>
-
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
-		WindowEventTimer::WindowEventTimer
-			()
-				:
-				QTTimer(),
+		WindowEventTimer::WindowEventTimer()
+			: QTTimer(),
 				application_(0)
 		{
 		}
 
-		WindowEventTimer::WindowEventTimer
-			(const QApplication &__rQApplication)
-				:
-				QTTimer(),
-				application_((QApplication *)&__rQApplication)
+		WindowEventTimer::WindowEventTimer(const QApplication& rQApplication)
+			: QTTimer(),
+				application_((QApplication *)& rQApplication)
 		{
 		}
 
-		WindowEventTimer::WindowEventTimer
-			(const WindowEventTimer &__rWindowEventTimer,
-			 bool deep)
-				:
-				QTTimer(__rWindowEventTimer, deep),
-				application_(__rWindowEventTimer.application_)
+		WindowEventTimer::WindowEventTimer(const WindowEventTimer& rWindowEventTimer, bool deep)
+			: QTTimer(rWindowEventTimer, deep),
+				application_(rWindowEventTimer.application_)
 		{
 		}
 
-		WindowEventTimer::~WindowEventTimer
-			()
+		WindowEventTimer::~WindowEventTimer()
 		{
 			#ifdef BALL_MOLVIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-			 << " of class " << getBallClass().getName() << endl;
+				cout << "Destructing object " << (void *)this << " of class " << getBallClass().getName() << endl;
 			#endif 
 
 			destroy();
 		}
 
-		void
-		WindowEventTimer::timer
-			()
+		void WindowEventTimer::timer()
 		{
 			if (application_ != 0)
 			{
 				stopTimer();
 
-				while (1)
+				while (true)
 				{
 					application_->processOneEvent();
 				}

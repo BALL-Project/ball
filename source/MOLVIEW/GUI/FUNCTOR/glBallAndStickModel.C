@@ -1,4 +1,4 @@
-// $Id: glBallAndStickModel.C,v 1.2 2000/12/12 16:19:34 oliver Exp $
+// $Id: glBallAndStickModel.C,v 1.3 2001/01/26 00:43:52 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h>
 
@@ -12,18 +12,14 @@ namespace BALL
 		using VIEW::GLTube;
 
 			
-		AddGLBallAndStickModel::AddGLBallAndStickModel
-			()
-				:
-				AddBallAndStickModel()
+		AddGLBallAndStickModel::AddGLBallAndStickModel()
+			: AddBallAndStickModel()
 		{
 		}
 
 		AddGLBallAndStickModel::AddGLBallAndStickModel
-			(const AddGLBallAndStickModel &__rAddGLBallAndStickModel,
-			 bool deep)
-				:
-				AddBallAndStickModel(__rAddGLBallAndStickModel, deep)
+			(const AddGLBallAndStickModel& rAddGLBallAndStickModel, bool deep)
+			: AddBallAndStickModel(rAddGLBallAndStickModel, deep)
 		{
 		}
 
@@ -32,29 +28,23 @@ namespace BALL
  		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<AddGLBallAndStickModel>() << endl;
+						 << " of class " << RTTI::getName<AddGLBallAndStickModel>() << endl;
 			#endif 
 
 			AddBallAndStickModel::destroy();
 		}
 
-		Sphere *
-		AddGLBallAndStickModel::createSphere_
-			()
+		Sphere* AddGLBallAndStickModel::createSphere_()
 		{
 			return (Sphere *)(new GLSphere());
 		}
 
-		Tube *
-		AddGLBallAndStickModel::createTube_
-			()
+		Tube* AddGLBallAndStickModel::createTube_()
 		{
 			return (Tube *)(new GLTube());
 		}
 
-		TwoColoredTube *
-		AddGLBallAndStickModel::createTwoColoredTube_
-			()
+		TwoColoredTube* AddGLBallAndStickModel::createTwoColoredTube_()
 		{
 			return (TwoColoredTube *)(new GLTwoColoredTube());
 		}

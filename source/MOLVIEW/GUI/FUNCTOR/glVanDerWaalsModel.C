@@ -1,28 +1,23 @@
-// $Id: glVanDerWaalsModel.C,v 1.2 2000/12/12 16:19:34 oliver Exp $
+// $Id: glVanDerWaalsModel.C,v 1.3 2001/01/26 00:43:53 amoll Exp $
 
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h>
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 		
 		using VIEW::GLSphere;
 
-		AddGLVanDerWaalsModel::AddGLVanDerWaalsModel
-			()
-				:
-				AddVanDerWaalsModel()
+		AddGLVanDerWaalsModel::AddGLVanDerWaalsModel()
+			: AddVanDerWaalsModel()
 		{
 		}
 
 		AddGLVanDerWaalsModel::AddGLVanDerWaalsModel
-			(const AddGLVanDerWaalsModel &__rAddGLVanDerWaalsModel,
-			 bool deep)
-				:
-				AddVanDerWaalsModel(__rAddGLVanDerWaalsModel, deep)
+			(const AddGLVanDerWaalsModel& rAddGLVanDerWaalsModel, bool deep)
+			: AddVanDerWaalsModel(rAddGLVanDerWaalsModel, deep)
 		{
 		}
 
@@ -37,9 +32,7 @@ namespace BALL
 			AddVanDerWaalsModel::destroy();
 		}
 
-		Sphere *
-		AddGLVanDerWaalsModel::createSphere_
-			()
+		Sphere*	AddGLVanDerWaalsModel::createSphere_()
 		{
 			return (Sphere *)(new GLSphere());
 		}

@@ -1,29 +1,23 @@
-// $Id: glLineModel.C,v 1.2 2000/12/12 16:19:34 oliver Exp $
+// $Id: glLineModel.C,v 1.3 2001/01/26 00:43:53 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.h>
 
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
 		using VIEW::GLPoint;
 		using VIEW::GLLine;
 
-		AddGLLineModel::AddGLLineModel
-			()
-				:
-				AddLineModel()
+		AddGLLineModel::AddGLLineModel()
+			: AddLineModel()
 		{
 		}
 
-		AddGLLineModel::AddGLLineModel
-			(const AddGLLineModel &__rAddGLLineModel,
-			 bool deep)
-				:
-				AddLineModel(__rAddGLLineModel, deep)
+		AddGLLineModel::AddGLLineModel(const AddGLLineModel& rAddGLLineModel, bool deep)
+			: AddLineModel(rAddGLLineModel, deep)
 		{
 		}
 
@@ -38,23 +32,17 @@ namespace BALL
 			AddLineModel::destroy();
 		}
 
-		Point *
-		AddGLLineModel::createPoint_
-			()
+		Point* AddGLLineModel::createPoint_()
 		{
 			return (Point *)(new GLPoint());
 		}
 
-		Line *
-		AddGLLineModel::createLine_
-			()
+		Line* AddGLLineModel::createLine_()
 		{
 			return (Line *)(new GLLine());
 		}
 
-		TwoColoredLine *
-		AddGLLineModel::createTwoColoredLine_
-			()
+		TwoColoredLine* AddGLLineModel::createTwoColoredLine_()
 		{
 			return (TwoColoredLine *)(new GLTwoColoredLine());
 		}
