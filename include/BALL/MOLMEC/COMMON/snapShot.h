@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.1 1999/12/17 19:10:44 pmueller Exp $
+// $Id: snapShot.h,v 1.2 1999/12/19 17:18:03 oliver Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -55,17 +55,16 @@
 // basic includes
 #include <iostream> 
 #include <fstream> 
+#include <stdio.h>
 
 // STL include commands
 #include <vector> 
 
-using namespace std; 
-
 namespace BALL
-  {
+{
   // This class contains the actual data of a single snapshot
   struct SnapShot
-    {
+  {
     /** @name Constructors and Destructors
     */
     //@{
