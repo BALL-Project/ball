@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.17 2000/10/20 15:58:02 amoll Exp $
+// $Id: PDBFile.C,v 1.18 2000/12/08 09:24:08 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -191,6 +191,7 @@ namespace BALL
 					if (bond != 0)
 					{
 						bond->setType(Bond::TYPE__COVALENT);
+						bond->setOrder(Bond::ORDER__SINGLE);
 					}
 				}
 			}
@@ -209,6 +210,7 @@ namespace BALL
 					if (bond != 0)
 					{
 						bond->setType(Bond::TYPE__HYDROGEN);
+						bond->setOrder(Bond::ORDER__SINGLE);
 					}
 				}
 			}
@@ -227,6 +229,7 @@ namespace BALL
 					if (bond != 0)
 					{
 						bond->setType(Bond::TYPE__SALT_BRIDGE);
+						bond->setOrder(Bond::ORDER__SINGLE);
 					}
 				}
 			}
@@ -1331,7 +1334,9 @@ namespace BALL
 			{
 				first->second->setProperty(Residue::PROPERTY__HAS_SSBOND);
 				second->second->setProperty(Residue::PROPERTY__HAS_SSBOND);
-			} else {
+			} 
+			else 
+			{
 				Log.warn() << "PDBFile::postprocessSSBonds_: could not assign SSBOND for " << *it << endl;
 			}
 		}
