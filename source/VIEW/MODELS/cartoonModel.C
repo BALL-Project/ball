@@ -1,13 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.32 2004/09/08 12:24:14 amoll Exp $
+// $Id: cartoonModel.C,v 1.33 2004/09/08 13:57:05 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
+
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
+
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/residue.h>
@@ -15,7 +17,11 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/protein.h>
+
 #include <BALL/MATHS/matrix44.h>
+
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 using namespace std;
 
@@ -92,10 +98,18 @@ namespace BALL
 			Position nr_of_residues = ss.countResidues();
 			for (Position pos = 0; pos < nr_of_residues; pos++)
 			{
+				Residue* r = ss.getResidue(pos);
+
+				// prevent double drawing for complementary bases
+				if (complementary_bases_.has(r) &&
+						complementary_bases_[r] < r) 
+				{
+					continue;
+				}
+
 				Atom* base_atom = 0;
 				Atom* atom2 = 0;
 				Atom* atom3 = 0;
-				Residue* r = ss.getResidue(pos);
 				if (r->getName() == "A")
 				{
 					BALL_FOREACH_ATOM(*r, it)
@@ -141,15 +155,43 @@ namespace BALL
 					continue;
 				}
 
-				Box* box = new Box(
-							atom2->getPosition(),
-						  base_atom->getPosition() - atom2->getPosition() ,
-							atom3->getPosition() - atom2->getPosition(),
-							0.3);
-				box->setComposite(r);
+				if (!complementary_bases_.has(r))
+				{
+					Box* box = new Box(
+								atom2->getPosition(),
+								base_atom->getPosition() - atom2->getPosition() ,
+								atom3->getPosition() - atom2->getPosition(),
+								0.3);
+					box->setComposite(r);
+					geometric_objects_.push_back(box);
+					continue;
+				}
 
-				geometric_objects_.push_back(box);
+				Residue* partner = complementary_bases_[r];
+				Atom* partner_base = 0;
+				BALL_FOREACH_ATOM(*partner, it)
+				{
+					if (it->getName() == "P") partner_base = &*it;
+				}
 
+				if (partner_base == 0) continue;
+
+				Vector3 v = base_atom->getPosition() - partner_base->getPosition();
+				v /= 2.5;
+
+				Tube* tube = new Tube;
+				tube->setVertex1(base_atom->getPosition());
+				tube->setVertex2(base_atom->getPosition() - v);
+				tube->setComposite(r);
+				tube->setRadius(tube_radius_);
+				geometric_objects_.push_back(tube);
+
+				Tube* tube2 = new Tube;
+				tube2->setVertex1(partner_base->getPosition());
+				tube2->setVertex2(partner_base->getPosition() + v);
+				tube2->setComposite(partner);
+				tube2->setRadius(tube_radius_);
+				geometric_objects_.push_back(tube2);
 			}
 
 			have_start_point_ = false;
@@ -561,6 +603,12 @@ namespace BALL
 		// -------------------------------------------------------------------	
 		Processor::Result AddCartoonModel::operator () (Composite& composite)
 		{
+			if (RTTI::isKindOf<Protein>(composite))
+			{
+				calculateComplementaryBases_(composite);
+				return Processor::CONTINUE;
+			}
+
 			if (RTTI::isKindOf<Chain>(composite))
 			{
 				clear_();
@@ -816,6 +864,80 @@ namespace BALL
 			insertTriangle_(last_vertices + 1, last_vertices +  15, last_vertices + 9, mesh);
 
 			last_vertices+=8;
+		}
+
+		void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
+			throw()
+		{
+			complementary_bases_.clear();
+			Protein& protein = *(Protein*)&composite;
+			if (protein.countChains() < 2) return;
+
+			HashMap<Residue*, Vector3> positions;
+
+			ResidueIterator rit = protein.beginResidue();
+			for (; +rit; rit++)
+			{
+				if ((*rit).getName().size() > 1 ||
+						((*rit).getName() != "A" &&
+						 (*rit).getName() != "C" &&
+						 (*rit).getName() != "G" &&
+						 (*rit).getName() != "T"))
+				{
+					continue;
+				}
+
+				GeometricCenterProcessor gcp;
+				(*rit).apply(gcp);
+				positions[&*rit] = gcp.getCenter();
+			}
+
+			if (positions.size() < 2) return;
+
+			Chain& chain1 = *protein.getChain(0);
+			Chain& chain2 = *protein.getChain(1);
+
+			ResidueIterator rit1 = chain1.beginResidue();
+
+			HashSet<Residue*> chain2_residues;
+			ResidueIterator rit2 = chain2.beginResidue();
+			for (; +rit2; ++rit2)
+			{
+				chain2_residues.insert(&*rit2);
+			}
+
+			for (; +rit1; ++rit1)
+			{
+				float distance = 200;
+				Residue* found_partner = 0;
+				HashSet<Residue*>::Iterator rit2 = chain2_residues.begin();
+				for (; rit2 != chain2_residues.end(); rit2++)
+				{
+					if (((*rit1).getName() == "A" && (**rit2).getName() != "T") ||
+							((*rit1).getName() == "C" && (**rit2).getName() != "G") ||
+							((*rit1).getName() == "G" && (**rit2).getName() != "C") ||
+							((*rit1).getName() == "T" && (**rit2).getName() != "A"))
+					{
+						continue;
+					}
+
+					float new_distance = ((positions[&*rit1] - positions[*rit2]).getSquareLength());
+					if (new_distance > distance) 
+					{
+						continue;
+					}
+
+					found_partner = *rit2;
+					distance = new_distance;
+				}
+
+				if (found_partner != 0)
+				{
+					complementary_bases_[&*rit1] =  found_partner;
+					complementary_bases_[found_partner]  = &*rit1;
+					chain2_residues.erase(found_partner);
+				}
+			}
 		}
 
 	} // namespace VIEW
