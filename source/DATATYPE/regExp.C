@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.6 2000/06/27 22:10:56 oliver Exp $ 
+// $Id: regExp.C,v 1.7 2000/06/28 20:23:09 oliver Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -89,11 +89,12 @@ namespace BALL
 
 		if (from < 0)
 		{
-			throw Exception::IndexUnderFlow(__FILE__, __LINE__, from, 0);
+			throw Exception::IndexUnderflow(__FILE__, __LINE__, from, 0);
 		}
-		if (from > text.size())
+
+		if (from > (Index)text.size())
 		{
-			throw Exception::IndexOverFlow(__FILE__, __LINE__, from, size());
+			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
 		}
 
 		return (bool)(regexec(&regex_, text.c_str() + from, (size_t)0, 0, execute_flags) == 0);
@@ -110,7 +111,7 @@ namespace BALL
 
 		if (!text.isValid())
 		{
-			throw Substring::InvalidSubstring(__FILE__, __LINE__)
+			throw Substring::InvalidSubstring(__FILE__, __LINE__);
 		}
 
 		if (from < 0)
@@ -118,7 +119,7 @@ namespace BALL
 			throw Exception::IndexUnderflow(__FILE__, __LINE__, from, 0);
 		}
 
-		if (from > text.size())
+		if (from > (Index)text.size())
 		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, from, text.size());
 		}
