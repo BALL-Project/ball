@@ -1,4 +1,4 @@
-// $Id: assignTypes.h,v 1.6 2001/02/18 20:51:18 amoll Exp $
+// $Id: assignTypes.h,v 1.7 2002/01/31 10:15:30 anker Exp $
 // Molecular Mechanics: atom type assignment
 
 #ifndef BALL_MOLMEC_COMMON_ASSIGNTYPES_H
@@ -17,7 +17,8 @@
 namespace BALL 
 {
 	
-	/**	Type assignment processor
+	/**	Type assignment processor.
+			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/assignTypes.h}
 	*/
 	class	AssignTypeProcessor
 		:	public UnaryProcessor<Atom>

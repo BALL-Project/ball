@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.h,v 1.9 2001/07/11 23:59:32 amoll Exp $
+// $Id: forceFieldComponent.h,v 1.10 2002/01/31 10:15:30 anker Exp $
 // Molecular Mechanics: general force field component class
 
 #ifndef BALL_MOLMEC_FORCEFIELDCOMPONENT_H
@@ -22,7 +22,8 @@ namespace BALL
 
 	class ForceField;
 
-	/**	Generic force field component class
+	/**	Generic force field component class.
+			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/forceFieldComponent.h}
 	*/
 	class ForceFieldComponent 
 	{

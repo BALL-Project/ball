@@ -1,11 +1,11 @@
-// $Id: common.doc,v 1.6 2001/03/11 19:27:06 anker Exp $
+// $Id: common.doc,v 1.7 2002/01/31 10:15:30 anker Exp $
 
 /**	@name	General Force Field Classes.
 */
 //@{
 
-  //@Inlcude: assignTypes.h
-	//@Inlcude: atomVector.h
+	//@Include: assignTypes.h
+	//@Include: atomVector.h
 	//@Include: forceField.h
 	//@Include: forceFieldComponent.h
 	//@Include: gradient.h

@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.16 2001/06/26 02:38:12 oliver Exp $
+// $Id: forceField.h,v 1.17 2002/01/31 10:15:30 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -74,7 +74,9 @@ namespace BALL
 			components and invokes the updateEnergy method of each of these components.
 			The total energy may then be retrieved by calling \Ref{getEnergy}.\\
 			Analogously, a force calculation is performed by invoking \Ref{updateForces}.
-			\Ref{getForces} returns a pointer to an array containing the forces for each atom.
+			\Ref{getForces} returns a pointer to an array containing the forces
+			for each atom.\\
+			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/forceField.h}
 	*/
 	class ForceField
 	{

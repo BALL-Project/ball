@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.h,v 1.12 2001/06/21 21:28:27 amoll Exp $
+// $Id: periodicBoundary.h,v 1.13 2002/01/31 10:15:30 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
 #define BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -23,8 +23,9 @@ namespace BALL
 	class PeriodicBoundary;
 
 	/**	Periodic boundary class for force field simulations. 
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/periodicBoundary.h} \\
 			Molecular Mechanics: class representing periodic boundary conditions.
+			\\
+			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/periodicBoundary.h}
 	*/
 	class PeriodicBoundary
 	{
