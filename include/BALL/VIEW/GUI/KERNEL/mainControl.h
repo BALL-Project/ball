@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.25 2002/12/16 16:07:53 amoll Exp $
+// $Id: mainControl.h,v 1.26 2002/12/17 13:34:27 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -57,6 +57,7 @@
 #include <qobject.h>
 #include <qwidget.h>
 #include <qmainwindow.h>
+#include <qlabel.h>
 
 namespace BALL
 {
@@ -800,6 +801,11 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 							
+			//@}
+			/**	@name	Accessors and Settings
+			*/
+			//@{
+			
 			/** Get the HashSet with the selected composites
 			 */
 			const HashSet<Composite*>& getSelection() const
@@ -821,14 +827,19 @@ namespace BALL
 			void selectComposites_(GeometricObjectSelectionMessage& message)
 				throw();
 
-			//@}
-			
+			/**	Select a composite recursive and add all atoms and atomcontainers to the selection.
+			 */
 			void selectCompositeRecursive(Composite* composite, bool state)
 				throw();
 
+			/** Sets the text in the statusbar.
+			 		The statusbar has a label, whose text is set to the given argument
+			*/
 			void setStatusbarText(const String& text)
 				throw();
 
+			//@}
+			
 			protected:
 
 			/*_ List with the selected composites
@@ -840,6 +851,11 @@ namespace BALL
 			*/
 			List<Composite*>						control_selection_;		
 
+			/*_ Message label in the statusbar
+			 		@see setStatusbarText
+			*/
+			QLabel* 										message_label_;
+	
 			private:
 
 			/*_	Create a unique item ID.
@@ -871,7 +887,8 @@ namespace BALL
 			INIFile		 									preferences_;
 			
 			static int 									current_id_;
-			
+
+		
 			// used to acces the global instance of MainControl
 			static MainControl* 				theMainControl_;
 
