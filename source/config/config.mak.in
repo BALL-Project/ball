@@ -1,0 +1,105 @@
+# This is config.mak.in/config.mak
+# Please do ONLY change config.mak.in, as config.mak is automagically 
+# created by configure from config.mak.in
+#
+# RCS ID: $Id: config.mak.in,v 1.1 1999/08/26 08:02:33 oliver Exp $
+#
+# author:    $author$
+# date:      $date$
+# revision:  $rev$
+#
+
+# First, some basic unix commands, including the C++ compiler
+#
+
+# archiver ar (to create static libraries)
+AR	=@AR@
+
+# dynamic archiver (to create shared libraries)
+DYNAR = @DYNAR@
+
+# C++ compiler
+CXX	=@CXX@
+# unix command rm, used to remove obsolete files (target clean)
+RM	=@RM@
+# unix command cp, used to copy files (target install.lib)
+CP	=@CP@
+# unix command strip, used to strip away unused stuff from object files
+STRIP	=@STRIP@
+# prelinker, needed for some compiler to create libraries
+PRELINK	=@PRELINK@
+
+
+OS	     = @OS@		   	  # name of your OS
+OSREV	   = @OSREV@	   	# full revision number
+OSMAJOR	 = @OSMAJOR@		# major revision number (full revision number cut at the first dot)
+BINFMT   = @BINFMT@     # binary format type (platform-architecture-compiler)
+
+# BALL_PATH is the BALL root directory (the directory in which include and source reside)
+# BALL_INCLUDES contains compiler flags to set the BALL include paths
+# and BALL_LIBS is set to $BALL_PATH/lib/$BINFMT
+#
+BALL_PATH		    = @BALL_PATH@
+BALL_INCLUDES		= @BALL_INCLUDES@
+BALL_LIBS		    = @BALL_LIBS@
+
+# USE_BALLVIEW contains true if BALLVIEW support is to be built, false otherwise
+# BALLVIEW_PLATFORM either contains Mesa or OpenGL (so far)
+#
+USE_BALLVIEW		= @USE_BALLVIEW@
+BALLVIEW_PLATFORM 	= @BALLVIEW_PLATFORM@
+BALLVIEW_INCLUDES	= @BALLVIEW_INCLUDES@
+BALLVIEW_LIBS		= @BALLVIEW_LIBS@
+
+# These are standard flags. CPPFLAGS to compile, LDFLAGS to link programs
+# DEFINES and DEBUG are both part of CPPFLAGS
+# ADD_CPPFLAGS are also passed on to the C++ compiler
+# but are NOT passed on to makedepend
+# This is the place for compiler options that are not understood
+# by makedepend (e.g. -Olimit using IRIX DCC)
+#
+CPPFLAGS		= @CPPFLAGS@ -DBFMT=@BINFMT_INDEX@
+LDFLAGS			= @LDFLAGS@
+ADD_CPPFLAGS		= @ADD_CPPFLAGS@
+
+# all the libraries in linker usable format (-l..)
+LIBS			= @LIBS@
+#
+DEFINES 		= @DEFINES@
+#
+CPPFLAGS_D		=@CPPFLAGS_D@
+CPPFLAGS_O		=@CPPFLAGS_O@
+BALL_CPPFLAGS =@BALL_CPPFLAGS@
+
+# MODE_FLAGS is set to DEBUG_FLAGS or OPTIMIZE_FLAGS, depending on the
+# BALL_DEBUG entry in configure.in
+CPP_MODE_FLAGS	= @CPP_MODE_FLAGS@
+
+# CPP_MODE_FLAGS_NO_OPTIMIZATION is used in the (luckily quite rare!)
+# cases where the compiler crashes when performing optimization.
+# In this case, the source files will be compiled using CPP_MODE_FLAGS_NO_OPTIMIZATION
+# instead of CPP_MODE_FLAGS
+CPP_MODE_FLAGS_NO_OPTIMIZATION = @CPP_MODE_FLAGS_NO_OPTIMIZATION@
+
+# prelinker options
+PREOPTS			= @PREOPTS@
+
+# if g++ is used, configure tries to determine its standard include directories
+# this is used to prevent trouble when calling makedepend. Otherwise makedepend
+# will produce loads of (irrelevant) warnings
+STD_CPP_INCLUDES	= @STD_CPP_INCLUDES@
+
+#  These are the major source directories.
+#  They are entered in this order and "make all" is executed.
+#  To build the library each of these directories is entered und "make libadd" is executed
+#  to add the subdirectories' objects to the library.
+#
+#  If configure decides that BALLVIEW is to be built, it will replace @BALLVIEW@ by BALLVIEW,
+#  otherwise by an empty string
+#
+DIRS	= @SUBDIRS@
+
+# Rule to create .o files from .C files
+#
+.C.o:
+	$(CXX) $(CPPFLAGS) $(ADD_CPPFLAGS) $(CPP_MODE_FLAGS) $(BALL_CPPFLAGS) $(BALL_INCLUDES) -c $*.C -o $@

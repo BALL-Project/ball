@@ -1,0 +1,22 @@
+
+EXECUTABLES=proteinMapper PDB2discover energy
+
+all:	$(EXECUTABLES)
+
+include ../common.mak
+
+
+
+
+clean:	default_clean
+	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	core a.out $(EXECUTABLES)
+
+proteinMapper:	proteinMapper.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+PDB2discover:	PDB2discover.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+energy:	energy.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+

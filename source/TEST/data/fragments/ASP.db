@@ -1,0 +1,98 @@
+(ASP
+  (Names
+		(Aspartate)
+		(Aspartat)
+		(Asp)
+		(D)
+  )
+  (Atoms
+    (N N 0.1006113 1.231053 -0.1065504)
+    (3H H 0.7826706 1.919109 0.1901606)
+    (CA C -0.6776782 1.854581 -1.196471)
+    (HA H -0.140641 1.67647 -2.129506)
+    (C C -0.7684437 3.377808 -1.00658)
+    (O O -0.1755398 3.814352 0.008837678)
+    (CB C -2.059715 1.201639 -1.304611)
+    (1HB H -1.947421 0.1437317 -1.541582)
+    (2HB H -2.583309 1.296861 -0.3531539)
+    (CG C -2.895658 1.868856 -2.384729)
+    (OD1 O -2.861295 1.365629 -3.526181)
+    (OD2 O -3.508188 2.905267 -2.052321)
+    (OXT O -0.9198192 4.048685 -2.051676)
+    (1H H -0.5109496 1.02733 0.6709606)
+    (2H H 0.5472904 0.3836241 -0.4264945)
+  )
+  (Bonds
+    (1 3H N)
+    (2 CA N)
+    (3 HA CA)
+    (4 C CA)
+    (5 O C)
+    (6 CB CA)
+    (7 1HB CB)
+    (8 2HB CB)
+    (9 CG CB)
+    (10 OD1 CG)
+    (11 OD2 CG)
+    (12 OXT C)
+    (13 1H N)
+    (14 2H N)
+  )
+  (Connections
+    (N-term N C-term 1.33 0.5) 
+    (C-term C N-term 1.33 0.5)
+  )
+ 	(Properties
+		(AMINO_ACID)
+	)
+	(Variants
+		(Default
+			(Delete
+				(OXT)
+			  (1H)
+			  (2H)
+			)
+		  (Rename
+			  (3H H)
+			)
+			(addh 4
+				(H N CA C x )
+				(HA CA N C CB )
+				(1HB CB CA CG OD1 )
+				(2HB CB CA CG OD1 )
+			)
+		)
+	  (ASP-N
+		  (Delete
+			  (OXT)
+			)
+		  (Properties
+			  (N_TERMINAL)
+      )
+			(addh 4
+				(H N CA C x )
+				(HA CA N C CB )
+				(1HB CB CA CG OD1 )
+				(2HB CB CA CG OD1 )
+			)
+		)
+		(ASP-C
+		  (Delete
+				(1H)
+				(2H)
+			)
+		  (Rename
+				(3H H)
+			)
+      (Properties
+				(C_TERMINAL)
+			)
+			(addh 4
+				(H N CA C x )
+				(HA CA N C CB )
+				(1HB CB CA CG OD1 )
+				(2HB CB CA CG OD1 )
+			)
+		)
+	)
+)

@@ -1,0 +1,13 @@
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c autoDeletable.C -o autoDeletable.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c callback.C -o callback.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c composite.C -o composite.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c notification.C -o notification.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c object.C -o object.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c persistenceManager.C -o persistenceManager.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c processor.C -o processor.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c property.C -o property.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c selectable.C -o selectable.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c singleton.C -o singleton.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c textPersistenceManager.C -o textPersistenceManager.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c visitor.C -o visitor.o
+/usr/bin/CC -n32 -O3 -I/KM/usr/oliver/SBALL/include -c XDRPersistenceManager.C -o XDRPersistenceManager.o

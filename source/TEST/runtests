@@ -1,0 +1,88 @@
+#!/bin/sh
+
+# try to figure out which syntax we need
+# to prevent a linefeed at the end of echo
+# Some versions of sh use -n as an option
+# others use \c at the end of the line.
+# This is just for cosmetic reasons...
+A=`echo "\c"|grep c`
+if test "$A" != "" ; then 
+	A=`echo -n "k"|grep n` 
+	if test "$A" == "" ; then 
+		ECHO="echo -n "
+		SUFFIX=""
+	else 
+		ECHO="echo"
+		SUFFIX=""
+	fi 
+else  
+	ECHO="echo"
+	SUFFIX="\c"
+fi
+
+
+echo " "
+echo "Now running all class tests."
+echo " "
+echo "This test suite verifies that all classes included in the test"
+echo "could be correctly compiled and checks their basic functionality."
+echo "If problems occur for one of these tests, you might want to run"
+echo "this test program manually. Any failing test will be rerun with"
+echo "verbose output to identify the subtest that caused the problem."
+echo "You may run each test manually in the verbose mode by specifying -v"
+echo "on the command line."
+echo "Running these tests may take some time...."
+echo " "
+
+# remember any failed tests by setting OK=false
+OK=true
+
+# loop over all tests
+for i in $* ; do
+	# print the name of the test running
+	$ECHO " - $i: $SUFFIX"
+	
+	# run it and examine its return value
+	if ./$i 2>&1 >/dev/null ; then
+		# test passed - OK
+		echo "OK"
+	else 
+		# test didn't pass
+		OK=false
+		
+		# remember this test
+		FAILED_TESTS="${FAILED_TESTS} $i"
+
+		# rerun it in verbose mode to find out which
+		# subtest failed
+		echo "Failure in test $i. Rerunning test in verbose mode:"
+		echo "--------------------------------------"
+		./$i -v
+		echo "--------------------------------------"
+		echo " "
+	fi
+done
+
+# print some summary of all tests
+echo "====================================="
+echo " "
+
+if test "$OK" = true ; then
+	echo "All tests passed. Congratulations!"
+	echo " "
+	exit 0
+else
+	echo "The following subtests failed:"
+
+	for i in ${FAILED_TESTS} ; do 
+		echo " - $i"
+	done
+
+	echo " "
+	echo "Please mail the output of this run to one of the developers"
+	echo "and include a detailed description of the system you use."
+	echo "It is also neccessary to include the files ../config.mak ../config.h"
+	echo " "
+
+	exit 1
+fi

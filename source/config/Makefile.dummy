@@ -1,0 +1,14 @@
+# Dummy Makefile - for people who are not used to ./configure
+# $Id: Makefile.dummy,v 1.1 1999/08/26 08:02:33 oliver Exp $
+
+
+default:
+	@echo "                        RTFM!"
+	@echo " "
+	@echo "Take care! Why didn't you have a look at the README file?"
+	@echo "First, you have to execute ./configure to create a useful Makefile."
+	@echo "I will do this for you now, but please DO READ THE README - next time..."
+	@-sleep 5
+	@./configure
+
+	

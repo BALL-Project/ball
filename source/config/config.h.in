@@ -1,0 +1,168 @@
+
+// here are some global configuration flags for BALL
+
+// this flag is used by GenericPDBFile
+// if it is not set, the length of each line has
+// to be meet the PDB spcifications exactly.
+// As virtually no existing PDB file fulfills
+// this requirement, we disencourage its usage.
+// Nevertheless, it can be quite useful for debugging.
+#undef BALL_STRICT_PDB_LINE_IMPORT
+
+// BALL_DEBUG enables some debugging methods
+// change the DEBUG entry in configure to define this flag.
+// If in debug mode, inline functions won't be compiled
+// as inline by defining BALL_NO_INLINE_FUNCTIONS
+// This facilitates debugging, as the debugger can always
+// find the corresponding source code line.
+// See also COMMON/debug.h for these symbols.
+#undef BALL_DEBUG
+#undef BALL_NO_INLINE_FUNCTIONS
+
+
+// this define is used to determine
+// wheter BALL shall try to close a socket conection
+// via shutdown or close
+// (see socket.C)
+#define BALL_USE_SOCKET_SHUTDOWN
+
+// these two flags are set by configure according to 
+// the OS and compiler found. HAS_BOOL_TYPE and 
+// _CC_BOOL_DEF_ are required for compatibility
+// reasons with QT.
+
+// the path to the directory where BALL is installed
+#define BALL_PATH "BALL"
+
+// used in COMMON/namespace.h to cause the inclusion of COMMON/memory.h
+#undef BALL_LOG_MEMORY
+#define BALL_LOG_MEMORY_FILE "memory.log"
+
+// undef this symbol to disable the usage
+// of the ObjectManager (refer to the documentation
+// for details)
+#define BALL_SUPPORT_OBJECT_MANAGER
+
+// define architecture
+#undef SPARC
+#undef MIPS
+#undef I386
+#undef ALPHA
+
+//define OS
+#undef LINUX
+#undef SOLARIS
+#undef SUNOS
+#undef IRIX
+#undef IRIX32
+#undef IRIX64
+
+
+// on systems that have no support for strerror
+// BALL defines by itself
+#undef BALL_DEFINE_STRERROR
+
+// each of the following symbols defines whether
+// BALL should use its own routines or the standard
+// routines of the OS. The BALL routines might be faster in 
+// some cases.
+#define BALL_INLINE_MEMCHR
+#define BALL_INLINE_MEMCMP
+#define BALL_INLINE_MEMCPY
+#define BALL_INLINE_MEMMOVE
+#define BALL_INLINE_MEMSET
+#define BALL_INLINE_STRCHR
+#define BALL_INLINE_STRNCHR
+#define BALL_INLINE_STRCMP
+#define BALL_INLINE_STRNCMP
+#define BALL_INLINE_STRCPY
+#define BALL_INLINE_STRNCPY
+#define BALL_INLINE_STRLEN
+#undef BALL_INLINE_STRSTR
+
+// Define if you have the inet_aton function.  
+// Note: inet_aton is a marginally improved version of inet_addr
+// If configure finds inet_aton, HAVE_INET_ATON is set and used
+// in SYSTEM/socket.C.
+#undef HAVE_INET_ATON
+
+// Define the type needed for getsockname, getpeername, and accept
+// This type is probably one of socklen_t, size_t, or int
+// Refer to /usr/include/sys/socket.h in case of doubt
+#define BALL_SOCKLEN_TYPE int
+
+// on some systems (e.g. Solaris) we need to include /usr/include/ieeefp.h
+// for some floating point functions
+#undef BALL_INCLUDE_IEEEFP
+
+// Define if you don't have vprintf but do have _doprnt.  
+#undef HAVE_DOPRNT
+
+// Define if you have <sys/wait.h> that is POSIX.1 compatible.  
+#undef HAVE_SYS_WAIT_H
+
+// Define if you have the vprintf function.  
+#undef HAVE_VPRINTF
+
+// Define if you have the wait3 system call.  
+#undef HAVE_WAIT3
+
+// Define to `int' if <sys/types.h> doesn't define.  
+#undef pid_t
+
+// Define to `unsigned' if <sys/types.h> doesn't define.  
+#undef size_t
+
+// Define if you have the ANSI C header files.  
+#undef STDC_HEADERS
+
+// Define if you can safely include both <sys/time.h> and <time.h>.  
+#undef TIME_WITH_SYS_TIME
+
+// Define if you have the getcwd function.  
+#undef HAVE_GETCWD
+
+// Define if you have the gettimeofday function.  
+#undef HAVE_GETTIMEOFDAY
+
+// Define if you have the putenv function.  
+#undef HAVE_PUTENV
+
+// Define if you have the select function.  
+#undef HAVE_SELECT
+
+// Define if you have the socket function.  
+#undef HAVE_SOCKET
+
+// Define if you have the strdup function.  
+#undef HAVE_STRDUP
+
+// Define if you have the strstr function.  
+#undef HAVE_STRSTR
+
+// Define if you have the uname function.  
+#undef HAVE_UNAME
+
+// Define if you have the <fcntl.h> header file.  
+#undef HAVE_FCNTL_H
+
+// Define if you have the <limits.h> header file.  
+#undef HAVE_LIMITS_H
+
+// Define if you have the <sys/time.h> header file.  
+#undef HAVE_SYS_TIME_H
+
+// Define if you have the <unistd.h> header file.  
+#undef HAVE_UNISTD_H
+
+// Define if numeric_limits is defined in <limits>
+#undef HAVE_NUMERIC_LIMITS
+
+// Defines an integer type that has the same length as void*
+#define BALL_POINTERSIZE_INT int
+
+// Defines an unsigned type that has the same length as size_t
+#define BALL_SIZE_TYPE int
+
+// Defines a signed type that has the same length as size_t
+#define BALL_INDEX_TYPE int
