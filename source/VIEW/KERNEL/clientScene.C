@@ -1,4 +1,4 @@
-// $Id: clientScene.C,v 1.1 1999/08/26 08:02:46 oliver Exp $
+// $Id: clientScene.C,v 1.3 1999/12/19 17:15:40 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/clientScene.h>
 
@@ -72,7 +72,7 @@ namespace BALL
 			IOStreamSocket iostream_socket;	
 			iostream_socket->connect(host_, port_);
 
-			iostream_socket << COMMAND__DESTROY_SCENE << " ";
+			iostream_socket << (int)COMMAND__DESTROY_SCENE << " ";
 			iostream_socket << scenehandle_ << endl;
 
 			iostream_socket->close();
@@ -95,7 +95,7 @@ namespace BALL
 			IOStreamSocket iostream_socket;	
 			iostream_socket->connect(host_, port_);
 
-			iostream_socket << COMMAND__SHOW_SCENE << " ";
+			iostream_socket << (int)COMMAND__SHOW_SCENE << " ";
 			iostream_socket << scenehandle_ << endl;
 
 			iostream_socket->close();
@@ -115,7 +115,7 @@ namespace BALL
 			IOStreamSocket iostream_socket;	
 			iostream_socket->connect(host_, port_);
 
-			iostream_socket << COMMAND__HIDE_SCENE << " ";
+			iostream_socket << (int)COMMAND__HIDE_SCENE << " ";
 			iostream_socket << scenehandle_ << endl;
 		
 			iostream_socket->close();
@@ -135,7 +135,7 @@ namespace BALL
 			IOStreamSocket iostream_socket;	
 			iostream_socket->connect(host_, port_);
 
-			iostream_socket << COMMAND__RESIZE_SCENE << " ";
+			iostream_socket << (int)COMMAND__RESIZE_SCENE << " ";
 			iostream_socket << scenehandle_ << " ";
 			iostream_socket << width << " ";
 			iostream_socket << height << endl;
@@ -162,8 +162,8 @@ namespace BALL
 			IOStreamSocket iostream_socket;	
 			iostream_socket->connect(host_, port_);
 
-			iostream_socket << COMMAND__SEND_OBJECT << endl;
-			iostream_socket << scenehandle_ << endl;
+			iostream_socket << (int)COMMAND__SEND_OBJECT << " ";
+			iostream_socket << scenehandle_ << " ";
 			iostream_socket << (unsigned long)(&composite) << endl;
 
 			pm_.setOstream(iostream_socket);
@@ -172,7 +172,7 @@ namespace BALL
 			iostream_socket->close();
     }
 
-		void ClientScene::update()
+		bool ClientScene::update(bool rebuild_displaylists)
 		{
 			#ifdef BALL_VIEW_DEBUG
 					
@@ -186,12 +186,166 @@ namespace BALL
 			IOStreamSocket iostream_socket;	
 			iostream_socket->connect(host_, port_);
 
-			iostream_socket << COMMAND__UPDATE_SCENE << " ";
-			iostream_socket << scenehandle_ << endl;
-		
+			iostream_socket << (int)COMMAND__UPDATE_SCENE << " ";
+			iostream_socket << scenehandle_ << " ";
+			iostream_socket << rebuild_displaylists << endl;
+
+			bool finished = false;
+
+			iostream_socket >> finished;
+
 			iostream_socket->close();
+
+			return finished;
     }
 
+		void ClientScene::setCreatorValue(int address, int value)
+    {
+			#ifdef BALL_VIEW_DEBUG
+					
+			if (!isValid())
+			{
+				throw InvalidClientScene(__FILE__, __LINE__);
+			}
+				
+			#endif
+
+			IOStreamSocket iostream_socket;	
+			iostream_socket->connect(host_, port_);
+
+			iostream_socket << (int)COMMAND__SET_CREATOR_VALUE << " ";
+			iostream_socket << address << " ";
+			iostream_socket << value << endl;
+		
+			iostream_socket->close();
+		}
+
+		int ClientScene::getCreatorValue(int address)
+    {
+			#ifdef BALL_VIEW_DEBUG
+					
+			if (!isValid())
+			{
+				throw InvalidClientScene(__FILE__, __LINE__);
+			}
+				
+			#endif
+
+			IOStreamSocket iostream_socket;	
+			iostream_socket->connect(host_, port_);
+
+			iostream_socket << (int)COMMAND__GET_CREATOR_VALUE << " ";
+			iostream_socket << address << endl;
+
+			int value = -1;
+
+			iostream_socket >> value;
+
+			iostream_socket->close();
+
+			return value;
+		}
+
+		bool ClientScene::hasCreatorValue(int address, int value)
+    {
+			#ifdef BALL_VIEW_DEBUG
+					
+			if (!isValid())
+			{
+				throw InvalidClientScene(__FILE__, __LINE__);
+			}
+				
+			#endif
+
+			IOStreamSocket iostream_socket;	
+			iostream_socket->connect(host_, port_);
+
+			iostream_socket << (int)COMMAND__HAS_CREATOR_VALUE << " ";
+			iostream_socket << address << " ";
+			iostream_socket << value << endl;
+
+			bool has_value = false;
+
+			iostream_socket >> has_value;
+
+			iostream_socket->close();
+
+			return has_value;
+		}
+
+		void ClientScene::setProcessorValue(int address, int value)
+    {
+			#ifdef BALL_VIEW_DEBUG
+					
+			if (!isValid())
+			{
+				throw InvalidClientScene(__FILE__, __LINE__);
+			}
+				
+			#endif
+
+			IOStreamSocket iostream_socket;	
+			iostream_socket->connect(host_, port_);
+
+			iostream_socket << (int)COMMAND__SET_PROCESSOR_VALUE << " ";
+			iostream_socket << address << " ";
+			iostream_socket << value << endl;
+		
+			iostream_socket->close();
+		}
+
+		int ClientScene::getProcessorValue(int address)
+    {
+			#ifdef BALL_VIEW_DEBUG
+					
+			if (!isValid())
+			{
+				throw InvalidClientScene(__FILE__, __LINE__);
+			}
+				
+			#endif
+
+			IOStreamSocket iostream_socket;	
+			iostream_socket->connect(host_, port_);
+
+			iostream_socket << (int)COMMAND__GET_PROCESSOR_VALUE << " ";
+			iostream_socket << address << endl;
+
+			int value = -1;
+
+			iostream_socket >> value;
+
+			iostream_socket->close();
+
+			return value;
+		}
+
+		bool ClientScene::hasProcessorValue(int address, int value)
+    {
+			#ifdef BALL_VIEW_DEBUG
+					
+			if (!isValid())
+			{
+				throw InvalidClientScene(__FILE__, __LINE__);
+			}
+				
+			#endif
+
+			IOStreamSocket iostream_socket;	
+			iostream_socket->connect(host_, port_);
+
+			iostream_socket << (int)COMMAND__HAS_PROCESSOR_VALUE << " ";
+			iostream_socket << address << " ";
+			iostream_socket << value << endl;
+
+			bool has_value = false;
+
+			iostream_socket >> has_value;
+
+			iostream_socket->close();
+
+			return has_value;
+		}
 
 		bool ClientScene::isValid() const
 		{
