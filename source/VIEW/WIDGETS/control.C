@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.C,v 1.2 2003/08/26 16:07:02 amoll Exp $
+// $Id: control.C,v 1.3 2003/09/02 21:56:38 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/control.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -287,13 +287,35 @@ void Control::updateSelection()
 	setStatusbarText("");
 	selected_.clear();
 
+	// we have to prevent, to insert child items of already selected parents,
+	// otherwise we get trouble in DisplayProperties
 	QListViewItemIterator it(this);
 	for (; it.current(); ++it)
 	{
 		SelectableListViewItem* item = (SelectableListViewItem*) it.current();
 		if (item->isSelected())
 		{
-			selected_.push_back(item->getComposite());
+			// always add systems
+			Composite* composite = item->getComposite();
+			if (composite->getParent() == 0)
+			{
+				selected_.push_back(composite);
+				continue;
+			}
+
+			List<Composite*>::Iterator lit = selected_.begin();
+			for (; lit != selected_.end(); lit++)
+			{
+				if (composite->isDescendantOf(**lit))
+				{
+					break;
+				}
+			}
+			// no added parent found
+			if (lit == selected_.end())
+			{
+				selected_.push_back(composite);
+			}
 		}
 	}
 
