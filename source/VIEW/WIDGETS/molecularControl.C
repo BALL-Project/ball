@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.18 2003/11/23 23:08:58 amoll Exp $
+// $Id: molecularControl.C,v 1.19 2003/11/25 12:00:20 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -88,6 +88,7 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 		{
 			color_menu_[i].insertItem(getColoringName((ColoringMethod)pos).c_str(), this, 
 																						 SLOT(createRepresentation_()), 0,2000 + pos);  
+			connect(&color_menu_[i], SIGNAL(highlighted(int)), this, SLOT(activatedItem_(int)));
 		}
 	}
 
@@ -180,21 +181,26 @@ void MolecularControl::activatedItem_(int pos)
 	{
 		selected_model_ = (ModelType)(pos -1000);
 	}
+	if (pos >= 2000 && pos < 3000)
+	{
+		selected_coloring_method_ = (ColoringMethod)(pos -2000);
+	}
+
 }
 
 void MolecularControl::buildContextMenu(Composite& composite)
 	throw()
 {
 	context_menu_.insertItem("Create Representation...", this, 
-			SLOT(createRepresentation()), CREATE_REPRESENTATION_MODE);
-	context_menu_.insertItem("Create Representation", &model_menu_, CREATE_REPRESENTATION);
+			SLOT(createRepresentation()), 0, CREATE_REPRESENTATION_MODE);
+	context_menu_.insertItem("Create Representation", &model_menu_, 0, CREATE_REPRESENTATION);
 	context_menu_.insertSeparator();
 
 	context_menu_.insertItem("Cut", this, SLOT(cut()), 0, OBJECT__CUT);
 	context_menu_.insertItem("Copy", this, SLOT(copy()), 0, OBJECT__COPY);
 	context_menu_.insertItem("Paste", this, SLOT(paste()), 0, OBJECT__PASTE);
 
-	context_menu_.insertItem("Move", this, SLOT(move()), OBJECT__MOVE);
+	context_menu_.insertItem("Move", this, SLOT(move()), 0, OBJECT__MOVE);
 
 	bool composites_muteable = getMainControl()->compositesAreMuteable();
 	context_menu_.setItemEnabled(OBJECT__CUT, composites_muteable);
