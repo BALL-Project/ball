@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.50.2.1 2004/12/27 17:38:53 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.50.2.2 2004/12/27 18:06:35 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -289,29 +289,25 @@ namespace BALL
 			if (composite == 0) return default_color_;
 			if (composite->isSelected()) return ColorProcessor::getColor(composite);
 
-			Position pos;
+			const Residue* residue = dynamic_cast<const Residue*>(composite);
+			if (residue == 0)
+			{
+				Residue dummy;
+				residue = composite->getAncestor(dummy);
+				if (residue == 0) return default_color_;
+			}
+				
 			try
 			{
-				if (!RTTI::isKindOf<Residue>(*composite))
-				{
-					Residue dummy;
-					const Residue* residue = composite->getAncestor(dummy);
-					if (residue == 0) return default_color_;
-					pos = residue->getID().toUnsignedShort();
-				}
-				else
-				{
-					pos = ((const Residue*)composite)->getID().toUnsignedShort();
-				}
+				ColorRGBA color = table_.map((float)residue->getID().toUnsignedShort());
+				color.setAlpha(255 - transparency_);
+				return color;
 			}
 			catch(...)
 			{
-				return default_color_;
 			}
 
-			ColorRGBA color = table_.map((float)pos);
-			color.setAlpha(255 - transparency_);
-			return color;
+			return default_color_;
 		}
 
 		bool ResidueNumberColorProcessor::start()
@@ -354,19 +350,16 @@ namespace BALL
 				{
 					if ((*res_it).getName() == "HOH") continue;
 
-					String id_string = (*res_it).getID();
-					Position id;
 					try
 					{
-						id = id_string.toUnsignedInt();
+						const Position id = (*res_it).getID().toUnsignedInt();
+						if (id < min_) min_ = id;
+						if (id > max_) max_ = id;
 					}
 					catch(...)
 					{
 						continue;
 					}
-
-					if (id < min_) min_ = id;
-					if (id > max_) max_ = id;
 				}
 			}
 
@@ -427,16 +420,18 @@ namespace BALL
 				green1 = negative_color_.getGreen();
 				blue1  = negative_color_.getBlue();
 			
-				charge = -charge;
+				charge *= -1.0;
 			}
 
 			red2   = neutral_color_.getRed();
 			green2 = neutral_color_.getGreen();
 			blue2  = neutral_color_.getBlue();
 
-			return ColorRGBA(red1 * charge + (1.0 - charge) * red2,
-											 green1 * charge + (1.0 - charge) * green2,
-											 blue1 * charge + (1.0 - charge) * blue2,
+			const float f = 1.0 - charge;
+
+			return ColorRGBA(red1 	* charge + f * red2,
+											 green1 * charge + f * green2,
+											 blue1 	* charge + f * blue2,
 											 255 - transparency_);
 		}
 
@@ -536,13 +531,13 @@ namespace BALL
 			if (distance > distance_) distance = distance_;
 			if (distance < 0.0) distance = 0.0;
 
-			float red1   = null_distance_color_.getRed();
-			float green1 = null_distance_color_.getGreen();
-			float blue1  = null_distance_color_.getBlue();
+			const float red1   = null_distance_color_.getRed();
+			const float green1 = null_distance_color_.getGreen();
+			const float blue1  = null_distance_color_.getBlue();
 
-			float red2   = full_distance_color_.getRed();
-			float green2 = full_distance_color_.getGreen();
-			float blue2  = full_distance_color_.getBlue();
+			const float red2   = full_distance_color_.getRed();
+			const float green2 = full_distance_color_.getGreen();
+			const float blue2  = full_distance_color_.getBlue();
 
 			return ColorRGBA(red1 + (distance * (red2 - red1)) 			/ distance_,
 											 green1 + (distance * (green2 - green1)) 	/ distance_,
@@ -602,8 +597,7 @@ namespace BALL
 					}
 					else if (RTTI::isKindOf<Atom>(**it))
 					{
-						const Atom* atom = dynamic_cast<const Atom*> (*it);
-						addAtom(*atom);
+						addAtom(*dynamic_cast<const Atom*> (*it));
 					}
 				}
 
