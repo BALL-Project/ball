@@ -1,4 +1,5 @@
-// $Id: ruleEvaluator.C,v 1.9 2001/04/09 11:28:11 amoll Exp $
+
+// $Id: ruleEvaluator.C,v 1.10 2001/07/11 00:12:56 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -42,7 +43,8 @@ namespace BALL
 	}
 
 	
-	void RuleEvaluator::clear() throw()
+	void RuleEvaluator::clear() 
+		throw()
 	{
 		prefix_ = "";
 		rule_map_.clear();
