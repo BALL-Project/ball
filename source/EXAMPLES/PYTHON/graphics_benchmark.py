@@ -3,7 +3,7 @@ pm = m.getPrimitiveManager()
 py = PyWidget.getInstance(0)
 
 result = 0
-nr_runs = 10
+nr_runs = 5
 
 def clearRepresentations():
 	nr = pm.getNumberOfRepresentations()
@@ -14,6 +14,7 @@ def clearRepresentations():
 		i = i + 1
 
 def runTest(name, model):
+	global result
 	run = 0
 	model_result = 0
 	while run < nr_runs and not py.toAbortScript():
@@ -25,7 +26,8 @@ def runTest(name, model):
 		model_result += t.getCPUTime()
 		run += 1
 		clearRepresentations()
-	print name+" "+str(model_result)
+	print name+" "+str(model_result)+" seconds"
+	result += model_result
 
 fd = MolecularFileDialog.getInstance(0)
 fd.openFile("bpti.pdb")
@@ -40,5 +42,7 @@ runTest("BAS",   		MODEL_BALL_AND_STICK)
 runTest("Cartoon", 	MODEL_CARTOON)
 runTest("SES", 			MODEL_SE_SURFACE)
 
+print "Result: "+str(result)+" seconds"
 result /= nr_runs
-print "Result: "+str(result)
+result = 1 / result
+print "Result: "+str(result)+" BALLView stones"
