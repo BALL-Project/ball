@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.28 2004/02/24 18:48:11 amoll Exp $
+// $Id: colorProcessor.C,v 1.29 2004/02/26 20:01:00 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -269,6 +269,8 @@ namespace BALL
 
 		ColorRGBA ColorProcessor::getColor(const Composite* composite)
 		{
+			if (composite == 0) return default_color_;
+
 			if (composite->isSelected())
 			{
 				ColorRGBA color(BALL_SELECTED_COLOR);
