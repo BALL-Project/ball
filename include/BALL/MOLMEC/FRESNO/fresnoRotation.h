@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.h,v 1.1.2.2 2002/03/05 23:46:20 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.3 2002/03/06 20:56:10 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
@@ -105,18 +105,10 @@ namespace BALL
 		*/
 		Size N_rot_;
 
-		/*_ A vector of vectors containing all atoms on either side of a
-		 * rotatable bond.
-		 * ?????
-		 * We coulde use indices insterad of pointers.
-		*/
-		::vector< ::pair< HashSet<const Atom*>, HashSet<const Atom*> > >
-			possible_contact_atoms_;
-			
 		/*_ A vector of bool indicating which of rotatable bond was frozen upon
 		 * binding.
 		*/
-		::vector<bool> frozen_bonds_;
+		::vector<bool> is_frozen_;
 
 		/* The percentages of nonlipophilc heavy atoms on each side of the bond
 		 * (named P(r) in the paper).
@@ -126,11 +118,19 @@ namespace BALL
 		/*_ This hash grid contains all receptor atoms. We need it for obtaining
 		 * those ligand atoms that are close to the receptor.
 		*/
-		HashGrid3<const Atom*>* receptor_grid_;
+		HashGrid3<const Atom*>* grid_;
 
-		/*_ The spacing of the receptor_grid_.
+		/*_ The spacing of the grid_.
 		*/
-		float receptor_grid_spacing_;
+		float grid_spacing_;
+
+		/*_
+		 */
+		Molecule* receptor_;
+
+		/*_
+		 */
+		float bind_distance_offset_;
 
 		/*_ The fresno atom types that are stored in the fresno force field
 		*/
@@ -140,7 +140,7 @@ namespace BALL
 				molecule.
 		*/
 		void cycleDFS_(const Atom* atom,
-				int& dfs_count, HashMap<const Atom*, int>& dfs_num, 
+				HashSet<const Atom*>& visited,
 				HashSet<const Bond*>& tree,
 				Stack<const Bond*>& possible_cycle_bonds,
 				HashSet<const Bond*>& cycle_bonds,
@@ -152,12 +152,20 @@ namespace BALL
 		 * Rognan et al.) atoms.
 		*/
 		void heavyAtomsDFS_(const Atom* atom, const Bond* bond,
-				int& dfs_count,
-				HashMap<const Atom*, int>& dfs_num,
+				HashSet<const Atom*>& visited,
 				int& heavy_atom_count)
-//				HashSet<const Atom*>& atoms_on_this_side)
 			throw();
-
+		
+		/*_ Find out which bonds are still frozen
+		 */
+		void updateFrozenBonds_()
+			throw();
+		
+		/*_
+		 */
+		bool frozenBondsDFS_(const Atom* atom,
+				HashSet<const Atom*>& visited)
+			throw();
 	};
 
 } // namespace BALL

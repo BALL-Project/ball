@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.2 2002/03/05 23:46:21 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.3 2002/03/06 20:56:11 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -25,10 +25,10 @@ namespace BALL
 		:	ForceFieldComponent(),
 			rotatable_bonds_(),
 			N_rot_(0),
-			frozen_bonds_(),
+			is_frozen_(),
 			heavy_atom_fractions_(),
-			receptor_grid_(0),
-			receptor_grid_spacing_(0.0),
+			grid_(0),
+			grid_spacing_(0.0),
 			fresno_types_(0)
 	{
 		// set component name
@@ -41,10 +41,10 @@ namespace BALL
 		:	ForceFieldComponent(force_field),
 			rotatable_bonds_(),
 			N_rot_(0),
-			frozen_bonds_(),
+			is_frozen_(),
 			heavy_atom_fractions_(),
-			receptor_grid_(0),
-			receptor_grid_spacing_(0.0),
+			grid_(0),
+			grid_spacing_(0.0),
 			fresno_types_(0)
 	{
 		// set component name
@@ -57,10 +57,10 @@ namespace BALL
 		:	ForceFieldComponent(fr, deep),
 			rotatable_bonds_(fr.rotatable_bonds_),
 			N_rot_(fr.N_rot_),
-			frozen_bonds_(fr.frozen_bonds_),
+			is_frozen_(fr.is_frozen_),
 			heavy_atom_fractions_(fr.heavy_atom_fractions_),
-			receptor_grid_(fr.receptor_grid_),
-			receptor_grid_spacing_(fr.receptor_grid_spacing_),
+			grid_(fr.grid_),
+			grid_spacing_(fr.grid_spacing_),
 			fresno_types_(fr.fresno_types_)
 	{
 	}
@@ -69,9 +69,9 @@ namespace BALL
 	FresnoRotation::~FresnoRotation()
 		throw()
 	{
-		if (receptor_grid_ != 0)
+		if (grid_ != 0)
 		{
-			delete receptor_grid_;
+			delete grid_;
 		}
 		clear();
 	}
@@ -82,10 +82,10 @@ namespace BALL
 	{
 		rotatable_bonds_.clear();
 		N_rot_ = 0;
-		frozen_bonds_.clear();
+		is_frozen_.clear();
 		heavy_atom_fractions_.clear();
-		if (receptor_grid_ != 0) receptor_grid_->clear();
-		receptor_grid_spacing_ = 0.0;
+		if (grid_ != 0) grid_->clear();
+		grid_spacing_ = 0.0;
 		fresno_types_ = 0;
 		// ?????
 		// ForceFieldComponent does not comply with the OCI
@@ -110,9 +110,9 @@ namespace BALL
 		// clear the vector of lipophilic interactions
 		rotatable_bonds_.clear();
 		// clear the grid that contains the receptor
-		if (receptor_grid_ != 0)
+		if (grid_ != 0)
 		{
-			receptor_grid_->clear();
+			grid_->clear();
 		}
 
 		// ?????
@@ -123,30 +123,30 @@ namespace BALL
 		// quadratic run time. not nice.
 
 		// see above
-		Molecule* receptor = &*system->beginProtein();
+		receptor_ = &*system->beginProtein();
 		const Molecule* ligand = system->getMolecule(0);
-		if (ligand == receptor) ligand = system->getMolecule(1);
+		if (ligand == receptor_) ligand = system->getMolecule(1);
 		
 		BoundingBoxProcessor bb_proc;
-		receptor->apply(bb_proc);
+		receptor_->apply(bb_proc);
 
 		// ?????
 		// parameter geraffels
-		receptor_grid_spacing_ = 5.0;
+		grid_spacing_ = 5.0;
+		bind_distance_offset_ = 0.5;
 
 		// create a grid for the receptor and insert all its atoms
-		receptor_grid_ = new HashGrid3<const Atom*>
-			(bb_proc.getLower(), bb_proc.getUpper(), receptor_grid_spacing_);
-		AtomConstIterator atom_it = receptor->beginAtom();
+		grid_ = new HashGrid3<const Atom*>
+			(bb_proc.getLower(), bb_proc.getUpper(), grid_spacing_);
+		AtomConstIterator atom_it = receptor_->beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
-			receptor_grid_->insert(atom_it->getPosition(), &*atom_it);
+			grid_->insert(atom_it->getPosition(), &*atom_it);
 		}
 
 		// define and initialize all variables we need for extracting the
 		// cycles (or rings)
-		int dfs_count = 0;
-		HashMap<const Atom*, int> dfs_num;
+		HashSet<const Atom*> visited;
 		HashSet<const Bond*> tree;
 		Stack<const Bond*> possible_cycle_bonds;
 		HashSet<const Bond*> cycle_bonds;
@@ -156,19 +156,13 @@ namespace BALL
 		const Atom* atom2;
 
 		// initialize the hash map
-		atom_it = ligand->beginAtom();
-		for (; +atom_it; ++atom_it)
-		{
-			dfs_num.insert(pair<const Atom*, int>(&*atom_it, -1));
-		}
 
-		cycleDFS_(atom1, dfs_count, dfs_num, 
+		cycleDFS_(atom1, visited,
 				tree, possible_cycle_bonds, cycle_bonds, cycle_count);
 
 		cout << tree.size() << endl;
 		// initialize the data structures for another dfs and count the heavy
 		// atoms in the system 
-		dfs_count = 0;
 		atom_it = ligand->beginAtom();
 		Size n_heavy_atoms = 0;
 		for (; +atom_it; ++atom_it)
@@ -237,24 +231,20 @@ namespace BALL
 							<< endl;
 						// /DEBUG
 						rotatable_bonds_.push_back(*tree_it);
-						dfs_count = 0;
-						for (atom_it = ligand->beginAtom(); +atom_it; ++atom_it)
-						{
-							dfs_num[&*atom_it] = -1;
-						}
+						visited.clear();
 						heavy_atom_count = 0;
 						// tmp.clear();
-						heavyAtomsDFS_(atom1, &**tree_it, dfs_count, dfs_num, 
+						heavyAtomsDFS_(atom1, &**tree_it, visited,
 								heavy_atom_count); // , tmp);
 						double first_fraction = (double) heavy_atom_count / (double) n_heavy_atoms;
 						double second_fraction = 1.0 - first_fraction;
 						heavy_atom_fractions_.push_back
 							(pair<double, double>(first_fraction, second_fraction));
 
-						cout << dfs_num[atom1] << " " << heavy_atom_count << " "
+						cout << heavy_atom_count << " "
 							<< first_fraction << " "
 							<< atom1->getFullName() << ":" << atom2->getFullName() << " " 
-							<< dfs_num[atom2] << " " << n_heavy_atoms - heavy_atom_count 
+							<< n_heavy_atoms - heavy_atom_count 
 							<< " " << second_fraction << endl;
 					}
 				}
@@ -262,6 +252,7 @@ namespace BALL
 		}
 
 		N_rot_ = rotatable_bonds_.size();
+		is_frozen_.resize(N_rot_);
 
 		// DEBUG
 		cout << "FresnoRotation setup statistics:" << endl;
@@ -279,15 +270,23 @@ namespace BALL
 	{
 
 		double E = 0.0;
+		double val;
 
-		// first find out which rotatable bonds are frozen
+		updateFrozenBonds_();
+
 		for (Size i = 0; i < rotatable_bonds_.size(); ++i)
 		{
-			// ?????
-			// we have to perform dfs in order to find those atoms that bind to the
-			// receptor.
+			if (is_frozen_[i] == true)
+			{
+				val = heavy_atom_fractions_[i].first + heavy_atom_fractions_[i].second;
+				val /= 2.0;
+				cout << "ROT: adding score of " << val << endl;
+				E += val;
+			}
 		}
 
+		E *= (1 - 1/N_rot_);
+		E += 1.0;
 		return E;
 
 	}
@@ -299,18 +298,17 @@ namespace BALL
 	}
 
 	void FresnoRotation::cycleDFS_(const Atom* atom,
-			int& dfs_count, HashMap<const Atom*, int>& dfs_num, 
+			HashSet<const Atom*>& visited,
 			HashSet<const Bond*>& tree,
 			Stack<const Bond*>& possible_cycle_bonds,
 			HashSet<const Bond*>& cycle_bonds,
 			int& cycle_count)
 		throw()
 	{
+		// mark this atom as visited
+		visited.insert(atom);
 
-		// assign this node's dfs number and increase the count
-		dfs_num[atom] = dfs_count++;
-
-		// now iterate over all bonds of this atom (i. e. this node)
+		// iterate over all bonds of this atom (i. e. this node)
 		AtomBondConstIterator it = atom->beginBond();
 		for (; +it; ++it)
 		{
@@ -318,7 +316,7 @@ namespace BALL
 			const Atom* partner = it->getPartner(*atom);
 
 			// if our partner atom wasn't visited yet, start dfs() with it
-			if (dfs_num[partner] == -1)
+			if (visited.has(partner) == false)
 			{
 
 				// save this bond as a candidate for a cycle bond
@@ -328,7 +326,7 @@ namespace BALL
 				tree.insert(bond);
 
 				// apply dfs() to the partner atom
-				cycleDFS_(partner, dfs_count, dfs_num, tree,
+				cycleDFS_(partner, visited, tree,
 						possible_cycle_bonds, cycle_bonds, cycle_count);
 
 				// if the current bond wasn't pop()'d by the cycle recognizing
@@ -427,15 +425,13 @@ namespace BALL
 
 
 	void FresnoRotation::heavyAtomsDFS_(const Atom* atom, const Bond* bond,
-			int& dfs_count,
-			HashMap<const Atom*, int>& dfs_num,
+			HashSet<const Atom*>& visited,
 			int& heavy_atom_count)
-//			HashSet<const Atom*>& atoms_on_this_side)
 		throw()
 	{
 
-		// assign this node's dfs number and increase the count
-		dfs_num[atom] = dfs_count++;
+		// mark this atom as visited
+		visited.insert(atom);
 
 		// if this is a heavy atom, count it
 		if ((atom->getElement().getSymbol() != "H") 
@@ -453,14 +449,102 @@ namespace BALL
 				const Atom* partner = it->getPartner(*atom);
 
 				// if our partner atom wasn't visited yet, start dfs() with it
-				if (dfs_num[partner] == -1)
+				if (visited.has(partner) == 0)
 				{
 					// apply dfs() to the partner atom
-					heavyAtomsDFS_(partner, bond, dfs_count, dfs_num,
+					heavyAtomsDFS_(partner, bond, visited,
 							heavy_atom_count); // , atoms_on_this_side);
 				}
 			}
 		}
+	}	
+
+
+	void FresnoRotation::updateFrozenBonds_()
+		throw()
+	{
+		HashSet<const Atom*> visited;
+
+		for (Size i = 0; i < rotatable_bonds_.size(); ++i)
+		{
+			const Bond* bond = rotatable_bonds_[i];
+			bool result = (frozenBondsDFS_(bond->getFirstAtom(), visited)
+					&& frozenBondsDFS_(bond->getSecondAtom(), visited));
+			if (result == true)
+			{
+				is_frozen_[i] = true;
+			}
+			else
+			{
+				is_frozen_[i] = false;
+			}
+		}
+	}
+
+
+	bool FresnoRotation::frozenBondsDFS_(const Atom* atom, 
+			HashSet<const Atom*>& visited)
+		throw()
+	{
+
+		// assign this node's dfs number and increase the count
+		visited.insert(atom);
+
+		// if this is atom is bound, then return true
+		Vector3 position = atom->getPosition();
+		float dist, bind_distance;
+
+		const HashGridBox3<const Atom*>* box = grid_->getBox(position);
+		HashGridBox3<const Atom*>::ConstBoxIterator box_it;
+		HashGridBox3<const Atom*>::ConstDataIterator data_it;
+
+		if (box == 0)
+		{
+			cerr << "got an empty box!" << endl;
+		}
+		else
+		{
+			for (box_it = box->beginBox(); +box_it; ++box_it)
+			{
+				for (data_it = box_it->beginData(); +data_it; ++data_it)
+				{
+					if ((*data_it)->getMolecule() == receptor_)
+					{
+						dist = (position - (*data_it)->getPosition()).getLength();
+						bind_distance = atom->getRadius() + (*data_it)->getRadius() 
+							+ bind_distance_offset_;
+						if (dist < bind_distance)
+						{
+							// DEBUG
+							cout << "Found bound atom " << atom->getFullName() 
+								<< ". dist: " << dist << " bind_distance: "
+								<< bind_distance << endl;
+							// /DEBUG
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		// now iterate over all bonds of this atom (i. e. this node)
+		AtomBondConstIterator it = atom->beginBond();
+		for (; +it; ++it)
+		{
+			const Atom* partner = it->getPartner(*atom);
+
+			// if our partner atom wasn't visited yet, start dfs() with it
+			if (visited.has(partner) == false)
+			{
+				// apply dfs() to the partner atom
+				bool result = frozenBondsDFS_(partner, visited);
+				if (result == true)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}	
 
 } // namespace BALL
