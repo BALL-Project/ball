@@ -1,5 +1,5 @@
 %{
-	// $Id: check_test.l,v 1.5 2003/06/12 13:49:13 oliver Exp $
+	// $Id: check_test.l,v 1.6 2003/06/12 14:21:29 oliver Exp $
 	// C++ scanner
 
 	#define YY_NO_UNPUT 
@@ -293,6 +293,7 @@
 %x	SkipSemiOrCurly
 %x	SkipSemiAndCurly
 %x	Sharp
+%x	ClassForwardDecl
 
 %%
 
@@ -452,6 +453,21 @@
 	}
 
 
+
+<FindMembers>[ \t]*"class"[ \t\n]+[a-z_A-Z0-9]+[ \t]*"<"	{RULE
+		// template class forward declaration: ignore
+		skip_return = ClassForwardDecl;
+		GOTO(Sharp);
+	}
+
+<ClassForwardDecl>";" {RULE
+		// ignore forward decl
+		name.erase();
+		type.erase();
+		args.erase();
+		GOTO(FindMembers);
+	}
+
 <FindMembers>[ \t]*"class"[ \t\n]+[a-z_A-Z0-9]+[ \t]*;	{RULE
 		// class forward declaration: ignore
 		GOTO(FindMembers);
@@ -471,6 +487,17 @@
 		pushType(STRUCT);
 		countLine();
 		GOTO(ClassName);
+	}
+
+<FindMembers>[ \t]*"enum"[ \t\n]+"{" {RULE
+		// anonymous enum definition
+		pushType(ENUM);
+		countLine();
+		start_line = line;
+    pushCurly();
+    inner_curly_count = 0;
+    pushPath("anonymous enum");
+    GOTO(EnumMembers);
 	}
 
 <FindMembers>[ \t]*"enum"[ \t\n]+	{RULE
