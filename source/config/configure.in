@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.65 2000/03/09 11:34:35 oliver Exp $
+dnl    $Id: configure.in,v 1.66 2000/03/14 16:37:29 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -987,16 +987,16 @@ dnl
 dnl		Digital C++ specific options
 dnl
 if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
-	dnl TEMPLATE_DIR="ti_files"  -- don't know yet...
-	AR="${CXX}"
+	TEMPLATE_DIR="cxx_repository"
+	AR="ar"
 	DYNAR="${CXX}"
 	AROPTS="${AROPTS} -o"
-	DYNAROPTS="${DYNAROPTS} -o"
+	DYNAROPTS="${DYNAROPTS} -shared -tused -o"
 	CXX_MAKEDEPEND="${CXX}"
 	MAKEDEP_CXX_OPTS="-M -D__USE_STD_IOSTREAM"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-	CXXFLAGS="${CXXFLAGS} -D__USE_STD_IOSTREAM"
+	CXXFLAGS="${CXXFLAGS} -tlocal -D__USE_STD_IOSTREAM"
 	CXXFLAGS_O="${CXXFLAGS_O} -O5"
 	
 	CXXFLAGS_D="${CXXFLAGS_D}"
