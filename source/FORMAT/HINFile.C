@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.42 2001/12/30 13:28:45 sturm Exp $
+// $Id: HINFile.C,v 1.43 2002/01/13 18:28:17 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -407,11 +407,8 @@ namespace BALL
 
 		try
 		{
-			while (readLine()) 
+			while (readLine() && (getLine() != "") && good()) 
 			{
-				// remove trailing whitespaces
-				getLine().trimLeft();
-
 				// ignore comment lines
 				if (getLine()[0] == ';' || getLine() == "") 
 				{
@@ -874,10 +871,10 @@ namespace BALL
 				{
 					continue;
 				}	
-			}
 
-			// if the tag was not recognized: complain about it
-			Log.warn() << "HINFile: unknown tag " << tag << " ignored." << endl;
+				// if the tag was not recognized: complain about it
+				Log.warn() << "HINFile: unknown tag " << tag << " ignored." << endl;
+			}
 		}
 		catch (Exception::ParseError& e)
 		{
