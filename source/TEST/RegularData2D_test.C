@@ -1,9 +1,9 @@
-// $Id: RegularData2D_test.C,v 1.7 2001/07/29 18:58:54 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.8 2002/01/26 22:01:28 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.7 2001/07/29 18:58:54 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.8 2002/01/26 22:01:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ CHECK(dump())
 	}
 	g.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/RegularData2D_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/RegularData2D_test.txt")
 RESULT
 
 

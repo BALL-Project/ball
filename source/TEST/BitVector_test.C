@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.26 2001/12/17 01:28:04 oliver Exp $
+// $Id: BitVector_test.C,v 1.27 2002/01/26 22:01:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.26 2001/12/17 01:28:04 oliver Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.27 2002/01/26 22:01:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -598,7 +598,7 @@ CHECK(BitVector::operator << (ostream&, const BitVector&))
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << bv4;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/BitVector_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/BitVector_test.txt")
 RESULT
 
 CHECK(BitVector::read(istream&))
@@ -618,7 +618,7 @@ CHECK(BitVector::write(ostream&) const)
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	bv4.write(outstr);
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/BitVector_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/BitVector_test2.txt")
 RESULT
 
 CHECK(BitVector::write(PersistenceManager&) const)
@@ -629,7 +629,7 @@ CHECK(BitVector::write(PersistenceManager&) const)
 	pm.registerClass(getStreamName<BitVector>(), BitVector::createDefault);
 	bv4.write(pm);
 	ofile.close();
-	TEST_FILE(filename.c_str(), "data/BitVector_test3.txt", false)
+	TEST_FILE(filename.c_str(), "data/BitVector_test3.txt")
 RESULT
 
 CHECK(BitVector::read(PersistenceManager&))

@@ -1,39 +1,75 @@
-// $Id: SimpleDescriptors_test.C,v 1.1 2001/12/18 02:46:45 oliver Exp $
+// $Id: SimpleDescriptors_test.C,v 1.2 2002/01/26 22:01:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
+#include <BALL/QSAR/simpleDescriptors.h>
+#include <BALL/FORMAT/SDFile.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/PTE.h>
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: SimpleDescriptors_test.C,v 1.1 2001/12/18 02:46:45 oliver Exp $")
+START_TEST(SimpleDescriptors, "$Id: SimpleDescriptors_test.C,v 1.2 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-///  insert tests for each member function here         
-///
-	
-CHECK("testname")			// a string describing the tested function
+SDFile infile("data/SDFile_test1.sdf");
+System S;
+infile >> S;
 
-TEST_EQUAL(0,0)				// each test should be one of the macros (see above): 
-											//   TEST_EQUAL(expression1, expression2)
-											//   TEST_REAL_EQUAL(expression1, expression2)
-											//   TEST_NOT_EQUAL(expression1, expression2)
-                      //   TEST_EXCEPTION(exception_class, expression)
-                      //   TEST_FILE(infile, templatefile, use_regexps)
+Position i;
+MoleculeIterator molecule;
+CHECK(NumberOfBonds)	
+	NumberOfBonds nb;
+	S.apply(nb);
+	i = 0;
+	Size results[11] = {42, 92, 52, 29, 49, 20, 19, 43, 25, 18, 139};
+	molecule = S.beginMolecule();
+	for (; +molecule; ++molecule, ++i)
+	{
+		TEST_EQUAL(molecule->hasProperty("NumberOfBonds"), true)
+		if (molecule->hasProperty("NumberOfBonds"))
+		{
+			Size number_of_bonds = (Size)molecule->getProperty("NumberOfBonds").getFloat();
+			ABORT_IF(i > 10)
+			TEST_EQUAL(number_of_bonds, results[i])
+		}
+	}
+RESULT
 
-RESULT								// prints the result for the test
-											// and updates the global variable
-											// OK. If any test fails, OK is set
-											// to false and the whole test suite
-											// will terminate with FAILURE and exit
-											// code 1. Otherwise it terminates
-											// with OK and 0.
-											
+
+// assign vdW radii...
+AtomIterator ai;
+for (ai = S.beginAtom(); ai != S.endAtom(); ++ai)
+{
+  ai->setRadius(ai->getElement().getVanDerWaalsRadius());
+}
+
+CHECK(PolarSurfaceArea)	
+	PolarSurfaceArea psa;
+	S.apply(psa);
+	i = 0;
+	float results[11] = {149.17, 447.974, 74.9747, 153.708, 121.778, 89.2721, 220.392, 138.404, 30.8643, 115.156, 108.148};
+
+	PRECISION(0.0005)
+	molecule = S.beginMolecule();
+	for (; +molecule; ++molecule, ++i)
+	{
+		TEST_EQUAL(molecule->hasProperty("PolarSurfaceArea"), true)
+		if (molecule->hasProperty("PolarSurfaceArea"))
+		{
+			float psa = molecule->getProperty("PolarSurfaceArea").getFloat();
+			ABORT_IF(i >= 11)
+			TEST_REAL_EQUAL(psa, results[i])
+		}
+	}
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

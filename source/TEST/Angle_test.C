@@ -1,11 +1,11 @@
-// $Id: Angle_test.C,v 1.16 2001/07/15 17:32:38 amoll Exp $
+// $Id: Angle_test.C,v 1.17 2002/01/26 22:01:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(Angle, "$Id: Angle_test.C,v 1.16 2001/07/15 17:32:38 amoll Exp $")
+START_TEST(Angle, "$Id: Angle_test.C,v 1.17 2002/01/26 22:01:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -337,7 +337,7 @@ CHECK(TAngle::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	a.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Angle_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Angle_test.txt")
 RESULT
 
 CHECK(std::istream& operator >> (std::istream& s, TAngle<T>& angle))
@@ -354,7 +354,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TAngle<T>& angle))
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << a;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Angle_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Angle_test2.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: Vector2_test.C,v 1.5 2001/07/10 16:36:03 anker Exp $
+// $Id: Vector2_test.C,v 1.6 2002/01/26 22:01:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(TVector2, "$Id: Vector2_test.C,v 1.5 2001/07/10 16:36:03 anker Exp $")
+START_TEST(TVector2, "$Id: Vector2_test.C,v 1.6 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -309,7 +309,7 @@ CHECK(TVector2::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	v.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Vector2_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Vector2_test.txt")
 RESULT
 
 CHECK(TVector2::isValid() const )
@@ -362,7 +362,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TVector2<T>& vector))
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << v;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Vector2_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Vector2_test2.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

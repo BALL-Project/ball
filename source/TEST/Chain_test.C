@@ -1,4 +1,4 @@
-// $Id: Chain_test.C,v 1.11 2001/06/27 10:46:00 oliver Exp $
+// $Id: Chain_test.C,v 1.12 2002/01/26 22:01:26 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.11 2001/06/27 10:46:00 oliver Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.12 2002/01/26 22:01:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -501,7 +501,7 @@ CHECK(Chain::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	c1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Chain_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Chain_test.txt")
 RESULT
 
 TextPersistenceManager pm;

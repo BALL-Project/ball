@@ -1,9 +1,9 @@
-// $Id: RegularData3D_test.C,v 1.3 2001/08/01 01:49:51 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.4 2002/01/26 22:01:29 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.3 2001/08/01 01:49:51 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -77,7 +77,7 @@ CHECK(dump())
 	}
 	g.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/RegularData3D_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/RegularData3D_test.txt")
 RESULT
 
 CHECK(isValid())

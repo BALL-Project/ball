@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.24 2001/06/27 10:44:45 oliver Exp $
+// $Id: Bond_test.C,v 1.25 2002/01/26 22:01:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.24 2001/06/27 10:44:45 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.25 2002/01/26 22:01:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -439,7 +439,7 @@ CHECK(dump(ostream&, Size))
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	b1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Bond_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Bond_test.txt")
 RESULT
 
 CHECK(finalize())

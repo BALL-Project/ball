@@ -1,4 +1,4 @@
-// $Id: HashGrid3_test.C,v 1.10 2002/01/17 12:01:37 oliver Exp $
+// $Id: HashGrid3_test.C,v 1.11 2002/01/26 22:01:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.10 2002/01/17 12:01:37 oliver Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.11 2002/01/26 22:01:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -248,7 +248,7 @@ CHECK(HashGridBox3::dump(std::ostream& s = std::cout, Size depth = 0) const  thr
 	STATUS(tmp_filename)
 	dump_stream.clear();
 	dump_stream.close();
-	TEST_FILE(tmp_filename.c_str(), "data/hashgrid3_test_dump0.txt", true)
+	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/hashgrid3_test_dump0.txt")
 RESULT
 
 

@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.17 2002/01/17 03:35:32 oliver Exp $
+// $Id: TCPTransfer_test.C,v 1.18 2002/01/26 22:01:29 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +19,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.17 2002/01/17 03:35:32 oliver Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.18 2002/01/26 22:01:29 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -72,7 +72,7 @@ CHECK(http/no login)
 	TEST_EQUAL(tcp_t.getPassword(), "")
 	os.close();
 	
-	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
 CHECK(http/login)
@@ -90,7 +90,7 @@ CHECK(http/login)
 	TEST_EQUAL(tcp_t.getPassword(), "test")	
 	os.close();
 
-	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
 CHECK(ftp)
@@ -110,7 +110,7 @@ CHECK(ftp)
 
 	os.close();
 
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT
 
 CHECK(http/exception)

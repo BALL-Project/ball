@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.17 2002/01/15 23:32:45 oliver Exp $
+// $Id: HINFile_test.C,v 1.18 2002/01/26 22:01:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.17 2002/01/15 23:32:45 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.18 2002/01/26 22:01:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -88,7 +88,7 @@ CHECK(HINFile::write(const System& system))
   NEW_TMP_FILE(filename)
   HINFile hin2(filename, std::ios::out);
 	hin2.write(system);
-  TEST_FILE(filename.c_str(), "data/HINFile_test2.hin", true)
+  TEST_FILE_REGEXP(filename.c_str(), "data/HINFile_test2.hin")
 RESULT
 
 CHECK(HINFile::HINFile& operator >> (System& system))
@@ -108,7 +108,7 @@ CHECK(HINFile::HINFile& operator << (const System& system))
   NEW_TMP_FILE(filename)
   HINFile hin2(filename, std::ios::out);
   hin2 << system;
-  TEST_FILE(filename.c_str(), "data/HINFile_test2.hin", true)
+  TEST_FILE_REGEXP(filename.c_str(), "data/HINFile_test2.hin")
 
 	// test whether the name truncation works: it should truncate
 	// the name of an atom containing whitespaces to the first field
@@ -118,11 +118,10 @@ CHECK(HINFile::HINFile& operator << (const System& system))
 	CAPTURE_OUTPUT(LogStream::WARNING)
 		hin3 << system;
 	COMPARE_OUTPUT("HINFile::write: truncated atom name 'NAME TEST' to 'NAME'.\n")
-	TEST_FILE(filename.c_str(), "data/HINFile_test3.hin", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/HINFile_test3.hin")
 RESULT
 
-
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
 END_TEST

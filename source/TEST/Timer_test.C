@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.11 2001/07/17 02:36:38 oliver Exp $
+// $Id: Timer_test.C,v 1.12 2002/01/26 22:01:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/SYSTEM/file.h>
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.11 2001/07/17 02:36:38 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.12 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -250,7 +250,7 @@ CHECK(Timer::dump(::std::ostream& s = ::std::cout, Size depth = 0L) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	t1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Timer_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Timer_test.txt")
 RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

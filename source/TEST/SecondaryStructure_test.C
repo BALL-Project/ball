@@ -1,4 +1,4 @@
-// $Id: SecondaryStructure_test.C,v 1.8 2001/07/15 17:32:41 amoll Exp $
+// $Id: SecondaryStructure_test.C,v 1.9 2002/01/26 22:01:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/protein.h>
 ///////////////////////////
 
-START_TEST(SecondaryStructure, "$Id: SecondaryStructure_test.C,v 1.8 2001/07/15 17:32:41 amoll Exp $")
+START_TEST(SecondaryStructure, "$Id: SecondaryStructure_test.C,v 1.9 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -385,7 +385,7 @@ CHECK(SecondaryStructure::dump(std::ostream& s = std::cout, Size depth = 0) cons
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	s1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/SecondaryStructure_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/SecondaryStructure_test.txt")
 RESULT
 
 TextPersistenceManager pm;

@@ -1,4 +1,4 @@
-// $Id: LogStream_test.C,v 1.15 2001/07/15 17:32:39 amoll Exp $
+// $Id: LogStream_test.C,v 1.16 2002/01/26 22:01:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/notification.h>
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.15 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.16 2002/01/26 22:01:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -133,7 +133,7 @@ CHECK(insert(std::ostream& s, int min_level = LogStreamBuf::MIN_LEVEL, int max_l
 	l1.info(99)  << "2" << endl;
 	l1.level(100)<< "X" << endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 4)
-	TEST_FILE(filename.c_str(), "data/LogStream_test_general.txt", false)
+	TEST_FILE(filename.c_str(), "data/LogStream_test_general.txt")
 RESULT
 
 CHECK(remove(std::ostream& s))
@@ -184,7 +184,7 @@ CHECK(setMinLevel(const std::ostream& s, int min_level))
 	l1.info(98) << "1" << endl;
 	l1.info(99) << "2" << endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 3)
-	TEST_FILE(filename.c_str(), "data/LogStream_test_general.txt", false)
+	TEST_FILE(filename.c_str(), "data/LogStream_test_general.txt")
 RESULT
 
 CHECK(setMaxLevel(const std::ostream& s, int max_level))
@@ -197,7 +197,7 @@ CHECK(setMaxLevel(const std::ostream& s, int max_level))
 	l1.info(98) << "2" << endl;
 	l1.info(99) << "X" << endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 3)
-	TEST_FILE(filename.c_str(), "data/LogStream_test_general.txt", false)
+	TEST_FILE(filename.c_str(), "data/LogStream_test_general.txt")
 RESULT
 
 CHECK(setPrefix(const std::ostream& s, const string& prefix))
@@ -226,7 +226,7 @@ CHECK(setPrefix(const std::ostream& s, const string& prefix))
 	l1.setPrefix(s, ""); //no prefix
 	l1.info(10) << " 10." << endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 10)
-	TEST_FILE(filename.c_str(), "data/LogStream_test_setPrefix.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/LogStream_test_setPrefix.txt")
 RESULT
 
 CHECK(clear())

@@ -1,4 +1,4 @@
-// $Id: MOLFile_test.C,v 1.5 2002/01/16 02:16:56 oliver Exp $
+// $Id: MOLFile_test.C,v 1.6 2002/01/26 22:01:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.5 2002/01/16 02:16:56 oliver Exp $")
+START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.6 2002/01/26 22:01:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ CHECK(MOLFile::write(const System& system))
 	f.write(S);
 	f.close();
 	
-	TEST_FILE(filename.c_str(), "data/MOLFile_test2.mol", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/MOLFile_test2.mol")
 RESULT
 
 
@@ -156,7 +156,7 @@ CHECK(MOLFile::MOLFile& operator << (const System& system))
 	f << S;	
 	f.close();
 	
-	TEST_FILE(filename.c_str(), "data/MOLFile_test2.mol", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/MOLFile_test2.mol")
 RESULT
 
 /////////////////////////////////////////////////////////////

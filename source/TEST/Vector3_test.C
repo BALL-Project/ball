@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.32 2001/06/26 10:01:13 amoll Exp $
+// $Id: Vector3_test.C,v 1.33 2002/01/26 22:01:30 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.32 2001/06/26 10:01:13 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.33 2002/01/26 22:01:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -475,7 +475,7 @@ CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	v.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Vector3_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Vector3_test.txt")
 RESULT
 
 CHECK(TVector3::isValid() const )
@@ -540,7 +540,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TVector3<T>& vector))
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << v;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Vector3_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Vector3_test2.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

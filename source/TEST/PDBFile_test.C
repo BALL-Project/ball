@@ -1,4 +1,4 @@
-// $Id: PDBFile_test.C,v 1.4 2001/08/24 01:25:36 oliver Exp $
+// $Id: PDBFile_test.C,v 1.5 2002/01/26 22:01:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.4 2001/08/24 01:25:36 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.5 2002/01/26 22:01:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -42,13 +42,13 @@ CHECK(PDBFile::write(System&))
 	f.write(S);
 	f.close();
 
-	TEST_FILE(tmp_filename.c_str(), "data/PDBFile_test2.txt", true)
+	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/PDBFile_test2.txt")
 
 	f.open(tmp_filename, File::OUT);
 	f.write(S);
 	f.close();
 
-	TEST_FILE(tmp_filename.c_str(), "data/PDBFile_test2.txt", true)
+	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/PDBFile_test2.txt")
 RESULT
 
 
@@ -67,7 +67,7 @@ CHECK(writing of Systems containing Atoms instead of PDBAtoms)
 	outfile << *system;
 	outfile.close();
 	delete system;
-	TEST_FILE(filename.c_str(), "data/PDBFile_test3.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PDBFile_test3.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

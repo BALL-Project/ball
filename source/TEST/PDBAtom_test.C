@@ -1,4 +1,4 @@
-// $Id: PDBAtom_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $
+// $Id: PDBAtom_test.C,v 1.7 2002/01/26 22:01:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -29,7 +29,7 @@ bool testEqual(const PDBAtom& a, const PDBAtom& b)
 				 a.getTemperatureFactor() == b.getTemperatureFactor();
 }
 
-START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.6 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.7 2002/01/26 22:01:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -256,7 +256,7 @@ CHECK(PDBAtom::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	pdba.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/PDBAtom_test_dump.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PDBAtom_test_dump.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

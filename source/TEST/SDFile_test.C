@@ -1,4 +1,4 @@
-// $Id: SDFile_test.C,v 1.4 2002/01/12 12:19:56 oliver Exp $
+// $Id: SDFile_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(SDFile, "$Id: SDFile_test.C,v 1.4 2002/01/12 12:19:56 oliver Exp $")
+START_TEST(SDFile, "$Id: SDFile_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -115,7 +115,7 @@ CHECK(SDFile::write(const System& system))
 	f.write(S);
 	f.close();
 	
-	TEST_FILE(filename.c_str(), "data/SDFile_test2.sdf", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/SDFile_test2.sdf")
 RESULT
 
 
@@ -162,7 +162,7 @@ CHECK(SDFile::SDFile& operator << (const System& system))
 	f << S;	
 	f.close();
 	
-	TEST_FILE(filename.c_str(), "data/SDFile_test2.sdf", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/SDFile_test2.sdf")
 RESULT
 
 CHECK(disableAtoms() throw())

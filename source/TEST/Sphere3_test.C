@@ -1,4 +1,4 @@
-// $Id: Sphere3_test.C,v 1.7 2001/07/15 17:32:41 amoll Exp $
+// $Id: Sphere3_test.C,v 1.8 2002/01/26 22:01:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(Sphere3, "$Id: Sphere3_test.C,v 1.7 2001/07/15 17:32:41 amoll Exp $")
+START_TEST(Sphere3, "$Id: Sphere3_test.C,v 1.8 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -162,7 +162,7 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const)
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	s.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Sphere3_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Sphere3_test.txt")
 RESULT
 
 CHECK(std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3))
@@ -181,7 +181,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere3))
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << s;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Sphere3_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Sphere3_test2.txt")
 RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

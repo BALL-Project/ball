@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.37 2002/01/03 01:56:38 oliver Exp $
+// $Id: String_test.C,v 1.38 2002/01/26 22:01:29 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.37 2002/01/03 01:56:38 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.38 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -2052,13 +2052,13 @@ CHECK(String::dump(ostream&, Size))
 	s2->dump(dump_stream, 0);
 	dump_stream.clear();
 	dump_stream.close();
-	TEST_FILE(tmp_filename.c_str(), "data/string_test_dump0.txt", true)
+	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/string_test_dump0.txt")
 
 	NEW_TMP_FILE(tmp_filename)
 	std::ofstream dump_stream2(tmp_filename.c_str(), std::ios::out);
 	s2->dump(dump_stream2, 4);
 	dump_stream2.close();
-	TEST_FILE(tmp_filename.c_str(), "data/string_test_dump4.txt", true)
+	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/string_test_dump4.txt")
 RESULT
 
 CHECK(String::getline(istream&, char*))
@@ -2459,7 +2459,7 @@ CHECK(Substring::friend::std::ostream& operator << (::std::ostream& s, const Sub
 	test_sub1.bind(ABCDEF, 1, 4);
 	outstr << test_sub1;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/String_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/String_test2.txt")
 	std::ofstream outstr2(filename.c_str(), std::ios::out);
 	outstr2 << empty_sub;
 	outstr2.close();
@@ -2479,7 +2479,7 @@ CHECK(Substring::dump(::std::ostream& s = ::std::cout, Size depth = 0) const )
 	test_sub1.bind(ABCDEF, 1, 4);
 	test_sub1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/String_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/String_test.txt")
 	std::ofstream outfile2(filename.c_str(), ios::out);
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.dump(outfile2))
 	outfile2.close();

@@ -1,11 +1,11 @@
-// $Id: Vector4_test.C,v 1.24 2001/07/16 09:39:49 oliver Exp $
+// $Id: Vector4_test.C,v 1.25 2002/01/26 22:01:30 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.24 2001/07/16 09:39:49 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.25 2002/01/26 22:01:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -143,7 +143,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TVector4<T>& vector))
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << v;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt")
 RESULT
 
 CHECK(TVector4::BALL_CREATE(TVector4<T>))
@@ -367,7 +367,7 @@ CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	v.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Vector4_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Vector4_test.txt")
 RESULT
 
 CHECK(TVector4<T>::set(const T* ptr))
@@ -454,7 +454,7 @@ CHECK(TVector4::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	v.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Vector4_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Vector4_test.txt")
 RESULT
 
 CHECK(std::istream& operator >> (std::istream& s, TVector4<T>& vector))
@@ -474,7 +474,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TVector4<T>& vector))
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << v;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt")
 RESULT
 /////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

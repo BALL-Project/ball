@@ -1,4 +1,4 @@
-// $Id: HashMap_test.C,v 1.11 2000/12/01 16:11:00 amoll Exp $
+// $Id: HashMap_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -34,7 +34,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashMap, "$Id: HashMap_test.C,v 1.11 2000/12/01 16:11:00 amoll Exp $")
+START_TEST(HashMap, "$Id: HashMap_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -422,7 +422,7 @@ CHECK(HashMap::dump(std::ostream&, Size) const)
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	hm.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/HashMap_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/HashMap_test.txt")
 RESULT
 
 CHECK(HashMap::isValid() const)

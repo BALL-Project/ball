@@ -1,4 +1,4 @@
-// $Id: NucleicAcid_test.C,v 1.10 2001/06/27 10:46:00 oliver Exp $
+// $Id: NucleicAcid_test.C,v 1.11 2002/01/26 22:01:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.10 2001/06/27 10:46:00 oliver Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.11 2002/01/26 22:01:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -223,7 +223,7 @@ CHECK(NucleicAcid::dump(ostream&, Size))
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	na1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/NucleicAcid_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/NucleicAcid_test.txt")
 RESULT
 
 TextPersistenceManager pm;

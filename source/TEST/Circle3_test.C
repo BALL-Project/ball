@@ -1,4 +1,4 @@
-// $Id: Circle3_test.C,v 1.7 2001/07/15 21:05:00 oliver Exp $
+// $Id: Circle3_test.C,v 1.8 2002/01/26 22:01:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Circle3, "$Id: Circle3_test.C,v 1.7 2001/07/15 21:05:00 oliver Exp $")
+START_TEST(Circle3, "$Id: Circle3_test.C,v 1.8 2002/01/26 22:01:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ CHECK(TCircle3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	c.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Circle3_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Circle3_test.txt")
 RESULT
 
 CHECK(std::istream& operator >> (std::istream& s, TCircle3& circle))
@@ -173,7 +173,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TCircle3& circle))
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << c;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Circle3_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Circle3_test2.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: TimeStamp_test.C,v 1.12 2002/01/05 03:42:02 oliver Exp $
+// $Id: TimeStamp_test.C,v 1.13 2002/01/26 22:01:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.12 2002/01/05 03:42:02 oliver Exp $")
+START_TEST(TimeStamp, "$Id: TimeStamp_test.C,v 1.13 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -149,7 +149,7 @@ CHECK(TimeStamp::write(PersistenceManager& pm) const )
 	pm.setOstream(of);
 	t.write(pm);
 	of.close();
-	TEST_FILE(filename.c_str(), "data/TimeStamp_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/TimeStamp_test2.txt")
 RESULT
 
 
@@ -174,7 +174,7 @@ CHECK(TimeStamp::operator << (std::ostream& os, const TimeStamp& ts))
 	ofstream of(filename.c_str(), std::ios::out);
 	of << t << std::endl;
 	of.close();
-	TEST_FILE(filename.c_str(), "data/TimeStamp_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/TimeStamp_test.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,9 +1,9 @@
-// $Id: Options_test.C,v 1.3 2000/07/26 15:06:24 amoll Exp $
+// $Id: Options_test.C,v 1.4 2002/01/26 22:01:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/DATATYPE/options.h>
 
-START_TEST(Options, "$Id: Options_test.C,v 1.3 2000/07/26 15:06:24 amoll Exp $")
+START_TEST(Options, "$Id: Options_test.C,v 1.4 2002/01/26 22:01:28 oliver Exp $")
 
 using BALL::Options;
 using BALL::Vector3;
@@ -166,7 +166,7 @@ String filename;
 CHECK(writeOptionFile)
 	NEW_TMP_FILE(filename)
 	options->writeOptionFile(filename);
-	TEST_FILE(filename.c_str(), "data/OptionsFile2.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/OptionsFile2.txt")
 RESULT
 
 CHECK(dump)
@@ -176,7 +176,7 @@ CHECK(dump)
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	options->dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Options_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Options_test.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

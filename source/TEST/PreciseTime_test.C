@@ -1,4 +1,4 @@
-// $Id: PreciseTime_test.C,v 1.7 2002/01/05 03:36:59 oliver Exp $
+// $Id: PreciseTime_test.C,v 1.8 2002/01/26 22:01:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.7 2002/01/05 03:36:59 oliver Exp $")
+START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.8 2002/01/26 22:01:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -165,7 +165,7 @@ CHECK(PreciseTime::write(PersistenceManager& pm) const )
 	pm.setOstream(of);
 	t.write(pm);
 	of.close();
-	TEST_FILE(filename.c_str(), "data/PreciseTime_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/PreciseTime_test2.txt")
 RESULT
 
 
@@ -186,7 +186,7 @@ CHECK(ostream& operator << (ostream& os, const PreciseTime& time))
 	ofstream of(filename.c_str(), std::ios::out);
 	of << t << std::endl;
 	of.close();
-	TEST_FILE(filename.c_str(), "data/PreciseTime_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PreciseTime_test.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

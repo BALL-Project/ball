@@ -1,4 +1,4 @@
-// $Id: HashSet_test.C,v 1.11 2000/12/01 16:10:52 amoll Exp $
+// $Id: HashSet_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -36,7 +36,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.11 2000/12/01 16:10:52 amoll Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -419,7 +419,7 @@ CHECK(HashSet::dump(std::ostream&, Size) const)
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	hs.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/HashSet_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/HashSet_test.txt")
 RESULT
 
 CHECK(HashSet::isValid() const)

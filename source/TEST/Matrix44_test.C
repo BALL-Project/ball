@@ -1,4 +1,4 @@
-// $Id: Matrix44_test.C,v 1.16 2001/07/15 17:32:39 amoll Exp $
+// $Id: Matrix44_test.C,v 1.17 2002/01/26 22:01:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.16 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.17 2002/01/26 22:01:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -946,7 +946,7 @@ CHECK(TMatrix4x4::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	m.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Matrix4x4_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Matrix4x4_test.txt")
 RESULT
 
 CHECK(std::istream& operator >> (std::istream& s, TMatrix4x4<T>& m))
@@ -961,7 +961,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m))
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << m;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Matrix4x4_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Matrix4x4_test2.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

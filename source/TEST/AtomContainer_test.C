@@ -1,4 +1,4 @@
-// $Id: AtomContainer_test.C,v 1.5 2001/07/04 00:14:18 oliver Exp $
+// $Id: AtomContainer_test.C,v 1.6 2002/01/26 22:01:26 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 
 #include <algorithm>
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.5 2001/07/04 00:14:18 oliver Exp $")
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.6 2002/01/26 22:01:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -692,7 +692,7 @@ CHECK(dump(ostream&, Size))
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	ac1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/AtomContainer_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/AtomContainer_test.txt")
 RESULT
 
 CHECK(operator ==)

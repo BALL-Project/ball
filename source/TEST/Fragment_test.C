@@ -1,4 +1,4 @@
-// $Id: Fragment_test.C,v 1.11 2000/12/19 23:59:21 amoll Exp $
+// $Id: Fragment_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.11 2000/12/19 23:59:21 amoll Exp $")
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -89,7 +89,7 @@ CHECK(dump(ostream&, Size))
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	f1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Fragment_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Fragment_test.txt")
 RESULT
 
 TextPersistenceManager pm;

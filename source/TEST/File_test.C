@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.33 2002/01/09 16:49:23 amoll Exp $
+// $Id: File_test.C,v 1.34 2002/01/26 22:01:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(File, "$Id: File_test.C,v 1.33 2002/01/09 16:49:23 amoll Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.34 2002/01/26 22:01:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -374,7 +374,7 @@ CHECK(TCPTransfer/1)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
 CHECK(TCPTransfer/2)
@@ -386,7 +386,7 @@ CHECK(TCPTransfer/2)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
 CHECK(TCPTransfer/3)
@@ -398,7 +398,7 @@ CHECK(TCPTransfer/3)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
 CHECK(TCPTransfer/4)
@@ -409,7 +409,7 @@ CHECK(TCPTransfer/4)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
 CHECK(TCPTransfer/5)
@@ -421,7 +421,7 @@ CHECK(TCPTransfer/5)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
 CHECK(TCPTransfer/6)
@@ -433,7 +433,7 @@ CHECK(TCPTransfer/6)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
 CHECK(TCPTransfer/7)
@@ -445,7 +445,7 @@ CHECK(TCPTransfer/7)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
 CHECK(TCPTransfer/8)
@@ -457,12 +457,13 @@ CHECK(TCPTransfer/8)
 	String filename;
 	NEW_TMP_FILE(filename)
 	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT
 
 CHECK(TCPTransfer/failedTransfer)
 	TEST_EXCEPTION(Exception::FileNotFound, File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/notthere.txt"))
 RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

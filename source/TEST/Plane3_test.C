@@ -1,4 +1,4 @@
-// $Id: Plane3_test.C,v 1.10 2001/07/15 17:32:40 amoll Exp $
+// $Id: Plane3_test.C,v 1.11 2002/01/26 22:01:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(Plane3, "$Id: Plane3_test.C,v 1.10 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(Plane3, "$Id: Plane3_test.C,v 1.11 2002/01/26 22:01:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -214,7 +214,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane))
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << p;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Plane3_test2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Plane3_test2.txt")
 RESULT
 
 CHECK(TPlane3::dump(std::ostream& s = std::cout, Size depth = 0) const )
@@ -226,7 +226,7 @@ CHECK(TPlane3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	p.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Plane3_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Plane3_test.txt")
 RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

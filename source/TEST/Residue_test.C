@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.19 2001/06/27 10:46:00 oliver Exp $
+// $Id: Residue_test.C,v 1.20 2002/01/26 22:01:29 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.19 2001/06/27 10:46:00 oliver Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.20 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -515,7 +515,7 @@ CHECK(Residue::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	r1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Residue_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Residue_test.txt")
 RESULT
 
 TextPersistenceManager pm;

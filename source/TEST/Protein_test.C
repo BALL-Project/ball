@@ -1,4 +1,4 @@
-// $Id: Protein_test.C,v 1.8 2001/07/15 17:32:40 amoll Exp $
+// $Id: Protein_test.C,v 1.9 2002/01/26 22:01:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Protein, "$Id: Protein_test.C,v 1.8 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(Protein, "$Id: Protein_test.C,v 1.9 2002/01/26 22:01:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -404,7 +404,7 @@ CHECK(Protein::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	p1.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Protein_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Protein_test.txt")
 RESULT
 
 TextPersistenceManager pm;

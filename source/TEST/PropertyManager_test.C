@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.18 2002/01/04 02:36:55 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.19 2002/01/26 22:01:28 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.18 2002/01/04 02:36:55 oliver Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.19 2002/01/26 22:01:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = 
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Float11.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Float11.txt")
 	delete np;
 
 	Protein protein("PROTEIN1");
@@ -155,7 +155,7 @@ CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = 
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Object11.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Object11.txt")
 
 	np = new NamedProperty("test3");
 	NEW_TMP_FILE(filename)
@@ -163,7 +163,7 @@ CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = 
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_None11.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_None11.txt")
 
 	string s("titel");
 	np = new NamedProperty("test4", s);
@@ -172,7 +172,7 @@ CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = 
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_String11.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_String11.txt")
 RESULT
 
 CHECK(NamedProperty::persistentRead(PersistenceManager& pm))
@@ -305,49 +305,49 @@ CHECK(friend std::ostream& operator << (std::ostream& s, const NamedProperty& pr
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << np1;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Bool2.txt", false)
+	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Bool2.txt")
 
 	NEW_TMP_FILE(filename)
 	outstr.open(filename.c_str());
 	outstr << np2;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Int2.txt", false)
+	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Int2.txt")
 
 	NEW_TMP_FILE(filename)
 	outstr.open(filename.c_str());
 	outstr << np3;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_UInt2.txt", false)
+	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_UInt2.txt")
 
 	NEW_TMP_FILE(filename)
 	outstr.open(filename.c_str());
 	outstr << np4;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Float2.txt", false)
+	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Float2.txt")
 
 	NEW_TMP_FILE(filename)
 	outstr.open(filename.c_str());
 	outstr << np5;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Double2.txt", false)
+	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Double2.txt")
 
 	NEW_TMP_FILE(filename)
 	outstr.open(filename.c_str());
 	outstr << np6;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_String2.txt", false)
+	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_String2.txt")
 
 	NEW_TMP_FILE(filename)
 	outstr.open(filename.c_str());
 	outstr << np7;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Object2.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Object2.txt")
 
 	NEW_TMP_FILE(filename)
 	outstr.open(filename.c_str());
 	outstr << np8;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_None2.txt", false)
+	TEST_FILE(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_None2.txt")
 RESULT
 
 CHECK(friend std::ostream& operator >> (std::ostream& s, NamedProperty& property))
@@ -746,7 +746,7 @@ CHECK(PropertyManager::std::ostream& operator << (std::ostream& s, const Propert
 	m.setProperty(2);
 	outstr << m;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_ostream1.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_ostream1.txt")
 RESULT
 
 
@@ -786,7 +786,7 @@ CHECK(PropertyManager::write(PersistenceManager& pm) const )
 	pm.setOstream(ofile);
 	m.write(pm);
 	ofile.close();	
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_write.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_write.txt")
 RESULT
 
 
@@ -827,7 +827,7 @@ CHECK(PropertyManager::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	NEW_TMP_FILE(filename)
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	m.dump(outstr); 
-	TEST_FILE(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_dump.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_dump.txt")
 RESULT
 
 /////////////////////////////////////////////////////////////

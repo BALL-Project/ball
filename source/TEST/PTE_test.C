@@ -1,4 +1,4 @@
-// $Id: PTE_test.C,v 1.7 2001/01/22 21:05:40 amoll Exp $
+// $Id: PTE_test.C,v 1.8 2002/01/26 22:01:28 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.7 2001/01/22 21:05:40 amoll Exp $")
+START_TEST(Element, "$Id: PTE_test.C,v 1.8 2002/01/26 22:01:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -231,7 +231,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const Element& element))
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << e1;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PTE_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/PTE_test.txt")
 RESULT
 
 CHECK(getElement(Position position))

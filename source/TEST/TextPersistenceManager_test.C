@@ -1,4 +1,4 @@
-// $Id: TextPersistenceManager_test.C,v 1.7 2002/01/12 01:59:49 oliver Exp $
+// $Id: TextPersistenceManager_test.C,v 1.8 2002/01/26 22:01:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.7 2002/01/12 01:59:49 oliver Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.8 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -67,7 +67,7 @@ CHECK(TextPersistenceManager::writeHeader(const char* type_name, const char* nam
 	pm.writeHeader("TYPENAME1", "NAME", (PointerSizeInt)12345678);
 	pm.writeHeader("TYPENAME2", (const char*)0, (PointerSizeInt)34567890);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeHeader.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeHeader.txt")
 RESULT
 
 
@@ -101,7 +101,7 @@ CHECK(TextPersistenceManager::writeTrailer(const char* name = 0))
 	STATUS("stream open: " << filename)
 	pm.writeTrailer((const char*)0);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeTrailer.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeTrailer.txt")
 RESULT
 
 
@@ -129,7 +129,7 @@ CHECK(TextPersistenceManager::writeStreamHeader())
 	pm.setOstream(os);
 	pm.writeStreamHeader();
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStreamHeader.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStreamHeader.txt")
 RESULT
 
 
@@ -141,7 +141,7 @@ CHECK(TextPersistenceManager::writeStreamTrailer())
 	pm.setOstream(os);
 	pm.writeStreamTrailer();
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStreamTrailer.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStreamTrailer.txt")
 RESULT
 
 
@@ -197,7 +197,7 @@ CHECK(TextPersistenceManager::writeName(const char* name))
 	pm.writeName("TEST1");
 	pm.writeName((const char*)0);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeName.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeName.txt")
 RESULT
 
 
@@ -224,7 +224,7 @@ CHECK(TextPersistenceManager::writeStorableHeader(const char* type_name, const c
 	pm.writeStorableHeader("TEST1", "TEST2");
 	pm.writeStorableHeader((const char*)0, (const char*)0);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStorableHeader.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStorableHeader.txt")
 RESULT
 
 
@@ -252,7 +252,7 @@ CHECK(TextPersistenceManager::writePrimitiveHeader(const char* type_name, const 
 	os << std::endl;
 	pm.writePrimitiveHeader("TEST4", "TEST5");
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writePrimitiveHeader.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writePrimitiveHeader.txt")
 RESULT
 
 
@@ -278,7 +278,7 @@ CHECK(TextPersistenceManager::writeStorableTrailer())
 	pm.setOstream(os);
 	pm.writeStorableTrailer();
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStorableTrailer.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStorableTrailer.txt")
 RESULT
 
 
@@ -302,7 +302,7 @@ CHECK(TextPersistenceManager::writePrimitiveTrailer())
 	pm.setOstream(os);
 	pm.writePrimitiveTrailer();
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writePrimitiveTrailer.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writePrimitiveTrailer.txt")
 RESULT
 
 
@@ -330,7 +330,7 @@ CHECK(TextPersistenceManager::writeObjectPointerHeader(const char* type_name, co
 	os << std::endl;
 	pm.writeObjectPointerHeader("TEST4", (const char*)0);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectPointerHeader.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectPointerHeader.txt")
 RESULT
 
 
@@ -358,7 +358,7 @@ CHECK(TextPersistenceManager::writeObjectReferenceHeader(const char* type_name, 
 	os << std::endl;
 	pm.writeObjectReferenceHeader("TEST4", (const char*)0);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectReferenceHeader.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectReferenceHeader.txt")
 RESULT
 
 
@@ -386,7 +386,7 @@ CHECK(TextPersistenceManager::writeObjectPointerArrayHeader(const char* type_nam
 	os << std::endl;
 	pm.writeObjectPointerArrayHeader("TEST4", "TEST5", 456789);
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectPointerArrayHeader.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectPointerArrayHeader.txt")
 RESULT
 
 
@@ -415,7 +415,7 @@ CHECK(TextPersistenceManager::writeObjectPointerArrayTrailer())
 	pm.setOstream(os);
 	pm.writeObjectPointerArrayTrailer();
 	os.close();
-	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectPointerArrayTrailer.txt", false)
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeObjectPointerArrayTrailer.txt")
 RESULT
 
 

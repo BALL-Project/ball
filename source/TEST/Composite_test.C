@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.28 2002/01/12 12:19:55 oliver Exp $
+// $Id: Composite_test.C,v 1.29 2002/01/26 22:01:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.28 2002/01/12 12:19:55 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.29 2002/01/26 22:01:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1088,7 +1088,7 @@ CHECK(dump())
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	a.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Composite_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Composite_test.txt")
 RESULT
 
 CHECK(host(Visitor<Composite>& visitor))

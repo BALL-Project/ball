@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.16 2001/08/19 09:39:35 amoll Exp $
+// $Id: INIFile_test.C,v 1.17 2002/01/26 22:01:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.16 2001/08/19 09:39:35 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.17 2002/01/26 22:01:27 oliver Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -358,7 +358,7 @@ CHECK(INIFile::write())
 	NEW_TMP_FILE(filename)
 	ini.setFilename(filename);
 	TEST_EQUAL(ini.write(), true)
-	TEST_FILE("data/INIFile_test2.ini", filename.c_str(), false)
+	TEST_FILE("data/INIFile_test2.ini", filename.c_str())
 
 	NEW_TMP_FILE(filename)
 	INIFile emptyFile;

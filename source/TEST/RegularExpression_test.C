@@ -1,4 +1,4 @@
-// $Id: RegularExpression_test.C,v 1.9 2001/05/17 18:20:39 oliver Exp $
+// $Id: RegularExpression_test.C,v 1.10 2002/01/26 22:01:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.9 2001/05/17 18:20:39 oliver Exp $")
+START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.10 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -230,7 +230,7 @@ CHECK(RegularExpression::dump(::std::ostream& s = ::std::cout, Size depth = 0) c
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	re2.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Regular_Expression.txt", false)
+	TEST_FILE(filename.c_str(), "data/Regular_Expression.txt")
 RESULT
 
 CHECK(RegularExpression::friend::std::ostream& operator << (::std::ostream& s, const RegularExpression& regular_expression))
@@ -238,7 +238,7 @@ CHECK(RegularExpression::friend::std::ostream& operator << (::std::ostream& s, c
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << re2;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Regular_Expression2.txt", false)
+	TEST_FILE(filename.c_str(), "data/Regular_Expression2.txt")
 RESULT
 
 CHECK(RegularExpression::friend::std::istream& operator >> (::std::istream& s, RegularExpression& regular_expression))

@@ -1,4 +1,4 @@
-// $Id: Selectable_test.C,v 1.4 2001/07/15 17:32:41 amoll Exp $
+// $Id: Selectable_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(Selectable, "$Id: Selectable_test.C,v 1.4 2001/07/15 17:32:41 amoll Exp $")
+START_TEST(Selectable, "$Id: Selectable_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -113,7 +113,7 @@ CHECK(Selectable::friend::std::ostream& operator << (::std::ostream& s, const Se
 	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << se;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Selectable_test.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test.txt")
 RESULT
 
 CHECK(Selectable::read(PersistenceManager& pm))
@@ -131,7 +131,7 @@ CHECK(Selectable::write(PersistenceManager& pm) const )
 	pm.setOstream(ofile);
 	se.write(pm);
 	ofile.close();	
-	TEST_FILE(filename.c_str(), "data/Selectable_test2.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test2.txt")
 RESULT
 
 CHECK(Selectable::dump(::std::ostream& s = std::cout, Size depth = 0L) const )
@@ -140,7 +140,7 @@ CHECK(Selectable::dump(::std::ostream& s = std::cout, Size depth = 0L) const )
 	std::ofstream outfile(filename.c_str(), File::OUT);
 	se.dump(outfile);
 	outfile.close();
-	TEST_FILE(filename.c_str(), "data/Selectable_test3.txt", true)
+	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test3.txt")
 RESULT	
 
 /////////////////////////////////////////////////////////////

@@ -1,9 +1,9 @@
-// $Id: ClassTest_test.C,v 1.7 2001/12/07 00:47:07 oliver Exp $
+// $Id: ClassTest_test.C,v 1.8 2002/01/26 22:01:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 using namespace BALL;
 
-START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.7 2001/12/07 00:47:07 oliver Exp $")
+START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.8 2002/01/26 22:01:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -52,9 +52,12 @@ CHECK("STATUS(a)")
 	STATUS("status message")
 RESULT
 
-CHECK("TEST_FILE(filename, templatename, use_regexps)")
-	TEST_FILE("data/class_test_infile.txt", "data/class_test_template.txt", false)
-	TEST_FILE("data/class_test_infile.txt", "data/class_test_regexp_template.txt", true)
+CHECK("TEST_FILE(filename, templatename)")
+	TEST_FILE("data/class_test_infile.txt", "data/class_test_template.txt")
+RESULT
+
+CHECK("TEST_FILE_REGEXP(filename, templatename)")
+	TEST_FILE_REGEXP("data/class_test_infile.txt", "data/class_test_regexp_template.txt")
 RESULT
 
 CHECK("ABORT_IF(condition)")
