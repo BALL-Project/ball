@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.32 2003/05/19 09:00:57 sneumann Exp $
+// $Id: regularData2D.h,v 1.33 2003/05/28 16:50:41 oliver Exp $
 //
 
-#ifndef BALL_DATATYPE_TREGULARDATA2D_H
-#define BALL_DATATYPE_TREGULARDATA2D_H
+#ifndef BALL_DATATYPE_REGULARDATA2D_H
+#define BALL_DATATYPE_REGULARDATA2D_H
 
 #ifndef BALL_MATHS_VECTOR2_H
 # include <BALL/MATHS/vector2.h>
@@ -42,10 +42,23 @@ namespace BALL
 		*/
 		//@{
 
+		/// The index type used to refer to a specific element in the grid (x-, and y-index)
+		class IndexType
+		{
+			public:
+			inline IndexType() : x(0), y(0) {}
+			inline IndexType(Position p) : x(p), y(p) {}
+			inline IndexType(Position p, Position q) : x(p), y(q) {}
+
+			///
+			Position x;
+			///
+			Position y;
+
+		};
+
 		/// The type containing an STL vector of the appropriate type
 		typedef std::vector<ValueType> VectorType;
-		/// The index type used to refer to a specific element in the grid (x-index and y-index)
-		typedef TVector2<Position> IndexType;
 		/// The coordinate type
 		typedef TVector2<float> CoordinateType;
 		/// A mutable iterator
@@ -72,7 +85,7 @@ namespace BALL
 		/**	Default constructor.
 				Creates an empty TRegularData2D object.
 		*/
-		TRegularData2D() throw();	
+		TRegularData2D() throw();
 
 		///	Copy constructor
 		TRegularData2D(const TRegularData2D<ValueType>& data)
@@ -126,45 +139,42 @@ namespace BALL
 		//@{
 		
 		/** Equality operator.
-				Two point grids are equal if they have the same number of points in all two
+				Two grids are equal if they have the same number of points in all two
 				dimensions, same origin, spacing and the data fields are equal.
-				Both grids have to be valid or false is returned.
 		*/
-		bool operator == (const TRegularData2D<ValueType>& grid) const throw();
+		bool operator == (const TRegularData2D<ValueType>& data) const throw();
 
     /// Inequality operator
-    bool operator != (const TRegularData2D<ValueType>& data) const throw() { return !this->operator == (data); }
+    BALL_INLINE bool operator != (const TRegularData2D<ValueType>& data) const throw() { return !this->operator == (data); }
 
 		/// Empty predicate
-		bool empty() const throw() { return data_.empty(); }
+		BALL_INLINE bool empty() const throw() { return data_.empty(); }
 
 		/// Test if a given point is inside the grid.
-		bool isInside(const CoordinateType& r) const throw();
+		bool isInside(const CoordinateType& x) const throw();
 		//@}
 
     /** @name Iterators
     */
     //@{
     ///
-    ConstIterator begin() const throw() { return data_.begin(); }
+    BALL_INLINE ConstIterator begin() const throw() { return data_.begin(); }
     ///
-    ConstIterator end() const throw() { return data_.end(); }
+    BALL_INLINE ConstIterator end() const throw() { return data_.end(); }
     ///
-    Iterator begin() throw() { return data_.begin(); }
+    BALL_INLINE Iterator begin() throw() { return data_.begin(); }
     ///
-    Iterator end() throw() { return data_.end(); }
+    BALL_INLINE Iterator end() throw() { return data_.end(); }
     //@}
 
     /** @name Accessors
     */
     //@{
-
     // STL compatibility
-    size_type max_size() const throw() { return data_.max_size(); }
-		void swap(TRegularData2D<ValueType>& grid) { std::swap(*this, grid); }
+    BALL_INLINE size_type size() const throw() { return data_.size(); }
+    BALL_INLINE size_type max_size() const throw() { return data_.max_size(); }
+		BALL_INLINE void swap(TRegularData2D<ValueType>& data) throw() { std::swap(*this, data); }
 		
-		/// Return the total number of grid points 
-    size_type size() const throw() { return data_.size(); }
 
     /** Return a nonmutable reference to a specific data element.
         This is the range chacking version of <tt>operator []</tt>.
@@ -221,8 +231,6 @@ namespace BALL
         correct range. A more robust (range-checking) version of
         this operator is implemented as \link getInterpolatedValue
         getInterpolatedValue \endlink.
-        \link getInterpolatedValue() getInterpolatedValue() \endlink.
-        @precondition getOrigin() <= x <= getOrigin() + getDimension()
     */
     ValueType operator () (const CoordinateType& x) const throw();
 
@@ -249,6 +257,12 @@ namespace BALL
     */
     ValueType& getClosestValue(const CoordinateType& x)
       throw(Exception::OutOfGrid);
+
+		/**	Return the position of the grid point with coordinates lesser than the given vector.
+				@exception OutOfGrid if the point is outside the grid
+		*/
+		IndexType getLowerIndex(const CoordinateType& v) const 
+			throw(Exception::OutOfGrid);
 
 		/**	Return the position of the grid point closest to the given vector.
 				If there are multiple grid points with equal distance, the
@@ -816,7 +830,9 @@ namespace BALL
 		}
 
 		Size l = x + size_.x * y;
-		CoordinateType r_0(getCoordinates(l));
+		CoordinateType r_0(origin_.x + (double)x * spacing_.x,
+											 origin_.y + (double)y * spacing_.y);
+
 		double dx = 1.0 - ((r.x - r_0.x) / spacing_.x);
 		double dy = 1.0 - ((r.y - r_0.y) / spacing_.y);
 
@@ -824,6 +840,24 @@ namespace BALL
 					+ data_[l + 1] * (1.0 - dx) * dy
 					+ data_[l + size_.x] * dx * (1.0 - dy)
 					+ data_[l + size_.x + 1] * (1.0 - dx) * (1.0 - dy);
+	}
+
+	template <typename ValueType>
+	BALL_INLINE
+	typename TRegularData2D<ValueType>::IndexType TRegularData2D<ValueType>::getLowerIndex
+		(const typename TRegularData2D<ValueType>::CoordinateType& r) const
+		throw(Exception::OutOfGrid)
+	{
+		if (!isInside(r))
+		{
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
+		}		
+		
+		static IndexType position;
+		position.x = (Position)((r.x - origin_.x) / spacing_.x);
+		position.y = (Position)((r.y - origin_.y) / spacing_.y);
+		
+		return position;
 	}
 
 	template <typename ValueType>
@@ -887,19 +921,20 @@ namespace BALL
 		
 		origin_.set(0.0);
 		dimension_.set(0.0, 0.0);
-		size_.set(0, 0);
+		size_.x = 0;
+		size_.y = 0;
 		spacing_.set(1.0, 1.0);
 	}
 
 	template <typename ValueType>	
-	bool TRegularData2D<ValueType>::operator == (const TRegularData2D<ValueType>& grid) const 
+	bool TRegularData2D<ValueType>::operator == (const TRegularData2D<ValueType>& data) const 
 		throw()
 	{
-		return ((origin_ == grid.origin_)
-						&& (dimension_ == grid.dimension_)
-						&& (size_.x == grid.size_.x)
-						&& (size_.y == grid.size_.y)
-						&& (data_ == grid.data_));
+		return ((origin_ == data.origin_)
+						&& (dimension_ == data.dimension_)
+						&& (size_.x == data.size_.x)
+						&& (size_.y == data.size_.y)
+						&& (data_ == data.data_));
 	}	
 
 
@@ -907,16 +942,16 @@ namespace BALL
 	//@{
 	/// Output operator
 	template <typename ValueType>
-  std::ostream& operator << (std::ostream& os, const TRegularData2D<ValueType>& grid)
+  std::ostream& operator << (std::ostream& os, const TRegularData2D<ValueType>& data)
     throw()
   {
     // Write the grid origin, dimension, and number of grid points
-    os << grid.getOrigin().x << " " << grid.getOrigin().y
+    os << data.getOrigin().x << " " << data.getOrigin().y
       << std::endl
-      << grid.getOrigin().x + grid.getDimension().x << " "
-      << grid.getOrigin().y + grid.getDimension().y
+      << data.getOrigin().x + data.getDimension().x << " "
+      << data.getOrigin().y + data.getDimension().y
       << std::endl
-      << grid.getSize().x - 1 << " " << grid.getSize().y - 1
+      << data.getSize().x - 1 << " " << data.getSize().y - 1
       << std::endl;
 
     // Write the array contents.
@@ -956,11 +991,9 @@ namespace BALL
 	{
 		File outfile(filename, std::ios::out|std::ios::binary);
 		
-		BinaryFileAdaptor< BlockValueType > adapt_block;
-		BinaryFileAdaptor< ValueType >			 adapt_single;
+		BinaryFileAdaptor<BlockValueType> adapt_block;
+		BinaryFileAdaptor<ValueType>			adapt_single;
 		
-		// TODO: check for endiannes and swap bytes accordingly
-
 		// write all information we need to recreate the grid
 		BinaryFileAdaptor<CoordinateType> adapt_coordinate;
 		BinaryFileAdaptor<Size> 					adapt_size;
@@ -1011,8 +1044,6 @@ namespace BALL
 		BinaryFileAdaptor< BlockValueType > adapt_block;
 		BinaryFileAdaptor< ValueType >		  adapt_single;
 		
-		// TODO: check for endiannes and swap bytes accordingly
-
 		// read all information we need to recreate the grid
 		BinaryFileAdaptor<CoordinateType> adapt_coordinate;
 		BinaryFileAdaptor<Size> 					adapt_size;

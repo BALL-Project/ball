@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.23 2003/05/13 11:06:18 amoll Exp $ 
+// $Id: regularData3D.h,v 1.24 2003/05/28 16:50:42 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -43,10 +43,24 @@ namespace BALL
 		*/
 		//@{
 
+    /// The index type used to refer to a specific element in the grid (x-, y-, and z-index)
+		class IndexType
+		{
+			public:
+			inline IndexType() : x(0), y(0), z(0) {}
+			inline IndexType(Position p) : x(p), y(p), z(p) {}
+			inline IndexType(Position p, Position q, Position r) : x(p), y(q), z(r) {}
+
+			///
+			Position x;
+			///
+			Position y;
+			///
+			Position z;
+		};
+
     /// The type containing an STL vector of the appropriate type
     typedef std::vector<ValueType> VectorType;
-    /// The index type used to refer to a specific element in the grid (x-index and y-index)
-    typedef TVector3<Position> IndexType;
     /// The coordinate type
     typedef TVector3<float> CoordinateType;
     /// A mutable iterator
@@ -131,10 +145,10 @@ namespace BALL
 
 		/** Inequality operator.
 		*/
-		bool operator != (const TRegularData3D<ValueType>& grid) const throw() {	return !this->operator == (grid); }
+		BALL_INLINE bool operator != (const TRegularData3D<ValueType>& grid) const throw() {	return !this->operator == (grid); }
 
 		/// Empty predicate
-		bool empty() const throw() { return data_.empty(); }
+		BALL_INLINE bool empty() const throw() { return data_.empty(); }
 
 		/// Test if a given point is inside the grid.
 		bool isInside(const CoordinateType& r) const throw();
@@ -144,13 +158,13 @@ namespace BALL
     */
     //@{
     ///
-    ConstIterator begin() const throw() { return data_.begin(); }
+    BALL_INLINE ConstIterator begin() const throw() { return data_.begin(); }
     ///
-    ConstIterator end() const throw() { return data_.end(); }
+    BALL_INLINE ConstIterator end() const throw() { return data_.end(); }
     ///
-    Iterator begin() throw() { return data_.begin(); }
+    BALL_INLINE Iterator begin() throw() { return data_.begin(); }
     ///
-    Iterator end() throw() { return data_.end(); }
+    BALL_INLINE Iterator end() throw() { return data_.end(); }
     //@}
 
 		/**	@name	Accessors
@@ -158,11 +172,10 @@ namespace BALL
 		//@{
 
     // STL compatibility
-    size_type max_size() const throw() { return data_.max_size(); }
-    void swap(TRegularData3D<ValueType>& grid) { std::swap(*this, grid); }
+    BALL_INLINE size_type size() const throw() { return data_.size(); }
+    BALL_INLINE size_type max_size() const throw() { return data_.max_size(); }
+    BALL_INLINE void swap(TRegularData3D<ValueType>& grid) { std::swap(*this, grid); }
 
-		/// Return the total number of grid points
-    size_type size() const throw() { return data_.size(); }
 
     /** Return a nonmutable reference to a specific data element.
         This is the range chacking version of <tt>operator []</tt>.
@@ -228,7 +241,7 @@ namespace BALL
         \link getInterpolatedValue() getInterpolatedValue() \endlink.
         @precondition getOrigin() <= x <= getOrigin() + getDimension()
     */
-    ValueType operator () (const CoordinateType& x) const throw(Exception::OutOfGrid);
+    ValueType operator () (const CoordinateType& x) const throw();
 		
     /** Return the linearly interpolated value of the surrounding two grid points.
         This method first performs a range check for the argument <tt>x</tt>
@@ -487,7 +500,7 @@ namespace BALL
       origin_(origin),
       dimension_(dimension),
       spacing_(spacing),
-      size_(0, 0, 0)
+      size_(0)
   {
     // Compute the grid size
     size_.x = (Size)(dimension_.x / spacing_.x + 0.5) + 1;
@@ -845,21 +858,24 @@ namespace BALL
 	BALL_INLINE
 	ValueType TRegularData3D<ValueType>::operator ()
 		(const typename TRegularData3D<ValueType>::CoordinateType& r) const
-		throw(Exception::OutOfGrid)
+		throw()
 	{
 		Vector3 h(r - origin_);
-		Position x = (int)(h.x / spacing_.x);
-		Position y = (int)(h.y / spacing_.y);
-		Position z = (int)(h.z / spacing_.z);
+		Position x = (Position)(h.x / spacing_.x);
+		Position y = (Position)(h.y / spacing_.y);
+		Position z = (Position)(h.z / spacing_.z);
 
-		unsigned long Nx = size_.x;
-		unsigned long Nxy = size_.z * Nx;
-		unsigned long l = x + Nx * y + Nxy * z;
-		Vector3 r_0 = getCoordinates((Position)l);
+		Position Nx = size_.x;
+		Position Nxy = size_.z * Nx;
+		Position l = x + Nx * y + Nxy * z;
+		Vector3 r_0(origin_.x + x * spacing_.x,
+								origin_.y + y * spacing_.y,
+								origin_.z + z * spacing_.z);
 
-		float dx = 1 - ((r.x - r_0.x) / spacing_.x);
-		float dy = 1 - ((r.y - r_0.y) / spacing_.y);
-		float dz = 1 - ((r.z - r_0.z) / spacing_.z);
+
+		double dx = 1. - ((double)(r.x - r_0.x) / spacing_.x);
+		double dy = 1. - ((double)(r.y - r_0.y) / spacing_.y);
+		double dz = 1. - ((double)(r.z - r_0.z) / spacing_.z);
 
 		return  data_[l] * dx * dy * dz
 					+ data_[l + 1] * (1 - dx) * dy * dz
@@ -955,7 +971,9 @@ namespace BALL
 
     origin_.set(0.0);
     dimension_.set(0.0);
-    size_.set(0, 0, 0);
+    size_.x = 0;
+    size_.y = 0;
+    size_.z = 0;
     spacing_.set(1.0);		
 	}
 
@@ -1121,7 +1139,9 @@ namespace BALL
     is >> size.x >> size.y >> size.z;
 
     dimension -= origin;
-    size += TRegularData3D<ValueType>::IndexType(1, 1, 1);
+    size.x++;
+    size.y++;
+    size.z++;
 
     grid.resize(size);
 		grid.setOrigin(origin);
