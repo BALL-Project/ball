@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.5 1999/09/21 11:08:28 oliver Exp $
+// $Id: forceField.C,v 1.6 1999/09/21 15:17:57 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -134,8 +134,6 @@ namespace BALL
 	// setup methods
 	bool  ForceField::setup(System& system)
 	{
-		Log.info() << "starting ForceField::setup()" << endl;
-
 		bool  success = true;
 
 		// store the specified system
@@ -144,7 +142,7 @@ namespace BALL
 		// Setup periodic boundary
 		if(!periodic_boundary.setup()) 
 		{
-			Log.level(LogStream::ERROR) << "setup of periodic boundary failed" << endl;
+			Log.error() << "setup of periodic boundary failed" << endl;
 			return false;
 		}
 			
@@ -176,13 +174,11 @@ namespace BALL
 		}
 		number_of_movable_atoms_ = atoms_.size();
 
-		Log.info() << "starting specificSetup()" << endl;
-
 		// force field specific parts
 		success = specificSetup();
 		if (!success) 
 		{
-			Log.level(LogStream::ERROR) << "Force Field specificSetup failed!" << endl;
+			Log.error() << "Force Field specificSetup failed!" << endl;
 			return false;
 		}
 
@@ -190,16 +186,14 @@ namespace BALL
 		vector<ForceFieldComponent*>::iterator  it;
 		for (it = components_.begin(); (it != components_.end()) && success; ++it)
 		{
-			Log.info() << "starting setup() for " << (*it)->name_ << endl;
 			success = (*(*it)).setup();
 			if (!success) 
 			{
-				Log.level(LogStream::ERROR) << "Force Field Component setup of " 
-					<< (*it)->name_ <<  " failed!" << endl;
+				Log.error() << "Force Field Component setup of " 
+										<< (*it)->name_ <<  " failed!" << endl;
 			}
 		}
 
-		Log.info() << "finished ForceField::setup()" << endl;
 		return success;
 	}
 
