@@ -12,9 +12,11 @@ Added:
     - fixed some minor details in other fragments
   - Python support: added more classes to the Python SIP interface
 	- new application: DCD2PNG to create series of PNG-images from a DCD trajectory file
+	- possibility to abort force field calculations if the assignment of values fails for a given number of atoms
   - BALLView
   	- Documentation for BALLView in the folder BALL/doc/BALLView  
     - new models for rendering nucleic acids and for visualizing forces
+		- atoms for which the setup of a force field fails can now become highlighted
   	- calculation of Ramachandran plots for proteins
 		- improved ball&stick model now renders double-, triple- and aromatic bonds
 		- ability to create animations, either as on-screen presentations or for movies
