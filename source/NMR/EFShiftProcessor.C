@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.C,v 1.6 2000/09/21 10:40:20 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.7 2000/09/21 13:48:34 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/SYSTEM/path.h>
@@ -42,6 +42,9 @@ namespace BALL
 	void EFShiftProcessor::init()
 		throw()
 	{
+		// by default, we assume the worst...
+		valid_ = false;
+
 		// if no parameters are assigned, abort immediately
 		if (parameters_ == 0)
 		{
@@ -52,7 +55,7 @@ namespace BALL
 		ParameterSection parameter_section;
 		parameter_section.extractSection(*parameters_, "ElectricFieldEffect");
 
-		// ..and that this section contains the correct coulm names
+		// ..and that this section contains the correct column names
 		if (!parameter_section.hasVariable("first_atom") || !parameter_section.hasVariable("second_atom")
 				|| !parameter_section.hasVariable("epsilon1") || !parameter_section.hasVariable("epsilon2"))
 		{
@@ -129,13 +132,16 @@ namespace BALL
 				charge_map_[parameter_section.getKey(i)] = charge_factor * parameter_section.getValue(i, charge_column).toFloat();
 			}
 		}
+
+		// mark the module as initialized
+		valid_ = true;
 	}
 		
 	bool EFShiftProcessor::start()
 		throw()
 	{
-		// if no parameters are assigned, abort immediately
-		if (parameters_ == 0)
+		// if the module is invalid, abort
+		if (!isValid())
 		{
 			return false;
 		}
@@ -150,8 +156,8 @@ namespace BALL
 	bool EFShiftProcessor::finish()
 		throw()
 	{
-		// abort if the parameters_ were not set (using ShiftModule::setParameters)
-		if (parameters_ == 0)
+		// if the module is in an invalid state, abort
+		if (!isValid())
 		{
 			return false;
 		}
