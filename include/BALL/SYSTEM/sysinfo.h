@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.h,v 1.7 2005/01/28 13:16:44 amoll Exp $
+// $Id: sysinfo.h,v 1.8 2005/01/28 18:41:15 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_SYSINFO_H
@@ -13,9 +13,6 @@
 
 namespace BALL
 {
-	/// where does thos LongIndex come from ?????
-	typedef long LongIndex;
-	
 	/** Namespace for methods to obtain informations about the systems hardware.
 	 		See the man page for sysinfo, GetSystemInfo and /proc/cpuinfo under Linux.
 	 		@see http://msdn.microsoft.com/library/en-us/memory/base/memorystatus_str.asp
