@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.10 2000/06/22 10:18:59 oliver Exp $
+// $Id: string.iC,v 1.11 2000/06/27 07:34:10 oliver Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -441,12 +441,6 @@ BALL_INLINE
 char String::toChar() const
 {
   return *c_str();
-}
-
-BALL_INLINE
-String::operator const char* () const
-{
-	return c_str();
 }
 
 BALL_INLINE 

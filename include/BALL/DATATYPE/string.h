@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.13 2000/06/22 10:18:59 oliver Exp $
+// $Id: string.h,v 1.14 2000/06/27 07:34:10 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -600,9 +600,6 @@ namespace BALL
 
 		/// Evaluates the string to a double
 		double toDouble() const;
-
-		/// convert to a char pointer
-		operator const char* () const;
 		//@}
 	
 		
