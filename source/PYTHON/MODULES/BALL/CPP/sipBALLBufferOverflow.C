@@ -1,0 +1,186 @@
+#include "sipBALLDeclBALL.h"
+#include "sipBALLBufferOverflow.h"
+
+
+PyObject *sipClass_BufferOverflow;
+
+static void sipDealloc_BufferOverflow(sipThisType *);
+
+static PyTypeObject sipType_BufferOverflow = {
+	PyObject_HEAD_INIT(&PyType_Type)
+	0,
+	sipName_BALL_BufferOverflow,
+	sizeof (sipThisType),
+	0,
+	(destructor)sipDealloc_BufferOverflow,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
+};
+
+// Cast a pointer to a type somewhere in its superclass hierachy.
+
+const void *sipCast_BufferOverflow(const void *ptr,PyObject *targetClass)
+{
+	const void *res;
+
+	if (targetClass == sipClass_BufferOverflow)
+		return ptr;
+
+	if ((res = sipCast_GeneralException((GeneralException *)(BufferOverflow *)ptr,targetClass)) != NULL)
+		return res;
+
+	return NULL;
+}
+
+static void sipDealloc_BufferOverflow(sipThisType *sipThis)
+{
+	if (sipThis -> u.cppPtr != NULL)
+	{
+		if (sipIsPyOwned(sipThis))
+			delete (BufferOverflow *)sipThis -> u.cppPtr;
+	}
+
+	sipDeleteThis(sipThis);
+}
+
+PyObject *sipNew_BufferOverflow(PyObject *sipSelf,PyObject *sipArgs)
+{
+	static sipExtraType et = {
+		sipCast_BufferOverflow
+	};
+
+	sipThisType *sipThis = NULL;
+	const void *sipNew = NULL;
+	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
+
+	// See if there is something pending.
+
+	sipNew = sipGetPending(&sipFlags);
+
+	if (sipNew == NULL)
+	{
+		const char * a0;
+		int a1;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-si",&a0,&a1))
+		{
+   try
+   {
+			sipNew = new BufferOverflow( a0, a1);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		const BufferOverflow * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_BufferOverflow,&a0obj))
+		{
+			int iserr = 0;
+
+			sipConvertTo_BufferOverflow(a0obj,(BufferOverflow **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			sipNew = new BufferOverflow(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		sipNoCtor(sipArgsParsed,sipName_BALL_BufferOverflow);
+		return NULL;
+	}
+
+	// Wrap the object.
+
+	if ((sipThis = sipCreateThis(sipSelf,sipNew,&sipType_BufferOverflow,sipFlags,&et)) == NULL)
+	{
+		if (sipFlags & SIP_PY_OWNED)
+			delete (BufferOverflow *)sipNew;
+
+		return NULL;
+	}
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+PyMethodDef sipClassAttrTab_BufferOverflow[] = {
+	{NULL}
+};
+
+int sipCanConvertTo_BufferOverflow(PyObject *sipPy)
+{
+	return sipIsSubClassInstance(sipPy,sipClass_BufferOverflow);
+}
+
+void sipConvertTo_BufferOverflow(PyObject *sipPy,BufferOverflow **sipCppPtr,int sipWillDeref,int *sipIsErr)
+{
+	if (*sipIsErr || sipPy == NULL)
+		return;
+
+	if (sipPy == Py_None)
+	{
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_BufferOverflow);
+		*sipCppPtr = NULL;
+
+		return;
+	}
+
+	*sipCppPtr = (BufferOverflow *)sipConvertToCpp(sipPy,sipClass_BufferOverflow,sipIsErr);
+}
+
+BufferOverflow *sipForceConvertTo_BufferOverflow(PyObject *valobj,int *iserrp)
+{
+	if (*iserrp || valobj == NULL || valobj == Py_None)
+		return NULL;
+
+	if (sipCanConvertTo_BufferOverflow(valobj))
+	{
+		BufferOverflow *val;
+
+		sipConvertTo_BufferOverflow(valobj,&val,0,iserrp);
+
+		return val;
+	}
+
+	sipBadClass(sipName_BALL_BufferOverflow);
+
+	*iserrp = 1;
+
+	return NULL;
+}

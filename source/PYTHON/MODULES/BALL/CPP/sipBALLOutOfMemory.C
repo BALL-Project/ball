@@ -1,0 +1,187 @@
+#include "sipBALLDeclBALL.h"
+#include "sipBALLOutOfMemory.h"
+
+
+PyObject *sipClass_OutOfMemory;
+
+static void sipDealloc_OutOfMemory(sipThisType *);
+
+static PyTypeObject sipType_OutOfMemory = {
+	PyObject_HEAD_INIT(&PyType_Type)
+	0,
+	sipName_BALL_OutOfMemory,
+	sizeof (sipThisType),
+	0,
+	(destructor)sipDealloc_OutOfMemory,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	0,
+	Py_TPFLAGS_DEFAULT,
+	0,
+	0,
+	0,
+};
+
+// Cast a pointer to a type somewhere in its superclass hierachy.
+
+const void *sipCast_OutOfMemory(const void *ptr,PyObject *targetClass)
+{
+	const void *res;
+
+	if (targetClass == sipClass_OutOfMemory)
+		return ptr;
+
+	if ((res = sipCast_GeneralException((GeneralException *)(OutOfMemory *)ptr,targetClass)) != NULL)
+		return res;
+
+	return NULL;
+}
+
+static void sipDealloc_OutOfMemory(sipThisType *sipThis)
+{
+	if (sipThis -> u.cppPtr != NULL)
+	{
+		if (sipIsPyOwned(sipThis))
+			delete (OutOfMemory *)sipThis -> u.cppPtr;
+	}
+
+	sipDeleteThis(sipThis);
+}
+
+PyObject *sipNew_OutOfMemory(PyObject *sipSelf,PyObject *sipArgs)
+{
+	static sipExtraType et = {
+		sipCast_OutOfMemory
+	};
+
+	sipThisType *sipThis = NULL;
+	const void *sipNew = NULL;
+	int sipFlags = SIP_PY_OWNED;
+	int sipArgsParsed = 0;
+
+	// See if there is something pending.
+
+	sipNew = sipGetPending(&sipFlags);
+
+	if (sipNew == NULL)
+	{
+		const char * a0;
+		int a1;
+		int a2 = 0;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-si|i",&a0,&a1,&a2))
+		{
+   try
+   {
+			sipNew = new OutOfMemory( a0, a1, a2);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		const OutOfMemory * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"-I",sipCanConvertTo_OutOfMemory,&a0obj))
+		{
+			int iserr = 0;
+
+			sipConvertTo_OutOfMemory(a0obj,(OutOfMemory **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			sipNew = new OutOfMemory(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		sipNoCtor(sipArgsParsed,sipName_BALL_OutOfMemory);
+		return NULL;
+	}
+
+	// Wrap the object.
+
+	if ((sipThis = sipCreateThis(sipSelf,sipNew,&sipType_OutOfMemory,sipFlags,&et)) == NULL)
+	{
+		if (sipFlags & SIP_PY_OWNED)
+			delete (OutOfMemory *)sipNew;
+
+		return NULL;
+	}
+
+	Py_INCREF(Py_None);
+	return Py_None;
+}
+
+PyMethodDef sipClassAttrTab_OutOfMemory[] = {
+	{NULL}
+};
+
+int sipCanConvertTo_OutOfMemory(PyObject *sipPy)
+{
+	return sipIsSubClassInstance(sipPy,sipClass_OutOfMemory);
+}
+
+void sipConvertTo_OutOfMemory(PyObject *sipPy,OutOfMemory **sipCppPtr,int sipWillDeref,int *sipIsErr)
+{
+	if (*sipIsErr || sipPy == NULL)
+		return;
+
+	if (sipPy == Py_None)
+	{
+		sipCheckNone(sipWillDeref,sipIsErr,sipName_BALL_OutOfMemory);
+		*sipCppPtr = NULL;
+
+		return;
+	}
+
+	*sipCppPtr = (OutOfMemory *)sipConvertToCpp(sipPy,sipClass_OutOfMemory,sipIsErr);
+}
+
+OutOfMemory *sipForceConvertTo_OutOfMemory(PyObject *valobj,int *iserrp)
+{
+	if (*iserrp || valobj == NULL || valobj == Py_None)
+		return NULL;
+
+	if (sipCanConvertTo_OutOfMemory(valobj))
+	{
+		OutOfMemory *val;
+
+		sipConvertTo_OutOfMemory(valobj,&val,0,iserrp);
+
+		return val;
+	}
+
+	sipBadClass(sipName_BALL_OutOfMemory);
+
+	*iserrp = 1;
+
+	return NULL;
+}
