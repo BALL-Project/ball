@@ -1,4 +1,4 @@
-// $Id: solventDescriptor.C,v 1.4 2001/05/17 01:30:58 oliver Exp $
+// $Id: solventDescriptor.C,v 1.5 2001/07/10 17:23:58 amoll Exp $
 
 #include <BALL/SOLVATION/solventDescriptor.h>
 
@@ -45,7 +45,6 @@ namespace BALL
 	SolventDescriptor::~SolventDescriptor() throw()
 	{
 		clear();
-
 		valid_ = false;
 	}
 
@@ -87,26 +86,32 @@ namespace BALL
 
 
 	void SolventDescriptor::setSolventAtomDescriptorList(const
-	std::vector<SolventAtomDescriptor>& solvent_atoms) throw()
+		std::vector<SolventAtomDescriptor>& solvent_atoms) throw()
 	{
 		solvent_atoms_ = solvent_atoms;
 	}
 
 
 	std::vector<SolventAtomDescriptor>
-	SolventDescriptor::getSolventAtomDescriptorList() const throw()
+		SolventDescriptor::getSolventAtomDescriptorList() const throw()
 	{
 		return solvent_atoms_;
 	}
 
-	Size SolventDescriptor::getNumberOfAtomTypes() const throw()
+	Size SolventDescriptor::getNumberOfAtomTypes() const 
+		throw()
 	{
 		return (Size)solvent_atoms_.size();
 	}
 
-	SolventAtomDescriptor SolventDescriptor::getAtomDescriptor(Position
-	index) const throw()
+	SolventAtomDescriptor SolventDescriptor::getAtomDescriptor(Position index) const 
+		throw(Exception::IndexOverflow)
 	{
+		if (index >= solvent_atoms_.size())
+		{
+			throw(Exception::IndexOverflow(__FILE__, __LINE__, index, solvent_atoms_.size()));
+		}
+		
 		return solvent_atoms_[index];
 	}
 
@@ -117,38 +122,33 @@ namespace BALL
 	}
 
 
-	bool SolventDescriptor::operator == (const SolventDescriptor& descriptor)
-	const throw()
+	bool SolventDescriptor::operator == (const SolventDescriptor& descriptor) const 
+		throw()
 	{
 		if (solvent_atoms_.size() != descriptor.solvent_atoms_.size())
 		{
-			// if the solvent descriptions have different sizes, they cannot be
-			// equal
+			// if the solvent descriptions have different sizes, they cannot be equal
 			return false;
 		}
-		else
+		
+		// go through all elements of the solvent desccription and check equality. 
+		// NOTE: This implementation does not recognize descriptions that
+		// have the atoms in different order!
+
+		vector<SolventAtomDescriptor>::const_iterator it = solvent_atoms_.begin();
+		vector<SolventAtomDescriptor>::const_iterator it2 = descriptor.solvent_atoms_.begin();
+
+		for (; it != solvent_atoms_.end(); ++it, ++it2)
 		{
-			// go through all elements of the solvent desccription and check
-			// equality. 
-			// NOTE: This implementation does not recognize descriptions that
-			// have the atoms in different order!
-
-			vector<SolventAtomDescriptor>::const_iterator it 
-				= solvent_atoms_.begin();
-			vector<SolventAtomDescriptor>::const_iterator it2 
-				= descriptor.solvent_atoms_.begin();
-
-			for (; it != solvent_atoms_.end(); ++it, ++it2)
+			if ((it->type != it2->type) 
+				|| (it->element_symbol != it2->element_symbol)
+				|| (it->radius != it2->radius)
+				|| (it->number_of_atoms != it2->number_of_atoms))
 			{
-				if ((it->type != it2->type) 
-					|| (it->element_symbol != it2->element_symbol)
-					|| (it->radius != it2->radius)
-					|| (it->number_of_atoms != it2->number_of_atoms))
-				{
-					return false;
-				}
+				return false;
 			}
 		}
+
 		return true;
 	}
 
