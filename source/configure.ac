@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.5 2003/03/03 13:59:18 anhi Exp $
+dnl    $Id: configure.ac,v 1.6 2003/04/17 20:21:13 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -259,6 +259,13 @@ dnl			Search for the C++ compiler in the (OS-determined) search order.
 CF_SEARCH_CXX
 
 dnl
+dnl		Determine the object suffix and executable suffix
+dnl
+AC_PROG_CXX
+AC_OBJEXT
+AC_EXEEXT
+
+dnl
 dnl  		Try to identify the compiler and determine its version number.
 dnl
 CF_IDENTIFY_GXX
@@ -285,7 +292,9 @@ case "${CXX_NAME}" in
 	MIPSpro )		CF_MIPSPRO_OPTIONS ;;
 	SunCC )			CF_SUNCC_OPTIONS ;;
 esac
+
 CF_BUILD_FULL_CXX_NAME
+
 
 dnl
 dnl   checking for DEBUG-Flag

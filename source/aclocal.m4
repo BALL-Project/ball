@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.18 2003/04/17 06:06:08 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.19 2003/04/17 20:21:07 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -580,7 +580,6 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 	fi
 
 	AC_MSG_RESULT(${VERSION_OUTPUT})
-
 	CF_DIGEST_CXX_VERSION
 
 	if test "${CXX_VERSION_1}" -lt 2 \
