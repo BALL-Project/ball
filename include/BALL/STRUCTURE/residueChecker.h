@@ -1,4 +1,4 @@
-// $Id: residueChecker.h,v 1.5 2001/01/15 10:12:42 anker Exp $
+// $Id: residueChecker.h,v 1.6 2001/01/26 12:11:02 oliver Exp $
 
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -19,6 +19,8 @@ namespace BALL
 			This processor checks residues for internal consistency.
 			It identifies missing or superfluous atoms, suspect bond lengths
 			and non-integral or extremely large charges on the residue.
+			Atom positions are checked as well: a warning is printed, if any of the 
+			atom's coordinates is not a number (NaN).
 			Warnings are emitted to \Ref{Log}.
 			\\
 			{\bf Definition:} \URL{BALL/STRUCTURE/residueChecker.h}

@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.15 2001/01/09 15:05:05 anker Exp $
+// $Id: residueChecker.C,v 1.16 2001/01/26 12:11:05 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -113,6 +113,16 @@ namespace BALL
 				
 				for (atom_it = residue.beginAtom(); +atom_it; ++atom_it)
 				{
+					// check for illegal atom positions (NaNs)
+					if (Maths::isNan(atom_it->getPosition().x)
+							||Maths::isNan(atom_it->getPosition().y)
+							||Maths::isNan(atom_it->getPosition().z))
+					{
+						Log.warn() << "ResidueChecker: illegal atom position (not a number) for atom "
+											 << atom_it->getName() << " of " << res_name << endl;
+					}
+														 
+					
 					if (reference_names.has(atom_it->getName()))
 					{
 						reference_names.erase(atom_it->getName());
