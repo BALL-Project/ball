@@ -16,10 +16,11 @@ CPP_SOURCES=\
 	datasetControl.C\
 	molecularControl.C\
 	molecularStructure.C\
-	canvasWidget.C\
-	scene.C\
-	regularData2DWidget.C\
-	regularData1DWidget.C
+	scene.C
+
+#	canvasWidget.C\
+#	regularData2DWidget.C\
+#	regularData1DWidget.C
 
 PYTHON_CPP_SOURCES=\
 	pyWidget.C
@@ -32,10 +33,10 @@ MOC_SOURCES=\
 	geometricControl_moc.C\
 	molecularControl_moc.C\
 	molecularStructure_moc.C\
-	scene_moc.C\
-	canvasWidget_moc.C\
-	regularData1DWidget_moc.C\
-	regularData2DWidget_moc.C
+	scene_moc.C
+#	canvasWidget_moc.C
+#	regularData1DWidget_moc.C\
+#	regularData2DWidget_moc.C
 
 PYTHON_MOC_SOURCES=\
 	pyWidget_moc.C
@@ -71,17 +72,14 @@ scene_moc.C:	$(HEADER_DIR)/scene.h
 pyWidget_moc.C:	$(HEADER_DIR)/pyWidget.h
 	$(MOC) $(HEADER_DIR)/pyWidget.h -o $@
 
-regularData1DWidget_moc.C:	$(HEADER_DIR)/regularData1DWidget.h
-	$(MOC) $(HEADER_DIR)/regularData1DWidget.h -o $@
-
-regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
-	$(MOC) $(HEADER_DIR)/regularData2DWidget.h -o $@
-
-canvasWidget_moc.C:	$(HEADER_DIR)/canvasWidget.h
-	$(MOC) $(HEADER_DIR)/canvasWidget.h -o $@
+#regularData1DWidget_moc.C:	$(HEADER_DIR)/regularData1DWidget.h
+#	$(MOC) $(HEADER_DIR)/regularData1DWidget.h -o $@
 
 #regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
 #	$(MOC) $(HEADER_DIR)/regularData2DWidget.h -o $@
+
+#canvasWidget_moc.C:	$(HEADER_DIR)/canvasWidget.h
+#	$(MOC) $(HEADER_DIR)/canvasWidget.h -o $@
 
 datasetControl_moc.C:	$(HEADER_DIR)/datasetControl.h
 	$(MOC) $(HEADER_DIR)/datasetControl.h -o $@
