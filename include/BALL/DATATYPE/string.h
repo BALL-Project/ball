@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.33 2001/02/20 11:36:33 amoll Exp $
+// $Id: string.h,v 1.34 2001/05/16 13:42:15 amoll Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -1225,13 +1225,13 @@ namespace BALL
 		*/
 		//_@{
 
-		/// pointer to the bound String
+		//_ pointer to the bound String
 		String* 	bound_;
 
-		/// start index in the bound String
+		//_ start index in the bound String
 		Index 		from_;
 
-		/// end index in the bound String
+		//_ end index in the bound String
 		Index 		to_;
 		//_@}
 	};
