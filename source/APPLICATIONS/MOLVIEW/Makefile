@@ -1,4 +1,4 @@
-EXECUTABLE=molview
+XECUTABLE=molview
 DIRECTORY=APPLICATIONS/MOLVIEW
 
 all:	$(EXECUTABLE)
@@ -15,14 +15,6 @@ CPP_SOURCES=\
 	DIALOGS/DlgAboutData.C\
 	DIALOGS/DlgAmberMinimization.C\
 	DIALOGS/DlgAmberMinimizationData.C\
-	DIALOGS/DlgPreferences.C\
-	DIALOGS/DlgPreferencesData.C\
-	DIALOGS/DlgPreferencesGeneral.C\
-	DIALOGS/DlgPreferencesGeneralData.C\
-	DIALOGS/DlgPreferencesDisplay.C\
-	DIALOGS/DlgPreferencesDisplayData.C\
-	DIALOGS/DlgPreferencesNetwork.C\
-	DIALOGS/DlgPreferencesNetworkData.C\
 	icons.C\
 	main.C\
 	mainframe.C
@@ -32,52 +24,22 @@ MOC_SOURCES=\
 	DIALOGS/DlgAboutData_moc.C\
 	DIALOGS/DlgAmberMinimization_moc.C\
 	DIALOGS/DlgAmberMinimizationData_moc.C\
-	DIALOGS/DlgPreferences_moc.C\
-	DIALOGS/DlgPreferencesData_moc.C\
-	DIALOGS/DlgPreferencesGeneral_moc.C\
-	DIALOGS/DlgPreferencesGeneralData_moc.C\
-	DIALOGS/DlgPreferencesDisplay_moc.C\
-	DIALOGS/DlgPreferencesDisplayData_moc.C\
-	DIALOGS/DlgPreferencesNetwork_moc.C\
-	DIALOGS/DlgPreferencesNetworkData_moc.C\
 	mainframe_moc.C
 
 
 SPECIAL_OBJECTS=
 
-
 molview:	$(OBJECTS) $(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS)
+
+example: example02.o 
+	$(CXX)	$(LDFLAGS) -o example example02.o $(BALLVIEW_LIBS) $(PYTHON_LIBS)
 
 DIALOGS/DlgAbout_moc.C:     DIALOGS/DlgAbout.h
 				$(MOC) DIALOGS/DlgAbout.h -o $@
 
 DIALOGS/DlgAboutData_moc.C: DIALOGS/DlgAboutData.h
 				$(MOC) DIALOGS/DlgAboutData.h -o $@
-
-DIALOGS/DlgPreferences_moc.C:     DIALOGS/DlgPreferences.h
-				$(MOC) DIALOGS/DlgPreferences.h -o $@
-
-DIALOGS/DlgPreferencesData_moc.C: DIALOGS/DlgPreferencesData.h
-				$(MOC) DIALOGS/DlgPreferencesData.h -o $@
-
-DIALOGS/DlgPreferencesDisplay_moc.C:     DIALOGS/DlgPreferencesDisplay.h
-				$(MOC) DIALOGS/DlgPreferencesDisplay.h -o $@
-
-DIALOGS/DlgPreferencesDisplayData_moc.C: DIALOGS/DlgPreferencesDisplayData.h
-				$(MOC) DIALOGS/DlgPreferencesDisplayData.h -o $@
-
-DIALOGS/DlgPreferencesGeneral_moc.C:     DIALOGS/DlgPreferencesGeneral.h
-				$(MOC) DIALOGS/DlgPreferencesGeneral.h -o $@
-
-DIALOGS/DlgPreferencesGeneralData_moc.C: DIALOGS/DlgPreferencesGeneralData.h
-				$(MOC) DIALOGS/DlgPreferencesGeneralData.h -o $@
-
-DIALOGS/DlgPreferencesNetwork_moc.C:     DIALOGS/DlgPreferencesNetwork.h
-				$(MOC) DIALOGS/DlgPreferencesNetwork.h -o $@
-
-DIALOGS/DlgPreferencesNetworkData_moc.C: DIALOGS/DlgPreferencesNetworkData.h
-				$(MOC) DIALOGS/DlgPreferencesNetworkData.h -o $@
 
 DIALOGS/DlgAmberMinimization_moc.C:     DIALOGS/DlgAmberMinimization.h
 				$(MOC) DIALOGS/DlgAmberMinimization.h -o $@
