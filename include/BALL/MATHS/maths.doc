@@ -27,4 +27,5 @@
 	//@}
 	//@Include: common.h
 	//@Include: analyticalGeometry.h
+	//@Include: function.h
 //@}
