@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.8 2000/11/06 18:03:12 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.9 2000/11/28 17:31:25 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -67,6 +67,18 @@ namespace BALL
 	}
 
 
+	Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor
+		(const SolventDescriptor& solvent,
+		 const RDFParameter& rdf_parameter,
+		 const Pair6_12RDFIntegrator& rdf_integrator) 
+		throw()
+		:	solvent_(solvent),
+			rdf_parameter_(rdf_parameter),
+			rdf_integrator_(rdf_integrator)
+	{
+	}
+
+
 	Pair6_12InteractionEnergyProcessor::~Pair6_12InteractionEnergyProcessor()
 		throw()
 	{
@@ -87,6 +99,48 @@ namespace BALL
 	}
 
 
+	void Pair6_12InteractionEnergyProcessor::setSolventDescriptor
+		(const SolventDescriptor& solvent) throw()
+	{
+		solvent_ = solvent;
+	}
+
+
+	const SolventDescriptor& 
+		Pair6_12InteractionEnergyProcessor::getSolventDescriptor() const throw()
+	{
+		return solvent_;
+	}
+
+
+	void Pair6_12InteractionEnergyProcessor::setRDFParameters
+		(const RDFParameter& rdf_parameter) throw()
+	{
+		rdf_parameter_ = rdf_parameter;
+	}
+
+
+	const RDFParameter& 
+		Pair6_12InteractionEnergyProcessor::getRDFParameter() const throw() 
+	{
+		return rdf_parameter_;
+	}
+
+
+	void Pair6_12InteractionEnergyProcessor::setRDFIntegrator
+		(const Pair6_12RDFIntegrator& integrator) throw()
+	{
+		rdf_integrator_ = integrator;
+	}
+
+
+	const Pair6_12RDFIntegrator& 
+		Pair6_12InteractionEnergyProcessor::getRDFIntegrator() const throw()
+	{
+		return rdf_integrator_;
+	}
+
+
 	const Pair6_12InteractionEnergyProcessor&
 		Pair6_12InteractionEnergyProcessor::operator =
 		(const Pair6_12InteractionEnergyProcessor& proc) throw()
@@ -103,14 +157,10 @@ namespace BALL
 	bool Pair6_12InteractionEnergyProcessor::operator == (const
 	Pair6_12InteractionEnergyProcessor& proc) const throw()
 	{
-		/*
 		return (EnergyProcessor::operator == (proc)
 			&& (solvent_ == proc.solvent_)
 			&& (rdf_parameter_ == rdf_parameter_)
 			&& (rdf_integrator_ == rdf_integrator_) );
-		*/
-		return (EnergyProcessor::operator == (proc)
-			&& (solvent_ == proc.solvent_));
 	}
 
 

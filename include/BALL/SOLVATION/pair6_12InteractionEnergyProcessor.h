@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.5 2000/11/06 17:56:55 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.6 2000/11/28 17:31:21 anker Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -165,15 +165,69 @@ namespace BALL
 		/** @name Constructors and destructors */
 		//@{
 
-		/** Default constructor */
-		Pair6_12InteractionEnergyProcessor() throw();
+		/** Default constructor 
+		*/
+		Pair6_12InteractionEnergyProcessor() 
+			throw();
 
-		/** Copy constructor */
+		/** Copy constructor 
+				@param proc the processor to copy
+		*/
 		Pair6_12InteractionEnergyProcessor
-			(const Pair6_12InteractionEnergyProcessor& proc) throw();
+			(const Pair6_12InteractionEnergyProcessor& proc) 
+			throw();
+
+		/** Detailed constructor
+				@param solvent a description of the sorrounding solvent (@see
+				SolventDescriptor)
+				@param rdf_param the parameters for the radial distribution
+				function (@see RDFParameter)
+				@param rdf_integrator the integrator needed for structural
+				integration (@see Pair6_12RDFIntegrator)
+		*/
+		Pair6_12InteractionEnergyProcessor(const SolventDescriptor& solvent, 
+				const RDFParameter& rdf_param,
+				const Pair6_12RDFIntegrator& rdf_integrator) 
+			throw();
 
 		/** Destructor */
 		virtual ~Pair6_12InteractionEnergyProcessor() throw();
+
+		//@}
+
+
+		/** @name Accessors */
+		//@{
+
+		/** set the solvent descriptor 
+				@param solvent the solvent descriptor to be set
+		*/
+		void setSolventDescriptor(const SolventDescriptor& solvent) throw();
+
+		/** get the solvent descriptor 
+				@return the current solvent descriptor of this instance
+		*/
+		const SolventDescriptor& getSolventDescriptor() const throw();
+
+		/** set the parameters for the radial distribution function 
+				@param rdf_parameter the RDF parameter to be set
+		*/
+		void setRDFParameters(const RDFParameter& rdf_parameter) throw();
+
+		/** get the parameters for the radial distribution function 
+				@return a const reference of the current RDF parameter
+		*/
+		const RDFParameter& getRDFParameter() const throw();
+
+		/** set the integrator of this processor
+				@param rdf_integrator the integrator to be set
+		*/
+		void setRDFIntegrator(const Pair6_12RDFIntegrator& integrator) throw();
+
+		/** get the integrator of this processor
+				@return the current integrator 
+		*/
+		const Pair6_12RDFIntegrator& getRDFIntegrator() const throw();
 
 		//@}
 

@@ -1,4 +1,4 @@
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.5 2000/11/14 19:13:06 anker Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.6 2000/11/28 17:31:33 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.5 2000/11/14 19:13:06 anker Exp $")
+START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.6 2000/11/28 17:31:33 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,8 +23,6 @@ using namespace std;
 ///  insert tests for each member function here         
 ///
 	
-// GROSSBAUSTELLE
-
 Pair6_12InteractionEnergyProcessor* pointer;
 
 CHECK(Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor())
@@ -42,12 +40,58 @@ CHECK(Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor(con
 	// BAUSTELLE
 RESULT
 
+CHECK(Pair6_12InteractionEnergyProcessor::setSolventDescriptor())
+	Pair6_12InteractionEnergyProcessor proc;
+	SolventDescriptor solvent;
+	proc.setSolventDescriptor(solvent);
+	bool test = (proc.getSolventDescriptor() == solvent);
+	TEST_EQUAL(test, true)
+RESULT
+
+CHECK(Pair6_12InteractionEnergyProcessor::setRDFParameters())
+	Pair6_12InteractionEnergyProcessor proc;
+	RDFParameter param;
+	proc.setRDFParameters(param);
+	bool test = (proc.getRDFParameter() == param);
+	TEST_EQUAL(test, true)
+RESULT
+
+CHECK(Pair6_12InteractionEnergyProcessor::setRDFIntegrator())
+	Pair6_12InteractionEnergyProcessor proc;
+	Pair6_12RDFIntegrator integ;
+	proc.setRDFIntegrator(integ);
+	bool test = (proc.getRDFIntegrator() == integ);
+	TEST_EQUAL(test, true)
+RESULT
+
 CHECK(Pair6_12InteractionEnergyProcessor::clear())
-	// BAUSTELLE
+	Pair6_12InteractionEnergyProcessor proc;
+	Pair6_12InteractionEnergyProcessor proc2;
+	proc2.clear();
+	bool test = (proc == proc2);
+	TEST_EQUAL(test, true)
+	SolventDescriptor solvent;
+	proc2.setSolventDescriptor(solvent);
+	proc2.clear();
+	test = (proc == proc2);
+	TEST_EQUAL(test, true)
+	RDFParameter param;
+	proc2.setRDFParameters(param);
+	proc2.clear();
+	test = (proc == proc2);
+	TEST_EQUAL(test, true)
+	Pair6_12RDFIntegrator integ;
+	proc2.setRDFIntegrator(integ);
+	proc2.clear();
+	test = (proc == proc2);
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(Pair6_12InteractionEnergyProcessor::operator = (const Pair6_12InteractionEnergyProcessor& proc))
-	// BAUSTELLE
+	Pair6_12InteractionEnergyProcessor proc;
+	SolventDescriptor solvent;
+	RDFParameter param;
+	Pair6_12RDFIntegrator integ;
 RESULT
 
 CHECK(Pair6_12InteractionEnergyProcessor::finish())
@@ -73,6 +117,8 @@ CHECK(Pair6_12InteractionEnergyProcessor::finish())
 	"data/6_12-test.rdf-fake.ini");
 	proc.options.setBool(Pair6_12InteractionEnergyProcessor::Option::USE_RDF,
 			true);
+	proc.options.setInteger(Pair6_12RDFIntegrator::Option::METHOD,
+			Pair6_12RDFIntegrator::METHOD__TRAPEZIUM);
 	S.apply(proc);
 	val = proc.getEnergy();
 	TEST_REAL_EQUAL(val, -6.027207050)
@@ -84,6 +130,7 @@ CHECK(Pair6_12InteractionEnergyProcessor::finish())
 	TEST_REAL_EQUAL(val, -6.027207050)
 
 	// BAUSTELLE: USE_RDF=true geht trotz nicht gesetzten Dateinamens!!!
+	// Was ist mit dem default? Exception?
 RESULT
 
 CHECK(Pair6_12InteractionEnergyProcessor::isValid())
@@ -94,7 +141,10 @@ CHECK(Pair6_12InteractionEnergyProcessor::isValid())
 RESULT
 
 CHECK(Pair6_12InteractionEnergyProcessor::operator == ())
-  // BAUSTELLE
+	Pair6_12InteractionEnergyProcessor proc;
+	Pair6_12InteractionEnergyProcessor proc2;
+	bool test = (proc == proc2);
+	TEST_EQUAL(test, true)
 RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
