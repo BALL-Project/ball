@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.12 2004/07/25 20:44:50 amoll Exp $
+// $Id: main.C,v 1.13 2004/10/09 08:53:05 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -114,14 +114,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 			continue;
 		}
 
-		if (argument.hasSuffix(".bvp"))
-		{
-			mainframe.loadBALLViewProjectFile(argument);
-		}
-		else
-		{
-			mainframe.openFile(argument);
-		}
+		mainframe.openFile(argument);
 	}
 
   // Hand over control to the application.
