@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.46 2004/06/04 14:43:18 amoll Exp $
+// $Id: mainControl.h,v 1.47 2004/06/25 14:37:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -697,7 +697,7 @@ namespace BALL
 			/** Enable the delete entry for GenericControls.
 					Called by a GenericControl, if it has a selection, that can be deleted.
 			*/
-			void enableDeleteEntry()
+			void setDeleteEntryEnabled(bool state)
 				throw();
 	
 			/** Insert the delete entry for GenericControls.

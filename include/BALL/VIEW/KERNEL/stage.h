@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.11 2004/06/24 23:03:42 amoll Exp $
+// $Id: stage.h,v 1.12 2004/06/25 14:37:16 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -335,34 +335,6 @@ namespace BALL
 			Vector3 					right_vector_;
 		};
 
-		///
-		class BALL_EXPORT ClippingPlane
-			: public Representation
-		{
-			public:
-
-			///
-			ClippingPlane()
-				throw();
-
-			///
-			ClippingPlane(const ClippingPlane& plane)
-				throw();
-
-			///
-			bool operator == (const ClippingPlane& plane) const
-				throw();
-
-			///
-			ClippingPlane& operator = (const ClippingPlane& plane)
-				throw();
-
-			Vector3 translation;
-			Vector3 plane_vector;
-			bool hidden;
-		};
-	
-	
 		/** A Stage has a Camera, LightSources and a background color.
 		 		It stores also the eye distance for the stereo view.
 		 		Finally a flag can be set, so that a coordinate system will be shown.
@@ -414,14 +386,6 @@ namespace BALL
 			virtual void removeLightSource(const LightSource& light_source) 
 				throw();
 			
-			///
-			virtual List<ClippingPlane>& getClippingPlanes()
-				throw() { return clipping_planes_;}
-
-			///
-			virtual const List<ClippingPlane>& getClippingPlanes() const
-				throw() { return clipping_planes_;}
-
 			/// Get the camera
 			virtual Camera& getCamera() 
 				throw() { return camera_;}
@@ -514,9 +478,6 @@ namespace BALL
 
 			//_
 			List<LightSource> 	light_sources_;
-
-			//_
-			List<ClippingPlane> clipping_planes_;
 
 			//_
 			Camera 						 	camera_;

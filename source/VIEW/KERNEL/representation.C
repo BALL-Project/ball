@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.38 2004/06/25 12:09:26 amoll Exp $
+// $Id: representation.C,v 1.39 2004/06/25 14:37:08 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -47,19 +47,34 @@ namespace BALL
 		Representation::Representation(const Representation& rp)
 			throw()
 				: PropertyManager(rp),
-					drawing_mode_(DRAWING_MODE_SOLID),
-					drawing_precision_(DRAWING_PRECISION_HIGH),
-					surface_drawing_precision_(-1),
-					model_type_(MODEL_UNKNOWN),
-					coloring_method_(COLORING_UNKNOWN),
-					transparency_(0),
+					drawing_mode_(rp.drawing_mode_),
+					drawing_precision_(rp.drawing_precision_),
+					surface_drawing_precision_(rp.drawing_precision_),
+					model_type_(rp.model_type_),
+					coloring_method_(rp.coloring_method_),
+					transparency_(rp.transparency_),
 					model_processor_(0),
 					color_processor_(0),
 					geometric_objects_(),
-					composites_(),
+					composites_(rp.composites_),
 					update_running_(false)
 		{
-			*this = rp;
+			if (rp.model_processor_ != 0)
+			{
+				model_processor_ = new ModelProcessor(*rp.model_processor_);
+			}
+
+			if (rp.color_processor_ != 0)
+			{
+				color_processor_ = new ColorProcessor(*rp.color_processor_);
+			}
+
+			GeometricObjectList::ConstIterator it = rp.geometric_objects_.begin();
+			for (;it != rp.geometric_objects_.end(); it++)
+			{
+				GeometricObject* object = new GeometricObject(**it);
+				geometric_objects_.push_back(object);
+			}
 		}
 
 

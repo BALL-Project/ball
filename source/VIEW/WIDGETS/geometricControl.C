@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.44 2004/06/25 00:34:33 amoll Exp $
+// $Id: geometricControl.C,v 1.45 2004/06/25 14:37:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -115,10 +115,7 @@ namespace BALL
 				delete item;
 				representation_to_item_.erase(&rep);		
 				listview->triggerUpdate();
-				return;
 			}
-
-			return;
 		}
 
 		void GeometricControl::updateRepresentation(Representation& rep)
@@ -144,13 +141,6 @@ namespace BALL
 			if (changed_content) item->setText(2, new_text.c_str());
 
 			if (changed_content) listview->triggerUpdate();
-
-			// ????? testing, if I can remove these lines: 13.03.04
-			/*
-			RepresentationMessage* message = new RepresentationMessage(rep, RepresentationMessage::SELECTED);
-			notify_(message);
-			*/
-			return;
 		}
 
 		void GeometricControl::onNotify(Message *message)
@@ -225,7 +215,12 @@ namespace BALL
 
 			context_menu_.insertSeparator();
 			insertContextMenuEntry("Move Clipping Plane", this, SLOT(moveClippingPlane()), 40);	
-			if (!RTTI::isKindOf<ClippingPlane>(rep))
+			if (rep.getModelType() == MODEL_CLIPPING_PLANE)
+			{
+				context_menu_.setItemEnabled(5, false);
+				context_menu_.setItemEnabled(20, false);
+			}
+			else
 			{
 				context_menu_.setItemEnabled(40, false);
 			}

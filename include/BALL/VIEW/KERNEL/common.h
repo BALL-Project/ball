@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.21 2004/06/13 18:30:31 amoll Exp $
+// $Id: common.h,v 1.22 2004/06/25 14:37:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -137,9 +137,6 @@ namespace BALL
 		*/
 		enum ModelType
 		{
-			/// unkown property
-			MODEL_UNKNOWN = -1,
-			
 			/// defines the property for the model: Lines
 			MODEL_LINES = 0,
 
@@ -178,7 +175,10 @@ namespace BALL
 			MODEL_CONTOUR_SURFACE,
 
 			/// Clipping Planes, e.g. in OpenGL
-			MODEL_CLIPPING_PLANE
+			MODEL_CLIPPING_PLANE,
+
+			/// unkown property
+			MODEL_UNKNOWN
 		};
 
 

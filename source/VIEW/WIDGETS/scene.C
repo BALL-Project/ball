@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.85 2004/06/25 00:34:33 amoll Exp $
+// $Id: scene.C,v 1.86 2004/06/25 14:37:08 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -427,15 +427,16 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-			List<ClippingPlane>::iterator cit;
-
+			PrimitiveManager::RepresentationList::ConstIterator it;
 			// ============== render Clipping planes ==============================
+			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 			
 			GLint current_clipping_plane = GL_CLIP_PLANE0;
-			cit = stage_->getClippingPlanes().begin();
-			for(; cit != stage_->getClippingPlanes().end(); cit++)
+			for(; it != getMainControl()->getPrimitiveManager().end(); it++)
 			{
-				if ((*cit).hidden)
+				if ((**it).getModelType() != MODEL_CLIPPING_PLANE) continue;
+
+				if ((**it).hasProperty(Representation::PROPERTY__HIDDEN))
 				{
 					glDisable(current_clipping_plane);
 					current_clipping_plane ++;
@@ -443,12 +444,12 @@ namespace BALL
 				}
 
 				glPushMatrix();
-				glTranslatef ((*cit).translation.x,
-											(*cit).translation.y,
-											(*cit).translation.z);
-				glRotated((*cit).plane_vector.x, 1, 0, 0);
-				glRotated((*cit).plane_vector.y, 0, 1, 0);
-				glRotated((*cit).plane_vector.z, 0, 0, 1);
+				glTranslatef ((**it).getProperty("TX").getDouble(),
+											(**it).getProperty("TY").getDouble(),
+											(**it).getProperty("TZ").getDouble());
+				glRotated((**it).getProperty("VX").getDouble(), 1, 0, 0);
+				glRotated((**it).getProperty("VY").getDouble(), 0, 1, 0);
+				glRotated((**it).getProperty("VZ").getDouble(), 0, 0, 1);
 
 				GLdouble plane[] ={1, 0, 0, 0};
 				glEnable(current_clipping_plane);
@@ -464,7 +465,6 @@ namespace BALL
 			{
 				glDisable(i);
 			}
-
 
 			// -------------------------------------------------------------------
 			// show light sources
@@ -489,7 +489,6 @@ namespace BALL
 	
 			// -------------------------------------------------------------------
 			
-			PrimitiveManager::RepresentationList::ConstIterator it;
 			// render all "normal" (non always front and non transparent models)
 			gl_renderer_.initSolid();
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
@@ -1626,16 +1625,16 @@ namespace BALL
 
 		void Scene::createNewClippingPlane()
 		{
-			ClippingPlane cplane;
-			cplane.translation = Vector3(25,25,25);
-			cplane.plane_vector = Vector3(0,0,0);
-Log.error() << "#~~#   4 " << stage_->getLightSources().size() << " "   << __FILE__ << "  " << __LINE__<< std::endl;
-			stage_->getClippingPlanes().push_back(cplane);
-Log.error() << "#~~#   3 "    << __FILE__ << "  " << __LINE__<< std::endl;
+			Representation* rep = new Representation();
+			rep->setModelType(MODEL_CLIPPING_PLANE);
+			rep->setProperty("TX", 25);
+			rep->setProperty("TY", 25);
+			rep->setProperty("TZ", 25);
+			rep->setProperty("VX", 0);
+			rep->setProperty("VY", 0);
+			rep->setProperty("VZ", 0);
 
-			SceneMessage* msg = new SceneMessage(SceneMessage::UPDATE_CLIPPING_PLANES);
-			msg->setStage(*stage_);
-			notify_(msg);
+			getMainControl()->insert(*rep);
 		}
 		
 
