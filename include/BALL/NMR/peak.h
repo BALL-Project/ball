@@ -1,4 +1,4 @@
-// $Id: peak.h,v 1.7 2001/06/14 11:44:26 oliver Exp $
+// $Id: peak.h,v 1.8 2001/06/24 14:18:13 oliver Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -156,57 +156,57 @@ namespace BALL
 	{
 	}
 
-	BALL_INLINE
 	template <typename PositionType>
+	BALL_INLINE
 	const Peak<PositionType>::Position& Peak<PositionType>::getPosition() const
 	{
 		return position_;
 	}
 
-	BALL_INLINE
 	template <typename PositionType>
+	BALL_INLINE
 	const Peak<PositionType>::Position& Peak<PositionType>::getWidth() const
 	{
 		return width_;
 	}
 
-	BALL_INLINE
 	template <typename PositionType>
+	BALL_INLINE
 	void Peak<PositionType>::setPosition(const Peak<PositionType>::Position& position)
 	{
 		position_ = position;
 	}
 
-	BALL_INLINE
 	template <typename PositionType>
+	BALL_INLINE
 	void Peak<PositionType>::setWidth(const Peak<PositionType>::Position& width)
 	{
 		width_ = width;
 	}
 
-	BALL_INLINE
 	template <typename PositionType>
+	BALL_INLINE
 	float Peak<PositionType>::getIntensity() const
 	{
 		return intensity_;
 	}
 
-	BALL_INLINE
 	template <typename PositionType>
+	BALL_INLINE
 	void Peak<PositionType>::setIntensity(float intensity)
 	{
 		intensity_ = intensity;
 	}
 
-	BALL_INLINE
 	template <typename PositionType>
+	BALL_INLINE
 	const Atom* Peak<PositionType>::getAtom() const
 	{
 		return atom_;
 	}
 
-	BALL_INLINE
 	template <typename PositionType>
+	BALL_INLINE
 	void Peak<PositionType>::setAtom(const Atom* atom)
 	{
 		atom_ = atom;
