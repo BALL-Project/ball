@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.16 2000/10/23 17:42:55 amoll Exp $
+// $Id: resourceFile.C,v 1.17 2000/10/25 15:03:13 anker Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -623,6 +623,7 @@ namespace BALL
 	{
 	}
 
+	
 	ResourceFile::ResourceFile(const String& name)
 		:	File(),
 			root_()
@@ -630,6 +631,7 @@ namespace BALL
 		open(name);
 	}
 
+	
 	ResourceFile::ResourceFile(const ResourceFile& resource_file)
 		:	File(resource_file),
 			root_()
@@ -639,15 +641,23 @@ namespace BALL
 			*this >> *this;
 			if (eof())
 			{
-				clear();
+				::std::fstream::clear();
 			}
 		}
 	}
 
+	
 	ResourceFile::~ResourceFile()
 	{
 		close();
 	}
+
+
+	void ResourceFile::clear()
+	{
+		root_.clear();
+	}
+
 
 	bool ResourceFile::open(const String& name)
 	{
@@ -657,7 +667,7 @@ namespace BALL
 			
 			if (eof())
 			{
-				clear();
+				::std::fstream::clear();
 			}
 		} 
 		else 
@@ -668,6 +678,7 @@ namespace BALL
 		return (bool)good();
 	}
 
+	
 	void ResourceFile::saveAs(const Entry& entry, const String& name)
 	{
 		File file(name.c_str(), File::OpenMode(File::OUT | File::TRUNC));
