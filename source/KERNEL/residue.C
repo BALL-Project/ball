@@ -1,9 +1,10 @@
-// $Id: residue.C,v 1.7 2000/02/12 19:28:21 oliver Exp $
+// $Id: residue.C,v 1.8 2000/03/25 22:46:15 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 using namespace std;
 
@@ -100,6 +101,114 @@ namespace BALL
 		residue.insertion_code_ = temp_insertion_code;
 	}
 
+	bool Residue::hasTorsionPsi() const
+	{
+		// the torsion angle psi is not defined for
+		// the C-terminus
+		return !isCTerminal();
+	}
+	
+	Angle Residue::getTorsionPsi() const
+	{
+		Angle result(0.0);
+		if (hasTorsionPsi())
+		{
+			const Residue* next = getNext(RTTI::getDefault<Residue>());
+			if (next != 0)
+			{
+				Atom* C = 0;
+				Atom* N = 0;
+				Atom* CA = 0;
+				AtomIterator it;
+				for (it = beginAtom(); +it; ++it)
+				{
+					if (it->getName() == "C")	C  = &*it;
+					if (it->getName() == "CA") CA = &*it;
+					if (it->getName() == "N")	N  = &*it;
+				}
+
+				Atom* next_N = 0;
+				for (it = next->beginAtom(); +it; ++it)
+				{
+					if (it->getName() == "N")	
+					{
+						next_N  = &*it;
+						break;
+					}
+				}
+				
+				if ((N != 0) && (C != 0) && (CA != 0) && (next_N != 0))
+				{
+					result = calculateTorsionAngle(*N, *CA, *C, *next_N);
+				} 
+				else
+				{
+					Log.error() << "Atoms not found:" << N << "/" << CA << "/" << C << "/" << next_N << endl;
+				}
+			}
+			else
+			{
+				Log.error() << "No next residue!" << endl;
+			}
+		}
+
+		return result;
+	}
+
+	bool Residue::hasTorsionPhi() const
+	{
+		// the torsion angle phi is not defined for
+		// the C-terminus
+		return !isNTerminal();
+	}
+	
+	Angle Residue::getTorsionPhi() const
+	{
+		Angle result(0.0);
+		if (hasTorsionPhi())
+		{
+			const Residue* previous = getPrevious(RTTI::getDefault<Residue>());
+			if (previous != 0)
+			{
+				Atom* C = 0;
+				Atom* N = 0;
+				Atom* CA = 0;
+				AtomIterator it;
+				for (it = beginAtom(); +it; ++it)
+				{
+					if (it->getName() == "C")	 C  = &*it;
+					if (it->getName() == "CA") CA = &*it;
+					if (it->getName() == "N")  N  = &*it;
+				}
+
+				Atom* last_C = 0;
+				for (it = previous->beginAtom(); +it; ++it)
+				{
+					if (it->getName() == "C")	
+					{
+						last_C  = &*it;
+						break;
+					}
+				}
+				
+				if ((N != 0) && (C != 0) && (CA != 0) && (last_C != 0))
+				{
+					result = calculateTorsionAngle(*last_C, *N, *CA, *C);
+				} 
+				else
+				{
+					Log.error() << "Atoms not found:" << last_C << "/" << N << "/" << CA << "/" << C << endl;
+				}
+			}
+			else
+			{
+				Log.error() << "No previous residue!" << endl;
+			}
+		}
+
+		return result;
+	}
+
 	Protein* Residue::getProtein()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
@@ -113,7 +222,7 @@ namespace BALL
 		return 0;
 	}
 
-	const Protein *Residue::getProtein() const
+	const Protein* Residue::getProtein() const
 	{
 		return ((Residue *)this)->getProtein();
 	}
