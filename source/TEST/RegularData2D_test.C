@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData2D_test.C,v 1.15 2003/06/19 19:19:47 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.16 2003/06/19 23:21:18 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.15 2003/06/19 19:19:47 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.16 2003/06/19 23:21:18 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -134,9 +134,41 @@ CHECK(const ValueType& getData(Position index) const throw(Exception::OutOfGrid)
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getData(117)) 
 RESULT
 
+CHECK(ValueType& operator [] (Position index) throw())
+	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
+	rg[0] = 12.4;
+	RegularData2D::Iterator it = rg.begin();
+	TEST_REAL_EQUAL(*it, 12.4)
+	rg[0] = 1.4;
+	TEST_REAL_EQUAL(*it, 1.4)
+	rg[1000] = 1.4;
+RESULT
+
+CHECK(ValueType& operator [] (const IndexType& index) throw())
+	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
+	rg[RegularData2D::IndexType(0,0)] = 2;
+	RegularData2D::Iterator it = rg.begin();
+	TEST_REAL_EQUAL(*it, 2)
+	rg[RegularData2D::IndexType(1,0)] = 3;
+	it++;
+	TEST_REAL_EQUAL(*it, 3)
+	rg[RegularData2D::IndexType(10,0)] = 3;
+RESULT
+
 CHECK(const ValueType& operator [] (Position index) const throw())
+	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
 	g[5] = 1.2345;
 	TEST_REAL_EQUAL(g[5], 1.2345);
+	TEST_REAL_EQUAL(g[555], 0);
+RESULT
+
+CHECK(const ValueType& operator [] (const IndexType& index) const throw())
+	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
+	rg[RegularData2D::IndexType(0,0)] = 2;
+	TEST_REAL_EQUAL(rg[RegularData2D::IndexType(0,0)], 2)
+	rg[RegularData2D::IndexType(1,0)] = 3;
+	TEST_REAL_EQUAL(rg[RegularData2D::IndexType(1,0)], 3)
+	TEST_REAL_EQUAL(rg[RegularData2D::IndexType(10,0)], 0)
 RESULT
 
 CHECK(CoordinateType getCoordinates(Position index) const throw(Exception::OutOfGrid))
@@ -301,11 +333,16 @@ CHECK(BALL_CREATE(TRegularData2D<ValueType>))
 RESULT
 
 CHECK(ConstIterator begin() const throw())
-  // ???
+  RegularData2D g(Vector2(5.0, 7.0), Vector2(2.0, 3.0), Vector2(1.0, 0.5));
+	g[0] = 2;
+	RegularData2D::Iterator it = g.begin();
+	TEST_REAL_EQUAL(*it, 2)
 RESULT
 
 CHECK(ConstIterator end() const throw())
-  // ???
+	RegularData2D g;
+	RegularData2D::Iterator it = g.begin();
+	TEST_EQUAL(it == g.end(), true)
 RESULT
 
 CHECK(IndexType getClosestIndex(const CoordinateType& v) const throw(Exception::OutOfGrid))
@@ -463,18 +500,6 @@ CHECK(const ValueType& getData(const IndexType& index) const throw(Exception::Ou
 	TEST_EXCEPTION(Exception::OutOfGrid, c_rg.getData(RegularData2D::IndexType(12, 12)))
 RESULT
 
-CHECK(ValueType& operator [] (Position index) throw())
-	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
-	rg[1] = 12.4;
-	TEST_REAL_EQUAL(rg[1], 12.4)
-RESULT
-
-CHECK(ValueType& operator [] (const IndexType& index) throw())
-	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
-	rg[RegularData2D::IndexType(1,1)] = 2;
-	TEST_REAL_EQUAL(rg[RegularData2D::IndexType(1,1)], 2);
-RESULT
-
 CHECK(bool empty() const throw())
 	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
 	TEST_EQUAL(rg.empty(), false);
@@ -510,24 +535,101 @@ CHECK(TRegularData2D& operator = (const TRegularData2D<ValueType>& data) throw(E
 	TEST_EQUAL(rg == rg2, true)
 RESULT
 
-CHECK(const ValueType& operator [] (const IndexType& index) const throw())
-  // ???
-RESULT
-
 CHECK(size_type max_size() const throw())
-  // ???
-RESULT
-
-CHECK(void binaryRead(const String& filename) throw())
-  // ???
+	RegularData2D rg;
+	TEST_EQUAL(rg.max_size() > 10000, true)
 RESULT
 
 CHECK(void binaryWrite(const String& filename) const throw())
-  // ???
+	NEW_TMP_FILE(filename)
+ 	RegularData2D g(Vector2(1,2), Vector2(8,10), Vector2(1.0, 1.0));
+	for (Position x = 0; x < 7; x++) 
+		for (Position y = 0; y < 8; y++)
+	{ 
+		g[RegularData2D::IndexType(x,y)] = x*y;
+	}
+	TEST_EQUAL(g.size(), 99)
+	TEST_REAL_EQUAL(g.getOrigin().x, 1.0)
+	TEST_REAL_EQUAL(g.getOrigin().y, 2.0)
+	TEST_REAL_EQUAL(g.getDimension().x, 8.0)
+	TEST_REAL_EQUAL(g.getDimension().y, 10.0)
+	TEST_REAL_EQUAL(g.getSpacing().x, 1.0)
+	TEST_REAL_EQUAL(g.getSpacing().y, 1.0)
+	TEST_EQUAL(g.getSize().x, 9)
+	TEST_EQUAL(g.getSize().y, 11)
+
+	g.binaryWrite(filename);
+RESULT
+
+CHECK(void binaryRead(const String& filename) throw())
+	RegularData2D g;
+	g.binaryRead(filename);
+	for (Position x = 0; x < 7; x++) 
+		for (Position y = 0; y < 8; y++)
+	{ 
+		TEST_REAL_EQUAL(g[RegularData2D::IndexType(x,y)], x*y)
+	}
+
+	TEST_EQUAL(g.size(), 99)
+	TEST_REAL_EQUAL(g.getOrigin().x, 1.0)
+	TEST_REAL_EQUAL(g.getOrigin().y, 2.0)
+	TEST_REAL_EQUAL(g.getDimension().x, 8.0)
+	TEST_REAL_EQUAL(g.getDimension().y, 10.0)
+	TEST_REAL_EQUAL(g.getSpacing().x, 1.0)
+	TEST_REAL_EQUAL(g.getSpacing().y, 1.0)
+	TEST_EQUAL(g.getSize().x, 9)
+	TEST_EQUAL(g.getSize().y, 11)
 RESULT
 
 CHECK(void swap(TRegularData2D<ValueType>& data) throw())
-  // ???
+ 	RegularData2D rg2(Vector2(1,2), Vector2(8,10), Vector2(1.0, 1.0));
+	for (Position x = 1; x < 8; x++) 
+		for (Position y = 2; y < 10; y++)
+	{ 
+		rg2[RegularData2D::IndexType(x,y)] = x*y;
+	}
+
+ 	RegularData2D g(Vector2(0,1), Vector2(7,9), Vector2(0.5, 0.6));
+	for (Position x = 0; x < 7; x++)
+		for (Position y = 1; y < 9; y++)
+	{ 
+		g[RegularData2D::IndexType(x,y)] = x*y/2;
+	}
+
+	g.swap(rg2); 
+
+	TEST_EQUAL(g.size(), 99)
+	TEST_REAL_EQUAL(g.getOrigin().x, 1.0)
+	TEST_REAL_EQUAL(g.getOrigin().y, 2.0)
+	TEST_REAL_EQUAL(g.getDimension().x, 8.0)
+	TEST_REAL_EQUAL(g.getDimension().y, 10.0)
+	TEST_REAL_EQUAL(g.getSpacing().x, 1.0)
+	TEST_REAL_EQUAL(g.getSpacing().y, 1.0)
+	TEST_EQUAL(g.getSize().x, 9)
+	TEST_EQUAL(g.getSize().y, 11)
+
+	TEST_EQUAL(rg2.size(), 240)
+	TEST_REAL_EQUAL(rg2.getOrigin().x, 0.0)
+	TEST_REAL_EQUAL(rg2.getOrigin().y, 1.0)
+	TEST_REAL_EQUAL(rg2.getDimension().x, 7.0)
+	TEST_REAL_EQUAL(rg2.getDimension().y, 9.0)
+	TEST_REAL_EQUAL(rg2.getSpacing().x, 0.5)
+	TEST_REAL_EQUAL(rg2.getSpacing().y, 0.6)
+	TEST_EQUAL(rg2.getSize().x, 15)
+	TEST_EQUAL(rg2.getSize().y, 16)
+
+
+	for (Position x = 1; x < 8; x++) 
+		for (Position y = 2; y < 10; y++)
+	{ 
+		TEST_REAL_EQUAL(g[RegularData2D::IndexType(x,y)], x*y)
+	}
+
+	for (Position x = 0; x < 7; x++) 
+		for (Position y = 1; y < 9; y++)
+	{ 
+		TEST_REAL_EQUAL(rg2[RegularData2D::IndexType(x,y)], x*y/2)
+	}
 RESULT
 
 CHECK([EXTRA]STL compatibility - Container requirements)
