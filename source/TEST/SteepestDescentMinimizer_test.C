@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SteepestDescentMinimizer_test.C,v 1.4 2003/04/12 10:06:06 oliver Exp $
+// $Id: SteepestDescentMinimizer_test.C,v 1.5 2004/02/23 20:33:33 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: SteepestDescentMinimizer_test.C,v 1.4 2003/04/12 10:06:06 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: SteepestDescentMinimizer_test.C,v 1.5 2004/02/23 20:33:33 oliver Exp $")
 
 using namespace BALL;
 
@@ -194,7 +196,8 @@ CHECK(SteepestDescentMinimizer::minimize(Size, bool))
 	cgm.setEnergyOutputFrequency(1);
 	cgm.setMaxGradient(0.01);
 	TEST_EQUAL(cgm.isValid(), true)
-	TEST_EQUAL(cgm.minimize(20), true)
+	bool converged = cgm.minimize(20);
+	TEST_EQUAL(converged, true)
 	
 	FF.updateEnergy();
 	FF.updateForces();
