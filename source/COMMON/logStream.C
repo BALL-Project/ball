@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.7 1999/11/03 12:12:13 oliver Exp $
+// $Id: logStream.C,v 1.8 1999/11/05 10:36:14 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 
@@ -12,6 +12,14 @@ using std::ostream;
 using std::streambuf;
 using std::cout;
 using std::cerr;
+
+#ifdef BALL_HAS_ANSI_IOSTREAM
+#	define BALL_IOS std::basic_ios<char>
+#	define BALL_OSTREAM std::ostream
+#else
+#	define BALL_IOS std::ios
+#	define BALL_OSTREAM std::ostream
+#endif
 
 namespace BALL 
 {
@@ -240,14 +248,16 @@ namespace BALL
 
 	// keep the given buffer	
 	LogStream::LogStream(LogStreamBuf* buf)		
-		: ostream(buf),
+		: BALL_IOS(buf),
+			BALL_OSTREAM(0),
 			delete_buffer_(false)
 	{
 	}
 
 	// create a new buffer
 	LogStream::LogStream(bool associate_stdio)
-		: ostream(new LogStreamBuf),
+		: BALL_IOS(new LogStreamBuf),
+			BALL_OSTREAM(0),
 			delete_buffer_(true)
 	{
 		if (associate_stdio == true) 
@@ -260,7 +270,7 @@ namespace BALL
 	}
 
 	// remove the streambuffer
-	LogStream::~LogStream(void)
+	LogStream::~LogStream()
 	{
 		if (delete_buffer_)
 		{
