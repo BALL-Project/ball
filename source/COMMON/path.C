@@ -1,4 +1,4 @@
-// $Id: path.C,v 1.2 1999/09/08 13:33:13 oliver Exp $
+// $Id: path.C,v 1.3 1999/09/17 11:17:05 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/path.h>
@@ -81,9 +81,9 @@ namespace BALL
 
 	string Path::find(const string& name) 
 	{
-		string	result;
+		string	result = findStrict(name);
 
-		if ((result = findStrict(name)) == string("")) 
+		if (result == string("")) 
 		{
 			// if the full (path-specified) name could not be found,
 			// only try the basename (remove leading directories)
@@ -107,18 +107,29 @@ namespace BALL
 		vector<string>::iterator	path_it = path_array_.begin();
 		string filename;
 
+		// first, try the path itself
+		ifstream file(name.c_str());
+		if (file)
+		{
+			file.close();
+			return name;
+		}
+		file.close();
+
 		// iterate over all path entries and check for 
 		// a file of the desired name...
 		for (; path_it != path_array_.end(); ++path_it)
 		{
 			filename = *path_it + name;
-			ifstream file(filename.c_str());
+			file.open(filename.c_str());
 			
 			// if the file could be opened, we return its name
 			if (file)	
 			{
+				file.close();
 				return filename;
 			}
+			file.close();
 		}
 			
 		// we didn't find anything - return an empty string
