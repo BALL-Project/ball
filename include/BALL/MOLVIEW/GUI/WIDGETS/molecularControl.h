@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.7.4.8 2002/12/03 10:08:48 oliver Exp $
+// $Id: molecularControl.h,v 1.7.4.9 2002/12/06 18:26:30 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -41,6 +41,22 @@ namespace BALL
 		{			
 			Q_OBJECT
 			
+			enum MenuEntries
+			{
+				OBJECT__REMOVE               = 0,
+				OBJECT__CUT                  = 1,
+				OBJECT__COPY                 = 2,
+				OBJECT__PASTE                = 3,
+				CAMERA__CENTER               = 10,
+				BONDS__BUILD                 = 20,
+				BONDS__REMOVE                = 21,
+				SELECT                       = 30,
+				DESELECT                     = 31,
+				RESIDUE__CHECK               = 40,
+				DISPLAY__CHANGE              = 50,
+				ATOM__PROPERTIES						 = 60
+			};
+
 			public:
 			
 			/**	@name	Constructors
