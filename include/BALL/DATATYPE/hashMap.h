@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.20 2000/11/30 22:57:58 amoll Exp $ 
+// $Id: hashMap.h,v 1.21 2000/12/01 14:11:43 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -234,7 +234,7 @@ namespace BALL
 
 		/**	Host a visitor for all map entries.
 		*/
-		void host(Visitor<ValueType>& visitor) throw();
+		void host(Visitor<HashMap<Key, T> >& visitor) throw();
 		//@}
 	
 		/**	@name	Predicates
@@ -1003,14 +1003,10 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	void HashMap<Key, T>::host(Visitor<ValueType>& visitor)
+	void HashMap<Key, T>::host(Visitor<HashMap<Key, T> >& visitor)
 		throw()
 	{
-		Iterator it = begin();
-		for (; it != end(); ++it)
-		{
-			visitor.visit(*it);
-		}
+		visitor.visit(*this);
 	}
 		
 	template <class Key, class T>

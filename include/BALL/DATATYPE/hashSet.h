@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.22 2000/11/30 23:23:09 amoll Exp $ 
+// $Id: hashSet.h,v 1.23 2000/12/01 14:12:18 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -219,7 +219,7 @@ namespace BALL
 
 		/**	Host a visitor for all set entries.
 		*/
-		void host(Visitor<ValueType>& visitor)	throw();
+		void host(Visitor<HashSet<Key> >& visitor)	throw();
 		//@}
 	
 		/**	@name	Predicates
@@ -917,31 +917,27 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	void HashSet<Key>::host(Visitor<ValueType>& visitor)		throw()
+	void HashSet<Key>::host(Visitor<HashSet<Key> >& visitor)	throw()
 	{
-		Iterator it = begin();
-		for (; it != end(); ++it)
-		{
-			visitor.visit(*it);
-		}
+		visitor.visit(*this);
 	}
 		
 	template <class Key>
 	BALL_INLINE 
-	bool HashSet<Key>::has(const Key& key) const		throw()
+	bool HashSet<Key>::has(const Key& key) const	throw()
 	{
 		return (find(key) != end());
 	}
 
 	template <class Key>
 	BALL_INLINE 
-	bool HashSet<Key>::isEmpty() const		throw()
+	bool HashSet<Key>::isEmpty() const	throw()
 	{
 		return (size_ == 0);
 	}
 
 	template <class Key>
-	bool HashSet<Key>::operator == (const HashSet& hash_set) const		throw()
+	bool HashSet<Key>::operator == (const HashSet& hash_set) const	throw()
 	{
 		if (size_ != hash_set.size_)
 		{
