@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.7 2001/02/23 17:38:59 amoll Exp $
+// $Id: amberNonBonded.C,v 1.8 2001/03/17 17:40:07 anker Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -354,6 +354,7 @@ namespace BALL
 		for (pair_it = atom_vector.begin(); pair_it != atom_vector.end();
 				++pair_it, ++bool_it) 
 		{
+
 			if (!(*bool_it)) 
 			{
 				atom1 = pair_it->first;
@@ -381,7 +382,6 @@ namespace BALL
 					tmp.values.A = 0;
 					tmp.values.B = 0;
 				}
-				
 				non_bonded_.push_back(tmp);
 			}
 		}
@@ -408,15 +408,47 @@ namespace BALL
 	}
 
 
-
 	BALL_INLINE
-	void AMBERcalculateMinimumImage
-    (Vector3& difference, const Vector3& period)
+	void AMBERcalculateMinimumImage(Vector3& difference, const Vector3& period)
 	{
-		MolmecSupport::calculateMinimumImage(difference, period);
+		Vector3 half_period(period * 0.5);
+
+		if (difference.x <= -half_period.x)
+		{
+			difference.x += period.x;
+		}
+		else 
+		{
+			if (difference.x > half_period.x)
+			{
+				difference.x -= period.x;
+			}
+		}
+
+		if (difference.y <= -half_period.y)
+		{
+			difference.y += period.y;
+		}
+		else 
+		{
+			if (difference.y > half_period.y)
+			{
+				difference.y -= period.y;
+			}
+		}
+
+		if (difference.z <= -half_period.z)
+		{
+			difference.z += period.z;
+		}
+		else 
+		{
+			if (difference.z > half_period.z)
+			{
+				difference.z -= period.z;
+			}
+		}
 	}
-
-
 
 	// This function AMBERcalculates the energies resulting from Van-der-
 	// Waals and electrostatic interactions between a pair of non-bonded
@@ -442,10 +474,10 @@ namespace BALL
 
 		if (use_periodic_boundary == true)
 		{
-      // calculate the minimum image 
-      AMBERcalculateMinimumImage(difference, period); 
+			// calculate the minimum image 
+			AMBERcalculateMinimumImage(difference, period); 
 		}
- 
+
 		// the squared distance between the two atoms 
 		double distance_2 = difference.getSquareLength();
 
@@ -512,7 +544,6 @@ namespace BALL
 				vdw_energy += tmp_energy;
 			}
 		}
-
 	}	// end  of function AMBERcalculateNBEnergy() 
 
 
@@ -713,7 +744,7 @@ namespace BALL
 
 
 	// define a convenient shorthand for the constant
-	// parameters to AMBERAMBERcalculateNBEnergy
+	// parameters to AMBERcalculateNBEnergy
 	#define ENERGY_PARAMETERS\
 		period,\
 		cut_off_vdw_2,\
@@ -905,7 +936,6 @@ namespace BALL
 				 + scaling_electrostatic_1_4_ * electrostatic_energy_1_4);
 			energy_ =  vdw_energy_ + electrostatic_energy_;
 		}
-
 		return energy_; 
   } // end of AmberNonBonded::updateEnergy 
 	
