@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.15 2001/03/02 22:10:23 amoll Exp $
+// $Id: molecularDynamics.h,v 1.16 2001/03/11 21:04:54 anker Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -49,6 +49,10 @@
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
 # include <BALL/MOLMEC/COMMON/snapShot.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
+# include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #endif
 
 

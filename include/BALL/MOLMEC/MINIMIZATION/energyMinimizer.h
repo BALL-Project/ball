@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.19 2001/01/25 23:31:39 amoll Exp $
+// $Id: energyMinimizer.h,v 1.20 2001/03/11 21:04:58 anker Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -32,8 +32,8 @@
 #	include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
-#ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
-#	include <BALL/MOLMEC/COMMON/snapShot.h>
+#ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
+#	include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_GRADIENT_H
