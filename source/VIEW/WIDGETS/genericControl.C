@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.12 2004/08/31 14:33:07 amoll Exp $
+// $Id: genericControl.C,v 1.13 2004/10/21 13:13:13 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -55,6 +55,8 @@ GenericControl::~GenericControl()
   #ifdef BALL_VIEW_DEBUG
 	  Log.error() << "Destructing object " << this << " of class GenericControl" << endl;
   #endif 
+
+	listview->clear();
 }
 
 
