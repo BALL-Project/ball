@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.19 2000/10/05 21:52:58 oliver Exp $ 
+// $Id: pointGrid.h,v 1.20 2000/11/21 16:22:30 anker Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -20,7 +20,7 @@ namespace BALL
 			\\
 			@see	HashGrid3
 	*/
-	template <class GridDataType>
+	template <typename GridDataType>
 	class PointGrid 
 	{
 		public:
@@ -49,7 +49,7 @@ namespace BALL
 		};
 
 		/**	@name	Position
-				@memo  Grid position type
+				@memo Grid position type
 		*/
 		typedef struct PositionStruct GridIndex;
 		//@}
@@ -60,7 +60,7 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
-				Creates creates a PointGrid object without allocating a grid.
+				Creates a PointGrid object without allocating a grid.
 		*/
 		PointGrid();	
 
@@ -477,6 +477,15 @@ namespace BALL
 	template <class GridDataType>
 	PointGrid<GridDataType>::PointGrid
 		(const PointGrid<GridDataType>& grid, bool /* deep */)
+		: data(0),
+			origin_(0,0,0),
+			size_(0,0,0),
+			spacing_(0,0,0),
+			number_of_points_x_(0),
+			number_of_points_y_(0),
+			number_of_points_z_(0),
+			number_of_grid_points_(0),
+			upper_(0,0,0)
 	{
 		set(grid);
 	}
@@ -496,13 +505,17 @@ namespace BALL
 	void PointGrid<GridDataType>::set(const PointGrid<GridDataType>& grid)
 	{
 		// throw away the old data 
-		delete [] data;
+		if (data != 0)
+		{
+			delete [] data;
+		}
 
 		// create a new array to hold the contents of the grid
 		data = new GridDataType[grid.number_of_grid_points_];
 
 		// if the alloc failed, mark this instance as invalid
 		valid_ = (data != 0);
+		// BAUSTELLE: What about an exception?
 
 		// copy the remaining attributes
 		origin_ = grid.getOrigin();
@@ -615,8 +628,8 @@ namespace BALL
 	{
 		*this = PointGrid(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
 											(Size)((upper.x - lower.x) / spacing + 1), 
-											(Size)((upper.x - lower.x) / spacing + 1), 
-											(Size)((upper.x - lower.x) / spacing + 1));
+											(Size)((upper.y - lower.y) / spacing + 1), 
+											(Size)((upper.z - lower.z) / spacing + 1));
 	}
 			
 	template <class GridDataType>
