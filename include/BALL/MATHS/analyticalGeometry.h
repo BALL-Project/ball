@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.36 2000/09/06 14:20:09 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.37 2000/09/06 19:58:02 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -44,13 +44,13 @@ namespace BALL
 
 	/**	Subroutine to get the determinant of any matrix.
 			Direct usage of this function should be avoided.
-			Instead use {\tt T GetDeterminant(const T* m, Size dim) }
+			Instead use {\tt T getDeterminant(const T* m, Size dim) }
 			@param	m pointer to matrix
 			@param	dim dimension of the matrix
 	*/
 	BALL_INLINE
 	template <typename T>
-	T GetDeterminant_(const T* m, Size dim)
+	T getDeterminant_(const T* m, Size dim)
 	{
 		T determinant = 0;
 		Index dim1 = dim - 1;
@@ -68,7 +68,7 @@ namespace BALL
 						*(submatrix + j * dim1 + k) = *(m + (j + 1) * dim + (k < i ? k : k + 1));
 					}
 				}
-				determinant += *(m + i) * (i / 2.0 == i / 2 ? 1 : -1) * GetDeterminant_(submatrix, dim1);
+				determinant += *(m + i) * (i / 2.0 == i / 2 ? 1 : -1) * getDeterminant_(submatrix, dim1);
 			}
 
 			delete [] submatrix;
@@ -86,7 +86,7 @@ namespace BALL
 			@param	dim dimension of the matrix
 	*/
 	template <typename T>
-	T GetDeterminant(const T* m, Size dim)
+	T getDeterminant(const T* m, Size dim)
 	{
 		if (dim == 2)
 		{
@@ -103,7 +103,7 @@ namespace BALL
 		} 
 		else 
 		{
-			return GetDeterminant_(m, dim);
+			return getDeterminant_(m, dim);
 		}
 	}
 
@@ -112,7 +112,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	T GetDeterminant2(const T* m)
+	T getDeterminant2(const T* m)
 	{
 		Size dim = 2;
 		return (BALL_CELL(0,0) * BALL_CELL(1,1) - BALL_CELL(0,1) * BALL_CELL(1,0));
@@ -126,7 +126,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	T GetDeterminant2(const T& m00, const T& m01, const T& m10, const T& m11)
+	T getDeterminant2(const T& m00, const T& m01, const T& m10, const T& m11)
 	{
 		return (m00 * m11 - m01 * m10);
 	}
@@ -136,7 +136,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE 
-	T GetDeterminant3(const T *m)
+	T getDeterminant3(const T *m)
 	{
 		Size dim = 3;
 		return (  BALL_CELL(0,0) * BALL_CELL(1,1) * BALL_CELL(2,2) 
@@ -152,7 +152,7 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE T 
-	GetDeterminant3
+	getDeterminant3
 		(const T& m00, const T& m01, const T& m02,
 		 const T& m10, const T& m11, const T& m12,
 		 const T& m20, const T& m21, const T& m22)
