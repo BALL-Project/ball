@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.25 2000/11/24 12:03:57 anker Exp $
+// $Id: composite.h,v 1.26 2000/12/01 23:15:48 amoll Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -1725,7 +1725,8 @@ namespace BALL
     for (Composite* composite = first_child_;
          composite != 0; composite = composite->next_)
     {
-      if (composite->first_child_ != 0 && composite->applyDescendantPostorderNostart_(processor) == false)
+      if (composite->first_child_ != 0 && 
+					composite->applyDescendantPostorderNostart_(processor) == false)
 			{
         return false;
 			}
@@ -1745,19 +1746,20 @@ namespace BALL
     return true;
 	}
 
-	template <typename T>
-	bool Composite::applyPostorder(UnaryProcessor<T>& processor)
-	{
-		bool return_value = processor.start() && applyDescendantPostorderNostart_(processor);
+  template <typename T>  
+  bool Composite::applyPostorder(UnaryProcessor<T>& processor)
+  { 
+    if (!processor.start() || !applyDescendantPostorderNostart_(processor))
+    {
+			return false;
+    }
 
-		T* t_ptr = dynamic_cast<T*>(this);
-		if (t_ptr != 0)
-		{
-			return_value &= (processor(*t_ptr) < Processor::BREAK) && processor.finish();
-		} 
-		
-		return return_value;
-	}
+    T* t_ptr = dynamic_cast<T*>(this);
+
+    return (t_ptr != 0													  && 
+						processor(*t_ptr) >= Processor::BREAK && 
+						processor.finish()											);
+  }
 
 	template <typename T>
   bool Composite::applyLevel(UnaryProcessor<T>& processor, long level)
