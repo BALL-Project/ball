@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.10 2005/03/18 14:48:16 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.11 2005/03/21 16:24:27 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -28,6 +28,10 @@
 #include <BALL/FORMAT/INIFile.h>
 #endif
 
+#ifndef BALL_STRUCTURE_DOCKING_ENERGETICEVALUATION_H
+# include <BALL/STRUCTURE/DOCKING/energeticEvaluation.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -52,7 +56,7 @@ namespace BALL
 			registerObject_(systems1);
 			registerObject_(systems2);
 			registerObject_(algorithms);
-			registerObject_(rank_functions);
+			registerObject_(scoring_functions);
 			registerObject_(best_num);
 			registerObject_(verbosity);
 			registerObject_(traject_file);
@@ -66,9 +70,14 @@ namespace BALL
 			registerObject_(build_bonds);
 			registerObject_(add_hydrogens);
 
-			//build HashMap for advanced option dialogs
+			//build HashMap for algorithm advanced option dialogs
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
-			addEntry("Geometric Fit", GEOMETRIC_FIT, geo_fit);
+			addAlgorithm("Geometric Fit", GEOMETRIC_FIT, geo_fit);
+			
+			//build HashMap for scoring function advanced option dialogs
+			
+			addScoringFunction("Default", DEFAULT);
+			
 			
 			result_dialog_ = new DockResultDialog(this);
 			
@@ -89,11 +98,22 @@ namespace BALL
 		// --------------------------------------------------------------------------------
 
 		// add docking algorithm to HashMap and ComboBox
-		void DockDialog::addEntry(QString name, int algorithm, QDialog* dialog)
+		void DockDialog::addAlgorithm(QString name, int algorithm, QDialog* dialog)
 			throw()
 		{
 			algorithm_dialogs_[algorithm] = dialog;
 			algorithms->insertItem(name, algorithm);
+		}
+		
+		// add scoring function to HashMap and ComboBox
+		void DockDialog::addScoringFunction(QString name, int score_func, QDialog* dialog)
+			throw()
+		{
+			if(dialog)
+			{
+				scoring_dialogs_[score_func] = dialog;
+			}
+			scoring_functions->insertItem(name, score_func);
 		}
 		
 		void DockDialog::initializeWidget(MainControl& main_control)
@@ -235,10 +255,13 @@ namespace BALL
 			if (tab_pages->currentPageIndex() == 0)
 			{
 				// comboboxes
-				systems1->setCurrentText("<select>");
-				systems2->setCurrentText("<select>");
-				algorithms->setCurrentText("<select>");
-				rank_functions->setCurrentText("<select>");
+				systems1->setCurrentItem(0);
+				systems2->setCurrentItem(0);
+				algorithms->setCurrentItem(0);
+				scoring_functions->setCurrentItem(0);
+				
+				// buttons
+				scoring_advanced_button->setEnabled(false);
 				
 				//options
 				best_num->setText("100");
@@ -291,19 +314,29 @@ namespace BALL
 			// before docking, apply processors, e.g. add hydrogens
 			applyProcessors_();
 			
+			
+			//check which algorithm is chosen
+			DockingAlgorithm* dock_alg = 0;
+			int index = algorithms->currentItem();
+			switch(index)
+			{
+				case GEOMETRIC_FIT:
+					dock_alg =  new GeometricFit();
+					break;
+			}
+		
 			//create docking algorithm object
-			GeometricFit geo_fit;
+			//GeometricFit geo_fit;
 			
 			// keep the larger protein in System A and the smaller one in System B
 			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
 			{
-				geo_fit.setup(*docking_partner2_, *docking_partner1_, options_);
+				dock_alg->setup(*docking_partner2_, *docking_partner1_, options_);
 			}
 			else
 			{
-				geo_fit.setup(*docking_partner1_, *docking_partner2_, options_);
+				dock_alg->setup(*docking_partner1_, *docking_partner2_, options_);
 			}
-			
 			
 			DockProgressDialog progress;
 			QString s = "Docking partner 1: ";
@@ -326,12 +359,24 @@ namespace BALL
 			
 			// start docking
 			Log.error() << "starting docking" << std::endl;
-			geo_fit.start();
+			dock_alg->start();
 			Log.error() << "finished docking" << std::endl;
 			
-			ConformationSet ranked_conformations = geo_fit.getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
-			result_dialog_->setConformationSet(ranked_conformations);
+			///////////////// BEST_NUM ist Option von DockingAlgorithm!!!!!!!!!!!!!!!!
+			ConformationSet conformation_set = dock_alg->getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
+			
+			// ToDo: switch-Anweisung, wenn mehrere scoring functions vorhanden sind
+			// create scoring function object
+			EnergeticEvaluation scoring;
+			// score the results of the docking algorithm
+			std::vector<ConformationSet::Conformation> ranked_conformations = scoring(conformation_set);
+			conformation_set.setScoring(ranked_conformations);
+			
+			// setup result_dialog 
+			result_dialog_->setConformationSet(conformation_set);
 	
+			result_dialog_->setScoringName(scoring_functions->currentText());
+			
 			// add docked system to BALLView structures 
 			result_dialog_->displayDockedSystem();
 			result_dialog_->show();
@@ -467,9 +512,13 @@ namespace BALL
 		}
 			
 		//
-		void DockDialog::rankAdvancedPressed()
+		void DockDialog::scoringAdvancedPressed()
 		{
-		
+			int index = scoring_functions->currentItem();
+			if(index)
+			{
+				scoring_dialogs_[index]->exec();
+			}
 		}
 		
 		void DockDialog::browseChargesData()
@@ -549,6 +598,26 @@ namespace BALL
 		void DockDialog::partner2Chosen()
 		{
 			docking_partner2_ = partnerChosen_(systems2->currentText());
+		}
+		
+		//
+		void DockDialog::algorithmChosen()
+		{
+		
+		}
+		
+		//
+		void DockDialog::scoringFuncChosen()
+		{
+			int index = scoring_functions->currentItem();
+			if(scoring_dialogs_.has(index))
+			{
+				scoring_advanced_button->setEnabled(true);
+			}
+			else
+			{
+				scoring_advanced_button->setEnabled(false);
+			}
 		}
 		
 		// find the system user has chosen in the dialog as docking partner

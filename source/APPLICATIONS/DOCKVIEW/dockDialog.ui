@@ -146,28 +146,26 @@
                     </widget>
                     <widget class="QButtonGroup" row="2" column="0">
                         <property name="name">
-                            <cstring>ranking_group</cstring>
+                            <cstring>scoring_group</cstring>
                         </property>
                         <property name="title">
-                            <string>Ranking</string>
+                            <string>Scoring</string>
                         </property>
                         <grid>
                             <property name="name">
                                 <cstring>unnamed</cstring>
                             </property>
                             <widget class="QComboBox" row="0" column="0">
-                                <item>
-                                    <property name="text">
-                                        <string>&lt;select&gt;</string>
-                                    </property>
-                                </item>
                                 <property name="name">
-                                    <cstring>rank_functions</cstring>
+                                    <cstring>scoring_functions</cstring>
                                 </property>
                             </widget>
                             <widget class="QPushButton" row="0" column="1">
                                 <property name="name">
-                                    <cstring>rank_advanced_button</cstring>
+                                    <cstring>scoring_advanced_button</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
                                 </property>
                                 <property name="text">
                                     <string>Advanced...</string>
@@ -547,10 +545,10 @@
         <slot>algAdvancedPressed()</slot>
     </connection>
     <connection>
-        <sender>rank_advanced_button</sender>
+        <sender>scoring_advanced_button</sender>
         <signal>clicked()</signal>
         <receiver>DockDialogData</receiver>
-        <slot>rankAdvancedPressed()</slot>
+        <slot>scoringAdvancedPressed()</slot>
     </connection>
     <connection>
         <sender>systems1</sender>
@@ -564,14 +562,26 @@
         <receiver>DockDialogData</receiver>
         <slot>partner2Chosen()</slot>
     </connection>
+    <connection>
+        <sender>scoring_functions</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>scoringFuncChosen()</slot>
+    </connection>
+    <connection>
+        <sender>algorithms</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>DockDialogData</receiver>
+        <slot>algorithmChosen()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>systems1</tabstop>
     <tabstop>systems2</tabstop>
     <tabstop>algorithms</tabstop>
     <tabstop>alg_advanced_button</tabstop>
-    <tabstop>rank_functions</tabstop>
-    <tabstop>rank_advanced_button</tabstop>
+    <tabstop>scoring_functions</tabstop>
+    <tabstop>scoring_advanced_button</tabstop>
     <tabstop>ok_button</tabstop>
     <tabstop>cancel_button</tabstop>
     <tabstop>reset_button</tabstop>
@@ -581,13 +591,15 @@
     <slot>okPressed()</slot>
     <slot>cancelPressed()</slot>
     <slot>algAdvancedPressed()</slot>
-    <slot>rankAdvancedPressed()</slot>
+    <slot>scoringAdvancedPressed()</slot>
     <slot>partner1Chosen()</slot>
     <slot>partner2Chosen()</slot>
     <slot>browseRadiiData()</slot>
     <slot>browseChargeData()</slot>
     <slot>browseChargeRules()</slot>
     <slot>browseRadiiRules()</slot>
+    <slot>scoringFuncChosen()</slot>
+    <slot>algorithmChosen()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

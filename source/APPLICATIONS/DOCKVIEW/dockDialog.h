@@ -72,9 +72,15 @@ namespace BALL
 				
 				public:
 				
-				/** if you want to add a new docking algorithm extend enum  
+				// ToDo: enum Algorithm und ScoringFunction in DockingAlgorithm bzw. EnergeticEvaluation
+				/** if you want to add a new docking algorithm extend enum 
+						0 entspricht <select> item in ComboBox  
 				*/
-				enum Algorithm {GEOMETRIC_FIT = 1, TEST1, TEST2};
+				enum Algorithm {GEOMETRIC_FIT = 1};
+				
+				/** if you want to add a new sccoring function extend enum 
+				*/
+				enum ScoringFunction {DEFAULT = 0};
 				
 				/// Constructor
 				DockDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
@@ -126,7 +132,11 @@ namespace BALL
 					docking_partner2_ = system2; }
 						
 				// add docking algorithm to HashMap and ComboBox
-				void addEntry(QString name, int algorithm, QDialog* dialog)
+				void addAlgorithm(QString name, int algorithm, QDialog* dialog)
+					throw();
+					
+				// add scoring function to HashMap and ComboBox
+				void addScoringFunction(QString name, int score_func, QDialog* dialog=0)
 					throw();
 					
 					
@@ -139,7 +149,7 @@ namespace BALL
 					virtual void algAdvancedPressed();
 					
 					//
-					virtual void rankAdvancedPressed();
+					virtual void scoringAdvancedPressed();
 					
 					//
 					virtual void cancelPressed();
@@ -155,6 +165,12 @@ namespace BALL
 					
 					//
 					virtual void partner2Chosen();
+					
+					//
+					virtual void algorithmChosen();
+					
+					//
+					virtual void scoringFuncChosen();
 					
 					///
 					virtual void browseChargesData();
@@ -186,6 +202,8 @@ namespace BALL
 					// key: Algorithm(enum), value: advanced options dialog
 					HashMap<int, QDialog*> algorithm_dialogs_;
 					
+					// key: ScoringFunction(enum), value: advanced options dialog
+					HashMap<int, QDialog*> scoring_dialogs_;
 					
 					DockResultDialog* result_dialog_;
 				
@@ -195,7 +213,6 @@ namespace BALL
 				
 					//options for the docking algorithm
 					Options options_;
-					//Docking::DockingAlgorithm docking_;
 					
 					//menu entry id
 					int id_;

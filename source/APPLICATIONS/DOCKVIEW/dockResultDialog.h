@@ -32,6 +32,10 @@ namespace BALL
 				
 				public:
 				
+					/** if you want to add a new sccoring function extend enum 
+					*/
+					enum ScoringFunction {DEFAULT = 0};
+				
 					//Constructor
 					DockResultDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 						throw();
@@ -40,12 +44,19 @@ namespace BALL
 					~DockResultDialog()
 						throw();
 				
-					void setConformationSet(ConformationSet conformations)
+					void setConformationSet(ConformationSet& conformations)
 						throw() {ranked_conformations_ = conformations;}
 						
 					ConformationSet getConformationSet()
 						throw() {return ranked_conformations_;}
+						
+					void setScoringName(QString name)
+						throw() {scoring_name_ = name;}
 					
+					// add scoring function to HashMap and ComboBox
+					void addScoringFunction(QString name, int score_func, QDialog* dialog=0)
+						throw();
+						
 					// add docked system to BALLView structures 
 					void displayDockedSystem()
 						throw();
@@ -57,12 +68,31 @@ namespace BALL
 				
 					//
 					virtual void showSnapshot();
+					
+					//
+					virtual void upwardClicked();
 				
+					//
+					virtual void downwardClicked();
+					
+					//
+					virtual void advancedClicked();
+					
+					//
+					virtual void scoringClicked();
+					
+					//
+					virtual void scoringFuncChosen();
+					
 				protected:
 				
 				private:
 					ConformationSet ranked_conformations_;
 					System* docked_system_;
+					QString scoring_name_;
+					
+					// key: ScoringFunction(enum), value: advanced options dialog
+					HashMap<int, QDialog*> scoring_dialogs_;
 					
 					
 		};

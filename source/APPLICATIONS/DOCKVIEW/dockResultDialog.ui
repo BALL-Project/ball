@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>409</width>
-            <height>422</height>
+            <width>544</width>
+            <height>540</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -30,10 +30,10 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QTable" row="0" column="0" rowspan="3" colspan="1">
+        <widget class="QTable" row="0" column="0" rowspan="5" colspan="1">
             <column>
                 <property name="text">
-                    <string>snapshot number</string>
+                    <string>snapshot</string>
                 </property>
                 <property name="pixmap">
                     <pixmap></pixmap>
@@ -98,9 +98,115 @@
                 <enum>SingleRow</enum>
             </property>
         </widget>
-        <spacer row="0" column="1">
+        <widget class="QButtonGroup" row="0" column="1" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>spacer2</cstring>
+                <cstring>reranking_group</cstring>
+            </property>
+            <property name="title">
+                <string>Reranking</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>scoring_functions</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>advanced_button</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="text">
+                        <string>Advanced...</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>scoring_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>New scoring</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QPushButton" row="4" column="2">
+            <property name="name">
+                <cstring>close_button</cstring>
+            </property>
+            <property name="text">
+                <string>Close</string>
+            </property>
+        </widget>
+        <spacer row="4" column="1">
+            <property name="name">
+                <cstring>spacer2_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>180</width>
+                    <height>21</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLayoutWidget" row="2" column="1">
+            <property name="name">
+                <cstring>layout4</cstring>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton" row="0" column="0" rowspan="1" colspan="2">
+                    <property name="name">
+                        <cstring>show_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show snapshot</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="1">
+                    <property name="name">
+                        <cstring>downwardButton</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Dingbats</family>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>t</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="1" column="0">
+                    <property name="name">
+                        <cstring>upwardButton</cstring>
+                    </property>
+                    <property name="font">
+                        <font>
+                            <family>Dingbats</family>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>s</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <spacer row="3" column="1">
+            <property name="name">
+                <cstring>spacer3</cstring>
             </property>
             <property name="orientation">
                 <enum>Vertical</enum>
@@ -110,27 +216,11 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>31</width>
-                    <height>291</height>
+                    <width>20</width>
+                    <height>131</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>show_button</cstring>
-            </property>
-            <property name="text">
-                <string>Show snapshot</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="2" column="1">
-            <property name="name">
-                <cstring>close_button</cstring>
-            </property>
-            <property name="text">
-                <string>Close</string>
-            </property>
-        </widget>
     </grid>
 </widget>
 <connections>
@@ -141,14 +231,50 @@
         <slot>close()</slot>
     </connection>
     <connection>
+        <sender>scoring_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockResultDialogData</receiver>
+        <slot>scoringClicked()</slot>
+    </connection>
+    <connection>
+        <sender>advanced_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockResultDialogData</receiver>
+        <slot>advancedClicked()</slot>
+    </connection>
+    <connection>
+        <sender>upwardButton</sender>
+        <signal>clicked()</signal>
+        <receiver>DockResultDialogData</receiver>
+        <slot>upwardClicked()</slot>
+    </connection>
+    <connection>
+        <sender>downwardButton</sender>
+        <signal>clicked()</signal>
+        <receiver>DockResultDialogData</receiver>
+        <slot>downwardClicked()</slot>
+    </connection>
+    <connection>
         <sender>show_button</sender>
         <signal>clicked()</signal>
         <receiver>DockResultDialogData</receiver>
         <slot>showSnapshot()</slot>
     </connection>
+    <connection>
+        <sender>scoring_functions</sender>
+        <signal>activated(const QString&amp;)</signal>
+        <receiver>DockResultDialogData</receiver>
+        <slot>scoringFuncChosen()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>showSnapshot()</slot>
+    <slot>upwardClicked()</slot>
+    <slot>downwardClicked()</slot>
+    <slot>rowSelected()</slot>
+    <slot>scoringClicked()</slot>
+    <slot>advancedClicked()</slot>
+    <slot>scoringFuncChosen()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
