@@ -179,12 +179,6 @@ void LabelDialog::accept()
 	arm->setType(RepresentationMessage::ADD);
 	notify_(arm);
 	
-	// update scene
-	SceneMessage* scene_message = new SceneMessage;
-	scene_message->setType(SceneMessage::REDRAW);
-	notify_(scene_message);
-	
-	// clear status bar
 	setStatusbarText("Label added.");
 }
 

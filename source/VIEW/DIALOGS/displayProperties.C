@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.58 2004/01/13 15:16:36 amoll Exp $
+// $Id: displayProperties.C,v 1.59 2004/01/13 16:03:57 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -380,12 +380,6 @@ void DisplayProperties::applyButtonClicked()
 
 	setStatusbarText("building model...");
 	createRepresentation_(getMainControl()->getMolecularControlSelection());
-	setStatusbarText("drawing representation...");
-
-	// update scene
-	SceneMessage* scene_message = new SceneMessage(SceneMessage::REDRAW);
-	notify_(scene_message);
-	setStatusbarText("finished drawing");
 }
 
 
@@ -612,6 +606,7 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 	bool focus = (getMainControl()->getPrimitiveManager().getRepresentations().size() == 1 && rep_ == 0);
 
 #ifndef BALL_QT_HAS_THREADS	
+	setStatusbarText("drawing representation...");
 	RepresentationMessage* message = new RepresentationMessage;
 	if (rep_ == 0)
 	{
@@ -634,6 +629,7 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 	}
 
 	advanced_options_modified_ = false;
+	setStatusbarText("finished drawing");
 }
 
 
