@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: anisotropyShiftProcessor.C,v 1.12 2002/12/22 15:56:24 oliver Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.13 2003/04/28 21:11:23 oliver Exp $
 
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 
@@ -66,16 +66,19 @@ namespace BALL
 	bool AnisotropyShiftProcessor::finish()
 		throw()
 	{
+		// Abort if the parameters wer not initialized correctly.
 		if (!isValid())
 		{
 			return false;
 		}
+
+		// Abort if there's nothing to do (no protons).
 		if (proton_list_.size() == 0)
 		{
 			return true;
 		}
 
-
+		// Some constants.
 		const float dX1   = -13.0;
 		const float dX2   =  -4.0;
 		const float dXN1  = -11.0;
@@ -85,18 +88,19 @@ namespace BALL
 		const float ndXN1 =  -7.0;
 		const float ndXN2 =   1.0;
 
-	  list<const Atom*>::iterator proton_iter;
-	  list<const Bond*>::iterator eff_iter;
-
-		// Iteriere über alle Protonen in proton_list_
-		for (proton_iter = proton_list_.begin(); proton_iter != proton_list_.end(); ++proton_iter)
+	  
+		// Iterate over all protons affected.
+		std::list<const Atom*>::const_iterator proton_it(proton_list_.begin());
+		for (; proton_it != proton_list_.end(); ++proton_it)
 		{
-			float gs = 0;
+			// Total shift is zero initially
+			float total_shift = 0.0;
 
-			for (eff_iter = eff_list_.begin(); eff_iter != eff_list_.end(); ++eff_iter)
+			// Iterate over all effector bonds (all anisotropic bonds).
+			std::list<const Bond*>::const_iterator eff_iter(eff_list_.begin());
+			for (; eff_iter != eff_list_.end(); ++eff_iter)
 			{
-				// Für jedes Proton iteriere über alle Effektorbindungen in eff_list_
-				const Atom* patom = *proton_iter;
+				// Iterate over all bonds of each effector atom.
 				const Bond* bond = *eff_iter;
 				const Atom* c_atom = bond->getFirstAtom();
 				const Atom* o_atom = bond->getSecondAtom();
@@ -107,7 +111,7 @@ namespace BALL
 				}
 				
 				const Atom* x_atom = 0;
-				if ((*proton_iter)->getFragment() != c_atom->getFragment())
+				if ((*proton_it)->getFragment() != c_atom->getFragment())
 				{
 					String name = c_atom->getName();
 					if (name == "C")
@@ -146,7 +150,7 @@ namespace BALL
 							break;
 						}
 					}
-					// was passiert wenn x_atom nicht gesetzt ???
+					// ??? What happens if x_atom is not set.
 
 					if ((c_atom == 0) || (o_atom == 0) || (x_atom == 0))	
 					{
@@ -161,22 +165,23 @@ namespace BALL
 						const Vector3& x_pos = x_atom->getPosition();
 
 						// baue rechtwinkliges Koordinatensystem auf :
-						Vector3 vz = o_pos - c_pos;
-						vz /= vz.getLength();
-						Vector3 vy = vz % (x_pos - c_pos);
-						vy /= vy.getLength();
-						Vector3 vx = vz % vy;
-						vx /= vx.getLength();
-						const Vector3 cen = c_pos + (vz * 1.1);
-						const Vector3 v1 = patom->getPosition() - cen;
-						const Vector3 v2 = v1 % vy;
-						const Vector3 v3 = v2 % vx;
+						Vector3 vz(o_pos - c_pos);
+						vz.normalize();
+						Vector3 vy(vz % (x_pos - c_pos));
+						vy.normalize();
+						Vector3 vx (vz % vy);
+						vx.normalize();
+						const Vector3 cen(c_pos + (vz * 1.1));
+						const Vector3 v1((*proton_it)->getPosition() - cen);
+						const Vector3 v2(v1 % vy);
+						const Vector3 v3(v2 % vx);
 
-						const float& distance = v1.getLength();
+						const float distance = v1.getLength();
 						const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
 						const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
-						float calc1, calc2;
-						if ((*proton_iter)->getName() == "H")
+						float calc1;
+						float calc2;
+						if ((*proton_it)->getName() == "H")
 						{
 							calc1 = dXN1 * ((3.0 * stheta * stheta) - 2.0);
 							calc2 = dXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
@@ -190,21 +195,20 @@ namespace BALL
 						float shift = (calc1 + calc2) / (3.0 * distance * distance * distance);
 						// ?????
 						// check whether effector and nucleus are in the same chain
-						if ((ignore_other_chain_) && ((*proton_iter)->getResidue() != 0) && (c_atom->getResidue() != 0))
+						if ((ignore_other_chain_) && ((*proton_it)->getResidue() != 0) && (c_atom->getResidue() != 0))
 						{
-							if ((*proton_iter)->getResidue()->getChain() == c_atom->getResidue()->getChain())
+							if ((*proton_it)->getResidue()->getChain() == c_atom->getResidue()->getChain())
 							{
 								shift = 0.0;
 							}
 						}
-						gs += shift;	
+						total_shift += shift;	
 					}
 				}
 			}
 
 			for (eff_iter = eff_list_2_.begin(); eff_iter != eff_list_2_.end(); ++eff_iter)
 			{
-				const Atom* patom = *proton_iter;
 				const Bond* bond = *eff_iter;
 				const Atom* c_atom = bond->getFirstAtom();
 				const Atom* n_atom = bond->getSecondAtom();
@@ -216,8 +220,8 @@ namespace BALL
 				}
 				const Atom* o_atom = 0;
 
-				// skip the H atom of this residue
-				if ((*proton_iter)->getName() == "H" && (*proton_iter)->getFragment() == n_atom->getFragment())
+				// Skip the H atom of this residue
+				if ((*proton_it)->getName() == "H" && (*proton_it)->getFragment() == n_atom->getFragment())
 				{
 					continue;
 				}
@@ -247,7 +251,7 @@ namespace BALL
 					Vector3 vx = vz % vy;
 					vx.normalize();
 					const Vector3 cen = c_pos + (vz * (0.85 * vz_scalar));
-					const Vector3 v1 = patom->getPosition() - cen;
+					const Vector3 v1 = (*proton_it)->getPosition() - cen;
 					const Vector3 v2 = v1 % vy;
 					const Vector3 v3 = v2 % vx;
 
@@ -255,7 +259,7 @@ namespace BALL
 					const float stheta = v2.getLength() / (v1.getLength() * vy.getLength());
 					const float sgamma = v3.getLength() / (v2.getLength() * vx.getLength());
 					float calc1, calc2;
-					if ((*proton_iter)->getName() == "H")
+					if ((*proton_it)->getName() == "H")
 					{
 						calc1 = ndXN1 * ((3.0 * stheta * stheta) - 2.0);
 						calc2 = ndXN2 * (1.0 - (3.0 * stheta * stheta * sgamma * sgamma));
@@ -269,24 +273,24 @@ namespace BALL
 					// ?????
 					float shift = (calc1 + calc2) / (3.0 * distance * distance * distance);	
 					// check whether effector and nucleus are in the same chain
-					if (ignore_other_chain_ && ((*proton_iter)->getResidue() != 0) && (c_atom->getResidue() != 0))
+					if (ignore_other_chain_ && ((*proton_it)->getResidue() != 0) && (c_atom->getResidue() != 0))
 					{
-						if ((*proton_iter)->getResidue()->getChain() == c_atom->getResidue()->getChain())
+						if ((*proton_it)->getResidue()->getChain() == c_atom->getResidue()->getChain())
 						{
 							shift = 0.0;
 						}
 					}
-					gs += shift;
+					total_shift += shift;
 				}
 				else 
 				{
 					Log.error() << "O atom not found for " << c_atom->getFullName() << "-" << n_atom->getFullName() << endl;
 				}
 			}
-			float shift = (*proton_iter)->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-			shift -= gs;
-			(const_cast<Atom*>(*proton_iter))->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
-			(const_cast<Atom*>(*proton_iter))->setProperty(PROPERTY__ANISOTROPY_SHIFT, -gs);
+			float shift = (*proton_it)->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+			shift -= total_shift;
+			(const_cast<Atom*>(*proton_it))->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
+			(const_cast<Atom*>(*proton_it))->setProperty(PROPERTY__ANISOTROPY_SHIFT, -total_shift);
 		}
 
 		return true;
