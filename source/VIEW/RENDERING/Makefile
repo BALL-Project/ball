@@ -8,6 +8,7 @@ CPP_SOURCES=\
 	glRenderer.C\
 	renderer.C\
 	POVRenderer.C\
+	vertexBuffer.C\
 	VRMLRenderer.C
 
 include ../../common.mak

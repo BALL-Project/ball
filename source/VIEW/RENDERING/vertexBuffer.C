@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.3 2005/01/16 21:27:37 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.4 2005/01/16 22:17:10 amoll Exp $
 //
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -47,6 +47,7 @@ const MeshBuffer& MeshBuffer::operator = (const MeshBuffer& mesh_buffer)
 
 bool MeshBuffer::initialize()
 {
+#ifdef GL_ARB_vertex_buffer_object
 	clearBuffer();
 	if (mesh_ == 0) return false;
 
@@ -113,6 +114,7 @@ bool MeshBuffer::initialize()
 	delete[] indices;
 
 	filled_ = true;
+#endif
 	return true;
 }
 
@@ -126,13 +128,16 @@ void MeshBuffer::clear()
 void MeshBuffer::clearBuffer()
 {
 	if (!filled_) return;
+#ifdef GL_ARB_vertex_buffer_object
 	glDeleteBuffersARB(4, buffers_);
+#endif
 	filled_ = false;
 }
 
 bool MeshBuffer::draw()
 {
 	if (!filled_) return false;
+#ifdef GL_ARB_vertex_buffer_object
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[0]);
 	glVertexPointer(3, GL_FLOAT, 0, 0); 
 
@@ -146,6 +151,7 @@ bool MeshBuffer::draw()
 	glIndexPointer(GL_UNSIGNED_INT, 0, 0);
 
 	glDrawElements(GL_TRIANGLES, mesh_->triangle.size() * 3, GL_UNSIGNED_INT, 0);
+#endif
 	return true;
 }
 
