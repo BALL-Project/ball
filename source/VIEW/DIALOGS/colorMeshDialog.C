@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.26 2004/05/14 10:23:33 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.27 2004/05/14 12:08:38 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -173,7 +173,7 @@ bool ColorMeshDialog::insertGrid_(RegularData3D& grid, const String& name)
 	if (grid_ == 0) grid_ = &grid;
 	if (mesh_ == 0 || !mesh_->vertex.size()) return false;
 
-// 	gridSelected(); ????
+ 	gridSelected();
 	return true;
 }
 
@@ -236,7 +236,7 @@ void ColorMeshDialog::gridSelected()
 	{
 		for(Position p = 0; p < mesh_->vertex.size(); p++)
 		{
-			float value = (*grid_)(mesh_->vertex[p]);
+			float value = grid_->getInterpolatedValue(mesh_->vertex[p]);
 
 			mid_value_ += value;
 			if (value < min_value_) min_value_ = value;
@@ -245,6 +245,7 @@ void ColorMeshDialog::gridSelected()
 	}
 	catch(Exception::OutOfGrid)
 	{
+		setStatusbarText("Can not color this surface with this grid, the mesh has points outside the grid!");
 		return;
 	}
 
@@ -307,6 +308,16 @@ void ColorMeshDialog::colorByCustomColor_()
 
 void ColorMeshDialog::colorByGrid_()
 {
+	if (grid_ == 0 ||
+			mesh_ == 0 ||
+			!getMainControl()->compositesAreMuteable() ||
+			rep_ == 0 ||
+			rep_->updateRunning())
+	{
+		setStatusbarText("Could not color surface, maybe because an other thread is still running?");
+		return;
+	}
+
 	setColor_(min_min_color, min_min_button, min_min_alpha);
 	setColor_(min_color, min_button, min_alpha);
 	setColor_(mid_color, mid_button, mid_alpha);
@@ -341,13 +352,14 @@ void ColorMeshDialog::colorByGrid_()
 	{
 		for (Position i=0; i<mesh_->colorList.size(); i++)
 		{
-			if ((*grid_)(mesh_->vertex[i]) <= String(mid_box->text().ascii()).toFloat())
+			float grid_value = grid_->getInterpolatedValue(mesh_->vertex[i]);
+			if (grid_value <= String(mid_box->text().ascii()).toFloat())
 			{
-				mesh_->colorList[i] = lower_table.map((*grid_)(mesh_->vertex[i]));
+				mesh_->colorList[i] = lower_table.map(grid_value);
 			}
 			else
 			{
-				mesh_->colorList[i] = upper_table.map((*grid_)(mesh_->vertex[i]));
+				mesh_->colorList[i] = upper_table.map(grid_value);
 			}
 		}
 	}	
@@ -355,7 +367,7 @@ void ColorMeshDialog::colorByGrid_()
 	{
 		Log.error() << "Error! There is a point contained in the surface that is not "
 								<< "inside the grid! Aborting the coloring..." << std::endl;
-		setStatusbarText("Aborted calculation, see Logs for more information");
+		setStatusbarText("Aborted calculation because a point of the surface is out of the grid!");
 		return;
 	}
 
@@ -562,8 +574,8 @@ void ColorMeshDialog::setMesh(Mesh* mesh, Representation* rep)
 	{
 		grids->setCurrentItem(grids->count()-1);
 	}
-// 	gridSelected() ; // ?????
-// 	apply_button->setEnabled(grid_ != 0);
+ 	gridSelected() ;
+ 	apply_button->setEnabled(grid_ != 0);
 }
 
 void ColorMeshDialog::show()
