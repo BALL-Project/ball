@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.17 2000/02/20 13:04:30 oliver Exp $
+// $Id: vector3.h,v 1.18 2000/02/21 17:06:18 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -336,42 +336,42 @@ namespace BALL
 		/**	Add a vector to this vector.
 				Add the components of {\tt vector} to this vector.
 				@param vector the vector to add
-				@return {\tt TVector3}, {\tt *this}
+				@return TVector3&, {\tt *this}
 		*/
 		TVector3& operator += (const TVector3& vector);
 
 		/**	Subtract a vector from this vector.
 				Subtract {\tt vector} from this vector componentwise.
 				@param vector the vector to subtract
-				@return {\tt TVector3}, {\tt *this}
+				@return TVector3&, {\tt *this}
 		*/
 		TVector3& operator -= (const TVector3& vector);
 
 		/**	Scalar product.
 				Return {\tt TVector3(x * scalar, y * scalar, z * scalar)}.
 				@param scalar, the scalar to multiply with
-				@return {\tt TVector3}, the scalar product of this vector and {\tt scalar}
+				@return TVector3, the scalar product of this vector and {\tt scalar}
 		*/
 		TVector3 operator * (const T& scalar);
 
 		/**	Multiply with a scalar.
 				Multiply all components of the vector with a {\tt scalar}.
 				@param scalar the scalar to multiply with
-				@return {\tt TVector3}\&, {\tt *this}
+				@return TVector3&, {\tt *this}
 		*/
 		TVector3& operator *= (const T& scalar);
 
 		/**	Fraction of a vector.
 				Return {\tt TVector3(x / scalar, y / scalar, z / scalar)}.
 				@param lambda the scalar to divide by
-				@return {\tt TVector3} 
+				@return TVector3& 
 				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
 		*/
 		TVector3 operator / (const T& lambda);
 
 		/**	Divide a vector by a scalar.
 				@param lambda the scalar to divide by
-				@return {\tt TVector3}\&, {\tt *this}
+				@return TVector3&, {\tt *this}
 				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
 		*/
 		TVector3& operator /= (const T& lambda);
@@ -993,7 +993,7 @@ namespace BALL
 	*/
 	//@{
 	/** Addition operator for two vectors
-  		@return {\tt TVector3} the new vector
+  		@return TVector3 - the new vector
 	*/
 	template <typename T>
 	inline 
@@ -1003,7 +1003,7 @@ namespace BALL
 	}
 
 	/** Subtraction operator of two vectors
-  		@return {\tt TVector3} the new vector
+  		@return TVector3 the new vector
 	*/
 	template <typename T>
 	inline
@@ -1013,7 +1013,7 @@ namespace BALL
 	}
 
 	/**	Multiply operator for a scalar with a vector
-  		@return {\tt TVector3} the new vector
+  		@return TVector3 - the new vector
 	*/
 	template <typename T>
 	BALL_INLINE 
@@ -1023,7 +1023,7 @@ namespace BALL
 	}
 
 	/**	Multiply operator for a vector with a scalar
-  		@return {\tt TVector3} the new vector
+  		@return TVector3 the new vector
 	*/
 	template <typename T>
 	TVector3<T> operator * (const TVector3<T>& vector, const T& scalar)
