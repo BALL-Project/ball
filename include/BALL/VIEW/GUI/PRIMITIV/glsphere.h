@@ -1,4 +1,4 @@
-// $Id: glsphere.h,v 1.5 2001/02/11 13:04:39 hekl Exp $
+// $Id: glsphere.h,v 1.6 2001/02/12 12:00:19 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
@@ -23,11 +23,8 @@ namespace BALL
 	{
 
 		/** GLSphere class.
-				
 				{\bf Framework:} BALL/VIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}
-				\\
-
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}	\\
 				An instance of GLSphere represents an instance of the geometric
 				visualization "sphere".
 				The class GLSphere is derived from the classes \Ref{Sphere} and
@@ -36,11 +33,10 @@ namespace BALL
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				sphere. OpenGL code is used for the visualization.
 				See these classes for further information.
-
 				@memo    GLSphere class (BALL VIEW gui primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/02/11 13:04:39 $
+				@author  $Author: amoll $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/02/12 12:00:19 $
 		*/
 		class GLSphere
 			: public Sphere,
@@ -54,7 +50,6 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new glSphere.
-
 					@return      GLSphere - new constructed glSphere
 					@see         Sphere::Sphere
 					@see         GLObject::GLObject
@@ -64,7 +59,6 @@ namespace BALL
 			/** Copy constructor with cloning facility.
 					Construct new glSphere by copying the glSphere {\em glSphere}.
 					The copy is either deep (default) or shallow.
-
 					@param       glSphere the glSphere to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
 					@return      GLSphere - new constructed glSphere copied from {\em glSphere}
@@ -76,7 +70,6 @@ namespace BALL
 			/** Copy constructor from geometricObject.
 					Construct new glSphere by copying the internal values from geometricObject 
 					{\em geometric_object}.
-
 					@param       geometric_object the geometricObject which internal value should be copied
 					@return      GLSphere - new constructed glSphere initialized from {\em geometric_object}
 					@see         Sphere::Sphere
@@ -86,7 +79,8 @@ namespace BALL
 
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
@@ -94,27 +88,28 @@ namespace BALL
 					Calls \Ref{GLSphere::destroy}.
 					@see         GLSphere::destroy
 			*/
-			virtual ~GLSphere();
+			virtual ~GLSphere()
+				throw();
 
 			/** Explicit default initialization.
 					Calls \Ref{Sphere::clear}
 					Calls \Ref{GLObject::clear}
-
 					@see  Sphere::clear
 					@see  GLObject::clear
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Calls \Ref{Sphere::destroy}
 					Calls \Ref{GLObject::destroy}
-
 					@see  Sphere::destroy
 					@see  GLObject::destroy
 			*/
-			virtual void destroy();
-			//@}
+			virtual void destroy()
+				throw();
 
+			//@}
 
 			protected:
 
@@ -131,7 +126,6 @@ namespace BALL
 					The parameter {\em with_names} indicates whether the openGL command 
 					{\em glLoadName} must be used for naming the graphical object 
 					(necessary for picking mode in the scene).
-					
 					@param     with_names flag if the graphical objects must have a name
 					@return    bool - {\tt true} if successful,	{\tt false} otherwise
 					@see       GLObject::draw
@@ -146,15 +140,12 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} glSphere into another
-					format (eg. POVRAY, VRML)
-				  \\
+					format (eg. POVRAY, VRML) \\
 				  {\bf Note:} Not yet implemented.
-
 					@return    bool - {\tt true} if successful,	{\tt false} otherwise
 			*/
-			virtual bool extract();
-
-			//@}
+			virtual bool extract()
+				throw();
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

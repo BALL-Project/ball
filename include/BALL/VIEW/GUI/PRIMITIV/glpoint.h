@@ -1,4 +1,4 @@
-// $Id: glpoint.h,v 1.5 2001/02/11 13:04:39 hekl Exp $
+// $Id: glpoint.h,v 1.6 2001/02/12 12:00:19 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
 #define BALL_VIEW_GUI_PRIMITIV_GLPOINT_H
@@ -22,12 +22,9 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/** GLPoint class.
-				
+		/** GLPoint class.				
 				{\bf Framework:} BALL/VIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glpoint.h}
-				\\
-
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glpoint.h}\\
 				An instance of GLPoint represents an instance of the geometric
 				visualization "point".
 				The class GLPoint is derived from the classes \Ref{Point} and
@@ -36,11 +33,10 @@ namespace BALL
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				point. OpenGL code is used for the visualization.
 				See these classes for further information.
-
 				@memo    GLPoint class (BALL VIEW gui primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/02/11 13:04:39 $
+				@author  $Author: amoll $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/02/12 12:00:19 $
 		*/
 		class GLPoint
 			: public Point,
@@ -54,7 +50,6 @@ namespace BALL
 
 			/** Default Constructor.
 					Construct new glPoint.
-
 					@return      GLPoint - new constructed glPoint
 					@see         Point::Point
 					@see         GLObject::GLObject
@@ -64,7 +59,6 @@ namespace BALL
 			/** Copy constructor with cloning facility.
 					Construct new glPoint by copying the glPoint {\em point}.
 					The copy is either deep (default) or shallow.
-
 					@param       point the glPoint to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
 					@return      GLPoint - new constructed glPoint copied from {\em point}
@@ -76,7 +70,6 @@ namespace BALL
 			/** Copy constructor from geometricObject.
 					Construct new glPoint by copying the internal values from geometricObject 
 					{\em geometric_object}.
-
 					@param       geometric_object the geometricObject which internal value should be copied
 					@return      GLPoint - new constructed glPoint initialized from {\em geometric_object}
 					@see         Point::Point
@@ -85,8 +78,8 @@ namespace BALL
 			GLPoint(const GeometricObject& geometric_object);
 
 			//@}
-
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
@@ -94,25 +87,27 @@ namespace BALL
 					Calls \Ref{GLPoint::destroy}.
 					@see         GLPoint::destroy
 			*/
-			virtual ~GLPoint();
+			virtual ~GLPoint()
+				throw();
 
 			/** Explicit default initialization.
 					Calls \Ref{Point::clear}
 					Calls \Ref{GLObject::clear}
-
 					@see  Point::clear
 					@see  GLObject::clear
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Calls \Ref{Point::destroy}
 					Calls \Ref{GLObject::destroy}
-
 					@see  Point::destroy
 					@see  GLObject::destroy
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
+
 			//@}
 
 			protected:
@@ -128,8 +123,7 @@ namespace BALL
 					of the \Ref{Scene}.
 					The parameter {\em with_names} indicates whether the openGL command 
 					{\em glLoadName} must be used for naming the graphical object 
-					(necessary for picking mode in the scene).
-					
+					(necessary for picking mode in the scene).		
 					@param     with_names flag if the graphical objects must have a name
 					@return    bool - {\tt true} if successful,	{\tt false} otherwise
 					@see       GLObject::draw
@@ -138,15 +132,13 @@ namespace BALL
 
 			/** Export method.
 					This method handles the export of {\em *this} glPoint into another
-					format (eg. POVRAY, VRML)
-				  \\
+					format (eg. POVRAY, VRML) \\
 				  {\bf Note:} Not yet implemented.
-
 					@return    bool - {\tt true} if successful,	{\tt false} otherwise
 			*/
-			virtual bool extract();
+			virtual bool extract()
+				throw();
 
-			//@}
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
