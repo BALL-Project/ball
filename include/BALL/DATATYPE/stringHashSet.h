@@ -1,11 +1,7 @@
-// $Id: stringHashSet.h,v 1.2 2000/01/10 15:50:59 oliver Exp $
+// $Id: stringHashSet.h,v 1.3 2000/09/26 19:24:41 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHSET_H
 #define BALL_DATATYPE_STRINGHASHSET_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #	include <BALL/DATATYPE/hashSet.h>
@@ -18,23 +14,12 @@
 namespace BALL 
 {
 
-	template <class ValueType>
-	class StringHashSet
-		: public HashSet<String, ValueType>
-	{
-		public:
-
-		StringHashSet()
-			:	HashSet<String, ValueType>()
-		{
-		}
-
-		StringHashSet(const StringHashSet& string_hash_map, bool deep = true)
-			:	HashSet<String, ValueType> (string_hash_map, deep)
-		{
-		}
-
-	};
+	/**	A string hash set.
+			This is just a convenience class.
+			\\
+			{\bf Definition:}\URL{BALL/DATAYTPE/stringHashSet.h}
+	*/
+	typedef HashSet<String> StringHashSet;
 
 } // namespace BALL
 
