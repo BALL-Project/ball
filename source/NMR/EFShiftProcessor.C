@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.C,v 1.1 2000/09/19 12:07:20 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.2 2000/09/19 19:20:28 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 
@@ -54,31 +54,17 @@ namespace BALL
 		first_atom_expressions_.clear();
 		second_atom_expressions_.clear();
 		
-		const Position description_column = parameter_section_.getColumnIndex("description");
+		if (!parameter_section_.hasVariable("first_atom") || !parameter_section_.hasVariable("second_atom"))
+		{
+			return false;
+		}
 
+		Position first_atom_column = parameter_section_.getColumnIndex("first_atom");
+		Position second_atom_column = parameter_section_.getColumnIndex("second_atom");
 		for (Position counter = 0; counter < parameter_section_.getNumberOfKeys(); counter++)
 		{
-			String description = parameter_section_.getValue(counter, description_column);
-
-			while (description.has('_'))
-			{
-				description.substitute("_"," "); 
-			}
-			first_atom_expressions_.push_back(Expression(description));
-		}	
-		
-		// build the Expression for the binding-atoms of the shiftAtoms
-		const Position second_atom_column = parameter_section_.getColumnIndex("second_atom");
-
-		for (Position counter = 0; counter < parameter_section_.getNumberOfKeys(); counter++)
-		{
-			String description = parameter_section_.getValue(counter, second_atom_column);
-
-			while (description.has('_'))
-			{
-				description.substitute("_"," ");
-			}
-			second_atom_expressions_.push_back(Expression(description));
+			first_atom_expressions_.push_back(Expression(parameter_section_.getValue(counter, first_atom_column)));
+			second_atom_expressions_.push_back(Expression(parameter_section_.getValue(counter, second_atom_column)));
 		}
 				
 		return true;
@@ -143,27 +129,27 @@ namespace BALL
 			{
 				if ( (*effector_iter)->getFragment() != (*atom_iter)->getFragment() )
 				{
-					const Vector3 atom_pos = (*effector_iter)->getPosition();
-					const Vector3 distance_proton_effector = proton_pos - atom_pos;			
+					Vector3 atom_pos = (*effector_iter)->getPosition();
+					Vector3 distance_proton_effector = proton_pos - atom_pos;			
 
-					const float dps_scalar = distance_proton_second.getLength();
-					const float dpe_scalar = distance_proton_effector.getLength();
+					float dps_scalar = distance_proton_second.getLength();
+					float dpe_scalar = distance_proton_effector.getLength();
 
-					const float charge = (*effector_iter)->getCharge();
-					const float Efact = charge / (dpe_scalar * dpe_scalar);
+					float charge = (*effector_iter)->getCharge();
+					float Efact = charge / (dpe_scalar * dpe_scalar);
 
-					const float sc = distance_proton_second * distance_proton_effector;
-					const float theta = sc / (dps_scalar * dps_scalar);
+					float sc = distance_proton_second * distance_proton_effector;
+					float theta = sc / (dps_scalar * dps_scalar);
 
 					Ez += theta * Efact;
 				}
 			}
-			const float sigmaE = parameter_section_.getValue(key, "sigmaE").toFloat();
-			double shift = (*atom_iter)->getProperty("chemical_shift").getFloat();
-			shift -= -Ez * sigmaE;
+			float epsilon1 = parameter_section_.getValue(key, "epsilon1").toFloat();
+			double shift = (*atom_iter)->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+			shift = epsilon1 * Ez;
 
-			(*atom_iter)->setProperty("chemical_shift", shift);
-			(*atom_iter)->setProperty("LEF", -Ez * sigmaE);
+			(*atom_iter)->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
+			(*atom_iter)->setProperty("ElectricFieldShift", -Ez * epsilon1);
 		}
 
 		return true;
@@ -172,27 +158,28 @@ namespace BALL
 	Processor::Result EFShiftProcessor::operator () (Composite& object)
 		throw()
 	{
-		// if object is an H-atom connected to a C-atom it is saved in _proton_list
-		// ???
-		if (!RTTI::isKindOf<PDBAtom>(object))
+		// Here, we collect all parameterized atoms
+		// and all charged atoms (as effectors of the electric field)
+		if (RTTI::isKindOf<Atom>(object))
 		{
-			return Processor::CONTINUE;
-		}
-
-		Atom* atom_ptr = RTTI::castTo<PDBAtom>(object);
-			
-		for (Position counter = 0; counter < first_atom_expressions_.size(); counter++)
-		{
-			if (first_atom_expressions_[counter](*atom_ptr))
+			Atom* atom_ptr = RTTI::castTo<Atom>(object);
+		
+			// if the atom matches any of our expressions, save it in the
+			// atom list (containing those atom whose shift is to be calculated)
+			for (Position counter = 0; counter < first_atom_expressions_.size(); counter++)
 			{
-				atom_list_.push_back(atom_ptr);
-				break;
+				if (first_atom_expressions_[counter](*atom_ptr))
+				{
+					atom_list_.push_back(atom_ptr);
+					break;
+				}
 			}
-		}
-			
-		if (atom_ptr->getCharge() != 0.0)
-		{
-			effector_list_.push_back(atom_ptr);
+				
+			// store all charged atoms in the effector list
+			if (atom_ptr->getCharge() != 0.0)
+			{
+				effector_list_.push_back(atom_ptr);
+			}
 		}
 		
 		return Processor::CONTINUE;
