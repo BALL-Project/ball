@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.137 2004/09/15 13:02:53 amoll Exp $
+// $Id: scene.C,v 1.138 2004/09/15 13:11:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1953,6 +1953,7 @@ namespace BALL
 			rep->setProperty("BY", 0);
 			rep->setProperty("CZ", 0);
 			rep->setProperty("D", 10);
+			rep->setHidden(true);
 			getMainControl()->insert(*rep);
 		}
 

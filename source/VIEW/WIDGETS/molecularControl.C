@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.69 2004/09/15 11:51:09 amoll Exp $
+// $Id: molecularControl.C,v 1.70 2004/09/15 13:10:25 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1272,6 +1272,7 @@ void MolecularControl::moveItems(const Matrix4x4& m)
 	// copy list, because selection could change
 	List<Composite*> selection = selected_;
 	List<Composite*>::Iterator it = selection.begin();
+	HashSet<Composite*> roots;
 
 	if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 	{
@@ -1298,6 +1299,7 @@ void MolecularControl::moveItems(const Matrix4x4& m)
 			(*it)->apply(tp1);
  			(*it)->apply(tp2);
 			(*it)->apply(tp3) ;
+			roots.insert(&(**it).getRoot());
 		}
 	}
 	else
@@ -1306,13 +1308,14 @@ void MolecularControl::moveItems(const Matrix4x4& m)
 		for(; it != selection.end(); it++)
 		{
 			(*it)->apply(tp);
+			roots.insert(&(**it).getRoot());
 		}
 	}
 
-	it = selection.begin();
-	for(; it != selection.end(); it++)
+	HashSet<Composite*>::Iterator rit = roots.begin();
+	for(; rit != roots.end(); rit++)
 	{
-		CompositeMessage* msg = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE);
+		CompositeMessage* msg = new CompositeMessage(**rit, CompositeMessage::CHANGED_COMPOSITE);
 		notify_(msg);
 	}
 }

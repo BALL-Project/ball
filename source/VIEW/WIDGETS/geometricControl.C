@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.53 2004/09/15 13:05:52 amoll Exp $
+// $Id: geometricControl.C,v 1.54 2004/09/15 13:14:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -308,7 +308,7 @@ namespace BALL
 							&rep, *this);
 
 			CHECK_PTR(new_item);
-			new_item->setOn(true);
+			new_item->setOn(!rep.isHidden());
 
 			representation_to_item_[&rep] = new_item;
 		}
