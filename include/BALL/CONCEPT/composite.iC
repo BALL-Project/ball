@@ -1,4 +1,4 @@
-// $Id: composite.iC,v 1.9 2000/08/28 09:57:01 oliver Exp $
+// $Id: composite.iC,v 1.10 2000/08/28 14:15:16 amoll Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
@@ -56,12 +56,6 @@ BALL_INLINE
 Size Composite::countDescendants() const
 {
   return (countDescendants_() - 1);
-}
-
-BALL_INLINE 
-Size Composite::getDepth() const
-{
-  return Composite::getDepth(*this);
 }
 
 BALL_INLINE 
@@ -233,12 +227,6 @@ bool Composite::hasChild() const
 }
 
 BALL_INLINE 
-bool Composite::isChild() const
-{
-  return (parent_ != 0);
-}
-
-BALL_INLINE 
 bool Composite::isChildOf(const Composite &composite) const
 {
   return (parent_ == &composite);
@@ -272,12 +260,6 @@ BALL_INLINE
 bool Composite::hasParent() const
 {
   return (parent_ != 0);
-}
-
-BALL_INLINE 
-bool Composite::isParent() const
-{
-  return (first_child_ != 0);
 }
 
 BALL_INLINE 
@@ -320,30 +302,6 @@ BALL_INLINE
 bool Composite::isNextSiblingOf(const Composite &composite) const
 {
   return (previous_ == &composite);
-}
-
-BALL_INLINE 
-bool Composite::hasDescendant() const
-{
-  return (first_child_ != 0);
-}
-  
-BALL_INLINE 
-bool Composite::isDescendant() const
-{
-  return (parent_ != 0);
-}
-  
-BALL_INLINE 
-bool Composite::hasAnyAncestor() const
-{
-  return (parent_ != 0);
-}
-
-BALL_INLINE 
-bool Composite::isAncestor() const
-{
-  return (bool)(first_child_ != 0);
 }
 
 BALL_INLINE 

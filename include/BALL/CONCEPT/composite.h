@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.19 2000/08/28 09:56:34 oliver Exp $
+// $Id: composite.h,v 1.20 2000/08/28 14:15:16 amoll Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -225,18 +225,10 @@ namespace BALL
 
 		/** Get the length of the path between two composite objects.
 				If no path exists {\tt INVALID_SIZE} is returned.
-				@param a the first composite object
-				@param b the second composite object
+				@param composite the second object
 				@return Size the size of the path
 		*/
-		static Size getPathLength(const Composite& a, const Composite& b);
-
-		/** Get the depth of {\tt composite} in its tree.
-				The depth of a root item is 0.
-				@param a the composite object
-				@return Size the depth of {\tt composite}
-		*/
-		static Size getDepth(const Composite& composite);
+		Size getPathLength(const Composite& composite) const;
 
 		/** Get the depth of this item in its tree.
 				The depth of a root item is 0.
@@ -458,15 +450,9 @@ namespace BALL
 		*/
 		void splice(Composite& composite);
 
-		/**	Remove a child from a composite.
-				This method removes a child from {\tt this} composite.
-				The child is only removed, if the following preconditions hold:
-				\begin{itemize}
-					\item {\tt child != this}
-					\item {\tt child} has a parent
-					\item {\tt this} is not a descendant of {\tt child}
-				\end{itemize}
-				@return false if composite could not be removed
+		/**	Remove a child from its parent.
+				The child is only removed, if is a child of this instance:
+				@return false if child could not be removed
 		*/
 		bool removeChild(Composite& child);
 
@@ -530,10 +516,6 @@ namespace BALL
 		/** Return true if the node has a child.
 		*/
 		bool hasChild() const;
-
-		/** Return true if the node has a parent.
-		*/
-		bool isChild() const;
 	
 		/** Return true if the node has the parent {\tt composite}.
 		*/
@@ -558,10 +540,6 @@ namespace BALL
 		/** Return true if the node has a parent.
 		*/
 		bool hasParent() const;
-
-		/** Return true if the node has a child.
-		*/
-		bool isParent() const;
 
 		/** Return true if the node is the parent of {\tt composite}.
 		*/
@@ -593,31 +571,15 @@ namespace BALL
 		/** Return true if the node is a next sibling of {\tt composite}.
 		*/
 		bool isNextSiblingOf(const Composite& composite) const;
-	
-		/** Return true if the node has childs.
-		*/
-		bool hasDescendant() const;
-	
-		/** Return true if the node has a parent.
-		*/
-		bool isDescendant() const;
-	
+		
 		/** Return true if the node is a descendent of {\tt composite}.
 		*/
 		bool isDescendantOf(const Composite& composite) const;
-
-		/** Return true if the node has a parent.
-		*/
-		bool hasAnyAncestor() const;
 
 		/** Return true if the node has a parent of the same type as dummy.
 		*/
 		template <typename T>
 		bool hasAncestor(const T& dummy ) const; 
-
-		/** Return true if the node has a child.
-		*/
-		bool isAncestor() const;
 
 		/** Return true if the node has composite as descendent.
 		*/
