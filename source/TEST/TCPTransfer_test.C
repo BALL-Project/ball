@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.13 2002/01/09 12:27:03 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.14 2002/01/09 15:48:54 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -17,11 +17,12 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.13 2002/01/09 12:27:03 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.14 2002/01/09 15:48:54 amoll Exp $")
 
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+String filename;
 
 TCPTransfer* tcp_ptr;
 CHECK(cstr)
@@ -50,11 +51,10 @@ RESULT
 
 CHECK(http/no login)
 	ABORT_IF(!NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP))
-	String filename;
 	File::createTemporaryFilename(filename);
 	ofstream out(filename.c_str(), std::ios::out);
 	
-	TCPTransfer tcp_t(out ,"http://www.mpi-sb.mpg.de/BALL/test/http_test.txt" , false);
+	TCPTransfer tcp_t(out ,"http://www.mpi-sb.mpg.de/BALL/test/http_test.txt");
 	TEST_EQUAL(tcp_t.getHostAddress(), "www.mpi-sb.mpg.de")
 	TEST_EQUAL(tcp_t.getFileAddress(), "/BALL/test/http_test.txt")
 	TEST_EQUAL(tcp_t.getPort(), 80)
@@ -68,25 +68,24 @@ CHECK(http/no login)
 RESULT
 
 CHECK(http/login)
-	ABORT_IF(!NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP))
-	String filename;
+	ABORT_IF(!NetworkTest::test("www.zbi.uni-saarland.de", NetworkTest::HTTP))
 	File::createTemporaryFilename(filename);
 	ofstream out(filename.c_str(), std::ios::out);
-	TCPTransfer tcp_t2(out ,"http://BALL:test@www.mpi-sb.mpg.de/BALL/INTERNAL/internal.html", true);
-	TEST_EQUAL(tcp_t2.getHostAddress(), "www.mpi-sb.mpg.de")
-	TEST_EQUAL(tcp_t2.getFileAddress(), "/BALL/INTERNAL/internal.html")
-	TEST_EQUAL(tcp_t2.getPort(), 80)
-	TEST_EQUAL(tcp_t2.getStatusCode(), TCPTransfer::NO_ERROR)
-	//?????, waiting for www-server config
-	//TEST_EQUAL(tcp_t2.getReceivedBytes(), 11908)
-	TEST_EQUAL(tcp_t2.getLogin(), "BALL")
-	TEST_EQUAL(tcp_t2.getPassword(), "test")
+	TCPTransfer tcp_t(out ,"http://BALL-TEST:test@www.zbi.uni-saarland.de/zbi/BALL/test/protected/TCPTransferTest.txt");
+	TEST_EQUAL(tcp_t.getHostAddress(), "www.zbi.uni-saarland.de")
+	TEST_EQUAL(tcp_t.getFileAddress(), "/zbi/BALL/test/protected/TCPTransferTest.txt")
+	TEST_EQUAL(tcp_t.getPort(), 80)
+	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
+	TEST_EQUAL(tcp_t.getReceivedBytes(), 3048)
+	TEST_EQUAL(tcp_t.getLogin(), "BALL-TEST")
+	TEST_EQUAL(tcp_t.getPassword(), "test")
 	out.close();
+
+	TEST_FILE(filename.c_str(), "data/http_test.txt", false)
 RESULT
 
 CHECK(ftp)
 	ABORT_IF(!NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP))
-  String filename;
 	File::createTemporaryFilename(filename);
 	ofstream out(filename.c_str(), std::ios::out);
 	TCPTransfer tcp_t(out, "ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
@@ -100,6 +99,17 @@ CHECK(ftp)
 	TEST_EQUAL(tcp_t.getStream(), &out)
 	out.close();
 
+	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
+RESULT
+
+CHECK(ftp/debug)
+	ABORT_IF(!NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP))
+	File::createTemporaryFilename(filename);	
+	ofstream out(filename.c_str(), std::ios::out);
+#define DEBUG
+	TCPTransfer tcp_t(out, "ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
+#undef DEBUG
+	out.close();
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
 RESULT
 
