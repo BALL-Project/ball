@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSurface.h,v 1.37 2003/08/26 08:04:55 oliver Exp $
-//
+// $Id: triangulatedSurface.h,v 1.38 2003/11/04 20:10:02 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -254,6 +253,11 @@ namespace BALL
 		/** Delete all triangles on the border of the TriangulatedSurface
 		*/
 		void shrink();
+
+		/** Delete all isolated edges of the TriangulatedSurface
+		*/
+		void deleteIsolatedEdges()
+			throw();
 
 		/** Delete all isolated points of the TriangulatedSurface
 		*/

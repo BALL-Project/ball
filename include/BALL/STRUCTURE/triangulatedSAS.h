@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSAS.h,v 1.9 2003/08/26 08:04:54 oliver Exp $
-//
+// $Id: triangulatedSAS.h,v 1.10 2003/11/04 20:10:36 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSAS_H
 #define BALL_STRUCTURE_TRIANGULATEDSAS_H
@@ -55,6 +54,10 @@
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_DATATYPE_HASHGRID_H
+#	include <BALL/DATATYPE/hashGrid.h>
 #endif
 
 #include <list>
@@ -230,74 +233,54 @@ namespace BALL
 
 		private:
 
-		void partitionEdge(SASEdge* edge)
-			throw();
-
 		void triangulateFace(SASFace* face)
 			throw();
 
-		bool buildSphericTriangles
-				(TriangulatedSAS&	part,
-				 const TSphere3<double>&		sphere
-			 			#ifdef print_debug_info
-				 		, int halt
-			 			#endif
-			 	)
+		void createPlanes
+				(SASFace* face,
+				 std::list< std::pair<TPlane3<double>,double> >& planes)
 			throw();
 
-		bool buildFirstTriangle
-				(TriangulatedSAS&						part,
-				 const TSphere3<double>&							sphere,
-				 std::list<TriangleEdge*>&	border
-							#ifdef print_debug_info
-							, int& halt
-							#endif
-			 	)
+		void tagPoints
+				(TriangulatedSurface& part,
+				 const std::list< std::pair<TPlane3<double>,double> >& planes)
 			throw();
 
-		void buildUnambiguousTriangle
-				(TriangleEdge*						 edge,
-				 TrianglePoint*						 point,
-				 std::list<TriangleEdge*>& border,
-				 const TSphere3<double>&						 sphere,
-				 TriangulatedSAS&					 part
-							#ifdef print_debug_info
-							, int& halt
-							#endif
-				)
+		void removeInsideTriangles(TriangulatedSurface& part)
 			throw();
 
-		void buildAmbiguousTriangles
-				(TriangleEdge*						 edge,
-				 std::list<TrianglePoint*> points,
-				 std::list<TriangleEdge*>& border,
-				 const TSphere3<double>&						 sphere,
-				 TriangulatedSAS&					 part
-							#ifdef print_debug_info
-							, int& halt
-							#endif
-				)
+		HashGrid3<TrianglePoint*> createHashGrid(const TriangulatedSurface& part)
 			throw();
 
-		void createTriangleAndEdges
-				(TriangleEdge*	edge,
-				 TrianglePoint* point,
-				 const TSphere3<double>& sphere,
-				 TriangleEdge*& edge1,
-				 bool&					old1,
-				 TriangleEdge*& edge2,
-				 bool&					old2,
-				 Triangle*&			triangle
-				)
+		void createPoints
+				(TriangulatedSurface& part,
+				 const std::list< std::pair<TPlane3<double>,double> >& planes,
+				 HashGrid3<TrianglePoint*>& grid)
 			throw();
 
-		void partitionOfCircle
-				(const TCircle3<double>&					circle,
-				 const TVector3<double>&					p0,
-				 const TAngle<double>&						phi,
-				 Size										number_of_segments,
-				 std::list< TVector3<double> >&	partition,
-				 bool										on_surface = true)
+		void createNewTriangles
+				(TriangulatedSurface& part,
+				 HashGrid3<TrianglePoint*>& grid)
+			throw();
+
+		void onePointOutside
+				(Index outside,
+				 Triangle* t,
+				 TriangulatedSurface& part,
+				 HashGrid3<TrianglePoint*>& grid)
+			throw();
+
+		void twoPointsOutside
+				(Position outside1,
+				 Position outside2,
+				 Triangle* t,
+				 TriangulatedSurface& part,
+				 HashGrid3<TrianglePoint*>& grid)
+			throw();
+
+		TrianglePoint* vertexExists
+				(const TVector3<double>& point,
+				 HashGrid3<TrianglePoint*>& grid)
 			throw();
 
 		Size numberOfRefinements(const double& density, const double& radius)
@@ -317,7 +300,7 @@ namespace BALL
 		TriangulatedSAS* tsas_;
 		double sqrt_density_;
 		std::vector< std::list< TVector3<double> > > edge_;
-		HashMap< Size,std::list< TVector3<double> > > template_spheres_;
+		HashMap<Size,TriangulatedSurface> template_spheres_;
 
 		//@}
 

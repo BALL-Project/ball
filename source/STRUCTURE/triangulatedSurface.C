@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSurface.C,v 1.4 2002/12/17 14:13:21 anker Exp $
+// $Id: triangulatedSurface.C,v 1.5 2003/11/04 20:05:40 strobel Exp $
 
 #include <BALL/STRUCTURE/triangulatedSurface.h>
 
@@ -213,8 +213,14 @@ namespace BALL
 	{
 		if (deep)
 		{
-			remove(edge->face_[0],true);
-			remove(edge->face_[0],true);
+			if (edge->face_[0] != NULL)
+			{
+				remove(edge->face_[0],true);
+			}
+			if (edge->face_[0] != NULL)
+			{
+				remove(edge->face_[0],true);
+			}
 			edge->vertex_[0]->edges_.erase(edge);
 			edge->vertex_[1]->edges_.erase(edge);
 		}
@@ -229,8 +235,14 @@ namespace BALL
 	{
 		if (deep)
 		{
-			remove((*e)->face_[0],true);
-			remove((*e)->face_[0],true);
+			if ((*e)->face_[0] != NULL)
+			{
+				remove((*e)->face_[0],true);
+			}
+			if ((*e)->face_[0] != NULL)
+			{
+				remove((*e)->face_[0],true);
+			}
 			(*e)->vertex_[0]->edges_.erase(*e);
 			(*e)->vertex_[1]->edges_.erase(*e);
 		}
@@ -475,6 +487,37 @@ namespace BALL
 			else
 			{
 				e++;
+			}
+		}
+	}
+
+
+	void TriangulatedSurface::deleteIsolatedEdges()
+		throw()
+	{
+		std::list<TriangleEdge*>::iterator e1;
+		std::list<TriangleEdge*>::iterator e2;
+		e1 = edges_.begin();
+		while (e1 != edges_.end())
+		{
+			if ((*e1)->face_[0] == NULL)
+			{
+				e2 = e1;
+				e2++;
+				if (e2 == edges_.end())
+				{
+					remove(e1);
+					e1 = edges_.end();
+				}
+				else
+				{
+					remove(e1);
+					e1 = e2;
+				}
+			}
+			else
+			{
+				e1++;
 			}
 		}
 	}
