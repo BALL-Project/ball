@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.14 2003/11/05 23:03:44 amoll Exp $
+// $Id: molecularControl.C,v 1.15 2003/11/05 23:26:36 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -206,6 +206,8 @@ void MolecularControl::buildContextMenu(Composite& composite)
 
 	context_menu_.insertSeparator();
 	context_menu_.insertItem("Show filename", this, SLOT(showFilename()), SHOW__FILENAME);
+	context_menu_.insertSeparator();
+	context_menu_.insertItem("Collapse all", this, SLOT(collapseAll()), COLLAPSE_ALL);
 }
 
 
@@ -855,6 +857,15 @@ void MolecularControl::createRepresentation()
 
 	ShowDisplayPropertiesMessage* msg = new ShowDisplayPropertiesMessage;
 	notify_(msg);
+}
+
+void MolecularControl::collapseAll()
+{
+	QListViewItemIterator it(listview);
+	for (; it.current(); ++it)
+	{
+		(*it)->setOpen(false);
+	}
 }
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.6 2003/10/05 14:49:26 amoll Exp $
+// $Id: molecularControl.h,v 1.7 2003/11/05 23:27:26 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -36,22 +36,23 @@ namespace BALL
 		{			
 			enum MolecularMenuEntries
 			{
-				CREATE_REPRESENTATION 			 = 1,
-				OBJECT__REMOVE               = 10,
-				OBJECT__CUT                  = 11,
-				OBJECT__COPY                 = 12,
-				OBJECT__PASTE                = 13,
-				OBJECT__MOVE                 = 14,
-				SELECT                       = 26,
-				DESELECT                     = 27,
+				CREATE_REPRESENTATION = 1,
+				OBJECT__REMOVE      	= 10,
+				OBJECT__CUT         	= 11,
+				OBJECT__COPY        	= 12,
+				OBJECT__PASTE       	= 13,
+				OBJECT__MOVE        	= 14,
+				SELECT              	= 26,
+				DESELECT            	= 27,
 
-				CAMERA__CENTER               = 110,
-				BONDS__BUILD                 = 120,
-				BONDS__REMOVE                = 121,
-				RESIDUE__CHECK               = 140,
-				DISPLAY__CHANGE              = 150,
-				ATOM__PROPERTIES						 = 160,
-				SHOW__FILENAME 							 = 170
+				CAMERA__CENTER      	= 110,
+				BONDS__BUILD        	= 120,
+				BONDS__REMOVE       	= 121,
+				RESIDUE__CHECK      	= 140,
+				DISPLAY__CHANGE     	= 150,
+				ATOM__PROPERTIES			= 160,
+				SHOW__FILENAME 				= 170,
+				COLLAPSE_ALL 					= 180
 			};
 
 			Q_OBJECT
@@ -299,6 +300,8 @@ namespace BALL
 			/// Move a composite
 			void move();
 			
+			/// Collapse all entries in the control
+			void collapseAll();
 
 			//@} 
 			/** @name Protected members 
