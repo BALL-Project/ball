@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.35 2003/08/26 08:04:10 oliver Exp $
+// $Id: hashGrid.h,v 1.36 2003/10/19 18:26:01 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -25,6 +25,10 @@
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_DATATYPE_LIST_H
+# include <BALL/DATATYPE/list.h>
 #endif
 
 namespace BALL 
@@ -1277,6 +1281,12 @@ namespace BALL
 		bool apply(UnaryProcessor< HashGridBox3<Item> > &processor)
 			throw();
 
+		/** Get the nearest item for a point
+		 		@param distance number of adjacted boxes in each direction to search in
+		*/
+		const Item* getClosestItem(const Vector3& point, Size distance) const
+			throw();
+
 		//@}
 		/**	@name	External Iterators 
 		*/
@@ -1855,6 +1865,52 @@ namespace BALL
 		throw()
 	{
 		return dimension_z_;
+	}
+
+	template <typename Item>
+	const Item* HashGrid3<Item>::getClosestItem(const Vector3& point, Size dist) const
+		throw()
+	{
+		const HashGridBox3<Item>* box = getBox(point);
+		if (!box)
+		{
+			return 0;
+		}
+
+		Position x, y, z;
+		getIndices(*box, x, y, z);
+
+		const Item* item = 0;
+		float distance = FLT_MAX;
+		List<HashGridBox3<Item>* > box_list;
+
+		// iterator over neighbour boxes
+		for (Index xi = -(Index)dist; xi <= (Index)dist; xi++)
+		{
+			for (Index yi = -(Index)dist; yi <= (Index)dist; yi++)
+			{
+				for (Index zi = -(Index)dist; zi <= (Index)dist; zi++)
+				{
+					// iterate over all data items
+					const HashGridBox3<Item>* box_ptr = getBox(x+xi, y+yi, z+zi);	
+					if (box_ptr != 0 && !box_ptr->isEmpty())
+					{
+						HashGridBox3<Item>::ConstDataIterator hit = box_ptr->beginData();
+						for (;hit != box_ptr->endData(); hit++)
+						{
+							float new_dist = ((*hit)->getPosition() - point).getSquareLength();
+							if (new_dist < distance)
+							{
+								item = &*hit;
+								distance = new_dist;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return item;
 	}
 
 	template <typename Item>
