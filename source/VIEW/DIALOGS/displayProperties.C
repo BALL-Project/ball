@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.95 2004/12/15 16:34:48 amoll Exp $
+// $Id: displayProperties.C,v 1.95.2.1 2005/01/12 23:00:01 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -430,6 +430,18 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	{
 		rep->setSurfaceDrawingPrecision(-1);
 		rep->setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
+	}
+
+	// set the minimum necessary distance for the coloring grid according to model type
+	if (rep->getModelType() == MODEL_SE_SURFACE ||
+			rep->getModelType() == MODEL_BACKBONE)
+	{
+		rep->getColorProcessor()->setAdditionalGridDistance(2.0);
+	}
+	else if (rep->getModelType() == MODEL_SA_SURFACE ||
+					 rep->getModelType() == MODEL_CARTOON)
+	{
+		rep->getColorProcessor()->setAdditionalGridDistance(4.0);
 	}
 	
 	if (new_representation)
