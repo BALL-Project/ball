@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.4 1999/09/03 14:07:11 len Exp $
+// $Id: forceField.h,v 1.5 2000/02/06 19:46:04 oliver Exp $
 // Molecular Mechanics: general force field class
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -286,6 +286,10 @@ namespace BALL
 		//@}
 
 		protected:
+		/*_	Collect all atoms into the atoms_ vector.
+		*/
+		void collectAtoms_(const System& system);
+		
 		/*_	@ name	Protected Attributes
 		*/
 		//_@{
