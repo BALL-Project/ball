@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.9 2000/02/17 00:30:39 oliver Exp $
+// $Id: string.h,v 1.10 2000/03/05 11:01:04 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -416,10 +416,10 @@ namespace BALL
 
 		/** Creates a new string from len copies of c.
 		*/
-		String(char c, Size size = 1);
+		String(const char c, Size size = 1);
 
 		/// Creates a string just containing an unsigned character
-		String(unsigned char uc);
+		String(const unsigned char uc);
 
 		/// Constructs a String from a short
 		String(short s);
