@@ -1,15 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.2 2003/08/26 15:26:41 amoll Exp $
+// $Id: common.h,v 1.3 2003/09/03 13:03:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 #define BALL_VIEW_KERNEL_COMMON_H
 
+#ifndef BALL_DATATYPE_STRING_H
+ #include <BALL/DATATYPE/string.h>
+#endif
+
+/*
 #define BALL_VIEW_PRINT_PROPERTY(property) \
 		(hasProperty(property) ? "yes" : "no")
-
+*/
 namespace BALL
 {
 	namespace VIEW
@@ -134,6 +139,9 @@ namespace BALL
 
 			/// defines the property for the model: Cartoon
 			MODEL_CARTOON,
+
+			/// defines the property for the model: H-Bonds
+			MODEL_HBONDS,
 			
 			/// defines the property for the model: Label
 			MODEL_LABEL
@@ -163,8 +171,10 @@ namespace BALL
 			COLORING_CUSTOM
 		};
 
-	} // namespace VIEW
+		String getModelName(ModelTypes type) 
+			throw();
 
+	} // namespace VIEW
 } // namespace BALL
 
 #endif // BALL_VIEW_KERNEL_COMMON_H
