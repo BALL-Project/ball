@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.5 2000/01/07 21:58:42 oliver Exp $
+// $Id: support.C,v 1.6 2000/02/02 09:51:03 len Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -188,19 +188,22 @@ namespace BALL
 									new_position.z = position.z + z * period_z;
 									hbox = grid.getBox(new_position);
 
-									for (box_it = hbox->beginBox(); +box_it; ++box_it) 
+									if (hbox != 0)
 									{
-										for (data_it = (*box_it).beginData(); +data_it; ++data_it) 
+										for (box_it = hbox->beginBox(); +box_it; ++box_it) 
 										{
-
-											difference = new_position - (*data_it)->getPosition();
-											if (difference.x > -half_period_x && difference.x <= half_period_x &&
-													difference.y > -half_period_y && difference.y <= half_period_y &&
-													difference.z > -half_period_z && difference.z <= half_period_z &&
-													difference.getSquareLength() <= squared_distance) 
+											for (data_it = (*box_it).beginData(); +data_it; ++data_it) 
 											{
-												pair_vector.push_back(pair<Atom*, Atom*>(*atom_it, *data_it));
-												counter++;
+
+												difference = new_position - (*data_it)->getPosition();
+												if (difference.x > -half_period_x && difference.x <= half_period_x &&
+														difference.y > -half_period_y && difference.y <= half_period_y &&
+														difference.z > -half_period_z && difference.z <= half_period_z &&
+														difference.getSquareLength() <= squared_distance) 
+												{
+													pair_vector.push_back(pair<Atom*, Atom*>(*atom_it, *data_it));
+													counter++;
+												}
 											}
 										}
 									}
@@ -307,7 +310,9 @@ namespace BALL
 			// is larger 0 and the mass is larger 0, then a another test has to be carried out whether
 			// the center of gravity is in the box. If so, the molecule will be inserted in system_A:
 	 
-			for (atom_it = system_B.beginAtom(); +atom_it; ++atom_it) 
+			atom_it = system_B.beginAtom();
+			old_molecule = (*atom_it).getMolecule();
+			for (	; +atom_it; ++atom_it) 
 			{
 				// Test if a new molecule is reached and if the old can be inserted into sytemA
 
@@ -347,13 +352,16 @@ namespace BALL
 				
 				hbox = grid.getBox(position);
 
-				for (box_it = hbox->beginBox(); +box_it && add; ++box_it)
-				{
-					for (data_it = (*box_it).beginData(); +data_it && add ; ++data_it)
+				if (hbox != 0)
+				{	
+					for (box_it = hbox->beginBox(); +box_it && add; ++box_it)
 					{
-						if ((position.getSquareDistance((*data_it)->getPosition())) < square_distance)
+						for (data_it = (*box_it).beginData(); +data_it && add ; ++data_it)
 						{
-							add = false;
+							if ((position.getSquareDistance((*data_it)->getPosition())) < square_distance)
+							{
+								add = false;
+							}
 						}
 					}
 				}
