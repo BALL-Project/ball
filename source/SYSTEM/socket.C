@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.23 2001/05/18 16:54:04 anker Exp $
+// $Id: socket.C,v 1.24 2001/05/18 17:02:00 anker Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -140,7 +140,7 @@ namespace BALL
 		int soc = ::socket(domain, socket_type, proto);
 		rep = new sockcnt(soc, 1);
 #	ifdef BALL_HAS_ANSI_IOSTREAM
-		xflags_ (0);
+		xflags (0);
 #	endif
 		if (rep->sock == -1)
 		{
@@ -159,7 +159,7 @@ namespace BALL
 			rtmo(socket_buf.rtmo)
 	{
 #	ifdef BALL_HAS_ANSI_IOSTREAM
-		xflags_(0);
+		xflags(0);
 #	endif
 		rep->cnt++;
 		xsetflags(_S_LINE_BUF);
