@@ -14,7 +14,7 @@ LightSource::LightSource()
 		intensity_(1),
 		color_(255, 255, 255, 255),
 		type_(0),
-		relative_(true)
+		relative_(true)	
 {
 }
 
@@ -169,7 +169,8 @@ Stage::Stage()
 	: background_color_(),
 		light_sources_(),
 		camera_(),
-		show_coordinate_system_(false)
+		show_coordinate_system_(false),
+		eye_distance_(2.0)
 {}
 
 Stage::Stage(const Stage& stage)
@@ -177,7 +178,8 @@ Stage::Stage(const Stage& stage)
 	: background_color_(stage.background_color_),
 		light_sources_(stage.light_sources_),
 		camera_(stage.camera_),
-		show_coordinate_system_(false)
+		show_coordinate_system_(false),
+		eye_distance_(stage.eye_distance_)
 {
 }
 
@@ -188,6 +190,7 @@ void Stage::clear()
 	light_sources_.clear();
 	camera_ = Camera();
 	show_coordinate_system_ = false;
+	eye_distance_ = 2.0;
 }
 
 void Stage::removeLightSource(const LightSource& light_source)
@@ -241,6 +244,9 @@ void Stage::dump(std::ostream& s, Size depth) const
 
 	BALL_DUMP_DEPTH(s, depth);
 	s << "Show coordinate system:  " << show_coordinate_system_ << endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "Show eye distance :  " << eye_distance_<< endl;
 
 	BALL_DUMP_STREAM_SUFFIX(s);
 }
