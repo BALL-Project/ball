@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.37 2000/01/09 22:11:24 oliver Exp $
+dnl    $Id: configure.in,v 1.38 2000/01/11 11:58:54 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -865,10 +865,12 @@ else
 			dnl 
 			dnl			a version above 7.2 is required
 			dnl
-			if test "${CXX_VERSION_1}" -lt 7  -o "${CXX_VERSION_1}" -eq 7 \
-							-a "${CXX_VERSION_2}" = 10; then
+			if test "${CXX_VERSION_1}" -lt 7  
+							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 10
+							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 20
+							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" -lt 2; then
 				AC_MSG_RESULT()
-				AC_MSG_RESULT(MipsPro CC version 7.2 and above is required. Please update your compiler.)
+				AC_MSG_RESULT(MipsPro CC version 7.30 or above is required. Please update your compiler.)
 				AC_ERROR(Aborted)
 			fi
 
@@ -1660,7 +1662,7 @@ if test "${USE_BALLVIEW}" = true ; then
 			USE_BALLVIEW=false
 		else
 			AC_MSG_RESULT(yes)
-			OPENGL_LIBOPTS="${OPENGL_LIBOPT} ${OPENGL_LIBS}"
+			OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
 		fi
 	fi
 fi
