@@ -1,4 +1,4 @@
-// $Id: regularExpression.sip,v 1.1 2003/06/19 15:24:36 oliver Exp $
+// $Id: regularExpression.sip,v 1.2 2003/06/19 16:13:07 oliver Exp $
 
 class RegularExpression
 {
@@ -38,7 +38,8 @@ class RegularExpression
       throw(NullPointer, IndexUnderflow, IndexOverflow);
 
   bool match(const Substring& /text/, Index /from/ = 0, int /execute_flags/ = 0) const;
-  bool match(const char* /text/, int /execute_flags/ = 0) const;
+  bool match(const char* /text/, int /execute_flags/) const;
+	bool match(const char* /text/) const;
   // static bool find
   //  (const char* /text/, const char* /pattern/,
   //   const char** found_substring_from = 0,
