@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.9 2003/12/10 17:17:26 amoll Exp $
+// $Id: mainControl.sip,v 1.10 2004/01/15 16:26:08 anhi Exp $
 //
 
 class MainControl
@@ -38,7 +38,7 @@ class MainControl
 
   CompositeManager& getCompositeManager() throw();
   INIFile& getINIFile() throw();
-  PyCompositeList getControlSelection() throw();
+  PyCompositeList getMolecularControlSelection() throw();
 
 	Preferences* getPreferences() throw();
 	PrimitiveManager& getPrimitiveManager() throw();
@@ -85,7 +85,7 @@ class MainControl
 	// void setLabel(QLabel* /label/) throw();
 	void setMenuHint(Index /id/, const String& /hint/) throw();
 	void setStatusbarText(const String& /text/) throw();
-	void updateAllRepresentations(bool /rebuild_display_lists/ = false) throw();
+	void redrawAllRepresentations(bool /rebuild_display_lists/ = false) throw();
 	bool update(Composite& /composite/) throw();
 	bool insert(Composite& /composite/) throw();
 	bool remove(Composite& /composite/) throw();
