@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyGeometricObjectList.sip,v 1.2 2003/12/11 02:20:10 amoll Exp $
+// $Id: pyGeometricObjectList.sip,v 1.3 2003/12/11 02:32:54 amoll Exp $
 //
 
 %MappedType PyGeometricObjectList
@@ -9,7 +9,7 @@
 %TypeHeaderCode
 	#include <BALL/PYTHON/pyGeometricObjectList.h>
 	#include "sipBALLGeometricObject.h"
-  #include <BALL/PYTHON/pyBALLSipHelper.h>
+  //#include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromTypeCode

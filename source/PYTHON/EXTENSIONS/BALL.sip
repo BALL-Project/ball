@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.24 2003/12/11 00:27:14 amoll Exp $
+// $Id: BALL.sip,v 1.25 2003/12/11 02:32:53 amoll Exp $
 //
 //
 //
@@ -243,6 +243,7 @@
 %Include pyProteinList.sip
 %Include pyNucleotideList.sip
 %Include pyNucleicAcidList.sip
+%Include pyGeometricObjectList.sip
 
 // QSAR
 //%Include descriptor.sip

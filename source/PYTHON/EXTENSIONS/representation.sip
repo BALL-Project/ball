@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.4 2003/12/02 15:58:30 amoll Exp $
+// $Id: representation.sip,v 1.5 2003/12/11 02:32:54 amoll Exp $
 //
 
 class Representation
@@ -11,9 +11,6 @@ class Representation
 	#include <BALL/VIEW/KERNEL/representation.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
-
-	//typedef Representation::GeometricObjectList GeometricObjectList;
-	//typedef Representation::CompositeSet 				CompositeSet;
 %End
   public:
 	// BALL_CREATE(Representation);
@@ -23,7 +20,7 @@ class Representation
 	// CompositesConstIterator end() const throw();
 	// CompositesIterator begin() throw();
 	// CompositesIterator end() throw();
-	// GeometricObjectList& getGeometricObjects() throw();
+	PyGeometricObjectList& getGeometricObjects() throw();
 	ColoringMethod getColoringMethod() const throw();
  	DrawingMode getDrawingMode() const throw();
 	DrawingPrecision getDrawingPrecision() const throw();
@@ -32,14 +29,14 @@ class Representation
 	Representation() throw();
 	Representation(ModelType /model_type/, DrawingPrecision /drawing_precision/, DrawingMode /drawing_mode/) throw();
 	// Representation(const CompositeSet& /composites/, ModelProcessor* /rep_processor/) throw();
-	// Representation(const GeometricObjectList& /object_list/) throw();
+	Representation(const PyGeometricObjectList& /object_list/) throw();
 	Representation(const Representation& /representation/) throw();
 	Size getTransparency() const throw();
 	String getModelName() const throw();
 	String getProperties() const throw();
 	bool isValid() const throw();
 	// const CompositeSet& getComposites() const throw();
-	// const GeometricObjectList& getGeometricObjects() const throw();
+	const PyGeometricObjectList& getGeometricObjects() const throw();
 	const ModelProcessor* getModelProcessor() const throw();
 	// const Representation& operator = (const Representation& /representation/) throw();
 	float getSurfaceDrawingPrecision() const throw();
