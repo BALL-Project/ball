@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.11 2000/05/30 18:25:53 oliver Exp $
+// $Id: logStream.h,v 1.12 2000/10/18 12:39:32 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_COMMON_GLOBAL_H
 #	include <BALL/COMMON/global.h>
+#endif
+
+#ifndef BALL_COMMON_LIMITS_H
+#	include <BALL/COMMON/limits.h>
 #endif
 
 #ifndef BALL_COMMON_DEBUG_H
@@ -164,8 +168,8 @@ namespace BALL
 			
 				Stream()
 					:	stream(0),
-						min_level(INT_MIN),
-						max_level(INT_MAX),
+						min_level(Limits<int>::min()),
+						max_level(Limits<int>::max()),
 						target(0)
 				{
 				}
@@ -180,7 +184,7 @@ namespace BALL
 			{	
 				int     level;
 				string  text;
-				time_t  time;
+				Time  time;
 
 				LoglineStruct()
 					: level(0),
@@ -193,7 +197,7 @@ namespace BALL
 
 
 			// interpret the prefix format string and return the expanded prefix
-			string expandPrefix_(const string& prefix, const int& level, const time_t& time) const;
+			string expandPrefix_(const string& prefix, const int& level, const Time& time) const;
 	
 			char* 									pbuf_;
 
@@ -370,7 +374,7 @@ namespace BALL
 				@param	min_level the minimum level of messages copied to this stream
 				@param	max_level the maximum level of messages copied to this stream
 		*/
-		void insert(std::ostream& s, const int& min_level = INT_MIN, const int& max_level = INT_MAX);
+		void insert(std::ostream& s, const int& min_level = Limits<int>::min(), const int& max_level = Limits<int>::max());
 
 		/**	Remove an association with a stream.
 				Remove a stream from the stream list and avoid the copying of new messages to
@@ -446,7 +450,7 @@ namespace BALL
 				@param	min_level the minimum log level of the counted messages
 				@param	max_level the maximum log level of the counted messages
 		*/
-		Size	getNumberOfLines(const int& min_level = INT_MIN, const int& max_level = INT_MAX) const;
+		Size	getNumberOfLines(const int& min_level = Limits<int>::min(), const int& max_level = Limits<int>::max()) const;
 
 		/**	Return the text of a specific line.
 				This method returns the content of a specific message without
@@ -458,9 +462,9 @@ namespace BALL
 
 		/**	Return the log time of a specific line
 				@param index the index of the messages
-				@return time_t the time of the message
+				@return Time the time of the message
 		*/
-		time_t getLineTime(const Index& index) const;	
+		Time getLineTime(const Index& index) const;	
 	
 		/**	Return the log level of a specific line.
 				If the given line does not exists, {\em -1} is returned.
@@ -477,8 +481,8 @@ namespace BALL
 				@param latest (long) the time of messages to stop filtering
 				@param s a string to look for
 		*/
-		list<int>	filterLines(const int& min_level = INT_MIN, const int& max_level = INT_MAX,
-														 const time_t& earliest = 0, const time_t& latest = LONG_MAX, const string& s = "") const;
+		list<int>	filterLines(const int& min_level = Limits<int>::min(), const int& max_level = Limits<int>::max(),
+														 const Time& earliest = 0, const Time& latest = Limits<Time>::max(), const string& s = "") const;
 		//@}
 
 		private:
