@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.4 2000/10/06 11:51:52 anker Exp $
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.5 2000/10/06 15:23:28 anker Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -48,6 +48,14 @@ namespace BALL
 		clear();
 
 		valid_ = false;
+	}
+
+
+	void PCMCavFreeEnergyProcessor::clear() throw()
+	{
+		options.clear();
+
+		valid_ = true;
 	}
 
 	

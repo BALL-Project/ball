@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.4 2000/10/06 11:51:52 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.5 2000/10/06 15:23:28 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -323,7 +323,9 @@ namespace BALL
 						{
 
 							// DEBUG
+							/*
 							Log.info() << "vertex.size() = " << current_surface.vertex.size() << endl;
+							*/
 							// r_k_vec is the vector from the center of the considered atom to
 							// the center of the current surface area
 							r_k_vec = (current_surface.vertex[k] - atom_center);
@@ -363,13 +365,16 @@ namespace BALL
 								e_ij += rho * integrator(r_k)
 									* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
 
-								// DEBUG
-								integrator.setConstants(A_ij, 0.0, k1, k2);
-								e_ij_R += rho * integrator(r_k)
-									* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
-								integrator.setConstants(0.0, B_ij, k1, k2);
-								e_ij_D += rho * integrator(r_k)
-									* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
+								if (verbosity > 0)
+								{
+									// DEBUG
+									integrator.setConstants(A_ij, 0.0, k1, k2);
+									e_ij_R += rho * integrator(r_k)
+										* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
+									integrator.setConstants(0.0, B_ij, k1, k2);
+									e_ij_D += rho * integrator(r_k)
+										* (-(r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
+								}
 							}
 							else
 							{
@@ -383,23 +388,28 @@ namespace BALL
 
 								I_disp = (r_k_vec * n_k_vec) / (3.0 * r_k_6);
 
-								// BAUSTELLE
-								e_ij_R += rho * A_ij * I_rep;
-								e_ij_D += - rho * B_ij * I_disp;
+								// the energy contribution
+
 								e_ij += rho * (A_ij * I_rep - B_ij * I_disp);
 
+								if (verbosity > 0)
+								{
+									e_ij_R += rho * A_ij * I_rep;
+									e_ij_D += - rho * B_ij * I_disp;
+								}
+								/*
 								// DEBUG
+								Log.info() << "rho = " << rho << endl;
 								Log.info() << "r_k_vec = " << r_k_vec << endl;
 								Log.info() << "r_k = " << r_k << endl;
 								Log.info() << "n_k_vec = " << n_k_vec << endl;
+								Log.info() << "r_k_vec * n_k_vec = " << r_k_vec * n_k_vec << endl;
 								Log.info() << "I_rep = " << I_rep << endl;
 								Log.info() << "I_disp = " << I_disp << endl;
 								Log.info() << "e_ij = " << e_ij << endl;
 								Log.info() << "e_ij_R = " << e_ij_R << endl;
 								Log.info() << "e_ij_D = " << e_ij_D << endl;
-								
-
-
+								*/
 							} 
 						} // surface
 					} // sphere
@@ -407,8 +417,12 @@ namespace BALL
 					// E_ij_x is the contribution of the combination of solvent atom
 					// type i and solute atom type j
 					E_ij += e_ij;
-					E_ij_D += e_ij_D;
-					E_ij_R += e_ij_R;
+
+					if (verbosity > 0)
+					{
+						E_ij_D += e_ij_D;
+						E_ij_R += e_ij_R;
+					}
 
 				} // if (A != 0 && B != 0)
 				

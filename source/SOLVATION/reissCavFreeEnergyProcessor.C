@@ -1,4 +1,4 @@
-// $Id: reissCavFreeEnergyProcessor.C,v 1.4 2000/10/06 11:51:53 anker Exp $
+// $Id: reissCavFreeEnergyProcessor.C,v 1.5 2000/10/06 15:23:29 anker Exp $
 
 #include <BALL/SOLVATION/reissCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -29,13 +29,9 @@ namespace BALL
 	ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor() throw()
 		: EnergyProcessor()
 	{
-		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
-		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, 
-				Default::SOLVENT_NUMBER_DENSITY);
-		options.setDefaultReal(Option::PRESSURE, Default::PRESSURE);
-		options.setDefaultReal(Option::ABSOLUTE_TEMPERATURE,
-				Default::ABSOLUTE_TEMPERATURE);
-		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
+		setDefaultOptions();
+
+		valid_ = true;
 	}
 
 
@@ -51,6 +47,15 @@ namespace BALL
 		clear();
 
 		valid_ = false;
+	}
+
+
+	void ReissCavFreeEnergyProcessor::clear() throw()
+	{
+		EnergyProcessor::clear();
+		setDefaultOptions();
+
+		valid_ = true;
 	}
 
 
@@ -116,4 +121,18 @@ namespace BALL
 		energy_ = deltaGcav;
 		return 1;
 	}
+		
+	
+	void ReissCavFreeEnergyProcessor::setDefaultOptions() throw()
+	{
+		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, 
+				Default::SOLVENT_NUMBER_DENSITY);
+		options.setDefaultReal(Option::PRESSURE, Default::PRESSURE);
+		options.setDefaultReal(Option::ABSOLUTE_TEMPERATURE,
+				Default::ABSOLUTE_TEMPERATURE);
+		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
+	}
+
+
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: uhligCavFreeEnergyProcessor.C,v 1.4 2000/10/06 11:51:53 anker Exp $
+// $Id: uhligCavFreeEnergyProcessor.C,v 1.5 2000/10/06 15:23:29 anker Exp $
 
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -24,10 +24,7 @@ namespace BALL
 	UhligCavFreeEnergyProcessor::UhligCavFreeEnergyProcessor() throw()
 		:	EnergyProcessor()
 	{
-		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
-		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
-		options.setDefaultReal(Option::SURFACE_TENSION, Default::SURFACE_TENSION);
-		options.setDefaultReal(Option::CONSTANT, Default::CONSTANT);
+		setDefaultOptions();
 
 		valid_ = true;
 	}
@@ -45,6 +42,15 @@ namespace BALL
 		clear();
 
 		valid_ = false;
+	}
+
+
+	void UhligCavFreeEnergyProcessor::clear() throw()
+	{
+		EnergyProcessor::clear();
+		setDefaultOptions();
+
+		valid_ = true;
 	}
 
 
@@ -67,4 +73,14 @@ namespace BALL
 		energy_ = gamma * A + C;
 		return 1;
 	}
+
+
+	void UhligCavFreeEnergyProcessor::setDefaultOptions() throw()
+	{
+		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		options.setDefaultReal(Option::PROBE_RADIUS, Default::PROBE_RADIUS);
+		options.setDefaultReal(Option::SURFACE_TENSION, Default::SURFACE_TENSION);
+		options.setDefaultReal(Option::CONSTANT, Default::CONSTANT);
+	}
+
 } // namespace BALL
