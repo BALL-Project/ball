@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.8 2003/11/13 19:30:42 amoll Exp $
+// $Id: cartoonModel.h,v 1.9 2003/11/22 17:53:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -15,6 +15,7 @@ namespace BALL
 {
 	class SecondaryStructure;
 	class Chain;
+	class AtomContainer;
 
 	namespace VIEW
 	{
@@ -141,11 +142,13 @@ namespace BALL
 			//_ create a spline segment between two spline points a and b
 			void createSplineSegment2_(const SplinePoint &a, const SplinePoint &b);
 
-			void computeSpline_(Chain& chain);
+			void computeSpline_(AtomContainer& ac);
 
 			void insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh);
 
 			std::vector<Vector3> spline_;
+
+			Composite* last_chain_;
 
 			float helix_radius_;
 			float arrow_width_;
