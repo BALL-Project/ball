@@ -1,4 +1,4 @@
-// $Id: parameters.h,v 1.3 2000/09/18 12:15:28 oliver Exp $
+// $Id: parameters.h,v 1.4 2000/09/18 14:35:23 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_FORMAT_PARAMETERS_H
@@ -27,6 +27,8 @@ namespace BALL
 	{
 		public:
 
+		BALL_CREATE(Parameters)
+
 		/**@name	Constructors and destructor	*/
 		//@{
 
@@ -40,7 +42,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		Parameters(const Parameters& force_field_parameter, bool deep = true);
+		Parameters(const Parameters& force_field_parameter);
 
 		/**	Destructor.
 		*/
@@ -50,6 +52,14 @@ namespace BALL
 		*/
 		virtual void clear();
 
+		//@}
+
+		/**	@name	Assignment
+		*/
+		//@{
+		/**	Assignment operator
+		*/
+		const Parameters& operator = (const Parameters& parameters);
 		//@}
 
 		/**@name	Accessors 	
