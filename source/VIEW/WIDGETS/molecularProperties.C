@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.6 2003/09/19 18:18:00 amoll Exp $
+// $Id: molecularProperties.C,v 1.7 2003/10/05 15:18:14 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -179,12 +179,8 @@ bool MolecularProperties::checkResidue()
 
 void MolecularProperties::addHydrogens()
 {
-	if (getMainControl()->getControlSelection().size() == 0)
-	{
-		return;
-	}
+	if (!getMainControl()->getControlSelection().size()) return;
 
-	// notify the main window
 	setStatusbarText("adding hydrogens ...");
 
 	// copy the selection_, it can change after a changemessage event
@@ -204,19 +200,16 @@ void MolecularProperties::addHydrogens()
 		notify_(change_message);
 	}
 
-	Log.info() << "added " <<  number_of_hydrogens << " hydrogen atoms." << std::endl;
-	setStatusbarText("");
+	String result = "added " +  String(number_of_hydrogens) + " hydrogen atoms."; 
+	Log.info() << result << std::endl;   
+	setStatusbarText(result);
 }
 
 
 void MolecularProperties::buildBonds()
 {
-	if (getMainControl()->getControlSelection().size() == 0)
-	{
-		return;
-	}
+	if (!getMainControl()->getControlSelection().size()) return;
 
-	// notify the main window
 	setStatusbarText("building bonds ...");
 
 	// copy the selection_, it can change after a changemessage event
@@ -234,9 +227,9 @@ void MolecularProperties::buildBonds()
 		notify_(change_message);
 	}
 
-	setStatusbarText("");
-
-	Log.info() << "Added " << number_of_bonds << " bonds." << std::endl;
+	String result = "added " + String(number_of_bonds) + " bonds.";
+	setStatusbarText(result);
+	Log.info() << result << std::endl;
 }
 
 
@@ -244,9 +237,9 @@ void MolecularProperties::centerCamera(Composite* composite)
 {
 	Composite* to_center_on = composite;
 	
-	if (to_center_on == 0)
+	if (!to_center_on)
 	{
-		if (getMainControl()->getControlSelection().size() == 0)
+		if (!getMainControl()->getControlSelection().size())
 		{
 			return;
 		}
@@ -328,10 +321,7 @@ void MolecularProperties::select()
 {
 	List<Composite*>& selection = getMainControl()->getControlSelection();
 
-	if (selection.size() == 0)
-	{
-		return;
-	}
+	if (!selection.size()) return;
 
 	// notify the main window
 	setStatusbarText("selecting " + String(selection.size()) + " objects...");
@@ -359,12 +349,8 @@ void MolecularProperties::deselect()
 {
 	List<Composite*>& selection = getMainControl()->getControlSelection();
 
-	if (selection.size() == 0)
-	{
-		return;
-	}
+	if (!selection.size()) return;
 
-	// notify the main window
 	setStatusbarText("deselecting " + String(selection.size()) + "objects...");
 
 	// copy list because the selection_ list can change after a changemessage event
@@ -395,10 +381,7 @@ void MolecularProperties::addComposite_(Composite& composite, const String& name
 	#endif
 
 	// properties will be used only for atom containers
-	if (!RTTI::isKindOf<AtomContainer>(composite))
-	{
-		return;
-	}
+	if (!RTTI::isKindOf<AtomContainer>(composite)) return;
 	
 	Log.info() << "> applying molecular properties ... " << endl;
 	
@@ -486,5 +469,4 @@ void MolecularProperties::createGridFromDistance()
 	notify_(message);
 }
 	
-#undef BALL_VIEW_DEBUG
 } } // namespaces
