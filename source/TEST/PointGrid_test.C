@@ -1,9 +1,9 @@
-// $Id: PointGrid_test.C,v 1.8 2000/07/04 16:45:42 oliver Exp $
+// $Id: PointGrid_test.C,v 1.9 2000/07/05 21:47:01 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/pointGrid.h>
 
-START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.8 2000/07/04 16:45:42 oliver Exp $")
+START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.9 2000/07/05 21:47:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,41 +24,42 @@ CHECK(~PointGrid<T>())
 	delete grid;
 RESULT
 
-CHECK(constructor/1)
+CHECK(PointGrid<T>(float, float, float, float, float, float, Size, Size, Size))
 	grid = new PointGrid<float>(0.0, 0.0, 0.0,
 															10.0, 10.0, 10.0,
 															11, 11, 11);
 	TEST_NOT_EQUAL(grid, 0)
+	delete grid;
 RESULT
 
 using BALL::Vector3;
 Vector3	lower(0.0, 0.0, 0.0);
 Vector3	upper(10.0, 10.0, 10.0);
 
-CHECK(constructor/2)
+CHECK(PointGrid<T>(const Vector3& lower, const Vector3& upper, float spacing))
 	grid = new PointGrid<float>(lower, upper, 1.0);
 	TEST_NOT_EQUAL(grid, 0)
+	delete grid;
 RESULT
 
-CHECK(constructor/3)
-	delete grid;
+CHECK(PointGrid<T>(const Vector3& lower, const Vector3& upper, Size, Size, Size))
 	grid = new PointGrid<float>(lower, upper, 11, 11, 11);
 	TEST_NOT_EQUAL(grid, 0)
 RESULT
 
-CHECK(getSize)
+CHECK(getSize())
 	TEST_EQUAL(grid->getSize(), 1331)
 RESULT
 
 PointGrid<float> g(0.0, 0.0, 0.0, 10.0, 10.0, 10.0,	11, 11, 11);
 
-CHECK(set)
+CHECK(set(const PointGrid<T>& grid))
 	PointGrid<float> g1;
 	g1.set(g);
 	TEST_EQUAL(g1.getSize(), 1331)
 RESULT
 
-CHECK(operator = ())
+CHECK(operator = (const PointGrid<T>& grid))
 	PointGrid<float> g1;
 	g1 = g;
 	TEST_EQUAL(g1.getSize(), 1331)
@@ -78,7 +79,7 @@ CHECK(dump())
 	TEST_FILE(filename.c_str(), "data/PointGrid_test.txt", true)
 RESULT
 
-CHECK(isValid)
+CHECK(isValid())
 	TEST_EQUAL(g.isValid(), true)
 RESULT
 
@@ -98,41 +99,41 @@ CHECK(getMinX())
 	TEST_REAL_EQUAL(grid->getMinX(), 0.0)
 RESULT
 
-CHECK(getMinY)
+CHECK(getMinY())
 	TEST_REAL_EQUAL(grid->getMinY(), 0.0)
 RESULT
 
-CHECK(getMinZ)
+CHECK(getMinZ())
 	TEST_REAL_EQUAL(grid->getMinZ(), 0.0)
 RESULT
 
-CHECK(getMaxXIndex)
+CHECK(getMaxXIndex())
 	TEST_EQUAL(grid->getMaxXIndex(), 10)
 RESULT
 
-CHECK(getMaxYIndex)
+CHECK(getMaxYIndex())
 	TEST_EQUAL(grid->getMaxYIndex(), 10)
 RESULT
 
-CHECK(getMaxZIndex)
+CHECK(getMaxZIndex())
 	TEST_EQUAL(grid->getMaxZIndex(), 10)
 RESULT
 
-CHECK(getXSpacing)
+CHECK(getXSpacing())
 	TEST_REAL_EQUAL(grid->getXSpacing(), 1.0)
 RESULT
 
-CHECK(getYSpacing)
+CHECK(getYSpacing())
 	TEST_REAL_EQUAL(grid->getYSpacing(), 1.0)
 RESULT
 
-CHECK(getZSpacing)
+CHECK(getZSpacing())
 	TEST_REAL_EQUAL(grid->getZSpacing(), 1.0)
 RESULT
 
 BALL::PointGrid<float>::GridIndex	index;
 
-CHECK(getIndex/1)
+CHECK(getIndex(const Vector3& vector))
 	lower.set(3.49, 3.51, 3.0);
 	index = grid->getIndex(lower);
 	TEST_EQUAL(index.x, 3)
@@ -140,14 +141,14 @@ CHECK(getIndex/1)
 	TEST_EQUAL(index.z, 3)
 RESULT
 
-CHECK(getIndex/2)
+CHECK(getIndex(float, float, float))
 	index = grid->getIndex(3.49, 3.51, 3.0);
 	TEST_EQUAL(index.x, 3)
 	TEST_EQUAL(index.y, 4)
 	TEST_EQUAL(index.z, 3)
 RESULT
 
-CHECK(getData/1/2)
+CHECK(getData(Position))
 	*(grid->getData(0, 0, 0)) = 5.4321;		
 	lower = grid->getOrigin();
 	TEST_REAL_EQUAL(*(grid->getData(0)), 5.4321);
