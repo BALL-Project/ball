@@ -2,7 +2,7 @@ dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
 dnl
-dnl		$Id: aclocal.m4,v 1.34 2003/08/26 13:14:36 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.35 2003/08/28 15:48:09 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -365,7 +365,6 @@ AC_DEFUN(CF_DETECT_OS,[
 	if test "`echo $OS | ${CUT} -d_ -f1`" = "CYGWIN" ; then
 		OS="CYGWIN"
 		BALL_NO_XDR=true
-		USE_VIEW=false
 	fi
 
 	if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX \
