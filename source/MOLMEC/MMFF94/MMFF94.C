@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.11 2005/04/02 13:50:59 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.12 2005/04/04 14:07:16 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -37,8 +37,8 @@ namespace BALL
 		setName("MMFF94");
 
 		// create the component list
-//         		insertComponent(new MMFF94Stretch(*this));
-         		insertComponent(new MMFF94Bend(*this));
+//      insertComponent(new MMFF94Stretch(*this));
+     		insertComponent(new MMFF94Bend(*this));
 //         		insertComponent(new MMFF94StretchBend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
@@ -51,8 +51,8 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-//   insertComponent(new MMFF94Stretch(*this));
-         		insertComponent(new MMFF94Bend(*this));
+     insertComponent(new MMFF94Stretch(*this));
+//               		insertComponent(new MMFF94Bend(*this));
 //         		insertComponent(new MMFF94StretchBend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
@@ -76,10 +76,10 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-//   insertComponent(new MMFF94Stretch(*this));
-      		insertComponent(new MMFF94Bend(*this));
-//         		insertComponent(new MMFF94StretchBend(*this));
-//   		insertComponent(new MMFF94Torsion(*this));
+//      insertComponent(new MMFF94Stretch(*this));
+         		insertComponent(new MMFF94Bend(*this));
+//            		insertComponent(new MMFF94StretchBend(*this));
+//      		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 
     bool result = setup(system, new_options);
@@ -319,11 +319,30 @@ namespace BALL
 			// is the bond order == 1 ?
 			// are both atoms sp or sp2 hypridised?
 			// both atoms are not in one aromatic ring
-			is_sbmb = 
-				bond.getOrder() == Bond::ORDER__SINGLE  &&
-				(isSp_(atom1) || isSp2_(atom1)) 				&&
-				(isSp_(atom2) || isSp2_(atom2))					&&
-				!isInOneAromaticRing(bond);
+			const bool in_one_ring = isInOneAromaticRing(bond);
+
+			is_sbmb = bond.getOrder() == Bond::ORDER__SINGLE  &&
+								!in_one_ring;
+
+			// check if both atoms are in different aromatic rings
+			if (!is_sbmb && !in_one_ring)
+			{
+				bool a1 = false;
+				bool a2 = false;
+
+				for (Position pos = 0; pos < aromatic_rings_.size(); pos++)
+				{
+					if (aromatic_rings_[pos].has((Atom*)&atom1)) a1 = true;
+					if (aromatic_rings_[pos].has((Atom*)&atom2)) a2 = true;
+				}
+			
+			  if (a1 && a2) is_sbmb = true;
+			}
+#ifdef BALL_DEBUG_MMFF
+Log.info() << atom1.getName() << " " << atom2.getName() << "  order single: "
+					 << (bond.getOrder() == Bond::ORDER__SINGLE) << "  sp: " 
+					 << !isInOneAromaticRing(bond) << std::endl;
+#endif
 		}
 
 		if (is_sbmb)
@@ -348,11 +367,6 @@ namespace BALL
 			if (aromatic_rings_[pos].has(atom1) &&
 					aromatic_rings_[pos].has(atom2))
 			{
-#ifdef BALL_DEBUG_MMFF
-				Log.info() << atom1->getName() << " " 
-									 << atom2->getName() << " "  
-									 << " removed atom from sbmbs" << std::endl;
-#endif
 				return true;
 			}
 		}
@@ -415,8 +429,9 @@ namespace BALL
 		aromatic_rings_.clear();
 
 		AromaticityProcessor ap;
-		ap.aromatize(rings, *getSystem());
-
+//   		ap.aromatize(rings, *getSystem());
+		ap.aromatizeSimple(rings);
+/*
 		for (Position i = 0; i < rings.size(); i++)
 		{
 			bool ok = true;
@@ -435,6 +450,16 @@ namespace BALL
 			for (Position j = 0; j < rings[i].size(); j++)
 			{
 				aromatic_rings_[aromatic_rings_.size() - 1].insert(rings[i][j]);
+			}
+		}
+
+		*/
+		for (Position i = 0; i < rings.size(); i ++)
+		{
+			aromatic_rings_.push_back(HashSet<Atom*>());
+			for (Position j = 0; j < rings[i].size(); j++)
+			{
+				aromatic_rings_[i].insert(rings[i][j]);
 			}
 		}
 
