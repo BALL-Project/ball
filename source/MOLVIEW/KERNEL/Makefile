@@ -7,6 +7,6 @@ CPP_SOURCES=\
 	molecularMessage.C
 
 include ../../common.mak
--include .Dependencies
+include .Dependencies
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES)

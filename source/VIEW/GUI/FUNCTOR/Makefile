@@ -6,7 +6,7 @@ CPP_SOURCES=\
 	glObjectCollector.C
 
 include ../../../common.mak
--include .Dependencies
+include .Dependencies
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES)
 

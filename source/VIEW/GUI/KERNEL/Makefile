@@ -19,7 +19,7 @@ MOC_SOURCES=\
 MOC=/KM/comp-bio/BALL-contrib/qt/bin/IRIX6/moc
 
 include ../../../common.mak
--include .Dependencies
+include .Dependencies
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES)
 

@@ -25,4 +25,4 @@ CPP_SOURCES=\
 	XYZFile.C
 
 include ../common.mak
--include .Dependencies
+include .Dependencies
