@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunction.h,v 1.8 2003/08/26 08:04:21 oliver Exp $
+// $Id: parsedFunction.h,v 1.9 2003/12/19 14:54:08 anne Exp $
 //
 
 #ifndef BALL_MATHS_PARSEDFUNCTION_H
@@ -45,7 +45,7 @@ namespace BALL
 			throw();
 
 		/// Detailed constructor.
-		ParsedFunction(String expression)
+		ParsedFunction(const String& expression)
 			throw();
 		
 		/// Copy constructor
