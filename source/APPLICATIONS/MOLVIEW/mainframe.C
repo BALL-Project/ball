@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.107 2003/12/20 15:28:43 amoll Exp $
+// $Id: mainframe.C,v 1.108 2003/12/23 12:47:15 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -202,8 +202,7 @@ Log.error() << "new Mainframe " << this << std::endl;
 	insertPopupMenuSeparator(MainControl::TOOLS);
 	hint = "Select atoms from a regular expression.";
 	insertMenuEntry(MainControl::TOOLS, "Select atoms", this,  SLOT(showSelectorDialog()), 
-									ALT+Key_S, MENU_SELECT_ATOMS, hint);
-
+									ALT+Key_A, MENU_SELECT_ATOMS, hint);
 
 	// Help-Menu -------------------------------------------------------------------
 	insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()), CTRL+Key_9, MENU__HELP_ABOUT);
@@ -828,6 +827,7 @@ void Mainframe::buildPeptide()
 void Mainframe::showSelectorDialog()
 {
 	selector_dialog_.show();
+	selector_dialog_.raise();
 }
 
 		
