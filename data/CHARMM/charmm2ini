@@ -1,6 +1,6 @@
 #!/opt/gnu/bin/gawk -f
 # 
-# $Id: charmm2ini,v 1.1 2000/12/06 11:41:03 oliver Exp $
+# $Id: charmm2ini,v 1.2 2000/12/07 12:19:49 oliver Exp $
 #
 #  CHARMM parameter and topology file converter
 #  produces output for BALL force field INI files
@@ -19,6 +19,39 @@ function wildcardSubst(name)
 	sub(/\%/, "?", name)	
 	sub(/^X$/, "*", name)
 	return name
+}
+
+function SkipRest()
+{
+	# skip remaining part of the setion and restart parsing at the first empty line
+	while (NF != 0)
+	{
+		getline
+	}
+}
+
+function NextSection(expected)
+{
+	found = 0
+	
+	do
+	{
+		# read new line until a non-empty line is encountered
+		while (NF == 0)
+		{
+			getline
+		}
+		
+		if (match(expected, substr($1, 1, 4)))
+		{
+			found = 1
+		}	else {
+			# this section does not match - skip it and retry
+			print "found section " $1 " while expecting " expected "!" >> "/dev/stderr"
+			exit
+		}
+	} while (found == 0)
+	print "reading section " $1  > "/dev/stderr"
 }
 
 function PDBAtomName(atom, res) 
@@ -131,15 +164,18 @@ BEGIN\
 		print ";"
 		print ";  Rev   I     J       k           r0      comment"
 		print ";  --- ----- ----- ---------- ------------ -----------------------"
-		
-		getline
+
 		while (substr($1, 1, 4) != "BOND")
 		{
 			getline
 		}
+
 		
+		print "reading parameter file " FILENAME > "/dev/stderr"
+		print "reading section " $1 > "/dev/stderr"
+
 		getline
-		while (substr($1, 1, 4) != "THET" && substr($1, 1, 4) != "ANGL")
+		while (NF > 0)
 		{
 			# avoid comment lines
 			if ((substr($1, 1, 1) != "!") && (NF > 3))
@@ -154,12 +190,12 @@ BEGIN\
 				# check whether the types are known
 				if (type_map[I] == "")
 				{
-					print "Unknown atom type " I " in line " FNR " of " FILENAME> "/dev/stderr"
+					print "Unknown first atom type " I " in line " FNR " of " FILENAME> "/dev/stderr"
 					exit
 				}
 				if (type_map[J] == "")
 				{
-					print "Unknown atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown second atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 				
@@ -192,8 +228,10 @@ BEGIN\
 		print ";  Rev   I     J     K       k         r0      comment"
 		print ";  --- ----- ----- ----- ---------- ---------- -----------------------"
 		
+
+		NextSection("THETA ANGLES ")
 		getline
-		while (substr($1, 1, 4) != "DIHE" && substr($1, 1, 3) != "PHI")
+		while (NF > 0)
 		{
 			# avoid comment lines
 			if ((substr($1, 1, 1) != "!") && (NF > 4))
@@ -209,17 +247,17 @@ BEGIN\
 				# check whether the types are known
 				if (type_map[I] == "")
 				{
-					print "Unknown atom type " I " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown first atom type " I " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 				if (type_map[J] == "")
 				{
-					print "Unknown atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown second atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 				if (type_map[K] == "")
 				{
-					print "Unknown atom type " K " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown third atom type " K " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 
@@ -258,8 +296,9 @@ BEGIN\
 		first = 0
 		number = 0
 
+		NextSection("TORSIONS DIHEDRALS")
 		getline
-		while (substr($1, 1, 4) != "IMPH")
+		while (NF > 0)
 		{
 			if ((substr($1, 1, 1) != "!") && (NF > 6))
 			{
@@ -277,22 +316,22 @@ BEGIN\
 				# check whether the types are known
 				if (type_map[I] == "")
 				{
-					print "Unknown atom type " I " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown first atom type " I " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 				if (type_map[J] == "")
 				{
-					print "Unknown atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown second atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 				if (type_map[K] == "")
 				{
-					print "Unknown atom type " K " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown third atom type " K " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 				if (type_map[L] == "")
 				{
-					print "Unknown atom type " L " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown fourth atom type " L " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 
@@ -373,8 +412,9 @@ BEGIN\
 		print ";  Rev   I     J     K     L        k          phase           comment"
 		print ";  --- ----- ----- ----- ----- ---------- ------------- -----------------------"
 		
+		NextSection("IMPROPER IMPHI")
 		getline
-		while ((substr($1, 0, 4) != "NONB") && (substr($1, 0, 4) != "NBON"))
+		while (NF > 0)
 		{
 			if ((substr($1, 1, 1) != "!") && (NF > 6))
 			{
@@ -392,22 +432,22 @@ BEGIN\
 				# check whether the types are known
 				if (type_map[I] == "")
 				{
-					print "Unknown atom type " I " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown first atom type " I " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 				if (type_map[J] == "")
 				{
-					print "Unknown atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown second atom type " J " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 				if (type_map[K] == "")
 				{
-					print "Unknown atom type " K " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown third atom type " K " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 				if (type_map[L] == "")
 				{
-					print "Unknown atom type " L " in line " FNR " of " FILENAME > "/dev/stderr"
+					print "Unknown fourth atom type " L " in line " FNR " of " FILENAME > "/dev/stderr"
 					exit
 				}
 
@@ -457,9 +497,9 @@ BEGIN\
 		
 		number_of_14_params = 0
 
-
+		NextSection("NONBONDED NBONDED")		
 		getline
-		while (substr($1, 1, 4) != "NBFI")
+		while (NF > 0)
 		{
 			if ((substr($1, 1, 1) != "!") && (NF >= 4))
 			{
@@ -495,6 +535,7 @@ BEGIN\
 		print "" 
 		print ""
 
+
 		print "[LennardJones14]"
 		print "ver:version key:I value:R value:epsilon"
 		print "@unit_R=Angstrom"
@@ -511,74 +552,85 @@ BEGIN\
 		print "" 
 		print ""
 		
-		# next section: NBFIX
+		# next section: NBFIX (optional!)
 		#
-		number_of_14_params = 0
-		print "[SpecificNonBonded]"
-		print "ver:version key:I key:J value:R value:epsilon"
-		print "@unit_R=Angstrom"
-		print "@unit_epsilon=kcal/mol"
-		print ";"
-		print ";"
-		print ";  Rev  I    J      Rmin      epsilon"
-		print ";  --- ---- ---- ---------- ----------"
-		
+		NextSection("NBFIX HBOND")
 
-		getline
-		while (substr($1, 1, 4) != "HBON")
+		if (substr($1, 1, 4) == "NBFI")
 		{
-			if ((substr($1, 1, 1) != "!") && (NF > 3))
-			{
-				rev = 1.0
-				I = wildcardSubst($1)
-				J = wildcardSubst($2)
-				Rmin = $4
-				Emin = $3
-
-				if (Emin != 0.0)
-				{
-					printf "   %3.1f  %-4s %-4s %10.4f %10.4f\n", rev, I, J, Rmin, Emin
-				}
-
-
-				if ((match($5, /[0-9.\-\+eE]/) > 0) && (match($6, /[0-9.\-\+eE]/) > 0))	
-				{
-					Rmin14[number_of_14_params] = $6
-					Emin14[number_of_14_params] = $5
-					TypeI14[number_of_14_params] = I
-					TypeJ14[number_of_14_params] = J
-		
-					number_of_14_params++
-				}
-			}
-			
 			getline
-		}
-		print ""
-		print ""
-		number_of_14_params = 0
-		print "[SpecificNonBonded14]"
-		print "ver:version key:I key:J value:R value:epsilon"
-		print "@unit_R=Angstrom"
-		print "@unit_epsilon=kcal/mol"
-		print ";"
-		print ";"
-		print ";  Rev  I    J      Rmin      epsilon"
-		print ";  --- ---- ---- ---------- ----------"
-		
 
-		for (i = 0; i < number_of_14_params; i++)
-		{
-			if (Emin14[i] != 0.0)
+			number_of_14_params = 0
+			print "[SpecificNonBonded]"
+			print "ver:version key:I key:J value:R value:epsilon"
+			print "@unit_R=Angstrom"
+			print "@unit_epsilon=kcal/mol"
+			print ";"
+			print ";"
+			print ";  Rev  I    J      Rmin      epsilon"
+			print ";  --- ---- ---- ---------- ----------"
+			
+
+			getline
+			while (NF > 0)
 			{
-				printf "   %3.1f  %-4s %-4s %10.4f %10.4f\n", rev, 
-							TypeI14[i], TypeJ14[i], Rmin14[i], Emin14[i]
+				if ((substr($1, 1, 1) != "!") && (NF > 3))
+				{
+					rev = 1.0
+					I = wildcardSubst($1)
+					J = wildcardSubst($2)
+					Rmin = $4
+					Emin = $3
+
+					if (Emin != 0.0)
+					{
+						printf "   %3.1f  %-4s %-4s %10.4f %10.4f\n", rev, I, J, Rmin, Emin
+					}
+
+
+					if ((match($5, /[0-9.\-\+eE]/) > 0) && (match($6, /[0-9.\-\+eE]/) > 0))	
+					{
+						Rmin14[number_of_14_params] = $6
+						Emin14[number_of_14_params] = $5
+						TypeI14[number_of_14_params] = I
+						TypeJ14[number_of_14_params] = J
+			
+						number_of_14_params++
+					}
+				}
+				
+				getline
 			}
+			print ""
+			print ""
+			number_of_14_params = 0
+			print "[SpecificNonBonded14]"
+			print "ver:version key:I key:J value:R value:epsilon"
+			print "@unit_R=Angstrom"
+			print "@unit_epsilon=kcal/mol"
+			print ";"
+			print ";"
+			print ";  Rev  I    J      Rmin      epsilon"
+			print ";  --- ---- ---- ---------- ----------"
+			
+
+			for (i = 0; i < number_of_14_params; i++)
+			{
+				if (Emin14[i] != 0.0)
+				{
+					printf "   %3.1f  %-4s %-4s %10.4f %10.4f\n", rev, 
+								TypeI14[i], TypeJ14[i], Rmin14[i], Emin14[i]
+				}
+			}
+
+			print ""
+			print ""
+						
+		} else {
+			NextSection("HBOND")
 		}
 
-		print ""
-		print ""
-					
+		# read the remainder of the file
 		while (ARGIND == 1)
 		{
 			getline
@@ -587,6 +639,8 @@ BEGIN\
 
 	if (ARGIND == 2)
 	{
+		print "reading topology file " FILENAME  > "/dev/stderr"
+
 		# read the masses for the different atom types
 		# and the default patches
 		while ($1 != "RESI" )
@@ -1086,8 +1140,13 @@ BEGIN\
 				}
 			}
 		}
+	
+		# skip the remaineder of the topology file
+		while ((ARGIND == 2) && (getline > 0));
+
 	}
-	getline
+	
+	
 	print "" 
 	print "" 
 
