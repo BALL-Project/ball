@@ -1,4 +1,4 @@
-// $Id: RegularData1D_test.C,v 1.2 2001/03/12 11:14:30 oliver Exp $
+// $Id: RegularData1D_test.C,v 1.3 2001/07/07 19:28:50 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,23 +7,23 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RegularData1D_test.C,v 1.2 2001/03/12 11:14:30 oliver Exp $")
+START_TEST(class_name, "$Id: RegularData1D_test.C,v 1.3 2001/07/07 19:28:50 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
-
-RegularData1D* rd;
+RegularData1D* rd_ptr;
 CHECK(TRegularData1D::TRegularData1D())
-	rd = new RegularData1D;
-	TEST_NOT_EQUAL(rd, 0)
+	rd_ptr = new RegularData1D;
+	TEST_NOT_EQUAL(rd_ptr, 0)
 RESULT
 
 
 CHECK(TRegularData1D::~TRegularData1D())
-  delete rd;
+  delete rd_ptr;
 RESULT
 
 
@@ -32,73 +32,139 @@ CHECK(TRegularData1D::BALL_CREATE(RegularData1D<T>))
 RESULT
 
 
+RegularData1D rd;
 CHECK(TRegularData1D::TRegularData1D(const TRegularData1D& data))
-  //BAUSTELLE
+	rd.setLowerBound(1.1);
+	rd.setUpperBound(2.1);
+	rd.resize(1);
+	rd[0] = 1.2;
+	RegularData1D rd2(rd);
+	TEST_REAL_EQUAL(rd2.getLowerBound(), 1.1)
+	TEST_REAL_EQUAL(rd2.getUpperBound(), 2.1)
+	TEST_REAL_EQUAL(rd2[0], 1.2) 
+	TEST_EQUAL(rd2.getSize(), 1)
 RESULT
 
 
 CHECK(TRegularData1D::clear())
-  //BAUSTELLE
+	rd.clear();
+	TEST_REAL_EQUAL(rd.getLowerBound(), 1.1)
+	TEST_REAL_EQUAL(rd.getUpperBound(), 2.1)
+	TEST_EQUAL(rd.getSize(), 1)
+	TEST_REAL_EQUAL(rd[0], 0.0)
 RESULT
 
 
 CHECK(TRegularData1D::destroy())
-  //BAUSTELLE
+	rd[0] = 2.3;
+	rd.destroy();
+	TEST_REAL_EQUAL(rd.getLowerBound(), 0.0)
+	TEST_REAL_EQUAL(rd.getUpperBound(), 0.0)
+	TEST_EQUAL(rd.getSize(), 0)
 RESULT
 
 
 CHECK(TRegularData1D::TRegularData1D& operator = (const TRegularData1D& data))
-  //BAUSTELLE
+	rd.setLowerBound(1.1);
+	rd.setUpperBound(2.1);
+	rd.resize(1);
+	rd[0] = 1.2;
+	RegularData1D rd2 = rd;
+	TEST_REAL_EQUAL(rd2.getLowerBound(), 1.1)
+	TEST_REAL_EQUAL(rd2.getUpperBound(), 2.1)
+	TEST_REAL_EQUAL(rd2[0], 1.2) 
+	TEST_EQUAL(rd2.getSize(), 1)
 RESULT
 
 
 CHECK(TRegularData1D::TRegularData1D& operator = (const DataType& data))
-  //BAUSTELLE
+	RegularData1D::VectorType v;
+	v.push_back(1.1);
+	v.push_back(1.2);
+	v.push_back(1.3);
+	v.push_back(1.4);
+	RegularData1D rd2;// = v;
+	TEST_REAL_EQUAL(rd2.getLowerBound(), 1.1)
+	TEST_REAL_EQUAL(rd2.getUpperBound(), 1.4)
+	TEST_EQUAL(rd2.getSize(), 4)
 RESULT
 
 
 CHECK(TRegularData1D::bool operator == (const TRegularData1D& data) const )
-  //BAUSTELLE
+	rd.destroy();
+	rd.resize(4);
+	rd[0] = 1.1;
+	rd[1] = 1.2;
+	rd[2] = 1.3;
+	rd[3] = 1.4;
+	RegularData1D rd2 = rd;
+	TEST_EQUAL(rd == rd2, true)
+	rd2[3] = 1.41;
+	TEST_EQUAL(rd == rd2, false)
+	rd2[3] = 1.4;
+	TEST_EQUAL(rd == rd2, true)
+	rd.setUpperBound(1.4);
+	TEST_EQUAL(rd == rd2, false)
+	rd2.setUpperBound(1.4);
+	TEST_EQUAL(rd == rd2, true)
 RESULT
 
 
 CHECK(TRegularData1D::T& operator [] (Position index) const )
-  //BAUSTELLE
+  TEST_REAL_EQUAL(rd[3], 1.4)
+	TEST_EXCEPTION(Exception::IndexOverflow, rd[4])
 RESULT
 
 
 CHECK(TRegularData1D::T& operator [] (Position index))
-  //BAUSTELLE
+  rd[3] = 1.5;
+	TEST_REAL_EQUAL(rd[3], 1.5)
+	TEST_EXCEPTION(Exception::IndexOverflow, rd[4] = 44.4)
 RESULT
 
 
+RegularData1D rd2;
 CHECK(TRegularData1D::getSize() const )
-  //BAUSTELLE
+  TEST_EQUAL(rd.getSize(), 4)
+	TEST_EQUAL(rd2.getSize(), 0)
 RESULT
 
 
-CHECK(TRegularData1D::getLower() const )
-  //BAUSTELLE
+CHECK(TRegularData1D::getLowerBound() const )
+	rd.setLowerBound(1.1);
+	rd.setUpperBound(1.5);
+	TEST_REAL_EQUAL(rd.getLowerBound(), 1.1)
+	TEST_REAL_EQUAL(rd2.getLowerBound(), 0.0)
 RESULT
 
 
-CHECK(TRegularData1D::getUpper() const )
-  //BAUSTELLE
+CHECK(TRegularData1D::getUpperBound() const )
+	TEST_REAL_EQUAL(rd.getUpperBound(), 1.5)
+	TEST_REAL_EQUAL(rd2.getUpperBound(), 0.0)
 RESULT
 
 
 CHECK(TRegularData1D::setUpperBound())
-  //BAUSTELLE
+	rd.setUpperBound(-99.9);
+	TEST_REAL_EQUAL(rd.getUpperBound(), -99.9)
 RESULT
 
 
 CHECK(TRegularData1D::setLowerBound())
-  //BAUSTELLE
+	rd.setLowerBound(99.9);
+	TEST_REAL_EQUAL(rd.getLowerBound(), 99.9)
 RESULT
 
 
 CHECK(TRegularData1D::resize(Size new_size))
-  //BAUSTELLE
+	TEST_EQUAL(rd.getSize(), 4)
+	rd.resize(99);
+	TEST_EQUAL(rd.getSize(), 99)
+	TEST_REAL_EQUAL(rd[98], 0.0)
+	rd.resize(3);
+	TEST_EQUAL(rd.getSize(), 3)
+	TEST_REAL_EQUAL(rd[2], 1.3)
+	TEST_EXCEPTION(Exception::IndexOverflow, rd[3])
 RESULT
 
 CHECK(TRegularData1D::rescale(Size new_size))
