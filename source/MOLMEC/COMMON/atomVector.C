@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.C,v 1.11 2003/03/12 16:11:49 oliver Exp $
+// $Id: atomVector.C,v 1.12 2003/06/19 13:24:47 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -66,7 +66,7 @@ namespace BALL
 
 		// iterate over all subcomposites and
 		// extract pointers to the atoms
-		Composite::SubcompositeConstIterator it = composite.beginSubcomposite();
+		Composite::CompositeConstIterator it = composite.beginComposite();
 		for (; +it; ++it)
 		{
 			Atom* atom = const_cast<Atom*>(dynamic_cast<const Atom*>(&*it));
