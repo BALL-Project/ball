@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.7 2000/08/24 20:26:08 amoll Exp $
+// $Id: PropertyManager_test.C,v 1.8 2000/08/24 20:54:31 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.7 2000/08/24 20:26:08 amoll Exp $")
+START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.8 2000/08/24 20:54:31 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -331,8 +331,8 @@ RESULT
 PropertyManager m;
 
 CHECK(setProperty(String&, int))
-//  TEST_EQUAL(m.hasProperty(0), false) //segfault
-  TEST_EQUAL(m.countProperties(), 0) //???
+  TEST_EQUAL(m.hasProperty(0), false) //segfault
+  TEST_EQUAL(m.countProperties(), 0)
 
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
 	m.setProperty("TEST_PROP", (unsigned int)123456);
@@ -361,7 +361,7 @@ CHECK(PropertyManager::destroy())
 RESULT
 
 CHECK(PropertyManager::set(const PropertyManager& property_manager, bool deep = true))
-  TEST_EQUAL(m.countProperties(), 1) //???
+  TEST_EQUAL(m.countProperties(), 1)
 	PropertyManager p2;
 	p2.set(m);
 	TEST_EQUAL(p2.hasProperty("TEST_PROP"), true)
@@ -450,10 +450,10 @@ CHECK(PropertyManager::toggleProperty(Property property))
 RESULT
 
 CHECK(PropertyManager::countProperties() const )
-  TEST_EQUAL(m.countProperties(), 2) //???
+  TEST_EQUAL(m.countProperties(), 2)
 	m.clear();
-  TEST_EQUAL(m.countProperties(), 0) // ???
-  TEST_EQUAL(m.countNamedProperties(), 0) // ???
+  TEST_EQUAL(m.countProperties(), 0)
+  TEST_EQUAL(m.countNamedProperties(), 0)
 RESULT
 
 CHECK(PropertyManager::setProperty(const NamedProperty& property))
