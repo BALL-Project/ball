@@ -1,10 +1,10 @@
-// $Id: RDFIntegrator.h,v 1.9 2001/03/06 00:43:43 amoll Exp $
+// $Id: RDFIntegrator.h,v 1.10 2001/07/14 12:58:22 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
 #define BALL_STRUCTURE_RDFINTEGRATOR_H
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
-#include <BALL/STRUCTURE/radialDistributionFunction.h>
+# include <BALL/STRUCTURE/radialDistributionFunction.h>
 #endif
 
 namespace BALL

@@ -1,10 +1,10 @@
-// $Id: radialDistributionFunction.h,v 1.9 2001/03/06 00:12:23 amoll Exp $
+// $Id: radialDistributionFunction.h,v 1.10 2001/07/14 12:58:22 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
-#include <BALL/MATHS/piecewisePolynomial.h>
+# include <BALL/MATHS/piecewisePolynomial.h>
 #endif
 
 namespace BALL

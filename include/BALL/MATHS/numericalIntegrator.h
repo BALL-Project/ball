@@ -1,9 +1,11 @@
-// $Id: numericalIntegrator.h,v 1.4 2001/07/13 17:33:56 anker Exp $
+// $Id: numericalIntegrator.h,v 1.5 2001/07/14 12:56:14 amoll Exp $
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
 #define BALL_MATHS_NUMERICALINTEGRATOR_H
 
-#include <BALL/MATHS/function.h>
+#ifndef BALL_MATHS_FUNCTION_H
+# include <BALL/MATHS/function.h>
+#endif
 
 namespace BALL
 {

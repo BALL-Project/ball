@@ -1,14 +1,14 @@
-// $Id: RDFSection.h,v 1.7 2001/06/21 08:58:41 amoll Exp $
+// $Id: RDFSection.h,v 1.8 2001/07/14 12:58:22 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RDFSECTION_H
 #define BALL_STRUCTURE_RDFSECTION_H
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
-#include <BALL/STRUCTURE/radialDistributionFunction.h>
+# include <BALL/STRUCTURE/radialDistributionFunction.h>
 #endif
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
-#include <BALL/FORMAT/parameterSection.h>
+# include <BALL/FORMAT/parameterSection.h>
 #endif
 
 namespace BALL

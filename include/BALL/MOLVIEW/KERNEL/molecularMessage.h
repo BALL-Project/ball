@@ -1,10 +1,10 @@
-// $Id: molecularMessage.h,v 1.3 2001/05/13 14:55:25 hekl Exp $
+// $Id: molecularMessage.h,v 1.4 2001/07/14 12:59:02 amoll Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -34,9 +34,9 @@ namespace BALL
 				accepting \Ref{NewCompositeMessage} object would also accept 
 				\Ref{NewMolecularMessage} objects and that is not allowed.
 				@memo    NewMolecularMessage class (BALL MOLVIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:25 $
+				@author  $Author: amoll $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/14 12:59:02 $
 		*/
 		class NewMolecularMessage: public CompositeMessage
 		{
@@ -94,9 +94,9 @@ namespace BALL
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class \Ref{RemovedCompositeMessage}.
 				@memo    RemovedMolecularMessage class (BALL MOLVIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:25 $
+				@author  $Author: amoll $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/14 12:59:02 $
 		*/
 		class RemovedMolecularMessage: public RemovedCompositeMessage
 		{
@@ -156,9 +156,9 @@ namespace BALL
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class \Ref{ChangedCompositeMessage}.
 				@memo    ChangedMolecularMessage class (BALL MOLVIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:25 $
+				@author  $Author: amoll $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/14 12:59:02 $
 		*/
 		class ChangedMolecularMessage: public ChangedCompositeMessage
 		{
@@ -219,9 +219,9 @@ namespace BALL
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class \Ref{SelectionMessage}.
 				@memo    MolecularSelectionMessage class (BALL MOLVIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:25 $
+				@author  $Author: amoll $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/14 12:59:02 $
 		*/
 		class MolecularSelectionMessage: public SelectionMessage
 		{

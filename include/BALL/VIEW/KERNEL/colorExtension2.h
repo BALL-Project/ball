@@ -1,14 +1,14 @@
-// $Id: colorExtension2.h,v 1.6 2001/07/09 17:34:01 sturm Exp $
+// $Id: colorExtension2.h,v 1.7 2001/07/14 12:55:55 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION2_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION2_H
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_VIEW_DATATYPE_COLOR_H
-#include <BALL/VIEW/DATATYPE/color.h>
+# include <BALL/VIEW/DATATYPE/color.h>
 #endif
 
 namespace BALL
@@ -24,9 +24,9 @@ namespace BALL
 				objects that needs two colors \Ref{ColorRGBA}. It provides the derived
 				class with methods for accessing these colors.
 				@memo    ColorExtension2 class (BALL VIEW kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/09 17:34:01 $
+				@author  $Author: amoll $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/07/14 12:55:55 $
 		*/
 		class ColorExtension2
 		{

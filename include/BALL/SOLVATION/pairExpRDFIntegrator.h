@@ -1,22 +1,22 @@
-// $Id: pairExpRDFIntegrator.h,v 1.12 2001/03/05 01:55:44 amoll Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.13 2001/07/14 12:58:39 amoll Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
-#include <BALL/STRUCTURE/RDFIntegrator.h>
+# include <BALL/STRUCTURE/RDFIntegrator.h>
 #endif
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
-#include <BALL/STRUCTURE/piecewiseFunction.h>
+# include <BALL/STRUCTURE/piecewiseFunction.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
-#include <BALL/DATATYPE/options.h>
+# include <BALL/DATATYPE/options.h>
 #endif
 
 namespace BALL

@@ -1,7 +1,12 @@
-// $Id: classTest.h,v 1.23 2001/07/10 10:36:48 oliver Exp $
+// $Id: classTest.h,v 1.24 2001/07/14 12:56:44 amoll Exp $
 
-#include <BALL/common.h>
-#include <BALL/SYSTEM/file.h>
+#ifndef BALL_COMMON_H
+# include <BALL/common.h>
+#endif
+
+#ifndef BALL_SYSTEM_H
+# include <BALL/SYSTEM/file.h>
+#endif
 
 #include <string>
 #include <list>

@@ -1,9 +1,11 @@
-// $Id: rombergIntegrator.h,v 1.4 2001/06/21 21:28:10 amoll Exp $
+// $Id: rombergIntegrator.h,v 1.5 2001/07/14 12:56:14 amoll Exp $
 
 #ifndef BALL_MATHS_ROMBERGINTEGRATOR_H
 #define BALL_MATHS_ROMBERGINTEGRATOR_H
 
-#include <BALL/MATHS/numericalIntegrator.h>
+#ifndef BALL_MATHS_NUMERICALINTERGRATOR_H
+# include <BALL/MATHS/numericalIntegrator.h>
+#endif
 
 namespace BALL
 {

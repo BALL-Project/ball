@@ -1,18 +1,18 @@
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.8 2001/03/07 22:19:47 amoll Exp $
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.9 2001/07/14 12:58:39 amoll Exp $
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
-#include <BALL/ENERGY/energyProcessor.h>
+# include <BALL/ENERGY/energyProcessor.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
-#include <BALL/DATATYPE/options.h>
+# include <BALL/DATATYPE/options.h>
 #endif
 
 namespace BALL

@@ -1,4 +1,4 @@
-// $Id: backbone.h,v 1.4 2001/05/13 14:55:25 hekl Exp $
+// $Id: backbone.h,v 1.5 2001/07/14 12:59:05 amoll Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
@@ -20,7 +20,7 @@
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#include <BALL/VIEW/KERNEL/geometricObject.h>
+# include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
@@ -35,7 +35,6 @@
 #	include <BALL/VIEW/PRIMITIV/tube.h>
 #endif
 
-//using namespace BALL;
 using namespace BALL::VIEW;
 
 namespace BALL
@@ -58,9 +57,9 @@ namespace BALL
 				See this class for further information concerning
 				interface and additional methods.
 				@memo    Backbone class (BALL MOLVIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 14:55:25 $
+				@author  $Author: amoll $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/14 12:59:05 $
 		*/
 		class Backbone
 			: public GeometricObject

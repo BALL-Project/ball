@@ -1,7 +1,12 @@
-// $Id: benchmark.h,v 1.3 2001/05/18 02:50:39 oliver Exp $
+// $Id: benchmark.h,v 1.4 2001/07/14 12:56:44 amoll Exp $
 
-#include <BALL/common.h>
-#include <BALL/SYSTEM/timer.h>
+#ifndef BALL_COMMON_H
+# include <BALL/common.h>
+#endif
+
+#ifndef BALL_SYSTEM_TIMER_H
+# include <BALL/SYSTEM/timer.h>
+#endif
 
 #include <string>
 

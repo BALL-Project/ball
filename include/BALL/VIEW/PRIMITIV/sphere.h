@@ -1,4 +1,4 @@
-// $Id: sphere.h,v 1.9 2001/05/13 13:40:38 hekl Exp $
+// $Id: sphere.h,v 1.10 2001/07/14 12:55:55 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -11,16 +11,12 @@
 #	include <BALL/VIEW/DATATYPE/color.h>
 #endif
 
-#ifndef BALL_VIEW_EXPORT_H
-//#	include <BALL/VIEW/extract.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION1_H
 #	include <BALL/VIEW/KERNEL/colorExtension1.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#include <BALL/VIEW/KERNEL/geometricObject.h>
+# include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
@@ -52,9 +48,9 @@ namespace BALL
 				\Ref{Vertex} and \Ref{Radius}. See these classes for further information concerning
 				interface and additional methods.
 				@memo    Sphere class (BALL VIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/05/13 13:40:38 $
+				@author  $Author: amoll $
+				@version $Revision: 1.10 $
+				@date    $Date: 2001/07/14 12:55:55 $
 		*/
 		class Sphere
 			: public GeometricObject,

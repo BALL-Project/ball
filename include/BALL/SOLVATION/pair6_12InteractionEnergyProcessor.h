@@ -1,36 +1,35 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.10 2001/05/29 16:40:18 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.11 2001/07/14 12:58:39 amoll Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
-#include <BALL/DATATYPE/options.h>
+# include <BALL/DATATYPE/options.h>
 #endif
 
 #ifndef BALL_MATHS_SURFACE_H
-#include <BALL/MATHS/surface.h>
+# include <BALL/MATHS/surface.h>
 #endif
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
-#include <BALL/ENERGY/energyProcessor.h>
+# include <BALL/ENERGY/energyProcessor.h>
 #endif
 
 #ifndef BALL_STRUCTURE_RDFPARAMETER_H
-#include <BALL/STRUCTURE/RDFParameter.h>
+# include <BALL/STRUCTURE/RDFParameter.h>
 #endif
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
-#include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
+# include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
 #endif
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
-#include <BALL/SOLVATION/solventDescriptor.h>
+# include <BALL/SOLVATION/solventDescriptor.h>
 #endif
-
 
 namespace BALL
 {

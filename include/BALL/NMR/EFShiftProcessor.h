@@ -1,9 +1,9 @@
-// $Id: EFShiftProcessor.h,v 1.12 2001/06/21 23:59:04 amoll Exp $
+// $Id: EFShiftProcessor.h,v 1.13 2001/07/14 12:57:26 amoll Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
 
-#ifndef BALL_NMR_SHIFT_MODULE
+#ifndef BALL_NMR_SHIFT_MODULE_H
 #	include<BALL/NMR/shiftModule.h>
 #endif
 

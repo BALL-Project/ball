@@ -1,4 +1,4 @@
-// $Id: server.h,v 1.7 2001/05/13 16:31:02 hekl Exp $
+// $Id: server.h,v 1.8 2001/07/14 12:55:51 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -36,7 +36,7 @@
 #endif
 
 #ifndef BALL_VIEW_GUI_DIALOGS_PREFERENCES_H
- #include <BALL/VIEW/GUI/DIALOGS/preferences.h>
+# include <BALL/VIEW/GUI/DIALOGS/preferences.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -69,9 +69,9 @@ namespace BALL
 				tree and after that the the message \Ref{NewCompositeMessage} with the new
 				received composite will be sent.
 				@memo    Server class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/13 16:31:02 $
+				@author  $Author: amoll $
+				@version $Revision: 1.8 $
+				@date    $Date: 2001/07/14 12:55:51 $
 		*/
 		class Server
 			: public QTTimer,

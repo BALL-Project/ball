@@ -1,18 +1,18 @@
-// $Id: piecewiseFunction.h,v 1.11 2001/06/21 02:33:54 oliver Exp $
+// $Id: piecewiseFunction.h,v 1.12 2001/07/14 12:56:14 amoll Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_COMMON_LIMITS_H
-#include <BALL/COMMON/limits.h>
+# include <BALL/COMMON/limits.h>
 #endif
 
 #ifndef BALL_COMMON_EXCEPTION_H
-#include <BALL/COMMON/exception.h>
+# include <BALL/COMMON/exception.h>
 #endif
 
 namespace BALL

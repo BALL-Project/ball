@@ -1,4 +1,4 @@
-// $Id: HBondShiftProcessor.h,v 1.4 2001/06/21 21:34:34 amoll Exp $
+// $Id: HBondShiftProcessor.h,v 1.5 2001/07/14 12:57:26 amoll Exp $
 
 #ifndef BALL_NMR_HBONDSHIFTPROCESSOR_H
 #define BALL_NMR_HBONDSHIFTPROCESSOR_H
@@ -15,7 +15,7 @@
 # include <BALL/KERNEL/atom.h>
 #endif
 
-#ifndef BALL_NMR_SHIFT_MODULE
+#ifndef BALL_NMR_SHIFT_MODULE_H
 # include <BALL/NMR/shiftModule.h>
 #endif
 

@@ -1,4 +1,4 @@
-// $Id: mesh.h,v 1.8 2001/05/13 13:40:37 hekl Exp $
+// $Id: mesh.h,v 1.9 2001/07/14 12:55:55 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -20,7 +20,7 @@
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#include <BALL/VIEW/KERNEL/geometricObject.h>
+# include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
 namespace BALL
@@ -42,9 +42,9 @@ namespace BALL
 				the class \Ref{Surface}. Therefore one can use {\em *this} mesh in the
 				same fashion as \Ref{Surface}.
 				@memo    Mesh class (BALL VIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/05/13 13:40:37 $
+				@author  $Author: amoll $
+				@version $Revision: 1.9 $
+				@date    $Date: 2001/07/14 12:55:55 $
 		*/
 		class Mesh
 			: public GeometricObject,

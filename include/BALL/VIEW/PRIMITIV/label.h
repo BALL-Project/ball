@@ -1,4 +1,4 @@
-// $Id: label.h,v 1.7 2001/05/13 13:40:37 hekl Exp $
+// $Id: label.h,v 1.8 2001/07/14 12:55:55 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
 #define BALL_VIEW_PRIMITIV_LABEL_H
@@ -16,7 +16,7 @@
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#include <BALL/VIEW/KERNEL/geometricObject.h>
+# include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
@@ -45,9 +45,9 @@ namespace BALL
 				and \Ref{Vertex}. See these classes for further information concerning
 				interface and additional methods.
 				@memo    Label class (BALL VIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/13 13:40:37 $
+				@author  $Author: amoll $
+				@version $Revision: 1.8 $
+				@date    $Date: 2001/07/14 12:55:55 $
 		*/
 		class Label
 			: public GeometricObject,

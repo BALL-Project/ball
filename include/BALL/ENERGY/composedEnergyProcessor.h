@@ -1,18 +1,18 @@
-// $Id: composedEnergyProcessor.h,v 1.3 2001/02/27 01:58:22 amoll Exp $
+// $Id: composedEnergyProcessor.h,v 1.4 2001/07/14 12:57:09 amoll Exp $
 
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 #define BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_DATATYPE_LIST_H
-#include <BALL/DATATYPE/list.h>
+# include <BALL/DATATYPE/list.h>
 #endif
 
-#ifndef BALL_ENERGY_ENERGYPROCESSOR
-#include <BALL/ENERGY/energyProcessor.h>
+#ifndef BALL_ENERGY_ENERGYPROCESSOR_H
+# include <BALL/ENERGY/energyProcessor.h>
 #endif
 
 namespace BALL

@@ -1,4 +1,4 @@
-// $Id: singularities.h,v 1.10 2001/06/28 17:32:50 strobel Exp $
+// $Id: singularities.h,v 1.11 2001/07/14 12:58:22 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
@@ -41,24 +41,37 @@
 #	include <BALL/STRUCTURE/solventExcludedSurface.h>
 #endif
 
+#ifndef BALL_KERNEL_ATOM_H
+# include <BALL/KERNEL/atom.h>
+#endif
+
+#ifndef BALL_KERNEL_MOLECULE_H
+# include <BALL/KERNEL/molecule.h>
+#endif
+
+#ifndef BALL_KERNEL_SYSTEM_H
+# include <BALL/KERNEL/system.h>
+#endif
+
+#ifndef BALL_KERNEL_PTE_H
+# include <BALL/KERNEL/PTE.h>
+#endif
+
+#ifndef BALL_FORMAT_HINFILE_H
+# include <BALL/FORMAT/HINFile.h>
+#endif
+
 #include <vector>
 #include <list>
 #include <set>
-
 #include <fstream>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/PTE.h>
-#include <BALL/FORMAT/HINFile.h>
 
 namespace BALL
 {
 
 	template <class T>
 	void TreatSingularities(TSolventExcludedSurface<T>*& ses,
-													TReducedSurface<T>*& rs,
-													const T& radius_of_probe)
+													TReducedSurface<T>*& rs, const T& radius_of_probe)
 	{
 		list<TSESFace<T>*> singular_faces;
 		GetSingularFaces(ses,singular_faces);

@@ -1,38 +1,38 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.9 2001/05/29 16:40:19 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.10 2001/07/14 12:58:39 amoll Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
-#include <BALL/DATATYPE/options.h>
+# include <BALL/DATATYPE/options.h>
 #endif
 
 #ifndef BALL_KERNEL_ATOM_H
-#include <BALL/KERNEL/atom.h>
+# include <BALL/KERNEL/atom.h>
 #endif
 
 #ifndef BALL_MATHS_SURFACE_H
-#include <BALL/MATHS/surface.h>
+# include <BALL/MATHS/surface.h>
 #endif
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
-#include <BALL/ENERGY/energyProcessor.h>
+# include <BALL/ENERGY/energyProcessor.h>
 #endif
 
 #ifndef BALL_STRUCTURE_RDFPARAMETER_H
-#include <BALL/STRUCTURE/RDFParameter.h>
+# include <BALL/STRUCTURE/RDFParameter.h>
 #endif
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
-#include <BALL/SOLVATION/pairExpRDFIntegrator.h>
+# include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 #endif
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
-#include <BALL/SOLVATION/solventDescriptor.h>
+# include <BALL/SOLVATION/solventDescriptor.h>
 #endif
 
 // BAUSTELLE: Die Konstanten alpha, C1 und C2 bzw die K_ij müssen noch in

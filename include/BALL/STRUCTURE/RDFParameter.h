@@ -1,22 +1,22 @@
-// $Id: RDFParameter.h,v 1.6 2001/02/23 02:40:44 amoll Exp $
+// $Id: RDFParameter.h,v 1.7 2001/07/14 12:58:22 amoll Exp $
 
 #ifndef BALL__RDFPARAMETER_H
 #define BALL__RDFPARAMETER_H
 
 #ifndef BALL_KERNEL_ATOM_H
-#include <BALL/KERNEL/atom.h>
+# include <BALL/KERNEL/atom.h>
 #endif
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
-#include <BALL/STRUCTURE/radialDistributionFunction.h>
+# include <BALL/STRUCTURE/radialDistributionFunction.h>
 #endif
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
-#include <BALL/FORMAT/parameterSection.h>
+# include <BALL/FORMAT/parameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETERS_FORCEFIELDPARAMETERS_H
-#include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
+# include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 #endif
 
 namespace BALL 

@@ -1,22 +1,22 @@
-// $Id: pair6_12RDFIntegrator.h,v 1.9 2001/05/29 16:40:19 anker Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.10 2001/07/14 12:58:39 amoll Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL__RDFINTEGRATOR_H
-#include <BALL/STRUCTURE/RDFIntegrator.h>
+# include <BALL/STRUCTURE/RDFIntegrator.h>
 #endif
 
 #ifndef BALL__PIECEWISEFUNCTION_H
-#include <BALL/MATHS/piecewiseFunction.h>
+# include <BALL/MATHS/piecewiseFunction.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
-#include <BALL/DATATYPE/options.h>
+# include <BALL/DATATYPE/options.h>
 #endif
 
 // BAUSTELLE: DOCU ... documentation for constants

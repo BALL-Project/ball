@@ -1,13 +1,36 @@
-// $Id: surfaceProcessor.h,v 1.16 2001/06/28 17:22:55 strobel Exp $
+// $Id: surfaceProcessor.h,v 1.17 2001/07/14 12:58:22 amoll Exp $
 
-#include <BALL/STRUCTURE/reducedSurface.h>
-#include <BALL/STRUCTURE/solventExcludedSurface.h>
-#include <BALL/STRUCTURE/singularities.h>
-#include <BALL/STRUCTURE/triangulatedSurface.h>
-#include <BALL/STRUCTURE/triangulation.h>
-#include <BALL/MATHS/surface.h>
-#include <BALL/CONCEPT/processor.h>
-#include <BALL/KERNEL/atom.h>
+#ifndef BALL_STRUCTUR_REDUCEDSURFACE_H
+# include <BALL/STRUCTURE/reducedSurface.h>
+#endif
+
+#ifndef BALL_STRUCTUR_SOLVENTEXCLUDEDSURFACE_H
+# include <BALL/STRUCTURE/solventExcludedSurface.h>
+#endif
+
+#ifndef BALL_STRUCTUR_SINGULARITIES_H
+# include <BALL/STRUCTURE/singularities.h>
+#endif
+
+#ifndef BALL_STRUCTUR_TRIANGULATEDSURFACE_H
+# include <BALL/STRUCTURE/triangulatedSurface.h>
+#endif
+
+#ifndef BALL_STRUCTUR_TRIANGULATION_H
+# include <BALL/STRUCTURE/triangulation.h>
+#endif
+
+#ifndef BALL_MATHS_SURFACE_H
+# include <BALL/MATHS/surface.h>
+#endif
+
+#ifndef BALL_CONCEPT_PROCESSOR_H
+# include <BALL/CONCEPT/processor.h>
+#endif
+
+#ifndef BALL_KERNEL_ATOM_H
+# include <BALL/KERNEL/atom.h>
+#endif
 
 #include <string>
 

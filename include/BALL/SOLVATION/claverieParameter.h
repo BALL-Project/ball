@@ -1,18 +1,18 @@
-// $Id: claverieParameter.h,v 1.5 2001/07/13 18:13:45 anker Exp $
+// $Id: claverieParameter.h,v 1.6 2001/07/14 12:58:39 amoll Exp $
 
 #ifndef BALL_SOLVATION_CLAVERIEPARAMETER_H
 #define BALL_SOLVATION_CLAVERIEPARAMETER_H
 
 #ifndef BALL_FORMAT_PARAMETERS_H
-#include <BALL/FORMAT/parameters.h>
+# include <BALL/FORMAT/parameters.h>
 #endif
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
-#include <BALL/FORMAT/parameterSection.h>
+# include <BALL/FORMAT/parameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_FORCEFIELDPARAMETERS_H
-#include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
+# include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 #endif
 
 namespace BALL

@@ -1,10 +1,11 @@
-// $Id: function.h,v 1.12 2001/07/13 17:30:38 anker Exp $
+// $Id: function.h,v 1.13 2001/07/14 12:56:14 amoll Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
 
-#include <BALL/common.h>
-#include <BALL/COMMON/exception.h>
+#ifndef BALL_COMMON_H
+# include <BALL/common.h>
+#endif
 
 namespace BALL
 {

@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.h,v 1.9 2001/06/21 21:34:52 amoll Exp $
+// $Id: anisotropyShiftProcessor.h,v 1.10 2001/07/14 12:57:26 amoll Exp $
 
 #ifndef BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
 #define BALL_NMR_ANISOTROPYSHIFTPROCESSOR_H
@@ -8,10 +8,10 @@
 #endif
 
 #ifndef BALL_KERNEL_ATOM_H
-#include<BALL/KERNEL/atom.h>
+# include<BALL/KERNEL/atom.h>
 #endif
 
-#ifndef BALL_NMR_SHIFT_MODULE
+#ifndef BALL_NMR_SHIFT_MODULE_H
 #	include<BALL/NMR/shiftModule.h>
 #endif
 

@@ -1,14 +1,14 @@
-// $Id: normal.h,v 1.6 2001/07/09 17:55:13 sturm Exp $
+// $Id: normal.h,v 1.7 2001/07/14 12:55:55 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_NORMAL_H
 #define BALL_VIEW_KERNEL_NORMAL_H
 
 #ifndef BALL_COMMON_H
-#include <BALL/common.h>
+# include <BALL/common.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
-#include <BALL/MATHS/vector3.h>
+# include <BALL/MATHS/vector3.h>
 #endif
 
 namespace BALL
@@ -24,9 +24,9 @@ namespace BALL
 				needs a normal vector. It provides the derived class with methods for accessing
 				that normal vector.
 				@memo    NormalVector class (BALL VIEW kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/09 17:55:13 $
+				@author  $Author: amoll $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/07/14 12:55:55 $
 		*/
 		class NormalVector
 		{

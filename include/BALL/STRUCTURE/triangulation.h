@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.21 2001/06/22 11:03:24 oliver Exp $
+// $Id: triangulation.h,v 1.22 2001/07/14 12:58:22 amoll Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -51,16 +51,33 @@
 #	include <BALL/DATATYPE/hashMap.h>
 #endif
 
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
+#endif
+
+#ifndef BALL_KERNEL_ATOM_H
+# include <BALL/KERNEL/atom.h>
+#endif
+
+#ifndef BALL_KERNEL_MOLECULE_H
+# include <BALL/KERNEL/molecule.h>
+#endif
+
+#ifndef BALL_KERNEL_SYSTEM_H
+# include <BALL/KERNEL/system.h>
+#endif
+
+#ifndef BALL_KERNEL_PTE_H
+# include <BALL/KERNEL/PTE.h>
+#endif
+
+#ifndef BALL_FORMAT_HINFILE_H
+# include <BALL/FORMAT/HINFile.h>
+#endif
+
 #include <vector>
 #include <list>
 #include <fstream>
-
-#include <BALL/DATATYPE/string.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/PTE.h>
-#include <BALL/FORMAT/HINFile.h>
 #include <string>
 
 namespace BALL
