@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: RingPerceptionProcessor_test.C,v 1.2 2004/08/07 19:38:25 oliver Exp $
 //
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +17,7 @@
 #include <BALL/KERNEL/molecule.h>
 
 ///////////////////////////
-START_TEST(RingPerceptionProcessor, "")
+START_TEST(RingPerceptionProcessor, "$Id: RingPerceptionProcessor_test.C,v 1.2 2004/08/07 19:38:25 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -36,16 +38,16 @@ CHECK(RingPerceptionProcessor)
 	S.apply(rpp);
 
 	Size results_atoms[9] = {6, 6, 6, 6, 6, 13, 0, 6, 4};
-	Size results_bonds[9] = {6, 6, 6, 6, 6, 14, 0, 6, 5};
+	Size results_bonds[9] = {6, 6, 6, 6, 6, 14, 0, 6, 6};
 
-	for (Size i=0;i!=limit;++i)
+	for (Size i = 0; i != limit; ++i)
 	{
 		molecule = S.getMolecule(i);
 		Size num_ringed = 0;
 
 		// atoms
 		AtomConstIterator a_it = molecule->beginAtom();
-		for (;a_it!=molecule->endAtom();++a_it)
+		for (; a_it != molecule->endAtom(); ++a_it)
 		{
 			if (a_it->getProperty("InRing").getBool())
 			{		
