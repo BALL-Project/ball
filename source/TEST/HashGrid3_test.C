@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3_test.C,v 1.19 2005/01/26 14:06:37 amoll Exp $
+// $Id: HashGrid3_test.C,v 1.20 2005/01/29 18:02:02 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid3, "$Id: HashGrid3_test.C,v 1.19 2005/01/26 14:06:37 amoll Exp $")
+START_TEST(HashGrid3, "$Id: HashGrid3_test.C,v 1.20 2005/01/29 18:02:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -240,11 +240,11 @@ CHECK(bool apply(UnaryProcessor<Item> &processor) throw())
 RESULT
 
 CHECK(calculateMinSpacing)
-	float memory = SysInfo::getAvailableMemory() * 0.9;
-	Vector3 size = Vector3(1000,2220,3330);
+	LongIndex memory = SysInfo::getAvailableMemory() / 2;
+	Vector3 size = Vector3(1000., 1000., 1000.);
 
 	float spacing = HashGrid3<float>::calculateMinSpacing(memory, size);
-	HashGrid3<float> hg(Vector3(0,0,0), size, spacing);
+	HashGrid3<float> hg(Vector3(0.0), size, spacing);
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,17 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.8 2005/01/28 13:29:04 amoll Exp $
+// $Id: sysinfo.C,v 1.9 2005/01/29 18:02:02 oliver Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
 
 #ifndef BALL_PLATFORM_WINDOWS
- #include <sys/sysinfo.h>
- #include <BALL/SYSTEM/file.h>
+#	include <sys/sysinfo.h>
+#	include <BALL/SYSTEM/file.h>
 #else
- #define WIN32_LEAN_AND_MEAN
- #include <windows.h>
+#	define WIN32_LEAN_AND_MEAN
+#	include <windows.h>
 #endif
 
 namespace BALL
@@ -35,36 +35,17 @@ namespace BALL
 			GlobalMemoryStatusEx (&statex);
 			return static_cast<LongIndex>(statex.ullAvailPhys);
 #else
-			try
-			{
-				File cpuinfo("/proc/meminfo");
-				char buffer[1024];
-				String line;
-				while (!cpuinfo.eof())
-				{
-					cpuinfo.getline(buffer, 1024);
-					line.assign(buffer);
-					if (line.hasPrefix("MemFree:"))
-					{
-						line = line.after(":");
-						line.trimLeft();
-						line = line.before(" ");
-						return line.toLong() * 1024;
-					}
-				}
-			}
-			catch(...)
-			{
-			}
-
-			// sysinfo seems to return somewhat insane values, but better than nothing...
+#ifdef BALL_OS_LINUX
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
 			if (result == -1) 
 			{
 				return result;
 			}
-			return info.freeram;
+			return info.freeram * info.mem_unit;
+#else
+			return -1;
+#endif
 #endif
 		}
 
@@ -75,13 +56,17 @@ namespace BALL
 			GlobalMemoryStatusEx (&statex);
 			return static_cast<LongIndex>(statex.ullTotalPhys);
 #else
+#ifdef BALL_OS_LINUX
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
 			if (result == -1) 
 			{
 				return result;
 			}
-			return info.totalram;
+			return info.totalram * info.mem_unit;
+#else
+			return -1;
+#endif
 #endif
 		}
 
@@ -90,32 +75,14 @@ namespace BALL
 #ifdef BALL_PLATFORM_WINDOWS
 			return -1;
 #else
-			try
-			{
-				File cpuinfo("/proc/meminfo");
-				char buffer[1024];
-				String line;
-				while (!cpuinfo.eof())
-				{
-					cpuinfo.getline(buffer, 1024);
-					line.assign(buffer);
-					if (line.hasPrefix("Cached:"))
-					{
-						line = line.after(":");
-						line.trimLeft();
-						line = line.before(" ");
-						return line.toLong() * 1024;
-					}
-				}
-			}
-			catch(...)
-			{
-			}
-
+#ifdef BALL_OS_LINUX
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
 			if (result == -1) return result;
-			return info.bufferram;
+			return info.bufferram * info.mem_unit;
+#else
+			return -1;
+#endif
 #endif
 		}
 
@@ -124,10 +91,14 @@ namespace BALL
 #ifdef BALL_PLATFORM_WINDOWS
 			return -1;
 #else
+#ifdef BALL_OS_LINUX
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.uptime;
+#else
+			return -1;
+#endif
 #endif
 		}
 
@@ -138,31 +109,11 @@ namespace BALL
 			GetSystemInfo(&sysinfo);
 			return sysinfo.dwNumberOfProcessors;
 #else
-			try
-			{
-				File cpuinfo("/proc/cpuinfo");
-				char buffer[1024];
-				String line;
-				Index nr_processors = 0;
-				while (!cpuinfo.eof())
-				{
-					cpuinfo.getline(buffer, 1024);
-					line.assign(buffer);
-					if (line.hasPrefix("processor"))
-					{
-						nr_processors++;
-					}
-				}
-
-				if (nr_processors == 0) return -1;
-
-				return nr_processors;
-			}
-			catch(...)
-			{
-			}
-
+#ifdef BALL_OS_LINUX
+			return get_nprocs();
+#else
 			return -1;
+#endif
 #endif
 		}
 
@@ -174,14 +125,18 @@ namespace BALL
 			GlobalMemoryStatusEx (&statex);
 			return (LongIndex) statex.ullAvailPageFile;
 #else
+#ifdef BALL_OS_LINUX
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
 			if (result == -1) return result;
-			return info.freeswap;
+			return info.freeswap * info.mem_unit;
+#else
+			return -1;
 #endif
-
+#endif
 		}
 
 	} // namespace SysInfo
+
 } // namespace BALL
 

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.18 2004/05/27 19:49:56 oliver Exp $
+dnl $Id: configure.ac,v 1.19 2005/01/29 18:02:01 oliver Exp $
 dnl
 dnl
 
@@ -25,6 +25,10 @@ AC_CONFIG_HEADER([
 config.h:config/config.h.in
 ])
 AC_LANG(C++)
+PROJECT=BALL
+define(PROJECT, BALL)
+dnl this project define is required by (portable) aclocal.m4 file
+dnl being used for BNPP, BALL, and OpenMS
 
 dnl   Require the user to accept the license (once)
 CF_CHECK_LICENSE

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.58 2004/11/08 11:00:50 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.59 2005/01/29 18:01:56 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -52,9 +52,9 @@ dnl    file.
 AC_DEFUN(CF_ERROR,[
 	AC_MSG_RESULT()
 	AC_MSG_RESULT([Configure failed. If you cannot solve your problem with the aid])
-	AC_MSG_RESULT([of the above error message, please contact the BALL mailing list])
-	AC_MSG_RESULT([or the BALL developers. Please enclose the file 'conf.diag.tar'])
-	AC_MSG_RESULT([which has been created in BALL/source. It contains the relevant])
+	AC_MSG_RESULT([of the above error message, please contact the ]PROJECT[ mailing list])
+S	AC_MSG_RESULT([or the ]PROJECT[ developers. Please enclose the file 'conf.diag.tar'])
+	AC_MSG_RESULT([which has been created in source. It contains the relevant])
 	AC_MSG_RESULT([files from this configure run. In most cases, the information])
 	AC_MSG_RESULT([is necessary to diagnose what went wrong. This file contains])
 	AC_MSG_RESULT([information about your system setup and versions of compilers])
@@ -362,7 +362,7 @@ AC_DEFUN(CF_DETECT_OS,[
 			ARCHITECTURE=x86_64
 			BINFMT=Linux-Opteron
 		fi
-		if test "${ARCHITECTURE}" = "unknown" -a "${BALL_IGNORE_ARCH}" = ""; then
+		if test "${ARCHITECTURE}" = "unknown" -a "${PROJECT[]_IGNORE_ARCH}" = ""; then
 			AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})
 			AC_MSG_RESULT(Sorry - this architecture is currently not supported...)
 			CF_ERROR
@@ -394,12 +394,12 @@ AC_DEFUN(CF_DETECT_OS,[
 
 	if test "`echo $OS | ${CUT} -d_ -f1`" = "CYGWIN" ; then
 		OS="CYGWIN"
-		BALL_NO_XDR=true
+		PROJECT[]_NO_XDR=true
 	fi
 
 	if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX \
 		-a  "$OS" != OSF1 -a "$OS" != FreeBSD -a "$OS" != "CYGWIN" \
-		-a "${OS}" != Darwin -a "${BALL_IGNORE_ARCH}" = "" ; then
+		-a "${OS}" != Darwin -a "${PROJECT[]_IGNORE_ARCH}" = "" ; then
 		AC_MSG_RESULT(Sorry - your OS ($OS) is currently not supported...)
 		CF_ERROR
 	fi
@@ -408,38 +408,38 @@ AC_DEFUN(CF_DETECT_OS,[
 	dnl 	create OS defines in config.h:
 	dnl
 	if test "${OS}" = Linux ; then
-		AC_DEFINE(BALL_OS_LINUX,LINUX)
+		AC_DEFINE(PROJECT[]_OS_LINUX,LINUX)
 	fi
 	if test "${OS}" = Solaris ; then
-		AC_DEFINE(BALL_OS_SOLARIS,SOLARIS)
+		AC_DEFINE(PROJECT[]_OS_SOLARIS,SOLARIS)
 	fi
 	if test "${OS}" = IRIX ; then
-		AC_DEFINE(BALL_OS_IRIX,IRIX)
+		AC_DEFINE(PROJECT[]_OS_IRIX,IRIX)
 	fi
 	if test "${OS}" = OSF1 ; then
-		AC_DEFINE(BALL_OS_OSF1,OSF1)
+		AC_DEFINE(PROJECT[]_OS_OSF1,OSF1)
 	fi
 	if test "${OS}" = FreeBSD ; then
-		AC_DEFINE(BALL_OS_FREEBSD,FREEBSD)
+		AC_DEFINE(PROJECT[]_OS_FREEBSD,FREEBSD)
 	fi
 	if test "${OS}" = Darwin ; then
-		AC_DEFINE(BALL_OS_DARWIN,DARWIN)
+		AC_DEFINE(PROJECT[]_OS_DARWIN,DARWIN)
 	fi
 
 	dnl
 	dnl		create ARCHITECTURE defines
 	dnl
 	if test "$ARCHITECTURE" = sparc ; then
-		AC_DEFINE(BALL_ARCH_SPARC,SPARC)
+		AC_DEFINE(PROJECT[]_ARCH_SPARC,SPARC)
 	fi
 	if test "$ARCHITECTURE" = i386 ; then
-		AC_DEFINE(BALL_ARCH_I386,I386)
+		AC_DEFINE(PROJECT[]_ARCH_I386,I386)
 	fi
 	if test "$ARCHITECTURE" = mips ; then
-		AC_DEFINE(BALL_ARCH_MIPS,MIPS)
+		AC_DEFINE(PROJECT[]_ARCH_MIPS,MIPS)
 	fi
 	if test "$ARCHITECTURE" = alpha ; then
-		AC_DEFINE(BALL_ARCH_ALPHA,ALPHA)
+		AC_DEFINE(PROJECT[]_ARCH_ALPHA,ALPHA)
 	fi
 
 	AC_MSG_RESULT($OS $OSREV (BINFMT=$BINFMT))
@@ -567,9 +567,9 @@ AC_DEFUN(CF_DIGEST_CXX_VERSION,[
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
-	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MAJOR, ${CXX_VERSION_1})
-	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MINOR, ${CXX_VERSION_2})
-	AC_DEFINE_UNQUOTED(BALL_COMPILER_VERSION_MINOR_MINOR, ${CXX_VERSION_3})
+	AC_DEFINE_UNQUOTED(PROJECT[]_COMPILER_VERSION_MAJOR, ${CXX_VERSION_1})
+	AC_DEFINE_UNQUOTED(PROJECT[]_COMPILER_VERSION_MINOR, ${CXX_VERSION_2})
+	AC_DEFINE_UNQUOTED(PROJECT[]_COMPILER_VERSION_MINOR_MINOR, ${CXX_VERSION_3})
 	])
 
 dnl
@@ -596,8 +596,8 @@ EOF
 		dnl 
 		dnl 	Define a symbol for G++.
 		dnl
-		AC_DEFINE(BALL_COMPILER_GXX, )
-		AC_DEFINE(BALL_COMPILER, GXX)
+		AC_DEFINE(PROJECT[]_COMPILER_GXX, )
+		AC_DEFINE(PROJECT[]_COMPILER, GXX)
 	else
 		AC_MSG_RESULT(no)
 		HAS_GPLUSPLUS=false
@@ -627,7 +627,7 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 	if test "${CXX_VERSION_1}" -lt 2 \
 		-o "${CXX_VERSION_1}" = 2 -a "${CXX_VERSION_2}" -lt 95 ; then
 		AC_MSG_RESULT()
-		AC_MSG_RESULT([The version of gcc you are using is not supported by BALL.])
+		AC_MSG_RESULT([The version of gcc you are using is not supported by PROJECT[].])
 		AC_MSG_RESULT([Please update to a newer version of g++ (at least 2.95.x)])
 		AC_MSG_RESULT([which can be obtained from])
 		AC_MSG_RESULT([  ftp://gcc.gnu.org/pub/gcc/releases/index.html])
@@ -688,7 +688,7 @@ AC_DEFUN(CF_GXX_OPTIONS, [
   else 
     if test "${OS}" = "Darwin" ; then
       DYNAROPTS="${DYNAROPTS} -prebind -dynamiclib -o"
-			ADD_DYNAROPTS_LIBBALL="-seg1addr 0xb0000000"
+			ADD_DYNAROPTS_LIBPROJECT[]="-seg1addr 0xb0000000"
 			ADD_DYNAROPTS_LIBVIEW="-seg1addr 0x80000000"
       RANLIB="ranlib -s "
     else	
@@ -697,10 +697,10 @@ AC_DEFUN(CF_GXX_OPTIONS, [
   fi
 
   if test "${IS_EGXX}" = true; then
-    BALL_TYPENAME=typename
+    PROJECT[]_TYPENAME=typename
   else
     if test "${CXX_VERSION_1}" -gt 2 -o "${CXX_VERSION_1}" -eq 2 -a "${CXX_VERSION_2}" -ge 8 ; then
-      BALL_TYPENAME=typename
+      PROJECT[]_TYPENAME=typename
     fi
   fi
 ])
@@ -725,8 +725,8 @@ AC_DEFUN(CF_IDENTIFY_KAI, [
 		dnl 
 		dnl 	Define a symbol for KAI C++.
 		dnl
-		AC_DEFINE(BALL_COMPILER_KAI, )
-		AC_DEFINE(BALL_COMPILER, KAI)
+		AC_DEFINE(PROJECT[]_COMPILER_KAI, )
+		AC_DEFINE(PROJECT[]_COMPILER, KAI)
 	else
 		IS_KCC=false
 		AC_MSG_RESULT(no)
@@ -819,8 +819,8 @@ AC_DEFUN(CF_IDENTIFY_INTEL, [
 		dnl 
 		dnl 	Define a symbol for Intel C++.
 		dnl
-		AC_DEFINE(BALL_COMPILER_INTEL, )
-		AC_DEFINE(BALL_COMPILER, INTEL)
+		AC_DEFINE(PROJECT[]_COMPILER_INTEL, )
+		AC_DEFINE(PROJECT[]_COMPILER, INTEL)
 	else
 		IS_INTELCC=false
 		AC_MSG_RESULT(no)
@@ -881,8 +881,8 @@ AC_DEFUN(CF_IDENTIFY_COMPAQ,[
 		dnl 
 		dnl 	Define a symbol for Compaq C++.
 		dnl
-		AC_DEFINE(BALL_COMPILER_COMPAQ, )
-		AC_DEFINE(BALL_COMPILER, COMPAQ)
+		AC_DEFINE(PROJECT[]_COMPILER_COMPAQ, )
+		AC_DEFINE(PROJECT[]_COMPILER, COMPAQ)
 	else
 		IS_DIGITALCXX=false
 		AC_MSG_RESULT(no)
@@ -904,7 +904,7 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
 		if test "${CXX_VERSION_1}" -lt 6 -o "${CXX_VERSION_1}" -eq 6 -a "${CXX_VERSION_2}" -lt 2 ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Your version of Digital/Compaq C++ does not provide all)
-			AC_MSG_RESULT(ANSI C++ features required by BALL.)
+			AC_MSG_RESULT(ANSI C++ features required by PROJECT[].)
 			AC_MSG_RESULT(Please upgrade to release 6.2 or above.)
 			CF_ERROR
 		fi
@@ -913,7 +913,7 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
   AR="ar"
   DYNAR="${CXX}"
   AROPTS="${AROPTS} -o"
-  DYNAROPTS="${DYNAROPTS} -shared -nocxxstd -ptr \$(BALL_PATH)/source/cxx_rep -o"
+  DYNAROPTS="${DYNAROPTS} -shared -nocxxstd -ptr \$(PROJECT[]_PATH)/source/cxx_rep -o"
   CXX_MAKEDEPEND="${CXX}"
   MAKEDEP_CXX_OPTS="-M -noimplicit_include"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
@@ -933,7 +933,7 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
 		fi
 	fi
 
-  LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
+  LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(PROJECT[]_PATH)/source/cxx_rep"
   CXXFLAGS_O="${CXXFLAGS_O} -O3"
 
   CXXFLAGS_D="${CXXFLAGS_D}"
@@ -960,8 +960,8 @@ AC_DEFUN(CF_IDENTIFY_SGI, [
 		dnl 
 		dnl 	Define a symbol for SGI C++.
 		dnl
-		AC_DEFINE(BALL_COMPILER_MIPSPRO, )
-		AC_DEFINE(BALL_COMPILER, MIPSPRO)
+		AC_DEFINE(PROJECT[]_COMPILER_MIPSPRO, )
+		AC_DEFINE(PROJECT[]_COMPILER, MIPSPRO)
 	else
 		IS_MIPSPRO=false
 		AC_MSG_RESULT(no)
@@ -997,7 +997,7 @@ AC_DEFUN(CF_MIPSPRO_OPTIONS, [
       CXX_NAME="${CXX_NAME}_N32"
     fi
 
-    BALL_TYPENAME=typename
+    PROJECT[]_TYPENAME=typename
 
     dnl
     dnl     a version above 7.2 is required
@@ -1078,8 +1078,8 @@ AC_DEFUN(CF_IDENTIFY_SUN, [
 		dnl 
 		dnl 	Define a symbol for SUNPro C++.
 		dnl
-		AC_DEFINE(BALL_COMPILER_SUNPRO)
-		AC_DEFINE(BALL_COMPILER, SUNPRO)
+		AC_DEFINE(PROJECT[]_COMPILER_SUNPRO)
+		AC_DEFINE(PROJECT[]_COMPILER, SUNPRO)
 	else
 		IS_SUNCC=false
 		AC_MSG_RESULT(no)
@@ -1109,7 +1109,7 @@ AC_DEFUN(CF_SUNCC_OPTIONS, [
     dnl
     if test "${CXX_VERSION_1}" -lt 5 ; then
       AC_MSG_RESULT()
-      AC_MSG_RESULT(BALL requires an ANSI C++ compliant compiler)
+      AC_MSG_RESULT(PROJECT[] requires an ANSI C++ compliant compiler)
       AC_MSG_RESULT(SUNPro compilers are (mostly) ANSI compliant for version 5.3 and above)
       AC_MSG_RESULT(Please upgrade your compiler!)
 			CF_ERROR
@@ -1121,7 +1121,7 @@ AC_DEFUN(CF_SUNCC_OPTIONS, [
 
     dnl  a nasty bug in SUNPro CC 5.3 causes trouble
     dnl  with the function templates in amberNonBonded.C
-    AC_DEFINE(BALL_MUST_CAST_TEMPLATE_FUNCTION_ARGS,)
+    AC_DEFINE(PROJECT[]_MUST_CAST_TEMPLATE_FUNCTION_ARGS,)
 
     dnl  set the default binary format (if none selected)
     dnl
@@ -1148,7 +1148,7 @@ AC_DEFUN(CF_SUNCC_OPTIONS, [
     MAKEDEP_CXX_OPTS="-xM1"
     MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-    AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
+    AC_DEFINE(PROJECT[]_NO_INLINE_FUNCTIONS,)
 
     CXXFLAGS="${CXXFLAGS} -KPIC"
     CXXFLAGS_O="${CXXFLAGS_O} -xO5"
@@ -1186,7 +1186,7 @@ AC_DEFUN(CF_CHECK_DEBUG_FLAG, [
 	AC_MSG_CHECKING(for DEBUG flag)
 	if test "$DEBUG" != "" ; then
 		dnl   define a debug flag and prevent the compilation of
-		dnl   inline functions by defining BALL_NO_INLINE_FUNCTIONS
+		dnl   inline functions by defining PROJECT[]_NO_INLINE_FUNCTIONS
 		dnl   (see COMMON/debug.h)
 		if test "$DEBUG" = true ; then
 			dnl  if debug information is also required, add the corresponding flag
@@ -1194,8 +1194,8 @@ AC_DEFUN(CF_CHECK_DEBUG_FLAG, [
 			if test "${DEBUG_INFO}" = true -a "$CXXFLAGS_DI" != "" ; then
 				CXXFLAGS_D="${CXXFLAGS_D} ${CXXFLAGS_DI}"
 			fi
-			AC_DEFINE(BALL_DEBUG,)
-			AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
+			AC_DEFINE(PROJECT[]_DEBUG,)
+			AC_DEFINE(PROJECT[]_NO_INLINE_FUNCTIONS,)
 			AC_MSG_RESULT(enabled)
 			CPP_MODE_FLAGS="${CXXFLAGS_D}"
 			CPP_MODE_FLAGS_NO_OPTIMIZATION="${CXXFLAGS_D}"
@@ -1223,7 +1223,7 @@ AC_DEFUN(CF_C_BIGENDIAN, [
       #include <fstream>
       int main(int, char**)
       {
-    ] ${BALL_SIZE_TYPE} endian_one = 1; [
+    ] ${PROJECT[]_SIZE_TYPE} endian_one = 1; [
       std::ofstream os("config.endian.log", std::ios::out);
 
       if (*(char*)&endian_one == '\001')
@@ -1241,11 +1241,11 @@ AC_DEFUN(CF_C_BIGENDIAN, [
       return 0;
       }
     ],
-    BALL_ENDIAN_TEST=true,
+    PROJECT[]_ENDIAN_TEST=true,
     DUMMY=0,
     DUMMY=0
 	)
-	if test "${BALL_ENDIAN_TEST+set}" != set ; then
+	if test "${PROJECT[]_ENDIAN_TEST+set}" != set ; then
 		AC_MSG_RESULT(<cannot determine>)
 		CF_ERROR
 	else
@@ -1256,13 +1256,13 @@ AC_DEFUN(CF_C_BIGENDIAN, [
 		ENDIAN_TYPE=`${CAT} config.endian.log`
 		${RM} config.endian.log 2>/dev/null
 		if test "${ENDIAN_TYPE}" = "LITTLE" ; then
-			BALL_LITTLE_ENDIAN=true
-			AC_DEFINE(BALL_LITTLE_ENDIAN, true)
+			PROJECT[]_LITTLE_ENDIAN=true
+			AC_DEFINE(PROJECT[]_LITTLE_ENDIAN, true)
 			AC_MSG_RESULT(little endian)
 		else
 			if test "${ENDIAN_TYPE}" = "BIG" ; then
-				BALL_BIG_ENDIAN=true
-				AC_DEFINE(BALL_BIG_ENDIAN, true)
+				PROJECT[]_BIG_ENDIAN=true
+				AC_DEFINE(PROJECT[]_BIG_ENDIAN, true)
 				AC_MSG_RESULT(big endian)
 			else
 				AC_MSG_RESULT(<cannot determine>)
@@ -1286,14 +1286,14 @@ AC_DEFUN(CF_CHECK_NUM_LIMITS, [
 		[
 			float f = std::numeric_limits<float>::min();
 		],
-		BALL_HAS_NUMERIC_LIMITS=true
+		PROJECT[]_HAS_NUMERIC_LIMITS=true
 	)
 	if test "${HAS_NUMERIC_LIMITS}" = true ; then
 		AC_MSG_RESULT(available)
-		AC_DEFINE(BALL_HAS_NUMERIC_LIMITS)
+		AC_DEFINE(PROJECT[]_HAS_NUMERIC_LIMITS)
 	else
 		AC_MSG_RESULT(not available)
-		BALL_HAS_NUMERIC_LIMITS=false
+		PROJECT[]_HAS_NUMERIC_LIMITS=false
 
 		dnl
 		dnl  we didn't find a numeric limits class, so we implement
@@ -1311,9 +1311,9 @@ AC_DEFUN(CF_CHECK_NUM_LIMITS, [
 				float c = DBL_MAX;
 				float d = DBL_MIN;
 			],
-			BALL_HAS_FLOAT_H=false
+			PROJECT[]_HAS_FLOAT_H=false
 		)
-		if test "${BALL_HAS_FLOAT_H}" != false ; then
+		if test "${PROJECT[]_HAS_FLOAT_H}" != false ; then
 			AC_TRY_COMPILE(
 				[
 					#include <float.h>
@@ -1324,17 +1324,17 @@ AC_DEFUN(CF_CHECK_NUM_LIMITS, [
 					float c = DBL_MAX;
 					float d = DBL_MIN;
 				],
-				BALL_HAS_FLOAT_H=true
+				PROJECT[]_HAS_FLOAT_H=true
 			)
 		fi
-		if test "${BALL_HAS_FLOAT_H+set}" != set ; then
+		if test "${PROJECT[]_HAS_FLOAT_H+set}" != set ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(limits.h seems to be corrupt or float.h is missing!)
 			AC_MSG_RESULT()
 		else
-			if test "${BALL_HAS_FLOAT_H}" = true ; then
+			if test "${PROJECT[]_HAS_FLOAT_H}" = true ; then
 				AC_MSG_RESULT(yes)
-				AC_DEFINE(BALL_HAS_FLOAT_H)
+				AC_DEFINE(PROJECT[]_HAS_FLOAT_H)
 			else
 				AC_MSG_RESULT(no)
 			fi
@@ -1351,7 +1351,7 @@ dnl   others don't - so let's find it out!
 dnl
 AC_DEFUN(CF_CHECK_TPL_NULL_ARGS, [
 	AC_MSG_CHECKING(for null template arguments)
-	BALL_NULL_TEMPLATE_ARGS="NULL"
+	PROJECT[]_NULL_TEMPLATE_ARGS="NULL"
 	AC_TRY_COMPILE(
 		[
 			template <typename T>
@@ -1363,8 +1363,8 @@ AC_DEFUN(CF_CHECK_TPL_NULL_ARGS, [
 		],
 		[
 		],
-		BALL_NULL_TEMPLATE_ARGS="<>")
-	if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
+		PROJECT[]_NULL_TEMPLATE_ARGS="<>")
+	if test "${PROJECT[]_NULL_TEMPLATE_ARGS}" = "NULL" ; then
 		AC_TRY_COMPILE(
 			[
 				template <typename T>
@@ -1376,10 +1376,10 @@ AC_DEFUN(CF_CHECK_TPL_NULL_ARGS, [
 			],
 			[
 			],
-			BALL_NULL_TEMPLATE_ARGS="")
+			PROJECT[]_NULL_TEMPLATE_ARGS="")
 	fi
-	AC_MSG_RESULT(\"$BALL_NULL_TEMPLATE_ARGS\")
-	if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
+	AC_MSG_RESULT(\"$PROJECT[]_NULL_TEMPLATE_ARGS\")
+	if test "${PROJECT[]_NULL_TEMPLATE_ARGS}" = "NULL" ; then
 		AC_MSG_RESULT(could not find a suitable argument for null templates)
 		CF_ERROR
 	fi
@@ -1391,7 +1391,7 @@ dnl		with inline functions (SGI CC has a problem with that)
 dnl
 AC_DEFUN(CF_CHECK_INLINE_TPL_ARGS, [
 	AC_MSG_CHECKING(for inline template function arguments)
-	BALL_HAS_INLINE_TPL_ARGS=no
+	PROJECT[]_HAS_INLINE_TPL_ARGS=no
 	AC_TRY_COMPILE(
 		[
 			template <int i>
@@ -1405,9 +1405,9 @@ AC_DEFUN(CF_CHECK_INLINE_TPL_ARGS, [
 		[
 			double d = bar< foo<3> >(2.0);
 		],
-		BALL_HAS_INLINE_TPL_ARGS=yes
+		PROJECT[]_HAS_INLINE_TPL_ARGS=yes
 	)
-	AC_MSG_RESULT($BALL_HAS_INLINE_TPL_ARGS)
+	AC_MSG_RESULT($PROJECT[]_HAS_INLINE_TPL_ARGS)
 ])
 
 dnl
@@ -1416,7 +1416,7 @@ dnl   We need this for the base classes (ios vs. basic_ios<char>) in socket.h/C
 dnl
 AC_DEFUN(CF_CHECK_ANSI_IOSTREAM, [
 	AC_MSG_CHECKING(for ANSI compliant iostream)
-	BALL_HAS_ANSI_IOSTREAM=no
+	PROJECT[]_HAS_ANSI_IOSTREAM=no
 	AC_TRY_COMPILE(
 		[
 			#include <iostream>
@@ -1428,9 +1428,9 @@ AC_DEFUN(CF_CHECK_ANSI_IOSTREAM, [
 		],
 		[
 		],
-		BALL_HAS_ANSI_IOSTREAM=yes
+		PROJECT[]_HAS_ANSI_IOSTREAM=yes
 	)
-	AC_MSG_RESULT($BALL_HAS_ANSI_IOSTREAM)
+	AC_MSG_RESULT($PROJECT[]_HAS_ANSI_IOSTREAM)
 ])
 
 dnl
@@ -1439,7 +1439,7 @@ dnl		style strstream
 dnl
 AC_DEFUN(CF_CHECK_HAS_SSTREAM, [
 	AC_MSG_CHECKING(for sstream headers)
-	BALL_HAS_SSTREAM=no
+	PROJECT[]_HAS_SSTREAM=no
 	AC_TRY_COMPILE(
 		[
 			#include <sstream>
@@ -1451,9 +1451,9 @@ AC_DEFUN(CF_CHECK_HAS_SSTREAM, [
 		],
 		[
 		],
-		BALL_HAS_SSTREAM=yes
+		PROJECT[]_HAS_SSTREAM=yes
 	)
-	AC_MSG_RESULT($BALL_HAS_SSTREAM)
+	AC_MSG_RESULT($PROJECT[]_HAS_SSTREAM)
 ])
 
 dnl
@@ -1462,7 +1462,7 @@ dnl   either (ARM style) Base::foo or (ANSI style) using Base::foo
 dnl
 AC_DEFUN(CF_CHECK_ARM_ACCESS_MODIFICATION, [
 	AC_MSG_CHECKING(for ANSI or ARM style access modification)
-	BALL_CFG_USING_METHOD_DIRECTIVE=none
+	PROJECT[]_CFG_USING_METHOD_DIRECTIVE=none
 	AC_TRY_COMPILE(
 		[
 			class A
@@ -1479,9 +1479,9 @@ AC_DEFUN(CF_CHECK_ARM_ACCESS_MODIFICATION, [
 			B b;
 			b.foo();
 		],
-		BALL_CFG_USING_METHOD_DIRECTIVE=ANSI
+		PROJECT[]_CFG_USING_METHOD_DIRECTIVE=ANSI
 	)
-	if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
+	if test ${PROJECT[]_CFG_USING_METHOD_DIRECTIVE} = none ; then
 		AC_TRY_COMPILE(
 			[
 				class A
@@ -1498,14 +1498,14 @@ AC_DEFUN(CF_CHECK_ARM_ACCESS_MODIFICATION, [
 				B b;
 				b.foo();
 			],
-			BALL_CFG_USING_METHOD_DIRECTIVE=ARM
+			PROJECT[]_CFG_USING_METHOD_DIRECTIVE=ARM
 		)
 	fi
-	AC_MSG_RESULT(${BALL_CFG_USING_METHOD_DIRECTIVE})
-	if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = ANSI ; then
-		AC_DEFINE(BALL_CFG_USING_METHOD_DIRECTIVE)
+	AC_MSG_RESULT(${PROJECT[]_CFG_USING_METHOD_DIRECTIVE})
+	if test ${PROJECT[]_CFG_USING_METHOD_DIRECTIVE} = ANSI ; then
+		AC_DEFINE(PROJECT[]_CFG_USING_METHOD_DIRECTIVE)
 	fi
-	if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
+	if test ${PROJECT[]_CFG_USING_METHOD_DIRECTIVE} = none ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT([Compiler does not understand ARM or ANSI style method access modification.])
 		AC_MSG_RESULT([Please specify a different compiler (e.g. g++ 2.95.2) using the option])
@@ -1523,10 +1523,10 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 	dnl
 	dnl   check for the size of int and pointers (may cause trouble on 64 bit architectures)
 	dnl   we define the type PointerInt (in COMMON/global.h) according to the macro
-	dnl   BALL_POINTERSIZE_INT (which is set here)
+	dnl   PROJECT[]_POINTERSIZE_INT (which is set here)
 	dnl   We also define a 64 bit unsigned numeric type. All pointers that are read or written
 	dnl   in persistence-related methods use this type to ensure compatibility between 32 and
-	dnl   64bit BALL versions.
+	dnl   64bit PROJECT[] versions.
 	dnl   missing: usage of the result of AC_TYPE_SIZE_T
 	dnl
 	AC_CHECK_SIZEOF(char, 4)
@@ -1544,25 +1544,25 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 	SIZEOF_ULONG=$ac_cv_sizeof_long
 	SIZEOF_ULONGLONG=$ac_cv_sizeof_long_long
 
-	AC_DEFINE_UNQUOTED(BALL_CHAR_SIZE, ${SIZEOF_CHAR})
-	AC_DEFINE_UNQUOTED(BALL_INT_SIZE, ${SIZEOF_INT})
-	AC_DEFINE_UNQUOTED(BALL_LONG_SIZE, ${SIZEOF_LONG})
-	AC_DEFINE_UNQUOTED(BALL_SIZE_T_SIZE, ${SIZEOF_SIZE_T})
-	AC_DEFINE_UNQUOTED(BALL_POINTER_SIZE, ${SIZEOF_VOID_P})
-	AC_DEFINE_UNQUOTED(BALL_UINT_SIZE, ${SIZEOF_UINT})
-	AC_DEFINE_UNQUOTED(BALL_ULONG_SIZE, ${SIZEOF_ULONG})
-	AC_DEFINE_UNQUOTED(BALL_ULONGLONG_SIZE, ${SIZEOF_ULONGLONG})
+	AC_DEFINE_UNQUOTED(PROJECT[]_CHAR_SIZE, ${SIZEOF_CHAR})
+	AC_DEFINE_UNQUOTED(PROJECT[]_INT_SIZE, ${SIZEOF_INT})
+	AC_DEFINE_UNQUOTED(PROJECT[]_LONG_SIZE, ${SIZEOF_LONG})
+	AC_DEFINE_UNQUOTED(PROJECT[]_SIZE_T_SIZE, ${SIZEOF_SIZE_T})
+	AC_DEFINE_UNQUOTED(PROJECT[]_POINTER_SIZE, ${SIZEOF_VOID_P})
+	AC_DEFINE_UNQUOTED(PROJECT[]_UINT_SIZE, ${SIZEOF_UINT})
+	AC_DEFINE_UNQUOTED(PROJECT[]_ULONG_SIZE, ${SIZEOF_ULONG})
+	AC_DEFINE_UNQUOTED(PROJECT[]_ULONGLONG_SIZE, ${SIZEOF_ULONGLONG})
 	dnl
 	dnl  define an unsigned type that can hold 64 bit pointers
 	dnl
 	if test "${SIZEOF_UINT}" = 8; then
-		BALL_64BIT_UINT="unsigned int"
+		PROJECT[]_64BIT_UINT="unsigned int"
 	else
 		if test "${SIZEOF_ULONG}" = 8; then
-			BALL_64BIT_UINT="unsigned long"
+			PROJECT[]_64BIT_UINT="unsigned long"
 		else
 			if test "${SIZEOF_ULONGLONG}" = 8 ; then
-				BALL_64BIT_UINT="unsigned long long"
+				PROJECT[]_64BIT_UINT="unsigned long long"
 			else
 				AC_MSG_RESULT()
 				AC_MSG_RESULT(cannot find appropriate numeric type for 64bit unsigned int)
@@ -1570,23 +1570,23 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 			fi
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(BALL_64BIT_UINT_TYPE, ${BALL_64BIT_UINT})
+	AC_DEFINE_UNQUOTED(PROJECT[]_64BIT_UINT_TYPE, ${PROJECT[]_64BIT_UINT})
 
 	dnl
 	dnl define a 32 bit type for Size and Index
 	dnl
 	if test "${SIZEOF_UINT}" = "${SIZEOF_VOID_P}" ; then
-		BALL_POINTER_TYPE="unsigned int"
+		PROJECT[]_POINTER_TYPE="unsigned int"
 	else
 		if test "${SIZEOF_ULONG}" = "${SIZEOF_VOID_P}" ; then
-			BALL_POINTER_TYPE="unsigned long"
+			PROJECT[]_POINTER_TYPE="unsigned long"
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find appropriate integer type of same size as void*)
 			CF_ERROR
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(BALL_POINTERSIZEINT_TYPE, ${BALL_POINTER_TYPE})
+	AC_DEFINE_UNQUOTED(PROJECT[]_POINTERSIZEINT_TYPE, ${PROJECT[]_POINTER_TYPE})
 
 	dnl
 	dnl define a (true) pointer size int for several conversion issues
@@ -1594,48 +1594,48 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 	dnl since for internal use only!
 	dnl
 	if test "${SIZEOF_INT}" = 4 ; then
-		BALL_INDEX_TYPE="int"
-		BALL_SIZE_TYPE="unsigned int"
+		PROJECT[]_INDEX_TYPE="int"
+		PROJECT[]_SIZE_TYPE="unsigned int"
 	else
 		if test "${SIZEOF_LONG}" = 4 ; then
-			BALL_INDEX_TYPE="long"
-			BALL_SIZE_TYPE="unsigned long"
+			PROJECT[]_INDEX_TYPE="long"
+			PROJECT[]_SIZE_TYPE="unsigned long"
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find appropriate numeric type for 32bit int)
 			CF_ERROR
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(BALL_SIZE_TYPE, ${BALL_SIZE_TYPE})
-	AC_DEFINE_UNQUOTED(BALL_INDEX_TYPE, ${BALL_INDEX_TYPE})
+	AC_DEFINE_UNQUOTED(PROJECT[]_SIZE_TYPE, ${PROJECT[]_SIZE_TYPE})
+	AC_DEFINE_UNQUOTED(PROJECT[]_INDEX_TYPE, ${PROJECT[]_INDEX_TYPE})
 
 	dnl  define 64 bit signed/unsigned type
 	if test "${SIZEOF_ULONG}" = "8" ; then
-		BALL_ULONG64_TYPE="unsigned long"
-		BALL_LONG64_TYPE="long"
-		AC_DEFINE(BALL_64BIT_ARCHITECTURE)
+		PROJECT[]_ULONG64_TYPE="unsigned long"
+		PROJECT[]_LONG64_TYPE="long"
+		AC_DEFINE(PROJECT[]_64BIT_ARCHITECTURE)
 	else
 		if test "${SIZEOF_ULONGLONG}" = "8" ; then
-			BALL_ULONG64_TYPE="unsigned long long"
-			BALL_LONG64_TYPE="long long"			
+			PROJECT[]_ULONG64_TYPE="unsigned long long"
+			PROJECT[]_LONG64_TYPE="long long"			
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(cannot find unsigned 64bit type.)
 			CF_ERROR
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(BALL_ULONG64_TYPE, ${BALL_ULONG64_TYPE})
-	AC_DEFINE_UNQUOTED(BALL_LONG64_TYPE, ${BALL_LONG64_TYPE})
+	AC_DEFINE_UNQUOTED(PROJECT[]_ULONG64_TYPE, ${PROJECT[]_ULONG64_TYPE})
+	AC_DEFINE_UNQUOTED(PROJECT[]_LONG64_TYPE, ${PROJECT[]_LONG64_TYPE})
 
 	dnl
 	dnl Check for size of Complex type
 	dnl
-	BALL_COMPLEX_PRECISION=float
+	PROJECT[]_COMPLEX_PRECISION=float
 	AC_MSG_CHECKING(for Complex type precision)
 	if test "${enable_double_cplx}" = yes ; then
-		BALL_COMPLEX_PRECISION=double
+		PROJECT[]_COMPLEX_PRECISION=double
 	fi
-	AC_MSG_RESULT(${BALL_COMPLEX_PRECISION})
+	AC_MSG_RESULT(${PROJECT[]_COMPLEX_PRECISION})
 ])
 
 
@@ -1646,9 +1646,9 @@ AC_DEFUN(CF_CHECK_REGEX_H, [
 	AC_CHECK_HEADER(regex.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
 	if test "${HAS_REGEX_H}" = "false" ; then
 		AC_CHECK_HEADER(regexp.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
-		AC_DEFINE(BALL_HAS_REGEXP_H,)
+		AC_DEFINE(PROJECT[]_HAS_REGEXP_H,)
 	else
-		AC_DEFINE(BALL_HAS_REGEX_H,)
+		AC_DEFINE(PROJECT[]_HAS_REGEX_H,)
 	fi
 	if test "${HAS_REGEX_H}" = "false" ; then
 		AC_MSG_RESULT()
@@ -1666,10 +1666,10 @@ dnl   Check whether ieeefp.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_IEEEFP_H, [
 	AC_CHECK_HEADERS(ieeefp.h,
-			[BALL_HAS_IEEEFP_H=true],
-			[BALL_HAS_IEEEFP_H=false])
-	if test ${BALL_HAS_IEEEFP_H} = true ; then
-		AC_DEFINE(BALL_HAS_IEEEFP_H,)
+			[PROJECT[]_HAS_IEEEFP_H=true],
+			[PROJECT[]_HAS_IEEEFP_H=false])
+	if test ${PROJECT[]_HAS_IEEEFP_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_IEEEFP_H,)
 	fi
 ])
 
@@ -1678,10 +1678,10 @@ dnl   check for ISO C99 stdint.h
 dnl
 AC_DEFUN(CF_CHECK_STDINT_H, [
 	AC_CHECK_HEADERS(stdint.h,
-				[BALL_HAS_STDINT_H=true],
-				[BALL_HAS_STDINT_H=false])
-	if test ${BALL_HAS_STDINT_H} = true ; then
-		AC_DEFINE(BALL_HAS_STDINT_H,)
+				[PROJECT[]_HAS_STDINT_H=true],
+				[PROJECT[]_HAS_STDINT_H=false])
+	if test ${PROJECT[]_HAS_STDINT_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_STDINT_H,)
 	fi
 ])
 
@@ -1690,10 +1690,10 @@ dnl   check whether values.h does really exist
 dnl
 AC_DEFUN(CF_CHECK_VALUES_H, [
 	AC_CHECK_HEADERS(values.h,
-				[BALL_HAS_VALUES_H=true],
-				[BALL_HAS_VALUES_H=false])
-	if test ${BALL_HAS_VALUES_H} = true ; then
-		AC_DEFINE(BALL_HAS_VALUES_H,)
+				[PROJECT[]_HAS_VALUES_H=true],
+				[PROJECT[]_HAS_VALUES_H=false])
+	if test ${PROJECT[]_HAS_VALUES_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_VALUES_H,)
 	fi
 ])
 
@@ -1702,10 +1702,10 @@ dnl   Check whether unistd.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_UNISTD_H, [
 	AC_CHECK_HEADERS(unistd.h,
-			[BALL_HAS_UNISTD_H=true],
-			[BALL_HAS_UNISTD_H=false])
-	if test ${BALL_HAS_UNISTD_H} = true ; then
-		AC_DEFINE(BALL_HAS_UNISTD_H,)
+			[PROJECT[]_HAS_UNISTD_H=true],
+			[PROJECT[]_HAS_UNISTD_H=false])
+	if test ${PROJECT[]_HAS_UNISTD_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_UNISTD_H,)
 	fi
 ])
 
@@ -1714,10 +1714,10 @@ dnl   Check whether limits.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_LIMITS_H, [
 	AC_CHECK_HEADERS(limits.h,
-			[BALL_HAS_LIMITS_H=true],
-			[BALL_HAS_LIMITS_H=false])
-	if test ${BALL_HAS_LIMITS_H} = true ; then
-		AC_DEFINE(BALL_HAS_LIMITS_H,)
+			[PROJECT[]_HAS_LIMITS_H=true],
+			[PROJECT[]_HAS_LIMITS_H=false])
+	if test ${PROJECT[]_HAS_LIMITS_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_LIMITS_H,)
 	fi
 ])
 
@@ -1726,10 +1726,10 @@ dnl   Check whether process.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_PROCESS_H, [
 	AC_CHECK_HEADERS(process.h,
-				[BALL_HAS_PROCESS_H=true],
-				[BALL_HAS_PROCESS_H=false])
-	if test ${BALL_HAS_PROCESS_H} = true ; then
-		AC_DEFINE(BALL_HAS_PROCESS_H,)
+				[PROJECT[]_HAS_PROCESS_H=true],
+				[PROJECT[]_HAS_PROCESS_H=false])
+	if test ${PROJECT[]_HAS_PROCESS_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_PROCESS_H,)
 	fi
 ])
 
@@ -1738,10 +1738,10 @@ dnl   Check whether sys/time.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_TIME_H, [
 	AC_CHECK_HEADERS(sys/time.h,
-			[BALL_HAS_SYS_TIME_H=true],
-			[BALL_HAS_SYS_TIME_H=false])
-	if test ${BALL_HAS_SYS_TIME_H} = true ; then
-		AC_DEFINE(BALL_HAS_SYS_TIME_H,)
+			[PROJECT[]_HAS_SYS_TIME_H=true],
+			[PROJECT[]_HAS_SYS_TIME_H=false])
+	if test ${PROJECT[]_HAS_SYS_TIME_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_SYS_TIME_H,)
 	fi
 ])
 
@@ -1750,10 +1750,10 @@ dnl   Check whether sys/stat.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_STAT_H, [
 	AC_CHECK_HEADERS(sys/stat.h,
-			[BALL_HAS_SYS_STAT_H=true],
-			[BALL_HAS_SYS_STAT_H=false])
-	if test ${BALL_HAS_SYS_STAT_H} = true ; then
-		AC_DEFINE(BALL_HAS_SYS_STAT_H,)
+			[PROJECT[]_HAS_SYS_STAT_H=true],
+			[PROJECT[]_HAS_SYS_STAT_H=false])
+	if test ${PROJECT[]_HAS_SYS_STAT_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_SYS_STAT_H,)
 	fi
 ])
 
@@ -1762,10 +1762,10 @@ dnl   Check whether sys/times.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_TIMES_H, [
 	AC_CHECK_HEADERS(sys/times.h,
-			[BALL_HAS_SYS_TIMES_H=true],
-			[BALL_HAS_SYS_TIMES_H=false])
-	if test ${BALL_HAS_SYS_TIMES_H} = true ; then
-		AC_DEFINE(BALL_HAS_SYS_TIMES_H,)
+			[PROJECT[]_HAS_SYS_TIMES_H=true],
+			[PROJECT[]_HAS_SYS_TIMES_H=false])
+	if test ${PROJECT[]_HAS_SYS_TIMES_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_SYS_TIMES_H,)
 	fi
 ])
 
@@ -1774,10 +1774,10 @@ dnl   Check whether sys/types.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_TYPES_H, [
 	AC_CHECK_HEADERS(sys/types.h,
-			[BALL_HAS_SYS_TYPES_H=true],
-			[BALL_HAS_SYS_TYPES_H=false])
-	if test ${BALL_HAS_SYS_TYPES_H} = true ; then
-		AC_DEFINE(BALL_HAS_SYS_TYPES_H,)
+			[PROJECT[]_HAS_SYS_TYPES_H=true],
+			[PROJECT[]_HAS_SYS_TYPES_H=false])
+	if test ${PROJECT[]_HAS_SYS_TYPES_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_SYS_TYPES_H,)
 	fi
 ])
 
@@ -1786,10 +1786,10 @@ dnl   Check whether sys/ioctl.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_IOCTL_H, [
 	AC_CHECK_HEADERS(sys/ioctl.h,
-			[BALL_HAS_SYS_IOCTL_H=true],
-			[BALL_HAS_SYS_IOCTL_H=false])
-	if test ${BALL_HAS_SYS_IOCTL_H} = true ; then
-		AC_DEFINE(BALL_HAS_SYS_IOCTL_H,)
+			[PROJECT[]_HAS_SYS_IOCTL_H=true],
+			[PROJECT[]_HAS_SYS_IOCTL_H=false])
+	if test ${PROJECT[]_HAS_SYS_IOCTL_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_SYS_IOCTL_H,)
 	fi
 ])
 
@@ -1798,10 +1798,10 @@ dnl   Check whether time.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_TIME_H, [
 	AC_CHECK_HEADERS(time.h,
-			[BALL_HAS_TIME_H=true],
-			[BALL_HAS_TIME_H=false])
-	if test ${BALL_HAS_TIME_H} = true ; then
-		AC_DEFINE(BALL_HAS_TIME_H,)
+			[PROJECT[]_HAS_TIME_H=true],
+			[PROJECT[]_HAS_TIME_H=false])
+	if test ${PROJECT[]_HAS_TIME_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_TIME_H,)
 	fi
 ])
 
@@ -1810,10 +1810,10 @@ dnl   Check whether sys/param.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_PARAM_H, [
 	AC_CHECK_HEADERS(sys/param.h,
-			[BALL_HAS_SYS_PARAM_H=true],
-			[BALL_HAS_SYS_PARAM_H=false])
-	if test ${BALL_HAS_SYS_PARAM_H} = true ; then
-		AC_DEFINE(BALL_HAS_SYS_PARAM_H,)
+			[PROJECT[]_HAS_SYS_PARAM_H=true],
+			[PROJECT[]_HAS_SYS_PARAM_H=false])
+	if test ${PROJECT[]_HAS_SYS_PARAM_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_SYS_PARAM_H,)
 	fi
 ])
 
@@ -1822,10 +1822,10 @@ dnl   Check whether dirent.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_DIRENT_H, [
 	AC_CHECK_HEADERS(dirent.h,
-			[BALL_HAS_DIRENT_H=true],
-			[BALL_HAS_DIRENT_H=false])
-	if test ${BALL_HAS_DIRENT_H} = true ; then
-		AC_DEFINE(BALL_HAS_DIRENT_H,)
+			[PROJECT[]_HAS_DIRENT_H=true],
+			[PROJECT[]_HAS_DIRENT_H=false])
+	if test ${PROJECT[]_HAS_DIRENT_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_DIRENT_H,)
 	fi
 ])
 
@@ -1834,10 +1834,10 @@ dnl   Check whether pwd.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_PWD_H, [
 	AC_CHECK_HEADERS(pwd.h,
-			[BALL_HAS_PWD_H=true],
-			[BALL_HAS_PWD_H=false])
-	if test ${BALL_HAS_PWD_H} = true ; then
-		AC_DEFINE(BALL_HAS_PWD_H,)
+			[PROJECT[]_HAS_PWD_H=true],
+			[PROJECT[]_HAS_PWD_H=false])
+	if test ${PROJECT[]_HAS_PWD_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_PWD_H,)
 	fi
 ])
 
@@ -1846,10 +1846,10 @@ dnl   Check whether direct.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_DIRECT_H, [
 	AC_CHECK_HEADERS(direct.h,
-			[BALL_HAS_DIRECT_H=true],
-			[BALL_HAS_DIRECT_H=false])
-	if test ${BALL_HAS_DIRECT_H} = true ; then
-		AC_DEFINE(BALL_HAS_DIRECT_H,)
+			[PROJECT[]_HAS_DIRECT_H=true],
+			[PROJECT[]_HAS_DIRECT_H=false])
+	if test ${PROJECT[]_HAS_DIRECT_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_DIRECT_H,)
 	fi
 ])
 
@@ -1858,10 +1858,10 @@ dnl   Check whether io.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_IO_H, [
 	AC_CHECK_HEADERS(io.h,
-			[BALL_HAS_IO_H=true],
-			[BALL_HAS_IO_H=false])
-	if test ${BALL_HAS_IO_H} = true ; then
-		AC_DEFINE(BALL_HAS_IO_H,)
+			[PROJECT[]_HAS_IO_H=true],
+			[PROJECT[]_HAS_IO_H=false])
+	if test ${PROJECT[]_HAS_IO_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_IO_H,)
 	fi
 ])
 
@@ -1870,10 +1870,10 @@ dnl   Check whether sys/socket.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_SOCKET_H, [
 	AC_CHECK_HEADERS(sys/socket.h,
-			[BALL_HAS_SYS_SOCKET_H=true],
-			[BALL_HAS_SYS_SOCKET_H=false])
-	if test ${BALL_HAS_SYS_SOCKET_H} = true ; then
-		AC_DEFINE(BALL_HAS_SYS_SOCKET_H,)
+			[PROJECT[]_HAS_SYS_SOCKET_H=true],
+			[PROJECT[]_HAS_SYS_SOCKET_H=false])
+	if test ${PROJECT[]_HAS_SYS_SOCKET_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_SYS_SOCKET_H,)
 	fi
 ])
 
@@ -1882,10 +1882,10 @@ dnl   Check whether netinet/in.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_NETINET_IN_H, [
 	AC_CHECK_HEADERS(netinet/in.h,
-			[BALL_HAS_NETINET_IN_H=true],
-			[BALL_HAS_NETINET_IN_H=false])
-	if test ${BALL_HAS_NETINET_IN_H} = true ; then
-		AC_DEFINE(BALL_HAS_NETINET_IN_H,)
+			[PROJECT[]_HAS_NETINET_IN_H=true],
+			[PROJECT[]_HAS_NETINET_IN_H=false])
+	if test ${PROJECT[]_HAS_NETINET_IN_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_NETINET_IN_H,)
 	fi
 ])
 
@@ -1894,10 +1894,10 @@ dnl   Check whether netdb.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_NETDB_H, [
 	AC_CHECK_HEADERS(netdb.h,
-			[BALL_HAS_NETDB_H=true],
-			[BALL_HAS_NETDB_H=false])
-	if test ${BALL_HAS_NETDB_H} = true ; then
-		AC_DEFINE(BALL_HAS_NETDB_H,)
+			[PROJECT[]_HAS_NETDB_H=true],
+			[PROJECT[]_HAS_NETDB_H=false])
+	if test ${PROJECT[]_HAS_NETDB_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_NETDB_H,)
 	fi
 ])
 
@@ -1906,31 +1906,31 @@ dnl   Check whether arpa/inet.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_ARPA_INET_H, [
 	AC_CHECK_HEADERS(arpa/inet.h,
-			[BALL_HAS_ARPA_INET_H=true],
-			[BALL_HAS_ARPA_INET_H=false])
-	if test ${BALL_HAS_ARPA_INET_H} = true ; then
-		AC_DEFINE(BALL_HAS_ARPA_INET_H,)
+			[PROJECT[]_HAS_ARPA_INET_H=true],
+			[PROJECT[]_HAS_ARPA_INET_H=false])
+	if test ${PROJECT[]_HAS_ARPA_INET_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_ARPA_INET_H,)
 	fi
 ])
 
 AC_DEFUN(CF_CHECK_SYSCONF, [
 	AC_CHECK_FUNCS(sysconf, HAS_SYSCONF=1)
 	if test "${HAS_SYSCONF}" = 1 ; then
-		AC_DEFINE(BALL_HAS_SYSCONF,)
+		AC_DEFINE(PROJECT[]_HAS_SYSCONF,)
 	fi
 ])
 
 AC_DEFUN(CF_CHECK_KILL, [
 	AC_CHECK_FUNCS(kill, HAS_KILL=1)
 	if test "${HAS_KILL}" = 1 ; then
-		AC_DEFINE(BALL_HAS_KILL,)
+		AC_DEFINE(PROJECT[]_HAS_KILL,)
 	fi
 ])
 
 AC_DEFUN(CF_CHECK_HYPOT, [
 	AC_CHECK_FUNCS(kill, HAS_HYPOT=1)
 	if test "${HAS_HYPOT}" = 1 ; then
-		AC_DEFINE(BALL_HAS_HYPOT,)
+		AC_DEFINE(PROJECT[]_HAS_HYPOT,)
 	fi
 ])
 
@@ -1968,7 +1968,7 @@ AC_DEFUN(CF_CHECK_VSNPRINTF, [
 		)
 
 		if test "${VSNPRINTF_OK}" = 1 ; then
-			AC_DEFINE(BALL_HAVE_VSNPRINTF)
+			AC_DEFINE(PROJECT[]_HAVE_VSNPRINTF)
 		fi
 	fi
 ])
@@ -1980,11 +1980,11 @@ dnl
 AC_DEFUN(CF_CHECK_GETHOSTNAME, [
 	AC_CHECK_FUNCS(gethostname, HAVE_GETHOSTNAME=1)
 	if test "${HAVE_GETHOSTNAME}" = 1 ; then
-		AC_DEFINE(BALL_HAVE_GETHOSTNAME)
+		AC_DEFINE(PROJECT[]_HAVE_GETHOSTNAME)
 	else
 		AC_CHECK_FUNCS(sysinfo, HAVE_SYSINFO=1)
 		if test "${HAVE_SYSINFO}" = 1  ; then
-			AC_DEFINE(BALL_HAVE_SYSINFO)
+			AC_DEFINE(PROJECT[]_HAVE_SYSINFO)
 		else
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([Could not find gethostname or sysinfo methods!])
@@ -2010,7 +2010,7 @@ AC_DEFUN(CF_CHECK_GETHOSTNAME, [
 		)
 		if test "${HAVE_GETHOSTNAME_HEADER+set}" != set ; then
 			AC_MSG_RESULT(no)
-			AC_DEFINE(BALL_DEFINE_GETHOSTNAME)
+			AC_DEFINE(PROJECT[]_DEFINE_GETHOSTNAME)
 		else
 			AC_MSG_RESULT(yes)
 		fi
@@ -2088,8 +2088,8 @@ AC_DEFUN(CF_CHECK_SOCKET_ARGS_AND_TYPES, [
 			socklen_t     len = 0;
 			getsockname(0, (struct sockaddr*)&addr, &len);
 		],
-  BALL_SOCKLEN_TYPE=socklen_t)
-	if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+  PROJECT[]_SOCKLEN_TYPE=socklen_t)
+	if test "${PROJECT[]_SOCKLEN_TYPE}" = "" ; then
 		AC_TRY_COMPILE(
 			[
 				#include <sys/types.h>
@@ -2100,9 +2100,9 @@ AC_DEFUN(CF_CHECK_SOCKET_ARGS_AND_TYPES, [
 				size_t    len = 0;
 				getsockname(0, (struct sockaddr*)&addr, &len);
 			],
-			BALL_SOCKLEN_TYPE=size_t)
+			PROJECT[]_SOCKLEN_TYPE=size_t)
 	fi
-	if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	if test "${PROJECT[]_SOCKLEN_TYPE}" = "" ; then
 		AC_TRY_COMPILE(
 			[
 				#include <sys/types.h>
@@ -2113,9 +2113,9 @@ AC_DEFUN(CF_CHECK_SOCKET_ARGS_AND_TYPES, [
 				unsigned int  len = 0;
 				getsockname(0, (struct sockaddr*)&addr, &len);
 			],
-			BALL_SOCKLEN_TYPE="unsigned int")
+			PROJECT[]_SOCKLEN_TYPE="unsigned int")
 	fi
-	if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	if test "${PROJECT[]_SOCKLEN_TYPE}" = "" ; then
 		AC_TRY_COMPILE(
 			[
 				#include <sys/types.h>
@@ -2126,32 +2126,32 @@ AC_DEFUN(CF_CHECK_SOCKET_ARGS_AND_TYPES, [
 				int           len = 0;
 				getsockname(0, (struct sockaddr*)&addr, &len);
 			],
-			BALL_SOCKLEN_TYPE="int")
+			PROJECT[]_SOCKLEN_TYPE="int")
 	fi
-	if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	if test "${PROJECT[]_SOCKLEN_TYPE}" = "" ; then
 		AC_MSG_RESULT(FAILED)
 		AC_MSG_RESULT(-------------WARNING!---------------)
 		AC_MSG_RESULT(could not find a matching type for socket length argument)
 		AC_MSG_RESULT(in call to getsockname)
-		AC_MSG_RESULT(please check the setting for BALL_SOCKLEN_TYPE in config.mak)
+		AC_MSG_RESULT(please check the setting for PROJECT[]_SOCKLEN_TYPE in config.mak)
 		AC_MSG_RESULT(and set it to the type needed for the third argument of getsockname)
 		AC_MSG_RESULT()
 	else
-		AC_MSG_RESULT($BALL_SOCKLEN_TYPE)
+		AC_MSG_RESULT($PROJECT[]_SOCKLEN_TYPE)
 	fi
 
-	AC_DEFINE_UNQUOTED(BALL_SOCKLEN_TYPE, ${BALL_SOCKLEN_TYPE})
+	AC_DEFINE_UNQUOTED(PROJECT[]_SOCKLEN_TYPE, ${PROJECT[]_SOCKLEN_TYPE})
 ])
 
 dnl
 dnl   check for the XDR functions: their interface and the libraries they're hidden in.
 dnl
 AC_DEFUN(CF_CHECK_XDR, [
-	if test "${BALL_NO_XDR}" = "true" ; then
+	if test "${PROJECT[]_NO_XDR}" = "true" ; then
 		AC_MSG_RESULT([No XDR headers available - building of XDR persistence support disabled])
-		AC_DEFINE(BALL_HAS_XDR, )
-		BALL_HAS_XDR=""
-		AC_SUBST(BALL_HAS_XDR)
+		AC_DEFINE(PROJECT[[]]_HAS_XDR, )
+		PROJECT[]_HAS_XDR=""
+		AC_SUBST(PROJECT[[]]_HAS_XDR)
 	else
 
 		AC_CHECK_HEADER(rpc/types.h, HAS_RPC_TYPES_H=true, HAS_RPC_TYPES_H=false)
@@ -2183,10 +2183,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 				],
 				[	
 				],
-				BALL_XDRREC_VOID_VOID_UINT=true,
-				BALL_XDRREC_VOID_VOID_UINT=false
+				PROJECT[]_XDRREC_VOID_VOID_UINT=true,
+				PROJECT[]_XDRREC_VOID_VOID_UINT=false
 		)
-		if test "${BALL_XDRREC_VOID_VOID_UINT}" = false ; then
+		if test "${PROJECT[]_XDRREC_VOID_VOID_UINT}" = false ; then
 			AC_TRY_COMPILE(
 					[
 						#include <rpc/types.h>
@@ -2199,10 +2199,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 					],
 					[	
 					],
-					BALL_XDRREC_VOID_CHAR_INT=true,
-					BALL_XDRREC_VOID_CHAR_INT=false
+					PROJECT[]_XDRREC_VOID_CHAR_INT=true,
+					PROJECT[]_XDRREC_VOID_CHAR_INT=false
 			)
-			if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
+			if test "${PROJECT[]_XDRREC_VOID_CHAR_INT}" = true ; then
 				AC_MSG_RESULT([(void*, char*, int)])
 			else
 				AC_TRY_COMPILE(
@@ -2217,10 +2217,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 						],
 						[	
 						],
-						BALL_XDRREC_CHAR_CHAR_INT=true,
-						BALL_XDRREC_CHAR_CHAR_INT=false
+						PROJECT[]_XDRREC_CHAR_CHAR_INT=true,
+						PROJECT[]_XDRREC_CHAR_CHAR_INT=false
 				)
-				if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
+				if test "${PROJECT[]_XDRREC_CHAR_CHAR_INT}" = true ; then
 					AC_MSG_RESULT([(char*, char*, int)])
 				else
 					AC_TRY_COMPILE(
@@ -2235,10 +2235,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 						],
 						[
 						],
-						BALL_XDRREC_VOID=true,
-						BALL_XDRREC_VOID=false
+						PROJECT[]_XDRREC_VOID=true,
+						PROJECT[]_XDRREC_VOID=false
 					)
-					if test "${BALL_XDRREC_VOID}" = true ; then
+					if test "${PROJECT[]_XDRREC_VOID}" = true ; then
 						AC_MSG_RESULT(())
 					else
 						AC_MSG_RESULT(not found!)
@@ -2255,7 +2255,7 @@ AC_DEFUN(CF_CHECK_XDR, [
 		dnl  unsigned ints (xdr_u_hyper)
 		dnl
 		AC_MSG_CHECKING(for xdr_u_hyper function)
-		BALL_HAS_XDR_U_HYPER=false
+		PROJECT[]_HAS_XDR_U_HYPER=false
 		AC_TRY_COMPILE(
 			[
 				#include <rpc/types.h>
@@ -2264,14 +2264,14 @@ AC_DEFUN(CF_CHECK_XDR, [
 			[
 				xdr_u_hyper(0, 0);
 			],	
-			BALL_HAS_XDR_U_HYPER=true
+			PROJECT[]_HAS_XDR_U_HYPER=true
 		)	
 
-		if test "${BALL_HAS_XDR_U_HYPER}" = "true" ; then
+		if test "${PROJECT[]_HAS_XDR_U_HYPER}" = "true" ; then
 			AC_MSG_RESULT(found)
 
 			AC_MSG_CHECKING([for 64-bit XDR type (for xdr_u_hyper)])
-			BALL_U_QUAD_TYPE=""
+			PROJECT[]_U_QUAD_TYPE=""
 			AC_TRY_COMPILE(
 				[
 					#include <rpc/types.h>
@@ -2281,10 +2281,10 @@ AC_DEFUN(CF_CHECK_XDR, [
 					XDR xdrs;
 						xdr_u_hyper(&xdrs, &q);
 				],
-				BALL_U_QUAD_TYPE=u_quad_t
+				PROJECT[]_U_QUAD_TYPE=u_quad_t
 			)	
 
-			if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			if test "${PROJECT[]_U_QUAD_TYPE}" = "" ; then
 				AC_TRY_COMPILE(
 					[
 						#include <rpc/types.h>
@@ -2294,11 +2294,11 @@ AC_DEFUN(CF_CHECK_XDR, [
 						XDR xdrs;
 						xdr_u_hyper(&xdrs, &q);
 					],
-					BALL_U_QUAD_TYPE=u_longlong_t
+					PROJECT[]_U_QUAD_TYPE=u_longlong_t
 				)	
 			fi
 
-			if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			if test "${PROJECT[]_U_QUAD_TYPE}" = "" ; then
 				AC_TRY_COMPILE(
 					[
 						#include <rpc/types.h>
@@ -2308,11 +2308,11 @@ AC_DEFUN(CF_CHECK_XDR, [
 						XDR xdrs;
 						xdr_u_hyper(&xdrs, &q);
 					],
-					BALL_U_QUAD_TYPE="unsigned long long int"
+					PROJECT[]_U_QUAD_TYPE="unsigned long long int"
 				)	
 			fi
 
-			if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			if test "${PROJECT[]_U_QUAD_TYPE}" = "" ; then
 				AC_TRY_COMPILE(
 					[
 						#include <rpc/types.h>
@@ -2322,22 +2322,22 @@ AC_DEFUN(CF_CHECK_XDR, [
 						XDR xdrs;
 						xdr_u_hyper(&xdrs, &q);
 					],
-					BALL_U_QUAD_TYPE=__uint64_t
+					PROJECT[]_U_QUAD_TYPE=__uint64_t
 				)	
 			fi
-			if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			if test "${PROJECT[]_U_QUAD_TYPE}" = "" ; then
 				AC_MSG_RESULT([Could not identify an appropriate type for xdr_u_hyper.])
 				CF_ERROR
 			fi
 
-			AC_MSG_RESULT(${BALL_U_QUAD_TYPE})
-			AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
-			AC_DEFINE(BALL_HAS_XDR_U_HYPER)
+			AC_MSG_RESULT(${PROJECT[]_U_QUAD_TYPE})
+			AC_DEFINE_UNQUOTED(PROJECT[]_XDR_UINT64_TYPE, ${PROJECT[]_U_QUAD_TYPE})
+			AC_DEFINE(PROJECT[]_HAS_XDR_U_HYPER)
 
 		else
 
 			dnl
-			dnl	we do not have xdr_u_hyper, so BALL has to use two 
+			dnl	we do not have xdr_u_hyper, so PROJECT[] has to use two 
 			dnl	calls to xdr_u_int instead. 
 			dnl	However, we have to identify whether the system supports
 			dnl	64bit unsigned types at all
@@ -2348,14 +2348,14 @@ AC_DEFUN(CF_CHECK_XDR, [
 				[	
 					unsigned long long int  q = 1234567890123456789LL;
 				],
-				BALL_U_QUAD_TYPE="unsigned long long int"
+				PROJECT[]_U_QUAD_TYPE="unsigned long long int"
 			)	
-			if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			if test "${PROJECT[]_U_QUAD_TYPE}" = "" ; then
 				AC_MSG_RESULT([Could not identify an 64 bit unsigned type (long long).])
 				CF_ERROR
 			fi
 		
-			AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
+			AC_DEFINE_UNQUOTED(PROJECT[]_XDR_UINT64_TYPE, ${PROJECT[]_U_QUAD_TYPE})
 			AC_MSG_RESULT(unsigned long long int)
 		
 		fi
@@ -2365,14 +2365,14 @@ AC_DEFUN(CF_CHECK_XDR, [
 		dnl Define appropriate symbols in config.h.
 		dnl The symbols are used in CONCEPT/XDRPersistenceManager.C only.
 		dnl
-		if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
-			AC_DEFINE(BALL_XDRREC_CREATE_VOID_CHAR_INT)
+		if test "${PROJECT[]_XDRREC_VOID_CHAR_INT}" = true ; then
+			AC_DEFINE(PROJECT[]_XDRREC_CREATE_VOID_CHAR_INT)
 		fi
-		if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
-			AC_DEFINE(BALL_XDRREC_CREATE_CHAR_CHAR_INT)
+		if test "${PROJECT[]_XDRREC_CHAR_CHAR_INT}" = true ; then
+			AC_DEFINE(PROJECT[]_XDRREC_CREATE_CHAR_CHAR_INT)
 		fi
-		if test "${BALL_XDRREC_VOID}" = true ; then
-			AC_DEFINE(BALL_XDRREC_CREATE_VOID)
+		if test "${PROJECT[]_XDRREC_VOID}" = true ; then
+			AC_DEFINE(PROJECT[]_XDRREC_CREATE_VOID)
 		fi
 		
 		dnl
@@ -2422,9 +2422,9 @@ AC_DEFUN(CF_CHECK_XDR, [
 			dnl
 			AC_MSG_RESULT(yes)
 		fi
-		AC_DEFINE(BALL_HAS_XDR, true)
-		BALL_HAS_XDR=true
-		AC_SUBST(BALL_HAS_XDR)
+		AC_DEFINE(PROJECT[]_HAS_XDR, true)
+		PROJECT[]_HAS_XDR=true
+		AC_SUBST(PROJECT[]_HAS_XDR)
 	fi
 ])
 
@@ -2471,7 +2471,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 		dnl prevent the use of -L/usr/lib - this may lead to problems with different
 		dnl binary formats (e.g. SGI O32/N32 format)
 		if test "${FFTW_INCL_PATH}" != /usr/include -a "${FFTW_INCL_PATH}" != "" ; then
-			BALL_INCLUDES="${BALL_INCLUDES} -I${FFTW_INCL_PATH}"
+			PROJECT[]_INCLUDES="${PROJECT[]_INCLUDES} -I${FFTW_INCL_PATH}"
 		fi
 
 		AC_MSG_CHECKING(for FFTW precision)
@@ -2518,20 +2518,20 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 		dnl Consistency check with --enable-double-cplx
 		dnl
 		AC_MSG_CHECKING(for consistency between complex type and FFTW precision)
-		if test "${enable_double_cplx}" != "" -a "${BALL_COMPLEX_PRECISION}" != "${FFTW_PRECISION}" ; then
+		if test "${enable_double_cplx}" != "" -a "${PROJECT[]_COMPLEX_PRECISION}" != "${FFTW_PRECISION}" ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Specified complex precision is inconsistent with the precision of FFTW.)
 			AC_MSG_RESULT(Please check ${FFTW_INCL_PATH}/fftw.h and your configure options.)
 			CF_ERROR
 		fi
-		BALL_COMPLEX_PRECISION=${FFTW_PRECISION}
-		AC_MSG_RESULT(set to ${BALL_COMPLEX_PRECISION})
+		PROJECT[]_COMPLEX_PRECISION=${FFTW_PRECISION}
+		AC_MSG_RESULT(set to ${PROJECT[]_COMPLEX_PRECISION})
 
-		AC_DEFINE(BALL_HAS_FFTW, true)
-		AC_DEFINE(BALL_HAS_FFTW_H, true)
-		BALL_HAS_FFTW=true
-		AC_SUBST(BALL_HAS_FFTW)
-		AC_SUBST(BALL_HAS_FFTW_H)
+		AC_DEFINE(PROJECT[]_HAS_FFTW, true)
+		AC_DEFINE(PROJECT[]_HAS_FFTW_H, true)
+		PROJECT[]_HAS_FFTW=true
+		AC_SUBST(PROJECT[]_HAS_FFTW)
+		AC_SUBST(PROJECT[]_HAS_FFTW_H)
 
 
 		AC_MSG_CHECKING(linking against libfftw)
@@ -2558,7 +2558,7 @@ AC_DEFUN(CF_CHECK_FFTW_SUPPORT, [
 			AC_MSG_RESULT(yes)
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(BALL_COMPLEX_TYPE, ${BALL_COMPLEX_TYPE})
+	AC_DEFINE_UNQUOTED(PROJECT[]_COMPLEX_TYPE, ${PROJECT[]_COMPLEX_TYPE})
 ])
 
 dnl
@@ -2566,7 +2566,7 @@ dnl		VIEW support
 dnl
 AC_DEFUN(CF_VIEW, [
 	dnl
-	dnl    search for X-libs and includes and BALLView (OpenGL/MESA) stuff
+	dnl    search for X-libs and includes and PROJECT[]View (OpenGL/MESA) stuff
 	dnl 
 	if test "${USE_VIEW}" = true ; then
 		AC_PATH_X
@@ -2680,9 +2680,9 @@ AC_DEFUN(CF_VIEW, [
 			if test "${USE_VIEW}" = true ; then
 				AC_MSG_CHECKING(for QT headers)
 				if test "${QTDIR}" != "" ; then
-					CF_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${BALL_PATH}/contrib/qt/include)
+					CF_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${PROJECT[]_PATH}/contrib/qt/include)
 				else
-					CF_FIND_HEADER(QT_INCPATH,qgl.h,${BALL_PATH}/contrib/qt/include)
+					CF_FIND_HEADER(QT_INCPATH,qgl.h,${PROJECT[]_PATH}/contrib/qt/include)
 				fi
 
 				if test "${QT_INCPATH}" = "" ; then
@@ -2709,7 +2709,7 @@ AC_DEFUN(CF_VIEW, [
 							QT_MT_SUFFIX=""
 						fi
 						if test "${QT_LIBPATH}" = "" ; then
-							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/qt/include)
 						fi
 					else	
 						if test -a "${QTDIR}/lib/libqt.so" ; then
@@ -2719,11 +2719,11 @@ AC_DEFUN(CF_VIEW, [
 							QT_MT_SUFFIX="-mt"
 						fi
 						if test "${QT_LIBPATH}" = "" ; then
-							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+							CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${PROJECT[]_PATH}/contrib/qt/include)
 						fi
 					fi
 				else
-					CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+					CF_FIND_LIB(QT_LIBPATH, libqt${QT_MT_SUFFIX}, ${PROJECT[]_PATH}/contrib/qt/lib ${PROJECT[]_PATH}/contrib/qt/lib/${BINFMT})
 				fi
 
 				if test "${QT_LIBPATH}" = "" ; then
@@ -2761,10 +2761,10 @@ AC_DEFUN(CF_VIEW, [
 					CF_ERROR
 				else
 					AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
-					AC_DEFINE_UNQUOTED(BALL_QT_VERSION, ${QT_VERSION})
-					AC_DEFINE_UNQUOTED(BALL_QT_VERSION_STR, ${QT_VERSION_STR})
+					AC_DEFINE_UNQUOTED(PROJECT[]_QT_VERSION, ${QT_VERSION})
+					AC_DEFINE_UNQUOTED(PROJECT[]_QT_VERSION_STR, ${QT_VERSION_STR})
 					if test "${QT_MT_SUFFIX}" = "-mt" ; then
-						AC_DEFINE(BALL_QT_HAS_THREADS,)
+						AC_DEFINE(PROJECT[]_QT_HAS_THREADS,)
 					fi
 				fi			
 		
@@ -2774,7 +2774,7 @@ AC_DEFUN(CF_VIEW, [
 				if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then
 					if test "${QT_VERSION}" -lt 300 ; then
 						AC_MSG_RESULT()
-						AC_MSG_RESULT([QT version 3.0 or above is required for BALL. Please update])
+						AC_MSG_RESULT([QT version 3.0 or above is required for PROJECT[]. Please update])
 						AC_MSG_RESULT([to a more current version or specify the path to a more])
 						AC_MSG_RESULT([recent version of libqt by passing the option --with-qt-libs=DIR])
 						AC_MSG_RESULT([to configure.])
@@ -3222,7 +3222,7 @@ AC_DEFUN(CF_VIEW, [
     
 
 	if test "${USE_VIEW}" = "true" ; then
-		AC_DEFINE(BALL_HAS_VIEW,)
+		AC_DEFINE(PROJECT[]_HAS_VIEW,)
 		LIBVIEW="libVIEW.a"
 		VIEW="VIEW"
 	else
@@ -3253,11 +3253,11 @@ AC_DEFUN(CF_PYTHON, [
 		dnl
 		if test "${USE_VIEW}" = false ; then
 			AC_MSG_RESULT()
-			AC_MSG_RESULT(BALL Python support requires the visualization component)
+			AC_MSG_RESULT(PROJECT[] Python support requires the visualization component)
 			AC_MSG_RESULT(VIEW. Please reconfigure without --without-VIEW.)
 			CF_ERROR
 		fi
-		AC_DEFINE(BALL_PYTHON_SUPPORT)
+		AC_DEFINE(PROJECT[]_PYTHON_SUPPORT)
 
 		dnl 
 		dnl Find the python executable (specified via --with-python)
@@ -4354,7 +4354,7 @@ AC_DEFUN(CF_CHECK_MULTI_BUILD,[
 		dnl (this is usually a problem with a missing "include config.mak" in the makefile.
 		dnl
 		echo "#ifndef BFMT" >> config.h
-		echo "# error BALL was configured in MULTI BUILD mode! Please specify -DBMFT!" >> config.h
+		echo ["# error] PROJECT [was configured in MULTI BUILD mode! Please specify -DBMFT!" >> config.h]
 		echo "#endif" >> config.h
 		echo "" >> config.h
 
@@ -4363,22 +4363,22 @@ AC_DEFUN(CF_CHECK_MULTI_BUILD,[
 		while test $i -le $LINES ; do
 			BFMT=`cat ${BINFORMAT_FILE} | ${SED} -n ${i}p`
 			echo "#if ( BFMT == $i )" >> config.h
-			echo "# include <BALL/CONFIG/config.h.${BFMT}>" >> config.h
+			echo ["# include <]PROJECT[/CONFIG/config.h.${BFMT}>" >> config.h]
 			echo "#endif" >> config.h
 			echo " " >> config.h
 			i=`expr $i + 1`
 		done
 		${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
-		${MKDIR} ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
-		if test -f ${BALL_PATH}/include/BALL/CONFIG/config.h ; then
-			if test "`${DIFF} ${BALL_PATH}/include/BALL/CONFIG/config.h config.h`" != "" ; then
-				${RM} ${BALL_PATH}/include/BALL/CONFIG/config.h
-				${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
+		${MKDIR} ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG 2>/dev/null
+		if test -f ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG/config.h ; then
+			if test "`${DIFF} ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG/config.h config.h`" != "" ; then
+				${RM} ${[]PROJECT[]_PATH}/include/PROJECT/CONFIG/config.h
+				${MV} config.h  ${[]PROJECT[]_PATH}/include/[]PROJECT[]/CONFIG/config.h
 			else
 				${RM} config.h
 			fi
 		else
-			${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
+			${MV} config.h  ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG/config.h
 		fi
 
 		dnl   define the string to substitute in common.mak
@@ -4410,8 +4410,8 @@ AC_DEFUN(CF_MOVE_CONFIG_FILES, [
 		${MV} Makefile.tmp ${BINFMT}/Makefile
 		${MV} common.mak.tmp ${BINFMT}/common.mak
 		${MV} config.mak.tmp ${BINFMT}/config.mak
-	  mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
-	  ${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
+	  mkdir ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG 2>/dev/null
+	  ${MV} -f config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h.${BINFMT}
 	else
 		${MV} Makefile.tmp Makefile
 		${MV} common.mak.tmp common.mak
@@ -4421,17 +4421,17 @@ AC_DEFUN(CF_MOVE_CONFIG_FILES, [
 		dnl move that damned file only if it differs from the previous
 		dnl version. Otherwise we have to rebuild _everything_ after each configure
 		dnl
-		if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
-			if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
-				${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+		if test -f $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h ; then
+			if test "`${DIFF} config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h`" != "" ; then
+				${MV} -f config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h
 			fi
 		else
 			dnl
-			dnl  create the directory BALL/include/CONFIG
+			dnl  create the directory PROJECT[]/include/CONFIG
 			dnl  and move config.h to that directory
 			dnl
-			mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
-			${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+			mkdir ${PROJECT[]_PATH}/include/PROJECT[]/CONFIG 2>/dev/null
+			${MV} -f config.h $PROJECT[]_PATH/include/PROJECT[]/CONFIG/config.h
 		fi
 	fi
 ])
@@ -4454,7 +4454,7 @@ AC_DEFUN(CF_VALGRIND, [
 	dnl	
 	dnl	Check for the valgrind application (a memory leak tester).
 	dnl Valgrind can be used to identify leaks from the test programs
- 	dnl	(target valgrind in BALL/source/TEST).
+ 	dnl	(target valgrind in PROJECT[]/source/TEST).
 	dnl
 	AC_PATH_PROG(VALGRIND, valgrind, valgrind)
 	AC_SUBST(VALGRIND, $VALGRIND)

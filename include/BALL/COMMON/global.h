@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.21 2004/02/25 21:22:25 oliver Exp $
+// $Id: global.h,v 1.22 2005/01/29 18:01:56 oliver Exp $
 //
 
 #ifndef BALL_COMMON_GLOBAL_H
@@ -93,6 +93,25 @@ namespace BALL
 			<b>persistent</b>
 	*/
 	typedef BALL_SIZE_TYPE 	Size;
+
+	/**	Long index type.
+			Use this type to represent very long (64 bit) indices.
+			Theses indices may be signed, contrary to the  \link ::LongSize LongSize \endlink  type.
+			 \par
+			<b>Size:</b> 64 bit \par
+			<b>persistent</b>
+	*/
+	typedef BALL_LONG64_TYPE LongIndex;
+
+
+	/**	Long size type.
+			Use this type to represent sizes of containers, sequences or alike.
+			Variables of type LongSize are unsigned.
+			 \par
+			<b>Size:</b> 64 bit \par
+			<b>persistent</b>
+	*/
+	typedef BALL_ULONG64_TYPE LongSize;
 
 	/**	Time type.
 			Use this type to represent a point in time
@@ -187,6 +206,8 @@ namespace BALL
 		typedef uint32_t	Handle;
 		typedef int32_t	Index;
 		typedef uint32_t	Size;
+		typedef uint64_t LongSize;
+		typedef int64_t	 LongIndex;
 		typedef time_t	Time;
 		typedef	uint32_t	HashIndex;
 		typedef	uint32_t	Position;

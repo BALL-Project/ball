@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.42 2005/01/26 21:17:49 amoll Exp $
+// $Id: hashGrid.h,v 1.43 2005/01/29 18:01:56 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -1293,7 +1293,7 @@ namespace BALL
 				@param size   the diagonal of the grid
 				@return the minimal needed spacing
 		*/
-		static float calculateMinSpacing(float memory, const Vector3& size)
+		static float calculateMinSpacing(LongIndex memory, const Vector3& size)
 			throw();
 
 		//@}
@@ -1922,13 +1922,13 @@ namespace BALL
 
 	template <typename Item>
 	BALL_INLINE
-	float HashGrid3<Item>::calculateMinSpacing(float memory, const Vector3& size)
+	float HashGrid3<Item>::calculateMinSpacing(LongIndex memory, const Vector3& size)
 		throw()
 	{
-		Size memory_for_box = sizeof(HashGridBox3<Item>) + sizeof(HashGridBox3<Item>*);
-		Size nr_boxes = (Size) floor(memory / memory_for_box);
+		LongSize memory_for_box = sizeof(HashGridBox3<Item>) + sizeof(HashGridBox3<Item>*);
+		LongSize nr_boxes =(LongSize)floor(memory / memory_for_box);
 
-		return pow((float)(size.x * size.y * size.z) / nr_boxes, (float)(1.0 / 3.0));
+		return pow((double)((size.x * size.y * size.z) / nr_boxes), (double)(1.0 / 3.0));
 	}
 
 	template <typename Item>
