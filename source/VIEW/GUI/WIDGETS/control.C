@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.12 2002/12/12 17:20:15 amoll Exp $
+// $Id: control.C,v 1.13 2002/12/13 13:32:43 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -224,7 +224,7 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* item)
 {
 	if (RTTI::isKindOf<GeometricObject>(*composite))
 	{
-		String entry = String("erase ") + getTypeName_(item).ascii();
+		String entry = String("Delete");// + getTypeName_(item).ascii();
 		insertContextMenuEntry(entry, this, SLOT(eraseGeometricObject()));
 	}
 
@@ -237,7 +237,7 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* item)
 		}
 		colorMeshDlg_ = new ColorMeshDialog(this);
 		colorMeshDlg_->mesh = (Mesh*)RTTI::castTo<Mesh>(*composite);
-		insertContextMenuEntry("Color mesh", colorMeshDlg_, SLOT(show()));	
+		insertContextMenuEntry("Properties", colorMeshDlg_, SLOT(show()));	
 	}
 }
 
