@@ -1,4 +1,4 @@
-// $Id: AnisotropyShiftProcessor_test.C,v 1.3 2000/09/24 13:27:44 oliver Exp $
+// $Id: AnisotropyShiftProcessor_test.C,v 1.4 2000/09/25 14:41:31 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.3 2000/09/24 13:27:44 oliver Exp $")
+START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.4 2000/09/25 14:41:31 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -69,9 +69,12 @@ CHECK(chemical shifts/with rings)
 	while (infile.good())
 	{
 		infile >> name >> shift;
-		aniso_shifts.insert(name, shift);
+		if (name != "")
+		{
+			aniso_shifts.insert(name, shift);	
+		}
 	}
-	TEST_EQUAL(aniso_shifts.size(), 13)
+	TEST_EQUAL(aniso_shifts.size(), 15)
 
 	AnisotropyShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -106,7 +109,7 @@ CHECK(chemical shifts/with rings)
 				}
 			}
 		}
-		TEST_EQUAL(i, 13)
+		TEST_EQUAL(i, 15)
 	}	
 RESULT
 
