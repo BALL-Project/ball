@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.33 2003/06/17 12:26:10 amoll Exp $
+// $Id: hashGrid.h,v 1.34 2003/06/22 10:22:34 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -195,11 +196,11 @@ namespace BALL
 		//@{
 
 		/// ?????
-		class DataItem_
+		class DataItem
 		{
 			public:
 		
-			DataItem_(const Item& item, DataItem_* next)
+			DataItem(const Item& item, DataItem* next)
 				throw()
 			:	item_(item),
 				previous_(0),
@@ -212,16 +213,16 @@ namespace BALL
 			}
 
 			Item 			item_;
-			DataItem_* previous_;
-			DataItem_* next_;
+			DataItem* previous_;
+			DataItem* next_;
 		};
 			
 		/// ?????
-		class NeighbourBoxItem_
+		class NeighborBoxItem
 		{
 			public:
 		
-			NeighbourBoxItem_(HashGridBox3* box, NeighbourBoxItem_* next)
+			NeighborBoxItem(HashGridBox3* box, NeighborBoxItem* next)
 				throw()
 				: box_(box),
 					previous_(0),
@@ -234,41 +235,41 @@ namespace BALL
 			}
 
 			HashGridBox3<Item>* 	box_;
-			NeighbourBoxItem_* 		previous_;
-			NeighbourBoxItem_* 		next_;
+			NeighborBoxItem* 		previous_;
+			NeighborBoxItem* 		next_;
 		};
 
 
-		typedef NeighbourBoxItem_* BoxIteratorPosition;
+		typedef NeighborBoxItem* BoxIteratorPosition;
 		
-		class BoxIteratorTraits_
+		class BoxIteratorTraits
 		{
 			public:
 
-			BALL_CREATE_DEEP(BoxIteratorTraits_)
+			BALL_CREATE_DEEP(BoxIteratorTraits)
 
-			BoxIteratorTraits_()
+			BoxIteratorTraits()
 				throw()
 				:	bound_(0),
 					position_(0)
 			{
 			}
 				
-			BoxIteratorTraits_(const HashGridBox3& box)
+			BoxIteratorTraits(const HashGridBox3& box)
 				throw()
 				:	bound_((HashGridBox3 *)&box),
 					position_(0)
 			{
 			}
 				
-			BoxIteratorTraits_(const BoxIteratorTraits_& traits, bool /* deep */ = true)
+			BoxIteratorTraits(const BoxIteratorTraits& traits, bool /* deep */ = true)
 				throw()
 				:	bound_(traits.bound_),
 					position_(traits.position_)
 			{
 			}
 				
-			const BoxIteratorTraits_& operator = (const BoxIteratorTraits_& traits)
+			const BoxIteratorTraits& operator = (const BoxIteratorTraits& traits)
 				throw()
 			{
 				bound_ = traits.bound_;
@@ -306,13 +307,13 @@ namespace BALL
 				return position_;
 			}
 
-			bool operator == (const BoxIteratorTraits_& traits) const
+			bool operator == (const BoxIteratorTraits& traits) const
 				throw()
 			{
 				return (position_ == traits.position_);
 			}
 
-			bool operator != (const BoxIteratorTraits_& traits) const
+			bool operator != (const BoxIteratorTraits& traits) const
 				throw()
 			{
 				return (position_ != traits.position_);
@@ -334,13 +335,13 @@ namespace BALL
 			void toBegin()
 				throw()
 			{
-				position_ = bound_->first_neighbour_;
+				position_ = bound_->first_neighbor_;
 			}
 
 			bool isBegin() const
 				throw()
 			{
-				return (position_ == bound_->first_neighbour_);
+				return (position_ == bound_->first_neighbor_);
 			}
 
 			void toEnd()
@@ -379,15 +380,15 @@ namespace BALL
 			BoxIteratorPosition position_;
 		};
 
-		friend class BoxIteratorTraits_;
+		friend class BoxIteratorTraits;
 
 		/** BoxIterators iterate over all non-empty boxes that lie in the
-				direct neighbourhood to a box. Such an iterator traverses at most
+				direct neighborhood to a box. Such an iterator traverses at most
 				26 boxes.
 		*/
 		typedef ForwardIterator
 			<HashGridBox3<Item>, HashGridBox3<Item>,
-			BoxIteratorPosition, BoxIteratorTraits_>
+			BoxIteratorPosition, BoxIteratorTraits>
 				BoxIterator;
 
 		/// get the first non-empty box 
@@ -408,7 +409,7 @@ namespace BALL
 		/// This is the const version of  \link BoxIterator BoxIterator \endlink 
 		typedef ConstForwardIterator
 			<HashGridBox3<Item>, HashGridBox3<Item>,
-			BoxIteratorPosition, BoxIteratorTraits_>
+			BoxIteratorPosition, BoxIteratorTraits>
 				ConstBoxIterator;
 
 		/// get the first non-empty box 
@@ -426,36 +427,36 @@ namespace BALL
 		}
 
 
-		typedef DataItem_* DataIteratorPosition;
+		typedef DataItem* DataIteratorPosition;
 		
-		class DataIteratorTraits_
+		class DataIteratorTraits
 		{
 			public:
 
-			BALL_CREATE_DEEP(DataIteratorTraits_)
+			BALL_CREATE_DEEP(DataIteratorTraits)
 
-			DataIteratorTraits_()
+			DataIteratorTraits()
 				throw()
 			:	bound_(0),
 				position_(0)
 			{
 			}
 				
-			DataIteratorTraits_(const HashGridBox3& box)
+			DataIteratorTraits(const HashGridBox3& box)
 				throw()
 			:	bound_((HashGridBox3 *)&box),
 				position_(0)
 			{
 			}
 				
-			DataIteratorTraits_(const DataIteratorTraits_& traits, bool /* deep */ = true)
+			DataIteratorTraits(const DataIteratorTraits& traits, bool /* deep */ = true)
 				throw()
 			:	bound_(traits.bound_),
 				position_(traits.position_)
 			{
 			}
 				
-			const DataIteratorTraits_& operator = (const DataIteratorTraits_ &traits)
+			const DataIteratorTraits& operator = (const DataIteratorTraits &traits)
 				throw()
 			{
 				bound_ = traits.bound_;
@@ -493,13 +494,13 @@ namespace BALL
 				return position_;
 			}
 
-			bool operator == (const DataIteratorTraits_ &traits) const
+			bool operator == (const DataIteratorTraits &traits) const
 				throw()
 			{
 				return (position_ == traits.position_);
 			}
 
-			bool operator != (const DataIteratorTraits_ &traits) const
+			bool operator != (const DataIteratorTraits &traits) const
 				throw()
 			{
 				return (position_ != traits.position_);
@@ -566,14 +567,14 @@ namespace BALL
 			DataIteratorPosition 	position_;
 		};
 
-		friend class DataIteratorTraits_;
+		friend class DataIteratorTraits;
 
 		/** Data iterator for grid boxes.
 				This iterator traverses the list of data items store in a  \link HashGridBox3 HashGridBox3 \endlink .
 		*/
 		typedef ForwardIterator
 			<HashGridBox3<Item>, Item,
-			 DataIteratorPosition, DataIteratorTraits_>
+			 DataIteratorPosition, DataIteratorTraits>
 			DataIterator;
 
 		///
@@ -596,7 +597,7 @@ namespace BALL
 		*/
 		typedef ConstForwardIterator
 			<HashGridBox3<Item>, Item,
-			 DataIteratorPosition, DataIteratorTraits_>
+			 DataIteratorPosition, DataIteratorTraits>
 			ConstDataIterator;
 
 		///
@@ -628,8 +629,8 @@ namespace BALL
 		bool remove_(HashGridBox3 *box)
 			throw();
 
-		NeighbourBoxItem_* 	first_neighbour_;
-		DataItem_* 					first_item_;
+		NeighborBoxItem* 	first_neighbor_;
+		DataItem* 					first_item_;
 	};
 
 	template<typename Item>  
@@ -637,7 +638,7 @@ namespace BALL
 		throw()
 		:	previous_(0),
 			next_(0),
-			first_neighbour_(0),
+			first_neighbor_(0),
 			first_item_(0)
 	{
 	}
@@ -647,7 +648,7 @@ namespace BALL
 		throw()
 		:	previous_(0),
 			next_(0),
-			first_neighbour_(0),
+			first_neighbor_(0),
 			first_item_(0)
 	{
 		set(box, deep);
@@ -664,13 +665,13 @@ namespace BALL
 	void HashGridBox3<Item>::clear()
 		throw()
 	{
-		for (NeighbourBoxItem_* next = 0; first_neighbour_ != 0; first_neighbour_ = next)
+		for (NeighborBoxItem* next = 0; first_neighbor_ != 0; first_neighbor_ = next)
 		{
-			next = first_neighbour_->next_;
-			delete first_neighbour_;
+			next = first_neighbor_->next_;
+			delete first_neighbor_;
 		}
 
-		for (DataItem_* next_item = 0; first_item_ != 0; first_item_ = next_item)
+		for (DataItem* next_item = 0; first_item_ != 0; first_item_ = next_item)
 		{
 			next_item = first_item_->next_;
 			delete first_item_;
@@ -707,7 +708,7 @@ namespace BALL
 	Item* HashGridBox3<Item>::find(const Item& item)
 		throw()
 	{
-		for (DataItem_* item_ptr= first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
+		for (DataItem* item_ptr= first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
 		{
 			if (item_ptr->item_ == item)
 			{
@@ -733,7 +734,7 @@ namespace BALL
 		Size size = 0;
 
 		// count all items in the box
-		for (const DataItem_* item = first_item_; item != 0; item = item->next_, size++);
+		for (const DataItem* item = first_item_; item != 0; item = item->next_, size++);
 		
 		return size;
 	}
@@ -743,14 +744,14 @@ namespace BALL
 	void HashGridBox3<Item>::insert(const Item& item)
 		throw()
 	{
-		first_item_ = new DataItem_(item, first_item_);
+		first_item_ = new DataItem(item, first_item_);
 	}
 
 	template<typename Item>  
 	bool HashGridBox3<Item>::remove(const Item& item)
 		throw()
 	{
-		for (DataItem_* item_ptr = first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
+		for (DataItem* item_ptr = first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
 		{
 			if (item_ptr->item_ == item)
 			{
@@ -783,8 +784,8 @@ namespace BALL
 		throw()
 	{
 		bool found = false;
-		DataItem_* next_item = 0;
-		DataItem_* item_ptr = first_item_;
+		DataItem* next_item = 0;
+		DataItem* item_ptr = first_item_;
 		
 		while(item_ptr != 0)
 		{
@@ -830,8 +831,8 @@ namespace BALL
 	bool HashGridBox3<Item>::operator == (const HashGridBox3<Item>& box) const
 		throw()
 	{
-		const DataItem_* a = first_item_;
-		const DataItem_* b = box.first_item_;
+		const DataItem* a = first_item_;
+		const DataItem* b = box.first_item_;
 		
 		for (; a != 0 && b != 0; a = a->next_, b = b->next_)
 		{
@@ -873,9 +874,9 @@ namespace BALL
 		throw()
 	{
 		Size size = 0;
-		NeighbourBoxItem_* item_ptr_ = 0;
+		NeighborBoxItem* item_ptr_ = 0;
 		
-		for (item_ptr_ = first_neighbour_; item_ptr_ != 0; item_ptr_ = item_ptr_->next_)
+		for (item_ptr_ = first_neighbor_; item_ptr_ != 0; item_ptr_ = item_ptr_->next_)
 		{
 			++size;
 
@@ -893,7 +894,7 @@ namespace BALL
 		}
 		
 		size = 0;
-		DataItem_* item = 0;
+		DataItem* item = 0;
 		
 		for (item = first_item_; item != 0; item = item->next_)
 		{
@@ -923,15 +924,15 @@ namespace BALL
 		
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  data:" << std::endl;
-		for (DataItem_ *item = first_item_; item != 0; item = item->next_)
+		for (DataItem *item = first_item_; item != 0; item = item->next_)
 		{
 			BALL_DUMP_DEPTH(s, depth);
 			s << "    " << item->item_ << std::endl;
 		}
 		
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  neighbour boxes:" << std::endl;
-		for (NeighbourBoxItem_ *item_ptr_ = first_neighbour_; item_ptr_ != 0; item_ptr_ = item_ptr_->next_)
+		s << "  neighbor boxes:" << std::endl;
+		for (NeighborBoxItem *item_ptr_ = first_neighbor_; item_ptr_ != 0; item_ptr_ = item_ptr_->next_)
 		{
 			BALL_DUMP_DEPTH(s, depth);
 			s << "    " << item_ptr_->box_ << std::endl;
@@ -951,7 +952,7 @@ namespace BALL
 
 		Processor::Result result;
 			
-		for (DataItem_ *item = first_item_; item != 0; item = item->next_)
+		for (DataItem *item = first_item_; item != 0; item = item->next_)
 		{
 			result = processor(item->item_);
 
@@ -975,10 +976,10 @@ namespace BALL
  
 		Processor::Result result;
 
-		for (NeighbourBoxItem_* neighbour_item = first_neighbour_;
-				 neighbour_item != 0; neighbour_item = neighbour_item->next_)
+		for (NeighborBoxItem* neighbor_item = first_neighbor_;
+				 neighbor_item != 0; neighbor_item = neighbor_item->next_)
 		{
-			result = processor(*(neighbour_item->box_));
+			result = processor(*(neighbor_item->box_));
 
 			if (result <= Processor::BREAK)
 			{
@@ -994,34 +995,34 @@ namespace BALL
 	void HashGridBox3<Item>::insert_(HashGridBox3* box)
 		throw()
 	{
-		first_neighbour_ = new NeighbourBoxItem_(box, first_neighbour_);
+		first_neighbor_ = new NeighborBoxItem(box, first_neighbor_);
 	}
 
 	template<typename Item>  
 	bool HashGridBox3<Item>::remove_(HashGridBox3* box)
 		throw()
 	{
-		for (NeighbourBoxItem_* neighbour_item = first_neighbour_; 
-				 neighbour_item != 0; neighbour_item = neighbour_item->next_)
+		for (NeighborBoxItem* neighbor_item = first_neighbor_; 
+				 neighbor_item != 0; neighbor_item = neighbor_item->next_)
 		{
-			if (neighbour_item->box_ == box)
+			if (neighbor_item->box_ == box)
 			{
-				if (neighbour_item == first_neighbour_)
+				if (neighbor_item == first_neighbor_)
 				{
-					first_neighbour_ = first_neighbour_->next_;
+					first_neighbor_ = first_neighbor_->next_;
 				}
 				
-				if (neighbour_item->next_ != 0)
+				if (neighbor_item->next_ != 0)
 				{
-					neighbour_item->next_->previous_ = neighbour_item->previous_;
+					neighbor_item->next_->previous_ = neighbor_item->previous_;
 				}
 			
-				if (neighbour_item->previous_ != 0)
+				if (neighbor_item->previous_ != 0)
 				{
-					neighbour_item->previous_->next_ = neighbour_item->next_;
+					neighbor_item->previous_->next_ = neighbor_item->next_;
 				}
 			
-				delete neighbour_item;
+				delete neighbor_item;
 				
 				return true;
 			}
@@ -1283,34 +1284,34 @@ namespace BALL
 
 		typedef HashGridBox3<Item>* BoxIteratorPosition;
 		
-		class BoxIteratorTraits_
+		class BoxIteratorTraits
 		{
 			public:
 
-			BALL_CREATE_DEEP(BoxIteratorTraits_)
+			BALL_CREATE_DEEP(BoxIteratorTraits)
 
-			BoxIteratorTraits_()
+			BoxIteratorTraits()
 				throw()
 				:	bound_(0),
 					position_(0)
 			{
 			}
 				
-			BoxIteratorTraits_(const HashGrid3 &grid)
+			BoxIteratorTraits(const HashGrid3 &grid)
 				throw()
 				:	bound_((HashGrid3 *)&grid),
 					position_(0)
 			{
 			}
 				
-			BoxIteratorTraits_(const BoxIteratorTraits_& traits, bool /* deep */ = true)
+			BoxIteratorTraits(const BoxIteratorTraits& traits, bool /* deep */ = true)
 				throw()
 				:	bound_(traits.bound_),
 					position_(traits.position_)
 			{
 			}
 				
-			const BoxIteratorTraits_& operator = (const BoxIteratorTraits_& traits)
+			const BoxIteratorTraits& operator = (const BoxIteratorTraits& traits)
 				throw()
 			{
 				bound_ = traits.bound_;
@@ -1348,13 +1349,13 @@ namespace BALL
 				return position_;
 			}
 
-			bool operator == (const BoxIteratorTraits_& traits) const
+			bool operator == (const BoxIteratorTraits& traits) const
 				throw()
 			{
 				return (position_ == traits.position_);
 			}
 
-			bool operator != (const BoxIteratorTraits_& traits) const
+			bool operator != (const BoxIteratorTraits& traits) const
 				throw()
 			{
 				return (position_ != traits.position_);
@@ -1421,12 +1422,12 @@ namespace BALL
 			BoxIteratorPosition position_;
 		};
 
-		friend class BoxIteratorTraits_;
+		friend class BoxIteratorTraits;
 
 		///
 		typedef ForwardIterator
 			<HashGrid3<Item>, HashGridBox3<Item>,
-			 BoxIteratorPosition, BoxIteratorTraits_>
+			 BoxIteratorPosition, BoxIteratorTraits>
 			BoxIterator;
 
 		/// 
@@ -1447,7 +1448,7 @@ namespace BALL
 		///
 		typedef ConstForwardIterator
 			<HashGrid3<Item>, HashGridBox3<Item>,
-			 BoxIteratorPosition, BoxIteratorTraits_>
+			 BoxIteratorPosition, BoxIteratorTraits>
 			ConstBoxIterator;
 
 		/// 
@@ -1738,7 +1739,7 @@ namespace BALL
 		{
 			if (sourcebox->isEmpty() == false)
 			{
-				for (typename HashGridBox3<Item>::DataItem_* item  = sourcebox->first_item_; item != 0; item = item->next_)
+				for (typename HashGridBox3<Item>::DataItem* item  = sourcebox->first_item_; item != 0; item = item->next_)
 				{
 					insert_(targetbox, item->item_);
 				}
@@ -2147,7 +2148,7 @@ namespace BALL
 
 		for (HashGridBox3<Item>* box = first_nonempty_; box != 0; box = box->next_)
 		{
-			for (typename HashGridBox3<Item>::DataItem_ *item = box->first_item_; item != 0; item = item->next_)
+			for (typename HashGridBox3<Item>::DataItem *item = box->first_item_; item != 0; item = item->next_)
 			{
 				result = processor(item->item_);
 
@@ -2222,17 +2223,17 @@ namespace BALL
 			++end_y;
 			++end_z;
 			
-			HashGridBox3<Item>* neighbourbox = 0;
+			HashGridBox3<Item>* neighborbox = 0;
 			for (Position x = end_x - 2; x <= end_x; ++x)
 			{
 				for (Position y = end_y - 2; y <= end_y; ++y)
 				{
 					for (Position z = end_z - 2; z <= end_z; ++z)
 					{
-						neighbourbox = getBox(x, y, z);
+						neighborbox = getBox(x, y, z);
 			
-						if (neighbourbox != 0)
-							neighbourbox->insert_(box);
+						if (neighborbox != 0)
+							neighborbox->insert_(box);
 					}
 				}
 			}
@@ -2270,18 +2271,18 @@ namespace BALL
 			++end_y;
 			++end_z;
 			
-			HashGridBox3<Item> *neighbourbox = 0;
+			HashGridBox3<Item> *neighborbox = 0;
 			for (Index x = end_x - 2; x <= end_x; ++x)
 			{
 				for (Index y = end_y - 2; y <= end_y; ++y)
 				{
 					for (Index z = end_z - 2; z <= end_z; ++z)
 					{
-						neighbourbox = getBox(x, y, z);
+						neighborbox = getBox(x, y, z);
 			
-						if (neighbourbox != 0)
+						if (neighborbox != 0)
 						{
-							neighbourbox->remove_(box);
+							neighborbox->remove_(box);
 						}
 					}
 				}
