@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.34 2002/01/28 00:10:06 oliver Exp $
+// $Id: expression.C,v 1.34.4.1 2002/05/15 23:32:28 oliver Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/expressionParser.h>
@@ -271,6 +271,7 @@ namespace BALL
 		create_methods_.insert("sp3Hybridized", Sp3HybridizedPredicate::createDefault);
 		create_methods_.insert("sp2Hybridized", Sp2HybridizedPredicate::createDefault);
 		create_methods_.insert("spHybridized", SpHybridizedPredicate::createDefault);
+		create_methods_.insert("charge", ChargePredicate::createDefault);
 	}
 
 }
