@@ -1,4 +1,4 @@
-// $Id: Pair6_12RDFIntegrator_test.C,v 1.2 2000/10/18 12:00:33 anker Exp $
+// $Id: Pair6_12RDFIntegrator_test.C,v 1.3 2000/12/01 11:45:57 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Pair6_12RDFIntegrator_test.C,v 1.2 2000/10/18 12:00:33 anker Exp $")
+START_TEST(class_name, "$Id: Pair6_12RDFIntegrator_test.C,v 1.3 2000/12/01 11:45:57 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -65,52 +65,54 @@ RESULT
 
 
 CHECK(Pair6_12RDFIntegrator::Pair6_12RDFIntegrator(const Pair6_12RDFIntegrator& integrator))
-	Pair6_12RDFIntegrator int1(1.0, 1.0, 1.0, 1.0, rdf);
+	double A = 47, B = 11, C = 0.8, D = 15;
+	Pair6_12RDFIntegrator int1;
+	int1.setConstants(A, B, C, D);
+	int1.setRDF(rdf);
 	Pair6_12RDFIntegrator int2(int1);
 	bool test = (int2.getRDF().getRepresentation().getIntervals() == intervals);
 	TEST_EQUAL(test, true);
 	test = (int2.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
+	double a, b, c, d;
+	int2.getConstants(a, b, c, d);
+	test = ((a == A) && (b == B) && (c == C) && (d == D));
+	TEST_EQUAL(test, true);
 	// BAUSTELLE: Konstanten
 	// BAUSTELLE: false, Spezialfälle
 RESULT
 
 
-CHECK(Pair6_12RDFIntegrator::Pair6_12RDFIntegrator(double alpha, double C1, double C2, double R_ij_o, double k1, double k2, const RadialDistributionFunction& rdf))
-	Pair6_12RDFIntegrator integrator(1.0, 1.0, 1.0, 1.0, rdf);
+CHECK(Pair6_12RDFIntegrator::Pair6_12RDFIntegrator(double A, double B, double k1, k2, const RadialDistributionFunction& rdf))
+	double A = 47, B = 11, C = 0.8, D = 15;
+	Pair6_12RDFIntegrator integrator(A, B, C, D, rdf);
 	bool test = (integrator.getRDF().getRepresentation().getIntervals() == intervals);
 	TEST_EQUAL(test, true);
 	test = (integrator.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
-	// BAUSTELLE: false, Spezialfälle
-RESULT
-
-
-CHECK(Pair6_12RDFIntegrator::destroy())
-	Pair6_12RDFIntegrator integrator(1.0, 1.0, 1.0, 1.0, rdf);
-	integrator.destroy();
-	vector<Interval> nope;
-	bool test = (integrator.getRDF().getRepresentation().getIntervals() == nope);
+	double a, b, c, d;
+	integrator.getConstants(a, b, c, d);
+	test = ((a == A) && (b == B) && (c == C) && (d == D));
 	TEST_EQUAL(test, true);
-	vector<Coefficients> naught;
-	test = (integrator.getRDF().getRepresentation().getCoefficients() == naught);
-	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
-	// BAUSTELLE: false, Spezialfälle
 RESULT
 
 
 CHECK(Pair6_12RDFIntegrator::clear())
-	Pair6_12RDFIntegrator integrator(1.0, 1.0, 1.0, 1.0, rdf);
-	integrator.destroy();
+	Pair6_12RDFIntegrator integrator(5.3, 22221.0, 0.0000000008, 1.0, rdf);
+	integrator.clear();
+	Pair6_12RDFIntegrator empty;
+	bool test = (integrator == empty);
+	TEST_EQUAL(test, true);
 	vector<Interval> nope;
-	bool test = (integrator.getRDF().getRepresentation().getIntervals() == nope);
+	test = (integrator.getRDF().getRepresentation().getIntervals() == nope);
 	TEST_EQUAL(test, true);
 	vector<Coefficients> naught;
 	test = (integrator.getRDF().getRepresentation().getCoefficients() == naught);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
+	double a, b, c, d;
+	integrator.getConstants(a, b, c, d);
+	test = ((a == 0.0) && (b == 0.0) && (c == 0.0) && (d == 0.0));
+	TEST_EQUAL(test, true);
 	// BAUSTELLE: false, Spezialfälle
 RESULT
 
@@ -119,20 +121,39 @@ CHECK(Pair6_12RDFIntegrator::Pair6_12RDFIntegrator& operator =
 			(const Pair6_12RDFIntegrator& integrator))
 	Pair6_12RDFIntegrator int1;
 	int1.setRDF(RadialDistributionFunction(poly));
-	int1.setConstants(1.0, 1.0, 1.0, 1.0);
+	int1.setConstants(1.0, 2.0, 3.0, 4.0);
 	Pair6_12RDFIntegrator int2;
 	int2 = int1;
 	bool test = (int2.getRDF().getRepresentation().getIntervals() == intervals);
 	TEST_EQUAL(test, true);
 	test = (int2.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
+	double a, b, c, d;
+	int2.getConstants(a, b, c, d);
+	test = ((a == 1.0) && (b == 2.0) && (c == 3.0) && (d == 4.0));
+	TEST_EQUAL(test, true);
 	// BAUSTELLE: false, Spezialfälle
 RESULT
 
 
-CHECK(Pair6_12RDFIntegrator::setConstants(double alpha, double C1, double C2, double R_ij_o, double k1, double k2))
-  //BAUSTELLE
+CHECK(Pair6_12RDFIntegrator::setConstants(double A, double B, double k1, double k2))
+	Pair6_12RDFIntegrator int1;
+	double A = 333.33, B = 45.67, C = 0.0, D = 12345678e19;
+	int1.setConstants(A, B, C, D);
+	int1.setRDF(rdf);
+	Pair6_12RDFIntegrator int2(A, B, C, D, rdf);
+	bool test = (int1 == int2);
+	TEST_EQUAL(test, true)
+RESULT
+
+
+CHECK(Pair6_12RDFIntegrator::getConstants(double A, double B, double k1, double k2))
+	double A = 333.33, B = 45.67, C = 0.0, D = 12345678e19;
+	Pair6_12RDFIntegrator int1(A, B, C, D, rdf);
+	double a, b, c, d;
+	int1.getConstants(a, b, c, d);
+	bool test = ((a == A) && (b == B) && (c == C) && (d == D));
+	TEST_EQUAL(test, true);
 RESULT
 
 
@@ -151,11 +172,9 @@ CHECK(Pair6_12RDFIntegrator::integrateToInf(double from) const )
 	rel_err = fabs((val - (-0.04934884587)) / (-0.04934884587));
 	TEST_REAL_EQUAL(rel_err, 0.01);
 
-	/*
 	val = integrator.integrateToInf(2);
-	rel_err = fabs((val - (-2.09822)) / -2.09822);
+	rel_err = fabs((val - (-0.074634517)) / -0.074634517);
 	TEST_REAL_EQUAL(rel_err, 0.01);
-	*/
   //BAUSTELLE
 RESULT
 
@@ -169,50 +188,53 @@ RESULT
 CHECK(Pair6_12RDFIntegrator::integrate(double from, double to) const )
 	
 	// Zuerst der triviale Test (keine geometrische Korrektur)
-	Pair6_12RDFIntegrator integrator(1, 1, 0, 0, rdf);
 	double val;
 	double rel_err;
 
 	PRECISION(0.01)
 
-	val = integrator.integrate(0.1, 0.9, 1.0, 1.0, 0.0, 0.0);
+	Pair6_12RDFIntegrator integrator(1, 1, 0, 0, rdf);
+	val = integrator.integrate(0.1, 0.9);
 	TEST_REAL_EQUAL(val, 0.0)
-	val = integrator.integrate(1.0, 1.5, 1.0, 1.0, 0.0, 0.0);
+	val = integrator.integrate(1.0, 1.5);
 	rel_err = fabs((val - (-0.4103491733)) / -0.4103491733);
+	Log.info() << "LOG: " << val << endl;
 	TEST_REAL_EQUAL(rel_err, 0.01);
-	val = integrator.integrate(2.3, 2.7, 1.0, 1.0, 0.0, 0.0);
+	val = integrator.integrate(2.3, 2.7);
 	rel_err = fabs((val - (-0.004029138)) / -0.004029138);
 	TEST_REAL_EQUAL(rel_err, 0.01);
-	val = integrator.integrate(1.3, 2.3, 1.0, 1.0, 0.0, 0.0);
+	val = integrator.integrate(1.3, 2.3);
 	rel_err = fabs((val - (-0.3558524516)) / -0.3558524516);
 	TEST_REAL_EQUAL(rel_err, 0.01);
 
-	// now come the tests involving geometric correction (and therefore
-	// numerical integration)
+	// now come the tests involving geometric correction 
 
+	integrator.setConstants(1.0, 1.0, 1.0, 1.0);
 	// these limits correspond to 1.5 .. 1.7 as argument for the rdf.
-	val = integrator.integrate(0.7247448714, 0.9628738838, 1.0, 1.0, 1.0, 1.0);
+	val = integrator.integrate(0.7247448714, 0.9628738838);
 	rel_err = fabs((val - 4.80942202) / 4.80942202);
 	TEST_REAL_EQUAL(rel_err, 0.01);
 	// these limits correspond to 1.7 .. 1.9 as argument for the rdf.
-	val = integrator.integrate(0.9628738838, 1.191153453, 1.0, 1.0, 1.0, 1.0);
+	val = integrator.integrate(0.9628738838, 1.191153453);
 	rel_err = fabs((val - (-0.1653446139)) / -0.1653446139);
 	TEST_REAL_EQUAL(rel_err, 0.01);
 
 	// now the same with some k1
-	val = integrator.integrate(1.022497216, 1.278404875, 1.0, 1.0, 0.2, 1.0);
+	integrator.setConstants(1.0, 1.0, 0.2, 1.0);
+	val = integrator.integrate(1.022497216, 1.278404875);
 	rel_err = fabs((val - (-0.2650117748)) / -0.2650117748);
 	TEST_REAL_EQUAL(rel_err, 0.01);
-	val = integrator.integrate(1.278404875, 1.518641406, 1.0, 1.0, 0.2, 1.0);
+	val = integrator.integrate(1.278404875, 1.518641406);
 	rel_err = fabs((val - (-0.2076186615)) / -0.2076186615);
 	TEST_REAL_EQUAL(rel_err, 0.01);
 
 	// now the same with some k1 and k2
-	val = integrator.integrate(0.4099019514, 0.8486832981, 1.0, 1.0, 0.2, 2.0);
+	integrator.setConstants(1.0, 1.0, 0.2, 2.0);
+	val = integrator.integrate(0.4099019514, 0.8486832981);
 	rel_err = fabs((val - 1179.861575) / 1179.861575);
 	TEST_REAL_EQUAL(rel_err, 0.01);
 
-	val = integrator.integrate(0.8486832981, 1.172792206, 1.0, 1.0, 0.2, 2.0);
+	val = integrator.integrate(0.8486832981, 1.172792206);
 	rel_err = fabs((val - 0.4461636106) / 0.4461636106);
 	TEST_REAL_EQUAL(rel_err, 0.01);
 RESULT
