@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.7 2001/09/15 14:50:41 amoll Exp $
+// $Id: TCPTransfer.C,v 1.8 2001/10/16 23:37:44 amoll Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -210,30 +210,12 @@ void TCPTransfer::clear()
 	}
 }
 
-TCPTransfer::Status TCPTransfer::getHTTP_()
-{
-	String query;
-	query  = "GET /" + file_address_ + " HTTP/1.0\n\r";
-	query += "Accept: */*\n\r";
-	query += "User-Agent: inet.c\n\r";
-	//BAUSTELLE basic authentification doesnt yet work
-	if (!login_.isEmpty() && !password_.isEmpty())
-	{
-		String auth(login_ + ":" + password_);
-		query += "Authorization: Basic "+ auth.encodeBase64() + "\n\r";
-	}
-	query += "\n\r";
-	
-	Status status = logon_(query);
-	if (status != NO_ERROR)
-	{
-		return status;
-	}
-
-	int bytes = received_bytes_;
+TCPTransfer::Status TCPTransfer::getHTTPStatus_()
+	throw()
+{	
 	// ==================================== get the status from the server
 	String first_line;
-	for (Position pos = 0; pos < (Position) bytes; pos++)
+	for (Position pos = 0; pos < (Position) received_bytes_; pos++)
 	{
 		if (buffer_[pos] == '\n')
 		{
@@ -244,7 +226,7 @@ TCPTransfer::Status TCPTransfer::getHTTP_()
 	
 	try
 	{
-		status = (Status) first_line.getField(1).toUnsignedInt();
+		Status status = (Status) first_line.getField(1).toUnsignedInt();
 		if (status != 200)
 		{
 			return status;
@@ -255,7 +237,44 @@ TCPTransfer::Status TCPTransfer::getHTTP_()
 		return UNKNOWN_ERROR;
 	}
 
+	return NO_ERROR;
+}
+
+	
+
+TCPTransfer::Status TCPTransfer::getHTTP_()
+	throw()
+{
+	String query;
+	query  = "GET " + file_address_ + " HTTP/1.0\n";
+	query += "Accept: */*\n";
+	query += "User-Agent: Mozilla/4.76\n";
+	
+	// HTTP authentification
+	if (!login_.isEmpty() && !password_.isEmpty())
+	{
+		String auth(login_ + ":" + password_);
+		query += "Authorization: Basic "+ auth.encodeBase64() + "\n";
+	}
+	query += "\n";
+	
+	// Logon to webserver and send GET-request
+	Status status = logon_(query);
+	if (status != NO_ERROR)
+	{
+		return status;
+	}
+
+	// ====================== read Status from HTTP-Request-Response
+	status = getHTTPStatus_();
+
+	if (status != NO_ERROR)
+	{
+		return status;
+	}
+
 	// ===================================== now cutting of the head
+	int bytes = received_bytes_;
 	Position pos = 0; 
 	for (;pos < (Position)bytes; pos++)
 	{
@@ -269,7 +288,8 @@ TCPTransfer::Status TCPTransfer::getHTTP_()
 		return BODY_ERROR;
 	}
 	
-	// ==================================== receive the rest
+	// write the file
+	// skip the carriage returns
 	pos += 3;
 	for (Position i = pos; i < (Position)bytes; i ++)
 	{
@@ -277,6 +297,7 @@ TCPTransfer::Status TCPTransfer::getHTTP_()
 	}
 	received_bytes_ = bytes - pos;
 
+	// ==================================== receive the rest
 	do
 	{
 		bytes = read(socket_, buffer_, BUFFER_SIZE);
@@ -296,6 +317,7 @@ TCPTransfer::Status TCPTransfer::getHTTP_()
 }
 	
 TCPTransfer::Status TCPTransfer::setBlock_(Socket socket, bool block)
+	throw()
 {
 	int temp = !block;
 	if (ioctl(socket, FIONBIO, &temp) == -1)
@@ -307,6 +329,7 @@ TCPTransfer::Status TCPTransfer::setBlock_(Socket socket, bool block)
 }
 
 TCPTransfer::Status TCPTransfer::logon_(const String& query)
+	throw()
 {
 	status_ = UNKNOWN_ERROR;
 	
@@ -342,16 +365,7 @@ TCPTransfer::Status TCPTransfer::logon_(const String& query)
 	
 	if (!query.isEmpty())
 	{
-		if (debug_)
-		{
-			(*fstream_) << ">>" << query << endl;
-		}
-
-		if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
-		{
-			status_ = SEND_ERROR;
-			return status_;
-		}
+		sendData_(query, socket_);
 	}
 
 	received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
@@ -372,6 +386,7 @@ TCPTransfer::Status TCPTransfer::logon_(const String& query)
 }	
 
 TCPTransfer::Status TCPTransfer::getFTPStatus_()
+	throw()
 {
 	status_ = UNKNOWN_ERROR;
 	String temp;
@@ -391,6 +406,7 @@ TCPTransfer::Status TCPTransfer::getFTPStatus_()
 }
 
 void TCPTransfer::output_()
+	throw()
 {
 	for (Position pos = 0; pos < (Position) received_bytes_; pos++)
 	{
@@ -398,7 +414,25 @@ void TCPTransfer::output_()
 	}
 }
 
+TCPTransfer::Status TCPTransfer::sendData_(const String& query, Socket socket)
+	throw()
+{
+	if (debug_)
+	{
+		(*fstream_) << ">>" << query << endl;
+	}
+
+	if (send(socket, query.c_str(), query.size(), 0) != (int) query.size())
+	{
+		status_ = SEND_ERROR;
+		return status_;
+	}
+
+	return NO_ERROR;
+}
+
 bool TCPTransfer::waitForOutput_(const String& key, Size seconds)
+	throw()
 {
 	setBlock_(socket_, false);
 	Timer timer;
@@ -430,7 +464,9 @@ bool TCPTransfer::waitForOutput_(const String& key, Size seconds)
 }
 
 TCPTransfer::Status TCPTransfer::getFTP_()
+	throw()
 {
+	// connect to FTP-server
 	Status status = logon_("");
 	if (status != NO_ERROR) 
 	{
@@ -442,9 +478,9 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return status_;
 	}
 
+	// read all lines from the server
+	// last line starts with "220 "
 	setBlock_(socket_, false);
-	Timer timer;
-	timer.start();
 	
 	// got "220 " (important: space)  -> last line has arrived
 	bool last_line1 = false;
@@ -453,6 +489,8 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	bool last_line2 = false;
 	
 	// try to read login message, abort after 20 seconds
+	Timer timer;
+	timer.start();
 	do		
 	{	
 		if (received_bytes_ > 0)
@@ -497,15 +535,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		query = "USER "+ login_ + "\n";
 	}
 	
-	if (debug_)
-	{
-		(*fstream_) << ">>" << query << endl;
-	}
-
-	if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
-	{
-		return SEND_ERROR;
-	}
+	sendData_(query, socket_);
 	
 	setBlock_(socket_, true);
 	received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
@@ -527,6 +557,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	}
 	
 	//================================================ password
+	// if password is empty try a common type email-address as password
 	if (password_.isEmpty())
 	{
 		query = "PASS nobody@nowhereland.com\n";
@@ -536,15 +567,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	 query = "PASS " + password_ + "\n";
 	}
 	
-	if (debug_)
-	{
-		(*fstream_) << ">>" << query << endl;
-	}
-
-	if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
-	{
-		return SEND_ERROR;
-	}
+	sendData_(query, socket_);
 	
 	received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
 	if (received_bytes_ < 0)
@@ -609,17 +632,9 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return LOGON_ERROR; 
 	}
 	
+	//======================================= we will use a passive connection
 	query = "PASV\n";
-	
-	if (debug_)
-	{
-		(*fstream_) << ">>" << query << endl;
-	}
-	
-	if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
-	{
-		return SEND_ERROR;
-	}
+	sendData_(query, socket_);	
 
 	setBlock_(socket_, true);
 	received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
@@ -634,12 +649,15 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		(*fstream_) << "<<" << buffer_ << endl;
 	}
 	
+	// we get a code 227 if FTP-server will open a passive connection
 	if (getFTPStatus_() != 227)
 	{
 		return status_;
 	}
 
+	// port for passive connection
 	Position passv_port = 0;
+	// host address for passive connection
 	String 	 passv_host;
 	try
 	{
@@ -647,16 +665,20 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		temp = temp.getField(1, "(");
 		temp = temp.getField(0, ")");
 
+		// extract IP for passive FTP-server
 		passv_host = temp.getField(0, ",") + "." +
 								 temp.getField(1, ",") + "." +
 								 temp.getField(2, ",") + "." +
 								 temp.getField(3, ",");
 		
+		// calculate port
 		passv_port = temp.getField(4, ",").toUnsignedInt() * 256 + 
 								 temp.getField(5, ",").toUnsignedInt();
 	}
 	catch(Exception::InvalidFormat)
 	{
+		// we dont need anything to do here
+		// passv_port == 0
 	}
 
 	if (passv_port == 0)
@@ -683,6 +705,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	host.sin_port	  = htons(passv_port);
 	host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
 	
+	// now connecting to passive ftp port
 	if(connect(socket2, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
 	{
 		status_ = CONNECT_ERROR;
@@ -690,7 +713,9 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	}
 	setBlock_(socket2, false);
 	
+	// ----------------------------------- test if server will send file
 	query = "RETR " + file_address_ + '\n';
+	
 	if (debug_)
 	{
 		(*fstream_) << ">>" << query << endl;
@@ -701,7 +726,6 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return SEND_ERROR;
 	}
 	
-	// ----------------------------------- test if server will send file
 	setBlock_(socket_, true);
 	received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
 
@@ -742,16 +766,28 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 			}
 			received_bytes_ += bytes;
 		}
+		
 		control_bytes = read(socket_, buffer_, BUFFER_SIZE);
+		if (debug_ && control_bytes > 0)
+		{
+			for (Position i = 0; i < (Position)bytes; i++)
+			{
+				(*fstream_) << "<< " << buffer_[i];
+			}
+		}
 	}
 	// im moment noch kein zeitabbruch	
 	
+	
+	// we dont need the second socket anymore
 	close(socket2);
+	
 	
 	if (bytes == 0)
 	{
 		return NO_ERROR;
 	}
+	
 	
 	if (control_bytes < 1)
 	{
@@ -759,10 +795,10 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return status_;
 	}
 
+	// test if file was transfer correct
 	buffer_[control_bytes] = '\0';
 	temp = buffer_;
 	temp = temp.getSubstring(0, 3);
-
 
 	if (temp != "226")
 	{
