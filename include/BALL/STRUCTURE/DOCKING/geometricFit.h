@@ -261,6 +261,16 @@ namespace BALL
       bool hasFinished() const
 				throw();
 
+			/** Return the translation corresponding to conformation con_num.
+			 */
+			Vector3 getTranslation(Index con_num) const
+				throw();
+
+			/** Return the orientation corresponding to conformation con_num.
+			 */
+			Vector3 getOrientation(Index con_num) const
+				throw();
+
 			/** Return the ranked conformations.
 			 */
 			ConformationSet getConformationSet(Index total_number = 0)
@@ -387,6 +397,10 @@ namespace BALL
 			// Needed to produce the correct results in getRankedConformations
 			System system_backup_a_;
 			System system_backup_b_;
+
+			// Vectors to store orientation and translation of the results in the ranked conformations
+			vector<Vector3> translations_;
+			vector<Vector3> orientations_;
 
     }; // class GeometricFit
 
