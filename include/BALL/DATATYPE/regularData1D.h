@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.17 2001/07/10 12:50:40 oliver Exp $
+// $Id: regularData1D.h,v 1.18 2001/07/10 17:50:36 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -52,6 +52,11 @@ namespace BALL
 		TRegularData1D(const TRegularData1D& data)
 			throw();
 
+		/** Detailled constructor
+		*/
+		TRegularData1D(const VectorType& data, double lower = 0, double upper = 0)
+			throw();
+			
 		/**	Destructor
 		*/
 		virtual ~TRegularData1D()
@@ -215,6 +220,15 @@ namespace BALL
 		:	lower_(data.lower_),
 			upper_(data.upper_),
 			data_(data.data_)
+	{
+	}
+
+	template <typename T>
+	TRegularData1D<T>::TRegularData1D(const VectorType& data, double lower, double upper)
+		throw()
+		: lower_(lower),
+			upper_(upper),
+			data_(data)
 	{
 	}
 
