@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.38 2004/02/12 16:17:28 amoll Exp $
+// $Id: scene.C,v 1.39 2004/02/13 17:35:49 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1398,6 +1398,19 @@ void Scene::mouseReleaseEvent(QMouseEvent *mouse_event)
 		need_update_ = false;
 	}
 }
+
+#ifndef QT_NO_WHEELEVENT
+void Scene::wheelEvent( QWheelEvent *qmouse_event )
+{
+	qmouse_event->accept();
+
+	int step_width=mouse_sensitivity_*2;
+
+	y_window_pos_new_ = y_window_pos_old_ + qmouse_event->delta()/120.*mouse_sensitivity_;
+	zoomSystem_(this);
+	y_window_pos_old_ = y_window_pos_new_;
+}
+#endif
 
 void Scene::rotateMode_()
 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.16 2004/02/09 13:50:22 amoll Exp $
+// $Id: scene.h,v 1.17 2004/02/13 17:36:00 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -433,6 +433,16 @@ namespace BALL
 					\see    Events
 			*/
 			virtual void mouseReleaseEvent(QMouseEvent* qmouse_event);
+
+#ifndef QT_NO_WHEELEVENT
+			/** Catch mouse wheel events.
+			 		Catch mouse wheel events and zoom the scene accordingly.
+					Calls Notify
+					\param  qmouse_event the QT-mouse event (See QT-library for mouse events)
+					\see    Events
+			*/
+			virtual void wheelEvent(QWheelEvent* qmouse_event);
+#endif
 
 			public slots:
 
