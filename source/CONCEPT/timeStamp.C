@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.7 2000/10/18 12:42:55 oliver Exp $
+// $Id: timeStamp.C,v 1.8 2000/11/02 18:22:36 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -18,6 +18,12 @@ namespace BALL
 	PreciseTime::PreciseTime(const PreciseTime& time)
 		:	secs_(time.secs_),
 		 	usecs_(time.usecs_)
+	{
+	}
+
+	PreciseTime::PreciseTime(long secs, long usecs)
+		:	secs_(secs),
+		 	usecs_(usecs)
 	{
 	}
 
@@ -77,20 +83,15 @@ namespace BALL
 		return (pm.readPrimitive(secs_, "secs_") && pm.readPrimitive(usecs_, "usecs_"));
 	}
 	
-	const PreciseTime& PreciseTime::now() throw()
+	PreciseTime PreciseTime::now() 
+		throw()
 	{
-		static PreciseTime t;
-
 		// get the current time via the system call
 		// gettimeofday()
 		struct timeval tv;
 		gettimeofday(&tv, 0);
 
-		// copy the struct to the members of time
-		t.secs_ = tv.tv_sec;
-		t.usecs_ = tv.tv_usec;
-
-		return t;
+		return PreciseTime(tv.tv_sec, tv.tv_usec);
 	}
 
 	const PreciseTime PreciseTime::ZERO;

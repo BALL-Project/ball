@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.7 2000/10/18 12:39:58 oliver Exp $
+// $Id: timeStamp.h,v 1.8 2000/11/02 18:22:34 oliver Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -50,6 +50,10 @@ namespace BALL
 		/**	Copy constructor
 		*/
 		PreciseTime(const PreciseTime& time);
+
+		/**	Detailed constructor
+		*/
+		PreciseTime(long secs, long usecs);
 			
 		/**	Destructor
 		*/
@@ -124,7 +128,7 @@ namespace BALL
 		/**	Return the current time.
 				@return PreciseTime the current time in seconds since Jan. 1, 1970
 		*/
-		static const PreciseTime& now() 
+		static PreciseTime now() 
 			throw();
 		//@}
     /** @name Storable interface.
