@@ -1,4 +1,4 @@
-// $Id: colorExtension1.h,v 1.5 2001/05/13 13:47:44 hekl Exp $
+// $Id: colorExtension1.h,v 1.6 2001/07/09 17:27:19 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION1_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION1_H
@@ -25,9 +25,9 @@ namespace BALL
 				objects that need a single color \Ref{ColorRGBA}. It provides the derived
 				class with methods for accessing that color.
 				@memo    ColorExtension class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:47:44 $
+				@author  $Author: sturm $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 17:27:19 $
 		*/
 		class ColorExtension
 		{
@@ -179,10 +179,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the color of {\em *this} colorExtension.
-					Access the constant reference of the color of {\em *this} colorExtension.
-					@return      ColorRGBA& constant reference to the color of {\em *this} colorExtension
-					@see         setColor
-					@see         ColorRGBA
+					For further information see \Ref{getColor}.
 			*/
 			const ColorRGBA& getColor() const
 				throw();
