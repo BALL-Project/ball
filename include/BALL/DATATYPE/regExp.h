@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.9 2000/10/20 16:29:42 oliver Exp $
+// $Id: regExp.h,v 1.10 2000/12/04 12:05:49 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -86,19 +86,23 @@ namespace BALL
 		/**	Default constructor.
 				Creates a new RegularExpression object.
 		*/
-		RegularExpression();
+		RegularExpression()
+			throw();
 
 		/**	
 		*/
-		RegularExpression(const RegularExpression& regular_expression, bool deep = true);
+		RegularExpression(const RegularExpression& regular_expression, bool deep = true)
+			throw();
 
 		/**	
 		*/
-		RegularExpression(const String& pattern, bool wildcard_pattern = false);
+		RegularExpression(const String& pattern, bool wildcard_pattern = false)
+			throw();
 
 		/**	
 		*/
-		virtual ~RegularExpression();
+		virtual ~RegularExpression()
+			throw();
 
 		/**	
 		*/
@@ -138,19 +142,23 @@ namespace BALL
 		*/
 		static bool match
 			(const char* text, const char* pattern,
-			 int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0 );
+			 int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0 )
+			throw(Exception::NullPointer);
 		
 		/**	
 		*/
-		bool match(const String& text, Index from = 0, int execute_flags = 0 ) const;
+		bool match(const String& text, Index from = 0, int execute_flags = 0 ) const
+			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 	
 		/**	
 		*/
-		bool match(const Substring& text, Index from = 0, int execute_flags = 0) const;
+		bool match(const Substring& text, Index from = 0, int execute_flags = 0) const
+			throw(Substring::InvalidSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
 	
 		/**	
 		*/
-		bool match(const char* text, int execute_flags = 0) const;
+		bool match(const char* text, int execute_flags = 0) const
+			throw(Exception::NullPointer);
 	
 		/**	
 		*/
@@ -158,13 +166,15 @@ namespace BALL
 		*/
 		bool find
 			(const String& text, Substring& found,
-			 Index from = 0, int execute_flags = 0) const;
+			 Index from = 0, int execute_flags = 0) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 			
 		/**	
 		*/
 		bool find
 			(const String& text, vector<Substring>& subexpressions,
-			 Index from = 0, int execute_flags = 0) const;
+			 Index from = 0, int execute_flags = 0) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 						
 		/**	@name	Predicates
 		*/
@@ -208,26 +218,31 @@ namespace BALL
 
 		/**	
 		*/
-		virtual void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
+		virtual void dump(::std::ostream& s = ::std::cout, Size depth = 0) const
+			throw();
 		//@}
 
-		/**	@name Storeres
+		/**	@name Storers
 		*/
 		//@{
 		/**	
 		*/
-		friend ::std::ostream& operator << (::std::ostream& s, const RegularExpression& regular_expression);
+		friend ::std::ostream& operator << (::std::ostream& s, const RegularExpression& regular_expression)
+			throw();
 
 		/**	
 		*/
-		friend ::std::istream& operator >> (::std::istream& s, RegularExpression& regular_expression);
+		friend ::std::istream& operator >> (::std::istream& s, RegularExpression& regular_expression)
+			throw();
 		//@}
 		
 		private:
 
-		void compilePattern_();
+		void compilePattern_()
+			throw();
 
-		void toExtendedRegularExpression_();
+		void toExtendedRegularExpression_() 
+			throw();
 
 		regex_t regex_;
 		String 	pattern_;
