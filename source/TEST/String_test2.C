@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test2.C,v 1.3 2002/12/18 16:00:40 sturm Exp $
+// $Id: String_test2.C,v 1.4 2003/01/14 21:57:49 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test2.C,v 1.3 2002/12/18 16:00:40 sturm Exp $")
+START_TEST(String,"$Id: String_test2.C,v 1.4 2003/01/14 21:57:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -187,6 +187,7 @@ CHECK(String::toUnsignedLong())
 RESULT
 
 CHECK(String::toFloat())
+	PRECISION(0.01)
 	s4.set("123.4");
 	TEST_REAL_EQUAL(s4.toFloat(),(float)123.4)
 	s4.set("abc");
