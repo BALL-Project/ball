@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.107 2004/07/14 18:18:41 amoll Exp $
+// $Id: scene.C,v 1.108 2004/07/16 14:42:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -426,7 +426,6 @@ namespace BALL
 				n.normalize();
 			}
 			float d = rep.getProperty("D").getDouble();
-			glPushMatrix();
 
 
 			if (rep.hasProperty(Representation::PROPERTY__HIDDEN))
@@ -452,7 +451,8 @@ namespace BALL
 						i++;
 					}
 				}
-
+			
+				glPushMatrix();
 				glTranslatef(-n.x * d, -n.y * d, -n.z * d);
 				glScalef(200, 200, 200);
 				glColor3f(0., 0., 1.0);
@@ -472,7 +472,6 @@ namespace BALL
 
 			glEnable(current_clipping_plane_);
 			glClipPlane(current_clipping_plane_, plane);
-			glPopMatrix();
 
 			current_clipping_plane_++;
 		}
@@ -496,9 +495,7 @@ namespace BALL
 				renderClippingPlane_(**it);
 			}
 		
-			GLint nr_planes;
-			glGetIntegerv(GL_MAX_CLIP_PLANES, &nr_planes);
-			for (GLint i = current_clipping_plane_; i < GL_CLIP_PLANE0 + nr_planes; i++)
+			for (GLint i = current_clipping_plane_; i < GL_MAX_CLIP_PLANES; i++)
 			{
 				glDisable(i);
 			}
@@ -529,10 +526,10 @@ namespace BALL
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 			{
-				gl_renderer_.initSolid();
 				if ((*it)->getTransparency() == 0 &&
 						!(*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 				{
+					gl_renderer_.initSolid();
 					render_(**it, mode);
 				}
 			}
@@ -541,9 +538,9 @@ namespace BALL
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 			{
-				gl_renderer_.initTransparent();
 				if ((*it)->getTransparency() != 0)
 				{
+					gl_renderer_.initTransparent();
 					render_(**it, mode);
 				}
 			}
@@ -552,9 +549,9 @@ namespace BALL
 			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 			{
-				gl_renderer_.initSolid();
 				if ((*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 				{
+					gl_renderer_.initSolid();
 					render_(**it, mode);
 				}
 			}

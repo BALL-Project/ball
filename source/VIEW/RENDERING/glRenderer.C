@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.37 2004/07/16 14:39:50 amoll Exp $
+// $Id: glRenderer.C,v 1.38 2004/07/16 14:41:19 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -849,8 +849,8 @@ namespace BALL
 			GL_quadric_object.setDrawStyle(GLU_LINE);
 			GL_quadric_object.setNormals(GLU_SMOOTH);
 			GL_quadric_object.setOrientation(GLU_OUTSIDE);
+
 			// building wireframe display list
-			scale_(0.4);
 			GL_spheres_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].startDefinition();
 			GL_quadric_object.drawSphere(1, 6, 4);
 			GL_spheres_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].endDefinition();
