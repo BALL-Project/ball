@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomAccessIterator.h,v 1.25 2003/06/19 20:35:21 oliver Exp $ 
+// $Id: randomAccessIterator.h,v 1.26 2003/06/29 12:31:18 oliver Exp $ 
 //
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -28,13 +28,15 @@ namespace BALL
 	{
 		public:
 
-		/** @name Typedefs
-		 */
-		//@{
+    /** @name Typedefs
+     */
+    //@{
 
-		///
-		typedef std::random_access_iterator_tag iterator_category;
-		//@}
+    ///
+    typedef std::random_access_iterator_tag iterator_category;
+    // convenience typedef
+    typedef ConstBidirectionalIterator<Container, DataType, Position, Traits> Base;
+    //@}
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -42,13 +44,11 @@ namespace BALL
 
 		/** Default Constructor.
 		*/
-		ConstRandomAccessIterator()
-			throw();
+		ConstRandomAccessIterator()	throw() {}
 	
 		/** Copy Constructor.
 		*/
-		ConstRandomAccessIterator(const ConstRandomAccessIterator& iterator)
-			throw();
+		ConstRandomAccessIterator(const ConstRandomAccessIterator& iterator) throw();
 
 		/** Detailed Constructor.
 		*/
@@ -57,8 +57,7 @@ namespace BALL
 		
 		/** Destructor.
 		 */
-		~ConstRandomAccessIterator()
-			throw();
+		~ConstRandomAccessIterator() throw() {}
 
 		//@}
 
@@ -259,13 +258,6 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstRandomAccessIterator<Container, DataType, Position, Traits>::ConstRandomAccessIterator()
-		throw()
-		:	ConstBidirectionalIterator<Container, DataType, Position, Traits>()
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstRandomAccessIterator<Container, DataType, Position, Traits>::ConstRandomAccessIterator
 		(const ConstRandomAccessIterator& iterator) throw()
 		:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
@@ -276,12 +268,6 @@ namespace BALL
 	ConstRandomAccessIterator<Container, DataType, Position, Traits>::ConstRandomAccessIterator
 		(const ConstBidirectionalIterator<Container, DataType, Position, Traits>& iterator) throw()
 		:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstRandomAccessIterator<Container, DataType, Position, Traits>::~ConstRandomAccessIterator()
-		throw()
 	{
 	}
 
@@ -602,7 +588,10 @@ namespace BALL
     typedef DataType& reference;
 		///
     typedef DataType* pointer;
+		///
+		typedef ConstRandomAccessIterator<Container, DataType, Position, Traits> Base;
 		//@}
+
 		/**	@name Constructors and Destructors
 		*/
 		//@{
@@ -629,10 +618,9 @@ namespace BALL
 			throw(Exception::InvalidIterator);
 
 		///
-		reference operator * () const throw(Exception::InvalidIterator);
-
+		BALL_INLINE reference operator * () const throw() { return const_cast<reference>(Base::getTraits().getData()); }
 		///
-		pointer operator -> () const throw(Exception::InvalidIterator);
+		BALL_INLINE pointer operator -> () const throw() { return const_cast<pointer>(&Base::getTraits().getData()); }
 
 		/** Return a RandomAccessIterator for a given container.
 		 *  It points at the first element.
@@ -673,7 +661,7 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	RandomAccessIterator<Container, DataType, Position, Traits>::RandomAccessIterator()
 		throw()
-		:	ConstRandomAccessIterator<Container, DataType, Position, Traits>()
+		:	Base()
 	{
 	}
 
@@ -681,7 +669,7 @@ namespace BALL
 	RandomAccessIterator<Container, DataType, Position, Traits>::RandomAccessIterator
 		(const RandomAccessIterator& iterator)
 		throw()
-		:	ConstRandomAccessIterator<Container, DataType, Position, Traits>(iterator)
+		:	Base(iterator)
 	{
 	}
 
@@ -702,35 +690,7 @@ namespace BALL
 			}
 		#endif
 
-		return (reference)ConstRandomAccessIterator<Container, DataType, Position, Traits>::getTraits().getData(index);
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType& RandomAccessIterator<Container, DataType, Position, Traits>::operator * () const
-		throw(Exception::InvalidIterator)
-	{
-		#ifdef BALL_DEBUG
-			if (!RandomAccessIterator<Container, DataType, Position, Traits>::getTraits().isValid())
-			{
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-			}
-		#endif
-
-		return (reference)ConstRandomAccessIterator<Container, DataType, Position, Traits>::getTraits().getData();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* RandomAccessIterator<Container, DataType, Position, Traits>::operator -> () const
-		throw(Exception::InvalidIterator)
-	{
-		#ifdef BALL_DEBUG
-			if (!RandomAccessIterator<Container, DataType, Position, Traits>::getTraits().isValid())
-			{
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-			}
-		#endif
-
-		return (pointer)&ConstRandomAccessIterator<Container, DataType, Position, Traits>::getTraits().getData();
+		return (reference)Base::getTraits().getData(index);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -776,7 +736,7 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	RandomAccessIterator<Container, DataType, Position, Traits>::RandomAccessIterator(const Container& container)
 		throw()
-		:	ConstRandomAccessIterator<Container, DataType, Position, Traits>(container)
+		:	Base(container)
 	{
 	}
 

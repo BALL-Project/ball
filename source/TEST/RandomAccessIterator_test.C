@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RandomAccessIterator_test.C,v 1.13 2003/06/29 09:12:44 oliver Exp $
+// $Id: RandomAccessIterator_test.C,v 1.14 2003/06/29 12:31:18 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,17 +14,14 @@
 using namespace BALL;
 using namespace std;
 
-typedef Index VectorIteratorPosition_;
+typedef Index VectorIteratorPosition;
 
 template <typename DataType>
 class VectorIteratorTraits
 {
 	public:
-	
-	typedef DataType* pointer;
-	typedef DataType& reference;
-	typedef DataType value_type;
-	typedef const DataType& const_reference;
+
+	BALL_CREATE_DEEP(VectorIteratorTraits)
 
 	VectorIteratorTraits()
 		throw()
@@ -73,7 +70,7 @@ class VectorIteratorTraits
 		return (bound_ == 0);
 	}
 
-	const VectorIteratorPosition_& getPosition() const
+	const VectorIteratorPosition& getPosition() const
 		throw(Exception::InvalidIterator)
 	{
 		if (bound_ == 0)
@@ -136,7 +133,7 @@ class VectorIteratorTraits
 	bool isValid() const
 		throw()
 	{
-		return (bound_ != 0 && position_ >= 0 && position_ < (VectorIteratorPosition_)bound_->size());
+		return (bound_ != 0 && position_ >= 0 && position_ < (VectorIteratorPosition)bound_->size());
 	}
 
 	void invalidate()
@@ -183,7 +180,7 @@ class VectorIteratorTraits
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
-		return (position_ >= (VectorIteratorPosition_)bound_->size());
+		return (position_ >= (VectorIteratorPosition)bound_->size());
 	}
 
 	DataType& getData()
@@ -193,7 +190,7 @@ class VectorIteratorTraits
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
-		if (position_ >= (VectorIteratorPosition_)bound_->size())
+		if (position_ >= (VectorIteratorPosition)bound_->size())
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
@@ -213,7 +210,7 @@ class VectorIteratorTraits
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
-		if (position_ >= (VectorIteratorPosition_)bound_->size())
+		if (position_ >= (VectorIteratorPosition)bound_->size())
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
@@ -258,7 +255,7 @@ class VectorIteratorTraits
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
-		return (position_ == (VectorIteratorPosition_)(bound_->size() - 1));
+		return (position_ == (VectorIteratorPosition)(bound_->size() - 1));
 	}
 	
 	void toREnd()
@@ -321,7 +318,7 @@ class VectorIteratorTraits
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
 	
-		if (position_ + distance > (VectorIteratorPosition_)(bound_->size()))
+		if (position_ + distance > (VectorIteratorPosition)(bound_->size()))
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
@@ -337,7 +334,7 @@ class VectorIteratorTraits
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
 		
-		if (index >= (VectorIteratorPosition_)bound_->size())
+		if (index >= (VectorIteratorPosition)bound_->size())
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
@@ -347,20 +344,19 @@ class VectorIteratorTraits
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
 
-
-		return bound_->operator [] (index);
+		return const_cast<DataType&>(bound_->operator [] (index));
 	}
 
 	private:
 
-	vector<DataType>*    		 bound_;
-	VectorIteratorPosition_  position_;
+	vector<DataType>*    		bound_;
+	VectorIteratorPosition	position_;
 };
 
-typedef RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits<float> > MyIterator;
-typedef reverse_iterator<RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits<float> > > MyReverseIterator;
+typedef RandomAccessIterator<vector<float>, float, VectorIteratorPosition, VectorIteratorTraits<float> > MyIterator;
+typedef reverse_iterator<RandomAccessIterator<vector<float>, float, VectorIteratorPosition, VectorIteratorTraits<float> > > MyReverseIterator;
 
-START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.13 2003/06/29 09:12:44 oliver Exp $")
+START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.14 2003/06/29 12:31:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -421,15 +417,13 @@ RESULT
 
 CHECK(static RandomAccessIterator rend(const Container& container) throw(Exception::InvalidIterator))
 	MyReverseIterator m1(MyIterator::rend(v));
-	TEST_EXCEPTION(Exception::InvalidIterator, *m1)
-	TEST_EXCEPTION(Exception::InvalidIterator, m1++);
 RESULT
 
-CHECK(pointer operator -> () const throw(Exception::InvalidIterator))
+CHECK(pointer operator -> () const throw())
   // ???
 RESULT
 
-CHECK(reference operator * () const throw(Exception::InvalidIterator))
+CHECK(reference operator * () const throw())
   // ???
 RESULT
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.57 2003/06/19 13:16:54 oliver Exp $
+// $Id: atom.h,v 1.58 2003/06/29 12:31:18 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -760,7 +760,7 @@ namespace BALL
 			*/
 			//@{
 
-			typedef Index BondIteratorPosition_;
+			typedef Index BondIteratorPosition;
 
 			class BondIteratorTraits
 			{
@@ -797,114 +797,60 @@ namespace BALL
 					return *this;
 				}
 
-				Atom* getContainer()
-					throw()
-				{
-					return bound_;
-				}
+				Atom* getContainer() throw() { return bound_;	}
 
-				const Atom* getContainer() const
-					throw()
-				{
-					return bound_;
-				}
+				const Atom* getContainer() const throw() { return bound_;	}
 
-				bool isSingular() const
-					throw()
-				{
-					return (bound_ == 0);
-				}
+				bool isSingular() const throw()	{	return (bound_ == 0);	}
 
-				BondIteratorPosition_& getPosition()
-					throw()
-				{
-					return position_;
-				}
+				BondIteratorPosition& getPosition()	throw()	{	return position_;	}
 
-				const BondIteratorPosition_& getPosition() const
-					throw()
-				{
-					return position_;
-				}
+				const BondIteratorPosition& getPosition() const	throw()	{ return position_;	}
 
-				bool operator == (const BondIteratorTraits& traits) const
-					throw()
+				bool operator == (const BondIteratorTraits& traits) const	throw()
 				{
 					return (position_ == traits.position_);
 				}
 
-				bool operator != (const BondIteratorTraits& traits) const
-					throw()
+				bool operator != (const BondIteratorTraits& traits) const	throw()
 				{
-					return (position_ != traits.position_);
+					return !(position_ == traits.position_);
 				}
 				
-				bool operator < (const BondIteratorTraits& traits) const
-					throw()
+				bool operator < (const BondIteratorTraits& traits) const throw()
 				{
 					return (position_ < traits.position_);
 				}
 
-				Distance getDistance(const BondIteratorTraits& traits) const
-					throw()
+				Distance getDistance(const BondIteratorTraits& traits) const throw()
 				{
 					return (Distance)(position_ - traits.position_);
 				}
 
-				bool isValid() const
-					throw()
+				bool isValid() const throw()
 				{
 					return (bound_ != 0 && position_ >= 0 && position_ < bound_->number_of_bonds_);
 				}
 
-				void invalidate()
-					throw()
-				{
+				void invalidate()	throw()	
+				{	
 					bound_ = 0;
 					position_ = 0;
 				}
 
-				void toBegin()
-					throw()
-				{
-					position_ = 0;
-				}
+				void toBegin() throw() { position_ = 0;	}
 
-				bool isBegin() const
-					throw()
-				{
-					return (position_ == 0);
-				}
+				bool isBegin() const throw() { return (position_ == 0); }
 
-				void toEnd()
-					throw()
-				{
-					position_ = bound_->number_of_bonds_;
-				}
+				void toEnd() throw() { position_ = bound_->number_of_bonds_; }
 
-				bool isEnd() const
-					throw()
-				{
-					return (position_ >= bound_->number_of_bonds_);
-				}
+				bool isEnd() const throw() { return (position_ >= bound_->number_of_bonds_);}
 
-				Bond& getData()
-					throw()
-				{
-					return *(bound_->bond_[position_]);
-				}
+				Bond& getData()	throw() {	return *(bound_->bond_[position_]); }
 
-				const Bond& getData() const
-					throw()
-				{
-					return *(bound_->bond_[position_]);
-				}
+				const Bond& getData() const	throw()	{	return *(bound_->bond_[position_]);	}
 
-				void forward()
-					throw()
-				{
-					++position_;
-				}
+				void forward() throw() { ++position_; }
 
 				friend std::ostream& operator << (std::ostream& s, const BondIteratorTraits& traits)
 					throw()
@@ -975,7 +921,7 @@ namespace BALL
 				private:
 
 				Atom* 								bound_;
-				BondIteratorPosition_ position_;
+				BondIteratorPosition position_;
 
 			};
 
@@ -984,7 +930,7 @@ namespace BALL
 			/** Random access iterator for bonds.
 			*/
 			typedef RandomAccessIterator
-				<Atom, Bond, BondIteratorPosition_, BondIteratorTraits>
+				<Atom, Bond, BondIteratorPosition, BondIteratorTraits>
 				BondIterator;
 			
 			/// Return a bond iterator pointing to the first bond of the atom
@@ -1003,7 +949,7 @@ namespace BALL
 
 			/// Constant random access iterator for bonds
 			typedef ConstRandomAccessIterator
-				<Atom, Bond, BondIteratorPosition_, BondIteratorTraits>
+				<Atom, Bond, BondIteratorPosition, BondIteratorTraits>
 				BondConstIterator;
 
 			/// Return a constant bond iterator pointing to the first bond
