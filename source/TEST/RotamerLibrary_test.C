@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.2 2003/04/04 10:26:18 oliver Exp $
+// $Id: RotamerLibrary_test.C,v 1.3 2003/04/12 10:04:21 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,12 +9,14 @@
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/STRUCTURE/defaultProcessors.h>
 #include <BALL/KERNEL/system.h>
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.2 2003/04/04 10:26:18 oliver Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.3 2003/04/12 10:04:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -231,6 +233,9 @@ CHECK(Size RotamerLibrary::getNumberOfRotamers() const)
 	// ???
 RESULT
 
+
+ResidueChecker rc(frag_db);
+
 CHECK(Side chain positions for Ser)
 	System S;
 	HINFile ags_file("data/AlaGlySer.hin");
@@ -268,6 +273,8 @@ CHECK(Side chain positions for Ser)
 	TEST_REAL_EQUAL(r.chi2, 0.0)
 	TEST_REAL_EQUAL(r.chi3, 0.0)
 	TEST_REAL_EQUAL(r.chi4, 0.0)
+	S.apply(rc);
+	TEST_EQUAL(rc.getStatus(), true)
 
 	Rotamer r1;
 	r1.chi1 = Angle(0.0);
@@ -277,7 +284,8 @@ CHECK(Side chain positions for Ser)
 	TEST_REAL_EQUAL(r2.chi1, 0.0)
 	Angle a = calculateTorsionAngle(*ser.getAtom("N"), *ser.getAtom("CA"), *ser.getAtom("CB"), *ser.getAtom("OG"));
 	TEST_REAL_EQUAL(a, 0.0)
-		
+	S.apply(rc);
+	TEST_EQUAL(rc.getStatus(), true)		
 RESULT
 
 CHECK(Side chain positions for Pro)
@@ -313,10 +321,13 @@ CHECK(Side chain positions for Pro)
 	Rotamer r = rrs_pro.getRotamer(pro);
 	TEST_EQUAL(r.P, 1.0)
 	PRECISION(1E-3)
-	TEST_REAL_EQUAL(r.chi1, 0.0)
-	TEST_REAL_EQUAL(r.chi2, 0.0)
-	TEST_REAL_EQUAL(r.chi3, 0.0)
-	TEST_REAL_EQUAL(r.chi4, 0.0)
+	TEST_REAL_EQUAL(r.chi1,  0.557364)
+	TEST_REAL_EQUAL(r.chi2, -0.637879)
+	TEST_REAL_EQUAL(r.chi3,  0.0)
+	TEST_REAL_EQUAL(r.chi4,  0.0)
+
+	S.apply(rc);
+	TEST_EQUAL(rc.getStatus(), true)		
 
 	Rotamer r1;
 	r1.chi1 = Angle( 25.9, false);
@@ -330,6 +341,14 @@ CHECK(Side chain positions for Pro)
 	Angle c2 = calculateTorsionAngle(*pro.getAtom("CA"), *pro.getAtom("CB"), *pro.getAtom("CG"), *pro.getAtom("CD"));
 	TEST_REAL_EQUAL(c1, r1.chi1)
 	TEST_REAL_EQUAL(c2, r1.chi2)		
+	S.apply(rc);
+	TEST_EQUAL(rc.getStatus(), true)		
+	String outfile_name;
+	NEW_TMP_FILE(outfile_name)
+	HINFile outfile(outfile_name, File::OUT);
+	outfile << S;
+	outfile.close();
+	
 
 	Rotamer r2;
 	r2.chi1 = Angle(-23.7, false);
@@ -343,6 +362,57 @@ CHECK(Side chain positions for Pro)
 	c2 = calculateTorsionAngle(*pro.getAtom("CA"), *pro.getAtom("CB"), *pro.getAtom("CG"), *pro.getAtom("CD"));
 	TEST_REAL_EQUAL(c1, r2.chi1)
 	TEST_REAL_EQUAL(c2, r2.chi2)		
+	S.apply(rc);
+	TEST_EQUAL(rc.getStatus(), true)		
+
+	NEW_TMP_FILE(outfile_name)
+	outfile.open(outfile_name, File::OUT);
+	outfile << S;
+
+
+RESULT
+
+CHECK(side-chain conformations for Dunbrack library)
+	System S;
+	HINFile infile("data/all_amino.hin");
+	infile >> S;
+	infile.close();
+	TEST_EQUAL(S.countResidues(), 20)
+	ClearChargeProcessor cc;
+
+	// Remove all charges -- they are somewhat bogus and would upset the residue checker.
+	S.apply(cc);
+
+	RotamerLibrary rl("rotamers/bbind99.Aug.lib", frag_db);
+	TEST_EQUAL(rl.getNumberOfVariants(), 57)
+	ABORT_IF((rl.getNumberOfVariants() != 57) || (S.countResidues() != 20))
+
+	ResidueIterator res_it(S.beginResidue());
+	for (; +res_it; ++res_it)
+	{
+		STATUS("checking rotamers for " << res_it->getName())
+		ResidueRotamerSet* rss = rl.getRotamerSet(res_it->getName());
+		if (rss != 0)
+		{
+
+			STATUS("  - " << rss->getNumberOfRotamers() << " rotamers")
+			for (Position i = 0; i < rss->getNumberOfRotamers(); i++)
+			{
+				rss->setRotamer(*res_it, rss->getRotamer(i));
+				res_it->apply(rc);
+				TEST_EQUAL(rc.getStatus(), true)
+
+				// Store suspicious conformations for subsequent debugging.
+				if (rc.getStatus() == false)
+				{
+					String outfile_name;
+					NEW_TMP_FILE(outfile_name)
+					HINFile outfile(outfile_name, File::OUT);
+					outfile << S;
+				}
+			}
+		}
+	}
 RESULT
 
 /////////////////////////////////////////////////////////////
