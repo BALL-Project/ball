@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.17 2003/06/19 10:45:50 oliver Exp $
+// $Id: Atom_test.C,v 1.18 2003/06/25 14:35:41 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,7 +15,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.17 2003/06/19 10:45:50 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.18 2003/06/25 14:35:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,24 +23,24 @@ START_TEST(Atom, "$Id: Atom_test.C,v 1.17 2003/06/19 10:45:50 oliver Exp $")
 using namespace BALL;
 
 Atom* atom;
-CHECK(Atom())
+CHECK(Atom() throw())
 atom = new Atom;
 TEST_NOT_EQUAL(atom, 0)
 RESULT
 
-CHECK(setCharge(float)/getCharge())
+CHECK(void setCharge(float charge) throw())
 	TEST_REAL_EQUAL(atom->getCharge(), 0.0)
 	atom->setCharge(1.23456);
 	TEST_REAL_EQUAL(atom->getCharge(), 1.23456);
 RESULT
 
-CHECK(setname(String&)/getName())
+CHECK(void setName(const String& name) throw())
 	TEST_EQUAL(atom->getName(), "")
 	atom->setName("ATOMNAME");
 	TEST_EQUAL(atom->getName(), "ATOMNAME");
 RESULT
 			
-CHECK(setElement(Element&)/getElement())
+CHECK(void setElement(const Element& element) throw())
 	TEST_EQUAL(atom->getElement(), Element::UNKNOWN)
 	atom->setElement(PTE.getElement(1));
 	TEST_EQUAL(atom->getElement(), PTE.getElement(1))
@@ -48,38 +48,38 @@ RESULT
 			
 Vector3	null_vector(0, 0, 0);
 Vector3	test_vector(1, 2, 3);
-CHECK(set/getPosition)
+CHECK(void setPosition(const Vector3& position) throw())
 	TEST_EQUAL(atom->getPosition(), null_vector)
 	atom->setPosition(test_vector);
 	TEST_EQUAL(atom->getPosition(), test_vector)
 RESULT
 			
-CHECK(setRadius(float)/getRadius())
+CHECK(void setRadius(float radius) throw())
 	TEST_REAL_EQUAL(atom->getRadius(), 0.0)
 	atom->setRadius(1.23456);
 	TEST_REAL_EQUAL(atom->getRadius(), 1.23456)
 RESULT
 
-CHECK(setType(Atom::Type)/getType())
+CHECK(void setType(Type atom_type) throw())
 	TEST_EQUAL(atom->getType(), Atom::UNKNOWN_TYPE)
 	atom->setType(27);
 	TEST_EQUAL(atom->getType(), 27);
 RESULT
 		
-CHECK(setVelocity(Vector3&)/getVelocity())
+CHECK(void setVelocity(const Vector3& velocity) throw())
 	TEST_EQUAL(atom->getVelocity(), null_vector)
 	atom->setVelocity(test_vector);
 	TEST_EQUAL(atom->getVelocity(), test_vector)
 RESULT
 			
-CHECK(setForce(Vector3&)/getForce())
+CHECK(void setForce(const Vector3& force) throw())
 	TEST_EQUAL(atom->getForce(), null_vector)
 	atom->setForce(test_vector);
 	TEST_EQUAL(atom->getForce(), test_vector)
 RESULT
 
 // the static attributes
-CHECK(getIndex() const)
+CHECK(Position getIndex() const)
 	Atom* a1_ptr = new Atom;
 	Atom* a2_ptr = new Atom;
 	TEST_NOT_EQUAL(a1_ptr->getIndex(), a2_ptr->getIndex())
@@ -87,7 +87,7 @@ CHECK(getIndex() const)
 	delete a2_ptr;
 RESULT
 
-CHECK(getAttributePtr())
+CHECK(StaticAtomAttributes* getAttributePtr())
 	Atom* a1_ptr = new Atom;
 	Atom* a2_ptr = new Atom;
 	TEST_NOT_EQUAL(a1_ptr->getAttributePtr(), 0)
@@ -104,12 +104,12 @@ CHECK(getAttributePtr())
 	delete a2_ptr;
 RESULT
 			
-CHECK(countBonds())
+CHECK(Size countBonds() const throw())
 	TEST_EQUAL(atom->countBonds(), 0)
 RESULT
 
 Atom* atom2;			
-CHECK(Atom(Atom&))
+CHECK(Atom(const Atom& atom, bool deep = true) throw())
 	atom2 = new Atom(*atom);
 	TEST_NOT_EQUAL(atom2, 0)
 	TEST_EQUAL(atom2->getName(), atom->getName())
@@ -123,11 +123,11 @@ CHECK(Atom(Atom&))
 	TEST_NOT_EQUAL(atom2->getHandle(), atom->getHandle())
 RESULT
 
-CHECK(destructor)
+CHECK(~Atom() throw())
 	delete atom2;
 RESULT
 			
-CHECK(Atom(Element&, String&, Atom:::Type, Vector3&, Vector3&, Vector3&, float, float))
+CHECK(Atom(Element& element, const String& name, const String& type_name = BALL_ATOM_DEFAULT_TYPE_NAME, Type atom_type = BALL_ATOM_DEFAULT_TYPE, const Vector3& position = Vector3(BALL_ATOM_DEFAULT_POSITION), const Vector3& velocity = Vector3(BALL_ATOM_DEFAULT_VELOCITY), const Vector3& force = Vector3(BALL_ATOM_DEFAULT_FORCE), float charge = BALL_ATOM_DEFAULT_CHARGE, float radius = BALL_ATOM_DEFAULT_RADIUS) throw())
 	atom2 = new Atom(PTE[Element::HELIUM],
 									 "TESTNAME",
 									 "TESTTYPE",
@@ -148,15 +148,8 @@ CHECK(Atom(Element&, String&, Atom:::Type, Vector3&, Vector3&, Vector3&, float, 
 	TEST_REAL_EQUAL(atom2->getRadius(), 2.34567)
 RESULT
 
-CHECK(createBond(Atom&))
-	TEST_EQUAL(atom2->countBonds(), 0)
-	TEST_EQUAL(atom->countBonds(), 0)
-	atom->createBond(*atom2);
-	TEST_EQUAL(atom->countBonds(), 1)
-	TEST_EQUAL(atom2->countBonds(), 1)
-RESULT
 
-CHECK(clear())
+CHECK(void clear() throw())
 	atom2->clear();
 	TEST_EQUAL(atom2->getName(), "")
 	TEST_EQUAL(atom2->getType(), Atom::UNKNOWN_TYPE)
@@ -170,7 +163,7 @@ CHECK(clear())
 	TEST_EQUAL(atom->countBonds(), 0)
 RESULT
 
-CHECK(create(bool))
+CHECK(BALL_CREATE_DEEP(Atom))
 	delete atom2;
 	atom2 = (Atom*)atom->create(false);
 	TEST_NOT_EQUAL(atom2, 0)
@@ -198,7 +191,7 @@ CHECK(create(bool))
 	TEST_NOT_EQUAL(atom2->getAttributePtr(), atom->getAttributePtr())
 RESULT
 
-CHECK(destroy())
+CHECK(void destroy() throw())
 	atom->createBond(*atom2);
 	atom2->destroy();
 	TEST_EQUAL(atom2->getName(), "")
@@ -213,7 +206,7 @@ CHECK(destroy())
 	TEST_EQUAL(atom->countBonds(), 0)
 RESULT
 
-CHECK(set(Atom&))
+CHECK(void set(const Atom& atom, bool deep = true) throw())
 	atom2->set(*atom);
 	TEST_NOT_EQUAL(atom2, 0)
 	TEST_EQUAL(atom2->getName(), atom->getName())
@@ -229,7 +222,7 @@ CHECK(set(Atom&))
 	TEST_NOT_EQUAL(atom2->getAttributePtr()->ptr, atom->getAttributePtr()->ptr)
 RESULT
 
-CHECK(operator = (Atom&))
+CHECK(Atom& operator = (const Atom& atom) throw())
 	atom2->clear();
 	*atom2 = *atom;
 	TEST_NOT_EQUAL(atom2, 0)
@@ -246,7 +239,7 @@ CHECK(operator = (Atom&))
 	TEST_NOT_EQUAL(atom2->getAttributePtr()->ptr, atom->getAttributePtr()->ptr)
 RESULT
 
-CHECK(get(Atom&))
+CHECK(void get(Atom& atom, bool deep = true) const throw())
 	atom2->clear();
 	atom2->get(*atom);
 	TEST_NOT_EQUAL(atom2, 0)
@@ -266,7 +259,7 @@ RESULT
 
 Atom*	atom3;
 Atom*	atom4;
-CHECK(swap(Atom&))
+CHECK(void swap(Atom& atom) throw())
 	atom2 = new Atom(PTE[Element::LITHIUM],
 												"TESTNAME2",
 												"TESTTYPE2",
@@ -301,7 +294,7 @@ RESULT
 
 Molecule*				molecule;
 Fragment*				fragment;
-CHECK(getMolecule())
+CHECK(Fragment* getFragment() throw())
 	molecule = new Molecule;
 	fragment = new Fragment;
 	molecule->insert(*fragment);
@@ -309,12 +302,12 @@ CHECK(getMolecule())
 	TEST_EQUAL((atom->getFragment() == fragment), true)
 RESULT
 
-CHECK(getMolecule())
+CHECK(const Molecule* getMolecule() const throw())
 	TEST_EQUAL(atom->getMolecule(), molecule)
 RESULT
 
 Bond*		bond;
-CHECK(createBond(Atom&)/getBond(Atom&))
+CHECK(Bond* createBond(Atom& atom) throw())
 	atom->createBond(*atom3);
 	atom3->getBond(*atom);
 	TEST_EQUAL(atom->countBonds(), 1)
@@ -323,21 +316,21 @@ CHECK(createBond(Atom&)/getBond(Atom&))
 	atom->createBond(*atom4);
 	atom->createBond(*atom4);
 	bond = atom->createBond(*atom);
-TEST_EQUAL(bond, 0);
+	TEST_EQUAL(bond, 0);
 
-TEST_EQUAL(atom4->countBonds(), 1)
+	TEST_EQUAL(atom4->countBonds(), 1)
 	TEST_EQUAL(atom->countBonds(), 2)
 	TEST_EQUAL(atom->getBond(*atom4), atom4->getBond(*atom))
 RESULT
 
-CHECK(destroyBond(Atom&))
+CHECK(bool destroyBond(const Atom& atom) throw())
 	atom->destroyBond(*atom4);
 	TEST_EQUAL(atom->countBonds(), 1)
 	TEST_EQUAL(atom4->countBonds(), 0)
 	TEST_EQUAL(atom4->getBond(*atom), 0)
 RESULT
 			
-CHECK(destroyBonds(Atom&))
+CHECK(void destroyBonds() throw())
 	atom->createBond(*atom4);
 	atom->destroyBonds();
 	TEST_EQUAL(atom->countBonds(), 0)
@@ -345,25 +338,25 @@ CHECK(destroyBonds(Atom&))
 	TEST_EQUAL(atom4->countBonds(), 0)
 RESULT
 
-CHECK(hasBond(Bond&))
+CHECK(bool hasBond(const Bond& bond) const throw())
 	atom->createBond(*atom4);
 	TEST_EQUAL(atom->hasBond(*atom->getBond(*atom3)), false)
 	TEST_EQUAL(atom->hasBond(*atom->getBond(*atom4)), true)
 	TEST_EQUAL(atom->hasBond(*atom->getBond(*atom)), false)
 RESULT
 
-CHECK(isBoundTo(Atom&))
+CHECK(bool isBoundTo(const Atom& atom) const throw())
 	TEST_EQUAL(atom->isBoundTo(*atom3), false)
 	TEST_EQUAL(atom->isBoundTo(*atom4), true)
 	TEST_EQUAL(atom->isBoundTo(*atom), false)
 RESULT
 
-CHECK(isBound())
+CHECK(bool isBound() const throw())
 	TEST_EQUAL(atom->isBound(), true)
 	TEST_EQUAL(atom3->isBound(), false)
 RESULT
 
-CHECK(isValid())
+CHECK(bool isValid() const throw())
 	TEST_EQUAL(atom->isValid(), true)
 RESULT
 
@@ -377,7 +370,7 @@ atom->setRadius(2.34567);
 String filename;
 using std::ofstream;
 using std::ios;
-CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	NEW_TMP_FILE(filename)
 	ofstream	ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
@@ -393,7 +386,7 @@ RESULT
 using std::ifstream;
 using std::cout;
 using namespace RTTI;
-CHECK(persistentRead(TextPersistenceManager()))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr;
@@ -419,7 +412,7 @@ CHECK(persistentRead(TextPersistenceManager()))
 	}
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const Atom& atom) const throw())
 	Atom a1;
 	Atom a2;
 	TEST_EQUAL(a1 == a2, false)
@@ -429,7 +422,7 @@ CHECK(operator ==)
 	TEST_EQUAL(a2 == a2, true)
 RESULT
 
-CHECK(operator !=)
+CHECK(bool operator != (const Atom& atom) const throw())
 	Atom a1;
 	Atom a2;
 	TEST_EQUAL(a1 != a2, true)
@@ -439,7 +432,7 @@ CHECK(operator !=)
 	TEST_EQUAL(a2 != a2, false)
 RESULT
 
-CHECK(compact(const AtomIndexList& indices))
+CHECK(static Position compact(const AtomIndexList& indices) throw(Exception::OutOfRange))
 	Atom::AtomIndexList block;
 	Atom::AtomPtrList ptrs;
 	std::list<Atom*> atoms;
@@ -510,6 +503,119 @@ CHECK([EXTRA] bond iteration)
 	TEST_EQUAL(+it, false)
 	TEST_EQUAL(it == a1->endBond(), true)
 RESULT
+
+CHECK(Bond* cloneBond(Bond& bond, Atom& atom) throw())
+  // ???
+RESULT
+
+CHECK(Bond* createBond(Bond& bond, Atom& atom) throw())
+  // ???
+RESULT
+
+CHECK(Bond* getBond(Position index) throw(Exception::IndexOverflow))
+  // ???
+RESULT
+
+CHECK(Bond* getBond(const Atom& atom) throw())
+  // ???
+RESULT
+
+CHECK(Molecule* getMolecule() throw())
+  // ???
+RESULT
+
+CHECK(String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const throw())
+  // ???
+RESULT
+
+CHECK(String getTypeName() const throw())
+  // ???
+RESULT
+
+CHECK(Type getType() const throw())
+  // ???
+RESULT
+
+CHECK(Vector3& getForce() throw())
+  // ???
+RESULT
+
+CHECK(Vector3& getPosition() throw())
+  // ???
+RESULT
+
+CHECK(bool applyBonds(UnaryProcessor<Bond>& processor) throw())
+  // ???
+RESULT
+
+CHECK(bool isGeminal(const Atom& atom) const throw())
+  // ???
+RESULT
+
+CHECK(bool isVicinal(const Atom& atom) const throw())
+  // ???
+RESULT
+
+CHECK(const Bond* getBond(Position index) const throw(Exception::IndexOverflow))
+  // ???
+RESULT
+
+CHECK(const Bond* getBond(const Atom& atom) const throw())
+  // ???
+RESULT
+
+CHECK(const Element& getElement() const throw())
+  // ???
+RESULT
+
+CHECK(const Fragment* getFragment() const throw())
+  // ???
+RESULT
+
+CHECK(const Residue* getResidue() const throw())
+  // ???
+RESULT
+
+CHECK(const StaticAtomAttributes* getAttributePtr() const)
+  // ???
+RESULT
+
+CHECK(const String& getName() const throw())
+  // ???
+RESULT
+
+CHECK(const Vector3& getForce() const throw())
+  // ???
+RESULT
+
+CHECK(const Vector3& getPosition() const throw())
+  // ???
+RESULT
+
+CHECK(const Vector3& getVelocity() const throw())
+  // ???
+RESULT
+
+CHECK(float getCharge() const throw())
+  // ???
+RESULT
+
+CHECK(float getRadius() const throw())
+  // ???
+RESULT
+
+CHECK(static AttributeVector& getAttributes())
+  // ???
+RESULT
+
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
+  // ???
+RESULT
+
+CHECK(void setTypeName(const String& name) throw())
+  // ???
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
