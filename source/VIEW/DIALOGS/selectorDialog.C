@@ -58,7 +58,9 @@ void SelectorDialog::accept()
 	HashSet<Composite*>::Iterator sit = roots.begin();
 	for (; sit != roots.end(); sit++)
 	{
-		mc->updateRepresentationsOf(**sit, false);
+		// faster, but doesnt always work:
+//	 	mc->updateRepresentationsOf(**sit, false);
+		mc->updateRepresentationsOf(**sit, true, true);
 	}
 
 	NewSelectionMessage* nm = new NewSelectionMessage;
