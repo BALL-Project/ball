@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.30 2003/04/28 19:21:27 oliver Exp $
+// $Id: INIFile.C,v 1.31 2003/07/10 12:49:54 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -30,13 +30,6 @@ namespace BALL
 			valid_(false),
 			filename_(filename)
 	{
-	}
-
-	void INIFile::destroy()
-	{
-		clear();
-		filename_ = "";
-		valid_ = false;
 	}
 
 	void INIFile::clear()
@@ -595,7 +588,7 @@ namespace BALL
 		check_duplicate_keys_ = mode;
 	}
 
-	bool INIFile::getDuplicateKeyCheck() const
+	bool INIFile::duplicateKeyCheckEnabled() const
 	{
 		return check_duplicate_keys_;
 	}

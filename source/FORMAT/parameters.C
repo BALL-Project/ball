@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameters.C,v 1.10 2002/02/27 12:21:20 sturm Exp $
+// $Id: parameters.C,v 1.11 2003/07/10 12:49:54 amoll Exp $
 //
 
 #include <BALL/FORMAT/parameters.h>
@@ -38,7 +38,7 @@ namespace BALL
 		throw()
 	{
 		// clean up everything
-		INI_file_.destroy();
+		INI_file_.clear();
 		valid_ = false;
 	}
 
