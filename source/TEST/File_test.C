@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.12 2000/10/21 10:34:56 oliver Exp $
+// $Id: File_test.C,v 1.13 2000/10/21 14:10:54 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.12 2000/10/21 10:34:56 oliver Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.13 2000/10/21 14:10:54 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -354,6 +354,27 @@ CHECK(isValid())
 	File f1;
 	TEST_EXCEPTION(Exception::FileNotFound, f1 = File("XXX"))
 	TEST_EQUAL(f1.isValid(), true)	
+RESULT
+
+CHECK(isOpen())
+	TEST_EQUAL(f.isOpen(), true)	
+	File f2;
+	TEST_EQUAL(f2.isOpen(), false)	
+	f2.open("File_test.C");
+	TEST_EQUAL(f2.isOpen(), true)	
+	f2.close();
+	TEST_EQUAL(f2.isOpen(), false)	
+RESULT
+
+
+CHECK(isClosed())
+	TEST_EQUAL(f.isClosed(), false)	
+	File f2;
+	TEST_EQUAL(f2.isClosed(), true)	
+	f2.open("File_test.C");
+	TEST_EQUAL(f2.isClosed(), false)	
+	f2.close();
+	TEST_EQUAL(f2.isClosed(), true)	
 RESULT
 
 /////////////////////////////////////////////////////////////
