@@ -5,6 +5,7 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	atomBondModelBaseProcessor.C\
 	atomBondModelConnector.C\
+	backboneModel.C\
 	ballAndStickModel.C\
 	baseModel.C\
 	baseModelConnector.C\
