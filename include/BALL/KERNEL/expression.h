@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.31 2004/02/07 19:34:47 amoll Exp $
+// $Id: expression.h,v 1.32 2004/05/18 11:54:42 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_EXPRESSION_H
@@ -162,7 +162,7 @@ namespace BALL
 			throw(Exception::ParseError);
 
 		/*_ Register the predicates defined by default.
-				See also: \URL{BALL/KERNEL/standardPredicates.h}
+				See also: BALL/KERNEL/standardPredicates.h
 		*/
 		void registerStandardPredicates_() 
 			throw();
