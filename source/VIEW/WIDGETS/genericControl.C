@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.1 2003/09/07 23:19:04 amoll Exp $
+// $Id: genericControl.C,v 1.2 2003/09/07 23:24:06 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -15,6 +15,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+void GenericControl::onContextMenu_(QListViewItem* /*item*/, const QPoint& /*point*/, int /*column*/)
+{}
 
 GenericControl::GenericControl(QWidget* parent, const char* name)
 	throw()
