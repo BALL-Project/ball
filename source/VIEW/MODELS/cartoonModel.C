@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.24 2005/01/10 13:48:21 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.25 2005/01/10 13:52:26 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -9,7 +9,6 @@
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
-#include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
@@ -24,7 +23,6 @@
 #include <BALL/KERNEL/protein.h>
 
 #include <BALL/MATHS/matrix44.h>
-
 #include <BALL/STRUCTURE/geometricProperties.h>
 
 using namespace std;
@@ -394,10 +392,6 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	
 	// start of spline_points_ of this SS
 	const Position start = ss_to_spline_start_[&ss] * interpolation_steps_;
-	if (start != 0)
-	{
-//   		buildGraphicalRepresentation_(start - 10, start);
-	}
 	 
 	// put first four points into the mesh (and first two triangles)
 	Vector3 right = spline_points_[start + 1] - spline_points_[start];
@@ -772,17 +766,11 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 												end >= atoms_of_spline_points_.size() ||
 											start >= atoms_of_spline_points_.size() )
 	{
-		Log.error() << "Error in " << __FILE__ << __LINE__ << std::endl;
+		Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl;
 		return;
 	}
 
 	if (end == 0) end = spline_points_.size();
-
-	if (start != 0)
-	{
-//   		start--;
-//   		buildGraphicalRepresentation_(start - 10, start);
-	}
 
 	// overall direction of the helix
 	const Vector3 helix_dir((spline_points_[end] - spline_points_[start]).normalize());

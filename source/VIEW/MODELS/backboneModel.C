@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.32 2005/01/09 17:45:35 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.33 2005/01/10 13:48:42 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -54,7 +54,8 @@ namespace BALL
 			: ModelProcessor(),
 				last_parent_(0),
 				tube_radius_((float)0.4),
-				interpolation_steps_(9)
+				interpolation_steps_(9),
+				last_spline_point_(-1)
 		{
 		}
 
@@ -63,7 +64,8 @@ namespace BALL
 			:	ModelProcessor(bm),
 				last_parent_(0),
 				tube_radius_(bm.tube_radius_),
-				interpolation_steps_(bm.interpolation_steps_)
+				interpolation_steps_(bm.interpolation_steps_),
+				last_spline_point_(-1)
 		{
 		}
 
@@ -273,7 +275,7 @@ namespace BALL
 
 			if (end == 0) end = spline_points_.size() - 1;
 
- 			if (start != 0) start--;
+ 			if (last_spline_point_ != -1) start = last_spline_point_;
 
 			// create sphere for the point
 			Sphere* sphere = new Sphere;
@@ -448,6 +450,8 @@ namespace BALL
 			sphere->setPosition(spline_points_[end]);
  			sphere->setComposite(atoms_of_spline_points_[end]);
  			geometric_objects_.push_back(sphere);
+
+			last_spline_point_ = end;
 		}
 
 
@@ -458,6 +462,7 @@ namespace BALL
 			spline_points_.clear();
 			atoms_of_spline_points_.clear();
 			last_parent_ = 0;
+			last_spline_point_ = -1;
 		}
 
 		bool AddBackboneModel::createGeometricObjects()
