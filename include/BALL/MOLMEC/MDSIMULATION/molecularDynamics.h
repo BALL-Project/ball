@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.9 2000/11/08 15:24:52 amoll Exp $
+// $Id: molecularDynamics.h,v 1.10 2000/11/08 15:25:55 amoll Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -176,7 +176,7 @@ namespace BALL
 
 		/**  Destructor.
 		*/
-		virtual ~ MolecularDynamics();
+		virtual ~MolecularDynamics();
 
 		//@}
 
@@ -315,7 +315,6 @@ namespace BALL
 		*/
 		ForceField *getForceField() const;
 
-
 		/** Start the molecular dynamics simulation                      
 				The base class does not provide any
 		    implementation for these methods below. 
@@ -375,11 +374,9 @@ namespace BALL
 		*/
 		System* system_ptr_;
 
-
 		/*_  The list of atoms. The simulation will be carried out for these atoms 
 		*/
 		AtomVector atom_vector_;
-
 
 		/*_  The current iteration number  
 		*/
@@ -409,7 +406,6 @@ namespace BALL
 		/*_  The current total energy in kJ/mol
 		*/
 		double total_energy_;
-
 
 		/*_  The current time of the MD run                 
 		*/
