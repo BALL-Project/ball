@@ -1,4 +1,4 @@
-// $Id: bidirectionalIterator.h,v 1.9 2001/06/07 15:15:16 anker Exp $ 
+// $Id: bidirectionalIterator.h,v 1.10 2001/06/22 00:00:42 amoll Exp $ 
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -18,7 +18,7 @@ namespace BALL
 	*/
 	//@{
 
-	/**	@name Bidirectional Iterator.	\\
+	/**	@name Bidirectional Iterator.	
 			{\bf Definition:} \URL{BALL/CONCEPT/bidirectionalIterator.h}
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -563,7 +563,7 @@ namespace BALL
 	}
 
 
-	/**	Constant Bidirectional Iterator.\\
+	/**	Constant Bidirectional Iterator.
 			{\bf Definition:} \URL{BALL/CONCEPT/bidirectionalIterator.h}
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>

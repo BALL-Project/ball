@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.h,v 1.11 2001/06/21 21:34:03 amoll Exp $
+// $Id: EFShiftProcessor.h,v 1.12 2001/06/21 23:59:04 amoll Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -16,7 +16,7 @@ namespace BALL
 
 	class Atom;
 		
-	/**	Shift assignment processor implementing the electric field effect. \\
+	/**	Shift assignment processor implementing the electric field effect. 
 			{\bf Definition}\URL{BALL/NMR/EFShiftProcessor.h}
 	*/
 	class EFShiftProcessor
