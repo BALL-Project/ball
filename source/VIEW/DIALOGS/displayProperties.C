@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.31 2003/11/02 14:12:24 amoll Exp $
+// $Id: displayProperties.C,v 1.32 2003/11/03 00:20:59 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -43,10 +43,6 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	:	DisplayPropertiesData( parent, name ),
 		ModularWidget(name),
 		id_(-1),
-		precision_(DRAWING_PRECISION_HIGH),
-		mode_(DRAWING_MODE_SOLID),
-		coloring_method_(COLORING_ELEMENT),
-		model_type_(MODEL_BALL_AND_STICK),
 		rep_(0)
 {
 #ifdef BALL_VIEW_DEBUG
@@ -65,7 +61,6 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	{
 		coloring_method_combobox->insertItem(VIEW::getColoringName((VIEW::ColoringMethod)p).c_str());
 	}
-
 }
 
 
@@ -101,32 +96,26 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 		color_sample_selection->setBackgroundColor(qcolor);
 	}
 
+	getEntry_(inifile, "model", *model_type_combobox);
+	getEntry_(inifile, "coloring_method", *coloring_method_combobox);
+	getEntry_(inifile, "precision", *precision_combobox);
+
 	if (inifile.hasEntry("WINDOWS", "Display::surface_precision"))
 	{
-		precision_slider->setValue((Position)inifile.getValue("WINDOWS", "Display::surface_precision").toFloat() * 10);
 		custom_precision_button->setChecked(true);
+		precision_slider->setValue((Position)inifile.getValue("WINDOWS", "Display::surface_precision").toFloat() * 10);
 	}
 	else
 	{ 
-		presets_precision_button->setChecked(true);
 		precision_slider->setValue(12 * 10);
+		presets_precision_button->setChecked(true);
 	}
-
-	getEntry_(inifile, "model", model_type_, *model_type_combobox);
-	getEntry_(inifile, "precision", precision_, *precision_combobox);
-	getEntry_(inifile, "coloring_method", coloring_method_, *coloring_method_combobox);
-
-	coloring_method_combobox->setCurrentItem(coloring_method_);
-	precision_combobox->setCurrentItem(precision_);
-	model_type_combobox->setCurrentItem(model_type_);
 }
 
-void DisplayProperties::getEntry_(INIFile& inifile,
-																	const String& key, Index& assign_to, QComboBox& box)
+void DisplayProperties::getEntry_(INIFile& inifile, const String& key, QComboBox& box)
 {
 	if (!inifile.hasEntry("WINDOWS", "Display::" + key)) return;
-	assign_to = inifile.getValue("WINDOWS", "Display::" + key).toUnsignedInt();
-	box.setCurrentItem(assign_to);
+	box.setCurrentItem(inifile.getValue("WINDOWS", "Display::" + key).toUnsignedInt());
 }
 
 
@@ -141,10 +130,16 @@ void DisplayProperties::writePreferences(INIFile& inifile)
 										255 - (Position) (transparency_slider->value() * 2.55));
 
 	// the combobox values
-	inifile.insertValue("WINDOWS", "Display::model", model_type_);
-	inifile.insertValue("WINDOWS", "Display::precision", precision_);
-	inifile.insertValue("WINDOWS", "Display::surface_precision", (float)precision_slider->value() / (float)10);
-	inifile.insertValue("WINDOWS", "Display::coloring_method", coloring_method_);
+	inifile.insertValue("WINDOWS", "Display::model", model_type_combobox->currentItem());
+	if (presets_precision_button->isChecked())
+	{
+		inifile.insertValue("WINDOWS", "Display::precision", precision_combobox->currentItem());
+	}
+	else
+	{
+		inifile.insertValue("WINDOWS", "Display::surface_precision", (float)precision_slider->value() / (float)10);
+	}
+	inifile.insertValue("WINDOWS", "Display::coloring_method", coloring_method_combobox->currentItem());
 	inifile.insertValue("WINDOWS", "Display::custom_color", custom_color_);
 	inifile.insertValue("WINDOWS", "Display::selected_color", BALL_SELECTED_COLOR);
 }
@@ -186,12 +181,18 @@ void DisplayProperties::createRepresentationMode()
 {
 	rep_ = 0;
 	setCaption("create Representation");
+	/*
 	coloring_method_combobox->setCurrentItem(coloring_method_);
 	precision_combobox->setCurrentItem(precision_);
-	model_type_combobox->setCurrentItem(model_type_);
+	if (surface_precision_ != -1)
+	{
+		precision_slider->setValue((Position) surface_precision_* 10);
+	}
+	model_combobox->currentItem()_combobox->setCurrentItem(model_combobox->currentItem()_);
 	mode_combobox->setCurrentItem(mode_);
+	*/
 	apply_button->setEnabled(getMainControl()->getControlSelection().size());
-	checkDrawingPrecision_();
+	//checkDrawingPrecision_();
 }
 
 void DisplayProperties::modifyRepresentationMode()
@@ -220,7 +221,6 @@ void DisplayProperties::selectModel(int index)
 		throw(InvalidOption(__FILE__, __LINE__, index));
 	}
 
-	model_type_ = index;
 	checkDrawingPrecision_();
 }
 
@@ -232,8 +232,6 @@ void DisplayProperties::selectMode(int index)
 	}
 
 	transparency_slider->setEnabled(index == VIEW::DRAWING_MODE_SOLID);
-
-	mode_ = index;
 }
 
 void DisplayProperties::selectColoringMethod(int index)
@@ -242,8 +240,6 @@ void DisplayProperties::selectColoringMethod(int index)
 	{
 		throw(InvalidOption(__FILE__, __LINE__, index));
 	}
-
-	coloring_method_ = index;
 }
 
 
@@ -330,7 +326,6 @@ void DisplayProperties::editColor()
 	custom_color_.set((float)qcolor.red() / 255.0,
 										(float)qcolor.green() / 255.0,
 										(float)qcolor.blue() / 255.0);
-
 	update();
 }
 
@@ -354,7 +349,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 {
 	ModelProcessor* model_processor;
 
-	switch (model_type_)
+	switch (model_type_combobox->currentItem())
 	{
 		case MODEL_LINES:
 			model_processor = new AddLineModel;
@@ -403,12 +398,12 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 			break;
 			
 		default:
-			throw(InvalidOption(__FILE__, __LINE__, model_type_));
+			throw(InvalidOption(__FILE__, __LINE__, model_type_combobox->currentItem()));
 	}
 
 	ColorProcessor* color_processor;
 
-	switch(coloring_method_)
+	switch(coloring_method_combobox->currentItem())
 	{
 		case COLORING_ELEMENT:
 			color_processor = new ElementColorProcessor;
@@ -446,7 +441,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 
 
 		default:
-			throw(InvalidOption(__FILE__, __LINE__, coloring_method_));
+			throw(InvalidOption(__FILE__, __LINE__, coloring_method_combobox->currentItem()));
 	}
 			
 
@@ -463,16 +458,22 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	if (rep_ == 0)
 	{
 		// create a new Representation
-		rep = new Representation(model_type_, precision_, mode_);
+		rep = new Representation(model_type_combobox->currentItem(), 
+														 precision_combobox->currentItem(), 
+														 mode_combobox->currentItem());
 		rebuild_representation = true;
+		if (custom_precision_button->isChecked())
+		{
+			rep->setSurfaceDrawingPrecision((float)precision_slider->value() / (float)10);
+		}
 	}
 	else 
 	{
 		// modify an existing Representation
 		// If the represenation has the same ModelProcessor as the currently selected,
 		// we dont have to rebuild the geometric objects.
-		if (rep_->getModelType() != model_type_ ||
-				rep_->getDrawingPrecision() != precision_ ||
+		if (rep_->getModelType() != model_type_combobox->currentItem() ||
+				rep_->getDrawingPrecision() != precision_combobox->currentItem() ||
 				 (custom_precision_button->isChecked() &&
 				  rep_->getSurfaceDrawingPrecision() != (float)precision_slider->value() / (float)10)||
 				 (!custom_precision_button->isChecked() &&
@@ -507,8 +508,8 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	}
 	else
 	{
-		rep_->setModelType(model_type_);
-		rep_->setDrawingPrecision(precision_);
+		rep_->setModelType(model_type_combobox->currentItem());
+		rep_->setDrawingPrecision(precision_combobox->currentItem());
 		if (custom_precision_button->isChecked())
 		{
 			rep_->setSurfaceDrawingPrecision((float)precision_slider->value() / (float) 10);
@@ -517,10 +518,10 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		{
 			rep_->setSurfaceDrawingPrecision(-1);
 		}
-		rep_->setDrawingMode(mode_);
+		rep_->setDrawingMode(mode_combobox->currentItem());
 	}
 
-	rep->setColoringType(coloring_method_);
+	rep->setColoringType(coloring_method_combobox->currentItem());
 	rep->update(rebuild_representation);
 
 	// no refocus, if a representation already exists
@@ -580,7 +581,6 @@ void DisplayProperties::precisionBoxChanged(int index)
 	{
 		throw(InvalidOption(__FILE__, __LINE__, index));
 	}
-	precision_ = index;
 
 	switch (index)
 	{
@@ -604,8 +604,8 @@ void DisplayProperties::precisionBoxChanged(int index)
 void DisplayProperties::checkDrawingPrecision_()
 	throw()
 {
-	if (model_type_ != MODEL_SE_SURFACE && 
-			model_type_ != MODEL_SA_SURFACE)
+	if (model_type_combobox->currentItem() != MODEL_SE_SURFACE && 
+			model_type_combobox->currentItem() != MODEL_SA_SURFACE)
 	{
 		presets_precision_button->setChecked(true);
 		custom_precision_button->setEnabled(false);
