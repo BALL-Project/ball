@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.8 2000/11/05 14:36:57 hekl Exp $
+// $Id: mainControl.h,v 1.9 2000/11/12 15:30:39 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -23,8 +23,8 @@
 #	include <BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_DATATYPE_OPTIONS_H
-#	include <BALL/DATATYPE/options.h>
+#ifndef BALL_FORMAT_INIFILE_H
+#	include <BALL/FORMAT/INIFile.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -33,6 +33,14 @@
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #	include <BALL/VIEW/KERNEL/connectionObject.h>
+#endif
+
+#ifndef BALL_VIEW_GUI_WIDGETS_MAINCONTROLPREFERENCES_H
+#	include <BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h>
+#endif
+
+#ifndef BALL_VIEW_GUI_DIALOGS_PREFERENCES_H
+#	include <BALL/VIEW/GUI/DIALOGS/preferences.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
@@ -44,6 +52,7 @@
 #endif
 
 #include <qapplication.h>
+#include <qobject.h>
 #include <qwidget.h>
 #include <qmainwindow.h>
 
@@ -137,16 +146,10 @@ namespace BALL
 					
 					@param  parent the new parent widget
 					@param  name the new name of the widget
-					@param  option_filename the new option filename
+					@param  inifile the new preferences filename
 					@return	MainControl - new constructed MainControl				
 			*/
-			MainControl(QWidget* parent = 0, const char* name = 0 , String option_filename = ".BALL.options");
-
-			/**	Copy constructor.
-					BAUSTELLE: what does the copy ctor do exactly? 
-					How to solve problems arising from the fact that QMainWindow's copy ctor is private?
-			*/
-			MainControl(const MainControl& main_control);
+			MainControl(QWidget* parent = 0, const char* name = 0 , String inifile = ".BALL.preferences");
 
 			/** Destructor
 					Default destruction of {\em *this} MainControl.
@@ -169,11 +172,11 @@ namespace BALL
 			/**	@name Exceptions
 			*/
 			//@{
-			class OptionsFileError
+			class PreferencesError
 				: public Exception::GeneralException
 			{
   			public:
-	   			OptionsFileError(const char* file, int line, const string& data);
+	   			PreferencesError(const char* file, int line, const string& data);
 			};
 			//@}
 
@@ -359,9 +362,17 @@ namespace BALL
 			*/
 			void updateAll();
 
-			/** Returns a pointer to the options
+			/** Returns a pointer to the preferences dialog (0 if not present)
 			*/
-			virtual Options *getOptions();
+			Preferences* getPreferences();
+
+			/** Returns the inifile.
+			*/
+			INIFile& getINIFile();
+
+			/** Returns the inifile (const version).
+			*/
+			const INIFile& getINIFile() const;
 
 			/** Handles messages sent by other \Ref{ConnectionObject}`s.
 					Virtual function for overriden the message handling system. Take care to call
@@ -403,6 +414,17 @@ namespace BALL
 					as the checkMenu-Function of the inserted ModularWidgets indicates.
 			*/
 			virtual void checkMenus();
+
+			/** Calls applyPreferences for all ModularWidgets if the apply button
+					of the preferences dialog is pressed.
+			*/
+			virtual void applyPreferencesTab();
+
+			/** Last second cleanup.
+					Must called after your own cleanup routine if you override this
+					method.
+			*/
+			virtual void aboutToExit();
 			//@}
 
 			public:
@@ -444,12 +466,12 @@ namespace BALL
 			virtual void write(std::ostream& s) const;
 			//@}
 
-			/**	@name	Automatic module registration and menu construction.
+			/**	@name	Automatic module registration, menu construction and preferences handling.
 			*/
 			//@{
 			/**
 			*/
-			static MainControl* getMainControl(const QWidget* widget);
+			static MainControl* getMainControl(const QObject* object);
 			
 			/**
 			*/
@@ -484,7 +506,55 @@ namespace BALL
 					The ID is one of the enum PopUpID
 			*/	
 			virtual QPopupMenu* initPopupMenu(int ID);
-				
+
+			/** Initialize a preferences tab for the widget (if needed).
+					This method is called automatically
+					immediately before the main application 
+					is started. It should add the widget's preferences tabs 
+					(if required).
+					A default tab for the application is automatically added.
+			*/
+			virtual void initializePreferencesTab(Preferences &preferences);
+			
+			/**	Remove the preferences tab.
+					This method is called by the widget's destructor.
+					It should reverse all actions performed in 
+					initializePreferencesTab (remove tabs).
+					It removed the default tab if it is created by initializePreferencesTab.
+			*/
+			virtual void finalizePreferencesTab(Preferences &preferences);
+			
+			/** Apply the preferences of the specific tab.
+					In this method the widget can extract any changed values from
+					its preferences tab (if required).
+					This method is called automatically if the apply button in the
+					preferences dialog is pressed.
+					If the default tab is created then the preferences of the tab
+					will be applied.
+			*/
+			virtual void applyPreferences(Preferences &preferences);
+			
+			/** Fetch the widgets preferences from the inifile.
+					This method extracts the default values from the given
+					inifile (if needed).
+					This method is called automatically
+					immediately before the main application 
+					is started. It should get the widget's initial values from the inifile. 
+					(if required).
+					If the default tab is created then those values will be fetched.
+					If you overload this method you should call it after your own fetch routine.
+			*/
+			virtual void fetchPreferences(INIFile &inifile);
+			
+			/** Writes the widgets preferences to the inifile.
+					This method is called by the widget's destructor.
+					It should write all needed values to the given inifile (as read from
+					the inifile in the fetchPreferences method).
+					If the default tab is created then those values will be written.
+					If you overload this method you should call it after your own fetch routine.
+			*/
+			virtual void writePreferences(INIFile &inifile);
+			
 			/**
 			*/
 			void addModularWidget(ModularWidget* widget);
@@ -519,7 +589,10 @@ namespace BALL
 			ListIteratorHashMap descriptor_map_;
 			List<CompositeDescriptor*> descriptors_;
 
-			Options options_;
+			MainControlPreferences *main_control_preferences_;
+			Preferences *preferences_dialog_;
+			int preferences_id_;
+			INIFile	preferences_;
 			
 			static int current_id_;
 			

@@ -1,4 +1,4 @@
-// $Id: mainControl.iC,v 1.5 2000/09/23 14:40:13 hekl Exp $
+// $Id: mainControl.iC,v 1.6 2000/11/12 15:30:40 hekl Exp $
 
 BALL_INLINE 
 CompositeDescriptor* MainControl::insert
@@ -83,5 +83,20 @@ const CompositeDescriptor* MainControl::getDescriptor
   return (CompositeDescriptor *)this->getDescriptor(center);
 }
 
+BALL_INLINE 
+Preferences* MainControl::getPreferences()
+{
+	return preferences_dialog_;
+}
 
+BALL_INLINE 
+INIFile& MainControl::getINIFile()
+{
+	return preferences_;
+}
 
+BALL_INLINE 
+const INIFile& MainControl::getINIFile() const
+{
+	return preferences_;
+}
