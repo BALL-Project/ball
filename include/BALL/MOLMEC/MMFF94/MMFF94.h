@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.2.2 2005/03/24 16:17:38 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.2.3 2005/03/25 21:07:48 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -29,8 +29,20 @@
 # include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
 #endif
 
+#ifndef BALL_DATATYPE_HASHSET_H
+# include <BALL/DATATYPE/hashSet.h>
+#endif
+
+#ifndef BALL_KERNEL_STANDARDPREDICATES_H
+ # include <BALL/KERNEL/standardPredicates.h>
+#endif
+
+#include <vector>
+
 namespace BALL 
 {
+	using std::vector;
+
 	/**	MMFF94 force field class.
       \ingroup  MMFF94
 	*/
@@ -159,16 +171,43 @@ namespace BALL
 			throw();
 
 		///
+		const vector<Bond*> getBonds() const { return bonds_;}
+		
+		///
+		const vector<HashSet<Atom*> >& getRings() const { return rings_;}
+		
+		///
+		const vector<HashSet<Atom*> >& getAromaticRings() const { return aromatic_rings_;}
+
+		///
 		const vector<MMFF94AtomTypeData>& getAtomTypes() const { return atom_types_.getAtomTypes();}
+
+		///
+ 		const MMFF94BondStretchParameters& getStretchParameters() const { return bond_parameters_;}
+
+		///
+		bool assignMMFF94BondType(Bond& bond) const;
+
+		///
+		bool isInOneAromaticRing(const Bond& bond) const;
 
 		//@}
 
 		protected:
-			
-		String										folder_;
-		MMFF94AtomTypesContainer 	atom_types_;
-		bool											parameters_initialized_;
 
+		void collectBonds_();
+		void collectRings_();
+			
+		String											folder_;
+		MMFF94AtomTypesContainer 		atom_types_;
+		MMFF94BondStretchParameters bond_parameters_;
+		vector<HashSet<Atom*> > 		rings_;
+		vector<HashSet<Atom*> > 		aromatic_rings_;
+		bool												parameters_initialized_;
+		vector<Bond*> 							bonds_;
+
+		Sp2HybridizedPredicate isSp2_;
+		SpHybridizedPredicate  isSp_;
 	};
 } // namespace BALL
 

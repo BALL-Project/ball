@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.4 2005/03/24 16:17:38 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.5 2005/03/25 21:07:49 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -24,6 +24,9 @@ using namespace std;
 
 namespace BALL 
 {
+	/// hold the maximum number of MMFF94 atom types + 1 (wildcard)
+	extern Size MMFF94_number_atom_types;
+
 	///
 	struct MMFF94AtomTypeData
 	{
@@ -75,7 +78,7 @@ namespace BALL
 		~MMFF94AtomTypesContainer();
 
 		///
-		bool readDataSet(const String& filename);
+		bool readParameters(const String& filename);
 		
 		///
 		const vector<MMFF94AtomTypeData>& getAtomTypes() const { return data_;}
@@ -99,7 +102,22 @@ namespace BALL
 		public:
 
 		///
-		typedef HashMap<Position, pair<float, float> > StretchMap;
+		struct BondData
+		{
+			BondData();
+
+			float kb_normal;
+			float r0_normal;
+			bool  standard_bond_exists;
+			
+			/// parameters for optinal single-bond--multiple bond cases (see MMFFPROP.PAR)
+			float kb_sbmb;
+			float r0_sbmb;
+			bool  sbmb_exists;
+		};
+
+		///
+		typedef HashMap<Position, BondData> StretchMap;
 
 		/**	@name Constant Definitions
 		*/
@@ -134,20 +152,16 @@ namespace BALL
 		bool isInitialized() { return is_initialized_;}
 
 		///
-		bool getParameters(const Bond& bond, float& kb, float& r0) const;
-
-		///
-		void getOptionalSBMBParameters(const Bond& bond, float& kb, float& r0) const;
+		StretchMap::ConstIterator getParameters(const Bond& bond) const;
 
 		///
 		bool readParameters(const String& filename)
 			throw(Exception::FileNotFound);
 		
-		bool hasOptionalSBMBParameter(Position atom_type1, Position atom_type2)
-		{
-			return parameters_optional_sbmb_.has(getIndex_(atom_type1, atom_type2));
-		}
+		///
+		const StretchMap& getBondParameters() { return parameters_;}
 
+		///
 		//@}
 
 		protected:
@@ -157,12 +171,7 @@ namespace BALL
 		/// standard parameters 
 		StretchMap parameters_;
 		
-		/// parameters for optinal single-bond--multiple bond cases (see MMFFPROP.PAR)
-		StretchMap parameters_optional_sbmb_;
-
 		bool is_initialized_;
-
-		Size nr_of_atom_types_;
 	};
 
 
@@ -173,8 +182,8 @@ namespace BALL
 	{
 		public:
 
-		/// Map with the bond type, force constant and reference angle
-		typedef HashMap<Position, vector<float> > BendMap;
+		/// Map with the force constant and reference angle
+		typedef HashMap<Position, pair<float, float> > BendMap;
 
 		/**	@name Constant Definitions
 		*/
@@ -209,7 +218,10 @@ namespace BALL
 		bool isInitialized() { return is_initialized_;}
 
 		///
-		bool getParameters(Position atom_type1, Position atom_type2, Position atom_type3, float& ka, float& angle) const;
+		bool getParameters(Position bend_type,
+											 Position atom_type1, 
+											 Position atom_type2, 
+											 Position atom_type3, float& ka, float& angle) const;
 
 		///
 		bool readParameters(const String& filename)
@@ -219,14 +231,15 @@ namespace BALL
 
 		protected:
 
-		Position getIndex_(Position atom_type1, Position atom_type2, Position atom_type3) const;
+		Position getIndex_(Position bend_type,
+											 Position atom_type1, 
+											 Position atom_type2, 
+											 Position atom_type3) const;
 
 		/// parameters 
 		BendMap parameters_;
 
 		bool is_initialized_;
-
-		Size nr_of_atom_types_;
 	};
 
 } // namespace BALL

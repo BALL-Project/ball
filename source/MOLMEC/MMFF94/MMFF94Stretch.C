@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.13 2005/03/24 16:17:34 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.14 2005/03/25 21:07:39 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -10,8 +10,6 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/path.h>
-#include <BALL/QSAR/ringPerceptionProcessor.h>
-#include <BALL/QSAR/aromaticityProcessor.h>
 
 #define BALL_DEBUG_MMFF
 
@@ -70,173 +68,65 @@ namespace BALL
 			return false;
 		}
 
-		if (!parameters_.isInitialized())
-		{
-			Path    path;
-			String  filename(path.find("MMFF94/MMFFBOND.PAR"));
-
-			if (filename == "") 
-			{
-				throw Exception::FileNotFound(__FILE__, __LINE__, filename);
-			}
-
-			parameters_.readParameters(filename);
-		}
-
 		stretch_.clear();
-		rings_.clear();
-
-		vector<vector<Atom*> > rings;
-
-		RingPerceptionProcessor rpp;
-		rpp.calculateSSSR(rings, *getForceField()->getSystem());
-
-		AromaticityProcessor ap;
-		ap.aromatize(rings, *getForceField()->getSystem());
-
-		for (Position i = 0; i < rings.size(); i++)
-		{
-			bool ok = true;
-			for (Position j = 0; j < rings[i].size(); j++)
-			{
-				if (!rings[i][j]->hasProperty("IsAromatic"))
-				{
-					ok = false;
-					break;
-				}
-			}
-
-			if (ok &&
-				rings[i].size() >=5 && rings[i].size() <= 6)
-			{
-				rings_.push_back(HashSet<Atom*>());
-				for (Position j = 0; j < rings[i].size(); j++)
-				{
-					rings_[rings_.size() - 1].insert(rings[i][j]);
-				}
-			}
-		}
 		
-#ifdef BALL_DEBUG_MMFF
-Log.info() << "MMFF94Strech Number of rings: "  << rings_.size() << std::endl;
-#endif
-
-		bool use_selection = getForceField()->getUseSelection();
-
 		// a working instance to put the current values in and push it back
 		Stretch dummy_stretch;
 
-		AtomVector::ConstIterator atom_it = getForceField()->getAtoms().begin();
-		for (; atom_it != getForceField()->getAtoms().end(); ++atom_it)
+		MMFF94& mmff = *(MMFF94*)getForceField();
+
+		const MMFF94BondStretchParameters& stretch_data = mmff.getStretchParameters();
+		MMFF94BondStretchParameters::StretchMap::ConstIterator stretch_it;
+
+		const vector<Bond*>& bonds = mmff.getBonds();
+		
+		vector<Bond*>::const_iterator bond_it = bonds.begin();
+		for (; bond_it != bonds.end(); bond_it++)
 		{
-			for (Atom::BondIterator it = (*atom_it)->beginBond(); +it ; ++it) 
+			stretch_it = stretch_data.getParameters(**bond_it);
+			
+			Atom& atom1 = *(Atom*)(*bond_it)->getFirstAtom();
+			Atom& atom2 = *(Atom*)(*bond_it)->getSecondAtom();
+
+			if (!+stretch_it)
 			{
-				// make sure we process each bond only once
-				if (*atom_it != it->getFirstAtom()) continue;
-				
-				Bond&	bond = *it;
-				if (bond.getType() == Bond::TYPE__HYDROGEN)
-				{	
-					// Ignore hydrogen bonds!
-					continue;
-				}
+				getForceField()->error() << "cannot find stretch parameters for atom types " 
+ 					<< atom1.getType() << " "
+ 					<< atom2.getType() << " "
+					<< " (atoms are: " 
+					<< atom1.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << " " 
+					<< atom2.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) 
+					<< ")" << std::endl;
 
-			  Atom& atom1(*(Atom*)bond.getFirstAtom());
-			  Atom& atom2(*(Atom*)bond.getSecondAtom());
-
-				const bool make_it = !use_selection || (use_selection && atom1.isSelected() && atom2.isSelected());
-				if (!make_it) continue;
-
-				const Atom::Type atom_type_A = atom1.getType();
-				const Atom::Type atom_type_B = atom2.getType();
-
-				// take the sbmb value if :
-
-				// is there an optional sbmb value ?
-				// is the bond order == 1 ?
-				// are both atoms sp or sp2 hypridised?
-				bool get_sbmb = 
-					parameters_.hasOptionalSBMBParameter(atom_type_A, atom_type_B) &&
-					bond.getOrder() == Bond::ORDER__SINGLE  									&&
-					(isSp_(atom1) || isSp2_(atom1)) 				&&
-					(isSp_(atom2) || isSp2_(atom2))					&&
- 					!isInOneAromaticRing_(bond);
-
-// debug->
-int reason = 0;
-if (!parameters_.hasOptionalSBMBParameter(atom_type_A, atom_type_B)) reason = 1;
-if (bond.getOrder() != Bond::ORDER__SINGLE) reason = 2;
-if (! ((isSp_(atom1) || isSp2_(atom1)) && (isSp_(atom2) || isSp2_(atom2)))) reason = 3;
-if (isInOneAromaticRing_(bond)) reason = 4;
-
-/*
-Log.info() << " (atoms are: " 
-							<< atom1.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << " " 
-							<< atom2.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ") " 
-							<< bond.getOrder() 
-							<< std::endl;
-*/
-
-dummy_stretch.reason = reason;
-// <- debug
-
-
-				dummy_stretch.sbmb = get_sbmb;
-
-				if (get_sbmb)
-				{
-					parameters_.getOptionalSBMBParameters(bond, dummy_stretch.kb, dummy_stretch.r0);
-				}
-
-				else if (!parameters_.getParameters(bond, dummy_stretch.kb, dummy_stretch.r0))
-				{
-					getForceField()->error() << "cannot find stretch parameters for atom types " 
-							<< atom_type_A << " " << atom_type_B 
-							<< " (atoms are: " 
-							<< atom1.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << " " 
-							<< atom2.getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << std::endl;
-
-					getForceField()->getUnassignedAtoms().insert(&atom1);
-					getForceField()->getUnassignedAtoms().insert(&atom2);
-					continue;
-				}
-
-				dummy_stretch.atom1 = &atom1; 
-				dummy_stretch.atom2 = &atom2;
-
-#ifdef BALL_DEBUG_MMFF
-				Log.info() << atom1.getFullName() << " -> " 
-					         << atom2.getFullName() << " : "
-									 << atom_type_A << " " << atom_type_B << std::endl;
-#endif
-
-				stretch_.push_back(dummy_stretch);
+				getForceField()->getUnassignedAtoms().insert(&atom1);
+				getForceField()->getUnassignedAtoms().insert(&atom2);
+				continue;
 			}
+
+			const bool is_sbmb = (**bond_it).hasProperty("MMFF94SBMB");
+			dummy_stretch.sbmb = is_sbmb;
+			dummy_stretch.atom1 = &atom1; 
+			dummy_stretch.atom2 = &atom2;
+
+			const MMFF94BondStretchParameters::BondData& data = stretch_it->second;
+
+			if (is_sbmb)
+			{
+				dummy_stretch.r0 = data.r0_sbmb;
+				dummy_stretch.kb = data.kb_sbmb;
+			}
+			else
+			{
+				dummy_stretch.r0 = data.r0_normal;
+				dummy_stretch.kb = data.kb_normal;
+			}
+
+			stretch_.push_back(dummy_stretch);
 		}
 
 		return true;
 	}
 
-	bool MMFF94Stretch::isInOneAromaticRing_(const Bond& bond)
-	{
-		Atom* atom1 = (Atom*) bond.getFirstAtom();
-		Atom* atom2 = (Atom*) bond.getSecondAtom();
-		for (Position pos = 0; pos < rings_.size(); pos++)
-		{
-			if (rings_[pos].has(atom1) &&
-					rings_[pos].has(atom2))
-			{
-#ifdef BALL_DEBUG_MMFF
-				Log.info() << atom1->getName() << " " 
-									 << atom2->getName() << " "  
-									 << " removed atom from sbmbs" << std::endl;
-#endif
-				return true;
-			}
-		}
-		
-		return false;
-	}
 
 	// update bond lists if the selection has changed
 	void MMFF94Stretch::update()

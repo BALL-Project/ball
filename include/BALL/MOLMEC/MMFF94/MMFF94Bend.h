@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.h,v 1.1.2.2 2005/03/24 16:17:38 amoll Exp $
+// $Id: MMFF94Bend.h,v 1.1.2.3 2005/03/25 21:07:48 amoll Exp $
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -37,7 +37,8 @@ namespace BALL
 
 		/// 0.043844 / 2
 		#define K0 0.021922
-		///
+
+		/// see MMFFANG.PAR
 		struct Bend
 		{
 			float theta0;
@@ -46,6 +47,7 @@ namespace BALL
 			Atom::StaticAtomAttributes*	atom2;
 			Atom::StaticAtomAttributes*	atom3;
 			bool is_linear;
+			Position ATIJK;
 		};
 
 		BALL_CREATE(MMFF94Bend)
@@ -93,6 +95,10 @@ namespace BALL
 		*/
 		virtual void updateForces();
 
+		///
+		Position getBendType(const Bond& bond1, const Bond& bond2,
+										 		 Atom& atom1, Atom& atom2, Atom& atom3) const;
+		
 		///
 		const vector<Bend>& getBends() const { return bends_;}
 		//@}

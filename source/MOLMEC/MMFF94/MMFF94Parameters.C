@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.6 2005/03/25 14:43:50 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.7 2005/03/25 21:07:39 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -14,6 +14,8 @@ using namespace std;
 
 namespace BALL 
 {
+
+	Size MMFF94_number_atom_types = 100;
 
 	MMFF94AtomTypeData::MMFF94AtomTypeData()
 		: aspec(0),
@@ -43,7 +45,7 @@ namespace BALL
 		data_ = to_copy.data_;
 	}
 
-	bool MMFF94AtomTypesContainer::readDataSet(const String& filename)
+	bool MMFF94AtomTypesContainer::readParameters(const String& filename)
 	{
 		data_.clear();
 
@@ -99,10 +101,19 @@ namespace BALL
 
 	///////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////
+	
+	MMFF94BondStretchParameters::BondData::BondData()
+		: kb_normal(0),
+			r0_normal(0),
+			standard_bond_exists(0),
+			kb_sbmb(0),
+			r0_sbmb(0),
+			sbmb_exists(0)
+	{
+	}
 
 	MMFF94BondStretchParameters::MMFF94BondStretchParameters()
-		: is_initialized_(false),
-			nr_of_atom_types_(100)
+		: is_initialized_(false)
 	{
 	}
 
@@ -117,40 +128,28 @@ namespace BALL
 		parameters_.clear();
 	}
 	
-	const MMFF94BondStretchParameters& MMFF94BondStretchParameters::operator = (const MMFF94BondStretchParameters& param)
+	const MMFF94BondStretchParameters& MMFF94BondStretchParameters::operator = 
+		(const MMFF94BondStretchParameters& param)
 		throw()
 	{
 		parameters_ = param.parameters_;
 		return *this;
 	}
 
-	void MMFF94BondStretchParameters::getOptionalSBMBParameters(const Bond& bond, float& kb, float& r0) const
-	{
-		StretchMap::ConstIterator it = 
-		      parameters_optional_sbmb_.find(getIndex_(bond.getFirstAtom()->getType(),
-																									 bond.getSecondAtom()->getType()));
-		kb = it->second.first;
-		r0 = it->second.second;
-	}
 
-	bool MMFF94BondStretchParameters::getParameters(const Bond& bond, float& kb, float& r0) const
+	MMFF94BondStretchParameters::StretchMap::ConstIterator 
+		MMFF94BondStretchParameters::getParameters(const Bond& bond) const
 	{
 		// take the standard value
 		StretchMap::ConstIterator it = parameters_.find(getIndex_(bond.getFirstAtom()->getType(),
 																							 							  bond.getSecondAtom()->getType()));
-		if (it == parameters_.end()) return false;
-
-		kb = it->second.first;
-		r0 = it->second.second;
-
-		return true;
+		return it;
 	}
 
 	bool MMFF94BondStretchParameters::readParameters(const String& filename)
 		throw(Exception::FileNotFound)
 	{
 		parameters_.clear();
-		parameters_optional_sbmb_.clear();
 
 		LineBasedFile infile(filename);
 		vector<String> fields;
@@ -167,7 +166,8 @@ namespace BALL
 				
 				if (infile.getLine().split(fields) != 6)
 				{
-					Log.error() << "Error in " << filename << " Not 6 fields in one line " << infile.getLine() << std::endl;
+					Log.error() << "Error in " << filename << " Not 6 fields in one line " 
+										  << infile.getLine() << std::endl;
 					return false;
 				}
 
@@ -175,25 +175,29 @@ namespace BALL
 				const Position type2 = fields[2].toUnsignedInt();
 				const Position index = getIndex_(type1, type2);
 
-				// the data values r0 and kb
-				pair<float, float> values(fields[3].toFloat(), fields[4].toFloat());
+				StretchMap::Iterator it = parameters_.find(index);
 
-				// if the value already exists, put it into the optional sbmb hashmap
-				if (parameters_.has(index))
+				if (it == parameters_.end())
 				{
-					if (fields[0] != "1")
-					{
-						Log.error() << "Problem while reading bond parameter file: Invalid SBMB entry: " 
-												<< infile.getLine() << std::endl;
-						return false;
-					}
-
-					parameters_optional_sbmb_[index] = values;
-					continue;
+					it = parameters_.insert(pair<Position, BondData>(index, BondData())).first;
 				}
 
-				// put the values into the standard values hashmap
-				parameters_[index] = values;
+				BondData& data = it->second;
+
+				bool is_sbmb = fields[0].toBool();
+
+				if (is_sbmb)
+				{
+					data.kb_sbmb = fields[3].toFloat(); 
+					data.r0_sbmb = fields[4].toFloat();
+					data.sbmb_exists = true;
+				}
+				else
+				{
+					data.kb_normal = fields[3].toFloat(); 
+					data.r0_normal = fields[4].toFloat();
+					data.standard_bond_exists = true;
+				}
 			}
 		}
 		catch(...)
@@ -221,15 +225,14 @@ namespace BALL
 			atom_type2 = temp;
 		}
 
-		return atom_type1 * nr_of_atom_types_ + atom_type2;
+		return atom_type1 * MMFF94_number_atom_types + atom_type2;
 	}
 
 	///////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////
 
 	MMFF94BendParameters::MMFF94BendParameters()
-		: is_initialized_(false),
-			nr_of_atom_types_(100)
+		: is_initialized_(false)
 	{
 	}
 
@@ -251,14 +254,17 @@ namespace BALL
 		return *this;
 	}
 
-	bool MMFF94BendParameters::getParameters(Position atom_type1, Position atom_type2, Position atom_type3, float& ka, float& angle) const
+	bool MMFF94BendParameters::getParameters(Position bond_type,
+			Position atom_type1, Position atom_type2, Position atom_type3, float& ka, float& angle) const
 	{
 		// take the standard value
-		BendMap::ConstIterator it = parameters_.find(getIndex_(atom_type1, atom_type2, atom_type3));
+		BendMap::ConstIterator it = parameters_.find(
+				getIndex_(bond_type, atom_type1, atom_type2, atom_type3));
+
 		if (it == parameters_.end()) return false;
 
-		ka = it->second[1];
-		angle = it->second[2];
+		ka = it->second.first;
+		angle = it->second.second;
 
 		return true;
 	}
@@ -283,20 +289,20 @@ namespace BALL
 				
 				if (infile.getLine().split(fields) < 7)
 				{
-					Log.error() << "Error in " << filename << " Not 6 fields in one line " << infile.getLine() << std::endl;
+					Log.error() << "Error in " << filename << " Not 6 fields in one line " 
+											<< infile.getLine() << std::endl;
 					return false;
 				}
 
-				const Position type1 = fields[1].toUnsignedInt();
-				const Position type2 = fields[2].toUnsignedInt();
-				const Position type3 = fields[3].toUnsignedInt();
-				const Position index = getIndex_(type1, type2, type3);
+				const Position bend_type = fields[0].toUnsignedInt();
+				const Position atom_type1 = fields[1].toUnsignedInt();
+				const Position atom_type2 = fields[2].toUnsignedInt();
+				const Position atom_type3 = fields[3].toUnsignedInt();
+				const Position index = getIndex_(bend_type, atom_type1, atom_type2, atom_type3);
 
-				parameters_[index] = vector<float>();
-				parameters_[index].resize(3);
-				parameters_[index][0] = fields[0].toUnsignedInt(); // bond type
-				parameters_[index][1] = fields[4].toFloat(); // ka
-				parameters_[index][2] = fields[5].toFloat(); // theta
+				parameters_[index] = pair<float, float>();
+				parameters_[index].first  = fields[4].toFloat(); // ka
+				parameters_[index].second = fields[5].toFloat(); // theta
 			}
 		}
 		catch(...)
@@ -313,17 +319,20 @@ namespace BALL
 		return true;
 	}
 
-	Position MMFF94BendParameters::getIndex_(Position atom_type1, Position atom_type2, Position atom_type3) const
+	Position MMFF94BendParameters::getIndex_(Position bend_type,
+						Position atom_type1, Position atom_type2, Position atom_type3) const
 	{ 
-		vector<Position> types;
-		
-		types.push_back(atom_type1);
-		types.push_back(atom_type2);
-		types.push_back(atom_type3);
+		// Atom type I is always less than or equal to K
+		if (atom_type1 > atom_type3)
+		{
+			Position temp(atom_type1);
+			atom_type1 = atom_type3;
+			atom_type3 = temp;
+		}
 
-		sort(types.begin(), types.end());
-
-		return types[0] * nr_of_atom_types_ * nr_of_atom_types_ + types[1] * nr_of_atom_types_ + types[2];
+		return atom_type1 * (bend_type + 1) * MMFF94_number_atom_types * MMFF94_number_atom_types + 
+					 atom_type2	* MMFF94_number_atom_types +
+					 atom_type3;
 	}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.4 2005/03/24 16:17:33 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.5 2005/03/25 21:07:38 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -13,8 +13,8 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
-#include <BALL/MOLMEC/COMMON/assignTypes.h>
-#include <BALL/MOLMEC/PARAMETER/templates.h>
+#include <BALL/QSAR/ringPerceptionProcessor.h>
+#include <BALL/QSAR/aromaticityProcessor.h>
 
 using namespace std;
 
@@ -152,13 +152,20 @@ namespace BALL
 			throw Exception::FileNotFound(__FILE__, __LINE__, folder_);
 		}
 
-		if (!atom_types_.isInitialized())
+		if (!parameters_initialized_)
 		{
-			atom_types_.readDataSet(folder + FileSystem::PATH_SEPARATOR + "MMFFPROP.PAR");
+			String prefix = folder + FileSystem::PATH_SEPARATOR;
+			atom_types_.readParameters(prefix + "MMFFPROP.PAR");
+			bond_parameters_.readParameters(prefix + "MMFFANG.PAR");
+			parameters_initialized_ = true;
 		}
+
+		collectBonds_();
+		collectRings_();
 
 		return true;
 	}
+
 
 	Size MMFF94::getUpdateFrequency() const
 	{
@@ -265,4 +272,163 @@ namespace BALL
 		return result;
 	}
 	
+
+	bool MMFF94::assignMMFF94BondType(Bond& bond) const
+	{
+		const MMFF94BondStretchParameters::StretchMap::ConstIterator it 
+			= bond_parameters_.getParameters(bond);
+
+		if (!+it) return false;
+
+		const MMFF94BondStretchParameters::BondData& data = it->second;
+
+#ifdef BALL_DEBUG_MMFF
+		if (!data.sbmb_exists && !data.standard_bond_exists)
+		{
+			Log.error() << "Error in " << __FILE__ << " " << __LINE__ << std::endl;
+			return false;
+		}
+#endif
+
+		Index is_sbmb = -1;
+		if (data.sbmb_exists && ! data.standard_bond_exists)
+		{
+			is_sbmb = 1;
+		}
+
+		else if (!data.sbmb_exists && data.standard_bond_exists)
+		{
+			is_sbmb = 0;
+		}
+
+		else
+		{
+			const Atom& atom1 = *(Atom*)bond.getFirstAtom();
+			const Atom& atom2 = *(Atom*)bond.getSecondAtom();
+
+			// ok, this bond can be a sbmb or a standard bond
+			// it is sbmb if :
+
+			// is the bond order == 1 ?
+			// are both atoms sp or sp2 hypridised?
+			// both atoms are not in one aromatic ring
+			is_sbmb = 
+				bond.getOrder() == Bond::ORDER__SINGLE  &&
+				(isSp_(atom1) || isSp2_(atom1)) 				&&
+				(isSp_(atom2) || isSp2_(atom2))					&&
+				!isInOneAromaticRing(bond);
+		}
+
+		if (is_sbmb == 1)
+		{
+			bond.setProperty("MMFF94SBMB");
+		}
+		else
+		{
+			bond.clearProperty("MMFF94SBMB");
+		}
+
+		return true;
+	}
+
+	bool MMFF94::isInOneAromaticRing(const Bond& bond) const
+	{
+		Atom* atom1 = (Atom*) bond.getFirstAtom();
+		Atom* atom2 = (Atom*) bond.getSecondAtom();
+
+		for (Position pos = 0; pos < aromatic_rings_.size(); pos++)
+		{
+			if (aromatic_rings_[pos].has(atom1) &&
+					aromatic_rings_[pos].has(atom2))
+			{
+#ifdef BALL_DEBUG_MMFF
+				Log.info() << atom1->getName() << " " 
+									 << atom2->getName() << " "  
+									 << " removed atom from sbmbs" << std::endl;
+#endif
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	void MMFF94::collectBonds_()
+	{
+		bonds_.clear();
+
+		Atom::BondIterator bond_iterator;
+		AtomVector::ConstIterator atom_it = getAtoms().begin();
+		for ( ; atom_it != getAtoms().end(); ++atom_it)
+		{
+			for (Atom::BondIterator it = (*atom_it)->beginBond(); +it ; ++it) 
+			{
+				// collect all bonds only once!
+				if (*atom_it != it->getFirstAtom()) continue;
+				
+				Bond&	bond = const_cast<Bond&>(*it);
+
+				// Ignore hydrogen bonds!
+				if (bond.getType() == Bond::TYPE__HYDROGEN) continue;
+
+				if (!getUseSelection() ||
+						(bond.getFirstAtom()->isSelected() && 
+						 bond.getSecondAtom()->isSelected()))
+				{
+					assignMMFF94BondType(bond);
+					bonds_.push_back(&bond);
+				}
+			}
+		}
+	}
+	
+	void MMFF94::collectRings_()
+	{
+		///////////////////////////////////////
+		/// calculate all rings in the molecule
+		rings_.clear();
+		vector<vector<Atom*> > rings;
+
+		RingPerceptionProcessor rpp;
+		rpp.calculateSSSR(rings, *getSystem());
+
+		for (Position i = 0; i < rings.size(); i++)
+		{
+			rings_.push_back(HashSet<Atom*>());
+			for (Position j = 0; j < rings[i].size(); j++)
+			{
+				rings_[rings_.size() - 1].insert(rings[i][j]);
+			}
+		}
+
+		///////////////////////////////////////
+		/// calculate all aromatic rings in the molecule
+		aromatic_rings_.clear();
+
+		AromaticityProcessor ap;
+		ap.aromatize(rings, *getSystem());
+
+		for (Position i = 0; i < rings.size(); i++)
+		{
+			bool ok = true;
+			for (Position j = 0; j < rings[i].size(); j++)
+			{
+				if (!rings[i][j]->hasProperty("IsAromatic"))
+				{
+					ok = false;
+					break;
+				}
+			}
+
+			if (ok)
+			{
+				rings_.push_back(HashSet<Atom*>());
+				for (Position j = 0; j < rings[i].size(); j++)
+				{
+					rings_[rings_.size() - 1].insert(rings[i][j]);
+				}
+			}
+		}
+	}
+
 } // namespace BALL

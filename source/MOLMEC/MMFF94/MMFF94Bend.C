@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.2 2005/03/24 16:17:33 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.3 2005/03/25 21:07:38 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -90,48 +90,66 @@ namespace BALL
 			for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 			{
 				if (it2->getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-bonds
+
 				for (it1 = it2, ++it1; +it1 ; ++it1) 
 				{
 					if (it1->getType() == Bond::TYPE__HYDROGEN) continue; // Skip H-Bonds;
+
 					this_bend.atom1 = &Atom::getAttributes()[it2->getPartner(**atom_it)->getIndex()];
 					this_bend.atom2 = &Atom::getAttributes()[(*atom_it)->getIndex()];
 					this_bend.atom3 = &Atom::getAttributes()[it1->getPartner(**atom_it)->getIndex()];
 
-					if (!use_selection ||
-					   (use_selection && (this_bend.atom1->ptr->isSelected() &&
-																this_bend.atom2->ptr->isSelected() &&
-																this_bend.atom3->ptr->isSelected())))
-					{ 
-						Atom::Type atom_type_a1 = this_bend.atom1->type;
-						Atom::Type atom_type_a2 = this_bend.atom2->type;
-						Atom::Type atom_type_a3 = this_bend.atom3->type;
+					if (use_selection && (!this_bend.atom1->ptr->isSelected() ||
+																!this_bend.atom2->ptr->isSelected() ||
+																!this_bend.atom3->ptr->isSelected()))
+					{
+						continue;
+					}
 
-						// check for parameters
-						if (!parameters_.getParameters(atom_type_a1, atom_type_a2, atom_type_a3, this_bend.ka, this_bend.theta0))
+					Atom::Type atom_type_a1 = this_bend.atom1->type;
+					Atom::Type atom_type_a2 = this_bend.atom2->type;
+					Atom::Type atom_type_a3 = this_bend.atom3->type;
+
+					this_bend.ATIJK = getBendType(*it1, *it2,
+																				*this_bend.atom1->ptr,
+																				*this_bend.atom2->ptr,
+																				*this_bend.atom3->ptr);
+
+					// check for parameters
+					if (!parameters_.getParameters(this_bend.ATIJK, 
+																				 atom_type_a1, 
+																				 atom_type_a2, 
+																				 atom_type_a3, 
+																				 this_bend.ka, 
+																				 this_bend.theta0))
+					{
+						// try wildcard matching
+						if (!parameters_.getParameters(this_bend.ATIJK, 
+																					 0, 
+																					 atom_type_a2, 
+																					 0, 
+																					 this_bend.ka, 
+																					 this_bend.theta0))
 						{
-							// handle wildcards: if the atom type is not known, try to match *-A2-* 
-//   							if (!bend_parameters.assignParameters(this_bend.values, Atom::ANY_TYPE, atom_type_a2, Atom::ANY_TYPE))
-							{
-								// complain if nothing was found
-								getForceField()->error() << "AmberBend::setup: cannot find bend parameters for atom types:"
-									<< atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 
-									<< " (atoms are: " << this_bend.atom1->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
-									<< this_bend.atom2->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
-									<< this_bend.atom3->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
+							// complain if nothing was found
+							getForceField()->error() << "MMFF94Bend::setup: cannot find bend parameters for atom types:"
+								<< atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 
+								<< " (atoms are: " << this_bend.atom1->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
+								<< this_bend.atom2->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
+								<< this_bend.atom3->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
 
-								getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
-   							getForceField()->getUnassignedAtoms().insert(*atom_it);
-								getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
-								continue;
-							}
-						} 
-						else 
-						{
-							this_bend.is_linear = atom_types[atom_type_a2].lin;
-
-							// store the bend parameters otherwise
-							bends_.push_back(this_bend);
+							getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
+							getForceField()->getUnassignedAtoms().insert(*atom_it);
+							getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
+							continue;
 						}
+					} 
+					else 
+					{
+						this_bend.is_linear = atom_types[atom_type_a2].lin;
+
+						// store the bend parameters otherwise
+						bends_.push_back(this_bend);
 					}
 				}
 			}
@@ -149,11 +167,11 @@ namespace BALL
 		Vector3 v1, v2;
 		vector<Bend>::iterator bend_it = bends_.begin();
 
-		float degree_to_radian = Constants::PI / 180.0;
 		float radian_to_degree = 180.0 / Constants::PI;
+		float degree_to_radian = Constants::PI / 180.0;
 
-		// -0.4 rad^-1
-		const float k1 = -0.4 * radian_to_degree;
+		// -0.007 degree^-1
+		const float k1 = -0.007;
 
 		for (; bend_it != bends_.end(); ++bend_it) 
 		{
@@ -163,6 +181,7 @@ namespace BALL
 			if (bend_it->is_linear)
 			{
 				const float energy = 143.9325 * ka * (1.0 + cos(theta0 * degree_to_radian));
+Log.error() << "#~~#   1 " << energy            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				energy_ += energy;
 				continue;
 			}
@@ -192,16 +211,24 @@ namespace BALL
 			}
 
 			theta *= radian_to_degree;
-			theta -= theta0;
 
 #ifdef BALL_DEBUG_MMFF
 Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " " 
 											<< bend_it->atom2->ptr->getName() << " " 
-											<< bend_it->atom3->ptr->getName() << "  T: " 
-											<< theta0 << std::endl;
+											<< bend_it->atom3->ptr->getName() << "  ATIJK: " 
+											<< bend_it->ATIJK << "  T: "
+											<< theta << "  T0: " << theta0 << " ka " << ka;
 #endif
 
-			energy_ += K0 * ka * theta * theta * (1.0 + k1 * theta);
+			theta -= theta0;
+
+			const float energy = K0 * ka * theta * theta * (1.0 + k1 * theta);
+
+#ifdef BALL_DEBUG_MMFF
+	Log.info() << "  E: "<< energy << std::endl;
+#endif
+
+			energy_ += energy;
 		}
 		
 		return energy_;
@@ -211,6 +238,70 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 	// calculates and adds its forces to the current forces of the force field
 	void MMFF94Bend::updateForces()
 	{
+	}
+
+	Position MMFF94Bend::getBendType(const Bond& bond1, const Bond& bond2,
+										 					 		 Atom& atom1, Atom& atom2, Atom& atom3) const
+	{
+		/* 	The angle-bending parameters employ angle-type indices ATIJK ranging 
+		  	between 0 and 8.  Their meanings are as defined below:
+
+				ATIJK           Structural significance
+				 ---------------------------------------------------------------------------
+					 0            The angle i-j-k is a "normal" bond angle
+					 1            Either bond i-j or bond j-k has a bond type of 1
+					 2            Both i-j and j-k have bond types of 1; the sum is 2.
+					 3            The angle occurs in a three-membered ring
+					 4            The angle occurs in a four-membered ring
+					 5            Is in a three-membered ring and the sum of the bond types is 1
+					 6            Is in a three-membered ring and the sum of the bond types is 2
+					 7            Is in a four-membered ring and the sum of the bond types is 1
+					 8            Is in a four-membered ring and the sum of the bond types is 2 
+		*/
+
+		MMFF94& mmff = *(MMFF94*)getForceField();
+		const vector<HashSet<Atom*> >& all_rings = mmff.getRings();
+
+		bool in_ring_of_three = false;
+		bool in_ring_of_four  = false;
+
+		/// test the rings in which all atoms occur
+		for (Position ring_nr = 0; ring_nr < all_rings.size(); ring_nr++)
+		{
+			Size size = all_rings[ring_nr].size();
+			if (size < 3 || size > 4) continue;
+
+			if (!all_rings[ring_nr].has(&atom1) &&
+			    !all_rings[ring_nr].has(&atom2) &&
+			    !all_rings[ring_nr].has(&atom3))
+			{
+				continue;
+			}
+
+			if (size == 3) in_ring_of_three = true;
+			if (size == 4) in_ring_of_four  = true;
+		}
+
+		/// calculate sum of bond_types
+		Size sum_bond_types = 0;
+		if (bond1.hasProperty("MMFF94SBMB")) sum_bond_types ++;
+		if (bond2.hasProperty("MMFF94SBMB")) sum_bond_types ++;
+
+		if (in_ring_of_four)
+		{
+			Position result = 4;
+			if (sum_bond_types != 0) result = 7 + sum_bond_types;
+			return result;
+		}
+
+		if (in_ring_of_three)
+		{
+			Position result = 3;
+			if (sum_bond_types != 0) result = 5 + sum_bond_types;
+			return result;
+		}
+
+		return sum_bond_types;
 	}
 
 } // namespace BALL

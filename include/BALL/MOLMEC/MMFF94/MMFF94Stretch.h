@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.h,v 1.1.2.9 2005/03/24 16:17:38 amoll Exp $ 
+// $Id: MMFF94Stretch.h,v 1.1.2.10 2005/03/25 21:07:49 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field, bond stretch component
@@ -19,10 +19,6 @@
 
 #ifndef BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H
 #	include <BALL/MOLMEC/MMFF94/MMFF94Parameters.h>
-#endif
-
-#ifndef BALL_KERNEL_STANDARDPREDICATES_H
- # include <BALL/KERNEL/standardPredicates.h>
 #endif
 
 namespace BALL 
@@ -47,7 +43,6 @@ namespace BALL
 			float kb;
 			float r0;
 			bool  sbmb; // debuging
-			int reason; // debuging
 		};
 
 		BALL_CREATE(MMFF94Stretch)
@@ -96,9 +91,6 @@ namespace BALL
 		virtual void update()
 			throw(Exception::TooManyErrors);
 
-		///
-		MMFF94BondStretchParameters getParameters() { return parameters_;}
-
 		const vector<Stretch>& getStretches() { return stretch_;}
 
 		//@} 
@@ -110,14 +102,7 @@ namespace BALL
 		/*_	@name	Private Attributes	
 		*/
 		//_@{
-		MMFF94BondStretchParameters parameters_;
-		
 		vector<Stretch> stretch_;
-
-		vector< HashSet<Atom*> > rings_;
-
-		Sp2HybridizedPredicate isSp2_;
-		SpHybridizedPredicate  isSp_;
 		//_@}
 		
 	};
