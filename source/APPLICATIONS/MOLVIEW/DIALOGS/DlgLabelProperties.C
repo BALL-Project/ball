@@ -8,6 +8,8 @@
  *********************************************************************/
 
 #include <qcolordialog.h>
+#include <qpopupmenu.h>
+#include <qmenubar.h>
 #include "DlgLabelProperties.h"
 
 #define Inherited DlgLabelPropertiesData
@@ -105,7 +107,7 @@ void DlgLabelProperties::onNotify(Message *message)
 
 void DlgLabelProperties::initializeWidget(MainControl& main_control)
 {
-	//	main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
+	main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
 	id_ = main_control.insertMenuEntry
 		      (MainControl::DISPLAY, "&Label Properties", this,
@@ -125,8 +127,8 @@ void DlgLabelProperties::checkMenu(MainControl& main_control)
 {
 	bool selected = (selection_.empty() ? false : true);
 
-	//	main_control.menuBar()->setItemEnabled(id_, selected);
-	//	main_control.menuBar()->setItemChecked(id_, isVisible());
+	main_control.menuBar()->setItemEnabled(id_, selected);
+	main_control.menuBar()->setItemChecked(id_, isVisible());
 }
 
 void DlgLabelProperties::openDialog()

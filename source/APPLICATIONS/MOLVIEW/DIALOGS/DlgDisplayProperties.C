@@ -8,6 +8,8 @@
  *********************************************************************/
 
 #include <qcolordialog.h>
+#include <qpopupmenu.h>
+#include <qmenubar.h>
 #include "DlgDisplayProperties.h"
 
 #define Inherited DlgDisplayPropertiesData
@@ -174,7 +176,7 @@ void DlgDisplayProperties::onNotify(Message *message)
 
 void DlgDisplayProperties::initializeWidget(MainControl& main_control)
 {
-	//	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
+	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
 	id_ = main_control.insertMenuEntry
 		      (MainControl::DISPLAY, "D&isplay Properties", this,
@@ -192,7 +194,7 @@ void DlgDisplayProperties::finalizeWidget(MainControl& main_control)
 
 void DlgDisplayProperties::checkMenu(MainControl& main_control)
 {
-	//	(main_control.menuBar())->setItemChecked(id_, isVisible());
+	(main_control.menuBar())->setItemChecked(id_, isVisible());
 }
 
 void DlgDisplayProperties::openDialog()
