@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.3 1999/10/30 12:53:37 oliver Exp $
+// $Id: file.C,v 1.4 1999/12/17 11:18:04 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 
@@ -171,6 +171,7 @@ namespace BALL
 	{
 		if (is_open_ == true)
 		{
+			fstream::clear();
 			fstream::close();
 
 			if (is_temporary_ == true)
