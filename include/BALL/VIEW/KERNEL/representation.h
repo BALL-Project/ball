@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.4 2003/10/17 16:17:18 amoll Exp $
+// $Id: representation.h,v 1.5 2003/10/21 15:36:35 amoll Exp $
 
 #ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
@@ -192,6 +192,14 @@ namespace BALL
 				throw() { return model_type_;}
 
 			///
+			void setColoringType(Index type)
+				throw() { coloring_type_ = type;}
+
+			///
+			Index getColoringType() const
+				throw() { return coloring_type_;}
+
+			///
 			String getProperties() const
 				throw();
 			
@@ -200,7 +208,7 @@ namespace BALL
 				throw();
 
 			///
-			void update()
+			void update(bool rebuild)
 				throw();
 
 			///
@@ -238,6 +246,9 @@ namespace BALL
 
 			//_
 			Index 							model_type_;
+
+			//_
+			Index 							coloring_type_;
 
 			//_
 			ModelProcessor* 		model_processor_;
