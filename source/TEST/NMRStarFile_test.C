@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NMRStarFile_test.C,v 1.11 2002/02/27 12:24:39 sturm Exp $
+// $Id: NMRStarFile_test.C,v 1.12 2003/05/26 15:20:25 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 using namespace BALL;
 
-START_TEST(String,"$Id: NMRStarFile_test.C,v 1.11 2002/02/27 12:24:39 sturm Exp $")
+START_TEST(String,"$Id: NMRStarFile_test.C,v 1.12 2003/05/26 15:20:25 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -46,37 +46,37 @@ CHECK(NMRStarFile::NMRStarFile(filename))
 	TEST_EQUAL(rs.getNumberOfAtoms(), 1914)
 	if (rs.getData().size() == 1 && rs.getNumberOfAtoms() == 1914)
 	{
-		TEST_EQUAL(rs.getData()[0]->atom_data[1913]->atom_ID, 1914)
-		TEST_EQUAL(rs.getData()[0]->atom_data[1913]->residue_seq_code, 215)
-		TEST_EQUAL(rs.getData()[0]->atom_data[1913]->residue_label, "ILE")
-		TEST_EQUAL(rs.getData()[0]->atom_data[1913]->atom_type, 'N')
-		TEST_EQUAL(rs.getData()[0]->atom_data[1913]->atom_name, "N")
-		TEST_REAL_EQUAL(rs.getData()[0]->atom_data[1913]->shift_value, 123.16)
-		TEST_REAL_EQUAL(rs.getData()[0]->atom_data[1913]->error_value, 0)
-		TEST_EQUAL(rs.getData()[0]->atom_data[1913]->ambiguity_code, 1)
+		TEST_EQUAL(rs.getData()[0].atom_data[1913].atom_ID, 1914)
+		TEST_EQUAL(rs.getData()[0].atom_data[1913].residue_seq_code, 215)
+		TEST_EQUAL(rs.getData()[0].atom_data[1913].residue_label, "ILE")
+		TEST_EQUAL(rs.getData()[0].atom_data[1913].atom_type, 'N')
+		TEST_EQUAL(rs.getData()[0].atom_data[1913].atom_name, "N")
+		TEST_REAL_EQUAL(rs.getData()[0].atom_data[1913].shift_value, 123.16)
+		TEST_REAL_EQUAL(rs.getData()[0].atom_data[1913].error_value, 0)
+		TEST_EQUAL(rs.getData()[0].atom_data[1913].ambiguity_code, 1)
 	}
 
-	TEST_EQUAL(rs.getData()[0]->name, "assigned_chemical_shifts")
+	TEST_EQUAL(rs.getData()[0].name, "assigned_chemical_shifts")
 
-	TEST_EQUAL(rs.getData()[0]->condition->name, "sample_conditions")
-	TEST_EQUAL(rs.getData()[0]->condition->temperature, 293)
-	TEST_EQUAL(rs.getData()[0]->condition->pH, 7)
-	TEST_EQUAL(rs.getData()[0]->condition->pressure, 0)
+	TEST_EQUAL(rs.getData()[0].condition.name, "sample_conditions")
+	TEST_EQUAL(rs.getData()[0].condition.temperature, 293)
+	TEST_EQUAL(rs.getData()[0].condition.pH, 7)
+	TEST_EQUAL(rs.getData()[0].condition.pressure, 0)
 
-	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->mol_common_name, "DSS")
-	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->atom_type, 'H')
-	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->isotope_number, 1)
-	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->atom_group, "methyl protons")
-	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->shift_units, "ppm")
-	TEST_REAL_EQUAL(rs.getData()[0]->reference->elements[0]->shift_value, 0)
-	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->reference_method, (char)NMRStarFile::INTERNAL_REFERENCE)
-	TEST_EQUAL(rs.getData()[0]->reference->elements[0]->reference_type, (char)NMRStarFile::DIRECT_TYPE)
-	TEST_REAL_EQUAL(rs.getData()[0]->reference->elements[0]->indirect_shift_ratio, 1)
+	TEST_EQUAL(rs.getData()[0].reference.elements[0].mol_common_name, "DSS")
+	TEST_EQUAL(rs.getData()[0].reference.elements[0].atom_type, 'H')
+	TEST_EQUAL(rs.getData()[0].reference.elements[0].isotope_number, 1)
+	TEST_EQUAL(rs.getData()[0].reference.elements[0].atom_group, "methyl protons")
+	TEST_EQUAL(rs.getData()[0].reference.elements[0].shift_units, "ppm")
+	TEST_REAL_EQUAL(rs.getData()[0].reference.elements[0].shift_value, 0)
+	TEST_EQUAL(rs.getData()[0].reference.elements[0].reference_method, (char)NMRStarFile::INTERNAL_REFERENCE)
+	TEST_EQUAL(rs.getData()[0].reference.elements[0].reference_type, (char)NMRStarFile::DIRECT_TYPE)
+	TEST_REAL_EQUAL(rs.getData()[0].reference.elements[0].indirect_shift_ratio, 1)
 
 	/*
-	for (Position i = 0;  i < rs.getData()[0]->atom_data.size(); i++)
+	for (Position i = 0;  i < rs.getData()[0].atom_data.size(); i++)
 	{
-		cout << *(rs.getData()[0]->atom_data[i]) << endl;
+		cout << *(rs.getData()[0].atom_data[i]) << endl;
 	}
 	*/
 RESULT
@@ -108,7 +108,7 @@ CHECK(NMRStarFile::BALL_CREATE(NMRStarFile))
 	NMRStarFile* v_ptr = (NMRStarFile*)rs.create();
 	TEST_NOT_EQUAL(v_ptr, 0)
 	TEST_EQUAL(v_ptr->getNumberOfAtoms(), 1914)
-	TEST_EQUAL(v_ptr->getData()[0]->reference->elements[0]->mol_common_name, "DSS")
+	TEST_EQUAL(v_ptr->getData()[0].reference.elements[0].mol_common_name, "DSS")
 	delete v_ptr;
 RESULT
 
