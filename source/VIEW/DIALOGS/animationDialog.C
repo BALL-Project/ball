@@ -72,6 +72,14 @@ void AnimationDialog::animate_()
 
 		for (Size i = 0; i < steps && !stop_; i++)
 		{
+
+#ifdef BALL_QT_HAS_THREADS
+			while (qApp->hasPendingEvents())
+			{
+   	 		animation_thread_->mySleep(50);
+			}
+#endif
+
 			camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
 			camera.setLookUpVector(camera.getLookUpVector() - diff_up);
 			camera.setLookAtPosition(camera.getLookAtPosition() - diff_look_at);
@@ -172,66 +180,6 @@ void AnimationDialog::entrySelected()
 	goto_button->setEnabled(entries->selectedItem() != 0);
 }
 
-
-#ifdef BALL_QT_HAS_THREADS
-void AnimationThread::run() 
-{
-	List<Camera>::Iterator it = ani_->cameras_.begin();
-	Camera last_camera = *it;
-	it++;
-
-	for (; it != ani_->cameras_.end(); it++)
-	{
-		if (*it == last_camera) continue;
- 
-		Camera camera = last_camera;
-		Vector3 diff_viewpoint = (camera.getViewPoint() - (*it).getViewPoint());
-		Vector3 diff_up = (camera.getLookUpVector() - (*it).getLookUpVector());
-		Vector3 diff_look_at = (camera.getLookAtPosition() - (*it).getLookAtPosition());
-
-		Vector3 max = diff_viewpoint;
-		if (diff_look_at.getLength() > max.getLength()) max = diff_look_at;
-		Size steps = (Size) (max.getLength() * ani_->smoothness->value());
-		diff_viewpoint /= steps;
-		diff_up /= steps;
-		diff_look_at /= steps;
-
-		for (Size i = 0; i < steps && !ani_->stop_; i++)
-		{
-			while (qApp->hasPendingEvents())
-			{
-   	 		msleep(50);
-			}
-
-			camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
-			camera.setLookUpVector(camera.getLookUpVector() - diff_up);
-			camera.setLookAtPosition(camera.getLookAtPosition() - diff_look_at);
-			Scene* scene = ((Scene*) Scene::getInstance(0));
-
-			Scene::SceneSetCameraEvent* e = new Scene::SceneSetCameraEvent();
-			e->camera = camera;
-			qApp->postEvent(scene, e);
-
-			if (ani_->export_PNG->isChecked())
-			{
-				Scene::SceneExportPNGEvent* e = new Scene::SceneExportPNGEvent();
-				qApp->postEvent(scene, e);
-			}
-
-			if (ani_->export_POV->isChecked())
-			{
-				Scene::SceneExportPOVEvent* e = new Scene::SceneExportPOVEvent();
-				qApp->postEvent(scene, e);
-			}
-		}
-		
-		last_camera = *it;
-	}
-
-	ani_->cancel_button->setEnabled(false);
-	ani_->animate_button->setEnabled(true);
-}
-#endif
 
 // NAMESPACE
 } }
