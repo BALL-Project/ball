@@ -1,4 +1,4 @@
-// $Id: ooiEnergy.C,v 1.4 2000/02/14 22:44:11 oliver Exp $
+// $Id: ooiEnergy.C,v 1.5 2000/05/30 10:35:18 oliver Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
 
@@ -9,13 +9,13 @@
 #include <BALL/DATATYPE/stringHashMap.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/FORMAT/parameters.h>
 #include <BALL/FORMAT/parameterSection.h>
+#include <BALL/MOLMEC/COMMON/typeRuleProcessor.h>
 
 #define OOI_PARAMETER_FILENAME "solvation/Ooi.ini"
-
-// #define BALL_DEBUG_OOI
 
 using namespace std;
 
@@ -29,6 +29,9 @@ namespace BALL
 		// a hash map to convert names to Ooi types
 		StringHashMap<Atom::Type> type_map;
 
+		// a type rule assignment processor
+		TypeRuleProcessor type_rule;
+
 		// free energy is calculated as
 		// dG = \sum_i g_i A_i
 		// where A_i is the atomic solvent accesible surface
@@ -36,7 +39,7 @@ namespace BALL
 		vector<float> radius;
 		vector<float> g;
 
-		// read the parameter files for calcualteOoiEnergy 
+		// read the parameter files for calculateOoiEnergy 
 		// and set up the basic data structures
 		void init()
 		{
@@ -89,7 +92,9 @@ namespace BALL
 				if (index < 0)
 				{
 					Log.error() << "calculateOoiEnergy: illegal atom type index: " << index << endl;
-				} else {
+				} 
+				else 
+				{
 					if (index > max_index)
 					{
 						max_index = index;
@@ -119,8 +124,6 @@ namespace BALL
 				{
 					radius[index] = parameter_section.getValue(i, radius_column).toFloat();
 					g[index] = parameter_section.getValue(i, g_column).toFloat();
-					Log.info() << "read parameter for type " << index << " " << g[index]
-											<< " " << radius[index] << endl;
 				}
 			}
 
@@ -134,17 +137,23 @@ namespace BALL
 				if (type >= (Atom::Type)radius.size())
 				{
 					Log.error() << "calculateOoiEnergy: illegal atom type: " << type << " while reading parameter file." << endl;
-				} else {
+				} 
+				else 
+				{
 					type_map.insert(type_section.getKey(i), (Atom::Type)type_section.getValue(i, type_column).toInt());
 				}
 			}
 			
+			// set up the type rule processor
+			// from the rules in the INI file
+			type_rule.initialize(parameters.getParameterFile(), "TypeRules");
+
 			// we're done with the initialization
 			is_initialized = true;
 		}
 	}
 
-	double calculateOoiEnergy(Composite& composite) 
+	double calculateOoiEnergy(BaseFragment& fragment) 
 	{
 		using namespace OoiEnergy;
 
@@ -160,79 +169,84 @@ namespace BALL
 		}
 		
 		// assign radii and atom types for all atoms
-		Composite::SubcompositeIterator composite_it;
-		for (composite_it = composite.beginSubcomposite(); +composite_it; ++composite_it) 
+		AtomIterator atom_it = fragment.beginAtom();
+		for (; +atom_it; ++atom_it) 
 		{
-			if (RTTI::isKindOf<Atom>(*composite_it))
+			// construct correct name, <RESNAME>:<ATOMNAME>
+			String atom_name = atom_it->getFullName();
+			
+			// get the atom type from hash table
+			// first, try a direct match
+			Atom::Type atom_type = -1;
+			if (type_map.has(atom_name))
 			{
-				Atom& atom = dynamic_cast<Atom&>(*composite_it);
-
-				// construct correct name, <RESNAME>:<ATOMNAME>
-				String atom_name = atom.getFullName();
-				
-				// get the atom type from hash table
-				// first, try a direct match
-				Atom::Type atom_type = -1;
+				atom_type = type_map[atom_name];
+			} 
+			else 
+			{
+				atom_name = atom_it->getFullName(Atom::NO_VARIANT_EXTENSIONS);
 				if (type_map.has(atom_name))
 				{
 					atom_type = type_map[atom_name];
-				} else {
-					atom_name = atom.getFullName(Atom::NO_VARIANT_EXTENSIONS);
+				} 
+				else 
+				{
+					// try wildcard match
+					atom_name = "*:" + atom_it->getName();
 					if (type_map.has(atom_name))
 					{
 						atom_type = type_map[atom_name];
-					} else {
-						// try wildcard match
-						atom_name = "*:" + atom.getName();
-						if (type_map.has(atom_name))
-						{
-							atom_type = type_map[atom_name];
-						}
 					}
 				}
+			}
 
-				// if the atom type could not be determined, complain
-				if (atom_type < 0)
-				{
-					Log.warn() << "calculateOOIEnergy: did not find an OOI type for " << atom_name << endl;
-					// ignore this atom....
-					atom.setType(-1);
-					atom.setRadius(0.0);
-				} else {
-					// assign type and radius
-					atom.setType(atom_type);
-					atom.setRadius(radius[atom_type]);
-				}
-			}		
+			// if the atom type could not be determined, complain
+			if (atom_type < 0)
+			{
+				// try to apply the type rule processor
+				atom_it->setType(-1);
+				type_rule(*atom_it);
+				atom_type = atom_it->getType();
+			}
+
+			if (atom_type < 0)
+			{
+				Log.warn() << "calculateOOIEnergy: did not find a suitable type for " << atom_it->getFullName() << endl;
+
+				// ignore this atom....
+				atom_it->setType(-1);
+				atom_it->setRadius(0.0);
+			} 
+			else 
+			{
+				// assign type and radius
+				atom_it->setType(atom_type);
+				atom_it->setRadius(radius[atom_type]);
+			}
 		}
 
 		// calculate the atomic SAS areas
 		// atom_SAS_areas hashes the atom pointer to the
 		// surface area (in Angstrom^2)
 		HashMap<Atom*,float> atom_SAS_areas;
-		calculateNumericalSASAtomAreas(atom_SAS_areas, composite, 1.4, 1888);
+		calculateNumericalSASAtomAreas(atom_SAS_areas, fragment, 1.4, 1888);
 
 		// iterate over all atoms and add up the energies
 		float energy = 0.0;
-		for (composite_it = composite.beginSubcomposite(); +composite_it; ++composite_it) 
+		for (atom_it = fragment.beginAtom(); +atom_it; ++atom_it) 
 		{
-			if (RTTI::isKindOf<Atom>(*composite_it))
-			{
-				Atom& atom = dynamic_cast<Atom&>(*composite_it);
 			
-				if (atom_SAS_areas.has(&atom))
+			if (atom_SAS_areas.has(&*atom_it))
+			{
+				Atom::Type atom_type = atom_it->getType();
+				// if the atom type could not be determined, complain
+				if (atom_type >= 0)
 				{
-					Atom::Type atom_type = atom.getType();
-					// if the atom type could not be determined, complain
-					if (atom_type >= 0)
-					{
-						// add the energy contribution of the atom
-						float tmp = atom_SAS_areas[&atom] * g[atom_type];
-						Log.info() << atom.getFullName() << " " << atom_SAS_areas[&atom] << " " << tmp << " kJ/mol" << endl;
-						energy += tmp;
-					}
-				}		
-			}
+					// add the energy contribution of the atom
+					float tmp = atom_SAS_areas[&*atom_it] * g[atom_type];
+					energy += tmp;
+				}
+			}		
 		}
 
 		// we're done.
