@@ -60,13 +60,10 @@ should always contain at least one chain. Secondary structure elements,
 defined by \class{SecondaryStructure} are optional. Wherever this information
 is known (\eg when read from PDB files), instances of
 \class{SecondaryStructure} are created to store it. Each secondary structure
-element contains a class {\eg helix, $\beta$-sheet) describing its type.
+element contains has a property {\eg helix, $\beta$-sheet) describing its type.
 
 \paragraph{The nucleic acid framework} contains the classes \class{NucleicAcid}
 and \class{Nucleotide} and is used to represent structures of nucleic acids.
-Right now, we do not differentiate between DNA and RNA, so if you need these
-classes, we are eager to get your input on how to model DNA and RNA in a more
-detailed way -- currently do not have yet any application for it.
 
 By deriving all kernel classes from the common base class \class{Composite},
 they share all the features implemented there. The following section will
@@ -74,7 +71,7 @@ briefly discuss some of these features.
 
 \section{Kernel iterators}
 Iteration over kernel data structures is a key concept in BALL.
-The BALL kernel iterators a re STL-like iterators. Since most BALL kernel
+The BALL kernel iterators are STL-like iterators. Since most BALL kernel
 classes are so-called {\em multi-containers}, \ie they can contain different
 objects, we cannot use the typical STL {\tt begin()}/{\tt end()} methods.
 For example in a protein, you might not only want to iterate over all chains,
@@ -90,12 +87,12 @@ bonds. We can use those iterators in an STL-like fashion
 \begin{lstlisting}{}
 	Molecule m = ...;
 	AtomIterator ai;
-	for (ai = m.beginAtom(); ai != m.beginAtom(); ++ai)
+	for (ai = m.beginAtom(); ai != m.endAtom(); ++ai)
 	{
 		...
 	}
 \end{lstlisting}
-\noindent but there is also a conventient shorthand, the \method{operator +}
+\noindent but there is also a convenient shorthand, the \method{operator +}
 for all iterators. In contrast to STL iterators, BALL iterators are tightly 
 bound to their containers and are thus aware of the container's end.
 The plus operator returns a boolean value determining the validity of the
@@ -110,7 +107,9 @@ end of the container. So we can rewrite the above code as:
 		...
 	}
 \end{lstlisting}
-\noindent There exist several variants of the kernel iterators : the standard
+
+\noindent 
+There exist several variants of the kernel iterators: the standard
 forward iterators (\eg \class{AtomIterator}) and reverse iterators
 (\class{AtomReverseIterator}). For both, there are also const versions of
 these iterators, which are required when iterating over const instances of

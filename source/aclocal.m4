@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.45 2004/02/19 14:12:03 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.46 2004/02/23 16:27:16 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -3158,6 +3158,7 @@ AC_DEFUN(CF_VIEW, [
     
 
 	if test "${USE_VIEW}" = "true" ; then
+		AC_DEFINE(BALL_HAS_VIEW,)
 		LIBVIEW="libVIEW.a"
 		VIEW="VIEW"
 	else

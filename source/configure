@@ -3992,7 +3992,7 @@ _ACEOF
 		echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 	fi
- fi
+  fi
 if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for GNU compiler" >&5
 echo $ECHO_N "checking for GNU compiler... $ECHO_C" >&6
@@ -4027,7 +4027,7 @@ echo "${ECHO_T}no" >&6
 	fi
 	${RM} /tmp/$$.conftest.c
 
- fi
+  fi
 if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for KAI C++ compiler" >&5
 echo $ECHO_N "checking for KAI C++ compiler... $ECHO_C" >&6
@@ -4053,7 +4053,7 @@ _ACEOF
 echo "${ECHO_T}no" >&6
 	fi
 
- fi
+  fi
 if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for SUN WorkShop/Forte C++ compiler" >&5
 echo $ECHO_N "checking for SUN WorkShop/Forte C++ compiler... $ECHO_C" >&6
@@ -4078,7 +4078,7 @@ _ACEOF
 		echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 	fi
- fi
+  fi
 if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for SGI/MipsPro C++ compiler" >&5
 echo $ECHO_N "checking for SGI/MipsPro C++ compiler... $ECHO_C" >&6
@@ -4103,7 +4103,7 @@ _ACEOF
 		echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6
 	fi
- fi
+  fi
 if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for Digital/Compaq C++ compiler" >&5
 echo $ECHO_N "checking for Digital/Compaq C++ compiler... $ECHO_C" >&6
@@ -4129,7 +4129,7 @@ _ACEOF
 echo "${ECHO_T}no" >&6
 	fi
 
- fi
+  fi
 
 CXX_MAKEDEPEND="makedepend"
 MAKEDEP_CXX_OPTS="-f.Dependencies -D__cplusplus --"

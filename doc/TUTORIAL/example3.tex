@@ -25,9 +25,9 @@ templates in the \class{FragmentDB}, we can identify the missing bonds
 and hydrogen atoms. A matching between atoms is computed based on the names,
 so the atom names have to adhere to the PDB naming convention.
 For deviating naming schemes, \class{FragmentDB} provides a member instance
-\member{normalize\_names}{}, which tries to convert the names to the PDB 
-naming convention. \member{normalize\_names}{} is a processor, so we
-can \member{apply}{} it to any given kernel data structure:
+\member{}{normalize\_names}, which tries to convert the names to the PDB 
+naming convention. \member{}{normalize\_names} is a processor, so we
+can \member{Composite}{apply} it to any given kernel data structure:
 
 \begin{lstlisting}{}
 	FragmentDB db;
@@ -219,7 +219,7 @@ stores all its settings in an \class{options} object. The
 \method{simulate} method simulates a given number of MD
 steps. 
 
-The source code for the complete example can be found as {\tt example3.C}
-in \directory{BALL/source/EXAMPLES}. Further documentation is available for all
+The source code for the complete example can be found as {\tt tutorial3.C}
+in \directory{BALL/source/TUTORIAL}. Further documentation is available for all
 classes in the BALL Reference Manual. The header files required for molecular
 mechanics reside in \directory{BALL/include/BALL/MOLMEC} and its subdirectories.

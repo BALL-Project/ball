@@ -22,15 +22,16 @@ site using the FTP protocol and reads the contents of that file into a
 meaningful is performed by the classes \class{TransformationManager} and
 \class{TCPTransfer}. Any filename is first handed to the static instance of
 \class{TransformationManager} which \class{File} possesses, which then applies
-all matching rules from a predefinde rule set to that file name. The resulting
+all matching rules from a predefined rule set to that file name. The resulting
 expanded file names are then checked for special prefixes by \class{File}:
 \begin{itemize}
 	\item a file name starting with {\tt exec:} will execute the command after the
 					colon, redirect the output of the command to a temporary file, which 	
-					is then opened and returned
+					is then opened and returned,
+
 	\item a file name starting with {\tt http:} or {\tt ftp:} will initiate
 					an HTTP or FTP tranfer from the given URL to a temporary file, which
-					is opened and returned
+					is opened and returned.
 \end{itemize}
 
 \noindent 
@@ -38,7 +39,7 @@ The {\tt exec:} prefix can be used to filter existing files through a command,
 e.g. the compressed (GZIPped) file {\tt test.txt.gz} can be achieved through
 the filename {\tt exec:gunzip -c test.txt.gz}, assuming that the gunzip
 executable is in your path. You can also automate this process using the
-TransformationManger. By simply defining a rule for all files ending in {\tt
+TransformationManager. By simply defining a rule for all files ending in {\tt
 .gz}, gunzip will be called automatically:
 
 \begin{lstlisting}{}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.127 2004/02/18 17:14:24 amoll Exp $
+// $Id: mainframe.C,v 1.128 2004/02/23 16:27:22 oliver Exp $
 //
 
 #include "mainframe.h"
@@ -247,18 +247,6 @@ namespace BALL
 		version += ")";
 		about.qt_version_label->setText(version.c_str());
 		about.exec(); 
-	}
-
-	void Mainframe::fetchPreferences(INIFile& inifile)
-		throw()
-	{
-		MainControl::fetchPreferences(inifile);
-	}
-
-	void Mainframe::writePreferences(INIFile& inifile)
-		throw()
-	{
-		MainControl::writePreferences(inifile);
 	}
 
 	void Mainframe::toggleFullScreen()

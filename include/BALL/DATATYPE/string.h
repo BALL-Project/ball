@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.52 2004/02/18 18:19:03 anhi Exp $
+// $Id: string.h,v 1.53 2004/02/23 16:27:16 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -422,50 +422,44 @@ namespace BALL
 				This method returns <b>false</b>, if the string contains the string <tt>false</tt>
 				(may be surrounded by whitespaces), or <b>true</b> otherwise.
 		*/
-		bool toBool() const
-			throw();
+		bool toBool() const	throw();
 
 		///	Returns the first character of the string
-		char toChar() const
-			throw();
+		char toChar() const 	throw();
 
 		/// Returns the first character of the string converted to an unsigned char
-		unsigned char toUnsignedChar() const
-			throw();
+		unsigned char toUnsignedChar() const throw();
 
 		/// Evaluates the string to a short
-		short toShort() const
-			throw(Exception::InvalidFormat);
+		short toShort() const throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to an unsigned short
-		unsigned short toUnsignedShort() const
-			throw(Exception::InvalidFormat);
+		unsigned short toUnsignedShort() const throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to an int
-		int toInt() const
-			throw(Exception::InvalidFormat);
+		int toInt() const	throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to an unsigned int
-		unsigned int toUnsignedInt() const
-			throw(Exception::InvalidFormat);
+		unsigned int toUnsignedInt() const throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to a long
-		long toLong() const
-			throw(Exception::InvalidFormat);
+		long toLong() const throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to an unsigned long
-		unsigned long toUnsignedLong() const
-			throw(Exception::InvalidFormat);
+		unsigned long toUnsignedLong() const throw(Exception::InvalidFormat);
 
 		///  Evaluates the string to a float
-		float toFloat() const
-			throw(Exception::InvalidFormat);
+		float toFloat() const throw(Exception::InvalidFormat);
 
 		/// Evaluates the string to a double
-		double toDouble() const
-			throw(Exception::InvalidFormat);
-
+		double toDouble() const	throw(Exception::InvalidFormat);
+			
+		#ifdef BALL_HAS_VIEW
+			operator QString () const throw();
+		#endif
 		//@}
+
+
 		/**	@name	Case Conversion 
 		*/
 		//@{			
