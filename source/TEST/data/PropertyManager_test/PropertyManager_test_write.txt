@@ -5,42 +5,42 @@ STORABLE BALL::BitVector  bitvector_
   bool - = TRUE 
 END_STORABLE
 unsigned_int size = 8 
-OBJECT BALL::NamedProperty @ 134844992 -
+/OBJECT BALL::NamedProperty @ [0-9a-fx]* -
   int type_ = 0 
   basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP1 
   bool data_.b = TRUE 
 END_OBJECT
-OBJECT BALL::NamedProperty @ 134845012 -
+/OBJECT BALL::NamedProperty @ [0-9a-fx]* -
   int type_ = 1 
   basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP2 
   int data_.i = -12345 
 END_OBJECT
-OBJECT BALL::NamedProperty @ 134845032 -
+/OBJECT BALL::NamedProperty @ [0-9a-fx]* -
   int type_ = 2 
   basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP3 
   unsigned_int data_.ui = 12345 
 END_OBJECT
-OBJECT BALL::NamedProperty @ 134845052 -
+/OBJECT BALL::NamedProperty @ [0-9a-fx]* -
   int type_ = 3 
   basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP4 
   float data_.f = 1.2345 
 END_OBJECT
-OBJECT BALL::NamedProperty @ 134845072 -
+/OBJECT BALL::NamedProperty @ [0-9a-fx]* -
   int type_ = 4 
   basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP5 
   double data_.d = 2.345 
 END_OBJECT
-OBJECT BALL::NamedProperty @ 134845092 -
+/OBJECT BALL::NamedProperty @ [0-9a-fx]* -
   int type_ = 5 
   basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP6 
   BALL::String data_.s = 4 test 
 END_OBJECT
-OBJECT BALL::NamedProperty @ 134845112 -
+/OBJECT BALL::NamedProperty @ [0-9a-fx]* -
   int type_ = 6 
   basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP7 
-  BALL::PersistentObject * data_.object  18446744072635807432 
+/  BALL::PersistentObject \* data_.object  [0-9a-fx]*
 END_OBJECT
-OBJECT BALL::NamedProperty @ 134845132 -
+/OBJECT BALL::NamedProperty @ [0-9a-fx]* -
   int type_ = 7 
   basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 PROP8 
 END_OBJECT

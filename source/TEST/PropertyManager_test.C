@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.11 2000/08/31 15:49:54 amoll Exp $
+// $Id: PropertyManager_test.C,v 1.12 2000/09/03 20:00:11 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.11 2000/08/31 15:49:54 amoll Exp $")
+START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.12 2000/09/03 20:00:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -44,12 +44,11 @@ CHECK(NamedProperty::NamedProperty(const string& name, bool value))
 	TEST_EQUAL(np->getBool(), x)
 RESULT
 
-CHECK(NamedProperty::BALL_CREATE_NODEEP(NamedProperty) const  const )
+CHECK(NamedProperty::BALL_CREATE(NamedProperty) const  const )
 	NamedProperty* np2 = (NamedProperty*)np->create();
 	TEST_EQUAL(np2->getType(), NamedProperty::BOOL)
 	TEST_EQUAL(np2->getName(), "test")
 	TEST_EQUAL(np2->getBool(), true)
-
 	delete np;
 RESULT
 
@@ -128,7 +127,7 @@ using std::ios;
 using namespace RTTI;
 TextPersistenceManager pm;
 pm.registerClass(getStreamName<NamedProperty>(), getNew<NamedProperty>);
-/*
+
 CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = "") const )
 	NEW_TMP_FILE(filename)
 	ofstream  ofile(filename.c_str(), File::OUT);
@@ -504,9 +503,11 @@ CHECK(PropertyManager:: operator BitVector& ())
 
 	BitVector b = (BitVector) m;
   TEST_EQUAL(b.getBit(0), false)
-
-//	m.setProperty(0, true); // seg fault ???
   TEST_EQUAL(b.getBit(5), true)
+
+	m.setProperty(0); 
+  TEST_EQUAL(b.getBit(5), true)
+  TEST_EQUAL(b.getBit(0), false)
 RESULT
 
 CHECK(PropertyManager::setProperty(Property property))
@@ -654,8 +655,7 @@ CHECK(PropertyManager::hasProperty(const string& name) const )
 	m.setProperty("TEST_PROP", 0);
 	m.clearProperty("TEST_PROP");
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
-RESULT*/
-	PropertyManager m;
+RESULT
 
 CHECK(PropertyManager::std::ostream& operator << (std::ostream& s, const PropertyManager& property_manager))
 	NEW_TMP_FILE(filename)
@@ -678,6 +678,7 @@ CHECK(PropertyManager::std::ostream& operator << (std::ostream& s, const Propert
 	TEST_FILE(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_ostream1.txt", true)
 RESULT
 
+/*
 CHECK(PropertyManager::std::istream& operator >> (std::istream& s, PropertyManager& property_manager))
 	std::ifstream instr("data/PropertyManager_test/PropertyManager_test_ostream2.txt");
 	instr >> m; // wenn file nicht existiert bleibt er hier haengen ???
@@ -696,23 +697,25 @@ CHECK(PropertyManager::std::istream& operator >> (std::istream& s, PropertyManag
 	TEST_EQUAL(m.getProperty("PROP3").getUnsignedInt(), 12345)
 	TEST_REAL_EQUAL(m.getProperty("PROP4").getFloat(), 1.2345)
 	TEST_REAL_EQUAL(m.getProperty("PROP5").getDouble(), 2.345)
-//	TEST_EQUAL(m.getProperty("PROP6").getString(), "test")// segfault ???
+	TEST_EQUAL(m.getProperty("PROP6").getString(), "test")
 	TEST_NOT_EQUAL(m.getProperty("PROP7").getObject(), 0) 
 	TEST_EQUAL(m.countNamedProperties(), 8);
 	TEST_EQUAL(m.getBitVector().getBit(0), true)
 	TEST_EQUAL(m.getBitVector().getBit(1), false)
 	TEST_EQUAL(m.getBitVector().getBit(2), true)
 RESULT
-/*
+*/
+
 CHECK(PropertyManager::write(PersistenceManager& pm) const )
 	NEW_TMP_FILE(filename)
 	ofstream  ofile(filename.c_str(), File::OUT);
 	pm.setOstream(ofile);
-	m.write(pm);   ///segfault  ???
+	m.write(pm);
 	ofile.close();	
 	TEST_FILE(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_write.txt", true)
 RESULT
 
+/*
 CHECK(PropertyManager::read(PersistenceManager& pm))
 	PropertyManager m;
 	ifstream  ifile("data/PersistenceManager_test_write.txt");
@@ -739,7 +742,8 @@ CHECK(PropertyManager::read(PersistenceManager& pm))
 	TEST_EQUAL(m.getBitVector().getBit(1), false)
 	TEST_EQUAL(m.getBitVector().getBit(2), true)
 	ifile.close();
-RESULT*/
+RESULT
+*/
 
 CHECK(PropertyManager::isValid() const )
 	TEST_EQUAL(m.isValid(), true)
@@ -748,7 +752,7 @@ RESULT
 CHECK(PropertyManager::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	NEW_TMP_FILE(filename)
 	std::ofstream outstr(filename.c_str(), File::OUT);
-	m.dump(outstr);  // segfault ???
+	m.dump(outstr); 
 	TEST_FILE(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_dump.txt", true)
 RESULT
 
