@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.18 2000/10/16 20:03:18 oliver Exp $
+// $Id: forceField.C,v 1.19 2000/12/15 21:24:50 amoll Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -148,7 +148,7 @@ namespace BALL
 	}
 		
 	// Is the force field valid
-	bool ForceField::isValid()
+	bool ForceField::isValid() const
 		throw()
 	{
 		return valid_;
@@ -302,6 +302,12 @@ namespace BALL
 	{
 		return system_;
 	}
+
+  // Return a pointer to the system
+  const System* ForceField::getSystem() const
+  {
+    return system_;
+  }
 
 	// Return the parameter use_selection_
 	bool ForceField::getUseSelection()

@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.10 2000/10/16 19:18:34 oliver Exp $
+// $Id: forceField.h,v 1.11 2000/12/15 21:24:44 amoll Exp $
 // Molecular Mechanics: general force field class
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -144,7 +144,7 @@ namespace BALL
 		//@{
 		/**	Is the force field valid?
 		*/
-		bool isValid()
+		bool isValid() const
 			throw();
 
 		//@}
@@ -201,6 +201,10 @@ namespace BALL
 		/**	Returns a pointer to the system
 		*/
 		System* getSystem();
+
+    /** Returns a pointer to the system
+    */
+    const System* getSystem() const;
 
 		/**	Return the status of the selection mechanism
 		*/
