@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.34 2001/10/28 21:40:45 amoll Exp $
+// $Id: file.h,v 1.35 2001/10/29 19:58:31 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -165,6 +165,12 @@ namespace BALL
 
 		/// Prefix for files (to mimick URL-like behavior)
 		static const String TRANSFORMATION_FILE_PREFIX;
+
+		/// Prefix for FTP-transfers
+		static const String TRANSFORMATION_FTP_PREFIX;
+
+		/// Prefix for HTTP-transfer
+		static const String TRANSFORMATION_HTTP_PREFIX;
 
 		//@}
 
