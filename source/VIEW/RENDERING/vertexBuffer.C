@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.18 2005/01/24 13:20:06 oliver Exp $
+// $Id: vertexBuffer.C,v 1.1.2.19 2005/01/26 22:09:24 amoll Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -88,7 +88,8 @@ GLRenderer* MeshBuffer::gl_renderer_ = 0;
 MeshBuffer::MeshBuffer()
 : mesh_(0),
 	buffer_(),
-	filled_(false)
+	filled_(false),
+	busy_(false)
 {
 	buffer_[0] = buffer_[1] = buffer_[2] = buffer_[3] = 0;
 }
@@ -96,7 +97,8 @@ MeshBuffer::MeshBuffer()
 MeshBuffer::MeshBuffer(const MeshBuffer& mesh_buffer)
 : mesh_(mesh_buffer.mesh_),
 	buffer_(),
-	filled_(false)
+	filled_(false),
+	busy_(false)
 {
 	buffer_[0] = buffer_[1] = buffer_[2] = buffer_[3] = 0;
 }
@@ -112,8 +114,11 @@ const MeshBuffer& MeshBuffer::operator = (const MeshBuffer& mesh_buffer)
 
 bool MeshBuffer::initialize()
 {
-	clearBuffer();
 	if (mesh_ == 0) return false;
+	if (busy_) return false;
+	busy_ = true;
+
+	clearBuffer();
 
 	Size nr_vertices = mesh_->vertex.size();
 	Size nr_triangles = mesh_->triangle.size();
@@ -190,11 +195,16 @@ bool MeshBuffer::initialize()
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 
 	filled_ = true;
+	busy_ = false;
 	return true;
 }
 
 void MeshBuffer::clear()
 {
+	while (busy_)
+	{
+		sleep(1);
+	}
 	mesh_ = 0;
 	clearBuffer();
 }
@@ -202,6 +212,7 @@ void MeshBuffer::clear()
 void MeshBuffer::clearBuffer()
 {
 	if (!filled_) return;
+
 	glDeleteBuffersARB(4, buffer_);
 	filled_ = false;
 }
@@ -209,6 +220,8 @@ void MeshBuffer::clearBuffer()
 bool MeshBuffer::draw()
 {
 	if (!filled_ || gl_renderer_ == 0) return false;
+	if (busy_) return false;
+	busy_ = true;
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 
@@ -263,6 +276,7 @@ bool MeshBuffer::draw()
 	glDisableClientState(GL_VERTEX_ARRAY);
 	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
+	busy_ = false;
 	return true;
 }
 

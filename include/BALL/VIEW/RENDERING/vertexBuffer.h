@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.h,v 1.1.2.7 2005/01/24 13:20:05 oliver Exp $
+// $Id: vertexBuffer.h,v 1.1.2.8 2005/01/26 22:09:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
@@ -75,6 +75,9 @@ namespace BALL
 			/// Free the reserved (and filled) vertex buffer.
 			void clearBuffer();
 
+			/// Return true, if currently updateing or drawing.
+			bool isBusy() const { return busy_;}
+
 			/** Set the GLRender.
 					This GLRender pointer is used to know if to draw the mesh transparent solid or transparent,
 					as solid triangles or as points.
@@ -88,10 +91,10 @@ namespace BALL
 			Buffer buffer_;
 			bool filled_;
 			static GLRenderer* gl_renderer_;
+			bool busy_;
 		};
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_RENDERING_VERTEXBUFFER_H
