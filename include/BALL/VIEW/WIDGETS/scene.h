@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.48 2004/07/03 17:41:43 amoll Exp $
+// $Id: scene.h,v 1.49 2004/08/13 17:52:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -322,6 +322,10 @@ namespace BALL
 			///
 			const Stage* getStage() const
 				throw() { return stage_;}
+
+			///
+			void setCamera(const Camera& camera)
+				throw();
 
 			///
 			void setDefaultLighting(bool update_GL = true)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.116 2004/07/26 14:16:56 amoll Exp $
+// $Id: scene.C,v 1.117 2004/08/13 17:52:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1737,6 +1737,12 @@ namespace BALL
 			rep->setProperty("D", 10);
 			getMainControl()->insert(*rep);
 		}
-		
+
+		void Scene::setCamera(const Camera& camera)
+			throw()
+		{
+			stage_->moveCameraTo(camera);
+			updateCamera_();
+		}
 
 } }// namespaces
