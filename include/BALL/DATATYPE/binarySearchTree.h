@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.11 2000/08/07 09:53:32 oliver Exp $
+// $Id: binarySearchTree.h,v 1.12 2000/08/07 21:56:52 oliver Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -95,7 +95,7 @@ namespace BALL
 		/**	Destructor.
 				Destruct the BSTreeItem
 		*/
-		~BSTreeItem();
+		virtual ~BSTreeItem();
 		//@}
 
 		/**	@name	Accessors
@@ -388,7 +388,7 @@ namespace BALL
 		/**	Destructor.
 				Destruct the item.
 		*/
-		~TBSTreeItem()
+		virtual ~TBSTreeItem()
 		{
 		}
 		//@}
