@@ -1,4 +1,4 @@
-// $Id: OoiEnergy_test.C,v 1.1 2000/05/30 10:28:50 oliver Exp $
+// $Id: OoiEnergy_test.C,v 1.2 2000/05/31 17:37:07 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(OOiEnergy, "$Id: OoiEnergy_test.C,v 1.1 2000/05/30 10:28:50 oliver Exp $")
+START_TEST(OOiEnergy, "$Id: OoiEnergy_test.C,v 1.2 2000/05/31 17:37:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,7 +34,7 @@ CHECK(calculateOoiEnergy() / BPTI)
 	
 	TEST_EQUAL(S.countAtoms(), 892)
 	float energy = calculateOoiEnergy(S);
-	TEST_REAL_EQUAL(energy, -2589.7)
+	TEST_REAL_EQUAL(energy, -2602.97)
 RESULT											
 
 CHECK(calculateOoiEnergy() / ethanol)
@@ -103,7 +103,7 @@ CHECK(calculateOoiEnergy() / acetate)
 
 	TEST_EQUAL(S.countAtoms(), 7)
 	float energy = calculateOoiEnergy(S);
-	TEST_REAL_EQUAL(energy, -337.44)
+	TEST_REAL_EQUAL(energy, -341.942)
 RESULT											
 
 CHECK(calculateOoiEnergy() / butylammonium)
@@ -125,7 +125,7 @@ CHECK(calculateOoiEnergy() / propionate)
 
 	TEST_EQUAL(S.countAtoms(), 10)
 	float energy = calculateOoiEnergy(S);
-	TEST_REAL_EQUAL(energy, -311.8)
+	TEST_REAL_EQUAL(energy, -315.938)
 RESULT											
 
 CHECK(calculateOoiEnergy() / methylimidazolium)
@@ -136,7 +136,7 @@ CHECK(calculateOoiEnergy() / methylimidazolium)
 
 	TEST_EQUAL(S.countAtoms(), 13)
 	float energy = calculateOoiEnergy(S);
-	TEST_REAL_EQUAL(energy, -26.4)
+	TEST_REAL_EQUAL(energy, -268.268)
 RESULT											
 
 /////////////////////////////////////////////////////////////
