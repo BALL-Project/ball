@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.136 2004/09/15 11:46:20 amoll Exp $
+// $Id: scene.C,v 1.137 2004/09/15 13:02:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -21,6 +21,7 @@
 
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -448,7 +449,6 @@ namespace BALL
 
 			float d = rep.getProperty("D").getDouble();
 
-
 			if (rep.isHidden())
 			{
 				Vector3 x(1,0,0);
@@ -473,19 +473,10 @@ namespace BALL
 					}
 				}
 			
-				glPushMatrix();
-				glTranslatef(-n.x * d, -n.y * d, -n.z * d);
-				glScalef(200, 200, 200);
-				glColor3f(0., 0., 1.0);
-				glBegin(GL_QUADS);
-				glNormal3f(n.x, -n.y, n.z);
-				glVertex3f(0,0,0);
-				glVertex3f(e[0].x, e[0].y, e[0].z);
-				glVertex3f(e[0].x + e[1].x, e[0].y + e[1].y, e[0].z + e[1].z);
-				glVertex3f(e[1].x, e[1].y, e[1].z);
-				glEnd();
-
-				glPopMatrix();
+				n *= -d;
+				Box b(n, e[0] * 300, e[1] * 300);
+				b.setColor(0,0,255, 255);
+				gl_renderer_.render_(&b);
 
 				return;
 			}

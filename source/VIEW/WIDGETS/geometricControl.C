@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.52 2004/09/15 12:03:47 amoll Exp $
+// $Id: geometricControl.C,v 1.53 2004/09/15 13:05:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -9,7 +9,6 @@
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
-#include <BALL/VIEW/DIALOGS/transformationDialog.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -64,8 +63,7 @@ namespace BALL
 				context_menu_(),
 				context_representation_(0),
 				colorMeshDlg_(new ColorMeshDialog(this, "ColorMeshDialog")),
-				creating_representations_(false),
-				transformation_dialog_(0)
+				creating_representations_(false)
 		{
 		#ifdef BALL_VIEW_DEBUG
 			Log.error() << "new GeometricControl " << this << std::endl;
@@ -156,6 +154,12 @@ namespace BALL
 		#endif
 
 			GenericControl::onNotify(message);
+
+			if (RTTI::isKindOf<TransformationMessage> (*message))
+			{
+				moveItems(((TransformationMessage*)message)->getMatrix());
+				return;
+			}
 
 			if (!RTTI::isKindOf<RepresentationMessage> (*message))
 			{
@@ -644,11 +648,19 @@ namespace BALL
 
 			if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
 			{
-				n.normalize();
+				if (n.getSquareLength() > 0)
+				{
+					n.normalize();
+				}
+				n = m * n;
+
+				context_representation_->setProperty("AX", n.x);
+				context_representation_->setProperty("BY", n.y);
+				context_representation_->setProperty("CZ", n.z);
 			}
 			else
 			{
-				Vector3 t(m.m14, m.m24, m.m34);
+				Vector3 t(-m.m14, -m.m24, -m.m34);
 				context_representation_->setProperty("D", d + t * n);
 			}
 
