@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.h,v 1.13 2002/12/18 16:09:51 anker Exp $
+// $Id: version.h,v 1.14 2002/12/20 17:20:51 anker Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -43,6 +43,8 @@ namespace BALL
 			ALPHA,
 			BETA,
 			NONPUBLIC,
+			PRERELEASE,
+			PATCHLEVEL,
 			UNKNOWN
 		};
 
@@ -61,7 +63,7 @@ namespace BALL
 		static int getMinorRevision() throw(Exception::InvalidFormat);
 
 		/** Return the type of release:
-				ALPHA, BETA, NONPUPLIC, STABLE, UNKNOWN.
+				ALPHA, BETA, NONPUPLIC, STABLE, PRERELEASE, PATCHLEVEL, UNKNOWN.
 		*/
 		static Type getType() throw();
 		
