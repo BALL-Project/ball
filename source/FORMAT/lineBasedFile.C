@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.19 2001/12/20 01:12:15 oliver Exp $
+// $Id: lineBasedFile.C,v 1.20 2001/12/20 02:35:35 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -64,8 +64,8 @@ namespace BALL
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
-			throw Exception::ParseError(__FILE__, __LINE__, this, 
-							"File " + getName() +" is not opend for read access or at all.");
+			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
+																	"LineBasedFile::search");
 		}
 
 		Position start_point = line_number_;
@@ -79,7 +79,7 @@ namespace BALL
 		
 		if (return_to_start)
 		{
-			goToLine(start_point);
+			gotoLine(start_point);
 		}
 		return false;
 	}
@@ -89,8 +89,8 @@ namespace BALL
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
-			throw Exception::ParseError(__FILE__, __LINE__, this, 
-							"File " + getName() +" is not opend for read access or at all.");
+			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
+																	"LineBasedFile::search");
 		}
 
 		Position start_point = line_number_;
@@ -101,7 +101,7 @@ namespace BALL
 			{
 				if (return_to_start)
 				{
-					goToLine(start_point);
+					gotoLine(start_point);
 				}
 
 				return false;
@@ -115,7 +115,7 @@ namespace BALL
 
 		if (return_to_start)
 		{
-			goToLine(start_point);
+			gotoLine(start_point);
 		}
 
 		return false;
@@ -126,20 +126,13 @@ namespace BALL
 	{
 		if (!isOpen() || getOpenMode() != IN)
 		{
-			throw Exception::ParseError(__FILE__, __LINE__, this, 
-							"File " + getName() +" is not opend for read access or at all.");
+			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
+																	"LineBasedFile::readLine");
 		}
 
-		if (eof())
-		{
-			return false;
-		}
-
-		char* c = new char[200];
-		getline(c, 200);
-		line_ = c;
+		line_.getline(getFileStream());
 		++line_number_;
-		return true;
+		return eof();
 	}
 
 	bool LineBasedFile::skipLines(Size number)
@@ -161,21 +154,21 @@ namespace BALL
 	{
 		if (!isOpen())
 		{
-			throw Exception::ParseError(__FILE__, __LINE__, this, 
-							"File " + getName() +" is not opend.");
+			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open" , 
+																	"LineBasedFile::rewind");
 		}
 		File::reopen();
 		line_number_ = 0;
 		line_ = "";
 	}
 
-	bool LineBasedFile::goToLine(Position line_number)
+	bool LineBasedFile::gotoLine(Position line_number)
 		 throw(Exception::ParseError)
 	{
 		if (!isOpen())
 		{
-			throw Exception::ParseError(__FILE__, __LINE__, this, 
-							"File " + getName() +" is not opend.");
+			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
+																	"LineBasedFile::gotoLine");
 		}
 
 		if (line_number == line_number_)
@@ -210,7 +203,7 @@ namespace BALL
 	{
 		if (!condition)
 		{
-			throw Exception::ParseError(file, line, this, msg);
+			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' while parsing line " + String(getLineNumber()), msg);
 		}
 	}
 

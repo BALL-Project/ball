@@ -232,7 +232,7 @@ namespace BALL
 	}
 
 	void NMRStarFile::readEntryInformation_()
-		throw (LineBasedFile::LineBasedFileError, Exception::InvalidFormat)
+		throw (Exception::ParseError, Exception::InvalidFormat)
 	{
 		try
 		{
@@ -243,7 +243,7 @@ namespace BALL
 
 			number_of_shifts_ = getField(1).toUnsignedInt();
 		}
-		catch (LineBasedFile::LineBasedFileError)
+		catch (Exception::ParseError)
 		{
 			Log.warn() << "Number of assigned chemical shifts could not be found" << endl;
 		}
@@ -278,7 +278,7 @@ namespace BALL
 				Log.warn() << "The name of the molecular system could not be read." << endl;
 			}
 		}
-		catch (LineBasedFile::LineBasedFileError e)
+		catch (Exception::ParseError e)
 		{
 			Log.warn() << e.getMessage() << endl;
 		}
@@ -356,7 +356,7 @@ namespace BALL
 
 			}
 		}
-		catch (LineBasedFile::LineBasedFileError e)
+		catch (Exception::ParseError e)
 		{
 			Log.warn() << "Sample Conditions could not be read.\n" 
 								 << e.getMessage() << endl;
@@ -543,7 +543,7 @@ namespace BALL
 	}
 
 	NMRAtomData* NMRStarFile::processShiftLine_()
-		throw (LineBasedFile::LineBasedFileError)
+		throw (Exception::ParseError)
 	{
 		NMRAtomData* ad = new NMRAtomData();
 
@@ -576,14 +576,15 @@ namespace BALL
 		catch (Exception::InvalidFormat e)
 		{
 			Log.error() << "An error occured while reading shift data:" << endl;
-			throw LineBasedFile::LineBasedFileError(__FILE__, __LINE__, this, e.getMessage());
+			throw Exception::ParseError(__FILE__, __LINE__,  String("error while reading shift data from line ") 
+																	+ String(getLineNumber()) + " from " + getName(), e.getMessage());
 		}
 		readLine();
 		return ad;
 	}
 
 	void NMRStarFile::readShifts_()
-		throw (LineBasedFile::LineBasedFileError)
+		throw (Exception::ParseError)
 	{
 		test(__FILE__, __LINE__, 
 				search("#      9             Ambiguous, specific ambiguity not defined    #", false),
@@ -621,7 +622,7 @@ namespace BALL
 					}
 				}				
 			}
-			catch (LineBasedFile::LineBasedFileError)
+			catch (Exception::ParseError)
 			{
 				rewind();
 			}
@@ -646,7 +647,7 @@ namespace BALL
 					}
 				}			
 			}
-			catch (LineBasedFile::LineBasedFileError)
+			catch (Exception::ParseError)
 			{
 				rewind();
 			}

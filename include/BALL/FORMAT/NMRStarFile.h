@@ -1,4 +1,4 @@
-// $Id: NMRStarFile.h,v 1.16 2001/08/01 01:06:27 oliver Exp $
+// $Id: NMRStarFile.h,v 1.17 2001/12/20 02:35:31 oliver Exp $
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
@@ -217,11 +217,11 @@ namespace BALL
 
 			/// function to extract the data from a chemical shift line
 			NMRAtomData* processShiftLine_()
-				throw(LineBasedFile::LineBasedFileError);
+				throw(Exception::ParseError);
 
 			/// reads the number of chemical shifts
 			void readEntryInformation_()
-				throw(LineBasedFile::LineBasedFileError, Exception::InvalidFormat);
+				throw(Exception::ParseError, Exception::InvalidFormat);
 
 			/// reads the molecular system name
 			void readMolSystem_()
@@ -237,7 +237,7 @@ namespace BALL
 
 			/// reads the shift datas
 			void readShifts_()
-				throw (LineBasedFile::LineBasedFileError);
+				throw (Exception::ParseError);
 
 			/// initialize the referenceOptions
 			static void initializeReferenceOptions_()

@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.h,v 1.17 2001/12/20 01:10:49 oliver Exp $
+// $Id: lineBasedFile.h,v 1.18 2001/12/20 02:35:32 oliver Exp $
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
@@ -132,7 +132,7 @@ namespace BALL
 		/** Go to a given line.
 				@return false if EOF occurs
 		*/
-		bool goToLine(Position line_number)
+		bool gotoLine(Position line_number)
 			throw(Exception::ParseError);
 
 		/** Rewind file to start
