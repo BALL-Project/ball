@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.23 2002/12/19 13:33:17 anker Exp $
+// $Id: standardPredicates.h,v 1.24 2002/12/19 17:40:45 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -531,6 +531,11 @@ namespace BALL
 					void removeChild(CTPNode* child)
 						throw();
 
+					/**
+					 */
+					::std::list<CTPNode*>& getChildren()
+						throw();
+
 					Iterator begin()
 						throw();
 
@@ -648,6 +653,35 @@ namespace BALL
 					/*_
 					 */
 					list<const CTPNode*> link_list_;
+
+					/*_
+					*/
+					struct greater_
+						: public binary_function<const CTPNode*, const CTPNode*, bool>
+					{
+
+						bool operator () (const CTPNode* a, const CTPNode* b) const
+						{
+							if ((a != 0) && (b != 0))
+							{
+								if (a->getSymbol() == "*")
+								{
+									return true;
+								}
+								else
+								{
+									return false;
+								}
+							}
+							else
+							{
+								Log.error() << "greater_: got NULL pointers" << endl;
+								return false;
+							}
+						}
+
+					};
+
 			};
 
 		public:

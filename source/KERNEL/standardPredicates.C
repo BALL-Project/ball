@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.33 2002/12/19 13:33:17 anker Exp $
+// $Id: standardPredicates.C,v 1.34 2002/12/19 17:40:45 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -584,6 +584,12 @@ namespace BALL
 		}
 	}
 
+	::std::list<ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getChildren()
+		throw()
+	{
+		return(children_);
+	}
+
 	Size ConnectedToPredicate::CTPNode::getNumberOfChildren() const
 		throw()
 	{
@@ -1053,15 +1059,50 @@ namespace BALL
 		std::list<CTPNode*>::iterator sort_it = all_nodes.begin();
 		for (; sort_it != all_nodes.end(); ++sort_it)
 		{
-			CTPNode::Iterator child_it = (*sort_it)->begin();
-			for (; child_it != (*sort_it)->end(); ++child_it)
+
+			// This is absolutely low tech. But it works.
+
+			::std::list<CTPNode*> non_stars;
+			::std::list<CTPNode*> stars;
+
+			::std::list<CTPNode*>& children = (*sort_it)->getChildren();
+
+			CTPNode::Iterator child_it = children.begin();
+			for (; child_it != children.end(); ++child_it)
 			{
 				if ((*child_it)->getSymbol() == "*")
 				{
-					(*sort_it)->removeChild(*child_it);
-					(*sort_it)->addChild(*child_it);
+					stars.push_back(*child_it);
+				}
+				else
+				{
+					non_stars.push_back(*child_it);
 				}
 			}
+
+			if (stars.size() > 1)
+			{
+				children.clear();
+
+				child_it = non_stars.begin();
+				for (; child_it != non_stars.end(); ++child_it)
+				{
+					children.push_back(*child_it);
+				}
+			
+				child_it = stars.begin();
+				for (; child_it != stars.end(); ++child_it)
+				{
+					children.push_back(*child_it);
+				}
+			
+				/* I don't know why, but this didn't work.
+				::std::list<CTPNode*>::iterator it = children.begin();
+				copy(non_stars.begin(), non_stars.end(), it);
+				copy(stars.begin(), stars.end(), it);
+				*/
+			}
+
 		}
 
 		tree_ = root;
