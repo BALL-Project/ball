@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.15 2001/07/03 09:16:23 amoll Exp $
+// $Id: baseIterator.h,v 1.16 2001/07/04 18:30:29 amoll Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -64,7 +64,7 @@ namespace BALL
 				BALL class names due to restrictions imposed by STL compliance.
 		*/
 		//@{
-		//
+		
 		/**
 		*/
 		typedef DataType	value_type;
@@ -122,8 +122,7 @@ namespace BALL
 			throw();
 
 		/**	Swap two iterators.
-				This method swaps the contents of two iterators of the same
-				type.
+				This method swaps the contents of two iterators of the same type.
 		*/
 		void swap(ConstBaseIterator &iterator)
 			throw();
@@ -192,6 +191,7 @@ namespace BALL
 		*/
 		const DataType* operator -> () const
 			throw(Exception::InvalidIterator);
+			
 		//@}
 		/**	@name	Predicates
 		*/
@@ -217,8 +217,7 @@ namespace BALL
 			throw();
 
 		/** Validity predicate.
-				@return true if the iterator is valid, i. e. pointing at data
-				BAUSTELLE
+				@return true if the iterator is valid (pointing at an element in a container) 
 		*/
 		bool isValid() const
 			throw();
@@ -277,7 +276,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator(const ConstBaseIterator& iterator, bool /* deep */)
+	ConstBaseIterator<Container, DataType, Position, Traits>
+	::ConstBaseIterator(const ConstBaseIterator& iterator, bool /* deep */)
 		throw()
 		:	previous_(0),
 			next_(ConstBaseIterator::getFirstIterator_())
@@ -366,7 +366,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	Size ConstBaseIterator<Container, DataType, Position, Traits>::countIterators(const Container& container, const Position& position)
+	Size ConstBaseIterator<Container, DataType, Position, Traits>
+	::countIterators(const Container& container, const Position& position)
 		throw()
 	{
 		Size size = 0;
@@ -556,12 +557,13 @@ namespace BALL
 		Container* getContainer() const
 			throw();
 
-		/**
+		/** Convert an iterator to its Datatype by returning a reference to 
+				the current data.
 		*/
 		DataType& operator * () const
 			throw(Exception::InvalidIterator);
 
-		/**
+		/** Return a pointer to the current data.
 		*/
 		DataType* operator -> () const
 			throw(Exception::InvalidIterator);
@@ -592,7 +594,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
+	BaseIterator<Container, DataType, Position, Traits>
+	::BaseIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
 		throw()
 		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
