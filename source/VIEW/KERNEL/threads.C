@@ -120,17 +120,19 @@ namespace BALL
 			qApp->postEvent(main_control_, su);  // Qt will delete it when done
 		}
 
+		// =====================================================================
 		void EnergyMinimizerThread::run()
 		{
 			try
 			{
-				if (minimizer_ == 0 ||
-						minimizer_->getForceField() == 0 || 
+				if (minimizer_ == 0 															||
+						minimizer_->getForceField() == 0 							|| 
 						minimizer_->getForceField()->getSystem() == 0 ||
 						main_control_ == 0)
 				{
 					throw Exception::NullPointer(__FILE__, __LINE__);
 				}
+
 				ForceField& ff = *minimizer_->getForceField();
 
 				// iterate until done and refresh the screen every "steps" iterations
@@ -215,21 +217,17 @@ namespace BALL
 					md_->simulateIterations(steps_between_updates_, true);
 					updateScene_();
 					
-					// prevent continuation of simulation, before update of visualisation has finished
-					main_control_->getPrimitiveManager().getUpdateThread().wait();
-
 					QString message;
 					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 													md_->getNumberOfIterations(), ff.getEnergy(),
 													ff.getRMSGradient());
 					output_(message.ascii());
 					
-					if (save_images_) 
-					{
-						exportSceneToPNG();
-					}
+					// prevent continuation of simulation, before update of visualisation has finished
+					main_control_->getPrimitiveManager().getUpdateThread().wait();
 
-					if (dcd_file_) manager.takeSnapShot();
+					if (save_images_) exportSceneToPNG();
+					if (dcd_file_) 		manager.takeSnapShot();
 				}
 
 				updateScene_();
