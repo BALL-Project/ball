@@ -1,4 +1,4 @@
-// $Id: baseModelConnector.C,v 1.1 2000/06/25 19:05:02 hekl Exp $
+// $Id: baseModelConnector.C,v 1.2 2000/07/18 08:29:57 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.h>
 
@@ -81,8 +81,9 @@ namespace BALL
 			color_calculator_->swap(*connector.color_calculator_);
 		}
 
-		void BaseModelConnector::visit(Composite& composite)
+		void BaseModelConnector::visit(Composite& /* composite */)
 		{
+			// BAUSTELLE
 		}
 
 		bool BaseModelConnector::isValid() const

@@ -23,7 +23,7 @@ namespace BALL
 			setAutoUpdate(TRUE);
 		}
 
-		LogView::LogView(const LogView& view, bool deep)
+		LogView::LogView(const LogView& view, bool /* deep */)
 			:	NotificationTarget<LogStreamNotifier>(),
 			  QMultiLineEdit(),
 				history_string_(view.history_string_),
@@ -77,7 +77,7 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-	  bool LogView::onNotify(LogStreamNotifier &source)
+	  bool LogView::onNotify(LogStreamNotifier& /* source */)
 		{
 			string line;
 			

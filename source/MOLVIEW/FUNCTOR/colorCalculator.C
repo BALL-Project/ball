@@ -1,4 +1,4 @@
-// $Id: colorCalculator.C,v 1.5 2000/01/11 20:15:49 hekl Exp $
+// $Id: colorCalculator.C,v 1.6 2000/07/18 08:29:57 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/colorCalculator.h>
 
@@ -11,13 +11,15 @@ namespace BALL
 	{
 
 		ColorCalculator::ColorCalculator()
-			:	Visitor<Atom>()
+			:	Visitor<Atom>(),
+				Visitor<Composite>()
 		{
 		}
 
 		ColorCalculator::ColorCalculator
 			(const ColorCalculator& color_calculator, bool /* deep */)
 			:	Visitor<Atom>(color_calculator),
+				Visitor<Composite>(color_calculator),
   			color_map_(color_calculator.color_map_),
 				default_color_(color_calculator.default_color_),
 				color_(color_calculator.color_)

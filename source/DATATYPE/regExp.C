@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.7 2000/06/28 20:23:09 oliver Exp $ 
+// $Id: regExp.C,v 1.8 2000/07/18 08:29:53 oliver Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -32,7 +32,8 @@ namespace BALL
 		compilePattern_();
 	}
 
-	RegularExpression::RegularExpression(const RegularExpression &regular_expression,bool deep)
+	RegularExpression::RegularExpression
+		(const RegularExpression& regular_expression, bool /* deep */)
 		:	pattern_(regular_expression.pattern_),
 			valid_pattern_(false)
 	{

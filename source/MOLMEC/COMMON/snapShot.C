@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.11 2000/05/10 08:37:33 pmueller Exp $
+// $Id: snapShot.C,v 1.12 2000/07/18 08:29:56 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -56,7 +56,7 @@ namespace BALL
 
 
 	// The copy constructor of the SnapShot class. 
-	SnapShot::SnapShot (const SnapShot & rhs, bool deep)
+	SnapShot::SnapShot (const SnapShot & rhs, bool /* deep */)
 	{
 		valid = rhs.valid;
 		index = rhs.index;
@@ -134,7 +134,7 @@ namespace BALL
 	// The copy constructor of the SnapShotManager
 	// All data will be copied. But the copy will flush snapshots to the same
 	// file as the original instance and it will use the same system and force field!
-	SnapShotManager::SnapShotManager (const SnapShotManager & rhs, bool deep)
+	SnapShotManager::SnapShotManager (const SnapShotManager & rhs, bool /* deep */)
 	{
 		// local variables
 		vector < SnapShot * >::iterator it;

@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.C,v 1.5 2000/07/06 14:01:31 oliver Exp $
+// $Id: molecularDynamics.C,v 1.6 2000/07/18 08:29:57 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -60,7 +60,7 @@ namespace BALL
 	// Copy constructor 
 	// Just for heaven's sake as it does standard memberwise copy and all classes used
 	// overload the assignment operator on their own 
-	MolecularDynamics::MolecularDynamics(const MolecularDynamics& rhs, bool deep)
+	MolecularDynamics::MolecularDynamics(const MolecularDynamics& rhs, bool /* deep */)
 	{
 		set(rhs);
 	}
@@ -392,17 +392,17 @@ namespace BALL
 	}
 
 	// This method will be overwritten by a subclass
-	void MolecularDynamics::simulate (bool restart)
+	void MolecularDynamics::simulate (bool /* restart */)
 	{
 	}
 
 	// This method will be overwritten by a subclass
-	void MolecularDynamics::simulateIterations (Size number, bool restart)
+	void MolecularDynamics::simulateIterations (Size /* number */, bool /* restart */)
 	{
 	}
 
 	// This method will be overwritten by a subclass
-	void MolecularDynamics::simulateTime (double time, bool restart)
+	void MolecularDynamics::simulateTime (double /* time */, bool /* restart */)
 	{
 	}
 

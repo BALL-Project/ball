@@ -1,4 +1,4 @@
-// $Id: atomVector.C,v 1.1 2000/03/25 22:56:13 oliver Exp $
+// $Id: atomVector.C,v 1.2 2000/07/18 08:29:55 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -14,6 +14,7 @@ namespace BALL
 	}
 
 	AtomVector::AtomVector(const AtomVector& atoms, bool /* deep */)
+		: vector<Atom*>()
 	{
 		set(atoms);
 	}

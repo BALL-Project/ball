@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.13 2000/03/23 20:02:57 oliver Exp $
+// $Id: composite.C,v 1.14 2000/07/18 08:29:52 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -15,6 +15,7 @@ namespace BALL
 
 	Composite::Composite()
 		:	PersistentObject(),
+			Object(),
 			Selectable(),
 			number_of_children_(0),
 			parent_(0),
@@ -31,6 +32,7 @@ namespace BALL
 
 	Composite::Composite(const Composite& composite, bool deep)
 		:	PersistentObject(composite),
+			Object(composite),
 			Selectable(composite),
 			number_of_children_(0),
 			parent_(0),

@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.12 2000/07/16 19:24:07 oliver Exp $
+// $Id: BALL.sip,v 1.13 2000/07/18 08:29:59 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -245,6 +245,8 @@
 // %Include socket.sip
 // %Include timer.sip
 
-// VIEW ??
+// VIEW/OPENGL/KERNEL
 %Include mainControl.sip
 %Include compositeDescriptor.sip
+// VIEW/OPENGL/WIDGETS
+%Include pyWidget.sip

@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.22 2000/07/16 20:06:22 amoll Exp $
+// $Id: String_test.C,v 1.23 2000/07/18 08:30:02 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.22 2000/07/16 20:06:22 amoll Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.23 2000/07/18 08:30:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -616,8 +616,6 @@ CHECK(String::toInt())
 	TEST_EQUAL(s4.toInt(), (int)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toInt(), (int)12)
-	s4.set("999999999999999999999999");
-	TEST_EXCEPTION(Exception::InvalidFormat, s4.toInt())
 RESULT
 
 CHECK(String::toUnsignedInt())
@@ -629,8 +627,6 @@ CHECK(String::toUnsignedInt())
 	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)12.34)
-	s4.set("999999999999999999999999");
-	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedInt())
 RESULT
 
 CHECK(String::toLong())
@@ -642,8 +638,6 @@ CHECK(String::toLong())
 	TEST_EQUAL(s4.toLong(), (long)0)
 	s4.set("-12.34");
 	TEST_EQUAL(s4.toLong(), (long)-12.34)
-	s4.set("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
-	TEST_EXCEPTION(Exception::InvalidFormat, s4.toLong())
 RESULT
 
 CHECK(String::toUnsignedLong())
@@ -653,8 +647,6 @@ CHECK(String::toUnsignedLong())
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedLong())
 	s4.set("");
 	TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
-	s4.set("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
-	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedLong())
 RESULT
 
 CHECK(String::toFloat())

@@ -1,4 +1,4 @@
-// $Id: peak.C,v 1.1 2000/07/03 20:02:24 oliver Exp $
+// $Id: peak.C,v 1.2 2000/07/18 08:29:59 oliver Exp $
 
 #include<BALL/NMR/peak.h>
 
@@ -16,8 +16,8 @@ peak::peak()
 	anzahl_=0;
 	}
 
-peak::peak(peak p, int i)
-	{
+peak::peak(peak p, int /* i */)
+{
 	min_=p.min_;
 	max_=p.max_;
 	ppm_=p.ppm_;

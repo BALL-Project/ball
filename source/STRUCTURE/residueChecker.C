@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.9 2000/05/18 09:03:48 oliver Exp $
+// $Id: residueChecker.C,v 1.10 2000/07/18 08:30:01 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -24,7 +24,8 @@ namespace BALL
 	}
 	
 	ResidueChecker::ResidueChecker(const ResidueChecker& residue_checker , bool /* deep */)
-		:	fragment_db_(residue_checker.fragment_db_),
+		:	UnaryProcessor<Residue>(),
+			fragment_db_(residue_checker.fragment_db_),
 			status_(residue_checker.status_)
 	{
 	}

@@ -1,4 +1,4 @@
-// $Id: PTE.C,v 1.3 2000/04/27 19:14:16 oliver Exp $
+// $Id: PTE.C,v 1.4 2000/07/18 08:29:53 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -390,7 +390,8 @@ namespace BALL
 	}
 
 	Element::Element(const Element& element, bool /* deep */)
-			:	name_(element.name_),
+			:	PropertyManager(),
+				name_(element.name_),
 				symbol_(element.symbol_),
 				group_(element.group_),
 				period_(element.period_),
@@ -479,14 +480,19 @@ namespace BALL
 		}
 
 		char symbol_buffer[] = { '\0', '\0', '\0', '\0' };
-		SymbolToElement compare = { symbol_buffer };
+		SymbolToElement compare = { symbol_buffer, 0 };
 		
-		if (symbol.size() == 1){
+		if (symbol.size() == 1)
+		{
 			symbol_buffer[0] = toupper(symbol[0]);
-		} else if (symbol.size() == 2){
+		} 
+		else if (symbol.size() == 2)
+		{
 			symbol_buffer[0] = toupper(symbol[0]);
 			symbol_buffer[1] = toupper(symbol[1]);
-		} else {
+		} 
+		else 
+		{
 			symbol_buffer[0] = toupper(symbol[0]);
 			symbol_buffer[1] = toupper(symbol[1]);
 			symbol_buffer[2] = toupper(symbol[2]);

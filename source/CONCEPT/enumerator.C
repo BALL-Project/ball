@@ -1,4 +1,4 @@
-// $Id: enumerator.C,v 1.4 2000/06/22 18:19:16 oliver Exp $
+// $Id: enumerator.C,v 1.5 2000/07/18 08:29:52 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/CONCEPT/enumerator.h>
@@ -18,10 +18,10 @@ namespace BALL
 	{
 	}
 
-	EnumeratorIndex::IncompatibleIndex::IncompatibleIndex(const char* file, int line)
+	EnumeratorIndex::IncompatibleIndex::IncompatibleIndex
+		(const char* /* file */, int /* line */)
 	{
 		// BAUSTELLE
-		Log.error() << "BAEH!" << endl;
 	}
 
 

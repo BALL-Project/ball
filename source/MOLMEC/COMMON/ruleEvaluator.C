@@ -1,4 +1,4 @@
-// $Id: ruleEvaluator.C,v 1.6 2000/05/26 09:28:26 oliver Exp $
+// $Id: ruleEvaluator.C,v 1.7 2000/07/18 08:29:55 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -213,7 +213,7 @@ namespace BALL
 		return valid_;
 	}
 
-	void RuleEvaluator::dump(std::ostream& s, Size indent_depth) const
+	void RuleEvaluator::dump(std::ostream& /* s */, Size /* indent_depth */) const
 	{
 		// BAUSTELLE
 	}

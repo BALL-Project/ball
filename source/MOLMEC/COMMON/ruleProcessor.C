@@ -1,4 +1,4 @@
-// $Id: ruleProcessor.C,v 1.4 2000/05/24 18:46:08 oliver Exp $
+// $Id: ruleProcessor.C,v 1.5 2000/07/18 08:29:56 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleProcessor.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -20,7 +20,8 @@ namespace BALL
 	}
 
 	RuleProcessor::RuleProcessor(const RuleProcessor& rule_processor)
-		:	valid_(rule_processor.valid_)
+		:	UnaryProcessor<Atom>(),
+			valid_(rule_processor.valid_)
 	{
 	}
 
@@ -50,7 +51,7 @@ namespace BALL
 		return *this;
 	}
 
-  void RuleProcessor::set(const RuleProcessor& rule_processor)
+  void RuleProcessor::set(const RuleProcessor& /* rule_processor */)
 	{
 		// BAUSTELLE
 	}
@@ -65,7 +66,7 @@ namespace BALL
 		return true;
 	}
 
-	Processor::Result RuleProcessor::operator () (Atom& atom)
+	Processor::Result RuleProcessor::operator () (Atom& /* atom */)
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
@@ -80,7 +81,7 @@ namespace BALL
 		return valid_;
 	}
 
-	void RuleProcessor::dump(std::ostream& s) const
+	void RuleProcessor::dump(std::ostream& /* s */) const
 	{
 		//BAUSTELLE
 	}

@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.15 2000/01/25 16:25:00 oliver Exp $
+// $Id: socket.C,v 1.16 2000/07/18 08:30:02 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -102,7 +102,8 @@ namespace BALL
 	}
 
 	SocketBuf::SocketBuf(const SocketBuf& sb)
-		: rep(sb.rep), 
+		: streambuf(sb),
+			rep(sb.rep), 
 			stmo(sb.stmo), 
 			rtmo(sb.rtmo)
 	{
@@ -849,6 +850,7 @@ namespace BALL
 	}
 
 	SockInetAddr::SockInetAddr(const SockInetAddr& sina)
+		: SockAddr(sina)
 	{
 		sin_family = SockInetBuf::af_inet;
 		sin_addr.s_addr = sina.sin_addr.s_addr;

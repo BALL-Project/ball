@@ -1,4 +1,4 @@
-// $Id: molecularInformation.C,v 1.1 2000/05/04 17:16:38 hekl Exp $
+// $Id: molecularInformation.C,v 1.2 2000/07/18 08:29:58 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
@@ -150,7 +150,7 @@ namespace BALL
 			type_ = type;
     }
 
-	  void MolecularInformation::getTypeName_(Composite& composite)
+	  void MolecularInformation::getTypeName_(Composite& /* composite */)
     {
 			String temp;
 			

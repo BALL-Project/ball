@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.13 2000/05/26 20:22:32 amoll Exp $
+// $Id: system.C,v 1.14 2000/07/18 08:29:54 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -17,7 +17,8 @@ namespace BALL
 	{
 	}
 		
-	System::System(const System& system,bool deep)
+	System::System(const System& system, bool deep)
+		: BaseFragment()
 	{
 		set(system, deep);
 	}

@@ -1,4 +1,4 @@
-// $Id: label.C,v 1.1 2000/05/09 09:27:28 hekl Exp $
+// $Id: label.C,v 1.2 2000/07/18 08:30:07 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/label.h>
 
@@ -19,9 +19,10 @@ namespace BALL
 			setProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
 		}
 
-		Label::Label(const Label& Label, bool deep)
-			:	GeometricObject(Label, deep),
-				ColorExtension(Label, deep)
+		Label::Label(const Label& label, bool deep)
+			:	GeometricObject(label, deep),
+				ColorExtension(label, deep),
+				Vertex(label, deep)
 		{
 			PropertyManager::setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			PropertyManager::setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);

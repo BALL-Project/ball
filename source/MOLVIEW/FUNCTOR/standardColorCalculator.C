@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.C,v 1.6 2000/05/23 16:25:17 hekl Exp $
+// $Id: standardColorCalculator.C,v 1.7 2000/07/18 08:29:58 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
 
@@ -226,7 +226,8 @@ namespace BALL
 	}
 	
   AtomChargeColorCalculator::AtomChargeColorCalculator(const AtomChargeColorCalculator& color_calculator)
-    : positive_color_(color_calculator.positive_color_),
+    : ColorCalculator(color_calculator),
+			positive_color_(color_calculator.positive_color_),
       neutral_color_(color_calculator.neutral_color_),
       negative_color_(color_calculator.negative_color_)
   {
@@ -295,6 +296,7 @@ namespace BALL
   AtomDistanceColorCalculator::AtomDistanceColorCalculator(const AtomDistanceColorCalculator& color_calculator)
 		:	UnaryProcessor<Atom>(color_calculator),
 			UnaryProcessor<Composite>(color_calculator),
+			ColorCalculator(color_calculator),
 			atom_2_distance_(),
 			distance_(color_calculator.distance_),
 			null_distance_color_(color_calculator.null_distance_color_),

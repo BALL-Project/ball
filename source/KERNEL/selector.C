@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.16 2000/05/19 12:50:45 oliver Exp $
+// $Id: selector.C,v 1.17 2000/07/18 08:29:54 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -26,7 +26,8 @@ namespace BALL
 	}
 
 	Selector::Selector(const Selector& selector)
-		:	number_of_selected_atoms_(selector.number_of_selected_atoms_)
+		:	UnaryProcessor<Composite>(),
+			number_of_selected_atoms_(selector.number_of_selected_atoms_)
 	{
 	}
 

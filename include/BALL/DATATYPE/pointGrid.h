@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.16 2000/07/07 11:57:56 amoll Exp $ 
+// $Id: pointGrid.h,v 1.17 2000/07/18 08:29:51 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -475,7 +475,8 @@ namespace BALL
 
 	// copy constructor
 	template <class GridDataType>
-	PointGrid<GridDataType>::PointGrid(const PointGrid<GridDataType>& grid, bool deep)
+	PointGrid<GridDataType>::PointGrid
+		(const PointGrid<GridDataType>& grid, bool /* deep */)
 	{
 		set(grid);
 	}

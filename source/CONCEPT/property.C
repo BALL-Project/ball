@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.7 2000/05/01 21:36:41 oliver Exp $
+// $Id: property.C,v 1.8 2000/07/18 08:29:53 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -9,56 +9,63 @@ namespace BALL
 {
 
 	NamedProperty::NamedProperty(const string& name)	
-		: type_(NONE),
+		: PersistentObject(),
+			type_(NONE),
 			name_(name)
-			
 	{
 	}
 
 	NamedProperty::NamedProperty(const string& name, bool value)
-		: type_(BOOL),
+		:	PersistentObject(),
+			type_(BOOL),
 			name_(name)
 	{
 		data_.b = value;
 	}
 
 	NamedProperty::NamedProperty(const string& name, int value)
-		:	type_(INT),
+		:	PersistentObject(),
+			type_(INT),
 			name_(name)
 	{
 		data_.i = value;
 	}
 
 	NamedProperty::NamedProperty(const string& name, unsigned int value)
-		:	type_(UNSIGNED_INT),
+		:	PersistentObject(),
+			type_(UNSIGNED_INT),
 			name_(name)
 	{
 		data_.ui = value;
 	}
 
 	NamedProperty::NamedProperty(const string& name, float value)
-		:	type_(FLOAT),
+		:	PersistentObject(),
+			type_(FLOAT),
 			name_(name)
 	{
 		data_.f = value;
 	}
 
 	NamedProperty::NamedProperty(const string& name, double value)
-		:	type_(DOUBLE),
+		:	PersistentObject(),
+			type_(DOUBLE),
 			name_(name)
 	{
 		data_.f = value;
 	}
 
 	NamedProperty::NamedProperty(const string& name, string& str)
-		:	type_(STRING),
+		:	PersistentObject(),
+			type_(STRING),
 			name_(name)
 	{
 		data_.s = &str;
 	}
 
 	NamedProperty::NamedProperty(const string& name, PersistentObject& po)
-		:	type_(OBJECT),
+		:	PersistentObject(),
+			type_(OBJECT),
 			name_(name)
 	{
 		data_.object = &po;
@@ -73,13 +80,15 @@ namespace BALL
 	}
 		
 	NamedProperty::NamedProperty() 
-		: type_(NONE),
+		: PersistentObject(),
+			type_(NONE),
 			name_("")
 	{
 	}
 
 	NamedProperty::NamedProperty(const NamedProperty& property) 
-		: type_(property.type_),
+		: PersistentObject(property),
+			type_(property.type_),
 			name_(property.name_)
 	{	
 		if (type_ != STRING)

@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.10 2000/07/12 20:45:08 oliver Exp $
+// $Id: file.C,v 1.11 2000/07/18 08:30:01 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 
@@ -42,6 +42,7 @@ namespace BALL
 	}
 
 	File::File(const File& file)
+		: fstream()
 	{
 		name_ = file.name_;
 		open_mode_ = file.open_mode_;

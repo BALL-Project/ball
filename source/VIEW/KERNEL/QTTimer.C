@@ -1,4 +1,4 @@
-// $Id: QTTimer.C,v 1.6 2000/06/06 13:19:05 oliver Exp $
+// $Id: QTTimer.C,v 1.7 2000/07/18 08:30:03 oliver Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
@@ -21,7 +21,8 @@ namespace BALL
 		}
 
 		QTTimer::QTTimer(const QTTimer& timer, bool /* deep */)
-			:	timer_id_(0),
+			:	QObject(),
+				timer_id_(0),
 				intervall_(timer.intervall_),
 				timer_enabled_(false),
 				timer_running_(false)

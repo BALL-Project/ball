@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.18 2000/07/06 14:00:01 oliver Exp $
+// $Id: standardPredicates.C,v 1.19 2000/07/18 08:29:54 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -20,7 +20,7 @@ namespace BALL
 {
 	// True predicate
 
-	bool TruePredicate::operator () (const Atom& atom) const
+	bool TruePredicate::operator () (const Atom& /* atom */) const
 	{
     return true;
  	}
