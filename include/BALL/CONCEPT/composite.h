@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.32 2001/02/06 13:17:51 amoll Exp $
+// $Id: composite.h,v 1.33 2001/05/29 12:21:54 anker Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -50,21 +50,21 @@
 namespace BALL 
 {
 	/**	Composite Class.
-			This class implements a variant of the composite design pattern.
-			A Composite may contain an arbitrary number of other composites, thus forming
-			a tree. All BALL kernel classes are derived from Composite. This provides a unique
-			interface for all kernel classes.\\
-
-			The composite class provides a selection mechanism that allows hierarchical selection
-			and deselection of arbitrary subtrees. The time of the last selection/deselection
-			operation is stored as well as the time of the last modification operation in time stamps
-			that can be accessed via \Ref{getModificationTime} and \Ref{getSelectionTime}.
-			
-			Selecting or deselecting a Composite automatically selects or deselects all its children (recursively!).
-			Selecting or deselecting all children of a node deselects their parent as well.	
-			Selection information is propagated upwards in the tree.
-		
-	
+			This class implements a variant of the composite design pattern. A
+			Composite may contain an arbitrary number of other composites, thus
+			forming a tree. All BALL kernel classes are derived from Composite.
+			This provides a unique interface for all kernel classes.
+			\\
+			The composite class provides a selection mechanism that allows
+			hierarchical selection and deselection of arbitrary subtrees. The
+			time of the last selection/deselection operation is stored as well as
+			the time of the last modification operation in time stamps that can
+			be accessed via \Ref{getModificationTime} and \Ref{getSelectionTime}.
+			Selecting or deselecting a Composite automatically selects or
+			deselects all its children (recursively!).  Selecting or deselecting
+			all children of a node deselects their parent as well.	Selection
+			information is propagated upwards in the tree.
+			\\
 			Composites are persistent objects. 
 			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/composite.h}
@@ -124,25 +124,30 @@ namespace BALL
 		/**	Copy constructor.
 				Creates a copy of a composite. {\em Deep} copies include the whole
 				composite tree, {\em shallow} copies contain anly a single composite.
-				@param	composite the composite to be cloned (the root of the tree in the case of a deep copy)
-				@param	deep make a deep copy ({\bf true}) or shallow copy ({\bf false})
+				@param	composite the composite to be cloned (the root of the tree in 
+								the case of a deep copy)
+				@param	deep make a deep copy ({\bf true}) or shallow copy 
+								({\bf false})
 		*/
 		Composite(const Composite& composite, bool deep = true)
 			throw();
 
 		/**	Destructor.	
-				The destructor calls \Ref{destroy} to remove the composite from potential tree structures.
-				It also recursively destructs all children of the composite.
+				The destructor calls \Ref{destroy} to remove the composite from 
+				potential tree structures. It also recursively destructs all
+				children of the composite.
 		*/
 		virtual ~Composite()
 			throw();
 
 		/**	Clear the composite properties.	
-				This method removes the composite's children and destructs them if they are
-				auto-deletable.\\
-				It does not remove the composite from any parental structure.\\
+				This method removes the composite's children and destructs them if
+				they are auto-deletable.
+				\\
+				It does not remove the composite from any parental structure.
+				\\
 				This  method updates the modification time stamp of {\tt this}.
-				@see stamp
+				@see	stamp
 				@see	AutoDeletable
 				@see	destroy
 		*/
@@ -150,8 +155,9 @@ namespace BALL
 			throw();
 	
 		/**	Destroy the composite.
-				This method removes the composite from potential parental structures and
-				then calls \Ref{clear} to destruct all children.\\
+				This method removes the composite from potential parental
+				structures and then calls \Ref{clear} to destruct all children.
+				\\
 				This  method updates the modification time stamp of {\tt this}.
 				@see stamp
 				@see	~Composite
@@ -161,10 +167,12 @@ namespace BALL
 			throw();
 
 		/**	Non-virtual destroy method.
-				This method behaves exactly like destroy except for a small difference:
-				when called with {\bf true}, it calls the {\em virtual} clear function.
-				If called with {\bf false} it calls the original clear function of Composite.
-				This is useful when implementing the behaviour of derived classes.\\
+				This method behaves exactly like destroy except for a small
+				difference: when called with {\bf true}, it calls the {\em virtual}
+				clear function. If called with {\bf false} it calls the original
+				clear function of Composite. This is useful when implementing the
+				behaviour of derived classes.
+				\\
 				This  method updates the modification time stamp of {\tt this}.
 				@see stamp
 				@param	virtual_destroy call the virtual clear method ({\bf true}) or
@@ -174,9 +182,11 @@ namespace BALL
 			throw();
 
 		/**	Clone with a predicate.
-				This method copies the attributes of {\tt this} composite to root (shallow copy) and
-				then adds recursively each composite of the tree that fulfils the {\tt predicate}.
-				@param	root the cloning target root is {\tt destroy}ed prior to any copying 
+				This method copies the attributes of {\tt this} composite to root
+				(shallow copy) and then adds recursively each composite of the tree
+				that fulfils the {\tt predicate}.
+				@param	root the cloning target root is {\tt destroy}ed prior to
+								any copying 
 				@param	predicate the predicate
 				@param  a pointer to the root composite ({\tt &root})
 		*/
@@ -193,7 +203,8 @@ namespace BALL
 				@param	pm the persistence manager
 				@param	name the object name
 		*/
-		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+		virtual void persistentWrite(PersistenceManager& pm,
+				const char* name = 0) const
 			throw();
 
 		/** Read a persistent object.
@@ -201,6 +212,7 @@ namespace BALL
 		*/
 		virtual void persistentRead(PersistenceManager& pm)
 			throw();
+
 		//@}
 
 		/**	@name	Modifying and Accessing the Tree 
@@ -208,16 +220,23 @@ namespace BALL
 		//@{
 
 		/**	Predicative assignment from a tree.
+				@param	composite the Composite tree to assign from
+				@param	predicate the predicate which controls assignment
 		*/
 		void set(const Composite& composite, KernelPredicateType& predicate)
 			throw();
 
 		/**	Regular tree assignment.
+				@param	composite the Composite tree to assign from
+				@param	deep a {\tt bool} deciding whether the assignment will be
+								deep or shallow.
 		*/
 		void set(const Composite& composite, bool deep = true)
 			throw();
 
 		/**	Assignment operator.
+				@param	composite the Composite tree to assign from
+				@return	a const reference to {\bf this}
 		*/
 		const Composite& operator = (const Composite& composite)
 			throw();
@@ -227,7 +246,8 @@ namespace BALL
 				Only nodes fulfilling the {\tt predicate}	are copied.
 				The assigned {\tt composite} is destroyed first.
 				@param	composite the composite to be assigned to
-				@param	predicate the predicate used to decide which composites are copied
+				@param	predicate the predicate used to decide which composites are
+								copied
 		*/
 		void get(Composite& composite, KernelPredicateType& predicate) const
 			throw();
@@ -302,8 +322,8 @@ namespace BALL
 		Composite* getLowestCommonAncestor(Composite& composite)
 			throw();
 
-		/** Get a const reference to the lowest common ancestor of this item with an other.
-				If no comman ancestor exists 0 is returned.
+		/** Get a const reference to the lowest common ancestor of this item
+				with an other. If no common ancestor exists, 0 is returned.
 				@return Composite& the lowest common ancestor
 		*/
 		const Composite* getLowestCommonAncestor(const Composite& composite) const
@@ -313,8 +333,9 @@ namespace BALL
 				This method walks up the tree from parent to parent and
 				checks whether the composite object is a kind of {\tt T}.
 				This method is useful to identify special container classes.
-				@return a pointer to the first composite found that is a kind of T or 0 if no
-								matching composite was found up to the root of the tree
+				@return a pointer to the first composite found that is a kind of T
+								or 0 if no matching composite was found up to the root of
+								the tree
 		*/
 		template <typename T>
 		T* getAncestor(const T& /* dummy */)
@@ -322,8 +343,9 @@ namespace BALL
 
 		/**	Find the first ancestor of type T (const method).
 				This method operates also on constant trees.
-				@return a pointer to the first composite found that is a kind of T or 0 if no 
-								matching composite was found to the root of the tree
+				@return a pointer to the first composite found that is a kind of T
+								or 0 if no matching composite was found to the root of the
+								tree
 		*/
 		template <class T>
 		const T* getAncestor(const T& /* dummy */) const
@@ -332,8 +354,9 @@ namespace BALL
 		/**	Find the nearest previous composite of type T.
 				This method walks backward in the tree from composite to composite and
 				checks whether the composite object is a kind of {\tt T}.
-				@return a pointer to the first composite found that is a kind of T or 0 if no 
-								matching composite was found up to the root of the tree
+				@return a pointer to the first composite found that is a kind of T
+								or 0 if no matching composite was found up to the root of
+								the tree
 		*/
 		template <typename T>
 		T* getPrevious(const T& /* dummy */)
@@ -342,8 +365,9 @@ namespace BALL
 		/**	Find the nearest previous composite of type T (const method).
 				This method walks backward in the tree from composite to composite and
 				checks whether the composite object is a kind of {\tt T}.
-				@return a pointer to the first composite found that is a kind of T or 0 if no 
-								matching composite was found up to the root of the tree
+				@return a pointer to the first composite found that is a kind of T
+								or 0 if no matching composite was found up to the root of
+								the tree
 		*/
 		template <class T>
 		const T* getPrevious(const T& dummy) const
@@ -352,8 +376,9 @@ namespace BALL
 		/**	Find the next composite of type T.
 				This method walks backward in the tree from composite to composite and
 				checks whether the composite object is a kind of {\tt T}.
-				@return a pointer to the first composite found that is a kind of T or 0 if no 
-								matching composite was found up to the root of the tree
+				@return a pointer to the first composite found that is a kind of T
+								or 0 if no matching composite was found up to the root of
+								the tree
 		*/
 		template <typename T>
 		T* getNext(const T& /* dummy */)
@@ -362,8 +387,9 @@ namespace BALL
 		/**	Find the next composite of type T (const method).
 				This method walks backward in the tree from composite to composite and
 				checks whether the composite object is a kind of {\tt T}.
-				@return a pointer to the first composite found that is a kind of T or 0 if no 
-								matching composite was found up to the root of the tree
+				@return a pointer to the first composite found that is a kind of T
+								or 0 if no matching composite was found up to the root of
+								the tree
 		*/
 		template <class T>
 		const T* getNext(const T& dummy) const
@@ -385,6 +411,7 @@ namespace BALL
 				If no such child exists, 0 is returned.
 				The index of the first child is {\bf 0}.
 				@param	index the index of the child to return
+				@return	a pointer to the child or 0 if there is no such child.
 		*/
 		Composite* getChild(Index index)
 			throw();
@@ -393,6 +420,7 @@ namespace BALL
 				If no such child exists, 0 is returned.
 				The index of the first child is {\bf 0}.
 				@param	index the index of the child to return
+				@return	a const pointer to the child or 0 if there is no such child.
 		*/
 		const Composite* getChild(Index index) const
 			throw();
@@ -402,6 +430,8 @@ namespace BALL
 				positive values of {\tt index}) or {\tt -index} positions to the left 
 				(for negative values of {\tt index}) is returned.
 				For Index = 0 the this-pointer is returned.
+				@param index the index of the sibling
+				@return	a pointer to the child or 0 if there is no such sibling.
 		*/
 		Composite* getSibling(Index index)
 			throw();
@@ -411,40 +441,44 @@ namespace BALL
 				positive values of {\tt index}) or {\tt -index} positions to the left 
 				(for negative values of {\tt index}) is returned.
 				For Index = 0 the this-pointer is returned.
+				@param index the index of the sibling
+				@return	a const pointer to the child or 0 if there is no such sibling.
 		*/
 		const Composite* getSibling(Index index) const
 			throw();
 
 		/**	Return a pointer to the first child.
-				If the composite does not contain a child, 0 is returned.
+				@return a pointer to the first child or 0 if there is no child.
 		*/
 		Composite* getFirstChild()
 			throw();
 
 		/**	Return a const pointer to the first child.
-				If the composite does not contain a child, 0 is returned.
+				@return a const pointer to the first child or 0 if there is no child.
 		*/
 		const Composite* getFirstChild() const
 			throw();
 
 		/**	Return a pointer to the last child.
-				If the composite does not contain a child, 0 is returned.
+				@return a  pointer to the last child or 0 if there is no child.
 		*/
 		Composite* getLastChild()
 			throw();
 
 		/**	Return a const pointer to the last child.
-				If the composite does not contain a child, 0 is returned.
+				@return a const pointer to the last child or 0 if there is no child.
 		*/
 		const Composite* getLastChild() const
 			throw();
 			
 		/**	Return the time of last modification
+				@return the last modification time
 		*/
 		const PreciseTime& getModificationTime() const 
 			throw();
 
 		/**	Return the time of last change of selection.
+				@return the last time of change of selection
 		*/
 		const PreciseTime& getSelectionTime() const 
 			throw();
@@ -495,28 +529,33 @@ namespace BALL
 			throw();
 
 		/**	Insert a new parent node.
-				This method is used to combine a range of nodes into a 
-				single parent. First, the {\tt parent} composite is {\tt destroy}ed.
-				Then, all nodes from {\tt first} through {\tt last} are inserted into
-				{\tt parent} and {\tt parent} is inserted in the former position of {\tt first}.
-				The method returns {\bf false}, if {\tt first} or {\tt last} have differing parents,
-				if {\tt parent} is identical with either {\tt first} or {\tt last}, or if {\tt first}
-				is already a descendant of {\tt parent}.
+				This method is used to combine a range of nodes into a single
+				parent. First, the {\tt parent} composite is {\tt destroy}ed.
+				Then, all nodes from {\tt first} through {\tt last} are inserted
+				into {\tt parent} and {\tt parent} is inserted in the former
+				position of {\tt first}. The method returns {\bf false}, if {\tt
+				first} or {\tt last} have differing parents, if {\tt parent} is
+				identical with either {\tt first} or {\tt last}, or if {\tt first}
+				is already a descendant of {\tt parent}.  
+				\\
 				This method updates the modification time stamp.
 				@see stamp
-				@param parent the new parent of the nodes from {\tt first} through {\tt last}
-				@param first the first of the nodes to be inserted into {\tt parent}
-				@param last the last of the nodes to be inserted into {\tt parent}
-				@param destroy_parent keeps the current contents of {\tt parent} if set to {\tt true}
+				@param	parent the new parent of the nodes from {\tt first} through
+								{\tt last}
+				@param	first the first of the nodes to be inserted into {\tt parent}
+				@param	last the last of the nodes to be inserted into {\tt parent}
+				@param	destroy_parent keeps the current contents of {\tt parent}
+								if set to {\tt true}
 		*/
 		static bool insertParent(Composite& parent, Composite& first,  
 														 Composite& last, bool destroy_parent = true)
 			throw();
 
 		/**	Insert a node before this node.
-				This method inserts {\tt composite} before {\tt this} node,
-				if {\tt this} node has a parent and is not a descendant of {\tt composite}.
+				This method inserts {\tt composite} before {\tt this} node, if {\tt
+				this} node has a parent and is not a descendant of {\tt composite}.
 				Self-insertion is recognized and ignored (nothing is done).
+				\\
 				This method updates the modification time stamp.
 				@see stamp
 				@param	composite the node to be inserted in the tree before {\tt this}
@@ -525,9 +564,10 @@ namespace BALL
 			throw();
 
 		/**	Insert a node after this node.
-				This method inserts {\tt composite} after {\tt this} node,
-				if {\tt this} node has a parent and is not a descendant of {\tt composite}.
+				This method inserts {\tt composite} after {\tt this} node, if {\tt
+				this} node has a parent and is not a descendant of {\tt composite}.
 				Self-insertion is recognized and ignored (nothing is done).
+				\\
 				This method updates the modification time stamp.
 				@see stamp
 				@param	composite the node to be inserted in the tree after of {\tt this}
@@ -535,9 +575,10 @@ namespace BALL
 		void insertAfter(Composite& composite)
 			throw();
 
-		/**	Prepend all children of {\tt composite} to the children of this composite.
-				The method does nothing, if {\tt composite} is identical to {\tt this} or
-				is a descendent of {\tt this}.
+		/**	Prepend all children of {\tt composite} to the children of this
+				composite.  The method does nothing, if {\tt composite} is
+				identical to {\tt this} or is a descendent of {\tt this}.
+				\\
 				This method updates the modification time stamp.
 				@see stamp
 				@param the composite to be spliced
@@ -545,9 +586,10 @@ namespace BALL
 		void spliceBefore(Composite& composite)
 			throw();
 
-		/**	Append all children of {\tt composite} to the children of this composite.
-				The method does nothing, if {\tt composite} is identical to {\tt this} or
-				is a descendent of {\tt this}.
+		/**	Append all children of {\tt composite} to the children of this
+				composite.  The method does nothing, if {\tt composite} is
+				identical to {\tt this} or is a descendent of {\tt this}.
+				\\
 				This method updates the modification time stamp.
 				@see stamp
 				@param composite the composite to be spliced
@@ -559,6 +601,7 @@ namespace BALL
 				The children of {\tt composite} are inserted at the position of 
 				{\tt composite} if {\tt composite} is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
+				\\
 				This method updates the modification time stamp.
 				@see stamp
 				@param composite the composite to be spliced
@@ -568,6 +611,7 @@ namespace BALL
 
 		/**	Remove a child from its parent.
 				{\tt child} is only removed, if it is a true child of {\tt this}.
+				\\
 				This method updates the modification time stamp of {\tt this}.
 				@see stamp
 				@param child the child to remove
@@ -578,36 +622,44 @@ namespace BALL
 
 		/** This instance and its subtree is removed form its tree and 
 				replaced by {\tt composite} and its subtree.
+				\\
 				This method updates the modification time stamp of 
 				{\tt this} and {\tt composite}.
 				@see stamp
+				@param	composite the composite which will be inserted
 		*/
 		void replace(Composite& composite)
 			throw();
 
 		/**	Swap the contents of two composites.
-				This  method updates the modification time stamp of {\tt this} and {\tt composite}.
+				\\
+				This  method updates the modification time stamp of {\tt this} and
+				{\tt composite}.
 				@see stamp
+				@param	composite the composite with which the contents will be
+								swapped
 		*/
 		void swap(Composite& composite)
 			throw();
 
 		/**	Select a composite.
 				This method selects the composite and all the composites therein.
-				If the state of this composite is modified, its selection time stamp
-				is updated and that of its ancestors (up to and including the root composite)
-				as well. The time stamps of descendants that changed their selection state 
-				are update, too.
+				\\
+				If the state of this composite is modified, its selection time
+				stamp is updated and that of its ancestors (up to and including the
+				root composite) as well. The time stamps of descendants that
+				changed their selection state are update, too.
 		*/	
 		virtual void select()
 			throw();
 
 		/**	Deselect a composite.
 				This method deselects the composite and all the composites therein.
-				If the state of this composite is modified, its selection time stamp
-				is updated and that of its ancestors (up to and including the root composite)
-				as well. The time stamps of descendants that changed their selection state 
-				are update, too.
+				\\
+				If the state of this composite is modified, its selection time
+				stamp is updated and that of its ancestors (up to and including the
+				root composite) as well. The time stamps of descendants that
+				changed their selection state are update, too.
 		*/	
 		virtual void deselect()
 			throw();
@@ -617,14 +669,15 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				Compares the handles of two Composite objects, so
-				two Composite objects can never be eqaul.
+				Compares the handles of two Composite objects, therefore two
+				Composite objects can never be equal.
 				@see Object::operator ==
+				@param	composite the composite against which equality will be tested
 		*/
 		bool operator == (const Composite& composite) const
 			throw();
 
-		/**	Inequality operator
+		/**	Inequality operator.
 				@see operator ==
 		*/
 		bool operator != (const Composite& composite) const
@@ -766,10 +819,12 @@ namespace BALL
 			throw();
 
 		/**	Return true if any descendant is selected.
-				This method does not check all nodes recursively. Instead, on each 
-				modification of the tree, internal flags are updated and the information 
-				is propagated  upwards in the tree.\\
-				Complexity: O(1)\\
+				This method does not check all nodes recursively. Instead, on each
+				modification of the tree, internal flags are updated and the
+				information is propagated upwards in the tree.
+				\\
+				Complexity: O(1)
+				\\
 				@return bool {\bf true} if any node in the subtree is selected
 		*/
 		bool containsSelection() const
@@ -785,6 +840,8 @@ namespace BALL
 			throw();
 
 		/** Dump the constent of this instance to an ostream.
+				@param	s the stream to which we will dump
+				@param	depth the indentation depth of the output
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
