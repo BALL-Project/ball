@@ -1,4 +1,4 @@
-// $Id: baseModel.C,v 1.7 2000/06/18 16:34:28 hekl Exp $
+// $Id: baseModel.C,v 1.8 2000/06/25 19:05:50 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -14,7 +14,8 @@ namespace BALL
 			:	UnaryProcessor<Composite>(),
 				ExtendedPropertyManager(),
 				find_geometric_object_(),
-				color_calculator_(const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>()))
+				color_calculator_(const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>())),
+				model_connector_(const_cast<BaseModelConnector*>((BaseModelConnector*)&RTTI::getDefault<BaseModelConnector>()))
 		{
 			clear_();
 		}
@@ -24,7 +25,8 @@ namespace BALL
 			:	UnaryProcessor<Composite>(),
 				ExtendedPropertyManager(base_model_processor, deep),
 				find_geometric_object_(base_model_processor.find_geometric_object_, deep),
-				color_calculator_(base_model_processor.color_calculator_)
+				color_calculator_(base_model_processor.color_calculator_),
+				model_connector_(base_model_processor.model_connector_)
 		{
 		}
 
@@ -42,7 +44,8 @@ namespace BALL
 		{
 			ExtendedPropertyManager::clear();
 			find_geometric_object_.clear();
-			color_calculator_ = const_cast<ColorCalculator*>((const ColorCalculator*)&RTTI::getDefault<ColorCalculator>());
+			color_calculator_ = const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>());
+			model_connector_ = const_cast<BaseModelConnector*>((BaseModelConnector*)&RTTI::getDefault<BaseModelConnector>());
 
 			clear_();
 		}
@@ -60,6 +63,7 @@ namespace BALL
 			ExtendedPropertyManager::set(base_model_processor, deep);
 			find_geometric_object_.set(base_model_processor.find_geometric_object_, deep);
 			color_calculator_ = base_model_processor.color_calculator_;
+			model_connector_ = base_model_processor.model_connector_;
 		}
 
 		BaseModelProcessor& BaseModelProcessor::operator =
@@ -86,6 +90,10 @@ namespace BALL
 			ColorCalculator *color_calculator = color_calculator_;
 			color_calculator_ = base_model_processor.color_calculator_;
 			base_model_processor.color_calculator_ = color_calculator;
+
+			BaseModelConnector *model_connector = model_connector_;
+			model_connector_ = base_model_processor.model_connector_;
+			base_model_processor.model_connector_ = model_connector;
 		}
 
 		bool BaseModelProcessor::start()
@@ -93,11 +101,19 @@ namespace BALL
 			if (hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == true)
 			{
 				getSearcher_().setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+				getSearcher_().clearProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
+				model_connector_->getGeometricObjectSearcher().setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+				model_connector_->getGeometricObjectSearcher().clearProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			}
 			else // default
 			{
 				getSearcher_().setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
+				getSearcher_().clearProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
+				model_connector_->getGeometricObjectSearcher().setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
+				model_connector_->getGeometricObjectSearcher().clearProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
 			}
+
+			getModelConnector()->registerColorCalculator(*getColorCalculator());
 
 			return true;
 		}
@@ -116,6 +132,7 @@ namespace BALL
 		{
 			return (bool)(ExtendedPropertyManager::isValid() == true
 										&& color_calculator_->isValid() == true
+										&& model_connector_->isValid() == true
 										&& find_geometric_object_.isValid() == true);
 		}
 
@@ -244,6 +261,7 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
+
   	bool BaseModelProcessor::isModel_(VIEW::GeometricObject& geometric_object)
     {
 			if (geometric_object.hasProperty(GeometricObject::PROPERTY__MODEL_BALL_AND_STICK))
@@ -305,7 +323,6 @@ namespace BALL
 
 		void BaseModelProcessor::clear_()
 		{
-			setProperty(GeometricObject::PROPERTY__MODEL_VDW);
 			setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			setProperty(GeometricObject::PROPERTY__OBJECT_OPAQUE);
 			setProperty(GeometricObject::PROPERTY__OBJECT_VISIBLE);
