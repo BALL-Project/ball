@@ -1,5 +1,5 @@
-// $Id: amberNonBonded.h,v 1.16 2001/07/11 23:59:23 amoll Exp $
-// Molecular Mechanics: Amber force field, bond stretch component
+// $Id: amberNonBonded.h,v 1.17 2002/02/14 16:47:19 anker Exp $
+// Molecular Mechanics: Amber force field, non-bonded component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
 #define BALL_MOLMEC_AMBER_NONBONDED_H
