@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.8 2000/08/01 12:35:50 amoll Exp $
+// $Id: binarySearchTree.h,v 1.9 2000/08/05 23:58:34 amoll Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -39,6 +39,15 @@ namespace BALL
 {
 
 	/**	Binary Search Tree Item.
+			A red-black tree is a binary search tree with one extra bit of storage per node:
+			its color, which can be either RED or BLACK. 
+			A binary search tree is a red-black tree if it satisfies the following red-black
+			properties:
+			{\em 1.} Every node is either red or black.
+			{\em 2.} Every leaf is black.
+			{\em 3.} If a node is red, then both its children are black.
+			{\em 4.} Every simple path from a node to a descendant leaf contains the same
+							 number of black nodes.
 	*/
 	class BSTreeItem 
 	{ 
@@ -128,49 +137,86 @@ namespace BALL
 		*/
 		void setColor(char color);
 
-		/**	
+		/**	Get the size of this instance.
+				The size is the number of all offsprings + 1.
+				(The instance itselfs counts also).
+				@return Size the size
 		*/
 		Size getSize() const;
 
-		/**
+		/**	Get the height of the tree with this instance as root.
+				(The instance itselfs counts also).
+				@return Size the height
 		*/
 		Size getHeight() const;
 
-		/**
+		/** Get the minimum node.
+				The minimum is the leftmost node in the tree.
+				@return BSTreeItem* the minimum node
 		*/
 		const BSTreeItem* getMinimum() const;
 
-		/**
+		/** Get the maximum node.
+				The maximum is the rightmost node in the tree.
+				@return BSTreeItem* the maximum node
 		*/
 		const BSTreeItem* getMaximum() const;
 
-		/**
+		/** Get the parent of the minimum node.
+				The minimum node is the leftmost node in the tree.
+				@return BSTreeItem* the parent of the minimum node
 		*/
-		BSTreeItem* getParentOfMinimum();
+		BSTreeItem* getParentOfMinimum(); // ??? warum hier nich const?
 
-		/**
+		/** Get the parent of the maximum node.
+				The maximum node is the rightmost node in the tree.
+				@return BSTreeItem* the parent of the maximum node
 		*/
 		BSTreeItem* getParentOfMaximum();
 
-		/**
+		/** Get the parent of the predecessor.
+				The successor of a node x is the node with the largest
+				key smaller than key[x].
+				Predecessor is the right child of node returned, unless item 
+				itself is the parent. Then the left child is the predecessor. 
+				If this is a leaf, 0 is returned. ASSUMES item isn't null.
 		*/
-		BSTreeItem* getParentOfPredecessor();
+		BSTreeItem* getParentOfPredecessor();	// ??? warum hier nich const?
 
-		/**
+		/** Get the parent of the successor.
+				The successor of a node x is the node with the smallest
+				key greater than key[x].
+				Successor is the left child of node returned, unless item itself is the parent.
+				Then the right child is the successor. 
+				If item is a leaf, 0 is returned. ASSUMES item isn't null.
 		*/
 		BSTreeItem* getParentOfSuccessor();
 
-		/**
+		/** Detaches node item with parent p from the tree.
+				Node item is the left child if right_side = false,
+				else it's the right child.
+				If p is 0, it means item is the root, and that is handled
+				accordingly. Redundantly returns the pointer item. May
+				have to update root pointer.
+				@param root gets the address of the replacement if no parent of t was given
+				@param p pointer to the parent of t
+				@param t the item to remove
+				@param right_side defines where to place the replacement, default = true => right child
+				@return BSTreeItem* pointer to the removed item
 		*/
 		static BSTreeItem* detachNode
-			(BSTreeItem*& root, BSTreeItem* t, 
+			(BSTreeItem*& root, BSTreeItem* t,
 			 BSTreeItem* p, bool right_side);
 
-		/**
+		/** Rotate right a node an its children.
+				PRECONDITION: left child exists.
+				If left child does not exists 0 is returned.
 		*/
 		BSTreeItem* rotateRight();
 
-		/**
+		/** Rotate left a node an its children.
+				PRECONDITION: right child exists.
+				If right child does not exists 0 is returned.
 		*/
 		BSTreeItem* rotateLeft();
 
@@ -180,19 +226,27 @@ namespace BALL
 		*/	
 		//@{
 
-		/**
+		/** Apply a processor in preorder to the tree.
+				Preorder means the root is processed first, than the left subtree
+				and at the end the right subtree.
 		*/
 		bool applyPreorder(UnaryProcessor<BSTreeItem>& processor);
 		
-		/**
+		/** Apply a processor in inorder to the tree.
+				Inorder means the left subtree is processed first, than the root
+				and at the end the right subtree.
 		*/
 		bool applyInorder(UnaryProcessor<BSTreeItem>& processor);
 
-		/**
+		/** Apply a processor in postorder to the tree.
+				Postorder means the left subtree is processed first, than the right subtree
+				and at the end the root.
 		*/
 		bool applyPostorder(UnaryProcessor<BSTreeItem>& processor);
 
-		/**
+		/** Apply a processor in levelorder to the tree.
+				Levelorder means root is processed first, than all child, 
+				after that all grandchilds, etc.
 		*/
 		bool applyLevelorder(UnaryProcessor<BSTreeItem>& processor);
 
@@ -208,7 +262,9 @@ namespace BALL
 		*/
 		bool applyPostorderFlat(UnaryProcessor<BSTreeItem>& processor);
 
-		/**
+		/** Apply a processor to all nodes of the tree.
+				This method uses Preorder.
+				@see applyPreorder
 		*/
 		bool apply(UnaryProcessor<BSTreeItem>& processor);
 		//@}
@@ -366,8 +422,8 @@ namespace BALL
 		*/
 		Size count(const DataType& data, const Comparator<DataType>* comparator) const
 		{
-			register const TBSTreeItem* item = this;
-			register Size size = 0;
+			const TBSTreeItem* item = this;
+			Size size = 0;
 			
 			while(item) 
 			{
@@ -509,73 +565,25 @@ namespace BALL
 			};
 
 			BSTreeIterator
-				(const BSTreeItem* item = 0,
-				 WalkOrder walk_order = BSTreeIterator::WALK_ORDER__PREORDER)
-				:	forward_(0),
-					path_(),
-					root_(0),
-					current_(0),
-					walk_order_(walk_order),
-					state_(false)
-			{
-				set(item, walk_order);
-			}
+				(const BSTreeItem* item = 0, WalkOrder walk_order = BSTreeIterator::WALK_ORDER__PREORDER);
 			
-			BSTreeIterator(const BSTreeIterator& iterator)
-				:	forward_(iterator.forward_),
-					path_(iterator.path_),
-					root_(iterator.root_),
-					current_(iterator.current_),
-					walk_order_(iterator.walk_order_),
-					state_(iterator.state_)
-			{
-			}
+			BSTreeIterator(const BSTreeIterator& iterator);
 			
-			virtual ~BSTreeIterator()
-			{
-			}
+			virtual ~BSTreeIterator(){}
 
 			void set(const BSTreeItem* item, WalkOrder walk_order = BSTreeIterator::WALK_ORDER__PREORDER);
 
-			void set(const BSTreeIterator& iterator)
-			{
-				if (this != &iterator)
-				{
-					forward_ = iterator.forward_;
-					path_ = iterator.path_;
-					root_ = iterator.root_;
-					current_ = iterator.current_;
-					walk_order_ = iterator.walk_order_;
-					state_ = iterator.state_;
-				}
-			}
+			void set(const BSTreeIterator& iterator);
 			
-			BSTreeIterator& operator = (const BSTreeIterator& iterator)
-			{
-				set(iterator);
-				
-				return *this;
-			}
+			BSTreeIterator& operator = (const BSTreeIterator& iterator);
 			
-			const BSTreeItem* forward()
-			{
-				return (this->*forward_)();
-			}
+			const BSTreeItem* forward();
 
-			void clear()
-			{
-				set(0);
-			}
+			void clear();
 
-			bool operator == (const BSTreeIterator& iterator) const
-			{
-				return (bool)(current_ == iterator.current_);
-			}
+			bool operator == (const BSTreeIterator& iterator) const;
 			
-			bool operator != (const BSTreeIterator& iterator) const
-			{
-				return (bool)(current_ != iterator.current_);
-			}
+			bool operator != (const BSTreeIterator& iterator) const;
 			
 		protected:
 		
@@ -958,7 +966,6 @@ namespace BALL
 			void toBegin()
 			{
 				iterator_.set(bound_->getRoot(), BSTreeIterator::WALK_ORDER__PREORDER);
-		
 				position_ = iterator_.forward();
 			}
 
@@ -1227,10 +1234,8 @@ namespace BALL
 		friend class LevelorderIteratorTraits_;
 
 		typedef ForwardIterator
-			<TBSTree<DataType>, DataType,
-			 const TBSTreeItem<DataType>*,
-			 LevelorderIteratorTraits_>
-			LevelorderIterator;
+			<TBSTree<DataType>, DataType, const TBSTreeItem<DataType>*,
+			 LevelorderIteratorTraits_>	LevelorderIterator;
 
 		LevelorderIterator beginLevelorder()
 		{
@@ -1245,10 +1250,8 @@ namespace BALL
 
 
 		typedef ConstForwardIterator
-			<TBSTree<DataType>, DataType,
-			 const TBSTreeItem<DataType>*,
-			 LevelorderIteratorTraits_>
-			ConstLevelorderIterator;
+			<TBSTree<DataType>, DataType, const TBSTreeItem<DataType>*,
+			 LevelorderIteratorTraits_>	ConstLevelorderIterator;
 
 		ConstLevelorderIterator beginLevelorder() const
 		{
@@ -1371,12 +1374,11 @@ namespace BALL
 	void TBSTree<DataType>::set(const TBSTree<DataType>& tree, BSTreeIterator::WalkOrder walk_order)
 	{
 		clear();
-		
 		comparator_ = tree.comparator_;
 
 		TBSTreeIterator< TBSTreeItem<DataType> > iterator(tree.root_, walk_order);
 		
-		for (register const TBSTreeItem<DataType> *item = iterator.forward();
+		for (const TBSTreeItem<DataType> *item = iterator.forward();
 				 item != 0; item = iterator.forward())
 		{
 			insert(item->data_, true);
@@ -1391,7 +1393,6 @@ namespace BALL
 		{
 			set(tree);
 		}
-
 		return *this;
 	}
 
@@ -1457,9 +1458,8 @@ namespace BALL
 		if (root_ == 0)
 		{
 			return 0;
-		} else {
-			return root_->getHeight();
 		}
+		return root_->getHeight();
 	}
 			
 	template<typename DataType>
@@ -1469,9 +1469,8 @@ namespace BALL
 		if (root_ == 0)
 		{
 			return 0;
-		} else {
-			return root_->getSize();
 		}
+		return root_->getSize();
 	}
 			
 	template<typename DataType>
@@ -1481,9 +1480,8 @@ namespace BALL
 		if (root_ == 0) 
 		{
 			return 0;
-		} else {
-			return &(((TBSTreeItem<DataType> *)root_->getMinimum())->data_);
 		}
+		return &(((TBSTreeItem<DataType> *)root_->getMinimum())->data_);
 	}
 
 	template<typename DataType>
@@ -1493,9 +1491,8 @@ namespace BALL
 		if (root_ == 0) 
 		{
 			return 0;
-		} else {
-			return &(((TBSTreeItem<DataType> *)root_->getMaximum())->data_);
 		}
+		return &(((TBSTreeItem<DataType> *)root_->getMaximum())->data_);
 	}
 
 	template<typename DataType>
@@ -1503,7 +1500,7 @@ namespace BALL
 	{
 		if (root_ != 0)
 		{
-			register TBSTreeItem<DataType> *item = root_;
+			TBSTreeItem<DataType> *item = root_;
 				 
 			for (; item != 0 && (comparator_->isNotEqual(data, item->data_) == true);
 					 item = (comparator_->isLess(data, item->data_) == true) 
@@ -1528,9 +1525,8 @@ namespace BALL
 		if (root_ == 0)
 		{
 			return 0;
-		} else {
-			return root_->count(data, comparator_);
 		}
+		return root_->count(data, comparator_);
 	}
 
 	template<typename DataType>
@@ -1549,12 +1545,16 @@ namespace BALL
 				{
 					right_child = false;
 					item = item->getLeftChild();
-				} else { 
+				}
+				else 
+				{ 
 					right_child = true;
 					item = item->getRightChild();
 				}
 			}
-		} else {
+		}
+		else 
+		{
 			while (item) 
 			{
 				if (comparator_->isEqual(data, item->data_) == true)
@@ -1567,7 +1567,9 @@ namespace BALL
 				{
 					right_child = false;
 					item = item->getLeftChild();
-				} else {
+				}
+				else 
+				{
 					right_child = true;
 					item = item->getRightChild();
 				}
@@ -1580,10 +1582,14 @@ namespace BALL
 			if (right_child)
 			{
 				parent->setRightChild(item);
-			} else {
+			}
+			else 
+			{
 				parent->setLeftChild(item);
 			}
-		}	else {
+		}
+		else 
+		{
 			root_ = item;
 		}
 
@@ -1610,7 +1616,9 @@ namespace BALL
 			{
 				right_child = false;
 				item = item->getLeftChild();
-			} else {
+			}
+			else 
+			{
 				right_child = true;
 				item = item->getRightChild();
 			}
@@ -1630,10 +1638,10 @@ namespace BALL
 		{
 			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
 				((BSTreeItem *&)root_, parent->left_, parent, false);
-		} else {
-			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-				((BSTreeItem *&)root_, root_, 0, false);
 		}
+
+		return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
+			((BSTreeItem *&)root_, root_, 0, false);
 	}
 
 	template<typename DataType>
@@ -1646,10 +1654,10 @@ namespace BALL
 		{
 			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
 				((BSTreeItem *&)root_, parent->right_, parent, true);
-		} else {
-			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-				((BSTreeItem *&)root_, root_, 0, false);
 		}
+
+		return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
+			((BSTreeItem *&)root_, root_, 0, false);
 	}
 
 	template<typename DataType>
@@ -1666,9 +1674,8 @@ namespace BALL
 		{
 			deleteItem(item);
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	template<typename DataType>
@@ -1679,7 +1686,7 @@ namespace BALL
 			return false;
 		}
 
-		register TBSTreeItem<DataType> *item = detach(data);
+		TBSTreeItem<DataType> *item = detach(data);
 
 		if (item != 0)
 		{
@@ -1687,11 +1694,9 @@ namespace BALL
 			{
 				deleteItem(item);
 			}
-
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	template<typename DataType>
@@ -1703,9 +1708,8 @@ namespace BALL
 		{
 			deleteItem(item);
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	template<typename DataType>
@@ -1717,9 +1721,8 @@ namespace BALL
 		{
 			deleteItem(item);
 			return true;
-		} else {
-			return false;
 		}
+		return false;
 	}
 
 	template <class DataType>
@@ -1736,8 +1739,8 @@ namespace BALL
 		
 		TBSTreeIterator< TBSTreeItem<DataType> > iterator(tree.root_);
 		
-		register const TBSTreeItem<DataType>* this_item = this_iterator.forward();
-		register const TBSTreeItem<DataType>* item = iterator.forward();
+		const TBSTreeItem<DataType>* this_item = this_iterator.forward();
+		const TBSTreeItem<DataType>* item = iterator.forward();
 
 		for (; this_item != 0 && item != 0; this_item = this_iterator.forward(), item = iterator.forward())
 		{
@@ -1812,9 +1815,8 @@ namespace BALL
 		if (root_ != 0)
 		{
 			return root_->applyPreorder(processor);
-		} else {
-			return true;
 		}
+		return true;
 	}
 			
 	template<typename DataType>
@@ -1824,9 +1826,8 @@ namespace BALL
 		if (root_ != 0)
 		{
 			return root_->applyInorder(processor);
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	template<typename DataType>
@@ -1836,9 +1837,8 @@ namespace BALL
 		if (root_ != 0)
 		{
 			return root_->applyPostorder(processor);
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	template<typename DataType>
@@ -1848,9 +1848,8 @@ namespace BALL
 		if (root_ != 0)
 		{
 			return root_->applyLevelorder(processor);
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	template<typename DataType>
@@ -1860,9 +1859,8 @@ namespace BALL
 		if (root_ != 0)
 		{
 			return root_->applyPreorderFlat(processor);
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	template<typename DataType>
@@ -1872,9 +1870,8 @@ namespace BALL
 		if (root_ != 0)
 		{
 			return root_->applyInorderFlat(processor);
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	template<typename DataType>
@@ -1884,9 +1881,8 @@ namespace BALL
 		if (root_ != 0)
 		{
 			return root_->applyPostorderFlat(processor);
-		} else {
-			return true;
 		}
+		return true;
 	}
 
 	template<typename DataType>
@@ -1918,11 +1914,11 @@ namespace BALL
 		if (item == 0)
 		{
 			return 0;
-		} else {
-			return newItem
-				(((TBSTreeItem<DataType> *)item)->data_, 
-				 clone_(item->left_), clone_(item->right_), item->color_);
 		}
+
+		return newItem
+			(((TBSTreeItem<DataType> *)item)->data_, 
+			 clone_(item->left_), clone_(item->right_), item->color_);
 	}
 
 	template<typename DataType>
@@ -1952,17 +1948,20 @@ namespace BALL
 						return false;
 					}
 				}
-				else if (parent->right_ == (BSTreeItem *)childitem)
+				else 
 				{
-					if (comparator_->isLess(childitem->data_, parent->data_) == true)
+					if (parent->right_ == (BSTreeItem *)childitem)
 					{
-						return false;
+						if (comparator_->isLess(childitem->data_, parent->data_) == true)
+						{
+							return false;
+						}
 					}
 				}
 			}
 			
-			if (isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->left_) == false
-					|| isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->right_) == false)
+			if (!isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->left_) ||
+					!isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->right_))
 			{
 				return false;
 			}
