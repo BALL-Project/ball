@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.5 2004/12/30 20:20:15 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.6 2005/01/01 12:50:44 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -62,18 +62,13 @@ namespace BALL
 				Log.info() << "Destructing object " << this << " of class POVRenderer" << endl;
 			#endif
 
-			if (outfile_ != 0 &&
-					RTTI::isKindOf<File>(*outfile_))
-			{
-				delete outfile_;
-			}
+				clear();
 		}
 
 		void POVRenderer::clear()
 			throw()
 		{
-			if (outfile_ != 0 &&
-					RTTI::isKindOf<File>(*outfile_))
+			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
 			{
 				delete outfile_;
 			}
@@ -85,8 +80,7 @@ namespace BALL
 		void POVRenderer::setFileName(const String& name)
 			throw(Exception::FileNotFound)
 		{
-			if (outfile_ == 0 ||
-					!RTTI::isKindOf<File>(*outfile_)) 
+			if (outfile_ == 0 || !RTTI::isKindOf<File>(*outfile_)) 
 			{
 				outfile_ = new File();
 			}
@@ -95,8 +89,7 @@ namespace BALL
 
 		void POVRenderer::setOstream(std::ostream& out_stream)
 		{
-			if (outfile_ != 0 &&
-					RTTI::isKindOf<File>(*outfile_)) 
+			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_)) 
 			{
 				delete outfile_;
 			}
@@ -175,54 +168,55 @@ namespace BALL
 				Log.info() << "Start the POVRender output..." << endl;
 			#endif
 
+			std::ostream& out = *outfile_;
+
 			if (!Renderer::init(stage, width, height)) return false;
 
 			if (human_readable_)
 			{
-				(*outfile_)	<< "// POVRay file created by the BALL POVRenderer" 
-									<< endl << endl;
+				out	<< "// POVRay file created by the BALL POVRenderer" << endl << endl
+				    << "// Width of the original scene: " << width_ << endl
+				    << "// Height of the original scene: " << height_ << endl
+				    << "// To render this scene, call povray (available from www.povray.org)"
+					  << " like this:\n//" << endl;
 
-				(*outfile_) << "// Width of the original scene: " << width_ << endl;
-				(*outfile_) << "// Height of the original scene: " << height_ << endl;
-				(*outfile_) << "// To render this scene, call povray (available from www.povray.org) like this:\n//" << endl;
-
-				if (outfile_ != 0 &&
-						RTTI::isKindOf<File>(*outfile_))
+				if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
 				{
 					String filename = FileSystem::baseName((*(File*)outfile_).getName());
-					(*outfile_) << "// povray +I" << filename 
-											 << " +FN +O" << filename << ".png +QR +W" << width_ << " +H" << height_ << " -UV\n//" << endl;
+					out << "// povray +I" << filename 
+							<< " +FN +O" << filename << ".png +QR +W" << width_ 
+							<< " +H" << height_ << " -UV\n//" << endl;
 				}
 			}
-			(*outfile_) << "camera {" << std::setprecision(12) << endl;
-			(*outfile_) << "\tperspective" << endl;
-			(*outfile_) << "\tdirection <0.0, 0.0, -1.0>" << endl;
-			(*outfile_) << "\tright " << (double)width_ / (double)height_ << " * x" << endl;
-			(*outfile_) << "\tangle 83.0" << endl;
-			(*outfile_) << "\ttransform {" << endl;
-			(*outfile_) << "\t\tmatrix <" << endl;
+			out << "camera {" << std::setprecision(12) << endl
+			    << "\tperspective" << endl
+			    << "\tdirection <0.0, 0.0, -1.0>" << endl
+			    << "\tright " << (double)width_ / (double)height_ << " * x" << endl
+			    << "\tangle 83.0" << endl
+			    << "\ttransform {" << endl
+			    << "\t\tmatrix <" << endl;
 
 			GLdouble m[16];	
 			glGetDoublev(GL_MODELVIEW_MATRIX, m);
 			
 			double norm = sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
-			(*outfile_) << "\t\t" 
+			out << "\t\t" 
 							 << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << endl;
 			norm = sqrt(m[4] * m[4] + m[5] * m[5] + m[6] * m[6]);
-			(*outfile_) << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << endl;
+			out << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << endl;
 			norm = sqrt(m[8] * m[8] + m[9] * m[9] + m[10] * m[10]);
-			(*outfile_) << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << endl;
-			(*outfile_) << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << endl;
-		  (*outfile_) << "\t\t>" << endl;
-			(*outfile_) << "\tinverse }" << endl;
-			(*outfile_) << "}" << std::setprecision(6) << endl << endl;
+			out << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << endl;
+			out << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << endl;
+		  out << "\t\t>" << endl;
+			out << "\tinverse }" << endl;
+			out << "}" << std::setprecision(6) << endl << endl;
 				
 			//
 			if (human_readable_)
 			{
-				(*outfile_) << "// look up: " << stage.getCamera().getLookUpVector() << endl;
-				(*outfile_) << "// look at: " << stage.getCamera().getLookAtPosition() << endl;
-				(*outfile_) << "// view point: " << stage.getCamera().getViewPoint() << endl;
+				out << "// look up: " << stage.getCamera().getLookUpVector() << endl;
+				out << "// look at: " << stage.getCamera().getLookAtPosition() << endl;
+				out << "// view point: " << stage.getCamera().getViewPoint() << endl;
 			}
 
 			// Set the light sources
@@ -242,38 +236,38 @@ namespace BALL
 				
 				if (it->getType() == LightSource::AMBIENT)
 				{
-					(*outfile_) << "global_settings { ambient_light " << POVColorRGBA(light_col) << " }" << endl;
+					out << "global_settings { ambient_light " << POVColorRGBA(light_col) << " }" << endl;
 					continue;
 				}
 
-				(*outfile_) << "light_source { ";
-				(*outfile_) << POVVector3(it->getPosition()) << ", " << POVColorRGBA(light_col) << "}" << endl;
+				out << "light_source { ";
+				out << POVVector3(it->getPosition()) << ", " << POVColorRGBA(light_col) << "}" << endl;
 
 				// TODO: distinguish between directional / positional light sources
 			}
 			
 			// Add some global blurb for radiosity support
-			(*outfile_) << "global_settings { radiosity { brightness 0.6 } }" << endl;
+			out << "global_settings { radiosity { brightness 0.6 } }" << endl;
 			// Set the background color
-			(*outfile_) << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << endl << endl;
+			out << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << endl << endl;
 
 			// Define the finish we will use for our molecular objects (defining the molecular
 			// "material properties"
 			// TODO: allow for more than one finish in order to have seperate parameters for different objects
-			(*outfile_) << "#declare BALLFinish            		 = finish { ";
+			out << "#declare BALLFinish            		 = finish { ";
 			// stage uses opengl values for material parameters (-1.0 -> 1.0), so normalize these
-			(*outfile_) << "specular " 	<< stage.getSpecularIntensity() / 2.0 + 0.5 << " ";
-			(*outfile_) << "diffuse " 	<< stage.getDiffuseIntensity() 	/ 2.0 + 0.5 << " ";
+			out << "specular " 	<< stage.getSpecularIntensity() / 2.0 + 0.5 << " ";
+			out << "diffuse " 	<< stage.getDiffuseIntensity() 	/ 2.0 + 0.5 << " ";
 			// povray uses an other ambient setting
-			(*outfile_) << "ambient 0.0 }"	 	<< endl;
-			(*outfile_) << "#declare BALLFinishSphereSolid      = BALLFinish" << endl;
-			(*outfile_) << "#declare BALLFinishSphereTransp     = BALLFinish" << endl;
-			(*outfile_) << "#declare BALLFinishTubeSolid        = BALLFinish" << endl;
-			(*outfile_) << "#declare BALLFinishTubeTransp       = BALLFinish" << endl;
-			(*outfile_) << "#declare BALLFinishMesh             = BALLFinish" << endl;
+			out << "ambient 0.0 }"	 	<< endl;
+			out << "#declare BALLFinishSphereSolid      = BALLFinish" << endl;
+			out << "#declare BALLFinishSphereTransp     = BALLFinish" << endl;
+			out << "#declare BALLFinishTubeSolid        = BALLFinish" << endl;
+			out << "#declare BALLFinishTubeTransp       = BALLFinish" << endl;
+			out << "#declare BALLFinishMesh             = BALLFinish" << endl;
 			
 			// now begin the CSG union containing all the geometric objects
-			(*outfile_) << "union {" << endl;
+			out << "union {" << endl;
 
 			return true;
 		}
@@ -281,10 +275,12 @@ namespace BALL
 		bool POVRenderer::finish()
 			throw()
 		{
+			std::ostream& out = *outfile_;
+
 			vector<POVRendererClippingPlane>::iterator it = clipping_planes_.begin();
 			for (;it != clipping_planes_.end(); it++)
 			{
-				(*outfile_) << "  clipped_by{" << endl
+				out << "  clipped_by{" << endl
 								 << "   plane{< -"  // negate normal vector
 					       << (*it).normal.x << ", -" 
 					       << (*it).normal.y << ", -" 
@@ -293,7 +289,7 @@ namespace BALL
 								 << "  }" << endl
 								 << " }" << endl;
 			}
-			(*outfile_) << "}" << endl;
+			out << "}" << endl;
 
 
 			if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
@@ -308,6 +304,8 @@ namespace BALL
 		void POVRenderer::renderSphere_(const Sphere& sphere)
 			throw()
 		{
+			std::ostream& out = *outfile_;
+
 			ColorRGBA color;
 			// first find out its color
 			if ((sphere.getComposite()) && sphere.getComposite()->isSelected())
@@ -325,19 +323,21 @@ namespace BALL
 			// and finally, its position
 			Vector3 position = sphere.getPosition();
 
-			// now write the information into the (*outfile_)
-			(*outfile_) << "\tsphere { ";
-			(*outfile_) << POVVector3(position) << ", ";
-			(*outfile_) << radius;
-			//(*outfile_) <<"\t\ttexture {" << endl;
-			(*outfile_) << " pigment { " << POVColorRGBA(color) << " } ";
-			(*outfile_) << POVFinish("Sphere", color);
-			(*outfile_) << " }" << endl << endl;
+			// now write the information into the out
+			out << "\tsphere { ";
+			out << POVVector3(position) << ", ";
+			out << radius;
+			//out <<"\t\ttexture {" << endl;
+			out << " pigment { " << POVColorRGBA(color) << " } ";
+			out << POVFinish("Sphere", color);
+			out << " }" << endl << endl;
 		}
 
 		void POVRenderer::renderDisc_(const Disc& disc)
 			throw()
 		{
+			std::ostream& out = *outfile_;
+
 			ColorRGBA color;
 			// first find out its color
 			if ((disc.getComposite() && (disc.getComposite()->isSelected())))
@@ -356,19 +356,21 @@ namespace BALL
 			disc.getCircle().get(position, normal, radius);
 			normal -= origin_;
 
-			// now write the information into the (*outfile_)
-			(*outfile_) << "\tdisc { ";
-			(*outfile_) << POVVector3(position) << ", ";
-			(*outfile_) << POVVector3(normal) << ", ";
-			(*outfile_) << radius;
-			(*outfile_) << " pigment { " << POVColorRGBA(color) << " } ";
-			(*outfile_) << POVFinish("Tube", color); // We use the same finish as for tubes -> helices
-			(*outfile_) << "} " << endl << endl;
+			// now write the information into the out
+			out << "\tdisc { ";
+			out << POVVector3(position) << ", ";
+			out << POVVector3(normal) << ", ";
+			out << radius;
+			out << " pigment { " << POVColorRGBA(color) << " } ";
+			out << POVFinish("Tube", color); // We use the same finish as for tubes -> helices
+			out << "} " << endl << endl;
 		}
 
 		void POVRenderer::renderTube_(const Tube& tube)
 			throw()
 		{
+			std::ostream& out = *outfile_;
+
 			ColorRGBA color;
 			// first, find out its color
 			if ((tube.getComposite()) && (tube.getComposite()->isSelected()))
@@ -387,19 +389,21 @@ namespace BALL
 			Vector3 base_point = tube.getVertex1();
 			Vector3  cap_point = tube.getVertex2();
 
-			// now write the information into the (*outfile_)
-			(*outfile_) << "\tcylinder {";
-			(*outfile_) << "\t" << POVVector3(base_point) << ", ";
-			(*outfile_)           << POVVector3( cap_point) << ", ";
-			(*outfile_)           <<                 radius;
-			(*outfile_) << " pigment { " << POVColorRGBA(color) << " } ";
-			(*outfile_) << POVFinish("Tube", color);
-			(*outfile_) << "} " << endl;
+			// now write the information into the out
+			out << "\tcylinder {";
+			out << "\t" << POVVector3(base_point) << ", ";
+			out << POVVector3( cap_point) << ", ";
+			out << radius;
+			out << " pigment { " << POVColorRGBA(color) << " } ";
+			out << POVFinish("Tube", color);
+			out << "} " << endl;
 		}	
 
 		void POVRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 			throw()
 		{
+			std::ostream& out = *outfile_;
+
 			// we have found a two colored tube
 			ColorRGBA color1, color2;
 
@@ -423,22 +427,22 @@ namespace BALL
 			Vector3  cap_point = tube.getVertex2();
 			Vector3  mid_point = tube.getMiddleVertex();
 
-			// now write the information into the (*outfile_)
-			(*outfile_) << "\tcylinder { ";
-			(*outfile_) << POVVector3(base_point) << ", ";
-			(*outfile_)           << POVVector3( mid_point) << ", ";
-			(*outfile_)           <<                 radius;
-			(*outfile_) << " pigment { " << POVColorRGBA(color1) << " } ";
-			(*outfile_) << POVFinish("Tube", color1);
-			(*outfile_) << "}" << endl;
+			// now write the information into the out
+			out << "\tcylinder { ";
+			out << POVVector3(base_point) << ", ";
+			out << POVVector3( mid_point) << ", ";
+			out << radius;
+			out << " pigment { " << POVColorRGBA(color1) << " } ";
+			out << POVFinish("Tube", color1);
+			out << "}" << endl;
 			
-			(*outfile_) << "\tcylinder {";
-			(*outfile_) << POVVector3(mid_point) << ", ";
-			(*outfile_)           << POVVector3(cap_point) << ", ";
-			(*outfile_)           <<                 radius;
-			(*outfile_) << " pigment { " << POVColorRGBA(color2) << " } ";
-			(*outfile_) << POVFinish("Tube", color2);
-			(*outfile_) << "}" << endl << endl;
+			out << "\tcylinder {";
+			out << POVVector3(mid_point) << ", ";
+			out << POVVector3(cap_point) << ", ";
+			out << radius;
+			out << " pigment { " << POVColorRGBA(color2) << " } ";
+			out << POVFinish("Tube", color2);
+			out << "}" << endl << endl;
 		}
 
 		void POVRenderer::renderMesh_(const Mesh& mesh)
@@ -479,17 +483,18 @@ namespace BALL
 			/////////////////////////////////////////////////
 			// calculate a hashset of all colors in the mesh
 			/////////////////////////////////////////////////
-			HashMap<String, Position> colors;
-			vector<ColorRGBA> color_vector;
-			Position pos = 0;
+			typedef HashMap<String, Position> ColorMap;
+			ColorMap colors;
+			vector<const ColorRGBA*> color_vector;
 			String color_string;
+			Position pos = 0;
 			for (Position i = 0; i < mesh.colorList.size(); i++)
 			{
 				mesh.colorList[i].get(color_string);
 				if (!colors.has(color_string))
 				{
-					colors[color_string] = pos;
-					color_vector.push_back(mesh.colorList[i]);
+					colors.insert(ColorMap::ValueType(color_string, pos));
+					color_vector.push_back(&mesh.colorList[i]);
 					pos++;
 				}
 			}
@@ -501,7 +506,7 @@ namespace BALL
 			ColorRGBA temp_color;
 			for (Position p = 0; p < color_vector.size(); p++)
 			{
-				temp_color.set(color_vector[p]);
+   			temp_color.set((*color_vector[p]));
 				out << "texture { pigment { " << POVColorRGBA(temp_color) << " }"
 						<< " finish { BALLFinishMesh } }," << endl;
 			}
@@ -560,5 +565,7 @@ namespace BALL
 
 			clipping_planes_.push_back(plane);
 		}
-	}
+
+		
+	} // namespaces
 }
