@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.9 2004/09/01 14:28:29 amoll Exp $
+// $Id: preferences.C,v 1.10 2004/09/29 20:40:18 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
+#include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <qwidgetstack.h>
 #include <qlistbox.h>
@@ -32,7 +33,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
-									 << " of class " << RTTI::getName<Preferences>() << std::endl;
+									 << " of class Preferences" << std::endl;
 			#endif 
 		}
 
@@ -42,21 +43,37 @@ namespace BALL
 			return (list_box->count() > 0);
 		}
 
-		void Preferences::insertPage(QWidget *child, const String& name)
+		void Preferences::insertEntry(PreferencesEntry *child, const String& name)
 			throw()
 		{
- 			widget_stack->addWidget(child, list_box->count() + 1);
+			if (!RTTI::isKindOf<QWidget>(*child)) 
+			{
+				Log.error() << "PreferencesEntry not derived from QWidget in " 
+										<< __FILE__ << "  " << __LINE__<< std::endl;
+				return;
+			}
+
+			QWidget* widget = dynamic_cast<QWidget*>(child);
+
+ 			widget_stack->addWidget(widget, list_box->count() + 1);
 			list_box->insertItem(name.c_str());
 
 			// set size for all child tabs
-			child->resize(380,210);
+			widget->setMinimumSize(560,400);
+			widget->setMaximumSize(560,400);
+			widget->resize(560,400);
+
+			entries_.insert(child);
 		}
 
-		void Preferences::removePage(QWidget *child)
+		void Preferences::removeEntry(PreferencesEntry *child)
 			throw()
 		{
-			list_box->removeItem(widget_stack->id(child) - 1);
-			widget_stack->removeWidget(child);
+			if (!entries_.has(child)) return;
+			list_box->removeItem(widget_stack->id((QWidget*)child) - 1);
+			widget_stack->removeWidget((QWidget*)child);
+			entries_.erase(child);
+			delete child;
 		}
 
 		void Preferences::fetchPreferences(INIFile& inifile)
@@ -76,6 +93,12 @@ namespace BALL
 			}
 			
 			move(x_pos, y_pos);
+
+			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
+			for (; it != entries_.end(); it++)
+			{
+				(**it).readPreferenceEntries(inifile);
+			}
 		}
 
 		void Preferences::writePreferences(INIFile& inifile)
@@ -84,6 +107,11 @@ namespace BALL
 			// the window position
 			inifile.insertValue("WINDOWS", "Preferences::x", String(x()));
 			inifile.insertValue("WINDOWS", "Preferences::y", String(y()));
+			HashSet<PreferencesEntry*>::Iterator it = entries_.begin();
+			for (; it != entries_.end(); it++)
+			{
+				(**it).writePreferenceEntries(inifile);
+			}
 		}
 
 		void Preferences::show()

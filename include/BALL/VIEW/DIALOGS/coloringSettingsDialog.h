@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.17 2004/09/28 22:46:56 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.18 2004/09/29 20:38:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -169,9 +169,6 @@ namespace BALL
 			virtual void forceMinValueChanged();
 
 			protected:
-
-      bool fetchPreference_(const INIFile& inifile, const String& entry, ColorRGBA& color)
-				        throw();
 
 			QColorTable* element_table_;
 			QColorTable* residue_table_;

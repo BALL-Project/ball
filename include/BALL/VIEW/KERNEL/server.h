@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.8 2004/07/03 12:10:10 amoll Exp $
+// $Id: server.h,v 1.9 2004/09/29 20:38:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -253,21 +253,6 @@ namespace BALL
 			virtual void defaultPreferences()
 				throw();
 			
-			/** Fetch the widgets preferences from the inifile.
-					This method is called automatically by the method MainControl::show.
-					See ModularWidget	for more information concerning preferences tabs.\par
-					\see    ServerPreferences
-			*/
-			virtual void fetchPreferences(INIFile &inifile)
-				throw();
-			
-			/** Writes the widgets preferences to the inifile.
-					This method is called automatically by the MainControl::aboutToExit.
-					\see    ServerPreferences
-			*/
-			virtual void writePreferences(INIFile &inifile)
-				throw();
-							
 			//@}
 			/**	@name	debuggers and diagnostics
 			*/

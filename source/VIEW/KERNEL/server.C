@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.14 2004/09/01 14:28:52 amoll Exp $
+// $Id: server.C,v 1.15 2004/09/29 20:40:19 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -179,7 +179,7 @@ namespace BALL
 			server_preferences_ = new ServerPreferences();
 			CHECK_PTR(server_preferences_);
 
-			preferences.insertPage(server_preferences_, "Server");
+			preferences.insertEntry(server_preferences_, "Server");
 		}
 
 		void Server::finalizePreferencesTab(Preferences &preferences)
@@ -187,9 +187,7 @@ namespace BALL
 		{
 			if (server_preferences_ != 0)
 			{
-				preferences.removePage(server_preferences_);
-		
-				delete server_preferences_;
+				preferences.removeEntry(server_preferences_);
 				server_preferences_ = 0;
 			}
 		}
@@ -225,26 +223,6 @@ namespace BALL
 			}
 		}
 		
-		void Server::fetchPreferences(INIFile &inifile)
-			throw()
-		{
-			// the default preferences tab (if existent)
-			if (server_preferences_ != 0)
-			{
-				server_preferences_->fetchPreferences(inifile);
-			}
-		}
-		
-		void Server::writePreferences(INIFile &inifile)
-			throw()
-		{
-			// the default preferences tab (if existent)
-			if (server_preferences_ != 0)
-			{
-				server_preferences_->writePreferences(inifile);
-			}
-		}
-
 		bool Server::isValid() const
 			throw()
 		{

@@ -6,8 +6,8 @@
 
 #include <BALL/VIEW/UIC/pythonSettingsData.h>
 
-#ifndef BALL_DATATYPE_STRING_H
-# include <BALL/DATATYPE/string.h>
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
 namespace BALL
@@ -20,7 +20,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_EXPORT PythonSettings 
-			: public PythonSettingsData
+			: public PythonSettingsData,
+				public PreferencesEntry
 		{ 
 			Q_OBJECT
 

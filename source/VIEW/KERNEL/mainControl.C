@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.107 2004/09/28 21:41:05 amoll Exp $
+// $Id: mainControl.C,v 1.108 2004/09/29 20:40:19 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -470,8 +470,11 @@ namespace BALL
 			
 			stopSimulation();
 
+			// write the preferences
 			preferences_.clear();
 			preferences_.appendSection("WINDOWS");
+			preferences_dialog_->writePreferences(preferences_);
+			writePreferences(preferences_);
 
 			// finalizes all modular widgets
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
@@ -488,14 +491,6 @@ namespace BALL
 			}
 
 			modular_widgets_.clear();
-
-			//
-			// write the preferences
-			//
-			preferences_dialog_->writePreferences(preferences_);
-
-			// write default preferences 
-			writePreferences(preferences_);
 
 			// finalize own preferences tab
 			finalizePreferencesTab(*preferences_dialog_);
@@ -770,7 +765,7 @@ namespace BALL
 		{
 			main_control_preferences_ = new MainControlPreferences();
 
-			preferences.insertPage(main_control_preferences_, "General");
+			preferences.insertEntry(main_control_preferences_, "General");
 			preferences.showPage(0);
 
 			main_control_preferences_->enableLoggingToFile(logging_to_file_);
@@ -781,9 +776,7 @@ namespace BALL
 		{
 			if (main_control_preferences_ != 0)
 			{
-				preferences.removePage(main_control_preferences_);
-
-				delete main_control_preferences_;
+				preferences.removeEntry(main_control_preferences_);
 				main_control_preferences_ = 0;
 			}
 		}
@@ -849,12 +842,6 @@ namespace BALL
 			
 			resize(QSize(w,h));
 			move(QPoint(x_pos, y_pos));
-			
-			// the default preferences tab (if existent)
-			if (main_control_preferences_ != 0)
-			{
-				main_control_preferences_->readPreferenceEntries(inifile);
-			}
 
 			restoreWindows(inifile);
 		}
@@ -888,12 +875,6 @@ namespace BALL
 			}
 			inifile.insertValue("WINDOWS", "Main::dockwidgets", mys);
 
-			// the default preferences tab (if existent)
-			if (main_control_preferences_ != 0)
-			{
-				main_control_preferences_->writePreferenceEntries(inifile);
-			}
-			
 			inifile.write();
 		}
 

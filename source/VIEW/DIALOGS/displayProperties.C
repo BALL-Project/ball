@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.85 2004/09/28 22:47:17 amoll Exp $
+// $Id: displayProperties.C,v 1.86 2004/09/29 20:40:17 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -120,16 +120,6 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 		precision_slider->setValue(12 * 10);
 		presets_precision_button->setChecked(true);
 	}
-
-	if (model_settings_ != 0)
-	{
-		model_settings_->readPreferenceEntries(inifile);
-	}
-
-	if (coloring_settings_ != 0)
-	{
-		coloring_settings_->readPreferenceEntries(inifile);
-	}
 }
 
 void DisplayProperties::getEntry_(INIFile& inifile, const String& key, QComboBox& box)
@@ -161,16 +151,6 @@ void DisplayProperties::writePreferences(INIFile& inifile)
 	inifile.insertValue("REPRESENTATION", "coloring_method", coloring_method_combobox->currentItem());
 	inifile.insertValue("REPRESENTATION", "custom_color", custom_color_);
 	inifile.insertValue("REPRESENTATION", "selected_color", BALL_SELECTED_COLOR);
-
-	if (model_settings_ != 0)
-	{
-		model_settings_->writePreferenceEntries(inifile);
-	}
-
-	if (coloring_settings_ != 0)
-	{
-		coloring_settings_->writePreferenceEntries(inifile);
-	}
 }
 
 
@@ -197,9 +177,9 @@ void DisplayProperties::initializePreferencesTab(Preferences &preferences)
 {
 	preferences_ = &preferences;
 	model_settings_ = new ModelSettingsDialog(this);
-	preferences.insertPage(model_settings_, "Models");
+	preferences.insertEntry(model_settings_, "Models");
 	coloring_settings_ = new ColoringSettingsDialog(this);
-	preferences.insertPage(coloring_settings_, "Model Colors");
+	preferences.insertEntry(coloring_settings_, "Model Colors");
 }
 
 void DisplayProperties::finalizePreferencesTab(Preferences &preferences)
@@ -207,14 +187,12 @@ void DisplayProperties::finalizePreferencesTab(Preferences &preferences)
 {
 	if (model_settings_) 
 	{
-		preferences.removePage(model_settings_);
-		delete model_settings_;
+		preferences.removeEntry(model_settings_);
 		model_settings_ = 0;
 	}
 	if (coloring_settings_) 
 	{
-		preferences.removePage(coloring_settings_);
-		delete coloring_settings_;
+		preferences.removeEntry(coloring_settings_);
 		coloring_settings_ = 0;
 	}
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>PythonSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -29,32 +29,6 @@
         </property>
         <property name="text">
             <string>Clear</string>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>script_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>9</x>
-                <y>24</y>
-                <width>531</width>
-                <height>23</height>
-            </rect>
-        </property>
-        <property name="paletteBackgroundColor">
-            <color>
-                <red>230</red>
-                <green>230</green>
-                <blue>230</blue>
-            </color>
-        </property>
-        <property name="text">
-            <string></string>
-        </property>
-        <property name="readOnly">
-            <bool>true</bool>
         </property>
     </widget>
     <widget class="QPushButton">
@@ -97,6 +71,29 @@
             <string>Startup script</string>
         </property>
     </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>script_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>24</y>
+                <width>534</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>232</red>
+                <green>232</green>
+                <blue>232</blue>
+            </color>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -104,12 +101,6 @@
         <signal>clicked()</signal>
         <receiver>PythonSettings</receiver>
         <slot>fileSelected()</slot>
-    </connection>
-    <connection>
-        <sender>clear_button</sender>
-        <signal>clicked()</signal>
-        <receiver>script_edit</receiver>
-        <slot>clear()</slot>
     </connection>
 </connections>
 <includes>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.5 2004/09/28 12:00:49 amoll Exp $
+// $Id: materialSettings.C,v 1.6 2004/09/29 20:40:18 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -18,9 +18,15 @@ namespace BALL
 	{
 
 		MaterialSettings::MaterialSettings( QWidget* parent,  const char* name, WFlags fl )
-			: MaterialSettingsData( parent, name, fl )
+			: MaterialSettingsData( parent, name, fl ),
+				PreferencesEntry()
 		{
+			setINIFileSectionName("MATERIAL_SETTINGS");
 			setDefaultValues();
+			registerObject_(specular_slider);
+			registerObject_(diffuse_slider);
+			registerObject_(ambient_slider);
+			registerObject_(shininess_slider);
 		}
 
 

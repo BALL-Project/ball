@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.5 2004/07/27 13:01:27 amoll Exp $
+// $Id: serverPreferences.C,v 1.6 2004/09/29 20:40:18 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
@@ -19,7 +19,8 @@ namespace BALL
 
 		ServerPreferences::ServerPreferences(QWidget* parent, const char* name)
 			throw()
-			: QWidget(parent, name, 0)
+			: QWidget(parent, name, 0),
+				PreferencesEntry()
 		{
 			QLabel* port_label = new QLabel(this, "Label_1");
 			port_label->setGeometry(30, 20, 73, 27);
@@ -60,6 +61,10 @@ namespace BALL
 			setMinimumSize(0, 0);
 			setMaximumSize(32767, 32767);
 			setDefaultValues();
+
+			setINIFileSectionName("NETWORK");
+			registerObject_(server_status_);
+			registerObject_(port_);
 		}
 
 		ServerPreferences::~ServerPreferences()
@@ -67,48 +72,11 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this 
-				 					 << " of class " << RTTI::getName<ServerPreferences>() << std::endl;
+				 					 << " of class ServerPreferences" << std::endl;
 			#endif 
 		}
 		
-		void ServerPreferences::writePreferences(INIFile& inifile)
-			throw()
-		{
-			// retrieve the network settings from the dialog
-			bool server_status = server_status_->isChecked();
-			String port = String(port_->text().ascii());
-			
-			inifile.appendSection("NETWORK");
 
-			// save them to the inifile
-			if (server_status)
-			{
-				inifile.insertValue("NETWORK", "start_server", "true");
-			} else {
-				inifile.insertValue("NETWORK", "start_server", "false");
-			}
-			inifile.insertValue("NETWORK", "server_port", port);
-		}
-
-		void ServerPreferences::fetchPreferences(INIFile& inifile)
-			throw()
-		{
-			bool server_status = false;
-			int port = VIEW_DEFAULT_PORT;
-			if (inifile.hasEntry("NETWORK", "start_server"))
-			{
-				server_status = (inifile.getValue("NETWORK", "start_server") == "true");
-			}
-			if (inifile.hasEntry("NETWORK", "server_port"))
-			{
-				port = inifile.getValue("NETWORK", "server_port").toInt();
-			}
-			
-			// set the values of the widgets
-			server_status_->setChecked(server_status);
-			port_->setText(String(port).c_str());
-		}
-		
 		int ServerPreferences::getPort()
 			throw()
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.141 2004/09/16 13:35:20 amoll Exp $
+// $Id: scene.C,v 1.142 2004/09/29 20:40:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1050,11 +1050,11 @@ namespace BALL
 			throw()
 		{
 			light_settings_ = new LightSettings(this);
-			preferences.insertPage(light_settings_, "Lighting");
+			preferences.insertEntry(light_settings_, "Lighting");
 			stage_settings_= new StageSettings(this);
-			preferences.insertPage(stage_settings_, "3D View");
+			preferences.insertEntry(stage_settings_, "3D View");
 			material_settings_= new MaterialSettings(this);
-			preferences.insertPage(material_settings_, "Materials");
+			preferences.insertEntry(material_settings_, "Materials");
 		}
 
 
@@ -1063,20 +1063,17 @@ namespace BALL
 		{
 			if (light_settings_) 
 			{
-				preferences.removePage(light_settings_);
-				delete light_settings_;
+				preferences.removeEntry(light_settings_);
 				light_settings_ = 0;
 			}
 			if (stage_settings_) 
 			{
-				preferences.removePage(stage_settings_);
-				delete stage_settings_;
+				preferences.removeEntry(stage_settings_);
 				stage_settings_= 0;
 			}
 			if (material_settings_) 
 			{
-				preferences.removePage(material_settings_);
-				delete material_settings_;
+				preferences.removeEntry(material_settings_);
 				material_settings_= 0;
 			}
 		}

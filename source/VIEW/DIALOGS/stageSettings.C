@@ -17,7 +17,8 @@ namespace BALL
 	{
 
 StageSettings::StageSettings( QWidget* parent,  const char* name, WFlags fl )
-    : StageSettingsData( parent, name, fl )
+  : StageSettingsData(parent, name, fl),
+		PreferencesEntry()
 {
 	stage_ = ((Scene*) parent)->getStage();
 	if (stage_ == 0) return;

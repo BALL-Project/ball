@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.10 2004/07/02 14:16:57 amoll Exp $
+// $Id: stageSettings.h,v 1.11 2004/09/29 20:38:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -9,8 +9,8 @@
 
 #include <BALL/VIEW/UIC/stageSettingsData.h>
 
-#ifndef BALL_COMMON_GLOBAL_H
-# include <BALL/COMMON/global.h>
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
 namespace BALL
@@ -29,7 +29,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_EXPORT StageSettings 
-			: public StageSettingsData
+			: public StageSettingsData,
+				public PreferencesEntry
 		{ 
 			Q_OBJECT
 

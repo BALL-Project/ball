@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.11 2004/09/01 14:28:25 amoll Exp $
+// $Id: preferences.h,v 1.12 2004/09/29 20:38:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -11,12 +11,17 @@
 #include <BALL/DATATYPE/string.h>
 #include <BALL/VIEW/UIC/preferencesData.h>
 
+#ifndef BALL_DATATYPE_HASHSET_H
+# include <BALL/DATATYPE/hashSet.h>
+#endif
+
 namespace BALL
 {
 	class INIFile;
 
 	namespace VIEW
 	{
+		class PreferencesEntry;
 
 		/** Preferences is a dialog for other preference pages to be
 				inserted. An interface for adding and removing the pages is
@@ -70,7 +75,7 @@ namespace BALL
 					\param  name the name of the new dialog
 					\see    removePage
 			*/
-			void insertPage(QWidget *child, const String &name)
+			void insertEntry(PreferencesEntry *child, const String &name)
 				throw();
 
 			/** Remove a previously inserted page.
@@ -78,7 +83,7 @@ namespace BALL
 					\param  child a pointer to the dialog to be removed 
 					\see    insertPage
 			*/
-			void removePage(QWidget *child)
+			void removeEntry(PreferencesEntry *child)
 				throw();
 
 			/** Fetch the preferences (the position) from the INIFile <tt>inifile</tt>.
@@ -119,6 +124,10 @@ namespace BALL
 			 		@param nr the number of the dialog, that is to be shown
 			*/
 			void showPage(int nr);
+
+			protected:
+
+			HashSet<PreferencesEntry*> entries_;
 
 			//@}
 		};

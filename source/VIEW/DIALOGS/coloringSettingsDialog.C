@@ -40,7 +40,7 @@ QColorTable::QColorTable(QWidget* parent)
 {
   setNumCols(2);
   horizontalHeader()->setLabel(1, "Color");
-	setGeometry(5,5, 375, 345);
+	setGeometry(5,5, 365, 345);
 	setColumnWidth(1, 200);
 	setSelectionMode(NoSelection);
 }
@@ -541,24 +541,6 @@ void ColoringSettingsDialog::forceMinValueChanged()
 	force_min_value_label->setText(text.c_str());
 }
 
-
-bool ColoringSettingsDialog::fetchPreference_(const INIFile& inifile, const String& entry, 
-																						  ColorRGBA& color)
-	throw()
-{
-	try
-	{
-		if (!inifile.hasEntry("COLORING_OPTIONS", entry)) return false;
-		color = inifile.getValue("COLORING_OPTIONS", entry);
-		return true;
-	}
-	catch(...)
-	{
-		Log.error() << "Could not read preferences for coloring from INIFile: ";
-		Log.error() << entry << std::endl; 
-	}
-	return false;
-}
 
 void ColoringSettingsDialog::setDefaultValues()
 	throw()

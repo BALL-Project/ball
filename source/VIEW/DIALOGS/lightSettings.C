@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.9 2004/06/26 20:17:16 oliver Exp $
+// $Id: lightSettings.C,v 1.10 2004/09/29 20:40:17 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -20,8 +20,10 @@ namespace BALL
 {
 	namespace VIEW
 	{
-LightSettings::LightSettings( QWidget* parent,  const char* name, WFlags fl )
-    : LightSettingsData( parent, name, fl )
+
+LightSettings::LightSettings(QWidget* parent,  const char* name, WFlags fl)
+  : LightSettingsData(parent, name, fl),
+		PreferencesEntry()
 {
 	stage_ = ((Scene*) parent)->getStage();
 	if (stage_ == 0) return;

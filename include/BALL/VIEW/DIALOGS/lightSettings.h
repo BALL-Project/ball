@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.7 2004/06/16 23:45:45 amoll Exp $
+// $Id: lightSettings.h,v 1.8 2004/09/29 20:38:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -13,8 +13,8 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-#ifndef BALL_COMMON_GLOBAL_H
-# include <BALL/COMMON/global.h>
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
 namespace BALL
@@ -31,7 +31,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_EXPORT LightSettings 
-			: public LightSettingsData
+			: public LightSettingsData,
+				public PreferencesEntry
 		{ 
 			Q_OBJECT
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.h,v 1.2 2004/09/28 12:00:53 amoll Exp $
+// $Id: materialSettings.h,v 1.3 2004/09/29 20:38:11 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
@@ -10,7 +10,11 @@
 #include <BALL/VIEW/UIC/materialSettingsData.h>
 
 #ifndef BALL_COMMON_GLOBAL_H
-# include <BALL/COMMON/global.h>
+// # include <BALL/COMMON/global.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
 namespace BALL
@@ -25,7 +29,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class BALL_EXPORT MaterialSettings 
-			: public MaterialSettingsData
+			: public MaterialSettingsData,
+				public PreferencesEntry
 		{ 
 			Q_OBJECT
 

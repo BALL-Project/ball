@@ -12,7 +12,8 @@ namespace BALL
 	{
 
 PythonHotkeys::PythonHotkeys( QWidget* parent,  const char* name, WFlags fl )
-    : PythonHotkeysData( parent, name, fl )
+  : PythonHotkeysData( parent, name, fl ),
+		PreferencesEntry()
 {
   table->horizontalHeader()->setLabel(0, "Modifier");
   table->horizontalHeader()->setLabel(1, "Key");
@@ -58,12 +59,6 @@ List<Hotkey> PythonHotkeys::getContent() const
 				hotkey.button_state =Qt::ShiftButton;
 				break;
 
-			/*
-			case 2:
-				hotkey.button_state = Qt::ControlButton;
-				break;
-			*/
-
 			case 2:
 				hotkey.button_state = Qt::AltButton;
 				break;
@@ -104,12 +99,6 @@ void PythonHotkeys::setContent(const List<Hotkey>& hotkeys)
 				item->setCurrentItem(1);
 				break;
 
-			/*
-			case (Position)Qt::ControlButton:
-				item->setCurrentItem(2);
-				break;
-			*/
-				
 			case (Position)Qt::AltButton:
 				item->setCurrentItem(2);
 				break;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.h,v 1.9 2004/05/27 19:49:48 oliver Exp $
+// $Id: serverPreferences.h,v 1.10 2004/09/29 20:38:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
@@ -11,8 +11,8 @@
 #include <qcheckbox.h>
 #include <qlineedit.h>
 
-#ifndef BALL_COMMON_GLOBAL_H
-# include <BALL/COMMON/global.h>
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
 namespace BALL
@@ -30,7 +30,9 @@ namespace BALL
 				This is one of the view dialogs, that is not implemented by an ui-file!
 				\ingroup ViewDialogs
 		*/
-		class BALL_EXPORT ServerPreferences : public QWidget
+		class BALL_EXPORT ServerPreferences 
+			: public QWidget,
+				public PreferencesEntry
 		{
 			Q_OBJECT
 				
@@ -64,21 +66,6 @@ namespace BALL
 			*/
 			//@{
 
-			/** Fetch the preferences (the port and the status of this INIFile.
-					This method will be called from Server::fetchPreferences.
-					\see    writePreferences
-			*/
-			void fetchPreferences(INIFile& inifile)
-				throw();
-
-			/** Write the preferences (the port and the status to the	INIFile.
-					This method will be called from the method Server::writePreferences.
-					\param  inifile the INIFile to be written into
-					\see    fetchPreferences
-			*/
-			void writePreferences(INIFile& inifile)
-				throw();
-			
 			/// 
 			void setDefaultValues()
 				throw();

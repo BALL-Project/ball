@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.38 2004/07/25 21:16:30 amoll Exp $
+// $Id: pyWidget.C,v 1.39 2004/09/29 20:40:19 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -672,9 +672,9 @@ namespace BALL
 		{
 			text_edit_->python_settings_= new PythonSettings();
 			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
-			preferences.insertPage(text_edit_->python_settings_, "Python");
+			preferences.insertEntry(text_edit_->python_settings_, "Python");
 			python_hotkeys_ = new PythonHotkeys();
-			preferences.insertPage(python_hotkeys_, "Hotkeys");
+			preferences.insertEntry(python_hotkeys_, "Hotkeys");
 		}
 
 		void PyWidget::finalizePreferencesTab(Preferences &preferences)
@@ -682,17 +682,13 @@ namespace BALL
 		{
 			if (text_edit_->python_settings_ != 0)
 			{
-				preferences.removePage(text_edit_->python_settings_);
-
-				delete text_edit_->python_settings_;
+				preferences.removeEntry(text_edit_->python_settings_);
 				text_edit_->python_settings_ = 0;
 			}
 
 			if (python_hotkeys_ != 0)
 			{
-				preferences.removePage(python_hotkeys_);
-
-				delete python_hotkeys_;
+				preferences.removeEntry(python_hotkeys_);
 				python_hotkeys_ = 0;
 			}
 		}

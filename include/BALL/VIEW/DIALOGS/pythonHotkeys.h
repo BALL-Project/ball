@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pythonHotkeys.h,v 1.1 2004/07/25 12:49:04 amoll Exp $
+// $Id: pythonHotkeys.h,v 1.2 2004/09/29 20:38:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PYTHONHOTKEYS_H
@@ -13,6 +13,10 @@
  #include <BALL/VIEW/WIDGETS/pyWidget.h>
 #endif
 			
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
@@ -23,7 +27,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class PythonHotkeys 
-			: public PythonHotkeysData
+			: public PythonHotkeysData,
+				public PreferencesEntry
 		{ 
 			Q_OBJECT
 

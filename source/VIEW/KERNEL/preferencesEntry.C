@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.7 2004/09/29 20:38:00 oliver Exp $
+// $Id: preferencesEntry.C,v 1.8 2004/09/29 20:40:19 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -11,7 +11,7 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
-#include <qtextedit.h>
+#include <qlineedit.h>
 #include <qbuttongroup.h>
 #include <qcolordialog.h>
 
@@ -24,6 +24,9 @@ namespace BALL
 
 		PreferencesEntry::PreferencesEntry()
 		{
+			#ifdef BALL_VIEW_DEBUG
+				Log.info() << "New PreferencesEntry " << (void *)this << std::endl;
+			#endif 
 		}
 
 		PreferencesEntry::~PreferencesEntry()
@@ -32,6 +35,19 @@ namespace BALL
 
 		void PreferencesEntry::writePreferenceEntries(INIFile& inifile)
 		{
+			if (preferences_objects_.size() == 0) return;
+
+			if (inifile_section_name_ == "") 
+			{
+				Log.error() << "INIFile section name not set in " << this << " :"<< std::endl;
+				HashSet<QWidget*>::Iterator it = preferences_objects_.begin();
+				for (; it != preferences_objects_.end(); it++)
+				{
+					Log.error() << "   " << (**it).name() << std::endl;
+				}
+				return;
+			}
+
 			inifile.appendSection(inifile_section_name_);
 
 			HashSet<QWidget*>::Iterator it = preferences_objects_.begin();
@@ -53,9 +69,9 @@ namespace BALL
 				{
 					inifile.insertValue(inifile_section_name_, name, getLabelColor_((QLabel*)*it));
 				}
-				else if (RTTI::isKindOf<QTextEdit>(**it))
+				else if (RTTI::isKindOf<QLineEdit>(**it))
 				{
-					inifile.insertValue(inifile_section_name_, name, ((QTextEdit*)(*it))->text().ascii());
+					inifile.insertValue(inifile_section_name_, name, ((QLineEdit*)(*it))->text().ascii());
 				}
 				else if (RTTI::isKindOf<QCheckBox>(**it))
 				{
@@ -108,9 +124,9 @@ namespace BALL
 					{
 						setLabelColor_((QLabel*)*it, ColorRGBA(value));
 					}
-					else if (RTTI::isKindOf<QTextEdit>(**it))
+					else if (RTTI::isKindOf<QLineEdit>(**it))
 					{
-						((QTextEdit*)(*it))->setText(value);
+						((QLineEdit*)(*it))->setText(value);
 					}
 					else if (RTTI::isKindOf<QCheckBox>(**it))
 					{
@@ -175,6 +191,23 @@ namespace BALL
 			label->setBackgroundColor(qcolor);
 		}
 
-	} // namespace VIEW
+		bool PreferencesEntry::fetchPreference_(const INIFile& inifile, 
+																				const String& entry, ColorRGBA& color)
+			throw()
+		{
+			try
+			{
+				if (!inifile.hasEntry(inifile_section_name_, entry)) return false;
+				color = inifile.getValue(inifile_section_name_, entry);
+				return true;
+			}
+			catch(...)
+			{
+				Log.error() << "Could not read preferences for coloring from INIFile: ";
+				Log.error() << entry << std::endl; 
+			}
+			return false;
+		}
 
+	} // namespace VIEW
 } // namespace BALL
