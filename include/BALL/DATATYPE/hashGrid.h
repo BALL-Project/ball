@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.6 1999/09/21 06:38:30 oliver Exp $
+// $Id: hashGrid.h,v 1.7 1999/12/28 18:35:31 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -136,7 +136,7 @@ namespace BALL
 		bool isValid() const;
 
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
 		//@}
 
 		/**	@name	Internal Iterators */
@@ -791,7 +791,7 @@ namespace BALL
 	}
 
 	template<class Item>  
-	void HashGridBox3<Item>::dump(ostream& s, unsigned long depth) const
+	void HashGridBox3<Item>::dump(std::ostream& s, unsigned long depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
@@ -1073,7 +1073,7 @@ namespace BALL
 		virtual bool isValid() const;
 
 		///
-		virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
 		//@}
 
 		/**	@name Internal Iterators */
@@ -1814,7 +1814,7 @@ namespace BALL
 
 	template <class Item>
 	void HashGrid3<Item>::dump
-		(ostream& s, unsigned long depth) const
+		(std::ostream& s, unsigned long depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

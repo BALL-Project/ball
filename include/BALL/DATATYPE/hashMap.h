@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.3 1999/12/22 17:00:08 oliver Exp $
+// $Id: hashMap.h,v 1.4 1999/12/28 18:35:32 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -11,243 +11,980 @@
 #	include <BALL/COMMON/hash.h>
 #endif
 
+#ifndef BALL_CONCEPT_FORWARDITERATOR_H
+#	include <BALL/CONCEPT/forwardIterator.h>
+#endif
+
 #ifndef BALL_CONCEPT_VISITOR_H
 #	include <BALL/CONCEPT/visitor.h>
+#endif
+
+#ifndef BALL_DATATYPE_FOREACH_H
+#	include <BALL/DATATYPE/forEach.h>
+#endif
+
+#ifndef BALL_CONCEPT_PREDICATE_H
+#	include <BALL/CONCEPT/predicate.h>
 #endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
-#include <BALL/DATATYPE/internal_hash_map.h>
-#include <algorithm>
-
-namespace BALL 
+namespace BALL
 {
 
-	template 
-		<class Key, class Value, 
-		 class Hasher = HashFunction<Key>, 
-	   class EqualKey = equal_to<Key> >
+	/**	Generic Hash Map Class.
+			{\bf Definition:} \URL{BALL/DATATYPE/hashMap.h}
+	*/
+	template <class Key, class T>
 	class HashMap
-		:	public hash_map<Key, Value, Hasher, EqualKey>
 	{
 		public:
 
-		BALL_CREATE(HashMap)
-
-		/**	@name Type Definitions
-		*/
-		//@{
-
-		/**	Iterator type
-		*/
-		typedef typename hash_map<Key, Value, Hasher, EqualKey>::iterator Iterator;
-
-		/**	Const iterator type
-		*/
-		typedef typename hash_map<Key, Value, Hasher, EqualKey>::const_iterator ConstIterator;	
-
-		/**	Value type
-		*/
-		typedef typename hash_map<Key, Value, Hasher, EqualKey>::value_type ValueType;	
-		//@}
-
-		/**	@name	Constructors and Destructors */
-		//@{
-
-		/**	Default constructor.
-				Create an empty hash map.
-		*/
-		HashMap()
-			: hash_map<Key, Value, Hasher, EqualKey>()
+		enum
 		{
-		}
+			INITIAL_CAPACITY          = 4,
+			INITIAL_NUMBER_OF_BUCKETS = 3
+		};
 
-		/** Copy constructor.
-				Create a copy of an existing hash map.
-				@param	map the hash map to be copied
-				@param	deep ignored
+		/**	@name	Exceptions
 		*/
-		HashMap(const HashMap& map, bool /* deep = true */)
-			: hash_map<Key, Value, Hasher, EqualKey>(map)
-		{
-		}
-			
-		/** Destructor.
-				Destruct the hash map and free all used memory.
-		*/
-		virtual ~HashMap()
-		{
-		}
-
-		/** Clear the hash map.
-				Remove all contents from the hash map.
-		*/
-		void destroy()
-		{
-			clear();
-		}
-	
-		//@}
-
-		/**	@name	Assignment */
 		//@{
 			
-		/** Assign a hash map from another.
-				Create a copy of a hash map.
-				@param	hash_map	the map to be copied
-				@param	deep ignored
+		/**	IllegalKey exception
 		*/
-    void set(const HashMap& hash_map, bool /* deep */ = true)
+		class IllegalKey
+			:	public Exception::GeneralException
 		{
-			clear();
-
-			const_iterator it = hash_map.begin();
-			for ( ; it != hash_map.end(); ++it)
-			{
-				insert(*it);
+			public:
+			IllegalKey(const char* file, int line)
+				:	Exception::GeneralException(file, line)
+			{	
 			}
-		}
-		
-		/** Assign a hash map from another.
-		*/
-		HashMap& operator = (const HashMap& hash_map)
-		{
-			set(hash_map);
-			return *this;
-		}
-			
-		/// Assigns the content of a hash map to another
-    void get(HashMap& hash_map, bool deep = true) const
-		{
-			hash_map.set(*this, deep);
-		}
-
-		/// Swaps the contents of two hash maps
-    void swap(HashMap& hash_map)
-		{
-			swap(*this, hash_map);
-		}
-
+		};
 		//@}
 
-		/**	@name Accessors */
-		//@{
+		class IteratorTraits_;
 
-		/**	Insert a pair of key and value.
+		/* *	@name	Type definitions
 		*/
-		pair<Iterator, bool> insert(const ValueType& obj)
-		{
-			return hash_map<Key, Value, Hasher, EqualKey>::insert(obj);
-		}
-		
-
-		/**	Insert a given value and key.
-				@param	value the value to be inserted
-				@param	key the value`s key
+		// @{
+		/* *
 		*/
-		pair<Iterator, bool> insert(const Key key, Value value)
-		{
-			return insert(pair<const Key, Value>(key, value));
-		}
-
+		typedef std::pair<Key, T> ValueType;
 			
-		/**	Remove the entry {\tt key} from the map.
-				@param	key the key of the entry to be removed
-				@return	{\bf true} if the key was removed
+		/* *
 		*/
-		bool remove(const Key key)	
+		typedef Key KeyType;
+
+		/* *
+		*/
+		typedef std::pair<Key, T>* PointerType;
+			
+		/* *
+		*/
+		typedef 
+				ForwardIterator<HashMap<Key, T>, ValueType, PointerType, IteratorTraits_>
+			Iterator;
+
+		/* *
+		*/
+		typedef 
+				ConstForwardIterator <HashMap<Key, T>, ValueType, PointerType, IteratorTraits_>
+			ConstIterator;
+		// @}
+
+		/* *	@name Constructors and Destructors 
+		*/
+		// @{
+
+		/* *	Default constructor.
+				Create a new and empty hash map.
+				@param initial_capacity the capcaity of the hash map
+				@param number_of_buckets the number_of_buckets to create
+		*/
+		HashMap(Size initial_capacity = INITIAL_CAPACITY, Size number_of_buckets = INITIAL_NUMBER_OF_BUCKETS);
+			
+		/* *	Copy Constructor.
+				@param	hash_map the hash map to be copied
+				@param	deep not used
+		*/
+		HashMap(const HashMap& hash_map, bool deep = true);
+
+		/* *	Destructor.
+		*/
+		virtual ~HashMap();
+
+		/* *	Clear the hash map.
+				Remove all nodes from all buckets.
+				The capacity and the number of buckets remain unchanged.
+		*/
+		virtual void clear();
+	
+		/* *	Clear the hash map.
+				Remove all nodes from all buckets.
+				The capacity and the number of buckets remain unchanged.
+				Simply calls clear;
+		*/
+		void destroy();
+		// @}
+		
+		/* *	@name Assignment 
+		*/
+		// @{
+
+		/* *	Assignment from another hash map.
+				@param hash_map the hash map to assign from
+				@param deep not used
+		*/
+		void set(const HashMap& hash_map, bool deep = true);
+
+		/* *	Assignment operator.
+				Assign the contents of a hash map to another.
+				@param hash_map the hash map to assign from
+		*/
+		HashMap& operator = (const HashMap& hash_map);
+
+		/* *	Assign the contents of this hash map to another map.
+		*/
+		void get(HashMap& hash_map, bool deep = true) const;
+
+		/* *	Swap the contents of two hash maps.
+		*/
+		void swap(HashMap& hash_map);
+		// @}
+
+		/* *	@name	Accessors
+		*/
+		// @{
+		/* *	Return the number of buckets
+		*/
+		Size getBucketSize() const;
+
+		/* *	????
+		*/
+		Size getCapacity() const;
+
+		/* *	Return the number of entries in the map.
+		*/
+		Size getSize() const;
+			
+		/* *	Return the number of entries in the map.
+		*/
+		Size size() const;
+
+		/* * Find the element whose key is {\tt key}.
+		*/
+		Iterator find(const Key& key);
+	
+		/* * Find the element whose key is {\tt key}.
+		*/
+		ConstIterator find(const Key& key) const;
+
+		/* *	Return a mutable reference to the element whose key is {\tt key}.
+				If an element with the key {\tt key} does not exist, it is inserted.
+				@param	key the key
+		*/
+		T& operator [] (const Key& key);
+
+		/* *	Return a constant reference to the element whose key is {\tt key}.
+				@exception IllegalKey if the given key does not exist
+				@param	key the key
+		*/
+		const T& operator [] (const Key& key) const;
+
+		/* *	Insert a new entry into the hash map.
+		*/
+		std::pair<Iterator, bool> insert(const ValueType& entry);
+
+		/* *	Erase element with key {\tt key}.
+				@return Size the number of elements erased (0 or 1)
+		*/
+		Size erase(const Key& key);
+
+		/* *	Erase a range of elements.
+				Erase all elemntes in the range {\tt \[first, last)}.
+		*/
+		void erase(Iterator first, Iterator last);
+		// @}
+
+		/* *	@name Miscellaneous
+		*/
+		// @{
+
+		/* *	Host a visitor.
+		*/
+		void host(Visitor<ValueType>& visitor);
+		// @}
+	
+		/* *	@name	Predicates
+		*/
+		// @{
+
+		/* *	Test whether the map contains the key {\tt key}.
+		*/
+		bool has(const Key& key) const;
+
+		/* *	Test whether the map is empty.
+		*/
+		bool isEmpty() const;
+
+		/* *	Compare two hash maps.
+		*/
+		bool operator == (const HashMap& hash_map) const;
+
+		/* *	Compare two hash maps.
+		*/
+		bool operator != (const HashMap& hash_map) const;
+		// @}
+
+		/* *	@name	Debugging and Diagnostics
+		*/
+		// @{
+
+		/* *	Return true if the hash map is consistent.
+				Condition: the number of entries in all buckets has to equal the 
+				stored number of entries (getSize()).
+		*/
+		bool isValid() const;
+
+		/* *
+		*/
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		// @}
+
+		// --- STORERS
+
+		/*
+		friend istream& operator >> (istream& s, HashMap& hash_map);
+
+		friend ostream& operator << (ostream& s, const HashMap& hash_map);
+
+		void read(istream &s);
+
+		void write(ostream &s) const;
+		*/      
+
+		// --- INTERNAL ITERATORS
+
+		bool apply(UnaryProcessor<ValueType>& processor);
+
+		// --- EXTERNAL ITERATORS
+		struct Node
 		{
-			// search the key
-			Iterator it = find(key);
-			if (it == end())
+			Node*			next;
+			ValueType	value;
+
+			Node(const ValueType& my_value, const Node* my_next)
+				: next(const_cast<Node*>(my_next)),
+					value(const_cast<ValueType&>(my_value))
 			{
-				// we didn't find it..
+			}
+		};
+
+		typedef Node* IteratorPosition;
+	
+		class IteratorTraits_
+		{
+			friend class HashMap<Key, T>;
+			public:
+
+			IteratorTraits_()
+				:	bound_(0),
+					position_(0),
+					bucket_(0)
+			{
+			}
+			
+			IteratorTraits_(const HashMap& hash_map)
+				:	bound_(const_cast<HashMap*>(&hash_map)),
+					position_(0),
+					bucket_(0)
+			{
+			}
+			
+			IteratorTraits_(const IteratorTraits_& traits)
+				:	bound_(traits.bound_),
+					position_(traits.position_),
+					bucket_(traits.bucket_)
+			{
+			}
+			
+			IteratorTraits_& operator = (const IteratorTraits_& traits)
+			{
+				bound_ = traits.bound_;
+				position_ = traits.position_;
+				bucket_ = traits.bucket_;
+		
+				return *this;
+			}
+
+			HashMap* getContainer()
+			{
+				return bound_;
+			}
+			
+			const HashMap* getContainer() const
+			{
+				return bound_;
+			}
+			
+			bool isSingular() const
+			{
+				return (bool)(bound_ == 0);
+			}
+			
+			IteratorPosition& getPosition()
+			{
+				return position_;
+			}
+
+			const IteratorPosition& getPosition() const
+			{
+				return position_;
+			}
+
+			bool operator == (const IteratorTraits_& traits) const
+			{
+				return (bool)(position_ == traits.position_);
+			}
+
+			bool operator != (const IteratorTraits_& traits) const
+			{
+				return (bool)(position_ != traits.position_);
+			}
+			
+			bool isValid() const
+			{
+				return (bool)((bound_ != 0) && (position_ != 0) && (bucket_ < (Position)bound_->bucket_.size()));
+			}
+
+			void invalidate()
+			{
+				bound_ = 0;
+				position_ = 0;
+				bucket_ = INVALID_INDEX;
+			}
+			
+			void toBegin()
+			{
+				for (bucket_ = 0;  bucket_ < (Position)bound_->bucket_.size();  ++bucket_)
+				{
+					position_ = bound_->bucket_[bucket_];
+
+					if (position_ != 0)
+					{
+						return;
+					}
+				}
+			}
+
+			bool isBegin() const
+			{
+				for (Position bucket = 0; bucket < (Position)bound_->bucket_.size();  ++bucket)
+				{
+					if (bound_->bucket_[bucket_] != 0)
+					{
+						if (position_ == bound_->bucket_[bucket_])
+						{
+							return true;
+						} else {
+							return false;
+						}
+					}
+				}
+
 				return false;
 			}
+
+			void toEnd()
+			{
+				position_ = 0;
+			}
 			
-			// found it: delete it
-			erase(it);
+			bool isEnd() const
+			{
+				return (bool)(position_ == 0);
+			}
+			
+			ValueType& getData()
+			{
+				return position_->value;
+			}
 
-			return true;
-		}
+			const ValueType& getData() const
+			{
+				return position_->value;
+			}
 
-		/** Return the size of the hash map.
-		*/
-		Size getSize() const
+			void forward()
+			{
+				position_ = position_->next;
+
+				if (position_ != 0)
+				{
+					return;
+				}
+
+				for (++bucket_;  bucket_ < (Position)bound_->bucket_.size();  ++bucket_)
+				{
+					position_ = bound_->bucket_[bucket_];
+
+					if (position_ != 0)
+					{
+						return;
+					}
+				}
+			} 
+
+			protected:
+
+			HashMap*						bound_;
+			IteratorPosition		position_;
+			Position						bucket_;
+		};
+
+		friend class IteratorTraits_;
+
+		Iterator begin()
 		{
-			return size();
+			return Iterator::begin(*this);
 		}
-		
-		/**	Return the load factor of the hash map.
-				The load factor is defined as the quotient of
-				the hash map size (the number of entries) and the number
-				of buckets.
-		*/
-		float getLoadFactor() const
+
+		Iterator end()
 		{
-			return (float)size() / (float)bucket_count();
+			return Iterator::end(*this);
 		}
 
-		/**	Return the number of buckets.
-		*/
-		Size getBucketSize() const
+		ConstIterator begin() const
 		{
-			return bucket_count();
+			return ConstIterator::begin(*this);
 		}
-		
-		//@}
 
-		/**	@name	Predicates */
-		//@{
-
-		/** Decide whether the hash map contains a given key.
-		*/
-		bool has(const Key& key) const
+		ConstIterator end() const
 		{
-			return !(find(key) == end());
+			return ConstIterator::end(*this);
 		}
 
-		/** Return true if the hash map is empty.
-				This method return {\bf true} if the hash map does not contain any entries.
+
+		protected:
+
+		virtual Node* newNode_(const ValueType& value, Node* next) const;
+
+		virtual void deleteNode_(Node* node) const;
+	
+		virtual HashIndex hash(const Key& key) const;
+
+		virtual bool needRehashing_() const;
+
+		virtual void rehash();
+
+
+		private:
+
+		PointerType find_(const Key& key, HashIndex& index);
+			
+		PointerType find_(const Key& key, HashIndex& index) const;
+
+		void deleteBuckets_();
+
+		HashIndex hash_(const Key& key) const;
+
+		void rehash_();
+
+		// --- ATTRIBUTES
+
+		Size					size_;
+		Size					capacity_;
+
+		/*_	Buckets are stored as a vector of linked lists of Nodes 
 		*/
-		bool isEmpty() const
-		{
-			return (size() == 0);
-		}
-		//@}
-
-		/**	@name	Miscellaneous */
-		//@{
-
-		/**	Visitor host method.
-				HashMaps may be visited.
-				@param	visitor	the visitor
-		*/
-		void host(Visitor<HashMap<Key, Value> >& visitor)
-		{
-			//BAUSTELLE
-		}
-  			
-		//@}
-
-		/**	@name	Internal Iterators */
-		//@{
-
-		/** Processor application method.
-				Applies the processor to each entry of the hash map.
-				@param processor the processor to be applied
-		*/
-		bool apply(UnaryProcessor<HashMap<Key, Value> >& processor)
-		{
-			// BAUSTELLE
-		}
-		//@}
-
+		vector<Node*>							bucket_;
 	};
 
+	template <class Key, class T>
+	HashMap<Key, T>::HashMap
+		(Size initial_capacity, Size number_of_buckets)
+		:	size_(0),
+			capacity_(initial_capacity),
+			bucket_(number_of_buckets)
+	{
+		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
+		{
+			bucket_[bucket] = 0;
+		}
+	}
 
-}// namespace BALL
+	template <class Key, class T>
+	HashMap<Key, T>::HashMap
+		(const HashMap& hash_map, bool /* deep */)
+		:	size_(hash_map.size_),
+			capacity_(hash_map.capacity_),
+			bucket_(hash_map.bucket_.size())
+	{
+		Node* node = 0;
+		
+		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
+		{
+			bucket_[bucket] = 0;
+
+			for (node = hash_map.bucket_[bucket]; node != 0; node = node->next)
+			{
+				bucket_[bucket] = newNode_(node->value, bucket_[bucket]);
+			}
+		}
+	}
+
+	template <class Key, class T>
+	HashMap<Key, T>::~HashMap()
+	{
+		destroy();
+		
+		deleteBuckets_();
+	}
+
+	template <class Key, class T>
+	void HashMap<Key, T>::clear()
+	{
+		Node* node = 0;
+		Node* next_node = 0;
+		
+		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
+		{
+			for (node = bucket_[bucket]; node != 0; node = next_node)
+			{
+				next_node = node->next;
+				deleteNode_(node);
+			}
+			
+			bucket_[bucket] = 0;
+		}
+
+		size_ = 0;
+	}
+	template <class Key, class T>
+	BALL_INLINE 
+	void HashMap<Key, T>::destroy()
+	{
+		clear();
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	void HashMap<Key, T>::set
+		(const HashMap& hash_map, bool /* deep */)
+	{
+		if (&hash_map == this)
+		{
+			return;
+		}
+
+		destroy();
+		
+		deleteBuckets_();
+
+		size_ = hash_map.size_;
+		capacity_ = hash_map.capacity_;
+		bucket_.resize(hash_map.bucket_.size());
+
+		PointerType item = 0;
+		
+		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
+		{
+			bucket_[bucket] = 0;
+
+			for (item = hash_map.bucket_[bucket]; item != 0; item = item->next)
+			{
+				bucket_[bucket]	= newNode_(item->value, bucket_[bucket]);
+			}
+		}
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	HashMap<Key, T>& HashMap<Key, T>::operator = (const HashMap& hash_map)
+	{
+		set(hash_map);
+
+		return *this;
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	void HashMap<Key, T>::get(HashMap& hash_map, bool deep) const
+	{
+		hash_map.set(*this, clone_deep);
+	}
+
+	template <class Key, class T>
+	void HashMap<Key, T>::swap(HashMap& hash_map)
+	{
+		swap(size_, hash_map.size_);
+		swap(capacity_, hash_map.capacity_);
+		swap(bucket_, hash_map.bucket_);
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	Size HashMap<Key, T>::getBucketSize() const
+	{
+		return bucket_.size();
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	Size HashMap<Key, T>::getCapacity() const
+	{
+		return capacity_;
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	Size HashMap<Key, T>::getSize() const
+	{
+		return size_;
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	Size HashMap<Key, T>::size() const
+	{
+		return size_;
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	HashMap<Key, T>::Iterator HashMap<Key, T>::find(const Key& key)
+	{
+		Iterator it = end();
+		HashIndex bucket = hash_(key);
+		Node*	node_ptr = bucket_[hash_(key)];
+		
+		for (; node_ptr != 0; node_ptr = node_ptr->next)
+		{
+			if (node_ptr->value.first == key)
+			{
+				it.getTraits().bound_ = this;
+				it.getTraits().position_ = node_ptr;
+				it.getTraits().bucket_ = bucket;
+				break;
+			}
+		} 
+
+		return it;
+	}
+		
+	template <class Key, class T>
+	BALL_INLINE 
+	HashMap<Key, T>::ConstIterator HashMap<Key, T>::find(const Key& key) const
+	{
+		return (const_cast<HashMap*>(this))->find(key);
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	T& HashMap<Key, T>::operator [] (const Key& key)
+	{
+		Iterator it = find(key);
+		if (it == end())
+		{
+			T value;
+			std::pair<Iterator, bool> result = insert(ValueType(key, value));
+			it = result.first;
+		} 
+		
+		return it->second;
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	const T& HashMap<Key, T>::operator [] (const Key& key) const
+	{
+		Iterator it = find(key);
+		if (it == end())
+		{
+			throw IllegalKey(__FILE__, __LINE__);
+		} else {
+			return it->second;
+		}
+	}
+
+	template <class Key, class T>
+	std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
+		(const ValueType& item)
+	{
+		Iterator it = find(item.first);
+		if (it == end())
+		{
+			if (needRehashing_() == true)
+			{
+				rehash_();
+			}
+			
+			HashIndex bucket = hash_(item.first);
+			
+			Node* node_ptr = bucket_[bucket];
+			bucket_[bucket] = newNode_(item, node_ptr);
+			
+			++size_;
+			it.getTraits().bound_ = this;
+			it.getTraits().position_ = bucket_[bucket];
+			it.getTraits().bucket_ = bucket;
+
+			return std::pair<Iterator, bool>(it, true);
+		} else {
+			// replace the existing value
+			it->second = item.second;
+
+			return std::pair<Iterator, bool>(it, false);
+		}
+	}
+
+	template <class Key, class T>
+	Size HashMap<Key, T>::erase(const Key& key)
+	{
+		Node*	previous = 0;
+		HashIndex bucket = hash_(key);
+		Node*	node_ptr = bucket_[bucket];
+		
+		for (; node_ptr != 0; node_ptr = node_ptr->next)
+		{
+			if (node_ptr->value.first == key)
+			{
+				break;
+			}
+
+			previous = node_ptr;
+		}
+
+		if (node_ptr != 0)
+		{
+			if (node_ptr == bucket_[bucket])
+			{
+				bucket_[bucket] = node_ptr->next;
+			} else {
+				previous->next = node_ptr->next;
+			}
+
+			deleteNode_(node_ptr);
+
+			--size_;
+
+			return 1;
+		} else
+		{
+			return 0;
+		}
+	}
+
+
+	template <class Key, class T>
+	BALL_INLINE 
+	void HashMap<Key, T>::deleteBuckets_()
+	{
+		Size i = 0;
+		Node*	node = 0;
+		Node*	next_node = 0;
+		for (i = 0; i < bucket_.size(); i++)
+		{
+			node = bucket_[i];
+			while (node != 0)
+			{
+				next_node = node->next;
+				deleteNode_(node);
+				node = next_node;
+			}
+			bucket_[i] = 0;
+		}
+	}
+		
+	template <class Key, class T>
+	BALL_INLINE 
+	void HashMap<Key, T>::host(Visitor<ValueType>& visitor)
+	{
+		visitor.visit(*this);
+	}
+		
+	template <class Key, class T>
+	BALL_INLINE 
+	bool HashMap<Key, T>::has(const Key& key) const
+	{
+		return (bool)(find(key) != end());
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	bool HashMap<Key, T>::isEmpty() const
+	{
+		return (bool)(size_ == 0);
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	bool HashMap<Key, T>::operator == (const HashMap& hash_map) const
+	{
+		bool identical = (size_ == hash_map.size_);
+		
+		if (!identical)
+		{
+			ConstIterator it = begin();
+			ConstIterator hash_map_it;
+			for (; identical && +it; ++it)
+			{
+				hash_map_it = hash_map.find(it->first);
+				identical = (hash_map_it != hash_map.end()) 
+										&& (hash_map_it->second == it->second);
+			}
+		}
+		
+		return identical;
+	}
+
+	template <class Key, class T>
+	BALL_INLINE
+	bool HashMap<Key, T>::operator != (const HashMap& hash_map) const
+	{
+		return (bool)!(*this == hash_map);
+	}
+
+	template <class Key, class T>
+	bool HashMap<Key, T>::isValid() const
+	{
+		Size size = 0;
+		Node* node = 0;
+
+		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
+		{
+			for (node = bucket_[bucket]; node != 0; node = node->next)
+			{
+				++size;
+
+				if (node->next == 0)
+				{
+					break;
+				}
+			}
+		}
+
+		return (bool)(size_ == size);
+	}      
+
+	template <class Key, class T>
+	void HashMap<Key, T>::dump(std::ostream& s, Size depth) const
+	{
+		BALL_DUMP_STREAM_PREFIX(s);
+
+		BALL_DUMP_DEPTH(s, depth);
+
+		BALL_DUMP_DEPTH(s, depth);
+		s << "  size: " << getSize() << std::endl;
+
+		BALL_DUMP_DEPTH(s, depth);
+		s << "  bucket size: " << getBucketSize() << std::endl;
+
+		BALL_DUMP_DEPTH(s, depth);
+		s << "  capacity: " << getCapacity() << std::endl;
+
+		BALL_DUMP_DEPTH(s, depth);
+		if (bucket_.size() != 0)
+		{
+			s << "  load factor: " << (float)size_ / (float)bucket_.size()  << std::endl;
+		}
+
+		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
+		{
+			BALL_DUMP_DEPTH(s, depth);
+			s << "    bucket " << bucket << " (" << (void*)bucket_[bucket] << "):" << std::endl;
+		}
+
+		BALL_DUMP_STREAM_SUFFIX(s);
+	} 
+
+	template <class Key, class T>
+	BALL_INLINE 
+	bool HashMap<Key, T>::apply(UnaryProcessor<ValueType>& processor)
+	{
+		// BAUSTELLE
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	HashMap<Key, T>::Node* HashMap<Key, T>::newNode_
+		(const ValueType& value, HashMap<Key, T>::Node* next) const
+	{
+		return new Node(value, next);
+	}
+		
+	template <class Key, class T>
+	BALL_INLINE 
+	void HashMap<Key, T>::deleteNode_(HashMap<Key, T>::Node* node) const
+	{
+		delete node;
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	HashIndex HashMap<Key, T>::hash(const Key& key) const
+	{
+		return Hash(key);
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	bool HashMap<Key, T>::needRehashing_() const
+	{
+		return (bool)(size_ >= capacity_);
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	void HashMap<Key, T>::rehash()
+	{
+		capacity_ = (Size)getNextPrime(bucket_.size() * 2);
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	HashIndex HashMap<Key, T>::hash_(const Key& key) const
+	{
+		return (HashIndex)(hash(key) % bucket_.size());
+	}
+
+ 
+	template <class Key, class T>
+	void HashMap<Key, T>::rehash_()
+	{
+		// calculate the new number of buckets (in capacity_)
+		rehash();
+		
+		// save the old contents
+		vector<Node*>	old_buckets(bucket_);
+
+		// resize the bucket vector and initialize it with zero
+		bucket_.clear();
+		bucket_.resize(capacity_);
+		Position i;
+		for (i = 0; i < capacity_; i++)
+		{
+			bucket_[i] = 0;
+		}
+
+		// rehash the old contents into the new buckets
+		Node*	node;
+		Node* next_node;
+		for (Position i = 0; i < (Position)old_buckets.size(); ++i)
+		{
+			for (node = old_buckets[i]; node != 0; node = next_node)
+			{
+				next_node = node->next;
+				Position new_bucket = (Position)hash_(node->value.first);
+				node->next = bucket_[new_bucket];
+				bucket_[new_bucket] = node; 
+			}
+		}		
+	}
+
+} // namespace BALL
 
 #endif // BALL_DATATYPE_HASHMAP_H
