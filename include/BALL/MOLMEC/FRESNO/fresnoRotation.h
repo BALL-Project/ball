@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.h,v 1.1.2.3 2002/03/06 20:56:10 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.4 2002/03/15 14:47:52 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
@@ -127,6 +127,10 @@ namespace BALL
 		/*_
 		 */
 		Molecule* receptor_;
+
+		/*_
+		*/
+		double factor_;
 
 		/*_
 		 */

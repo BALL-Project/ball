@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.4 2002/03/05 22:55:30 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.5 2002/03/15 14:48:01 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -93,14 +93,29 @@ namespace BALL
 
 		FresnoFF* fff = dynamic_cast<FresnoFF*>(force_field);
 
-		// ?????
-		// the following should be done with some proper parameter parsing
-		h_bond_distance_lower_ = 0.25;
-		h_bond_distance_upper_ = 0.65;
-		h_bond_angle_lower_ = 30;
-		h_bond_angle_upper_ = 80;
-		ideal_hbond_length_ = 1.85;
-		ideal_hbond_angle_ = 180;
+    Options& options = force_field->options;
+
+		factor_ 
+			= options.setDefaultReal(FresnoFF::Option::HB,
+					FresnoFF::Default::HB);
+		ideal_hbond_length_ 
+			= options.setDefaultReal(FresnoFF::Option::HB_IDEAL_LENGTH,
+					FresnoFF::Default::HB_IDEAL_LENGTH);
+		ideal_hbond_angle_
+			= options.setDefaultReal(FresnoFF::Option::HB_IDEAL_ANGLE,
+					FresnoFF::Default::HB_IDEAL_ANGLE);
+		h_bond_distance_lower_
+			= options.setDefaultReal(FresnoFF::Option::HB_DIST_LOWER,
+					FresnoFF::Default::HB_DIST_LOWER);
+		h_bond_distance_upper_
+			= options.setDefaultReal(FresnoFF::Option::HB_DIST_UPPER,
+					FresnoFF::Default::HB_DIST_UPPER);
+		h_bond_angle_lower_
+			= options.setDefaultReal(FresnoFF::Option::HB_ANG_LOWER,
+					FresnoFF::Default::HB_ANG_LOWER);
+		h_bond_angle_upper_
+			= options.setDefaultReal(FresnoFF::Option::HB_ANG_UPPER,
+					FresnoFF::Default::HB_ANG_UPPER);
 
 		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
 
@@ -289,6 +304,7 @@ namespace BALL
 				}
 			}
 		}
+		energy_ = factor_ * E;
 		return E;
 	}
 

@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.3 2002/03/06 20:56:11 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.4 2002/03/15 14:48:03 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -130,10 +130,17 @@ namespace BALL
 		BoundingBoxProcessor bb_proc;
 		receptor_->apply(bb_proc);
 
-		// ?????
-		// parameter geraffels
-		grid_spacing_ = 5.0;
-		bind_distance_offset_ = 0.5;
+    Options& options = force_field->options;
+
+		factor_
+			= options.setDefaultReal(FresnoFF::Option::ROT,
+					FresnoFF::Default::ROT);
+		grid_spacing_ 
+			= options.setDefaultReal(FresnoFF::Option::ROT_GRID_SPACING,
+					FresnoFF::Default::ROT_GRID_SPACING);
+		bind_distance_offset_
+			= options.setDefaultReal(FresnoFF::Option::ROT_BIND_OFFSET,
+					FresnoFF::Default::ROT_BIND_OFFSET);
 
 		// create a grid for the receptor and insert all its atoms
 		grid_ = new HashGrid3<const Atom*>
@@ -251,8 +258,8 @@ namespace BALL
 			}
 		}
 
-		N_rot_ = rotatable_bonds_.size();
-		is_frozen_.resize(N_rot_);
+		// N_rot_ = rotatable_bonds_.size();
+		is_frozen_.resize(rotatable_bonds_.size());
 
 		// DEBUG
 		cout << "FresnoRotation setup statistics:" << endl;
@@ -287,6 +294,7 @@ namespace BALL
 
 		E *= (1 - 1/N_rot_);
 		E += 1.0;
+		energy_ = E;
 		return E;
 
 	}
@@ -465,6 +473,8 @@ namespace BALL
 	{
 		HashSet<const Atom*> visited;
 
+		N_rot_ = 0;
+
 		for (Size i = 0; i < rotatable_bonds_.size(); ++i)
 		{
 			const Bond* bond = rotatable_bonds_[i];
@@ -473,6 +483,7 @@ namespace BALL
 			if (result == true)
 			{
 				is_frozen_[i] = true;
+				N_rot_++;
 			}
 			else
 			{
@@ -487,7 +498,7 @@ namespace BALL
 		throw()
 	{
 
-		// assign this node's dfs number and increase the count
+		// mark this atom as visited
 		visited.insert(atom);
 
 		// if this is atom is bound, then return true
@@ -510,17 +521,21 @@ namespace BALL
 				{
 					if ((*data_it)->getMolecule() == receptor_)
 					{
-						dist = (position - (*data_it)->getPosition()).getLength();
-						bind_distance = atom->getRadius() + (*data_it)->getRadius() 
-							+ bind_distance_offset_;
-						if (dist < bind_distance)
+						// Eldridge et al. says any two *heavy* atoms
+						if ((*data_it)->getElement().getSymbol() != "H")
 						{
-							// DEBUG
-							cout << "Found bound atom " << atom->getFullName() 
-								<< ". dist: " << dist << " bind_distance: "
-								<< bind_distance << endl;
-							// /DEBUG
-							return true;
+							dist = (position - (*data_it)->getPosition()).getLength();
+							bind_distance = atom->getRadius() + (*data_it)->getRadius() 
+								+ bind_distance_offset_;
+							if (dist < bind_distance)
+							{
+								// DEBUG
+								cout << "Found bound atom " << atom->getFullName() 
+									<< ". dist: " << dist << " bind_distance: "
+									<< bind_distance << endl;
+								// /DEBUG
+								return true;
+							}
 						}
 					}
 				}

@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.h,v 1.1.2.2 2002/03/05 22:41:52 anker Exp $
+// $Id: fresnoHydrogenBond.h,v 1.1.2.3 2002/03/15 14:47:52 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOHYDROGENBOND_H
@@ -113,6 +113,10 @@ namespace BALL
 		 * setup().
 		*/
 		HashMap<const Atom*, bool> already_used_;
+
+		/*_
+		*/
+		double factor_;
 
 		/*_
 		*/

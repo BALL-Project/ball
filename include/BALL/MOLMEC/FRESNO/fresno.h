@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.3 2002/03/05 22:38:58 anker Exp $
+// $Id: fresno.h,v 1.1.2.4 2002/03/15 14:47:50 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -40,58 +40,157 @@ namespace BALL
 		*/
 		struct Option
 		{
-			/**	The parameter file name (@see Default::FILENAME)
+			/**	The additive constant (@see Default::CONST)
 			*/
-			static const char* FILENAME;
+			static const char* CONST;
 
-			/**	automatically assign charges to the system (during setup)
+			/**
 			*/
-			static const char* ASSIGN_CHARGES;
+			static const char* HB;
 
-			/**	automatically assign type names to the system (during setup)
+			/**
 			*/
-			static const char* ASSIGN_TYPENAMES;
+			static const char* LIPO;
 
-			/**	automatically assign types to the system's atoms (during setup)
+			/**
 			*/
-			static const char* ASSIGN_TYPES;
+			static const char* ROT;
 
-			/**	during charge assignment, overwrite even non-zero charges
+			/**
 			*/
-			static const char* OVERWRITE_CHARGES;
+			static const char* BP;
 
-			/**	during charge assignment, overwrite even non-empty type names
+			/**
 			*/
-			static const char* OVERWRITE_TYPENAMES;
+			static const char* DESOLV;
+
+			/**
+			*/
+			static const char* HB_IDEAL_LENGTH;
+
+			/**
+			*/
+			static const char* HB_IDEAL_ANGLE;
+
+			/**
+			*/
+			static const char* HB_DIST_LOWER;
+
+			/**
+			*/
+			static const char* HB_DIST_UPPER;
+
+			/**
+			*/
+			static const char* HB_ANG_LOWER;
+
+			/**
+			*/
+			static const char* HB_ANG_UPPER;
+
+			/**
+			*/
+			static const char* LIPO_R1_OFFSET;
+
+			/**
+			*/
+			static const char* LIPO_R2_OFFSET;
+
+			/**
+			*/
+			static const char* BP_R1_OFFSET;
+
+			/**
+			*/
+			static const char* BP_R2_OFFSET;
+
+			/**
+			*/
+			static const char* ROT_BIND_OFFSET;
+
+			/**
+			*/
+			static const char* ROT_GRID_SPACING;
+
+
 		};
 
 		/** Default values for FRESNO options.
 		*/
 		struct Default
 		{
-			/**	Default filename for the parameter file (@see Option::FILENAME).
+			/**	The additive constant (@see Default::CONST)
 			*/
-			static const char* FILENAME;
+			static const float CONST;
 
-			/**	automatically assign charges to the system (during setup)
+			/**
 			*/
-			static const bool ASSIGN_CHARGES;
+			static const float HB;
 
-			/**	automatically assign type names to the system (during setup)
+			/**
 			*/
-			static const bool ASSIGN_TYPENAMES;
+			static const float LIPO;
 
-			/**	automatically assign types to the system's atoms (during setup)
+			/**
 			*/
-			static const bool ASSIGN_TYPES;
+			static const float ROT;
 
-			/**	during charge assignment, overwrite even non-zero charges
+			/**
 			*/
-			static const bool OVERWRITE_CHARGES;
+			static const float BP;
 
-			/**	during charge assignment, overwrite even non-empty type names
+			/**
 			*/
-			static const bool OVERWRITE_TYPENAMES;
+			static const float DESOLV;
+
+			/**
+			*/
+			static const float HB_IDEAL_LENGTH;
+
+			/**
+			*/
+			static const float HB_IDEAL_ANGLE;
+
+			/**
+			*/
+			static const float HB_DIST_LOWER;
+
+			/**
+			*/
+			static const float HB_DIST_UPPER;
+
+			/**
+			*/
+			static const float HB_ANG_LOWER;
+
+			/**
+			*/
+			static const float HB_ANG_UPPER;
+
+			/**
+			*/
+			static const float LIPO_R1_OFFSET;
+
+			/**
+			*/
+			static const float LIPO_R2_OFFSET;
+
+			/**
+			*/
+			static const float BP_R1_OFFSET;
+
+			/**
+			*/
+			static const float BP_R2_OFFSET;
+
+			/**
+			*/
+			static const float ROT_BIND_OFFSET;
+
+			/**
+			*/
+			static const float ROT_GRID_SPACING;
+
 		};
 
 		/**
@@ -223,7 +322,7 @@ namespace BALL
 		/**	Force field specific setup
 		*/
 		virtual bool specificSetup()
-			throw(Exception::FileNotFound);
+			throw();
 
 		//@}
 		/**	@name Accessors specific to the FRESNO force field
@@ -268,14 +367,6 @@ namespace BALL
 		/** @name Protected Attributes
 		*/
 		//@{
-
-		/*_ The filename of the parameter file
-		*/
-		String	filename_;
-
-		/*_ Are all parameters initialized?
-		*/
-		bool parameters_initialized_;
 
 		/** A hash map mapping atom pointers to fresno types.
 		*/

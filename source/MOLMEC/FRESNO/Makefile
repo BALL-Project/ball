@@ -4,6 +4,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	fresno.C\
+	fresnoConstant.C\
 	fresnoHydrogenBond.C\
 	fresnoLipophilic.C\
 	fresnoBuriedPolar.C\

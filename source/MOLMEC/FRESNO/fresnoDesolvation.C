@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.2 2002/03/07 21:03:08 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.3 2002/03/15 14:48:01 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -15,8 +15,7 @@ namespace BALL
 
 	FresnoDesolvation::FresnoDesolvation()
 		throw()
-		:	ForceFieldComponent(),
-			fdpb_()
+		:	ForceFieldComponent()
 	{
 		// set component name
 		setName("Fresno Desolvation");
@@ -25,8 +24,7 @@ namespace BALL
 
 	FresnoDesolvation::FresnoDesolvation(ForceField& force_field)
 		throw()
-		:	ForceFieldComponent(force_field),
-			fdpb_()
+		:	ForceFieldComponent(force_field)
 	{
 		// set component name
 		setName("Fresno Desolvation");
@@ -35,8 +33,7 @@ namespace BALL
 
 	FresnoDesolvation::FresnoDesolvation(const FresnoDesolvation& fd, bool deep)
 		throw()
-		:	ForceFieldComponent(fd, deep),
-			fdpb_(fd.fdpb_)
+		:	ForceFieldComponent(fd, deep)
 	{
 	}
 
@@ -51,8 +48,6 @@ namespace BALL
 	void FresnoDesolvation::clear()
 		throw()
 	{
-		// fdpb_.clear();
-
 		// ?????
 		// ForceFieldComponent does not comply with the OCI
 		// ForceFieldComponent::clear();
@@ -77,8 +72,11 @@ namespace BALL
 		// the fresno types
 
 		System* system = force_field->getSystem();
+    Options& options = force_field->options;
 
-		// FresnoFF* fff = dynamic_cast<FresnoFF*>(force_field);
+		factor_ 
+			= options.setDefaultReal(FresnoFF::Option::DESOLV,
+					FresnoFF::Default::DESOLV);
 
 		ProteinPredicate isProtein;
 
@@ -90,12 +88,19 @@ namespace BALL
 		// ?????
 		// the following should be done with some proper parameter parsing
 
-		System ligand_system_;
 		Molecule temp(*ligand, true);
-		ligand_system_.insert(temp);
+		System ligand_system;
+		ligand_system.insert(temp);
+		FDPB fdpb;
 
-		if (fdpb_.setup(ligand_system_))
+		if (fdpb.setup(ligand_system))
 		{
+			fdpb.solve();
+			energy_ = fdpb.getReactionFieldEnergy();
+			energy_ *= factor_;
+			// DEBUG
+			cout << "DESOLV: energy is " << energy_ << endl;
+			// /DEBUG
 			return true;
 		}
 		else
@@ -110,9 +115,7 @@ namespace BALL
 	double FresnoDesolvation::updateEnergy()
 		throw()
 	{
-		fdpb_.solve();
-		double E = fdpb_.getReactionFieldEnergy();
-		return E;
+		return energy_;
 	}
 
 

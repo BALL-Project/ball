@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.h,v 1.1.2.1 2002/02/14 17:02:48 anker Exp $
+// $Id: fresnoBuriedPolar.h,v 1.1.2.2 2002/03/15 14:47:50 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOBURIEDPOLAR_H
@@ -98,15 +98,19 @@ namespace BALL
 		*/
 		::vector< pair<const Atom*, const Atom*> > possible_buried_polar_interactions_;
 
+		/*_
+		*/
+		double factor_;
+
 		/*_ This length will be added to the sum of the van-der-Waals radii for
 				obtaining the lower bound of the scoring function.
 		*/
-		double add_to_radii_;
+		double r1_offset_;
 
 		/*_ The upper bound for the scoring function is obtained by adding a
 				constant to the lower bound.
 		*/
-		double add_to_lower_bound_;
+		double r2_offset_;
 
 	};
 

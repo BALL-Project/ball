@@ -1,19 +1,18 @@
-// $Id: fresnoDesolvation.h,v 1.1.2.2 2002/03/15 14:47:51 anker Exp $
-// Molecular Mechanics: Fresno force field, hydrogen bond component
+// $Id: fresnoConstant.h,v 1.1.2.1 2002/03/15 14:47:51 anker Exp $
+// Molecular Mechanics: Fresno force field, additive constant
 
-#ifndef BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
-#define BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
+#ifndef BALL_MOLMEC_FRESNO_FRESNOCONSTANT_H
+#define BALL_MOLMEC_FRESNO_FRESNOCONSTANT_H
 
-#include <BALL/SOLVATION/poissonBoltzmann.h>
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 
 namespace BALL
 {
 
 	/** Fresno Hydrogen Bond component.
-			{\bf Definition:} \URL{BALL/MOLMEC/FRESNO/fresnoDesolvation.h}
+			{\bf Definition:} \URL{BALL/MOLMEC/FRESNO/fresnoConstant.h}
 	*/
-	class FresnoDesolvation
+	class FresnoConstant
 		:	public ForceFieldComponent
 	{
 
@@ -25,22 +24,22 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		FresnoDesolvation()
+		FresnoConstant()
 			throw();
 
 		/**	Constructor.
 		*/
-		FresnoDesolvation(ForceField& force_field)
+		FresnoConstant(ForceField& force_field)
 			throw();
 
 		/**	Copy constructor
 		*/
-		FresnoDesolvation(const FresnoDesolvation& fhb, bool clone_deep = true)
+		FresnoConstant(const FresnoConstant& fhb, bool clone_deep = true)
 			throw();
 
 		/**	Destructor.
 		*/
-		virtual ~FresnoDesolvation()
+		virtual ~FresnoConstant()
 			throw();
 
 		//@}
@@ -50,7 +49,7 @@ namespace BALL
 
 		/** Assignment.
 		*/
-		const FresnoDesolvation& operator = (const FresnoDesolvation& fr)
+		const FresnoConstant& operator = (const FresnoConstant& fr)
 			throw();
 
 		/** Clear method.
@@ -63,7 +62,7 @@ namespace BALL
 		*/
 		//@{
 
-		bool operator == (const FresnoDesolvation& fr) const
+		bool operator == (const FresnoConstant& fr) const
 			throw();
 
 		//@}
@@ -93,14 +92,8 @@ namespace BALL
 
 		//@}
 
-		private:
-
-		/*_
-		*/
-		double factor_;
-
 	};
 
 } // namespace BALL
 
-#endif // BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
+#endif // BALL_MOLMEC_FRESNO_FRESNOCONSTANT_H

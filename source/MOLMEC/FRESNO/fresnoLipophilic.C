@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.C,v 1.1.2.2 2002/03/05 22:56:43 anker Exp $
+// $Id: fresnoLipophilic.C,v 1.1.2.3 2002/03/15 14:48:02 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -16,8 +16,8 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(),
 			possible_lipophilic_interactions_(),
-			add_to_radii_(0.0),
-			add_to_lower_bound_(0.0)
+			r1_offset_(0.0),
+			r2_offset_(0.0)
 	{
 		// set component name
 		setName("Fresno Lipophilic");
@@ -28,8 +28,8 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(force_field),
 			possible_lipophilic_interactions_(),
-			add_to_radii_(0.0),
-			add_to_lower_bound_(0.0)
+			r1_offset_(0.0),
+			r2_offset_(0.0)
 	{
 		// set component name
 		setName("Fresno Lipophilic");
@@ -40,8 +40,8 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(fl, deep),
 			possible_lipophilic_interactions_(fl.possible_lipophilic_interactions_),
-			add_to_radii_(fl.add_to_radii_),
-			add_to_lower_bound_(fl.add_to_lower_bound_)
+			r1_offset_(fl.r1_offset_),
+			r2_offset_(fl.r2_offset_)
 	{
 	}
 
@@ -57,8 +57,8 @@ namespace BALL
 		throw()
 	{
 		possible_lipophilic_interactions_.clear();
-		add_to_radii_ = 0.0;
-		add_to_lower_bound_ = 0.0;
+		r1_offset_ = 0.0;
+		r2_offset_ = 0.0;
 		// ?????
 		// ForceFieldComponent does not comply with the OCI
 		// ForceFieldComponent::clear();
@@ -85,11 +85,14 @@ namespace BALL
 
 		System* system = force_field->getSystem();
 		FresnoFF* fff = dynamic_cast<FresnoFF*>(force_field);
+    Options& options = force_field->options;
 
-		// ?????
-		// the following should be done with some proper parameter parsing
-		add_to_radii_ = 0.5;
-		add_to_lower_bound_ = 3.0;
+		r1_offset_
+			= options.setDefaultReal(FresnoFF::Option::LIPO_R1_OFFSET,
+					FresnoFF::Default::LIPO_R1_OFFSET);
+		r2_offset_
+			= options.setDefaultReal(FresnoFF::Option::LIPO_R2_OFFSET,
+					FresnoFF::Default::LIPO_R2_OFFSET);
 
 		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
 
@@ -163,8 +166,8 @@ namespace BALL
 			atom1 = it->first;
 			atom2 = it->second;
 
-			R1 = atom1->getRadius() + atom2->getRadius() + add_to_radii_;
-			R2 = R1 + add_to_lower_bound_;
+
+			R2 = R1 + r2_offset_;
 
 			distance = (atom1->getPosition() - atom2->getPosition()).getLength();
 
@@ -186,6 +189,7 @@ namespace BALL
 			}
 		}
 
+		energy_ = factor_ *= E;
 		return E;
 	}
 
