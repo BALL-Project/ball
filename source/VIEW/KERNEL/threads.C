@@ -199,7 +199,7 @@ namespace BALL
 								minimizer_->getNumberOfIterations() < minimizer_->getMaxNumberOfIterations() &&
 								ok)
 				{
-					ok = minimizer_->minimize(steps_between_updates_, true);
+					minimizer_->minimize(steps_between_updates_, true);
 			
 					updateScene_();
 
@@ -210,6 +210,7 @@ namespace BALL
 													minimizer_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
 					output_(message.ascii());
+					ok = !minimizer_->wasAborted();
 				}
 
 				updateScene_();
