@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.22 2000/03/27 12:40:25 oliver Exp $
+// $Id: Vector3_test.C,v 1.23 2000/05/03 08:06:02 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.22 2000/03/27 12:40:25 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.23 2000/05/03 08:06:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -559,11 +559,11 @@ CHECK(TVector3 operator * (const TVector3<T>& vector, const T& scalar))
 	TEST_REAL_EQUAL(v[2], 6.0)
 RESULT
 
-CHECK(T getSpatProduct (const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c))
+CHECK(T getTripleProduct (const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c))
  	v = Vector3(1.0, 2.0, 3.0);
  	v1 = Vector3(2.0, 4.0, 6.0);
  	v2 = Vector3(3.0, 6.0, 9.0);
-	TEST_REAL_EQUAL(v.getSpatProduct(v, v1, v2), 0)
+	TEST_REAL_EQUAL(v.getTripleProduct(v, v1, v2), 0)
 RESULT
 
 
