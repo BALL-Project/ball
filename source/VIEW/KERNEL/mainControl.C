@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.39 2003/12/15 02:35:47 amoll Exp $
+// $Id: mainControl.C,v 1.40 2003/12/15 18:14:10 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -392,19 +392,22 @@ bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebui
 	{
 		Representation* rep = *reps_it;
 
-		// this should work, but it doesnt, so I had to do it the old way
-		// Andreas Moll 13.12.2003 ?????
-		/*
-		if (rep->getModelType() == MODEL_SE_SURFACE ||
+		if (rep->getModelBuildTime() < Atom::getAttributesModificationTime())
+		{
+			rep->update(true);
+		}
+		else 
+		{
+			if (rep->getModelType() == MODEL_SE_SURFACE ||
 				rep->getModelType() == MODEL_SA_SURFACE ||
 				rep->getModelType() == MODEL_BACKBONE 	||
 				rep->getModelType() == MODEL_CARTOON    ||
 				force)
-		{
-		 	rep->update(rebuild);
+			{
+				rep->update(rebuild);
+			}
 		}
-		*/
-rep->update(true);
+		
 		RepresentationMessage* ur_message = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
  		notify_(ur_message);
 	}
