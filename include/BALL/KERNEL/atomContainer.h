@@ -1,4 +1,4 @@
-// $Id: atomContainer.h,v 1.11 2001/07/04 08:04:04 anker Exp $
+// $Id: atomContainer.h,v 1.12 2001/07/04 09:43:25 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -121,8 +121,8 @@ namespace BALL
 		*/
 		virtual void persistentRead(PersistenceManager& pm)
 			throw();
+			
 		//@}			
-
 		/**	@name	Assignment 
 		*/
 		//@{
@@ -183,10 +183,8 @@ namespace BALL
 		*/
 		bool operator != (const AtomContainer& atom_container) const
 			throw();
-		//@}
 
 		//@}
-
 		/**	@name	Accessors 
 		*/
 		//@{
@@ -451,8 +449,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-		// --- INTERNAL ITERATION ---
 		/**	@name	Internal Iteration
 		*/
 		//@{
