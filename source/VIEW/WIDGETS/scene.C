@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.5 2005/01/14 17:33:12 amoll Exp $
+// $Id: scene.C,v 1.156.2.6 2005/01/17 00:22:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -22,6 +22,7 @@
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -34,7 +35,8 @@
 #include <qdragobject.h>
 #include <qdir.h>
 
-#define BALL_BENCHMARKING
+
+ #define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
@@ -616,6 +618,8 @@ namespace BALL
 		void Scene::render_(const Representation& rep, RenderMode mode)
 			throw()
 		{
+			if (rep.getGeometricObjects().size() == 0) return;
+
 #ifdef BALL_BENCHMARKING
 	Timer t;
 	t.start();
@@ -634,9 +638,17 @@ namespace BALL
 					gl_renderer_.render(rep);
 					break;
 			}
+
+			// no benchmark output for vertex buffer usage
+			if (gl_renderer_.vertexBuffersEnabled()&& 
+					VIEW::isSurfaceModel(rep.getModelType()))
+			{
+				return;
+			}
+
 #ifdef BALL_BENCHMARKING
 	t.stop();
-	logString("Scene rendering time: " + String(t.getClockTime()));
+ 	logString("Scene rendering time: " + String(t.getClockTime()));
 #endif
 		}
 

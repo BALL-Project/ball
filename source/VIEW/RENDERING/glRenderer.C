@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.13 2005/01/17 00:08:55 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.14 2005/01/17 00:23:04 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -307,6 +307,7 @@ namespace BALL
 					isSurfaceModel(rep.getModelType()))
 			{
 				clearVertexBuffersFor(*(Representation*)&rep);
+				render(rep);
 				return;
 			}
 
