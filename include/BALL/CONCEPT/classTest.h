@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.31 2002/01/26 21:35:06 oliver Exp $
+// $Id: classTest.h,v 1.31.4.1 2002/05/14 23:27:43 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -524,7 +524,7 @@ int main(int argc, char **argv)\
 							std::cout << std::endl;\
 						}\
 						\
-						std::cout << "   TEST_FILE: line mismatch: " << TEST_FILE__line << " differs from " << TEST_FILE__template_line << "." << std::endl;\
+						std::cout << "   TEST_FILE: line mismatch:\n    got:      '" << TEST_FILE__line << "'\n    expected: '" << TEST_FILE__template_line << "'" << std::endl;\
 					}\
 				}\
 			}\
@@ -638,7 +638,7 @@ int main(int argc, char **argv)\
 								std::cout << std::endl;\
 							}\
 							\
-							std::cout << "   TEST_FILE_REGEXP: line mismatch: " << TEST_FILE__line << " differs from " << TEST_FILE__template_line << "." << std::endl;\
+  						std::cout << "   TEST_FILE: line mismatch:\n    got:      '" << TEST_FILE__line << "'\n    expected: '" << TEST_FILE__template_line << "'" << std::endl;\
 						}\
 					}\
 				}\

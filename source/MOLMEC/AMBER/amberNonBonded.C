@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.7 2002/05/12 16:30:00 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.8 2002/05/14 23:27:44 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -984,9 +984,9 @@ namespace BALL
 
 		#ifdef NEW_STYLE
 			SwitchingCutOnOff cutoffs_es 
-				= { SQR(cut_off_electrostatic_), SQR(cut_on_electrostatic_), inverse_distance_off_on_electrostatic_3_};
+				= { cut_off_electrostatic_2, cut_on_electrostatic_2, inverse_distance_off_on_electrostatic_3_};
 			SwitchingCutOnOff cutoffs_vdw 
-				= { SQR(cut_off_vdw_), SQR(cut_on_vdw_), inverse_distance_off_on_vdw_3_};
+				= { cut_off_vdw_2, cut_on_vdw_2, inverse_distance_off_on_vdw_3_};
 		#endif
 
 		// Define the different components of the non-bonded energy

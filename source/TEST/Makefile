@@ -150,6 +150,7 @@ EXECUTABLES_STRUCTURE = \
 	Enumerator_test\
 	AnalyticalSES_test\
 	NumericalSAS_test\
+	Peptides_test\
 	RadialDistributionFunction_test\
 	RDFIntegrator_test\
 	RDFParameter_test\
