@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.5 1999/10/30 12:53:34 oliver Exp $
+// $Id: HINFile.C,v 1.6 1999/11/05 10:38:13 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/residue.h>
@@ -71,7 +71,7 @@ namespace BALL {
 			{
 				number_of_bonds++;
 
-				bond_string += String(index - atom_offset);
+				bond_string += String(index);
 
 				switch (bond->getOrder()) 
 				{
@@ -90,9 +90,10 @@ namespace BALL {
 		*(File*)this << number_of_bonds << bond_string << endl;
 
 		// HyperChem uses A/ps, as does BALL. So, no conversion is needed.
-		*(File*)this << "vel " << number + 1 - atom_offset << " " << atom.getVelocity().x << " " 
-			<< atom.getVelocity().y << " "
-			<< atom.getVelocity().z << endl;
+		*(File*)this << "vel " << number + 1 - atom_offset << " " 
+								 << atom.getVelocity().x << " " 
+								 << atom.getVelocity().y << " "
+								 << atom.getVelocity().z << endl;
 
 	}
 
@@ -191,7 +192,12 @@ namespace BALL {
 		// order of residues
 		for (Size i = 0; i < atom_vector.size(); i++)
 		{
+			// remember the index of the atom
 			components[index_vector[i]].push_back(i);
+			
+			// and set the atom's HINFILE_INDEX properly
+			// (i.e. to the index in the right connected component
+			atom_vector[i]->setProperty("__HINFILE_INDEX", (unsigned int)components[index_vector[i]].size());
 		}
 		
 
