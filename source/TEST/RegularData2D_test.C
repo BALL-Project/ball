@@ -1,9 +1,9 @@
-// $Id: RegularData2D_test.C,v 1.5 2001/07/15 22:09:13 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.6 2001/07/25 11:37:30 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.5 2001/07/15 22:09:13 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.6 2001/07/25 11:37:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -299,26 +299,14 @@ CHECK(getMinValue())
 	g.data[1] = +123.23;
 	g.data[13] = -123.231;
 	g.data[3] = -123.230;
-	Vector2 vector2;
-	const float* float_ptr = g.getMinValue(vector2);
+	float min = g.getMinValue();
 	TEST_NOT_EQUAL(float_ptr, 0)
-	if (float_ptr != 0)
-	{
-		TEST_REAL_EQUAL(*float_ptr, (float) -123.231)
-		TEST_EQUAL(vector2.x, 2)
-		TEST_EQUAL(vector2.y, 1)
-		
-		g.data[120] = -124.11;
-		TEST_REAL_EQUAL(*g.getMinValue(vector2), (float) -124.11)
-		TEST_EQUAL(vector2.x, 10)
-		TEST_EQUAL(vector2.y, 10)
-		g.data[120] = 0.11;
-		
-		g.data[13] = -123.11;
-		TEST_REAL_EQUAL(*g.getMinValue(vector2), (float) -123.23)
-		TEST_EQUAL(vector2.x, 0)
-		TEST_EQUAL(vector2.y, 0)
-	}
+	TEST_REAL_EQUAL(min, (float) -123.231)
+	g.data[120] = -124.11;
+	TEST_REAL_EQUAL(g.getMinValue(), (float) -124.11)
+	g.data[120] = 0.11;
+	g.data[13] = -123.11;
+	TEST_REAL_EQUAL(g.getMinValue(), (float) -123.23)
 RESULT
 
 CHECK(getMaxValue())
@@ -328,25 +316,14 @@ CHECK(getMaxValue())
 	g.data[13] = +123.231;
 	g.data[3] = -123.230;
 	Vector2 vector2;
-	const float* float_ptr = g.getMaxValue(vector2);
-	TEST_NOT_EQUAL(float_ptr, 0)
-	if (float_ptr != 0)
-	{
-		TEST_REAL_EQUAL(*float_ptr, (float) +123.231)
-		TEST_EQUAL(vector2.x, 2)
-		TEST_EQUAL(vector2.y, 1)
+	float max = g.getMaxValue(vector2);
+	TEST_REAL_EQUAL(max, (float) +123.231)
+	g.data[120] = +124.11;
+	TEST_REAL_EQUAL(g.getMaxValue(), (float) +124.11)
+	g.data[120] = 0.11;
 		
-		g.data[120] = +124.11;
-		TEST_REAL_EQUAL(*g.getMaxValue(vector2), (float) +124.11)
-		TEST_EQUAL(vector2.x, 10)
-		TEST_EQUAL(vector2.y, 10)
-		g.data[120] = 0.11;
-		
-		g.data[13] = +123.11;
-		TEST_REAL_EQUAL(*g.getMaxValue(vector2), (float) +123.23)
-		TEST_EQUAL(vector2.x, 0)
-		TEST_EQUAL(vector2.y, 0)
-	}
+	g.data[13] = +123.11;
+	TEST_REAL_EQUAL(g.getMaxValue(), (float) +123.23)
 RESULT
 
 CHECK(rescale)
