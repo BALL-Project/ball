@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.20 2000/06/21 08:51:45 oliver Exp $
+# $Id: Makefile.in,v 1.21 2000/08/03 21:52:50 oliver Exp $
 #
 
 include config.mak
@@ -68,12 +68,12 @@ libVIEW.objects:
 collect:	$(OBJECT_LISTS)
 	
 libBALL.@SHARED_LIB_SUFFIX@:	collect
-	$(DYNAR) $(DYNAROPTS) libBALL.@SHARED_LIB_SUFFIX@ `cat libBALL.objects` -lm
+	$(DYNAR) $(DYNAROPTS) libBALL.@SHARED_LIB_SUFFIX@ `cat libBALL.objects` $(PYTHON_LIBS) -lm
 
-libVIEW.@SHARED_LIB_SUFFIX@:	libBALL.so
+libVIEW.@SHARED_LIB_SUFFIX@:	libBALL.@SHARED_LIB_SUFFIX@
 	$(DYNAR) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) $(X11_LIBOPTS) -lm
 
-libMOLVIEW.@SHARED_LIB_SUFFIX@:	libVIEW.so
+libMOLVIEW.@SHARED_LIB_SUFFIX@:	libVIEW.@SHARED_LIB_SUFFIX@
 	$(DYNAR) $(DYNAROPTS) libMOLVIEW.@SHARED_LIB_SUFFIX@ `cat libMOLVIEW.objects` -L. -lVIEW -lBALL $(QT_LIBOPTS) $(OPENGL_LIBOPTS) -lm
 
 .objects.a:	
