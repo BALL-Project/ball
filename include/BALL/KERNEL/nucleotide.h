@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.2 1999/12/28 18:38:45 oliver Exp $
+// $Id: nucleotide.h,v 1.3 2000/01/10 21:48:27 oliver Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -42,7 +42,7 @@ namespace BALL
 		enum Property
 		{
 			///
-			PROPERTY__5_PRIME Fragment::NUMBER_OF_PROPERTIES + 1,
+			PROPERTY__5_PRIME = Fragment::NUMBER_OF_PROPERTIES + 1,
 			///
 			PROPERTY__3_PRIME,
 

@@ -1,4 +1,4 @@
-// $Id: nucleotideIterator.h,v 1.1 2000/01/10 21:29:11 oliver Exp $
+// $Id: nucleotideIterator.h,v 1.2 2000/01/10 21:48:27 oliver Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDEITERATOR_H
 #define BALL_KERNEL_NUCLEOTIDEITERATOR_H
@@ -21,6 +21,8 @@
 
 namespace BALL 
 {
+
+	class Nucleotide;
 
 	class NucleotideIteratorTraits_
 		: public CompositeIteratorTraits_

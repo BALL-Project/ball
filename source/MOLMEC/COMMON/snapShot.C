@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.5 2000/01/10 15:51:12 oliver Exp $
+// $Id: snapShot.C,v 1.6 2000/01/10 21:48:43 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/CONCEPT/XDRPersistenceManager.h> 
@@ -805,7 +805,7 @@ namespace BALL
       // first look in main memory
       Size pos = index - snapshot_counter_ + snapshot_list_.size() - 1; 
 
-      if(pos >= 0 && pos < (int) snapshot_list_.size())
+      if(pos < snapshot_list_.size())
         {
         // one of the recent snapshots is wanted -> it should be in
         // main memory 
@@ -822,7 +822,7 @@ namespace BALL
           }
         }
 
-      if(pos >=  static_cast<int>(snapshot_list_.size()))
+      if (pos > snapshot_list_.size())
         {
         // the list in memory always contains the highest index. If the calculated 
         // position is beyond the current size, this means that no such snapshot

@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.6 2000/01/10 21:24:55 oliver Exp $
+// $Id: selector.C,v 1.7 2000/01/10 21:48:40 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -6,6 +6,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PSE.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/nucleotide.h>
 
 using namespace std;
 
@@ -682,9 +683,9 @@ namespace BALL
 	{
 		if (RTTI::isKindOf<Atom>(composite))
 		{
-			if (composite.hasAncestor<Residue>())
+			if (composite.hasAncestor(RTTI::getDefault<Residue>()))
 			{
-				String name = RTTI::castTo<Atom>(composite);
+				String name = RTTI::castTo<Atom>(composite)->getName();
 				if ((name == "C") || (name == "N") || (name == "CA") || (name == "O"))
 				{
 					return true;
