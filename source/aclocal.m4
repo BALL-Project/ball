@@ -1653,6 +1653,18 @@ AC_DEFUN(CF_CHECK_DIRENT_H, [
 ])
 
 dnl
+dnl   Check whether pwd.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_PWD_H, [
+	AC_CHECK_HEADERS(pwd.h,
+			[BALL_HAS_PWD_H=true],
+			[BALL_HAS_PWD_H=false])
+	if test ${BALL_HAS_PWD_H} = true ; then
+		AC_DEFINE(BALL_HAS_PWD_H,)
+	fi
+])
+
+dnl
 dnl   Check whether direct.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_DIRECT_H, [
