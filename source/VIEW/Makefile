@@ -7,8 +7,8 @@ THISLIB=libVIEW
 DIRS=\
 	DATATYPE\
 	FUNCTOR\
+	GUI\
 	KERNEL\
-	OPENGL\
 	PRIMITIV
 
 default: dirs

@@ -8,8 +8,8 @@ DIRS=\
 	COMMON\
 	COLORS\
 	FUNCTOR\
+	GUI\
 	KERNEL\
-	OPENGL\
 	PRIMITIV
 
 default: dirs
