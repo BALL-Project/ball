@@ -1,10 +1,11 @@
-// $Id: ooiEnergy.C,v 1.8 2000/06/21 14:16:05 amoll Exp $
+// $Id: ooiEnergy.C,v 1.9 2000/07/23 22:16:05 oliver Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
 
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/DATATYPE/stringHashMap.h>
@@ -91,17 +92,27 @@ namespace BALL
 			Size i;
 			for (i = 1; i <= parameter_section.getNumberOfKeys(); i++)
 			{
-				Index index = parameter_section.getKey(i).toInt();
-				if (index < 0)
+				
+				String index_str(parameter_section.getKey(i));
+				Index index;
+				try
 				{
-					Log.error() << "calculateOoiEnergy: illegal atom type index: " << index << endl;
-				} 
-				else 
-				{
-					if (index > max_index)
+					index = index_str.trim().toInt();
+					if (index < 0)
 					{
-						max_index = index;
+						Log.error() << "calculateOoiEnergy: illegal atom type index: " << index << endl;
+					} 
+					else 
+					{
+						if (index > max_index)
+						{
+							max_index = index;
+						}
 					}
+				} 
+				catch (Exception::InvalidFormat e)
+				{
+					Log.error() << "calculateOoiEnergy: cannot convert to a number: " << index_str << endl;
 				}
 			}
 
@@ -120,13 +131,22 @@ namespace BALL
 			// and read all values from the parameter section
 			for (i = 1; i <= parameter_section.getNumberOfKeys(); i++)
 			{
-				Index index = parameter_section.getKey(i).toInt();
-
-				// we ignore illegal (negative) indices
-				if (index >= 0)
+				String index_str(parameter_section.getKey(i));
+				Index index;
+				try
 				{
-					radius[index] = parameter_section.getValue(i, radius_column).toFloat();
-					g[index] = parameter_section.getValue(i, g_column).toFloat();
+					index = index_str.trim().toInt();
+
+					// we ignore illegal (negative) indices
+					if (index >= 0)
+					{
+						radius[index] = parameter_section.getValue(i, radius_column).toFloat();
+						g[index] = parameter_section.getValue(i, g_column).toFloat();
+					}
+				}
+				catch (Exception::InvalidFormat)
+				{
+					Log.error() << "calculateOoiEnergy: cannot convert to a number: " << index_str << endl;
 				}
 			}
 
@@ -136,14 +156,16 @@ namespace BALL
 			for (i = 1; i <= type_section.getNumberOfKeys(); i++)
 			{
 				// retrieve the type and check for validity
-				Atom::Type type = type_section.getValue(i, type_column).toInt();
+				String index_str(type_section.getValue(i, type_column));
+				Atom::Type type = index_str.trim().toInt();
 				if (type >= (Atom::Type)radius.size())
 				{
 					Log.error() << "calculateOoiEnergy: illegal atom type: " << type << " while reading parameter file." << endl;
 				} 
 				else 
 				{
-					type_map.insert(type_section.getKey(i), (Atom::Type)type_section.getValue(i, type_column).toInt());
+					index_str = type_section.getValue(i, type_column);
+					type_map.insert(type_section.getKey(i), (Atom::Type)index_str.trim().toInt());
 				}
 			}
 			
