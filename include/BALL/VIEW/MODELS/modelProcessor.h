@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
+// $Id: modelProcessor.h,v 1.3 2003/09/03 10:18:26 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_MODELS_ModelProcessor_H
 #define BALL_VIEW_GUI_MODELS_ModelProcessor_H
@@ -18,15 +18,12 @@
 # include <BALL/CONCEPT/property.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-# include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
-
 namespace BALL
 {
 	namespace VIEW
 	{
 		class ColorProcessor;
+		class GeometricObject;
 		
 		class ModelProcessor
 			: public UnaryProcessor<Composite>,
