@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.17 2003/11/03 16:51:01 amoll Exp $
+// $Id: mainControl.C,v 1.18 2003/11/05 23:02:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -678,26 +678,39 @@ void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 {
 	List<GeometricObject*>& objects = const_cast<List<GeometricObject*>&>(message.getSelection());
 	List<GeometricObject*>::Iterator it_objects = objects.begin();
+	HashSet<Composite*> roots;
 
 	Size nr = 0;
 	for (; it_objects != objects.end(); it_objects++)
 	{
-		if ((*it_objects)->getComposite() != 0  &&
-				selection_.has((Composite*)(*it_objects)->getComposite()) != message.isSelected())
+		Composite* composite = (Composite*)(*it_objects)->getComposite();
+
+		if (composite != 0  && (selection_.has(composite) != message.isSelected()))
 		{	
 			if (message.isSelected())
 			{
-				selectCompositeRecursive((Composite*)(*it_objects)->getComposite(), true);
+				selectCompositeRecursive(composite , true);
 			}
 			else
 			{
-				deselectCompositeRecursive((Composite*)(*it_objects)->getComposite(), true);
+				deselectCompositeRecursive(composite, true);
 			}
 			nr++;
+
+			if (!roots.has(&composite->getRoot()))
+			{
+				roots.insert(&composite->getRoot());
+			}
 		}				
 	}
 
 	printSelectionInfos();
+
+	HashSet<Composite*>::Iterator it = roots.begin();
+	for(; it != roots.end(); it++)
+	{
+		update(**it, false);
+	}
 
 	#ifdef BALL_DEBUG_VIEW
 		Log.info() << "Selected " + String(nr) + " items."<< std::endl;
@@ -869,7 +882,6 @@ void MainControl::selectCompositeRecursive(Composite* composite, bool first_call
 			{
 				if (!selection_.has(parent->getChild(i)))
 				{
-					update(composite->getRoot(), false);
 					return;
 				}
 			}
@@ -878,7 +890,6 @@ void MainControl::selectCompositeRecursive(Composite* composite, bool first_call
 			parent->select();
 			parent = parent->getParent();
 		}
-		update(composite->getRoot(), false);
 	}
 }
 
@@ -919,8 +930,6 @@ void MainControl::deselectCompositeRecursive(Composite* composite, bool first_ca
 			selection_.erase(parent);
 			parent = parent->getParent();
 		}
-
-		update(composite->getRoot(), false);
 	}
 }
 
