@@ -132,12 +132,17 @@ namespace BALL
 				filename += pdbId->text().latin1();
 				filename +="&compression=None"; 
 
-				Log.info() << filename << std::endl;
 				PDBFile pdb_file(filename);
 				pdb_file >> *system;
 				pdb_file.close();
 
 				Log.info() << "> read " << system->countAtoms() << " atoms from URL \"" << filename<< "\"" << std::endl;
+				if (system->countAtoms() == 0)
+				{
+					delete system;
+					setStatusbarText("Could not fetch the given PDBFile");
+					return;
+				}
 
 				if (system->getName() == "")
 				{
