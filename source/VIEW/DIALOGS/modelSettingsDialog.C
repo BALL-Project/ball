@@ -2,6 +2,10 @@
 // vi: set ts=2:
 //
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
+#include <BALL/DATATYPE/string.h>
+#include <BALL/FORMAT/INIFile.h>
+
+#include <qlineedit.h>
 
 namespace BALL
 {
@@ -48,6 +52,62 @@ float ModelSettingsDialog::getFloatValue_(const QLineEdit* const& te) const
 		Log.error() << "Invalid value: " << te->text() << std::endl;
 	}
 	return 1;
+}
+
+void ModelSettingsDialog::setValue_(QLineEdit* le, float value)
+	throw()
+{
+	String s(value);
+	s.trimRight("0");
+	if (s.hasSuffix(".")) s+= "0";
+	le->setText(s.c_str());
+}
+
+void ModelSettingsDialog::fetchPreference_(const INIFile& inifile, const String& entry, 
+																					 QLineEdit& lineedit)
+	throw()
+{
+	if (!inifile.hasEntry("MODEL_OPTIONS", entry)) return;
+	lineedit.setText(inifile.getValue("MODEL_OPTIONS", entry).c_str());
+}
+
+void ModelSettingsDialog::writePreference_(INIFile& inifile, const String& entry, 
+																	const QLineEdit& lineedit) const
+	throw()
+{
+	inifile.insertValue("MODEL_OPTIONS", entry, lineedit.text().ascii());
+}
+
+
+void ModelSettingsDialog::writePreferences(INIFile& file)
+	throw()
+{
+	file.appendSection("MODEL_OPTIONS");
+  writePreference_(file, "stick_radius", *stick_radius);
+  writePreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius);
+  writePreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius);
+  writePreference_(file, "vdw_radius_factor", *vdw_radius_factor);
+  writePreference_(file, "surface_probe_radius", *surface_probe_radius);
+  writePreference_(file, "tube_radius", *tube_radius);
+  writePreference_(file, "cartoon_tube_radius", *cartoon_tube_radius);
+  writePreference_(file, "cartoon_sphere_radius", *cartoon_sphere_radius);
+  writePreference_(file, "cartoon_arrow_height", *cartoon_arrow_height);
+  writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width);
+}
+
+void ModelSettingsDialog::fetchPreferences(const INIFile& file)
+	throw()
+{
+  fetchPreference_(file, "stick_radius", *stick_radius);
+  fetchPreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius);
+  fetchPreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius);
+  fetchPreference_(file, "vdw_radius_factor", *vdw_radius_factor);
+  fetchPreference_(file, "surface_probe_radius", *surface_probe_radius);
+  fetchPreference_(file, "tube_radius", *tube_radius);
+  fetchPreference_(file, "cartoon_tube_radius", *cartoon_tube_radius);
+  fetchPreference_(file, "cartoon_sphere_radius", *cartoon_sphere_radius);
+  fetchPreference_(file, "cartoon_arrow_height", *cartoon_arrow_height);
+	fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width);
 }
 
 } } // NAMESPACE

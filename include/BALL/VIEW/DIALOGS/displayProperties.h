@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.18 2003/11/13 21:46:02 amoll Exp $
+// $Id: displayProperties.h,v 1.19 2003/11/14 01:29:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -151,7 +151,11 @@ namespace BALL
 			///
 			virtual void finalizePreferencesTab(Preferences &preferences)
 				throw();
-				
+
+			///
+			void applyPreferences(Preferences& preferences)
+				throw();
+
 			/**	Menu checking method.
 					This method is called by MainControl::checkMenus before a popup menu is shown.
 					The menu <b> Display Properties</b> will be checked if this displayProperties is visible. 
@@ -274,12 +278,13 @@ namespace BALL
 			Preferences* 							preferences_;
 			
 			// the menu entry id of the dialog
-			int 				id_;
+			int 						id_;
 			
 			// used by GeometricControl to modify an existing representation
 			Representation* rep_;
 
-			ColorRGBA 	custom_color_;
+			ColorRGBA 			custom_color_;
+			bool 						advanced_options_modified_;
 		};
 
 } } // namespaces

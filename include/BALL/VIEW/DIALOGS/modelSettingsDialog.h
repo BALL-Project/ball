@@ -1,20 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.3 2003/11/13 21:46:50 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.4 2003/11/14 01:29:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
 #define BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
 
 #include <BALL/VIEW/UIC/modelSettingsDialogData.h>
-#include <qlineedit.h>
-#include <BALL/DATATYPE/string.h>
 
 class QLineEdit;
 
 namespace BALL
 {
+	class INIFile;
+	class String;
+
 	namespace VIEW
 	{
 		/** Dialog for the molecular model settings
@@ -32,6 +33,14 @@ namespace BALL
 
 			/// Destructor
 			~ModelSettingsDialog() {}
+
+			///
+			void writePreferences(INIFile& file)
+				throw();
+
+			///
+			void fetchPreferences(const INIFile& file)
+				throw();
 
 			///
 			void setDefaults()
@@ -87,51 +96,62 @@ namespace BALL
 
 			///
 			void setStickStickRadius(float value) 
-				throw() { stick_radius->setText(String(value).c_str());}
+				throw() { setValue_(stick_radius,value);}
 
 			///
 			void setBallAndStickStickRadius(float value) 
-				throw() { ball_stick_cylinder_radius->setText(String(value).c_str());}
+				throw() { setValue_(ball_stick_cylinder_radius,value);}
 
 			///
 			void setBallRadius(float value) 
-				throw() { ball_stick_sphere_radius->setText(String(value).c_str());}
+				throw() { setValue_(ball_stick_sphere_radius,value);}
 
 			///
 			void setVDWRadiusFactor(float value) 
-				throw() { vdw_radius_factor->setText(String(value).c_str());}
+				throw() { setValue_(vdw_radius_factor,value);}
 
 			///
 			void setSurfaceProbeRadius(float value) 
-				throw() { surface_probe_radius->setText(String(value).c_str());}
+				throw() { setValue_(surface_probe_radius,value);}
 
 			///
 			void setTubeRadius(float value) 
-				throw() { tube_radius->setText(String(value).c_str());}
+				throw() { setValue_(tube_radius,value);}
 
 			///
 			void setCartoonTubeRadius(float value) 
-				throw() { cartoon_tube_radius->setText(String(value).c_str());}
+				throw() { setValue_(cartoon_tube_radius,value);}
 
 			///
 			void setCartoonSphereRadius(float value) 
-				throw() { cartoon_sphere_radius->setText(String(value).c_str());}
+				throw() { setValue_(cartoon_sphere_radius,value);}
 
 			///
 			void setCartoonArrowWidth(float value) 
-				throw() { cartoon_arrow_height->setText(String(value).c_str());}
+				throw() { setValue_(cartoon_arrow_height,value);}
 
 			///
 			void setCartoonArrowHeight(float value) 
-				throw() { cartoon_arrow_height->setText(String(value).c_str());}
+				throw() { setValue_(cartoon_arrow_height,value);}
 
 			///
 			void setHBondRadius(float value) 
-				throw() { hbonds_radius->setText(String(value).c_str());}
+				throw() { setValue_(hbonds_radius,value);}
 
 			protected:
 			
-			float getFloatValue_(const QLineEdit* const & te) const
+			float getFloatValue_(const QLineEdit* const & le) const
+				throw();
+
+			void setValue_(QLineEdit* le, float value)
+				throw();
+
+			void fetchPreference_(const INIFile& inifile, const String& entry, 
+														QLineEdit& lineedit)
+				throw();
+
+			void writePreference_(INIFile& inifile, const String& entry, 
+														const QLineEdit& lineedit) const
 				throw();
 		};
 

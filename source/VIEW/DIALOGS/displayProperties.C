@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.37 2003/11/13 21:45:31 amoll Exp $
+// $Id: displayProperties.C,v 1.38 2003/11/14 01:29:55 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -49,7 +49,8 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 		coloring_settings_(0),
 		preferences_(0),
 		id_(-1),
-		rep_(0)
+		rep_(0),
+		advanced_options_modified_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DisplayProperties " << this << std::endl;
@@ -120,6 +121,11 @@ void DisplayProperties::fetchPreferences(INIFile& inifile)
 		precision_slider->setValue(12 * 10);
 		presets_precision_button->setChecked(true);
 	}
+
+	if (model_settings_ != 0)
+	{
+		model_settings_->fetchPreferences(inifile);
+	}
 }
 
 void DisplayProperties::getEntry_(INIFile& inifile, const String& key, QComboBox& box)
@@ -153,6 +159,11 @@ void DisplayProperties::writePreferences(INIFile& inifile)
 	inifile.insertValue("REPRESENTATION", "coloring_method", coloring_method_combobox->currentItem());
 	inifile.insertValue("REPRESENTATION", "custom_color", custom_color_);
 	inifile.insertValue("REPRESENTATION", "selected_color", BALL_SELECTED_COLOR);
+
+	if (model_settings_ != 0)
+	{
+		model_settings_->writePreferences(inifile);
+	}
 }
 
 
@@ -521,7 +532,8 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 				 (custom_precision_button->isChecked() &&
 				  rep_->getSurfaceDrawingPrecision() != (float)precision_slider->value() / 10.0)||
 				 (!custom_precision_button->isChecked() &&
-				  rep_->getSurfaceDrawingPrecision() != -1))
+				  rep_->getSurfaceDrawingPrecision() != -1) ||
+				 advanced_options_modified_)
 		{
 			rebuild_representation = true;
 		}
@@ -590,6 +602,8 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		ccmessage->setType(CompositeMessage::CENTER_CAMERA);
 		notify_(ccmessage);
 	}
+
+	advanced_options_modified_ = false;
 }
 
 
@@ -738,6 +752,11 @@ void DisplayProperties::getAdvancedOptions_()
 	}
 }
 			
+void DisplayProperties::applyPreferences(Preferences& /*preferences*/)
+	throw()
+{
+	advanced_options_modified_ = true;
+}
 
 
 } } // namespaces
