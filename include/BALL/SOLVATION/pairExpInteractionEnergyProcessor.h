@@ -1,6 +1,5 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.7 2000/11/06 17:59:19 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.8 2001/03/05 01:55:44 amoll Exp $
 
-// BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
 
@@ -43,11 +42,10 @@ namespace BALL
 {
 
 	/** Processor for the computation of the van-derWaals interaction energy
-	  of a molecule.
-		This processor uses a 6-exp pair potential for the calculation of
-		dispersion and repulsion energies.
-		\\
-		{\bf Definition:} \URL{BALL/SOLVATION/pairExpInteractionEnergyProcessor.h}
+			of a molecule.
+			This processor uses a 6-exp pair potential for the calculation of
+			dispersion and repulsion energies. \\
+			{\bf Definition:} \URL{BALL/SOLVATION/pairExpInteractionEnergyProcessor.h}
 	 */
 	
 	class PairExpInteractionEnergyProcessor
@@ -72,26 +70,26 @@ namespace BALL
 		};
 
 		/** Symbolic names for option keys.
-			This struct contains a symbolic name for each recognized key in
-			PairExpInteractionEnergyProcessor::options.
+				This struct contains a symbolic name for each recognized key in
+				PairExpInteractionEnergyProcessor::options.
 		 */
 		struct Option
 		{
 			
 			/** The verbosity level.
-				Use integer values with this option.
-				@see Default::VERBOSITY
-				@param verbosity integer
+					Use integer values with this option.
+					@see Default::VERBOSITY
+					@param verbosity integer
 			 */
 			static const char* VERBOSITY;
 
 			/** Constants for the pair potential.
-				@see Default::ALPHA
-				@see Default::C1
-				@see Default::C2
-				@param alpha float
-				@param c1 float
-				@param c2 float
+					@see Default::ALPHA
+					@see Default::C1
+					@see Default::C2
+					@param alpha float
+					@param c1 float
+					@param c2 float
 			 */
 			static const char* ALPHA;
 			static const char* C1;
@@ -100,58 +98,58 @@ namespace BALL
 			static const char* CLAVERIE_FILENAME;
 
 			/** RDF option.
-				This option states whether the RDF should be considered during the
-				integrtion or not. Use bool values with this option.
-				@see Default::USE_RDF
-				@param verbosity integer
+					This option states whether the RDF should be considered during the
+					integrtion or not. Use bool values with this option.
+					@see Default::USE_RDF
+					@param verbosity integer
 			 */
 			static const char* USE_RDF;
 
 			/** RDF file option.
-				This options sets the name of the file containing the RDF
-				information. Use char* values with this option.
-				@see Default::RDF_FILENAME
-				@param rdf_file_name char*
+					This options sets the name of the file containing the RDF
+					information. Use char* values with this option.
+					@see Default::RDF_FILENAME
+					@param rdf_file_name char*
 			 */
 			static const char* RDF_FILENAME;
 
 			/** Solvent description file option.
-				This option sets the name of the file containig the solvent
-				description. Use char* values with this option.
-				@see Default::SOLVENT_FILENAME;
-				@param solvent_file_name char*
+					This option sets the name of the file containig the solvent
+					description. Use char* values with this option.
+					@see Default::SOLVENT_FILENAME;
+					@param solvent_file_name char*
 			 */
 			static const char* SOLVENT_FILENAME;
 
 			/** The type of surface to be used.
-				@see Default::SURFACE_TYPE
-				@param surface_type int the type of the surface
+					@see Default::SURFACE_TYPE
+					@param surface_type int the type of the surface
 			 */
 			static const char* SURFACE_TYPE;
 
 			/** The name of the file containing a surface definition.
-				@see Default::SURFACE_FILENAME
-				@param surface_filename char*
+					@see Default::SURFACE_FILENAME
+					@param surface_filename char*
 			 */
 			static const char* SURFACE_FILENAME;
 
 		};
 
 		/** Default values for interaction energy calculations.
-		These values represent the default settings for the calculations of the
-		interaction energy.
+				These values represent the default settings for the calculations 
+				of the interaction energy.
 		 */
 		struct Default
 		{
 			/** Default verbosity level.
-				@see Option::VERBOSITY
+					@see Option::VERBOSITY
 			 */
 			static const int VERBOSITY;
 
 			/** Default pair potential constants.
-			@see: Option::ALPHA
-			@see: Option::C1
-			@see: Option::C2
+					@see: Option::ALPHA
+					@see: Option::C1
+					@see: Option::C2
 			*/
 			static const double ALPHA;
 			static const double C1;
@@ -160,84 +158,97 @@ namespace BALL
 			static const char* CLAVERIE_FILENAME;
 
 			/** Default RDF setting.
-				We use RDF information for the calculation of the interaction
-				energy by default.
-				@see Option::USE_RDF
+					We use RDF information for the calculation of the interaction
+					energy by default.
+					@see Option::USE_RDF
 			 */
 			static const bool USE_RDF;
 			static const char* RDF_FILENAME;
 			static const char* SOLVENT_FILENAME;
 
 			/** 
-				@see Option::SURFACE_TYPE
+					@see Option::SURFACE_TYPE
 			 */
 			static const int SURFACE_TYPE;
 
 			/** 
-				@see Option::SURFACE_FILENAME
+					@see Option::SURFACE_FILENAME
 			 */
 			static const char* SURFACE_FILENAME;
 
 		};
 
-		/** @name Constructors and destructors */
+		/** @name Constructors and destructors 
+		*/
 		//@{
 
-		/** Default constructor */
+		/** Default constructor 
+		*/
 		PairExpInteractionEnergyProcessor() throw();
 
-		/** Copy constructor */
+		/** Copy constructor 
+		*/
 		PairExpInteractionEnergyProcessor(const
 				PairExpInteractionEnergyProcessor& proc) throw();
 
-		/** Destructor */
+		/** Destructor 
+		*/
 		virtual ~PairExpInteractionEnergyProcessor() throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const PairExpInteractionEnergyProcessor& operator = 
 			(const PairExpInteractionEnergyProcessor& proc) throw();
 
-		/** Clear function */
+		/** Clear function 
+		*/
 		virtual void clear() throw();
 		
 		//@}
-
-
-		/** @name Processor functions */
+		/** @name Processor functions 
+		*/
 		//@{
 
-		/** */
+		/** 
+		*/
 		virtual bool finish() throw();
 
 		//@}
-
-
-		/** @name Options */
+		/** @name Options 
+		*/
 		//@{
 
-		/** Options for the calculation of the free energy */
+		/** Options for the calculation of the free energy 
+		*/
 		Options options;
 
 		//@}
 
-
 		protected:
 
-		/*_ Alpha constant from the Kitaygorodski Potential */
+		/*_ Alpha constant from the Kitaygorodski Potential 
+		*/
 		double alpha_;
-		/*_ Repulsion constant from the Kitaygorodski Potential */
+
+		/*_ Repulsion constant from the Kitaygorodski Potential 
+		*/
 		double C1_;
-		/*_ Dispersion constant from the Kitaygorodski Potential */
+
+		/*_ Dispersion constant from the Kitaygorodski Potential 
+		*/
 		double C2_;
-		/*_ The solvent description */
+
+		/*_ The solvent description 
+		*/
 		SolventDescriptor solvent_;
-		/*_ The helper class for reading rdf descriptions from an INIFile */
+
+		/*_ The helper class for reading rdf descriptions from an INIFile 
+		*/
 		RDFParameter rdf_parameter_;
 
 		// PairExpRDFIntegrator rdf_integrator_;

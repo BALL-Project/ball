@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.9 2001/02/18 20:52:50 amoll Exp $ 
+// $Id: poissonBoltzmann.h,v 1.10 2001/03/05 01:55:44 amoll Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -26,16 +26,15 @@ using std::vector;
 namespace BALL 
 {
 
-	/** Finite Difference Poisson Boltzmann Solver
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/poissonBoltzmann.h}\\
+	/** Finite Difference Poisson Boltzmann Solver. //
+			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/poissonBoltzmann.h}
 	*/			
 	class FDPB 
 	{
 
 		public:
 
-		/**	Error codes: these are the possible error codes that
-				can be produced by FDPB.
+		/**	Error codes: these are the possible error codes that can be produced by FDPB.
 				@see	FDPB::getErrorCode()
 				@see	FDPB::getErrorMessage()
 		*/
@@ -81,7 +80,7 @@ namespace BALL
 			ERROR__CANNOT_CREATE_EPSILON_GRID,
 
 			/**	Unable to create grid for the modified Debye Hueckel parameter/out of memory.
-					The modified Debye Hueckel parameter $\bar{\kappa}$ is also a function of
+					The modified Debye Hueckel parameter $\bar{\kappa}$ is also a function of 
 					space and therefore represented by a RegularData3D<float> (FDPB::kappa_grid).
 					The grid is created by FDPB::setupKappaGrid().\\
 					If the creation of this grid fails due to a alack of virtual memory
@@ -294,10 +293,10 @@ namespace BALL
 			*/
 			static const char* DIPOLE;
 
-			/**	Boundary condition Focusing: potential is via a larger but coarser grid.
+			/**	Boundary condition Focusing: potential is estimated via a larger but coarser grid.
 					Focusing calculates a larger grid (double extension in each direction)
 					centered on the final grid with a four times the spacing of the final grid.
-					Focusing also assigns an estimate of the electrostatic potential to
+					Focusing also assigns an estimate of the electrostatic potential to 
 					each grid point in the final grid, thus acceleratingthe convergence.
 			*/
 			static const char* FOCUSING;
@@ -317,7 +316,6 @@ namespace BALL
 			*/
 			static const char* UNIFORM;
 		};
-		
 
 		/**	Constants to define  the dielectric smoothing methods.
 				To increase the accuracy of a FDPB calculation it prooved
@@ -400,7 +398,7 @@ namespace BALL
 			*/
 			static const float PROBE_RADIUS;
 
-			/**	Default ionic exclusion radius
+			/**	Default ionic exclusion radius.
 					Default is 2.0 Angstrom
 					@see	Option::ION_RADIUS
 			*/
@@ -491,7 +489,8 @@ namespace BALL
 		typedef struct FastAtomStruct FastAtom;
 
 
-		/**	@name	Constructors and Destructors */
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 		
 		/**	Default constructor.
@@ -533,7 +532,6 @@ namespace BALL
 		*/
 		virtual ~FDPB();
 
-		
 		/**	Frees all allocated memory and destroys the options and results.
 		*/
 		void destroy();
@@ -549,7 +547,6 @@ namespace BALL
 		void destroyGrids();
 
 		//@}
-		
 		/**	@name Setup methods
 				Using these methods, a FDPB object can be prepared
 				for a calculation.\\
@@ -578,12 +575,11 @@ namespace BALL
 		bool setup(System& system);
 
 		/**	Setup with assignment of options.
-				This method copies the options given by options in to the
-				options variable of the FDPB object and invokes 
-				setup(system) afterwards.
+				This method copies the options given by options into the
+				options variable of the FDPB object and invokes setup(system) afterwards.
 				@see	setup(System& system)
 				@param	options the new options
-				@param	system 	the molecular system to be evaulated
+				@param	system 	the molecular system to be evaluated
 				@return 	bool true on success, call getErrorCode otherwise
 		*/
 		bool setup(System& system, Options& options);
@@ -597,7 +593,7 @@ namespace BALL
 				\Ref{setupEpsGrid} creates a grid containing the dielectric constant
 				between any two neighbouring grid points (i.e., it contains 3 N values).
 				Points inside the molecule (i.i, inside the radius of any atom) are set to
-				the solute dielectric constant, al other points are set to the solvent
+				the solute dielectric constant, all other points are set to the solvent
 				dielectric constant.\\
 				This method also sets the coordinates and dimensions of the grid (extracted
 				from either options or system) and the grid spacing.\\
@@ -609,7 +605,6 @@ namespace BALL
 					\item ERROR__NOT_A_VECTOR_IN_UPPER_LOWER
 					\item ERROR__ILLEGAL_VALUE_FOR_LOWER_UPPER
 				\end{itemize}
-
 				@param	system the system to be evaluated
 				@return	true on success, call getErrorCode otherwise
 		*/
@@ -627,7 +622,6 @@ namespace BALL
 				The method may set the error code to ERROR__CANNOT_CREATE_ATOM_ARRAY 
 				and terminate with false if insufficient virtual memory is available to create
 				the array.
-
 				@param	system	the system to be evaluated
 				@return	bool	true on success, call getErrorCode otherwise
 				@see	atom_array
@@ -652,12 +646,11 @@ namespace BALL
 		bool setupBoundary();
 
 		//@}
-
-		/**	@name Executing the calculation and retrieving the results */
+		/**	@name Executing the calculation and retrieving the results 
+		*/
 		//@{	
 
 		/**	Solves the linearized Poisson-Boltzmann equation.
-				
 		*/
 		bool 	solve();
 
@@ -665,7 +658,6 @@ namespace BALL
 				The total electrostatic energy of the FDPB object after
 				the last iteration (even if no convergence was reached!)
 				is returned in units of kJ/mol.
-
 				@see	getNumberOfIterations
 				@return	energy in kJ/mol
 		*/
@@ -692,8 +684,8 @@ namespace BALL
 		unsigned long	getNumberOfIterations() const;
 
 		//@}
-
-		/**	@name	Debugging	*/
+		/**	@name	Debugging	
+		*/
 		//@{
 			
 		/**	Returns the last error code.
@@ -706,12 +698,11 @@ namespace BALL
 		int getErrorCode() const;
 
 		//@}
-
-		/**	@name	Options and results of the calculation */
+		/**	@name	Options and results of the calculation 
+		*/
 		//@{
 
 		/**	The options for the FDPB calculation.
-				
 		*/
 		Options	options;
 
@@ -720,8 +711,8 @@ namespace BALL
 		Options	results;
 
 		//@}
-
-		/**	@name	Grids and arrays	*/
+		/**	@name	Grids and arrays	
+		*/
 		//@{
 
 		/**	The grid containing the spatial dependent dielectric constant.
@@ -760,7 +751,7 @@ namespace BALL
 		*/
 		RegularData3D<char>*	SAS_grid;
 
-		/**	An array containing a fast represenetation of all atoms in the system.
+		/**	An array containing a fast representation of all atoms in the system.
 				@see		FastAtom
 		*/
 		vector<FDPB::FastAtom>*	atom_array;

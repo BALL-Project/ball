@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.h,v 1.11 2000/12/01 15:17:50 anker Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.12 2001/03/05 01:55:44 amoll Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -22,13 +22,12 @@
 namespace BALL
 {
 	/** 6-exp pair potential integrator.
-		This class provides a tool for calculating the integral part of the
-		van-der-Waals interaction energies. The difference to the values
-		calculated with the standard interaction energy processor is the
-		inclusion of a radial distribution function (@see
-		RadialDistributionFunction) into the computaion.
-		\\
-		{\bf Definition:} \URL{BALL/SOLVATION/pairExpRDFIntegrator}
+			This class provides a tool for calculating the integral part of the
+			van-der-Waals interaction energies. The difference to the values
+			calculated with the standard interaction energy processor is the
+			inclusion of a radial distribution function \Ref{RadialDistributionFunction} 
+			into the computaion. \\
+			{\bf Definition:} \URL{BALL/SOLVATION/pairExpRDFIntegrator}
 	 */
 
 	class PairExpRDFIntegrator
@@ -40,21 +39,21 @@ namespace BALL
 		BALL_CREATE(PairExpRDFIntegrator)
 
 		/** Symbolic names for option keys.
-			This struct contains a symbolic name for each recognized key in
-			PairExpRDFIntegrator::options.
+				This struct contains a symbolic name for each recognized key in
+				PairExpRDFIntegrator::options.
 		 */
 		struct Option
 		{
 			/** The verbosity level.
-				Use integer values with this option.
-				@see Default::VERBOSITY
-				@param verbosity integer
+					Use integer values with this option.
+					@see Default::VERBOSITY
+					@param verbosity integer
 			 */
 			static const char* VERBOSITY;
 
 			/** Number of sampling points for the numerical integration.
-			@see Default::SAMPLES
-			@param samples integer
+				@see Default::SAMPLES
+				@param samples integer
 			*/
 			static const char* SAMPLES;
 		};
@@ -62,7 +61,7 @@ namespace BALL
 		struct Default
 		{
 			/** Default verbosity level.
-				@see Option::VERBOSITY
+					@see Option::VERBOSITY
 			 */
 			static const int VERBOSITY;
 			/** Default number of samples to use in numerical integration
@@ -72,7 +71,8 @@ namespace BALL
 		};
 
 
-		/** @name Constructors and destructors */
+		/** @name Constructors and destructors 
+		*/
 		//@{
 
 		/** Default constructor
@@ -93,8 +93,7 @@ namespace BALL
 				@param R_ij_o potential constant
 				@param k1 geometric correction constant
 				@param k2 geometric correction constant
-				@param rdf a radial distribution functin (@see
-				RadialDistributionFunction)
+				@param rdf a radial distribution functin \Ref{RadialDistributionFunction} 
 		*/
 		PairExpRDFIntegrator(double alpha, double C1, double C2, double R_ij_o,
 				double k1, double k2, const RadialDistributionFunction& rdf)
@@ -106,9 +105,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-		
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
 		/** Assignment operator 
@@ -125,12 +123,11 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/** @name Accessors */
+		/** @name Accessors 
+		*/
 		//@{
 
-		/** set the potential and geometric correction constants of this
+		/** Set the potential and geometric correction constants of this
 				instance of PairExpRDFIntegrator
 				@param alpha potential constant
 				@param C1 potential constant
@@ -143,7 +140,7 @@ namespace BALL
 				double k1, double k2) 
 			throw();
 
-		/** get the potential and geometric correction constants of this
+		/** Get the potential and geometric correction constants of this
 				instance of PairExpRDFIntegrator
 				@param alpha potential constant (set by this function)
 				@param C1 potential constant (set by this function)
@@ -156,14 +153,14 @@ namespace BALL
 				double& k1, double& k2) 
 			throw();
 
-		/** integrate to Infinity from {\tt from} using previously set constants 
+		/** Integrate to Infinity from {\tt from} using previously set constants 
 				@param from the lower limit of integration
 				@return the value of the integration
 		*/
 		double integrateToInf(double from) const 
 			throw();
 
-		/** integrate from {\tt from} to infinity using the specified constants 
+		/** Integrate from {\tt from} to infinity using the specified constants 
 				@param from the lower limit of the integration
 				@param alpha potential constant
 				@param C1 potential constant
@@ -177,8 +174,7 @@ namespace BALL
 				double R_ij_o, double k1, double k2) 
 			throw();
 
-		/** integrate from {\tt from} to {\tt to} using previously assigned
-				constants 
+		/** Integrate from {\tt from} to {\tt to} using previously assigned	constants.
 				@param from the lower limit
 				@param to the upper limit 
 				@return the value of the integration
@@ -186,7 +182,7 @@ namespace BALL
 		double integrate(double from, double to) const 
 			throw();
 
-		/** integrate from {\tt from} to {\tt to} using the specified constants 
+		/** Integrate from {\tt from} to {\tt to} using the specified constants 
 				@param from the lower limit of integration
 				@param to the upper limit 
 				@param alpha potential constant
@@ -210,9 +206,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
 		/** Equality operator. Tests whether two instances of
@@ -225,12 +220,12 @@ namespace BALL
 
 		//@}
 
-
-		/** */
+		/** 
+		*/
 		Options options;
 
-
-		/** @name Debugging and diagnostics */
+		/** @name Debugging and diagnostics 
+		*/
 		//@{
 
 		/** Dumps the whole content of the object
@@ -241,8 +236,6 @@ namespace BALL
 			throw();
 		
 		//@}
-
-
 
 		protected:
 

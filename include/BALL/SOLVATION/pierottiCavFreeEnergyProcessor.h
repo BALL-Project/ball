@@ -1,4 +1,4 @@
-// $Id: pierottiCavFreeEnergyProcessor.h,v 1.7 2001/02/03 15:25:59 amoll Exp $
+// $Id: pierottiCavFreeEnergyProcessor.h,v 1.8 2001/03/05 01:55:44 amoll Exp $
 
 #ifndef BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
@@ -18,16 +18,13 @@
 namespace BALL
 {
 	/** Processor for the computation of the cavitation free energy. 
-		This processor is using the SPT theory approach by Pierotti,
-		Chem. Rev. 76(6):717--726, 1976 with the modification for
-		non-spherical solutes by Huron/Claverie, J. Phys. Chem.
-		76(15):2123-2133, 1972.
-		\\
-		Energy returned in units of kJ/mol.
-		\\
-		{\bf Definition:} \URL{BALL/SOLVATION/pierottiCavFreeEnergyProcessor.h}
+			This processor is using the SPT theory approach by Pierotti,
+			Chem. Rev. 76(6):717--726, 1976 with the modification for
+			non-spherical solutes by Huron/Claverie, J. Phys. Chem.
+			76(15):2123-2133, 1972.	\\
+			Energy returned in units of kJ/mol.	\\
+			{\bf Definition:} \URL{BALL/SOLVATION/pierottiCavFreeEnergyProcessor.h}
 	 */
-
 	class PierottiCavFreeEnergyProcessor
 		:	public EnergyProcessor
 	{
@@ -35,40 +32,40 @@ namespace BALL
 		public:
 
 		/** Symbolic names for option keys.
-			This struct contains a symbolic name for each recognized key in
-			PierottiCavFreeEnergyProcessor::options.
+				This struct contains a symbolic name for each recognized key in
+				PierottiCavFreeEnergyProcessor::options.
 		 */
 		struct Option
 		{
 			/** The verbosity level.
-				Use integer values with this option.
-				@see Default::VERBOSITY
-				@param verbosity integer
+					Use integer values with this option.
+					@see Default::VERBOSITY
+					@param verbosity integer
 			 */
 			static const char* VERBOSITY;
 
 			/** The number density of the solvent.
-				This option defines the number density of the surrounding solvent. Use
-				float values of unit $ A^{-3} $ with this option.
-				@see Default::SOLVENT_NUMBER_DENSITY
-				@param solvent_number_density float
+					This option defines the number density of the surrounding solvent. Use
+					float values of unit $ A^{-3} $ with this option.
+					@see Default::SOLVENT_NUMBER_DENSITY
+					@param solvent_number_density float
 			 */
 			static const char* SOLVENT_NUMBER_DENSITY;
 
 			/** The pressure.
-				With this option it is possible to define the pressure under which
-				the solvation takes place. Use float values of unit Pa with this
-				option.
-				@see Default::PRESSURE
-				@param pressure float
+					With this option it is possible to define the pressure under which
+					the solvation takes place. Use float values of unit Pa with this
+					option.
+					@see Default::PRESSURE
+					@param pressure float
 			 */
 			static const char* PRESSURE;
 
 			/** The temperature.
-				This option defines the absolute temperature at which the solvation
-				takes place. Use float values of unit K with this option.
-				@see Default::ABSOLUTE_TEMPERATURE
-				@param absolute_temperature float;
+					This option defines the absolute temperature at which the solvation
+					takes place. Use float values of unit K with this option.
+					@see Default::ABSOLUTE_TEMPERATURE
+					@param absolute_temperature float;
 			 */
 			static const char* ABSOLUTE_TEMPERATURE;
 
@@ -83,98 +80,102 @@ namespace BALL
 		};
 
 		/** Default values for cavitation free anergy calculations.
-		These values represent the default settings for the calculations of the
-		cavitation free energy.
+				These values represent the default settings for the calculations of the
+				cavitation free energy.
 		 */
 		struct Default
 		{
 			/** Default verbosity level.
-				@see Option::VERBOSITY
+					@see Option::VERBOSITY
 			 */
 			static const int VERBOSITY;
 
 			/** Default number density.
-				This default value is the number density of water at 300 K and
-				standard pressure (3.33253e-2 $ A^{-3} $).
-				@see Option::SOLVENT_NUMBER_DENSITY;
+					This default value is the number density of water at 300 K and
+					standard pressure (3.33253e-2 $ A^{-3} $).
+					@see Option::SOLVENT_NUMBER_DENSITY;
 			 */
 			static const float SOLVENT_NUMBER_DENSITY;
 
 			/** Default pressure.
-				This default value is the standard pressure (1.01325e5 Pa).
-				@see Option::PRESSURE
+					This default value is the standard pressure (1.01325e5 Pa).
+					@see Option::PRESSURE
 			 */
 			static const float PRESSURE;
 
 			/** Default temperature.
-				We use a standard temperature of 298 K (25 degrees Celsius).
-				@see Option::ABSOLUTE_TEMPERATURE
+						We use a standard temperature of 298 K (25 degrees Celsius).
+						@see Option::ABSOLUTE_TEMPERATURE
 			 */
 			static const float ABSOLUTE_TEMPERATURE;
 
 			/** Default probe radius.
-				This probe radius is the one suggested by Pierotti et al. in their
-				paper (1.385 $ A $).
-				@see Option::PROBE_RADIUS
+					This probe radius is the one suggested by Pierotti et al. in their
+					paper (1.385 $ A $).
+					@see Option::PROBE_RADIUS
 			 */
 			static const float PROBE_RADIUS;
 		};
 
-		/** @name Constructors and Destructors */
+		/** @name Constructors and Destructors 
+		*/
 		//@{
 
-		/** Default constructor */
+		/** Default constructor 
+		*/
 		PierottiCavFreeEnergyProcessor() throw();
 
-		/** Copy constructor */
-		PierottiCavFreeEnergyProcessor(const PierottiCavFreeEnergyProcessor&
-				proc) throw();
+		/** Copy constructor 
+		*/
+		PierottiCavFreeEnergyProcessor(const PierottiCavFreeEnergyProcessor& proc) 
+			throw();
 
-		/** Destructor */
+		/** Destructor 
+		*/
 		virtual ~PierottiCavFreeEnergyProcessor() throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const PierottiCavFreeEnergyProcessor& operator = (
 				const PierottiCavFreeEnergyProcessor& proc) throw();
 
-		/** Clear function */
+		/** Clear function 
+		*/
 		virtual void clear() throw();
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 		
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const PierottiCavFreeEnergyProcessor& proc) const throw();
 
 		//@}
-
-
-		/** @name processor functions */
+		/** @name processor functions 
+		*/
 		//@{
 
-		/** This is where the actual computation takes place. */
+		/** This is where the actual computation takes place. 
+		*/
 		virtual bool finish() throw();
 
 		//@}
-
-
-		/** @name Options */
+		/** @name Options 
+		*/
 		//@{
 
-		/** Options for the calculation of the caviation free energy */
+		/** Options for the calculation of the caviation free energy 
+		*/
 		Options options;
 
 		//@}
-
 
 		private:
 

@@ -1,4 +1,4 @@
-// $Id: ooiEnergy.h,v 1.3 2000/08/30 19:58:25 oliver Exp $
+// $Id: ooiEnergy.h,v 1.4 2001/03/05 01:55:43 amoll Exp $
 
 #ifndef BALL_SOLVATION_OOIENERGY_H
 #define BALL_SOLVATION_OOIENERGY_H
@@ -16,20 +16,14 @@ namespace BALL
 
 	class AtomContainer;
 
-	/** Calculate the solvation energy.
-			Calculates the solvation energy after
-			OOI et al. (Proc. of the National US Academy of Sciences)
-			The energy is returned in units of kJ/mol
-			Unparametrized atoms are simply ignored, this leads to
-			unreasonable values.\\
-
-			{\bf Files:}\\
-			types are taken from {\tt solvation/Ooi.ini}\\
+	/** Calculate the solvation energy after OOI et al. 
+			(Proc. of the National US Academy of Sciences)
+			The energy is returned in units of kJ/mol.
+			Unparametrized atoms are simply ignored, this leads to unreasonable values. \\
+			{\bf Files:}\\ types are taken from {\tt solvation/Ooi.ini}\\
 			{\bf Definition:} \URL{BALL/SOLVATION/ooiEnergy.h}
-			\\
 	*/ 
 	double calculateOoiEnergy(AtomContainer& atoms);
-
 		
 } // namespace BALL
 

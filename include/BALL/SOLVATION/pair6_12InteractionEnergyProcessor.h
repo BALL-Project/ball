@@ -1,6 +1,5 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.7 2001/02/03 15:25:59 amoll Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.8 2001/03/05 01:55:44 amoll Exp $
 
-// BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 
@@ -16,7 +15,6 @@
 #include <BALL/MATHS/surface.h>
 #endif
 
-// BAUSTELLE: Pfad?
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #include <BALL/ENERGY/energyProcessor.h>
 #endif
@@ -38,13 +36,11 @@ namespace BALL
 {
 
 	/** Processor for the computation of the van-der-Waals interaction energy
-	  of a molecule with its surrounding.
-		This processor uses a 6_12 pair potential for the calculation of
-		dispersion and repulsion energies.
-	  \\
-		Energies are computed in units of kJ/mol.
-		\\
-		{\bf Definition:} \URL{BALL/SOLVATION/pair6_12InteractionEnergyProcessor.h}
+			of a molecule with its surrounding.
+			This processor uses a 6_12 pair potential for the calculation of
+			dispersion and repulsion energies. \\
+			Energies are computed in units of kJ/mol. \\
+			{\bf Definition:} \URL{BALL/SOLVATION/pair6_12InteractionEnergyProcessor.h}
 	 */
 	
 	class Pair6_12InteractionEnergyProcessor
@@ -63,106 +59,105 @@ namespace BALL
 		};
 
 		/** Symbolic names for option keys.
-			This struct contains a symbolic name for each recognized key in
-			Pair6_12InteractionEnergyProcessor::options.
-		 */
+				This struct contains a symbolic name for each recognized key in
+				Pair6_12InteractionEnergyProcessor::options.
+		*/
 		struct Option
 		{
 			
 			/** The verbosity level.
-				Use integer values with this option.
-				@see Default::VERBOSITY
-				@param verbosity integer
+					Use integer values with this option.
+					@see Default::VERBOSITY
+					@param verbosity integer
 			 */
 			static const char* VERBOSITY;
 
 			/** RDF option.
-				This option states whether the RDF should be considered during the
-				integrtion or not. Use bool values with this option.
-				@see Default::USE_RDF
-				@param verbosity integer
+					This option states whether the RDF should be considered during the
+					integrtion or not. Use bool values with this option.
+					@see Default::USE_RDF
+					@param verbosity integer
 			 */
 			static const char* USE_RDF;
 
 			/** RDF file option.
-				This options sets the name of the file containing the RDF
-				information. Use char* values with this option.
-				@see Default::RDF_FILENAME
-				@param rdf_file_name char*
+					This options sets the name of the file containing the RDF
+					information. Use char* values with this option.
+					@see Default::RDF_FILENAME
+					@param rdf_file_name char*
 			 */
 			static const char* RDF_FILENAME;
 
 			/** Solvent description file option.
-				This option sets the name of the file containig the solvent
-				description. Use char* values with this option.
-				@see Default::SOLVENT_FILENAME;
-				@param solvent_file_name char*
+					This option sets the name of the file containig the solvent
+					description. Use char* values with this option.
+					@see Default::SOLVENT_FILENAME;
+					@param solvent_file_name char*
 			 */
 			static const char* SOLVENT_FILENAME;
 
 			/** The number density of the solvent.
-				This option defines the number density of the surrounding solvent. Use
-				float values of unit $ A^{-3} $ with this option.
-				@see Default::SOLVENT_NUMBER_DENSITY
-				@param solvent_number_density float
+					This option defines the number density of the surrounding solvent. 
+					Use	float values of unit $ A^{-3} $ with this option.
+					@see Default::SOLVENT_NUMBER_DENSITY
+					@param solvent_number_density float
 			 */
 			static const char* SOLVENT_NUMBER_DENSITY;
 
 			/** The type of surface to be used.
-				@see Default::SURFACE_TYPE
-				@param surface_type int the type of the surface
+					@see Default::SURFACE_TYPE
+					@param surface_type int the type of the surface
 			 */
 			static const char* SURFACE_TYPE;
 
 			/** The name of the file containing a surface definition.
-				@see Default::SURFACE_FILENAME
-				@param surface_filename char*
+					@see Default::SURFACE_FILENAME
+					@param surface_filename char*
 			 */
 			static const char* SURFACE_FILENAME;
 
 		};
 
 		/** Default values for interaction energy calculations.
-		These values represent the default settings for the calculations of the
-		interaction energy.
+				These values represent the default settings for the calculations of the
+				interaction energy.
 		 */
 		struct Default
 		{
 			/** Default verbosity level.
-				@see Option::VERBOSITY
+					@see Option::VERBOSITY
 			 */
 			static const int VERBOSITY;
 
 			/** Default RDF setting.
-				We use RDF information for the calculation of the interaction
-				energy by default.
-				@see Option::USE_RDF
+					We use RDF information for the calculation of the interaction	energy by default.
+					@see Option::USE_RDF
 			 */
 			static const bool USE_RDF;
 			static const char* RDF_FILENAME;
 			static const char* SOLVENT_FILENAME;
 
 			/** Default number density.
-				This default value is the number density of water at 300 K and
-				standard pressure (3.33253e-2 $ A^{-3}$).
-				@see Option::SOLVENT_NUMBER_DENSITY;
+					This default value is the number density of water at 300 K and
+					standard pressure (3.33253e-2 $ A^{-3}$).
+					@see Option::SOLVENT_NUMBER_DENSITY;
 			 */
 			static const float SOLVENT_NUMBER_DENSITY;
 
 			/** 
-				@see Option::SURFACE_TYPE
+					@see Option::SURFACE_TYPE
 			 */
 			static const int SURFACE_TYPE;
 
 			/** 
-				@see Option::SURFACE_FILENAME
+					@see Option::SURFACE_FILENAME
 			 */
 			static const char* SURFACE_FILENAME;
 
 		};
 
-
-		/** @name Constructors and destructors */
+		/** @name Constructors and destructors 
+		*/
 		//@{
 
 		/** Default constructor 
@@ -178,111 +173,111 @@ namespace BALL
 			throw();
 
 		/** Detailed constructor
-				@param solvent a description of the sorrounding solvent (@see
-				SolventDescriptor)
-				@param rdf_param the parameters for the radial distribution
-				function (@see RDFParameter)
-				@param rdf_integrator the integrator needed for structural
-				integration (@see Pair6_12RDFIntegrator)
+				@param solvent a description of the surrounding solvent (@see	SolventDescriptor)
+				@param rdf_param the parameters for the radial distribution	function (@see RDFParameter)
+				@param rdf_integrator the integrator needed for structural 
+							 integration (@see Pair6_12RDFIntegrator)
 		*/
 		Pair6_12InteractionEnergyProcessor(const SolventDescriptor& solvent, 
 				const RDFParameter& rdf_param,
 				const Pair6_12RDFIntegrator& rdf_integrator) 
 			throw();
 
-		/** Destructor */
+		/** Destructor 
+		*/
 		virtual ~Pair6_12InteractionEnergyProcessor() throw();
 
 		//@}
-
-
-		/** @name Accessors */
+		/** @name Accessors 
+		*/
 		//@{
 
-		/** set the solvent descriptor 
+		/** Set the solvent descriptor.
 				@param solvent the solvent descriptor to be set
 		*/
 		void setSolventDescriptor(const SolventDescriptor& solvent) throw();
 
-		/** get the solvent descriptor 
+		/** Get the solvent descriptor.
 				@return the current solvent descriptor of this instance
 		*/
 		const SolventDescriptor& getSolventDescriptor() const throw();
 
-		/** set the parameters for the radial distribution function 
+		/** Set the parameters for the radial distribution function 
 				@param rdf_parameter the RDF parameter to be set
 		*/
 		void setRDFParameters(const RDFParameter& rdf_parameter) throw();
 
-		/** get the parameters for the radial distribution function 
+		/** Get the parameters for the radial distribution function 
 				@return a const reference of the current RDF parameter
 		*/
 		const RDFParameter& getRDFParameter() const throw();
 
-		/** set the integrator of this processor
+		/** Set the integrator of this processor
 				@param rdf_integrator the integrator to be set
 		*/
 		void setRDFIntegrator(const Pair6_12RDFIntegrator& integrator) throw();
 
-		/** get the integrator of this processor
+		/** Get the integrator of this processor
 				@return the current integrator 
 		*/
 		const Pair6_12RDFIntegrator& getRDFIntegrator() const throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const Pair6_12InteractionEnergyProcessor& operator =
 			(const Pair6_12InteractionEnergyProcessor& proc) throw();
 
-		/** Clear function */
+		/** Clear function 
+		*/
 		virtual void clear() throw();
 		
 		//@}
-
-
-		/** @name Processor functions */
+		/** @name Processor functions 
+		*/
 		//@{
 
-		/** */
+		/** 
+		*/
 		virtual bool finish() throw();
 
 		//@}
-
-
-		/** @name Options */
+		/** @name Options 
+		*/
 		//@{
 
-		/** Options for the calculation of the caviation free energy */
+		/** Options for the calculation of the caviation free energy 
+		*/
 		Options options;
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const Pair6_12InteractionEnergyProcessor& proc) 
 			const throw();
 
 		//@}
 
-
 		protected:
 
-		/*_ solvent description, to be read from an INIFile */
+		/*_ solvent description, to be read from an INIFile 
+		*/
 		SolventDescriptor solvent_;
 
-		/*_ the rdf description, also from an INIFile */
+		/*_ the rdf description, also from an INIFile 
+		*/
 		RDFParameter rdf_parameter_;
 
-		/*_ This is the tool to perform integrations with embedded RDf
-		 * information */
+		/*_ This is the tool to perform integrations with embedded RDf information 
+		*/
 		Pair6_12RDFIntegrator rdf_integrator_;
 
 

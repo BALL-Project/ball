@@ -1,4 +1,4 @@
-// $Id: solventParameter.h,v 1.3 2000/10/17 17:14:35 anker Exp $
+// $Id: solventParameter.h,v 1.4 2001/03/05 01:55:44 amoll Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTPARAMETER_H
 #define BALL_SOLVATION_SOLVENTPARAMETER_H
@@ -22,12 +22,10 @@
 namespace BALL
 {
 	/** Parameter section for the solvent description.
-		This class provides parameter file interface for the SolventDescriptor
-		class (@see SolventDescriptor). 
-		\\
-		{\bf Definition:} \URL{BALL/.../SolventParameter.h}
+			This class provides parameter file interface for the SolventDescriptor
+			class (\Ref{SolventDescriptor}).  \\
+			{\bf Definition:} \URL{BALL/SOLVATION/SolventParameter.h}
 	 */
-
 	class SolventParameter
 		:	public ParameterSection
 	{
@@ -36,68 +34,81 @@ namespace BALL
 
 		BALL_CREATE(SolventParameter)
 
-		/** @name Constructors and destructors. */
+		/** @name Constructors and destructors. 
+		*/
 		//@{
 
-		/** Default constructor */
+		/** Default constructor 
+		*/
 		SolventParameter() throw();
 
-		/** Detailed constructor */
+		/** Detailed constructor 
+		*/
 		SolventParameter(Parameters& parameters) throw();
 
-		/** Copy constructor */
+		/** Copy constructor 
+		*/
 		SolventParameter(const SolventParameter& param) throw();
 
 		/** Destructor */
 		virtual ~SolventParameter() throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const SolventParameter& operator = (const SolventParameter& param)
 		throw();
 
-		/** Clear method */
+		/** Clear method 
+		*/
 		virtual void clear() throw();
 
 		//@}
-
-
-		/** @name Accessors */
+		/** @name Accessors 
+		*/
 		//@{
 
-		/** Return a SolventDescriptor with the values from the parameter file */
+		/** Return a SolventDescriptor with the values from the parameter file 
+		*/
 		SolventDescriptor getSolventDescriptor() const throw();
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const SolventParameter& param) const throw();
+
 		//@}
 
-
-		/** */
+		/** 
+		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String&
 				section_name) throw();
 
 
 		protected:
 
-		/*_ The name of the solvent description freom the INI file */
+		/*_ The name of the solvent description freom the INI file 
+		*/
 		String name_;
-		/*_ The density of the solvent description freom the INI file */
+
+		/*_ The density of the solvent description freom the INI file 
+		*/
 		float number_density_;
-		/*_ The atoms of the solvent description freom the INI file */
+
+		/*_ The atoms of the solvent description freom the INI file 
+		*/
 		std::vector<SolventAtomDescriptor> solvent_atoms_;
-		/*_ The solvent descriptor to be created */
+
+		/*_ The solvent descriptor to be created 
+		*/
 		SolventDescriptor solvent_descriptor_;
 
 	};

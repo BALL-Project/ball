@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.h,v 1.3 2000/12/05 13:01:57 amoll Exp $
+// $Id: molecularSurfaceGrid.h,v 1.4 2001/03/05 01:55:43 amoll Exp $
 
 #ifndef BALL_SOLVATION_MOLECULARSURFACEGRID_H
 #define BALL_SOLVATION_MOLECULARSURFACEGRID_H
@@ -22,14 +22,14 @@
 namespace BALL 
 {
 
-	RegularData3D<char>* calculateSESGrid(const Vector3& lower, 
-														const Vector3& upper, 
+	///
+	RegularData3D<char>* calculateSESGrid(const Vector3& lower, const Vector3& upper, 
 														const float spacing, 
 														const System& system, 
 														const float probe_radius);
 
-	RegularData3D<char>* calculateSASGrid(const Vector3& lower, 
-														const Vector3& upper, 
+	///
+	RegularData3D<char>* calculateSASGrid(const Vector3& lower, const Vector3& upper, 
 														const float spacing, 
 														const System& system, 
 														const float probe_radius);

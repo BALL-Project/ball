@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.h,v 1.7 2000/12/01 11:49:35 anker Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.8 2001/03/05 01:55:44 amoll Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -19,52 +19,49 @@
 #include <BALL/DATATYPE/options.h>
 #endif
 
+// BAUSTELLE: DOCU ... documentation for constants
+
 namespace BALL
 {
 	/** 6-12 pair potential integrator.
-		This class provides a tool for calculating the integral part of the
-		van-der-Waals interaction energies. The difference to the values
-		calculated with the standard interaction energy processor is the
-		inclusion of a radial distribution function (@see
-		RadialDistributionFunction) into the computaion.
-		\\
-		{\bf Definition:} \URL{BALL/SOLVATION/pair6_12RDFIntegrator}
+			This class provides a tool for calculating the integral part of the
+			van-der-Waals interaction energies. The difference to the values
+			calculated with the standard interaction energy processor is the
+			inclusion of a radial distribution function 
+			(@see	RadialDistributionFunction) into the computaion.\\
+			{\bf Definition:} \URL{BALL/SOLVATION/pair6_12RDFIntegrator}
 	*/
-
 	class Pair6_12RDFIntegrator
 		:	public RDFIntegrator
 	{
-
 		public:
 
 		BALL_CREATE(Pair6_12RDFIntegrator)
 
 		/** Symbolic names for option keys.
-			This struct contains a symbolic name for each recognized key in
-			Pair6_12RDFIntegrator::options.
+				This struct contains a symbolic name for each recognized key in
+				Pair6_12RDFIntegrator::options.
 		 */
-
 		struct Option
 		{
-			/** The verbosity level.
-				Use integer values with this option.
-				@see Default::VERBOSITY
-				@param verbosity integer
-			 */
-
-			static const char* METHOD;
 			/** The integration method.
-				Use integer values with this option.
-				@see Default::METHOD
-				@param integration_method integer
+					Use integer values with this option.
+					@see Default::METHOD
+					@param integration_method integer
 			 */
+			static const char* METHOD;
 
+			/** This option sets the number of samples to be used in numerical integration.
+					Use integer values with this option.
+					@see Default::SAMPLES
+					@param samples integer
+			 */
 			static const char* SAMPLES;
-			/** This option sets the number of samples to be used in numerical
-			 * integration.
-				Use integer values with this option.
-				@see Default::SAMPLES
-				@param samples integer
+
+			/** The verbosity level.
+					Use integer values with this option.
+					@see Default::VERBOSITY
+					@param verbosity integer
 			 */
 			static const char* VERBOSITY;
 		};
@@ -72,23 +69,23 @@ namespace BALL
 		struct Default
 		{
 			/** Default verbosity level.
-				@see Option::VERBOSITY
+					@see Option::VERBOSITY
 			 */
 			static const int VERBOSITY;
 			
 			/** Default integration method.
-				@see Option::METHOD
+					@see Option::METHOD
 			 */
 			static const int METHOD;
 
 			/** Default number of inetgartion samples.
-				@see Option::SAMPLES
+					@see Option::SAMPLES
 			 */
 			static const int SAMPLES;
 		};
 
-
-		/** The available methods for integration */
+		/** The available methods for integration 
+		*/
 		enum IntegrationMethod
 		{
 			METHOD__UNKNOWN = 0,
@@ -96,8 +93,8 @@ namespace BALL
 			METHOD__TRAPEZIUM = 2
 		};
 
-
-		/** @name Constructors and destructors */
+		/** @name Constructors and destructors 
+		*/
 		//@{
 
 		/** Default constructor 
@@ -114,8 +111,8 @@ namespace BALL
 		/** Detailed constructor
 				@param A repulsion constant of the 6-12 potential in units of ...
 				@param B dispersion constant of the 6-12 potential in units of ...
-				@param k1 geometric correction constant (@see ...)
-				@param k2 geometric correction constant (@see ...)
+				@param k1 geometric correction constant
+				@param k2 geometric correction constant
 				@param rdf a radial distribution function
 		*/
 		Pair6_12RDFIntegrator(double A, double B, double k1, double k2,
@@ -128,9 +125,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-		
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
 		/** Assignment operator 
@@ -141,48 +137,45 @@ namespace BALL
 			(const Pair6_12RDFIntegrator& integrator) 
 			throw();
 
-		/** clear method 
+		/** Clear method 
 		*/
 		virtual void clear() 
 			throw();
 
 		//@}
-
-
 		/// @name Accessors 
 		//@{
 
-		/** set the constants for the integration, usually done by the calling
-				energy processor 
+		/** Set the constants for the integration, usually done by the calling energy processor.
 				@param A repulsion constant of the 6-12 potential in units of ...
 				@param B dispersion constant of the 6-12 potential in units of ...
-				@param k1 geometric correction constant (@see ...)
-				@param k2 geometric correction constant (@see ...)
+				@param k1 geometric correction constant
+				@param k2 geometric correction constant
 		*/
 		void setConstants(double A, double B, double k1, double k2) 
 			throw();
 
-		/** get the constants from this processor 
+		/** Get the constants from this processor.
 				@param A repulsion constant of the 6-12 potential in units of ...
 				@param B dispersion constant of the 6-12 potential in units of ...
-				@param k1 geometric correction constant (@see ...)
-				@param k2 geometric correction constant (@see ...)
+				@param k1 geometric correction constant
+				@param k2 geometric correction constant
 		*/
 		void getConstants(double& A, double& B, double& k1, double& k2)	
 			throw();
 
-		/** integrate to Infinity from {\tt from} using previously set constants 
+		/** Integrate to Infinity from {\tt from} using previously set constants 
 				@param from the lower limit of integration
 				@return the value of the integration
 		*/
 		double integrateToInf(double from) const 
 			throw();
 
-		/** integrate from {\tt from} to infinity using the specified constants 
+		/** Integrate from {\tt from} to infinity using the specified constants 
 				@param A repulsion constant of the 6-12 potential in units of ...
 				@param B dispersion constant of the 6-12 potential in units of ...
-				@param k1 geometric correction constant (@see ...)
-				@param k2 geometric correction constant (@see ...)
+				@param k1 geometric correction constant
+				@param k2 geometric correction constant
 				@param from the lower limit of integration
 				@return the value of the integration
 		*/
@@ -190,7 +183,7 @@ namespace BALL
 				double k2) 
 			throw();
 
-		/** integrate from {\tt from} to {\tt to} using previously assigned
+		/** Integrate from {\tt from} to {\tt to} using previously assigned
 				constants 
 				@param from the lower limit
 				@param to the upper limit 
@@ -199,13 +192,13 @@ namespace BALL
 		double integrate(double from, double to) const 
 			throw();
 		
-		/** integrate from {\tt from} to {\tt to} using the specified constants 
+		/** Integrate from {\tt from} to {\tt to} using the specified constants 
 				@param from the lower limit of integration
 				@param to the upper limit 
 				@param A repulsion constant of the 6-12 potential in units of ...
 				@param B dispersion constant of the 6-12 potential in units of ...
-				@param k1 geometric correction constant (@see ...)
-				@param k2 geometric correction constant (@see ...)
+				@param k1 geometric correction constant
+				@param k2 geometric correction constant
 				@return the value of the integration
 		*/
 		double integrate(double from, double to, double A, double B, double k1,
@@ -213,7 +206,7 @@ namespace BALL
 			throw();
 
 		/** Default operation, integrate from {\tt x} to infinity using
-				previously assigned constants 
+				previously assigned constants.
 				@param x the lower limit of the integration to infinity
 				@return the value of the integration
 		 */
@@ -221,9 +214,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
 		/** Equality operator. Tests whether two instances of
@@ -236,8 +228,7 @@ namespace BALL
 
 		//@}
 
-
-		/** The options of this Integrator (@see Options, ) 
+		/** The options of this Integrator (@see Options) 
 		*/
 		Options options;
 
@@ -254,7 +245,6 @@ namespace BALL
 			throw();
 		
 		//@}
-
 
 		protected:
 
