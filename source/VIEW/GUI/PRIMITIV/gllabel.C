@@ -1,15 +1,9 @@
-// $Id: gllabel.C,v 1.6.4.1 2002/09/25 15:02:21 anhi Exp $
+// $Id: gllabel.C,v 1.6.4.2 2002/11/05 15:35:08 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
-#include <GL/gl.h>
-
-#include <qdialog.h>
-
-using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -63,7 +57,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLLabel>() << endl;
+					<< " of class " << RTTI::getName<GLLabel>() << std::endl;
 			#endif 
 
 			destroy();
@@ -170,10 +164,7 @@ namespace BALL
 
 			// build bitmap
 			generateBitmap_();
-for (int i=0; i<height_*(width_+7)/8; i++)
-{
-//	text_array_[i] = 5;
-}
+
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
 			glRasterPos3f((GLfloat)getVertex().x, 
