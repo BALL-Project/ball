@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.22 2000/07/22 10:56:42 oliver Exp $
+// $Id: string.iC,v 1.23 2000/07/23 10:37:35 oliver Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -295,7 +295,7 @@ Index Substring::getLastIndex() const
 
 BALL_INLINE 
 char& Substring::operator [] (Index index)
-	throw(Substring::UnboundSubstring,Exception::IndexOverflow,Exception::IndexUnderflow)
+	throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow)
 {
   if (bound_ == 0)
   {
@@ -310,7 +310,7 @@ char& Substring::operator [] (Index index)
 
 BALL_INLINE 
 char Substring::operator [] (Index index) const
-	throw(Substring::UnboundSubstring,Exception::IndexOverflow,Exception::IndexUnderflow)
+	throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow)
 {
   if (bound_ == 0)
   {

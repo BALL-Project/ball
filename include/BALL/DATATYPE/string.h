@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.21 2000/07/22 16:06:14 amoll Exp $
+// $Id: string.h,v 1.22 2000/07/23 10:37:34 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -191,11 +191,11 @@ namespace BALL
 
 		/// String assignment operator
 		Substring& operator = (const String& string)
-			throw(Substring::UnboundSubstring());
+			throw(Substring::UnboundSubstring);
 
 		/// Substring assignment operator
 		Substring& operator = (const Substring& substring)
-			throw(Substring::UnboundSubstring());
+			throw(Substring::UnboundSubstring);
 
 		/// char pointer assignment operator
 		Substring& operator = (const char* char_ptr)
@@ -227,11 +227,11 @@ namespace BALL
 
 		/// Mutable random access to a character of the substring
 		char& operator [] (Index index)
-			throw(Substring::UnboundSubstring);
+			throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// Random access to a character of the substring
 		char operator [] (Index index) const
-			throw(Substring::UnboundSubstring);
+			throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// Converts the substring to lower case characters
 		Substring& toLower()	throw(Substring::UnboundSubstring);
