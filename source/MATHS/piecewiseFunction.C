@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.C,v 1.3 2000/08/31 21:53:24 oliver Exp $
+// $Id: piecewiseFunction.C,v 1.4 2000/09/22 16:25:24 anker Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
 
@@ -273,6 +273,30 @@ namespace BALL
 		else
 		{
 			return false;
+		}
+	}
+
+
+	void PiecewiseFunction::dump(ostream& stream, Size /* depth */) const
+	{
+		if (!isValid())
+		{
+			Log.error() << "PiecewiseFunction::dump(): instance is not valid\n";
+			return;
+		}
+		stream << "[PiecewiseFunction: " << intervals_.size() << " intervals]"
+			<< endl;
+		vector<Interval>::const_iterator int_it = intervals_.begin();
+		vector<Coefficients>::const_iterator coef_it = coefficients_.begin();
+		Coefficients::const_iterator c_it;
+		for(; int_it != intervals_.end(); ++int_it, ++coef_it)
+		{
+			stream << "[" << int_it->first << "," << int_it->second << "): ";
+			for(c_it = coef_it->begin(); c_it != coef_it->end(); ++c_it)
+			{
+				stream << *c_it << " ";
+			}
+			stream << endl;
 		}
 	}
 

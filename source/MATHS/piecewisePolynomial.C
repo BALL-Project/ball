@@ -1,4 +1,4 @@
-// $Id: piecewisePolynomial.C,v 1.3 2000/08/31 21:53:24 oliver Exp $
+// $Id: piecewisePolynomial.C,v 1.4 2000/09/22 16:25:24 anker Exp $
 
 #include <BALL/MATHS/piecewisePolynomial.h>
 
@@ -101,6 +101,13 @@ namespace BALL
 			}
 			return val;
 		}
+	}
+
+
+	void PiecewisePolynomial::dump(ostream& stream, Size /* depth */) const
+	{
+		stream << "[PiecewisePolynomial: degree " << degree_ << "]" << endl;
+		PiecewiseFunction::dump();
 	}
 
 }
