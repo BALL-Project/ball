@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.5 2003/04/28 19:21:27 oliver Exp $
+// $Id: RotamerLibrary_test.C,v 1.6 2003/05/06 20:56:15 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.5 2003/04/28 19:21:27 oliver Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.6 2003/05/06 20:56:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -349,7 +349,6 @@ CHECK(Side chain positions for Pro)
 	NEW_TMP_FILE(outfile_name)
 
 
-	float x = 0;
 	HINFile outfile(outfile_name, std::ios::out);
 	outfile << S;
 	outfile.close();
