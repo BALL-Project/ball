@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.29 2003/12/12 15:30:48 amoll Exp $
+// $Id: scene.C,v 1.30 2003/12/15 14:25:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -417,14 +417,6 @@ void Scene::renderRepresentations_(RenderMode mode)
 void Scene::render_(const Representation& rep, RenderMode mode)
 	throw()
 {
-	// display list rendering is not available for line models
-	// otherwise the models disapear by turning the camera
-	if (rep.getModelType() == MODEL_LINES)
-	{
-		gl_renderer_.render_(rep); 
-		return;
-	}
-
 	switch (mode)
 	{
 		case DIRECT_RENDERING:
