@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.7 2003/10/05 15:18:14 amoll Exp $
+// $Id: molecularProperties.C,v 1.8 2003/10/05 16:29:59 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -32,7 +32,7 @@ MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
 	// cant use ModularWidget::getMainControl() here, no idea why
 	MainControl& main_control = *MainControl::getMainControl(this);
 
-	center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "&Focus Camera", this, 
+	center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																										SLOT(centerCamera()), CTRL+Key_F);
 	build_bonds_id_ = main_control.insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
 																										SLOT(buildBonds()), CTRL+Key_B);
@@ -44,15 +44,15 @@ MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
 																										SLOT(select()), ALT+Key_S);   
 	deselect_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Deselect", this, 
 																										SLOT(deselect()), ALT+Key_D);   
-	create_distance_grid_id_ = main_control.insertMenuEntry(MainControl::TOOLS, "&Create Distance Grid", this, 
-																										SLOT(createGridFromDistance()));   
-}
+	create_distance_grid_id_ = main_control.insertMenuEntry(MainControl::TOOLS_CREATE_GRID, 
+																			"&Create Distance Grid", this, SLOT(createGridFromDistance()));   
+	}
 
 MolecularProperties::~MolecularProperties()
 	throw()
 {
 	MainControl& main_control = *getMainControl();
-	main_control.removeMenuEntry(MainControl::DISPLAY, "&Focus Camera", this, 
+	main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																									SLOT(centerCamera()), CTRL+Key_F);
 	main_control.removeMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
 																									SLOT(buildBonds()), CTRL+Key_B);
@@ -62,7 +62,8 @@ MolecularProperties::~MolecularProperties()
 																									SLOT(checkResidue()), CTRL+Key_K);
 	main_control.removeMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S);   
 	main_control.removeMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), ALT+Key_D);   
-	main_control.removeMenuEntry(MainControl::TOOLS, "&Create Distance Grid", this, SLOT(createGridFromDistance()));   
+	main_control.removeMenuEntry(MainControl::TOOLS_CREATE_GRID, "&Distance Grid", this, 
+																													SLOT(createGridFromDistance()));   
 }
 
 void MolecularProperties::onNotify(Message *message)

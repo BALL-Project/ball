@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.14 2003/10/05 15:40:49 amoll Exp $
+// $Id: mainControl.C,v 1.15 2003/10/05 16:29:59 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -133,8 +133,14 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 			case DISPLAY:
 				menuBar()->insertItem("&Display", menu, DISPLAY, (3 <= max_id) ? 3 : -1);
 				break;
+			case DISPLAY_VIEWPOINT:
+				initPopupMenu(MainControl::DISPLAY)->insertItem("&Viewpoint", menu, DISPLAY_VIEWPOINT);
+				break;
 			case TOOLS:
 				menuBar()->insertItem("&Tools", menu, TOOLS, (4 <= max_id) ? 4 : -1);
+				break;
+			case TOOLS_CREATE_GRID:
+				initPopupMenu(MainControl::TOOLS)->insertItem("&Create Grid", menu, TOOLS_CREATE_GRID);
 				break;
 			case TOOLS_PYTHON:
 				initPopupMenu(MainControl::TOOLS)->insertItem("&Python", menu, TOOLS_PYTHON);
@@ -145,7 +151,6 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 			case USER:
 				menuBar()->insertItem("&User", menu, USER, (6 <= max_id) ? 6 : -1);
 				break;
-
 			case HELP:
 				menuBar()->insertSeparator();
 				menuBar()->insertItem("&Help", menu, HELP, -1);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.14 2003/10/04 15:18:56 amoll Exp $
+// $Id: scene.C,v 1.15 2003/10/05 16:29:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1027,13 +1027,13 @@ void Scene::initializeWidget(MainControl& main_control)
 		MainControl::DISPLAY, "&Mouse Sensitivity", this, SLOT(mouseSensitivity_()), CTRL+Key_M);
 
 	main_control.insertMenuEntry(
-		MainControl::DISPLAY, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W);
+		MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W);
 
 	main_control.insertMenuEntry(
-		MainControl::DISPLAY, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), CTRL+Key_N);
+		MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), CTRL+Key_N);
 
 	main_control.insertMenuEntry(
-		MainControl::DISPLAY, "Rese&t Camera", this, SLOT(resetCamera_()), CTRL+Key_T);
+		MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()), CTRL+Key_T);
 
 	main_control.insertMenuEntry(
 		MainControl::FILE_EXPORT, "Export PNG", this, SLOT(exportPNG()), ALT+Key_P);
@@ -1053,9 +1053,12 @@ void Scene::finalizeWidget(MainControl& main_control)
 	main_control.removeMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
 	main_control.removeMenuEntry(MainControl::DISPLAY, "&Mouse Sensitivity", this, 
 			SLOT(mouseSensitivity_()), CTRL+Key_M);		
-	main_control.removeMenuEntry(MainControl::DISPLAY, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W);		
-	main_control.removeMenuEntry(MainControl::DISPLAY, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), CTRL+Key_N);		
-	main_control.removeMenuEntry(MainControl::DISPLAY, "Rese&t Camera", this, SLOT(resetCamera_()), CTRL+Key_T);		
+	main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
+																										SLOT(showViewPoint_()), CTRL+Key_W);		
+	main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
+																										SLOT(setViewPoint_()), CTRL+Key_N);		
+	main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
+																										SLOT(resetCamera_()), CTRL+Key_T);		
 	main_control.removeMenuEntry(MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()), CTRL+Key_T);		
 	main_control.removeMenuEntry(MainControl::FILE_EXPORT, "Export PNG", this, SLOT(exportPNG()), ALT+Key_P);		
 	main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
