@@ -1,4 +1,4 @@
-// $Id: structure.doc,v 1.9 2002/12/18 18:19:56 amoll Exp $
+// $Id: structure.doc,v 1.10 2002/12/22 14:01:53 sturm Exp $
 
 /**	@name	Molecular Structure
 		This chapter contains all relevant information on 
@@ -30,11 +30,12 @@
 	/**	@name	Molecular Surface Computation
 	*/
 	//@{
-	  //@Include: surfaceProcessor.h
+		//@Include: surfaceProcessor.h
 		//@Include: analyticalSES.h
 		//@Include: numericalSAS.h
 		//@Include: reducedSurface.h
 		//@Include: solventExcludedSurface.h
+		//@Include: solventAccessibleSurface.h 
 		//@Include: triangulatedSurface.h
 		//@Include: RSEdge.h
 		//@Include: RSFace.h
@@ -42,5 +43,7 @@
 		//@Include: SESEdge.h
 		//@Include: SESFace.h
 		//@Include: SESVertex.h
+		//@Include: triangulatedSAS.h 
+		//@Include: triangulatedSES.h 
 	//@}
 //@}

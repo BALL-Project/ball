@@ -1,12 +1,13 @@
-// $Id: solvation.doc,v 1.6 2001/03/07 22:19:47 amoll Exp $ */
+// $Id: solvation.doc,v 1.7 2002/12/22 14:01:53 sturm Exp $ */
 
 /**@name	Solvation methods
 		This chapter contains all relevant information on 
 		the use of BALL solvation methods.
 */
 //@{
+	//@Include: electrostaticPotentialCalculator.h 
 	//@Include: poissonBoltzmann.h
-	//@include: molecularSurfaceGrid.h
+	//@Include: molecularSurfaceGrid.h
 	//@Include: ooiEnergy.h
 	//@Include: claverieParameter.h
 	//@Include: pair6_12InteractionEnergyProcessor.h

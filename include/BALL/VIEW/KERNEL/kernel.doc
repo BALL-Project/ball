@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.8 2002/12/18 18:20:30 amoll Exp $
+// $Id: kernel.doc,v 1.9 2002/12/22 14:01:57 sturm Exp $
 
         /**     @name Client request handling.
                       With the help of the class {\em Client} it is possible
@@ -11,6 +11,7 @@
         */
         //@{
                 //@Include: client.h
+								//@Include: clientScene.h
                 //@Include: QTTimer.h
         //@}
 
