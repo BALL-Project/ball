@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.28 2003/12/11 16:33:57 amoll Exp $
+// $Id: BALL.sip,v 1.29 2003/12/12 01:25:06 amoll Exp $
 //
 //
 //
@@ -297,16 +297,17 @@
 
 // VIEW/MODELS
 %Include colorProcessor.sip
-%Include standardColorProcessor.sip
+//%Include standardColorProcessor.sip
 %Include modelProcessor.sip
 %Include atomBondModelBaseProcessor.sip
-%Include backboneModel.sip
-%Include ballAndStickModel.sip
-%Include cartoonModel.sip
-%Include HBondModel.sip
 %Include lineModel.sip
-%Include surfaceModel.sip
-%Include vanDerWaalsModel.sip
+
+//%Include backboneModel.sip
+//%Include ballAndStickModel.sip
+//%Include cartoonModel.sip
+// %Include HBondModel.sip
+//%Include surfaceModel.sip
+//   %Include vanDerWaalsModel.sip
 
 // VIEW/PRIMITIVES
 %Include box.sip
