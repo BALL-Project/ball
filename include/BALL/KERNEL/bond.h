@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.20 2001/02/22 20:35:47 amoll Exp $
+// $Id: bond.h,v 1.21 2001/02/23 01:00:14 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -58,8 +58,8 @@ namespace BALL
 			\end{itemize}
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.20 $
-			@date    $Date: 2001/02/22 20:35:47 $
+			@version $Revision: 1.21 $
+			@date    $Date: 2001/02/23 01:00:14 $
 	*/
 	class Bond
 		: public Composite,
@@ -317,33 +317,6 @@ namespace BALL
 		/** @name Assignment methods 
 		*/
 		//@{
-
-    /** Assignment with cloning facility.
-        Assign the bond {\em bond} to {\em *this}.
-        The assignment is either deep or shallow (default).
-        The state of {\em *this} bond is initialized to the state of the bond {\em bond}.\\
-        {\bf Note:} Deep copying of bonds is not supported.
-        The use of this method is not recommended because it may result in inconcistencies
-        of the whole system. It is used for backup only.
-        @param bond the bond to be copied (cloned)
-        @param deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em bond}
-    */
-    void set(const Bond& bond, bool deep = true)
-      throw();
-
-    /** Copying with cloning facility.
-        Copy {\em *this} to the bond {\em bond}.
-        The assignment is either deep or shallow (default).
-        Calls \Ref{Bond::set}.
-        The state of the bond {\em bond} is initialized to the state of {\em *this}.\\
-        {\bf Note:} Deep copying of bonds is not supported.
-        The use of this method is not recommended because it may result in inconcistencies
-        of the whole system. It is used for backup only.
-        @param bond the bond to be assigned to
-        @see   Bond::set
-    */  
-    void get(Bond& bond, bool deep = true) const
-      throw();
 		
 		/** Assignment operator.
 				Assign the bond {\em bond} to {\em *this}.

@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.16 2001/02/22 20:36:12 amoll Exp $
+// $Id: bond.C,v 1.17 2001/02/23 00:59:48 amoll Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -180,24 +180,6 @@ namespace BALL
 			second_ = tmp;
 		}
 	}
-
-  void Bond::set(const Bond &bond,bool deep)
-    throw()
-  {
-    PropertyManager::set(bond, deep);
-
-    first_      = bond.first_;
-    second_     = bond.second_;
-    name_       = bond.name_;
-    bond_order_ = bond.bond_order_;
-    bond_type_  = bond.bond_type_;  
-  }
-
-  void Bond::get(Bond &bond, bool deep) const
-    throw()
-  {
-    bond.set(*this, deep);
-  }
 
 	const Bond& Bond::operator = (const Bond& bond)
 		throw()
