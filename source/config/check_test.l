@@ -1,5 +1,5 @@
 %{
-	// $Id: check_test.l,v 1.4 2003/06/11 15:51:39 oliver Exp $
+	// $Id: check_test.l,v 1.5 2003/06/12 13:49:13 oliver Exp $
 	// C++ scanner
 
 	#define YY_NO_UNPUT 
@@ -965,6 +965,7 @@
 		type += name;
 		name = yytext;
 		pushPath(name);
+		cout << "reading entries for class " << getPath() << endl;
 	}
 
 <ClassName>"<" {RULE
