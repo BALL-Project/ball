@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.15 2004/02/23 16:27:22 oliver Exp $
+dnl $Id: configure.ac,v 1.16 2004/04/16 11:40:27 amoll Exp $
 dnl
 dnl
 
@@ -600,7 +600,7 @@ dnl 	the library has been built.
 dnl   Any hints concerning a special OS/compiler combination 
 dnl   might want to print some information here (as is the
 dnl   case for the IRIX LD_LBRARY_PATH/LD_LIBRARY64_PATH/LD_LIBRARYN32_PATH)
-dnl   If VIEW is to be built, we add a hint for MolVIEW.
+dnl   If VIEW is to be built, we add a hint for BALLView.
 if test "${ADDITIONAL_COMMENTS}" = "" ; then
 	ADDITIONAL_COMMENTS=""
 fi

@@ -26,7 +26,7 @@ or setenv LD_LIBRARY_PATH ...                                (csh-like shells)
    make test                   - to build and run the library test suite
                                  (not required, but recommended)
 
-   make molview                - to build the stand-alone molecule viewer
+   make BALLView               - to build the stand-alone molecule viewer
                                  (only if you had OpenGL/Mesa and QT installed)
 
 The configuration of the visualization component BALLVIEW is a bit tricky

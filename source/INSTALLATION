@@ -196,14 +196,14 @@ developers - this helps use to improve the library.
 --------------------------
 
 BALL provides some short example applications in BALL/source/EXAMPLES as
-well as the powerful 3D visualization tool molview.  To build one of these
+well as the powerful 3D visualization tool BALLView.  To build one of these
 applications, the shared libraries have to be built and installed, and the
 LD_LIBRARY_PATH has to be set accordingly (see above, 2.2).  To build the
 examples, simply change to the BALL/source/EXAMPLES directory and type
-"make".  Similarly, the viewer molview is build by changing to
-BALL/source/MOLVIEW/APPLICATION and calling "make". When running molview,
+"make".  Similarly, the viewer BALLView is build by changing to
+BALL/source/BALLVIEW/APPLICATION and calling "make". When running BALLView,
 please make sure that all required shared libraries are included in the
-LD_LIBRARY_PATH. molview needs the BALL libraries (libBALL.so and libVIEW.so),
+LD_LIBRARY_PATH. BALLView needs the BALL libraries (libBALL.so and libVIEW.so),
 the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa libraries 
 (libGL.so, libGLU.so).
 
@@ -233,4 +233,4 @@ Windows/DOT NET:
     on our website
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.14 2004/02/19 14:09:31 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.15 2004/04/16 11:39:39 amoll Exp $
