@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.6 2001/07/12 20:00:37 anker Exp $
+// $Id: Expression_test.C,v 1.7 2001/07/13 07:45:58 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Expression_test.C,v 1.6 2001/07/12 20:00:37 anker Exp $")
+START_TEST(class_name, "$Id: Expression_test.C,v 1.7 2001/07/13 07:45:58 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -240,7 +240,7 @@ RESULT
 
 CHECK(ExpressionTree::bool operator () (const Atom& atom) const  throw())
 	ExpressionTree et;
-
+	// BAUSTELLE
 RESULT
 
 
@@ -722,6 +722,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	test_expressions.insert(pair<String, Size>("element(H)", 4));
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
+	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 1));
 
 	Expression e;
 	Size counter;
@@ -730,6 +731,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	{
 		counter = 0;
 		e.setExpression(exp_iterator->first);
+		Log.info() << "expression: " << exp_iterator->first << endl;
 		for (AtomIterator it = S.beginAtom(); +it; ++it)
 		{
 			if (e.operator () (*it)) counter++;
