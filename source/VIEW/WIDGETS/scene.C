@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.93 2004/07/01 11:38:33 amoll Exp $
+// $Id: scene.C,v 1.94 2004/07/01 11:39:43 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1531,11 +1531,8 @@ namespace BALL
 
 		String Scene::exportPNG()
 		{
-Log.error() << "#~~#   1 " << this   << __FILE__ << "  " << __LINE__<< std::endl;
 			makeCurrent();
-Log.error() << "#~~#   2 "    << __FILE__ << "  " << __LINE__<< std::endl;
 			QImage image = grabFrameBuffer();
-Log.error() << "#~~#   3 "    << __FILE__ << "  " << __LINE__<< std::endl;
 
 			String filename = String("BALLView_screenshot" + String(screenshot_nr_) +".png");
 			bool result = image.save(filename.c_str(), "PNG");
@@ -1544,7 +1541,6 @@ Log.error() << "#~~#   3 "    << __FILE__ << "  " << __LINE__<< std::endl;
 			if (result) setStatusbarText("Saved screenshot to " + filename);
 			else 				setStatusbarText("Could not save screenshot to " + filename);
 
-Log.error() << "#~~#   4 "    << __FILE__ << "  " << __LINE__<< std::endl;
 			return filename;
 		}
 
