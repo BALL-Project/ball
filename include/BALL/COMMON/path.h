@@ -1,4 +1,4 @@
-// $Id: path.h,v 1.4 2000/05/06 14:10:48 oliver Exp $
+// $Id: path.h,v 1.5 2000/05/21 19:38:59 amoll Exp $
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H
@@ -43,7 +43,7 @@ namespace BALL
 				The environment variable always overrides the compiled
 				settings.\\
 				The default path may be accessed using \Ref{getDefaultDataPath}.
-				The path may also be modified at runtime bu calling \Ref{setDataPath}.
+				The path may also be modified at runtime by calling \Ref{setDataPath}.
 				The path contains a colon separated list of paths that are searched 
 				in the order of occurence.\\
 		*/		

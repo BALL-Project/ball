@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.7 2000/02/17 00:30:36 oliver Exp $
+// $Id: logStream.h,v 1.8 2000/05/21 19:38:59 amoll Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -260,7 +260,7 @@ namespace BALL
 
 		/** Default constructor.
 				Creates a new LogStream object that is not associated with any stream.
-				if the argument {\tt associate\_stdio} is set to {\bf true},
+				If the argument {\tt associate\_stdio} is set to {\bf true},
 				{\tt cout} is associated with all messages of levels \Ref{INFORMATION} 
 				and \Ref{WARNING}, and {\tt cerr} is associated with all messages
 				of level \Ref{ERROR}.
@@ -289,7 +289,7 @@ namespace BALL
 		*/
 		LogStreamBuf* rdbuf();
 
-		/** arrow operator.
+		/** Arrow operator.
 		*/
 		LogStreamBuf* operator -> ();
 		//@}
@@ -388,7 +388,7 @@ namespace BALL
 		*/
 		void removeNotification(const std::ostream& s);
 
-		/**	Set the maximum log level of an associated stream.
+		/**	Set the minimum log level of an associated stream.
 				This method changes the minimum log level of an already
 				associated stream. However, if the stream is not
 				associated, nothing will happen.
@@ -439,7 +439,7 @@ namespace BALL
 		/**	Return the number of lines.
 				This method retruns the number of lines in the buffer 
 				for a given range of levels.\\
-				If the reange is omitted, the total number of messages is
+				If the range is omitted, the total number of messages is
 				returned.
 				@return Size the number of lines matching the log level range
 				@param	min_level the minimum log level of the counted messages
@@ -448,7 +448,7 @@ namespace BALL
 		Size	getNumberOfLines(int min_level = INT_MIN, int max_level = INT_MAX) const;
 
 		/**	Return the text of a specific line.
-				This method returns the content of a specific messages without
+				This method returns the content of a specific message without
 				time and level.
 				@return string the mesasge text
 				@param	Index the index of the line
