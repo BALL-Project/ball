@@ -287,6 +287,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     model_type_combobox_static->insertItem(  "ball and stick" );
     model_type_combobox_static->insertItem(  "surface"  );
     model_type_combobox_static->insertItem(  "van der Waals"  );
+    model_type_combobox_static->insertItem(  "backone"  );
     model_type_combobox_static->setGeometry( QRect( 90, 20, 140, 24 ) ); 
     model_type_combobox_static->setMinimumSize( QSize( 140, 24 ) );
     model_type_combobox_static->setMaximumSize( QSize( 140, 24 ) );
@@ -407,6 +408,7 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     model_type_combobox_dynamic->insertItem(  "ball and stick" );
     model_type_combobox_dynamic->insertItem(  "surface"  );
     model_type_combobox_dynamic->insertItem(  "van der Waals"  );
+    model_type_combobox_dynamic->insertItem(  "backbone"  );
     model_type_combobox_dynamic->setGeometry(QRect( 90, 20, 140, 24 ) ); 
     model_type_combobox_dynamic->setMinimumSize( QSize( 140, 24 ) );
     model_type_combobox_dynamic->setMaximumSize( QSize( 140, 24 ) );
