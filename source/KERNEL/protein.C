@@ -1,4 +1,4 @@
-// $Id: protein.C,v 1.4 1999/12/30 18:05:34 oliver Exp $
+// $Id: protein.C,v 1.5 2000/04/17 14:02:34 amoll Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -198,11 +198,6 @@ namespace BALL
 	void Protein::setID(const String& id)
 	{
 		id_ = id;
-	}
-
-	String&  Protein::getID()
-	{
-		return id_;
 	}
 
 	const String& Protein::getID() const

@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.8 2000/03/25 22:46:15 oliver Exp $
+// $Id: residue.C,v 1.9 2000/04/17 14:03:09 amoll Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -270,11 +270,6 @@ namespace BALL
 	void Residue::setID(const String &id)
 	{
 		id_ = id;
-	}
-
-	String & Residue::getID()
-	{
-		return id_;
 	}
 
 	const String &Residue::getID() const

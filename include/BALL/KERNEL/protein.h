@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.4 2000/03/30 10:16:07 oliver Exp $ 
+// $Id: protein.h,v 1.5 2000/04/17 14:02:42 amoll Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -161,9 +161,6 @@ namespace BALL
 
 		///		
 		void setID(const String& id);
-
-		///
-		String& getID();
 
 		///
 		const String& getID() const;

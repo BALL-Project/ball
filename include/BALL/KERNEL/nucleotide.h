@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.5 2000/04/16 21:12:55 amoll Exp $
+// $Id: nucleotide.h,v 1.6 2000/04/17 14:01:50 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -146,11 +146,6 @@ namespace BALL
 				@param id the new ID
 		*/
 		void setID(const String& id);
-
-		/**	Retrieve the ID of the nucleotide.
-				@return String the ID
-		*/
-		String& getID();
 
 		/**	Retrieve the ID of the nucleotide.
 				@return String the ID (constant)

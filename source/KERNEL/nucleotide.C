@@ -1,4 +1,4 @@
-// $Id: nucleotide.C,v 1.1 2000/01/10 23:12:34 oliver Exp $
+// $Id: nucleotide.C,v 1.2 2000/04/17 14:02:03 amoll Exp $
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -120,11 +120,6 @@ namespace BALL
 	void Nucleotide::setID(const String &id)
 	{
 		id_ = id;
-	}
-
-	String & Nucleotide::getID()
-	{
-		return id_;
 	}
 
 	const String &Nucleotide::getID() const

@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.9 2000/03/30 10:16:07 oliver Exp $
+// $Id: residue.h,v 1.10 2000/04/17 14:03:17 amoll Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -189,9 +189,6 @@ namespace BALL
 	
 		///
 		void setID(const String& id);
-
-		///
-		String& getID();
 
 		///
 		const String& getID() const;
