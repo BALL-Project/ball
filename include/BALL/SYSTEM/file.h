@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.35 2001/10/29 19:58:31 amoll Exp $
+// $Id: file.h,v 1.36 2001/12/18 01:17:28 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -413,9 +413,6 @@ namespace BALL
         @return std::fstream the stream
     */
     std::fstream& getFileStream();
-
-
-
 		//@}
 		
 		/**@name On-the-fly file transformation
