@@ -3092,6 +3092,7 @@ echo "${ECHO_T}no" >&6
 
 
 
+	RANLIB="echo"
 
 	echo "$as_me:$LINENO: checking your OS" >&5
 echo $ECHO_N "checking your OS... $ECHO_C" >&6
