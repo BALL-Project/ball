@@ -93,6 +93,12 @@ namespace BALL
 			*/
 			void setWindowsMenuEntry(bool state);
 
+			///
+			virtual void dropEvent(QDropEvent* e);
+
+			///
+			virtual void dragEnterEvent(QDragEnterEvent* e);
+
 			//@} 
 
 			protected:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.31 2004/09/14 15:01:19 amoll Exp $
+// $Id: mainframe.C,v 1.32 2004/10/07 17:14:23 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -25,7 +25,6 @@
 #include <qprinter.h>
 #include <qpainter.h>
 #include <qimage.h>
-#include <qapplication.h>
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 #include <sstream>
@@ -81,6 +80,7 @@ namespace BALL
 		setLoggingFilename("BALLView.log");
 
 		control_ = new MolecularControl(this, "Structures");
+		setAcceptDrops(true);
 		CHECK_PTR(control_);
 
 		geometric_control_ = new GeometricControl(this, "Representations");
@@ -278,6 +278,7 @@ namespace BALL
 	void Mainframe::openFile(const String& file)
 		throw()
 	{
+		setStatusbarText(String("Opening file ") + file + "...");
 		file_dialog_->openFile(file);
 	}
 

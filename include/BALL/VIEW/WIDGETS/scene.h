@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.56 2004/10/01 14:20:23 amoll Exp $
+// $Id: scene.h,v 1.57 2004/10/07 17:12:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -597,6 +597,12 @@ namespace BALL
 			
 			//_
 			virtual void customEvent( QCustomEvent * e );
+
+			///
+			virtual void dropEvent(QDropEvent* e);
+
+			///
+			virtual void dragEnterEvent(QDragEnterEvent* e);
 
 			//@}
 

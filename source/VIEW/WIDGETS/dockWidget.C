@@ -1,12 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.23 2004/07/26 11:29:11 amoll Exp $
+// $Id: dockWidget.C,v 1.24 2004/10/07 17:12:00 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <qmenubar.h>
 #include <qlabel.h>
+#include <qdragobject.h>
+#include <qdir.h>
 
 namespace BALL
 {
@@ -18,6 +20,7 @@ namespace BALL
 				ModularWidget("unnamed DockWidget"),
 				guest_(0)
 		{
+			setAcceptDrops(true);
 		}
 			
 		DockWidget::DockWidget(const DockWidget& dw)
@@ -25,6 +28,7 @@ namespace BALL
 				ModularWidget(dw.name()),
 				guest_(0)
 		{
+			setAcceptDrops(true);
 		}
 			
 		
@@ -59,6 +63,8 @@ namespace BALL
 			{
 				setName("DockWidget");
 			}
+
+			setAcceptDrops(true);
 		}
 
 		void DockWidget::setGuest(QWidget& guest)
@@ -72,6 +78,7 @@ namespace BALL
 			setMinimumSize(20, 20);
 			setCloseMode(QDockWindow::Always);
 			setResizeEnabled(true);
+ 			guest.setAcceptDrops(true);
 		}
 
 		void DockWidget::initializeWidget(MainControl& main_control)
@@ -151,6 +158,30 @@ namespace BALL
 		{
 			if (!BALL_VIEW_DOCKWINDOWS_SHOW_LABELS) caption_label_->hide();
 			else caption_label_->show();
+		}
+
+		void DockWidget::dropEvent(QDropEvent* e)
+		{
+			if (!QUriDrag::canDecode(e)) 
+			{
+				e->ignore();
+				return;
+			}
+
+			QStrList lst;
+			QUriDrag::decode(e, lst);
+			e->accept();
+
+			for (Position i = 0; i < lst.count(); ++i )
+			{
+				QString filename = QDir::convertSeparators(QUriDrag::uriToLocalFile(lst.at(i)));
+				getMainControl()->openFile(filename.ascii());
+			}
+		}
+
+		void DockWidget::dragEnterEvent(QDragEnterEvent* event)
+		{
+			event->accept(QTextDrag::canDecode(event));
 		}
 
 	} // namespace VIEW 

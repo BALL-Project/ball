@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.56 2004/10/07 15:11:18 amoll Exp $
+// $Id: mainControl.h,v 1.57 2004/10/07 17:12:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -754,6 +754,11 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 					
+			/** Open a file.
+			 		To be derived from...
+			*/
+			virtual void openFile(const String& /*file*/) throw() {};
+
 			//@}
 			
 			protected slots:

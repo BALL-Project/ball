@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.144 2004/10/01 14:20:16 amoll Exp $
+// $Id: scene.C,v 1.145 2004/10/07 17:12:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -31,6 +31,8 @@
 #include <qmenubar.h>
 #include <qcursor.h>
 #include <qapp.h>
+#include <qdragobject.h>
+#include <qdir.h>
 
 // #define BALL_BENCHMARKING
 
@@ -76,6 +78,7 @@ namespace BALL
 				stop_animation_(false)
 		{
 			gl_renderer_.setSize(600, 600);
+			setAcceptDrops(true);
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (1) " << this << std::endl;
 #endif
@@ -106,6 +109,7 @@ namespace BALL
 			// the widget with the MainControl
 			registerWidget(this);
 			gl_renderer_.setSize(600, 600);
+			setAcceptDrops(true);
 
 			if (!QGLWidget::isValid())
 			{
@@ -136,6 +140,7 @@ namespace BALL
 
 			// the widget with the MainControl
 			ModularWidget::registerWidget(this);
+			setAcceptDrops(true);
 		}
 
 		Scene::~Scene()
@@ -2083,6 +2088,30 @@ namespace BALL
 					moveMode_();
 					break;
 			}
+		}
+
+		void Scene::dropEvent(QDropEvent* e)
+		{
+			if (!QUriDrag::canDecode(e)) 
+			{
+				e->ignore();
+				return;
+			}
+
+			QStrList lst;
+			QUriDrag::decode(e, lst);
+			e->accept();
+
+			for (Position i = 0; i < lst.count(); ++i )
+			{
+				QString filename = QDir::convertSeparators(QUriDrag::uriToLocalFile(lst.at(i)));
+				getMainControl()->openFile(filename.ascii());
+			}
+		}
+
+		void Scene::dragEnterEvent(QDragEnterEvent* event)
+		{
+			event->accept(QTextDrag::canDecode(event));
 		}
 
 } }// namespaces
