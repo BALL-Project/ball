@@ -1,9 +1,9 @@
-// $Id: PointGrid_test.C,v 1.3 2000/07/01 18:11:03 amoll Exp $
+// $Id: PointGrid_test.C,v 1.4 2000/07/02 01:23:14 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/DATATYPE/pointGrid.h>
 
-START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.3 2000/07/01 18:11:03 amoll Exp $")
+START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.4 2000/07/02 01:23:14 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -176,11 +176,56 @@ CHECK(getGridCoordinates/3)
 RESULT
 
 CHECK(getBoxIndices)
-///
+	lower.set(2, 2, 2);
+	Position p1, p2, p3, p4, p5, p6, p7, p8;
+	TEST_EQUAL(g.getBoxIndices(lower, p1, p2, p3, p4, p5, p6, p7, p8), true)
+	TEST_EQUAL(p1, 266);
+	TEST_EQUAL(p2, 267);
+	TEST_EQUAL(p3, 277);
+	TEST_EQUAL(p4, 278);
+	TEST_EQUAL(p5, 387);
+	TEST_EQUAL(p6, 388);
+	TEST_EQUAL(p7, 398);
+	TEST_EQUAL(p8, 399);
+
+	lower.set(2.1, 2.1, 2.1);
+	TEST_EQUAL(g.getBoxIndices(lower, p1, p2, p3, p4, p5, p6, p7, p8), true)
+	TEST_EQUAL(p1, 266);
+	TEST_EQUAL(p2, 267);
+	TEST_EQUAL(p3, 277);
+	TEST_EQUAL(p4, 278);
+	TEST_EQUAL(p5, 387);
+	TEST_EQUAL(p6, 388);
+	TEST_EQUAL(p7, 398);
+	TEST_EQUAL(p8, 399);
+
+	lower.set(10.1, 2.1, 2.1);
+	TEST_EQUAL(g.getBoxIndices(lower, p1, p2, p3, p4, p5, p6, p7, p8), false)
 RESULT
 
 CHECK(getBoxData)
-///
+	lower.set(2, 2, 2);
+	float p1, p2, p3, p4, p5, p6, p7, p8;
+	g[266] = 1;
+	g[267] = 2;
+	g[277] = 3;
+	g[278] = 4;
+	g[387] = 5;
+	g[388] = 6;
+	g[398] = 7;
+	g[399] = 8;
+	TEST_EQUAL(g.getBoxData(lower, p1, p2, p3, p4, p5, p6, p7, p8), true)
+	TEST_EQUAL(p1, 1);
+	TEST_EQUAL(p2, 2);
+	TEST_EQUAL(p3, 3);
+	TEST_EQUAL(p4, 4);
+	TEST_EQUAL(p5, 5);
+	TEST_EQUAL(p6, 6);
+	TEST_EQUAL(p7, 7);
+	TEST_EQUAL(p8, 8);
+
+	lower.set(10.1, 2.1, 2.1);
+	TEST_EQUAL(g.getBoxData(lower, p1, p2, p3, p4, p5, p6, p7, p8), false)
 RESULT
 
 CHECK(getOrigin)
