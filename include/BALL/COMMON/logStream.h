@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.16 2002/12/12 09:48:39 oliver Exp $
+// $Id: logStream.h,v 1.17 2003/01/17 11:11:26 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -282,7 +282,7 @@ namespace BALL
 				of level \Ref{ERROR}.
 				@param	associate_stdio bool, default is false
 		*/
-		LogStream(const bool& associate_stdio = false);
+		LogStream(bool associate_stdio = false);
 
 		/** Constructor.
 				Create a new LogStream object with a given LogStreamBuf
