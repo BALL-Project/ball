@@ -1,30 +1,23 @@
-// $Id: connolly.C,v 1.4 2000/06/15 17:10:11 oliver Exp $
+// $Id: connolly.C,v 1.5 2000/06/27 08:27:22 oliver Exp $
 
 #include <math.h>
 #include <algorithm>
 #include <iostream>
 
-using
-	std::min;
-using
-	std::max;
-using
-	std::cerr;
-using
-	std::endl;
+using std::min;
+using std::max;
+using std::cerr;
+using std::endl;
 
-namespace
-	BALL
+namespace	BALL
 {
 
 /* Common Block Declarations */
 
 	struct
 	{
-		double
-			x[5000], y[5000], z__[5000];
-		int
-			n;
+		double x[5000], y[5000], z__[5000];
+		int n;
 	}
 	atoms_;
 
@@ -32,10 +25,8 @@ namespace
 
 	struct
 	{
-		double
-			a[15000] /* was [3][5000] */ , ar[5000], pr;
-		int
-			na;
+		double a[15000] /* was [3][5000] */ , ar[5000], pr;
+		int na;
 	}
 	face01_;
 
@@ -43,8 +34,7 @@ namespace
 
 	struct
 	{
-		bool
-			skip[5000], nosurf[5000], afree[5000], abur[5000];
+		bool skip[5000], nosurf[5000], afree[5000], abur[5000];
 	}
 	face02_;
 
@@ -52,8 +42,7 @@ namespace
 
 	struct
 	{
-		int
-			anbr[20000] /* was [2][5000] */ , nbr[500000], nbrt[500000];
+		int anbr[20000] /* was [2][5000] */ , nbr[500000], nbrt[500000];
 	}
 	face03_;
 
@@ -61,11 +50,8 @@ namespace
 
 	struct
 	{
-		int
-			ntt, tta[500000] /* was [2][250000] */ , ttfe[250000], ttle[
-																																	 250000], enext[50000];
-		bool
-			ttbur[250000], ttfree[250000];
+		int ntt, tta[500000] /* was [2][250000] */ , ttfe[250000], ttle[250000], enext[50000];
+		bool ttbur[250000], ttfree[250000];
 	}
 	face04_;
 
@@ -73,13 +59,9 @@ namespace
 
 	struct
 	{
-		double
-			t[45000] /* was [3][15000] */ , tr[15000], tax[45000]	/* 
-																														   was [3][15000] */ ;
-		int
-			nt, ta[30000] /* was [2][15000] */ , tfe[15000];
-		bool
-			tfree[15000];
+		double t[45000] /* was [3][15000] */ , tr[15000], tax[45000]	/* was [3][15000] */ ;
+		int nt, ta[30000] /* was [2][15000] */ , tfe[15000];
+		bool tfree[15000];
 	}
 	face05_;
 
@@ -87,10 +69,8 @@ namespace
 
 	struct
 	{
-		double
-			p[30000] /* was [3][10000] */ ;
-		int
-			np, pa[30000] /* was [3][10000] */ ;
+		double p[30000] /* was [3][10000] */ ;
+		int np, pa[30000] /* was [3][10000] */ ;
 	}
 	face06_;
 
@@ -98,10 +78,8 @@ namespace
 
 	struct
 	{
-		double
-			v[75000] /* was [3][25000] */ ;
-		int
-			nv, va[25000], vp[25000];
+		double v[75000] /* was [3][25000] */ ;
+		int nv, va[25000], vp[25000];
 	}
 	face07_;
 
@@ -109,9 +87,7 @@ namespace
 
 	struct
 	{
-		int
-			nen, env[50000] /* was [2][25000] */ , nfn, fnen[30000]	/* 
-																															   was [3][10000] */ ;
+		int nen, env[50000] /* was [2][25000] */ , nfn, fnen[30000]	/* was [3][10000] */ ;
 	}
 	face08_;
 
@@ -119,10 +95,8 @@ namespace
 
 	struct
 	{
-		double
-			c__[75000] /* was [3][25000] */ , cr[25000];
-		int
-			nc, ca[25000], ct[25000];
+		double c__[75000] /* was [3][25000] */ , cr[25000];
+		int nc, ca[25000], ct[25000];
 	}
 	face09_;
 
@@ -130,9 +104,7 @@ namespace
 
 	struct
 	{
-		int
-			nep, epc[25000], epv[50000] /* was [2][25000] */ , afe[5000], ale[
-																																				 5000], epnext[25000];
+		int nep, epc[25000], epv[50000] /* was [2][25000] */ , afe[5000], ale[5000], epnext[25000];
 	}
 	face10_;
 
@@ -140,9 +112,7 @@ namespace
 
 	struct
 	{
-		int
-			nfs, fsen[30000] /* was [2][15000] */ , fsep[30000]	/* 
-																													   was [2][15000] */ ;
+		int nfs, fsen[30000] /* was [2][15000] */ , fsep[30000]	/* was [2][15000] */ ;
 	}
 	face11_;
 
@@ -150,8 +120,7 @@ namespace
 
 	struct
 	{
-		int
-			ncy, cynep[5000], cyep[150000] /* was [30][5000] */ ;
+		int ncy, cynep[5000], cyep[150000] /* was [30][5000] */ ;
 	}
 	face12_;
 
@@ -159,8 +128,7 @@ namespace
 
 	struct
 	{
-		int
-			nfp, fpa[5000], fpcy[50000] /* was [10][5000] */ , fpncy[5000];
+		int nfp, fpa[5000], fpcy[50000] /* was [10][5000] */ , fpncy[5000];
 	}
 	face13_;
 
@@ -168,90 +136,46 @@ namespace
 
 /* Table of constant values */
 
-	static double
-		c_b94 = 0.0;
-	static double
-		c_b157 = -1.0;
-	static double
-		c_b158 = 1.0;
+	static double c_b94 = 0.0;
+	static double c_b157 = -1.0;
+	static double c_b158 = 1.0;
 
 
-	double
-	dist2_ (double *x, double *y);
-	int
-	vcross_ (double *x, double *y, double *z__);
-	int
-	vnorm_ (double *x, double *xn);
-	double
-	anorm_ (double *x);
-	int
-	gettor_ (int *ia, int *ja, bool * ttok, double *torcen, double *torad, double *torax);
-	int
-	getprb_ (int *ia, int *ja, int *ka, bool * prbok, bool * tb, double *bijk, double *hijk, double *uijk);
-	int
-	vam_ (double *volume, double *area);
-	bool
-	ptincy_ (double *pnt, double *unvect, int *icy);
-	double
-	rotang_ (double *epu, int *nedge, double *unvect);
-	double
-	vecang_ (double *v1, double *v2, double *axis, double *hand);
-	double
-	depth_ (int *ip, double *alt);
-	int
-	neighbor_ ();
-	int
-	torus_ ();
-	int
-	place_ ();
-	int
-	compress_ ();
-	int
-	saddles_ ();
-	int
-	contact_ ();
-	int
-	inedge_ (int *ien, int *itt);
-	int
-	ipedge_ (int *iep, int *ia);
-	int
-	measpm_ (int *ifn, double *prism);
-	int
-	measfp_ (int *ifp, double *areap, double *volp);
-	int
-	measfs_ (int *ifs, double *areas, double *vols, double *areasp, double *volsp);
-	int
-	measfn_ (int *ifn, double *arean, double *voln);
-	int
-	projct_ (double *pnt, double *unvect, int *icy, int *ia, double *spv, int *nedge, bool * fail);
-	int
-	epuclc_ (double *spv, int *nedge, double *epu);
-	int
-	cirpln_ (double *circen, double *cirrad, double *cirvec,
-					 double *plncen, double *plnvec, bool * cinsp, bool * cintp, double *xpnt1, double *xpnt2);
-	int
-	gendot_ (int *ndots, double *dots, double *radius, double *xcenter, double *ycenter, double *zcenter);
-	double
-	dot_ (double *x, double *y);
-	double
-	triple_ (double *x, double *y, double *z__);
+	double dist2_ (double *x, double *y);
+	int vcross_ (double *x, double *y, double *z__);
+	int vnorm_ (double *x, double *xn);
+	double anorm_ (double *x);
+	int gettor_ (int *ia, int *ja, bool * ttok, double *torcen, double *torad, double *torax);
+	int getprb_ (int *ia, int *ja, int *ka, bool * prbok, bool * tb, double *bijk, double *hijk, double *uijk);
+	int vam_ (double *volume, double *area, double* atom_areas);
+	bool ptincy_ (double *pnt, double *unvect, int *icy);
+	double rotang_ (double *epu, int *nedge, double *unvect);
+	double vecang_ (double *v1, double *v2, double *axis, double *hand);
+	double depth_ (int *ip, double *alt);
+	int neighbor_ ();
+	int torus_ ();
+	int place_ ();
+	int compress_ ();
+	int saddles_ ();
+	int contact_ ();
+	int inedge_ (int *ien, int *itt);
+	int ipedge_ (int *iep, int *ia);
+	int measpm_ (int *ifn, double *prism);
+	int measfp_ (int *ifp, double *areap, double *volp);
+	int measfs_ (int *ifs, double *areas, double *vols, double *areasp, double *volsp);
+	int measfn_ (int *ifn, double *arean, double *voln);
+	int projct_ (double *pnt, double *unvect, int *icy, int *ia, double *spv, int *nedge, bool * fail);
+	int epuclc_ (double *spv, int *nedge, double *epu);
+	int cirpln_ (double *circen, double *cirrad, double *cirvec,
+							 double *plncen, double *plnvec, bool * cinsp, bool * cintp, double *xpnt1, double *xpnt2);
+	int gendot_ (int *ndots, double *dots, double *radius, double *xcenter, double *ycenter, double *zcenter);
+	double dot_ (double *x, double *y);
+	double triple_ (double *x, double *y, double *z__);
 
-	int
-	connolly_ (int number_of_atoms, double *coordinates, double *radius,
-						 double *volume, double *area, double probe, double exclude)
+	int connolly_ (int number_of_atoms, double *coordinates, double *radius,
+								 double *volume, double *area, double probe, double exclude, double* atom_areas)
 	{
-		/* System generated locals */
-		int
-			i__1;
-
-		/* Local variables */
-		static int
-			i__;
-
-
-
-
-/*     set the probe radius and the number of atoms */
+		/*     set the probe radius and the number of atoms */
 
 		/* Parameter adjustments */
 		--radius;
@@ -260,97 +184,75 @@ namespace
 		face01_1.pr = probe;
 		face01_1.na = number_of_atoms;
 
-/*     set atom coordinates and radii, the excluded buffer */
+		/*     set atom coordinates and radii, the excluded buffer */
 
-/*     radius ("exclude") is added to atomic radii */
+		/*     radius ("exclude") is added to atomic radii */
 
-		i__1 = face01_1.na;
-		for (i__ = 1; i__ <= i__1; ++i__)
+		for (int i = 1; i <= face01_1.na; ++i)
 		{
-			/*
-			   face01_1.a[i__ * 3 - 3] = atoms_1.x[i__ - 1];
-			   face01_1.a[i__ * 3 - 2] = atoms_1.y[i__ - 1];
-			   face01_1.a[i__ * 3 - 1] = atoms_1.z__[i__ - 1];
-			 */
-			face01_1.a[i__ * 3 - 3] = coordinates[3 * i__ - 3];
-			face01_1.a[i__ * 3 - 2] = coordinates[3 * i__ - 2];
-			face01_1.a[i__ * 3 - 1] = coordinates[3 * i__ - 1];
-			face01_1.ar[i__ - 1] = radius[i__];
-			if (face01_1.ar[i__ - 1] == 0.0)
+			face01_1.a[i * 3 - 3] = coordinates[3 * i - 3];
+			face01_1.a[i * 3 - 2] = coordinates[3 * i - 2];
+			face01_1.a[i * 3 - 1] = coordinates[3 * i - 1];
+			face01_1.ar[i - 1] = radius[i];
+			if (face01_1.ar[i - 1] == 0.0)
 			{
-				face02_1.skip[i__ - 1] = true;
+				face02_1.skip[i - 1] = true;
 			}
 			else
 			{
-				face01_1.ar[i__ - 1] += exclude;
-				face02_1.skip[i__ - 1] = false;
+				face01_1.ar[i - 1] += exclude;
+				face02_1.skip[i - 1] = false;
 			}
 		}
 
-/*     find the analytical volume and surface area */
+		/*     find the analytical volume and surface area */
+		neighbor_();
+		torus_();
+		place_();
+		compress_();
+		saddles_();
+		contact_();
+		vam_(volume, area, atom_areas);
 
-		neighbor_ ();
-		torus_ ();
-		place_ ();
-		compress_ ();
-		saddles_ ();
-		contact_ ();
-		vam_ (volume, area);
 		return 0;
 	}	/* connolly_ */
 
 
-	double
-	dist2_ (double *x, double *y)
+	inline double dist2_ (double* x, double* y)
 	{
 		return ((x[0] - y[0]) * (x[0] - y[0]) + (x[1] - y[1]) * (x[1] - y[1]) + (x[2] - y[2]) * (x[2] - y[2]));
 	}
 
 
-/*     ################################################################## */
-
-/*     ##                                                              ## */
-
-/*     ##  subroutine getprb  --  test probe site between three atoms  ## */
-
-/*     ##                                                              ## */
-
-/*     ################################################################## */
+	/*     ################################################################## */
+	/*     ##                                                              ## */
+	/*     ##  subroutine getprb  --  test probe site between three atoms  ## */
+	/*     ##                                                              ## */
+	/*     ################################################################## */
 
 
-/*     "getprb" tests for a possible probe position at the interface */
+	/*     "getprb" tests for a possible probe position at the interface */
+	/*     between three neighboring atoms */
 
-/*     between three neighboring atoms */
 
-
-	int
-	getprb_ (int *ia, int *ja, int *ka, bool * prbok, bool * tb, double *bijk, double *hijk, double *uijk)
+	int getprb_ (int *ia, int *ja, int *ka, bool * prbok, bool * tb, double *bijk, double *hijk, double *uijk)
 	{
 		/* System generated locals */
-		double
-			d__1, d__2;
+		double d__1, d__2;
 
 		/* Local variables */
-		static double
-			fact, wijk;
-		static int
-			k;
-		static double
-			tijik[3], swijk, dotut, dotijk;
-		static double
-			dba, rad, rij;
-		static double
-			rik, uij[3], uik[3], utb[3], tij[3], tik[3];
-		static bool
-			tok;
-		static double
-			rad2, dat2, rip2;
+		static double fact, wijk;
+		static int k;
+		static double tijik[3], swijk, dotut, dotijk;
+		static double dba, rad, rij;
+		static double rik, uij[3], uik[3], utb[3], tij[3], tik[3];
+		static bool tok;
+		static double rad2, dat2, rip2;
 
 
 
 
-/*     initialize, then check torus over atoms "ia" and "ja" */
-
+		/*     initialize, then check torus over atoms "ia" and "ja" */
 		/* Parameter adjustments */
 		--uijk;
 		--bijk;
@@ -371,9 +273,8 @@ namespace
 		d__2 = rij;
 		rad2 = d__1 * d__1 - d__2 * d__2;
 
-/*     if "ka" less than "ja", then all we care about */
-
-/*     is whether the torus is buried */
+		/*     if "ka" less than "ja", then all we care about */
+		/*     is whether the torus is buried */
 
 		if (*ka < *ja)
 		{
@@ -403,11 +304,9 @@ namespace
 		wijk = acos (dotijk);
 		swijk = sin (wijk);
 
-/*     if the three atoms are colinear, then there is no */
-
-/*     probe placement; but we still care whether the torus */
-
-/*     is buried by atom "k" */
+		/*     if the three atoms are colinear, then there is no */
+		/*     probe placement; but we still care whether the torus */
+		/*     is buried by atom "k" */
 
 		if (swijk == 0.0)
 		{
@@ -451,41 +350,30 @@ namespace
 
 
 
-/*     ################################################################ */
-
-/*     ##                                                            ## */
-
-/*     ##  subroutine gettor  --  test torus site between two atoms  ## */
-
-/*     ##                                                            ## */
-
-/*     ################################################################ */
+	/*     ################################################################ */
+	/*     ##                                                            ## */
+	/*     ##  subroutine gettor  --  test torus site between two atoms  ## */
+	/*     ##                                                            ## */
+	/*     ################################################################ */
 
 
-/*     "gettor" tests for a possible torus position at the interface */
+	/*     "gettor" tests for a possible torus position at the interface */
+	/*     between two atoms, and finds the torus radius, center and axis */
 
-/*     between two atoms, and finds the torus radius, center and axis */
 
-
-	int
-	gettor_ (int *ia, int *ja, bool * ttok, double *torcen, double *torad, double *torax)
+	int gettor_ (int *ia, int *ja, bool * ttok, double *torcen, double *torad, double *torax)
 	{
 		/* System generated locals */
 		double
 			d__1, d__2, d__3;
 
 		/* Local variables */
-		static double
-			temp;
-		static double
-			temp1, temp2;
-		static int
-			k;
-		static double
-			bij[3], dij, uij[3], vij[3];
+		static double temp;
+		static double temp1, temp2;
+		static int k;
+		static double bij[3], dij, uij[3], vij[3];
 
 		/*     get the distance between the two atoms */
-
 		/* Parameter adjustments */
 		--torax;
 		--torcen;
@@ -502,14 +390,11 @@ namespace
 			uij[k - 1] = vij[k - 1] / dij;
 		}
 
-/*     find coordinates of the center of the torus */
+		/*     find coordinates of the center of the torus */
 
 
-		d__1 =
-			face01_1.ar[*ia - 1] + face01_1.pr;
-
+		d__1 = face01_1.ar[*ia - 1] + face01_1.pr;
 		d__2 = face01_1.ar[*ja - 1] + face01_1.pr;
-
 		d__3 = dij;
 		temp = (d__1 * d__1 - d__2 * d__2) / (d__3 * d__3) + 1.;
 		for (k = 1; k <= 3; ++k)
@@ -517,28 +402,24 @@ namespace
 			bij[k - 1] = face01_1.a[k + *ia * 3 - 4] + vij[k - 1] * .5 * temp;
 		}
 
-/*     skip if atoms too far apart (should not happen) */
+		/*     skip if atoms too far apart (should not happen) */
 
 
 		d__1 = face01_1.ar[*ia - 1] + face01_1.ar[*ja - 1] + face01_1.pr * 2.;
-
 		d__2 = dij;
 		temp1 = d__1 * d__1 - d__2 * d__2;
 		if (temp1 >= 0.0)
 		{
 
-/*     skip if one atom is inside the other */
-
+			/*     skip if one atom is inside the other */
 
 			d__1 = dij;
-
 			d__2 = face01_1.ar[*ia - 1] - face01_1.ar[*ja - 1];
 			temp2 = d__1 * d__1 - d__2 * d__2;
 			if (temp2 >= 0.0)
 			{
 
 				/*     store the torus radius, center and axis */
-
 				*ttok = true;
 				*torad = sqrt (temp1 * temp2) / (dij * 2.);
 				for (k = 1; k <= 3; ++k)
@@ -555,80 +436,51 @@ namespace
 
 
 
-/*     ############################################################### */
-
-/*     ##                                                           ## */
-
-/*     ##  subroutine neighbor  --  list of neighboring atom pairs  ## */
-
-/*     ##                                                           ## */
-
-/*     ############################################################### */
+	/*     ############################################################### */
+	/*     ##                                                           ## */
+	/*     ##  subroutine neighbor  --  list of neighboring atom pairs  ## */
+	/*     ##                                                           ## */
+	/*     ############################################################### */
 
 
-/*     "neighbor" finds all of the neighbors of each atom */
-
-/*     local variables : */
-
-/*     ico      int cube coordinates */
-
-/*     icuptr   pointer to next atom in cube */
-
-/*     comin    minimum atomic coordinates (cube corner) */
-
-/*     icube    pointer to first atom in list for cube */
-
-/*     scube    true if cube contains active atoms */
-
-/*     sscube   true if cube or adjacent cubes have active atoms */
-
-/*     itnl     temporary neighbor list, before sorting */
+	/*     "neighbor" finds all of the neighbors of each atom */
+	/*     local variables : */
+	/*     ico      int cube coordinates */
+	/*     icuptr   pointer to next atom in cube */
+	/*     comin    minimum atomic coordinates (cube corner) */
+	/*     icube    pointer to first atom in list for cube */
+	/*     scube    true if cube contains active atoms */
+	/*     sscube   true if cube or adjacent cubes have active atoms */
+	/*     itnl     temporary neighbor list, before sorting */
 
 
 	int
 	neighbor_ ()
 	{
 		/* System generated locals */
-		int
-			i__1, i__2, i__3, i__4, i__5, i__6;
-		double
-			d__1, d__2, d__3;
+		int i__1, i__2, i__3, i__4, i__5, i__6;
+		double d__1, d__2, d__3;
 
 		/* Local variables */
-		static int
-			nbra[1000], jnbr, jmin, nnbr, iuse, itnl[1000], iptr;
-		static double
-			sumi, vect1, vect2, vect3;
-		static int
-			i__, j, k, m, icube[64000] /* was [40][40][40] */ , nnbra;
-		static bool
-			scube[64000] /* was [40][40][40] */ ;
-		static int
-			jmold;
-		static double
-			comin[3];
-		static int
-			iatom, jatom;
-		static double
-			width, d2;
-		static int
-			i1, j1, k1;
-		static double
-			r2, radmax;
-		static int
-			jminbr;
-		static bool
-			sscube[64000] /* was [40][40][40] */ ;
-		static int
-			icuptr[5000], ici, icj, ick, jci, jcj, jck, ico[15000]
-			/* was [3][5000] */ ;
-		static double
-			sum;
+		static int nbra[1000], jnbr, jmin, nnbr, iuse, itnl[1000], iptr;
+		static double sumi, vect1, vect2, vect3;
+		static int i__, j, k, m, icube[64000] /* was [40][40][40] */ , nnbra;
+		static bool scube[64000] /* was [40][40][40] */ ;
+		static int jmold;
+		static double comin[3];
+		static int iatom, jatom;
+		static double width, d2;
+		static int i1, j1, k1;
+		static double r2, radmax;
+		static int jminbr;
+		static bool sscube[64000] /* was [40][40][40] */ ;
+		static int icuptr[5000], ici, icj, ick, jci, jcj, jck, ico[15000] /* was [3][5000] */ ;
+		static double sum;
 
 
-/*     ignore all atoms that are completely inside another atom; */
+		/*     ignore all atoms that are completely inside another atom; */
 
-/*     may give nonsense results if this step is not taken */
+		/*     may give nonsense results if this step is not taken */
 
 		i__1 = face01_1.na - 1;
 		for (i__ = 1; i__ <= i__1; ++i__)
@@ -2994,138 +2846,78 @@ namespace
 
 
 /*     ########################################################## */
-
 /*     ##                                                      ## */
-
 /*     ##  subroutine vam  --  volumes and areas of molecules  ## */
-
 /*     ##                                                      ## */
-
 /*     ########################################################## */
 
 
 /*     "vam" takes the analytical molecular surface defined */
-
-/*     as a collection of spherical and toroidal polygons */
-
-/*     and uses it to compute the volume and surface area */
+/*     as a collection of spherical and toroidal polygons   */
+/*     and uses it to compute the volume and surface area   */
 
 
-	int
-	vam_ (double *volume, double *area)
+	int vam_ (double *volume, double *area, double* atom_areas)
 	{
 		/* System generated locals */
-		int
-			i__1, i__2, i__3;
-		double
-			d__1, d__2, d__3;
+		int i__1, i__2, i__3;
+		double d__1, d__2, d__3;
 
 		/* Local variables */
-		static bool
-			badt[10000], alli, allj;
-		static double
-			cora[10000];
-		static int
-			nate, neat, nlap[10000], enfs[25000], idot;
-		static double
-			dota, alts[30000] /* was [3][10000] */ , corv[10000],
-			sdot[3], dotv[20], voln, dots[3000] /* was [3][1000] */ , vint, volp;
-		static bool
-			anyi;
-		static double
-			vols;
-		static int
-			nspt[30000] /* was [3][10000] */ ;
-		static bool
-			anyj, case1, case2;
-		static double
-			vpyr, vect1[3], vect2[3], vect3[3];
-		static double
-			vect4[3], vect5[3], vect6[3], vect7[3], vect8[3], xpnt1[3];
-		static int
-			k;
-		static double
-			xpnt2[3];
-		static bool
-			badav[10000];
-		static double
-			arean, areap, areas, fncen[30000] /* was [3][10000] */ ;
-		static double
-			scinc, alens, coran;
-		static int
-			ifnop[100];
-		static double
-			vcone;
-		static double
-			totan, voldo;
-		static int
-			ndots;
-		static double
-			vlens, totap, totas, prism, sumsc, corvn, vects[9]
-			/* was [3][3] */ , tdots[3000] /* was [3][1000] */ ;
-		static bool
-			cinsp;
-		static double
-			volsp;
-		static bool
-			cintp;
-		static double
-			totvn, totvp, totvs;
-		static int
-			ispnd2[3], ia, ic, ke, ip;
-		static double
-			areado, dt;
-		static int
-			it, iv;
-		static double
-			rm;
-		static int
-			kv;
-		static double
-			uc[3], uq[3];
-		static double
-			areasp;
-		static double
-			hedron, alensn, sigmaq[3];
-		static double
-			fnvect[90000] /* was [3][3][10000] */ ;
-		static int
-			ispind[3];
-		static double
-			alenst, depths[10000];
-		static int
-			neatmx;
-		static double
-			sumlam;
-		static double
-			thetaq[3];
-		static bool
-			spindl;
-		static int
-			ke2;
-		static bool
-			fntrev[30000] /* was [3][10000] */ ;
-		static double
-			vlensn, ds2, totasp, vlenst, sumsig;
-		static bool
-			usenum;
-		static int
-			iv1, iv2;
-		static double
-			totvsp;
-		static bool
-			ate[100];
-		static int
-			ien, ifn, iep, ifp, ifs, isc, jfn, nop, iop, ivs[3], fnt[30000] /* was [3][10000] */ ;
-		static double
-			atmarea[5000];
-		static double
-			dpp, rat, rsc, rho, stq, tau[3], ppm[3], qij[3], upp[3], umq[3], upq[3], uij[3];
-		static double
-			dij2;
+		static bool badt[10000], alli, allj;
+		static double cora[10000];
+		static int nate, neat, nlap[10000], enfs[25000], idot;
+		static double dota, alts[30000] /* was [3][10000] */ , corv[10000],
+					 sdot[3], dotv[20], voln, dots[3000] /* was [3][1000] */ , vint, volp;
+		static bool anyi;
+		static double vols;
+		static int nspt[30000] /* was [3][10000] */ ;
+		static bool anyj, case1, case2;
+		static double vpyr, vect1[3], vect2[3], vect3[3];
+		static double vect4[3], vect5[3], vect6[3], vect7[3], vect8[3], xpnt1[3];
+		static int k;
+		static double xpnt2[3];
+		static bool badav[10000];
+		static double arean, areap, areas, fncen[30000] /* was [3][10000] */ ;
+		static double scinc, alens, coran;
+		static int ifnop[100];
+		static double vcone;
+		static double totan, voldo;
+		static int ndots;
+		static double vlens, totap, totas, prism, sumsc, corvn, vects[9]
+						/* was [3][3] */ , tdots[3000] /* was [3][1000] */ ;
+		static bool cinsp;
+		static double volsp;
+		static bool cintp;
+		static double totvn, totvp, totvs;
+		static int ispnd2[3], ia, ic, ke, ip;
+		static double areado, dt;
+		static int it, iv;
+		static double rm;
+		static int kv;
+		static double uc[3], uq[3];
+		static double areasp;
+		static double hedron, alensn, sigmaq[3];
+		static double fnvect[90000] /* was [3][3][10000] */ ;
+		static int ispind[3];
+		static double alenst, depths[10000];
+		static int neatmx;
+		static double sumlam;
+		static double thetaq[3];
+		static bool spindl;
+		static int ke2;
+		static bool fntrev[30000] /* was [3][10000] */ ;
+		static double vlensn, ds2, totasp, vlenst, sumsig;
+		static bool usenum;
+		static int iv1, iv2;
+		static double totvsp;
+		static bool ate[100];
+		static int ien, ifn, iep, ifp, ifs, isc, jfn, nop, iop, ivs[3], fnt[30000] /* was [3][10000] */ ;
+		static double dpp, rat, rsc, rho, stq, tau[3], ppm[3], qij[3], upp[3], umq[3], upq[3], uij[3];
+		static double dij2;
 
 
-/*     compute the volume of the interior polyhedron */
+		/*     compute the volume of the interior polyhedron */
 
 		hedron = 0.0;
 		i__1 = face08_1.nfn;
@@ -3135,31 +2927,26 @@ namespace
 			hedron += prism;
 		}
 
-/*     compute the area and volume due to convex faces */
+		/*     compute the area and volume due to convex faces */
+		/*     as well as the area partitioned among the atoms */
 
-/*     as well as the area partitioned among the atoms */
-
-		totap =
-			0.0;
+		totap = 0.0;
 		totvp = 0.0;
-		i__1 = face01_1.na;
-		for (ia = 1; ia <= i__1; ++ia)
+		for (ia = 1; ia <= face01_1.na; ++ia)
 		{
-			atmarea[ia - 1] = 0.0;
+			atom_areas[ia - 1] = 0.0;
 		}
-		i__1 = face13_1.nfp;
-		for (ifp = 1; ifp <= i__1; ++ifp)
+		for (ifp = 1; ifp <= face13_1.nfp; ++ifp)
 		{
 			measfp_ (&ifp, &areap, &volp);
 			ia = face13_1.fpa[ifp - 1];
-			atmarea[ia - 1] += areap;
+			atom_areas[ia - 1] += areap;
 			totap += areap;
 			totvp += volp;
 		}
 
-/*     compute the area and volume due to saddle faces */
-
-/*     as well as the spindle correction value */
+		/*     compute the area and volume due to saddle faces */
+		/*     as well as the spindle correction value */
 
 		totas = 0.0;
 		totvs = 0.0;
@@ -3187,8 +2974,7 @@ namespace
 			}
 		}
 
-/*     compute the area and volume due to concave faces */
-
+		/* compute the area and volume due to concave faces */
 		totan = 0.0;
 		totvn = 0.0;
 		i__1 = face08_1.nfn;
@@ -3199,8 +2985,7 @@ namespace
 			totvn += voln;
 		}
 
-/*     compute the area and volume lens correction values */
-
+		/*     compute the area and volume lens correction values */
 		alenst = 0.0;
 		alensn = 0.0;
 		vlenst = 0.0;
@@ -3236,7 +3021,7 @@ namespace
 			}
 			ia = face07_1.va[iv - 1];
 
-/*     get vertices and vectors */
+			/*     get vertices and vectors */
 
 			for (ke = 1; ke <= 3; ++ke)
 			{
@@ -3258,9 +3043,8 @@ namespace
 				}
 			}
 
-/*     calculate normal vectors for the three planes */
-
-/*     that cut out the geodesic triangle */
+			/*     calculate normal vectors for the three planes */
+			/*     that cut out the geodesic triangle */
 
 			vcross_ (vects, &vects[3], &fnvect[(ifn * 3 + 1) * 3 - 12]);
 			vnorm_ (&fnvect[(ifn * 3 + 1) * 3 - 12], &fnvect[(ifn * 3 + 1) * 3 - 12]);
@@ -3657,7 +3441,7 @@ namespace
 				corv[ifn - 1] += vlens;
 				corv[jfn - 1] += vlens;
 
-/*     check for vertex on opposing probe in face */
+				/*     check for vertex on opposing probe in face */
 
 				for (kv = 1; kv <= 3; ++kv)
 				{
@@ -3702,8 +3486,7 @@ namespace
 				goto L130;
 			}
 
-/*     gather all overlapping probes */
-
+			/*     gather all overlapping probes */
 			nop = 0;
 			i__2 = face08_1.nfn;
 			for (jfn = 1; jfn <= i__2; ++jfn)
@@ -3728,7 +3511,7 @@ namespace
 				}
 			}
 
-/*     numerical calculation of the correction */
+			/*     numerical calculation of the correction */
 
 			areado = 0.0;
 			voldo = 0.0;
@@ -3738,8 +3521,6 @@ namespace
 				rsc = isc - 0.5;
 
 				d__1 = rsc;
-
-/* Computing 3rd power */
 				d__2 = scinc, d__3 = d__2;
 				dotv[isc - 1] = face01_1.pr * dota * (d__1 * d__1) * (d__3 * (d__2 * d__2));
 			}
@@ -3859,12 +3640,12 @@ namespace
 		}
 	L140:
 
-/*     finally, compute the total area and total volume */
+		/*     finally, compute the total area and total volume */
 
 		*area = totap + totas + totan - totasp - alenst;
 		*volume = totvp + totvs + totvn + hedron - totvsp + vlenst;
 
-/*     print out the decomposition of the area and volume */
+		/*     print out the decomposition of the area and volume */
 
 		return 0;
 	}	/* vam_ */
@@ -4633,7 +4414,7 @@ namespace
 				ke2 = 1;
 			}
 
-/*     unit vector along edge of cycle */
+			/*     unit vector along edge of cycle */
 
 			for (k = 1; k <= 3; ++k)
 			{
@@ -4641,9 +4422,9 @@ namespace
 			}
 			epun = anorm_ (&epu[ke * 3 + 1]);
 
-/*        if (epun .le. 0.0d0)  call error ('Null Edge in Cycle') */
+			/*        if (epun .le. 0.0d0)  call error ('Null Edge in Cycle') */
 
-/*     normalize */
+			/*     normalize */
 
 			if (epun > 0.0)
 			{
