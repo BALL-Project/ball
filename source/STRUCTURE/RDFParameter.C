@@ -1,4 +1,4 @@
-// $Id: RDFParameter.C,v 1.2 2000/09/01 06:10:35 oliver Exp $
+// $Id: RDFParameter.C,v 1.3 2000/09/21 13:28:54 anker Exp $
 
 #include <BALL/STRUCTURE/RDFParameter.h>
 #include <BALL/STRUCTURE/RDFSection.h>
@@ -95,7 +95,15 @@ namespace BALL
 	{
 		if (hasRDF(type_i, type_j))
 		{
-			return getRDF(getIndex(type_i, type_j));
+			Position index = getIndex(type_i, type_j);
+			if (index != INVALID_POSITION)
+			{
+				return getRDF(index);
+			}
+			else
+			{
+				// BAUSTELLE
+			}
 		}
 		else
 		{
@@ -113,7 +121,6 @@ namespace BALL
 			return false;
 		}
 
-		Log.info() << "section_name = " << section_name << endl;
 		ParameterSection::extractSection(parameters, section_name);
 
 		Size index_name = getColumnIndex("RDF");
@@ -132,6 +139,10 @@ namespace BALL
 			{
 				type_name_i = key.before(" ", 0);
 				type_name_j = key.after(" ", 0); 
+				/*
+				Log.info() << "About to read RDF for combination " << type_name_i 
+					<< " " << type_name_j << endl;
+				*/
 				if ((atom_types.hasType(type_name_i)) && 
 						(atom_types.hasType(type_name_j)))
 				{
@@ -161,7 +172,6 @@ namespace BALL
 							{
 								// Hier wird der Typ klar.
 								it->second.insert(std::pair<Atom::Type, Position>(type_j, index));
-
 							}
 						}
 						else
@@ -170,8 +180,6 @@ namespace BALL
 							tmp[type_j] = index;
 							rdf_indices_.insert(std::pair<Atom::Type,
 									HashMap<Atom::Type, Position> >(type_i, tmp));
-
-							return true;
 						}
 					}
 					else
