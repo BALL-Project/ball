@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.148 2004/10/21 11:31:46 amoll Exp $
+// $Id: scene.C,v 1.149 2004/10/21 13:45:37 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -69,6 +69,14 @@ namespace BALL
 				quaternion_(),
 				need_update_(false),
 				update_running_(false),
+				x_window_pos_old_(0),
+				y_window_pos_old_(0),
+				x_window_pos_new_(0),
+				y_window_pos_new_(0),
+				x_window_pick_pos_first_(0),
+				y_window_pick_pos_first_(0),
+				x_window_pick_pos_second_(0),
+				y_window_pick_pos_second_(0),
 				stage_(new Stage),
 				light_settings_(0),
 				stage_settings_(0),
@@ -96,6 +104,14 @@ namespace BALL
 				quaternion_(),
 				need_update_(false),
 				update_running_(false),
+				x_window_pos_old_(0),
+				y_window_pos_old_(0),
+				x_window_pos_new_(0),
+				y_window_pos_new_(0),
+				x_window_pick_pos_first_(0),
+				y_window_pick_pos_first_(0),
+				x_window_pick_pos_second_(0),
+				y_window_pick_pos_second_(0),
 				stage_(new Stage),
 				light_settings_(0),
 				stage_settings_(0),
@@ -124,6 +140,14 @@ namespace BALL
 				ModularWidget(scene),
 				system_origin_(scene.system_origin_),
 				quaternion_(scene.quaternion_),
+				x_window_pos_old_(0),
+				y_window_pos_old_(0),
+				x_window_pos_new_(0),
+				y_window_pos_new_(0),
+				x_window_pick_pos_first_(0),
+				y_window_pick_pos_first_(0),
+				x_window_pick_pos_second_(0),
+				y_window_pick_pos_second_(0),
 				stage_(new Stage(*scene.stage_)),
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
