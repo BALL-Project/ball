@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.25 2003/06/19 11:46:07 oliver Exp $ 
+// $Id: regularData3D.h,v 1.26 2003/06/19 13:42:17 anker Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -941,7 +941,7 @@ namespace BALL
     position.y = (Position)((r.y - origin_.y) / spacing_.y + 0.5);
     position.z = (Position)((r.z - origin_.z) / spacing_.z + 0.5);
 
-    return data_[position];
+    return operator [] (position);
 	}
 
   template <typename ValueType>
@@ -960,7 +960,7 @@ namespace BALL
     position.y = (Position)((r.y - origin_.y) / spacing_.y + 0.5);
     position.z = (Position)((r.z - origin_.z) / spacing_.z + 0.5);
 
-    return data_[position];
+    return operator [] (position);
 	}
 
 

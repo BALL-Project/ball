@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.34 2003/06/19 11:46:07 oliver Exp $
+// $Id: regularData2D.h,v 1.35 2003/06/19 13:42:18 anker Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -893,7 +893,7 @@ namespace BALL
 		position.x = (Position)((r.x - origin_.x) / spacing_.x + 0.5);
 		position.y = (Position)((r.y - origin_.y) / spacing_.y + 0.5);
 
-		return data_[size_.x * position.y + position.x];
+		return operator [] (position);
 	}
 
 	template <typename ValueType>
@@ -911,7 +911,7 @@ namespace BALL
 		position.x = (Position)((r.x - origin_.x) / spacing_.x + 0.5);
 		position.y = (Position)((r.y - origin_.y) / spacing_.y + 0.5);
 
-		return data_[size_.x * position.y + position.x];
+		return operator [] (position);
 	}
 
 	template <typename ValueType>
