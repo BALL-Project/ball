@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.5 2000/02/10 15:16:57 oliver Exp $
+// $Id: templates.C,v 1.6 2000/02/13 16:54:47 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -117,7 +117,6 @@ namespace BALL
 	{
 		// remember the current parent to avoid
 		// the recalculation of the parent`s name
-		Fragment* parent = 0;
 		String		parent_name(":");
 
 		// iterate over all atoms
