@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.23 2003/03/21 14:37:30 anhi Exp $
+// $Id: conjugateGradient.C,v 1.24 2003/03/21 15:39:03 anhi Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -589,7 +589,7 @@ namespace BALL
 			}	
 		}
 
-		Size max_iterations = std::max(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
+		Size max_iterations = std::min(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
 
 		#ifdef BALL_DEBUG
 			Log.info() << "CGM: minimize(" << iterations << ", " << resume << ")" << endl;

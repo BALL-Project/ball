@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.16 2003/03/21 14:37:31 anhi Exp $
+// $Id: steepestDescent.C,v 1.17 2003/03/21 15:39:03 anhi Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
@@ -139,7 +139,7 @@ namespace BALL
 			setNumberOfIterations(0);
 			same_energy_counter_ = 0;
 		}
-		Size max_iterations = std::max(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
+		Size max_iterations = std::min(getNumberOfIterations() + iterations, getMaxNumberOfIterations());
 		
 		LineSearch line_search(*this);
 		bool converged = false;
