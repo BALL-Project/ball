@@ -24,7 +24,7 @@ PYINTERPRETER = pyInterpreter.obj
 # default target
 all:	$(PYINTERPRETER)
  cd EXTENSIONS
- nmake /I /B /F Makefile.win
+ nmake  /F Makefile.win
 
 
 
