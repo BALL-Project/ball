@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.10 2000/08/30 19:58:02 oliver Exp $ 
+// $Id: hashMap.h,v 1.11 2000/09/01 06:23:55 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -30,6 +30,8 @@
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
 #endif
+
+#include <algorithm>
 
 namespace BALL
 {
@@ -620,9 +622,9 @@ namespace BALL
 	template <class Key, class T>
 	void HashMap<Key, T>::swap(HashMap& hash_map)
 	{
-		swap(size_, hash_map.size_);
-		swap(capacity_, hash_map.capacity_);
-		swap(bucket_, hash_map.bucket_);
+		std::swap(size_, hash_map.size_);
+		std::swap(capacity_, hash_map.capacity_);
+		std::swap(bucket_, hash_map.bucket_);
 	}
 
 	template <class Key, class T>
