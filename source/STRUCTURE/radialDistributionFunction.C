@@ -1,6 +1,8 @@
-// $Id: radialDistributionFunction.C,v 1.3 2000/09/22 16:30:18 anker Exp $
+// $Id: radialDistributionFunction.C,v 1.4 2000/09/24 13:29:31 oliver Exp $
 
 #include <BALL/STRUCTURE/radialDistributionFunction.h>
+
+using namespace std;
 
 namespace BALL
 {
