@@ -1,4 +1,4 @@
-// $Id: snapShotManager.C,v 1.3 2001/03/21 18:15:34 anker Exp $
+// $Id: snapShotManager.C,v 1.4 2001/03/22 19:43:36 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -444,7 +444,8 @@ namespace BALL
 		// We have to avoid seek() so we need to reopen and read from the
 		// beginning
 		trajectory_file_ptr_->reopen();
-		for  (Size count = 0; count < number; ++count)
+		trajectory_file_ptr_->readHeader();
+		for (Size count = 0; count < number; ++count)
 		{
 			if (!trajectory_file_ptr_->read(buffer))
 			{
@@ -452,6 +453,8 @@ namespace BALL
 					<< "error reading from the TrajectoryFile" << endl;
 				return false;
 			}
+			// DEBUG 
+			Log.info() << "read SnapShot number " << count << endl;
 		}
 		// now apply the last snapshot we read
 		buffer.applySnapShot(*system_ptr_);
@@ -468,6 +471,7 @@ namespace BALL
 		// We should check for file validity here
 
 		trajectory_file_ptr_->reopen();
+		trajectory_file_ptr_->readHeader();
 		return applyNextSnapShot();
 	}
 
