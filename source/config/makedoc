@@ -1,0 +1,13 @@
+#!/bin/bash
+CONFIGFILE=doxygen.cfg
+
+if test $1 == "-website"; then
+	CONFIGFILE=doxygen_website.cfg
+fi
+
+cd ../doc/ && \
+rm -f doxygen/html/*;  
+doxygen $CONFIGFILE && \
+cd doxygen/html && \
+for i in `find . -name "*html"`; do sed -i "s/BALL:://g" $i; done 
+
