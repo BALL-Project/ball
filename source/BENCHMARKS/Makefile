@@ -2,6 +2,7 @@ DIRECTORY=BENCHMARKS
 
 EXECUTABLES = \
 	CompositeClone_bench\
+	KernelCreation_bench\
 	KernelClone_bench\
 	KernelIteration_bench\
 	AmberFF_bench\
@@ -17,8 +18,8 @@ all:	$(EXECUTABLES)
 CPP_SOURCES=$(EXECUTABLES:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
 
-include ../common.mak
-include .Dependencies
+-include ../common.mak
+-include .Dependencies
 
 # remove the library specific flags
 LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)

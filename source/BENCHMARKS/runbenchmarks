@@ -11,7 +11,7 @@ REF_TIME=258.98
 A=`echo "\c"|grep c`
 if test "$A" != "" ; then 
 	A=`echo -n "k"|grep n` 
-	if test "$A" == "" ; then 
+	if test "$A" = "" ; then 
 		ECHO="echo -n "
 		SUFFIX=""
 	else 
