@@ -1,4 +1,4 @@
-// $Id: anisotropy.C,v 1.1 2000/07/03 20:02:20 oliver Exp $
+// $Id: anisotropy.C,v 1.2 2000/07/04 13:57:38 oliver Exp $
 
 #include<BALL/NMR/anisotropy.h>
 
@@ -60,7 +60,7 @@ bool AnIsoShift::finish()
 	list<Bond*>::iterator eff_iter;
 	Bond* hbond;
 
-	if (proton_list_.begin()!=NULL)
+	if (proton_list_.size() > 0)
 		{
 		// Iteriere über alle Protonen in proton_list_
 		
