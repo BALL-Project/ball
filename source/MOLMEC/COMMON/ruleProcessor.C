@@ -1,4 +1,4 @@
-// $Id: ruleProcessor.C,v 1.2 2000/05/24 12:12:53 anker Exp $
+// $Id: ruleProcessor.C,v 1.3 2000/05/24 18:33:52 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleProcessor.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -65,7 +65,7 @@ namespace BALL
 		return true;
 	}
 
-	Processor::Result RuleProcessor::operator () (const Atom& atom)
+	Processor::Result RuleProcessor::operator () (Atom& atom)
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
@@ -80,7 +80,7 @@ namespace BALL
 		return valid_;
 	}
 
-	void RuleProcessor::dump(std::ostream& s = std::cout) const
+	void RuleProcessor::dump(std::ostream& s) const
 	{
 		// BAUSTELLE
 	}

@@ -1,4 +1,4 @@
-// $Id: ruleProcessor.h,v 1.3 2000/05/24 12:46:31 anker Exp $
+// $Id: ruleProcessor.h,v 1.4 2000/05/24 18:34:15 oliver Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEPROCESSOR_H
@@ -88,7 +88,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual Processor::Result operator () (const Atom& atom);
+		virtual Processor::Result operator () (Atom& atom);
 
 		/** 
 		*/
