@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.C,v 1.7 2000/06/30 05:56:14 oliver Exp $
+// $Id: charmmImproperTorsion.C,v 1.8 2001/07/12 19:02:00 anker Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -274,7 +274,9 @@ namespace BALL
 					if (a4 != 0) Log.warn() << " a4 = " << a4->getFullName();
 					Log.warn() << endl;
 
-				} else {
+				} 
+				else 
+				{
 					// if we use selection and the atoms are selected,
 					// add the torsion the the impropers_ vector
 					if	(getForceField()->getUseSelection() == false ||
@@ -336,13 +338,21 @@ namespace BALL
 						if (found)	
 						{
 							impropers_.push_back(values);
-						} else {
-							Log.warn() << "CharmmImproperTorsion::setup: no parameters for improper " 
-												 << torsion.residue_name << "/" << torsion.atom_name_A << "/" 
-												 << torsion.atom_name_B << "/" << torsion.atom_name_C << "/" 
-												 << torsion.atom_name_D << " (types are " 
-												 << a1->getTypeName() << "/" << a2->getTypeName() << "/"
-												 << a3->getTypeName() << "/" << a4->getTypeName()												
+						} 
+						else 
+						{
+							Log.warn() << "CharmmImproperTorsion::setup: "
+												 << "no parameters for improper " 
+												 << torsion.residue_name << "/" 
+												 << torsion.atom_name_A << "/" 
+												 << torsion.atom_name_B << "/" 
+												 << torsion.atom_name_C << "/" 
+												 << torsion.atom_name_D 
+												 << " (types are " 
+												 << a1->getTypeName() << "/" 
+												 << a2->getTypeName() << "/"
+												 << a3->getTypeName() << "/" 
+												 << a4->getTypeName()												
 												 << ")" << endl;
 						}
 					}
