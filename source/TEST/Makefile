@@ -26,6 +26,7 @@ EXECUTABLES_MATHS = \
 	Box3_test\
 	Plane3_test\
 	Sphere3_test\
+	Surface_test\
 	Function_test\
 	PiecewiseFunction_test\
 	PiecewisePolynomial_test
