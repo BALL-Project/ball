@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.9 2002/10/17 09:36:04 anker Exp $
+// $Id: fresno.h,v 1.1.2.10 2002/10/31 14:51:41 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -138,6 +138,30 @@ namespace BALL
 
 			/**
 			*/
+			static const char* PROBE_RADIUS;
+
+			/**
+			*/
+			static const char* SURFACE_TENSION;
+
+			/**
+			*/
+			static const char* UHLIG_CONSTANT;
+
+			/**
+			*/
+			static const char* SOLVENT_NUMBER_DENSITY;
+
+			/**
+			*/
+			static const char* ABSOLUTE_TEMPERATURE;
+
+			/**
+			*/
+			static const char* NONPOLAR_METHOD;
+
+			/**
+			*/
 			static const char* VERBOSITY;
 
 
@@ -238,6 +262,30 @@ namespace BALL
 			/**
 			*/
 			static const Size DESOLV_METHOD;
+
+			/**
+			*/
+			static const float PROBE_RADIUS;
+
+			/**
+			*/
+			static const float SURFACE_TENSION;
+
+			/**
+			*/
+			static const float UHLIG_CONSTANT;
+
+			/**
+			*/
+			static const float SOLVENT_NUMBER_DENSITY;
+
+			/**
+			*/
+			static const float ABSOLUTE_TEMPERATURE;
+
+			/**
+			*/
+			static const Size NONPOLAR_METHOD;
 
 			/**
 			*/

@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.12 2002/10/17 09:36:05 anker Exp $
+// $Id: fresno.C,v 1.1.2.13 2002/10/31 14:51:41 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -17,6 +17,7 @@
 #include <BALL/MOLMEC/FRESNO/fresnoDesolvation.h>
 #include <BALL/MOLMEC/FRESNO/chemScoreMetal.h>
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
+#include <BALL/MOLMEC/FRESNO/fresnoNonPolar.h>
 
 using namespace std;
 
@@ -48,6 +49,12 @@ namespace BALL
 	const char* FresnoFF::Option::METAL_R2 = "metal_r2";
 	const char* FresnoFF::Option::DESOLV_METHOD = "desolvation_method";
 	const char* FresnoFF::Option::DESOLV_AVG = "desolvation_averaging";
+	const char* FresnoFF::Option::PROBE_RADIUS = "probe_radius";
+	const char* FresnoFF::Option::SURFACE_TENSION = "surface_tesnion";
+	const char* FresnoFF::Option::UHLIG_CONSTANT = "uhlig_constant";
+	const char* FresnoFF::Option::SOLVENT_NUMBER_DENSITY = "solvent_number_density";
+	const char* FresnoFF::Option::ABSOLUTE_TEMPERATURE = "absolute_temperature";
+	const char* FresnoFF::Option::NONPOLAR_METHOD = "nonpolar_method";
 	const char* FresnoFF::Option::VERBOSITY = "verbosity";
 
 	const float FresnoFF::Default::CONST = -33.614;
@@ -75,6 +82,12 @@ namespace BALL
 	const float FresnoFF::Default::METAL_R2 = 2.6;
 	const Size FresnoFF::Default::DESOLV_METHOD = 0;
 	const Size FresnoFF::Default::DESOLV_AVG = 0;
+	const float FresnoFF::Default::PROBE_RADIUS = 0;
+	const float FresnoFF::Default::SURFACE_TENSION = 0;
+	const float FresnoFF::Default::UHLIG_CONSTANT = 0;
+	const float FresnoFF::Default::SOLVENT_NUMBER_DENSITY = 0;
+	const float FresnoFF::Default::ABSOLUTE_TEMPERATURE = 0;
+	const Size FresnoFF::Default::NONPOLAR_METHOD = 0;
 	const Size FresnoFF::Default::VERBOSITY = 9;
 
 	void FresnoFF::registerComponents_()
@@ -89,6 +102,7 @@ namespace BALL
 		insertComponent(new FresnoDesolvation(*this));
 		insertComponent(new ChemScoreMetal(*this));
 		// insertComponent(new CharmmNonBonded(*this));
+		insertComponent(new FresnoNonPolar(*this));
 	}
 
 
