@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.h,v 1.5 2000/04/04 15:51:04 oliver Exp $
+// $Id: standardColorCalculator.h,v 1.6 2000/05/23 16:27:19 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -7,10 +7,13 @@
 #	include <BALL/MOLVIEW/FUNCTOR/colorCalculator.h>
 #endif
 
+#ifndef BALL_DATATYPE_HASHMAP_H
+#	include <BALL/DATATYPE/hashMap.h>
+#endif
+
 #ifndef BALL_KERNEL_RESIDUE_H
 #	include <BALL/KERNEL/residue.h>
 #endif
-
 
   
 namespace BALL
@@ -96,22 +99,82 @@ namespace BALL
 
 			virtual void visit(Atom& atom);
 
-			virtual void visit(Composite& composite) 
-			{
-				if (RTTI::isKindOf<Atom>(composite))
-				{
-					visit(*RTTI::castTo<Atom>(composite));
-				}
-			};
+			virtual void visit(Composite& composite);
 			//@}
 
 			protected:
+
 			ColorRGBA		positive_color_;
 			ColorRGBA		neutral_color_;
 			ColorRGBA		negative_color_;
 		};
 
+
+
+		/**
+		*/
+		class AtomDistanceColorCalculator
+			:	public UnaryProcessor<Atom>,
+			  public UnaryProcessor<Composite>,
+			  public ColorCalculator
+		{
+			public:
 			
+			/**	@name	Constructors and Destructors
+			*/
+			//@{
+
+      AtomDistanceColorCalculator();
+
+ 			AtomDistanceColorCalculator(const AtomDistanceColorCalculator& color_calculator);
+
+			virtual void clear();
+
+			virtual void destroy();
+
+			//@}
+
+			/**	@name Accessors
+			*/
+			//@{
+			void setDistance(float distance);
+			float getDistance() const;
+
+			void setNullDistanceColor(const ColorRGBA& color);
+			const ColorRGBA& getNullDistanceColor() const;
+
+			void setFullDistanceColor(const ColorRGBA& color);
+			const ColorRGBA& getFullDistanceColor() const;
+
+			void calculateDistances();
+
+			virtual bool start();
+			
+			virtual bool finish();
+
+			virtual Processor::Result operator() (Atom& atom);
+
+			virtual Processor::Result operator() (Composite& composite);
+
+			virtual void visit(Atom& atom);
+
+			virtual void visit(Composite& composite);
+			//@}
+
+			protected:
+
+			typedef HashMap<void*, float> AtomDistanceHashMap;
+
+			AtomDistanceHashMap atom_2_distance_;
+
+			float distance_;
+
+			ColorRGBA		null_distance_color_;
+			ColorRGBA		full_distance_color_;
+		};
+
+
+
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.iC>
 #			endif

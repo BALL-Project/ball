@@ -1,4 +1,5 @@
-// $Id: standardColorCalculator.iC,v 1.1 2000/01/11 20:19:51 hekl Exp $
+// $Id: standardColorCalculator.iC,v 1.2 2000/05/23 16:27:20 hekl Exp $
+
 BALL_INLINE
 void AtomChargeColorCalculator::setPositiveColor(const ColorRGBA& color)
 {
@@ -34,3 +35,42 @@ const ColorRGBA& AtomChargeColorCalculator::getNegativeColor() const
 {
 	return negative_color_;
 }
+
+
+
+BALL_INLINE
+void AtomDistanceColorCalculator::setDistance(float distance)
+{
+	distance_ = distance;
+}
+
+BALL_INLINE
+float AtomDistanceColorCalculator::getDistance() const
+{
+	return distance_;
+}
+
+BALL_INLINE
+void AtomDistanceColorCalculator::setNullDistanceColor(const ColorRGBA& color)
+{
+	null_distance_color_ = color;
+}
+
+BALL_INLINE
+const ColorRGBA& AtomDistanceColorCalculator::getNullDistanceColor() const
+{
+	return null_distance_color_;
+}
+
+BALL_INLINE
+void AtomDistanceColorCalculator::setFullDistanceColor(const ColorRGBA& color)
+{
+	full_distance_color_ = color;
+}
+
+BALL_INLINE
+const ColorRGBA& AtomDistanceColorCalculator::getFullDistanceColor() const
+{
+	return full_distance_color_;
+}
+
