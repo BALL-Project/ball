@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.19 2001/04/11 10:00:34 amoll Exp $
+// $Id: parameterSection.C,v 1.20 2001/04/11 10:01:53 amoll Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -93,8 +93,8 @@ namespace BALL
 		// check for the existence of the required section
 		if (!ini_file.hasSection(section_name))
 		{
-			 Log.warning() << "ParameterSectionFile " << ini_file.getFilename() 
-										 << " has no Section " << section_name << "." << endl;
+			 Log.warn() << "ParameterSectionFile " << ini_file.getFilename() 
+									<< " has no Section " << section_name << "." << endl;
 
 			return false;
 		}
