@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.37 2003/03/03 14:17:34 anhi Exp $
+// $Id: classTest.h,v 1.38 2003/03/07 15:56:51 sneumann Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -718,12 +718,21 @@ int main(int argc, char **argv)\
 		Each <tt>CAPTURE_OUTPUT</tt> requires exactly one subsequent
 		 \link COMPARE_OUTPUT COMPARE_OUTPUT \endlink  macro.
 */
+#ifdef HAS_SSTREAM
 #define CAPTURE_OUTPUT_LEVEL(level) \
 	{\
 		std::ostringstream TEST_strstr;\
 		Log.remove(std::cout);\
 		Log.remove(std::cerr);\
 		Log.insert(TEST_strstr, level, level);
+#else
+#define CAPTURE_OUTPUT_LEVEL(level) \
+	{\
+		std::ostrstream TEST_strstr;\
+		Log.remove(std::cout);\
+		Log.remove(std::cerr);\
+		Log.insert(TEST_strstr, level, level);
+#endif
 
 /**	Redirect output to the global logging facility.
 		This macro (together with  \link COMPARE_OUTPUT COMPARE_OUTPUT \endlink ) can be used
@@ -736,29 +745,67 @@ int main(int argc, char **argv)\
 		Each <tt>CAPTURE_OUTPUT</tt> requires exactly one subsequent
 		 \link COMPARE_OUTPUT COMPARE_OUTPUT \endlink  macro.
 */
+#ifdef HAS_SSTREAM
 #define CAPTURE_OUTPUT_LEVEL_RANGE(minlevel, maxlevel) \
 	{\
 		std::ostringstream TEST_strstr;\
 		Log.remove(std::cout);\
 		Log.remove(std::cerr);\
 		Log.insert(TEST_strstr, minlevel, maxlevel);
-
+#else
+#define CAPTURE_OUTPUT_LEVEL_RANGE(minlevel, maxlevel) \
+	{\
+		std::ostrstream TEST_strstr;\
+		Log.remove(std::cout);\
+		Log.remove(std::cerr);\
+		Log.insert(TEST_strstr, minlevel, maxlevel);
+#endif
 /**	Compare output made to the global logging facility.
 		@see CAPTURE_OUTPUT
 */
+
+#ifdef HAS_SSTREAM
+#define COMPARE_OUTPUT(text) \
+                Log.remove(TEST_strstr);\
+                Log.insert(std::cout, LogStream::INFORMATION, LogStream::ERROR - 1);\
+                Log.insert(std::cerr, LogStream::ERROR);\
+                TEST::this_test = (::strncmp(TEST_strstr.str().c_str(), text, TEST_strstr.str().size()) == 0);\
+                TEST::test = TEST::test && TEST::this_test;\
+                \
+                if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+                {\
+                        /* reserve space for the null-terminated content of the strstrem */\
+                        char* TEST_strstr_contents = new char[TEST_strstr.str().size() + 1];\
+                        ::strncpy(TEST_strstr_contents, TEST_strstr.str().c_str(), TEST_strstr.str().size());\
+                        TEST_strstr_contents[TEST_strstr.str().size()] = '\0';\
+                        \
+                        if (!TEST::newline)\
+                        {\
+                                TEST::newline = true;\
+                                std::cout << std::endl;\
+                        }\
+                        std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got '" << (TEST_strstr_contents) << "', expected '" <
+                        if (TEST::this_test)\
+                                std::cout << " + " << std::endl;\
+                        else \
+                                std::cout << " - " << std::endl;\
+                        delete [] TEST_strstr_contents;\
+                }\
+        }
+#else
 #define COMPARE_OUTPUT(text) \
 		Log.remove(TEST_strstr);\
 		Log.insert(std::cout, LogStream::INFORMATION, LogStream::ERROR - 1);\
 		Log.insert(std::cerr, LogStream::ERROR);\
-		TEST::this_test = (::strncmp(TEST_strstr.str().c_str(), text, TEST_strstr.str().size()) == 0);\
+		TEST::this_test = (::strncmp(TEST_strstr.str(), text, TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0) == 0);\
 		TEST::test = TEST::test && TEST::this_test;\
 		\
 		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 		{\
 			/* reserve space for the null-terminated content of the strstrem */\
-			char* TEST_strstr_contents = new char[TEST_strstr.str().size() + 1];\
-			::strncpy(TEST_strstr_contents, TEST_strstr.str().c_str(), TEST_strstr.str().size());\
-			TEST_strstr_contents[TEST_strstr.str().size()] = '\0';\
+			char* TEST_strstr_contents = new char[TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0 + 1];\
+			::strncpy(TEST_strstr_contents, TEST_strstr.str(), TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0);\
+			TEST_strstr_contents[TEST_strstr.str()!=0?strlen(TEST_strstr.str()):0] = '\0';\
 			\
 			if (!TEST::newline)\
 			{\
@@ -772,8 +819,9 @@ int main(int argc, char **argv)\
 				std::cout << " - " << std::endl;\
 			delete [] TEST_strstr_contents;\
 		}\
-	}\
-	
+	}
+#endif	
 	
 	
 //@}
+

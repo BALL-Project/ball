@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.iC,v 1.40 2002/12/12 09:48:44 oliver Exp $
+// $Id: string.iC,v 1.41 2003/03/07 15:59:42 sneumann Exp $
 
 BALL_INLINE 
 String::String()
@@ -51,7 +51,11 @@ String::String(const String& s, Index from, Size len)
 }
 
 BALL_INLINE 
+#ifdef HAS_SSTREAM
 void String::set(std::stringstream& s)
+#else
+void String::set(std::strstream& s)
+#endif
 	throw()
 {
 	s >> (*this);
@@ -419,7 +423,12 @@ const String& String::operator = (const char* char_ptr)
 }
 
 BALL_INLINE 
+
+#ifdef HAS_SSTREAM
 const String& String::operator = (std::stringstream& s)
+#else
+const String& String::operator = (std::strstream& s)
+#endif
 	throw()
 {
   set(s);

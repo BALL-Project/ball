@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.46 2003/03/03 14:17:40 anhi Exp $
+// $Id: string.h,v 1.47 2003/03/07 15:59:42 sneumann Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -194,8 +194,13 @@ namespace BALL
 				successive construction of multiple strings from the same <tt>stringstream</tt>
 				object leads to identical copies.
 		*/
+#ifdef BALL_HAS_SSTREAM
 		String(std::stringstream& s)
 			throw();
+#else
+		String(std::strstream& s)
+			throw();
+#endif
 
 		/** Creates a new string from len copies of c.
 		*/
@@ -279,8 +284,13 @@ namespace BALL
 		/** Assign a String from a <b>stringstream</b>.
 				The contents of the <tt>stringstream</tt> object are not modified.
 		*/
+#ifdef BALL_HAS_SSTREAM
 		void set(std::stringstream& s)
 			throw();
+#else
+		void set(std::strstream& s)
+			throw();
+#endif
 
 		/// Assign a String from the result of repeating <b>c</b> <b>len</b> times
 		void set(char c, Size len = 1)
@@ -337,8 +347,13 @@ namespace BALL
 		/** Assign a string from a <b>stringstream</b>.
 				The contents of the <tt>stringstream</tt> object are not modified.
 		*/
+#ifdef BALL_HAS_SSTREAM
 		const String& operator = (std::stringstream& s)
 			throw();
+#else
+		const String& operator = (std::strstream& s)
+			throw();
+#endif
 
 		/// Assign a String from a single char
 		const String& operator = (char c)
