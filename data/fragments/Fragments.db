@@ -1,24 +1,25 @@
 <node>Fragments
- <node>#include:ALA<value>fragments/ALA.db:/ALA</value></node>
- <node>#include:ARG<value>fragments/ARG.db:/ARG</value></node>
- <node>#include:ASP<value>fragments/ASP.db:/ASP</value></node>
- <node>#include:ASN<value>fragments/ASN.db:/ASN</value></node>
- <node>#include:CYS<value>fragments/CYS.db:/CYS</value></node>
- <node>#include:GLN<value>fragments/GLN.db:/GLN</value></node>
- <node>#include:GLU<value>fragments/GLU.db:/GLU</value></node>
- <node>#include:GLY<value>fragments/GLY.db:/GLY</value></node>
- <node>#include:HIS<value>fragments/HIS.db:/HIS</value></node>
- <node>#include:ILE<value>fragments/ILE.db:/ILE</value></node>
- <node>#include:LEU<value>fragments/LEU.db:/LEU</value></node>
- <node>#include:LYS<value>fragments/LYS.db:/LYS</value></node>
- <node>#include:MET<value>fragments/MET.db:/MET</value></node>
- <node>#include:PHE<value>fragments/PHE.db:/PHE</value></node>
- <node>#include:PRO<value>fragments/PRO.db:/PRO</value></node>
- <node>#include:SER<value>fragments/SER.db:/SER</value></node>
- <node>#include:THR<value>fragments/THR.db:/THR</value></node>
- <node>#include:TRP<value>fragments/TRP.db:/TRP</value></node>
- <node>#include:TYR<value>fragments/TYR.db:/TYR</value></node>
- <node>#include:VAL<value>fragments/VAL.db:/VAL</value></node>
+	<node>#include:ALA<value>fragments/ALA.db:/ALA</value></node>
+	<node>#include:ARG<value>fragments/ARG.db:/ARG</value></node>
+	<node>#include:ASP<value>fragments/ASP.db:/ASP</value></node>
+	<node>#include:ASN<value>fragments/ASN.db:/ASN</value></node>
+	<node>#include:CYS<value>fragments/CYS.db:/CYS</value></node>
+	<node>#include:GLN<value>fragments/GLN.db:/GLN</value></node>
+	<node>#include:GLU<value>fragments/GLU.db:/GLU</value></node>
+	<node>#include:GLY<value>fragments/GLY.db:/GLY</value></node>
+	<node>#include:HIS<value>fragments/HIS.db:/HIS</value></node>
+	<node>#include:ILE<value>fragments/ILE.db:/ILE</value></node>
+	<node>#include:LEU<value>fragments/LEU.db:/LEU</value></node>
+	<node>#include:LYS<value>fragments/LYS.db:/LYS</value></node>
+	<node>#include:MET<value>fragments/MET.db:/MET</value></node>
+	<node>#include:PHE<value>fragments/PHE.db:/PHE</value></node>
+	<node>#include:PRO<value>fragments/PRO.db:/PRO</value></node>
+	<node>#include:SER<value>fragments/SER.db:/SER</value></node>
+	<node>#include:THR<value>fragments/THR.db:/THR</value></node>
+	<node>#include:TRP<value>fragments/TRP.db:/TRP</value></node>
+	<node>#include:TYR<value>fragments/TYR.db:/TYR</value></node>
+	<node>#include:VAL<value>fragments/VAL.db:/VAL</value></node>
+	<node>#include:CA<value>fragments/CA.db:/CA</value></node>
 </node>
 <node>Names
  <node>#include:Discover<value>fragments/Names.Discover.db:/Discover</value></node>
