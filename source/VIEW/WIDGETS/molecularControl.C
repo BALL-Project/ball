@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.65 2004/09/14 16:02:34 amoll Exp $
+// $Id: molecularControl.C,v 1.66 2004/09/15 11:45:04 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
-#include <BALL/VIEW/DIALOGS/transformationDialog.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
@@ -100,7 +99,6 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			context_menu_(this),
 			model_menu_(this),
 			context_composite_(0),
-			transformation_dialog_(0),
 			was_delete_(false)
 {
 #ifdef BALL_VIEW_DEBUG
@@ -175,7 +173,6 @@ MolecularControl::~MolecularControl()
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "Destroying MolecularControl " << this << std::endl;
 #endif
-	if (transformation_dialog_) delete transformation_dialog_;
 }
 
 void MolecularControl::checkMenu(MainControl& main_control)
@@ -467,11 +464,6 @@ void MolecularControl::updateSelection()
 	}
 
 	
-	if (transformation_dialog_ && selected_.size()>0)
-	{
-		transformation_dialog_->setComposite(*selected_.begin());
-	}
-
 	if (selected_.size() == 1 && RTTI::isKindOf<System>(**selected_.begin()))
 	{
 		context_composite_ = *selected_.begin();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.35 2004/09/14 15:26:01 amoll Exp $
+// $Id: molecularControl.h,v 1.36 2004/09/15 11:46:15 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -31,7 +31,6 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		class TransformationDialog;
 		class BondProperties;
 
 		/**	MolecularControl is a widget to display the molecular structure of Composite objects. 
@@ -515,7 +514,6 @@ namespace BALL
 
 			// the dialogs
 			SelectableListViewItem* context_item_;
-			TransformationDialog* 	transformation_dialog_;
 
 			HashMap<Composite*, SelectableListViewItem*> composite_to_item_;
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.134 2004/09/14 16:15:06 amoll Exp $
+// $Id: scene.C,v 1.136 2004/09/15 11:46:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1567,12 +1567,12 @@ namespace BALL
 				{
 					if (delta_x * delta_x > delta_y * delta_y)
 					{
-						Angle angle(delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * -30)), false);
+						Angle angle(delta_x * (mouse_sensitivity_ / (ROTATE_FACTOR * -10)), false);
 						m.rotate(angle, camera.getLookUpVector());
 					}
 					else
 					{
-						Angle angle(delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -30)), false);
+						Angle angle(delta_y * (mouse_sensitivity_ / (ROTATE_FACTOR * -10)), false);
 						m.rotate(angle, camera.getRightVector());
 					}
 					break;

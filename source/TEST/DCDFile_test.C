@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.25 2004/03/25 12:46:22 amoll Exp $
+// $Id: DCDFile_test.C,v 1.26 2004/09/15 11:44:24 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.25 2004/03/25 12:46:22 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.26 2004/09/15 11:44:24 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -105,7 +105,7 @@ CHECK([EXTRA] full test writing)
 	dcd.enableVelocityStorage();
 	TEST_EQUAL(dcd.isAccessible(), true)
 	Options options;
-	SnapShotManager ssm(&system, &amberFF, options, &dcd, true);
+	SnapShotManager ssm(&system, &amberFF, options, &dcd);
 	ssm.takeSnapShot();
 	system.getAtom(0)->setPosition(Vector3(1,2,1111));
 	system.getAtom(0)->setForce(Vector3(3,4,5));
