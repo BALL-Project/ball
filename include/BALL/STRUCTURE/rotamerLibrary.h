@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.5 1999/08/31 22:14:07 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.6 1999/09/06 22:21:33 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -123,7 +123,7 @@ namespace BALL
 
 		/**	The assignment operator
 		*/
-		ResidueRotamerSet&	operator=(const ResidueRotamerSet& residue_rotamer_set);
+		ResidueRotamerSet&	operator = (const ResidueRotamerSet& residue_rotamer_set);
 
 		//@}
 
@@ -153,6 +153,10 @@ namespace BALL
 		/**	Set the number of valid torsions
 		*/
 		void setNumberOfTorsions(Size number_of_torsions);
+
+		/**	Random access operator for single rotamers.
+		*/
+		Rotamer& operator [] (Position index);
 
 		//}
 
