@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.16 2000/02/20 02:47:34 amoll Exp $
+// $Id: vector3.h,v 1.17 2000/02/20 13:04:30 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -1026,7 +1026,7 @@ namespace BALL
   		@return {\tt TVector3} the new vector
 	*/
 	template <typename T>
-	TVector3<T> operator * (const TVector3<T>& vector, const T& scalar);
+	TVector3<T> operator * (const TVector3<T>& vector, const T& scalar)
 	{
 		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 	}
