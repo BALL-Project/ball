@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.11 2005/01/22 00:53:25 amoll Exp $
+// $Id: scene.C,v 1.156.2.12 2005/01/23 23:39:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -347,6 +347,7 @@ namespace BALL
 			gl_renderer_.initSolid();
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 			gl_renderer_.updateCamera();
+			stage_settings_->getGLSettings();
 		}
 
 		void Scene::paintGL()
@@ -826,7 +827,7 @@ namespace BALL
 			int height = BALL_ABS((int)y_window_pick_pos_second_ - (int)y_window_pick_pos_first_);
 			if (width == 0)	width = 1;
 			if (height == 0) height = 1;
-			gl_renderer_.pickObjects2(objects, width, height);
+ 			gl_renderer_.pickObjects2(objects, width, height);
 			glFlush();
 
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
