@@ -1,0 +1,337 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>DockDialog</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>DockDialog</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>448</width>
+            <height>545</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>0</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>450</width>
+            <height>550</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>Docking options</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>systems_group</cstring>
+            </property>
+            <property name="title">
+                <string>Docking Partners</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>systems1</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>systems2</cstring>
+                    </property>
+                    <property name="editable">
+                        <bool>false</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>generator_group</cstring>
+            </property>
+            <property name="title">
+                <string>Structure Generator</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>generators</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>gen_advanced_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Advanced...</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>evaluation_group</cstring>
+            </property>
+            <property name="title">
+                <string>Evaluation</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>eval_functions</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>eval_advanced_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Advanced...</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>ranking_group</cstring>
+            </property>
+            <property name="title">
+                <string>Ranking</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QComboBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>rank_functions</cstring>
+                    </property>
+                </widget>
+                <widget class="QPushButton" row="0" column="1">
+                    <property name="name">
+                        <cstring>rank_advanced_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Advanced...</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>options_group</cstring>
+            </property>
+            <property name="title">
+                <string>Options</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>checkBox6</cstring>
+                    </property>
+                    <property name="text">
+                        <string>checkBox6</string>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QButtonGroup">
+            <property name="name">
+                <cstring>processors_group</cstring>
+            </property>
+            <property name="title">
+                <string>Processors</string>
+            </property>
+            <grid>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox" row="0" column="1">
+                    <property name="name">
+                        <cstring>build_bonds</cstring>
+                    </property>
+                    <property name="text">
+                        <string>build Bonds</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="2">
+                    <property name="name">
+                        <cstring>add_hydrogens</cstring>
+                    </property>
+                    <property name="text">
+                        <string>addHydrogens</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="0" column="0">
+                    <property name="name">
+                        <cstring>normalize_names</cstring>
+                    </property>
+                    <property name="text">
+                        <string>normalize names</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="0">
+                    <property name="name">
+                        <cstring>assign_charges</cstring>
+                    </property>
+                    <property name="text">
+                        <string>assign charges</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>assign_radii</cstring>
+                    </property>
+                    <property name="text">
+                        <string>assign radii</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </grid>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout8</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>ok_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>OK</string>
+                    </property>
+                    <property name="default">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>cancel_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cancel</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>reset_button</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Reset</string>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>cancel_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialog</receiver>
+        <slot>cancelPressed()</slot>
+    </connection>
+    <connection>
+        <sender>ok_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialog</receiver>
+        <slot>okPressed()</slot>
+    </connection>
+    <connection>
+        <sender>reset_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialog</receiver>
+        <slot>resetPressed()</slot>
+    </connection>
+    <connection>
+        <sender>gen_advanced_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialog</receiver>
+        <slot>advancedPressed()</slot>
+    </connection>
+    <connection>
+        <sender>gen_advanced_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialog</receiver>
+        <slot>advancedPressed()</slot>
+    </connection>
+    <connection>
+        <sender>rank_advanced_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialog</receiver>
+        <slot>advancedPressed()</slot>
+    </connection>
+    <connection>
+        <sender>eval_advanced_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockDialog</receiver>
+        <slot>advancedPressed()</slot>
+    </connection>
+</connections>
+<tabstops>
+    <tabstop>systems1</tabstop>
+    <tabstop>systems2</tabstop>
+    <tabstop>generators</tabstop>
+    <tabstop>gen_advanced_button</tabstop>
+    <tabstop>eval_functions</tabstop>
+    <tabstop>eval_advanced_button</tabstop>
+    <tabstop>rank_functions</tabstop>
+    <tabstop>rank_advanced_button</tabstop>
+    <tabstop>normalize_names</tabstop>
+    <tabstop>build_bonds</tabstop>
+    <tabstop>add_hydrogens</tabstop>
+    <tabstop>assign_charges</tabstop>
+    <tabstop>assign_radii</tabstop>
+    <tabstop>ok_button</tabstop>
+    <tabstop>cancel_button</tabstop>
+    <tabstop>reset_button</tabstop>
+</tabstops>
+<slots>
+    <slot>resetPressed()</slot>
+    <slot>okPressed()</slot>
+    <slot>cancelPressed()</slot>
+    <slot>advancedPressed()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
