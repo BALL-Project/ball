@@ -1,76 +1,13 @@
-// $Id: BinarySearchTree_test.C,v 1.13 2000/08/09 10:10:07 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.14 2000/08/21 18:30:09 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-
 #include <BALL/DATATYPE/binarySearchTree.h>
 #include <iostream>
-#include <BALL/CONCEPT/comparator.h>
-#include <BALL/DATATYPE/list.h>
+#include <../source/TEST/ItemCollector.h>
 ///////////////////////////
 
 using namespace BALL;
-
-// helper class: a processor counting tree items
-template<typename DataType>
-class ItemCollector	: public UnaryProcessor<DataType>
-{
-	public:
-	bool start()
-	{
-		// clear the item list
-		list_.clear();
-		list_it_ = list_.begin();
-		return true;
-	}
-
-	bool finish()
-	{
-		return true;
-	}
-
-	Processor::Result operator () (DataType& item)
-	{	// store the item
-		list_.push_back(&item);
-		return Processor::CONTINUE;
-	}
-
-	list<DataType*> getList()
-	{ // get a pointer to the list
-		return list_;
-	}
-	
-	DataType* getPointer()
-	{	// get a pointer to the first element in the list
-		if (list_it_ == list_.end())
-		{
-			return 0;
-		}
-		DataType* temp = *list_it_;
-		return temp;
-	}
-
-	void forward()
-	{	
-		list_it_++;
-	}
-
-
-	Size getSize()
-	{	// get the size of the list
-		return list_.size();
-	}
-	
-	void reset()
-	{ // reset the iterator to the first element of the list
-		list_it_ = list_.begin();
-	}
-
-	private:
-	List<DataType*>	list_;
-	typename List<DataType*>::iterator list_it_;
-};
-
 
 //			     	  	   		item
 //	    			leftitem              rightitem
@@ -105,7 +42,7 @@ void initialize_()
 	rrrightitem_ = TBSTreeItem<int>(8, 0, 0, (char) BSTreeItem::BLACK);
 }
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.13 2000/08/09 10:10:07 amoll Exp $")
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.14 2000/08/21 18:30:09 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -597,7 +534,7 @@ CHECK(setRightChild())
 RESULT
 
 CHECK(count(const DataType& data, const Comparator<DataType>* comparator))
-	initialize_();	// warum umbedingt Comparator notwendig ???
+	initialize_();
 	Comparator<int>* comp = 0;
 	TEST_EXCEPTION(Exception::NullPointer, item_.count(1, 0))
 	comp = new Comparator<int>();
@@ -605,7 +542,6 @@ CHECK(count(const DataType& data, const Comparator<DataType>* comparator))
 	TEST_EQUAL(item_.count(999, comp), 0)
 RESULT
 
-//ItemCollector< TBSTreeItem<int> > myproc;
 ItemCollector< int > myproc;
 
 CHECK(applyPreorder)
@@ -1094,115 +1030,6 @@ CHECK(TBSTree::apply(UnaryProcessor<DataType>& processor))
   //BAUSTELLE
 RESULT
 
-// tests for class TBSTree::PreorderIteratorTraits_::
-
-CHECK(TBSTree::PreorderIteratorTraits_::(PreorderIteratorTraits_)())
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTree::PreorderIteratorTraits_::PreorderIteratorTraits_(const TBSTree& tree))
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTree::PreorderIteratorTraits_::PreorderIteratorTraits_(const PreorderIteratorTraits_& traits))
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTree::PreorderIteratorTraits_::PreorderIteratorTraits_& operator =  (const PreorderIteratorTraits_& traits))
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTree::PreorderIteratorTraits_::getContainer() const )
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTree::PreorderIteratorTraits_::getPosition())
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTree::PreorderIteratorTraits_::bool operator == (const PreorderIteratorTraits_& traits) const )
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTree::PreorderIteratorTraits_::isValid() const )
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTree::PreorderIteratorTraits_::toBegin())
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTree::PreorderIteratorTraits_::toEnd())
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTree::PreorderIteratorTraits_::getData() const )
-  //BAUSTELLE
-RESULT
-
-// tests for class TBSTreeItem::InorderIteratorTraits_::
-
-CHECK(TBSTreeItem::InorderIteratorTraits_::InorderIteratorTraits_())
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTreeItem::InorderIteratorTraits_::InorderIteratorTraits_(const TBSTree& tree))
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTreeItem::InorderIteratorTraits_::InorderIteratorTraits_(const InorderIteratorTraits_& traits))
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTreeItem::InorderIteratorTraits_::toBegin())
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTreeItem::beginInorder())
-  //BAUSTELLE
-RESULT
-
-// tests for class PostorderIteratorTraits_::
-
-CHECK(PostorderIteratorTraits_::PostorderIteratorTraits_())
-  //BAUSTELLE
-RESULT
-
-CHECK(PostorderIteratorTraits_::PostorderIteratorTraits_(const TBSTree& tree))
-  //BAUSTELLE
-RESULT
-
-CHECK(PostorderIteratorTraits_::PostorderIteratorTraits_(const PostorderIteratorTraits_& traits))
-  //BAUSTELLE
-RESULT
-
-CHECK(PostorderIteratorTraits_::toBegin())
-  //BAUSTELLE
-RESULT
-
-// tests for class LevelorderIteratorTraits_::
-
-CHECK(LevelorderIteratorTraits_::LevelorderIteratorTraits_())
-  //BAUSTELLE
-RESULT
-
-CHECK(LevelorderIteratorTraits_::LevelorderIteratorTraits_(const TBSTree& tree))
-  //BAUSTELLE
-RESULT
-
-CHECK(LevelorderIteratorTraits_::LevelorderIteratorTraits_(const LevelorderIteratorTraits_& traits))
-  //BAUSTELLE
-RESULT
-
-CHECK(LevelorderIteratorTraits_::toBegin())
-  //BAUSTELLE
-RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
-
-/*
-	void* ptr_a = (void*)(item.detachMinimum(root));
-	void* ptr_b = (void*)&rleftitem;
-	TEST_EQUAL(ptr_a, ptr_b)*/
-
