@@ -1,4 +1,4 @@
-// $Id: system.sip,v 1.3 2003/03/25 17:09:01 anhi Exp $
+// $Id: system.sip,v 1.4 2003/03/28 10:49:27 oliver Exp $
 
 class System
   : AtomContainer,
@@ -44,7 +44,7 @@ class System
 	//  template <typename T>
 	//  bool apply(UnaryProcessor<T>& processor)
 
-	char *__str__() /NoLazy/;
+	char* __repr__() /NoLazy/;
 %MemberCode
   System* ptr;
 
