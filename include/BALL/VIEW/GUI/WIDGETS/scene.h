@@ -1,4 +1,4 @@
-// $Id: scene.h,v 1.8.4.1 2002/08/26 15:55:32 oliver Exp $
+// $Id: scene.h,v 1.8.4.2 2002/08/27 11:58:22 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -592,12 +592,6 @@ namespace BALL
 				throw();
 			//@}
 
-			/**	Interface to external renderers.
-					External renderers, e.g. the \ref{PovRayRenderer}, can render the objects
-					represented in the scene into their own representation, for example into
-					input files for external ray tracers or 3D description languages.
-			*/
-			Processor::Result apply(TUnaryProcessor<GeometricObject>& renderer) throw();
 
 			protected:
 

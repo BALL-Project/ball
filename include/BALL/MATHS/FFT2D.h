@@ -1,13 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.1.2.1 2002/08/19 10:24:55 anhi Exp $
+// $Id: FFT2D.h,v 1.1.2.2 2002/08/27 11:58:15 oliver Exp $
 
 #ifndef BALL_MATHS_FFT2D_H
 #define BALL_MATHS_FFT2D_H
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
+#endif
+
+#ifndef BALL_MATHS_COMPLEX_H
+# include <BALL/MATHS/complex.h>
 #endif
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H

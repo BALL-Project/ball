@@ -5,6 +5,7 @@ THISLIB=$(LIBNAME)
 FFT_SOURCES=$(BALL_HAS_FFTW:true=FFT1D.C FFT2D.C FFT3D.C)
 
 CPP_SOURCES= $(FFT_SOURCES)\
+	complex.C\
 	analyticalGeometry.C\
 	angle.C\
 	box3.C\

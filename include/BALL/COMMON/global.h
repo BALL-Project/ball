@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.9.4.3 2002/08/09 11:09:56 oliver Exp $
+// $Id: global.h,v 1.9.4.4 2002/08/27 11:58:11 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -9,7 +9,6 @@
 
 #include <limits.h>
 #include <time.h>
-#include <complex>
 
 #if defined(BALL_LOG_MEMORY) && !defined(BALL_COMMON_MEMORY_H)
 #	include <BALL/COMMON/memory.h>
@@ -167,10 +166,6 @@ namespace BALL
 
 	#endif
 
-
-	/**	Complex numbers
-	*/
-	typedef std::complex<BALL_COMPLEX_PRECISION> Complex;
 	//@}
 
 	enum ASCII

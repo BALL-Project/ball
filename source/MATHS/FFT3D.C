@@ -1,4 +1,4 @@
-// $Id: FFT3D.C,v 1.1.2.1 2002/08/19 10:24:59 anhi Exp $
+// $Id: FFT3D.C,v 1.1.2.2 2002/08/27 11:58:24 oliver Exp $
 
 #include <BALL/MATHS/FFT3D.h>
 
@@ -427,8 +427,8 @@ namespace BALL
 	
 		if (!inFourierSpace_)
 		{
-			dummy.re = val.real()*((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
-			dummy.im = val.imag()*((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
+			dummy.re = val.re*((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
+			dummy.im = val.im*((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
 	
 			(*this)[pos]=dummy;
 		}
@@ -437,8 +437,8 @@ namespace BALL
 			val*=phase(pos)*(BALL_COMPLEX_PRECISION)((sqrt(2*M_PI)/(stepPhysX_*stepPhysY_*stepPhysZ_)))
 				             *((float)pow((float)(lengthX_*lengthY_*lengthZ_),(int)numFourierToPhys_));
 			
-			dummy.re = val.real();
-			dummy.im = val.imag();
+			dummy.re = val.re;
+			dummy.im = val.im;
 			
 			(*this)[pos]=dummy;
 		}
