@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.13 2000/09/01 23:01:43 amoll Exp $ 
+// $Id: hashMap.h,v 1.14 2000/09/04 20:57:57 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -207,13 +207,16 @@ namespace BALL
 		/**	Erase element with key {\tt key}.
 				@return Size the number of elements erased (0 or 1)
 		*/
-		Size erase(const Key& key);
+		bool erase(const Key& key);
+
+		/**	Erase element at a given position.
+				@param pos an iterator pointing to the element to delete
+		*/
+		void erase(Iterator pos);
 
 		/**	Erase a range of elements.
 				Erase all elemntes in the range {\tt \[first, last)}.
-				Not yet implemented.
 		*/
-		// BAUSTELLE
 		void erase(Iterator first, Iterator last);
 		//@}
 
@@ -277,7 +280,6 @@ namespace BALL
 		// --- INTERNAL ITERATORS
 
 		/** Apply a processor to the hashmap.
-				Not yet implemented.
 				@return true if the processor could be applied.
 		*/
 		bool apply(UnaryProcessor<ValueType>& processor);
@@ -573,7 +575,6 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	BALL_INLINE 
 	void HashMap<Key, T>::set(const HashMap& hash_map)
 	{
 		if (&hash_map == this)
@@ -619,6 +620,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
+	BALL_INLINE 
 	void HashMap<Key, T>::swap(HashMap& hash_map)
 	{
 		std::swap(size_, hash_map.size_);
@@ -655,7 +657,6 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	BALL_INLINE 
 	HashMap<Key, T>::Iterator HashMap<Key, T>::find(const Key& key)
 	{
 		Iterator it = end();
@@ -745,44 +746,118 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	Size HashMap<Key, T>::erase(const Key& key)
+	bool HashMap<Key, T>::erase(const Key& key)
 	{
 		Node*	previous = 0;
 		HashIndex bucket = hash_(key);
 		Node*	node_ptr = bucket_[bucket];
-		
-		for (; node_ptr != 0; node_ptr = node_ptr->next)
-		{
-			if (node_ptr->value.first == key)
-			{
-				break;
-			}
 
+		while (node_ptr != 0 && node_ptr->value.first != key)
+		{
 			previous = node_ptr;
+			node_ptr = node_ptr->next;
 		}
 
-		if (node_ptr != 0)
+		if (node_ptr == 0)
 		{
-			if (node_ptr == bucket_[bucket])
-			{
-				bucket_[bucket] = node_ptr->next;
-			} else {
-				previous->next = node_ptr->next;
-			}
-
-			deleteNode_(node_ptr);
-
-			--size_;
-
-			return 1;
-		} else
-		{
-			return 0;
+			return false;
 		}
+
+		if (node_ptr == bucket_[bucket])
+		{
+			bucket_[bucket] = node_ptr->next;
+		} else {
+			previous->next = node_ptr->next;
+		}
+
+		deleteNode_(node_ptr);
+		--size_;
+		return true;
 	}
 		
 	template <class Key, class T>
-	BALL_INLINE 
+	void HashMap<Key, T>::erase(Iterator pos)
+	{
+		if (pos.bound_ != this)
+		{
+			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+		}
+
+		if (pos == end())
+		{
+			return;
+		}
+				
+		if (pos == bucket_[pos.bucket_])
+		{
+			bucket_[pos.bucket_] = pos->next;
+		} else {
+			(pos-1)->next = pos->next;
+		}
+
+		deleteNode_(pos);
+		--size_;
+	}
+
+	template <class Key, class T>
+	void HashMap<Key, T>::erase(Iterator f, Iterator l)
+	{
+		if (f.bound_ != this || l.bound_ != this)
+		{
+			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+		}
+		
+		if (f.position_ > l.position_)
+		{
+			std::swap(f, l);
+		}
+
+		if (f == end())
+		{
+			return;
+		}
+
+		if (f == bucket_[f.bucket_])
+		{
+			bucket_[f.bucket_] = *l;
+		} else {
+			(f-1)->next = *l;
+		}
+
+		int diff = f.position_ - l.position_;
+		while (f.position_ < l.position_)
+		{
+			deleteNode_(f);
+			f++;
+		}
+		size_ -= diff;
+	}
+
+	template <class Key, class T>
+	bool HashMap<Key, T>::apply(UnaryProcessor<ValueType>& processor)
+	{
+    if (processor.start() == false)
+		{
+			return false;
+		}
+
+    Processor::Result result;
+
+		Iterator it = begin();
+		while (it != end())
+		{
+			result = processor(*it);
+			if (result <= Processor::BREAK)
+			{
+				return (result == Processor::BREAK);
+			}
+			it++;
+		}
+
+    return processor.finish();
+	}
+
+	template <class Key, class T>
 	void HashMap<Key, T>::host(Visitor<ValueType>& visitor)
 	{
 		Iterator it = begin();
@@ -807,7 +882,6 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	BALL_INLINE 
 	bool HashMap<Key, T>::operator == (const HashMap& hash_map) const
 	{
 		bool identical = (size_ == hash_map.size_);
@@ -886,13 +960,6 @@ namespace BALL
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	} 
-
-	template <class Key, class T>
-	BALL_INLINE 
-	bool HashMap<Key, T>::apply(UnaryProcessor<ValueType>& processor)
-	{
-		// BAUSTELLE
-	}
 		
 	template <class Key, class T>
 	BALL_INLINE 
@@ -910,7 +977,6 @@ namespace BALL
 
 
 	template <class Key, class T>
-	BALL_INLINE 
 	void HashMap<Key, T>::deleteBuckets_()
 	{
 		Size i = 0;
@@ -958,7 +1024,6 @@ namespace BALL
 	{
 		return (HashIndex)(hash(key) % bucket_.size());
 	}
-
  
 	template <class Key, class T>
 	void HashMap<Key, T>::rehash_()
