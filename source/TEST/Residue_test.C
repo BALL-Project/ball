@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Residue_test.C,v 1.23 2003/01/16 15:34:19 oliver Exp $
+// $Id: Residue_test.C,v 1.24 2003/02/20 06:31:29 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.23 2003/01/16 15:34:19 oliver Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.24 2003/02/20 06:31:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -195,8 +195,11 @@ CHECK(Residue::hasTorsionPhi() const )
 	c.insert(r);
 	TEST_EQUAL(r.hasTorsionPhi(), false)	
 	Residue r2;
+	c.insert(r2);
+	TEST_EQUAL(r.hasTorsionPhi(), false)
+	r.setProperty(Residue::PROPERTY__AMINO_ACID);
+	TEST_EQUAL(r.hasTorsionPhi(), false)
 	r2.setProperty(Residue::PROPERTY__AMINO_ACID);
-	c.append(r2);
 	TEST_EQUAL(r.hasTorsionPhi(), false)
 	Residue r3;
 	r3.setProperty(Residue::PROPERTY__AMINO_ACID);
