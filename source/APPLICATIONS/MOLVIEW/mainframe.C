@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.94 2003/11/26 09:05:18 bender Exp $
+// $Id: mainframe.C,v 1.95 2003/12/07 17:39:50 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -469,7 +469,7 @@ void Mainframe::amberMinimization()
 	thread->setNumberOfStepsBetweenUpdates(minimization_dialog_->getRefresh());
 	thread->setMainframe(this);
 	thread->setComposite(system);
-	thread->start();
+	thread->start(QThread::LowPriority);
 #else
 	// ============================= WITHOUT MULTITHREADING =================================
 	// iterate until done and refresh the screen every "steps" iterations
@@ -591,7 +591,7 @@ void Mainframe::amberMDSimulation()
 	thread->setSaveImages(md_dialog_->saveImages());
 	thread->setDCDFile(dcd);
 	thread->setComposite(system);
-	thread->start();
+	thread->start(QThread::LowPriority);
 
 #else
 	// ============================= WITHOUT MULTITHREADING ==============================
@@ -719,7 +719,11 @@ void Mainframe::stopSimulation()
 	stop_simulation_ = true;
 	if (simulation_thread_ != 0)
 	{
-		if (simulation_thread_->running()) simulation_thread_->wait();
+		if (simulation_thread_->running()) 
+		{
+			simulation_thread_->getMutex().unlock();
+			simulation_thread_->wait();
+		}
 
 		DCDFile* file = simulation_thread_->getDCDFile();
 		if (file)
@@ -780,7 +784,8 @@ void Mainframe::customEvent( QCustomEvent * e )
 			return;
 		}
 
-		update(*(Composite*)so->getComposite());
+		updateRepresentationsOf(*(Composite*)so->getComposite(), true);
+		simulation_thread_->getMutex().unlock();
 		return;
 	}
 }
