@@ -1,4 +1,4 @@
-// $Id: MolmecSupport_test.C,v 1.1.2.1 2002/06/16 22:09:55 oliver Exp $
+// $Id: MolmecSupport_test.C,v 1.1.2.2 2002/11/26 15:42:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,24 +13,13 @@
 namespace BALL
 {
 	template <>
-	HashIndex Hash(const std::pair<Atom*, Atom*>& item)
+	HashIndex Hash(const std::pair<Atom*, Atom*>& item) throw()
 	{
 		return Hash((PointerSizeInt)(((PointerSizeInt)(Size)(void*)item.first) / 2) + ((PointerSizeInt)(Size)(void*)item.second) / 2);
 	}
-/*	
-	bool operator == (const std::pair<Atom*, Atom*>& lhs, const std::pair<Atom*, Atom*>& rhs) 
-	{
-		return (lhs.first == rhs.first) && (lhs.second == rhs.second);
-	}
-
-	bool operator < (const std::pair<Atom*, Atom*>& lhs, const std::pair<Atom*, Atom*>& rhs) 
-	{
-		return (lhs.first < rhs.first) || ((lhs.first == rhs.first) && (lhs.second < rhs.second));
-	}
-*/
 }
 
-START_TEST(class_name, "$Id: MolmecSupport_test.C,v 1.1.2.1 2002/06/16 22:09:55 oliver Exp $")
+START_TEST(class_name, "$Id: MolmecSupport_test.C,v 1.1.2.2 2002/11/26 15:42:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -55,7 +44,7 @@ CHECK(calculateNonBondedAtomPairs())
 
 	std::cout << pair_vector.size() << std::endl;
 	HashSet<ForceField::PairVector::value_type> pair_set_hash_grid;
-	copy(pair_vector.begin(), pair_vector.end(), inserter(pair_set_hash_grid, pair_set_hash_grid.begin()));
+	std::copy(pair_vector.begin(), pair_vector.end(), std::inserter(pair_set_hash_grid, pair_set_hash_grid.begin()));
 	pair_vector.clear();
 
 	MolmecSupport::calculateNonBondedAtomPairs
@@ -67,7 +56,7 @@ CHECK(calculateNonBondedAtomPairs())
 
 	std::cout << pair_vector.size() << std::endl;
 	HashSet<ForceField::PairVector::value_type> pair_set_brute_force;
-	copy(pair_vector.begin(), pair_vector.end(), inserter(pair_set_brute_force, pair_set_brute_force.begin()));
+	std::copy(pair_vector.begin(), pair_vector.end(), std::inserter(pair_set_brute_force, pair_set_brute_force.begin()));
 	pair_vector.clear();
 
 	STATUS("# of pairs in hash grid set: " << pair_set_hash_grid.size())
