@@ -47,6 +47,8 @@ namespace BALL
 				Q_OBJECT
 
 				public:
+				
+				BALL_EMBEDDABLE(FDPBDialog)
 
 				///
 				FDPBDialog(QWidget* parent = 0, const char* name = 0, 
