@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.5 2001/09/12 11:00:20 amoll Exp $
+// $Id: TCPTransfer.C,v 1.6 2001/09/13 15:09:39 amoll Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -215,7 +215,8 @@ TCPTransfer::Status TCPTransfer::getHTTP_()
 	//BAUSTELLE basic authentification doesnt yet works
 	if (!login_.isEmpty() && !password_.isEmpty())
 	{
-		query += "Authorization: Basic "+ login_ + ":" + password_ + "\n\r";
+		String auth(login_ + ":" + password_);
+		query += "Authorization: Basic "+ auth.encodeBase64() + "\n\r";
 	}
 	query += "Accept: */*\n\r";
 	query += "User-Agent: inet.c\n\r\n\r";
@@ -450,15 +451,18 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	// try to read login message, abort after 20 seconds
 	do		
 	{	
-		String temp(buffer_);
-		if (temp.hasSubstring("220 "))
+		if (received_bytes_ > 0)
 		{
-			last_line1 = true;
-		}
-		if (last_line1 && temp.has('\n'))
-		{
-			last_line2 = true;
-			break;
+			String temp(buffer_);
+			if (temp.hasSubstring("220 "))
+			{
+				last_line1 = true;
+			}
+			if (last_line1 && temp.has('\n'))
+			{
+				last_line2 = true;
+				break;
+			}
 		}
 
 		received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
@@ -569,16 +573,9 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	
 	// try to read login message, abort after 20 seconds
 	do
-	{
-		received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
+	{	
 		if (received_bytes_ > 0)
 		{
-			buffer_[received_bytes_] = '\0';
-			if (debug_)
-			{
-				(*fstream_) << "<<" << buffer_ << endl;
-			}
-	
 			String temp(buffer_);
 			if (temp.hasSubstring("230 "))
 			{
@@ -588,6 +585,16 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 			{
 				last_line2 = true;
 				break;
+			}
+		}
+		
+		received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
+		if (received_bytes_ > 0)
+		{
+			buffer_[received_bytes_] = '\0';
+			if (debug_)
+			{
+				(*fstream_) << "<<" << buffer_ << endl;
 			}
 		}
 	}
