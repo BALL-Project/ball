@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.5 1999/08/27 12:03:26 oliver Exp $
+# $Id: Makefile.in,v 1.6 1999/08/27 12:56:38 oliver Exp $
 #
 
 include config.mak
@@ -39,7 +39,7 @@ clean:
 	@echo "Cleaning up object files, cores,  and (uninstalled) library files..."
 	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=default_clean
 	@-$(RM) -f  $(STATIC_LIBS) $(SHARED_LIBS)
-	@-$(RM) -rf .Dependencies; */.Dependencies *.objects *~ @TEMPLATE_DIR@
+	@-$(RM) -rf .Dependencies */.Dependencies *.objects *~ @TEMPLATE_DIR@
 	@cd TEST ; $(MAKE) clean
 
 lib_clean:
