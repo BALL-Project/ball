@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.C,v 1.10 2000/09/25 19:10:45 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.11 2000/09/25 21:23:07 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/COMMON/limits.h>
@@ -244,9 +244,7 @@ namespace BALL
 				shift += delta_EF;
 				first_atom->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
 
-				shift = first_atom->getProperty(PROPERTY__EF_SHIFT).getFloat();
-				shift += delta_EF;
-				first_atom->setProperty(PROPERTY__EF_SHIFT, shift);
+				first_atom->setProperty(PROPERTY__EF_SHIFT, delta_EF);
 			}
 		}
 
