@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.11 2000/12/13 16:26:51 oliver Exp $
+// $Id: timeStamp.C,v 1.12 2000/12/13 19:35:22 amoll Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
@@ -21,7 +21,7 @@ namespace BALL
 	bool PreciseTime::read(PersistenceManager& pm)
 		throw()
 	{
-		Size tmp;
+		long tmp;
 		bool result = pm.readPrimitive(tmp, "secs_");
 		secs_ = tmp;
 
