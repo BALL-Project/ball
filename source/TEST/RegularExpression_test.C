@@ -1,4 +1,4 @@
-// $Id: RegularExpression_test.C,v 1.6 2000/07/27 20:00:12 amoll Exp $
+// $Id: RegularExpression_test.C,v 1.7 2000/10/20 16:30:47 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.6 2000/07/27 20:00:12 amoll Exp $")
+START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.7 2000/10/20 16:30:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -85,34 +85,41 @@ RESULT
 
 CHECK(RegularExpression::countSubexpressions() const )
 	TEST_EQUAL(re2.countSubexpressions(), 0);
-	re2.set("[A-Z]+[0-9]+");
-	TEST_EQUAL(re2.countSubexpressions(), 2);//???????????????
+	TEST_EQUAL(re2.isValid(), true)
+	re2.set("([A-Z]+[0-9]+).*([0-9])");
+	TEST_EQUAL(re2.isValid(), true)
+	TEST_EQUAL(re2.countSubexpressions(), 2);
 RESULT
 
 CHECK(RegularExpression::match(const char* text, const char* pattern, int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0 ))
 	char* c = 0;
-	TEST_EXCEPTION(Exception::NullPointer, re2.match(c, "*bd"))
-	TEST_EXCEPTION(Exception::NullPointer, re2.match("*bd", c))
-	TEST_EQUAL(re2.match("abbcbbd", "*bd"), true)//???????????
-	TEST_EQUAL(re2.match("abbcbbd", "bd"), true)
-	TEST_EQUAL(re2.match("abbcbbd", "b.a"), false)
-	TEST_EQUAL(re2.match("abbcbbd", "a*d"), true)
-	TEST_EQUAL(re2.match("abbcbbd", "a..d"), false)
-	TEST_EQUAL(re2.match("abbcbbd", "x"), false)
-	TEST_EQUAL(re2.match("abbcbbd", "a[bc]+d"), true)
-	TEST_EQUAL(re2.match("abbcbbd", "a[bc][bc]d"), false)
-	TEST_EQUAL(re2.match("abbcbbd", "a[b]+d"), false)
-	TEST_EQUAL(re2.match("abbcbbd", "a[BC]+d"), false)
+	TEST_EXCEPTION(Exception::NullPointer, RegularExpression::match(c, "a*bd"))
+	TEST_EXCEPTION(Exception::NullPointer, RegularExpression::match("a*bd", c))
+	TEST_EQUAL(RegularExpression::match("abbcbbd", ".*bd"), true)
+	TEST_EQUAL(RegularExpression::match("abbcbbd", "bd"), true)
+	TEST_EQUAL(RegularExpression::match("abbcbbd", "b.a"), false)
+	TEST_EQUAL(RegularExpression::match("abbcbbd", "a*d"), true)
+	TEST_EQUAL(RegularExpression::match("abbcbbd", "a..d"), false)
+	TEST_EQUAL(RegularExpression::match("abbcbbd", "x"), false)
+	TEST_EQUAL(RegularExpression::match("abbcbbd", "a[bc]+d"), true)
+	TEST_EQUAL(RegularExpression::match("abbcbbd", "a[bc][bc]d"), false)
+	TEST_EQUAL(RegularExpression::match("abbcbbd", "a[b]+d"), false)
+	TEST_EQUAL(RegularExpression::match("abbcbbd", "a[BC]+d"), false)
 RESULT
 
 CHECK(RegularExpression::match(const String& text, Index from = 0, int execute_flags = 0 ) const )
 	re2.set("a[bc]+d");
 	String s = "abbcbbd";
+	TEST_EQUAL(re2.isValid(), true)
 	TEST_EQUAL(re2.match(s), true)
 	TEST_EQUAL(re2.match(s, 1, 0), false)
+	re2.set(".*bd");
+	TEST_EQUAL(re2.isValid(), true)
+	TEST_EQUAL(re2.match(s), true)
 RESULT
 
 CHECK(RegularExpression::match(const Substring& text, Index from = 0, int execute_flags = 0) const )
+	re2.set("a[bc]+d");
 	String s = "abbcbbd";
 	Substring ss;
 	ss.bind(s);
@@ -123,15 +130,6 @@ RESULT
 CHECK(RegularExpression::match(const char* text, int execute_flags = 0) const )
 	char* s = "abbcbbd";
 	TEST_EQUAL(re2.match(s), true)
-RESULT
-
-CHECK(RegularExpression::find(const char* text, const char* pattern, const char** found_substring_from = 0, const char** found_substring_to = 0, int compile_flags = 0 | REG_EXTENDED, int execute_flags = 0))
-	/*char* s = "abbcbbd";
-	char* c1 = 0;
-	char* c2 = 0;
-	TEST_EQUAL(re2.find(s, "bb", &c1, &c2), true)
-	TEST_EQUAL(*c1, 0)
-	TEST_EQUAL(*c2, 0)*/
 RESULT
 
 CHECK(RegularExpression::find(const String& text, Substring& found, Index from = 0, int execute_flags = 0) const )
@@ -147,46 +145,24 @@ CHECK(RegularExpression::find(const String& text, Substring& found, Index from =
 	TEST_EQUAL(text, "1234123")
 RESULT
 
-CHECK(RegularExpression::find(const String& text, Substring found_subexpression[], Size number_of_subexpressions, Index from = 0, int execute_flags = 0) const )
-	re2.set("bb?");
+CHECK(RegularExpression::find(const String& text, vector<Substring>& subexpressions, Index from = 0, int execute_flags = 0) const )
+	re2.set("(bb).*(bd)");
 	String s = "abbcbbd";
-	Substring ss[5];
-	TEST_EQUAL(re2.find(s, ss, 5, 0), true)
+	vector<Substring> ss;
+	TEST_EQUAL(re2.find(s, ss, 0), true)
+	TEST_EQUAL(ss.size(), 3)
 	TEST_EQUAL(ss[0].isBound(), true)
-	TEST_EQUAL(ss[0].size(), 2)
-	TEST_EQUAL(ss[0].getFirstIndex(), 1)
+	TEST_EQUAL(ss[0].size(), 6)
+	TEST_EQUAL(ss[0], "bbcbbd")
 	TEST_EQUAL(ss[1].isBound(), true)
-	TEST_EQUAL(ss[0], "bb")
-	TEST_EQUAL(re2.find(s, ss, 5, 5), false)
+	TEST_EQUAL(ss[1].size(), 2)
+	TEST_EQUAL(ss[1], "bb")
+	TEST_EQUAL(ss[2].isBound(), true)
+	TEST_EQUAL(ss[2].size(), 2)
+	TEST_EQUAL(ss[2], "bd")
+	TEST_EQUAL(re2.find(s, ss, 5), false)
 RESULT
 
-CHECK(RegularExpression::find(const Substring& text, Substring& found, Index from = 0, int execute_flags = 0) const )
-	String s = "abbcbbd";
-	Substring ss(s);
-	Substring sss;
-	TEST_EQUAL(re2.find(ss, sss), true)
-	TEST_EQUAL(sss.isBound(), true)
-	TEST_EQUAL(sss, "bb")
-	TEST_EQUAL(re2.find(s, sss, 5, 0), false)
-RESULT
-
-CHECK(RegularExpression::find(const Substring& text, Substring found_subexpressions[], Size number_of_subexpressions, Index from = 0, int execute_flags = 0) const )
-	String s = "abbcbbd";
-	Substring ss(s);
-	Substring sa[5];
-	TEST_EQUAL(re2.find(ss, sa, 5), true)
-	TEST_EQUAL(sa[0].isBound(), true)
-	TEST_EQUAL(sa[1].isBound(), true)
-	TEST_EQUAL(sa[0], "bb")
-	TEST_EQUAL(re2.find(ss, sa, 5, 5), false)
-RESULT
-
-CHECK(RegularExpression::find(const char* text, const char** found_substrings_from = 0, const char** found_substring_to = 0, int execute_flags = 0) const )
-	char* s = "abbcbbd";
-	char* from = 0;
-	char* to = 0;
-	//TEST_EQUAL(re2.find(s, from, to), true)
-RESULT
 
 CHECK(RegularExpression::isEmpty() const )
 	re2.set("abc");
