@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.11 2003/12/02 15:58:20 amoll Exp $
+// $Id: glRenderer.C,v 1.12 2003/12/03 19:22:44 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -430,9 +430,8 @@ namespace BALL
 			// drawing mode dots must be implemented
 
 			glBegin(GL_LINES);
-			normalVector3_(normal_vector_);
-			vertexVector3_(line.getVertex1());
-			vertexVector3_(line.getVertex2());
+				vertexVector3_(line.getVertex1());
+				vertexVector3_(line.getVertex2());
 			glEnd();
 		}
 
@@ -588,8 +587,8 @@ namespace BALL
 		{
 			setColor4ub_(line);
 
+			glDisable(GL_LIGHTING);
 			glBegin(GL_LINE_STRIP);
-			normalVector3_(normal_vector_);
 			vertexVector3_(line.getVertex1());
 			vertexVector3_(line.getMiddleVertex());
 
@@ -603,6 +602,7 @@ namespace BALL
 			vertexVector3_(line.getVertex2());
 
 			glEnd();
+			glEnable(GL_LIGHTING);
 		}
 
 
