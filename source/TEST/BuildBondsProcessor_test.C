@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BuildBondsProcessor_test.C,v 1.5 2005/03/08 17:19:15 bertsch Exp $
+// $Id: BuildBondsProcessor_test.C,v 1.4 2005/02/25 18:23:02 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,11 +12,10 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/SDFile.h>
-#include <BALL/KERNEL/forEach.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.5 2005/03/08 17:19:15 bertsch Exp $")
+START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.4 2005/02/25 18:23:02 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -41,12 +40,7 @@ CHECK(BuildBondsProcessor(const String& filename))
 RESULT
 
 CHECK(operator() (AtomContainer& ac))
-
 	BuildBondsProcessor bbp2;
-	bbp2.options[BuildBondsProcessor::Option::DELETE_EXISTING_BONDS] = "false";
-	bbp2.options[BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS] = "false";
-	bbp2.options[BuildBondsProcessor::Option::DELETE_OVERESTIMATED_BONDS] = "false";
-	
 	PDBFile infileA("data/ACE_test_A.pdb");
 	System sysA;
 	infileA >> sysA;
@@ -76,29 +70,6 @@ CHECK(operator() (AtomContainer& ac))
 	{
 		mit->apply(bbp2);
 		TEST_EQUAL(mit->countBonds(), results[i]);
-	}
-
-	bbp2.options[BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS] = "false";
-	bbp2.options[BuildBondsProcessor::Option::DELETE_OVERESTIMATED_BONDS] = "false";
-
-	i=0;
-	Size double_results[] = {3, 3, 0, 0, 0, 0, 0, 0, 3, 0, 3, 0, 3, 4};
-	for (MoleculeIterator mit = sysC.beginMolecule(); +mit; ++mit, i++)
-	{
-		mit->apply(bbp2);
-		TEST_EQUAL(mit->countBonds(), results[i])
-
-		Size num_double(0);
-		AtomIterator ait;
-		Atom::BondIterator bit;
-		BALL_FOREACH_BOND(*mit, ait, bit)
-		{
-			if (bit->getOrder() == Bond::ORDER__DOUBLE)
-			{
-				++num_double;
-			}
-		}
-		TEST_EQUAL(num_double, double_results[i])
 	}
 
 RESULT
