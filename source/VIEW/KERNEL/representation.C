@@ -1,14 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.55 2004/12/09 23:58:54 amoll Exp $
+// $Id: representation.C,v 1.56 2004/12/13 16:05:28 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/MODELS/modelProcessor.h>
-#include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <BALL/KERNEL/atom.h>
@@ -31,11 +29,11 @@ namespace BALL
 					transparency_(0),
 					model_processor_(0),
 					color_processor_(0),
-					geometric_objects_(),
 					composites_(),
 					model_build_time_(),
 					rebuild_(true),
-					hidden_(false)
+					hidden_(false),
+					geometric_objects_()
 		{
 		}
 
@@ -51,11 +49,11 @@ namespace BALL
 					transparency_(rp.transparency_),
 					model_processor_(0),
 					color_processor_(0),
-					geometric_objects_(),
 					composites_(rp.composites_),
 					model_build_time_(),
 					rebuild_(rp.rebuild_),
-					hidden_(rp.hidden_)
+					hidden_(rp.hidden_),
+					geometric_objects_()
 		{
 			if (rp.model_processor_ != 0)
 			{
@@ -67,11 +65,11 @@ namespace BALL
 				color_processor_ = new ColorProcessor(*rp.color_processor_);
 			}
 
-			GeometricObjectList::ConstIterator it = rp.geometric_objects_.begin();
-			for (;it != rp.geometric_objects_.end(); it++)
+			GeometricObjectList::ConstIterator it = rp.getGeometricObjects().begin();
+			for (;it != rp.getGeometricObjects().end(); it++)
 			{
 				GeometricObject* object = new GeometricObject(**it);
-				geometric_objects_.push_back(object);
+				getGeometricObjects().push_back(object);
 			}
 		}
 
@@ -88,11 +86,11 @@ namespace BALL
 					transparency_(0),
 					model_processor_(0),
 					color_processor_(0),
-					geometric_objects_(),
 					composites_(),
 					model_build_time_(),
 					rebuild_(true),
-					hidden_(false)
+					hidden_(false),
+					geometric_objects_()
 		{
 		}
 
@@ -107,11 +105,11 @@ namespace BALL
 				transparency_(0),
 				model_processor_(model_processor),
 				color_processor_(0),
-				geometric_objects_(),
 				composites_(composites),
 				model_build_time_(),
 				rebuild_(true),
-				hidden_(false)
+				hidden_(false),
+				geometric_objects_()
 		{
 		}
 
@@ -149,11 +147,11 @@ namespace BALL
 				color_processor_ = 0;
 			}
 
-			GeometricObjectList::ConstIterator it = representation.geometric_objects_.begin();
-			for (;it != representation.geometric_objects_.end(); it++)
+			GeometricObjectList::ConstIterator it = representation.getGeometricObjects().begin();
+			for (;it != representation.getGeometricObjects().end(); it++)
 			{
 				GeometricObject* object = new GeometricObject(**it);
-				geometric_objects_.push_back(object);
+				getGeometricObjects().push_back(object);
 			}
 
 			composites_ = representation.composites_;
@@ -175,13 +173,14 @@ namespace BALL
 		void Representation::clear()
 			throw()
 		{
-			clearGeometricObjects();
 			composites_.clear();
 
 			if (model_processor_  != 0) delete model_processor_;
 			if (color_processor_  != 0) delete color_processor_;
 			model_processor_ 	= 0;
 			color_processor_ 	= 0;
+
+			clearGeometricObjects();
 
 			drawing_mode_= DRAWING_MODE_SOLID;
 			drawing_precision_= DRAWING_PRECISION_HIGH;
@@ -198,12 +197,12 @@ namespace BALL
 		void Representation::clearGeometricObjects()
 			throw()
 		{
-			List<GeometricObject*>::Iterator it = geometric_objects_.begin();
-			for (; it != geometric_objects_.end(); it++)
+			List<GeometricObject*>::Iterator it = getGeometricObjects().begin();
+			for (; it != getGeometricObjects().end(); it++)
 			{
 				delete *it;
 			}
-			geometric_objects_.clear();
+			getGeometricObjects().clear();
 
 			if (model_processor_ != 0)
 			{
@@ -229,7 +228,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "coloring type : " << coloring_method_ << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
-			s << "number of primitives: " << geometric_objects_.size() << std::endl;
+			s << "number of primitives: " << getGeometricObjects().size() << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
 			s << "number of composites: " << composites_.size() << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
@@ -256,8 +255,8 @@ namespace BALL
 			}
 
 #ifdef BALL_VIEW_DEBUG
-			GeometricObjectList::ConstIterator it = geometric_objects_.begin();
-			for (; it != geometric_objects_.end(); it++)
+			GeometricObjectList::ConstIterator it = getGeometricObjects().begin();
+			for (; it != getGeometricObjects().end(); it++)
 			{
 				if (!(*it)->isValid()) return false;
 			}
@@ -268,23 +267,7 @@ namespace BALL
 			return true;
 		}
 
-		void Representation::update(bool rebuild)
-			throw()
-		{
-			rebuild_ = rebuild;
-
-#ifdef BALL_QT_HAS_THREADS
-			MainControl* mc = getMainControl();
-			if (mc != 0)
-			{
-				mc->getPrimitiveManager().update_(*this);
-				return;
-			}
-#endif
-
-			update_();
-		}
-		
+	
 		void Representation::update_() 
 			throw()
 		{
@@ -307,7 +290,6 @@ namespace BALL
 					(const_cast<Composite*>(*it))->apply(*model_processor_);
 				}
 				model_processor_->createGeometricObjects();
-				geometric_objects_ = model_processor_->getGeometricObjects();
 				model_build_time_ = PreciseTime::now();
 			}
 
@@ -317,7 +299,7 @@ namespace BALL
 				if (rebuild_) color_processor_->setComposites(&composites_);
 				color_processor_->setTransparency(transparency_);
 				color_processor_->setModelType(model_type_);
-				geometric_objects_.apply(*color_processor_);
+				getGeometricObjects().apply(*color_processor_);
 			}
 
 #ifdef BALL_BENCHMARKING
@@ -326,20 +308,6 @@ namespace BALL
 #endif
 		}
 		
-
-		String Representation::getModelName() const
-			throw()
-		{
-			return VIEW::getModelName(model_type_);
-		}
-
-		
-		String Representation::getColoringName() const
-			throw()
-		{
-			return VIEW::getColoringName(coloring_method_);
-		}
-
 
 		String Representation::getProperties() const
 			throw()
@@ -359,12 +327,19 @@ namespace BALL
 				return String(composites_.size()) + " C, " + String(triangles) + " T";
 			}
 			
-			return String(composites_.size()) + " C, " + String(geometric_objects_.size()) + " P";
+			return String(composites_.size()) + " C, " + String(getGeometricObjects().size()) + " P";
 		}
 
 		void Representation::setModelProcessor(ModelProcessor* processor)
 			throw() 
 		{ 
+			GeometricObjectList::ConstIterator it = geometric_objects_.begin();
+			for (;it != geometric_objects_.end(); it++)
+			{
+				delete *it;
+			}
+			geometric_objects_.clear();
+
 			if (model_processor_ != 0)
 			{
 				delete model_processor_;
@@ -393,22 +368,6 @@ namespace BALL
 				color_processor_->setComposites(&composites_);
 				color_processor_->setTransparency(transparency_);
 			}
-		}
-
-		
-		void Representation::setDrawingPrecision(DrawingPrecision precision)
-			throw() 
-		{
-			drawing_precision_ = precision;
-			if (model_processor_ != 0) model_processor_->setDrawingPrecision(drawing_precision_);
-		}
-
-		
-		void Representation::setSurfaceDrawingPrecision(float precision)
-			throw() 
-		{
-			surface_drawing_precision_ = precision;
-			if (model_processor_ != 0) model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
 		}
 
 		
@@ -522,6 +481,28 @@ namespace BALL
 				collectRecursive_(*c.getChild(p), hashmap);
 			}
 		}
+
+		void Representation::update(bool rebuild)
+			throw()
+		{
+			rebuild_ = rebuild;
+
+#ifdef BALL_QT_HAS_THREADS
+			MainControl* mc = getMainControl();
+			if (mc != 0)
+			{
+				mc->getPrimitiveManager().update_(*this);
+				return;
+			}
+#endif
+
+			update_();
+		}
+
+
+  #	ifdef BALL_NO_INLINE_FUNCTIONS
+  #		include <BALL/VIEW/KERNEL/representation.iC>
+  #	endif
 
 	} // namespace VIEW
 } // namespace BALL

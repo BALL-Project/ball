@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.C,v 1.10 2004/12/09 23:34:49 amoll Exp $
+// $Id: modelProcessor.C,v 1.11 2004/12/13 16:09:15 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/geometricObject.h>
 
 using namespace std;
 
@@ -42,7 +43,14 @@ namespace BALL
 			throw()
 		{
 			PropertyManager::clear();
+			
+			GeometricObjectList::Iterator it = geometric_objects_.begin();
+			for (; it != geometric_objects_.end(); it++)
+			{
+				delete *it;
+			}
 			geometric_objects_.clear();
+			
 			drawing_precision_ = DRAWING_PRECISION_HIGH;
 			surface_drawing_precision_ = -1;
 			clearComposites();

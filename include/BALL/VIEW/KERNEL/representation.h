@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.27 2004/11/09 21:35:30 amoll Exp $
+// $Id: representation.h,v 1.28 2004/12/13 16:05:25 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -25,6 +25,14 @@
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_MODELPROCESSOR_H
+# include <BALL/VIEW/MODELS/modelProcessor.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_COLORPROCESSOR_H
+# include <BALL/VIEW/MODELS/colorProcessor.h>
 #endif
 
 namespace BALL
@@ -134,11 +142,11 @@ namespace BALL
 
 			///
 			void setHidden(bool state) 
-				throw() { hidden_ = state;}
+				throw();
 
 			///
 			bool isHidden() const
-				throw() { return hidden_;}
+				throw();
 
 			///
 			void setDrawingPrecision(DrawingPrecision precision)
@@ -146,11 +154,11 @@ namespace BALL
 
 			///
 			DrawingPrecision getDrawingPrecision() const
-				throw() { return drawing_precision_;}
+				throw();
 
 			///
 			float getSurfaceDrawingPrecision() const
-				throw() { return surface_drawing_precision_;}
+				throw();
 
 			///
 			void setSurfaceDrawingPrecision(float precision)
@@ -158,15 +166,15 @@ namespace BALL
 
 			///
 			void setDrawingMode(DrawingMode mode)
-				throw() { drawing_mode_ = mode;}
+				throw();
 
 			///
 			DrawingMode getDrawingMode() const
-				throw() { return drawing_mode_;}
+				throw();
 			
 			///
 			Size getTransparency() const
-				throw() { return transparency_;}
+				throw();
 
 			///
 			void setTransparency(Size value)
@@ -174,31 +182,31 @@ namespace BALL
 			
 			///
 			const GeometricObjectList& getGeometricObjects() const
-				throw() { return geometric_objects_; }
+				throw();
 
 			///
 			GeometricObjectList& getGeometricObjects()
-				throw() { return geometric_objects_; }
+				throw();
 
 			///
 			void insert(GeometricObject& object) 
-				throw() { geometric_objects_.push_back(&object); }
+				throw();
 
 			///
 			const CompositeSet& getComposites() const
-				throw() { return composites_; }
+				throw();
 
 			///
 			CompositeSet& getComposites()
-				throw() { return composites_; }
+				throw();
 
 			///
 			const ModelProcessor* getModelProcessor() const
-				throw() { return model_processor_;}
+				throw();
 
 			///
 			ModelProcessor* getModelProcessor()
-				throw() { return model_processor_;}
+				throw();
 
 			///
 			void setModelProcessor(ModelProcessor* processor)
@@ -206,7 +214,7 @@ namespace BALL
 			
 			///
 			ColorProcessor* getColorProcessor()
-				throw() { return color_processor_;}
+				throw();
 
 			///
 			void setColorProcessor(ColorProcessor* processor)
@@ -218,11 +226,11 @@ namespace BALL
 
 			///
 			void setModelType(ModelType type)
-				throw() { model_type_ = type;}
+				throw();
 
 			///
-			ModelType  getModelType() const
-				throw() { return model_type_;}
+			ModelType getModelType() const
+				throw();
 
 			///
 			String getColoringName() const
@@ -230,11 +238,11 @@ namespace BALL
 
 			///
 			void setColoringMethod(ColoringMethod type)
-				throw() { coloring_method_= type;}
+				throw();
 
 			///
 			ColoringMethod getColoringMethod() const
-				throw() { return coloring_method_;}
+				throw();
 
 			///
 			String getProperties() const
@@ -258,7 +266,7 @@ namespace BALL
 					@see Atom::getAttributesModificationTime
 			*/
 			const PreciseTime& getModelBuildTime() const
-				throw() { return model_build_time_;}
+				throw();
 
 			/** Returns true, if Representation needs to be updated.
 			 		Called by GeometricControl.
@@ -277,19 +285,19 @@ namespace BALL
 
 			///
 			CompositesIterator begin() 
-				throw() { return composites_.begin();}
+				throw();
 
 			///
 			CompositesConstIterator begin() const
-				throw() { return composites_.begin();}
+				throw();
 			
 			///
 			CompositesIterator end() 
-				throw() { return composites_.end();}
+				throw();
 
 			///
 			CompositesConstIterator end() const
-				throw() { return composites_.end();}
+				throw();
 
 			//@}
 
@@ -330,9 +338,6 @@ namespace BALL
 			ColorProcessor* 		color_processor_;
 
 			//_
-			GeometricObjectList geometric_objects_;
-
-			//_
 			CompositeSet 				composites_;
 
 			//_
@@ -346,7 +351,17 @@ namespace BALL
 
 			//_
 			bool 								hidden_;
+
+			// prevent usage of geometric_objects_ in derived classes
+			private:
+
+			//_
+			GeometricObjectList geometric_objects_;
 		};
+
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/KERNEL/representation.iC>
+#	endif
 
 	} // namespace VIEW
 } // namespace BALL

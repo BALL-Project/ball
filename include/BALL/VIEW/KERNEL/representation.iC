@@ -1,0 +1,207 @@
+BALL_INLINE 
+const PreciseTime& Representation::getModelBuildTime() const
+	throw() 
+{ 
+	return model_build_time_;
+}
+
+BALL_INLINE 
+void Representation::setModelType(ModelType type)
+	throw() 
+{ 
+	model_type_ = type;
+}
+
+BALL_INLINE 
+ModelType  Representation::getModelType() const
+	throw() 
+{ 
+	return model_type_;
+}
+
+BALL_INLINE 
+void Representation::setColoringMethod(ColoringMethod type)
+	throw() 
+{ 
+	coloring_method_= type;
+}
+
+BALL_INLINE 
+ColoringMethod Representation::getColoringMethod() const
+	throw() 
+{ 
+	return coloring_method_;
+}
+
+BALL_INLINE 
+Representation::CompositesIterator Representation::begin() 
+	throw()
+{ 
+	return composites_.begin();
+}
+
+BALL_INLINE 
+Representation::CompositesConstIterator Representation::begin() const
+	throw() 
+{ 	
+	return composites_.begin();
+}
+
+BALL_INLINE 
+Representation::CompositesIterator Representation::end() 
+	throw() 
+{ 
+	return composites_.end();
+}
+
+BALL_INLINE 
+Representation::CompositesConstIterator Representation::end() const
+	throw() 
+{ 
+	return composites_.end();
+}
+
+BALL_INLINE 
+void Representation::insert(GeometricObject& object) 
+	throw() 
+{
+	geometric_objects_.push_back(&object); 
+}
+
+BALL_INLINE 
+const Representation::CompositeSet& Representation::getComposites() const
+	throw() 
+{ 
+	return composites_;
+}
+
+BALL_INLINE 
+Representation::CompositeSet& Representation::getComposites()
+	throw() 
+{
+	return composites_; 
+}
+
+BALL_INLINE 
+const ModelProcessor* Representation::getModelProcessor() const
+	throw() 
+{
+	return model_processor_;
+}
+
+BALL_INLINE 
+ModelProcessor* Representation::getModelProcessor()
+	throw() 
+{
+	return model_processor_;
+}
+
+BALL_INLINE 
+ColorProcessor* Representation::getColorProcessor()
+	throw() 
+{
+	return color_processor_;
+}
+
+BALL_INLINE 
+void Representation::setHidden(bool state) 
+	throw() 
+{
+	hidden_ = state;
+}
+
+BALL_INLINE 
+bool Representation::isHidden() const
+	throw() 
+{
+	return hidden_;
+}
+
+BALL_INLINE 
+DrawingPrecision Representation::getDrawingPrecision() const
+	throw() 
+{
+	return drawing_precision_;
+}
+
+BALL_INLINE 
+float Representation::getSurfaceDrawingPrecision() const
+	throw() 
+{
+	return surface_drawing_precision_;
+}
+
+BALL_INLINE 
+void Representation::setDrawingMode(DrawingMode mode)
+	throw() 
+{
+	drawing_mode_ = mode;
+}
+
+BALL_INLINE 
+String Representation::getModelName() const
+	throw()
+{
+	return VIEW::getModelName(model_type_);
+}
+
+BALL_INLINE 
+String Representation::getColoringName() const
+	throw()
+{
+	return VIEW::getColoringName(coloring_method_);
+}
+
+BALL_INLINE 
+void Representation::setDrawingPrecision(DrawingPrecision precision)
+	throw() 
+{
+	drawing_precision_ = precision;
+	if (model_processor_ != 0) model_processor_->setDrawingPrecision(drawing_precision_);
+}
+
+BALL_INLINE 
+void Representation::setSurfaceDrawingPrecision(float precision)
+	throw() 
+{
+	surface_drawing_precision_ = precision;
+	if (model_processor_ != 0) model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
+}
+
+BALL_INLINE 
+const Representation::GeometricObjectList& Representation::getGeometricObjects() const
+	throw() 
+{ 
+	if (model_processor_ == 0)
+	{
+		return geometric_objects_; 
+	}
+	
+	return model_processor_->getGeometricObjects();
+}
+
+BALL_INLINE 
+Representation::GeometricObjectList& Representation::getGeometricObjects()
+	throw() 
+{ 
+	if (model_processor_ == 0)
+	{
+		return geometric_objects_; 
+	}
+	
+	return model_processor_->getGeometricObjects();
+}
+
+BALL_INLINE 
+Size Representation::getTransparency() const
+	throw()
+{
+	return transparency_;
+}
+
+BALL_INLINE 
+DrawingMode Representation::getDrawingMode() const
+	throw()
+{
+	return drawing_mode_;
+}
