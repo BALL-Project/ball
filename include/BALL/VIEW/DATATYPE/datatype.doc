@@ -1,4 +1,4 @@
-// $Id: datatype.doc,v 1.7 2003/09/04 23:14:10 amoll Exp $
+// $Id: datatype.doc,v 1.8 2003/12/15 02:58:52 amoll Exp $
 
 /** \defgroup ViewDatatypes Datatypes for the VIEW framework
 		\ingroup Visualisation
@@ -24,4 +24,10 @@
 				These two classes are used by ColorRGBA and ColorHSV.
 				They allow them to use different types of input parameters 
 				like integers, floats or even strings (numbers in hex format).
+ */
+
+
+/**     \defgroup ViewDatatypeGeometricObject Helper Base Classes for derived GeometricObject 's
+				\ingroup ViewDatatypes
+				These classes are used as base classes for derived GeometricObject classes.
  */

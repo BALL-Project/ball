@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.h,v 1.7 2003/12/12 14:56:10 amoll Exp $
+// $Id: vertex2.h,v 1.8 2003/12/15 02:58:52 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_VERTEX2_H
 #define BALL_VIEW_DATATYPE_VERTEX2_H
@@ -26,6 +26,7 @@ namespace BALL
 				changes, the values of the vectors  changes 
 				as well. To avoid segmentation faults these vector addresses must be 
 				valid as long as the Vertex2 exists. \par
+				\ingroup ViewDatatypeGeometricObject
 		*/
 		class Vertex2
 		{

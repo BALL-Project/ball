@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex1.h,v 1.5 2003/12/12 14:59:41 amoll Exp $
+// $Id: vertex1.h,v 1.6 2003/12/15 02:58:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
@@ -26,6 +26,7 @@ namespace BALL
 				changes the value of this vertex changes as well. To avoid 
 				segmentation faults this vector address must be valid as long as 
 				this vertex exists. \par
+				\ingroup ViewDatatypeGeometricObject
 		*/
 		class Vertex
 		{
