@@ -1,5 +1,5 @@
-// $Id: fresnoDesolvation.h,v 1.1.2.2 2002/03/15 14:47:51 anker Exp $
-// Molecular Mechanics: Fresno force field, hydrogen bond component
+// $Id: fresnoDesolvation.h,v 1.1.2.3 2002/09/13 14:07:00 anker Exp $
+// Molecular Mechanics: Fresno force field, desolvation component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
 #define BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
@@ -18,6 +18,32 @@ namespace BALL
 	{
 
 		public:
+
+		/**
+		*/
+		enum CalculationMethod
+		{
+			/**
+			*/
+			CALCULATION__FRESNO,
+
+			/**
+			*/
+			CALCULATION__FULL_FRESNO,
+
+			/**
+			*/
+			CALCULATION__FULL_CYCLE,
+
+			/**
+			*/
+			CALCULATION__KEKSE,
+
+			/**
+			*/
+			CALCULATION__EEF1
+
+		};
 
 		/** @name	Constructors and Destructors	
 		*/
@@ -98,6 +124,42 @@ namespace BALL
 		/*_
 		*/
 		double factor_;
+
+		/*_
+		*/
+		Size calculation_method_;
+
+		/*_
+		*/
+		Size verbosity_;
+
+		/*_
+		*/
+		FDPB fdpb_;
+
+		/*_
+		*/
+		float bulk_water_dc_;
+
+		/*_
+		*/
+		float vacuum_dc_;
+
+		/*_
+		*/
+		bool computeEnergyDifference_(System& system, float& energy)
+			throw();
+
+		/*_
+		*/
+		bool computeESEnergy_(System& system, float& energy)
+			throw();
+
+		/*_
+		*/
+		bool computeFullCycle_(System& system, Molecule& protein, 
+				Molecule& ligand, float& energy)
+			throw();
 
 	};
 
