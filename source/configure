@@ -1,7 +1,7 @@
 #! /bin/sh
 
 ###############
-###  $Id: configure,v 1.7 1999/09/01 15:14:08 hekl Exp $
+###  $Id: configure,v 1.8 1999/09/03 09:01:51 oliver Exp $
 ###############
 ###############
 ###
@@ -19,7 +19,7 @@ DEBUG=true
 
 #   if you do not want to include BALLView,
 #   set USE_BALLVIEW to false
-USE_BALLVIEW=
+USE_BALLVIEW=false
 
 #   all variables *_INCLUDES should be set to the path of
 #   include directory. E.g. your OpenGL include file GL/gl.h
@@ -34,21 +34,21 @@ USE_BALLVIEW=
 #   will not work and causes an error message.
 
 #    headers and libs for OpenGL
-OPENGL_INCLUDES=/usr/include
-OPENGL_LIBS=/usr/lib64
+#OPENGL_INCLUDES=/usr/include
+#OPENGL_LIBS=/usr/lib64
 
 #    ...same for MESA
-MESA_INCLUDES=
-MESA_LIBS=
+#MESA_INCLUDES=
+#MESA_LIBS=
 
 #    ...and for QT (see also BALL/contrib/qt!)
-QT_INCLUDES=/KM/comp-bio/BALL-contrib/qt/include
-QT_LIBS=/KM/comp-bio/BALL-contrib/qt/lib/IRIX6-CC_7.2.1
+#QT_INCLUDES=/KM/comp-bio/BALL-contrib/qt/include
+#QT_LIBS=/KM/comp-bio/BALL-contrib/qt/lib/IRIX6-CC_7.2.1
 
 #   if you do not want to be asked by configure
 #   which BALLView platform to use, put it here
 #   Possible values are Mesa or OpenGL
-BALLVIEW_PLATFORM=OpenGL
+#BALLVIEW_PLATFORM=OpenGL
 
 
 #   This applies to 64 bit SGI machines only.
@@ -56,7 +56,7 @@ BALLVIEW_PLATFORM=OpenGL
 #      32 : old 32 bit format
 #      N32: new 32 bit format
 #      64 : 64 bit format (default)
-IRIX_BINFMT=64
+#IRIX_BINFMT=64
 
 #		multi-platform build
 #   (for advanced users only!)
