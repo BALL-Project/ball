@@ -1,4 +1,4 @@
-// $Id: peak.C,v 1.7 2000/09/22 17:19:12 oliver Exp $
+// $Id: peak.C,v 1.8 2000/09/23 17:52:05 amoll Exp $
 
 #include<BALL/NMR/peak.h>
 #include<BALL/MATHS/common.h>
@@ -86,7 +86,7 @@ namespace BALL
 		return Maths::isLess(value_, peak.value_);
 	}
 
-	ostream& operator << (ostream& os, const Peak1D& peak)
+	std::ostream& operator << (std::ostream& os, const Peak1D& peak)
 	{
 		return os << peak.getValue();
 	}
