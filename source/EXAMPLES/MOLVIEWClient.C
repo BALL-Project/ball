@@ -42,7 +42,9 @@ int main(int argc, char** argv)
 	{
 		port = String(host_port.after(":")).toUnsignedInt();
 		host = host_port.before(":");
-	} else {
+	} 
+	else 
+	{
 		host = host_port;
 		port = VIEW_DEFAULT_PORT;
 	}
@@ -50,14 +52,13 @@ int main(int argc, char** argv)
 	// create a MOLVIEW client and
 	// connect to the given host and port
 	cout << "connecting to port " << port << " of " << host << endl;
-	Client client(argv[1], port);
+	Client client(host, port);
 
 
 	// transmit the system
 	cout << "sending " << S.countAtoms() << " atoms to " << host << endl;
 	client.insert(S);
 
-	
 	// that's it.
 	cout << "done." << endl;
 	return 0;
