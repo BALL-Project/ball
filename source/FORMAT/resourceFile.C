@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.11 2000/09/25 19:13:09 oliver Exp $
+// $Id: resourceFile.C,v 1.12 2000/10/20 18:08:57 amoll Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -58,7 +58,7 @@ namespace BALL
 
 	ResourceEntry::~ResourceEntry()
 	{
-		clear();
+		ResourceEntry::clear();
 	}
 
 	ResourceEntry* ResourceEntry::clone_(ResourceEntry* parent) const

@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.13 2000/10/19 20:11:25 amoll Exp $
+// $Id: file.h,v 1.14 2000/10/20 18:08:53 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -135,7 +135,8 @@ namespace BALL
 				Construct new File object.
 				@return    File - new constructed File object
 		*/
-		File();
+		File()
+			throw();
 
 		/** Detailed constructor.
 				Construct new File object from the file {\em name}
@@ -149,11 +150,11 @@ namespace BALL
 			throw (Exception::FileNotFound);
 
 		/** Copy constructor.
-				Construct new File object by copying the File {\em file}
-				and open the file.
+				Construct new File object by copying the filename from File {\em file}.
+				The file is not opend.
 				@param  file the File object to be copied (cloned)
 				@see    open
-				@return File - new constructed File cloned from {\em file}
+				@return File - new constructed File object cloned from {\em file}
 		*/
 		File(const File& file)
 			throw (Exception::FileNotFound);
@@ -169,28 +170,22 @@ namespace BALL
 		/**	@name	Assignment */
 		//@{
 
-		/** Assign a file to this object.
-				@param name the name of the file
-				@return bool true if this file is valid
-		*/
-		bool set(const String& name);
-
-		/** Assignment with cloning facility.
-				Assign a File object to this object.
-				@param file the file object to assign
-				@return bool true if this file is valid
-		*/
-		bool set(const File& file);
-
 		/** Assignment operator.
-				Assign the File {\em file} to {\em *this} File.
+				Assign the filename from File {\em file} to {\em *this} File.
+				The file is not opend.
 		*/
-		File& operator = (const File& file);
+		const File& operator = (const File& file)
+			throw();
 
 		//@}
 
 		/**	@name	Accessors */
 		//@{
+
+		/** Clears the File object.
+		*/
+		void clear()
+			throw();
 
 		/**	Open a given file.
 				The standard constructor uses this method.
@@ -205,52 +200,55 @@ namespace BALL
 				The file is closed and reopend.
 				@return bool true if the file could be reopend
 		*/
-		bool reopen();
+		bool reopen()
+			throw (Exception::FileNotFound);
 
 		/**	Close the file.
 		*/
-		void close();
+		void close()
+			throw();
 
 		/**	Return the name of the file.
 				@return String the name of the file
 		*/
-		const String& getName() const;
+		const String& getName()
+			const	throw();
 
 		/**	Return the size of the file.
 				If the file does not exist 0 is returned.
 				@return Size the size of the file
 		*/
-		Size getSize();
+		Size getSize()
+			throw();
 
 		/**	Return the size of a given file.
-				If the file does not exist 0 is returned.
+				@exception FileNotFound if file does not exists.
 				@return Size the size of the file
 		*/
-		static Size getSize(String name);
+		static Size getSize(String name)
+			throw (Exception::FileNotFound);
 
 		/** Return the open mode.
 				Default is IN.
 				@return int the open mode
 		*/
-		File::OpenMode getOpenMode() const;
+		File::OpenMode getOpenMode()
+			const	throw();
 		
 		/**	Return the filetype of a given file.
 				@param name the name of the file.
 				@param trace_link true to follow links
 				@return Type the filetype
 		*/
-		static Type getType(String name, bool trace_link);
+		static Type getType(String name, bool trace_link)
+			throw(Exception::FileNotFound);
 
 		/**	Return the filetype.
 				@param trace_link true to follow links
 				@return Type the filetype
 		*/
-		Type getType(bool trace_link) const;
-
-		/**	Return the stream associated with this file.
-				@return std::fstream the stream
-		*/
-		std::fstream& getFileStream();
+		Type getType(bool trace_link)
+			const	throw(Exception::FileNotFound);
 		
 		/**	Copy a given file to a given destination.
 				If a file with the destination name exists allready, nothing happens.
@@ -260,7 +258,8 @@ namespace BALL
 				@return true if copying was successfull
 		*/
 		static bool copy
-			(String source_name, String destination_name, Size buffer_size = 4096);
+			(String source_name, String destination_name, Size buffer_size = 4096)
+			throw(Exception::FileNotFound);
 
 		/**	Copy the file this File object is associated with to a given destination.
 				If a file with the destination name exists allready, nothing happens.
@@ -268,7 +267,8 @@ namespace BALL
 				@param buffer_size the buffer size to use while copying
 				@return true if copying was successfull
 		*/
-		bool copyTo(const String& destination_name, Size buffer_size = 4096);
+		bool copyTo(const String& destination_name, Size buffer_size = 4096)
+			throw(Exception::FileNotFound);
 
 		/**	Move a given file to a given destination.
 				If a file with the destination name exists allready, nothing happens.
@@ -277,7 +277,8 @@ namespace BALL
 				@param buffer_size the buffer size to use while moving
 				@return true if copying was successfull
 		*/
-		static bool move(const String& source_name, const String& destination_name);
+		static bool move(const String& source_name, const String& destination_name)
+			throw(Exception::FileNotFound);
 
 		/**	Move the file this File object is associated with to a given destination.
 				If a file with the destination name exists allready, nothing happens.
@@ -285,45 +286,52 @@ namespace BALL
 				@param buffer_size the buffer size to use while moving
 				@return true if copying was successfull
 		*/
-		bool moveTo(const String& destination_name);
+		bool moveTo(const String& destination_name)
+			throw(Exception::FileNotFound);
 
 		/**	Remove the file "name".
 				@param name the name of the file to be removed
 				@return bool true if the file could be removed
 		*/
-		static bool remove(String name);
+		static bool remove(String name)
+			throw();
 
 		/**	Remove the file, this File object is associated with.
 				@return bool true if the file could be removed
 		*/
-		bool remove() const;
+		bool remove()
+			throw();
 
 		/**	Rename a file.
 				@param old_path the path and name of the file to be renamed
 				@param new_path the new path and name of the file
 				@return bool true if the file could be renamed
 		*/
-		static bool rename(String old_path, String new_path);
+		static bool rename(String old_path, String new_path)
+			throw (Exception::FileNotFound);
 
 		/**	Rename the file this File object is associated with to a given name.
 				If a file with the destination name exists allready, nothing happens.
 				@param new_path the new path and name of the file
 				@return bool true if the file could be renamed
 		*/
-		bool renameTo(const String& new_path);
+		bool renameTo(const String& new_path)
+			throw (Exception::FileNotFound);
 
 		/**	Truncate a given file.
 				@param path the path to the file
 				@param size the new size of the file
 				@return bool true if the file could be truncated
 		*/
-		static bool truncate(String path, Size size = 0);
+		static bool truncate(String path, Size size = 0)
+			throw (Exception::FileNotFound);
 
 		/**	Truncate the file this File object is associated with.
 				@param size the new size of the file
 				@return bool true if the file could be truncated
 		*/
-		bool truncate(Size size = 0) const;
+		bool truncate(Size size = 0)
+			const throw (Exception::FileNotFound);
 			
 		/**	Create a temporary filename.
 				This method creates strings, starting at _AAAAAAA.TMP and tries if a 
@@ -332,7 +340,14 @@ namespace BALL
 				@param temporary reference to the temporary filename
 				@return bool true if a temporary filename could be found
 		*/
-		static bool createTemporaryFilename(String& temporary);
+		static bool createTemporaryFilename(String& temporary)
+			throw();
+
+    /** Return the stream associated with this file.
+				Implemented just for convenience.
+        @return std::fstream the stream
+    */
+    std::fstream& getFileStream();
 
 		//@}
 
@@ -341,14 +356,16 @@ namespace BALL
 		//@{
 
 		/**	Equality comparison operator.
-				Two File objects are equal if they point to the same file.
+				Two File objects are equal if they point to the same canonzied filename.
 		*/
-		bool operator == (const File& file) const;
+		bool operator == (const File& file)
+			const	throw();
 		
 		/**	Inequality comparison operator.
-				Two File objects are equal if they point not to the same file.
+				Two File objects are equal if they point not to the same canonized filename.
 		*/
-		bool operator != (const File& file) const;
+		bool operator != (const File& file)
+			const	throw();
 
 		//@}
 
@@ -356,66 +373,79 @@ namespace BALL
 				The standard constructor opens the file.
 				@return bool true if the file is closed
 		*/
-		bool isOpen() const;
+		bool isOpen()
+			const	throw();
 
 		/**	Test if the file is closed.
 				The standard constructor opens the file.
 				@return bool true if the file is closed
 		*/
-		bool isClosed() const;
+		bool isClosed()
+			const	throw();
 
 		/**	Test if a given file can be accessed.
 				@param name the name of the file to be tested
 				@return bool true if the file can be accessed
+				@exception FileNotFound is thrown if name is an empty string
 		*/
-		static bool isAccessible(String name);
+		static bool isAccessible(String name)
+			throw (Exception::FileNotFound);
 
 		/**	Test if the file can be accessed.
 				@return bool true if the file can be accessed
+				@exception FileNotFound is thrown if name_ is an empty string
 		*/
-		bool isAccessible() const;
+		bool isAccessible()
+			const throw (Exception::FileNotFound);
 
-		/**	Test if the path of the file is canonize.
+		/**	Test if the path of the file is canonized.
 				The path is	compared before and after call of 
 				FileSystem::canonizePath(canonized_name).
 				@see FileSystem::canonizePath
 				@return bool true if the path is cononized.
 		*/
-		bool isCanonized() const;
+		bool isCanonized()
+			const throw (Exception::FileNotFound);
 	
 		/**	Test if a given file is readable.
 				@param name the name of the file
 				@return true if the file can be read
 		*/
-		static bool isReadable(String name);
+		static bool isReadable(String name)
+			throw (Exception::FileNotFound);
 
 		/**	Test if the file is readable.
 				@return true if the file can be read
 		*/
-		bool isReadable() const;
+		bool isReadable()
+			const throw (Exception::FileNotFound);
 
 		/**	Test if a given file is writeable.
 				@param name the name of the file
 				@return true if the file is writeable
 		*/
-		static bool isWritable(String name);
+		static bool isWritable(String name)
+			throw (Exception::FileNotFound);
 
 		/**	Test if the file is writeable.
 				@return true if the file is writeable
 		*/
-		bool isWritable() const;
+		bool isWritable()
+			const throw (Exception::FileNotFound);
 
 		/**	Test if a given file is executable.
 				@param name the name of the file
 				@return true if the file is executable
 		*/
-		static bool isExecutable(String name);
+		static bool isExecutable(String name)
+			throw (Exception::FileNotFound);
 
 		/**	Test if the file is executable.
 				@return true if the file is executable
 		*/
-		bool isExecutable() const;
-
+		bool isExecutable()
+			const throw (Exception::FileNotFound);
+ 
 		/**	@name	Debugging and Diagnostics */
 		//@{
 
@@ -423,15 +453,18 @@ namespace BALL
 				This function uses std::fstream::good().
 				@return bool true if the file is valid
 		*/
-		bool isValid() const;
+		bool isValid()
+			const	throw();
 
 		//@}
 
 		protected:
-
-		String name_;
+		void setName(const String& name)
+			throw();
 
 		private:
+		String name_;
+
 		OpenMode	open_mode_;
 		bool			is_open_;
 		bool			is_temporary_;

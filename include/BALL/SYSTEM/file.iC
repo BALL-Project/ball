@@ -1,66 +1,54 @@
-// $Id: file.iC,v 1.9 2000/10/20 08:14:35 oliver Exp $
-
+// $Id: file.iC,v 1.10 2000/10/20 18:08:54 amoll Exp $
 
 BALL_INLINE 
-bool File::isValid() const
+File::clear()
+	throw()
 {
-  return (bool)((File *)this)->::std::fstream::good();
+	File::close();
+  name_ = "";
 }
 
 BALL_INLINE 
-File& File::operator = (const File& file)
-{
-  set(file);
-  return *this;
-}
-
-BALL_INLINE 
-bool File::set(const String& name)
-{
-	*this = File(name);
-	return isValid();
-}
-
-BALL_INLINE 
-bool File::set(const File& file)
-{
-	*this = File(file);
-	return isValid();
-}
-
-BALL_INLINE 
-const String& File::getName() const
+const String& File::getName()
+	const	throw()
 {
   return name_;
 }
 
 BALL_INLINE 
-File::OpenMode File::getOpenMode() const
+File::setName(const String& name)
+	throw()
+{
+	File::close();
+  name_ = name;
+  FileSystem::canonizePath(name_);
+}
+
+
+BALL_INLINE 
+File::OpenMode File::getOpenMode()
+	const	throw()
 {
   return open_mode_;
 }
   
 BALL_INLINE 
-File::Type File::getType(bool trace_link) const
+File::Type File::getType(bool trace_link) 
+	const throw (Exception::FileNotFound)
 {
   return File::getType(name_, trace_link);
 }
 
 BALL_INLINE 
-::std::fstream& File::getFileStream()
-{
-  return *this;
-}
-
-BALL_INLINE 
 bool File::copyTo(const String& destination_name, Size buffer_size)
+	throw (Exception::FileNotFound)
 {
-  return File::copy
-    (name_, destination_name, buffer_size);
+  return File::copy(name_, destination_name, buffer_size);
 }
 
 BALL_INLINE 
 bool File::remove(String name)
+	throw()
 {
   FileSystem::canonizePath(name);
   
@@ -68,13 +56,15 @@ bool File::remove(String name)
 }
 
 BALL_INLINE 
-bool File::remove() const
+bool File::remove() 
+	throw()
 {
   return File::remove(name_);
 }
 
 BALL_INLINE 
 bool File::move(const String& source_name, const String& destination_name)
+	throw (Exception::FileNotFound)
 {
   if (File::copy(source_name, destination_name))
   {
@@ -85,6 +75,7 @@ bool File::move(const String& source_name, const String& destination_name)
 
 BALL_INLINE 
 bool File::moveTo(const String& destination_name)
+	throw (Exception::FileNotFound)
 {
   if (File::move(name_, destination_name))
   {
@@ -96,78 +87,117 @@ bool File::moveTo(const String& destination_name)
 
 BALL_INLINE 
 bool File::rename(String old_path, String new_path)
+	throw (Exception::FileNotFound)
 {
   FileSystem::canonizePath(old_path);
   FileSystem::canonizePath(new_path);
   
+	if (!isAccessible(old_path))
+	{
+		throw (Exception::FileNotFound(__FILE__, __LINE__, old_path));
+	}
+
   return (bool)(::rename(old_path.c_str(), new_path.c_str()) == 0);
 }
 
 BALL_INLINE 
 bool File::renameTo(const String& new_path)
+	throw (Exception::FileNotFound)
 {
-  if (File::rename(name_, new_path))
+  if (!File::rename(name_, new_path))
   {
-    name_ = new_path;
-    return true;
-  }
-  return false;
+		return false;
+	}
+
+	name_ = new_path;
+	return true;
 }
 
 BALL_INLINE 
 bool File::truncate(String path, Size size)
+	throw (Exception::FileNotFound)
 {
+	if (!isAccessible(path))
+	{
+		throw (Exception::FileNotFound(__FILE__, __LINE__, path));
+	}
+
   FileSystem::canonizePath(path);
   
   return (bool)(::truncate(path.c_str(), (long)size) == 0);
 }
 
 BALL_INLINE 
-bool File::truncate(Size size) const
+bool File::truncate(Size size)
+	const	throw (Exception::FileNotFound)
 {
   return File::truncate(name_, size);
 }
 
 BALL_INLINE 
-bool File::operator == (const File &file) const
+bool File::operator == (const File &file)
+	const	throw()
 {
-  return (bool)(name_ == file.name_);
+  return (name_ == file.name_);
 }
 
 BALL_INLINE 
-bool File::operator != (const File &file) const
+bool File::operator != (const File &file)
+	const	throw()
 {
-  return (bool)(name_ != file.name_);
+  return (name_ != file.name_);
 }
 
 BALL_INLINE 
-bool File::isOpen() const
+const File& File::operator = (const File& file)
+	throw()
+{
+  name_ = file.name_;
+	open_mode_ = file.open_mode_;
+
+  return *this;
+}
+
+BALL_INLINE 
+bool File::isValid() 
+	const	throw()
+{
+  return (bool)((File *)this)->::std::fstream::good();
+}
+
+BALL_INLINE 
+bool File::isOpen() 
+	const	throw()
 {
   return is_open_;
 }
 
 BALL_INLINE 
-bool File::isClosed() const
+bool File::isClosed()
+	const	throw()
 {
-  return (bool)!is_open_;
+  return !is_open_;
 }
 
 BALL_INLINE 
 bool File::isAccessible(String name)
+	throw (Exception::FileNotFound)
 {
   FileSystem::canonizePath(name);
   
-  return (bool)(::access(name.c_str(), F_OK) == 0);
+  return (::access(name.c_str(), F_OK) == 0);
 }
 
 BALL_INLINE 
-bool File::isAccessible() const
+bool File::isAccessible()
+	const throw (Exception::FileNotFound)
 {
   return File::isAccessible(name_);
 }
 
 BALL_INLINE 
-bool File::isCanonized() const
+bool File::isCanonized()
+	const throw (Exception::FileNotFound)
 {
   String canonized_name(name_);
 
@@ -178,6 +208,7 @@ bool File::isCanonized() const
 
 BALL_INLINE 
 bool File::isReadable(String name)
+	throw (Exception::FileNotFound)
 {
   FileSystem::canonizePath(name);
   
@@ -185,13 +216,15 @@ bool File::isReadable(String name)
 }
 
 BALL_INLINE 
-bool File::isReadable() const
+bool File::isReadable()
+	const throw (Exception::FileNotFound)
 {
   return File::isReadable(name_);
 }
 
 BALL_INLINE 
 bool File::isWritable(String name)
+	throw (Exception::FileNotFound)
 {
   FileSystem::canonizePath(name);
   
@@ -199,13 +232,15 @@ bool File::isWritable(String name)
 }
 
 BALL_INLINE 
-bool File::isWritable() const
+bool File::isWritable()
+	const throw (Exception::FileNotFound)
 {
   return File::isWritable(name_);
 }
 
 BALL_INLINE 
 bool File::isExecutable(String name)
+	throw (Exception::FileNotFound)
 {
   FileSystem::canonizePath(name);
   
@@ -213,14 +248,22 @@ bool File::isExecutable(String name)
 }
 
 BALL_INLINE 
-bool File::isExecutable() const
+bool File::isExecutable()
+	const throw (Exception::FileNotFound)
 {
   return File::isExecutable(name_);
 }
 
 BALL_INLINE 
 Size File::getSize(String name)
+	throw (Exception::FileNotFound)
 {
   File tmp(name);
   return tmp.getSize();
+}
+
+BALL_INLINE
+::std::fstream& File::getFileStream()
+{
+  return *this;
 }

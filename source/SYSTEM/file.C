@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.13 2000/10/20 08:52:17 amoll Exp $
+// $Id: file.C,v 1.14 2000/10/20 18:09:05 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <math.h>
@@ -21,6 +21,7 @@ namespace BALL
   const File::OpenMode File::TRUNC;
  
 	File::File()
+		throw()
 		:	fstream(),
 			name_(),
 			open_mode_(ios::in),
@@ -88,6 +89,7 @@ namespace BALL
 	}
 
 	bool File::reopen()
+		throw (Exception::FileNotFound)
 	{
 		close();
 
@@ -95,8 +97,8 @@ namespace BALL
 	}
 
 	bool File::copy(String source_name, String destination_name, Size buffer_size)
+		throw (Exception::FileNotFound)
 	{
-
 		if (source_name == "" || destination_name == "" || source_name == destination_name)
 		{
 			return false;
@@ -104,6 +106,16 @@ namespace BALL
 
 		FileSystem::canonizePath(source_name);
 		FileSystem::canonizePath(destination_name);
+
+		if (source_name == destination_name)
+		{
+			return false;
+		}
+
+		if (!isAccessible(source_name))
+		{
+			throw (Exception::FileNotFound(__FILE__, __LINE__, source_name));
+		}
 
 		char* buffer = new char[buffer_size];
 		ifstream source(source_name.c_str(), ios::in);
@@ -128,17 +140,11 @@ namespace BALL
 		source.close();
 		destination.close();
 
-		if (destination)
-		{
-			return true;
-		}
-		else 
-		{
-			return false;
-		}
+		return (destination);
 	}
 
 	void File::close()
+		throw()
 	{
 		if (is_open_ == true)
 		{
@@ -157,6 +163,7 @@ namespace BALL
 	}
 
 	Size File::getSize()
+		throw()
 	{
 		if (!is_open_)
 		{
@@ -174,6 +181,7 @@ namespace BALL
 	}
 
 	File::Type File::getType(String name, bool trace_link)
+		throw (Exception::FileNotFound)
 	{
 		struct stat stats;
 		
@@ -224,6 +232,7 @@ namespace BALL
 	}
 
 	bool File::createTemporaryFilename(String& temporary)
+		throw()
 	{
 		temporary = "_1234567.TMP";
 		
