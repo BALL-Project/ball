@@ -1,4 +1,8 @@
-// $Id: residueChecker.h,v 1.1 1999/09/17 11:16:37 oliver Exp $
+// $Id: residueChecker.h,v 1.2 1999/12/19 17:37:11 oliver Exp $
+
+
+#ifndef BALL_STRUCTURE_RESIDUECHECKER_H
+#define BALL_STRUCTURE_RESIDUECHECKER_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -68,3 +72,5 @@ namespace BALL
 	}; 
 					
 } // namespace BALL
+
+#endif // BALL_STRUCTURE_RESIDUE_CHECKER
