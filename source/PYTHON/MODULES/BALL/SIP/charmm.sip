@@ -1,4 +1,4 @@
-// $Id: charmm.sip,v 1.1 2000/07/18 21:27:16 oliver Exp $
+// $Id: charmm.sip,v 1.2 2000/08/07 15:21:03 oliver Exp $
 
 class CharmmFF 
   : ForceField
@@ -51,7 +51,7 @@ class CharmmFF
   // BALL_CREATE(CharmmFF)
   CharmmFF();
   CharmmFF(System& /system/);
-   CharmmFF(System& /system/, const Options& /options/);
+  CharmmFF(System& /system/, const Options& /options/);
   CharmmFF(const CharmmFF& /force_field/, bool /clone_deep/ = true);
   ~CharmmFF();
   virtual bool specificSetup();

@@ -1,4 +1,4 @@
-// $Id: baseFragment.sip,v 1.1 2000/07/18 21:27:11 oliver Exp $
+// $Id: baseFragment.sip,v 1.2 2000/08/07 15:21:03 oliver Exp $
 
 class BaseFragment
   : Composite, 
@@ -66,6 +66,7 @@ class BaseFragment
 	// workaround for template method apply()...
 	bool apply(AtomProcessor& /processor/);
 	bool apply(CompositeProcessor& /processor/);
+	bool apply(FragmentProcessor& /processor/);
 
 	
 	operator const char* ();
