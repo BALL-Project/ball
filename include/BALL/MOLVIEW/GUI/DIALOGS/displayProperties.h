@@ -1,11 +1,7 @@
-// $Id: displayProperties.h,v 1.11 2001/12/28 02:33:38 oliver Exp $
+// $Id: displayProperties.h,v 1.11.4.1 2002/10/19 14:49:03 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 # include <BALL/STRUCTURE/geometricProperties.h>
@@ -17,10 +13,6 @@
 
 #ifndef BALL_FORMAT_INIFILE_H
 #	include <BALL/FORMAT/INIFile.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
-#	include <BALL/VIEW/KERNEL/logView.h>
 #endif
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -63,7 +55,6 @@
 #	include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
 #endif
 
-
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
@@ -76,13 +67,8 @@
 # include <BALL/MOLVIEW/GUI/DIALOGS/displayPropertiesData.h>
 #endif
 
-//using namespace BALL;
-using namespace BALL::VIEW;
-//using namespace BALL::MOLVIEW;
-
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -112,8 +98,7 @@ namespace BALL
 				For information about the drawing precision see \Ref{GeometricObject}.\\
 				This dialog is also responsible for selecting and deselecting,
 				building bonds and adding hydrogens to molecular objects. Further it is possible
-				to center the camera of the \Ref{Scene} to the geometric center of the selection
-				of molecular objects.
+				to center the camera of the \Ref{Scene} to the geometric center of the selection of molecular objects.
 				The class \Ref{MolecularControl} is responsible for creating such a selection.
 				If this dialog is used, it should be created with \Ref{MainControl} as parent.
 				The class DisplayPropertiesData contains the definition of the layout of
@@ -139,8 +124,8 @@ namespace BALL
 					This combo box as well as the others can be set differently according to saved
 					preferences. See \Ref{fetchPreferences}.
 					Calls \Ref{registerWidget}.
-					@param      parent the parent widget of {\em *this} displayProperties (See documentation of QT-library for information concerning widgets)
-					@param      name the name of {\em *this} displayProperties (See documentation of QT-library for information concerning widgets)
+					@param      parent the parent widget of {\em *this} displayProperties 
+					@param      name the name of {\em *this} displayProperties 
 					@return     DisplayProperties new constructed displayProperties
 					@see        fetchPreferences
 					@see        ElementColorCalculator
@@ -165,6 +150,7 @@ namespace BALL
 			/**	@name	Accessors: inspectors and mutators 
 			 */
 			//@{
+
 			/** Message handling method.
 					Handles messages sent by other registered \Ref{ConnectionObject} objects.
 					Catches \Ref{NewMolecularMessage} and \Ref{MolecularSelectionMessage}.
@@ -228,7 +214,8 @@ namespace BALL
 						\item  {\em Display Properties} - opens the dialog (indicates if open)
 						\item  {\em Select} - marks the selected molecular objects in the selected color (See \Ref{GeometricObject})
 						\item  {\em Deselect} - uses the previously set color of the selected molecular objects
-						\item  {\em Focus Camera} - centers the camera of \Ref{Scene} to the geometric center of the molecular objects in the selection
+						\item  {\em Focus Camera} - centers the camera of \Ref{Scene} to the geometric center 
+										of the molecular objects in the selection
 						\item  {\em Build Bonds} - generates the \Ref{Bond} object to the molecular objects in the selection
 						\item  {\em Add Hydrogens} - adds hydrogens to the molecular objects in the selection
 					\end{itemize}

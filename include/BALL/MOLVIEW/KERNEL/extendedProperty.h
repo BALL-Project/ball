@@ -1,11 +1,7 @@
-// $Id: extendedProperty.h,v 1.6.4.1 2002/10/18 07:49:42 amoll Exp $
+// $Id: extendedProperty.h,v 1.6.4.2 2002/10/19 14:51:06 amoll Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #define BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #	include <BALL/CONCEPT/property.h>
@@ -17,7 +13,6 @@
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -57,7 +52,7 @@ namespace BALL
 					the extendedPropertyManager {\em extended_property_manager}.\\
 					@param       extended_property_manager the extendedPropertyManager to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em extended_property_manager}
-					@return      ExtendedPropertyManager new constructed extendedPropertyManager cloned from {\em extended_property_manager}
+					@return      ExtendedPropertyManager new extendedPropertyManager cloned from {\em extended_property_manager}
 					@see         PropertyManager
 			*/
 			ExtendedPropertyManager(const ExtendedPropertyManager& extended_property_manager, bool deep = true)
