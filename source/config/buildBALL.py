@@ -114,3 +114,18 @@ for subdir in subdirlist:
 	commandline += " "+os.path.expanduser(subdirconfig["remotepath"])+"/testBuild.py\""
 
 	os.system(commandline)
+
+	# now we have got the tar-file back... we just have to untar it
+	commandline = "cd "+subdir+" && "
+
+	if (commands.has_key("tar")):
+		if (commands["tar"].strip() != "echo"):
+			commandline += commands["tar"]
+		else:
+			commandline += "tar"
+	else:
+		commandline += "tar"
+
+	commandline += " xf ./results.tar"
+
+	os.system(commandline)
