@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.15 2003/10/05 16:29:59 amoll Exp $
+// $Id: scene.C,v 1.16 2003/10/05 21:18:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1036,7 +1036,7 @@ void Scene::initializeWidget(MainControl& main_control)
 		MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()), CTRL+Key_T);
 
 	main_control.insertMenuEntry(
-		MainControl::FILE_EXPORT, "Export PNG", this, SLOT(exportPNG()), ALT+Key_P);
+		MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);
 
 	window_menu_entry_id_ = 
 		main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
@@ -1060,7 +1060,7 @@ void Scene::finalizeWidget(MainControl& main_control)
 	main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
 																										SLOT(resetCamera_()), CTRL+Key_T);		
 	main_control.removeMenuEntry(MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()), CTRL+Key_T);		
-	main_control.removeMenuEntry(MainControl::FILE_EXPORT, "Export PNG", this, SLOT(exportPNG()), ALT+Key_P);		
+	main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
 	main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
 }
 
