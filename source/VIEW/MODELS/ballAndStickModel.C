@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.11 2004/06/07 10:16:58 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.12 2004/07/12 14:58:59 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -180,9 +180,41 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 	// no visualisation for hydrogen bonds
 	if (bond.getType() == Bond::TYPE__HYDROGEN) return;
 	
+	if (bond.getOrder() == Bond::ORDER__DOUBLE ||
+	    bond.getOrder() == Bond::ORDER__AROMATIC)
+	{
+		Vector3 dir = bond.getSecondAtom()->getPosition() - bond.getFirstAtom()->getPosition();
+		Vector3 normal;
+		normal = dir % Vector3(1,0,0);
+		if (normal.getSquareLength() == .0)
+		{
+			normal = dir % Vector3(0,1,0);
+		}
+		normal.normalize();
+		normal *= stick_radius_ / 1.5;
+		
+		TwoColoredTube *tube = new TwoColoredTube;
+		if (tube == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredTube));
+							
+		tube->setRadius(stick_radius_ / 2.4);
+		tube->setVertex1(bond.getFirstAtom()->getPosition() - normal);
+		tube->setVertex2(bond.getSecondAtom()->getPosition() - normal);
+		tube->setComposite(&bond);
+		geometric_objects_.push_back(tube);
+		
+		TwoColoredTube *tube2 = new TwoColoredTube;
+		if (tube2 == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredTube));
+							
+		tube2->setRadius(stick_radius_ / 2.4);
+		tube2->setVertex1(bond.getFirstAtom()->getPosition() + normal);
+		tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal);
+		tube2->setComposite(&bond);
+		geometric_objects_.push_back(tube2);
+		return;
+	}
+
 	// generate two colored tube
 	TwoColoredTube *tube = new TwoColoredTube;
-					
 	if (tube == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredTube));
 						
 	tube->setRadius(stick_radius_);
