@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.23 2001/05/05 21:09:57 amoll Exp $
+// $Id: INIFile.C,v 1.24 2001/05/10 19:36:11 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -502,8 +502,8 @@ namespace BALL
 
 		if (section_index_.has(line))
 		{
-      Log.error() << "In INIFile " << filename_ << " , while adding section:"
-                    << "Section '" << line << "already exists." << endl;
+      Log.error() << "In INIFile " << filename_ << " , while adding section: '"
+                  << line << "' already exists." << endl;
 			return false;
 		}
 
