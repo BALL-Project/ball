@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.21 2000/05/02 14:03:49 amoll Exp $
+// $Id: atom.h,v 1.22 2000/05/04 20:57:10 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -82,9 +82,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Atom class (BALL kernel framework)
-			@author  $Author: amoll $
-			@version $Revision: 1.21 $
-			@date    $Date: 2000/05/02 14:03:49 $
+			@author  $Author: oliver $
+			@version $Revision: 1.22 $
+			@date    $Date: 2000/05/04 20:57:10 $
 	*/
 	class Atom
 		: public Composite,
@@ -459,19 +459,20 @@ namespace BALL
 					is appended. For single amino acids (C and N terminal) {\tt -M} is added.\\
 					If the atom is not contained in a residue, the name of the parent fragment 
 					is taken instead of	the residue name. If there is no parent fragment, the name of the parent molecule ist taken.
-					If the atom is not contained in any superstructure, getFullname returns getName.
+					If the atom is not contained in any superstructure, getFullname returns getName.\\
+					Overview of the returned strings:
+					\begin{itemize}
+						\item <residue>:<atom>  -- if contained in a residue
+						\item <residue>-C:<atom>	-- for C terminal residues
+						\item <residue>-N:<atom>	-- for N terminal residues
+						\item CYS-S:<atom> -- for CYS residues involved in a SS bond
+						\item CYS-NS:<atom> -- for N terminal CYS residues involved in a SS bond
+						\item CYS-CS:<atom> -- for C terminal CYS residues involved in a SS bond
+						\item <fragment>:atom -- for atoms contained in a fragment, but not in a residue
+						\item <molecule>:atom -- for atoms contained in a molecule, but not in a fragment
+					\end{itemize}				
 					@param	type if type is set to {\tt Atom::NO_VARIANT_EXTENSIONS}, the variant extension ({\tt -XX}) is omitted
-					@return	String&
-							\begin{itemize}
-								\item <residue>:<atom>  -- if contained in a residue
-								\item <residue>-C:<atom>	-- for C terminal residues
-								\item <residue>-N:<atom>	-- for N terminal residues
-								\item CYS-S:<atom> -- for CYS residues involved in a SS bond
-								\item CYS-NS:<atom> -- for N terminal CYS residues involved in a SS bond
-								\item CYS-CS:<atom> -- for C terminal CYS residues involved in a SS bond
-								\item <fragment>:atom -- for atoms contained in a fragment, but not in a residue
-								\item <molecule>:atom -- for atoms contained in a molecule, but not in a fragment
-							\end{itemize}
+					@return	String the full name
 			*/
 			String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const;
 
