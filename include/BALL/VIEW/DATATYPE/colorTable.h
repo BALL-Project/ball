@@ -1,4 +1,4 @@
-// $Id: colorTable.h,v 1.3.4.2 2002/10/18 14:48:00 amoll Exp $
+// $Id: colorTable.h,v 1.3.4.3 2002/11/26 12:29:39 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #define BALL_VIEW_DATATYPE_COLORTABLE_H
@@ -52,9 +52,8 @@ namespace BALL
 			/**	Copy constructor.
 					Create a copy of a ColorTable object.
 					@param	color_table the color table to be copied
-					@param	deep ignored
 			*/
-			ColorTable(const ColorTable& color_table, bool deep = true)
+			ColorTable(const ColorTable& color_table)
 				throw();
 
 			/** Detailed constructor.
@@ -147,11 +146,14 @@ namespace BALL
 			//@}
 
 			protected:
-				Index color_number_;
-				bool  alpha_blending_;
-				ColorRGBA min_color_, max_color_;
-				bool has_min_max_colors_;
-				float min_, max_;
+
+			Index			color_number_;
+			bool			alpha_blending_;
+			ColorRGBA min_color_;
+			ColorRGBA	max_color_;
+			bool			has_min_max_colors_;
+			float			min_;
+			float			max_;
 		};
 
 

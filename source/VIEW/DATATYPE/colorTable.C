@@ -1,4 +1,4 @@
-// $Id: colorTable.C,v 1.4.4.5 2002/11/04 18:14:39 amoll Exp $
+// $Id: colorTable.C,v 1.4.4.6 2002/11/26 12:29:39 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 #include <BALL/COMMON/rtti.h>
@@ -16,9 +16,11 @@ namespace BALL
 			:	vector<ColorRGBA>(),
 				color_number_(0),
 				alpha_blending_(false),
+				min_color_(),
+				max_color_(),
+				has_min_max_colors_(false),
 				min_(0.),
-				max_(1.),
-				has_min_max_colors_(false)
+				max_(1.)
 		{
 		}
 
@@ -27,20 +29,24 @@ namespace BALL
 			:	vector<ColorRGBA>(color_number),
 				color_number_(color_number),
 				alpha_blending_(false),
+				min_color_(),
+				max_color_(),
+				has_min_max_colors_(false),
 				min_(0.),
-				max_(1.),
-				has_min_max_colors_(false)
+				max_(1.)
 		{
 		}
 
-		ColorTable::ColorTable(const ColorTable& color_table, bool /* deep */)
+		ColorTable::ColorTable(const ColorTable& color_table)
 			throw()
 			:	vector<ColorRGBA>(color_table),
 				color_number_(color_table.color_number_),
 				alpha_blending_(color_table.alpha_blending_),
+				min_color_(),
+				max_color_(),
+				has_min_max_colors_(false),
 				min_(0.),
-				max_(1.),
-				has_min_max_colors_(false)
+				max_(1.)
 		{
 		}
 
@@ -49,19 +55,23 @@ namespace BALL
 			:	vector<ColorRGBA>(size, color),
 				color_number_(size),
 				alpha_blending_(alpha_blending),
+				min_color_(),
+				max_color_(),
+				has_min_max_colors_(false),
 				min_(0.),
-				max_(1.),
-				has_min_max_colors_(false)
+				max_(1.)
 		{
 		}
 
 		ColorTable::ColorTable(const ColorTable& color_table, Index from, Index to, bool alpha_blending)
 			throw()
-			: color_number_(to-from+1),
+			:	color_number_(to - from + 1),
 				alpha_blending_(alpha_blending),
+				min_color_(),
+				max_color_(),
+				has_min_max_colors_(false),
 				min_(0.),
-				max_(1.),
-				has_min_max_colors_(false)
+				max_(1.)
 		{
 			clear();
 			for (Index i = from; i <= to; i++)
@@ -70,13 +80,15 @@ namespace BALL
 			}
 		}
 		
-		ColorTable::ColorTable(const ColorRGBA *array, Size array_size, bool alpha_blending)
+		ColorTable::ColorTable(const ColorRGBA* array, Size array_size, bool alpha_blending)
 			throw()
 			: color_number_(array_size),
 				alpha_blending_(alpha_blending),
+				min_color_(),
+				max_color_(),
+				has_min_max_colors_(false),
 				min_(0.),
-				max_(1.),
-				has_min_max_colors_(false)
+				max_(1.)
 		{
 			clear();
 			for (Size i = 0; i < array_size; i++)
@@ -129,35 +141,35 @@ namespace BALL
 			// we will build the color table in a temporary vector which we
 			// will later copy into our own dataset
 			vector<ColorRGBA> new_table(color_number_);
-			Size old_colNum = (Size) size();
+			Index old_number_of_colors = (Index)size();
 
 			// we won't *reduce* the number of colors, so if we should, we
 			// just return
-			if (color_number_ < old_colNum)
+			if (color_number_ < old_number_of_colors)
 			{
-				return old_colNum;
+				return old_number_of_colors;
 			}
 		
 			// how many colors do we have to put between two of the old ones?
-			Size numInterpolSteps = (Size)floor((double)(color_number_ - old_colNum) / (old_colNum - 1));
+			Index numInterpolSteps = (Index)floor((double)(color_number_ - old_number_of_colors) / (old_number_of_colors - 1));
 	
 			// adjust the number of colors so that there are no remainders after the interpolation
-			if (color_number_ != (old_colNum + numInterpolSteps*(old_colNum-1)))  
+			if (color_number_ != (old_number_of_colors + numInterpolSteps*(old_number_of_colors-1)))  
 			{
-				color_number_ = old_colNum + (numInterpolSteps*(old_colNum-1));
+				color_number_ = old_number_of_colors + (numInterpolSteps*(old_number_of_colors-1));
 			}
 			
 			ColorRGBA col1, col2;
 			float pos;
 			
-			for (Index i=0; i<old_colNum-1; i++)
+			for (Index i=0; i<old_number_of_colors-1; i++)
 			{
 				col1 = (*this)[i];
 				col2 = (*this)[i+1];
 
 				new_table[i*(numInterpolSteps+1)] = col1;
 				
-				for (Index j=1; j<=numInterpolSteps; j++)
+				for (Index j = 1; j <= numInterpolSteps; j++)
 				{
 					pos = (float)j/(float)(numInterpolSteps+1);
 					new_table[(i*(numInterpolSteps+1))+j].setRed(pos*(float)col2.getRed() + (1.-pos)*(float)col1.getRed());
@@ -171,7 +183,7 @@ namespace BALL
 				}
 			}
 			
-			new_table[color_number_-1] = (*this)[old_colNum-1]; 
+			new_table[color_number_-1] = (*this)[old_number_of_colors-1]; 
 
 			// This can probably done much faster...
 			(*this).resize(color_number_);
