@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.43 2003/12/16 14:01:43 amoll Exp $
+// $Id: mainControl.C,v 1.44 2003/12/16 15:54:03 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -354,7 +354,6 @@ bool MainControl::remove_(Composite& composite)
 	
 	Composite* root = 0;
 	if (composite.getRoot() != composite) root = &composite.getRoot();
-	composite_manager_.remove(composite);
 
 	// delete all representations containing the composite
 	List<Representation*> removed_representations;
@@ -372,6 +371,8 @@ bool MainControl::remove_(Composite& composite)
 		SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
 		notify_(scene_message);
 	}
+
+	composite_manager_.remove(composite);
 
 	if (root != 0) updateRepresentationsOf(*root, true, true);
 
