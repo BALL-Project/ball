@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>MainControlPreferencesData</class>
 <widget class="QWidget">
     <property name="name">
@@ -112,45 +112,6 @@
     </widget>
     <widget class="QCheckBox">
         <property name="name">
-            <cstring>show_labels</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>6</x>
-                <y>61</y>
-                <width>250</width>
-                <height>23</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>250</width>
-                <height>23</height>
-            </size>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>250</width>
-                <height>23</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>show labels in docked widgets</string>
-        </property>
-        <property name="checked">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
             <cstring>logging_to_file</cstring>
         </property>
         <property name="geometry">
@@ -186,6 +147,45 @@
         </property>
         <property name="toolTip" stdset="0">
             <string>Writes the information from the Logs window into a file</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>show_labels</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>60</y>
+                <width>300</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>300</width>
+                <height>23</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>300</width>
+                <height>23</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>show labels in docked widgets</string>
+        </property>
+        <property name="checked">
+            <bool>true</bool>
         </property>
     </widget>
 </widget>

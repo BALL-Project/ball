@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>LightSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -6,22 +6,22 @@
     </property>
     <property name="geometry">
         <rect>
-            <x>0</x>
-            <y>0</y>
+            <x>39</x>
+            <y>40</y>
             <width>500</width>
-            <height>310</height>
+            <height>330</height>
         </rect>
     </property>
     <property name="minimumSize">
         <size>
             <width>500</width>
-            <height>310</height>
+            <height>330</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
             <width>500</width>
-            <height>310</height>
+            <height>330</height>
         </size>
     </property>
     <property name="caption">
@@ -36,7 +36,7 @@
                 <x>5</x>
                 <y>5</y>
                 <width>490</width>
-                <height>295</height>
+                <height>315</height>
             </rect>
         </property>
         <hbox>

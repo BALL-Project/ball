@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>StageSettingsData</class>
 <widget class="QDialog">
     <property name="name">
@@ -34,6 +34,148 @@
             <attribute name="id">
                 <number>0</number>
             </attribute>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>coordinate_button</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>162</y>
+                        <width>267</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Show coordinate system</string>
+                </property>
+            </widget>
+            <widget class="QCheckBox">
+                <property name="name">
+                    <cstring>show_lights_</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>182</y>
+                        <width>270</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Show lightsources in Scene</string>
+                </property>
+            </widget>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>groupBox1_2_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>7</x>
+                        <y>219</y>
+                        <width>269</width>
+                        <height>103</height>
+                    </rect>
+                </property>
+                <property name="title">
+                    <string>Fog</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>The fog is currently not exported to POVRay</string>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>enable_fog</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>21</y>
+                            <width>180</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>Enable fog</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_3_4</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>76</y>
+                            <width>33</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>min</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2_2_4</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>210</x>
+                            <y>75</y>
+                            <width>47</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>max</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>fog_slider</cstring>
+                    </property>
+                    <property name="enabled">
+                        <bool>false</bool>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>51</y>
+                            <width>248</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="maxValue">
+                        <number>400</number>
+                    </property>
+                    <property name="value">
+                        <number>200</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>50</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Intensity of fog</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Intensity of fog</string>
+                    </property>
+                </widget>
+            </widget>
             <widget class="QGroupBox">
                 <property name="name">
                     <cstring>groupBox1_2_3_2</cstring>
@@ -56,7 +198,7 @@
                     <set>AlignHCenter</set>
                 </property>
                 <property name="toolTip" stdset="0">
-                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
+                    <string></string>
                 </property>
                 <widget class="QSlider">
                     <property name="name">
@@ -128,132 +270,6 @@
                     </property>
                     <property name="text">
                         <string>min</string>
-                    </property>
-                </widget>
-            </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>coordinate_button</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>162</y>
-                        <width>267</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Show coordinate system</string>
-                </property>
-            </widget>
-            <widget class="QGroupBox">
-                <property name="name">
-                    <cstring>groupBox1_2_3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>7</x>
-                        <y>219</y>
-                        <width>269</width>
-                        <height>103</height>
-                    </rect>
-                </property>
-                <property name="title">
-                    <string>Fog</string>
-                </property>
-                <property name="alignment">
-                    <set>AlignHCenter</set>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
-                </property>
-                <widget class="QCheckBox">
-                    <property name="name">
-                        <cstring>enable_fog</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>21</y>
-                            <width>180</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>Enable fog</string>
-                    </property>
-                </widget>
-                <widget class="QSlider">
-                    <property name="name">
-                        <cstring>fog_slider</cstring>
-                    </property>
-                    <property name="enabled">
-                        <bool>false</bool>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>51</y>
-                            <width>248</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="maxValue">
-                        <number>400</number>
-                    </property>
-                    <property name="value">
-                        <number>200</number>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="tickmarks">
-                        <enum>Below</enum>
-                    </property>
-                    <property name="tickInterval">
-                        <number>50</number>
-                    </property>
-                    <property name="toolTip" stdset="0">
-                        <string>Intensity of fog</string>
-                    </property>
-                    <property name="whatsThis" stdset="0">
-                        <string>Intensity of fog</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel1_3_4</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>76</y>
-                            <width>33</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>min</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel1_2_2_4</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>210</x>
-                            <y>75</y>
-                            <width>47</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>max</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
                     </property>
                 </widget>
             </widget>
@@ -336,22 +352,6 @@
                     </property>
                 </widget>
             </widget>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>show_lights_</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>182</y>
-                        <width>270</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Show lightsources in Scene</string>
-                </property>
-            </widget>
         </widget>
         <widget class="QWidget">
             <property name="name">
@@ -382,33 +382,8 @@
                     <set>AlignHCenter</set>
                 </property>
                 <property name="toolTip" stdset="0">
-                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
+                    <string>Change sensitivity of mouse wheel. Higher sensitivity means more movement with less moving the wheel.</string>
                 </property>
-                <widget class="QSlider">
-                    <property name="name">
-                        <cstring>wheel_slider_</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>10</x>
-                            <y>24</y>
-                            <width>235</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="maxValue">
-                        <number>10</number>
-                    </property>
-                    <property name="value">
-                        <number>5</number>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="tickmarks">
-                        <enum>Below</enum>
-                    </property>
-                </widget>
                 <widget class="QLabel">
                     <property name="name">
                         <cstring>TextLabel1_2_2</cstring>
@@ -444,6 +419,31 @@
                         <string>min</string>
                     </property>
                 </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>wheel_slider_</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>10</x>
+                            <y>24</y>
+                            <width>235</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="maxValue">
+                        <number>10</number>
+                    </property>
+                    <property name="value">
+                        <number>5</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                </widget>
             </widget>
             <widget class="QGroupBox">
                 <property name="name">
@@ -467,7 +467,7 @@
                     <set>AlignHCenter</set>
                 </property>
                 <property name="toolTip" stdset="0">
-                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
+                    <string>Change the mouse sensitivity. Greater sensitivity means greater mouse movement on the screen with less movement of the mouse.</string>
                 </property>
                 <widget class="QLabel">
                     <property name="name">
@@ -483,6 +483,25 @@
                     </property>
                     <property name="text">
                         <string>min</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>198</x>
+                            <y>46</y>
+                            <width>44</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>max</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignVCenter|AlignRight</set>
                     </property>
                 </widget>
                 <widget class="QSlider">
@@ -510,15 +529,64 @@
                         <enum>Below</enum>
                     </property>
                 </widget>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>Stereo</cstring>
+            </property>
+            <attribute name="id">
+                <number>2</number>
+            </attribute>
+            <widget class="QGroupBox">
+                <property name="name">
+                    <cstring>groupBox1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>300</width>
+                        <height>78</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>NoFrame</enum>
+                </property>
+                <property name="title">
+                    <string>Stereo: Eye points distance</string>
+                </property>
+                <property name="alignment">
+                    <set>AlignHCenter</set>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string></string>
+                </property>
                 <widget class="QLabel">
                     <property name="name">
-                        <cstring>TextLabel1_2</cstring>
+                        <cstring>TextLabel1_3_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>198</x>
-                            <y>46</y>
-                            <width>44</width>
+                            <x>7</x>
+                            <y>45</y>
+                            <width>33</width>
+                            <height>20</height>
+                        </rect>
+                    </property>
+                    <property name="text">
+                        <string>min</string>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>TextLabel1_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>190</x>
+                            <y>48</y>
+                            <width>46</width>
                             <height>21</height>
                         </rect>
                     </property>
@@ -529,30 +597,85 @@
                         <set>AlignVCenter|AlignRight</set>
                     </property>
                 </widget>
-            </widget>
-        </widget>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>Stereo</cstring>
-            </property>
-            <attribute name="id">
-                <number>2</number>
-            </attribute>
-            <widget class="QCheckBox">
-                <property name="name">
-                    <cstring>swap_sss_button</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>15</x>
-                        <y>193</y>
-                        <width>298</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Swap side by side stereo</string>
-                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>eye_distance_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>241</x>
+                            <y>21</y>
+                            <width>50</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>50</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>eye_distance_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>8</x>
+                            <y>23</y>
+                            <width>227</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="maxValue">
+                        <number>40</number>
+                    </property>
+                    <property name="lineStep">
+                        <number>5</number>
+                    </property>
+                    <property name="pageStep">
+                        <number>5</number>
+                    </property>
+                    <property name="value">
+                        <number>20</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Below</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>The greater the eye point distance is the greater is the stereo effect.</string>
+                    </property>
+                </widget>
             </widget>
             <widget class="QGroupBox">
                 <property name="name">
@@ -576,7 +699,7 @@
                     <set>AlignHCenter</set>
                 </property>
                 <property name="toolTip" stdset="0">
-                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
+                    <string></string>
                 </property>
                 <widget class="QLabel">
                     <property name="name">
@@ -693,141 +816,21 @@
                     </property>
                 </widget>
             </widget>
-            <widget class="QGroupBox">
+            <widget class="QCheckBox">
                 <property name="name">
-                    <cstring>groupBox1_2_2</cstring>
+                    <cstring>swap_sss_button</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>300</width>
-                        <height>78</height>
+                        <x>15</x>
+                        <y>193</y>
+                        <width>298</width>
+                        <height>20</height>
                     </rect>
                 </property>
-                <property name="frameShape">
-                    <enum>NoFrame</enum>
+                <property name="text">
+                    <string>Swap side by side stereo</string>
                 </property>
-                <property name="title">
-                    <string>Stereo: Eye points distance</string>
-                </property>
-                <property name="alignment">
-                    <set>AlignHCenter</set>
-                </property>
-                <property name="toolTip" stdset="0">
-                    <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
-                </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel1_3_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>7</x>
-                            <y>45</y>
-                            <width>33</width>
-                            <height>20</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>min</string>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>TextLabel1_2_2_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>190</x>
-                            <y>48</y>
-                            <width>46</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="text">
-                        <string>max</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignVCenter|AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QSlider">
-                    <property name="name">
-                        <cstring>eye_distance_slider</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>8</x>
-                            <y>23</y>
-                            <width>227</width>
-                            <height>21</height>
-                        </rect>
-                    </property>
-                    <property name="maxValue">
-                        <number>40</number>
-                    </property>
-                    <property name="lineStep">
-                        <number>5</number>
-                    </property>
-                    <property name="pageStep">
-                        <number>5</number>
-                    </property>
-                    <property name="value">
-                        <number>20</number>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="tickmarks">
-                        <enum>Below</enum>
-                    </property>
-                    <property name="tickInterval">
-                        <number>5</number>
-                    </property>
-                </widget>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>eye_distance_label</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>241</x>
-                            <y>21</y>
-                            <width>50</width>
-                            <height>25</height>
-                        </rect>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>0</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>50</width>
-                            <height>25</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>35</width>
-                            <height>25</height>
-                        </size>
-                    </property>
-                    <property name="frameShape">
-                        <enum>TabWidgetPanel</enum>
-                    </property>
-                    <property name="text">
-                        <string>99.9</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignCenter</set>
-                    </property>
-                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -837,36 +840,26 @@
             <attribute name="id">
                 <number>3</number>
             </attribute>
-            <widget class="QListView">
-                <column>
-                    <property name="text">
-                        <string>Extension</string>
-                    </property>
-                    <property name="clickable">
-                        <bool>false</bool>
-                    </property>
-                    <property name="resizable">
-                        <bool>false</bool>
-                    </property>
-                </column>
-            <item>
-                <property name="text">
-                    <string>Extensions</string>
-                </property>
-                <property name="pixmap">
-                    <pixmap></pixmap>
-                </property>
-            </item>
+            <widget class="QCheckBox">
                 <property name="name">
-                    <cstring>extensions_list</cstring>
+                    <cstring>use_vertex_buffers</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>10</x>
-                        <y>105</y>
-                        <width>454</width>
-                        <height>225</height>
+                        <y>350</y>
+                        <width>462</width>
+                        <height>20</height>
                     </rect>
+                </property>
+                <property name="text">
+                    <string>Use OpenGL Vertex Buffer Objects (Experimental!)</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Select to use OpenGL vertex buffer. Results in greater performance.</string>
                 </property>
             </widget>
             <widget class="QLayoutWidget">
@@ -1031,23 +1024,39 @@
                     </widget>
                 </vbox>
             </widget>
-            <widget class="QCheckBox">
+            <widget class="QListView">
+                <column>
+                    <property name="text">
+                        <string>Extension</string>
+                    </property>
+                    <property name="clickable">
+                        <bool>false</bool>
+                    </property>
+                    <property name="resizable">
+                        <bool>false</bool>
+                    </property>
+                </column>
+            <item>
+                <property name="text">
+                    <string>Extensions</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap></pixmap>
+                </property>
+            </item>
                 <property name="name">
-                    <cstring>use_vertex_buffers</cstring>
+                    <cstring>extensions_list</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>10</x>
-                        <y>350</y>
-                        <width>462</width>
-                        <height>20</height>
+                        <y>105</y>
+                        <width>454</width>
+                        <height>225</height>
                     </rect>
                 </property>
-                <property name="text">
-                    <string>Use OpenGL Vertex Buffer Objects (Experimental!)</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
+                <property name="toolTip" stdset="0">
+                    <string>Extensions supported by your graphics card</string>
                 </property>
             </widget>
         </widget>

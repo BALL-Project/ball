@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>DownloadPDBFileData</class>
 <widget class="QDialog">
     <property name="name">
@@ -90,6 +90,9 @@
                 <property name="default">
                     <bool>true</bool>
                 </property>
+                <property name="toolTip" stdset="0">
+                    <string>Download PDB file</string>
+                </property>
             </widget>
             <widget class="QPushButton">
                 <property name="name">
@@ -113,6 +116,9 @@
                 <property name="autoDefault">
                     <bool>true</bool>
                 </property>
+                <property name="toolTip" stdset="0">
+                    <string>Abort download</string>
+                </property>
             </widget>
             <widget class="QPushButton">
                 <property name="name">
@@ -132,6 +138,9 @@
                 </property>
                 <property name="autoDefault">
                     <bool>true</bool>
+                </property>
+                <property name="toolTip" stdset="0">
+                    <string>Close window</string>
                 </property>
             </widget>
         </hbox>
@@ -313,6 +322,19 @@
                 </property>
             </widget>
         </widget>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>results</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>213</x>
+                    <y>222</y>
+                    <width>150</width>
+                    <height>28</height>
+                </rect>
+            </property>
+        </widget>
         <widget class="QTextEdit">
             <property name="name">
                 <cstring>searchField</cstring>
@@ -351,20 +373,7 @@
                 <string>Search www.rcsb.org</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Mch at www.rcsb.orgake sear</string>
-            </property>
-        </widget>
-        <widget class="QComboBox">
-            <property name="name">
-                <cstring>results</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>213</x>
-                    <y>222</y>
-                    <width>150</width>
-                    <height>28</height>
-                </rect>
+                <string>Search www.rcsb.org for query string</string>
             </property>
         </widget>
     </widget>
