@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.16.4.1 2002/05/23 23:55:11 oliver Exp $
+// $Id: regularData2D.h,v 1.16.4.2 2002/12/11 11:30:57 anker Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -96,15 +96,14 @@ namespace BALL
 		/**	Destructor. 
 				Frees all allocated memory.
 		*/
-		virtual ~TRegularData2D() throw()
-		{
-			delete [] data;
-		}
+		virtual ~TRegularData2D() 
+			throw();
 
 		/** Clear method.
 				Frees all allocated memory. The instance is set to not valid.
 		*/
-		virtual void clear() throw();
+		virtual void clear() 
+			throw();
 
 		//@}
 		/**	@name Assignment
@@ -462,6 +461,14 @@ namespace BALL
 			valid_(false)
 	{
 		set(grid);
+	}
+
+	// copy constructor
+	template <class GridDataType>
+	TRegularData2D<GridDataType>::~TRegularData2D()
+		throw()
+	{
+		clear();
 	}
 
 	// assignment operator
