@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.10 2005/03/31 13:45:26 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.11 2005/03/31 16:36:46 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -229,9 +229,10 @@ Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " "
 
 			bend_it->delta_theta = theta;
 
+	bend_it->energy = energy;
+
 #ifdef BALL_DEBUG_MMFF
 	Log.info() << "  E: "<< energy << std::endl;
-	bend_it->energy = energy;
 #endif
 
 			energy_ += energy;

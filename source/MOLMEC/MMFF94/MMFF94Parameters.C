@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.11 2005/03/31 13:45:26 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.12 2005/03/31 16:36:47 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -395,7 +395,9 @@ namespace BALL
 				return false;
 			}
 #ifdef BALL_DEBUG_MMFF
-Log.error() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom2.getName() << " " << atom3.getName() << std::endl;
+Log.info() << "MMFF94 StretchBend: from row: " << atom1.getName() << " " << atom2.getName() << " " << atom3.getName() << " " <<
+																									atom1.getType() << " " << atom2.getType() << " " << atom3.getType() << 
+																									"    b: " << bend_type << std::endl;
 #endif
 		}
 
