@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.20 2001/01/21 21:27:09 amoll Exp $
+// $Id: Bond_test.C,v 1.21 2001/02/06 12:37:24 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.20 2001/01/21 21:27:09 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.21 2001/02/06 12:37:24 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -536,18 +536,7 @@ CHECK(operator ==)
 	Atom a1, a2, a3;
 	Bond b1("test", a1, a2);
 	Bond b2("test", a1, a2);
-	TEST_EQUAL(b1 == b2, true)
-
-	b1.setName("b1");
 	TEST_EQUAL(b1 == b2, false)
-	b1.setName("test");
-
-	b1.setFirstAtom(&a3);
-	TEST_EQUAL(b1 == b2, true)
-	a3.setName("XX");
-	TEST_EQUAL(b1 == b2, false)
-
-	b1 = b2;
 	TEST_EQUAL(b1 == b1, true)
 RESULT
 
@@ -555,18 +544,7 @@ CHECK(operator !=)
 	Atom a1, a2, a3;
 	Bond b1("test", a1, a2);
 	Bond b2("test", a1, a2);
-	TEST_EQUAL(b1 != b2, false)
-
-	b1.setName("b1");
 	TEST_EQUAL(b1 != b2, true)
-	b1.setName("test");
-
-	b1.setFirstAtom(&a3);
-	TEST_EQUAL(b1 != b2, false)
-	a3.setName("XX");
-	TEST_EQUAL(b1 != b2, true)
-
-	b1 = b2;
 	TEST_EQUAL(b1 != b1, false)
 RESULT
 
