@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.14 2004/07/12 21:19:09 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.15 2004/07/13 11:06:29 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -118,7 +118,10 @@ void AddBallAndStickModel::setStickRadius(const float radius)
 
 Processor::Result AddBallAndStickModel::operator() (Composite& composite)
 {
-	AtomBondModelBaseProcessor::operator() (composite);
+	if (ball_and_stick_)
+	{
+		AtomBondModelBaseProcessor::operator() (composite);
+	}
 
 	if (!RTTI::isKindOf<Atom>(composite))
 	{
@@ -184,6 +187,19 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 	// no visualisation for hydrogen bonds
 	if (bond.getType() == Bond::TYPE__HYDROGEN) return;
 
+	if (!ball_and_stick_ ||
+			bond.getOrder() == Bond::ORDER__SINGLE)
+	{
+		// generate two colored tube
+		TwoColoredTube *tube = new TwoColoredTube;
+		tube->setRadius(stick_radius_);
+		tube->setVertex1Address(bond.getFirstAtom()->getPosition());
+		tube->setVertex2Address(bond.getSecondAtom()->getPosition());
+		tube->setComposite(&bond);
+		geometric_objects_.push_back(tube);
+		return;
+	}
+
 	if (ring_atoms_.has(bond.getFirstAtom()) &&
 			ring_atoms_.has(bond.getSecondAtom()))
 	{
@@ -231,23 +247,14 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 		tube2->setVertex2(bond.getSecondAtom()->getPosition() + normal);
 		tube2->setComposite(&bond);
 		geometric_objects_.push_back(tube2);
-		return;
 	}
-
-	// generate two colored tube
-	TwoColoredTube *tube = new TwoColoredTube;
-	if (tube == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredTube));
-						
-	tube->setRadius(stick_radius_);
-	tube->setVertex1Address(bond.getFirstAtom()->getPosition());
-	tube->setVertex2Address(bond.getSecondAtom()->getPosition());
-	tube->setComposite(&bond);
-	geometric_objects_.push_back(tube);
 }
 
 void AddBallAndStickModel::visualiseRings_()
 	throw()
 {
+	if (!ball_and_stick_) return;
+
 	vector<vector<Atom*> >::iterator it = rings_.begin();
 	for(; it != rings_.end(); it++)
 	{
