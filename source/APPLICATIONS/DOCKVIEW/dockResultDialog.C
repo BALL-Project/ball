@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.5 2005/03/23 15:38:35 leonhardt Exp $
+// $Id: dockResultDialog.C,v 1.1.2.6 2005/03/24 10:39:23 haid Exp $
 //
 
 #include <qtable.h>
@@ -92,7 +92,6 @@ namespace BALL
 			{
 				result_table->removeRow(j);
 			}*/
-			
 			
 			// fill the table of the result dialog
 			result_table->insertRows(0,conformations.size());
@@ -196,11 +195,15 @@ namespace BALL
 			result_table->clearSelection();
 			result_table->setSelectionMode(QTable::SingleRow);
 			
-			
 			// add new column to the table of the result dialog, where the new scores are shown
 			int num_column = result_table->numCols();
 			result_table->insertColumns(num_column,1);
 			result_table->horizontalHeader()->setLabel(num_column, scoring_functions->currentText());
+			
+			
+			//adjust the table size
+			
+			
 			// fill table
 			for(int row = 0 ; row < result_table->numRows(); row++)
 			{
@@ -212,19 +215,8 @@ namespace BALL
 				}
 			}
 			
-			
-			/*for(unsigned int i = 0; i < ranked_conformations.size() ; i++)
-			{
-				for(unsigned int j = 0; j < result_table->numRows(); j++)
-				{
-					QString snapshot = result_table->text(j,0);
-					QString s;
-					if (snapshot == s.setNum(ranked_conformations[i].first))
-					{
-						result_table->setText(j,num_column,s.setNum(ranked_conformations[i].second));
-					}
-				}
-			}*/
+			//sort by new column
+			sortTable(num_column);
 			
 			result_table->adjustColumn(num_column);
 		}
