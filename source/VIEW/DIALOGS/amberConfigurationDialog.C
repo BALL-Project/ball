@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.5 2004/02/19 10:38:30 oliver Exp $
+// $Id: amberConfigurationDialog.C,v 1.6 2004/04/22 22:04:44 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -335,6 +335,20 @@ namespace BALL
 			amber.options[AmberFF::Option::SCALING_VDW_1_4] = getScalingVdw_1_4();
 
 			amber.options[AmberFF::Option::FILENAME] = getFilename();
+
+			if (boundary_box_->isChecked())
+			{
+				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
+				if (add_solvent_box->isChecked())
+				{
+					amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+				}
+			}
+			else
+			{
+				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
+				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+			}
 		}
 
 		void AmberConfigurationDialog::setAmberFF(AmberFF& amber)

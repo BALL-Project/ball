@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.2 2004/02/19 10:38:30 oliver Exp $
+// $Id: charmmConfigurationDialog.C,v 1.3 2004/04/22 22:04:44 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
@@ -387,6 +387,20 @@ namespace BALL
 			charmm.options[CharmmFF::Option::SCALING_VDW_1_4] = getScalingVdw_1_4();
 
 			charmm.options[CharmmFF::Option::FILENAME] = getFilename();
+
+			if (boundary_box_->isChecked())
+			{
+				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
+				if (add_solvent_box->isChecked())
+				{
+					charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+				}
+			}
+			else
+			{
+				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
+				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+			}
 		}
 
 		void CharmmConfigurationDialog::setCharmmFF(CharmmFF& charmm)
