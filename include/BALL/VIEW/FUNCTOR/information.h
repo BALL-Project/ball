@@ -1,4 +1,4 @@
-// $Id: information.h,v 1.4 2001/05/13 13:35:16 hekl Exp $
+// $Id: information.h,v 1.5 2001/07/08 11:23:54 aubertin Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H
@@ -67,9 +67,9 @@ namespace BALL
 				about the shown \Ref{Composite} objects.
 				@see     Control
 				@memo    Information class (BALL VIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:35:16 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/08 11:23:54 $
 		*/
 		class Information: public Visitor<Composite>
 		{
@@ -117,7 +117,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new information.
+					Constructs new information.
 					Calls \Ref{clear}.
 					@return      Information new constructed information
 					@see         clear
@@ -140,7 +140,7 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
-					Reset the state of {\em *this} information to:
+					Resets the state of {\em *this} information to:
 					\begin{itemize}
 					  \item  name_ is set to {\tt "unknown"}
 					  \item  type_name_ is set to {\tt "unknown type"}
@@ -162,7 +162,7 @@ namespace BALL
 			*/
 			//@{
 
-			/** Return the type of the given composite.
+			/** Returns the type of the given composite.
 					If the given \Ref{Composite} is of any kind that is defined by the 
 					enumeration \Ref{Type} this type will be returned.
 					@return  Type the type of the \Ref{Composite}
@@ -172,8 +172,8 @@ namespace BALL
 			Type getType() const
 				throw();
 
-			/** Return the type name of the given composite.
-					Access the type name of the given \Ref{Composite} object.
+			/** Returns the type name of the given composite.
+					Accesses the type name of the given \Ref{Composite} object.
 					If the composite object is of any kind that is defined by the 
 					enumeration \Ref{Type} this type will be returned as
 					a string. If a \Ref{Composite} is of kind \Ref{GeometricObject}
@@ -185,8 +185,8 @@ namespace BALL
 			String getTypeName() const
 				throw();
 			
-			/** Return the name of the given composite.
-					Access the name of the given \Ref{Composite} object.
+			/** Returns the name of the given composite.
+					Accesses the name of the given \Ref{Composite} object.
 					If a \Ref{Composite} is of kind \Ref{GeometricObject}
 					than the string defined by the \Ref{GeometricObject::getName}
 					method is returned. If a \Ref{Composite} is not of kind 

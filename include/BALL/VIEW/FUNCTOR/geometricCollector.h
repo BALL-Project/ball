@@ -1,4 +1,4 @@
-// $Id: geometricCollector.h,v 1.3 2001/05/13 13:35:15 hekl Exp $
+// $Id: geometricCollector.h,v 1.4 2001/07/08 11:19:55 aubertin Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
 #define BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
@@ -33,15 +33,15 @@ namespace BALL
 				The class GeometricCollector is a \Ref{Processor} that collects
 				\Ref{GeometricObject} objects that can either be selected or
 				not. It is also a base class for collector objects that can collect
-				\Ref{Composite} objects. Override the	methods \Ref{operator},
+				\Ref{Composite} objects. Overrides the	methods \Ref{operator},
 				\Ref{start} and \Ref{finish} to	change the collection filter criteria. 
 				This class is used by the class \Ref{Scene} to collect picked objects.
 				@see     GeometricObject
 				@see     Scene
 				@memo    GeometricCollector class (BALL VIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 13:35:15 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/08 11:19:55 $
 		*/
 		class GeometricCollector: public UnaryProcessor<Composite>
 		{
@@ -52,7 +52,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new geometricCollector.
+					Constructs new geometricCollector.
 					@return      GeometricCollector new constructed geometricCollector
 					Calls \Ref{clear}.
 					@see         clear
@@ -75,9 +75,9 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
-					Reset the state of {\em *this} geometricCollector to:
+					Resets the state of {\em *this} geometricCollector to:
 					\begin{itemize}
-					  \item  collect all \Ref{GeometricObject} objects (independend of the selection property)
+					  \item  collect all \Ref{GeometricObject} objects (independent of the selection property)
 					  \item  the collection list is empty
 					\end{itemize}
 			*/
@@ -98,7 +98,7 @@ namespace BALL
 			//@{
 
 			/** Mutable inspection of the collection list.
-					Access the mutable reference of the collected \Ref{GeometricObject}
+					Accesses the mutable reference of the collected \Ref{GeometricObject}
 					objects as a list of \Ref{Composite} objects from {\em *this}
 					geometricCollector.
 					@return  List<Composite*> a mutable reference to the collected \Ref{GeometricObject} objects returned as a list of \Ref{Composite} objects
@@ -111,7 +111,7 @@ namespace BALL
 				throw();
 			
 			/** Non-mutable inspection of the collection list.
-					Access the constant reference of the collected \Ref{GeometricObject}
+					Accesses the constant reference of the collected \Ref{GeometricObject}
 					objects as a list of \Ref{Composite} objects from {\em *this}
 					geometricCollector.
 					@return  List<Composite*> a constant reference to the collected \Ref{GeometricObject} objects returned as a list of \Ref{Composite} objects
@@ -123,8 +123,8 @@ namespace BALL
 			const List<Composite *>& getCollection() const
 				throw();
 
-			/** Change the collection mode.
-					Change the collection mode of {\em *this} geometricCollection.
+			/** Changes the collection mode.
+					Changes the collection mode of {\em *this} geometricCollection.
 					@param       selected {\tt true} if {\em only selected} \Ref{GeometricObject} objects should be collected, {\tt false} if {\em all} \Ref{GeometricObject} object should be selected
 					@see         getCollection
 					@see         GeometricObject
@@ -133,7 +133,7 @@ namespace BALL
 				throw();
 
 			/** Inspection of the collection mode.
-					Check the collection mode of {\em *this} geometricCollector.
+					Checks the collection mode of {\em *this} geometricCollector.
 					If {\tt true} is returned than {\em only selected} \Ref{GeometricObject}
 					objects are collected. If {\tt false} is returned than {\em all} 
 					\Ref{GeometricObject} objects are collected.
@@ -165,10 +165,10 @@ namespace BALL
 				throw();
 			
 			/**	Operator ().
-					Collect all \Ref{GeometricObject} objects that are
+					Collects all \Ref{GeometricObject} objects that are
 					available in the given \Ref{Composite} object {\em composite}. The collected
 					\Ref{GeometricObject} objects can either be selected or not.
-					Use the method \Ref{collectSelectedGeometricObjects} to switch
+					Uses the method \Ref{collectSelectedGeometricObjects} to switch
 					the filter criteria.
 					@param  composite the \Ref{Composite} to be filtered for \Ref{GeometricObject} objects
 					@return Processor::Result the result of {\em *this} geometricCollection
@@ -186,7 +186,7 @@ namespace BALL
 			//@{
 			
 			/** Internal value dump.
-					Dump the current state of {\em *this} geometricCollector to 
+					Dumps the current state of {\em *this} geometricCollector to 
 					the output ostream {\em s} with dumping depth {\em depth}.
 					@param   s output stream where to output the state of {\em *this} geometricCollector
 					@param   depth the dumping depth
