@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.7 2003/03/26 13:08:35 sturm Exp $
+// $Id: molecularGraph.h,v 1.8 2003/03/26 15:59:27 anhi Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -30,7 +30,7 @@ namespace BALL
 	class TMolecularGraph;
 
 	/**	The node type in a molecular graph
-		\ingroup Structure
+		\ingroup StructureMiscellaneous
 	*/
 	template <typename Node, typename Edge>
 	class NodeItem

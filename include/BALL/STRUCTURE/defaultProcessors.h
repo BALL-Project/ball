@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: defaultProcessors.h,v 1.13 2003/03/26 13:08:33 sturm Exp $
+// $Id: defaultProcessors.h,v 1.14 2003/03/26 15:59:25 anhi Exp $
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
 #define BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -29,7 +29,7 @@
 namespace BALL 
 {
 	/** @name	Standard processors
-	\ingroup Structure
+	\ingroup StructureMiscellaneous
 	*/
 	//@{
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.23 2003/03/26 13:08:33 sturm Exp $
+// $Id: fragmentDB.h,v 1.24 2003/03/26 15:59:25 anhi Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -57,7 +57,7 @@ namespace BALL
 			They are entered in a special format described below.
 			The main resource file resides under 
 			<a href="../../../data/fragments/Fragments.db">data/fragments/Fragments.db</a>.  \par
-	\ingroup Structure		
+	\ingroup StructureMiscellaneous		
 	*/
 	class FragmentDB 
 	{

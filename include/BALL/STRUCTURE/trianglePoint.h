@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trianglePoint.h,v 1.9 2003/03/26 13:08:42 sturm Exp $
+// $Id: trianglePoint.h,v 1.10 2003/03/26 15:59:29 anhi Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGLEPOINT_H
 #define BALL_STRUCTURE_TRIANGLEPOINT_H
@@ -40,7 +40,7 @@ namespace BALL
 			 \par
 			
 			 \par
-	\ingroup Structure
+	\ingroup StructureMiscellaneous
 	*/
 	class TrianglePoint
 			:	public GraphVertex< TrianglePoint,TriangleEdge,Triangle >

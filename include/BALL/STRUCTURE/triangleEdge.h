@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangleEdge.h,v 1.8 2003/03/26 13:08:41 sturm Exp $
+// $Id: triangleEdge.h,v 1.9 2003/03/26 15:59:29 anhi Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGLEEDGE_H
 #define BALL_STRUCTURE_TRIANGLEEDGE_H
@@ -36,7 +36,7 @@ namespace BALL
 			 \par
 			
 			 \par
-	\ingroup Structure
+	\ingroup StructureMiscellaneous
 	*/
 	class TriangleEdge
 			:	public GraphEdge< TrianglePoint,TriangleEdge,Triangle >

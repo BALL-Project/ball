@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.52 2003/03/26 13:56:27 anhi Exp $
+// $Id: atom.h,v 1.53 2003/03/26 15:59:20 anhi Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -93,7 +93,7 @@ namespace BALL
 			@see Molecule
 			@see AtomContainer
     
-			\ingroup  Kernel
+			\ingroup KernelContainers 
 	*/
 	class Atom
 		: public Composite,

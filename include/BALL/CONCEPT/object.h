@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: object.h,v 1.21 2003/03/26 13:56:13 anhi Exp $ 
+// $Id: object.h,v 1.22 2003/03/26 15:59:17 anhi Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -30,7 +30,7 @@ namespace BALL
 			with the BALL object manager this class also provides a double linked
 			list of all objects.  \par
 			
-	 	 \ingroup  Concepts
+	 	 \ingroup ConceptsMiscellaneous
 	*/
 	class Object
 		: public AutoDeletable

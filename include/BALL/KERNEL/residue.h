@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.34 2003/03/26 13:56:33 anhi Exp $
+// $Id: residue.h,v 1.35 2003/03/26 15:59:23 anhi Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -39,7 +39,7 @@ namespace BALL
 			This class is used to represent residues in proteins.
 			 \par
 			
-    	\ingroup  Kernel
+    	\ingroup KernelContainers 
 	*/
 	class Residue
 		: public Fragment

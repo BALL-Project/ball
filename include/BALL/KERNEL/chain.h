@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.31 2003/03/26 13:56:29 anhi Exp $
+// $Id: chain.h,v 1.32 2003/03/26 15:59:21 anhi Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -34,7 +34,7 @@ namespace BALL
 			Chains can contain  \link SecondaryStructure SecondaryStructure \endlink s or  \link Residue Residue \endlink s.
 			 \par
 			
-	 		\ingroup  Kernel
+	 		\ingroup KernelContainers 
 	*/
 	class Chain
 		: public AtomContainer

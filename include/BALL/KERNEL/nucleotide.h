@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.26 2003/03/26 13:56:32 anhi Exp $
+// $Id: nucleotide.h,v 1.27 2003/03/26 15:59:22 anhi Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -32,7 +32,7 @@ namespace BALL
 			an  \link NucleicAcid NucleicAcid \endlink  object.
 			 \par
 			
-    	\ingroup  Kernel
+    	\ingroup KernelContainers 
 	*/
 	class Nucleotide
 		: public Fragment

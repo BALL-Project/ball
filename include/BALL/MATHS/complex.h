@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.17 2003/03/14 11:49:14 sturm Exp $
+// $Id: complex.h,v 1.18 2003/03/26 15:59:24 anhi Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -20,10 +20,8 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Mathematics
-     *  @{
-     */
 	/**	@name	Complex numbers.
+			\ingroup Primitives		
 	*/
 	//@{
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.44 2003/03/26 13:56:12 anhi Exp $
+// $Id: composite.h,v 1.45 2003/03/26 15:59:16 anhi Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -72,7 +72,7 @@ namespace BALL
 			Composites are persistent objects. 
 			 \par
 			
-   		\ingroup Concepts 
+   		\ingroup ConceptsMiscellaneous 
 	*/
 	class Composite
 		: public PersistentObject,

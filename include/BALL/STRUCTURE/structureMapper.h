@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.h,v 1.18 2003/03/26 13:08:40 sturm Exp $
+// $Id: structureMapper.h,v 1.19 2003/03/26 15:59:29 anhi Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -44,7 +44,7 @@ namespace BALL
 	using std::map;
 
 	/**	Structure mapping class.
-	\ingroup Structure
+	\ingroup StructureMiscellaneous
 	*/
 	class StructureMapper
 		:	public TransformationProcessor

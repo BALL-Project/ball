@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.h,v 1.28 2003/03/26 13:56:32 anhi Exp $ 
+// $Id: nucleicAcid.h,v 1.29 2003/03/26 15:59:22 anhi Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -29,7 +29,7 @@ namespace BALL
 			
 			 \par
     	
-			\ingroup  Kernel
+			\ingroup KernelContainers 
 	*/
 	class NucleicAcid
 		: public Molecule

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalGeometry.h,v 1.58 2003/03/26 09:31:56 sturm Exp $
+// $Id: analyticalGeometry.h,v 1.59 2003/03/26 15:59:24 anhi Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -40,7 +40,7 @@
 namespace BALL 
 {
 
-	/**	@name Analytical Geometry
+	/**	\defgroup AnalyticalGeometry Analytical Geometry
 			representation of analytical geometry functions,
 			using the classes: TAngle, TCircle3, TLine3, TPlane3, TSphere3, TVector3.
 	  \ingroup Mathematics

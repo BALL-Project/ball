@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.36 2003/03/26 13:56:28 anhi Exp $
+// $Id: bond.h,v 1.37 2003/03/26 15:59:20 anhi Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -58,7 +58,7 @@ namespace BALL
 				- "bond order" ( \link Bond::bond_order_ Bond::bond_order_ \endlink )
 				- "bond type" ( \link Bond::bond_type_ Bond::bond_type_ \endlink )
 			
-    	\ingroup  Kernel
+    	\ingroup KernelMiscellaneous 
 	*/
 	class Bond
 		: public Composite,

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.h,v 1.33 2003/03/26 13:56:15 anhi Exp $
+// $Id: property.h,v 1.34 2003/03/26 15:59:18 anhi Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -24,7 +24,7 @@ namespace BALL
 {
 
 	/**	@name	Properties
-	 	 \ingroup  Concepts
+	 	 \ingroup ConceptsMiscellaneous
 	*/
 	//@{
 	

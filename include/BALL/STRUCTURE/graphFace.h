@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: graphFace.h,v 1.11 2003/03/26 13:08:35 sturm Exp $
+// $Id: graphFace.h,v 1.12 2003/03/26 15:59:26 anhi Exp $
 
 #ifndef BALL_STRUCTURE_GRAPHFACE_H
 #define BALL_STRUCTURE_GRAPHFACE_H
@@ -23,7 +23,7 @@ namespace BALL
 	class GraphEdge;
 
 	/** Generic GraphFace Class.
-		\ingroup Structure		
+		\ingroup StructureMiscellaneous		
 	*/
 	template <typename Vertex, typename Edge, typename Face>
 	class GraphFace
@@ -681,7 +681,7 @@ namespace BALL
 
 
 	/** Generic GraphTriangle Class.
-		\ingroup Structure		
+		\ingroup StructureMiscellaneous		
 	*/
 	template <typename Vertex, typename Edge, typename Face>
 	class GraphTriangle

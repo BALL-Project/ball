@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: notification.h,v 1.18 2003/03/26 13:56:13 anhi Exp $
+// $Id: notification.h,v 1.19 2003/03/26 15:59:17 anhi Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -25,7 +25,7 @@ namespace BALL
 			signal/slot mechanism of QT).
 			 \par
 			
-			\ingroup  Concepts
+			\ingroup ConceptsMiscellaneous
 	*/
 	//@{
 	

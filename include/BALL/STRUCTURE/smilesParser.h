@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.h,v 1.10 2003/03/26 13:08:39 sturm Exp $
+// $Id: smilesParser.h,v 1.11 2003/03/26 15:59:28 anhi Exp $
 
 #ifndef BALL_STRUCTURE_SMILES_PARSER_H
 #define BALL_STRUCTURE_SMILES_PARSER_H
@@ -34,7 +34,7 @@ namespace BALL
 			
 			 \par
 			<b>Status:</b> <b>experimental</b> \par
-	\ingroup Structure		
+	\ingroup StructureMiscellaneous		
 	*/
 	class SmilesParser
 	{

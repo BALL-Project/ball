@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.17 2003/03/26 14:16:47 anhi Exp $
+// $Id: kernel.doc,v 1.18 2003/03/26 15:59:22 anhi Exp $
 
 /** \defgroup Kernel Kernel Classes
 		\ingroup Foundation
@@ -22,4 +22,8 @@
 
 	/** \defgroup Predicates Kernel Predicates
 	* 	\ingroup Kernel
+	*/
+
+	/** \defgroup KernelContainers Atoms and AtomContainers
+	 		\ingroup Kernel
 	*/

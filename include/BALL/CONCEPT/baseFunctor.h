@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseFunctor.h,v 1.8 2003/03/26 13:56:10 anhi Exp $
+// $Id: baseFunctor.h,v 1.9 2003/03/26 15:59:15 anhi Exp $
 
 #ifndef BALL_CONCEPT_BASEFUNCTOR_H
 #define BALL_CONCEPT_BASEFUNCTOR_H
@@ -11,7 +11,7 @@ namespace BALL
 
 	/**	@name Generic Functors.
 			
-	* 	 \ingroup  Concepts
+	* 	 \ingroup  ConceptsMiscellaneous
 	*/
 	//@{
 		

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.h,v 1.15 2003/03/26 13:08:39 sturm Exp $
+// $Id: residueChecker.h,v 1.16 2003/03/26 15:59:28 anhi Exp $
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
 #define BALL_STRUCTURE_RESIDUECHECKER_H
@@ -23,7 +23,7 @@ namespace BALL
 			Atom positions are checked as well: a warning is printed, if any of the 
 			atom's coordinates is not a number (NaN).
 			Warnings are emitted to  \link Log Log \endlink .  \par
-	\ingroup Structure		
+	\ingroup StructureMiscellaneous		
 	*/
 	class ResidueChecker
 		:	public	UnaryProcessor<Residue>

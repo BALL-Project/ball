@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.h,v 1.25 2003/03/26 13:56:33 anhi Exp $ 
+// $Id: protein.h,v 1.26 2003/03/26 15:59:23 anhi Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -45,7 +45,7 @@ namespace BALL
 			and  \link Residue Residue \endlink .
 			 \par
 			
-    	\ingroup  Kernel
+    	\ingroup KernelContainers 
 	*/
 	class Protein
 		: public Molecule

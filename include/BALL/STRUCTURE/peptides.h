@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptides.h,v 1.7 2003/03/26 13:08:36 sturm Exp $
+// $Id: peptides.h,v 1.8 2003/03/26 15:59:27 anhi Exp $
 
 #ifndef BALL_STRUCTURE_PEPTIDES_H
 #define BALL_STRUCTURE_PEPTIDES_H
@@ -20,7 +20,7 @@ namespace BALL
 	namespace Peptides
 	{
 		/**	@name	Type definitions
-		\ingroup Structure
+		\ingroup StructureMiscellaneous
 		*/
 		//@{
 
@@ -32,7 +32,7 @@ namespace BALL
 		//@}
 
 		/**	@name Amino acid sequence conversion
-		\ingroup Structure
+		\ingroup StructureMiscellaneous
 		*/
 		//@{
 

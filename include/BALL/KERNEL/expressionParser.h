@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.h,v 1.8 2003/03/26 13:56:29 anhi Exp $
+// $Id: expressionParser.h,v 1.9 2003/03/26 15:59:21 anhi Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPARSER_H
 #define BALL_KERNEL_EXPRESSIONPARSER_H
@@ -34,7 +34,7 @@ namespace BALL
 			a syntax tree from the boolean expressions contained therein.
 			 \par
 			
-			\ingroup Kernel
+			\ingroup KernelMiscellaneous 
 	*/
 	class ExpressionParser
 	{

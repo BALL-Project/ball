@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.h,v 1.19 2003/03/26 13:08:34 sturm Exp $
+// $Id: geometricProperties.h,v 1.20 2003/03/26 15:59:26 anhi Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -74,7 +74,7 @@ namespace BALL
 			atoms. \par
 			
 			 \par
-	\ingroup Structure
+	\ingroup StructureMiscellaneous
 	*/
 	class BoundingBoxProcessor
 		:	public UnaryProcessor<Atom>
@@ -136,7 +136,7 @@ namespace BALL
 				\vec{C} = \frac{1}{N} \sum_{i}{N} \vec{r_i}
 			\]
 			Where $\vec{r_i}$ represents the coordinates of the ith atom. \par
-			\ingroup Structure
+			\ingroup StructureMiscellaneous
 	*/
 	class GeometricCenterProcessor
 		:	public UnaryProcessor<Atom> 
@@ -196,7 +196,7 @@ namespace BALL
 			The fragment array is emptied prior to each collection run. \par
 			
 			 \par
-	\ingroup Structure
+	\ingroup StructureMiscellaneous
 	*/
 	class FragmentDistanceCollector
 		: public UnaryProcessor<Composite> 
@@ -303,7 +303,7 @@ namespace BALL
 
 	//@}
 	/**	@name	Angle Calculation
-	\ingroup Structure
+	\ingroup StructureMiscellaneous
 	*/
 	//@{
 		
