@@ -1,4 +1,4 @@
-// $Id: ooiEnergy.C,v 1.2 2000/02/12 19:31:16 oliver Exp $
+// $Id: ooiEnergy.C,v 1.3 2000/02/13 16:56:42 oliver Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
 
@@ -112,7 +112,7 @@ namespace BALL
 			// and read all values from the parameter section
 			for (i = 1; i <= parameter_section.getNumberOfKeys(); i++)
 			{
-				Position index = parameter_section.getKey(i).toInt();
+				Index index = parameter_section.getKey(i).toInt();
 
 				// we ignore illegal (negative) indices
 				if (index >= 0)
