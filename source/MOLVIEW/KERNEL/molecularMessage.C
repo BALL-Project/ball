@@ -1,4 +1,4 @@
-// $Id: molecularMessage.C,v 1.3.4.1 2002/10/18 14:48:31 amoll Exp $
+// $Id: molecularMessage.C,v 1.3.4.2 2002/12/02 20:59:52 amoll Exp $
 
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 
@@ -12,15 +12,13 @@ namespace BALL
 
 		NewMolecularMessage::NewMolecularMessage()
 			throw()
-			:
-			CompositeMessage()
+			: CompositeMessage()
 		{
 		}
 
 		NewMolecularMessage::NewMolecularMessage(const CompositeMessage& message)
 			throw()
-			:
-			CompositeMessage(message)
+			: CompositeMessage(message)
 		{
 		}
 
@@ -35,15 +33,13 @@ namespace BALL
 
 		RemovedMolecularMessage::RemovedMolecularMessage()
 			throw()
-			:
-			RemovedCompositeMessage()
+			: RemovedCompositeMessage()
 		{
 		}
 
 		RemovedMolecularMessage::RemovedMolecularMessage(const CompositeMessage& message)
 			throw()
-			:
-			RemovedCompositeMessage(message)
+			: RemovedCompositeMessage(message)
 		{
 		}
 
@@ -58,15 +54,13 @@ namespace BALL
 
 		ChangedMolecularMessage::ChangedMolecularMessage()
 			throw()
-			:
-			ChangedCompositeMessage()
+			: ChangedCompositeMessage()
 		{
 		}
 
 	  ChangedMolecularMessage::ChangedMolecularMessage(const CompositeMessage& message)
 			throw()
-			:
-			ChangedCompositeMessage(message)
+			: ChangedCompositeMessage(message)
 		{
 		}
 
@@ -82,15 +76,13 @@ namespace BALL
 
 		MolecularSelectionMessage::MolecularSelectionMessage()
 			throw()
-			:
-			SelectionMessage()
+			: SelectionMessage()
 		{
 		}
 
 		MolecularSelectionMessage::MolecularSelectionMessage(const SelectionMessage& message)
 			throw()
-			:
-			SelectionMessage(message)
+			: SelectionMessage(message)
 		{
 		}
 
@@ -98,8 +90,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<MolecularSelectionMessage>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+							 		  << " of class " << RTTI::getName<MolecularSelectionMessage>() << endl;
 			#endif 
 		}
 
