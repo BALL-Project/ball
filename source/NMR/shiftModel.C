@@ -1,4 +1,4 @@
-// $Id: shiftModel.C,v 1.13 2001/02/06 18:14:05 anhi Exp $
+// $Id: shiftModel.C,v 1.14 2001/03/11 11:07:33 amoll Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/FORMAT/parameterSection.h>
@@ -160,7 +160,7 @@ namespace BALL
 			{
 				// the section contains the columns "name" and "type", let's construct
 				// the corresponding modules 
-				Position name_col = module_section.getColumnIndex("nmae");
+				Position name_col = module_section.getColumnIndex("name");
 				for (Position i = 0; i < module_section.getNumberOfKeys(); i++)
 				{
 					String type = module_section.getKey(i);
