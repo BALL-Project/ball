@@ -1,13 +1,13 @@
-// $Id: listSort.mac,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: listSort.mac,v 1.2 2001/01/24 11:55:39 amoll Exp $
 
-#ifndef _BALL_DATATYPE_LISTSORT_MAC
-#define _BALL_DATATYPE_LISTSORT_MAC
+#ifndef BALL_DATATYPE_LISTSORT_MAC
+#define BALL_DATATYPE_LISTSORT_MAC
 
-#ifndef _BALL_COMMON_H
+#ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
 
-#ifndef _BALL_CONCEPT_COMPARATOR_H
+#ifndef BALL_CONCEPT_COMPARATOR_H
 #	include <BALL/CONCEPT/comparator.h>
 #endif
 
@@ -36,7 +36,7 @@
   NodeType *c = 0; \
   NodeType *d = 0; \
   long a_cnt, b_cnt; \
-  register long n; \
+  long n; \
  \
   while(b) \
   { \
@@ -67,72 +67,72 @@
     { \
       if (a_cnt >= 0) \
       { \
-	a_cnt = n; \
+				a_cnt = n; \
       } \
  \
       if (b_cnt >= 0) \
       { \
-	b_cnt = n; \
+				b_cnt = n; \
       } \
  \
       for (;;) \
       { \
         if (a_cnt > 0 \
-	    && (b_cnt < 1 \
-		|| (Comparator).isLessOrEqual(a, b))) \
-	{ \
+						&& (b_cnt < 1 \
+						|| (Comparator).isLessOrEqual(a, b))) \
+				{ \
            c = c->next = a; \
-	   a = a->next; \
- \
+					 a = a->next; \
+											  \
            if (a == 0) \
-	   { \
-	     a_cnt = -1; \
-	   } \
-	   else \
-	   { \
-	     a_cnt--; \
-	   } \
+				   { \
+						 a_cnt = -1; \
+				   } \
+				   else \
+				   { \
+						 a_cnt--; \
+				   } \
         } \
         else \
-	{ \
-	  if (b_cnt < 1) \
-	  { \
-	    break; \
-	  } \
- \
-	  c = c->next = b; \
-	  b = b->next; \
-	  if (b == 0) \
-	  { \
-	    b_cnt = -1; \
-	  } \
-	  else \
-	  { \
-	    b_cnt--; \
-	  } \
+				{ \
+				  if (b_cnt < 1) \
+				  { \
+				    break; \
+				  } \
+						 \
+				  c = c->next = b; \
+				  b = b->next; \
+				  if (b == 0) \
+				  { \
+				    b_cnt = -1; \
+				  } \
+				  else \
+				  { \
+						b_cnt--; \
+				  } \
         } \
       } \
- \
+			 \
       if (a_cnt < 0 \
-	  && b_cnt < 0) \
+				  && b_cnt < 0) \
       { \
-	break; \
+				break; \
       } \
- \
+			 \
       tmp = c; \
       c = d; \
       d = tmp; \
     } \
- \
+		 \
     c->next = d->next = 0; \
- \
+		 \
     tmp = ih; \
     ih = oh; \
     oh = tmp; \
   } \
- \
+	 \
   head = a; \
   tail = c; \
 }
 
-#endif // _BALL_DATATYPE_LISTSORT_MAC
+#endif // BALL_DATATYPE_LISTSORT_MAC
