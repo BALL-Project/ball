@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.12 2004/06/09 12:56:33 bender Exp $
+# $Id: Makefile.lst,v 1.13 2004/06/15 06:39:07 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -132,6 +132,7 @@ EXECUTABLES_KERNEL = \
 	StandardPredicates_test$(EXEEXT)\
 	DefaultProcessors_test$(EXEEXT)\
 	FragmentDB_test$(EXEEXT)\
+	NormalizeNamesProcessor_test$(EXEEXT)\
 	ForEach_test$(EXEEXT)\
 	GlobalKernel_test$(EXEEXT)\
 	CompositeIteratorTraits_test$(EXEEXT)\
