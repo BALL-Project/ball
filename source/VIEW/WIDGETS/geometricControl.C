@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.3 2003/08/29 15:25:51 amoll Exp $
+// $Id: geometricControl.C,v 1.4 2003/08/31 00:24:35 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -101,16 +101,13 @@ void GeometricControl::removeRepresentation(Representation& rep)
 void GeometricControl::updateRepresentation(Representation& rep)
 	throw()
 {
-	removeRepresentation(rep);
-	addRepresentation(rep);
-	return;
-
 	QListViewItem* item = representation_to_item_[&rep]; 
 	if (item == 0) return;
 	
 	QString properties = rep.getProperties().c_str();
 	if (item->text(1) == properties) return;
 
+	item->setText(0, getRepresentationName_(rep).c_str());
 	item->setText(1, properties);
 
 	// update the view
@@ -153,13 +150,7 @@ void GeometricControl::buildContextMenu(Representation& rep)
 	throw()
 {
 	insertContextMenuEntry("Delete", this, SLOT(deleteRepresentation_()));
-	DisplayProperties* display_properties_dialog = (DisplayProperties*) DisplayProperties::getInstance(0);
-
-	if (display_properties_dialog != 0)
-	{
-		display_properties_dialog->setRepresentation(&rep);
-		insertContextMenuEntry("Properties", display_properties_dialog, SLOT(openDialog2()));	
-	}
+	insertContextMenuEntry("Properties", this, SLOT(modifyRepresentation_()));	
 
 	// This is used to provide the coloring for meshes...
 	if (rep.getModelName() == "Surface" &&
@@ -187,7 +178,7 @@ Representation* GeometricControl::getRepresentation(QListViewItem& item)
 	return ((SelectableListViewItem*) &item)->getRepresentation();
 }
 
-void GeometricControl::generateListViewItem_(Representation& rep)
+String GeometricControl::getRepresentationName_(const Representation& rep)
 	throw()
 {
 	String name;
@@ -234,10 +225,16 @@ void GeometricControl::generateListViewItem_(Representation& rep)
 		if (rep.getComposites().size() > 1) name += "...";
 	}
 
+	return name;
+}
 
+void GeometricControl::generateListViewItem_(Representation& rep)
+	throw()
+{
 	QString properties = rep.getProperties().c_str();
 	// create a new list item
-	SelectableListViewItem* new_item = new SelectableListViewItem(this, name.c_str(), properties, &rep, *this);
+	SelectableListViewItem* new_item = 
+		new SelectableListViewItem(this, getRepresentationName_(rep).c_str(), properties, &rep, *this);
 
 	CHECK_PTR(new_item);
 	new_item->setOn(true);
@@ -310,6 +307,14 @@ void GeometricControl::onContextMenu(QListViewItem* item,  const QPoint& point, 
 	}
 }
 
+void GeometricControl::modifyRepresentation_()
+	throw()
+{
+	if (context_representation_ == 0) return;
+	ShowDisplayPropertiesMessage* message = new ShowDisplayPropertiesMessage;
+	message->setDeletable(true);
+	notify_(message);
+}
 
 void GeometricControl::updateSelection()
 {
@@ -337,6 +342,12 @@ void GeometricControl::updateSelection()
 	}
 
 	Representation* rep = getRepresentation(*item);
+
+	RepresentationMessage* message = new RepresentationMessage;
+	message->setType(RepresentationMessage::SELECTED);
+	message->setRepresentation(rep);
+	message->setDeletable(true);
+	notify_(message);
 
 	if (rep->getComposites().size() == 0) 
 	{

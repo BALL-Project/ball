@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
+// $Id: geometricControl.h,v 1.3 2003/08/31 00:24:09 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -225,6 +225,9 @@ namespace BALL
 		  protected slots:
 			
 			//@} /** @name Protected members */ //@{
+			
+			virtual void modifyRepresentation_()
+				throw();
 
 			/** Generate the item for a representation.
 			*/
@@ -250,15 +253,18 @@ namespace BALL
 			QString						getName_(QListViewItem& item)
 				throw();
 
-			// the context menu
-			QPopupMenu context_menu_;
+			String 						getRepresentationName_(const Representation& rep)
+				throw();
 
-			Representation* context_representation_;
-			QListViewItem*  context_item_;
+			// the context menu
+			QPopupMenu 				context_menu_;
+
+			Representation* 	context_representation_;
+			QListViewItem*  	context_item_;
 
 			HashMap<Representation*, QListViewItem*> representation_to_item_;
 
-			ColorMeshDialog* colorMeshDlg_;
+			ColorMeshDialog* 	colorMeshDlg_;
 
 			MolecularInformation information_;
 		};

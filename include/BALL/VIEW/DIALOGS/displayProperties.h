@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.4 2003/08/29 15:25:09 amoll Exp $
+// $Id: displayProperties.h,v 1.5 2003/08/31 00:23:47 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -232,10 +232,13 @@ class DisplayProperties
 			Calls show and raise from QDialog class.
 			See documentation of QT-library for information concerning QDialog widgets.
 	*/
-	void createRepresentation();
+	void showDialog();
 
 	///
-	void modifyRepresentation();
+	void createRepresentationMode();
+
+	///
+	void modifyRepresentationMode();
 		
 	protected slots:
 			

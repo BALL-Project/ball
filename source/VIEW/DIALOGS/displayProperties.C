@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.4 2003/08/29 15:24:58 amoll Exp $
+// $Id: displayProperties.C,v 1.5 2003/08/31 00:23:26 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -96,6 +96,10 @@ namespace BALL
 			getEntry_(inifile, "model", model_type_, *model_type_combobox);
 			getEntry_(inifile, "precision", precision_, *precision_combobox);
 			getEntry_(inifile, "coloring_method", coloring_method_, *coloring_method_combobox);
+
+			coloring_method_combobox->setCurrentItem(coloring_method_);
+			precision_combobox->setCurrentItem(precision_);
+			model_type_combobox->setCurrentItem(model_type_);
 		}
 
 		void DisplayProperties::getEntry_(INIFile& inifile,
@@ -135,7 +139,7 @@ namespace BALL
 			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
 			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																				 SLOT(createRepresentation()), CTRL+Key_I);   
+																				 SLOT(showDialog()), CTRL+Key_I);   
 		}
 
 
@@ -143,7 +147,7 @@ namespace BALL
 			throw()
 		{
 			main_control.removeMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																											SLOT(createRepresentation()), CTRL+Key_I);   
+																											SLOT(showDialog()), CTRL+Key_I);   
 		}
 
 
@@ -154,7 +158,13 @@ namespace BALL
 		}
 
 
-		void DisplayProperties::createRepresentation()
+		void DisplayProperties::showDialog()
+		{
+			show();
+			raise();
+		}
+
+		void DisplayProperties::createRepresentationMode()
 		{
 			rep_ = 0;
 			setCaption("create Representation");
@@ -162,19 +172,15 @@ namespace BALL
 			precision_combobox->setCurrentItem(precision_);
 			model_type_combobox->setCurrentItem(model_type_);
 			apply_button->setEnabled(getMainControl()->getControlSelection().size());
-			show();
-			raise();
 		}
 
-		void DisplayProperties::modifyRepresentation()
+		void DisplayProperties::modifyRepresentationMode()
 		{
 			setCaption("modify Representation");
 			coloring_method_combobox->setCurrentItem(coloring_method_);
 			precision_combobox->setCurrentItem(precision_);
 			model_type_combobox->setCurrentItem(model_type_);
 			apply_button->setEnabled(true);
-			show();
-			raise();
 		}
 
 		void DisplayProperties::selectPrecision(int index)
@@ -231,6 +237,28 @@ namespace BALL
 				createRepresentation_(composite_message->getComposite());
 			}
 
+			if (RTTI::isKindOf<ShowDisplayPropertiesMessage>(*message))
+			{
+				show();
+				return;
+			}
+
+			if (RTTI::isKindOf<RepresentationMessage>(*message))
+			{
+				if (((RepresentationMessage*) message)->getType() == RepresentationMessage::SELECTED)
+				{
+					rep_ = ((RepresentationMessage*) message)->getRepresentation();
+					modifyRepresentationMode();
+				}
+
+				return;
+			}
+
+			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+			{
+				createRepresentationMode();
+			}
+
 			// disable apply button if selection is empty
 			apply_button->setEnabled(getMainControl()->getControlSelection().size());
 		}
@@ -239,7 +267,8 @@ namespace BALL
 		void DisplayProperties::applyButtonClicked()
 		{
 			// no selection present => return
-			if (getMainControl()->getControlSelection().size() == 0)
+			if (getMainControl()->getControlSelection().size() == 0 &&
+					!rep_)
 			{
 				return;
 			}
