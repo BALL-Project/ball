@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.h,v 1.6 2001/08/01 01:11:18 oliver Exp $
+// $Id: molecularSurfaceGrid.h,v 1.6.2.1 2002/11/12 16:29:35 anker Exp $
 
 #ifndef BALL_SOLVATION_MOLECULARSURFACEGRID_H
 #define BALL_SOLVATION_MOLECULARSURFACEGRID_H
@@ -18,6 +18,12 @@
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 # include <BALL/DATATYPE/regularData3D.h>
 #endif
+
+// ?????
+// I am an ugly hack. Fixme.
+#define CCONN__OUTSIDE 1
+#define CCONN__INSIDE  0
+#define	CCONN__INSIDE_PROBE 128
 
 namespace BALL 
 {
