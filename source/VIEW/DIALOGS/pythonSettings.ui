@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>PythonSettingsData</class>
 <widget class="QWidget">
     <property name="name">
@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>440</width>
-            <height>276</height>
+            <height>279</height>
         </rect>
     </property>
     <property name="caption">
@@ -86,13 +86,13 @@
 <connections>
     <connection>
         <sender>choose_button</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>PythonSettings</receiver>
         <slot>fileSelected()</slot>
     </connection>
     <connection>
         <sender>clear_button</sender>
-        <signal>pressed()</signal>
+        <signal>clicked()</signal>
         <receiver>PythonSettings</receiver>
         <slot>clearSelected()</slot>
     </connection>
