@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.10 2001/03/21 18:14:04 anker Exp $
+// $Id: DCDFile.C,v 1.11 2001/03/22 19:42:14 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -7,6 +7,21 @@ using namespace std;
 
 namespace BALL
 {
+
+	template <typename T>
+	BALL_INLINE
+	void swapBytes(T& t)
+	{
+		if (sizeof(T) % 2 != 0)
+		{
+			Log.error() << "Cannot swap types of uneven size." << endl;
+			return;
+		}
+
+		char* tmp = reinterpret_cast<char*>(&t);
+		std::reverse(tmp, tmp + sizeof(T));
+	}
+	
 
 	DCDFile::DCDFile()
 		throw()
@@ -118,14 +133,23 @@ namespace BALL
 		*this >> adapt_Size; 
 		if (adapt_Size.getData() != 84)
 		{
-			Log.error() << "DCDFile::readHeader(): "
-				<< "wrong header; expected 84, got " << adapt_Size.getData() << endl;
-			return false;
+			swapBytes(adapt_Size.getData());
+			if (adapt_Size.getData() != 84)
+			{
+				Log.error() << "DCDFile::readHeader(): "
+					<< "wrong header; expected 84, got " << adapt_Size.getData() << endl;
+				return false;
+			}
+			else
+			{
+				Log.info() << "Swapping bytes." << endl;
+				swap_bytes_ = true;
+			}
 		}
 
 		// read the distinct components of the block
 
-		// first the CORD characters
+		// first the CORD characters (don't need to be swapped...)
 		for (Size i = 0; i < 4; ++i)
 		{
 			*this >> adapt_char;
@@ -143,15 +167,18 @@ namespace BALL
 		// storing that number in this instance AND in header_ might not be too
 		// clever.
 		*this >> adapt_Size;
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		header_.number_of_coordinate_sets = number_of_snapshots_ 
 			= adapt_Size.getData();
 		
 		// read the number of the first step
 		*this >> adapt_Size;
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		header_.step_number_of_starting_time = adapt_Size.getData();
 
 		// read the number of steps between saves
 		*this >> adapt_Size;
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		header_.steps_between_saves = adapt_Size.getData();
 
 		// skip unused fields
@@ -162,6 +189,7 @@ namespace BALL
 
 		// read the length of a time step
 		*this >> adapt_DoubleReal;
+		if (swap_bytes_) swapBytes(adapt_DoubleReal.getData());
 		header_.time_step_length = adapt_DoubleReal.getData();
 
 		// skip unused fields
@@ -173,6 +201,7 @@ namespace BALL
 		// read the "footer" of the 84 byte block. This also must contain the
 		// number 84 to indicate the size of this block
 		*this >> adapt_Size; 
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		if (adapt_Size.getData() != 84)
 		{
 			Log.error() << "DCDFile::readHeader(): "
@@ -185,6 +214,7 @@ namespace BALL
 		// integer indicating the number of 80 bytes comment blocks within this
 		// block, so the block size minus 4 must be dividable by 80
 		*this >> adapt_Size; 
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		Size comment_size = adapt_Size.getData();
 		if ((comment_size - 4) % 80 != 0)
 		{
@@ -196,6 +226,7 @@ namespace BALL
 		Size number_of_comments = (comment_size - 4) / 80;
 		
 		*this >> adapt_Size; 
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		if (adapt_Size.getData() != number_of_comments)
 		{
 			Log.error() << "DCDFile::readHeader(): "
@@ -218,6 +249,7 @@ namespace BALL
 
 		// read the "footer" and compare it with the "header"
 		*this >> adapt_Size;
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		if (adapt_Size.getData() != comment_size)
 		{
 			Log.error() << "DCDFile::readHeader(): "
@@ -229,6 +261,7 @@ namespace BALL
 
 		// read the block containing the number of atoms
 		*this >> adapt_Size;
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		if (adapt_Size.getData() != 4)
 		{
 			Log.error() << "DCDFile::readHeader(): "
@@ -239,10 +272,12 @@ namespace BALL
 
 		// now read the actual number of atoms
 		*this >> adapt_Size;
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		header_.number_of_atoms = number_of_atoms_ = adapt_Size.getData();
 
 		// and check the footer
 		*this >> adapt_Size;
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		if (adapt_Size.getData() != 4)
 		{
 			Log.error() << "DCDFile::readHeader(): "
@@ -352,8 +387,8 @@ namespace BALL
 		Size expected_size = 4 * expected_noa;
 
 		vector<Vector3> positions(expected_noa);
-		BinaryFileAdaptor<Size> adaptSize;
-		BinaryFileAdaptor<Real> adaptReal;
+		BinaryFileAdaptor<Size> adapt_Size;
+		BinaryFileAdaptor<Real> adapt_Real;
 
 		// first read the x coordinates
 
@@ -362,7 +397,9 @@ namespace BALL
 		// BAUSTELLE
 		// *this >> BinaryFileAdaptor<Size>(tmp);
 
-		*this >> adaptSize; tmp = adaptSize.getData();
+		*this >> adapt_Size; 
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
+		tmp = adapt_Size.getData();
 		// ...and compare it to what we would expect. This value stems from the
 		// information of the file header.
 		if (tmp != expected_size)
@@ -376,10 +413,14 @@ namespace BALL
 		// now read the x positions
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			*this >> adaptReal; positions[atom].x = adaptReal.getData();
+			*this >> adapt_Real; 
+			if (swap_bytes_) swapBytes(adapt_Real.getData());
+			positions[atom].x = adapt_Real.getData();
 		}
 		// and the block "footer"
-		*this >> adaptSize; tmp = adaptSize.getData();
+		*this >> adapt_Size; 
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
+		tmp = adapt_Size.getData();
 		if (tmp != expected_size)
 		{
 			Log.error() << "DCDFile::read(): "
@@ -391,7 +432,9 @@ namespace BALL
 		// the same proceedure for y coordinates
 
 		// header
-		*this >> adaptSize; tmp = adaptSize.getData();
+		*this >> adapt_Size; 
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
+		tmp = adapt_Size.getData();
 		// sanity check
 		if (tmp != expected_size)
 		{
@@ -403,10 +446,14 @@ namespace BALL
 		// data
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			*this >> adaptReal; positions[atom].y = adaptReal.getData();
+			*this >> adapt_Real; 
+			if (swap_bytes_) swapBytes(adapt_Real.getData());
+			positions[atom].y = adapt_Real.getData();
 		}
 		// footer
-		*this >> adaptSize; tmp = adaptSize.getData();
+		*this >> adapt_Size; 
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
+		tmp = adapt_Size.getData();
 		// sanity check
 		if (tmp != expected_size)
 		{
@@ -419,7 +466,9 @@ namespace BALL
 		// and z coordinates
 
 		// header
-		*this >> adaptSize; tmp = adaptSize.getData();
+		*this >> adapt_Size; 
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
+		tmp = adapt_Size.getData();
 		// sanity check
 		if (tmp != expected_size)
 		{
@@ -431,10 +480,14 @@ namespace BALL
 		// data
 		for (Size atom = 0; atom < expected_noa; ++atom)
 		{
-			*this >> adaptReal; positions[atom].z = adaptReal.getData();
+			*this >> adapt_Real; 
+			if (swap_bytes_) swapBytes(adapt_Real.getData());
+			positions[atom].z = adapt_Real.getData();
 		}
 		// footer
-		*this >> adaptSize; tmp = adaptSize.getData();
+		*this >> adapt_Size; 
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
+		tmp = adapt_Size.getData();
 		// sanity check
 		if (tmp != expected_size)
 		{
