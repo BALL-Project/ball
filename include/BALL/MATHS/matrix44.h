@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.16 2000/03/14 09:03:41 oliver Exp $
+// $Id: matrix44.h,v 1.17 2000/03/14 09:37:40 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -1173,7 +1173,7 @@ namespace BALL
 		{
 			for (int j=0; j<4; j++  )
 			{
-				if (Maths::isNear((*this)(i, j), m(i, j), maxDiff) == false)
+				if (Maths::isNear((*this)(i, j), m(i, j), max_diff) == false)
 				{
 					return false;
 				} 
