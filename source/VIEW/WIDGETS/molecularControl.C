@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.42 2004/02/11 16:18:48 amoll Exp $
+// $Id: molecularControl.C,v 1.43 2004/02/23 22:41:59 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -124,6 +124,8 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 	// it is then re-determined by getSelection()
 	connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 
+	model_menu_.insertItem("Custom", this, SLOT(createRepresentation())); 
+
 	Position p = 0;
 	for (Position pos = MODEL_LINES; pos < MODEL_LABEL; pos++)
 	{
@@ -241,27 +243,13 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	bool one_item = (selected_.size() == 1);
 	bool composites_muteable = getMainControl()->compositesAreMuteable();
 
-	context_menu_.insertItem("Create Representation...", this, 
-			SLOT(createRepresentation()), 0, CREATE_REPRESENTATION_MODE);
 	context_menu_.insertItem("Create Representation", &model_menu_, 0, CREATE_REPRESENTATION);
-	context_menu_.insertSeparator();
-
-	context_menu_.insertItem("Cut", this, SLOT(cut()), 0, OBJECT__CUT);
-	context_menu_.insertItem("Copy", this, SLOT(copy()), 0, OBJECT__COPY);
-	context_menu_.insertItem("Paste", this, SLOT(paste()), 0, OBJECT__PASTE);
-	context_menu_.insertItem("Delete", this, SLOT(deleteCurrentItems()), 0, OBJECT__DELETE);
 	context_menu_.insertSeparator();
 
 	context_menu_.insertItem("Rename", this, SLOT(rename()), 0, RENAME);
 	context_menu_.setItemEnabled(RENAME, composites_muteable && composites_muteable && one_item);
 
 	context_menu_.insertItem("Move", this, SLOT(move()), 0, OBJECT__MOVE);
-
-	context_menu_.setItemEnabled(OBJECT__CUT, composites_muteable);
-	context_menu_.setItemEnabled(OBJECT__PASTE, getCopyList_().size() > 0 && composites_muteable);
-	context_menu_.setItemEnabled(OBJECT__MOVE, composites_muteable);
-	context_menu_.setItemEnabled(OBJECT__DELETE, composites_muteable);
-	context_menu_.insertSeparator();
 
 	context_menu_.insertItem("Select", this, SLOT(select()), 0, SELECT);
 	context_menu_.insertItem("Deselect", this, SLOT(deselect()), 0, DESELECT);
@@ -274,9 +262,6 @@ void MolecularControl::buildContextMenu(Composite& composite)
 
 	// -----------------------------------> AtomContainer
 	bool atom_container_selected = RTTI::isKindOf<AtomContainer>(composite);
-
-	context_menu_.insertItem("Check residue", this, SLOT(checkResidue()), 0, RESIDUE__CHECK);
-	context_menu_.setItemEnabled(RESIDUE__CHECK, atom_container_selected);
 
 	bool system_selected = true;
 	/*
@@ -294,9 +279,6 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.insertItem("Change ID", this, SLOT(changeID()), 0, CHANGEID);
 	context_menu_.setItemEnabled(CHANGEID, composites_muteable && allow_id_change);
 
-	context_menu_.insertItem("Build Bonds", this, SLOT(buildBonds()), 0, BONDS__BUILD);
-	context_menu_.setItemEnabled(BONDS__BUILD, composites_muteable && atom_container_selected);
-
 	context_menu_.insertItem("Count items", this, SLOT(countItems()), 0, COUNT__ITEMS);
 	context_menu_.setItemEnabled(COUNT__ITEMS, atom_container_selected);
 
@@ -312,9 +294,8 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	// <----------------------------------- Atoms
 
 	context_menu_.insertSeparator();
-	context_menu_.insertItem("Show filename", this, SLOT(showFilename()), 0, SHOW__FILENAME);
-	context_menu_.insertSeparator();
 	context_menu_.insertItem("Collapse all", this, SLOT(collapseAll()), 0, COLLAPSE_ALL);
+	context_menu_.insertItem("Expand all", this, SLOT(expandAll()), 0, EXPAND_ALL);
 }
 
 
@@ -880,6 +861,7 @@ void MolecularControl::move()
 
 	if (transformation_dialog_) 
 	{
+		getMainControl()->removeModularWidget(transformation_dialog_);
 		transformation_dialog_->hide();
 		delete transformation_dialog_;
 	}
@@ -1010,6 +992,15 @@ void MolecularControl::collapseAll()
 	for (; it.current(); ++it)
 	{
 		(*it)->setOpen(false);
+	}
+}
+
+void MolecularControl::expandAll()
+{
+	QListViewItemIterator it(listview);
+	for (; it.current(); ++it)
+	{
+		(*it)->setOpen(true);
 	}
 }
 
