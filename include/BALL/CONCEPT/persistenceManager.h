@@ -1,7 +1,7 @@
-// $Id: persistenceManager.h,v 1.29 2001/06/22 10:48:44 oliver Exp $
+// $Id: persistenceManager.h,v 1.30 2001/07/14 13:12:14 amoll Exp $
 
-#ifndef BALL_CONCEPT_PERSISTENCE_H
-#define BALL_CONCEPT_PERSISTENCE_H
+#ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
+#define BALL_CONCEPT_PERSISTENCEMANAGER_H
 
 #ifndef BALL_COMMON_RTTI_H
 #	include <BALL/COMMON/rtti.h>
@@ -1046,4 +1046,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_CONCEPT_PERSISTENCE_H
+#endif // BALL_CONCEPT_PERSISTENCEMANAGER_H

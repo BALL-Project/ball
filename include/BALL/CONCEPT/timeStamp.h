@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.12 2001/07/05 17:51:34 oliver Exp $
+// $Id: timeStamp.h,v 1.13 2001/07/14 13:12:32 amoll Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -15,7 +15,7 @@
 #	include <BALL/COMMON/debug.h>
 #endif
 
-#ifndef BALL_CONCEPT_PERSISTENCE_H
+#ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 # include <BALL/CONCEPT/persistenceManager.h>
 #endif
 
