@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: animationDialog.h,v 1.1 2004/08/13 18:05:04 amoll Exp $
+// $Id: animationDialog.h,v 1.2 2004/08/15 22:17:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_ANIMATIONDIALOG_H
@@ -17,16 +17,26 @@
 
 #include <BALL/VIEW/UIC/animationDialogData.h>
 
+#ifdef BALL_QT_HAS_THREADS
+ #include <qthread.h>
+ #include <qevent.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
 	{
+		class AnimationDialog;
+
+
 		/** Dialog to animate a "flight" in the Scene
 				\ingroup ViewDialogs
 		*/
 		class BALL_EXPORT AnimationDialog 
 			: public AnimationDialogData
 		{ 
+			friend class AnimationThread;
+
 				Q_OBJECT
 
 			public:
@@ -43,8 +53,36 @@ namespace BALL
 				void addPressed();
 
 			protected:
+				void animate_();
+
 				List<Camera> cameras_;
+				bool stop_;
+				AnimationThread* animation_thread_;
 		};
+
+#ifdef BALL_QT_HAS_THREADS
+		///
+		class AnimationThread
+			: public QThread
+		{
+			public:
+				
+				///
+				AnimationThread()
+					throw(): ani_(0) {};
+
+				///
+				void setAnimationDialog(AnimationDialog* ani)
+					throw() { ani_ = ani;}
+
+				///
+				virtual void run() {ani_->animate_();}
+
+				protected:
+				AnimationDialog* ani_;
+		};
+#endif
+
 
 } } // namespaces
 #endif

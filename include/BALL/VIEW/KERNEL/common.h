@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.27 2004/07/20 11:25:49 amoll Exp $
+// $Id: common.h,v 1.28 2004/08/15 22:17:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -79,6 +79,12 @@ namespace BALL
 		{
 			///
 			SCENE_EXPORTPNG_EVENT = 60000,
+
+			///
+			SCENE_EXPORTPOV_EVENT,
+
+			///
+			SCENE_SETCAMERA_EVENT,
 
 			/// see Mainframe::SimulationThreadFinished
 			SIMULATION_THREAD_FINISHED_EVENT,

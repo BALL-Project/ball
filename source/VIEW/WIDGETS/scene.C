@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.117 2004/08/13 17:52:09 amoll Exp $
+// $Id: scene.C,v 1.118 2004/08/15 22:17:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1634,10 +1634,22 @@ namespace BALL
 
 		void Scene::customEvent(QCustomEvent * e)
 		{
-			// It must be a SceneExportPNGEvent
 			if (e->type() == (QEvent::Type)SCENE_EXPORTPNG_EVENT) 
 			{  
 				exportPNG();
+				return;
+			}
+
+			if (e->type() == (QEvent::Type)SCENE_EXPORTPOV_EVENT) 
+			{  
+				exportPOVRay();
+				return;
+			}
+
+			if (e->type() == (QEvent::Type)SCENE_SETCAMERA_EVENT) 
+			{  
+				setCamera(((SceneSetCameraEvent*) e)->camera);
+				return;
 			}
 		}
 

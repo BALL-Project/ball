@@ -10,6 +10,7 @@
 #include <qcheckbox.h>
 #include <qlistbox.h>
 #include <qspinbox.h>
+#include <qapplication.h>
 
 namespace BALL
 {
@@ -17,18 +18,37 @@ namespace BALL
 	{
 
 AnimationDialog::AnimationDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
- : AnimationDialogData( parent, name, modal, fl )
+ : AnimationDialogData( parent, name, modal, fl ),
+	 animation_thread_(0)
 {
 }
 
 AnimationDialog::~AnimationDialog()
 {
+	if (animation_thread_ != 0) delete animation_thread_;
  // no need to delete child widgets, Qt does it all for us
 }
 
 void AnimationDialog::animatePressed()
 {
+#ifdef BALL_QT_HAS_THREADS
+	if (animation_thread_ != 0) delete animation_thread_;
+	animation_thread_ = new AnimationThread();
+	animation_thread_->setAnimationDialog(this);
+	animation_thread_->start();
+	return;
+#endif
+	
+	animate_();
+}
+
+void AnimationDialog::animate_()
+{
 	if (cameras_.size() < 2) return;
+
+	stop_ = false;
+	cancel_button->setEnabled(true);
+	animate_button->setEnabled(false);
 
 	List<Camera>::Iterator it = cameras_.begin();
 	Camera last_camera = *it;
@@ -36,8 +56,11 @@ void AnimationDialog::animatePressed()
 
 	for (; it != cameras_.end(); it++)
 	{
-		if (*it == last_camera) continue;
+//	 	qApp->wakeUpGuiThread();
+// 		qApp->processEvents(500);
 
+		if (*it == last_camera) continue;
+ 
 		Camera camera = last_camera;
 		Vector3 diff_viewpoint = (camera.getViewPoint() - (*it).getViewPoint());
 		Vector3 diff_up = (camera.getLookUpVector() - (*it).getLookUpVector());
@@ -50,31 +73,40 @@ void AnimationDialog::animatePressed()
 		diff_up /= steps;
 		diff_look_at /= steps;
 
-		for (Size i = 0; i < steps; i++)
+		for (Size i = 0; i < steps && !stop_; i++)
 		{
 			camera.setViewPoint(camera.getViewPoint() - diff_viewpoint);
 			camera.setLookUpVector(camera.getLookUpVector() - diff_up);
 			camera.setLookAtPosition(camera.getLookAtPosition() - diff_look_at);
-			((Scene*) Scene::getInstance(0))->setCamera(camera);
+			Scene* scene = ((Scene*) Scene::getInstance(0));
+
+			Scene::SceneSetCameraEvent* e = new Scene::SceneSetCameraEvent();
+			e->camera = camera;
+			qApp->postEvent(scene, e);
 
 			if (export_PNG->isChecked())
 			{
-				((Scene*) Scene::getInstance(0))->exportPNG();
+				Scene::SceneExportPNGEvent* e = new Scene::SceneExportPNGEvent();
+				qApp->postEvent(scene, e);
 			}
 
 			if (export_POV->isChecked())
 			{
-				((Scene*) Scene::getInstance(0))->exportPOVRay();
+				Scene::SceneExportPOVEvent* e = new Scene::SceneExportPOVEvent();
+				qApp->postEvent(scene, e);
 			}
 		}
 		
 		last_camera = *it;
 	}
 
+	cancel_button->setEnabled(false);
+	animate_button->setEnabled(true);
 }
 
 void AnimationDialog::cancelPressed()
 {
+	stop_ = true;
 }
 
 void AnimationDialog::closePressed()
@@ -142,6 +174,7 @@ void AnimationDialog::entrySelected()
 	delete_button->setEnabled(entries->selectedItem() != 0);
 	goto_button->setEnabled(entries->selectedItem() != 0);
 }
+
 
 // NAMESPACE
 } }

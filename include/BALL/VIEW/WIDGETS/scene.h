@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.49 2004/08/13 17:52:22 amoll Exp $
+// $Id: scene.h,v 1.50 2004/08/15 22:17:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -96,6 +96,28 @@ namespace BALL
 				public:
 					SceneExportPNGEvent()
 						: QCustomEvent( SCENE_EXPORTPNG_EVENT){}
+			};
+
+			/** This class is only intended for usage with multithreading.
+			 		It provides a mean for other threads to make the Scene export a POVRay file.
+			*/
+			class BALL_EXPORT SceneExportPOVEvent : public QCustomEvent
+			{
+				public:
+					SceneExportPOVEvent()
+						: QCustomEvent( SCENE_EXPORTPOV_EVENT){}
+			};
+
+			/** This class is only intended for usage with multithreading.
+			 		It provides a mean for other threads to set the camera position.
+			*/
+			class BALL_EXPORT SceneSetCameraEvent : public QCustomEvent
+			{
+				public:
+					SceneSetCameraEvent()
+						: QCustomEvent( SCENE_SETCAMERA_EVENT){}
+
+					Camera camera;
 			};
 			
 			/** @name Type definitions 
