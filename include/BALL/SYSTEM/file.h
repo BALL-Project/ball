@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.16 2000/12/14 16:54:14 anker Exp $
+// $Id: file.h,v 1.17 2000/12/18 12:22:51 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -471,6 +471,48 @@ namespace BALL
 		bool			is_open_;
 		bool			is_temporary_;
 	};
+
+
+	template <typename T>
+	class BinaryFileAdaptor
+	{
+		public:
+		BinaryFileAdaptor()
+		{
+		}
+
+		BinaryFileAdaptor(const T& data)
+			:	data_(data)
+		{
+		}
+
+		const T& getData() const
+		{
+			return data_;
+		}
+
+		T& getData()
+		{
+			return data_;
+		}
+
+		protected:
+		T data_;
+	};
+
+	template <typename T>
+	ostream& operator << (ostream& os, const BinaryFileAdaptor<T>& data)
+	{
+		os.write((const char*)&(data.getData()), sizeof(T));
+		return os;
+	}
+
+	template <typename T>
+	istream& operator >> (istream& is, BinaryFileAdaptor<T>& data)
+	{
+		is.read((char*)&(data.getData()), sizeof(T));
+		return is;
+	}
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/SYSTEM/file.iC>
