@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.23.2.2 2004/05/14 12:09:50 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.23.2.3 2004/05/14 12:27:29 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -316,6 +316,17 @@ void ColorMeshDialog::colorByGrid_()
 	{
 		setStatusbarText("Could not color surface, maybe because an other thread is still running?");
 		return;
+	}
+
+	try
+	{
+		String((mid_box->text().ascii())).toFloat();
+		String((min_box->text().ascii())).toFloat();
+		String((max_box->text().ascii())).toFloat();
+	}
+	catch(...)
+	{
+		setStatusbarText("Invalid value for min, mid or max value!");
 	}
 
 	setColor_(min_min_color, min_min_button, min_min_alpha);
