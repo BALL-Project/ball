@@ -1,16 +1,19 @@
-// $Id: bitVector.C,v 1.4 1999/12/17 11:15:37 oliver Exp $
+// $Id: bitVector.C,v 1.5 1999/12/19 17:13:44 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
 #include <algorithm>
 
-namespace BALL {
+namespace BALL 
+{
 
 	Bit::Bit(const BitVector& bit_vector, Index index)
 		:	bitvector_((BitVector *)&bit_vector),
 			index_(index)
 	{
 	}
+
+	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
 
 	BitVector::BitVector(BALL::Size size)
 		:	size_(size),
