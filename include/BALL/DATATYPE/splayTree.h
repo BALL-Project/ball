@@ -1,4 +1,4 @@
-// $Id: splayTree.h,v 1.2 2000/01/10 15:50:58 oliver Exp $
+// $Id: splayTree.h,v 1.3 2000/08/09 10:00:18 amoll Exp $
 
 #ifndef BALL_DATATYPE_SPLAYTREE_H
 #define BALL_DATATYPE_SPLAYTREE_H
@@ -34,21 +34,21 @@ namespace BALL
 
 			static void assemble(BSTreeItem* parent, BSTreeItem* left, BSTreeItem* right);
 
-			static BSTreeItem* splayMinimum(BSTreeItem *);
+			static BSTreeItem* splayMinimum(BSTreeItem*);
 
-			static BSTreeItem* splayMaximum(BSTreeItem *);
+			static BSTreeItem* splayMaximum(BSTreeItem*);
 
 			static BSTreeItem* detachMinimum(BSTreeItem*& root);
 
 			static BSTreeItem* detachMaximum(BSTreeItem*& root);
+
 	};
 
 
 
 	/**	Splay Tree Class */
 	template<class DataType>
-	class TSplayTree
-		: public TBSTree<DataType>
+	class TSplayTree : public TBSTree<DataType>
 	{
 		public:
 		
@@ -75,7 +75,7 @@ namespace BALL
 			void set(const TSplayTree &splay_tree,  BSTreeIterator::WalkOrder walk_order);
 
 			///
-			TSplayTree& operator = (const TSplayTree &splay_tree);
+			TSplayTree& operator = (const TSplayTree& splay_tree);
 
 			///
 			void get(TSplayTree& splay_tree, bool deep = true) const;
@@ -113,7 +113,7 @@ namespace BALL
 			TBSTreeItem<DataType>* insertNotSplayed(const DataType& data, bool multiple = true);
 
 			///
-			TBSTreeItem<DataType>* detach(const DataType &data);
+			TBSTreeItem<DataType>* detach(const DataType& data);
 
 			///
 			TBSTreeItem<DataType>* detachMinimum();
@@ -155,53 +155,48 @@ namespace BALL
 			
 		private:
 
-			void findAndSplay_(const DataType &data); 
+			void findAndSplay_(const DataType& data); 
 	};
 
 	template<class DataType>
-	TSplayTree<DataType>::TSplayTree
-		()
-			:
-			TBSTree<DataType>()
+	BALL_INLINE 
+	TSplayTree<DataType>::TSplayTree()
+			:	TBSTree<DataType>()
 	{
 	}
 
 	template<class DataType>
+	BALL_INLINE 
 	TSplayTree<DataType>::TSplayTree
-		(const TSplayTree<DataType> &splay_tree,
-		 bool deep)
-			:
-			TBSTree<DataType>(splay_tree, deep)
+		(const TSplayTree<DataType> &splay_tree, bool deep)
+			:	TBSTree<DataType>(splay_tree, deep)
 	{
 	}
 
 	template<class DataType>
-	TSplayTree<DataType>::~TSplayTree
-		()
+	BALL_INLINE 
+	TSplayTree<DataType>::~TSplayTree()
 	{
 		clear();
 	}
 
 	template<class DataType>
-	BALL_INLINE void
-	TSplayTree<DataType>::set
-		(const TSplayTree &splay_tree,
-		 bool deep)
+	BALL_INLINE 
+	void TSplayTree<DataType>::set(const TSplayTree &splay_tree, bool deep)
 	{
 		TBSTree<DataType>::set(splay_tree, deep);
 	}
 
 	template<class DataType>
-	BALL_INLINE void 
-	TSplayTree<DataType>::set
-		(const TSplayTree<DataType> &splay_tree, 
-		 BSTreeIterator::WalkOrder walk_order)
+	BALL_INLINE 
+	void TSplayTree<DataType>::set
+		(const TSplayTree<DataType> &splay_tree, BSTreeIterator::WalkOrder walk_order)
 	{
 		clear();
 		
 		TBSTreeIterator< TBSTreeItem<DataType> > tree_it((TBSTreeItem<DataType> *)splay_tree.root_, walk_order);
 		
-		for (register const TBSTreeItem<DataType>* item = tree_it.forward();
+		for (const TBSTreeItem<DataType>* item = tree_it.forward();
 				 item != 0; item = tree_it.forward())
 		{
 			insert(item->data_, true);
@@ -226,7 +221,7 @@ namespace BALL
 
 	template<class DataType>
 	BALL_INLINE 
-	void TSplayTree<DataType>::get(TSplayTree<DataType>& splay_tree,  BSTreeIterator::WalkOrder walk_order) const
+	void TSplayTree<DataType>::get(TSplayTree<DataType>& splay_tree, BSTreeIterator::WalkOrder walk_order) const
 	{
 		splay_tree.set(*this, walk_order);
 	}
@@ -358,7 +353,7 @@ namespace BALL
 			// minimum node of the right subtree to the top.
 			// If there is no right subtree, use the left 
 			// child as the replacement.
-			 TBSTreeItem<DataType> *oldroot = root_;
+			 TBSTreeItem<DataType>* oldroot = root_;
 
 			 if (root_->right)
 			 {
@@ -420,7 +415,7 @@ namespace BALL
 			return false;
 		}
 
-		register TBSTreeItem<DataType> *item = detach(data);
+		TBSTreeItem<DataType> *item = detach(data);
 
 		if (item != 0)
 		{
@@ -441,7 +436,7 @@ namespace BALL
 	BALL_INLINE 
 	bool TSplayTree<DataType>::removeMinimum()
 	{
-		TBSTreeItem<DataType> *item = detachMinimum();
+		TBSTreeItem<DataType>* item = detachMinimum();
 		if (item != 0)
 		{
 			deleteItem(item);
@@ -457,7 +452,7 @@ namespace BALL
 	BALL_INLINE 
 	bool TSplayTree<DataType>::removeMaximum()
 	{
-		TBSTreeItem<DataType> *item = detachMaximum();
+		TBSTreeItem<DataType>* item = detachMaximum();
 		if (item != 0)
 		{
 			deleteItem(item);

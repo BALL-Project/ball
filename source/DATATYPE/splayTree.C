@@ -1,4 +1,4 @@
-// $Id: splayTree.C,v 1.3 2000/08/01 12:37:12 amoll Exp $
+// $Id: splayTree.C,v 1.4 2000/08/09 09:59:55 amoll Exp $
 
 #include <BALL/DATATYPE/splayTree.h>
 
@@ -15,9 +15,9 @@ namespace BALL
 	// parent_item->left becomes the new parent of the tree that parent_item
 	// used to belong to, so we return parent_item->left.
 	// Returns 0 if parent_item->left is 0.
-	BSTreeItem* SplayTree::linkRight(BSTreeItem *parent_item, BSTreeItem *right_item)
+	BSTreeItem* SplayTree::linkRight(BSTreeItem* parent_item, BSTreeItem* right_item)
 	{
-		BSTreeItem *newparent_item = parent_item->getLeftChild();
+		BSTreeItem* newparent_item = parent_item->getLeftChild();
 
 		parent_item->getLeftChild() = 0;
 		right_item->getRightChild()->getLeftChild() = parent_item;
@@ -36,9 +36,9 @@ namespace BALL
 	// parent_item->right becomes the new parent of the tree that parent_item
 	// used to belong to, so we return parent_item->right.
 	// Returns 0 if parent_item->right is 0.
-	BSTreeItem* SplayTree::linkLeft(BSTreeItem *parent_item, BSTreeItem *left_item)
+	BSTreeItem* SplayTree::linkLeft(BSTreeItem* parent_item, BSTreeItem* left_item)
 	{
-		BSTreeItem *newparent_item = parent_item->getRightChild();
+		BSTreeItem* newparent_item = parent_item->getRightChild();
 
 		parent_item->getRightChild() = 0;
 		left_item->getLeftChild()->getRightChild() = parent_item;
@@ -52,7 +52,7 @@ namespace BALL
 	// as the left and right subtrees of parent_item, and the old
 	// left and right subtrees of parent_item as right and left subtrees
 	// of left_item & right_item, respectively.
-	void SplayTree::assemble(BSTreeItem *parent_item, BSTreeItem *left_item, BSTreeItem *right_item)
+	void SplayTree::assemble(BSTreeItem* parent_item, BSTreeItem* left_item, BSTreeItem* right_item)
 	{
 		if (left_item->getRightChild()) 
 		{
@@ -69,11 +69,12 @@ namespace BALL
 
 	// Move the minimum of item up the tree, replacing item
 	// as the root. The new root is returned.
-	BSTreeItem* SplayTree::splayMinimum(BSTreeItem *item)
+	BSTreeItem* SplayTree::splayMinimum(BSTreeItem* item)
 	{
 		if (item == 0)
+		{
 			return 0;
-
+		}
 		BSTreeItem left_item, right_item; 
 
 		left_item.getLeftChild() = &left_item; 
@@ -99,9 +100,7 @@ namespace BALL
 		return item;
 	}
 
-	BSTreeItem *
-	SplayTree::splayMaximum
-		(BSTreeItem *item)
+	BSTreeItem* SplayTree::splayMaximum(BSTreeItem* item)
 	// Move the maximum of t up the tree, replacing item
 	// as the root. The new root is returned.
 	{
@@ -141,7 +140,9 @@ namespace BALL
 	BSTreeItem* SplayTree::detachMinimum(BSTreeItem*& root)
 	{  
 		if (root == 0)
+		{
 			return 0;
+		}
 
 		root = splayMinimum(root);
 
@@ -150,7 +151,7 @@ namespace BALL
 		// minimum node of the right subtree to the top.
 		// If there is no right subtree, it means we're
 		// empty, since the left child is always null.
-		BSTreeItem *old_root_item = root;
+		BSTreeItem* old_root_item = root;
 
 		if (root->getRightChild()) 
 		{
@@ -167,8 +168,7 @@ namespace BALL
 	}
 
 
-	BSTreeItem *
-	SplayTree::detachMaximum(BSTreeItem *&root)
+	BSTreeItem*	SplayTree::detachMaximum(BSTreeItem*& root)
 	// Detach the maximum node of the tree, returning
 	// a pointer to it, or 0 if tree is empty.
 	{
@@ -184,7 +184,7 @@ namespace BALL
 		// maximum node of the left subtree to the top.
 		// If there is no left subtree, it means we're
 		// empty, since the right child is always null.
-		BSTreeItem *old_root_item = root;
+		BSTreeItem* old_root_item = root;
 
 		if (root->getLeftChild()) 
 		{
