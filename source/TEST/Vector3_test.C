@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector3_test.C,v 1.37 2003/06/09 22:40:54 oliver Exp $
+// $Id: Vector3_test.C,v 1.38 2003/06/10 14:10:41 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.37 2003/06/09 22:40:54 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.38 2003/06/10 14:10:41 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -406,7 +406,8 @@ CHECK(TAngle<T> getAngle(const TVector3& vector) const throw(Exception::Division
 	r = v.getSquareLength() * v2.getSquareLength();
   e = acos((v * v2) / sqrt(r));
 	TEST_REAL_EQUAL(v.getAngle(v2) , e)
-	//??? missin: exception test!
+	v2.clear();
+	TEST_EXCEPTION(Exception::DivisionByZero, v2.getAngle(v))
 RESULT
 
 CHECK(TVector3 getOrthogonalProjection(const TVector3& direction) const throw())
@@ -535,7 +536,11 @@ CHECK(TVector3& negate() throw())
 RESULT
 
 CHECK(static TVector3 getPerpendicularNormalization(const TVector3& a, const TVector3& b, const TVector3& c) throw())
-  // ???
+	Vector3 v1(0,0,0);
+	Vector3 v2(1,0,0);
+	Vector3 v3(0,1,0);
+	TEST_EQUAL(Vector3::getPerpendicularNormalization(v1, v2, v3), Vector3(0, 0, -1))
+	TEST_EQUAL(Vector3::getPerpendicularNormalization(v1, v1, v1), Vector3(0, 0, 0))
 RESULT
 
 
