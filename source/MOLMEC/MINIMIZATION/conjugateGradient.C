@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.18 2003/02/05 13:00:18 oliver Exp $
+// $Id: conjugateGradient.C,v 1.19 2003/02/05 19:14:52 oliver Exp $
+//
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -10,7 +11,7 @@
 #include <BALL/MOLMEC/COMMON/gradient.h>
 #include <BALL/COMMON/limits.h>
 
-//#define BALL_DEBUG
+// #define BALL_DEBUG
 
 // The default method to use for the CG direction update
 // (FLETCHER_REEVES | POLAK_RIBIERE | SHANNO)
@@ -147,16 +148,14 @@ namespace BALL
 			return false;
 		}
 
+		// Invalidate the initial gradient in order to ensure
+		// its re-evaluation at the start of minimize().
+		initial_grad_.invalidate();
+		old_grad_.invalidate();
+
     // set the options  to their default values if not already set  
     step_ = options.setDefaultReal
 			(Option::STEP_LENGTH, Default::STEP_LENGTH); 
-
-		updateForces();
-		// This is to avoid completely senseless behaviour
-		//if (current_grad_.norm < 1e6)
-		{
-			step_ *= current_grad_.norm;
-		}
 
     // determine the number of atoms
     number_of_atoms_ = (Size)force_field_->getAtoms().size(); 
@@ -684,16 +683,19 @@ namespace BALL
 		// if this is not a restart or we do not have a valid
 		// gradient, recalculate the gradient, the energy, and the search 
  		// direction
-		if (!restart || !old_grad_.isValid() || old_grad_.size() == 0)
+		if (!restart || !old_grad_.isValid() || old_grad_.size() == 0 || !initial_grad_.isValid())
 		{
 			#ifdef BALL_DEBUG
 				Log.info() << "CGM: calculating initial gradient...";
 			#endif
 
-			// ...forces
+			// Compute initial forces, energy.
 			updateForces();
-			initial_energy_ = updateEnergy();
 			initial_grad_ = current_grad_;
+			initial_energy_ = updateEnergy();
+			old_grad_ = current_grad_;
+			old_energy_ = Limits<float>::max();
+
 			direction_ = current_grad_;
 			direction_.negate();
 
@@ -721,8 +723,9 @@ namespace BALL
 		// save the current atom positions
 		atoms.savePositions();
 
+		
 		// iterate: while not converged and not enough iterations
-		while (!isConverged() && (getNumberOfIterations() < max_iteration))
+		do
 		{
 			// invalidate the current direction: we don't want to
 			// take this direction again. If findStep() 
@@ -732,7 +735,9 @@ namespace BALL
 			direction_.invalidate();
 
 			// try to find a new solution
-			bool result = findStep();
+			double lambda = findStep();
+			bool result = (lambda >= 0.0);
+
 			// take the step and save these positions
 
 			// TEST! This is a workaround...
@@ -744,7 +749,6 @@ namespace BALL
 			}
 			else
 			{
-
 				// find the maximal translation
 				Gradient::ConstIterator grad_it(direction_.begin());
 				double max=0;
@@ -766,14 +770,23 @@ namespace BALL
 				atoms.moveTo(direction_, lambda_ * step_);
 			}
 
-			atoms.savePositions();
 			// if findStep only found an emergency solution...
 			if (!result)
 			{	
+				#ifdef BALL_DEBUG
+					Log << "Computing new energy/forces!" << std::endl;
+				#endif
 				// ...calculate energy and forces for the new position
 				updateForces();
 				updateEnergy();
 			} 
+			else
+			{
+				// take the step:
+				atoms.moveTo(direction_, lambda * step_);
+				atoms.savePositions();
+			}
+
 			
 			// store the gradient and the energy
 			old_grad_ = initial_grad_;
@@ -782,6 +795,7 @@ namespace BALL
 			// store the current gradient and energy
 			initial_energy_ = current_energy_;
 			initial_grad_ = current_grad_;
+
 
 			// Calculate a new search direction if the search direction is invalid
 			// 
@@ -817,12 +831,17 @@ namespace BALL
 			old_dir_grad = dir_grad;
 			old_dir_grad_valid = true;
 
+			#ifdef BALL_DEBUG
+				Log << "CGM: end of main: current grad RMS = " << current_grad_.rms << std::endl;
+			#endif
+
 			
 			// increment iteration counter, take snapshots, print energy,
 			// update pair lists, and check the same-energy counter
 			finishIteration();
-	
-		}	// end of main loop
+		}	
+		while (!isConverged() && (getNumberOfIterations() < max_iteration));
+		// end of main loop
 
 
 		// check for convergence
