@@ -1,4 +1,4 @@
-// $Id: chemScoreMetal.C,v 1.1.2.1 2002/04/20 12:26:01 anker Exp $
+// $Id: chemScoreMetal.C,v 1.1.2.2 2002/04/24 09:19:20 anker Exp $
 // 
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -120,7 +120,7 @@ namespace BALL
 					{
 						Size lig_type = fresno_types[&*lig_it];
 						if ((lig_type == FresnoFF::HBOND_ACCEPTOR)
-									&& (lig_type == FresnoFF::HBOND_ACCEPTOR_DONOR))
+									|| (lig_type == FresnoFF::HBOND_ACCEPTOR_DONOR))
 						{
 							possible_metal_interactions_.push_back(pair<const Atom*,
 									const Atom*>(&*rec_it, &*lig_it));
@@ -136,6 +136,13 @@ namespace BALL
 					}
 				}
 			}
+			// PARANOIA
+			else
+			{
+				Log.error() << "ChemScoreMetal::updateEnergy() "
+					<< "atom not found in the fresno type list." << endl;
+			}
+			// /PARANOIA
 		}
 
 		// DEBUG
