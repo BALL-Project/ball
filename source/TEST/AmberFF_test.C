@@ -1,4 +1,4 @@
-// $Id: AmberFF_test.C,v 1.6 2000/01/28 15:46:30 oliver Exp $
+// $Id: AmberFF_test.C,v 1.7 2000/02/15 18:16:53 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/FORMAT/HINFile.h>
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.6 2000/01/28 15:46:30 oliver Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.7 2000/02/15 18:16:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,6 +31,94 @@ RESULT
 CHECK(specificSetup())
 AmberFF a;
 a.specificSetup();
+RESULT
+
+CHECK(energy test 1 (Single Stretch) [AMBER91])
+HINFile f("data/AmberFF_test_1.hin");	
+System s;
+f >> s;
+f.close();
+TEST_EQUAL(s.countAtoms(), 2)
+Options options;
+options[AmberFF::Option::FILENAME] = "Amber/amber91.ini";
+options[AmberFF::Option::ASSIGN_CHARGES] = "false";
+AmberFF amber91(s, options);
+amber91.updateEnergy();
+amber91.updateForces();
+#undef PRECISION
+#define PRECISION 5e-2
+TEST_REAL_EQUAL(amber91.getEnergy(), 25.552734)
+TEST_REAL_EQUAL(amber91.getRMSGradient(), 228.7267908)
+TEST_REAL_EQUAL(amber91.getStretchEnergy(), 25.552734)
+TEST_REAL_EQUAL(amber91.getBendEnergy(), 0.0)
+TEST_REAL_EQUAL(amber91.getTorsionEnergy(), 0.0)
+TEST_REAL_EQUAL(amber91.getVdWEnergy(), 0.0)
+TEST_REAL_EQUAL(amber91.getESEnergy(), 0.0)
+RESULT
+
+CHECK(energy test 2 (Bend) [AMBER91])
+HINFile f("data/AmberFF_test_2.hin");	
+System s;
+f >> s;
+f.close();
+TEST_EQUAL(s.countAtoms(), 3)
+Options options;
+options[AmberFF::Option::FILENAME] = "Amber/amber91.ini";
+options[AmberFF::Option::ASSIGN_CHARGES] = "false";
+AmberFF amber91(s, options);
+amber91.updateEnergy();
+amber91.updateForces();
+#undef PRECISION
+#define PRECISION 5e-2
+TEST_REAL_EQUAL(amber91.getEnergy(), 7.895902544)
+TEST_REAL_EQUAL(amber91.getRMSGradient(), 51.16447077)
+TEST_REAL_EQUAL(amber91.getStretchEnergy(), 0.0)
+TEST_REAL_EQUAL(amber91.getBendEnergy(), 7.895902544)
+TEST_REAL_EQUAL(amber91.getTorsionEnergy(), 0.0)
+TEST_REAL_EQUAL(amber91.getVdWEnergy(), 0.0)
+TEST_REAL_EQUAL(amber91.getESEnergy(), 0.0)
+RESULT
+
+CHECK(energy test 3 (VdW) [AMBER91])
+HINFile f("data/AmberFF_test_3.hin");	
+System s;
+f >> s;
+f.close();
+TEST_EQUAL(s.countAtoms(), 2)
+Options options;
+options[AmberFF::Option::FILENAME] = "Amber/amber91.ini";
+options[AmberFF::Option::ASSIGN_CHARGES] = "false";
+AmberFF amber91(s, options);
+amber91.updateEnergy();
+amber91.updateForces();
+TEST_REAL_EQUAL(amber91.getEnergy(), 21.57722272)
+TEST_REAL_EQUAL(amber91.getRMSGradient(), 67.57709778)
+TEST_REAL_EQUAL(amber91.getStretchEnergy(), 0.0)
+TEST_REAL_EQUAL(amber91.getBendEnergy(), 0.0)
+TEST_REAL_EQUAL(amber91.getTorsionEnergy(), 0.0)
+TEST_REAL_EQUAL(amber91.getVdWEnergy(), 21.57722272)
+TEST_REAL_EQUAL(amber91.getESEnergy(), 0.0)
+RESULT
+
+CHECK(energy test 4 (Torsion) [AMBER91])
+HINFile f("data/AmberFF_test_4.hin");	
+System s;
+f >> s;
+f.close();
+TEST_EQUAL(s.countAtoms(), 4)
+Options options;
+options[AmberFF::Option::FILENAME] = "Amber/amber91.ini";
+options[AmberFF::Option::ASSIGN_CHARGES] = "false";
+AmberFF amber91(s, options);
+amber91.updateEnergy();
+amber91.updateForces();
+TEST_REAL_EQUAL(amber91.getEnergy(), 16.95386504)
+TEST_REAL_EQUAL(amber91.getRMSGradient(), 14.28469482)
+TEST_REAL_EQUAL(amber91.getStretchEnergy(), 2e-6)
+TEST_REAL_EQUAL(amber91.getBendEnergy(), 4e-6)
+TEST_REAL_EQUAL(amber91.getTorsionEnergy(), 17.04302192)
+TEST_REAL_EQUAL(amber91.getVdWEnergy(), -0.08817236)
+TEST_REAL_EQUAL(amber91.getESEnergy(), 0.0)
 RESULT
 
 CHECK(energy test 1 (AlaGlySer) [AMBER91])
@@ -68,6 +156,7 @@ TEST_REAL_EQUAL(amber91.getTorsionEnergy(), 0.0489528)
 TEST_REAL_EQUAL(amber91.getVdWEnergy(), 21.03)
 TEST_REAL_EQUAL(amber91.getESEnergy(), -346.797)
 RESULT
+
 
 CHECK(energy test 2 (AlaGlySer) [AMBER94])
 HINFile f("data/AlaGlySer2.hin");	

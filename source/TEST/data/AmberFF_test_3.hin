@@ -1,0 +1,11 @@
+; HyperChem file created by BALL 
+; 
+forcefield amber
+sys 0
+view 40 0.13287 55 15 0.515876 -0.42528 -0.7436457 -0.6126205 0.4236369 -0.667254 0.5988056 0.7997929 -0.04199115 6.8156 -0.15065 -53.531
+mol 1
+atom 1 N  N N3 - 0.000 0.0 0.0 0.0 0
+endmol 1
+mol 2
+atom 1 CA C CT - 0.000 2.5 0.0 0.0 0
+endmol 2
