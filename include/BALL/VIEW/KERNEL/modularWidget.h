@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.13 2004/04/21 15:06:28 amoll Exp $
+// $Id: modularWidget.h,v 1.13.2.1 2004/05/19 13:14:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -37,12 +37,14 @@ namespace BALL
 				Inserting an instance of one of these widgets automatically creates the required
 				menus in the menubar of the main window, sets up the required connections,
 				and registers the class instance for use from the embedded Python interpreter 
-				(if desired).\par
+				(if desired).
+				<br>
 				When implementing classes derived from ModularWidget and you want to give access 
 				to the class from Python, please remember	to include the BALL_EMBEDDABLE 
 				macro in the public section	of your class declaration. Also make sure that the QT 
 				class you	derive from (e.g. QWidget) is the <b>first</b> base class and 
-				ModularWidget	second. \par
+				ModularWidget	second. 
+				<br>
 				<b>Remember:</b> A ModularWidget is not notified by the Messages it sends itself!
 				\see MainControl
 				\see Embeddable
