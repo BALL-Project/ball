@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.34 2004/06/18 14:28:16 amoll Exp $
+// $Id: pyWidget.C,v 1.35 2004/07/03 12:09:30 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -585,14 +585,14 @@ namespace BALL
 			}
 		}
 
-		void PyWidget::applyPreferences(Preferences & /* preferences */)
+		void PyWidget::applyPreferences()
 			throw()
 		{
 			if (text_edit_->python_settings_ == 0) return;
 			text_edit_->startup_script_ = text_edit_->python_settings_->getFilename();
 		}
 
-		void PyWidget::cancelPreferences(Preferences&)
+		void PyWidget::cancelPreferences()
 			throw()
 		{
 			if (text_edit_->python_settings_ != 0)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.19 2004/04/19 16:51:11 amoll Exp $
+// $Id: dockWidget.C,v 1.20 2004/07/03 12:09:30 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -197,7 +197,7 @@ namespace BALL
 			}
 		}
 
-		void DockWidget::applyPreferences(Preferences & /* preferences */)
+		void DockWidget::applyPreferences()
 			throw()
 		{
 			if (!BALL_VIEW_DOCKWINDOWS_SHOW_LABELS) caption_label_->hide();

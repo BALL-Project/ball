@@ -76,7 +76,7 @@ namespace BALL
 			/** Apply Preferences
 					@see ModularWidget::applyPreferences
 			*/
-			virtual void applyPreferences(Preferences & /* preferences */) throw();				
+			virtual void applyPreferences() throw();				
 
 			//@}
 			/** @name Public slots 

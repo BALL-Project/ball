@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.46 2004/07/02 14:16:57 amoll Exp $
+// $Id: scene.h,v 1.47 2004/07/03 12:10:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -336,15 +336,15 @@ namespace BALL
 				throw();
 
 			///
-			void applyPreferences(Preferences& /*preferences*/)
+			virtual void applyPreferences()
 				throw();
 				
 			///
-			void cancelPreferences(Preferences& /*preferences*/)
+			virtual void cancelPreferences()
 				throw();
 				
 			/// Set default values for the current page in Preferences
-			virtual void defaultPreferences(Preferences& /*preferences*/)
+			virtual void defaultPreferences()
 				throw();
 			
 			///

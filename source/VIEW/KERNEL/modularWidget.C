@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.9 2004/04/21 15:06:14 amoll Exp $
+// $Id: modularWidget.C,v 1.10 2004/07/03 12:09:30 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -100,11 +100,6 @@ void ModularWidget::initializePreferencesTab(Preferences & /* preferences */)
 }
 
 void ModularWidget::finalizePreferencesTab(Preferences & /* preferences */)
-	throw()
-{
-}
-
-void ModularWidget::applyPreferences(Preferences & /* preferences */)
 	throw()
 {
 }

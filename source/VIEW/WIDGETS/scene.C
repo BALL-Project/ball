@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.97 2004/07/03 11:02:26 amoll Exp $
+// $Id: scene.C,v 1.98 2004/07/03 12:09:31 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1030,6 +1030,8 @@ namespace BALL
 			readLights_(inifile);
 			light_settings_->updateFromStage();
 			stage_settings_->updateFromStage();
+
+			applyPreferences();
 		}
 
 
@@ -1068,7 +1070,7 @@ namespace BALL
 			}
 		}
 
-		void Scene::defaultPreferences(Preferences&)
+		void Scene::defaultPreferences()
 			throw()
 		{
 			if (light_settings_ == 0) return;
@@ -1078,7 +1080,7 @@ namespace BALL
 		}
 
 
-		void Scene::applyPreferences(Preferences & /* preferences */)
+		void Scene::applyPreferences()
 			throw()
 		{
 			if (light_settings_ == 0) return;
@@ -1139,7 +1141,7 @@ namespace BALL
 		}
 
 
-		void Scene::cancelPreferences(Preferences&)
+		void Scene::cancelPreferences()
 			throw()
 		{
 			if (light_settings_ != 0)

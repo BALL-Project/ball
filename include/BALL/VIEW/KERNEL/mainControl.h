@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.47 2004/06/25 14:37:16 amoll Exp $
+// $Id: mainControl.h,v 1.48 2004/07/03 12:10:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -562,7 +562,7 @@ namespace BALL
 					\see    MainControlPreferences
 					\see    Preferences
 			*/
-			virtual void applyPreferences(Preferences &preferences)
+			virtual void applyPreferences()
 				throw();
 			
 			/** Fetch the widgets preferences from the INIfile.

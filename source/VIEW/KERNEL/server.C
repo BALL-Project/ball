@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.11 2004/05/22 15:34:26 amoll Exp $
+// $Id: server.C,v 1.12 2004/07/03 12:09:30 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -194,7 +194,7 @@ namespace BALL
 			}
 		}
 		
-		void Server::applyPreferences(Preferences & /* preferences */)
+		void Server::applyPreferences()
 				throw()
 		{
 			if (server_preferences_ == 0) return;
@@ -336,7 +336,7 @@ namespace BALL
     }
 
 
-		void Server::defaultPreferences(Preferences&)
+		void Server::defaultPreferences()
 			throw()
 		{
 			server_preferences_->setDefaultValues();

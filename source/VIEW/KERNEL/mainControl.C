@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.93 2004/06/25 00:34:32 amoll Exp $
+// $Id: mainControl.C,v 1.94 2004/07/03 12:09:30 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -339,14 +339,14 @@ namespace BALL
 			fetchPreferences(preferences_);
 
 			// apply on own preferences tab
-			applyPreferences(*preferences_dialog_);
+			applyPreferences();
 
 			// check menu entries, fetch and apply preferences
 			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
 			{
 				(*it)->checkMenu(*this);
 				(*it)->fetchPreferences(preferences_);
-				(*it)->applyPreferences(*preferences_dialog_);
+				(*it)->applyPreferences();
 			}
 
 			// own menu entries
@@ -400,13 +400,13 @@ namespace BALL
 		void MainControl::applyPreferencesTab()
 		{
 			// apply on own preferences tab
-			applyPreferences(*preferences_dialog_);
+			applyPreferences();
 
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
 			{
-				(*it)->applyPreferences(*preferences_dialog_);
+				(*it)->applyPreferences();
 			}
 		}
 
@@ -418,7 +418,7 @@ namespace BALL
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
 			{
-				(*it)->cancelPreferences(*preferences_dialog_);
+				(*it)->cancelPreferences();
 			}
 		}
 
@@ -429,7 +429,7 @@ namespace BALL
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
 			{
-				(*it)->defaultPreferences(*preferences_dialog_);
+				(*it)->defaultPreferences();
 			}
 		}
 
@@ -742,7 +742,7 @@ namespace BALL
 			}
 		}
 
-		void MainControl::applyPreferences(Preferences & /* preferences */)
+		void MainControl::applyPreferences()
 			throw()
 		{
 			if (main_control_preferences_ != 0)

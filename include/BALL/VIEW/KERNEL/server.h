@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.h,v 1.7 2004/02/26 08:41:40 anhi Exp $
+// $Id: server.h,v 1.8 2004/07/03 12:10:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_SERVER_H
@@ -246,11 +246,11 @@ namespace BALL
 					\see    ServerPreferences
 					\see    Preferences
 			*/
-			virtual void applyPreferences(Preferences &preferences)
+			virtual void applyPreferences()
 				throw();
 
 			///
-			virtual void defaultPreferences(Preferences&)
+			virtual void defaultPreferences()
 				throw();
 			
 			/** Fetch the widgets preferences from the inifile.
