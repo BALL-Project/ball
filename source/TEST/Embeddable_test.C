@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Embeddable_test.C,v 1.6 2004/02/08 21:46:31 oliver Exp $
+// $Id: Embeddable_test.C,v 1.7 2004/02/11 18:52:29 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,7 +19,7 @@ class A
 	: public Embeddable
 {
 	public:
-	BALL_EMBEDDABLE(A,Embeddable)
+	BALL_EMBEDDABLE(A, Embeddable)
 };
 
 class B
@@ -32,10 +32,10 @@ class C
 		public A
 {
 	public:
-	BALL_EMBEDDABLE(C,A)
+	BALL_EMBEDDABLE(C, A)
 };
 
-START_TEST(Embeddable, "$Id: Embeddable_test.C,v 1.6 2004/02/08 21:46:31 oliver Exp $")
+START_TEST(Embeddable, "$Id: Embeddable_test.C,v 1.7 2004/02/11 18:52:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

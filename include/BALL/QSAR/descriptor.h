@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: descriptor.h,v 1.11 2003/08/26 08:04:47 oliver Exp $
+// $Id: descriptor.h,v 1.12 2004/02/11 18:52:27 oliver Exp $
 //
 
 #ifndef BALL_QSAR_DESCRIPTOR_H
@@ -36,26 +36,31 @@ namespace BALL
 		/**	@name Constructors and Destructors
 		*/
 		//@{
+		///
 		Descriptor();
-			
+		///
 		Descriptor(const String& name);
-			
+		///
 		Descriptor(const Descriptor& descriptor);
-
+		///
 		virtual ~Descriptor();
 		//@}
 
 		/**	@name	Processor-related methods
 		*/	
 		//@{
+		///
 		virtual Processor::Result operator () (Molecule& molecule);
 		//@}
 
 		/**	@name Accessors
 		*/
 		//@{
+		///
 		const String& getName() const;
+		///
 		void setName(const String& name);
+		///
 		virtual double compute(const Molecule& molecule);
 		//@}
 

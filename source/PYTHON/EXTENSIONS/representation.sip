@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.7 2003/12/18 19:03:22 oliver Exp $
+// $Id: representation.sip,v 1.8 2004/02/11 18:52:29 oliver Exp $
 //
 
 class Representation
@@ -15,7 +15,7 @@ class Representation
   public:
 	// BALL_CREATE(Representation);
 	ColorProcessor* getColorProcessor() throw();
-	// CompositeSet& getComposites() throw();
+	PyCompositeList getComposites() throw();
 	// CompositesConstIterator begin() const throw();
 	// CompositesConstIterator end() const throw();
 	// CompositesIterator begin() throw();
@@ -28,14 +28,14 @@ class Representation
 	ModelProcessor* getModelProcessor() throw();
 	Representation() throw();
 	Representation(ModelType /model_type/, DrawingPrecision /drawing_precision/, DrawingMode /drawing_mode/) throw();
-	// Representation(const CompositeSet& /composites/, ModelProcessor* /rep_processor/) throw();
-	//Representation(const GeometricObjectList& /object_list/) throw();
+	Representation(const PyCompositeList& /composites/, ModelProcessor* /rep_processor/) throw();
+	// Representation(const GeometricObjectList& /object_list/) throw();
 	Representation(const Representation& /representation/) throw();
 	Size getTransparency() const throw();
 	String getModelName() const throw();
 	String getProperties() const throw();
 	bool isValid() const throw();
-	// const CompositeSet& getComposites() const throw();
+	// CompositeList getComposites() const throw();
 	const GeometricObjectList& getGeometricObjects() const throw();
 	const ModelProcessor* getModelProcessor() const throw();
 	// const Representation& operator = (const Representation& /representation/) throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyCompositeList.h,v 1.1 2003/11/15 12:53:56 oliver Exp $
+// $Id: pyCompositeList.h,v 1.2 2004/02/11 18:52:27 oliver Exp $
 //
 
 #ifndef BALL_PYTHON_PYCOMPOSITELIST_H
@@ -17,6 +17,10 @@
 
 #ifndef BALL_DATAYPE_HASHSET_H
 #	include <BALL/DATATYPE/hashSet.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
+#	include <BALL/VIEW/KERNEL/representation.h>
 #endif
 
 namespace BALL 
@@ -70,10 +74,20 @@ namespace BALL
 		PyCompositeList(const List<Composite*>& composite_list);
 			
 		/// Construction from a HashSet
+		PyCompositeList(const HashSet<const Composite*>& composite_set);
+			
+		/// Construction from a HashSet
 		PyCompositeList(const HashSet<Composite*>& composite_set);
 			
 		///	Destructor
 		virtual ~PyCompositeList() throw();
+		//@}
+		
+		/**	Converters
+		*/
+		//@{
+		/// 
+		operator VIEW::Representation::CompositeSet () const;
 		//@}
 
 	};

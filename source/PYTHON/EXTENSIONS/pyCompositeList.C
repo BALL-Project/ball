@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyCompositeList.C,v 1.2 2003/11/15 12:53:57 oliver Exp $
+// $Id: pyCompositeList.C,v 1.3 2004/02/11 18:52:28 oliver Exp $
 //
 
 #include <BALL/PYTHON/pyCompositeList.h>
@@ -28,7 +28,24 @@ namespace BALL
 	PyCompositeList::PyCompositeList(const HashSet<Composite*>& composite_set)
 		: List<Composite*>()
   {
-		std::copy(composite_set.begin(), composite_set.end(), std::back_inserter<List<Composite*> >(*this));
+		std::copy(composite_set.begin(), composite_set.end(), std::inserter(*this, begin()));
+	}
+
+	PyCompositeList::PyCompositeList(const HashSet<const Composite*>& composite_set)
+		: List<Composite*>()
+  {
+		HashSet<const Composite*>::ConstIterator it(composite_set.begin());
+		for (; +it; ++it)
+		{
+			push_back(const_cast<Composite*>(*it));
+		}
+	}
+
+	PyCompositeList::operator VIEW::Representation::CompositeSet () const
+	{
+		VIEW::Representation::CompositeSet tmp;
+		std::copy(begin(), end(), std::inserter(tmp, tmp.begin()));
+		return tmp;
 	}
 
 	PyCompositeList::~PyCompositeList()

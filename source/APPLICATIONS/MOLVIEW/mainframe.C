@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.121 2004/02/11 14:35:40 amoll Exp $
+// $Id: mainframe.C,v 1.122 2004/02/11 18:52:28 oliver Exp $
 //
 
 #include "mainframe.h"
@@ -68,6 +68,7 @@ namespace BALL
 		// Logstream setup -----
 		// ---------------------
 		Log.remove(std::cout);
+		Log.remove(std::cerr);
 
 		control_ = new MolecularControl(this, "Structures");
 		CHECK_PTR(control_);
