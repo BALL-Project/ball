@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.13.4.1 2002/08/16 15:35:08 anhi Exp $
+// $Id: surfaceModel.C,v 1.13.4.2 2002/08/26 15:55:32 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -171,9 +171,7 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		Mesh *
-		AddSurfaceModel::createMesh_
-			()
+		Mesh*	AddSurfaceModel::createMesh_()
 		{
 			return (Mesh *)(new Mesh());
 		}

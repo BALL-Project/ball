@@ -1,4 +1,4 @@
-// $Id: glObjectCollector.C,v 1.2 2001/05/13 14:28:36 hekl Exp $
+// $Id: glObjectCollector.C,v 1.2.4.1 2002/08/26 15:55:32 oliver Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h>
 
@@ -84,7 +84,7 @@ namespace BALL
 			return true;
 		}
 				
-		Processor::Result GLObjectCollector::operator()
+		Processor::Result GLObjectCollector::operator ()
 			(Composite& composite)
 			throw()
 		{

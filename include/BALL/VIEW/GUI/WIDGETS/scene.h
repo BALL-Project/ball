@@ -1,4 +1,4 @@
-// $Id: scene.h,v 1.8 2001/07/16 14:49:32 amoll Exp $
+// $Id: scene.h,v 1.8.4.1 2002/08/26 15:55:32 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -77,7 +77,8 @@ namespace BALL
 				be assigned to a scene.
 				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/scene.h}
 		*/
-		class Scene: public QGLWidget, public ModularWidget
+		class Scene
+			: public QGLWidget, public ModularWidget
 		{
 			Q_OBJECT
 
@@ -591,49 +592,15 @@ namespace BALL
 				throw();
 			//@}
 
-
-/*
-			signals:
-
-			// must be updated => new event handler
-
-			void clickedButton
-				(Scene::MouseButton,
-				 Scene::Event);
-
-			void clickedMouseButtonOne
-				(Scene::Event);
-
-			void clickedMouseButtonTwo
-				(Scene::Event);
-
-			void clickedMouseButtonThree
-				(Scene::Event);
-
-			void releasedButton
-				(Scene::MouseButton,
-				 Scene::Event);
-
-			void releasedMouseButtonOne
-				(Scene::Event);
-
-			void releasedMouseButtonTwo
-				(Scene::Event);
-
-			void releasedMouseButtonThree
-				(Scene::Event);
-*/
+			/**	Interface to external renderers.
+					External renderers, e.g. the \ref{PovRayRenderer}, can render the objects
+					represented in the scene into their own representation, for example into
+					input files for external ray tracers or 3D description languages.
+			*/
+			Processor::Result apply(TUnaryProcessor<GeometricObject>& renderer) throw();
 
 			protected:
 
-			/*
-			const Vector3& getLastLookAtPosition_() const
-				throw();
-			void getLastLookAtPosition_(Vector3& v) const
-				throw();
-			void getLastLookAtPosition_(Real& x, Real& y, Real& z) const
-				throw();
-			*/
 
 			/** @name Protected members
 			*/
@@ -861,7 +828,6 @@ namespace BALL
 				MOUSE_BUTTON__THREE = 3
 			};
 
-
 			void setRenderMode_(RenderMode mode)
 				throw();
 
@@ -906,7 +872,7 @@ namespace BALL
 			
 			bool rotate_mode_;
 
-			GLObjectCollector *GL_object_collector_;
+			GLObjectCollector* GL_object_collector_;
 			GLPrimitiveManager GL_primitive_manager_;
 
 			Vector3 system_origin_;

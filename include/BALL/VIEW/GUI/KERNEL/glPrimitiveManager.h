@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
+// $Id: glPrimitiveManager.h,v 1.7.4.1 2002/08/26 15:55:29 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -718,8 +718,8 @@ namespace BALL
 			typedef HashMap<GeometricObject*, Name> NameHashMap;
 			typedef HashMap<Name, GeometricObject*> GeometricObjectHashMap;
 
-			GeometricObjectHashMap name_to_object_;
-			NameHashMap object_to_name_;
+			GeometricObjectHashMap	name_to_object_;
+			NameHashMap							object_to_name_;
 
 			Name all_names_;
 		};
