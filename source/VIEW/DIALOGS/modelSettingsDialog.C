@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.17 2004/09/01 14:14:04 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.18 2004/09/01 15:02:09 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -204,7 +204,9 @@ namespace BALL
 			{
 				((AddBallAndStickModel*)&mp)->setStickRadius(getBallAndStickStickRadius());
 				((AddBallAndStickModel*)&mp)->setBallRadius(getBallRadius());
-				((AddBallAndStickModel*)&mp)->enableDashedBonds(ballAndStickDashedBondsEnabled());
+				((AddBallAndStickModel*)&mp)->enableDashedBonds(
+												((AddBallAndStickModel*)&mp)->isBallAndStickModel() &&
+												ballAndStickDashedBondsEnabled());
 				return;
 			}
 					
