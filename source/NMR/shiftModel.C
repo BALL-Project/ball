@@ -1,4 +1,4 @@
-// $Id: shiftModel.C,v 1.11 2000/09/25 19:12:09 oliver Exp $
+// $Id: shiftModel.C,v 1.12 2000/09/27 07:20:04 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/FORMAT/parameterSection.h>
@@ -254,14 +254,21 @@ namespace BALL
 	Processor::Result ShiftModel::operator () (Composite& composite)
 		throw()
 	{
-		// call every module
+		// Clear previsously assigned shifts and...
+		Atom* atom = dynamic_cast<Atom*>(&composite);
+		if (atom != 0)
+		{
+			atom->clearProperty(ShiftModule::PROPERTY__SHIFT);
+		}
+			
+		// ...call operator () for every module.
 		Processor::Result result;
-
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)
 		{
+			// abort if any of the modules returns Processor::ABORT
 			result = (*it)->operator () (composite);
-			if (result == Processor::BREAK)
+			if (result == Processor::ABORT)
 			{
 				break;
 			}
