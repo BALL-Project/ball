@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.C,v 1.8 2001/01/29 18:17:21 anhi Exp $
+// $Id: bruker1DFile.C,v 1.9 2001/02/06 18:12:29 anhi Exp $
 
 
 #include <BALL/FORMAT/bruker1DFile.h>
@@ -87,7 +87,7 @@ namespace BALL
 			    } 
 			  else 
 			    { // conversion from little to big
-			      numdum = ( ((numdum & 0x000000FFL) << 24)
+			      numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
 					 |((numdum & 0x0000FF00L) << 16)
 					 |((numdum & 0x00FF0000L) >> 16)
 					 |((numdum & 0xFF000000L) >> 24));
@@ -97,7 +97,7 @@ namespace BALL
 			{
 			  if (littleEndian == true) // conversion from big to little
 			    {
-			      numdum = ( ((numdum & 0x000000FFL) << 24)
+			      numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
 					 |((numdum & 0x0000FF00L) << 16)
 					 |((numdum & 0x00FF0000L) >> 16)
 					 |((numdum & 0xFF000000L) >> 24));

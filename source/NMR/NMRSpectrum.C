@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.C,v 1.12 2000/09/30 16:43:25 oliver Exp $
+// $Id: NMRSpectrum.C,v 1.13 2001/02/06 18:13:39 anhi Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
 #include<BALL/NMR/randomCoilShiftProcessor.h>
@@ -6,6 +6,7 @@
 #include<BALL/NMR/haighMallionShiftProcessor.h>
 #include<BALL/NMR/EFShiftProcessor.h>
 #include<BALL/NMR/anisotropyShiftProcessor.h>
+#include<BALL/NMR/HBondShiftProcessor.h>
 #include<BALL/FORMAT/PDBFile.h>
 #include<BALL/KERNEL/PTE.h>
 #include<BALL/COMMON/limits.h>
@@ -185,7 +186,8 @@ namespace BALL
 				outfile << atom_ptr->getProperty(AnisotropyShiftProcessor::PROPERTY__ANISOTROPY_SHIFT).getFloat() << " ";
 				outfile << atom_ptr->getProperty(EFShiftProcessor::PROPERTY__EF_SHIFT).getFloat() << " ";
 				outfile << atom_ptr->getProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat() << " ";
-				outfile << atom_ptr->getProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat() << " " << endl;
+				outfile << atom_ptr->getProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat() << " ";
+				outfile << atom_ptr->getProperty(HBondShiftProcessor::PROPERTY__HBOND_SHIFT).getFloat() << " " << endl;
 			}
 		}
 	}

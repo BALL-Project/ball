@@ -1,4 +1,4 @@
-// $Id: shiftModel.C,v 1.12 2000/09/27 07:20:04 oliver Exp $
+// $Id: shiftModel.C,v 1.13 2001/02/06 18:14:05 anhi Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/FORMAT/parameterSection.h>
@@ -7,6 +7,7 @@
 #include <BALL/NMR/EFShiftProcessor.h>
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 #include <BALL/NMR/randomCoilShiftProcessor.h>
+#include <BALL/NMR/HBondShiftProcessor.h>
 
 using namespace std;
 
@@ -249,6 +250,7 @@ namespace BALL
 		registerModule("ElectricField", getNew<EFShiftProcessor>);
 		registerModule("Anisotropy", getNew<AnisotropyShiftProcessor>);
 		registerModule("RandomCoil", getNew<RandomCoilShiftProcessor>);
+		registerModule("HBond", getNew<HBondShiftProcessor>);
 	}
 
 	Processor::Result ShiftModel::operator () (Composite& composite)

@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.16 2000/12/22 19:12:17 amoll Exp $
+// $Id: regularData2DWidget.C,v 1.17 2001/02/06 18:14:39 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -70,59 +70,12 @@ NewRegularData2DMessage::~NewRegularData2DMessage()
   #endif
 }
 
-PixWid::PixWid(QWidget *w) 
-	: QWidget(w), select_(false)
-{
-  setMouseTracking(true);
-}
-
-void PixWid::mousePressEvent(QMouseEvent *e)
-{
-  if (e->button() == QMouseEvent::LeftButton)
-  {
-    beg_old_ = beg_;
-    grabMouse(crossCursor);
-    beg_ = e->pos();
-    select_ = true;
-  }
-	else 
-	{
-    emit context(e);
-  }
-}
-
-void PixWid::mouseReleaseEvent(QMouseEvent *e)
-{
-  if (select_) 
-	{
-    releaseMouse();
-    end_old_ = end_;
-    end_ = e->pos();
-    select_ = false;
-    emit selected(beg_, end_);
-  }
-}
-
-void PixWid::mouseMoveEvent(QMouseEvent *e)
-{
-  if (select_) // we first have to draw the current selection
-  {
-//     QPainter q(this);
-    
-//     q.setPen(QColor(white));
-//     q.drawRect(beg_.x(), beg_.y(), beg_.x() - end_.x(), beg_.y() - end_.y());
-  }
-
-  emit (mouseMoved(e->x(), e->y()));
-}
-
 RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double max, QWidget *parent) 
   : QScrollView(parent), 
 		ModularWidget("RegularData2DWidget"), 
 		pm_(0), 
 		legend_map_(0), 
 		buffer_map_(0), 
-		pix_wid_(0),
 		legend_last_x_(0),
 		legend_last_y_(0),
 		lengthx_(lx_), 
@@ -239,11 +192,6 @@ bool RegularData2DWidget::reactToMessages_(Message* message)
 				delete (pm_);
 				pm_ = 0;
       }
-      if (pix_wid_)
-      {
-				delete (pix_wid_);
-				pix_wid_ = 0;
-      }
 
       lengthx_ = spec_->getXSize();
       lengthy_ = spec_->getYSize();
@@ -342,15 +290,6 @@ void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x
 		{
       delete (pm_);
 		}
-    if (pix_wid_)
-		{
-      delete (pix_wid_);
-		}
-    pix_wid_ = new PixWid(viewport());
-    connect(pix_wid_, SIGNAL(mouseMoved(Position, Position)), this, SLOT(NewMousePos(Position,Position)));
-    connect(pix_wid_, SIGNAL(context(QMouseEvent*)), this, SLOT(mousePressEvent(QMouseEvent*)));
-    connect(pix_wid_, SIGNAL(selected(QPoint, QPoint)), this, SLOT(Selected(QPoint, QPoint)));
-    pix_wid_->resize(nx, ny);
 
     pm_ = new QPixmap(nx, ny);
     pm_->fill();
@@ -380,10 +319,7 @@ void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x
 	    }
 		}
     paint.end();
-    //    addChild(pix_wid_);
-//     pix_wid_->show();
-//     QScrollView::resizeEvent(new QResizeEvent(size(), size()));
-    resizeContents(pix_wid_->width(), pix_wid_->height());
+
   }
 }
 
@@ -473,10 +409,6 @@ void RegularData2DWidget::createPlot()
 	{
     delete (pm_); 
 	}
-  if (pix_wid_)
-	{
-    delete (pix_wid_);
-	}
   spec_->createGroundState();
   min_ = spec_->getGroundState() + spec_->getSigmaGroundState();
  
@@ -489,12 +421,6 @@ void RegularData2DWidget::createPlot()
 
   full_length_x_ = lengthx_;
   full_length_y_ = lengthy_;
-
-  pix_wid_ = new PixWid(viewport());
-  connect(pix_wid_, SIGNAL(mouseMoved(Position,Position)), this, SLOT(NewMousePos(Position,Position)));
-  connect(pix_wid_, SIGNAL(context(QMouseEvent*)), this, SLOT(mousePressEvent(QMouseEvent*)));
-  connect(pix_wid_, SIGNAL(selected(QPoint, QPoint)), this, SLOT(Selected(QPoint, QPoint)));
-  pix_wid_->resize(full_length_x_, full_length_y_);
 
   // Draw the points
   pm_ = new QPixmap(full_length_x_, full_length_y_);
@@ -519,11 +445,6 @@ void RegularData2DWidget::createPlot()
   }
 
   paint.end();
-  //  addChild(pix_wid_);
-  // Hack to enable display of scrollbars etc...
-//   pix_wid_->show();
-//   QScrollView::resizeEvent(new  QResizeEvent(size(), size()));
-  resizeContents(pix_wid_->width(), pix_wid_->height());
 }
 
 void RegularData2DWidget::plotContour()

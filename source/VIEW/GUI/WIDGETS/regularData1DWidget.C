@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.C,v 1.1 2001/01/29 17:20:27 anhi Exp $
+// $Id: regularData1DWidget.C,v 1.2 2001/02/06 18:14:32 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
 
@@ -136,7 +136,7 @@ bool RegularData1DWidget::operator == (const RegularData1DWidget &widget) const
 void RegularData1DWidget::createPlot()
 {
   QPointArray fdummy(length_);
-  int i;
+  Size i;
   double min_el, max_el;
 
   min_el = spec_->getLowerBound(); // we have to be careful not to lose important digits
@@ -161,6 +161,7 @@ void RegularData1DWidget::createPlot()
   for (i=0; i<length_; i++)
   {
     fdummy.putPoints(i, 1, i, (*spec_)[i]);
+    cout << (*spec_)[i] << endl;
   }
   p.setPen( QColor(red) );
   p.drawPolyline( fdummy );

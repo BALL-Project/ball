@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.C,v 1.11 2000/12/18 12:18:48 anker Exp $
+// $Id: bruker2DFile.C,v 1.12 2001/02/06 18:12:35 anhi Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -130,7 +130,7 @@ namespace BALL
 						}
 						else 
 						{ // conversion from little to big
-							numdum = ( ((numdum & 0x000000FFL) << 24)
+							numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
 									|((numdum & 0x0000FF00L) << 8)
 									|((numdum & 0x00FF0000L) >> 8)
 									|((numdum & 0xFF000000L) >> 24));
@@ -140,7 +140,7 @@ namespace BALL
 					{
 						if (littleEndian == true) // conversion from big to little
 						{
-							numdum = ( ((numdum & 0x000000FFL) << 24)
+							numdum = (signed long) ( ((numdum & 0x000000FFL) << 24)
 									|((numdum & 0x0000FF00L) << 8)
 									|((numdum & 0x00FF0000L) >> 8)
 									|((numdum & 0xFF000000L) >> 24));
@@ -155,7 +155,7 @@ namespace BALL
 					actMatF2 = (actMat % matNumF2); // x - coordinate of submatrix
 					actMatF1 = (actMat / matNumF2); // y - coordinate of submatrix
 
-					spectrum_[ f2 + XDIMF2_ * actMatF2 + ( ( f1 + XDIMF1_ * actMatF1 ) * SIF2_ ) ] = numdum;
+					spectrum_[ f2 + XDIMF2_ * actMatF2 + ( ( f1 + XDIMF1_ * actMatF1 ) * SIF2_ ) ] = (float) numdum;
 				}
 			}
 		}
