@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.C,v 1.17 2003/08/26 09:17:54 oliver Exp $
+// $Id: lennardJones.C,v 1.18 2005/02/18 12:50:51 amoll Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -328,12 +328,12 @@ namespace BALL
 	bool LennardJones::hasParameters(Atom::Type I, Atom::Type J) const
 		throw()
 	{
-		if ((I < 0) && (I >= (Index)number_of_atom_types_))
+		if (I < 0 || I >= (Index)number_of_atom_types_)
 		{
 			return false;
 		}
 
-		if ((J < 0) && (J >= (Index)number_of_atom_types_))
+		if (J < 0 || J >= (Index)number_of_atom_types_)
 		{
 			return false;
 		}
@@ -342,8 +342,7 @@ namespace BALL
 	}
 
 
-	LennardJones::Values LennardJones::getParameters
-		(Atom::Type I, Atom::Type J) const throw()
+	LennardJones::Values LennardJones::getParameters(Atom::Type I, Atom::Type J) const throw()
 	{
 		LennardJones::Values parameters;
 		assignParameters(parameters, I, J);
