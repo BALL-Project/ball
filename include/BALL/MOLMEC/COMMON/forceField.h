@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.27 2003/08/26 08:04:25 oliver Exp $
+// $Id: forceField.h,v 1.28 2004/02/19 18:46:26 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -312,6 +312,12 @@ namespace BALL
 				each component in the force field.
 		*/
 		virtual void update();
+
+		/** Get the current results in String form
+		 		(Generic function to be overloaded in derived classes.)
+		*/
+		virtual String getResults() const
+			throw() { return "undefined";}
 
 		//@}
 		/**	@name	Public Attributes

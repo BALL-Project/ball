@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.h,v 1.20 2003/08/26 08:04:23 oliver Exp $ 
+// $Id: amber.h,v 1.21 2004/02/19 18:46:26 amoll Exp $ 
 //
 
 // Molecular Mechanics: Amber force field class
@@ -253,6 +253,10 @@ namespace BALL
 				This method return 20 as a default value.
 		*/
 		Size getUpdateFrequency() const;
+
+		/// Get the current results in String form
+		virtual String getResults() const
+			throw();
 
 		//@}
 

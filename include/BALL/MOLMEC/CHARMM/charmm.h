@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.h,v 1.14 2003/08/26 08:04:24 oliver Exp $
+// $Id: charmm.h,v 1.15 2004/02/19 18:46:26 amoll Exp $
 //
 
 // Molecular Mechanics: CHARMM force field class
@@ -282,6 +282,10 @@ namespace BALL
 		/**	Return true, if the parameters have already been initialized
 		*/
 		bool hasInitializedParameters() const;
+		
+		/// Get the current results in String form
+		virtual String getResults() const
+			throw();
 
 		//@}
 
