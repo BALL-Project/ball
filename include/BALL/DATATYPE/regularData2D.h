@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.2 2000/11/15 18:19:01 anhi Exp $
+// $Id: regularData2D.h,v 1.3 2000/11/24 16:48:08 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 #define BALL_DATATYPE_REGULARDATA2D_H
@@ -99,7 +99,7 @@ namespace BALL
 		
 		/**     Return the position of the data point nearest to x, y.
 		 */
-		const pair<Position, Position>& getNearestPosition(double x, double y);
+		void getNearestPosition(double x, double y, pair<Position, Position>& dum);
 
 		/**     Return the value at coordinates x, y. If there's no data point at that location, it will be
                         interpolated.
@@ -343,10 +343,8 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	const pair<Position, Position>& TRegularData2D<T>::getNearestPosition(double x, double y)
+	void TRegularData2D<T>::getNearestPosition(double x, double y, pair<Position, Position>& res)
 	{
-	  pair<Position, Position> res;
-	  
 	  if (x > xlower_)
 	  {
 	    if (x < xupper_)
@@ -387,8 +385,10 @@ namespace BALL
 	  double stepx, stepy;
 	  double correctionx, correctiony;
 	  double shx, shy;
-	  pair<Position, Position> dum;
-	  double res;
+	  pair<Position, Position> dum[4];
+	  double res=0.0;
+	  double t, u;
+	  int i;
 
 	  if (xsize_ && ysize_)
 	  {
@@ -400,34 +400,15 @@ namespace BALL
 	    Position ax, ay;
 
 	    // Find out where we are in the data
-	    ax = floor((valx - xlower_) / stepx);
-	    ay = floor((valy - ylower_) / stepy);
-	    correctionx = (valx - xlower_) - ax*stepx;
-	    correctiony = (valy - ylower_) - ay*stepy;
+	    ax = (Position) floor((valx - xlower_) / stepx); // this is the index of the lower left corner.
+	    ay = (Position) floor((valy - ylower_) / stepy);
 
-	    // upper left corner of surrounding square
-	    shx = valx - correctionx;
-	    shy = valy + (stepy - correctiony);
-	    dum = getNearestPosition(shx, shy);
-	    res += (1./(sqrt(pow(correctionx, 2) + pow(correctiony, 2))) * data_[dum.first + xsize_*dum.second]); // ???
+	    t = (valx - (xlower_ + ax*stepx))  / (stepx);
+	    u = (valy - (ylower_ + ay*stepy)) /  (stepy);
 
-	    // upper right corner of surrounding square
-	    shx = valx + (stepx - correctionx);
-	    shy = valy + (stepy - correctiony);
-	    dum = getNearestPosition(shx, shy);
-	    res += (1./(sqrt(pow(correctionx, 2) + pow(correctiony, 2))) * data_[dum.first + xsize_*dum.second]); // ???
+	    res = (1-t)*(1-u)*data_[ax + xsize_*ay] + t*(1-u)*data_[(ax+1) + xsize_*ay] \
+	      + t*u*data_[(ax+1) + xsize_*(ay+1)] + (1-t)*u*data_[ax + xsize_*(ay+1)];
 
-	    // lower right corner of surrounding square
-	    shx = valx + (stepx - correctionx);
-	    shy = valy - correctiony;
-	    dum = getNearestPosition(shx, shy);
-	    res += (1./(sqrt(pow(correctionx, 2) + pow(correctiony, 2))) * data_[dum.first + xsize_*dum.second]); // ???
-
-	    // lower left corner of surrounding square
-	    shx = valx - correctionx;
-	    shy = valy - correctiony;
-	    dum = getNearestPosition(shx, shy);
-	    res += (1./(sqrt(pow(correctionx, 2) + pow(correctiony, 2))) * data_[dum.first + xsize_*dum.second]); // ???
 	  }
 	  return res;
 	}

@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.1 2000/11/15 18:19:39 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.2 2000/11/24 16:50:22 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -9,6 +9,7 @@
 #include <qpixmap.h>
 #include <qpainter.h>
 #include <qscrollview.h>
+#include <qpopupmenu.h>
 
 #include <iostream>
 #include <fstream>
@@ -17,6 +18,10 @@
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+
+#ifndef BALL_CONCEPT_COMPOSITE_H
+#       include <BALL/CONCEPT/composite.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -63,7 +68,7 @@ class RegularData2DWidget
 {
   Q_OBJECT
  public:
-  RegularData2DWidget(vector<double> &d_, int lx_, int ly_, double min=0, double max=1., QWidget *parent = 0);
+  RegularData2DWidget(int lx_, int ly_, double min=0, double max=1., QWidget *parent = 0);
   RegularData2DWidget(const RegularData2DWidget& widget);
 
   ~RegularData2DWidget();
@@ -73,9 +78,9 @@ class RegularData2DWidget
    */
   void createLegend( int w, int h );
 
-  /** Scale the data to the new dimensions nx, ny
+  /** Scales the data in the rectangle (x1, y1, x2, y2) to the dimensions nx, ny
    */
-  void scale(Size nx, Size ny);
+  void scale(Size nx, Size ny, double x1, double y1, double x2, double y2);
 
   /**
    * Creates a pixmap containing nx * ny data points from startx to endx and starty to endy
@@ -105,6 +110,8 @@ class RegularData2DWidget
  
   void enterEvent( QEvent * );
   void leaveEvent( QEvent * );
+
+  void mousePressEvent( QMouseEvent *e );
   
   /**	@name	ModularWidget related methods
    */
@@ -148,6 +155,8 @@ class RegularData2DWidget
   Size snumpoints_;
   /* Stores the spectrum */
   RegularData2D *spec_;
+  /* Context-menu */
+  QPopupMenu *men_;
 };
   
 #endif
