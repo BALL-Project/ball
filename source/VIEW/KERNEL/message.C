@@ -1,10 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.27 2004/12/19 13:33:57 amoll Exp $
+// $Id: message.C,v 1.27.4.1 2005/04/01 14:35:16 haid Exp $
+
+#include <../source/APPLICATIONS/DOCKVIEW/dockResult.h>
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
+
 
 using namespace std;
 
@@ -239,7 +242,6 @@ void MolecularTaskMessage::setType(MolecularTaskMessageType type)
 	type_ = type;
 }
 
-
 NewTrajectoryMessage::NewTrajectoryMessage()
 	throw()
 	: CompositeMessage(),
@@ -247,6 +249,16 @@ NewTrajectoryMessage::NewTrajectoryMessage()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new NewTrajectoryMessage" << std::endl;		
+	#endif
+}
+
+NewDockResultMessage::NewDockResultMessage()
+	throw()
+	: CompositeMessage(),
+		dock_res_(0)        ///???
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new NewDockResultMessage" << std::endl;
 	#endif
 }
 
