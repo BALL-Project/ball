@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.3 1999/09/25 14:26:39 oliver Exp $
+// $Id: energyMinimizer.h,v 1.4 1999/11/30 19:48:18 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -40,10 +40,13 @@
 
 #include <vector>
 
-namespace BALL {
+namespace BALL 
+{
 
 	class ForceField;
 
+	/**
+	*/
 	class EnergyMinimizer
 	{
 		public:
@@ -55,9 +58,12 @@ namespace BALL {
 		/**	Error codes of the ForceField class
 		*/
 		enum	ErrorCode 
-		{
+		{	
+			///
 			ERROR__NONE	= -1,
+			///
 			ERROR__UNKNOWN,
+			///
 			ERROR__NOT_IMPLEMENTED,
 
 			NUMBER_OF_ERRORS
@@ -128,8 +134,6 @@ namespace BALL {
 
 		//@}
 
-
-
 		/**	@name	Constructors and Destructors	
 		*/
 		//@{
@@ -193,7 +197,7 @@ namespace BALL {
 
 		/**	Specific setup
 		*/
-		virtual bool specificSetup(void);
+		virtual bool specificSetup();
 
 		//@}
 
@@ -205,7 +209,7 @@ namespace BALL {
 
 		/**	Get the current iteration number
 		*/
-		Size	getNumberOfIteration(void) const;
+		Size	getNumberOfIteration() const;
 
 		/**	Set the iteration number
 		*/
@@ -235,7 +239,7 @@ namespace BALL {
 
 		/**	Get the energy ouput frequency
 		*/
-		Size	getEnergyOutputFrequency(void) const;
+		Size	getEnergyOutputFrequency() const;
 
 		/** Set the energy difference bound
 		*/
@@ -243,15 +247,15 @@ namespace BALL {
 
 		/**	Get the energy difference bound
 		*/
-		float	getEnergyDifferenceBound(void) const;
+		float	getEnergyDifferenceBound() const;
 
 		/**     Set the maximal shift value
 		*/
-		void    setMaximalShift( float maximal_shift );
+		void    setMaximalShift(float maximal_shift);
 
 		/**     Get the maximal shift value
 		*/
-		float   getMaximalShift( void ) const;
+		float   getMaximalShift() const;
 
 		/**	Set the snapshot output frequency
 		*/
@@ -259,11 +263,11 @@ namespace BALL {
 
 		/**	Get the snapshot output frequency
 		*/
-		Size	getSnapshotOutputFrequency(void) const;
+		Size	getSnapshotOutputFrequency() const;
 
 		/**	Return the force field of the energy minimizer
 		*/
-		ForceField*	getForceField(void);
+		ForceField*	getForceField();
 
 		/**	Minimize the energy of the system bound to the force field.	
 				If a number of steps is given, the minimization is aborted after

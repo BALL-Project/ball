@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.4 1999/10/30 12:53:24 oliver Exp $
+// $Id: string.iC,v 1.5 1999/11/30 19:47:16 oliver Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -91,7 +91,9 @@ BALL_INLINE
 void Substring::destroy()
 {
 	if (bound_ != 0)
+	{
 	  bound_->erase(from_, to_ - from_ + 1);
+	}
 
   unbind();
 }
