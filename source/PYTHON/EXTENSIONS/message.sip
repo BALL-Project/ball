@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.sip,v 1.1 2003/12/10 15:59:01 amoll Exp $
+// $Id: message.sip,v 1.2 2003/12/10 17:16:20 amoll Exp $
 //
 
 class Message
@@ -26,13 +26,14 @@ class CompositeMessage
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/message.h>
+	typedef CompositeMessage::CompositeMessageType CompositeMessageType;
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
 
 	public:
 
-	enum Types
+	enum CompositeMessageType
 	{
 		UNDEFINED = -1,
 		NEW_COMPOSITE,
@@ -63,13 +64,14 @@ class SceneMessage
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/message.h>
+	typedef SceneMessage::SceneMessageType SceneMessageType;
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
 
 	public:
 
-	enum Type
+	enum SceneMessageType
 	{
 		UNDEFINED = 0,
 		REBUILD_DISPLAY_LISTS,
@@ -78,12 +80,12 @@ class SceneMessage
 		REMOVE_COORDINATE_SYSTEM,
 		EXPORT_PNG
 	};
-	SceneMessage(Type) throw();
+	SceneMessage(SceneMessageType) throw();
 	SceneMessage(const SceneMessage&) throw();
 	~SceneMessage() throw();
 	
-	void setType(Type) throw();
-	Type getType() const throw();
+	void setType(SceneMessageType) throw();
+	SceneMessageType getType() const throw();
 //	void setCamera(const Camera&) throw();
 //	Camera& getCamera() throw();
 //	const Camera& getCamera() const throw();
