@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.8 2002/12/01 14:05:20 oliver Exp $
+// $Id: control.h,v 1.10.4.9 2002/12/02 20:53:12 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -71,15 +71,15 @@ namespace BALL
 		{
 			Q_OBJECT
 
-			class MyListViewItem
+			class SelectableListViewItem
 				: public QCheckListItem
 			{
 				public:
 
-				MyListViewItem(QListViewItem* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
+				SelectableListViewItem(QListViewItem* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
 					throw();
 
-				MyListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
+				SelectableListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
 					throw();
 
 				Composite* getComposite() { return composite_;};
@@ -97,7 +97,7 @@ namespace BALL
 				private: 
 				
 				// prevent use of default cstr
-				MyListViewItem();
+				SelectableListViewItem();
 			};
 
 				
@@ -676,7 +676,12 @@ namespace BALL
 
 			QString					getRootTypeName_(QListViewItem* item)
 				throw();
+
+			void selectRecursive_(Composite* composite)
+				throw();			
 			
+			void deselectRecursive_(Composite* composite)
+				throw();			
 			
 			// ATTRIBUTES
 			List<Composite*> selected_;
@@ -695,6 +700,9 @@ namespace BALL
 			QListViewItem *context_item_;
 
 			ColorMeshDialog* colorMeshDlg_;
+
+			HashMap<Composite*, QListViewItem*> composite_to_item_;
+						
 		};
 		
 		
