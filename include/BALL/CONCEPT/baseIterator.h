@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.14 2001/06/29 14:10:11 anker Exp $
+// $Id: baseIterator.h,v 1.15 2001/07/03 09:16:23 amoll Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -192,7 +192,6 @@ namespace BALL
 		*/
 		const DataType* operator -> () const
 			throw(Exception::InvalidIterator);
-
 		//@}
 		/**	@name	Predicates
 		*/
@@ -208,7 +207,7 @@ namespace BALL
 				@see operator ==
 		*/
 		bool operator != (const ConstBaseIterator &iterator) const
-			throw();
+			throw(Exception::IncompatibleIterators);
 
 		/** Singularity predicate.
 				This method returns {\bf true} if the iterator is singular, i.e., 
@@ -459,7 +458,7 @@ namespace BALL
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstBaseIterator<Container, DataType, Position, Traits>::operator != (const ConstBaseIterator &iterator) const
-		throw()
+		throw(Exception::IncompatibleIterators)
 	{
 		if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 		{
