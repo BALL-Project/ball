@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.15 2004/04/01 13:22:06 amoll Exp $
+// $Id: molecularStructure.h,v 1.16 2004/04/16 14:55:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -87,6 +87,9 @@ namespace BALL
 			*/
 			MolecularStructure(QWidget* parent = 0, const char* name = 0)
 				throw();
+			
+			/// only needed for Python Interface, dont call it!
+			MolecularStructure(const MolecularStructure& m);
 			
 			//@}
 			/** @name Destructors 
@@ -237,7 +240,7 @@ namespace BALL
 			//@}
 			
 			private:
-			
+
 			virtual void calculateCenter_(Composite& composite);
 
 			virtual void addComposite_(Composite& composite, const String& name)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.37 2004/04/01 13:21:57 amoll Exp $
+// $Id: molecularStructure.C,v 1.38 2004/04/16 14:55:34 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -175,6 +175,16 @@ namespace BALL
 		main_control.removeMenuEntry(MainControl::BUILD, "Map two Proteins", this,
 																										SLOT(mapProteins()));
 	}
+
+
+	MolecularStructure::MolecularStructure(const MolecularStructure& m)
+	 : QWidget(),
+		 ModularWidget()
+	{ 
+		// prevent warnings
+		m.isValid();
+	}
+
 
 	void MolecularStructure::onNotify(Message *message)
 		throw()
