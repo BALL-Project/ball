@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.4 2004/02/18 17:14:13 amoll Exp $
+// $Id: molecularStructure.h,v 1.5 2004/02/18 17:37:42 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
 #define BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -18,8 +18,8 @@
  #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
 #endif
 
-#ifndef BALL_VIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
-# include <BALL/VIEW/DIALOGS/amberMinimizationDialog.h>
+#ifndef BALL_VIEW_DIALOGS_MINIMIZATIONDIALOG_H
+# include <BALL/VIEW/DIALOGS/minimizationDialog.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
@@ -229,7 +229,7 @@ class MolecularStructure
 	void calculateForceFieldEnergy();
 
 	///
-	void amberMinimization();
+	void runMinimization();
 
 	///
 	void amberMDSimulation();
@@ -283,8 +283,8 @@ private:
 	AmberFF* 										amber_;
 	CharmmFF*										charmm_;
 	AmberConfigurationDialog    amber_dialog_;
-	CharmmConfigurationDialog charmm_dialog_;
-	AmberMinimizationDialog 		minimization_dialog_;
+	CharmmConfigurationDialog 	charmm_dialog_;
+	MinimizationDialog 					minimization_dialog_;
 	MolecularDynamicsDialog 		md_dialog_;
 };
 

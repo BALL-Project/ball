@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.16 2004/02/18 17:37:35 amoll Exp $
+// $Id: molecularStructure.C,v 1.17 2004/02/18 17:38:26 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1262,6 +1262,8 @@ namespace BALL
 		use_amber_ = true;
 		menuBar()->setItemChecked(charmm_ff_id_, false);
 		menuBar()->setItemChecked(amber_ff_id_, true);
+		md_dialog_.setForceField(true);
+		minimization_dialog_.setForceField(true);
 	}
 	
 	void MolecularStructure::chooseCharmmFF()
@@ -1269,6 +1271,8 @@ namespace BALL
 		use_amber_ = false;
 		menuBar()->setItemChecked(amber_ff_id_, false);
 		menuBar()->setItemChecked(charmm_ff_id_, true);
+		md_dialog_.setForceField(false);
+		minimization_dialog_.setForceField(false);
 	}
 
 	void MolecularStructure::setupForceField()
@@ -1276,14 +1280,10 @@ namespace BALL
 		if (use_amber_)
 		{
 			showAmberForceFieldOptions();
-			md_dialog_.setForceField(true);
-			minimization_dialog_.setForceField(true);
 		}
 		else
 		{
 			showCharmmForceFieldOptions();
-			md_dialog_.setForceField(false);
-			minimization_dialog_.setForceField(false);
 		}
 	}
 
