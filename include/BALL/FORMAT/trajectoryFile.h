@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.h,v 1.5 2001/03/11 19:26:34 anker Exp $
+// $Id: trajectoryFile.h,v 1.6 2001/03/21 16:06:07 anker Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -88,6 +88,12 @@ namespace BALL
 		Size getNumberOfSnapShots() const
 			throw();
 
+		/** get the number of atoms coverd by each snapshot
+				@return the number of atoms 
+		*/
+		Size getNumberOfAtoms() const
+			throw();
+
 		//@}
 		/// @name Public methods for file handling
 		//@{
@@ -147,6 +153,9 @@ namespace BALL
 
 		//_ The number of snapshots stored in that file
 		Size number_of_snapshots_;
+		
+		//_ The number of atoms covered by the snapshots
+		Size number_of_atoms_;
 		
 		//@}
 		
