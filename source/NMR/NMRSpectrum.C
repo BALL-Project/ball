@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.C,v 1.13 2001/02/06 18:13:39 anhi Exp $
+// $Id: NMRSpectrum.C,v 1.14 2001/05/07 00:56:40 oliver Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
 #include<BALL/NMR/randomCoilShiftProcessor.h>
@@ -121,6 +121,10 @@ namespace BALL
 			}
 			it++;
 		}
+		if (min == Limits<float>::max())
+		{ 
+			min = 0.0;
+		}
 
 		return min;
 	}
@@ -136,6 +140,10 @@ namespace BALL
 				max = it->getValue();
 			}
 			it++;
+		}
+		if (max == Limits<float>::min())
+		{ 
+			max = 0.0;
 		}
 
 		return max;
