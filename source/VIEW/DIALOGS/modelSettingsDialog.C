@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.24 2004/09/10 15:28:50 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.25 2004/09/16 14:36:54 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -25,6 +25,7 @@
 #include <qlistbox.h>
 #include <qwidgetstack.h>
 #include <qradiobutton.h>
+#include <qbuttongroup.h>
 
 namespace BALL
 {
@@ -42,49 +43,51 @@ namespace BALL
 		{
 			if (all || list_box->currentItem() == 0)
 			{
-				stick_radius_slider->setValue(2);
+				AddBallAndStickModel dummy;
+				dummy.enableStickModel();
+				getSettings(dummy);
 			}
 			
 			if (all || list_box->currentItem() == 1)
 			{
-				ball_stick_cylinder_radius_slider->setValue(2);
-				ball_stick_sphere_radius_slider->setValue(4);
-				ball_stick_dashed_bonds->setChecked(true);
+				AddBallAndStickModel dummy;
+				getSettings(dummy);
 			}
 			
 			if (all || list_box->currentItem() == 2)
 			{
-				vdw_radius_factor_slider->setValue(10);
+				AddVanDerWaalsModel dummy;
+				getSettings(dummy);
 			}
 			
 			if (all || list_box->currentItem() == 3)
 			{
-				surface_probe_radius_slider->setValue(15);
+				AddSurfaceModel dummy;
+				getSettings(dummy);
 			}
 			
 			if (all || list_box->currentItem() == 4)
 			{
-				tube_radius_slider->setValue(4);
+				AddBackboneModel dummy;
+				getSettings(dummy);
 			}
 			
 			if (all || list_box->currentItem() == 5)
 			{
-				cartoon_tube_radius_slider->setValue(4);
-				cartoon_helix_radius_slider->setValue(20);
-				cartoon_arrow_width_slider->setValue(20);
-				cartoon_arrow_height_slider->setValue(4);
-				cartoon_dna_wac->setChecked(true);
+				HBondModelProcessor dummy;
+				getSettings(dummy);
 			}
 			
 			if (all || list_box->currentItem() == 6)
 			{
-				hbonds_radius_slider->setValue(3);
+				ForceModel dummy;
+				getSettings(dummy);
 			}
 
 			if (all || list_box->currentItem() == 7)
 			{
-				force_max_length_slider->setValue((Size)(10 * 10.0));
-				force_scaling_slider->setValue(Size(11 * 10.0));
+				AddBallAndStickModel dummy;
+				getSettings(dummy);
 			}
 		}
 
@@ -142,6 +145,9 @@ namespace BALL
 			writePreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
 			writePreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
 			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
+			writePreference_(file, "cartoon_dna_helix_radius", *cartoon_dna_helix_radius_slider);
+			writePreference_(file, "cartoon_dna_ladder_radius", *cartoon_dna_ladder_radius_slider);
+			writePreference_(file, "cartoon_dna_base_radius", *cartoon_dna_base_radius_slider);
 			if (cartoon_dna_wac->isChecked())
 			{
 				file.insertValue("MODEL_OPTIONS", "cartoon_dna_wac", true);
@@ -170,6 +176,9 @@ namespace BALL
 			fetchPreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
 			fetchPreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
 			fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
+			fetchPreference_(file, "cartoon_dna_helix_radius", *cartoon_dna_helix_radius_slider);
+			fetchPreference_(file, "cartoon_dna_ladder_radius", *cartoon_dna_ladder_radius_slider);
+			fetchPreference_(file, "cartoon_dna_base_radius", *cartoon_dna_base_radius_slider);
 			cartoon_dna_wac->setChecked(
 				(file.hasEntry("MODEL_OPTIONS", "cartoon_dna_wac")));
 
@@ -243,6 +252,9 @@ namespace BALL
 				((AddCartoonModel*) &mp)->setArrowWidth(getCartoonArrowWidth());
 				((AddCartoonModel*) &mp)->setArrowHeight(getCartoonArrowHeight());
 				((AddCartoonModel*) &mp)->setDrawDNAAsLadderModel(cartoon_dna_ladder->isChecked());
+				((AddCartoonModel*) &mp)->setDNALadderRadius(getDNALadderRadius());
+				((AddCartoonModel*) &mp)->setDNABaseRadius(getDNABaseRadius());
+				((AddCartoonModel*) &mp)->setDNAHelixRadius(getDNAHelixRadius());
 				return;
 			}
 					
@@ -353,19 +365,24 @@ namespace BALL
 				return;
 			}
 					
-			if (RTTI::isKindOf<AddBackboneModel>(mp))
-			{
-				setTubeRadius(((AddBackboneModel*) &mp)->getTubeRadius());
-				return;
-			}
-					
 			if (RTTI::isKindOf<AddCartoonModel>(mp))
 			{
 				setCartoonTubeRadius(((AddCartoonModel*) &mp)->getTubeRadius());
 				setCartoonHelixRadius(((AddCartoonModel*) &mp)->getHelixRadius());
 				setCartoonArrowWidth(((AddCartoonModel*) &mp)->getArrowWidth());
 				setCartoonArrowHeight(((AddCartoonModel*) &mp)->getArrowHeight());
+				setCartoonDNAHelixRadius(((AddCartoonModel*) &mp)->getDNAHelixRadius());
+				setCartoonDNALadderRadius(((AddCartoonModel*) &mp)->getDNALadderRadius());
+				setCartoonDNABaseRadius(((AddCartoonModel*) &mp)->getDNABaseRadius());
 				cartoon_dna_ladder->setChecked(((AddCartoonModel*) &mp)->drawDNAAsLadderModel());
+				cartoon_dna_wac->setChecked(!((AddCartoonModel*) &mp)->drawDNAAsLadderModel());
+				return;
+			}
+
+			// after derived class
+			if (RTTI::isKindOf<AddBackboneModel>(mp))
+			{
+				setTubeRadius(((AddBackboneModel*) &mp)->getTubeRadius());
 				return;
 			}
 					

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.45 2004/09/16 13:35:20 amoll Exp $
+// $Id: cartoonModel.C,v 1.46 2004/09/16 14:36:54 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -41,9 +41,9 @@ namespace BALL
 				helix_radius_(2.4),
 				arrow_width_(2),
 				arrow_height_(0.4),
-				DNA_helix_radius_(1.1),
+				DNA_helix_radius_(1.0),
 				DNA_ladder_radius_(0.8),
-				DNA_base_radius_(0.1),
+				DNA_base_radius_(0.2),
 				draw_DNA_as_ladder_(false)
 		{
 		}
@@ -133,10 +133,8 @@ namespace BALL
 				}
 			}
 
-			float temp = helix_radius_;
-			helix_radius_ = DNA_helix_radius_;
+			tube_radius_ = DNA_helix_radius_;
 			createBackbone_();
-			helix_radius_  = temp;
 
 			if (!draw_DNA_as_ladder_)
 			{

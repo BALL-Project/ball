@@ -1535,9 +1535,9 @@
                 <property name="geometry">
                     <rect>
                         <x>9</x>
-                        <y>188</y>
+                        <y>175</y>
                         <width>304</width>
-                        <height>173</height>
+                        <height>192</height>
                     </rect>
                 </property>
                 <property name="frameShape">
@@ -1551,13 +1551,13 @@
                 </property>
                 <widget class="QFrame">
                     <property name="name">
-                        <cstring>frame3_2_3_2_2_2_2_2_2_2_2_3</cstring>
+                        <cstring>frame3_2_3_2_2_2_2_2_2_2_2</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>3</x>
-                            <y>136</y>
-                            <width>294</width>
+                            <x>2</x>
+                            <y>69</y>
+                            <width>296</width>
                             <height>41</height>
                         </rect>
                     </property>
@@ -1567,96 +1567,14 @@
                     <property name="frameShadow">
                         <enum>Raised</enum>
                     </property>
-                    <widget class="QSlider">
-                        <property name="name">
-                            <cstring>cartoon_dna_step</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>149</x>
-                                <y>11</y>
-                                <width>84</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="minValue">
-                            <number>5</number>
-                        </property>
-                        <property name="maxValue">
-                            <number>15</number>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="tickmarks">
-                            <enum>Above</enum>
-                        </property>
-                        <property name="tickInterval">
-                            <number>12</number>
-                        </property>
-                    </widget>
                     <widget class="QLabel">
                         <property name="name">
-                            <cstring>cartoon_dna_step_label</cstring>
+                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2</cstring>
                         </property>
                         <property name="geometry">
                             <rect>
-                                <x>239</x>
-                                <y>9</y>
-                                <width>50</width>
-                                <height>25</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>50</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>35</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="frameShape">
-                            <enum>TabWidgetPanel</enum>
-                        </property>
-                        <property name="text">
-                            <string>99.9</string>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignCenter</set>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_5</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>8</x>
-                                <y>14</y>
+                                <x>9</x>
+                                <y>15</y>
                                 <width>120</width>
                                 <height>16</height>
                             </rect>
@@ -1682,31 +1600,12 @@
                             </size>
                         </property>
                         <property name="text">
-                            <string>helix step</string>
+                            <string>helix backbone</string>
                         </property>
                     </widget>
-                </widget>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>frame3_2_3_2_2_2_2_2_2_2_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>3</x>
-                            <y>95</y>
-                            <width>296</width>
-                            <height>41</height>
-                        </rect>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
                     <widget class="QLabel">
                         <property name="name">
-                            <cstring>cartoon_dna_backbone_label</cstring>
+                            <cstring>cartoon_dna_helix_radius_label</cstring>
                         </property>
                         <property name="geometry">
                             <rect>
@@ -1746,14 +1645,73 @@
                             <set>AlignCenter</set>
                         </property>
                     </widget>
-                    <widget class="QLabel">
+                    <widget class="QSlider">
                         <property name="name">
-                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2</cstring>
+                            <cstring>cartoon_dna_helix_radius_slider</cstring>
                         </property>
                         <property name="geometry">
                             <rect>
-                                <x>9</x>
-                                <y>15</y>
+                                <x>150</x>
+                                <y>12</y>
+                                <width>84</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>84</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>84</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="minValue">
+                            <number>2</number>
+                        </property>
+                        <property name="maxValue">
+                            <number>25</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="tickmarks">
+                            <enum>Above</enum>
+                        </property>
+                        <property name="tickInterval">
+                            <number>12</number>
+                        </property>
+                    </widget>
+                </widget>
+                <widget class="QFrame">
+                    <property name="name">
+                        <cstring>frame3_2_3_2_2_2_2_2_2_2_2_3</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>2</x>
+                            <y>110</y>
+                            <width>294</width>
+                            <height>41</height>
+                        </rect>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_5</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>8</x>
+                                <y>14</y>
                                 <width>120</width>
                                 <height>16</height>
                             </rect>
@@ -1779,17 +1737,59 @@
                             </size>
                         </property>
                         <property name="text">
-                            <string>helix backbone</string>
+                            <string>helix step</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>cartoon_dna_ladder_radius_label</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>239</x>
+                                <y>9</y>
+                                <width>50</width>
+                                <height>25</height>
+                            </rect>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>50</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>35</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="frameShape">
+                            <enum>TabWidgetPanel</enum>
+                        </property>
+                        <property name="text">
+                            <string>99.9</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignCenter</set>
                         </property>
                     </widget>
                     <widget class="QSlider">
                         <property name="name">
-                            <cstring>cartoon_dna_backbone</cstring>
+                            <cstring>cartoon_dna_ladder_radius_slider</cstring>
                         </property>
                         <property name="geometry">
                             <rect>
-                                <x>150</x>
-                                <y>12</y>
+                                <x>149</x>
+                                <y>11</y>
                                 <width>84</width>
                                 <height>21</height>
                             </rect>
@@ -1807,10 +1807,147 @@
                             </size>
                         </property>
                         <property name="minValue">
-                            <number>7</number>
+                            <number>5</number>
                         </property>
                         <property name="maxValue">
-                            <number>25</number>
+                            <number>15</number>
+                        </property>
+                        <property name="orientation">
+                            <enum>Horizontal</enum>
+                        </property>
+                        <property name="tickmarks">
+                            <enum>Above</enum>
+                        </property>
+                        <property name="tickInterval">
+                            <number>12</number>
+                        </property>
+                    </widget>
+                </widget>
+                <widget class="QFrame">
+                    <property name="name">
+                        <cstring>frame3_2_3_2_2_2_2_2_2_2_2_3_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>3</x>
+                            <y>149</y>
+                            <width>294</width>
+                            <height>41</height>
+                        </rect>
+                    </property>
+                    <property name="frameShape">
+                        <enum>NoFrame</enum>
+                    </property>
+                    <property name="frameShadow">
+                        <enum>Raised</enum>
+                    </property>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_5_2</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>8</x>
+                                <y>14</y>
+                                <width>120</width>
+                                <height>16</height>
+                            </rect>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>120</width>
+                                <height>0</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>120</width>
+                                <height>32767</height>
+                            </size>
+                        </property>
+                        <property name="text">
+                            <string>base radius</string>
+                        </property>
+                    </widget>
+                    <widget class="QLabel">
+                        <property name="name">
+                            <cstring>cartoon_dna_base_radius_label</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>239</x>
+                                <y>9</y>
+                                <width>50</width>
+                                <height>25</height>
+                            </rect>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>0</hsizetype>
+                                <vsizetype>0</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>50</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>35</width>
+                                <height>25</height>
+                            </size>
+                        </property>
+                        <property name="frameShape">
+                            <enum>TabWidgetPanel</enum>
+                        </property>
+                        <property name="text">
+                            <string>99.9</string>
+                        </property>
+                        <property name="alignment">
+                            <set>AlignCenter</set>
+                        </property>
+                    </widget>
+                    <widget class="QSlider">
+                        <property name="name">
+                            <cstring>cartoon_dna_base_radius_slider</cstring>
+                        </property>
+                        <property name="geometry">
+                            <rect>
+                                <x>149</x>
+                                <y>11</y>
+                                <width>84</width>
+                                <height>21</height>
+                            </rect>
+                        </property>
+                        <property name="minimumSize">
+                            <size>
+                                <width>84</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="maximumSize">
+                            <size>
+                                <width>84</width>
+                                <height>21</height>
+                            </size>
+                        </property>
+                        <property name="minValue">
+                            <number>1</number>
+                        </property>
+                        <property name="maxValue">
+                            <number>15</number>
                         </property>
                         <property name="orientation">
                             <enum>Horizontal</enum>
@@ -1825,14 +1962,14 @@
                 </widget>
                 <widget class="QButtonGroup">
                     <property name="name">
-                        <cstring>dna_cartoon_model</cstring>
+                        <cstring>dna_cartoon_model_type</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>15</x>
+                            <x>10</x>
                             <y>19</y>
-                            <width>274</width>
-                            <height>71</height>
+                            <width>279</width>
+                            <height>50</height>
                         </rect>
                     </property>
                     <property name="title">
@@ -1853,8 +1990,8 @@
                         </property>
                         <property name="geometry">
                             <rect>
-                                <x>9</x>
-                                <y>41</y>
+                                <x>117</x>
+                                <y>18</y>
                                 <width>137</width>
                                 <height>21</height>
                             </rect>
@@ -1872,9 +2009,9 @@
                         </property>
                         <property name="geometry">
                             <rect>
-                                <x>9</x>
+                                <x>10</x>
                                 <y>17</y>
-                                <width>135</width>
+                                <width>104</width>
                                 <height>21</height>
                             </rect>
                         </property>
@@ -2405,6 +2542,24 @@
         <receiver>ModelSettingsDialog</receiver>
         <slot>showPage_(int)</slot>
     </connection>
+    <connection>
+        <sender>cartoon_dna_base_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>cartoonDNABaseRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>cartoon_dna_helix_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>cartoonDNAHelixRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>cartoon_dna_ladder_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>cartoonDNALadderRadiusChanged()</slot>
+    </connection>
 </connections>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
@@ -2424,6 +2579,9 @@
     <slot>showPage_(int)</slot>
     <slot>forceMaxLengthChanged()</slot>
     <slot>forceScalingChanged()</slot>
+    <slot>cartoonDNAHelixRadiusChanged()</slot>
+    <slot>cartoonDNALadderRadiusChanged()</slot>
+    <slot>cartoonDNABaseRadiusChanged()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
