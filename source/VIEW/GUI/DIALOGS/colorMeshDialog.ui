@@ -1,13 +1,10 @@
-<!DOCTYPE UI><UI>
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
 <class>ColorMeshDialogData</class>
-<widget>
-    <class>QDialog</class>
-    <property stdset="1">
-        <name>name</name>
+<widget class="QDialog">
+    <property name="name">
         <cstring>ColorMeshDialogData</cstring>
     </property>
-    <property stdset="1">
-        <name>geometry</name>
+    <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
@@ -15,36 +12,29 @@
             <height>263</height>
         </rect>
     </property>
-    <property stdset="1">
-        <name>minimumSize</name>
+    <property name="minimumSize">
         <size>
             <width>413</width>
             <height>263</height>
         </size>
     </property>
-    <property stdset="1">
-        <name>maximumSize</name>
+    <property name="maximumSize">
         <size>
             <width>413</width>
             <height>263</height>
         </size>
     </property>
-    <property stdset="1">
-        <name>caption</name>
-        <string>Form1</string>
+    <property name="caption">
+        <string>ColorMesh</string>
     </property>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>apply_button</cstring>
         </property>
-        <property stdset="1">
-            <name>enabled</name>
+        <property name="enabled">
             <bool>false</bool>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>70</x>
                 <y>220</y>
@@ -52,23 +42,18 @@
                 <height>32</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>Apply</string>
         </property>
-        <property stdset="1">
-            <name>default</name>
+        <property name="default">
             <bool>true</bool>
         </property>
     </widget>
-    <widget>
-        <class>QPushButton</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>cancel_button</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>220</x>
                 <y>220</y>
@@ -76,31 +61,21 @@
                 <height>32</height>
             </rect>
         </property>
-        <property stdset="1">
-            <name>text</name>
+        <property name="text">
             <string>Cancel</string>
         </property>
-        <property stdset="1">
-            <name>on</name>
+        <property name="on">
             <bool>false</bool>
         </property>
-        <property stdset="1">
-            <name>default</name>
-            <bool>false</bool>
-        </property>
-        <property stdset="1">
-            <name>on</name>
+        <property name="default">
             <bool>false</bool>
         </property>
     </widget>
-    <widget>
-        <class>QTabWidget</class>
-        <property stdset="1">
-            <name>name</name>
+    <widget class="QTabWidget">
+        <property name="name">
             <cstring>surface_tab</cstring>
         </property>
-        <property stdset="1">
-            <name>geometry</name>
+        <property name="geometry">
             <rect>
                 <x>0</x>
                 <y>0</y>
@@ -108,24 +83,18 @@
                 <height>200</height>
             </rect>
         </property>
-        <widget>
-            <class>QWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QWidget">
+            <property name="name">
                 <cstring>by_file</cstring>
             </property>
-            <attribute>
-                <name>title</name>
+            <attribute name="title">
                 <string>by file</string>
             </attribute>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel1</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>10</y>
@@ -133,19 +102,15 @@
                         <height>26</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Load file:</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>browse_button</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>80</y>
@@ -153,19 +118,15 @@
                         <height>32</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Browse</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLineEdit">
+                <property name="name">
                     <cstring>location_edit</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>40</y>
@@ -175,24 +136,18 @@
                 </property>
             </widget>
         </widget>
-        <widget>
-            <class>QWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QWidget">
+            <property name="name">
                 <cstring>by_color</cstring>
             </property>
-            <attribute>
-                <name>title</name>
+            <attribute name="title">
                 <string>by color</string>
             </attribute>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>choose_button</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>160</x>
                         <y>40</y>
@@ -200,8 +155,7 @@
                         <height>80</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>palette</name>
+                <property name="palette">
                     <palette>
                         <active>
                             <color>
@@ -273,6 +227,16 @@
                                 <red>255</red>
                                 <green>255</green>
                                 <blue>255</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
                             </color>
                         </active>
                         <disabled>
@@ -346,6 +310,16 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </disabled>
                         <inactive>
                             <color>
@@ -418,22 +392,28 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </inactive>
                     </palette>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string></string>
                 </property>
             </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QSpinBox">
+                <property name="name">
                     <cstring>green_box</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>80</x>
                         <y>40</y>
@@ -441,23 +421,18 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>maxValue</name>
+                <property name="maxValue">
                     <number>255</number>
                 </property>
-                <property stdset="1">
-                    <name>value</name>
+                <property name="value">
                     <number>255</number>
                 </property>
             </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QSpinBox">
+                <property name="name">
                     <cstring>red_box</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>80</x>
                         <y>10</y>
@@ -465,23 +440,18 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>maxValue</name>
+                <property name="maxValue">
                     <number>255</number>
                 </property>
-                <property stdset="1">
-                    <name>value</name>
+                <property name="value">
                     <number>255</number>
                 </property>
             </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QSpinBox">
+                <property name="name">
                     <cstring>alpha_box</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>80</x>
                         <y>100</y>
@@ -489,23 +459,18 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>maxValue</name>
+                <property name="maxValue">
                     <number>255</number>
                 </property>
-                <property stdset="1">
-                    <name>value</name>
+                <property name="value">
                     <number>255</number>
                 </property>
             </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QSpinBox">
+                <property name="name">
                     <cstring>blue_box</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>80</x>
                         <y>70</y>
@@ -513,23 +478,18 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>maxValue</name>
+                <property name="maxValue">
                     <number>255</number>
                 </property>
-                <property stdset="1">
-                    <name>value</name>
+                <property name="value">
                     <number>0</number>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel4</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>70</y>
@@ -537,19 +497,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>blue:</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel5</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>100</y>
@@ -557,19 +513,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>alpha:</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel2</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>10</y>
@@ -577,19 +529,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>red:</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel3</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>8</x>
                         <y>42</y>
@@ -597,19 +545,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>green:</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel10</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>160</x>
                         <y>20</y>
@@ -617,30 +561,23 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Choose:</string>
                 </property>
             </widget>
         </widget>
-        <widget>
-            <class>QWidget</class>
-            <property stdset="1">
-                <name>name</name>
+        <widget class="QWidget">
+            <property name="name">
                 <cstring>colormap_tab</cstring>
             </property>
-            <attribute>
-                <name>title</name>
+            <attribute name="title">
                 <string>ColorMap</string>
             </attribute>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel14_3</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>32</x>
                         <y>58</y>
@@ -648,19 +585,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&lt; min</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel14</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>112</x>
                         <y>58</y>
@@ -668,19 +601,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>min</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel14_2</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>192</x>
                         <y>58</y>
@@ -688,19 +617,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>mid</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel15</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>272</x>
                         <y>58</y>
@@ -708,19 +633,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>max</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel13</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>342</x>
                         <y>58</y>
@@ -728,19 +649,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>&gt; max</string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>min_button</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>90</x>
                         <y>80</y>
@@ -748,8 +665,7 @@
                         <height>32</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>palette</name>
+                <property name="palette">
                     <palette>
                         <active>
                             <color>
@@ -822,6 +738,16 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </active>
                         <disabled>
                             <color>
@@ -893,6 +819,16 @@
                                 <red>255</red>
                                 <green>255</green>
                                 <blue>255</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
                             </color>
                         </disabled>
                         <inactive>
@@ -966,22 +902,28 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </inactive>
                     </palette>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string></string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>mid_button</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>170</x>
                         <y>80</y>
@@ -989,8 +931,7 @@
                         <height>32</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>palette</name>
+                <property name="palette">
                     <palette>
                         <active>
                             <color>
@@ -1063,6 +1004,16 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </active>
                         <disabled>
                             <color>
@@ -1134,6 +1085,16 @@
                                 <red>255</red>
                                 <green>255</green>
                                 <blue>255</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
                             </color>
                         </disabled>
                         <inactive>
@@ -1207,22 +1168,28 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </inactive>
                     </palette>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string></string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>max_button</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>250</x>
                         <y>80</y>
@@ -1230,8 +1197,7 @@
                         <height>32</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>palette</name>
+                <property name="palette">
                     <palette>
                         <active>
                             <color>
@@ -1304,6 +1270,16 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </active>
                         <disabled>
                             <color>
@@ -1375,6 +1351,16 @@
                                 <red>255</red>
                                 <green>255</green>
                                 <blue>255</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
                             </color>
                         </disabled>
                         <inactive>
@@ -1448,22 +1434,28 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </inactive>
                     </palette>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string></string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>max_max_button</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>330</x>
                         <y>80</y>
@@ -1471,8 +1463,7 @@
                         <height>32</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>palette</name>
+                <property name="palette">
                     <palette>
                         <active>
                             <color>
@@ -1544,6 +1535,16 @@
                                 <red>255</red>
                                 <green>255</green>
                                 <blue>255</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
                             </color>
                         </active>
                         <disabled>
@@ -1617,6 +1618,16 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </disabled>
                         <inactive>
                             <color>
@@ -1689,22 +1700,28 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </inactive>
                     </palette>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string></string>
                 </property>
             </widget>
-            <widget>
-                <class>QPushButton</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QPushButton">
+                <property name="name">
                     <cstring>min_min_button</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>80</y>
@@ -1712,8 +1729,7 @@
                         <height>32</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>palette</name>
+                <property name="palette">
                     <palette>
                         <active>
                             <color>
@@ -1785,6 +1801,16 @@
                                 <red>255</red>
                                 <green>255</green>
                                 <blue>255</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
                             </color>
                         </active>
                         <disabled>
@@ -1858,6 +1884,16 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </disabled>
                         <inactive>
                             <color>
@@ -1930,22 +1966,28 @@
                                 <green>255</green>
                                 <blue>255</blue>
                             </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
+                            <color>
+                                <red>0</red>
+                                <green>0</green>
+                                <blue>0</blue>
+                            </color>
                         </inactive>
                     </palette>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string></string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>gradient_label</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>20</x>
                         <y>130</y>
@@ -1953,59 +1995,15 @@
                         <height>21</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string></string>
                 </property>
             </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>levels_box</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>120</x>
-                        <y>20</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>value</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel7</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>10</x>
-                        <y>20</y>
-                        <width>110</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Number of levels:</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLineEdit">
+                <property name="name">
                     <cstring>max_box</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>340</x>
                         <y>20</y>
@@ -2013,19 +2011,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>1.0</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel9</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>300</x>
                         <y>20</y>
@@ -2033,19 +2027,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Max:</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLineEdit">
+                <property name="name">
                     <cstring>min_box</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>230</x>
                         <y>20</y>
@@ -2053,19 +2043,15 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>-1.0</string>
                 </property>
             </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
+            <widget class="QLabel">
+                <property name="name">
                     <cstring>TextLabel8</cstring>
                 </property>
-                <property stdset="1">
-                    <name>geometry</name>
+                <property name="geometry">
                     <rect>
                         <x>190</x>
                         <y>20</y>
@@ -2073,9 +2059,40 @@
                         <height>20</height>
                     </rect>
                 </property>
-                <property stdset="1">
-                    <name>text</name>
+                <property name="text">
                     <string>Min:</string>
+                </property>
+            </widget>
+            <widget class="QSpinBox">
+                <property name="name">
+                    <cstring>levels_box</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>120</x>
+                        <y>20</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="value">
+                    <number>3</number>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>TextLabel7</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>110</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Number of levels:</string>
                 </property>
             </widget>
         </widget>
@@ -2166,17 +2183,20 @@
         <receiver>ColorMeshDialogData</receiver>
         <slot>tab_changed()</slot>
     </connection>
-    <slot access="public">apply_clicked()</slot>
-    <slot access="public">browse_clicked()</slot>
-    <slot access="public">cancel_clicked()</slot>
-    <slot access="public">choose_clicked()</slot>
-    <slot access="public">color_boxes_changed()</slot>
-    <slot access="public">location_changed()</slot>
-    <slot access="public">max_clicked()</slot>
-    <slot access="public">mid_clicked()</slot>
-    <slot access="public">min_clicked()</slot>
-    <slot access="public">min_min_clicked()</slot>
-    <slot access="public">max_max_clicked()</slot>
-    <slot access="public">tab_changed()</slot>
 </connections>
+<slots>
+    <slot>apply_clicked()</slot>
+    <slot>browse_clicked()</slot>
+    <slot>cancel_clicked()</slot>
+    <slot>choose_clicked()</slot>
+    <slot>color_boxes_changed()</slot>
+    <slot>location_changed()</slot>
+    <slot>max_clicked()</slot>
+    <slot>mid_clicked()</slot>
+    <slot>min_clicked()</slot>
+    <slot>min_min_clicked()</slot>
+    <slot>max_max_clicked()</slot>
+    <slot>tab_changed()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
 </UI>
