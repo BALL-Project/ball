@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.18 2000/03/26 12:52:25 oliver Exp $
+// $Id: amberTorsion.C,v 1.19 2000/05/18 18:31:17 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -80,7 +80,7 @@ namespace BALL
 
 			if (result == false) 
 			{
-				Log.error() << "cannot find section Torsions" << endl;
+				Log.error() << "AmberTorsion::setup: cannot find section Torsions" << endl;
 				return false;
 			}
 		}
@@ -115,7 +115,9 @@ namespace BALL
 							if ((*it2).getFirstAtom() == *atom_it) 
 							{
 								a1 = (*it2).getSecondAtom();
-							} else {
+							} 
+							else 
+							{
 								a1 = (*it2).getFirstAtom();
 							}
  
@@ -127,7 +129,9 @@ namespace BALL
 									if ((*it3).getFirstAtom() == a3)
 									{
 										a4 = (*it3).getSecondAtom();
-									} else {
+									} 
+									else 
+									{
 										a4 = (*it3).getFirstAtom();
 									}
 
@@ -153,7 +157,8 @@ namespace BALL
 										if (torsion_parameters_.assignParameters(values, type_a1, type_a2, type_a3, type_a4)) 
 										{
 											found = true;
-										} else if (torsion_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
+										} 
+										else if (torsion_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
 										{
 											found = true;
 										}
@@ -164,12 +169,16 @@ namespace BALL
 												tmp.values = values.values[j];
 												torsion_.push_back(tmp);
 											}
-										} else {
-											Log.level(LogStream::ERROR) << "cannot find torsion parameter for:"
+										} 
+										else 
+										{
+											Log.error() << "AmberTorsion::setup: cannot find torsion parameter for:"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a1) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a3) << "-"
-												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a4) << endl;
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a4) 
+												<< " (atoms are: " << a1->getFullName() << "/" << a2->getFullName() 
+												<< "/" << a3->getFullName() << "/" << a4->getFullName() << ")" << endl;
 										}
 									}
 								} 
@@ -186,7 +195,7 @@ namespace BALL
 
 			if (result == false) 
 			{
-				Log.error() << "cannot find section ImproperTorsions" << endl;
+				Log.error() << "AmberTorsion::setup: cannot find section ImproperTorsions" << endl;
 				return false;
 			}
 		}
@@ -223,7 +232,9 @@ namespace BALL
 						res_name = (*atom_it)->getFragment()->getName();
 						res_name.trim();
 					}
-				} else {
+				} 
+				else 
+				{
 					res_name = res->getName();
 					res_name.trim();
 
@@ -313,17 +324,20 @@ namespace BALL
 										improper_parameters_.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
 	
 										found = true;
-									} else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, type_a4))
+									} 
+									else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, type_a4))
 									{
 										improper_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, type_a4);
 
 										found = true;
-									} else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4)) 
+									} 
+									else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4)) 
 									{
 										improper_parameters_.assignParameters(values, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3, type_a4);
 	
 										found = true;
-									} else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
+									} 
+									else if (improper_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
 									{
 										improper_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
 	
