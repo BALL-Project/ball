@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PropertyManager_test.C,v 1.23 2003/05/23 10:26:04 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.24 2003/06/17 15:44:06 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.23 2003/05/23 10:26:04 oliver Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.24 2003/06/17 15:44:06 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,310 +22,19 @@ START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.23 2003/05/23 10:26
 using namespace BALL;
 using namespace std;
 
-NamedProperty* np;
-
-CHECK(NamedProperty::NamedProperty())
-	np = new NamedProperty();
-	TEST_NOT_EQUAL(np, 0)
-RESULT
-
-CHECK(NamedProperty::~NamedProperty())
-	delete np;
-RESULT
-
-CHECK(NamedProperty::NamedProperty(const string& name))
-	np = new NamedProperty("name");
-	TEST_NOT_EQUAL(np, 0)
-	TEST_EQUAL(np->getName(), "name")
-	delete np;
-RESULT
-
-CHECK(NamedProperty::NamedProperty(const string& name, bool value))
-	bool x = true;
-  np = new NamedProperty("test", x);
-	TEST_NOT_EQUAL(np, 0)
-	TEST_EQUAL(np->getType(), NamedProperty::BOOL)
-	TEST_EQUAL(np->getName(), "test")
-	TEST_EQUAL(np->getBool(), x)
-RESULT
-
-CHECK(NamedProperty::BALL_CREATE(NamedProperty) const  const )
-	NamedProperty* np2 = (NamedProperty*)np->create();
-	TEST_EQUAL(np2->getType(), NamedProperty::BOOL)
-	TEST_EQUAL(np2->getName(), "test")
-	TEST_EQUAL(np2->getBool(), true)
-	delete np;
-	delete np2;
-RESULT
-
-CHECK(NamedProperty::NamedProperty(const string& name, int value))
-	int x = -99;
-  np = new NamedProperty("test", x);
-	TEST_NOT_EQUAL(np, 0)
-	TEST_EQUAL(np->getType(), NamedProperty::INT)
-	TEST_EQUAL(np->getName(), "test")
-	TEST_EQUAL(np->getInt(), x)
-	delete np;
-RESULT
-
-CHECK(NamedProperty::NamedProperty(const string& name, unsigned int value))
-	unsigned int x = 99;
-  np = new NamedProperty("test", x);
-	TEST_NOT_EQUAL(np, 0)
-	TEST_EQUAL(np->getType(), NamedProperty::UNSIGNED_INT)
-	TEST_EQUAL(np->getName(), "test")
-	TEST_EQUAL(np->getUnsignedInt(), x)
-	delete np;
-RESULT
-
-CHECK(NamedProperty::NamedProperty(const string& name, double value))
-	double x = -99.9;
-  np = new NamedProperty("test", x);
-	TEST_NOT_EQUAL(np, 0)
-	TEST_EQUAL(np->getType(), NamedProperty::DOUBLE)
-	TEST_EQUAL(np->getName(), "test")
-	TEST_REAL_EQUAL(np->getDouble(), x)
-	delete np;
-RESULT
-
-CHECK(NamedProperty::NamedProperty(const string& name, string& str))
-	string x = "xxx";
-  np = new NamedProperty("test", x);
-	TEST_NOT_EQUAL(np, 0)
-	TEST_EQUAL(np->getType(), NamedProperty::STRING)
-	TEST_EQUAL(np->getName(), "test")
-	TEST_EQUAL(np->getString(), x)
-	delete np;
-RESULT
-
-CHECK(NamedProperty::NamedProperty(const string& name, PersistentObject& po))
-	PersistentObject x;
-  np = new NamedProperty("test", x);
-	TEST_NOT_EQUAL(np, 0)
-	TEST_EQUAL(np->getType(), NamedProperty::OBJECT)
-	TEST_EQUAL(np->getName(), "test")
-	TEST_EQUAL(np->getObject(), &x)
-	delete np;
-RESULT
-
-CHECK(NamedPr operty::NamedProperty(const string& name, float value))
-	float x = -99.9;
-  np = new NamedProperty("test", x);
-	TEST_NOT_EQUAL(np, 0)
-	TEST_EQUAL(np->getType(), NamedProperty::FLOAT)
-	TEST_EQUAL(np->getName(), "test")
-	TEST_REAL_EQUAL(np->getFloat(), x)
-RESULT
-
-CHECK(NamedProperty::NamedProperty(const NamedProperty&))
-	float x = -99.9;
-	NamedProperty np2(*np);
-	TEST_EQUAL(np2.getType(), NamedProperty::FLOAT)
-	TEST_EQUAL(np2.getName(), "test")
-	TEST_REAL_EQUAL(np2.getFloat(), x)
-	
-	NamedProperty np3(String("TESTPROP"), String("STR"));
-	TEST_EQUAL(np3.getType(), NamedProperty::STRING)
-	TEST_EQUAL(np3.getString(), "STR")
-	NamedProperty np4(np3);
-	TEST_EQUAL(np4.getType(), NamedProperty::STRING)
-	TEST_EQUAL(np4.getString(), "STR")
-	np3.clear();
-	TEST_EQUAL(np3.getType(), NamedProperty::NONE)
-	TEST_EQUAL(np4.getType(), NamedProperty::STRING)
-	TEST_EQUAL(np4.getString(), "STR")
-	np4.clear();
-	TEST_EQUAL(np4.getType(), NamedProperty::NONE)
-RESULT
-
-String filename;
-using std::ofstream;
-using std::ios;
-using namespace RTTI;
-TextPersistenceManager pm;
-pm.registerClass(getStreamName<NamedProperty>(), getNew<NamedProperty>);
-
-CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = "") const )
-	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), std::ios::out);
-	pm.setOstream(ofile);
-	*np >> pm;
-	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Float11.txt")
-	delete np;
-
-	Protein protein("PROTEIN1");
-	np = new NamedProperty("test2", protein);
-	NEW_TMP_FILE(filename)
-	ofile.open(filename.c_str());
-	pm.setOstream(ofile);
-	*np >> pm;
-	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_Object11.txt")
-	delete np;
-
-	np = new NamedProperty("test3");
-	NEW_TMP_FILE(filename)
-	ofile.open(filename.c_str());
-	pm.setOstream(ofile);
-	*np >> pm;
-	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_None11.txt")
-	delete np;
-
-	string s("titel");
-	np = new NamedProperty("test4", s);
-	NEW_TMP_FILE(filename)
-	ofile.open(filename.c_str());
-	pm.setOstream(ofile);
-	*np >> pm;
-	ofile.close();	
-	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/NamedProperty_test_String11.txt")
-	delete np;
-RESULT
-
-CHECK(NamedProperty::persistentRead(PersistenceManager& pm))
-	NamedProperty np;
-	PersistentObject* ptr;
-	ifstream  ifile("data/PropertyManager_test/NamedProperty_test_Float1.txt");
-	pm.setIstream(ifile);
-
-	ptr = pm.readObject();
-	ifile.close();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
-		if (isKindOf<NamedProperty>(*ptr))
-		{
-			NamedProperty* pers_a = castTo<NamedProperty>(*ptr);
-			TEST_EQUAL(pers_a->getType(), NamedProperty::FLOAT)
-			TEST_EQUAL(pers_a->getName(), "test")
-			TEST_REAL_EQUAL(pers_a->getFloat(), (float)-99.9)
-		}
-		delete ptr;
-	}
-
-	// due to some problems in the IRIX/CC fstream implementation....
-	ifile.clear();
-	ifile.open("data/PropertyManager_test/NamedProperty_test_Object1.txt");
-	ptr = pm.readObject();
-	ifile.close();
-
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
-		if (isKindOf<NamedProperty>(*ptr))
-		{
-			NamedProperty* pers_a = castTo<NamedProperty>(*ptr);
-			TEST_EQUAL(pers_a->getType(), NamedProperty::OBJECT)
-			TEST_EQUAL(pers_a->getName(), "test2")
-			TEST_NOT_EQUAL(pers_a->getObject(), 0)
-			ABORT_IF(pers_a->getObject())
-			delete pers_a->getObject();
-		}
-		delete ptr;
-	}
-	
-	// due to some problems in the IRIX/CC fstream implementation....
-	ifile.clear();
-	ifile.open("data/PropertyManager_test/NamedProperty_test_None1.txt");
-	ptr = pm.readObject();
-	ifile.close();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
-		if (isKindOf<NamedProperty>(*ptr))
-		{
-			NamedProperty* pers_a = castTo<NamedProperty>(*ptr);
-			TEST_EQUAL(pers_a->getType(), NamedProperty::NONE)
-			TEST_EQUAL(pers_a->getName(), "test3")
-		}
-		delete ptr;
-	}
-
-	// due to some problems in the IRIX/CC fstream implementation....
-	ifile.clear();
-	ifile.open("data/PropertyManager_test/NamedProperty_test_String1.txt");
-	ptr = pm.readObject();
-	ifile.close();
-
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
-		if (isKindOf<NamedProperty>(*ptr))
-		{
-			NamedProperty* pers_a = castTo<NamedProperty>(*ptr);
-			TEST_EQUAL(pers_a->getType(), NamedProperty::STRING)
-			TEST_EQUAL(pers_a->getString(), "titel")
-			TEST_EQUAL(pers_a->getName(), "test4")
-		}
-		delete ptr;
-	}
-RESULT
-
-CHECK(NamedProperty::getType() const )
-  //TESTED ABOVE
-RESULT
-
-CHECK(NamedProperty::getName() const )
-  //TESTED ABOVE
-RESULT
-
-CHECK(NamedProperty::getBool() const )
-  //TESTED ABOVE
-RESULT
-
-CHECK(NamedProperty::getInt() const )
-  //TESTED ABOVE
-RESULT
-
-CHECK(NamedProperty::getFloat() const )
-  //TESTED ABOVE
-RESULT
-
-CHECK(NamedProperty::getDouble() const )
-  //TESTED ABOVE
-RESULT
-
-CHECK(NamedProperty::getUnsignedInt() const )
-  //TESTED ABOVE
-RESULT
-
-CHECK(NamedProperty::getObject() const )
-  //TESTED ABOVE
-RESULT
-
-CHECK(NamedProperty::getString() const )
-  //TESTED ABOVE
-RESULT
-
 PropertyManager* p;
-CHECK(PropertyManager())
+CHECK(PropertyManager() throw())
 	p = new PropertyManager();
 	TEST_NOT_EQUAL(p, 0)
 RESULT
 
-CHECK(~PropertyManager())
+CHECK(~PropertyManager() throw())
 	delete p;
 RESULT
 
 PropertyManager m;
 
-CHECK(setProperty(String&, int))
-  TEST_EQUAL(m.hasProperty(0), false)
-  TEST_EQUAL(m.countProperties(), 0)
-
-	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
-	m.setProperty("TEST_PROP", (unsigned int)123456);
-	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
-	TEST_EQUAL(m.getProperty("TEST_PROP").getUnsignedInt(), 123456)
-RESULT
-
-CHECK(PropertyManager::PropertyManager(const PropertyManager& property_manager, bool deep = true))
+CHECK(PropertyManager(const PropertyManager& property_manager) throw())
 	PropertyManager* p2;
 	p2 = new PropertyManager(m);
 	TEST_NOT_EQUAL(p2, 0)
@@ -334,19 +43,13 @@ CHECK(PropertyManager::PropertyManager(const PropertyManager& property_manager, 
 	delete p2;
 RESULT
 
-CHECK(PropertyManager::clear())
+CHECK(void clear() throw())
 	PropertyManager p2(m);
 	p2.clear();
 	TEST_EQUAL(p2.hasProperty("TEST_PROP"), false)
 RESULT
 
-CHECK(PropertyManager::destroy())
-	PropertyManager p2(m);
-	p2.destroy();
-	TEST_EQUAL(p2.hasProperty("TEST_PROP"), false)
-RESULT
-
-CHECK(PropertyManager::set(const PropertyManager& property_manager, bool deep = true))
+CHECK(void set(const PropertyManager& property_manager) throw())
   TEST_EQUAL(m.countProperties(), 1)
 	PropertyManager p2;
 	p2.set(m);
@@ -354,21 +57,21 @@ CHECK(PropertyManager::set(const PropertyManager& property_manager, bool deep = 
 	TEST_EQUAL(p2.getProperty("TEST_PROP").getUnsignedInt(), 123456)	
 RESULT
 
-CHECK(PropertyManager::PropertyManager& operator = (const PropertyManager& property_manager))
+CHECK(const PropertyManager& operator = (const PropertyManager& property_manager) throw())
 	PropertyManager p2;
 	p2 = m;
 	TEST_EQUAL(p2.hasProperty("TEST_PROP"), true)
 	TEST_EQUAL(p2.getProperty("TEST_PROP").getUnsignedInt(), 123456)	
 RESULT
 
-CHECK(PropertyManager::get(PropertyManager& property_manager, bool deep = true) const )
+CHECK(void get(PropertyManager& property_manager) const throw())
 	PropertyManager p2;
 	m.get(p2);
 	TEST_EQUAL(p2.hasProperty("TEST_PROP"), true)
 	TEST_EQUAL(p2.getProperty("TEST_PROP").getUnsignedInt(), 123456)	
 RESULT
 
-CHECK(PropertyManager::swap(PropertyManager& property_manager))
+CHECK(void swap(PropertyManager& property_manager) throw())
 	PropertyManager m2;
 	m2.setProperty("PROP1", (float)4.56);
 	m2.setProperty("PROP2", (string)"test");
@@ -386,13 +89,13 @@ CHECK(PropertyManager::swap(PropertyManager& property_manager))
 	m2.swap(m);
 RESULT
 
-CHECK(PropertyManager::getBitVector())
+CHECK(BitVector& getBitVector() throw())
   TEST_EQUAL(m.getBitVector().getBit(0), false)
 	m.getBitVector().setBit(0, true);
   TEST_EQUAL(m.getBitVector().getBit(0), true)
 RESULT
 
-CHECK(PropertyManager::getBitVector() const )
+CHECK(const BitVector& getBitVector() const throw())
 	PropertyManager m;
   m.setProperty(5);
 
@@ -403,7 +106,7 @@ CHECK(PropertyManager::getBitVector() const )
   TEST_EQUAL(m3.getBitVector().getBit(0), false)
 RESULT
 
-CHECK(PropertyManager:: operator BitVector& ())
+CHECK(operator BitVector& () throw())
 	PropertyManager m;
   m.setProperty(5);
 
@@ -416,20 +119,20 @@ CHECK(PropertyManager:: operator BitVector& ())
   TEST_EQUAL(b.getBit(0), false)
 RESULT
 
-CHECK(PropertyManager::setProperty(Property property))
+CHECK(void setProperty(Property property) throw())
 	PropertyManager m;
   m.setProperty(1);
   TEST_EQUAL(m.getBitVector().getBit(1), true)
 RESULT
 
-CHECK(PropertyManager::clearProperty(Property property))
+CHECK(void clearProperty(Property property) throw())
 	PropertyManager m;
   m.setProperty(1);
   m.clearProperty(1);
   TEST_EQUAL(m.getBitVector().getBit(1), false)
 RESULT
 
-CHECK(PropertyManager::toggleProperty(Property property))
+CHECK(void toggleProperty(Property property) throw())
 	PropertyManager m;
   m.toggleProperty(1);
   TEST_EQUAL(m.getBitVector().getBit(1), true)
@@ -437,14 +140,14 @@ CHECK(PropertyManager::toggleProperty(Property property))
   TEST_EQUAL(m.getBitVector().getBit(1), false)
 RESULT
 
-CHECK(PropertyManager::countProperties() const )
+CHECK(Size countProperties() const throw())
   TEST_EQUAL(m.countProperties(), 2)
 	m.clear();
   TEST_EQUAL(m.countProperties(), 0)
   TEST_EQUAL(m.countNamedProperties(), 0)
 RESULT
 
-CHECK(PropertyManager::setProperty(const NamedProperty& property))
+CHECK(void setProperty(const NamedProperty& property) throw())
 	NamedProperty x("test", 1);
 	PropertyManager m;
 	m.setProperty(x);
@@ -453,7 +156,7 @@ CHECK(PropertyManager::setProperty(const NamedProperty& property))
 	TEST_EQUAL(m.getProperty("test").getType(), NamedProperty::INT)
 RESULT
 
-CHECK(PropertyManager::setProperty(const string& name))
+CHECK(void setProperty(const string& name) throw())
 	PropertyManager m;
 	m.setProperty("TEST_PROP");
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
@@ -461,49 +164,49 @@ CHECK(PropertyManager::setProperty(const string& name))
 	TEST_EQUAL(m.getProperty("TEST_PROP").getType(), NamedProperty::NONE)
 RESULT
 
-CHECK(PropertyManager::setProperty(const string& name, bool value))
+CHECK(void setProperty(const string& name, bool value) throw())
 	PropertyManager m;
 	m.setProperty("TEST_PROP", true);
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
 	TEST_EQUAL(m.getProperty("TEST_PROP").getBool(), true)
 RESULT
 
-CHECK(PropertyManager::setProperty(const string& name, int value))
+CHECK(void setProperty(const string& name, int value) throw())
 	PropertyManager m;
 	m.setProperty("TEST_PROP", (int)-56789);
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
 	TEST_EQUAL(m.getProperty("TEST_PROP").getInt(), -56789)
 RESULT
 
-CHECK(PropertyManager::setProperty(const string& name, unsigned int value))
+CHECK(void setProperty(const string& name, unsigned int value) throw())
 	PropertyManager m;
 	m.setProperty("TEST_PROP", (unsigned int)56789);
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
 	TEST_EQUAL(m.getProperty("TEST_PROP").getUnsignedInt(), 56789)
 RESULT
 
-CHECK(setProperty(String&, float))
+CHECK(void setProperty(const string& name, float value) throw())
 	PropertyManager m;
 	m.setProperty("TEST_PROP", (float)0.56789);
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
 	TEST_REAL_EQUAL(m.getProperty("TEST_PROP").getFloat(), 0.56789)
 RESULT
 
-CHECK(PropertyManager::setProperty(const string& name, double value))
+CHECK(void setProperty(const string& name, double value) throw())
 	PropertyManager m;
 	m.setProperty("TEST_PROP", (double)0.56789);
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
 	TEST_REAL_EQUAL(m.getProperty("TEST_PROP").getDouble(), 0.56789)
 RESULT
 
-CHECK(PropertyManager::setProperty(const string& name, const string& value))
+CHECK(void setProperty(const string& name, const string& value) throw())
 	PropertyManager m;
 	m.setProperty("TEST_PROP", (string)"xxx");
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), true)
 	TEST_EQUAL(m.getProperty("TEST_PROP").getString(), "xxx")
 RESULT
 
-CHECK(PropertyManager::setProperty(const string& name, const PersistentObject& value))
+CHECK(void setProperty(const string& name, const PersistentObject& value) throw())
 	PropertyManager m;
 	PersistentObject po;
 	m.setProperty("TEST_PROP", po);
@@ -511,7 +214,7 @@ CHECK(PropertyManager::setProperty(const string& name, const PersistentObject& v
 	TEST_EQUAL(m.getProperty("TEST_PROP").getObject(), &po)
 RESULT
 
-CHECK(PropertyManager::getProperty(const string& name) const )
+CHECK(const NamedProperty& getProperty(const string& name) const throw())
 	PropertyManager m;
 	PersistentObject po;
 	TEST_EQUAL(m.getProperty("TEST_PROP").getObject(), 0)
@@ -521,7 +224,7 @@ CHECK(PropertyManager::getProperty(const string& name) const )
 	TEST_EQUAL(m.getProperty("TEST_PROP").getObject(), &po)
 RESULT
 
-CHECK(PropertyManager::clearProperty(const string& name))
+CHECK(void clearProperty(const string& name) throw())
 	PropertyManager m;
 	PersistentObject po;
 	m.setProperty("TEST_PROP", po);
@@ -531,7 +234,7 @@ CHECK(PropertyManager::clearProperty(const string& name))
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
 RESULT
 
-CHECK(PropertyManager::countNamedProperties() const )
+CHECK(Size countNamedProperties() const throw())
 	PropertyManager m;
 	TEST_EQUAL(m.countNamedProperties(), 0)
 	m.setProperty("TEST_PROP1", 0);
@@ -544,7 +247,7 @@ CHECK(PropertyManager::countNamedProperties() const )
 	TEST_EQUAL(m.countNamedProperties(), 1)
 RESULT
 
-CHECK(PropertyManager::getNamedProperty(Position index) const)
+CHECK(const NamedProperty& getNamedProperty(Position index) const throw(Exception::IndexOverflow))
 	PropertyManager m;
 	m.setProperty("TEST_PROP1", 123);
 	m.setProperty("TEST_PROP2", string("ASD"));
@@ -558,7 +261,7 @@ CHECK(PropertyManager::getNamedProperty(Position index) const)
 	TEST_EXCEPTION(Exception::IndexOverflow, c_m.getNamedProperty(3))
 RESULT
 
-CHECK(PropertyManager::getNamedProperty(Position index))
+CHECK(NamedProperty& getNamedProperty(Position index) throw(Exception::IndexOverflow))
 	PropertyManager m;
 	m.setProperty("TEST_PROP1", 123);
 	m.setProperty("TEST_PROP2", string("ASD"));
@@ -571,7 +274,7 @@ CHECK(PropertyManager::getNamedProperty(Position index))
 	TEST_EXCEPTION(Exception::IndexOverflow, m.getNamedProperty(3))
 RESULT
 
-CHECK(PropertyManager::hasProperty(Property property) const )
+CHECK(bool hasProperty(Property property) const throw())
 	PropertyManager m;
 	TEST_EQUAL(m.hasProperty(1), false)
 	TEST_EQUAL(m.hasProperty(0), false)
@@ -581,7 +284,7 @@ CHECK(PropertyManager::hasProperty(Property property) const )
 	TEST_EQUAL(m.hasProperty(0), false)
 RESULT
 
-CHECK(PropertyManager::hasProperty(const string& name) const )
+CHECK(bool hasProperty(const string& name) const throw())
 	PropertyManager m;
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
 	TEST_EQUAL(m.hasProperty(""), false)
@@ -590,7 +293,10 @@ CHECK(PropertyManager::hasProperty(const string& name) const )
 	TEST_EQUAL(m.hasProperty("TEST_PROP"), false)
 RESULT
 
-CHECK(PropertyManager::write(PersistenceManager& pm) const )
+String filename;
+TextPersistenceManager pm;
+
+CHECK(void write(PersistenceManager& pm) const throw())
 	NEW_TMP_FILE(filename)
 	String str("test");
 	PersistentObject ob;
@@ -612,7 +318,7 @@ CHECK(PropertyManager::write(PersistenceManager& pm) const )
 RESULT
 
 
-CHECK(PropertyManager::read(PersistenceManager& pm))
+CHECK(bool read(PersistenceManager& pm) throw())
 	PropertyManager m;
 	ifstream  ifile("data/PropertyManager_test/PropertyManager_test_read.txt");
 	pm.setIstream(ifile);
@@ -641,15 +347,38 @@ CHECK(PropertyManager::read(PersistenceManager& pm))
 RESULT
 
 
-CHECK(PropertyManager::isValid() const )
+CHECK(bool isValid() const throw())
 	TEST_EQUAL(m.isValid(), true)
 RESULT
 
-CHECK(PropertyManager::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	NEW_TMP_FILE(filename)
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	m.dump(outstr); 
 	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_dump.txt")
+RESULT
+
+
+CHECK(bool operator != (const PropertyManager& pm) const throw())
+  // rudimentary tests
+	PropertyManager pm1;
+	PropertyManager pm2;
+	bool result = (pm1 != pm2);
+	TEST_NOT_EQUAL(result, true)
+	pm1.setProperty("TEST_PROP1", 123);
+	result = (pm1 != pm2);
+	TEST_EQUAL(result, true)
+RESULT
+
+CHECK(bool operator == (const PropertyManager& pm) const throw())
+  // rudimentary tests
+	PropertyManager pm1;
+	PropertyManager pm2;
+	bool result = (pm1 == pm2);
+	TEST_EQUAL(result, true)
+	pm1.setProperty("TEST_PROP1", 123);
+	result = (pm1 == pm2);
+	TEST_NOT_EQUAL(result, true)
 RESULT
 
 /////////////////////////////////////////////////////////////
