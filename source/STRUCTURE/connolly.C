@@ -1,4 +1,4 @@
-// $Id: connolly.C,v 1.6 2000/06/27 09:11:09 oliver Exp $
+// $Id: connolly.C,v 1.7 2000/06/27 14:19:50 oliver Exp $
 
 #include <math.h>
 #include <algorithm>
@@ -2951,8 +2951,8 @@ namespace	BALL
 			totvs += vols;
 			totasp += areasp;
 			totvsp += volsp;
-			atom_areas[a1] += (areas + areasp) / 2.0;
-			atom_areas[a2] += (areas + areasp) / 2.0;
+			atom_areas[a1 - 1] += (areas + areasp) / 2.0;
+			atom_areas[a2 - 1] += (areas + areasp) / 2.0;
 			if (areas - areasp < 0.0)
 			{
 				cerr << "Negative Area for Saddle Face" << endl;
@@ -2968,9 +2968,9 @@ namespace	BALL
 			// the indices of the three atoms
 			int a1, a2, a3;
 			measfn_ (&ifn, &arean, &voln, &a1, &a2, &a3);
-			atom_areas[a1] += arean / 3.0;
-			atom_areas[a2] += arean / 3.0;
-			atom_areas[a3] += arean / 3.0;
+			atom_areas[a1 - 1] += arean / 3.0;
+			atom_areas[a2 - 1] += arean / 3.0;
+			atom_areas[a3 - 1] += arean / 3.0;
 			totan += arean;
 			totvn += voln;
 		}
