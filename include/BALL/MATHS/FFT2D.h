@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.2 2002/12/12 17:00:52 oliver Exp $
+// $Id: FFT2D.h,v 1.3 2002/12/23 09:05:46 sturm Exp $
 
 #ifndef BALL_MATHS_FFT2D_H
 #define BALL_MATHS_FFT2D_H
@@ -31,7 +31,7 @@ namespace BALL
 	/** A class to perform Fast Fourier Transforms and inverse Fast Fourier Transforms
 			on regularly spaced two dimensional data. \\
 			This class makes use of the freely available library {\bf FFTW}, which can be
-			found at \URL{www.fftw.org}. Normalization, translation and scaling of the
+			found at \URL{http://www.fftw.org}. Normalization, translation and scaling of the
 			coordinate system can be handled automatically. The normaliztion is chosen
 			symmetrically.
 			\\
