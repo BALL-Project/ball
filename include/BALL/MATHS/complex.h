@@ -1,13 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.6 2002/09/05 11:41:31 oliver Exp $
+// $Id: complex.h,v 1.7 2002/09/05 13:27:41 anhi Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+
+#ifdef BALL_HAS_FFTW
+# include <fftw.h>
 #endif
 
 #include <math.h>
@@ -449,7 +453,7 @@ namespace BALL
 	BALL_INLINE
 	TComplex<T> TComplex<T>::operator * (const TComplex<T>& cpx) const throw()
 	{
-		return TComplex<T>(re * cpx.re - im * cpx.im, re * cpx.im - im * cpx.re);
+		return TComplex<T>(re * cpx.re - im * cpx.im, re * cpx.im + im * cpx.re);
 	}
 
 	template <typename T>
@@ -458,7 +462,7 @@ namespace BALL
     throw()
 	{
 		re = re * real;
-		im = -im * real;
+		im = im * real;
 		return *this;
 	}
 
@@ -468,7 +472,7 @@ namespace BALL
     throw()
 	{
 		re = re * cpx.re - im * cpx.im;
-		im = re * cpx.im - im * cpx.re;
+		im = re * cpx.im + im * cpx.re;
 		return *this;
 	}
 
@@ -603,7 +607,14 @@ namespace BALL
 		
 		return s << cpx.re << " " << cpx.im;
 	}
+	
+#ifdef BALL_HAS_FFTW
+	std::istream& operator >> (std::istream& s, FFTW_COMPLEX& cpx)
+		throw();
 
+	std::ostream& operator << (std::ostream& s, const FFTW_COMPLEX& cpx)
+		throw();
+#endif
 	
 }// namespace BALL
 
