@@ -1,4 +1,4 @@
-// $Id: canonicalMD.h,v 1.11 2001/01/26 02:26:41 amoll Exp $
+// $Id: canonicalMD.h,v 1.12 2001/01/29 18:36:47 anker Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -71,6 +71,7 @@ namespace BALL
 	{
     public: 
 
+
     /** A local auxiliary class
     */
     struct Aux_Factors
@@ -78,6 +79,7 @@ namespace BALL
       double factor1, factor2; 
     }; 
     
+
     /** @name Constructors and Destructors
     */
     //@{
@@ -86,30 +88,48 @@ namespace BALL
 
     /** The default constructor with no arguments
     */
-    CanonicalMD(); 
+    CanonicalMD()
+			throw();
 
     /** This constructor expects a force field 
         The force field's options are used and no saving of snapshots is done 
+				@param myforcefield the forcefield we need for the simulation
     */
-    CanonicalMD(ForceField& myforcefield); 
+    CanonicalMD(ForceField& myforcefield)
+			throw();
 
     /** This constructor expects a force field and a snapshot manager 
         The force field's options are used. 
+				@param myforcefield the forcefield which is to be used in the
+				simulation
+				@param ssm  a pointer to the SnapShotManager which will be used to
+				create trajectory files
     */
-    CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm); 
+    CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm)
+			throw();
 
     /** This constructor wants a force field, a snapshot manager and new 
 				options 
+				@param myforcefield the forcefield which is to be used in the
+				simulation
+				@param ssm a pointer to the SnapShotManager used for creating
+				trajectory files
+				@param myoptions arbitrary options that are to be used by this
+				instance instead of those defined therein
     */
-    CanonicalMD(ForceField &myforcefield,SnapShotManager *ssm, const Options &myoptions);
+    CanonicalMD(ForceField &myforcefield,SnapShotManager *ssm,
+				const Options &myoptions)
+			throw();
 
-    /** The standard copy constructor
+    /** The standard copy constructor.
     */
-    CanonicalMD(const CanonicalMD &rhs, bool deep = true); 
+    CanonicalMD(const CanonicalMD &rhs, bool deep = true)
+			throw();
 
-    /** The destructor
+    /** The destructor.
     */
-    virtual ~CanonicalMD(); 
+    virtual ~CanonicalMD()
+			throw();
 
     //@}
 
@@ -118,24 +138,13 @@ namespace BALL
     */
 
     //@{
-    /** Assignment operator
-    */
-    CanonicalMD &operator=(const CanonicalMD &rhs); 
+
+    /// Assignment operator
+    CanonicalMD &operator = (const CanonicalMD& rhs)
+			throw();
+
     //@}
 
-
-    /** Accessors
-    */
-    //@{
-    /** This method sets a new relaxation time for the coupling to an
-        external heat bath
-    */
-    void setBathRelaxationTime(double time);
-
-    /** This method gets the current value for heat bath coupling
-    */
-    double getBathRelaxationTime() const; 
-    //@}
 
     /** @name Setup methods
     */
@@ -143,72 +152,100 @@ namespace BALL
 
     /** This method does general setup things 
     */
-    virtual bool setup(ForceField &myforcefield, SnapShotManager *ssm); 
+    virtual bool setup(ForceField &myforcefield, SnapShotManager *ssm)
+			throw();
 
     /** This method does general setup things 
     */
-    virtual bool setup(ForceField &myforcefield, SnapShotManager *ssm, const Options &myoptions); 
+    virtual bool setup(ForceField &myforcefield, SnapShotManager *ssm,
+				const Options &myoptions)
+			throw();
 
     /** This method is meant for additional preparations  apart from those
-       done in setup 
+				done in setup 
+				@return {\bf true} if specificSetup() was successful
     */
-    virtual bool specificSetup();
+    virtual bool specificSetup()
+			throw();
 
     //@} 
 
-    /** @name Accessors
+
+    /// @name Accessors
+		//@{
+
+    /** This method sets a new relaxation time for the coupling to an
+        external heat bath
+				@param time the time in [unit] 
     */
+    void setBathRelaxationTime(double time)
+			throw();
+
+    /** This method gets the current value for heat bath coupling
+				@return the time in [unit]
+    */
+    double getBathRelaxationTime() const
+			throw();
 
     /** Set a new time step  for the numerical integration 
     */
-    virtual void setTimeStep(double time); 
+    virtual void setTimeStep(double time)
+			throw();
 
-    //@{
     /**  This method does the actual simulation stuff
          It runs for getMaximalNumberIterations() iterations.
          If restart is true, the counting of iterations starts with the
          number of the last iteration in the previous run.  
+				 @param restart a bool value indicating whether the simulation is
+				 to be run from the beginning
     */
-    virtual void simulate(bool restart = false);
+    virtual void simulate(bool restart = false)
+			throw();
 
     /**  This method does the actual simulation stuff. 
          It runs for the indicated number of iterations. 
          If restart is true, the counting of iterations starts with the
          number of the last iteration in the previous run.  
-          
+				 @param number the number of iterations that have to be simulated
+				 @param restart flag for restarting the simulation
     */
-    virtual void simulateIterations(Size number,bool restart = false);
+    virtual void simulateIterations(Size number, bool restart = false)
+			throw();
 
     /**  This method does the actual simulation stuff. 
          It runs for the indicated time in picoseconds. 
          If restart is true, the counting of iterations starts with the
          number of the last iteration in the previous run.  
+				 @param simulation_time
+				 @param restart
     */
-    virtual void simulateTime(double simulation_time,bool restart = false); 
+    virtual void simulateTime(double simulation_time, bool restart = false)
+			throw();
 
     //@}
 
+
     protected:
-    /*_ @name Protected methods
-    */
+
+    //_ @name Protected methods
     //_@{
 
     /*_ A protected method for calculating some
         factors that are needed all the time
     */
-    void calculateFactors();
+    void calculateFactors_()
+			throw();
 
     //_@}
 
-    /*_  @name Protected Attributes
-    */
+
+    //_  @name Protected Attributes
     //@{
-    /*_  The coupling parameter to the heat  bath
-    */
+
+    //_  The coupling parameter to the heat  bath
     double bath_relaxation_time_; 
 
-    /*_  This vector contains special precomputed factors 
-    */
+    //_  This vector contains special precomputed factors 
     vector<Aux_Factors> mass_factor_; 
 
     //@} 

@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.9 2001/01/29 17:44:01 anker Exp $
+// $Id: canonicalMD.C,v 1.10 2001/01/29 18:36:49 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
@@ -8,42 +8,67 @@ namespace BALL
 	using namespace std;
 
 	// The default constructor with no arguments
-	  CanonicalMD::CanonicalMD ():MolecularDynamics ()
+	CanonicalMD::CanonicalMD()
+		throw()
+		:	MolecularDynamics()
 	{
 		valid_ = false;
 	}
 
 
 	// This constructor uses the given force field 
-	CanonicalMD::CanonicalMD (ForceField & myforcefield):MolecularDynamics (myforcefield)
+	CanonicalMD::CanonicalMD(ForceField& myforcefield)
+		throw()
+		:	MolecularDynamics(myforcefield)
 	{
 		// the user does not want to take snapshots.
-		// Create an invalid  dummy manager
+		// Create an invalid dummy manager
 		SnapShotManager tmp;
-		valid_ = setup (myforcefield, &tmp);
+		valid_ = setup(myforcefield, &tmp);
 	}
+
 
 	// This constructor uses the given force field and a snapshot manager 
-	CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):MolecularDynamics (myforcefield)
+	CanonicalMD::CanonicalMD(ForceField& myforcefield,
+			SnapShotManager* ssm)
+		throw()
+		:	MolecularDynamics(myforcefield)
 	{
-		valid_ = setup (myforcefield, ssm);
+		valid_ = setup(myforcefield, ssm);
 	}
 
+
 	// This constructor uses the given force field and options 
-	CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm,
-														const Options & myoptions):MolecularDynamics (myforcefield)
+	CanonicalMD::CanonicalMD(ForceField &myforcefield,
+			SnapShotManager *ssm, const Options &myoptions)
+		throw()
+		:	MolecularDynamics(myforcefield)
 	{
 		valid_ = setup (myforcefield, ssm, myoptions);
 	}
 
+
+	// The copy constructor 
+	CanonicalMD::CanonicalMD(const CanonicalMD& rhs, bool deep)
+		throw()
+		:	MolecularDynamics (rhs, deep)
+	{
+		// copy class specific variables 
+		mass_factor_ = rhs.mass_factor_;
+	}
+
+
 	// The destructor
-	CanonicalMD::~CanonicalMD ()
+	CanonicalMD::~CanonicalMD()
+		throw()
 	{
 		// Nothing to do 
 	}
 
+
 	// This method does the general setup. 
-	bool CanonicalMD::setup (ForceField & myforcefield, SnapShotManager * ssm)
+	bool CanonicalMD::setup(ForceField & myforcefield, SnapShotManager * ssm)
+		throw()
 	{
 		// No specific options have been named -> we use the force field's options
 		valid_ = setup (myforcefield, ssm, myforcefield.options);
@@ -51,24 +76,29 @@ namespace BALL
 		return valid_;
 	}
 
-	bool CanonicalMD::setup (ForceField & myforcefield, SnapShotManager * ssm, const Options & myoptions)
+
+	bool CanonicalMD::setup(ForceField & myforcefield, SnapShotManager * ssm,
+			const Options & myoptions)
+		throw()
 	{
 		// First check whether the force field is valid. If not, then it is useless
 		// to do anything here.
-		if (myforcefield.isValid () == false)
+		if (myforcefield.isValid() == false)
 		{
 			// The setup has failed for some reason. Output an error message.
-			Log.level (LogStream::ERROR) << "Setup of instance of class 'MicroCanonical' hast failed" << endl;
-
+			Log.error() << "CanonicalMD::setup(): "
+				<< "forcefield is not valid." << endl;
 			valid_ = false;
 			return false;
 		}
 
 		// first call the base class setup method
-		valid_ = MolecularDynamics::setup (myforcefield, ssm, myoptions);
+		valid_ = MolecularDynamics::setup(myforcefield, ssm, myoptions);
 
 		if (valid_ == false)
+		{
 			return false;
+		}
 
 		// base class setup was successful; we can go on
 
@@ -76,42 +106,46 @@ namespace BALL
 		// none
 
 		// call the specific Setup
-		valid_ = specificSetup ();
-
+		valid_ = specificSetup();
 
 		return valid_;
-
 	}
+
 
   // Choose a new time step. This means that all pre-factors must be
   // recomputed.
 	void CanonicalMD::setTimeStep(double time)
+		throw()
   {
 		MolecularDynamics::setTimeStep(time);
 
 		// calculate the new factors
-		calculateFactors();
+		calculateFactors_();
 	}
  
+
   // This method allows us to set the coupling to a thermal bath 
   void CanonicalMD::setBathRelaxationTime(double time)
+		throw()
   {
 		bath_relaxation_time_ = time;
 		options[MolecularDynamics::Option::BATH_RELAXATION_TIME] = time;
 	}
                                            
+
   // This method allows us to get the current value for the bath 
   // relaxation time (coupling to an external heat bath) 
   double CanonicalMD::getBathRelaxationTime() const
-	{       
+		throw()
+	{
 		return bath_relaxation_time_;
 	}       
 
 
-
 	// This method calculates certain factors that are needed
 	// throughout the simulation
-	void CanonicalMD::calculateFactors()
+	void CanonicalMD::calculateFactors_()
+		throw()
 	{
 		// precompute a vector of factors to save some work 
 		// Clear the vector of factors if it is already existing
@@ -139,32 +173,31 @@ namespace BALL
 
 	// This method performs additional setup preparations in addition 
 	// to those done in MolecularDynamics::setup 
-	bool CanonicalMD::specificSetup ()
+	bool CanonicalMD::specificSetup()
+		throw()
 	{
 		if (!valid_)	
 		{
+			Log.error() << "CanonicalMD::specificSetup(): "
+				<< "Instance is not valid." << endl;
 			return false;
 		}
 
 		// Set some class specific options
 		// The bath relaxation time. This indicates how closely the system will
 		// be coupled to a heat bath in order to keep the temperature constant.
-		options.setDefaultReal (MolecularDynamics::Option::BATH_RELAXATION_TIME,
-														MolecularDynamics::Default::BATH_RELAXATION_TIME);
-		bath_relaxation_time_ = options.getReal (MolecularDynamics::Option::BATH_RELAXATION_TIME);
+		options.setDefaultReal(MolecularDynamics::Option::BATH_RELAXATION_TIME,
+				MolecularDynamics::Default::BATH_RELAXATION_TIME);
+		bath_relaxation_time_ 
+			= options.getReal(MolecularDynamics::Option::BATH_RELAXATION_TIME);
 
 		return true;
-	}	// end of 'specificSetup' 
+	}	
 
-	// The copy constructor 
-	CanonicalMD::CanonicalMD (const CanonicalMD & rhs, bool deep):MolecularDynamics (rhs, deep)
-	{
-		// copy class specific variables 
-		mass_factor_ = rhs.mass_factor_;
-	}
 
 	// The assignment operator 
 	CanonicalMD & CanonicalMD::operator = (const CanonicalMD & rhs)
+		throw()
 	{
 		mass_factor_ = rhs.mass_factor_;
 
@@ -174,13 +207,15 @@ namespace BALL
 		return *this;
 	}
 
+
 	// This method does the actual simulation stuff
   // It runs for getMaximalNumberOfIterations() iterations. 
   // restart=true means that the counting of iterations is started with the end
   // value of the previous run
-	void CanonicalMD::simulate (bool restart)
+	void CanonicalMD::simulate(bool restart)
+		throw()
 	{
-		simulateIterations (maximal_number_of_iterations_, restart);
+		simulateIterations(maximal_number_of_iterations_, restart);
 	}
 
 
@@ -189,6 +224,7 @@ namespace BALL
   // restart=true means that the counting of iterations is started with the end
   // value of the previous run
 	void CanonicalMD::simulateTime (double simulation_time, bool restart)
+		throw()
 	{
 		Size number;
 
@@ -206,6 +242,7 @@ namespace BALL
   // restart=true means that the counting of iterations is started with the end
   // value of the previous run
 	void CanonicalMD::simulateIterations(Size iterations, bool restart)
+		throw()
 	{
 		// local variables
 		double current_energy;
@@ -249,7 +286,7 @@ namespace BALL
 		}
 
 		// pre-calculate some needed factors
-		calculateFactors();
+		calculateFactors_();
 
 		// make sure that the MD simulation operates on the same set of atoms
 		// as the forcefield does (this may have changed since setup was called)
@@ -376,7 +413,5 @@ namespace BALL
 		updateInstantaneousTemperature();
 
 	}	// end of simulateIterations() 
-
-
 
 }	// end of namespace Ball
