@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.32 2002/01/04 03:48:29 oliver Exp $
+// $Id: File_test.C,v 1.33 2002/01/09 16:49:23 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(File, "$Id: File_test.C,v 1.32 2002/01/04 03:48:29 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.33 2002/01/09 16:49:23 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -460,6 +460,9 @@ CHECK(TCPTransfer/8)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt", false)
 RESULT
 
+CHECK(TCPTransfer/failedTransfer)
+	TEST_EXCEPTION(Exception::FileNotFound, File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/notthere.txt"))
+RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
