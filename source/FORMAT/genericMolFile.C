@@ -1,6 +1,8 @@
-// $Id: genericMolFile.C,v 1.1 2001/12/17 11:32:47 oliver Exp $
+// $Id: genericMolFile.C,v 1.2 2001/12/19 02:40:25 oliver Exp $
 
 #include <BALL/FORMAT/genericMolFile.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/molecule.h>
 
 namespace BALL 
 {
@@ -26,13 +28,42 @@ namespace BALL
 	{
 	}
 
-	void GenericMolFile::read(System& system)
+	bool GenericMolFile::read(System& system)
 		throw(Exception::ParseError)
+	{
+		if (!isOpen())
+		{
+			return false;
+		}
+
+		bool read_anything = false;
+		Molecule* molecule = 0;
+		while ((molecule = read()) != 0)
+		{
+			system.append(*molecule);
+			read_anything = true;
+		}
+
+		return read_anything;
+	}
+
+	Molecule* GenericMolFile::read()
+		throw(Exception::ParseError)
+	{
+		return 0;
+	}
+
+	void GenericMolFile::write(const Molecule& molecule)
 	{
 	}
 
 	void GenericMolFile::write(const System& system)
 	{
+		MoleculeConstIterator molecule = system.beginMolecule();
+		for (; +molecule; ++molecule)
+		{
+			write(*molecule);
+		}
 	}
 
 	GenericMolFile& GenericMolFile::operator >> (System& system)
@@ -45,6 +76,23 @@ namespace BALL
 	GenericMolFile& GenericMolFile::operator << (const System& system)
 	{
 		write(system);
+	}
+
+	GenericMolFile& GenericMolFile::operator >> (Molecule& molecule)
+		throw(Exception::ParseError)
+	{
+		molecule.clear();
+		Molecule* new_mol = read();
+		if (new_mol != 0)
+		{
+			molecule = *new_mol;
+		}
+		return *this;
+	}
+ 
+	GenericMolFile& GenericMolFile::operator << (const Molecule& molecule)
+	{
+		write(molecule);
 	}
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.15 2001/12/17 01:43:35 oliver Exp $
+// $Id: HINFile.h,v 1.16 2001/12/19 02:40:22 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -13,9 +13,6 @@
 
 namespace BALL 
 {
-	class System;
-	class Atom;
-
 	/**	HyperChem file class.
 			This class enables BALL to read and write HyperChem HIN files. \\
 			{\bf Definition:} \URL{BALL/FORMAT/HINFile.h} \\
@@ -58,11 +55,18 @@ namespace BALL
 		/**	Write a system to a HIN file.
 				Note that this changes the properties of atoms in the system.
 		*/
+		virtual void write(const Molecule& molecule);
+			
 		virtual void write(const System& system);
 		
 		/**	Read a system from the HIN file
 		*/
-		virtual void read(System&	system)
+		virtual Molecule* read()
+			throw(Exception::ParseError);
+
+		/**
+		*/
+		virtual bool read(System& system)
 			throw(Exception::ParseError);
 		//@}
 

@@ -1,4 +1,4 @@
-// $Id: Selector_test.C,v 1.8 2001/07/17 02:36:19 oliver Exp $
+// $Id: Selector_test.C,v 1.9 2001/12/19 02:40:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Selector, "$Id: Selector_test.C,v 1.8 2001/07/17 02:36:19 oliver Exp $")
+START_TEST(Selector, "$Id: Selector_test.C,v 1.9 2001/12/19 02:40:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ RESULT
 CHECK(Selector::Processor::Result operator () (Composite& composite) throw())
 	HINFile file("data/Expression_test.hin");
 	System S;
-	file.read(S);
+	file >> S;
 	file.close();
 
 	HashMap<String, Size> test_expressions;
@@ -100,7 +100,7 @@ RESULT
 CHECK(Selector::getNumberOfSelectedAtoms() const  throw())
 	HINFile file("data/Expression_test.hin");
 	System S;
-	file.read(S);
+	file >> S;
 	file.close();
 
 	HashMap<String, Size> test_expressions;

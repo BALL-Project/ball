@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.13 2001/12/17 11:25:54 oliver Exp $
+// $Id: MOL2File.C,v 1.14 2001/12/19 02:40:24 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -243,7 +243,7 @@ namespace BALL
 	}
 
 
-	void MOL2File::read(System& system)
+	bool MOL2File::read(System& system)
 		throw(Exception::ParseError)
 	{
 		// remove old rubbish from the system
@@ -259,13 +259,12 @@ namespace BALL
     {
 			getLine().toUpper();
 			
-			while (getLine().hasPrefix(TRIPOS))
+			while (startsWith(TRIPOS))
 			{
 				// we found a "Record Type Identifier" (RTI)
 				String RTI = getLine().after(TRIPOS);
 				RTI.trim();
-				
-				
+					
 				// interpret the RTI (at least the known ones)
 				if (RTI == "ATOM")
 				{
@@ -300,7 +299,7 @@ namespace BALL
 		}
 
 		// interpret the section we already read from the file
-		buildAll_(system);
+		return buildAll_(system);
 	}
 				
 	void MOL2File::readAtomSection_()
@@ -529,11 +528,8 @@ namespace BALL
 	}
 		
 
-	void MOL2File::buildAll_(System& system) 
+	bool MOL2File::buildAll_(System& system) 
 	{
-		// name the system
-		system.setName(molecule_.name);
-
 		// consistency check
 		if (atoms_.size() != molecule_.number_of_atoms)
 		{
@@ -541,7 +537,7 @@ namespace BALL
 									<< molecule_.number_of_atoms << ")" << endl
 									<< " is not consistent with the contents of the ATOM section (" 
 									<< atoms_.size() << " atoms)!" << endl;
-			return;
+			return false;
 		}
 		if (bonds_.size() != molecule_.number_of_bonds)
 		{
@@ -549,7 +545,7 @@ namespace BALL
 									<< molecule_.number_of_bonds << ")" << endl
 									<< " is not consistent with the contents of the BOND section (" 
 									<< bonds_.size() << " bonds)!" << endl;
-			return;
+			return false;
 		}
 		if (substructures_.size() != molecule_.number_of_substructures)
 		{
@@ -557,17 +553,22 @@ namespace BALL
 									<< molecule_.number_of_substructures << ")" << endl
 									<< " is not consistent with the contents of the SUBSTRUCTURE section (" 
 									<< substructures_.size() << " substructures)!" << endl;
-			return;
+			return false;
 		}
 
+		// if we read anything meaningful at all, store in this flag
+		bool read_anything = false;
+
 		// construct the substructures (if any)
-		vector<AtomContainer*>	sub_ptr(substructures_.size());
+		vector<AtomContainer*> sub_ptr(substructures_.size());
 		Position i;
 		for (i = 0; i < substructures_.size(); i++)
 		{
 			AtomContainer* frag = 0;
 			if (substructures_[i].substructure_type == "RESIDUE")
 			{
+				read_anything = true;
+
 				Residue* residue= new Residue;
 				frag = static_cast<AtomContainer*>(residue);
 
@@ -605,6 +606,7 @@ namespace BALL
 		vector<Atom*> atom_ptr(atoms_.size());
 		for (i = 0; i < atoms_.size(); i++)
 		{
+			read_anything = true;
 			// create a new atom and assign its attributes
 			Atom* atom = new Atom;
 			atom->setName(atoms_[i].name);
@@ -705,6 +707,11 @@ namespace BALL
 				molecule->insert(*atom_ptr[i]);
 			}
 		}
+
+		// name the system
+		system.setName(molecule_.name);
+
+		return read_anything;
 	}
 
 	String MOL2File::getSybylType_(const Atom& atom) const

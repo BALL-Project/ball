@@ -1,4 +1,4 @@
-// $Id: MOL2File.h,v 1.10 2001/12/17 01:43:35 oliver Exp $
+// $Id: MOL2File.h,v 1.11 2001/12/19 02:40:22 oliver Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -70,7 +70,7 @@ namespace BALL
 		
 		/**	Read a system from the MOL2 file
 		*/
-		virtual void read(System&	system)
+		virtual bool read(System&	system)
 			throw(Exception::ParseError);
 		//@}
 
@@ -92,7 +92,7 @@ namespace BALL
 		
 		void clear_();
 		
-		void buildAll_(System& system);
+		bool buildAll_(System& system);
 
 		struct AtomStruct
 		{

@@ -1,4 +1,4 @@
-// $Id: SDFile.h,v 1.2 2001/12/18 01:19:10 oliver Exp $
+// $Id: SDFile.h,v 1.3 2001/12/19 02:40:23 oliver Exp $
 
 #ifndef BALL_FORMAT_SDFILE_H
 #define BALL_FORMAT_SDFILE_H
@@ -69,17 +69,17 @@ namespace BALL
 
 		/**	Read a system from the SD file
 		*/
-		virtual void read(System&	system)
+		virtual bool read(System& system)
 			throw(Exception::ParseError);
 
 		/**	Read a single molecule from an SD file.
 		*/
-		virtual void read(Molecule& molecule)
+		virtual Molecule* read()
 			throw(Exception::ParseError);
 		//@}
 
 		protected:
-		/** Read the propertyblock of an SD file.
+		/** Read the property block of an SD file.
 				The values are stored as named properties in the 
 				molecule read.
 		*/

@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.38 2001/12/17 11:25:54 oliver Exp $
+// $Id: HINFile.C,v 1.39 2001/12/19 02:40:24 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -55,31 +55,31 @@ namespace BALL
 
 	void HINFile::writeAtom_(const Atom& atom, Size number, Size atom_offset)
 	{
-		*(File*)this << "atom " << number + 1 - atom_offset << " ";
+		getFileStream() << "atom " << number + 1 - atom_offset << " ";
 		String name = atom.getName();
 		if (name != "") 
 		{
-			*(File*)this << name.trim() << " ";
+			getFileStream() << name.trim() << " ";
 		} 
 		else 
 		{
-			*(File*)this << "- ";
+			getFileStream() << "- ";
 		}
 
-		*(File*)this << atom.getElement().getSymbol() << " ";
+		getFileStream() << atom.getElement().getSymbol() << " ";
 		if (atom.getTypeName() == "?")
 		{
-			*(File*)this << "**";
+			getFileStream() << "**";
 		} 
 		else 
 		{
-			*(File*)this << atom.getTypeName();	
+			getFileStream() << atom.getTypeName();	
 		}
-		*(File*)this << " - ";
-		*(File*)this << atom.getCharge() << " ";
-		*(File*)this << atom.getPosition().x << " ";
-		*(File*)this << atom.getPosition().y << " ";
-		*(File*)this << atom.getPosition().z << " ";
+		getFileStream() << " - ";
+		getFileStream() << atom.getCharge() << " ";
+		getFileStream() << atom.getPosition().x << " ";
+		getFileStream() << atom.getPosition().y << " ";
+		getFileStream() << atom.getPosition().z << " ";
 
 		Size number_of_bonds = 0;
 		String bond_string(" ");
@@ -110,13 +110,20 @@ namespace BALL
 		}
 		
 		// write the bonds
-		*(File*)this << number_of_bonds << bond_string << endl;
+		getFileStream() << number_of_bonds << bond_string << endl;
 
 		// HyperChem uses A/ps, as does BALL. So, no conversion is needed.
-		*(File*)this << "vel " << number + 1 - atom_offset << " " 
+		getFileStream() << "vel " << number + 1 - atom_offset << " " 
 								 << atom.getVelocity().x << " " 
 								 << atom.getVelocity().y << " "
 								 << atom.getVelocity().z << endl;
+	}
+
+	void HINFile::write(const Molecule& molecule)
+	{
+		System S;
+		S.insert(*(Molecule*)molecule.create(true));
+		write(S);
 	}
 	
 	void HINFile::write(const System& system)
@@ -222,13 +229,13 @@ namespace BALL
 		}
 
 		// write some default header
-		*(File*)this << "; HyperChem file created by BALL" << endl;
-		*(File*)this << ";" << endl;
-		*(File*)this << "forcefield AMBER" << endl;
+		getFileStream() << "; HyperChem file created by BALL" << endl;
+		getFileStream() << ";" << endl;
+		getFileStream() << "forcefield AMBER" << endl;
 
 		// BAUSTELLE: 
 		// insert system temperature here
-		*(File*)this << "sys 0" << endl;
+		getFileStream() << "sys 0" << endl;
 
 		// BAUSTELLE:
 		// insert the periodic box size (if any)
@@ -254,7 +261,7 @@ namespace BALL
 			}
 
 			// write the molecule identifier	
-			*(File*)this << "mol " << j + 1 << " " << name << endl;
+			getFileStream() << "mol " << j + 1 << " " << name << endl;
 			
 			// now iterate over all atoms and write them
 			const Residue* current_residue = 0;
@@ -273,7 +280,7 @@ namespace BALL
 					if (current_residue != 0)
 					{
 						// write and "endres" tag
-						*(File*)this << "endres " << res_count << endl;
+						getFileStream() << "endres " << res_count << endl;
 					}
 
 					current_residue = this_residue;
@@ -290,8 +297,8 @@ namespace BALL
 							name = "-";
 						}
 						
-						*(File*)this << "res " << res_count << " ";
-						*(File*)this << name << " ";
+						getFileStream() << "res " << res_count << " ";
+						getFileStream() << name << " ";
 						
 						name = this_residue->getID();
 						name.trim();
@@ -300,7 +307,7 @@ namespace BALL
 							name = "-";
 						}
 
-						*(File*)this << name << " - ";
+						getFileStream() << name << " - ";
 						
 						// write the chain name
 						const Chain*	chain = this_residue->getChain();
@@ -319,7 +326,7 @@ namespace BALL
 							name = "-";
 						}
 
-						*(File*)this << "-" << endl;
+						getFileStream() << "-" << endl;
 					}
 				}
 
@@ -332,11 +339,11 @@ namespace BALL
 			if (current_residue != 0)
 			{
 				// write and "endres" tag
-				*(File*)this << "endres " << res_count << endl;
+				getFileStream() << "endres " << res_count << endl;
 			}
 
 			// write endmol keyword
-			*(File*)this << "endmol " << j + 1 << endl;
+			getFileStream() << "endmol " << j + 1 << endl;
 		}
 
 		// clear the atom properties
@@ -346,21 +353,20 @@ namespace BALL
 		}
 	}
 
-	void HINFile::read(System& system)
+	bool HINFile::read(System& system)
+		throw(Exception::ParseError)
+	{
+		return GenericMolFile::read(system);
+	}
+	
+	Molecule* HINFile::read()
 		throw(Exception::ParseError)
 	{
 		if (!isValid())
 		{
-			Log.error() << "HINFile is not valid, but was tried to be opened: " 
-									<< getName() << endl;
-			return;
+			Log.error() << "trying to read form invalid HINFile '" << getName() << "'" << endl;
+			return false;
 		}
-		
-		// this is just for the paranoid...
-		reopen();
-
-		// destroy the old contents of the system
-		system.destroy();
 		
 		// we define some states for our simple parser machine
 		// legal transitions are:
@@ -373,9 +379,6 @@ namespace BALL
 			IN_RESIDUE
 		};
 		
-		// count the lines to tell the line number in case of error
-		Size				number_of_lines = 0;
-
 		// reset some private members
 		box_.a.set(0.0);
 		box_.b.set(0.0);
@@ -385,13 +388,6 @@ namespace BALL
 #		define ERROR(msg)\
 				throw Exception::ParseError(__FILE__, __LINE__, getLine(), String("while reading line " + String(getLineNumber()) + " of '" + getName() + "': " + (msg)));
 			
-		
-
-		const	Size	MAX_LENGTH = 512;	
-		char				buffer[MAX_LENGTH + 1];	
-		String			line;
-		String			tag;
-
 		// the current state - we don't want to insert an atom if
 		// we don't have created the molecule/residue to insert it into!
 		State	state = START;
@@ -401,10 +397,9 @@ namespace BALL
 		Molecule*	molecule = 0;	
 		Fragment*	fragment = 0;
 
-		// initial size: 100 atoms, all set to NULL pointer
+		// initial size: 100 atoms, all set to NULL pointer, 100 bonds
 		vector<Atom*>	atom_vector;
-
-		vector<struct HINFileBondStruct>	bond_vector(100);
+		vector<struct HINFileBondStruct> bond_vector(100);
 
 		Size	number_of_bonds = 0;
 
@@ -413,479 +408,495 @@ namespace BALL
 		Protein*	protein = 0;
 		Chain*		chain = 0;
 
-		while (getline(buffer, MAX_LENGTH)) 
+		String tag;
+
+		try
 		{
-			number_of_lines++;
-			line = buffer;
-			line.trimLeft();
-
-			// ignore comment lines
-			if (line[0] == ';' || line == "") 
+			while (readLine()) 
 			{
-				continue;
-			}
+				// remove trailing whitespaces
+				getLine().trimLeft();
 
-			// determine the hyperchem tag: always the first word in a line
-			tag = line.getField(0);
-
-			if (tag == "atom")
-			{
-				if (state == IN_RESIDUE || state == IN_MOLECULE) 
-				{
-					Size number_of_fields = line.countFields();
-					if (number_of_fields < 11) 
-					{
-						ERROR(String("illegal <atom> line: at least 10 arguments are required for <atom>!"))
-					}
-
-					Atom*	atom;
-					if (state == IN_RESIDUE) 
-					{
-						PDBAtom*	prot_atom = new PDBAtom;
-						atom = RTTI::castTo<Atom>(*prot_atom);
-						residue->insert(*prot_atom);
-
-						// check the atom flags, whther this is a PDB HETATM: 
-						// any HETATM sets its residue to NON_STANDARD 
-						// (compare FORMAT/PDBFile:readRecordHETATM)
-						if (line.getField(5).has('h')) 
-						{
-							residue->clearProperty(Residue::PROPERTY__AMINO_ACID);
-							residue->setProperty(Residue::PROPERTY__NON_STANDARD);
-						} 
-						else 
-						{
-							residue->setProperty(Residue::PROPERTY__AMINO_ACID);
-							residue->clearProperty(Residue::PROPERTY__NON_STANDARD);
-						}
-					} 
-					else 
-					{
-						atom = new Atom;
-						if (molecule == 0) 
-						{
-							fragment->insert(*atom);
-						} 
-						else 
-						{
-							molecule->insert(*atom);
-						}
-					}
-
-					atom->setName(line.getField(2));
-
-					if (PTE[line.getField(3)] == Element::UNKNOWN)
-					{
-						ERROR(String("unknown element: ") + line.getField(3))
-					}
-					atom->setElement(PTE[line.getField(3)]);
-					// set the atom radius
-					atom->setRadius(PTE[line.getField(3)].getVanDerWaalsRadius());
-
-					if (line.getField(4) == "**")
-					{
-						atom->setTypeName("?");
-					} 
-					else	
-					{
-						atom->setTypeName(line.getField(4));
-					}
-
-					try 
-					{
-						atom->setCharge(line.getField(6).toFloat());
-					}
-					catch (Exception::InvalidFormat)
-					{
-						ERROR(String("illegal charge ") + line.getField(6))
-					}
-
-					try 
-					{
-						atom->setPosition(Vector3(line.getField(7).toFloat(), 
-																			line.getField(8).toFloat(), 
-																			line.getField(9).toFloat()));
-					}
-					catch (Exception::InvalidFormat)
-					{
-						ERROR(String("illegal position (") + line.getField(7) + " / " + line.getField(8) + " / " + line.getField(9) + ")")
-					}
-
-					Size number_of_atom_bonds;
-					try 
-					{
-						number_of_atom_bonds = ((Size)line.getField(10).toInt());
-					}
-					catch (Exception::InvalidFormat)
-					{
-						ERROR(String("illegal number of bonds: " + line.getField(10)))
-					}
-
-					Position atom_number;
-					try 
-					{
-						atom_number = (Position)line.getField(1).toInt();
-					}
-					catch (Exception::InvalidFormat)
-					{
-						ERROR(String("illegal atom number: ") + line.getField(1))
-					}
-
-					// store the atom pointer in the atom_vector - we need it later to create the bonds!
-					// if the atom_vector is to small, grow it!
-					if (atom_number >= atom_vector.size())
-					{
-						atom_vector.resize(atom_number * 2);
-					}
-					atom_vector[atom_number] = atom;
-
-					// now iterate over all bonds and insert them into the bond_vector 
-					// this table will be processed afterwards to create the bonds, as most of
-					// the bound atoms are not yet created by now
-					if (number_of_atom_bonds > 0)
-					{
-						// check whether the total number of fields is consistent
-						// with the number of bonds
-						if (number_of_fields != (11 + 2 * number_of_atom_bonds))
-						{
-							// write an error message!
-							if (number_of_fields < (11 + 2 * number_of_atom_bonds))
-							{
-								ERROR(String("too few fields in atom line for ") + String(number_of_atom_bonds) + " bonds")
-							}
-							else 
-							{
-								ERROR(String("too many fields in atom line for ") + String(number_of_atom_bonds) + " bonds")
-							}
-						}
-						else 
-						{
-							for (Position i = 0 ; i < number_of_atom_bonds; i++) 
-							{ 
-								if (number_of_bonds >= bond_vector.capacity())
-								{
-									bond_vector.resize(number_of_bonds * 2);
-								}
-
-								bond_vector[number_of_bonds].atom1 = atom_number;
-								try 
-								{
-									bond_vector[number_of_bonds].atom2 = (Index)line.getField(11 + 2 * (Index)i).toInt();
-								}
-								catch (Exception::InvalidFormat)
-								{
-									ERROR(String("illegal atom number for bond ") + String(i) + ": " + line.getField(11 + 2 * (Index)i))
-								}
-								Bond::Order order = Bond::ORDER__UNKNOWN;
-								String type_field = line.getField(12 + 2 * (Index)i);
-
-								if (type_field.size() == 1)
-								{
-									switch (type_field[0]) 
-									{
-										case 's':	order = Bond::ORDER__SINGLE;		break;
-										case 'd':	order = Bond::ORDER__DOUBLE;		break;
-										case 't': order = Bond::ORDER__TRIPLE;		break;
-										case 'a': order = Bond::ORDER__AROMATIC;	break;
-									}
-								}
-											
-								bond_vector[number_of_bonds++].order = order;
-							}
-						}
-					}
-				}	
-				else 
-				{
-					ERROR(String("<atom> tag may appear only inside a <mol> or <res>!"))
-				}
-				continue;
-			}
-
-
-			if (tag == "vel")
-			{
-				// read the velocity of an atom
-				// since HyperChem uses the same units for velocities 
-				// (resp. A/ps) we don't need a conversion
-				Vector3 velocity;
-
-				try
-				{
-					velocity.x = line.getField(2).toFloat();
-					velocity.y = line.getField(3).toFloat();
-					velocity.z = line.getField(4).toFloat();
-				}
-				catch (Exception::InvalidFormat)
-				{
-					ERROR(String("illegal velocity (") 
-											 + line.getField(2) + " / "
-											 + line.getField(3) + " / " 
-											 + line.getField(4) + ")")
-				}
-
-					
-				// check whether the atom exists
-				Position atom_number;
-				try
-				{
-					atom_number = (Position)line.getField(1).toInt();
-				}
-				catch (Exception::InvalidFormat)
-				{
-					ERROR(String("illegal atom number ") + line.getField(1))
-				}
-
-				if (atom_number >= atom_vector.size())
-				{
-					ERROR(String("cannot assign velocity for atom ") + String(atom_number) + ": atom not defined!")
-				} 
-
-				if (atom_vector[atom_number] != 0)
-				{
-					atom_vector[atom_number]->setVelocity(velocity);
-				} 
-				else 
-				{
-					ERROR(String("cannot assign velocity for atom ") + String(atom_number) + ": atom not defined!")
-				}
-					
-				continue;
-			}
-
-
-			if (tag == "res")
-			{
-				// remember where we are.
-				if (state != IN_MOLECULE) 
-				{
-					ERROR(String("<res> tag must be inside a <mol>/<endmol>"))
-				}
-
-				state = IN_RESIDUE;
-				
-				// create a protein if it doesn't exist already
-				if (protein == 0)
-				{
-					system.insert(*(protein = new Protein));
-				}
-
-				// check whether we already have a chain to insert into
-				if (chain == 0)
-				{
-					protein->insert(*(chain = new Chain));
-				}
-
-				// create a new residue and insert it into the chain
-				residue = new Residue;
-				chain->insert(*residue);
-
-				// set the residue's name
-				if (line.getField(2) != "-")
-				{
-					residue->setName(line.getField(2));
-				}
-
-				// set the residue's PDB ID
-				if (line.getField(3) != "-")
-				{
-					residue->setID(line.getField(3));
-				}
-
-				// set the chain name 
-				if (line.getField(5) != "-")
-				{
-					chain->setName(line.getField(5));
-				}
-				
-				// create a fragment to insert the "loose" atoms into
-				if (fragment == 0)
-				{
-					chain->AtomContainer::insert(*(fragment = new Fragment));
-				}
-
-				// now check for a molecule, that might already exist
-				// and move its atoms into a fragment (to be inserted into the chain)
-				if (molecule == 0)
+				// ignore comment lines
+				if (getLine()[0] == ';' || getLine() == "") 
 				{
 					continue;
 				}
 
-				AtomIterator atom_it = molecule->beginAtom();
-				vector<Atom*>	tmp_atoms(20);
-				for (; +atom_it; ++atom_it)
+				// determine the hyperchem tag: always the first word in a line
+				tag = getLine().getField(0);
+
+				if (tag == "atom")
 				{
-					tmp_atoms.push_back(&*atom_it);
-				}
-				for (Size i = 0; i < tmp_atoms.size(); ++i)
-				{
-					fragment->insert(*tmp_atoms[i]);
-				}
-				
-				// delete the (now empty!) molecule and clear the pointer
-				system.remove(*molecule);
-				delete molecule;
-				molecule = 0;
-				continue;
-			}
-
-
-			if (tag == "endres")
-			{
-				if (state != IN_RESIDUE) 
-				{
-					ERROR(String("<endres> without <res>!"))
-				}
-				
-				state = IN_MOLECULE;
-
-				// reset the residue pointer to zero
-				residue = 0;
-				
-				continue;
-			}
-
-
-			if (tag == "mol")
-			{
-				if (state != START) 
-				{
-					ERROR(String("<mol> inside <mol> or <res> definition!"))
-				}
-
-				state = IN_MOLECULE;
-
-				// create a new molecule and insert it into the system.
-				// We do not yet know, whether this contains residues.
-				// If it does, we have to convert it to a protein afterwards.
-				system.insert(*(molecule = new Molecule));
-
-				if (line.countFields() > 2)
-				{
-					String name = line.getField(2);
-					if ((name != "") && (name != "-"))
+					if (state == IN_RESIDUE || state == IN_MOLECULE) 
 					{
-						molecule->setName(name);
+						Size number_of_fields = getLine().countFields();
+						if (number_of_fields < 11) 
+						{
+							ERROR(String("illegal <atom> line: at least 10 arguments are required for <atom>!"))
+						}
+
+						Atom*	atom;
+						if (state == IN_RESIDUE) 
+						{
+							PDBAtom*	prot_atom = new PDBAtom;
+							atom = RTTI::castTo<Atom>(*prot_atom);
+							residue->insert(*prot_atom);
+
+							// check the atom flags, whether this is a PDB HETATM: 
+							// any HETATM sets its residue to NON_STANDARD 
+							// (compare FORMAT/PDBFile:readRecordHETATM)
+							if (getLine().getField(5).has('h')) 
+							{
+								residue->clearProperty(Residue::PROPERTY__AMINO_ACID);
+								residue->setProperty(Residue::PROPERTY__NON_STANDARD);
+							} 
+							else 
+							{
+								residue->setProperty(Residue::PROPERTY__AMINO_ACID);
+								residue->clearProperty(Residue::PROPERTY__NON_STANDARD);
+							}
+						} 
+						else 
+						{
+							atom = new Atom;
+							if (molecule == 0) 
+							{
+								fragment->insert(*atom);
+							} 
+							else 
+							{
+								molecule->insert(*atom);
+							}
+						}
+
+						atom->setName(getLine().getField(2));
+
+						if (PTE[getLine().getField(3)] == Element::UNKNOWN)
+						{
+							ERROR(String("unknown element: ") + getLine().getField(3))
+						}
+						atom->setElement(PTE[getLine().getField(3)]);
+						// set the atom radius
+						atom->setRadius(PTE[getLine().getField(3)].getVanDerWaalsRadius());
+
+						if (getLine().getField(4) == "**")
+						{
+							atom->setTypeName("?");
+						} 
+						else	
+						{
+							atom->setTypeName(getLine().getField(4));
+						}
+
+						try 
+						{
+							atom->setCharge(getLine().getField(6).toFloat());
+						}
+						catch (Exception::InvalidFormat)
+						{
+							ERROR(String("illegal charge ") + getLine().getField(6))
+						}
+
+						try 
+						{
+							atom->setPosition(Vector3(getLine().getField(7).toFloat(), 
+																				getLine().getField(8).toFloat(), 
+																				getLine().getField(9).toFloat()));
+						}
+						catch (Exception::InvalidFormat)
+						{
+							ERROR(String("illegal position (") + getLine().getField(7) + " / " + getLine().getField(8) + " / " + getLine().getField(9) + ")")
+						}
+
+						Size number_of_atom_bonds;
+						try 
+						{
+							number_of_atom_bonds = ((Size)getLine().getField(10).toInt());
+						}
+						catch (Exception::InvalidFormat)
+						{
+							ERROR(String("illegal number of bonds: " + getLine().getField(10)))
+						}
+
+						Position atom_number;
+						try 
+						{
+							atom_number = (Position)getLine().getField(1).toInt();
+						}
+						catch (Exception::InvalidFormat)
+						{
+							ERROR(String("illegal atom number: ") + getLine().getField(1))
+						}
+
+						// store the atom pointer in the atom_vector - we need it later to create the bonds!
+						// if the atom_vector is to small, grow it!
+						if (atom_number >= atom_vector.size())
+						{
+							atom_vector.resize(atom_number * 2);
+						}
+						atom_vector[atom_number] = atom;
+
+						// now iterate over all bonds and insert them into the bond_vector 
+						// this table will be processed afterwards to create the bonds, as most of
+						// the bound atoms are not yet created by now
+						if (number_of_atom_bonds > 0)
+						{
+							// check whether the total number of fields is consistent
+							// with the number of bonds
+							if (number_of_fields != (11 + 2 * number_of_atom_bonds))
+							{
+								// write an error message!
+								if (number_of_fields < (11 + 2 * number_of_atom_bonds))
+								{
+									ERROR(String("too few fields in atom line for ") + String(number_of_atom_bonds) + " bonds")
+								}
+								else 
+								{
+									ERROR(String("too many fields in atom line for ") + String(number_of_atom_bonds) + " bonds")
+								}
+							}
+							else 
+							{
+								for (Position i = 0 ; i < number_of_atom_bonds; i++) 
+								{ 
+									if (number_of_bonds >= bond_vector.capacity())
+									{
+										bond_vector.resize(number_of_bonds * 2);
+									}
+
+									bond_vector[number_of_bonds].atom1 = atom_number;
+									try 
+									{
+										bond_vector[number_of_bonds].atom2 = (Index)getLine().getField(11 + 2 * (Index)i).toInt();
+									}
+									catch (Exception::InvalidFormat)
+									{
+										ERROR(String("illegal atom number for bond ") + String(i) + ": " + getLine().getField(11 + 2 * (Index)i))
+									}
+									Bond::Order order = Bond::ORDER__UNKNOWN;
+									String type_field = getLine().getField(12 + 2 * (Index)i);
+
+									if (type_field.size() == 1)
+									{
+										switch (type_field[0]) 
+										{
+											case 's':	order = Bond::ORDER__SINGLE;		break;
+											case 'd':	order = Bond::ORDER__DOUBLE;		break;
+											case 't': order = Bond::ORDER__TRIPLE;		break;
+											case 'a': order = Bond::ORDER__AROMATIC;	break;
+										}
+									}
+												
+									bond_vector[number_of_bonds++].order = order;
+								}
+							}
+						}
 					}	
-				}
-				
-				continue;
-			}
-
-			if (tag == "endmol")
-			{
-				if (state != IN_MOLECULE)
-				{
-					ERROR(String("missing <mol> or <endres> tag!"))
-				}
-
-				state = START;
-				
-				if (fragment != 0)
-				{
-					if (fragment->countAtoms() == 0)
+					else 
 					{
-						chain->AtomContainer::remove(*fragment);
+						ERROR(String("<atom> tag may appear only inside a <mol> or <res>!"))
 					}
+					continue;
 				}
 
-				fragment = 0;
-				chain = 0;
-				molecule = 0;
 
-				// now build all bonds
-				for (Size i = 0; i < number_of_bonds; i++)
+				if (tag == "vel")
 				{
-					// check whether both atoms exist
-					if (bond_vector[i].atom1 >= atom_vector.size() || 
-							bond_vector[i].atom2 >= atom_vector.size())
-					{
-						// complain if one of the atoms does not exist
-						ERROR(String("HINFile: cannot create bond from atom ") + String(bond_vector[i].atom1)
-									+ " to atom " + String(bond_vector[i].atom2) + " of molecule " 
-									+ line.getField(1) + " - non-existing atom!")
+					// read the velocity of an atom
+					// since HyperChem uses the same units for velocities 
+					// (resp. A/ps) we don't need a conversion
+					Vector3 velocity;
 
+					try
+					{
+						velocity.x = getLine().getField(2).toFloat();
+						velocity.y = getLine().getField(3).toFloat();
+						velocity.z = getLine().getField(4).toFloat();
+					}
+					catch (Exception::InvalidFormat)
+					{
+						ERROR(String("illegal velocity (") 
+												 + getLine().getField(2) + " / "
+												 + getLine().getField(3) + " / " 
+												 + getLine().getField(4) + ")")
+					}
+
+						
+					// check whether the atom exists
+					Position atom_number;
+					try
+					{
+						atom_number = (Position)getLine().getField(1).toInt();
+					}
+					catch (Exception::InvalidFormat)
+					{
+						ERROR(String("illegal atom number ") + getLine().getField(1))
+					}
+
+					if (atom_number >= atom_vector.size())
+					{
+						ERROR(String("cannot assign velocity for atom ") + String(atom_number) + ": atom not defined!")
 					} 
-					else  
+
+					if (atom_vector[atom_number] != 0)
 					{
-						// everything all right, create the bond
-						Bond* b =  atom_vector[bond_vector[i].atom1]->createBond(*atom_vector[bond_vector[i].atom2]);
-					
-						b->setOrder(bond_vector[i].order);
+						atom_vector[atom_number]->setVelocity(velocity);
+					} 
+					else 
+					{
+						ERROR(String("cannot assign velocity for atom ") + String(atom_number) + ": atom not defined!")
 					}
+						
+					continue;
 				}
 
-				number_of_bonds = 0;
 
-				continue;
+				if (tag == "res")
+				{
+					// remember where we are.
+					if (state != IN_MOLECULE) 
+					{
+						ERROR(String("<res> tag must be inside a <mol>/<endmol>"))
+					}
+
+					state = IN_RESIDUE;
+					
+					// create a protein if it doesn't exist already
+					if (protein == 0)
+					{
+						protein = new Protein;
+					}
+
+					// check whether we already have a chain to insert into
+					if (chain == 0)
+					{
+						protein->insert(*(chain = new Chain));
+					}
+
+					// create a new residue and insert it into the chain
+					residue = new Residue;
+					chain->insert(*residue);
+
+					// set the residue's name
+					if (getLine().getField(2) != "-")
+					{
+						residue->setName(getLine().getField(2));
+					}
+
+					// set the residue's PDB ID
+					if (getLine().getField(3) != "-")
+					{
+						residue->setID(getLine().getField(3));
+					}
+
+					// set the chain name 
+					if (getLine().getField(5) != "-")
+					{
+						chain->setName(getLine().getField(5));
+					}
+					
+					// create a fragment to insert the "loose" atoms into
+					if (fragment == 0)
+					{
+						chain->AtomContainer::insert(*(fragment = new Fragment));
+					}
+
+					// now check for a molecule, that might already exist
+					// and move its atoms into a fragment (to be inserted into the chain)
+					if (molecule == 0)
+					{
+						continue;
+					}
+
+					AtomIterator atom_it = molecule->beginAtom();
+					vector<Atom*>	tmp_atoms(20);
+					for (; +atom_it; ++atom_it)
+					{
+						tmp_atoms.push_back(&*atom_it);
+					}
+					for (Size i = 0; i < tmp_atoms.size(); ++i)
+					{
+						fragment->insert(*tmp_atoms[i]);
+					}
+					
+					// delete the (now empty!) molecule and clear the pointer
+					delete molecule;
+					molecule = 0;
+					continue;
+				}
+
+
+				if (tag == "endres")
+				{
+					if (state != IN_RESIDUE) 
+					{
+						ERROR(String("<endres> without <res>!"))
+					}
+					
+					state = IN_MOLECULE;
+
+					// reset the residue pointer to zero
+					residue = 0;
+					
+					continue;
+				}
+
+
+				if (tag == "mol")
+				{
+					if (state != START) 
+					{
+						ERROR(String("<mol> inside <mol> or <res> definition!"))
+					}
+
+					state = IN_MOLECULE;
+
+					// create a new molecule and insert it into the system.
+					// We do not yet know, whether this contains residues.
+					// If it does, we have to convert it to a protein afterwards.
+					molecule = new Molecule;
+
+					if (getLine().countFields() > 2)
+					{
+						String name = getLine().getField(2);
+						if ((name != "") && (name != "-"))
+						{
+							molecule->setName(name);
+						}	
+					}
+					
+					continue;
+				}
+
+				if (tag == "endmol")
+				{
+					if (state != IN_MOLECULE)
+					{
+						ERROR(String("missing <mol> or <endres> tag!"))
+					}
+
+					state = START;
+					
+					if (fragment != 0)
+					{
+						if (fragment->countAtoms() == 0)
+						{
+							chain->AtomContainer::remove(*fragment);
+						}
+					}
+
+					fragment = 0;
+					chain = 0;
+					molecule = 0;
+
+					// now build all bonds
+					for (Size i = 0; i < number_of_bonds; i++)
+					{
+						// check whether both atoms exist
+						if (bond_vector[i].atom1 >= atom_vector.size() || 
+								bond_vector[i].atom2 >= atom_vector.size())
+						{
+							// complain if one of the atoms does not exist
+							ERROR(String("HINFile: cannot create bond from atom ") + String(bond_vector[i].atom1)
+										+ " to atom " + String(bond_vector[i].atom2) + " of molecule " 
+										+ getLine().getField(1) + " - non-existing atom!")
+
+						} 
+						else  
+						{
+							// everything all right, create the bond
+							Bond* b =  atom_vector[bond_vector[i].atom1]->createBond(*atom_vector[bond_vector[i].atom2]);
+						
+							b->setOrder(bond_vector[i].order);
+						}
+					}
+
+					number_of_bonds = 0;
+
+					break;
+				}
+
+
+				if (tag == "sys")
+				{
+					// set the system's temperature
+					try
+					{
+						temperature_ = getLine().getField(1).toFloat();
+					}
+					catch (Exception::InvalidFormat)
+					{
+						ERROR(String("illegal temperature ") + getLine().getField(1))
+					}
+
+					continue;
+				}
+
+
+				if (tag == "box")
+				{
+					// retrieve the periodic boundary
+					// we assume that the box is centered about the origin
+					// of the coordinate system
+					// The manual says the parameters are the dimensions of the box,
+					// so we have to divide by two.
+					try
+					{
+						box_.a.x = - getLine().getField(1).toFloat() / 2.0;
+						box_.a.y = - getLine().getField(2).toFloat() / 2.0;
+						box_.a.z = - getLine().getField(3).toFloat() / 2.0;
+					}
+					catch (Exception::InvalidFormat)
+					{
+						ERROR(String("illegal box position (")
+												 + getLine().getField(1)  + " / "
+												 + getLine().getField(2)  + " / "
+												 + getLine().getField(3)  + " )")
+					}		
+
+					box_.b.x = - box_.a.x;
+					box_.b.y = - box_.a.y;
+					box_.b.z = - box_.a.z;
+					continue;
+				}
+
+
+				// ignore the irrelevant fields
+				if (tag == "forcefield" ||
+						tag == "user1color" ||
+						tag == "user2color" ||
+						tag == "user3color" ||
+						tag == "user4color" ||
+						tag == "view"				||
+						tag == "seed"				||
+						tag == "mass"				||
+						tag == "basisset"		||
+						tag == "selection"	||
+						tag == "endselection"		 ||
+						tag == "selectrestraint" ||
+						tag == "selectatom"			 ||
+						tag == "formalcharge")
+				{
+					continue;
+				}	
 			}
-
-
-			if (tag == "sys")
-			{
-				// set the system's temperature
-				try
-				{
-					temperature_ = line.getField(1).toFloat();
-				}
-				catch (Exception::InvalidFormat)
-				{
-					ERROR(String("illegal temperature ") + line.getField(1))
-				}
-
-				continue;
-			}
-
-
-			if (tag == "box")
-			{
-				// retrieve the periodic boundary
-				// we assume that the box is centered about the origin
-				// of the coordinate system
-				// The manual says the parameters are the dimensions of the box,
-				// so we have to divide by two.
-				try
-				{
-					box_.a.x = - line.getField(1).toFloat() / 2.0;
-					box_.a.y = - line.getField(2).toFloat() / 2.0;
-					box_.a.z = - line.getField(3).toFloat() / 2.0;
-				}
-				catch (Exception::InvalidFormat)
-				{
-					ERROR(String("illegal box position (")
-											 + line.getField(1)  + " / "
-											 + line.getField(2)  + " / "
-											 + line.getField(3)  + " )")
-				}		
-
-				box_.b.x = - box_.a.x;
-				box_.b.y = - box_.a.y;
-				box_.b.z = - box_.a.z;
-				continue;
-			}
-
-
-			// ignore the irrelevant fields
-			if (tag == "forcefield" ||
-					tag == "user1color" ||
-					tag == "user2color" ||
-					tag == "user3color" ||
-					tag == "user4color" ||
-					tag == "view"				||
-					tag == "seed"				||
-					tag == "mass"				||
-					tag == "basisset"		||
-					tag == "selection"	||
-					tag == "endselection"		 ||
-					tag == "selectrestraint" ||
-					tag == "selectatom"			 ||
-					tag == "formalcharge")
-			{
-				continue;
-			}	
 
 			// if the tag was not recognized: complain about it
 			Log.warn() << "HINFile: unknown tag " << tag << " ignored." << endl;
+		}
+		catch (Exception::ParseError& e)
+		{
+			delete molecule;
+			delete residue;
+			throw e;
+		}
+
+		// if we read a protein, return it as a molecule anyway
+		if (molecule == 0)
+		{
+			molecule = protein;
+			protein = 0;
 		}
 
 		// if desired, try to remove the lone pairs from old AMBER HC-Files 
@@ -895,7 +906,7 @@ namespace BALL
 			list<Atom*> del_list;
 			
 			// iterate over all atoms
-			AtomIterator it = system.beginAtom();
+			AtomIterator it = molecule->beginAtom();
 			for (; +it; ++it)
 			{
 				if (it->getElement().getSymbol() == "Lp")
@@ -939,6 +950,9 @@ namespace BALL
 				}
 			}
 		}
+
+		// return the resulting molecule
+		return molecule;
 	}
 
 	bool HINFile::hasPeriodicBoundary() const

@@ -1,4 +1,4 @@
-// $Id: SDFile.C,v 1.2 2001/12/18 01:14:46 oliver Exp $
+// $Id: SDFile.C,v 1.3 2001/12/19 02:40:25 oliver Exp $
 
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -47,37 +47,34 @@ namespace BALL
 		writePropertyBlock_(molecule);
 	}
 
-	void SDFile::read(Molecule& molecule)
+	Molecule* SDFile::read()
 		throw(Exception::ParseError)
 	{
 		// read the molecule (MOLFile = Header + CTAB + props)
-		MOLFile::read(molecule);
+		Molecule* molecule = MOLFile::read();
 
 		// read the property block and assign these
 		// properties a s named properties to the molecule
-		readPropertyBlock_(molecule);
+		if (molecule != 0)
+		{
+			readPropertyBlock_(*molecule);
+		}
+
+		return molecule;
 	}
 	
-	void SDFile::read(System& system)
+	bool SDFile::read(System& system)
 		throw(Exception::ParseError)
 	{
 		Molecule* molecule = 0;
-		try 
+		bool read_anything = false;
+		while ((molecule = read()) != 0)
 		{
-			while (good())
-			{
-				molecule = new Molecule;
-				read(*molecule);
-			
-				// add the molecule to the system
-				system.append(*molecule);
-			}
+			// add the molecule to the system
+			system.append(*molecule);
+			read_anything = true;
 		}
-		catch (Exception::ParseError& e)
-		{
-			delete molecule;
-			throw e;
-		}
+		return read_anything;
 	}
 
 	void SDFile::readPropertyBlock_(Molecule& molecule)

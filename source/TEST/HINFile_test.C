@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.12 2001/07/16 02:11:46 oliver Exp $
+// $Id: HINFile_test.C,v 1.13 2001/12/19 02:40:25 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.12 2001/07/16 02:11:46 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.13 2001/12/19 02:40:25 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ RESULT
 
 System system;
 CHECK(HINFile::read(System& system))
-  hin.read(system);
+  hin.read(System);
 	hin.reopen();
 	Vector3 position(0.59038, -0.410275, -0.860515);
   TEST_EQUAL(hin.isValid(), true)

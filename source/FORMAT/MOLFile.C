@@ -1,4 +1,4 @@
-// $Id: MOLFile.C,v 1.3 2001/12/18 03:28:16 oliver Exp $
+// $Id: MOLFile.C,v 1.4 2001/12/19 02:40:25 oliver Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -203,7 +203,7 @@ namespace BALL
 		}
 	}
 
-	void MOLFile::readCTAB_(Molecule& molecule, vector<Atom*>& atom_map)
+	Molecule* MOLFile::readCTAB_(vector<Atom*>& atom_map)
 		throw(Exception::ParseError)
 	{
 		// read the counts line
@@ -212,6 +212,7 @@ namespace BALL
 
 		// resize the array to the number of atoms
 		atom_map.resize(counts.number_of_atoms);
+		Molecule* molecule = new Molecule;
 		try
 		{
 			// read the atom block
@@ -232,7 +233,7 @@ namespace BALL
 															0.0); // radius undefined
 				// insert the atom into the molecule and store its pointer in 
 				// a map array
-				molecule.append(*atom);
+				molecule->append(*atom);
 				atom_map[i] = atom;
 
 				// assign the charge (overridden by M CHG lines below)
@@ -413,19 +414,22 @@ namespace BALL
 		catch (Exception::GeneralException& e)
 		{
 			// clean up: delete all atoms we just constructed
-			molecule.clear();
+			delete molecule;
+			molecule = 0;
 			throw e;
 		}
+		
+		return molecule;
 	}
 
-	void MOLFile::read(System& system)
+	bool MOLFile::read(System& system)
 		throw(Exception::ParseError)
 	{
 		// read the molecule
-		Molecule* molecule = new Molecule;
+		Molecule* molecule = 0;
 		try
 		{
-			read(*molecule);
+			molecule = read();
 		}
 		catch (Exception::ParseError& e)
 		{
@@ -436,14 +440,14 @@ namespace BALL
 
 		// add the molecule to the system
 		system.append(*molecule);
+
+		// if we read a molecule, return true
+		return (molecule != 0);
 	}
 
-	void MOLFile::read(Molecule& molecule)
+	Molecule* MOLFile::read()
 		throw(Exception::ParseError)
 	{
-		// clean the molecule's contents
-		molecule.clear();
-
 		// read the header block: first line == name, third line = comment, second line ignored
 		bool ok = true;
 		ok &= readLine();
@@ -456,8 +460,8 @@ namespace BALL
 			throw Exception::ParseError(__FILE__, __LINE__, String("'") + getLine() + "' (line " + String(getLineNumber()) + " of '" + getName() + "')",
 																	"Unable to read header block");
 		}
-		vector<Atom*> atom_map;
-		readCTAB_(molecule, atom_map);
+		static vector<Atom*> atom_map;
+		return readCTAB_(atom_map);
 	}
 	
 	void MOLFile::readCountsLine_(MOLFile::CountsStruct& counts)

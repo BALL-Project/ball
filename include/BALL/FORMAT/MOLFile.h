@@ -1,4 +1,4 @@
-// $Id: MOLFile.h,v 1.2 2001/12/18 01:19:10 oliver Exp $
+// $Id: MOLFile.h,v 1.3 2001/12/19 02:40:22 oliver Exp $
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H
@@ -154,23 +154,17 @@ namespace BALL
 		
 		/**	Read a system from the MOL file
 		*/
-		virtual void read(System&	system)
+		virtual bool read(System&	system)
 			throw(Exception::ParseError);
 
 		/**	Read a single molecule from the file
 		*/
-		virtual void read(Molecule& molecule)
+		virtual Molecule* read()
 			throw(Exception::ParseError);
 			
 		/**	Write a molecule to the file
 		*/
 		virtual void write(const Molecule& molecule);
-		//@}
-
-		/**	@name	Accessors
-		*/
-		//@{
-				
 		//@}
 
 		protected:
@@ -188,7 +182,7 @@ namespace BALL
 		//@}
 
 		/// Read the CTAB of a MOL file and construct a Molecule from its data
-		void readCTAB_(Molecule& molecule, std::vector<Atom*>& atom_map)
+		Molecule* readCTAB_(std::vector<Atom*>& atom_map)
 			throw(Exception::ParseError);
 
 		/// Read the Counts line of a MOL file

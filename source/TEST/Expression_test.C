@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.17 2001/07/31 01:26:38 oliver Exp $
+// $Id: Expression_test.C,v 1.18 2001/12/19 02:40:25 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.17 2001/07/31 01:26:38 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.18 2001/12/19 02:40:25 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -667,7 +667,7 @@ RESULT
 CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	HINFile file("data/Expression_test.hin");
 	System S;
-	file.read(S);
+	file >> S;
 	HashMap<String, Size> test_expressions;
 	test_expressions.insert(pair<String, Size>("true()", 6));
 	test_expressions.insert(pair<String, Size>("false()", 0));
