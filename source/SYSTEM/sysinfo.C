@@ -1,14 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.17 2005/03/10 19:38:30 oliver Exp $
+// $Id: sysinfo.C,v 1.18 2005/03/11 16:53:37 amoll Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
 
-//   #define BALL_PLATFORM_SOLARIS
-
-#ifdef BALL_PLATFORM_SOLARIS
+#ifdef BALL_OS_SOLARIS
 # undef BALL_HAS_SYS_SYSINFO_H
 # include <stdlib.h>
 # include <stdio.h>
@@ -145,7 +143,7 @@ namespace BALL
 		}
 
 #else
-#ifdef BALL_PLATFORM_SOLARIS
+#ifdef BALL_OS_SOLARIS
 
 	LongIndex getFreeMemory()
 	{
