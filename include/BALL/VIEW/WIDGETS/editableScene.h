@@ -45,9 +45,49 @@ class BALL_EXPORT EditableScene
 		Q_OBJECT //macro for QT-Messages
 
 		public:
-
+			
 			BALL_EMBEDDABLE(EditableScene, ModularWidget)	
 
+      // nested class
+			class BALL_EXPORT EditOperation
+			{
+				public:
+					
+					/** Constructor
+					 */
+					EditOperation()
+						throw();
+
+					EditOperation(Atom* atom, Bond* bond, String describtion= "Added Object", int operation=0)
+						throw();
+					
+					EditOperation(const EditOperation& eOperation)
+						throw();
+
+					
+					/** Destructor.
+					*/
+					virtual ~EditOperation()
+						throw();
+					
+					enum OperationType
+					{
+						DEFAULT,
+						ADDED__ATOM,
+						ADDED__BOND,
+						CHANGED__TYPE
+						//CHANGED__SYSTEM
+						//MOVED__ATOM
+					};
+					
+				protected:
+					OperationType operationType_;
+					Atom* atom_;
+					Bond* bond_;
+					String description_;
+					
+			};
+				
 				//@} 
 			/**	@name	Constructors 
 			*/	
@@ -81,6 +121,7 @@ class BALL_EXPORT EditableScene
 					\param  name the name of this scene 
 					\param  wflags the flags the scene widget should have 
 									(See documentation of QT-library for information concerning widget flags) 
+					undo_, stack for operations is NOT copied!				
 			 */
 			EditableScene (const EditableScene& eScene, QWidget* parent_widget = NULL, const char* name = NULL, WFlags wflags = 0)
 				throw();
@@ -138,6 +179,7 @@ class BALL_EXPORT EditableScene
 
 			virtual void mouseReleaseEvent(QMouseEvent *e);
 
+      void setEditElementType(int element_number);
 
 	protected slots:
 			virtual void editMode_();
@@ -163,11 +205,37 @@ class BALL_EXPORT EditableScene
 			
 			double limit_;			
 			bool   mouse_has_moved_;
+			int editAtomType_;
+
+			//undo stack
+			//TODO   list_of_operations
+			vector< EditOperation > undo_;
 			
+			/**
+			 * Insert a given Atom in the Scene. Its position is specified by the 2-dim 
+			 * Mouseclick coordinates of the Screen, which will be translated into the 
+			 * 3-dim space of Viewing Volume.
+			 */
 			void insert_(int x_, int y_, PDBAtom &atom_);
+
+			/**
+			 *  Given a 3-dim. Coordinates (in Viewing Volume) getScreenPosition
+			 *  computes the 2-dim Coordinates on Screen.
+			 */
 			TVector2<Position> getScreenPosition_(Vector3 vec);
+			
+			/**
+			 * Given 2-dim Coordinates of Screen, clickedPointOnViewPlane computes the
+			 * appropriate 3-dim Position in Viewing Volume
+			 */
 			Vector3 clickedPointOnViewPlane_(int x, int y);
+			
+			/**
+			 * Given 2-dim Coordinates of Screen, getCLickedAtom_ returns the nearest Atom 
+			 * within a special radius. If no atom is found, getClickedAtom returns NULL.
+			 */
 			Atom* getClickedAtom_(int x, int y);
+
 			/**
 			 * Maps the current viewplane to screen coordinates.
 			 * Returns false if the projection matrix is not correctly

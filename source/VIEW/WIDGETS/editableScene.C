@@ -34,14 +34,60 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		
+//
+//-------------------- EditOperation -----------------------
+//
 
+EditableScene::EditOperation::EditOperation()
+	throw()
+	: operationType_(),
+		atom_(),
+		bond_(),
+		description_()
+{ 
+}
+	
+EditableScene::EditOperation::EditOperation(Atom* atom, Bond* bond, String description, int operation)
+	throw()
+	: operationType_((EditableScene::EditOperation::OperationType)operation),
+		atom_(atom),
+		bond_(bond),
+		description_(description)
+{
+}
+
+EditableScene::EditOperation::EditOperation(const EditOperation& eOperation)
+	throw()
+	: operationType_(eOperation.operationType_),
+		atom_(eOperation.atom_),
+		bond_(eOperation.bond_),
+		description_(eOperation.description_)
+{
+}
+
+EditableScene::EditOperation::~EditOperation()	
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.info() << "Destructing object EditOperation " << this << " of class EditableScene>" << std::endl;
+	#endif 
+}
+
+
+
+//
+//-------------------- EditableScene -----------------------
+//
 EditableScene::EditableScene()
 	throw()
 	:	Scene(),
 		edit_id_(-1),
 		system_(),
 		first_atom_for_bond_(0),
-		limit_(1.5)
+		limit_(1.5),
+		editAtomType_(0),
+		undo_()
 {
 }
 
@@ -51,18 +97,22 @@ EditableScene::EditableScene(QWidget* parent_widget, const char* name, WFlags w_
 		edit_id_(-1),
 		system_(), 
 		first_atom_for_bond_(0),
-		limit_(1.5)
+		limit_(1.5),
+		editAtomType_(0),
+		undo_()
 {
 }
 
 // TODO: Was sollte ein Copyconstructor sinnvolles tun?
+// undo_ is NOT copied
 EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget, const char* name , WFlags w_flags)
 	throw()
 	: Scene(eScene, parent_widget, name, w_flags),
 		edit_id_(-1),
 		system_(eScene.system_),
 		first_atom_for_bond_(eScene.first_atom_for_bond_),
-		limit_(eScene.limit_)
+		limit_(eScene.limit_),editAtomType_(),
+		undo_()
 {
 	//current_molecule_ = new Molecule();
 	//current_molecule_ = eScene.current_molecule_;
@@ -139,7 +189,7 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 			// ToDo: Is the representation ok? Can the user see all aktual atoms?
 			
 			// if no atom is selected
-			PDBAtom* a = new PDBAtom(PTE[Element::C], "C");
+			PDBAtom* a = new PDBAtom(PTE[editAtomType_], PTE[editAtomType_].getName());
 			insert_(e->x(), e->y(), *a);		
 			first_atom_for_bond_ = a;
 			Log.info() << e->x() << " " << e->y() << endl;
@@ -364,7 +414,7 @@ void EditableScene::mouseReleaseEvent(QMouseEvent *e)
 			if(first_atom_for_bond_!=0)
 			{
 				// build a new atom...
-				PDBAtom* a = new PDBAtom(PTE[Element::C], "C");
+				PDBAtom* a = new PDBAtom(PTE[editAtomType_], PTE[editAtomType_].getName());
 				insert_(e->x(), e->y(), *a);
 				//TODO: test if they have the same position, i.e. a and first_atom_for_bond!
 				if (a->getPosition() == first_atom_for_bond_->getPosition())
@@ -648,6 +698,10 @@ Vector3 EditableScene::clickedPointOnViewPlane_(int x, int y)
 	return k_;
 }	
 
+void EditableScene::setEditElementType(int element_number)
+{
+	 editAtomType_=element_number;
+}
 
 	}//end of namespace 
 } //end of namespace
