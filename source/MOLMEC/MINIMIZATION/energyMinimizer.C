@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.C,v 1.5 1999/12/30 20:30:44 oliver Exp $
+// $Id: energyMinimizer.C,v 1.6 1999/12/30 20:37:18 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/COMMON/limits.h>
@@ -153,12 +153,12 @@ namespace BALL
 /*
 BAUSTELLE 
 	// Return the trajectory of the minimization procedure
-	Snapshot& EnergyMinimizer::getSnapshot() const
+	Snapshot& EnergyMinimizer::getSnapShot() const
 	{
 		return snapshot_;
 	}
 	// Set the trajectory
-	void EnergyMinimizer::setSnapshot(Snapshot& snapshot)
+	void EnergyMinimizer::setSnapShot(Snapshot& snapshot)
 	{
 		snapshot_ = snapshot;
 	}
@@ -232,13 +232,13 @@ BAUSTELLE
 	}
 
 	//	Set the trajectory ouput frequency
-	void EnergyMinimizer::setSnapshotFrequency(Size snapshot_frequency)
+	void EnergyMinimizer::setSnapShotFrequency(Size snapshot_frequency)
 	{
 		snapshot_frequency_ = snapshot_frequency;
 	}
 
 	//	Get the trajectory ouput frequency
-	Size EnergyMinimizer::getSnapshotFrequency() const
+	Size EnergyMinimizer::getSnapShotFrequency() const
 	{
 		return snapshot_frequency_;
 	}
