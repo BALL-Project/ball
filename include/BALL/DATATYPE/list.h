@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: list.h,v 1.14 2002/02/27 12:18:32 sturm Exp $
+// $Id: list.h,v 1.15 2003/02/19 12:29:53 amoll Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -18,7 +18,6 @@
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
-
 #include <list>
 
 namespace BALL 
@@ -27,8 +26,7 @@ namespace BALL
 	/** Extended list object.
 		This object is an improved version of the STL list class
 		{\bf Definition:} \URL{BALL/DATATYPE/list.h}
-	 */
-
+	*/
  	template <typename Value>
 	class List
 		:	public std::list<Value>
@@ -52,7 +50,6 @@ namespace BALL
 		typedef typename std::list<Value>::const_iterator const_iterator;
 
 		//@}
-
 		/**	@name	Constructors and Destructors */
 		//@{
 
@@ -76,10 +73,9 @@ namespace BALL
 		{
 		}
 			
-		/** Clear the list.
-				Remove all contents from the list.
+		/** Clear the list
 		*/
- 		void destroy()  throw()
+ 		void destroy() throw()
 		{
 			clear();
 		}
@@ -92,12 +88,10 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name	Assignment */
 		//@{
 			
 		/** Assign a list from another.
-				Create a copy of a list.
 				@param	list	the map to be copied
 				@param	deep ignored
 		*/
@@ -136,22 +130,19 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name Accessors */
 		//@{
 
 		/** Return the size of the list.
-			@return Size the size of the list
 		*/
 		Size getSize() const throw()
 		{
 			return (Size)size();
 		}
 
-		/** Remove an item from the list. The first item that matches 
-			{\tt item} will be removed.
-			@param 	item the item to be removed
-			@return bool {\bf true} if the item was removed
+		/** Remove an item from the list. The first item that matches {\tt item} will be removed.
+				@param 	item the item to be removed
+				@return bool {\bf true} if the item was removed
 		 */
 		bool remove(const Value& item) throw()
 		{
@@ -168,7 +159,6 @@ namespace BALL
 		}
 		
 		//@}
-
 		/**	@name	Predicates */
 		//@{
 
@@ -179,8 +169,8 @@ namespace BALL
 		{
 			return (size() == 0);
 		}
-		//@}
 
+		//@}
 		/**	@name	Miscellaneous */
 		//@{
 
@@ -190,8 +180,8 @@ namespace BALL
 		*/
 		virtual void host(Visitor<List<Value> >& visitor) 
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Internal Iterators */
 		//@{
 
@@ -201,28 +191,20 @@ namespace BALL
 		*/
 		bool apply(UnaryProcessor<Value>& processor) throw()
 		{
-			if (processor.start() == false)
-			{
-				return false;
-			}
+			if (!processor.start()) return false;
 
-			Processor::Result result;
-			Iterator it = begin();
-			for (; it != end(); ++it)
+			for (Iterator it = begin(); it != end(); ++it)
 			{
-				result = processor(*it);
+				Processor::Result result = processor(*it);
 				if (result <= Processor::BREAK)
 				{
 					return (result == Processor::BREAK);
 				}
 			}
-			if (result == Processor::ABORT)
-			{
-				return false;
-			}
 
 			return processor.finish();
 		}
+
 		//@}
 
 		/** Equality operator.
