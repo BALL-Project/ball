@@ -1,22 +1,39 @@
-// $Id: constants.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: constants.h,v 1.2 1999/12/28 18:29:49 oliver Exp $
 
 #ifndef BALL_COMMON_CONSTANTS_H
 #define BALL_COMMON_CONSTANTS_H
 
 namespace BALL 
 {
-	
+
+	/// The constants namespace
 	namespace Constants 
 	{
 
 		/**	@name The constants namespace.
 				This namespace contains definitions for some basic mathematical and physical constants.
 				All constants are double precision.\\
+				There are basically two ways of accessing these constants:
+				\begin{itemize}
+					\item specify all namespaces:\\
+							{\tt float my\_pi = BALL::Constants::PI}
+					\item shortcut via the {\tt using directive}:\\
+							{\tt using namespace BALL::Constants; float my\_pi = PI;}
+				\end{itemize}
 				{\bf Definition:} \URL{BALL/COMMON/constants.h}
 		*/
 		//@{
 
 		/**	@name	Mathematical constants
+				All constants are double precision.\\
+				There are basically two ways of accessing these constants:
+				\begin{itemize}
+					\item specify all namespaces:\\
+							{\tt float my\_pi = BALL::Constants::PI}
+					\item shortcut via the {\tt using directive}:\\
+							{\tt using namespace BALL::Constants; float my\_pi = PI;}
+				\end{itemize}
+				{\bf Definition:} \URL{BALL/COMMON/constants.h}
 		*/
 		//@{
 
@@ -32,6 +49,15 @@ namespace BALL
 		//@}
 			
 		/**	@name Chemical/physical constants
+				All constants are double precision.\\
+				There are basically two ways of accessing these constants:
+				\begin{itemize}
+					\item specify all namespaces:\\
+							{\tt float my\_pi = BALL::Constants::PI}
+					\item shortcut via the {\tt using directive}:\\
+							{\tt using namespace BALL::Constants; float my\_pi = PI;}
+				\end{itemize}
+				{\bf Definition:} \URL{BALL/COMMON/constants.h}
 		*/
 		//@{
 		
@@ -112,6 +138,15 @@ namespace BALL
 		//@}
 
 		/**	@name	Conversion factors
+				All constants are double precision.\\
+				There are basically two ways of accessing these constants:
+				\begin{itemize}
+					\item specify all namespaces:\\
+							{\tt float my\_pi = BALL::Constants::PI}
+					\item shortcut via the {\tt using directive}:\\
+							{\tt using namespace BALL::Constants; float my\_pi = PI;}
+				\end{itemize}
+				{\bf Definition:} \URL{BALL/COMMON/constants.h}
 		*/
 		//@{		
 			

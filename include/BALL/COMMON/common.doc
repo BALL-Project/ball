@@ -1,8 +1,9 @@
-// $Id: common.doc,v 1.1 1999/08/26 07:53:14 oliver Exp $
+// $Id: common.doc,v 1.2 1999/12/28 18:29:49 oliver Exp $
 
-/**@name	Common version
+/**@name	Common Definitions
 		This chapter contains all relevant information on 
-		BALL kernel datastructures. 
+		very fundamental definitions and classes used throughout BALL
+		(part of the {\bf Foundation Classes}).
 		@nonames
 */
 //@{
