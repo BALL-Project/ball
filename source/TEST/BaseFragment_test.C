@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.2 1999/09/06 22:22:29 oliver Exp $
+// $Id: BaseFragment_test.C,v 1.3 1999/11/26 16:47:39 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.2 1999/09/06 22:22:29 oliver Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.3 1999/11/26 16:47:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -205,9 +205,6 @@ if (bf2 != 0)
 delete bf1;
 RESULT
 
-// BAUSTELLE
-Log.insert(cerr);
-											
 TextPersistenceManager pm;
 pm.registerClass(RTTI<Composite>::getStreamName(), RTTI<Composite>::getNew);
 pm.registerClass(RTTI<BaseFragment>::getStreamName(), RTTI<BaseFragment>::getNew);
@@ -238,8 +235,8 @@ if (ptr != 0)
 	TEST_EQUAL(bf1->countBaseFragments(), 1)
 	TEST_EQUAL(bf1->getBaseFragment(0)->getName(), "name2")
 	delete bf1;
-} else { // BAUSTELLE
-	exit(0);
+} else {
+	throw Exception::NullPointer(__FILE__, __LINE__);
 }
 RESULT
 

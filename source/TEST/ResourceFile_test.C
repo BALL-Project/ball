@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.4 1999/11/24 14:54:24 oliver Exp $
+// $Id: ResourceFile_test.C,v 1.5 1999/11/26 16:47:39 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.4 1999/11/24 14:54:24 oliver Exp $")
+START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.5 1999/11/26 16:47:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -107,6 +107,7 @@ TEST_EQUAL(R.getChild(5), 0);
 RESULT
 
 CHECK(ResourceEntry::getChild(Index) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::ResourceEntry(const ResourceEntry&, bool))
@@ -271,108 +272,143 @@ TEST_EQUAL(R.getPath(), "/TEST1")
 RESULT
 
 CHECK(ResourceEntry::getEntry(const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::getEntry(const String&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::countDescendants() const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::getDepth() const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::insertChild(const String&, const String&, bool))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::insertSibling(const String&, const String&, bool))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::insert(const String&, constr String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::mergeChildrenOf(ResourceEntry&, bool))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::removeChild(const String&, ResourceEntry**))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::removeKey(const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::clear())
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::destroy())
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::findChild(const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::findChild(const String&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::findDescendant(const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::findDescendant(const String&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::findEntry(const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::findEntry(const String&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::host(Visistor<ResourceEntry>&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::hasChild(const String&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::isEmpty() const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::isParentOf(const ResourceEntry&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::isChildOf(const ResourceEntry&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::isAncestorOf(const ResourceEntry&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::isDescendantOf(const ResourceEntry&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::isRelatedWith(const ResourceEntry&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::isRoot() const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::isValid() const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::dump(std::ostream&, unsigned long) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::apply(UnaryProcessor<ResourceEntry>&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceEntry::applyChildren(UnaryProcessor<ResourceEntry>&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::ResourceFile())
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::ResourceFile(const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::~ResourceFile())
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::destroy())
+//BAUSTELLE
 RESULT
 
 ResourceFile f;
@@ -383,6 +419,7 @@ TEST_EQUAL(f.is_open(), true)
 RESULT
 
 CHECK(operator >> (std::istream&, ResourceFile&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::close())
@@ -392,60 +429,79 @@ TEST_EQUAL(f.is_open(), false)
 RESULT
 
 CHECK(ResourceFile::saveAs(const Entry&, const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::save(const Entry&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::save())
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::getSize())
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::getRoot())
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::getRoot() const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::getEntry(const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::getEntry(const String&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::getValue(const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::getValue(const String&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::insert(const String&, const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::removeKey(const String&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::hasKey(const String&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::isEmpty(const String&) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::isValid() const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::dump(std::ostream, unsigned long depth) const)
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::host(Visitor<ResourceFile>&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::apply(UnaryProcessor<Entry>&))
+//BAUSTELLE
 RESULT
 
 CHECK(ResourceFile::applyChildren(UnaryProcessor<Entry>&))
+//BAUSTELLE
 RESULT
 		
 /////////////////////////////////////////////////////////////
