@@ -10,6 +10,7 @@
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 
 #include <qapplication.h>
@@ -19,9 +20,60 @@ namespace BALL
 	namespace VIEW
 	{
 
+		BALLThread::BALLThread()
+			: QThread(),
+				main_control_(0),
+				composite_(0)
+		{
+		}
+
+		void BALLThread::output_(const String& string, bool important)
+		{
+			if (main_control_ == 0) 
+			{
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			}
+
+			if (main_control_->stopedSimulation()) return;
+
+			SimulationOutput* su = new SimulationOutput;
+			su->setMessage(string);
+			su->setImportant(important);
+			qApp->postEvent(main_control_, su);  // Qt will delete it when done
+		}
+
+		void BALLThread::waitForUpdateOfRepresentations_()
+		{
+			if (main_control_ == 0) 
+			{
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			}
+
+			if (main_control_->getPrimitiveManager().updatePending())
+			{
+				main_control_->getPrimitiveManager().getUpdateWaitCondition().wait();
+			}
+		}
+
+		void BALLThread::updateScene_()
+		{
+			if (main_control_ == 0) 
+			{
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			}
+
+			main_control_->getPrimitiveManager().notifyOfPendingingUpdate();
+			// notify MainControl to update all Representations for the Composite
+			UpdateCompositeEvent* se = new UpdateCompositeEvent;
+			se->setComposite(composite_);
+			qApp->postEvent(main_control_, se);
+		}
+
+		// ================================== FetchHTMLThread ===============================
+
 		FetchHTMLThread::FetchHTMLThread()
 			throw()
-			: QThread()
+			: BALLThread()
 		{
 		}
 
@@ -54,7 +106,7 @@ namespace BALL
 		
 		UpdateRepresentationThread::UpdateRepresentationThread()
 			throw() 
-			: QThread(),
+			: BALLThread(),
 				rep_(0)
 		{
 		}
@@ -68,29 +120,15 @@ namespace BALL
 			qApp->postEvent(getMainControl(), se);
 		}
 
-
+		// ==========================================
+		
 		SimulationThread::SimulationThread()
-			: QThread(),
-				main_control_(0),
-				dcd_file_(0),
-				composite_(0)
+			: BALLThread(),
+				steps_between_updates_(0),
+				dcd_file_(0)
 		{
 		}
-
-		void SimulationThread::run()
-		{
-			// overloaded in derived classes
-		}
-
-		void SimulationThread::updateScene_()
-		{
-			main_control_->getPrimitiveManager().notifyOfPendingingUpdate();
-			// notify MainControl to update all Representations for the Composite
-			UpdateCompositeEvent* se = new UpdateCompositeEvent;
-			se->setComposite(composite_);
-			qApp->postEvent(main_control_, se);
-		}
-
+		
 		void SimulationThread::exportSceneToPNG_()
 		{
 			if (main_control_->stopedSimulation()) return;
@@ -102,30 +140,12 @@ namespace BALL
 			qApp->postEvent(scene, e);
 		}
 
-		void SimulationThread::output_(const String& string, bool important)
-		{
-			if (main_control_->stopedSimulation()) return;
-
-			SimulationOutput* su = new SimulationOutput;
-			su->setMessage(string);
-			su->setImportant(important);
-			qApp->postEvent(main_control_, su);  // Qt will delete it when done
-		}
-
 		void SimulationThread::finish_()
 		{
 			SimulationThreadFinished* su = new SimulationThreadFinished;
 			qApp->postEvent(main_control_, su);  // Qt will delete it when done
 
 			main_control_->getCompositesLockedWaitCondition().wakeAll();
-		}
-
-		void SimulationThread::waitForUpdateOfRepresentations_()
-		{
-			if (main_control_->getPrimitiveManager().updatePending())
-			{
-				main_control_->getPrimitiveManager().getUpdateWaitCondition().wait();
-			}
 		}
 
 		// =====================================================================
@@ -286,6 +306,20 @@ namespace BALL
 			: QCustomEvent(SIMULATION_OUTPUT_EVENT),
 			  important_(false)
 		{
+		}
+		
+		// =================================================0
+		
+		CalculateFDPBThread::CalculateFDPBThread()
+			throw()
+			: BALLThread(),
+				dialog_(0)
+		{}
+
+		void CalculateFDPBThread::run()
+		{
+			if (dialog_ == 0) return;
+			dialog_->calculate_();
 		}
 
 	} // namespace VIEW

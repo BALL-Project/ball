@@ -20,17 +20,77 @@
 
 namespace BALL
 {
-class EnergyMinimizer;
-class MolecularDynamics;
-class Composite;
+	class EnergyMinimizer;
+	class MolecularDynamics;
+	class Composite;
 
 namespace VIEW
 {
 	class MainControl;
+	class FDPBDialog;
+
+	/** Baseclass for threads in BALL.
+			To use multithreading in BALL, there are several problems arising from
+			the fact, that QT itself is not threadsafe:
+			1. Prevent any output to Log, stdout or sterr.
+				 If a simulation has to print some informations, use the method output_,
+				 which will send an Event to the GUI-thread to do this.
+			2. Dont call any QT-methods directly. If you need some interaction with the
+				 GUI, create a new Event-class and send this event to the MainControl.
+			3. Especially dont call the refresh methods for the Scene or 
+				 GL-methods. Use updateScene_() instead.
+			4. Overload the run method to insert the multithreaded code.
+			5. Before running a thread, lock the composites with ModularWidget::lockComposites().
+			6. After running a thread, unlock them with ModularWidget::unlockComposites().
+			If you dont pay attention to these rules, dont wonder if BALLView freezes
+			or crashes!
+	*/
+	class BALL_EXPORT BALLThread
+		: public QThread
+	{
+		public:
+
+			///
+			BALLThread();
+			
+			///
+			void setMainControl(MainControl* mf) throw() {main_control_ = mf;}
+			
+			///
+			void setComposite(Composite* composite) throw() {composite_ = composite;}
+
+			///
+			Composite* getComposite() throw() { return composite_;}
+	
+			/** Overloaded from QThread::run(), overload again in derived classes!
+			*/
+			virtual void run() {};
+			
+			protected:
+
+			/** Provokes an update of the Representation's and the Scene 
+			 		with rebuild of the display-lists.
+					This method calls PrimitiveManager::notifyOfPendingingUpdate()
+					and sends an UpdateCompositeEvent with a pointer to the Composite.
+			*/
+			void updateScene_();
+
+			/// Sends the string as outout to Log.info
+			void output_(const String& string, bool important = false);
+
+			/** Wait until all Representation's are rebuild, by using
+					PrimitiveManager::updatePending() and \\
+					PrimitiveManager::getUpdateWaitCondition().wait() .
+			*/
+			void waitForUpdateOfRepresentations_();
+	
+			MainControl* 	main_control_;
+			Composite* 		composite_;
+		};
 
 	///
 	class FetchHTMLThread
-		: public QThread
+		: public BALLThread
 	{
 		public:
 			///
@@ -52,10 +112,32 @@ namespace VIEW
 			String filename_;
 			String url_;
 	};
+	
+	///
+	class CalculateFDPBThread
+		: public BALLThread
+	{
+		public:
+
+			///
+			CalculateFDPBThread()
+				throw();
+
+			///
+			virtual void run();
+
+			///
+			void setFDPBDialog(FDPBDialog* dialog)
+				{dialog_ = dialog;}
+
+		protected:
+			FDPBDialog* dialog_;
+	};
+
 
 	///
 	class UpdateRepresentationThread
-		: public QThread
+		: public BALLThread
 	{
 		public:
 
@@ -80,40 +162,21 @@ namespace VIEW
 	};
 
 	/** Baseclass for threads, which perform a simulation.
-			To use multithreading in BALL, there are several problems arising from
-			the fact, that QT itself is not threadsafe:
-			1. Prevent any output to Log, stdout or sterr.
-				 If a simulation has to print some informations, use the method output_,
-				 which will send an Event to the GUI-thread to do this.
-			2. Dont call any QT-methods directly. If you need some interaction with the
-				 GUI, create a new Event-class and send this event to the MainControl.
-			3. Especially dont call the refresh methods for the Scene or 
-				 GL-methods. Use updateScene_() instead.
-			4. At the end of the run() method, always call finish_() to notify the 
-				 main thread to delete the simulation thread, otherwise there will be 
-				 a memory leak.
-			5. After updating the visualisations, call SimulationThread::setUpdateRunning(false)
-				 from the MainControl.
-			If you dont pay attention to these rules, dont wonder if BALLView freezes
-			or crashes!
+			At the end of the run() method, always call finish_() to notify the 
+			main thread to delete the simulation thread, otherwise there will be 
+			a memory leak.
 	*/
 	class BALL_EXPORT SimulationThread
-		: public QThread
+		: public BALLThread
 	{
 		public:
 
 			///
 			SimulationThread();
-			
-			/// Overloaded method QThread::run()
-			virtual void run();
 
 			///
 			void setNumberOfStepsBetweenUpdates(Size steps) throw()
 				{ steps_between_updates_ = steps;}
-
-			///
-			void setMainControl(MainControl* mf) throw() {main_control_ = mf;}
 
 			///
 			void setDCDFile(DCDFile* file) throw() {dcd_file_ = file;}
@@ -121,41 +184,16 @@ namespace VIEW
 			///
 			DCDFile* getDCDFile() throw() { return dcd_file_;}
 
-			///
-			void setComposite(Composite* composite) throw() {composite_ = composite;}
-
-			///
-			Composite* getComposite() throw() { return composite_;}
-
 			protected:
-
-			/** Wait until all Representation's are rebuild, by using
-					PrimitiveManager::updatePending() and \\
-					PrimitiveManager::getUpdateWaitCondition().wait() .
-			*/
-			void waitForUpdateOfRepresentations_();
-		
+	
 			/// Notify the MainControl to export an PNG
 			void exportSceneToPNG_();
-
-			/** Provokes an update of the Representation's and the Scene 
-			 		with rebuild of the display-lists.
-					This method calls PrimitiveManager::notifyOfPendingingUpdate()
-					and sends an UpdateCompositeEvent with a pointer to the Composite.
-			*/
-			void updateScene_();
-
-			/// Sends the string as outout to Log.info
-			void output_(const String& string, bool important = false);
 
 			/// Notifies the main thread to delete the simulating thread
 			void finish_();
 
-
 			Size 					steps_between_updates_;
-			MainControl* 	main_control_;
 			DCDFile*   		dcd_file_;
-			Composite* 		composite_;
 		};
 
 

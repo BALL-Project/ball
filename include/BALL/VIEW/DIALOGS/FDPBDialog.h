@@ -37,6 +37,8 @@ namespace BALL
 	namespace VIEW
 	{
 
+		class CalculateFDPBThread;
+
 		/** Dialog for performing Finite Distance Poisson Bolzmann calculations
 				\ingroup ViewDialogs
 		*/
@@ -44,88 +46,92 @@ namespace BALL
 		  : public FDPBDialogData,
 		    public ModularWidget
 		{ 
-				Q_OBJECT
+			friend class CalculateFDPBThread;
 
-				public:
+			Q_OBJECT
+
+			public:
+			
+			BALL_EMBEDDABLE(FDPBDialog,ModularWidget)
+
+			/// Constructor
+			FDPBDialog(QWidget* parent = 0, const char* name = 0, 
+								 bool modal = FALSE, WFlags fl = 0);
+
+			/// Destructor
+			virtual ~FDPBDialog()
+				throw();
 				
-				BALL_EMBEDDABLE(FDPBDialog,ModularWidget)
-
-				/// Constructor
-				FDPBDialog(QWidget* parent = 0, const char* name = 0, 
-									 bool modal = FALSE, WFlags fl = 0);
-
-				/// Destructor
-				virtual ~FDPBDialog()
-					throw();
-					
-				///	Read the preferences from a INIFile
-				void fetchPreferences(INIFile& file)
-					throw();
+			///	Read the preferences from a INIFile
+			void fetchPreferences(INIFile& file)
+				throw();
+			
+			/// Write the preferences to a INIFile
+			void writePreferences(INIFile& file)
+				throw();
 				
-				/// Write the preferences to a INIFile
-				void writePreferences(INIFile& file)
-					throw();
-					
-				/// Reset the dialog to the standard values
-				void reset()
-					throw();
+			/// Reset the dialog to the standard values
+			void reset()
+				throw();
 
-				/// Calculate the FDPB grid
-				bool calculate()
-					throw();
+			/// Calculate the FDPB grid
+			bool calculate()
+				throw();
 
-				/// Get the instance of the FDPB solver
-				FDPB& getFDPBSolver()
-					throw() {return fdpb_;}
+			/// Get the instance of the FDPB solver
+			FDPB& getFDPBSolver()
+				throw() {return fdpb_;}
 
-				/// Set the system, the FDPB will be calculated for
-				void setSystem(System* system)
-					throw() {system_ = system;}
+			/// Set the system, the FDPB will be calculated for
+			void setSystem(System* system)
+				throw() {system_ = system;}
 
-				/// Get the system
-				System* getSystem()
-					throw() { return system_;}
-				
+			/// Get the system
+			System* getSystem()
+				throw() { return system_;}
+			
 
-			public slots:
+		public slots:
 
-				///
-				virtual void browseChargesData();
+			///
+			virtual void browseChargesData();
 
-				///
-				virtual void browseChargesRules();
+			///
+			virtual void browseChargesRules();
 
-				///
-				virtual void browseRadiiData();
+			///
+			virtual void browseRadiiData();
 
-				///
-				virtual void browseRadiiRules();
+			///
+			virtual void browseRadiiRules();
 
-				///
-				virtual void cancelPressed();
+			///
+			virtual void cancelPressed();
 
-				///
-				virtual void okPressed();
+			///
+			virtual void okPressed();
 
-				///
-				virtual void resetPressed();
-				
-			protected:
+			///
+			virtual void resetPressed();
+			
+		protected:
 
-				void selectFile_(QLineEdit& lineedit) throw();
-				void applyValues_() throw();
-				bool applyProcessors_() throw();
-				void fetchPreference_(INIFile& inifile, const String& entry, QLineEdit& lineedit) throw();
-				void writePreference_(INIFile& inifile, const String& entry, const QLineEdit& lineedit) const throw();
+			void calculate_();
+			void selectFile_(QLineEdit& lineedit) throw();
+			void applyValues_() throw();
+			bool applyProcessors_() throw();
+			void fetchPreference_(INIFile& inifile, const String& entry, QLineEdit& lineedit) throw();
+			void writePreference_(INIFile& inifile, const String& entry, const QLineEdit& lineedit) const throw();
 
-				FDPB 			fdpb_;
-				Options 	options_;
-				System* 	system_;
-				
-				RadiusRuleProcessor 			radius_rule_processor_;
-				ChargeRuleProcessor 			charge_rule_processor_;
-				AssignRadiusProcessor 		radius_processor_;
-				AssignChargeProcessor 		charge_processor_;
+			FDPB 			fdpb_;
+			Options 	options_;
+			System* 	system_;
+			
+			RadiusRuleProcessor 			radius_rule_processor_;
+			ChargeRuleProcessor 			charge_rule_processor_;
+			AssignRadiusProcessor 		radius_processor_;
+			AssignChargeProcessor 		charge_processor_;
+			CalculateFDPBThread* 			thread_;
 		};
 
 } } // Namespaces
