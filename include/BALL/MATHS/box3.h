@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.25 2000/09/27 08:00:26 oliver Exp $
+// $Id: box3.h,v 1.26 2000/10/16 19:56:39 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -130,6 +130,11 @@ namespace BALL
 				@param	box the box to swap contents with
 		*/
 		void swap(TBox3& box);
+
+		/**	Clear methods.
+		*/
+		virtual void clear() 
+			throw();
 		//@}
 
 
@@ -323,6 +328,15 @@ namespace BALL
 	{
 		a.swap(box.a);
 		b.swap(box.b);
+	}
+
+	template <typename T>
+	BALL_INLINE
+	void TBox3<T>::clear()
+		throw()
+	{
+		a.set((T)0, (T)0, (T)0);
+		b.set((T)0, (T)0, (T)0);
 	}
 
 	template <typename T>
