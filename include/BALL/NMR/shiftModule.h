@@ -1,4 +1,4 @@
-// $Id: shiftModule.h,v 1.6 2000/09/19 19:06:43 oliver Exp $
+// $Id: shiftModule.h,v 1.7 2000/09/20 11:12:56 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -131,6 +131,14 @@ namespace BALL
 		const Parameters* getParameters() const
 			throw();
 
+		/**	Parameter iniitalization.
+				Use this method to implement the extraction and initialization of
+				the module's parameters.
+				\Ref{init} is called by \Ref{ShiftModel} as soon as the \Ref{ShiftModule}
+				is constructed and parameters and name are assigned.
+		*/
+		virtual void init() 
+			throw();
 		//@}
 		protected:
 
