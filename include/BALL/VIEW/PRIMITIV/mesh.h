@@ -1,4 +1,4 @@
-// $Id: mesh.h,v 1.6 2001/02/04 15:58:22 hekl Exp $
+// $Id: mesh.h,v 1.7 2001/02/06 22:24:42 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -29,12 +29,9 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/** Mesh class.
-				
+		/** Mesh class.			
 				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/mesh.h}
-				\\
-
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/mesh.h}	\\
 				An instance of Mesh represents an instance of the geometric representation "mesh".
 				A mesh has the following properties. 
 				\begin{itemize}
@@ -44,11 +41,10 @@ namespace BALL
 				and \Ref{Surface}. The data structures defining the mesh are implemented in
 				the class \Ref{Surface}. Therefore one can use {\em *this} mesh in the
 				same fashion as \Ref{Surface}.
-
 				@memo    Mesh class (BALL VIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/02/04 15:58:22 $
+				@author  $Author: amoll $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/02/06 22:24:42 $
 		*/
 		class Mesh
 			: public GeometricObject,
@@ -67,7 +63,6 @@ namespace BALL
 					\begin{itemize}
   				  \item color - to the color black
 					\end{itemize}
-
 					@return      Mesh - new constructed mesh
 					@see         GeometricObject::GeometricObject
 					@see         ColorExtension::ColorExtension
@@ -79,9 +74,8 @@ namespace BALL
 			/** Copy constructor with cloning facility.
 					Construct new mesh by copying the mesh {\em mesh}.
 					The copy is either deep (default) or shallow.
-
 					@param       mesh the mesh to be copied (cloned)
-					@param       deep make a deep (={\tt true}) or shallow (={\tt false
+					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
 					@return      Mesh - new constructed mesh copied from {\em mesh}
 					@see         GeometricObject::GeometricObject
 					@see         ColorExtension::ColorExtension
@@ -93,7 +87,6 @@ namespace BALL
 			/** Copy constructor from geometricObject.
 					Construct new mesh by copying the internal values from geometricObject 
 					{\em geometric_object}.
-
 					@param       geometric_object the geometricObject which internal value should be copied
 					@return      Mesh - new constructed mesh initialized from {\em geometric_object}
 					@see         GeometricObject::GeometricObject
@@ -104,7 +97,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors */
 			//@{
 
@@ -119,7 +111,6 @@ namespace BALL
 			/** Explicit default initialization.
 					Calls \Ref{GeometricObject::clear}
 					Calls \Ref{ColorExtension::clear}
-
 					@see  GeometricObject::clear
 					@see  ColorExtension::clear
 			*/
@@ -129,15 +120,13 @@ namespace BALL
 			/** Explicit destructor.
 					Calls \Ref{GeometricObject::destroy}
 					Calls \Ref{ColorExtension::destroy}
-
 					@see  GeometricObject::destroy
 					@see  ColorExtension::destroy
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
-			
+			//@}	
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -147,7 +136,6 @@ namespace BALL
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} mesh is initialized to the value of 
 					the mesh {\em mesh}.\\
-
 					@param       mesh the mesh to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em mesh}
 					@see         Mesh::Mesh
@@ -161,7 +149,6 @@ namespace BALL
 					Calls \Ref{Mesh::set}.
 					The value of {\em *this} mesh is initialized to the value 
 					of the mesh {\em mesh}.\\
-
 					@param       mesh the mesh to be copied
 					@return      Mesh& - {\em *this} mesh
 					@see         Mesh::set
@@ -175,7 +162,6 @@ namespace BALL
 					Calls \Ref{Mesh::set}.
 					The value of the mesh {\em mesh} is initialized to the
 					value of {\em *this} mesh.\\
-
 					@param       mesh the mesh to be assigned to
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em mesh}
 					@see         Mesh::set
@@ -185,15 +171,13 @@ namespace BALL
 
 			/** Swapping of mesh's.
 					Swap the value of {\em *this} mesh with the mesh {\em mesh}.
-
 					@param       mesh the mesh being swapped with {\em *this} mesh 
 					@see         Mesh::Mesh
 			*/
 			void swap(Mesh& mesh)
 				throw();
+
 			//@}
-
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -204,7 +188,6 @@ namespace BALL
 					If the internal state of {\em *this} mesh is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {GeometricObject::isValid}.
-
 					@return			bool -
 											{\tt true} if the internal state of {\em *this} mesh is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
@@ -218,53 +201,47 @@ namespace BALL
 					the output ostream {\em s} with dumping depth {\em depth}.
 					Calls \Ref{GeometricObject::dump}.
 					Calls \Ref{ColorExtension::dump}.
-
 					@param   s output stream where to output the value of {\em *this} mesh
 					@param   depth the dumping depth
-					@see        GeometricObject::dump
-					@see        ColorExtension::dump
+					@see     GeometricObject::dump
+					@see     ColorExtension::dump
 			*/
 			virtual void dump(std::ostream&  s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Storers
 			*/
 			//@{
+
 			/** Persistent stream output and state restorage.
-  			 Read persistent mesh data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s input stream from where to restore the internal state of {\em *this} mesh
+  			  Read persistent mesh data from the input stream {\em s} and 
+				  restore the state of {\em *this}. \\
+				  {\bf Note:} Not yet implemented.
+				  @param       s input stream from where to restore the internal state of {\em *this} mesh
 					@exception   NotImplemented - always
 			*/
 			virtual void read(std::istream&  s)
 				throw();
 
 			/** Persistent stream output and state storage.
-  			 Write persistent mesh data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s output stream to where to store the internal state of {\em *this} mesh
+  			  Write persistent mesh data to the output stream {\em s} and 
+				  store the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s output stream to where to store the internal state of {\em *this} mesh
 					@exception   NotImplemented - always
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
-			//@}
 
+			//@}
 
 			protected:
 
 			/** Export method.
 					This method handles the export of {\em *this} mesh into another
-					format (eg. POVRAY, VRML)
-				  \\
+					format (eg. POVRAY, VRML)	\\
 				  {\bf Note:} Not yet implemented.
-
 					@return    bool - {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()
