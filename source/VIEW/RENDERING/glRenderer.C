@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.27 2004/06/04 14:37:16 amoll Exp $
+// $Id: glRenderer.C,v 1.28 2004/06/18 00:04:39 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -68,15 +68,18 @@ namespace BALL
 		{
 			Renderer::init(stage, width, height);
 
-			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
-			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
-			glEnable(GL_CULL_FACE);  // disable elimination of back-facing polygons
+ 			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
+ 			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
+ 			glEnable(GL_CULL_FACE);  // disable elimination of back-facing polygons
 
 			// Force OpenGL to normalize transformed normals to be of unit 
 			// length before using the normals in OpenGL's lighting equations
 			// While this corrects potential lighting problems introduced by scaling, 
 			// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
 			glEnable(GL_NORMALIZE);   
+			
+		  GLint two_side = 1;
+ 			glLightModeliv(GL_LIGHT_MODEL_TWO_SIDE, &two_side);
 
 			// do depthcomparisons and update the depth buffer
 			glEnable(GL_DEPTH_TEST);
@@ -107,7 +110,7 @@ namespace BALL
 			// set the background color according to the stage
 			updateBackgroundColor();
 
-			glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+			glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 			glEnable(GL_COLOR_MATERIAL);
 			
 			GLfloat diff[] = {0.4, 0.4, 0.4, 1.0};
@@ -119,6 +122,21 @@ namespace BALL
 			glMaterialfv(GL_FRONT, GL_SHININESS, shin );
 			glMaterialfv(GL_FRONT, GL_DIFFUSE,  diff);
 			glMaterialfv(GL_FRONT, GL_AMBIENT,  ambient);
+
+			// BACKSIDE MATERIAL PROPERTIES
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  spec);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, shin );
+			glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,  diff);
+			glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,  ambient);
+			GLfloat diff2[] = {0.3, 0.3, 0.3, 1.0};
+			GLfloat shin2[] = {76.8};
+			GLfloat spec2[] = {0.674597, 0.674597, 0.674597, 1.0};
+			GLfloat ambient2[] = {0.20, 0.20, 0.20, 1.0};
+		
+			glMaterialfv(GL_BACK, GL_SPECULAR,  spec2);
+			glMaterialfv(GL_BACK, GL_SHININESS, shin2);
+			glMaterialfv(GL_BACK, GL_DIFFUSE,  diff2);
+			glMaterialfv(GL_BACK, GL_AMBIENT,  ambient2);
 
 
 			// if displaylists were already calculated, return
@@ -667,6 +685,17 @@ namespace BALL
 						normalVector3_(mesh.normal[mesh.triangle[index].v3]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
 
+						/*
+// draw inside triangles
+normalVector3_(mesh.normal[-mesh.triangle[index].v1]);
+vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
+
+normalVector3_(mesh.normal[-mesh.triangle[index].v2]);
+vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
+
+normalVector3_(mesh.normal[-mesh.triangle[index].v3]);
+vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
+	*/
 						glEnd();
 					}
 				}
