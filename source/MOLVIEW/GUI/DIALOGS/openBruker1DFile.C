@@ -1,4 +1,4 @@
-// $Id: openBruker1DFile.C,v 1.4.4.2 2002/12/03 10:08:49 oliver Exp $
+// $Id: openBruker1DFile.C,v 1.4.4.3 2002/12/08 22:50:44 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h>
 #include <BALL/FORMAT/bruker1DFile.h>
@@ -39,10 +39,7 @@ namespace BALL
 	  void OpenBruker1DFile::openFile_()
 		  throw()
     {
-      // notify the main window
-      WindowMessage window_message;
-      window_message.setStatusBar("reading Bruker1D file...");
-      notify_(window_message);
+      setStatusbarText("reading Bruker1D file...");
 
       // reading the file
       Bruker1D *myfile = new Bruker1D();
@@ -70,9 +67,7 @@ namespace BALL
 
       notify_(new_message);
 
-      // notify main window
-      window_message.setStatusBar("");
-      notify_(window_message);
+      setStatusbarText("");
     }
   }
 }
