@@ -3,10 +3,6 @@ DIRECTORY=TEST
 XDR_DEPENDENT_EXECUTABLES=\
 	XDRPersistenceManager_test
 
-SMILES_EXECUTABLES=\
-	SmilesParser_test
-
-
 EXECUTABLES_BASIC = \
 	ClassTest_test\
 	RegularExpression_test\
@@ -151,7 +147,7 @@ EXECUTABLES_ENERGY = \
 	EnergyProcessor_test\
 	OoiEnergy_test
 
-EXECUTABLES_STRUCTURE = $(BALL_HAS_FLEX_YACC:true=$(SMILES_EXECUTABLES))\
+EXECUTABLES_STRUCTURE = \
 	Enumerator_test\
 	AnalyticalSES_test\
 	NumericalSAS_test\
@@ -159,6 +155,7 @@ EXECUTABLES_STRUCTURE = $(BALL_HAS_FLEX_YACC:true=$(SMILES_EXECUTABLES))\
 	RDFIntegrator_test\
 	RDFParameter_test\
 	RDFSection_test\
+	SmilesParser_test\
 	StructureMapper_test\
 	TransformationApplicator_test\
 	TranslationApplicator_test
