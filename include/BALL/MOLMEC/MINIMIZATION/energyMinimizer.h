@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.14 2000/03/26 12:50:24 oliver Exp $
+// $Id: energyMinimizer.h,v 1.15 2000/03/28 15:32:10 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -218,9 +218,9 @@ namespace BALL
 				returns {\bf true}. The convergence criterion is implemented as one
 				of three conditions:
 				\begin{itemize}
-					\item{RMS gradient} is below max_rms_gradient_
-					\item\Ref{same_energy_counter_} is above Ref{max_same_energy_}
-					\item{the energy difference} between two successive steps is below \Ref{energy_difference_bound_}
+					\item {RMS gradient} is below max_rms_gradient_
+					\item \Ref{same_energy_counter_} is above \Ref{max_same_energy_}
+					\item {the energy difference} between two successive steps is below \Ref{energy_difference_bound_}
 				\end{itemize}
 				If any of these conditions hold \Ref{isConverged} returns {\bf true}.
 				This method should be reimplemented in derived classes for a different
@@ -251,7 +251,7 @@ namespace BALL
 
     /** Update forces and store them in current_grad_.
 				This method calls {\tt force_field_->updateForces()} and stores them in 
-				\ref{current_grad_}.
+				\Ref{current_grad_}.
     */
     virtual void updateForces();
 
