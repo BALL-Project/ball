@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.18 2000/08/27 16:05:34 amoll Exp $
+// $Id: composite.h,v 1.19 2000/08/28 09:56:34 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -43,6 +43,10 @@
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
+#ifndef BALL_CONCEPT_TIMESTAMP_H
+#	include <BALL/CONCEPT/timeStamp.h>
+#endif
+
 namespace BALL 
 {
 	/**	Composite Class.
@@ -50,6 +54,16 @@ namespace BALL
 			A Composite may contain an arbitrary number of other composites, thus forming
 			a tree. All BALL kernel classes are derived from Composite. This provides a unique
 			interface for all kernel classes.\\
+
+			The composite class provides a selection mechanism that allows hierarchical selection
+			and deselection of arbitrary subtrees. The time of the last selection/deselection
+			operation is stored as well as the time of the last modification operation in time stamps
+			that can be accessed via \Ref{getModificationTime} and \Ref{getSelectionTime}.
+			
+			Selecting or deselecting a Composite automatically selects or deselects all its children (recursively!).
+			Selecting or deselecting all children of a node deselects their parent as well.	
+			Selection information is propagated upwards in the tree.
+		
 	
 			Composites are persistent objects. 
 			\\
@@ -163,7 +177,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Predicative assign a tree.
+		/**	Predicative assignment from a tree.
 		*/
 		void set(const Composite& composite, KernelPredicateType& predicate);
 
@@ -371,6 +385,14 @@ namespace BALL
 				If the composite does not contain a child, 0 is returned.
 		*/
 		const Composite* getLastChild() const;
+			
+		/**	Return the time of last modification
+		*/
+		const Time& getModificationTime() const throw();
+
+		/**	Return the time of last change of selection.
+		*/
+		const Time& getSelectionTime() const throw();
 
 		/**	Expand a collapsed composite.
 				Only expanded composite subtrees are iterated.
@@ -458,18 +480,25 @@ namespace BALL
 
 		/**	Select a composite.
 				This method selects the composite and all the composites therein.
+				If the state of this composite is modified, its selection time stamp
+				is updated and that of its ancestors (up to and including the root composite)
+				as well. The time stamps of descendants that changed their selection state 
+				are update, too.
 		*/	
 		virtual void select();
 
 		/**	Deselect a composite.
 				This method deselects the composite and all the composites therein.
+				If the state of this composite is modified, its selection time stamp
+				is updated and that of its ancestors (up to and including the root composite)
+				as well. The time stamps of descendants that changed their selection state 
+				are update, too.
 		*/	
 		virtual void deselect();
 		//@}
 	
 		/**	@name	Predicates */
 		//@{
-
 		/** Test if instance is expanded.
 				@see expand
 		*/
@@ -606,8 +635,8 @@ namespace BALL
 
 		/**	Return true if any descendant is selected.
 				This method does not check all nodes recursively. Instead, on each 
-				modification in the tree internal flags are updated and propagated 
-				upwards in the tree.\\
+				modification of the tree, internal flags are updated and the information 
+				is propagated  upwards in the tree.\\
 				Complexity: O(1)\\
 				@return bool {\bf true} if any node in the subtree is selected
 		*/
@@ -1521,18 +1550,20 @@ namespace BALL
 		void select_(bool update_parent = true);
 		void deselect_(bool update_parent = true);
 
-		// private attributes
+		// priotected attributes
 		
-		Size 										number_of_children_;
-		Composite*							parent_;
-		Composite* 							previous_;
-		Composite* 							next_;
-		Composite* 							first_child_;
-		Composite* 							last_child_;
-		unsigned char						properties_;
-		bool										contains_selection_;
-		Size										number_of_selected_children_;
-		Size										number_of_children_containing_selection_;
+		Size 						number_of_children_;
+		Composite*			parent_;
+		Composite* 			previous_;
+		Composite* 			next_;
+		Composite* 			first_child_;
+		Composite* 			last_child_;
+		unsigned char		properties_;
+		bool						contains_selection_;
+		Size						number_of_selected_children_;
+		Size						number_of_children_containing_selection_;
+		TimeStamp				selection_stamp_;
+		TimeStamp				modification_stamp_;
 	};
 
 	template <typename T>
@@ -1768,7 +1799,7 @@ namespace BALL
 	BALL_INLINE 
 	bool Composite::apply(UnaryProcessor<T>& processor)
 	{
-		return applyPreorder(processor)
+		return applyPreorder(processor);
 	}
 
 	template <typename T>
