@@ -1,4 +1,4 @@
-// $Id: structure.doc,v 1.12 2003/03/26 15:59:28 anhi Exp $
+// $Id: structure.doc,v 1.13 2003/04/01 21:18:04 oliver Exp $
 
 /**	\defgroup Structure	Molecular Structure
 		\ingroup Modeling
@@ -7,7 +7,7 @@
 		structure and geometry.
 */
 
-	/** \defgroup StructureMiscellaneous Miscellaneous
+	/** \defgroup StructureRotamers Rotamers
 	 		\ingroup Structure
 	*/
 
@@ -17,4 +17,8 @@
 
 	/**	\defgroup Surface	Molecular Surface Computation
 	* 	\ingroup Structure
+	*/
+
+	/** \defgroup StructureMiscellaneous Miscellaneous
+	 		\ingroup Structure
 	*/

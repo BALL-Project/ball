@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.24 2003/03/26 15:59:28 anhi Exp $
+// $Id: rotamerLibrary.h,v 1.25 2003/04/01 21:18:04 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -25,29 +25,36 @@
 namespace BALL
 {
 	/** Rotamer class.
-		\ingroup StructureMiscellaneous	
+		\ingroup StructureRotamers
+
+		This class is used to describe <em>rotamers</em>, i.e. rotational conformers,
+		of amino acid side chains. These rotamers correspond to different low-energy conformations.
+		Rotamers can alos be used to store and retrieve specific conformations of a side chain.
+		In principle, a rotamer is just a list containing the side chain torsion angles (up to four)
+		and the probability for that angle (useful only in the context of rotamer libraries).
 	*/
 	class Rotamer
 	{
 		public:
 
-		/**	@name	Constructors.
+		/**	@name	Constructors
 		*/
 		//@{
 
-		/**	Default constructor.
+		/**	Default constructor
 		*/
 		Rotamer();
 
-		/**	Copy constructor.
+		/**	Copy constructor
 		*/
 		Rotamer(const Rotamer& rotamer);
 
-		/**	Detailled constructor.
+		/**	Constructor
 		*/
 		Rotamer(float new_P, float new_chi1, float new_chi2, float new_chi3, float new_chi4);
 
 		//@}
+
 		/**	@name	Attributes.
 		*/
 		//@{
@@ -76,8 +83,12 @@ namespace BALL
 	};
 
 
-	/** ResidueRotamerSet.
-	\ingroup StructureMiscellaneous		
+	/** Residue Rotamer Set.
+		\ingroup StructureRotamers		
+		This class stores all potential rotamers for a given side-chain type.
+		By linking a residue rotamer set to a specific side chain, one can iteratively
+		try all possible rotamers for this side chain. These rotamers for a side chain	
+		are typically stored in a \link rotamer library RotamerLibrary \endlink.
 	*/
 	class ResidueRotamerSet
 	{
@@ -87,10 +98,13 @@ namespace BALL
 		*/
 		//@{
 
+		///
 		typedef vector<Rotamer>::const_iterator	ConstIterator;
+		///
 		typedef vector<Rotamer>::iterator				Iterator;
 
 		//@}
+
 		/**	@name Constructors and Destructors
 		*/
 		//@{
@@ -112,41 +126,51 @@ namespace BALL
 		/**	Destructor
 		*/
 		virtual ~ResidueRotamerSet();
-
 		//@}
+
+
 		/**	@name	External Iteration
 		*/
 		//@{
-			
+
+		/**	
+		*/
 		Iterator begin();
 
+		/**
+		*/
 		Iterator end();
 		
+		/**
+		*/
 		ConstIterator begin() const;
 
+		/**
+		*/
 		ConstIterator end() const;
-
 		//@}
-		/**	@name	Assignment Operator
+
+		/**	@name	Assignment
 		*/
 		//@{
 
 		/**	The assignment operator
 		*/
-		ResidueRotamerSet&	operator = (const ResidueRotamerSet& residue_rotamer_set);
+		const ResidueRotamerSet& operator = (const ResidueRotamerSet& residue_rotamer_set);
 
 		//@}
+
 		/** @name Accessors
 		*/
 		//@{
 
 		/** Get the name of the ResidueRotamerSet 
 		*/
-		const String & getName() const; 
+		const String& getName() const; 
 
 		/**
 		*/
-		Residue& getResidue() ; 
+		Residue& getResidue(); 
 
 		/** Find out if the class instance is valid
 		*/
@@ -167,17 +191,19 @@ namespace BALL
 		/**	Random access operator for single rotamers.
 		*/
 		Rotamer& operator [] (Position index);
-
 		//@}
+
 		/**	@name	Rotamer Assignment
 		*/
 		//@{
 
 		/**	Assign a specific rotamer.
+				Sets the side-chain torsions of <tt>residue</tt> to the values specified by <tt>rotamer</tt>.
 		*/
-		bool setRotamer(Residue& residue, const Rotamer& rotamer) ;
+		bool setRotamer(Residue& residue, const Rotamer& rotamer);
 
-		/**	Calculate the torsion angle of a residue
+		/**	Calculate the torsion angle of a residue.
+				Retrieve the side-chain torsion angles from the residue's current conformation.
 		*/
 		Rotamer getRotamer(const Residue& residue) const;
 
@@ -190,81 +216,80 @@ namespace BALL
 
 		/** Assign a new name
 		*/
-		void setName(String &name); 
+		void setName(const String& name); 
 
-		/**	
+		/**	Add a rotamer to the current set.
 		*/
 		void addRotamer(const Rotamer& rotamer);
 
-		/**	Build a copy of a specified rotamer
+		/**	Build a copy of a specified rotamer.
+				This method sets the side-chain torsion angles
+				according to the values specified by <tt>rotamer</tt> and returns a copy of the residue.
 		*/
-		Residue* buildRotamer(const Rotamer& rotamer) ;
+		Residue* buildRotamer(const Rotamer& rotamer);
 
 		//@}
 		
 		protected:
 
-		/*_ @name Protected attributes 
+		/** Determines all movable atoms 
 		*/
-		//@{
+		void addMovable_(vector<String>& movable, Atom& a); 
 
-		/*_ Determines all movable atoms 
+		/** Set the torsion angles
 		*/
-		void addMoveable_(vector<String>& moveable, Atom& a); 
-
-		/*_ Set the torsion angles
-		*/
-		void setTorsionAngle_(const vector<String>& moveable, Angle angle); 
+		void setTorsionAngle_(const vector<String>& movable, Angle angle); 
 
 
-		/*_ Indicates whether the instance is valid 
+		/** Indicates whether the instance is valid 
 		*/ 
 		bool valid_; 
 
 
-		/*_ Name of the variant.
+		/** Name of the variant.
 				(NOT the residue name, but the variant name obtained from the template DB)
     */ 
 		String								name_;
 		
-		/*_ Contains the residue (side chain and backbone)
+		/** Contains the residue (side chain and backbone)
 		*/
 		Residue								side_chain_;
 
-		/*_ Hash map containing all atom names of the variant
+		/** Hash map containing all atom names of the variant
 		    and pointers to the corresponding atoms in residue_
 		*/
 		StringHashMap<Atom*>	atom_name_map_;
 
-		/*_ The three anchor atoms (backbone atoms)
+		/** The three anchor atoms (backbone atoms)
 		    used to determine the primary transformation
 		*/
 		Atom*									anchor_atoms_[3];
 
-		/*_ Array containing all rotamers
+		/** Array containing all rotamers
 		*/
 		vector<Rotamer>				rotamers_;
 
-		/*_ Names of the movable atoms (names) for each of the torsions
+		/** Names of the movable atoms (names) for each of the torsions
 		*/
-		vector<String>				moveable_atoms_chi1_;
-		vector<String>				moveable_atoms_chi2_;
-		vector<String>				moveable_atoms_chi3_;
-		vector<String>				moveable_atoms_chi4_;
+		vector<String> movable_atoms_chi1_;
+		vector<String> movable_atoms_chi2_;
+		vector<String> movable_atoms_chi3_;
+		vector<String> movable_atoms_chi4_;
 
-		/*_	Nnumber of valid torsions of the side chain
+		/**	Number of valid torsions of the side chain
 		*/
 		Size number_of_torsions_;
 
-		/*_	Original atom coordinates of side_chain_
+		/**	Original atom coordinates of side_chain_
 		*/
 		vector<Vector3>				original_coordinates_;
-
-		//@}
 	};
 
-	/** RotamerLibrary
-	\ingroup StructureMiscellaneous
+	/** Rotamer Library Class.
+		\ingroup StructureRotamers
+		A rotamer library contains a list of all possible torsion angle combinations
+		observed for each of the 19 amino acid side chains (GLY does not have any
+		useful rotamers). 
 	*/
 	class RotamerLibrary
 	{
@@ -294,28 +319,51 @@ namespace BALL
 
 		//@}
 
+		/**	@name Assignment
+		*/
+		//@{
+			
+		/**	Assignment operator
+		*/
+		const RotamerLibrary& operator = (const RotamerLibrary& rhs);
+			
+		/**	Read from a file.
+				This method reads rotamer libraries from SQWRL files (Dunbrack et al.).
+		*/
 		bool readSQWRLLibraryFile(const String& filename, const FragmentDB& fragment_db);
+		//@}
+			
 
-		ResidueRotamerSet* getRotamerSet(const String& name);
-
-		Size getNumberOfVariants() const;
-
-		Size getNumberOfRotamers() const;
-
-		protected:
-
-		/*_ @name Protected Attributes
+		/**	@name Accessors
 		*/
 		//@{
 
-		/*_ Contains the available variants 
+		/**
+		*/
+		ResidueRotamerSet* getRotamerSet(const String& name);
+
+		/**
+		*/
+		Size getNumberOfVariants() const;
+
+		/**
+		*/
+		Size getNumberOfRotamers() const;
+		//@}
+
+		protected:
+
+		/** @name Protected Attributes
+		*/
+		//@{
+
+		/** Contains the available variants 
 		*/ 
 		vector<ResidueRotamerSet>	variants_;
 
-		/*_ Indicates whether the instance is valid 
+		/** Indicates whether the instance is valid 
 		*/ 
 		bool valid_;
-
 		//@}
 	};
 
