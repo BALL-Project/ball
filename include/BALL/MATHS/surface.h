@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.26 2003/08/26 08:04:22 oliver Exp $
+// $Id: surface.h,v 1.27 2003/09/04 15:42:03 aubertin Exp $
 //
 
 #ifndef BALL_MATHS_SURFACE_H
@@ -19,7 +19,7 @@ namespace BALL
 
 	/**	Generic Three-dimensional Surface class.
 			This class describes a three-dimensional triangulated surface. 
-			Each tringle is represented by three indices to vertices (as
+			Each triangle is represented by three indices to vertices (as
 			described by the  \link TSurface::Triangle TSurface::Triangle \endlink ). Each of the vertices has
 			a position and possibly a normal vector associated.
 			\par
