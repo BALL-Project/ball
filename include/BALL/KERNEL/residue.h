@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.4 2000/02/06 19:43:44 oliver Exp $
+// $Id: residue.h,v 1.5 2000/02/10 15:03:29 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -125,6 +125,17 @@ namespace BALL
 		/**	@name	Accessors */
 		//@{
 
+		/**	Return the fully qualified name.
+				Residue names are modified as follows:
+				\begin{itemize}
+					\item {\tt -N} is added for N terminal residues
+					\item {\tt -C} is added for C terminal residue
+					\item {\tt [-]S} is added for CYS involved in a disulphide bridge
+					\item {\tt -M} is added for individual amino acids (C and N terminal)
+				\end{itemize}
+		*/
+		String getFullName() const;
+			
 		///
 		Protein* getProtein();
 
