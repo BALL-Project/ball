@@ -24,7 +24,10 @@ EXECUTABLES_MATHS = \
 	Circle3_test\
 	Box3_test\
 	Plane3_test\
-	Sphere3_test
+	Sphere3_test\
+	Function_test\
+	PiecewiseFunction_test\
+	PiecewisePolynomial_test
 
 EXECUTABLES_SYSTEM = \
 	Directory_test\
@@ -44,9 +47,6 @@ EXECUTABLES_DATATYPES = \
 	StringHashMap_test\
 	HashSet_test\
 	Options_test\
-	Function_test\
-	PiecewiseFunction_test\
-	PiecewisePolynomial_test\
 	Quadruple_test\
 	RegularData1D_test\
 	RegularData2D_test\
@@ -83,6 +83,8 @@ EXECUTABLES_KERNEL = \
 	Residue_test\
 	Expression_test\
 	KernelPredicate_test\
+	Expression_test\
+	Selector_test\
 	RuleEvaluator_test\
 	StandardPredicates_test\
 	DefaultProcessors_test\
