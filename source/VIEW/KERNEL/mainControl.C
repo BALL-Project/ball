@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.42 2003/12/16 13:59:19 amoll Exp $
+// $Id: mainControl.C,v 1.43 2003/12/16 14:01:43 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -382,23 +382,19 @@ bool MainControl::remove_(Composite& composite)
 bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebuild, bool force)
 	throw()
 {
-Log.error() << "#~~#   1 " << std::endl;
 	if (!composite_manager_.has(composite)) return false;
 	
-	bool rebuild_display_lists = false;
 	// update all representations containing the composite
 	List<Representation*> changed_representations = primitive_manager_.getRepresentationsOf(composite);
 	List<Representation*>::Iterator reps_it = changed_representations.begin();
 	// notify GeometricControl of changed representations
 	for (; reps_it != changed_representations.end(); reps_it++)
 	{
-Log.error() << "#~~#   2 " << std::endl;
 		Representation* rep = *reps_it;
 
 		if (rep->getModelBuildTime() < Atom::getAttributesModificationTime())
 		{
 			rep->update(true);
-			rebuild_display_lists = true;
 		}
 		else 
 		{
@@ -408,9 +404,7 @@ Log.error() << "#~~#   2 " << std::endl;
 					rep->getModelType() == MODEL_CARTOON    ||
 					force)
 			{
-Log.error() << "#~~#   3 " << std::endl;
 				rep->update(rebuild);
-				rebuild_display_lists = rebuild;
 			}
 		}
 		
@@ -419,11 +413,6 @@ Log.error() << "#~~#   3 " << std::endl;
 	}
 
 	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
-	if (rebuild_display_lists)
-	{
-Log.error() << "#~~#   4 " << std::endl;
-		scene_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
-	}
 	notify_(scene_message);
 
 	return true;
