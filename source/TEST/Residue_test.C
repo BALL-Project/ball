@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.6 2000/05/16 08:26:22 oliver Exp $
+// $Id: Residue_test.C,v 1.7 2000/05/17 16:45:39 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,14 +12,12 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.6 2000/05/16 08:26:22 oliver Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.7 2000/05/17 16:45:39 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-using namespace std;
-
 String filename;
 NEW_TMP_FILE(filename)
 
@@ -211,19 +209,19 @@ RESULT
 
 CHECK(Residue::hasTorsionPsi() const )
 	Residue r;
-	TEST_EQUAL(r.hasTorsionPhi(), false)	
+	TEST_EQUAL(r.hasTorsionPsi(), false)	
 	Chain c;
 	c.insert(r);
-	TEST_EQUAL(r.hasTorsionPhi(), false)	
+	TEST_EQUAL(r.hasTorsionPsi(), false)	
 	Residue r2;
 	c.insert(r2);
-	TEST_EQUAL(r.hasTorsionPhi(), true)
+	TEST_EQUAL(r.hasTorsionPsi(), true)
 	Residue r3;
 	c.prepend(r3);
-	TEST_EQUAL(r.hasTorsionPhi(), true)
+	TEST_EQUAL(r.hasTorsionPsi(), true)
 	Residue r4;
 	c.append(r4);
-	TEST_EQUAL(r.hasTorsionPhi(), true)
+	TEST_EQUAL(r.hasTorsionPsi(), true)
 RESULT
 
 CHECK(Residue::getTorsionPsi() const )
