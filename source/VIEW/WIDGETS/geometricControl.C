@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.72.2.1 2004/12/28 17:10:54 amoll Exp $
+// $Id: geometricControl.C,v 1.72.2.2 2004/12/28 17:18:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -19,13 +19,8 @@
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
-#include <BALL/VIEW/PRIMITIVES/point.h>
-#include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
-#include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
-#include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
-#include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/MATHS/simpleBox3.h>
 
 #include <qpopupmenu.h>
@@ -523,34 +518,19 @@ namespace BALL
 				Vector3 center;
 
 				// cant use Vertex or Vertex2 here, no idea why
-				if (RTTI::isKindOf<TwoColoredLine>(go))
+				if (RTTI::isKindOf<Vertex2>(go))
 				{
-					TwoColoredLine& v = reinterpret_cast<TwoColoredLine&>(go);
+					Vertex2& v = *dynamic_cast<Vertex2*>(&go);
 					center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
 
 					bbox.operator()(v.getVertex1());
 					bbox.operator()(v.getVertex2());
 				}
-				else if (RTTI::isKindOf<TwoColoredTube>(go))
+				else if (RTTI::isKindOf<Vertex>(go))
 				{
-					TwoColoredTube& v = reinterpret_cast<TwoColoredTube&>(go);
-					center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
-
-					bbox.operator()(v.getVertex1());
-					bbox.operator()(v.getVertex2());
-				}
-				else if (RTTI::isKindOf<Tube>(go))
-				{
-					Tube& v = reinterpret_cast<Tube&>(go);
-					center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
-
-					bbox.operator()(v.getVertex1());
-					bbox.operator()(v.getVertex2());
-				}
-				else if (RTTI::isKindOf<Point> (go))
-				{
-					Point& v = reinterpret_cast<Point&>(go);
+					Vertex& v = *dynamic_cast<Vertex*>(&go);
 					center = v.getVertex();
+
 					bbox.operator()(v.getVertex());
 				}
 				else if (RTTI::isKindOf<SimpleBox3>(go))
@@ -595,15 +575,6 @@ namespace BALL
 					bbox.operator()(box.getPoint() + box.getRightVector());
 					bbox.operator()(box.getPoint() + box.getDiagonalVector());
 				}
-				else if (RTTI::isKindOf<Line>(go))
-				{
-					Line& v = reinterpret_cast<Line&>(go);
-					center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
-
-					bbox.operator()(v.getVertex1());
-					bbox.operator()(v.getVertex2());
-				}
-
 				else if (RTTI::isKindOf<BALL::VIEW::Label>(go))
 				{
 					// do nothing
