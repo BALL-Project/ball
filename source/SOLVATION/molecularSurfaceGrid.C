@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.13 2002/12/16 17:15:33 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.14 2002/12/17 14:02:20 anker Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -26,12 +26,6 @@ namespace BALL
 	{
 
 		// points in the grid marked with
-		// CCONN__OUTSIDE are outside of the molecule (default)
-		// CCONN__INSIDE are sure inside the molecule
-
-		#define CCONN__OUTSIDE 1
-		#define CCONN__INSIDE  0
-		#define	CCONN__INSIDE_PROBE 128
 
 		long* fast_sphere;
 		long* fast_sphere_relative;
@@ -295,9 +289,6 @@ namespace BALL
 		// points in the grid marked with
 		// CCONN__OUTSIDE are outside of the molecule (default)
 		// CCONN__INSIDE are sure inside the molecule
-
-		#define CCONN__OUTSIDE 1
-		#define CCONN__INSIDE  0
 
 		// contains the squared length of the diagonal distance in the grid
 		float	d2, d;
