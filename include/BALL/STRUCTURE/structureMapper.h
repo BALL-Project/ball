@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.h,v 1.21 2003/08/26 08:04:54 oliver Exp $
+// $Id: structureMapper.h,v 1.22 2003/09/02 07:02:16 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -41,9 +41,6 @@
 namespace BALL 
 {
 
-	using std::vector;
-	using std::map;
-
 	/**	Structure mapping class.
 	\ingroup StructureMiscellaneous
 	*/
@@ -54,24 +51,11 @@ namespace BALL
 
 		/** A struct for representing an atom pair of the mapping.
 		*/
-		struct AtomPairStruct 
-		{
-			/** The first atom of the pair.
-			*/
-			Atom*	first;
-
-			/** The second atom of the pair.
-			*/
-			Atom*	second;
-		};
+		typedef std::pair<Atom*, Atom*> AtomPairType;
 		
-		/** 
-		*/
-		typedef struct AtomPairStruct	AtomPairType;
-
 		/*_	The list representing a bijection between	selected atoms of A and B
 		*/
-		typedef vector < AtomPairType >	AtomBijection;
+		typedef std::vector<AtomPairType>	AtomBijection;
 		
 		/**	@name	Constructors and Destructors
 		*/
@@ -83,7 +67,7 @@ namespace BALL
 
 		/**	Constructor
 		*/
-		StructureMapper(Composite& A, Composite& B);
+		StructureMapper(AtomContainer& A, AtomContainer& B);
 
 		/**	Destructor
 		*/
@@ -93,14 +77,14 @@ namespace BALL
 
 		/**	Assign the two objects to be mapped
 		*/	
-		void set(Composite& A, Composite& B);
+		void set(AtomContainer& A, AtomContainer& B);
 		
 		/**	Calculate the root mean squared deviation
 		*/
 		double calculateRMSD();
 		
 		/**	Calculate the transformation to map the first of two isomorphous 
-				Composite objects onto the second
+				AtomContainer objects onto the second
 		*/
 		bool calculateTransformation();
 
@@ -143,7 +127,7 @@ namespace BALL
 		/**
 		*/
 		vector<vector<Fragment*> >& searchPattern
-			(vector<Fragment*>& pattern, Composite& composite,
+			(vector<Fragment*>& pattern, AtomContainer& composite,
 			 double max_rmsd = 4.0,	   double max_center_tolerance = 2.0,
 			 double upper_bound = 8.0, double lower_bound = 4.0);
 
@@ -160,16 +144,16 @@ namespace BALL
 
 		protected:
 			
-		Size countFragments_(const Composite& composite) const;
+		Size countFragments_(const AtomContainer& composite) const;
 		
 
 		/*_	The first of two composites - the "original" 
 		*/
-		Composite*	A_;
+		AtomContainer*	A_;
 
 		/*_	The second composites - the "copy" to be mapped 
 		*/
-		Composite*	B_;
+		AtomContainer*	B_;
 		
 		/*_	The current atom bijection.
 				Required for the caclulation of the RMSD.
@@ -181,10 +165,6 @@ namespace BALL
 		double	rmsd_;
 	};
 
-#	ifndef	BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/STRUCTURE/structureMapper.iC>
-#	endif
-  
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_STRUCTUREMAPPER_H
