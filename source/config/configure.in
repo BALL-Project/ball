@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.126 2001/04/30 02:27:27 oliver Exp $
+dnl    $Id: configure.in,v 1.127 2001/04/30 17:12:59 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1799,15 +1799,18 @@ dnl
 dnl   check for the XDR functions: their interface and the libraries they're hidden in.
 dnl
 if test "${BALL_NO_XDR}" = "true" ; then
+
 	AC_MSG_RESULT([No XDR headers available - building of XDR persistence support disabled])
 	AC_DEFINE(BALL_HAS_XDR, )
-else
 
+else
 
 	AC_CHECK_HEADER(rpc/types.h, HAS_RPC_TYPES_H=true, HAS_RPC_TYPES_H=false)
 	if test "${HAS_RPC_TYPES_H}" = false ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT([Cannot find RPC headers (rpc/types.h).])
+		AC_MSG_RESULT([If your system does not provide an RPC/XDR implementation (e.g., CYGWIN),])
+		AC_MSG_RESULT([please specify the option --without-xdr to avoid this error.])
 		AC_MSG_RESULT()
 		AC_MSG_ERROR(Aborted.)
 	fi
