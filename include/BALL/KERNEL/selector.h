@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.4 2000/02/12 09:32:54 oliver Exp $
+// $Id: selector.h,v 1.5 2000/02/12 19:29:14 oliver Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -260,10 +260,20 @@ namespace BALL
 		/**
 		*/
 		bool hasPredicate(const String& name);
+		//@}
 
+		/**	@name	Processor related methods
+		*/
+		//@{
 		/**
 		*/
 		virtual Processor::Result operator () (Composite& composite);
+		
+		/**	Processor start method.
+				This method is needed to reset the internal counter for the number of
+				selected atoms.
+		*/
+		virtual bool start();
 		//@}
 
 		/**	@name	Accessors
@@ -282,6 +292,11 @@ namespace BALL
 		/**
 		*/
 		void setExpression(const String& expression);
+
+		/**	Return the number of atoms selected during the last application.
+		*/
+		Size getNumberOfSelectedAtoms() const;
+				
 		//@}
 			
 		protected:
@@ -292,6 +307,7 @@ namespace BALL
 		
 		ExpressionNode*								expression_tree_;
 		StringHashMap<CreationMethod> create_methods_;
+		Size													number_of_selected_atoms_;
 	};
 
 	/**	@name	Predefined Predicates
