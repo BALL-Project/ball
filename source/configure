@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.31 2000/01/03 22:03:26 oliver Exp $
+#  $Id: configure,v 1.32 2000/01/03 22:06:43 oliver Exp $
 
 
 ##################################################
@@ -747,7 +747,7 @@ else
  	BALLVIEW_PLATFORM=Mesa
 fi
 
-if test "$with_BALLVIEW" != "no" ; then
+if test "$with_BALLVIEW" = "no" ; then
 	USE_BALLVIEW=false
 fi
 
