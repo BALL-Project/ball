@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.78 2004/12/19 13:33:58 amoll Exp $
+// $Id: molecularStructure.C,v 1.79 2004/12/23 00:13:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -893,9 +893,21 @@ namespace BALL
 			setStatusbarText("Setting up force field...", true);
 			ForceField& ff = getForceField();
 
-			if (!ff.setup(*system))
+			bool ok = false;
+			try
 			{
-				setStatusbarText("Setup up of force field failed", true);
+				if (ff.setup(*system))
+				{
+					ok = true;
+				}
+			}
+			catch(...)
+			{
+			}
+
+			if (!ok)
+			{
+				setStatusbarText("Force field setup failed.", true);
 				selectUnassignedForceFieldAtoms_();
 				return;
 			}
@@ -957,13 +969,26 @@ namespace BALL
 			
 			ForceField& ff = getForceField();
 			ff.disableSelection();
-			if (!ff.setup(*system))
+
+			bool ok = false;
+			try
 			{
-				setStatusbarText("Force field setup failed. See log for details.", true);
+				if (ff.setup(*system))
+				{
+					ok = true;
+				}
+			}
+			catch(...)
+			{
+			}
+
+			if (!ok)
+			{
+				setStatusbarText("Force field setup failed.", true);
 				selectUnassignedForceFieldAtoms_();
 				return;
 			}
-
+			
 			// CHARMM setup may delete atoms (converted to united atoms!),
 			// so we have to make sure the rest of the world realizes something might have changed.
 			if (!use_amber_)
@@ -1097,19 +1122,32 @@ namespace BALL
 			{
 				chooseCharmmFF();
 			}
-			ForceField& ff = getForceField();
 
 			// set up the force field
 			setStatusbarText("setting up force field...", true);
 		
 			// Setup the force field.
+			ForceField& ff = getForceField();
 			ff.disableSelection();
-			if (!ff.setup(*system))
+			bool ok = false;
+			try
+			{
+				if (ff.setup(*system))
+				{
+					ok = true;
+				}
+			}
+			catch(...)
+			{
+			}
+
+			if (!ok)
 			{
 				setStatusbarText("Force field setup failed.", true);
 				selectUnassignedForceFieldAtoms_();
 				return;
 			}
+			
 			ff.updateEnergy();
 
 			// CHARMM setup may delete atoms (converted to united atoms!),
