@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.23 2001/05/24 14:47:13 anker Exp $
+// $Id: standardPredicates.C,v 1.24 2001/05/24 15:35:39 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -10,6 +10,7 @@
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/secondaryStructure.h>
 #include <BALL/KERNEL/nucleotide.h>
+#include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/bond.h>
 
 #include <algorithm>
@@ -164,8 +165,13 @@ namespace BALL
 	bool NucleicAcidPredicate::operator () (const Atom& atom) const
 		throw()
 	{
-		// BAUSTELLE
-		// return RTTI::isKindOf<NucleicAcid>(atom);
+		const NucleicAcid* nucleic_acid 
+			= atom.getAncestor(RTTI::getDefault<NucleicAcid>());
+		if (nucleic_acid != 0)
+		{
+			return (nucleic_acid->getName() == argument_);
+		}
+		return false;
 	}
 
 	// nucleotide predicate
