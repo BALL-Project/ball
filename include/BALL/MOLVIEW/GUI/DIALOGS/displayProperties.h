@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.11.4.4 2002/11/07 14:34:24 amoll Exp $
+// $Id: displayProperties.h,v 1.11.4.5 2002/11/09 20:56:34 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -518,6 +518,9 @@ namespace BALL
 			virtual void setupDynamicProcessor_()
 				throw();
 
+			void setStatusbarText_(String text)
+				throw();
+
 			// --------------------------------------------------------------------------------
 			// attributs
 			// --------------------------------------------------------------------------------
@@ -562,6 +565,7 @@ namespace BALL
 			RemoveModel 								remove_model_static_;
 			RemoveModel 								remove_model_dynamic_;
 			ObjectSelector 							selector_;			
+			ObjectDeselector 						deselector_;			
 
 			BaseModelProcessor* 				static_base_model_pointer_;
 			BaseModelProcessor* 				dynamic_base_model_pointer_;
