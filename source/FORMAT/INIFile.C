@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.21 2001/04/22 18:11:56 amoll Exp $
+// $Id: INIFile.C,v 1.22 2001/04/23 21:59:52 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -249,9 +249,8 @@ namespace BALL
 			if (section.key_map_.has(key))
 			{
 
-        Log.error() << "In INIFile " << filename_ << " , error while appending line: "
+        Log.info() << "In INIFile " << filename_ << " , while appending line: "
                     << line << " . Key '" << key << "' already exists in section." << endl;
-				return false;
 			}
 
 			line_it.getSectionNextLine();
@@ -315,10 +314,8 @@ namespace BALL
 			if (section.key_map_.has(key))
 			{
 
-				Log.error() << "In INIFile " << filename_ << " , error while appending line: "
+				Log.info() << "In INIFile " << filename_ << " , while appending line: "
 										<< line << " . Key '" << key << "' already exists in section." << endl;   
-
-				return false;
 			}
 			
 			section.lines_.push_back(line);
