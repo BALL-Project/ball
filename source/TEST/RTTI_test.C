@@ -1,16 +1,13 @@
-// $Id: RTTI_test.C,v 1.1 1999/12/30 18:05:43 oliver Exp $
+// $Id: RTTI_test.C,v 1.2 2000/01/03 15:30:00 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/KERNEL/protein.h>
-#include <BALL/KERNEL/residue.h>
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/baseFragment.h>
 
 ///////////////////////////
 
-START_TEST(RTTI, "$Id: RTTI_test.C,v 1.1 1999/12/30 18:05:43 oliver Exp $")
+START_TEST(RTTI, "$Id: RTTI_test.C,v 1.2 2000/01/03 15:30:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
