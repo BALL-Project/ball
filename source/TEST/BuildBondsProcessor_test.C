@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BuildBondsProcessor_test.C,v 1.2 2005/02/18 12:08:12 oliver Exp $
+// $Id: BuildBondsProcessor_test.C,v 1.3 2005/02/25 13:53:51 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,50 +16,66 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.2 2005/02/18 12:08:12 oliver Exp $")
+START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.3 2005/02/25 13:53:51 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 using namespace BALL;
 using namespace std;
 
-// TODO testing of all methods and constructors, and operators
-
-
 BuildBondsProcessor* bbp = 0;
-CHECK(BuildBondsProcessor() )
+CHECK(BuildBondsProcessor())
 	bbp = new BuildBondsProcessor();
 	TEST_NOT_EQUAL(bbp, 0);
 RESULT
 
-CHECK( ~BuildBondsProcessor() )
+CHECK(~BuildBondsProcessor())
 	delete bbp;
 RESULT
 
+CHECK(BuildBondsProcessor(const String& filename))
+	bbp = 0;
+	bbp = new BuildBondsProcessor("bond_lengths/bond_lengths.db");
+	TEST_NOT_EQUAL(bbp,0)
+	TEST_EXCEPTION(Exception::FileNotFound, BuildBondsProcessor("file_does_not_exist"))
+RESULT
+
 CHECK(operator() (AtomContainer& ac))
-	BuildBondsProcessor bbp;
+	BuildBondsProcessor bbp2;
 	PDBFile infileA("data/ACE_test_A.pdb");
 	System sysA;
 	infileA >> sysA;
-	sysA.apply(bbp);
+	sysA.apply(bbp2);
 	TEST_EQUAL(sysA.countBonds(), 1666)
 
 	PDBFile infileB("data/ACE_test_B.pdb");
 	System sysB;
 	infileB >> sysB;
-	sysB.apply(bbp);
+	sysB.apply(bbp2);
 	TEST_EQUAL(sysB.countBonds(), 468)
 
 	SDFile infileC("data/buildBondsProcessor_test.sdf");
 	System sysC;
 	infileC >> sysC;
-	Size results[] = {9, 9, 9, 11, 9, 8, 9, 20, 6, 18, 12, 24, 21, 22};
+	Size results[] = {9, 9, 9, 9, 9, 8, 9, 20, 6, 18, 12, 24, 21, 22};
 	Size i(0);
 	for (MoleculeIterator mit = sysC.beginMolecule(); +mit; ++mit, i++)
 	{
-		mit->apply(bbp);
+		mit->apply(bbp2);
 		TEST_EQUAL(mit->countBonds(), results[i]);
+		//TEST_EQUAL(bbp2.getNumberOfBondsBuilt(), results[i]);
 	}
+RESULT
+
+CHECK(setBondLengths(const String& filename))
+	BuildBondsProcessor bbp2;
+	bbp2.setBondLengths("bond_lengths/bond_lengths.db");
+	PDBFile infileA("data/ACE_test_A.pdb");
+	System sysA;
+	infileA >> sysA;
+	sysA.apply(bbp2);
+	TEST_EQUAL(sysA.countBonds(), 1666)
+	TEST_EXCEPTION(Exception::FileNotFound, bbp2.setBondLengths("file_does_not_exist"));
 RESULT
 
 /////////////////////////////////////////////////////////////

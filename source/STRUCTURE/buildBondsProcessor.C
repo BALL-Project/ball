@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.3 2005/02/20 21:36:31 bertsch Exp $
+// $Id: buildBondsProcessor.C,v 1.4 2005/02/25 13:53:51 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -18,18 +18,20 @@
 
 #include <cmath>
 
-#define BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEBUG
-#undef  BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEBUG
-
-#define MAX_LENGTH_DEFECT 0.4
-
 using namespace std;
 
 namespace BALL 
 {
-
+	const char* BuildBondsProcessor::Option::BONDLENGTHS_FILENAME = "bondlengths_filename";
+	const char* BuildBondsProcessor::Option::DELETE_EXISTING_BONDS = "delete_existing_bonds";
+	const char* BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS = "reestimate_bondorders_rings";
+	const char* BuildBondsProcessor::Default::BONDLENGTHS_FILENAME = "bond_lengths/bond_lengths.db";
+	const bool  BuildBondsProcessor::Default::DELETE_EXISTING_BONDS = false;
+	const bool  BuildBondsProcessor::Default::REESTIMATE_BONDORDERS_RINGS = false;
+	
 	BuildBondsProcessor::BuildBondsProcessor()
 		: UnaryProcessor<AtomContainer>(),
+			options(),
 			num_bonds_(0),
 			max_length_(0.0f)
 	{
@@ -38,6 +40,7 @@ namespace BALL
 
 	BuildBondsProcessor::BuildBondsProcessor(const BuildBondsProcessor& bbp)
 		:	UnaryProcessor<AtomContainer>(bbp),
+			options(),
 			num_bonds_(0),
 			max_length_(bbp.max_length_)
 	{
@@ -48,6 +51,7 @@ namespace BALL
 
 	BuildBondsProcessor::BuildBondsProcessor(const String& file_name)	throw(Exception::FileNotFound)
 		:	UnaryProcessor<AtomContainer>(),
+			options(),
 			num_bonds_(0),
 			max_length_(0.0f)
 	{
@@ -80,24 +84,32 @@ namespace BALL
 
 	bool BuildBondsProcessor::finish()
 	{
-
 		return true;
 	}
 
 	Processor::Result BuildBondsProcessor::operator () (AtomContainer& ac)
 	{
-		Size num_atoms = ac.countAtoms();
-
-		if (num_atoms > 50)
+		if (options.getBool(BuildBondsProcessor::Option::DELETE_EXISTING_BONDS))
 		{
-			num_bonds_ += buildBondsHashGrid3_(ac);
+			while (ac.countBonds() != 0)
+			{
+				AtomIterator ait;
+				Atom::BondIterator bit;
+				BALL_FOREACH_BOND(ac, ait, bit)
+				{
+					bit->destroy();
+				}
+			}
 		}
-		else
-		{
-			num_bonds_ += buildBondsSimple_(ac);
-		}
+		
+		num_bonds_ += buildBondsHashGrid3_(ac);
 
 		estimateBondOrders_(ac);
+
+		if (options.getBool(BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS))
+		{
+			// TODO
+		}
 		
 		return Processor::CONTINUE;
 	}
@@ -112,7 +124,7 @@ namespace BALL
 		Vector3 size = bbox.getUpper() - bbox.getLower();
 
 		// build HashGrid
-		HashGrid3<Atom*> grid(bbox.getLower() - Vector3(max_length_), size + Vector3(max_length_), max_length_);
+		HashGrid3<Atom*> grid(bbox.getLower() - Vector3(max_length_+1.0), size + Vector3((max_length_+1.0)*2), max_length_);
 	
 		// fill in the atom pointers into the grid
 		AtomIterator a_it(ac.beginAtom());
@@ -153,7 +165,7 @@ namespace BALL
 									getMinBondLength_(min_dist, an1, an2) &&
 									max_dist != 0 && min_dist != 0)
 							{
-								if (dist <= (max_dist+MAX_LENGTH_DEFECT) && dist >= min_dist)
+								if (dist <= max_dist && dist >= min_dist)
 								{
 									if (!atom1->isBoundTo(**data_it2))
 									{
@@ -168,45 +180,6 @@ namespace BALL
 				}
 			}
 		}
-		return num_bonds;
-	}
-
-	Size BuildBondsProcessor::buildBondsSimple_(AtomContainer& ac)
-	{	
-		Size num_bonds(0);
-		// iterator over all atoms
-		for(AtomIterator a_it1 = ac.beginAtom(); +a_it1; ++a_it1)
-		{
-			// iterator over all atom pairs
-			AtomIterator a_it2 = a_it1;
-			a_it2++;
-			for (; a_it2!=ac.endAtom(); ++a_it2)
-			{
-				// test the distance criterion for the element pair
-				float dist(a_it1->getPosition().getDistance(a_it2->getPosition()));
-				
-				Size an1(a_it1->getElement().getAtomicNumber());
-				Size an2(a_it2->getElement().getAtomicNumber());
-				
-				float max_dist(0), min_dist(0);
-			
-				if (getMaxBondLength_(max_dist, an1, an2) && 
-						getMinBondLength_(min_dist, an1, an2) &&
-						max_dist != 0 && min_dist != 0)
-				{
-					if (dist <= (max_dist+MAX_LENGTH_DEFECT) && dist >= min_dist)
-					{
-						if (!a_it1->isBoundTo(*a_it2))
-						{
-							Bond * b = a_it1->createBond(*a_it2);
-							b->setOrder(Bond::ORDER__UNKNOWN);
-							num_bonds++;
-						}
-					}
-				}
-			}
-		}
-		
 		return num_bonds;
 	}
 
@@ -288,7 +261,7 @@ namespace BALL
 			}
 			else
 			{
-				// should never occur
+				// should never occur, otherwise the input paramters file is corrupted
 				Log.error() << "cannot find right bond order: " << elem1 << " " << elem2 << " " << length << endl;
 				return Bond::ORDER__UNKNOWN;
 			}
@@ -320,15 +293,19 @@ namespace BALL
 
 	void BuildBondsProcessor::readBondLengthsFromFile_(const String& file_name) throw(Exception::FileNotFound)
 	{
-		#ifdef BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEBUG
-		cerr << "'void BuildBondsProcessor::readBondLengthsFromFile_(const String& file_name)'" << endl;
-		#endif 
-		
+
+		options.setDefault(BuildBondsProcessor::Option::BONDLENGTHS_FILENAME,
+													 BuildBondsProcessor::Default::BONDLENGTHS_FILENAME);
+		options.setDefaultBool(BuildBondsProcessor::Option::REESTIMATE_BONDORDERS_RINGS,
+													 BuildBondsProcessor::Default::REESTIMATE_BONDORDERS_RINGS);
+		options.setDefaultBool(BuildBondsProcessor::Option::DELETE_EXISTING_BONDS,
+													 BuildBondsProcessor::Default::DELETE_EXISTING_BONDS);
+
 		// test file or set default file
 		String filename(file_name);
 		if (file_name == "")
 		{
-			filename = String(BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEFAULT_FILE);
+			filename = String(options.get(BuildBondsProcessor::Option::BONDLENGTHS_FILENAME));
 		}
 		Path path;
 		String filepath = path.find(filename);
@@ -375,10 +352,6 @@ namespace BALL
 			// test if we are in the bond partner depth
 			if (it->getDepth() == 2)
 			{
-				#ifdef BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEBUG
-				cerr << "> 1:key of depth " << it->getDepth() << ": " << it->getKey() << endl;
-				#endif
-				
 				Size an1 = it->getKey().toUnsignedInt();
 				entry1 = it->getEntry("Partners");
 
@@ -389,9 +362,6 @@ namespace BALL
 					// test if we are in the bond length section depth
 					if (entry_it->getDepth() == entry1->getDepth() + 1)
 					{
-						#ifdef BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEBUG
-						cerr << "> 2:key of depth " << entry_it->getDepth() << ": " << entry_it->getKey() << endl;
-						#endif 
 						Size an2 = entry_it->getKey().toUnsignedInt();
 						ResourceEntry * entry2;
 						entry2 = entry_it->getEntry("BondLengths");
@@ -402,12 +372,6 @@ namespace BALL
 						{
 							if (bond_it->getDepth() == entry2->getDepth() + 1)
 							{
-								#ifdef BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEBUG
-								cerr << "> 3:key of depth " << bond_it->getDepth() << ": " << 
-									bond_it->getKey() << ", value: " << 
-									bond_it->getValue() << endl;
-								#endif
-								
 								// now fill the bond_lengths, min and, max structs
 								String key = bond_it->getKey();
 								Bond::BondOrder order = Bond::ORDER__UNKNOWN;

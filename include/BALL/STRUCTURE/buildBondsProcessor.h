@@ -1,20 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.3 2005/02/20 21:36:31 bertsch Exp $
+// $Id: buildBondsProcessor.h,v 1.4 2005/02/25 13:53:51 bertsch Exp $
 //
 
 /** TODO
-	* - parameter section for:
-	*		o hash grid size parameter
-	*		o mass defect parameter
-	*		o #atoms-threshold for switch hash grid/ simple version 
-	*			(or skip simple version?)
-	*	- how to deal with existing bonds? option for complete rebuild?
 	* - method to reestimate bond orders of rings (due to bad aromatic
 	*		bond order detection, bc it is hard to distinguish between 
 	*		double and aromatic bonds)
-	*	-	complete the test methods
 	*/
 
 
@@ -41,6 +34,10 @@
 	#include <BALL/KERNEL/bond.h>
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+	#include <BALL/DATATYPE/options.h>
+#endif
+
 #include <vector>
 #include <utility>
 
@@ -57,9 +54,52 @@ namespace BALL
 
 		public:
 
+			/** @name Constant Definitions
+			*/
+			//@{
+			/// Option names
+			struct Option
+			{
+				/** Name to the file where the bonds lengths, max and
+				 *  min bond lengths are stored in.
+				 */
+				static const char* BONDLENGTHS_FILENAME;
+				
+				/** If true, the existing bonds are deleted before 
+				 *  bonds detection begins. If the atoms are in 
+				 *  non-bond distance no bonds will be build!
+				 */
+				static const char* DELETE_EXISTING_BONDS;
+
+				/** If this option is set to true, the molecule
+				 *  will be reprocessed. In this step the processor
+				 *  tries to correct the somtimes wrong orders of 
+				 *  aromatic rings.
+				 */
+				static const char* REESTIMATE_BONDORDERS_RINGS;
+			};
+
+			/// Default values for options
+			struct Default
+			{
+				/// default file name for the bond lengths
+				static const char* BONDLENGTHS_FILENAME;
+				
+				/// this option is off by default
+				static const bool DELETE_EXISTING_BONDS;
+
+				/// this option is off by default
+				static const bool REESTIMATE_BONDORDERS_RINGS;
+			};
+			//@}
+		
+
 			/** @name	Constructors and Destructors
 			*/
 			//@{
+
+			BALL_CREATE(BuildBondsProcessor);
+			
 			///	default constructor
 			BuildBondsProcessor();
 		
@@ -103,14 +143,18 @@ namespace BALL
 			BuildBondsProcessor& operator = (const BuildBondsProcessor& bbp);
 			//@}
 
+			/** @name Public Attributes
+			*/
+			//@{
+			/// options
+			Options options;
+			//@}
+			
 		protected:
 		
 			/// builds bonds, based on atom distances read from parameter file using a 3D hash grid
 			Size buildBondsHashGrid3_(AtomContainer& ac);
 		
-			/// builds bonds, based on atom distances read from parameter file; simply iterates over atom pairs
-			Size buildBondsSimple_(AtomContainer& ac);
-
 			/// after the bonds are built, the orders are estimated
 			void estimateBondOrders_(AtomContainer& ac);
 			
@@ -148,7 +192,6 @@ namespace BALL
 
 			/// parameter which holds the longest possible bond
 			float max_length_;
-			
 	};
 
 } // namespace BALL 

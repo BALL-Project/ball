@@ -13,9 +13,9 @@
 			</node>
 			<node>6
 				<node>BondLengths
-					<node>max<value>1.2</value></node>
+					<node>max<value>1.15</value></node>
 					<node>single<value>1.09</value></node>
-					<node>min<value>0.8</value></node>
+					<node>min<value>0.95</value></node>
 				</node>
 			</node>
 			<node>7
