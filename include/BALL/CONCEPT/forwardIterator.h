@@ -1,4 +1,4 @@
-// $Id: forwardIterator.h,v 1.7 2001/06/23 10:38:38 amoll Exp $
+// $Id: forwardIterator.h,v 1.8 2001/06/26 08:58:21 anker Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -21,7 +21,7 @@ namespace BALL
 
 	/**	Generic Constant Forward Iterator
 	*/
-	template <class Container, class DataType, class Position, class Traits>
+	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstForwardIterator
 		: public ConstBaseIterator<Container, DataType, Position, Traits>
 	{
@@ -99,16 +99,6 @@ namespace BALL
 		ConstForwardIterator operator ++ (int)
 			throw(Exception::InvalidIterator);
 
-		/** Find the first item matching a predicate
-		 */
-		const DataType* findFirst(const UnaryPredicate<DataType> &predicate) const
-			throw(Exception::InvalidIterator);
-	
-		/** Find the next occurance of a predicate match
-		 */
-		const DataType* findNext(const UnaryPredicate<DataType>& predicate) const
-			throw(Exception::InvalidIterator);
-	
 		/** Return an iterator at the beginning of the container
 		 */
 		static ConstForwardIterator begin(const Container& container)
@@ -238,33 +228,6 @@ namespace BALL
 		return iterator;
 	}
 
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType ConstForwardIterator<Container, DataType, Position, Traits>::*findFirst(const UnaryPredicate<DataType> &predicate)
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-		for(traits_ptr_->toBegin(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
-				return (const DataType *)&(traits_ptr_->getData());
-
-		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstForwardIterator<Container, DataType, Position, Traits>::findNext(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-		for(traits_ptr_->forward(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
-				return (const DataType *)&(traits_ptr_->getData());
-
-		return 0;
-	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator(const Container& container)
@@ -355,16 +318,6 @@ namespace BALL
 		ForwardIterator operator ++ (int)
 			throw(Exception::InvalidIterator);
 
-		/** Find the first item matching a predicate
-		 */
-		DataType* findFirst(const UnaryPredicate<DataType>& predicate) const
-			throw(Exception::InvalidIterator);
-	
-		/** Find the next occurance of a predicate match
-		 */
-		DataType* findNext(const UnaryPredicate<DataType>& predicate) const
-			throw(Exception::InvalidIterator);
-	
 		/** Return an iterator at the beginning of the container
 		 */
 		static ForwardIterator begin(const Container &container)
@@ -475,34 +428,6 @@ namespace BALL
 		ForwardIterator iterator(*this);
 		++(*this);
 		return iterator;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* ForwardIterator<Container, DataType, Position, Traits>::findFirst(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-		for(traits_ptr_->toBegin(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-			if (predicate((const DataType &)traits_ptr_->getData()) == true)
-				return (DataType *)&(traits_ptr_->getData());
-
-		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* ForwardIterator<Container, DataType, Position, Traits>::findNext(const UnaryPredicate<DataType>& predicate) const
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-
-		for(traits_ptr_->forward(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
-			if (predicate((const DataType&)traits_ptr_->getData()) == true)
-				return (DataType*)&(traits_ptr_->getData());
-
-		return 0;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
