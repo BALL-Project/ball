@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.95 2003/12/07 17:39:50 amoll Exp $
+// $Id: mainframe.C,v 1.96 2003/12/10 15:10:52 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -388,7 +388,7 @@ void Mainframe::computeIsoContourSurface()
 	rep->insert(*mesh);
 	rep->setModelType(MODEL_CONTOUR_SURFACE); // Setting Representation type to Surface
 
-	RepresentationMessage* message = new RepresentationMessage(rep, RepresentationMessage::ADD);
+	RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
 	notify_(message);
 }
 
@@ -733,8 +733,8 @@ void Mainframe::stopSimulation()
 			delete file;
 			file = new DCDFile(filename, File::IN);
 			NewTrajectoryMessage* message = new NewTrajectoryMessage;
-			message->setComposite(simulation_thread_->getComposite());
-			message->setTrajectoryFile(file);
+			message->setComposite(*simulation_thread_->getComposite());
+			message->setTrajectoryFile(*file);
 			notify_(message);
 		}
 		

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.50 2003/12/09 12:36:09 amoll Exp $
+// $Id: displayProperties.C,v 1.51 2003/12/10 15:10:14 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -615,13 +615,13 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 	{
 		message->setType(RepresentationMessage::UPDATE);
 	}
-	message->setRepresentation(rep);
+	message->setRepresentation(*rep);
 	notify_(message);
 
 	if (focus && composites.size() > 0)
 	{
 		CompositeMessage* ccmessage = new CompositeMessage;
-		ccmessage->setComposite(*composites.begin());
+		ccmessage->setComposite(**composites.begin());
 		ccmessage->setType(CompositeMessage::CENTER_CAMERA);
 		notify_(ccmessage);
 	}

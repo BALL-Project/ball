@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.11 2003/12/06 00:07:24 amoll Exp $
+// $Id: molecularProperties.C,v 1.12 2003/12/10 15:10:27 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -486,9 +486,9 @@ void MolecularProperties::createGridFromDistance()
 	}
 
 	RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::NEW);
-	message->setComposite(&S);
+	message->setComposite(S);
 	message->setCompositeName(S.getName() + "_distance");
-	message->setRegularData3D(regdat);
+	message->setRegularData3D(*regdat);
 	notify_(message);
 }
 

@@ -175,7 +175,7 @@ void LabelDialog::accept()
 	rep->setProperty(Representation::PROPERTY__ALWAYS_FRONT);
 	rep->setModelType(MODEL_LABEL);
 	RepresentationMessage* arm = new RepresentationMessage;
-	arm->setRepresentation(rep);
+	arm->setRepresentation(*rep);
 	arm->setType(RepresentationMessage::ADD);
 	notify_(arm);
 	

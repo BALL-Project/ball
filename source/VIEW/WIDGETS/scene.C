@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.26 2003/12/05 23:56:23 amoll Exp $
+// $Id: scene.C,v 1.27 2003/12/10 15:10:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -740,7 +740,7 @@ void Scene::createCoordinateSystem_()
 	gl_renderer_.buildDisplayListFor(*rp);
 	
 	// notify GeometricControl
-	RepresentationMessage* message = new RepresentationMessage(rp, RepresentationMessage::ADD);
+	RepresentationMessage* message = new RepresentationMessage(*rp, RepresentationMessage::ADD);
 	notify_(message);
 }
 
@@ -900,7 +900,7 @@ void Scene::applyPreferences(Preferences & /* preferences */)
 		for (; it != reps.end(); it++)
 		{
 			pm.remove(**it);
-			RepresentationMessage* message = new RepresentationMessage(*it, RepresentationMessage::REMOVE);
+			RepresentationMessage* message = new RepresentationMessage(**it, RepresentationMessage::REMOVE);
 			notify_(message);
 		}
 	}

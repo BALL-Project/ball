@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.8 2003/11/29 14:47:12 oliver Exp $
+// $Id: FDPBDialog.C,v 1.9 2003/12/10 15:10:13 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -252,8 +252,8 @@ namespace BALL
 			fdpb_.setup(*system_, options_);
 			fdpb_.solve();
 			RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::NEW); 
-			message->setRegularData3D(fdpb_.phi_grid);
-			message->setComposite(system_);
+			message->setRegularData3D(*fdpb_.phi_grid);
+			message->setComposite(*system_);
 			message->setCompositeName("FDPB_" + system_->getName());
 			notify_(message);
 			fdpb_.phi_grid = 0;
@@ -416,7 +416,7 @@ namespace BALL
 			}
 
 			CompositeMessage* message = new CompositeMessage;
-			message->setComposite(system_);
+			message->setComposite(*system_);
 			message->setType(CompositeMessage::CHANGED_COMPOSITE);
 			notify_(message);
 
@@ -424,5 +424,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.11 2003/10/15 13:47:20 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.12 2003/12/10 15:10:14 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -480,7 +480,7 @@ namespace BALL
 
 			// notify tree of a new composite
 			CompositeMessage* new_message = new CompositeMessage;
-			new_message->setComposite(system);
+			new_message->setComposite(*system);
 			new_message->setCompositeName(system_name);
 			new_message->setType(CompositeMessage::NEW_COMPOSITE);
 			notify_(new_message);

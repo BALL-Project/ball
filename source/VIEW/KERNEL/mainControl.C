@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.27 2003/12/09 16:43:32 amoll Exp $
+// $Id: mainControl.C,v 1.28 2003/12/10 15:10:41 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -363,7 +363,7 @@ bool MainControl::remove_(Composite& composite)
 	// notify GeometricControl of removed representations
 	for (; reps_it != removed_representations.end(); reps_it++)
 	{
-		RepresentationMessage* rr_message = new RepresentationMessage(*reps_it, RepresentationMessage::REMOVE);
+		RepresentationMessage* rr_message = new RepresentationMessage(**reps_it, RepresentationMessage::REMOVE);
 		notify_(rr_message);
 	}
 
@@ -393,7 +393,7 @@ bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebui
 		{
 			rep->update(rebuild);
 		}
-		RepresentationMessage* ur_message = new RepresentationMessage(rep, RepresentationMessage::UPDATE);
+		RepresentationMessage* ur_message = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
 		notify_(ur_message);
 	}
 
@@ -1052,7 +1052,7 @@ bool MainControl::insert(Representation& rep)
 	if (primitive_manager_.has(rep)) return false;
 	primitive_manager_.insert(rep);
 
-	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::ADD);
+	RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::ADD);
 	notify_(rm);
 
 	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
@@ -1068,7 +1068,7 @@ bool MainControl::update(Representation& rep)
 
 	rep.update(true);
 
-	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::UPDATE);
+	RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::UPDATE);
 	notify_(rm);
 
 	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
@@ -1082,7 +1082,7 @@ bool MainControl::remove(Representation& rep)
 {
 	if (!primitive_manager_.has(rep)) return false;
 
-	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::REMOVE);
+	RepresentationMessage* rm = new RepresentationMessage(rep, RepresentationMessage::REMOVE);
 	notify_(rm);
 	primitive_manager_.remove(rep);
 

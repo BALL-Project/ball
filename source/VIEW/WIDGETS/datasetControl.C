@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.14 2003/12/01 19:36:35 amoll Exp $
+// $Id: datasetControl.C,v 1.15 2003/12/10 15:10:27 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -213,7 +213,7 @@ void DatasetControl::deleteItem_(QListViewItem& item)
 		RegularData3D* ssm = item_to_grid_[&item];
 
 		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::REMOVE);
-		msg->setRegularData3D(ssm);
+		msg->setRegularData3D(*ssm);
 		notify_(msg);
 
 		item_to_grid_.erase(&item);
@@ -310,8 +310,7 @@ void DatasetControl::add3DGrid()
 	infile.close();
 	insertGrid_(dat, 0, String(result.ascii()));
 	RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
-	msg->setRegularData3D(dat);
-	msg->setComposite(0);
+	msg->setRegularData3D(*dat);
 	msg->setCompositeName(result.ascii());
 	notify_(msg);
 }
@@ -362,7 +361,6 @@ void DatasetControl::updateSelection()
 	throw()
 {
 	RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::SELECTED);
-	message->setRegularData3D(0);
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
@@ -370,7 +368,7 @@ void DatasetControl::updateSelection()
 		if (item->isSelected() &&
 				item_to_grid_.has(item))
 		{
-			message->setRegularData3D(item_to_grid_[item]);
+			message->setRegularData3D(*item_to_grid_[item]);
 			message->setCompositeName(item->text(0).ascii());
 			break;
 		}
