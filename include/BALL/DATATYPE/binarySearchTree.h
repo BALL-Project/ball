@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.12 2000/08/07 21:56:52 oliver Exp $
+// $Id: binarySearchTree.h,v 1.13 2000/08/09 09:17:57 amoll Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -407,7 +407,7 @@ namespace BALL
 		/**	Return the nodes data.
 				@return the item's data
 		*/
-		DataType getData() const
+		const DataType& getData() const
 		{
 			return data_;
 		}
@@ -415,7 +415,7 @@ namespace BALL
 		/**	Return the left child.
 				@return the item's left child item
 		*/
-		TBSTreeItem*& getLeftChild()
+		TBSTreeItem*& getLeftChild() const
 		{
 			return (TBSTreeItem*&)left_;
 		}
@@ -423,7 +423,7 @@ namespace BALL
 		/**	Return the right child.
 				@return the item's right child item
 		*/
-		TBSTreeItem*& getRightChild()
+		TBSTreeItem*& getRightChild() const
 		{
 			return (TBSTreeItem*&)right_;
 		}
@@ -534,9 +534,11 @@ namespace BALL
 		}
 		//@}
 
-		private:
+		protected:
 
 		DataType data_;
+
+		private:
 
 		class TreeItemProcessor_
 			: public UnaryProcessor<BSTreeItem>
@@ -1326,7 +1328,7 @@ namespace BALL
 	template<typename DataType>
 	TBSTree<DataType>::TBSTree()
 		:	root_(0),
-			comparator_(RTTI::getDefault<Comparator<DataType> >())
+			comparator_(&(RTTI::getDefault<Comparator<DataType> >()))
 	{
 	}
 
@@ -1443,7 +1445,7 @@ namespace BALL
 	BALL_INLINE 
 	void TBSTree<DataType>::resetComparator()
 	{
-		comparator_ = RTTI::getDefault<Comparator<DataType> >();
+		comparator_ = &(RTTI::getDefault<Comparator<DataType> >());
 	}
 
 	template <class DataType>
@@ -1490,7 +1492,7 @@ namespace BALL
 		{
 			return 0;
 		}
-		return &(((TBSTreeItem<DataType> *)root_->getMinimum())->data_);
+		return &(((TBSTreeItem<DataType> *)root_->getMinimum())->getData());
 	}
 
 	template<typename DataType>
@@ -1501,7 +1503,7 @@ namespace BALL
 		{
 			return 0;
 		}
-		return &(((TBSTreeItem<DataType> *)root_->getMaximum())->data_);
+		return &(((TBSTreeItem<DataType> *)root_->getMaximum())->getData());
 	}
 
 	template<typename DataType>
@@ -1511,8 +1513,8 @@ namespace BALL
 		{
 			TBSTreeItem<DataType> *item = root_;
 				 
-			for (; item != 0 && (comparator_->isNotEqual(data, item->data_) == true);
-					 item = (comparator_->isLess(data, item->data_) == true) 
+			for (; item != 0 && (comparator_->isNotEqual(data, item->getData()) == true);
+					 item = (comparator_->isLess(data, item->getData()) == true) 
 						? item->getLeftChild() 
 						: item->getRightChild())
 			{
@@ -1520,7 +1522,7 @@ namespace BALL
 
 			if (item != 0)
 			{
-				return &(item->data_);
+				return &(item->getData());
 			}
 		}
 
@@ -1550,7 +1552,7 @@ namespace BALL
 			while (item) 
 			{
 				parent = item;
-				if (comparator_->isLessOrEqual(data, item->data_) == true)
+				if (comparator_->isLessOrEqual(data, item->getData()) == true)
 				{
 					right_child = false;
 					item = item->getLeftChild();
@@ -1566,13 +1568,13 @@ namespace BALL
 		{
 			while (item) 
 			{
-				if (comparator_->isEqual(data, item->data_) == true)
+				if (comparator_->isEqual(data, item->getData()) == true)
 				{
 					return item;
 				}
 
 				parent = item;
-				if (comparator_->isLess(data, item->data_) == true)
+				if (comparator_->isLess(data, item->getData()) == true)
 				{
 					right_child = false;
 					item = item->getLeftChild();
@@ -1614,14 +1616,14 @@ namespace BALL
 
 		while (item) 
 		{
-			if (comparator_->isEqual(data, item->data_) == true)
+			if (comparator_->isEqual(data, item->getData()) == true)
 			{
 				break;
 			}
 			
 			parent = item;
 			
-			if (comparator_->isLess(data, item->data_) == true)
+			if (comparator_->isLess(data, item->getData()) == true)
 			{
 				right_child = false;
 				item = item->getLeftChild();
@@ -1643,10 +1645,10 @@ namespace BALL
 	{
 		BSTreeItem* parent = root_->getParentOfMinimum();
 		
-		if (parent && parent->left_)
+		if (parent && parent->getLeftChild())
 		{
 			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-				((BSTreeItem *&)root_, parent->left_, parent, false);
+				((BSTreeItem *&)root_, parent->getLeftChild(), parent, false);
 		}
 
 		return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
@@ -1659,10 +1661,10 @@ namespace BALL
 	{
 		BSTreeItem* parent = root_->getParentOfMaximum();
 		
-		if (parent && parent->right_)
+		if (parent && parent->getRightChild())
 		{
 			return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
-				((BSTreeItem *&)root_, parent->right_, parent, true);
+				((BSTreeItem *&)root_, parent->getRightChild(), parent, true);
 		}
 
 		return (TBSTreeItem<DataType> *)BSTreeItem::detachNode
@@ -1753,7 +1755,7 @@ namespace BALL
 
 		for (; this_item != 0 && item != 0; this_item = this_iterator.forward(), item = iterator.forward())
 		{
-			if (comparator_->isNotEqual(this_item->data_, item->data_) == true)
+			if (comparator_->isNotEqual(this_item->getData(), item->getData()) == true)
 			{
 				return false;
 			}
@@ -1926,8 +1928,8 @@ namespace BALL
 		}
 
 		return newItem
-			(((TBSTreeItem<DataType> *)item)->data_, 
-			 clone_(item->left_), clone_(item->right_), item->color_);
+			(((TBSTreeItem<DataType> *)item)->getData(), 
+			 clone_(item->getLeftChild()), clone_(item->getRightChild()), item->getColor());
 	}
 
 	template<typename DataType>
@@ -1950,18 +1952,18 @@ namespace BALL
 		{
 			if (parent != 0)
 			{
-				if (parent->left_ == (BSTreeItem *)childitem)
+				if (parent->getLeftChild() == (BSTreeItem *)childitem)
 				{
-					if (comparator_->isLess(parent->data_, childitem->data_) == true)
+					if (comparator_->isLess(parent->getData(), childitem->getData()) == true)
 					{
 						return false;
 					}
 				}
 				else 
 				{
-					if (parent->right_ == (BSTreeItem *)childitem)
+					if (parent->getRightChild() == (BSTreeItem *)childitem)
 					{
-						if (comparator_->isLess(childitem->data_, parent->data_) == true)
+						if (comparator_->isLess(childitem->getData(), parent->getData()) == true)
 						{
 							return false;
 						}
@@ -1969,8 +1971,8 @@ namespace BALL
 				}
 			}
 			
-			if (!isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->left_) ||
-					!isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->right_))
+			if (!isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->getLeftChild()) ||
+					!isValid_(childitem, (const TBSTreeItem<DataType> *)childitem->getRightChild()))
 			{
 				return false;
 			}
@@ -1987,20 +1989,20 @@ namespace BALL
 
 		if (item != 0)
 		{
-			s << item->data_ << " (" << (int)item->color_ << ')' << endl;
+			s << item->getData() << " (" << (int)item->getColor() << ')' << endl;
 
-			if (item->right_ != 0)
+			if (item->getRightChild() != 0)
 			{
 				BALL_DUMP_DEPTH(s, depth);
 				s << "  r: ";
-				dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->right_);
+				dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->getRightChild());
 			}
 
-			if (item->left_ != 0)
+			if (item->getLeftChild() != 0)
 			{
 				BALL_DUMP_DEPTH(s, depth);
 				s << "  l: ";
-				dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->left_);
+				dump_(s, depth + 1, (const TBSTreeItem<DataType> *)item->getLeftChild());
 			}
 		}
 

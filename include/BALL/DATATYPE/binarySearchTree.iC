@@ -32,7 +32,7 @@ void BSTreeItem::setLeftChild(BSTreeItem* item)
 {
 	if (item == this || (item == right_ && item != 0) )
 	{
-		throw Exception::GeneralException(__FILE__, __LINE__);
+		throw Exception::IllegalTreeOperation(__FILE__, __LINE__);
 	}
 	left_ = item;
 }
@@ -48,7 +48,7 @@ void BSTreeItem::setRightChild(BSTreeItem *item)
 {
 	if (item == this || (item == left_ && item != 0) )
 	{
-		throw Exception::GeneralException(__FILE__, __LINE__);
+		throw Exception::IllegalTreeOperation(__FILE__, __LINE__);
 	}
 	right_ = item;
 }
