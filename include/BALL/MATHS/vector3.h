@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.51 2001/03/12 10:49:42 oliver Exp $
+// $Id: vector3.h,v 1.52 2001/03/13 10:10:42 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -401,7 +401,7 @@ namespace BALL
 				@param scalar, the scalar to multiply by
 				@return TVector3, the scalar product of this vector and {\tt scalar}
 		*/
-		TVector3 operator * (const T& scalar)
+		TVector3 operator * (const T& scalar) const
 			throw();
 
 		/**	Multiply by a scalar.
@@ -418,7 +418,7 @@ namespace BALL
 				@return TVector3& 
 				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
 		*/
-		TVector3 operator / (const T& lambda)
+		TVector3 operator / (const T& lambda) const
 			throw(Exception::DivisionByZero);
 
 		/**	Divide a vector by a scalar.
@@ -912,7 +912,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	TVector3<T> TVector3<T>::operator * (const T& scalar)
+	TVector3<T> TVector3<T>::operator * (const T& scalar) const 
 		throw()
 	{
 		return TVector3<T>(x * scalar, y * scalar, z * scalar);
@@ -931,7 +931,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	TVector3<T> TVector3<T>::operator / (const T& lambda)
+	TVector3<T> TVector3<T>::operator / (const T& lambda) const
 		throw(Exception::DivisionByZero)
 	{
 		if (lambda == (T)0)
