@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.15 2002/12/12 09:48:46 oliver Exp $
+// $Id: surface.h,v 1.16 2002/12/16 18:12:44 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -475,7 +475,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	void TSurface<T>::pushBackVertex(const TSurface<T>::Vertex& position)
+	void TSurface<T>::pushBackVertex(const typename TSurface<T>::Vertex& position)
 		throw()
 	{
 		vertex.push_back(position);
@@ -513,7 +513,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	void TSurface<T>::pushBackNormal(const TSurface<T>::Normal& n)
+	void TSurface<T>::pushBackNormal(const typename TSurface<T>::Normal& n)
 		throw()
 	{
 		normal.push_back(n);

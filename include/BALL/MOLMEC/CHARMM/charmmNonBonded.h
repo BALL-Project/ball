@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.h,v 1.10 2002/02/27 12:19:00 sturm Exp $
+// $Id: charmmNonBonded.h,v 1.11 2002/12/16 18:12:45 oliver Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -92,7 +92,7 @@ namespace BALL
 		/** Equality operator
 		*/
 		bool operator == (const CharmmNonBonded& charmm_non_bonded)
-			throw(Exception::NotImplemented);
+			throw();
 
 		//@}
 		/**	@name	Setup Methods	

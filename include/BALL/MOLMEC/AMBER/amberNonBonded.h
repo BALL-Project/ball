@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.h,v 1.19 2002/12/12 09:48:46 oliver Exp $
+// $Id: amberNonBonded.h,v 1.20 2002/12/16 18:12:44 oliver Exp $
 
 // Molecular Mechanics: Amber force field, non-bonded component
 
@@ -88,7 +88,7 @@ namespace BALL
 		/** Equality operator
 		*/
 		bool operator == (const AmberNonBonded& anb)
-			throw(Exception::NotImplemented);
+			throw();
 
 		//@}
 		/**	@name	Setup Methods	
