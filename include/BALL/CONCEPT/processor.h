@@ -1,4 +1,4 @@
-// $Id: processor.h,v 1.4 2000/02/16 19:13:06 oliver Exp $
+// $Id: processor.h,v 1.5 2000/02/17 09:47:12 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #define BALL_CONCEPT_PROCESSOR_H
@@ -58,15 +58,22 @@ namespace BALL
 		//@{
 		/**	Default constructor
 		*/
-		UnaryProcessor();
+		UnaryProcessor()
+		{
+		}
 
 		/**	Copy constructor
 		*/
-		UnaryProcessor(const UnaryProcessor& processor, bool deep = true);
+		UnaryProcessor
+			(const UnaryProcessor& /* processor */, bool /* deep */ = true)
+		{
+		}
 
 		/**	Destructor
 		*/
-		virtual ~UnaryProcessor();
+		virtual ~UnaryProcessor()
+		{
+		}
 		//@}
 
 		/**	@name Processor specific methods
@@ -74,58 +81,26 @@ namespace BALL
 		//@{
 		/** start method
 		*/
-		virtual bool start();
+		virtual bool start()
+		{
+			return true;
+		}
 
 		/** finish method
 		*/
-		virtual bool finish();
+		virtual bool finish()
+		{
+			return true;
+		}
 
 		/**	operator ()
 		*/
-		virtual Processor::Result operator () (T &);
+		virtual Processor::Result operator () (T &)
+		{
+			return Processor::CONTINUE;
+		}
 		//@}
 	};
-			
-	template <typename T>
-	BALL_INLINE 
-	UnaryProcessor<T>::UnaryProcessor()
-	{
-	}
-				
-	template <typename T>
-	BALL_INLINE 
-	UnaryProcessor<T>::UnaryProcessor
-		(const UnaryProcessor& /* processor */, bool /* deep */)
-	{
-	}
-				
-	template <typename T>
-	BALL_INLINE 
-	UnaryProcessor<T>::~UnaryProcessor()
-	{
-	}
-				
-	template <typename T>
-	BALL_INLINE 
-	bool UnaryProcessor<T>::start()
-	{
-		return true;
-	}
-
-	template <typename T>
-	BALL_INLINE 
-	bool UnaryProcessor<T>::finish()
-	{
-		return false;
-	}
-
-	template <typename T>
-	BALL_INLINE 
-	Processor::Result UnaryProcessor<T>::operator () (T&)
-	{
-		return Processor::ABORT;
-	}
-
 
 	/**	Generic Binary Processor Class
 	*/
@@ -140,15 +115,22 @@ namespace BALL
 		//@{
 		/**	Default constructor
 		*/
-		BinaryProcessor();
+		BinaryProcessor()	
+		{
+		}
 
 		/**	Copy constructor
 		*/
-		BinaryProcessor(const BinaryProcessor& processor, bool deep = true);
+		BinaryProcessor	
+			(const BinaryProcessor& /* processor */, bool /* deep */ = true)
+		{
+		}
 
 		/**	Destructor
 		*/
-		virtual ~BinaryProcessor();
+		virtual ~BinaryProcessor()
+		{
+		}
 		//@}
 
 		/**	@name	Processor-specific methods
@@ -157,59 +139,26 @@ namespace BALL
 		
 		/**	start method
 		*/
-		virtual bool start();
+		virtual bool start()
+		{
+			return true;
+		}
 
 		/**	finish method
 		*/
-		virtual bool finish();
+		virtual bool finish()
+		{
+			return true;
+		}
 
 		/**	operator ()
 		*/
-		virtual Processor::Result operator () (T1&, T2&);
+		virtual Processor::Result operator () (T1&, T2&)
+		{
+			return Processor::CONTINUE;
+		}
 		//@}
 	};
-
-	template <typename T1, typename T2>
-	BALL_INLINE 
-	BinaryProcessor<T1, T2>::BinaryProcessor()
-	{
-	}
-				
-	template <typename T1, typename T2>
-	BALL_INLINE 
-	BinaryProcessor<T1, T2>::BinaryProcessor
-		(const BinaryProcessor& /* processor */, bool /* deep */)
-	{
-	}
-				
-	template <typename T1, typename T2>
-	BALL_INLINE 
-	BinaryProcessor<T1, T2>::~BinaryProcessor()
-	{
-	}
-				
-
-	template <typename T1, typename T2>
-	BALL_INLINE 
-	bool BinaryProcessor<T1, T2>::start()
-	{
-		return true;
-	}
-
-	template <typename T1, typename T2>
-	BALL_INLINE 
-	bool BinaryProcessor<T1, T2>::finish()
-	{
-		return false;
-	}
-
-	
-	template <typename T1, typename T2>
-	BALL_INLINE 
-	Processor::Result BinaryProcessor<T1, T2>::operator () (T1&, T2&)
-	{
-		return Processor::ABORT;
-	}
 
 	//@}
 
