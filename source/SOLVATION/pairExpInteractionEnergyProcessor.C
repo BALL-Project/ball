@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.14 2001/12/30 13:28:54 sturm Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.15 2002/01/13 14:00:12 aubertin Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -133,7 +133,7 @@ namespace BALL
 
 		int verbosity = (int) options.getInteger(Option::VERBOSITY);
 		// this is the flag stating whether the rdf information should be used
-		// ?????: Options oder Memebrs aber nicht beides...
+		// ?????: Options or members but noth both...
 		alpha_ = options.getReal(Option::ALPHA);
 		C1_ = options.getReal(Option::C1);
 		C2_ = options.getReal(Option::C2);
@@ -306,7 +306,7 @@ namespace BALL
 			for (solute_iterator = fragment_->beginAtom(); +solute_iterator;
 					++solute_iterator)
 			{
-				// ?????: Warum geht das net?
+				// ?????: this should work -- but it doesn't
 				// type_j = solute_iterator->getType();
 				type_j = ffparam.getAtomTypes().getType(solute_iterator->getTypeName());
 				atom_center = solute_iterator->getPosition();
@@ -386,8 +386,8 @@ namespace BALL
 							Log.info() << "r_k_vec * n_k_vec = " << r_k_vec * n_k_vec << endl;
 							*/
 
-							// ?????: Sollte protected werden. Und nicht geteilt in
-							// zwei Beiträge
+							// ?????: Should be protected . Don't divide it into
+							// two parts
 							integrator.setConstants(alpha_, C1_, C2_, R_ij_o, k1, k2);
 							integrator.setRDF(rdf_parameter_.getRDF(type_i, type_j));
 							e_ij += rho * integrator.integrateToInf(r_k)
@@ -478,7 +478,7 @@ namespace BALL
 		return true;
 	}
 
-	// ?????: sollte nicht hier stehen.
+	// ?????: shouldn't be here.
 	void PairExpInteractionEnergyProcessor::getExternalSurface_(
 			vector< pair<Vector3, Surface> >& surface_map, 
 			const char* surface_file) throw()
