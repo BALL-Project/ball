@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.16 2003/08/28 16:47:07 amoll Exp $
+# $Id: Makefile,v 1.17 2003/08/28 19:19:02 oliver Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -130,48 +130,3 @@ BALL_INCLUDES=$(VIEW_INCLUDES)
 $(UIC_SOURCES):	$(UIC_HDR)
 
 depend: $(UIC_SOURCES) $(MOC_SOURCES)
-
-amberMinimizationDialog_moc.C:	$(HEADER_DIR)/amberMinimizationDialog.h
-	$(MOC) $(HEADER_DIR)/amberMinimizationDialog.h -o $@
-
-atomProperties_moc.C:	$(HEADER_DIR)/atomProperties.h
-	$(MOC) $(HEADER_DIR)/atomProperties.h -o $@
-
-contourSurfaceDialog_moc.C:	$(HEADER_DIR)/contourSurfaceDialog.h
-	$(MOC) $(HEADER_DIR)/contourSurfaceDialog.h -o $@
-
-displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
-	$(MOC) $(HEADER_DIR)/displayProperties.h -o $@
-
-labelDialog_moc.C:	$(HEADER_DIR)/labelDialog.h
-	$(MOC) $(HEADER_DIR)/labelDialog.h -o $@
-
-mainControlPreferences_moc.C:	$(HEADER_DIR)/mainControlPreferences.h
-	$(MOC) $(HEADER_DIR)/mainControlPreferences.h -o $@
-
-molecularDynamicsDialog_moc.C:	$(HEADER_DIR)/molecularDynamicsDialog.h
-	$(MOC) $(HEADER_DIR)/molecularDynamicsDialog.h -o $@
-
-molecularFileDialog_moc.C:	$(HEADER_DIR)/molecularFileDialog.h
-	$(MOC) $(HEADER_DIR)/molecularFileDialog.h -o $@
-
-moveOverlayDialog_moc.C:	$(HEADER_DIR)/moveOverlayDialog.h
-	$(MOC) $(HEADER_DIR)/moveOverlayDialog.h -o $@
-
-openBruker1DFile_moc.C:	$(HEADER_DIR)/openBruker1DFile.h
-	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
-
-openBruker2DFile_moc.C:	$(HEADER_DIR)/openBruker2DFile.h
-	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
-
-peptideDialog_moc.C:	$(HEADER_DIR)/peptideDialog.h
-	$(MOC) $(HEADER_DIR)/peptideDialog.h -o $@
-
-preferences_moc.C:	$(HEADER_DIR)/preferences.h
-	$(MOC) $(HEADER_DIR)/preferences.h -o $@
-
-serverPreferences_moc.C:	$(HEADER_DIR)/serverPreferences.h
-	$(MOC) $(HEADER_DIR)/serverPreferences.h -o $@
-
-snapShotVisualisation_moc.C:	$(HEADER_DIR)/snapShotVisualisation.h
-	$(MOC) $(HEADER_DIR)/snapShotVisualisation.h -o $@
