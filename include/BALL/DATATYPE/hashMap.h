@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.27.4.2 2002/05/31 22:48:40 oliver Exp $ 
+// $Id: hashMap.h,v 1.27.4.3 2002/06/09 14:24:33 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -219,6 +219,11 @@ namespace BALL
 		/**	Insert a new entry into the hash map.
 		*/
 		std::pair<Iterator, bool> insert(const ValueType& entry) throw();
+
+		/**	Insert a new entry into the hash map.
+				For STL compatibility. The value of {\tt pos} is ignored.
+		*/
+		Iterator insert(Iterator pos, const ValueType& entry) throw();
 
 		/**	Erase element with key {\tt key}.
 				@return Size the number of elements erased (0 or 1)
@@ -828,6 +833,14 @@ namespace BALL
 
 			return std::pair<Iterator, bool>(it, false);
 		}
+	}
+
+	template <class Key, class T>
+	BALL_INLINE
+	typename HashMap<Key, T>::Iterator HashMap<Key, T>::insert
+		(typename HashMap<Key, T>::Iterator /* pos */, const ValueType& entry)	throw()
+	{
+		return insert(entry).first;
 	}
 
 	template <class Key, class T>

@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.30.4.4 2002/06/06 00:37:07 oliver Exp $
+// $Id: support.C,v 1.30.4.5 2002/06/09 14:24:34 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -267,7 +267,7 @@ namespace BALL
 													&& (difference.z <= half_period_z) 
 													&& (difference.getSquareLength() <= squared_distance))
 												{
-													pair_vector.push_back(pair<Atom*, Atom*>(*atom_it, *data_it));
+													pair_vector.push_back(pair<Atom*, Atom*>(*data_it, *atom_it));
 													counter++;
 												}
 											}
@@ -333,7 +333,7 @@ namespace BALL
 											&& !(*data_it)->isBoundTo(**atom_it)
 											&& !(*data_it)->isGeminal(**atom_it))
 									{
-										pair_vector.push_back(pair<Atom*,Atom*>((*atom_it),(*data_it)));
+										pair_vector.push_back(pair<Atom*,Atom*>(*data_it, *atom_it));
 										counter++;
 									}
 								}

@@ -1,9 +1,10 @@
 DIRECTORY=BENCHMARKS
 
 EXECUTABLES = \
-	PDB_bench\
 	KernelIteration_bench\
 	AmberFF_bench\
+	CharmmFF_bench\
+	PDB_bench\
 	PoissonBoltzmann_bench\
 	MolmecSupport_bench
 

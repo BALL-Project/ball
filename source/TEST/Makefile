@@ -103,6 +103,7 @@ EXECUTABLES_KERNEL = \
 EXECUTABLES_MOLMEC = \
 	Gradient_test\
 	AtomVector_test\
+	MolmecSupport_test\
 	AmberFF_test\
 	CharmmFF_test\
 	EnergyMinimizer_test\

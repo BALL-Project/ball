@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.30.4.3 2002/05/23 23:55:11 oliver Exp $ 
+// $Id: hashSet.h,v 1.30.4.4 2002/06/09 14:24:33 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -103,12 +103,25 @@ namespace BALL
 				ForwardIterator<HashSet<Key>, ValueType, PointerType, IteratorTraits_>
 			Iterator;
 
+
 		/**
 		*/
 		typedef 
 				ConstForwardIterator <HashSet<Key>, ValueType, PointerType, IteratorTraits_>
 			ConstIterator;
 
+		// STL compatibility stuff
+		typedef Iterator iterator;
+		typedef ConstIterator const_iterator;
+
+		typedef Key					value_type;
+		typedef Key					key_type;
+		typedef Key*				pointer;
+		typedef const Key*	const_pointer;
+		typedef Key&				reference;
+		typedef const Key&	const_reference;
+		typedef Size				size_type;
+		typedef Index				difference_type;			
 		//@}
 
 		/**	@name Constructors and Destructors 
@@ -204,6 +217,11 @@ namespace BALL
 		*/
 		std::pair<Iterator, bool> insert(const ValueType& item)	throw();
 
+		/**	Insert a new entry into the hash set.
+				For STL compatibility. The value of {\tt pos} is ignored.
+		*/
+		Iterator insert(Iterator pos, const ValueType& item) throw();
+
 		/**	Erase element with key {\tt key}.
 				@return Size the number of elements erased (0 or 1)
 		*/
@@ -247,6 +265,28 @@ namespace BALL
 				The left-hand set is not modified.
 		*/
 		HashSet operator | (const HashSet& rhs) const throw();
+
+		/**	Union operator.
+				@see operator|
+		*/
+		HashSet operator + (const HashSet& rhs) const throw();
+
+		/**	Difference operator.
+				Computes the difference of the two sets, i.e. constructs a
+				set containing the the elements of {\tt this} set that are not
+				contained in {\tt rhs}.
+		*/
+		HashSet operator - (const HashSet& rhs) const throw();
+
+		/**	Union operator.
+				@see operator|=
+		*/
+		const HashSet& operator += (const HashSet& rhs) throw();
+
+		/**	Difference operator.
+				Remove all elements contained in {\tt rhs} from the set.
+		*/
+		const HashSet& operator -= (const HashSet& rhs) throw();
 		//@}
 
 		/**	@name Miscellaneous
@@ -716,7 +756,15 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	HashSet<Key> HashSet<Key>::operator & (const HashSet& rhs) const
+	const HashSet<Key>& HashSet<Key>::operator += (const HashSet<Key>& rhs)
+		throw()
+	{
+		return operator |= (rhs);
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	HashSet<Key> HashSet<Key>::operator & (const HashSet<Key>& rhs) const
 		throw()
 	{
 		// Create an empty hash set...
@@ -737,6 +785,45 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
+	HashSet<Key> HashSet<Key>::operator - (const HashSet<Key>& rhs) const
+		throw()
+	{
+		// Create an empty hash set...
+		HashSet<Key> tmp;
+		ConstIterator it = begin();
+		
+		// ...and copy all the elements contained in this set and not in the rhs hash set.
+		for (; +it; ++it)
+		{
+			if (!rhs.has(*it))
+			{
+				tmp.insert(*it);
+			}
+		}
+
+		return tmp;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	const HashSet<Key>& HashSet<Key>::operator -= (const HashSet<Key>& rhs) 
+		throw()
+	{
+		// erase all elements contained in rhs as well
+		HashSet<Key>::ConstIterator it = rhs.begin();
+		for (; it != rhs.end(); ++it)
+		{
+			if (has(*it))
+			{
+				erase(*it);
+			}
+		}
+
+		return *this;
+	}
+
+	template <class Key>
+	BALL_INLINE 
 	HashSet<Key> HashSet<Key>::operator | (const HashSet<Key>& rhs) const
 		throw()
 	{
@@ -744,6 +831,14 @@ namespace BALL
 		tmp |= rhs;
 
 		return tmp;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	HashSet<Key> HashSet<Key>::operator + (const HashSet<Key>& rhs) const
+		throw()
+	{
+		return operator | (rhs);
 	}
 
 	template <class Key>
@@ -827,7 +922,14 @@ namespace BALL
 			it.getTraits().bucket_ = bucket;
 		}
 
-		return ::std::pair<Iterator, bool>(it, true);
+		return std::pair<Iterator, bool>(it, true);
+	}
+
+	template <class Key>
+	typename HashSet<Key>::Iterator HashSet<Key>::insert
+		(typename HashSet<Key>::Iterator /* pos */, const ValueType& item)	throw()
+	{
+		return insert(item).first;
 	}
 
 	template <class Key>

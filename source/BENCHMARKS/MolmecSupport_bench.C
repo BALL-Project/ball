@@ -1,4 +1,4 @@
-// $Id: MolmecSupport_bench.C,v 1.1.2.4 2002/06/07 10:36:52 oliver Exp $
+// $Id: MolmecSupport_bench.C,v 1.1.2.5 2002/06/09 14:24:33 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 using namespace BALL;
 
 // args: benchmark name (without '"'), reference time in seconds, CVS ID string
-START_BENCHMARK(MolmecSupport, 10.0, "$Id: MolmecSupport_bench.C,v 1.1.2.4 2002/06/07 10:36:52 oliver Exp $")
+START_BENCHMARK(MolmecSupport, 4.0, "$Id: MolmecSupport_bench.C,v 1.1.2.5 2002/06/09 14:24:33 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -21,8 +21,8 @@ START_BENCHMARK(MolmecSupport, 10.0, "$Id: MolmecSupport_bench.C,v 1.1.2.4 2002/
 System S;
 ForceField ff;
 
-ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_LOWER, Vector3(-20.0));
-ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_UPPER, Vector3(20.0));
+ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_LOWER, Vector3(-6.0));
+ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_UPPER, Vector3(6.0));
 ff.periodic_boundary.enable();
 ff.setup(S);
 
@@ -32,7 +32,7 @@ START_SECTION(calculateNonBondedAtomPairs(type = HASH_GRID, periodic_boundary = 
 	START_TIMER
 		MolmecSupport::calculateNonBondedAtomPairs
 			(pair_vector, ff.getAtoms(), ff.periodic_boundary.getBox(),
-			 10.0, true, MolmecSupport::HASH_GRID);
+			 4.0, true, MolmecSupport::HASH_GRID);
 	STOP_TIMER
 END_SECTION
 std::cout << pair_vector.size() << std::endl;
@@ -42,7 +42,7 @@ START_SECTION(calculateNonBondedAtomPairs(type = BRUTE_FORCE, periodic_boundary 
 	START_TIMER
 		MolmecSupport::calculateNonBondedAtomPairs
 			(pair_vector, ff.getAtoms(), ff.periodic_boundary.getBox(),
-			 10.0, true, MolmecSupport::BRUTE_FORCE);
+			 4.0, true, MolmecSupport::BRUTE_FORCE);
 	STOP_TIMER
 END_SECTION
 std::cout << pair_vector.size() << std::endl;
@@ -52,7 +52,7 @@ START_SECTION(calculateNonBondedAtomPairs(type = HASH_GRID, periodic_boundary = 
 	START_TIMER
 		MolmecSupport::calculateNonBondedAtomPairs
 			(pair_vector, ff.getAtoms(), ff.periodic_boundary.getBox(),
-			 10.0, false, MolmecSupport::HASH_GRID);
+			 4.0, false, MolmecSupport::HASH_GRID);
 	STOP_TIMER
 END_SECTION
 std::cout << pair_vector.size() << std::endl;
@@ -62,7 +62,7 @@ START_SECTION(calculateNonBondedAtomPairs(type = BRUTE_FORCE, periodic_boundary 
 	START_TIMER
 		MolmecSupport::calculateNonBondedAtomPairs
 			(pair_vector, ff.getAtoms(), ff.periodic_boundary.getBox(),
-			 10.0, false, MolmecSupport::BRUTE_FORCE);
+			 4.0, false, MolmecSupport::BRUTE_FORCE);
 	STOP_TIMER
 END_SECTION
 std::cout << pair_vector.size() << std::endl;

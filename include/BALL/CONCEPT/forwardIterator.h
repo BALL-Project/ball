@@ -1,4 +1,4 @@
-// $Id: forwardIterator.h,v 1.10 2001/07/04 20:31:41 amoll Exp $
+// $Id: forwardIterator.h,v 1.10.4.1 2002/06/09 14:24:32 oliver Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -49,15 +49,15 @@ namespace BALL
 	
 		/** Copy constructor
 		*/
-		ConstForwardIterator(const ConstForwardIterator &iterator)
+		ConstForwardIterator(const ConstForwardIterator& iterator)
 			throw();
 
 		/** Detailed constructor
 		*/
-		ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
-		
+		ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
+			throw();		
 		//@}
+
 		/** @name Iterator methods
 		*/
 		//@{
@@ -128,8 +128,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits>
-	::ConstForwardIterator(const ConstForwardIterator &iterator)
+	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator
+		(const ConstForwardIterator& iterator)
 		throw()
 		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
@@ -162,7 +162,7 @@ namespace BALL
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstForwardIterator<Container, DataType, Position, Traits> 
-		ConstForwardIterator<Container, DataType, Position, Traits>::begin(const Container &container)
+		ConstForwardIterator<Container, DataType, Position, Traits>::begin(const Container& container)
 		throw(Exception::InvalidIterator)
 	{
 		ConstForwardIterator<Container, DataType, Position, Traits> iterator(container);
