@@ -120,8 +120,8 @@
 // Define whether float.h has to be included along with limits.h
 #undef BALL_INCLUDE_FLOAT_H 
 
-// Define an unsigned integer type that has the same length as (void*)
-#define BALL_POINTERSIZE_INT int
+// Define an unsigned integer type of 64 bit to hold (portable) pointers
+#define BALL_64BIT_UINT_TYPE long
 
 // Define on 64 bit architectures to avoid the use of long long
 // which is required on 32 bit machines for comatibility

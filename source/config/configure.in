@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.117 2000/11/03 04:26:52 oliver Exp $
+dnl    $Id: configure.in,v 1.118 2000/12/08 09:18:05 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1518,28 +1518,40 @@ AC_DEFINE_UNQUOTED(BALL_UINT_SIZE, ${SIZEOF_UINT})
 AC_DEFINE_UNQUOTED(BALL_ULONG_SIZE, ${SIZEOF_ULONG})
 AC_DEFINE_UNQUOTED(BALL_ULONGLONG_SIZE, ${SIZEOF_ULONGLONG})
 
-if test "${SIZEOF_VOID_P}" = "${SIZEOF_UINT}" ; then
-	BALL_POINTERSIZE_INT="unsigned int"
+
+dnl
+dnl  define an unsigned type that can hold 64 bit pointers
+dnl
+if test "${SIZEOF_UINT}" = 8; then
+	BALL_64BIT_UINT="unsigned int"
 else 
-	if test "${SIZEOF_VOID_P}" = "${SIZEOF_ULONG}" ; then
-		BALL_POINTERSIZE_INT="unsigned long"
+	if test "${SIZEOF_ULONG}" = 8; then
+		BALL_64BIT_UINT="unsigned long"
 	else
-		AC_MSG_RESULT()
-		AC_MSG_RESULT(cannot find appropriate numeric type of same size as void*)
-		AC_MSG_ERROR(abort)
+		if test "${SIZEOF_ULONGLONG}" = 8 ; then
+			BALL_64BIT_UINT="unsigned long long"
+		else
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(cannot find appropriate numeric type for 64bit unsigned int)
+			AC_MSG_ERROR(abort)
+		fi
 	fi
 fi
-AC_DEFINE_UNQUOTED(BALL_POINTERSIZE_INT, ${BALL_POINTERSIZE_INT})
-if test "${SIZEOF_SIZE_T}" = "${SIZEOF_INT}" ; then
+AC_DEFINE_UNQUOTED(BALL_64BIT_UINT, ${BALL_64BIT_UINT})
+
+dnl
+dnl	define a 32 bit type for Size and Index
+dnl
+if test "${SIZEOF_INT}" = 4 ; then
 	BALL_INDEX_TYPE="int"
 	BALL_SIZE_TYPE="unsigned int"
 else 
-	if test "${SIZEOF_SIZE_T}" = "${SIZEOF_LONG}" ; then
+	if test "${SIZEOF_LONG}" = 4 ; then
 		BALL_INDEX_TYPE="long"
 		BALL_SIZE_TYPE="unsigned long"
 	else
 		AC_MSG_RESULT()
-		AC_MSG_RESULT(cannot find appropriate numeric type of same size as size_t)
+		AC_MSG_RESULT(cannot find appropriate numeric type for 32bit int)
 		AC_MSG_ERROR(abort)
 	fi
 fi
@@ -1561,7 +1573,7 @@ else
 	fi
 fi
 AC_DEFINE_UNQUOTED(BALL_ULONG64_TYPE, ${BALL_ULONG64_TYPE})
-	
+
 
 dnl
 dnl		check whether vsnprintf is defined
