@@ -1,4 +1,4 @@
-// $Id: Vector4_test.C,v 1.8 2000/02/27 18:49:51 amoll Exp $
+// $Id: Vector4_test.C,v 1.9 2000/05/04 11:10:03 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.8 2000/02/27 18:49:51 amoll Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.9 2000/05/04 11:10:03 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -201,16 +201,16 @@ CHECK(TVector4::getUnit())
 	TEST_EQUAL(Vector4::getUnit().h, 1)
 RESULT
 
-//line 211: method TVector4::fill(const T& value = (T)1)
-CHECK(TVector4::fill(const T& value = (T)1))
+//line 211: method TVector4::set(const T& value = (T)1)
+CHECK(TVector4::set(const T& value = (T)1))
 	v = Vector4(2,2,2,2);
-	v.fill();
+	v.set();
 	TEST_EQUAL(v[0], 1)
 	TEST_EQUAL(v[1], 1)
 	TEST_EQUAL(v[2], 1)
 	TEST_EQUAL(v[3], 1)
 	v = Vector4(2,2,2,2);
-	v.fill(3);
+	v.set(3);
 	TEST_EQUAL(v[0], 3)
 	TEST_EQUAL(v[1], 3)
 	TEST_EQUAL(v[2], 3)
