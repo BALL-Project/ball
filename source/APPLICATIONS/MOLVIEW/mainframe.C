@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.92 2003/11/12 00:41:19 amoll Exp $
+// $Id: mainframe.C,v 1.93 2003/11/12 09:38:50 bender Exp $
 //
 
 #include "mainframe.h"
@@ -161,10 +161,10 @@ Log.error() << "new Mainframe " << this << std::endl;
 									ALT+Key_X, MENU_FULLSCREEN);
 	// Build Menu -------------------------------------------------------------------
 	hint = "To assign charges, one System has to be selected.";
-	insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()), 
+	insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()),
 									CTRL+Key_G, MENU_ASSIGN_CHARGES, hint);
 	hint = "To assign H-bonds, one System has to be selected.";
-	insertMenuEntry(MainControl::BUILD, "Calculate H-Bonds", this, SLOT(calculateHBonds()), 
+	insertMenuEntry(MainControl::BUILD, "Calculate H-Bonds", this, SLOT(calculateHBonds()),
 									CTRL+Key_9, MENU_CALCULATE_HBONDS, hint);
 	insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, MENU_PEPTIDE);
 
@@ -709,7 +709,7 @@ void Mainframe::buildPeptide()
 	system->insert(*protein);
 	composite_manager_.insert(*system);
 	CompositeMessage* new_message = new CompositeMessage(*system, CompositeMessage::NEW_COMPOSITE);
-	new_message->setCompositeName("Peptide");
+	new_message->setCompositeName(dialog->getSequence());
 	notify_(new_message);
 }
 
