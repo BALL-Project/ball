@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.2 2003/08/26 16:07:03 amoll Exp $
+// $Id: molecularProperties.C,v 1.3 2003/09/02 16:06:23 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -69,7 +69,6 @@ namespace BALL
 			{
 				NewCompositeMessage* new_message = RTTI::castTo<NewCompositeMessage>(*message);
 				addComposite_(*new_message->getComposite(), new_message->getCompositeName());
-				return;
 			}
 			else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
 			{
@@ -116,7 +115,6 @@ namespace BALL
 					default:
 						Log.error() << "Unknown type of MolecularTaskMessage in " 
 												<< __FILE__ << "  " << __LINE__ << std::endl;
-						return;
 				}
 			}
 			else if (RTTI::isKindOf<CenterCameraMessage>(*message))
