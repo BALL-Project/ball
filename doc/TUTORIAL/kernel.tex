@@ -4,7 +4,7 @@ Although some of the terms in biochemistry are rather fuzzy, there is a clear
 hierarchical relationship (Fig.~\ref{figure:problem-domain}).
 BALL tries to model this hierarchical relationship as a tree structure.
 The design pattern used to implement this tree is the {\em composite
-pattern}\ref{GOF}, which is implemented in the \class{Composite} class.
+pattern}\cite{DesignPatterns}, which is implemented in the \class{Composite} class.
 Derived from Composite are \class{AtomContainer}, the base class of all
 classes handling atoms and \class{Atom}. As a typical user, you will probably
 have to use only derived classes of \class{AtomContainer}, atoms, and bonds.
@@ -20,17 +20,17 @@ of the kernel classes.
   \centering\includegraphics[width=\textwidth]{problem-domain.eps}
   \caption{A model of the biochemical problme domain. BALL tries to model
 					these entities as closely as possible with its kernel classes.}
-  \label{fig:problem-domain}
+  \label{figure:problem-domain}
 \end{figure}
 
 \begin{figure}[tb]
-  \centering\includegraphics[width=\textwidth]{kernel-frameworks.eps}
+  \centering\includegraphics[width=\textwidth]{kernel-data-structures.eps}
   \caption{The BALL kernel classes consist of three main frameworks: the
 molecular framework, the protein framwork, and the nucleic acid framework.}
-  \label{fig:kernel-frameworks}
+  \label{figure:kernel-frameworks}
 \end{figure}
 
-\paragraph{The molecular framework contains the classes \class{System},
+\paragraph{The molecular framework} contains the classes \class{System},
 \class{Molecule}, \class{Fragment}, \class{Bond}, and \class{Atom}. 
 Molecules can contain an arbitrary number of atoms or fragments. A fragment
 can be used to define distinct groups in a molecule, \eg functional groups or
