@@ -1,6 +1,7 @@
-// $Id: amber.C,v 1.14 2000/03/26 12:51:47 oliver Exp $
+// $Id: amber.C,v 1.15 2000/06/06 13:19:00 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
+#include <BALL/COMMON/path.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amberBend.h>

@@ -1,7 +1,9 @@
-// $Id: rotamerLibrary.C,v 1.10 1999/12/28 18:17:12 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.11 2000/06/06 13:19:03 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
+
 #include <BALL/SYSTEM/file.h>
+#include <BALL/COMMON/path.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/STRUCTURE/structureMapper.h>

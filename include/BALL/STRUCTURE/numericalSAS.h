@@ -1,4 +1,4 @@
-// $Id: numericalSAS.h,v 1.4 2000/06/02 07:12:05 oliver Exp $
+// $Id: numericalSAS.h,v 1.5 2000/06/06 13:18:58 oliver Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -34,7 +34,7 @@ namespace BALL
 			@param  number_of_dots the number of dots used per atom
 			@return the total SAS area in $\AA^2$
 	*/
-	float calculateNumericalSASArea
+	float calculateSASArea
 					(const BaseFragment& fragment, float probe_radius = 1.5,
 					 Size number_of_dots = 400); 
 
@@ -48,7 +48,7 @@ namespace BALL
 			@param	number_of_dots the number of dots used per atom
 			@return the total SAS area in $\AA^2$
 	*/
-	float calculateNumericalSASAtomAreas
+	float calculateSASAtomAreas
 					(const BaseFragment& fragment, HashMap<Atom*,float>& atom_areas,
 					 float probe_radius = 1.5, Size number_of_dots = 400);
 	
@@ -69,7 +69,7 @@ namespace BALL
 			@param	number_of_dots the number of dots used per atom
 			@return the total SAS area in $\AA^2$
 	*/
-	float calculateNumericalSASPoints
+	float calculateSASPoints
 					(const BaseFragment& fragment, Surface& surface_points,
 					 float probe_radius = 1.5,  Size number_of_dots = 400);
 

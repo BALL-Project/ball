@@ -1,9 +1,10 @@
-// $Id: assignTypes.C,v 1.10 2000/02/16 19:19:16 oliver Exp $
+// $Id: assignTypes.C,v 1.11 2000/06/06 13:19:01 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 
 #include <iostream>
 
+#include <BALL/COMMON/path.h>
 #include <BALL/KERNEL/fragment.h>
 
 using namespace std;

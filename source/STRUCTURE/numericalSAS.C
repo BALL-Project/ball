@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.11 2000/06/02 11:42:36 oliver Exp $
+// $Id: numericalSAS.C,v 1.12 2000/06/06 13:19:03 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -18,7 +18,7 @@ namespace BALL
 	// forward
 	int nsc_(double*, double*, int, int, int, double*, double**, double*, double**, int*, int**);
 
-	float calculateNumericalSASAtomAreas
+	float calculateSASAtomAreas
 		(const BaseFragment& fragment, HashMap<Atom*,float>& atom_areas,
 		 float probe_radius, Size number_of_dots)
 	{
@@ -102,7 +102,7 @@ namespace BALL
 	}
 
 
-	float calculateNumericalSASArea	
+	float calculateSASArea	
 		(const BaseFragment& fragment, float probe_radius, Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
@@ -166,7 +166,7 @@ namespace BALL
 		return area;
 	}
 
-  float calculateNumericalSASPoints
+  float calculateSASPoints
 		(const BaseFragment& fragment, Surface& surface,
 		 float probe_radius,  Size number_of_dots)
 	{
@@ -394,7 +394,7 @@ int          last_cubus=0;
 		}
 		if ( (fabs(f) - 1.00)  <= DP_TOL ) 
 		{
-			NSC_WARNING << "calculateNumericalSASArea: invalid argument" << f << endl;
+			NSC_WARNING << "calculateSASArea: invalid argument" << f << endl;
 		}
 		return(M_PI_2);
 	}
@@ -407,7 +407,7 @@ int          last_cubus=0;
 			ip = (int *) calloc(nelem, elsize);
 			if(ip == NULL)
 			{
-				NSC_ERROR << "calculateNumericalSASAreaCALLOC : failed in file " << filename << " at line " << linenr << endl;
+				NSC_ERROR << "calculateSASAreaCALLOC : failed in file " << filename << " at line " << linenr << endl;
 			}
 			return(ip);
 		}

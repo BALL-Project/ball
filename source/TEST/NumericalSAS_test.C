@@ -1,4 +1,4 @@
-// $Id: NumericalSAS_test.C,v 1.3 2000/06/01 10:35:19 oliver Exp $
+// $Id: NumericalSAS_test.C,v 1.4 2000/06/06 13:19:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,14 +8,14 @@
 #include <BALL/DATATYPE/hashMap.h>
 ///////////////////////////
 
-START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.3 2000/06/01 10:35:19 oliver Exp $")
+START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.4 2000/06/06 13:19:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-CHECK(calculateNumericalSASArea(const	Composite&, float, int))
+CHECK(calculateSASArea(const	Composite&, float, int))
 	Fragment	f;
 	Atom a1, a2;
 	a1.setRadius(1.0);
@@ -25,13 +25,13 @@ CHECK(calculateNumericalSASArea(const	Composite&, float, int))
 	f.insert(a1);
 	f.insert(a2);
 
-	float area = calculateNumericalSASArea(f, 1.5, 624);
+	float area = calculateSASArea(f, 1.5, 624);
 
 	PRECISION(0.001)
 	TEST_REAL_EQUAL(area, 157.07963)
 RESULT
 
-CHECK(calculateNumericalSASAtomAreas())
+CHECK(calculateSASAtomAreas())
 	Fragment	f;
 	Atom a1, a2;
 	a1.setRadius(1.0);
@@ -43,7 +43,7 @@ CHECK(calculateNumericalSASAtomAreas())
 
 	HashMap<Atom*, float>	atom_map;
 
-	float area = calculateNumericalSASAtomAreas(f, atom_map, 1.5, 624);
+	float area = calculateSASAtomAreas(f, atom_map, 1.5, 624);
 
 	PRECISION(0.001)
 	TEST_REAL_EQUAL(area, 157.07963)
@@ -51,7 +51,7 @@ CHECK(calculateNumericalSASAtomAreas())
 	TEST_REAL_EQUAL(atom_map[&a2], area / 2.0)
 RESULT
 
-CHECK(calculateNumericalSASPoints())
+CHECK(calculateSASPoints())
 	Fragment	f;
 	Atom a1, a2;
 	a1.setRadius(1.0);
@@ -62,7 +62,7 @@ CHECK(calculateNumericalSASPoints())
 	f.insert(a2);
 
 	Surface surface;
-	float area = calculateNumericalSASPoints(f, surface, 1.5, 624);
+	float area = calculateSASPoints(f, surface, 1.5, 624);
 
 	PRECISION(0.001)
 	TEST_REAL_EQUAL(area, 157.07963)

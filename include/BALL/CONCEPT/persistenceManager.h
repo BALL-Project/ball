@@ -1,7 +1,11 @@
-// $Id: persistenceManager.h,v 1.15 2000/03/17 11:28:03 oliver Exp $
+// $Id: persistenceManager.h,v 1.16 2000/06/06 13:18:57 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
+
+#ifndef BALL_COMMON_RTTI_H
+#	include <BALL/COMMON/rtti.h>
+#endif
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #	include <BALL/DATATYPE/hashMap.h>

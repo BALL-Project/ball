@@ -1,7 +1,7 @@
-// $Id: radius.C,v 1.4 1999/12/30 18:05:47 oliver Exp $
+// $Id: radius.C,v 1.5 2000/06/06 13:19:06 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/radius.h>
-
+#include <BALL/COMMON/exception.h>
 using namespace std;
 
 namespace BALL

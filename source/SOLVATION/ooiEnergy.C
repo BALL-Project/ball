@@ -1,9 +1,10 @@
-// $Id: ooiEnergy.C,v 1.6 2000/06/02 07:14:21 oliver Exp $
+// $Id: ooiEnergy.C,v 1.7 2000/06/06 13:19:02 oliver Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
 
 
 #include <BALL/common.h>
+#include <BALL/COMMON/path.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/DATATYPE/stringHashMap.h>
@@ -16,6 +17,8 @@
 #include <BALL/MOLMEC/COMMON/typeRuleProcessor.h>
 
 #define OOI_PARAMETER_FILENAME "solvation/Ooi.ini"
+
+//#define BALL_DEBUG_OOI
 
 using namespace std;
 
@@ -229,7 +232,7 @@ namespace BALL
 		// atom_SAS_areas hashes the atom pointer to the
 		// surface area (in Angstrom^2)
 		HashMap<Atom*,float> atom_SAS_areas;
-		calculateNumericalSASAtomAreas(fragment, atom_SAS_areas, 1.4, 1888);
+		calculateSASAtomAreas(fragment, atom_SAS_areas, 1.4, 1888);
 
 		// iterate over all atoms and add up the energies
 		float energy = 0.0;
@@ -239,12 +242,16 @@ namespace BALL
 			if (atom_SAS_areas.has(&*atom_it))
 			{
 				Atom::Type atom_type = atom_it->getType();
-				// if the atom type could not be determined, complain
 				if (atom_type >= 0)
 				{
 					// add the energy contribution of the atom
 					float tmp = atom_SAS_areas[&*atom_it] * g[atom_type];
 					energy += tmp;
+
+					#ifdef BALL_DEBUG_OOI
+						Log.info() << atom_it->getFullName() << " A = " << atom_SAS_areas[&*atom_it] 
+    									 << " E = " << tmp << " kJ/mol" << endl;
+					#endif
 				}
 			}		
 		}

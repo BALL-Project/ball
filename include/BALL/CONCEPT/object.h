@@ -1,10 +1,14 @@
-// $Id: object.h,v 1.5 1999/12/30 20:30:38 oliver Exp $ 
+// $Id: object.h,v 1.6 2000/06/06 13:18:56 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #	include <BALL/CONCEPT/autoDeletable.h>
+#endif
+
+#ifndef BALL_COMMON_RTTI_H
+#	include <BALL/COMMON/rtti.h>
 #endif
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H

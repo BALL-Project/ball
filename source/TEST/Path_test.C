@@ -1,11 +1,11 @@
-// $Id: Path_test.C,v 1.1 2000/06/05 01:13:03 amoll Exp $
+// $Id: Path_test.C,v 1.2 2000/06/06 13:19:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/COMMON/path.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Path_test.C,v 1.1 2000/06/05 01:13:03 amoll Exp $")
+START_TEST(class_name, "$Id: Path_test.C,v 1.2 2000/06/06 13:19:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,8 +47,8 @@ RESULT
 
 CHECK(findStrict(const string& name))
 	TEST_EQUAL(String(p.getDataPath()+"TEST/Path_test.C"), String(p.getDataPath()+"TEST/Path_test.C"))
-	TEST_EQUAL(p.findStrict("Path_test.C"), "Path_test.C")	// <<<<<<<<<
-	TEST_EQUAL(p.findStrict("/TEST/Path_test.C"), "Path_test.C"); // <<<<<<<<<
+	TEST_EQUAL(p.findStrict("Path_test.C"), "Path_test.C")
+	TEST_EQUAL(p.findStrict("/TEST/Path_test.C"), "");
 	TEST_EQUAL(p.findStrict("/xxx/Path_test.C"), "");
 RESULT
 

@@ -1,6 +1,7 @@
 // $Id:
 
 #include <BALL/VIEW/KERNEL/logView.h>
+#include <BALL/COMMON/exception.h>
 
 using namespace std;
 

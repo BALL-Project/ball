@@ -1,10 +1,14 @@
-// $Id: binarySearchTree.h,v 1.5 2000/02/17 00:30:38 oliver Exp $
+// $Id: binarySearchTree.h,v 1.6 2000/06/06 13:18:57 oliver Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+ 
+#ifndef BALL_COMMON_COMMON_H
+#	include <BALL/COMMON/rtti.h>
 #endif
  
 #ifndef BALL_CONCEPT_COMPARATOR_H
