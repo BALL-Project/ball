@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.h,v 1.21 2003/08/26 08:04:24 oliver Exp $
+// $Id: atomVector.h,v 1.22 2003/08/27 16:41:50 oliver Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -27,7 +27,7 @@ namespace BALL
     	\ingroup MolmecCommon
 	*/
 	class AtomVector
-		:	private ::std::vector<Atom*>
+		:	private std::vector<Atom*>
 	{
     public:
 
@@ -39,11 +39,11 @@ namespace BALL
 		
 		/**	Iterator type
 		*/
-		typedef ::std::vector<Atom*>::iterator Iterator;
+		typedef std::vector<Atom*>::iterator Iterator;
 
 		/**	Const iterator type.
 		*/
-		typedef ::std::vector<Atom*>::const_iterator ConstIterator;
+		typedef std::vector<Atom*>::const_iterator ConstIterator;
 
 		//@}
     /**	@name	Constructors and Destructors	
@@ -74,8 +74,8 @@ namespace BALL
 				Removes all atoms from the vector
 		*/
 		using std::vector<Atom*>::clear;
-
     //@}
+
     /**	@name	Assignments 
     */
     //@{
@@ -110,12 +110,12 @@ namespace BALL
 
 		/**	Return the vector size;
 		*/
-		using ::std::vector<Atom*>::size;
+		using std::vector<Atom*>::size;
 
 		/// Random access operator
 		// ?????: problem with GCC3 using std::vector<Atom*>::operator [];
-		Atom*       & operator [] (int i)       { return ::std::vector<Atom*>::operator [] (i); }
-		Atom* const & operator [] (int i) const { return ::std::vector<Atom*>::operator [] (i); }
+		Atom*       & operator [] (int i)       { return std::vector<Atom*>::operator [] (i); }
+		Atom* const & operator [] (int i) const { return std::vector<Atom*>::operator [] (i); }
 		
 		/**	Store the current atom positions.
 				AtomVector also contains an array with positions for each atom.
@@ -142,7 +142,7 @@ namespace BALL
 
 		/**	Insert an atom pointer.
 		*/
-		using ::std::vector<Atom*>::push_back;
+		using std::vector<Atom*>::push_back;
 
 		/**	Resize the vector.
 		 *  If the vector is resized to to more elements, than are contained,
@@ -158,14 +158,14 @@ namespace BALL
 		/**	Return an iterator, pointing to the first atom pointer.
 		*/
 		//?????: GCC3 using std::vector<Atom*>::begin;
-					iterator begin()			 { return ::std::vector<Atom*>::begin(); }
-		const_iterator begin() const { return ::std::vector<Atom*>::begin(); }
+					iterator begin()			 { return std::vector<Atom*>::begin(); }
+		const_iterator begin() const { return std::vector<Atom*>::begin(); }
 
 		/**	Return an iterator, pointing behind the last atom pointer.
 		*/
 		//?????: GCC3 using std::vector<Atom*>::end;
-					iterator end()			 { return ::std::vector<Atom*>::end(); }
-		const_iterator end() const { return ::std::vector<Atom*>::end(); }
+					iterator end()			 { return std::vector<Atom*>::end(); }
+		const_iterator end() const { return std::vector<Atom*>::end(); }
 
 		//@}
 		
