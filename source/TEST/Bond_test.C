@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.22 2001/02/22 20:35:20 amoll Exp $
+// $Id: Bond_test.C,v 1.23 2001/02/23 00:57:16 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.22 2001/02/22 20:35:20 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.23 2001/02/23 00:57:16 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -125,21 +125,6 @@ CHECK(destroy())
 	TEST_EQUAL(a2.countBonds(), 0)
 RESULT
 
-CHECK(set(Bond&, bool))
-	Atom a1;
-	Atom a2;
-	Bond b1("bond", a1, a2), b2;
-	b1.setType(1);
-	b1.setOrder(1);
-	b1.setName("abc");
-	b2.set(b1);
-	TEST_EQUAL(b1.getFirstAtom(), b2.getFirstAtom())
-	TEST_EQUAL(b1.getSecondAtom(), b2.getSecondAtom())
-	TEST_EQUAL(b1.getName(), b2.getName())
-	TEST_EQUAL(b1.getOrder(), b2.getOrder())
-	TEST_EQUAL(b1.getType(), b2.getType())
-RESULT
-
 CHECK(operator = (Bond&))
 	Atom a1;
 	Atom a2;
@@ -148,21 +133,6 @@ CHECK(operator = (Bond&))
 	b1.setOrder(1);
 	b1.setName("abc");
 	b2 = b1;
-	TEST_EQUAL(b1.getFirstAtom(), b2.getFirstAtom())
-	TEST_EQUAL(b1.getSecondAtom(), b2.getSecondAtom())
-	TEST_EQUAL(b1.getName(), b2.getName())
-	TEST_EQUAL(b1.getOrder(), b2.getOrder())
-	TEST_EQUAL(b1.getType(), b2.getType())
-RESULT
-
-CHECK(get(Bond&, bool))
-	Atom a1;
-	Atom a2;
-	Bond b1("bond", a1, a2), b2;
-	b1.setType(1);
-	b1.setOrder(1);
-	b1.setName("abc");
-	b2.get(b1);
 	TEST_EQUAL(b1.getFirstAtom(), b2.getFirstAtom())
 	TEST_EQUAL(b1.getSecondAtom(), b2.getSecondAtom())
 	TEST_EQUAL(b1.getName(), b2.getName())
