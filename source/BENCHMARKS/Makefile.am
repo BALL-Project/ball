@@ -1,6 +1,11 @@
-DIRECTORY=BENCHMARKS
+# include Makefile.template
+CXXFLAGS+=$(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) 
+SUBDIRS=
 
-EXECUTABLES = \
+# remove the library specific flags
+LIB_CXXFLAGS = $(NONLIB_CXXFLAGS)
+
+bin_PROGRAMS = \
 	KernelIteration_bench\
 	AmberFF_bench\
 	CharmmFF_bench\
@@ -8,33 +13,12 @@ EXECUTABLES = \
 	PoissonBoltzmann_bench\
 	MolmecSupport_bench
 
-# default target
-all:	$(EXECUTABLES)
+KernelIteration_bench_SOURCES=KernelIteration_bench.C
+AmberFF_bench_SOURCES=AmberFF_bench.C
+CharmmFF_bench_SOURCES=CharmmFF_bench.C
+PDB_bench_SOURCES=PDB_bench.C
+PoissonBoltzmann_bench_SOURCES=PoissonBoltzmann_bench.C
+MolmecSupport_bench_SOURCES=MolmecSupport_bench.C
 
-# required for clean and depend
-CPP_SOURCES=$(EXECUTABLES:=.C)
-OBJECTS=$(EXECUTABLES:=.o)
-
-include ../common.mak
-include .Dependencies
-
-# remove the library specific flags
-LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
-
-.o:
-	$(CXX) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)
-# 
-%%.C:
-	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
-
-bench:	$(EXECUTABLES)
-	@./runbenchmarks $(EXECUTABLES)
-
-clean:	default_clean
-	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
- 
-AmberFF_bench:	AmberFF_bench.o ../MOLMEC/AMBER/amberNonBonded.o ../MOLMEC/AMBER/amberBend.o
-	$(CXX) $(CXXFLAGS) AmberFF_bench.o ../MOLMEC/AMBER/amberNonBonded.o ../MOLMEC/AMBER/amberBend.o $(LDFLAGS) -o $@ $(LIBS)
-
-hin2mol:	hin2mol.o
-	$(CXX) $(CXXFLAGS) hin2mol.o $(LDFLAGS) -o $@ $(LIBS)
+benchmark:
+	@./runbenchmarks $(PROGRAMS)

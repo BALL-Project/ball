@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.19 2002/12/08 18:06:50 oliver Exp $
+dnl    $Id: configure.ac,v 1.1.2.20 2002/12/09 19:35:11 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -596,40 +596,13 @@ dnl
 
 SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLVATION STRUCTURE SYSTEM ${BALLVIEW} ${PYTHON}"
 AC_SUBST(SUBDIRS)
-
-if test "${MULTI_BUILD}" = "true" ; then
-	AC_MSG_RESULT(creating shadow directories...)
-	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST BENCHMARKS EXAMPLES TUTORIAL APPLICATIONS"
-	${RM} -fr `pwd`/${BINFMT}/TEST/data 2>/dev/null
-	${RM} -fr `pwd`/${BINFMT}/BENCHMARKS/data 2>/dev/null
-	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST 2>/dev/null
-	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST 2>/dev/null
-	${LN} -s `pwd`/BENCHMARKS/data `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
-	${LN} -s `pwd`/BENCHMARKS/runbenchmarks `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
-
-	${CP} config/Makefile.multiplatform Makefile
-
-	dnl   define the string to substitute in common.mak
-	BINFMT_PATH="/${BINFMT}"
-else
-	BINFMT_PATH=""
-fi
+BINFMT_PATH=""
 
 dnl keep that for now for compatibility
 AC_OUTPUT([
  	config.mak.tmp:config/config.mak.in 
 	common.mak.tmp:config/common.mak.in 
 ])
-
-dnl if test "${MULTI_BUILD}" = "true" ; then
-dnl 	${MV} Makefile.tmp ${BINFMT}/Makefile
-dnl 	${MV} common.mak.tmp ${BINFMT}/common.mak
-dnl 	${MV} config.mak.tmp ${BINFMT}/config.mak
-dnl else 
-dnl 	${MV} Makefile.tmp Makefile
-dnl 	${MV} common.mak.tmp common.mak
-dnl 	${MV} config.mak.tmp config.mak
-dnl fi
 
 AC_OUTPUT([Makefile \
 					 Make.rules \
@@ -676,6 +649,7 @@ AC_OUTPUT([Makefile \
 					 MOLVIEW/PRIMITIV/Makefile \
 					 TUTORIAL/Makefile \
 					 EXAMPLES/Makefile \
+					 BENCHMARKS/Makefile \
 					 TEST/Makefile \
 					 APPLICATIONS/MOLVIEW/Makefile])
  
@@ -687,26 +661,21 @@ dnl    copy config.h to the includes directory
 dnl    remove obsolete dependency file
 dnl
 
-if test "${MULTI_BUILD}" = "true" ; then
-	mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
-	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
-else
-	dnl	
-	dnl move that damned file only if it differs from the previous
-	dnl version. Otherwise we have to rebuild _everything_ after each configure
-	dnl
-	if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
-		if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
-			${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
-		fi
-	else 
-		dnl
-		dnl  create the directory BALL/include/CONFIG
-		dnl  and move config.h to that directory
-		dnl
-		mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+dnl	
+dnl move that damned file only if it differs from the previous
+dnl version. Otherwise we have to rebuild _everything_ after each configure
+dnl
+if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
+	if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
 		${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 	fi
+else 
+	dnl
+	dnl  create the directory BALL/include/CONFIG
+	dnl  and move config.h to that directory
+	dnl
+	mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 fi
 	
 
@@ -714,13 +683,8 @@ fi
 dnl
 dnl		make sure the dependencies and object lists are (re)built
 dnl
-if test "${MULTI_BUILD}" = "true" ; then
-	${RM}  ${BINFMT}/.Dependencies 2>/dev/null
-	${RM}  ${BINFMT}/lib*.objects 2>/dev/null
-else
-	${RM}  .Dependencies 2>/dev/null
-	${RM}  lib*.objects 2>/dev/null
-fi
+${RM}  .Dependencies 2>/dev/null
+${RM}  lib*.objects 2>/dev/null
 
 dnl
 dnl Just give another helpful message and exit

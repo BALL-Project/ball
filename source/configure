@@ -16292,24 +16292,7 @@ fi
 
 SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLVATION STRUCTURE SYSTEM ${BALLVIEW} ${PYTHON}"
 
-
-if test "${MULTI_BUILD}" = "true" ; then
-	echo "$as_me:$LINENO: result: creating shadow directories..." >&5
-echo "${ECHO_T}creating shadow directories..." >&6
-	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST BENCHMARKS EXAMPLES TUTORIAL APPLICATIONS"
-	${RM} -fr `pwd`/${BINFMT}/TEST/data 2>/dev/null
-	${RM} -fr `pwd`/${BINFMT}/BENCHMARKS/data 2>/dev/null
-	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST 2>/dev/null
-	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST 2>/dev/null
-	${LN} -s `pwd`/BENCHMARKS/data `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
-	${LN} -s `pwd`/BENCHMARKS/runbenchmarks `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
-
-	${CP} config/Makefile.multiplatform Makefile
-
-		BINFMT_PATH="/${BINFMT}"
-else
-	BINFMT_PATH=""
-fi
+BINFMT_PATH=""
 
                     ac_config_files="$ac_config_files config.mak.tmp:config/config.mak.in common.mak.tmp:config/common.mak.in"
 cat >confcache <<\_ACEOF
@@ -17682,8 +17665,7 @@ if test "$no_create" != yes; then
 fi
 
 
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ac_config_files="$ac_config_files Makefile Make.rules COMMON/Makefile CONCEPT/Makefile DATATYPE/Makefile ENERGY/Makefile FORMAT/Makefile KERNEL/Makefile MATHS/Makefile MOLMEC/Makefile MOLMEC/AMBER/Makefile MOLMEC/CHARMM/Makefile MOLMEC/COMMON/Makefile MOLMEC/MDSIMULATION/Makefile MOLMEC/MINIMIZATION/Makefile MOLMEC/PARAMETER/Makefile NMR/Makefile QSAR/Makefile SOLVATION/Makefile STRUCTURE/Makefile SYSTEM/Makefile VIEW/Makefile VIEW/DATATYPE/Makefile VIEW/FUNCTOR/Makefile VIEW/GUI/Makefile VIEW/GUI/DIALOGS/Makefile VIEW/GUI/FUNCTOR/Makefile VIEW/GUI/KERNEL/Makefile VIEW/GUI/PRIMITIV/Makefile VIEW/GUI/WIDGETS/Makefile VIEW/KERNEL/Makefile VIEW/PRIMITIV/Makefile MOLVIEW/Makefile MOLVIEW/COMMON/Makefile MOLVIEW/FUNCTOR/Makefile MOLVIEW/GUI/Makefile MOLVIEW/GUI/DIALOGS/Makefile MOLVIEW/GUI/FUNCTOR/Makefile MOLVIEW/GUI/KERNEL/Makefile MOLVIEW/GUI/PRIMITIV/Makefile MOLVIEW/GUI/WIDGETS/Makefile MOLVIEW/KERNEL/Makefile MOLVIEW/PRIMITIV/Makefile TUTORIAL/Makefile EXAMPLES/Makefile TEST/Makefile APPLICATIONS/MOLVIEW/Makefile"
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ac_config_files="$ac_config_files Makefile Make.rules COMMON/Makefile CONCEPT/Makefile DATATYPE/Makefile ENERGY/Makefile FORMAT/Makefile KERNEL/Makefile MATHS/Makefile MOLMEC/Makefile MOLMEC/AMBER/Makefile MOLMEC/CHARMM/Makefile MOLMEC/COMMON/Makefile MOLMEC/MDSIMULATION/Makefile MOLMEC/MINIMIZATION/Makefile MOLMEC/PARAMETER/Makefile NMR/Makefile QSAR/Makefile SOLVATION/Makefile STRUCTURE/Makefile SYSTEM/Makefile VIEW/Makefile VIEW/DATATYPE/Makefile VIEW/FUNCTOR/Makefile VIEW/GUI/Makefile VIEW/GUI/DIALOGS/Makefile VIEW/GUI/FUNCTOR/Makefile VIEW/GUI/KERNEL/Makefile VIEW/GUI/PRIMITIV/Makefile VIEW/GUI/WIDGETS/Makefile VIEW/KERNEL/Makefile VIEW/PRIMITIV/Makefile MOLVIEW/Makefile MOLVIEW/COMMON/Makefile MOLVIEW/FUNCTOR/Makefile MOLVIEW/GUI/Makefile MOLVIEW/GUI/DIALOGS/Makefile MOLVIEW/GUI/FUNCTOR/Makefile MOLVIEW/GUI/KERNEL/Makefile MOLVIEW/GUI/PRIMITIV/Makefile MOLVIEW/GUI/WIDGETS/Makefile MOLVIEW/KERNEL/Makefile MOLVIEW/PRIMITIV/Makefile TUTORIAL/Makefile EXAMPLES/Makefile BENCHMARKS/Makefile TEST/Makefile APPLICATIONS/MOLVIEW/Makefile"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -18280,6 +18262,7 @@ do
   "MOLVIEW/PRIMITIV/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/PRIMITIV/Makefile" ;;
   "TUTORIAL/Makefile" ) CONFIG_FILES="$CONFIG_FILES TUTORIAL/Makefile" ;;
   "EXAMPLES/Makefile" ) CONFIG_FILES="$CONFIG_FILES EXAMPLES/Makefile" ;;
+  "BENCHMARKS/Makefile" ) CONFIG_FILES="$CONFIG_FILES BENCHMARKS/Makefile" ;;
   "TEST/Makefile" ) CONFIG_FILES="$CONFIG_FILES TEST/Makefile" ;;
   "APPLICATIONS/MOLVIEW/Makefile" ) CONFIG_FILES="$CONFIG_FILES APPLICATIONS/MOLVIEW/Makefile" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
@@ -19104,29 +19087,19 @@ fi
 
 
 
-if test "${MULTI_BUILD}" = "true" ; then
-	mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
-	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
-else
-					if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
-		if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
-			${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
-		fi
-	else
-										mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
+	if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
 		${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 	fi
-fi
-
-
-
-if test "${MULTI_BUILD}" = "true" ; then
-	${RM}  ${BINFMT}/.Dependencies 2>/dev/null
-	${RM}  ${BINFMT}/lib*.objects 2>/dev/null
 else
-	${RM}  .Dependencies 2>/dev/null
-	${RM}  lib*.objects 2>/dev/null
+					mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
 fi
+
+
+
+${RM}  .Dependencies 2>/dev/null
+${RM}  lib*.objects 2>/dev/null
 
 
 echo "$as_me:$LINENO: result: " >&5
