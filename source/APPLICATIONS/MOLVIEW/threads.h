@@ -58,9 +58,13 @@ namespace BALL
 			///
 			void setMainframe(Mainframe* mf) {main_frame_ = mf;}
 
-			void setDCDFileName(const String& name) {dcd_file_name_ = name;}
+			void setDCDFile(DCDFile* file) {dcd_file_ = file;}
 
 			DCDFile* getDCDFile() { return dcd_file_;}
+
+			void setComposite(Composite* composite) {composite_ = composite;}
+
+			Composite* getComposite() { return composite_;}
 
 		protected:
 
@@ -78,8 +82,8 @@ namespace BALL
 
 			Size steps_between_updates_;
 			Mainframe* main_frame_;
-			String dcd_file_name_;
 			DCDFile* dcd_file_;
+			Composite* composite_;
 		};
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.68 2003/09/02 10:57:24 amoll Exp $
+// $Id: mainframe.C,v 1.69 2003/09/02 14:20:01 amoll Exp $
 
 #include "mainframe.h"
 #include "icons.h"
@@ -38,7 +38,7 @@
 #include <qlabel.h>
 #include <qaccel.h> 
 
-//#undef QT_THREAD_SUPPORT
+#undef QT_THREAD_SUPPORT
 #ifdef QT_THREAD_SUPPORT
  #include "threads.h"
 #endif
@@ -517,9 +517,13 @@ void Mainframe::amberMDSimulation()
 	// we update everything every so and so steps
 	Size steps = md_dialog_->getStepsBetweenRefreshs();
 
-	String dcdfile = md_dialog_->getDCDFile();
-	bool store_dcd = dcdfile.size() != 0;
-	DCDFile* dcd;
+	DCDFile* dcd = 0;
+	if (md_dialog_->getDCDFile().size()) 
+	{
+		dcd = new DCDFile;
+		dcd->open(md_dialog_->getDCDFile(), File::OUT);
+		dcd->enableVelocityStorage();
+	}
 	// ============================= WITH MULTITHREADING ===================================
 #ifdef QT_THREAD_SUPPORT
 	MDSimulationThread* thread = new MDSimulationThread;
@@ -531,18 +535,14 @@ void Mainframe::amberMDSimulation()
 	thread->setNumberOfStepsBetweenUpdates(steps);
 	thread->setMainframe(this);
 	thread->setSaveImages(md_dialog_->saveImages());
-	thread->setDCDFileName(md_dialog_->getDCDFile());
+	thread->setDCDFile(dcd);
+	thread->setComposite(system);
 	thread->start();
-	dcd = thread->getDCDFile();
-Log.error() << "#~~#   2 " << dcd << std::endl;
 
 #else
 	// ============================= WITHOUT MULTITHREADING ==============================
 	// iterate until done and refresh the screen every "steps" iterations
 	
-	dcd = new DCDFile;
-	if store_dcd dcd = dcd->open(dcdfile, File::OUT);
-	dcd->enableVelocityStorage();
 	SnapShotManager manager(amber->getSystem(), amber, dcd);
 	manager.setFlushToDiskFrequency(10);
 	while (mds->getNumberOfIterations() < md_dialog_->getNumberOfSteps())
@@ -555,8 +555,7 @@ Log.error() << "#~~#   2 " << dcd << std::endl;
 			scene->exportPNG();
 		}
 		
-		
-		if (store_dcd) manager.takeSnapShot();
+		if (dcd) manager.takeSnapShot();
 
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
@@ -564,7 +563,7 @@ Log.error() << "#~~#   2 " << dcd << std::endl;
 		setStatusbarText(String(message.ascii()));
  	}
 
-	if (store_dcd) manager.flushToDisk();
+	if (dcd) manager.flushToDisk();
 
 	Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 	printAmberResults(*amber);
@@ -574,18 +573,15 @@ Log.error() << "#~~#   2 " << dcd << std::endl;
 
 	// clean up
 	delete mds;
+
+	NewTrajectoryMessage* message = new NewTrajectoryMessage;
+	message->setComposite(amber->getSystem());
+	message->setTrajectoryFile(dcd);
+	message->setDeletable(true);
+	notify_(message);
+
 	delete amber;
 #endif
-
-	if (store_dcd) 
-	{
-		NewTrajectoryMessage* message = new NewTrajectoryMessage;
-		message->setComposite(system);
-		message->setTrajectoryFile(dcd);
-Log.error() << "#~~#   5 " << message->getTrajectoryFile()<< std::endl;
-		message->setDeletable(true);
-		notify_(message);
-	}
 }
 
 void Mainframe::about()
@@ -787,6 +783,18 @@ void Mainframe::stopSimulation()
 	if (simulation_thread_ != 0)
 	{
 		if (simulation_thread_->running()) simulation_thread_->wait();
+
+		if (simulation_thread_->getDCDFile())
+		{
+			simulation_thread_->getDCDFile()->flushToDisk();
+			NewTrajectoryMessage* message = new NewTrajectoryMessage;
+			message->setComposite(simulation_thread_->getComposite());
+			message->setTrajectoryFile(simulation_thread_->getDCDFile());
+	Log.error() << "#~~#   5 " << message->getTrajectoryFile()<< std::endl;
+			message->setDeletable(true);
+			notify_(message);
+		}
+		
 		delete simulation_thread_;
 		simulation_thread_ = 0;
 	}

@@ -14,7 +14,9 @@ namespace BALL
 
 	SimulationThread::SimulationThread()
 		: QThread(),
-			main_frame_(0)
+			main_frame_(0),
+			dcd_file_(0),
+			composite_(0)
 	{
 	}
 
@@ -124,15 +126,6 @@ namespace BALL
 		}
 		AmberFF& amber =*(AmberFF*)md_->getForceField();
 
-		bool store_dcd = dcd_file_name_.size() != 0;
-		if (store_dcd) 
-		{
-			dcd_file_ = new DCDFile;
-			dcd_file_->open(dcd_file_name_, File::OUT);
-			dcd_file_->enableVelocityStorage();
-Log.error() << "#~~#  1 " << dcd_file_<< std::endl;
-		}
-			
 		SnapShotManager manager(amber.getSystem(), &amber, dcd_file_);
 		manager.setFlushToDiskFrequency(10);
 		// iterate until done and refresh the screen every "steps" iterations
@@ -157,10 +150,10 @@ Log.error() << "#~~#  1 " << dcd_file_<< std::endl;
 				scene->exportPNG();
 			}
 
-			if (store_dcd) manager.takeSnapShot();
+			if (dcd_file_) manager.takeSnapShot();
 		}
 
-		if (store_dcd) 
+		if (dcd_file_) 
 		{
 			manager.flushToDisk();
 		}
@@ -170,6 +163,7 @@ Log.error() << "#~~#  1 " << dcd_file_<< std::endl;
 						+ String(md_->getNumberOfIterations()) + " iterations\n");
 		finish_();
 	}
+
 
 	MDSimulationThread::MDSimulationThread()
 		: SimulationThread(),
