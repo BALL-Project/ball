@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.h,v 1.8 2000/10/05 17:34:16 anker Exp $
+// $Id: forceFieldParameters.h,v 1.9 2000/10/16 19:19:42 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -57,7 +57,8 @@ namespace BALL
 		//@{
 
 		/** Clear method */
-		virtual void clear();
+		virtual void clear()
+			throw();
 
 		/** Assignment operator */
 		const ForceFieldParameters& operator = (const ForceFieldParameters& param);
