@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.12 2001/03/06 14:06:35 anker Exp $
+// $Id: support.h,v 1.13 2001/05/16 01:37:39 oliver Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -76,6 +76,15 @@ namespace BALL
 			 const AtomVector& atom_vector, const Box3& box, 
 			 double distance,	bool periodic_boundary_enabled, 
 			 PairListAlgorithmType type);
+
+		/**	Sort the pair list.
+				The atom pairs in the list ar sorted in such a way, that those atom pairs
+				where at least one of the atoms is selected are at the beginning of the list.
+				The number of such pairs is returned. Running time is linear in the length of the list.
+				@return number of atom pairs in the list, where at least one atom is selected
+				@param pair_vector the unsorted pair_list (modified during the sorting)
+		*/
+		Size sortNonBondedAtomPairsAfterSelection(ForceField::PairVector& pair_vector);
 
 		/**	Merge the non-overlapping molecules of a system into another system.
 				Fills {\tt system} with copies of the solvent molecules stored in	{\tt solvent}. 
