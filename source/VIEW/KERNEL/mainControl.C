@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.151 2004/12/06 15:01:49 amoll Exp $
+// $Id: mainControl.C,v 1.152 2004/12/07 13:34:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1716,7 +1716,9 @@ namespace BALL
 
 	void MainControl::saveBALLViewProjectFile(const String& filename)
 	{
-		INIFile out(filename);
+		String temp;
+		File::createTemporaryFilename(temp);
+		INIFile out(temp);
 		out.appendSection("WINDOWS");
 		out.appendSection("BALLVIEW_PROJECT");
 
@@ -1725,27 +1727,6 @@ namespace BALL
 		for (; mit != modular_widgets_.end(); ++mit)
 		{
 			(*mit)->writePreferences(out);
-		}
-
-		CompositeManager::CompositeIterator cit = getCompositeManager().begin();
-		for (Index system_nr = 1; cit != getCompositeManager().end(); cit++)
-		{
-			if (!RTTI::isKindOf<System>(**cit)) continue;
-			String molecular_file = String(filename)+"_molecule" + String(system_nr) + ".xdr";
-			out.insertValue("BALLVIEW_PROJECT", "MolecularFile" + String(system_nr), molecular_file);
-
-			std::ofstream outfile(molecular_file.c_str(), std::ios::out);
-			if (!outfile.good()) 
-			{
-				setStatusbarText("Could not write project file to " + molecular_file, true);
-				outfile.close();
-				return;
-			}
-
-			TextPersistenceManager pm(outfile);
-			(*dynamic_cast<System*>(*cit)) >> pm;
-			outfile.close();
-			system_nr++;
 		}
 
 		if (Scene::getInstance(0) != 0)
@@ -1800,55 +1781,90 @@ namespace BALL
 		}
 				
 		writePreferences(out);
+		INIFile::LineIterator lit = out.getLine(0);
+		File result(filename, std::ios::out);
+		result << out.getNumberOfLines() << std::endl;
+		result << getCompositeManager().getNumberOfComposites() << std::endl;
+		for (; +lit; ++lit)
+		{
+			result << *lit << std::endl;
+		}
+
+		CompositeManager::CompositeIterator cit = getCompositeManager().begin();
+		for (; cit != getCompositeManager().end(); cit++)
+		{
+			if (!RTTI::isKindOf<System>(**cit)) continue;
+
+			// hack to prevent ambiguous problem with overloaded cstr
+			TextPersistenceManager pm(result.getFileStream(), result.getFileStream());
+			(*dynamic_cast<System*>(*cit)) >> pm;
+		}
+
+		result.close();
+		File::remove(temp);
 	} 
 
 	void MainControl::loadBALLViewProjectFile(const String& filename)
 		throw()
 	{
-		INIFile *in = new INIFile(filename);
-		in->read();
+		File file(filename, std::ios::in);
+		Size nr_lines, nr_composites;
+		file >> nr_lines;
+		file >> nr_composites;
+ 		INIFile in;
+		char buffer[2000];
+		for (Position p = 0; p <= nr_lines; p++)
+		{
+			if (!file.getline(&(buffer[0]), 2000))
+			{
+				setStatusbarText("Error while reading project file, could not read INIFile", true);
+				return;
+			}
+
+			if (!in.appendLine(buffer)) 
+			{
+				setStatusbarText("Error while reading project file, could not read INIFile", true);
+				return;
+			}
+		}
 
 		// check menu entries, fetch and apply preferences
 		List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 		for (; it != modular_widgets_.end(); ++it)
 		{
-			(*it)->fetchPreferences(*in);
+			(*it)->fetchPreferences(in);
 			(*it)->applyPreferences();
 		}
 
-		for (Position pos = 1; pos < 1000; pos++)
+		if (DisplayProperties::getInstance(0) != 0)
 		{
-			if (!in->hasEntry("BALLVIEW_PROJECT", "MolecularFile" + String(pos)))
-			{
-				break;
-			}
+			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
+		}
 
-			String molecular_file = in->getValue("BALLVIEW_PROJECT", "MolecularFile" + String(pos));
-			if (DisplayProperties::getInstance(0) != 0)
-			{
-				DisplayProperties::getInstance(0)->enableCreationForNewMolecules(false);
-			}
-
-			std::ifstream infile(molecular_file.c_str(), std::ios::in);
-			TextPersistenceManager pm(infile);
+		Position current_composite = 0;
+		while (file.good() && !file.eof() && current_composite < nr_composites)
+		{
+			TextPersistenceManager pm(file, file);
 			PersistentObject* po = pm.readObject();
 			if (!RTTI::isKindOf<System>(*po))
 			{
-				setStatusbarText("Error while reading project file! Aborting...");
-				Log.error() << "Error while reading project file! Aborting..." << std::endl;
+				setStatusbarText("Error while reading project file, could not read molecule", true);
 				return;
 			}
-			infile.close();
 			insert(*(System*) po);
+			current_composite++;
 		}
+
+		file.close();
+		DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
 
 		try
 		{
 			for (Position p = 0; p < 9999999; p++)
 			{
-				if (!in->hasEntry("BALLVIEW_PROJECT", "Representation" + String(p))) break;
+				if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p))) break;
 
-				String data_string = in->getValue("BALLVIEW_PROJECT", "Representation" + String(p));
+				String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
 
 				vector<String> string_vector;
 				Size split_size;
@@ -1910,8 +1926,7 @@ namespace BALL
 
 				if (cit2 == getCompositeManager().end())  
 				{
-					setStatusbarText("Error while reading project file! Aborting...");
-					Log.error() << "Error while reading project file! Aborting..." << std::endl;
+					setStatusbarText("Error while reading project file! Aborting...", true);
 					continue;
 				}
 
@@ -1959,8 +1974,7 @@ namespace BALL
 		}
 		catch(Exception::InvalidFormat e)
 		{
-			setStatusbarText("Error while reading project file! Aborting...");
-			Log.error() << "Error while reading project file! Aborting..." << std::endl;
+			setStatusbarText("Error while reading project file, could not read Representation.");
 			Log.error() << e << std::endl;
 			return;
 		}
@@ -1969,13 +1983,13 @@ namespace BALL
 		NewSelectionMessage* msg = new NewSelectionMessage();
 		notify_(msg);
  	
-		fetchPreferences(*in);
+		fetchPreferences(in);
 
-		if (in->hasEntry("BALLVIEW_PROJECT", "Camera"))
+		if (in.hasEntry("BALLVIEW_PROJECT", "Camera"))
 		{
 			Stage stage;
 			Camera c;
-			if (!c.readFromString(in->getValue("BALLVIEW_PROJECT", "Camera")))
+			if (!c.readFromString(in.getValue("BALLVIEW_PROJECT", "Camera")))
 			{
 				setStatusbarText("Could not read Camera position from project");
 				Log.error() << "Could not read Camera position from project" << std::endl;
@@ -1992,7 +2006,7 @@ namespace BALL
 			DisplayProperties::getInstance(0)->enableCreationForNewMolecules(true);
 		}
 
-		Scene::getInstance(0)->fetchPreferences(*in);
+		Scene::getInstance(0)->fetchPreferences(in);
 		Scene::getInstance(0)->applyPreferences();
 	}
 
