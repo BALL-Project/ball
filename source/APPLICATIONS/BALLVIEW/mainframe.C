@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.48 2005/01/20 23:30:54 amoll Exp $
+// $Id: mainframe.C,v 1.49 2005/01/31 14:34:39 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -264,14 +264,11 @@ namespace BALL
 	 	if (qresult == QString::null) return;
 
 		String result = qresult.ascii();
-
 		if (result.isEmpty()) return;
 
-		if (!result.hasSuffix(".bvp"))
-		{
-			result += ".bvp";
-		}
+		if (!result.hasSuffix(".bvp")) result += ".bvp";
 
+ 		MainControl::saveBALLViewProjectFile(result);
 		setStatusbarText("Saved project to " + result);
 	} 
 
