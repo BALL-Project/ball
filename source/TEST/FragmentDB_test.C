@@ -1,8 +1,10 @@
-// $Id: FragmentDB_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $
+// $Id: FragmentDB_test.C,v 1.8 2001/12/13 02:43:42 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/FORMAT/HINFile.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
@@ -12,7 +14,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.7 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.8 2001/12/13 02:43:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -128,6 +130,51 @@ CHECK(FragmentDB::BuildBondsProcessor::operator () )
 		i++;
 	}	
 
+RESULT
+
+CHECK(FragmentDB::BuildBondsProcessor::operator () / Tripeptide)
+  HINFile infile("data/AlaGlySer.hin");
+	System S;
+	infile >> S;
+	TEST_EQUAL(S.countAtoms(), 31)
+
+	TEST_EQUAL(S.countResidues(), 3)
+	ABORT_IF(S.countResidues() != 3)
+				
+	Atom::BondIterator bond_it;
+	AtomIterator atom_it;
+	ResidueIterator res_it = S.beginResidue();
+	for (; +res_it; ++res_it)
+	{
+		Size number_of_atoms = 0;;
+		BALL_FOREACH_BOND(*res_it, atom_it, bond_it)
+		{
+			number_of_atoms++;
+			STATUS("  " << bond_it->getFirstAtom()->getFullName() << "-" << bond_it->getSecondAtom()->getFullName())
+		}
+		STATUS("Number of bonds in residue " << res_it->getName() << ": " << number_of_atoms)
+	}
+
+	atom_it = S.beginAtom();
+	for (; +atom_it; ++atom_it)
+	{
+		atom_it->destroyBonds();
+	}
+
+	// build the bonds
+	S.apply(db.build_bonds);
+	
+	// check the bonds
+	for (res_it = S.beginResidue(); +res_it; ++res_it)
+	{
+		Position i = 0;
+		BALL_FOREACH_BOND(*res_it, atom_it, bond_it)
+		{
+			i++;
+			STATUS("  " << bond_it->getFirstAtom()->getFullName() << "-" << bond_it->getSecondAtom()->getFullName())
+		}	
+		STATUS("Number of bonds in residue " << res_it->getName() << ": " << i)
+	}
 RESULT
 
 /////////////////////////////////////////////////////////////
