@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.16 2001/01/31 05:42:25 oliver Exp $
+// $Id: support.C,v 1.17 2001/02/01 15:01:45 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -42,8 +42,7 @@ namespace BALL
 			double period_y;
 			double period_z;
 
-			// Are atoms stored in atom_vector?
-
+			// Are there atoms stored in atom_vector at all?
 			if (atom_vector.size() == 0)
 			{
 				Log.warn() << "calculateNonBondedAtomPairs: atom_vector is empty " 
@@ -51,8 +50,8 @@ namespace BALL
 				return 0;
 			}
 
-			// Test if periodic boundary is enabled or not and calculate the box
-			// size accordingly
+			// Test whether the periodic boundary is enabled or not and calculate
+			// the box size accordingly
 			if (periodic_boundary_enabled) 
 			{
 				// Just take the box that was given as argument...
@@ -62,7 +61,6 @@ namespace BALL
 			
 				// ... and add at least distance to each coordinate to gain a box
 				// that contains enough neighbouring boxes.
-
 				if (distance < period_x) 
 				{
 					lower.x = box.a.x - distance;
@@ -119,6 +117,8 @@ namespace BALL
 				upper.z += distance;
 			}
 
+			// now we have the box, let's look which pairs we shall create
+
 			// Counter for the number of neighbored atom pairs.
 			Size	counter = 0;
 
@@ -128,9 +128,9 @@ namespace BALL
 			// initialize the hash grid
 			HashGrid3<Atom*> grid(lower - Vector3(0.1),
 					upper - lower + Vector3(0.2), distance);
-			HashGridBox3<Atom*>* hbox;
 
 			// Iterators and hash box pointer for the grid search
+			HashGridBox3<Atom*>* hbox;
 			HashGridBox3<Atom*>::BoxIterator box_it;
 			HashGridBox3<Atom*>::DataIterator data_it;
 	
@@ -147,12 +147,14 @@ namespace BALL
 				if (type == BRUTE_FORCE) 
 				{
 					// Brute force algorithm:
-					//
 
-					for (atom_it = atom_vector.begin(); +atom_it; ++atom_it) 
+					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
+							++atom_it) 
 					{
 						position = (*atom_it)->getPosition();
-						for (atom_it2 = atom_it, atom_it2++; +atom_it2; ++atom_it2) 
+						atom_it2 = atom_it; ++atom_it2;
+						// for (atom_it2 = atom_it, atom_it2++; +atom_it2; ++atom_it2) 
+						while (+atom_it2)
 						{
 							new_position = position;
 							difference = position - (*atom_it2)->getPosition();
@@ -193,7 +195,8 @@ namespace BALL
 								}
 							}
 
-							if ((new_position.getSquareDistance((*atom_it2)->getPosition())) <= squared_distance) 
+							if ((new_position.getSquareDistance((*atom_it2)->getPosition())) 
+									<= squared_distance) 
 							{
 								pair_vector.push_back(pair<Atom*, Atom*>(*atom_it, *atom_it2));
 								counter++;
@@ -206,11 +209,12 @@ namespace BALL
 					// Use a hash grid with box length "distance" to determine all
 					// neigboured atom pairs
 
-					for (atom_it = atom_vector.begin(); +atom_it; ++atom_it) 
+					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
+							++atom_it) 
 					{
 						position = (*atom_it)->getPosition();
 
-						// Search all neighbor atoms of "atom_it" that are stored in
+						// Search all neighbour atoms of "atom_it" that are stored in
 						// the hash grid
 
 						// Calculate the 27 images of the atom and determine their
@@ -231,16 +235,15 @@ namespace BALL
 									{
 										for (box_it = hbox->beginBox(); +box_it; ++box_it) 
 										{
-											for (data_it = (*box_it).beginData(); +data_it; ++data_it) 
+											for (data_it = box_it->beginData(); +data_it; ++data_it) 
 											{
-
 												difference = new_position - (*data_it)->getPosition();
 												if ((difference.x > -half_period_x) 
-													&& (difference.x <= half_period_x) 
+													&& (difference.x < half_period_x) 
 													&& (difference.y > -half_period_y) 
-													&& (difference.y <= half_period_y)
+													&& (difference.y < half_period_y)
 													&& (difference.z > -half_period_z) 
-													&& (difference.z <= half_period_z) 
+													&& (difference.z < half_period_z) 
 													&& (difference.getSquareLength() <= squared_distance))
 												{
 													pair_vector.push_back(pair<Atom*, Atom*>(*atom_it, *data_it));
@@ -252,22 +255,24 @@ namespace BALL
 								}
 							}
 						}
-
 						// insert the new atom into the hash grid
 						grid.insert(position, (*atom_it));
 					}
 				}
 			} 
+			// periodic boundary not enabled
 			else 
 			{
 				// Check what kind of algorithm should be used for calculating the neighbours
 				if (type == BRUTE_FORCE) 
 				{
 					// Brute force algorithm
-					for (Size atom_index_a = 0; atom_index_a < (atom_vector.size() - 1); ++atom_index_a) 
+					for (Size atom_index_a = 0; atom_index_a < (atom_vector.size() - 1); 
+							++atom_index_a) 
 					{
 						position = atom_vector[atom_index_a]->getPosition();
-						for (Size atom_index_b = atom_index_a + 1; atom_index_b < atom_vector.size(); ++atom_index_b) 
+						for (Size atom_index_b = atom_index_a + 1; 
+								atom_index_b < atom_vector.size(); ++atom_index_b) 
 						{
 							if (((position.getSquareDistance(atom_vector[atom_index_b]->getPosition())) <= squared_distance) 
 									&& !atom_vector[atom_index_a]->isBoundTo(*atom_vector[atom_index_b])
