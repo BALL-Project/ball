@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.26 2004/02/26 20:01:00 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.27 2004/03/23 15:30:49 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -309,6 +309,7 @@ namespace BALL
 			throw()
 		{
 			ColorProcessor::start();
+			min_ = 999999999;
 			max_ = 0;
 			table_.clear();
 			table_ = ColorTable(500);
@@ -318,31 +319,48 @@ namespace BALL
 			base_colors[2] = last_color_;
 			table_.setBaseColors(base_colors, 3);
 
+
 			CompositeSet::ConstIterator it = composites_->begin();
+			ResidueIterator res_it;
 			for(; it != composites_->end(); it++)
 			{
-				Position pos = 0;
 				if (RTTI::isKindOf<System>(**it))
 				{
-					pos = ((const System*) *it)->countResidues();
+					res_it = ((System*)*it)->beginResidue();
 				}
 				else if (RTTI::isKindOf<Protein>(**it))
 				{
-					pos = ((const Protein*) *it)->countResidues();
+					res_it = ((Protein*)*it)->beginResidue();
 				}
 				else if (RTTI::isKindOf<Chain>(**it))
 				{
-					pos = ((const Chain*) *it)->countResidues();
+					res_it = ((Chain*)*it)->beginResidue();
 				}
 				else if (RTTI::isKindOf<SecondaryStructure>(**it))
 				{
-					pos = ((const SecondaryStructure*) *it)->countResidues();
+					res_it = ((SecondaryStructure*)*it)->beginResidue();
 				}
-				if (pos > max_) max_ = pos;
+
+				for (; +res_it; ++res_it)
+				{
+					String id_string = (*res_it).getID();
+					Position id;
+					try
+					{
+						id = id_string.toUnsignedInt();
+					}
+					catch(...)
+					{
+						continue;
+					}
+
+					if (id < min_) min_ = id;
+					if (id > max_) max_ = id;
+				}
 			}
 
 			max_++;
-			table_.setRange(0, max_);
+			table_.setRange(min_, max_);
 			table_.createTable();
 			return true;
 		}

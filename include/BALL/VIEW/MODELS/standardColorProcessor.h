@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.20 2004/02/26 08:41:42 anhi Exp $
+// $Id: standardColorProcessor.h,v 1.21 2004/03/23 15:30:53 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -103,6 +103,7 @@ namespace BALL
 				GeometricObjectList list_;
 				ColorRGBA first_color_, middle_color_, last_color_;
 				ColorTable table_;
+				Position min_;
 				Position max_;
 		};
 
