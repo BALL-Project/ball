@@ -1,8 +1,8 @@
-/Object: [0-9a-fx]+ is instance of class: Q24BALL8Molecule
-/Object: [0-9a-fx]+ is instance of class: Q24BALL8Molecule
+/Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
+/Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
 /  handle: [0-9]
   auto-deletable: 0
-/Object: [0-9a-fx]+ is instance of class: Q24BALL8Molecule
+/Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
   selected: 0
 /  parent: [0-9]
 /  first: [0-9]
@@ -15,11 +15,11 @@
   number of children containing selection:0
   children:
 /    .*
-/    Object: [0-9a-fx]+ is instance of class: Q24BALL4Atom
-/    Object: [0-9a-fx]+ is instance of class: Q24BALL4Atom
+/    Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
+/    Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
 /      handle: [0-9]
       auto-deletable: 0
-/    Object: [0-9a-fx]+ is instance of class: Q24BALL4Atom
+/    Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
       selected: 0
 /      parent: [0-9]
 /      first: [0-9]
@@ -44,11 +44,11 @@
       bonds: 
 
 /    .*
-/    Object: [0-9a-fx]+ is instance of class: Q24BALL4Atom
-/    Object: [0-9a-fx]+ is instance of class: Q24BALL4Atom
+/    Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
+/    Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
 /      handle: [0-9]
       auto-deletable: 0
-/    Object: [0-9a-fx]+ is instance of class: Q24BALL4Atom
+/    Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
       selected: 0
 /      parent: [0-9]
 /      first: [0-9]
