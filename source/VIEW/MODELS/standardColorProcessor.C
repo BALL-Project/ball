@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.49 2004/10/23 18:22:19 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.50 2004/10/23 18:24:51 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -835,6 +835,7 @@ namespace BALL
 				acidic_color_(ColorRGBA(0,0,255)),
 				polar_color_(ColorRGBA(255,0,255)),
 				hydrophobic_color_(ColorRGBA(0,255,0)),
+				aromatic_color_(ColorRGBA(255,0,0)),
 				other_color_(ColorRGBA(125,125,125))
 		{
 		}
