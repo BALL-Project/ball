@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmEEF1.C,v 1.12 2003/05/26 09:31:44 anhi Exp $
+// $Id: charmmEEF1.C,v 1.13 2003/05/26 10:10:25 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
@@ -101,6 +101,8 @@ namespace BALL
 		sig_w_ = 0;
 		delete [] R_min_;
 		R_min_ = 0;
+		delete [] is_defined_;
+		is_defined_ = 0;
 		
 		ParameterSection::clear();
 	}
@@ -143,22 +145,15 @@ namespace BALL
 		const AtomTypes&	atom_types = parameters.getAtomTypes();
 		number_of_atom_types_ = atom_types.getNumberOfTypes();
 
-		if (V_)
-			delete [] V_;
-		if (dG_ref_)
-			delete [] dG_ref_;
-		if (dG_free_)	 
-			delete [] dG_free_; 
-		if (dH_ref_)
-			delete []	dH_ref_;
-		if (Cp_ref_)
-			delete [] Cp_ref_;
-		if (sig_w_)
-			delete [] sig_w_;
-		if (R_min_)
-			delete [] R_min_;
-		if (is_defined_)
-			delete [] is_defined_;
+		// Free previously allocated arrays.
+		delete [] V_;
+		delete [] dG_ref_;
+		delete [] dG_free_; 
+		delete []	dH_ref_;
+		delete [] Cp_ref_;
+		delete [] sig_w_;
+		delete [] R_min_;
+		delete [] is_defined_;
 
 		// allocate two onedimensional fields for the two parameters
 		V_					= new float[number_of_atom_types_];
