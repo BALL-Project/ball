@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.61 2004/11/10 02:56:59 amoll Exp $
+// $Id: mainControl.h,v 1.62 2004/11/10 15:41:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -872,7 +872,7 @@ namespace BALL
 
 			HashMap<Index, String>      menu_entries_hints_;
 
-			StatusbarTimer* 						timer_;
+			StatusbarTimer  						timer_;
 
 			QLabel*             simulation_icon_;
 			static const char  *simulation_running_xpm_[];

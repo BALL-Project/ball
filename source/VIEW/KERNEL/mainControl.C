@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.125 2004/11/10 15:41:27 amoll Exp $
+// $Id: mainControl.C,v 1.126 2004/11/10 15:42:46 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1589,7 +1589,8 @@ namespace BALL
 		StatusbarTimer::StatusbarTimer(QObject* parent)
 			throw()
 			: QTTimer(parent),
-				label_(0)
+				label_(0),
+				important_(false)
 		{}
 
 		void StatusbarTimer::timer()
