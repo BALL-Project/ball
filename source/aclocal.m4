@@ -3022,6 +3022,11 @@ AC_DEFUN(CF_PYTHON, [
 	AC_SUBST(PYTHON_LIBS)
 
 	if test "${PYTHON_SUPPORT}" = true ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Python support temporarily disabled in this version!)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(Aborted)
 		dnl
 		dnl Python support won't work without BALLVIEW!
 		dnl (at least for the moment...)

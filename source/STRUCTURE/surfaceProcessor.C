@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.C,v 1.5 2002/12/18 03:14:33 amoll Exp $
+// $Id: surfaceProcessor.C,v 1.6 2002/12/20 14:01:45 oliver Exp $
 
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 
@@ -88,9 +88,6 @@ namespace BALL
 				delete surface;
 			}
 			delete ses;
-#ifdef BALL_DEBUG
-			Log.error() << "    ProbeRadius: " << probe_radius_ << "    Durchläufe: " << i << std::endl;
-#endif
 		}
 		else
 		{

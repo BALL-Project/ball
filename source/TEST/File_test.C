@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.37 2002/12/20 06:36:16 oliver Exp $
+// $Id: File_test.C,v 1.38 2002/12/20 14:01:46 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(File, "$Id: File_test.C,v 1.37 2002/12/20 06:36:16 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.38 2002/12/20 14:01:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -97,7 +97,6 @@ RESULT
 
 CHECK(static getSize(String filename))
 	File  file("data/File_test.txt");
-	const File& f  = file;
 	TEST_EQUAL(file.getSize("data/File_test.txt"), 100)
 	TEST_EXCEPTION(Exception::FileNotFound, file.getSize("XXX"))
 RESULT
@@ -111,8 +110,7 @@ RESULT
 
 CHECK(static Type getType(String name, bool trace_link))
 	File  file("data/File_test.txt");
-	const File& f  = file;
-	TEST_EQUAL(f.getType("data/File_test.txt", false), 4)
+	TEST_EQUAL(file.getType("data/File_test.txt", false), 4)
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
@@ -211,7 +209,6 @@ RESULT
 
 CHECK(remove())
 	File  file("data/File_test.txt");
-	const File& f  = file;
 	file.copyTo("XXX");
 	File f1 = File("XXX");
 	TEST_EQUAL(f1.remove(), true)
@@ -221,7 +218,6 @@ RESULT
 
 CHECK(rename(String old_path, String new_path) - Part 1)
 	File  file("data/File_test.txt");
-	const File& f  = file;
 	file.copyTo("XXX");
 RESULT
 
@@ -261,7 +257,6 @@ RESULT
 
 CHECK(truncate(String path, Size size = 0))
 	File  file("data/File_test.txt");
-	const File& f  = file;
 	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.truncate("XXX", 50), true)
@@ -275,7 +270,6 @@ RESULT
 
 CHECK(truncate(Size size = 0))
 	File  file("data/File_test.txt");
-	const File& f  = file;
 	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.truncate(50), true)
@@ -466,7 +460,6 @@ RESULT
 sleep(2);
 
 CHECK(TCPTransfer/3)
-	// just repeat test to make sure we didn't mess up ports or stuff...
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
 	ABORT_IF(!network)
@@ -480,19 +473,6 @@ RESULT
 sleep(2);
 
 CHECK(TCPTransfer/4)
-	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
-	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
-	ABORT_IF(!network)
-	File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
-	String filename;
-	NEW_TMP_FILE(filename)
-	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
-RESULT	
-
-sleep(2);
-
-CHECK(TCPTransfer/5)
 	// just repeat test to make sure that FTP transfers don't upset HTTP transfers
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
@@ -506,7 +486,7 @@ RESULT
 
 sleep(2);
 
-CHECK(TCPTransfer/6)
+CHECK(TCPTransfer/5)
 	// ... and the other way round
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
@@ -520,7 +500,7 @@ RESULT
 
 sleep(2);
 
-CHECK(TCPTransfer/7)
+CHECK(TCPTransfer/6)
 	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
 	STATUS("network status of www.mpi-sb.mpg.de: " << (network ? "up" : "down"))
 	ABORT_IF(!network)
@@ -534,7 +514,7 @@ RESULT
 
 sleep(2);
 
-CHECK(TCPTransfer/8)
+CHECK(TCPTransfer/7)
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
 	ABORT_IF(!network)
