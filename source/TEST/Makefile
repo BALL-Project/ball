@@ -100,6 +100,7 @@ EXECUTABLES = \
 	Sphere3_test\
 	StandardPredicates_test\
 	String_test\
+	StringHashMap_test\
 	StructureMapper_test\
 	System_test\
 	PreciseTime_test\
