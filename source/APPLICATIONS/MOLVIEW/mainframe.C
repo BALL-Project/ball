@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.109 2004/01/12 08:45:26 bender Exp $
+// $Id: mainframe.C,v 1.110 2004/01/13 00:52:05 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -573,7 +573,9 @@ void Mainframe::amberMDSimulation()
 
 	amber->options[AmberFF::Option::FILENAME] = filename;
 
-//	amber->options.dump();
+#ifdef BALL_VIEW_DEBUG
+	amber->options.dump();
+#endif
 
 	if (!amber->setup(*system))
 	{
@@ -692,81 +694,9 @@ void Mainframe::amberMDSimulation()
 
 void Mainframe::about()
 {
-	Selector s;
-	s.setExpression(Expression("element(O)"));
-	CompositeManager::CompositeIterator it = getCompositeManager().begin();
-	selection_.clear();
-	for(; it != getCompositeManager().end(); it++)
-	{
-		(*it)->apply(s);
-		List<Atom*>::Iterator ait = s.getSelectedAtoms().begin();
-		for (; ait != s.getSelectedAtoms().end(); ait++)
-		{
-			selection_.insert(*ait);
-		}
-		NewSelectionMessage* nm = new NewSelectionMessage;
-		sendMessage(*nm);
- 		CompositeMessage* cm = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
-		sendMessage(*cm);
-	}
-
-	setStatusbarText("Selected " + String(s.getNumberOfSelectedAtoms()) + " Atoms.");
-	return;
-	
-// 	ParsedFunctionDialog* pfd = new ParsedFunctionDialog();
-// 	pfd->exec();
-//	return;
-	
-	//QPixmap* pix = new QPixmap;			
-	//if (! pix->load("anne.png")) std::cout<< "Fehler" << std::endl;
-
-	//DockablePixmapWidget *pcv = new DockablePixmapWidget(*pix, 20, 40, this);	
-	//pcv->show();
-	//pcv->plot();
-	//dump();
-	
-// 	QString s = pfd->y_axis->text();
-// 	ParsedFunction<float> pf(s.latin1());
-/*
-	RegularData1D *d = new RegularData1D(0.0, 4.*M_PI, 0.01);
-
-	for (int i=0; i<d->size(); i++)
-	{
-	//	(*d)[i] = pf((float)d->getCoordinates(i));
-	(*d)[i] = i;
-	}
-	
-DockableRegularData1DWidget *rwd = new DockableRegularData1DWidget(*d, this);
-//	RegularData1DWidget *rwd = new RegularData1DWidget(*d, this);
-//	rwd->createPlot();
-//  QString s2 = pfd->x_axis->text();
- cout << " vH: " << rwd->getWidget().height() << " cH: " << rwd->getWidget().contentsHeight() <<endl;
- cout << " vW: " << rwd->getWidget().width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
-
- rwd->getWidget().resize(rwd->size());
-rwd->plot();
- //	rwd->getWidget().zoom(atof(s2), atof(s2));
- rwd->getWidget().zoomToFit();	
- // rwd->plot();
-	rwd->show();
- rwd->getWidget().zoomToFit();	
-	
- cout << " vH: " << rwd->getWidget().height() << " cH: " << rwd->getWidget().contentsHeight() <<endl;
- cout << " vW: " << rwd->getWidget().width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
-cout << " vH2: " << rwd->height() << " cH: " << rwd->getWidget().contentsHeight() <<endl;
- cout << " vW2: " << rwd->width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
-
-//  rwd->getWidget().resize(rwd->size());
-
-Log.error() << "#~~#   2 " << std::endl;
- cout << " vH: " << rwd->getWidget().height() << " cH: " << rwd->getWidget().contentsHeight() <<endl;
- cout << " vW: " << rwd->getWidget().width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
-cout << " vH2: " << rwd->height() << " cH: " << rwd->getWidget().contentsHeight() <<endl;
- cout << " vW2: " << rwd->width()  << " cW: " << rwd->getWidget().contentsWidth()  << endl;
-return;
+	// showing about dialog
 	AboutDialog about;
 	about.exec(); 
-	*/
 }
 
 void Mainframe::fetchPreferences(INIFile& inifile)
