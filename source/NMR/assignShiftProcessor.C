@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.15 2000/09/26 10:58:56 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.16 2000/09/26 13:43:10 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 #include<BALL/KERNEL/PDBAtom.h>
@@ -23,9 +23,9 @@ namespace BALL
 		// ----------transforming the names from STAR-FILE-STANDARD to PDB------
 		FragmentDB frag_db;
 		StringHashMap<String>* map = 0;
-		if (frag_db.getNamingStandards().has("XPLOR-PDB"))
+		if (frag_db.getNamingStandards().has("Star-PDB"))
 		{
-			map = frag_db.getNamingStandards()["XPLOR-PDB"];
+			map = frag_db.getNamingStandards()["Star-PDB"];
 		}
 		else 
 		{
