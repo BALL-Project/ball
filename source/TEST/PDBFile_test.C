@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.9 2002/12/13 12:57:37 anker Exp $
+// $Id: PDBFile_test.C,v 1.10 2002/12/13 14:00:43 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.9 2002/12/13 12:57:37 anker Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.10 2002/12/13 14:00:43 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -132,18 +132,28 @@ CHECK(writing of Systems containing Atoms instead of PDBAtoms)
 	System* system = new System;
 	Protein* protein = new Protein;
 	Chain* chain = new Chain;
+
+	String filename;
+	NEW_TMP_FILE(filename)
+	PDBFile outfile(filename, std::ios::out);
+	outfile << *system;
+	outfile.close();
+	TEST_FILE_REGEXP(filename.c_str(), "data/PDBFile_test_write_empty.txt")
+
 	system->insert(*protein);
 	protein->insert(*chain);
 	chain->insert(*db.getResidueCopy("ALA"));
 	TEST_EQUAL(system->countAtoms(), 10)
-	String filename;
 	NEW_TMP_FILE(filename)
 	STATUS(system->countBonds())
-	PDBFile outfile(filename, std::ios::out);
+	outfile.open(filename, std::ios::out);
 	outfile << *system;
 	outfile.close();
-	delete system;
 	TEST_FILE_REGEXP(filename.c_str(), "data/PDBFile_test3.txt")
+
+	delete chain;
+	delete protein;
+	delete system;
 RESULT
 
 /////////////////////////////////////////////////////////////
