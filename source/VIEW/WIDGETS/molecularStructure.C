@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.25 2004/02/24 08:19:49 oliver Exp $
+// $Id: molecularStructure.C,v 1.27 2004/02/24 10:47:39 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -64,9 +64,9 @@ namespace BALL
 																											SLOT(centerCamera()), CTRL+Key_F, -1, hint);
 
 		// Build Menu -------------------------------------------------------------------
-		hint = "To assign charges, one System has to be selected.";
-		assign_charges_id_ = insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()),
-										CTRL+Key_G, -1 , hint);
+// 		hint = "To assign charges, one System has to be selected.";
+// 		assign_charges_id_ = insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()),
+// 										CTRL+Key_G, -1 , hint);
 
 		build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, 
 										-1, "Build a peptide from selected amino acids.");
@@ -385,7 +385,7 @@ amber_.getResults();
 		bool one_item = (number_of_selected_objects == 1);
 		bool composites_muteable = main_control.compositesAreMuteable();
 
-		menuBar()->setItemEnabled(assign_charges_id_, one_item && composites_muteable);
+// 		menuBar()->setItemEnabled(assign_charges_id_, one_item && composites_muteable);
 
 		// AMBER methods are available only for single systems
 		menuBar()->setItemEnabled(amber_energy_id_, one_item);
@@ -775,9 +775,9 @@ amber_.getResults();
 	}
 
 
-	void MolecularStructure::assignCharges()
-	{
-	}
+// 	void MolecularStructure::assignCharges()
+// 	{
+// 	}
 
 	void MolecularStructure::calculateHBonds()
 	{

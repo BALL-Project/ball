@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.9 2004/02/19 20:28:57 amoll Exp $
+// $Id: molecularStructure.h,v 1.10 2004/02/24 10:47:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -224,8 +224,8 @@ namespace BALL
 			/// Calculate the H-Bonds for a Protein
 			void calculateHBonds();
 
-			/// Calculate the charges for a Molecule
-			void assignCharges();
+			// Calculate the charges for a Molecule
+//	 		void assignCharges();
 
 			/// Calculate the energy for the currently selected force field
 			void calculateForceFieldEnergy();
