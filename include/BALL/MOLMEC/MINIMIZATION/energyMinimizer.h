@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.41 2005/01/24 16:57:45 amoll Exp $
+// $Id: energyMinimizer.h,v 1.42 2005/01/25 01:04:07 amoll Exp $
 //
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
@@ -425,11 +425,20 @@ namespace BALL
 		/// Query if the MDSimulation aborts if the Energy is greater than abort_energy_
 		bool energyAbortConditionEnabled() const;
 
-		///
+		/** Set the value for the energy, that will result in aborting the minization,
+		 		if it will be surpassed.
+				Default value: 10^9.
+		*/
 		void setEnergyToAbort(float value);
 		
 		///
 		float getEnergyToAbort() const;
+
+		/** Return true, if the minimization was aborted, e.g. because of strange 
+		 		energies or gradient.
+		*/
+		bool wasAborted() const
+			throw();
 		
 		//@}
 
@@ -544,6 +553,9 @@ namespace BALL
 		
 		//_ 
 		float abort_energy_;
+
+		//_
+		bool  aborted_;
 
 		//_@}
 	};

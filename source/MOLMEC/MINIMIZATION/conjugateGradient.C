@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.35 2005/01/24 17:22:09 amoll Exp $
+// $Id: conjugateGradient.C,v 1.36 2005/01/25 01:05:10 amoll Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -575,13 +575,15 @@ namespace BALL
   // The minimizer optimizes the energy of the system 
   // by using a conjugate gradient method. 
   // Return value is true when no further steps can be taken!
-  bool ConjugateGradientMinimizer::minimize
-		(Size iterations, bool resume)
+  bool ConjugateGradientMinimizer::minimize(Size iterations, bool resume)
   {
+		aborted_ = false;
+
 		// Check for validity of minimizer and force field
 		if (!isValid() || getForceField() == 0 || !getForceField()->isValid())
 		{
-			Log.error() << "ConjugateGradientMinimizer: minimizer is not initialized correctly!" << std::endl;
+			Log.error() << "ConjugateGradientMinimizer: is not initialized correctly!" << std::endl;
+			aborted_ = true;
 			return false;
 		}
 
@@ -702,18 +704,27 @@ namespace BALL
 			// update pair lists, and check the same-energy counter
 			finishIteration();
 
-			if (Maths::isNan(force_field_->getEnergy())) return false;
+			if (Maths::isNan(force_field_->getEnergy())) 
+			{
+				aborted_ = true;
+				return false;
+			}
 
 			if (Maths::isNan(getGradient().rbegin()->x) ||
 			    Maths::isNan(getGradient().rbegin()->y) ||
 			    Maths::isNan(getGradient().rbegin()->z)) 
 			{
+				aborted_ = true;
 				return false;
 			}
 
 			if (abort_by_energy_enabled_)
 			{
-				if (force_field_->getEnergy() > abort_energy_) return false;
+				if (force_field_->getEnergy() > abort_energy_) 
+				{
+					aborted_ = true;
+					return false;
+				}
 			}
 
 		}	

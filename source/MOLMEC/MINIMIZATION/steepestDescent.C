@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.26 2005/01/24 17:22:10 amoll Exp $
+// $Id: steepestDescent.C,v 1.27 2005/01/25 01:05:10 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -119,10 +119,12 @@ namespace BALL
 	*/
 	bool SteepestDescentMinimizer::minimize(Size iterations, bool resume)
 	{
+		aborted_ = false;
 		// Check for validity of minimizer and force field
 		if (!isValid() || getForceField() == 0 || !getForceField()->isValid())
 		{
 			Log.error() << "SteepestDescentMinimizer: minimizer is not initialized correctly!" << std::endl;
+			aborted_ = true;
 			return false;
 		}
 		
@@ -194,18 +196,27 @@ namespace BALL
 			// End of this iteration: increment iteration counter, update pairlists etc.
 			finishIteration();
 
-			if (Maths::isNan(force_field_->getEnergy())) return false;
+			if (Maths::isNan(force_field_->getEnergy())) 
+			{
+				aborted_ = true;
+				return false;
+			}
 
 			if (Maths::isNan(getGradient().rbegin()->x) ||
 			    Maths::isNan(getGradient().rbegin()->y) ||
 			    Maths::isNan(getGradient().rbegin()->z)) 
 			{
+				aborted_ = true;
 				return false;
 			}
 
 			if (abort_by_energy_enabled_)
 			{
-				if (force_field_->getEnergy() > abort_energy_) return false;
+				if (force_field_->getEnergy() > abort_energy_) 
+				{
+					aborted_ = true;
+					return false;
+				}
 			}
 
 		}

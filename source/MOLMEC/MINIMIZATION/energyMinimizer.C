@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.28 2005/01/24 17:22:10 amoll Exp $
+// $Id: energyMinimizer.C,v 1.29 2005/01/25 01:05:10 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -64,7 +64,8 @@ namespace BALL
 			force_update_counter_(0),
 			energy_update_counter_(0),
 			abort_by_energy_enabled_(true),
-			abort_energy_(1000000000.0)
+			abort_energy_(1000000000.0),
+			aborted_(false)
 	{
 	}
 
@@ -94,7 +95,8 @@ namespace BALL
 			force_update_counter_(energy_minimizer.force_update_counter_),
 			energy_update_counter_(energy_minimizer.energy_update_counter_),
 			abort_by_energy_enabled_(energy_minimizer.abort_by_energy_enabled_),
-			abort_energy_(energy_minimizer.abort_energy_)
+			abort_energy_(energy_minimizer.abort_energy_),
+			aborted_(false)
 	{
 	}
 
@@ -122,7 +124,6 @@ namespace BALL
       energy_update_counter_        = energy_minimizer.energy_update_counter_;
 			abort_by_energy_enabled_      = energy_minimizer.abort_by_energy_enabled_;
 			abort_energy_ 								= energy_minimizer.abort_energy_;
-	
 		}
 
 		return (*this);
@@ -605,6 +606,12 @@ namespace BALL
 	float EnergyMinimizer::getEnergyToAbort() const
 	{
 		return abort_energy_;
+	}
+
+	bool EnergyMinimizer::wasAborted() const
+		throw()
+	{
+		return aborted_;
 	}
 		
 } // namespace Ball
