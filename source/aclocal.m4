@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.39 2003/11/01 09:27:30 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.40 2003/11/01 10:52:12 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -64,7 +64,7 @@ AC_DEFUN(CF_ERROR,[
 	if test -f $TARFILE ; then 
 		${RM} $TARFILE ; 
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log 
 	AC_MSG_ERROR(Aborted.)
 ])
 
@@ -3323,11 +3323,33 @@ AC_DEFUN(CF_PYTHON, [
 		fi
 
 		dnl
+		dnl	 SIP executable
+		dnl
+		AC_MSG_CHECKING(whether ${SIP} is executable)
+		if test ! -x "${SIP}" ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Could not execute ${SIP}!)
+			AC_MSG_RESULT(Please specify the location of SIP using the)
+			AC_MSG_RESULT( --with-sip=PATH)
+			AC_MSG_RESULT(option or make sure it is in your current PATH.)
+			CF_ERROR
+		fi
+		AC_MSG_RESULT(yes)
+
+		dnl
 		dnl		SIP version
 		dnl
 		AC_MSG_CHECKING(sip version)
 		SIP_VERSION=`$SIP -V`
 		AC_MSG_RESULT(${SIP_VERSION})
+		if test "${SIP}" = "" ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Could not determine version number of ${SIP}!)
+			AC_MSG_RESULT(Please specify the location of SIP using the)
+			AC_MSG_RESULT( --with-sip=PATH)
+			AC_MSG_RESULT(option or make sure it is in your current PATH.)
+			CF_ERROR
+		fi
 		SIP_VERS_NUM=`echo ${SIP_VERSION}| ${CUT} -d\  -f1`
 		SIP_VERS_MAJOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f1`
 		SIP_VERS_MINOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f2`

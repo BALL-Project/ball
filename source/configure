@@ -1805,7 +1805,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -1887,7 +1887,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -1969,7 +1969,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2051,7 +2051,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2133,7 +2133,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2215,7 +2215,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2297,7 +2297,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2379,7 +2379,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2461,7 +2461,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2543,7 +2543,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2625,7 +2625,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2707,7 +2707,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2789,7 +2789,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2871,7 +2871,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2953,7 +2953,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -3067,7 +3067,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -3133,7 +3133,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -3304,7 +3304,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -3412,7 +3412,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -4218,7 +4218,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -4509,7 +4509,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -4641,7 +4641,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -4795,7 +4795,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -5609,7 +5609,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -5917,7 +5917,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8234,7 +8234,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8282,7 +8282,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8331,7 +8331,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8388,7 +8388,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8501,7 +8501,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8554,7 +8554,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -9607,7 +9607,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -12836,7 +12836,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -14317,7 +14317,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -14490,7 +14490,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -14723,7 +14723,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -14993,7 +14993,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -15080,7 +15080,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -15247,7 +15247,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -15777,7 +15777,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -15905,7 +15905,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16014,7 +16014,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16058,7 +16058,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16163,7 +16163,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16536,7 +16536,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16845,7 +16845,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16970,7 +16970,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -17184,7 +17184,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -17502,7 +17502,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -17559,7 +17559,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -17616,7 +17616,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18024,7 +18024,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18170,7 +18170,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18358,7 +18358,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18463,7 +18463,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18513,7 +18513,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18608,7 +18608,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18656,7 +18656,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18706,7 +18706,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18800,7 +18800,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18849,7 +18849,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18899,7 +18899,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18958,7 +18958,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19046,7 +19046,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19090,7 +19090,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19142,7 +19142,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19274,7 +19274,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19327,7 +19327,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19376,7 +19376,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19465,7 +19465,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19508,18 +19508,107 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 
 		fi
 
+								echo "$as_me:$LINENO: checking whether ${SIP} is executable" >&5
+echo $ECHO_N "checking whether ${SIP} is executable... $ECHO_C" >&6
+		if test ! -x "${SIP}" ; then
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+			echo "$as_me:$LINENO: result: Could not execute ${SIP}!" >&5
+echo "${ECHO_T}Could not execute ${SIP}!" >&6
+			echo "$as_me:$LINENO: result: Please specify the location of SIP using the" >&5
+echo "${ECHO_T}Please specify the location of SIP using the" >&6
+			echo "$as_me:$LINENO: result: --with-sip=PATH" >&5
+echo "${ECHO_T}--with-sip=PATH" >&6
+			echo "$as_me:$LINENO: result: option or make sure it is in your current PATH." >&5
+echo "${ECHO_T}option or make sure it is in your current PATH." >&6
+
+	echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+	echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6
+	echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6
+	echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6
+	echo "$as_me:$LINENO: result: which has been created in BALL/source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in BALL/source. It contains the relevant" >&6
+	echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6
+	echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6
+	echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6
+	echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6
+	echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then
+		${RM} $TARFILE ;
+	fi
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+		fi
+		echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+
 								echo "$as_me:$LINENO: checking sip version" >&5
 echo $ECHO_N "checking sip version... $ECHO_C" >&6
 		SIP_VERSION=`$SIP -V`
 		echo "$as_me:$LINENO: result: ${SIP_VERSION}" >&5
 echo "${ECHO_T}${SIP_VERSION}" >&6
+		if test "${SIP}" = "" ; then
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+			echo "$as_me:$LINENO: result: Could not determine version number of ${SIP}!" >&5
+echo "${ECHO_T}Could not determine version number of ${SIP}!" >&6
+			echo "$as_me:$LINENO: result: Please specify the location of SIP using the" >&5
+echo "${ECHO_T}Please specify the location of SIP using the" >&6
+			echo "$as_me:$LINENO: result: --with-sip=PATH" >&5
+echo "${ECHO_T}--with-sip=PATH" >&6
+			echo "$as_me:$LINENO: result: option or make sure it is in your current PATH." >&5
+echo "${ECHO_T}option or make sure it is in your current PATH." >&6
+
+	echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+	echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
+echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6
+	echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
+echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6
+	echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
+echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6
+	echo "$as_me:$LINENO: result: which has been created in BALL/source. It contains the relevant" >&5
+echo "${ECHO_T}which has been created in BALL/source. It contains the relevant" >&6
+	echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
+echo "${ECHO_T}files from this configure run. In most cases, the information" >&6
+	echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
+echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6
+	echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
+echo "${ECHO_T}information about your system setup and versions of compilers" >&6
+	echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
+echo "${ECHO_T}and other tools installed in your system." >&6
+	echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then
+		${RM} $TARFILE ;
+	fi
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+
+		fi
 		SIP_VERS_NUM=`echo ${SIP_VERSION}| ${CUT} -d\  -f1`
 		SIP_VERS_MAJOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f1`
 		SIP_VERS_MINOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f2`
@@ -19561,7 +19650,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19689,7 +19778,7 @@ echo "${ECHO_T}" >&6
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log ../include/BALL/COMMON/version.h
+  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
