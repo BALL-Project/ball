@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.3 2003/10/06 15:24:54 oliver Exp $
+// $Id: datasetControl.h,v 1.4 2003/12/01 20:37:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -134,8 +134,8 @@ namespace BALL
 			//@{
 		  protected slots:
 
-			void deleteTrajectory_();
-			void deleteGrid_();
+			void deleteItem_(QListViewItem& item);
+			void deleteItems_();
 			void visualiseTrajectory_();
 			void saveTrajectory_();
 			void save3DGrid_()
@@ -154,9 +154,6 @@ namespace BALL
 				throw();
 			
 			void insertComposite_(Composite* composite, QListViewItem* item)
-				throw();
-
-			void deleteItem_(QListViewItem* item)
 				throw();
 
 			SnapShotManager* 							context_trajectory_;
