@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.10 2002/12/12 09:37:46 oliver Exp $
+// $Id: scene.h,v 1.11 2002/12/15 12:31:34 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -561,29 +561,6 @@ namespace BALL
 					@param   depth the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-
-			//@}
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent scene data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} scene
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent compositeDescriptor data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-  				@param       s output stream to where to store the internal state of {\em *this} scene
-			*/
-			virtual void write(std::ostream& s) const
 				throw();
 
 			protected:
