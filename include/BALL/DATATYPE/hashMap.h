@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.14 2000/09/04 20:57:57 amoll Exp $ 
+// $Id: hashMap.h,v 1.15 2000/09/05 14:01:24 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -207,7 +207,7 @@ namespace BALL
 		/**	Erase element with key {\tt key}.
 				@return Size the number of elements erased (0 or 1)
 		*/
-		bool erase(const Key& key);
+		Size erase(const Key& key);
 
 		/**	Erase element at a given position.
 				@param pos an iterator pointing to the element to delete
@@ -746,7 +746,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	bool HashMap<Key, T>::erase(const Key& key)
+	Size HashMap<Key, T>::erase(const Key& key)
 	{
 		Node*	previous = 0;
 		HashIndex bucket = hash_(key);
@@ -778,59 +778,152 @@ namespace BALL
 	template <class Key, class T>
 	void HashMap<Key, T>::erase(Iterator pos)
 	{
-		if (pos.bound_ != this)
+		if (pos.getTraits().bound_ != this)
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 
-		if (pos == end())
+		if ((pos == end()) || (size_ == 0))
 		{
 			return;
 		}
 				
-		if (pos == bucket_[pos.bucket_])
+		if (pos.getTraits().position_ == bucket_[pos.getTraits().bucket_])
 		{
-			bucket_[pos.bucket_] = pos->next;
-		} else {
-			(pos-1)->next = pos->next;
+			bucket_[pos.getTraits().bucket_] = pos.getTraits().position_->next;
+		} 
+		else 
+		{
+			// walk over all nodes in this bucket and identify the predecessor
+			// of the node refered to by the iterator pos
+			Node* prev = bucket_[pos.getTraits().bucket_];
+			for (; (prev != 0) && (prev->next != pos.getTraits().position_); prev = prev->next);
+			if (prev != 0)
+			{
+				// remove the node and reconnect the list
+				prev->next = pos.getTraits().position_->next;
+			}
+			else 
+			{
+				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 		}
 
-		deleteNode_(pos);
+		// delete the node and decrement the set size
+		deleteNode_(pos.getTraits().position_);
 		--size_;
 	}
 
 	template <class Key, class T>
 	void HashMap<Key, T>::erase(Iterator f, Iterator l)
 	{
-		if (f.bound_ != this || l.bound_ != this)
+		if (f.getTraits().bound_ != this || l.getTraits().bound_ != this)
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 		
-		if (f.position_ > l.position_)
-		{
-			std::swap(f, l);
-		}
-
 		if (f == end())
 		{
 			return;
 		}
 
-		if (f == bucket_[f.bucket_])
+		Position last_bucket = l.getTraits().bucket_;
+		if (l == end())
 		{
-			bucket_[f.bucket_] = *l;
-		} else {
-			(f-1)->next = *l;
+			last_bucket = bucket_.size() - 1;
 		}
 
-		int diff = f.position_ - l.position_;
-		while (f.position_ < l.position_)
+		if (f.getTraits().bucket_ > last_bucket)
 		{
-			deleteNode_(f);
-			f++;
+			// empty range - l < f
+			return;
 		}
-		size_ -= diff;
+
+		// count the deleted entries to correct the set size
+		Size no_deletions = 0;
+
+		Position bucket = f.getTraits().bucket_;
+		for (; bucket <= last_bucket; bucket++)
+		{
+			if (bucket_[bucket] == 0)
+			{
+				// skip all empty buckets
+				continue;
+			}
+
+			if ((bucket == f.getTraits().bucket_) && (bucket_[bucket] != f.getTraits().position_))
+			{
+				// find the predecessor of f
+				Node* n = bucket_[bucket];
+				Node* next;
+				for (; (n->next != f.getTraits().position_) && (n->next != 0); n = n->next);
+				
+				if (bucket == last_bucket)
+				{
+					// delete everything from f to l in this bucket
+
+					next = n->next;
+					n->next = l.getTraits().position_;
+					for (n = next; (n != 0) && (n != l.getTraits().position_); n = next)
+					{
+						next = n->next;
+						deleteNode_(n);
+						no_deletions++;
+					}
+				}
+				else
+				{
+					// delete everything from f to the end in this bucket
+
+					if (n != 0)
+					{
+						// mark the end of the list
+						next = n->next;
+						n->next = 0;
+
+						// delete all remaining nodes
+						for (n = next; n != 0; n = next)
+						{
+							next = n->next;
+							deleteNode_(n);
+							no_deletions++;
+						}
+					}
+				}
+			} 
+			// if the current bucket lies between the first and the last bucket...
+			else if (bucket < last_bucket)
+			{
+				// ...delete the whole bucket
+				Node* next;
+				for (Node* n = bucket_[bucket]; n != 0; n = next)
+				{
+					next = n->next;
+					deleteNode_(n);
+					no_deletions++;
+				}
+				bucket_[bucket] = 0;
+			}
+			else if (bucket == last_bucket)
+			{
+				// we delete everything in this bucket up to the iterator l
+
+				// find the predecessor of l
+				Node* n = bucket_[bucket];
+				Node* next;
+				for (; (n != 0) && (n != l.getTraits().position_); n = next)
+				{
+					next = n->next;
+					deleteNode_(n);
+					no_deletions++;
+				}
+
+				bucket_[bucket] = l.getTraits().position_;
+			}
+		}
+
+		// correct the set size
+		size_ -= no_deletions;
 	}
 
 	template <class Key, class T>
