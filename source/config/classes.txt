@@ -53,8 +53,8 @@ HashSet                             DX          /       store methods
       IteratorTraits_
 List                                /           /
 Options                             X           /	isValid
-Quadruple                           /           X       operators >=, <=
-RegularData1D                       /           Z
+Quadruple                           /           /
+RegularData1D                       /           X
 RegularData2D                       /           Z
 RegularData3D                       /           /
 RegularExpression                   D           /
@@ -63,6 +63,8 @@ Substring                           D           /
       UnboundSubstring
       InvalidSubstring
 StringHashMap                       /           /
+TContour														DE          Z
+TContourLine												E						Z
 ------------------------CONCEPT---------------------------------------------
 BaseIterator                        I,          Z     clear fehlt, BALL_CREATE_DEEP
 ConstBaseIterator                   I,          Z
@@ -75,7 +77,7 @@ AutoDeletable                       I,          X
 Callback                            DI,         Z
 Classtest                           /           /
 Comparator                          D           Z
-Composite                           D,          /
+Composite                           D,          X ausgabe in test
       AncestorIteratorTraits_       DI          Z
       ChildCompositeIteratorTraits_ DI          Z
       CompositeIteratorPosition_    DI          Z
@@ -109,8 +111,8 @@ ConstReverseBidirectionalIterator   DI          Z
 Selectable                          /           /
 Singleton                           DI          Z
 TextPersistenceManager              EI          Z
-Time                                /           X
 TimeStamp                           /           X
+PreciseTime													/						X
 Visitor                             DI          Z
 XDRPersistenceManager               IX          Z
 
@@ -148,22 +150,22 @@ DCDFile				    X?		Z
 ------------------------KERNEL----------------------------------------------
 Atom                                DX          /           read, write fehlt
             BondIteratorTraits_     DEI         Z
-AtomContainer                       X           /           read, write fehlt
+AtomContainer                       DX          /           read, write fehlt
 AtomContainerIteratorTraits_        EI          Z
 AtomIteratorTraits_                 EI          Z
-Bond                                /           /
+Bond                                D           /
             TooManyBonds            I           Z
 Chain                               X           /           read, write fehlt
 ChainIteratorTraits_                EI
 CompositeIteratorTraits_            EI          Z
-Expression                          EIX		X
+Expression                          EIX		      X
 ExpressionPredicate                 EIX
 ExpressionTree                      EIX         
 SyntaxTree                          EI
 Fragment                            X           /           read, write fehlt
 FragmentIteratorTraits_             EI          Z
 Element                             /           /
-PTE_                                /           /
+PTE_                                D           /
 KernelPredicate                     I           /
 Molecule                            X           /           read, write fehlt
 MoleculeIteratorTraits_             EI          Z
@@ -171,7 +173,7 @@ NucleicAcid                         X           /           read, write fehlt
 NucleicAcidIteratorTraits_          EI          Z
 Nucleotide                          X           /           read, write fehlt
 NucleotideIteratorTraits_           EI          Z
-PDBAtom                             X           Z           read, write fehlt
+PDBAtom                             DX          Z           read, write fehlt
 PDBAtomIteratorTraits_              EI          Z
 Protein                             X           /           read, write fehlt
 ProteinIteratorTraits_              EI          Z
@@ -215,14 +217,15 @@ TLine3                              /           /
 TMatrix4x4                          /           /
 PiecewiseFunction                   IX          X
 PiecewisePolynomial                 IX          X
+RombergIntegrator										X           Z  cout
 TPlane3                             /           /
 TQuaternion                         /           /
 TSphere3                            /           /
 TSurface                            X           Z    
 TVector3                            /           /
 TVector4                            /           /
-Function			    IX		X
-NumericalIntegrator		    ?		Z
+Function			                      IX		      X
+NumericalIntegrator		              ?	         	Z
 ------------------------MOLMEC----------------------------------------------
                         ---------AMBER-----
 amberBend                           DEI         Z
@@ -431,7 +434,7 @@ TTriangulatedSurface                DEIX        Z
   Edge
   Point
 ------------------------SYSTEM----------------------------------------------
-Directory                           EI          /
+Directory                           E           /
 File                                /           /
 FileSystem                          DEI         /
 Path                                EI          /
