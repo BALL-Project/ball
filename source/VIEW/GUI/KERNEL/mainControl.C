@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.2 2000/10/05 22:34:46 oliver Exp $
+// $Id: mainControl.C,v 1.3 2000/10/07 15:25:17 hekl Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -42,12 +42,12 @@ namespace BALL
 			//					throw ::BALL::VIEW::MainControl::OptionsFileError(__FILE__, __LINE__, "file error.");			
 			//			}
 		}
-			
+		/*
 		MainControl::MainControl(const MainControl& main_control)
 		{	
 			// BAUSTELLE
 		}
-
+		*/
 		MainControl::~MainControl()
 		{
 			#ifdef BALL_VIEW_DEBUG
@@ -74,20 +74,24 @@ namespace BALL
 					case FILE:
 						menuBar()->insertItem("&File", menu, FILE, 0);
 						break;
+   				case FILE_IMPORT:
+						initPopupMenu(MainControl::FILE)
+							->insertItem("&Import File", menu, FILE_IMPORT, (1 <= max_id) ? 1 : -1);
+						break;
 					case EDIT:
-						menuBar()->insertItem("&Edit", menu, EDIT, (1 <= max_id) ? 1 : -1);
+						menuBar()->insertItem("&Edit", menu, EDIT, (2 <= max_id) ? 2 : -1);
 						break;
 					case BUILD:
-						menuBar()->insertItem("&Build", menu, BUILD, (2 <= max_id) ? 2 : -1);
+						menuBar()->insertItem("&Build", menu, BUILD, (3 <= max_id) ? 3 : -1);
 						break;
 					case DISPLAY:
-						menuBar()->insertItem("&Display", menu, DISPLAY, (3 <= max_id) ? 3 : -1);
+						menuBar()->insertItem("&Display", menu, DISPLAY, (4 <= max_id) ? 4 : -1);
 						break;
 					case TOOLS:
-						menuBar()->insertItem("&Tools", menu, TOOLS, (4 <= max_id) ? 4 : -1);
+						menuBar()->insertItem("&Tools", menu, TOOLS, (5 <= max_id) ? 5 : -1);
 						break;
 					case USER:
-						menuBar()->insertItem("&User", menu, USER, (5 <= max_id) ? 5 : -1);
+						menuBar()->insertItem("&User", menu, USER, (6 <= max_id) ? 6 : -1);
 						break;
 
 					case HELP:
