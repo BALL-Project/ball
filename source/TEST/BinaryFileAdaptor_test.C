@@ -1,4 +1,4 @@
-// $Id: BinaryFileAdaptor_test.C,v 1.4 2002/01/04 01:53:05 oliver Exp $
+// $Id: BinaryFileAdaptor_test.C,v 1.5 2002/01/09 02:17:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,14 +7,14 @@
 
 ///////////////////////////
 
-START_TEST(BinaryFileAdaptor, "$Id: BinaryFileAdaptor_test.C,v 1.4 2002/01/04 01:53:05 oliver Exp $")
+START_TEST(BinaryFileAdaptor, "$Id: BinaryFileAdaptor_test.C,v 1.5 2002/01/09 02:17:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-//???
+//????
 
 
 /////////////////////////////////////////////////////////////

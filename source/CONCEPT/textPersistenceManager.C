@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.12 2000/12/12 16:21:33 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.13 2002/01/09 02:17:04 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -9,7 +9,8 @@ using namespace std;
 namespace BALL 
 {
 
-	const char* TextPersistenceManager::INDENT_STEP = "  ";
+	const char* TextPersistenceManager::INDENT_STRING = "                                                                                                       ";
+	const Size TextPersistenceManager::MAX_INDENT = (Size)strlen(TextPersistenceManager::INDENT_STRING);
 
 	TextPersistenceManager::TextPersistenceManager()
 		:	PersistenceManager(),
@@ -48,18 +49,9 @@ namespace BALL
 		return (s == value);
 	}
 
-	String TextPersistenceManager::indent() 
+	const char* TextPersistenceManager::indent() 
 	{
-		string result("");
-
-		// assemble a string consisting of indent_depth_ copies
-		// of INDENT_STEP
-		for (Size i = 0; i < indent_depth_; i++)
-		{
-			result.append(INDENT_STEP);
-		}
-
-		return result;
+		return &INDENT_STRING[MAX_INDENT - std::max(MAX_INDENT, 2 * indent_depth_)];
 	}
 			
   void TextPersistenceManager::writeHeader

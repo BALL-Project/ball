@@ -1,4 +1,4 @@
-// $Id: SmilesParser_test.C,v 1.1 2002/01/08 00:47:16 oliver Exp $
+// $Id: SmilesParser_test.C,v 1.2 2002/01/09 02:17:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,14 +6,65 @@
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
 
+#include <fstream>
+#include <iostream>
+#include <algorithm>
+#include <iterator>
+
 ///////////////////////////
 
-START_TEST(SmilesParser, "$Id: SmilesParser_test.C,v 1.1 2002/01/08 00:47:16 oliver Exp $")
-
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-
 using namespace BALL;
+
+typedef std::map<String, Size> Formula;
+typedef std::pair<String, Formula> Line;
+
+std::ostream& operator << (std::ostream& os, const std::pair<BALL::String, Size>& p)
+{
+	return os << p.first << p.second;
+}
+
+std::ostream& operator << (std::ostream& os, const std::map<String, Size>& f)
+{
+	std::map<String, Size>::const_iterator it(f.begin());
+	for (; it != f.end(); it++)
+	{
+		os << *it << " ";
+	}
+	return os;
+}
+
+Formula computeFormula(const System& s)
+{
+	Formula f;
+	AtomConstIterator atom(s.beginAtom());
+	for (; atom != s.endAtom(); ++atom)
+	{
+		f[atom->getElement().getSymbol()]++;
+	}
+	return f;
+}
+
+Line readSmilesLine(std::istream& is) 
+{
+	String line;
+	line.getline(is);
+	std::pair<String, Formula> s;	
+
+	if (line != "")
+	{
+		s.first = line.getField(0);
+		for (Position i = 1; i < line.countFields(); i += 2)
+		{
+			s.second[line.getField(i)] = line.getField(i + 1).toUnsignedInt();
+		}
+	}
+	return s;
+}
+
+START_TEST(SmilesParser, "$Id: SmilesParser_test.C,v 1.2 2002/01/09 02:17:04 oliver Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 
 SmilesParser sp;
 CHECK(C)
@@ -43,6 +94,21 @@ CHECK(parse errors)
 	TEST_EXCEPTION(Exception::ParseError, sp.parse("C+"))
 RESULT
 	
+CHECK(example library)
+	std::ifstream is("data/SmilesParser_test.txt");
+	std::pair<String, Formula> smiles;
+	while (is.good())
+	{
+		smiles = readSmilesLine(is);
+		if (smiles.first == "") 
+		{
+			break;
+		}
+		sp.parse(smiles.first);
+		TEST_EQUAL(computeFormula(sp.getSystem()), smiles.second)
+	}
+	
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

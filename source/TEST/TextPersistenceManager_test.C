@@ -1,4 +1,4 @@
-// $Id: TextPersistenceManager_test.C,v 1.3 2001/12/30 13:29:03 sturm Exp $
+// $Id: TextPersistenceManager_test.C,v 1.4 2002/01/09 02:17:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.3 2001/12/30 13:29:03 sturm Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.4 2002/01/09 02:17:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -16,17 +16,21 @@ START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.3 200
 using namespace BALL;
 using namespace std;
 
+
+TextPersistenceManager* pm_ptr = 0;
 CHECK(TextPersistenceManager::TextPersistenceManager())
-  //?????
+	pm_ptr = new TextPersistenceManager();
+	TEST_NOT_EQUAL(pm_ptr, 0)
 RESULT
 
-
-
+CHECK(TextPersistenceManager::~TextPersistenceManager())
+	delete pm_ptr;
+RESULT
 
 String filename;
 NEW_TMP_FILE(filename)
-CHECK(TextPersistenceManager::TextPersistenceManager(std::ostream& os))
-	ofstream os(filename.c_str(), std::ios::out);
+CHECK(TextPersistenceManager::TextPersistenceManager(ostream& os))
+	ofstream os(filename.c_str(), ios::out);
 	Composite comp;
 	TextPersistenceManager pm(os);
 	comp >> pm;
@@ -34,7 +38,7 @@ CHECK(TextPersistenceManager::TextPersistenceManager(std::ostream& os))
 RESULT
 
 
-CHECK(TextPersistenceManager::TextPersistenceManager(std::istream& is))
+CHECK(TextPersistenceManager::TextPersistenceManager(istream& is))
 	ifstream is(filename.c_str());
 	TextPersistenceManager pm(is);
 	PersistentObject* po = pm.readObject();
@@ -44,38 +48,102 @@ CHECK(TextPersistenceManager::TextPersistenceManager(std::istream& is))
 RESULT
 
 
-CHECK(TextPersistenceManager::TextPersistenceManager(std::istream& is, std::ostream& os))
-  //?????
+CHECK(TextPersistenceManager::TextPersistenceManager(istream& is, ostream& os))
+	ifstream is;
+	ofstream os;
+	TextPersistenceManager pm(is, os);
+	// not much to test there -- either it works or
+	// it doesn't. Functionality should be covered by
+	// PersistenceManager_test
 RESULT
 
 
 CHECK(TextPersistenceManager::writeHeader(const char* type_name, const char* name, LongPointerType ptr))
-  //?????
+	String filename;
+	NEW_TMP_FILE(filename)
+	ofstream os(filename.c_str(), ios::out);
+	TextPersistenceManager pm;
+	pm.setOstream(os);
+	pm.writeHeader("TYPENAME1", "NAME", (PointerSizeInt)123456678);
+	pm.writeHeader("TYPENAME2", (const char*)0, (PointerSizeInt)345667890);
+	os.close();
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeHeader.txt", false)
 RESULT
 
 
 CHECK(TextPersistenceManager::checkHeader(const char* type_name, const char* name, LongPointerType& ptr))
-  //?????
+	ifstream is("data/TextPersistenceManager_test.checkHeader.txt");
+	TextPersistenceManager pm;
+	pm.setIstream(is);
+	PointerSizeInt ptr;
+	bool result = pm.checkHeader("TYPENAME", "NAME", ptr);
+	TEST_EQUAL(result, true)
+	TEST_EQUAL(ptr, 12345678)
+	result = pm.checkHeader("TYPENAME2", (const char*)0, ptr);
+	TEST_EQUAL(result, true)
+	TEST_EQUAL(ptr, 34567890)
+	result = pm.checkHeader("TYPENAME2", (const char*)0, ptr);
+	TEST_EQUAL(result, false)
+	result = pm.checkHeader("TYPENAME2", (const char*)0, ptr);
+	TEST_EQUAL(result, false)
+	is.close();
 RESULT
 
 
 CHECK(TextPersistenceManager::writeTrailer(const char* name = 0))
-  //?????
+	String filename;
+	NEW_TMP_FILE(filename)
+	ofstream os(filename.c_str(), ios::out);
+	TextPersistenceManager pm;
+	pm.setOstream(os);
+	STATUS("stream open: " << filename)
+	pm.writeTrailer("TYPENAME");
+	STATUS("stream open: " << filename)
+	pm.writeTrailer((const char*)0);
+	os.close();
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeTrailer.txt", false)
 RESULT
 
 
 CHECK(TextPersistenceManager::checkTrailer(const char* name = 0))
-  //?????
+	ifstream is("data/TextPersistenceManager_test.checkTrailer.txt");
+	TextPersistenceManager pm;
+	pm.setIstream(is);
+	bool result = pm.checkTrailer("TYPENAME");
+	TEST_EQUAL(result, true)
+	result = pm.checkTrailer((const char*)0);
+	TEST_EQUAL(result, true)
+	result = pm.checkTrailer((const char*)0);
+	TEST_EQUAL(result, false)
+	result = pm.checkTrailer((const char*)0);
+	TEST_EQUAL(result, false)
+	is.close();
 RESULT
 
 
 CHECK(TextPersistenceManager::writeStreamHeader())
-  //?????
+	String filename;
+	NEW_TMP_FILE(filename)
+	ofstream os(filename.c_str(), ios::out);
+	TextPersistenceManager pm;
+	pm.setOstream(os);
+	pm.writeStreamHeader();
+	os.close();
+	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeStreamHeader.txt", false)
 RESULT
 
 
 CHECK(TextPersistenceManager::writeStreamTrailer())
-  //?????
+	ifstream is("data/TextPersistenceManager_test.checkStreamHeader.txt");
+	TextPersistenceManager pm;
+	pm.setIstream(is);
+	bool result = pm.checkStreamHeader();
+	TEST_EQUAL(result, true)
+	result = pm.checkStreamHeader();
+	TEST_EQUAL(result, false)
+	result = pm.checkStreamHeader();
+	TEST_EQUAL(result, false)
+	is.close();
 RESULT
 
 
@@ -185,7 +253,7 @@ RESULT
 
 
 NEW_TMP_FILE(filename)
-std::ofstream outfile(filename.c_str(), std::ios::out);
+ofstream outfile(filename.c_str(), ios::out);
 
 TextPersistenceManager pm;
 pm.setOstream(outfile);
@@ -266,7 +334,7 @@ pm.writeStreamTrailer();
 pm.finalizeOutputStream();
 outfile.close();
 
-std::ifstream infile(filename.c_str());
+ifstream infile(filename.c_str());
 pm.setIstream(infile);
 pm.initializeInputStream();
 pm.checkStreamHeader();
@@ -384,4 +452,3 @@ infile.close();
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
-

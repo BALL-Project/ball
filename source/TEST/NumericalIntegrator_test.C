@@ -1,4 +1,4 @@
-// $Id: NumericalIntegrator_test.C,v 1.6 2002/01/05 02:59:05 oliver Exp $
+// $Id: NumericalIntegrator_test.C,v 1.7 2002/01/09 02:17:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(NumericalIntegrator, "$Id: NumericalIntegrator_test.C,v 1.6 2002/01/05 02:59:05 oliver Exp $")
+START_TEST(NumericalIntegrator, "$Id: NumericalIntegrator_test.C,v 1.7 2002/01/09 02:17:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,12 +53,6 @@ CHECK(NumericalIntegrator::NumericalIntegrator& operator = (const NumericalInteg
 	ni2 = ni1;
 	test = (ni1 == ni2);
 	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(NumericalIntegrator::clear() throw())
-	// ?????:
-	// see <BALL/MATHS/numericalIntegrator.h>
 RESULT
 
 

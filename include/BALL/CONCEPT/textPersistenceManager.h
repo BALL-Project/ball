@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.h,v 1.8 2001/02/10 20:01:27 amoll Exp $
+// $Id: textPersistenceManager.h,v 1.9 2002/01/09 02:17:04 oliver Exp $
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -272,13 +272,14 @@ namespace BALL
 
 		/**	Return a string for the current indentation level.
 		*/
-		virtual String indent();
+		virtual const char* indent();
 		
 		private:
 
-		static const char*	INDENT_STEP;
+		static const char*	INDENT_STRING;
+		static const Size		MAX_INDENT;
 
-		Size				indent_depth_;
+		Size indent_depth_;
 
 	};
 

@@ -3,36 +3,84 @@
 Having introduced the basic of handling proteins in the last
 chapter, we now turn towards real-life examples: getting a protein
 from the PDB and performing an AMBER calculation with it.
-Again, we will be using BPTI. Instead of reading BPTI from a 
-file, as in the last example, we will use the TCP transfer
-capabilities of BALL to retrieve the file directly form the 
-PDB (if your machine is connected to the internet -- you might
-want to read it from a file as in the last example otherwise).
-All classes handling file I/O in BALL are derived from a common
-base class, \class{File}. This base class provides a lot of
-functionality that applies to all derived classes as well.
-On eof the most usefult features is on-the-fly file transformation.
-Iin our case, we can open a file (e.g. a PDB file using the \class{PDBFile} 
+Again, we will be using BPTI, reading to from a PDB file as in the
+previous example:
 class) that is not stored locally on a disc, but in the internet:
 
 \begin{lstlisting}{}
-	PDBFile
-	infile("ftp://ftp.rcsb.org/pub/pdb/data/structures/all/pdb/pdb4pti.ent");
+	PDBFile	infile("pdb4pti.ent");
 	System S;
 	infile >> S;
 	infile.close();
 \end{lstlisting}
 
 \noindent
-This command retrieves the file {\tt pdb4pti.ent} from its location at the RCSB
-site using the FTP protocol and reads the contents of that file into a
-\class{System}. The retrieval and the expansion of the URL into something
-meaningful is performed by the classes \class{TransformationManager} and
-\class{TCPTransfer}. Any filename is first handed to the static instance of
-\class{TransformationManager} \class{File} possesses and all 
+The file we chose to read here is the original file as obtained from
+the PDB, therefor it does not contain neither hydrogen atoms, nor bonds.
+The BALL class \class{FragmentDB} provides a convenient way to solve
+both problems. \class{FragmentDB} is an extensible database of residue
+structures. By comparing the residues in the PDB file with the reference
+templates in the \class{FragmentDB}, we can identify the missing bonds
+and hydrogen atoms. A matching between atoms is computed based on the names,
+so the atom names have to adhere to the PDB naming convention.
+For deviating naming schemes, \class{FragmentDB} provides a member instance
+\member{normalize\_names}, which tries to convert the names to the PDB 
+naming convention. \member{normalize\_names} is a processor, so we
+can \member{apply} it to any given kernel data structure:
 
 \begin{lstlisting}{}
-	File::registerTransformation(".*\.gz", "exec:/usr/local/bin/gunzip -c %s");
+	FragmentDB db;
+	S.apply(db.normalize_names);
+\end{lstlisting}
+
+\noindent
+Instantiating \class{FragmentDB} usually takes a few seconds to parse the 
+fragment database and the naming conversion tables. The corresponding data is
+using the \member{add\_hydrogens} processor and rebuild the mising bonds
+stored in \directory{BALL/data/Fragments}. Now we will add the missing hydrogens 
+using the \member{build\_bonds} processor:
+
+\begin{lstlisting}{}
+	S.apply(db.add_hydrogens);
+	S.apply(db.build_bonds);
+\end{lstlisting}
+
+\noindent
+Now we have constructed a complete protein structure of BPTI. We can verify
+this by applying a \class{ResidueChecker} to the system.
+\class{ResidueChecker} is a processor that performs a number of consistency
+checks on a given kernel data structure:
+\begin{itemize}
+	\item check for missing atoms
+	\item check for overlapping atoms (closer than 0.5 \AA)
+	\item check for integrality of residue charges (not relevant here)
+	\item check bond lengths (should be within 15% of the template bond lengths)
+\end{itemize}
+The information on missing atoms and bond lengths is taken from an instance
+of \class{FragmentDB}:
+
+\begin{lstlisting}{}
+	ResidueChecker rc(db);
+	S.apply(rc);
+\end{lstlisting}
+	
+\noindent
+If the \class{ResidueChecker} notices a problem with the structure, it will 
+print a warning. In our case, was (hopefully) correct, so nothing will happen.
+
+Although our protein structure is correct, the positions of the added hydrogen
+atoms are only approximations of the true positions.
+\class{AddHydrogensProcessor} tries to set the positions based on the
+positions given in the \class{FragmentDB} templates, which usually deviate
+from their optimal position in the given structure. We can relax those
+hydrogen positions using a molecular mechanics calculation.
+We will use the AMBER force field\cite{AMBER95} and optimize the hydrogen 
+positions while keeping the heavy atoms rigid. The AMBER force field is
+implemented in the \class{AmberFF} class. Instantiating that with a given
+system is very simple:
+
+\begin{lstlisting}{}
+	AmberFF amber(S);
 \end{lstlisting}
 
 \noindent
