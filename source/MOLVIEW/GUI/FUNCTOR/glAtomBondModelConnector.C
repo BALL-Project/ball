@@ -1,4 +1,4 @@
-// $Id: glAtomBondModelConnector.C,v 1.3 2001/05/13 15:02:40 hekl Exp $
+// $Id: glAtomBondModelConnector.C,v 1.3.4.1 2002/10/18 14:48:26 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.h>
 
@@ -52,10 +52,6 @@ namespace BALL
     {
 			return new GLTwoColoredTube();
     }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

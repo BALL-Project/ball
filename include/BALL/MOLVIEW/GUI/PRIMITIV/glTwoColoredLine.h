@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.h,v 1.7 2001/07/16 14:49:28 amoll Exp $
+// $Id: glTwoColoredLine.h,v 1.7.4.1 2002/10/18 14:48:18 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
@@ -219,10 +219,6 @@ namespace BALL
 				throw();
 			//@}
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

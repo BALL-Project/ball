@@ -1,4 +1,4 @@
-// $Id: clientScene.C,v 1.6 2000/01/13 22:32:43 oliver Exp $
+// $Id: clientScene.C,v 1.6.4.1 2002/10/18 14:47:58 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/clientScene.h>
 
@@ -50,6 +50,7 @@ namespace BALL
 
 		void ClientScene::clear()
 		{
+			// ??????????
 			/*
 			host_ = 0;
 			port_ = 0;
@@ -373,10 +374,6 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/clientScene.iC>
-#		endif 
-		
 	} // namespace VIEW
 
 } // namespace BALL

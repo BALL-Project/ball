@@ -1,4 +1,4 @@
-// $Id: line.C,v 1.8 2001/02/04 16:14:28 hekl Exp $
+// $Id: line.C,v 1.8.4.1 2002/10/18 14:47:59 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/line.h>
 
@@ -129,10 +129,6 @@ namespace BALL
 		{
 			return true;  
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/line.iC>
-#		endif
 
 	} // namespace VIEW
 

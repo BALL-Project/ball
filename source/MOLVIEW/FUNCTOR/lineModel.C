@@ -1,4 +1,4 @@
-// $Id: lineModel.C,v 1.11 2001/07/15 18:50:28 oliver Exp $
+// $Id: lineModel.C,v 1.11.4.1 2002/10/18 14:48:23 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
 
@@ -132,11 +132,6 @@ namespace BALL
 		{
 			return (TwoColoredLine *)(new TwoColoredLine());
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/lineModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: glBackboneModel.C,v 1.3 2001/05/13 15:02:40 hekl Exp $
+// $Id: glBackboneModel.C,v 1.3.4.1 2002/10/18 14:48:26 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.h>
 
@@ -41,10 +41,6 @@ namespace BALL
 		{
 			return (Backbone *)(new GLBackbone());
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

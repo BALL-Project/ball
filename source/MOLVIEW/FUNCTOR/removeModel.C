@@ -1,4 +1,4 @@
-// $Id: removeModel.C,v 1.11 2001/07/15 18:50:29 oliver Exp $
+// $Id: removeModel.C,v 1.11.4.1 2002/10/18 14:48:23 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 
@@ -124,11 +124,6 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/removeModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

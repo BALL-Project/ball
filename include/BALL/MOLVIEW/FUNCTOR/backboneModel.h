@@ -1,4 +1,4 @@
-// $Id: backboneModel.h,v 1.5 2001/07/16 14:49:23 amoll Exp $
+// $Id: backboneModel.h,v 1.5.4.1 2002/10/18 14:48:11 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
@@ -229,10 +229,6 @@ namespace BALL
 			List<ColorRGBA> atoms_color_;
 
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/FUNCTOR/backboneModel.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

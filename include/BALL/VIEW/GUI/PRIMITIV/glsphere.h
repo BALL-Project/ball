@@ -1,4 +1,4 @@
-// $Id: glsphere.h,v 1.9 2001/07/16 14:49:30 amoll Exp $
+// $Id: glsphere.h,v 1.9.4.1 2002/10/18 14:48:04 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
@@ -201,10 +201,6 @@ namespace BALL
 			//@}
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glsphere.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

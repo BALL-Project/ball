@@ -1,4 +1,4 @@
-// $Id: removeModel.h,v 1.9 2001/07/16 14:49:23 amoll Exp $
+// $Id: removeModel.h,v 1.9.4.1 2002/10/18 14:48:12 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -172,10 +172,6 @@ namespace BALL
 
 			private:
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/FUNCTOR/removeModel.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

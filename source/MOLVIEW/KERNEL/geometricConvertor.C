@@ -1,4 +1,4 @@
-// $Id: geometricConvertor.C,v 1.2 2000/08/30 19:58:34 oliver Exp $
+// $Id: geometricConvertor.C,v 1.2.4.1 2002/10/18 14:48:30 amoll Exp $
 
 #include <BALL/MOLVIEW/KERNEL/geometricConvertor.h>
 
@@ -60,10 +60,6 @@ namespace BALL
 				}
 			}
     }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/KERNEL/geometricConvertor.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

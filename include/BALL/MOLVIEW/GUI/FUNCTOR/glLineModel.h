@@ -1,4 +1,4 @@
-// $Id: glLineModel.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
+// $Id: glLineModel.h,v 1.5.4.1 2002/10/18 14:48:15 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLLINEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLLINEMODEL_H
@@ -140,10 +140,6 @@ namespace BALL
 			virtual TwoColoredLine* createTwoColoredLine_();
 			//@}
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

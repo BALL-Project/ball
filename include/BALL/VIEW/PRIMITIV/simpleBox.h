@@ -1,4 +1,4 @@
-// $Id: simpleBox.h,v 1.9 2001/07/16 14:49:33 amoll Exp $
+// $Id: simpleBox.h,v 1.9.4.1 2002/10/18 14:48:09 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
 #define BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -253,10 +253,6 @@ namespace BALL
 				throw();
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/simpleBox.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: openPDBFile.C,v 1.5 2001/05/13 16:28:12 hekl Exp $
+// $Id: openPDBFile.C,v 1.5.4.1 2002/10/18 14:48:25 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
 
@@ -116,10 +116,6 @@ namespace BALL
 			window_message.setStatusBar("");
 			notify_(window_message);
     }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

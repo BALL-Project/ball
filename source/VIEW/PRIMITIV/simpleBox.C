@@ -1,4 +1,4 @@
-// $Id: simpleBox.C,v 1.6 2001/02/04 16:14:28 hekl Exp $
+// $Id: simpleBox.C,v 1.6.4.1 2002/10/18 14:47:59 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/simpleBox.h>
 
@@ -129,10 +129,6 @@ namespace BALL
 		{
 			return true;  
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/simpleBox.iC>
-#		endif
 
 	} // namespace VIEW
 

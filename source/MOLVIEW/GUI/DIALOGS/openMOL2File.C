@@ -1,4 +1,4 @@
-// $Id: openMOL2File.C,v 1.1 2001/08/16 00:50:13 oliver Exp $
+// $Id: openMOL2File.C,v 1.1.4.1 2002/10/18 14:48:25 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h>
 
@@ -128,10 +128,6 @@ namespace BALL
 			window_message.setStatusBar("");
 			notify_(window_message);
     }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

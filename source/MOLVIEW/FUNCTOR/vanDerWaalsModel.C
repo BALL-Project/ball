@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.C,v 1.11 2001/07/15 18:50:29 oliver Exp $
+// $Id: vanDerWaalsModel.C,v 1.11.4.1 2002/10/18 14:48:24 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 
@@ -116,11 +116,6 @@ namespace BALL
 		{
 			return (Sphere *)(new Sphere());
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: moleculeObjectCreator.h,v 1.4 2001/07/16 14:49:28 amoll Exp $
+// $Id: moleculeObjectCreator.h,v 1.4.4.1 2002/10/18 14:48:17 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -122,17 +122,14 @@ namespace BALL
 					See \Ref{TextPersistenceManager} for information
 					on how to convert \Ref{PersistentObject} objects into other objects.				
 					@param  po a reference to a \Ref{PersistentObject} to be converted
-					@return Composite* a converted \Ref{Composite} object if {\em po} could successfully be converted into a \Ref{Composite} object
+					@return Composite* a converted \Ref{Composite} object if {\em po} could successfully be 
+									converted into a \Ref{Composite} object
 					@see    initPersistenceManager
 			*/
 			virtual Composite *convertObject(PersistentObject &po)
 				throw();
 			//@}
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

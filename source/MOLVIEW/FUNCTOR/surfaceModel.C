@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.13.4.3 2002/09/24 16:58:19 anhi Exp $
+// $Id: surfaceModel.C,v 1.13.4.4 2002/10/18 14:48:23 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -147,11 +147,6 @@ namespace BALL
 		{
 			return (Mesh *)(new Mesh());
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/surfaceModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

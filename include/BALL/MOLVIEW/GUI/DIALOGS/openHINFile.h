@@ -1,4 +1,4 @@
-// $Id: openHINFile.h,v 1.7 2001/12/28 02:33:38 oliver Exp $
+// $Id: openHINFile.h,v 1.7.4.1 2002/10/18 14:48:13 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENHINFILE_H
@@ -130,10 +130,6 @@ namespace BALL
 
 			private:
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.iC>
-#		endif 
 
 		} // namespace VIEW
 

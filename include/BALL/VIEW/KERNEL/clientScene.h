@@ -1,4 +1,4 @@
-// $Id: clientScene.h,v 1.6 2000/02/17 00:30:46 oliver Exp $
+// $Id: clientScene.h,v 1.6.4.1 2002/10/18 14:48:06 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENTSCENE_H
 #define BALL_VIEW_KERNEL_CLIENTSCENE_H
@@ -142,11 +142,6 @@ namespace BALL
 			TextPersistenceManager pm_;
 		};
 
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/clientScene.iC>
-#		endif
-		
 	} // namespace VIEW
 	
 } // namespace BALL

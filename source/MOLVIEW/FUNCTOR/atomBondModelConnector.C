@@ -1,4 +1,4 @@
-// $Id: atomBondModelConnector.C,v 1.5 2001/07/01 21:45:27 oliver Exp $
+// $Id: atomBondModelConnector.C,v 1.5.4.1 2002/10/18 14:48:22 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h>
 
@@ -268,10 +268,6 @@ namespace BALL
     {
 			return new TwoColoredTube();
     }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: colorTable.C,v 1.4.4.3 2002/10/12 17:07:01 oliver Exp $
+// $Id: colorTable.C,v 1.4.4.4 2002/10/18 14:47:37 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 
@@ -276,10 +276,6 @@ namespace BALL
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/DATATYPE/colorTable.iC>
-#		endif 
 
 	} // namespace VIEW
 

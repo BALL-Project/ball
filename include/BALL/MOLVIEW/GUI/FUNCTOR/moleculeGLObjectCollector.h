@@ -1,4 +1,4 @@
-// $Id: moleculeGLObjectCollector.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
+// $Id: moleculeGLObjectCollector.h,v 1.5.4.1 2002/10/18 14:48:16 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
@@ -88,16 +88,13 @@ namespace BALL
 					of the processed \Ref{Molecule} object (if \Ref{getRootComposite} is of type
 					\Ref{Molecule}).
 					Calls \Ref{GLObjectCollector::operator()} for each \Ref{Bond} of \Ref{Molecule}.
-					@return bool {\tt true} if the finish of {\em *this} moleculeGLObjectCollector was successful, {\tt false} otherwise
+					@return bool {\tt true} if the finish of {\em *this} moleculeGLObjectCollector was successful, 
+					             {\tt false} otherwise
 			*/
 			virtual bool finish()
 				throw();
 			//@}
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

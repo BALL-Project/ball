@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.C,v 1.5 2001/05/13 15:02:41 hekl Exp $
+// $Id: glTwoColoredLine.C,v 1.5.4.1 2002/10/18 14:48:28 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.h>
 
@@ -148,10 +148,6 @@ namespace BALL
 			return TwoColoredLine::extract();
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.iC>
-#		endif
- 
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: molecularMessage.C,v 1.3 2001/05/13 15:02:41 hekl Exp $
+// $Id: molecularMessage.C,v 1.3.4.1 2002/10/18 14:48:31 amoll Exp $
 
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 
@@ -102,10 +102,6 @@ namespace BALL
 					<< " of class " << RTTI::getName<MolecularSelectionMessage>() << endl;
 			#endif 
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/KERNEL/molecularMessage.iC>
-#		endif 
 
 	} // namespace MOLVIEW
 

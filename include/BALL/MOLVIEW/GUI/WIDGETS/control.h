@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.1 2000/09/23 15:38:16 hekl Exp $
+// $Id: control.h,v 1.1.4.1 2002/10/18 14:48:19 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_CONTROL_H
@@ -175,10 +175,6 @@ using namespace BALL::MOLVIEW;
 			
 			bool selection_changed_;
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/WIDGETS/control.iC>
-#		endif
 
 //	} // namespace MOLVIEW
 

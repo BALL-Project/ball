@@ -1,4 +1,4 @@
-// $Id: moleculeObjectProcessor.h,v 1.3 2001/01/07 15:45:31 hekl Exp $
+// $Id: moleculeObjectProcessor.h,v 1.3.4.1 2002/10/18 14:48:17 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEOBJECTPROCESSOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEOBJECTPROCESSOR_H
@@ -149,10 +149,6 @@ namespace BALL
 			AtomChargeColorCalculator  atom_charge_color_calculator_;
 			CustomColorCalculator      custom_color_calculator_;
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeObjectProcessor.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

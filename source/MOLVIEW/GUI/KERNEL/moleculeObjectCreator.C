@@ -1,4 +1,4 @@
-// $Id: moleculeObjectCreator.C,v 1.3 2001/12/26 03:35:53 oliver Exp $
+// $Id: moleculeObjectCreator.C,v 1.3.4.1 2002/10/18 14:48:28 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
 
@@ -121,10 +121,6 @@ namespace BALL
 
 			return 0;
     }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

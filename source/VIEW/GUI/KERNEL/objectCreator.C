@@ -1,4 +1,4 @@
-// $Id: objectCreator.C,v 1.3 2001/05/13 14:28:36 hekl Exp $
+// $Id: objectCreator.C,v 1.3.4.1 2002/10/18 14:47:45 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
 
@@ -80,10 +80,6 @@ namespace BALL
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/objectCreator.iC>
-#		endif 
 
 	} // namespace VIEW
 

@@ -1,4 +1,4 @@
-// $Id: backboneModel.C,v 1.4 2001/07/15 18:50:28 oliver Exp $
+// $Id: backboneModel.C,v 1.4.4.1 2002/10/18 14:48:22 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
@@ -157,10 +157,6 @@ namespace BALL
 			return (Backbone *)(new Backbone());
 		}
 
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/backboneModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

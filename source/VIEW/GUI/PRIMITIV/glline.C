@@ -1,4 +1,4 @@
-// $Id: glline.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
+// $Id: glline.C,v 1.5.4.1 2002/10/18 14:47:55 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glline.h>
 #include <GL/gl.h>
@@ -112,6 +112,7 @@ namespace BALL
 
 			glPushMatrix();
 			
+			// BAUSTELLE
 			// drawing mode dots must be implemented
 			//  int precision;
 			//  int mode;
@@ -139,10 +140,6 @@ namespace BALL
 			return Line::extract();
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glline.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: sphere.h,v 1.11 2001/07/16 14:49:33 amoll Exp $
+// $Id: sphere.h,v 1.11.4.1 2002/10/18 14:48:09 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -263,10 +263,6 @@ namespace BALL
 				throw();
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/sphere.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: glVanDerWaalsModel.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
+// $Id: glVanDerWaalsModel.h,v 1.6.4.1 2002/10/18 14:48:16 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
@@ -101,10 +101,6 @@ namespace BALL
 			virtual Sphere* createSphere_();
 			//@}
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: molecularFilter.C,v 1.5 2001/07/15 18:50:28 oliver Exp $
+// $Id: molecularFilter.C,v 1.5.4.1 2002/10/18 14:48:23 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularFilter.h>
 
@@ -54,11 +54,6 @@ namespace BALL
 
 			setResult_(result);
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/molecularFilter.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: glSurfaceModel.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
+// $Id: glSurfaceModel.h,v 1.5.4.1 2002/10/18 14:48:15 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
@@ -101,10 +101,6 @@ namespace BALL
 			//@}
 		};
 
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.iC>
-#			endif
-		
 	} // namespace MOLVIEW
 
 } // namespace BALL

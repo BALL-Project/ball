@@ -102,11 +102,6 @@ namespace BALL
 			return true;
 		}
 
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/logView.iC>
-#		endif 
-
 	} // namespace VIEW
 
 } // namespace BALL

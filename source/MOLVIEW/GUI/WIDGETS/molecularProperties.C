@@ -1,4 +1,4 @@
-// $Id: molecularProperties.C,v 1.7 2001/12/26 03:35:53 oliver Exp $
+// $Id: molecularProperties.C,v 1.7.4.1 2002/10/18 14:48:30 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 
@@ -37,6 +37,7 @@ namespace BALL
 				// properties will be used only for atom containers
 				if (!RTTI::isKindOf<AtomContainer>(*(composite_message->getComposite())))
 				{
+					// BAUSTELLE
 					// ??????????????? warum wird eine MolecularMessage gesendet wenn
 					// composite kein AtomContainer ?????????????????????????????????
 					//
@@ -137,10 +138,6 @@ namespace BALL
 				}
 			}
     }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.h,v 1.7.4.1 2002/08/26 15:55:29 oliver Exp $
+// $Id: glPrimitiveManager.h,v 1.7.4.2 2002/10/18 14:48:01 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -724,10 +724,6 @@ namespace BALL
 			Name all_names_;
 		};
 
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.iC>
-#		endif
 
 	} // namespace VIEW
 

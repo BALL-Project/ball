@@ -1,4 +1,4 @@
-// $Id: moleculeObjectProcessor.C,v 1.3 2001/01/07 15:42:31 hekl Exp $
+// $Id: moleculeObjectProcessor.C,v 1.3.4.1 2002/10/18 14:48:27 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeObjectProcessor.h>
 
@@ -473,10 +473,6 @@ namespace BALL
     {
 			composite.apply(*processor);
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeObjectProcessor.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

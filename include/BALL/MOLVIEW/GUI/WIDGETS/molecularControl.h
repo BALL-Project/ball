@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.7 2001/07/16 14:49:28 amoll Exp $
+// $Id: molecularControl.h,v 1.7.4.1 2002/10/18 14:48:20 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -166,7 +166,8 @@ namespace BALL
 					calls for each of these children the method \Ref{updateListViewItem_}.
 					@param   item a pointer to a \Ref{QListViewItem} containing the subtree structure 
 					@param   composite a pointer to a \Ref{Composite} object containing the (possibly) new substructure
-					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree structure of {\em item} are unequal, {\tt false} otherwise 
+					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree structure of 
+												{\em item} are unequal, {\tt false} otherwise 
 					@see     updateListViewItem_
 			*/
 			virtual bool recurseUpdate_(QListViewItem* item, Composite* composite)
@@ -197,10 +198,6 @@ namespace BALL
 			// tests wether a composite holds the criterias
 			MolecularFilter molecular_filter_;
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

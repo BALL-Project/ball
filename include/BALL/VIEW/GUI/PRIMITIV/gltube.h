@@ -1,4 +1,4 @@
-// $Id: gltube.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
+// $Id: gltube.h,v 1.7.4.1 2002/10/18 14:48:05 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
@@ -202,10 +202,6 @@ namespace BALL
 
 			//@}
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/gltube.iC>
-#		endif
 
 	} // namespace VIEW
 

@@ -1,4 +1,4 @@
-// $Id: glSurfaceModel.C,v 1.3.4.1 2002/08/16 13:31:21 oliver Exp $
+// $Id: glSurfaceModel.C,v 1.3.4.2 2002/10/18 14:48:27 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h>
 
@@ -39,10 +39,6 @@ namespace BALL
 		{
 			return (Mesh *)(new GLMesh());
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

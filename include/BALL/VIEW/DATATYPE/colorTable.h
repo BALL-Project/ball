@@ -1,4 +1,4 @@
-// $Id: colorTable.h,v 1.3.4.1 2002/08/16 15:32:20 anhi Exp $
+// $Id: colorTable.h,v 1.3.4.2 2002/10/18 14:48:00 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #define BALL_VIEW_DATATYPE_COLORTABLE_H
@@ -154,10 +154,6 @@ namespace BALL
 				float min_, max_;
 		};
 
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/DATATYPE/colorTable.iC>
-#		endif
 
 	} // namespace VIEW
 

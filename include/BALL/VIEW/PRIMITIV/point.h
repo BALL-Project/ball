@@ -1,4 +1,4 @@
-// $Id: point.h,v 1.10 2001/07/16 14:49:33 amoll Exp $
+// $Id: point.h,v 1.10.4.1 2002/10/18 14:48:08 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #define BALL_VIEW_PRIMITIV_POINT_H
@@ -247,10 +247,6 @@ namespace BALL
 			virtual bool extract()
 				throw();
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/point.iC>
-#		endif
 
 	} // namespace VIEW
 

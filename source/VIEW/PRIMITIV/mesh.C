@@ -1,4 +1,4 @@
-// $Id: mesh.C,v 1.6.4.2 2002/08/29 10:50:45 anhi Exp $
+// $Id: mesh.C,v 1.6.4.3 2002/10/18 14:47:59 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/mesh.h>
 
@@ -137,10 +137,6 @@ namespace BALL
 		{
 			return true;  
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/mesh.iC>
-#		endif
 
 	} // namespace VIEW
 

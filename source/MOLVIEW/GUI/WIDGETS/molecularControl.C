@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.6 2001/05/13 15:02:41 hekl Exp $
+// $Id: molecularControl.C,v 1.6.4.1 2002/10/18 14:48:29 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <qpopupmenu.h>
@@ -159,7 +159,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 
 
 
-
+// BAUSTELLE
 /*
 void MolecularControl::ContextMenu
   (QListViewItem* item,  const QPoint& point, int column)
@@ -316,11 +316,6 @@ void MolecularControl::ContextMenu
 	}
 }
 */
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

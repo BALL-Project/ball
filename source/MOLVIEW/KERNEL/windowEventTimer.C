@@ -1,4 +1,4 @@
-// $Id: windowEventTimer.C,v 1.3 2001/01/26 00:43:56 amoll Exp $
+// $Id: windowEventTimer.C,v 1.3.4.1 2002/10/18 14:48:31 amoll Exp $
 #include <BALL/MOLVIEW/KERNEL/windowEventTimer.h>
 
 namespace BALL
@@ -45,10 +45,6 @@ namespace BALL
 				}
 			}
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/KERNEL/windowEventTimer.iC>
-#		endif 
 
 	} // namespace MOLVIEW
 

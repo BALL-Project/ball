@@ -1,4 +1,4 @@
-// $Id: elementColor.h,v 1.5.4.1 2002/10/12 17:06:52 oliver Exp $
+// $Id: elementColor.h,v 1.5.4.2 2002/10/18 14:48:10 amoll Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
 #define BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
@@ -82,10 +82,6 @@ namespace BALL
 			static const unsigned char color_values_[111][3];
 		};
 
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/COLORS/elementColor.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

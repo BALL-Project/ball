@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.1 2000/09/23 15:39:17 hekl Exp $
+// $Id: control.C,v 1.1.4.1 2002/10/18 14:48:29 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/control.h>
 
@@ -657,8 +657,4 @@ void Control::invalidateSelection()
 		it.current()->setSelected(FALSE);
 	}
 }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/WIDGETS/control.iC>
-#		endif
 

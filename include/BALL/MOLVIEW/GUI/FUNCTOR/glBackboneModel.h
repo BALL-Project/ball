@@ -1,4 +1,4 @@
-// $Id: glBackboneModel.h,v 1.4 2001/07/16 14:49:28 amoll Exp $
+// $Id: glBackboneModel.h,v 1.4.4.1 2002/10/18 14:48:14 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
@@ -101,10 +101,6 @@ namespace BALL
 			//@}
 		};
 
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.iC>
-#			endif
-		
 	} // namespace MOLVIEW
 
 } // namespace BALL

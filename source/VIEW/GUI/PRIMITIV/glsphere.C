@@ -1,4 +1,4 @@
-// $Id: glsphere.C,v 1.6 2001/05/13 14:28:37 hekl Exp $
+// $Id: glsphere.C,v 1.6.4.1 2002/10/18 14:47:57 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsphere.h>
 #include <GL/gl.h>
@@ -144,10 +144,6 @@ namespace BALL
 		{
 			return Sphere::extract();
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glsphere.iC>
-#		endif
 
 	} // namespace VIEW
 

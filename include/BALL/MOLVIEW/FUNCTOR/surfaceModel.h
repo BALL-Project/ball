@@ -1,4 +1,4 @@
-// $Id: surfaceModel.h,v 1.5 2001/07/16 14:49:23 amoll Exp $
+// $Id: surfaceModel.h,v 1.5.4.1 2002/10/18 14:48:12 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
@@ -199,10 +199,6 @@ namespace BALL
 
 			Composite* start_composite_;
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/FUNCTOR/surfaceModel.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: glBackbone.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
+// $Id: glBackbone.h,v 1.6.4.1 2002/10/18 14:48:18 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -243,10 +243,6 @@ namespace BALL
 			virtual Line* createLine_();		
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.iC>
-#		endif
-		
 	} // namespace MOLVIEW
 
 } // namespace BALL

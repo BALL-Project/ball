@@ -1,4 +1,4 @@
-// $Id: moleculeGLObjectCollector.C,v 1.4 2001/12/30 13:28:51 sturm Exp $
+// $Id: moleculeGLObjectCollector.C,v 1.4.4.1 2002/10/18 14:48:27 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
 
@@ -51,10 +51,6 @@ namespace BALL
 
 			return GLObjectCollector::finish();
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: glBackbone.C,v 1.4 2001/05/13 15:02:41 hekl Exp $
+// $Id: glBackbone.C,v 1.4.4.1 2002/10/18 14:48:28 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h>
 #include <GL/gl.h>
@@ -111,10 +111,6 @@ namespace BALL
 			return new GLLine();
 		}
 		
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.iC>
-#		endif
-
 	} // namespace MOLVIEW
 
 } // namespace BALL

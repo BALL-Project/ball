@@ -1,4 +1,4 @@
-// $Id: mesh.h,v 1.10.4.1 2002/08/16 15:33:37 anhi Exp $
+// $Id: mesh.h,v 1.10.4.2 2002/10/18 14:48:08 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -249,10 +249,6 @@ namespace BALL
 				throw();
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/mesh.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

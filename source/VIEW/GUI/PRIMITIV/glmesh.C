@@ -1,4 +1,4 @@
-// $Id: glmesh.C,v 1.5.4.2 2002/09/25 15:03:00 anhi Exp $
+// $Id: glmesh.C,v 1.5.4.3 2002/10/18 14:47:56 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 #include <GL/gl.h>
@@ -349,10 +349,6 @@ namespace BALL
 		{
 			return Mesh::extract();
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glmesh.iC>
-#		endif
 
 	} // namespace VIEW
 

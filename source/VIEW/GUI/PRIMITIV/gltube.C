@@ -1,4 +1,4 @@
-// $Id: gltube.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
+// $Id: gltube.C,v 1.5.4.1 2002/10/18 14:47:57 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gltube.h>
 #include <GL/gl.h>
@@ -159,10 +159,6 @@ namespace BALL
 			return Tube::extract();
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/gltube.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: glTwoColoredTube.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
+// $Id: glTwoColoredTube.h,v 1.6.4.1 2002/10/18 14:48:19 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
@@ -226,10 +226,6 @@ namespace BALL
 				(const Vector3& vertex_1, const Vector3& vertex_2,
 				 const Vector3& rotation_axis, const Real angle);
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: openPDBFile.h,v 1.7 2001/12/28 02:33:38 oliver Exp $
+// $Id: openPDBFile.h,v 1.7.4.1 2002/10/18 14:48:14 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENPDBFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENPDBFILE_H
@@ -128,10 +128,6 @@ namespace BALL
 
 			private:
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.iC>
-#		endif 
 
 	} // namespace MOLVIEW
 

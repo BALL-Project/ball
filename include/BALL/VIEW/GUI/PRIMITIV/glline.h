@@ -1,4 +1,4 @@
-// $Id: glline.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
+// $Id: glline.h,v 1.7.4.1 2002/10/18 14:48:02 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLINE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLINE_H
@@ -193,10 +193,6 @@ namespace BALL
 			//@}
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glline.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

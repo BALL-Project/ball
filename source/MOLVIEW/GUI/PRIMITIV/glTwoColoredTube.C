@@ -1,4 +1,4 @@
-// $Id: glTwoColoredTube.C,v 1.5 2001/05/13 15:02:41 hekl Exp $
+// $Id: glTwoColoredTube.C,v 1.5.4.1 2002/10/18 14:48:29 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h>
 
@@ -173,11 +173,6 @@ namespace BALL
 
 			glPopMatrix();
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

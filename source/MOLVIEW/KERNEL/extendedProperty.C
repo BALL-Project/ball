@@ -1,4 +1,4 @@
-// $Id: extendedProperty.C,v 1.8 2001/07/15 19:28:44 oliver Exp $
+// $Id: extendedProperty.C,v 1.8.4.1 2002/10/18 14:48:30 amoll Exp $
 
 #include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 
@@ -79,11 +79,6 @@ namespace BALL
 
 			PropertyManager::setProperty(property);
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/KERNEL/extendedProperty.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

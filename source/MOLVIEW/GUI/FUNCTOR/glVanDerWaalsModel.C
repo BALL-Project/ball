@@ -1,4 +1,4 @@
-// $Id: glVanDerWaalsModel.C,v 1.4 2001/05/13 15:02:41 hekl Exp $
+// $Id: glVanDerWaalsModel.C,v 1.4.4.1 2002/10/18 14:48:27 amoll Exp $
 
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h>
@@ -38,10 +38,6 @@ namespace BALL
 		{
 			return (Sphere *)(new GLSphere());
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

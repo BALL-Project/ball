@@ -148,12 +148,6 @@ namespace BALL
 			std::stringstream strstream_;
 		};
 
-
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/logView.iC>
-#		endif
-
 	}// namespace VIEW
 		
 }// namespace BALL

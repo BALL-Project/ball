@@ -1,4 +1,4 @@
-// $Id: glAtomBondModelConnector.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
+// $Id: glAtomBondModelConnector.h,v 1.5.4.1 2002/10/18 14:48:14 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
@@ -164,10 +164,6 @@ namespace BALL
 		};
 
 			
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.iC>
-#			endif
-
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,16 +1,11 @@
-// $Id: openHINFile.C,v 1.6 2002/01/16 02:59:38 oliver Exp $
+// $Id: openHINFile.C,v 1.6.4.1 2002/10/18 14:48:24 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
-#include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
+//#include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <BALL/MATHS/box3.h>
 #include <BALL/KERNEL/system.h>
-
-using std::istream;
-using std::ostream;
-using std::endl;
-using std::cerr;
 
 namespace BALL
 {
@@ -34,8 +29,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<OpenHINFile>() << endl;
+				std::cout << "Destructing object " << (void *)this 
+					<< " of class " << RTTI::getName<OpenHINFile>() << std::endl;
 			#endif 
 		}
 
@@ -150,10 +145,6 @@ namespace BALL
 			window_message.setStatusBar("");
 			notify_(window_message);
     }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.h,v 1.11 2001/07/16 14:49:23 amoll Exp $
+// $Id: vanDerWaalsModel.h,v 1.11.4.1 2002/10/18 14:48:12 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -208,10 +208,6 @@ namespace BALL
 			virtual Sphere* createSphere_();
 			//@}
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,4 @@
-// $Id: objectCreator.h,v 1.5 2001/07/16 14:49:30 amoll Exp $
+// $Id: objectCreator.h,v 1.5.4.1 2002/10/18 14:48:02 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
 #define BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
@@ -165,11 +165,6 @@ namespace BALL
 			TextPersistenceManager pm_;
 		};
 
-
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/objectCreator.iC>
-#		endif
 
 	}// namespace VIEW
 		

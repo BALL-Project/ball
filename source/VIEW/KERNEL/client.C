@@ -1,4 +1,4 @@
-// $Id: client.C,v 1.9 2001/05/13 14:28:37 hekl Exp $
+// $Id: client.C,v 1.9.4.1 2002/10/18 14:47:58 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -91,6 +91,7 @@ namespace BALL
 			iostream_socket->close();
     }
 
+		// ????????????
 		/*
 		void Client::setCreatorValue(int address, int value)
     {
@@ -202,10 +203,6 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/client.iC>
-#		endif 
-		
 	} // namespace VIEW
 
 } // namespace BALL

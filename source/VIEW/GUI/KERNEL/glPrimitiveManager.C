@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.C,v 1.7.4.1 2002/08/26 15:55:33 oliver Exp $
+// $Id: glPrimitiveManager.C,v 1.7.4.2 2002/10/18 14:47:45 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 
@@ -872,10 +872,6 @@ namespace BALL
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.iC>
-#		endif
 
 	} // namespace VIEW
 

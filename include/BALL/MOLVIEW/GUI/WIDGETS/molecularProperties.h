@@ -1,4 +1,4 @@
-// $Id: molecularProperties.h,v 1.8 2001/12/28 02:33:39 oliver Exp $
+// $Id: molecularProperties.h,v 1.8.4.1 2002/10/18 14:48:20 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -122,10 +122,6 @@ namespace BALL
 			
 			FragmentDB fragment_db_;  			
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

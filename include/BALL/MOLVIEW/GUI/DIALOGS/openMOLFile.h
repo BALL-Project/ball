@@ -1,4 +1,4 @@
-// $Id: openMOLFile.h,v 1.1.2.1 2002/08/23 08:23:07 oliver Exp $
+// $Id: openMOLFile.h,v 1.1.2.2 2002/10/18 14:48:13 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENMOLFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENMOLFILE_H
@@ -130,10 +130,6 @@ namespace BALL
 
 			private:
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/DIALOGS/openMOLFile.iC>
-#		endif 
 
 		} // namespace VIEW
 
