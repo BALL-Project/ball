@@ -1,4 +1,4 @@
-// $Id: AtomContainer_test.C,v 1.2 2001/01/21 21:27:33 amoll Exp $
+// $Id: AtomContainer_test.C,v 1.3 2001/05/30 20:48:26 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,9 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.2 2001/01/21 21:27:33 amoll Exp $")
+#include <algorithm>
+
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.3 2001/05/30 20:48:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -20,195 +22,195 @@ String filename;
 NEW_TMP_FILE(filename)
 
 
-AtomContainer*	bf;
+AtomContainer*	ac;
 CHECK(AtomContainer())
-	bf = new AtomContainer;
-	TEST_NOT_EQUAL(bf, 0)
+	ac = new AtomContainer;
+	TEST_NOT_EQUAL(ac, 0)
 RESULT
 
 CHECK(~AtomContainer())
-	delete bf;
+	delete ac;
 RESULT
 
 CHECK(setName(String&))
-	bf = new AtomContainer;
-	bf->setName("testname");
+	ac = new AtomContainer;
+	ac->setName("testname");
 RESULT
 
 CHECK(getName())
-	TEST_EQUAL(bf->getName(), "testname")
-	delete bf;
+	TEST_EQUAL(ac->getName(), "testname")
+	delete ac;
 RESULT
 
 CHECK(AtomContainer(AtomContainer&, bool))
-	AtomContainer* bf1 = new AtomContainer;
-	bf1->setName("testname");
+	AtomContainer* ac1 = new AtomContainer;
+	ac1->setName("testname");
 	Atom a;
 	a.setName("a");
-	bf1->insert(a);
-	AtomContainer* bf2 = new AtomContainer(*bf1, true);
-	TEST_NOT_EQUAL(bf2, 0)
-	if (bf2 != 0)
+	ac1->insert(a);
+	AtomContainer* ac2 = new AtomContainer(*ac1, true);
+	TEST_NOT_EQUAL(ac2, 0)
+	if (ac2 != 0)
 	{
-		TEST_EQUAL(bf2->getName(), "testname")
-		TEST_EQUAL(bf2->getAtom(0)->getName(), "a")
-		delete bf2;
+		TEST_EQUAL(ac2->getName(), "testname")
+		TEST_EQUAL(ac2->getAtom(0)->getName(), "a")
+		delete ac2;
 	}
-	bf2 = new AtomContainer(*bf1, false);
-	TEST_NOT_EQUAL(bf2, 0)
-	if (bf2 != 0)
+	ac2 = new AtomContainer(*ac1, false);
+	TEST_NOT_EQUAL(ac2, 0)
+	if (ac2 != 0)
 	{
-		TEST_EQUAL(bf2->getName(), "testname")
-		delete bf2;
+		TEST_EQUAL(ac2->getName(), "testname")
+		delete ac2;
 	}
-	delete bf1;
+	delete ac1;
 RESULT
 
 CHECK(AtomContainer(String&))
-	AtomContainer* bf1 = new AtomContainer("hello");
-	TEST_NOT_EQUAL(bf1, 0)
-	if (bf1 != 0)
+	AtomContainer* ac1 = new AtomContainer("hello");
+	TEST_NOT_EQUAL(ac1, 0)
+	if (ac1 != 0)
 	{
-		TEST_EQUAL(bf1->getName(), "hello")
-		delete bf1;
+		TEST_EQUAL(ac1->getName(), "hello")
+		delete ac1;
 	}
 RESULT
 
 CHECK(insert(AtomContainer&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	bf1.insert(bf2);
+	AtomContainer ac1;
+	AtomContainer ac2;
+	ac1.insert(ac2);
 RESULT
 
 CHECK(remove(AtomContainer&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	bf1.insert(bf2);
-	bf1.remove(bf2);
+	AtomContainer ac1;
+	AtomContainer ac2;
+	ac1.insert(ac2);
+	ac1.remove(ac2);
 RESULT
 
 CHECK(countAtomContainers())
-	AtomContainer bf1;
-	AtomContainer bf2;
-	TEST_EQUAL(bf1.countAtomContainers(), 0)
-	bf1.insert(bf2);
-	TEST_EQUAL(bf1.countAtomContainers(), 1)
-	bf1.remove(bf2);
-	TEST_EQUAL(bf1.countAtomContainers(), 0)
-	bf1.insert(bf1);
-	TEST_EQUAL(bf1.countAtomContainers(), 0)
-	bf1.insert(bf2);
-	TEST_EQUAL(bf1.countAtomContainers(), 1)
-	bf2.insert(bf1);
-	TEST_EQUAL(bf1.countAtomContainers(), 1)
-	TEST_EQUAL(bf2.countAtomContainers(), 0)
-	bf1.remove(bf2);
-	TEST_EQUAL(bf1.countAtomContainers(), 0)
-	TEST_EQUAL(bf2.countAtomContainers(), 0)
-	bf2.remove(bf1);
-	TEST_EQUAL(bf1.countAtomContainers(), 0)
-	TEST_EQUAL(bf2.countAtomContainers(), 0)
+	AtomContainer ac1;
+	AtomContainer ac2;
+	TEST_EQUAL(ac1.countAtomContainers(), 0)
+	ac1.insert(ac2);
+	TEST_EQUAL(ac1.countAtomContainers(), 1)
+	ac1.remove(ac2);
+	TEST_EQUAL(ac1.countAtomContainers(), 0)
+	ac1.insert(ac1);
+	TEST_EQUAL(ac1.countAtomContainers(), 0)
+	ac1.insert(ac2);
+	TEST_EQUAL(ac1.countAtomContainers(), 1)
+	ac2.insert(ac1);
+	TEST_EQUAL(ac1.countAtomContainers(), 1)
+	TEST_EQUAL(ac2.countAtomContainers(), 0)
+	ac1.remove(ac2);
+	TEST_EQUAL(ac1.countAtomContainers(), 0)
+	TEST_EQUAL(ac2.countAtomContainers(), 0)
+	ac2.remove(ac1);
+	TEST_EQUAL(ac1.countAtomContainers(), 0)
+	TEST_EQUAL(ac2.countAtomContainers(), 0)
 RESULT
 
 CHECK(getAtomContainer(Position))
-	AtomContainer bf1("bf1");
-	AtomContainer bf2("bf2");
-	AtomContainer* bf3;
-	bf3 = bf1.getAtomContainer(0);
-	TEST_EQUAL(bf3, 0)
-	bf1.insert(bf2);
-	bf3 = bf1.getAtomContainer(0);
-	TEST_NOT_EQUAL(bf3, 0)
-	if (bf3 != 0)
+	AtomContainer ac1("ac1");
+	AtomContainer ac2("ac2");
+	AtomContainer* ac3;
+	ac3 = ac1.getAtomContainer(0);
+	TEST_EQUAL(ac3, 0)
+	ac1.insert(ac2);
+	ac3 = ac1.getAtomContainer(0);
+	TEST_NOT_EQUAL(ac3, 0)
+	if (ac3 != 0)
 	{
-		TEST_EQUAL(bf3->getName(), "bf2")
+		TEST_EQUAL(ac3->getName(), "ac2")
 	}
-	bf3 = bf1.getAtomContainer(1);
-	TEST_EQUAL(bf3, 0)
+	ac3 = ac1.getAtomContainer(1);
+	TEST_EQUAL(ac3, 0)
 RESULT
 
 CHECK(getAtomContainer(Position) const)
-	AtomContainer bf1("bf1");
-	AtomContainer bf2("bf2");
-	const AtomContainer* bf3;
-	bf3 = bf1.getAtomContainer(0);
-	TEST_EQUAL(bf3, 0)
-	bf1.insert(bf2);
-	bf3 = bf1.getAtomContainer(0);
-	TEST_NOT_EQUAL(bf3, 0)
-	if (bf3 != 0)
+	AtomContainer ac1("ac1");
+	AtomContainer ac2("ac2");
+	const AtomContainer* ac3;
+	ac3 = ac1.getAtomContainer(0);
+	TEST_EQUAL(ac3, 0)
+	ac1.insert(ac2);
+	ac3 = ac1.getAtomContainer(0);
+	TEST_NOT_EQUAL(ac3, 0)
+	if (ac3 != 0)
 	{
-		TEST_EQUAL(bf3->getName(), "bf2")
+		TEST_EQUAL(ac3->getName(), "ac2")
 	}
-	bf3 = bf1.getAtomContainer(1);
-	TEST_EQUAL(bf3, 0)
+	ac3 = ac1.getAtomContainer(1);
+	TEST_EQUAL(ac3, 0)
 RESULT
 
 CHECK(clear())
-	AtomContainer bf1("bf1");
-	AtomContainer bf2("bf2");
-	AtomContainer bf3("bf2");
-	bf1.insert(bf2);
-	bf2.insert(bf3);
-	bf2.clear();
-	TEST_EQUAL(bf1.getName(), "bf1")
-	TEST_EQUAL(bf2.getName(), "")
-	TEST_EQUAL(bf3.getName(), "")
-	TEST_EQUAL(bf1.countAtomContainers(), 1)
-	TEST_EQUAL(bf2.countAtomContainers(), 0)
+	AtomContainer ac1("ac1");
+	AtomContainer ac2("ac2");
+	AtomContainer ac3("ac2");
+	ac1.insert(ac2);
+	ac2.insert(ac3);
+	ac2.clear();
+	TEST_EQUAL(ac1.getName(), "ac1")
+	TEST_EQUAL(ac2.getName(), "")
+	TEST_EQUAL(ac3.getName(), "")
+	TEST_EQUAL(ac1.countAtomContainers(), 1)
+	TEST_EQUAL(ac2.countAtomContainers(), 0)
 RESULT
 
 CHECK(destroy())
-	AtomContainer bf1("bf1");
-	AtomContainer bf2("bf2");
-	AtomContainer bf3("bf2");
-	bf1.insert(bf2);
-	bf2.insert(bf3);
-	bf2.destroy();
-	TEST_EQUAL(bf1.getName(), "bf1")
-	TEST_EQUAL(bf2.getName(), "")
-	TEST_EQUAL(bf3.getName(), "")
-	TEST_EQUAL(bf1.countAtomContainers(), 0)
-	TEST_EQUAL(bf2.countAtomContainers(), 0)
+	AtomContainer ac1("ac1");
+	AtomContainer ac2("ac2");
+	AtomContainer ac3("ac2");
+	ac1.insert(ac2);
+	ac2.insert(ac3);
+	ac2.destroy();
+	TEST_EQUAL(ac1.getName(), "ac1")
+	TEST_EQUAL(ac2.getName(), "")
+	TEST_EQUAL(ac3.getName(), "")
+	TEST_EQUAL(ac1.countAtomContainers(), 0)
+	TEST_EQUAL(ac2.countAtomContainers(), 0)
 RESULT
 
 CHECK(clone(bool))
-	AtomContainer* bf1 = new AtomContainer;
-	Composite*	composite = (Composite*)bf1;
-	bf1->setName("hello");
+	AtomContainer* ac1 = new AtomContainer;
+	Composite*	composite = (Composite*)ac1;
+	ac1->setName("hello");
 
 	Atom a1, a2, a3, a4;
 	a1.createBond(a2);
 	a1.createBond(a3);
 	a1.createBond(a4);
 
-	bf1->insert(a1);
-	bf1->insert(a2);
-	bf1->insert(a3);
-	bf1->insert(a4);
+	ac1->insert(a1);
+	ac1->insert(a2);
+	ac1->insert(a3);
+	ac1->insert(a4);
 
-	TEST_EQUAL(bf1->countBonds(), 3)
-	TEST_EQUAL(bf1->countAtoms(), 4)
+	TEST_EQUAL(ac1->countBonds(), 3)
+	TEST_EQUAL(ac1->countAtoms(), 4)
 
-	AtomContainer* bf2 = (AtomContainer*)composite->create(true);
-	TEST_NOT_EQUAL(bf2, 0)
-	if (bf2 != 0)
+	AtomContainer* ac2 = (AtomContainer*)composite->create(true);
+	TEST_NOT_EQUAL(ac2, 0)
+	if (ac2 != 0)
 	{
-		TEST_EQUAL(bf2->getName(), "hello")
-		TEST_EQUAL(bf2->countBonds(), 3)
-		TEST_EQUAL(bf2->countAtoms(), 4)
-		delete bf2;
+		TEST_EQUAL(ac2->getName(), "hello")
+		TEST_EQUAL(ac2->countBonds(), 3)
+		TEST_EQUAL(ac2->countAtoms(), 4)
+		delete ac2;
 	}
-	bf2 = (AtomContainer*)composite->create(false);
-	TEST_NOT_EQUAL(bf2, 0)
-	if (bf2 != 0)
+	ac2 = (AtomContainer*)composite->create(false);
+	TEST_NOT_EQUAL(ac2, 0)
+	if (ac2 != 0)
 	{
-		TEST_EQUAL(bf2->getName(), "hello")
-		TEST_EQUAL(bf2->countBonds(), 0)
-		TEST_EQUAL(bf2->countAtoms(), 0)
-		delete bf2;
+		TEST_EQUAL(ac2->getName(), "hello")
+		TEST_EQUAL(ac2->countBonds(), 0)
+		TEST_EQUAL(ac2->countAtoms(), 0)
+		delete ac2;
 	}
-	delete bf1;
+	delete ac1;
 RESULT
 
 TextPersistenceManager pm;
@@ -250,478 +252,478 @@ CHECK(persistentRead(PersistenceManager&))
 RESULT
 
 CHECK(set(AtomContainer&, bool))
-	AtomContainer bf1("name1");
-	AtomContainer bf2;
-	bf1.insert(bf2);
-	AtomContainer bf3;
-	bf3.set(bf1, false);
-	TEST_EQUAL(bf3.getName(), "name1");
-	TEST_EQUAL(bf3.countAtomContainers(), 0);
-	bf1.setName("name2");
-	bf3.set(bf1, true);
-	TEST_EQUAL(bf3.getName(), "name2");
-	TEST_EQUAL(bf3.countAtomContainers(), 1);
+	AtomContainer ac1("name1");
+	AtomContainer ac2;
+	ac1.insert(ac2);
+	AtomContainer ac3;
+	ac3.set(ac1, false);
+	TEST_EQUAL(ac3.getName(), "name1");
+	TEST_EQUAL(ac3.countAtomContainers(), 0);
+	ac1.setName("name2");
+	ac3.set(ac1, true);
+	TEST_EQUAL(ac3.getName(), "name2");
+	TEST_EQUAL(ac3.countAtomContainers(), 1);
 RESULT
 
 CHECK(operator = (AtomContainer&))
-	AtomContainer bf1("name1");
+	AtomContainer ac1("name1");
 	Atom a;
-	bf1.insert(a);
-	AtomContainer bf2;
-	bf2 = bf1;
-	TEST_EQUAL(bf2.getName(), "name1");
-	TEST_EQUAL(bf2.countAtoms(), 1);
+	ac1.insert(a);
+	AtomContainer ac2;
+	ac2 = ac1;
+	TEST_EQUAL(ac2.getName(), "name1");
+	TEST_EQUAL(ac2.countAtoms(), 1);
 RESULT
 
 CHECK(get(AtomContainer&, bool))
-	AtomContainer bf1("name1");
-	AtomContainer bf2;
-	bf1.insert(bf2);
-	AtomContainer bf3;
-	bf1.get(bf3, false);
-	TEST_EQUAL(bf3.getName(), "name1");
-	TEST_EQUAL(bf3.countAtomContainers(), 0);
-	bf1.setName("name2");
-	bf1.get(bf3, true);
-	TEST_EQUAL(bf3.getName(), "name2");
-	TEST_EQUAL(bf3.countAtomContainers(), 1);
+	AtomContainer ac1("name1");
+	AtomContainer ac2;
+	ac1.insert(ac2);
+	AtomContainer ac3;
+	ac1.get(ac3, false);
+	TEST_EQUAL(ac3.getName(), "name1");
+	TEST_EQUAL(ac3.countAtomContainers(), 0);
+	ac1.setName("name2");
+	ac1.get(ac3, true);
+	TEST_EQUAL(ac3.getName(), "name2");
+	TEST_EQUAL(ac3.countAtomContainers(), 1);
 RESULT
 
 CHECK(swap(AtomContainer&))
-	AtomContainer bf1("bf1");
-	AtomContainer bf2("bf2");
-	AtomContainer bf3("bf3");
-	AtomContainer bf4("bf4");
-	bf1.insert(bf2);
-	bf3.insert(bf4);
-	TEST_EQUAL(bf1.getName(), "bf1")
-	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
-	TEST_EQUAL(bf3.getName(), "bf3")
-	TEST_EQUAL(bf3.getAtomContainer(0), &bf4)
-	bf1.swap(bf3);
-	TEST_EQUAL(bf1.getName(), "bf3")
-	TEST_EQUAL(bf1.getAtomContainer(0), &bf4)
-	TEST_EQUAL(bf3.getName(), "bf1")
-	TEST_EQUAL(bf3.getAtomContainer(0), &bf2)
-	bf1.swap(bf3);
-	TEST_EQUAL(bf1.getName(), "bf1")
-	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
-	TEST_EQUAL(bf3.getName(), "bf3")
-	TEST_EQUAL(bf3.getAtomContainer(0), &bf4)
+	AtomContainer ac1("ac1");
+	AtomContainer ac2("ac2");
+	AtomContainer ac3("ac3");
+	AtomContainer ac4("ac4");
+	ac1.insert(ac2);
+	ac3.insert(ac4);
+	TEST_EQUAL(ac1.getName(), "ac1")
+	TEST_EQUAL(ac1.getAtomContainer(0), &ac2)
+	TEST_EQUAL(ac3.getName(), "ac3")
+	TEST_EQUAL(ac3.getAtomContainer(0), &ac4)
+	ac1.swap(ac3);
+	TEST_EQUAL(ac1.getName(), "ac3")
+	TEST_EQUAL(ac1.getAtomContainer(0), &ac4)
+	TEST_EQUAL(ac3.getName(), "ac1")
+	TEST_EQUAL(ac3.getAtomContainer(0), &ac2)
+	ac1.swap(ac3);
+	TEST_EQUAL(ac1.getName(), "ac1")
+	TEST_EQUAL(ac1.getAtomContainer(0), &ac2)
+	TEST_EQUAL(ac3.getName(), "ac3")
+	TEST_EQUAL(ac3.getAtomContainer(0), &ac4)
 RESULT
 
 CHECK(getMolecule())
-	AtomContainer bf1("bf1");
+	AtomContainer ac1("ac1");
 	Molecule* ptr;
-	ptr = bf1.getMolecule();
+	ptr = ac1.getMolecule();
 	TEST_EQUAL(ptr, 0)
 	Molecule m;
-	m.insert(bf1);
-	ptr = bf1.getMolecule();
+	m.insert(ac1);
+	ptr = ac1.getMolecule();
 	TEST_EQUAL(ptr, &m)
-	m.remove(bf1);
-	AtomContainer bf2;
-	bf2.insert(bf1);
-	m.insert(bf2);
-	ptr = bf1.getMolecule();
+	m.remove(ac1);
+	AtomContainer ac2;
+	ac2.insert(ac1);
+	m.insert(ac2);
+	ptr = ac1.getMolecule();
 	TEST_EQUAL(ptr, &m)
-	ptr = bf2.getMolecule();
+	ptr = ac2.getMolecule();
 	TEST_EQUAL(ptr, &m)
 RESULT
 
 CHECK(getMolecule() const)
-	AtomContainer bf1("bf1");
-	TEST_EQUAL(bf1.getMolecule(), 0)
+	AtomContainer ac1("ac1");
+	TEST_EQUAL(ac1.getMolecule(), 0)
 	Molecule m;
-	m.insert(bf1);
-	TEST_EQUAL(bf1.getMolecule(), &m)
-	m.remove(bf1);
-	AtomContainer bf2;
-	bf2.insert(bf1);
-	m.insert(bf2);
-	TEST_EQUAL(bf2.getMolecule(), &m)
-	TEST_EQUAL(bf1.getMolecule(), &m)
+	m.insert(ac1);
+	TEST_EQUAL(ac1.getMolecule(), &m)
+	m.remove(ac1);
+	AtomContainer ac2;
+	ac2.insert(ac1);
+	m.insert(ac2);
+	TEST_EQUAL(ac2.getMolecule(), &m)
+	TEST_EQUAL(ac1.getMolecule(), &m)
 RESULT
 
 CHECK(getSuperAtomContainer())
-	AtomContainer bf1("bf1");
-	AtomContainer* ptr = bf1.getSuperAtomContainer();
+	AtomContainer ac1("ac1");
+	AtomContainer* ptr = ac1.getSuperAtomContainer();
 	TEST_EQUAL(ptr, 0)
-	AtomContainer bf2;
-	AtomContainer bf3;
-	bf2.insert(bf3);
-	bf1.insert(bf2);
-	ptr = bf3.getSuperAtomContainer();
-	TEST_EQUAL(ptr, &bf2)
-	ptr = bf2.getSuperAtomContainer();
-	TEST_EQUAL(ptr, &bf1)
+	AtomContainer ac2;
+	AtomContainer ac3;
+	ac2.insert(ac3);
+	ac1.insert(ac2);
+	ptr = ac3.getSuperAtomContainer();
+	TEST_EQUAL(ptr, &ac2)
+	ptr = ac2.getSuperAtomContainer();
+	TEST_EQUAL(ptr, &ac1)
 RESULT
 
 CHECK(getSuperAtomContainer() const)
-	AtomContainer bf1("bf1");
-	const AtomContainer* ptr = bf1.getSuperAtomContainer();
+	AtomContainer ac1("ac1");
+	const AtomContainer* ptr = ac1.getSuperAtomContainer();
 	TEST_EQUAL(ptr, 0)
-	AtomContainer bf2;
-	AtomContainer bf3;
-	bf2.insert(bf3);
-	bf1.insert(bf2);
-	ptr = bf3.getSuperAtomContainer();
-	TEST_EQUAL(ptr, &bf2)
-	ptr = bf2.getSuperAtomContainer();
-	TEST_EQUAL(ptr, &bf1)
+	AtomContainer ac2;
+	AtomContainer ac3;
+	ac2.insert(ac3);
+	ac1.insert(ac2);
+	ptr = ac3.getSuperAtomContainer();
+	TEST_EQUAL(ptr, &ac2)
+	ptr = ac2.getSuperAtomContainer();
+	TEST_EQUAL(ptr, &ac1)
 RESULT
 
 CHECK(insert(Atom&))
-	AtomContainer bf1;
+	AtomContainer ac1;
 	Atom a;
-	bf1.insert(a);
+	ac1.insert(a);
 RESULT
 
 CHECK(remove(Atom&))
-	AtomContainer bf1;
+	AtomContainer ac1;
 	Atom a;
-	bf1.insert(a);
-	bf1.remove(a);
+	ac1.insert(a);
+	ac1.remove(a);
 RESULT
 
 CHECK(getAtom(Position))
-	AtomContainer bf1;
+	AtomContainer ac1;
 	Atom a;
-	Atom* ptr = bf1.getAtom(0);
+	Atom* ptr = ac1.getAtom(0);
 	TEST_EQUAL(ptr, 0)
-	bf1.insert(a);
-	ptr = bf1.getAtom(0);
+	ac1.insert(a);
+	ptr = ac1.getAtom(0);
 	TEST_EQUAL(ptr, &a)
-	bf1.remove(a);
-	ptr = bf1.getAtom(0);
+	ac1.remove(a);
+	ptr = ac1.getAtom(0);
 	TEST_EQUAL(ptr, 0)
-	ptr = bf1.getAtom(25);
+	ptr = ac1.getAtom(25);
 	TEST_EQUAL(ptr, 0)
 RESULT
 
 CHECK(getAtom(Position) const)
-	AtomContainer bf1;
+	AtomContainer ac1;
 	Atom a;
-	TEST_EQUAL(bf1.getAtom(0), 0)
-	bf1.insert(a);
-	TEST_EQUAL(bf1.getAtom(0), &a)
-	bf1.remove(a);
-	TEST_EQUAL(bf1.getAtom(0), 0)
-	TEST_EQUAL(bf1.getAtom(24), 0)
+	TEST_EQUAL(ac1.getAtom(0), 0)
+	ac1.insert(a);
+	TEST_EQUAL(ac1.getAtom(0), &a)
+	ac1.remove(a);
+	TEST_EQUAL(ac1.getAtom(0), 0)
+	TEST_EQUAL(ac1.getAtom(24), 0)
 RESULT
 
 CHECK(countAtoms())
-	AtomContainer bf1;
-	AtomContainer bf2;
-	bf1.insert(bf2);
+	AtomContainer ac1;
+	AtomContainer ac2;
+	ac1.insert(ac2);
 	Atom a1;
 	Atom a2;
 	Atom a3;
-	TEST_EQUAL(bf1.countAtoms(), 0)
-	TEST_EQUAL(bf2.countAtoms(), 0)
-	bf2.insert(a1);
-	TEST_EQUAL(bf1.countAtoms(), 1)
-	TEST_EQUAL(bf2.countAtoms(), 1)
-	bf1.insert(a2);
-	TEST_EQUAL(bf1.countAtoms(), 2)
-	TEST_EQUAL(bf2.countAtoms(), 1)
-	bf2.insert(a3);
-	TEST_EQUAL(bf1.countAtoms(), 3)
-	TEST_EQUAL(bf2.countAtoms(), 2)
-	bf1.remove(bf2);
-	TEST_EQUAL(bf1.countAtoms(), 1)
-	TEST_EQUAL(bf2.countAtoms(), 2)
+	TEST_EQUAL(ac1.countAtoms(), 0)
+	TEST_EQUAL(ac2.countAtoms(), 0)
+	ac2.insert(a1);
+	TEST_EQUAL(ac1.countAtoms(), 1)
+	TEST_EQUAL(ac2.countAtoms(), 1)
+	ac1.insert(a2);
+	TEST_EQUAL(ac1.countAtoms(), 2)
+	TEST_EQUAL(ac2.countAtoms(), 1)
+	ac2.insert(a3);
+	TEST_EQUAL(ac1.countAtoms(), 3)
+	TEST_EQUAL(ac2.countAtoms(), 2)
+	ac1.remove(ac2);
+	TEST_EQUAL(ac1.countAtoms(), 1)
+	TEST_EQUAL(ac2.countAtoms(), 2)
 RESULT
 
 CHECK(countBonds())
-	AtomContainer bf1;
-	AtomContainer bf2;
+	AtomContainer ac1;
+	AtomContainer ac2;
 	Atom a1;
 	Atom a2;
 	Atom a3;
 	Atom a4;
-	bf1.insert(a1);
-	bf1.insert(a2);
-	bf2.insert(a3);
-	bf2.insert(a4);
-	TEST_EQUAL(bf1.countBonds(), 0);
-	TEST_EQUAL(bf2.countBonds(), 0);
+	ac1.insert(a1);
+	ac1.insert(a2);
+	ac2.insert(a3);
+	ac2.insert(a4);
+	TEST_EQUAL(ac1.countBonds(), 0);
+	TEST_EQUAL(ac2.countBonds(), 0);
 	a1.createBond(a2);
 	a2.createBond(a3);
 	a3.createBond(a4);
 	a1.createBond(a4);
-	TEST_EQUAL(bf1.countBonds(), 3);
-	TEST_EQUAL(bf2.countBonds(), 3);
+	TEST_EQUAL(ac1.countBonds(), 3);
+	TEST_EQUAL(ac2.countBonds(), 3);
 RESULT
 
 CHECK(countInterBonds())
-	AtomContainer bf1;
-	AtomContainer bf2;
+	AtomContainer ac1;
+	AtomContainer ac2;
 	Atom a1;
 	Atom a2;
 	Atom a3;
 	Atom a4;
-	bf1.insert(a1);
-	bf1.insert(a2);
-	bf2.insert(a3);
-	bf2.insert(a4);
-	TEST_EQUAL(bf1.countInterBonds(), 0);
-	TEST_EQUAL(bf2.countInterBonds(), 0);
+	ac1.insert(a1);
+	ac1.insert(a2);
+	ac2.insert(a3);
+	ac2.insert(a4);
+	TEST_EQUAL(ac1.countInterBonds(), 0);
+	TEST_EQUAL(ac2.countInterBonds(), 0);
 	a1.createBond(a2);
 	a2.createBond(a3);
 	a3.createBond(a4);
-	TEST_EQUAL(bf1.countInterBonds(), 1);
-	TEST_EQUAL(bf2.countInterBonds(), 1);
+	TEST_EQUAL(ac1.countInterBonds(), 1);
+	TEST_EQUAL(ac2.countInterBonds(), 1);
 RESULT
 
 CHECK(countIntraBonds())
-	AtomContainer bf1;
-	AtomContainer bf2;
+	AtomContainer ac1;
+	AtomContainer ac2;
 	Atom a1;
 	Atom a2;
 	Atom a3;
 	Atom a4;
-	bf1.insert(a1);
-	bf1.insert(a2);
-	bf2.insert(a3);
-	bf2.insert(a4);
-	TEST_EQUAL(bf1.countIntraBonds(), 0);
-	TEST_EQUAL(bf2.countIntraBonds(), 0);
+	ac1.insert(a1);
+	ac1.insert(a2);
+	ac2.insert(a3);
+	ac2.insert(a4);
+	TEST_EQUAL(ac1.countIntraBonds(), 0);
+	TEST_EQUAL(ac2.countIntraBonds(), 0);
 	a1.createBond(a2);
 	a2.createBond(a3);
 	a3.createBond(a4);
-	TEST_EQUAL(bf1.countIntraBonds(), 1);
-	TEST_EQUAL(bf2.countIntraBonds(), 1);
+	TEST_EQUAL(ac1.countIntraBonds(), 1);
+	TEST_EQUAL(ac2.countIntraBonds(), 1);
 RESULT
 
 CHECK(prepend(Atom&))
-	AtomContainer bf1;
+	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
-	bf1.insert(a1);
-	TEST_EQUAL(bf1.getAtom(0), &a1)
-	bf1.prepend(a2);
-	TEST_EQUAL(bf1.getAtom(0), &a2)
-	TEST_EQUAL(bf1.getAtom(1), &a1)
+	ac1.insert(a1);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	ac1.prepend(a2);
+	TEST_EQUAL(ac1.getAtom(0), &a2)
+	TEST_EQUAL(ac1.getAtom(1), &a1)
 RESULT
 
 CHECK(insert(Atom&))
-	AtomContainer bf1;
+	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
-	bf1.insert(a1);
-	TEST_EQUAL(bf1.getAtom(0), &a1)
-	bf1.insert(a2);
-	TEST_EQUAL(bf1.getAtom(0), &a1)
-	TEST_EQUAL(bf1.getAtom(1), &a2)
+	ac1.insert(a1);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	ac1.insert(a2);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	TEST_EQUAL(ac1.getAtom(1), &a2)
 RESULT
 
 CHECK(append(Atom&))
-	AtomContainer bf1;
+	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
-	bf1.insert(a1);
-	bf1.append(a2);
-	TEST_EQUAL(bf1.getAtom(0), &a1)
-	TEST_EQUAL(bf1.getAtom(1), &a2)
+	ac1.insert(a1);
+	ac1.append(a2);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	TEST_EQUAL(ac1.getAtom(1), &a2)
 RESULT
 
 CHECK(insertBefore(Atom&, Composite&))
-	AtomContainer bf1;
+	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
 	Atom a3;
-	bf1.insert(a1);
-	bf1.append(a2);
-	bf1.insertBefore(a3, a2);
-	TEST_EQUAL(bf1.getAtom(0), &a1)
-	TEST_EQUAL(bf1.getAtom(1), &a3)
-	TEST_EQUAL(bf1.getAtom(2), &a2)
+	ac1.insert(a1);
+	ac1.append(a2);
+	ac1.insertBefore(a3, a2);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	TEST_EQUAL(ac1.getAtom(1), &a3)
+	TEST_EQUAL(ac1.getAtom(2), &a2)
 RESULT
 
 CHECK(insertAfter(Atom&, Composite&))
-	AtomContainer bf1;
+	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
 	Atom a3;
-	bf1.insert(a1);
-	bf1.append(a2);
-	bf1.insertAfter(a3, a1);
-	TEST_EQUAL(bf1.getAtom(0), &a1)
-	TEST_EQUAL(bf1.getAtom(1), &a3)
-	TEST_EQUAL(bf1.getAtom(2), &a2)
+	ac1.insert(a1);
+	ac1.append(a2);
+	ac1.insertAfter(a3, a1);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	TEST_EQUAL(ac1.getAtom(1), &a3)
+	TEST_EQUAL(ac1.getAtom(2), &a2)
 RESULT
 
 CHECK(prepend(AtomContainer&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	AtomContainer bf3;
-	bf1.prepend(bf2);
-	bf1.prepend(bf3);
-	TEST_EQUAL(bf1.getAtomContainer(1), &bf2)
-	TEST_EQUAL(bf1.getAtomContainer(0), &bf3)
+	AtomContainer ac1;
+	AtomContainer ac2;
+	AtomContainer ac3;
+	ac1.prepend(ac2);
+	ac1.prepend(ac3);
+	TEST_EQUAL(ac1.getAtomContainer(1), &ac2)
+	TEST_EQUAL(ac1.getAtomContainer(0), &ac3)
 RESULT
 
 CHECK(append(AtomContainer&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	AtomContainer bf3;
-	bf1.append(bf2);
-	bf1.append(bf3);
-	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
-	TEST_EQUAL(bf1.getAtomContainer(1), &bf3)
+	AtomContainer ac1;
+	AtomContainer ac2;
+	AtomContainer ac3;
+	ac1.append(ac2);
+	ac1.append(ac3);
+	TEST_EQUAL(ac1.getAtomContainer(0), &ac2)
+	TEST_EQUAL(ac1.getAtomContainer(1), &ac3)
 RESULT
 
 CHECK(insertBefore(AtomContainer&, Composite&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	AtomContainer bf3;
-	AtomContainer bf4;
-	bf1.append(bf2);
-	bf1.append(bf3);
-	bf1.insertBefore(bf4, bf3);
-	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
-	TEST_EQUAL(bf1.getAtomContainer(1), &bf4)
-	TEST_EQUAL(bf1.getAtomContainer(2), &bf3)
+	AtomContainer ac1;
+	AtomContainer ac2;
+	AtomContainer ac3;
+	AtomContainer ac4;
+	ac1.append(ac2);
+	ac1.append(ac3);
+	ac1.insertBefore(ac4, ac3);
+	TEST_EQUAL(ac1.getAtomContainer(0), &ac2)
+	TEST_EQUAL(ac1.getAtomContainer(1), &ac4)
+	TEST_EQUAL(ac1.getAtomContainer(2), &ac3)
 RESULT
 
 CHECK(insertAfter(AtomContainer&, Composite&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	AtomContainer bf3;
-	AtomContainer bf4;
-	bf1.append(bf2);
-	bf1.append(bf3);
-	bf1.insertAfter(bf4, bf2);
-	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
-	TEST_EQUAL(bf1.getAtomContainer(1), &bf4)
-	TEST_EQUAL(bf1.getAtomContainer(2), &bf3)
+	AtomContainer ac1;
+	AtomContainer ac2;
+	AtomContainer ac3;
+	AtomContainer ac4;
+	ac1.append(ac2);
+	ac1.append(ac3);
+	ac1.insertAfter(ac4, ac2);
+	TEST_EQUAL(ac1.getAtomContainer(0), &ac2)
+	TEST_EQUAL(ac1.getAtomContainer(1), &ac4)
+	TEST_EQUAL(ac1.getAtomContainer(2), &ac3)
 RESULT
 
 CHECK(spliceBefore(AtomContainer&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	AtomContainer bf3;
-	AtomContainer bf4;
-	bf1.append(bf2);
-	bf4.append(bf3);
-	bf4.spliceBefore(bf1);
-	TEST_EQUAL(bf1.getAtomContainer(0), 0)
-	TEST_EQUAL(bf4.getAtomContainer(0), &bf2)
-	TEST_EQUAL(bf4.getAtomContainer(1), &bf3)
-	bf4.spliceBefore(bf4);
-	TEST_EQUAL(bf4.getAtomContainer(0), &bf2)
-	TEST_EQUAL(bf4.getAtomContainer(1), &bf3)
+	AtomContainer ac1;
+	AtomContainer ac2;
+	AtomContainer ac3;
+	AtomContainer ac4;
+	ac1.append(ac2);
+	ac4.append(ac3);
+	ac4.spliceBefore(ac1);
+	TEST_EQUAL(ac1.getAtomContainer(0), 0)
+	TEST_EQUAL(ac4.getAtomContainer(0), &ac2)
+	TEST_EQUAL(ac4.getAtomContainer(1), &ac3)
+	ac4.spliceBefore(ac4);
+	TEST_EQUAL(ac4.getAtomContainer(0), &ac2)
+	TEST_EQUAL(ac4.getAtomContainer(1), &ac3)
 RESULT
 
 CHECK(spliceAfter(AtomContainer&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	AtomContainer bf3;
-	AtomContainer bf4;
-	bf1.append(bf2);
-	bf4.append(bf3);
-	bf4.spliceAfter(bf1);
-	TEST_EQUAL(bf1.getAtomContainer(0), 0)
-	TEST_EQUAL(bf4.getAtomContainer(1), &bf2)
-	TEST_EQUAL(bf4.getAtomContainer(0), &bf3)
-	bf4.spliceBefore(bf4);
-	TEST_EQUAL(bf4.getAtomContainer(1), &bf2)
-	TEST_EQUAL(bf4.getAtomContainer(0), &bf3)
+	AtomContainer ac1;
+	AtomContainer ac2;
+	AtomContainer ac3;
+	AtomContainer ac4;
+	ac1.append(ac2);
+	ac4.append(ac3);
+	ac4.spliceAfter(ac1);
+	TEST_EQUAL(ac1.getAtomContainer(0), 0)
+	TEST_EQUAL(ac4.getAtomContainer(1), &ac2)
+	TEST_EQUAL(ac4.getAtomContainer(0), &ac3)
+	ac4.spliceBefore(ac4);
+	TEST_EQUAL(ac4.getAtomContainer(1), &ac2)
+	TEST_EQUAL(ac4.getAtomContainer(0), &ac3)
 RESULT
 
 CHECK(splice(AtomContainer&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	AtomContainer bf3;
-	AtomContainer bf4;
-	AtomContainer bf5;
-	AtomContainer bfx;
-	AtomContainer bfy;
-	bf1.append(bf2);
-	bf1.append(bfx);
-	bf1.append(bf3);
-	bfx.append(bfy);
-	bf4.append(bf5);
-	bf1.splice(bfx);
-	TEST_EQUAL(bf1.getAtomContainer(0), &bf2)
-	TEST_EQUAL(bf1.getAtomContainer(1), &bfy)
-	TEST_EQUAL(bf1.getAtomContainer(2), &bf3)
-	bf1.splice(bf4);
-	TEST_EQUAL(bf1.getAtomContainer(0), &bf5)
-	TEST_EQUAL(bf1.getAtomContainer(1), &bf2)
+	AtomContainer ac1;
+	AtomContainer ac2;
+	AtomContainer ac3;
+	AtomContainer ac4;
+	AtomContainer ac5;
+	AtomContainer acx;
+	AtomContainer acy;
+	ac1.append(ac2);
+	ac1.append(acx);
+	ac1.append(ac3);
+	acx.append(acy);
+	ac4.append(ac5);
+	ac1.splice(acx);
+	TEST_EQUAL(ac1.getAtomContainer(0), &ac2)
+	TEST_EQUAL(ac1.getAtomContainer(1), &acy)
+	TEST_EQUAL(ac1.getAtomContainer(2), &ac3)
+	ac1.splice(ac4);
+	TEST_EQUAL(ac1.getAtomContainer(0), &ac5)
+	TEST_EQUAL(ac1.getAtomContainer(1), &ac2)
 RESULT
 
 CHECK(destroyBonds())
-	AtomContainer bf1;
+	AtomContainer ac1;
 	Atom a1, a2, a3, a4;
 	a1.createBond(a2);
 	a1.createBond(a3);
 	a1.createBond(a4);
 	a3.createBond(a4);
-	bf1.append(a1);
-	bf1.append(a2);
-	bf1.destroyBonds();
+	ac1.append(a1);
+	ac1.append(a2);
+	ac1.destroyBonds();
 	TEST_EQUAL(a1.countBonds(), 0)	
 	TEST_EQUAL(a2.countBonds(), 0)	
 	TEST_EQUAL(a3.countBonds(), 1)	
 RESULT
 
 CHECK(isSubAtomContainerOf(AtomContainer&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	AtomContainer bf3;
-	bf1.append(bf2);
-	bf2.append(bf3);
-	TEST_EQUAL(bf1.isSubAtomContainerOf(bf2), false)	
-	TEST_EQUAL(bf2.isSubAtomContainerOf(bf2), false)	
-	TEST_EQUAL(bf2.isSubAtomContainerOf(bf1), true)	
-	TEST_EQUAL(bf3.isSubAtomContainerOf(bf1), true)	
+	AtomContainer ac1;
+	AtomContainer ac2;
+	AtomContainer ac3;
+	ac1.append(ac2);
+	ac2.append(ac3);
+	TEST_EQUAL(ac1.isSubAtomContainerOf(ac2), false)	
+	TEST_EQUAL(ac2.isSubAtomContainerOf(ac2), false)	
+	TEST_EQUAL(ac2.isSubAtomContainerOf(ac1), true)	
+	TEST_EQUAL(ac3.isSubAtomContainerOf(ac1), true)	
 RESULT
 
 CHECK(isSuperAtomContainerOf(AtomContainer&))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	AtomContainer bf3;
-	bf1.append(bf2);
-	bf2.append(bf3);
-	TEST_EQUAL(bf1.isSuperAtomContainerOf(bf2), true)	
-	TEST_EQUAL(bf1.isSuperAtomContainerOf(bf3), true)	
-	TEST_EQUAL(bf2.isSuperAtomContainerOf(bf2), false)	
-	TEST_EQUAL(bf2.isSuperAtomContainerOf(bf1), false)	
-	TEST_EQUAL(bf3.isSuperAtomContainerOf(bf1), false)	
+	AtomContainer ac1;
+	AtomContainer ac2;
+	AtomContainer ac3;
+	ac1.append(ac2);
+	ac2.append(ac3);
+	TEST_EQUAL(ac1.isSuperAtomContainerOf(ac2), true)	
+	TEST_EQUAL(ac1.isSuperAtomContainerOf(ac3), true)	
+	TEST_EQUAL(ac2.isSuperAtomContainerOf(ac2), false)	
+	TEST_EQUAL(ac2.isSuperAtomContainerOf(ac1), false)	
+	TEST_EQUAL(ac3.isSuperAtomContainerOf(ac1), false)	
 RESULT
 
 CHECK(isValid())
-	AtomContainer bf1;
-	AtomContainer bf2;
-	AtomContainer bf3;
-	bf1.append(bf2);
-	bf2.append(bf3);
+	AtomContainer ac1;
+	AtomContainer ac2;
+	AtomContainer ac3;
+	ac1.append(ac2);
+	ac2.append(ac3);
 	Atom a1, a2, a3, a4;
 	a1.createBond(a2);
 	a1.createBond(a3);
 	a1.createBond(a4);
 	a3.createBond(a3);
-	bf1.append(a1);
-	bf2.append(a2);
-	bf3.append(a3);
-	TEST_EQUAL(bf1.isValid(), true)	
-	TEST_EQUAL(bf2.isValid(), true)	
-	TEST_EQUAL(bf3.isValid(), true)	
+	ac1.append(a1);
+	ac2.append(a2);
+	ac3.append(a3);
+	TEST_EQUAL(ac1.isValid(), true)	
+	TEST_EQUAL(ac2.isValid(), true)	
+	TEST_EQUAL(ac3.isValid(), true)	
 RESULT
 
 CHECK(dump(ostream&, Size))
-	AtomContainer bf1;
-	AtomContainer bf2;
-	bf1.setName("BF1");
-	bf2.setName("BF2");
-	bf1.append(bf2);
+	AtomContainer ac1;
+	AtomContainer ac2;
+	ac1.setName("BF1");
+	ac2.setName("BF2");
+	ac1.append(ac2);
 	Atom a1;
 	a1.setName("A1");
-	bf2.append(a1);
+	ac2.append(a1);
 	std::ofstream outfile(filename.c_str(), File::OUT);
-	bf1.dump(outfile);
+	ac1.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/AtomContainer_test.txt", true)
 RESULT
@@ -752,6 +754,22 @@ RESULT
 
 CHECK(write(ostream&))
 // NotImplemented
+RESULT
+
+CHECK(beginAtom()/endAtom())
+	AtomContainer ac1;
+	Atom a1;
+	a1.setName("A1");
+	Atom a2;
+	a2.setName("A2");
+	ac1.append(a1);
+	ac1.append(a2);
+	vector<Atom> vec(20);
+
+	std::copy(ac1.beginAtom(), ac1.endAtom(), vec.begin());
+	TEST_EQUAL(vec[0].getName(), "A1")
+	TEST_EQUAL(vec[1].getName(), "A2")
+	TEST_EQUAL(vec[3].getName(), "")
 RESULT
 
 /////////////////////////////////////////////////////////////
