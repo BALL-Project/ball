@@ -1,4 +1,4 @@
-// $Id: predicate.h,v 1.7 2001/02/26 00:21:49 amoll Exp $
+// $Id: predicate.h,v 1.8 2001/07/18 09:59:52 amoll Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -28,8 +28,8 @@ namespace BALL
 			(or \Ref{Protein}, as Protein is derived from Molecule). Otherwise false is returned.\\
 			Each KernelPredicate possesses three methods:
 			\begin{itemize}
-				\item{\bf operator (const Composite\&)}
-				\item{\bf operator (const Composite\&) const}
+				\item{\bf operator (const Composite&)}
+				\item{\bf operator (const Composite&) const}
 			\end{itemize}
 			The two operators are functionally identical (two methods are needed, because the class
 			is derived from TUnaryPredicate and we want to make sure both methods are overwritten).
