@@ -1,4 +1,4 @@
-// $Id: XYZFile.h,v 1.1 2000/05/15 19:13:31 oliver Exp $
+// $Id: XYZFile.h,v 1.2 2000/06/20 21:32:28 oliver Exp $
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
@@ -53,6 +53,10 @@ namespace BALL
 				@param open_mode the openmode - default is {\tt std::ios::in}
 		*/
 		XYZFile(const String& filename, File::OpenMode open_mode = std::ios::in);
+
+		/**	Copy constructor
+		*/
+		XYZFile(const XYZFile& file);
 
 		/// Destructor
 		virtual ~XYZFile();

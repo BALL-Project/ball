@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.5 2000/05/23 05:45:11 oliver Exp $
+// $Id: HINFile.h,v 1.6 2000/06/20 21:32:28 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -48,6 +48,10 @@ namespace BALL
 		/** Detailled constructor.
 		*/
 		HINFile(const String& filename, File::OpenMode open_mode = std::ios::in);
+
+		/**	Copy constructor
+		*/
+		HINFile(const HINFile& file);
 
 		/// Destructor
 		virtual ~HINFile();

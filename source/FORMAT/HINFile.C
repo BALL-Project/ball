@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.17 2000/05/24 09:19:39 oliver Exp $
+// $Id: HINFile.C,v 1.18 2000/06/20 21:31:42 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -31,6 +31,11 @@ namespace BALL
 
 	HINFile::HINFile(const String& name, File::OpenMode open_mode)
 		: File(name, open_mode)
+	{
+	}
+
+	HINFile::HINFile(const HINFile& file)
+		: File(file)
 	{
 	}
 
