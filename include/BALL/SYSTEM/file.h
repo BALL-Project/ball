@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.20 2000/12/19 18:36:07 anker Exp $
+// $Id: file.h,v 1.21 2001/02/16 00:07:33 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -29,10 +29,8 @@
 namespace BALL 
 {
 	
-	/**	File Class.
-			\\
-			{\bf Definition:} \URL{BALL/SYSTEM/file.h}
-			\\
+	/**	File Class.	\\
+			{\bf Definition:} \URL{BALL/SYSTEM/file.h} \\
 	*/
 	class File
 		: public std::fstream
@@ -48,8 +46,8 @@ namespace BALL
 				as described in Section 27.4.2.1.4 of the ANSI C++ standard.
 		*/
 		typedef std::ios::openmode OpenMode;			
+
 		//@}
-		
 		/**	@name	Constants
 		*/
 		//@{
@@ -66,8 +64,8 @@ namespace BALL
 		static const OpenMode ATE = std::ios::ate;
 		/// Truncate an existing file.
 		static const OpenMode TRUNC = std::ios::trunc;
-		//@}
 
+		//@}
 		/**	@name	Enums
 		*/
 		//@{
@@ -128,8 +126,8 @@ namespace BALL
 			///
 			TYPE__FIFO_SPECIAL_FILE  = 7
 		};
-		//@}
 
+		//@}
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -145,7 +143,7 @@ namespace BALL
 				Construct new File object from the file {\em name}
 				and open the file.
 				@param  name the name of the file to be opend
-				@param  OpenMode the openmode to be used
+				@param  open_mode the openmode to be used
 				@see    open
 				@return File - new constructed File object
 		*/
@@ -169,8 +167,8 @@ namespace BALL
 		virtual ~File();
 
 		//@}
-
-		/**	@name	Assignment */
+		/**	@name	Assignment 
+		*/
 		//@{
 
 		/** Assignment operator.
@@ -181,8 +179,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-		/**	@name	Accessors */
+		/**	@name	Accessors 
+		*/
 		//@{
 
 		/** Clears the File object.
@@ -224,6 +222,12 @@ namespace BALL
 		*/
 		const String& getName()
 			const	throw();
+		
+		/** Close the file and point to an other file.
+				@param  name the new file
+		*/
+		void setName(const String& name)
+			throw (Exception::FileNotFound);
 
 		/**	Return the size of the file.
 				If the file does not exist 0 is returned.
@@ -272,7 +276,7 @@ namespace BALL
 			(String source_name, String destination_name, Size buffer_size = 4096)
 			throw(Exception::FileNotFound);
 
-		/**	Copy the file this File object is associated with to a given destination.
+		/**	Copy the file to a given destination.
 				If a file with the destination name exists allready, nothing happens.
 				@param destination_name the name of the destination file
 				@param buffer_size the buffer size to use while copying
@@ -285,7 +289,6 @@ namespace BALL
 				If a file with the destination name exists allready, nothing happens.
 				@param source_name the name of the source file
 				@param destination_name the name of the destination file
-				@param buffer_size the buffer size to use while moving
 				@return true if copying was successfull
 		*/
 		static bool move(const String& source_name, const String& destination_name)
@@ -307,7 +310,7 @@ namespace BALL
 		static bool remove(String name)
 			throw();
 
-		/**	Remove the file, this File object is associated with.
+		/**	Remove the file.
 				@return bool true if the file could be removed
 		*/
 		bool remove()
@@ -321,7 +324,7 @@ namespace BALL
 		static bool rename(String old_path, String new_path)
 			throw (Exception::FileNotFound);
 
-		/**	Rename the file this File object is associated with to a given name.
+		/**	Rename the file to a given name.
 				If a file with the destination name exists allready, nothing happens.
 				@param new_path the new path and name of the file
 				@return bool true if the file could be renamed
@@ -337,7 +340,7 @@ namespace BALL
 		static bool truncate(String path, Size size = 0)
 			throw (Exception::FileNotFound);
 
-		/**	Truncate the file this File object is associated with.
+		/**	Truncate the file.
 				@param size the new size of the file
 				@return bool true if the file could be truncated
 		*/
@@ -346,7 +349,7 @@ namespace BALL
 			
 		/**	Create a temporary filename.
 				This method creates strings, starting at _AAAAAAA.TMP and tries if a 
-				file with this name exists. If not the string is returned. If a file
+				file with this name exists. If not, the string is returned. If a file
 				with this name exists, it continues to create names up to _ZZZZZZZ.TMP.
 				@param temporary reference to the temporary filename
 				@return bool true if a temporary filename could be found
@@ -361,24 +364,21 @@ namespace BALL
     std::fstream& getFileStream();
 
 		//@}
-
 		/**	@name Predicates 
 		*/
 		//@{
 
 		/**	Equality comparison operator.
-				Two File objects are equal if they point to the same canonzied filename.
+				Two File objects are equal if they point to the same canonized filename.
 		*/
 		bool operator == (const File& file)
 			const	throw();
 		
 		/**	Inequality comparison operator.
-				Two File objects are equal if they point not to the same canonized filename.
+				Two File objects are inequal if they point not to the same canonized filename.
 		*/
 		bool operator != (const File& file)
 			const	throw();
-
-		//@}
 
 		/**	Test if the file is opend.
 				The standard constructor opens the file.
@@ -457,13 +457,12 @@ namespace BALL
 		bool isExecutable()
 			const throw (Exception::FileNotFound);
  
-		void setName(const String& name)
-			throw (Exception::FileNotFound);
-
-		/**	@name	Debugging and Diagnostics */
+		//@}
+		/**	@name	Debugging and Diagnostics 
+		*/
 		//@{
 
-		/**	Test if the file ist valid.
+		/**	Test if the file is valid.
 				This function uses std::fstream::good().
 				@return bool true if the file is valid
 		*/
@@ -481,10 +480,8 @@ namespace BALL
 	};
 
 
-	/** Helper class for data conversion.
-			\\
-			{\bf Definition:} \URL{BALL/SYSTEM/file.h}
-			\\
+	/** Helper class for data conversion.	\\
+			{\bf Definition:} \URL{BALL/SYSTEM/file.h} \\
 	*/
 	template <typename T>
 	class BinaryFileAdaptor
@@ -504,7 +501,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		///@name Accessors
 		//@{
 
@@ -517,7 +513,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 
 		protected:
 

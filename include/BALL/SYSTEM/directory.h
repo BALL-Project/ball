@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.9 2000/07/04 14:24:40 oliver Exp $
+// $Id: directory.h,v 1.10 2001/02/16 00:07:33 amoll Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -34,27 +34,29 @@ namespace BALL
 		/**	@name Constants
 		*/
 		//@{
+
 		/**	The maximum length of a path.
 				This constant is used for system calls that require
 				a maximum length (e.g., getcwd()). Default is 8192.
 		*/
 		static const Size MAX_PATH_LENGTH;
-		//@}
 
-		/**	@name	Constructors and Destructors */
+		//@}
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		/** Default constructor.
 				Constructs new Directory object.
 				The directory path is set to the current working directory.
-				The directory path does not have a path seperator {\em /} at its end.
+				The directory path does not have a path seperator {\em "/"} at its end.
 				@return    Directory - new constructed Directory object
 		*/
 		Directory();
 
 		/** Detailed constructor.
 				Construct new Directory object from the directory {\em directory_path}.
-				The directory path does not have a path seperator {\em /} at its end.
+				The directory path does not have a path seperator {\em "/"} at its end.
 				If the given directory does not exists, the directory path is set to an empty string.
 				@param  directory_path the name of the directory to be opend
 				@param  set_current true, to set the directory as the current, default = false
@@ -76,14 +78,17 @@ namespace BALL
 
 		/** Explicit default initialization.
 				Set the state of {\em *this} Directory to the default values.
+				The path is set to an empty string.
 		*/
 		void clear();
 
-		/** Explicit destructor.*/
+		/** Explicit destructor.
+		*/
 		void destroy();
-		//@}
 
-		/**	@name	Assignment */
+		//@}
+		/**	@name	Assignment 
+		*/
 		//@{
 
 		/** Assign the Directory with the path {\em directory_path} to {\em *this}.
@@ -98,7 +103,6 @@ namespace BALL
 		/** Assignment with cloning facility.
 				Assign the Directory {\em directory} to {\em *this}.
 				@param  directory_path the directory to be cloned
-				@param  set_current true to set the directory as the current, default = false
 		*/
 		void set(const Directory& directory);
 
@@ -113,19 +117,19 @@ namespace BALL
 		*/
 		void get(Directory& directory) const;
 
-		/** Swapping of Directorys.
+		/** Swapping of Directories.
 				Swap the states of {\em *this} Directory with the Directory {\em directory}.
-				@param	Directory the Directory being swapped with {\em *this} Directory 
+				@param	directory the Directory being swapped with {\em *this} Directory 
 		*/
 		void swap(Directory& directory);
-		//@}
-			
 
-		/**	@name	Accessors */
+		//@}
+		/**	@name	Accessors 
+		*/
 		//@{
 
 		/** Get the path of {\em *this} object.
-				The directory path does not have a path seperator {\em /} at its end
+				The directory path does not have a path seperator {\em "/"} at its end
 				and is absolute; If a unvalid path was set the path is an empty string.
 				@return String the name of the directory
 		*/
@@ -134,8 +138,8 @@ namespace BALL
 		/** Rename a given directory.
 				With this method the directory associated with this object can not
 				be renamed. Use renameTo instead to do so.
-				@param old_path the old oath
-				@param new_path the new oath
+				@param old_path the old path
+				@param new_path the new path
 				@return bool  true if the directory could be renamed
 		*/
 		bool rename(String old_path, String new_path);
@@ -193,7 +197,7 @@ namespace BALL
 		bool getNextEntry(String& entry);
 
 		/** Count all items in the directory.
-				@return Size the size
+				@return Size the number of items (files, links, directories)
 		*/
 		Size countItems();
 
@@ -216,17 +220,17 @@ namespace BALL
 		bool find(const String& filename, String& filepath);
 
 		//@}
-
-		/**	@name	Predicates */
+		/**	@name	Predicates 
+		*/
 		//@{
 		
 		/** Test if the directory has an item.
-				@param filename the name of the item to look for
+				@param item the name of the item to look for
 				@return bool true if the directory has the file
 		*/
 		bool has(const String& item);
 
-		/**	Test if the directory ist valid.
+		/**	Test if the directory is valid.
 				The directory is valid if it exists.
 				This function uses ::opendir(const char *dirname).
 				@return bool true if the directory is valid

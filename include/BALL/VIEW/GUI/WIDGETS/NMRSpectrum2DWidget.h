@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum2DWidget.h,v 1.2 2001/01/29 00:33:25 amoll Exp $
+// $Id: NMRSpectrum2DWidget.h,v 1.3 2001/02/16 00:07:48 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_NMRSPECTRUM2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_NMRSPECTRUM2DWIDGET_H
@@ -79,7 +79,7 @@ class nmr
 
   ~nmr();
 
-  /** Erstellt eine Bildlegende der Breite w und Höhe h.
+  /** Erstellt eine Bildlegende der Breite w und H”he h.
    */
   void createLegend(int w, int h);
 

@@ -1,4 +1,4 @@
-// $Id: piecewisePolynomial.h,v 1.4 2000/10/18 13:55:46 anker Exp $
+// $Id: piecewisePolynomial.h,v 1.5 2001/02/16 00:06:52 amoll Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -21,7 +21,7 @@ namespace BALL
 		future. The PPCurves are of the form 
 		$\sum_{i=0}^{d} a_i^{(k)} (x - x_0^{(k)})^i$, where $k$ is the index of
 		the interval and $d$ is the overall degree of the PPCurve. Note that
-		there is no warranty that the defined curve ist continuously
+		there is no warranty that the defined curve is continuously
 		differentiable or even continuous.
 		{\bf Definition:} \URL{BALL/MATHS/pPolynomial.h}
 	 */

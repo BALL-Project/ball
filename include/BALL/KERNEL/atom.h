@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.31 2001/01/20 00:26:34 amoll Exp $
+// $Id: atom.h,v 1.32 2001/02/16 00:07:18 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -84,8 +84,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.31 $
-			@date    $Date: 2001/01/20 00:26:34 $
+			@version $Revision: 1.32 $
+			@date    $Date: 2001/02/16 00:07:18 $
 	*/
 	class Atom
 		: public Composite,
@@ -512,7 +512,7 @@ namespace BALL
 					If the residue is a CYS involved in a disulphide bridge, an additional {\tt -S} or {\tt S} (for terminal residue)
 					is appended. For single amino acids (C and N terminal) {\tt -M} is added.\\
 					If the atom is not contained in a residue, the name of the parent fragment 
-					is taken instead of	the residue name. If there is no parent fragment, the name of the parent molecule ist taken.
+					is taken instead of	the residue name. If there is no parent fragment, the name of the parent molecule is taken.
 					If the atom is not contained in any superstructure, getFullname returns getName.\\
 					Overview of the returned strings:
 					\begin{itemize}

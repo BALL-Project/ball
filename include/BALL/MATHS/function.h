@@ -1,4 +1,4 @@
-// $Id: function.h,v 1.4 2000/12/19 16:24:24 anker Exp $
+// $Id: function.h,v 1.5 2001/02/16 00:06:52 amoll Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -10,8 +10,7 @@ namespace BALL
 {
 
 	/** Constant function class. This function represents a constant that is
-			already known at compile time.
-			\\
+			already known at compile time. \\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	// BAUSTELLE float templates sind nicht ansi.
@@ -44,8 +43,7 @@ namespace BALL
 
 
 	/** Constant function class. This class represents constants that are not
-			known at compile time but must be set at running time.
-			\\
+			known at compile time but must be set at running time. \\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	template <typename DataType = float>
@@ -80,8 +78,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Assignment
 		*/
 		//@{
@@ -92,8 +88,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Predicates
 		*/
 		//@{
@@ -104,8 +98,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Function realization
 		*/
 		//@{
@@ -122,14 +114,11 @@ namespace BALL
 		}
 
 		//@}
-
-
 		/** @name Accessors
 		*/
 		//@{
 
 		/** set the constant argument of the constant
-				@return a reference to the constant argument
 		*/
 		void setConstant(DataType constant)
 			throw()
@@ -148,7 +137,6 @@ namespace BALL
 	
 		//@}
 
-
 		protected:
 
 		/*_ the constant
@@ -158,8 +146,7 @@ namespace BALL
 	};
 
 
-	/** Addition class.
-			\\
+	/** Addition class.	\\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	template <typename First, typename Second, typename DataType = float>
@@ -189,8 +176,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Assignment
 		*/
 		//@{
@@ -201,8 +186,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Predicates
 		*/
 		//@{
@@ -213,8 +196,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Function realization
 		*/
 		//@{
@@ -231,14 +212,11 @@ namespace BALL
 		}
 
 		//@}
-
-
 		/** @name Accessors
 		*/
 		//@{
 
 		/** set the first argument of the addition
-				@return a reference to the first argument
 		*/
 		void setFirst(const First& first)
 			throw()
@@ -255,8 +233,7 @@ namespace BALL
 			return first_;
 		}
 
-		/** set the first argument of the addition
-				@return a reference to the first argument
+		/** set the second argument of the addition
 		*/
 		void setSecond(const Second& second)
 			throw()
@@ -264,8 +241,8 @@ namespace BALL
 			second_ = second;
 		}
 
-		/** get the first argument of the addition
-				@return a const reference to the first argument
+		/** get the second argument of the addition
+				@return a const reference to the second argument
 		*/
 		Second& getSecond()
 			throw()
@@ -274,7 +251,6 @@ namespace BALL
 		}
 	
 		//@}
-
 
 		protected:
 
@@ -289,8 +265,7 @@ namespace BALL
 	};
 
 
-	/** Subtraction class.
-			\\
+	/** Subtraction class. \\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	template <typename First, typename Second, typename DataType = float>
@@ -320,8 +295,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Assignment
 		*/
 		//@{
@@ -332,8 +305,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Predicates
 		*/
 		//@{
@@ -344,8 +315,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Function realization
 		*/
 		//@{
@@ -362,14 +331,11 @@ namespace BALL
 		}
 
 		//@}
-
-
 		/** @name Accessors
 		*/
 		//@{
 
 		/** set the first argument of the subtraction
-				@return a reference to the first argument
 		*/
 		void setFirst(const First& first)
 			throw()
@@ -386,8 +352,7 @@ namespace BALL
 			return first_;
 		}
 
-		/** set the first argument of the subtraction
-				@return a reference to the first argument
+		/** set the second argument of the subtraction
 		*/
 		void setSecond(const Second& second)
 			throw()
@@ -395,8 +360,8 @@ namespace BALL
 			second_ = second;
 		}
 
-		/** get the first argument of the subtraction
-				@return a const reference to the first argument
+		/** get the second argument of the subtraction
+				@return a const reference to the second argument
 		*/
 		Second& getSecond()
 			throw()
@@ -405,7 +370,6 @@ namespace BALL
 		}
 	
 		//@}
-
 
 		protected:
 
@@ -420,8 +384,7 @@ namespace BALL
 	};
 
 
-	/** Multiplication class.
-			\\
+	/** Multiplication class.	\\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	template <typename First, typename Second, typename DataType = float>
@@ -451,8 +414,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Assignment
 		*/
 		//@{
@@ -463,8 +424,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Predicates
 		*/
 		//@{
@@ -475,8 +434,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Function realization
 		*/
 		//@{
@@ -493,14 +450,11 @@ namespace BALL
 		}
 
 		//@}
-
-
 		/** @name Accessors
 		*/
 		//@{
 
 		/** set the first argument of the product
-				@return a reference to the first argument
 		*/
 		void setFirst(const First& first)
 			throw()
@@ -517,7 +471,7 @@ namespace BALL
 			return first_;
 		}
 
-		/** set the first argument of the product
+		/** set the second argument of the product
 				@param second the second argument
 		*/
 		void setSecond(const Second& second)
@@ -526,8 +480,8 @@ namespace BALL
 			second_ = second;
 		}
 
-		/** get the first argument of the product
-				@return a const reference to the first argument
+		/** get the second argument of the product
+				@return a const reference to the second argument
 		*/
 		Second& getSecond()
 			throw()
@@ -536,7 +490,6 @@ namespace BALL
 		}
 	
 		//@}
-
 
 		protected:
 
@@ -551,8 +504,7 @@ namespace BALL
 	};
 
 
-	/** Division class.
-			\\
+	/** Division class.	\\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	template <typename First, typename Second, typename DataType = float>
@@ -582,8 +534,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Assignment
 		*/
 		//@{
@@ -594,8 +544,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Predicates
 		*/
 		//@{
@@ -606,8 +554,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Function realization
 		*/
 		//@{
@@ -632,14 +578,11 @@ namespace BALL
 		}
 
 		//@}
-
-
 		/** @name Accessors
 		*/
 		//@{
 
 		/** set the first argument of the division
-				@return a reference to the first argument
 		*/
 		void setFirst(const First& first)
 			throw()
@@ -656,8 +599,7 @@ namespace BALL
 			return first_;
 		}
 
-		/** set the first argument of the division
-				@return a reference to the first argument
+		/** set the second argument of the division
 		*/
 		void setSecond(const Second& second)
 			throw()
@@ -665,8 +607,8 @@ namespace BALL
 			second_ = second;
 		}
 
-		/** get the first argument of the division
-				@return a const reference to the first argument
+		/** get the second argument of the division
+				@return a const reference to the second argument
 		*/
 		Second& getSecond()
 			throw()
@@ -675,7 +617,6 @@ namespace BALL
 		}
 	
 		//@}
-
 
 		protected:
 
@@ -690,8 +631,7 @@ namespace BALL
 	};
 
 
-	/** Reciprocal class.
-			\\
+	/** Reciprocal class.	\\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	template <typename Function, typename DataType = float>
@@ -721,8 +661,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Assignment
 		*/
 		//@{
@@ -733,8 +671,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Predicates
 		*/
 		//@{
@@ -745,8 +681,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Function realization
 		*/
 		//@{
@@ -771,14 +705,11 @@ namespace BALL
 		}
 
 		//@}
-
-
 		/** @name Accessors
 		*/
 		//@{
 
 		/** set the function argument of the reciprocal
-				@return a reference to the function argument
 		*/
 		void setFunction(const Function& function)
 			throw()
@@ -797,7 +728,6 @@ namespace BALL
 	
 		//@}
 
-
 		protected:
 
 		/*_ the argument of the reciprocal
@@ -807,8 +737,7 @@ namespace BALL
 	};
 
 
-	/** SquareFunction class.
-			\\
+	/** SquareFunction class.	\\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	template <typename Function, typename DataType = float>
@@ -838,8 +767,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Assignment
 		*/
 		//@{
@@ -850,8 +777,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Predicates
 		*/
 		//@{
@@ -862,8 +787,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Function realization
 		*/
 		//@{
@@ -881,14 +804,11 @@ namespace BALL
 		}
 
 		//@}
-
-
 		/** @name Accessors
 		*/
 		//@{
 
 		/** set the function argument of the square
-				@return a reference to the function argument
 		*/
 		void setFunction(const Function& function)
 			throw()
@@ -917,8 +837,7 @@ namespace BALL
 	};
 
 
-	/** CubicFunction class.
-			\\
+	/** CubicFunction class. \\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	template <typename Function, typename DataType = float>
@@ -948,8 +867,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Assignment
 		*/
 		//@{
@@ -960,8 +877,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Predicates
 		*/
 		//@{
@@ -972,8 +887,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Function realization
 		*/
 		//@{
@@ -991,14 +904,11 @@ namespace BALL
 		}
 
 		//@}
-
-
 		/** @name Accessors
 		*/
 		//@{
 
 		/** set the function argument of the cubic
-				@return a reference to the function argument
 		*/
 		void setFunction(const Function& function)
 			throw()
@@ -1017,7 +927,6 @@ namespace BALL
 	
 		//@}
 
-
 		protected:
 
 		/*_ the argument of the cubic
@@ -1027,8 +936,7 @@ namespace BALL
 	};
 
 
-	/** MutablePower class.
-			\\
+	/** MutablePower class.	\\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	template <typename Function, typename DataType = float>
@@ -1058,8 +966,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Assignment
 		*/
 		//@{
@@ -1070,8 +976,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Predicates
 		*/
 		//@{
@@ -1082,8 +986,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/** @name Function realization
 		*/
 		//@{
@@ -1100,14 +1002,11 @@ namespace BALL
 		}
 
 		//@}
-
-
 		/** @name Accessors
 		*/
 		//@{
 
 		/** set the function argument of the power
-				@return a reference to the function argument
 		*/
 		void setFunction(const Function& function)
 			throw()
@@ -1135,8 +1034,8 @@ namespace BALL
 		*/
 		DataType getExponent() const
 			throw();
-		//@}
 
+		//@}
 
 		protected:
 
