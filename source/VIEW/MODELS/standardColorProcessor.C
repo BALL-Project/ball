@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.19 2003/11/20 17:17:16 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.20 2003/11/20 17:24:47 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -302,6 +302,7 @@ namespace BALL
 
 			ColorRGBA color = table_.map(pos);
 			color.setAlpha(255 - transparency_);
+			return color;
 		}
 
 		bool ResidueNumberColorProcessor::start()
