@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.5 2000/01/10 15:51:15 oliver Exp $
+// $Id: geometricProperties.C,v 1.6 2000/01/15 18:56:51 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -80,7 +80,10 @@ namespace BALL
 
 	bool GeometricCenterProcessor::finish()
 	{
-		center_ /= (float)n_;
+		if (n_ != 0)
+		{
+			center_ /= (float)n_;
+		}
 
 		return true;
 	}
