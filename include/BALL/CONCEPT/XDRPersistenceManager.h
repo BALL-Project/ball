@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.10 2000/10/29 11:29:24 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.11 2000/10/29 22:29:10 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -320,14 +320,6 @@ namespace BALL
 		//@}
 
 		private:
-		
-		void checkReadBuffer_();
-
-		void checkWriteBuffer_();
-
-		void writeBuffer_();
-		
-		void readBuffer_();
 
 		/**	The XDR struct used to read from
 		*/
