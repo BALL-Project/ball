@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.36 2001/08/24 01:30:07 oliver Exp $
+// $Id: String_test.C,v 1.37 2002/01/03 01:56:38 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.36 2001/08/24 01:30:07 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.37 2002/01/03 01:56:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -591,7 +591,7 @@ CHECK(String::toShort())
 	s4.set("abc");
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toShort())
 	s4.set("");
-	//TEST_EQUAL(s4.toShort(), (short)0)
+	TEST_EQUAL(s4.toShort(), (short)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toShort(), (short)12)
 	s4.set("999999999999999999999999");
@@ -604,7 +604,7 @@ CHECK(String::toUnsignedShort())
 	s4.set("abc");
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedShort())
 	s4.set("");
-	//TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)0)
+	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)12)
 	s4.set("999999999999999999999999");
@@ -1568,7 +1568,7 @@ CHECK(String::compare(char*, Index, Size))
 	TEST_EQUAL(s4.compare("abc", 0, 1), 0)
 	TEST_EQUAL(s4.compare("abc", 0, 2), 0)
 	TEST_EQUAL(s4.compare("abc", 0, 3), 0)
-	//TEST_EXCEPTION(Exception::IndexOverflow, s4.compare("abc", 0, 4))
+	TEST_EXCEPTION(Exception::IndexOverflow, s4.compare("abc", 0, 4))
 	TEST_EQUAL(s4.compare("axxx", 0, 1), 0)
 	TEST_EQUAL(s4.compare("abxx", 0, 2), 0)
 	TEST_EQUAL(s4.compare("abcx", 0, 3), 0)
