@@ -52,7 +52,7 @@ HashSet                             DX          /       store methods
       Node
       IteratorTraits_
 List                                /           /
-Options                             /           /
+Options                             X           /	isValid
 Quadruple                           /           X       operators >=, <=
 RegularData1D                       /           Z
 RegularData2D                       /           Z
