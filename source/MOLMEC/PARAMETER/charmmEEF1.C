@@ -1,4 +1,4 @@
-// $Id: charmmEEF1.C,v 1.1 2000/01/30 12:58:12 oliver Exp $
+// $Id: charmmEEF1.C,v 1.2 2000/02/06 20:00:35 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
@@ -17,6 +17,7 @@ namespace BALL
 			dH_ref_(0),
 			Cp_ref_(0),
 			sig_w_(0),
+			R_min_(0),
 			is_defined_(0)
 	{
 	}
@@ -35,6 +36,7 @@ namespace BALL
 		delete [] Cp_ref_;
 		delete [] dH_ref_;
 		delete [] sig_w_;
+		delete [] R_min_;
 
 		FFParameterSection::destroy();
 	}
@@ -51,11 +53,11 @@ namespace BALL
 		FFParameterSection::extractSection(parameters, section_name);
 
 		// check whether all variables we need are defined, terminate otherwise
-		if (!(hasVariable("V") && !hasVariable("dG_free")
-				&& hasVariable("dH_ref") && hasVariable("Cp_ref") && hasVariable("sig_w")))
+		if (!hasVariable("V") || !hasVariable("dG_free") || !hasVariable("R_min")
+				|| !hasVariable("dH_ref") || !hasVariable("Cp_ref") || !hasVariable("sig_w"))
 		{
-			Log.level(LogStream::ERROR) << "CHARMm EEF1 parameter section requires five variable columns:"		
-				<< "V/dG_ref/dG_free/dH_ref/Cp_ref/sig_w" << endl;
+			Log.level(LogStream::ERROR) << "CHARMm EEF1 parameter section requires six variable columns:"		
+				<< "V, dG_ref, dG_free, dH_ref, Cp_ref, sig_w, and R_min." << endl;
 
 			return false;
 
@@ -72,6 +74,7 @@ namespace BALL
 		dH_ref_			= new float[number_of_atom_types_];
 		Cp_ref_			= new float[number_of_atom_types_];
 		sig_w_			= new float[number_of_atom_types_];
+		R_min_			= new float[number_of_atom_types_];
 		is_defined_ = new bool[number_of_atom_types_];
 
 		// loop variable
@@ -90,6 +93,7 @@ namespace BALL
 		Size index_dH_ref		= getColumnIndex("dH_ref");
 		Size index_Cp_ref		= getColumnIndex("Cp_ref");
 		Size index_sig_w		= getColumnIndex("sig_w");
+		Size index_R_min		= getColumnIndex("R_min");
 
 		// try to identify the units of all parameters
 		// and set the conversion factors
@@ -162,22 +166,22 @@ namespace BALL
 		double factor_Cp_ref = 1.0;
 		if (options.has("unit_Cp_ref"))
 		{
-			if (options["unit_Cp_ref"] == "kcal/mol")
+			if (options["unit_Cp_ref"] == "kcal/(molK)")
 			{
 				factor_Cp_ref = Constants::JOULE_PER_CAL;
 			}
-			else if (options["unit_Cp_ref"] == "cal/mol")
+			else if (options["unit_Cp_ref"] == "cal/(molK)")
 			{
 				factor_Cp_ref = Constants::JOULE_PER_CAL * 0.001;					
 			}
-			else if (options["unit_Cp_ref"] == "J/mol")
+			else if (options["unit_Cp_ref"] == "J/(molK)")
 			{
 				factor_Cp_ref = 0.001;
 			}
-			else if (options["unit_Cp_ref"] != "kJ/mol")
+			else if (options["unit_Cp_ref"] != "kJ/(molK)")
 			{
 				Log.error() << "FFPSCharmmEEF1: unknown unit for parameter column Cp_ref: " 
-										<< options["unit_Cp_ref"] << ". Assuming kJ/mol as default unit." << endl;
+										<< options["unit_Cp_ref"] << ". Assuming kJ/(molK) as default unit." << endl;
 			}
 		}
 
@@ -194,12 +198,25 @@ namespace BALL
 				Log.error() << "FFPSCharmmEEF1: unknown unit for parameter column sig_w: " 
 										<< options["unit_sig_w"] << ". Assuming Angstrom as default unit." << endl;
 			}
+		}
 
-
+		double factor_R_min = 1.0;
+		if (options.has("unit_R_min"))
+		{
+			if (options["unit_R_min"] == "pm")
+			{
+				factor_R_min = 0.1;
+			}
+			else if (options["unit_R_min"] != "A"
+							 && options["unit_R_min"] != "Angstrom")
+			{
+				Log.error() << "FFPSCharmmEEF1: unknown unit for parameter column R_min: " 
+										<< options["unit_R_min"] << ". Assuming Angstrom as default unit." << endl;
+			}
 		}
 
 		double factor_V = 1.0;
-		if (options.has("unit_sig_w"))
+		if (options.has("unit_V"))
 		{
 			if (options["unit_V"] != "A^3"
 							 && options["unit_V"] != "Angstrom^3")
@@ -209,23 +226,26 @@ namespace BALL
 			}
 		}
 
-		String			key;
+		String key;
 		for (i = 1; i <= getNumberOfKeys(); ++i)
 		{
 			// get the key
 			key = getKey(i);
 			if (atom_types.hasType(key))
 			{
+				Position idx = atom_types.getType(key);
 				// retrieve the values
-				V_[i]				= getValue(i, index_V).toFloat() * factor_V;
-				dG_ref_[i]	= getValue(i, index_dG_ref).toFloat() * factor_dG_ref;
-				dG_free_[i] = getValue(i, index_dG_free).toFloat() * factor_dG_free;
-				dH_ref_[i]	= getValue(i, index_dH_ref).toFloat() * factor_dH_ref;
-				Cp_ref_[i]	= getValue(i, index_Cp_ref).toFloat() * factor_Cp_ref;
-				sig_w_[i]		= getValue(i, index_sig_w).toFloat() * factor_sig_w;
-				is_defined_[i] = true;
+				V_[idx]				= getValue(i, index_V).toFloat() * factor_V;
+				dG_ref_[idx]	= getValue(i, index_dG_ref).toFloat() * factor_dG_ref;
+				dG_free_[idx] = getValue(i, index_dG_free).toFloat() * factor_dG_free;
+				dH_ref_[idx]	= getValue(i, index_dH_ref).toFloat() * factor_dH_ref;
+				Cp_ref_[idx]	= getValue(i, index_Cp_ref).toFloat() * factor_Cp_ref;
+				sig_w_[idx]		= getValue(i, index_sig_w).toFloat() * factor_sig_w;
+				R_min_[idx]		= getValue(i, index_R_min).toFloat() * factor_R_min;
+				is_defined_[idx] = true;
 
 			} else {
+
 				Log.level(LogStream::WARNING) << "unknown atom type in Charmm EEF1 parameters: " << key << "   i = " << i << endl;
 			}
 		}
@@ -262,8 +282,10 @@ namespace BALL
 			parameters.V				= V_[I];
 			parameters.dG_ref		= dG_ref_[I];
 			parameters.dG_free	= dG_free_[I];
-			parameters.r_min		= sig_w_[I];
+			parameters.sig_w		= sig_w_[I];
+			parameters.r_min		= R_min_[I];
 			parameters.dH_ref		= dH_ref_[I];
+			parameters.Cp_ref		= Cp_ref_[I];
 			parameters.Cp_ref		= Cp_ref_[I];
 
 			return true;
