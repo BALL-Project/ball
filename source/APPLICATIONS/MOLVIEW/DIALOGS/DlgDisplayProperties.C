@@ -257,6 +257,11 @@ void DlgDisplayProperties::editColor()
 	custom_color_ = color;
 
 	object_processor_->setColorCalculator(COLORCALCULATOR_VALUES__CUSTOM, color);
+
+	coloring_method_string_ = "custom";
+  setComboBoxIndex_(coloring_type_combobox_, coloring_method_string_);
+  selectColoringMethod(coloring_method_string_);
+	update();
 }
 
 void DlgDisplayProperties::setComboBoxIndex_(QComboBox* combo_box, QString& item_string)
