@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.25 2003/12/10 15:51:05 amoll Exp $
+// $Id: mainControl.h,v 1.26 2003/12/20 15:32:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -575,11 +575,15 @@ namespace BALL
 			*/
 			//@{
 			
-			/// Get the HashSet with the selected (e.g. picked) Composite objects
+			/// Get the HashSet with the selected (e.g. picked) Composite objects (const)
 			const HashSet<Composite*>& getSelection() const
 				throw();
 
-			/// Get the selection (highlighted items) of the MolecularControl (not the selection with checkboxes).
+			/// Get the HashSet with the selected (e.g. picked) Composite objects
+			HashSet<Composite*>& getSelection() 
+				throw();
+
+			/// Get the selection (highlighted items) of the MolecularControl (not the selection with checkboxes)
 			List<Composite*>& getControlSelection()
 				throw();
 
@@ -593,6 +597,12 @@ namespace BALL
 
 			/// Select a Composite recursive and add all Atom and AtomContainer objects to the selection.
 			void deselectCompositeRecursive(Composite* composite, bool first_call=false)
+				throw();
+
+			/** Clear Selection
+			 		Deselect all Composites and clear the selection list in the MainControl
+			*/
+			void clearSelection()
 				throw();
 
 			/** Print some informations for the selection in the statusbar.

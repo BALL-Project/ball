@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.45 2003/12/17 15:10:42 amoll Exp $
+// $Id: mainControl.C,v 1.46 2003/12/20 15:32:38 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -860,6 +860,11 @@ const HashSet<Composite*>& MainControl::getSelection() const
 	return selection_;
 }
 
+HashSet<Composite*>& MainControl::getSelection() 
+	throw()
+{
+	return selection_;
+}
 
 System* MainControl::getSelectedSystem()
 	throw()
@@ -1113,6 +1118,26 @@ void MainControl::sendMessage(Message& message)
 	onNotify(&message);
 	notify_(&message);
 }
+
+void MainControl::clearSelection()
+	throw()
+{
+	CompositeManager::CompositeIterator it = getCompositeManager().begin();
+	for (; it != getCompositeManager().end(); it++)
+	{
+		getSelection().insert(*it);
+		deselectCompositeRecursive(*it);
+		updateRepresentationsOf(**it, true);
+	}
+
+ 	getSelection().clear();
+
+ 	updateAllRepresentations(true);
+
+	NewSelectionMessage* nm = new NewSelectionMessage;
+	sendMessage(*nm);
+}
+
 // ======================= StatusbarTimer =========================
 StatusbarTimer::StatusbarTimer(QObject* parent)
 	throw()

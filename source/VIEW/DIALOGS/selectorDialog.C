@@ -40,8 +40,6 @@ void SelectorDialog::accept()
 		return;
 	}
 
-// 	mc->getSelection().clear();
-
 	List<Composite*>::Iterator it = mc->getControlSelection().begin();
 	for(; it != mc->getControlSelection().end(); it++)
 	{
@@ -66,21 +64,7 @@ void SelectorDialog::clearSelection()
 	MainControl* mc = MainControl::getMainControl(parentWidget());
 	if (mc == 0) return;
 	
-	CompositeManager::CompositeIterator it = mc->getCompositeManager().begin();
-	for (; it != mc->getCompositeManager().end(); it++)
-	{
-//	 	CompositeMessage* cm = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE);
-// 		mc->sendMessage(*cm);
-		mc->getSelection().insert(*it);
-		mc->deselectCompositeRecursive(*it);
-		mc->updateRepresentationsOf(**it, true);
-	}
- 	mc->getSelection().clear();
-
- 	mc->updateAllRepresentations(true);
-
-	NewSelectionMessage* nm = new NewSelectionMessage;
-	mc->sendMessage(*nm);
+	mc->clearSelection();
 }
 
 // NAMESPACE
