@@ -55,8 +55,6 @@ Fixed:
 		- ResidueIndexColorProcessor now no longer considers water residues 
 		- visualization of contour surfaces had sometimes incorrect normals
 		- several core dumps related to missing mutex locks
-		- seg fault in RingPerceptionProcessesor
-		- core dump in calculation of contour surfaces
 
 Changed:
   - BALLView
