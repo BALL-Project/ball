@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.17.4.3 2002/12/08 22:22:46 anker Exp $
+// $Id: PDBFile.h,v 1.17.4.4 2002/12/11 17:28:08 anker Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -19,10 +19,6 @@
 
 #ifndef BALL_DATATYPE_STRING_H
 #	include <BALL/DATATYPE/string.h>
-#endif
-
-#ifndef BALL_DATATYPE_OPTIONS_H
-#	include <BALL/DATATYPE/options.h>
 #endif
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
@@ -62,34 +58,6 @@ namespace BALL
 	{
 		public:
 
-		/**	Symbolic names for option keys.
-				This struct contains a symbolic name
-				for each recognized key in PDBFile::options.\\
-				For each symbol the required type is given under parameters.
-		*/
-		struct Option 
-		{
-			/**	The verbosity level.
-					Use integer values with this option.
-					0 = terse\\
-					99 = tell me everything
-					@see		Default::VERBOSITY
-					@param	verbosity  integer
-			*/
-			static const char* VERBOSITY;
-		};
-
-		/** Default values for PDBFile options.  
-		*/
-		struct Default 
-		{
-			/** Default verbosity level.
-					0 - shut up!
-					@see	Option::VERBOSITY
-			*/
-			static const int VERBOSITY;
-		};
-
 
 		/**	@name	Constructors and Destructors 
 		*/
@@ -118,13 +86,6 @@ namespace BALL
 		virtual ~PDBFile()
 			throw();
 
-		//@}
-
-		/** @name Options
-		*/
-		//@{
-		///
-		Options options;
 		//@}
 
 		/**	@name Overridden read methods 

@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.h,v 1.13 2001/08/23 10:29:34 oliver Exp $
+// $Id: genericPDBFile.h,v 1.13.4.1 2002/12/11 17:28:08 anker Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_SYSTEM_FILE_H
 #	include <BALL/SYSTEM/file.h>
+#endif
+
+#ifndef BALL_DATATYPE_OPTIONS_H
+#	include <BALL/DATATYPE/options.h>
 #endif
 
 namespace BALL 
@@ -811,6 +815,41 @@ namespace BALL
 			public PropertyManager
 	{
 		public:
+
+		/**	Symbolic names for option keys.
+				This struct contains a symbolic name
+				for each recognized key in PDBFile::options.\\
+				For each symbol the required type is given under parameters.
+		*/
+		struct Option 
+		{
+			/**	The verbosity level.
+					Use integer values with this option.
+					0 = terse\\
+					99 = tell me everything
+					@see		Default::VERBOSITY
+					@param	verbosity  integer
+			*/
+			static const char* VERBOSITY;
+		};
+
+		/** Default values for PDBFile options.  
+		*/
+		struct Default 
+		{
+			/** Default verbosity level.
+					0 - shut up!
+					@see	Option::VERBOSITY
+			*/
+			static const int VERBOSITY;
+		};
+
+		/** @name Options
+		*/
+		//@{
+		///
+		Options options;
+		//@}
 
 		GenericPDBFile();
 
