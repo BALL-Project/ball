@@ -1,6 +1,7 @@
-// $Id: connolly.C,v 1.7 2000/06/27 14:19:50 oliver Exp $
+// $Id: connolly.C,v 1.8 2001/05/10 13:53:19 oliver Exp $
 
 #include <math.h>
+#include <values.h> // required for M_PI on some systems
 #include <algorithm>
 #include <iostream>
 
