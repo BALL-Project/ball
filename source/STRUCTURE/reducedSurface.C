@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.C,v 1.6 2003/04/16 21:20:43 oliver Exp $
+// $Id: reducedSurface.C,v 1.7 2003/08/19 15:58:18 amoll Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 
@@ -309,7 +309,7 @@ namespace BALL
 	}
 
 
-	TBox3<double> ReducedSurface::getBoundingBox() const
+	TSimpleBox3<double> ReducedSurface::getBoundingBox() const
 		throw()
 	{
 		return bounding_box_;

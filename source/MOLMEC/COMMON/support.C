@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.39 2003/06/11 08:10:03 oliver Exp $
+// $Id: support.C,v 1.40 2003/08/19 15:54:03 amoll Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -35,7 +35,7 @@ namespace BALL
 		Size calculateNonBondedAtomPairs
 			(vector< pair <Atom*, Atom*> >& pair_vector, 
 			 const AtomVector& atom_vector,
-			 const Box3& box, 
+			 const SimpleBox3& box, 
 			 double distance,
 			 bool periodic_boundary_enabled, 
 			 PairListAlgorithmType type)
@@ -301,7 +301,7 @@ namespace BALL
 		// "solute_grid"
 		Size addNonOverlappingMolecules
 			(System& system, const HashGrid3<const Atom*>& solute_grid, 
-			 const System& solvent, const Box3& box, double distance)
+			 const System& solvent, const SimpleBox3& box, double distance)
 		{
 			const Molecule* old_molecule = 0;
 			const Molecule* new_molecule = 0;
@@ -571,7 +571,7 @@ namespace BALL
 
 		// This little function adapts a waterbox from external programs that
 		// use a different definition of the periodic box.
-		void adaptWaterBox(System& system, const Box3& box)
+		void adaptWaterBox(System& system, const SimpleBox3& box)
 		{
 
 			float width = box.getWidth();

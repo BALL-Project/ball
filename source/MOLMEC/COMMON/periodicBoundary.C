@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.C,v 1.24 2002/02/27 12:21:34 sturm Exp $
+// $Id: periodicBoundary.C,v 1.25 2003/08/19 15:54:02 amoll Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -107,14 +107,14 @@ namespace BALL
 	}
 
 	// Accessor for setting the box of the periodic boundary
-	void PeriodicBoundary::setBox(const Box3& box)
+	void PeriodicBoundary::setBox(const SimpleBox3& box)
 	{
 		box_.a = box.a;
 		box_.b = box.b;
 	}
 
 	// Accessor for reading the box of the periodic boundary
-	Box3 PeriodicBoundary::getBox() const
+	SimpleBox3 PeriodicBoundary::getBox() const
 	{
 		return box_;
 	}
@@ -401,7 +401,7 @@ namespace BALL
 			return 0;
 		}
 		
-		Box3 solvent_box = hin.getPeriodicBoundary();
+		SimpleBox3 solvent_box = hin.getPeriodicBoundary();
 
 		// adapt foreign water boxes to our definition
 		MolmecSupport::adaptWaterBox(solvent, solvent_box);

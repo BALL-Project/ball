@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.27 2003/07/11 15:27:03 amoll Exp $
+// $Id: HINFile.h,v 1.28 2003/08/19 15:56:59 amoll Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -10,8 +10,8 @@
 #	include <BALL/FORMAT/genericMolFile.h>
 #endif
 
-#ifndef BALL_MATHS_BOX_H
-# include <BALL/MATHS/box3.h>
+#ifndef BALL_MATHS_SIMPLEBOX_H
+# include <BALL/MATHS/simpleBox3.h>
 #endif
 
 namespace BALL 
@@ -100,7 +100,7 @@ namespace BALL
 				An emptry box is returned if no periodic boundary is defined.
 				@return	the boundary box
 		*/
-		Box3 getPeriodicBoundary() const;
+		SimpleBox3 getPeriodicBoundary() const;
 
 		/**	Return the temperature stored in the file.
 				HIN files may contain a <tt>sys</tt> entry containing
@@ -114,10 +114,11 @@ namespace BALL
 
 		protected:
 		
+		SimpleBox3		box_;
+		
 		///	Initialize temperature and box dimensions prior to reading a system.
 		virtual void initRead_();
 
-		Box3		box_;
 		float		temperature_;
 	
 		void writeAtom_(const Atom& atom, Size number, Size atom_offset);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.58 2003/07/11 15:27:43 amoll Exp $
+// $Id: HINFile.C,v 1.59 2003/08/19 15:57:24 amoll Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -58,7 +58,7 @@ namespace BALL
 	const HINFile& HINFile::operator = (const HINFile& rhs)
 		throw(Exception::FileNotFound)
 	{
-		box_ = Box3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		box_ = SimpleBox3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 		temperature_ = 0.0;
 
 		GenericMolFile::operator = (rhs);
@@ -1047,7 +1047,7 @@ namespace BALL
 		return (box_.a != box_.b);
 	}
 
-	Box3 HINFile::getPeriodicBoundary() const
+	SimpleBox3 HINFile::getPeriodicBoundary() const
 	{
 		return box_;
 	}
