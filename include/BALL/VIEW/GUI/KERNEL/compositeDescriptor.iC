@@ -1,0 +1,141 @@
+// $Id: compositeDescriptor.iC,v 1.5 2000/09/23 14:40:11 hekl Exp $
+
+BALL_INLINE 
+void CompositeDescriptor::setName(const String& name)
+{
+  *name_ptr_ = name;
+}
+
+BALL_INLINE 
+String& CompositeDescriptor::getName()
+{
+  return *name_ptr_;
+}
+
+BALL_INLINE 
+const String& CompositeDescriptor::getName() const
+{
+  return *name_ptr_;
+}
+
+BALL_INLINE 
+void CompositeDescriptor::setCenter
+  (const Vector3& v)
+{
+  *center_ptr_ = v;
+}
+
+BALL_INLINE 
+Vector3& CompositeDescriptor::getCenter()
+{
+  return *center_ptr_;
+}
+
+BALL_INLINE 
+const Vector3& CompositeDescriptor::getCenter() const
+{
+  return *center_ptr_;
+}
+
+BALL_INLINE 
+void CompositeDescriptor::setQuaternion
+  (const Quaternion& quaternion)
+{
+  *quaternion_ptr_ = quaternion;
+}
+
+BALL_INLINE 
+void CompositeDescriptor::setQuaternion
+  (const Vector3& axis, const Real angle)
+{
+  quaternion_ptr_->set(axis, angle);
+}
+
+BALL_INLINE 
+void CompositeDescriptor::setQuaternion
+  (const Vector3& axis, const Angle& angle)
+{
+  quaternion_ptr_->set(axis, angle.toRadian());
+}
+
+BALL_INLINE 
+Quaternion& CompositeDescriptor::getQuaternion()
+{
+  return *quaternion_ptr_;
+}
+
+BALL_INLINE 
+const Quaternion& CompositeDescriptor::getQuaternion() const
+{
+  return *quaternion_ptr_;
+}
+
+BALL_INLINE 
+void CompositeDescriptor::setComposite(const Composite* composite, bool allow_deletion)
+{
+	composite_ = const_cast<Composite*>(composite);
+	shallow_copy_ = (bool)(allow_deletion == false);
+}
+
+BALL_INLINE 
+Composite* CompositeDescriptor::getComposite()
+{
+  return composite_;
+}
+
+BALL_INLINE 
+const Composite* CompositeDescriptor::getComposite() const
+{
+  return composite_;
+}
+
+BALL_INLINE 
+void CompositeDescriptor::registerPrimitiveManager(const GLPrimitiveManager& manager)
+{
+	primitive_manager_ = const_cast<GLPrimitiveManager*>(&manager);
+}
+
+BALL_INLINE 
+void CompositeDescriptor::registerGLObjectCollector(const GLObjectCollector& collector)
+{
+	object_collector_ = const_cast<GLObjectCollector*>(&collector);
+}
+
+BALL_INLINE 
+bool CompositeDescriptor::isShallowCopy() const 
+{
+  return (bool)(shallow_copy_ == true);
+}
+
+BALL_INLINE 
+bool CompositeDescriptor::isDeepCopy() const
+{
+  return (bool)(shallow_copy_ == false);
+}
+
+BALL_INLINE 
+void CompositeDescriptor::addShallowCompositeDescriptor_
+  (CompositeDescriptor* composite_descriptor)
+{
+  shallow_copies_.push_back(composite_descriptor);
+}
+
+BALL_INLINE 
+void CompositeDescriptor::removeShallowCompositeDescriptor_
+  (CompositeDescriptor* composite_descriptor)
+{
+  shallow_copies_.remove(composite_descriptor);
+}
+
+BALL_INLINE 
+void CompositeDescriptor::setParentCompositeDescriptor_
+  (CompositeDescriptor* composite_descriptor)
+{
+  parent_ = composite_descriptor;
+}
+
+BALL_INLINE 
+CompositeDescriptor* CompositeDescriptor::getParentCompositeDescriptor_()
+{
+  return parent_;
+}
