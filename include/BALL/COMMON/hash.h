@@ -1,4 +1,4 @@
-// $Id: hash.h,v 1.10 2001/06/21 01:55:20 oliver Exp $
+// $Id: hash.h,v 1.11 2001/06/22 11:04:27 oliver Exp $
 
 #ifndef BALL_COMMON_HASH_H
 #define BALL_COMMON_HASH_H
@@ -56,7 +56,7 @@ namespace BALL
   extern HashIndex hashElfString(const char* str) throw();
 
 	/** General default hash function.
-			This method should tires to convert the given key to a 
+			This method converts the given key to a 
 			\Ref{HashIndex} by calling {\tt (HashIndex)key}.
 			If the key type {\tt T} is not convertible to \Ref{HashIndex} by
 			default, a converter should be defined ({\tt operator HashIndex}).
@@ -66,7 +66,7 @@ namespace BALL
 	template <typename T>
 	inline HashIndex Hash(const T& key) throw()
 	{
-		return (HashIndex)(key);
+		return (HashIndex)((BALL_POINTERSIZEINT_TYPE)key);
 	}
 
 	/** String hash function.
