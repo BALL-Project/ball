@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.22 2004/07/14 16:55:50 amoll Exp $
+// $Id: glRenderer.h,v 1.23 2004/07/16 14:39:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -25,6 +25,11 @@
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 # include <BALL/VIEW/KERNEL/stage.h>
+#endif
+
+
+#ifndef BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
+# include <BALL/VIEW/RENDERING/glQuadricObject.h>
 #endif
 
 #include <qgl.h>
@@ -355,6 +360,7 @@ namespace BALL
 			//_
 			float 								y_scale_;
 
+			GLQuadricObject 			GL_quadric_object_;
 			GLDisplayList* 				GL_spheres_list_;
 			GLDisplayList* 				GL_tubes_list_;
 			GLDisplayList* 				GL_boxes_list_;

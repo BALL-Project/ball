@@ -1,11 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.36 2004/07/14 16:56:10 amoll Exp $
+// $Id: glRenderer.C,v 1.37 2004/07/16 14:39:50 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
-#include <BALL/VIEW/RENDERING/glQuadricObject.h>
 #include <BALL/VIEW/RENDERING/glDisplayList.h>
 #include <BALL/VIEW/KERNEL/common.h>
 
@@ -429,13 +428,12 @@ namespace BALL
 			Real angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(disc.getCircle().n.z / disc.getCircle().n.getLength()));
 			rotateVector3Angle_(rotation_axis, angle);
 
-			GLQuadricObject GL_quadric_object;
 			if (drawing_precision_ == 0)
-				GL_quadric_object.drawDisk(0, disc.getCircle().radius, 6, 4);
+				GL_quadric_object_.drawDisk(0, disc.getCircle().radius, 6, 4);
 			else if (drawing_precision_ == 1)
-				GL_quadric_object.drawDisk(0, disc.getCircle().radius, 14, 8);
+				GL_quadric_object_.drawDisk(0, disc.getCircle().radius, 14, 8);
 			else
-				GL_quadric_object.drawDisk(0, disc.getCircle().radius, 24, 16);
+				GL_quadric_object_.drawDisk(0, disc.getCircle().radius, 24, 16);
 			glPopMatrix();
 		}
 
@@ -831,6 +829,7 @@ namespace BALL
 		void GLRenderer::createSpheres_()
 			throw()
 		{
+			glPushMatrix();
 			// building point display list
 			GL_spheres_list_[0 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].startDefinition();
 			createDottedSphere_(1); // Precision 0 is far too evil here
@@ -851,6 +850,7 @@ namespace BALL
 			GL_quadric_object.setNormals(GLU_SMOOTH);
 			GL_quadric_object.setOrientation(GLU_OUTSIDE);
 			// building wireframe display list
+			scale_(0.4);
 			GL_spheres_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].startDefinition();
 			GL_quadric_object.drawSphere(1, 6, 4);
 			GL_spheres_list_[1 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 0].endDefinition();
@@ -877,7 +877,7 @@ namespace BALL
 			GL_spheres_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].startDefinition();
 			GL_quadric_object.drawSphere(1, 24, 16);
 			GL_spheres_list_[2 * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 2].endDefinition();
-			
+			glPopMatrix();
 		}
 
 
