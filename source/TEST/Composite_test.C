@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.21 2000/12/01 23:15:13 amoll Exp $
+// $Id: Composite_test.C,v 1.22 2000/12/19 12:49:24 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.21 2000/12/01 23:15:13 amoll Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.22 2000/12/19 12:49:24 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1272,6 +1272,11 @@ RESULT
 CHECK(count(const KernelPredicateType&) const)
 	TEST_EQUAL(a.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
 	TEST_EQUAL(e.count(Composite::DEFAULT_UNARY_PREDICATE), 1)
+RESULT
+
+CHECK(operator ==)
+	TEST_EQUAL(a == e, false)
+	TEST_EQUAL(a == a, true)
 RESULT
 
 /////////////////////////////////////////////////////////////
