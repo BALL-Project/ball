@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.h,v 1.31 2005/01/24 16:57:41 amoll Exp $
+// $Id: molecularDynamics.h,v 1.32 2005/02/07 19:29:57 amoll Exp $
 //
 
 // MolecularDynamics: A base class for molecular dynamics simulations    
@@ -319,10 +319,14 @@ namespace BALL
 		/// Query if the MDSimulation aborts if the Energy is greater than abort_energy_
 		bool energyAbortConditionEnabled() const;
 
-		///
+		/** Specify the energy to abort the simulation.
+		 		The default value is 10^8.
+		*/
 		void setEnergyToAbort(float value);
 		
-		///
+		/** Query the energy to abort the simulation.
+		 		The default value is 10^8.
+		*/
 		float getEnergyToAbort() const;
 		
 		//@}
