@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.50 2004/05/27 19:49:41 oliver Exp $
+// $Id: matrix44.h,v 1.51 2004/10/22 20:16:41 amoll Exp $
 //
 
 #ifndef BALL_MATHS_MATRIX44_H
@@ -2193,24 +2193,24 @@ namespace BALL
 		xy = x * y;
 		yz = y * z;
 		zx = z * x;
-		xs = x * sin_angle;
-		ys = y * sin_angle;
-		zs = z * sin_angle;
-		one_c = 1 - cos_angle;
+		xs = (T) (x * sin_angle);
+		ys = (T) (y * sin_angle);
+		zs = (T) (z * sin_angle);
+		one_c = (T) (1 - cos_angle);
 
-		m11 = (one_c * xx) + cos_angle;
+		m11 = (T)( (one_c * xx) + cos_angle );
 		m12 = (one_c * xy) - zs;
 		m13 = (one_c * zx) + ys;
 		m14 = 0;
 		
 		m21 = (one_c * xy) + zs;
-		m22 = (one_c * yy) + cos_angle;
+		m22 = (T) ((one_c * yy) + cos_angle);
 		m23 = (one_c * yz) - xs;
 		m24 = 0;
 		
 		m31 = (one_c * zx) - ys;
 		m32 = (one_c * yz) + xs;
-		m33 = (one_c * zz) + cos_angle;
+		m33 = (T) ((one_c * zz) + cos_angle);
 		m34 = 0;
 		 
 		m41 = 0;

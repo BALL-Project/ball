@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.42 2004/05/27 19:49:42 oliver Exp $
+// $Id: quaternion.h,v 1.43 2004/10/22 20:18:05 amoll Exp $
 //
 
 #ifndef BALL_MATHS_QUATERNION_H
@@ -330,7 +330,7 @@ namespace BALL
 		} 
 		else 
 		{
-			T omega = new_angle * 0.5;
+			T omega = (T) (new_angle * 0.5);
 			T sin_omega = (T)::sin(omega);
 
 			i = x * sin_omega / length;
