@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.h,v 1.6 2000/10/28 22:35:25 amoll Exp $
+// $Id: piecewiseFunction.h,v 1.7 2000/10/29 21:27:04 anker Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -59,6 +59,7 @@ namespace BALL
 
 		//@}
 
+
 		/** @name Assignemnt */
 		//@{
 
@@ -69,6 +70,7 @@ namespace BALL
 		void clear() throw();
 
 		//@}
+
 
 		/** @name Accessors */
 		//@{
@@ -84,7 +86,7 @@ namespace BALL
 
 		/** Get the interval a given x belongs to */
 		const Interval& getInterval(double x) const
-			throw();
+			throw(Exception::OutOfRange);
 
 		/** Get interval limits by index */
 		const Interval& getInterval(Position index) const 
@@ -107,7 +109,8 @@ namespace BALL
 		const std::vector<Coefficients>& getCoefficients() const throw();
 
 		/** Get the coefficients for a given x */
-		const Coefficients& getCoefficients(double x) const throw();
+		const Coefficients& getCoefficients(double x) const 
+			throw(Exception::OutOfRange);
 
 		/** get coefficients from index */
 		const Coefficients& getCoefficients(Position index) const 
@@ -121,6 +124,7 @@ namespace BALL
 				const std::vector<Coefficients>& coeffs) throw();
 
 		//@}
+
 
 		/** @name Predicates */
 		//@{
@@ -136,6 +140,7 @@ namespace BALL
 
 		//@}
 
+
 		/** @name Debugging and Diagnostics */
 		//@{
 
@@ -143,6 +148,7 @@ namespace BALL
 		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const throw();
 
 		//@}
+
 
 		protected:
 
@@ -152,6 +158,7 @@ namespace BALL
 		std::vector<Coefficients> coefficients_;
 
 		bool valid_;
+
 
 		private:
 

@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.C,v 1.8 2000/10/23 10:21:28 anker Exp $
+// $Id: piecewiseFunction.C,v 1.9 2000/10/29 21:27:04 anker Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
 
@@ -91,7 +91,8 @@ namespace BALL
 	}
 
 
-	const Interval& PiecewiseFunction::getInterval(double x) const throw()
+	const Interval& PiecewiseFunction::getInterval(double x) const 
+		throw(Exception::OutOfRange)
 	{
 		Position index = getIntervalIndex(x);
 		// No error checking here, is handled by getIntervalIndex()
@@ -163,7 +164,7 @@ namespace BALL
 
 
 	const Coefficients& PiecewiseFunction::getCoefficients(double x) const
-		throw()
+		throw(Exception::OutOfRange)
 	{
 		Position index = getIntervalIndex(x);
 		// No error checking here, is handled by getIntervalIndex()
