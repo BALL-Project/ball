@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.25 2000/09/27 07:45:20 oliver Exp $
+// $Id: fragmentDB.C,v 1.26 2000/10/16 19:55:20 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1117,9 +1117,6 @@ namespace BALL
 				map_name = (*map_iterator).first;
 			}
 		}
-
-		Log.info() << "USING map " << map_name << endl;
-
 
 		// after having identified the map, use it to replace the names
 		// first, get the map
