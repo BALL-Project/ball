@@ -1,4 +1,4 @@
-// $Id: autoDeletable.h,v 1.10 2001/05/24 15:38:27 anker Exp $
+// $Id: autoDeletable.h,v 1.11 2001/09/28 08:37:30 anker Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -133,17 +133,25 @@ namespace BALL
 
 		protected:
 
+		/*_ BAUSTELLE
+		*/
 		AutoDeletable()
 			throw();
 
+		/*_ BAUSTELLE
+		*/
 		AutoDeletable(const AutoDeletable& auto_deletable, bool deep = false)
 			throw();
 
 
 		private:
 
+		/*_ BAUSTELLE
+		*/
 		bool 		enabled_;
 
+		/*_ BAUSTELLE
+		*/
 		static 	void* last_ptr_;
 	};
 
