@@ -1,9 +1,10 @@
-// $Id: main.C,v 1.3 2000/05/27 10:38:59 oliver Exp $
+// $Id: main.C,v 1.4 2000/05/30 10:48:44 oliver Exp $
 
 #include "global.h"
 #include "reading.h"
 #include "assignment.h"
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/STRUCTURE/numericalSAS.h>
 
 using namespace BALL;
 using namespace std;
@@ -23,6 +24,7 @@ void usage()
 	Log.error() << "     -0                   clear all charges in subsequently read structures" << endl;
 	Log.error() << "     -s                   calculate the solvation free energy by performing a second" << endl;
 	Log.error() << "                          FDPB calculation in vacuum" << endl;
+	Log.error() << "     -a                   calculate the solvent accessible surface of the solute" << endl;
 	Log.error() << "     -n                   normalize all atom names in subsequently read structures" << endl;
 	Log.error() << "     -d <FILE>            dump the atom charges and radii to <FILE> (for debugging)" << endl;
 	Log.error() << "     -v                   verbose output (implies ``verbosity 99'' in the" << endl;
@@ -102,6 +104,10 @@ int main(int argc, char** argv)
 
 			case 's':		// calculate solvation energy
 				calculate_solvation_energy = true;
+				break;
+
+			case 'a':		// calculate solvent excluded surface
+				calculate_SES = true;
 				break;
 
 			case 'd':		// dump the final results
@@ -228,6 +234,16 @@ int main(int argc, char** argv)
 							 << dG - fdpb.getEnergy()<< " kJ/mol" << endl;
 		Log.info() << "Solvation energy as change of the reaction field: " 
 							 << dG_RF - fdpb.getReactionFieldEnergy() << " kJ/mol" << endl;
+	}
+
+	// calculate the solvent excluded surface area of the solute
+	// (used to estimate the non electrostatic contribution
+	// to the solvation free energy)
+	if (calculate_SES)
+	{
+		double A = calculateNumericalSASArea(S, 1.4);
+		Log.info() << "Solvent accessible surface : " << A << "A^2";
+		Log.info() << " (1.4 Angstrom probe radius)" << endl;
 	}
 
 	// done
