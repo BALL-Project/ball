@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.5 2000/12/20 18:39:02 anker Exp $
+// $Id: DCDFile.C,v 1.6 2001/03/02 14:49:49 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -272,7 +272,6 @@ namespace BALL
 		throw(Exception::NotImplemented)
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
-		return false;
 	}
 
 
@@ -280,7 +279,6 @@ namespace BALL
 		throw(Exception::NotImplemented)
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
-		return false;
 	}
 
 
