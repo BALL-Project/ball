@@ -1,4 +1,4 @@
-// $Id: scene.C,v 1.6.4.4 2002/11/03 12:58:03 amoll Exp $
+// $Id: scene.C,v 1.6.4.5 2002/11/03 15:36:44 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
@@ -262,7 +262,7 @@ namespace BALL
 			}
 		}
 
-		void Scene::exportScene(ExternalRenderer &er)
+		void Scene::exportScene(ExternalRenderer &er) const
 			throw()
 		{
 			er.setScene(*this);

@@ -1,4 +1,4 @@
-// $Id: scene.h,v 1.8.4.4 2002/11/01 17:10:23 amoll Exp $
+// $Id: scene.h,v 1.8.4.5 2002/11/03 15:37:33 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -468,7 +468,7 @@ namespace BALL
 
 			/** This method prepares an ExternalRenderer for a later export of this scene.
 			*/
-			virtual void exportScene(BALL::VIEW::ExternalRenderer &er)
+			virtual void exportScene(BALL::VIEW::ExternalRenderer &er) const
 				throw();
 
 			//@}			
