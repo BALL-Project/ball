@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.7 2000/02/10 15:14:25 oliver Exp $
+// $Id: support.C,v 1.8 2000/03/26 12:56:19 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -18,8 +18,8 @@ namespace BALL
 
 		Size calculateNonBondedAtomPairs
 			(vector< pair <Atom*, Atom*> >& pair_vector, 
-			 const vector<Atom*>& atom_vector,
-			 const Box3& box, float distance,
+			 const AtomVector& atom_vector,
+			 const Box3& box, double distance,
 			 bool periodic_boundary_enabled, 
 			 PairListAlgorithmType type)
 		{
@@ -29,9 +29,9 @@ namespace BALL
 			Vector3 lower(Limits<float>::max(), Limits<float>::max(), Limits<float>::max());
 			Vector3 upper(Limits<float>::min(), Limits<float>::min(), Limits<float>::min());
 
-			// Iterators for the STL atom vector
-			vector<Atom*>::const_iterator atom_it;
-			vector<Atom*>::const_iterator atom_it2;
+			// Iterators for the atom vector
+			AtomVector::ConstIterator atom_it;
+			AtomVector::ConstIterator atom_it2;
 
 			// Position vectors
 			Vector3 position;
@@ -39,9 +39,9 @@ namespace BALL
 			Vector3 difference;
 			
 			// the box width / length / depth
-			float period_x;
-			float period_y;
-			float period_z;
+			double period_x;
+			double period_y;
+			double period_z;
 
 			// Are atoms stored in atom_vector?
 
@@ -112,7 +112,7 @@ namespace BALL
 			Size	counter = 0;
 
 			// Squared distance
-			float  squared_distance = distance * distance;
+			double  squared_distance = distance * distance;
 
 			// initialize the hash grid
 			HashGrid3<Atom*>	grid(lower - Vector3(0.1), upper - lower + Vector3(0.2), distance);
@@ -127,9 +127,9 @@ namespace BALL
 			if (periodic_boundary_enabled) 
 			{
 				// Calculate the half periods for determining the minimal image
-				float half_period_x = period_x * 0.5;
-				float half_period_y = period_y * 0.5;
-				float half_period_z = period_z * 0.5;
+				double half_period_x = period_x * 0.5;
+				double half_period_y = period_y * 0.5;
+				double half_period_z = period_z * 0.5;
 
 				// Check what kind of algorithm should be used for determining the neighbours
 
@@ -282,7 +282,7 @@ namespace BALL
 
 		Size addNonOverlappingMolecules
 			(System&  system_A, const System& system_B, 
-			 const Box3& box, float distance)
+			 const Box3& box, double distance)
 		{
 			Vector3	vector(distance);
 
@@ -302,8 +302,8 @@ namespace BALL
 			bool	add = false;
 			Size atom_counter = 0;
 			Size mol_counter = 0;
-			float square_distance = distance * distance;
-			float mass = 0;
+			double square_distance = distance * distance;
+			double mass = 0;
 			Vector3	center_of_gravity(0.0);
 
 			// Iterate over all atoms in system_B and test the different molecules as follows:
