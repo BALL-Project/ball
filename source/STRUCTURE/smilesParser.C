@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.C,v 1.12 2003/05/26 15:43:39 oliver Exp $
+// $Id: smilesParser.C,v 1.13 2003/05/27 14:04:08 oliver Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -143,6 +143,7 @@ namespace BALL
 				all_atoms_[i]->destroy();
 				delete all_atoms_[i];
 			}
+			all_atoms_.clear();
 
 			// Propagate the parse error upwards.
 			throw e;
@@ -195,6 +196,7 @@ namespace BALL
 	SmilesParser::SPBond::~SPBond()
 		throw()
 	{
+		destroy();
 	}
 
 	SmilesParser::ZEIsomerType SmilesParser::SPBond::getZEType() const
