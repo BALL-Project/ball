@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.66 2004/11/10 02:56:47 amoll Exp $
+// $Id: molecularStructure.C,v 1.67 2004/11/15 15:12:01 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -49,6 +49,9 @@ namespace BALL
 				minimization_dialog_(this),
 				md_dialog_(this)
 		{
+			#ifdef BALL_VIEW_DEBUG
+				Log.error() << "New MolecularStructure " << this << std::endl;
+			#endif
 			registerWidget(this);
 			hide();
 		}
