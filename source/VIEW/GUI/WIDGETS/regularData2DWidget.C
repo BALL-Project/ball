@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.10 2000/12/04 21:15:20 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.11 2000/12/04 21:20:41 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -119,7 +119,7 @@ RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double ma
   ModularWidget::registerWidget(this);
 
   // create the context menu
-  men_ = new QPopupm_enu(this);
+  men_ = new QPopupMenu(this);
   men_->insertItem("Create Baseline");
   men_->insertItem("Zoom out", this, SLOT(slotZoomOut()));
   men_->insertItem("Contourplot", this, SLOT(createContour()));
