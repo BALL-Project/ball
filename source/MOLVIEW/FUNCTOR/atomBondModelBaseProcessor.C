@@ -1,4 +1,4 @@
-// $Id: atomBondModelBaseProcessor.C,v 1.2 2000/12/12 16:19:24 oliver Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.3 2001/01/25 23:47:55 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 
@@ -130,44 +130,44 @@ namespace BALL
 		void AtomBondModelBaseProcessor::buildBondModels_()
     {
 			// generate bond primitive
-			Atom *first__pAtom = 0;
-			Atom *second__pAtom = 0;
-			Bond *__pBond = 0;
-			AtomBondIterator bond__Iterator;
+			Atom* first_pAtom = 0;
+			Atom* second_pAtom = 0;
+			Bond* pbond = 0;
+			AtomBondIterator bond_Iterator;
 			List<Atom*>::Iterator list_iterator;
 
 			// for all used atoms
 			for (list_iterator = getAtomList_().begin();
 					 list_iterator != getAtomList_().end(); ++list_iterator)
 			{
-				first__pAtom = *list_iterator;
+				first_pAtom = *list_iterator;
 
 				// for all bonds connected from first- to second atom
-				BALL_FOREACH_ATOM_BOND(*first__pAtom, bond__Iterator)
+				BALL_FOREACH_ATOM_BOND(*first_pAtom, bond_Iterator)
 				{
-					__pBond = &(*bond__Iterator);
+					pbond = &(*bond_Iterator);
 					
-					if (first__pAtom != __pBond->getSecondAtom())
+					if (first_pAtom != pbond->getSecondAtom())
 					{
-						second__pAtom = __pBond->getSecondAtom();
+						second_pAtom = pbond->getSecondAtom();
 					}
 					else
 					{
-						second__pAtom = __pBond->getFirstAtom();
+						second_pAtom = pbond->getFirstAtom();
 					}
 
 					// use only atoms with greater handles than first atom
 					// or
 					// second atom not a used atom, but smaller as the first atom
 					// process bond between them		
-					if (*first__pAtom < *second__pAtom
-							|| !getAtomSet_().has(second__pAtom))
+					if (*first_pAtom < *second_pAtom
+							|| !getAtomSet_().has(second_pAtom))
 					{
 						// remove all models append to bond
-						removeGeometricObjects_(*__pBond, true);
+						removeGeometricObjects_(*pbond, true);
 
 						// build connection primitive
-						__pBond->host(*getModelConnector());
+						pbond->host(*getModelConnector());
 					}
 				}
 			}
