@@ -61,7 +61,6 @@ EXECUTABLES = \
 	Sphere3_test\
 	String_test\
 	StructureMapper_test\
-	StructureMapper_test\
 	TransformationApplicator_test\
 	TranslationApplicator_test\
 	Vector3_test\
