@@ -48,8 +48,6 @@ AtomProperties::AtomProperties( Atom* atom, QWidget* parent,  const char* name, 
 	element_box->setCurrentText(atom->getElement().getSymbol().c_str());
 
 	apply_button->setEnabled(false);
-	show();
-	raise();
 }
 
 AtomProperties::~AtomProperties()

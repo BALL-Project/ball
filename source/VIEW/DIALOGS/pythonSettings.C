@@ -14,7 +14,6 @@ namespace BALL
 PythonSettings::PythonSettings( QWidget* parent,  const char* name, WFlags fl )
  : PythonSettingsData( parent, name, fl )
 {
-	show();
 }
 
 

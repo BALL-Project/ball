@@ -23,7 +23,6 @@ StageSettings::StageSettings( QWidget* parent,  const char* name, WFlags fl )
 	scene_ = (Scene*) parent;
 	
 	updateFromStage();
-	show();
 }
 
 

@@ -29,8 +29,6 @@ SetCamera::SetCamera( QWidget* parent,  const char* name, bool modal, WFlags fl 
 				 String(camera.getLookAtPosition().z);
 
 	look_edit->setText(text.c_str());
-
-	show();
 }
 
 SetCamera::~SetCamera()

@@ -27,7 +27,6 @@ LightSettings::LightSettings( QWidget* parent,  const char* name, WFlags fl )
 	current_light_ = -1;
 	
 	updateFromStage();
-	show();
 }
 
 
