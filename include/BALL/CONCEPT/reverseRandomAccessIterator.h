@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reverseRandomAccessIterator.h,v 1.14 2003/05/08 18:19:30 oliver Exp $
+// $Id: reverseRandomAccessIterator.h,v 1.15 2003/05/28 16:50:24 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_REVERSERANDOMACCESS_H
 #define BALL_CONCEPT_REVERSERANDOMACCESS_H
@@ -17,7 +18,6 @@
 #ifndef BALL_CONCEPT_PREDICATE_H
 #	include <BALL/CONCEPT/predicate.h>
 #endif
-
 
 namespace BALL 
 {
@@ -135,13 +135,6 @@ namespace BALL
 		ReverseRandomAccessIterator operator - (Distance distance)
 			throw(Exception::InvalidIterator);
 
-		friend Distance operator - (const ReverseRandomAccessIterator& a, const ReverseRandomAccessIterator& b)
-			throw(Exception::InvalidIterator)
-		{
-			return (((RandomAccessIterator<Container, DataType, Position, Traits>&)b) 
-							- ((RandomAccessIterator<Container, DataType, Position, Traits>&)a));
-		}
-
 		bool operator < (const ReverseRandomAccessIterator& iterator) const
 			throw(Exception::InvalidIterator);
 
@@ -204,7 +197,7 @@ namespace BALL
 	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return RandomAccessIterator<Container, DataType, Position, Traits>::traits_->isValid();
+		return RandomAccessIterator<Container, DataType, Position, Traits>::getTraits().isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -506,14 +499,6 @@ namespace BALL
 		ConstReverseRandomAccessIterator operator - (Distance distance)
 			throw(Exception::InvalidIterator);
 
-		friend Distance operator - (const ConstReverseRandomAccessIterator& a,
-																const ConstReverseRandomAccessIterator& b)
-			throw(Exception::InvalidIterator)
-		{
-			return (((ConstRandomAccessIterator<Container, DataType, Position, Traits>& )b) 
-							- ((ConstRandomAccessIterator<Container, DataType, Position, Traits>& )a));
-		}
-
 		bool operator < (const ConstReverseRandomAccessIterator& iterator) const
 			throw(Exception::InvalidIterator);
 
@@ -576,7 +561,7 @@ namespace BALL
 	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_->isValid();
+		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::getTraits().isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
