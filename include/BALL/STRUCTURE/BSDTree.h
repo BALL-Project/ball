@@ -1,4 +1,4 @@
-// $Id: BSDTree.h,v 1.12 2001/06/28 17:07:21 strobel Exp $
+// $Id: BSDTree.h,v 1.13 2001/06/28 19:12:36 amoll Exp $
 
 #define DEBUG_BSDTREE
 
@@ -226,7 +226,7 @@ namespace BALL
 
 
 	template <typename T>
-	TBSDTree<T>::TBSDTree(const TBSDTree<T>& bsd_tree, bool = true)
+	TBSDTree<T>::TBSDTree(const TBSDTree<T>& bsd_tree, bool)
 		throw()
 		: point_(bsd_tree.point_),
 			part_(bsd_tree.part_),

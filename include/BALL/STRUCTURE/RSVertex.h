@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.12 2001/06/28 17:20:51 strobel Exp $
+// $Id: RSVertex.h,v 1.13 2001/06/28 19:12:37 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -311,7 +311,7 @@ namespace BALL
 
 
 	template <typename T>
-	TRSVertex<T>::TRSVertex(const TRSVertex<T>& rsvertex, bool = true)
+	TRSVertex<T>::TRSVertex(const TRSVertex<T>& rsvertex, bool)
 		throw()
 		: atom_(rsvertex.atom_),
 			edges_(rsvertex.edges_),
@@ -354,7 +354,7 @@ namespace BALL
 
 
 	template <typename T>
-	void TRSVertex<T>::set(const TRSVertex<T>& rsvertex, bool = true)
+	void TRSVertex<T>::set(const TRSVertex<T>& rsvertex, bool)
 		throw()
 	{
 		atom_ = rsvertex.atom_;

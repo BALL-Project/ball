@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.14 2001/06/28 17:08:40 strobel Exp $
+// $Id: RSFace.h,v 1.15 2001/06/28 19:12:36 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -363,7 +363,7 @@ namespace BALL
 
 
 	template <typename T>
-	TRSFace<T>::TRSFace(const TRSFace<T>& rsface, bool = true)
+	TRSFace<T>::TRSFace(const TRSFace<T>& rsface, bool)
 		throw()
 		: vertex0_(rsface.vertex0_),
 			vertex1_(rsface.vertex1_),
@@ -414,7 +414,7 @@ namespace BALL
 
 
 	template <typename T>
-	void TRSFace<T>::set(const TRSFace<T>& rsface, bool = true)
+	void TRSFace<T>::set(const TRSFace<T>& rsface, bool)
 		throw()
 	{
 		vertex0_ = rsface.vertex0_;

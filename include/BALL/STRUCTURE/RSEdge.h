@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.13 2001/06/28 17:08:09 strobel Exp $
+// $Id: RSEdge.h,v 1.14 2001/06/28 19:12:36 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -466,7 +466,7 @@ namespace BALL
 
 
 	template <typename T>
-	TRSEdge<T>::TRSEdge(const TRSEdge<T>& rsedge, bool  = true)
+	TRSEdge<T>::TRSEdge(const TRSEdge<T>& rsedge, bool)
 		throw()
 		: vertex0_(rsedge.vertex0_),
 			vertex1_(rsedge.vertex1_),
@@ -525,7 +525,7 @@ namespace BALL
 
 
 	template <typename T>
-	void TRSEdge<T>::set(const TRSEdge& rsedge, bool = true)
+	void TRSEdge<T>::set(const TRSEdge& rsedge, bool)
 		throw()
 	{
 		vertex0_ = rsedge.vertex0_;
@@ -827,8 +827,8 @@ namespace BALL
 		{
 			return false;
 		}
-		if ((vertex1_->similar(*rsedge.vertex0_)) == false) &&
-				(vertex1_->similar(*rsedge.vertex1_)) == false)    )
+		if ((vertex1_->similar(*rsedge.vertex0_) == false) &&
+				(vertex1_->similar(*rsedge.vertex1_) == false)    )
 		{
 			return false;
 		}
