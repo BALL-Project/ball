@@ -55,6 +55,7 @@ EXECUTABLES_CONCEPTS =$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	AutoDeleteable_test\
 	Object_test\
 	PersistentObject_test\
+	PersistenceManager_test\
 	TextPersistenceManager_test\
 	Selectable_test\
 	PropertyManager_test\
