@@ -17568,7 +17568,7 @@ echo $ECHO_N "checking libsip.so... $ECHO_C" >&6
 			echo "$as_me:$LINENO: result: ${SIP_LIB}" >&5
 echo "${ECHO_T}${SIP_LIB}" >&6
 		else
-			SIP_LIB_LOCATION=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
+			SIP_LIB_LOCATION=`${FIND} ${PYTHON_PREFIX} -name libsip.so 2>/dev/null`
 			if test "${SIP_LIB_LOCATION}" != "" ; then
 				SIP_LIB=" -L`(dirname "${SIP_LIB_LOCATION}") 2>/dev/null ||
 $as_expr X"${SIP_LIB_LOCATION}" : 'X\(.*[^/]\)//*[^/][^/]*/*$' \| \
