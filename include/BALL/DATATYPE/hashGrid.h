@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: hashGrid.h,v 1.2 1999/09/01 07:01:51 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -1605,9 +1605,9 @@ namespace BALL {
 	{
 		Index index = getIndex_(box);
 		
-		if (index == INVALID_INDEX)
+		if (index == INVALID_POSITION)
 		{
-			x = y = z = INVALID_INDEX;
+			x = y = z = INVALID_POSITION;
 			
 			return false;
 		}
