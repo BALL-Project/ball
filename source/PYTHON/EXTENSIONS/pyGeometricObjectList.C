@@ -1,11 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyGeometricObjectList.C,v 1.1 2003/12/11 02:15:00 amoll Exp $
+// $Id: pyGeometricObjectList.C,v 1.2 2003/12/11 14:22:24 amoll Exp $
 //
 
 #include <BALL/PYTHON/pyGeometricObjectList.h>
-#include <BALL/VIEW/KERNEL/geometricObject.h>
 
 namespace BALL
 {

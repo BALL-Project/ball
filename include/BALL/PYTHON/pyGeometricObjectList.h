@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyGeometricObjectList.h,v 1.1 2003/12/11 02:14:35 amoll Exp $
+// $Id: pyGeometricObjectList.h,v 1.2 2003/12/11 14:22:38 amoll Exp $
 //
 
 #ifndef BALL_PYTHON_PYGEOMETRICOBJECTLIST_H
@@ -15,12 +15,13 @@
 #	include <BALL/DATATYPE/list.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_GEOMETRIC_OBJECT
+# include <BALL/VIEW/KERNEL/geometricObject.h>
+#endif
+
 namespace BALL 
 {
-	namespace VIEW
-	{
-		class GeometricObject;
-	}
+	using namespace VIEW;
 	
 	/** pyGeometricObjectList
 		\ingroup PythonExtensions

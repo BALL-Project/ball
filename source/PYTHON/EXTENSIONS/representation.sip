@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.5 2003/12/11 02:32:54 amoll Exp $
+// $Id: representation.sip,v 1.6 2003/12/11 14:22:25 amoll Exp $
 //
 
 class Representation
@@ -29,7 +29,7 @@ class Representation
 	Representation() throw();
 	Representation(ModelType /model_type/, DrawingPrecision /drawing_precision/, DrawingMode /drawing_mode/) throw();
 	// Representation(const CompositeSet& /composites/, ModelProcessor* /rep_processor/) throw();
-	Representation(const PyGeometricObjectList& /object_list/) throw();
+	//Representation(const PyGeometricObjectList& /object_list/) throw();
 	Representation(const Representation& /representation/) throw();
 	Size getTransparency() const throw();
 	String getModelName() const throw();
