@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.3 2003/08/27 13:58:38 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.4 2003/08/28 21:16:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -11,8 +11,7 @@
 # include <BALL/FORMAT/INIFile.h>
 #endif
 
-#include <qwidget.h>
-#include <qradiobutton.h>
+#include <BALL/VIEW/UIC/mainControlPreferencesData.h>
 
 namespace BALL
 {
@@ -26,7 +25,8 @@ namespace BALL
 				object and will be inserted into the Preferences dialog.
 		\ingroup ViewGuiWidgets		
 		*/
-		class MainControlPreferences : public QWidget
+		class MainControlPreferences 
+			: public MainControlPreferencesData
 		{
 			Q_OBJECT
 
@@ -37,44 +37,32 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new mainControlPreferences.
-					this mainControlPreferences contains the various styles the 
+					This mainControlPreferences contains the various styles the 
 					MainControl can have.
-					\param       parent the parent QWidget of this mainControlPreferences (See QFileDialog in the QT documentation)
-					\param       name the name of this mainControlPreferences (See QFileDialog in the QT documentation)
-					\return      MainControlPreferences new constructed mainControlPreferences widget
 			*/
-			MainControlPreferences(QWidget *parent = NULL,	const char *name = NULL )
+			MainControlPreferences(QWidget *parent = NULL, const char *name = NULL, WFlags fl=0)
 				throw();
 			
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
 
 			/** Destructor.
-					Default destruction of this mainControlPreferences.
-					Calls clear.
 			*/
 			virtual ~MainControlPreferences()
 				throw();
 
-			/** Explicit default initialization.
-					Empty for further purpose.
-			*/
-			virtual void clear()
-				throw();
-
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+
 			/** Inspection of the selected style.
 					Access the selected style of this mainControlPreferences.
 					This method will be called from the method MainControl::applyPreferences.
-					\return  QStyle* a pointer to the selected style of this mainControlPreferences (See documentation of QT-library for information concerning styles)
+					\return  QStyle* a pointer to the selected style of this mainControlPreferences 
+					(See documentation of QT-library for information concerning styles)
 			 */
 			QStyle* getStyle()
 				throw();
@@ -83,14 +71,14 @@ namespace BALL
 					Fetch the preferences (the style of this mainControlPreferences) from
 					the	INIFile <b> inifile.
 					This method will be called from the method MainControl::fetchPreferences.
-					\param  inifile the INIFile that contains the needed information for this mainControlPreferences
+					\param  inifile the INIFile that contains the needed information for 
+									this MainControlPreferences
 					\see    writePreferences
 			*/
 			void fetchPreferences(INIFile &inifile)
 				throw();
 
-			/** Write the preferences.
-					Write the preferences (the style of this mainControlPreferences) to the
+			/** Write the preferences (the style of this mainControlPreferences) to the
 					INIFile <b> inifile.
 					This method will be called from the method 
 					MainControl::writePreferences.
@@ -100,13 +88,6 @@ namespace BALL
 			void writePreferences(INIFile &inifile)
 				throw();
 			//@}
-
-      private:
-			
-			QRadioButton *is_platinum_style;
-			QRadioButton *is_windows_style;
-			QRadioButton *is_motif_style;
-			QRadioButton *is_cde_style;
 		};
   
 	} // namespace VIEW

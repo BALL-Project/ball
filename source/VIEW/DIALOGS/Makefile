@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.17 2003/08/28 19:19:02 oliver Exp $
+# $Id: Makefile,v 1.18 2003/08/28 21:15:50 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -32,6 +32,7 @@ CPP_SOURCES=\
 	lightSettings.C\
 	lightSettingsData.C\
 	mainControlPreferences.C\
+	mainControlPreferencesData.C\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
@@ -76,6 +77,7 @@ MOC_SOURCES=\
 	lightSettings_moc.C\
 	lightSettingsData_moc.C\
 	mainControlPreferences_moc.C\
+	mainControlPreferencesData_moc.C\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
@@ -109,6 +111,7 @@ UIC_SOURCES=\
 	FDPBDialogData.C\
 	labelDialogData.C\
 	lightSettingsData.C\
+	mainControlPreferencesData.C\
 	molecularDynamicsDialogData.C\
 	moveOverlayDialogData.C\
 	mouseSensitivityData.C\
