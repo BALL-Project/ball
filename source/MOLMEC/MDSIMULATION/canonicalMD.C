@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.12 2001/02/20 11:26:16 anker Exp $
+// $Id: canonicalMD.C,v 1.13 2001/04/02 09:50:10 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
@@ -258,7 +258,7 @@ namespace BALL
 
 		if (restart == false)
 		{
-			// reset the current number of iteration and the simulation time  to
+			// reset the current number of iteration and the simulation time to
 			// the values given in the options
 			number_of_iteration_
 				= options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
@@ -324,13 +324,18 @@ namespace BALL
 				force_field_ptr_->periodic_boundary.updateMolecules();
 			}
 
+			// The new velocities calculated a few lines further below will be
+			// rescaled by a certain factor. We use the temperature from the
+			// previous iteration for computing the factor. 
+			updateInstantaneousTemperature();
+
 			// In regular intervals, calculate and  output the current energy
 			if (iteration % energy_output_frequency_ == 0)
 			{
 				// update the current values for energy and temperature and 
 				// output them 
 				current_energy = force_field_ptr_->updateEnergy();
-				updateInstantaneousTemperature();
+				// updateInstantaneousTemperature();
 
 				Log.info()
 					<< "Canonical MD simulation System has potential energy "
@@ -341,11 +346,6 @@ namespace BALL
 					<< current_temperature_ << " at time " 
 					<< current_time_ + (double) iteration *time_step_ << " ps " << endl;
 			}
-
-			// The new velocities calculated a few lines further below will be
-			// rescaled by a certain factor. We use the temperature from the
-			// previous iteration for computing the factor. 
-			updateInstantaneousTemperature();
 
 			// check whether the rescaling will be successful
 			// We trap a special case: at the start of a simulation, the current
