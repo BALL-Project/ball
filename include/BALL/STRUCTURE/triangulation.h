@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.2 2000/10/11 08:18:28 oliver Exp $
+// $Id: triangulation.h,v 1.3 2000/10/14 13:02:34 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -47,9 +47,9 @@ namespace BALL
 																			 const T& size)
 	{
 #ifdef debug_tri		
-ofstream print("Triangulation.log");
+std::ofstream print("Triangulation.log");
 #else
-ofstream print;
+std::ofstream print;
 #endif
 //cout << "$1\n";
 		T radius_of_probe(rs->getProbeRadius());
