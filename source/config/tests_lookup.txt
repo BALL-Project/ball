@@ -1,11 +1,11 @@
-#   include/BALL/COMMON/exception.h
+Co#   include/BALL/COMMON/exception.h
 #   Windows/Libs/libBALL/libBALL.h
 #   Windows/Libs/libMOLVIEW/libMolView.h
 #   Windows/Libs/libVIEW/libView.h
 #   include/BALL/COMMON/global.h
 include/BALL/COMMON/hash.h Hash_test.C
 include/BALL/COMMON/limits.h Limits_test.C
-include/BALL/COMMON/logStream.h LogStream_test.C
+include/BALL/COMMON/logStream.h LogStream_test.C BALL::LogStream
 include/BALL/COMMON/version.h VersionInfo_test.C
 include/BALL/CONCEPT/XDRPersistenceManager.h XDRPersistenceManager_test.C
 include/BALL/CONCEPT/autoDeletable.h AutoDeletable_test.C

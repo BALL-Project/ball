@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.h,v 1.19 2003/08/26 08:04:05 oliver Exp $
+// $Id: hash.h,v 1.20 2003/09/03 12:31:42 oliver Exp $
 //
 
 #ifndef BALL_COMMON_HASH_H
@@ -29,7 +29,7 @@ namespace BALL
   {
     public:
 		
-    bool operator () (const T& t) const throw()
+		HashIndex operator () (const T& t) const throw()
     {
       return Hash(t);
 		}
