@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.22 2000/08/28 21:12:23 amoll Exp $
+// $Id: composite.C,v 1.23 2000/08/29 15:50:58 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -61,6 +61,28 @@ namespace BALL
 	Composite::~Composite()
 	{
 		destroy();
+	}
+
+	void Composite::set(const Composite& composite, bool deep)
+	{
+		if (deep == true)
+		{
+			// predicative cloning
+			composite.clone(*this, Composite::DEFAULT_UNARY_PREDICATE);
+		}
+		else
+		{
+			// clear old contents
+			destroy();
+
+			// copy all remaining attributes
+			properties_ = composite.properties_;
+			selected_ = composite.selected_;
+			contains_selection_ = selected_;
+
+			// update modification and selection time stamp
+			stamp(BOTH);
+		}
 	}
 
   void Composite::persistentWrite(PersistenceManager& pm, const char* name) const
@@ -157,6 +179,25 @@ namespace BALL
 		return *composite_ptr;
 	}
 
+	Composite* Composite::getChild(Index index)
+	{
+		if (first_child_ != 0)
+		{
+			if (index == 0)
+			{
+				return first_child_;
+			}
+			else
+			{
+				return first_child_->getSibling(index);
+			}
+		}
+		else
+		{
+			return 0;
+		}
+	} 
+
 	Composite* Composite::getLowestCommonAncestor(Composite& composite)
 	{
 		Composite* composite_ptr = 0;
@@ -217,7 +258,9 @@ namespace BALL
 
 			for (; ++index < 0 && composite_ptr != 0; 
 					 composite_ptr = composite_ptr->previous_);
-		} else if (index > 0) {
+		} 
+		else if (index > 0) 
+		{
 			// walk "index" steps along the next_ pointers
 			composite_ptr = composite_ptr->next_;
 
@@ -236,7 +279,8 @@ namespace BALL
 			return 0;
 		}
 
-		// remove old contents
+		// remove old contents 
+		// (update the modification and selection stamp as well)
 		root.destroy();
 		
 		// copy the properties
@@ -262,6 +306,24 @@ namespace BALL
 		}
 
 		return &root;
+	}
+
+	void Composite::stamp(Composite::StampType stamp_type) throw()
+	{
+		if ((stamp_type & MODIFICATION) != 0)
+		{
+			modification_stamp_.stamp();
+		}
+		if ((stamp_type & SELECTION) != 0)
+		{
+			selection_stamp_.stamp();
+		}
+
+		// propagate the time stamp upwards to the root
+		if (parent_ != 0)
+		{
+			parent_->stamp(stamp_type);
+		}
 	}
 
 	void Composite::select()
@@ -508,6 +570,9 @@ namespace BALL
 
 		composite.parent_ = this;
 		++number_of_children_;
+
+		// update modification time stamp
+		first_child_->stamp(MODIFICATION);
 	
 		// update selection counters
 		if (composite.containsSelection())
@@ -561,6 +626,9 @@ namespace BALL
 		composite.parent_ = this;
 		++number_of_children_;
 
+		// update modification time stamp
+		last_child_->stamp(MODIFICATION);
+	
 		// update selection counters
 		if (composite.containsSelection())
 		{
@@ -579,7 +647,7 @@ namespace BALL
 	bool Composite::insertParent(Composite& parent, Composite& first, Composite& last, bool destroy_parent)
 	{
 		// return if first and last have different parents, 
-		// if either doesn't possess a parent, or if parent equals first or parent
+		// if either doesn't possess a parent, or if parent equals first or last
 		if (first.parent_ != last.parent_ || first.parent_ == 0 || &first == &parent || &last == &parent)
 		{
 			return false;
@@ -623,11 +691,9 @@ namespace BALL
 			first.previous_ = 0;
 			
 			parent_ptr->last_child_ = &parent;
-
 		} 
 		else 
 		{
-
 			first.previous_->next_ = &parent;
 			parent.previous_ = first.previous_;
 			last.next_->previous_ = &parent;
@@ -647,6 +713,10 @@ namespace BALL
 
 		// update all selection fields recursively
 		parent.determineSelection_();
+
+		// update the modification time stamps
+		first.stamp(MODIFICATION);
+		last.stamp(MODIFICATION);
 
 		return true;
 	}
@@ -698,11 +768,16 @@ namespace BALL
 			
 			parent_->updateSelection_();
 		}
+
+		// update modification time stamps
+		previous_->stamp(MODIFICATION);
+		next_->stamp(MODIFICATION);
+		stamp(MODIFICATION);
 	}
 
 	void Composite::insertAfter(Composite& composite)
 	{
-		// abort if there`s no parent, on slef-insertion, or
+		// abort if there`s no parent, on self-insertion, or
 		// if this node is a descendant of composite
 		if (parent_ == 0 || &composite == this
 				|| isDescendantOf(composite) == true)
@@ -719,7 +794,7 @@ namespace BALL
 			return;
 		}
 
-		// if composite has a prent, remove it from there
+		// if composite has a parent, remove it from there
 		if (composite.parent_ != 0)
 		{
 			composite.parent_->removeChild(composite);
@@ -747,7 +822,21 @@ namespace BALL
 			
 			parent_->updateSelection_();
 		}
+
+		// update modification time stamps
+		previous_->stamp(MODIFICATION);
+		next_->stamp(MODIFICATION);
+		stamp(MODIFICATION);
 	}
+
+	void Composite::replace(Composite& composite)
+	{
+		if (parent_ != 0 && &composite != this)
+		{
+			insertBefore(composite);
+			parent_->removeChild(*this);
+		}
+	} 
 
 	void Composite::spliceBefore(Composite& composite)
 	{
@@ -800,6 +889,10 @@ namespace BALL
 		composite.number_of_selected_children_ = 0;
 		composite.number_of_children_containing_selection_ = 0;
 		composite.contains_selection_ = composite.selected_;
+
+		// update the modification time stamp
+		composite.stamp(MODIFICATION);
+		stamp(MODIFICATION);
 	}
 
 	void  Composite::spliceAfter(Composite& composite)
@@ -853,6 +946,10 @@ namespace BALL
 		composite.number_of_selected_children_ = 0;
 		composite.number_of_children_containing_selection_ = 0;
 		composite.contains_selection_ = composite.selected_;
+
+		// update the modification time stamp
+		composite.stamp(MODIFICATION);
+		stamp(MODIFICATION);
 	}
 
 	void Composite::splice(Composite& composite)
@@ -938,6 +1035,10 @@ namespace BALL
 
 		// clean up everything
 		updateSelection_();
+
+		// update the modification time stamp
+		composite.stamp(MODIFICATION);
+		stamp(MODIFICATION);
 	}
 
 	bool Composite::removeChild(Composite& child)
@@ -977,7 +1078,6 @@ namespace BALL
 		{
 			last_child_ = child.previous_;
 			last_child_->next_ = child.previous_ = 0;
-
 		} 
 		else
 		{
@@ -1004,6 +1104,9 @@ namespace BALL
 
 		// update the selection
 		updateSelection_();
+
+		// update modification time stamp
+		stamp(MODIFICATION);
 
 		return true;
 	}
@@ -1042,6 +1145,9 @@ namespace BALL
 		number_of_children_containing_selection_ = 0;
 		contains_selection_ = selected_;
 		updateSelection_();
+
+		// update modification time stamp
+		stamp(MODIFICATION);
 	}
 
 	void Composite::destroy()
@@ -1064,6 +1170,7 @@ namespace BALL
 		if (virtual_flag == true)
 		{
 			clear();
+			stamp(MODIFICATION);
 		} 
 		else 
 		{
@@ -1147,11 +1254,10 @@ namespace BALL
 		std::swap(properties_, composite.properties_);
 		Selectable::swap(composite);
 
+		// update the modification time stamps
+		stamp(MODIFICATION);
+		composite.stamp(MODIFICATION);
 
-//-------------------------------------------------------->	TimeStamp swapen ?????
-
-		this->modification_stamp_.stamp();
-		composite.modification_stamp_.stamp();
 		// if the two parents are different, we have to update
 		// the selection information
 		if (parent_ != 0)
@@ -1381,6 +1487,22 @@ namespace BALL
 		}
 
 		BALL_DUMP_STREAM_SUFFIX(s);
+	}
+
+	Size Composite::getHeight() const
+	{
+		Size size = 0;
+
+		// if there are children, determine the maximum height
+		if (first_child_ != 0)
+		{
+			return getHeight_(size, size);
+		}
+		else
+		{
+			// otherwise we are at height 0
+			return 0;
+		}
 	}
 
 	Size Composite::getHeight_(Size size, Size& max_height) const
