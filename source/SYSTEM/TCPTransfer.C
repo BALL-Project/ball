@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.31 2004/12/10 16:45:13 amoll Exp $
+// $Id: TCPTransfer.C,v 1.32 2004/12/13 20:30:34 amoll Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -61,7 +61,7 @@ namespace BALL
 		port_(0),
 		login_(""),
 		password_(""),
-		status_(UNINITIALIZED_ERROR),
+		status_(UNINITIALIZED__ERROR),
 		received_bytes_(0),
 		protocol_(UNKNOWN_PROTOCOL),
 		socket_(0),
@@ -95,7 +95,7 @@ namespace BALL
 		port_(0),
 		login_(""),
 		password_(""),
-		status_(UNINITIALIZED_ERROR),
+		status_(UNINITIALIZED__ERROR),
 		received_bytes_(0),
 		protocol_(UNKNOWN_PROTOCOL),
 		socket_(0),
@@ -147,7 +147,7 @@ namespace BALL
 		}
 
 		close(socket_);
-		return UNKNOWN_PROTOCOL_ERROR;
+		return UNKNOWN_PROTOCOL__ERROR;
 	}
 
 
@@ -160,7 +160,7 @@ namespace BALL
 			socket_ = 0;
 		}
 
-		status_ = ADDRESS_ERROR;
+		status_ = ADDRESS__ERROR;
 
 		fstream_ = &file;
 		if (address.getSubstring(0, 7) == "http://")
@@ -180,7 +180,7 @@ namespace BALL
 			else
 			{
 				protocol_ = UNKNOWN_PROTOCOL;
-				status_ 	= UNKNOWN_PROTOCOL_ERROR;
+				status_ 	= UNKNOWN_PROTOCOL__ERROR;
 				return false;
 			}
 		}
@@ -241,7 +241,7 @@ namespace BALL
 		port_ 					= 0;
 		fstream_ 				= 0;
 		received_bytes_ = 0;
-		status_				  = UNINITIALIZED_ERROR;
+		status_				  = UNINITIALIZED__ERROR;
 		protocol_ 			= UNKNOWN_PROTOCOL;
 		
 		if (socket_ != 0)
@@ -276,7 +276,7 @@ namespace BALL
 		}
 		catch(Exception::InvalidFormat)
 		{
-			return UNKNOWN_ERROR;
+			return UNKNOWN__ERROR;
 		}
 
 		return (Status)OK;
@@ -326,7 +326,7 @@ namespace BALL
 		}
 		if (pos == 0)
 		{
-			return BODY_ERROR;
+			return BODY__ERROR;
 		}
 		
 		// write the file
@@ -348,7 +348,7 @@ namespace BALL
 #			endif
 			if (bytes < 0)
 			{
-				return RECV_ERROR;
+				return RECV__ERROR;
 			}
 			for (Position i = 0; i < (Position)bytes; i++)
 			{
@@ -372,14 +372,14 @@ namespace BALL
 
 			if (ioctl(socket, FIONBIO, &temp) == -1)
 			{
-				return (Status)CONNECT_ERROR;
+				return (Status)CONNECT__ERROR;
 			}
 		#else
 			u_long temp = !block;
 
 			if (ioctlsocket(socket, FIONBIO, &temp) == -1)
 			{
-				return (Status)CONNECT_ERROR;
+				return (Status)CONNECT__ERROR;
 			}
 		#endif
 
@@ -400,12 +400,12 @@ namespace BALL
 			}	 
 		#endif
 
-		status_ = UNKNOWN_ERROR;
+		status_ = UNKNOWN__ERROR;
 		
 		struct hostent* ht = gethostbyname(host_address_.c_str());
 		if (ht == NULL)
 		{
-			status_ = GETHOSTBYNAME_ERROR;
+			status_ = GETHOSTBYNAME__ERROR;
 			return status_;
 		}  
 		if (socket_ != 0)
@@ -416,7 +416,7 @@ namespace BALL
 		if (socket_ == -1)
 		{
 			socket_ = 0;
-			status_ = (Status)SOCKET_ERROR;
+			status_ = (Status)SOCKET__ERROR;
 			return status_;
 		}  
 
@@ -427,7 +427,7 @@ namespace BALL
 
 		if(connect(socket_, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
 		{
-			status_ = CONNECT_ERROR;
+			status_ = CONNECT__ERROR;
 			return status_;
 		}
 		if (!query.isEmpty())
@@ -441,7 +441,7 @@ namespace BALL
 #			endif
 		if (received_bytes_ < 0)
 		{
-			status_ = RECV_ERROR;
+			status_ = RECV__ERROR;
 			return status_;
 		}
 		buffer_[received_bytes_] = '\0';
@@ -457,7 +457,7 @@ namespace BALL
 	TCPTransfer::Status TCPTransfer::getFTPStatus_()
 		throw()
 	{
-		status_ = UNKNOWN_ERROR;
+		status_ = UNKNOWN__ERROR;
 		String temp;
 		for (Position pos = 0; pos < 3 && pos < (Position) received_bytes_; pos++)
 		{
@@ -500,7 +500,7 @@ namespace BALL
 				
 		if (send(socket, query.c_str(), query.size(), 0) != (int) query.size())
 		{
-			status_ = SEND_ERROR;
+			status_ = SEND__ERROR;
 			return status_;
 		}
 		return (Status)OK;
@@ -602,7 +602,7 @@ namespace BALL
 		
 		if (!last_line2)
 		{
-			status_ = RECV_ERROR;
+			status_ = RECV__ERROR;
 			return false; 
 		}
 		
@@ -691,20 +691,20 @@ namespace BALL
 
 		if (passv_port == 0)
 		{
-			return PORT_ERROR;
+			return PORT__ERROR;
 		}
 
 		struct hostent* ht = gethostbyname(passv_host.c_str());
 		if (ht == NULL)
 		{
-			status_ = GETHOSTBYNAME_ERROR;
+			status_ = GETHOSTBYNAME__ERROR;
 			return status_;
 		}  
 
 		Socket socket2 = socket(AF_INET, SOCK_STREAM, 0); 
 		if (socket2 == -1)
 		{
-			status_ = (Status)SOCKET_ERROR;
+			status_ = (Status)SOCKET__ERROR;
 			return status_;
 		}  
 
@@ -717,7 +717,7 @@ namespace BALL
 		if(connect(socket2, (struct sockaddr*)&host, sizeof(struct sockaddr)) == -1)
 		{
 			close(socket2);
-			status_ = CONNECT_ERROR;
+			status_ = CONNECT__ERROR;
 			return status_;
 		}
 		setBlock_(socket2, false);
@@ -738,7 +738,7 @@ namespace BALL
 		if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
 		{
 			close(socket2);
-			return SEND_ERROR;
+			return SEND__ERROR;
 		}
 		
 
@@ -797,7 +797,7 @@ namespace BALL
 		
 		if (control_bytes < 1)
 		{
-			status_ = RECV_ERROR;
+			status_ = RECV__ERROR;
 			return status_;
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.19 2004/12/10 16:44:59 amoll Exp $
+// $Id: TCPTransfer.h,v 1.20 2004/12/13 20:31:01 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
@@ -43,22 +43,22 @@ namespace BALL
 			*/
 			enum Status
 			{
-				OK  							= 0,
-				GETHOSTBYNAME_ERROR 		= 1,
-				SOCKET_ERROR 						= 2,
-				CONNECT_ERROR 					= 3,
-				RECV_ERROR 							= 4,
-				OUTOFMEMORY_ERROR 			= 5,
-				BODY_ERROR 							= 6,
-				UNKNOWN_ERROR 					= 7,
-				ADDRESS_ERROR 					= 8,
-				UNINITIALIZED_ERROR 		= 9,
-				TRANSFER_ERROR					= 10,
-				SEND_ERROR							= 11,
-				PORT_ERROR							= 12,
-				UNKNOWN_PROTOCOL_ERROR 	= 13,
-				LOGON_ERROR							= 14,
-				FILENOTFOUND_ERROR 			= 404
+				OK  										= 0,
+				GETHOSTBYNAME__ERROR 		= 1,
+				SOCKET__ERROR 					= 2,
+				CONNECT__ERROR 					= 3,
+				RECV__ERROR 						= 4,
+				OUTOFMEMORY__ERROR 			= 5,
+				BODY__ERROR 						= 6,
+				UNKNOWN__ERROR 					= 7,
+				ADDRESS__ERROR 					= 8,
+				UNINITIALIZED__ERROR 		= 9,
+				TRANSFER__ERROR					= 10,
+				SEND__ERROR							= 11,
+				PORT__ERROR							= 12,
+				UNKNOWN_PROTOCOL__ERROR = 13,
+				LOGON__ERROR						= 14,
+				FILENOTFOUND__ERROR 		= 404
 			};
 
 			/** Enumeration of the supported protocols.
@@ -89,7 +89,7 @@ namespace BALL
 				};
 			
 			/** Default constructor.
-					The instance is set to UNINITIALIZED_ERROR.
+					The instance is set to UNINITIALIZED__ERROR.
 			*/
 			TCPTransfer()
 				throw();
@@ -110,7 +110,7 @@ namespace BALL
 		
 			/** Clear method.
 			 *  All attributes are set to default values and the status is set
-			 *  to UNINITIALIZED_ERROR.
+			 *  to UNINITIALIZED__ERROR.
 			 */
 			void clear()
 				throw();
