@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.33 2003/06/09 22:40:49 oliver Exp $
+// $Id: sphere3.h,v 1.34 2003/08/19 19:56:12 amoll Exp $
 //
 
 #ifndef BALL_MATHS_SPHERE3_H
@@ -82,12 +82,19 @@ namespace BALL
 		}
 
 		/**	Destructor.	
-				Destructs the Sphere3 object. As there are no dynamic
-				data structures, nothing happens.
+				As there are no dynamic data structures, nothing happens.
 		*/
 		virtual ~TSphere3()
 			throw()
 		{
+		}
+
+		///
+		virtual void clear()
+			throw()
+		{
+			p.clear();
+			radius = 0;
 		}
 
 		//@}
