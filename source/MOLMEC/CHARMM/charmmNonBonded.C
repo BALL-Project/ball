@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.2 2000/02/10 10:46:40 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.3 2000/02/10 15:13:35 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -344,7 +344,7 @@ namespace BALL
 
 
 	BALL_INLINE 
-	void calculateMinimumImage
+	void CHARMMcalculateMinimumImage
 		(Vector3& difference, Vector3& period, Vector3& half_period)
 	{
 		if (difference.x < -half_period.x) 
@@ -381,7 +381,7 @@ namespace BALL
 	// atoms.
 
 	BALL_INLINE 
-	void calculateVdWAndElectrostaticEnergy
+	void CHARMMcalculateVdWAndElectrostaticEnergy
 		(vector<FFPSLennardJones::LennardJones>::const_iterator it,
 		 Vector3& period, Vector3& half_period,
 		 float& cut_off_vdw_2, float& cut_off_electrostatic_2,
@@ -398,7 +398,7 @@ namespace BALL
 		if (use_periodic_boundary == true)
 		{
 			// calculate the minimum image 
-			calculateMinimumImage(difference,period,half_period); 
+			CHARMMcalculateMinimumImage(difference,period,half_period); 
 		}
 	 
 		// the squared distance between the two atoms 
@@ -470,7 +470,7 @@ namespace BALL
 	// This  function calculates the  force vector
 	// resulting from non-bonded interactions between two atoms 
 	BALL_INLINE 
-	void calculateVdWAndElectrostaticForce
+	void CHARMMcalculateVdWAndElectrostaticForce
 		(vector<FFPSLennardJones::LennardJones>::iterator it, 
 		 Vector3& period, Vector3& half_period, 
 		 bool use_selection,		
@@ -492,7 +492,7 @@ namespace BALL
 		// choose the nearest image if period boundary is enabled 
 		if (use_periodic_boundary == true)
 		{
-			calculateMinimumImage(direction,period,half_period); 
+			CHARMMcalculateMinimumImage(direction,period,half_period); 
 		}
 
 		float distance_2 = direction.getSquareLength(); 
@@ -663,7 +663,7 @@ namespace BALL
 				if(use_selection == false
 					 || (use_selection == true && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
-					calculateVdWAndElectrostaticEnergy
+					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, period, half_period, cut_off_vdw_2, 
 						 cut_off_electrostatic_2, vdw_energy_1_4,                                
 						 electrostatic_energy_1_4, cut_on_vdw_2, 
@@ -677,7 +677,7 @@ namespace BALL
 			{                                                                                            
 				if(use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
-					calculateVdWAndElectrostaticEnergy
+					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, period, half_period, cut_off_vdw_2, 
 						 cut_off_electrostatic_2,vdw_energy, electrostatic_energy,cut_on_vdw_2,
 						 inverse_difference_on_off_3, true, true, 
@@ -699,7 +699,7 @@ namespace BALL
 				if (use_selection == false 
 						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
-					calculateVdWAndElectrostaticEnergy
+					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, period,half_period, cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy_1_4,                                
 						 electrostatic_energy_1_4, cut_on_vdw_2,
 						 inverse_difference_on_off_3, true, false, 
@@ -713,7 +713,7 @@ namespace BALL
 				if (use_selection == false 
 						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                 
-					calculateVdWAndElectrostaticEnergy
+					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, period,half_period,   
 						 cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy,                        
 						 electrostatic_energy,cut_on_vdw_2,
@@ -731,7 +731,7 @@ namespace BALL
 				if (use_selection == false 
 						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{                                                                                          
-					calculateVdWAndElectrostaticEnergy
+					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, period,half_period, cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy_1_4,                                
 						 electrostatic_energy_1_4, cut_on_vdw_2, 
 						 inverse_difference_on_off_3, false, true, 
@@ -745,7 +745,7 @@ namespace BALL
 				if (use_selection == false 
 						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
-					calculateVdWAndElectrostaticEnergy
+					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it, period,half_period,   
 						 cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy,                                
 						 electrostatic_energy,cut_on_vdw_2,
@@ -763,7 +763,7 @@ namespace BALL
 			{                                                                                            
 				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
-					calculateVdWAndElectrostaticEnergy
+					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it,period,half_period,   
 						 cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy_1_4,                                
 						 electrostatic_energy_1_4, cut_on_vdw_2,
@@ -778,7 +778,7 @@ namespace BALL
 				if (use_selection == false 
 						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
-					calculateVdWAndElectrostaticEnergy
+					CHARMMcalculateVdWAndElectrostaticEnergy
 						(it,period,half_period,   
 						 cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy,                                
 						 electrostatic_energy, cut_on_vdw_2, 
@@ -875,7 +875,7 @@ namespace BALL
 				if (use_selection == false 
 						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
-					calculateVdWAndElectrostaticForce
+					CHARMMcalculateVdWAndElectrostaticForce
 						(it, period, half_period, use_selection,
 						 e_scaling_factor_1_4, vdw_scaling_factor_1_4, cut_off_electrostatic_2, 
 						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
@@ -889,7 +889,7 @@ namespace BALL
 				if (use_selection == false 
 						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
-					calculateVdWAndElectrostaticForce
+					CHARMMcalculateVdWAndElectrostaticForce
 						(it, period, half_period, use_selection,
 						 e_scaling_factor, vdw_scaling_factor, cut_off_electrostatic_2, 
 						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
@@ -911,7 +911,7 @@ namespace BALL
 				if (use_selection == false 
 						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
-					calculateVdWAndElectrostaticForce
+					CHARMMcalculateVdWAndElectrostaticForce
 						(it, period, half_period, use_selection, 
 						 e_scaling_factor_1_4, vdw_scaling_factor_1_4, cut_off_electrostatic_2, 
 						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
@@ -925,7 +925,7 @@ namespace BALL
 				if (use_selection == false 
 						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{
-					calculateVdWAndElectrostaticForce
+					CHARMMcalculateVdWAndElectrostaticForce
 						(it, period,half_period, use_selection, 
 						 e_scaling_factor, vdw_scaling_factor, cut_off_electrostatic_2, 
 						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
@@ -943,7 +943,7 @@ namespace BALL
 				if (use_selection == false 
 						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
-					calculateVdWAndElectrostaticForce
+					CHARMMcalculateVdWAndElectrostaticForce
 						(it, period,half_period, use_selection, 
 						 e_scaling_factor_1_4, vdw_scaling_factor_1_4, cut_off_electrostatic_2, 
 						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
@@ -956,7 +956,7 @@ namespace BALL
 			{
 				if (use_selection == false || ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
-					calculateVdWAndElectrostaticForce
+					CHARMMcalculateVdWAndElectrostaticForce
 						(it, period,half_period, use_selection, 
 						 e_scaling_factor, vdw_scaling_factor, cut_off_electrostatic_2, 
 						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
@@ -973,7 +973,7 @@ namespace BALL
 			{
 				if (use_selection == false || ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
-					calculateVdWAndElectrostaticForce
+					CHARMMcalculateVdWAndElectrostaticForce
 						(it, period,half_period, use_selection, 
 						 e_scaling_factor_1_4, vdw_scaling_factor_1_4, cut_off_electrostatic_2, 
 						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
@@ -987,7 +987,7 @@ namespace BALL
 				if (use_selection == false 
 						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
-					calculateVdWAndElectrostaticForce
+					CHARMMcalculateVdWAndElectrostaticForce
 						(it, period,half_period, use_selection, 
 						 e_scaling_factor, vdw_scaling_factor, cut_off_electrostatic_2, 
 						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
