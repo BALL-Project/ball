@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.66 2000/03/14 16:37:29 oliver Exp $
+dnl    $Id: configure.in,v 1.67 2000/03/14 20:49:27 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -993,10 +993,10 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 	AROPTS="${AROPTS} -o"
 	DYNAROPTS="${DYNAROPTS} -shared -tused -o"
 	CXX_MAKEDEPEND="${CXX}"
-	MAKEDEP_CXX_OPTS="-M -D__USE_STD_IOSTREAM"
+	MAKEDEP_CXX_OPTS="-M -noimplicit_include -std strict_ansi"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-	CXXFLAGS="${CXXFLAGS} -tlocal -D__USE_STD_IOSTREAM"
+	CXXFLAGS="${CXXFLAGS} -tlocal -std strict_ansi"
 	CXXFLAGS_O="${CXXFLAGS_O} -O5"
 	
 	CXXFLAGS_D="${CXXFLAGS_D}"
