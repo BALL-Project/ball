@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.23 2004/12/28 14:35:22 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.24 2004/12/28 14:37:49 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -343,7 +343,7 @@ namespace BALL
 			for (Position p = 0; p < slides + 1; p++)
 			{
 				mesh->vertex.push_back(last_point_ + new_points[p]);
-				mesh->vertex.push_back(new_points[p]);
+				mesh->normal.push_back(new_points[p]);
 			}
 
 			//------------------------------------------------------>
