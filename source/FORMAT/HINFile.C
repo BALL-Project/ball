@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.18 2000/06/20 21:31:42 oliver Exp $
+// $Id: HINFile.C,v 1.19 2000/06/20 22:00:06 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -837,6 +837,11 @@ namespace BALL
 	Box3 HINFile::getPeriodicBoundary() const
 	{
 		return box_;
+	}
+
+	float HINFile::getTemperature() const
+	{
+		return temperature_;
 	}
 
 } // namespace BALL
