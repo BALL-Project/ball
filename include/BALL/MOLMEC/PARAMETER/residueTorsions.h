@@ -1,4 +1,4 @@
-// $Id: residueTorsions.h,v 1.4 2000/02/14 22:42:41 oliver Exp $
+// $Id: residueTorsions.h,v 1.5 2000/02/16 19:05:03 oliver Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
@@ -17,7 +17,7 @@ namespace BALL
 
 	/**	Parameter class containing all proper torsions occuring in a residue.
 			Several force fields (e.g. CHARMM) do not necessarily consider or
-			parametrize all occurring trosions but explicitly list the torsions
+			parametrize all occurring torsions but explicitly list the torsions
 			for each residue. This parameter section is used to represetn this list.
 			The class AMBER and CHARMM torsions components check for the presence of
 			the parameter section [ResidueTorsions] and the decide whether they have
@@ -100,8 +100,8 @@ namespace BALL
 
 		/**	Assign the {\it i}th torsion for a residue.
 				@param	name the residue name (including modifiers like -S or -N);
-				@param  i the index. 0 < {\tt i} < \ref{getNumberOfResidueTorsions}
-				@param	{struct ResidueTorsion} the torsion to be assigned to
+				@param  i the index. 0 $<$ {\tt i} $<$ \Ref{getNumberOfResidueTorsions}
+				@param	ResidueTorsion the torsion to be assigned to
 				@return {\bf true} if the torsion was found, {\bf false} otherwise
 		*/
 		bool assignTorsion(const String& name, Position i, Data& torsion) const;
