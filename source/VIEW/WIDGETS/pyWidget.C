@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.27 2004/04/19 22:12:36 amoll Exp $
+// $Id: pyWidget.C,v 1.28 2004/04/21 13:59:42 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -17,6 +17,9 @@
 #include <qscrollbar.h>
 #include <qfiledialog.h>
 #include <qapplication.h>
+
+// doesnt work right now
+#undef BALL_QT_HAS_THREADS
 
 namespace BALL
 {
@@ -39,10 +42,13 @@ namespace BALL
 
 		PyWidgetData::PyWidgetData(QWidget* parent, const char* name)
 			: QTextEdit(parent, name),
-				thread_(new RunPythonThread()),
+				thread_(0),
 				stop_script_(false)
 		{
 			setWrapPolicy(QTextEdit::Anywhere);
+			#ifdef BALL_QT_HAS_THREADS
+			  thread_ = new RunPythonThread();
+			#endif
 		}
 
 		PyWidgetData::PyWidgetData(const PyWidgetData& /*widget*/)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.56 2004/04/21 12:03:26 amoll Exp $
+// $Id: scene.C,v 1.57 2004/04/21 13:59:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1204,9 +1204,7 @@ namespace BALL
 		{
 			qmouse_event->accept();
 
-			int step_width=(int)(mouse_wheel_sensitivity_*2);
-
-			y_window_pos_new_ = y_window_pos_old_ + (qmouse_event->delta()/120*step_width);
+			y_window_pos_new_ = y_window_pos_old_ + (qmouse_event->delta()/120*mouse_wheel_sensitivity_);
 			zoomSystem_(this);
 			y_window_pos_old_ = y_window_pos_new_;
 		}
