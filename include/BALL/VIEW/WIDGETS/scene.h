@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.8 2003/09/19 18:41:58 amoll Exp $
+// $Id: scene.h,v 1.9 2003/10/24 22:38:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -529,6 +529,10 @@ namespace BALL
 				throw();
 
 			//_ called by renderView_
+			void renderRepresentations_(RenderMode mode)
+				throw();
+
+			//_ called by renderRepresentations_
 			void render_(const Representation& rep, RenderMode mode)
 				throw();
 
