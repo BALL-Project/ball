@@ -1,0 +1,396 @@
+\documentclass[a4]{article}
+\title{BALL coding conventions}
+\author{Oliver Kohlbacher}
+
+\newtheorem{example}{Example}
+
+\begin{document}
+\maketitle
+\section{General}
+
+\subsection{Formatting}
+
+All BALL files use a tab width of two. Use the command {\tt set tabstop=2} in
+{\bf vi} or {\tt set-variable tab-width 2} if you are using {\bf emacs}.
+
+Matching pairs of opening and closing curly braces should be set to the same
+column:
+\begin{verbatim}
+while (continue == true)
+{
+  for (int i = 0; i < 10; i++)
+  {
+    ...
+  }
+
+ 	...
+
+  if (x < 7)
+  {
+    ....
+  }
+}
+\end{verbatim}
+The main reason for this rule is to avoid constructions like:
+
+\begin{verbatim}
+if (isValid(a))
+  return 0;
+\end{verbatim}
+
+which might be changed to something like
+
+\begin{verbatim}
+if (isValid(a))
+  error = 0;
+  return 0;
+\end{verbatim}
+
+The resulting errors are hard to find. There are two ways to avoid these
+problems: (a) always use braces around a block (b) write everyting in a single
+line. We recommend method (a).
+However, this is mainly a question of personal style, so no explicit checking
+is performed to enforce this rule.
+
+
+
+\section{Class requirements}
+
+Each Ball class has to provide the following minimal interface:
+\begin{verbatim}
+	/** Class documentation... 
+	*/
+  class Test
+  {
+    public:
+
+    // clone method (implemented automatically with the CREATE macro)
+    CREATE(Test)    
+
+    // default ctor
+    Test();
+
+    // copy ctor 
+    Test(const Test& test, bool clone_deep = true);
+
+    // destructor 
+    virtual ~Test();
+ 
+    // assignment operator
+    Test& operator = (const Test& test);
+  };
+\end{verbatim}
+
+
+
+\subsection{Exception handling}
+
+No BALL program should completely terminate itself on an error. Especially
+when used for scripting, robustness is an important topic. The recommended
+procedure to handle -- even fatal -- errors is to throw an exception. Uncaught
+exception will result in a call to {\tt abort} thereby terminating the
+program.\\
+All exceptions used in BALL are derived from {\tt GeneralException}
+defined in {\bf COMMON/exception.h}. A default constructor should not be
+implemented for these exceptions. Instead, the constructor of all derived
+exceptions should have the following signature:
+\begin{verbatim}
+  AnyException(const char* file, unsigned long line);
+\end{verbatim}
+Additional arguments are possible but should provide default values (see
+{\tt IndexOverflow} for an example).\\
+The {\tt throw} directive for each exception should be of the form
+\begin{verbatim}
+  throw AnyException(__FILE__, __LINE__);
+\end{verbatim}
+to simplify debugging. {\tt \_\_FILE\_\_} and {\tt \_\_LINE\_\_} are preprocessor
+macros filled in by the compiler. {\bf GeneralException} provides two methods
+({\tt getFile} and {\tt getLine}) that allow the localization of the
+exception's cause.\\
+
+
+\subsection{Persistence}
+
+Object persistence is a serious problem in C++. There are mainly three
+concepts that are responsible for the trouble:
+\begin{itemize}
+	\item multiple inheritence from a common base class, leading to virtual
+		inheritance
+	\item static member variables
+	\item void pointers
+\end{itemize}
+
+To start at the end, {\em void pointers} are easisest to handle: avoid them!
+Pointers are only valid inside a single instance of a program, they have no
+meaning for a different instance or even another machine. Any code dealing
+with void pointers cannot be made persistent.
+
+{\em Static member} variables can cause trouble, if the behaviour of a class depends
+on the state of this variable. There is no general rule on how to handle these
+variables. However, in most cases everything works fine if you simply ignore
+them. The only case where a static member variable had to be considered when
+implementing object persistence for the BALL kernel classes was the internal
+counter of the class {\tt Object}. This counter is incremented by one for each
+instance of {\tt Object} created. It is used to uniquely identify objects and
+to define a linear order on these objects (this is the object's handle).
+If the state of this counter was written with each persistent object, what
+had happened? When writing for example a molecule, the static variable had
+always had the same value. Reading these objects again had set the internal
+variable of the reading instance of a program to that value. This might lead
+to object handles occuring twice. Persistent reading for objects of type {\tt Object} 
+was therefore implemented to ignore the value. This leads to a different order
+of the handles (the atoms that are read get handles according to the order in
+which they are read and created) but prevents the double occurance of the same
+handle. Whether static variables have to be read/written or not has to be
+decided  on a case-by-case basis.
+
+{\em Multiple inheritance} is the most serious problem. Again, the kernel
+classes contain a good example. {\tt Atom} is derived (among others) from
+{\tt Composite} and {\tt PropertyManager}. {\tt Composite} is a {\tt
+PersistentObject}. Hence, an atom inherits the methods {\tt persistentWrite}
+and {\tt persistentRead}. It would be quite easy to implement object
+persistence for an atom, if {\tt PropertyManager} was a {\tt
+PersistentObejct}, too. This is not possible since {\tt Atom} could not decide
+which {\tt persistentWrite} method is meant with {\tt Atom::persistenWrite}:
+either {\tt Composite::persistentWrite} or {\tt
+PropertyManager::persistentWrite}. 
+All persistent object have to be derived from exactly {\em one} persistent
+object - in this case {\tt Composite}. The support classes like {\tt
+PropertyManager} or {\tt Selectable} are not derived from {\tt
+PersistentObject} but are a {\em model of storable}. 
+This requires the definition of two methods in the storable class' interface:
+{\tt read(PersistenceManager\& pm)} and {\tt write(PersistenceManager\& pm)}.
+These methods are quite alike to {\tt persistenWrite} and {\tt
+persistentRead} even in the implementation. The difference is that classes
+that are a model of storable cannot be read from a persistent stream if they
+are not part or base class of a persistent object. This is due to the fact
+that the persistence manager needs a well-defined interface to handle the
+objects he stores and retrieves and this interface is implemented in the class
+{\tt PersistentObject}. 
+
+\section{Naming conventions}
+
+\subsection{Variable names}
+
+Variable names are all lower case letters. Distinguished parts of the name are
+separated using underscores ``{\tt \_}''. If parts of the name are derived
+from common acronyms (e.g. PDB) they should be in upper case.\\
+Private or protected member variables of classes are suffixed by an
+underscore.\\
+No prefixing or suffixing is allowed too identify the variable type - this
+leads to completely illegible documentation and overly long variable names.\\
+\begin{example}
+{\tt String PDB\_atom\_name;} (using an abbreviation)\\
+{\tt int counter\_;} (private class member)\\
+{\tt bool is\_found;} (ordinary variable)
+\end{example}
+
+\subsection{Class names/type names}
+
+Class names and type names always start with a capital letter. Different parts
+of the name are separated by capital letters at the beginning of the word. No
+underscores are allowed in type names and class names, except for the names of
+protected types and classes in classes which are suffixed by an underscore.
+\begin{example}
+{\tt class PDBFile}\\
+{\tt class ForwardIteratorTraits\_} (private nested class definition)\\
+\end{example}
+
+\subsection{Function names/method names}
+
+Function names (including class method names) always start with a lower case
+letter. Parts of the name are separated using capital letters (as are types
+and class names). No underscores are allowed in type names and class names,
+except for the names of protected types and classes in classes which are
+suffixed by an underscore. The argument of {\tt void} functions is omitted in
+the declaration and the definition. If function arguments are pointers or
+references, the pointer or reference qualifier is appended to the variable
+type (without separating blanks). It should not prefix the variable name.\\
+The variable names used in the declaration have to be the same as in the
+definition. They should be as short as possible, but nevertheless
+comprehensible.  If arguments are not used in the implementation of the
+function, they have to be commented out (to avoid compiler warnings).
+\begin{example}
+{\tt int countAtoms()}\\
+{\tt bool isBondedTo(const Atom\& atom)}\\
+{\tt bool doSomething(int i, String\& /* name */)}
+\end{example}
+
+\section{Documentation}
+
+\subsection{DOC++}
+Each BALL class hast to be documented using DOC++. The documentation is
+inserted in DOC++ format in the header file where the class is defined.
+Documentation includes the description of the class, of each method, type
+declaration, enum declaration, each constant, and each member variable.
+An example for a class documentation is given below. 
+
+\subsection{Usage of groups in the documentation}
+
+In order to obtain a structured and comprehensible documentation methods are
+grouped by their function. Each class usually uses one or more out of the
+following categories to group its methods:
+\begin{itemize}
+	\item {\bf Type Definitions:}\\
+		This group should contain all {\tt typedef}s (except for private or pretected
+		ones) of the class
+	\item {\bf Exceptions:}\\
+		All class specific exceptions are defined as nested classes in this group
+	\item {\bf Enums:}\\
+		This group usually contains enums or constants defined via enums such as
+		properties
+	\item {\bf Constructors and Destructors:}\\
+		This group includes all constructors and destructors, as well as related
+		methods such as {\tt clear} or {\tt destroy}
+	\item {\bf Persistence:}\\
+		This group is present in each class derived from {\tt PersistentObject}
+		and always contains the two methods {\tt persistentWrite} and {\tt
+		persistentRead}
+	\item {\bf Converters:}\\
+		If an object should be convertible to another class, an explicit
+		converter should be defined inside this group.
+	\item {\bf Accessors:}\\
+		Accessors are all the methods that access or modify attributes of the
+		class.
+	\item {\bf Predicates:}\\
+		Predicates are functions returning a boolean value. the names of
+		predicates should start with {\tt is} or {\tt has} if applicable.
+		Comparison operators are also predicates and should appear inside
+		this group.
+	\item {\bf Debugging and Diagnostics:}\\
+		This group should contain all methods used for the debugging of the class
+		(for example the {\tt dump} methods).
+	\item {\bf Storers:}\\
+		Storers are {\tt operator << (ostream\&)}, {\tt operator >> (istream\&)},
+		or the {\tt read} and {\tt write} methods of objects that are e model of
+		storable.
+	\item {\bf Attributes:}\\	
+		This group should contain all public class attributes. Protected and
+		private attributes should be documented in the corresponding groups
+		{\bf Private Attributes} or {\bf Protected Attributes}. However, private 
+		members do not occur in the documentation by default.
+\end{itemize}
+
+These section names are intended as a rule-of-thumb only. There are many cases
+where other section headings are more intuitive. However, if any of the above
+sections apply, they should be used. The sections should also appear in this
+order.
+
+
+\subsection{Documenting protected and private members}
+
+Documentation for private members and methods should not appear in the
+official documentation. However, it should be available upon special request
+for developers. They should therefor be documented as all methods and
+variables, too. THe only difference is that the are documented using a
+slightly different comment syntax. Instead of the DOC++ comment {\tt /**}
+private members are documented using {\tt /*\_}. The group command {\tt //@\{}
+is replaced by {\tt //\_@\{}.\\
+
+
+\subsection{Commenting code}
+
+The code for each .C file has to be commented. Each piece of code in BALL has
+to contain at least {\bf 5\% of comments}. The use of {\tt //} instead of C style
+comments ({\tt /* */}) is recommended to avoid problems arising from nested
+comments. Comments should be written in plain english and describe the
+functionality of the next few lines.
+
+To check whether a header or source file fulfils this requirement, use the
+script {\tt BALL/doc/tools/check\_coding}. Invoke {\tt check\_coding} with the
+filename to check (or a list of files) and it will print the percentage of
+comments (including DOC++ comments) for each file.
+
+
+\subsection{Revision control}
+
+BALL uses the Revision Control System (RCS) to handle different version of the
+source files. For easier identification, each BALL source file starts with the
+revision control ID string in a comment. Any new BALL header or source file
+should start with this line:
+\begin{verbatim}
+	// $Id: coding_style.tex,v 1.1 2003/10/29 16:37:08 oliver Exp $
+\end{verbatim}
+On the first check-in of this file (for example using {\tt ci -l
+<filename>}) this string is expanded to the full RCS ID:
+\begin{verbatim}
+	// $Id: coding_style.tex,v 1.1 2003/10/29 16:37:08 oliver Exp $ 
+\end{verbatim}
+
+
+\section{Testing}
+
+\subsection{General}
+
+Each BALL class has to provide a test program. This test program has to check
+each method of the class. The test programs reside in the directory
+{\tt BALL/source/TEST}. To create a new test program, rename a copy of the file
+{\tt Skeleton\_test.C} to the new class test name (usually {\tt
+<classname>\_test.C}). The test program has to be coded using the class test
+macros as described in the BALL online reference. Special care should be taken
+to cover all special cases (e.g. what happens, if a method is called with
+empty strings, negative values, zero, null pointers etc.).
+
+
+\subsection{Structure of a test program}
+
+\subsection{Macros to start, finish and evaluate tests}
+\begin{itemize}
+	\item {\tt START\_TEST(class\_name, version)}
+	\item {\tt END\_TEST}
+	\item {\tt CHECK(name)}
+	\item {\tt RESULT}
+\end{itemize}
+
+\subsection{Comparison macros}
+\begin{itemize}
+	\item {\tt TEST\_EQUAL(a, b)}
+	\item {\tt TEST\_NOT\_EQUAL(a, b)}
+	\item {\tt TEST\_REAL\_EQUAL(a, b)}
+	\item {\tt TEST\_EXCEPTION(exception\_type, expression)}	
+\end{itemize}
+
+\subsection{Is this really necessary?}
+
+Yes. Testing is crucial to verify the correctness of the library -- especially when
+using C++. But why has it to be {\em so} complicated, using all these macros
+and stuff? One of the biggest problems when building large class frameworks is
+portability. C++ compilers are strange beasts and there is not a single one
+that accepts the same code as any other compiler. Since one of the main
+concerns of BALL is portability, we have to ensure that every single line of
+code compiles on all platforms. Due to the long compilation times and the
+(hopefully in future) large number of different platforms, tests to verify the
+correct behaviour of all classes have to be carried out automatically. This
+implies a well defined interface for all tests, which is the reason for all
+these strange macros. This fixed format also enforces the writing of complete
+class tests. Usually a programmer writes a few lines of code to test the parts
+of the code he wrote for correctness. Of the methods tested after the
+introduction of the test macros, about a tenth of all functions/methods showed
+severe errors or after thorough testing. Most of these errors didn't occur an
+all platforms or didn't show up on trivial input.
+
+Writing tests for {\em each} method of a class also ensures that each line is
+compiled. WHen using class templates the compiler only compiles the methods
+called. Thus it is possible that a code segment contains syntactical errors
+but the compiler accepts the code happily -- he simply ignores most of the
+code. This is quickly discovered in a complete test of all methods. The same
+is true for configuration dependend preprocessor directives that stem from
+platform dependencies. Often untested code also hides inside the {\tt const}
+version of a method, when there is a non-const method with the same name and
+arguments (for example most of the {\tt getName}) methods in BALL. In most
+cases, the non-const version is preferred by the compiler and it is usually
+not clear to the user which version is taken. Again, explicit testing of each
+single method provides help for this problem.
+The ideal method to tackle the problem of untested code is the complete
+coverage analysis of a class. Unfortunately this is only supported for very
+few compilers, so it is not used for testing BALL.
+
+One last point: writing the
+test program is a wonderful opportunity to verify and complete the
+documentation! Often enough implementation details are not clear at the time
+the documentation is written. A lot of side effects or special cases that were
+added later do not appear in the documentation. Going through the
+documentation and the implementation in parallel is the best way to verify the
+documentation for consistence and (strange coincidence?!) the best way to
+implement a test program, too!
+\end{document}
