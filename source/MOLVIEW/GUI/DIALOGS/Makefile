@@ -12,9 +12,7 @@ CPP_SOURCES=\
 	openMOL2File.C\
 	openPDBFile.C\
 	openBruker1DFile.C\
-	openBruker2DFile.C\
-	DlgMoveOverlay.C\
-	DlgMoveOverlayData.C
+	openBruker2DFile.C
 
 MOC_SOURCES=\
 	displayProperties_moc.C\
@@ -26,9 +24,7 @@ MOC_SOURCES=\
 	openMOL2File_moc.C\
 	openPDBFile_moc.C\
 	openBruker1DFile_moc.C\
-	openBruker2DFile_moc.C\
-	DlgMoveOverlay_moc.C\
-	DlgMoveOverlayData_moc.C
+	openBruker2DFile_moc.C
 
 include ../../../common.mak
 include .Dependencies
@@ -65,8 +61,3 @@ openBruker1DFile_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker
 openBruker2DFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h -o openBruker2DFile_moc.C
 
-DlgMoveOverlay_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlay.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlay.h -o DlgMoveOverlay_moc.C
-
-DlgMoveOverlayData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlayData.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlayData.h -o DlgMoveOverlayData_moc.C
