@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.6 2001/01/26 01:36:57 amoll Exp $
+// $Id: RSFace.h,v 1.7 2001/02/03 15:24:04 amoll Exp $
 
 #ifndef secure
 #define secure
@@ -586,7 +586,7 @@ namespace BALL
 		/** Substitute a rsvertex by an other one.
 				@param old_vertex the vertex that has to be substituted
 				@param new_vertex the new vertex
-				@return bool, {\texbf true}, if the vertex can be substituted, {\textbf false} otherwise
+				@return bool, {\bf true}, if the vertex can be substituted, {\bf false} otherwise
 		*/
 		bool substituteVertex(TRSVertex<T>* old_vertex, TRSVertex<T>* new_vertex)
 		{

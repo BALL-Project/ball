@@ -1,4 +1,4 @@
-// $Id: numericalSAS.h,v 1.14 2000/10/30 00:19:27 amoll Exp $
+// $Id: numericalSAS.h,v 1.15 2001/02/03 15:24:04 amoll Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -27,18 +27,17 @@ namespace BALL
 			and Scharf ("The Double Cubic Lattice Method: Efficient Approaches to 
 			numerical Integration of Surface Area and Volume and to Dot
 			Surface Contouring of Molecular Assemblies", J. Comput. Chem. (1995),
-			{\underline 15}, 273-284).
+			{\em 15}, 273-284).
 	*/
 	
 	/** Calculate the solvent accessible surface area numerically.
 			This method returns the total 
 			Solvent Accessible Surface (SAS) of a BALL kernel object. 
 			Atoms with a radius of 0 are ignored.
-
 			@param  fragment the kernel object containing the atoms
 			@param  probe_radius the probe radius used for the SAS
 			@param  number_of_dots the number of dots used per atom
-			@return the total SAS area in $\AA^2$
+			@return the total SAS area in $ A^2$
 	*/
 	float calculateSASArea(const AtomContainer& fragment, float probe_radius = 1.5,
 												 Size number_of_dots = 400); 
@@ -46,12 +45,11 @@ namespace BALL
 	/** Calculate the solvent accessible volume numerically.
 			This method returns the total volume enclosd by the 
 			Solvent Accessible Surface (SAS) of a BALL kernel object. 
-			Atoms with a radius of 0 are ignored
-
+			Atoms with a radius of 0 are ignored.
 			@param  fragment the kernel object containing the atoms
 			@param  probe_radius the probe radius used for the SAS
 			@param  number_of_dots the number of dots used per atom
-			@return the volume in $\AA^3$
+			@return the volume in $ A^3$
 	*/
 	float calculateSASVolume(const AtomContainer& fragment, float probe_radius = 1.5,
 													 Size number_of_dots = 400); 
@@ -59,12 +57,12 @@ namespace BALL
 	/**	Calculate the Solvent Accessible Surface area for each atom.
 			This method returns the surface fraction of each atom at the 
 			Solvent Accessible Surface (SAS). Atoms with a radius of 0 are 
-			ignored. All areas are in $\AA^2$.
+			ignored. All areas are in $ A^2$.
 			@param  atom_areas a hash map containing the areas of the atoms (returned)
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
 			@param	number_of_dots the number of dots used per atom
-			@return the total SAS area in $\AA^2$
+			@return the total SAS area in $ A^2$
 	*/
 	float calculateSASAtomAreas(const AtomContainer& fragment, HashMap<Atom*,float>& atom_areas,
 															float probe_radius = 1.5, Size number_of_dots = 400);
@@ -75,7 +73,7 @@ namespace BALL
 			The \Ref{Surface} object holds just the vertices, it
 			does not contain any triangles. The normals for each point
 			normals to the SAS in that point, their length equals the 
-			fraction of the surface area represented by this point in $\AA^2$:
+			fraction of the surface area represented by this point in $ A^2$:
 			\[	
 					|\vec{n_i}| = \frac{\mathrm{SAS of atom} i}{\mathrm{number of points on the SAS of atom} i}
 			\]
@@ -84,23 +82,23 @@ namespace BALL
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
 			@param	number_of_dots the number of dots used per atom
-			@return the total SAS area in $\AA^2$
+			@return the total SAS area in $ A^2$
 	*/
 	float calculateSASPoints(const AtomContainer& fragment, Surface& surface_points,
 													 float probe_radius = 1.5,  Size number_of_dots = 400);
 
 	/** Calculate a point set on the Solvent Accessible Surface for each
-		atom. This method returns the point sets on the SAS used to calculate
-		the surface area for each atom. @see calculateSASAtomAreas.
-		@param	fragment the kernel object containing the atoms
-		@param  atom_surfaces a hashmap of atoms and Surface objects containing the point sets for eacht atom (returned)
-		@param	probe_radius the probe radius used for the SAS
-		@param	number_of_dots the number of dots used per atom
-		@return the total SAS area in $\AA^2$
+			atom. This method returns the point sets on the SAS used to calculate
+			the surface area for each atom. @see calculateSASAtomAreas.
+			@param	fragment the kernel object containing the atoms
+			@param  atom_surfaces a hashmap of atoms and Surface objects containing the point sets for eacht atom (returned)
+			@param	probe_radius the probe radius used for the SAS
+			@param	number_of_dots the number of dots used per atom
+			@return the total SAS area in $ A^2$
 	 */
 	float calculateSASAtomPoints(const AtomContainer& fragment, 
 											 				 std::vector< std::pair<Vector3, Surface> >& atom_surfaces,
-															float probe_radius = 1.5,  Size number_of_dots = 400);
+															 float probe_radius = 1.5,  Size number_of_dots = 400);
 
 } // namespace BALL
 

@@ -1,4 +1,4 @@
-// $Id: RDFIntegrator.h,v 1.7 2000/12/01 11:47:29 anker Exp $
+// $Id: RDFIntegrator.h,v 1.8 2001/02/03 15:24:04 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RDFINTEGRATOR_H
 #define BALL_STRUCTURE_RDFINTEGRATOR_H
@@ -9,20 +9,20 @@
 
 namespace BALL
 {
-	/** Integrator class for radial distribution functions.
-		This class provides the integration functionality needed for the
-		computation of interaction energies.
-		\\
-		{\bf Definition:} \URL{BALL/.../RDFIntegrator.h}
-	 */
 
+	/** Integrator class for radial distribution functions.
+			This class provides the integration functionality needed for the
+			computation of interaction energies.	\\
+			{\bf Definition:} \URL{BALL/.../RDFIntegrator.h}
+  */
 	class RDFIntegrator
 	{
 		public:
 
 		BALL_CREATE(RDFIntegrator)
 
-		/** @name Constructors and destructors */
+		/** @name Constructors and destructors 
+		*/
 		//@{
 
 		/** Default constructor 
@@ -30,15 +30,15 @@ namespace BALL
 		RDFIntegrator()
 			throw();
 
-		/** Copy constructor
+		/** Copy constructor.
 				@param integrator the integrator to copy from
 		*/
 		RDFIntegrator(const RDFIntegrator& integrator)
 			throw();
 
-		/** Detailed constructor
-				@param rdf the radial distribution function to initialize {\em
-				this} with
+		/** Detailed constructor.
+				@param rdf the radial distribution function to 
+							 initialize {\em	this} with
 		*/
 		RDFIntegrator(const RadialDistributionFunction& rdf)
 			throw();
@@ -49,9 +49,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
 		/** Assignment operator.
@@ -67,14 +66,11 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/// Predicates
 		//@{
 
 		/** Equality operator. Tests whether two instances are the same.
-				@param integrator the integrator which we want to compare to {\em
-				this}
+				@param integrator the integrator which we want to compare to {\em	this}
 				@return true, if the instances are equal, false ow.
 		*/
 		bool operator == (const RDFIntegrator& integrator) const
@@ -87,19 +83,17 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/// Accessors
 		//@{
 
-		/** Set the radial distribution function of this instance
+		/** Set the radial distribution function of this instance.
 				@param rdf a radial distribution function (@see
 				RadialDistributionFunction)
 		*/
 		void setRDF(const RadialDistributionFunction& rdf)
 			throw();
 
-		/** Get the radial distribution function of this instance
+		/** Get the radial distribution function of this instance.
 				@return a const reference to the radial distribution function
 		*/
 		const RadialDistributionFunction& getRDF() const
@@ -115,7 +109,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 
 
 		protected:

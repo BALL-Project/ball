@@ -1,4 +1,4 @@
-// $Id: BSDTree.h,v 1.5 2000/12/07 14:38:35 strobel Exp $
+// $Id: BSDTree.h,v 1.6 2001/02/03 15:24:04 amoll Exp $
 
 #define DEBUG_BSDTREE
 
@@ -8,6 +8,7 @@
 #ifndef BALL_MATHS_BOX3_H
 #	include <BALL/MATHS/box3.h>
 #endif
+
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
 #endif
@@ -19,11 +20,8 @@
 namespace BALL 
 {
 
-	/** Generic BSD Tree Class.
-
-			\\
+	/** Generic BSD Tree Class.	\\
 			{\bf Definition:}\URL{BALL/STRUCTURE/BSDTree.h}
-			\\
 	*/
 	template <typename T>
 	class TBSDTree
@@ -47,8 +45,8 @@ namespace BALL
 			DIRECTION_Y  = 1,
 			DIRECTION_Z  = 2
 		};
-		//@}
 
+		//@}
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -104,7 +102,7 @@ namespace BALL
 		}
 
 		/**	Detailed constructor.
-				Create a new BSDTree object from a vector of TVector3
+				Create a new BSDTree object from a vector of TVector3.
 				@param	p assigned to the points
 		*/
 		TBSDTree(const vector< TVector3<T> >& p)
@@ -124,8 +122,7 @@ namespace BALL
 		}
 
 		/**	Detailed constructor.
-				Create a new BSDTree object from a vector of TVector3, a list of
-				Index
+				Create a new BSDTree object from a vector of TVector3, a list of Index.
 				@param	p assigned to the points
 				@param	prt assigned to the indices of this part of the tree
 		*/
@@ -155,8 +152,8 @@ namespace BALL
 				delete right_;
 			}
 		}
-		//@}
 
+		//@}
 		/**	@name	Assignment	
 		*/
 		//@{
@@ -173,10 +170,10 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name	Acessors
 		*/
 		//@{
+
 		void getExtrema(T& x_min, T& y_min, T& z_min,
 										T& x_max, T& y_max, T& z_max)
 		{
@@ -311,6 +308,7 @@ namespace BALL
 				}
 			}
 		}
+
 		//@}
 
 

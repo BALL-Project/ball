@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.5 2001/01/26 01:36:57 amoll Exp $
+// $Id: RSEdge.h,v 1.6 2001/02/03 15:24:04 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -403,7 +403,7 @@ namespace BALL
 		/** Substitute a rsvertex by an other one.
 				@param old_vertex the vertex that has to be substituted
 				@param new_vertex the new vertex
-				@return bool, {\texbf true}, if the vertex can be substituted, {\textbf false} otherwise
+				@return bool, {\bf true}, if the vertex can be substituted, {\bf false} otherwise
 		*/
 		bool substituteVertex(TRSVertex<T>* old_vertex, TRSVertex<T>* new_vertex)
 		{
