@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.4 2001/09/11 21:53:55 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.5 2001/10/17 21:25:37 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <BALL/SYSTEM/file.h>
 ///////////////////////////
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.4 2001/09/11 21:53:55 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.5 2001/10/17 21:25:37 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,36 +38,13 @@ CHECK(set(ofstream& file, const String& address))
 	TEST_EQUAL(tcp_t.getLogin(), "")
 	TEST_EQUAL(tcp_t.getPassword(), "")
 	TEST_EQUAL(tcp_t.getStream(), &out)
-	
-//	cout << "AAAAAAAAAAAAAA" << FIONBIO << endl;
 RESULT
 
-/*
-CHECK(esoterik)
-	String filename;
-	File::createTemporaryFilename(filename);
-	ofstream out(filename.c_str(), ios::out);
-	out << "ASDFGHJKL";
-	out.close();
-	File f(filename);
-	TEST_EQUAL(f.getSize(), 9);
-RESULT
-
-CHECK(esoterik2)
-	String filename;
-	File::createTemporaryFilename(filename);
-	ofstream out(filename.c_str(), ios::out);
-	out << "ASDFGHJKLM";
-	out.close();
-	File f(filename);
-	TEST_EQUAL(f.getSize(), 10);
-RESULT
-
-*/
 CHECK(http)
 	String filename;
 	File::createTemporaryFilename(filename);
 	ofstream out(filename.c_str(), ios::out);
+	
 	TCPTransfer tcp_t(out ,"http://tucows.uni-erlangen.de:80/index.html" , false);
 	TEST_EQUAL(tcp_t.getHostAddress(), "tucows.uni-erlangen.de")
 	TEST_EQUAL(tcp_t.getFileAddress(), "/index.html")
@@ -82,8 +59,6 @@ CHECK(http)
 	TEST_EQUAL(f.getSize(), 2238)
 	f.close();
 
-	//does not yet works:
-	/*
 	File::createTemporaryFilename(filename);
 	ofstream out2(filename.c_str(), ios::out);
 	TCPTransfer tcp_t2(out2 ,"http://BALL:test@www.mpi-sb.mpg.de/BALL/INTERNAL/internal.html", true);
@@ -91,14 +66,13 @@ CHECK(http)
 	TEST_EQUAL(tcp_t2.getFileAddress(), "/BALL/INTERNAL/internal.html")
 	TEST_EQUAL(tcp_t2.getPort(), 80)
 	TEST_EQUAL(tcp_t2.getStatusCode(), TCPTransfer::NO_ERROR)
-	TEST_EQUAL(tcp_t2.getReceivedBytes(), 2238)
+	TEST_EQUAL(tcp_t2.getReceivedBytes(), 11908)
 	TEST_EQUAL(tcp_t2.getLogin(), "BALL")
 	TEST_EQUAL(tcp_t2.getPassword(), "test")
 	out2.close();
-	*/
 RESULT
 
-CHECK(ftp)
+CHECK(ftp1)
   String filename;
 	File::createTemporaryFilename(filename);
 	ofstream out(filename.c_str(), ios::out);
@@ -107,23 +81,36 @@ CHECK(ftp)
 	TEST_EQUAL(tcp_t.getFileAddress(), "/pub/welcome.msg")
 	TEST_EQUAL(tcp_t.getPort(), 21)
 	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
-	TEST_EQUAL(tcp_t.getReceivedBytes(), 961)
+	TEST_EQUAL(tcp_t.getReceivedBytes(), 932)
 	TEST_EQUAL(tcp_t.getLogin(), "anonymous")
 	TEST_EQUAL(tcp_t.getPassword(), "nobody@asd.de")
 	TEST_EQUAL(tcp_t.getStream(), &out)
 	out.close();
 
 	File f(filename);
-	TEST_EQUAL(f.getSize(), 961)
+	TEST_EQUAL(f.getSize(), 932)
 	f.close();
 RESULT
 
-	//TCPTransfer tcp_t(out, "http://postino.mpi-sb.mpg.de/index.html");
-	//TCPTransfer tcp_t(out, "http://www.winmx.com/index.html");
-	//TCPTransfer tcp_t(out, "http://download.nullsoft.com/winamp/client/winamp276_full.exe");
-	//TCPTransfer tcp_t(out, "ftp://ftp.gwdg.de:21/pub/newfiles.gz");
-	//TCPTransfer tcp_t(out, "ftp://ftp.uni-mainz.de/pub/misc/.cache");
-	//TCPTransfer tcp_t(out, "ftp://ftp.gwdg.de:21/pub/mpg/service/lt.db.txt");
+CHECK(ftp2)
+  String filename;
+	File::createTemporaryFilename(filename);
+	ofstream out(filename.c_str(), ios::out);
+	TCPTransfer tcp_t(out, "ftp://ftp.vim.org/pub/vim/pc/vim60w32.zip");
+	TEST_EQUAL(tcp_t.getHostAddress(), "ftp.vim.org")
+	TEST_EQUAL(tcp_t.getFileAddress(), "/pub/vim/pc/vim60w32.zip")
+	TEST_EQUAL(tcp_t.getPort(), 21)
+	TEST_EQUAL(tcp_t.getStatusCode(), TCPTransfer::NO_ERROR)
+	TEST_EQUAL(tcp_t.getReceivedBytes(), 591521)
+	TEST_EQUAL(tcp_t.getLogin(), "")
+	TEST_EQUAL(tcp_t.getPassword(), "")
+	TEST_EQUAL(tcp_t.getStream(), &out)
+	out.close();
+
+	File f(filename);
+	TEST_EQUAL(f.getSize(), 591521)
+	f.close();
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
