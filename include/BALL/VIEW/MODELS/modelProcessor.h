@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.15 2004/12/16 15:57:25 amoll Exp $
+// $Id: modelProcessor.h,v 1.16 2005/02/23 12:55:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -106,7 +106,7 @@ namespace BALL
 				 		To be overloaded in derived classes
 				*/
 				virtual bool createGeometricObjects() 
-					throw();
+					throw() { return true;}
 				
 				protected:
 				

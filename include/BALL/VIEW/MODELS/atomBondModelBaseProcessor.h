@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.14 2005/02/23 12:50:05 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.15 2005/02/23 12:55:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -99,13 +99,6 @@ namespace BALL
 			*/
 			virtual Processor::Result operator() (Composite& composite);
 		
-			/** Start method.
-					Calls clearUsedAtoms_().
-					Calls ModelProcessor::start.
-					\return bool true if the start was successful
-			*/
-			virtual bool start();
-			
 			//@} 
 			/**	@name	debuggers and diagnostics 
 			*/ 

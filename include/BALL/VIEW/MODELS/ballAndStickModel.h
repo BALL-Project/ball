@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.13 2004/07/15 12:05:42 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.14 2005/02/23 12:55:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -76,22 +76,14 @@ namespace BALL
 
 			/** Assignment.
 					Calls AtomBondModelBaseProcessor::set.
-					\param       add_ball_and_stick_model the AddBallAndStickModel to be copied 
 			*/
 			void set(const AddBallAndStickModel& add_ball_and_stick_model)
 				throw();
 
 			/** Assignment operator.
 					Calls set().
-					\param       add_ball_and_stick_model the addBallAndStickModel to be copied
 			*/
-			const AddBallAndStickModel& operator = (const AddBallAndStickModel& add_ball_and_stick_model)
-				throw();
-
-			/** Swapping of addBallAndStickModel's.
-					Calls AtomBondModelBaseProcessor::swap
-			*/
-			void swap(AddBallAndStickModel& add_ball_and_stick_model)
+			const AddBallAndStickModel& operator = (const AddBallAndStickModel& processor)
 				throw();
 
 			//@}
@@ -149,13 +141,11 @@ namespace BALL
 			*/ 
 			//@{
 
-			/**	Operator method.
+			/**	Operator () method.
 					This method iterates over each Composite object reachable in the 
 					Composite tree. If the composite is of kind Atom than a Sphere
 					is created for that atom, and the atom is inserted with 
 					the method insertAtom_().
-					The color for the Sphere object is calculated with the ColorCalculator
-					object retrieved with the method getColorCalculator().
 					If the AddBallAndStickModel should create a ball and stick model
 					the radius assigned to the sphere will be the ball radius (see method
 					setBallRadius()); if a stick model should be created than the stick radius
@@ -219,9 +209,8 @@ namespace BALL
 			virtual void visualiseRings_()
 				throw();
 
-			void renderDashedBond_(const Atom& a1, const Atom& a2, 
-														 Vector3 n1, Vector3 n2)
-				throw();
+			void renderDashedBond_(const Atom& a1, const Atom& a2, Vector3 n1, Vector3 n2)
+				throw(Exception::DivisionByZero);
 
 			private:
 

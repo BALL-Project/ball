@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.C,v 1.11 2004/12/13 16:09:15 amoll Exp $
+// $Id: modelProcessor.C,v 1.12 2005/02/23 12:55:19 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -54,13 +54,6 @@ namespace BALL
 			drawing_precision_ = DRAWING_PRECISION_HIGH;
 			surface_drawing_precision_ = -1;
 			clearComposites();
-		}
-
-
-		bool ModelProcessor::createGeometricObjects() 
-			throw() 
-		{ 
-			return true;
 		}
 
 	} // namespace VIEW

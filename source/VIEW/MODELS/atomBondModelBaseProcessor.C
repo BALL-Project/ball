@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.13 2004/09/27 15:29:15 oliver Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.14 2005/02/23 12:55:19 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
@@ -38,8 +38,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object " << (void *)this 
-						 			 << " of class " << RTTI::getName<AtomBondModelBaseProcessor>() << std::endl;
+				Log.info() << "Destructing object " << this << " of class AtomBondModelBaseProcessor" << std::endl;
 			#endif 
 		}
 
@@ -49,6 +48,8 @@ namespace BALL
 			ModelProcessor::clear();
 			atom_set_.clear();
 			used_atoms_.clear();
+			rings_.clear();
+			ring_atoms_.clear();
 		}
 
 		void AtomBondModelBaseProcessor::set(const AtomBondModelBaseProcessor& processor)
@@ -63,17 +64,6 @@ namespace BALL
 		{
 			set(processor);
 			return *this;
-		}
-
-		void AtomBondModelBaseProcessor::swap(AtomBondModelBaseProcessor& processor)
-			throw()
-		{
-			ModelProcessor::swap(processor);
-		}
-
-		bool AtomBondModelBaseProcessor::start()
-		{
-			return ModelProcessor::start();
 		}
 
 		void AtomBondModelBaseProcessor::clearComposites()
@@ -166,10 +156,11 @@ namespace BALL
 
 		Processor::Result AtomBondModelBaseProcessor::operator () (Composite& composite)
 		{
-			if (!RTTI::isKindOf<Residue>(composite)) return Processor::CONTINUE;
+			Residue* residue = dynamic_cast<Residue*>(&composite);
+			if (residue == 0) return Processor::CONTINUE;
 
 			RingPerceptionProcessor rpp;
-			rpp.calculateSSSR(rings_, (*reinterpret_cast<Residue*>(&composite)));
+			rpp.calculateSSSR(rings_, *residue);
 			return Processor::CONTINUE;
 		}
 
@@ -178,5 +169,4 @@ namespace BALL
 #		endif
 
 	} // namespace VIEW
-
 } // namespace BALL
