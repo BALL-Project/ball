@@ -1,10 +1,15 @@
-$Id: README,v 1.1.2.1 2003/01/21 11:14:39 anker Exp $
+$Id: README,v 1.1.2.2 2003/01/24 16:05:10 anker Exp $
 
 BALL Utilities
 ==============
 
 This directory contains some little utilities which are handy for everyday
 use in molecular modeling:
+
+add_hydrogens:
+
+	Add missing hydrogens to PDB files and minimizes them while fixing all
+	other atoms.
 
 dcd2dcd:
 
