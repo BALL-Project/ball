@@ -1,11 +1,11 @@
-// $Id: Triple_test.C,v 1.1 2001/07/20 08:09:04 oliver Exp $
+// $Id: Triple_test.C,v 1.2 2001/07/29 18:57:15 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/DATATYPE/triple.h>
 ///////////////////////////
 
-START_TEST(Triple, "$Id: Triple_test.C,v 1.1 2001/07/20 08:09:04 oliver Exp $")
+START_TEST(Triple, "$Id: Triple_test.C,v 1.2 2001/07/29 18:57:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -118,9 +118,6 @@ CHECK(bool operator < (const Triple& triple) const throw())
 	q1.set(0, 1, 2);
 	TEST_EQUAL(q1 < q2, false)
 	TEST_EQUAL(q2 < q1, false)
-	q1.set(0, 1, 2);
-	TEST_EQUAL(q1 < q2, false)
-	TEST_EQUAL(q2 < q1, true)
 RESULT
 
 CHECK(bool operator > (const Triple& triple) const throw())
@@ -137,16 +134,12 @@ CHECK(bool operator > (const Triple& triple) const throw())
 	q1.set(0, 1, 2);
 	TEST_EQUAL(q1 > q2, false)
 	TEST_EQUAL(q2 > q1, false)
-	q1.set(0, 1, 2);
-	TEST_EQUAL(q1 > q2, true)
-	TEST_EQUAL(q2 > q1, false)
 RESULT
 
 CHECK(bool operator <= (const Triple& triple) const throw())
 	Triple<int, int, int> q1 = Triple<int, int, int>(1, 2, 3);
 	Triple<int, int, int> q2 = Triple<int, int, int>(1, 2, 4);
 	TEST_EQUAL(q1 <= q2, true)
-
 	TEST_EQUAL(q2 <= q1, false)
 	q2.set(1, 2, 3);
 	TEST_EQUAL(q1 <= q2, true)
