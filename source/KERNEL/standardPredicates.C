@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.19 2000/07/18 08:29:54 oliver Exp $
+// $Id: standardPredicates.C,v 1.20 2000/09/01 10:18:05 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -200,7 +200,27 @@ namespace BALL
 
 	bool InRingPredicate::operator () (const Atom& atom) const
 	{
-		int n = argument_.toInt();
+		int n;
+		if (argument_.size() == 1)
+		{
+			if (argument_.isDigit())
+			{
+				n = argument_.toInt();
+			}
+			else
+			{
+				Log.error() << "InRingPredicate::operator () (): "
+					<< "Expected a number < 9: " << argument_ << endl;
+				return false;
+			}
+		}
+		else
+		{
+			Log.error() << "InRingPredicate::operator () (): "
+				<< "Expected a number < 9: " << argument_ << endl;
+			return false;
+		}
+
 		// There are no rings with less than 3 atoms
 		if (n < 3) 
 		{
