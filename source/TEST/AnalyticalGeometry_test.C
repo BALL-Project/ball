@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.2 2000/03/20 02:17:04 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.3 2000/03/20 11:10:12 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.2 2000/03/20 02:17:04 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.3 2000/03/20 11:10:12 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -261,18 +261,18 @@ CHECK(TAngle<T> getTorsionAngle
 		 const T& bx, const T& by, const T& bz,
 		 const T& cx, const T& cy, const T& cz, 
 		 const T& dx, const T& dy, const T& dz))
-	a1 = getTorsionAngle(0.0, 0.0,   0.0,  10.0,   0.0, 0.0,
-											 0.0, -10.0, 0.0,  10.0, -10.0, 0.0);
+	a1 = getTorsionAngle((float)0.0,   (float)0.0,   (float)0.0,  (float)10.0,   (float)0.0, (float)0.0,
+											 (float)0.0, (float)-10.0, (float)0.0,  (float)10.0, (float)-10.0, (float)0.0);
 	Angle res(-180, false);
 	TEST_EQUAL(a1, res)
 
-	a1 = getTorsionAngle(0.0, 0.0,   0.0,  10.0,   0.0, 0.0,
-											 0.0, -10.0, 0.0,  5.0, -5.0, 10.0);
+	a1 = getTorsionAngle((float)0.0, (float)0.0,   (float)0.0,  (float)10.0,   (float)0.0, (float)0.0,
+											 (float)0.0, (float)-10.0, (float)0.0,  (float)5.0, (float)-5.0, (float)10.0);
 	res.set(-90, false);
 	TEST_EQUAL(a1, res)
 
-	a1 = getTorsionAngle(0.0, 0.0,   0.0,  10.0, 0.0, 0.0,
-											 0.0, -10.0, 0.0,   0.0, 0.0, 0.0);
+	a1 = getTorsionAngle((float)0.0, (float)0.0,   (float)0.0,  (float)10.0, (float)0.0, (float)0.0,
+											 (float)0.0, (float)-10.0, (float)0.0,   (float)0.0, (float)0.0, (float)0.0);
 	res.set(0, false);
 	TEST_EQUAL(a1, res)
 
