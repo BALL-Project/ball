@@ -1,8 +1,8 @@
-// $Id: XDRPersistenceManager.C,v 1.12 2000/11/03 04:29:20 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.13 2000/12/12 16:21:32 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
-// #define BALL_DEBUG_PERSISTENCE
+#define BALL_DEBUG_PERSISTENCE
 
 using namespace std;
 
@@ -95,7 +95,7 @@ namespace BALL
 	{
 	}
 
-  void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, LongPointerType ptr)
+  void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, PointerSizeInt ptr)
   {
 		Log.info() << "writing header for " << name << "/" << type_name << endl;
     if ((name != 0) && (!strcmp(name, "")))
@@ -147,19 +147,21 @@ namespace BALL
 		const caddr_t istr_ptr = (caddr_t)istr_;
 		xdrrec_create(&xdr_in_, 0, 0, istr_ptr, XDRReadStream_, XDRError_);
 		xdr_in_.x_op = XDR_DECODE;
-		Log.info() << "initialized output stream." << endl;
+		Log.info() << "initialized input stream." << endl;
 	}
 
 	void XDRPersistenceManager::finalizeOutputStream()
 	{
 		// destroy the XDR stream
 		xdr_destroy(&xdr_out_);
+		Log.info() << "finalized output stream." << endl;
 	}
 
 	void XDRPersistenceManager::finalizeInputStream()
 	{
-		// destroy the XDR stream
-		xdr_destroy(&xdr_in_);
+		// destroy the XDR stream 
+		// xdr_destroy(&xdr_in_); //BAUSTELLE
+		Log.info() << "finalized input stream." << endl;
 	}
 
 	bool XDRPersistenceManager::checkStreamHeader()
@@ -228,7 +230,7 @@ namespace BALL
 		return true;
 	}
 
-	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, LongPointerType& ptr)
+	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, PointerSizeInt& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			Log.info() << "entering checkHeader(" << type_name << ", " << name << ")" << endl;
@@ -254,7 +256,7 @@ namespace BALL
 		return true;
 	}
 
-	bool XDRPersistenceManager::getObjectHeader(String& type_name, LongPointerType& ptr)
+	bool XDRPersistenceManager::getObjectHeader(String& type_name, PointerSizeInt& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			Log.info() << "entering getObjectHeader()" << endl;
@@ -412,9 +414,9 @@ namespace BALL
 		xdr_char(&xdr_out_, char_ptr);
 	}
 
-	void XDRPersistenceManager::put(const unsigned char c)
+	void XDRPersistenceManager::put(const Byte b)
 	{
-		unsigned char* char_ptr = const_cast<unsigned char*>(&c);
+		unsigned char* char_ptr = const_cast<unsigned char*>(&b);
 		xdr_u_char(&xdr_out_, char_ptr);
 	}
 
@@ -424,73 +426,34 @@ namespace BALL
 		xdr_char(&xdr_out_, &c);
 	}
 
-	void XDRPersistenceManager::put(const short i)
+	void XDRPersistenceManager::put(const Index i)
 	{
-		short* short_ptr = const_cast<short*>(&i);
-		xdr_short(&xdr_out_, short_ptr);
+		Index* index_ptr = const_cast<Index*>(&i);
+		xdr_int(&xdr_out_, index_ptr);
 	}
 
-	void XDRPersistenceManager::put(const unsigned short i)
+	void XDRPersistenceManager::put(const Size s)
 	{
-		unsigned short* short_ptr = const_cast<unsigned short*>(&i);
-		xdr_u_short(&xdr_out_, short_ptr);
+		Size* size_ptr = const_cast<Size*>(&s);
+		xdr_u_int(&xdr_out_, size_ptr);
 	}
 
-	void XDRPersistenceManager::put(const int i)
+	void XDRPersistenceManager::put(const Real x)
 	{
-		int* int_ptr = const_cast<int*>(&i);
-		xdr_int(&xdr_out_, int_ptr);
+		Real* real_ptr = const_cast<Real*>(&x);
+		xdr_float(&xdr_out_, real_ptr);
 	}
 
-	void XDRPersistenceManager::put(const unsigned int i)
+	void XDRPersistenceManager::put(const DoubleReal x)
 	{
-		unsigned int* int_ptr = const_cast<unsigned int*>(&i);
-		xdr_u_int(&xdr_out_, int_ptr);
-	}
-
-	void XDRPersistenceManager::put(const long i)
-	{
-		long* long_ptr = const_cast<long*>(&i);
-		xdr_long(&xdr_out_, long_ptr);
-	}
-
-	void XDRPersistenceManager::put(const unsigned long i)
-	{
-		unsigned long* long_ptr = const_cast<unsigned long*>(&i);
-		xdr_u_long(&xdr_out_, long_ptr);
-	}
-
-#ifndef BALL_64BIT_ARCHITECTURE
-	void XDRPersistenceManager::put(const long long i)
-	{
-		long long* long_ptr = const_cast<long long*>(&i);
-		xdr_longlong_t(&xdr_out_, long_ptr);
-	}
-
-	void XDRPersistenceManager::put(const unsigned long long i)
-	{
-		unsigned long long* long_ptr = const_cast<unsigned long long*>(&i);
-		xdr_u_longlong_t(&xdr_out_, long_ptr);
-	}
-#endif
-
-	
-	void XDRPersistenceManager::put(const float x)
-	{
-		float* float_ptr = const_cast<float*>(&x);
-		xdr_float(&xdr_out_, float_ptr);
-	}
-
-	void XDRPersistenceManager::put(const double x)
-	{
-		double* double_ptr = const_cast<double*>(&x);
+		DoubleReal* double_ptr = const_cast<DoubleReal*>(&x);
 		xdr_double(&xdr_out_, double_ptr);
 	}
 
-	void XDRPersistenceManager::put(const void* ptr)
+	void XDRPersistenceManager::put(const PointerSizeInt ptr)
 	{
-		long ptr_long = (long)ptr;
-		xdr_long(&xdr_out_, &ptr_long);
+		u_long ptr_ptr = ptr;
+		xdr_u_long(&xdr_out_, &ptr_ptr);
 	}
 
 	void XDRPersistenceManager::put(const string& s)
@@ -505,10 +468,10 @@ namespace BALL
 		Log.info() << "read char: " << c << endl;
 	}
 
-	void XDRPersistenceManager::get(unsigned char& c)
+	void XDRPersistenceManager::get(Byte& c)
 	{
 		xdr_u_char(&xdr_in_, &c);
-		Log.info() << "read unsigned char: " << c << endl;
+		Log.info() << "read Byte: " << c << endl;
 	}
 
 	void XDRPersistenceManager::get(bool& b)
@@ -528,69 +491,33 @@ namespace BALL
 		Log.info() << "read string: " << s << endl;
 	}
 
-	void XDRPersistenceManager::get(short& s)
+	void XDRPersistenceManager::get(Index& i)
 	{
-		xdr_short(&xdr_in_, &s);
-		Log.info() << "read short: " << s << endl;
+		xdr_int(&xdr_in_, &i);
+		Log.info() << "read int: " << i << endl;
 	}
 
-	void XDRPersistenceManager::get(unsigned short& s)
-	{
-		xdr_u_short(&xdr_in_, &s);
-		Log.info() << "read unsigned short: " << s  << endl;
-	}
-
-	void XDRPersistenceManager::get(int& s)
-	{
-		xdr_int(&xdr_in_, &s);
-		Log.info() << "read int: " << s  << endl;
-	}
-
-	void XDRPersistenceManager::get(unsigned int& s)
+	void XDRPersistenceManager::get(Size& s)
 	{
 		xdr_u_int(&xdr_in_, &s);
 		Log.info() << "read unsigned int: " << s << "/" << hex << s << endl;
 	}
 
-	void XDRPersistenceManager::get(long& s)
-	{
-		xdr_long(&xdr_in_, &s);
-	}
-
-	void XDRPersistenceManager::get(unsigned long& s)
-	{
-		xdr_u_long(&xdr_in_, &s);
-	}
-
-#ifndef BALL_64BIT_ARCHITECTURE
-	void XDRPersistenceManager::get(long long& s)
-	{
-		xdr_longlong_t(&xdr_in_, &s);
-	}
-
-	void XDRPersistenceManager::get(unsigned long long& s)
-	{
-		xdr_u_longlong_t(&xdr_in_, &s);
-	}
-#endif
-
-	void XDRPersistenceManager::get(float& x)
+	void XDRPersistenceManager::get(Real& x)
 	{
 		xdr_float(&xdr_in_, &x);
 	}
 
-	void XDRPersistenceManager::get(double& x)
+	void XDRPersistenceManager::get(DoubleReal& x)
 	{
 		xdr_double(&xdr_in_, &x);
 	}
 
-	void XDRPersistenceManager::get(void*& ptr)
+	void XDRPersistenceManager::get(PointerSizeInt& ptr)
 	{
-		long ptr_long;
-		xdr_long(&xdr_in_, &ptr_long);
-		ptr = (void*)ptr_long;
+		xdr_long(&xdr_in_, &ptr);
 
-		Log.info() << "get ptr: " << hex << (long)ptr_long << endl;
+		Log.info() << "get ptr: " << hex << ptr << endl;
 	}
 
 } // namespace BALL

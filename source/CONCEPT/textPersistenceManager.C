@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.11 2000/10/24 21:38:51 amoll Exp $
+// $Id: textPersistenceManager.C,v 1.12 2000/12/12 16:21:33 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -63,7 +63,7 @@ namespace BALL
 	}
 			
   void TextPersistenceManager::writeHeader
-		(const char* type_name, const char* name, LongPointerType ptr)
+		(const char* type_name, const char* name, PointerSizeInt ptr)
   {
     *ostr_ << indent();
 
@@ -172,7 +172,7 @@ namespace BALL
 		}
 	}
 
-	bool TextPersistenceManager::checkHeader(const char* type_name, const char* name, LongPointerType& ptr)
+	bool TextPersistenceManager::checkHeader(const char* type_name, const char* name, PointerSizeInt& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			if (name == 0)
@@ -232,7 +232,7 @@ namespace BALL
 		{
 #			ifdef BALL_DEBUG_PERSISTENCE
 				Log.error() << "Could not read a valid object pointer: " 
-										<< dec << (LongPointerType)ptr << "!" << endl;
+										<< dec << (PointerSizeInt)ptr << "!" << endl;
 #			endif
 
 			// abort if it was not a valid pointer
@@ -269,7 +269,7 @@ namespace BALL
 		return true;
 	}
 
-	bool TextPersistenceManager::getObjectHeader(String& type_name, LongPointerType& ptr)
+	bool TextPersistenceManager::getObjectHeader(String& type_name, PointerSizeInt& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			Log.info() << "entering getObjectHeader()" << endl;
@@ -483,14 +483,14 @@ namespace BALL
 		*ostr_ << ' ' << (int)c << ' ';
 	}
 
-	void TextPersistenceManager::put(const unsigned char c)
+	void TextPersistenceManager::put(const Byte c)
 	{
 		*ostr_ << ' ' << (int)c << ' ';
 	}
 
 	void TextPersistenceManager::put(const bool b)
 	{	
-		// write a boolena value as TRUE or FALSE
+		// write a boolean value as TRUE or FALSE
 		if (b)
 		{
 			*ostr_ << " TRUE ";
@@ -509,18 +509,11 @@ namespace BALL
 		*ostr_ << ' ' << i << ' ';\
 	}\
 
-	BALL_DEFINE_NUMBER_PUT(short)
-	BALL_DEFINE_NUMBER_PUT(unsigned short)
-	BALL_DEFINE_NUMBER_PUT(int)
-	BALL_DEFINE_NUMBER_PUT(unsigned int)
-	BALL_DEFINE_NUMBER_PUT(long)
-	BALL_DEFINE_NUMBER_PUT(unsigned long)
-#ifndef BALL_64BIT_ARCHITECTURE
-	BALL_DEFINE_NUMBER_PUT(long long)
-	BALL_DEFINE_NUMBER_PUT(unsigned long long)
-#endif
-	BALL_DEFINE_NUMBER_PUT(float)
-	BALL_DEFINE_NUMBER_PUT(double)
+	BALL_DEFINE_NUMBER_PUT(Size)
+	BALL_DEFINE_NUMBER_PUT(Index)
+	BALL_DEFINE_NUMBER_PUT(PointerSizeInt)
+	BALL_DEFINE_NUMBER_PUT(Real)
+	BALL_DEFINE_NUMBER_PUT(DoubleReal)
 
 	void TextPersistenceManager::put(const string& s)
 	{
@@ -537,14 +530,6 @@ namespace BALL
 		*ostr_ << ' ';
 	}
 
-	void TextPersistenceManager::put(const void* p)
-	{
-		// pointers are converted to an int of equal length
-		// and written in decimal format
-		*ostr_ << ' ' << dec << (PointerInt)p << ' ';
-	}
-
-	
 	void TextPersistenceManager::get(char& c)
 	{
 		int i;
@@ -552,7 +537,7 @@ namespace BALL
 		c = (char)i;
 	}
 
-	void TextPersistenceManager::get(unsigned char& c)
+	void TextPersistenceManager::get(Byte& c)
 	{
 		int i;
 		*istr_ >> i;
@@ -590,13 +575,6 @@ namespace BALL
 		}
 	}
 
-	void TextPersistenceManager::get(void*& p)
-	{
-		PointerInt i;
-		*istr_ >> i;
-		p = (void*)i;
-	}
-
 #define BALL_DEFINE_NUMBER_GET(type)\
 	void TextPersistenceManager::get(type& i)\
 	{\
@@ -604,17 +582,10 @@ namespace BALL
 	}\
 
 
-	BALL_DEFINE_NUMBER_GET(short)
-	BALL_DEFINE_NUMBER_GET(unsigned short)
-	BALL_DEFINE_NUMBER_GET(int)
-	BALL_DEFINE_NUMBER_GET(unsigned int)
-	BALL_DEFINE_NUMBER_GET(long)
-	BALL_DEFINE_NUMBER_GET(unsigned long)
-#ifndef BALL_64BIT_ARCHITECTURE
-	BALL_DEFINE_NUMBER_GET(long long)
-	BALL_DEFINE_NUMBER_GET(unsigned long long)
-#endif
-	BALL_DEFINE_NUMBER_GET(float)
-	BALL_DEFINE_NUMBER_GET(double)
+	BALL_DEFINE_NUMBER_GET(Index)
+	BALL_DEFINE_NUMBER_GET(Size)
+	BALL_DEFINE_NUMBER_GET(PointerSizeInt)
+	BALL_DEFINE_NUMBER_GET(Real)
+	BALL_DEFINE_NUMBER_GET(DoubleReal)
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: persistenceManager.C,v 1.10 2000/10/30 21:51:15 oliver Exp $
+// $Id: persistenceManager.C,v 1.11 2000/12/12 16:21:32 oliver Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/KERNEL/system.h>
@@ -188,7 +188,7 @@ namespace BALL
 		object_in_.clear();
 		
 		String						type_name;
-		LongPointerType		ptr;
+		PointerSizeInt		ptr;
 
 		// prepare the input stream
 		initializeInputStream();
@@ -285,13 +285,13 @@ namespace BALL
 		return first_object;
 	}
 
-	void PersistenceManager::addPointerPair_(LongPointerType old_ptr, void* new_ptr)
+	void PersistenceManager::addPointerPair_(PointerSizeInt old_ptr, void* new_ptr)
 	{
 #		ifdef DEBUG_PERSISTENCE
 			Log.info() << "PersistenceManager: pointer pair (" << old_ptr << "/" << new_ptr << ")" << endl;
 #		endif
 
-		pointer_map_.insert(pair<LongPointerType, void*>(old_ptr, new_ptr));
+		pointer_map_.insert(pair<PointerSizeInt, void*>(old_ptr, new_ptr));
 	}
 
 	void PersistenceManager::addNeededObjects_() 
