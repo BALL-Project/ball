@@ -3,7 +3,7 @@
 ############################################################
 # source directory shadow builder for multiplatform builds #
 ############################################################
-# $Id: binfmt.sh,v 1.5 1999/09/25 12:15:14 oliver Exp $
+# $Id: binfmt.sh,v 1.6 1999/12/18 11:29:05 oliver Exp $
 ############################################################
 
 UNAME=uname
@@ -113,7 +113,7 @@ else
 	if test "${FORMATS}" != "`echo ${FORMATS} | cut -d\  -f1`" ; then
 		if test "${COMPILER_NAME}" != "" ; then
 			COMPILER_NAME="`echo ${COMPILER_NAME} | ${SED} s/\\\\+/\\\\\\\\+/g`"
-			FORMATS=`${GREP} "^${BINFMT}-" ${BINFORMAT_FILE} | ${GREP} "-e-${COMPILER_NAME}\$"`
+			FORMATS=`${GREP} "^${BINFMT}-" ${BINFORMAT_FILE} | ${GREP} "[-]${COMPILER_NAME}\$"`
 		fi
 		if test "${FORMATS}" != "`echo ${FORMATS} | cut -d\  -f1`" ; then
 			echo "WARNING: multiple binary formats defined for this platform:" >&2
