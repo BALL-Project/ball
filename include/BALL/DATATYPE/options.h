@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.10 2000/11/30 22:58:54 amoll Exp $
+// $Id: options.h,v 1.11 2000/12/01 13:30:34 anker Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -27,9 +27,10 @@ namespace BALL
 				method calls. These options are stored as key/value pairs
 				of \Ref{String}s.\\
 				Using this datastructure, options for force fields (\Ref{ForceField}),
-				finit difference Poisson Boltzmann calculations (\Ref{FDPB}), or the results
-				of calculations can be given, retrieved, stored into a file and retrieved from a file.
-				This simplifies the handling of such complex parameter sets.\\
+				finit difference Poisson Boltzmann calculations (\Ref{FDPB}), or the 
+				results of calculations can be given, retrieved, stored into a file
+				and retrieved from a file.  This simplifies the handling of such
+				complex parameter sets.\\
 
 				{\bf Definition:} \URL{BALL/DATATYPE/options.h}
 				\\
@@ -97,7 +98,7 @@ namespace BALL
 		/**		Returns true, if the value associated with the 
 					given key is an integer
 					@param	key String
-					@return	bool, true/false
+					@return	true, if {\em key} is an integer
 					@memo
 		*/
 		bool isInteger(const String& key) const throw();
@@ -106,16 +107,16 @@ namespace BALL
 					given key is a boolean.
 					A boolean entry has either the value {\tt true}
 					or {\tt false}. 
-					@param					key String
-					@return					bool, true/false
+					@param	key String
+					@return	true, if {\em key} is a boolean value
 					@memo
 		*/
 		bool isBool(const String& key) const throw();
 
 		/**		Returns true, if the value associated with the 
 					given key is a real number
-					@param					key String
-					@return					bool, true/false
+					@param	key String
+					@return	true, if {\key} is a real number
 					@memo
 		*/
 		bool isReal(const String& key) const throw();
@@ -126,7 +127,7 @@ namespace BALL
 					#(<float> <float> <float>)# where #<float>#
 					represents an arbitrary floating point number.
 					@param					key String
-					@return					bool, true/false
+					@return					true, if {\em} key represents a 3D vector of reals
 					@memo
 		*/
 		bool isVector(const String& key) const throw();
@@ -353,13 +354,17 @@ namespace BALL
 		//@{
 		
 		/** 	Dumps the whole content of the object */
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const throw();
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const 
+			throw();
 
 		//@}
 
-		private:
+
+		protected:
+
 		/*_	The option table's name */
 		String		name_;
+
 	};
 
 } // namespace BALL
