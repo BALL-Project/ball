@@ -93,7 +93,14 @@ void LightSettings::colorPressed()
 void LightSettings::defaultsPressed()
 {
 	clearFields_();
-	lights_ = default_lights_;
+	lights_.clear();
+	LightSource light;
+	light.setType(LightSource::POSITIONAL);
+	light.setPosition(stage_->getCamera().getViewPoint() - 
+										stage_->getCamera().getViewVector() * 4);
+	light.setDirection(stage_->getCamera().getLookAtPosition());
+	lights_.push_back(light);
+
 	current_light_ = -1;
 	update();
 }
@@ -309,20 +316,6 @@ void LightSettings::clearFields_()
 	intensity->setValue(0);
 	remove_lights_button->setEnabled(false);
 	relative_to_camera->setButton(-1);
-}
-
-
-void LightSettings::getDefaultLights()
-	throw()
-{
-	default_lights_.clear();
-	List<LightSource>::Iterator it = stage_->getLightSources().begin();
-	for (; it != stage_->getLightSources().end(); it++)
-	{
-		default_lights_.push_back(LightSource(*it));
-	}
-
-	update();
 }
 
 

@@ -62,6 +62,8 @@ void StageSettings::apply()
 	stage_->setFocalDistance((float)(eye_distance_slider->value()));
 
 	stage_->setSwapSideBySideStereo(swap_sss_button->isChecked());
+
+	Scene::setShowLightSources(show_lights_->isChecked());
 }
 
 
@@ -72,6 +74,8 @@ void StageSettings::setDefaultValues()
 	coordinate_button->setChecked(false);
 
 	slider_->setValue(5);
+
+	show_lights_->setChecked(false);
 
 	eye_distance_slider->setValue(20);
 	focal_distance_slider->setValue(40);

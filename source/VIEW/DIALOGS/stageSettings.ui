@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>435</width>
-            <height>297</height>
+            <height>299</height>
         </rect>
     </property>
     <property name="caption">
@@ -541,13 +541,29 @@
     </widget>
     <widget class="QCheckBox">
         <property name="name">
+            <cstring>coordinate_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>230</x>
+                <y>6</y>
+                <width>200</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Show coordinate system</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
             <cstring>swap_sss_button</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>251</x>
-                <y>129</y>
-                <width>180</width>
+                <x>228</x>
+                <y>128</y>
+                <width>195</width>
                 <height>20</height>
             </rect>
         </property>
@@ -557,18 +573,18 @@
     </widget>
     <widget class="QCheckBox">
         <property name="name">
-            <cstring>coordinate_button</cstring>
+            <cstring>show_lights_</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>250</x>
-                <y>7</y>
-                <width>180</width>
+                <x>230</x>
+                <y>36</y>
+                <width>201</width>
                 <height>20</height>
             </rect>
         </property>
         <property name="text">
-            <string>Show coordinate system</string>
+            <string>Show lightsources in Scene</string>
         </property>
     </widget>
 </widget>

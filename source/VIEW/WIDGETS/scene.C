@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.81 2004/06/16 21:48:27 amoll Exp $
+// $Id: scene.C,v 1.82 2004/06/16 23:49:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -15,6 +15,9 @@
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
+
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/tube.h>
 
 #include <qpainter.h>
 #include <qmenubar.h>
@@ -37,6 +40,7 @@ namespace BALL
 		// values for mouse-sensitivity 
 		float Scene::mouse_sensitivity_ = 5;
 		float Scene::mouse_wheel_sensitivity_ = 5;
+		bool  Scene::show_light_sources_ = false;
 		#define  ZOOM_FACTOR 			7
 		#define  ROTATE_FACTOR    22
 		#define  TRANSLATE_FACTOR 6 
@@ -459,6 +463,28 @@ namespace BALL
 				glDisable(i);
 			}
 
+
+			// -------------------------------------------------------------------
+			// show light sources
+			if (show_light_sources_)
+			{
+				List<LightSource>::ConstIterator lit = stage_->getLightSources().begin();
+				for (; lit != stage_->getLightSources().end(); lit++)
+				{
+					Sphere s;
+					s.setPosition((*lit).getPosition());
+					s.setRadius(5);
+					s.setColor(ColorRGBA(255,255,255));
+					gl_renderer_.renderSphere_(s);
+
+					Tube t;
+					t.setVertex1((*lit).getPosition());
+					t.setVertex2((*lit).getDirection());
+					t.setColor(ColorRGBA(255,255,255));
+					gl_renderer_.renderTube_(t);
+				}
+			}
+	
 			// -------------------------------------------------------------------
 			
 			// render all "normal" (non always front and non transparent models)
@@ -778,16 +804,17 @@ namespace BALL
 		void Scene::setDefaultLighting(bool update_GL)
 			throw()
 		{
+
+			LightSource light;
+			light.setType(LightSource::POSITIONAL);
+			light.setPosition(stage_->getCamera().getViewPoint() - 
+												stage_->getCamera().getViewVector() * 4);
+			light.setDirection(stage_->getCamera().getLookAtPosition());
+
 			List<LightSource>& lights = stage_->getLightSources();
 			lights.clear();
-			LightSource light;
-			light.setPosition(Vector3(0, 0, 1110));
-			light.setIntensity(0.6);
-			light.setType(LightSource::POSITIONAL);
-			stage_->addLightSource(light);
+			lights.push_back(light);
 			gl_renderer_.setLights();
-			light_settings_->update();
-			light_settings_->getDefaultLights();
 			light_settings_->updateFromStage();
 
 			if (update_GL) renderView_(REBUILD_DISPLAY_LISTS);
@@ -1102,9 +1129,6 @@ namespace BALL
 		void Scene::readLights_(const INIFile& inifile)
 			throw()
 			{
-				setDefaultLighting(false);
-				light_settings_->getDefaultLights();
-
 				stage_->getLightSources().clear();
 				String data;
 				vector<String> strings;
@@ -1155,6 +1179,11 @@ namespace BALL
 				{
 					Log.error() << "Could not read lighting settings from Inifile" << std::endl;
 					Log.error() << e;
+				}
+
+				if (stage_->getLightSources().size() == 0)
+				{
+					setDefaultLighting(true);
 				}
 			}
 
