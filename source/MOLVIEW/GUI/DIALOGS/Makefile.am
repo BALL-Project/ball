@@ -10,7 +10,8 @@ MOC_SOURCES=\
 	labelPropertiesData_moc.C\
 	contourSurfaceDialog_moc.C\
 	atomSettings_moc.C\
-	atomSettingsData_moc.C
+	atomSettingsData_moc.C\
+	molecularFileDialog_moc.C
 
 BUILT_SOURCES=$(MOC_SOURCES)
 
@@ -28,6 +29,7 @@ CURRENTDIR_SOURCES=\
 	contourSurfaceDialog.C\
 	atomSettings.C\
 	atomSettingsData.C\
+	molecularFileDialog.C\
 	$(MOC_SOURCES)
 
 clean-local:
@@ -55,3 +57,6 @@ atomSettings_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h
 
 atomSettingsData_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettingsData.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettingsData.h -o atomSettingsData_moc.C
+	
+molecularFileDialog_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h -o molecularFileDialog_moc.C
