@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.30 2000/12/24 09:29:01 oliver Exp $
+// $Id: String_test.C,v 1.31 2001/05/17 17:44:55 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.30 2000/12/24 09:29:01 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.31 2001/05/17 17:44:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -473,11 +473,14 @@ CHECK(String::operator = (String&))
 	s5.set("");
 	s4 = s5;
 	TEST_EQUAL(s4, s5)
+	String s6;
+	s4 = s6;
+	TEST_EQUAL(s4, s6)
 RESULT
 
 CHECK(String::operator = (char*))
-	s4 = "Test";
-	TEST_EQUAL(s4, "Test")
+	s4 = "TestTestTestTest";
+	TEST_EQUAL(s4, "TestTestTestTest")
 	s4 = "";
 	TEST_EQUAL(s4, "");
 RESULT
@@ -976,7 +979,7 @@ CHECK(String::split(String[], Size, char*, Index))
 	TEST_EQUAL(arr[0], "")
 
 	s4 = "a/b(cd)e*f-g";
-	char* c = "/()*-";
+	const char* c = "/()*-";
 	TEST_EQUAL(s4.split(arr, 10, c), 6)
 	TEST_EQUAL(arr[0], "a")
 	TEST_EQUAL(arr[1], "b")
@@ -1020,7 +1023,7 @@ CHECK(String::split(vector<String>& strings, const char* delimiters, Index from 
 	TEST_EQUAL(arr.size(), 0)
 
 	s4 = "a/b(cd)e*f-g";
-	char* c = "/()*-";
+	const char* c = "/()*-";
 	TEST_EQUAL(s4.split(arr, c), 6)
 	TEST_EQUAL(arr.size(), 6)
 	TEST_EQUAL(arr[0], "a")
@@ -1067,7 +1070,7 @@ CHECK(String::splitQuoted(vector<String>& strings, const char* delimiters, const
 	TEST_EQUAL(arr.size(), 0)
 
 	s4 = "a/b(cd)e*f-g";
-	char* c = "/()*-";
+	const char* c = "/()*-";
 	TEST_EQUAL(s4.splitQuoted(arr, c), 6)
 	TEST_EQUAL(arr.size(), 6)
 	if (arr.size() > 0) TEST_EQUAL(arr[0], "a")
