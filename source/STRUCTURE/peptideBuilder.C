@@ -127,22 +127,25 @@ namespace BALL
 		PeptideBuilder::PeptideBuilder()
 			: sequence_(), 
 				chainname_("Chain"),
-				proteinname_("Protein")
+				proteinname_("Protein"),
+				is_proline_(false)
 		{
 		}
 
 		PeptideBuilder::PeptideBuilder(const std::vector<AminoAcidDescriptor>& sequence)
 			: sequence_(sequence),
 				chainname_("Chain"),
-				proteinname_("Protein")
+				proteinname_("Protein"),
+				is_proline_(false)
 		{
 		}
 
 		PeptideBuilder::PeptideBuilder(const PeptideBuilder& pc)
 			:sequence_(pc.sequence_),
 			 chainname_(pc.chainname_),
-			 proteinname_(pc.proteinname_)
-		{
+			 proteinname_(pc.proteinname_),
+			 is_proline_(false)
+		{ 
 		}
 
 		PeptideBuilder::~PeptideBuilder()
@@ -188,7 +191,7 @@ namespace BALL
 			Chain *chain = new Chain(chainname_);
 			
 			// create the first residue
-			Residue* residue = createResidue_(sequence_[0].getType());
+			Residue* residue = createResidue_(sequence_[0].getType(), 0);
 			chain->insert(*residue);
 			Residue* residueold = residue;
 			
@@ -197,18 +200,41 @@ namespace BALL
 			// consistency check for empty sequences and sequences of length < 2!!	
 			// ????
 			// loop for the remaining residues 
+			int id = 0;
+			
 			for (++i; i != sequence_.end(); ++i)
 			{
-				Residue* residue2 = createResidue_(i->getType());
+				id++;
+				// We have to take care of two special cases:
+				// 		- the residue we are looking at is proline
+				// 		- the last residue was proline
+				String type = i->getType();
+				type.toUpper();
+				if (type == "PRO")
+				{
+					is_proline_ = true;
+					
+					// in this case, the second torsion angle is fixed to -80 degrees
+					i->setPsi(Angle(-80.,false));
+				}
+				else
+				{
+					is_proline_ = false;
+				}
+				
+				Residue* residue2 = createResidue_(i->getType(), id);
 					
 				insert_(*residue2,*residueold);
 				chain->insert(*residue2);
 					
 				//set the torsion angle 
 				// TODO: angle of the peptide bond (omega)
-					
-				transform_(i->getPhi(),i->getPsi(),i->getOmega(),*residueold,*residue2);
+				transform_(i->getPhi(),i->getPsi(),*residueold,*residue2);
 				peptide_(*residueold,*residue2);
+
+				// set the peptide bond angle omega
+				setOmega_(*residueold, *residue2, i->getOmega());
+
 				residueold=residue2;
 			}
 
@@ -223,19 +249,19 @@ namespace BALL
 			
 			// Add missing bonds and atoms (including side chains!)
 			ReconstructFragmentProcessor rfp(db);
-			protein->apply(db.build_bonds);
 			protein->apply(rfp);
+			protein->apply(db.build_bonds);
 			
 			return protein;
 		}
 
-		Residue* PeptideBuilder::createResidue_(const String& type)
+		Residue* PeptideBuilder::createResidue_(const String& type, const int id)
 		{
-			Residue* res = new Residue(type); 
+			Residue* res = new Residue(type, String(id)); 
 			PDBAtom* nitrogen = new PDBAtom(PTE[Element::N], "N");
 			PDBAtom* carbona = new PDBAtom(PTE[Element::C], "CA");
 			PDBAtom* carbon = new PDBAtom(PTE[Element::C], "C");
-		 
+
 			//put CA into the starting position 
 			carbona->setPosition(Vector3( 0.00, 0.00, 0.0));
 			//insert N and C 
@@ -256,7 +282,7 @@ namespace BALL
 			// create the bonds
 			nitrogen->createBond(*carbona);
 			carbona->createBond(*carbon);
-		 
+
 			return res;
 		}
 
@@ -427,7 +453,7 @@ namespace BALL
 		}
 
 		void PeptideBuilder::transform_
-			(const Angle& phi, const Angle& psi, const Angle& /* omega */, Residue& resold, Residue& resnew)
+			(const Angle& phi, const Angle& psi, Residue& resold, Residue& resnew)
 		{
 			// Parameter omega obviously not used!!!
 			Matrix4x4 phimat;   // rotation matrix
@@ -517,7 +543,7 @@ namespace BALL
 			PDBAtom* pcarbon     = getAtomByName_(resold, "C");
 			PDBAtom* pcarbona    = getAtomByName_(resold, "CA");
 			PDBAtom* pnitrogen_n = getAtomByName_(resnew, "N");
-			
+
 			Vector3 CA_C_axis =(pcarbon->getPosition() - pcarbona->getPosition()).normalize(); 
 			Vector3 C_NN_axis =(pnitrogen_n->getPosition() - pcarbon->getPosition()).normalize();
 
@@ -535,21 +561,53 @@ namespace BALL
 			(pcarbon->createBond(*poxygen))->setOrder(Bond::ORDER__DOUBLE);
 			resold.insert(*poxygen);
 			
-			//----------set hydrogen
-			PDBAtom* phydrogen = new PDBAtom(PTE[Element::H], "H");
-			pcarbon     = getAtomByName_(resold, "C");
-			pnitrogen_n = getAtomByName_(resnew, "N");
-			poxygen     = getAtomByName_(resold, "O");
-			
-			newpos =  (pcarbon->getPosition() - poxygen->getPosition()).normalize();
-			
-			newpos = newpos * BOND_LENGTH_N_H + pnitrogen_n->getPosition();
-			phydrogen->setPosition(newpos);
-			phydrogen->createBond(*pnitrogen_n);
-			resnew.insert(*phydrogen);
+			//----------set hydrogen. We can't do this for proline,
+			//					since in this case, this hydrogen doesn't exist
+			if (!is_proline_)
+			{
+				PDBAtom* phydrogen = new PDBAtom(PTE[Element::H], "H");
+				pcarbon     = getAtomByName_(resold, "C");
+				pnitrogen_n = getAtomByName_(resnew, "N");
+				poxygen     = getAtomByName_(resold, "O");
+
+				newpos =  (pcarbon->getPosition() - poxygen->getPosition()).normalize();
+
+				newpos = newpos * BOND_LENGTH_N_H + pnitrogen_n->getPosition();
+				phydrogen->setPosition(newpos);
+				phydrogen->createBond(*pnitrogen_n);
+				resnew.insert(*phydrogen);
+			}
 			return;
 		}
 
+		void PeptideBuilder::setOmega_(Residue& resold, Residue& resnew, const Angle& omega)
+		{
+			PDBAtom* pcarbon     = getAtomByName_(resold, "C");
+			PDBAtom* pnitrogen_n = getAtomByName_(resnew, "N");
+
+			Vector3 C_NN_axis =(pnitrogen_n->getPosition() - pcarbon->getPosition()).normalize();
+
+			// At this point, omega has been fixed to 180 degrees
+			Matrix4x4 mat;
+			mat.setRotation(Angle(omega-Angle(Constants::PI)), C_NN_axis); 
+			TransformationProcessor omegatrans(mat);
+
+			// translate to 0|0|0 (needed for the rotation)
+			Vector3 toOrigin =  pnitrogen_n->getPosition();
+			TranslationProcessor translation;
+			translation.setTranslation(((float)(-1.))*toOrigin);
+			resnew.apply(translation);
+
+			// rotate 
+			resnew.apply(omegatrans);
+
+			// translate back to the correct position
+			translation.setTranslation(toOrigin);
+			resnew.apply(translation);
+
+			return;
+		}
+		
 		PDBAtom* PeptideBuilder::getAtomByName_(Residue& res, const String& name)
 		{
 			PDBAtomIterator ai;

@@ -1,4 +1,4 @@
-// $Id: peptideBuilder.h,v 1.1 2003/04/16 10:58:49 oliver Exp $
+// $Id: peptideBuilder.h,v 1.2 2003/05/05 20:32:17 anhi Exp $
 // ???? Editor header
 
 #ifndef BALL_COMMON_H
@@ -145,13 +145,17 @@ namespace BALL
 	   String chainname_;
 	   String proteinname_;
 	   
+		 /// The proline flag
+		 bool is_proline_;
+
 	   /** some helper functions for the construction of the residue; for internal use only
 	    * omega is not yet implemented
 	    */
-	   Residue* createResidue_(const String& type);
+	   Residue* createResidue_(const String& type, const int id);
 	   void	insert_(Residue& resnew, Residue& resold);
-	   void	transform_(const Angle& phi, const Angle& psi, const Angle& omega, Residue& resold, Residue& resnew);
+	   void	transform_(const Angle& phi, const Angle& psi, Residue& resold, Residue& resnew);
 	   void peptide_(Residue& resold, Residue& resnew);
+		 void setOmega_(Residue& resold, Residue& residue, const Angle& omega);
 	   PDBAtom* getAtomByName_(Residue& res, const String& name);
 	 };
        
