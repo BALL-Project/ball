@@ -1,4 +1,4 @@
-// $Id: Box3_test.C,v 1.11 2000/07/26 16:49:46 amoll Exp $
+// $Id: Box3_test.C,v 1.12 2000/09/05 09:59:13 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Box3_test.C,v 1.11 2000/07/26 16:49:46 amoll Exp $")
+START_TEST(class_name, "$Id: Box3_test.C,v 1.12 2000/09/05 09:59:13 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -143,6 +143,14 @@ RESULT
 CHECK(TBox3::isValid() const )
 	box = Box3(v1, v2);
 	TEST_EQUAL(box.isValid(), true)
+RESULT
+
+CHECK(bool TBox3::has(const TVector3<T>& point, bool on_surface = false) const)
+	// BAUSTELLE
+RESULT
+
+CHECK(bool TBox3::isIntersecting(const TBox3& box) const)
+	// BAUSTELLE
 RESULT
 
 CHECK(TBox3::set(const TBox3<T>& box, bool /* deep */))
