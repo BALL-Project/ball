@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.1 2000/08/31 18:24:33 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.2 2000/09/01 15:14:09 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -292,20 +292,6 @@ namespace BALL
 						// n_k_vec is the normal of the current surface triangle 
 						n_k_vec = current_surface.normal[k];
 
-						// DEBUG
-
-						/*
-						Log.info() << "vertex.size() = " << current_surface.vertex.size() << endl;
-						Log.info() << "r_k_vec = " << r_k_vec << endl;
-						Log.info() << "r_k = " << r_k << endl;
-						Log.info() << "n_k_vec = " << n_k_vec << endl;
-						// Log.info() << "alpha_ = " << alpha_ << endl;
-						// Log.info() << "C1_ = " << C1_ << endl;
-						// Log.info() << "C2_ = " << C2_ << endl;
-						// Log.info() << "R_ij_o = " << R_ij_o << endl;
-						// Log.info() << "rho = " << rho << endl;
-						*/
-
 						if (use_rdf)
 						{
 							float A = (atom_center - sphere_center).getSquareLength();
@@ -372,8 +358,11 @@ namespace BALL
 
 		} // solvent
 
-		Log.info() << "Dispersion energy: " << E_D << " kcal/mol\t"
-			<< "Repulsion energy: " << E_R << " kcal/mol" << endl;
+		if (verbosity > 0)
+		{
+			Log.info() << "Dispersion energy: " << E_D << " kcal/mol\t"
+				<< "Repulsion energy: " << E_R << " kcal/mol" << endl;
+		}
 
 		energy_ = 4184 * (E_R + E_D);
 		return true;

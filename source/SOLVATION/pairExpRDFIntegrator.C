@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.1 2000/08/31 18:12:29 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.2 2000/09/01 15:14:09 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -87,7 +87,12 @@ namespace BALL
 	void PairExpRDFIntegrator::setConstants(double alpha, double C1, double C2, 
 			double R_ij_o, double k1, double k2)
 	{
-		setConstants(alpha, C1, C2, R_ij_o, k1, k2);
+		alpha_ = alpha;
+		C1_ = C1;
+		C2_ = C2;
+		R_ij_o_ = R_ij_o;
+		k1_ = k1;
+		k2_ = k2;
 	}
 
 
@@ -208,6 +213,11 @@ namespace BALL
 			double C1, double C2, double R_ij_o, double k1, double k2)
 	{
 		setConstants(alpha, C1, C2, R_ij_o, k1, k2);
+		// DEBUG
+		Log.info() << "alpha_ = " << alpha_ << endl;
+		Log.info() << "C1_ = " << C1_ << endl;
+		Log.info() << "C2_ = " << C2_ << endl;
+		Log.info() << "R_ij_o_ = " << R_ij_o_ << endl;
 		return integrate(from, to);
 	}
 
@@ -230,64 +240,37 @@ namespace BALL
 		double b = alpha_/R_ij_o_;
 		double R_ij_o_6 = pow(R_ij_o_, 6);
 		double d = R_ij_o_6;
+		double k = rdf_.getRepresentation().getInterval(index).first;
+
+		// DEBUG
+		Log.info() << "r = " << r << endl;
+		Log.info() << "R = " << R << endl;
+		Log.info() << "b = " << b << endl;
+		Log.info() << "R_ij_o_6 = " << R_ij_o_6 << endl;
+		Log.info() << "a[0] = " << a[0] << " a[1] = " << a[1] 
+			<< " a[2] = " << a[2] << " a[3] = " << a[3] << endl;
+		Log.info() << "k = " << k << endl;
 
 		if (fabs(k2_) < 1e-10)
 		{
 
+			Log.info() << "keine geometrische Korrektur nötig." << endl;
+
 			// the molecule we sit on is that defining the current sphere, so we
 			// dont have to consider the geometric correction. Thus we have an
-			// analytical form, we can use.
+			// analytical form we can use.
 
-			val = (720*pow(r,3)*a[3]*C1_ + 
-						144*b*pow(r,3)*
-						 (a[2] + 5*r*a[3])*C1_ + 
-						36*pow(b,2)*pow(r,3)*
-						 (a[1] + 4*r*a[2] + 
-							 10*pow(r,2)*a[3])*C1_ + 
-						6*pow(b,5)*pow(r,5)*
-						 (a[0] + r*a[1] + 
-							 pow(r,2)*a[2] + 
-							 pow(r,3)*a[3])*C1_ + 
-						6*pow(b,4)*pow(r,4)*
-						 (2*a[0] + 3*r*a[1] + 
-							 4*pow(r,2)*a[2] + 
-							 5*pow(r,3)*a[3])*C1_ + 
-						12*pow(b,3)*pow(r,3)*
-						 (a[0] + 3*r*a[1] + 
-							 6*pow(r,2)*a[2] + 
-							 10*pow(r,3)*a[3])*C1_ - 
-						pow(b,6)*d*exp(b*r)*
-						 (2*a[0] + 3*r*a[1] + 
-							 6*pow(r,2)*a[2])*C2_ + 
-						6*pow(b,6)*d*exp(b*r)*
-						 pow(r,3)*a[3]*C2_*log(r))/
-					(6.*pow(b,6)*exp(b*r)*
-						pow(r,3)) - 
-				 (720*pow(R,3)*a[3]*C1_ + 
-						144*b*pow(R,3)*
-						 (a[2] + 5*R*a[3])*C1_ + 
-						36*pow(b,2)*pow(R,3)*
-						 (a[1] + 4*R*a[2] + 
-							 10*pow(R,2)*a[3])*C1_ + 
-						6*pow(b,5)*pow(R,5)*
-						 (a[0] + R*a[1] + 
-							 pow(R,2)*a[2] + 
-							 pow(R,3)*a[3])*C1_ + 
-						6*pow(b,4)*pow(R,4)*
-						 (2*a[0] + 3*R*a[1] + 
-							 4*pow(R,2)*a[2] + 
-							 5*pow(R,3)*a[3])*C1_ + 
-						12*pow(b,3)*pow(R,3)*
-						 (a[0] + 3*R*a[1] + 
-							 6*pow(R,2)*a[2] + 
-							 10*pow(R,3)*a[3])*C1_ - 
-						pow(b,6)*d*exp(b*R)*
-						 (2*a[0] + 3*R*a[1] + 
-							 6*pow(R,2)*a[2])*C2_ + 
-						6*pow(b,6)*d*exp(b*R)*
-						 pow(R,3)*a[3]*C2_*log(R))/
-					(6.*pow(b,6)*exp(b*R)*
-						pow(R,3));
+
+			double s3 = d*pow(b,4.0)*a[0]/5+d*pow(b,4.0)*a[1]*R/4+d*pow(b,4.0)*a[2]*R*R/3+d*pow(b,4.0)*a[3]*R*R*R/2-6.0*exp(-b*R)*a[3]*pow(R,5.0)-exp(-b*R)*a[0]*b*b*b*pow(R,5.0)-exp(-b*R)*a[1]*b*b*pow(R,5.0)-exp(-b*R)*a[1]*b*b*b*pow(R,6.0)-2.0*exp(-b*R)*a[2]*b*b*pow(R,6.0)-2.0*exp(-b*R)*a[2]*b*pow(R,5.0)-exp(-b*R)*a[2]*b*b*b*pow(R,7.0)-6.0*exp(-b*R)*a[3]*b*pow(R,6.0)-3.0*exp(-b*R)*a[3]*b*b*pow(R,7.0)-exp(-b*R)*a[3]*b*b*b*pow(R,8.0)-d*pow(b,4.0)*a[2]*k*R/2;
+			double s2 = s3-d*pow(b,4.0)*a[3]*k*R*R+3.0/4.0*d*pow(b,4.0)*a[3]*k*k*R-d*pow(b,4.0)*a[1]*k/5+d*pow(b,4.0)*a[2]*k*k/5-d*pow(b,4.0)*a[3]*k*k*k/5-3.0*exp(-b*R)*a[3]*k*k*b*b*b*pow(R,6.0)+6.0*exp(-b*R)*a[3]*k*b*pow(R,5.0)+2.0*exp(-b*R)*a[2]*k*b*b*pow(R,5.0)+6.0*exp(-b*R)*a[3]*k*b*b*pow(R,6.0)+3.0*exp(-b*R)*a[3]*k*b*b*b*pow(R,7.0)-3.0*exp(-b*R)*a[3]*k*k*b*b*pow(R,5.0)+exp(-b*R)*a[1]*k*b*b*b*pow(R,5.0)+exp(-b*R)*a[3]*k*k*k*b*b*b*pow(R,5.0)-exp(-b*R)*a[2]*k*k*b*b*b*pow(R,5.0)+2.0*exp(-b*R)*a[2]*k*b*b*b*pow(R,6.0);
+			s3 = 1/pow(b,4.0)/pow(R,5.0);
+			double s1 = s2*s3;
+			double s4 = -d*pow(b,4.0)*a[0]/5-d*pow(b,4.0)*a[1]*r/4-d*pow(b,4.0)*a[2]*r*r/3-d*pow(b,4.0)*a[3]*r*r*r/2+6.0*exp(-b*r)*a[3]*pow(r,5.0)+exp(-b*r)*a[0]*b*b*b*pow(r,5.0)+exp(-b*r)*a[1]*b*b*b*pow(r,6.0)+2.0*exp(-b*r)*a[2]*b*pow(r,5.0)+exp(-b*r)*a[1]*b*b*pow(r,5.0)+2.0*exp(-b*r)*a[2]*b*b*pow(r,6.0)+exp(-b*r)*a[2]*b*b*b*pow(r,7.0)+6.0*exp(-b*r)*a[3]*b*pow(r,6.0)+3.0*exp(-b*r)*a[3]*b*b*pow(r,7.0)+exp(-b*r)*a[3]*b*b*b*pow(r,8.0)+d*pow(b,4.0)*a[1]*k/5;
+			s3 = s4-d*pow(b,4.0)*a[2]*k*k/5+d*pow(b,4.0)*a[3]*k*k*k/5-6.0*exp(-b*r)*a[3]*k*b*pow(r,5.0)+d*pow(b,4.0)*a[2]*k*r/2+d*pow(b,4.0)*a[3]*k*r*r-3.0/4.0*d*pow(b,4.0)*a[3]*k*k*r-exp(-b*r)*a[1]*k*b*b*b*pow(r,5.0)-2.0*exp(-b*r)*a[2]*k*b*b*b*pow(r,6.0)-2.0*exp(-b*r)*a[2]*k*b*b*pow(r,5.0)-3.0*exp(-b*r)*a[3]*k*b*b*b*pow(r,7.0)+3.0*exp(-b*r)*a[3]*k*k*b*b*b*pow(r,6.0)+3.0*exp(-b*r)*a[3]*k*k*b*b*pow(r,5.0)+exp(-b*r)*a[2]*k*k*b*b*b*pow(r,5.0)-6.0*exp(-b*r)*a[3]*k*b*b*pow(r,6.0)-exp(-b*r)*a[3]*k*k*k*b*b*b*pow(r,5.0);
+			s4 = 1/pow(b,4.0)/pow(r,5.0);
+			s2 = s3*s4;
+			val = s1+s2;
+
 
 			Log.info() << "RDF::integralToRC(), ohne G: " << val << endl;
 
@@ -301,7 +284,8 @@ namespace BALL
 			// situation. As this seems analytically impossible, we have to do it
 			// numerically. The method we use is the trapezium method.
 
-			// BAUSTELLE
+			// BAUSTELLE: Die Anzahl der Stützstellen muss per Option konfiguriert
+			// werden können.
 
 			double area = 0;
 			double x = r;
@@ -309,7 +293,8 @@ namespace BALL
 			double s = (R-r)/n;
 			while (n > 0)
 			{
-				area += (rdf_(x) + rdf_(x+s))/2.0 * s;
+				area += ((exp(-b*x) - R_ij_o_6/pow(x,6))*rdf_(x) 
+						+ (exp(-b*x) - R_ij_o_6/pow(x,6))*rdf_(x+s))/2.0 * s;
 				x += s;
 				--n;
 			}
