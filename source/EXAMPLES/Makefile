@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.9 2000/01/31 10:13:46 oliver Exp $
+# $Id: Makefile,v 1.10 2000/02/15 20:15:57 oliver Exp $
 #========================
 # BALL/EXAMPLES Makefile
 #========================
@@ -36,3 +36,4 @@ PDBChecker:	PDBChecker.o
 addHydrogens:	addHydrogens.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+include .Dependencies

@@ -6,4 +6,4 @@ CPP_SOURCES=\
 	common.C
 
 include ../../common.mak
-
+include .Dependencies

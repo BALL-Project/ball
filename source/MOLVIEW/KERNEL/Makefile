@@ -7,5 +7,6 @@ CPP_SOURCES=\
 	windowEventTimer.C
 
 include ../../common.mak
+include .Dependencies
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES)

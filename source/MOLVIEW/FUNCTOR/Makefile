@@ -14,4 +14,4 @@ CPP_SOURCES=\
 	vanDerWaalsModel.C
 
 include ../../common.mak
-
+include .Dependencies

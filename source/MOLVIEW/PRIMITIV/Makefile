@@ -7,4 +7,4 @@ CPP_SOURCES=\
 	twoColoredTube.C
 
 include ../../common.mak
-
+include .Dependencies

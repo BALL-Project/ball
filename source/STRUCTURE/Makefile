@@ -15,3 +15,4 @@ CPP_SOURCES=\
 	structureMapper.C
 
 include ../common.mak
+include .Dependencies
