@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.14 2000/03/16 12:43:33 oliver Exp $
+// $Id: persistenceManager.h,v 1.15 2000/03/17 11:28:03 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -127,11 +127,6 @@ namespace BALL
 		*/
 		virtual void registerClass(String signature, const CreateMethod	m);
 
-		/**	Register a class with its default name and virtual constructor.
-		*/
-		template <typename T>
-		void registerDefault();
-		
 		/**	Create an object of a registered class.
 				If the persistence manager has registered a creation method for the given
 			  class signature, the corresponding create method is called and its result is
@@ -781,12 +776,6 @@ namespace BALL
 		std::ostream*	ostr_;
 		std::istream*	istr_;
 	};
-
-	template <typename T>
-	void PersistenceManager::registerDefault()
-	{
-		registerClass(RTTI::getStreamName<T>(), T::createDefault);
-	}
 
 } // namespace BALL
 
