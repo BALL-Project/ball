@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.55 2004/04/19 16:51:12 amoll Exp $
+// $Id: molecularControl.C,v 1.56 2004/05/08 20:46:41 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -462,9 +462,13 @@ void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point,
 	context_menu_.clear();
 
 	// get composite address
-	if (item == 0) return;
+	if (item == 0 ||
+			(dynamic_cast<SelectableListViewItem*>(item)) == 0)
+	{
+			return;
+	}
 
-	Composite* composite = ((SelectableListViewItem*)item)->getComposite();
+	Composite* composite = (dynamic_cast<SelectableListViewItem*>(item))->getComposite();
 
 	// create the context menu
 	if (composite != 0)
