@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.29 2001/08/01 01:22:02 oliver Exp $
+// $Id: exception.C,v 1.30 2002/01/15 00:40:38 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -291,7 +291,7 @@ namespace BALL
 				Log.insert(std::cerr);
 				Log.error() << endl;
 				Log.error() << "---------------------------------------------------" << endl;
-				Log.error() << "FATAL: terminate called!" << endl;
+				Log.error() << "FATAL: uncaught exception!" << endl;
 				Log.error() << "---------------------------------------------------" << endl;
 				if ((line_ != -1) && (name_ != "unknown"))
 				{
