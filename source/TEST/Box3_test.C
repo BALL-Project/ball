@@ -1,4 +1,4 @@
-// $Id: Box3_test.C,v 1.6 2000/04/18 21:12:33 amoll Exp $
+// $Id: Box3_test.C,v 1.7 2000/04/30 16:46:40 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Box3_test.C,v 1.6 2000/04/18 21:12:33 amoll Exp $")
+START_TEST(class_name, "$Id: Box3_test.C,v 1.7 2000/04/30 16:46:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -195,6 +195,14 @@ RESULT
 CHECK(TBox3::get(TBox3<T>& box, bool deep) const )
 	box = Box3(v1, v2);
 	box.get(box2);
+	TEST_EQUAL(box == box2, true)
+RESULT
+
+
+//line 289: method TBox3::get(TVector3&, TVector3&) const
+CHECK(TBox3::get(TVector3& lower, TVector3& upper) const)
+	Box3 box;
+	box2.get(box);
 	TEST_EQUAL(box == box2, true)
 RESULT
 
