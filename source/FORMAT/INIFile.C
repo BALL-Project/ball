@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.36 2004/11/18 16:21:01 amoll Exp $
+// $Id: INIFile.C,v 1.37 2004/12/07 13:34:33 amoll Exp $
 //
 
 #include <BALL/FORMAT/INIFile.h>
@@ -596,6 +596,43 @@ namespace BALL
 		return check_duplicate_keys_;
 	}
 
+	List<String> INIFile::getContent() const
+		throw()
+	{
+		List<String> lines;
+		LineIterator it = const_cast<INIFile*>(this)->getLine(0);
+		for (; +it; ++it)
+		{
+			lines.push_back(*it);
+		}
+
+		return lines;
+	}
+
+
+	bool INIFile::setContent(const List<String>& lines)
+		throw()
+	{
+ 		List<String>::ConstIterator it = lines.begin();
+		for (; it != lines.end(); ++it)
+		{
+			if (!appendLine(*it)) return false;
+		}
+
+		return true;
+	}
+
+	bool INIFile::appendLine(const String& data)
+	{
+		if (data[0] == '[')
+		{
+			return appendSection(data);
+		}
+
+		if (sections_.size() == 0) return false;
+		return appendLine((*sections_.rbegin()).name_, data);
+	}
+	
 	// ===================== IteratorTraits_ ==========================
 
 	INIFile::IteratorTraits_::IteratorTraits_()
