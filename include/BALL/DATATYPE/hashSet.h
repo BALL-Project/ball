@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.17 2000/09/05 09:17:40 oliver Exp $ 
+// $Id: hashSet.h,v 1.18 2000/09/05 09:23:42 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -774,10 +774,16 @@ namespace BALL
 			{
 				// remove the node and reconnect the list
 				prev->next = pos.getTraits().position_->next;
-				deleteNode_(pos.getTraits().position_);
-				--size_;
+			}
+			else 
+			{
+				throw Execption::InvalidIterator(__FILE__, __LINE__);
 			}
 		}
+
+		// delete the node and decrement the set size
+		deleteNode_(pos.getTraits().position_);
+		--size_;
 	}
 
 	template <class Key>
