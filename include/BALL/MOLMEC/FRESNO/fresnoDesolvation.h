@@ -1,5 +1,4 @@
-// $Id: fresnoDesolvation.h,v 1.1.2.4 2002/10/17 09:36:05 anker Exp $
-// Molecular Mechanics: Fresno force field, desolvation component
+// $Id: fresnoDesolvation.h,v 1.1.2.5 2002/11/12 16:24:58 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
 #define BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
@@ -23,6 +22,11 @@ namespace BALL
 		*/
 		enum CalculationMethod
 		{
+
+			/**
+			*/
+			CALCULATION__NONE,
+
 			/**
 			*/
 			CALCULATION__FRESNO,
@@ -211,3 +215,4 @@ namespace BALL
 } // namespace BALL
 
 #endif // BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
+

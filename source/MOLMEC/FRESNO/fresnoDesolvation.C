@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.13 2002/10/24 13:48:24 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.14 2002/11/12 16:24:59 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -103,13 +103,21 @@ namespace BALL
 		System* original = force_field->getSystem();
     Options& options = force_field->options;
 
-		factor_ 
-			= options.setDefaultReal(FresnoFF::Option::DESOLV,
-					FresnoFF::Default::DESOLV);
-
 		calculation_method_ 
 			= options.setDefaultInteger(FresnoFF::Option::DESOLV_METHOD,
 					FresnoFF::Default::DESOLV_METHOD);
+
+		if (calculation_method_ == CALCULATION__NONE)
+		{
+			Log.info() << "FresnoDesolvation::setup(): calculation switched off"
+				<< endl;
+			energy_ = 0.0;
+			return true;
+		}
+
+		factor_ 
+			= options.setDefaultReal(FresnoFF::Option::DESOLV,
+					FresnoFF::Default::DESOLV);
 
 		verbosity_
 			= options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
@@ -486,7 +494,8 @@ namespace BALL
 		}
 
 		// DEBUG
-		Log.info() << "DESOLV: score is " << energy_ << endl;
+		Log.info() << "DESOLV " << calculation_method_ << ": score is " 
+			<< energy_ << endl;
 		// /DEBUG
 
 		energy_ *= factor_;
