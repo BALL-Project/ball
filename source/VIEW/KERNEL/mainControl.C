@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.15 2003/10/05 16:29:59 amoll Exp $
+// $Id: mainControl.C,v 1.16 2003/10/15 13:41:45 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -53,7 +53,8 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 		main_control_preferences_(0),
 		preferences_dialog_(0),
 		preferences_id_(-1),
-		composites_muteable_(true)
+		composites_muteable_(true),
+		timer_(new StatusbarTimer(this))
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new MainControl " << this << std::endl;
@@ -63,6 +64,11 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 	preferences_.read();
 
 	statusBar()->addWidget(message_label_, 20);
+
+	timer_->setInterval(5000);
+	timer_->setLabel(message_label_);
+
+	initPopupMenu(EDIT);
 
 	connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 	connect(menuBar(),	SIGNAL(highlighted(int)), this, SLOT(menuItemHighlighted(int)));
@@ -210,7 +216,6 @@ void MainControl::show()
 	List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 	for (; it != modular_widgets_.end(); ++it)
 	{
-		registerConnectionObject(**it);
 		(*it)->initializeWidget(*this);
 		(*it)->initializePreferencesTab(*preferences_dialog_);
 	}
@@ -242,10 +247,11 @@ void MainControl::show()
 	{
 		initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 		
+		insertPopupMenuSeparator(MainControl::EDIT);
 		preferences_id_ = insertMenuEntry(MainControl::EDIT, 
 																			"Preferences", 
 																			preferences_dialog_, 
-																			SLOT(openDialog()), CTRL+Key_Z);
+																			SLOT(show()), CTRL+Key_Z);
 	}
 
 	restoreWindows();
@@ -450,17 +456,6 @@ void MainControl::onNotify(Message *message)
 }
 
 
-void MainControl::dump(ostream& s, Size depth) const
-	throw()
-{
-	BALL_DUMP_STREAM_PREFIX(s);
-
-	BALL_DUMP_DEPTH(s, depth);
-	BALL_DUMP_HEADER(s, this, this);
-
-	BALL_DUMP_STREAM_SUFFIX(s);     
-}
-
 // VIEW automatic module registration
 MainControl* MainControl::getMainControl(const QObject* object)
 	throw()
@@ -657,6 +652,7 @@ void MainControl::addModularWidget(ModularWidget* widget)
 	#endif
 	modular_widgets_.push_back(widget);
 	widget->registerThis();
+	registerConnectionObject(*widget);
 }
 
 void MainControl::removeModularWidget(ModularWidget* widget)
@@ -744,6 +740,11 @@ void MainControl::printSelectionInfos()
 	
 	switch(nr_of_atoms)
 	{
+		case 0:
+		{
+			setStatusbarText("0 objects selected.");
+			return;
+		}
 		case 1:
 		{
 			// if one atom was picked, show its properties
@@ -916,6 +917,8 @@ void MainControl::setStatusbarText(const String& text)
 	throw()
 {
 	message_label_->setText(text.c_str());
+	timer_->stopTimer();
+	timer_->startTimer();
 	QWidget::update();
 }
 
@@ -950,7 +953,45 @@ const String& MainControl::getMenuHint(Index id) const
 void MainControl::menuItemHighlighted(int id)
 	throw()
 {
-	if (menu_entries_hints_.has(id)) setStatusbarText(menu_entries_hints_[id]);
+	if (menu_entries_hints_.has(id)) 
+	{
+		setStatusbarText(menu_entries_hints_[id]);
+	}
+	else
+	{
+		setStatusbarText("");
+	}
+}
+
+void MainControl::dump(ostream& s, Size depth) const
+	throw()
+{
+	BALL_DUMP_STREAM_PREFIX(s);
+	BALL_DUMP_DEPTH(s, depth);
+		ConnectionObject::dump(s, depth);
+		Embeddable::dump(s, depth);
+	BALL_DUMP_STREAM_SUFFIX(s);     
+}
+
+// ======================= StatusbarTimer =========================
+StatusbarTimer::StatusbarTimer(QObject* parent)
+	throw()
+	: QTTimer(parent),
+		label_(0)
+{}
+
+void StatusbarTimer::timer()
+	throw()
+{
+	if (!label_) return;
+	label_->setText("");
+	stopTimer();
+}
+
+void StatusbarTimer::setLabel(QLabel* label)
+	throw()
+{
+	label_ = label;
 }
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
