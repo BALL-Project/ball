@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.C,v 1.7 2000/09/22 14:14:59 amoll Exp $
+// $Id: NMRSpectrum.C,v 1.8 2000/09/27 07:21:10 oliver Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
 #include<BALL/FORMAT/PDBFile.h>
@@ -19,7 +19,6 @@
    und dementsprechung eine neu compilierung. besser waere es die Neucompilierung
    auf das neue Modulzu beschraenken.
    
-
    !!! korrigieren : Fehler wenn nur ein peak vorhanden : stepSize = 0 und 
 	Schleife terminiert nicht  bei Ausgabe in file
 */
@@ -66,9 +65,20 @@ namespace BALL
 
 	void NMRSpectrum::createSpectrum()
 	{
+		create_spectrum_.init();
 		system_->apply(create_spectrum_);
 		spectrum_ = create_spectrum_.getPeakList();
 		spectrum_.sort();
+	}
+
+	const ShiftModel& NMRSpectrum::getShiftModel() const
+	{
+		return shift_model_;
+	}
+
+	void NMRSpectrum::setShiftModel(const ShiftModel& model)
+	{
+		shift_model_ = model;
 	}
 
 	const list<Peak1D>& NMRSpectrum::getPeakList() const
@@ -144,10 +154,10 @@ namespace BALL
 	{
 		ofstream outfile(filename.c_str (), ios::out);
 
-		list<Peak1D>::const_iterator peak_iter = spectrum_.begin();
-		for (; peak_iter != spectrum_.end(); ++peak_iter)
+		list<Peak1D>::const_iterator peak_it = spectrum_.begin();
+		for (; peak_it != spectrum_.end(); ++peak_it)
 		{
-			outfile << peak_iter->getValue() << " " << peak_iter->getHeight() << endl;
+			outfile << peak_it->getValue() << " " << peak_it->getHeight() << " " << peak_it->getAtom()->getFullName()<< endl;
 		}
 	}
 
@@ -159,8 +169,8 @@ namespace BALL
 		AtomIterator atom_iter = system_->beginAtom();
 		for (; atom_iter != system_->endAtom(); ++atom_iter)
 		{
-			shift = (*atom_iter).getProperty ("chemical_shift").getFloat();
-			if (shift != 0 && shift < 100)
+			shift = (*atom_iter).getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+			if (shift != 0.0)
 			{
 				outfile << (*atom_iter).getFullName() << " " << shift << endl;
 			}
@@ -172,58 +182,38 @@ namespace BALL
 	{
 		// berechnet die peak Daten und schreibt sie in das file : filename
 
-	  list<Peak1D>::const_iterator peak_iter1;
-	  list<Peak1D>::const_iterator peak_iter2;
-
 		ofstream outfile(filename.c_str(), ios::out);
 
 		// Berechnung der Dichteverteilung:
 
-		float omega, ts, gs;
+	  float min = getSpectrumMin();
+	  float max = getSpectrumMax();
+	  float step_size = (max - min) / density_;
 
-	  const float& min = getSpectrumMin();
-	  const float& max = getSpectrumMax();
-
-	  const float stepSize = max - min / density_;
-	  float y = stepSize;
-	  float value = peak_iter1->getValue();
-	  float value_old = value;
-	  peak_iter1 = spectrum_.begin();
-
-		for (float x = min; x <= max; x += y)
+		
+		if (step_size <= 0.0)
 		{
-			if (x < value)
-			{
-				omega = x;
-			}
-			else
-			{
-				omega = value;
-				++peak_iter1;
-				value_old = value;
-				value = (*peak_iter1).getValue();
-				x -= y;
-			}
+			Log.error() << "NMRSpectrum:plotSpectrum: spectrum has empty range. Aborted." << endl;
+		}
+		else 
+		{
+		
+			Log.info() << " min = " << min << "   max = " << max << "   density_ = " << density_ << "   step_size = " << step_size << endl;
 
-			gs = 0;
-			for (peak_iter2 = spectrum_.begin(); peak_iter2 != spectrum_.end(); ++peak_iter2)
+			List<Peak1D>::const_iterator peak_it;
+			for (float x = min; x <= max; x += step_size)
 			{
-				const float number = peak_iter2->getValue() * 2 * Constants::PI * 1e6 - omega * 2 * Constants::PI * 1e6;
+				float y = 0;
+				for (peak_it = spectrum_.begin(); peak_it != spectrum_.end(); ++peak_it)
+				{
+					float number = peak_it->getValue() * 2 * Constants::PI  - x * 2 * Constants::PI;
 
-				ts =	peak_iter2->getHeight() / (1 +  (number * number * 4 / peak_iter2->getWidth()));
-				gs += ts;
-			}
-			outfile << omega << " " << gs << endl;
-			if (((x - value)     < stepSize && (x - value)     > -stepSize) || 
-					((x - value_old) < stepSize && (x - value_old) > -stepSize)    )
-			{
-				y = stepSize / 10;
-			}
-			else
-			{
-				y = stepSize;
+					y +=	peak_it->getHeight() / (1 +  (number * number * 4 / (peak_it->getWidth() / 10.0)));
+				}
+				outfile << x << " " << y << endl;
 			}
 		}
+		outfile.close();
 	}
 
 	void makeDifference(const float& diff, const String &a, const String& b, const String& out)
@@ -274,58 +264,6 @@ namespace BALL
 
 		outfile << "END" << " " << 0.0 << endl;
 	}
-
-	void setDifference(NMRSpectrum* a, NMRSpectrum* b, const String& outpdb, const String& out)
-	{
-		const System& system_a = *a->getSystem();
-		const System& system_b = *b->getSystem();
-
-	  StringHashMap<Atom*> table_b;
-
-		AtomIterator atom_iter = system_b.beginAtom();
-		for (; +atom_iter; ++atom_iter)
-		{
-			if ((*atom_iter).getElement() == PTE[Element::H])
-			{
-				table_b[(*atom_iter).getFullName()] = &(*atom_iter);
-			}
-		}
-
-		PDBAtom*	patom_a;
-		Atom*			atom_b;
-
-		ofstream dfile(out.c_str(), ios::out);
-
-		float shift_a, shift_b, difference;
-
-		atom_iter = system_a.beginAtom();
-		for (; +atom_iter; ++atom_iter)
-		{
-			patom_a = RTTI::castTo<PDBAtom>((*atom_iter));
-			patom_a->setOccupancy(0.5);
-			if ((*atom_iter).getElement() == PTE[Element::H] &&
-					 table_b.has((*atom_iter).getFullName()))
-			{
-				atom_b = table_b[(*atom_iter).getFullName()];
-				shift_a = patom_a->getProperty ("chemical_shift").getFloat();
-				shift_b = atom_b->getProperty ("chemical_shift").getFloat();
-
-				difference = shift_a - shift_b;
-				if (shift_a > 100)
-				{
-					difference = 0.5;
-				}
-				patom_a->setOccupancy(patom_a->getOccupancy() + difference);
-				dfile << (*atom_iter).getFullName() << " " << shift_a << " " << difference << endl;
-			}
-		}
-
-		PDBFile outfile(outpdb, ios::out);
-		//outfile.open;
-		outfile << system_a;
-		outfile.close();
-	}
-
 
 
 }	// namespace Ball
