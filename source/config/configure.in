@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.21 2000/01/03 17:39:51 oliver Exp $
+dnl    $Id: configure.in,v 1.22 2000/01/03 18:58:15 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -16,6 +16,66 @@ AC_CONFIG_HEADER([
 	config.h:config/config.h.in
 ])
 AC_LANG_CPLUSPLUS
+
+dnl		
+dnl    define command line arguments for QT, Mesa, and OpenGL
+dnl    includes and libraries
+dnl
+AC_ARG_WITH(compiler,          [  --with-compiler=CXX     use CXX as C++ compiler])
+AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS as compiler flags])
+AC_ARG_ENABLE(optimization,    [  --enable-optimization   optimize the library for speed. Omit debug info.!])
+AC_ARG_ENABLE(debugging,       [  --disable-debugging     remove -g from the compiler flags (omit debug information)])
+AC_ARG_ENABLE(BALLVIEW,        [  --disable-BALLVIEW      disable the compilation of BALL, the visualization component])
+AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
+AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
+AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
+AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
+AC_ARG_WITH(opengl,            [  --without-OpenGL        use MESA instead of OpenGL])
+
+dnl    interpret switches...
+if test "$with_compiler" != "" ; then
+	CXX=$with_compiler
+fi
+
+if test "$with_cxxflags" != "" ; then
+	CPPFLAGS=$with_cxxflags
+fi
+
+if test "$enable_optimization" = "yes" ; then
+	DEBUG=false
+else
+	DEBUG=true
+fi
+
+if test "$enable_debugging" != "no" ; then
+	DEBUG_INFO=false
+else
+	DEBUG_INFO=true
+fi
+
+if test "$with_qt_incl" != "" ; then
+	QT_INCLUDES=$with_qt_incl
+fi
+if test "$with_qt_libs" != "" ; then
+	QT_LIBS=$with_qt_libs
+fi
+
+if test "$with_opengl_incl" != "" ; then
+	OPENGL_INCLUDES=$with_opengl_incl
+fi
+if test "$with_qt_libs" != "" ; then
+	OPENGL_LIBS=$with_opengl_libs
+fi
+
+if test "$with_opengl" != "no" ; then	
+	BALLVIEW_PLATFORM=OpenGL
+else
+ 	BALLVIEW_PLATFORM=Mesa
+fi
+
+if test "$with_BALLVIEW" != "no" ; then
+	USE_BALLVIEW=false
+fi
 
 dnl
 dnl 	global definitions
@@ -706,7 +766,8 @@ if test "${HAS_GPLUSPLUS}" = "true" ; then
 	if test "${ARCHITECTURE}" = "alpha" ; then
 		CPPFLAGS="${CPPFLAGS} -Wa,-m21164a"
 	fi
-	CPPFLAGS_D="${CPPFLAGS_D} -g -Wall"
+	CPPFLAGS_D="${CPPFLAGS_D} -Wall"
+	CPPFLAGS_DI="${CPPFLAGS_DI} -g"
 	CPPFLAGS_O="${CPPFLAGS_O} -O2"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 	CPPFLAGS="${CPPFLAGS} -fPIC"
@@ -764,7 +825,8 @@ else
 		
 		dnl		avoid high level optimization to
 		dnl		get debuggable code...
-		CPPFLAGS_D="${CPPFLAGS_D} -g +K0"
+		CPPFLAGS_D="${CPPFLAGS_D} +K0"
+		CPPFLAGS_DI="${CPPFLAGS_DI} -g"
 	else
 		if test "${OS}" = IRIX ; then
 			dnl  set the name for the template repository
@@ -794,7 +856,8 @@ else
 				BALL_TYPENAME=""
 				PRELINK="/usr/lib/DCC/edg_prelink"
 				CPPFLAGS="$CPPFLAGS -32 +w"
-				CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn"
+				CPPFLAGS_D="${CPPFLAGS_D} -fullwarn"
+				CPPFLAGS_DI="${CPPFLAGS_DI} -g"
 				CPPFLAGS_O="${CPPFLAGS_O} -O2 -Olimit=40000"
 				LDFLAGS="$LDFLAGS -32"
 				AC_DEFINE(IRIX32,)
@@ -846,7 +909,8 @@ else
 					CPPFLAGS="$CPPFLAGS -64 -LANG:std"
 					DYNAROPTS="-64 ${DYNAROPTS}"
 					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 6"
-					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn -multigot -G 6-DEBUG:woff=1375,3201,1424,1110,1209"
+					CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
+					CPPFLAGS_DI="${CPPFLAGS_DI} -g"
 					LDFLAGS="$LDFLAGS -64 -LANG:std"
 					AC_DEFINE(IRIX64,)
 					ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
@@ -856,7 +920,8 @@ else
 					CPPFLAGS="$CPPFLAGS -n32 -LANG:std"
 					DYNAROPTS="-n32 ${DYNAROPTS}"
 					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 6"
-					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
+					CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
+					CPPFLAGS_DI="${CPPFLAGS_DI} -g"
 					LDFLAGS="$LDFLAGS -n32 -LANG:std"
 					AC_DEFINE(IRIX32,)
 					ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
@@ -871,7 +936,8 @@ else
 		dnl  old SunOS 4.x - only for completeness
 		dnl
 		if test $OS = SunOS ; then
-			CPPFLAGS_D="$CPPFLAGS_D} -g"
+			CPPFLAGS_D="$CPPFLAGS_D}"
+			CPPFLAGS_DI="$CPPFLAGS_DI} -g"
 			CPPFLAGS_O="${CPPFLAGS_O} -O2"
 			AC_DEFINE(SPARC,)
 			AC_DEFINE(SUNOS,)
@@ -916,7 +982,8 @@ else
 			AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
 			CPPFLAGS="${CPPFLAGS} -pto -w -PIC"
 			CPPFLAGS_O="${CPPFLAGS_O} -xO3 -xtarget=native"
-			CPPFLAGS_D="${CPPFLAGS_D} -g"
+			CPPFLAGS_D="${CPPFLAGS_D}"
+			CPPFLAGS_DI="${CPPFLAGS_DI} -g"
 		fi
 	fi
 fi
@@ -931,11 +998,17 @@ if test "$DEBUG" != "" ; then
 	dnl   inline functions by defining BALL_NO_INLINE_FUNCTIONS
 	dnl   (see COMMON/debug.h)
 	if test "$DEBUG" = true ; then	
+		dnl  if debug information is also required, add the corresponding flag
+		dnl
+		if test "$DEBUG_INFO" = true -a "$CPP_FLAGS_DI" != "" ; then
+			CPP_FLAGS_D="${CPP_FLAGS_D} ${CPP_FLAGS_DI}
+		fi
 		AC_DEFINE(BALL_DEBUG,)
 		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
 		AC_MSG_RESULT(enabled)
 		CPP_MODE_FLAGS="${CPPFLAGS_D}"
 		CPP_MODE_FLAGS_NO_OPTIMIZATION="${CPPFLAGS_D}"
+		if test "$DEBUG_INFO" = true ; then
 	else
 		AC_MSG_RESULT(disabled)
 		CPP_MODE_FLAGS="${CPPFLAGS_O}"

@@ -1,78 +1,10 @@
-###############
-###  $Id: configure.header,v 1.3 1999/12/30 18:05:52 oliver Exp $
-###############
-###############
-###
-###   change these settings to define special paths to libraries, headers od compilers
-###   remember not to insert blanks before or after the '='!
+#  $Id: configure.header,v 1.4 2000/01/03 18:58:16 oliver Exp $
 
-#    change this variable to use a certain C++ compiler
-#CXX=
-
-#    and this flag to add compiler specific flags
-#CXXFLAGS=
-
-#   Use this flag to enable debug mode:
-#DEBUG=true
-
-#   if you do not want to include BALLView,
-#   set USE_BALLVIEW to false
-#USE_BALLVIEW=true
-
-#   all variables *_INCLUDES should be set to the path of
-#   include directory. E.g. your OpenGL include file GL/gl.h
-#   resides in /usr/include/GL/gl.h you need to specifiy 
-#   /usr/include
-#   TAKE CARE!! Do not enter a blank or tab in front of
-#   your paths. sh won't accept this!
-#   The declaration 
-#       OPENGL_LIBS=/usr/lib 
-#   is correct, whereas 
-#       OPENGL_LIBS= /usr/lib
-#   will not work and causes an error message.
-
-#    headers and libs for OpenGL
-#OPENGL_INCLUDES=
-#OPENGL_LIBS=
-
-#    ...same for MESA
-#MESA_INCLUDES=
-#MESA_LIBS=
-
-#    ...and for QT (see also BALL/contrib/qt!)
-#QT_INCLUDES=
-#QT_LIBS=
-
-#   if you do not want to be asked by configure
-#   which BALLView platform to use, put it here
-#   Possible values are Mesa or OpenGL
-#BALLVIEW_PLATFORM=
-
-
-#   This applies to 64 bit SGI machines only.
-#   You may select on from the following formats:
-#      32 : old 32 bit format
-#      N32: new 32 bit format
-#      64 : 64 bit format (default)
-#IRIX_BINFMT=
-
-#		multi-platform build
-#   (for advanced users only!)
-#   Using this option, it is possible to keep objects for
-#   the library for all platforms in parallel.
-#   WIth the aid of the script config/shadowsource.sh
-#   shadow directories are build for the source tree 
-#   (directories containing only links to the sources in
-#   the main source tree). The top-level Makefile
-#   will be modified to redirect all commands to the
-#   shadow directory correpsonding to the current binary 
-#   format. The binary format may be queried using the
-#   command config/binfmt.sh
-#MULTI_BUILD=true
 
 ##################################################
 ##  PLEASE DO NOT CHANGE ANYTHING BELOW IF YOU  ##
 ##  ARE NOT COMPLETELY SURE WHAT YOU ARE DOING  ##
+##  INSTEAD, RERUN CONFIGURE WITH --help        ##
 ##################################################
 
 
