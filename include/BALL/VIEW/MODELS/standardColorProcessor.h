@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.3 2003/08/29 10:36:42 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.4 2003/10/15 14:24:38 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -42,12 +42,30 @@ namespace BALL
 			*/
 			ElementColorProcessor()
 				throw();
+
+			///
+			virtual Processor::Result operator() (const Composite* composite);
+
 			//@}
 		};
 
 
-		/** ResidueNameColorProcessor class.
-				ResidueNameColorProcessor is derived from the class ColorProcessor.
+		/// 
+		class ResidueNumberColorProcessor
+			: public ColorProcessor
+		{
+			public:
+
+				///
+				ResidueNumberColorProcessor()
+					throw();
+
+				///
+				virtual Processor::Result operator() (const Composite* composite);
+		};
+
+
+		/** ResidueNameColorProcessor is derived from the class ColorProcessor.
 				It is used for calculating residue colors of a given Atom object 
 				(A residue color of a given atom is the color of the residue the atom is contained in).
 				In the constructor a ColorMap is initialized that contains all colors
@@ -75,32 +93,20 @@ namespace BALL
 			*/ 
 			//@{
 
-			/** Calculate a key (the residue name) to the given Atom.
-					This method is overridden to calculate a string key of the Atom object.
-					In this implementation the key of the atom is the name of the Residue the
-					Atom object is contained in.
-					This calculated key will be used to access the ColorMap to get a
-					ColorRGBA for the given Atom object.
-					\param  atom the Atom object for which a string key should be calculated
-					\return String& a constant reference to a string key
-			*/
-			virtual const String& calculateKey(const Atom& atom) const
-				throw();
+			///
+			virtual Processor::Result operator() (const Composite* composite);
 			//@}
 		};
 
 			
 		/** AtomChargeColorProcessor class.
 				The class AtomChargeColorProcessor is derived from the class ColorProcessor.
-				It is used for calculating charge colors of a given Atom object 
 				There can be set three colors for the charge boundaries. A color for a negative charge 
 				(charge = -1), a color for the neutral charge (charge = 0)
 				and a color for the positive charge (charge = +1).
-				If a charge of an Atom object lies between these boundaries the resulting
-				color will be interpolated according to the charge. If a charge of an Atom object
+				If a charge lies between these boundaries the resulting
+				color will be interpolated according to the charge. If a charge 
 				is greater than +1 or lower than -1 it will be set to +1 or -1.
-				The ColorProcessor can be set in the class DisplayProperties
-				to color an entire object in its atom charge colors. 
 				\ingroup  ViewModels
 		*/
 		class AtomChargeColorProcessor
@@ -108,7 +114,7 @@ namespace BALL
 		{
 			public:
 			
-			/**	@name	Constructors and Destructor
+			/**	@name	Constructors 
 			*/	
 			//@{
 
@@ -124,43 +130,6 @@ namespace BALL
 			/** Copy constructor.
 			*/
  			AtomChargeColorProcessor(const AtomChargeColorProcessor& color_Processor)
-				throw();
-
-			/** Destructor.
-			*/
-			virtual ~AtomChargeColorProcessor()
-				throw();
-
-			/** Explicit default initialization.
-					Initialize the colors to:
-					  - positive color set to blue ("0000FFFF")
-					  - neutral color set to white ("FFFFFFFF")
-					  - negative color set to red ("FF0000FF")
-			*/
-			virtual void clear()
-				throw();
-
-			//@} 
-			/**	@name	Assignment 
-			*/ 
-			//@{
-
-			/** Assignment.
-					The colors are initialized from the given processor.
-			*/
-			void set(const AtomChargeColorProcessor& color_Processor)
-				throw();
-
-			/** Assignment operator.
-					Calls set().
-					\return      AtomDistanceColorProcessor& constant reference of this instance 
-			*/
-			const AtomChargeColorProcessor& operator = (const AtomChargeColorProcessor& color_Processor)
-				throw();
-
-			/** Swapping of AtomChargeColorProcessor including colors.
-			*/
-			void swap(AtomChargeColorProcessor& color_Processor)
 				throw();
 
 			//@} 
@@ -211,23 +180,14 @@ namespace BALL
 			const ColorRGBA& getNegativeColor() const
 				throw();
 
-			/** Visit method.
-					Calculate the charge color of the given Atom by interpolating
-					the positive, neutral and negative color according to the charge.
-					Access the calculated color with the method ColorProcessor::getColor().
-					\param  atom the Atom object whose charge color should be calculated
-					\see    setPositiveColor
-					\see    setNeutralColor
-					\see    setNegativeColor
-			*/
-			virtual void visit(Atom& atom);
+			///
+			virtual Processor::Result operator() (const Composite* composite);
+
 			//@}
 
 			private:
 
-			ColorRGBA		positive_color_;
-			ColorRGBA		neutral_color_;
-			ColorRGBA		negative_color_;
+			ColorRGBA		positive_color_, neutral_color_, negative_color_;
 		};
 
 
@@ -247,7 +207,7 @@ namespace BALL
 		{
 			public:
 			
-			/**	@name	Constructors and Destructor
+			/**	@name	Constructors 
 			*/	
 			//@{
 
@@ -265,45 +225,6 @@ namespace BALL
 					Construct with copying the colors and the distance.
 			*/
  			AtomDistanceColorProcessor(const AtomDistanceColorProcessor& color_Processor)
-				throw();
-
-			/** Destructor.
-			*/
-      virtual ~AtomDistanceColorProcessor()
-				throw();
-
-			/** Explicit default initialization.
-					Reset the AtomDistanceColorProcessor to:
-					  - distance set to 10
-					  - null distance color set to red ("FF0000FF"). 
-					  - max distance color set to blue ("00FF00FF"). 
-					\see  ColorRGBA
-			*/
-			virtual void clear()
-				throw();
-
-			//@} 
-			/**	@name	Assignment 
-			*/ 
-			//@{
-
-			/** Assignment.
-					The colors and the distance of this instance are
-					initialized to the colors and distance of the given processor.
-			*/
-			void set(const AtomDistanceColorProcessor& color_Processor)
-				throw();
-
-			/** Assignment operator.
-					Calls set().
-			*/
-			const AtomDistanceColorProcessor& operator = (const AtomDistanceColorProcessor& color_Processor)
-				throw();
-
-			/** Swapping of AtomDistanceColorProcessor.
-					Calls ColorRGBA::swap.
-			*/
-			void swap(AtomDistanceColorProcessor& color_Processor)
 				throw();
 
 			//@} 
@@ -388,20 +309,8 @@ namespace BALL
 			//@{
 
 			/**	Operator ().
-					Insert the Atom with the max distance as specified by the method
-					setDistance() into this processor.
-					\param  atom the Atom to be inserted 
-					\return Processor::Result the result
 			*/
-			virtual Processor::Result operator() (Atom& atom);
-
-			/**	Operator ().
-					Calls the previously declared method operator() if the Composite is of kind Atom.
-					This method is provided for convenience.
-					\param  composite the Composite to be inserted into this processor
-					\return Processor::Result the result 
-			*/
-			virtual Processor::Result operator() (Composite& composite);
+			virtual Processor::Result operator() (const Composite* composite);
 
 			//@}
 
@@ -418,12 +327,9 @@ namespace BALL
 		};
 
 
-		/** CustomColorProcessor class.
-				CustomColorProcessor is in reality only the class ColorProcessor because
-				for every given object only the default color will be returned by the method
+		/** CustomColorProcessor is just a typedef of the class ColorProcessor.
+				For every given object only the default color will be returned by the method
 				ColorProcessor::getColor. 
-				The ColorProcessor can be set in the class DisplayProperties to color 
-				an entire object in one color.
 				\ingroup  ViewModels
 		*/
 		typedef ColorProcessor CustomColorProcessor;
@@ -432,7 +338,6 @@ namespace BALL
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>
 #	endif
 
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
