@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.20 2001/12/30 13:28:47 sturm Exp $
+// $Id: amber.C,v 1.21 2002/02/14 16:47:56 anker Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -28,7 +28,7 @@ namespace BALL
 	const char* AmberFF::Option::ASSIGN_TYPES = "assign_types"; 
 	const char* AmberFF::Option::OVERWRITE_CHARGES = "overwrite_non-zero_charges"; 
 	const char* AmberFF::Option::OVERWRITE_TYPENAMES = "overwrite_non-empty_typenames"; 
- 
+
 	const char* AmberFF::Default::FILENAME = "Amber/amber96.ini";
 	const float AmberFF::Default::NONBONDED_CUTOFF = 20.0;
 	const float AmberFF::Default::VDW_CUTOFF = 15.0;
@@ -37,13 +37,13 @@ namespace BALL
 	const float AmberFF::Default::ELECTROSTATIC_CUTON = 13.0;
 	const float AmberFF::Default::SCALING_ELECTROSTATIC_1_4 = 2.0;
 	const float AmberFF::Default::SCALING_VDW_1_4 = 2.0;
-  const bool  AmberFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = false;   
+	const bool  AmberFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = false;   
 	const bool	AmberFF::Default::ASSIGN_CHARGES = true;
 	const bool	AmberFF::Default::ASSIGN_TYPENAMES = true;
 	const bool	AmberFF::Default::ASSIGN_TYPES = true;
 	const bool	AmberFF::Default::OVERWRITE_CHARGES = true;
 	const bool	AmberFF::Default::OVERWRITE_TYPENAMES = false;
- 
+
 	// Default constructor
 	AmberFF::AmberFF() 
 		: ForceField(),
@@ -273,7 +273,7 @@ namespace BALL
 		} 
 		else 
 		{
-			return 0;
+			return 0.0;
 		}
 	}
 
