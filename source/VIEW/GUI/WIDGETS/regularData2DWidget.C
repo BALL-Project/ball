@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.9 2000/12/04 21:10:18 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.10 2000/12/04 21:15:20 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -154,7 +154,7 @@ void RegularData2DWidget::onNotify(Message *message)
   reactToMessages_(message);
 }
 
-bool RegularData2DWidget::isVisibleAs(double x, double y, pair<Position, Position> res)
+bool RegularData2DWidget::isVisibleAs(double x, double y, pair<Position, Position>& res)
 {
   // we need the information stored in xvis & yvis, step_x_ & step_y_
   if ((x > xvis_low_) && (x < xvis_high_) && (y > yvis_low_) && (y < yvis_high_))
