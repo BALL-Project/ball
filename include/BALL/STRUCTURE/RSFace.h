@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSFace.h,v 1.22 2002/02/27 12:19:42 sturm Exp $
+// $Id: RSFace.h,v 1.23 2002/06/19 12:34:37 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -49,18 +49,33 @@ namespace BALL
 	template <typename T>
 	class TTriangulatedSES;
 
+	template <typename T>
+	class TSolventAccessibleSurface;
+
+	template <typename T>
+	class TSASEdge;
+
+	template <typename T>
+	class TSASFace;
+
+	template <typename T>
+	class TSASVertex;
+
+	template <typename T>
+	class TTriangulatedSAS;
+
 	/** Generic RSFace Class.	
 			{\bf Definition:} \URL{BALL/STRUCTURE/RSFace.h} 
 	*/
 	template <class T>
-	class TRSFace	:	public GraphFace< TRSVertex<T>,TRSEdge<T> >
+	class TRSFace	:	public GraphTriangle< TRSVertex<T>,TRSEdge<T> >
 	{
 		public:
 
 		/** @name Class friends
 				\begin{itemize}
 					\item class GraphEdge< TRSVertex<T>,TRSFace<T> >
-					\item class GraphFace< TRSVertex<T>,TRSEdge<T> >
+					\item class GraphTriangle< TRSVertex<T>,TRSEdge<T> >
 					\item class GraphVertex< TRSEdge<T>,TRSFace<T> >
 					\item class TReducedSurface<T>
 					\item class TRSEdge<T>
@@ -70,10 +85,15 @@ namespace BALL
 					\item class TSESEdge<T>
 					\item class TSESVertex<T>
 					\item class TTriangulatedSES<T>
+					\itme class TSolventAccessibleSurface<T>;
+					\item class TSASFace<T>
+					\item class TSASEdge<T>
+					\item class TSASVertex<T>
+					\item class TTriangulatedSAS<T>
 				\end{itemize}
 		*/
 		friend class GraphEdge< TRSVertex<T>,TRSFace<T> >;
-		friend class GraphFace< TRSVertex<T>,TRSEdge<T> >;
+		friend class GraphTriangle< TRSVertex<T>,TRSEdge<T> >;
 		friend class GraphVertex< TRSEdge<T>,TRSFace<T> >;
 		friend class TReducedSurface<T>;
 		friend class TRSEdge<T>;
@@ -83,6 +103,11 @@ namespace BALL
 		friend class TSESEdge<T>;
 		friend class TSESVertex<T>;
 		friend class TTriangulatedSES<T>;
+		friend class TSolventAccessibleSurface<T>;
+		friend class TSASFace<T>;
+		friend class TSASEdge<T>;
+		friend class TSASVertex<T>;
+		friend class TTriangulatedSAS<T>;
 
 		BALL_CREATE(TRSFace)
 
@@ -345,26 +370,18 @@ namespace BALL
 	template <typename T>
 	TRSFace<T>::TRSFace()
 		throw()
-		: GraphFace< TRSVertex<T>,TRSEdge<T> >(),
+		: GraphTriangle< TRSVertex<T>,TRSEdge<T> >(),
 			center_(),
 			normal_(),
 			singular_(false)
 	{
-		vertex_.push_back(NULL);
-		vertex_.push_back(NULL);
-		vertex_.push_back(NULL);
-		number_of_vertices_ = 3;
-		edge_.push_back(NULL);
-		edge_.push_back(NULL);
-		edge_.push_back(NULL);
-		number_of_edges_ = 3;
 	}
 
 
 	template <typename T>
 	TRSFace<T>::TRSFace(const TRSFace<T>& rsface, bool deep)
 		throw()
-		:	GraphFace< TRSVertex<T>,TRSEdge<T> >(rsface,deep),
+		:	GraphTriangle< TRSVertex<T>,TRSEdge<T> >(rsface,deep),
 			center_(rsface.center_),
 			normal_(rsface.normal_),
 			singular_(rsface.singular_)
@@ -384,20 +401,11 @@ namespace BALL
 			bool singular,
 			Index index)
 		throw(Exception::DivisionByZero)
-		:	GraphFace< TRSVertex<T>,TRSEdge<T> >(),
+		:	GraphTriangle< TRSVertex<T>,TRSEdge<T> >(vertex1,vertex2,vertex3,edge1,edge2,edge3,index),
 			center_(center),
 			normal_(normal),
 			singular_(singular)
 	{
-		vertex_.push_back(vertex1);
-		vertex_.push_back(vertex2);
-		vertex_.push_back(vertex3);
-		number_of_vertices_ = 3;
-		edge_.push_back(edge1);
-		edge_.push_back(edge2);
-		edge_.push_back(edge3);
-		number_of_edges_ = 3;
-		index_ = index;
 		normal_.normalize();
 	}
 
