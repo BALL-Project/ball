@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.24 2001/05/10 19:36:11 amoll Exp $
+// $Id: INIFile.C,v 1.25 2001/05/17 00:41:33 oliver Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -320,7 +320,7 @@ namespace BALL
 				Log.error() << "In INIFile " << filename_ << " , error while appending line: "
 										<< line << " . Key '" << key << "' already exists in section." << endl;   
 				return false;
-			}
+ 			}
 			
 			section.lines_.push_back(line);
 			List<String >::Iterator	line_it(section.lines_.end());
@@ -352,7 +352,10 @@ namespace BALL
 	Size INIFile::getNumberOfSections() const 
 	{
 		// HEADER is not counted
-		return sections_.size() -1;
+		// BAUSTELLE: wo wird sichergestellt, dass sections_ mindestens
+		// 1 ist? Ansonsten gibt es einen Unterlauf und der Rueckgabewert
+		// wird sehr gross positiv!
+		return (Size)sections_.size() - 1;
 	}
 
 	bool INIFile::hasSection(const String& section_name) const
@@ -415,7 +418,7 @@ namespace BALL
 			return INVALID_SIZE;
 		}
 
-		return section_index_[section_name]->lines_.size();
+		return (Size)section_index_[section_name]->lines_.size();
 	}
 
 	bool INIFile::hasEntry(const String& section_name, const String& key) const
