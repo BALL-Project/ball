@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.15 2001/12/30 13:28:54 sturm Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.16 2002/01/15 02:00:55 oliver Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -126,7 +126,7 @@ namespace BALL
 		}
 
 		// now build the interval we want to integrate
-		Size number_of_intervals = poly.getIntervals().size();
+		Size number_of_intervals = (Size)poly.getIntervals().size();
 		interval = poly.getInterval(number_of_intervals - 1);
 
 		// the last interval has to be defined to infinity

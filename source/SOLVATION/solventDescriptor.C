@@ -1,4 +1,4 @@
-// $Id: solventDescriptor.C,v 1.7 2001/12/30 13:28:55 sturm Exp $
+// $Id: solventDescriptor.C,v 1.8 2002/01/15 02:00:55 oliver Exp $
 
 #include <BALL/SOLVATION/solventDescriptor.h>
 
@@ -115,7 +115,7 @@ namespace BALL
 	{
 		if (index >= solvent_atoms_.size())
 		{
-			throw(Exception::IndexOverflow(__FILE__, __LINE__, index, solvent_atoms_.size()));
+			throw(Exception::IndexOverflow(__FILE__, __LINE__, index, (Size)solvent_atoms_.size()));
 		}
 		
 		return solvent_atoms_[index];
@@ -126,7 +126,7 @@ namespace BALL
 	{
 		if (index >= solvent_atoms_.size())
 		{
-			throw(Exception::IndexOverflow(__FILE__, __LINE__, index, solvent_atoms_.size()));
+			throw(Exception::IndexOverflow(__FILE__, __LINE__, index, (Size)solvent_atoms_.size()));
 		}
 		
 		return solvent_atoms_[index];

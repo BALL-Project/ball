@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.17 2002/01/15 00:43:39 oliver Exp $
+// $Id: enumerator.h,v 1.18 2002/01/15 02:00:46 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -149,10 +149,10 @@ namespace BALL
 		Index i;
 		Size multiplier = 1;
 		typename std::list<std::pair<VariantIterator, std::vector<Variant> > >::const_iterator list_it = variant_list.begin();
-		for (i = size() - 1; i >= 0; i--, list_it++)
+		for (i = (Size)(size() - 1); i >= 0; i--, list_it++)
 		{
 			operator[](i) = 0;
-			modulus_[i] = list_it->second.size();
+			modulus_[i] = (Size)list_it->second.size();
 
 			base_multipliers_[i] = multiplier;
 			multiplier *= modulus_[i];
@@ -305,7 +305,7 @@ namespace BALL
 			throw()
 		{
 			typename SiteList::iterator var_it;
-			var_it = find(variant_sites_.begin(), variant_sites_.end(), Site(it, variants));
+			var_it = std::find(variant_sites_.begin(), variant_sites_.end(), Site(it, variants));
 			if (var_it != variant_sites_.end())
 			{
 				variant_sites_.erase(var_it);
@@ -360,7 +360,7 @@ namespace BALL
 			}
 
 			typename SiteList::iterator it = variant_sites_.begin();
-			Position i = index.size() - 1;
+			Position i((Position)(index.size() - 1));
 			for (; it != variant_sites_.end(); ++it, --i)
 			{
 				mutate_(it->first, it->second[index[i]]);

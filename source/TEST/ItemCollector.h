@@ -41,7 +41,7 @@ class ItemCollector
 	/// get the size of the list
 	Size getSize()
 	{	
-		return list_.size();
+		return (Size)list_.size();
 	}
 	
 	/** Reset the iterator to the first element of the list.

@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.29 2001/06/05 15:41:48 anker Exp $ 
+// $Id: hashSet.h,v 1.30 2002/01/15 02:00:49 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -822,7 +822,7 @@ namespace BALL
 		Position last_bucket = l.getTraits().bucket_;
 		if (l == end())
 		{
-			last_bucket = bucket_.size() - 1;
+			last_bucket = (Position)(bucket_.size() - 1);
 		}
 
 		if (f.getTraits().bucket_ > last_bucket)

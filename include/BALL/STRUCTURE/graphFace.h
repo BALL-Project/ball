@@ -253,14 +253,13 @@ namespace BALL
 		std::vector<Vertex*> vertex_;
 		/*_ The number of edges of the GrpahFace
 		*/
-		Position number_of_edges_;
+		Size number_of_edges_;
 		/*_ The edges of the GraphFace
 		*/
 		std::vector<Edge*> edge_;
 		/* The index of the GraphFace
 		*/
 		Index index_;
-
 	};
 
 
@@ -299,9 +298,9 @@ namespace BALL
 			const std::vector<Edge*>& edges,
 			Index index)
 		throw()
-		: number_of_vertices_(vertices.size()),
+		: number_of_vertices_((Size)vertices.size()),
 			vertex_(vertices),
-			number_of_edges_(edges.size()),
+			number_of_edges_((Size)edges.size()),
 			edge_(edges),
 			index_(index)
 	{

@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.15 2002/01/13 14:00:12 aubertin Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.16 2002/01/15 02:00:55 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -143,7 +143,7 @@ namespace BALL
 		String rdf_filename = options.get(Option::RDF_FILENAME);
 		// the file contacining the solvent description
 		String solvent_filename = options.get(Option::SOLVENT_FILENAME);
-		Size surface_type = options.getInteger(Option::SURFACE_TYPE);
+		Size surface_type = (Size)options.getInteger(Option::SURFACE_TYPE);
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
 
 		// define the solvent

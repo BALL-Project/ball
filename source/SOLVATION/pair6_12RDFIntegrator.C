@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.14 2001/12/30 13:28:54 sturm Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.15 2002/01/15 02:00:55 oliver Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
@@ -119,7 +119,7 @@ namespace BALL
 
 		Index verbosity =
 			(Index)options.getInteger(Pair6_12RDFIntegrator::Option::VERBOSITY);
-		Size method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
+		Size method = (Size)options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
 
 		if (method == METHOD__UNKNOWN)
 		{
@@ -134,7 +134,7 @@ namespace BALL
 		double lower_inf; 
 		
 		// now build the interval we want to integrate
-		Size number_of_intervals = poly.getIntervals().size();
+		Size number_of_intervals = (Size)poly.getIntervals().size();
 		if (number_of_intervals < 1)
 		{ 
 			// ?????: Sollte hier eine Exception geworfen werden?
@@ -231,7 +231,7 @@ namespace BALL
 
 		// int verbosity =
 		//	options.getInteger(Pair6_12RDFIntegrator::Option::VERBOSITY);
-		Size method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
+		Size method = (Size)options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
 
 		if (method == METHOD__UNKNOWN)
 		{

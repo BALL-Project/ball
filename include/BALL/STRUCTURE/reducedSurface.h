@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.29 2002/01/14 22:16:29 strobel Exp $
+// $Id: reducedSurface.h,v 1.30 2002/01/15 02:00:50 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -1056,7 +1056,7 @@ namespace BALL
 		 (const ::std::vector< TSphere3<T> >& spheres,
 			const T& probe_radius)
 		throw()
-		:	number_of_atoms_(spheres.size()),
+		:	number_of_atoms_((Size)spheres.size()),
 			atom_(spheres),
 			probe_radius_(probe_radius),
 			neighbours_(number_of_atoms_),

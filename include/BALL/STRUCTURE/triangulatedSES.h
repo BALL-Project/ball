@@ -1,4 +1,4 @@
-// $Id: triangulatedSES.h,v 1.4 2002/01/14 22:19:34 strobel Exp $
+// $Id: triangulatedSES.h,v 1.5 2002/01/15 02:00:52 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSES_H
 #define BALL_STRUCTURE_TRIANGULATEDSES_H
@@ -1388,7 +1388,7 @@ namespace BALL
 					}
 				}
 				#endif
-		Size border_size = border.size();
+		Size border_size((Size)border.size());
 		if (border_size == 0)
 		{
 			#ifdef print_debug_info
@@ -2466,7 +2466,7 @@ namespace BALL
 			number_of_triangles++;
 		}
 		TAngle<T> phi(psi/number_of_triangles,true);
-		Size number_of_segments = centers.size()-1;
+		Size number_of_segments((Size)(centers.size() - 1));
 		// How much TrianglePoints lie on the face?
 		// Remark: edge3 == NULL iff the face is singular
 		Size number_of_points = ((edge3 != NULL) ? (number_of_segments+1)*(number_of_triangles+1)

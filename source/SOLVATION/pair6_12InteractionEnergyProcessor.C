@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.15 2001/12/31 00:30:54 oliver Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.16 2002/01/15 02:00:55 oliver Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -169,7 +169,7 @@ namespace BALL
 	{
 
 		// how loud will we cry?
-		Index verbosity = options.getInteger(Option::VERBOSITY);
+		Index verbosity = (Index)options.getInteger(Option::VERBOSITY);
 		// this is the flag stating whether the rdf information should be used
 		bool use_rdf = options.getBool(Option::USE_RDF);
 		// the file containing the rdf descriptions
@@ -185,7 +185,7 @@ namespace BALL
 		{
 			solvent_filename = options.get(Option::SOLVENT_FILENAME);
 		}
-		Size surface_type = options.getInteger(Option::SURFACE_TYPE);
+		Size surface_type = (Size)options.getInteger(Option::SURFACE_TYPE);
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
 
 		// define the solvent
@@ -215,14 +215,14 @@ namespace BALL
 			// check whether there is an option set for the integration method
 			rdf_integrator_.options.setInteger
 				(Pair6_12RDFIntegrator::Option::VERBOSITY, verbosity);
-			Size method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
+			Size method = (Size)options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
 			if (method != Pair6_12RDFIntegrator::METHOD__UNKNOWN)
 			{
 				Log.info() << "method: " << method << endl;
 				rdf_integrator_.options.setInteger
 					(Pair6_12RDFIntegrator::Option::METHOD, method);
 				Size samples =
-					options.getInteger(Pair6_12RDFIntegrator::Option::SAMPLES);
+					(Size)options.getInteger(Pair6_12RDFIntegrator::Option::SAMPLES);
 				if (samples != 0)
 				{
 					rdf_integrator_.options.setInteger

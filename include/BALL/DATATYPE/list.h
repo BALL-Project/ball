@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.12 2001/08/16 00:37:00 oliver Exp $
+// $Id: list.h,v 1.13 2002/01/15 02:00:49 oliver Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -142,7 +142,7 @@ namespace BALL
 		*/
 		Size getSize() const throw()
 		{
-			return size();
+			return (Size)size();
 		}
 
 		/** Remove an item from the list. The first item that matches 
