@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.3 2000/06/28 20:22:38 oliver Exp $
+// $Id: BitVector_test.C,v 1.4 2000/07/18 09:53:25 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.3 2000/06/28 20:22:38 oliver Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.4 2000/07/18 09:53:25 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,37 +43,91 @@ CHECK(BitVector::BitVector(Size))
 	TEST_EXCEPTION(Exception::InvalidRange,BitVector bv0((Size)0);)
 RESULT
 
+BitVector bv9(9);
+
 CHECK(BitVector::BitVector(const BitVector&, bool))
-	// BAUSTELLE
+	bv9.setBit(0, true);
+	bv9.setBit(9, true);
+	BitVector bv9_2 = BitVector(bv9);
+	TEST_EQUAL(bv9_2.getSize(), 9)
+	TEST_EQUAL(bv9.getBit(0), true)
+	TEST_EQUAL(bv9.getBit(1), false)
+	TEST_EQUAL(bv9.getBit(9), true)
 RESULT
 
 CHECK(BitVector::BitVector(const char*))
-	// BAUSTELLE
+	char c[9] = {1, 0, 0, 1, 0, 1, 0, 1, 1};
+	BitVector bv9_2 = BitVector(c);
+	TEST_EQUAL(bv9_2.getSize(), 9)
+	TEST_EQUAL(bv9.getBit(0), true)
+	TEST_EQUAL(bv9.getBit(1), false)
+	TEST_EQUAL(bv9.getBit(9), true)
 RESULT
 
 CHECK(BitVector::clear())
-	// BAUSTELLE
+	bv9.setBit(0, true);
+	bv9.setBit(9, true);
+	bv9.clear();
+	TEST_EQUAL(bv9.getBit(0), false)
+	TEST_EQUAL(bv9.getBit(9), false)
 RESULT
 
-
 CHECK(BitVector::set(const BitVector&, bool))
-	// BAUSTELLE
+	BitVector bv9_2;
+	bv9_2.set(bv9);
+	TEST_EQUAL(bv9_2.getSize(), 9)
+	TEST_EQUAL(bv9.getBit(0), true)
+	TEST_EQUAL(bv9.getBit(1), false)
+	TEST_EQUAL(bv9.getBit(9), true)
 RESULT
 
 CHECK(BitVector::set(const char*))
-	// BAUSTELLE
+	char c[9] = {1, 0, 0, 1, 0, 1, 0, 1, 1};
+	BitVector bv9_2;
+	bv9_2.set(c);
+	TEST_EQUAL(bv9_2.getSize(), 9)
+	TEST_EQUAL(bv9.getBit(0), true)
+	TEST_EQUAL(bv9.getBit(1), false)
+	TEST_EQUAL(bv9.getBit(9), true)
 RESULT
 
 CHECK(BitVector::BitVector& operator = (const BitVector&))
-	// BAUSTELLE
+	BitVector bv9_2;
+	bv9_2 = bv9;
+	TEST_EQUAL(bv9_2.getSize(), 9)
+	TEST_EQUAL(bv9.getBit(0), true)
+	TEST_EQUAL(bv9.getBit(1), false)
+	TEST_EQUAL(bv9.getBit(9), true)
 RESULT
 
 CHECK(BitVector::BitVector& operator = (const char*))
-	// BAUSTELLE
+	char c[9] = {1, 0, 0, 1, 0, 1, 0, 1, 1};
+	BitVector bv9_2;
+	bv9_2 = c;
+	TEST_EQUAL(bv9_2.getSize(), 9)
+	TEST_EQUAL(bv9.getBit(0), true)
+	TEST_EQUAL(bv9.getBit(1), false)
+	TEST_EQUAL(bv9.getBit(9), true)
 RESULT
 
 CHECK(BitVector::swap(BitVector&))
-	// BAUSTELLE
+	BitVector bv10(10);
+	bv10.setBit(1, true);
+	bv10.setBit(8, true);
+	bv10.setBit(10, true);
+	bv10.swap(bv9);
+	TEST_EQUAL(bv9.getSize(), 10)
+	TEST_EQUAL(bv9.getBit(0), false)
+	TEST_EQUAL(bv9.getBit(1), true)
+	TEST_EQUAL(bv9.getBit(9), false)
+	TEST_EQUAL(bv9.getBit(10), true)
+
+	TEST_EQUAL(bv10.getBit(0), true)
+	TEST_EQUAL(bv10.getBit(1), false)
+	TEST_EQUAL(bv10.getBit(9), true)
+	TEST_EQUAL(bv10.getSize(), 9)
+
+	bv10.swap(bv9);
 RESULT
 
 CHECK(BitVector::operator () (Index,Index) const)
@@ -97,11 +151,11 @@ CHECK(BitVector::getBitSet() const)
 RESULT
 
 CHECK(BitVector::operator [] (Index))
-	// BAUSTELLE
+	//bv9[0] = true;
 RESULT
 
 CHECK(BitVector::operator [] (Index) const)
-	// BAUSTELLE
+	//TEST_EQUAL(bv9[0], true)
 RESULT
 
 CHECK(BitVector::get(char*, Size, Index, Index) const)
@@ -109,23 +163,37 @@ CHECK(BitVector::get(char*, Size, Index, Index) const)
 RESULT
 
 CHECK(BitVector::setBit(Index, bool))
-	// BAUSTELLE
+	bv9.setBit(0, false);
+	TEST_EQUAL(bv9.getBit(0), false)
+	bv9.setBit(0, true);
+	TEST_EQUAL(bv9.getBit(0), true)
+	bv9.setBit(0, false);
+	TEST_EQUAL(bv9.getBit(0), false)
 RESULT
 
 CHECK(BitVector::getBit(Index) const)
-	// BAUSTELLE
+	TEST_EQUAL(bv9.getBit(0), false)
+	TEST_EQUAL(bv9.getBit(8), false)
+	TEST_EQUAL(bv9.getBit(99), false)
+	TEST_EQUAL(bv9.getSize(), 100)
 RESULT
 
 CHECK(BitVector::getBit(Index))
-	// BAUSTELLE
+	/*Bit b = true;
+	TEST_EQUAL(bv9.getBit(0), b)*/
 RESULT
 
 CHECK(BitVector::toggleBit(Index))
-	// BAUSTELLE
+	bv9.toggleBit(0);
+	TEST_EQUAL(bv9.getBit(0), true)
 RESULT
 
 CHECK(BitVector::fill(bool, Index, Index))
-	// BAUSTELLE
+	bv9.fill(true, 2, 3);
+	TEST_EQUAL(bv9.getBit(1), false)
+	TEST_EQUAL(bv9.getBit(2), true)
+	TEST_EQUAL(bv9.getBit(3), true)
+	TEST_EQUAL(bv9.getBit(4), false)
 RESULT
 
 CHECK(BitVector::toggle(Index, Index))
@@ -217,7 +285,7 @@ CHECK(BitVector::isEveryBit(bool, Index, Index) const)
 RESULT
  
 CHECK(BitVector::isValid() const)
-	// BAUSTELLE
+	TEST_EQUAL(bv9.isValid(), true)
 RESULT
 
 CHECK(BitVector::operator >> (istream&, BitVector&))
