@@ -1,4 +1,4 @@
-// $Id: standardPredicates.h,v 1.5 2000/05/24 10:45:14 anker Exp $
+// $Id: standardPredicates.h,v 1.6 2000/05/24 16:39:42 oliver Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -31,6 +31,23 @@ namespace BALL
 		@see ExpressionPredicate
 	 */
 	//@{
+
+	/** Default predicate.
+			This predicate may be used to implement
+			default rules. It is always {\bf true}.
+	 */
+	class TruePredicate
+		:	public ExpressionPredicate
+		{
+			public:
+				BALL_CREATE_NODEEP(TruePredicate)
+				/** Evaluate the predicate for the atom {\tt atom}
+					@param atom the atom to test
+					@return true - always
+					*/
+				virtual bool operator () (const Atom& atom) const;
+		};
+
 
 	/** Predicate for atom names
 	 */
