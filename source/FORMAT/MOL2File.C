@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.12 2001/08/16 00:32:29 oliver Exp $
+// $Id: MOL2File.C,v 1.13 2001/12/17 11:25:54 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -18,18 +18,20 @@ using namespace std;
 namespace BALL 
 {
 	MOL2File::MOL2File()
+		throw()
+		:	GenericMolFile()
 	{
 	}
 
 	MOL2File::MOL2File(const String& name, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
-		: File(name, open_mode)
+		: GenericMolFile(name, open_mode)
 	{
 	}
 
 	MOL2File::MOL2File(const MOL2File& file)
 		throw(Exception::FileNotFound)
-		: File(file)
+		: GenericMolFile(file)
 	{
 	}
 
@@ -242,6 +244,7 @@ namespace BALL
 
 
 	void MOL2File::read(System& system)
+		throw(Exception::ParseError)
 	{
 		// remove old rubbish from the system
 		system.destroy();
@@ -252,14 +255,14 @@ namespace BALL
 		// remember the line number for error messages
 		number_of_lines_ = 0;
 		
-    while (nextLine_())
+    while (readLine())
     {
-			line_.toUpper();
+			getLine().toUpper();
 			
-			while (line_.hasPrefix(TRIPOS))
+			while (getLine().hasPrefix(TRIPOS))
 			{
 				// we found a "Record Type Identifier" (RTI)
-				String RTI = line_.after(TRIPOS);
+				String RTI = getLine().after(TRIPOS);
 				RTI.trim();
 				
 				
@@ -289,10 +292,10 @@ namespace BALL
 					// we found an unknown MOL2 section: print a warning message and ignore it!
 					Log.warn() << "MOL2File::read: section ignored in line " 
 										 << number_of_lines_ << ": " << RTI << endl;
-					nextLine_();
+					readLine();
 				}
 				
-				line_.toUpper();
+				getLine().toUpper();
 			}
 		}
 
@@ -303,21 +306,20 @@ namespace BALL
 	void MOL2File::readAtomSection_()
 	{
 		Size number_of_fields = 1;
-		while (nextLine_() && (number_of_fields > 0) && !line_.hasPrefix(TRIPOS))
+		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS))
 		{
-			Size number_of_fields = line_.countFields();
+			Size number_of_fields = getLine().countFields();
 			if (number_of_fields > 0)
 			{
 				if (number_of_fields < 6)
 				{
-					Log.error() << "MOL2File::readAtomSection_: too few fields for an atom entry in line " 
-											<< number_of_lines_ << endl;
+					throw(Exception::ParseError(__FILE__, __LINE__, getLine(), String("MOL2File::readAtomSection_: too few fields for an atom entry in line ") + String(getLineNumber())));
 				} 
 				else 
 				{	
 					// split the line into fields
-					String	fields[10];
-					line_.split(fields, 10);
+					String fields[10];
+					getLine().split(fields, 10);
 
 					// create an atom and assign the fields of the line
 					AtomStruct	atom;
@@ -340,10 +342,10 @@ namespace BALL
 	void MOL2File::readBondSection_()
 	{
 		Size number_of_fields = 1;
-		while (nextLine_() && (number_of_fields > 0) && !line_.hasPrefix(TRIPOS))
+		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS))
 		{
-			line_.trim();
-			Size number_of_fields = line_.countFields();
+			getLine().trim();
+			Size number_of_fields = getLine().countFields();
 			if (number_of_fields > 0)
 			{
 				if (number_of_fields < 4)
@@ -355,7 +357,7 @@ namespace BALL
 				{
 					// split the line into fields
 					String	fields[4];
-					line_.split(fields, 4);
+					getLine().split(fields, 4);
 
 					// create an atom and assign the fields of the line
 					BondStruct	bond;
@@ -373,10 +375,10 @@ namespace BALL
 	void MOL2File::readSetSection_()
 	{
 		Size number_of_fields = 1;
-		while (nextLine_() && (number_of_fields > 0) && !line_.hasPrefix(TRIPOS))
+		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS))
 		{
-			line_.trim();
-			Size number_of_fields = line_.countFields();
+			getLine().trim();
+			Size number_of_fields = getLine().countFields();
 			if (number_of_fields > 0)
 			{
 				if (number_of_fields < 3)
@@ -388,7 +390,7 @@ namespace BALL
 				{
 					// split the line into fields
 					String	fields[6];
-					line_.split(fields, 6);
+					getLine().split(fields, 6);
 
 					// create an atom and assign the fields of the line
 					SetStruct	set;
@@ -398,13 +400,13 @@ namespace BALL
 					set.comment = fields[6];
 					if (fields[2] == "static")
 					{
-						nextLine_();
-						line_.trim();
-						Size number_of_fields = line_.countFields();
+						readLine();
+						getLine().trim();
+						Size number_of_fields = getLine().countFields();
 
-						for (Size i = 1; (i <= (Size)line_.getField(0).toInt()) && (i < number_of_fields); i++)
+						for (Size i = 1; (i <= (Size)getLine().getField(0).toInt()) && (i < number_of_fields); i++)
 						{
-							set.members.push_back(line_.getField(i).toInt());
+							set.members.push_back(getLine().getField(i).toInt());
 						}
 
 						// remember this set
@@ -426,37 +428,37 @@ namespace BALL
 	{
 		Size number_of_fields = 1;
 		Size line_number = 0;
-		while (nextLine_() && (number_of_fields > 0) && !line_.hasPrefix(TRIPOS) && (line_number <= 5))
+		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS) && (getLineNumber() <= 5))
 		{
 			// read four lines
 			line_number++;
-			number_of_fields = line_.countFields();
+			number_of_fields = getLine().countFields();
 
 			switch (line_number)
 			{
 				case 1:
 					// read the first line: the molecule name (->BALL system name)
-					molecule_.name = line_.trim();
+					molecule_.name = getLine().trim();
 					break;
 
 				case 2:
 					// read the number of atoms, bonds, and substructures
-					molecule_.number_of_atoms = line_.getField(0).toUnsignedInt();
+					molecule_.number_of_atoms = getLine().getField(0).toUnsignedInt();
 					if (number_of_fields > 1)
 					{
-						molecule_.number_of_bonds = line_.getField(1).toUnsignedInt();
+						molecule_.number_of_bonds = getLine().getField(1).toUnsignedInt();
 					}
 					if (number_of_fields > 2)
 					{
-						molecule_.number_of_substructures = line_.getField(2).toUnsignedInt();
+						molecule_.number_of_substructures = getLine().getField(2).toUnsignedInt();
 					}
 					if (number_of_fields > 3)
 					{
-						molecule_.number_of_features = line_.getField(3).toUnsignedInt();
+						molecule_.number_of_features = getLine().getField(3).toUnsignedInt();
 					}
 					if (number_of_fields > 4)
 					{
-						molecule_.number_of_sets = line_.getField(4).toUnsignedInt();
+						molecule_.number_of_sets = getLine().getField(4).toUnsignedInt();
 					}
 					break;
 
@@ -471,37 +473,37 @@ namespace BALL
 
 	void MOL2File::readSubstructureSection_()
 	{
-		while (nextLine_() && (line_.countFields() > 0) && !line_.hasPrefix(TRIPOS))
+		while (readLine() && (getLine().countFields() > 0) && !getLine().hasPrefix(TRIPOS))
 		{
 			SubstructureStruct sub;
 
-			Size number_of_fields = line_.countFields();
+			Size number_of_fields = getLine().countFields();
 
-			sub.name = line_.getField(1);
-			sub.root_atom = line_.getField(2).toUnsignedInt();
+			sub.name = getLine().getField(1);
+			sub.root_atom = getLine().getField(2).toUnsignedInt();
 			if (number_of_fields > 3)
 			{
-				sub.substructure_type = line_.getField(3);
+				sub.substructure_type = getLine().getField(3);
 			}
 			if (number_of_fields > 4)
 			{
-				sub.dictionary_type = line_.getField(4).toUnsignedInt();
+				sub.dictionary_type = getLine().getField(4).toUnsignedInt();
 			}
 			if (number_of_fields > 5)
 			{
-				sub.chain = line_.getField(5);
+				sub.chain = getLine().getField(5);
 			}
 			if (number_of_fields > 6)
 			{
-				sub.sub_type = line_.getField(6);
+				sub.sub_type = getLine().getField(6);
 			}
 			if (number_of_fields > 7)
 			{
-				sub.inter_bonds = line_.getField(7).toUnsignedInt();
+				sub.inter_bonds = getLine().getField(7).toUnsignedInt();
 			}
 			for (Position i = 8; i < number_of_fields; i++)
 			{
-				sub.comment += line_.getField(i) + " ";
+				sub.comment += getLine().getField(i) + " ";
 			}
 			sub.comment.trimRight();
 					
@@ -705,19 +707,6 @@ namespace BALL
 		}
 	}
 
-	bool MOL2File::nextLine_() 
-	{
-		if (getline(buffer_, MAX_LENGTH_))
-		{
-			line_.set(buffer_);
-			number_of_lines_++;
-			
-			return true;
-		}
-		
-		return false;
-	}
-			
 	String MOL2File::getSybylType_(const Atom& atom) const
 	{
 		// the basename of Sybyl name is always the element

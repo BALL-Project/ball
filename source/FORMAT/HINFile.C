@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.37 2001/09/28 08:38:06 anker Exp $
+// $Id: HINFile.C,v 1.38 2001/12/17 11:25:54 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -25,14 +25,16 @@ namespace BALL
 	};
  
 	HINFile::HINFile()
-		:	box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+		throw()
+		:	GenericMolFile(),
+			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
 			temperature_(0.0)
 	{
 	}
 
 	HINFile::HINFile(const String& name, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
-		: File(name, open_mode),
+		: GenericMolFile(name, open_mode),
 			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
 			temperature_(0.0)
 	{
@@ -40,7 +42,7 @@ namespace BALL
 
 	HINFile::HINFile(const HINFile& file)
 		throw(Exception::FileNotFound)
-		: File(file),
+		: GenericMolFile(file),
 			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
 			temperature_(0.0)
 	{
@@ -344,20 +346,8 @@ namespace BALL
 		}
 	}
 
-	HINFile& HINFile::operator >> (System& system)
-	{
-		read(system);
-		return *this;
-	}
- 
-	HINFile& HINFile::operator << (System& system)
-	{
-		write(system);
-		return *this;
-	}
- 
-
 	void HINFile::read(System& system)
+		throw(Exception::ParseError)
 	{
 		if (!isValid())
 		{
@@ -383,10 +373,6 @@ namespace BALL
 			IN_RESIDUE
 		};
 		
-		// we remember the first error that occured - we only want to 
-		// log the filename once!
-		bool				error = false;
-
 		// count the lines to tell the line number in case of error
 		Size				number_of_lines = 0;
 
@@ -396,13 +382,9 @@ namespace BALL
 		temperature_ = 0.0;
 
 		// define a macro to print an error message for the file (only once!)
-#		define ERROR_HEADER\
-			if (!error) \
-			{\
-				Log.error() << "HINFile::read: Invalid HyperChem file: " << getName() << endl;\
-				error = true;\
-			}\
-			Log.error() << "Line " << number_of_lines << ": "
+#		define ERROR(msg)\
+				throw Exception::ParseError(__FILE__, __LINE__, getLine(), String("while reading line " + String(getLineNumber()) + " of '" + getName() + "': " + (msg)));
+			
 		
 
 		const	Size	MAX_LENGTH = 512;	
@@ -453,9 +435,7 @@ namespace BALL
 					Size number_of_fields = line.countFields();
 					if (number_of_fields < 11) 
 					{
-						ERROR_HEADER << "illegal <atom> line: at least 10 arguments are required for"
-												 << "<atom>!" << endl;
-						continue;
+						ERROR(String("illegal <atom> line: at least 10 arguments are required for <atom>!"))
 					}
 
 					Atom*	atom;
@@ -496,9 +476,7 @@ namespace BALL
 
 					if (PTE[line.getField(3)] == Element::UNKNOWN)
 					{
-						ERROR_HEADER << "unknown element: " 
-												 << line.getField(3) << endl;
-						continue;
+						ERROR(String("unknown element: ") + line.getField(3))
 					}
 					atom->setElement(PTE[line.getField(3)]);
 					// set the atom radius
@@ -519,9 +497,7 @@ namespace BALL
 					}
 					catch (Exception::InvalidFormat)
 					{
-						ERROR_HEADER << "illegal charge " 
-												 << line.getField(6) << endl;
-						continue;
+						ERROR(String("illegal charge ") + line.getField(6))
 					}
 
 					try 
@@ -532,11 +508,7 @@ namespace BALL
 					}
 					catch (Exception::InvalidFormat)
 					{
-						ERROR_HEADER << "illegal position (" 
-												 << line.getField(7) << " / "
-												 << line.getField(8) << " / " 
-												 << line.getField(9) << ")"<< endl;
-						continue;
+						ERROR(String("illegal position (") + line.getField(7) + " / " + line.getField(8) + " / " + line.getField(9) + ")")
 					}
 
 					Size number_of_atom_bonds;
@@ -546,8 +518,7 @@ namespace BALL
 					}
 					catch (Exception::InvalidFormat)
 					{
-						ERROR_HEADER << "illegal number of bonds: " << line.getField(10) << endl;
-						continue;
+						ERROR(String("illegal number of bonds: " + line.getField(10)))
 					}
 
 					Position atom_number;
@@ -557,8 +528,7 @@ namespace BALL
 					}
 					catch (Exception::InvalidFormat)
 					{
-						ERROR_HEADER << "illegal atom number: " << line.getField(1) << endl;
-						continue;
+						ERROR(String("illegal atom number: ") + line.getField(1))
 					}
 
 					// store the atom pointer in the atom_vector - we need it later to create the bonds!
@@ -581,13 +551,11 @@ namespace BALL
 							// write an error message!
 							if (number_of_fields < (11 + 2 * number_of_atom_bonds))
 							{
-								ERROR_HEADER << "too few fields in atom line for " 
-														 << number_of_atom_bonds << " bonds" << endl;
+								ERROR(String("too few fields in atom line for ") + String(number_of_atom_bonds) + " bonds")
 							}
 							else 
 							{
-								ERROR_HEADER << "too many fields in atom line for " 
-														 << number_of_atom_bonds << " bonds" << endl;
+								ERROR(String("too many fields in atom line for ") + String(number_of_atom_bonds) + " bonds")
 							}
 						}
 						else 
@@ -606,9 +574,7 @@ namespace BALL
 								}
 								catch (Exception::InvalidFormat)
 								{
-									ERROR_HEADER << "illegal atom number for bond " 
-															 << i << ": " << line.getField(11 + 2 * (Index)i) << endl;
-									break;
+									ERROR(String("illegal atom number for bond ") + String(i) + ": " + line.getField(11 + 2 * (Index)i))
 								}
 								Bond::Order order = Bond::ORDER__UNKNOWN;
 								String type_field = line.getField(12 + 2 * (Index)i);
@@ -631,7 +597,7 @@ namespace BALL
 				}	
 				else 
 				{
-					ERROR_HEADER << "<atom> tag may appear only inside a <mol> or <res>!" << endl;
+					ERROR(String("<atom> tag may appear only inside a <mol> or <res>!"))
 				}
 				continue;
 			}
@@ -652,11 +618,10 @@ namespace BALL
 				}
 				catch (Exception::InvalidFormat)
 				{
-					ERROR_HEADER << "illegal velocity (" 
-											 << line.getField(2) << " / "
-											 << line.getField(3) << " / " 
-											 << line.getField(4) << ")"<< endl;
-					continue;
+					ERROR(String("illegal velocity (") 
+											 + line.getField(2) + " / "
+											 + line.getField(3) + " / " 
+											 + line.getField(4) + ")")
 				}
 
 					
@@ -668,15 +633,12 @@ namespace BALL
 				}
 				catch (Exception::InvalidFormat)
 				{
-					ERROR_HEADER << "illegal atom number " << line.getField(1) << endl;
-					continue;
+					ERROR(String("illegal atom number ") + line.getField(1))
 				}
 
 				if (atom_number >= atom_vector.size())
 				{
-					ERROR_HEADER << "cannot assign velocity for atom " << atom_number 
-											 << ": atom not defined!" << endl;
-					continue;
+					ERROR(String("cannot assign velocity for atom ") + String(atom_number) + ": atom not defined!")
 				} 
 
 				if (atom_vector[atom_number] != 0)
@@ -685,8 +647,7 @@ namespace BALL
 				} 
 				else 
 				{
-					ERROR_HEADER << "cannot assign velocity for atom " 
-											 << atom_number << ": atom not defined!" << endl;
+					ERROR(String("cannot assign velocity for atom ") + String(atom_number) + ": atom not defined!")
 				}
 					
 				continue;
@@ -698,7 +659,7 @@ namespace BALL
 				// remember where we are.
 				if (state != IN_MOLECULE) 
 				{
-					ERROR_HEADER << "<res> tag must be inside a <mol>/<endmol>" << endl;
+					ERROR(String("<res> tag must be inside a <mol>/<endmol>"))
 				}
 
 				state = IN_RESIDUE;
@@ -773,7 +734,7 @@ namespace BALL
 			{
 				if (state != IN_RESIDUE) 
 				{
-					ERROR_HEADER << "<endres> without <res>!" << endl;
+					ERROR(String("<endres> without <res>!"))
 				}
 				
 				state = IN_MOLECULE;
@@ -789,7 +750,7 @@ namespace BALL
 			{
 				if (state != START) 
 				{
-					ERROR_HEADER << "<mol> inside <mol> or <res> definition!" << endl;
+					ERROR(String("<mol> inside <mol> or <res> definition!"))
 				}
 
 				state = IN_MOLECULE;
@@ -815,7 +776,7 @@ namespace BALL
 			{
 				if (state != IN_MOLECULE)
 				{
-					ERROR_HEADER << "missing <mol> or <endres> tag!" << endl;
+					ERROR(String("missing <mol> or <endres> tag!"))
 				}
 
 				state = START;
@@ -840,9 +801,10 @@ namespace BALL
 							bond_vector[i].atom2 >= atom_vector.size())
 					{
 						// complain if one of the atoms does not exist
-						Log.error() << "HINFile: cannot create bond from atom " << bond_vector[i].atom1 
-												<< " to atom " << bond_vector[i].atom2 << " of molecule " 
-												<< line.getField(1) << " - non-existing atom!" << endl;
+						ERROR(String("HINFile: cannot create bond from atom ") + String(bond_vector[i].atom1)
+									+ " to atom " + String(bond_vector[i].atom2) + " of molecule " 
+									+ line.getField(1) + " - non-existing atom!")
+
 					} 
 					else  
 					{
@@ -868,7 +830,7 @@ namespace BALL
 				}
 				catch (Exception::InvalidFormat)
 				{
-					ERROR_HEADER << "illegal temperature " << line.getField(1) << endl;
+					ERROR(String("illegal temperature ") + line.getField(1))
 				}
 
 				continue;
@@ -890,11 +852,10 @@ namespace BALL
 				}
 				catch (Exception::InvalidFormat)
 				{
-					ERROR_HEADER << "illegal box position (" 
-											 << line.getField(1)  << " / "
-											 << line.getField(2)  << " / "
-											 << line.getField(3)  << " )" << endl;
-					continue;
+					ERROR(String("illegal box position (")
+											 + line.getField(1)  + " / "
+											 + line.getField(2)  + " / "
+											 + line.getField(3)  + " )")
 				}		
 
 				box_.b.x = - box_.a.x;
