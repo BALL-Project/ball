@@ -39,17 +39,16 @@ ColorMeshDialog::~ColorMeshDialog()
 
 void ColorMeshDialog::apply_clicked()
 {
-	String fileName(location_edit->text().latin1());
-
 	if (surface_tab->currentPage() == by_file)
 	{
 		// coloring by file
 		RegularData3D dat;
 		String filename = String(location_edit->text());
 		File infile;
+		
 		try
 		{
-			infile = File(fileName, std::ios::in);
+			infile.open(filename, std::ios::in);
 		}
 		catch(Exception::FileNotFound)
 		{
