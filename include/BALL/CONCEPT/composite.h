@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.35 2002/01/12 12:19:55 oliver Exp $
+// $Id: composite.h,v 1.35.4.1 2002/05/31 22:46:55 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -944,6 +944,7 @@ namespace BALL
 
 			BALL_CREATE_DEEP(AncestorIteratorTraits_)
 
+			BALL_INLINE
 			AncestorIteratorTraits_()
 				throw()
 				:	bound_(0),
@@ -951,6 +952,7 @@ namespace BALL
 			{
 			}
 		
+			BALL_INLINE
 			AncestorIteratorTraits_(const Composite& composite)
 				throw()
 				:	bound_((Composite *)&composite),
@@ -958,6 +960,7 @@ namespace BALL
 			{
 			}
 		
+			BALL_INLINE
 			AncestorIteratorTraits_(const AncestorIteratorTraits_& traits, bool /* deep */ = true)
 				throw()
 				:	bound_(traits.bound_),
@@ -965,6 +968,7 @@ namespace BALL
 			{
 			}
 		
+			BALL_INLINE
 			const AncestorIteratorTraits_& operator = (const AncestorIteratorTraits_& traits)
 				throw()
 			{
@@ -973,102 +977,117 @@ namespace BALL
 				return *this;
 			}
 
+			BALL_INLINE
 			Composite* getContainer()
 				throw()
 			{
 				return bound_;
 			}
 
+			BALL_INLINE
 			const Composite* getContainer() const
 				throw()
 			{
 				return bound_;
 			}
 
+			BALL_INLINE
 			bool isSingular() const
 				throw()
 			{
 				return (bound_ == 0);
 			}
 
+			BALL_INLINE
 			Composite*& getPosition()
 				throw()
 			{
 				return ancestor_;
 			}
 
+			BALL_INLINE
 			Composite* const& getPosition() const
 				throw()
 			{
 				return ancestor_;
 			}
 
+			BALL_INLINE
 			bool operator == (const AncestorIteratorTraits_& traits) const
 				throw()
 			{
 				return (ancestor_ == traits.ancestor_);
 			}
 		
+			BALL_INLINE
 			bool operator != (const AncestorIteratorTraits_& traits) const
 				throw()
 			{
 				return (ancestor_ != traits.ancestor_);
 			}
 		
+			BALL_INLINE
 			bool isValid() const
 				throw()
 			{
 				return (bound_ != 0 && ancestor_ != 0);
 			}
 
+			BALL_INLINE
 			void invalidate()
 				throw()
 			{
 				bound_ 	= ancestor_ = 0; 
 			}
-
+			
+			BALL_INLINE
 			void toBegin()
 				throw()
 			{
 				ancestor_ = bound_->parent_;
 			}
 
+			BALL_INLINE
 			bool isBegin() const
 				throw()
 			{
 				return (ancestor_ == bound_->parent_);
 			}
 
+			BALL_INLINE
 			void toEnd()
 				throw()
 			{
 				ancestor_ = 0;
 			}
 
+			BALL_INLINE
 			bool isEnd() const
 				throw()
 			{
 				return (ancestor_ == 0);
 			}
 
+			BALL_INLINE
 			Composite& getData()
 				throw()
 			{
 				return *ancestor_;
 			}
 
+			BALL_INLINE
 			const Composite& getData() const
 				throw()
 			{
 				return *ancestor_;
 			}
 
+			BALL_INLINE
 			void forward()
 				throw()
 			{
 				ancestor_ = ancestor_->parent_;
 			}
-
 
 			private:
 
