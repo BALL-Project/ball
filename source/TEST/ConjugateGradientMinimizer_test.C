@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.17 2003/05/02 12:37:15 anhi Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.18 2003/05/04 09:56:15 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.17 2003/05/02 12:37:15 anhi Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.18 2003/05/04 09:56:15 oliver Exp $")
 
 using namespace BALL;
 
@@ -301,7 +301,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	bool result = cgm.minimize(600);
+	bool result = cgm.minimize(700);
 
 	TEST_EQUAL(result, true)
 	STATUS("PR/AlaAla -- " << (result ? "" : "not ") << "converged after " 
@@ -476,7 +476,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(2E-3)
+	PRECISION(2E-2)
 	TEST_REAL_EQUAL(energy, 5.906)
 
 	AtomIterator atit;
@@ -489,7 +489,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 		++i;
 	}
 
-	PRECISION(1E-3)
+	PRECISION(3E-2)
 	Angle torsion;
 	torsion = getTorsionAngle(pos[2].x, pos[2].y, pos[2].z, pos[0].x, pos[0].y, pos[0].z, pos[1].x, pos[1].y, pos[1].z, pos[6].x, pos[6].y, pos[6].z);
 	TEST_REAL_EQUAL(torsion.toRadian(), 1.047)
@@ -552,7 +552,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 	float energy = FF.updateEnergy();
 	FF.updateForces();
 	
-	PRECISION(2E-3)
+	PRECISION(2E-2)
 	TEST_REAL_EQUAL(energy, 5.906)
 
 	AtomIterator atit;
@@ -565,7 +565,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 		++i;
 	}
 
-	PRECISION(1E-3)
+	PRECISION(3E-2)
 	Angle torsion;
 	torsion = getTorsionAngle(pos[2].x, pos[2].y, pos[2].z, pos[0].x, pos[0].y, pos[0].z, pos[1].x, pos[1].y, pos[1].z, pos[6].x, pos[6].y, pos[6].z);
 	TEST_REAL_EQUAL(torsion.toRadian(), 1.047)
