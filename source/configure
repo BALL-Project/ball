@@ -1536,8 +1536,8 @@ echo "$as_me: error: source directory already configured; run \"make distclean\"
 fi
 
 # Define the identity of the package.
- PACKAGE=foreign
- VERSION=1.4
+ PACKAGE=ball
+ VERSION=1.0
 
 
 cat >>confdefs.h <<_ACEOF

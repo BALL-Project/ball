@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.18 2002/12/08 16:49:42 oliver Exp $
+dnl    $Id: configure.ac,v 1.1.2.19 2002/12/08 18:06:50 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -6,7 +6,7 @@ dnl
 dnl    some initialization stuff...
 dnl 
 AC_INIT(BALL, 1.0, ball-bugs@bioinf.uni-sb.de)
-AM_INIT_AUTOMAKE(foreign, 1.4)
+AM_INIT_AUTOMAKE([foreign 1.4])
 AM_CONFIG_HEADER([
 	config.h:config/config.h.in
 ])

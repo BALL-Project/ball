@@ -252,7 +252,7 @@ all: $(BUILT_SOURCES)
 .SUFFIXES: .C .y .l .o .obj
 $(srcdir)/Makefile.in:  Makefile.am $(srcdir)/../../../Make.rules.in $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  VIEW/GUI/KERNEL/Makefile
+	  $(AUTOMAKE) --foreign  VIEW/GUI/KERNEL/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)

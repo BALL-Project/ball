@@ -14,7 +14,7 @@
 
 @SET_MAKE@
 
-# $Id: Makefile.in,v 1.1.2.4 2002/12/08 16:50:03 oliver Exp $
+# $Id: Makefile.in,v 1.1.2.5 2002/12/08 18:07:02 oliver Exp $
 #========================
 # BALL/TUTORIAL Makefile
 #========================
@@ -232,7 +232,7 @@ all: all-recursive
 .SUFFIXES: .C .o .obj
 $(srcdir)/Makefile.in:  Makefile.am  $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  TUTORIAL/Makefile
+	  $(AUTOMAKE) --foreign  TUTORIAL/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)

@@ -232,7 +232,7 @@ all: all-recursive
 .SUFFIXES: .C .y .l .o .obj
 $(srcdir)/Makefile.in:  Makefile.am $(srcdir)/../../../Make.rules.in $(top_srcdir)/configure.ac $(ACLOCAL_M4)
 	cd $(top_srcdir) && \
-	  $(AUTOMAKE) --gnu  VIEW/GUI/PRIMITIV/Makefile
+	  $(AUTOMAKE) --foreign  VIEW/GUI/PRIMITIV/Makefile
 Makefile:  $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@ $(am__depfiles_maybe)
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
