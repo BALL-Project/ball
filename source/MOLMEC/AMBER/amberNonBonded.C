@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.3 2002/02/28 01:24:50 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.4 2002/02/28 03:36:03 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -7,8 +7,11 @@
 
 using namespace std;
 
+#define NEW_STYLE
+
 // define a macro for the square function
 #define SQR(x) ((x) * (x))
+
 
 namespace BALL 
 {
@@ -670,9 +673,14 @@ namespace BALL
 		double B;
 	};
 		
-	inline double nonperiodic_inverse_square_distance(const Vector3& a, const Vector3& b)
+	inline double nonperiodicInverseSquareDistance(const Vector3& a, const Vector3& b)
 	{
 		return SQR(a.x - b.x) + SQR(a.y - b.y) + SQR(a.z - b.z);
+	}
+
+	inline double distanceDependentCoulomb(double inverse_square_distance, double charge_product)
+	{
+		return charge_product * inverse_square_distance * sqrt(inverse_square_distance);
 	}
 
 	inline double coulomb(double inverse_square_distance, double charge_product)
@@ -680,40 +688,44 @@ namespace BALL
 		return charge_product * inverse_square_distance;
 	}
 
-	inline double vdw_6_12(double inverse_square_distance, double A, double B)
+	inline double vdwSixTwelve(double inverse_square_distance, double A, double B)
 	{
 		register double inv_dist_6(inverse_square_distance * inverse_square_distance * inverse_square_distance);
 		return (inv_dist_6 * (inv_dist_6 * A - B)); 
 	}
 
-	typedef double (*SquareAtomDistanceFunction) (const Vector3&, const Vector3&);
 	typedef double (*ESEnergyFunction) (double square_dist, double q1_q2);
 	typedef double (*VdWEnergyFunction) (double square_dist, double A, double B);
 
 	
-	template <ESEnergyFunction es_energy_fct, 
-						VdWEnergyFunction vdw_energy_fct, 
-						SquareAtomDistanceFunction distance_fct>
-	inline
-	void AmberNBEnergy(NBStruct* ptr, NBStruct* end_ptr, double& es_energy, double& vdw_energy)
+	template <ESEnergyFunction es_energy_fct, VdWEnergyFunction vdw_energy_fct>
+	void AmberNBEnergy(LennardJones::Data* ptr, LennardJones::Data* end_ptr, double& es_energy, double& vdw_energy)
 	{
 		// iterate over all pairs
 		for (; ptr != end_ptr; ++ptr)
 		{
 			// compute the square distance and correct for periodic boundary if necessary
-			double inverse_square_distance = distance_fct(ptr->atom1->position, ptr->atom2->position);
-			es_energy += es_energy_fct(inverse_square_distance, ptr->charge_product);
-			vdw_energy += vdw_energy_fct(inverse_square_distance, ptr->A, ptr->B);
+			double inverse_square_distance(1.0 / ptr->atom1->position.getSquareDistance(ptr->atom2->position));
+			es_energy += es_energy_fct(inverse_square_distance, ptr->atom1->charge * ptr->atom2->charge);
+			vdw_energy += vdw_energy_fct(inverse_square_distance, ptr->values.A, ptr->values.B);
 		}
 	}
 
-	void tmp()
+	template <ESEnergyFunction es_energy_fct, VdWEnergyFunction vdw_energy_fct>
+	inline 
+	void AmberNBEnergyPeriodic(LennardJones::Data* ptr, LennardJones::Data* end_ptr, double& es_energy, double& vdw_energy, const Vector3& period)
 	{
-		NBStruct field[10];
+		// iterate over all pairs
+		for (; ptr != end_ptr; ++ptr)
+		{
+			Vector3 difference(ptr->atom1->position - ptr->atom2->position);
+			AMBERcalculateMinimumImage(difference, period);
 
-		double es_energy;
-		double vdw_energy;
-		AmberNBEnergy<coulomb, vdw_6_12, nonperiodic_inverse_square_distance>(&field[0], &field[10], es_energy, vdw_energy);
+			// compute the square distance and correct for periodic boundary if necessary
+			double inverse_square_distance(1.0 / difference.getSquareLength());
+			es_energy += es_energy_fct(inverse_square_distance, ptr->atom1->charge * ptr->atom2->charge);
+			vdw_energy += vdw_energy_fct(inverse_square_distance, ptr->values.A, ptr->values.B);
+		}
 	}
 
 	// This  function AMBERcalculates the force vector
@@ -953,23 +965,30 @@ namespace BALL
 			Box3 box = force_field_->periodic_boundary.getBox();
 			period = box.b - box.a;
 
-			// first evaluate 1-4 non-bonded pairs 
-			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
-			{
-				AMBERcalculateNBEnergy		
-					(*it, ENERGY_PARAMETERS, 
-					 vdw_energy_1_4, electrostatic_energy_1_4, 
-					 false, true, true);
-			}
+			#ifdef NEW_STYLE
+				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve>
+					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, period);
+				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve>
+					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy, period);
+			#else
+				// first evaluate 1-4 non-bonded pairs 
+				for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
+				{
+					AMBERcalculateNBEnergy		
+						(*it, ENERGY_PARAMETERS, 
+						 vdw_energy_1_4, electrostatic_energy_1_4, 
+						 false, true, true);
+				}
 
-			// evaluate remaining non-bonded pairs (also in the same vector) 
-			for (i = 0; it != non_bonded_.end(); ++it, i++)  
-			{                                                                                            
-				AMBERcalculateNBEnergy
-					(*it, ENERGY_PARAMETERS, 
-					 vdw_energy, electrostatic_energy, 
-					 (bool)is_hydrogen_bond_[i], true, true);
-			}
+				// evaluate remaining non-bonded pairs (also in the same vector) 
+				for (i = 0; it != non_bonded_.end(); ++it, i++)  
+				{                                                                                            
+					AMBERcalculateNBEnergy
+						(*it, ENERGY_PARAMETERS, 
+						 vdw_energy, electrostatic_energy, 
+						 (bool)is_hydrogen_bond_[i], true, true);
+				}
+			#endif
 		}
 		else	
 		{
@@ -980,23 +999,30 @@ namespace BALL
 				Box3 box = force_field_->periodic_boundary.getBox();
 				period = box.b - box.a;
 
-				// first evaluate 1-4 non-bonded pairs 
-				for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
-				{
-					AMBERcalculateNBEnergy
-						(*it, ENERGY_PARAMETERS,
-						 vdw_energy_1_4, electrostatic_energy_1_4, 
-						 false, true, false);
-				}                                                                                    
+				#ifdef NEW_STYLE
+					AmberNBEnergyPeriodic<coulomb, vdwSixTwelve>
+						(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, period);
+					AmberNBEnergyPeriodic<coulomb, vdwSixTwelve>
+						(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy, period);
+				#else
+					// first evaluate 1-4 non-bonded pairs 
+					for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
+					{
+						AMBERcalculateNBEnergy
+							(*it, ENERGY_PARAMETERS,
+							 vdw_energy_1_4, electrostatic_energy_1_4, 
+							 false, true, false);
+					}                                                                                    
 
-				// evaluate remaining non-bonded pairs (also in the same vector) 
-				for (i = 0; it != non_bonded_.end(); ++it, i++)  
-				{                                                                                    
-					AMBERcalculateNBEnergy
-						(*it, ENERGY_PARAMETERS,
-						 vdw_energy, electrostatic_energy, 
-						 (bool)is_hydrogen_bond_[i], true, false);            
-				}
+					// evaluate remaining non-bonded pairs (also in the same vector) 
+					for (i = 0; it != non_bonded_.end(); ++it, i++)  
+					{                                                                                    
+						AMBERcalculateNBEnergy
+							(*it, ENERGY_PARAMETERS,
+							 vdw_energy, electrostatic_energy, 
+							 (bool)is_hydrogen_bond_[i], true, false);            
+					}
+				#endif
 			}
 			else
 			{
@@ -1006,46 +1032,61 @@ namespace BALL
 					// dielectric  
 
 					// first evaluate 1-4 non-bonded pairs 
+					#ifdef NEW_STYLE
+						AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve>
+							(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4);
 
-					for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
-					{
-						AMBERcalculateNBEnergy
-							(*it, ENERGY_PARAMETERS, 
-							 vdw_energy_1_4, electrostatic_energy_1_4, 
-							 false, false, true);
-					}
+						AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve>	
+							(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy);
+					#else
+						for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
+						{
+							AMBERcalculateNBEnergy
+								(*it, ENERGY_PARAMETERS, 
+								 vdw_energy_1_4, electrostatic_energy_1_4, 
+								 false, false, true);
+						}
 
-					// evaluate remaining non-bonded pairs (also in the same vector) 
-					for (i = 0; it != non_bonded_.end(); ++it, i++)  
-					{                                                                                            
-						AMBERcalculateNBEnergy
-							(*it, ENERGY_PARAMETERS,
-							 vdw_energy, electrostatic_energy, 
-							 (bool)is_hydrogen_bond_[i], false, true);
-					}
+						// evaluate remaining non-bonded pairs (also in the same vector) 
+						for (i = 0; it != non_bonded_.end(); ++it, i++)  
+						{                                                                                            
+							AMBERcalculateNBEnergy
+								(*it, ENERGY_PARAMETERS,
+								 vdw_energy, electrostatic_energy, 
+								 (bool)is_hydrogen_bond_[i], false, true);
+						}
+					#endif
+
 				}
 				else
 				{
 					// no periodic boundary enabled and use a constant dielectric 
 
-					// first evaluate 1-4 non-bonded pairs 
-					for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
-					{
-						AMBERcalculateNBEnergy
-							(*it, ENERGY_PARAMETERS, 
-							 vdw_energy_1_4, electrostatic_energy_1_4, 
-							 false, false, false);
-					}
+					#ifdef NEW_STYLE
+						AmberNBEnergy<coulomb, vdwSixTwelve>
+							(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4);
+						AmberNBEnergy<coulomb, vdwSixTwelve>
+							(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy);
+					#else
+						// first evaluate 1-4 non-bonded pairs 
+						for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
+						{
+							AMBERcalculateNBEnergy
+								(*it, ENERGY_PARAMETERS, 
+								 vdw_energy_1_4, electrostatic_energy_1_4, 
+								 false, false, false);
+						}
 
-					// evaluate remaining non-bonded pairs (also in the same vector) 
-					for (i = 0; it != non_bonded_.end(); ++it, i++)  
-					{
-						AMBERcalculateNBEnergy
-							(*it, ENERGY_PARAMETERS, 
-							 vdw_energy, electrostatic_energy, 
-							 (bool)is_hydrogen_bond_[i], false, false);
-					}
-				}
+						// evaluate remaining non-bonded pairs (also in the same vector) 
+						for (i = 0; it != non_bonded_.end(); ++it, i++)  
+						{
+							AMBERcalculateNBEnergy
+								(*it, ENERGY_PARAMETERS, 
+								 vdw_energy, electrostatic_energy, 
+								 (bool)is_hydrogen_bond_[i], false, false);
+						}
+					#endif
+				}				
 			}
 
 			// calculate the total energy and its contributions
