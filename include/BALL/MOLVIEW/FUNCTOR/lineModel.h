@@ -1,4 +1,4 @@
-// $Id: lineModel.h,v 1.9.4.2 2002/10/23 14:25:03 amoll Exp $
+// $Id: lineModel.h,v 1.9.4.3 2002/12/06 16:58:46 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
@@ -227,6 +227,11 @@ namespace BALL
 			private:
 
 		};
+
+
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/MOLVIEW/FUNCTOR/lineModel.iC>
+#	endif
 
 	} // namespace MOLVIEW
 
