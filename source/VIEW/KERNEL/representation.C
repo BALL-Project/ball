@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.52 2004/12/03 00:31:07 amoll Exp $
+// $Id: representation.C,v 1.53 2004/12/03 00:42:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -37,6 +37,7 @@ namespace BALL
 					color_processor_(0),
 					geometric_objects_(),
 					composites_(),
+					model_build_time_(),
 					rebuild_(true),
 					hidden_(false)
 		{
@@ -56,6 +57,7 @@ namespace BALL
 					color_processor_(0),
 					geometric_objects_(),
 					composites_(rp.composites_),
+					model_build_time_(),
 					rebuild_(rp.rebuild_),
 					hidden_(rp.hidden_)
 		{
@@ -92,6 +94,7 @@ namespace BALL
 					color_processor_(0),
 					geometric_objects_(),
 					composites_(),
+					model_build_time_(),
 					rebuild_(true),
 					hidden_(false)
 		{
@@ -110,6 +113,7 @@ namespace BALL
 				color_processor_(0),
 				geometric_objects_(),
 				composites_(composites),
+				model_build_time_(),
 				rebuild_(true),
 				hidden_(false)
 		{
