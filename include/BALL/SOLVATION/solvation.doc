@@ -1,4 +1,4 @@
-// $Id: solvation.doc,v 1.4 2001/01/24 11:59:36 amoll Exp $ */
+// $Id: solvation.doc,v 1.5 2001/01/29 00:37:37 amoll Exp $ */
 
 /**@name	Solvation methods
 		This chapter contains all relevant information on 
@@ -19,6 +19,5 @@
 	//@Include: reissCavFreeEnergyProcessor.h
 	//@Include: solventDescriptor.h
 	//@Include: solventParameter.h
-	//@Include: structuredCavFreeEnergyProcessor.h
 	//@Include: uhligCavFreeEnergyProcessor.h
 //@}
