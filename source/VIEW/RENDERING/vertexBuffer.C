@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.21 2005/01/28 14:16:42 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.22 2005/02/01 12:50:39 amoll Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -115,8 +115,8 @@ const MeshBuffer& MeshBuffer::operator = (const MeshBuffer& mesh_buffer)
 
 bool MeshBuffer::initialize()
 {
-	if (mesh_ == 0) return false;
-	if (busy_) return false;
+	if (mesh_ == 0 || busy_) return false;
+
 	busy_ = true;
 
 	clearBuffer();
@@ -128,9 +128,9 @@ bool MeshBuffer::initialize()
 	// Get valid Names
 	glGenBuffersARB(4, buffer_);
 
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_NORMAL_ARRAY);
-
+	////////////////////////////////////////////////////////////
+	/// upload colors, normals and vertices
+	////////////////////////////////////////////////////////////
 	float* data = new float[nr_vertices * 4];
 	if (data == 0) return false;
 	for (Size index = 0; index < nr_vertices; ++index)
@@ -166,14 +166,15 @@ bool MeshBuffer::initialize()
 			data[start + 3] = (float) mesh_->colorList[index].getAlpha();
 		}
 
-		glEnableClientState(GL_COLOR_ARRAY);
-
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[2]);
 		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 4, data, GL_STATIC_DRAW_ARB);
 	}
 
 	delete[] data;
 
+	////////////////////////////////////////////////////////////
+	/// upload triangle indices
+	////////////////////////////////////////////////////////////
 	unsigned int* indices = new unsigned int[nr_triangles * 3];
 	if (indices == 0) return false;
 	for (Size index = 0; index < nr_triangles; ++index)
@@ -189,9 +190,9 @@ bool MeshBuffer::initialize()
 									indices, GL_STATIC_DRAW_ARB);
 	delete[] indices;
 
-	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
-	glDisableClientState(GL_COLOR_ARRAY);
+	////////////////////////////////////////////////////////////
+	/// cleanup
+	////////////////////////////////////////////////////////////
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 
@@ -224,27 +225,25 @@ void MeshBuffer::clearBuffer()
 
 bool MeshBuffer::draw()
 {
-	if (!filled_ || gl_renderer_ == 0) return false;
-	if (busy_) return false;
-	busy_ = true;
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
+	if (!filled_ || gl_renderer_ == 0 || busy_) return false;
 
+	busy_ = true;
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_INDEX_ARRAY);
+
+	// vertices
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[0]);
 	glVertexPointer(3, GL_FLOAT, 0, 0); 
 
-	if (gl_renderer_->getRenderMode() == GLRenderer::RENDER_MODE_SOLID)
-	{
-		glEnableClientState(GL_NORMAL_ARRAY);
-		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[1]);
-		glNormalPointer(GL_FLOAT, 0, 0);
-	}
-
+	// indices
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, buffer_[3]);
 	glIndexPointer(GL_UNSIGNED_INT, 0, 0);
 
+	// colors
 	if (mesh_->colorList.size() > 1)
 	{
+		glEnableClientState(GL_COLOR_ARRAY);
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[2]);
 		glColorPointer (4, GL_FLOAT, 0, 0);
 	}
@@ -262,10 +261,19 @@ bool MeshBuffer::draw()
 		}
 	}
 
+
+	////////////////////////////////////////////////////////////
+	/// draw it
+	////////////////////////////////////////////////////////////
 	DrawingMode drawing_mode = gl_renderer_->getDrawingMode();
 	if (drawing_mode == DRAWING_MODE_SOLID)
 	{
+		glEnableClientState(GL_NORMAL_ARRAY);
+		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[1]);
+		glNormalPointer(GL_FLOAT, 0, 0);
+
 		glDrawElements(GL_TRIANGLES, mesh_->triangle.size() * 3, GL_UNSIGNED_INT, 0);
+		glDisableClientState(GL_NORMAL_ARRAY);
 	}
 	else if (drawing_mode == DRAWING_MODE_WIREFRAME)
 	{
@@ -276,11 +284,15 @@ bool MeshBuffer::draw()
 		glDrawElements(GL_POINTS, mesh_->vertex.size() * 3, GL_UNSIGNED_INT, 0);
 	}
 
+	////////////////////////////////////////////////////////////
+	/// cleanup
+	////////////////////////////////////////////////////////////
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, 0);
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, 0);
 	glDisableClientState(GL_VERTEX_ARRAY);
-	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_INDEX_ARRAY);
+	
 	busy_ = false;
 	return true;
 }
