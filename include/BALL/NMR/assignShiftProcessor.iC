@@ -1,7 +1,6 @@
 BALL_INLINE 
 AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atomData)
 	:	atom_data_(atomData),
-		fragment_(0),
 		molecule_(0)
 {
 	if (atomData.size() == 0)
@@ -20,7 +19,6 @@ AssignShiftProcessor::AssignShiftProcessor(const AssignShiftProcessor& processor
 		shift_table_(processor.shift_table_),
 		atom_data_(processor.atom_data_),
 		valid_(processor.valid_),
-		fragment_(processor.fragment_),
 		molecule_(processor.molecule_),
 		number_of_fragment_(processor.number_of_fragment_)
 {

@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.h,v 1.4 2000/09/17 23:54:34 amoll Exp $
+// $Id: assignShiftProcessor.h,v 1.5 2000/09/18 09:57:58 amoll Exp $
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -82,7 +82,6 @@ namespace BALL
 		StringHashMap<float>							shift_table_;
 		const std::vector<NMRAtomData*>&	atom_data_;
 		bool															valid_;
-		const Fragment*										fragment_;
 		const Molecule*										molecule_;
 		Position													number_of_fragment_;
 	};

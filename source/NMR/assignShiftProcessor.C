@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.5 2000/09/17 23:54:49 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.6 2000/09/18 09:58:07 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 
@@ -63,7 +63,6 @@ cout << endl << endl;
 				atomName += atom_data_[atompos]->atomName;
 				shift_table_[atomName] = atom_data_[atompos]->shiftValue;
 cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
-
 				continue;
 			}
 
@@ -85,7 +84,6 @@ cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
 				atomName += transformTable[entry];
 				shift_table_[atomName] = atom_data_[atompos]->shiftValue;
 cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
-
 				continue;
 			}
 
@@ -105,56 +103,53 @@ cout << atomName << " " << atom_data_[atompos]->shiftValue << endl;
 
 	Processor::Result AssignShiftProcessor::operator()(Composite&  object)
 	{
-		//-----------------security queries------------------------------------------------
-		if (!RTTI::isKindOf<PDBAtom>(object))
+		//-----------------switching by the type of given object--------------------------
+		if (RTTI::isKindOf<Molecule>(object))
 		{
-			//Log.error() << "AssignShiftProcessor: given object is not a PDBAtom" << endl;
+			if (molecule_ == 0)
+			{
+				molecule_ = RTTI::castTo<Molecule>(object);
+				number_of_fragment_ = 0;
+			}
+			return Processor::CONTINUE;
+
+			if (RTTI::castTo<Molecule>(object) != molecule_)
+			{
+					Log.error() << "AssignShiftProcessor: atom not from same molecule as before" << endl;
+					return Processor::BREAK;
+			}
+		}
+
+		if (RTTI::isKindOf<Fragment>(object))
+		{
+			number_of_fragment_++;
 			return Processor::CONTINUE;
 		}
 
-		PDBAtom *patom_;
-		patom_= RTTI::castTo<PDBAtom>(object);
-
-		if (molecule_ == 0)
+		if (!RTTI::isKindOf<PDBAtom>(object))
 		{
-			molecule_ = patom_->getMolecule();
-			number_of_fragment_ = 0;
-		}
-		else
-		{
-			if (patom_->getMolecule() != molecule_)
-			{
-				Log.error() << "AssignShiftProcessor: atom not from same molecule as before" << endl;
-				return Processor::BREAK;
-			}
-		}
-		
-		// --------------------count the position of the fragment------------------------------
-		if (fragment_ != patom_->getFragment())
-		{
-			number_of_fragment_++;
-			fragment_ = patom_->getFragment();
+			return Processor::CONTINUE;
 		}
 
 		// --------------------set the shift value--------------------------------------------
-		if (patom_->getElement() == PTE[Element::H] || patom_->getElement() == PTE[Element::N])
-		{
-			String atomName(number_of_fragment_);
-			atomName += fragment_->getName();
-			atomName += ":";
-			atomName += patom_->getName();
+		PDBAtom* patom_;
+		patom_= RTTI::castTo<PDBAtom>(object);
+		
+		String atomName(number_of_fragment_);
+		atomName += patom_->getFragment()->getName();
+		atomName += ":";
+		atomName += patom_->getName();
 
-			patom_->clearProperty("chemical_shift");
-			if (shift_table_.has(atomName))
-			{
-				patom_->setProperty("chemical_shift", shift_table_[atomName]);
+		patom_->clearProperty("chemical_shift");
+		if (shift_table_.has(atomName))
+		{
+			patom_->setProperty("chemical_shift", shift_table_[atomName]);
 cout << "atom found " << atomName << endl;
-			}
-			else 
-			{
-				Log.error() << "AssignShiftProcessor: entry not found: " << atomName << endl;   
-			}               
 		}
+else 
+{
+	Log.error() << "AssignShiftProcessor: entry not found: " << atomName << endl;   
+}               
 
 		return Processor::CONTINUE;
 	}
