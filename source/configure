@@ -1,6 +1,6 @@
 #! /bin/sh
 # Guess values for system-dependent variables and create Makefiles.
-#  $Id: configure,v 1.152 2001/07/15 02:24:17 oliver Exp $
+#  $Id: configure,v 1.153 2001/07/16 13:13:18 oliver Exp $
 
 
 ##################################################
@@ -2878,7 +2878,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 
 	CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
 	LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
-	CXXFLAGS_O="${CXXFLAGS_O} -O5"
+	CXXFLAGS_O="${CXXFLAGS_O} -O1"
 
 	CXXFLAGS_D="${CXXFLAGS_D}"
 	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
