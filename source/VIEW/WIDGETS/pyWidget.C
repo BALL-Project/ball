@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.21 2004/01/18 12:44:12 amoll Exp $
+// $Id: pyWidget.C,v 1.22 2004/04/19 12:51:50 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -139,26 +139,30 @@ namespace BALL
 		}
 
 
-		void PyWidgetData::parseLine_()
+		bool PyWidgetData::parseLine_(String line)
 		{
 			if (!Py_IsInitialized())
 			{
 				append("ERROR: no interpreter running!\n");
-				return;
+				return false;
 			}
+
+			// check for comments
+			String temp(line);
+			temp.trim();
+			if (temp.hasSuffix("#")) return true;
 
 			history_position_ = history_.size();
 
-			String line = current_line_.getSubstring(4);
 			line.trimRight();
 			
 			if (!multi_line_mode_)
 			{
-				if (line.isEmpty()) return;
+				if (line.isEmpty()) return true;
 				if ((line.hasPrefix("for ") 		|| 
 						 line.hasPrefix("def ") 		||
 						 line.hasPrefix("class ") 	||
-						 line.hasPrefix("while ")	||
+						 line.hasPrefix("while ")	  ||
 						 line.hasPrefix("if "))
 						&& line.hasSuffix(":"))
 				{
@@ -168,7 +172,7 @@ namespace BALL
 						multi_lines_ = 1;
 						appendToHistory_(line);
 						newPrompt_();
-						return;
+						return true;
 				}
 
 				multi_lines_ = 0;
@@ -182,12 +186,13 @@ namespace BALL
 				{
 					multi_line_text_ += line + "\n";
 					newPrompt_();
-					return;
+					return true;
 				}
 
 				line = multi_line_text_ + "\n";
 			}
 
+			bool ok = true;
 			bool state;
 			String result = PyInterpreter::run(line, state);
 			if (result != "") 
@@ -195,6 +200,7 @@ namespace BALL
 				if (result.hasSubstring("ERROR"))
 				{
 					setColor(red);
+					ok = false;
 				}
 				else
 				{
@@ -217,6 +223,7 @@ namespace BALL
 			multi_line_mode_ = false;
 
 			newPrompt_();
+			return ok;
 		}
 
 		void PyWidgetData::appendToHistory_(const String& line)
@@ -234,6 +241,12 @@ namespace BALL
 		{
 			append(getPrompt_());
 			setCursorPosition(paragraphs() - 1, 4);
+		}
+
+		bool PyWidgetData::parseLine_()
+		{
+			String line = current_line_.getSubstring(4);
+			return parseLine_(line);
 		}
 
 
@@ -331,8 +344,8 @@ namespace BALL
 		void PyWidgetData::runFile(const String& filename)
 		{
 			append(String("> running File " + filename + "\n").c_str());
-			bool result;
-			String result_string;
+//			 bool result;
+// 			String result_string;
 			LineBasedFile file;
 			try
 			{
@@ -347,16 +360,13 @@ namespace BALL
 
 			while (file.readLine())
 			{
-				result_string = PyInterpreter::run(file.getLine(), result);
-				if (!result)
+				if (!parseLine_(file.getLine()))
 				{
-					result_string += "> Error in Line " + String(file.getLineNumber()) + " in file " + filename + "\n";
+					String result_string = "> Error in Line " + String(file.getLineNumber()) + " in file " + filename + "\n";
 					append(result_string.c_str());
 					newPrompt_();
 					return;
 				}
-
-				append(result_string.c_str());
 			}
 			append("> finished...");
 			newPrompt_();

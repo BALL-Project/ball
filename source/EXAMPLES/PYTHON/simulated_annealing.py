@@ -5,13 +5,18 @@ cm = mc.getCompositeManager()
 c = cm.getComposites()
 system = c[0]
 mds = CanonicalMD()
-o = Options()
 ssm = SnapShotManager()
-mds.setup(ff, ssm, o)
 ff.setup(system)
-mds.setup(ff, ssm, o)
-mds.simulateIterations(5)
+mds.setup(ff, ssm)
 mds.setTimeStep(0.001)
-mds.setReferenceTemperature(222)
-mds.simulateIterations(500)
-mc.update(system)
+time = 0
+temperature = 0
+mds.setReferenceTemperature(0)
+while time < 100:
+ mds.simulateIterations(50)
+ mds.setReferenceTemperature(temperature)
+ mc.update(system)
+ time = time + 1
+ temperature = 293. / 100. * float(time)
+
+
