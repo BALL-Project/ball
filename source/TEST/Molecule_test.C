@@ -1,17 +1,14 @@
-// $Id: Molecule_test.C,v 1.2 2000/04/12 18:01:48 amoll Exp $
+// $Id: Molecule_test.C,v 1.3 2000/05/11 22:55:20 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/atom.h>
-#include <BALL/COMMON/exception.h>
 #include <BALL/CONCEPT/persistenceManager.h>
-#include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Molecule_test.C,v 1.2 2000/04/12 18:01:48 amoll Exp $")
+START_TEST(class_name, "$Id: Molecule_test.C,v 1.3 2000/05/11 22:55:20 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -68,14 +65,6 @@ CHECK(destroy())
 	m.destroy();
 	TEST_EQUAL(m.getName(), "")
 	TEST_EQUAL(s.countAtoms(), 0)
-RESULT
-
-CHECK(Molecule::persistentWrite(PersistenceManager& pm, const char* name = 0) const )
-  //BAUSTELLE
-RESULT
-
-CHECK(Molecule::persistentRead(PersistenceManager& pm))
-  //BAUSTELLE
 RESULT
 
 CHECK(Molecule::set(const Molecule& molecule, bool deep = true))
@@ -344,7 +333,6 @@ CHECK(Molecule::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE(filename.c_str(), "data/Molecule_test.txt", true)
 RESULT
 
-
 CHECK(Molecule::read(std::istream& s))
 /*std::ifstream instr("data/Molecule.txt2");
 	Molecule m;
@@ -368,7 +356,11 @@ CHECK(Molecule::write(std::ostream& s) const ) // NotImplemented
 	outstr.close();*/
 RESULT
 
-CHECK(Molecule::BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment))
+CHECK(Molecule::persistentWrite(PersistenceManager& pm, const char* name = 0) const )
+  //BAUSTELLE
+RESULT
+
+CHECK(Molecule::persistentRead(PersistenceManager& pm))
   //BAUSTELLE
 RESULT
 
