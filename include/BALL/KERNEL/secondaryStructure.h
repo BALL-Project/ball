@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.6 2000/04/14 13:09:55 amoll Exp $
+// $Id: secondaryStructure.h,v 1.7 2000/04/16 20:23:53 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -128,49 +128,49 @@ namespace BALL
 		/**	@name Accessors */	
 		//@{
 
-		/** Get a pointer to the superior protein.
+		/** Get a pointer to the parent protein.
 				The reference is 0 if {\em *this} SecondaryStructure does not have a parent protein.
 				@return  Protein* -
 								 mutable reference to the parent protein of {\em *this} SecondaryStructure,
 		*/
 		Protein* getProtein();
 
-		/** Get a pointer to the superior protein.
+		/** Get a pointer to the parent protein.
 				The reference is 0 if {\em *this} SecondaryStructure does not have a parent protein.
 				@return  Protein* -
 								 constant reference to the parent protein of {\em *this} SecondaryStructure,
 		*/
 		const Protein* getProtein() const;
 
-		/** Get a pointer to the superior chain.
+		/** Get a pointer to the parent chain.
 				The reference is 0 if {\em *this} SecondaryStructure does not have a parent chain.
 				@return  Protein* -
 								 mutable reference to the parent chain of {\em *this} SecondaryStructure,
 		*/
 		Chain* getChain();
 
-		/** Get a pointer to the superior chain.
+		/** Get a pointer to the parent chain.
 				The reference is 0 if {\em *this} SecondaryStructure does not have a parent chain.
 				@return  Protein* -
 								 constant reference to the parent chain of {\em *this} SecondaryStructure,
 		*/
 		const Chain* getChain() const;
 
-		/** Get a pointer to a subaltern Residue at a given position.
+		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} residue does not have a Residue at the given position.
-				@param   index the position of the subaltern Residue
+				@param   index the position of the child Residue
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  Residue* -
-								 mutable reference to the subaltern Residue at positon {\em index} of {\em *this} residue,
+								 mutable reference to the child Residue at positon {\em index} of {\em *this} residue,
 		*/
 		Residue* getResidue(Index index);
 	
-		/** Get a pointer to a subaltern Residue at a given position.
+		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} residue does not have a Residue at the given position.
-				@param   index the position of the subaltern Residue
+				@param   index the position of the child Residue
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  Residue* -
-								 constant reference to the subaltern Residue at positon {\em index} of {\em *this} residue,
+								 constant reference to the child Residue at positon {\em index} of {\em *this} residue,
 		*/
 		const Residue* getResidue(Index index) const;
 
@@ -206,21 +206,21 @@ namespace BALL
 		*/
 		const Residue* getCTerminal() const;
 
-		/** Get a pointer to a subaltern PDBAtom at a given position.
+		/** Get a pointer to a child PDBAtom at a given position.
 				The reference is 0 if {\em *this} residue does not have a PDBAtom at the given position.
-				@param   index the position of the subaltern PDBAtom
+				@param   index the position of the child PDBAtom
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  PDBAtom* -
-								 constant reference to the subaltern PDBAtom at positon {\em index} of {\em *this} residue,
+								 constant reference to the child PDBAtom at positon {\em index} of {\em *this} residue,
 		*/
 		PDBAtom* getPDBAtom(Index index);
 	
-		/** Get a pointer to a subaltern PDBAtom at a given position.
+		/** Get a pointer to a child PDBAtom at a given position.
 				The reference is 0 if {\em *this} residue does not have a PDBAtom at the given position.
-				@param   index the position of the subaltern PDBAtom
+				@param   index the position of the child PDBAtom
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  PDBAtom* -
-								 mutable reference to the subaltern PDBAtom at positon {\em index} of {\em *this} residue,
+								 mutable reference to the child PDBAtom at positon {\em index} of {\em *this} residue,
 		*/
 		const PDBAtom* getPDBAtom(Index index) const;
 	
@@ -249,13 +249,13 @@ namespace BALL
 		*/
 		void insert(Residue& residue);
 
-		/** Insert a Residue before an given {\em Comosite} object.
+		/** Insert a Residue before a given {\em Comosite} object.
 				@param residue, the Residue to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
 		void insertBefore(Residue& residue, Composite& before);
 
-		/** Insert a Residue after an given {\em Comosite} object.
+		/** Insert a Residue after a given {\em Comosite} object.
 				@param residue, the Residue to insert
 				@param after, the {\em Comosite} object to insert before
 		*/
@@ -289,7 +289,7 @@ namespace BALL
 	
 		/** Internal state and consistency self-validation.
 				Initiate self-validation of the internal state and data structure consistencies of {\em *this} SecondaryStructure.
-				If the internal state of {\em *this} chain is correct (self-validated) and consistent {\tt true} is returned,
+				If the internal state of {\em *this} SecondaryStructure is correct (self-validated) and consistent {\tt true} is returned,
 				{\tt false} otherwise. 
 				@return			bool -
 										{\tt true} if the internal state of {\em *this} SecondaryStructure is correct (self-validated) and consistent,
