@@ -40,8 +40,8 @@ Please choose the configuration "Python Multihreaded" in the Configuration
 Manager, as this is the only configuration, that is currently working...
 
 If you want to compile the visualization component of BALL as well,
-you will need a QT license (QT 3.0.6, commercial or academic license).
-If you install a version different than 3.0.6 you might have to adjust the
+you will need a QT license (QT 3.2.0 or higher, commercial or academic license).
+If you install a version different than 3.2.3 you might have to adjust the
 linker settings to reflect the correct library names.
 
 
