@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.29 2000/10/30 00:19:59 amoll Exp $
+// $Id: fragmentDB.C,v 1.30 2001/01/26 12:31:39 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -6,6 +6,7 @@
 #include <vector>
 
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
@@ -462,7 +463,7 @@ namespace BALL
 				}
 				
 
-				Property prop = -1;
+				Property prop = Limits<Property>::max();
 				if (property == "NON_STANDARD")
 				{
 					prop = Residue::PROPERTY__NON_STANDARD;
@@ -491,7 +492,7 @@ namespace BALL
 				{
 				}
 
-				if (prop == -1)
+				if (prop == Limits<Property>::max())
 				{
 					// if the property was not recognized,
 					// store it as a name-value pair
@@ -1220,13 +1221,15 @@ namespace BALL
 	/////////////////////////////////////////////////////////////////
 	//		FragmentDB::AddHydrogensProcessor												 //
 	/////////////////////////////////////////////////////////////////	
+
 	void FragmentDB::AddHydrogensProcessor::setFragmentDB(const FragmentDB& db)
 	{
 		fragment_db_ = &const_cast<FragmentDB&>(db);
 	}
 
 	// turns vector around x1-axis
-	void FragmentDB::AddHydrogensProcessor::turn_x1_(Vector3& v,const float winkel) 
+	void FragmentDB::AddHydrogensProcessor::turn_x1_
+		(Vector3& v, const float winkel) 
 	{
 		float hilf_y = v.y * cos(winkel) + v.z * -sin(winkel);
 		float hilf_z = v.y * sin(winkel) + v.z * cos(winkel);
@@ -1276,13 +1279,15 @@ namespace BALL
 	}
 
 	// calculates position of hydrogen to be added
-	void FragmentDB::AddHydrogensProcessor::calculate_	
-		(String atom_name, Atom* bond_atom, Vector3& a, Vector3& b,Vector3& c, Vector3& d,
-		 Vector3& xa, Vector3& xb,Vector3& xc, Vector3& xd, Vector3& xtarget)
+	PDBAtom* FragmentDB::AddHydrogensProcessor::createNewHydrogen_	
+		(const Atom& ref_hydrogen,
+		 const Atom& center_atom, const Atom& atom_1, const Atom& atom_2, const Atom& atom_3,
+		 const Atom& ref_center_atom, const Atom& ref_atom_1, const Atom& ref_atom_2, const Atom& ref_atom_3)
+		throw()
 	{
 		// setting of local variables    
 		// variables beginning with x, are related to             
-		// the prototypes of the fragment Databas
+		// the prototypes of the fragment database
 		int spiegel1 = 0;	
 		int spiegel2 = 0;
 		int xspiegel1 = 0;
@@ -1291,15 +1296,17 @@ namespace BALL
 
 		// moving first point to coordinate center
 		// actual residue 
-		Vector3 b_a = b - a;	
-		Vector3 c_a = c - a;
-		Vector3 d_a = d - a;
+		Vector3 b_a = atom_1.getPosition() - center_atom.getPosition();	
+		Vector3 c_a = atom_2.getPosition() - center_atom.getPosition();
+		Vector3 d_a = atom_3.getPosition() - center_atom.getPosition();
+
 		// residue prototype    
-		Vector3 xb_a = xb - xa;
-		Vector3 xc_a = xc - xa;
-		Vector3 xd_a = xd - xa;
+		Vector3 xb_a = ref_atom_1.getPosition() - ref_center_atom.getPosition();
+		Vector3 xc_a = ref_atom_2.getPosition() - ref_center_atom.getPosition();
+		Vector3 xd_a = ref_atom_3.getPosition() - ref_center_atom.getPosition();
 		// hydrogen to be added
-		Vector3 xtarget_a = xtarget-xa;      
+		Vector3 xtarget = ref_hydrogen.getPosition();
+		Vector3 xtarget_a = xtarget - ref_center_atom.getPosition();
 
 		// turning the second point onto x1_x2 plane
 		// actual residue
@@ -1307,14 +1314,14 @@ namespace BALL
 		// checking turn direction
 		if (b_a.y > 0)
 		{
-			alpha = -alpha; 
+			alpha =-alpha; 
 		}
 		
-		turn_x1_(b_a, alpha);	
+		turn_x1_(b_a,alpha);	
 		// residue prototype
 		float xalpha = winkelx1_x2_(xb_a);
 		// checking turn direction
-		if (xb_a.y > 0) 
+		if (xb_a.y>0) 
 		{
 			xalpha=-xalpha; 
 		}
@@ -1327,7 +1334,7 @@ namespace BALL
 		float beta = winkelx1_x3_(b_a);
 		if (b_a.x>0)
 		{
-			beta = -beta; 
+			beta=-beta; 
 		}
 		turn_x3_(b_a, beta);	
 
@@ -1347,7 +1354,7 @@ namespace BALL
 		float gamma = winkelx1_x2_(c_a);
 		if (c_a.y > 0) 
 		{
-			gamma = -gamma; 
+			gamma=-gamma; 
 		}
 		turn_x1_(c_a, gamma);
 
@@ -1358,19 +1365,19 @@ namespace BALL
 		float xgamma = winkelx1_x2_(xc_a);
 		if(xc_a.y > 0) 
 		{
-			xgamma = -xgamma; 
+			xgamma=-xgamma; 
 		}
-		turn_x1_(xc_a,xgamma);	
+		turn_x1_(xc_a, xgamma);	
 
 		// setting the mirrors
 		// third point lies in first quadrant of x1x2-plane	
 		// actual residue
-		if (c_a.x<0) 
+		if (c_a.x < 0) 
 		{
 			spiegel1 = 1;
 		}
 	
-		if (c_a.y<0)
+		if (c_a.y < 0)
 		{
 			spiegel2 = 1;
 		}
@@ -1390,34 +1397,36 @@ namespace BALL
 		// actual residue
 		if (spiegel1)
 		{
-			b_a.x=-b_a.x;
-			c_a.x=-c_a.x;
+			b_a.x = -b_a.x;
+			c_a.x = -c_a.x;
 		}
 		if (spiegel2)
 		{
-			b_a.y=-b_a.y;
-			c_a.y=-c_a.y;
+			b_a.y = -b_a.y;
+			c_a.y = -c_a.y;
 		}
 		// residue prototype
 		if (xspiegel1)
 		{
-			xb_a.x=-xb_a.x;
-			xc_a.x=-xc_a.x;
+			xb_a.x = -xb_a.x;
+			xc_a.x = -xc_a.x;
 		}
 		if (xspiegel2)
 		{
-			xb_a.y=-xb_a.y;
-			xc_a.y=-xc_a.y;
+			xb_a.y = -xb_a.y;
+			xc_a.y = -xc_a.y;
 		}
 
 		// error distance of both points on plane is corrected
-		float w, n, z, abstand1, abstand2;
+		float w;
+		float n,z;
+		float abstand1, abstand2;
 		Vector3 test1, test2;
 					
-		z = c_a*xc_a;
+		z = c_a * xc_a;
 		n = c_a.getLength() * xc_a.getLength();
 				
-		if (fabs( z - n ) > 0.0001)
+		if (fabs(z - n) > 0.0001)
 		{
 			w = -(acos(z / n)) / 2;
 											 
@@ -1445,9 +1454,9 @@ namespace BALL
 		// check wether there is need of another mirror at x1x2 plane
 		
 		// actual residue
-		turn_x1_(d_a,alpha);
-		turn_x3_(d_a,beta);
-		turn_x1_(d_a,gamma);
+		turn_x1_(d_a, alpha);
+		turn_x3_(d_a, beta);
+		turn_x1_(d_a, gamma);
 		if (spiegel1)
 		{
 			d_a.x = -d_a.x;
@@ -1511,340 +1520,249 @@ namespace BALL
 		turn_x1_(xtarget_a, -gamma);
 		turn_x3_(xtarget_a, -beta);
 		turn_x1_(xtarget_a, -alpha);
-		xtarget = xtarget_a + a;
-
-		// extract the atom name
-		String name(atom_name.before(":"));
+		xtarget = xtarget_a + center_atom.getPosition();
 
 		// creating new atom and inserting it 
-		PDBAtom& atom = *new PDBAtom;
-		atom.setElement(PTE["H"]);
-		atom.setPosition(xtarget);
-		atom.setName(name);
+		PDBAtom& new_hydrogen = *new PDBAtom;
+		((Atom&)new_hydrogen).set(ref_hydrogen);
+		new_hydrogen.setPosition(xtarget);
 
-		try 
+		return &new_hydrogen;
+	}
+
+	Quadruple<bool, const Atom*, const Atom*, const Atom*> 
+	FragmentDB::AddHydrogensProcessor::getThreeReferenceAtoms_
+		(const Atom& ref_center_atom)
+		throw()
+	{
+		Quadruple<bool, const Atom*, const Atom*, const Atom*> result(false, 0, 0, 0);
+		
+		// a hash set to remember all those atoms we have already visited
+		list<const Atom*> atom_list;
+		atom_list.push_back(&ref_center_atom);
+		
+		// abort if we found the three first atoms (beyond the center atom)
+		// or we are running out of fresh atoms
+		list<const Atom*>::iterator current(atom_list.begin());
+		while ((atom_list.size() < 4) && (current != atom_list.end()))
 		{
-			atom.createBond(*bond_atom);
-		} 
-		catch (Bond::TooManyBonds)
+			Atom::BondConstIterator bond((*current)->beginBond());
+			for (; +bond; ++bond)
+			{
+				const Atom* next_atom = bond->getPartner(**current);
+				if ((next_atom->getElement() != PTE[Element::H]) 
+						&& (find(atom_list.begin(), atom_list.end(), next_atom) == atom_list.end()))
+				{
+					atom_list.push_back(next_atom);
+					if (atom_list.size() > 3)
+					{
+						bond = (*current)->endBond();
+						break;
+					}
+				}
+			}
+			
+			// try the bonds of the next atom in the list
+			current++;
+		}
+		
+		if (atom_list.size() == 4)
 		{
-			Log.error() << "FragmentDB: cannot create bond between "
-									<< atom_name << " and " << bond_atom->getName() 
-									<< ": too many bonds!" << endl;
+			// copy the three reference atoms to the result 
+			// (omit the first atom, which is the center atom!)
+			result.first = true;
+			current = atom_list.begin();
+			current++;
+			result.second = *current;
+			current++;
+			result.third  = *current;
+			current++;
+			result.fourth = *current;
 		}
 
-		residue_->insert(atom);
-
-		count_h_++;
+		return result;
 	}
 	
-	// adds the structure of a template to the hashtable prot_table
-	void FragmentDB::AddHydrogensProcessor::addToTemplateTable_(const Fragment* tplate)  
-	{
-		// Setzen der lokalen Variablen        
-		String residue_name;
-		String atom_name;
-		AtomIterator atom_iter;
-		
-		residue_name = tplate->getName();
-
-		for(atom_iter = tplate->beginAtom(); +atom_iter; ++atom_iter) 
-		{
-			atom_name = (*atom_iter).getName();
-			atom_name.append(":");
-			atom_name.append(residue_name);
-			prot_table_[atom_name] = *atom_iter;
-		}
-	}
-
-	// start function of AddHydorgensProcessor
+	// start function of AddHydrogensProcessor
 	// nothing important is done here
 	bool FragmentDB::AddHydrogensProcessor::start()
 	{
-		count_h_ = 0;
+		number_of_inserted_h_ = 0;
+		
+		if (fragment_db_ == 0)
+		{
+			Log.error() << "FragmentDB::AddHydrogensProcessor: no FragmentDB defined. "
+									<< "Use setFragmentDB() to associate a fragment database." << std::endl;
+			return false;
+		}
 		
 		return true;
 	}
 	
-	// finish function of AddHydrogensProcessor
-	// nothing is done here
+	// Processor finish method
 	bool FragmentDB::AddHydrogensProcessor::finish()
 	{
 		return true;
 	}
 	
-	// operator function of AddHydrogensProcessor
-	// works on residues
-
+	// Processor application method
 	Processor::Result FragmentDB::AddHydrogensProcessor::operator () (Fragment& object)
 	{
-		// setting of local variables
-		
-		// check variable for already inserted hydrogens
-		bool inserted;
-		// lopp variables
-		int i = 0;
-		int k = 0;
-		
-		// actual residues vectors
-		Vector3 x[4]; 
-		// residue prototype vectors
-		Vector3 xx[4]; //Vektoren der Prototypen
-		// vector of hydrogen to be added
-		Vector3 xtarget;
-		static Vector3 old_C;
-		AtomIterator atom_iter;
-		Atom bond_atom;
-		Atom* atom;
-		Atom** atom_feld=new Atom*[4];
-		// some counting variables
-		int h_zaehler=0;
-		int zaehler1=0;
-		int zaehler2=0;
-		int test_zaehler=0;
-		int bond_zaehler=0;
-		String atom_name;
-
-		// setting the actual residue
-		
-		if (RTTI::isKindOf<Residue>(object))
+		// abort if the object is not a residue (only residues are 
+		// contained in the fragment DB)																				
+		if (!RTTI::isKindOf<Residue>(object))
 		{
-			residue_ = RTTI::castTo<Residue>(object);
-			
-			String atom_name;
+			return Processor::CONTINUE;
+		}
 
-			const Fragment* tmp = fragment_db_->getReferenceFragment(*residue_);
-			if (tmp == 0)
+		// cast the object to a residue
+		Residue& residue = dynamic_cast<Residue&>(object);
+
+		// get the reference fragment from the fragment DB
+		const Fragment* reference_fragment = fragment_db_->getReferenceFragment(residue);
+
+		// complain if no reference fragment could be found
+		if (reference_fragment == 0)
+		{
+			Log.warn() << "FragmentDB::AddHydrogensProcessor: no reference fragment found for " 
+							   << residue.getName() << ":" << residue.getID() << std::endl;
+		}
+
+		// check whether this reference fragment is already known
+		Handle handle = reference_fragment->getHandle();
+		if (!reference_fragment_h_names_.has(handle))
+		{
+			// this is the first time we encounter this fragment, extract all hydrogen names
+			// create a new name list for the current reference fragment
+			reference_fragment_h_names_.insert(pair<Handle, StringHashSet>(handle, StringHashSet()));
+			StringHashSet& names = reference_fragment_h_names_[handle];
+			for (AtomIterator atom_it = reference_fragment->beginAtom();
+					+atom_it; ++atom_it)
 			{
-				Log.warn() << "FragmentDB::AddHydrogensProcesor: couldn't find reference fragment for " 
-									 << residue_->getName() << endl;
-				return Processor::CONTINUE;
-			}
-			if (tmp != 0)
-			{
-				String variant_name = tmp->getName();
-				// the name is known, searching the residue prototype for hydrogens to be added
-				// save them in h_table_
-				
-				if (h_table_.has(variant_name)) 
+				if (atom_it->getElement() == PTE[Element::H])
 				{
-					h_atoms_ = h_table_[variant_name];
-				} 
-				else 
-				{
-					// constructing hashtable entry using prototype information
-					
-					// iterating the fragment and save the name of every hydrogen
-					
-					for (atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
-						{
-						if ((*atom_iter).getElement()==PTE[Element::H])
-							{
-							zaehler1++;
-							}
-						}
-					h_zaehler=zaehler1;
-					h_atoms_=new String[h_zaehler+1];
-					zaehler1=0;
-					for (atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
-					{
-						if ((*atom_iter).getElement()==PTE[Element::H])
-						{
-						atom_name=(*atom_iter).getName();
-						atom_name.append(":");
-						atom_name.append(variant_name);
-						h_atoms_[zaehler1]=atom_name;
-						zaehler1++;
-						}
-					}
-
-					h_atoms_[zaehler1]="NULL";
-					h_table_[variant_name]=h_atoms_;
-				}
-				
-				// iterating the hydrogens		
-				while(h_atoms_[k] != "NULL")	
-				{
-					inserted = false;
-					// test wethe hydrogen is already inserted
-					for (atom_iter = residue_->beginAtom(); +atom_iter; ++atom_iter)
-					{
-						atom_name = atom_iter->getName();
-						atom_name.append(":");
-						atom_name.append(variant_name);
-
-						if (atom_name == h_atoms_[k]) 
-						{ 
-							inserted = true;		
-							break;
-						}
-					}
-					
-					if (inserted) 
-					{     
-						k++;
-					} 
-					else 
-					{
-						if (ini_table_.has(h_atoms_[k]))	
-						{
-							// identify the atoms needed to get the new atom's coordinates
-							atoms_ = ini_table_[h_atoms_[k]]; 
-						} 
-						else 
-						{
-							// constructing hashtable entry
-							atoms_ = new String[5];
-							// searching prototype for h_atoms_[k] 
-							for(atom_iter=tmp->beginAtom();+atom_iter;++atom_iter)
-							{
-								atom_name = atom_iter->getName();
-								atom_name.append(":");
-								atom_name.append(variant_name);
-								if (atom_name == h_atoms_[k]) 
-								{
-									 atom=&(*atom_iter);
-							  }
-							}
-							// access hydrogen bound and get first reference atom
-							atom=atom->getBond(0)->getBoundAtom(*atom);
-							atom_feld[0] = atom;
-							zaehler1 = 0;
-							zaehler2 = 1;
-							bond_zaehler = 0;
-							
-							// searching for more reference atoms
-							// if the actual atom has no more bonds start over with next
-							// atom stored in atom_feld
-							
-							while (zaehler2 < 4)
-							{
-								atom=atom_feld[zaehler1];
-								if (atom->getBond(bond_zaehler))
-								{
-									atom=atom->getBond(bond_zaehler)->getBoundAtom(*atom);
-									if (atom->getElement()!=PTE[Element::H])
-									{
-										test_zaehler = 0;
-										inserted = 0;
-										while (test_zaehler < zaehler2)
-										{
-											if (atom_feld[test_zaehler]==atom) 
-											{
-												inserted=1;
-											}
-											test_zaehler++;
-										}
-										// next reference atom found and stored in atom_feld	
-										if (!inserted)
-										{
-											atom_feld[zaehler2] = atom;
-											zaehler2++;
-										}
-										bond_zaehler++;
-									}
-									else 
-									{  
-										zaehler1++;
-										bond_zaehler=0;
-									}
-								}
-							}
-
-							zaehler1 = 0;
-							while (zaehler1 < 4)
-							{
-								atom_name=atom_feld[zaehler1]->getName();
-								atom_name.append(":");
-								atom_name.append(variant_name);
-								atoms_[zaehler1]=atom_name;
-								zaehler1++;
-							}
-							atoms_[4]="NULL";
-							ini_table_[h_atoms_[k] ]=atoms_;
-						}
-						
-						// hydrogen is going to be inserted
-					
-						// getting the position of reference atoms
-						for (i = 0; i <= 3; i++)
-							{	
-								if (prot_table_.has(atoms_[i]))
-								{
-									atom = (PDBAtom*)&prot_table_[atoms_[i]];
-									xx[i] = atom->getPosition();
-								} 
-								else 
-								{
-									// if template is not known in prot_table
-									// it has to be added
-									addToTemplateTable_(tmp);
-									atom = (PDBAtom*)&prot_table_[atoms_[i]];
-									xx[i] = atom->getPosition();
-								}
-							}
-						
-							// getting the position of reference hydrogen
-							if (prot_table_.has(h_atoms_[k]))
-							{
-								atom = (PDBAtom*)&prot_table_[h_atoms_[k]];
-								xtarget = atom->getPosition(); 
-							} 
-							else 
-							{
-								Log.error() << "prot_table_ Eintrag nicht gefunden :"<< h_atoms_[k] << endl;
-								continue;
-							}
-					
-							// getting position of reference atoms of actual residue
-							for (i = 0; i <= 3; i++)
-							{
-								for (atom_iter = residue_->beginAtom(); +atom_iter; ++atom_iter)
-								{
-									atom_name = (*atom_iter).getName();
-									atom_name.append(":");
-									atom_name.append(variant_name);
-									if (atom_name == atoms_[i])
-									{
-										x[i] = (*atom_iter).getPosition();
-										if (!i)
-										{
-											bond_atom = (*atom_iter);	
-										}
-									}
-								}
-							}
-		
-							// xtarget is calculated
-							calculate_(h_atoms_[k], &bond_atom,
-												 x[0], x[1], x[2], x[3],
-												 xx[0], xx[1], xx[2], xx[3], 
-												 xtarget); 
-							
-							k++;
-					}
+					// add this hydrogen name to the name list for the current reference fragment
+					names.insert(atom_it->getName());
 				}
 			}
 		}
 
+		// get a copy of the hydrogen names occurring in the current reference fragment....
+		StringHashSet names = reference_fragment_h_names_[handle];
+
+		// ...and remove the names of existing hydrogens.
+		// At the same time, we construct a hash map relating the atom names
+		// of the residues with the corresponding atom pointers.
+		StringHashMap<Atom*> atom_name_map;
+		for (AtomIterator atom_it = residue.beginAtom(); +atom_it; ++atom_it)
+		{
+			if (names.has(atom_it->getName()))
+			{
+				names.erase(atom_it->getName());
+			}
+
+			atom_name_map.insert(atom_it->getName(), &*atom_it);
+		}
+
+
+		// the hash set now contains the names of the missing hydrogen atoms
+		// iterate over these atom names and identify the reference atoms
+		StringHashSet::Iterator missing_h_it = names.begin();
+		for (; missing_h_it != names.end(); ++missing_h_it)
+		{
+			// identify the reference hydrogen and the atom it is bound to
+			AtomIterator atom_it = reference_fragment->beginAtom();
+			for (; +atom_it; ++atom_it)
+			{
+				if (atom_it->getName() == *missing_h_it)
+				{
+					break;
+				}
+			}
+			const Atom& ref_hydrogen = *atom_it;
+			if ((ref_hydrogen.countBonds() != 1) 
+					|| (ref_hydrogen.getBond(0)->getPartner(ref_hydrogen)->getElement() == PTE[Element::H]))
+			{
+				Log.error() << "FragmentDB::AddHydrogensProcessor: unbound hydrogen atom "
+									  << ref_hydrogen.getName() << " in template of " << reference_fragment->getName() << std::endl;
+				continue;
+			}
+			const Atom& ref_center_atom = *ref_hydrogen.getBond(0)->getPartner(ref_hydrogen);
+
+			// determine the equivalent atom in the current residue
+			if (!atom_name_map.has(ref_center_atom.getName()))
+			{
+				Log.error() << "FragmentDB::AddHydrogensProcessor: could not identify a central atom for "
+									  << ref_hydrogen.getName() << " in " << residue.getName() << ":" << residue.getID() << std::endl;
+				continue;
+			}
+			Atom& center_atom = *atom_name_map[ref_center_atom.getName()];
+
+			// BFS marsch!
+			Quadruple<bool, const Atom*, const Atom*, const Atom*> result(getThreeReferenceAtoms_(ref_center_atom));
+
+			if (result.first == false)
+			{
+				Log.error() << "FragmentDB::AddHydrogensProcessor: could not find reference atoms for "
+									  << ref_hydrogen.getName() << " in reference residue " 
+										<< reference_fragment->getName() << ". Check fragment database for missing bonds!" << endl;
+				continue;
+			}
+
+			const Atom& ref_atom_1 = *result.second;
+			const Atom& ref_atom_2 = *result.third;
+			const Atom& ref_atom_3 = *result.fourth;
+			
+			// determine the equivalent atoms in the current residue
+			if (!atom_name_map.has(ref_atom_1.getName()) 
+					|| !atom_name_map.has(ref_atom_2.getName())
+					|| !atom_name_map.has(ref_atom_3.getName()))
+			{
+				Log.error() << "FragmentDB::AddHydrogensProcessor: could not identify all reference atoms in residue for "
+									  << ref_hydrogen.getName() << " in " << residue.getName() << ":" << residue.getID() << std::endl;
+				continue;
+			}
+			const Atom& atom_1 = *atom_name_map[ref_atom_1.getName()];
+			const Atom& atom_2 = *atom_name_map[ref_atom_2.getName()];
+			const Atom& atom_3 = *atom_name_map[ref_atom_3.getName()];
+			
+			// create a new hydrogen at an appropriate position
+			PDBAtom* new_hydrogen = createNewHydrogen_(ref_hydrogen, center_atom, atom_1, atom_2, atom_3,
+																							ref_center_atom, ref_atom_1, ref_atom_2, ref_atom_3);
+			
+			// check whether we could create the new hydrogen
+			if (new_hydrogen != 0)
+			{
+				// insert the hydrogen atom
+				residue.insert(*new_hydrogen);
+				number_of_inserted_h_++;
+				try 
+				{
+					new_hydrogen->createBond(center_atom);
+				} 
+				catch (Bond::TooManyBonds)
+				{
+					Log.error() << "FragmentDB::AddHydrogensProcessor: cannot create bond between "
+											<< residue.getName() << ":" << new_hydrogen->getName() << " and " 
+											<< center_atom.getName() << ": too many bonds!" << endl;
+				}
+			}
+			else
+			{
+				// complain about it
+				Log.warn() << "FragmentDB::AddHydrogensProcessor: could not create new hydrogen atom " 
+									 << ref_hydrogen.getName() << std::endl;
+			}
+		}	
+		
 		return Processor::CONTINUE;
+
 	}
 
 	// copy constructor	
 	FragmentDB::AddHydrogensProcessor::AddHydrogensProcessor(const FragmentDB& db)
 	{
 		fragment_db_ = &db;
-		
-		// extract the fragment names from the fragment DB
-		const ResourceEntry* tmp = fragment_db_->tree->getEntry("/Fragments");
-		ResourceEntry::ConstIterator it = tmp->begin();
-		for (++it; +it; ++it)
-		{
-      if ((*it).getDepth() == tmp->getDepth() + 1)
-			{
-				template_names_.push_back((*it).getKey());
-			}
-		}
 	}
 	
 	// constructor	
@@ -1856,19 +1774,13 @@ namespace BALL
 	// destructor	
 	FragmentDB::AddHydrogensProcessor::~AddHydrogensProcessor()
 	{
-		// BAUSTELLE: Da fehlt ja wohl noch alles!
-		// erase the array containing the amino acid names
-		template_names_.clear();
-		
 		fragment_db_ = 0;
 	}
 	// returning numbers of inserted hydrogens
-	Size FragmentDB::AddHydrogensProcessor::getNumberOfInsertedH()
+	Size FragmentDB::AddHydrogensProcessor::getNumberOfInsertedHydrogens()
 	{
-		return count_h_;
+		return 0;
 	}
-
-
 	//	BuildBondsProcessor
 
 	FragmentDB::BuildBondsProcessor::BuildBondsProcessor()
