@@ -1,0 +1,278 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>AnimationDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>AnimationDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>270</width>
+            <height>317</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>AnimationDialog</string>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>add_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>4</y>
+                <width>114</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Add</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>goto_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>149</x>
+                <y>32</y>
+                <width>114</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Go to</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>delete_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>149</x>
+                <y>62</y>
+                <width>114</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Delete</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>animate_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>41</x>
+                <y>210</y>
+                <width>181</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Animate</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>close_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>40</x>
+                <y>279</y>
+                <width>181</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Close</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancel_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>41</x>
+                <y>245</y>
+                <width>181</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+        <property name="default">
+            <bool>false</bool>
+        </property>
+    </widget>
+    <widget class="QListBox">
+        <property name="name">
+            <cstring>entries</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>8</x>
+                <y>8</y>
+                <width>134</width>
+                <height>174</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>export_POV</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>151</x>
+                <y>119</y>
+                <width>113</width>
+                <height>19</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>110</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>export POVRay</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Export one PNG image for each Snapshot.</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Export one PNG image for each Snapshot.</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>export_PNG</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>151</x>
+                <y>144</y>
+                <width>113</width>
+                <height>19</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>110</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>export PNGs</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Export one PNG image for each Snapshot.</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Export one PNG image for each Snapshot.</string>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>repeat_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>151</x>
+                <y>169</y>
+                <width>113</width>
+                <height>19</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>110</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>repeat</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Export one PNG image for each Snapshot.</string>
+        </property>
+        <property name="whatsThis" stdset="0">
+            <string>Export one PNG image for each Snapshot.</string>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>animate_button</sender>
+        <signal>pressed()</signal>
+        <receiver>AnimationDialogData</receiver>
+        <slot>animatePressed()</slot>
+    </connection>
+    <connection>
+        <sender>cancel_button</sender>
+        <signal>pressed()</signal>
+        <receiver>AnimationDialogData</receiver>
+        <slot>cancelPressed()</slot>
+    </connection>
+    <connection>
+        <sender>close_button</sender>
+        <signal>pressed()</signal>
+        <receiver>AnimationDialogData</receiver>
+        <slot>closePressed()</slot>
+    </connection>
+    <connection>
+        <sender>delete_button</sender>
+        <signal>pressed()</signal>
+        <receiver>AnimationDialogData</receiver>
+        <slot>deletePressed()</slot>
+    </connection>
+    <connection>
+        <sender>entries</sender>
+        <signal>selectionChanged()</signal>
+        <receiver>AnimationDialogData</receiver>
+        <slot>entrySelected()</slot>
+    </connection>
+    <connection>
+        <sender>goto_button</sender>
+        <signal>pressed()</signal>
+        <receiver>AnimationDialogData</receiver>
+        <slot>gotoPressed()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>cancelPressed()</slot>
+    <slot>animatePressed()</slot>
+    <slot>closePressed()</slot>
+    <slot>addPressed()</slot>
+    <slot>gotoPressed()</slot>
+    <slot>deletePressed()</slot>
+    <slot>entrySelected()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
