@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.108 2004/07/16 14:42:14 amoll Exp $
+// $Id: scene.C,v 1.109 2004/07/20 11:32:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -948,6 +948,7 @@ namespace BALL
 			inifile.insertValue("STAGE", "FogIntensity", String(stage_->getFogIntensity()));
 			inifile.insertValue("STAGE", "BackgroundColor", String(data));
 			inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
+			inifile.insertValue("STAGE", "Fulcrum", vector3ToString(system_origin_));
 			writeLights_(inifile);
 		}
 
@@ -978,6 +979,11 @@ namespace BALL
 			if (inifile.hasEntry("STAGE", "FogIntensity"))
 			{
 				stage_->setFogIntensity(inifile.getValue("STAGE", "FogIntensity").toFloat());
+			}
+
+			if (inifile.hasEntry("STAGE", "Fulcrum"))
+			{
+				stringToVector3(inifile.getValue("STAGE", "Fulcrum"), system_origin_);
 			}
 
 			if (inifile.hasEntry("STAGE", "BackgroundColor"))
