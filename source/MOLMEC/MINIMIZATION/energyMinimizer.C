@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.23 2003/03/21 14:37:31 anhi Exp $
+// $Id: energyMinimizer.C,v 1.24 2003/05/27 14:04:02 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
@@ -485,7 +485,7 @@ namespace BALL
 	}
 
 	// update the step size
-	void EnergyMinimizer::updateStepSize(double lambda)
+	void EnergyMinimizer::updateStepSize(double /* lambda */)
 	{
 	}
 	
