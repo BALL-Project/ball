@@ -1,4 +1,4 @@
-// $Id: energyProcessor.h,v 1.1 2000/08/31 14:16:56 anker Exp $
+// $Id: energyProcessor.h,v 1.2 2000/08/31 16:24:15 anker Exp $
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #define BALL_ENERGY_ENERGYPROCESSOR_H
@@ -7,8 +7,8 @@
 #include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_BASEFRAGMENT_H
-#include <BALL/KERNEL/baseFragment.h>
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+#include <BALL/KERNEL/atomContainer.h>
 #endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
@@ -24,7 +24,7 @@ namespace BALL
 	*/
 
 	class EnergyProcessor
-		:	public UnaryProcessor<BaseFragment>
+		:	public UnaryProcessor<AtomContainer>
 	{
 
 		public:
@@ -70,7 +70,7 @@ namespace BALL
 		virtual bool start();
 
 		/** Operator-function. This function only stores the BaseFragment. */
-		virtual Processor::Result operator () (BaseFragment& fragment);
+		virtual Processor::Result operator () (AtomContainer& fragment);
 		
 		//@}
 
@@ -85,7 +85,7 @@ namespace BALL
 
 		protected:
 
-		const BaseFragment* fragment_;
+		const AtomContainer* fragment_;
 		double energy_;
 	};
 }
