@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.11 2000/02/18 22:19:19 oliver Exp $
+// $Id: vector4.h,v 1.12 2000/02/19 01:35:34 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -116,12 +116,12 @@ namespace BALL
 		void set(const T* ptr);
 
 		/**	Assign the vector components.
-				@param x the new x component
-				@param y the new y component
-				@param z the new z component
-				@param h the new h component, default = 1
+				@param rx the new x component
+				@param ry the new y component
+				@param rz the new z component
+				@param rh the new h component, default = 1
 		*/
-		void set(const T& x, const T& y, const T& z, const T& h = (T)1);
+		void set(const T& rx, const T& ry, const T& rz, const T& rh = (T)1);
 
 		/**	Assign from another TVector4.
 				@param vector	the TVector4 object to assign from
@@ -151,12 +151,12 @@ namespace BALL
 		void get(T* ptr) const;
 
 		/**	Assign to four variables of type {\tt T}.
-				@param	x the x component
-				@param	y the y component
-				@param	z the z component
-				@param	h the h component
+				@param	rx the x component
+				@param	ry the y component
+				@param	rz the z component
+				@param	rh the h component
 		*/
-		void get(T& x, T& y, T& z, T& h) const;
+		void get(T& rx, T& ry, T& rz, T& rh) const;
 
 		/**	Assign to another Vector4.
 				Assigns the vector components to another vector.
@@ -404,12 +404,12 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TVector4<T>::set(const T& x, const T& y, const T& z, const T& h)
+	void TVector4<T>::set(const T& rx, const T& ry, const T& rz, const T& rh)
 	{
-		x = x;
-		y = y;
-		z = z;
-		h = h;
+		x = rx;
+		y = ry;
+		z = rz;
+		h = rh;
 	}
 
 	template <class T>
@@ -454,7 +454,7 @@ namespace BALL
 	void TVector4<T>::get(T* ptr) const
 	{
 		if (ptr == 0)
-			throw Exception::NullPointer(__FILE__, __LINE___);
+			throw Exception::NullPointer(__FILE__, __LINE__);
 		
 		*ptr++ = x;
 		*ptr++ = y;
@@ -517,6 +517,7 @@ namespace BALL
 	}
 
 	template <class T>
+
 	BALL_INLINE
 	TVector4<T>& TVector4<T>::normalize()
 	{
