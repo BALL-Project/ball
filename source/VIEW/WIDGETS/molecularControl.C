@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.50 2004/03/02 01:23:07 amoll Exp $
+// $Id: molecularControl.C,v 1.51 2004/03/12 22:36:14 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -963,6 +963,7 @@ MolecularControl::SelectableListViewItem*
 	CHECK_PTR(new_item);
 
 	composite_to_item_[&composite] = new_item;
+	if (composite.isSelected()) new_item->setOn(true);
 
 	recurseGeneration_(new_item, composite);
 
