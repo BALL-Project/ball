@@ -1,7 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.C,v 1.25 2002/12/22 15:03:43 anker Exp $
+// $Id: numericalSAS.C,v 1.26 2003/08/28 20:56:30 oliver Exp $
+//
+
+#include <utility>
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -12,8 +15,6 @@
 #ifdef BALL_HAS_VALUES_H
 # include <values.h>
 #endif
-
-using namespace std;
 
 #define FLAG_DOTS       01
 #define FLAG_VOLUME     02
@@ -84,7 +85,7 @@ namespace BALL
 		// hash map atom_areas
 		for (Size j = 0; j < atoms.size(); ++j)
 		{
-			atom_areas.insert(pair<const Atom*, float>(atoms[j], (float)internal_atom_areas[j]));
+			atom_areas.insert(std::pair<const Atom*, float>(atoms[j], (float)internal_atom_areas[j]));
 		}
 
 		// free arrays (if created)
@@ -344,7 +345,7 @@ namespace BALL
 	}
 	
   float calculateSASAtomPoints(const AtomContainer& fragment, 
-			std::vector< std::pair<Vector3, Surface> >& atom_surfaces,
+			std::vector<std::pair<Vector3, Surface> >& atom_surfaces,
 			float probe_radius,  Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
@@ -429,8 +430,8 @@ namespace BALL
 				surface.normal[i] *= length;
 				point++;
 			}
-			// atom_surfaces.insert(pair<Atom*, Surface>(atoms[j], surface));
-			atom_surfaces.push_back(pair<Vector3, Surface>(atoms[j]->getPosition(), surface));
+			// atom_surfaces.insert(std::pair<Atom*, Surface>(atoms[j], surface));
+			atom_surfaces.push_back(std::pair<Vector3, Surface>(atoms[j]->getPosition(), surface));
 		}
 
 		// free arrays (if created)
@@ -576,7 +577,7 @@ int          last_cubus=0;
 		}
 		if ( (fabs(f) - 1.00)  <= DP_TOL ) 
 		{
-			BALL_NSC_WARNING << "calculateSASArea: invalid argument" << f << endl;
+			BALL_NSC_WARNING << "calculateSASArea: invalid argument" << f << ::std::endl;
 		}
 		return(M_PI * M_PI);
 	}
@@ -589,7 +590,7 @@ int          last_cubus=0;
 			ip = (int *) calloc(nelem, elsize);
 			if(ip == NULL)
 			{
-				BALL_NSC_ERROR << "calculateSASAreaCALLOC : failed in file " << filename << " at line " << linenr << endl;
+				BALL_NSC_ERROR << "calculateSASAreaCALLOC : failed in file " << filename << " at line " << linenr << ::std::endl;
 			}
 			return(ip);
 		}
@@ -601,7 +602,7 @@ int          last_cubus=0;
 		ip = (int *) realloc(ptr, size);
 		if(ip == NULL)
 		{
-			BALL_NSC_ERROR << "REALLOC : failed in file " << filename << " at line " << linenr << endl;
+			BALL_NSC_ERROR << "REALLOC : failed in file " << filename << " at line " << linenr << ::std::endl;
 		}
 		return(ip);
 		}
@@ -643,18 +644,18 @@ int          last_cubus=0;
 		dd = sqrt(xd*xd+yd*yd+zd*zd);
 		if (dd < DP_TOL)
 		{
-			BALL_NSC_ERROR << "divarc: rotation axis of length " << dd << endl;
+			BALL_NSC_ERROR << "divarc: rotation axis of length " << dd << ::std::endl;
 		}
 
 		d1 = x1*x1+y1*y1+z1*z1;
 		if (d1 < 0.5)
 		{
-			BALL_NSC_ERROR << "divarc: vector 1 of sq.length " << d1 << endl;
+			BALL_NSC_ERROR << "divarc: vector 1 of sq.length " << d1 << ::std::endl;
 		}
 		d2 = x2*x2+y2*y2+z2*z2;
 		if (d2 < 0.5)
 		{
-			BALL_NSC_ERROR << "divarc: vector 2 of sq.length " << d2 << endl;
+			BALL_NSC_ERROR << "divarc: vector 2 of sq.length " << d2 << ::std::endl;
 		}
 
 		phi = asin_safe(dd/sqrt(d1*d2));
@@ -687,7 +688,7 @@ int          last_cubus=0;
 		if (n_dot < densit) 
 		{
 			BALL_NSC_ERROR << "ico_dot_arc: error in formula for tessalation level (" << tess 
-								<< "->" << n_dot << ", " << densit << ")" << endl;
+								<< "->" << n_dot << ", " << densit << ")" << ::std::endl;
 		}
 
 		xus = (double *) CALLOC(3*n_dot, sizeof(double));
@@ -712,7 +713,7 @@ int          last_cubus=0;
 					{
 						if (tn >= n_dot) 
 						{ 
-							BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
+							BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << ::std::endl;
 						}
 						divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 									 xus[3*j], xus[1+3*j], xus[2+3*j],
@@ -769,7 +770,7 @@ int          last_cubus=0;
 											 tess-tl-tl2, tess, &xjk, &yjk, &zjk);
 								if (tn >= n_dot)
 								{
-									BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
+									BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << ::std::endl;
 								}
 								divarc(xki, yki, zki, xji, yji, zji, tl2, tess-tl, &x, &y, &z);
 								divarc(xkj, ykj, zkj, xij, yij, zij, tl, tess-tl2, &x2, &y2, &z2);
@@ -787,7 +788,7 @@ int          last_cubus=0;
 			}			/* cycle i */
 			if (n_dot != tn) 
 			{
-				BALL_NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << endl;
+				BALL_NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << ::std::endl;
 			}
 		}		/* end of if (tess > 1) */
 		return n_dot;
@@ -810,7 +811,7 @@ int          last_cubus=0;
 		if (n_dot < densit) 
 		{
 			BALL_NSC_ERROR << "ico_dot_dod: error in formula for tessalation level (" << tess << "->" 
-				<< n_dot << ", " << densit << ")" << endl;
+				<< n_dot << ", " << densit << ")" << ::std::endl;
 		}
 
 		xus = (double *) CALLOC(3*n_dot, sizeof(double));
@@ -889,7 +890,7 @@ int          last_cubus=0;
 					{
 						if (tn >= n_dot) 
 						{
-							BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
+							BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << ::std::endl;
 						}
 						divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 									 xus[3*j], xus[1+3*j], xus[2+3*j],
@@ -955,7 +956,7 @@ int          last_cubus=0;
 											 tess-tl-tl2, tess, &xjk, &yjk, &zjk);
 								if (tn >= n_dot) 
 								{
-									BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
+									BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << ::std::endl;
 								}
 								divarc(xki, yki, zki, xji, yji, zji, tl2, tess-tl, &x, &y, &z);
 								divarc(xkj, ykj, zkj, xij, yij, zij, tl, tess-tl2, &x2, &y2, &z2);
@@ -975,7 +976,7 @@ int          last_cubus=0;
 			}			/* cycle i */
 			if (n_dot != tn) 
 			{
-				BALL_NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << endl;
+				BALL_NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << ::std::endl;
 			}
 		}		/* end of if (tess > 1) */
 		
@@ -1012,7 +1013,7 @@ int          last_cubus=0;
 		if (mode == UNSP_ICO_ARC)      { ndot = ico_dot_arc(densit); }
 		else if (mode == UNSP_ICO_DOD)      { ndot = ico_dot_dod(densit); }
 		else {
-			BALL_NSC_WARNING << "make_unsp: mode " << ((k)?'+':'-') << (int)mode << " not allowed" << endl;
+			BALL_NSC_WARNING << "make_unsp: mode " << ((k)?'+':'-') << (int)mode << " not allowed" << ::std::endl;
 			return 1;
 			}
 
@@ -1149,7 +1150,7 @@ int          last_cubus=0;
 		/* calculate neighbour list with the box algorithm */
 		if (nat == 0) 
 		{
-			BALL_NSC_WARNING << "nsc_dclm: no surface atoms selected" << endl;
+			BALL_NSC_WARNING << "nsc_dclm: no surface atoms selected" << ::std::endl;
 			return 1;
 		}
 		if (mode & FLAG_VOLUME) 

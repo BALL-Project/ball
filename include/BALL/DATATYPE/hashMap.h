@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashMap.h,v 1.38 2003/08/26 08:04:10 oliver Exp $ 
+// $Id: hashMap.h,v 1.39 2003/08/28 20:56:29 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_HASHMAP_H
@@ -39,6 +39,7 @@
 #	include <BALL/COMMON/exception.h>
 #endif
 
+#include <utility>
 #include <algorithm>
 
 namespace BALL
@@ -437,7 +438,7 @@ namespace BALL
 
 		/**	Insert a new entry into the hash map.
 		*/
-		std::pair<Iterator, bool> insert(const ValueType& entry) throw();
+		::std::pair<Iterator, bool> insert(const ValueType& entry) throw();
 
 		/**	Insert a new entry into the hash map.
 				For STL compatibility. The value of <tt>pos</tt> is ignored.
@@ -782,7 +783,7 @@ namespace BALL
 		if (it == end())
 		{
 			T value;
-			std::pair<Iterator, bool> result = insert(ValueType(key, value));
+			::std::pair<Iterator, bool> result = insert(ValueType(key, value));
 			it = result.first;
 		} 
 		
@@ -806,7 +807,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
+	::std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
 		(const ValueType& item)	throw()
 	{
 		Iterator it = find(item.first);
@@ -827,14 +828,14 @@ namespace BALL
 			it.getTraits().position_	= bucket_[bucket];
 			it.getTraits().bucket_		= bucket;
 
-			return std::pair<Iterator, bool>(it, true);
+			return ::std::pair<Iterator, bool>(it, true);
 		} 
 		else 
 		{
 			// replace the existing value
 			it->second = item.second;
 
-			return std::pair<Iterator, bool>(it, false);
+			return ::std::pair<Iterator, bool>(it, false);
 		}
 	}
 

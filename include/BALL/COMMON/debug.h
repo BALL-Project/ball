@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: debug.h,v 1.8 2003/08/26 08:04:05 oliver Exp $
+// $Id: debug.h,v 1.9 2003/08/28 20:56:29 oliver Exp $
 //
 
 #ifndef BALL_COMMON_DEBUG_H
@@ -17,6 +17,8 @@
 #	define BALL_INLINE inline
 #endif
 
+#include <string>
+
 #ifdef BALL_DEBUG
 
 #	define BALL_PRECONDITION_EXCEPTION(condition, message)\
@@ -25,8 +27,8 @@
 		Exception::Precondition e(__FILE__, __LINE__, #condition);\
 		if (message != "")\
 		{\
-      std::string tmp(e.getMessage());\
-			tmp += std::string(message);\
+      ::std::string tmp(e.getMessage());\
+			tmp += ::std::string(message);\
 			e.setMessage(tmp);\
 		}\
 		throw e;\
