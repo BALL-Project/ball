@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.h,v 1.9 2000/11/28 18:04:05 anhi Exp $
+// $Id: bruker1DFile.h,v 1.10 2001/01/29 18:17:03 anhi Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -21,6 +21,10 @@
 #       include <BALL/FORMAT/JCAMPFile.h>
 #endif
 
+#ifndef BALL_DATATYPE_REGULARDATA1D_H
+#       include <BALL/DATATYPE/regularData1D.h>
+#endif
+
 namespace BALL
 {
 	/**	Bruker 1D spectrum format.
@@ -36,6 +40,8 @@ namespace BALL
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
+
+       	        Bruker1D();
 
 		/**	Constructor.
 				@param name important: name of the Bruker-*directory*
@@ -53,9 +59,15 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Read a 1D-spectrum to dat.
+		/**	Read a spectrum from "name". It will be stored in spectrum_
 		*/
-		void read(std::vector<double>& dat);
+		void read(const String &name);
+
+		void read();
+
+	        /**     Return a reference to the spectrum.
+		 */
+		RegularData1D* GetData();
 
 		/**
 		*/
@@ -72,6 +84,8 @@ namespace BALL
 		
 		Size min_;
 		Size max_;
+
+		RegularData1D spectrum_;
 	};
 }
 
