@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File_test.C,v 1.10 2003/02/20 06:50:37 oliver Exp $
+// $Id: MOL2File_test.C,v 1.11 2003/03/03 09:53:27 anhi Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.10 2003/02/20 06:50:37 oliver Exp $")
+START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.11 2003/03/03 09:53:27 anhi Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,7 +53,6 @@ CHECK(MOL2File::read(System& system))
 	}
 	TEST_EQUAL(number_of_bonds, 29)
 RESULT
-
 
 CHECK(MOL2File::MOL2File(const String& filename, File::OpenMode open_mode))
 	MOL2File f("data/AAG.mol2", std::ios::in);
@@ -151,14 +150,24 @@ CHECK(MOL2File::MOL2File& operator << (const System& system))
 	TEST_FILE_REGEXP(filename.c_str(), "data/MOL2File_test.mol2")
 RESULT
 
-CHECK(Bug #11)
-	MOL2File f("data/MOL2File_test_bug11.mol2");
+CHECK(Reading of triple bonds)
+	MOL2File f("data/MOL2File_test2.mol2");
 	System S;
+	CAPTURE_OUTPUT_LEVEL(2000)
 	f >> S;
+	COMPARE_OUTPUT("")
 	f.close();
-	TEST_EQUAL(S.countAtoms(), 15)
+	TEST_EQUAL(S.countAtoms(), 21)
+	TEST_EQUAL(S.countResidues(), 0)
+	Size number_of_bonds = 0;
+	Atom::BondIterator bond_it;
+	AtomIterator atom_it;
+	BALL_FOREACH_BOND(S, atom_it, bond_it)
+	{
+		number_of_bonds++;
+	}
+	TEST_EQUAL(number_of_bonds, 23)
 RESULT
-
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
