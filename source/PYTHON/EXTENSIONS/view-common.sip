@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: view-common.sip,v 1.2 2003/11/27 21:06:08 oliver Exp $
+// $Id: view-common.sip,v 1.3 2004/05/18 16:19:24 amoll Exp $
 //
 
 %ModuleHeaderCode 
@@ -11,9 +11,6 @@
 %End
 
 //extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
-
-//typedef unsigned long    SceneHandle;      
-
 
 enum Command
 {

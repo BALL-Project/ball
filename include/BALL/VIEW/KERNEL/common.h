@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.18 2004/05/18 15:47:31 amoll Exp $
+// $Id: common.h,v 1.19 2004/05/18 16:18:06 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -86,13 +86,6 @@ enum EventsIDs
 
 /// global variable, which defines, if DockWidgets are shown with a Label
 extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
-
-/** SceneHandle type.
-		Use this type to represent <b>scene handles</b>. Scene handles are used
-		for the non-ambiguous identification of scenes.
-*/
-typedef unsigned long    SceneHandle;      
-
 
 //@}
 /** @name Enumerations for Representations and Renderer
