@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.1 2000/10/10 14:24:58 oliver Exp $
+// $Id: triangulatedSurface.h,v 1.2 2000/10/11 09:40:57 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -182,29 +182,29 @@ namespace BALL
 		TSurface<T> exportSurface()
 		{
 			setIndices();
-			list< TVector3<T> > surface_points;
-			list<TSurface<T>::Triangle> surface_triangles;
-			list< TVector3<T> > surface_normals;
+			std::vector<TVector3<T> > surface_points;
+			std::vector<TSurface<T>::Triangle> surface_triangles;
+			std::vector<TVector3<T> > surface_normals;
 			list<Point*>::iterator p;
 			for (p = points.begin(); p != points.end(); p++)
-				{
-					surface_points.push_back((*p)->p);
-					surface_normals.push_back((*p)->n);
-				}
+			{
+				surface_points.push_back((*p)->p);
+				surface_normals.push_back((*p)->n);
+			}
 			list<Triangle*>::iterator t;
 			for (t = triangles.begin(); t != triangles.end(); t++)
-				{
-					TSurface<T>::Triangle triangle;
-					triangle.v1 = (*t)->point[0]->index;
-					triangle.v2 = (*t)->point[1]->index;
-					triangle.v3 = (*t)->point[2]->index;
-					surface_triangles.push_back(triangle);
-				}
+			{
+				TSurface<T>::Triangle triangle;
+				triangle.v1 = (*t)->point[0]->index;
+				triangle.v2 = (*t)->point[1]->index;
+				triangle.v3 = (*t)->point[2]->index;
+				surface_triangles.push_back(triangle);
+			}
 			
 			TSurface<T> surface;
 			surface.vertex = surface_points;
-			surface.triangles = surface_triangles;
-			surface.normals = surface_normals;
+			surface.triangle = surface_triangles;
+			surface.normal = surface_normals;
 
 			return surface;
 		}
