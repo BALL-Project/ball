@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.C,v 1.11 2003/05/19 09:00:31 oliver Exp $
+// $Id: hash.C,v 1.12 2003/05/21 14:38:19 oliver Exp $
 
 #include <BALL/COMMON/hash.h>
 
@@ -29,7 +29,7 @@ namespace BALL
 	HashIndex hashString(const char *s)
 		throw()
 	{
-		if (char == 0)
+		if (s == 0)
 		{
 			return (HashIndex)0;
 		}
