@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.60 2000/02/02 14:35:24 oliver Exp $
+dnl    $Id: configure.in,v 1.61 2000/02/04 17:47:04 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -28,6 +28,8 @@ AC_ARG_ENABLE(64,              [  --enable-64             create 64 bit binaries
 AC_ARG_WITH(compiler,          [  --with-compiler=CXX     use CXX as C++ compiler])
 AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ compiler flags (commas are converted to blanks)])
 AC_ARG_WITH(ldflags,           [  --with-ldflags=FLAGS    add FLAGS to the linker flags (commas are converted to blanks)])
+AC_ARG_WITH(arflags,           [  --with-arflags=FLAGS    add FLAGS to the flags for the creation of the static libraries])
+AC_ARG_WITH(dynarflags,        [  --with-dynarflags=FLAGS add FLAGS to the flags for the creation of the shared libraries])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
 AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
 AC_ARG_WITH(moc,               [  --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)])
@@ -67,6 +69,14 @@ fi
 
 if test "$with_ldflags" != "" ; then
 	LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
+fi
+
+if test "$with_dynarflags" != "" ; then
+	DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
+fi
+
+if test "$with_arflags" != "" ; then
+	AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
 fi
 
 if test "$with_qt_incl" != "" ; then
@@ -835,9 +845,9 @@ if test "${HAS_GPLUSPLUS}" = "true" ; then
 
 	DYNAR="${CXX}"
 	if test "${OS}" != "Solaris" ; then
-		DYNAROPTS="-shared -fPIC -o"		
+		DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"		
 	else 
-		DYNAROPTS="-G -fPIC -o"
+		DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
 	fi
 
 	if test "${IS_EGXX}" = true; then
@@ -860,8 +870,8 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 	TEMPLATE_DIR="ti_files"
 	AR="${CXX}"
 	DYNAR="${CXX}"
-	AROPTS="-o"
-	DYNAROPTS="-o"
+	AROPTS="${AROPTS} -o"
+	DYNAROPTS="${DYNAROPTS} -o"
 	CXX_MAKEDEPEND="${CXX}"
 	MAKEDEP_CXX_OPTS="-M"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
@@ -902,7 +912,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
 			LDFLAGS="${LDFLAGS} -xarch=v9"
 			CXXFLAGS="${CXXFLAGS} -xarch=v9"
 			AROPTS="${AROPTS} -xarch=v9"
-			DYNAROPTS=" -xarch=v9 ${DYNAROPTS}"
+			DYNAROPTS="-xarch=v9 ${DYNAROPTS}"
 		else
 			CXX_NAME="${CXX_NAME}_V8"
 		fi
@@ -947,9 +957,9 @@ if test "${COMPILER_DONE}" != true ; then
 
 
 		AR=${CXX}
-		AROPTS="-ar -o"
+		AROPTS="${AROPTS} -ar -o"
 		DYNAR=${CXX}
-		DYNAROPTS="-LANG:std -shared -quickstart_info -no_unresolved -o"
+		DYNAROPTS="${DYNAROPTS} -LANG:std -shared -quickstart_info -no_unresolved -o"
 
 		dnl  issue a warning about an old compiler with a broken ostream implementation: reopening a fstream
 		dnl  and writing to it will omit the first 16k written to the stream. Nasty, but confirmed with SGI
@@ -1037,7 +1047,7 @@ if test "${COMPILER_DONE}" != true ; then
 			LDFLAGS="${LDFLAGS} -xarch=v9"
 			CXXFLAGS="${CXXFLAGS} -xarch=v9"
 			AROPTS="${AROPTS} -xarch=v9"
-			DYNAROPTS=" -xarch=v9 ${DYNAROPTS}"
+			DYNAROPTS="-xarch=v9 ${DYNAROPTS}"
 		else
 			SUN_BINFMT=V8
 			CXX_NAME="${CXX_NAME}_V8"
