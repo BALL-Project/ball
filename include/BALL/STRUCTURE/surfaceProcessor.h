@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.13 2001/03/06 00:12:24 amoll Exp $
+// $Id: surfaceProcessor.h,v 1.14 2001/06/05 15:48:32 anker Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -99,9 +99,9 @@ namespace BALL
 					}
 				}
 				*/
-				std::cerr << "initialising reduced surface ...\n";
+				Log.error() << "initialising reduced surface ...\n";
 		ReducedSurface* rs = new ReducedSurface(spheres_,probe_radius_);
-				std::cerr << "... ok\ncomputing reduced surface ...\n";
+				Log.error() << "... ok\ncomputing reduced surface ...\n";
 		rs->compute();
 				std::ofstream rsfile("ReducedSurface.log");
 				rsfile << *rs;
@@ -135,29 +135,29 @@ namespace BALL
 					surface_.normal[triangle.v3] += rs->getFace(t)->getNormal();
 					surface_.triangle.push_back(triangle);
 				}*/
-				std::cerr << "... ok\ninitialising solvent excluded surface ...\n";
+				Log.error() << "... ok\ninitialising solvent excluded surface ...\n";
 		SolventExcludedSurface* ses = new SolventExcludedSurface(rs);
-				std::cerr << "... ok\ncomputing solvent excluded surface ...\n";
+				Log.error() << "... ok\ncomputing solvent excluded surface ...\n";
 		ses->get(rs);
 				std::ofstream sesfile("SolventExcludedSurface.log");
 				sesfile << *ses;
 				sesfile.close();
-				std::cerr << "... ok\ntreating singularities ...\n";
+				Log.error() << "... ok\ntreating singularities ...\n";
 		//TreatSingularities(ses,probe_radius_);
 				density_ = 4.5;
-				std::cerr << "... ok\ntriangulating surface ...\n";
+				Log.error() << "... ok\ntriangulating surface ...\n";
 		TriangulatedSurface* surface = Triangulate(ses,rs,density_);
-				std::cerr << "... " << surface->triangles.size() << " Dreiecke ... ok\n";
+				Log.error() << "... " << surface->triangles.size() << " Dreiecke ... ok\n";
 				//cout << *surface;
-				std::cerr << "exporting surface ...\n";
+				Log.error() << "exporting surface ...\n";
 		surface->exportSurface(surface_);
-				std::cerr << "... ok\ndeleting surface ...\n";
+				Log.error() << "... ok\ndeleting surface ...\n";
 		delete surface;
-				std::cerr << "... ok\ndeleting solvent excluded surface ...\n";
+				Log.error() << "... ok\ndeleting solvent excluded surface ...\n";
 		delete ses;
-				std::cerr << "... ok\ndeleting reduced surface ...\n";
+				Log.error() << "... ok\ndeleting reduced surface ...\n";
 		delete rs;
-				std::cerr << "... ok\n";
+				Log.error() << "... ok\n";
 		Constants::EPSILON = old_epsilon;
 		return true;
 	}
