@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.10 1999/11/03 12:12:42 oliver Exp $
+dnl    $Id: configure.in,v 1.11 1999/12/17 17:09:22 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -877,11 +877,17 @@ if test "$DEBUG" != "" ; then
 	dnl   define a debug flag and prevent the compilation of
 	dnl   inline functions by defining BALL_NO_INLINE_FUNCTIONS
 	dnl   (see COMMON/debug.h)
-	AC_DEFINE(BALL_DEBUG,)
-	AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
-	AC_MSG_RESULT(enabled)
-	CPP_MODE_FLAGS="${CPPFLAGS_D}"
-	CPP_MODE_FLAGS_NO_OPTIMIZATION="${CPPFLAGS_D}"
+	if test "$DEBUG" = true ; then	
+		AC_DEFINE(BALL_DEBUG,)
+		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
+		AC_MSG_RESULT(enabled)
+		CPP_MODE_FLAGS="${CPPFLAGS_D}"
+		CPP_MODE_FLAGS_NO_OPTIMIZATION="${CPPFLAGS_D}"
+	else
+		AC_MSG_RESULT(disabled)
+		CPP_MODE_FLAGS="${CPPFLAGS_O}"
+		CPP_MODE_FLAGS_NO_OPTIMIZATION=""
+	fi
 else
 	AC_MSG_RESULT(disabled)
 	CPP_MODE_FLAGS="${CPPFLAGS_O}"
