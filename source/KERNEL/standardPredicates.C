@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.30.2.5 2003/02/05 15:45:32 anker Exp $
+// $Id: standardPredicates.C,v 1.30.2.6 2003/02/05 15:47:36 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -844,55 +844,12 @@ namespace BALL
 		current = root;
 		all_nodes.push_back(root);
 
-<<<<<<< standardPredicates.C
-	ConnectedToPredicate::CTPNode* ConnectedToPredicate::parse_() 
-		throw()
-	{
-		return(parse_(argument_));
-	}
-=======
-		String bond_chars(".-=#%~");
-		String uppercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
-		String lowercase("abcdefghijklmnopqrstuvwxyz");
-		String numbers("12345678");
->>>>>>> 1.40
-
-<<<<<<< standardPredicates.C
-	ConnectedToPredicate::CTPNode* ConnectedToPredicate::parse_(const String& input) 
-		throw()
-	{
-		Size depth = 0;
-		int bracket_count = 0;
-		Size position = 0;
-		CTPNode* current = 0;
-		Size verbosity = 1;
-		std::list<CTPNode*> all_nodes;
-		std::vector<CTPNode*> bracket_stack;
-
-		CTPNode* root = new CTPNode;
-		
-		// PARANOIA
-		if (root == 0)
-		{
-			Log.error() << "ConnectedToPredicate::parse_(): "
-				<< "could not create the root node" << std::endl;
-			return(0);
-		}
-		// /PARANOIA
-		
-		root->setSymbol("/");
-		current = root;
-		all_nodes.push_back(root);
-
 		String bond_chars(".-=#%~");
 		String uppercase("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 		String lowercase("abcdefghijklmnopqrstuvwxyz");
 		String numbers("12345678");
 
 		for (; position < input.size(); ++position)
-=======
-		for (; position < input.size(); ++position)
->>>>>>> 1.40
 		{
 			// PARANOIA
 			if (current == 0)
@@ -909,60 +866,6 @@ namespace BALL
 
 			if (input[position] == '(')
 			{
-<<<<<<< standardPredicates.C
-				if (bond_chars.has(input[position - 1]))
-				{
-					Log.error() << "ConnectedToPredicate:parse_(): " << std::endl
-						<< "\tparse error: bond char before bracket." << std::endl;
-					return(false);
-				}
-				bracket_stack.push_back(current);
-				current = createNewNode_(current);
-				all_nodes.push_back(current);
-				depth++;
-				bracket_count++;
-				if (verbosity > 90)
-				{
-					Log.info() << "Found (, created new node, new depth is " << depth
-						<< std::endl;
-				}
-			}
-			else
-			{
-				if (input[position] == ')')
-				{
-					if (current == 0)
-					{
-						Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
-							<< "\ttried to access a NULL pointer. Aborting." << std::endl;
-						return(false);
-					}
-					current->setFinished();
-					depth--;
-					bracket_count--;
-					if (verbosity > 90)
-					{
-						Log.info() << "Found ), new depth is " << depth
-							<< std::endl;
-					}
-					if (bracket_stack.size() > 0)
-					{
-						current = bracket_stack.back();
-						bracket_stack.pop_back();
-					}
-					else
-					{
-						Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
-							<< "\tparse error: missing opening bracket." << std::endl;
-						return(false);
-					}
-				}
-				else
-				{
-					if (bond_chars.has(input[position]))
-					{
-						if (current->getSymbol() != "<uninitialized>")
-=======
 				if (bond_chars.has(input[position - 1]))
 				{
 					Log.error() << "ConnectedToPredicate:parse_(): " << std::endl
@@ -1015,7 +918,6 @@ namespace BALL
 					if (bond_chars.has(input[position]))
 					{
 						if (current->getSymbol() != "<uninitialized>")
->>>>>>> 1.40
 						{
 							current = createNewNode_(current);
 							all_nodes.push_back(current);
@@ -1031,9 +933,6 @@ namespace BALL
 					{
 						if (uppercase.has(input[position]) || (input[position] == '*'))
 						{
-<<<<<<< standardPredicates.C
-							if (current->getSymbol() != "<uninitialized>")
-=======
 							if (current->getSymbol() != "<uninitialized>")
 							{
 								current = createNewNode_(current);
@@ -1048,119 +947,14 @@ namespace BALL
 							// We are in a fresh node.
 							current->setSymbol(input[position]);
 							if (current->getBondType() == CTPNode::BONDTYPE__UNINITIALISED)
->>>>>>> 1.40
-							{
-<<<<<<< standardPredicates.C
-								current = createNewNode_(current);
-								all_nodes.push_back(current);
-								depth++;
-								if (verbosity > 90)
-								{
-									Log.info() << "Found uppercase letter without prior \"(\", created new node, new depth is " << depth
-										<< std::endl;
-								}
-							}
-							// We are in a fresh node.
-							current->setSymbol(input[position]);
-							if (current->getBondType() == CTPNode::BONDTYPE__UNINITIALISED)
 							{
 								current->setBondType((Size) CTPNode::BONDTYPE__ANY);
-=======
-								current->setBondType((Size) CTPNode::BONDTYPE__ANY);
->>>>>>> 1.40
 							}
 						}
 						else
 						{
 							if (lowercase.has(input[position]))
 							{
-<<<<<<< standardPredicates.C
-								if (current->isFinished() == true)
-								{
-									Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
-										<< "\tparse error: trying to add a lowercase char to an already finished node." 
-										<< std::endl;
-									return(0);
-								}
-								String symbol = current->getSymbol();
-								if (symbol.size() != 1)
-								{
-									Log.error() << "ConnectedToPredicate::parse_(): "
-										<< "\tparse error: trying to add a lowercase char to a symbol with length != 1." 
-										<< std::endl;
-									return(0);
-								}
-								if (symbol == '*')
-								{
-									Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
-										<< "\tparse error: trying to add a lowercase char to a \"*\"." 
-										<< std::endl;
-									return(0);
-								}
-								symbol += input[position];
-								current->setSymbol(symbol);
-							}
-							else
-							{
-								if (input[position] == '@')
-								{
-									link_mark_ = input[++position];
-									if (numbers.has(link_mark_))
-									{
-
-										if (link_map_.has(link_mark_) == true)
-										{
-											if (link_map_[link_mark_].second != 0)
-											{
-												Log.error() << "ConnectedToPredicate::parse_(): "
-													<< "\tparse error: triple mark: " << link_mark_ << std::endl;
-												return(0);
-											}
-											link_map_[link_mark_].second = current;
-											CTPNode* first = link_map_[link_mark_].first;
-											if (first == 0) first = root;
-											current->linkWith(first);
-										}
-									}
-									else
-									{
-										Log.error() << "ConnectedToPredicate::parse_(): "
-											<< "\tparse error: only numbers are allowed as marks." << std::endl;
-										return(0);
-									}
-								}
-								else
-								{
-									if (numbers.has(input[position]))
-									{
-										char n = input[position];
-										Size N = atoi(&n);
-										CTPNode* parent = current->getParent();
-										if (parent == 0)
-										{
-											Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
-												<< "\tmultiplier without parent. Aborting."
-												<< std::endl;
-											return(0);
-										}
-										CTPNode* new_child = 0;
-										for (Size i = 0; i < (N - 1); ++i)
-										{
-											new_child = new CTPNode(*current);
-											all_nodes.push_back(new_child);
-											parent->addChild(new_child);
-										}
-										current = parent;
-									}
-									else
-									{
-										Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
-											<< "\tparse error: unknown input char: " 
-											<< input[position] << std::endl;
-										return(false);
-									}
-								}
-=======
 								if (current->isFinished() == true)
 								{
 									Log.error() << "ConnectedToPredicate::parse_():\n"
@@ -1246,7 +1040,6 @@ namespace BALL
 										return(false);
 									}
 								}
->>>>>>> 1.40
 							}
 						}
 					}
@@ -1258,32 +1051,17 @@ namespace BALL
 
 		if (bracket_count > 0)
 		{
-<<<<<<< standardPredicates.C
-			Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
-				<< "\tparse error: too many opening brackets." << std::endl;
-			return(0);
-=======
 			Log.error() << "ConnectedToPredicate::parse_():\n"
 				<< "\tparse error: too many opening brackets." << std::endl;
 			return(0);
->>>>>>> 1.40
 		}
 
-<<<<<<< standardPredicates.C
-		if (bracket_count < 0)
-		{
-			Log.error() << "ConnectedToPredicate::parse_(): " << std::endl
-				<< "\tparse error: Too many closing brackets." << std::endl;
-			return(0);
-		}
-=======
 		if (bracket_count < 0)
 		{
 			Log.error() << "ConnectedToPredicate::parse_():\n"
 				<< "\tparse error: Too many closing brackets." << std::endl;
 			return(0);
 		}
->>>>>>> 1.40
 
 		std::list<CTPNode*>::iterator sort_it = all_nodes.begin();
 		for (; sort_it != all_nodes.end(); ++sort_it)
@@ -1313,25 +1091,11 @@ namespace BALL
 			{
 				children.clear();
 
-<<<<<<< standardPredicates.C
-				child_it = non_stars.begin();
-				for (; child_it != non_stars.end(); ++child_it)
-				{
-					children.push_back(*child_it);
-=======
 				child_it = non_stars.begin();
 				for (; child_it != non_stars.end(); ++child_it)
 				{
 					children.push_back(*child_it);
 				}
-			
-				child_it = stars.begin();
-				for (; child_it != stars.end(); ++child_it)
-				{
-					children.push_back(*child_it);
->>>>>>> 1.40
-				}
-<<<<<<< standardPredicates.C
 			
 				child_it = stars.begin();
 				for (; child_it != stars.end(); ++child_it)
@@ -1345,24 +1109,8 @@ namespace BALL
 				copy(stars.begin(), stars.end(), it);
 				*/
 
-=======
-			
-				/* I don't know why, but this didn't work.
-				::std::list<CTPNode*>::iterator it = children.begin();
-				copy(non_stars.begin(), non_stars.end(), it);
-				copy(stars.begin(), stars.end(), it);
-				*/
-
->>>>>>> 1.40
 			}
 
-<<<<<<< standardPredicates.C
-		}
-
-		tree_ = root;
-
-		return(root);
-=======
 		}
 
 		tree_ = root;
@@ -1370,67 +1118,13 @@ namespace BALL
 		return(root);
 
 	}
->>>>>>> 1.40
-
-<<<<<<< standardPredicates.C
-	}
 
 	bool ConnectedToPredicate::bondOrderMatch_(const Bond& bond, const ConnectedToPredicate::CTPNode& node) const
 		throw()
 	{
-=======
-	bool ConnectedToPredicate::bondOrderMatch_(const Bond& bond, const ConnectedToPredicate::CTPNode& node) const
-		throw()
-	{
->>>>>>> 1.40
 
 		bool result = false;
 
-<<<<<<< standardPredicates.C
-		switch (node.getBondType())
-		{
-			case CTPNode::BONDTYPE__UNINITIALISED:
-				Log.error() << "ConnectedToPredicate::bondOrderMatch_(): " << std::endl
-					<< "\tuninitialized bond. Returning false." << std::endl;
-				result = false;
-				break;
-
-			case CTPNode::BONDTYPE__ANY:
-				result = true;
-				break;
-
-			case CTPNode::BONDTYPE__SINGLE:
-				if (bond.getOrder() == Bond::ORDER__SINGLE) result = true;
-				else result = false;
-				break;
-
-			case CTPNode::BONDTYPE__DOUBLE:
-				if (bond.getOrder() == Bond::ORDER__DOUBLE) result = true;
-				else result = false;
-				break;
-
-			case CTPNode::BONDTYPE__TRIPLE:
-				if (bond.getOrder() == Bond::ORDER__TRIPLE) result = true;
-				else result = false;
-				break;
-
-			case CTPNode::BONDTYPE__QUADRUPLE:
-				if (bond.getOrder() == Bond::ORDER__QUADRUPLE) result = true;
-				else result = false;
-				break;
-
-			case CTPNode::BONDTYPE__AROMATIC:
-				if (bond.getOrder() == Bond::ORDER__AROMATIC) result = true;
-				else result = false;
-				break;
-
-			default:
-				Log.error() << "ConnectedToPredicate::bondOrderMatch_(): " << std::endl
-					<< "\tunknown bond type " << node.getBondType() << std::endl;
-				result = false;
-		}
-		return result;
-=======
 		switch (node.getBondType())
 		{
 			case CTPNode::BONDTYPE__UNINITIALISED:
@@ -1474,41 +1168,22 @@ namespace BALL
 				result = false;
 		}
 		return result;
->>>>>>> 1.40
 
 	}
 
-<<<<<<< standardPredicates.C
-	bool ConnectedToPredicate::find_(const Atom& atom, const ConnectedToPredicate::CTPNode* current, HashSet<const Bond*>& visited) const
-		throw()
-	{
-		Atom* partner;
-		const Bond* bond;
-		Size verbosity = 1;
-=======
 	bool ConnectedToPredicate::find_(const Atom& atom, const ConnectedToPredicate::CTPNode* current, HashSet<const Bond*>& visited) const
 		throw()
 	{
 		Atom* partner;
 		const Bond* bond;
 		Size verbosity = 0;
->>>>>>> 1.40
 
-<<<<<<< standardPredicates.C
-		if (current == 0)
-		{
-			Log.error() << "ConnectedToPredicate::find_(): " << std::endl
-				<< "\tencountered NULL as node pointer, aborting." << std::endl;
-			return(false);
-		}
-=======
 		if (current == 0)
 		{
 			// Log.error() << "ConnectedToPredicate::find_():\n"
 			//	<< "\tencountered NULL as node pointer, aborting." << std::endl;
 			return(false);
 		}
->>>>>>> 1.40
 
 		CTPNode::ConstIterator child_it = current->begin();
 		for (; child_it != current->end(); ++child_it)
@@ -1681,12 +1356,6 @@ namespace BALL
 
 		if (element == PTE[Element::C])
 		{
-<<<<<<< standardPredicates.C
-			if (atom.countBonds() != 4)
-			{
-				return false;
-			}
-=======
 			if (atom.getElement() == PTE[Element::O])
 			{
 				if (atom.countBonds() == 2)
@@ -1695,7 +1364,6 @@ namespace BALL
 				}
 			}
 			return false;
->>>>>>> 1.40
 		}
 		else
 		{

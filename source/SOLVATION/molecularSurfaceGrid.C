@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.10.2.3 2003/02/05 15:33:33 anker Exp $
+// $Id: molecularSurfaceGrid.C,v 1.10.2.4 2003/02/05 15:45:34 anker Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -29,18 +29,8 @@ namespace BALL
 
 		// points in the grid marked with
 
-<<<<<<< molecularSurfaceGrid.C
-		// Now THIS is dreck.
-		// #define CCONN__OUTSIDE 1
-		// #define CCONN__INSIDE  0
-		// #define	CCONN__INSIDE_PROBE 128
-
 		PointerSizeInt* fast_sphere;
 		PointerSizeInt* fast_sphere_relative;
-=======
-		PointerSizeInt* fast_sphere;
-		PointerSizeInt* fast_sphere_relative;
->>>>>>> 1.16
 		
 		// contains the squared length of the diagonal distance in the grid
 		float	d2, d;

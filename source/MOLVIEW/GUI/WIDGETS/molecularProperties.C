@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.7.2.2 2003/02/05 15:33:19 anker Exp $
+// $Id: molecularProperties.C,v 1.7.2.3 2003/02/05 15:45:33 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -15,11 +15,8 @@ using namespace std;
 
 namespace BALL
 {
-<<<<<<< molecularProperties.C
-=======
 	using namespace VIEW;
 
->>>>>>> 1.14
 	namespace MOLVIEW
 	{
 

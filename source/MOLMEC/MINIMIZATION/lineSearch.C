@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.4.2.2 2003/02/05 15:33:05 anker Exp $
+// $Id: lineSearch.C,v 1.4.2.3 2003/02/05 15:45:33 anker Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -18,13 +18,8 @@
 // maximum number of interpolation steps for a line search
 #define LINESEARCH__DEFAULT_MAX_STEPS			10
 
-<<<<<<< lineSearch.C
-#define DEBUG
-
-=======
 #define BALL_DEBUG
 
->>>>>>> 1.8
 namespace BALL 
 {
 	// default constructor

@@ -1,7 +1,7 @@
 	// -*- Mode: C++; tab-width: 2; -*-
 	// vi: set ts=2:
 	//
-	// $Id: support.C,v 1.30.2.4 2003/02/05 15:33:02 anker Exp $
+	// $Id: support.C,v 1.30.2.5 2003/02/05 15:45:32 anker Exp $
 
 	#include <BALL/MOLMEC/COMMON/support.h>
 	#include <BALL/KERNEL/atom.h>
@@ -545,19 +545,8 @@
 								}
 							}
 						}
-<<<<<<< support.C
 
 					}
-					if (keep == false)
-					{
-						delete_set.insert(&*mol_it);
-=======
-
->>>>>>> 1.36
-					}
-<<<<<<< support.C
-				}
-=======
 					if (keep == false)
 					{
 						delete_set.insert(&*mol_it);
@@ -566,20 +555,10 @@
 
 				// update the number of atoms we return to tha caller
 				mol_counter -= delete_set.size();
->>>>>>> 1.36
-
-<<<<<<< support.C
-				// update the number of atoms we return to tha caller
-				mol_counter -= delete_set.size();
 
 				// delete all molecules we gathered
 				HashSet<Molecule*>::Iterator del_it = delete_set.begin();
 				for(; +del_it; ++del_it)
-=======
-				// delete all molecules we gathered
-				HashSet<Molecule*>::Iterator del_it = delete_set.begin();
-				for(; +del_it; ++del_it)
->>>>>>> 1.36
 				{
 					delete *del_it;
 				}
@@ -605,7 +584,6 @@
 				float total_mass;
 				Vector3 translation;
 
-<<<<<<< support.C
 				// iterate over every molecule of the system and translate every
 				// molecule with center of gravity outside to the opposite wall of
 				// the box.
@@ -628,42 +606,11 @@
 						center_of_gravity += atomic_mass * atom_it->getPosition();
 						total_mass += atomic_mass;
 					}
-=======
-				// iterate over every molecule of the system and translate every
-				// molecule with center of gravity outside to the opposite wall of
-				// the box.
-				Size mol_count = 0;
-				MoleculeIterator mol_it = system.beginMolecule();
-				AtomIterator atom_it;
-				for (; +mol_it; ++mol_it)
-				{
-					atom_counter = 0;
-					center_of_gravity.clear();
-					total_mass = 0.0;
->>>>>>> 1.36
 
-<<<<<<< support.C
 					center_of_gravity /= total_mass;
-=======
-					// iterate over all atoms of this molecule to calculate the center
-					// of gravity of this molecule
-					atom_it = mol_it->beginAtom();
-					for (; +atom_it; ++atom_it)
-					{
-						atom_counter++;
-						atomic_mass = atom_it->getElement().getAtomicWeight();
-						center_of_gravity += atomic_mass * atom_it->getPosition();
-						total_mass += atomic_mass;
-					}
->>>>>>> 1.36
 
-<<<<<<< support.C
 					bool translate = false;
-=======
-					center_of_gravity /= total_mass;
->>>>>>> 1.36
 
-<<<<<<< support.C
 					if (center_of_gravity.x < box.a.x) 
 					{
 						translation.x += width;
@@ -674,11 +621,7 @@
 						translation.x -= width;
 						translate = true;
 					}
-=======
-					bool translate = false;
->>>>>>> 1.36
 
-<<<<<<< support.C
 					if (center_of_gravity.y < box.a.y) 
 					{
 						translation.y += height;
@@ -689,20 +632,7 @@
 						translation.y -= height;
 						translate = true;
 					}
-=======
-					if (center_of_gravity.x < box.a.x) 
-					{
-						translation.x += width;
-						translate = true;
-					} 
-					else if (center_of_gravity.x > box.b.x) 
-					{
-						translation.x -= width;
-						translate = true;
-					}
->>>>>>> 1.36
 
-<<<<<<< support.C
 					if (center_of_gravity.z < box.a.z) 
 					{
 						translation.z += depth;
@@ -713,67 +643,7 @@
 						translation.z -= depth;
 						translate = true;
 					}
-=======
-					if (center_of_gravity.y < box.a.y) 
-					{
-						translation.y += height;
-						translate = true;
-					} 
-					else if (center_of_gravity.y > box.b.y) 
-					{
-						translation.y -= height;
-						translate = true;
-					}
->>>>>>> 1.36
 
-<<<<<<< support.C
-					// Translate the atoms of the molecule if it has to be translated
-					if (translate) 
-=======
-					if (center_of_gravity.z < box.a.z) 
-					{
-						translation.z += depth;
-						translate = true;
-					} 
-					else if (center_of_gravity.z > box.b.z) 
->>>>>>> 1.36
-					{
-<<<<<<< support.C
-						for (atom_it = mol_it->beginAtom(); +atom_it; ++atom_it)
-						{
-							atom_it->setPosition(atom_it->getPosition() + translation);
-						}
-=======
-						translation.z -= depth;
-						translate = true;
->>>>>>> 1.36
-					}
-<<<<<<< support.C
-					mol_count++;
-				} // iteration over molecules
-			}
-
-=======
->>>>>>> 1.36
-
-<<<<<<< support.C
-			void calculateMinimumImage
-				(Vector3& distance,	const Vector3& period)
-			{
-				distance.x = distance.x - period.x * rint(distance.x / period.x);
-				distance.y = distance.y - period.y * rint(distance.y / period.y);
-				distance.z = distance.z - period.z * rint(distance.z / period.z);
-			}
-
-		double calculateFresnoHelperFunction(double x, double lower, double upper)
-			throw()
-		{
-			// Quick and dirty. Optimize this.
-
-			double return_value;
-
-			x = fabs(x);
-=======
 					// Translate the atoms of the molecule if it has to be translated
 					if (translate) 
 					{
@@ -785,24 +655,7 @@
 					mol_count++;
 				} // iteration over molecules
 			}
->>>>>>> 1.36
 
-<<<<<<< support.C
-			if (x <= lower)
-			{
-				return_value = 1.0;
-			}
-			else
-			{
-				if (x <= upper)
-				{
-					return_value = 1.0 - ((x - lower)/(upper - lower));
-				}
-				else
-				{
-					return_value = 0.0;
-				}
-=======
 
 			void calculateMinimumImage
 				(Vector3& distance,	const Vector3& period)
@@ -810,13 +663,7 @@
 				distance.x = distance.x - period.x * rint(distance.x / period.x);
 				distance.y = distance.y - period.y * rint(distance.y / period.y);
 				distance.z = distance.z - period.z * rint(distance.z / period.z);
->>>>>>> 1.36
 			}
-<<<<<<< support.C
-			return return_value;
-		}
-=======
->>>>>>> 1.36
 
 		}	// namespace MolmecSupport
 

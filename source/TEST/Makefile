@@ -116,16 +116,9 @@ EXECUTABLES_MOLMEC = \
 	AmberFF_test\
 	CharmmFF_test\
 	EnergyMinimizer_test\
-<<<<<<< Makefile
-	SnapShot_test\
-	SnapShotManager_test\
-	AmberFF_test\
-	CharmmFF_test
-=======
 	LineSearch_test\
 	SteepestDescentMinimizer_test\
 	ConjugateGradientMinimizer_test
->>>>>>> 1.170
 
 EXECUTABLES_NMR = \
 	AssignShiftProcessor_test\
