@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.h,v 1.6 2004/02/26 08:41:37 anhi Exp $
+// $Id: compositeManager.h,v 1.7 2004/12/13 22:43:59 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
 #define BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -91,10 +91,10 @@ namespace BALL
 				throw();
 
 			/** Remove a Composite.
-			 		The Composite and its descendents will be destroyed.
+			 		The Composite and its descendents will be destroyed if to_delete is true
 			 		\return true if the composite could be removed
 			*/
-			bool remove(Composite& composite)
+			bool remove(Composite& composite, bool to_delete = true)
 				throw();
 
 			/** Return the number of inserted Composites

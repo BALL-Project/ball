@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.154 2004/12/10 14:54:03 amoll Exp $
+// $Id: mainControl.C,v 1.155 2004/12/13 22:43:26 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -546,7 +546,7 @@ namespace BALL
 		}
 
 
-		bool MainControl::remove_(Composite& composite, bool update_representations_of_parent)
+		bool MainControl::remove_(Composite& composite, bool update_representations_of_parent, bool to_delete)
 			throw()
 		{
 			if (!composite_manager_.has(composite)) return false;
@@ -558,7 +558,7 @@ namespace BALL
 			if (composite.getRoot() != composite) root = &composite.getRoot();
 
 			// delete the Composite
-			composite_manager_.remove(composite);
+			composite_manager_.remove(composite, to_delete);
 
 			// update all Representations
 			if (root != 0 && update_representations_of_parent) 
@@ -644,7 +644,7 @@ namespace BALL
 						composite_manager_.insert(*cmessage->getComposite());
 						return;
 					case CompositeMessage::REMOVED_COMPOSITE:
-						remove_(*cmessage->getComposite(), cmessage->updateRepresentations());
+						remove_(*cmessage->getComposite(), cmessage->updateRepresentations(), true);
 						return;
 					case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
 					case CompositeMessage::CHANGED_COMPOSITE:
@@ -1322,7 +1322,7 @@ namespace BALL
 			return true;
 		}
 
-		bool MainControl::remove(Composite& composite)
+		bool MainControl::remove(Composite& composite, bool to_delete)
 			throw()
 		{
 			if (!composite_manager_.has(composite)) return false;
@@ -1330,7 +1330,7 @@ namespace BALL
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::REMOVED_COMPOSITE);
 			notify_(cm);
-			remove_(composite);
+			remove_(composite, true, to_delete);
 
 			return true;
 		}

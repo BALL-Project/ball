@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.83 2004/12/08 01:56:12 amoll Exp $
+// $Id: molecularControl.C,v 1.84 2004/12/13 22:44:02 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -740,7 +740,7 @@ void MolecularControl::setSelection_(bool open, bool force)
 void MolecularControl::cut()
 {
 	// delete old composites
-	if (copy_list_.size() > 0)
+	if (!was_delete_ && copy_list_.size() > 0)
 	{
 		List<Composite*>::ConstIterator list_it = copy_list_.begin();	
 		for (; list_it != copy_list_.end(); ++list_it)
@@ -752,58 +752,37 @@ void MolecularControl::cut()
 	}
 
 	// remove the selected composites from the tree and from the scene
-	// selected systems are copied to the copy_list_
-	// for all selected items, which are not Systems, the representations of their root are rebuild
+	// if !was_delete_, copy them into the copy_list_
+	// for all roots of removed items the representations are rebuild
+	Size nr_of_items = 0;
 	HashSet<Composite*> roots;
-	HashSet<Composite*> to_delete;
 	List<Composite*>::Iterator it = selected_.begin();	
 	for (; it != selected_.end(); it++)
 	{
 		getMainControl()->deselectCompositeRecursive(*it, false);
+		nr_of_items += removeComposite(**it);
+
+		if (!(**it).isRoot())
+		{
+			roots.insert(&(**it).getRoot());
+			(**it).getParent()->removeChild(**it);
+		}
+		else
+		{
+			getMainControl()->remove(**it, was_delete_);
+		}
 
 		if (!was_delete_) 
 		{
-			// insert deep clone of the composite into the cut list
-			copy_list_.push_back((System*)(*it)->create());
+ 			copy_list_.push_back(*it);
 		}
-
-		to_delete.insert(*it);
-
-		if (!RTTI::isKindOf<System>(**it))
+		else
 		{
-			roots.insert(&(*it)->getRoot());
-		}
-	}
-
-	List<Composite*> childs;
-	HashSet<Composite*>::Iterator delete_it = to_delete.begin();
-	for (; delete_it != to_delete.end(); delete_it++)
-	{
-		HashSet<Composite*>::Iterator delete_it2 = to_delete.begin();
-		for (; delete_it2 != to_delete.end(); delete_it2++)
-		{
-			if ((*delete_it)->isAncestorOf(**delete_it2))
+			if (!(**it).isRoot())
 			{
-				childs.push_back(*delete_it2);
+				delete *it;
 			}
 		}
-	}
-
-	List<Composite*>::Iterator child_it = childs.begin();
-	for (; child_it != childs.end(); child_it++)
-	{
-		to_delete.erase(*child_it);
-	}
-	
-	Size nr_of_items = 0;
-
-	delete_it = to_delete.begin();
-	for (; delete_it!= to_delete.end(); delete_it++)
-	{
-		// remove composite representation from tree
-		nr_of_items += removeComposite(**delete_it);
-		CompositeMessage* remove_message = new CompositeMessage(**delete_it, CompositeMessage::REMOVED_COMPOSITE, false);
-		notify_(remove_message);
 	}
 
 	setStatusbarText("Deleted " + String(nr_of_items) + " items.");

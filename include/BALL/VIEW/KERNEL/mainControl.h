@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.69 2004/11/28 22:17:36 amoll Exp $
+// $Id: mainControl.h,v 1.70 2004/12/13 22:43:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -267,7 +267,7 @@ namespace BALL
 					CompositeManager::remove called.
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool remove(Composite& composite)
+			bool remove(Composite& composite, bool to_delete = true)
 				throw();
 
 			/** Update a Representation
@@ -777,7 +777,8 @@ namespace BALL
 					Redraws representations of the parent of the Composite, if wished.
 					\return bool <tt>true</tt> if the CompositeManager has the Composite
 			*/
-			bool remove_(Composite& composite, bool update_representations_of_parent = true)
+			bool remove_(Composite& composite, bool update_representations_of_parent = true, 
+																				 bool to_delete = true)
 				throw();
 
 			/*_	Create a unique item ID for a menuentry by adding 1 to current_id_
