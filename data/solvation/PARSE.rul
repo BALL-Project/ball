@@ -1,11 +1,14 @@
+#
+# $Id: PARSE.rul,v 1.8 2004/04/15 13:27:45 anker Exp $
 # 
 #  PARSE rule set -- charge and radius assignment rules based on the 
 #  parameters developed by 
 #   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
 #   Using Macroscopic Solvent Models, J. Phys. Chem, (1994), 98, 1978-1988
 #
-# $Id: PARSE.rul,v 1.7 2003/02/22 13:27:23 anker Exp $
-#
+#  NOTE: These parameters NEED BONDS! You have to use structures with
+#  preassigned bonds or make use of the build_bonds processor of the
+#  fragment database (FragmentDB) in order to use this file correctly
 
 
 [ChargeRules:H]
@@ -204,7 +207,7 @@
 ; missing: CYS-CYS (CHn-S-S-CHn)
 -0.29   = connectedTo((-S(-C))(-C))
 
-
+; This default charge should make it easy to find unassigned charges
 [ChargeRules:*]
  4711 = true()
 
@@ -235,5 +238,4 @@
 
 [RadiusRules:S]
  1.85 = true()
-
 
