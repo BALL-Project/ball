@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomTypes.C,v 1.11 2002/02/27 12:21:38 sturm Exp $
+// $Id: atomTypes.C,v 1.12 2003/02/22 12:48:47 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>
@@ -49,8 +49,9 @@ namespace BALL
 	{
 		clear();
 
+		ParameterSection::operator = (atom_types);
 		names_ = atom_types.names_;
-		type_map_.set(atom_types.type_map_);
+		type_map_ = atom_types.type_map_;
 
 		return *this;
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomTypes.h,v 1.10 2003/02/21 16:04:37 anhi Exp $
+// $Id: atomTypes.h,v 1.11 2003/02/22 12:48:44 anker Exp $
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
 #define BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -58,7 +58,7 @@ namespace BALL
 				the format, and builds some datastructures for fast and easy acces this data.
 		*/
 		virtual bool extractSection(Parameters& parameters, 
-				const String& section_name) throw();
+				const String& section_name = "AtomTypes") throw();
 
 		/**	Returns the numeric type for a given string.
 		*/
@@ -103,10 +103,12 @@ namespace BALL
 
 		protected:
 		
-		/*_	Contains the numeric types for each atom type string
+		/*_	Contains the numeric types for each atom type string.
 		*/
 		StringHashMap<Atom::Type>	type_map_;
 
+		/*_ Contains the symbolic names of the atom types.
+		*/
 		vector<String>						names_;
 	};
 
