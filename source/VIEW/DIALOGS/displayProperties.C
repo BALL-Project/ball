@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.41 2003/11/19 12:44:22 amoll Exp $
+// $Id: displayProperties.C,v 1.42 2003/11/19 21:29:11 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -261,7 +261,8 @@ void DisplayProperties::modifyRepresentationMode()
 	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
 
 	checkDrawingPrecision_();
-	getAdvancedOptions_();
+	getAdvancedModelOptions_();
+	getAdvancedColoringOptions_();
 
 	apply_button->setEnabled(true);
 }
@@ -507,9 +508,13 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 			color_processor = new OccupancyColorProcessor;
 			break;
 
-
 		default:
 			throw(InvalidOption(__FILE__, __LINE__, coloring_method_combobox->currentItem()));
+	}
+
+	if (color_processor != 0)
+	{
+		coloring_settings_->applySettingsTo(*color_processor);
 	}
 			
 
@@ -549,6 +554,10 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 				 advanced_options_modified_)
 		{
 			rebuild_representation = true;
+			if (rep_->getColorProcessor() != 0)
+			{
+				coloring_settings_->applySettingsTo(*rep_->getColorProcessor());
+			}
 		}
 		rep = rep_;
 	}
@@ -641,7 +650,6 @@ void DisplayProperties::coloringOptionsPressed()
 	if (preferences_ == 0) return;
 
 	preferences_->show();
-	//preferences_->setCurrentPage(preferences_->indexOf(coloring_settings_));
 	preferences_->showPage(coloring_settings_);
 }
 
@@ -650,7 +658,6 @@ void DisplayProperties::modelOptionsPressed()
 	if (preferences_ == 0) return;
 
 	preferences_->show();
-	//preferences_->setCurrentPage(preferences_->indexOf(model_settings_));
 	preferences_->showPage(model_settings_);
 }
 
@@ -709,7 +716,22 @@ void DisplayProperties::checkDrawingPrecision_()
 	}
 }
 
-void DisplayProperties::getAdvancedOptions_()
+void DisplayProperties::getAdvancedColoringOptions_()
+	throw()
+{
+	if (rep_ == 0) return;
+
+	ColorProcessor* cp = rep_->getColorProcessor();
+	if (cp == 0 ||
+		  coloring_method_combobox->currentItem() == COLORING_CUSTOM)
+	{
+		return;
+	}
+
+	coloring_settings_->applySettingsTo(*cp);
+}
+
+void DisplayProperties::getAdvancedModelOptions_()
 	throw()
 {
 	if (rep_ == 0) return;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.4 2003/11/19 12:08:26 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.5 2003/11/19 21:28:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -33,6 +33,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
+		class ColorProcessor;
 
 		class QColorTableItem : public QTableItem
 		{
@@ -98,9 +99,22 @@ namespace BALL
 			void setDefaults()
 				throw();
 
+			///
+			void applySettingsTo(ColorProcessor& cp) const
+				throw();
+
+			///
+			vector<ColorRGBA> getElementColors() const
+				throw();
+
+			///
+			vector<ColorRGBA> getResidueColors() const
+				throw();
+
+			protected:
+
 			QColorTable* element_table_;
 			QColorTable* residue_table_;
-
 		};
 
 } }

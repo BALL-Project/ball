@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.19 2003/11/14 01:29:55 amoll Exp $
+// $Id: displayProperties.h,v 1.20 2003/11/19 21:28:23 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -267,7 +267,11 @@ namespace BALL
 			virtual void getEntry_(INIFile& inifile, const String& key, QComboBox& box);
 
 			//_
-			virtual void getAdvancedOptions_()
+			virtual void getAdvancedModelOptions_()
+				throw();
+
+			//_
+			virtual void getAdvancedColoringOptions_()
 				throw();
 
 			// --------------------------------------------------------------------------------

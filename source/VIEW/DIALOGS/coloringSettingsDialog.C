@@ -147,4 +147,82 @@ void ColoringSettingsDialog::setDefaults()
 	residue_table_->setContent(names, colors);
 }
 
+vector<ColorRGBA> ColoringSettingsDialog::getElementColors() const
+	throw()
+{
+	vector<ColorRGBA> colors;
+	colors.push_back(((QColorTableItem*)element_table_->item(element_table_->numRows()-1, 1))->getColor());
+	for (Position p = 0; p < (Position)element_table_->numRows(); p++)
+	{
+		colors.push_back(((QColorTableItem*)element_table_->item(p, 1))->getColor());
+	}
+
+	return colors;
+}
+
+vector<ColorRGBA> ColoringSettingsDialog::getResidueColors() const
+	throw()
+{
+}
+
+void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
+	throw()
+{
+	if (RTTI::isKindOf<CustomColorProcessor>(cp))
+	{
+		return;
+	}
+
+	if (RTTI::isKindOf<ElementColorProcessor>(cp))
+	{
+		vector<ColorRGBA> colors = getElementColors();
+		for (Position p = 0; p < colors.size(); p++)
+		{
+			(*(ElementColorProcessor*)&cp).getColorMap()[p] = colors[p];
+		}
+		return;
+	}
+	
+	if (RTTI::isKindOf<ResidueNameColorProcessor>(cp))
+	{
+		for (Position p = 0; p < (Position)residue_table_->numRows(); p++)
+		{
+			(*(ResidueNameColorProcessor*)&cp).getColorMap()[residue_table_->item(p,0)->text().ascii()] = 
+				((QColorTableItem*)residue_table_->item(p,1))->getColor();
+		}
+		return;
+	}
+
+	if (RTTI::isKindOf<ResidueIndexColorProcessor>(cp))
+	{
+		return;
+	}
+
+	if (RTTI::isKindOf<AtomChargeColorProcessor>(cp))
+	{
+		return;
+	}
+
+	if (RTTI::isKindOf<AtomDistanceColorProcessor>(cp))
+	{
+		return;
+	}
+
+	if (RTTI::isKindOf<OccupancyColorProcessor>(cp))
+	{
+		return;
+	}
+
+	if (RTTI::isKindOf<SecondaryStructureColorProcessor>(cp))
+	{
+		return;
+	}
+
+	if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
+	{
+		return;
+	}
+}
+	
+
 } } // NAMESPACE
