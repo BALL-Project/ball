@@ -1,4 +1,4 @@
-/* $Id */
+/* $Id: solvation.doc,v 1.3 2000/10/27 12:25:26 anker Exp $ */
 
 /**@name	Solvation methods
 		This chapter contains all relevant information on 
@@ -9,4 +9,16 @@
 	//@Include: poissonBoltzmann.h
 	//@include: molecularSurfaceGrid.h
 	//@Include: ooiEnergy.h
+	//@Include: claverieParameter.h
+	//@Include: pair6_12InteractionEnergyProcessor.h
+	//@Include: pair6_12RDFIntegrator.h
+	//@Include: pairExpInteractionEnergyProcessor.h
+	//@Include: pairExpRDFIntegrator.h
+	//@Include: PCMCavFreeEnergyProcessor.h
+	//@Include: pierottiCavFreeEnergyProcessor.h
+	//@Include: reissCavFreeEnergyProcessor.h
+	//@Include: solventDescriptor.h
+	//@Include: solventParameter.h
+	//@Include: structuredCavFreeEnergyProcessor.h
+	//@Include: uhligCavFreeEnergyProcessor.h
 //@}
