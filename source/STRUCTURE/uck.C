@@ -9,10 +9,10 @@
 #include <map>
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/PTE.h>
 
 using namespace std;
-using namespace BALL;
 
 namespace BALL
 {
@@ -252,4 +252,4 @@ namespace BALL
 		return;
 	}
 	
-}//namespace
+} // namespace BALL
