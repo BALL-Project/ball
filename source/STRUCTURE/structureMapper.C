@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.2 1999/08/31 22:01:19 oliver Exp $
+// $Id: structureMapper.C,v 1.3 1999/09/01 07:02:11 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -727,9 +727,9 @@ namespace BALL {
 		// calculate an array of arrays that contains the indices of potential matching fragments
 
 		vector<vector<Size> >											indices_CF(no_of_frag);
-		vector<vector<Fragment*> >*	result;
-		bool																												ready = false;
-		int																													counter;
+		vector<vector<Fragment*> >*								result;
+		bool																			ready = false;
+		int																				counter;
 		
 		result = new vector<vector<Fragment*> >;
 	 
@@ -752,11 +752,11 @@ namespace BALL {
 		// search the pattern using the array of indices
 
 		vector<Fragment*>	potential_pattern(no_of_frag);
-		vector<int>									indices_of_pot_pattern(no_of_frag);
-		Matrix4x4		T;
-		bool        distances_fit;
-		Size				k;
-		stack<int>  index_stack;
+		vector<Size>			indices_of_pot_pattern(no_of_frag);
+		Matrix4x4					T;
+		bool							distances_fit;
+		Size							k;
+		stack<Size>				index_stack;
 
 		i = 0;
 		j = 0;

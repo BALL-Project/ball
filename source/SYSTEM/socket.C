@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.2 1999/08/31 22:01:19 oliver Exp $
+// $Id: socket.C,v 1.3 1999/09/01 07:02:14 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -867,7 +867,7 @@ namespace BALL {
 
 	void SockInetAddr::setaddr(const char* host_name)
 	{
-		if ( (sin_addr.s_addr = inet_addr(host_name)) == -1) 
+		if ((int)(sin_addr.s_addr = inet_addr(host_name)) == -1) 
 		{
 			hostent* hp = gethostbyname(host_name);
 			if (hp == 0) 
