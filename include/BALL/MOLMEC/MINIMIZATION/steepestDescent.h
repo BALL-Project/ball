@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.14 2003/03/03 14:17:59 anhi Exp $
+// $Id: steepestDescent.h,v 1.15 2003/03/12 12:00:14 anhi Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -141,6 +141,9 @@ namespace BALL
 		*/
 		virtual void updateDirection();
 
+		/** Update the step size.
+		 */
+		virtual void updateStepSize(double lambda);
 		
 		protected:
 		/**	The line search minimizer.

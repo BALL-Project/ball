@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.34 2003/03/03 14:17:59 anhi Exp $
+// $Id: energyMinimizer.h,v 1.35 2003/03/12 12:00:14 anhi Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -253,6 +253,10 @@ namespace BALL
 				 \link current_grad_ current_grad_ \endlink .
     */
     virtual void updateForces();
+
+		/** Update the step size of the minimizer.
+		 */
+		virtual void updateStepSize(double lambda);
 
 		/**	Store the current energy and gradient.
 				The current gradient and current energy is copied into

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.17 2003/03/03 14:17:59 anhi Exp $ 
+// $Id: conjugateGradient.h,v 1.18 2003/03/12 12:00:13 anhi Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -201,6 +201,10 @@ namespace BALL
 				It uses the Fletcher-Reeves conjugate gradient.
 		*/
 		virtual void updateDirection();
+
+		/** Update the step size.
+		 */
+		virtual void updateStepSize(double lambda);
 
     /**	Minimize the energy of the system.
 				This method executes at most <tt>iterations</tt> minimization steps.
