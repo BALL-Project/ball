@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.14 2000/06/26 10:41:07 oliver Exp $
+// $Id: residue.C,v 1.15 2000/06/27 07:48:02 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -440,7 +440,7 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	void Residue::write(ostream&  /*s */) const
+	void Residue::write(ostream&  /* s */) const
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
@@ -484,7 +484,7 @@ namespace BALL
 			}
 		}
 
-		return full_name + getID();
+		return full_name;
 	}
 
 } // namespace BALL
