@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.21 2000/04/17 21:24:30 amoll Exp $
+// $Id: atom.C,v 1.22 2000/04/17 22:43:01 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -219,11 +219,6 @@ namespace BALL
 		atom.number_of_bonds_ = temp_c;
 	}
 		
-	void Atom::setName(const String &name)
-	{
-		name_ = name;
-	}
-
 	String Atom::getFullName(Atom::FullNameType type) const
 	{
 		// determine the parent`s name
