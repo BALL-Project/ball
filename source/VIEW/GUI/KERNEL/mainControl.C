@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.25 2002/12/12 17:50:53 amoll Exp $
+// $Id: mainControl.C,v 1.26 2002/12/13 14:30:12 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -848,25 +848,10 @@ namespace BALL
 				if (!RTTI::isKindOf<GeometricObject>(*(*it)->getParent()) &&
 						!selection_.has((*it)->getParent())) 
 				{	
-					selection_.insert((*it)->getParent());;
+					//selection_.insert((*it)->getParent());;
+					selectCompositeRecursive((*it)->getParent(), true);	
 					nr++;
 				}				
-			}
-
-			// recursive selection of parents up the tree
-			HashSet<Composite*>::Iterator set_it = selection_.begin();
-			for (; set_it != selection_.end(); set_it++)
-			{
-				Composite* parent = (*set_it)->getParent();
-				if (selection_.has(parent)) continue;
-
-				while (parent != 0)
-				{
-					selection_.insert(parent);
-					parent->select();
-
-					parent = parent->getParent();
-				}
 			}
 
 			NewSelectionMessage* new_message = new NewSelectionMessage;
