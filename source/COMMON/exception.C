@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.19 2000/10/23 10:21:53 anker Exp $
+// $Id: exception.C,v 1.20 2000/12/20 00:23:47 amoll Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -15,7 +15,7 @@
 #define BALL_CORE_DUMP_ENVNAME "BALL_DUMP_CORE"
 
 #define DEF_EXCEPTION(a,b) \
-	a##::##a##(const char* file, int line)\
+	a##::##a##(const char* file, int line) throw()\
 		: GeneralException(file, line, #a, b)\
 	{\
 	}\
@@ -32,6 +32,7 @@ namespace BALL
 	{
 
 			GeneralException::GeneralException() 
+				throw()
 				:	file_("?"),
 					line_(-1),
 					name_("GeneralException"),
@@ -41,6 +42,7 @@ namespace BALL
 			}
 
 			GeneralException::GeneralException(const char* file, int line, const string& name, const string& message) 
+				throw()
 				:	file_(file),
 					line_(line),
 					name_(name),
@@ -50,6 +52,7 @@ namespace BALL
 			}
 
 			GeneralException::GeneralException(const GeneralException& exception)
+				throw()
 				:	file_(exception.file_),
 					line_(exception.line_),
 					name_(exception.name_),
@@ -58,31 +61,37 @@ namespace BALL
 			}
 
 			GeneralException::~GeneralException()
+				throw()
 			{
 			}
 		
 
 			string GeneralException::getName() const
+				throw()
 			{
 				return name_;
 			}
 
 			string GeneralException::getMessage() const
+				throw()
 			{
 				return message_;
 			}
 
 			string GeneralException::getFile() const
+				throw()
 			{
 				return file_;
 			}
 			
 			int GeneralException::getLine() const
+				throw()
 			{
 				return line_;
 			}
 
 			IndexUnderflow::IndexUnderflow(const char* file, int line, Index index, Size size)
+				throw()
 				: GeneralException(file, line, "IndexUnderflow", ""),
 					size_(size),
 					index_(index)
@@ -102,6 +111,7 @@ namespace BALL
 			}
 
 			IndexOverflow::IndexOverflow(const char* file, int line, Index index, Size size)
+				throw()
 				:	GeneralException(file, line, "IndexOverflow", "an index was too large"),
 					size_(size),
 					index_(index)
@@ -121,6 +131,7 @@ namespace BALL
 			}
 
 			OutOfMemory::OutOfMemory(const char* file, int line, Size size)
+				throw()
 				:	GeneralException(file, line, "OutOfMemory", "a memory allocation failed"),
 					size_(size)
 			{
@@ -134,11 +145,13 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 
-			OutOfMemory::~OutOfMemory() throw()
+			OutOfMemory::~OutOfMemory() 
+				throw()
 			{
 			}
 
 			SizeUnderflow::SizeUnderflow(const char* file, int line, Size size)
+				throw()
 				:	GeneralException(file, line, "SizeUnderflow", ""),
 					size_(size)
 			{
@@ -150,7 +163,29 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 
+			IllegalPosition::IllegalPosition(const char* file, int line, float x, float y, float z)
+				throw()
+				:	GeneralException(file, line, "IllegalPosition:", "")
+			{
+				char buf1[40];
+				sprintf(buf1, "%f", x);
+				char buf2[40];
+				sprintf(buf2, "%f", y);
+				char buf3[40];
+				sprintf(buf3, "%f", z);
+
+				message_ += "(";
+				message_ += buf1;
+				message_ += ",";
+				message_ += buf2;
+				message_ += ",";
+				message_ += buf3;
+				message_ += ")";
+				globalHandler.setMessage(message_);
+			}
+
 			FileNotFound::FileNotFound(const char* file, int line, const string& filename)
+				throw()
 				:	GeneralException(file, line, "FileNotFound", ""),
 					filename_(filename)
 			{
@@ -159,11 +194,13 @@ namespace BALL
 			}
 
 			string FileNotFound::getFilename() const
+				throw()
 			{
 				return filename_;
 			}
 
 			InvalidFormat::InvalidFormat(const char* file, int line, const string& s)
+				throw()
 				:	GeneralException(file, line, "InvalidFormat", ""),
 					format_(s)
 			{
@@ -195,6 +232,7 @@ namespace BALL
 
 		
 			GlobalExceptionHandler::GlobalExceptionHandler()
+				throw()
 			{
 				std::set_terminate(terminate);
 				std::set_unexpected(terminate);
@@ -202,11 +240,13 @@ namespace BALL
 			}
 
 			void GlobalExceptionHandler::newHandler()
+				throw()
 			{
 				throw Exception::OutOfMemory(__FILE__, __LINE__);
 			}
 				
 			void GlobalExceptionHandler::terminate()
+				throw()
 			{
 				// add cerr to the log stream
 				// and write all available information on
@@ -244,6 +284,7 @@ namespace BALL
 			void GlobalExceptionHandler::set
 				(const string& file, int line,
 				 const string& name, const string& message)
+				throw()
 			{
 				name_ = name;
 				line_ = line;
@@ -252,21 +293,25 @@ namespace BALL
 			}
 			
 			void GlobalExceptionHandler::setName(const string& name)
+				throw()
 			{
 				name_ = name;
 			}
 			
 			void GlobalExceptionHandler::setMessage(const string& message)
+				throw()
 			{
 				message_ = message;
 			}
 			
 			void GlobalExceptionHandler::setFile(const string& file)
+				throw()
 			{
 				file_ = file;
 			}
 			
 			void GlobalExceptionHandler::setLine(int line) 
+				throw()
 			{
 				line_ = line;
 			}
