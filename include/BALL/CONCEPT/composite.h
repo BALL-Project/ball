@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.20 2000/08/28 14:15:16 amoll Exp $
+// $Id: composite.h,v 1.21 2000/08/29 15:50:38 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -76,7 +76,7 @@ namespace BALL
 	{
 		public:
 
-		/**	@name	Type Definitions
+		/**	@name	Type Definitions and Enums
 		*/
 		//@{
 
@@ -89,6 +89,21 @@ namespace BALL
 		*/
 		typedef	UnaryPredicate<Composite>	KernelPredicateType;
 #endif
+
+		/**	Time stamp type.
+		*/
+		enum StampType
+		{
+			/**	
+			*/
+			MODIFICATION = 1,
+			/**
+			*/
+			SELECTION = 2,
+			/**	
+			*/
+			BOTH = 3
+		};
 		//@}
 				
 		BALL_CREATE(Composite)
@@ -122,7 +137,9 @@ namespace BALL
 		/**	Clear the composite properties.	
 				This method removes the composite's children and destructs them if they are
 				auto-deletable.\\
-				It does not remove the composite from any parental structure.
+				It does not remove the composite from any parental structure.\\
+				This  method updates the modification time stamp of {\tt this}.
+				@see stamp
 				@see	AutoDeletable
 				@see	destroy
 		*/
@@ -130,7 +147,9 @@ namespace BALL
 	
 		/**	Destroy the composite.
 				This method removes the composite from potential parental structures and
-				then calls \Ref{clear} to destruct all children.
+				then calls \Ref{clear} to destruct all children.\\
+				This  method updates the modification time stamp of {\tt this}.
+				@see stamp
 				@see	~Composite
 				@see	clear
 		*/
@@ -139,8 +158,10 @@ namespace BALL
 		/**	Non-virtual destroy method.
 				This method behaves exactly like destroy except for a small difference:
 				when called with {\bf true}, it calls the {\em virtual} clear function.
-				If called with false it calls the original clear function of Composite.
-				This is useful when implementing the behaviour of derived classes.
+				If called with {\bf false} it calls the original clear function of Composite.
+				This is useful when implementing the behaviour of derived classes.\\
+				This  method updates the modification time stamp of {\tt this}.
+				@see stamp
 				@param	virtual_destroy call the virtual clear method ({\bf true}) or
 								{\tt Composite::clear()} ({\bf false})
 		*/		
@@ -386,6 +407,17 @@ namespace BALL
 		*/
 		const Time& getSelectionTime() const throw();
 
+		/**	Modify a time stamp.
+				Update one or both of the two time stamps with the
+				current time. The time stamp is then propagated up to the
+				root of the composite tree. Each composite contains two stamps. 
+				the \emph{modification stamp} is update each time the tree structure
+				changes, while the \emph{selection stamp} is updated each time the
+				selection status changes.
+				@param stamp the time stamp type 
+		*/
+		void stamp(StampType stamp = BOTH) throw();
+			
 		/**	Expand a collapsed composite.
 				Only expanded composite subtrees are iterated.
 				@see collapse
@@ -400,11 +432,15 @@ namespace BALL
 		void collapse();
 
 		/**	Insert a composite as the first child of this composite.
+				Updates the modification time stamp.
+				@see stamp
 				@param	composite the composite to be inserted
 		*/
 		void prependChild(Composite& composite);
 
 		/**	Insert a composite as the last child of this composite.
+				Updates the modification time stamp.
+				@see stamp
 				@param	composite the composite to be inserted
 		*/
 		void appendChild(Composite& composite);
@@ -414,6 +450,16 @@ namespace BALL
 				single parent. First, the {\tt parent} composite is {\tt destroy}ed.
 				Then, all nodes from {\tt first} through {\tt last} are inserted into
 				{\tt parent} and {\tt parent} is inserted in the former position of {\tt first}.
+				The method returns {\bf false}, if {\tt first} or {\tt last} have differing parents,
+				if {\tt parent} is identical with either {\tt first} or {\tt last}, or if {\tt first}
+				is already a descendant of {\tt parent}.\\
+				
+				This method updates the modification time stamp.
+				@see stamp
+				@param parent the new parent of the nodes from {\tt first} through {\tt last}
+				@param first the first of the nodes to be inserted into {\tt parent}
+				@param last the last of the nodes to be inserted into {\tt parent}
+				@param destroy_parent keeps the current contents of {\tt parent} if set to {\tt true}
 		*/
 		static bool insertParent
 			(Composite& parent, Composite& first, 
@@ -422,7 +468,10 @@ namespace BALL
 		/**	Insert a node before this node.
 				This method inserts {\tt composite} before {\tt this} node,
 				if {\tt this} node has a parent and is not a descendant of {\tt composite}.
-				Self-insertion is recognized and ignored (nothing is done).
+				Self-insertion is recognized and ignored (nothing is done).\\
+
+				This method updates the modification time stamp.
+				@see stamp
 				@param	composite the node to be inserted in the tree before {\tt this}
 		*/
 		void insertBefore(Composite& composite);
@@ -430,16 +479,31 @@ namespace BALL
 		/**	Insert a node after this node.
 				This method inserts {\tt composite} after {\tt this} node,
 				if {\tt this} node has a parent and is not a descendant of {\tt composite}.
-				Self-insertion is recognized and ignored (nothing is done).
+				Self-insertion is recognized and ignored (nothing is done).\\
+
+				This method updates the modification time stamp.
+				@see stamp
 				@param	composite the node to be inserted in the tree after of {\tt this}
 		*/
 		void insertAfter(Composite& composite);
 
 		/**	Prepend all children of {\tt composite} to the children of this composite.
+				The method does nothing, if {\tt composite} is identical to {\tt this} or
+				is a descendent of {\tt this}.\\
+
+				This method updates the modification time stamp.
+				@see stamp
+				@param the composite to be spliced
 		*/
 		void spliceBefore(Composite& composite);
 
 		/**	Append all children of {\tt composite} to the children of this composite.
+				The method does nothing, if {\tt composite} is identical to {\tt this} or
+				is a descendent of {\tt this}.\\
+
+				This method updates the modification time stamp.
+				@see stamp
+				@param composite the composite to be spliced
 		*/
 		void spliceAfter(Composite& composite);
 
@@ -447,21 +511,35 @@ namespace BALL
 				The children of {\tt composite} are inserted at the position of 
 				{\tt composite} if {\tt composite} is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
+				\\
+				This method updates the modification time stamp.
+				@see stamp
+				@param composite the composite to be spliced
 		*/
 		void splice(Composite& composite);
 
 		/**	Remove a child from its parent.
-				The child is only removed, if is a child of this instance:
+				{\tt child} is only removed, if it is a true child of {\tt this}.
+				\\
+				This method updates the modification time stamp of {\tt this}.
+				@see stamp
+				@param composite the composite to be spliced
 				@return false if child could not be removed
 		*/
 		bool removeChild(Composite& child);
 
 		/** This instance and its subtree is removed form its tree and 
 				replaced by {\tt composite} and its subtree.
+				This method updates the modification time stamp of 
+				{\tt this} and {\tt composite}.
+				@see stamp
 		*/
 		void replace(Composite& composite);
 
-		///
+		/**	Swap the contents of two composites.
+				This  method updates the modification time stamp of {\tt this} and {\tt composite}.
+				@see stamp
+		*/
 		void swap(Composite& composite);
 
 		/**	Select a composite.
@@ -481,6 +559,7 @@ namespace BALL
 				are update, too.
 		*/	
 		virtual void deselect();
+
 		//@}
 	
 		/**	@name	Predicates */

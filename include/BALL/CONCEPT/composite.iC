@@ -1,30 +1,9 @@
-// $Id: composite.iC,v 1.11 2000/08/28 15:52:39 oliver Exp $
+// $Id: composite.iC,v 1.12 2000/08/29 15:50:38 oliver Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
 {
   composite.clone(*this, predicate);
-}
-
-BALL_INLINE 
-void Composite::set(const Composite& composite, bool deep)
-{
-	if (deep == true)
-	{
-		// predicative cloning
-		composite.clone(*this, Composite::DEFAULT_UNARY_PREDICATE);
-
-	} 
-	else 
-	{
-		// clear old contents
-		destroy();
-		
-		// copy all remaining attributes
-		properties_ = composite.properties_;
-		selected_ = composite.selected_;
-		contains_selection_ = selected_;
-	}
 }
 
 BALL_INLINE 
@@ -60,21 +39,6 @@ Size Composite::countDescendants() const
 }
 
 BALL_INLINE 
-Size Composite::getHeight() const
-{
-  Size size = 0;
-
-	// if there are children, determine the maximum height
-	if (first_child_ != 0)
-	{	
-	  return getHeight_(size, size);
-	} else {
-		// otherwise we are at height 0
-		return 0;
-	}
-}
-
-BALL_INLINE 
 const Composite& Composite::getRoot() const
 {
   return (const_cast<Composite*>(this)->getRoot());
@@ -96,22 +60,6 @@ BALL_INLINE
 const Composite* Composite::getParent() const
 {
   return parent_;
-}
-
-BALL_INLINE 
-Composite* Composite::getChild(Index index)
-{
-  if (first_child_ != 0)
-  {
-    if (index == 0)
-    {
-      return first_child_;
-    } else {
-      return first_child_->getSibling(index);
-    }
-  } else {
-    return 0;
-  }
 }
 
 BALL_INLINE 
@@ -172,17 +120,6 @@ BALL_INLINE
 void Composite::collapse()
 {
   BALL_BIT_SET(properties_, PROPERTY__COLLAPSED_);
-}
-
-BALL_INLINE 
-void Composite::replace(Composite& composite)
-{
-  if (parent_ != 0 && &composite != this)
-  {
-    insertBefore(composite);
-
-    parent_->removeChild(*this);
-  }
 }
 
 BALL_INLINE 
