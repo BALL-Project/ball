@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.10 2000/05/15 21:17:30 amoll Exp $
+// $Id: system.h,v 1.11 2000/05/16 15:17:42 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -25,6 +25,18 @@
 
 #ifndef BALL_KERNEL_PROTEINITERATOR_H
 #	include <BALL/KERNEL/proteinIterator.h>
+#endif
+
+#ifndef BALL_KERNEL_NUCLEICACID_H
+#	include <BALL/KERNEL/nucleicAcid.h>
+#endif
+
+#ifndef BALL_KERNEL_NUCLEICACIDITERATOR_H
+#	include <BALL/KERNEL/nucleicAcidIterator.h>
+#endif
+
+#ifndef BALL_KERNEL_NUCLEOTIDEIDITERATOR_H
+#	include <BALL/KERNEL/nucleotideIterator.h>
 #endif
 
 #define BALL_SYSTEM_DEFAULT_NAME   ""
@@ -134,15 +146,40 @@ namespace BALL
 		*/
 		Size countFragments() const;
 
+		/** Count the atoms in this system.
+				@return Size the number of atoms
+		*/
+		Size countAtoms() const;
+
+		/** Count the proteins in this system.
+				@return Size the number of proteins
+		*/
+		Size countProteins() const;
+
+		/** Count the chains in this system.
+				@return Size the number of chains
+		*/
+		Size countChains() const;
+
+		/** Count the secondary structures in this system.
+				@return Size the number of secondary structures
+		*/
+		Size countSecondaryStructures() const;
+
 		/** Count the residues in this system.
 				@return Size the number of residues
 		*/
 		Size countResidues() const;
 
-		/** Count the atoms in this system.
-				@return Size the number of atoms
+		/** Count the nucleic acids in this system.
+				@return Size the number of nucleic acids
 		*/
-		Size countAtoms() const;
+		Size countNucleicAcids() const;
+
+		/** Count the nucleotides in this system.
+				@return Size the number of nucleotides
+		*/
+		Size countNucleotides() const;
 
 		/** Prepend a molecule at position 0.
 				@param molecule, the molecule to prepend
@@ -194,14 +231,6 @@ namespace BALL
 		void splice(System& system);		
 		//@}
 
-		/**	@name 	Miscellaneous */
-		//@{
-
-		/// Removes all bonds contained in the system	
-		void destroyBonds();
-
-		//@}
-
 		/**	@name	Storers */
 		//@{
 
@@ -222,6 +251,9 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Residue)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Chain)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(SecondaryStructure)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Nucleotide)
+		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(NucleicAcid)
+
 	};
 
 } // namespace BALL

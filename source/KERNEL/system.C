@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.10 2000/05/15 21:18:04 amoll Exp $
+// $Id: system.C,v 1.11 2000/05/16 15:17:35 amoll Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -40,7 +40,6 @@ namespace BALL
 			Composite::persistentRead(pm);
     pm.checkObjectTrailer(0);
 	}
- 
 
 	System::~System()
 	{
@@ -115,11 +114,71 @@ namespace BALL
 		return size;
 	}
 
-	Size System::countAtoms() const
+	Size  System::countAtoms() const
 	{
 		Size size = 0;
 
-		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
+		for (AtomIterator frag_it = beginAtom(); !frag_it.isEnd(); ++frag_it)
+		{
+			++size;
+		}
+
+		return size;
+	}
+
+	Size  System::countProteins() const
+	{
+		Size size = 0;
+
+		for (ProteinIterator frag_it = beginProtein(); !frag_it.isEnd(); ++frag_it)
+		{
+			++size;
+		}
+
+		return size;
+	}
+
+	Size  System::countChains() const
+	{
+		Size size = 0;
+
+		for (ChainIterator frag_it = beginChain(); !frag_it.isEnd(); ++frag_it)
+		{
+			++size;
+		}
+
+		return size;
+	}
+
+	Size  System::countSecondaryStructures() const
+	{
+		Size size = 0;
+
+		for (SecondaryStructureIterator frag_it = beginSecondaryStructure(); !frag_it.isEnd(); ++frag_it)
+		{
+			++size;
+		}
+
+		return size;
+	}
+
+	Size  System::countNucleotides() const
+	{
+		Size size = 0;
+
+		for (NucleotideIterator frag_it = beginNucleotide(); !frag_it.isEnd(); ++frag_it)
+		{
+			++size;
+		}
+
+		return size;
+	}
+
+	Size  System::countNucleicAcids() const
+	{
+		Size size = 0;
+
+		for (NucleicAcidIterator frag_it = beginNucleicAcid(); !frag_it.isEnd(); ++frag_it)
 		{
 			++size;
 		}
@@ -171,15 +230,15 @@ namespace BALL
 	{
 		Composite::splice(system);
 	}
-
+/*
 	void System::destroyBonds()
 	{
-		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
-		{
-			atom_it->destroyBonds();
-		}
+		 for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
+		 {
+						 atom_it->destroyBonds();
+		 }
 	}
-
+*/
 	void System::read(istream& /* s */)
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
