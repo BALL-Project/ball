@@ -1,4 +1,4 @@
-// $Id: clip_protein_around_ligand.C,v 1.6 2004/02/18 19:12:48 oliver Exp $
+// $Id: clip_protein_around_ligand.C,v 1.6.2.1 2004/05/10 12:04:14 amoll Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL
@@ -287,7 +287,7 @@ int main(int argc, char** argv)
 	protein_file.close();
 
 	Log.info() << "Initializing fragment database." << endl;
-	FragmentDB db;
+	FragmentDB db("");
 	Log.info() << "Building bonds (protein)." << endl;
 	protein.apply(db.build_bonds);
 	Log.info() << "Normalizing names (protein)." << endl;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: addHydrogens.C,v 1.12 2003/11/29 14:47:12 oliver Exp $
+// $Id: addHydrogens.C,v 1.12.2.1 2004/05/10 12:04:15 amoll Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -49,7 +49,7 @@ int main(int argc, char** argv)
 
 	// now we open a fragment database
 	Log << "reading fragment DB..." << endl;
-	FragmentDB fragment_db;
+	FragmentDB fragment_db("");
 
 	// and normalize the atom names, i.e. we convert different
 	// naming standards to the PDB naming scheme - just in case!

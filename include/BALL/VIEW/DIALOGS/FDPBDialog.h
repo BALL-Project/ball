@@ -110,9 +110,7 @@ namespace BALL
 				///
 				virtual void resetPressed();
 				
-				FragmentDB& getFragmentDB() {return fragment_db_;}
-
-		protected:
+			protected:
 
 				void selectFile_(QLineEdit& lineedit) throw();
 				void applyValues_() throw();
@@ -128,7 +126,6 @@ namespace BALL
 				ChargeRuleProcessor 			charge_rule_processor_;
 				AssignRadiusProcessor 		radius_processor_;
 				AssignChargeProcessor 		charge_processor_;
-				FragmentDB 								fragment_db_;
 		};
 
 } } // Namespaces

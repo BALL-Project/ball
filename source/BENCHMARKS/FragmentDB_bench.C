@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_bench.C,v 1.4 2004/02/16 13:26:34 oliver Exp $
+// $Id: FragmentDB_bench.C,v 1.4.2.1 2004/05/10 12:04:15 amoll Exp $
 
 #include <BALL/CONCEPT/benchmark.h>
 
@@ -15,7 +15,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(FragmentDB, 1.0, "$Id: FragmentDB_bench.C,v 1.4 2004/02/16 13:26:34 oliver Exp $")
+START_BENCHMARK(FragmentDB, 1.0, "$Id: FragmentDB_bench.C,v 1.4.2.1 2004/05/10 12:04:15 amoll Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -26,7 +26,7 @@ START_SECTION(Creation, 0.50)
 	for (Size i = 0; i < 20; i++)
 	{
 		START_TIMER
-			ptr = new FragmentDB;
+			ptr = new FragmentDB("");
 		STOP_TIMER
 		delete ptr;
 	}
@@ -34,7 +34,7 @@ START_SECTION(Creation, 0.50)
 END_SECTION
 
 STATUS("Creating fragment DB")
-FragmentDB db;
+FragmentDB db("");
 STATUS("Readig PDB file")
 PDBFile f("data/AmberFF_bench.pdb");
 System original;

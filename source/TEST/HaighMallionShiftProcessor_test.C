@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HaighMallionShiftProcessor_test.C,v 1.8 2002/02/27 12:24:34 sturm Exp $
+// $Id: HaighMallionShiftProcessor_test.C,v 1.8.4.1 2004/05/10 12:04:16 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.8 2002/02/27 12:24:34 sturm Exp $")
+START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.8.4.1 2004/05/10 12:04:16 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -163,7 +163,7 @@ CHECK(chemical shifts/with rings)
 RESULT
 
 PDBFile PDB_file;
-FragmentDB frag_db;
+FragmentDB frag_db("");
 
 PRECISION(0.00015)
 CHECK(chemical shifts -- PHE)

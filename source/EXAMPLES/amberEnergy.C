@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberEnergy.C,v 1.7 2003/09/29 13:26:18 anhi Exp $
+// $Id: amberEnergy.C,v 1.7.2.1 2004/05/10 12:04:15 amoll Exp $
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -38,7 +38,7 @@ int main(int argc, char** argv)
 
 	// normalize the names and build all bonds
 	Log.info() << "normalizing names..." << endl;
-	FragmentDB db;
+	FragmentDB db("");
 	S.apply(db.normalize_names);
 	Log.info() << "building bonds..." << endl;
 	S.apply(db.build_bonds);

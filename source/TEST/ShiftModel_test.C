@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ShiftModel_test.C,v 1.9 2003/08/20 21:34:49 oliver Exp $
+// $Id: ShiftModel_test.C,v 1.9.2.1 2004/05/10 12:04:17 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.9 2003/08/20 21:34:49 oliver Exp $")
+START_TEST(ShiftModel, "$Id: ShiftModel_test.C,v 1.9.2.1 2004/05/10 12:04:17 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -180,7 +180,7 @@ CHECK(chemical shift/BPTI)
 	f >> S;
 	TEST_EQUAL(S.countAtoms(), 892)
 
-	FragmentDB frag_db;
+	FragmentDB frag_db("");
 	bool result = S.apply(frag_db.build_bonds);
 	TEST_EQUAL(result, true)
 	

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tutorial3.C,v 1.4 2002/12/12 11:36:12 oliver Exp $
+// $Id: tutorial3.C,v 1.4.4.1 2004/05/10 12:04:18 amoll Exp $
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
@@ -21,7 +21,7 @@ int main()
 	infile >> S;
 	infile.close();
 
-	FragmentDB db;
+	FragmentDB db("");
 	S.apply(db.normalize_names);
 
 	S.apply(db.add_hydrogens);

@@ -1,4 +1,4 @@
-// $Id: reconstruct_fragment.C,v 1.5 2003/10/04 09:38:05 anker Exp $
+// $Id: reconstruct_fragment.C,v 1.5.2.1 2004/05/10 12:04:14 amoll Exp $
 //
 // A little helper program that tries to reconstruct broken fragments in a
 // molecule. This program assumes that there is only *one* chain in the
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
 	infile >> system;
 	infile.close();
 
-	FragmentDB db;
+	FragmentDB db("");
 	system.apply(db.normalize_names);
 
 	if (automatic == true)
