@@ -1,4 +1,4 @@
-// $Id: Limits_test.C,v 1.2 2001/07/15 17:32:39 amoll Exp $
+// $Id: Limits_test.C,v 1.3 2001/12/17 11:29:34 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,9 +8,10 @@
 #else
 # include <limits.h>
 #endif
+#include <values.h>
 ///////////////////////////
 
-START_TEST(Limits, "$Id: Limits_test.C,v 1.2 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(Limits, "$Id: Limits_test.C,v 1.3 2001/12/17 11:29:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

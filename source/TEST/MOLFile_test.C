@@ -1,0 +1,151 @@
+// $Id: MOLFile_test.C,v 1.1 2001/12/17 11:29:34 oliver Exp $
+#include <BALL/CONCEPT/classTest.h>
+
+///////////////////////////
+
+#include <BALL/FORMAT/MOLFile.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/MATHS/vector3.h>
+
+///////////////////////////
+
+START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.1 2001/12/17 11:29:34 oliver Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+using namespace BALL;
+
+
+MOLFile* mf = 0;
+CHECK(MOLFile::MOLFile())
+	mf = new MOLFile;
+	TEST_NOT_EQUAL(mf, 0)
+RESULT
+
+
+CHECK(MOLFile::~MOLFile())
+	delete mf;
+RESULT
+
+
+CHECK(MOLFile::read(System& system))
+	MOLFile f("data/MOLFile_test1.mol");
+	System system;
+	f.read(system);
+	TEST_EQUAL(system.countAtoms(), 30)
+	Size number_of_bonds = 0;
+	Atom::BondIterator bond_it;
+	AtomIterator atom_it;
+	BALL_FOREACH_BOND(system, atom_it, bond_it)
+	{
+		number_of_bonds++;
+	}
+	TEST_EQUAL(number_of_bonds, 29)
+RESULT
+
+
+CHECK(MOLFile::MOLFile(const String& filename, File::OpenMode open_mode))
+	MOLFile f("dataMOLFile_test.mol", File::IN);
+	System system;
+	f.read(system);
+	TEST_EQUAL(system.countAtoms(), 30)
+	TEST_EQUAL(system.countResidues(), 3)
+	Size number_of_bonds = 0;
+	Atom::BondIterator bond_it;
+	AtomIterator atom_it;
+	BALL_FOREACH_BOND(system, atom_it, bond_it)
+	{
+		number_of_bonds++;
+	}
+	TEST_EQUAL(number_of_bonds, 29)
+
+	// writing is tested below...
+RESULT
+
+
+CHECK(MOLFile::write(const System& system))
+  Molecule* m = new Molecule;
+	m->setName("MOL");
+	System S;
+	S.setName("SYSTEM");
+	S.insert(*m);
+	Atom* a1 = new Atom();
+	Atom* a2 = new Atom();
+	m->insert(*a1);
+	m->insert(*a2);
+
+	a1->setName("A1");
+	a1->setElement(PTE[Element::N]);
+	a1->setCharge(0.5);
+	a1->setPosition(Vector3(0.1, 0.2, 0.3));
+
+	a2->setName("A2");
+	a2->setElement(PTE[Element::O]);
+	a2->setCharge(-0.5);
+	a2->setPosition(Vector3(0.5, 0.6, 0.7));
+	
+	a1->createBond(*a2);
+	a1->getBond(*a2)->setOrder(Bond::ORDER__DOUBLE);
+	
+
+	String filename;
+	NEW_TMP_FILE(filename)
+	MOLFile f(filename, File::OUT);
+	f.write(S);
+	f.close();
+	
+	TEST_FILE(filename.c_str(), "data/MOLFile_test.mol", true)
+RESULT
+
+
+CHECK(MOLFile::MOLFile& operator >> (System& system))
+  MOLFile f("dataMOLFile_test.mol");
+	System S;
+	f >> S;
+	f.close();
+	TEST_EQUAL(S.countAtoms(), 30)
+RESULT
+
+CHECK(MOLFile::MOLFile& operator << (const System& system))
+  Molecule* m = new Molecule;
+	m->setName("MOL");
+	System S;
+	S.setName("SYSTEM");
+	S.insert(*m);
+	Atom* a1 = new Atom();
+	Atom* a2 = new Atom();
+	m->insert(*a1);
+	m->insert(*a2);
+
+	a1->setName("A1");
+	a1->setElement(PTE[Element::N]);
+	a1->setCharge(0.5);
+	a1->setPosition(Vector3(0.1, 0.2, 0.3));
+
+	a2->setName("A2");
+	a2->setElement(PTE[Element::O]);
+	a2->setCharge(-0.5);
+	a2->setPosition(Vector3(0.5, 0.6, 0.7));
+	
+	a1->createBond(*a2);
+	a1->getBond(*a2)->setOrder(Bond::ORDER__DOUBLE);
+	
+
+	String filename;
+	NEW_TMP_FILE(filename)
+	MOLFile f(filename, File::OUT);
+	f << S;	
+	f.close();
+	
+	TEST_FILE(filename.c_str(), "data/MOLFile_test.mol", true)
+RESULT
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+END_TEST

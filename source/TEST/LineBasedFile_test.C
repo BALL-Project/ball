@@ -1,11 +1,11 @@
-// $Id: LineBasedFile_test.C,v 1.11 2001/07/15 17:32:39 amoll Exp $
+// $Id: LineBasedFile_test.C,v 1.12 2001/12/17 11:29:34 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.11 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(LineBasedFile, "$Id: LineBasedFile_test.C,v 1.12 2001/12/17 11:29:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -98,6 +98,14 @@ CHECK(getLine() const  throw())
 	TEST_EQUAL(f1.getLine(), "line1")
 
 	TEST_EQUAL(fx.getLine(), "")
+RESULT
+
+CHECK(getLine() throw())
+	TEST_EQUAL(f1.getLine(), "line1")
+	f1.getLine() = "test";
+	TEST_EQUAL(f1.getLine(), "test")
+	f1.getLine() = "line1";
+	TEST_EQUAL(f1.getLine(), "line1")
 RESULT
 
 CHECK(getField(Position pos = 0, const String& quotes = "", 

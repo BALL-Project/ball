@@ -120,17 +120,19 @@ EXECUTABLES_NMR = \
 	Peak_test\
 	PeakList_test
 
-EXECUTABLES_FILES =\
+EXECUTABLES_FORMATS =\
 	LineBasedFile_test\
 	BinaryFileAdaptor_test\
 	INIFile_test\
 	Parameters_test\
 	ParameterSection_test\
 	ResourceFile_test\
+	GenericMolFile_test\
 	HINFile_test\
+	MOLFile_test\
+	MOL2File_test\
 	NMRStarFile_test\
 	DCDFile_test\
-	MOL2File_test\
 	PDBFile_test\
 	TrajectoryFile_test\
 	XYZFile_test
@@ -174,7 +176,7 @@ EXECUTABLES = \
 	$(EXECUTABLES_DATATYPES)\
 	$(EXECUTABLES_CONCEPTS)\
 	$(EXECUTABLES_KERNEL)\
-	$(EXECUTABLES_FILES)\
+	$(EXECUTABLES_FORMATS)\
 	$(EXECUTABLES_MOLMEC)\
 	$(EXECUTABLES_NMR)\
 	$(EXECUTABLES_ENERGY)\
@@ -205,7 +207,7 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 %%.C:
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
 
-test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test files_test energy_test molmec_test nmr_test structure_test solvation_test
+test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test solvation_test
 	@./runtests -success
 
 info:
@@ -229,8 +231,8 @@ concepts_test:	$(EXECUTABLES_CONCEPTS)
 kernel_test:	$(EXECUTABLES_KERNEL)
 	@./runtests -section "KERNEL" $(TEST_OPTIONS) $(EXECUTABLES_KERNEL)
 	
-files_test:	$(EXECUTABLES_FILES)
-	@./runtests -section "FILES" $(TEST_OPTIONS) $(EXECUTABLES_FILES)
+formats_test:	$(EXECUTABLES_FORMATS)
+	@./runtests -section "FORMATS" $(TEST_OPTIONS) $(EXECUTABLES_FORMATS)
 	
 energy_test:	$(EXECUTABLES_ENERGY)
 	@./runtests -section "ENERGY" $(TEST_OPTIONS) $(EXECUTABLES_ENERGY)
