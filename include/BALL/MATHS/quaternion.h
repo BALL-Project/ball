@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.26 2001/02/13 01:49:06 amoll Exp $
+// $Id: quaternion.h,v 1.27 2001/03/07 10:40:37 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -25,8 +25,8 @@ namespace BALL
 	*/
 	//@{	
 
-	/**	Generic Quaternion Class.
-      {\bf Definition:} \URL{BALL/MATHS/quaternion.h} \\
+	/**	Generic Quaternion Class. \\
+      {\bf Definition:} \URL{BALL/MATHS/quaternion.h} 
 	*/
 	template <typename T>
 	class TQuaternion
@@ -56,9 +56,9 @@ namespace BALL
 		/**	Detailed constructor.
 				Create a new TQuaternion object from a variable of type {\em TVector3} and an angle.
 				@param axis assigned to the axis
-				@param angle assigned to the angle
+				@param new_angle assigned to the angle
 		*/
-		TQuaternion(const TVector3<T>& axis, const T &angle)
+		TQuaternion(const TVector3<T>& axis, const T& new_angle)
 			throw();
 
 		/**	Detailed constructor.
@@ -66,9 +66,9 @@ namespace BALL
 				@param x assigned to the x-component of the axis
 				@param y assigned to the y-component of the axis
 				@param z assigned to the z-component of the axis
-				@param angle assigned to the angle
+				@param new_angle assigned to the angle
 		*/
-		TQuaternion(const T& x, const T& y, const T& z, const T& angle)
+		TQuaternion(const T& x, const T& y, const T& z, const T& new_angle)
 			throw();
 
 		/**	Destructor.	
@@ -95,18 +95,18 @@ namespace BALL
 
 		/**	Assign the TQuaternion components.
 				@param axis the new axis component
-				@param angle the new angle component
+				@param new_angle the new angle component
 		*/
-		void set(const TVector3<T>& axis, const T& angle)
+		void set(const TVector3<T>& axis, const T& new_angle)
 			throw();
 
 		/**	Assign the TQuaternion components.
 				@param x assigned to the x-component of the axis
 				@param y assigned to the y-component of the axis
 				@param z assigned to the z-component of the axis
-				@param angle assigned to the angle
+				@param new_angle assigned to the angle
 		*/
-		void set(const T& x, const T& y, const T& z, const T& angle)
+		void set(const T& x, const T& y, const T& z, const T& new_angle)
 			throw();
 
 		/**	Assign from another TQuaternion.
@@ -226,16 +226,20 @@ namespace BALL
 		*/
 		//@{
 
-		/**	x component of the axis. */
+		/**	x component of the axis. 
+		*/
 		T i;
 
-		/**	y component of the axis. */
+		/**	y component of the axis. 
+		*/
 		T j;
 
-		/**	z component of the axis. */
+		/**	z component of the axis. 
+		*/
 		T k;
 
-		/**	Angle component. */
+		/**	Angle component. 
+		*/
 		T angle;
 
 		//@}
@@ -263,10 +267,10 @@ namespace BALL
 	}
 
 	template <typename T>
-	TQuaternion<T>::TQuaternion(const TVector3<T>& axis, const T& angle)
+	TQuaternion<T>::TQuaternion(const TVector3<T>& axis, const T& new_angle)
 		throw()
 	{
-		set(axis.x, axis.y, axis.z, angle);
+		set(axis.x, axis.y, axis.z, new_angle);
 	}
 
 	template <typename T>
@@ -311,7 +315,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TQuaternion<T>::set(const T& x, const T& y, const T& z, const T& phi)
+	void TQuaternion<T>::set(const T& x, const T& y, const T& z, const T& new_angle)
 		throw()
 	{
 		T length = (T)sqrt(x * x + y * y + z * z);
@@ -323,7 +327,7 @@ namespace BALL
 		} 
 		else 
 		{
-			T omega = phi * 0.5;
+			T omega = new_angle * 0.5;
 			T sin_omega = (T)::sin(omega);
 
 			i = x * sin_omega / length;
@@ -615,6 +619,7 @@ namespace BALL
 			be used. It is predefined as {\tt Quaternion} for convenience.
 	*/
 	typedef TQuaternion<float> Quaternion;
+
 	//@}
 
 } // namespace BALL
