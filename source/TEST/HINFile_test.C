@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile_test.C,v 1.26 2003/08/20 07:02:35 oliver Exp $
+// $Id: HINFile_test.C,v 1.27 2003/08/26 19:04:53 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.26 2003/08/20 07:02:35 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.27 2003/08/26 19:04:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -91,14 +92,14 @@ CHECK(bool read(System& system) throw(Exception::ParseError))
 	TEST_EQUAL(empty.read(S2), false)
 RESULT
 
-CHECK(bool write(const System& system) throw(File::CanNotWrite))
+CHECK(bool write(const System& system) throw(File::CannotWrite))
   String filename;
   NEW_TMP_FILE(filename)
   HINFile hin2(filename, std::ios::out);
 	hin2.write(system);
   TEST_FILE_REGEXP(filename.c_str(), "data/HINFile_test2.hin")
 
-	TEST_EXCEPTION(File::CanNotWrite, empty.write(system))
+	TEST_EXCEPTION(File::CannotWrite, empty.write(system))
 RESULT
 
 CHECK([EXTRA]HINFile::HINFile& operator >> (System& system))
@@ -132,7 +133,7 @@ CHECK([EXTRA]HINFile::HINFile& operator << (const System& system))
 	COMPARE_OUTPUT("HINFile::write: truncated atom name 'NAME TEST' to 'NAME'.\n")
 	TEST_FILE_REGEXP(filename.c_str(), "data/HINFile_test3.hin")
 
-	TEST_EXCEPTION(File::CanNotWrite, empty << system)
+	TEST_EXCEPTION(File::CannotWrite, empty << system)
 RESULT
 
 CHECK([EXTRA]robust reading)	
@@ -192,8 +193,8 @@ CHECK(const HINFile& operator = (const HINFile& rhs) throw(Exception::FileNotFou
 	TEST_EXCEPTION(Exception::FileNotFound, f2 = f3)
 RESULT
 
-CHECK(bool write(const Molecule& molecule) throw(File::CanNotWrite))
-	TEST_EXCEPTION(File::CanNotWrite, empty.write(Molecule()))
+CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
+	TEST_EXCEPTION(File::CannotWrite, empty.write(Molecule()))
 	String filename;
 	NEW_TMP_FILE(filename);
 	Molecule m;

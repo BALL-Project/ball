@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile_test.C,v 1.9 2003/07/25 12:47:09 amoll Exp $
+// $Id: MOLFile_test.C,v 1.10 2003/08/26 19:04:54 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -18,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.9 2003/07/25 12:47:09 amoll Exp $")
+START_TEST(MOLFile, "$Id: MOLFile_test.C,v 1.10 2003/08/26 19:04:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -68,7 +69,7 @@ CHECK(MOLFile(const String& filename, File::OpenMode open_mode = std::ios::in) t
 RESULT
 
 
-CHECK(bool write(const System& system) throw(File::CanNotWrite))
+CHECK(bool write(const System& system) throw(File::CannotWrite))
   Molecule* m = new Molecule;
 	m->setName("MOL");
 	System S;
@@ -102,7 +103,7 @@ CHECK(bool write(const System& system) throw(File::CanNotWrite))
 	TEST_FILE_REGEXP(filename.c_str(), "data/MOLFile_test2.mol")
 
 	MOLFile f2("MOLFile_test.C", File::IN);
-	TEST_EXCEPTION(File::CanNotWrite, f2.write(S))
+	TEST_EXCEPTION(File::CannotWrite, f2.write(S))
 RESULT
 
 
@@ -180,7 +181,7 @@ CHECK([EXTRA]MOLFile::MOLFile& operator << (const System& system))
 	TEST_FILE_REGEXP(filename.c_str(), "data/MOLFile_test2.mol")
 RESULT
 
-CHECK(bool write(const Molecule& molecule) throw(File::CanNotWrite))
+CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
 	NEW_TMP_FILE(filename)
 	MOLFile f(filename, std::ios::out);
 	f.write(*m);

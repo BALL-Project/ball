@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GenericMolFile_test.C,v 1.6 2003/07/14 15:56:43 amoll Exp $
+// $Id: GenericMolFile_test.C,v 1.7 2003/08/26 19:04:53 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(GenericMolFile, "$Id: GenericMolFile_test.C,v 1.6 2003/07/14 15:56:43 amoll Exp $")
+START_TEST(GenericMolFile, "$Id: GenericMolFile_test.C,v 1.7 2003/08/26 19:04:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,7 +48,7 @@ CHECK(bool read(System& system) throw(Exception::ParseError))
   TEST_EQUAL(mol2.read(system), false)
 RESULT
 
-CHECK(bool write(const System& system) throw(File::CanNotWrite))
+CHECK(bool write(const System& system) throw(File::CannotWrite))
   String filename;
   NEW_TMP_FILE(filename)
   GenericMolFile mol2(filename, std::ios::out);
@@ -60,19 +61,19 @@ CHECK(GenericMolFile& operator >> (System& system) throw(Exception::ParseError))
 RESULT
 
 
-CHECK(GenericMolFile& operator << (const System& system) throw(File::CanNotWrite))
+CHECK(GenericMolFile& operator << (const System& system) throw(File::CannotWrite))
   String filename;
   NEW_TMP_FILE(filename)
   GenericMolFile mol2(filename, std::ios::out);
 	 mol2 << system;
   GenericMolFile mol3;
-  TEST_EXCEPTION(File::CanNotWrite, mol3 << system)
+  TEST_EXCEPTION(File::CannotWrite, mol3 << system)
 RESULT
 
 Molecule m;
 
-CHECK(GenericMolFile& operator << (const Molecule& molecule) throw(File::CanNotWrite))
-	TEST_EXCEPTION(File::CanNotWrite, mol << m)
+CHECK(GenericMolFile& operator << (const Molecule& molecule) throw(File::CannotWrite))
+	TEST_EXCEPTION(File::CannotWrite, mol << m)
 RESULT
 
 CHECK(GenericMolFile& operator >> (Molecule& molecule) throw(Exception::ParseError))
@@ -99,8 +100,8 @@ CHECK(const GenericMolFile& operator = (const GenericMolFile& rhs) throw(Excepti
 	TEST_EQUAL(mol2.getName(), filename)
 RESULT
 
-CHECK(bool write(const Molecule& molecule) throw(File::CanNotWrite))
-	TEST_EXCEPTION(File::CanNotWrite, mol.write(m))
+CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
+	TEST_EXCEPTION(File::CannotWrite, mol.write(m))
 RESULT
 
 /////////////////////////////////////////////////////////////

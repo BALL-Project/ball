@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.18 2003/07/14 15:56:43 amoll Exp $
+// $Id: DCDFile_test.C,v 1.19 2003/08/26 19:04:53 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +14,7 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.18 2003/07/14 15:56:43 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.19 2003/08/26 19:04:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -183,7 +184,7 @@ CHECK(bool append(const SnapShot& snapshot) throw())
 RESULT
 
 
-CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw(File::CanNotWrite))
+CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw(File::CannotWrite))
 	vector<SnapShot> v;
 	v.push_back(ss);
 	TEST_EQUAL(ss.getNumberOfAtoms(), 892)
@@ -206,7 +207,7 @@ CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw(File::CanNotWr
 	TEST_NOT_EQUAL(dcd.getSize(), 0)   // got 0
 
 	DCDFile empty;
-	TEST_EXCEPTION(File::CanNotWrite, empty.flushToDisk(v))
+	TEST_EXCEPTION(File::CannotWrite, empty.flushToDisk(v))
 RESULT
 
 CHECK(BALL_CREATE(DCDFile))

@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile_test.C,v 1.3 2003/07/14 15:56:43 amoll Exp $
+// $Id: JCAMPFile_test.C,v 1.4 2003/08/26 19:04:54 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: JCAMPFile_test.C,v 1.3 2003/07/14 15:56:43 amoll Exp $")
+START_TEST(class_name, "$Id: JCAMPFile_test.C,v 1.4 2003/08/26 19:04:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -59,7 +61,7 @@ CHECK(void read() throw(Exception::ParseError))
 	TEST_EXCEPTION(Exception::ParseError, empty.read())
 RESULT
 
-CHECK(bool write() throw(File::CanNotWrite))
+CHECK(bool write() throw(File::CannotWrite))
 	JCAMPFile jcamp(String("data") + FileSystem::PATH_SEPARATOR + "JCAMPFile_test.dat");
 	jcamp.read();
 	jcamp.close();
@@ -71,7 +73,7 @@ CHECK(bool write() throw(File::CanNotWrite))
 	out.write();
 
 	JCAMPFile empty;
-	TEST_EXCEPTION(File::CanNotWrite, empty.write())
+	TEST_EXCEPTION(File::CannotWrite, empty.write())
 RESULT
 
 CHECK(HeaderMap& getHeader() throw())

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.14 2003/08/17 20:13:30 oliver Exp $
+// $Id: PDBFile_test.C,v 1.15 2003/08/26 19:04:54 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.14 2003/08/17 20:13:30 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.15 2003/08/26 19:04:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -104,7 +105,7 @@ CHECK([EXTRA]PDBFile strict line checking)
 	TEST_EQUAL(s.countAtoms(), 2)
 RESULT
 
-CHECK(bool write(const System& system) throw(File::CanNotWrite))
+CHECK(bool write(const System& system) throw(File::CannotWrite))
 	PDBFile f;
 	f.open("data/PDBFile_test2.pdb");
 	String tmp_filename;
@@ -127,7 +128,7 @@ CHECK(bool write(const System& system) throw(File::CanNotWrite))
 	TEST_FILE_REGEXP(tmp_filename.c_str(), "data/PDBFile_test2.txt")
 
 	PDBFile out(tmp_filename);
-	TEST_EXCEPTION(File::CanNotWrite, out.write(S))
+	TEST_EXCEPTION(File::CannotWrite, out.write(S))
 RESULT
 
 
@@ -211,7 +212,7 @@ CHECK(bool readRecordTURN(PDB::Integer sequence_number, PDB::LString3 turn_ID, P
 
 CHECK(bool readUnknownRecord(const char* line))
 
-CHECK(bool write(const Protein& protein) throw(File::CanNotWrite))
+CHECK(bool write(const Protein& protein) throw(File::CannotWrite))
 
 CHECK(void read(Protein& protein))
 
