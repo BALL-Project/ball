@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.C,v 1.9 2001/05/13 15:02:40 hekl Exp $
+// $Id: vanDerWaalsModel.C,v 1.10 2001/07/01 21:45:27 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 
@@ -15,9 +15,9 @@ namespace BALL
 		{
  		}
 
-		AddVanDerWaalsModel::AddVanDerWaalsModel(const AddVanDerWaalsModel& _rAddVanDerWaalsModel, bool deep)
+		AddVanDerWaalsModel::AddVanDerWaalsModel(const AddVanDerWaalsModel& model, bool deep)
 			throw()
-			: AtomBondModelBaseProcessor(_rAddVanDerWaalsModel, deep)
+			: AtomBondModelBaseProcessor(model, deep)
 		{
 		}
 

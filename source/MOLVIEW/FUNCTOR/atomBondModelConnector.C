@@ -1,4 +1,4 @@
-// $Id: atomBondModelConnector.C,v 1.4 2001/05/13 16:27:25 hekl Exp $
+// $Id: atomBondModelConnector.C,v 1.5 2001/07/01 21:45:27 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h>
 
@@ -51,8 +51,8 @@ namespace BALL
 
 			Bond* bond = RTTI::castTo<Bond>(composite);
 			
-			Atom* first_atom = bond->getFirstAtom();
-			Atom* second_atom = bond->getSecondAtom();
+			Atom* first_atom = const_cast<Atom*>(bond->getFirstAtom());
+			Atom* second_atom = const_cast<Atom*>(bond->getSecondAtom());
 			Property first_model = getModel_(*first_atom);
 			Property second_model = getModel_(*second_atom);
 			
@@ -117,8 +117,8 @@ namespace BALL
 		void AtomBondModelConnector::createLineRepresentation_(Bond& bond)
 			throw(Exception::OutOfMemory)
     {
-			Atom* first_atom = bond.getFirstAtom();
-			Atom* second_atom = bond.getSecondAtom();
+			Atom* first_atom = const_cast<Atom*>(bond.getFirstAtom());
+			Atom* second_atom = const_cast<Atom*>(bond.getSecondAtom());
 
 			// get colors from both atoms
 			first_atom->host(*getColorCalculator());
@@ -189,8 +189,8 @@ namespace BALL
 				stick_radius = getProperty(String("STICK_RADIUS")).getFloat();
 			}
 
-			Atom* first_atom = bond.getFirstAtom();
-			Atom* second_atom = bond.getSecondAtom();
+			Atom* first_atom = const_cast<Atom*>(bond.getFirstAtom());
+			Atom* second_atom = const_cast<Atom*>(bond.getSecondAtom());
 
 			// get colors from both atoms
 			first_atom->host(*getColorCalculator());

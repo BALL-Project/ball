@@ -1,4 +1,4 @@
-// $Id: removeModel.C,v 1.9 2001/05/13 15:02:40 hekl Exp $
+// $Id: removeModel.C,v 1.10 2001/07/01 21:45:27 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 
@@ -55,8 +55,8 @@ namespace BALL
 			throw()
 		{
 			// generate StickPrimitives
-			Atom* first_pAtom = 0;
-			Atom* second_pAtom = 0;
+			Atom* first_atom = 0;
+			Atom* second_atom = 0;
 			Bond* pBond = 0;
 			AtomBondIterator bond_Iterator;
 
@@ -66,16 +66,16 @@ namespace BALL
 			for (list_iterator = getAtomList_().begin();
 					 list_iterator != getAtomList_().end(); ++list_iterator)
 			{
-				first_pAtom = *list_iterator;
+				first_atom = *list_iterator;
 
 				// for all bonds connected from first- to second atom
-				BALL_FOREACH_ATOM_BOND(*first_pAtom, bond_Iterator)
+				BALL_FOREACH_ATOM_BOND(*first_atom, bond_Iterator)
 				{
 					pBond = &(*bond_Iterator);
-					second_pAtom = pBond->getSecondAtom();
+					second_atom = const_cast<Atom*>(pBond->getSecondAtom());
 
 					// use only atoms with greater handles than first atom
-					if (*first_pAtom < *second_pAtom)
+					if (*first_atom < *second_atom)
 					{
 						// remove models
 						removeGeometricObjects_(*pBond);
@@ -83,7 +83,7 @@ namespace BALL
 				}
 
 				// remove atom models
-				removeGeometricObjects_(*first_pAtom);
+				removeGeometricObjects_(*first_atom);
 			}
 			
 			return true;

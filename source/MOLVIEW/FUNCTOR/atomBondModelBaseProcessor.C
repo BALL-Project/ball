@@ -1,4 +1,4 @@
-// $Id: atomBondModelBaseProcessor.C,v 1.5 2001/05/13 16:27:25 hekl Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.6 2001/07/01 21:45:27 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 
@@ -128,8 +128,8 @@ namespace BALL
 			throw()
     {
 			// generate bond primitive
-			Atom* first_pAtom = 0;
-			Atom* second_pAtom = 0;
+			Atom* first_atom_ptr = 0;
+			Atom* second_atom_ptr = 0;
 			Bond* pbond = 0;
 			AtomBondIterator bond_Iterator;
 			List<Atom*>::Iterator list_iterator;
@@ -138,28 +138,28 @@ namespace BALL
 			for (list_iterator = getAtomList_().begin();
 					 list_iterator != getAtomList_().end(); ++list_iterator)
 			{
-				first_pAtom = *list_iterator;
+				first_atom_ptr = *list_iterator;
 
 				// for all bonds connected from first- to second atom
-				BALL_FOREACH_ATOM_BOND(*first_pAtom, bond_Iterator)
+				BALL_FOREACH_ATOM_BOND(*first_atom_ptr, bond_Iterator)
 				{
 					pbond = &(*bond_Iterator);
 					
-					if (first_pAtom != pbond->getSecondAtom())
+					if (first_atom_ptr != pbond->getSecondAtom())
 					{
-						second_pAtom = pbond->getSecondAtom();
+						second_atom_ptr = const_cast<Atom*>(pbond->getSecondAtom());
 					}
 					else
 					{
-						second_pAtom = pbond->getFirstAtom();
+						second_atom_ptr = const_cast<Atom*>(pbond->getFirstAtom());
 					}
 
 					// use only atoms with greater handles than first atom
 					// or
 					// second atom not a used atom, but smaller as the first atom
 					// process bond between them		
-					if (*first_pAtom < *second_pAtom
-							|| !getAtomSet_().has(second_pAtom))
+					if (*first_atom_ptr < *second_atom_ptr
+							|| !getAtomSet_().has(second_atom_ptr))
 					{
 						// remove all models append to bond
 						removeGeometricObjects_(*pbond, true);

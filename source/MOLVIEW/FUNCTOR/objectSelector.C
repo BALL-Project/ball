@@ -1,4 +1,4 @@
-// $Id: objectSelector.C,v 1.1 2001/05/13 15:02:39 hekl Exp $
+// $Id: objectSelector.C,v 1.2 2001/07/01 21:45:27 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 
@@ -76,9 +76,9 @@ namespace BALL
 		{
 			AtomBondModelBaseProcessor::swap(selector);
 
-			bool _bool = selection_;
+			bool tmp = selection_;
 			selection_ = selector.selection_;
-			selector.selection_ = _bool;
+			selector.selection_ = tmp;
 		}
 
 		bool ObjectSelector::start()
@@ -92,10 +92,10 @@ namespace BALL
 		bool ObjectSelector::finish()
 			throw()
 		{
-			Atom *first_pAtom = 0;
-			Atom *second_pAtom = 0;
-			Bond *__pBond = 0;
-			AtomBondIterator bond__Iterator;
+			Atom *first_atom = 0;
+			Atom *second_atom = 0;
+			Bond *bond_ptr = 0;
+			AtomBondIterator bond_it;
 
 			List<Atom*>::Iterator list_iterator;
 
@@ -103,27 +103,27 @@ namespace BALL
 			for (list_iterator = getAtomList_().begin();
 					 list_iterator != getAtomList_().end(); ++list_iterator)
 			{
-				first_pAtom = *list_iterator;
+				first_atom = *list_iterator;
 
 				// for all bonds connected from first- to second atom
-				BALL_FOREACH_ATOM_BOND(*first_pAtom, bond__Iterator)
+				BALL_FOREACH_ATOM_BOND(*first_atom, bond_it)
 				{
-					__pBond = &(*bond__Iterator);
-					second_pAtom = __pBond->getSecondAtom();
+					bond_ptr = &(*bond_it);
+					second_atom = const_cast<Atom*>(bond_ptr->getSecondAtom());
 
 					// use only atoms with greater handles than first atom
-					if (*first_pAtom < *second_pAtom)
+					if (*first_atom < *second_atom)
 					{
 						// select bond only if second atom is selected too
-						if (getAtomSet_().has(second_pAtom))
+						if (getAtomSet_().has(second_atom))
 						{
 							if (selection_ == true)
 							{
-								__pBond->select();
+								bond_ptr->select();
 							}
 							else
 							{
-								__pBond->deselect();
+								bond_ptr->deselect();
 							}
 						}
 					}
@@ -131,11 +131,11 @@ namespace BALL
 
 				if (selection_ == true)
 				{
-					first_pAtom->select();
+					first_atom->select();
 				}
 				else
 				{
-					first_pAtom->deselect();
+					first_atom->deselect();
 				}
 			}
 			
