@@ -1,10 +1,13 @@
-// $Id: moleculeGLObjectCollector.C,v 1.4.4.1 2002/10/18 14:48:27 amoll Exp $
+// $Id: moleculeGLObjectCollector.C,v 1.4.4.2 2002/10/23 13:19:01 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/molecule.h>
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 

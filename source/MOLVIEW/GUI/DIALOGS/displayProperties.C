@@ -1,17 +1,26 @@
-// $Id: displayProperties.C,v 1.13.4.3 2002/10/21 15:40:09 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.4 2002/10/23 13:19:01 amoll Exp $
 
-#include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 
 #include <qcolordialog.h>
 #include <qmenubar.h>
-#include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
+
+#include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.h>
+#include <BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h>
+#include <BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.h>
+#include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h>
+#include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h>
+#include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
+#include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 
 #define Inherited DisplayPropertiesData
 #undef DEBUG
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
