@@ -15,6 +15,7 @@ EXECUTABLES_MATHS = \
 	MathsCommon_test\
 	AnalyticalGeometry_test\
 	Angle_test\
+	Vector2_test\
 	Vector3_test\
 	Vector4_test\
 	Quaternion_test\
@@ -48,6 +49,7 @@ EXECUTABLES_DATATYPES = \
 	PiecewisePolynomial_test\
 	Quadruple_test\
 	RegularData1D_test\
+	RegularData2D_test\
 	RegularData3D_test
 
 EXECUTABLES_CONCEPTS =$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
