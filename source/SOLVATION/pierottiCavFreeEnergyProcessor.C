@@ -1,4 +1,4 @@
-// $Id: pierottiCavFreeEnergyProcessor.C,v 1.2 2000/09/02 14:34:12 oliver Exp $
+// $Id: pierottiCavFreeEnergyProcessor.C,v 1.3 2000/10/06 10:27:01 oliver Exp $
 
 #include <BALL/SOLVATION/pierottiCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -37,6 +37,7 @@ namespace BALL
 	}
 
 	PierottiCavFreeEnergyProcessor::~PierottiCavFreeEnergyProcessor()
+		throw()
 	{
 	}
 

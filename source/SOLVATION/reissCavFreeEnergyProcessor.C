@@ -1,4 +1,4 @@
-// $Id: reissCavFreeEnergyProcessor.C,v 1.2 2000/09/02 14:35:44 oliver Exp $
+// $Id: reissCavFreeEnergyProcessor.C,v 1.3 2000/10/06 10:27:01 oliver Exp $
 
 #include <BALL/SOLVATION/reissCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -37,6 +37,7 @@ namespace BALL
 	}
 
 	ReissCavFreeEnergyProcessor::~ReissCavFreeEnergyProcessor()
+		throw()
 	{
 	}
 

@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.2 2000/10/05 17:24:40 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.3 2000/10/06 10:27:01 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -9,6 +9,8 @@
 #include <BALL/SOLVATION/pair6_12InteractionEnergyProcessor.h>
 #include <BALL/SOLVATION/solventParameter.h>
 
+
+using namespace std;
 
 namespace BALL
 {
@@ -73,6 +75,7 @@ namespace BALL
 
 
 	Pair6_12InteractionEnergyProcessor::~Pair6_12InteractionEnergyProcessor()
+		throw()
 	{
 		clear();
 		valid_ = false;
@@ -80,6 +83,7 @@ namespace BALL
 
 
 	void Pair6_12InteractionEnergyProcessor::clear()
+		throw()
 	{
 		EnergyProcessor::clear();
 		solvent_.clear();

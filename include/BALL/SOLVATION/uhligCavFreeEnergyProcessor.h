@@ -1,4 +1,4 @@
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.2 2000/08/31 18:49:03 anker Exp $
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.3 2000/10/06 10:27:16 oliver Exp $
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
@@ -121,7 +121,8 @@ namespace BALL
 		UhligCavFreeEnergyProcessor();
 
 		/** Destructor */
-		virtual ~UhligCavFreeEnergyProcessor();
+		virtual ~UhligCavFreeEnergyProcessor()
+			throw();
 
 		//@}
 

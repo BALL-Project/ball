@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.2 2000/08/31 18:49:03 anker Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.3 2000/10/06 10:27:15 oliver Exp $
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -109,7 +109,8 @@ namespace BALL
 		PCMCavFreeEnergyProcessor();
 
 		/** Destructor */
-		virtual ~PCMCavFreeEnergyProcessor();
+		virtual ~PCMCavFreeEnergyProcessor()
+			throw();
 
 		//@}
 

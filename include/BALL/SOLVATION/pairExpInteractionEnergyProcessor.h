@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.2 2000/09/21 15:23:12 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.3 2000/10/06 10:27:16 oliver Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
@@ -213,13 +213,15 @@ namespace BALL
 		PairExpInteractionEnergyProcessor(const PairExpInteractionEnergyProcessor& proc);
 
 		/** Destructor */
-		virtual ~PairExpInteractionEnergyProcessor();
+		virtual ~PairExpInteractionEnergyProcessor()
+			throw();
 
 		/** Destroy function */
 		virtual void destroy();
 
 		/** Clear function */
-		virtual void clear();
+		virtual void clear()
+			throw();
 		//@}
 
 

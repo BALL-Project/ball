@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.1 2000/10/05 17:13:49 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.2 2000/10/06 10:27:15 oliver Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -184,7 +184,8 @@ namespace BALL
 			(const Pair6_12InteractionEnergyProcessor& proc);
 
 		/** Destructor */
-		virtual ~Pair6_12InteractionEnergyProcessor();
+		virtual ~Pair6_12InteractionEnergyProcessor()
+			throw();
 
 		//@}
 
@@ -197,7 +198,8 @@ namespace BALL
 			(const Pair6_12InteractionEnergyProcessor& proc);
 
 		/** Clear function */
-		virtual void clear();
+		virtual void clear()
+			throw();
 		
 		//@}
 

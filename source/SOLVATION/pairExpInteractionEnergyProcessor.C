@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.6 2000/09/25 11:17:55 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.7 2000/10/06 10:27:01 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -101,6 +101,7 @@ namespace BALL
 
 	
 	PairExpInteractionEnergyProcessor::~PairExpInteractionEnergyProcessor()
+		throw()
 	{
 		destroy();
 	}
@@ -113,6 +114,7 @@ namespace BALL
 
 	
 	void PairExpInteractionEnergyProcessor::clear()
+		throw()
 	{
 		options.clear();
 		solvent_.clear();

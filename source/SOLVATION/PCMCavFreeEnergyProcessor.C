@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.2 2000/09/02 14:34:11 oliver Exp $
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.3 2000/10/06 10:27:00 oliver Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -35,6 +35,7 @@ namespace BALL
 	}
 
 	PCMCavFreeEnergyProcessor::~PCMCavFreeEnergyProcessor()
+		throw()
 	{
 	}
 

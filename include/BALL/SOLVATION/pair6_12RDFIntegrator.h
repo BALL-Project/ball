@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.h,v 1.2 2000/09/28 17:32:55 anker Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.3 2000/10/06 10:27:16 oliver Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -89,7 +89,7 @@ namespace BALL
 				const RadialDistributionFunction& rdf);
 
 		/** Assignment operator */
-		const Pair6_12RDFIntegrator& Pair6_12RDFIntegrator::operator =
+		const Pair6_12RDFIntegrator& operator =
 			(const Pair6_12RDFIntegrator& proc);
 
 		//@}
