@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.11 2000/12/13 19:00:52 oliver Exp $
+// $Id: triangulation.h,v 1.12 2000/12/13 22:07:04 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -336,7 +336,7 @@ namespace BALL
 		 //const TTriangulatedSurface<T>& triangulated_sphere,
 		 std::vector<TTriangulatedSurface<T>*>& triangulated_faces,
 		 //std::vector< Contour<T> > contour,
-		 std::vector< std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > > >& contour,
+		 std::vector< std::list< std::pair< Index,std::list<typename TTriangulatedSurface<T>::Edge*> > > >& contour,
 		 std::vector< std::vector< TSESEdge<T>* > >& border)
 	{
 		TTriangulatedSurface<T>* triangulated_face = new TTriangulatedSurface<T>;
@@ -400,7 +400,7 @@ namespace BALL
 
 	template <class T>
 	void CutSphericFace(TSESFace<T>* face, TTriangulatedSurface<T>& surface,
-											std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >& contour)
+											std::list< std::pair< Index,std::list<typename TTriangulatedSurface<T>::Edge*> > >& contour)
 											//Contour<T>& contour)
 	{
 		std::vector< TPlane3<T> > planes;
@@ -501,7 +501,7 @@ namespace BALL
 		}
 		else
 		{
-			list< TTriangulatedSurface<T>::Point* >::iterator post = next;
+			list<typename TTriangulatedSurface<T>::Point*>::iterator post = next;
 			post++;
 			test_points.push_back(*post);
 		}
@@ -537,7 +537,7 @@ namespace BALL
 
 
 	template <class T>
-	void SewFace(std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >& contour,
+	void SewFace(std::list<std::pair<Index, std::list<typename TTriangulatedSurface<T>::Edge*> > >& contour,
 							 std::vector< std::list<typename TTriangulatedSurface<T>::Point* > >& edge_contours,
 							 const TSphere3<T>& sphere, bool convex,
 							 TTriangulatedSurface<T>* surface)
@@ -581,8 +581,8 @@ namespace BALL
 
 
 	template <class T>
-	void SewContours(list<TTriangulatedSurface<T>::Point*>& contour_in,
-									 list<TTriangulatedSurface<T>::Point*>& contour_out,
+	void SewContours(list<typename TTriangulatedSurface<T>::Point*>& contour_in,
+									 list<typename TTriangulatedSurface<T>::Point*>& contour_out,
 									 const TVector3<T>& center, bool convex,
 									 TTriangulatedSurface<T>* surface)
 	{
@@ -634,9 +634,9 @@ namespace BALL
 
 	template <class T>
 	void SortContour
-			(std::list<TTriangulatedSurface<T>::Edge*>& edges,
-			 std::list<TTriangulatedSurface<T>::Point*>& counterpart,
-			 std::list<TTriangulatedSurface<T>::Point*>& contour, const T& /*dummy*/)
+			(std::list<typename TTriangulatedSurface<T>::Edge*>& edges,
+			 std::list<typename TTriangulatedSurface<T>::Point*>& counterpart,
+			 std::list<typename TTriangulatedSurface<T>::Point*>& contour, const T& /*dummy*/)
 	{
 		std::list<TTriangulatedSurface<T>::Edge*> sorted_edges;
 		TTriangulatedSurface<T>::Edge* start_edge = edges.front();
@@ -756,7 +756,7 @@ namespace BALL
 
 	template <class T>
 	void SewEmptyContour
-			(std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >& contour,
+			(std::list< std::pair<Index, std::list<typename TTriangulatedSurface<T>::Edge*> > >& contour,
 			 std::vector< std::list<typename TTriangulatedSurface<T>::Point* > >& edge_contours,
 			 const TSphere3<T>& sphere, bool convex,
 			 TTriangulatedSurface<T>* surface)
@@ -802,8 +802,8 @@ namespace BALL
 
 	template <class T>
 	void SewEmptyEdges
-			(std::list< std::pair< Index,std::list<TTriangulatedSurface<T>::Edge*> > >& contour,
-			 std::vector< std::list<typename TTriangulatedSurface<T>::Point* > >& edge_contours,
+			(std::list<std::pair<Index, std::list<typename TTriangulatedSurface<T>::Edge*> > >& contour,
+			 std::vector<std::list<typename TTriangulatedSurface<T>::Point*> >& edge_contours,
 			 HashSet<Position>& empty,
 			 TTriangulatedSurface<T>* surface)
 	{
