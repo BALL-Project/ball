@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.41 2004/02/25 10:47:05 oliver Exp $
+// $Id: regularData1D.h,v 1.42 2004/02/25 16:03:56 anhi Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
@@ -79,8 +79,8 @@ namespace BALL
 		TRegularData1D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing)
 			throw(Exception::OutOfMemory);
 		
-		///
-		TRegularData1D(const IndexType& size, const CoordinateType& origin = CoordinateType(0.0), const CoordinateType& dimension = CoordinateType(1.0))
+		/// This constructor sets origin to 0.0 and dimension to 1.0
+		TRegularData1D(const IndexType& size)
 			throw(Exception::OutOfMemory);
 
 		///
@@ -408,7 +408,7 @@ namespace BALL
 		throw(Exception::OutOfMemory)
 		: origin_(origin),
 			dimension_(dimension),
-			spacing_(dimension / (double)data.size()),
+			spacing_(dimension / ((double)data.size()-1)),
 			data_()
 	{
 		// Try to catch allocation errors and rethrow them as OutOfMemory
@@ -425,14 +425,11 @@ namespace BALL
 
   template <class ValueType>
   TRegularData1D<ValueType>::TRegularData1D
-    (const TRegularData1D<ValueType>::IndexType& size,
-     const TRegularData1D<ValueType>::CoordinateType& origin,
-     const TRegularData1D<ValueType>::CoordinateType& dimension)
+    (const TRegularData1D<ValueType>::IndexType& size)
     throw(Exception::OutOfMemory)
-    : data_(),
-      origin_(origin),
-      dimension_(dimension),
-      spacing_(0.0, 0.0)
+    : origin_(0.0),
+      dimension_(1.0),
+			data_()
   {
     // Compute the grid spacing
     spacing_ = dimension_ / (double)(size - 1);
@@ -444,7 +441,7 @@ namespace BALL
     catch (std::bad_alloc&)
     {
       data_.resize(0);
-      throw Exception::OutOfMemory(__FILE__, __LINE__, number_of_points * sizeof(ValueType));
+      throw Exception::OutOfMemory(__FILE__, __LINE__, size * sizeof(ValueType));
 		}
 	}
 
@@ -511,7 +508,7 @@ namespace BALL
 	bool TRegularData1D<ValueType>::isInside(const typename TRegularData1D<ValueType>::CoordinateType& r) const
     throw()
   {
-    return ((r.x >= origin_) && (r.x <= (origin_ + dimension_)));
+    return ((r >= origin_) && (r <= (origin_ + dimension_)));
 	}
 
 	template <typename ValueType>
@@ -593,7 +590,7 @@ namespace BALL
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 
-		return (CoordinateType)(origin_ + (double)index / (double)data_.size() * dimension_);
+		return (CoordinateType)(origin_ + (double)index / ((double)data_.size()-1) * dimension_);
 	}
 
 	template <typename ValueType>
@@ -665,7 +662,7 @@ namespace BALL
 		}
 		
 		// Interpolate between the point to the left and the point to the right.
-		double d = (x - (double)left_index * spacing_) / spacing_;
+		double d = 1.0 - ((x - (double)left_index * spacing_) / spacing_);
 		return data_[left_index] * d + (1.0 - d) * data_[left_index + 1];
 	}
 			
