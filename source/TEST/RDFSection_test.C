@@ -1,15 +1,14 @@
-// $Id: RDFSection_test.C,v 1.1 2000/08/31 13:33:59 anker Exp $
+// $Id: RDFSection_test.C,v 1.2 2000/08/31 13:35:37 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 // insert includes here
-#include "RDFSection.h"
-// #include <BALL/STRUCTURE/RDFSection.h>
+#include <BALL/STRUCTURE/RDFSection.h>
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RDFSection_test.C,v 1.1 2000/08/31 13:33:59 anker Exp $")
+START_TEST(class_name, "$Id: RDFSection_test.C,v 1.2 2000/08/31 13:35:37 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
