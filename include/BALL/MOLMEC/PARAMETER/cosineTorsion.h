@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cosineTorsion.h,v 1.15 2003/03/26 13:56:43 anhi Exp $
+// $Id: cosineTorsion.h,v 1.16 2003/03/28 19:17:00 anker Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_COSINETORSION_H
 #define BALL_MOLMEC_PARAMETER_COSINETORSION_H
@@ -59,7 +59,9 @@ namespace BALL
 
 		struct Values 
 		{
+			///
 			unsigned char 	n;
+			///
 			SingleValues*		values;
 
 			Values()
@@ -153,8 +155,9 @@ namespace BALL
 
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section_name from ini_file,
-				interprets (if given) a format line, reads the data from this section according to 
-				the format, and builds some datastructures for fast and easy acces this data.
+				interprets (if given) a format line, reads the data from this
+				section according to the format, and builds some datastructures for
+				fast and easy acces this data.
 		*/
 		virtual bool extractSection(ForceFieldParameters& parameters, const String& section_name);
 

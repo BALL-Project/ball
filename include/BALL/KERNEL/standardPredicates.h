@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.31 2003/03/26 13:56:34 anhi Exp $
+// $Id: standardPredicates.h,v 1.32 2003/03/28 19:17:10 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -345,7 +345,8 @@ namespace BALL
 
 		private:
 			bool dfs_(const Atom& atom, const Atom& first_atom, 
-					const Size limit, HashSet<const Bond*>& visited) const
+					const Size limit, const bool exact, 
+					HashSet<const Bond*>& visited) const
 				throw();
 				
 	};
