@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.8 2001/02/23 02:40:44 amoll Exp $
+// $Id: RSEdge.h,v 1.9 2001/04/03 13:16:40 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -7,15 +7,11 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-#ifndef BALL_MATHS_SPHERE3_H
-#	include <BALL/MATHS/sphere3.h>
-#endif
-
 #ifndef BALL_MATHS_CIRCLE3_H
 #	include <BALL/MATHS/circle3.h>
 #endif
 
-#ifndef BALL_MATHS_SPHERE3_H
+#ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>
 #endif
 
@@ -93,7 +89,7 @@ namespace BALL
 						const TVector3<T>& center_of_torus, const T& radius_of_torus, const TAngle<T>& phi,
 						const TCircle3<T>& circle1, const TCircle3<T>& circle2,
 						const TVector3<T>& intersection_point1, const TVector3<T>& intersection_point2,
-						const bool singular, const Index index)
+						const bool singular, Index index)
 			: vertex0_(vertex1), vertex1_(vertex2), face0_(face1), face1_(face2),
 				center_of_torus_(center_of_torus), radius_of_torus_(radius_of_torus),
 				phi_(phi), circle0_(circle1), circle1_(circle2),
@@ -155,7 +151,7 @@ namespace BALL
 						 const TVector3<T>& center_of_torus, const T& radius_of_torus, const TAngle<T>& phi,
 						 const TCircle3<T>& circle0, const TCircle3<T>& circle1,
 						 const TVector3<T>& intersection_point0, const TVector3<T>& intersection_point1,
-						 const bool singular, const Index index)
+						 const bool singular, Index index)
 		{
 			vertex0_ = vertex0; vertex1_ = vertex1; face0_ = face0; face1_ = face1;
 			center_of_torus_ = center_of_torus; radius_of_torus_ = radius_of_torus;
@@ -170,7 +166,7 @@ namespace BALL
 
 		/** Change the indices of the two rsvertices of the rsedge.
 				@param i the first vertex is changed if i = 0, the second otherwise
-				@param vertex the new index
+				@param vertex the new vertex
 		*/
 		void setVertices(const Position i, TRSVertex<T>* vertex)
 		{
@@ -184,9 +180,9 @@ namespace BALL
 			}
 		}
 
-		/** Return the index of one of the two rsvertices of the rsedge.
-				@return RSVertex the index of the first rsvertex if i = 0,
-												 the index of the second rsvertex otherwise
+		/** Return one of the two rsvertices of the rsedge.
+				@return RSVertex the first rsvertex if i = 0,
+												 the second rsvertex otherwise
 		*/
 		TRSVertex<T>* getVertex(const Position i)
 		{
@@ -216,8 +212,8 @@ namespace BALL
 			}
 		}
 
-		/** Return the index of one of the two rsfaces of the rsedge.
-				@return Index the index of the first rsface if i = 0, the index of the second rsface otherwise
+		/** Return one of the two rsfaces of the rsedge.
+				@return Index the first rsface if i = 0, the second rsface otherwise
 		*/
 		TRSFace<T>* getFace(const Position i)
 		{

@@ -1,19 +1,7 @@
-// $Id: RSVertex.h,v 1.5 2001/02/23 02:40:45 amoll Exp $
-
-#ifndef secure
-#define secure
-#endif
+// $Id: RSVertex.h,v 1.6 2001/04/03 13:13:02 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
-
-#ifndef BALL_MATHS_VECTOR3_H
-#	include <BALL/MATHS/vector3.h>
-#endif
-
-#ifndef BALL_MATHS_SPHERE3_H
-#	include <BALL/MATHS/sphere3.h>
-#endif
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #	include <BALL/DATATYPE/hashSet.h>
@@ -82,8 +70,8 @@ namespace BALL
 				@param	face_list assigned to HashSet of rsfaces
 				@param	i assigned to the index of the rsvertex
 		*/
-		TRSVertex(const Index a, const HashSet< TRSEdge<T>* >& edge_list,
-							const HashSet< TRSFace<T>* >& face_list, const Index i)
+		TRSVertex(Index a, const HashSet< TRSEdge<T>* >& edge_list,
+							const HashSet< TRSFace<T>* >& face_list, Index i)
 			: atom_(a), edges_(edge_list), faces_(face_list), index_(i)
 		{
 		}
@@ -119,8 +107,8 @@ namespace BALL
 				@param	face_list assigned to list of faces
 				@param	i	asiigned to the index of the rsvertex
 		*/
-		void set(const Index a, const HashSet< TRSEdge<T>* >& edge_list,
-						 const HashSet< TRSFace<T>* >& face_list, const Index i)
+		void set(Index a, const HashSet< TRSEdge<T>* >& edge_list,
+						 const HashSet< TRSFace<T>* >& face_list, Index i)
 		{
 			atom_ = a; edges_ = edge_list; faces_ = face_list; index_ = i;
 		}
@@ -131,7 +119,7 @@ namespace BALL
 		//@{
 
 		/** Change the index of the atom represented by the vertex.
-				@param atom the new index
+				@param	atom	the new index
 		*/
 		void setAtom(Index atom)
 		{
@@ -139,7 +127,7 @@ namespace BALL
 		}
 
 		/** Return the index of the atom represented by the vertex.
-				@return Index, the index of the atom represented by the vertex
+				@return		Index,	the index of the atom represented by the vertex
 		*/
 		Index getAtom()
 		{
@@ -222,30 +210,20 @@ namespace BALL
 		*/
 		bool join(const TRSVertex<T>& rsvertex)
 		{
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-			RSVertexIsValid(rsvertex,__LINE__);
-			#endif
 			if (atom_ != rsvertex.atom_)
 			{
-				#ifdef secure
-				RSVertexIsValid(*this,__LINE__);
-				RSVertexIsValid(rsvertex,__LINE__);
-				#endif
 				return false;
 			}
-			for (HashSet<TRSEdge<T>*>::Iterator e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
+			for (HashSet<TRSEdge<T>*>::Iterator e = rsvertex.edges_.begin();
+					 e != rsvertex.edges_.end(); e++)
 			{
 				edges_.insert(*e);
 			}
-			for (HashSet<TRSFace<T>*>::Iterator f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
+			for (HashSet<TRSFace<T>*>::Iterator f = rsvertex.faces_.begin();
+					 f != rsvertex.faces_.end(); f++)
 			{
 				faces_.insert(*f);
 			}
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-			RSVertexIsValid(rsvertex,__LINE__);
-			#endif
 			return true;
 		}
 
@@ -254,30 +232,20 @@ namespace BALL
 		*/
 		bool substitute(TRSVertex<T>* rsvertex)
 		{
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-			RSVertexIsValid(*rsvertex,__LINE__);
-			#endif
 			if (atom_ != rsvertex->atom_)
 			{
-				#ifdef secure
-				RSVertexIsValid(*this,__LINE__);
-				RSVertexIsValid(*rsvertex,__LINE__);
-				#endif
 				return false;
 			}
-			for (HashSet<TRSEdge<T>*>::Iterator e = edges_.begin(); e != edges_.end(); e++)
+			for (HashSet<TRSEdge<T>*>::Iterator e = edges_.begin();
+					 e != edges_.end(); e++)
 			{
 				(*e)->substituteVertex(this,rsvertex);
 			}
-			for (HashSet<TRSFace<T>*>::Iterator f = faces_.begin(); f != faces_.end(); f++)
+			for (HashSet<TRSFace<T>*>::Iterator f = faces_.begin();
+					 f != faces_.end(); f++)
 			{
 				(*f)->substituteVertex(this,rsvertex);
 			}
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-			RSVertexIsValid(*rsvertex,__LINE__);
-			#endif
 			return true;
 		}
 
@@ -287,152 +255,100 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if the vertices are equal in all components, {\bf false} otherwise
+				@return	bool,	{\bf true} if the vertices are equal in all components,
+											{\bf false} otherwise
 		*/
-		bool operator == (TRSVertex& rsvertex) const
+		bool operator == (const TRSVertex& rsvertex) const
 		{
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-			RSVertexIsValid(rsvertex,__LINE__);
-			#endif
 			if (atom_ != rsvertex.getAtom())
 			{
-				#ifdef secure
-				RSVertexIsValid(*this,__LINE__);
-				RSVertexIsValid(rsvertex,__LINE__);
-				#endif
 				return false;
 			}
-			for (HashSet<TRSEdge<T>*>::Iterator e = edges_.begin(); e != edges_.end(); e++)
+			for (HashSet<TRSEdge<T>*>::Iterator e = edges_.begin();
+					 e != edges_.end(); e++)
 			{
 				if (rsvertex.edges_.has(*e) == false)
 				{
-					#ifdef secure
-					RSVertexIsValid(*this,__LINE__);
-					RSVertexIsValid(rsvertex,__LINE__);
-					#endif
 					return false;
 				}
 			}
-			for (HashSet<TRSEdge<T>*>::Iterator e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
+			for (HashSet<TRSEdge<T>*>::Iterator e = rsvertex.edges_.begin();
+					 e != rsvertex.edges_.end(); e++)
 			{
 				if (edges_.has(*e) == false)
 				{
-					#ifdef secure
-					RSVertexIsValid(*this,__LINE__);
-					RSVertexIsValid(rsvertex,__LINE__);
-					#endif
 					return false;
 				}
 			}
-			for (HashSet<TRSFace<T>*>::Iterator f = faces_.begin(); f != faces_.end(); f++)
+			for (HashSet<TRSFace<T>*>::Iterator f = faces_.begin();
+					 f != faces_.end(); f++)
 			{
 				if (rsvertex.faces_.has(*f) == false)
 				{
-					#ifdef secure
-					RSVertexIsValid(*this,__LINE__);
-					RSVertexIsValid(rsvertex,__LINE__);
-					#endif
 					return false;
 				}
 			}
-			for (HashSet<TRSFace<T>*>::Iterator f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
+			for (HashSet<TRSFace<T>*>::Iterator f = rsvertex.faces_.begin();
+					 f != rsvertex.faces_.end(); f++)
 			{
 				if (faces_.has(*f) == false)
 				{
-					#ifdef secure
-					RSVertexIsValid(*this,__LINE__);
-					RSVertexIsValid(rsvertex,__LINE__);
-					#endif
 					return false;
 				}
 			}
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-			RSVertexIsValid(rsvertex,__LINE__);
-			#endif
 			return true;
 		}
 
 		/**	Inequality operator.
-				@return bool, {\bf true} if the vertices differ in one component, {\bf false} otherwise
+				@return	bool,	{\bf true} if the vertices differ in one component,
+											{\bf false} otherwise
 		*/
 		bool operator != (TRSVertex& rsvertex) const
 		{
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-			RSVertexIsValid(rsvertex,__LINE__);
-			#endif
 			return ( ! (*this == rsvertex) );
 		}
 
 		/**	Similar
-				@return bool, {\bf true} if the atoms are equal, {\bf false} otherwise
+				@return	bool,	{\bf true} if the atoms are equal,
+											{\bf false} otherwise
 		*/
 		bool similar(/*const*/ TRSVertex<T>& rsvertex)
 		{
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-			RSVertexIsValid(rsvertex,__LINE__);
-			#endif
 			return (atom_ == rsvertex.atom_);
 		}
 
 		/**	Test if the vertex is meber of a given rsface.
-				@param	face	a pointer to the the face to be tested
-				@return TRSFace<T>*, a pointer to the face if it exists, otherwise {\bf NULL}
+				@param	face					a pointer to the the face to be tested
+				@return	TRSFace<T>*,	a pointer to the face if it exists,
+															otherwise {\bf NULL}
 		*/
 		TRSFace<T>* has(TRSFace<T>* face)
 		{
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-//			RSVertexIsValid(rsvertex,__LINE__);
-			#endif
 			HashSet<TRSFace<T>*>::Iterator f;
 			for (f = faces_.begin(); f != faces_.end(); f++)
 			{
 				if (*(*f) == *face)
 				{
-					#ifdef secure
-					RSVertexIsValid(*this,__LINE__);
-//					RSVertexIsValid(rsvertex,__LINE__);
-					#endif
 					return *f;
 				}
 			}
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-//			RSVertexIsValid(rsvertex,__LINE__);
-			#endif
 			return NULL;
 		}
 
 		/**	Test if the vertex is meber of a given rsedge.
 				@param	edge	a pointer to the edge to be tested
-				@return bool,	{\bf true} if it exists, otherwise {\bf false}
+				@return	bool,	{\bf true} if it exists, otherwise {\bf false}
 		*/
 		bool has(TRSEdge<T>* edge)
 		{
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-//			RSVertexIsValid(rsvertex,__LINE__);
-			#endif
 			HashSet<TRSEdge<T>*>::Iterator e;
 			for (e = edges_.begin(); e != edges_.end(); e++)
 			{
 				if (*(*e) == *edge)
 				{
-					#ifdef secure
-					RSVertexIsValid(*this,__LINE__);
-//					RSVertexIsValid(rsvertex,__LINE__);
-					#endif
 					return true;
 				}
 			}
-			#ifdef secure
-			RSVertexIsValid(*this,__LINE__);
-//			RSVertexIsValid(rsvertex,__LINE__);
-			#endif
 			return false;
 		}
 		
@@ -442,8 +358,8 @@ namespace BALL
 		protected:
 
 		Index atom_;
-		HashSet< TRSEdge<T>* > edges_;
-		HashSet< TRSFace<T>* > faces_;
+		HashSet<TRSEdge<T>*> edges_;
+		HashSet<TRSFace<T>*> faces_;
 		Index index_;
 
 	};
@@ -492,31 +408,6 @@ namespace BALL
 	typedef TRSVertex<float> RSVertex;
 
 
-	/* debuging */
-	template <class T>
-	void RSVertexIsValid(const TRSVertex<T>& rsvertex, int line)
-	{
-		HashSet<TRSEdge<T>*> edges;
-		edges = rsvertex.getEdges();
-		HashSet<TRSEdge<T>*>::Iterator e;
-		for (e = edges.begin(); e != edges.end(); e++)
-		{
-			if (*e == NULL)
-			{
-				throw Exception::GeneralException(__FILE__,line,"RSVertexNotValid","NULL-pointer in edge list");
-			}
-		}
-		HashSet<TRSFace<T>*> faces;
-		faces = rsvertex.getFaces();
-		HashSet<TRSFace<T>*>::Iterator f;
-		for (f = faces.begin(); f != faces.end(); f++)
-		{
-			if (*f == NULL)
-			{
-				throw Exception::GeneralException(__FILE__,line,"RSVertexNotValid","NULL-pointer in face list");
-			}
-		}
-	}
 
 
 } // namespace BALL

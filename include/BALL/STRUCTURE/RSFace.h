@@ -1,8 +1,4 @@
-// $Id: RSFace.h,v 1.9 2001/02/23 02:40:45 amoll Exp $
-
-#ifndef secure
-#define secure
-#endif
+// $Id: RSFace.h,v 1.10 2001/04/03 13:15:21 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -78,7 +74,8 @@ namespace BALL
 		*/
 		TRSFace(TRSVertex<T>* vertex1, TRSVertex<T>* vertex2, TRSVertex<T>* vertex3,
 						TRSEdge<T>* edge1, TRSEdge<T>* edge2, TRSEdge<T>* edge3,
-						const TVector3<T>& center, const TVector3<T>& normal, const bool singular, const Index index)
+						const TVector3<T>& center, const TVector3<T>& normal,
+						bool singular, Index index)
 			: vertex0_(vertex1), vertex1_(vertex2), vertex2_(vertex3),
 				edge0_(edge1), edge1_(edge2), edge2_(edge3),
 				center_(center), normal_(normal), singular_(singular), index_(index)
@@ -123,11 +120,13 @@ namespace BALL
 		*/
 		void set(TRSVertex<T>* vertex1, TRSVertex<T>* vertex2, TRSVertex<T>* vertex3,
 						 TRSEdge<T>* edge1, TRSEdge<T>* edge2, TRSEdge<T>* edge3,
-						 const TVector3<T>& center, const TVector3<T>& normal, const bool singular, const Index index)
+						 const TVector3<T>& center, const TVector3<T>& normal,
+						 bool singular, Index index)
 		{
 			vertex0_ = vertex1; vertex1_ = vertex2; vertex2_ = vertex3;
 			edge0_ = edge1; edge1_ = edge2; edge2_ = edge3;
-			center_ = center;	normal_ = normal; singular_ = singular; index_ = index;
+			center_ = center;	normal_ = normal; singular_ = singular;
+			index_ = index;
 			normal_.normalize();
 		}
 
@@ -141,52 +140,28 @@ namespace BALL
 		*/
 		bool operator == (const TRSFace& rsface) const
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			RSFaceIsValid(rsface,__LINE__);
-			#endif
 			if (normal_ != rsface.normal_)
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				RSFaceIsValid(rsface,__LINE__);
-				#endif
 				return false;
 			}
 			if ((vertex0_->similar(*rsface.vertex0_) == false) &&
 					(vertex0_->similar(*rsface.vertex1_) == false) &&
 					(vertex0_->similar(*rsface.vertex2_) == false)    )
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				RSFaceIsValid(rsface,__LINE__);
-				#endif
 				return false;
 			}
 			if ((vertex1_->similar(*rsface.vertex0_) == false) &&
 					(vertex1_->similar(*rsface.vertex1_) == false) &&
 					(vertex1_->similar(*rsface.vertex2_) == false)    )
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				RSFaceIsValid(rsface,__LINE__);
-				#endif
 				return false;
 			}
 			if ((vertex2_->similar(*rsface.vertex0_) == false) &&
 					(vertex2_->similar(*rsface.vertex1_) == false) &&
 					(vertex2_->similar(*rsface.vertex2_) == false)    )
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-//				RSFaceIsValid(rsface,__LINE__);
-				#endif
 				return false;
 			}
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			RSFaceIsValid(rsface,__LINE__);
-			#endif
 			return true;
 		}
 
@@ -195,44 +170,24 @@ namespace BALL
 		*/
 		bool similar(TRSFace& rsface) const
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			RSFaceIsValid(rsface,__LINE__);
-			#endif
 			if ((vertex0_->similar(*rsface.vertex0_) == false) &&
 					(vertex0_->similar(*rsface.vertex1_) == false) &&
 					(vertex0_->similar(*rsface.vertex2_) == false)    )
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				RSFaceIsValid(rsface,__LINE__);
-				#endif
 				return false;
 			}
 			if ((vertex1_->similar(*rsface.vertex0_) == false) &&
 					(vertex1_->similar(*rsface.vertex1_) == false) &&
 					(vertex1_->similar(*rsface.vertex2_) == false)    )
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				RSFaceIsValid(rsface,__LINE__);
-				#endif
 				return false;
 			}
 			if ((vertex2_->similar(*rsface.vertex0_) == false) &&
 					(vertex2_->similar(*rsface.vertex1_) == false) &&
 					(vertex2_->similar(*rsface.vertex2_) == false)    )
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				RSFaceIsValid(rsface,__LINE__);
-				#endif
 				return false;
 			}
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			RSFaceIsValid(rsface,__LINE__);
-			#endif
 			return true;
 		}
 
@@ -242,10 +197,6 @@ namespace BALL
 		*/
 		bool operator != (const TRSFace<T>& rsface) const
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			RSFaceIsValid(rsface,__LINE__);
-			#endif
 			return (bool)(!(*this == rsface));
 		}
 		
@@ -262,29 +213,26 @@ namespace BALL
 		*/
 		//@{
 
-		/** Change the index of one of the three rsvertices of the rsface.
-				@param i the first vertex is changed if i = 0, the second otherwise
-				@param vertex the new index
+		/** Change one of the three rsvertices of the rsface.
+				@param	i				the first vertex is changed if i = 0,
+												the second vertex is changed if i = 1,
+												the third vertex is changed otherwise
+				@param	vertex	a pointer to the new vertex
 		*/
 		void  setVertex(const Position i, TRSVertex<T>* vertex)
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			switch (i)
 			{
 				case 0  :	vertex0_ = vertex; break;
 				case 1  :	vertex1_ = vertex; break;
 				default :	vertex2_ = vertex; break;
 			}
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 		}
+
 		/** Return one of the three rsvertices of the rsface.
-				@return Index the first rsvertex if i = 0,
-											the second rsvertex if i = 1,
-											the third rsvertex if otherwse
+				@return	RSVertex*	the first rsvertex if i = 0,
+													the second rsvertex if i = 1,
+													the third rsvertex if otherwse
 		*/
 		TRSVertex<T>* getVertex(const Position i) const
 		{
@@ -297,29 +245,25 @@ namespace BALL
 		}
 
 		/** Change the three rsedges of the rsface.
-				@param i the first edge is changed if i = 0, the second otherwise
-				@param edge a pointer to the new edge
+				@param	i			the first edge is changed if i = 0,
+											the second edge is changed if i = 1,
+											the third edge is changed otherwise
+				@param	edge	a pointer to the new edge
 		*/
 		void  setEdge(const Position i, TRSEdge<T>* edge)
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			switch (i)
 			{
 				case 0  :	edge0_ = edge; break;
 				case 1  :	edge1_ = edge; break;
 				default :	edge2_ = edge; break;
 			}
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 		}
 
-		/** Return the index of one of the three rsedges of the rsface.
-				@return Index the first rsedge if i = 0,
-											the second rsedge if i = 1
-											the third rsedge if otherwse
+		/** Return of one of the three rsedges of the rsface.
+				@return	RSEdge*	the first rsedge if i = 0,
+												the second rsedge if i = 1
+												the third rsedge if otherwse
 		*/
 		TRSEdge<T>* getEdge(const Position i) const
 		{
@@ -348,22 +292,16 @@ namespace BALL
 		}
 
 		/** Change the vector orthogonal to the rsface.
-				@param normal the new normal
+				@param	normal	the new normal
 		*/
 		void setNormal(const TVector3<T>& normal)
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			normal_ = normal;
 			normal_.normalize();
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 		}
 
 		/** Return the vector orthogonal to the rsface.
-				@return TVector3<T> the vector orthogonal to the rsface.
+				@return	TVector3<T>	the vector orthogonal to the rsface.
 		*/
 		TVector3<T> getNormal() const
 		{
@@ -394,28 +332,20 @@ namespace BALL
 		}
 
 		/** Find the two rsedges of this face that belong to the given rsvertex
-				@param vertex the index of the given vertex
-				@param edge1 the index of the first found edge
-				@param edge2 the index of the second found edge
-				@return bool {\bf true} if the edges can be found, {\bf false} otherwise
+				@param	vertex	a pointer to the given vertex
+				@param	edge1		a pointer to the first found edge
+				@param	edge2		a pointer to the second found edge
+				@return	bool		{\bf true} if the edges can be found,
+												{\bf false} otherwise
 		*/
 		bool getEdges(TRSVertex<T>* vertex, TRSEdge<T>*& edge1, TRSEdge<T>*& edge2)
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			if ((vertex0_ != vertex) && (vertex1_ != vertex) && (vertex2_ != vertex))
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return false;
 			}
 			if ((edge0_ == NULL) || (edge1_ == NULL) || (edge2_ == NULL))
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return false;
 			}
 			if ((edge0_->getVertex(0) != vertex) && (edge0_->getVertex(1) != vertex))
@@ -435,185 +365,118 @@ namespace BALL
 					edge2 = edge2_;
 				}
 			}
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			return true;
 		}
 		
 		/** Find the rsedge of this face that belong to the two given rsvertices
-				@param vertex1 the index of the first given vertex
-				@param vertex2 the index of the second given vertex
-				@param edge the index of the first found edge
-				@return bool {\bf true} if the edge can be found, {\bf false} otherwise
+				@param	vertex1 a pointer to the first given vertex
+				@param	vertex2 a pointer to the second given vertex
+				@param	edge		a pointer to the first found edge
+				@return	bool		{\bf true} if the edge can be found,
+												{\bf false} otherwise
 		*/
 		bool getEdge(TRSVertex<T>* vertex1, TRSVertex<T>* vertex2, TRSEdge<T>*& edge)
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			if ((vertex0_ != vertex1) && (vertex1_ != vertex1) && (vertex2_ != vertex1))
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return false;
 			}
 			if ((vertex0_ != vertex2) && (vertex1_ != vertex2) && (vertex2_ != vertex2))
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return false;
 			}
 			if ((edge0_ == NULL) || (edge1_ == NULL) || (edge2_ == NULL))
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return false;
 			}
 			if ((edge0_->getVertex(0) == vertex1) && (edge0_->getVertex(1) == vertex2) ||
 			    (edge0_->getVertex(1) == vertex1) && (edge0_->getVertex(0) == vertex2))
 			{
 				edge = edge0_;
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return true;
 			}
 			if ((edge1_->getVertex(0) == vertex1) && (edge1_->getVertex(1) == vertex2) ||
 			    (edge1_->getVertex(1) == vertex1) && (edge1_->getVertex(0) == vertex2))
 			{
 				edge = edge1_;
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return true;
 			}
 			if ((edge2_->getVertex(0) == vertex1) && (edge2_->getVertex(1) == vertex2) ||
 			    (edge2_->getVertex(1) == vertex1) && (edge2_->getVertex(0) == vertex2))
 			{
 				edge = edge2_;
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return true;
 			}
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			return false;
 		}
 		
 		/** Return the relative index of a rsvertex in the rsface.
-				@return Index, the relative index of the rsvertex
+				@return	Index	the relative index of the rsvertex
 		*/
 		Index getRelativeVertexIndex(TRSVertex<T>* vertex)
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			if (vertex0_ == vertex)
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return 0;
 			}
 			if (vertex1_ == vertex)
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return 1;
 			}
 			if (vertex2_ == vertex)
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return 2;
 			}
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			return -1;
 		}
 
 		/** Return the third rsvertex of this rsface.
-				@param v1 the first vertex
-				@param v2 the second vertex
-				@return TRSVertex<T>*, the third vertex
+				@param	v1						the first vertex
+				@param	v2						the second vertex
+				@return	TRSVertex<T>*	the third vertex
 		*/
 		TRSVertex<T>* thirdVertex(TRSVertex<T>* v1, TRSVertex<T>* v2)
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			if ((vertex0_ == v1) || (vertex0_ == v2))
 			{
 				if ((vertex1_ == v1) || (vertex1_ == v2))
 				{
-					#ifdef secure
-					RSFaceIsValid(*this,__LINE__);
-					#endif
 					return vertex2_;
 				}
 				else
 				{
-					#ifdef secure
-					RSFaceIsValid(*this,__LINE__);
-					#endif
 					return vertex1_;
 				}
 			}
 			else
 			{
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return vertex0_;
 			}
 		}
 
 		/** Substitute a rsvertex by an other one.
-				@param old_vertex the vertex that has to be substituted
-				@param new_vertex the new vertex
-				@return bool, {\bf true}, if the vertex can be substituted, {\bf false} otherwise
+				@param	old_vertex	the vertex that has to be substituted
+				@param	new_vertex	the new vertex
+				@return	bool				{\bf true}, if the vertex can be substituted,
+														{\bf false} otherwise
 		*/
 		bool substituteVertex(TRSVertex<T>* old_vertex, TRSVertex<T>* new_vertex)
 		{
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			if (vertex0_ == old_vertex)
 			{
 				vertex0_ = new_vertex;
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return true;
 			}
 			if (vertex1_ == old_vertex)
 			{
 				vertex1_ = new_vertex;
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return true;
 			}
 			if (vertex2_ == old_vertex)
 			{
 				vertex2_ = new_vertex;
-				#ifdef secure
-				RSFaceIsValid(*this,__LINE__);
-				#endif
 				return true;
 			}
-			#ifdef secure
-			RSFaceIsValid(*this,__LINE__);
-			#endif
 			return false;
 		}
 
@@ -630,7 +493,7 @@ namespace BALL
 		TVector3<T> center_;
 		TVector3<T> normal_;
 		bool singular_;
-		int index_;
+		Index index_;
 
 	};
 
@@ -653,7 +516,8 @@ namespace BALL
 		template <typename T>
 		std::ostream& operator << (std::ostream& s, TRSFace<T>& rsface)
 		{
-			return (s << "RSFACE" << rsface.getIndex()
+			return (s << "RSFACE"
+								<< rsface.getIndex()
 								<< "([" << (rsface.getVertex(0) == NULL ? -2 : rsface.getVertex(0)->getIndex()) << ' '
 								<<				 (rsface.getVertex(1) == NULL ? -2 : rsface.getVertex(1)->getIndex()) << ' '
 								<<				 (rsface.getVertex(2) == NULL ? -2 : rsface.getVertex(2)->getIndex()) << "] "
@@ -673,29 +537,6 @@ namespace BALL
 	typedef TRSFace<float> RSFace;
 	
 	
-	/* debugung */
-	template <class T>
-	void RSFaceIsValid(const TRSFace<T>& face, int line)
-	{
-		for (Position i = 0; i < 3; i++)
-		{
-			if (face.getVertex(i) == NULL)
-			{
-				throw Exception::GeneralException(__FILE__,line,"RSFaceNotValid","NULL-pointer in vertex list");
- 			}
- 		}
- 		for (Position i = 0; i < 3; i++)
- 		{
-//			if (face.getEdge(i) == NULL)
-//			{
-//				throw Exception::GeneralException(__FILE__,line,"RSFaceNotValid","NULL-pointer in edge list");
-// 			}
- 		}
-		if (face.getNormal() == TVector3<T>::getZero())
-		{
-			throw Exception::GeneralException(__FILE__,line,"RSFaceNotValid","normal equals zero vector");
-		}
-	}
 
 } // namespace BALL
 
