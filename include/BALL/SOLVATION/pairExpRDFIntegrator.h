@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.h,v 1.9 2000/10/17 17:14:35 anker Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.10 2000/11/06 18:00:07 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -68,27 +68,23 @@ namespace BALL
 			static const int SAMPLES;
 		};
 
+
 		/** @name Constructors and destructors */
 		//@{
 
 		/** Default constructor */
-		PairExpRDFIntegrator();
+		PairExpRDFIntegrator() throw();
 
 		/** Copy constructor */
-		PairExpRDFIntegrator(const PairExpRDFIntegrator& integrator);
+		PairExpRDFIntegrator(const PairExpRDFIntegrator& integrator) throw();
 
 		/** Detailed constructor */
 		PairExpRDFIntegrator(double alpha, double C1, double C2, double R_ij_o,
-				double k1, double k2, const RadialDistributionFunction& rdf);
+				double k1, double k2, const RadialDistributionFunction& rdf)
+			throw();
 
 		/** Destructor */
-		virtual ~PairExpRDFIntegrator();
-
-		/** */
-		virtual void destroy();
-
-		/** */
-		virtual void clear();
+		virtual ~PairExpRDFIntegrator() throw();
 
 		//@}
 
@@ -96,12 +92,12 @@ namespace BALL
 		/** @name Assignment */
 		//@{
 
-		/** */
-		void set(const PairExpRDFIntegrator& integrator);
-
-		/** */
+		/** Assignment operator */
 		const PairExpRDFIntegrator& operator = 
-			(const PairExpRDFIntegrator& integrator);
+			(const PairExpRDFIntegrator& integrator) throw();
+
+		/** Clear method */
+		virtual void clear() throw();
 
 		//@}
 
@@ -111,24 +107,24 @@ namespace BALL
 
 		/** */
 		void setConstants(double alpha, double C1, double C2, double R_ij_o,
-				double k1, double k2);
+				double k1, double k2) throw();
 
 		/** */
-		double integrateToInf(double from) const;
+		double integrateToInf(double from) const throw();
 
 		/** */
 		double integrateToInf(double from, double alpha, double C1, double C2,
-				double R_ij_o, double k1, double k2);
+				double R_ij_o, double k1, double k2) throw();
 
 		/** */
-		double integrate(double from, double to) const;
+		double integrate(double from, double to) const throw();
 
 		/** */
 		double integrate(double from, double to, double alpha, double C1, 
-				double C2, double R_ij_o, double k1, double k2);
+				double C2, double R_ij_o, double k1, double k2) throw();
 		
 		/** */
-		virtual double operator () (double x) const;
+		virtual double operator () (double x) const throw();
 
 		//@}
 
@@ -136,12 +132,24 @@ namespace BALL
 		/** */
 		Options options;
 
+
 		/** @name Debugging and diagnostics */
 		//@{
 
 		/** Dumps the whole content of the object */
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const
+		throw();
 		
+		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const PairExpRDFIntegrator& integrator) const
+			throw();
+
 		//@}
 
 
@@ -159,9 +167,9 @@ namespace BALL
 
 		private:
 
-		double numericallyIntegrateInterval(Interval interval) const;
-		double project(double x) const;
-		double unproject(double x) const;
+		double numericallyIntegrateInterval(Interval interval) const throw();
+		double project(double x) const throw();
+		double unproject(double x) const throw();
 
 	};
 
