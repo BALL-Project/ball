@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.16 2001/03/12 00:50:35 amoll Exp $
+// $Id: parameterSection.C,v 1.17 2001/04/08 23:30:25 amoll Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -91,8 +91,7 @@ namespace BALL
 		
 		INIFile&  ini_file = parameters.getParameterFile();		
 		// check for the existence of the required section
-		if (!ini_file.hasSection(section_name) ||
-				 ini_file.getSectionLength(section_name) == 0)
+		if (!ini_file.hasSection(section_name))
 		{
 			return false;
 		}
@@ -113,19 +112,16 @@ namespace BALL
 		// count non-comment lines only
 		int	number_of_lines = 0;
 		String line;
-		Size first_line = ini_file.getSectionFirstLine(section_name);
-		Size  last_line = ini_file.getSectionLastLine(section_name);
 
-		for (Position i = first_line; i <= last_line; i++)
+		INIFile::LineIterator it = ini_file.getSectionFirstLine(section_name);
+
+		for (; +it ; ++it)
 		{						
 			// get the line and remove leading white spaces
-			if (ini_file.getLine(i) == 0)
-			{
-				Log.error() << "Error in call to INIFile::getLine(), i = " << i
-										<< " , File: << " << ini_file.getFilename() << endl;
-				return false;
-			}
-			line = *ini_file.getLine(i);
+		
+			const INIFile::LineIterator& cit(it);
+
+			String line(*cit);
 			line.trimLeft();
 
 			// skip all empty lines, comments and option lines
@@ -232,9 +228,12 @@ namespace BALL
 		
 		number_of_lines = -1; // skip format line
 
-		for (Position i = first_line; i <= last_line; i++)
+		it = ini_file.getSectionFirstLine(section_name);
+		for (; +it ; ++it)
 		{
-			line = *ini_file.getLine(i);
+			const INIFile::LineIterator& cit(it);
+
+			line = *cit;
 			line.trimLeft();
 
 			// if line is empty or is a comment line, nothing to be done
