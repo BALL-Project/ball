@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.5 2000/02/20 16:44:52 oliver Exp $ #include
+// $Id: Vector3_test.C,v 1.6 2000/02/20 20:49:02 oliver Exp $ #include
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.5 2000/02/20 16:44:52 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.6 2000/02/20 20:49:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -263,14 +263,14 @@ RESULT
 CHECK(TVector3::getDistance(const TVector3& vector) const )
 	v2 = Vector3(1, 2, 4);
 	v  = Vector3(0, 1, 2);
-	TEST_REAL_EQUAL(v.getDistance(v2) , 2)
+	TEST_REAL_EQUAL(v.getDistance(v2) , sqrt(6.0))
 RESULT
 
 //line
 CHECK(TVector3::getSquareDistance(const TVector3& vector) const )
 	v2 = Vector3(1, 2, 4);
 	v  = Vector3(0, 1, 2);
-	TEST_REAL_EQUAL(v.getSquareDistance(v2) , 4)
+	TEST_REAL_EQUAL(v.getSquareDistance(v2) , 6.0)
 RESULT
 
 //line 
