@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.13 2001/03/14 14:19:07 amoll Exp $
+// $Id: INIFile.h,v 1.14 2001/04/08 23:29:35 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -11,7 +11,13 @@
 # include <BALL/DATATYPE/stringHashMap.h>
 #endif
 
-#include <vector>
+#ifndef BALL_CONCEPT_PROCESSOR_H
+#	include <BALL/CONCEPT/processor.h>
+#endif
+
+#ifndef BALL_DATATYPE_LIST_H
+# include <BALL/DATATYPE/list.h>
+#endif
 
 namespace BALL 
 {
@@ -34,16 +40,240 @@ namespace BALL
 			MAX_LINE_LENGTH = 1024
 		};
 
+		class IteratorTraits_;
 		
+		class Section
+		{
+			public:
+
+			friend class INIFile;
+			friend class INIFile::IteratorTraits_;
+
+			const String& getName() const
+			{
+				return name_;
+			}
+
+			bool operator == (const Section& section) const
+			{
+				return (name_		 == section.name_		&&
+								lines_	 == section.lines_	&&
+								key_map_ == section.key_map_);
+			}
+
+			protected:
+
+			// name of the section
+			String																	name_;
+
+			// all lines of the section
+			List<String>														lines_;
+
+			// hashmap with all keys
+			StringHashMap<List<String>::Iterator>		key_map_;
+		};
+
+		typedef List<Section>::Iterator Section_iterator;
+		typedef List<Section>::ConstIterator ConstSection_iterator;
+	
+		class IteratorTraits_
+		{
+
+			friend class INIFile;
+
+			public:
+
+			BALL_CREATE(IteratorTraits_)
+
+			IteratorTraits_()
+				:	bound_(0),
+					section_(),
+					position_()
+					
+			{
+			}
+			
+			IteratorTraits_(List<Section>& list, 
+											Section_iterator section, 
+											List<String>::Iterator line)
+				:	bound_(&list),
+					section_(section),
+					position_(line)
+			{
+			}
+			
+			IteratorTraits_(const IteratorTraits_& traits)
+				:	bound_(traits.bound_),
+					section_(traits.section_),
+					position_(traits.position_)
+			{
+			}
+
+			virtual ~IteratorTraits_()
+			{
+			}
+			
+			const IteratorTraits_& operator = (const IteratorTraits_ &traits)
+			{
+				bound_		= traits.bound_;
+				section_  = traits.section_;
+				position_ = traits.position_;
+
+				return *this;
+			}
+
+			List<String>::Iterator getPosition()
+			{
+				return position_;
+			}
+
+			Section_iterator getSection()
+			{
+				return section_;
+			}
+		
+			const String& operator *() const
+			{
+				return *position_;
+			}
+
+			const String& getLine() const
+			{
+				return *position_;
+			}
+
+			IteratorTraits_& operator ++ ()
+			{
+				if (bound_ == 0)
+				{
+					return *this;
+				}
+
+				if (!isSectionEnd())
+				{
+					position_++;
+
+					return *this;
+				}
+
+				section_++;
+
+				if (section_ == bound_->end())
+				{
+					return *this;
+				}
+
+				position_ = section_->lines_.begin();
+
+				return *this;
+			}
+
+			bool operator == (const IteratorTraits_& traits) const
+			{
+				return (bound_ == traits.bound_			&&
+								section_ == traits.section_ &&
+								position_ == traits.position_);
+			}
+
+			bool operator != (const IteratorTraits_& traits) const
+			{
+				return !(*this == traits);
+			}
+			
+			bool operator + () const
+			{
+				return (bound_ != 0 && 
+								section_ != bound_->end() &&
+								position_ != section_->lines_.end());
+			}
+
+			bool isValid() const
+			{
+				return (+ (*this));
+			}
+
+			void toBegin()
+			{
+				position_ = section_->lines_.begin();
+			}
+
+			bool isSectionBegin() const
+			{
+				return (position_ == section_->lines_.begin());
+			}
+
+			void toSectionEnd()
+			{
+				position_ = section_->lines_.end();
+				position_--;
+			}
+			
+			bool isSectionEnd() const
+			{
+				List<String>::Iterator last(section_->lines_.end());
+				last--;
+				return (position_ == last);
+			}
+			
+			//protected:
+
+			String& operator *()
+			{
+				return *position_;
+			}
+
+			private:
+
+			List<Section>*					bound_;
+			Section_iterator				section_;
+			List<String>::Iterator	position_;
+		};
+
+		/** An iterator for the lines in an INIFile.
+				With a LineIterator it is easy to iterator over all lines
+				in an instance of INIFile.
+		*/
+		typedef IteratorTraits_ LineIterator;
+/*
+		friend class IteratorTraits_;
+
+		typedef ForwardIterator<ResourceEntry, ResourceEntry, ResourceEntry*, IteratorTraits_> Iterator;
+
+		Iterator begin()
+		{
+			return Iterator::begin(*this);
+		}
+
+		Iterator end()
+		{
+			return Iterator::end(*this);
+		}
+
+
+		typedef ConstForwardIterator<ResourceEntry, ResourceEntry, ResourceEntry*, IteratorTraits_> ConstIterator;
+
+		ConstIterator begin() const
+		{
+			return ConstIterator::begin(*this);
+		}
+
+		ConstIterator end() const
+		{
+			return ConstIterator::end(*this);
+		}
+
+*/
+		//friend class LineIterator;
+
 		/** Return type: undefined:
 				"[UNDEFINED!]"
 		*/
 		static const String UNDEFINED;
 		
-		/** Name of the prefix section:
-				"#PREFIX!"
+		/** Name of the HEADER section:
+				"#HEADER!"
 		*/
-		static const String PREFIX;		
+		static const String HEADER;		
 		
 		/** @name	Constructors and Destructors
 		*/
@@ -93,6 +323,7 @@ namespace BALL
 				lines and are stored, but not interpreted.
 				Key-names and values are trimmed.
 				If the file could not be read, valid_ is set to false, ow true.
+				IF a line starts with "[", but no closing bracket occurs, the line is skipped.
 				@return	bool \begin{itemize}
 												\item {\bf true} if the file could be opened and read
 												\item {\bf false} otherwise
@@ -143,11 +374,11 @@ namespace BALL
 		/**	Return the contents of the specified line.
 				If the {\bf line_number} given is not valid (less than
 				0 or greater or equal to the number returned by \Ref{getNumberOfLines})
-				0 is returned
+				a non-valid iterator is returned.
 				@param	line_number, first line starts with 0
-				@return	a pointer to the specified line (as a \Ref{String}) or 0
+				@return	LineIterator to the specified line
 		*/	
-		const String* getLine(Size line_number) const;
+		LineIterator getLine(Size line_number);
 
 		/**	Change the contents of a line.
 				Replaces the line given by {\bf line_number} by the text in {\bf line}.
@@ -162,19 +393,29 @@ namespace BALL
 											\item {\bf false} otherwise
 										\end{itemize}
 		*/	
-		bool setLine(Size line_number, const String& line);
+		bool setLine(LineIterator line_it, const String& line);
 		
 		/** Delete a line.
 				If the line does not exists, false is returned.
-				(This is also the case if the line was already deleted.)
 				Section headers can not be removed with this method.
 				If the line contains a key, it will be removed.
 				@param line_number the line to delete
 		*/
-		bool deleteLine(Position line_number);
+		bool deleteLine(LineIterator line_it);
 		
-		/** Add a line.
-				To add a line to the prefix use {\bf [PREFIX]} as section_name.
+		/** Add a line after a given iterator.
+				Lines starting with "[" cannot be added (to prevent problems with
+				section headers).
+				If the line contains a key and the section contains already this key
+				the method aborts and returns false, use setValue() instead.
+				@param line_it the iterator to insert after
+				@param line the line to be added
+				@return true, if line could be added
+		*/
+		bool insertLine(LineIterator line_it, const String& line);
+		
+		/** Append a line to a section.
+				To add a line to the HEADER use {\bf INIFile::HEADER} as section_name.
 				If the given section does not exists, false is returned.
 				Lines starting with "[" cannot be added (to prevent problems with
 				section headers).
@@ -184,22 +425,13 @@ namespace BALL
 				@param line the line to be added
 				@return true, if line could be added
 		*/
-		bool insertLine(const String& section_name, const String& line);
-		
-		/**	Return the original number of lines.
-				This are the lines read from an INIFile.
-				Changes after reading the file dont matter here.
-				@return 	Size number of lines in the INIFile
-		*/	
-		Size getOriginalNumberOfLines() const;
-				
-		/**	Return the absolute number of lines.
-				This are the lines read from a file plus all added lines
-				and minus all deleted lines.
-				@return 	Size number of lines in buffer
-		*/	
-		Size getNumberOfLines() const;		
+		bool appendLine(const String& section_name, const String& line);
 
+		/**	Return number of lines.
+				@return	Size number of lines in the INIFile
+		*/	
+		Size getNumberOfLines() const;
+				
 		/**	Queries for a certain section.
 				@param	section_name	the name of the section (without square brackets)
 				@return bool \begin{itemize}
@@ -216,10 +448,12 @@ namespace BALL
 											   \item 0, if pos is too high
 										    \end{itemize}
 		*/
-	  String* getSectionName(Position pos);
+	  Section_iterator getSection(const String& section_name);
+
+	  Section_iterator getSection(Position pos);
 
 		/**	Count all sections.
-				The prefix is not counted!
+				The HEADER is not counted!
 		*/	
 		Size getNumberOfSections() const;
 
@@ -233,7 +467,7 @@ namespace BALL
 										 \end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
-		Size getSectionFirstLine(const String& section_name) const;
+		LineIterator getSectionFirstLine(const String& section_name);
 
 		/**	Returns the index of the last line of a section.
 				The last line of a section is either the last line 
@@ -247,14 +481,9 @@ namespace BALL
 											\end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
-		Size getSectionLastLine(const String& section_name) const;	
+		LineIterator getSectionLastLine(const String& section_name);	
 
-		/**	Returns the number of line in a section.
-				The header line is not counted. The last section is terminated 
-				by the last line of the file.
-				Deleted lines are not counted.
-				Inserted lines are counted, so \\
-				getSectionLastLine - getSectionFirstLine != getSectionLength \\
+		/**	Returns the number of lines in a section.
 				@return	Size \begin{itemize}
 											\item the number of lines, or 
 											\item INVALID_SIZE if the section could not be found
@@ -303,6 +532,10 @@ namespace BALL
 		*/	
 		bool setValue(const String& section, const String& key, const String& value);
 
+		/**	
+		*/
+		bool apply(UnaryProcessor<LineIterator>& processor);
+
 		//@}
 		/** @name Predicates
 		*/
@@ -317,34 +550,15 @@ namespace BALL
 		//protected:	
 
 		bool									valid_;
+
 		String								filename_;	
 
-		// names of all sections
-		// 0. section is "[PREFIX]"
-		std::vector<String>		section_names_;
-
-		// all lines
-		std::vector<String>		lines_;
-
-		// in which sector is the line
-		// -1 means the line was deleted
-		std::vector<Index>		line_section_index_;
-
-		// starts of the sections
-		std::vector<Size>			section_start_;
-
-		// end line number of the sections
-		std::vector<Size>			section_end_;
+		// all sections
+		// 0. section is "[HEADER]"
+		List<Section>		sections_;
 
 		// hashmap with the section names  => index
-		StringHashMap<Size>		section_index_;
-
-		// hashmap with all keys
-		StringHashMap<Size>		section_key_map_;
-
-		// number of lines in the original file
-		Size									original_number_of_lines_;
-
+		StringHashMap<Section_iterator>		section_index_;
 	};
 
 } // namespace BALL
