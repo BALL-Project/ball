@@ -1,4 +1,4 @@
-// $Id: BinarySearchTree_test.C,v 1.2 2000/07/31 15:17:00 oliver Exp $
+// $Id: BinarySearchTree_test.C,v 1.3 2000/07/31 21:57:57 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,6 +6,8 @@
 #include <BALL/DATATYPE/binarySearchTree.h>
 #include <iostream>
 ///////////////////////////
+
+using namespace BALL;
 
 // helper class: a processor counting tree items
 class BSTreeItemCollector
@@ -40,24 +42,22 @@ class BSTreeItemCollector
 	list<BSTreeItem*>	list_;
 };
 
-// BSTreeItemCollector myproc;
-// BSTree tree ...;
-// tree.apply(myproc);
-// list<BSTreeItem*> mylist(myproc.getList());
-//
-// list<BSTreeItem*>::iterator list_it = mylist.begin();
-// TEST_EQUAL((list_it != mylist.end()) && (*list_it == item1), true)
-// list_it++;
-// TEST_EQUAL((list_it != mylist.end()) && (*list_it == item2), true)
-// list_it++;
+BSTreeItem* test(list<BSTreeItem*>& mylist, list<BSTreeItem*>::iterator& list_it)
+{
+	if (list_it == mylist.end())
+	{
+		return 0;
+	}
+	BSTreeItem* temp = *list_it;
+	list_it++;
+	return temp;
+}
 
-
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.2 2000/07/31 15:17:00 oliver Exp $")
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.3 2000/07/31 21:57:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-using namespace BALL;
 using namespace std;
 
 BSTreeItem* itemp;
@@ -196,8 +196,15 @@ CHECK(rotateLeft())
   //BAUSTELLE
 RESULT
 
+BSTreeItemCollector myproc;
+list<BSTreeItem*>::iterator list_it;
+
 CHECK(applyPreorder(UnaryProcessor<BSTreeItem>& processor))
-  //BAUSTELLE
+	list<BSTreeItem*> mylist(myproc.getList());
+	item.applyPreorder(myproc);
+	list_it = mylist.begin();
+//	TEST_EQUAL((list_it != mylist.end()) && (*list_it == &left), true)
+	TEST_EQUAL(test(mylist, list_it), &left)
 RESULT
 
 CHECK(applyInorder(UnaryProcessor<BSTreeItem>& processor))
