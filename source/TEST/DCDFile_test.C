@@ -1,4 +1,4 @@
-// $Id: DCDFile_test.C,v 1.3 2001/04/27 15:19:40 anker Exp $
+// $Id: DCDFile_test.C,v 1.4 2001/05/06 21:38:55 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: DCDFile_test.C,v 1.3 2001/04/27 15:19:40 anker Exp $")
+START_TEST(class_name, "$Id: DCDFile_test.C,v 1.4 2001/05/06 21:38:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,7 +38,7 @@ RESULT
 
 
 CHECK(DCDFile::DCDFile(const DCDFile& file) throw())
-  DCDFile first_file;
+  DCDFile first_file(dcd_test_file);
 	DCDFile second_file(first_file);
 	bool test = (first_file == second_file);
 	TEST_EQUAL(test, true)
