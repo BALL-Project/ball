@@ -64,7 +64,7 @@ namespace BALL
 			throw()
 		{
 			String hint("Download a PDB file from www.rcsb.org");
-			main_control.insertMenuEntry(MainControl::FILE_OPEN, "Downlo&ad Structure", (QObject *)this,
+			main_control.insertMenuEntry(MainControl::FILE_OPEN, "Download Structure", (QObject *)this,
 																	 SLOT(show()), ALT+Key_I, -1, hint);
 		}
 

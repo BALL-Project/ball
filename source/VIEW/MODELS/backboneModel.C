@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.12 2004/06/07 13:16:23 amoll Exp $
+// $Id: backboneModel.C,v 1.13 2004/09/04 00:10:02 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -86,13 +86,21 @@ namespace BALL
 			BALL_FOREACH_ATOM(residue, it)
 			{
 				// collect only CA-Atoms and CH3 atoms in ACE and NME
-				if ((it->getName().hasSubstring("CA")) ||
+				if (((it->getName().hasSubstring("CA")) ||
 				    (it->getName().hasSubstring("CH3") &&
 						(residue.getFullName() == "ACE" 	||
 						 residue.getFullName() == "ACE-N" ||
 						 residue.getFullName() == "NME" 	||
 						 residue.getFullName() == "NME-C" )
-						))
+						)) || (
+						// or we collect P atoms in nucleotides
+						residue.getName().size() == 1 &&
+						(
+						residue.getName() == "C" ||
+						residue.getName() == "G" ||
+						residue.getName() == "T" ||
+						residue.getName() == "A")) &&
+						(it->getName() == "P"))
 				{
 					SplinePoint spline_point((*it).getPosition(), &*it);
 					spline_vector_.push_back(spline_point);
