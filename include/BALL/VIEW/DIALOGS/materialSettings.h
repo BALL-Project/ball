@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.h,v 1.4 2004/10/08 14:49:20 amoll Exp $
+// $Id: materialSettings.h,v 1.4.2.1 2004/12/30 14:00:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
@@ -59,13 +59,7 @@ namespace BALL
 
 			private:
 
-			void setValues_(const QSlider& slider, QLabel& label, Position pos);
-			void setValues_();
-
-			void apply_(Index e, float value)
-				throw();
-
-			float material_values_[4];
+			void setValues_(const QSlider& slider, QLabel& label);
 		};
 
 	}

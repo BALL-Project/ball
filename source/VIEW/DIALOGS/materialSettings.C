@@ -1,15 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.9.2.1 2004/12/30 13:59:57 amoll Exp $
+// $Id: materialSettings.C,v 1.9.2.2 2004/12/30 14:01:31 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <qlabel.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
 #include <qslider.h>
 
 namespace BALL
@@ -17,7 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		MaterialSettings::MaterialSettings( QWidget* parent,  const char* name, WFlags fl )
+		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, WFlags fl)
 			: MaterialSettingsData( parent, name, fl ),
 				PreferencesEntry()
 		{
