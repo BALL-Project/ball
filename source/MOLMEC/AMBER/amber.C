@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.C,v 1.27 2004/12/22 16:02:23 amoll Exp $
+// $Id: amber.C,v 1.28 2004/12/26 17:22:46 amoll Exp $
 //
 // Molecular Mechanics: Amber force field class
 //
@@ -237,7 +237,7 @@ namespace BALL
 		if (assign_charges || assign_type_names)
 		{
 			Templates templates;
-			templates.setMaximumUnassignedAtoms(max_number_of_errors_);
+			templates.setMaximumUnassignedAtoms(max_number_of_errors_ - number_of_errors_);
 			templates.extractSection(parameters_, "ChargesAndTypeNames");
 			if (assign_charges && assign_type_names)
 			{
@@ -272,7 +272,7 @@ namespace BALL
 		{
 			// convert the type names to types
 			AssignTypeProcessor type_proc(parameters_.getAtomTypes());
-			type_proc.setMaximumUnassignedAtoms(max_number_of_errors_);
+			type_proc.setMaximumUnassignedAtoms(max_number_of_errors_ - number_of_errors_);
 			getSystem()->apply(type_proc);			
 
 			HashSet<const Atom*>::ConstIterator it = type_proc.getUnassignedAtoms().begin();

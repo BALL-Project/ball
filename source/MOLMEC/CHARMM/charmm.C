@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.22 2004/12/22 16:02:25 amoll Exp $
+// $Id: charmm.C,v 1.23 2004/12/26 17:22:59 amoll Exp $
 //
 
 // Molecular Mechanics: Charmm force field class
@@ -221,7 +221,7 @@ namespace BALL
 		if (assign_charges || assign_type_names || remove_hydrogens)
 		{
 			Templates templates;
-			templates.setMaximumUnassignedAtoms(max_number_of_errors_);
+			templates.setMaximumUnassignedAtoms(max_number_of_errors_ - number_of_errors_);
 			templates.extractSection(parameters_, "ChargesAndTypeNames");
 			
 			// remove all hydrogens bound to extended atom types
@@ -308,7 +308,7 @@ namespace BALL
 		{
 			// convert the type names to types
 			AssignTypeProcessor type_proc(parameters_.getAtomTypes());
-			type_proc.setMaximumUnassignedAtoms(max_number_of_errors_);
+			type_proc.setMaximumUnassignedAtoms(max_number_of_errors_ - number_of_errors_);
 			getSystem()->apply(type_proc);			
 
 			HashSet<const Atom*>::ConstIterator it = type_proc.getUnassignedAtoms().begin();
