@@ -1,5 +1,5 @@
 %{
-	// $Id: check_test.l,v 1.6 2003/06/12 14:21:29 oliver Exp $
+	// $Id: check_test.l,v 1.7 2003/06/12 18:37:25 oliver Exp $
 	// C++ scanner
 
 	#define YY_NO_UNPUT 
@@ -507,8 +507,8 @@
 		GOTO(ClassName);
 	}
 
-<FindMembers>[ \t]*"typedef"[ \t\n]+[ \t\na-zA-Z0-9<>:_*&]*";"	{RULE
-		// enum definition
+<FindMembers>[ \t]*"typedef"[ \t\n]+[ \t\na-zA-Z0-9<,>:_*&]*";"	{RULE
+		// type definition
 		if (debug) cerr << "read typedef: " << yytext << endl;
 		countLine();
 	}
