@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.22 2005/01/18 22:25:09 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.23 2005/01/19 22:47:54 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -20,6 +20,7 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/KERNEL/system.h>
 
 #include <qfont.h>
 #include <qpainter.h>
@@ -50,7 +51,8 @@ namespace BALL
 				stereo_(NO_STEREO),
 				render_mode_(RENDER_MODE_UNDEFINED),
  				use_vertex_buffer_(false),
-				picking_mode_(false)
+				picking_mode_(false),
+				model_type_(MODEL_LINES)
 		{
 		}
 
@@ -348,6 +350,8 @@ namespace BALL
 			drawing_precision_  = representation.getDrawingPrecision();
 			drawing_mode_ 		  = representation.getDrawingMode();
 
+			display_lists_index_ = drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + drawing_precision_;
+
 			if (representation.getDrawingMode() == DRAWING_MODE_DOTS)
 			{
 				glDisable(GL_LIGHTING);
@@ -356,6 +360,8 @@ namespace BALL
 			{
 				glEnable(GL_LIGHTING);
 			}
+
+			model_type_ = representation.getModelType();
 
 			// accelerate things a little by calling getGeometricObjects() only once
 			const List<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
@@ -459,8 +465,24 @@ namespace BALL
 			translateVector3_(sphere.getPosition());
 			scale_(sphere.getRadius());
 
-			GL_spheres_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 
-											 drawing_precision_].draw();
+			if (model_type_ == MODEL_STICK)
+			{
+				Index precision = drawing_precision_;
+				const Composite* const composite = sphere.getComposite();
+				if (composite != 0 && ((Atom*)composite)->countBonds() > 2)
+				{
+					if (precision > DRAWING_PRECISION_LOW)
+					{
+						precision--;
+					}
+				}
+				GL_spheres_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION + 
+													 precision].draw();
+			}
+			else
+			{
+				GL_spheres_list_[display_lists_index_].draw();
+			}
 
  			glPopMatrix();
 		}
@@ -545,8 +567,7 @@ namespace BALL
 			setColor4ub_(box);
 			translateVector3_(box.a);
 			scaleVector3_(box.b - box.a);
-			GL_boxes_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION 
-										 + drawing_precision_].draw();
+			GL_boxes_list_[display_lists_index_].draw();
 			glPopMatrix();
 		}
 
@@ -585,8 +606,7 @@ namespace BALL
 						 	 box.getHeightVector().getLength(),
  							 box.getDepth());
 	
-			GL_boxes_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION 
-										 + drawing_precision_].draw();
+			GL_boxes_list_[display_lists_index_].draw();
 
 			glPopMatrix();
 		}
@@ -611,8 +631,7 @@ namespace BALL
 							 (GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getLength());
 
-			GL_tubes_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION 
-										 + drawing_precision_].draw();
+			GL_tubes_list_[display_lists_index_].draw();
 
 			glPopMatrix();
 		}
@@ -638,8 +657,7 @@ namespace BALL
 							 (GLfloat)tube.getRadius(),
 							 (GLfloat)tube.getLength() / (Real)2);
 
-			GL_tubes_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION 
-										 + drawing_precision_].draw();
+			GL_tubes_list_[display_lists_index_].draw();
 
 			glPopMatrix();
 			glPushMatrix();
@@ -658,8 +676,7 @@ namespace BALL
 				setColorRGBA_(tube.getColor2());
 			}
 
-			GL_tubes_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION 
-										 + drawing_precision_].draw();
+			GL_tubes_list_[display_lists_index_].draw();
 
 			glPopMatrix();
 		}

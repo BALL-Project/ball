@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.13 2005/01/19 16:33:32 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.14 2005/01/19 22:48:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -414,6 +414,7 @@ namespace BALL
 			GLDisplayList* 				GL_spheres_list_;
 			GLDisplayList* 				GL_tubes_list_;
 			GLDisplayList* 				GL_boxes_list_;
+			GLDisplayList* 				sphere_list_;
 
 			/* static array of vertices for sphere dots */
 			static const float sphere_vertices_[12][3];
@@ -435,10 +436,13 @@ namespace BALL
 			ColorRGBA 							dummy_color_;
 			const ColorRGBA* 				last_color_;
 
-			StereoMode stereo_;
-			RenderMode render_mode_;
-			bool use_vertex_buffer_;
-			bool picking_mode_;
+			StereoMode 							stereo_;
+			RenderMode 							render_mode_;
+
+			bool 										use_vertex_buffer_;
+			bool 										picking_mode_;
+			ModelType 							model_type_;
+			Position 								display_lists_index_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
