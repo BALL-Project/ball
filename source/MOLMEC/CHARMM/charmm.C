@@ -1,4 +1,7 @@
-// $Id: charmm.C,v 1.12 2001/09/25 12:17:04 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmm.C,v 1.12.2.1 2003/01/07 13:21:05 anker Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -36,7 +39,7 @@ namespace BALL
 	const char* CharmmFF::Option::OVERWRITE_TYPENAMES = "overwrite_non-empty_typenames"; 
 	const char* CharmmFF::Option::USE_EEF1 = "use_EEF1"; 
  
-	const char* CharmmFF::Default::FILENAME = "CHARMM/param22.ini";
+	const char* CharmmFF::Default::FILENAME = "CHARMM/EEF1/param19_eef1.ini";
 	const float CharmmFF::Default::NONBONDED_CUTOFF = 20.0;
 	const float CharmmFF::Default::VDW_CUTOFF = 9.0;
 	const float CharmmFF::Default::VDW_CUTON = 7.0;
@@ -46,7 +49,7 @@ namespace BALL
 	const float CharmmFF::Default::ELECTROSTATIC_CUTON = 7.0;
 	const float CharmmFF::Default::SCALING_ELECTROSTATIC_1_4 = 2.0;
 	const float CharmmFF::Default::SCALING_VDW_1_4 = 1.0;
-  const bool  CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = true;
+	  const bool  CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = true;
 	const bool	CharmmFF::Default::ASSIGN_CHARGES = true;
 	const bool	CharmmFF::Default::ASSIGN_TYPENAMES = true;
 	const bool	CharmmFF::Default::ASSIGN_TYPES = true;
@@ -70,9 +73,9 @@ namespace BALL
 		insertComponent(new CharmmNonBonded(*this));
 	}
 
-  // Constructor initialized with a system
-  CharmmFF::CharmmFF(System& system)
-    : ForceField(),
+	// Constructor initialized with a system
+	CharmmFF::CharmmFF(System& system)
+		: ForceField(),
 			filename_(Default::FILENAME)
   {
 		// create the component list

@@ -1,4 +1,7 @@
-// $Id: events.C,v 1.2 2001/05/13 14:26:25 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: events.C,v 1.2.2.1 2003/01/07 13:23:30 anker Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/events.h>
 
@@ -237,8 +240,8 @@ namespace BALL
 			 ShiftKeyPressed,
 			 MouseRightButtonReleasedShiftKeyPressedControlKeyPressed)
 
-			/*
 		Events::Events()
+			throw()		
 			:	ShiftKeyPressed(this),
 				ShiftKeyPressedMouseMoved(this),
 				ControlKeyPressed(this),
@@ -294,7 +297,6 @@ namespace BALL
 				scene_(0)
 		{
 		}
-			*/
 
 		Events::Events(Scene* scene)
 			throw()
@@ -353,13 +355,6 @@ namespace BALL
 				scene_(scene)
 		{
 		}
-
-		/*			
-		Events::Events(const Events&  events, bool deep)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-	  */
 
 		Events::~Events()
 			throw()

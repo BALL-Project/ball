@@ -1,4 +1,7 @@
-// $Id: tutorial1.C,v 1.5 2002/01/17 00:44:51 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: tutorial1.C,v 1.5.2.1 2003/01/07 13:23:16 anker Exp $
 // tutorial example 1
 // ------------------
 // build two water molecules and write them to a file

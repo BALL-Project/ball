@@ -1,4 +1,7 @@
-// $Id: pyConstant.h,v 1.1 2000/06/27 22:07:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyConstant.h,v 1.1.2.1 2003/01/07 13:18:52 anker Exp $
 
 #ifndef BALL_PYTHON_PYCONSTANT_H
 #define BALL_PYTHON_PYCONSTANT_H

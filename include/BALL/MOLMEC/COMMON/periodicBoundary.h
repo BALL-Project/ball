@@ -1,4 +1,7 @@
-// $Id: periodicBoundary.h,v 1.13 2002/01/31 10:15:30 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: periodicBoundary.h,v 1.13.2.1 2003/01/07 13:18:09 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
 #define BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H

@@ -1,4 +1,7 @@
-// $Id: lineBasedFile.C,v 1.22 2001/12/26 03:35:53 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: lineBasedFile.C,v 1.22.2.1 2003/01/07 13:20:47 anker Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -129,8 +132,9 @@ namespace BALL
 			throw Exception::ParseError(__FILE__, __LINE__, String("File '") + getName() + "' not open for reading" , 
 																	"LineBasedFile::readLine");
 		}
-
-		line_.getline(getFileStream());
+		static char buffer[BALL_MAX_LINE_LENGTH];
+		getFileStream().getline(buffer, BALL_MAX_LINE_LENGTH);
+		line_.assign(buffer);
 		++line_number_;
 		return !eof();
 	}

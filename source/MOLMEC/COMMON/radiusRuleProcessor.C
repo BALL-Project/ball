@@ -1,4 +1,7 @@
-// $Id: radiusRuleProcessor.C,v 1.3 2000/06/02 08:32:52 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: radiusRuleProcessor.C,v 1.3.2.1 2003/01/07 13:21:09 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
 

@@ -1,4 +1,7 @@
-// $Id: TCPTransfer.h,v 1.8 2002/01/09 16:36:05 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: TCPTransfer.h,v 1.8.2.1 2003/01/07 13:19:16 anker Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -38,7 +41,7 @@ namespace BALL
 			*/
 			enum Status
 			{
-				NO_ERROR 								= 0,
+				OK  							= 0,
 				GETHOSTBYNAME_ERROR 		= 1,
 				SOCKET_ERROR 						= 2,
 				CONNECT_ERROR 					= 3,
@@ -114,6 +117,7 @@ namespace BALL
 			 */
 			bool set(::std::ofstream& file, const String& address)
 				throw();
+			
 			
 			/** Detailled set method.
 			 *  @see set(ofstream& file, const String& address)
@@ -248,6 +252,13 @@ namespace BALL
 				Status	getHTTP_()
 					throw();
 
+				/*_ Read a complete status message form a FTP server
+				    Return false if timeout of 20 seconds is exceeded or an other than the given message
+						is received.
+				*/						
+				bool getFTPMessage_(Index status)
+					throw();				
+				
 				//_ Compute the status of a ftp server from its response
 				Status	getFTPStatus_()
 					throw();
@@ -266,6 +277,11 @@ namespace BALL
 				
 				//_ Debug method
 				void 		output_()
+					throw();
+
+			private:
+				
+				void operator = (TCPTransfer)
 					throw();
 	};
 

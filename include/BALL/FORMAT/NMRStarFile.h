@@ -1,4 +1,7 @@
-// $Id: NMRStarFile.h,v 1.17 2001/12/20 02:35:31 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: NMRStarFile.h,v 1.17.2.1 2003/01/07 13:17:42 anker Exp $
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
@@ -17,7 +20,7 @@ namespace BALL
 {
 	/** @name Data classes and structures.
 			These classes represent the data extracted from NMR-Star-Files.
-			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
+			{\bf Definition:} \URL{BALL/FORMAT/NMRStarFile.h}
 	*/
 	//@{
 
@@ -107,7 +110,7 @@ namespace BALL
 			To read a file simpy use the NMRStarFile(char* filename)- Constructor.
 			All useful data are extracted and stored.
 			To get access to the data use getData().
-			{\bf Definition:} \URL{BALL/NMR/NMRStarFile.h}
+			{\bf Definition:} \URL{BALL/FORMAT/NMRStarFile.h}
 	*/
 	//@{
 	class NMRStarFile

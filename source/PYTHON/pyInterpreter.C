@@ -1,4 +1,7 @@
-// $Id: pyInterpreter.C,v 1.4 2001/12/30 13:28:53 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyInterpreter.C,v 1.4.2.1 2003/01/07 13:21:42 anker Exp $
 
 #include <BALL/PYTHON/pyInterpreter.h>
 #include <Python.h>

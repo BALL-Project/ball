@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id: 
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MAINCONTROLPREFERENCES_H
@@ -52,8 +55,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} mainControlPreferences.
-					Calls \Ref{destroy}.
-					@see         destroy
+					Calls \Ref{clear}.
 			*/
 			virtual ~MainControlPreferences()
 				throw();
@@ -64,11 +66,6 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			/** Explicit destructor.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
-				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 

@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.7 2001/05/13 13:47:47 hekl Exp $
+// $Id: kernel.doc,v 1.7.2.1 2003/01/07 13:19:50 anker Exp $
 
         /**     @name Client request handling.
                       With the help of the class {\em Client} it is possible
@@ -11,6 +11,7 @@
         */
         //@{
                 //@Include: client.h
+								//@Include: clientScene.h
                 //@Include: QTTimer.h
         //@}
 
@@ -43,8 +44,6 @@
                 //@Include: colorExtension3.h
                 //@Include: colorExtension4.h
                 //@Include: colorExtension5.h
-                //@Include: normal.h
-                //@Include: radius.h
                 //@Include: vertex1.h
                 //@Include: vertex2.h
         //@}

@@ -1,4 +1,7 @@
-// $Id: glObject.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glObject.C,v 1.4.2.1 2003/01/07 13:23:25 anker Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glObject.h>
 
@@ -96,18 +99,6 @@ namespace BALL
 			s << "displaylistmanager: " << (void *)GL_primitive_manager_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-				
-		void GLObject::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void GLObject::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool GLObject::draw(bool /* with_names */)

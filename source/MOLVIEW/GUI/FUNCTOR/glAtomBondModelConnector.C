@@ -1,4 +1,7 @@
-// $Id: glAtomBondModelConnector.C,v 1.3 2001/05/13 15:02:40 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glAtomBondModelConnector.C,v 1.3.2.1 2003/01/07 13:21:29 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.h>
 
@@ -33,29 +36,9 @@ namespace BALL
 			destroy();
 		}
 
-		Line* GLAtomBondModelConnector::createLine_()
-    {
-			return new GLLine();
-    }
-
-	  TwoColoredLine* GLAtomBondModelConnector::createTwoColoredLine_()
-    {
-			return new GLTwoColoredLine();
-    }
-
-		Tube* GLAtomBondModelConnector::createTube_()
-    {
-			return new GLTube();
-    }
-
-		TwoColoredTube* GLAtomBondModelConnector::createTwoColoredTube_()
-    {
-			return new GLTwoColoredTube();
-    }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.iC>
-#		endif
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.iC>
+#	endif
 
 	} // namespace MOLVIEW
 

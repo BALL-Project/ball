@@ -1,4 +1,8 @@
-// $Id: File_test.C,v 1.34 2002/01/26 22:01:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: File_test.C,v 1.34.2.1 2003/01/07 13:22:25 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +16,12 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(File, "$Id: File_test.C,v 1.34 2002/01/26 22:01:27 oliver Exp $")
+#ifdef BALL_COMPILER_MSVC
+#	define sleep(a) _sleep(1000 * a)
+#endif
+
+START_TEST(File, "$Id: File_test.C,v 1.34.2.1 2003/01/07 13:22:25 anker Exp $")
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,16 +37,7 @@ CHECK(~File())
 	delete f1;
 RESULT
 
-CHECK(File::OpenMode)
-	TEST_EQUAL(File::IN, std::ios::in)
-	TEST_EQUAL(File::APP, std::ios::app)
-	TEST_EQUAL(File::OUT, std::ios::out)
-	TEST_EQUAL(File::ATE, std::ios::ate)
-	TEST_EQUAL(File::TRUNC, std::ios::trunc)
-	TEST_EQUAL(File::BINARY, std::ios::binary)
-RESULT
-
-CHECK(File(const String& name, OpenMode open_mode = File::IN))
+CHECK(File(const String& name, OpenMode open_mode = std::ios::in))
 	File f("data/File_test.txt");
 	TEST_EQUAL(f.getSize(), 100)
 
@@ -45,10 +45,9 @@ CHECK(File(const String& name, OpenMode open_mode = File::IN))
 	TEST_EXCEPTION(Exception::FileNotFound, File f2("sdffsdf"))
 RESULT
 
-File  file("data/File_test.txt");
-const File& f  = file;
-
 CHECK(File(const File& file))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	File f1(f);
 	TEST_EQUAL(f1 == f, true)
 
@@ -57,13 +56,17 @@ CHECK(File(const File& file))
 RESULT
 
 CHECK(close())
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(file.getSize(), 100)
 	file.close();
 	TEST_EQUAL(f.isClosed(), true)
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
-CHECK(open(const String& name, OpenMode open_mode = File::IN))
+CHECK(open(const String& name, OpenMode open_mode = std::ios::in))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	file.open("data/File_test.txt");
 	TEST_EQUAL(f.isOpen(), true)
 	TEST_EQUAL(file.getSize(), 100)
@@ -73,6 +76,8 @@ CHECK(open(const String& name, OpenMode open_mode = File::IN))
 RESULT
 
 CHECK(reopen())
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	file.close();
 	file.reopen();
 	file.reopen();
@@ -81,36 +86,47 @@ CHECK(reopen())
 RESULT
 
 CHECK(getName())
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(f.getName(), "data/File_test.txt")
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(getSize())
+	File  file("data/File_test.txt");
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(static getSize(String filename))
+	File  file("data/File_test.txt");
 	TEST_EQUAL(file.getSize("data/File_test.txt"), 100)
 	TEST_EXCEPTION(Exception::FileNotFound, file.getSize("XXX"))
 RESULT
 
 CHECK(int getOpenMode() const)
-	TEST_EQUAL(f.getOpenMode(), File::IN)
+	File  file("data/File_test.txt");
+	const File& f  = file;
+	TEST_EQUAL(f.getOpenMode(), std::ios::in)
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(static Type getType(String name, bool trace_link))
-	TEST_EQUAL(f.getType("data/File_test.txt", false), 4)
+	File  file("data/File_test.txt");
+	TEST_EQUAL(file.getType("data/File_test.txt", false), 4)
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(Type getType(bool trace_link) const;)
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(f.getType(false), 4)
 	TEST_EQUAL(f.getType(true), 4)
 	TEST_EQUAL(file.getSize(), 100)
 RESULT
 
 CHECK(copy(String source_name, String destination_name, Size buffer_size = 4096))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(f.copy("data/File_test.txt", "data/File_test.txt"), false)
 	TEST_EQUAL(f.copy("", "data/File_test.txt"), false)
 	TEST_EQUAL(f.copy("data/File_test.txt", ""), false)
@@ -127,6 +143,8 @@ CHECK(copy(String source_name, String destination_name, Size buffer_size = 4096)
 RESULT
 
 CHECK(copyTo(const String& destination_name, Size buffer_size = 4096))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(file.copyTo("data/File_test.txt"), false)
 	TEST_EQUAL(file.copyTo(""), false)
 	TEST_EQUAL(file.copyTo("XXX"), true)
@@ -139,6 +157,8 @@ CHECK(copyTo(const String& destination_name, Size buffer_size = 4096))
 RESULT
 
 CHECK(move(const String& source_name, const String& destination_name))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(file.copyTo("XXX"), true)
 	TEST_EQUAL(file.copyTo("YYY"), true)
 	TEST_EQUAL(f.move("XXX", "XXX"), false)
@@ -163,6 +183,8 @@ CHECK(move(const String& source_name, const String& destination_name))
 RESULT
 
 CHECK(moveTo(const String& destination_name))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.moveTo("XXX"), false)
@@ -179,6 +201,8 @@ CHECK(moveTo(const String& destination_name))
 RESULT
 
 CHECK(remove(String name))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	file.copyTo("XXX");
 	TEST_EQUAL(f.remove("XXX"), true)
 	TEST_EQUAL(file.getSize(), 100)
@@ -186,6 +210,7 @@ CHECK(remove(String name))
 RESULT
 
 CHECK(remove())
+	File  file("data/File_test.txt");
 	file.copyTo("XXX");
 	File f1 = File("XXX");
 	TEST_EQUAL(f1.remove(), true)
@@ -193,15 +218,23 @@ CHECK(remove())
 	TEST_EQUAL(f1.isAccessible(), false)
 RESULT
 
-CHECK(rename(String old_path, String new_path))
+CHECK(rename(String old_path, String new_path) - Part 1)
+	File  file("data/File_test.txt");
 	file.copyTo("XXX");
+RESULT
+
+CHECK(rename(String old_path, String new_path) - Part 2)
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	File f1("XXX");
 	TEST_EQUAL(f1.rename("XXX", "XXX"), true)
+	f1.close();
 	TEST_EQUAL(f1.rename("XXX", "YYY") && f1.rename("YYY", "XXX"), true)
 
 	TEST_EQUAL(f1.isAccessible("YYY"), false)
 	TEST_EQUAL(f1.isAccessible("XXX"), true)
 	f1.remove();
+
 	TEST_EQUAL(file.getSize(), 100)
 	f.remove("YYY");
 
@@ -209,8 +242,12 @@ CHECK(rename(String old_path, String new_path))
 	TEST_EXCEPTION(Exception::FileNotFound, f1.rename("XXX", ""))
 RESULT
 
-CHECK(renameTo(const String& new_path))
+CHECK(renameTo(const String& new_path) - Part 1)
+	File  file("data/File_test.txt");
 	file.copyTo("XXX");
+RESULT
+
+CHECK(renameTo(const String& new_path) - Part 2)
 	File f1("XXX");
 	TEST_EQUAL(f1.renameTo("XXX"), true)
 	TEST_EQUAL(f1.isAccessible("XXX"), true)
@@ -221,6 +258,7 @@ CHECK(renameTo(const String& new_path))
 RESULT
 
 CHECK(truncate(String path, Size size = 0))
+	File  file("data/File_test.txt");
 	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.truncate("XXX", 50), true)
@@ -233,6 +271,7 @@ CHECK(truncate(String path, Size size = 0))
 RESULT
 
 CHECK(truncate(Size size = 0))
+	File  file("data/File_test.txt");
 	file.copyTo("XXX");
 	File f1("XXX");
 	TEST_EQUAL(f1.truncate(50), true)
@@ -243,12 +282,16 @@ CHECK(truncate(Size size = 0))
 RESULT
 
 CHECK(createTemporaryFilename(String& temporary))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	String s;
 	TEST_EQUAL(f.createTemporaryFilename(s), true)
 	TEST_NOT_EQUAL(s, "")
 RESULT
 
 CHECK(operator == (const File& file))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	File f1(f);
 	TEST_EQUAL(f1 == f, true)	
 	file.copyTo("XXX");
@@ -258,6 +301,8 @@ CHECK(operator == (const File& file))
 RESULT
 
 CHECK(operator != (const File& file))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	File f1(f);
 	TEST_EQUAL(f1 != f, false)	
 	file.copyTo("XXX");
@@ -267,15 +312,24 @@ CHECK(operator != (const File& file))
 RESULT
 
 CHECK(isAccessible(String name))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(f.isAccessible("data/File_test.txt"), true)
 	f.remove("XXX");
 	TEST_EQUAL(f.isAccessible("XXX"), false)
 RESULT
 
-CHECK(isAccessible())
+CHECK(isAccessible() - part 1)
+	
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(f.isAccessible(), true)
-	file.copyTo("XXX");
-	File f1("XXX");
+	file.copyTo("XXZ");
+RESULT
+
+CHECK(isAccessible() - part 2)
+	File f1("XXZ");
+	
 	f1.remove();
 	TEST_EQUAL(f1.isAccessible(), false)
 RESULT
@@ -303,6 +357,8 @@ CHECK(isCanonized())
 RESULT
 
 CHECK(isReadable(String name))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(f.isReadable("File_test.C"), true)	
 RESULT
 
@@ -312,6 +368,8 @@ CHECK(isReadable())
 RESULT
 
 CHECK(isWritable(String name))
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(f.isWritable("File_test.C"), true)	
 RESULT
 
@@ -321,13 +379,19 @@ CHECK(isWritable())
 RESULT
 
 CHECK(isExecutable(String name))
+	File  file("data/File_test.txt");
+	const File& f  = file;
+#ifndef BALL_COMPILER_MSVC
 	TEST_EQUAL(f.isExecutable(BALL_PATH "/source/configure"), true)	
+#endif
 	TEST_EQUAL(f.isExecutable("File_test.C"), false)	
 RESULT
 
 CHECK(isExecutable())
+#ifndef BALL_COMPILER_MSVC
 	File f1(BALL_PATH "/source/configure");
 	TEST_EQUAL(f1.isExecutable(), true)	
+#endif
 	File f2("File_test.C");
 	TEST_EQUAL(f2.isExecutable(), false)	
 RESULT
@@ -337,7 +401,7 @@ CHECK(isValid())
 	TEST_EQUAL(f.isValid(), false)	
 
 	File f1;
-	TEST_EXCEPTION(Exception::FileNotFound, f1 = File("XXX"))
+	TEST_EXCEPTION(Exception::FileNotFound, f1 = File("XXY"))
 	TEST_EQUAL(f1.isValid(), false)	
 
 	File f2("File_test.C");
@@ -347,6 +411,8 @@ CHECK(isValid())
 RESULT
 
 CHECK(isOpen())
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(f.isOpen(), true)	
 	File f2;
 	TEST_EQUAL(f2.isOpen(), false)	
@@ -357,6 +423,8 @@ CHECK(isOpen())
 RESULT
 
 CHECK(isClosed())
+	File  file("data/File_test.txt");
+	const File& f  = file;
 	TEST_EQUAL(f.isClosed(), false)	
 	File f2;
 	TEST_EQUAL(f2.isClosed(), true)	
@@ -377,6 +445,8 @@ CHECK(TCPTransfer/1)
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
+sleep(2);
+
 CHECK(TCPTransfer/2)
 	// just repeat test to make sure we didn't mess up ports or stuff...
 	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
@@ -389,8 +459,9 @@ CHECK(TCPTransfer/2)
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
+sleep(2);
+
 CHECK(TCPTransfer/3)
-	// just repeat test to make sure we didn't mess up ports or stuff...
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
 	ABORT_IF(!network)
@@ -400,19 +471,10 @@ CHECK(TCPTransfer/3)
 	f.copyTo(filename);
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
+
+sleep(2);
 
 CHECK(TCPTransfer/4)
-	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
-	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
-	ABORT_IF(!network)
-	File f("ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
-	String filename;
-	NEW_TMP_FILE(filename)
-	f.copyTo(filename);
-	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
-RESULT	
-
-CHECK(TCPTransfer/5)
 	// just repeat test to make sure that FTP transfers don't upset HTTP transfers
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
@@ -424,7 +486,9 @@ CHECK(TCPTransfer/5)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
-CHECK(TCPTransfer/6)
+sleep(2);
+
+CHECK(TCPTransfer/5)
 	// ... and the other way round
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
@@ -436,7 +500,9 @@ CHECK(TCPTransfer/6)
 	TEST_FILE(filename.c_str(), "data/ftp_test.txt")
 RESULT	
 
-CHECK(TCPTransfer/7)
+sleep(2);
+
+CHECK(TCPTransfer/6)
 	bool network = NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP);
 	STATUS("network status of www.mpi-sb.mpg.de: " << (network ? "up" : "down"))
 	ABORT_IF(!network)
@@ -448,7 +514,9 @@ CHECK(TCPTransfer/7)
 	TEST_FILE(filename.c_str(), "data/http_test.txt")
 RESULT
 
-CHECK(TCPTransfer/8)
+sleep(2);
+
+CHECK(TCPTransfer/7)
 	bool network = NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP);
 	STATUS("network status of ftp.mpi-sb.mpg.de: " << (network ? "up" : "down"))
 	ABORT_IF(!network)

@@ -1,4 +1,7 @@
-// $Id: genericMolFile.h,v 1.10 2002/01/11 13:26:11 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: genericMolFile.h,v 1.10.2.1 2003/01/07 13:17:45 anker Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -66,7 +69,7 @@ namespace BALL
 
 		/** Detailed constructor
 		*/
-		GenericMolFile(const String& filename, File::OpenMode open_mode = File::IN)
+		GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/**	Copy constructor
@@ -78,6 +81,16 @@ namespace BALL
 		virtual ~GenericMolFile()
 			throw();
 		
+		//@}
+
+		/**	@name Assignment
+		*/
+		//@{
+		/**	Assignment operator.
+				Create a new object pointing to the same filename.
+		*/
+		const GenericMolFile& operator = (const GenericMolFile& rhs)
+			throw();
 		//@}
 
 		/**	@name Reading and Writing of Kernel Datastructures

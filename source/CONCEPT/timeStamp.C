@@ -1,8 +1,21 @@
-// $Id: timeStamp.C,v 1.17 2002/01/04 19:52:08 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: timeStamp.C,v 1.17.2.1 2003/01/07 13:20:34 anker Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
-#include <sys/time.h>
+#ifdef BALL_HAS_SYS_TIME_H
+#	include <sys/time.h>
+#endif 
+#ifdef BALL_HAS_TIME_H
+#	include <time.h>
+#endif 
+
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+#	include <windows.h>
+#	include <sys/timeb.h>
+#endif
 
 using namespace std;
 
@@ -14,6 +27,11 @@ namespace BALL
 		: secs_(0),
 			usecs_(0)
 	{
+		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			LARGE_INTEGER t;
+			QueryPerformanceFrequency(&t);
+			ticks_ = (long)t.QuadPart;
+		#endif
 	}
 
 	PreciseTime::PreciseTime(const PreciseTime& time)
@@ -22,6 +40,10 @@ namespace BALL
 			usecs_(time.usecs_)
 	{
 	}
+
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+	long PreciseTime::ticks_;
+#endif
 
 	TimeStamp::TimeStamp()
 		throw()
@@ -55,12 +77,25 @@ namespace BALL
 	PreciseTime PreciseTime::now() 
 		throw()
 	{
-		// get the current time via the system call
-		// gettimeofday()
-		struct timeval tv;
-		gettimeofday(&tv, 0);
-
-		return PreciseTime(tv.tv_sec, tv.tv_usec);
+		#ifdef BALL_COMPILER_MSVC
+			#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+				LARGE_INTEGER tvl;
+				QueryPerformanceCounter(&tvl);
+				long sec = tvl.QuadPart / ticks_;
+				long usec = (tvl.QuadPart - sec * ticks_) * 1000000 / ticks_;
+				return PreciseTime(sec, usec);
+			#else
+				struct _timeb tv;
+				_ftime(&tv);
+				return PreciseTime(tv.time, tv.millitm * 1000);
+			#endif
+		#else
+			// get the current time via the system call
+			// gettimeofday()
+			struct timeval tv;
+			gettimeofday(&tv, 0);
+			return PreciseTime(tv.tv_sec, tv.tv_usec);
+		#endif
 	}
 
 	const PreciseTime PreciseTime::ZERO;

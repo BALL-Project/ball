@@ -1,7 +1,11 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id: 
 
 #include <BALL/VIEW/GUI/WIDGETS/serverPreferences.h>
 #include <BALL/VIEW/COMMON/global.h>
+#include <BALL/COMMON/rtti.h>
 
 #include <qpixmap.h>
 #include <qlayout.h>
@@ -23,8 +27,6 @@ namespace BALL
 			qtarch_Label_1->setMaximumSize(32767, 32767);
 			qtarch_Label_1->setFocusPolicy(QWidget::NoFocus);
 			qtarch_Label_1->setBackgroundMode(QWidget::PaletteBackground);
-			qtarch_Label_1->setFontPropagation(QWidget::SameFont);
-			qtarch_Label_1->setPalettePropagation(QWidget::SameFont);
 			qtarch_Label_1->setFrameStyle( 0 );
 			qtarch_Label_1->setLineWidth( 1 );
 			qtarch_Label_1->setMidLineWidth( 0 );
@@ -39,8 +41,6 @@ namespace BALL
 			port_->setMaximumSize(32767, 32767);
 			port_->setFocusPolicy(QWidget::StrongFocus);
 			port_->setBackgroundMode(QWidget::PaletteBase);
-			port_->setFontPropagation(QWidget::SameFont);
-			port_->setPalettePropagation(QWidget::SameFont);
 			port_->setText( tr( "20000" ) );
 			port_->setMaxLength( 5 );
 			port_->setFrame( QLineEdit::Normal );
@@ -53,8 +53,6 @@ namespace BALL
 			qtarch_PushButton_6->setMaximumSize(32767, 32767);
 			qtarch_PushButton_6->setFocusPolicy(QWidget::TabFocus);
 			qtarch_PushButton_6->setBackgroundMode(QWidget::PaletteButton);
-			qtarch_PushButton_6->setFontPropagation(QWidget::SameFont);
-			qtarch_PushButton_6->setPalettePropagation(QWidget::SameFont);
 			qtarch_PushButton_6->setText( tr( "Reset" ) );
 			qtarch_PushButton_6->setAutoRepeat( FALSE );
 			qtarch_PushButton_6->setAutoResize( FALSE );
@@ -70,8 +68,6 @@ namespace BALL
 			server_status_->setMaximumSize(32767, 32767);
 			server_status_->setFocusPolicy(QWidget::TabFocus);
 			server_status_->setBackgroundMode(QWidget::PaletteBackground);
-			server_status_->setFontPropagation(QWidget::SameFont);
-			server_status_->setPalettePropagation(QWidget::SameFont);
 			server_status_->setText( tr( "accept clients" ) );
 			server_status_->setAutoRepeat( FALSE );
 			server_status_->setAutoResize( TRUE );
@@ -110,14 +106,16 @@ namespace BALL
 			bool server_status = server_status_->isChecked();
 			String port = String(port_->text().ascii());
 			
+			inifile.appendSection("NETWORK");
+
 			// save them to the inifile
 			if (server_status)
 			{
-				inifile.setValue("NETWORK", "start_server", "true");
+				inifile.insertValue("NETWORK", "start_server", "true");
 			} else {
-				inifile.setValue("NETWORK", "start_server", "false");
+				inifile.insertValue("NETWORK", "start_server", "false");
 			}
-			inifile.setValue("NETWORK", "server_port", port);
+			inifile.insertValue("NETWORK", "server_port", port);
 		}
 
 		void ServerPreferences::fetchPreferences(INIFile& inifile)

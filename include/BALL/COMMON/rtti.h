@@ -1,4 +1,7 @@
-// $Id: rtti.h,v 1.15 2001/06/24 14:13:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: rtti.h,v 1.15.2.1 2003/01/07 13:17:20 anker Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -10,7 +13,7 @@
 
 #include <string>
 #include <typeinfo>
-using ::std::string;
+using std::string;
 
 namespace BALL 
 {

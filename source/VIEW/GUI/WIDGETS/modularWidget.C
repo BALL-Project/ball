@@ -1,4 +1,7 @@
-// $Id: modularWidget.C,v 1.9 2002/01/16 02:59:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: modularWidget.C,v 1.9.2.1 2003/01/07 13:23:30 anker Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 
@@ -112,6 +115,15 @@ namespace BALL
 		void ModularWidget::writePreferences(INIFile & /* inifile */)
 			throw()
 		{
+		}
+
+		void ModularWidget::setStatusbarText(String text)
+			throw()
+		{
+			WindowMessage *window_message = new WindowMessage;
+			window_message->setStatusBar(text);
+			window_message->setDeletable(true);
+			notify_(window_message);
 		}
 
 	} // namespace VIEW

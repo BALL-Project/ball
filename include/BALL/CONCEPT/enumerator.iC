@@ -1,8 +1,39 @@
-// $Id: enumerator.iC,v 1.2 2000/12/19 12:50:49 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: enumerator.iC,v 1.2.2.1 2003/01/07 13:17:25 anker Exp $
 
 BALL_INLINE
 const vector<Size>& EnumeratorIndex::getModulus() const
 	throw()
 {
 	return modulus_;
+}
+
+BALL_INLINE
+Size EnumeratorIndex::getModulus(Position pos) const
+	throw()
+{
+	return modulus_[pos];
+}
+
+BALL_INLINE
+Position EnumeratorIndex::operator [] (Position pos) const
+	throw()
+{
+	return std::vector<Position>::operator [] (pos);
+}
+ 
+BALL_INLINE
+Position& EnumeratorIndex::operator [] (Position pos)
+	throw()
+{
+	return std::vector<Position>::operator [] (pos);
+}
+
+BALL_INLINE
+Size EnumeratorIndex::getSize() const
+	throw()
+{
+	return (Size)size();
 }

@@ -1,4 +1,7 @@
-// $Id: conjugateGradient.h,v 1.10 2001/07/11 23:59:32 amoll Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: conjugateGradient.h,v 1.10.2.1 2003/01/07 13:18:11 anker Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -7,7 +10,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifdef BALL_INCLUDE_IEEEFP
+#ifdef BALL_HAS_IEEEFP_H
 #	include <ieeefp.h> 
 #endif
 

@@ -1,5 +1,8 @@
-// $Id: analyticalSES.C,v 1.11 2001/06/05 15:53:30 anker Exp $
-// $Id: analyticalSES.C,v 1.11 2001/06/05 15:53:30 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: analyticalSES.C,v 1.11.2.1 2003/01/07 13:22:00 anker Exp $
+// $Id: analyticalSES.C,v 1.11.2.1 2003/01/07 13:22:00 anker Exp $
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>

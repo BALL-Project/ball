@@ -1,4 +1,7 @@
-// $Id: glmesh.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glmesh.h,v 1.7.2.1 2003/01/07 13:19:37 anker Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLMESH_H
 #define BALL_VIEW_GUI_PRIMITIV_GLMESH_H
@@ -15,16 +18,12 @@
 #	include <BALL/VIEW/PRIMITIV/mesh.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
-
 		/** GLMesh class.
-				An instance of GLMesh represents an instance of the geometric
-				visualization "mesh".
+				An instance of GLMesh represents an instance of the geometric visualization "mesh".
 				The class GLMesh is derived from the classes \Ref{Mesh} and
 				\Ref{GLObject}. Therefore the class glMesh is the graphical extension
 				of the geometrical definition of the class mesh.
@@ -65,8 +64,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor from geometricObject.
-					Construct new glMesh by copying the internal values from geometricObject 
-					{\em geometric_object}.
+					Construct new glMesh by copying the internal values from geometricObject {\em geometric_object}.
 					@param       geometric_object the geometricObject which internal value should be copied
 					@return      GLMesh new constructed glMesh initialized from {\em geometric_object}
 					@see         Mesh
@@ -76,7 +74,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -106,8 +103,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -158,10 +155,10 @@ namespace BALL
 			*/
 			void swap(GLMesh& mesh)
 				throw();
-			//@}
 
 			protected:
 
+			//@}
 			/** @name Graphical interface methods
 			*/
 			//@{
@@ -183,12 +180,6 @@ namespace BALL
 			virtual bool draw(bool with_names = false)
 				throw();
 
-			/** Experimental method.
-					Please avoid using this method.
-			*/
-			virtual bool drawUserDefined()
-				throw();
-
 			/** Export method.
 					This method handles the export of {\em *this} glMesh into another
 					format (eg. POVRAY, VRML)\\
@@ -201,12 +192,7 @@ namespace BALL
 			//@}
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glmesh.iC>
-#		endif
-		
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_GUI_PRIMITIV_GLMESH_H

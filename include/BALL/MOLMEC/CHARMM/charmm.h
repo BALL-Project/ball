@@ -1,4 +1,7 @@
-// $Id: charmm.h,v 1.6 2001/02/28 01:17:38 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmm.h,v 1.6.2.1 2003/01/07 13:18:07 anker Exp $
 // Molecular Mechanics: CHARMM force field class
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMM_H
@@ -36,7 +39,9 @@ namespace BALL
 		*/
 		struct Option
 		{
-			/**	The parameter file name
+			/**	The parameter file name.
+					The default is {\tt parm19\_eef1.ini} which means that EEF1 is
+					the default parameterization.
 			*/
 			static const char* FILENAME;
 

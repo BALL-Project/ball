@@ -1,4 +1,7 @@
-// $Id: glCross.C,v 1.1 2002/01/12 21:22:45 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glCross.C,v 1.1.2.1 2003/01/07 13:23:15 anker Exp $
 // molview tutorial example
 // ------------------------
 // create a geometric primitive

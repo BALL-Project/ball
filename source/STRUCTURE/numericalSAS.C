@@ -1,4 +1,7 @@
-// $Id: numericalSAS.C,v 1.22 2002/02/10 08:41:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: numericalSAS.C,v 1.22.2.1 2003/01/07 13:22:03 anker Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -6,7 +9,7 @@
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/MATHS/surface.h>
 
-#ifdef BALL_INCLUDE_VALUES
+#ifdef BALL_HAS_VALUES_H
 # include <values.h>
 #endif
 
@@ -542,11 +545,11 @@ namespace BALL
 #define UNSP_ICO_DOD      9
 #define UNSP_ICO_ARC     10
 
-#define NSC_WARNING\
+#define BALL_NSC_WARNING\
 	Log.level(LogStream::WARNING) << "NSC: error in " << __FILE__\
 		<< ":" << __LINE__ << ": " 
 
-#define NSC_ERROR\
+#define BALL_NSC_ERROR\
 	Log.level(LogStream::ERROR) << "NSC: error in " << __FILE__\
 		<< ":" << __LINE__ << ": " 
 
@@ -573,7 +576,7 @@ int          last_cubus=0;
 		}
 		if ( (fabs(f) - 1.00)  <= DP_TOL ) 
 		{
-			NSC_WARNING << "calculateSASArea: invalid argument" << f << endl;
+			BALL_NSC_WARNING << "calculateSASArea: invalid argument" << f << endl;
 		}
 		return(M_PI * M_PI);
 	}
@@ -586,7 +589,7 @@ int          last_cubus=0;
 			ip = (int *) calloc(nelem, elsize);
 			if(ip == NULL)
 			{
-				NSC_ERROR << "calculateSASAreaCALLOC : failed in file " << filename << " at line " << linenr << endl;
+				BALL_NSC_ERROR << "calculateSASAreaCALLOC : failed in file " << filename << " at line " << linenr << endl;
 			}
 			return(ip);
 		}
@@ -598,7 +601,7 @@ int          last_cubus=0;
 		ip = (int *) realloc(ptr, size);
 		if(ip == NULL)
 		{
-			NSC_ERROR << "REALLOC : failed in file " << filename << " at line " << linenr << endl;
+			BALL_NSC_ERROR << "REALLOC : failed in file " << filename << " at line " << linenr << endl;
 		}
 		return(ip);
 		}
@@ -640,18 +643,18 @@ int          last_cubus=0;
 		dd = sqrt(xd*xd+yd*yd+zd*zd);
 		if (dd < DP_TOL)
 		{
-			NSC_ERROR << "divarc: rotation axis of length " << dd << endl;
+			BALL_NSC_ERROR << "divarc: rotation axis of length " << dd << endl;
 		}
 
 		d1 = x1*x1+y1*y1+z1*z1;
 		if (d1 < 0.5)
 		{
-			NSC_ERROR << "divarc: vector 1 of sq.length " << d1 << endl;
+			BALL_NSC_ERROR << "divarc: vector 1 of sq.length " << d1 << endl;
 		}
 		d2 = x2*x2+y2*y2+z2*z2;
 		if (d2 < 0.5)
 		{
-			NSC_ERROR << "divarc: vector 2 of sq.length " << d2 << endl;
+			BALL_NSC_ERROR << "divarc: vector 2 of sq.length " << d2 << endl;
 		}
 
 		phi = asin_safe(dd/sqrt(d1*d2));
@@ -683,7 +686,7 @@ int          last_cubus=0;
 		n_dot = 10*tess*tess+2;
 		if (n_dot < densit) 
 		{
-			NSC_ERROR << "ico_dot_arc: error in formula for tessalation level (" << tess 
+			BALL_NSC_ERROR << "ico_dot_arc: error in formula for tessalation level (" << tess 
 								<< "->" << n_dot << ", " << densit << ")" << endl;
 		}
 
@@ -709,7 +712,7 @@ int          last_cubus=0;
 					{
 						if (tn >= n_dot) 
 						{ 
-							NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
+							BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
 						}
 						divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 									 xus[3*j], xus[1+3*j], xus[2+3*j],
@@ -766,7 +769,7 @@ int          last_cubus=0;
 											 tess-tl-tl2, tess, &xjk, &yjk, &zjk);
 								if (tn >= n_dot)
 								{
-									NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
+									BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
 								}
 								divarc(xki, yki, zki, xji, yji, zji, tl2, tess-tl, &x, &y, &z);
 								divarc(xkj, ykj, zkj, xij, yij, zij, tl, tess-tl2, &x2, &y2, &z2);
@@ -784,7 +787,7 @@ int          last_cubus=0;
 			}			/* cycle i */
 			if (n_dot != tn) 
 			{
-				NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << endl;
+				BALL_NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << endl;
 			}
 		}		/* end of if (tess > 1) */
 		return n_dot;
@@ -806,7 +809,7 @@ int          last_cubus=0;
 		n_dot = 30*tess*tess+2;
 		if (n_dot < densit) 
 		{
-			NSC_ERROR << "ico_dot_dod: error in formula for tessalation level (" << tess << "->" 
+			BALL_NSC_ERROR << "ico_dot_dod: error in formula for tessalation level (" << tess << "->" 
 				<< n_dot << ", " << densit << ")" << endl;
 		}
 
@@ -886,7 +889,7 @@ int          last_cubus=0;
 					{
 						if (tn >= n_dot) 
 						{
-							NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
+							BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
 						}
 						divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 									 xus[3*j], xus[1+3*j], xus[2+3*j],
@@ -952,7 +955,7 @@ int          last_cubus=0;
 											 tess-tl-tl2, tess, &xjk, &yjk, &zjk);
 								if (tn >= n_dot) 
 								{
-									NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
+									BALL_NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
 								}
 								divarc(xki, yki, zki, xji, yji, zji, tl2, tess-tl, &x, &y, &z);
 								divarc(xkj, ykj, zkj, xij, yij, zij, tl, tess-tl2, &x2, &y2, &z2);
@@ -972,7 +975,7 @@ int          last_cubus=0;
 			}			/* cycle i */
 			if (n_dot != tn) 
 			{
-				NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << endl;
+				BALL_NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << endl;
 			}
 		}		/* end of if (tess > 1) */
 		
@@ -1009,7 +1012,7 @@ int          last_cubus=0;
 		if (mode == UNSP_ICO_ARC)      { ndot = ico_dot_arc(densit); }
 		else if (mode == UNSP_ICO_DOD)      { ndot = ico_dot_dod(densit); }
 		else {
-			NSC_WARNING << "make_unsp: mode " << ((k)?'+':'-') << (int)mode << " not allowed" << endl;
+			BALL_NSC_WARNING << "make_unsp: mode " << ((k)?'+':'-') << (int)mode << " not allowed" << endl;
 			return 1;
 			}
 
@@ -1115,10 +1118,10 @@ int          last_cubus=0;
 		int jat, j, jj, jjj, jx, jy, jz;
 		int distribution;
 		int l;
-		int maxnei, nnei, last, maxdots;
+		int maxnei, nnei, last, maxdots = 0;
 		point_int wkdot=NULL, wkbox=NULL, wkat1=NULL, wkatm=NULL;
 		Neighbour  *wknb, *ctnb;
-		int iii1, iii2, iiat, lfnr, i_at, j_at;
+		int iii1, iii2, iiat, i_at, j_at, lfnr = 0;
 		double dx, dy, dz, dd, ai, aisq, ajsq, aj, as, a;
 		double xi, yi, zi, xs=0., ys=0., zs=0.;
 		double dotarea, area, vol=0.;
@@ -1146,7 +1149,7 @@ int          last_cubus=0;
 		/* calculate neighbour list with the box algorithm */
 		if (nat == 0) 
 		{
-			NSC_WARNING << "nsc_dclm: no surface atoms selected" << endl;
+			BALL_NSC_WARNING << "nsc_dclm: no surface atoms selected" << endl;
 			return 1;
 		}
 		if (mode & FLAG_VOLUME) 

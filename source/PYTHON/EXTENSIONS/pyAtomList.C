@@ -1,4 +1,7 @@
-// $Id: pyAtomList.C,v 1.2 2002/01/16 00:19:10 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyAtomList.C,v 1.2.2.1 2003/01/07 13:21:45 anker Exp $
 
 #include <BALL/PYTHON/pyAtomList.h>
 #include <BALL/KERNEL/atom.h>

@@ -1,4 +1,7 @@
-// $Id: PDBFile.C,v 1.26 2001/08/24 01:26:52 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PDBFile.C,v 1.26.2.1 2003/01/07 13:20:45 anker Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -16,7 +19,8 @@ namespace BALL
 {
 
 	PDBFile::PDBFile()
-		:	PDB_atom_map_(),
+		:	GenericPDBFile(),
+			PDB_atom_map_(),
 			residue_map_(),
 			ssbond_list_(),
 			helix_list_(),
@@ -62,7 +66,8 @@ namespace BALL
 
 	PDBFile::PDBFile(const String& filename, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
-		:	PDB_atom_map_(),
+		:	GenericPDBFile(),
+			PDB_atom_map_(),
 			residue_map_(),
 			ssbond_list_(),
 			helix_list_(),
@@ -340,7 +345,7 @@ namespace BALL
 		
 		new_sheet_secstruc_list_.push_back(sec_struc);
 		sec_struc->setProperty(SecondaryStructure::PROPERTY__STRAND);
-		sec_struc->setProperty("STRAND_SENSE", (void *)sense_of_strand);
+		sec_struc->setProperty("STRAND_SENSE", (sense_of_strand != 0));
 		
 		sheet_list_.push_back(partner_residue);
 		
@@ -438,10 +443,22 @@ namespace BALL
 		
 		if (number_of_proteins == 0)
 		{
-			Protein p;
-			((Composite&)p).splice((Composite&)system);
-			write_(p, true);
-			((Composite&)system).splice((Composite&)p);
+			if (system.countMolecules() != 1)
+			{
+				Log.error() << "PDBFile::write(System): "
+					<< "Cannot write empty/multiple molecules to a PDB file." << endl;
+					return;
+			}
+			else
+			{
+				// this loop is for future releases which are able to write
+				// multiple molecules as different models or chains.
+				MoleculeConstIterator it = system.beginMolecule();
+				for (; +it; ++it)
+				{
+					write_(*it);
+				}
+			}
 		} 
 		else 
 		{
@@ -1140,49 +1157,49 @@ namespace BALL
 		{
 			BALL_FOREACH_ATOM(molecule, atom_it)
 			{
-      ++number_of_atomic_coordinate_records;
+				++number_of_atomic_coordinate_records;
 
-      current_atom = &(*atom_it);
-      current_atom->getName().get(PDB_atom_name, 0, 3);
-      PDB_atom_name[2] = BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR;
-      PDB_atom_name[3] = BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR;
-      PDB_atom_name[4] = '\0';
-      strcpy(element_symbol, current_atom->getElement().getSymbol().c_str());
-      
-      current_fragment = current_atom->getAncestor(RTTI::getDefault<Fragment>());
-      if (current_fragment != 0)
-      {
-				current_fragment->getName().get(PDB_residue_name[0], 0, 4);
-      } 
-			else 
-			{
-				PDB_residue_name[0][0] = '\0';
-      }
+				current_atom = &(*atom_it);
+				current_atom->getName().get(PDB_atom_name, 0, 3);
+				PDB_atom_name[2] = BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR;
+				PDB_atom_name[3] = BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR;
+				PDB_atom_name[4] = '\0';
+				strcpy(element_symbol, current_atom->getElement().getSymbol().c_str());
 
-      sprintf(line_buffer, 
-	      record_type_format_[PDB::RECORD_TYPE__HETATM].format_string,
-	      record_type_format_[PDB::RECORD_TYPE__HETATM].string,
-	      ++atom_serial_number,
-	      PDB_atom_name,
-	      BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR,
-	      PDB_residue_name[0],
-	      BALL_CHAIN_DEFAULT_NAME,
-	      0L,
-	      BALL_RESIDUE_DEFAULT_INSERTION_CODE,
-	      current_atom->getPosition().x,
-	      current_atom->getPosition().y,
-	      current_atom->getPosition().z,
-	      1.0f,
-	      20.0f,
-	      "",
-	      "",
-	      ""); // CHARGE NOT YET SUPPORTED
-      
-      line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
-      File::getFileStream() << line_buffer << endl;
-      
-      atom_map[(void *)current_atom] = (long)atom_serial_number;
-    }
+				current_fragment = current_atom->getAncestor(RTTI::getDefault<Fragment>());
+				if (current_fragment != 0)
+				{
+					current_fragment->getName().get(PDB_residue_name[0], 0, 4);
+				} 
+				else 
+				{
+					PDB_residue_name[0][0] = '\0';
+				}
+
+				sprintf(line_buffer, 
+						record_type_format_[PDB::RECORD_TYPE__HETATM].format_string,
+						record_type_format_[PDB::RECORD_TYPE__HETATM].string,
+						++atom_serial_number,
+						PDB_atom_name,
+						BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR,
+						PDB_residue_name[0],
+						BALL_CHAIN_DEFAULT_NAME,
+						0L,
+						BALL_RESIDUE_DEFAULT_INSERTION_CODE,
+						current_atom->getPosition().x,
+						current_atom->getPosition().y,
+						current_atom->getPosition().z,
+						1.0f,
+						20.0f,
+						"",
+						"",
+						""); // CHARGE NOT YET SUPPORTED
+
+				line_buffer[PDB::SIZE_OF_PDB_RECORD_LINE + 1] = '\0';
+				File::getFileStream() << line_buffer << endl;
+
+				atom_map[(void *)current_atom] = (long)atom_serial_number;
+			}
   }
 
   // --- ENDMDL ---
@@ -1401,10 +1418,30 @@ namespace BALL
 			initial = residue_map_.find(*res_it);
 			++res_it;
 			terminal = residue_map_.find(*res_it);
+		
+			// This is to catch those cases where initial comes after terminal in the
+			// residue sequence.
+			// We first swap initial and terminal. Then we walk along the chain begining
+			// with the old initial (which is now terminal), and if we encounter the old
+			// terminal (which is now initial) on the way, then we swap the residues
+			// again.
+			ResidueMap::Iterator dummy = initial;
+			initial = terminal;
+			terminal = dummy;
 			
+			for (;dummy != residue_map_.end(); ++dummy)
+			{
+				if (dummy == initial)
+				{
+					initial = terminal;
+					terminal = dummy;
+					break;
+				}
+			}
+
 			if (!(initial != residue_map_.end() && terminal != residue_map_.end()
 						&& initial->second->getChain() == terminal->second->getChain()
-						&& Composite::insertParent(*(*helix_it), *initial->second, *terminal->second, false) == true))
+						&& (Composite::insertParent(*(*helix_it), *initial->second, *terminal->second, false) == true)))
 			{
 				delete (*helix_it);
 			}

@@ -1,11 +1,15 @@
-// $Id: Angle_test.C,v 1.17 2002/01/26 22:01:26 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Angle_test.C,v 1.17.2.1 2003/01/07 13:22:13 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(Angle, "$Id: Angle_test.C,v 1.17 2002/01/26 22:01:26 oliver Exp $")
+START_TEST(Angle, "$Id: Angle_test.C,v 1.17.2.1 2003/01/07 13:22:13 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -334,7 +338,7 @@ CHECK(TAngle::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Angle a(0.5);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	a.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Angle_test.txt")
@@ -351,7 +355,7 @@ RESULT
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TAngle<T>& angle))
 	Angle a(1.0);
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << a;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Angle_test2.txt")

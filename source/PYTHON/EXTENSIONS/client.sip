@@ -1,4 +1,4 @@
-// $Id: client.sip,v 1.1 2002/02/15 01:57:28 oliver Exp $
+// $Id: client.sip,v 1.1.4.1 2003/01/07 13:21:43 anker Exp $
 
 class Client
 {

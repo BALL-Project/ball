@@ -1,8 +1,12 @@
-// $Id: glDisplayList.C,v 1.5 2001/07/29 17:38:09 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glDisplayList.C,v 1.5.2.1 2003/01/07 13:23:24 anker Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 
@@ -70,7 +74,7 @@ namespace BALL
 		}
 
 		void GLDisplayList::startDefinition()
-			throw(NestedDisplayList, NoDisplayListAvailable, DisplayListRedeclaration)
+			throw(GLDisplayList::NestedDisplayList, GLDisplayList::NoDisplayListAvailable, GLDisplayList::DisplayListRedeclaration)
 		{
 			if (GL_list_ == 0)
 			{
@@ -148,18 +152,6 @@ namespace BALL
 					 << ((compile_ == false) ? "yes" : "no") << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void GLDisplayList::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-		 
-		void GLDisplayList::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

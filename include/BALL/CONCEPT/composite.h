@@ -1,4 +1,7 @@
-// $Id: composite.h,v 1.35 2002/01/12 12:19:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: composite.h,v 1.35.2.1 2003/01/07 13:17:24 anker Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -182,14 +185,12 @@ namespace BALL
 
 		/**	Clone with a predicate.
 				This method copies the attributes of {\tt this} composite to root
-				(shallow copy) and then adds recursively each composite of the tree
-				that fulfils the {\tt predicate}.
+				(shallow copy) and then adds recursively each of its children.
 				@param	root the cloning target root is {\tt destroy}ed prior to
 								any copying 
-				@param	predicate the predicate
-				@param  a pointer to the root composite ({\tt &root})
+				@return  a pointer to the root composite ({\tt &root})
 		*/
-		void* clone(Composite& root, KernelPredicateType& predicate) const
+		void* clone(Composite& root) const
 			throw();
 
 		//@}		
@@ -218,14 +219,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Predicative assignment from a tree.
-				@param	composite the Composite tree to assign from
-				@param	predicate the predicate which controls assignment
-		*/
-		void set(const Composite& composite, KernelPredicateType& predicate)
-			throw();
-
-		/**	Regular tree assignment.
+		/**	Assignment.
 				@param	composite the Composite tree to assign from
 				@param	deep a {\tt bool} deciding whether the assignment will be
 								deep or shallow.
@@ -240,18 +234,7 @@ namespace BALL
 		const Composite& operator = (const Composite& composite)
 			throw();
 
-		/**	Predicative assignment of a tree to another.
-				Assign a copy of {\bf this} tree to another tree.
-				Only nodes fulfilling the {\tt predicate}	are copied.
-				The assigned {\tt composite} is destroyed first.
-				@param	composite the composite to be assigned to
-				@param	predicate the predicate used to decide which composites are
-								copied
-		*/
-		void get(Composite& composite, KernelPredicateType& predicate) const
-			throw();
-
-		/**	Regular assignment of a tree to another.
+		/**	Assignment of a tree to another.
 				Create a deep ({\tt deep} = {\bf true}) or shallow copy of a composite
 				and assign it to {\tt composite}. {\tt composite} is destroyed first.
 				@param	composite the composite to assign the copy to
@@ -944,6 +927,7 @@ namespace BALL
 
 			BALL_CREATE_DEEP(AncestorIteratorTraits_)
 
+			BALL_INLINE
 			AncestorIteratorTraits_()
 				throw()
 				:	bound_(0),
@@ -951,6 +935,7 @@ namespace BALL
 			{
 			}
 		
+			BALL_INLINE
 			AncestorIteratorTraits_(const Composite& composite)
 				throw()
 				:	bound_((Composite *)&composite),
@@ -958,6 +943,7 @@ namespace BALL
 			{
 			}
 		
+			BALL_INLINE
 			AncestorIteratorTraits_(const AncestorIteratorTraits_& traits, bool /* deep */ = true)
 				throw()
 				:	bound_(traits.bound_),
@@ -965,6 +951,7 @@ namespace BALL
 			{
 			}
 		
+			BALL_INLINE
 			const AncestorIteratorTraits_& operator = (const AncestorIteratorTraits_& traits)
 				throw()
 			{
@@ -973,102 +960,117 @@ namespace BALL
 				return *this;
 			}
 
+			BALL_INLINE
 			Composite* getContainer()
 				throw()
 			{
 				return bound_;
 			}
 
+			BALL_INLINE
 			const Composite* getContainer() const
 				throw()
 			{
 				return bound_;
 			}
 
+			BALL_INLINE
 			bool isSingular() const
 				throw()
 			{
 				return (bound_ == 0);
 			}
 
+			BALL_INLINE
 			Composite*& getPosition()
 				throw()
 			{
 				return ancestor_;
 			}
 
+			BALL_INLINE
 			Composite* const& getPosition() const
 				throw()
 			{
 				return ancestor_;
 			}
 
+			BALL_INLINE
 			bool operator == (const AncestorIteratorTraits_& traits) const
 				throw()
 			{
 				return (ancestor_ == traits.ancestor_);
 			}
 		
+			BALL_INLINE
 			bool operator != (const AncestorIteratorTraits_& traits) const
 				throw()
 			{
 				return (ancestor_ != traits.ancestor_);
 			}
 		
+			BALL_INLINE
 			bool isValid() const
 				throw()
 			{
 				return (bound_ != 0 && ancestor_ != 0);
 			}
 
+			BALL_INLINE
 			void invalidate()
 				throw()
 			{
 				bound_ 	= ancestor_ = 0; 
 			}
-
+			
+			BALL_INLINE
 			void toBegin()
 				throw()
 			{
 				ancestor_ = bound_->parent_;
 			}
 
+			BALL_INLINE
 			bool isBegin() const
 				throw()
 			{
 				return (ancestor_ == bound_->parent_);
 			}
 
+			BALL_INLINE
 			void toEnd()
 				throw()
 			{
 				ancestor_ = 0;
 			}
 
+			BALL_INLINE
 			bool isEnd() const
 				throw()
 			{
 				return (ancestor_ == 0);
 			}
 
+			BALL_INLINE
 			Composite& getData()
 				throw()
 			{
 				return *ancestor_;
 			}
 
+			BALL_INLINE
 			const Composite& getData() const
 				throw()
 			{
 				return *ancestor_;
 			}
 
+			BALL_INLINE
 			void forward()
 				throw()
 			{
 				ancestor_ = ancestor_->parent_;
 			}
-
 
 			private:
 
@@ -1816,7 +1818,7 @@ namespace BALL
 		Size countDescendants_() const
 			throw();
 
-		void clone_(Composite& parent, Composite& stack, KernelPredicateType& predicate) const
+		void clone_(Composite& parent, Composite& stack) const
 			throw();
 
 		// traverse forward, valid for composites and subcomposites

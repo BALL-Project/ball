@@ -1,4 +1,7 @@
-// $Id: mainControl.iC,v 1.10 2001/05/13 13:57:02 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: mainControl.iC,v 1.10.2.1 2003/01/07 13:19:34 anker Exp $
 
 BALL_INLINE 
 int MainControl::getNextID_()
@@ -111,4 +114,11 @@ const INIFile& MainControl::getINIFile() const
 	throw()
 {
 	return preferences_;
+}
+
+BALL_INLINE
+List<Composite*>& MainControl::getControlSelection()
+	throw()
+{
+	return control_selection_;
 }

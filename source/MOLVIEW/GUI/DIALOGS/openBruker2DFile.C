@@ -1,9 +1,11 @@
-// $Id: openBruker2DFile.C,v 1.6 2001/05/13 16:28:12 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: openBruker2DFile.C,v 1.6.2.1 2003/01/07 13:21:28 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
-
-using std::istream;
-using std::ostream;
+#include <BALL/FORMAT/bruker2DFile.h>
+#include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
 namespace BALL
 {
@@ -14,7 +16,6 @@ namespace BALL
     {
       QStringList string_list;
       string_list = "Bruker2D-files (2rr)";
-
       setFilters(string_list);
     }
 
@@ -22,30 +23,24 @@ namespace BALL
 			throw()
     {
       #ifdef BALL_VIEW_DEBUG
-      cout << "Destructing object " << (void *)this
-	   << " of class " << RTTI::getName<OpenBruker2DFile>() << endl;
+      cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<OpenBruker2DFile>() << endl;
       #endif
     }
 
     void OpenBruker2DFile::initializeWidget(MainControl& main_control)
-	throw()
+			throw()
     {
-      main_control.insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&2D File", this,
-				   SLOT(exec()),
-				   CTRL+Key_2);
+      main_control.insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&2D File", this, SLOT(exec()), CTRL+Key_2);
     }
 
     void OpenBruker2DFile::finalizeWidget(MainControl& main_control)
-	throw()
+			throw()
     {
-      main_control.removeMenuEntry
-	(MainControl::FILE_IMPORT, "Bruker&2D File", this,
-	 SLOT(exec()),
-	 CTRL+Key_2);
+      main_control.removeMenuEntry (MainControl::FILE_IMPORT, "Bruker&2D File", this, SLOT(exec()), CTRL+Key_2);
     }
 
     void OpenBruker2DFile::openFile_()
-	throw()
+			throw()
     {
       // notify the main window
       WindowMessage window_message;
@@ -58,18 +53,15 @@ namespace BALL
       String mydir = dirPath().latin1();
 
       try
-	{
-	  myfile->read(mydir);
-	  // TEST!!!
-	  //	  myfile->save("/home/andreas/nmrtest", 0, 90, 500, 400);
-	}
+			{
+				 myfile->read(mydir);
+			}
       catch(...)
-	{
-	  Log.info() << "> read Bruker2D file failed." << endl;
-	  delete myfile;
-	  
-	  return;
-	}
+			{
+				 Log.info() << "> read Bruker2D file failed." << endl;
+				 delete myfile;
+				 return;
+			}
 
       // writing info to log
       Log.info() << "> Bruker file " << mydir << " succesfully read." << endl;

@@ -1,11 +1,10 @@
-// $Id: connectionObject.h,v 1.8 2001/07/16 14:49:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: connectionObject.h,v 1.8.2.1 2003/01/07 13:19:49 anker Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -32,7 +31,6 @@
 #include <typeinfo>
 
 using std::string;
-//using namespace BALL;
 
 namespace BALL
 {
@@ -200,29 +198,7 @@ namespace BALL
 				throw();
 
 			//@}
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-					Read persistent connectionObject data from the input stream {\em s} and 
-					restore the state of {\em *this}.	\\
-					{\bf Note:} Not yet implemented.
-			  	@param       s input stream from where to restore the internal state of {\em *this} connectionObject
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  				Write persistent connectionObject data to the output stream {\em s} and 
-					store the state of {\em *this}. \\
-					{\bf Note:} Not yet implemented.
-		 			@param       s output stream to where to store the internal state of {\em *this} connectionObject
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-	
-			//@}
+			
 			/** @name Protected notification methods
 			*/
 			//@{

@@ -1,4 +1,7 @@
-// $Id: piecewisePolynomial.h,v 1.8 2001/07/14 12:56:14 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: piecewisePolynomial.h,v 1.8.2.1 2003/01/07 13:18:03 anker Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H

@@ -1,4 +1,7 @@
-// $Id: HINFile.h,v 1.17 2001/12/20 01:10:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: HINFile.h,v 1.17.2.1 2003/01/07 13:17:41 anker Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -39,12 +42,21 @@ namespace BALL
 
 		/** Detailed constructor
 		*/
-		HINFile(const String& filename, File::OpenMode open_mode = File::IN)
+		HINFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/**	Destructor
 		*/
 		virtual ~HINFile()
+			throw();
+		//@}
+
+		/**	@name Assignment.
+		*/
+		//@{
+		/** Assignment operator.
+		*/
+		const HINFile& operator = (const HINFile& rhs)
 			throw();
 		//@}
 

@@ -1,4 +1,7 @@
-// $Id: Skeleton_bench.C,v 1.2 2001/06/24 14:50:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Skeleton_bench.C,v 1.2.2.1 2003/01/07 13:20:27 anker Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -10,7 +13,7 @@
 using namespace BALL;
 
 // args: benchmark name (without '"'), reference time in seconds, CVS ID string
-START_BENCHMARK(BenchName, 10.0, "$Id: Skeleton_bench.C,v 1.2 2001/06/24 14:50:55 oliver Exp $")
+START_BENCHMARK(BenchName, 10.0, "$Id: Skeleton_bench.C,v 1.2.2.1 2003/01/07 13:20:27 anker Exp $")
 
 
 /////////////////////////////////////////////////////////////

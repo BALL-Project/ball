@@ -1,7 +1,11 @@
-// $Id: colorHSV.C,v 1.2 2001/05/13 14:28:34 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorHSV.C,v 1.2.2.1 2003/01/07 13:23:17 anker Exp $
 
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#include <BALL/COMMON/rtti.h>
 using namespace std;
 
 namespace BALL
@@ -59,8 +63,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-			cout << "Destructing object " << (void *)this << " of class " 
-					 << RTTI::getName<ColorHSV>() << endl;
+			cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColorHSV>() << endl;
 			#endif 
 
 			destroy();
@@ -209,18 +212,6 @@ namespace BALL
 			value_.dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);  
-		}
-
-		void ColorHSV::read(istream& /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorHSV::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		istream& operator >> (istream& s, ColorHSV& color_HSV)

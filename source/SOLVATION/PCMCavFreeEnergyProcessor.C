@@ -1,4 +1,7 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.10.2.1 2002/11/12 16:50:18 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.10.2.2 2003/01/07 13:21:51 anker Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>

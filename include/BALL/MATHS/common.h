@@ -1,4 +1,7 @@
-// $Id: common.h,v 1.14 2001/02/14 01:59:58 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: common.h,v 1.14.2.1 2003/01/07 13:18:00 anker Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -9,8 +12,12 @@
 
 #include <math.h>
 
-#ifdef BALL_INCLUDE_IEEEFP
+#ifdef BALL_HAS_IEEEFP_H
 # include <ieeefp.h>
+#endif
+
+#ifdef BALL_HAS_FLOAT_H
+# include <float.h>
 #endif
 
 #ifndef BALL_COMMON_CONSTANTS_H
@@ -62,6 +69,7 @@ namespace BALL
 			return (t - (T)tmp);
 		}
 
+#ifndef max 
 		/**	Return the greater of two numbers.
 				@param	a the first number
 				@param	b the second number
@@ -88,7 +96,9 @@ namespace BALL
 		{ 
 			return BALL_MAX3(a, b, ct);
 		}
+#endif
 
+#ifndef min
 		/**	Return the smallest of two numbers.
 				@param	a the first number
 				@param	b the second number
@@ -115,6 +125,7 @@ namespace BALL
 		{ 
 			return BALL_MIN3(a, b, ct);
 		}
+#endif
 
 		/**	Round a number and return the result.
 				@param	t the number
@@ -149,7 +160,11 @@ namespace BALL
 		bool isFinite(const T& t)
 			throw()
 		{
-			return finite(t);
+#ifdef BALL_COMPILER_MSVC
+			return ::_finite(t);
+#else
+			return ::finite(t);
+#endif
 		}
 
 		/**	Test whether a number is infinite.
@@ -173,7 +188,11 @@ namespace BALL
 		bool isNan(const T& t)
 			throw()
 		{
-			return isnan(t);
+			#ifdef BALL_COMPILER_MSVC
+				return (_isnan(t) != 0);
+			#else
+				return (isnan(t) != 0);
+			#endif
 		}
 
 		/**	Test whether a number is zero.

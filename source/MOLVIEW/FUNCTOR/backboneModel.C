@@ -1,14 +1,16 @@
-// $Id: backboneModel.C,v 1.4 2001/07/15 18:50:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: backboneModel.C,v 1.4.2.1 2003/01/07 13:21:19 anker Exp $
 
-#ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
-#endif
+#include <BALL/KERNEL/system.h>
+#include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -34,8 +36,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-						 << " of class " << RTTI::getName<AddBackboneModel>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<AddBackboneModel>() << endl;
 			#endif 
 
 			destroy();
@@ -76,8 +78,7 @@ namespace BALL
 
 				if (backbone == 0)
 				{
-					throw Exception::OutOfMemory
-						(__FILE__, __LINE__, sizeof(Backbone));
+					throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Backbone));
 				}
 
 				// get info from the start composite
@@ -106,8 +107,7 @@ namespace BALL
 			return true;
 		}
 				
-		Processor::Result 
-		AddBackboneModel::operator () (Composite& composite)
+		Processor::Result AddBackboneModel::operator () (Composite& composite)
 		{
 			// take first composite, Backbone will be inserted to it later
 			if (get_composite_)
@@ -135,9 +135,7 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void 
-		AddBackboneModel::dump
-			(std::ostream& s, Size depth) const
+		void AddBackboneModel::dump(std::ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -150,17 +148,11 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		Backbone *
-		AddBackboneModel::createBackbone_
-			()
+		Backbone* AddBackboneModel::createBackbone_()
 		{
 			return (Backbone *)(new Backbone());
 		}
 
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/backboneModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

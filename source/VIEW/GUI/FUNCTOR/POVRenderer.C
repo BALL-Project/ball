@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.4 2002/12/20 14:58:27 anhi Exp $
+// $Id: POVRenderer.C,v 1.4.2.1 2003/01/07 13:23:23 anker Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/POVRenderer.h>
 

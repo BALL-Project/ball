@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.C,v 1.3 2002/12/18 16:00:34 sturm Exp $
+// $Id: FFT2D.C,v 1.3.2.1 2003/01/07 13:20:57 anker Exp $
 
 #include <BALL/MATHS/FFT2D.h>
 

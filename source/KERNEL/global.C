@@ -1,4 +1,7 @@
-// $Id: global.C,v 1.4 2000/01/08 20:52:11 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: global.C,v 1.4.2.1 2003/01/07 13:20:53 anker Exp $
 
 #include <BALL/KERNEL/global.h>
 #include <BALL/MATHS/vector3.h>

@@ -5,16 +5,24 @@ Compiler:
   (version above 2.95 or above).
   It has been successfully built and tested on the following platforms:
 
-    - Linux/x86 2.x using g++ 2.95.1 and 2.95.2
-    - Solaris/SPARC 2.6, 7, and 8 using g++ 2.95.2
-    - Solaris/SPARC 7 using Kuck & Associate (KAI) C++ 3.4g
-		- Solaris/SPARC 7 using SUN Workshop CC 6.0ea
-    - Solaris/x86 2.6 using g++ 2.95.2
-    - IRIX 6.5 using CC 7.3.1.1m
-    - IRIX 6.5 using g++ 2.95.2
-		- Compaq Tru64 Unix V5.0 using CXX 6.2
+    - Linux/x86 2.x using g++ 3.2.1
+    - Linux/x86 2.x using g++ 2.95.3
+    - Solaris/SPARC 8 using g++ 3.2.1
+    - Solaris/SPARC 8 using g++ 2.95.3
+		- Solaris/SPARC 8 using SUN Forte Developer 7 C++ 5.4 2002/03/09
+    - IRIX 6.5 using CC 7.3.1.1m (32 and 64 bit)
+		- Microsoft Windows XP using Microsoft Visual Studio .NET (MSVC 7.0)
 
 External software and libraries:
+  BALL needs flex and bison for automatically generating parsers for
+  various purposes. These utilities are standard software and should be
+  installed on every contemporary UN*X machine. The newest versions are
+  downloadable from http://www.gnu.org/software/.
+     
+  The usage of GNU make is recommended, although BALL will also build with
+  other versions of make. It is available from ftp://ftp.gnu.org/gnu/ and
+  easy to install.
+
   The compilation of the visualization component BALLVIEW also requires
   the QT library (version 2.x) which is available from
 
@@ -40,27 +48,28 @@ External software and libraries:
 2) Building the libraries
 =========================
 
-building BALL is very easy, but please read through this section carefully to
-avoid any problems.
-If all requirements stated above are met, BALL is built by issuing the following
-commands in the directory BALL/source:
+Building BALL is very easy, but please read through this section carefully
+to avoid any problems.  If all requirements stated above are met, BALL is
+built by issuing the following commands in the directory BALL/source:
 
   ./configure
   make
 
-The following sections give further details on the configuration of the library,
-on the library files created, how to test the library, and how to build BALL 
-applications.
+The following sections give further details on the configuration of the
+library, on the library files created, how to test the library, and how to
+build BALL applications.
 
 2.1 "configure"
 ---------------
 
-"configure" tries to gather as much information on your system as possible and 
-then creates the necessary configuration files (config.h, config.mak, common.mak,
-and Makefile).
+"configure" tries to gather as much information on your system as possible
+and then creates the necessary configuration files (config.h, config.mak,
+common.mak, and Makefile).
+
 The configuration of BALL may be adapted to your needs and to your system
-configuration from the command line by adding one or more of the following options.
-An overview of these options can also be obtained by executing "configure --help"
+configuration from the command line by adding one or more of the following
+options.  An overview of these options can also be obtained by executing
+"configure --help"
 
   --x-includes=DIR        X include files are in DIR
 
@@ -105,13 +114,17 @@ An overview of these options can also be obtained by executing "configure --help
 
 For example, to compile BALL without the visualization component BALLVIEW,
 specify 
+
   configure --without-BALLVIEW
 
-To include BALLVIEW using the QT installation in /opt/qt/lib and /opt/qt/include, specify
+To include BALLVIEW using the QT installation in /opt/qt/lib and
+/opt/qt/include, specify
+
   configure --with-qt-libs=/opt/qt/lib --with-qt-incl=/opt/qt/include
 
-If Mesa should be used (when compiling under Linux), the correct options might look
-like this:
+If Mesa should be used (when compiling under Linux), the correct options
+might look like this:
+
   configure --with-qt-libs=/opt/qt/lib --with-qt-incl=/opt/qt/include --without-opengl
     --with-opengl-libs=/opt/mesa/lib --with-opengl-incl=/opt/mesa/include
 
@@ -119,29 +132,31 @@ like this:
 2.2) Building the libraries
 ---------------------------
 
-After the successful termination of configure, "make" builds the shared libraries.
-There exist three different libraries:
+After the successful termination of configure, "make" builds the shared
+libraries. There exist three different libraries:
   libBALL.so:     the BALL library
   libVIEW.so:     the visualization component BALLVIEW
   libMOLVIEW.so:  a library used by the standalone molecule viewer molview
 
-The latter two libraries are not built if "--without-BALLVIEW" is specified or configure
-cannot find X libraries, OpenGL libraries, or QT libraries (and the respective headers).
+The latter two libraries are not built if "--without-BALLVIEW" is specified
+or configure cannot find X libraries, OpenGL libraries, or QT libraries
+(and the respective headers).
 
-It is also possible (although not recommended) to build the corresponding static libraries
-libBALL.a, libVIEW.a, and libMOLVIEW.a using "make staticlibs".
+It is also possible (although not recommended) to build the corresponding
+static libraries libBALL.a, libVIEW.a, and libMOLVIEW.a using "make
+staticlibs".
 
 
 2.3) Installing the libraries
 -----------------------------
 
-After compiling the libraries, they are installed in BALL/lib/${BINFMT}/ when calling 
-"make install.shared" or "make install.static", where ${BINFMT} is the binary format
-as detrmined by configure. 
-Currently, the only way to install the libraries somewhere else is by moving them 
-by hand to the desired destination.
-Whereever you install the shared libraries, please make sure to include their location
-in the LD_LIBRARY_PATH environment variable. This is done as follows
+After compiling the libraries, they are installed in BALL/lib/${BINFMT}/
+when calling "make install.shared" or "make install.static", where
+${BINFMT} is the binary format as detrmined by configure.  Currently, the
+only way to install the libraries somewhere else is by moving them by hand
+to the desired destination.  Whereever you install the shared libraries,
+please make sure to include their location in the LD_LIBRARY_PATH
+environment variable. This is done as follows
   
    setenv LD_LIBRARY_PATH DIR  (if you are using csh, tcsh or similar shells)
 
@@ -150,42 +165,46 @@ or
    LD_LIBRARY_PATH=DIR         (if you are using sh, bash or similar shells)
    export LD_LIBRARY_PATH
 
-If you installed the shared libraries that are searched by ld by default, it is not
-necessary to set the LD_LIBRARY_PATH.
+If you installed the shared libraries that are searched by ld by default,
+it is not necessary to set the LD_LIBRARY_PATH.
 
 
 2.4) Testing the library
 ------------------------
 
-BALL provides an extensive suite of test programs to ensure the correctness of the code
-on all platforms. This test suite requires a lot of patience since the compilation takes
-quite some time. However, we recommend to run these tests to ensure that the library is
-fully operational. At the moment, the test suite does not yet cover all functionality of
-BALL, but only some chosen classes.
+BALL provides an extensive suite of test programs to ensure the correctness
+of the code on all platforms. This test suite requires a lot of patience
+since the compilation takes quite some time. However, we recommend to run
+these tests to ensure that the library is fully operational. At the moment,
+the test suite does not yet cover all functionality of BALL, but only some
+chosen classes.
 The test programs are located in the directory BALL/source/TEST.
-To compile and run the test suite, use "make test". Please make sure that LD_LIBRARY_PATH 
-is correctly set, otherwise the linking of the test programs will fail.
+To compile and run the test suite, use "make test". Please make sure that
+LD_LIBRARY_PATH is correctly set, otherwise the linking of the test
+programs will fail.
 
-Each of the test programs tests one or more classes of BALL. When calling a test, e.g. 
-Atom_test, the program prints either "OK" (if all tests passed) or "FAILED" if any of 
-the tests failed. "make test" runs all tests and complains if certains tets fail.
-If this happens, please let us know by mailing the files specified by in the output
-of "make test" to one of the developers - this helps use to improve the library.
+Each of the test programs tests one or more classes of BALL. When calling a
+test, e.g.  Atom_test, the program prints either "OK" (if all tests passed)
+or "FAILED" if any of the tests failed. "make test" runs all tests and
+complains if certains tets fail.  If this happens, please let us know by
+mailing the files specified by in the output of "make test" to one of the
+developers - this helps use to improve the library.
 
 
 2.5) Building applications
 --------------------------
 
-BALL provides some short example applications in BALL/source/EXAMPLES as well as the powerful
-3D visualization tool molview. 
-To build one of these applications, the shared libraries have to be built and installed, and the
-LD_LIBRARY_PATH has to be set accordingly (see above, 2.2).
-To build the examples, simply change to the BALL/source/EXAMPLES directory and type "make".
-Similarly, the viewer molview is build by changing to BALL/source/MOLVIEW/APPLICATION and
-calling "make". When running molview, please make sure that all required shared libraries 
-are included in the LD_LIBRARY_PATH. molview needs the BALL libraries (libBALL.so, libVIEW.so,
-and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa libraries 
-(libGL.so, libGLU.so).
+BALL provides some short example applications in BALL/source/EXAMPLES as
+well as the powerful 3D visualization tool molview.  To build one of these
+applications, the shared libraries have to be built and installed, and the
+LD_LIBRARY_PATH has to be set accordingly (see above, 2.2).  To build the
+examples, simply change to the BALL/source/EXAMPLES directory and type
+"make".  Similarly, the viewer molview is build by changing to
+BALL/source/MOLVIEW/APPLICATION and calling "make". When running molview,
+please make sure that all required shared libraries are included in the
+LD_LIBRARY_PATH. molview needs the BALL libraries (libBALL.so, libVIEW.so,
+and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the
+OpenGL/Mesa libraries (libGL.so, libGLU.so).
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.9 2000/05/03 19:50:50 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.9.2.1 2003/01/07 13:19:59 anker Exp $

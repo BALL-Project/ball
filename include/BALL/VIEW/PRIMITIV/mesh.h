@@ -1,4 +1,7 @@
-// $Id: mesh.h,v 1.10 2001/07/16 14:49:33 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: mesh.h,v 1.10.2.1 2003/01/07 13:19:55 anker Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -202,28 +205,15 @@ namespace BALL
 				throw();
 
 			//@}
-			/**	@name	Storers
-			*/
+			/** @name Attributes
+			 */
 			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent mesh data from the input stream {\em s} and 
-				  restore the state of {\em *this}. \\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} mesh
-			*/
-			virtual void read(std::istream&  s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent mesh data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} mesh
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-
+			
+			/** The colors belonging to each vertex. If this list has *less* entries than
+					there are vertices in this mesh, we take the first element to color the whole
+					mesh. If it is *empty*, we use the color white.
+			 */
+			vector<ColorRGBA> colorList;
 			//@}
 
 			protected:
@@ -238,10 +228,6 @@ namespace BALL
 				throw();
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/mesh.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

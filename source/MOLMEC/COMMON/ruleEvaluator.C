@@ -1,5 +1,8 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
-// $Id: ruleEvaluator.C,v 1.11 2001/12/30 13:28:49 sturm Exp $
+// $Id: ruleEvaluator.C,v 1.11.2.1 2003/01/07 13:21:09 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #include <BALL/FORMAT/INIFile.h>

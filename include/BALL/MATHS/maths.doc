@@ -27,8 +27,11 @@
 		//@Include: sphere3.h
 		//@Include: surface.h
 	//@}
+	//@Include: FFT1D.h 
+	//@Include: FFT2D.h 
 	//@Include: analyticalGeometry.h
 	//@Include: function.h
+	//@Include: parsedFunction.h 
 	//@Include: numericalIntegrator.h
 	//@Include: rombergIntegrator.h
   //@Include: piecewiseFunction.h

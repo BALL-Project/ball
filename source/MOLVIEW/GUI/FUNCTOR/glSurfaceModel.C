@@ -1,29 +1,25 @@
-// $Id: glSurfaceModel.C,v 1.3 2001/05/13 15:02:41 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glSurfaceModel.C,v 1.3.2.1 2003/01/07 13:21:30 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h>
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-
 		using VIEW::GLMesh;
-
 			
 		AddGLSurfaceModel::AddGLSurfaceModel()
 			throw()
-				:
-				AddSurfaceModel()
+			:	AddSurfaceModel()
 		{
 		}
 
-		AddGLSurfaceModel::AddGLSurfaceModel
-			(const AddGLSurfaceModel &add_gl_surface_model,
-			 bool deep)
+		AddGLSurfaceModel::AddGLSurfaceModel(const AddGLSurfaceModel &add_gl_surface_model, bool deep)
 			throw()
-				:
-				AddSurfaceModel(add_gl_surface_model, deep)
+			:	AddSurfaceModel(add_gl_surface_model, deep)
 		{
 		}
 
@@ -31,24 +27,16 @@ namespace BALL
       throw()
  		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<AddGLSurfaceModel>() << endl;
+				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<AddGLSurfaceModel>() << endl;
 			#endif 
 
 			AddSurfaceModel::destroy();
 		}
 
-		Mesh *
-		AddGLSurfaceModel::createMesh_
-			()
+		Mesh* AddGLSurfaceModel::createMesh_()
 		{
-			return (Mesh *)(new GLMesh());
+			return (new GLMesh());
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.iC>
-#		endif
-
 	} // namespace MOLVIEW
-
 } // namespace BALL

@@ -1,14 +1,15 @@
-// $Id: glpoint.C,v 1.6 2001/05/13 14:28:37 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glpoint.C,v 1.6.2.1 2003/01/07 13:23:28 anker Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glpoint.h>
-#include <GL/gl.h>
+#include <BALL/COMMON/rtti.h>
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
-
 
 		GLPoint::GLPoint()
 			throw()
@@ -36,7 +37,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTIT<GLPoint>::getName() << endl;
+					<< " of class " << RTTI::getName<GLPoint>() << endl;
 			#endif 
 
 			destroy();
@@ -100,10 +101,10 @@ namespace BALL
 			}
 			else
 			{
-				glColor4ub((unsigned char)getSelectedColor().getRed(),
-									 (unsigned char)getSelectedColor().getGreen(),
-									 (unsigned char)getSelectedColor().getBlue(),
-									 (unsigned char)getSelectedColor().getAlpha());
+				glColor4ub((unsigned char)BALL_SELECTED_COLOR.getRed(),
+									 (unsigned char)BALL_SELECTED_COLOR.getGreen(),
+									 (unsigned char)BALL_SELECTED_COLOR.getBlue(),
+									 (unsigned char)BALL_SELECTED_COLOR.getAlpha());
 			}
 
 			if (with_names)
@@ -129,10 +130,6 @@ namespace BALL
 		{
 			return Point::extract();
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glpoint.iC>
-#		endif
 
 	} // namespace VIEW
 

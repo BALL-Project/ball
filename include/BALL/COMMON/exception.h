@@ -1,4 +1,7 @@
-// $Id: exception.h,v 1.31 2002/01/28 09:54:45 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: exception.h,v 1.31.2.1 2003/01/07 13:17:18 anker Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -475,7 +478,7 @@ namespace BALL
 
 			/// The BALL new handler
 			static void newHandler()
-				throw();
+				throw(Exception::OutOfMemory);
 
 			static std::string file_;
 			static int				 line_;

@@ -1,4 +1,7 @@
-// $Id: vertex2.h,v 1.7 2001/07/16 14:49:33 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: vertex2.h,v 1.7.2.1 2003/01/07 13:19:53 anker Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX2_H
 #define BALL_VIEW_KERNEL_VERTEX2_H
@@ -511,28 +514,6 @@ namespace BALL
 				throw();
 			//@}
 
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent vertex2 data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} vertex2
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent vertex2 data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} vertex2
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-			//@}
 
 			private:
 		

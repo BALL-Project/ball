@@ -1,4 +1,7 @@
-// $Id: BitVector_test.C,v 1.27 2002/01/26 22:01:26 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: BitVector_test.C,v 1.27.2.1 2003/01/07 13:22:16 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.27 2002/01/26 22:01:26 oliver Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.27.2.1 2003/01/07 13:22:16 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

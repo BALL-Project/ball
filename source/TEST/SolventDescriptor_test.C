@@ -1,11 +1,14 @@
-// $Id: SolventDescriptor_test.C,v 1.7 2002/01/15 13:18:50 aubertin Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SolventDescriptor_test.C,v 1.7.2.1 2003/01/07 13:22:54 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
  
 ///////////////////////////
 #include <BALL/SOLVATION/solventDescriptor.h>
 ///////////////////////////
 	  
-START_TEST(SolventDescriptor, "$Id: SolventDescriptor_test.C,v 1.7 2002/01/15 13:18:50 aubertin Exp $")
+START_TEST(SolventDescriptor, "$Id: SolventDescriptor_test.C,v 1.7.2.1 2003/01/07 13:22:54 anker Exp $")
 		 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

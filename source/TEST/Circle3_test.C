@@ -1,4 +1,8 @@
-// $Id: Circle3_test.C,v 1.8 2002/01/26 22:01:26 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Circle3_test.C,v 1.8.2.1 2003/01/07 13:22:18 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Circle3, "$Id: Circle3_test.C,v 1.8 2002/01/26 22:01:26 oliver Exp $")
+START_TEST(Circle3, "$Id: Circle3_test.C,v 1.8.2.1 2003/01/07 13:22:18 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -146,7 +150,7 @@ CHECK(TCircle3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	c = Circle3(p, v1, radian);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	c.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Circle3_test.txt")
@@ -170,7 +174,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TCircle3& circle))
 	v1 = Vector3(3.0, 4.0, 5.0);
 	v2 = Vector3(6.0, 7.0, 8.0);
 	c = Circle3(v1, v2, 7.0);
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << c;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Circle3_test2.txt")

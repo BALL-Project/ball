@@ -1,4 +1,7 @@
-// $Id: secondaryStructureIterator.h,v 1.4 2000/08/30 19:58:11 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: secondaryStructureIterator.h,v 1.4.2.1 2003/01/07 13:17:58 anker Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
 #define BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H

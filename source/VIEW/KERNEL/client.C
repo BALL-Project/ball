@@ -1,4 +1,7 @@
-// $Id: client.C,v 1.9 2001/05/13 14:28:37 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: client.C,v 1.9.2.1 2003/01/07 13:23:32 anker Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -67,7 +70,7 @@ namespace BALL
 		}
 
 	  void Client::insert(Composite &composite)
-			throw(InvalidClient, NoPersistentObject)
+			throw(Client::InvalidClient, Client::NoPersistentObject)
     {
 			if (!isValid())
 			{
@@ -82,8 +85,8 @@ namespace BALL
 			IOStreamSocket iostream_socket;	
 			iostream_socket->connect(host_.c_str(), port_);
 
-			iostream_socket << (int)COMMAND__SEND_OBJECT << " ";
-			iostream_socket << (unsigned long)(&composite) << endl;
+			iostream_socket << (Size)COMMAND__SEND_OBJECT << " ";
+			iostream_socket << (PointerSizeInt)(&composite) << endl;
 
 			pm_.setOstream(iostream_socket);
 			composite >> pm_;
@@ -91,6 +94,7 @@ namespace BALL
 			iostream_socket->close();
     }
 
+		// ????????????
 		/*
 		void Client::setCreatorValue(int address, int value)
     {
@@ -190,22 +194,6 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void Client::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Client::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/client.iC>
-#		endif 
-		
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,4 +1,7 @@
-// $Id: message.h,v 1.9 2001/07/16 14:49:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: message.h,v 1.9.2.1 2003/01/07 13:19:51 anker Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -82,7 +85,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -92,8 +94,8 @@ namespace BALL
 			*/
 			virtual ~Message()
 				throw();
+
 			//@}
-		
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -198,7 +200,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -302,7 +303,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -355,7 +355,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -408,7 +407,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -423,25 +421,6 @@ namespace BALL
 			private:
 		};
 
-
-		/*
-		class DisplayMessage: public CompositeMessage
-		{
-			public:
-
-			//@{
-			DisplayMessage()
-				throw();
-
-			DisplayMessage(const DisplayMessage& message)
-				throw();
-
-			virtual ~DisplayMessage()
-				throw();
-			//@}
- 			private:
-		};
-		*/
 
 		/** SceneMessage class.
 				The class SceneMessage is the message class that is responsible for
@@ -488,7 +467,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -626,7 +604,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
       */
 			//@{
@@ -636,8 +613,8 @@ namespace BALL
 			*/
 			virtual ~WindowMessage()
 				throw();
+			
 			//@}
-		
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -707,7 +684,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -717,8 +693,8 @@ namespace BALL
 			*/
 			virtual ~SelectionMessage()
 				throw();
+							
 			//@}
-		
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -750,6 +726,37 @@ namespace BALL
 		};
 
 
+		/** Used to inform MainControl of selection in Control (not the one of the checkboxes!)
+		 */
+		class ControlSelectionMessage: public SelectionMessage
+		{
+			public:
+			ControlSelectionMessage()
+				throw();
+		};
+
+		/** Used to inform MainControl and MolecularProperties of the selection of one composite in Control.
+		 		MolecularProperties sends as answer a CompositeChanged message to inform the Scene.
+		 */
+		class CompositeSelectedMessage: public Message
+		{
+			public:
+
+			CompositeSelectedMessage(Composite* composite, bool selected) 
+				throw();
+
+			Composite* composite_;
+			bool selected_;
+		};
+
+		/** Send by MainControl to Controls to sync selection
+		 */
+		class NewSelectionMessage: public Message
+		{
+			public:
+			NewSelectionMessage()
+				throw();
+		};
 
 		/** GeometricObjectSelectionMessage class.
 				The class GeometricObjectSelectionMessage is the message class that is a container for
@@ -790,7 +797,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -805,7 +811,71 @@ namespace BALL
 			private:
 		};
 
+		/** Message to build bonds.
+		 		Send by MolecularControl to MolecularProperties.
+		 */
+		class BuildBondsMessage: public Message
+		{
+			public:
 
+			BuildBondsMessage()
+				throw()
+			{};
+		};
+
+		/** Message to center camera.
+		 		Send by MolecularControl to MolecularProperties.
+		 */
+		class CenterCameraMessage: public CompositeMessage
+		{
+			public:
+
+			CenterCameraMessage()
+				throw()
+				: CompositeMessage()
+			{};
+		};
+
+		/** Message to check residues.
+		 		Send by MolecularControl to MolecularProperties.
+		 */
+		class CheckResidueMessage: public Message
+		{
+			public:
+
+			CheckResidueMessage()
+				throw()
+			{};
+		};
+
+		/** Message to (re)draw a composite.
+		 		Send by MolecularProperties to DisplayProperties.
+		 */
+		class DrawMessage: public CompositeMessage
+		{
+			public:
+
+			DrawMessage()
+				throw()
+				: CompositeMessage()
+			{};
+		};
+
+		/** Message to select or deselect composites.
+		 		Send by MolecularControl to MolecularProperties.
+		 */
+		class SelectMessage: public Message
+		{
+			public:
+
+			SelectMessage()
+				throw()
+				: select_(false)
+			{};
+
+			bool select_;
+		};
+		
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/message.iC>
 #		endif

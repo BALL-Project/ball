@@ -1,7 +1,11 @@
-// $Id: version.C,v 1.8 2000/11/13 19:31:01 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: version.C,v 1.8.2.1 2003/01/07 13:20:29 anker Exp $
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>
+#include <BALL/DATATYPE/stringHashMap.h>
 
 namespace BALL
 {
@@ -14,6 +18,12 @@ namespace BALL
 	{
 		static String release(BALL_RELEASE_STRING);
 		String minor = release.getField(1, ".");
+		String tmp = minor;
+		tmp.trimRight(String::CHARACTER_CLASS__ASCII_NUMERIC);
+		if (tmp.size() > 0)
+		{
+			minor.trimRight(String::CHARACTER_CLASS__ASCII_NUMERIC);
+		}
 		minor.trimRight(String::CHARACTER_CLASS__ASCII_ALPHA);
 
 		return minor.toInt();
@@ -27,6 +37,13 @@ namespace BALL
 	
 	VersionInfo::Type VersionInfo::getType() throw()
 	{
+		StringHashMap<VersionInfo::Type> type_mapper;
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("alpha", ALPHA));
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("beta", BETA));
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("nonpublic", NONPUBLIC));
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("pre", PRERELEASE));
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("patch", PATCHLEVEL));
+
 		static String release(BALL_RELEASE_STRING);
 		
 		// check for the suffix of the release string
@@ -35,32 +52,23 @@ namespace BALL
 		{
 			return UNKNOWN;
 		}
-		char release_suffix = release[release.size() - 1];
-		switch (release_suffix)
+		
+		String minor = release.getField(1, ".");
+		String tmp = minor;
+		tmp.trimRight(String::CHARACTER_CLASS__ASCII_NUMERIC);
+		if (tmp.size() > 0)
 		{
-			case 'a': 
-				return ALPHA;
+			return STABLE;
+		}
 
-			case 'b': 
-				return BETA;
-
-			case 'n': 
-				return NONPUBLIC;
-
-			case '0':
-			case '1':
-			case '2':
-			case '3':
-			case '4':
-			case '5':
-			case '6':
-			case '7':
-			case '8':
-			case '9':
-				return STABLE;
-
-			default:
-				return UNKNOWN;
+		String type = minor.trimRight(String::CHARACTER_CLASS__ASCII_ALPHA);
+		if (type_mapper.has(type))
+		{
+			return(type_mapper[type]);
+		}
+		else
+		{
+			return(UNKNOWN);
 		}
 	}
 

@@ -1,4 +1,7 @@
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.8 2001/07/14 12:58:39 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.8.2.1 2003/01/07 13:18:56 anker Exp $
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -23,7 +26,7 @@ namespace BALL
 			modification for non-spherical solutes by Huron/Claverie, J. Phys.
 			Chem. 76(15):2123-2133, 1972.	\\
 			The energy value is returned in units of kJ/mol. \\
-			{\bf Definition:} \URL{BALL/.../PCMCavFreeEnergyProcessor.h}
+			{\bf Definition:} \URL{BALL/SOLVATION/PCMCavFreeEnergyProcessor.h}
 	 */
 	class PCMCavFreeEnergyProcessor
 		:	public EnergyProcessor
@@ -70,7 +73,7 @@ namespace BALL
 			static const char* PROBE_RADIUS;
 		};
 
-		/** Default values for cavitation free anergy calculations.
+		/** Default values for cavitation free energy calculations.
 				These values represent the default settings for the calculations of the
 				cavitation free energy.
 		 */

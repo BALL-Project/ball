@@ -1,4 +1,8 @@
-// $Id: PDBAtom_test.C,v 1.7 2002/01/26 22:01:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PDBAtom_test.C,v 1.7.2.1 2003/01/07 13:22:38 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -29,7 +33,7 @@ bool testEqual(const PDBAtom& a, const PDBAtom& b)
 				 a.getTemperatureFactor() == b.getTemperatureFactor();
 }
 
-START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.7 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(PDBAtom, "$Id: PDBAtom_test.C,v 1.7.2.1 2003/01/07 13:22:38 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -94,7 +98,7 @@ RESULT
 
 CHECK(PDBAtom::persistentWrite(PersistenceManager& pm, const char* name = 0) const  throw())
 	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), File::OUT);
+	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	pm.registerClass(getStreamName<PDBAtom>(), PDBAtom::createDefault);
 	pdba >> pm;
@@ -253,7 +257,7 @@ RESULT
 
 CHECK(PDBAtom::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	pdba.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/PDBAtom_test_dump.txt")

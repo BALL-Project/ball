@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: factory.h,v 1.3 2002/12/18 16:00:25 sturm Exp $
+// $Id: factory.h,v 1.3.2.1 2003/01/07 13:17:26 anker Exp $
 
 #ifndef BALL_CONCEPT_FACTORY_H
 #define BALL_CONCEPT_FACTORY_H

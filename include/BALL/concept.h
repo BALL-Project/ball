@@ -1,4 +1,7 @@
-// $Id: concept.h,v 1.1 2000/01/03 15:17:31 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: concept.h,v 1.1.2.1 2003/01/07 13:17:14 anker Exp $
 // CONCEPT header file
 // collective header file for all headers in BALL/CONCEPT
 #ifndef BALL_CONCEPT_H

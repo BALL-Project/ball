@@ -1,4 +1,7 @@
-// $Id: quaternion.h,v 1.28 2001/06/21 21:27:52 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: quaternion.h,v 1.28.2.1 2003/01/07 13:18:03 anker Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H

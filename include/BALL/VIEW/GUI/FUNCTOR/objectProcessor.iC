@@ -1,4 +1,7 @@
-// $Id: objectProcessor.iC,v 1.11 2000/09/23 15:03:57 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: objectProcessor.iC,v 1.11.2.1 2003/01/07 13:19:29 anker Exp $
 
 BALL_INLINE
 void ObjectProcessor::setViewCenter(const Vector3 &vector)

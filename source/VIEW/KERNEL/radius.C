@@ -1,4 +1,7 @@
-// $Id: radius.C,v 1.7 2001/05/13 14:28:38 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: radius.C,v 1.7.2.1 2003/01/07 13:23:36 anker Exp $
 
 #include <BALL/VIEW/KERNEL/radius.h>
 #include <BALL/COMMON/exception.h>

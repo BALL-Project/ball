@@ -1,1 +1,48 @@
-// $Id: glPrimitiveManager.iC,v 1.5 2000/09/23 14:40:12 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glPrimitiveManager.iC,v 1.5.2.1 2003/01/07 13:19:32 anker Exp $
+
+BALL_INLINE
+const GLDisplayList& GLDisplayListObject_::operator ()
+	(unsigned int drawing_mode, unsigned int drawing_precision) const
+	throw(GLDisplayListObject_::WrongModes)
+{
+	return ((GLDisplayListObject_ *)this)->operator() (drawing_mode, drawing_precision);
+}
+
+BALL_INLINE 
+void GLSphereDisplayLists_::drawPoint_(Vector3& v)
+	throw()
+{
+	glVertex3f((GLfloat)v[0], (GLfloat)v[1], (GLfloat)v[2]);
+}
+
+BALL_INLINE
+bool GLPrimitiveManager::isValid() const
+	throw()
+{
+	return (Sphere.isValid() &&
+					Tube.isValid()   &&
+					SimpleBox.isValid());
+}
+
+BALL_INLINE
+void GLPrimitiveManager::init()
+	throw()
+{
+	Sphere.init();
+	Tube.init();
+	SimpleBox.init();
+}
+
+BALL_INLINE
+void GLPrimitiveManager::clearNames()
+	throw()
+{
+	name_to_object_.clear();
+	object_to_name_.clear();
+
+	all_names_ = 0;
+}
+

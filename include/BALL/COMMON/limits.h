@@ -1,4 +1,7 @@
-// $Id: limits.h,v 1.9 2001/07/18 20:44:27 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: limits.h,v 1.9.2.1 2003/01/07 13:17:19 anker Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
@@ -7,11 +10,16 @@
 #	include <BALL/CONFIG/config.h>
 #endif
 
-#ifdef BALL_HAVE_NUMERIC_LIMITS
+#ifdef BALL_HAS_NUMERIC_LIMITS
 #	include <limits>
 #else
-#	include <limits.h>
-#	ifdef BALL_INCLUDE_FLOAT_H
+#	ifdef BALL_HAS_LIMITS_H
+#		include <limits.h>
+#	endif
+#	ifdef BALL_HAS_VALUES_H
+#		include <limits.h>
+#	endif
+#	ifdef BALL_HAS_FLOAT_H
 #		include <float.h>
 #	endif
 #endif

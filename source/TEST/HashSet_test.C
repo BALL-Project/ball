@@ -1,10 +1,20 @@
-// $Id: HashSet_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: HashSet_test.C,v 1.12.2.1 2003/01/07 13:22:29 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/DATATYPE/hashSet.h>
 #include <BALL/CONCEPT/visitor.h>
+
+#include <list>
+#include <vector>
+#include <algorithm>
+
 #include "ItemCollector.h"
+
 ///////////////////////////
 
 using namespace BALL;
@@ -36,7 +46,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.12.2.1 2003/01/07 13:22:29 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -150,7 +160,7 @@ CHECK(HashSet::swap(HashSet&, bool))
 	TEST_EQUAL(hs.has(3), true)
 RESULT
 
-CHECK(HashSet::operator = (const HashSet&))
+CHECK(HashSet::operator = (const HashSet& rhs))
 	HashSet<int> hs, hs2;
 	hs.insert(0);
 	hs.insert(1);
@@ -160,6 +170,292 @@ CHECK(HashSet::operator = (const HashSet&))
 	TEST_EQUAL(hs2.getSize(), 3)
 	TEST_EQUAL(hs2.getCapacity(), 4)
 	TEST_EQUAL(hs2.getBucketSize(), 3)
+RESULT
+
+CHECK(HashSet::operator &= (const HashSet& rhs))
+	HashSet<int> hs, hs2;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+
+	hs2 &= hs;
+	TEST_EQUAL(hs2.getSize(), 0)
+	hs &= hs2;
+	TEST_EQUAL(hs.getSize(), 0)
+	hs &= hs;
+	TEST_EQUAL(hs.getSize(), 0)
+
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	hs.insert(3);
+	hs2.insert(1);
+	hs2.insert(3);
+	hs &= hs2;
+	TEST_EQUAL(hs.getSize(), 2)
+	TEST_EQUAL(hs.has(0), false)
+	TEST_EQUAL(hs.has(1), true)
+	TEST_EQUAL(hs.has(2), false)
+	TEST_EQUAL(hs.has(3), true)
+RESULT
+
+CHECK(HashSet::operator |= (const HashSet& rhs))
+	HashSet<int> hs, hs2;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+
+	hs2 |= hs;
+	TEST_EQUAL(hs2.getSize(), 3)
+	hs |= hs2;
+	TEST_EQUAL(hs.getSize(), 3)
+	hs |= hs;
+	TEST_EQUAL(hs.getSize(), 3)
+
+	hs.clear();
+	hs.insert(0);
+	hs.insert(3);
+	hs2.clear();
+	hs2.insert(1);
+	hs2.insert(3);
+	hs |= hs2;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs.has(0), true)
+	TEST_EQUAL(hs.has(1), true)
+	TEST_EQUAL(hs.has(2), false)
+	TEST_EQUAL(hs.has(3), true)
+RESULT
+
+CHECK(HashSet::operator & (const HashSet& rhs) const)
+	HashSet<int> hs, hs2;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+
+	HashSet<int> hs3 = hs2 & hs;
+	TEST_EQUAL(hs2.getSize(), 0)
+	hs3 = hs & hs2;
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs.getSize(), 3)
+
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	hs.insert(3);
+	hs2.insert(1);
+	hs2.insert(3);
+	hs3 = hs & hs2;
+	TEST_EQUAL(hs3.getSize(), 2)
+	TEST_EQUAL(hs3.has(0), false)
+	TEST_EQUAL(hs3.has(1), true)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), true)
+	TEST_EQUAL(hs.getSize(), 4)
+	TEST_EQUAL(hs2.getSize(), 2)
+	hs3 = hs2 & hs;
+	TEST_EQUAL(hs3.getSize(), 2)
+	TEST_EQUAL(hs3.has(0), false)
+	TEST_EQUAL(hs3.has(1), true)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), true)
+	TEST_EQUAL(hs.getSize(), 4)
+	TEST_EQUAL(hs2.getSize(), 2)
+RESULT
+
+CHECK(HashSet::operator | (const HashSet& rhs))
+	HashSet<int> hs, hs2;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+
+	HashSet<int> hs3 = hs2 | hs;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs3.getSize(), 3)
+
+	hs3 = hs | hs2;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs3.getSize(), 3)
+
+	hs3 = hs | hs;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs3.getSize(), 3)
+
+	hs3 = hs2 | hs2;
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs3.getSize(), 0)
+
+	hs.clear();
+	hs.insert(0);
+	hs.insert(3);
+	hs2.clear();
+	hs2.insert(1);
+	hs2.insert(3);
+	hs3 = hs | hs2;
+	TEST_EQUAL(hs3.getSize(), 3)
+	TEST_EQUAL(hs3.has(0), true)
+	TEST_EQUAL(hs3.has(1), true)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), true)
+
+	hs3 = hs2 | hs;
+	TEST_EQUAL(hs3.getSize(), 3)
+	TEST_EQUAL(hs3.has(0), true)
+	TEST_EQUAL(hs3.has(1), true)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), true)
+RESULT
+
+CHECK(HashSet::operator += (const HashSet& rhs))
+	HashSet<int> hs, hs2;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+
+	hs2 += hs;
+	TEST_EQUAL(hs2.getSize(), 3)
+	hs += hs2;
+	TEST_EQUAL(hs.getSize(), 3)
+	hs += hs;
+	TEST_EQUAL(hs.getSize(), 3)
+
+	hs.clear();
+	hs.insert(0);
+	hs.insert(3);
+	hs2.clear();
+	hs2.insert(1);
+	hs2.insert(3);
+	hs += hs2;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs.has(0), true)
+	TEST_EQUAL(hs.has(1), true)
+	TEST_EQUAL(hs.has(2), false)
+	TEST_EQUAL(hs.has(3), true)
+RESULT
+
+CHECK(HashSet::operator + (const HashSet& rhs))
+	HashSet<int> hs, hs2;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+
+	HashSet<int> hs3 = hs2 + hs;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs3.getSize(), 3)
+
+	hs3 = hs + hs2;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs3.getSize(), 3)
+
+	hs3 = hs + hs;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs3.getSize(), 3)
+
+	hs3 = hs2 + hs2;
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs3.getSize(), 0)
+
+	hs.clear();
+	hs.insert(0);
+	hs.insert(3);
+	hs2.clear();
+	hs2.insert(1);
+	hs2.insert(3);
+	hs3 = hs + hs2;
+	TEST_EQUAL(hs3.getSize(), 3)
+	TEST_EQUAL(hs3.has(0), true)
+	TEST_EQUAL(hs3.has(1), true)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), true)
+
+	hs3 = hs2 + hs;
+	TEST_EQUAL(hs3.getSize(), 3)
+	TEST_EQUAL(hs3.has(0), true)
+	TEST_EQUAL(hs3.has(1), true)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), true)
+RESULT
+
+CHECK(HashSet::operator -= (const HashSet& rhs))
+	HashSet<int> hs, hs2;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+
+	hs2 -= hs;
+	TEST_EQUAL(hs2.getSize(), 0)
+	hs -= hs2;
+	TEST_EQUAL(hs.getSize(), 3)
+	hs -= hs;
+	TEST_EQUAL(hs.getSize(), 0)
+
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	hs.insert(3);
+	hs2.insert(1);
+	hs2.insert(3);
+	hs -= hs2;
+	TEST_EQUAL(hs.getSize(), 2)
+	TEST_EQUAL(hs.has(0), true)
+	TEST_EQUAL(hs.has(1), false)
+	TEST_EQUAL(hs.has(2), true)
+	TEST_EQUAL(hs.has(3), false)
+RESULT
+
+CHECK(HashSet::operator - (const HashSet& rhs) const)
+	HashSet<int> hs, hs2;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+
+	HashSet<int> hs3 = hs2 & hs;
+	TEST_EQUAL(hs2.getSize(), 0)
+	hs3 = hs - hs2;
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs.getSize(), 3)
+
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	hs.insert(3);
+	hs2.insert(1);
+	hs2.insert(3);
+	hs3 = hs - hs2;
+	TEST_EQUAL(hs3.getSize(), 2)
+	TEST_EQUAL(hs3.has(0), true)
+	TEST_EQUAL(hs3.has(1), false)
+	TEST_EQUAL(hs3.has(2), true)
+	TEST_EQUAL(hs3.has(3), false)
+	TEST_EQUAL(hs.getSize(), 4)
+	TEST_EQUAL(hs2.getSize(), 2)
+	hs3 = hs2 - hs;
+	TEST_EQUAL(hs3.getSize(), 0)
+	TEST_EQUAL(hs3.has(0), false)
+	TEST_EQUAL(hs3.has(1), false)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), false)
+	TEST_EQUAL(hs.getSize(), 4)
+	TEST_EQUAL(hs2.getSize(), 2)
 RESULT
 
 CHECK(HashSet::getBucketSize() const)
@@ -416,7 +712,7 @@ CHECK(HashSet::dump(std::ostream&, Size) const)
 
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	hs.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/HashSet_test.txt")
@@ -438,6 +734,31 @@ CHECK(HashSet::apply(UnaryProcessor))
 	TEST_EQUAL(*myproc.getPointer(), 3) myproc.forward();
 	TEST_EQUAL(*myproc.getPointer(), 1) myproc.forward();
 	TEST_EQUAL(*myproc.getPointer(), 2) myproc.forward();
+RESULT
+
+CHECK(HashSet STL compatibility)
+	HashSet<int> hs;
+	std::vector<int> v;
+	v.push_back(4);
+	v.push_back(1);
+	v.push_back(3);
+	v.push_back(2);
+	std::copy(v.begin(), v.end(), std::inserter(hs, hs.begin()));
+	TEST_EQUAL(hs.size(), 4)
+	TEST_EQUAL(hs.has(0), false)
+	TEST_EQUAL(hs.has(1), true)
+	TEST_EQUAL(hs.has(2), true)
+	TEST_EQUAL(hs.has(3), true)
+	TEST_EQUAL(hs.has(4), true)
+
+	std::list<int> il;
+	std::copy(hs.begin(), hs.end(), std::front_inserter(il));
+	TEST_EQUAL(il.size(), 4)
+	TEST_EQUAL(std::find(il.begin(), il.end(), 0) == il.end(), true)
+	TEST_EQUAL(std::find(il.begin(), il.end(), 1) != il.end(), true)
+	TEST_EQUAL(std::find(il.begin(), il.end(), 2) != il.end(), true)
+	TEST_EQUAL(std::find(il.begin(), il.end(), 3) != il.end(), true)
+	TEST_EQUAL(std::find(il.begin(), il.end(), 4) != il.end(), true)
 RESULT
 
 /////////////////////////////////////////////////////////////

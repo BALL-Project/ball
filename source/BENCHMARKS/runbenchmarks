@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # the total time of the (imaginary) reference system
-REF_TIME=258.98
+REF_TIME=42.6276
 
 # try to figure out which syntax we need
 # to prevent a linefeed at the end of echo
@@ -11,7 +11,7 @@ REF_TIME=258.98
 A=`echo "\c"|grep c`
 if test "$A" != "" ; then 
 	A=`echo -n "k"|grep n` 
-	if test "$A" == "" ; then 
+	if test "$A" = "" ; then 
 		ECHO="echo -n "
 		SUFFIX=""
 	else 
@@ -68,6 +68,7 @@ echo " "
 
 if test "$OK" = true ; then
 	echo "All benchmarks executed."
+	echo "Total net time required: ${TOTAL_TIME} s."
 	echo "Your system scores `echo ${TOTAL_TIME} ${REF_TIME}|awk '{printf \"%.2f\", $2/$1}'` BALLStones"
 	echo " "
 	exit 0

@@ -1,4 +1,7 @@
-// $Id: baseModel.C,v 1.13 2001/06/18 17:28:45 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: baseModel.C,v 1.13.2.1 2003/01/07 13:21:19 anker Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -59,8 +62,7 @@ namespace BALL
 		{
 		}
 
-		void BaseModelProcessor::set
-			(const BaseModelProcessor& base_model_processor, bool deep)
+		void BaseModelProcessor::set(const BaseModelProcessor& base_model_processor, bool deep)
 			throw()
 		{
 			clear_();
@@ -71,24 +73,20 @@ namespace BALL
 			model_connector_ = base_model_processor.model_connector_;
 		}
 
-		const BaseModelProcessor& BaseModelProcessor::operator =
-			(const BaseModelProcessor& base_model_processor)
+		const BaseModelProcessor& BaseModelProcessor::operator = (const BaseModelProcessor& base_model_processor)
 			throw()
 		{
 			set(base_model_processor);
-
 			return *this;
 		}
 
-		void BaseModelProcessor::get
-			(BaseModelProcessor& base_model_processor, bool deep) const
+		void BaseModelProcessor::get(BaseModelProcessor& base_model_processor, bool deep) const
 			throw()
 		{
 			base_model_processor.set(*this, deep);
 		}
 
-		void BaseModelProcessor::swap
-			(BaseModelProcessor& base_model_processor)
+		void BaseModelProcessor::swap(BaseModelProcessor& base_model_processor)
 			throw()
 		{
 			ExtendedPropertyManager::swap(base_model_processor);
@@ -106,7 +104,7 @@ namespace BALL
 
 		bool BaseModelProcessor::start()
 		{
-			if (hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) == true)
+			if (hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC))
 			{
 				getSearcher_().setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
 				getSearcher_().clearProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
@@ -139,9 +137,9 @@ namespace BALL
 		bool BaseModelProcessor::isValid() const
 			throw()
 		{
-			return (ExtendedPropertyManager::isValid()
-							&& model_connector_->isValid()
-							&& find_geometric_object_.isValid());
+			return (ExtendedPropertyManager::isValid() && 
+										 model_connector_->isValid() && 
+								find_geometric_object_.isValid());
 		}
 
 		void BaseModelProcessor::dump(ostream& s, Size depth) const
@@ -242,12 +240,6 @@ namespace BALL
 			s << "   dprecision high: " 
 					 << BALL_MOLVIEW_PRINT_PROPERTY
 											(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH) 
-					 << endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "  dprecision ultra: " 
-					 << BALL_MOLVIEW_PRINT_PROPERTY
-											(GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA) 
 					 << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);

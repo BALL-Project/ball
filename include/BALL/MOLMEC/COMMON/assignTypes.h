@@ -1,4 +1,7 @@
-// $Id: assignTypes.h,v 1.7 2002/01/31 10:15:30 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: assignTypes.h,v 1.7.2.1 2003/01/07 13:18:08 anker Exp $
 // Molecular Mechanics: atom type assignment
 
 #ifndef BALL_MOLMEC_COMMON_ASSIGNTYPES_H

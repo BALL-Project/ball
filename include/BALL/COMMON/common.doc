@@ -1,4 +1,4 @@
-// $Id: common.doc,v 1.6 2001/03/07 22:19:41 amoll Exp $
+// $Id: common.doc,v 1.6.2.1 2003/01/07 13:17:17 anker Exp $
 
 /**@name	Common Definitions
 		This chapter contains all relevant information on 
@@ -6,7 +6,7 @@
 		(part of the {\bf Foundation Classes}).
 */
 //@{
-
+  //@Include: debug.h
 	//@Include: constants.h
 	//@Include: create.h
 	//@Include: version.h

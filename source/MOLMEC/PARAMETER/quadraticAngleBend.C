@@ -1,5 +1,7 @@
-// $Id: quadraticAngleBend.C,v 1.11 2001/12/14 01:18:12 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
 //
+// $Id: quadraticAngleBend.C,v 1.11.2.1 2003/01/07 13:21:16 anker Exp $
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
@@ -147,7 +149,6 @@ namespace BALL
 					values.k = getValue(i, index_k).toFloat() * factor_k;
 					values.theta0 = getValue(i, index_theta0).toFloat() * factor_theta0;
 					values_.push_back(values);
-
 				} 
 				else 
 				{

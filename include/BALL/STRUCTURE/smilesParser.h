@@ -1,4 +1,7 @@
-// $Id: smilesParser.h,v 1.2 2002/01/17 17:32:05 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: smilesParser.h,v 1.2.2.1 2003/01/07 13:19:11 anker Exp $
 
 #ifndef BALL_STRUCTURE_SMILES_PARSER_H
 #define BALL_STRUCTURE_SMILES_PARSER_H
@@ -65,6 +68,8 @@ namespace BALL
 			:	public Bond
 		{
 			public:
+			virtual ~SPBond() throw();
+
 			SPBond(SPAtom* first, SPAtom* second, Index order = 1);
 
 			ZEIsomerType getZEType() const;

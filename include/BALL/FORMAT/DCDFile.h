@@ -1,4 +1,7 @@
-// $Id: DCDFile.h,v 1.15 2002/01/15 02:00:08 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: DCDFile.h,v 1.15.2.1 2003/01/07 13:17:40 anker Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -14,7 +17,7 @@ namespace BALL
 			files that can be read by VMD. The format stems from the xplor
 			package. This format is {\bf NOT} portable.	\\
 			The header is described in the documentation for the nested DCDHeader	class. \\
-			{\bf Definition:} \URL{BALL/Format/DCDFile.h}	\\
+			{\bf Definition:} \URL{BALL/FORMAT/DCDFile.h}	\\
 	*/
 	class DCDFile
 		:	public TrajectoryFile
@@ -38,7 +41,7 @@ namespace BALL
 				block consisting of 8 bytes starts with the number 8 followed by 8
 				bytes of data and ends with the number 8.	\\
 				BASUTELLE: complete header description \\
-				{\bf Definition:} \URL{BALL/Format/DCDFile.h}	\\
+				{\bf Definition:} \URL{BALL/FORMAT/DCDFile.h}	\\
 		*/
 		class DCDHeader
 		{
@@ -169,7 +172,7 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/// Detailed constructor
-		DCDFile(const String& name, File::OpenMode open_mode = File::IN)
+		DCDFile(const String& name, File::OpenMode open_mode = std::ios::in)
 			throw();
 
 		/// Destructor

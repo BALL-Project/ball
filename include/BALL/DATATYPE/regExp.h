@@ -1,4 +1,7 @@
-// $Id: regExp.h,v 1.14 2001/12/30 13:28:36 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: regExp.h,v 1.14.2.1 2003/01/07 13:17:36 anker Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -11,8 +14,24 @@
 #if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
 #	pragma set woff 1174
 #endif
-#include <sys/types.h>
-#include <regex.h>
+
+#ifdef BALL_HAS_SYS_TYPES_H
+#	include <sys/types.h>
+#endif
+
+#ifdef BALL_HAS_REGEX_H
+	// make sure __STDC__ is set when including the
+  // GNU regex headers under Windows
+# ifdef BALL_COMPILER_MSVC
+#		define __STDC__ 1
+		extern "C" {
+#	endif
+#			include <regex.h>
+#	ifdef BALL_COMPILER_MSVC
+		}
+#	endif
+#endif
+
 #if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
 #	pragma reset woff 1174
 #endif
@@ -291,7 +310,8 @@ namespace BALL
 		void toExtendedRegularExpression_() 
 			throw();
 
-		regex_t regex_;
+			regex_t regex_;
+		
 		String 	pattern_;
 		bool 		valid_pattern_;
 	};

@@ -1,11 +1,10 @@
-// $Id: backbone.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: backbone.h,v 1.6.2.1 2003/01/07 13:18:44 anker Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
@@ -39,7 +38,6 @@ using namespace BALL::VIEW;
 
 namespace BALL
 {
-	
 	namespace MOLVIEW
 	{
 
@@ -95,7 +93,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -121,9 +118,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
-
 			
+			//@}
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -189,11 +185,10 @@ namespace BALL
 				throw();
 
 			//@}
-
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+			
 			/** Set the atom list for the backbone.
 					Set a list of atoms that should be used to create a backbone representation.
 					{\em *this} backbone will create a spline path through these atoms
@@ -254,8 +249,6 @@ namespace BALL
 				throw();
 
 			//@}
-
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -267,8 +260,8 @@ namespace BALL
 					(self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {GeometricObject::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} backbone is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} backbone 
+											is correct (self-validated) and consistent, {\tt false} otherwise
 					@see        GeometricObject::isValid
 			*/
  			virtual bool isValid() const
@@ -287,32 +280,6 @@ namespace BALL
 				throw();
 
 			//@}
-
-
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent backbone data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} backbone
-			*/
-			virtual void read(std::istream&  s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent backbone data to the output stream {\em s} and 
-				  store the state of {\em *this}. \\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} backbone
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-
-			//@}
-
 
 			protected:
 			

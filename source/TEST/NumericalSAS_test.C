@@ -1,4 +1,7 @@
-// $Id: NumericalSAS_test.C,v 1.7 2001/06/05 15:53:33 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: NumericalSAS_test.C,v 1.7.2.1 2003/01/07 13:22:37 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 #include <BALL/DATATYPE/hashMap.h>
 ///////////////////////////
 
-START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.7 2001/06/05 15:53:33 anker Exp $")
+START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.7.2.1 2003/01/07 13:22:37 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

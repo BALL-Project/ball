@@ -1,4 +1,7 @@
-// $Id: RandomAccessIterator_test.C,v 1.8 2002/01/15 02:00:56 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RandomAccessIterator_test.C,v 1.8.2.1 2003/01/07 13:22:47 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -332,7 +335,7 @@ class VectorIteratorTraits_
 
 typedef RandomAccessIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
 
-START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.8 2002/01/15 02:00:56 oliver Exp $")
+START_TEST(RandomAccessIterator, "$Id: RandomAccessIterator_test.C,v 1.8.2.1 2003/01/07 13:22:47 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

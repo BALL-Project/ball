@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id: 
 
 #ifndef BALL_VIEW_GUI_DIALOGS_PREFERENCES_H
@@ -10,8 +13,6 @@
 #include <qtabdialog.h>
 #include <qwidget.h>
 #include <qstring.h>
-
-//using namespace BALL;
 
 namespace BALL
 {
@@ -58,14 +59,13 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} preferences.
-					Calls \Ref{destroy}.
+					Calls \Ref{clear}.
 					@see         destroy
 			*/
 			virtual ~Preferences()
@@ -75,12 +75,6 @@ namespace BALL
 					Empty for further purpose.
 			*/
 			virtual void clear()
-				throw();
-
-			/** Explicit destructor.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
 				throw();
 			//@}
 
@@ -136,11 +130,10 @@ namespace BALL
 			*/
 			void writePreferences(INIFile &inifile)
 				throw();
-			//@}
-
 
 			public slots:
 
+			//@}
 			/** @name Public slots
 			*/
 			//@{
@@ -149,8 +142,8 @@ namespace BALL
 					Open {\em *this} preferences.
 			*/
 			void openDialog();
+						
 			//@}
-
 
 		  private:
 

@@ -1,8 +1,11 @@
-// $Id: glBackbone.C,v 1.4 2001/05/13 15:02:41 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glBackbone.C,v 1.4.2.1 2003/01/07 13:21:32 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h>
-#include <GL/gl.h>
 
+#include <qgl.h>
 
 namespace BALL
 {
@@ -111,10 +114,6 @@ namespace BALL
 			return new GLLine();
 		}
 		
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.iC>
-#		endif
-
 	} // namespace MOLVIEW
 
 } // namespace BALL

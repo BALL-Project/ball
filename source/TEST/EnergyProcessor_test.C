@@ -1,13 +1,18 @@
-// $Id: EnergyProcessor_test.C,v 1.6 2001/07/16 12:54:13 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: EnergyProcessor_test.C,v 1.6.2.1 2003/01/07 13:22:23 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
+#include <BALL/CONCEPT/processor.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/ENERGY/energyProcessor.h>
 ///////////////////////////
 
-START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.6 2001/07/16 12:54:13 amoll Exp $")
+START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.6.2.1 2003/01/07 13:22:23 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -32,7 +37,7 @@ using namespace BALL;
 	{
 		change += 1;
 		EnergyProcessor::operator() (fragment);
-		return Processor::CONTINUE;
+		return BALL::Processor::CONTINUE;
 	}
 	
 	virtual bool finish() throw()

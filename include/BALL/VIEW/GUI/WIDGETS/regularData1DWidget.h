@@ -1,4 +1,7 @@
-// $Id: regularData1DWidget.h,v 1.8 2001/12/28 02:33:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: regularData1DWidget.h,v 1.8.2.1 2003/01/07 13:19:43 anker Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H

@@ -1,5 +1,8 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 
-// $Id: basetube.h,v 1.6 2000/12/21 17:03:45 amoll Exp $
+// $Id: basetube.h,v 1.6.2.1 2003/01/07 13:19:54 anker Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_BASETUBE_H
 #define BALL_VIEW_PRIMITIV_BASETUBE_H

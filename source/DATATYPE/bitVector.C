@@ -1,14 +1,19 @@
-// $Id: bitVector.C,v 1.30 2002/01/05 03:59:09 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: bitVector.C,v 1.30.2.1 2003/01/07 13:20:35 anker Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
 
 #include <algorithm>
 
-using namespace std;
-
 namespace BALL 
 {
+
+	#	ifdef BALL_NO_INLINE_FUNCTIONS
+	#		include <BALL/DATATYPE/bitVector.iC>
+	#	endif
 
 	const Size BitVector::BlockSize = BALL_BLOCK_BITS;
 
@@ -180,14 +185,12 @@ namespace BALL
 	BitVector BitVector::operator () (Index first, Index last) const
 	 throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
-		using std::min;
-
 		validateRange_(first, last);
 
 		BitVector temp(last - first + 1);
 		Index source = first;
 		Index target = 0;
-		Position end = min((Position)last, size_ - 1);
+		Position end = std::min((Position)last, size_ - 1);
 		
 		for (; (Position)source <= end; source++, target++)
 		{
@@ -285,7 +288,8 @@ namespace BALL
 
 		// We do this in a loop instead of using a direct cast to avoid
 		// problems with differing byte orders (big endian/little endian)
-		for (Index i = (Index)Maths::min((Size)BALL_CHAR_BITS, getSize()) - 1; i >= 0; i--)
+
+		for (Index i = (Index)std::min((Size)BALL_CHAR_BITS, getSize()) - 1; i >= 0; i--)
 		{
 			c = c << 1;
 			if (getBit((Index)i) == true)
@@ -314,7 +318,7 @@ namespace BALL
 		throw()
 	{
 		unsigned short c = 0;
-		Index i = (Index)Maths::min((Size)(sizeof(unsigned short) * BALL_CHAR_BITS), getSize()) - 1;
+		Index i = (Index)std::min((Size)(sizeof(unsigned short) * BALL_CHAR_BITS), getSize()) - 1;
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
@@ -345,7 +349,7 @@ namespace BALL
 	{
 		unsigned int c = 0;
 
-		Index i = (Index)Maths::min((Size)(sizeof(unsigned int) * BALL_CHAR_BITS), getSize()) - 1;
+		Index i = (Index)std::min((Size)(sizeof(unsigned int) * BALL_CHAR_BITS), getSize()) - 1;
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
@@ -376,7 +380,7 @@ namespace BALL
 	{
 		unsigned long c = 0;
 
-		Index i = (Index)Maths::min((Size)(sizeof(unsigned long) * BALL_CHAR_BITS), getSize()) - 1;
+		Index i = (Index)std::min((Size)(sizeof(unsigned long) * BALL_CHAR_BITS), getSize()) - 1;
 		for (; i >= 0; i--)
 		{
 			c = c << 1;
@@ -481,21 +485,21 @@ namespace BALL
 		return true;
 	}
 
-	istream& operator >> (istream& s, BitVector& bit_vector)
+	std::istream& operator >> (std::istream& s, BitVector& bit_vector)
 		throw(Exception::OutOfMemory)
 	{
 		bit_vector.read(s);
 		return s;
 	}
 
-	ostream& operator << (ostream& s, const BitVector& bit_vector)
+	std::ostream& operator << (std::ostream& s, const BitVector& bit_vector)
 		throw()
 	{
 		bit_vector.write(s);
 		return s;
 	}
 
-	void BitVector::read(istream& s)
+	void BitVector::read(std::istream& s)
 		throw(Exception::OutOfMemory)
 	{
 		Size size = 0;
@@ -516,7 +520,7 @@ namespace BALL
 		}
 	}
 
-	void BitVector::write(ostream& s) const
+	void BitVector::write(std::ostream& s) const
 		throw()
 	{
 		s << getSize() << ' ';
@@ -644,9 +648,4 @@ namespace BALL
 
 		size_ = size;
 	}
-
-#	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/DATATYPE/bitVector.iC>
-#	endif
-
 } // namespace BALL

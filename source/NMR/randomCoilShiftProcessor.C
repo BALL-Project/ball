@@ -1,4 +1,7 @@
-// $Id: randomCoilShiftProcessor.C,v 1.5 2000/09/25 19:12:09 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: randomCoilShiftProcessor.C,v 1.5.2.1 2003/01/07 13:21:40 anker Exp $
 
 #include<BALL/NMR/randomCoilShiftProcessor.h>
 #include<BALL/FORMAT/parameterSection.h>

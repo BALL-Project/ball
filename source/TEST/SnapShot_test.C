@@ -1,4 +1,7 @@
-// $Id: SnapShot_test.C,v 1.3 2001/12/30 13:29:02 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SnapShot_test.C,v 1.3.2.1 2003/01/07 13:22:53 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(SnapShot, "$Id: SnapShot_test.C,v 1.3 2001/12/30 13:29:02 sturm Exp $")
+START_TEST(SnapShot, "$Id: SnapShot_test.C,v 1.3.2.1 2003/01/07 13:22:53 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: radius.h,v 1.7 2001/07/16 14:49:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: radius.h,v 1.7.2.1 2003/01/07 13:19:52 anker Exp $
 
 #ifndef BALL_VIEW_KERNEL_RADIUS_H
 #define BALL_VIEW_KERNEL_RADIUS_H

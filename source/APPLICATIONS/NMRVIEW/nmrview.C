@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>

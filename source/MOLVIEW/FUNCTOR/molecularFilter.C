@@ -1,18 +1,21 @@
-// $Id: molecularFilter.C,v 1.5 2001/07/15 18:50:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularFilter.C,v 1.5.2.1 2003/01/07 13:21:21 anker Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularFilter.h>
+#include <BALL/KERNEL/atomContainer.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
 		MolecularFilter::MolecularFilter()
 			throw()
-			:	Filter()
+			:	VIEW::Filter()
 		{
 		}
 
@@ -30,13 +33,13 @@ namespace BALL
 		void MolecularFilter::clear()
 			throw()
 		{
-			Filter::clear();
+			VIEW::Filter::clear();
 		}
 
 		void MolecularFilter::destroy()
 			throw()
 		{
-			Filter::destroy();
+			VIEW::Filter::destroy();
 		}
 
 		void MolecularFilter::visit(Composite& composite)
@@ -54,11 +57,6 @@ namespace BALL
 
 			setResult_(result);
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/molecularFilter.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,7 @@
-// $Id: color.C,v 1.5 2000/01/13 22:31:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: color.C,v 1.5.2.1 2003/01/07 13:23:17 anker Exp $
 
 #include <BALL/VIEW/DATATYPE/color.h>
 using namespace std;
@@ -17,7 +20,7 @@ namespace BALL
 		{
 		}
 
-		ColorRGBA::ColorRGBA(const ColorRGBA& color, bool /* deep */ )
+		ColorRGBA::ColorRGBA(const ColorRGBA& color)
 			:	red_(color.red_),
 				green_(color.green_),
 				blue_(color.blue_),
@@ -83,7 +86,7 @@ namespace BALL
 			return String(&temp[0]);  
 		}
 
-		void ColorRGBA::set(const ColorRGBA& color, bool /* deep */)
+		void ColorRGBA::set(const ColorRGBA& color)
 		{
 			red_ = color.red_;
 			green_ = color.green_;
@@ -212,16 +215,6 @@ namespace BALL
 			alpha_.dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);  
-		}
-
-		void ColorRGBA::read(istream& /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorRGBA::write(ostream&  /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		istream& operator >> (istream& s, ColorRGBA& color)
@@ -462,16 +455,6 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);  
 		}
 
-		void ColorHSV::read(istream& /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorHSV::write(ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
 		istream& operator >> (istream& s, ColorHSV& color_HSV)
 		{
 			s >> color_HSV.hue_
@@ -646,7 +629,7 @@ namespace BALL
 					
 				if ((length != 6) && (length != 7))
 				{
-					throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
+					throw BALL::Exception::InvalidRange(__FILE__, __LINE__);
 				}
 								
 			#endif
@@ -695,7 +678,7 @@ namespace BALL
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/DATATYPE/color.iC>
+//#			include <BALL/VIEW/DATATYPE/color.iC>
 #		endif
 
 	} // namespace VIEW

@@ -1,4 +1,7 @@
-// $Id: box3.h,v 1.31 2001/07/15 21:21:02 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: box3.h,v 1.31.2.1 2003/01/07 13:18:00 anker Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H

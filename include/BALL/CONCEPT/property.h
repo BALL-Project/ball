@@ -1,4 +1,7 @@
-// $Id: property.h,v 1.26 2002/01/15 03:22:50 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: property.h,v 1.26.2.1 2003/01/07 13:17:28 anker Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -192,12 +195,12 @@ namespace BALL
 		/**	Write a persistent copy of the object.
 		*/
     virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Retrieve a persistent copy of the object
 		*/
     virtual void persistentRead(PersistenceManager& pm)
-			throw();
+			throw(Exception::GeneralException);
 		
 		//@}
 		/**	@name	 Accessors 
@@ -262,16 +265,9 @@ namespace BALL
 			throw();
 
 		//@}
-		/**	@name	Storers */
+
+		/**	@name	Predicates */
 		//@{
-
-		/// Output operator
-		friend std::ostream& operator << (std::ostream& s, const NamedProperty& property)
-			throw();
-
-		/// Input operator
-		friend std::istream& operator >> (std::istream& s, NamedProperty& property)
-			throw();
 
 		/** Equality operator
 				Two instances are equal if they have the same name and the same value.
@@ -635,18 +631,6 @@ namespace BALL
 		//@}
 
 
-		/**	@name	Storers */
-		//@{
-
-		/// Output operator
-		friend std::ostream& operator << (std::ostream& s, const PropertyManager& property_manager)
-			throw();
-
-		/// Input operator
-		friend std::istream& operator >> (std::istream& s, PropertyManager& property_manager)
-			throw();
-		
-		//@}
 		/**	@name Storable Interface
 		*/
 		//@{

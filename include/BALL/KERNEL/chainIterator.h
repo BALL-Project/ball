@@ -1,4 +1,7 @@
-// $Id: chainIterator.h,v 1.9 2002/01/04 03:19:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: chainIterator.h,v 1.9.2.1 2003/01/07 13:17:52 anker Exp $
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
 #define BALL_KERNEL_CHAINITERATOR_H

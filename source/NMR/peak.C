@@ -1,4 +1,7 @@
-// $Id: peak.C,v 1.9 2001/06/14 11:34:59 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: peak.C,v 1.9.2.1 2003/01/07 13:21:39 anker Exp $
 
 #include<BALL/NMR/peak.h>
 

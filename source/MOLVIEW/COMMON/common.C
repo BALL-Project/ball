@@ -1,7 +1,7 @@
-// $Id: common.C,v 1.2 1999/12/19 17:14:20 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: common.C,v 1.2.2.1 2003/01/07 13:21:17 anker Exp $
 
 #include <BALL/MOLVIEW/COMMON/common.h>
 
-#ifdef BALL_NO_INLINE_FUNCTIONS
-#	include <BALL/MOLVIEW/COMMON/common.iC>
-#endif

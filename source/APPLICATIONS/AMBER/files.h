@@ -1,4 +1,7 @@
-// $Id: files.h,v 1.1 2000/06/10 11:23:20 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: files.h,v 1.1.2.1 2003/01/07 13:20:07 anker Exp $
 
 enum RuleType
 {

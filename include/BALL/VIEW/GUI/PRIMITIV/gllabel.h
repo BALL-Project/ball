@@ -1,4 +1,7 @@
-// $Id: gllabel.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: gllabel.h,v 1.7.2.1 2003/01/07 13:19:36 anker Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLABEL_H

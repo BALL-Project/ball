@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.2 2002/12/23 13:51:56 oliver Exp $
+dnl    $Id: configure.ac,v 1.2.2.1 2003/01/07 13:20:05 anker Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 

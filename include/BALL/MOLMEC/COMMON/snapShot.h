@@ -1,4 +1,7 @@
-// $Id: snapShot.h,v 1.18 2001/03/28 13:48:58 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: snapShot.h,v 1.18.2.1 2003/01/07 13:18:10 anker Exp $
 
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 

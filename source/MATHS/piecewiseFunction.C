@@ -1,4 +1,7 @@
-// $Id: piecewiseFunction.C,v 1.10 2001/12/30 13:28:47 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: piecewiseFunction.C,v 1.10.2.1 2003/01/07 13:21:00 anker Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
 

@@ -1,4 +1,7 @@
-// $Id: SDFile.h,v 1.4 2002/01/12 01:59:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SDFile.h,v 1.4.2.1 2003/01/07 13:17:43 anker Exp $
 
 #ifndef BALL_FORMAT_SDFILE_H
 #define BALL_FORMAT_SDFILE_H
@@ -38,7 +41,7 @@ namespace BALL
 
 		/** Detailed constructor.
 		*/
-		SDFile(const String& filename, File::OpenMode open_mode = File::IN)
+		SDFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/**	Copy constructor

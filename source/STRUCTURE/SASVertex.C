@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SASVertex.C,v 1.1 2002/12/17 17:14:22 anker Exp $
+// $Id: SASVertex.C,v 1.1.2.1 2003/01/07 13:21:59 anker Exp $
 
 #include <BALL/STRUCTURE/SASEdge.h>
 #include <BALL/STRUCTURE/SASFace.h>

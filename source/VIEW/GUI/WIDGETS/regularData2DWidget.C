@@ -1,4 +1,7 @@
-// $Id: regularData2DWidget.C,v 1.25 2001/12/30 13:29:04 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: regularData2DWidget.C,v 1.25.2.1 2003/01/07 13:23:31 anker Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 

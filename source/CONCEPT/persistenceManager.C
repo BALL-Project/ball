@@ -1,4 +1,7 @@
-// $Id: persistenceManager.C,v 1.14 2001/07/15 16:13:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: persistenceManager.C,v 1.14.2.1 2003/01/07 13:20:33 anker Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/KERNEL/system.h>
@@ -104,7 +107,6 @@ namespace BALL
 		#define REGISTER_CLASS(T) registerClass(RTTI::getStreamName<T>(), T::createDefault);
 		REGISTER_CLASS(AtomContainer)
 		REGISTER_CLASS(NamedProperty)
-		REGISTER_CLASS(Vector3)
 		REGISTER_CLASS(Composite)
 		REGISTER_CLASS(Atom)
 		REGISTER_CLASS(Bond)
@@ -256,7 +258,7 @@ namespace BALL
 		object_in_.clear();
 		
 		String						type_name;
-		PointerSizeInt		ptr;
+		PointerSizeUInt		ptr;
 
 		// prepare the input stream
 		initializeInputStream();
@@ -353,14 +355,14 @@ namespace BALL
 		return first_object;
 	}
 
-	void PersistenceManager::addPointerPair_(PointerSizeInt old_ptr, void* new_ptr)
+	void PersistenceManager::addPointerPair_(PointerSizeUInt old_ptr, void* new_ptr)
 		throw()
 	{
 #		ifdef DEBUG_PERSISTENCE
 			Log.info() << "PersistenceManager: pointer pair (" << old_ptr << "/" << new_ptr << ")" << endl;
 #		endif
 
-		pointer_map_.insert(pair<PointerSizeInt, void*>(old_ptr, new_ptr));
+		pointer_map_.insert(pair<PointerSizeUInt, void*>(old_ptr, new_ptr));
 	}
 
 	void PersistenceManager::addNeededObjects_() 

@@ -1,4 +1,7 @@
-// $Id: expression.h,v 1.20 2002/01/26 21:53:11 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: expression.h,v 1.20.2.1 2003/01/07 13:17:52 anker Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H

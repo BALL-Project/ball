@@ -1,4 +1,7 @@
-// $Id: nucleicAcid.C,v 1.13 2001/07/15 16:12:42 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: nucleicAcid.C,v 1.13.2.1 2003/01/07 13:20:53 anker Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>

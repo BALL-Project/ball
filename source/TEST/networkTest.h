@@ -1,13 +1,31 @@
-// $Id: networkTest.h,v 1.4 2002/01/16 03:47:44 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: networkTest.h,v 1.4.2.1 2003/01/07 13:23:04 anker Exp $
+
+// ugly workaround for Intel C++ 7.0/Linux w/ optimization
+#ifdef __OPTIMIZE__
+# undef __OPTIMIZE__
+#endif
 
 // workaround for Solaris -- this should be caught by configure -- OK
 #define BSD_COMP 
 
-#include <sys/socket.h>	  // socket
-#include <netdb.h>	  // gethostbyname
-#include <netinet/in.h>	  // sockaddr_in
+#ifdef BALL_USE_WINSOCK
+#	include <windows.h>
+#	include <winsock.h>
+#endif
+#ifdef BALL_HAS_SYS_SOCKET_H
+#	include <sys/socket.h>	  // socket
+#endif
+#ifdef BALL_HAS_NETDB_H
+#	include <netdb.h>	  // gethostbyname
+#endif
+#ifdef BALL_HAS_NETINET_IN_H
+#	include <netinet/in.h>	  // sockaddr_in
+#endif
+
 #include <unistd.h>	  // close
-#include <sys/ioctl.h>
 #include <iostream>	  // cout, endl
 
 class NetworkTest
@@ -48,7 +66,11 @@ class NetworkTest
 			host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
 			
 			result = (connect(my_socket, (struct sockaddr*)&host, sizeof(struct sockaddr)) != -1);
+#ifdef BALL_USE_WINSOCK
+			closesocket(my_socket);
+#else
 			close(my_socket);
+#endif
 		}
 		else
 		{

@@ -1,11 +1,14 @@
-// $Id: MathsCommon_test.C,v 1.6 2001/07/15 17:32:39 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MathsCommon_test.C,v 1.6.2.1 2003/01/07 13:22:34 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(MathsCommon, "$Id: MathsCommon_test.C,v 1.6 2001/07/15 17:32:39 amoll Exp $")
+START_TEST(MathsCommon, "$Id: MathsCommon_test.C,v 1.6.2.1 2003/01/07 13:22:34 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

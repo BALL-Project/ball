@@ -1,4 +1,7 @@
-// $Id: simpleDescriptors.h,v 1.5 2002/01/26 21:51:22 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: simpleDescriptors.h,v 1.5.2.1 2003/01/07 13:18:56 anker Exp $
 
 #ifndef BALL_QSAR_SIMPLEDESCRIPTORS_H
 #define BALL_QSAR_SIMPLEDESCRIPTORS_H

@@ -1,4 +1,7 @@
-// $Id: potential1210.C,v 1.8 2001/12/14 01:18:12 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: potential1210.C,v 1.8.2.1 2003/01/07 13:21:16 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/potential1210.h>

@@ -1,4 +1,7 @@
-// $Id: exception.C,v 1.31 2002/01/28 09:54:45 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: exception.C,v 1.31.2.1 2003/01/07 13:20:28 anker Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -11,7 +14,13 @@
 #include <stdlib.h>	// for getenv in terminate()
 #include <sys/types.h>
 #include <signal.h> // for SIGSEGV and kill
-#include <unistd.h> // fot getpid
+
+#ifdef BALL_HAS_UNISTD_H
+#	include <unistd.h> // fot getpid
+#endif
+#ifdef BALL_HAS_PROCESS_H
+#	include <process.h>
+#endif
 
 #define BALL_CORE_DUMP_ENVNAME "BALL_DUMP_CORE"
 
@@ -288,7 +297,7 @@ namespace BALL
 			}
 
 			void GlobalExceptionHandler::newHandler()
-				throw()
+				throw(Exception::OutOfMemory)
 			{
 				throw Exception::OutOfMemory(__FILE__, __LINE__);
 			}
@@ -319,10 +328,12 @@ namespace BALL
 				// is set, provoke a core dump (this is helpful to get s stack traceback)
 				if (getenv(BALL_CORE_DUMP_ENVNAME) != 0)
 				{
-					Log.error() << "dumping core file.... (to avoid this, unset " << BALL_CORE_DUMP_ENVNAME 
-											<< " in your environment)" << endl;
-					// provoke a core dump 
-					kill(getpid(), SIGSEGV);
+					#ifdef BALL_HAS_KILL
+						Log.error() << "dumping core file.... (to avoid this, unset " << BALL_CORE_DUMP_ENVNAME 
+									<< " in your environment)" << endl;
+						// provoke a core dump 
+						kill(getpid(), SIGSEGV);
+					#endif
 				}
 
 				// otherwise exit cleanly

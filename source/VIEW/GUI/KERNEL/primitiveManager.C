@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.3 2002/12/18 16:00:43 sturm Exp $
+// $Id: primitiveManager.C,v 1.3.2.1 2003/01/07 13:23:26 anker Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/primitiveManager.h>
 #include <stdio.h>

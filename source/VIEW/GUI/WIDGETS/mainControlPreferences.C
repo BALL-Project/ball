@@ -1,6 +1,10 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id: 
 
 #include <BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h>
+#include <BALL/COMMON/rtti.h>
 
 #include <qwidget.h>
 #include <qplatinumstyle.h>
@@ -27,8 +31,6 @@ namespace BALL
 			qtarch_VButtonGroup_1->setMaximumSize(102, 132);
 			qtarch_VButtonGroup_1->setFocusPolicy(QWidget::NoFocus);
 			qtarch_VButtonGroup_1->setBackgroundMode(QWidget::PaletteBackground);
-			qtarch_VButtonGroup_1->setFontPropagation(QWidget::SameFont);
-			qtarch_VButtonGroup_1->setPalettePropagation(QWidget::SamePalette);
 			qtarch_VButtonGroup_1->setFrameStyle( 33 );
 			qtarch_VButtonGroup_1->setLineWidth( 1 );
 			qtarch_VButtonGroup_1->setMidLineWidth( 0 );
@@ -43,8 +45,6 @@ namespace BALL
 			is_platinum_style->setMaximumSize(32767, 32767);
 			is_platinum_style->setFocusPolicy(QWidget::TabFocus);
 			is_platinum_style->setBackgroundMode(QWidget::PaletteBackground);
-			is_platinum_style->setFontPropagation(QWidget::SameFont);
-			is_platinum_style->setPalettePropagation(QWidget::SameFont);
 			is_platinum_style->setText( tr( "Platinum" ) );
 			is_platinum_style->setAutoRepeat( FALSE );
 			is_platinum_style->setAutoResize( FALSE );
@@ -56,8 +56,6 @@ namespace BALL
 			is_windows_style->setMaximumSize(32767, 32767);
 			is_windows_style->setFocusPolicy(QWidget::TabFocus);
 			is_windows_style->setBackgroundMode(QWidget::PaletteBackground);
-			is_windows_style->setFontPropagation(QWidget::SameFont);
-			is_windows_style->setPalettePropagation(QWidget::SameFont);
 			is_windows_style->setText( tr( "Windows " ) );
 			is_windows_style->setAutoRepeat( FALSE );
 			is_windows_style->setAutoResize( TRUE );
@@ -69,8 +67,6 @@ namespace BALL
 			is_motif_style->setMaximumSize(32767, 32767);
 			is_motif_style->setFocusPolicy(QWidget::TabFocus);
 			is_motif_style->setBackgroundMode(QWidget::PaletteBackground);
-			is_motif_style->setFontPropagation(QWidget::SameFont);
-			is_motif_style->setPalettePropagation(QWidget::SamePalette);
 			is_motif_style->setText( tr( "Motif" ) );
 			is_motif_style->setAutoRepeat( FALSE );
 			is_motif_style->setAutoResize( TRUE );
@@ -82,8 +78,6 @@ namespace BALL
 			is_cde_style->setMaximumSize(32767, 32767);
 			is_cde_style->setFocusPolicy(QWidget::TabFocus);
 			is_cde_style->setBackgroundMode(QWidget::PaletteBackground);
-			is_cde_style->setFontPropagation(QWidget::SameFont);
-			is_cde_style->setPalettePropagation(QWidget::SameFont);
 			is_cde_style->setText( tr( "CDE" ) );
 			is_cde_style->setAutoRepeat( FALSE );
 			is_cde_style->setAutoResize( FALSE );
@@ -110,15 +104,10 @@ namespace BALL
 					<< " of class " << RTTI::getName<MainControlPreferences>() << endl;
 			#endif 
 
-			destroy();
+			clear();
 		}
 		
 		void MainControlPreferences::clear()
-			throw()
-		{
-		}
-
-		void MainControlPreferences::destroy()
 			throw()
 		{
 		}
@@ -196,7 +185,7 @@ namespace BALL
 			}	
 			
 			// save the style settings
-			inifile.setValue("WINDOWS", "style", style);
+			inifile.insertValue("WINDOWS", "style", style);
 		}
 		
 	} // namespace VIEW

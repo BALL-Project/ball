@@ -1,4 +1,7 @@
-// $Id: JCAMPFile.C,v 1.7 2001/08/01 01:04:14 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: JCAMPFile.C,v 1.7.2.1 2003/01/07 13:20:44 anker Exp $
 
 #include <BALL/FORMAT/JCAMPFile.h>
 

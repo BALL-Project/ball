@@ -1,4 +1,7 @@
-// $Id: haighMallionShiftProcessor.C,v 1.12 2001/12/30 13:28:52 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: haighMallionShiftProcessor.C,v 1.12.2.1 2003/01/07 13:21:39 anker Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -114,7 +117,8 @@ namespace BALL
 		
 		Vector3* ring_positions = new Vector3[6];
 
-		Size zaehler, number_of_rings;
+		Size counter = 0;
+		Size number_of_rings = 0;
 		for (list<Atom*>::iterator proton_iter = proton_list_.begin();
 				 proton_iter != proton_list_.end(); ++proton_iter)
 		{
@@ -137,25 +141,25 @@ namespace BALL
 
 				if (residue.getName()=="TRP")
 				{
-					zaehler = 0;
+					counter = 0;
 					number_of_rings = 2;
 					intensity_factor = 1.05;
 				}
 				if (residue.getName()=="PHE")
 				{
-					zaehler = 1;
+					counter = 1;
 					number_of_rings = 1;
 					intensity_factor = 1.05;
 				}
 				if (residue.getName()=="TYR")
 				{
-					zaehler = 2; 
+					counter = 2; 
 					number_of_rings = 1; 
 					intensity_factor = 0.92;
 				}
 				if (residue.getName()=="HIS")
 				{
-					zaehler = 3; 
+					counter = 3; 
 					number_of_rings = 1; 
 					intensity_factor = 0.43;
 				}
@@ -172,7 +176,7 @@ namespace BALL
 					//Aufbau von vector_feld
 					for (Position pos = hilf; pos < hilf + 6; pos++ )
 					{
-						if (asrings_[zaehler][1 + pos] == "NULL")
+						if (asrings_[counter][1 + pos] == "NULL")
 						{
 							break;
 						}
@@ -180,7 +184,7 @@ namespace BALL
 						for	(AtomConstIterator atom_iter = residue.beginAtom();
 								+atom_iter; ++atom_iter)
 						{
-							if (asrings_[zaehler][1 + pos] == (*atom_iter).getName())
+							if (asrings_[counter][1 + pos] == (*atom_iter).getName())
 							{
 								ring_positions[number_of_ring_atoms] = (*atom_iter).getPosition();
 								number_of_ring_atoms++ ;
@@ -203,7 +207,7 @@ namespace BALL
 						{
 							center += ring_positions[pos];
 						}
-						center /= number_of_ring_atoms;
+						center /= (double)number_of_ring_atoms;
 					
 						// if the center of the ring is within the cut off,
 						// perform the shift calculation

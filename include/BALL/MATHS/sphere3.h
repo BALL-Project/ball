@@ -1,4 +1,7 @@
-// $Id: sphere3.h,v 1.24 2001/07/15 21:21:02 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: sphere3.h,v 1.24.2.1 2003/01/07 13:18:04 anker Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -7,7 +10,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifdef BALL_INCLUDE_IEEEFP
+#ifdef BALL_HAS_IEEEFP_H
 #	include <ieeefp.h>
 #endif
 

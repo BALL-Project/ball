@@ -1,4 +1,7 @@
-// $Id: clientScene.h,v 1.6 2000/02/17 00:30:46 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: clientScene.h,v 1.6.2.1 2003/01/07 13:19:45 anker Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENTSCENE_H
 #define BALL_VIEW_KERNEL_CLIENTSCENE_H
@@ -123,16 +126,6 @@ namespace BALL
 
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
-
-			/**	@name	Storers
-			*/
-			//@{
-
-			virtual void read(std::istream& s);
-
-			virtual void write(std::ostream& s) const;
-
-			//@}
 			
 			private:
 
@@ -142,11 +135,6 @@ namespace BALL
 			TextPersistenceManager pm_;
 		};
 
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/clientScene.iC>
-#		endif
-		
 	} // namespace VIEW
 	
 } // namespace BALL

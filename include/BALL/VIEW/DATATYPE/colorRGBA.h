@@ -1,4 +1,7 @@
-// $Id: colorRGBA.h,v 1.5 2001/07/16 14:49:29 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorRGBA.h,v 1.5.2.1 2003/01/07 13:19:20 anker Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -36,7 +39,6 @@ namespace BALL
 		class ColorRGBA
 		{
 			/** @name Class friends
-
 					\begin{itemize}
 						\item class ColorHSV
 					\end{itemize}
@@ -113,7 +115,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -123,7 +124,7 @@ namespace BALL
 					Calls \Ref{destroy}.
 					@see         destroy
 			*/
-			virtual ~ColorRGBA()
+			~ColorRGBA()
 				throw();
 
 			/** Explicit default initialization.
@@ -136,16 +137,16 @@ namespace BALL
 						\item alpha component is 1 (1.0)
 					\end{itemize}
 			*/
-			virtual void clear()
+			void clear()
 				throw();
 
 			/** Explicit destructor.
 					Empty for further purpose.
 			*/
-			virtual void destroy()
+			void destroy()
 				throw();
+
 			//@}
-				
 			/**	@name	Converters
 			*/
 			//@{
@@ -157,8 +158,8 @@ namespace BALL
 			*/
 			operator String() const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -532,8 +533,8 @@ namespace BALL
 			*/
 			bool operator >= (const ColorRGBA& color) const
 				throw();
+			
 			//@}
-				
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -545,30 +546,13 @@ namespace BALL
 					@param   depth the dumping depth
 					@see     ColorUnit::dump
 			*/
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+			
 			//@}
-
 			/**	@name	Storers
 			*/
 			//@{
-
-			/** Persistent stream input and color restorage.
-					Reads persistent colorRGBA data from the input stream {\em s} and restores the color of {\em *this}.\\
-					{\bf Note:} Not yet implemented.
-					@param  s input stream from where to restore the color of {\em *this} colorRGBA
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and color storage.
-					Writes persistent colorRGBA data to the output stream {\em s} and stores the color of {\em *this}.\\
-					{\bf Note:} Not yet implemented.
-					@param  s output stream to where the color of {\em *this} colorRGBA will be stored
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
 
 			/** Friendly stream input.
 					Reads colorRGBA data from the input stream {\em s} and restore the color of {\em *this}.
@@ -603,6 +587,8 @@ namespace BALL
 				throw(Exception::InvalidRange, ColorUnit::NotInHexFormat);
 		};
 
+		/** Static instance for the color of selected geometric objects */
+		extern ColorRGBA BALL_SELECTED_COLOR;
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/DATATYPE/colorRGBA.iC>

@@ -1,4 +1,7 @@
-// $Id: radialDistributionFunction.C,v 1.7 2000/10/18 13:55:53 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: radialDistributionFunction.C,v 1.7.2.1 2003/01/07 13:22:04 anker Exp $
 
 #include <BALL/STRUCTURE/radialDistributionFunction.h>
 

@@ -1,11 +1,10 @@
-// $Id: objectCreator.h,v 1.5 2001/07/16 14:49:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: objectCreator.h,v 1.5.2.1 2003/01/07 13:19:34 anker Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
 #define BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -29,10 +28,8 @@
 
 #include <vector>
 
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 
@@ -63,7 +60,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -87,11 +83,12 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+							
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{		
+
 			/** Initialize the persistence manager.
 					Initialize the \Ref{TextPersistenceManager} of {\em *this} objectCreator.
 					Override this method to initialize the persistence manager for specified
@@ -108,15 +105,17 @@ namespace BALL
 					\Ref{Composite} objects. See \Ref{TextPersistenceManager} for information
 					on how to convert \Ref{PersistentObject} objects into other objects.				
 					@param  po a reference to a \Ref{PersistentObject} to be converted
-					@return Composite* a converted \Ref{Composite} object if {\em po} could successfully be converted into a \Ref{Composite} object
+					@return Composite* a converted \Ref{Composite} object if {\em po} could successfully be converted 
+										into a \Ref{Composite} object
 			*/
 			virtual Composite *convertObject(PersistentObject &po)
 				throw();
+							
 			//@}
-
 			/**	@name	Operators
 			*/
 			//@{
+
 			/** Read from a socket stream.
 					This method will be called by the \Ref{Server} to convert objects
 					that are available at the \Ref{IOSocketStream} using the 
@@ -131,33 +130,8 @@ namespace BALL
 			*/
 			Composite *operator() (IOStreamSocket &iostream_socket)
 				throw();
+
 			//@}
-
-			/**	@name	Storers
-			*/	
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent server data from the input stream {\em s} and 
-				  restore the state of {\em *this} objectCreator.\\
-				  {\bf Note:} Not yet implemented.
-				  @param s input stream from where to restore the internal state of {\em *this} objectCreator
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent server data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param s output stream to where to store the internal state of {\em *this} objectCreator
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-			//@}
-
-			
-			protected:
 
 			private:
 			
@@ -165,11 +139,6 @@ namespace BALL
 			TextPersistenceManager pm_;
 		};
 
-
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/objectCreator.iC>
-#		endif
 
 	}// namespace VIEW
 		

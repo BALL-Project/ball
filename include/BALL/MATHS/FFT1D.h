@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.h,v 1.3 2002/12/23 09:05:46 sturm Exp $
+// $Id: FFT1D.h,v 1.3.2.1 2003/01/07 13:17:59 anker Exp $
 
 #ifndef BALL_MATHS_FFT1D_H
 #define BALL_MATHS_FFT1D_H

@@ -1,4 +1,7 @@
-// $Id: RDFParameter.C,v 1.8 2001/05/17 01:30:59 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RDFParameter.C,v 1.8.2.1 2003/01/07 13:21:57 anker Exp $
 
 #include <BALL/STRUCTURE/RDFParameter.h>
 #include <BALL/STRUCTURE/RDFSection.h>

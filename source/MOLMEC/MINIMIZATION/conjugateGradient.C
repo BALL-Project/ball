@@ -1,4 +1,7 @@
-// $Id: conjugateGradient.C,v 1.12 2001/12/30 13:28:50 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: conjugateGradient.C,v 1.12.2.1 2003/01/07 13:21:13 anker Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 

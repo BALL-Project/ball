@@ -1,4 +1,8 @@
-// $Id: Selectable_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Selectable_test.C,v 1.5.2.1 2003/01/07 13:22:51 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(Selectable, "$Id: Selectable_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $")
+START_TEST(Selectable, "$Id: Selectable_test.C,v 1.5.2.1 2003/01/07 13:22:51 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -100,22 +104,6 @@ using std::ios;
 using namespace RTTI;
 TextPersistenceManager pm;
 
-CHECK(Selectable::friend::std::istream& operator >> (::std::istream& s, Selectable& selectable))
-	std::ifstream instr("data/Selectable_test.txt");
-	se2.clear();
-	instr >> se2;
-	instr.close();
-	TEST_EQUAL(se2.isSelected(), true)
-RESULT
-
-CHECK(Selectable::friend::std::ostream& operator << (::std::ostream& s, const Selectable& selectable))
-	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), File::OUT);
-	outstr << se;
-	outstr.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test.txt")
-RESULT
-
 CHECK(Selectable::read(PersistenceManager& pm))
 	ifstream  ifile("data/Selectable_test2.txt");
 	pm.setIstream(ifile);
@@ -127,7 +115,7 @@ RESULT
 
 CHECK(Selectable::write(PersistenceManager& pm) const )
 	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), File::OUT);
+	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	se.write(pm);
 	ofile.close();	
@@ -137,7 +125,7 @@ RESULT
 CHECK(Selectable::dump(::std::ostream& s = std::cout, Size depth = 0L) const )
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	se.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test3.txt")

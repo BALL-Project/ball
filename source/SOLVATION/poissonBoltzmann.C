@@ -1,4 +1,7 @@
-// $Id: poissonBoltzmann.C,v 1.29.2.5 2002/12/04 09:55:43 anker Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: poissonBoltzmann.C,v 1.29.2.6 2003/01/07 13:21:54 anker Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -11,6 +14,11 @@
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/PTE.h>
+
+// DEBUG
+#include <BALL/KERNEL/PTE.h>
+#include <BALL/SYSTEM/file.h>
+// /DEBUG
 
 using namespace std;
 
@@ -55,19 +63,19 @@ namespace BALL
 
 	const int		FDPB::Default::VERBOSITY  = 0;
 	const bool	FDPB::Default::PRINT_TIMING  = false;
-	const float FDPB::Default::SPACING =  0.6;
-	const float FDPB::Default::BORDER = 4.0;
-	const float FDPB::Default::TEMPERATURE = 298.15;
-	const float FDPB::Default::PROBE_RADIUS = 1.5;
-	const float FDPB::Default::ION_RADIUS = 2.0;
-	const float FDPB::Default::IONIC_STRENGTH = 0.0;
+	const float FDPB::Default::SPACING =  0.6F;
+	const float FDPB::Default::BORDER = 4.0F;
+	const float FDPB::Default::TEMPERATURE = 298.15F;
+	const float FDPB::Default::PROBE_RADIUS = 1.5F;
+	const float FDPB::Default::ION_RADIUS = 2.0F;
+	const float FDPB::Default::IONIC_STRENGTH = 0.0F;
 	const char* FDPB::Default::BOUNDARY = FDPB::Boundary::DIPOLE;
 	const char* FDPB::Default::CHARGE_DISTRIBUTION = FDPB::ChargeDistribution::UNIFORM;
 	const char* FDPB::Default::DIELECTRIC_SMOOTHING = FDPB::DielectricSmoothing::NONE;
 	const float FDPB::Default::SOLVENT_DC = 78.0;
 	const float FDPB::Default::SOLUTE_DC = 2.0;
-	const float FDPB::Default::RMS_CRITERION = 1e-5;
-	const float FDPB::Default::MAX_CRITERION = 1e-4;
+	const float FDPB::Default::RMS_CRITERION = 1e-5F;
+	const float FDPB::Default::MAX_CRITERION = 1e-4F;
 	const Index  FDPB::Default::MAX_ITERATIONS = 500;
 	const Index  FDPB::Default::CHECK_AFTER_ITERATIONS = 10;
 
@@ -317,7 +325,7 @@ namespace BALL
 		verbosity = (int)options.getInteger(Option::VERBOSITY);
 
 		// ...and whether we should tell him how Index it took us...
-		print_timing = options.getInteger(Option::PRINT_TIMING);
+		print_timing = (options.getInteger(Option::PRINT_TIMING) != 0);
 
 		Timer	step_timer;
 		step_timer.start();
@@ -746,7 +754,7 @@ namespace BALL
 			}
 
 			// copy the temporary grid back to the old dielectric grid
-			eps_grid->set(tmp_grid);
+			(*eps_grid) = tmp_grid;
 		}
 
 		step_timer.stop();
@@ -898,7 +906,7 @@ namespace BALL
 		{
 			case 1:  
 				// TRILINEAR:
-				// distribute the charge equally upon the eigth 
+				// distribute the charge equally upon the eight 
 				// closest gridpoints
 					
 				Index i;
@@ -1136,6 +1144,7 @@ namespace BALL
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		float ionic_strength = options.getReal(Option::IONIC_STRENGTH);
+		// float ion_radius = options.getReal(Option::ION_RADIUS);
 		float T = options.getReal(Option::TEMPERATURE);
 		float solvent_dielectric_constant = options.getReal(Option::SOLVENT_DC);
 
@@ -1172,6 +1181,10 @@ namespace BALL
 			/ ( Constants::VACUUM_PERMITTIVITY * Constants::k * T);
 
 		// DEBUG
+		//kappa_square = 42 * spacing_*spacing_;
+		// /DEBUG
+
+		// DEBUG
 		Log.info() << "ionic_strength = " << ionic_strength << endl;
 		Log.info() << "solvent_dielectric_constant = " 
 			<< solvent_dielectric_constant << endl;
@@ -1192,7 +1205,7 @@ namespace BALL
 
 		for (Size i = 0; i < kappa_grid->getSize(); ++i)
 		{
-			if ((*SAS_grid)[i] == CCONN__OUTSIDE)
+			if ((*SAS_grid)[i] == CCONN__INSIDE)
 			{
 				(*kappa_grid)[i] = kappa_square;
 			}
@@ -1360,10 +1373,8 @@ namespace BALL
 		using namespace Constants;
 		if (ionic_strength != 0.0)
 		{
-			// beta = 1.0 / sqrt((2.0 * NA * e0 * e0 * ionic_strength)
-			//								 / (VACUUM_PERMITTIVITY * solvent_dielectric_constant * k * temperature));
 			beta = 1.0 / sqrt((2.0 * NA * e0 * e0 * 1000 * ionic_strength)
-											 / (VACUUM_PERMITTIVITY * solvent_dielectric_constant * k * temperature));
+					/ (VACUUM_PERMITTIVITY * solvent_dielectric_constant * k * temperature));
 		}
 		else 
 		{
@@ -1374,10 +1385,9 @@ namespace BALL
 
 		if (verbosity > 1)
 		{
-			Log.info(2) << "beta = " << beta << endl;
-			Log.info(2) << "ionic_strength = " << ionic_strength << endl;
+			Log.info(2) << "Debye length = " << beta << " m" << endl;
+			Log.info(2) << "ionic strength = " << ionic_strength << endl;
 		}
-													
 
 		// variable to hold the calculated grid index
 		Index idx;
@@ -1882,6 +1892,7 @@ namespace BALL
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 		int verbosity = (int)options.getInteger(Option::VERBOSITY);
 		float ionic_strength = options.getReal(Option::IONIC_STRENGTH);
+		float solvent_dielectric_constant = options.getReal(Option::SOLVENT_DC);
 
 		float*	phi;
 		float*	T;
@@ -1890,7 +1901,7 @@ namespace BALL
 
 		// some generally used loop variables
 		Size	i;
-		Size	j, k, l;
+		Size	j, k, l = 0;
 
 		// retrieve some basic grid properties and set the 
 		// corresponding variables
@@ -1932,8 +1943,8 @@ namespace BALL
 				for (k = 1; k < (Nx - 1); k++)
 				{
           l = i + j * Nx + k * Nxy;
-					// if kappa was spatial dependent we should use somethign like 
-					if (ionic_strength == 0.0) 
+
+					if (ionic_strength == 0.0 || solvent_dielectric_constant == 1.0)
 					{
 						d = 1 / ((*eps_grid)[(Index)l].x
 								+ (*eps_grid)[(Index)l].y
@@ -1952,7 +1963,7 @@ namespace BALL
 								+ (*eps_grid)[(Index)(l - Nxy)].z
 								+ (*kappa_grid)[l]);
 					}
-									
+
 					Q[l] = e0 * *(q_grid->getData((Index)l)) / (1e-10 * VACUUM_PERMITTIVITY * spacing_) * d;
 				}
 			}
@@ -1975,7 +1986,8 @@ namespace BALL
 				for (k = 1; k < (Nx - 1); k++)
 				{
 					l = i + j * Nx + k * Nxy;
-					if (ionic_strength == 0.0)
+
+					if (ionic_strength == 0.0 || solvent_dielectric_constant == 1.0)
 					{
 						d = 1 / ((*eps_grid)[(Index)l].x
 								+ (*eps_grid)[(Index)l].y
@@ -2186,7 +2198,7 @@ namespace BALL
 
 			// first half of Gauss-Seidel iteration (black fields only)
 			for (z = 1; z < (Index)(Nx - 1); z++)
-			{
+			{	
 				for (y = 1; y < (Index)(Nx - 1); y++)
 				{
 					black = ((y % 2) + (z % 2)) % 2;
@@ -2251,8 +2263,6 @@ namespace BALL
 					}
 				}
 			}
-
-
 		
 			charge_pointer = charged_white_points;
 			for (charge_pointer = charged_white_points;
@@ -2291,7 +2301,7 @@ namespace BALL
 				if (verbosity > 0)
 				{
 					Log.info(1) << "Iteration " << iteration << " RMS: " 
-					<< rms_change << "   MAX: " << max_residual << endl;
+						<< rms_change << "   MAX: " << max_residual << endl;
 				}
 			}
 
@@ -2304,6 +2314,12 @@ namespace BALL
 			// increase iteration count
 			iteration++;
 		}
+
+		// DEBUG
+		File file("phi_grid", ::std::ios::out);
+		file << *phi_grid;
+		file.close();
+		// /DEBUG
 
 		if ((rms_change <= rms_criterion) && (max_residual <= max_criterion))
 		{
@@ -2456,9 +2472,8 @@ namespace BALL
 	
 	double FDPB::calculateReactionFieldEnergy() const
 	{
-
 		if (options[Option::DIELECTRIC_SMOOTHING] 
-			!= FDPB::DielectricSmoothing::NONE)
+				!= FDPB::DielectricSmoothing::NONE)
 		{
 			Log.error() << "Cannot calculate reaction field energy when dielectric smoothing is turned on." << endl;
 			return(0.0);

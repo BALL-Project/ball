@@ -1,4 +1,7 @@
-// $Id: steepestDescent.C,v 1.10 2000/03/26 12:58:13 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: steepestDescent.C,v 1.10.2.1 2003/01/07 13:21:14 anker Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/COMMON/limits.h>

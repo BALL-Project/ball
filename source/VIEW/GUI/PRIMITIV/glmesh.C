@@ -1,12 +1,12 @@
-// $Id: glmesh.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glmesh.C,v 1.5.2.1 2003/01/07 13:23:28 anker Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
-#include <GL/gl.h>
-
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -35,8 +35,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLMesh>() << endl;
+				Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<GLMesh>() << endl;
 			#endif 
 
 			destroy();
@@ -100,10 +99,10 @@ namespace BALL
 			}
 			else
 			{
-				glColor4ub((unsigned char)getSelectedColor().getRed(),
-									 (unsigned char)getSelectedColor().getGreen(),
-									 (unsigned char)getSelectedColor().getBlue(),
-									 (unsigned char)getSelectedColor().getAlpha());
+				glColor4ub((unsigned char)BALL_SELECTED_COLOR.getRed(),
+									 (unsigned char)BALL_SELECTED_COLOR.getGreen(),
+									 (unsigned char)BALL_SELECTED_COLOR.getBlue(),
+									 (unsigned char)BALL_SELECTED_COLOR.getAlpha());
 			}
 
 			if (with_names)
@@ -112,100 +111,233 @@ namespace BALL
 			}
 
 			glPushMatrix();
-
-			glColor4ub(255,255,255,255);
-			
 			unsigned int precision;
 			unsigned int mode;
 
 			getDrawingModeAndPrecision(mode, precision);
+			mode += GeometricObject::PROPERTY__DRAWING_MODE_DOTS;
 
-			Triangle t;
-			Vector3 v, n;
-
-			if (mode == GeometricObject::PROPERTY__DRAWING_MODE_DOTS)
-			{
-				glBegin(GL_POINTS);
-					
-				// draw the triangles with lines
-				for (Size index = 0; index < triangle.size(); ++index)
+			// If we have only one color for the whole mesh, this can
+			// be assigned efficiently
+			if (colorList.size() < vertex.size())
+			{	
+				if (colorList.size() == 0)
 				{
-					t = triangle[index];
-					
-					v = vertex[t.v1];
-					
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+					glColor4ub(255,255,255,255);
 				}
-
-				glEnd();
-				// ------------------
-			}
-			else if (mode == GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME)
-			{
-				// draw the triangles with lines
-				for (Size index = 0; index < triangle.size(); ++index)
+				else
 				{
-					glBegin(GL_LINE_STRIP);
+					glColor4ub((unsigned char)colorList[0].getRed(),
+										 (unsigned char)colorList[0].getGreen(),
+										 (unsigned char)colorList[0].getBlue(),
+										 (unsigned char)colorList[0].getAlpha());
+				}
 					
-					t = triangle[index];
-					
-					v = vertex[t.v1];
-					
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					v = vertex[t.v2];
-					
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					v = vertex[t.v3];
 
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
+				Triangle t;
+				Vector3 v, n;
+
+				if (mode == GeometricObject::PROPERTY__DRAWING_MODE_DOTS)
+				{
+					glBegin(GL_POINTS);
+
+					// draw the triangles with lines
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						t = triangle[index];
+
+						v = vertex[t.v1];
+
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+					}
+
 					glEnd();
+					// ------------------
 				}
-				// ------------------
-			}
-			else
-			{
-				// draw the triangles
-				for (Size index = 0; index < triangle.size(); ++index)
+				else if (mode == GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME)
 				{
-					glBegin(GL_TRIANGLES);
-					
-					t = triangle[index];
-					
-					v = vertex[t.v1];
-					n = normal[t.v1];
-					
-					glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					v = vertex[t.v2];
-					n = normal[t.v2];
-					
-					glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					v = vertex[t.v3];
-					n = normal[t.v3];
-					
-					glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
-					glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
-					
-					glEnd();
-				}
-				// ------------------
-			}
 
+					// draw the triangles with lines
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						glBegin(GL_LINE_STRIP);
+
+						t = triangle[index];
+
+						v = vertex[t.v1];
+
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v2];
+
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v3];
+
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						glEnd();
+					}
+					// ------------------
+				}
+				else
+				{
+					// draw the triangles
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						glBegin(GL_TRIANGLES);
+
+						t = triangle[index];
+
+						v = vertex[t.v1];
+						n = normal[t.v1];
+
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v2];
+						n = normal[t.v2];
+
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v3];
+						n = normal[t.v3];
+
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						glEnd();
+					}
+					// ------------------
+				}
+			}
+			else // we have a different color for each vertex
+			{	
+				unsigned int precision;
+				unsigned int mode;
+
+				getDrawingModeAndPrecision(mode, precision);
+
+				Triangle t;
+				Vector3 v, n;
+
+				if (mode == GeometricObject::PROPERTY__DRAWING_MODE_DOTS)
+				{
+					glBegin(GL_POINTS);
+
+					// draw the triangles with lines
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						t = triangle[index];
+
+						v = vertex[t.v1];
+						// set the color
+						ColorRGBA col = colorList[t.v1];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+		
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+					}
+
+					glEnd();
+					// ------------------
+				}
+				else if (mode == GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME)
+				{
+					// draw the triangles with lines
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						glBegin(GL_LINE_STRIP);
+
+						t = triangle[index];
+
+						v = vertex[t.v1];
+
+						ColorRGBA col = colorList[t.v1];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v2];
+						
+						col = colorList[t.v2];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v3];
+
+						col = colorList[t.v3];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						glEnd();
+					}
+					// ------------------
+				}
+				else
+				{
+					// draw the triangles
+					for (Size index = 0; index < triangle.size(); ++index)
+					{
+						glBegin(GL_TRIANGLES);
+
+						t = triangle[index];
+
+						v = vertex[t.v1];
+						n = normal[t.v1];
+						ColorRGBA col = colorList[t.v1];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v2];
+						n = normal[t.v2];
+						col = colorList[t.v2];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						v = vertex[t.v3];
+						n = normal[t.v3];
+						col = colorList[t.v3];
+						glColor4ub((unsigned char)col.getRed(),
+	 						 				 (unsigned char)col.getGreen(),
+											 (unsigned char)col.getBlue(),
+											 (unsigned char)col.getAlpha());
+	
+						glNormal3f((GLfloat)n.x, (GLfloat)n.y, (GLfloat)n.z);
+						glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);
+
+						glEnd();
+					}
+					// ------------------
+				}
+			}
 			glPopMatrix();
 
 			return true;
-		}
-
-		bool GLMesh::drawUserDefined()
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool GLMesh::extract()
@@ -213,10 +345,6 @@ namespace BALL
 		{
 			return Mesh::extract();
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glmesh.iC>
-#		endif
 
 	} // namespace VIEW
 

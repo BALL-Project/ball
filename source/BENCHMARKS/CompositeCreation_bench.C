@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CompositeCreation_bench.C,v 1.5 2002/12/23 07:25:25 oliver Exp $
+// $Id: CompositeCreation_bench.C,v 1.5.2.1 2003/01/07 13:20:24 anker Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(CompositeCreation, 1.0, "$Id: CompositeCreation_bench.C,v 1.5 2002/12/23 07:25:25 oliver Exp $")
+START_BENCHMARK(CompositeCreation, 1.0, "$Id: CompositeCreation_bench.C,v 1.5.2.1 2003/01/07 13:20:24 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

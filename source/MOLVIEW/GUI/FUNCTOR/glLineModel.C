@@ -1,7 +1,9 @@
-// $Id: glLineModel.C,v 1.4 2001/05/13 15:02:41 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glLineModel.C,v 1.4.2.1 2003/01/07 13:21:30 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.h>
-
 
 namespace BALL
 {
@@ -27,8 +29,7 @@ namespace BALL
       throw()
  		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<AddGLLineModel>() << endl;
+				cout << "Destructing object " << (void*)this << " of class " << RTTI::getName<AddGLLineModel>() << endl;
 			#endif 
 
 			AddLineModel::destroy();
@@ -49,11 +50,6 @@ namespace BALL
 			return (TwoColoredLine *)(new GLTwoColoredLine());
 		}
 
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.iC>
-#		endif
-	
 	} // namespace MOLVIEW
 
 } // namespace BALL

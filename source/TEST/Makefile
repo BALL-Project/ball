@@ -32,6 +32,7 @@ EXECUTABLES_MATHS = \
 	PiecewisePolynomial_test
 
 EXECUTABLES_SYSTEM = \
+	BinaryFileAdaptor_test\
 	Directory_test\
 	FileSystem_test\
 	File_test\
@@ -44,7 +45,6 @@ EXECUTABLES_SYSTEM = \
 	TransformationManager_test
 
 EXECUTABLES_DATATYPES = \
-	String_test\
 	BitVector_test\
 	List_test\
 	Hash_test\
@@ -53,6 +53,11 @@ EXECUTABLES_DATATYPES = \
 	HashSet_test\
 	HashGrid3_test\
 	Options_test\
+	String_test1\
+	String_test2\
+	String_test3\
+	String_test4\
+	Substring_test\
 	Triple_test\
 	Quadruple_test\
 	RegularData1D_test\
@@ -62,13 +67,15 @@ EXECUTABLES_DATATYPES = \
 EXECUTABLES_CONCEPTS = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	LogStream_test\
 	AutoDeletable_test\
+	Factory_test\
 	Object_test\
 	PersistentObject_test\
 	PersistenceManager_test\
 	TextPersistenceManager_test\
 	Selectable_test\
 	PropertyManager_test\
-	Composite_test\
+	Composite_test1\
+	Composite_test2\
 	Embeddable_test\
 	RandomAccessIterator_test
 
@@ -102,11 +109,12 @@ EXECUTABLES_KERNEL = \
 EXECUTABLES_MOLMEC = \
 	Gradient_test\
 	AtomVector_test\
-	AmberFF_test\
-	CharmmFF_test\
+	MolmecSupport_test\
 	EnergyMinimizer_test\
 	SnapShot_test\
-	SnapShotManager_test
+	SnapShotManager_test\
+	AmberFF_test\
+	CharmmFF_test
 
 EXECUTABLES_NMR = \
 	AssignShiftProcessor_test\
@@ -120,8 +128,7 @@ EXECUTABLES_NMR = \
 	ShiftModel_test\
 	ShiftModule_test\
 	Spectrum_test\
-	Peak_test\
-	PeakList_test
+	Peak_test
 
 EXECUTABLES_FORMATS =\
 	LineBasedFile_test\
@@ -150,15 +157,19 @@ EXECUTABLES_ENERGY = \
 EXECUTABLES_STRUCTURE = \
 	Enumerator_test\
 	AnalyticalSES_test\
+	MolecularGraph_test\
 	NumericalSAS_test\
+	Peptides_test\
 	RadialDistributionFunction_test\
 	RDFIntegrator_test\
 	RDFParameter_test\
 	RDFSection_test\
+	ReconstructFragmentProcessor_test\
 	SmilesParser_test\
 	StructureMapper_test\
 	TransformationApplicator_test\
-	TranslationApplicator_test
+	TranslationApplicator_test\
+	SurfaceProcessor_test
 
 EXECUTABLES_SOLVATION = \
 	PoissonBoltzmann_test\
@@ -209,7 +220,7 @@ include .Dependencies
 LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
 # do not optimize tests (reduces compile time drastically)
-CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
+CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION) -O0
 
 .o:
 	$(CXX) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)
@@ -217,28 +228,30 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 %%.C:
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
 
+dummy:
+
 test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test formats_test energy_test molmec_test nmr_test structure_test qsar_test solvation_test
 	@./runtests -success
 
 info:
 	@./runtests -info
 
-basic_test:	$(EXECUTABLES_BASIC)
+basic_test:	$(EXECUTABLES_BASIC) dummy
 	@./runtests -section "BASIC" $(TEST_OPTIONS) $(EXECUTABLES_BASIC)
 
-system_test:	$(EXECUTABLES_SYSTEM)
+system_test:	$(EXECUTABLES_SYSTEM) dummy
 	@./runtests -section "SYSTEM" $(TEST_OPTIONS) $(EXECUTABLES_SYSTEM)
 
-maths_test:	$(EXECUTABLES_MATHS)
+maths_test:	$(EXECUTABLES_MATHS) dummy
 	@./runtests -section "MATHS" $(TEST_OPTIONS) $(EXECUTABLES_MATHS)
 
-datatypes_test:	$(EXECUTABLES_DATATYPES)
+datatypes_test:	$(EXECUTABLES_DATATYPES) dummy
 	@./runtests -section "DATATYPES" $(TEST_OPTIONS) $(EXECUTABLES_DATATYPES)
 	
-concepts_test:	$(EXECUTABLES_CONCEPTS)
+concepts_test:	$(EXECUTABLES_CONCEPTS) dummy
 	@./runtests -section "CONCEPTS" $(TEST_OPTIONS) $(EXECUTABLES_CONCEPTS)
 	
-kernel_test:	$(EXECUTABLES_KERNEL)
+kernel_test:	$(EXECUTABLES_KERNEL) dummy
 	@./runtests -section "KERNEL" $(TEST_OPTIONS) $(EXECUTABLES_KERNEL)
 	
 formats_test:	$(EXECUTABLES_FORMATS)

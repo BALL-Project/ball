@@ -1,4 +1,7 @@
-// $Id: KernelPredicate_test.C,v 1.3 2000/08/30 19:59:15 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: KernelPredicate_test.C,v 1.3.2.1 2003/01/07 13:22:30 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +13,7 @@
 #include <BALL/KERNEL/atomContainer.h>
 ///////////////////////////
 
-START_TEST(KernelPredicate<T>, "$Id: KernelPredicate_test.C,v 1.3 2000/08/30 19:59:15 oliver Exp $")
+START_TEST(KernelPredicate<T>, "$Id: KernelPredicate_test.C,v 1.3.2.1 2003/01/07 13:22:30 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

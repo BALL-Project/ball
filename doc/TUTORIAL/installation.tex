@@ -5,45 +5,57 @@
   BALL requires a (more or less) ANSI compliant \CPP compiler.
   It has been successfully built and tested on the following platforms:
 	\begin{itemize}	
+   	\item Linux/x86 2.x using g{\tt ++} 3.2.1
    	\item Linux/x86 2.x using g{\tt ++} 2.95.3
-   	\item Linux/x86 2.x using g{\tt ++} 3.0.3
-   	\item Linux/x86 2.x using Kuck \& Associate (KAI) \CPP 4.0
+%   	\item Linux/x86 2.x using Kuck \& Associate (KAI) \CPP 4.0
+%   	\item Linux/x86 2.x using Intel Compiler 5.0
+   	\item Solaris/SPARC 8 using g{\tt ++} 3.2.1
    	\item Solaris/SPARC 8 using g{\tt ++} 2.95.3
-   	\item Solaris/SPARC 8 using g{\tt ++} 3.0.3
-   	\item Solaris/SPARC 8 using Kuck \& Associate (KAI) \CPP 4.0
+%   	\item Solaris/SPARC 8 using Kuck \& Associate (KAI) \CPP 4.0
+   	\item Solaris/SPARC 8 using Sun Forte Developer 7 C++ 5.4 2002/03/09
    	\item IRIX 6.5 using CC 7.3.1.1m (32 and 64 bit)
-   	\item Compaq Tru64 Unix V4.0f using Compaq \CPP 6.3
+%   	\item Compaq Tru64 Unix V4.0f using Compaq \CPP 6.3
+		\item Microsoft Windows XP using Microsoft Visual Studio .NET (MSVC 7.0)
  	\end{itemize}
 
 \subsection{External software and libraries}
+BALL needs {\tt flex} and {\tt bison} for automatically generating parsers
+for various purposes. These utilities are standard software and should be
+installed on every contemporary UN*X machine. The newest versions are
+downloadable from \URL{http://www.gnu.org/software/}.
+
 The usage of GNU make is recommended, although BALL will also build with
 other versions of make. It is available from \URL{ftp://ftp.gnu.org/gnu/}
 and easy to install.
 
 The compilation of the visualization component BALLVIEW also requires
-the QT library (version 2.3.2) which is available from
+the QT library (version 3.0.6) which is available from
 \URL{http://www.troll.no/qt}/.
 
 If QT was not installed in one of the standard library paths or the
 QT header files were not installed in one of the compiler's default
 include directories, use \mbox{"\option{--with-qt-libs}{\tt{}=DIR}"} and
-\mbox{"\option{--with-qt-incl}{\tt{}=DIR}"} as
-options to configure (see Section \ref{section:building-ball}) to specify the paths
-QT was installed to.\index{QT}
-Please remember to compile also \file{libqgl.so}, which is one of the QT extensions
-(to build \file{libqgl.a}, cd to {\tt\nobreak{\$QTDIR/extensions/opengl/src}} and type {\tt
-make}).
+\mbox{"\option{--with-qt-incl}{\tt{}=DIR}"} as options to configure (see
+Section \ref{section:building-ball}) to specify the paths QT was installed
+to.\index{QT}
+Please remember to compile also \file{libqgl.so}, which is one of the QT
+extensions (to build \file{libqgl.a}, cd to 
+{\tt\nobreak{\$QTDIR/extensions/opengl/src}} and type {\tt make}).
 
 QT also requires OpenGL. On platforms that do not provide OpenGL, MESA can
 be used (e.g. Linux). Mesa is a 3-D graphics library with an API which is 
-very similar to that of OpenGL. It can be obtained from \URL{http://www.mesa3d.org}.
+very similar to that of OpenGL. It can be obtained from 
+\URL{http://www.mesa3d.org}.
 \index{MESA}
 
-To use the Python extensions of BALL (Python is an object oriented scripting
-language), you will also need Python 2.1 installed
-(\URL{http://www.python.org}) and a special version of SIP 3.0 distributed through 
-our website (\URL{http://www.mpi-sb.mpg.de/BALL/}). SIP is a tool for
-generating Python bindings for C++ class libraries.
+To use the Python extensions of BALL (Python is an object oriented
+scripting language), you will also need Python 2.1 installed
+(\URL{http://www.python.org}) and a special version of SIP 3.0 distributed
+through our website (\URL{http://www.mpi-sb.mpg.de/BALL/}). SIP is a tool
+for generating Python bindings for C++ class libraries.
+
+Additionally you need might need the FFTW package for fast Fourier
+transformations (Verson 2.1.3), available from \URL{http://www.fftw.org/}.
 
 Please make sure that the required external \CPP libraries (i.e. QT and SIP)
 have been compiled with the same compiler (and compiler version!) as the BALL

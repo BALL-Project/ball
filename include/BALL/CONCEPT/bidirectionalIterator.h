@@ -1,4 +1,7 @@
-// $Id: bidirectionalIterator.h,v 1.14 2002/01/04 01:53:05 oliver Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: bidirectionalIterator.h,v 1.14.2.1 2003/01/07 13:17:22 anker Exp $ 
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -52,7 +55,11 @@ namespace BALL
 
 		/// Detailed constructor
 		BidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
+			throw()
+			:	BaseIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
+
 
 		/// Destructor
 		~BidirectionalIterator()
@@ -192,14 +199,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BidirectionalIterator<Container, DataType, Position, Traits>
 	::BidirectionalIterator(const BidirectionalIterator& iterator)
-		throw()
-		:	BaseIterator<Container, DataType, Position, Traits>(iterator)
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BidirectionalIterator<Container, DataType, Position, Traits>
-	::BidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
 		throw()
 		:	BaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
@@ -494,7 +493,11 @@ namespace BALL
 		/** Detailed constructor
 		 */
 		ConstBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator)
-			throw();
+			throw()
+			:	ConstBaseIterator <Container, DataType, Position, Traits>(iterator)
+		{
+		}
+
 
 		/** Destructor
 		 */
@@ -639,13 +642,6 @@ namespace BALL
 	{
 	}
 
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBidirectionalIterator<Container, DataType, Position, Traits>
-	::ConstBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator)
-		throw()
-		:	ConstBaseIterator <Container, DataType, Position, Traits>(iterator)
-	{
-	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstBidirectionalIterator<Container, DataType, Position, Traits>::~ConstBidirectionalIterator()

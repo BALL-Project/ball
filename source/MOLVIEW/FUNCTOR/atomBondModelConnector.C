@@ -1,23 +1,19 @@
-// $Id: atomBondModelConnector.C,v 1.5 2001/07/01 21:45:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: atomBondModelConnector.C,v 1.5.2.1 2003/01/07 13:21:18 anker Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-		/*
-    AtomBondModelConnector::MissingProperty::MissingProperty
-		  (const char* file, int line, const string& message)
-			throw()
-				: Exception::GeneralException(file, line, "MissingProperty", message)
-		{
-    }
-		*/
-
+				
 		AtomBondModelConnector::AtomBondModelConnector()
 			throw()
 			:	BaseModelConnector()
@@ -268,10 +264,6 @@ namespace BALL
     {
 			return new TwoColoredTube();
     }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

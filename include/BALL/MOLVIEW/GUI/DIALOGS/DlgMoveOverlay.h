@@ -1,4 +1,7 @@
-// $Id: DlgMoveOverlay.h,v 1.3 2001/06/07 01:30:19 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: DlgMoveOverlay.h,v 1.3.2.1 2003/01/07 13:18:25 anker Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_DLGMOVEOVERLAY_H
 #define BALL_VIEW_GUI_DIALOGS_DLGMOVEOVERLAY_H 

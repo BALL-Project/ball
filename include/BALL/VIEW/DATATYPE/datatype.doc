@@ -1,4 +1,4 @@
-// $Id: datatype.doc,v 1.2 2001/02/04 15:58:19 hekl Exp $
+// $Id: datatype.doc,v 1.2.2.1 2003/01/07 13:19:22 anker Exp $
 
         /**     @name Different color classes.
 	                    That are the two different color classes in VIEW.
@@ -13,6 +13,8 @@
                       parameter.
         */
         //@{
+								//@Include: color.h 
+								//@Include: colorTable.h 
                 //@Include: colorRGBA.h
                 //@Include: colorHSV.h
         //@}

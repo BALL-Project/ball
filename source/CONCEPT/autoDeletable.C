@@ -1,4 +1,7 @@
-// $Id: autoDeletable.C,v 1.8 2000/12/10 19:46:05 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: autoDeletable.C,v 1.8.2.1 2003/01/07 13:20:30 anker Exp $
 
 #include <BALL/CONCEPT/autoDeletable.h>
 

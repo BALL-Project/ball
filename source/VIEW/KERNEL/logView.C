@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id:
 
 #include <BALL/VIEW/KERNEL/logView.h>
@@ -41,8 +44,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<LogView>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<LogView>() << endl;
 			#endif 
 
 			Log.remove(strstream_);
@@ -53,23 +56,6 @@ namespace BALL
 		void LogView::clear()
 			throw()
 		{
-		}
-
-		void LogView::destroy()
-			throw()
-		{
-		}
-
-		void LogView::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void LogView::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 	  bool LogView::onNotify(LogStreamNotifier& /* source */)
@@ -93,19 +79,14 @@ namespace BALL
 				history_string_ += QString(line.c_str());
 
 				setText(history_string_);
-				setCursorPosition(numLines(), 0);
-				repaint();
+				//setCursorPosition(numLines(), 0);
+				//repaint();
 
 				qApp->processEvents();
 			}
 
 			return true;
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/logView.iC>
-#		endif 
 
 	} // namespace VIEW
 

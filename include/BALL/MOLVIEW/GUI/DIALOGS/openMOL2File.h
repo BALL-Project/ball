@@ -1,4 +1,7 @@
-// $Id: openMOL2File.h,v 1.2 2001/12/28 02:33:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: openMOL2File.h,v 1.2.2.1 2003/01/07 13:18:30 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENMOL2FILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENMOL2FILE_H

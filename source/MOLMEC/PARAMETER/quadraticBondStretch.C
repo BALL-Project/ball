@@ -1,4 +1,7 @@
-// $Id: quadraticBondStretch.C,v 1.7 2000/10/18 10:40:07 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: quadraticBondStretch.C,v 1.7.2.1 2003/01/07 13:21:16 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticBondStretch.h>

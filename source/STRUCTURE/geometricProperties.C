@@ -1,4 +1,7 @@
-// $Id: geometricProperties.C,v 1.14 2001/06/05 15:53:30 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: geometricProperties.C,v 1.14.2.1 2003/01/07 13:22:02 anker Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 

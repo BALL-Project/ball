@@ -1,4 +1,7 @@
-// $Id: files.C,v 1.6 2001/07/17 13:18:36 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: files.C,v 1.6.2.1 2003/01/07 13:20:06 anker Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>

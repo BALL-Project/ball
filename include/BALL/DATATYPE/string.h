@@ -1,4 +1,7 @@
-// $Id: string.h,v 1.40 2001/12/30 13:28:37 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: string.h,v 1.40.2.1 2003/01/07 13:17:37 anker Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -27,7 +30,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strstream>
+#include <sstream>
 #include <iostream>
 #include <vector>
 
@@ -179,12 +182,12 @@ namespace BALL
 		String(Size buffer_size, const char* format, ... )
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
-		/**	Create a new string from the contents of a {\bf strstream}.
-				The contents of the {\tt strstream} are not modified, i.e.
-				successive construction of multiple strings from the same {\tt strstream}
+		/**	Create a new string from the contents of a {\bf stringstream}.
+				The contents of the {\tt stringstream} are not modified, i.e.
+				successive construction of multiple strings from the same {\tt stringstream}
 				object leads to identical copies.
 		*/
-		String(::std::strstream& s)
+		String(std::stringstream& s)
 			throw();
 
 		/** Creates a new string from len copies of c.
@@ -266,10 +269,10 @@ namespace BALL
 		void set(Size buffer_size, const char *format, ...)
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
-		/** Assign a String from a {\bf strstream}.
-				The contents of the {\tt strstream} object are not modified.
+		/** Assign a String from a {\bf stringstream}.
+				The contents of the {\tt stringstream} object are not modified.
 		*/
-		void set(::std::strstream& s)
+		void set(std::stringstream& s)
 			throw();
 
 		/// Assign a String from the result of repeating {\bf c} {\bf len} times
@@ -324,10 +327,10 @@ namespace BALL
 		const String& operator = (const char* pc)
 			throw(Exception::NullPointer);
 
-		/** Assign a string from a {\bf strstream}.
-				The contents of the {\tt strstream} object are not modified.
+		/** Assign a string from a {\bf stringstream}.
+				The contents of the {\tt stringstream} object are not modified.
 		*/
-		const String& operator = (::std::strstream& s)
+		const String& operator = (std::stringstream& s)
 			throw();
 
 		/// Assign a String from a single char
@@ -893,7 +896,7 @@ namespace BALL
 			throw();
 
 		///
-		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const
+		void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
 
 		//@}			
@@ -902,11 +905,11 @@ namespace BALL
 		//@{
 
 		///
-		::std::istream& getline(::std::istream& s = ::std::cin, char delimiter = '\n')
+		std::istream& getline(std::istream& s = std::cin, char delimiter = '\n')
 			throw();
 
 		///
-		friend ::std::istream& getline(::std::istream& s,  String& string,  char delimiter = '\n')
+		friend std::istream& getline(std::istream& s,  String& string,  char delimiter = '\n')
 			throw();
 
 		//@}
@@ -1223,7 +1226,7 @@ namespace BALL
 		//@{
 
 		/// Writes the substring to a stream
-		friend ::std::ostream& operator << (::std::ostream& s, const Substring& substring)
+		friend std::ostream& operator << (std::ostream& s, const Substring& substring)
 			throw();
 
 		//@}
@@ -1239,7 +1242,7 @@ namespace BALL
 			throw();
 
 		///	Dumps the substring object (including the values of its private members)
-		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const 
+		void dump(std::ostream& s = std::cout, Size depth = 0) const 
 			throw(Substring::UnboundSubstring);
 
 		//@}

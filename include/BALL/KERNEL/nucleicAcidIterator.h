@@ -1,4 +1,7 @@
-// $Id: nucleicAcidIterator.h,v 1.2 2000/08/30 19:58:09 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: nucleicAcidIterator.h,v 1.2.2.1 2003/01/07 13:17:55 anker Exp $
 
 #ifndef BALL_KERNEL_NUCLEICACIDITERATOR_H
 #define BALL_KERNEL_NUCLEICACIDITERATOR_H

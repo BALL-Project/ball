@@ -1,4 +1,8 @@
-// $Id: Vector3_test.C,v 1.33 2002/01/26 22:01:30 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Vector3_test.C,v 1.33.2.1 2003/01/07 13:23:02 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,27 +13,13 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.33 2002/01/26 22:01:30 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.33.2.1 2003/01/07 13:23:02 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 using namespace std;
-
-CHECK(TVector3::BALL_CREATE(TVector3<T>))
-	Vector3 v(1.0, 2.0, 3.0);
-	Vector3* v_ptr = (Vector3*)v.create(false, true);
-	TEST_REAL_EQUAL(v_ptr->x, 0.0)
-	TEST_REAL_EQUAL(v_ptr->y, 0.0)
-	TEST_REAL_EQUAL(v_ptr->z, 0.0)
-	delete v_ptr;
-	v_ptr = (Vector3*)v.create();
-	TEST_REAL_EQUAL(v_ptr->x, 1.0)
-	TEST_REAL_EQUAL(v_ptr->y, 2.0)
-	TEST_REAL_EQUAL(v_ptr->z, 3.0)
-	delete v_ptr;
-RESULT
 
 CHECK(TVector3();)
   Vector3* v;
@@ -114,36 +104,27 @@ using std::ofstream;
 using std::ios;
 using namespace RTTI;
 TextPersistenceManager pm;
-CHECK(virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;)
+CHECK(virtual void write(PersistenceManager& pm, const char* name = 0) const;)
 	Vector3 v(1.0, 2.0, 3.0);
 	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), File::OUT);
+	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
-	pm.registerClass(getStreamName<Vector3>(), Vector3::createDefault);
-	v >> pm;
+	pm.writeStorableObject(v, "testname");
 	ofile.close();	
 RESULT
 
 using std::ifstream;
 using std::cout;
-CHECK(virtual void persistentRead(PersistenceManager& pm);)
-	ifstream  ifile(filename.c_str());
+CHECK(virtual void read(PersistenceManager& pm);)
+	ifstream ifile(filename.c_str());
 	pm.setIstream(ifile);
-	PersistentObject* ptr;
-	ptr = pm.readObject();
+	Vector3 v;
+	bool result = pm.readStorableObject(v, "testname");
 	ifile.close();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-		TEST_EQUAL(isKindOf<Vector3>(*ptr), true)
-		if (isKindOf<Vector3>(*ptr))
-		{
-			Vector3* v_ptr = castTo<Vector3>(*ptr);
-			TEST_REAL_EQUAL(v_ptr->x, 1.0)
-			TEST_REAL_EQUAL(v_ptr->y, 2.0)
-			TEST_REAL_EQUAL(v_ptr->z, 3.0)
-		}
-	}
+	TEST_EQUAL(result, true)
+	TEST_REAL_EQUAL(v.x, 1.0)
+	TEST_REAL_EQUAL(v.y, 2.0)
+	TEST_REAL_EQUAL(v.z, 3.0)
 RESULT
 
 CHECK(TVector3<T>::set(const T* ptr))
@@ -472,7 +453,7 @@ CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Vector3 v(1.2, 2.3, 3.4);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	v.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Vector3_test.txt")
@@ -537,7 +518,7 @@ RESULT
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector3<T>& vector))
 	Vector3 v(1.2, 2.3, 3.4);
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << v;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Vector3_test2.txt")

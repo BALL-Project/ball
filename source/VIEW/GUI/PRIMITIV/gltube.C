@@ -1,11 +1,12 @@
-// $Id: gltube.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: gltube.C,v 1.5.2.1 2003/01/07 13:23:29 anker Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gltube.h>
-#include <GL/gl.h>
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -85,12 +86,12 @@ namespace BALL
 		bool GLTube::draw(bool with_names)
 			throw()
 		{
-			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
+			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN))
 			{
 				return true;
 			}
 
-			if (isSelected() == false)
+			if (!isSelected())
 			{
 				glColor4ub((unsigned char)getColor().getRed(),
 									 (unsigned char)getColor().getGreen(),
@@ -99,10 +100,10 @@ namespace BALL
 			}
 			else
 			{
-				glColor4ub((unsigned char)getSelectedColor().getRed(),
-									 (unsigned char)getSelectedColor().getGreen(),
-									 (unsigned char)getSelectedColor().getBlue(),
-									 (unsigned char)getSelectedColor().getAlpha());
+				glColor4ub((unsigned char)BALL_SELECTED_COLOR.getRed(),
+									 (unsigned char)BALL_SELECTED_COLOR.getGreen(),
+									 (unsigned char)BALL_SELECTED_COLOR.getBlue(),
+									 (unsigned char)BALL_SELECTED_COLOR.getAlpha());
 			}
 
 			if (with_names)
@@ -147,22 +148,12 @@ namespace BALL
 			return true;
 		}
 
-		bool GLTube::drawUserDefined()
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
 		bool GLTube::extract()
 			throw()
 		{
 			return Tube::extract();
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/gltube.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

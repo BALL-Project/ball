@@ -1,4 +1,7 @@
-// $Id: version.h,v 1.11 2001/12/22 16:39:14 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: version.h,v 1.11.2.1 2003/01/07 13:17:20 anker Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -10,7 +13,7 @@
 //
 //  master data for all revisions is stored in this define!
 //
-#define BALL_RELEASE_STRING             "1.0b"
+#define BALL_RELEASE_STRING             "1.0pre1"
 
 namespace BALL
 {
@@ -40,6 +43,8 @@ namespace BALL
 			ALPHA,
 			BETA,
 			NONPUBLIC,
+			PRERELEASE,
+			PATCHLEVEL,
 			UNKNOWN
 		};
 
@@ -58,7 +63,7 @@ namespace BALL
 		static int getMinorRevision() throw(Exception::InvalidFormat);
 
 		/** Return the type of release:
-				ALPHA, BETA, NONPUPLIC, STABLE, UNKNOWN.
+				ALPHA, BETA, NONPUPLIC, STABLE, PRERELEASE, PATCHLEVEL, UNKNOWN.
 		*/
 		static Type getType() throw();
 		

@@ -1,4 +1,7 @@
-// $Id: AnisotropyShiftProcessor_test.C,v 1.6 2002/01/10 11:37:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: AnisotropyShiftProcessor_test.C,v 1.6.2.1 2003/01/07 13:22:14 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.6 2002/01/10 11:37:38 oliver Exp $")
+START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.6.2.1 2003/01/07 13:22:14 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

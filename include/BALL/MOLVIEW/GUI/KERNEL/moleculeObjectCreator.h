@@ -1,4 +1,7 @@
-// $Id: moleculeObjectCreator.h,v 1.4 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: moleculeObjectCreator.h,v 1.4.2.1 2003/01/07 13:18:36 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -129,10 +132,6 @@ namespace BALL
 				throw();
 			//@}
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

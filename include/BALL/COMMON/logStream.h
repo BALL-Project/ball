@@ -1,4 +1,7 @@
-// $Id: logStream.h,v 1.14 2001/02/04 23:51:56 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: logStream.h,v 1.14.2.1 2003/01/07 13:17:19 anker Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -15,7 +18,12 @@
 #	include <BALL/COMMON/debug.h>
 #endif
 
-#include <sys/time.h>
+#ifdef BALL_HAS_SYS_TIME_H
+#	include <sys/time.h>
+#endif
+#ifdef BALL_HAS_TIME_H
+#	include <time.h>
+#endif
 
 #include <iostream>
 #include <list>

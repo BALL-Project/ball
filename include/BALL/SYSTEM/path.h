@@ -1,4 +1,7 @@
-// $Id: path.h,v 1.2 2001/02/26 00:23:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: path.h,v 1.2.2.1 2003/01/07 13:19:17 anker Exp $
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H
@@ -19,7 +22,7 @@ namespace BALL
 	/**	Data path management class.
 			This class is intended to provide a unique interface to 
 			directories where the data files needed by BALL reside.	\\
-			{\bf Definition:}\URL{BALL/COMMON/path.h}	\\
+			{\bf Definition:}\URL{BALL/SYSTEM/path.h}	\\
 	*/
 	class Path 
 	{

@@ -1,4 +1,7 @@
-// $Id: regExp.C,v 1.14 2001/07/31 00:48:35 oliver Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: regExp.C,v 1.14.2.1 2003/01/07 13:20:36 anker Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 

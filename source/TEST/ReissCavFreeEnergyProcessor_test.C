@@ -1,4 +1,7 @@
-// $Id: ReissCavFreeEnergyProcessor_test.C,v 1.5 2001/09/20 13:33:59 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: ReissCavFreeEnergyProcessor_test.C,v 1.5.2.1 2003/01/07 13:22:49 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +12,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(ReissCavFreeEnergyProcessor, "$Id: ReissCavFreeEnergyProcessor_test.C,v 1.5 2001/09/20 13:33:59 anker Exp $")
+START_TEST(ReissCavFreeEnergyProcessor, "$Id: ReissCavFreeEnergyProcessor_test.C,v 1.5.2.1 2003/01/07 13:22:49 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

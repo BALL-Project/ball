@@ -1,12 +1,15 @@
-// $Id: geometricCollector.C,v 1.2 2001/05/13 14:28:35 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: geometricCollector.C,v 1.2.2.1 2003/01/07 13:23:19 anker Exp $
 
 #include <BALL/VIEW/FUNCTOR/geometricCollector.h>
 
-using namespace std;
+using std::endl;
+using std::ostream;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -24,7 +27,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GeometricCollector>() << endl;
+						 << " of class " << RTTI::getName<GeometricCollector>() << endl;
 			#endif 
 
 			destroy();
@@ -98,8 +101,7 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void GeometricCollector::dump
-			(ostream& s, Size depth) const
+		void GeometricCollector::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -122,5 +124,4 @@ namespace BALL
 #		endif
 
 	} // namespace VIEW
-
 } // namespace BALL

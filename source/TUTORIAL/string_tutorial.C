@@ -1,4 +1,7 @@
-// $Id: string_tutorial.C,v 1.1 2002/01/16 10:46:52 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: string_tutorial.C,v 1.1.2.1 2003/01/07 13:23:15 anker Exp $
 // string tutorial example
 // -----------------------
 // play around with the functionality of BALL strings

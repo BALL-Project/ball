@@ -1,4 +1,8 @@
-// $Id: Molecule_test.C,v 1.12 2002/01/26 22:01:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Molecule_test.C,v 1.12.2.1 2003/01/07 13:22:35 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +12,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Molecule, "$Id: Molecule_test.C,v 1.12 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(Molecule, "$Id: Molecule_test.C,v 1.12.2.1 2003/01/07 13:22:35 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -327,7 +331,7 @@ CHECK(Molecule::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	m.append(a1);
 	m.append(a2);
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	m.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Molecule_test.txt")
@@ -339,7 +343,7 @@ pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), File::OUT);
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Atom* f2= new Atom();
 	f2->setName("name2");
 	Atom* f3= new Atom();

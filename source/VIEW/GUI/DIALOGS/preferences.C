@@ -1,6 +1,10 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id: 
 
 #include <BALL/VIEW/GUI/DIALOGS/preferences.h>
+#include <BALL/COMMON/rtti.h>
 
 namespace BALL
 {
@@ -33,15 +37,10 @@ namespace BALL
 					<< " of class " << RTTI::getName<Preferences>() << endl;
 			#endif 
 
-			destroy();
+			clear();
 		}
 		
 		void Preferences::clear()
-			throw()
-		{
-		}
-
-		void Preferences::destroy()
 			throw()
 		{
 		}
@@ -90,13 +89,9 @@ namespace BALL
 		void Preferences::writePreferences(INIFile& inifile)
 			throw()
 		{
-			//	
 			// the display window position
-			//
-			inifile.setValue
-				("WINDOWS", "Preferences::x", String(x()));
-			inifile.setValue
-				("WINDOWS", "Preferences::y", String(y()));
+			inifile.insertValue("WINDOWS", "Preferences::x", String(x()));
+			inifile.insertValue("WINDOWS", "Preferences::y", String(y()));
 		}
 
 		void Preferences::openDialog()

@@ -1,4 +1,7 @@
-// $Id: twoColoredLine.h,v 1.8 2001/07/16 14:49:29 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: twoColoredLine.h,v 1.8.2.1 2003/01/07 13:18:44 anker Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
 #define BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
@@ -18,9 +21,9 @@
 #ifndef BALL_VIEW_KERNEL_VERTEX2_H
 #	include <BALL/VIEW/KERNEL/vertex2.h>
 #endif
+
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -102,7 +105,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -136,8 +138,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -193,12 +195,12 @@ namespace BALL
 			*/
 			void swap(TwoColoredLine& two_colored_line)
 				throw();
+
 			//@}
-
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+			
 			/** Inspection of the middle vector.
 					Access the geometric middle vertex between vertex1 and vertex2 of
 					{\em *this} twoColoredLine.
@@ -207,9 +209,8 @@ namespace BALL
 			*/
 			Vector3 getMiddleVertex()
 				throw();
+
 			//@}
-
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -221,8 +222,7 @@ namespace BALL
 					(self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {GeometricObject::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} twoColoredLine is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} twoColoredLine is correct 
 					@see        GeometricObject::isValid
 			*/
 			virtual bool isValid() const
@@ -242,37 +242,13 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+
 			//@}
-
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent twoColoredLine data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} twoColoredLine
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent twoColoredLine data to the output stream {\em s} and 
-				  store the state of {\em *this}. \\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} twoColoredLine
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-			//@}
-
 
 			protected:
 
 			/** Export method.
-					This method handles the export of {\em *this} twoColoredLine into another
-					format (eg. POVRAY, VRML)\\
+					This method handles the export of {\em *this} twoColoredLine into another format (eg. POVRAY, VRML)\\
 				  {\bf Note:} Not yet implemented.
 					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
@@ -280,9 +256,9 @@ namespace BALL
 				throw();
 		};
 
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.iC>
-#			endif
+	#ifndef BALL_NO_INLINE_FUNCTIONS
+	# include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.iC>
+	#endif
 
 	} // namespace MOLVIEW
 

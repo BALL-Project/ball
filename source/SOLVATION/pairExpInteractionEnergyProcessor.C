@@ -1,4 +1,7 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.16.2.1 2002/11/19 01:32:19 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.16.2.2 2003/01/07 13:21:53 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>

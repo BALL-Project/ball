@@ -1,4 +1,7 @@
-// $Id: moleculeObjectProcessor.C,v 1.3 2001/01/07 15:42:31 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: moleculeObjectProcessor.C,v 1.3.2.1 2003/01/07 13:21:31 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeObjectProcessor.h>
 

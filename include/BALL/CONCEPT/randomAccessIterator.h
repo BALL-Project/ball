@@ -1,4 +1,7 @@
-// $Id: randomAccessIterator.h,v 1.13 2001/07/15 20:58:54 oliver Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: randomAccessIterator.h,v 1.13.2.1 2003/01/07 13:17:29 anker Exp $ 
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #define BALL_CONCEPT_RANDOMACCESSITERATOR_H

@@ -1,4 +1,7 @@
-// $Id: nucleicAcid.h,v 1.21 2001/07/15 16:14:22 oliver Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: nucleicAcid.h,v 1.21.2.1 2003/01/07 13:17:55 anker Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H

@@ -1,4 +1,7 @@
-// $Id: mainControl.h,v 1.20 2001/12/28 02:33:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: mainControl.h,v 1.20.2.1 2003/01/07 13:19:33 anker Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -17,10 +20,6 @@
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #	include <BALL/DATATYPE/hashMap.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_FORMAT_INIFILE_H
@@ -51,29 +50,24 @@
 #	include <BALL/DATATYPE/list.h>
 #endif
 
-#include <qapplication.h>
+#ifndef BALL_KERNEL_SYSTEM_H
+# include <BALL/KERNEL/system.h>
+#endif
+
 #include <qobject.h>
 #include <qwidget.h>
 #include <qmainwindow.h>
-
-//using namespace std;
-//using namespace BALL;
-//using namespace BALL::VIEW;
-
-
-//class ModularWidget;
+#include <qlabel.h>
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 		class ModularWidget;
 
 		/**	MainControl class.
 				{\bf Caveat:} Due to a peculiarity of the QT Meta Object Compiler (MOC)
-				you have to specify the full namsespace qualified name of this classes
-				when deriving from it.
+				you have to specify the full namsespace qualified name of this classes when deriving from it.
 				So don't use {\tt class foo : public MainControl {};} but 
 				{\tt class foo : public BALL::VIEW::MainControl {};} instead. \\ \\
 				The class MainControl is a container for the \Ref{CompositeDescriptor} and the
@@ -200,8 +194,7 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} MainControl.
-					Calls \Ref{destroy}
-					@see  destroy
+					Calls \Ref{clear}
 			*/
 			virtual ~MainControl()
 				throw();
@@ -216,18 +209,6 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			/** Explicit destructor.
-					Clears all inserted \Ref{CompositeDescriptor}
-					Calls \Ref{clear}
-					@see  clear
-			*/
-			virtual void destroy()
-				throw();
-			//@}
-
-			/**	@name	Assignment
-			*/
-			//@{
 			//@}
 
 			/**	@name	Accessors
@@ -243,20 +224,15 @@ namespace BALL
 					If this method is used to insert composites the composite objects will
 					be deleted by the destruction of {\em *this} mainControl. If {\em composite}
 					is already inserted it will be removed and reinserted.\\
-					{\bf Note:} do not insert statically created \Ref{Composite} objects with
-					this method.
+					{\bf Note:} do not insert statically created \Ref{Composite} objects with this method.
 					@param composite the new \Ref{Composite} object to be inserted into {\em *this} mainControl
 					@param name the name the \Ref{Composite} object should have (Default: {\tt "unkown"})
 					@param center the geometric center the \Ref{Composite} object should have (Default: {\tt Vector3(0,0,0)}) 
 					@see    Composite
 					@see    CompositeDescriptor
-					@see    String
 					@see    Vector3
 			*/
-			void insert
-				(Composite* composite,
-				 const String& name = "unkown",
-				 const Vector3& center = Vector3(0,0,0))
+			void insert(Composite* composite, const String& name = "unkown", const Vector3& center = Vector3(0,0,0))
 				throw();
 
 			/** Insert a new composite (without deletion).
@@ -264,11 +240,9 @@ namespace BALL
 					If this method is used to insert composites. The composite objects will
 					not be deleted by the destruction of {\em *this} mainControl.
 					This method returns the \Ref{CompositeDescriptor} object that is
-					created for the given \Ref{Composite} object. See \Ref{CompositeDescriptor}
-					for further information.
+					created for the given \Ref{Composite} object. See \Ref{CompositeDescriptor} for further information.
 					If {\em composite} is already inserted {\tt 0} will be returned.\\
-					{\bf Note:} statically created \Ref{Composite} objects can be inserted with
-					this method.
+					{\bf Note:} statically created \Ref{Composite} objects can be inserted with this method.
 					@param composite the new \Ref{Composite} object to be inserted into {\em *this} mainControl
 					@param name the name the \Ref{Composite} object should have (Default: {\tt "unkown"})
 					@param center the geometric center the \Ref{Composite} object should have (Default: {\tt Vector3(0,0,0)}) 
@@ -276,26 +250,20 @@ namespace BALL
 					@see    insert
 					@see    Composite
 					@see    CompositeDescriptor
-					@see    String
 					@see    Vector3
 			*/
-      CompositeDescriptor* insert
-        (const Composite& composite,
-         const String& name = "unkown",
-				 const Vector3& center = Vector3(0,0,0))
+      CompositeDescriptor* insert(const Composite& composite, const String& name = "unkown", const Vector3& center = Vector3(0,0,0))
 				throw();
  
 			/** Insert a new composite_descriptor.
-					The \Ref{CompositeDescriptor} {\em composite_descriptor}
-					is copied according to the flag {\em deep}.
+					The \Ref{CompositeDescriptor} {\em composite_descriptor} is copied according to the flag {\em deep}.
 					If {\em deep} is set to {\tt true} then {\em composite_descriptor} is
 					copied deep otherwise a shallow \Ref{CompositeDescriptor} is created.
-					See \Ref{CompositeDescriptor} for information concerning deep and shallow
-					copies.
-					If {\em composite_descriptor} is already inserted and a shallow copy
-					should be made {\tt 0} will be returned.
+					See \Ref{CompositeDescriptor} for information concerning deep and shallow copies.
+					If {\em composite_descriptor} is already inserted and a shallow copy should be made {\tt 0} will be returned.
 					@param composite_descriptor the new \Ref{CompositeDescriptor} to be inserted into {\em *this} mainControl
-					@param deep if {\tt true} then a deep (default) copy of {\em composite_descriptor} is made, {\tt false} a shallow copy is made
+					@param deep if {\tt true} then a deep (default) copy of {\em composite_descriptor} is made, 
+										{\tt false} a shallow copy is made
 					@return CompositeDescriptor* mutable pointer to the new created \Ref{CompositeDescriptor}
 					@see    Composite
 					@see    CompositeDescriptor
@@ -309,7 +277,8 @@ namespace BALL
 					children of {\em *this} mainControl. See \Ref{ConnectionObject} for
 					information concerning message queuing and responding.
 					@param  composite the \Ref{Composite} to be removed from {\em *this} mainControl
-					@param  sent_message if set to {\tt true} {\em *this} mainControl sents a \Ref{RemoveCompositeMessage} through the \Ref{ConnectionObject} tree
+					@param  sent_message if set to {\tt true} {\em *this} mainControl sents a \Ref{RemoveCompositeMessage} 
+										through the \Ref{ConnectionObject} tree
 					@return bool {\tt true} the \Ref{Composite} was successfully removed, {\tt false} otherwise
 					@see    insert
 					@see    Composite
@@ -336,7 +305,8 @@ namespace BALL
 					\Ref{Composite} {\em composite}. If {\em composite} is not inserted into
 					{\em *this} mainControl then {\tt 0} is returned.
 					@param   composite the inserted \Ref{Composite} whose \Ref{CompositeDescriptor} should be returned
-					@return  CompositeDescriptor* mutable pointer to \Ref{CompositeDescriptor}, {\tt 0} if {\em composite} is not inserted into {\em *this} mainControl
+					@return  CompositeDescriptor* mutable pointer to \Ref{CompositeDescriptor}, {\tt 0} if {\em composite} 
+										is not inserted into {\em *this} mainControl
 					@see     insert
 					@see     Composite
 					@see     CompositeDescriptor
@@ -352,9 +322,9 @@ namespace BALL
 			
 			/** Mutable inspection of of all compositeDescriptor objects.
 					Access a mutable reference to the list of \Ref{CompositeDescriptor} objects
-					of {\em *this} mainControl. Empty if {\em *this} mainControl has no objects
-					yet.			
-					@return List<CompositeDescriptor*>& mutable reference to the list of \Ref{CompositeDescriptor} objects of {\em *this} mainControl
+					of {\em *this} mainControl. Empty if {\em *this} mainControl has no objects yet.			
+					@return List<CompositeDescriptor*>& mutable reference to the list of \Ref{CompositeDescriptor} objects 
+										of {\em *this} mainControl
 					@see     insert
 					@see     getDescriptor
 					@see     CompositeDescriptor
@@ -372,25 +342,21 @@ namespace BALL
 					Change the name of {\em composite} to {\em name}.					
 					@param  composite the \Ref{Composite} whose name will be changed
 					@param  name the new name
-					@return bool {\tt true} if {\em composite} is inserted in {\em *this} mainControl and the assignment was successful, {\tt false} otherwise
+					@return bool {\tt true} if {\em composite} is inserted in {\em *this} mainControl and the assignment was successful
 					@see    getName
 					@see    insert
 					@see    Composite
-					@see    String
 			*/
 			bool setName(const Composite& composite, const String& name)
 				throw();
 
 			/** Mutable inspection of the name.
-					Access a mutable pointer to the name of {\em composite}. If the 
-					{\em composite} is not inserted into {\em *this} mainControl then {\tt 0}
-					is returned.
+					Access a mutable pointer to the name of {\em composite}. 
+					If the {\em composite} is not inserted into {\em *this} mainControl then {\tt 0} is returned.
 					@param   composite the \Ref{Composite} whose name should be retrieved
 					@return  String* mutable pointer to the name ({\tt 0} if no such composite is inserted)
 					@see     setName
-					@see     insert
 					@see     Composite
-					@see     String
 			*/
 			String* getName(const Composite& composite)
 				throw();
@@ -403,17 +369,13 @@ namespace BALL
 
 			/** Mutable inspection of a compositeDescriptor to a given name.
 					Access a mutable pointer to the \Ref{CompositeDescriptor} of a
-					\Ref{Composite} inserted into {\em *this} mainControl with a given string
-					{\em name}.
+					\Ref{Composite} inserted into {\em *this} mainControl with a given string {\em name}.
 					If more such names are available then the first found 
 					\Ref{CompositeDescriptor} with this {\em name} will be returned.
 					@param   name the name whose \Ref{CompositeDescriptor} should be retrieved
-					@return  CompositeDescriptor* mutable pointer to the \Ref{CompositeDescriptor} ({\tt 0} if no such \Ref{Composite} with such a name exists)
-					@see     setName
-					@see     insert
-					@see     Composite
+					@return  CompositeDescriptor* mutable pointer to the \Ref{CompositeDescriptor} 
+										({\tt 0} if no such \Ref{Composite} with such a name exists)
 					@see     CompositeDescriptor
-					@see     String
 			*/
 			CompositeDescriptor* getDescriptor(const String& name)
 				throw();
@@ -425,14 +387,11 @@ namespace BALL
 				throw();
 
 			/** Change of the center vector.
-					Change the center vector of the \Ref{Composite} {\em composite} 
-					to the \Ref{Vector3} {\em v}.
+					Change the center vector of the \Ref{Composite} {\em composite} to the \Ref{Vector3} {\em v}.
 					@param  composite the \Ref{Composite} whose center vector should be changed
 					@param  v the \Ref{Vector3} that is the new center vector
-					@return bool {\tt true} if {\em composite} is inserted in {\em *this} mainControl and the assignment was successful, {\tt false} otherwise
+					@return bool {\tt true} if {\em composite} is inserted in {\em *this} mainControl and the assignment was successful
 					@see    getCenter
-					@see    insert
-					@see    Composite
 					@see    Vector3
 			*/
 			bool setCenter(const Composite& composite, const Vector3& v)
@@ -443,9 +402,6 @@ namespace BALL
 					\Ref{Composite} {\em composite}.
 					@param   composite the \Ref{Composite} whose center vector should be retrieved
 					@return  Vector3* mutable pointer to the center vector ({\tt 0} if no such \Ref{Composite} exists)
-					@see     setCenter
-					@see     insert
-					@see     Composite
 					@see     Vector3
 			*/
 			Vector3* getCenter(const Composite& composite)
@@ -459,15 +415,12 @@ namespace BALL
 
 			/** Mutable inspection of a compositeDescriptor to a given center vector.
 					Access a mutable pointer to the \Ref{CompositeDescriptor} of a
-					\Ref{Composite} inserted into {\em *this} mainControl with a given 
-					\Ref{Vector3} {\em center}.
+					\Ref{Composite} inserted into {\em *this} mainControl with a given \Ref{Vector3} {\em center}.
 					If more such center \Ref{Vector3} are available then the first found 
 					\Ref{CompositeDescriptor} with this {\em center} vector will be returned.
 					@param   center the center \Ref{Vector3} whose \Ref{CompositeDescriptor} should be retrieved
-					@return  CompositeDescriptor* mutable pointer to the \Ref{CompositeDescriptor} ({\tt 0} if no such \Ref{Composite} with such a center vector exists)
-					@see     setCenter
-					@see     insert
-					@see     Composite
+					@return  CompositeDescriptor* mutable pointer to the \Ref{CompositeDescriptor} 
+										({\tt 0} if no such \Ref{Composite} with such a center vector exists)
 					@see     CompositeDescriptor
 					@see     Vector3
 			*/
@@ -482,8 +435,7 @@ namespace BALL
 
 			/** Mark a composite for update.
 					If a \Ref{Composite} was marked for update then the graphical representation
-					of {\em composite} will be created anew when the next time the render engine
-					will draw this \Ref{Composite}.
+					of {\em composite} will be created anew when the next time the render engine will draw this \Ref{Composite}.
 					If {\em composite} is inserted into {\em *this} mainControl {\tt true} will be
 					returned, otherwise {\tt false}.
 					@param  composite the \Ref{Composite} that should be updated
@@ -493,16 +445,14 @@ namespace BALL
 				throw();
 
 			/** Marks all inserted composite objects for update.
-					Same as \Ref{update} but all inserted \Ref{Composite} objects
-					are marked for update.
+					Same as \Ref{update} but all inserted \Ref{Composite} objects are marked for update.
 					@see update
 			*/
 			void updateAll()
 				throw();
 
 			/** Mutable inspection of the preferences dialog.
-					Access the mutual pointer of the general \Ref{Preferences} dialog
-					of {\em *this} mainControl.
+					Access the mutual pointer of the general \Ref{Preferences} dialog of {\em *this} mainControl.
 					@return   Preferences* a pointer to the \Ref{Preferences} dialog, ({\tt 0} if not present)
 					@see      Preferences
 			*/
@@ -536,8 +486,8 @@ namespace BALL
 		  */
 			virtual void onNotify(Message *message)
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Predicates
 			*/
 			//@{
@@ -559,10 +509,10 @@ namespace BALL
 			*/
 			bool isInserted(const CompositeDescriptor& compositeDescriptor) const
 				throw();
-			//@}
 
 			public slots:
 
+			//@}
 			/** @name Public slots
 			*/
 			//@{
@@ -606,9 +556,9 @@ namespace BALL
 			/** Menu checking method.
 					This method checks, enables or disables all inserted menu entries of the
 					associated \Ref{ModularWidget} objects registered into {\em *this} mainControl.
-					If this method is overridden make sure that it will be called at the end of
+					If this method is overridden make sure that it will be called at the end of 
 					the new {\em checkMenus} method.
-					See \Ref{ModularWidget} for further information concerning menu structure creation
+					See \Ref{ModularWidget} for further information concerning menu structure creation 
 					of \Ref{ModularWidget} objects.
 					Calls \Ref{ModularWidget::checkMenu}\\
 					{\bf Note:} This method will be called internally whenever the menu structure
@@ -621,8 +571,7 @@ namespace BALL
 			/** Apply preferences.
 					This method calls the method {\em applyPreferences} of all registered
 					\Ref{ModularWidget} objects if the apply button of the \Ref{Preferences} dialog
-					of {\em *this} mainControl is pressed. It processes also the own method
-					{\em applyPreferences}.
+					of {\em *this} mainControl is pressed. It processes also the own method {\em applyPreferences}.
 					Calls \Ref{ModularWidget::applyPreferences}
 					Calls \Ref{applyPreferences}\\
 					{\bf Note:} This method will be called internally whenever the apply button
@@ -645,8 +594,7 @@ namespace BALL
 					Calls \Ref{finalizePreferencesTab}
 					Calls \Ref{removeModularWidget}
 					Calls \Ref{INIFile::write}\\
-					{\bf Note:} This method will be called internally if {\em *this} mainControl
-					will be destroyed.
+					{\bf Note:} This method will be called internally if {\em *this} mainControl will be destroyed.
 				  @see   ModularWidget
 					@see   ModularWidget::writePreferences
 					@see   ModularWidget::finalizePreferencesTab
@@ -658,10 +606,10 @@ namespace BALL
 					@see   INIFile::write
 			*/
 			virtual void aboutToExit();
-			//@}
 
 			public:
 			
+			//@}
 			/**	@name	Automatic module registration, menu construction and preferences handling.
 			*/
 			//@{
@@ -672,10 +620,8 @@ namespace BALL
 					{\em object}. Because we use the qt library every widget or dialog has 
 					\Ref{QObject} as a base class. MainControl is the main application and therefore
 					all widgets and dialogs are children of {\em *this} mainControl. We use the qt
-					\Ref{QObject} tree mechanism to return {\em *this} mainControl from a given
-					\Ref{QObject}.\\
-					{\bf Note:} this method is used internally from the \Ref{ModularWidget} 
-					registration process.
+					\Ref{QObject} tree mechanism to return {\em *this} mainControl from a given \Ref{QObject}.\\
+					{\bf Note:} this method is used internally from the \Ref{ModularWidget} registration process.
 					@return   MainControl* {\em *this} mainControl, the root of the \Ref{ConnectionObject} tree
 					@see      ConnectionObject
 					@see      ModularWidget
@@ -694,16 +640,14 @@ namespace BALL
 					@param entry_ID the id of the menu entry
 					@see   insertMenuEntry
 			*/
-			void removeMenuEntry
-				(int ID, const String& name, const QObject* receiver = 0, 
-				 const char* slot = 0, int accel = 0, int entry_ID = -1)
+			void removeMenuEntry (int ID, const String& name, const QObject* receiver = 0, 
+														const char* slot = 0, int accel = 0, int entry_ID = -1)
 				throw();
  
 			/** Insert a new menu entry.
 					Insert a new menu entry into {\em *this} mainControl to menu {\em ID} 
 					(creates a new menu if {\em ID} not existent).
-					See the documentation of the qt library for more information concerning
-					menu creation.
+					See the documentation of the qt library for more information concerning menu creation.
 					@param ID the menu ID to which the new menu entry should be inserted
 					@param name the name of the new menu entry
 					@param receiver the object to which the menu action will be connected
@@ -713,16 +657,14 @@ namespace BALL
 					@return int the new entry_ID
 					@see   removeMenuEntry
 			*/
-			int insertMenuEntry
-				(int ID, const String& name, const QObject* receiver = 0, 
-				 const char* slot = 0, int accel = 0, int entry_ID = -1)
+			int insertMenuEntry (int ID, const String& name, const QObject* receiver = 0, 
+													 const char* slot = 0, int accel = 0, int entry_ID = -1)
 				throw();
 			
 			/**	Initialize a popup menu.
 					Initialize a new popup menu {\em ID}. If {\em *this} mainControl has already
 					the popup menu {\em ID} that \Ref{QPopupMenu} is returned.
-					See the documentation of the qt library for more information concerning
-					the class QPopupMenu.
+					See the documentation of the qt library for more information concerning the class QPopupMenu.
 					@param    ID the ID of the menu entry to be created.
 					@return   QPopupMenu* a pointer to the created \Ref{QPopupMenu}
 					@see      PopUpID
@@ -817,8 +759,7 @@ namespace BALL
 			
 			/** Add new modular widget.
 					Add a new \Ref{ModularWidget} to {\em *this} mainControl.
-					This method will be called internally by the modular widget registration
-					process.
+					This method will be called internally by the modular widget registration process.
 					@param  widget the \Ref{ModularWidget} to be inserted into {\em *this} mainControl
 					@see    ModularWidget
 			*/
@@ -827,25 +768,25 @@ namespace BALL
 
 			/** Remove modular widget.
 					Remove a new \Ref{ModularWidget} from {\em *this} mainControl.
-					This method will be called internally by the modular widget registration
-					process.
+					This method will be called internally by the modular widget registration process.
 					@param  widget the \Ref{ModularWidget} to be removed from {\em *this} mainControl
 					@see    ModularWidget
 			*/
 			void removeModularWidget(ModularWidget* widget)
 				throw();
+
 			//@}
-			
 			/**	@name	Debugging and Diagnostics
 			*/
 			//@{
+
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} mainControl.
 					If the internal state of {\em *this} mainControl is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise.
 					Calls \Ref{CompositeDescriptor::isValid}
-					@return			bool {\tt true} if the internal state of {\em *this} mainControl is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} mainControl is correct
 			*/
 			virtual bool isValid() const
 				throw();
@@ -859,35 +800,76 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+							
 			//@}
-
-			/**	@name	Storers
+			/**	@name	Accessors and Settings
 			*/
 			//@{
-			/** Persistent stream output and state restorage.
-  			  Read persistent mainControl data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} mainControl
-			*/
-			virtual void read(std::istream& s)
+			
+			/** Get the HashSet with the selected composites
+			 */
+			const HashSet<Composite*>& getSelection() const
 				throw();
 
-			/** Persistent stream output and state storage.
-  			  Write persistent mainControl data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} mainControl
-			*/
-			virtual void write(std::ostream& s) const
+			/** Get the selection of the control (not the selection with checkboxes).
+			 */
+			List<Composite*>& getControlSelection()
 				throw();
+
+			/** Return true if exact one system is selected in the control and nothing else
+			 */
+			System* getSelectedSystem()
+				throw();
+
+			/** Select the composite parents of the geometric objects.
+			 		The GeometricObjectSelectionMessage is sent by the Scene.
+			 */
+			void selectComposites_(GeometricObjectSelectionMessage& message)
+				throw();
+
+			/**	Select a composite recursive and add all atoms and atomcontainers to the selection.
+			 */
+			void selectCompositeRecursive(Composite* composite, bool state)
+				throw();
+
+			/** Print some informations for the selection.
+			 		Called by selectComposites_.
+					If one atom is selected, its position is printed.
+					If two atoms are selected, their distance,
+					for three atoms their angle and
+					for four atoms their torsion angle.
+					Else the number of items is printed.
+			*/
+			void printSelectionInfos()
+				throw();
+			
+			/** Sets the text in the statusbar.
+			 		The statusbar has a label, whose text is set to the given argument
+			*/
+			void setStatusbarText(const String& text)
+				throw();
+
 			//@}
 			
 			protected:
 
+			/*_ List with the selected composites
+			*/
+			HashSet<Composite*> 				selection_;
+
+			/*_ List with the selected composites of the control.
+			 		(Not the one with the checkboxes!)
+			*/
+			List<Composite*>						control_selection_;		
+
+			/*_ Message label in the statusbar
+			 		@see setStatusbarText
+			*/
+			QLabel* 										message_label_;
+	
 			private:
 
-			/**	Create a unique item ID.
+			/*_	Create a unique item ID.
 			*/
 			int getNextID_()
 				throw();
@@ -898,33 +880,39 @@ namespace BALL
 			CompositeDescriptor* insert_(CompositeDescriptor& composite_descriptor, bool deep = true)
 				throw();
 
-			typedef HashMap<void*, List<CompositeDescriptor*>::Iterator>
-				ListIteratorHashMap;
+			void selectRecursive_(Composite* composite)
+				throw();
 
-			ListIteratorHashMap composite_map_;
-			ListIteratorHashMap descriptor_map_;
-			List<CompositeDescriptor*> descriptors_;
+			void deselectRecursive_(Composite* composite)
+				throw();
 
-			MainControlPreferences *main_control_preferences_;
-			Preferences *preferences_dialog_;
-			int preferences_id_;
-			INIFile	preferences_;
+			typedef HashMap<void*, List<CompositeDescriptor*>::Iterator> ListIteratorHashMap;
+
+			ListIteratorHashMap 				composite_map_;
+			ListIteratorHashMap 				descriptor_map_;
+			List<CompositeDescriptor*> 	descriptors_;
+
+			MainControlPreferences* 		main_control_preferences_;
+			Preferences*								preferences_dialog_;
+			int 			 									preferences_id_;
+			INIFile		 									preferences_;
 			
-			static int current_id_;
-			
+			static int 									current_id_;
+
+		
 			// used to acces the global instance of MainControl
-			static MainControl* theMainControl_;
+			static MainControl* 				theMainControl_;
 
-			/**	A list containing all modular widgets.
+			/*_	A list containing all modular widgets.
 					This list is modified by \Ref{addModularWidget} and
 					\Ref{removeModularWidget}.
 			*/
-			List<ModularWidget*>	modular_widgets_;
+			List<ModularWidget*>				modular_widgets_;
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
-#		endif 
+#ifndef BALL_NO_INLINE_FUNCTIONS
+#	include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
+#endif 
 
 		} // namespace VIEW
 

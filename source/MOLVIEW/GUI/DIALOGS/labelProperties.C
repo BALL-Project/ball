@@ -1,5 +1,10 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id:
 
+#include <BALL/STRUCTURE/geometricProperties.h>
+# include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <qcolordialog.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
@@ -9,22 +14,22 @@
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
-		LabelProperties::LabelProperties
-			(QWidget* parent, const char* name)
+		LabelProperties::LabelProperties(QWidget* parent, const char* name)
 			throw()
 			:	Inherited( parent, name ),
 				ModularWidget(name),
 				id_(-1),
 				selection_()
 		{
-			setCaption("Label Properties");
+			setCaption("Add Label");
 
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
+
+			hide();
 		}
 
 		LabelProperties::~LabelProperties()
@@ -66,24 +71,26 @@ namespace BALL
 
 				color_sample_->setBackgroundColor(qcolor);
 			}
+			else
+			{
+				custom_color_.set(ColorRGBA(1.,1.,0.,1.));
+				QColor qcolor(custom_color_.getRed(), 
+											custom_color_.getGreen(), 
+											custom_color_.getBlue());
+
+				color_sample_->setBackgroundColor(qcolor);
+	    }			
 		}
 
 		void LabelProperties::writePreferences(INIFile& inifile)
 			throw()
 		{
-			//	
 			// the label window position
-			//
-			inifile.setValue
-				("WINDOWS", "Label::x", String(x()));
-			inifile.setValue
-				("WINDOWS", "Label::y", String(y()));
+			inifile.insertValue("WINDOWS", "Label::x", String(x()));
+			inifile.insertValue("WINDOWS", "Label::y", String(y()));
 
-			// 
 			// the color value
-			// 
-			inifile.setValue
-				("WINDOWS", "Label::customcolor", custom_color_);
+			inifile.insertValue("WINDOWS", "Label::customcolor", custom_color_);
 		}
 
 		void LabelProperties::onNotify(Message *message)
@@ -93,7 +100,6 @@ namespace BALL
 			if (RTTI::isKindOf<MolecularSelectionMessage>(*message))
 			{
 				MolecularSelectionMessage *selection = RTTI::castTo<MolecularSelectionMessage>(*message);
-
 				selection_ = selection->getSelection();
 			}
 			else
@@ -103,14 +109,7 @@ namespace BALL
 			}
 
 			// disabled apply button, if selection is empty
-			if (selection_.empty())
-			{
-				apply_button_->setEnabled(false);
-			}
-			else
-			{
-				apply_button_->setEnabled(true);
-			}
+			apply_button_->setEnabled(!selection_.empty());
 		}
 
 		void LabelProperties::initializeWidget(MainControl& main_control)
@@ -118,19 +117,15 @@ namespace BALL
 		{
 			main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
-			id_ = main_control.insertMenuEntry
-							(MainControl::DISPLAY, "&Label Properties", this,
-							 SLOT(openDialog()), 
-							 CTRL+Key_L);   
+			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "&Add Label", this,
+																				 SLOT(openDialog()), CTRL+Key_L);   
 		}
 
 		void LabelProperties::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry
-				(MainControl::DISPLAY, "&Label Properties", this,
-				 SLOT(openDialog()), 
-				 CTRL+Key_L);   
+			main_control.removeMenuEntry(MainControl::DISPLAY, "&Add Label", this,
+																	 SLOT(openDialog()), CTRL+Key_L);   
 		}
 
 		void LabelProperties::checkMenu(MainControl& main_control)
@@ -194,33 +189,27 @@ namespace BALL
 			(**list_it).appendChild(*label);
 
 			// mark composite for update
-			ChangedCompositeMessage change_message;
-			change_message.setComposite((*list_it));
+			ChangedCompositeMessage* change_message = new ChangedCompositeMessage;
+			change_message->setComposite((*list_it));
 			notify_(change_message);
 
 			// update scene
-			SceneMessage scene_message;
-			scene_message.updateOnly();
+			SceneMessage* scene_message = new SceneMessage;
+			scene_message->updateOnly();
 			notify_(scene_message);
 			
 			// clear status bar
-			WindowMessage window_message;
-			notify_(window_message);
+			setStatusbarText("");
 		}
 
 		void LabelProperties::editColor()
 		{
-			color_sample_
-				->setBackgroundColor(QColorDialog::getColor(color_sample_->backgroundColor()));
-
-			ColorRGBA color;
+			color_sample_->setBackgroundColor(QColorDialog::getColor(color_sample_->backgroundColor()));
 			QColor qcolor = color_sample_->backgroundColor();
 
-			color.set((float)qcolor.red() / 255.0,
-								(float)qcolor.green() / 255.0,
-								(float)qcolor.blue() / 255.0);
-
-			custom_color_ = color;
+			custom_color_.set((float)qcolor.red() / 255.0,
+											  (float)qcolor.green() / 255.0,
+												(float)qcolor.blue() / 255.0);
 
 			update();
 		}

@@ -1,4 +1,7 @@
-// $Id: stringHashSet.h,v 1.3 2000/09/26 19:24:41 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: stringHashSet.h,v 1.3.2.1 2003/01/07 13:17:38 anker Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHSET_H
 #define BALL_DATATYPE_STRINGHASHSET_H
@@ -17,7 +20,7 @@ namespace BALL
 	/**	A string hash set.
 			This is just a convenience class.
 			\\
-			{\bf Definition:}\URL{BALL/DATAYTPE/stringHashSet.h}
+			{\bf Definition:}\URL{BALL/DATATYPE/stringHashSet.h}
 	*/
 	typedef HashSet<String> StringHashSet;
 

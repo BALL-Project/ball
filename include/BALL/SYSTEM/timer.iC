@@ -1,4 +1,7 @@
-// $Id: timer.iC,v 1.4 2001/01/26 01:36:59 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: timer.iC,v 1.4.2.1 2003/01/07 13:19:18 anker Exp $
 
 BALL_INLINE 
 bool Timer::isValid() const
@@ -13,7 +16,7 @@ bool Timer::isRunning() const
 }
 
 BALL_INLINE 
-float Timer::getCPUTime() const
+double Timer::getCPUTime() const
 { 
   return (getUserTime() + getSystemTime());
 }

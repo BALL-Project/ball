@@ -1,4 +1,7 @@
-// $Id: events.h,v 1.7 2001/07/16 14:49:31 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: events.h,v 1.7.2.1 2003/01/07 13:19:41 anker Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -964,6 +967,8 @@ namespace BALL
 			/**	@name	Constructors
 			*/	
 			//@{
+			Events()
+				throw();
 
 			/** Default Constructor.
 					Construct new events.

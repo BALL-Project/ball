@@ -1,4 +1,7 @@
-// $Id:
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: trianglePoint.h,v 1.2.2.1 2003/01/07 13:19:14 anker Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGLEPOINT_H
 #define BALL_STRUCTURE_TRIANGLEPOINT_H
@@ -23,17 +26,14 @@
 namespace BALL
 {
 
-	template <class T>
-	class TTriangleEdge;
-
-	template <class T>
-	class TTriangle;
-
-	template <class T>
-	class TTriangulatedSurface;
-
-	template <class T>
-	class TTriangulatedSES;
+	class TriangleEdge;
+	class Triangle;
+	class TriangulatedSurface;
+	class TriangulatedSphere;
+	class TriangulatedSES;
+	class SESTriangulator;
+	class TriangulatedSAS;
+	class SASTriangulator;
 
 
 	/** Generic TriangleEdge Class.
@@ -41,32 +41,34 @@ namespace BALL
 			{\bf Definition:}\URL{BALL/STRUCTURE/triangle.h}
 			\\
 	*/
-	template <class T>
-	class TTrianglePoint	:	public GraphVertex< TTriangleEdge<T>,TTriangle<T> >
+	class TrianglePoint
+			:	public GraphVertex< TrianglePoint,TriangleEdge,Triangle >
 	{
 		
 		public:
 
 		/** @name Class friends
 				\begin{itemize}
-					\item class GraphEdge< TTrianglePoint<T>,TTriangle<T> >
-					\item class GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >
-					\item class GraphVertex< TTriangleEdge<T>,TTriangle<T> >
-					\item class TTriangulatedSurface<T>
-					\item class TTriangulatedSES<T>
-					\item class TTriangle<T>;
-					\item class TTriangleEdge<T>;
+					\item class Triangle
+					\item class TriangleEdge
+					\item class TriangulatedSurface
+					\item class TriangulatedSphere
+					\item class TriangulatedSES
+					\item class SESTriangulator
+					\item class TriangulatedSAS
+					\item class SASTriangulator
 				\end{itemize}
 		*/
-		friend class GraphEdge< TTrianglePoint<T>,TTriangle<T> >;
-		friend class GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >;
-		friend class GraphVertex< TTriangleEdge<T>,TTriangle<T> >;
-		friend class TTriangulatedSurface<T>;
-		friend class TTriangulatedSES<T>;
-		friend class TTriangle<T>;
-		friend class TTriangleEdge<T>;
+		friend class Triangle;
+		friend class TriangleEdge;
+		friend class TriangulatedSurface;
+		friend class TriangulatedSphere;
+		friend class TriangulatedSES;
+		friend class SESTriangulator;
+		friend class TriangulatedSAS;
+		friend class SASTriangulator;
 
-		BALL_CREATE(TTrianglePoint)
+		BALL_CREATE(TrianglePoint)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -75,49 +77,72 @@ namespace BALL
 		/**	Default constructor.
 				This method creates a new TrianglePoint object.
 		*/
-		TTrianglePoint()
+		TrianglePoint()
 			throw();
 
 		/**	Copy constructor.
 				Create a new TrianglePoint object from another.
 				@param	point	the TrianglePoint object to be copied
-				@param	deep	if deep = false, all pointers are set to NULL (default). Otherwise the new	
-											TrianglePoint object is linked to the neighbours of the old TrianglePoint object.
+				@param	deep	if deep = false, all pointers are set to NULL (default).	
+											Otherwise the new TrianglePoint object is linked to the	
+											neighbours of the old TrianglePoint object.
 		*/
-		TTrianglePoint(const TTrianglePoint<T>& point, bool deep = false)
+		TrianglePoint(const TrianglePoint& point, bool deep = false)
 			throw();
 
 		/**	Destructor.
 				Destructs the TrianglePoint object.
 		*/
-		virtual ~TTrianglePoint()
+		virtual ~TrianglePoint()
 			throw();
 
 		//@}
+		/**	@name	Assignments
+		*/
+		//@{
 
+		/**	Assign from another TrianglePoint.
+				@param	point	the TrianglePoint object to assign from
+				@param	deep	if deep = false, all pointers are set to NULL	
+											(default). Otherwise the new TrianglePoint object is	
+											linked to the neighbours of the TrianglePoint object to	
+											assign from.
+		*/
+		void set(const TrianglePoint& point, bool deep = false)
+			throw();
+
+		/**	Assign from another TrianglePoint.
+				The new TrianglePoint object is linked to the neighbours of the	
+				TrianglePoint object to assign from.
+				@param	point	the TrianglePoint object to assign from
+		*/
+		TrianglePoint& operator = (const TrianglePoint& point)
+			throw();
+
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
 
 		/** Get the point
 		*/
-		TVector3<T> getPoint() const
+		TVector3<double> getPoint() const
 			throw();
 
 		/** Set the point
 		*/
-		void setPoint(const TVector3<T>& point)
+		void setPoint(const TVector3<double>& point)
 			throw();
 
 		/** Get the normal of the TrianglePoint
 		*/
-		TVector3<T> getNormal() const
+		TVector3<double> getNormal() const
 			throw();
 
 		/** Set the normal of the TrianglePoint
 		*/
-		void setNormal(const TVector3<T>& normal)
-			throw();
+		void setNormal(const TVector3<double>& normal)
+			throw(Exception::DivisionByZero);
 
 		//@}
 
@@ -126,13 +151,24 @@ namespace BALL
 		//@{
 
 		/** Equality operator
+				@return	bool	{\bf true} if the TrianglePoints lie on the same point,	
+											{\bf false} otherwise.
 		*/
-		bool operator == (const TTrianglePoint& point) const
+		virtual bool operator == (const TrianglePoint& point) const
 			throw();
 
 		/** Inequality operator
+				@return	bool	{\bf false} if the TrianglePoints lie on the same point,	
+											{\bf true} otherwise.
 		*/
-		bool operator != (const TTrianglePoint& point) const
+		virtual bool operator != (const TrianglePoint& point) const
+			throw();
+
+		/** Similarity operator
+				@return	bool	{\bf true} if the TrianglePoints lie on the same point,	
+											{\bf false} otherwise.
+		*/
+		virtual bool operator *= (const TrianglePoint& point) const
 			throw();
 
 		//@}
@@ -141,13 +177,10 @@ namespace BALL
 
 		/*_ The point itselfe
 		*/
-		TVector3<T> point_;
+		TVector3<double> point_;
 		/*_ The normal vector of the point
 		*/
-		TVector3<T> normal_;
-		/*_ The state of the point
-		*/
-		Index state_;
+		TVector3<double> normal_;
 
 	};
 
@@ -158,123 +191,12 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	template <class T>
-	std::ostream& operator << (std::ostream& s, const TTrianglePoint<T>& point)
-	{
-		s << "POINT";
-		s << point.getIndex();
-		s << "( " << point.getPoint() << " " << point.getNormal() << " {";
-		std::list<TTriangleEdge<T>*> edges = point.getEdges();
-		typename std::list<TTriangleEdge<T>*>::const_iterator e;
-		for (e = edges.begin(); e != edges.end(); e++)
-		{
-			s << (*e)->getIndex() << " ";
-		}
-		s << "} [";
-		std::list<TTriangle<T>*> triangles = point.getFaces();
-		typename std::list<TTriangle<T>*>::const_iterator t;
-		for (t = triangles.begin(); t != triangles.end(); t++)
-		{
-			s << (*t)->getIndex() << " ";
-		}
-		s << "] )";
-		return s;
-	}
+	std::ostream& operator << (std::ostream& s, const TrianglePoint& point);
 
 	//@}
-
-
-	/**	The Default Triangle Type.
-			If double precision is not needed, {\tt TTrianglePoint<float>} should	
-			be used. It is predefined as {\tt TrianglePoint} for convenience.
-	*/
-	typedef TTrianglePoint<float> TrianglePoint;
-
-
-
-
-	template <class T>
-	TTrianglePoint<T>::TTrianglePoint()
-		throw()
-		:	GraphVertex< TTriangleEdge<T>,TTriangle<T> >(),
-			point_(),
-			normal_()
-	{
-	}
-
-
-	template <class T>
-	TTrianglePoint<T>::TTrianglePoint(const TTrianglePoint<T>& point, bool deep)
-		throw()
-		:	GraphVertex< TTriangleEdge<T>,TTriangle<T> >(point,deep),
-			point_(point.point_),
-			normal_(point.normal_)
-	{
-	}
-
-
-	template <class T>
-	TTrianglePoint<T>::~TTrianglePoint()
-		throw()
-	{
-	}
-
-
-	template <class T>
-	TVector3<T> TTrianglePoint<T>::getPoint() const
-		throw()
-	{
-		return point_;
-	}
-
-
-	template <class T>
-	void TTrianglePoint<T>::setPoint(const TVector3<T>& point)
-		throw()
-	{
-		point_ = point;
-	}
-
-
-	template <class T>
-	TVector3<T> TTrianglePoint<T>::getNormal() const
-		throw()
-	{
-		return normal_;
-	}
-
-
-	template <class T>
-	void TTrianglePoint<T>::setNormal(const TVector3<T>& normal)
-		throw()
-	{
-		normal_ = normal;
-	}
-
-
-	template <class T>
-	bool TTrianglePoint<T>::operator == (const TTrianglePoint<T>& point) const
-		throw()
-	{
-		return (point_ == point.point_);
-	}
-
-
-	template <class T>
-	bool TTrianglePoint<T>::operator != (const TTrianglePoint<T>& point) const
-		throw()
-	{
-		return (point_ != point.point_);
-	}
-
-
-
-
-
 
 
 }	// namespace BALL
 
 
 #endif	// BALL_STRUCTURE_TRIANGLEPOINT_H
-

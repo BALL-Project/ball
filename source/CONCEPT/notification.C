@@ -1,4 +1,7 @@
-// $Id: notification.C,v 1.7 2001/07/15 18:56:11 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: notification.C,v 1.7.2.1 2003/01/07 13:20:32 anker Exp $
 
 #include <BALL/CONCEPT/notification.h>
 #include <iostream>

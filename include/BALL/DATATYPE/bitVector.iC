@@ -1,4 +1,7 @@
-// $Id: bitVector.iC,v 1.24 2001/12/12 11:30:21 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: bitVector.iC,v 1.24.2.1 2003/01/07 13:17:32 anker Exp $
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
@@ -19,7 +22,7 @@ Bit::Bit(const BitVector* const bit_vector, Index index)
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
 
-	if (index < (Index) - bit_vector->getSize())
+	if (index < - (Index)bit_vector->getSize())
 	{
 		throw Exception::IndexUnderflow(__FILE__, __LINE__);
 	}
@@ -41,7 +44,7 @@ Bit::Bit(BitVector* bit_vector, Index index)
 	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
-	if (index < (Index) - bit_vector->getSize())
+	if (index < (- (Index)bit_vector->getSize()))
 	{
 		throw Exception::IndexUnderflow(__FILE__, __LINE__);
 	}

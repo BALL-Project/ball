@@ -1,4 +1,7 @@
-// $Id: string.iC,v 1.37 2001/07/14 12:59:38 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: string.iC,v 1.37.2.1 2003/01/07 13:17:38 anker Exp $
 
 BALL_INLINE 
 String::String()
@@ -48,12 +51,10 @@ String::String(const String& s, Index from, Size len)
 }
 
 BALL_INLINE 
-void String::set(::std::strstream& s)
+void String::set(std::stringstream& s)
 	throw()
 {
-	s << ::std::ends;
-	char* char_ptr = s.str();
-	assign(char_ptr);
+	s >> (*this);
 }
 
 BALL_INLINE 
@@ -418,7 +419,7 @@ const String& String::operator = (const char* char_ptr)
 }
 
 BALL_INLINE 
-const String& String::operator = (::std::strstream& s)
+const String& String::operator = (std::stringstream& s)
 	throw()
 {
   set(s);
@@ -773,7 +774,7 @@ bool String::isValid() const
 }
 
 BALL_INLINE 
-::std::istream& String::getline(::std::istream& s,  char delimiter)
+std::istream& String::getline(std::istream& s,  char delimiter)
 	throw()
 {
 	static char line_buffer[8192];

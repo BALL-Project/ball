@@ -1,4 +1,7 @@
-// $Id: coulomb.C,v 1.2 2001/06/05 15:49:48 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: coulomb.C,v 1.2.2.1 2003/01/07 13:20:39 anker Exp $
 
 #include <BALL/ENERGY/coulomb.h>
 #include <BALL/KERNEL/forEach.h>

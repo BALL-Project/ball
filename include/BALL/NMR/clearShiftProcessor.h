@@ -1,4 +1,7 @@
-// $Id: clearShiftProcessor.h,v 1.5 2001/03/02 22:19:33 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: clearShiftProcessor.h,v 1.5.2.1 2003/01/07 13:18:47 anker Exp $
 
 #ifndef BALL_NMR_CLEARSHIFTPROCESSOR_H
 #define BALL_NMR_CLEARSHIFTPROCESSOR_H

@@ -1,4 +1,7 @@
-// $Id:
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: graphEdge.h,v 1.2.2.1 2003/01/07 13:19:07 anker Exp $
 
 #ifndef BALL_STRUCTURE_GRAPHEDGE_H
 #define BALL_STRUCTURE_GRAPHEDGE_H
@@ -12,13 +15,33 @@
 namespace BALL
 {
 
-	/** Generic GraphEdge Class.	
+	template <typename Vertex, typename Edge, typename Face>
+	class GraphVertex;
+
+	template <typename Vertex, typename Edge, typename Face>
+	class GraphFace;
+
+	template <typename Vertex, typename Edge, typename Face>
+	class GraphTriangle;
+
+	/** Generic GraphEdge Class.
       {\bf Definition:} \URL{BALL/STRUCTURE/GraphEdge.h}
 	*/
-	template <class Vertex, class Face>
+	template <typename Vertex, typename Edge, typename Face>
 	class GraphEdge
 	{
 		public:
+
+		/** @name Class friends
+				\begin{itemize}
+					\item class GraphVertex<Vertex,Edge,Face>;
+					\item class GraphFace<Vertex,Edge,Face>;
+					\item class GraphTriangle<Vertex,Edge,Face>;
+				\end{itemize}
+		*/
+		friend class GraphVertex<Vertex,Edge,Face>;
+		friend class GraphFace<Vertex,Edge,Face>;
+		friend class GraphTriangle<Vertex,Edge,Face>;
 
 		BALL_CREATE(GraphEdge)
 
@@ -35,10 +58,11 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new GraphEdge object from another.
 				@param	edge	the GraphEdge object to be copied
-				@param	deep	if deep = false, all pointers are set to NULL (default). Otherwise the new	
-											GraphEdge object is linked to the neighbours of the old GraphEdge object.
+				@param	deep	if deep = false, all pointers are set to NULL (default).
+											Otherwise the new	GraphEdge object is linked to the
+											neighbours of the old GraphEdge object.
 		*/
-		GraphEdge(const GraphEdge<Vertex,Face>& edge, bool deep = false)
+		GraphEdge(const GraphEdge<Vertex,Edge,Face>& edge, bool deep = false)
 			throw();
 
 		/**	Detailled constructor.
@@ -49,7 +73,11 @@ namespace BALL
 				@param	face2		assigned to the second face
 				@param	index		assigned to the index
 		*/
-		GraphEdge(Vertex* vertex1, Vertex* vertex2, Face* face1, Face* face2, Index index)
+		GraphEdge(Vertex*	vertex1,
+							Vertex*	vertex2,
+							Face*		face1,
+							Face*		face2,
+							Index		index)
 			throw();
 
 		/**	Destructor.
@@ -66,10 +94,20 @@ namespace BALL
 
 		/**	Assign from another GraphEdge.
 				@param	edge	the GraphEdge object to assign from
-				@param	deep	if deep = false, all pointers are set to NULL (default). Otherwise the	
-											GraphEdge object is linked to the neighbours of the GraphEdge object to be copied.
+				@param	deep	if deep = false, all pointers are set to NULL (default).
+											Otherwise the GraphEdge object is linked to the
+											neighbours of the GraphEdge object to assign from.
 		*/
-		void set(const GraphEdge<Vertex,Face>& edge, bool deep = false)
+		void set(const GraphEdge<Vertex,Edge,Face>& edge, bool deep = false)
+			throw();
+
+		/**	Assign from another GraphEdge.
+				The GraphEdge object is linked to the neighbours of the GraphEdge	
+				object to assign from.
+				@param	edge	the GraphEdge object to assign from
+		*/
+		GraphEdge<Vertex,Edge,Face>& operator =
+				(const GraphEdge<Vertex,Edge,Face>& edge)
 			throw();
 
 		/**	Assign from a lot of nice objects
@@ -79,16 +117,20 @@ namespace BALL
 				@param	face2		assigned to the second face
 				@param	index		assigned to the index
 		*/
-		void set(Vertex* vertex0, Vertex* vertex1, Face* face0, Face* face1, Index index)
+		void set(Vertex*	vertex0,
+						 Vertex*	vertex1,
+						 Face*		face0,
+						 Face*		face1,
+						 Index		index)
 			throw();
-		
+
 		//@}
 		/**	@name	Accessors
 		*/
 		//@{
 
 		/** Set one of the two vertices of the GraphEdge.
-				@param	i				the first vertex is changed if i = 0, the second	
+				@param	i				the first vertex is changed if i = 0, the second
 												otherwise
 				@param	vertex	a pointer to the new vertex
 		*/
@@ -97,7 +139,7 @@ namespace BALL
 
 		/** Return one of the two vertices of the GraphEdge.
 				@param	i
-				@return	Vertex*	a pointer to the first vertex if i = 0,	
+				@return	Vertex*	a pointer to the first vertex if i = 0,
 												a pointer to the second vertex otherwise
 		*/
 		Vertex* getVertex(Position i) const
@@ -112,7 +154,7 @@ namespace BALL
 
 		/** Return one of the two faces of the GraphEdge.
 				@param	i
-				@return	Face*	a pointer to the first face if i = 0,	
+				@return	Face*	a pointer to the first face if i = 0,
 											a pointer to the second face otherwise
 		*/
 		Face* getFace(Position i) const
@@ -129,60 +171,56 @@ namespace BALL
 		*/
 		Index getIndex() const
 			throw();
-		
+
 		/** Return a pointer to the other vertex of the GraphEdge.
-				If the given vertex is not incident to the GraphEdge, an exception is thrown.
+				If the given vertex is not incident to the GraphEdge, an exception is
+				thrown.
 				@param	Vertex*	one of the vertices of the GraphEdge
 				@return	Vertex*	the other vertex
 		*/
-		Vertex* otherVertex(Vertex* face) const
+		Vertex* other(const Vertex* vertex) const
 			throw(Exception::GeneralException);
 
 		/** Return a pointer to the other face of the GraphEdge.
-				If the given face is not neighboured to the GraphEdge, an exception is thrown.
+				If the given face is not neighboured to the GraphEdge, an exception is
+				thrown.
 				@param	Face*	one of the faces of the GraphEdge
 				@return	Face*	the other face
 		*/
-		Face* otherFace(Face* face) const
+		Face* other(const Face* face) const
 			throw(Exception::GeneralException);
 
 		/** Substitute a vertex by an other one.
 				@param	old_vertex	the vertex that has to be substituted
 				@param	new_vertex	the new vertex
-				@return	bool				{\bf true}, if the vertex can be substituted, {\bf false} otherwise
+				@return	bool				{\bf true}, if the vertex can be substituted,
+														{\bf false} otherwise
 		*/
-		bool substituteVertex(Vertex* old_vertex, Vertex* new_vertex)
+		bool substitute(const Vertex* old_vertex, Vertex* new_vertex)
 			throw();
 
 		/** Substitute a face by an other one.
 				@param	old_face	the face that has to be substituted
 				@param	new_face	the new face
-				@return	bool			{\bf true}, if the face can be substituted, {\bf false} otherwise
+				@return	bool			{\bf true}, if the face can be substituted,
+													{\bf false} otherwise
 		*/
-		bool substituteFace(Face* old_vertex, Face* new_vertex)
+		bool substitute(const Face* old_vertex, Face* new_vertex)
 			throw();
 
-		/*void remove()
-		{	
-			vertex_[0]->deleteEdge(this);
-			vertex_[1]->deleteEdge(this);
-			//if (face0_ != NULL)
-			//{
-			//	face0_->deleteEdge(this);
-			//}
-			//if (face1_ != NULL)
-			//{
-			//	face1_->deleteEdge(this);
-			//}
-		}*/
-
 		/**	Delete a face of the GraphEdge.
-				If the second face of the GraphEdge should be deleted, it is set to NULL. If the first one should	
-				be deleted, the second one is copied to first position and then set to NULL.
+				If the second face of the GraphEdge should be deleted, it is set to
+				NULL. If the first one should be deleted, the second one is copied to
+				first position and then set to NULL.
 				@param	face	the face to delete
 				@return	Face*	a pointer to the other face
 		*/
-		Face* deleteFace(Face* face)
+		Face* remove(const Face* face)
+			throw();
+
+		/*	Swap the two vertices of the GraphEdge
+		*/
+		void revert()
 			throw();
 
 		//@}
@@ -193,40 +231,51 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
+				@return bool, {\bf true}
 		*/
-		bool operator == (const GraphEdge<Vertex,Face>&) const
+		virtual bool operator == (const Edge&) const
 			throw();
 
 		/**	Inequality operator.
+				@return	bool	{\bf false}
 		*/
-		bool operator != (const GraphEdge<Vertex,Face>&) const
+		virtual bool operator != (const Edge&) const
 			throw();
-		
+
+		/**	Similarity operator.
+				@return	bool	{\bf true}
+		*/
+		virtual bool operator *= (const Edge&) const
+			throw();
+
 		//@}
 
+		protected:
 
-		//protected:
+		/*_	@name	Attributes
+		*/
+		//@{
 
 		/*_ The vertices of the GraphEdge
 		*/
-		std::vector<Vertex*> vertex_;
+		Vertex* vertex_[2];
 		/*_ The faces of the GraphEdge
 		*/
-		std::vector<Face*> face_;
+		Face* face_[2];
 		/*_ The index of the GraphEdge
 		*/
 		Index index_;
+
+		//@}
 
 	};
 
 
 
-	template <typename Vertex, typename Face>
-	GraphEdge<Vertex,Face>::GraphEdge()
+	template <typename Vertex, typename Edge, typename Face>
+	GraphEdge<Vertex,Edge,Face>::GraphEdge()
 		throw()
-		:	vertex_(2),
-			face_(2),
-			index_(-1)
+		:	index_(-1)
 	{
 		vertex_[0] = NULL;
 		vertex_[1] = NULL;
@@ -235,12 +284,11 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	GraphEdge<Vertex,Face>::GraphEdge(const GraphEdge<Vertex,Face>& edge, bool deep)
+	template <typename Vertex, typename Edge, typename Face>
+	GraphEdge<Vertex,Edge,Face>::
+			GraphEdge(const GraphEdge<Vertex,Edge,Face>& edge, bool deep)
 		throw()
-		:	vertex_(2),
-			face_(2),
-			index_(edge.index_)
+		:	index_(edge.index_)
 	{
 		if (deep)
 		{
@@ -259,17 +307,15 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	GraphEdge<Vertex,Face>::GraphEdge
+	template <typename Vertex, typename Edge, typename Face>
+	GraphEdge<Vertex,Edge,Face>::GraphEdge
 		(Vertex*	vertex1,
 		 Vertex*	vertex2,
 		 Face*		face1,
 		 Face*		face2,
 		 Index		index)
 		throw()
-		: vertex_(2),
-			face_(2),
-			index_(index)
+		: index_(index)
 	{
 		vertex_[0] = vertex1;
 		vertex_[1] = vertex2;
@@ -278,37 +324,58 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	GraphEdge<Vertex,Face>::~GraphEdge()
+	template <typename Vertex, typename Edge, typename Face>
+	GraphEdge<Vertex,Edge,Face>::~GraphEdge()
 		throw()
 	{
 	}
 
 
-	template <typename Vertex, typename Face>
-	void GraphEdge<Vertex,Face>::set(const GraphEdge<Vertex,Face>& edge, bool deep)
+	template <typename Vertex, typename Edge, typename Face>
+	void GraphEdge<Vertex,Edge,Face>::set
+			(const GraphEdge<Vertex,Edge,Face>& edge, bool deep)
 		throw()
 	{
-		if (deep)
+		if (this != &edge)
+		{
+			if (deep)
+			{
+				vertex_[0] = edge.vertex_[0];
+				vertex_[1] = edge.vertex_[1];
+				face_[0] = edge.face_[0];
+				face_[1] = edge.face_[1];
+			}
+			else
+			{
+				vertex_[0] = NULL;
+				vertex_[1] = NULL;
+				face_[0] = NULL;
+				face_[1] = NULL;
+			}
+			index_ = edge.index_;
+		}
+	}
+
+
+	template <typename Vertex, typename Edge, typename Face>
+	GraphEdge<Vertex,Edge,Face>& GraphEdge<Vertex,Edge,Face>::operator =
+			(const GraphEdge<Vertex,Edge,Face>& edge)
+		throw()
+	{
+		if (this != &edge)
 		{
 			vertex_[0] = edge.vertex_[0];
 			vertex_[1] = edge.vertex_[1];
 			face_[0] = edge.face_[0];
 			face_[1] = edge.face_[1];
+			index_ = edge.index_;
 		}
-		else
-		{
-			vertex_[0] = NULL;
-			vertex_[1] = NULL;
-			face_[0] = NULL;
-			face_[1] = NULL;
-		}
-		index_ = edge.index_;
+		return *this;
 	}
 
 
-	template <typename Vertex, typename Face>
-	void GraphEdge<Vertex,Face>::set
+	template <typename Vertex, typename Edge, typename Face>
+	void GraphEdge<Vertex,Edge,Face>::set
 		(Vertex*	vertex0,
 		 Vertex*	vertex1,
 		 Face*		face0,
@@ -324,8 +391,8 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	void GraphEdge<Vertex,Face>::setVertex(Position i, Vertex* vertex)
+	template <typename Vertex, typename Edge, typename Face>
+	void GraphEdge<Vertex,Edge,Face>::setVertex(Position i, Vertex* vertex)
 		throw()
 	{
 		if (i == 0)
@@ -339,8 +406,8 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	Vertex* GraphEdge<Vertex,Face>::getVertex(Position i) const
+	template <typename Vertex, typename Edge, typename Face>
+	Vertex* GraphEdge<Vertex,Edge,Face>::getVertex(Position i) const
 		throw()
 	{
 		if (i == 0)
@@ -354,8 +421,8 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	void GraphEdge<Vertex,Face>::setFace(Position i, Face* face)
+	template <typename Vertex, typename Edge, typename Face>
+	void GraphEdge<Vertex,Edge,Face>::setFace(Position i, Face* face)
 		throw()
 	{
 		if (i == 0)
@@ -369,8 +436,8 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	Face* GraphEdge<Vertex,Face>::getFace(Position i) const
+	template <typename Vertex, typename Edge, typename Face>
+	Face* GraphEdge<Vertex,Edge,Face>::getFace(Position i) const
 		throw()
 	{
 		if (i == 0)
@@ -384,24 +451,24 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	void GraphEdge<Vertex,Face>::setIndex(Index index)
+	template <typename Vertex, typename Edge, typename Face>
+	void GraphEdge<Vertex,Edge,Face>::setIndex(Index index)
 		throw()
 	{
 		index_ = index;
 	}
 
 
-	template <typename Vertex, typename Face>
-	Index GraphEdge<Vertex,Face>::getIndex() const
+	template <typename Vertex, typename Edge, typename Face>
+	Index GraphEdge<Vertex,Edge,Face>::getIndex() const
 		throw()
 	{
 		return index_;
 	}
 
 
-	template <typename Vertex, typename Face>
-	Vertex* GraphEdge<Vertex,Face>::otherVertex(Vertex* vertex) const
+	template <typename Vertex, typename Edge, typename Face>
+	Vertex* GraphEdge<Vertex,Edge,Face>::other(const Vertex* vertex) const
 		throw(Exception::GeneralException)
 	{
 		if (vertex_[0] == vertex)
@@ -422,8 +489,8 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	Face* GraphEdge<Vertex,Face>::otherFace(Face* face) const
+	template <typename Vertex, typename Edge, typename Face>
+	Face* GraphEdge<Vertex,Edge,Face>::other(const Face* face) const
 		throw(Exception::GeneralException)
 	{
 		if (face_[0] == face)
@@ -444,8 +511,9 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	bool GraphEdge<Vertex,Face>::substituteVertex(Vertex* old_vertex, Vertex* new_vertex)
+	template <typename Vertex, typename Edge, typename Face>
+	bool GraphEdge<Vertex,Edge,Face>::substitute
+			(const Vertex* old_vertex, Vertex* new_vertex)
 		throw()
 	{
 		if (vertex_[0] == old_vertex)
@@ -467,8 +535,9 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	bool GraphEdge<Vertex,Face>::substituteFace(Face* old_face, Face* new_face)
+	template <typename Vertex, typename Edge, typename Face>
+	bool GraphEdge<Vertex,Edge,Face>::substitute
+			(const Face* old_face, Face* new_face)
 		throw()
 	{
 		if (face_[0] == old_face)
@@ -490,24 +559,8 @@ namespace BALL
 	}
 
 
-	template <typename Vertex, typename Face>
-	bool GraphEdge<Vertex,Face>::operator == (const GraphEdge<Vertex,Face>&) const
-		throw()
-	{
-		return false;
-	}
-
-
-	template <typename Vertex, typename Face>
-	bool GraphEdge<Vertex,Face>::operator != (const GraphEdge<Vertex,Face>&) const
-		throw()
-	{
-		return true;
-	}
-
-
-	template <typename Vertex, typename Face>
-	Face* GraphEdge<Vertex,Face>::deleteFace(Face* face)
+	template <typename Vertex, typename Edge, typename Face>
+	Face* GraphEdge<Vertex,Edge,Face>::remove(const Face* face)
 		throw()
 	{
 		if (face_[1] == face)
@@ -526,6 +579,38 @@ namespace BALL
 	}
 
 
+	template <typename Vertex, typename Edge, typename Face>
+	void GraphEdge<Vertex,Edge,Face>::revert()
+		throw()
+	{
+		Vertex* tmp = vertex_[0];
+		vertex_[0] = vertex_[1];
+		vertex_[1] = tmp;
+	}
+
+
+	template <typename Vertex, typename Edge, typename Face>
+	bool GraphEdge<Vertex,Edge,Face>::operator == (const Edge&) const
+		throw()
+	{
+		return true;
+	}
+
+
+	template <typename Vertex, typename Edge, typename Face>
+	bool GraphEdge<Vertex,Edge,Face>::operator != (const Edge&) const
+		throw()
+	{
+		return false;
+	}
+
+
+	template <typename Vertex, typename Edge, typename Face>
+	bool GraphEdge<Vertex,Edge,Face>::operator *= (const Edge&) const
+		throw()
+	{
+		return true;
+	}
 
 
 

@@ -1,4 +1,8 @@
-// $Id: Expression_test.C,v 1.28 2002/01/28 00:43:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Expression_test.C,v 1.28.2.1 2003/01/07 13:22:24 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.28 2002/01/28 00:43:55 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.28.2.1 2003/01/07 13:22:24 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -410,7 +414,7 @@ Expression* e_ptr = 0;
 CHECK(Expression::Expression() throw())
 	e_ptr = new Expression;
 	TEST_NOT_EQUAL(e_ptr, 0)
-	TEST_EQUAL(e_ptr->getCreationMethods().size(), 23)
+	TEST_EQUAL(e_ptr->getCreationMethods().size(), 24)
 RESULT
 
 
@@ -435,7 +439,7 @@ RESULT
 
 CHECK(Expression::Expression(const String& expression_string) throw())
 	Expression e("true()");
-	TEST_EQUAL(e.getCreationMethods().size(), 23)
+	TEST_EQUAL(e.getCreationMethods().size(), 24)
 	TEST_EQUAL(e(Atom()), true)
 RESULT
 
@@ -479,8 +483,14 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	test_expressions.insert(pair<String, Size>("connectedTo((H)(H))", 14));
 	test_expressions.insert(pair<String, Size>("connectedTo(C(H)(H)(H))", 0));
 	test_expressions.insert(pair<String, Size>("element(H)", 38));
+	test_expressions.insert(pair<String, Size>("!element(H)", 38));
 	test_expressions.insert(pair<String, Size>("element(O)", 6));
 	test_expressions.insert(pair<String, Size>("element(C)", 22));
+	test_expressions.insert(pair<String, Size>("!element(C)", 54));
+	test_expressions.insert(pair<String, Size>("((element(C)))", 22));
+	test_expressions.insert(pair<String, Size>("!(element(C))", 54));
+	test_expressions.insert(pair<String, Size>("(!element(C))", 54));
+	test_expressions.insert(pair<String, Size>("!(!element(C))", 22));
 	test_expressions.insert(pair<String, Size>("element(H) OR (name(CA) AND chain(A))", 40));
 
 	Expression e;
@@ -494,6 +504,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 		{
 			if (e.operator () (*it)) counter++;
 		}
+		STATUS("testing expression " << exp_iterator->first)
 		TEST_EQUAL(counter, exp_iterator->second);
 	}
 

@@ -1,4 +1,7 @@
-// $Id: textPersistenceManager.C,v 1.15 2002/01/09 03:03:02 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: textPersistenceManager.C,v 1.15.2.1 2003/01/07 13:20:34 anker Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -55,7 +58,7 @@ namespace BALL
 	}
 			
   void TextPersistenceManager::writeHeader
-		(const char* type_name, const char* name, PointerSizeInt ptr)
+		(const char* type_name, const char* name, PointerSizeUInt ptr)
   {
     *ostr_ << indent();
 
@@ -164,7 +167,7 @@ namespace BALL
 		}
 	}
 
-	bool TextPersistenceManager::checkHeader(const char* type_name, const char* name, PointerSizeInt& ptr)
+	bool TextPersistenceManager::checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			if (name == 0)
@@ -224,7 +227,7 @@ namespace BALL
 		{
 #			ifdef BALL_DEBUG_PERSISTENCE
 				Log.error() << "Could not read a valid object pointer: " 
-										<< dec << (PointerSizeInt)ptr << "!" << endl;
+										<< dec << (PointerSizeUInt)ptr << "!" << endl;
 #			endif
 
 			// abort if it was not a valid pointer
@@ -261,7 +264,7 @@ namespace BALL
 		return true;
 	}
 
-	bool TextPersistenceManager::getObjectHeader(String& type_name, PointerSizeInt& ptr)
+	bool TextPersistenceManager::getObjectHeader(String& type_name, PointerSizeUInt& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			Log.info() << "entering getObjectHeader()" << endl;
@@ -503,7 +506,7 @@ namespace BALL
 
 	BALL_DEFINE_NUMBER_PUT(Size)
 	BALL_DEFINE_NUMBER_PUT(Index)
-	BALL_DEFINE_NUMBER_PUT(PointerSizeInt)
+	BALL_DEFINE_NUMBER_PUT(PointerSizeUInt)
 	BALL_DEFINE_NUMBER_PUT(Real)
 	BALL_DEFINE_NUMBER_PUT(DoubleReal)
 
@@ -576,7 +579,7 @@ namespace BALL
 
 	BALL_DEFINE_NUMBER_GET(Index)
 	BALL_DEFINE_NUMBER_GET(Size)
-	BALL_DEFINE_NUMBER_GET(PointerSizeInt)
+	BALL_DEFINE_NUMBER_GET(PointerSizeUInt)
 	BALL_DEFINE_NUMBER_GET(Real)
 	BALL_DEFINE_NUMBER_GET(DoubleReal)
 

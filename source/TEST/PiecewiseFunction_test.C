@@ -1,4 +1,7 @@
-// $Id: PiecewiseFunction_test.C,v 1.6 2001/12/30 13:29:00 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PiecewiseFunction_test.C,v 1.6.2.1 2003/01/07 13:22:42 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.6 2001/12/30 13:29:00 sturm Exp $")
+START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.6.2.1 2003/01/07 13:22:42 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

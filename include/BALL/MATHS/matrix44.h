@@ -1,4 +1,7 @@
-// $Id: matrix44.h,v 1.38 2001/02/14 01:59:58 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: matrix44.h,v 1.38.2.1 2003/01/07 13:18:01 anker Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H

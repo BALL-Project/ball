@@ -1,4 +1,7 @@
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.9.2.1 2002/11/12 16:29:57 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.9.2.2 2003/01/07 13:19:01 anker Exp $
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
@@ -21,7 +24,7 @@ namespace BALL
 			This processor is using the method proposed by Simonson/Bruenger, J.
 			Phys. Chem. 98:4683--4694, 1994 which is based on Uhlig, J. Phys. Chem.
 			41(9):1215--1225, 1937. \\
-			{\bf Definition:} \URL{BALL/SOLVATION/UhligCavFreeEnergyProcessor.h}
+			{\bf Definition:} \URL{BALL/SOLVATION/uhligCavFreeEnergyProcessor.h}
 	 */
 	class UhligCavFreeEnergyProcessor
 		:	public EnergyProcessor

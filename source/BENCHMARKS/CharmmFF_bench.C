@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_bench.C,v 1.7 2002/12/22 15:04:49 anker Exp $
+// $Id: CharmmFF_bench.C,v 1.7.2.1 2003/01/07 13:20:23 anker Exp $
 
 #include <BALL/CONCEPT/benchmark.h>
 
@@ -16,7 +16,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(CharmmFF, 1.0, "$Id: CharmmFF_bench.C,v 1.7 2002/12/22 15:04:49 anker Exp $")
+START_BENCHMARK(CharmmFF, 1.0, "$Id: CharmmFF_bench.C,v 1.7.2.1 2003/01/07 13:20:23 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

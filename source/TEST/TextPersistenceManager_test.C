@@ -1,4 +1,7 @@
-// $Id: TextPersistenceManager_test.C,v 1.8 2002/01/26 22:01:29 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: TextPersistenceManager_test.C,v 1.8.2.1 2003/01/07 13:22:59 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.8 2002/01/26 22:01:29 oliver Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.8.2.1 2003/01/07 13:22:59 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -64,8 +67,8 @@ CHECK(TextPersistenceManager::writeHeader(const char* type_name, const char* nam
 	ofstream os(filename.c_str(), ios::out);
 	TextPersistenceManager pm;
 	pm.setOstream(os);
-	pm.writeHeader("TYPENAME1", "NAME", (PointerSizeInt)12345678);
-	pm.writeHeader("TYPENAME2", (const char*)0, (PointerSizeInt)34567890);
+	pm.writeHeader("TYPENAME1", "NAME", (PointerSizeUInt)12345678);
+	pm.writeHeader("TYPENAME2", (const char*)0, (PointerSizeUInt)34567890);
 	os.close();
 	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeHeader.txt")
 RESULT
@@ -75,7 +78,7 @@ CHECK(TextPersistenceManager::checkHeader(const char* type_name, const char* nam
 	ifstream is("data/TextPersistenceManager_test.checkHeader.txt");
 	TextPersistenceManager pm;
 	pm.setIstream(is);
-	PointerSizeInt ptr;
+	PointerSizeUInt ptr;
 	bool result = pm.checkHeader("TYPENAME1", "NAME", ptr);
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(ptr, 12345678)
@@ -173,7 +176,7 @@ CHECK(TextPersistenceManager::getObjectHeader(String& type_name, LongPointerType
 	ifstream is("data/TextPersistenceManager_test.getObjectHeader.txt");
 	TextPersistenceManager pm;
 	pm.setIstream(is);
-	PointerSizeInt ptr = 0;
+	PointerSizeUInt ptr = 0;
 	String type_name = "none";
 	bool result = pm.getObjectHeader(type_name, ptr);
 	TEST_EQUAL(result, true)
@@ -496,15 +499,15 @@ CHECK(TextPersistenceManager::put(const string& s))
 RESULT
 
 
-PointerSizeInt psi1 = 0x01234567;
+PointerSizeUInt psi1 = 0x01234567;
 psi1 <<= 32;
 psi1 += 0xFEDCBA98;
-PointerSizeInt psi2 = 0xFEDCBA98;
+PointerSizeUInt psi2 = 0xFEDCBA98;
 psi2 <<= 32;
 psi2 += 0x01234567;
 
-CHECK(TextPersistenceManager::put(const PointerSizeInt p))
-	pm.put((PointerSizeInt)0);
+CHECK(TextPersistenceManager::put(const PointerSizeUInt p))
+	pm.put((PointerSizeUInt)0);
 	pm.put(psi1);
 	pm.put(psi2);
 RESULT
@@ -614,8 +617,8 @@ CHECK(TextPersistenceManager::get(String& s))
 RESULT
 
 
-CHECK(TextPersistenceManager::get(PointerSizeInt& p))
-	PointerSizeInt p;
+CHECK(TextPersistenceManager::get(PointerSizeUInt& p))
+	PointerSizeUInt p;
 	pm.get(p);
 	TEST_EQUAL(p, 0)
 	pm.get(p);

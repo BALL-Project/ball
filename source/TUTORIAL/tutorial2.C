@@ -1,4 +1,7 @@
-// $Id: tutorial2.C,v 1.3 2000/03/26 18:27:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: tutorial2.C,v 1.3.2.1 2003/01/07 13:23:16 anker Exp $
 // tutorial example 2
 // ------------------
 // read BPTI from a PDB file, print its sequence

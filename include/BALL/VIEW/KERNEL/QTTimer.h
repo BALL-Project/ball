@@ -1,4 +1,7 @@
-// $Id: QTTimer.h,v 1.10 2001/07/16 14:49:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: QTTimer.h,v 1.10.2.1 2003/01/07 13:19:44 anker Exp $
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
 #define BALL_VIEW_KERNEL_QTTIMER_H
@@ -238,31 +241,10 @@ namespace BALL
 				throw();
 
 			//@}
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Reads persistent qtTimer data from the input stream {\em s} and 
-				  restores the state of {\em *this}.	 \\
-				  {\bf Note:} Not yet implemented.		 
-				  @param       s input stream from where to restore the internal state of {\em *this} qtTimer
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Writes persistent qtTimer data to the output stream {\em s} and 
-				  stores the state of {\em *this}. \\
-				  {\bf Note:} Not yet implemented.	 
-				  @param       s output stream to where to store the internal state of {\em *this} qtTimer
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
 
 			protected:
 
-			//@}
+
 			/** @name Timer method.
 			*/
 			//@{

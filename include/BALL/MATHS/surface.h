@@ -1,4 +1,7 @@
-// $Id: surface.h,v 1.13 2002/01/05 03:57:45 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: surface.h,v 1.13.2.1 2003/01/07 13:18:04 anker Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -16,9 +19,9 @@ namespace BALL
 
 	/**	Generic Three-dimensional Surface class.
 			This class describes a three-dimensional triangulated surface. 
-			Each tringle is represented by three indices to vertices (as described by the
-			\Ref{TSurface::Triangle}). Each of the vertices has a position and possibly a 
-			normal vector associated.
+			Each tringle is represented by three indices to vertices (as
+			described by the \Ref{TSurface::Triangle}). Each of the vertices has
+			a position and possibly a normal vector associated.
 			\\
 			{\bf Definition:} \URL{BALL/MATHS/surface.h}
 			\\
@@ -43,8 +46,16 @@ namespace BALL
 			Index	v2;
 			Index	v3;
 
-			bool operator == (const Triangle& triangle) const throw();
-			bool operator != (const Triangle& triangle) const throw();
+			bool operator == (const Triangle& triangle) const throw()
+			{
+				return (v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
+			}
+
+
+			bool operator != (const Triangle& triangle) const throw()
+			{
+				return !(v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
+			}
 		};
 			
 		/// A vertex
@@ -393,7 +404,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index)
+	typename TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index)
 		throw()
 	{
 		return triangle[index];
@@ -401,7 +412,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index) const
+	const typename TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index) const
 		throw()
 	{
 		return triangle[index];
@@ -433,7 +444,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	TSurface<T>::Vertex& TSurface<T>::getVertex(Position index)
+	typename TSurface<T>::Vertex& TSurface<T>::getVertex(Position index)
 		throw()
 	{
 		return vertex[index];
@@ -441,7 +452,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const TSurface<T>::Vertex& TSurface<T>::getVertex(Position index) const
+	const typename TSurface<T>::Vertex& TSurface<T>::getVertex(Position index) const
 		throw()
 	{
 		return vertex[index];
@@ -464,7 +475,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	void TSurface<T>::pushBackVertex(const TSurface<T>::Vertex& position)
+	void TSurface<T>::pushBackVertex(const typename TSurface<T>::Vertex& position)
 		throw()
 	{
 		vertex.push_back(position);
@@ -472,7 +483,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	TSurface<T>::Normal& TSurface<T>::getNormal(Position index)
+	typename TSurface<T>::Normal& TSurface<T>::getNormal(Position index)
 		throw()
 	{
 		return normal[index];
@@ -480,7 +491,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const TSurface<T>::Normal& TSurface<T>::getNormal(Position index) const
+	const typename TSurface<T>::Normal& TSurface<T>::getNormal(Position index) const
 		throw()
 	{
 		return normal[index];
@@ -502,7 +513,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	void TSurface<T>::pushBackNormal(const TSurface<T>::Normal& n)
+	void TSurface<T>::pushBackNormal(const typename TSurface<T>::Normal& n)
 		throw()
 	{
 		normal.push_back(n);
@@ -515,17 +526,7 @@ namespace BALL
 		return !(*this == surface);
 	}
 
-	template <typename T>
-	bool TSurface<T>::Triangle::operator == (const TSurface<T>::Triangle& triangle) const throw()
-	{
-		return (v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
-	}
 
-	template <typename T>
-	bool TSurface<T>::Triangle::operator != (const TSurface<T>::Triangle& triangle) const throw()
-	{
-		return !(v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
-	}
 
 
 	/**	Default surface type.

@@ -1,4 +1,8 @@
-// $Id: PersistenceManager_test.C,v 1.6 2002/01/12 01:59:49 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PersistenceManager_test.C,v 1.6.2.1 2003/01/07 13:22:42 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -38,12 +42,12 @@ namespace BALL
 		// Layer 0
 
 		void writeHeader(const char* /* type_name */, const char* /* name */,
-										 PointerSizeInt /* ptr */)
+										 PointerSizeUInt /* ptr */)
 		{
 		}
 
 		bool checkHeader(const char* /* type_name */, const char* /* name */,
-										 PointerSizeInt& /* ptr */)
+										 PointerSizeUInt& /* ptr */)
 		{
 			return true;
 		}
@@ -75,7 +79,7 @@ namespace BALL
 			return true;
 		}
 
-		bool getObjectHeader(String& /* type_name */, PointerSizeInt& /* ptr */)
+		bool getObjectHeader(String& /* type_name */, PointerSizeUInt& /* ptr */)
 		{
 			return true;
 		}
@@ -195,7 +199,7 @@ namespace BALL
 		{
 		}
 
-		void put(const PointerSizeInt /* p */)
+		void put(const PointerSizeUInt /* p */)
 		{
 		}
 
@@ -231,7 +235,7 @@ namespace BALL
 		{
 		}
 
-		void get(PointerSizeInt& /* p */)
+		void get(PointerSizeUInt& /* p */)
 		{
 		}
 
@@ -243,7 +247,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.6 2002/01/12 01:59:49 oliver Exp $")
+START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.6.2.1 2003/01/07 13:22:42 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -310,7 +314,7 @@ RESULT
 CHECK(PersistenceManager::getNumberOfClasses() const  throw())
 	PersistenceTest tpm;
 	Size noc = tpm.getNumberOfClasses();
-	TEST_EQUAL(noc, 16);
+	TEST_EQUAL(noc, 15);
 RESULT
 
 

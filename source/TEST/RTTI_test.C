@@ -1,4 +1,7 @@
-// $Id: RTTI_test.C,v 1.9 2001/06/23 02:23:32 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RTTI_test.C,v 1.9.2.1 2003/01/07 13:22:46 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +18,7 @@ class TC
 {
 };
 
-START_TEST(RTTI, "$Id: RTTI_test.C,v 1.9 2001/06/23 02:23:32 oliver Exp $")
+START_TEST(RTTI, "$Id: RTTI_test.C,v 1.9.2.1 2003/01/07 13:22:46 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

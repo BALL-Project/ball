@@ -1,4 +1,7 @@
-// $Id: sphere.h,v 1.11 2001/07/16 14:49:33 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: sphere.h,v 1.11.2.1 2003/01/07 13:19:57 anker Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -23,11 +26,6 @@
 #	include <BALL/VIEW/KERNEL/vertex1.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_RADIUS_H
-#	include <BALL/VIEW/KERNEL/radius.h>
-#endif
-
-
 namespace BALL
 {
 	
@@ -50,8 +48,7 @@ namespace BALL
 		class Sphere
 			: public GeometricObject,
 				public ColorExtension,
-				public Vertex,
-				public Radius
+				public Vertex
 		{
 			public:
 
@@ -231,22 +228,15 @@ namespace BALL
 			/**	@name	Storers
 			*/
 			//@{
-			/** Persistent stream output and state restorage.
-  			  Read persistent sphere data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.	 
-				  @param       s input stream from where to restore the internal state of {\em *this} sphere
-			*/
-			virtual void read(std::istream&  s)
+
+			/**	Get the radius.
+			 */
+			Real getRadius() const
 				throw();
 
-			/** Persistent stream output and state storage.
-  			  Write persistent sphere data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.		 
-				  @param       s output stream to where to store the internal state of {\em *this} sphere
-			*/
-			virtual void write(std::ostream& s) const
+			/** Set the radius.
+			 */
+			void setRadius(Real radius)
 				throw();
 
 			//@}
@@ -261,11 +251,15 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+
+			private:
+
+			Real radius_;
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/sphere.iC>
-#		endif
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/PRIMITIV/sphere.iC>
+#	endif
 		
 	} // namespace VIEW
 

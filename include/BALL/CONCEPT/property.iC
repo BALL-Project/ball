@@ -1,4 +1,7 @@
-// $Id: property.iC,v 1.27 2002/01/15 03:22:50 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: property.iC,v 1.27.2.1 2003/01/07 13:17:29 anker Exp $
 
 using namespace std;
 

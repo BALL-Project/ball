@@ -1,4 +1,4 @@
-// $Id: structure.doc,v 1.6 2002/01/08 00:44:19 oliver Exp $
+// $Id: structure.doc,v 1.6.2.1 2003/01/07 13:19:12 anker Exp $
 
 /**	@name	Molecular Structure
 		This chapter contains all relevant information on 
@@ -10,10 +10,13 @@
   //@Include: geometricProperties.h
   //@Include: geometricTransformations.h
   //@Include: fragmentDB.h
+	//@Include: reconstructFragmentProcessor.h
   //@Include: residueChecker.h
 	//@Include: smilesParser.h
   //@Include: rotamerLibrary.h
   //@Include: structureMapper.h
+	//@Include: molecularGraph.h
+	//@Include: peptides.h
 
 	/**	@name Radial Distribution Functions
 	*/
@@ -27,20 +30,20 @@
 	/**	@name	Molecular Surface Computation
 	*/
 	//@{
-	  //@Include: surfaceProcessor.h
+		//@Include: surfaceProcessor.h
 		//@Include: analyticalSES.h
 		//@Include: numericalSAS.h
 		//@Include: reducedSurface.h
-		//@Include: singularities.h
 		//@Include: solventExcludedSurface.h
+		//@Include: solventAccessibleSurface.h 
 		//@Include: triangulatedSurface.h
-		//@Include: triangulation.h
-		//@Include: BSDTree.h
 		//@Include: RSEdge.h
 		//@Include: RSFace.h
 		//@Include: RSVertex.h
 		//@Include: SESEdge.h
 		//@Include: SESFace.h
 		//@Include: SESVertex.h
+		//@Include: triangulatedSAS.h 
+		//@Include: triangulatedSES.h 
 	//@}
 //@}

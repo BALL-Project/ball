@@ -1,4 +1,7 @@
-// $Id: kernel.h,v 1.3 2000/08/30 19:57:56 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: kernel.h,v 1.3.2.1 2003/01/07 13:17:15 anker Exp $
 // BALL collective kernel header file
 // includes all kernel headers
 #ifndef BALL_KERNEL_H

@@ -1,4 +1,7 @@
-// $Id: charmmImproperTorsion.C,v 1.8 2001/07/12 19:02:00 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmmImproperTorsion.C,v 1.8.2.1 2003/01/07 13:21:05 anker Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>

@@ -1,4 +1,7 @@
-// $Id: glTwoColoredLine.C,v 1.5 2001/05/13 15:02:41 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glTwoColoredLine.C,v 1.5.2.1 2003/01/07 13:21:32 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.h>
 
@@ -6,6 +9,7 @@ using namespace std;
 
 namespace BALL
 {
+	using VIEW::BALL_SELECTED_COLOR;
 
 	namespace MOLVIEW
 	{
@@ -96,10 +100,10 @@ namespace BALL
 
 			if (isSelected())
 			{
-				glColor4ub((unsigned char)getSelectedColor().getRed(),
-									 (unsigned char)getSelectedColor().getGreen(),
-									 (unsigned char)getSelectedColor().getBlue(),
-									 (unsigned char)getSelectedColor().getAlpha());
+				glColor4ub((unsigned char)BALL_SELECTED_COLOR.getRed(),
+									 (unsigned char)BALL_SELECTED_COLOR.getGreen(),
+									 (unsigned char)BALL_SELECTED_COLOR.getBlue(),
+									 (unsigned char)BALL_SELECTED_COLOR.getAlpha());
 			}
 
 			if (with_names)
@@ -148,10 +152,6 @@ namespace BALL
 			return TwoColoredLine::extract();
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.iC>
-#		endif
- 
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,4 +1,7 @@
-// $Id: pyAtomContainerList.h,v 1.2 2001/07/25 11:30:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyAtomContainerList.h,v 1.2.2.1 2003/01/07 13:18:51 anker Exp $
 
 #ifndef BALL_PYTHON_PYATOMCONTAINERLIST_H
 #define BALL_PYTHON_PYATOMCONTAINERLIST_H

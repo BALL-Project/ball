@@ -1,4 +1,4 @@
-// $Id: concept.doc,v 1.8 2001/05/30 12:09:34 anker Exp $
+// $Id: concept.doc,v 1.8.2.1 2003/01/07 13:17:24 anker Exp $
 
 /** @name	Concepts
 		This chapter contains all relevant information on 
@@ -27,6 +27,7 @@
 		//@Include: reverseRandomAccessIterator.h
 	//@}
 
+	//@Include: factory.h
 	//@Include: notification.h
 	//@Include: object.h
 	

@@ -1,4 +1,7 @@
-// $Id: glDisplayList.h,v 1.6 2001/07/16 14:49:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glDisplayList.h,v 1.6.2.1 2003/01/07 13:19:30 anker Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
@@ -7,11 +10,10 @@
 #	include <BALL/common.h>
 #endif
 
-#include <GL/gl.h>
+#include <qgl.h>
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -30,7 +32,6 @@ namespace BALL
 		{
 			public:
 
-
 			/**	@name	Type Definitions.
 			*/
 			//@{
@@ -40,8 +41,8 @@ namespace BALL
 					that represents such a display list.
 			*/
 			typedef unsigned long GLList;
-			//@}
 
+			//@}
 			/** @name Predefined static values.
 			*/
 			//@{
@@ -51,8 +52,8 @@ namespace BALL
 					{\em DISPLAYLIST_NOT_DEFINED}.
 			*/
 			static const GLList DISPLAYLIST_NOT_DEFINED;
-			//@}
 
+			//@}
 			/**	@name	Exceptions
 			*/
 			//@{
@@ -95,8 +96,8 @@ namespace BALL
 				DisplayListRedeclaration(const char* file, int line)
 					throw();
 			};
-			//@}
 
+			//@}
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -116,7 +117,6 @@ namespace BALL
 					throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -144,7 +144,6 @@ namespace BALL
 			virtual void destroy()
 					throw();
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -156,7 +155,8 @@ namespace BALL
 					this method will be compiled into {\em *this} glDisplayList.
 					@exception   NestedDisplayList thrown whenever a nested display list definition is tried.
 					@exception   NoDisplayListAvailable thrown whenever no memory for the display list is available.
-					@exception   DisplayListRedeclaration thrown whenever {\em *this} glDisplayList is tried to be redefined before \Ref{destroy} is called.
+					@exception   DisplayListRedeclaration thrown whenever {\em *this} glDisplayList is tried to be redefined before 
+										   \Ref{destroy} is called.
 					@see         endDefinition
 			*/
 			void startDefinition()
@@ -206,8 +206,8 @@ namespace BALL
 			*/
 			void useCompileAndExecuteMode()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Predicates
 			*/
 			//@{
@@ -227,8 +227,8 @@ namespace BALL
 			*/
 			bool isCompileAndExecuteMode() const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -253,32 +253,9 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+
 			//@}
 
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent glDisplayList data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} glDisplayList
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent glDisplayList data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} glDisplayList
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-			//@}
-
-			
 			private:
 
 			/* compile switch */

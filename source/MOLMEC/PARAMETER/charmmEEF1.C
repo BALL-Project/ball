@@ -1,4 +1,7 @@
-// $Id: charmmEEF1.C,v 1.8 2001/07/11 00:10:47 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmmEEF1.C,v 1.8.2.1 2003/01/07 13:21:14 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>

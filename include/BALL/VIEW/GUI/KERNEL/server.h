@@ -1,4 +1,7 @@
-// $Id: server.h,v 1.10 2001/12/28 02:33:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: server.h,v 1.10.2.1 2003/01/07 13:19:35 anker Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -21,10 +24,6 @@
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #	include <BALL/SYSTEM/socket.h>
-#endif
-
-#ifndef BALL_VIEW_COMMON_GLOBAL_H
-#	include <BALL/VIEW/COMMON/global.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
@@ -51,7 +50,6 @@
 
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 
@@ -94,7 +92,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -126,8 +123,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+							
 			//@}
-
 			/**	@name	Exceptions
 			*/
 			//@{
@@ -144,8 +141,8 @@ namespace BALL
 				NotCompositeObject(const char* file, int line)
 					throw();
 			};
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -311,18 +308,19 @@ namespace BALL
 			*/
 			virtual void writePreferences(INIFile &inifile)
 				throw();
+							
 			//@}
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} server.
 					If the internal state of {\em *this} server is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {ConnectionObject::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} server is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} server is correct
 					@see        ConnectionObject::isValid
 			*/
 			virtual bool isValid() const
@@ -338,32 +336,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
-			/**	@name	Storers
-			*/	
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent server data from the input stream {\em s} and 
-				  restore the state of {\em *this} server.\\
-				  {\bf Note:} Not yet implemented.
-				  @param s input stream from where to restore the internal state of {\em *this} server
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent server data to the output stream {\em s} and 
-				  store the state of {\em *this} server.\\
-				  {\bf Note:} Not yet implemented.
-				  @param s output stream to where to store the internal state of {\em *this} server
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-			//@}
-
-			
+			//@}	
 			protected:
 
 			/** @name Timer method.
@@ -382,8 +356,8 @@ namespace BALL
 					@exception NotCompositeObject thrown if another object than \Ref{Composite} object is received
 			*/
 			virtual void timer();
+						
 			//@}
-
 
 			private:
 

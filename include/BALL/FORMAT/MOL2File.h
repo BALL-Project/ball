@@ -1,4 +1,7 @@
-// $Id: MOL2File.h,v 1.13 2002/01/05 19:01:44 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MOL2File.h,v 1.13.2.1 2003/01/07 13:17:42 anker Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -46,7 +49,7 @@ namespace BALL
 
 		/** Detailed constructor
 		*/
-		MOL2File(const String& filename, File::OpenMode open_mode = File::IN)
+		MOL2File(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/**	Copy constructor

@@ -1,4 +1,7 @@
-// $Id: tube.C,v 1.8 2001/02/04 16:14:28 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: tube.C,v 1.8.2.1 2003/01/07 13:23:39 anker Exp $
 
 #include <BALL/VIEW/PRIMITIV/tube.h>
 
@@ -6,34 +9,33 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
 		Tube::Tube()
 			throw()
 			: GeometricObject(),
-				Radius(),
 			  ColorExtension(),
-   			Vertex2()
+   			Vertex2(),
+				radius_(1)
 		{
 		}
 
 		Tube::Tube(const Tube& tube, bool deep)
 			throw()
 			: GeometricObject(tube, deep),
-				Radius(tube),
 			  ColorExtension(tube),
-   			Vertex2(tube)
+   			Vertex2(tube),
+				radius_(1)
 		{
 		}
 
 		Tube::Tube(const GeometricObject& geometric_object)
 			throw()
 			: GeometricObject(geometric_object),
-				Radius(),
 			  ColorExtension(),
-   			Vertex2()
+   			Vertex2(),
+				radius_(1)
 		{
 		}
 
@@ -41,8 +43,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Tube>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<Tube>() << endl;
 			#endif 
 
 			destroy();
@@ -52,16 +54,15 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::clear();
-			Radius::clear();
 			ColorExtension::clear();
 			Vertex2::clear();
+			radius_ = 1;
 		}
 
 		void Tube::destroy()
 			throw()
 		{
 			GeometricObject::destroy();
-			Radius::destroy();
 			ColorExtension::destroy();
 			Vertex2::destroy();
 		}
@@ -70,9 +71,9 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::set(tube, deep);
-			Radius::set(tube);
 			ColorExtension::set(tube);
 			Vertex2::set(tube);
+			radius_ = tube.radius_;
 		}
 
 		const Tube& Tube::operator = (const Tube& tube)
@@ -92,9 +93,12 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::swap(tube);
-			Radius::swap(tube);
 			ColorExtension::swap(tube);
 			Vertex2::swap(tube);
+
+			Real temp = tube.radius_;
+			tube.radius_ = radius_;
+			radius_ = temp;
 		}
 
 		bool Tube::isValid() const
@@ -113,23 +117,11 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			GeometricObject::dump(s, depth + 1);
-			Radius::dump(s, depth + 1);
 			ColorExtension::dump(s, depth + 1);
 			Vertex2::dump(s, depth + 1);
+			s << "radius : " << radius_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void Tube::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Tube::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool Tube::extract()

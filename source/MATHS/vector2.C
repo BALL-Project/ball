@@ -1,3 +1,6 @@
-// $Id: vector2.C,v 1.1 2001/05/31 21:58:15 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: vector2.C,v 1.1.2.1 2003/01/07 13:21:02 anker Exp $
 
 #include <BALL/MATHS/vector3.h>

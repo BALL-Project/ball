@@ -1,4 +1,7 @@
-// $Id: periodicBoundary.C,v 1.23 2002/01/18 01:35:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: periodicBoundary.C,v 1.23.2.1 2003/01/07 13:21:08 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>

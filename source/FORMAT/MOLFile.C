@@ -1,4 +1,7 @@
-// $Id: MOLFile.C,v 1.11 2002/01/17 00:46:32 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MOLFile.C,v 1.11.2.1 2003/01/07 13:20:44 anker Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -22,7 +25,7 @@ namespace BALL
 	const String MOLFile::counts_format_ = "%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d%6s\n";
 
 	// the format definition for the atom block
-	const String MOLFile::atom_format_ = "%10.4f%10.4f%10.4f %3s%2d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d\n";
+	const String MOLFile::atom_format_ = "%10.4f%10.4f%10.4f %-3s%2d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d%3d\n";
 
 	// the format definition for the bond block
 	const String MOLFile::bond_format_ = "%3d%3d%3d%3d%3d%3d%3d\n";
@@ -480,7 +483,10 @@ namespace BALL
 																	"Unable to read header block");
 		}
 		static vector<Atom*> atom_map;
-		return readCTAB_(atom_map);
+		Molecule* mol = readCTAB_(atom_map);
+		mol->setName(name);
+
+		return mol;
 	}
 	
 	void MOLFile::readCountsLine_(MOLFile::CountsStruct& counts)

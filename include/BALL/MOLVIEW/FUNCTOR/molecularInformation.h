@@ -1,57 +1,21 @@
-// $Id: molecularInformation.h,v 1.6 2001/07/16 14:49:23 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularInformation.h,v 1.6.2.1 2003/01/07 13:18:21 anker Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_CHAIN_H
-#	include <BALL/KERNEL/chain.h>
-#endif
-
-#ifndef BALL_KERNEL_FRAGMENT_H
-#	include <BALL/KERNEL/fragment.h>
-#endif
-
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
-#endif
-
-#ifndef BALL_KERNEL_PROTEIN_H
-# include <BALL/KERNEL/protein.h>
-#endif
-
-#ifndef BALL_KERNEL_RESIDUE_H
-#	include <BALL/KERNEL/residue.h>
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
-#endif
-        
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #	include <BALL/VIEW/FUNCTOR/information.h>
 #endif
 
-using namespace BALL::VIEW;
-
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 		
@@ -67,7 +31,8 @@ namespace BALL
 				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/molecularInformation.h} 
 				@see     Information
 		*/
-		class MolecularInformation: public Information
+		class MolecularInformation
+			: public VIEW::Information
 		{
 			public:
 			

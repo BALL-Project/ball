@@ -1,4 +1,7 @@
-// $Id: molecularSurfaceGrid.h,v 1.6.2.1 2002/11/12 16:29:35 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularSurfaceGrid.h,v 1.6.2.2 2003/01/07 13:18:57 anker Exp $
 
 #ifndef BALL_SOLVATION_MOLECULARSURFACEGRID_H
 #define BALL_SOLVATION_MOLECULARSURFACEGRID_H
@@ -21,12 +24,18 @@
 
 // ?????
 // I am an ugly hack. Fixme.
-#define CCONN__OUTSIDE 1
-#define CCONN__INSIDE  0
-#define	CCONN__INSIDE_PROBE 128
+// #define CCONN__OUTSIDE 1
+// #define CCONN__INSIDE  0
+// #define	CCONN__INSIDE_PROBE 128
 
 namespace BALL 
 {
+
+	// Define the entry values for an SES or SAS grid
+	const char CCONN__INSIDE = 0;
+	const char CCONN__OUTSIDE = 1;
+	const char CCONN__INSIDE_PROBE = (char)64;
+
 	///
 	TRegularData3D<char>* calculateSESGrid(const Vector3& lower, const Vector3& upper, 
 														const float spacing, 

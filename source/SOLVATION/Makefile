@@ -5,6 +5,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	claverieParameter.C\
+	electrostaticPotentialCalculator.C\
 	molecularSurfaceGrid.C\
 	ooiEnergy.C\
 	PCMCavFreeEnergyProcessor.C\

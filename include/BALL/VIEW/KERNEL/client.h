@@ -1,4 +1,7 @@
-// $Id: client.h,v 1.10 2001/07/16 14:49:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: client.h,v 1.10.2.1 2003/01/07 13:19:45 anker Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -191,29 +194,6 @@ namespace BALL
 				throw();
 
 			//@}
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Reads persistent client data from the input stream {\em s} and 
-				  restores the state of {\em *this}. \\
-				  {\bf Note:} Not yet implemented.
-			 	  @param       s input stream from where to restore the internal state of {\em *this} client
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Writes persistent client data to the output stream {\em s} and 
-				  stores the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} client
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-
-			//@}
 			
 			private:
 
@@ -223,11 +203,6 @@ namespace BALL
 			TextPersistenceManager pm_;
 		};
 
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/client.iC>
-#		endif
-		
 	} // namespace VIEW
 	
 } // namespace BALL

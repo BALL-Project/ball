@@ -1,4 +1,8 @@
-// $Id: StructureMapper_test.C,v 1.3 2001/12/17 01:29:42 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: StructureMapper_test.C,v 1.3.2.1 2003/01/07 13:22:57 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/STRUCTURE/structureMapper.h>
@@ -7,7 +11,7 @@
 #include <BALL/MATHS/quaternion.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.3 2001/12/17 01:29:42 oliver Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.3.2.1 2003/01/07 13:22:57 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -96,6 +100,81 @@ CHECK(mapFragments)
 	TEST_REAL_EQUAL(map_result.m42, t.m42)
 	TEST_REAL_EQUAL(map_result.m43, t.m43)
 	TEST_REAL_EQUAL(map_result.m44, t.m44)
+RESULT
+
+CHECK(Matrix4x4 StructureMapper::matchPoints(const Vector3& w1, const Vector3& w2, const Vector3& w3, const Vector& v1, const Vector3& v2, const Vector3& v3))
+	Vector3 v1(2.0, 2.0, 2.0);
+	Vector3 v2(3.0, 2.0, 2.0);
+	Vector3 v3(2.0, 3.0, 2.0);
+
+	Vector3 w1(1.0, 1.0, 1.0);
+	Vector3 w2(2.0, 1.0, 1.0);
+	Vector3 w3(1.0, 2.0, 1.0);
+
+	Matrix4x4 T = StructureMapper::matchPoints(w1, w2, w3, v1, v2, v3);
+	STATUS("transformation:\n" << T)
+	TEST_REAL_EQUAL(T.m11, 1.0)
+	TEST_REAL_EQUAL(T.m12, 0.0)
+	TEST_REAL_EQUAL(T.m13, 0.0)
+	TEST_REAL_EQUAL(T.m14, 1.0)
+	TEST_REAL_EQUAL(T.m21, 0.0)
+	TEST_REAL_EQUAL(T.m22, 1.0)
+	TEST_REAL_EQUAL(T.m23, 0.0)
+	TEST_REAL_EQUAL(T.m24, 1.0)
+	TEST_REAL_EQUAL(T.m31, 0.0)
+	TEST_REAL_EQUAL(T.m32, 0.0)
+	TEST_REAL_EQUAL(T.m33, 1.0)
+	TEST_REAL_EQUAL(T.m34, 1.0)
+	TEST_REAL_EQUAL(T.m41, 0.0)
+	TEST_REAL_EQUAL(T.m42, 0.0)
+	TEST_REAL_EQUAL(T.m43, 0.0)
+	TEST_REAL_EQUAL(T.m44, 1.0)
+
+	TEST_REAL_EQUAL((T * w1 - v1).getSquareLength(), 0.0)
+	TEST_REAL_EQUAL((T * w2 - v2).getSquareLength(), 0.0)
+	TEST_REAL_EQUAL((T * w3 - v3).getSquareLength(), 0.0)
+
+	w1.set(5.0, 0.0, 0.0);
+	w2.set(5.0, 1.0, 0.0);
+	w3.set(5.0, 2.0, 1.0);
+	
+	T = StructureMapper::matchPoints(w1, w2, w3, v1, v2, v3);
+	STATUS("transformation:\n" << T)
+	TEST_REAL_EQUAL(T.m11, 0.0)
+	TEST_REAL_EQUAL(T.m12, 1.0)
+	TEST_REAL_EQUAL(T.m13, 0.0)
+	TEST_REAL_EQUAL(T.m14, 2.0)
+	TEST_REAL_EQUAL(T.m21, 0.0)
+	TEST_REAL_EQUAL(T.m22, 0.0)
+	TEST_REAL_EQUAL(T.m23, 1.0)
+	TEST_REAL_EQUAL(T.m24, 2.0)
+	TEST_REAL_EQUAL(T.m31, 1.0)
+	TEST_REAL_EQUAL(T.m32, 0.0)
+	TEST_REAL_EQUAL(T.m33, 0.0)
+	TEST_REAL_EQUAL(T.m34, -3.0)
+	TEST_REAL_EQUAL(T.m41, 0.0)
+	TEST_REAL_EQUAL(T.m42, 0.0)
+	TEST_REAL_EQUAL(T.m43, 0.0)
+	TEST_REAL_EQUAL(T.m44, 1.0)
+
+	TEST_REAL_EQUAL((T * w1 - v1).getSquareLength(), 0.0)
+	TEST_REAL_EQUAL((T * w2 - v2).getSquareLength(), 0.0)
+	TEST_REAL_EQUAL((T * w3 - v3).getSquareLength(), 4.0)
+
+	// test co-linear case
+	w1.set(5.0, 0.0, 0.0);
+	w2.set(5.0, 1.0, 0.0);
+	w3.set(5.0, 2.0, 0.0);
+	
+	T = StructureMapper::matchPoints(w1, w2, w3, v1, v2, v3);
+	STATUS("transformation:\n" << T)
+	TEST_REAL_EQUAL(T.m14, 2.0)
+	TEST_REAL_EQUAL(T.m24, -3.0)
+	TEST_REAL_EQUAL(T.m34, 2.0)
+	TEST_REAL_EQUAL(T.m44, 1.0)
+
+	TEST_REAL_EQUAL((T * w1 - v1).getSquareLength(), 0.0)
+	TEST_REAL_EQUAL((T * w2 - v2).getSquareLength(), 0.0)
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,17 +1,26 @@
-// $Id: fileSystem.C,v 1.12 2002/01/12 12:19:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: fileSystem.C,v 1.12.2.1 2003/01/07 13:22:11 anker Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
 #include <BALL/DATATYPE/regExp.h>
+#ifdef BALL_HAS_PWD_H
 #include <pwd.h> // 'getpwnam'
+#endif
 
 namespace BALL 
 {
-
+#ifdef BALL_COMPILER_MSVC
+	const char FileSystem::PATH_SEPARATOR='\\';
+#else
 	const char FileSystem::PATH_SEPARATOR = '/';
+#endif
 	const char* const FileSystem::CURRENT_DIRECTORY = ".";
 	const char* const FileSystem::PARENT_DIRECTORY = "..";
 	// must be adapted in case of porting to other platforms than UNIX
+
 	static const char* const REGEXP_CONFORM_PARENT_DIRECTORY = "\\.\\.";
 
 	void FileSystem::canonizePath(String& path)
@@ -58,6 +67,22 @@ namespace BALL
 		// remove intermediate reversals of path 
 		// (something like "/usr/local/../bin" 
 		//  would be reduced to "/usr/bin")
+#ifdef BALL_COMPILER_MSVC
+		s = "[^";
+		s += FileSystem::PATH_SEPARATOR;
+		s += FileSystem::PATH_SEPARATOR;
+		s += FileSystem::CURRENT_DIRECTORY;
+		s += "][^";
+		s += FileSystem::PATH_SEPARATOR;
+		s += FileSystem::PATH_SEPARATOR;
+		s += FileSystem::CURRENT_DIRECTORY;
+		s += "]*";
+		s += FileSystem::PATH_SEPARATOR;
+		s += FileSystem::PATH_SEPARATOR;
+		s += REGEXP_CONFORM_PARENT_DIRECTORY;
+		s += FileSystem::PATH_SEPARATOR;
+		s += FileSystem::PATH_SEPARATOR;
+#else
 		s = "[^";
 		s += FileSystem::PATH_SEPARATOR;
 		s += FileSystem::CURRENT_DIRECTORY;
@@ -68,6 +93,7 @@ namespace BALL
 		s += FileSystem::PATH_SEPARATOR;
 		s += REGEXP_CONFORM_PARENT_DIRECTORY;
 		s += FileSystem::PATH_SEPARATOR;
+#endif
 		RegularExpression reg_exp(s);
 		Substring sub;
 		while (reg_exp.find(path, sub) == true)
@@ -79,6 +105,10 @@ namespace BALL
 	void FileSystem::expandTilde_(String& path)
 		throw()
 	{
+// WIN port: How to do this under Windows? WHAT to do?
+#ifndef BALL_COMPILER_MSVC
+			
+
 		if (path.isEmpty() == true)
 		{
 			return;
@@ -138,13 +168,34 @@ namespace BALL
 		String buffer(passwd->pw_dir);
 		buffer.append(path.c_str() + index);
 		buffer.swap(path);
+#else
+		Index index = (Index)path.find_first_not_of(FileSystem::PATH_SEPARATOR, 1);
 		
+		if (index == 2)
+		{
+			const char* user_dir = ::getenv("USERPROFILE");
+
+			if (user_dir == 0)
+			{
+				Log.warn() << "FileSystem::expandTilde: unable to expand '~' to"
+					              "the user's home directory -- please set $USER or"
+												"$HOME in your environment!" << std::endl;
+			}
+			else
+			{
+				// replace the '~' by the user's home dir (from $HOME)
+				path.replace(0, 1, user_dir);
+			}
+		}
+
+#endif
+
 		return;
 	}
 
 	String FileSystem::baseName(const String& filename)
 	{
-		Position idx = filename.find_last_of(PATH_SEPARATOR);
+		Position idx = (Position)filename.find_last_of(PATH_SEPARATOR);
 		if (idx != String::EndPos)
 		{
 			if ((idx + 1)< filename.size())
@@ -164,7 +215,7 @@ namespace BALL
 
 	String FileSystem::path(const String& filename)
 	{
-		Position idx = filename.find_last_of(PATH_SEPARATOR);
+		Position idx = (Position)filename.find_last_of(PATH_SEPARATOR);
 		if (idx != String::EndPos)
 		{
 			return filename(0, idx + 1);

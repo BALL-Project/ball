@@ -1,4 +1,7 @@
-// $Id: geometricConvertor.h,v 1.1 2000/06/04 17:56:10 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: geometricConvertor.h,v 1.1.2.1 2003/01/07 13:18:42 anker Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_GEOMETRICCONVERTOR_H
 #define BALL_MOLVIEW_KERNEL_GEOMETRICCONVERTOR_H

@@ -1,4 +1,7 @@
-// $Id: createSpectrumProcessor.h,v 1.13 2001/09/28 14:44:25 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: createSpectrumProcessor.h,v 1.13.2.1 2003/01/07 13:18:47 anker Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -89,7 +92,7 @@ namespace BALL
 				@exception ParseError if the contents of the file could not be parsed
 		*/
 		virtual void init(const String& filename = "NMR/StandardSpectrum.ini")
-			throw();
+			throw(Exception::ParseError, Exception::FileNotFound);
 
 		/**	Start method.
 		*/
@@ -150,8 +153,8 @@ namespace BALL
 		vector<String>					equivalency_residues_;
 		vector<vector<String> >	equivalency_atoms_;
 		float width_;
-		float use_averaging_;
-		float use_ignore_table_;
+		bool	use_averaging_;
+		bool	use_ignore_table_;
 		Expression expression_;
 	};
 

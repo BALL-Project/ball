@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.h,v 1.2 2002/05/12 14:03:22 oliver Exp $
+// $Id: reconstructFragmentProcessor.h,v 1.2.2.1 2003/01/07 13:19:09 anker Exp $
 
 #ifndef BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H
 #define BALL_STRUCTURE_RECONSTRUCFRAGMENTPROCESSOR_H

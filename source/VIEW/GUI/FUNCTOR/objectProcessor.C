@@ -1,4 +1,7 @@
-// $Id: objectProcessor.C,v 1.2 2001/01/26 01:37:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: objectProcessor.C,v 1.2.2.1 2003/01/07 13:23:23 anker Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/objectProcessor.h>
 

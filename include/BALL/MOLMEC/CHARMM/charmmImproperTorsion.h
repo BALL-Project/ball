@@ -1,4 +1,7 @@
-// $Id: charmmImproperTorsion.h,v 1.8 2001/07/11 23:59:31 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: charmmImproperTorsion.h,v 1.8.2.1 2003/01/07 13:18:07 anker Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMIMPROPERTORSION_H

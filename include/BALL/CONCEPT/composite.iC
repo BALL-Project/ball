@@ -1,11 +1,7 @@
-// $Id: composite.iC,v 1.16 2001/07/15 16:14:05 oliver Exp $
-
-BALL_INLINE 
-void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
-	throw()
-{
-  composite.clone(*this, predicate);
-}
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: composite.iC,v 1.16.2.1 2003/01/07 13:17:24 anker Exp $
 
 BALL_INLINE 
 const Composite& Composite::operator = (const Composite& composite)
@@ -14,13 +10,6 @@ const Composite& Composite::operator = (const Composite& composite)
   set(composite);
   return *this;
 }    
-
-BALL_INLINE 
-void Composite::get(Composite& composite, UnaryPredicate<Composite>& predicate) const
-	throw()
-{
-  composite.set(*this, predicate);
-}
 
 BALL_INLINE 
 void Composite::get(Composite& composite, bool deep) const
@@ -145,14 +134,14 @@ BALL_INLINE
 bool Composite::isExpanded() const
 	throw()
 {
-  return BALL_BIT_IS_CLEARED(properties_, PROPERTY__COLLAPSED_);
+  return (BALL_BIT_IS_CLEARED(properties_, PROPERTY__COLLAPSED_) != 0);
 }
 
 BALL_INLINE 
 bool Composite::isCollapsed() const
 	throw()
 {
-  return BALL_BIT_IS_SET(properties_, PROPERTY__COLLAPSED_);
+  return (BALL_BIT_IS_SET(properties_, PROPERTY__COLLAPSED_) != 0);
 }
 
 BALL_INLINE 

@@ -1,4 +1,7 @@
-// $Id: experiment.C,v 1.1 2001/06/14 11:37:14 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: experiment.C,v 1.1.2.1 2003/01/07 13:21:38 anker Exp $
 
 #include <BALL/NMR/experiment.h>
 

@@ -1,4 +1,7 @@
-// $Id: basetube.C,v 1.8 2001/02/04 16:14:28 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: basetube.C,v 1.8.2.1 2003/01/07 13:23:37 anker Exp $
 
 #include <BALL/VIEW/PRIMITIV/basetube.h>
 

@@ -1,10 +1,17 @@
 DIRECTORY=BENCHMARKS
 
 EXECUTABLES = \
-	PDB_bench\
+	CompositeCreation_bench\
+	CompositeClone_bench\
+	KernelCreation_bench\
+	KernelClone_bench\
 	KernelIteration_bench\
+	FragmentDB_bench\
 	AmberFF_bench\
-	PoissonBoltzmann_bench
+	CharmmFF_bench\
+	PDB_bench\
+	PoissonBoltzmann_bench\
+	MolmecSupport_bench
 
 # default target
 all:	$(EXECUTABLES)

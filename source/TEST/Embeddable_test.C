@@ -1,4 +1,7 @@
-// $Id: Embeddable_test.C,v 1.2 2000/10/24 21:38:54 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Embeddable_test.C,v 1.2.2.1 2003/01/07 13:22:22 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////

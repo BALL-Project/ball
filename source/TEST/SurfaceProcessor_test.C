@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SurfaceProcessor_test.C,v 1.1 2002/12/17 16:02:17 anker Exp $
+// $Id: SurfaceProcessor_test.C,v 1.1.2.1 2003/01/07 13:22:58 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(SurfaceProcessor, "$Id: SurfaceProcessor_test.C,v 1.1 2002/12/17 16:02:17 anker Exp $")
+START_TEST(SurfaceProcessor, "$Id: SurfaceProcessor_test.C,v 1.1.2.1 2003/01/07 13:22:58 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

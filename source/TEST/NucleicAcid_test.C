@@ -1,4 +1,8 @@
-// $Id: NucleicAcid_test.C,v 1.11 2002/01/26 22:01:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: NucleicAcid_test.C,v 1.11.2.1 2003/01/07 13:22:36 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +11,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.11 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.11.2.1 2003/01/07 13:22:36 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -220,7 +224,7 @@ CHECK(NucleicAcid::dump(ostream&, Size))
 	Nucleotide n1("N1");
 	na1.insert(n1);
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	na1.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/NucleicAcid_test.txt")
@@ -232,7 +236,7 @@ pm.registerClass(getStreamName<Nucleotide>(), Nucleotide::createDefault);
 pm.registerClass(getStreamName<NucleicAcid>(), NucleicAcid::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), File::OUT);
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	NucleicAcid* f1 = new NucleicAcid("name1");
 	Nucleotide* f2= new Nucleotide("name2");
 	Nucleotide* f3= new Nucleotide("name3");

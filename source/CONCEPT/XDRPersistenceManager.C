@@ -1,4 +1,7 @@
-// $Id: XDRPersistenceManager.C,v 1.20 2001/12/30 13:28:44 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: XDRPersistenceManager.C,v 1.20.2.1 2003/01/07 13:20:30 anker Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -125,7 +128,7 @@ namespace BALL
 	{
 	}
 
-  void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, PointerSizeInt ptr)
+  void XDRPersistenceManager::writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr)
 		throw()
   {
 #ifdef BALL_DEBUG_PERSISTENCE
@@ -310,7 +313,7 @@ namespace BALL
 		return true;
 	}
 
-	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, PointerSizeInt& ptr)
+	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr)
 		throw()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
@@ -337,7 +340,7 @@ namespace BALL
 		return true;
 	}
 
-	bool XDRPersistenceManager::getObjectHeader(String& type_name, PointerSizeInt& ptr)
+	bool XDRPersistenceManager::getObjectHeader(String& type_name, PointerSizeUInt& ptr)
 		throw()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
@@ -612,7 +615,7 @@ namespace BALL
 #		endif		
 	}
 
-	void XDRPersistenceManager::put(const PointerSizeInt ptr)
+	void XDRPersistenceManager::put(const PointerSizeUInt ptr)
 		throw()
 	{
 #   ifdef BALL_HAS_XDR_U_HYPER
@@ -626,7 +629,7 @@ namespace BALL
 #   endif
 
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.info() << "XDRPersistenceManager: put(PointerSizeInt = " << ptr << ")" << endl;
+			Log.info() << "XDRPersistenceManager: put(PointerSizeUInt = " << ptr << ")" << endl;
 #		endif		
 	}
 
@@ -726,7 +729,7 @@ namespace BALL
 #		endif		
 	}
 
-	void XDRPersistenceManager::get(PointerSizeInt& ptr)
+	void XDRPersistenceManager::get(PointerSizeUInt& ptr)
 		throw()
 	{
 #   ifdef BALL_HAS_XDR_U_HYPER

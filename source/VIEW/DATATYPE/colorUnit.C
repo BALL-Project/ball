@@ -1,7 +1,11 @@
-// $Id: colorUnit.C,v 1.6 2001/05/13 14:28:35 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorUnit.C,v 1.6.2.1 2003/01/07 13:23:18 anker Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
 #include <stdio.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 
@@ -30,13 +34,13 @@ namespace BALL
 		}
 
 		ColorUnit::ColorUnit(const char *char_ptr)
-			throw(Exception::InvalidRange, NotInHexFormat)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(char_ptr);
 		}
 
 		ColorUnit::ColorUnit(const String& s)
-			throw(Exception::InvalidRange, NotInHexFormat)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(s.c_str());
 		}
@@ -189,13 +193,13 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const char* char_ptr)
-			throw(Exception::InvalidRange, NotInHexFormat)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(char_ptr);
 		}
 
 		const ColorUnit& ColorUnit::operator = (const char* char_ptr)
-			throw(Exception::InvalidRange, NotInHexFormat)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(char_ptr);
 
@@ -209,13 +213,13 @@ namespace BALL
 		}
 
 		void ColorUnit::set(const String& s)
-			throw(Exception::InvalidRange, NotInHexFormat)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(s.c_str());
 		}
 
 		const ColorUnit& ColorUnit::operator = (const String& s)
-			throw(Exception::InvalidRange, NotInHexFormat)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(s);
 
@@ -500,26 +504,14 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void ColorUnit::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorUnit::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		istream& operator >> (istream& s, ColorUnit& color)
+		istream& operator >> (std::istream& s, ColorUnit& color)
 		{
 			s >> color.value_;
 
 			return s;
 		}
 
-		ostream& operator << (ostream& s, const ColorUnit& color)
+		ostream& operator << (std::ostream& s, const ColorUnit& color)
 		{
 			s << (int)(color.value_ * 255.0);
 			
@@ -527,7 +519,7 @@ namespace BALL
 		}
 
 		float ColorUnit::hexToFloat_(const char *char_ptr)
-			throw(Exception::InvalidRange, NotInHexFormat)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			int number = 0;
 

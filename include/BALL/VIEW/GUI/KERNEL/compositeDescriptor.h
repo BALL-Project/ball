@@ -1,11 +1,10 @@
-// $Id: compositeDescriptor.h,v 1.9 2001/07/16 14:49:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: compositeDescriptor.h,v 1.9.2.1 2003/01/07 13:19:30 anker Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -17,10 +16,6 @@
 
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -47,10 +42,8 @@
 #	include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 
@@ -215,14 +208,6 @@ namespace BALL
 					@see    set
 			*/
 			void get(CompositeDescriptor& composite_descriptor, bool deep = true)
-				throw();
-			
-			/** Swapping of CompositeDescriptors.
-					Swap the states of {\em *this} with {\em composite_descriptor}.\\
- 				  {\bf Note:} Not yet implemented.
-					@param  composite_descriptor the CompositeDescriptor {\em *this} is being swapped with
-			*/
-			void swap(CompositeDescriptor& composite_descriptor)
 				throw();
 			
 			//@}
@@ -508,29 +493,6 @@ namespace BALL
 					@param   depth the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-			
-			//@}
-			/**	@name	Storers
-			*/
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent compositeDescriptor data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s input stream from where to restore the internal state of {\em *this} compositeDescriptor
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent compositeDescriptor data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} compositeDescriptor
-			*/
-			virtual void write(std::ostream& s) const
 				throw();
 			
 			//@}

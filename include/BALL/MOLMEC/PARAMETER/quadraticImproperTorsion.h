@@ -1,4 +1,7 @@
-// $Id: quadraticImproperTorsion.h,v 1.7 2001/06/21 21:30:06 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: quadraticImproperTorsion.h,v 1.7.2.1 2003/01/07 13:18:14 anker Exp $
 // Molecular Mechanics Parameter: class describing the parameters required to
 // describe a harmonic improper torsion (out-of-plane) potential
  
@@ -17,7 +20,7 @@ namespace BALL
 {
 		
 	/** QuadraticImproperTorsion.
-			{\bf Definition:} \URL{include/BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h}
+			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h}
 	*/
 	class QuadraticImproperTorsion 
 		:	public ParameterSection

@@ -1,11 +1,10 @@
-// $Id: glSurfaceModel.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glSurfaceModel.h,v 1.5.2.1 2003/01/07 13:18:34 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLMESH_H
 #	include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
@@ -15,11 +14,8 @@
 #	include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #endif
 
-
-
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -56,12 +52,10 @@ namespace BALL
 					@return      AddGLSurfaceModel new constructed addGLSurfaceModel copied from {\em add_gl_surface_model}
 					@see         AddSurfaceModel
 			*/
-			AddGLSurfaceModel
-				(const AddGLSurfaceModel& add_gl_surface_model, bool deep = true)
+			AddGLSurfaceModel(const AddGLSurfaceModel& add_gl_surface_model, bool deep = true)
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -73,20 +67,19 @@ namespace BALL
 			*/
 			virtual ~AddGLSurfaceModel()
 				throw();
-			//@}
-
 
 			protected:
 
+			//@}
 			/** @name Creation method
 					This method creates primitives with OpenGL implementation used
-					for generating the graphical representation of the shapes they
-					represent.
+					for generating the graphical representation of the shapes they represent.
 					This method is the overridden method of the base class 
 					\Ref{AddSurfaceModel}.
 					@see  AddSurfaceModel
 			*/
 			//@{
+			
 			/** Creates a mesh.
 					Creates a \Ref{GLMesh} object and returns it as \Ref{Mesh}.
 					This overridden method of the class \Ref{AddSurfaceModel} creates
@@ -101,10 +94,6 @@ namespace BALL
 			//@}
 		};
 
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.iC>
-#			endif
-		
 	} // namespace MOLVIEW
 
 } // namespace BALL

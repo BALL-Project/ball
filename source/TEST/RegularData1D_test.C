@@ -1,13 +1,18 @@
-// $Id: RegularData1D_test.C,v 1.11 2001/07/16 00:26:37 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RegularData1D_test.C,v 1.11.2.1 2003/01/07 13:22:48 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/DATATYPE/regularData1D.h>
+#include <BALL/COMMON/limits.h>
 
 ///////////////////////////
 
-START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.11 2001/07/16 00:26:37 oliver Exp $")
+START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.11.2.1 2003/01/07 13:22:48 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -90,15 +95,6 @@ CHECK(TRegularData1D::clear())
 RESULT
 
 
-CHECK(TRegularData1D::destroy())
-	rd[0] = 2.3;
-	rd.destroy();
-	TEST_REAL_EQUAL(rd.getLowerBound(), 0.0)
-	TEST_REAL_EQUAL(rd.getUpperBound(), 0.0)
-	TEST_EQUAL(rd.getSize(), 0)
-RESULT
-
-
 CHECK(TRegularData1D::TRegularData1D& operator = (const TRegularData1D& data))
 	rd.setBoundaries(1.1, 2.1);
 	rd.resize(1);
@@ -131,7 +127,7 @@ RESULT
 
 
 CHECK(TRegularData1D::bool operator == (const TRegularData1D& data) const )
-	rd.destroy();
+	rd.clear();
 	rd.resize(4);
 	rd[0] = 1.1;
 	rd[1] = 1.2;

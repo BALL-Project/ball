@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ReconstructFragmentProcessor_test.C,v 1.2 2002/05/12 14:05:13 oliver Exp $
+// $Id: ReconstructFragmentProcessor_test.C,v 1.2.2.1 2003/01/07 13:22:47 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.2 2002/05/12 14:05:13 oliver Exp $")
+START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.2.2.1 2003/01/07 13:22:47 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

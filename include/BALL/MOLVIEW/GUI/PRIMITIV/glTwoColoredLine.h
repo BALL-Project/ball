@@ -1,11 +1,10 @@
-// $Id: glTwoColoredLine.h,v 1.7 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glTwoColoredLine.h,v 1.7.2.1 2003/01/07 13:18:38 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #	include <BALL/VIEW/GUI/KERNEL/glObject.h>
@@ -15,13 +14,10 @@
 #	include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.h>
 #endif
 
-
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-			
 		using VIEW::GLObject;
 		
 		/** GLTwoColoredLine class.
@@ -217,12 +213,9 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+
 			//@}
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

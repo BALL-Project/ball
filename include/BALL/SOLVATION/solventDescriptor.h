@@ -1,4 +1,7 @@
-// $Id: solventDescriptor.h,v 1.9 2001/07/16 23:58:34 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: solventDescriptor.h,v 1.9.2.1 2003/01/07 13:19:00 anker Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
 #define BALL_SOLVATION_SOLVENTDESCRIPTOR_H

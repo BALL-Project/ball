@@ -1,4 +1,7 @@
-// $Id: object.C,v 1.10 2001/07/25 11:25:22 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: object.C,v 1.10.2.1 2003/01/07 13:20:32 anker Exp $
 
 #include <BALL/CONCEPT/object.h>
 

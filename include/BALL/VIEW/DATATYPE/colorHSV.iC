@@ -1,4 +1,7 @@
-// $Id: colorHSV.iC,v 1.2 2001/05/13 13:28:49 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorHSV.iC,v 1.2.2.1 2003/01/07 13:19:20 anker Exp $
 
 BALL_INLINE 
 void ColorHSV::setHue(const ColorUnitHue& hue)

@@ -1,15 +1,10 @@
-// $Id: molecularControl.h,v 1.7 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularControl.h,v 1.7.2.1 2003/01/07 13:18:40 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #	include <BALL/VIEW/GUI/WIDGETS/control.h>
@@ -23,21 +18,16 @@
 #	include <BALL/MOLVIEW/FUNCTOR/molecularFilter.h>
 #endif
 
-#ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
-#	include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
+#ifndef BALL_KERNEL_ATOM_H
+#	include <BALL/KERNEL/atom.h>
 #endif
-
-
-//using namespace BALL;
-using namespace BALL::VIEW;
-//using namespace BALL::MOLVIEW;
-
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
+		using VIEW::Control;
+
 		/**	The MolecularControl class.
 				The MolecularControl class is a widget to display the molecular structure of 
 				\Ref{Composite}	objects. 
@@ -49,11 +39,28 @@ namespace BALL
 				objects. \\
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h}
 		*/
-		class MolecularControl: public BALL::VIEW::Control
+		class MolecularControl
+			: public VIEW::Control
 		{			
 			Q_OBJECT
 			
-		public:
+			enum MenuEntries
+			{
+				OBJECT__REMOVE               = 0,
+				OBJECT__CUT                  = 1,
+				OBJECT__COPY                 = 2,
+				OBJECT__PASTE                = 3,
+				CAMERA__CENTER               = 10,
+				BONDS__BUILD                 = 20,
+				BONDS__REMOVE                = 21,
+				SELECT                       = 30,
+				DESELECT                     = 31,
+				RESIDUE__CHECK               = 40,
+				DISPLAY__CHANGE              = 50,
+				ATOM__PROPERTIES						 = 60
+			};
+
+			public:
 			
 			/**	@name	Constructors
 			*/	
@@ -61,8 +68,8 @@ namespace BALL
 
 			/** Default Constructor.
 					Constructs new molecularControl.
-					@param      parent the parent widget of {\em *this} molecularControl (See documentation of QT-library for information concerning widgets)
-					@param      name the name of {\em *this} molecularControl (See documentation of QT-library for information concerning widgets)
+					@param      parent the parent widget of {\em *this} molecularControl 
+					@param      name the name of {\em *this} molecularControl 
 					@return     MolecularControl new constructed molecularControl
 					@see        Control
 			*/
@@ -70,7 +77,6 @@ namespace BALL
 				throw();
 			
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -80,8 +86,8 @@ namespace BALL
 			*/
 			virtual ~MolecularControl()
 				throw();
-			//@}
 			
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -99,7 +105,7 @@ namespace BALL
 					@see   show
 					@see   checkMenus
 			*/
-			virtual void checkMenu(MainControl& main_control)
+			virtual void checkMenu(VIEW::MainControl& main_control)
 				throw();
 
 			/** Builds a context menu.
@@ -111,10 +117,10 @@ namespace BALL
 			*/
 			virtual void buildContextMenu(Composite* composite, QListViewItem* item)
 				throw();
-			//@}
 
 		public slots:
 				
+			//@}
 			/** @name Public slots
 			*/
 			//@{
@@ -130,13 +136,32 @@ namespace BALL
 			*/
 			virtual void sentSelection();
 
-			//@}
-		
+			/** Atom properties dialog requested */
+			void atomProperties();
 
-		signals:
+			/** Check residues
+			 */
+			void checkResidue();
+
+			/** Select 
+			 */
+			void select();
 			
+			/** Deselect
+			 */
+			void deselect();
+			
+			/** Build bonds
+			 */
+			void buildBonds();
+			
+			/** Center the camera on a composite.
+			 */
+			void centerCamera();
+
 		protected:
 
+			//@}
 			/** @name Internal creation and message handling
 			*/
 			//@{
@@ -148,7 +173,7 @@ namespace BALL
 					@see     MolecularInformation
 					@see     generateListViewItem_
 			*/
-		  virtual Information& getInformationVisitor_()
+		  virtual VIEW::Information& getInformationVisitor_()
 				throw();
 
 			/** Recursive iteration method.
@@ -166,7 +191,8 @@ namespace BALL
 					calls for each of these children the method \Ref{updateListViewItem_}.
 					@param   item a pointer to a \Ref{QListViewItem} containing the subtree structure 
 					@param   composite a pointer to a \Ref{Composite} object containing the (possibly) new substructure
-					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree structure of {\em item} are unequal, {\tt false} otherwise 
+					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree structure of 
+												{\em item} are unequal, {\tt false} otherwise 
 					@see     updateListViewItem_
 			*/
 			virtual bool recurseUpdate_(QListViewItem* item, Composite* composite)
@@ -184,7 +210,7 @@ namespace BALL
 					@return  bool {\tt true} if an update of {\em *this} molecularControl is necessary, {\tt false} otherwise
 					@see     onNotify
 			*/
-			virtual bool reactToMessages_(Message* message)
+			virtual bool reactToMessages_(VIEW::Message* message)
 				throw();
 			//@}
 			
@@ -197,10 +223,6 @@ namespace BALL
 			// tests wether a composite holds the criterias
 			MolecularFilter molecular_filter_;
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,7 @@
-// $Id: glsphere.h,v 1.9 2001/07/16 14:49:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glsphere.h,v 1.9.2.1 2003/01/07 13:19:39 anker Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
@@ -15,10 +18,8 @@
 #	include <BALL/VIEW/PRIMITIV/sphere.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 
@@ -30,8 +31,8 @@ namespace BALL
 				of the geometrical definition of the class sphere.
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				sphere. OpenGL code is used for the visualization.
-				See these classes for further information.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}	\\ \\
+				See these classes for further information.\\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}	
 		*/
 		class GLSphere
 			: public Sphere,
@@ -76,7 +77,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -108,7 +108,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -159,10 +158,10 @@ namespace BALL
 			*/
 			void swap(GLSphere& sphere)
 				throw();
-			//@}
 
 			protected:
 
+			//@}
 			/** @name Graphical interface methods
 			*/
 			//@{
@@ -184,12 +183,6 @@ namespace BALL
 			virtual bool draw(bool with_names = false)
 				throw();
 
-			/** Experimental method.
-					Please avoid using this method.
-			*/
-			virtual bool drawUserDefined()
-				throw();
-
 			/** Export method.
 					This method handles the export of {\em *this} glSphere into another
 					format (eg. POVRAY, VRML) \\
@@ -201,10 +194,6 @@ namespace BALL
 			//@}
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glsphere.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

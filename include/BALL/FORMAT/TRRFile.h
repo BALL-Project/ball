@@ -1,4 +1,7 @@
-// $Id: TRRFile.h,v 1.2 2002/01/15 02:00:08 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: TRRFile.h,v 1.2.2.1 2003/01/07 13:17:43 anker Exp $
 
 #ifndef BALL_FORMAT_TRRFILE_H
 #define BALL_FORMAT_TRRFILE_H
@@ -15,7 +18,7 @@ namespace BALL
 			program. This format is portable.	\\
 			In a TRR-file, each timestep is preceded by a header. The header
 			is handled by the nested TRRHeader class. \\
-			{\bf Definition:} \URL{BALL/Format/TRRFile.h}	\\
+			{\bf Definition:} \URL{BALL/FORMAT/TRRFile.h}	\\
 	*/
 	class TRRFile
 	  :	public TrajectoryFile
@@ -31,7 +34,7 @@ namespace BALL
 				The format can be found at \\
 				http://www.ks.uiuc.edu/~danorris/projects/formats/trr.shtml \\
 				The header consists of several records that are stored sequentially. \\
-				{\bf Definition:} \URL{BALL/Format/TRRFile.h}	\\
+				{\bf Definition:} \URL{BALL/FORMAT/TRRFile.h}	\\
 		*/
 		class TRRHeader
 		{
@@ -172,7 +175,7 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/// Detailed constructor
-		TRRFile(const String& name, File::OpenMode open_mode = File::IN)
+		TRRFile(const String& name, File::OpenMode open_mode = std::ios::in)
 			throw();
 
 		/// Destructor
@@ -273,7 +276,7 @@ namespace BALL
 			throw();
 
 		///
-		bool setPrecision(const Size newprecision)
+		bool setPrecision(const Size precision)
 			throw();
 
 		///

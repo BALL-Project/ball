@@ -1,19 +1,10 @@
-// $Id: lineModel.h,v 1.9 2001/07/16 14:49:23 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: lineModel.h,v 1.9.2.1 2003/01/07 13:18:20 anker Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #	include <BALL/VIEW/PRIMITIV/line.h>
@@ -21,10 +12,6 @@
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #	include <BALL/VIEW/PRIMITIV/point.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
@@ -37,22 +24,18 @@
 
 namespace BALL
 {
-			
 	namespace MOLVIEW
 	{
 
 		using VIEW::Point;
 		using VIEW::Line;
 
-
 		/** AddLineModel class.
 				The class AddLineModel is a model processor that is responsible
 				for creating a line model.
 				This processor creates only the primitive objects without openGL implementation.
-				The derived class \Ref{AddGLLineModel} uses the primitives with
-				openGL implementation.
-				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation. \\
+				The derived class \Ref{AddGLLineModel} uses the primitives with openGL implementation.
+				For information about the processor concept see \Ref{Processor} in tbe BALL documentation.\\
 				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/lineModel.h}
 		*/
 		class AddLineModel: public AtomBondModelBaseProcessor
@@ -83,7 +66,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -108,12 +90,12 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+
 			//@}
-
-
 			/**	@name Processor specific methods
 			*/
 			//@{
+
 			/** Start method.
 					Initialize the properties of the \Ref{BaseModelConnector} to {\em *this}
 					addLineModel and changes the property of {\em *this} addLineModel from
@@ -174,8 +156,8 @@ namespace BALL
 					@see    Bond
 			*/
 			virtual Processor::Result operator() (Composite& composite);
+						
 			//@}
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -190,6 +172,7 @@ namespace BALL
 			virtual void dump
 				(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+							
 			//@}
 
 		  protected:
@@ -202,6 +185,7 @@ namespace BALL
 					@see  AddGLLineModel
 			*/
 			//@{
+			
 			/** Create a point.
 					Create a \Ref{Point} object.
 					This method is overridden by the class \Ref{AddGLLineModel} to
@@ -247,9 +231,10 @@ namespace BALL
 
 		};
 
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/FUNCTOR/lineModel.iC>
-#			endif
+
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/MOLVIEW/FUNCTOR/lineModel.iC>
+#	endif
 
 	} // namespace MOLVIEW
 

@@ -1,4 +1,7 @@
-// $Id:
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: triangle.h,v 1.1.2.1 2003/01/07 13:19:13 anker Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGLE_H
 #define BALL_STRUCTURE_TRIANGLE_H
@@ -19,17 +22,14 @@
 namespace BALL
 {
 
-	template <class T>
-	class TTriangleEdge;
-
-	template <class T>
-	class TTrianglePoint;
-
-	template <class T>
-	class TTriangulatedSurface;
-
-	template <class T>
-	class TTriangulatedSES;
+	class TriangleEdge;
+	class TrianglePoint;
+	class TriangulatedSurface;
+	class TriangulatedSphere;
+	class TriangulatedSES;
+	class TriangulatedSAS;
+	class SESTriangulator;
+	class SASTriangulator;
 
 
 	/** Generic TriangleEdge Class.
@@ -37,100 +37,136 @@ namespace BALL
 			{\bf Definition:}\URL{BALL/STRUCTURE/triangle.h}
 			\\
 	*/
-	template <class T>
-	class TTriangle	:	public GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >
+	class Triangle
+			:	public GraphTriangle< TrianglePoint,TriangleEdge,Triangle >
 	{
 		
 		public:
 
 		/** @name Class friends
 				\begin{itemize}
-					\item class GraphEdge< TTrianglePoint<T>,TTriangle<T> >
-					\item class GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >
-					\item class GraphVertex< TTriangleEdge<T>,TTriangle<T> >
-					\item class TTriangulatedSurface<T>
-					\item class TTriangulatedSES<T>
-					\item class TTrianglePoint<T>;
-					\item class TTriangleEdge<T>;
+					\item class TriangleEdge
+					\item class TrianglePoint
+					\item class TriangulatedSurface
+					\item class TriangulatedSphere
+					\item class TriangulatedSES
+					\item class TriangulatedSAS
+					\item class SESTriangulator
+					\item class SASTriangulator
 				\end{itemize}
 		*/
-		friend class GraphEdge< TTrianglePoint<T>,TTriangle<T> >;
-		friend class GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >;
-		friend class GraphVertex< TTriangleEdge<T>,TTriangle<T> >;
-		friend class TTriangulatedSurface<T>;
-		friend class TTriangulatedSES<T>;
-		friend class TTrianglePoint<T>;
-		friend class TTriangleEdge<T>;
+		friend class TriangleEdge;
+		friend class TrianglePoint;
+		friend class TriangulatedSurface;
+		friend class TriangulatedSphere;
+		friend class TriangulatedSES;
+		friend class TriangulatedSAS;
+		friend class SESTriangulator;
+		friend class SASTriangulator;
 
-		BALL_CREATE(TTriangle)
+		BALL_CREATE(Triangle)
 
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
 
 		/**	Default constructor.
-				This method creates a new TriangleEdge object.
+				This method creates a new Triangle object.
 		*/
-		TTriangle()
+		Triangle()
 			throw();
 
 		/**	Copy constructor.
-				Create a new TriangleEdge object from another.
-				@param	edge	the TriangleEdge object to be copied
-				@param	deep	if deep = false, all pointers are set to NULL (default). Otherwise the new	
-											TriangleEdge object is linked to the neighbours of the old TriangleEdge object.
+				Create a new Triangle object from another.
+				@param	triangle	the Triangle object to be copied
+				@param	deep			if deep = false, all pointers are set to NULL	
+													(default). Otherwise the new Triangle object is
+													linked to the neighbours of the old Triangle object.
 		*/
-		TTriangle(const TTriangle<T>& edge, bool deep = false)
+		Triangle(const Triangle& triangle, bool deep = false)
 			throw();
 
 		/**	Destructor.
-				Destructs the TriangleEdge object.
+				Destructs the Triangle object.
 		*/
-		virtual ~TTriangle()
+		virtual ~Triangle()
 			throw();
-		//@}
 
+		//@}
+		/**	@name	Assignments
+		*/
+		//@{
+
+		/**	Assign from another Triangle.
+				@param	triangle	the Triangle object to assign from
+				@param	deep			if deep = false, all pointers are set to NULL	
+													(default). Otherwise the Triangle object is linked	
+													to the neighbours of the Triangle object to assign	
+													from
+		*/
+		void set(const Triangle& triangle, bool deep = false)
+			throw();
+
+		/**	Assign from another Triangle.
+				The Triangle object is linked to the neighbours of the Triangle	
+				object to assign from
+				@param	triangle	the Triangle object to assign from
+		*/
+		Triangle& operator = (const Triangle& triangle)
+			throw();
+
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
 
-		/** Set one of the two points of the TriangleEdge.
-				@param	i			the first point is changed if i = 0, the second otherwise
+		/** Set one of the three points of the Triangle.
+				@param	i			the relative index of the point which should be set.	
+											If i is greater three, an exception is thrown.
 				@param	point	a pointer to the new point
 		*/
-		void setPoint(Position i, TTrianglePoint<T>* point)
+		void setPoint(Position i, TrianglePoint* point)
 			throw(Exception::IndexOverflow);
 
-		/** Return one of the two points of the TriangleEdge.
-				@param	i
-				@return	TTrianglePoint<T>*	a pointer to the first point if i = 0,	
-																		a pointer to the second point otherwise
+		/** Return one of the three points of the Triangle.
+				@param	i										the relative index of the point which	
+																		should be given back. If i is greater	
+																		three, an exception is thrown.
+				@return	TrianglePoint*	a pointer to the asked point
 		*/
-		TTrianglePoint<T>* getPoint(Position i) const
+		TrianglePoint* getPoint(Position i) const
 			throw(Exception::IndexOverflow);
 
 		/**	Remove an edge from the Triangle.
 				The edge is set to NULL.
 				@param	edge	the edge to delete
 		*/
-		void remove(TTriangleEdge<T>* edge)
+		void remove(TriangleEdge* edge)
 			throw();
 
-		/** Return the third point of the Triangle.
-				@param	p1									a pointer to the first point
-				@param	p2									a pointer to the second point
-				@return	TTrianglePoint<T>*	a pointer to the third point
+		//@}
+		/**	@name	Predicates
 		*/
-		TTrianglePoint<T>* thirdPoint(TTrianglePoint<T>* p1, TTrianglePoint<T>* p2)
-			throw();
+		//@{
 
-		/** Get the edge of the Triangle which lies on the opposite side of a point.
-				@param	point							a point of the Triangle
-				@return	TTriangleEdge<T>*	a pointer to the opposite Edge
+		/**	Equality operator.
+				@return	{\bf true}
 		*/
-		TTriangleEdge<T>* getOppositeEdge(TTrianglePoint<T>* point)
+		virtual bool operator == (const Triangle&) const
 			throw();
 
+		/**	Inequality operator.
+				@return	{\bf false}
+		*/
+		virtual bool operator != (const Triangle&) const
+			throw();
+
+		/**	Similarity operator.
+				@return	{\bf true}
+		*/
+		virtual bool operator *= (const Triangle&) const
+			throw();
+		
 		//@}
 
 	};
@@ -142,147 +178,12 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	template <class T>
-	std::ostream& operator << (std::ostream& s, const TTriangle<T>& triangle)
-	{
-		s << "TRIANGLE" << triangle.getIndex()
-			<< "([" << (triangle.getVertex(0) == NULL ? -2 : triangle.getVertex(0)->getIndex()) << ' '
-			<<				 (triangle.getVertex(1) == NULL ? -2 : triangle.getVertex(1)->getIndex()) << ' '
-			<<				 (triangle.getVertex(2) == NULL ? -2 : triangle.getVertex(2)->getIndex()) << "] "
-			<< "[" << (triangle.getEdge(0) == NULL ? -2 : triangle.getEdge(0)->getIndex()) << ' '
-			<<				(triangle.getEdge(1) == NULL ? -2 : triangle.getEdge(1)->getIndex()) << ' '
-			<<				(triangle.getEdge(2) == NULL ? -2 : triangle.getEdge(2)->getIndex()) << "] ";
-		return s;
-	}
+	std::ostream& operator << (std::ostream& s, const Triangle& triangle);
 
 	//@}
-
-
-	/**	The Default Triangle Type.
-			If double precision is not needed, {\tt TTriangle<float>} should	
-			be used. It is predefined as {\tt Triangle} for convenience.
-	*/
-	typedef TTriangle<float> Triangle;
-
-
-
-
-	template <class T>
-	TTriangle<T>::TTriangle()
-		throw()
-		:	GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >()
-	{
-		vertex_.push_back(NULL);
-		vertex_.push_back(NULL);
-		vertex_.push_back(NULL);
-		number_of_vertices_ = 3;
-		edge_.push_back(NULL);
-		edge_.push_back(NULL);
-		edge_.push_back(NULL);
-		number_of_edges_ = 3;
-	}
-
-
-	template <class T>
-	TTriangle<T>::TTriangle(const TTriangle<T>& edge, bool deep)
-		throw()
-		:	GraphFace< TTrianglePoint<T>,TTriangleEdge<T> >(edge,deep)
-	{
-	}
-
-
-	template <class T>
-	TTriangle<T>::~TTriangle()
-		throw()
-	{
-	}
-
-
-	template <typename T>
-	void TTriangle<T>::setPoint(Position i, TTrianglePoint<T>* vertex)
-		throw(Exception::IndexOverflow)
-	{
-		switch (i)
-		{
-			case 0	:	vertex_[0] = vertex; break;
-			case 1	:	vertex_[1] = vertex; break;
-			case 2	:	vertex_[2] = vertex; break;
-			default	:	throw Exception::IndexOverflow(__FILE__,__LINE__,i,2);
-		}
-	}
-
-
-	template <typename T>
-	TTrianglePoint<T>* TTriangle<T>::getPoint(Position i) const
-		throw(Exception::IndexOverflow)
-	{
-		switch (i)
-		{
-			case 0	:	return vertex_[0];
-			case 1	:	return vertex_[1];
-			case 2	:	return vertex_[2];
-			default	:	throw Exception::IndexOverflow(__FILE__,__LINE__,i,2);
-		}
-	}
-
-
-	template <class T>
-	void TTriangle<T>::remove(TTriangleEdge<T>* edge)
-		throw()
-	{
-		for (Position i = 0; i < 3; i++)
-		{
-			if (edge_[i] == edge)
-			{
-				edge_[i] = NULL;
-			}
-		}
-	}
-
-
-	template <typename T>
-	TTrianglePoint<T>* TTriangle<T>::thirdPoint(TTrianglePoint<T>* p1, TTrianglePoint<T>* p2)
-		throw()
-	{
-		if ((*vertex_[0] == *p1) || (*vertex_[0] == *p2))
-		{
-			if ((*vertex_[1] == *p1) || (*vertex_[1] == *p2))
-			{
-				return vertex_[2];
-			}
-			else
-			{
-				return vertex_[1];
-			}
-		}
-		else
-		{
-			return vertex_[0];
-		}
-	}
-
-
-	template <class T>
-	TTriangleEdge<T>* TTriangle<T>::getOppositeEdge(TTrianglePoint<T>* point)
-		throw()
-	{
-		for (Position i = 0; i < 3; i++)
-		{
-			if ((edge_[i]->vertex_[0] != point) && (edge_[i]->vertex_[1] != point))
-			{
-				return edge_[i];
-			}
-		}
-		return NULL;
-	}
-
-
-
 
 
 }	// namespace BALL
 
 
 #endif	// BALL_STRUCTURE_TRIANGLE_H
-
-

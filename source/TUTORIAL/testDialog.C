@@ -1,4 +1,7 @@
-// $Id: testDialog.C,v 1.1 2002/01/12 21:22:45 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: testDialog.C,v 1.1.2.1 2003/01/07 13:23:16 anker Exp $
 // view tutorial example
 // ---------------------
 // creation of a dialog

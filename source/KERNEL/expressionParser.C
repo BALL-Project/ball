@@ -1,4 +1,7 @@
-// $Id: expressionParser.C,v 1.3 2002/01/28 00:10:06 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: expressionParser.C,v 1.3.2.1 2003/01/07 13:20:51 anker Exp $
 
 #include <BALL/KERNEL/expressionParser.h>
 #include <BALL/KERNEL/PTE.h>

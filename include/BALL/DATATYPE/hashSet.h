@@ -1,4 +1,7 @@
-// $Id: hashSet.h,v 1.30 2002/01/15 02:00:49 oliver Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: hashSet.h,v 1.30.2.1 2003/01/07 13:17:35 anker Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -45,44 +48,6 @@ namespace BALL
 	{
 		public:
 
-		class IteratorTraits_;
-
-		/**	@name	Enums
-		*/
-		//@{
-
-		enum
-		{
-			/// Initial capacity of the hash set
-			INITIAL_CAPACITY          = 4,
-			/// Initial number of buckets
-			INITIAL_NUMBER_OF_BUCKETS = 3
-		};
-
-		//@}
-		/**	@name	Exceptions
-		*/
-		//@{
-
-		/**	Illegal key exception.
-				Thrown if access to a non-existent key is required by the constant
-				version of \Ref{operator []}.
-		*/
-		class IllegalKey
-			:	public Exception::GeneralException
-		{
-			public:
-			IllegalKey(const char* file, int line)
-				:	Exception::GeneralException(file, line)
-			{
-			}
-		};
-
-		//@}
-		/**	@name	Type definitions
-		*/
-		//@{
-
 		/**
 		*/
 		typedef Key ValueType;
@@ -94,192 +59,6 @@ namespace BALL
 		/**
 		*/
 		typedef Key* PointerType;
-			
-		/**
-		*/
-		typedef 
-				ForwardIterator<HashSet<Key>, ValueType, PointerType, IteratorTraits_>
-			Iterator;
-
-		/**
-		*/
-		typedef 
-				ConstForwardIterator <HashSet<Key>, ValueType, PointerType, IteratorTraits_>
-			ConstIterator;
-
-		//@}
-		/**	@name Constructors and Destructors 
-		*/
-		//@{
-
-		/**	Default Constructor.
-		*/
-		HashSet(Size initial_capacity = INITIAL_CAPACITY, Size number_of_buckets = INITIAL_NUMBER_OF_BUCKETS)
-			throw();
-			
-		/**	Copy Constructor.
-		*/
-		HashSet(const HashSet& hash_set)	throw();
-
-		/**	Destructor.
-		*/
-		virtual ~HashSet()	throw()
-		{
-			destroy();
-			deleteBuckets_();
-		}
-
-		/**	Clear the hash set.
-				Remove all nodes from all buckets.
-				The capacity and the number of buckets remain unchanged.
-		*/
-		virtual void clear()	throw();
-	
-		/**	Clear the hash set.
-				Remove all nodes from all buckets.
-				The capacity and the number of buckets remain unchanged.
-				Simply calls clear;
-		*/
-		void destroy()	throw();
-
-		//@}
-		/**	@name Assignment 
-		*/
-		//@{
-
-		/** Assign this HashSet with the contents of another HashSet
-				@param hash_set the HashSet to assign from
-		*/
-		void set(const HashSet& hash_set)	throw();
-
-		/** Assign this HashSet with the contents of another HashSet
-				@param hash_set the HashSet to assign from
-		*/
-		const HashSet& operator = (const HashSet& hash_set)	throw();
-
-		/** Assign another HashSet with the contents of this HashSet
-				@param hash_set the HashSet to assign to
-		*/
-		void get(HashSet& hash_set) const	throw();
-
-		/**	Swap the contents of two hash sets.
-		*/
-		void swap(HashSet& hash_set)	throw();
-
-		//@}
-		/**	@name	Accessors
-		*/
-		//@{
-
-		/**	Return the number of buckets.
-		*/
-		Size getBucketSize() const	throw();
-
-		/** Return the capcacity of the hash set.
-		*/
-		Size getCapacity() const	throw();
-
-		/**	Return the number of elements in the hash set.
-		*/
-		Size getSize() const	throw();
-			
-		/**	Return the number of elements in the hash set.
-		*/
-		Size size() const	throw();
-
-    /** Find the element whose key is {\tt key}.
-    */
- 		Iterator find(const Key& key)	throw();
-	
-    /** Find the element whose key is {\tt key}.
-    */
-		ConstIterator find(const Key& key) const	throw();
-
-		/**	Insert a new entry into the hash set.
-		*/
-		std::pair<Iterator, bool> insert(const ValueType& item)	throw();
-
-		/**	Erase element with key {\tt key}.
-				@return Size the number of elements erased (0 or 1)
-		*/
-		Size erase(const KeyType& key)	throw();
-
-		/**	Erase element at a given position.
-				@param pos an iterator pointing to the element to delete
-		*/
-		void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator);
-
-		/**	Erase a range of elements.
-				Erase all elements in the range {\tt f - l}.
-		*/
-		void erase(Iterator f, Iterator l) throw(Exception::IncompatibleIterators);
-
-		//@}
-		/**	@name Miscellaneous
-		*/
-		//@{
-
-		/**	Host a visitor for all set entries.
-		*/
-		virtual void host(Visitor<HashSet<Key> >& visitor)	
-			throw();
-
-		//@}
-		/**	@name	Predicates
-		*/
-		//@{
-
-		/**	Test whether the set contains the key {\tt key}.
-		*/
-		bool has(const Key& key) const	throw();
-
-		/**	Test whether the set is empty.
-		*/
-		bool isEmpty() const	throw();
-
-		/**	Compare two hash sets.
-		*/
-		bool operator == (const HashSet& hash_set) const	throw();
-
-		/**	Compare two hash sets.
-		*/
-		bool operator != (const HashSet& hash_set) const	throw();
-
-		//@}
-		/**	@name	Debugging and Diagnostics
-		*/
-		//@{
-
-		/**	Return true if the hash set is consistent.
-				Condition: the number of entries in all buckets has to be equal the 
-				stored number of entries (getSize()).
-		*/
-		bool isValid() const	throw();
-
-		/** Dump the constent of this instance to an ostream.
-		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const	throw();
-
-		//@}
-
-		// --- INTERNAL ITERATORS
-
-		/** Apply a processor to all keys in this instance.
-				@return true if the processor could be applied.
-		*/
-		bool apply(UnaryProcessor<ValueType>& processor)	throw();
-
-		// --- STORERS
-
-		/*
-		friend istream& operator >> BALL_TEMPLATE_NULL_ARGS (std::istream& s, HashSet& hash_set);
-			
-		friend ostream& operator << BALL_TEMPLATE_NULL_ARGS (std::ostream& s, const HashSet& hash_set);
-
-		void read(std::istream& s);
-
-		void write(std::ostream& s) const;
-		*/      
 
 		// --- EXTERNAL ITERATORS
 		struct Node
@@ -460,8 +239,298 @@ namespace BALL
 			IteratorPosition		position_;
 			Position						bucket_;
 		};
-
 		friend class IteratorTraits_;
+
+		/**	@name	Enums
+		*/
+		//@{
+
+		enum
+		{
+			/// Initial capacity of the hash set
+			INITIAL_CAPACITY          = 4,
+			/// Initial number of buckets
+			INITIAL_NUMBER_OF_BUCKETS = 3
+		};
+
+		//@}
+
+		/**	@name	Exceptions
+		*/
+		//@{
+
+		/**	Illegal key exception.
+				Thrown if access to a non-existent key is required by the constant
+				version of \Ref{operator []}.
+		*/
+		class IllegalKey
+			:	public Exception::GeneralException
+		{
+			public:
+			IllegalKey(const char* file, int line)
+				:	Exception::GeneralException(file, line)
+			{
+			}
+		};
+
+		//@}
+
+		/**	@name	Type definitions
+		*/
+		//@{
+
+			
+		/**
+		*/
+		typedef 
+				ForwardIterator<HashSet<Key>, ValueType, PointerType, IteratorTraits_>
+			Iterator;
+
+
+		/**
+		*/
+		typedef 
+				ConstForwardIterator <HashSet<Key>, ValueType, PointerType, IteratorTraits_>
+			ConstIterator;
+
+		// STL compatibility stuff
+		typedef Iterator iterator;
+		typedef ConstIterator const_iterator;
+
+		typedef Key					value_type;
+		typedef Key					key_type;
+		typedef Key*				pointer;
+		typedef const Key*	const_pointer;
+		typedef Key&				reference;
+		typedef const Key&	const_reference;
+		typedef Size				size_type;
+		typedef Index				difference_type;			
+		//@}
+
+		/**	@name Constructors and Destructors 
+		*/
+		//@{
+
+		/**	Default Constructor.
+		*/
+		HashSet(Size initial_capacity = INITIAL_CAPACITY, Size number_of_buckets = INITIAL_NUMBER_OF_BUCKETS)
+			throw();
+			
+		/**	Copy Constructor.
+		*/
+		HashSet(const HashSet& hash_set) throw();
+
+		/**	Destructor.
+		*/
+		virtual ~HashSet()	throw()
+		{
+			destroy();
+			deleteBuckets_();
+		}
+
+		/**	Clear the hash set.
+				Remove all nodes from all buckets.
+				The capacity and the number of buckets remain unchanged.
+		*/
+		virtual void clear() throw();
+	
+		/**	Clear the hash set.
+				Remove all nodes from all buckets.
+				The capacity and the number of buckets remain unchanged.
+				Simply calls clear;
+		*/
+		void destroy() throw();
+
+		//@}
+
+		/**	@name Assignment 
+		*/
+		//@{
+
+		/** Assign this HashSet with the contents of another HashSet
+				@param hash_set the HashSet to assign from
+		*/
+		void set(const HashSet& hash_set)	throw();
+
+		/** Assign this HashSet with the contents of another HashSet
+				@param rhs the HashSet to assign from
+		*/
+		const HashSet& operator = (const HashSet& rhs)	throw();
+
+		/** Assign another HashSet with the contents of this HashSet
+				@param hash_set the HashSet to assign to
+		*/
+		void get(HashSet& hash_set) const	throw();
+
+		/**	Swap the contents of two hash sets.
+		*/
+		void swap(HashSet& hash_set)	throw();
+
+		//@}
+
+		/**	@name	Accessors
+		*/
+		//@{
+
+		/**	Return the number of buckets.
+		*/
+		Size getBucketSize() const	throw();
+
+		/** Return the capcacity of the hash set.
+		*/
+		Size getCapacity() const	throw();
+
+		/**	Return the number of elements in the hash set.
+		*/
+		Size getSize() const	throw();
+			
+		/**	Return the number of elements in the hash set.
+		*/
+		Size size() const	throw();
+
+    /** Find the element whose key is {\tt key}.
+    */
+ 		Iterator find(const Key& key)	throw();
+	
+    /** Find the element whose key is {\tt key}.
+    */
+		ConstIterator find(const Key& key) const	throw();
+
+		/**	Insert a new entry into the hash set.
+		*/
+		std::pair<Iterator, bool> insert(const ValueType& item)	throw();
+
+		/**	Insert a new entry into the hash set.
+				For STL compatibility. The value of {\tt pos} is ignored.
+		*/
+		Iterator insert(Iterator pos, const ValueType& item) throw();
+
+		/**	Erase element with key {\tt key}.
+				@return Size the number of elements erased (0 or 1)
+		*/
+		Size erase(const KeyType& key)	throw();
+
+		/**	Erase element at a given position.
+				@param pos an iterator pointing to the element to delete
+		*/
+		void erase(Iterator pos) throw(Exception::IncompatibleIterators, Exception::InvalidIterator);
+
+		/**	Erase a range of elements.
+				Erase all elements in the range {\tt f - l}.
+		*/
+		void erase(Iterator f, Iterator l) throw(Exception::IncompatibleIterators);
+
+		//@}
+
+		/**	@name	Operators
+		*/
+		//@{
+		/**	Intersection operator.
+				Replace the contents of the current hash set by
+				its intersection with {\tt rhs}.
+		*/
+		const HashSet& operator &= (const HashSet& rhs) throw();
+		
+		/**	Union operator.
+				Replace the contents of the current hash set by
+				its union with {\tt rhs}.
+		*/
+		const HashSet& operator |= (const HashSet& rhs) throw();
+		
+		/**	Intersection operator.
+				Compute the intersection of the two hash sets.
+				The left-hand set is not modified.
+		*/
+		HashSet operator & (const HashSet& rhs) const throw();
+		
+		/**	Union operator.
+				Compute the union of the two hash sets.
+				The left-hand set is not modified.
+		*/
+		HashSet operator | (const HashSet& rhs) const throw();
+
+		/**	Union operator.
+				@see operator|
+		*/
+		HashSet operator + (const HashSet& rhs) const throw();
+
+		/**	Difference operator.
+				Computes the difference of the two sets, i.e. constructs a
+				set containing the the elements of {\tt this} set that are not
+				contained in {\tt rhs}.
+		*/
+		HashSet operator - (const HashSet& rhs) const throw();
+
+		/**	Union operator.
+				@see operator|=
+		*/
+		const HashSet& operator += (const HashSet& rhs) throw();
+
+		/**	Difference operator.
+				Remove all elements contained in {\tt rhs} from the set.
+		*/
+		const HashSet& operator -= (const HashSet& rhs) throw();
+		//@}
+
+		/**	@name Miscellaneous
+		*/
+		//@{
+
+		/**	Host a visitor for all set entries.
+		*/
+		virtual void host(Visitor<HashSet<Key> >& visitor)	
+			throw();
+		//@}
+
+		/**	@name	Predicates
+		*/
+		//@{
+
+		/**	Test whether the set contains the key {\tt key}.
+		*/
+		bool has(const Key& key) const	throw();
+
+		/**	Test whether the set is empty.
+		*/
+		bool isEmpty() const	throw();
+
+		/**	Compare two hash sets.
+		*/
+		bool operator == (const HashSet& hash_set) const	throw();
+
+		/**	Compare two hash sets.
+		*/
+		bool operator != (const HashSet& hash_set) const	throw();
+		//@}
+
+		/**	@name	Debugging and Diagnostics
+		*/
+		//@{
+
+		/**	Return true if the hash set is consistent.
+				Condition: the number of entries in all buckets has to be equal the 
+				stored number of entries (getSize()).
+		*/
+		bool isValid() const	throw();
+
+		/** Dump the constent of this instance to an ostream.
+		*/
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const	throw();
+
+		//@}
+
+		// --- INTERNAL ITERATORS
+
+		/**	@name Iteration
+		*/
+		//@{
+		/** Apply a processor to all keys in this instance.
+				@return true if the processor could be applied.
+		*/
+		bool apply(UnaryProcessor<ValueType>& processor) throw();
+		//@}
+
+
 
 		/**
 		*/
@@ -472,7 +541,7 @@ namespace BALL
 
 		/**
 		*/
-		Iterator end()	throw()
+		Iterator end() throw()
 		{
 			return Iterator::end(*this);
 		}
@@ -559,7 +628,6 @@ namespace BALL
 				bucket_[bucket]	= newNode_(item->value, bucket_[bucket]);
 			}
 		}
-
 	}
 
 	template <class Key>
@@ -650,6 +718,142 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
+	const HashSet<Key>& HashSet<Key>::operator &= (const HashSet& rhs)
+		throw()
+	{
+		// Store all elements that are not part of the intersection
+		// in a list for subsequent deletion.
+		std::list<Key> erase_list;
+		for (Iterator it = begin(); it != end(); ++it)
+		{
+			if (!rhs.has(*it))
+			{
+				erase_list.push_back(*it);
+			}
+		}
+
+		// erase all elements not part of the intersection
+		typename list<Key>::iterator list_it = erase_list.begin();
+		for (; list_it != erase_list.end(); ++list_it)
+		{
+			erase(*list_it);
+		}
+
+		return *this;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	const HashSet<Key>& HashSet<Key>::operator |= (const HashSet<Key>& rhs)
+		throw()
+	{
+		// Compute the union of both sets by inserting every element of the
+		// rhs set.
+		for (ConstIterator it = rhs.begin(); it != rhs.end(); ++it)
+		{
+			insert(*it);
+		}
+
+		return *this;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	const HashSet<Key>& HashSet<Key>::operator += (const HashSet<Key>& rhs)
+		throw()
+	{
+		return operator |= (rhs);
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	HashSet<Key> HashSet<Key>::operator & (const HashSet<Key>& rhs) const
+		throw()
+	{
+		// Create an empty hash set...
+		HashSet<Key> tmp;
+		ConstIterator it = begin();
+		
+		// ...and copy all the elements contained in the rhs hash set.
+		for (; +it; ++it)
+		{
+			if (rhs.has(*it))
+			{
+				tmp.insert(*it);
+			}
+		}
+
+		return tmp;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	HashSet<Key> HashSet<Key>::operator - (const HashSet<Key>& rhs) const
+		throw()
+	{
+		// Create an empty hash set...
+		HashSet<Key> tmp;
+		ConstIterator it = begin();
+		
+		// ...and copy all the elements contained in this set and not in the rhs hash set.
+		for (; +it; ++it)
+		{
+			if (!rhs.has(*it))
+			{
+				tmp.insert(*it);
+			}
+		}
+
+		return tmp;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	const HashSet<Key>& HashSet<Key>::operator -= (const HashSet<Key>& hash_set) 
+		throw()
+	{
+		// avoid memory corruption caused by iterating over freed space when
+		// deleting myself
+		if (this == &hash_set)
+		{
+			clear();
+		}
+		else
+		{
+			// erase all elements which are contained in this and hash_set 
+			HashSet<Key>::ConstIterator it = hash_set.begin();
+			for (; it != hash_set.end(); ++it)
+			{
+				if (has(*it))
+				{
+					erase(*it);
+				}
+			}
+		}
+		return *this;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	HashSet<Key> HashSet<Key>::operator | (const HashSet<Key>& rhs) const
+		throw()
+	{
+		HashSet<Key> tmp(*this);
+		tmp |= rhs;
+
+		return tmp;
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	HashSet<Key> HashSet<Key>::operator + (const HashSet<Key>& rhs) const
+		throw()
+	{
+		return operator | (rhs);
+	}
+
+	template <class Key>
+	BALL_INLINE 
 	Size HashSet<Key>::getBucketSize() const
 		throw()
 	{
@@ -681,7 +885,7 @@ namespace BALL
 	}
 
 	template <class Key>
-	HashSet<Key>::Iterator HashSet<Key>::find(const Key& key)		throw()
+	typename HashSet<Key>::Iterator HashSet<Key>::find(const Key& key)		throw()
 	{
 		Iterator it = end();
 		Position bucket = hashBucket_(key);
@@ -702,7 +906,7 @@ namespace BALL
 		
 	template <class Key>
 	BALL_INLINE 
-	HashSet<Key>::ConstIterator HashSet<Key>::find(const Key& key) const		throw()
+	typename HashSet<Key>::ConstIterator HashSet<Key>::find(const Key& key) const		throw()
 	{
 		return (const_cast<HashSet*>(this))->find(key);
 	}
@@ -729,11 +933,19 @@ namespace BALL
 			it.getTraits().bucket_ = bucket;
 		}
 
-		return ::std::pair<Iterator, bool>(it, true);
+		return std::pair<Iterator, bool>(it, true);
 	}
 
 	template <class Key>
-	Size HashSet<Key>::erase(const KeyType& key)		throw()
+	typename HashSet<Key>::Iterator HashSet<Key>::insert
+		(typename HashSet<Key>::Iterator /* pos */, const ValueType& item)	throw()
+	{
+		return insert(item).first;
+	}
+
+	template <class Key>
+	Size HashSet<Key>::erase(const KeyType& key)		
+		throw()
 	{
 		Position	bucket = hashBucket_(key);
 		Node*			previous = 0;
@@ -1087,15 +1299,17 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	HashSet<Key>::Node* HashSet<Key>::newNode_
-		(const ValueType& value, HashSet<Key>::Node* next) const		throw()
+	typename HashSet<Key>::Node* HashSet<Key>::newNode_
+		(const ValueType& value, typename HashSet<Key>::Node* next) const		
+		throw()
 	{
 		return new Node(value, next);
 	}
 
 	template <class Key>
 	BALL_INLINE 
-	void HashSet<Key>::deleteNode_(HashSet<Key>::Node* node) const		throw()
+	void HashSet<Key>::deleteNode_(typename HashSet<Key>::Node* node) const		
+		throw()
 	{
 		delete node;
 	}

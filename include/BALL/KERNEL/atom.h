@@ -1,4 +1,7 @@
-// $Id: atom.h,v 1.43 2001/12/17 01:40:21 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: atom.h,v 1.43.2.1 2003/01/07 13:17:49 anker Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -152,6 +155,7 @@ namespace BALL
 			};
 
 			//@}  
+
 			/** @name Constructors 
 			*/
 			//@{
@@ -305,7 +309,8 @@ namespace BALL
 			const Atom& operator = (const Atom& atom)
 				throw();
 
-			/** Swap the contents of two atoms
+			/** Swap the contents of two atoms.
+					The static attributes are swapped by exchanging the indices of the two atoms!
 					@param   atom the atom being swapped with this instance 
 			*/
 			void swap(Atom& atom)
@@ -1053,29 +1058,93 @@ namespace BALL
 
 		//@}
 
+		/**	@name Efficient handling of atom attributes
+		*/
+		//@{
+		///
+		class StaticAtomAttributes
+		{
+			public:
+			///
+			float 					charge;
+			///
+			Vector3 				position;
+			///
+			Type 						type;
+			///
+			Vector3 				velocity;
+			///
+			Vector3 				force;
+			///
+			Atom*						ptr;
+
+			/// Set the attributes to their default values
+			void clear();
+
+			/** Swap the contents of the two attributes.
+					Adjusts the {\tt ptr} and {\tt index_} members of
+					\Ref{StaticAtomAttributes} and \Ref{Atom}.
+			*/
+			void swap(StaticAtomAttributes& attr);
+
+			/** Assign the contents from a different atom attribute.
+			*/
+			void set(StaticAtomAttributes& attr);
+		};
+
+		
+		///
+		typedef std::vector<StaticAtomAttributes> AttributeVector;
+
+		///
+		typedef std::list<Atom*> AtomPtrList;
+
+		///
+		typedef std::list<Position> AtomIndexList;
+			
+		/**	Compact memory for a list of atoms.
+				This method packs the static attributes of the atom in the given 
+				range into a contiguous memory segment in order to increase 
+				locality.
+		*/
+		static Position compact(const AtomIndexList& indices)
+			throw(Exception::OutOfRange);
+
+		/** Access to the static attribute array
+		*/
+		static AttributeVector& getAttributes();
+
+		/** Return the index in the static attribute array
+		*/
+		Position getIndex() const;
+
+		StaticAtomAttributes* getAttributePtr();
+		const StaticAtomAttributes* getAttributePtr() const;
+		//@}
+
+
 		protected:
 
 		/**	@name Attributes
 		*/
 		//@{
+
+		///
+		static AttributeVector	static_attributes_;
+
+		///
+		static AtomIndexList		free_list_;
+
+		///
+		Position				index_;
 		///
 		const Element* 	element_;
-		///
-		float 					charge_;
 		///
 		String 					name_;
 		///
 		String 					type_name_;
 		///
-		Vector3 				position_;
-		///
 		float 					radius_;
-		///
-		Type 						type_;
-		///
-		Vector3 				velocity_;
-		///
-		Vector3 				force_;
 		///
 		unsigned char		number_of_bonds_;
 		///
@@ -1083,6 +1152,12 @@ namespace BALL
 		//@}
 
 		private:
+
+		/// Return the next unallocated index in the static attribute array
+		static Position nextIndex_();
+
+		/// Free an index in the static attribute array
+		static void freeIndex_(Position index);
 
 		///
 		void clear_()

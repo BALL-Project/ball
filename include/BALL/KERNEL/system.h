@@ -1,4 +1,7 @@
-// $Id: system.h,v 1.23 2001/07/15 16:14:23 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: system.h,v 1.23.2.1 2003/01/07 13:17:59 anker Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H

@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.22 2002/01/26 22:31:04 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.22.2.1 2003/01/07 13:23:41 anker Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -68,12 +68,14 @@ BALLVIEW_PLATFORM 	= @BALLVIEW_PLATFORM@
 BALLVIEW_INCLUDES	  = @BALLVIEW_INCLUDES@
 BALLVIEW_LIBS		    = @BALLVIEW_LIBS@
 BALL_HAS_XDR				= @BALL_HAS_XDR@
+BALL_HAS_FFTW       = @BALL_HAS_FFTW@
 BALL_HAS_FLEX_YACC	= @BALL_HAS_FLEX_YACC@
 OPENGL_LIBPATH      = @OPENGL_LIBPATH@
 OPENGL_LIBOPTS      = @OPENGL_LIBOPTS@
 QT_LIBPATH          = @QT_LIBPATH@
 QT_LIBOPTS          = @QT_LIBOPTS@
 MOC                 = @MOC@
+UIC                 = @UIC@
 X11_LIBPATH         = @X11_LIBPATH@
 X11_LIBOPTS         = @X11_LIBOPTS@
 X11_LIBS            = @X11_LIBS@

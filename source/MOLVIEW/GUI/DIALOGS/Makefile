@@ -1,63 +1,82 @@
 DIRECTORY=MOLVIEW/GUI/DIALOGS
 
+HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
+
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	atomProperties.C\
+	atomPropertiesData.C\
 	displayProperties.C\
 	displayPropertiesData.C\
 	labelProperties.C\
 	labelPropertiesData.C\
-	openHINFile.C\
-	openMOL2File.C\
-	openPDBFile.C\
+	molecularFileDialog.C\
 	openBruker1DFile.C\
 	openBruker2DFile.C\
-	DlgMoveOverlay.C\
-	DlgMoveOverlayData.C
+	contourSurfaceDialog.C\
+	contourSurfaceDialogData.C
 
 MOC_SOURCES=\
+	atomProperties_moc.C\
+	atomPropertiesData_moc.C\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
 	labelProperties_moc.C\
 	labelPropertiesData_moc.C\
-	openHINFile_moc.C\
-	openPDBFile_moc.C\
+	molecularFileDialog_moc.C\
 	openBruker1DFile_moc.C\
 	openBruker2DFile_moc.C\
-	DlgMoveOverlay_moc.C\
-	DlgMoveOverlayData_moc.C
+	contourSurfaceDialog_moc.C\
+	contourSurfaceDialogData_moc.C
 
 include ../../../common.mak
 include .Dependencies
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES)
 
-displayProperties_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h -o displayProperties_moc.C
+displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
+	$(MOC) $< -o $@
 
-displayPropertiesData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/displayPropertiesData.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/displayPropertiesData.h -o displayPropertiesData_moc.C
+displayPropertiesData_moc.C:	$(HEADER_DIR)/displayPropertiesData.h
+	$(MOC) $< -o $@
 
-labelProperties_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelProperties.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelProperties.h -o labelProperties_moc.C
+labelProperties_moc.C:	$(HEADER_DIR)/labelProperties.h
+	$(MOC) $< -o $@
 
-labelPropertiesData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.h -o labelPropertiesData_moc.C
+labelPropertiesData_moc.C:	$(HEADER_DIR)/labelPropertiesData.h
+	$(MOC) $< -o $@
 
-openHINFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h -o openHINFile_moc.C
+openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
+	$(MOC) $< -o $@
 
-openPDBFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h -o openPDBFile_moc.C
+openBruker2DFile_moc.C:	$(HEADER_DIR)/openBruker2DFile.h
+	$(MOC) $< -o $@
 
-openBruker1DFile_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h -o openBruker1DFile_moc.C
+molecularFileDialog_moc.C:	$(HEADER_DIR)/molecularFileDialog.h
+	$(MOC) $< -o $@
 
-openBruker2DFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h -o openBruker2DFile_moc.C
+contourSurfaceDialog_moc.C:	$(HEADER_DIR)/contourSurfaceDialog.h
+	$(MOC) $< -o $@
 
-DlgMoveOverlay_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlay.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlay.h -o DlgMoveOverlay_moc.C
+contourSurfaceDialogData_moc.C:	$(HEADER_DIR)/contourSurfaceDialogData.h
+	$(MOC) $< -o $@
 
-DlgMoveOverlayData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlayData.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlayData.h -o DlgMoveOverlayData_moc.C
+atomProperties_moc.C:	$(HEADER_DIR)/atomProperties.h
+	$(MOC) $< -o $@
+
+atomPropertiesData_moc.C:	$(HEADER_DIR)/atomPropertiesData.h
+	$(MOC) $< -o $@
+
+$(HEADER_DIR)/displayPropertiesData.h:  displayProperties.ui
+	$(UIC) -o $@ $<
+
+displayPropertiesData.C:  $(HEADER_DIR)/displayPropertiesData.h
+	$(UIC) -o $@ -impl $< displayProperties.ui
+
+$(HEADER_DIR)/atomPropertiesData.h:  atomProperties.ui
+	$(UIC) -o $@ $<
+
+atomPropertiesData.C:  $(HEADER_DIR)/atomPropertiesData.h
+	$(UIC) -o $@ -impl $< atomProperties.ui
+

@@ -1,7 +1,9 @@
-// $Id: server.C,v 1.6 2001/05/13 16:29:09 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: server.C,v 1.6.2.1 2003/01/07 13:23:26 anker Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
-#include <BALL/COMMON/logStream.h>
 
 #include <qstatusbar.h>
 #include <qpixmap.h>
@@ -12,7 +14,6 @@ using namespace std;
 
 namespace BALL
 {
-  
 	namespace VIEW
 	{
 		const char* Server::mini_ray_xpm_[] =
@@ -66,8 +67,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Server>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<Server>() << endl;
 			#endif 
 
 			destroy();
@@ -191,42 +192,35 @@ namespace BALL
 		void Server::applyPreferences(Preferences & /* preferences */)
 				throw()
 		{
-			if (server_preferences_ != 0)
+			if (server_preferences_ == 0) return;
+
+			// get server mode
+			if (server_preferences_->getServerStatus())
 			{
-				// get server mode
-				bool start_server = server_preferences_->getServerStatus();
-		
-				if (start_server)
-				{
-					// retrieve the port number
-					int port = server_preferences_->getPort();
+				// retrieve the port number
+				int port = server_preferences_->getPort();
 
-					// set the port and active the server
-					setPort(port);
-					activate();
-	
-					// adjust the tool tip and update the server icon
-					QString tip;
-					tip.sprintf("VIEW Server listening on port %d", port); 
-					QToolTip::add(server_icon_, tip);
-					server_icon_->show();
-				}
-				else
-				{
-					// stop the server
-					deactivate();
+				// set the port and active the server
+				setPort(port);
+				activate();
 
-					// hide the icon
-					server_icon_->hide();
-					QToolTip::add(server_icon_, "VIEW Server disabled");
-				}
+				// adjust the tool tip and update the server icon
+				QString tip;
+				tip.sprintf("VIEW Server listening on port %d", port); 
+				QToolTip::add(server_icon_, tip);
+				server_icon_->show();
+			}
+			else
+			{
+				// stop the server
+				deactivate();
 
-				// notify the main window
-				WindowMessage *window_message_2 = new WindowMessage;
-				window_message_2->setStatusBar("");
-				window_message_2->setDeletable(true);
-				notify_(window_message_2);
- 			}
+				// hide the icon
+				server_icon_->hide();
+				QToolTip::add(server_icon_, "VIEW Server disabled");
+			}
+
+			setStatusbarText("");
 		}
 		
 		void Server::fetchPreferences(INIFile &inifile)
@@ -269,18 +263,6 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void Server::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Server::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
 		// main event loop
 	  void Server::timer()
 		{
@@ -312,7 +294,7 @@ namespace BALL
 		}
 
 	  void Server::sendObject(IOStreamSocket &iostream_socket)
-				throw(NotCompositeObject)
+				throw(Server::NotCompositeObject)
     {
 			Log.info() << "Server: receiving object ... " << endl;
 
@@ -353,8 +335,8 @@ namespace BALL
 				try
 				{
 					// remove old composite
-					RemovedCompositeMessage message;
-					message.setComposite(*inserted_composite_ptr);
+					RemovedCompositeMessage* message = new RemovedCompositeMessage;
+					message->setComposite(*inserted_composite_ptr);
 					notify_(message);
 					
 					// remove composite from hashmap
@@ -368,28 +350,13 @@ namespace BALL
 					Log.info() << "> Server: error deleting old composite!" << endl;
 				}
 			}
-			/*
-			else // composite is new
- 			{
-	 			// insert into hashmap
-		 		composite_hashmap_.
-					insert(CompositeHashMap::ValueType(object_handle, new_composite_ptr));
- 			
-				// notify main window
-				NewCompositeMessage new_message;
-				new_message.setComposite(*new_composite_ptr);
-				
-				notify_(new_message);
-			}		
-			*/
 			
 			// insert into hashmap
-			composite_hashmap_.
-				insert(CompositeHashMap::ValueType(object_handle, new_composite_ptr));
+			composite_hashmap_.insert(CompositeHashMap::ValueType(object_handle, new_composite_ptr));
  			
 			// notify main window
-			NewCompositeMessage new_message;
-			new_message.setComposite(*new_composite_ptr);
+			NewCompositeMessage* new_message = new NewCompositeMessage;
+			new_message->setComposite(*new_composite_ptr);
 			
 			notify_(new_message);
     }

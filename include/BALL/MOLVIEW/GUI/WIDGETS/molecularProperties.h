@@ -1,18 +1,10 @@
-// $Id: molecularProperties.h,v 1.8 2001/12/28 02:33:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularProperties.h,v 1.8.2.1 2003/01/07 13:18:40 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#include <iostream>
-#include <qwidget.h>
-
-#ifndef BALL_CONCEPT_COMPOSITE_H
-#	include <BALL/CONCEPT/composite.h>
-#endif
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #	include <BALL/STRUCTURE/fragmentDB.h>
@@ -22,26 +14,10 @@
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
-#	include <BALL/VIEW/KERNEL/logView.h>
-#endif
-
-#ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
-#	include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
-#endif
-
-#ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
-#	include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
-#endif
-
-
-//using namespace BALL;
 using namespace BALL::VIEW;
-
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -57,11 +33,13 @@ namespace BALL
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h}
 		*/
 		class MolecularProperties
-			: public QWidget, public ModularWidget
+			: public QWidget, 
+				public ModularWidget
 		{
-			public:
-			
+			Q_OBJECT
 			BALL_EMBEDDABLE(MolecularProperties)
+
+			public:
 			
 			/**	@name	Constructors
 			*/	
@@ -70,8 +48,8 @@ namespace BALL
 			/** Default Constructor.
 					Constructs new molecularProperties.
 					Calls \Ref{registerWidget}.
-					@param      parent the parent widget of {\em *this} molecularProperties (See documentation of QT-library for information concerning widgets)
-					@param      name the name of {\em *this} molecularProperties (See documentation of QT-library for information concerning widgets)
+					@param      parent the parent widget of {\em *this} molecularProperties 
+					@param      name the name of {\em *this} molecularProperties 
 					@return     MolecularProperties new constructed molecularProperties
 					@see        QWidget
 					@see        ModularWidget
@@ -80,7 +58,6 @@ namespace BALL
 				throw();
 			
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -90,11 +67,12 @@ namespace BALL
 			*/
 			virtual ~MolecularProperties()
 				throw();
+
 			//@}
-			
 			/**	@name	Accessors: inspectors and mutators 
 			 */
 			//@{
+
 			/** Message handling method.
 					Handles messages sent by other registered \Ref{ConnectionObject} objects.
 					Converts \Ref{NewCompositeMessage} to \Ref{NewMolecularMessage} if the
@@ -110,22 +88,94 @@ namespace BALL
 					@see   NewCompositeMessage
 					@see   NewMolecularMessage
 					@see   GeometricObjectSelectionMessage
-					@see   AtomContainer
 					@see   ConnectionObject
 		  */
 			void onNotify(Message *message)
 				throw();
+
+
+			/**	Check the menu entries.
+			 */
+			void checkMenu(MainControl& main_control)
+				throw();
+
+			public slots:
+
+			/** Centers the camera.
+					Centers the camera of \Ref{Scene} to the geometric center of the molecular objects
+					in the selection list.
+					The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
+					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+			*/
+			void centerCamera(Composite* composite = 0);
+
+			/** Creates bonds.
+					If selected molecular objects are available \Ref{Bond} objects will be created
+					for each object in the selection list
+					using the \Ref{build_bonds} processor of the \Ref{FragmentDB}
+					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
+					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
+					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+					The number of bonds created will be written into the \Ref{Log} object.
+			*/
+			void buildBonds();
+			
+			/** Adds hydrogens.
+					If selected molecular objects are available hydrogens will be created
+					for each object in the selection list
+					using the \Ref{add_hydrogens} processor of the \Ref{FragmentDB}
+					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
+					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
+					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+					The number of hydrogens created will be written into the \Ref{Log} object.
+			*/
+			void addHydrogens();
+			
+
+			/** Colors selected objects uniquely.
+					If selected molecular objects are available they will be colored according to
+					the selected color as specified in \Ref{GeometricObject}.
+					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
+					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
+					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+			*/
+			void select();
+
+			/** Colors deselected objects in their own color.
+					If selected molecular objects are available they will be colored according to
+					their own color as specified in the objects. This method reverses the process
+					done in the \Ref{select} method.
+					The message \Ref{ChangedCompositeMessage} will be sent for each object in the
+					selection list. The messages \Ref{WindowMessage} and \Ref{SceneMessage} will
+					be sent to inform the \Ref{MainControl} and the \Ref{Scene} about the change.
+			*/
+			void deselect();
+
+			/** Check the residues
+			 */
+			virtual bool checkResidue();
+
 			//@}
 
 			
 		private:
 			
-			FragmentDB fragment_db_;  			
-		};
+			virtual void calculateCenter_(Composite& composite);
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.iC>
-#		endif
+			FragmentDB fragment_db_;  			
+
+			int center_camera_id_;
+			int build_bonds_id_;
+			int add_hydrogens_id_;
+			int check_structure_id_;
+			int select_id_;
+			int deselect_id_;
+			
+			Vector3 										view_center_vector_;
+			int 												view_direction_;
+			Real 												view_distance_;
+
+		};
 
 	} // namespace MOLVIEW
 

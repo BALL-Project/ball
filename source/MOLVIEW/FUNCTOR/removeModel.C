@@ -1,6 +1,11 @@
-// $Id: removeModel.C,v 1.11 2001/07/15 18:50:29 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: removeModel.C,v 1.11.2.1 2003/01/07 13:21:21 anker Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
@@ -124,11 +129,6 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/removeModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

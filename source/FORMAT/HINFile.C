@@ -1,4 +1,7 @@
-// $Id: HINFile.C,v 1.45 2002/01/17 00:45:56 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: HINFile.C,v 1.45.2.1 2003/01/07 13:20:43 anker Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -52,6 +55,19 @@ namespace BALL
 		throw()
 	{
 	}
+	
+	const HINFile& HINFile::operator = (const HINFile& rhs)
+		throw()
+	{
+		box_ = Box3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+		temperature_ = 0.0;
+
+		GenericMolFile::operator = (rhs);
+		
+		return *this;
+	}
+
+	
 
 	void HINFile::writeAtom_(const Atom& atom, Size number, Size atom_offset)
 	{
@@ -398,9 +414,14 @@ namespace BALL
 		State	state = START;
 
 		// 
+		// All <mol>s that contain <res>idues are inserted
+		// as single chains into this protein
+    // 
 		Residue*	residue = 0;
 		Molecule*	molecule = 0;	
 		Fragment*	fragment = 0;
+		Protein*  protein = 0;
+		Chain*    chain = 0;
 
 		// initial size: 100 atoms, all set to NULL pointer, 100 bonds
 		vector<Atom*>	atom_vector;
@@ -408,10 +429,6 @@ namespace BALL
 
 		Size	number_of_bonds = 0;
 
-		// All <mol>s that contain <res>idues are inserted
-		// as single chains into this protein
-		Protein* protein = 0;
-		Chain* chain = 0;
 
 		String tag;
 
@@ -712,7 +729,7 @@ namespace BALL
 					}
 
 					AtomIterator atom_it = molecule->beginAtom();
-					vector<Atom*>	tmp_atoms(20);
+					vector<Atom*>	tmp_atoms;
 					for (; +atom_it; ++atom_it)
 					{
 						tmp_atoms.push_back(&*atom_it);
@@ -787,9 +804,9 @@ namespace BALL
 							chain->AtomContainer::remove(*fragment);
 						}
 					}
-
 					fragment = 0;
 					chain = 0;
+
 
 					// now build all bonds
 					for (Size i = 0; i < number_of_bonds; i++)
@@ -888,11 +905,14 @@ namespace BALL
 		}
 		catch (Exception::ParseError& e)
 		{
-			delete protein;
-			delete molecule;
-			delete residue;
+			// Delete all stray atoms. The order is important:
+			// since fragment and residue could be contained in 
+			// chain, molecule, etc., they have to be deleted first!
 			delete fragment;
+			delete residue;
 			delete chain;
+			delete molecule;
+			delete protein;
 			throw e;
 		}
 		catch (Exception::IndexOverflow)

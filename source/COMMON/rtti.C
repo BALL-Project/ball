@@ -1,6 +1,11 @@
-// $Id: rtti.C,v 1.8 2002/01/03 01:53:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: rtti.C,v 1.8.2.1 2003/01/07 13:20:29 anker Exp $
 
+#include <BALL/COMMON/global.h>
 #include <BALL/COMMON/rtti.h>
+
 #include <typeinfo>
 #include <ctype.h>
 
@@ -31,6 +36,13 @@ namespace BALL
     #endif                                                                                                                                   
 #else
 		string s(t.name());
+		#ifdef BALL_COMPILER_MSVC
+			// MSVC prefixes all class names with "class " -- delete it!
+			while (s.find("class ") != string::npos) 
+				s.erase(s.find("class "), 6);
+		#endif
+		
+		
 #endif
 
 

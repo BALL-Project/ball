@@ -1,4 +1,8 @@
-// $Id: energyMinimizer.h,v 1.22 2001/07/11 23:59:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: energyMinimizer.h,v 1.22.2.1 2003/01/07 13:18:12 anker Exp $
+
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -83,6 +87,7 @@ namespace BALL
       static const char* MAX_SAME_ENERGY;
 
       /** The maximum RMS gradient allowed for convergence.
+  				If the current rms gradient is below this one, we are converged.
       */
       static const char* MAX_GRADIENT;
 
@@ -110,12 +115,14 @@ namespace BALL
 			*/
 			static Size NUMBER_OF_ITERATION;
 
-			/**	Energy difference bound
+			/**	Energy difference bound.
+					The energy difference needed for assuming 'equal energy' 
 			*/
 			static float ENERGY_DIFFERENCE_BOUND;
 
       /** The number of iterations without any change in energy. This
           is used to detect convergence.
+					If this number is reached, we assume convergence.
       */
       static Size MAX_SAME_ENERGY; 
 
@@ -172,6 +179,10 @@ namespace BALL
 
 		//@}
 
+		/// Equality operator
+		bool operator == (const EnergyMinimizer& energy_minimizer)
+			throw();
+
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{
@@ -181,6 +192,7 @@ namespace BALL
 		bool	isValid() const;
 
 		//@}
+
 		/**	@name	Setup methods 
 		*/
 		//@{
@@ -206,6 +218,8 @@ namespace BALL
 		virtual bool specificSetup();
 
 		//@}
+
+
 		/**	@name	Accessors 
 		*/
 		//@{
@@ -356,7 +370,7 @@ namespace BALL
     /** Set the maximum RMS gradient (first convergence criterion).
       The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
     */
-    void  setMaxGradient(float max_gradient);
+    void setMaxGradient(float max_gradient);
 
     /** Get the maximum RMS gradient (first convergence criterion).
         The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
@@ -382,6 +396,16 @@ namespace BALL
 		/**	Return the force field of the energy minimizer
 		*/
 		ForceField*	getForceField();
+
+		/**	
+		*/
+		int getForceUpdateCounter() const
+			throw();
+
+		/**	
+		*/
+		int getEnergyUpdateCounter() const
+			throw();
 
 		/**	Minimize the energy of the system bound to the force field.	
 				If a number of steps is given, the minimization is aborted after

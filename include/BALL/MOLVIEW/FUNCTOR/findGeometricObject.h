@@ -1,11 +1,10 @@
-// $Id: findGeometricObject.h,v 1.8 2001/07/16 14:49:23 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: findGeometricObject.h,v 1.8.2.1 2003/01/07 13:18:20 anker Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
 #define BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
@@ -19,17 +18,18 @@
 #	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
-#endif
-
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #	include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 #endif
 
+#ifndef BALL_MOLVIEW_COMMONC_COMMON_H
+# include <BALL/MOLVIEW/COMMON/common.h>
+#endif
+
+using BALL::VIEW::GeometricObject;
+
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 		
@@ -282,8 +282,6 @@ namespace BALL
 				throw();
 			//@}
 
-
-			
 			private:  
 
 			List<GeometricObject*> geometric_objects_;

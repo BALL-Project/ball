@@ -1,11 +1,10 @@
-// $Id: glBallAndStickModel.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glBallAndStickModel.h,v 1.5.2.1 2003/01/07 13:18:33 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #	include <BALL/VIEW/GUI/PRIMITIV/glsphere.h>
@@ -22,7 +21,6 @@
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #	include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h>
 #endif
-
 
 namespace BALL
 {
@@ -61,7 +59,7 @@ namespace BALL
 					addGLBallAndStickModel to the state of {\em add_GL_ball_and_stick_model}.
 					@param       add_GL_ball_and_stick_model the addGLBallAndStickModel to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_GL_ball_and_stick_model}
-					@return      AddGLBallAndStickModel new constructed addGLBallAndStickModel copied from {\em add_GL_ball_and_stick_model}
+					@return      AddGLBallAndStickModel new addGLBallAndStickModel copied from {\em add_GL_ball_and_stick_model}
 					@see         AddBallAndStickModel
 			*/
 			AddGLBallAndStickModel
@@ -141,10 +139,6 @@ namespace BALL
 			private:
 		};
 
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.iC>
-#			endif
-		
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,4 +1,8 @@
-// $Id: Limits_test.C,v 1.3 2001/12/17 11:29:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Limits_test.C,v 1.3.2.1 2003/01/07 13:22:30 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,10 +12,12 @@
 #else
 # include <limits.h>
 #endif
-#include <values.h>
+#ifdef BALL_HAS_VALUES_H
+#include <values.h> 
+#endif
 ///////////////////////////
 
-START_TEST(Limits, "$Id: Limits_test.C,v 1.3 2001/12/17 11:29:34 oliver Exp $")
+START_TEST(Limits, "$Id: Limits_test.C,v 1.3.2.1 2003/01/07 13:22:30 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

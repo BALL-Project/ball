@@ -1,4 +1,7 @@
-// $Id: chargeRuleProcessor.C,v 1.2 2000/06/02 08:32:52 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: chargeRuleProcessor.C,v 1.2.2.1 2003/01/07 13:21:07 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
 

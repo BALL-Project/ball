@@ -1,4 +1,7 @@
-// $Id: defaultProcessors.C,v 1.16 2002/01/17 15:12:53 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: defaultProcessors.C,v 1.16.2.1 2003/01/07 13:22:01 anker Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 

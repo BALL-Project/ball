@@ -1,5 +1,5 @@
 %{
-// $Id: parsedFunctionLexer.l,v 1.2 2002/12/12 10:22:09 oliver Exp $
+// $Id: parsedFunctionLexer.l,v 1.2.2.1 2003/01/07 13:20:59 anker Exp $
 #include <BALL/MATHS/parsedFunction.h>
 
 using namespace BALL;

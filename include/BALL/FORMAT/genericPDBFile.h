@@ -1,4 +1,7 @@
-// $Id: genericPDBFile.h,v 1.13 2001/08/23 10:29:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: genericPDBFile.h,v 1.13.2.1 2003/01/07 13:17:45 anker Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -15,27 +18,40 @@
 #	include <BALL/SYSTEM/file.h>
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+#	include <BALL/DATATYPE/options.h>
+#endif
+
 namespace BALL 
 {
-	
-	/*	PDB namespace
+
+	/**	PDB namespace.
 	*/
 	namespace PDB 
 	{
 
+		// ?????
+		// Shouldn't this be implemented via Options?
+		/**
+		*/
 		enum
 		{
 			SIZE_OF_PDB_RECORD_LINE      = 80,
 			SIZE_OF_PDB_LINE_BUFFER      = 256,   
-			SIZE_OF_FORMAT_STRING_BUFFER = 256,
-			FIRST_MODEL                  = -1
+			SIZE_OF_FORMAT_STRING_BUFFER = 256
 		};
 
+		// ?????
+		// Shouldn't this be implemented via Options?
+		/**
+		*/
 		enum Property
 		{
 			PROPERTY__PSEUDO_XPLOR_ATOM_IMPORT = 0
 		};
 		
+		/** The rcord types of a PDB file.
+		*/
 		enum RecordType
 		{
 			RECORD_TYPE__UNKNOWN = 0,
@@ -95,42 +111,85 @@ namespace BALL
 			ALL_RECORD_TYPES
 		};
 
+		/** @name Some typedefs for simplifying parsing.
+		*/
+		//@{
+		///
 		typedef char   AChar;
+		///
 		typedef char   Atom[5];
+		///
 		typedef char   Character;
+		///
 		typedef long   Continuation;
+		///
 		typedef char   Date[10];
+		///
 		typedef char   IDcode[5];
+		///
 		typedef long   Integer;
 		// typedef char   Token[CPDBFile::SIZE_OF_PDB_RECORD_LINE + 1];
+		///
 		typedef char   PDBList[SIZE_OF_PDB_RECORD_LINE + 1];
+		///
 		typedef char   LString[SIZE_OF_PDB_RECORD_LINE + 1];
+		///
 		typedef char   LString2[3];
+		///
 		typedef char   LString3[4];
+		///
 		typedef char   LString4[5];
+		///
 		typedef char   LString5[6];
+		///
 		typedef char   LString6[7];
+		///
 		typedef char   LString7[8];
+		///
 		typedef char   LString8[9];
+		///
 		typedef char   LString9[10];
+		///
 		typedef char   LString10[11];
+		///
 		typedef char   LString11[12];
+		///
 		typedef char   LString12[13];
+		///
 		typedef char   LString13[14];
+		///
 		typedef double Real;
+		///
 		typedef char   RecordName[7];
+		///
 		typedef char   ResidueName[4];
+		///
 		typedef char   SList[SIZE_OF_PDB_RECORD_LINE + 1];
+		///
 		typedef char   Specification[SIZE_OF_PDB_RECORD_LINE + 1];
+		///
 		typedef char   SpecificationList[SIZE_OF_PDB_RECORD_LINE + 1];
+		///
 		typedef char   PDBString[SIZE_OF_PDB_RECORD_LINE + 1];
+		///
 		typedef char   String2[3];
+		///
 		typedef char   String3[4];
+		///
 		typedef char   String4[5];
+		///
 		typedef char   String5[6];
+		///
 		typedef char   String40[41];
+		///
 		typedef long   SymmetryOperator;
-		
+		//@}
+
+		/** @name Structs for storing records.
+		*/
+		//@{
+		/**
+		*/
 		struct RecordTypeFormat
 		{
 			public:
@@ -139,11 +198,15 @@ namespace BALL
 			const char*		format_string;
 		};
 
+		/**
+		*/
 		struct RecordUNKNOWN
 		{
 			Real max_record_size[SIZE_OF_PDB_RECORD_LINE];
 		};
 		
+		/**
+		*/
 		struct RecordANISOU
 		{
 			RecordType  record_type;
@@ -166,6 +229,8 @@ namespace BALL
 			LString2    charge; 
 		};
 
+		/**
+		*/
 		struct RecordATOM
 		{
 			RecordType  record_type;
@@ -185,6 +250,8 @@ namespace BALL
 			LString2    charge; 
 		};
 
+		/**
+		*/
 		struct RecordAUTHOR
 		{
 			RecordType   record_type;
@@ -193,6 +260,8 @@ namespace BALL
 			PDBList      authors;
 		};
 
+		/**
+		*/
 		struct RecordCAVEAT
 		{
 			RecordType   record_type;
@@ -202,6 +271,8 @@ namespace BALL
 			PDBString    comment;
 		};
 
+		/**
+		*/
 		struct RecordCISPEP
 		{
 			RecordType     record_type;
@@ -218,6 +289,8 @@ namespace BALL
 			Real           angle_measure;
 		};
 
+		/**
+		*/
 		struct RecordCOMPND
 		{
 			RecordType        record_type;
@@ -226,6 +299,8 @@ namespace BALL
 			SpecificationList component_description;
 		};
 		
+		/**
+		*/
 		struct RecordCONECT
 		{
 			RecordType record_type;
@@ -236,6 +311,8 @@ namespace BALL
 			Integer    salt_bridged_atom_serial_number[2];
 		};
 
+		/**
+		*/
 		struct RecordCRYST1
 		{
 			RecordType record_type;
@@ -253,6 +330,8 @@ namespace BALL
 			} unit_cell;
 		};
 
+		/**
+		*/
 		struct RecordDBREF
 		{
 			RecordType record_type;
@@ -284,6 +363,8 @@ namespace BALL
 			} ending_database_segment;
 		};
 
+		/**
+		*/
 		struct RecordEND
 		{
 			RecordType record_type;
@@ -579,6 +660,8 @@ namespace BALL
 			LString6     name_of_modified_record[4];
 		};
 
+		/**
+		*/
 		struct RecordSCALE1
 		{
 			RecordType record_type;
@@ -586,6 +669,8 @@ namespace BALL
 			Real       transformation_matrix[4];
 		};
 
+		/**
+		*/
 		struct RecordSCALE2
 		{
 			RecordType record_type;
@@ -593,6 +678,8 @@ namespace BALL
 			Real       transformation_matrix[4];
 		};
 
+		/**
+		*/
 		struct RecordSCALE3
 		{
 			RecordType record_type;
@@ -600,6 +687,8 @@ namespace BALL
 			Real       transformation_matrix[4];
 		};
 
+		/**
+		*/
 		struct RecordSEQRES
 		{
 			RecordType  record_type;
@@ -610,6 +699,8 @@ namespace BALL
 			ResidueName residue_name[13];
 		};
 
+		/**
+		*/
 		struct RecordSHEET
 		{
 			RecordType    record_type;
@@ -650,6 +741,8 @@ namespace BALL
 			} residue_in_previous_strand;
 		};
 
+		/**
+		*/
 		struct RecordSIGATM
 		{
 			RecordType  record_type;
@@ -669,6 +762,8 @@ namespace BALL
 			LString2    charge; 
 		};
 
+		/**
+		*/
 		struct RecordSIGUIJ
 		{
 			RecordType  record_type;
@@ -691,6 +786,8 @@ namespace BALL
 			LString2    charge; 
 		};
 
+		/**
+		*/
 		struct RecordSITE
 		{
 			RecordType    record_type;
@@ -707,6 +804,8 @@ namespace BALL
 			} residue[4];
 		};
 
+		/**
+		*/
 		struct RecordSLTBRG
 		{
 			RecordType      record_type;
@@ -727,6 +826,8 @@ namespace BALL
 			SymmetryOperator second_atom;
 		};
 
+		/**
+		*/
 		struct RecordSOURCE
 		{
 			RecordType        record_type;
@@ -735,6 +836,8 @@ namespace BALL
 			SpecificationList sources;
 		};
 
+		/**
+		*/
 		struct RecordSSBOND
 		{
 			RecordType    record_type;
@@ -750,6 +853,8 @@ namespace BALL
 			} partner_residue[2];
 		};
 
+		/**
+		*/
 		struct RecordTER
 		{
 			RecordType  record_type;
@@ -761,6 +866,8 @@ namespace BALL
 			AChar       insertion_code;
 		};
 
+		/**
+		*/
 		struct RecordTITLE
 		{
 			RecordType   record_type;
@@ -769,6 +876,8 @@ namespace BALL
 			PDBString    title;
 		};
 
+		/**
+		*/
 		struct RecordTURN
 		{
 			RecordType    record_type;
@@ -792,6 +901,8 @@ namespace BALL
 			PDBString     comment;
 		};
 
+		/**
+		*/
 		struct RecordTVECT
 		{
 			RecordType record_type;
@@ -800,6 +911,7 @@ namespace BALL
 			Real       translation_vector[3];
 			PDBString  comment;
 		};
+		//@}
 	}
 
 	/**	Generic PDB file class.
@@ -812,70 +924,195 @@ namespace BALL
 	{
 		public:
 
+		/**	Symbolic names for option keys.
+				This struct contains a symbolic name
+				for each recognized key in PDBFile::options.\\
+				For each symbol the required type is given under parameters.
+		*/
+		struct Option 
+		{
+			/**	The verbosity level.
+					Use integer values with this option.
+					0 = terse\\
+					99 = tell me everything
+					@see		Default::VERBOSITY
+					@param	verbosity  integer
+			*/
+			static const char* VERBOSITY;
+
+			/**	Enable strict line checking. [Not yet implemented]
+					This option turns line checking on or off. Line checking is a
+					very simple test for the correct length of input lines. The
+					default is to keep line checking turned off. 
+					@see		Default::LINE_CHECKING
+					@param	verbosity  boolean
+			*/
+			static const char* STRICT_LINE_CHECKING;
+			
+			/** Choose a model. 
+					If a PDB file contains several models, choose the model you want
+					to have read via this option. Default is the first model
+					appearing, denoted by Index 0. If you want to read all models,
+					choose index -1.
+					@see		Default::CHOOSE_MODEL
+					@param	model	integer
+			*/
+			static const char* CHOOSE_MODEL;
+
+		};
+
+		/** Default values for PDBFile options.  
+		*/
+		struct Default 
+		{
+			/** Default verbosity level.
+					0 - shut up!
+					@see	Option::VERBOSITY
+			*/
+			static const int VERBOSITY;
+
+			/** Default for strict line checking option.
+					false - don't check lines lengths.
+					@see	Option::STRICT_LINE_CHECKING
+			*/
+			static const bool STRICT_LINE_CHECKING;
+
+			/** Default model to read from file.
+					0 - read the first model from the file
+					@see	Option::CHOOSE_MODEL
+			*/
+			static const Index CHOOSE_MODEL;
+		};
+
+		/** @name Options
+		*/
+		//@{
+		///
+		Options options;
+		//@}
+
+		/** @name Constructurs and destructor.
+		*/
+		//@{
+		/// Default constructor.
 		GenericPDBFile();
 
+		/// Construct with options.
+		GenericPDBFile(const Options& new_options);
+
+		/// Copy constructor
 		GenericPDBFile(const GenericPDBFile& file)
 			throw();
 		
+		/// Destructor
 		virtual ~GenericPDBFile()
 			throw();
+		//@}
 
+		/** @name Assignment.
+		*/
+		//@{
+
+		/// Clear method.
 		virtual void clear(int state = 0);
-	
+		//@}
+
+		/** @name Accessors.
+		*/
+		//@{
+
+		/// Returns the version number this PDB file reader is able to read.
 		virtual float getVersion() const;
 
+		/** Selects one of multiple models for reading. Default behaviour is
+				reading model 1. If a file does not contain a MODEL specifier, all
+				coordinates will be assigned to model 1.
+		*/
 		void selectModel(Index index);
 
+		/// Selects all models for reading.
 		void selectAllModels();
 
+		/// Returns the number of the currently selected model.
 		Index getSelectedModel() const;
 
+		/// Returns the number of the model weare currently reading. (?????)
 		Index getCurrentModel() const;
 
+		/// Return a mutable pointer to the line buffer.
 		char* getRecordString();
-	
+
+		/// Return a constant pointer to the line buffer.
 		const char* getRecordString() const;
-	
+
+		/// Returns the number of the record we are currently reading.
 		Index getRecordNumber() const;
 
+		/// Returns the type of the record we are currently reading.
 		PDB::RecordType getRecordType() const;
 
+		/** Returns the element symbol of an atom. If element_symbol is
+				invalid we try to reconstruct the element symbol from the atom name.
+		*/
 		virtual const char* getAtomElementSymbol
 			(const PDB::Atom atom_name,
 			 PDB::Atom element_symbol);
-	
+
+		/// Returns the atom name.
 		virtual const char* getAtomName
 			(const PDB::Atom atom_name);
-	
+
+		/// ?????
 		virtual char getAtomRemotenessIndicator
 			(const PDB::Atom atom_name);
-	
+
+		/// ?????
 		virtual short getAtomBranchDesignator
 			(const PDB::Atom atom_name);
-	
+
+		/// Returns the number of record fields.
 		Size countRecordFields() const;
 
+		/** Returns the number of records of type record_type in the file being
+				read.
+		*/
 		Size countRecord
 			(PDB::RecordType record_type,
 			 bool from_begin_of_file = true);
-	
+
+		/** Returns the number of all records in the file.
+		*/
 		Size countRecords
 			(bool from_begin_of_file = true);
-	
+		//@}
+
+		/** @name Functions for reading parts of the PDB file.
+		*/
+		//@{
+		/// Parse a line from a PDBFile. This is a helper function for readLine().
 		bool parseLine(const char* line, Size size, const char* format_string, ...);
 
+		/// Read and parse a line from a PDB file.
 		bool readLine(char* line, Size size, bool extract_values);
 
+		/// Read the firts record of a file. 
 		bool readFirstRecord(bool read_values = true);
-	
+
+		/// Read the next record of a PDB file.
 		bool readNextRecord(bool read_values = true);
 
+		/** Reads all records of a file and returns true if all records were
+				readable without error, false ow.
+		*/
 		bool readRecords();
-	
+
+		/// ``Reads'' an unknown record by simply returning true.
 		virtual bool readUnknownRecord(const char* line);
-	
+
+		/// ``Reads'' an invalid record by simply returning true.
 		virtual bool readInvalidRecord(const char* line);
-	
+
+		/// Reads an anisotropic temperature factor record.
 		virtual bool readRecordANISOU
 			(PDB::Integer serial_number,
 			 PDB::Atom atom_name,
@@ -894,6 +1131,7 @@ namespace BALL
 			 PDB::LString2 element_symbol,
 			 PDB::LString2 charge);
 
+		/// Reads an atom record.
 		virtual bool readRecordATOM
 			(PDB::Integer serial_number,
 			 PDB::Atom atom_name,
@@ -909,34 +1147,43 @@ namespace BALL
 			 PDB::LString2 element_symbol,
 			 PDB::LString2 charge);
 
+		/// Reads an author record.
 		virtual bool readRecordAUTHOR
 			(PDB::Continuation continuation,
 			 PDB::PDBList authors);
 
+		/// Reads a cave-at record.
 		virtual bool readRecordCAVEAT
 			(PDB::Continuation continuation,
 			 PDB::IDcode entry_code,
 			 PDB::PDBString comment);
 
+		/// Reads a record specifying peptides in cis conformation.
 		virtual bool readRecordCISPEP
 			(PDB::Integer record_serial_number,
 			 PDB::RecordCISPEP::CisPeptide cis_peptide[2],
 			 PDB::Integer specific_model_ID,
 			 PDB::Real angle_measure);
 
+		/// Reads the title record containing macroscopic compoubd information.
 		virtual bool readRecordCOMPND
 			(PDB::Continuation continuation,
 			 PDB::SpecificationList component_description);
-	
+
+		/// Reads a connection record.
 		virtual bool readRecordCONECT
 			(PDB::Integer atom_serial_number,
 			 PDB::Integer bonded_atom_serial_number[4],
 			 PDB::Integer hydrogen_bonded_atom_serial_number[4],
 			 PDB::Integer salt_bridged_atom_serial_number[2]);
 
+		/** Reads the record specifying the unit cell parameters, space group,
+				and Z value for crystographically determined structures.
+		*/
 		virtual bool readRecordCRYST1
 			(PDB::RecordCRYST1::UnitCell& unit_cell);
 
+		/// Reads a record containing database cross-reference links.
 		virtual bool readRecordDBREF
 			(PDB::IDcode entry_code,
 			 PDB::Character chain_ID,
@@ -948,30 +1195,41 @@ namespace BALL
 			 PDB::RecordDBREF::InitialDatabaseSegment& initial_database_segment,
 			 PDB::RecordDBREF::EndingDatabaseSegment& ending_database_segment);
 
+		/// Reads the record defining the end of a PDB file.
 		virtual bool readRecordEND();
-	
+
+		/// Reads a model ending record.
 		virtual bool readRecordENDMDL();
-	
+
+		/// Reads a record containing data about the experiment.
 		virtual bool readRecordEXPDTA
 			(PDB::Continuation continuation,
 			 PDB::SList technique);
-	
+
+		/** Reads a record containing the chemical formula of a non-standard
+				group.
+		*/
 		virtual bool readRecordFORMUL
 			(PDB::Integer component_number,
 			 PDB::LString3 het_ID,
 			 PDB::Integer continuation_number,
 			 PDB::Character is_water,
 			 PDB::PDBString chemical_formula);
-	
+
+		/// Reads a record containing a footnote.
 		virtual bool readRecordFTNOTE
 			(PDB::Integer number,
 			 PDB::PDBString text);
-	
+
+		/** Reads the header recors which contains the idCode field, entry
+				classification and deposition date.
+		*/
 		virtual bool readRecordHEADER
 			(PDB::String40 classification,
 			 PDB::Date deposition_date,
 			 PDB::IDcode ID_code);
-	
+
+		/// Reads a helix defining record.
 		virtual bool readRecordHELIX
 			(PDB::Integer serial_number,
 			 PDB::LString3 helix_ID,
@@ -980,7 +1238,8 @@ namespace BALL
 			 PDB::Integer helix_class,
 			 PDB::PDBString comment,
 			 PDB::Integer length);
-	
+
+		/// Reads a record defining a non-standard residue.
 		virtual bool readRecordHET
 			(PDB::LString3 het_ID,
 			 PDB::Character chain_ID,
@@ -988,7 +1247,8 @@ namespace BALL
 			 PDB::AChar insertion_code,
 			 PDB::Integer number_of_HETATM_records,
 			 PDB::PDBString text);
-	
+
+		/// Reads atomic coordinates for atoms in non-standard groups.
 		virtual bool readRecordHETATM
 			(PDB::Integer serial_number,
 			 PDB::Atom atom_name,
@@ -1003,30 +1263,38 @@ namespace BALL
 			 PDB::LString4 segment_ID,
 			 PDB::LString2 element_symbol,
 			 PDB::LString2 charge);
-	
+
+		/// Reads a record defining the name of a non-standard group.
 		virtual bool readRecordHETNAM
 			(PDB::Continuation continuation,
 			 PDB::LString3 het_ID,
 			 PDB::PDBString chemical_name);
-	
+
+		/// Reads a record defining a hydrogen bond.
 		virtual bool readRecordHYDBND
 			(PDB::RecordHYDBND::HydrogenPartnerAtom hydrogen_partner_atom[2],
 			 PDB::RecordHYDBND::HydrogenAtom& hydrogen_atom,
 			 PDB::SymmetryOperator first_non_hydrogen_atom,
 			 PDB::SymmetryOperator second_non_hydrogen_atom);
-	
+
+		/// Reads a record containing a journal reference.
 		virtual bool readRecordJRNL
 			(PDB::LString text);
-	
+
+		/// Reads a record containing keywords for this entry.
 		virtual bool readRecordKEYWDS
 			(PDB::Continuation continuation,
 			 PDB::PDBList keywords);
-	
+
+		/// Reads a record containing supplemental connectivity information.
 		virtual bool readRecordLINK
 			(PDB::RecordLINK::LinkPartner link_partner[2],
 			 PDB::SymmetryOperator first_atom,
 			 PDB::SymmetryOperator second_atom);
-	
+
+		/** Reads the master record containing numerous counts for bookkeeping
+				purposes.
+		*/
 		virtual bool readRecordMASTER
 			(PDB::Integer number_of_REMARK_records,
 			 PDB::Integer zero,
@@ -1040,10 +1308,12 @@ namespace BALL
 			 PDB::Integer number_of_TER_records,
 			 PDB::Integer number_of_CONECT_records,
 			 PDB::Integer number_of_SEQRES_records);
-	
+
+		/// Reads a record indicating the beginning of a new model.
 		virtual bool readRecordMODEL
 			(PDB::Integer model_serial_number);
-	
+
+		/// Reads a record identifying residue modifications.
 		virtual bool readRecordMODRES
 			(PDB::IDcode entry_code,
 			 PDB::ResidueName residue_name,
@@ -1052,41 +1322,64 @@ namespace BALL
 			 PDB::AChar insertion_code,
 			 PDB::ResidueName standardresidue_name,
 			 PDB::PDBString comment);
-	
+
+		/** Reads a record defining transformations expressing
+				non-crystallographic symmetry.
+		*/
 		virtual bool readRecordMTRIX1
 			(PDB::Integer serial_number,
 			 PDB::Real transformation_matrix[4],
 			 PDB::Integer is_given);
-	
+
+		/** Reads a record defining transformations expressing
+				non-crystallographic symmetry.
+		*/
 		virtual bool readRecordMTRIX2
 			(PDB::Integer serial_number,
 			 PDB::Real transformation_matrix[4],
 			 PDB::Integer is_given);
-	
+
+		/** Reads a record defining transformations expressing
+				non-crystallographic symmetry.
+		*/
 		virtual bool readRecordMTRIX3
 			(PDB::Integer serial_number,
 			 PDB::Real transformation_matrix[4],
 			 PDB::Integer is_given);
-	
+
+		/** Reads a record indicating that this structura has been
+				withdrawnform the database.
+		*/
 		virtual bool readRecordOBSLTE
 			(PDB::Continuation continuation,
 			 PDB::Date entry_replaced_date,
 			 PDB::IDcode entry_code,
 			 PDB::IDcode replacing_entry_code[8]);
-	
+
+		/** Reads a record defining the transformation from the orthogonal
+				coordinates contained in the entry to the submitted coordinates.
+		*/
 		virtual bool readRecordORIGX1
 			(PDB::Real transformation_matrix[4]);
-	
+
+		/** Reads a record defining the transformation from the orthogonal
+				coordinates contained in the entry to the submitted coordinates.
+		*/
 		virtual bool readRecordORIGX2
 			(PDB::Real transformation_matrix[4]);
-	
+
+		/** Reads a record defining the transformation from the orthogonal
+				coordinates contained in the entry to the submitted coordinates.
+		*/
 		virtual bool readRecordORIGX3
 			(PDB::Real transformation_matrix[4]);
-	
+
+		/// Reads a record containing remarks.
 		virtual bool readRecordREMARK
 			(PDB::Integer remark_number,
 			 PDB::LString text);
-	
+
+		/// Reads a record containing a revision history.
 		virtual bool readRecordREVDAT
 			(PDB::Integer modification_number,
 			 PDB::Continuation continuation,
@@ -1095,21 +1388,26 @@ namespace BALL
 			 PDB::Integer modification_type,
 			 PDB::LString6 name_of_modified_record[4]);
 
+		/// Reads a scale transformation record.
 		virtual bool readRecordSCALE1
 			(PDB::Real transformation_matrix[4]);
 
+		/// Reads a scale transformation record.
 		virtual bool readRecordSCALE2
 			(PDB::Real transformation_matrix[4]);
 
+		/// Reads a scale transformation record.
 		virtual bool readRecordSCALE3
 			(PDB::Real transformation_matrix[4]);
 
+		/// Reads a record containing the sequence of residues.
 		virtual bool readRecordSEQRES
 			(PDB::Integer serial_number,
 			 PDB::Character chain_ID,
 			 PDB::Integer number_of_residues_in_chain,
 			 PDB::ResidueName residue_name[13]);
 
+		/// Reads a record defining a beta-sheet.
 		virtual bool readRecordSHEET
 			(PDB::Integer strand_number,
 			 PDB::LString3 sheet_ID,
@@ -1122,6 +1420,7 @@ namespace BALL
 			 PDB::Atom atom_name_in_previous_strand,
 			 PDB::RecordSHEET::ResidueInPreviousStrand& residue_in_previous_strand);
 
+		/// Reads a record giving the standard deviation of atomic coordinates.
 		virtual bool readRecordSIGATM
 			(PDB::Integer serial_number,
 			 PDB::Atom atom_name,
@@ -1137,6 +1436,9 @@ namespace BALL
 			 PDB::LString2 element_symbol,
 			 PDB::LString2 charge);
 
+		/** Reads a record giving the standard deviation of anisotropic
+				temperature factors.
+		*/
 		virtual bool readRecordSIGUIJ
 			(PDB::Integer serial_number,
 			 PDB::Atom atom_name,
@@ -1155,25 +1457,32 @@ namespace BALL
 			 PDB::LString2 element_symbol,
 			 PDB::LString2 charge);
 
+		/// Reads a record containing groups comprising a site.
 		virtual bool readRecordSITE
 			(PDB::Integer sequence_number,
 			 PDB::LString3 name,
 			 PDB::Integer number_of_residues,
 			 PDB::RecordSITE::Residue residue[4]);
 
+		/// Reads a record defining a salt bridge.
 		virtual bool readRecordSLTBRG
 			(PDB::RecordSLTBRG::PartnerAtom partner_atom[2],
 			 PDB::SymmetryOperator first_atom,
 			 PDB::SymmetryOperator second_atom);
 
+		/** Reads a record specifies the chemical/biological source of each
+				molecule in the entry.
+		*/
 		virtual bool readRecordSOURCE
 			(PDB::Continuation continuation,
 			 PDB::SpecificationList sources);
 
+		/// Reads a record specifying a disulfide bond.
 		virtual bool readRecordSSBOND
 			(PDB::Integer serial_number,
 			 PDB::RecordSSBOND::PartnerResidue partner_residue[2]);
 
+		/// Reads a record terminating molecule.
 		virtual bool readRecordTER
 			(PDB::Integer serial_number,
 			 PDB::ResidueName residue_name,
@@ -1181,10 +1490,12 @@ namespace BALL
 			 PDB::Integer residue_sequence_number,
 			 PDB::AChar insertion_code);
 
+		/// Reads a record specifying the title of the experiment or anaysis.
 		virtual bool readRecordTITLE
 			(PDB::Continuation continuation,
 			 PDB::PDBString title);
 
+		/// Reads a record specifying a turn.
 		virtual bool readRecordTURN
 			(PDB::Integer sequence_number,
 			 PDB::LString3 turn_ID,
@@ -1192,36 +1503,76 @@ namespace BALL
 			 PDB::RecordTURN::TerminalResidue& terminal_residue,
 			 PDB::PDBString comment);
 
+		/** Reads a record specifying the translation vector for infinite
+				covalently connected structures.
+		*/
 		virtual bool readRecordTVECT
 			(PDB::Integer serial_number,
 			 PDB::Real translation_vector[3],
 			 PDB::PDBString comment);
+		//@}
 
+		///
 		virtual bool hasFormat();
 
+		///
 		bool hasFormat() const;
 
+		///
 		virtual bool hasFormat(const String& s) const;
 
 
 		protected:
 		
+		//_
 		void clear_();
+
+		//_
+		static const PDB::RecordTypeFormat record_type_format_[];
 
 
 		private:
 
+		//_
 		GenericPDBFile(const File& generic_PDB_file);
 
+		//_
 		GenericPDBFile& operator = (const GenericPDBFile& generic_PDB_file);
 
+		/*_ A helper function for initializing certain data structures. Used by
+				constructors.
+		*/
+		void init_()
+			throw();
+
+		//_
+		int verbosity_;
+
+		//_
+		bool strict_line_checking_;
+
+		//_ 
 		Index current_model_;
+
+		//_
 		Index selected_model_;
+
+		//_
 		Index current_record_;
+
+		//_
 		Size record_fields_;
+
+		//_
 		PDB::RecordType current_record_type_;
+
+		//_
 		PDB::RecordTypeFormat compare_record_type_format_; 
+
+		//_
 		char line_buffer_[PDB::SIZE_OF_PDB_LINE_BUFFER];
+
+		//_
 		union
 		{
 			PDB::RecordUNKNOWN record_UNKNOWN;
@@ -1277,9 +1628,6 @@ namespace BALL
 			PDB::RecordTVECT   record_TVECT;
 		};
 
-		protected:
-		
-		static const PDB::RecordTypeFormat record_type_format_[];
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

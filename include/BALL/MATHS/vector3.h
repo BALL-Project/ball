@@ -1,4 +1,7 @@
-// $Id: vector3.h,v 1.56 2001/07/16 02:13:47 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: vector3.h,v 1.56.2.1 2003/01/07 13:18:04 anker Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -71,11 +74,8 @@ namespace BALL
 	*/
 	template <typename T>
 	class TVector3
-		: public PersistentObject
 	{
 		public:
-
-		BALL_CREATE(TVector3<T>)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -137,33 +137,13 @@ namespace BALL
 				Destructs the TVector3 object. As there are no dynamic
 				data structures, nothing happens.
 		*/	
-		virtual ~TVector3()
+		~TVector3()
 			throw();
 
 		/** Clear method
 				The values are set to 0.
 		*/
-		virtual void clear()
-			throw();
-
-		//@}
-
-		/**	@name Persistence 
-		*/
-		//@{
-
-		/**	Persistent writing.
-				Writes a TVector3 object to a persistent stream.
-				@param pm the persistence manager
-		*/
-		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
-			throw();
-
-		/**	Persistent reading.
-				Reads a TVector3 object from a persistent stream.
-				@param pm the persistence manager
-		*/
-		virtual void persistentRead(PersistenceManager& pm)
+		void clear()
 			throw();
 
 		//@}
@@ -515,6 +495,22 @@ namespace BALL
 		//@}
 
 
+    /** @name Storable Interface
+    */
+    //@{
+
+    /** Persistent stream writing.
+    */
+    void write(PersistenceManager& pm) const
+			throw();
+
+    /** Persistent stream reading.
+    */
+		bool read(PersistenceManager& pm)
+      throw();
+
+    //@}
+
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -564,7 +560,7 @@ namespace BALL
 		{
 			TAngle<T> angle;
 	
-			if (Maths::isNotZero(x))
+			if (Maths::isNotZero(a))
 			{
 				angle = atan(b / a);
 			} 
@@ -591,19 +587,19 @@ namespace BALL
 
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3()
 		throw()
-		:	PersistentObject(),
-			x(0),
+		:	x(0),
 			y(0),
 			z(0)
 	{
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3(const T* ptr)
 		throw(Exception::NullPointer)
-		:	PersistentObject()
 	{
 		if (ptr == 0) 
 		{
@@ -616,78 +612,60 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3(const T& value)
 		throw()
-		:	PersistentObject(),	
-			x(value),
+		:	x(value),
 			y(value),
 			z(value)
 	{
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3(const T& vx, const T& vy, const T& vz)
 		throw()
-		:	PersistentObject(),
-			x(vx),
+		:	x(vx),
 			y(vy),
 			z(vz)
 	{
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3(const TVector3& vector)
 		throw()
-		:	PersistentObject(),
-			x(vector.x),
+		:	x(vector.x),
 			y(vector.y),
 			z(vector.z)
 	{
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
 		throw()
-		:	PersistentObject(),
-			x(r * cos(phi) * sin(theta)),
+		:	x(r * cos(phi) * sin(theta)),
 			y(r * sin(phi) * sin(theta)),
 			z(r * cos(theta))
 	{
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>::~TVector3()
 		throw()
 	{
 	}
 
 	template <typename T>
+	BALL_INLINE
 	void TVector3<T>::clear()
 		throw()
 	{
 		x = y = z = (T)0;
 	}
 
-	template <typename T>
-  void TVector3<T>::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
-	{
-		pm.writeObjectHeader(this, name);
-			pm.writePrimitive(x, "x");
-			pm.writePrimitive(y, "y");
-			pm.writePrimitive(z, "z");
-		pm.writeObjectTrailer(name);
-	}
-
-	template <typename T>
-	void TVector3<T>::persistentRead(PersistenceManager& pm)
-		throw()
-	{
-		pm.readPrimitive(x, "x");
-		pm.readPrimitive(y, "y");
-		pm.readPrimitive(z, "z");
-	}
- 
 	template <typename T>
 	BALL_INLINE 
 	void TVector3<T>::set(const T* ptr)
@@ -732,6 +710,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	void TVector3<T>::set(const T& r, const TAngle<T> &phi, const TAngle<T> &theta)
 		throw()
 	{
@@ -741,6 +720,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	const TVector3<T>& TVector3<T>::operator = (const T* ptr)
 		throw(Exception::NullPointer)
 	{
@@ -824,6 +804,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	void TVector3<T>::swap(TVector3<T>& vector)
 		throw()
 	{
@@ -875,6 +856,7 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE
 	TVector3<T>& TVector3<T>::negate()
 		throw()
 	{
@@ -1208,6 +1190,27 @@ namespace BALL
 	{
 		return TVector3<T>(x - b.x, y - b.y, z - b.z);
 	}
+
+	template <typename T>
+  void TVector3<T>::write(PersistenceManager& pm) const
+    throw()
+  {
+    pm.writePrimitive(x, "x");
+    pm.writePrimitive(y, "y");
+    pm.writePrimitive(z, "z");
+	}
+
+	template <typename T>			
+  bool TVector3<T>::read(PersistenceManager& pm)
+    throw()
+  {
+    pm.readPrimitive(x, "x");
+    pm.readPrimitive(y, "y");
+    pm.readPrimitive(z, "z");
+
+    return true;
+	}
+
 
 	template <typename T>
 	BALL_INLINE 

@@ -1,4 +1,7 @@
-// $Id: glsimpleBox.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glsimpleBox.h,v 1.7.2.1 2003/01/07 13:19:38 anker Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSIMPLEBOX_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSIMPLEBOX_H
@@ -183,12 +186,6 @@ namespace BALL
 			virtual bool draw(bool with_names = false)
 				throw();
 
-			/** Experimental method.
-					Please avoid using this method.
-			*/
-			virtual bool drawUserDefined()
-				throw();
-
 			/** Export method.
 					This method handles the export of {\em *this} glSimpleBox into another
 					format (eg. POVRAY, VRML)\\
@@ -201,10 +198,6 @@ namespace BALL
 			//@}
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.iC>
-#		endif
-		
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,11 +1,14 @@
-// $Id: ResourceFile_test.C,v 1.16 2002/01/12 12:19:56 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: ResourceFile_test.C,v 1.16.2.1 2003/01/07 13:22:50 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.16 2002/01/12 12:19:56 oliver Exp $")
+START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.16.2.1 2003/01/07 13:22:50 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -304,7 +307,26 @@ CHECK(ResourceEntry::getEntry(const String& key_path))
 RESULT
 
 CHECK(ResourceEntry::getEntry(const String&) const)
-	//?????
+	ResourceEntry R("TEST1", "test1");
+	ResourceEntry& S = *new ResourceEntry("TEST2", "test2");
+	ResourceEntry& T = *new ResourceEntry("TEST3", "test3");
+	ResourceEntry& U = *new ResourceEntry("TEST4", "test4");
+	ResourceEntry& V = *new ResourceEntry("TEST5", "test5");
+	R.insertChild(S);
+	R.insertChild(T);
+	R.insertChild(U);
+	U.insertChild(V);
+	const ResourceEntry* r_entry_ptr;
+	r_entry_ptr = R.getEntry("TEST2");
+	TEST_EQUAL(r_entry_ptr, &S)
+	r_entry_ptr = R.getEntry("TEST3");
+	TEST_EQUAL(r_entry_ptr, &T)
+	r_entry_ptr = R.getEntry("TEST4");
+	TEST_EQUAL(r_entry_ptr, &U)
+	r_entry_ptr = R.getEntry("TEST4/TEST5");
+	TEST_EQUAL(r_entry_ptr, &V)
+	r_entry_ptr = R.getEntry("TEST2/TEST6");
+	TEST_EQUAL(r_entry_ptr, 0)
 RESULT
 
 CHECK(ResourceEntry::countDescendants() const)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSAS.C,v 1.1 2002/12/17 17:14:23 anker Exp $
+// $Id: triangulatedSAS.C,v 1.1.2.1 2003/01/07 13:22:08 anker Exp $
 
 #ifdef debug_triangulation
 #	include <BALL/KERNEL/atom.h>

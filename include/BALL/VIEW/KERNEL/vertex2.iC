@@ -1,4 +1,7 @@
-// $Id: vertex2.iC,v 1.5 2001/05/13 13:47:49 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: vertex2.iC,v 1.5.2.1 2003/01/07 13:19:53 anker Exp $
 
 BALL_INLINE
 void Vertex2::setVertex1(const Vector3& v)

@@ -1,4 +1,7 @@
-// $Id: rotamerLibrary.C,v 1.16 2001/12/17 01:30:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: rotamerLibrary.C,v 1.16.2.1 2003/01/07 13:22:05 anker Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -123,7 +126,7 @@ namespace BALL
 		vector<String>	lines;
 		String line;
 		RegularExpression regexp("[A-Z][A-Z][A-Z] [0-9] [0-9] [0-9] [0-9] *[0-9]* *[0-9]* *[0-9\\.]*");
-		while (f)
+		while (f.good())
 		{
 			line.getline(f);
 			if (regexp.match(line))
@@ -524,9 +527,6 @@ namespace BALL
 		// Initiate Transformation Processor
 		TransformationProcessor proc;
 
-		// Initiate Instance of StructureMapper
-		StructureMapper mapper;
-
 		// Compute transformation that moves the torsion atoms into normal position
 		Vector3 a1(atom_name_map_[moveable[0]]->getPosition());
 		Vector3 a2(atom_name_map_[moveable[1]]->getPosition());
@@ -535,7 +535,9 @@ namespace BALL
 		Vector3	v1(0.0,0.0,0.0);
 		Vector3 v2(1.0,0.0,0.0);
 		Vector3 v3(0.0,1.0,0.0);
-		Matrix4x4 M = mapper.matchPoints_(a2, a3, a1, v1, v2, v3);
+
+		Matrix4x4 M = StructureMapper::matchPoints(a2, a3, a1, v1, v2, v3);
+
 		// Apply this transformation to all atoms of the residue
 		proc.setTransformation(M);
 		side_chain_.apply(proc); 
@@ -670,11 +672,8 @@ namespace BALL
 		// Initiate transformation processor
 		TransformationProcessor proc;
 
-		// Initiate structure mapper
-		StructureMapper	mapper;
-
 		// Calculate the transformation
-		Matrix4x4 M = mapper.matchPoints_(a1,a2,a3,z1,z2,z3);
+		Matrix4x4 M = StructureMapper::matchPoints(a1,a2,a3,z1,z2,z3);
 	
 		// Apply the transformation to side_chain
 		proc.setTransformation(M);

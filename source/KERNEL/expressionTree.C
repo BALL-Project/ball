@@ -1,4 +1,7 @@
-// $Id: expressionTree.C,v 1.6 2002/01/10 15:00:40 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: expressionTree.C,v 1.6.2.1 2003/01/07 13:20:52 anker Exp $
 
 #include <BALL/KERNEL/expressionTree.h>
 
@@ -103,7 +106,7 @@ namespace BALL
 		throw()
 	{
 
-    bool result;
+    bool result = true;
     if (type_ == LEAF)
     {
 
@@ -121,7 +124,6 @@ namespace BALL
 		} 
 		else 
 		{
-
 			// this is either a conjunction or a disjunction or a node that
 			// represents a bracket pair (which is marked as INVALID)
 

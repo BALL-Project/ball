@@ -1,4 +1,7 @@
-// $Id: lineSearch.C,v 1.4 2001/12/17 01:33:00 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: lineSearch.C,v 1.4.2.1 2003/01/07 13:21:13 anker Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -14,6 +17,8 @@
 
 // maximum number of interpolation steps for a line search
 #define LINESEARCH__DEFAULT_MAX_STEPS			10
+
+#define DEBUG
 
 namespace BALL 
 {

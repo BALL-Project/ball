@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 #include <BALL/FORMAT/NMRStarFile.h>
 #include <iostream> 
 #include <fstream>
@@ -131,10 +134,10 @@ namespace BALL
 
 	SampleCondition::SampleCondition()
 		throw()
-		: name(),
-			temperature(),
-			pH(),
-			pressure()
+		: name(""),
+			temperature(0.0),
+			pH(7.0),
+			pressure(0.0)
 	{
 	}
 
@@ -308,7 +311,7 @@ namespace BALL
 
 				SampleCondition* condition = new SampleCondition();
 				condition->name.set(getLine(), 5);
-				if (!search("      _Variable_value_units", "#"))
+				if (!search("      _Variable_value_units", "#", true))
 				{
 					break;
 				}

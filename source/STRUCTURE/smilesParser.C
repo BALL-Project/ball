@@ -1,4 +1,7 @@
-// $Id: smilesParser.C,v 1.6 2002/02/12 14:42:53 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: smilesParser.C,v 1.6.2.1 2003/01/07 13:22:06 anker Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -20,7 +23,7 @@ namespace BALL
 			is_aromatic_(false),
 			in_brackets_(in_brackets)
 	{
-		setAromatic(islower(symbol[0]));
+		setAromatic(islower(symbol[0]) != 0);
 		String s(symbol);
 		s.toUpper(0, 1);
 		setElement(PTE[s]);
@@ -72,6 +75,10 @@ namespace BALL
 	}
 
 	SmilesParser::SmilesParser()
+	{
+	}
+
+	SmilesParser::SmilesParser(const SmilesParser& /* parser */)
 	{
 	}
 
@@ -150,6 +157,21 @@ namespace BALL
 	{
 		left->createBond(*this, *right);
 		setOrder(order);
+	}
+
+	SmilesParser::SPBond::~SPBond()
+		throw()
+	{
+	}
+
+	SmilesParser::ZEIsomerType SmilesParser::SPBond::getZEType() const
+	{
+		return ze_type_;
+	}
+
+	void SmilesParser::SPBond::setZEType(SmilesParser::ZEIsomerType type)
+	{
+		ze_type_ = type;
 	}
 
 	struct SmilesParser::State SmilesParser::state;

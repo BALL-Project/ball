@@ -1,4 +1,7 @@
-// $Id: constants.C,v 1.5 2001/12/17 01:31:53 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: constants.C,v 1.5.2.1 2003/01/07 13:20:28 anker Exp $
 
 #include <BALL/COMMON/constants.h>
 

@@ -1,4 +1,7 @@
-// $Id: baseModelConnector.C,v 1.7 2001/07/15 14:52:25 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: baseModelConnector.C,v 1.7.2.1 2003/01/07 13:21:19 anker Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.h>
 

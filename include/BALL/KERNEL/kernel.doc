@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.12 2001/12/30 15:40:45 oliver Exp $
+// $Id: kernel.doc,v 1.12.2.1 2003/01/07 13:17:54 anker Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on BALL kernel datastructures. 
@@ -56,6 +56,7 @@
 	  //@Include: forEach.h
 	  //@Include: PTE.h
 	//@}
+
 	/** @name Kernel Predicates
 	*/
 	//@{

@@ -1,4 +1,7 @@
-// $Id: basesphere.C,v 1.7 2000/12/21 17:03:46 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: basesphere.C,v 1.7.2.1 2003/01/07 13:23:37 anker Exp $
 
 #include <BALL/VIEW/PRIMITIV/basesphere.h>
 

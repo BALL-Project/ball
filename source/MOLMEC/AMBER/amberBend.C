@@ -1,4 +1,7 @@
-// $Id: amberBend.C,v 1.14 2001/06/26 02:43:51 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: amberBend.C,v 1.14.2.1 2003/01/07 13:21:03 anker Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -78,30 +81,41 @@ namespace BALL
 			{
 				for (it1 = it2, ++it1; +it1 ; ++it1) 
 				{
-					this_bend.atom1 = it2->getPartner(**atom_it);
-					this_bend.atom2 = *atom_it;
-					this_bend.atom3 = it1->getPartner(**atom_it);
+					this_bend.atom1 = &Atom::getAttributes()[it2->getPartner(**atom_it)->getIndex()];
+					this_bend.atom2 = &Atom::getAttributes()[(*atom_it)->getIndex()];
+					this_bend.atom3 = &Atom::getAttributes()[it1->getPartner(**atom_it)->getIndex()];
 
 					if (getForceField()->getUseSelection() == false ||
 					   (getForceField()->getUseSelection() == true && 
-					   (this_bend.atom1->isSelected() || this_bend.atom2->isSelected() || this_bend.atom3->isSelected())))
+					   (this_bend.atom1->ptr->isSelected() 
+							|| this_bend.atom2->ptr->isSelected() 
+							|| this_bend.atom3->ptr->isSelected())))
 					{ 
 
-						Atom::Type atom_type_a1 = this_bend.atom1->getType();
-						Atom::Type atom_type_a2 = this_bend.atom2->getType();
-						Atom::Type atom_type_a3 = this_bend.atom3->getType();
+						Atom::Type atom_type_a1 = this_bend.atom1->type;
+						Atom::Type atom_type_a2 = this_bend.atom2->type;
+						Atom::Type atom_type_a3 = this_bend.atom3->type;
 
 						// check for parameters
 						if (!bend_parameters.assignParameters(this_bend.values, atom_type_a1, atom_type_a2, atom_type_a3))
 						{
-							// complain if nothing was found
-							Log.error() << "AmberBend::setup: cannot find bend parameters for atom types:"
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) 
-								<< " (atoms are: " << this_bend.atom1->getFullName() << "/" 
-								<< this_bend.atom2->getFullName() << "/" 
-								<< this_bend.atom3->getFullName() << ")" << endl;
+							// handle wildcards: if the atom type is not known, try to match *-A2-* 
+							if (!bend_parameters.assignParameters(this_bend.values, Atom::ANY_TYPE, atom_type_a2, Atom::ANY_TYPE))
+							{
+								// complain if nothing was found
+								Log.error() << "AmberBend::setup: cannot find bend parameters for atom types:"
+									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
+									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
+									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) 
+									<< " (atoms are: " << this_bend.atom1->ptr->getFullName() << "/" 
+									<< this_bend.atom2->ptr->getFullName() << "/" 
+									<< this_bend.atom3->ptr->getFullName() << ")" << endl;
+							}
+							else
+							{
+								// store the bend parameters otherwise
+								bend_.push_back(this_bend);
+							}
 						} 
 						else 
 						{
@@ -120,38 +134,35 @@ namespace BALL
 	// calculates the current energy of this component
 	double AmberBend::updateEnergy()
 	{
-		double length;
 		energy_ = 0;
-
-		for (Size i = 0 ; i < bend_.size() ; i++) 
+		
+		// abort for an empty vector
+		if (bend_.size() == 0)
 		{
-			if (getForceField()->getUseSelection() == false ||
-					(getForceField()->getUseSelection() == true  &&
-					(bend_[i].atom1->isSelected() || bend_[i].atom2->isSelected() || bend_[i].atom3->isSelected())))
+			return 0.0;
+		}
+
+		Vector3 v1, v2;
+		bool use_selection = getForceField()->getUseSelection();
+		QuadraticAngleBend::Data* bend_it = &(bend_[0]);
+		QuadraticAngleBend::Data* bend_end = &(bend_[bend_.size() - 1]);
+		for (; bend_it <= bend_end ; ++bend_it) 
+		{
+			if (use_selection == false ||
+					(bend_it->atom1->ptr->isSelected() 
+					 || bend_it->atom2->ptr->isSelected() 
+					 || bend_it->atom3->ptr->isSelected()))
 			{
+				v1 = bend_it->atom1->position - bend_it->atom2->position;
+				v2 = bend_it->atom3->position - bend_it->atom2->position;
+				double square_length = v1.getSquareLength() * v2.getSquareLength();
 
-				Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
-				length = v1.getLength();
-
-				if (length == 0) 
+				if (square_length == 0.0) 
 				{
 					continue;
 				}
 
-				double inverse_length = 1 / length;
-				v1 *= inverse_length;
-				Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
-				length = v2.getLength();
-
-				if (length == 0) 
-				{
-					continue;
-				}
-
-				inverse_length = 1/length;
-				v2 *= inverse_length;
-
-				double costheta = v1 * v2;
+				double costheta = v1 * v2 / sqrt(square_length);
 				double theta;
 				if (costheta > 1.0) 
 				{	
@@ -166,9 +177,9 @@ namespace BALL
 					theta = acos(costheta);
 				}
 			
-				energy_ += bend_[i].values.k * (theta - bend_[i].values.theta0) * (theta - bend_[i].values.theta0);
+				theta -= bend_it->values.theta0;
+				energy_ += bend_it->values.k * theta * theta;
 			}
-
 		}
 		
 		return energy_;
@@ -177,21 +188,24 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void AmberBend::updateForces()
 	{
-
 		double length;
 
 		for (Size i = 0; i < bend_.size(); i++) 
 		{
 			if (getForceField()->getUseSelection() == false ||
-					(getForceField()->getUseSelection()  == true  &&
-					(bend_[i].atom1->isSelected() || bend_[i].atom2->isSelected() || bend_[i].atom3->isSelected())))
+					(getForceField()->getUseSelection() == true  &&
+					(bend_[i].atom1->ptr->isSelected() 
+					 || bend_[i].atom2->ptr->isSelected() 
+					 || bend_[i].atom3->ptr->isSelected())))
 			{
 
 				// Calculate the vector between atom1 and atom2,
 				// test if the vector has length larger than 0 and normalize it
 
-				Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
+				Vector3 v1 = bend_[i].atom1->position - bend_[i].atom2->position;
+				Vector3 v2 = bend_[i].atom3->position - bend_[i].atom2->position;
 				length = v1.getLength();
+
 				if (length == 0) continue;
 				double inverse_length_v1 = 1/length;
 				v1 *= inverse_length_v1 ;
@@ -199,7 +213,6 @@ namespace BALL
 				// Calculate the vector between atom3 and atom2,
 				// test if the vector has length larger than 0 and normalize it
 
-				Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
 				length = v2.getLength();
 				if (length == 0) continue;
 				double inverse_length_v2 = 1/length;
@@ -238,26 +251,26 @@ namespace BALL
 
 				if (getForceField()->getUseSelection() == false)
 				{
-					bend_[i].atom1->getForce() -= n1;
-					bend_[i].atom2->getForce() += n1;
-					bend_[i].atom2->getForce() -= n2;
-					bend_[i].atom3->getForce() += n2;
+					bend_[i].atom1->force -= n1;
+					bend_[i].atom2->force += n1;
+					bend_[i].atom2->force -= n2;
+					bend_[i].atom3->force += n2;
 				} 
 				else 
 				{
-					if (bend_[i].atom1->isSelected()) 
+					if (bend_[i].atom1->ptr->isSelected()) 
 					{
-						bend_[i].atom1->getForce() -= n1;
+						bend_[i].atom1->force -= n1;
 					}
 	
-					if (bend_[i].atom2->isSelected())
+					if (bend_[i].atom2->ptr->isSelected())
 					{
-						bend_[i].atom2->getForce() += n1;
-						bend_[i].atom2->getForce() -= n2;
+						bend_[i].atom2->force += n1;
+						bend_[i].atom2->force -= n2;
 					}
-					if (bend_[i].atom3->isSelected())
+					if (bend_[i].atom3->ptr->isSelected())
 					{
-						bend_[i].atom3->getForce() += n2;
+						bend_[i].atom3->force += n2;
 					}
 				}
 			}

@@ -1,4 +1,8 @@
-// $Id: Fragment_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Fragment_test.C,v 1.12.2.1 2003/01/07 13:22:25 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +11,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.12 2002/01/26 22:01:27 oliver Exp $")
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.12.2.1 2003/01/07 13:22:25 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -86,7 +90,7 @@ CHECK(dump(ostream&, Size))
 	Atom a1;
 	a1.setName("A1");
 	f2.append(a1);
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	f1.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Fragment_test.txt")
@@ -98,7 +102,7 @@ pm.registerClass(getStreamName<Fragment>(), Fragment::createDefault);
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), File::OUT);
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Fragment* f1 = new Fragment("name1");
 	Atom* f2 = new Atom();
 	Atom* f3 = new Atom();

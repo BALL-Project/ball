@@ -1,7 +1,10 @@
-// $Id: colorUnitHue.C,v 1.6 2001/05/13 14:28:35 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorUnitHue.C,v 1.6.2.1 2003/01/07 13:23:18 anker Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
-#include <stdio.h>
+#include <BALL/COMMON/rtti.h>
 
 using namespace std;
 
@@ -139,7 +142,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColHUnit>() << endl;
+				Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColorUnitHue>() << endl;
 			#endif 
 
 			destroy();
@@ -470,18 +473,6 @@ namespace BALL
 			s << "hunit : " << (int)(value_ * 360.0) << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void ColorUnitHue::read(istream& /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorUnitHue::write(ostream& /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		istream& operator >> (istream& s, ColorUnitHue& color_h_unit)

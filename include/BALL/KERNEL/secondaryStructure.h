@@ -1,4 +1,7 @@
-// $Id: secondaryStructure.h,v 1.24 2001/08/16 00:39:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: secondaryStructure.h,v 1.24.2.1 2003/01/07 13:17:58 anker Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H

@@ -1,4 +1,7 @@
-// $Id: molecularSurfaceGrid.C,v 1.10.2.1 2002/11/12 16:51:23 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularSurfaceGrid.C,v 1.10.2.2 2003/01/07 13:21:52 anker Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -7,10 +10,16 @@ namespace BALL
 {
 
 	// needed for quicksort (below)
-	extern "C" int compareLong_(const void* a, const void* b)
+	extern "C" int 
+#ifdef BALL_COMPILER_MSVC
+	__cdecl 
+#endif
+	comparePointerSizeIntPtr_(const void* a, const void* b)
 	{
-		return (int)(*(long*)a - *(long*)b);
+		return (int)(*(PointerSizeInt*)a - *(PointerSizeInt*)b);
 	}
+
+
 
 	TRegularData3D<char> *calculateSESGrid
 		(const Vector3& lower, const Vector3& upper,
@@ -19,16 +28,14 @@ namespace BALL
 	{
 
 		// points in the grid marked with
-		// CCONN__OUTSIDE are outside of the molecule (default)
-		// CCONN__INSIDE are sure inside the molecule
 
 		// Now THIS is dreck.
 		// #define CCONN__OUTSIDE 1
 		// #define CCONN__INSIDE  0
 		// #define	CCONN__INSIDE_PROBE 128
 
-		long* fast_sphere;
-		long* fast_sphere_relative;
+		PointerSizeInt* fast_sphere;
+		PointerSizeInt* fast_sphere_relative;
 		
 		// contains the squared length of the diagonal distance in the grid
 		float	d2, d;
@@ -78,12 +85,12 @@ namespace BALL
 		origin_z = grid->getMinZ();
 
 		// Nx is the number of points in the grid along the x-axis
-		unsigned long Nx;
+		PointerSizeInt Nx;
 
 		// Nxy is the number of points in an xy-plane
-		unsigned long Nxy;
+		PointerSizeInt Nxy;
 
-		unsigned long i, j, k;
+		PointerSizeInt i, j, k;
 
 		// assign values for fast grid access
 		Nx = grid->getMaxXIndex() + 1;
@@ -92,25 +99,33 @@ namespace BALL
 		// constructing the FAST probe sphere, a collection of points 
 		// of a sphere on the grid relative to the sphere's origin
 		
-		unsigned long count, relative_count;
+		PointerSizeInt count, relative_count;
 
 		// the probe_radius (squared) in squared grid units
 		unsigned short grid_radius;
 		grid_radius = (unsigned short)((probe_radius) * (probe_radius) / spacing2 + 0.5);
 		count = 0;
-		for (i = 0; i < (unsigned long)(probe_radius / spacing + 2); i++)
-			for (j = 0; j < (unsigned long)(probe_radius / spacing + 2); j++)
-					for (k = 0; k < (unsigned long)(probe_radius / spacing + 2); k++)
-						if ((i * i + j * j + k * k) < grid_radius)
-							count++;
+		for (i = 0; i < (PointerSizeInt)(probe_radius / spacing + 2); i++)
+		{
+			for (j = 0; j < (PointerSizeInt)(probe_radius / spacing + 2); j++)
+			{
+				for (k = 0; k < (PointerSizeInt)(probe_radius / spacing + 2); k++)
+				{
+					if ((i * i + j * j + k * k) < grid_radius)
+					{
+						count++;
+					}
+				}
+			}
+		}
 
-		fast_sphere = new long[count * 8];
-		fast_sphere_relative = new long[count * 8];
+		fast_sphere = new PointerSizeInt[count * 8];
+		fast_sphere_relative = new PointerSizeInt[count * 8];
 
 		count = 0;
-		for (i = 0; i < (unsigned long)(probe_radius / spacing + 2); i++)
-			for (j = 0; j < (unsigned long)(probe_radius / spacing + 2); j++)
-					for (k = 0; k < (unsigned long)(probe_radius / spacing + 2); k++)
+		for (i = 0; i < (PointerSizeInt)(probe_radius / spacing + 2); i++)
+			for (j = 0; j < (PointerSizeInt)(probe_radius / spacing + 2); j++)
+					for (k = 0; k < (PointerSizeInt)(probe_radius / spacing + 2); k++)
 						if ((i * i + j * j + k * k) < grid_radius){
 							fast_sphere[count++] =  (long)k + (long)j * (long)Nx + (long)i * (long)Nxy;
 							fast_sphere[count++] = -(long)k + (long)j * (long)Nx + (long)i * (long)Nxy;
@@ -123,13 +138,13 @@ namespace BALL
 						}
 
 		// now, for speed's sake, we sort the entries in fast_sphere
-		qsort(fast_sphere, count, sizeof(long), compareLong_);
+		qsort(fast_sphere, count, sizeof(long), comparePointerSizeIntPtr_);
 
 		long last_index;
 		relative_count = 1;
 		last_index = fast_sphere[0];
 		// loop variable
-		unsigned long u;
+		PointerSizeInt u;
 
 		fast_sphere_relative[0] = fast_sphere[0];
 		for (u = 1; u < count; u++){
@@ -181,12 +196,13 @@ namespace BALL
 							grid_value = &(grid->data[i + Nx * j + Nxy * k]);
 															
 								
-							if (*grid_value != CCONN__INSIDE){
+							if (*grid_value != CCONN__INSIDE)
+							{
 								squared_distance =  (r0.x - x) * (r0.x - x)
 																 +  (r0.y - y) * (r0.y - y)
 																 +  (r0.z - z) * (r0.z - z);
-
-								if (squared_distance <= R_b2){
+								if (squared_distance <= R_b2)
+								{
 									*grid_value = CCONN__INSIDE;
 								}
 							}
@@ -200,25 +216,27 @@ namespace BALL
 		// which are less then probe_radius apart from the border point
 		// (actually this means to "roll" the probe sphere along the border
 		// and just retain points which haven't been touched by the probe sphere)
-		unsigned long idx;
-		long grid_pointer, grid_begin, grid_end;
-		long* fast_sphere_end;
-		long* sphere_pointer;
+		PointerSizeInt idx;
+		PointerSizeInt grid_pointer, grid_begin, grid_end;
+		PointerSizeInt* fast_sphere_end;
+		PointerSizeInt* sphere_pointer;
 
 		unsigned short border;
 
-		unsigned long border_count;
+		PointerSizeInt border_count;
 		border_count = 0;
 					
-		grid_begin = (long)grid->getData(0);
-		grid_end = (long)grid->getData(grid->getSize());
+		grid_begin = (PointerSizeInt)grid->getData(0);
+		grid_end = (PointerSizeInt)grid->getData(grid->getSize());
 
-		unsigned long s;
-		unsigned long t;
-		unsigned long q;
+		PointerSizeInt s;
+		PointerSizeInt t;
+		PointerSizeInt q;
 
 		for (s = 1; s < grid->getMaxZIndex(); s++)
+		{
 			for (t = 1; t < grid->getMaxYIndex(); t++)
+			{
 				for (q = 1; q < grid->getMaxXIndex(); q++)
 				{
 					// calculate the absolute grid index the hard way (faster!)
@@ -239,17 +257,22 @@ namespace BALL
 						{			
 							// Okay, we found a point on the boundary
 							border_count++;												
-							grid_pointer = (long)&(grid->data[idx]);
+							grid_pointer = (PointerSizeInt)&(grid->data[idx]);
 							fast_sphere_end = &(fast_sphere_relative[relative_count - 1]);
 
-							for (sphere_pointer = fast_sphere_relative; sphere_pointer <= fast_sphere_end; sphere_pointer++){
+							for (sphere_pointer = fast_sphere_relative; sphere_pointer <= fast_sphere_end; sphere_pointer++)
+							{
 								grid_pointer += *sphere_pointer;
 								if ((grid_pointer <= grid_end) && (grid_pointer >= grid_begin))
+								{
 									*((char*)grid_pointer) |= CCONN__INSIDE_PROBE;
+								}
 							}
 						}
 					}
 				}
+			}
+		}
 
 		delete [] fast_sphere_relative;
 
@@ -260,7 +283,7 @@ namespace BALL
 		// the probe_radius of any border point
 
 		grid_value = grid->getData(0);
-		unsigned long l;
+		PointerSizeInt l;
 
 		for (l = 0; l < grid->getSize(); l++)
 		{
@@ -271,7 +294,7 @@ namespace BALL
 		return &(*grid);
 	}
 
-	TRegularData3D<char> *calculateSASGrid(
+	TRegularData3D<char>* calculateSASGrid(
 				const Vector3 &lower, 
 				const Vector3 &upper,
 				const float spacing,
@@ -282,9 +305,6 @@ namespace BALL
 		// points in the grid marked with
 		// CCONN__OUTSIDE are outside of the molecule (default)
 		// CCONN__INSIDE are sure inside the molecule
-
-		// #define CCONN__OUTSIDE 1
-		// #define CCONN__INSIDE  0
 
 		// contains the squared length of the diagonal distance in the grid
 		float	d2, d;
@@ -333,10 +353,10 @@ namespace BALL
 		origin_z = grid->getMinZ();
 
 		// Nx is the number of points in the grid along the x-axis
-		unsigned long Nx;
+		PointerSizeInt Nx;
 
 		// Nxy is the number of points in an xy-plane
-		unsigned long Nxy;
+		PointerSizeInt Nxy;
 
 		// assign values for fast grid access
 		Nx = grid->getMaxXIndex() + 1;
@@ -370,9 +390,12 @@ namespace BALL
 																		 r0.y + R_b + d, 
 																		 r0.z + R_b + d);
 
-				for(unsigned long k = lower_index.z; k <= upper_index.z; k++)
-					for(unsigned long j = lower_index.y; j <= upper_index.y; j++)
-						for(unsigned long i = lower_index.x; i <= upper_index.x; i++){
+				for (PointerSizeInt k = lower_index.z; k <= upper_index.z; k++)
+				{
+					for (PointerSizeInt j = lower_index.y; j <= upper_index.y; j++)
+					{
+						for (PointerSizeInt i = lower_index.x; i <= upper_index.x; i++)
+						{
 							x = (float)i * spacing + origin_x;
 							y = (float)j * spacing + origin_y;
 							z = (float)k * spacing + origin_z;
@@ -391,6 +414,8 @@ namespace BALL
 								}
 							}
 						}
+					}
+				}
 			}
 		}
 

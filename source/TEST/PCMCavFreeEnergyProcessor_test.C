@@ -1,4 +1,7 @@
-// $Id: PCMCavFreeEnergyProcessor_test.C,v 1.2 2002/01/15 13:13:08 aubertin Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PCMCavFreeEnergyProcessor_test.C,v 1.2.2.1 2003/01/07 13:22:38 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +12,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(PCMCavFreeEnergyProcessor, "$Id: PCMCavFreeEnergyProcessor_test.C,v 1.2 2002/01/15 13:13:08 aubertin Exp $")
+START_TEST(PCMCavFreeEnergyProcessor, "$Id: PCMCavFreeEnergyProcessor_test.C,v 1.2.2.1 2003/01/07 13:22:38 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

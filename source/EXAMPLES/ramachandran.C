@@ -1,4 +1,7 @@
-// $Id: ramachandran.C,v 1.6 2000/03/23 20:01:36 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: ramachandran.C,v 1.6.2.1 2003/01/07 13:20:42 anker Exp $
 
 //============================================================================
 // BALL - Ramachandran plot example

@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 // $Id: 
 
 #ifndef BALL_VIEW_KERNEL_LOGVIEW_H
@@ -7,7 +10,7 @@
 #	include <BALL/common.h>
 #endif
 
-#include <strstream>
+#include <sstream>
 
 #ifndef QAPPLICATION_H
 #	include <qapplication.h>
@@ -56,7 +59,7 @@ namespace BALL
 			/** Default Constructor.
 					Construct new logView.
 					The text of {\em *this} logView is empty. The contructor connects the own
-					{\em strstream} with the \Ref{Log} object. If a string is written into
+					{\em stringstream} with the \Ref{Log} object. If a string is written into
 					\Ref{Log} {\em *this} will be notified and the string will be displayed
 					by {\em *this} logView. 
 					@return      LogView new constructed logView
@@ -83,8 +86,7 @@ namespace BALL
 			/** Destructor.
 					Default destruction of {\em *this} logView.
 					Remove the connection between the \Ref{Log} object and {\em *this} logView.
-					Calls \Ref{destroy}.
-					@see         destroy
+					Calls \Ref{clear}.
 			*/
 			virtual ~LogView()
 				throw();
@@ -95,36 +97,10 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			/** Explicit destructor.
-					Destroy {\em *this} logView.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
-				throw();
 			//@}
 
 			/**	@name	Storers
 			*/	
-			//@{
-
-			/** Persistent stream output and state restorage.
-  			  Read persistent logView data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-					@param       s input stream from where to restore the internal state of {\em *this} logView
-			*/
-			virtual void read(std::istream& s)
-				throw();
-
-			/** Persistent stream output and state storage.
-  			  Write persistent logView data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-  				@param       s output stream to where to store the internal state of {\em *this} logView
-			*/
-			virtual void write(std::ostream& s) const
-				throw();
-			//@}
 
 			protected:
 
@@ -145,14 +121,8 @@ namespace BALL
 			*/
 			QString history_string_;
 
-			std::strstream strstream_;
+			std::stringstream strstream_;
 		};
-
-
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/logView.iC>
-#		endif
 
 	}// namespace VIEW
 		

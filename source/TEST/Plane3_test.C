@@ -1,4 +1,8 @@
-// $Id: Plane3_test.C,v 1.11 2002/01/26 22:01:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Plane3_test.C,v 1.11.2.1 2003/01/07 13:22:43 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +11,7 @@
 #include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(Plane3, "$Id: Plane3_test.C,v 1.11 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(Plane3, "$Id: Plane3_test.C,v 1.11.2.1 2003/01/07 13:22:43 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -211,7 +215,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane))
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
 	p = Plane3(v1, v2);
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << p;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Plane3_test2.txt")
@@ -223,7 +227,7 @@ CHECK(TPlane3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	p = Plane3(v1, v2);
 	String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	p.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Plane3_test.txt")

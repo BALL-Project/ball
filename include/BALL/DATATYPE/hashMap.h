@@ -1,4 +1,7 @@
-// $Id: hashMap.h,v 1.27 2001/06/05 15:41:18 anker Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: hashMap.h,v 1.27.2.1 2003/01/07 13:17:34 anker Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -48,7 +51,237 @@ namespace BALL
 	{
 		public:
 
-		class IteratorTraits_;
+		/**
+		*/
+		typedef ::std::pair<Key, T> ValueType;
+			
+		/**
+		*/
+		typedef Key KeyType;
+
+		/**
+		*/
+		typedef ::std::pair<Key, T>* PointerType;
+			
+
+		// --- EXTERNAL ITERATORS
+		struct Node
+		{
+			Node*			next;
+			ValueType	value;
+
+			Node(const ValueType& my_value, const Node* my_next)
+				throw()
+				: next(const_cast<Node*>(my_next)),
+					value(const_cast<ValueType&>(my_value))
+			{
+			}
+		};
+
+		typedef Node* IteratorPosition;
+
+		class IteratorTraits_
+		{
+			friend class HashMap<Key, T>;
+			public:
+
+			
+			IteratorTraits_()
+				throw()
+				:	bound_(0),
+					position_(0),
+					bucket_(0)
+			{
+			}
+			
+			
+			IteratorTraits_(const HashMap& hash_map)
+				throw()
+				:	bound_(const_cast<HashMap*>(&hash_map)),
+					position_(0),
+					bucket_(0)
+			{
+			}
+			
+			
+			IteratorTraits_(const IteratorTraits_& traits)
+				throw()
+				:	bound_(traits.bound_),
+					position_(traits.position_),
+					bucket_(traits.bucket_)
+			{
+			}
+			
+			
+			const IteratorTraits_& operator = (const IteratorTraits_& traits)
+				throw()
+			{
+				bound_ = traits.bound_;
+				position_ = traits.position_;
+				bucket_ = traits.bucket_;
+		
+				return *this;
+			}
+
+			
+			HashMap* getContainer()
+				throw()
+			{
+				return bound_;
+			}
+			
+			
+			const HashMap* getContainer() const
+				throw()
+			{
+				return bound_;
+			}
+			
+			
+			bool isSingular() const
+				throw()
+			{
+				return (bound_ == 0);
+			}
+			
+			
+			IteratorPosition& getPosition()
+				throw()
+			{
+				return position_;
+			}
+
+			
+			const IteratorPosition& getPosition() const
+				throw()
+			{
+				return position_;
+			}
+
+			
+			bool operator == (const IteratorTraits_& traits) const
+				throw()
+			{
+				return (position_ == traits.position_);
+			}
+
+			
+			bool operator != (const IteratorTraits_& traits) const
+				throw()
+			{
+				return (position_ != traits.position_);
+			}
+			
+			
+			bool isValid() const
+				throw()
+			{
+				return ((bound_ != 0) && (position_ != 0) && (bucket_ < (Position)bound_->bucket_.size()));
+			}
+			
+			
+			void invalidate()
+				throw()
+			{
+				bound_ = 0;
+				position_ = 0;
+				bucket_ = INVALID_INDEX;
+			}
+			
+			
+			void toBegin()
+				throw()
+			{
+				for (bucket_ = 0;  bucket_ < (Position)bound_->bucket_.size();  ++bucket_)
+				{
+					position_ = bound_->bucket_[bucket_];
+
+					if (position_ != 0)
+					{
+						return;
+					}
+				}
+			}
+
+			
+			bool isBegin() const
+				throw()
+			{
+				for (Position bucket = 0; bucket < (Position)bound_->bucket_.size();  ++bucket)
+				{
+					if (bound_->bucket_[bucket_] != 0)
+					{
+						if (position_ == bound_->bucket_[bucket_])
+						{
+							return true;
+						} 
+						else 
+						{
+							return false;
+						}
+					}
+				}
+
+				return false;
+			}
+
+			
+			void toEnd()
+				throw()
+			{
+				position_ = 0;
+			}
+			
+			
+			bool isEnd() const
+				throw()
+			{
+				return (position_ == 0);
+			}
+			
+			
+			ValueType& getData()
+				throw()
+			{
+				return position_->value;
+			}
+
+			
+			const ValueType& getData() const
+				throw()
+			{
+				return position_->value;
+			}
+
+			
+			void forward()
+				throw()
+			{
+				position_ = position_->next;
+
+				if (position_ != 0)
+				{
+					return;
+				}
+
+				for (++bucket_;  bucket_ < (Position)bound_->bucket_.size();  ++bucket_)
+				{
+					position_ = bound_->bucket_[bucket_];
+
+					if (position_ != 0)
+					{
+						return;
+					}
+				}
+			} 
+
+			protected:
+
+			HashMap*						bound_;
+			IteratorPosition		position_;
+			Position						bucket_;
+		};
+
 
 		/**	@name	 Enums and Constants
 		*/
@@ -85,18 +318,6 @@ namespace BALL
 
 		/**
 		*/
-		typedef ::std::pair<Key, T> ValueType;
-			
-		/**
-		*/
-		typedef Key KeyType;
-
-		/**
-		*/
-		typedef ::std::pair<Key, T>* PointerType;
-			
-		/**
-		*/
 		typedef 
 				ForwardIterator<HashMap<Key, T>, ValueType, PointerType, IteratorTraits_>
 			Iterator;
@@ -130,6 +351,7 @@ namespace BALL
 
 		/**	Destructor.
 		*/
+		BALL_INLINE
 		virtual ~HashMap() throw()
 		{
 			destroy();
@@ -213,11 +435,16 @@ namespace BALL
 				@param	key the key
 		*/
 		const T& operator [] (const Key& key) const 
-			throw(IllegalKey);
+			throw(typename HashMap<Key, T>::IllegalKey);
 
 		/**	Insert a new entry into the hash map.
 		*/
-		::std::pair<Iterator, bool> insert(const ValueType& entry) throw();
+		std::pair<Iterator, bool> insert(const ValueType& entry) throw();
+
+		/**	Insert a new entry into the hash map.
+				For STL compatibility. The value of {\tt pos} is ignored.
+		*/
+		Iterator insert(Iterator pos, const ValueType& entry) throw();
 
 		/**	Erase element with key {\tt key}.
 				@return Size the number of elements erased (0 or 1)
@@ -235,6 +462,8 @@ namespace BALL
 		void erase(Iterator first, Iterator last) throw(Exception::IncompatibleIterators);
 
 		//@}
+
+
 		/**	@name Miscellaneous
 		*/
 		//@{
@@ -291,224 +520,32 @@ namespace BALL
 
 		//@}
 
-		// --- EXTERNAL ITERATORS
-		struct Node
-		{
-			Node*			next;
-			ValueType	value;
-
-			Node(const ValueType& my_value, const Node* my_next)
-				throw()
-				: next(const_cast<Node*>(my_next)),
-					value(const_cast<ValueType&>(my_value))
-			{
-			}
-		};
-
-		typedef Node* IteratorPosition;
-	
-		class IteratorTraits_
-		{
-			friend class HashMap<Key, T>;
-			public:
-
-			IteratorTraits_()
-				throw()
-				:	bound_(0),
-					position_(0),
-					bucket_(0)
-			{
-			}
 			
-			IteratorTraits_(const HashMap& hash_map)
-				throw()
-				:	bound_(const_cast<HashMap*>(&hash_map)),
-					position_(0),
-					bucket_(0)
-			{
-			}
-			
-			IteratorTraits_(const IteratorTraits_& traits)
-				throw()
-				:	bound_(traits.bound_),
-					position_(traits.position_),
-					bucket_(traits.bucket_)
-			{
-			}
-			
-			const IteratorTraits_& operator = (const IteratorTraits_& traits)
-				throw()
-			{
-				bound_ = traits.bound_;
-				position_ = traits.position_;
-				bucket_ = traits.bucket_;
-		
-				return *this;
-			}
-
-			HashMap* getContainer()
-				throw()
-			{
-				return bound_;
-			}
-			
-			const HashMap* getContainer() const
-				throw()
-			{
-				return bound_;
-			}
-			
-			bool isSingular() const
-				throw()
-			{
-				return (bound_ == 0);
-			}
-			
-			IteratorPosition& getPosition()
-				throw()
-			{
-				return position_;
-			}
-
-			const IteratorPosition& getPosition() const
-				throw()
-			{
-				return position_;
-			}
-
-			bool operator == (const IteratorTraits_& traits) const
-				throw()
-			{
-				return (position_ == traits.position_);
-			}
-
-			bool operator != (const IteratorTraits_& traits) const
-				throw()
-			{
-				return (position_ != traits.position_);
-			}
-			
-			bool isValid() const
-				throw()
-			{
-				return ((bound_ != 0) && (position_ != 0) && (bucket_ < (Position)bound_->bucket_.size()));
-			}
-
-			void invalidate()
-				throw()
-			{
-				bound_ = 0;
-				position_ = 0;
-				bucket_ = INVALID_INDEX;
-			}
-			
-			void toBegin()
-				throw()
-			{
-				for (bucket_ = 0;  bucket_ < (Position)bound_->bucket_.size();  ++bucket_)
-				{
-					position_ = bound_->bucket_[bucket_];
-
-					if (position_ != 0)
-					{
-						return;
-					}
-				}
-			}
-
-			bool isBegin() const
-				throw()
-			{
-				for (Position bucket = 0; bucket < (Position)bound_->bucket_.size();  ++bucket)
-				{
-					if (bound_->bucket_[bucket_] != 0)
-					{
-						if (position_ == bound_->bucket_[bucket_])
-						{
-							return true;
-						} 
-						else 
-						{
-							return false;
-						}
-					}
-				}
-
-				return false;
-			}
-
-			void toEnd()
-				throw()
-			{
-				position_ = 0;
-			}
-			
-			bool isEnd() const
-				throw()
-			{
-				return (position_ == 0);
-			}
-			
-			ValueType& getData()
-				throw()
-			{
-				return position_->value;
-			}
-
-			const ValueType& getData() const
-				throw()
-			{
-				return position_->value;
-			}
-
-			void forward()
-				throw()
-			{
-				position_ = position_->next;
-
-				if (position_ != 0)
-				{
-					return;
-				}
-
-				for (++bucket_;  bucket_ < (Position)bound_->bucket_.size();  ++bucket_)
-				{
-					position_ = bound_->bucket_[bucket_];
-
-					if (position_ != 0)
-					{
-						return;
-					}
-				}
-			} 
-
-			protected:
-
-			HashMap*						bound_;
-			IteratorPosition		position_;
-			Position						bucket_;
-		};
 
 		friend class IteratorTraits_;
 
+		BALL_INLINE
 		Iterator begin()
 			throw()
 		{
 			return Iterator::begin(*this);
 		}
 
+		BALL_INLINE
 		Iterator end()
 			throw()
 		{
 			return Iterator::end(*this);
 		}
 
+		BALL_INLINE
 		ConstIterator begin() const
 			throw()
 		{
 			return ConstIterator::begin(*this);
 		}
 
+		BALL_INLINE
 		ConstIterator end() const
 			throw()
 		{
@@ -557,6 +594,7 @@ namespace BALL
 	};
 
 	template <class Key, class T>
+	BALL_INLINE
 	HashMap<Key, T>::HashMap(Size initial_capacity, Size number_of_buckets)
 		throw()
 		:	size_(0),
@@ -570,6 +608,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
+	BALL_INLINE
 	HashMap<Key, T>::HashMap(const HashMap& hash_map)
 		throw()
 		:	size_(hash_map.size_),
@@ -609,6 +648,7 @@ namespace BALL
 
 		size_ = 0;
 	}
+
 	template <class Key, class T>
 	BALL_INLINE 
 	void HashMap<Key, T>::destroy()
@@ -706,7 +746,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	HashMap<Key, T>::Iterator HashMap<Key, T>::find(const Key& key)
+	typename HashMap<Key, T>::Iterator HashMap<Key, T>::find(const Key& key)
 		throw()
 	{
 		Iterator it = end();
@@ -729,7 +769,7 @@ namespace BALL
 		
 	template <class Key, class T>
 	BALL_INLINE 
-	HashMap<Key, T>::ConstIterator HashMap<Key, T>::find(const Key& key) const
+	typename HashMap<Key, T>::ConstIterator HashMap<Key, T>::find(const Key& key) const
 		throw()
 	{
 		return (const_cast<HashMap*>(this))->find(key);
@@ -744,7 +784,7 @@ namespace BALL
 		if (it == end())
 		{
 			T value;
-			::std::pair<Iterator, bool> result = insert(ValueType(key, value));
+			std::pair<Iterator, bool> result = insert(ValueType(key, value));
 			it = result.first;
 		} 
 		
@@ -754,7 +794,7 @@ namespace BALL
 	template <class Key, class T>
 	BALL_INLINE 
 	const T& HashMap<Key, T>::operator [] (const Key& key) const
-		throw(HashMap<Key, T>::IllegalKey)
+		throw(typename HashMap<Key, T>::IllegalKey)
 	{
 		ConstIterator it = find(key);
 		if (it == end())
@@ -768,7 +808,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	::std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
+	std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
 		(const ValueType& item)	throw()
 	{
 		Iterator it = find(item.first);
@@ -789,15 +829,23 @@ namespace BALL
 			it.getTraits().position_	= bucket_[bucket];
 			it.getTraits().bucket_		= bucket;
 
-			return ::std::pair<Iterator, bool>(it, true);
+			return std::pair<Iterator, bool>(it, true);
 		} 
 		else 
 		{
 			// replace the existing value
 			it->second = item.second;
 
-			return ::std::pair<Iterator, bool>(it, false);
+			return std::pair<Iterator, bool>(it, false);
 		}
+	}
+
+	template <class Key, class T>
+	BALL_INLINE
+	typename HashMap<Key, T>::Iterator HashMap<Key, T>::insert
+		(typename HashMap<Key, T>::Iterator /* pos */, const ValueType& entry)	throw()
+	{
+		return insert(entry).first;
 	}
 
 	template <class Key, class T>
@@ -1161,8 +1209,8 @@ namespace BALL
 
 	template <class Key, class T>
 	BALL_INLINE 
-	HashMap<Key, T>::Node* HashMap<Key, T>::newNode_
-		(const ValueType& value, HashMap<Key, T>::Node* next) const
+	typename HashMap<Key, T>::Node* HashMap<Key, T>::newNode_
+		(const ValueType& value, typename HashMap<Key, T>::Node* next) const
 		throw()
 	{
 		return new Node(value, next);
@@ -1170,7 +1218,7 @@ namespace BALL
 
 	template <class Key, class T>
 	BALL_INLINE 
-	void HashMap<Key, T>::deleteNode_(HashMap<Key, T>::Node* node) const
+	void HashMap<Key, T>::deleteNode_(typename HashMap<Key, T>::Node* node) const
 		throw()
 	{
 		delete node;

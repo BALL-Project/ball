@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PrimitiveManager_test.C,v 1.3 2002/12/18 16:00:40 sturm Exp $
+// $Id: PrimitiveManager_test.C,v 1.3.2.1 2003/01/07 13:22:44 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////

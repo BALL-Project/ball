@@ -1,4 +1,7 @@
-// $Id: RDFSection_test.C,v 1.5 2002/01/16 00:24:51 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RDFSection_test.C,v 1.5.2.1 2003/01/07 13:22:46 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(RDFSection, "$Id: RDFSection_test.C,v 1.5 2002/01/16 00:24:51 oliver Exp $")
+START_TEST(RDFSection, "$Id: RDFSection_test.C,v 1.5.2.1 2003/01/07 13:22:46 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,7 @@
-// $Id: AtomVector_test.C,v 1.6 2001/07/15 17:32:38 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: AtomVector_test.C,v 1.6.2.1 2003/01/07 13:22:15 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 #include <BALL/KERNEL/atom.h>
 ///////////////////////////
 
-START_TEST(AtomVector, "$Id: AtomVector_test.C,v 1.6 2001/07/15 17:32:38 amoll Exp $")
+START_TEST(AtomVector, "$Id: AtomVector_test.C,v 1.6.2.1 2003/01/07 13:22:15 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

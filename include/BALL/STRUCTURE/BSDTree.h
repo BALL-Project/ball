@@ -1,4 +1,7 @@
-// $Id: BSDTree.h,v 1.15 2001/12/30 13:28:42 sturm Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: BSDTree.h,v 1.15.2.1 2003/01/07 13:19:01 anker Exp $
 
 #ifndef BALL_STRUCTURE_BSDTREE_H
 #define BALL_STRUCTURE_BSDTREE_H

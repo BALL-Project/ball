@@ -1,4 +1,7 @@
-// $Id: file.h,v 1.39 2002/01/11 13:26:25 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: file.h,v 1.39.2.1 2003/01/07 13:19:16 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -19,14 +22,44 @@
 #	include <BALL/SYSTEM/fileSystem.h>
 #endif
 
+#ifdef BALL_COMPILER_MSVC
+#	define S_ISREG _S_ISREG
+#	define S_ISDIR _S_ISDIR
+#	define S_ISCHR _S_ISCHR
+#	define S_ISBLK _S_ISBLK
+#	define S_ISFIFO _S_ISFIFO
+#	define access _access
+#endif
+
+#include <iostream>
 #include <fstream>
 #include <stdlib.h>			// 'getenv'
 #include <sys/types.h>
 #include <sys/stat.h>		// 'stat', 'lstat'
 #include <stdio.h>			// 'rename'
-#include <unistd.h>			// 'access', 'rename', 'truncate'
-
 #include <map>
+
+
+#ifdef BALL_HAS_UNISTD_H
+#	include <unistd.h>			// 'access', 'rename', 'truncate'
+#endif
+
+#ifdef BALL_COMPILER_MSVC
+#	include <fcntl.h>
+#	include <io.h>
+	// Define the missing symbols from <unistd.h>,
+	// which M$, in its infinite wisdom, was unable to provide.
+#	define F_OK 0
+#	define W_OK 2
+#	define R_OK 4
+#	ifdef IN
+#		undef IN
+#	endif
+#	ifdef	OUT
+#		undef OUT
+#	endif
+#endif
+
 
 namespace BALL 
 {
@@ -121,6 +154,8 @@ namespace BALL
 		//@}
 
 
+
+
 		/**	@name	Constants
 		*/
 		//@{
@@ -134,11 +169,11 @@ namespace BALL
 		/// Binary mode
 		static const OpenMode BINARY = std::ios::binary;
 		/// Seek to end directly after opening.
-		static const OpenMode ATE = std::ios::ate;
+		static const OpenMode ATE =  std::ios::ate;
 		/// Truncate an existing file.
 		static const OpenMode TRUNC = std::ios::trunc;
-
 		//@}
+
 		/**	@name	Enums
 		*/
 		//@{
@@ -212,7 +247,7 @@ namespace BALL
 				@see    open
 				@return File - new constructed File object
 		*/
-		File(const String& name, OpenMode open_mode = IN)
+		File(const String& name, OpenMode open_mode = std::ios::in)
 			throw (Exception::FileNotFound);
 
 		/** Copy constructor.
@@ -261,7 +296,7 @@ namespace BALL
 				@param open_mode the open mode, default is IN
 				@return bool true if the file could be opened
 		*/
-		bool open(const String& name, OpenMode open_mode = IN)
+		bool open(const String& name, File::OpenMode open_mode = std::ios::in)
 			throw (Exception::FileNotFound);
 
 		/**	Reopen the file.

@@ -1,4 +1,7 @@
-// $Id: TransformationManager_test.C,v 1.5 2001/12/31 00:30:54 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: TransformationManager_test.C,v 1.5.2.1 2003/01/07 13:23:01 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.5 2001/12/31 00:30:54 oliver Exp $")
+START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.5.2.1 2003/01/07 13:23:01 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

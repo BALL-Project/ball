@@ -1,5 +1,5 @@
 #!/usr/local/bin/bash
-cat config/configure.in | gawk '
+cat configure.in | gawk '
 	{
 		line=$0
 		gsub("[^\"]","")
@@ -11,7 +11,7 @@ cat config/configure.in | gawk '
 		}
 	}'
 # find missing closing ']' in AC_MSG_RESULT expressions
-cat config/configure.in |\
+cat configure.in |\
 	 grep -n "^.*AC_MSG_RESULT(\\[[^\\[]*$"|\
 	 grep -v "\])" |\
 	 cut -d: -f1 |\

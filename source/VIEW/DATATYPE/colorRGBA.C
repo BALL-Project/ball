@@ -1,7 +1,11 @@
-// $Id: colorRGBA.C,v 1.2 2001/05/13 14:28:35 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorRGBA.C,v 1.2.2.1 2003/01/07 13:23:17 anker Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
+#include <BALL/COMMON/rtti.h>
 using namespace std;
 
 namespace BALL
@@ -10,6 +14,8 @@ namespace BALL
 	namespace VIEW
 	{
 
+		ColorRGBA BALL_SELECTED_COLOR(255, 255, 0, 255);
+		
 		ColorRGBA::ColorRGBA()
 			throw()
 			:	red_(),
@@ -214,18 +220,6 @@ namespace BALL
 			alpha_.dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);  
-		}
-
-		void ColorRGBA::read(istream& /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorRGBA::write(ostream&  /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		istream& operator >> (istream& s, ColorRGBA& color)

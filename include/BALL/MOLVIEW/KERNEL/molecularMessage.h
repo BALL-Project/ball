@@ -1,22 +1,22 @@
-// $Id: molecularMessage.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularMessage.h,v 1.5.2.1 2003/01/07 13:18:43 anker Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #	include <BALL/VIEW/KERNEL/message.h>
 #endif
 
-using namespace BALL::VIEW;
-
+using BALL::VIEW::CompositeMessage;
+using BALL::VIEW::RemovedCompositeMessage;
+using BALL::VIEW::ChangedCompositeMessage;
+using BALL::VIEW::SelectionMessage;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 		/** NewMolecularMessage class.
@@ -86,7 +86,7 @@ namespace BALL
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class \Ref{RemovedCompositeMessage}. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
 		*/
 		class RemovedMolecularMessage: public RemovedCompositeMessage
 		{
@@ -143,7 +143,7 @@ namespace BALL
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class \Ref{ChangedCompositeMessage}. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}\
 		*/
 		class ChangedMolecularMessage: public ChangedCompositeMessage
 		{
@@ -200,7 +200,7 @@ namespace BALL
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
 				use this class in the same way as the class \Ref{SelectionMessage}. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/message.h}
 		*/
 		class MolecularSelectionMessage: public SelectionMessage
 		{
@@ -247,10 +247,6 @@ namespace BALL
 		};
 
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/KERNEL/molecularMessage.iC>
-#		endif
-		
 	} // namespace MOLVIEW
 
 } // namespace BALL

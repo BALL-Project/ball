@@ -1,7 +1,14 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 #include <BALL/common.h>
+
 #include <qapplication.h>
 
+
 #include "mainframe.h"
+
+
 
 int main(int argc, char **argv)
 {

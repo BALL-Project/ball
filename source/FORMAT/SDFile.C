@@ -1,4 +1,7 @@
-// $Id: SDFile.C,v 1.5 2002/01/12 01:59:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SDFile.C,v 1.5.2.1 2003/01/07 13:20:45 anker Exp $
 
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/atom.h>

@@ -1,7 +1,10 @@
-// $Id: expressionParser.h,v 1.2 2002/01/27 21:36:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: expressionParser.h,v 1.2.2.1 2003/01/07 13:17:52 anker Exp $
 
-#ifndef BALL_KERNEL_EXPRESSION_PARSER_H
-#define BALL_KERNEL_EXPRESSION_PARSER_H
+#ifndef BALL_KERNEL_EXPRESSIONPARSER_H
+#define BALL_KERNEL_EXPRESSIONPARSER_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -207,4 +210,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_KERNEL_EXPRESSION_PARSER_H
+#endif // BALL_KERNEL_EXPRESSIONPARSER_H

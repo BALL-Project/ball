@@ -1,12 +1,15 @@
-// $Id: regExp.iC,v 1.5 2000/12/05 10:28:00 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: regExp.iC,v 1.5.2.1 2003/01/07 13:17:36 anker Exp $
 
 BALL_INLINE 
 void RegularExpression::set(const RegularExpression& regular_expression, bool /* deep */)
- throw()
+	throw()
 {
-  pattern_.set(regular_expression.pattern_);
+	pattern_.set(regular_expression.pattern_);
 	regfree(&regex_);
-  compilePattern_();
+	compilePattern_();
 }
 
 BALL_INLINE 

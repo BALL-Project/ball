@@ -1,4 +1,7 @@
-// $Id: forceFieldParameters.h,v 1.12 2001/07/11 23:59:33 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: forceFieldParameters.h,v 1.12.2.1 2003/01/07 13:18:13 anker Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H

@@ -1,4 +1,7 @@
-// $Id: typeRuleProcessor.h,v 1.4 2001/03/02 00:34:15 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: typeRuleProcessor.h,v 1.4.2.1 2003/01/07 13:18:10 anker Exp $
 // Molecular Mechanics: rule-based assignment of types 
 
 #ifndef BALL_MOLMEC_COMMON_TYPERULEPROCESSOR_H

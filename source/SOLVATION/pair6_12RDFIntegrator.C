@@ -1,9 +1,16 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.15 2002/01/15 02:00:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pair6_12RDFIntegrator.C,v 1.15.2.1 2003/01/07 13:21:53 anker Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
 
 using namespace std;
+
+#ifdef BALL_COMPILER_MSVC
+#	define atanh(x) ((log  (1+x) - log (1-x))/2)
+#endif
 
 namespace BALL
 {
@@ -323,7 +330,7 @@ namespace BALL
 				{
 					interval.second = poly.getInterval(from_index).second;
 					x0 = poly.getInterval(from_index).first;
-					val = analyticallyIntegrateInterval(interval, coeffs, from_index);
+					val = analyticallyIntegrateInterval(interval, coeffs, x0);
 				}
 
 				// if we are below the last interval, sum up the results from each

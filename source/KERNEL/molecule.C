@@ -1,4 +1,7 @@
-// $Id: molecule.C,v 1.12 2001/07/15 16:12:42 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecule.C,v 1.12.2.1 2003/01/07 13:20:53 anker Exp $
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -187,14 +190,14 @@ namespace BALL
 	void Molecule::dump(ostream& s, Size depth) const
 		throw()
 	{
-		BALL_DUMP_STREAM_PREFIX(s);
+		BALL_DUMP_STREAM_PREFIX(s)
 		
 		AtomContainer::dump(s, depth);
 		// just to avoid these damned compiler warnings
 		// (dump_indent_depth_ was declared but never referenced)
 		if (dump_indent_depth_ == 0) ;
 	 
-		BALL_DUMP_STREAM_SUFFIX(s);
+		BALL_DUMP_STREAM_SUFFIX(s)
 	}
 
 	bool Molecule::operator == (const Molecule& molecule) const

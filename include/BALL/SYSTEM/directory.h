@@ -1,4 +1,7 @@
-// $Id: directory.h,v 1.13 2001/06/21 08:58:57 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: directory.h,v 1.13.2.1 2003/01/07 13:19:16 anker Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -19,13 +22,28 @@
 #	include <BALL/SYSTEM/fileSystem.h>
 #endif
 
-#include <dirent.h>
+#ifdef BALL_HAS_DIRENT_H
+#	include <dirent.h>
+#endif
+#ifdef BALL_HAS_UNISTD_H
+#	include <unistd.h>
+#endif
+#ifdef BALL_HAS_SYS_STAT_H
+#	include <sys/stat.h>
+#endif
+#ifdef BALL_HAS_DIRECT_H
+#	include <direct.h>
+#endif
+#include <stdio.h>
+#ifdef BALL_COMPILER_MSVC
+#include <windows.h>
+#endif
 
 namespace BALL 
 {
 
 	/**	Directory class. 
-			{\bf Definition:} \URL{BALL/SYSTEM/directory.C}
+			{\bf Definition:} \URL{BALL/SYSTEM/directory.h}
 	*/
 	class Directory
 	{
@@ -115,14 +133,8 @@ namespace BALL
 				@param directory the directory to be assigned to
 		*/
 		void get(Directory& directory) const;
-
-		/** Swapping of Directories.
-				Swap the states of this instance with {\em directory}.
-				@param	directory the Directory being swapped with {\em *this} Directory 
-		*/
-		void swap(Directory& directory);
-
 		//@}
+
 		/**	@name	Accessors 
 		*/
 		//@{
@@ -265,9 +277,13 @@ namespace BALL
 
 		//_switch back to the working directory
 		bool desynchronize_(bool result = true);
-
+#ifdef BALL_COMPILER_MSVC
+		HANDLE					dirent_;
+		HANDLE					dir_;
+#else
 		DIR*						dir_;
 		dirent*					dirent_;
+#endif
 		String					directory_path_;
 		String					backup_path_;
 	};

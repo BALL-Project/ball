@@ -1,4 +1,7 @@
-// $Id: openHINFile.C,v 1.6 2002/01/16 02:59:38 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: openHINFile.C,v 1.6.2.1 2003/01/07 13:21:28 anker Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 

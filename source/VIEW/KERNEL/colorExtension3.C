@@ -1,7 +1,10 @@
-// $Id: colorExtension3.C,v 1.7 2001/05/13 14:28:37 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: colorExtension3.C,v 1.7.2.1 2003/01/07 13:23:34 anker Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension3.h>
-
+#include <BALL/COMMON/rtti.h>
 using namespace std;
 
 namespace BALL
@@ -95,18 +98,6 @@ namespace BALL
 			s << "color3 : " << color3_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void ColorExtension3::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void ColorExtension3::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

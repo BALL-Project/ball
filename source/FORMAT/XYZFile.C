@@ -1,4 +1,7 @@
-// $Id: XYZFile.C,v 1.3 2001/08/01 01:04:14 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: XYZFile.C,v 1.3.2.1 2003/01/07 13:20:46 anker Exp $
 
 #include <BALL/FORMAT/XYZFile.h>
 #include <BALL/DATATYPE/string.h>

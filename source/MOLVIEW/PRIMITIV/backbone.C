@@ -1,4 +1,7 @@
-// $Id: backbone.C,v 1.6 2001/05/13 15:02:41 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: backbone.C,v 1.6.2.1 2003/01/07 13:21:36 anker Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/backbone.h>
 
@@ -139,18 +142,6 @@ namespace BALL
 			GeometricObject::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void Backbone::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Backbone::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool Backbone::extract()

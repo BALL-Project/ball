@@ -1,3 +1,6 @@
-// $Id: regularData1D.C,v 1.1 2001/06/03 14:29:22 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: regularData1D.C,v 1.1.2.1 2003/01/07 13:20:37 anker Exp $
 
 #include <BALL/DATATYPE/regularData1D.h>

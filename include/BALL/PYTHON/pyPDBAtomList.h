@@ -1,4 +1,7 @@
-// $Id: pyPDBAtomList.h,v 1.5 2001/07/25 11:30:49 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyPDBAtomList.h,v 1.5.2.1 2003/01/07 13:18:54 anker Exp $
 
 #ifndef BALL_PYTHON_PYPDBATOMLIST_H
 #define BALL_PYTHON_PYPDBATOMLIST_H

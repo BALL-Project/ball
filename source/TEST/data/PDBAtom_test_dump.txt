@@ -1,8 +1,8 @@
-/Object: [a-z0-9]+ is instance of class: [A-Z0-9]+
-/Object: [a-z0-9]+ is instance of class: [A-Z0-9]+
+/Object: [a-fA-Fx0-9]+ is instance of class: .*BALL.*PDBAtom.*
+/Object: [a-fA-Fx0-9]+ is instance of class: .*BALL.*PDBAtom.*
 /  handle: [0-9]*
   auto-deletable: 0
-/Object: [a-z0-9]+ is instance of class: [A-Z0-9]+
+/Object: [a-fA-Fx0-9]+ is instance of class: .*BALL.*PDBAtom.*
   selected: 0
 /  parent: [0-9]+
 /  first: [0-9]+

@@ -1,11 +1,10 @@
-// $Id: glBackbone.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: glBackbone.h,v 1.6.2.1 2003/01/07 13:18:37 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #	include <BALL/VIEW/GUI/KERNEL/glObject.h>
@@ -147,14 +146,10 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assigns the glBackbone {\em glbackbone} to {\em *this}
-					glBackbone.	The copy is deep.
-					This method does not copy the structure of {\em glbackbone} into {\em *this}
-					glBackbone. 
-					Only the geometric properties and the the access to the
-					\Ref{GLPrimitiveManager} are copied.
-					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
-					Calls \Ref{set}.
+					Assigns the glBackbone {\em glbackbone} to {\em *this} glBackbone.	The copy is deep.
+					This method does not copy the structure of {\em glbackbone} into {\em *this} glBackbone. 
+					Only the geometric properties and the the access to the \Ref{GLPrimitiveManager} are copied.
+					See \Ref{GeometricObject} and	\Ref{GLObject} for information.  Calls \Ref{set}.
 					The value of {\em *this} glBackbone is initialized to the value 
 					of the glBackbone {\em glbackbone}.\\
 					@param       glbackbone the glBackbone to be copied
@@ -167,12 +162,10 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copies {\em *this} glBackbone to the glBackbone {\em glbackbone}.
 					The copy is either deep (default) or shallow.
-					This method does not copy the structure of {\em *this} glBackbone into
-					{\em glbackbone}. 
+					This method does not copy the structure of {\em *this} glBackbone into {\em glbackbone}. 
 					Only the geometric properties and the the access to the
 					\Ref{GLPrimitiveManager} are copied.
-					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
-					Calls \Ref{set}.
+					See \Ref{GeometricObject} and	\Ref{GLObject} for information.  Calls \Ref{set}.
 					The value of the glBackbone {\em glbackbone} is initialized to the
 					value of {\em *this} glBackbone.\\
 					@param       glbackbone the glBackbone to be assigned to
@@ -183,10 +176,8 @@ namespace BALL
 				throw();
 
 			/** Swapping of glBackbone's.
-					Swaps the value of {\em *this} glBackbone with the glBackbone
-					{\em glbackbone}.
-					This method does not swap the structure of {\em glbackbone} with {\em *this}
-					glBackbone. 
+					Swaps the value of {\em *this} glBackbone with the glBackbone {\em glbackbone}.
+					This method does not swap the structure of {\em glbackbone} with {\em *this} glBackbone. 
 					Only the geometric properties and the the access to the
 					\Ref{GLPrimitiveManager} are swapped.
 					See \Ref{GeometricObject} and	\Ref{GLObject} for information.
@@ -196,7 +187,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 
 			protected:
 
@@ -229,6 +219,7 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+
 			//@}
 
   		private:
@@ -243,10 +234,6 @@ namespace BALL
 			virtual Line* createLine_();		
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.iC>
-#		endif
-		
 	} // namespace MOLVIEW
 
 } // namespace BALL

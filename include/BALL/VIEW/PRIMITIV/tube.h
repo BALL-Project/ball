@@ -1,4 +1,7 @@
-// $Id: tube.h,v 1.11 2001/07/16 14:49:33 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: tube.h,v 1.11.2.1 2003/01/07 13:19:58 anker Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -19,13 +22,8 @@
 #	include <BALL/VIEW/KERNEL/vertex2.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_RADIUS_H
-#	include <BALL/VIEW/KERNEL/radius.h>
-#endif
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 
@@ -46,7 +44,6 @@ namespace BALL
 		*/
 		class Tube
 			: public GeometricObject,
-				public Radius,
 			  public ColorExtension,
    			public Vertex2
 		{
@@ -249,22 +246,14 @@ namespace BALL
 			*/
 			//@{
 
-			/** Persistent stream output and state restorage.
-  			  Read persistent tube data from the input stream {\em s} and 
-				  restore the state of {\em *this}.\\
-				  {\bf Note:} Not yet implemented.
-		 		  @param       s input stream from where to restore the internal state of {\em *this} tube
-			*/
-			virtual void read(std::istream& s)
+			/**	Get the radius.
+			 */
+			Real getRadius() const
 				throw();
 
-			/** Persistent stream output and state storage.
-  			  Write persistent tube data to the output stream {\em s} and 
-				  store the state of {\em *this}. \\
-				  {\bf Note:} Not yet implemented.
-				  @param       s output stream to where to store the internal state of {\em *this} tube
-			*/
-			virtual void write(std::ostream& s) const
+			/** Set the radius.
+			 */
+			void setRadius(Real radius)
 				throw();
 
 			//@}
@@ -279,11 +268,15 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+
+			private:
+
+			Real radius_;
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/tube.iC>
-#		endif
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/PRIMITIV/tube.iC>
+#	endif
 		
 	} // namespace VIEW
 	 

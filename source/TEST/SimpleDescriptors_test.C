@@ -1,4 +1,7 @@
-// $Id: SimpleDescriptors_test.C,v 1.2 2002/01/26 22:01:29 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: SimpleDescriptors_test.C,v 1.2.2.1 2003/01/07 13:22:52 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(SimpleDescriptors, "$Id: SimpleDescriptors_test.C,v 1.2 2002/01/26 22:01:29 oliver Exp $")
+START_TEST(SimpleDescriptors, "$Id: SimpleDescriptors_test.C,v 1.2.2.1 2003/01/07 13:22:52 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

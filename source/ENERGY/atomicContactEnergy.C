@@ -1,11 +1,12 @@
-// $Id: atomicContactEnergy.C,v 1.1 2000/09/05 14:29:15 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: atomicContactEnergy.C,v 1.1.2.1 2003/01/07 13:20:38 anker Exp $
 
 #include <BALL/ENERGY/atomicContactEnergy.h>
 
-#include <strstream>
-#include <stdio.h>
-
 #include <BALL/common.h>
+#include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/DATATYPE/string.h>
@@ -25,13 +26,12 @@ using namespace std;
 namespace BALL 
 {
 
-	StringHashMap<Atom::Type>& buildTable_()
+	StringHashMap<Atom::Type> buildTable_()
 	{
-		FILE*				datafile;
-		char				residue[10];
-		char				atom_name[10];
-		Atom::Type*	atom_type;
-		String*			key;
+		File				datafile;
+		String			residue;
+		String			atom_name;
+		Atom::Type	atom_type;
 
 		// determine the path to the data file
 		Path path;
@@ -41,32 +41,24 @@ namespace BALL
 			throw Exception::FileNotFound(__FILE__, __LINE__, ACE_TYPES_FILENAME);
 		}
 
-		datafile = fopen(filename.c_str(), "r");
-		if (datafile == 0)
-		{
-			throw Exception::FileNotFound(__FILE__, __LINE__, ACE_TYPES_FILENAME);
-		}
-		
+		datafile.open(filename);
 
 		// create a new StringHashMap
-		StringHashMap<Atom::Type>* table = new StringHashMap<Atom::Type>;
+		StringHashMap<Atom::Type> table;
 
-		while (!feof(datafile))
+		while (datafile.good())
 		{
-			atom_type = new Atom::Type;
-			fscanf(datafile, "%s %s %hd", &(residue[0]), &(atom_name[0]), atom_type);
-			key = new String(residue);
-			key->append(":");
-			key->append(atom_name);
-			(*table)[*key] = (Atom::Type)*atom_type;
+			datafile >> residue >> atom_name >> atom_type;
+			String key(residue);
+			key.append(":");
+			key.append(atom_name);
+			table[key] = atom_type;
 		}
 					
-		fclose(datafile);
+		datafile.close();
 
-		return *table;
+		return table;
 	}
-
-
 
 	typedef struct 
 	{

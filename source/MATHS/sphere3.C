@@ -1,3 +1,6 @@
-// $Id: sphere3.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: sphere3.C,v 1.1.1.1.2.1 2003/01/07 13:21:01 anker Exp $
 
 #include <BALL/MATHS/sphere3.h>

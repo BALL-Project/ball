@@ -1,4 +1,7 @@
-// $Id: embeddable.h,v 1.6 2001/12/26 03:35:52 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: embeddable.h,v 1.6.2.1 2003/01/07 13:17:25 anker Exp $
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #define BALL_CONCEPT_EMBEDDABLE_H

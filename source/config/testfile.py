@@ -16,7 +16,7 @@ class test:
 	errors=0
 	line=''
 	lastline=''
-	linenr= -1
+	linenr= 0 
 	carriage=0
 	testnr= 0
 	f = open(sys.argv[1])
@@ -149,13 +149,12 @@ class test:
 			'//',
 			'// $Id:')
 		#compare first 4 lines with tab info lines
-		self.linenr = self.linenr + 1
-		while self.linenr < 4: 
+		for reg in tabInfoLines:
 			self.linenr = self.linenr + 1
 			self.lastline = self.line
 			self.line = self.f.readline()
 			if not self.line: break;
-			if string.find(self.line, tabInfoLines[self.linenr]) == -1: 
+			if string.find(self.line, reg) == -1: 
 				self.write('#99 tab info line lack')
 				break
 		return 1

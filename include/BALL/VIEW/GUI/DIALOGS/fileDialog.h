@@ -1,21 +1,19 @@
-// $Id: fileDialog.h,v 1.7 2001/12/28 02:33:39 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: fileDialog.h,v 1.7.2.1 2003/01/07 13:19:26 anker Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
+#include <qfiledialog.h>
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
 
-#include <qfiledialog.h>
-
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -57,15 +55,13 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} fileDialog.
-					Calls \Ref{destroy}.
-					@see         destroy
+					Calls \Ref{clear}.
 			*/
 			virtual ~FileDialog()
 				throw();
@@ -74,12 +70,6 @@ namespace BALL
 					Empty for further purpose.
 			*/
 			virtual void clear()
-				throw();
-
-			/** Explicit destructor.
-					Empty for further purpose.
-			*/
-			virtual void destroy()
 				throw();
 			//@}
 
@@ -102,11 +92,11 @@ namespace BALL
 			*/
 			const string& getFileName() const
 				throw();
-			//@}
 
 
 			public slots:
 
+			//@}
 			/** @name Public slots
 			*/
 			//@{
@@ -119,10 +109,10 @@ namespace BALL
 			*/
 			int exec();
 
-			//@}
 
    		protected:
 
+			//@}
 			/**	@name	Protected Members
 			*/
 			//@{
@@ -143,9 +133,9 @@ namespace BALL
 			string filename_;
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/DIALOGS/fileDialog.iC>
-#		endif 
+#ifndef BALL_NO_INLINE_FUNCTIONS
+#	include <BALL/VIEW/GUI/DIALOGS/fileDialog.iC>
+#endif 
 
 		} // namespace VIEW
 

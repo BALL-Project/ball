@@ -1,4 +1,7 @@
-// $Id: processor.h,v 1.9 2001/10/11 00:46:21 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: processor.h,v 1.9.2.1 2003/01/07 13:17:28 anker Exp $
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #define BALL_CONCEPT_PROCESSOR_H

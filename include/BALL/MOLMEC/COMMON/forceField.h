@@ -1,4 +1,7 @@
-// $Id: forceField.h,v 1.17 2002/01/31 10:15:30 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: forceField.h,v 1.17.2.1 2003/01/07 13:18:09 anker Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -187,7 +190,7 @@ namespace BALL
 				contains the atoms that are to be moved, the rest of the array contains
 				the fixed atoms.
 		*/
-		Size	getNumberOfMovableAtoms() const;
+		Size getNumberOfMovableAtoms() const;
 
 		/**	Returns a reference to the atom vector
 		*/

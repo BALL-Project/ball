@@ -1,4 +1,7 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.16.2.3 2002/11/22 18:38:59 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.16.2.4 2003/01/07 13:21:53 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -246,13 +249,13 @@ namespace BALL
 			{
 				Log.info() << "method: " << method << endl;
 				rdf_integrator_.options.setInteger
-					(Pair6_12RDFIntegrator::Option::METHOD, method);
+					(Pair6_12RDFIntegrator::Option::METHOD, (long)method);
 				Size samples =
 					(Size)options.getInteger(Pair6_12RDFIntegrator::Option::SAMPLES);
 				if (samples != 0)
 				{
 					rdf_integrator_.options.setInteger
-						(Pair6_12RDFIntegrator::Option::SAMPLES, samples);
+						(Pair6_12RDFIntegrator::Option::SAMPLES, (long)samples);
 				}
 			}
 

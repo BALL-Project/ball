@@ -1,4 +1,7 @@
-// $Id: constants.h,v 1.7 2001/02/04 10:29:42 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: constants.h,v 1.7.2.1 2003/01/07 13:17:18 anker Exp $
 
 #ifndef BALL_COMMON_CONSTANTS_H
 #define BALL_COMMON_CONSTANTS_H

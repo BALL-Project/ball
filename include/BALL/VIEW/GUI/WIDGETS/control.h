@@ -1,4 +1,7 @@
-// $Id: control.h,v 1.10 2001/07/16 14:49:31 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: control.h,v 1.10.2.1 2003/01/07 13:19:40 anker Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -6,14 +9,6 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
-
-#include <iostream>
-
-#include <qlistview.h>
-#include <qmessagebox.h>
-#include <qpoint.h>
-#include <qpopupmenu.h>
-
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -39,9 +34,25 @@
 #	include <BALL/VIEW/FUNCTOR/filter.h>
 #endif
 
+#ifndef BALL_VIEW_PRIMITIV_MESH_H
+# include <BALL/VIEW/PRIMITIV/mesh.h>
+#endif
+
+#ifndef BALL_VIEW_GUI_DIALOGS_COLORMESHDIALOG_H
+# include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
+#endif
+
+#ifndef BALL_VIEW_COMMON_GLOBAL_H
+# include <BALL/VIEW/COMMON/global.h>
+#endif 
+
+#include <qlistview.h>
+#include <qmessagebox.h>
+#include <qpoint.h>
+#include <qpopupmenu.h>
+
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -57,21 +68,55 @@ namespace BALL
 				will be shown in the structure view of {\em *this} control.
 				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/control.h}
 		*/
-		class Control: public QListView, public ModularWidget
+		class Control
+			: public QListView, 
+				public ModularWidget
 		{
-			
 			Q_OBJECT
+
+			class SelectableListViewItem
+				: public QCheckListItem
+			{
+				public:
+
+				SelectableListViewItem(QListViewItem* parent, const QString& text, const QString& type, Composite* composite, 
+															 VIEW::Control& control)
+					throw();
+
+				SelectableListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, 
+															 VIEW::Control& control)
+					throw();
+
+				Composite* getComposite() { return composite_;};
+
+				protected:
+
+				// overriden function, used to message to Control
+				virtual void stateChange(bool)
+					throw();
+
+				Composite* composite_;
+
+				VIEW::Control& control_reference_;
+
+				private: 
+				
+				// prevent use of default cstr
+				SelectableListViewItem();
+			};
+
 				
 			public:
 			
 			/** @name Macros.
 		  */
 			//@{
+
 			/** Embeddable Macro.
 			*/
 			BALL_EMBEDDABLE(Control)
+
 			//@}
-					
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -96,7 +141,6 @@ namespace BALL
 				throw();
 			
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -120,8 +164,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+
 			//@}
-			
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -152,6 +196,12 @@ namespace BALL
 					@see     updateContents
 			*/
 			bool removeComposite(Composite* composite)
+				throw();
+	
+			/** Recursive removal of composite from control.
+			 		@see removeComposite
+			*/
+			Size removeRecursiveComposite(Composite* composite)
 				throw();
 
 			/** Update a composite.
@@ -220,9 +270,8 @@ namespace BALL
 					@param entry_ID the id for the new menu entry (default: -1, will create a new one)
 					@see   buildContextMenu
 			*/
-			void insertContextMenuEntry
-				(const String& name, const QObject* receiver = 0, 
-				 const char* slot = 0, int accel = 0, int entry_ID = -1)
+			void insertContextMenuEntry(const String& name, const QObject* receiver = 0, 
+																  const char* slot = 0, int entry_ID = -1, int accel = 0)
 				throw();
 
 			/**	Initialize the widget.
@@ -283,18 +332,18 @@ namespace BALL
 			*/
 			virtual void checkMenu(MainControl& main_control)
 				throw();
-			//@}			
 			
 
 			public slots:
 				
+			//@}			
 			/** @name Public slots
 			*/
 			//@{
 
 			/** Invalidate the selection.
 					Invalidate the selection of {\em *this} control.
-					Alle selected items in the tree will be deselected.
+					All selected items in the tree will be deselected.
 					Calls \Ref{updateSelection}.
 					@see  updateSelection
 			*/
@@ -382,23 +431,20 @@ namespace BALL
 			/** Controlling method for context menus.
 					Clear the previously created context menu.
 					Calls \Ref{buildContextMenu} for the \Ref{Composite} object belonging
-					to the {\em item} and executes the context menu if menu entries are
-					available.
+					to the {\em item} and executes the context menu if menu entries are available.
 					@param  item the \Ref{QListViewItem} for which a context menu should be created
 					@param  point the position to which the context menu should be drawn
 					@param  column not used at the moment
 					@see    buildContextMenu
 			*/
-			void onContextMenu(QListViewItem* item,  const QPoint& point, int column);
+			void onContextMenu(QListViewItem* item, const QPoint& point, int column);
 
 			/** Erase a geometricObject.
-					Erase a \Ref{GeometricObject} object previously selected with the context
-					menu.
+					Erase a \Ref{GeometricObject} object previously selected with the context menu.
 					If the \Ref{GeometricObject} object has a parent it will be removed from it
 					and the message \Ref{ChangedCompositeMessage} will be sent. If the 
 					\Ref{GeometricObject} object has no parent it will be removed entirely from
-					{\em *this} control and the message \Ref{RemovedCompositeMessage} will be
-					sent.
+					{\em *this} control and the message \Ref{RemovedCompositeMessage} will be sent.
 					The message \Ref{SceneMessage} will be sent after the former process to 
 					update the \Ref{Scene}.
 					Calls \Ref{updateContents} to update {\em *this} control.
@@ -410,17 +456,27 @@ namespace BALL
 					@see    GeometricObject
 			*/
 			void eraseGeometricObject();
-			//@}
-		
+
+			/** Method is called if checkbox of an item is clicked.
+			*/
+			void selectedComposite(Composite* composite, bool state);
 
 		  signals:
 			
-			
 		  protected:
 			
+			//@}
 			/** @name Protected members
 			*/
 			//@{
+
+			/** Set the selection of the checkboxes and the opening of the tree according to the selection
+			 		in the MainControl.
+					@param open true means, that the item tree is opend and closed according to the changes
+			*/
+			void setSelection_(bool open)
+				throw(MainControlMissing);
+
 			/** Access the information visitor.
 					Access the \Ref{Information} visitor of {\em *this} control.
 					Override this method if another information visitor is needed.
@@ -448,15 +504,15 @@ namespace BALL
 					call for each the method \Ref{updateListViewItem_}.
 					@param   item a pointer to a \Ref{QListViewItem} containing the subtree structure 
 					@param   composite a pointer to a \Ref{Composite} object containing the (possibly) new substructure
-					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree structure of {\em item} are unequal, {\tt false} otherwise 
+					@return  bool {\tt true} if the subtree structure of {\em composite} and the subtree 
+									 structure of {\em item} are unequal, {\tt false} otherwise 
 					@see     updateListViewItem_
 			*/
 			virtual bool recurseUpdate_(QListViewItem* item, Composite* composite)
 				throw();
 			
 			/** Message handling.
-					Catch the \Ref{Message} objects and react accordingly to the different
-					messages.
+					Catch the \Ref{Message} objects and react accordingly to the different messages.
 					Override this method if new messages should be catched.\\
 					{\bf Note:} If this method is overriden, call this method at the end of the
 					new implementation to make sure the old messages are still catched properly.\\
@@ -516,15 +572,15 @@ namespace BALL
 					be inserted into given {\em item}.
 					All children of {\em composite} will be inserted recursivly into the newly
 					created item by the method \Ref{recurseGeneration_}.
-					@param  item a \Ref{QListViewItem} into which a subtree of items will be inserted, or {\tt 0} if a new root item should be created
+					@param  item a \Ref{QListViewItem} into which a subtree of items will be inserted, 
+											 or {\tt 0} if a new root item should be created
 					@param  composite the \Ref{Composite} object whose subtree will be inserted into {\em item}
 					@param  default_name the name of the {\em item}
 					@see    Information
 					@see    getInformationVisitor_
 					@see    recurseGeneration_
 			*/
-			void generateListViewItem_
-				(QListViewItem* item, Composite* composite, QString* default_name = 0)
+			void generateListViewItem_(QListViewItem* item, Composite* composite, QString* default_name = 0)
 				throw();
 			
 			/** Update the item tree recursivly.
@@ -543,24 +599,25 @@ namespace BALL
 					@see    generateListViewItem_
 					@see    recurseUpdate_
 			*/
-			bool updateListViewItem_
-				(QListViewItem* item, Composite* composite, QString* default_name = 0)
+			bool updateListViewItem_(QListViewItem* item, Composite* composite, QString* default_name = 0)
 				throw();
 			
 			/** Search the item tree for a composite.
 					Search the \Ref{QListViewItem} tree of {\em *this} control for the given
 					\Ref{Composite} object {\em composite}.
 					@param  composite a pointer to the \Ref{Composite} object to be search for
-					@return QListViewItem* a pointer to the \Ref{QListViewItem} containing the \Ref{Composite} object {\em composite}, {\tt 0} if no such \Ref{Composite} object exists
+					@return QListViewItem* a pointer to the \Ref{QListViewItem} containing the \Ref{Composite} 
+									object {\em composite}, {\tt 0} if no such \Ref{Composite} object exists
 					@see    updateListViewItem_
 			*/
 			QListViewItem* findListViewItem_(Composite* composite)
 				throw();
+
 			//@}
-			
 			/** @name Protected member variables
 			*/
 			//@{
+
 			/** Cut id.
 					In this variable the menu id for the cut menu is stored.
 					This variable is provided for access to the cut menu. With the help of this
@@ -603,16 +660,15 @@ namespace BALL
 					@see   checkMenu
 			*/
 			int clipboard_id_;
-			//@}
-			
 
-		  private:
+			//@}
+
+		  protected:
 			
 			enum ColumnID
 			{
 				COLUMN_ID__NAME      = 0,
-				COLUMN_ID__TYPE      = 1,
-				COLUMN_ID__ADDRESS   = 6
+				COLUMN_ID__TYPE      = 1
 			};
 
 
@@ -633,7 +689,12 @@ namespace BALL
 
 			QString					getRootTypeName_(QListViewItem* item)
 				throw();
+
+			void selectRecursive_(Composite* composite)
+				throw();			
 			
+			void deselectRecursive_(Composite* composite)
+				throw();			
 			
 			// ATTRIBUTES
 			List<Composite*> selected_;
@@ -650,6 +711,11 @@ namespace BALL
 
 			Composite* context_composite_;
 			QListViewItem *context_item_;
+
+			ColorMeshDialog* colorMeshDlg_;
+
+			HashMap<Composite*, QListViewItem*> composite_to_item_;
+						
 		};
 		
 		

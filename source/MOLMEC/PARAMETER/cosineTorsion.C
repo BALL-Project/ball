@@ -1,4 +1,7 @@
-// $Id: cosineTorsion.C,v 1.7 2001/12/14 01:18:12 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: cosineTorsion.C,v 1.7.2.1 2003/01/07 13:21:15 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>

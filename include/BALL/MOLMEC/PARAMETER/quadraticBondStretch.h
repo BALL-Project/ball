@@ -1,4 +1,7 @@
-// $Id: quadraticBondStretch.h,v 1.9 2001/06/21 21:29:53 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: quadraticBondStretch.h,v 1.9.2.1 2003/01/07 13:18:13 anker Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
 #define BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
@@ -37,8 +40,8 @@ namespace BALL
 
 		struct Data
 		{
-			Atom*		atom1;
-			Atom*		atom2;
+			Atom::StaticAtomAttributes*	atom1;
+			Atom::StaticAtomAttributes*	atom2;
 			Values	values;
 		};
 

@@ -1,4 +1,7 @@
-// $Id: VersionInfo_test.C,v 1.1 2000/06/28 20:21:31 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: VersionInfo_test.C,v 1.1.2.1 2003/01/07 13:23:03 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(VersionInfo, "$Id: VersionInfo_test.C,v 1.1 2000/06/28 20:21:31 oliver Exp $")
+START_TEST(VersionInfo, "$Id: VersionInfo_test.C,v 1.1.2.1 2003/01/07 13:23:03 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

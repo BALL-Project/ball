@@ -1,27 +1,21 @@
-// $Id: objectSelector.C,v 1.3 2001/07/15 18:50:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: objectSelector.C,v 1.3.2.1 2003/01/07 13:21:21 anker Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/bond.h>
 
-using namespace std;
+using std::ostream;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
 		ObjectSelector::ObjectSelector()
 			throw()
-			: AtomBondModelBaseProcessor(),
-				selection_(true)
-		{
-		}
-
-		ObjectSelector::ObjectSelector
-			(const ObjectSelector &selector, bool deep)
-			throw()
-			: AtomBondModelBaseProcessor(selector, deep),
-				selection_(selector.selection_)
 		{
 		}
 
@@ -29,166 +23,80 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-			 << " of class " << RTTI::getName<ObjectSelector>() << endl;
+				Log.info() << "Destructing object " << (void *)this 
+									 << " of class " << RTTI::getName<ObjectSelector>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 
-		void ObjectSelector::clear()
-			throw()
+	Processor::Result ObjectDeselector::operator() (Composite &composite)
+		throw()
+	{
+		if (RTTI::isKindOf<AtomContainer> (composite))
 		{
-			AtomBondModelBaseProcessor::clear();
-
-			selection_ = true;
-		}
-
-		void ObjectSelector::destroy()
-			throw()
-		{
-		}
-
-		void ObjectSelector::set(const ObjectSelector &selector, bool deep)
-			throw()
-		{
-			AtomBondModelBaseProcessor::set(selector, deep);
-
-			selection_ = selector.selection_;
-		}
-
-		const ObjectSelector& ObjectSelector::operator = (const ObjectSelector &selector)
-			throw()
-		{
-			set(selector);
-
-			return *this;
-		}
-
-		void ObjectSelector::get(ObjectSelector &selector, bool deep) const
-			throw()
-		{
-			selector.set(*this, deep);
-		}
-
-		void ObjectSelector::swap (ObjectSelector &selector)
-			throw()
-		{
-			AtomBondModelBaseProcessor::swap(selector);
-
-			bool tmp = selection_;
-			selection_ = selector.selection_;
-			selector.selection_ = tmp;
-		}
-
-		bool ObjectSelector::start()
-		{
-			getSearcher_().clear();
-
-			return AtomBondModelBaseProcessor::start();
-		}
-				
-		bool ObjectSelector::finish()
-		{
-			Atom *first_atom = 0;
-			Atom *second_atom = 0;
-			Bond *bond_ptr = 0;
-			AtomBondIterator bond_it;
-
-			List<Atom*>::Iterator list_iterator;
-
-			// for all used atoms
-			for (list_iterator = getAtomList_().begin();
-					 list_iterator != getAtomList_().end(); ++list_iterator)
+			AtomIterator ai;
+			AtomBondIterator bi;		
+			BALL_FOREACH_BOND((*(AtomContainer*) &composite), ai, bi)
 			{
-				first_atom = *list_iterator;
-
-				// for all bonds connected from first- to second atom
-				BALL_FOREACH_ATOM_BOND(*first_atom, bond_it)
+				if (!bi->isSelected())
+				for (Size i=0; i < bi->getDegree();i++)
 				{
-					bond_ptr = &(*bond_it);
-					second_atom = const_cast<Atom*>(bond_ptr->getSecondAtom());
-
-					// use only atoms with greater handles than first atom
-					if (*first_atom < *second_atom)
-					{
-						// select bond only if second atom is selected too
-						if (getAtomSet_().has(second_atom))
-						{
-							if (selection_ == true)
-							{
-								bond_ptr->select();
-							}
-							else
-							{
-								bond_ptr->deselect();
-							}
-						}
-					}
-				}
-
-				if (selection_ == true)
-				{
-					first_atom->select();
-				}
-				else
-				{
-					first_atom->deselect();
+					bi->getChild(i)->deselect();
 				}
 			}
-			
-			return true;
+
+			BALL_FOREACH_ATOM((*(AtomContainer*) &composite), ai)
+			{
+				for (Size i=0; i < ai->getDegree();i++)
+				{
+					ai->getChild(i)->deselect();
+				}
+			}
 		}
-				
-		Processor::Result ObjectSelector::operator() (Composite &composite)
+
+		if (RTTI::isKindOf<Atom> (composite))
 		{
-			// composite is an atom ?
-			if (!RTTI::isKindOf<Atom>(composite))
+			for (Size i=0; i < composite.getDegree();i++)
 			{
-				return Processor::CONTINUE;
+				composite.getChild(i)->deselect();
 			}
-
-			Atom *atom = RTTI::castTo<Atom>(composite);
-
-			if (selection_ == true)
-			{
-				atom->select();
-			}
-			else
-			{
-				atom->deselect();
-			}
-
-			// collect atom with geometric object for selection
-			insertAtom_(atom);
-
-			return Processor::CONTINUE;
 		}
+		return Processor::CONTINUE;
+	}
 
-		void ObjectSelector::dump(ostream& s, Size depth) const
-			throw()
+	Processor::Result ObjectSelector::operator() (Composite &composite)
+		throw()
+	{
+		if (RTTI::isKindOf<AtomContainer> (composite))
 		{
-			BALL_DUMP_STREAM_PREFIX(s);
-			
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
+			AtomIterator ai;
+			AtomBondIterator bi;		
+			BALL_FOREACH_BOND((*(AtomContainer*) &composite), ai, bi)
+			{
+				if (bi->isSelected())
+				for (Size i=0; i < bi->getDegree();i++)
+				{
+					bi->getChild(i)->select();
+				}
+			}
 
-			BALL_DUMP_DEPTH(s, depth);
-			cout << "use Selection Color: " << ((selection_ == true) ? "Yes" : "No") << endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			cout << "use Object Color:    " << ((selection_ == false) ? "Yes" : "No") << endl;
-
-			AtomBondModelBaseProcessor::dump(s, depth + 1);
-
-			BALL_DUMP_STREAM_SUFFIX(s);
+			BALL_FOREACH_ATOM((*(AtomContainer*) &composite), ai)
+			{
+				for (Size i=0; i < ai->getDegree();i++)
+				{
+					ai->getChild(i)->select();
+				}
+			}
 		}
 
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/objectSelector.iC>
-#		endif
+		if (RTTI::isKindOf<Atom> (composite))
+		{
+			for (Size i=0; i < composite.getDegree();i++)
+			{
+				composite.getChild(i)->select();
+			}
+		}
+		return Processor::CONTINUE;
+	}
 
 	} // namespace MOLVIEW
-
 } // namespace BALL

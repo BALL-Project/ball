@@ -1,4 +1,7 @@
-// $Id: simpleBox.C,v 1.6 2001/02/04 16:14:28 hekl Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: simpleBox.C,v 1.6.2.1 2003/01/07 13:23:39 anker Exp $
 
 #include <BALL/VIEW/PRIMITIV/simpleBox.h>
 
@@ -112,27 +115,11 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void SimpleBox::read(istream & /* s */)
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void SimpleBox::write(ostream & /* s */) const
-			throw()
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
 		bool SimpleBox::extract()
 			throw()
 		{
 			return true;  
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/simpleBox.iC>
-#		endif
 
 	} // namespace VIEW
 

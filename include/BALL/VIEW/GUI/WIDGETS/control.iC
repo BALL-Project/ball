@@ -1,4 +1,7 @@
-// $Id: control.iC,v 1.7 2000/12/22 19:12:15 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: control.iC,v 1.7.2.1 2003/01/07 13:19:41 anker Exp $
 
 BALL_INLINE
 List<Composite*>& Control::getSelection()

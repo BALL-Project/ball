@@ -1,3 +1,6 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/SOLVATION/poissonBoltzmann.h>
 #include <BALL/FORMAT/HINFile.h>

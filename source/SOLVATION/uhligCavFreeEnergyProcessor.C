@@ -1,7 +1,12 @@
-// $Id: uhligCavFreeEnergyProcessor.C,v 1.7.2.1 2002/11/12 16:52:36 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: uhligCavFreeEnergyProcessor.C,v 1.7.2.2 2003/01/07 13:21:55 anker Exp $
 
 #include <BALL/SOLVATION/uhligCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
+
+using std::endl;
 
 namespace BALL
 {
@@ -55,15 +60,15 @@ namespace BALL
 
 	const UhligCavFreeEnergyProcessor& UhligCavFreeEnergyProcessor::operator = (const UhligCavFreeEnergyProcessor& proc) throw()     
 	{
-		 valid_=proc.valid_;
-		 energy_=proc.energy_;
-		 fragment_=proc.fragment_;  
-		 return *this;
+		valid_=proc.valid_;
+		energy_=proc.energy_;
+		fragment_=proc.fragment_;  
+		return *this;
 	}
 
 	bool UhligCavFreeEnergyProcessor::operator == (const UhligCavFreeEnergyProcessor& proc) const throw()
 	{
-	  bool result;
+		bool result;
 		if ((fragment_ == 0) && (proc.fragment_ == 0))
 		{
 			result = ((energy_ == proc.energy_) && (valid_ == proc.valid_));
@@ -90,7 +95,7 @@ namespace BALL
 		// first check for user settings
 
 		// for now, there is nothing to report
-		verbosity_ = (int) options.getInteger(Option::VERBOSITY);
+		int verbosity = (int) options.getInteger(Option::VERBOSITY);
 		// the solvent radius [ A ]
 		double solvent_radius = options.getReal(Option::PROBE_RADIUS);
 		// the surface tension [ J/mol/A^2 ]
@@ -104,6 +109,15 @@ namespace BALL
 			Log.info() << "Uhlig: SAS area = " << A << endl;
 		}
 		
+		if (verbosity > 0)
+		{
+			Log.info() << "Uhlig parameters and calculated values:" << endl
+			<< "solvent radius:  " << solvent_radius << endl
+			<< "surface tension: " << gamma << endl
+			<< "constant:        " << C << endl
+			<< "SAS area:        " << A << endl;
+		}
+
 		// return energy in units of kJ/mol
 		energy_ = (gamma * A + C)/1000; 
 

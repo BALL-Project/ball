@@ -1,4 +1,7 @@
-// $Id: MOL2File.C,v 1.15 2002/01/05 19:01:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MOL2File.C,v 1.15.2.1 2003/01/07 13:20:44 anker Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -438,7 +441,7 @@ namespace BALL
 	{
 		Size number_of_fields = 1;
 		Size line_number = 0;
-		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS) && (getLineNumber() <= 5))
+		while (readLine() && (number_of_fields > 0) && !getLine().hasPrefix(TRIPOS) && (line_number <= 5))
 		{
 			// read four lines
 			line_number++;
@@ -449,6 +452,10 @@ namespace BALL
 				case 1:
 					// read the first line: the molecule name (->BALL system name)
 					molecule_.name = getLine().trim();
+					if (molecule_.name == "****")
+					{
+						molecule_.name == "";
+					}
 					break;
 
 				case 2:
@@ -497,7 +504,24 @@ namespace BALL
 			}
 			if (number_of_fields > 4)
 			{
-				sub.dictionary_type = getLine().getField(4).toUnsignedInt();
+				String dictionary_type = getLine().getField(4);
+				if (dictionary_type == "****")
+				{
+					sub.dictionary_type = 0;	
+				}
+				else
+				{
+					try
+					{
+						sub.dictionary_type = getLine().getField(4).toUnsignedInt();
+					}
+					catch (Exception::InvalidFormat& e)
+					{
+						sub.dictionary_type = 0;
+						Log.warn() << "MOL2File::read: error in field 5 of line " 
+											<< getLineNumber() << " of " << getName() << ": " << e << endl;
+					}
+				}
 			}
 			if (number_of_fields > 5)
 			{
@@ -509,7 +533,16 @@ namespace BALL
 			}
 			if (number_of_fields > 7)
 			{
-				sub.inter_bonds = getLine().getField(7).toUnsignedInt();
+				try
+				{
+					sub.inter_bonds = getLine().getField(7).toUnsignedInt();
+				}
+				catch (Exception::InvalidFormat& e)
+				{
+					sub.inter_bonds = 0;
+					Log.warn() << "MOL2File::read: error in field 8 of line " 
+										<< getLineNumber() << " of " << getName() << ": " << e << endl;
+				}
 			}
 			for (Position i = 8; i < number_of_fields; i++)
 			{
@@ -545,7 +578,7 @@ namespace BALL
 		if (atoms_.size() != molecule_.number_of_atoms)
 		{
 			Log.error() << "MOL2File::read: number of atoms in the MOLECULE section (" 
-									<< molecule_.number_of_atoms << ")" << endl
+									<< molecule_.number_of_atoms << ")"
 									<< " is not consistent with the contents of the ATOM section (" 
 									<< atoms_.size() << " atoms)!" << endl;
 			return false;
@@ -553,7 +586,7 @@ namespace BALL
 		if (bonds_.size() != molecule_.number_of_bonds)
 		{
 			Log.error() << "MOL2File::read: number of bonds in the MOLECULE section (" 
-									<< molecule_.number_of_bonds << ")" << endl
+									<< molecule_.number_of_bonds << ")"
 									<< " is not consistent with the contents of the BOND section (" 
 									<< bonds_.size() << " bonds)!" << endl;
 			return false;
@@ -561,7 +594,7 @@ namespace BALL
 		if (substructures_.size() != molecule_.number_of_substructures)
 		{
 			Log.error() << "MOL2File::read: number of substructures in the MOLECULE section (" 
-									<< molecule_.number_of_substructures << ")" << endl
+									<< molecule_.number_of_substructures << ")"
 									<< " is not consistent with the contents of the SUBSTRUCTURE section (" 
 									<< substructures_.size() << " substructures)!" << endl;
 			return false;
@@ -589,11 +622,18 @@ namespace BALL
 				Substring ID;
 				if (re.find(substructures_[i].name, ID))
 				{
-					// assign the ID to the residue
-					residue->setID(ID.toString());
+					try
+					{
+						// assign the ID to the residue
+						residue->setID(ID.toString());
 
-					// and remove it from the fragment name
-					ID = "";
+						// and remove it from the fragment name
+						ID = "";
+					}
+					catch (Exception::GeneralException& e)
+					{
+						Log.warn() << "MOL2File::read: error in line " << getLineNumber() << ": " << e << endl;
+					}
 				}
 			}
 			else
@@ -658,6 +698,11 @@ namespace BALL
 				{
 					bond->setOrder(Bond::ORDER__AROMATIC);
 				}
+				else if (bonds_[i].type == "am")
+				{
+					// for now we translate the amide bond (am) as a single bond
+					bond->setOrder(Bond::ORDER__SINGLE);
+				}
 				else if (bonds_[i].type == "1")
 				{
 					bond->setOrder(Bond::ORDER__SINGLE);
@@ -672,7 +717,7 @@ namespace BALL
 				}
 				else
 				{
-					Log.error() << "MOL2File::read: unkown bond type " << bonds_[i].type << endl;
+					Log.error() << "MOL2File::read: unknown bond type " << bonds_[i].type << endl;
 				}
 			}
 		}

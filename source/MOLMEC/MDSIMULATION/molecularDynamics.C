@@ -1,4 +1,7 @@
-// $Id: molecularDynamics.C,v 1.11 2002/02/03 19:24:40 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularDynamics.C,v 1.11.2.1 2003/01/07 13:21:12 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -451,7 +454,8 @@ namespace BALL
 
 			int no_of_molecules = 0;
 
-			Molecule *old, *current;
+			Molecule* old = 0;
+			Molecule* current = 0;
 			Vector3 centre_velocity;
 
 
@@ -471,7 +475,7 @@ namespace BALL
 			while (atom_it != end_it)
 			{
 				// determine the molecule of the current atom
-				current = (*atom_it)->getMolecule ();
+				current = (*atom_it)->getMolecule();
 
 				if (current != old)
 				{

@@ -1,4 +1,7 @@
-// $Id: pierottiCavFreeEnergyProcessor.C,v 1.9 2001/09/24 08:15:55 aubertin Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pierottiCavFreeEnergyProcessor.C,v 1.9.2.1 2003/01/07 13:21:54 anker Exp $
 
 #include <BALL/SOLVATION/pierottiCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>

@@ -1,6 +1,10 @@
-// $Id: shiftModel.C,v 1.14 2001/03/11 11:07:33 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: shiftModel.C,v 1.14.2.1 2003/01/07 13:21:40 anker Exp $
 
 #include <BALL/NMR/shiftModel.h>
+#include <BALL/CONCEPT/factory.h>
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/NMR/haighMallionShiftProcessor.h>
@@ -244,13 +248,12 @@ namespace BALL
 	void ShiftModel::registerStandardModules_()
 		throw()
 	{
-		using RTTI::getNew;
-		registerModule("JohnsonBovey", getNew<JohnsonBoveyShiftProcessor>);
-		registerModule("HaighMallion", getNew<HaighMallionShiftProcessor>);
-		registerModule("ElectricField", getNew<EFShiftProcessor>);
-		registerModule("Anisotropy", getNew<AnisotropyShiftProcessor>);
-		registerModule("RandomCoil", getNew<RandomCoilShiftProcessor>);
-		registerModule("HBond", getNew<HBondShiftProcessor>);
+		registerModule("JohnsonBovey", Factory<JohnsonBoveyShiftProcessor>::createVoid);
+		registerModule("HaighMallion", Factory<HaighMallionShiftProcessor>::createVoid);
+		registerModule("ElectricField", Factory<EFShiftProcessor>::createVoid);
+		registerModule("Anisotropy", Factory<AnisotropyShiftProcessor>::createVoid);
+		registerModule("RandomCoil", Factory<RandomCoilShiftProcessor>::createVoid);
+		registerModule("HBond", Factory<HBondShiftProcessor>::createVoid);
 	}
 
 	Processor::Result ShiftModel::operator () (Composite& composite)
@@ -264,7 +267,7 @@ namespace BALL
 		}
 			
 		// ...call operator () for every module.
-		Processor::Result result;
+		Processor::Result result = Processor::CONTINUE;
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)
 		{
@@ -284,7 +287,7 @@ namespace BALL
 		throw()
 	{
 		// call every module
-		bool result;
+		bool result = Processor::CONTINUE;
 
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)
@@ -304,7 +307,7 @@ namespace BALL
 		throw()
 	{
 		// call every module
-		bool result;
+		bool result = Processor::CONTINUE;
 
 		ModuleList::iterator it = modules_.begin();
 		for (; it != modules_.end(); ++it)

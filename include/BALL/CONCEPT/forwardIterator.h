@@ -1,4 +1,7 @@
-// $Id: forwardIterator.h,v 1.10 2001/07/04 20:31:41 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: forwardIterator.h,v 1.10.2.1 2003/01/07 13:17:26 anker Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -49,15 +52,19 @@ namespace BALL
 	
 		/** Copy constructor
 		*/
-		ConstForwardIterator(const ConstForwardIterator &iterator)
+		ConstForwardIterator(const ConstForwardIterator& iterator)
 			throw();
 
 		/** Detailed constructor
 		*/
-		ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
-		
+		ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
+			throw()
+			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
+
 		//@}
+
 		/** @name Iterator methods
 		*/
 		//@{
@@ -128,16 +135,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits>
-	::ConstForwardIterator(const ConstForwardIterator &iterator)
-		throw()
-		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits>
-	::ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
+	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator
+		(const ConstForwardIterator& iterator)
 		throw()
 		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
@@ -162,7 +161,7 @@ namespace BALL
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstForwardIterator<Container, DataType, Position, Traits> 
-		ConstForwardIterator<Container, DataType, Position, Traits>::begin(const Container &container)
+		ConstForwardIterator<Container, DataType, Position, Traits>::begin(const Container& container)
 		throw(Exception::InvalidIterator)
 	{
 		ConstForwardIterator<Container, DataType, Position, Traits> iterator(container);
@@ -279,7 +278,11 @@ namespace BALL
 		/** Detailed constructor
 		*/
 		ForwardIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
+			throw()
+			:	BaseIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
+
 
 		//@}
 		/** @name Iterator methods
@@ -357,6 +360,7 @@ namespace BALL
 	{
 	}
 
+	/** WIN
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ForwardIterator<Container, DataType, Position, Traits>
 	::ForwardIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
@@ -364,6 +368,7 @@ namespace BALL
 		:	BaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
 	}
+	*/
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ForwardIterator<Container, DataType, Position, Traits>::operator + () const

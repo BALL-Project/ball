@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.6 2002/02/03 14:28:24 oliver Exp $
+// $Id: BALL.sip,v 1.6.2.1 2003/01/07 13:21:42 anker Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -209,7 +209,7 @@
 
 
 // MOLVIEW ??
-
+%Include client.sip
 
 // NMR
 // %Include johnsonBovey.sip // ??
@@ -251,6 +251,7 @@
 // %Include analyticalSES.sip
 %Include defaultProcessors.sip
 %Include fragmentDB.sip
+%Include reconstructFragmentProcessor.sip
 %Include geometricProperties.sip
 %Include geometricTransformations.sip
 %Include numericalSAS.sip 

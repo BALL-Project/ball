@@ -1,4 +1,7 @@
-// $Id: PDB2discover.C,v 1.6 2000/02/16 19:18:32 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PDB2discover.C,v 1.6.2.1 2003/01/07 13:20:40 anker Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>

@@ -1,3 +1,155 @@
-// $Id: RSVertex.C,v 1.2 2000/10/30 00:19:58 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: RSVertex.C,v 1.2.2.1 2003/01/07 13:21:58 anker Exp $
 
+#include <BALL/STRUCTURE/RSEdge.h>
+#include <BALL/STRUCTURE/RSFace.h>
 #include <BALL/STRUCTURE/RSVertex.h>
+
+namespace BALL
+{
+
+	RSVertex::RSVertex()
+		throw()
+		:	GraphVertex< RSVertex,RSEdge,RSFace >(),
+			atom_(-1)
+	{
+	}
+
+
+	RSVertex::RSVertex(const RSVertex& rsvertex, bool deep)
+		throw()
+		:	GraphVertex< RSVertex,RSEdge,RSFace >(rsvertex,deep),
+			atom_(rsvertex.atom_)
+	{
+	}
+
+
+	RSVertex::RSVertex(Index atom)
+		throw()
+		:	GraphVertex< RSVertex,RSEdge,RSFace >(),
+			atom_(atom)
+	{
+	}
+
+
+	RSVertex::~RSVertex()
+		throw()
+	{
+	}
+
+
+	void RSVertex::set(const RSVertex& rsvertex, bool deep)
+		throw()
+	{
+		if (this != &rsvertex)
+		{
+			GraphVertex< RSVertex,RSEdge,RSFace >::set(rsvertex,deep);
+			atom_ = rsvertex.atom_;
+		}
+	}
+
+
+	RSVertex& RSVertex::operator = (const RSVertex& rsvertex)
+		throw()
+	{
+		if (this != &rsvertex)
+		{
+			GraphVertex< RSVertex,RSEdge,RSFace >::operator = (rsvertex);
+			atom_ = rsvertex.atom_;
+		}
+		return *this;
+	}
+
+
+	void RSVertex::setAtom(Index atom)
+		throw()
+	{
+		atom_ = atom;
+	}
+
+
+	Index RSVertex::getAtom() const
+		throw()
+	{
+		return atom_;
+	}
+
+
+	bool RSVertex::operator == (const RSVertex& rsvertex) const
+		throw()
+	{
+		if (atom_ != rsvertex.atom_)
+		{
+			return false;
+		}
+		HashSet<RSEdge*>::ConstIterator e;
+		for (e = edges_.begin(); e != edges_.end(); e++)
+		{
+			if (rsvertex.edges_.has(*e) == false)
+			{
+				return false;
+			}
+		}
+		for (e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
+		{
+			if (edges_.has(*e) == false)
+			{
+				return false;
+			}
+		}
+		HashSet<RSFace*>::ConstIterator f;
+		for (f = faces_.begin(); f != faces_.end(); f++)
+		{
+			if (rsvertex.faces_.has(*f) == false)
+			{
+				return false;
+			}
+		}
+		for (f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
+		{
+			if (faces_.has(*f) == false)
+			{
+				return false;
+			}
+		}
+		return true;
+	}
+
+
+	bool RSVertex::operator != (const RSVertex& rsvertex) const
+		throw()
+	{
+		return ( ! (*this == rsvertex) );
+	}
+
+
+	bool RSVertex::operator *= (const RSVertex& rsvertex) const
+		throw()
+	{
+		return (atom_ == rsvertex.atom_);
+	}
+
+
+	std::ostream& operator << (std::ostream& s, const RSVertex& rsvertex)
+	{
+		s << "RSVERTEX" << rsvertex.getIndex() << "("
+			<< rsvertex.getAtom() << " [";
+		RSVertex::ConstEdgeIterator e;
+		for (e = rsvertex.beginEdge(); e != rsvertex.endEdge(); e++)
+		{
+			s << (*e)->getIndex() << ' ';
+		}
+		s << "] [";
+		RSVertex::ConstFaceIterator f;
+		for (f = rsvertex.beginFace(); f != rsvertex.endFace(); f++)
+		{
+			s << (*f)->getIndex() << ' ';
+		}
+		s << "])";
+		return s;
+	}
+
+
+} // namespace BALL

@@ -1,4 +1,7 @@
-// $Id: parameterSection.h,v 1.15 2002/01/10 01:29:06 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: parameterSection.h,v 1.15.2.1 2003/01/07 13:17:46 anker Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -32,7 +35,7 @@ namespace BALL
 			"{\bf     Ca       Ca        9.6 }" \\		
 			Each value line may contain version information, indicated by a variable 
 			definition named "ver"; thus only the latest version will be version will be accessed.
-			{\bf Definition:} \URL{BALL/FORMAT/ParameterSection.h} \\
+			{\bf Definition:} \URL{BALL/FORMAT/parameterSection.h} \\
 	*/
 	class ParameterSection 
 	{

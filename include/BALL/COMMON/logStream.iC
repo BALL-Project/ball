@@ -1,4 +1,7 @@
-// $Id: logStream.iC,v 1.8 2000/10/24 21:38:42 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: logStream.iC,v 1.8.2.1 2003/01/07 13:17:20 anker Exp $
 
 BALL_INLINE
 int LogStreamBuf::overflow(int c)

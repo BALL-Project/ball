@@ -1,4 +1,7 @@
-// $Id: timeStamp.h,v 1.13 2001/07/14 13:12:32 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: timeStamp.h,v 1.13.2.1 2003/01/07 13:17:31 anker Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -20,6 +23,10 @@
 #endif
 
 #include <iostream>
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+#	include <windows.h>
+#	include <sys/timeb.h>
+#endif
 
 namespace BALL 
 {
@@ -35,7 +42,7 @@ namespace BALL
 	*/
 	class PreciseTime
 	{
-		
+
 		public:
 
 		BALL_CREATE(PreciseTime)
@@ -170,6 +177,10 @@ namespace BALL
 
 		long secs_;
 		long usecs_;
+
+		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+			static long ticks_;
+		#endif
 	};
 
 	/**	Time stamp concept.

@@ -1,4 +1,7 @@
-// $Id: options.C,v 1.20 2000/12/01 13:25:19 anker Exp $ 
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: options.C,v 1.20.2.1 2003/01/07 13:20:36 anker Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -265,7 +268,7 @@ namespace BALL
 		if (!has(key))
 		{
 			set(key, value);
-			return key;
+			return value;
 		} 
 		else 
 		{

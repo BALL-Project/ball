@@ -1,4 +1,7 @@
-// $Id: predicate.C,v 1.2 1999/12/30 18:05:33 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: predicate.C,v 1.2.2.1 2003/01/07 13:20:54 anker Exp $
 
 #include <BALL/KERNEL/predicate.h>
 
@@ -9,17 +12,4 @@
 
 namespace BALL 
 {
-
-	template <typename T>
-	bool KernelPredicate<T>::operator () (const Composite& composite)
-	{
-		return RTTI::isKindOf<T>(composite);
-	}
-
-	template <class T>
-	bool KernelPredicate::operator () (const Composite& composite) const
-	{
-		return RTTI::isKindOf<T>(composite);
-	}
-
 } // namespace BALL

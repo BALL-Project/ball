@@ -1,4 +1,7 @@
-// $Id: createSpectrumProcessor.C,v 1.17 2002/01/04 11:34:37 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: createSpectrumProcessor.C,v 1.17.2.1 2003/01/07 13:21:38 anker Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -41,7 +44,7 @@ namespace BALL
 	}
 
 	void CreateSpectrumProcessor::init(const String& filename)
-		throw()
+		throw(Exception::ParseError, Exception::FileNotFound)
 	{
 		valid_ = false;
 

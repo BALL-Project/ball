@@ -1,4 +1,7 @@
-// $Id: secondaryStructure.C,v 1.13 2001/07/15 16:12:43 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: secondaryStructure.C,v 1.13.2.1 2003/01/07 13:20:55 anker Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -283,14 +286,14 @@ namespace BALL
 	void SecondaryStructure::dump(ostream& s, Size depth) const
 		throw()
 	{
-		BALL_DUMP_STREAM_PREFIX(s);
+		BALL_DUMP_STREAM_PREFIX(s)
 		
 		AtomContainer::dump(s, depth);
 		// just to avoid these damned compiler warnings
 		// (dump_indent_depth_ was declared but never referenced)
 		if (dump_indent_depth_ == 0) ;
 		
-		BALL_DUMP_STREAM_SUFFIX(s);
+		BALL_DUMP_STREAM_SUFFIX(s)
 	}
 
 	bool SecondaryStructure::operator == (const SecondaryStructure& secondary_structure) const

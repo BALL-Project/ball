@@ -1,4 +1,7 @@
-// $Id: assignTypes.C,v 1.12 2000/06/21 14:16:02 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: assignTypes.C,v 1.12.2.1 2003/01/07 13:21:07 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 
@@ -70,7 +73,9 @@ namespace BALL
 					if (type_map_.has(name))
 					{
 						atom.setTypeName(type_map_[name]);				
-					} else {	
+					} 
+					else 
+					{	
 						// we could not assign a type name - complain!
 						Log.warn() << "AssignTypeNameProcessor: could not assign type name for atom " 
 								<< atom.getFullName(Atom::NO_VARIANT_EXTENSIONS) << endl;
@@ -94,7 +99,9 @@ namespace BALL
 		if (type == Atom::UNKNOWN_TYPE)
 		{
 			Log.warn() << "AssignTypeProcessor: could not assign atom type for " << atom.getTypeName() << endl;
-		} else {
+		} 
+		else 
+		{
 			atom.setType(type);
 		}
 

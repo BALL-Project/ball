@@ -1,4 +1,8 @@
-// $Id: Quaternion_test.C,v 1.11 2002/01/26 22:01:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: Quaternion_test.C,v 1.11.2.1 2003/01/07 13:22:45 anker Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +11,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(Quaternion, "$Id: Quaternion_test.C,v 1.11 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(Quaternion, "$Id: Quaternion_test.C,v 1.11.2.1 2003/01/07 13:22:45 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -250,7 +254,7 @@ CHECK(std::istream& operator >>(std::istream& s, TQuaternion<T>& q))
 RESULT
 
 CHECK(std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q))
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << q;
 	outstr.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Quaternion_test3.txt")
@@ -259,7 +263,7 @@ RESULT
 CHECK(TQuaternion::dump(std::ostream& s, Size depth) const )
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), std::ios::out);
 	q.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Quaternion_test.txt")

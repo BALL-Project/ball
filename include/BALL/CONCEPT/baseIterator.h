@@ -1,4 +1,7 @@
-// $Id: baseIterator.h,v 1.17 2001/07/15 20:09:48 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: baseIterator.h,v 1.17.2.1 2003/01/07 13:17:22 anker Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -54,7 +57,6 @@ namespace BALL
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstBaseIterator
 	{
-
 		public:
 
 		BALL_CREATE(ConstBaseIterator)
@@ -85,6 +87,7 @@ namespace BALL
 		*/
 		typedef ::std::bidirectional_iterator_tag iterator_category;
 
+		
 		//@}
 		/**	@name	Constructors and Destructors 
 		*/
@@ -118,7 +121,7 @@ namespace BALL
 				Assigns the contents of an iterator to another iterator.
 				@param	iterator the iterator to be copied
 		*/
-		const ConstBaseIterator& operator = (const ConstBaseIterator &iterator)
+		const ConstBaseIterator& operator = (const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
 			throw();
 
 		/**	Swap two iterators.
@@ -162,8 +165,11 @@ namespace BALL
 		/** Get a constant reference to the traits of this iterator.
 		*/
 		const Traits& getTraits() const
-			throw();
+			throw()
+		{return *traits_ptr_;}
 
+		
+		
 		/** Get a constant pointer to the container of this iterator.
 		*/
 		const Container* getContainer() const
@@ -400,12 +406,14 @@ namespace BALL
 		*traits_ptr_ = iteratorTraits;
 	}
 
+	/**
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	const Traits& ConstBaseIterator<Container, DataType, Position, Traits>::getTraits() const
 		throw()
 	{
-		return *traits_ptr_;
+		return *traits_ptr_;	
 	}
+	*/
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	const Container* ConstBaseIterator<Container, DataType, Position, Traits>::getContainer() const 
@@ -535,13 +543,20 @@ namespace BALL
 	
 		/**	Default constructor
 		*/
-		BaseIterator(const BaseIterator &iterator)
-			throw();
+		BaseIterator(const BaseIterator& iterator)
+			throw()
+			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
+
 
 		/**	Default constructor
 		*/
 		BaseIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
+			throw()
+			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
 
 		//@}
 		/**	@name	Accessors
@@ -587,20 +602,6 @@ namespace BALL
 	{
 	}
 
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const BaseIterator &iterator)
-		throw()
-		:	ConstBaseIterator<Container,  DataType,  Position,  Traits>(iterator)
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>
-	::BaseIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
-		throw()
-		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
-	{
-	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	Traits& BaseIterator<Container, DataType, Position, Traits>::getTraits() const

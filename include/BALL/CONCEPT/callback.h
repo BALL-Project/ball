@@ -1,4 +1,7 @@
-// $Id: callback.h,v 1.3 2000/12/19 12:50:48 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: callback.h,v 1.3.2.1 2003/01/07 13:17:23 anker Exp $
 
 #ifndef BALL_CONCEPT_CALLBACK_H
 #define BALL_CONCEPT_CALLBACK_H

@@ -1,23 +1,17 @@
-// $Id: extendedProperty.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: extendedProperty.h,v 1.6.2.1 2003/01/07 13:18:41 anker Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #define BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #	include <BALL/CONCEPT/property.h>
 #endif
 
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
-#endif
-
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -31,7 +25,7 @@ namespace BALL
 				will clear the one previously set).
 				This class will be used by the class \Ref{BaseModelProcessor}, so that all
 				derived processors can make use of the properties. \\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/extendedPropertyManager.h}
+				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/extendedProperty.h}
 		*/
 		class ExtendedPropertyManager: public PropertyManager
 		{
@@ -57,7 +51,7 @@ namespace BALL
 					the extendedPropertyManager {\em extended_property_manager}.\\
 					@param       extended_property_manager the extendedPropertyManager to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em extended_property_manager}
-					@return      ExtendedPropertyManager new constructed extendedPropertyManager cloned from {\em extended_property_manager}
+					@return      ExtendedPropertyManager new extendedPropertyManager cloned from {\em extended_property_manager}
 					@see         PropertyManager
 			*/
 			ExtendedPropertyManager(const ExtendedPropertyManager& extended_property_manager, bool deep = true)
@@ -97,11 +91,6 @@ namespace BALL
 				throw();
 			//@}
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/KERNEL/extendedProperty.iC>
-#			endif
-
 
 	} // namespace MOLVIEW
 
