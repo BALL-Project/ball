@@ -1,4 +1,4 @@
-// $Id: distanceCoulomb.h,v 1.2 2000/01/10 15:50:59 oliver Exp $
+// $Id: distanceCoulomb.h,v 1.3 2000/02/16 19:13:32 oliver Exp $
 
 #ifndef BALL_ENERGY_DISTANCE_COULOMB_H
 #define BALL_ENERGY_DISTANCE_COULOMB_H
@@ -17,9 +17,9 @@ namespace BALL
 	/**	Returns the electrostatic (self) energy of a molecular system.
 			Units are kJ/mol. Charges have to be assigned to each atom prior to a call
 			to calculateDistanceCoulomb. Dielectric constant is calculated as follows:
-			\begin{equation}\mathrm
-				\varepsilon = 4\AA^{-1} r_ij\nonumber
-			\end{equation}
+			\[\mathrm
+				\varepsilon = 4 r_{ij}\nonumber
+			\]
 			@see	Atom::setCharge
 			@see	AssignChargeProcessor
 	*/
