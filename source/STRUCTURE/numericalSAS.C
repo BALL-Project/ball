@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.C,v 1.24 2002/12/12 11:07:19 oliver Exp $
+// $Id: numericalSAS.C,v 1.25 2002/12/22 15:03:43 anker Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -1118,10 +1118,10 @@ int          last_cubus=0;
 		int jat, j, jj, jjj, jx, jy, jz;
 		int distribution;
 		int l;
-		int maxnei, nnei, last, maxdots;
+		int maxnei, nnei, last, maxdots = 0;
 		point_int wkdot=NULL, wkbox=NULL, wkat1=NULL, wkatm=NULL;
 		Neighbour  *wknb, *ctnb;
-		int iii1, iii2, iiat, lfnr, i_at, j_at;
+		int iii1, iii2, iiat, i_at, j_at, lfnr = 0;
 		double dx, dy, dz, dd, ai, aisq, ajsq, aj, as, a;
 		double xi, yi, zi, xs=0., ys=0., zs=0.;
 		double dotarea, area, vol=0.;
