@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.35 2000/05/01 08:16:29 oliver Exp $
+// $Id: vector3.h,v 1.36 2000/05/02 07:09:08 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -331,7 +331,7 @@ namespace BALL
 
 		/**	Positive sign.
 		*/
-		TVector3 operator + () const;
+		const TVector3& operator + () const;
 
 		/**	Negative sign.
 		*/
