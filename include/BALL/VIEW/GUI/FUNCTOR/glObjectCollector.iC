@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glObjectCollector.iC,v 1.13 2002/02/27 12:19:59 sturm Exp $
+// $Id: glObjectCollector.iC,v 1.14 2002/12/20 16:27:47 anhi Exp $
 
 BALL_INLINE
 void GLObjectCollector::appendToStaticList(GLObject* GL_object)
@@ -106,6 +106,48 @@ const list<GLObject*>& GLObjectCollector::getDynamicList() const
 	throw()
 {
   return dynamic_list_;
+}
+
+BALL_INLINE
+void GLObjectCollector::appendToDynamicWireframeList(GLObject* object)
+	throw()
+{
+	dynamic_wireframe_list_.push_back(object);
+}
+
+BALL_INLINE
+list<GLObject*>& GLObjectCollector::getDynamicWireframeList()
+	throw()
+{
+  return dynamic_wireframe_list_;
+}
+
+BALL_INLINE
+const list<GLObject*>& GLObjectCollector::getDynamicWireframeList() const
+	throw()
+{
+  return dynamic_wireframe_list_;
+}
+
+BALL_INLINE
+void GLObjectCollector::appendToDynamicWireframeAlwaysFrontList(GLObject* object)
+	throw()
+{
+  dynamic_wireframe_always_front_list_.push_back(object);
+}
+
+BALL_INLINE
+list<GLObject*>& GLObjectCollector::getDynamicWireframeAlwaysFrontList()
+	throw()
+{
+  return dynamic_wireframe_always_front_list_;
+}
+
+BALL_INLINE
+const list<GLObject*>& GLObjectCollector::getDynamicWireframeAlwaysFrontList() const
+	throw()
+{
+  return dynamic_wireframe_always_front_list_;
 }
 
 BALL_INLINE

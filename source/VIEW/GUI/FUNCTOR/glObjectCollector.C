@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glObjectCollector.C,v 1.5 2002/12/18 18:34:43 anhi Exp $
+// $Id: glObjectCollector.C,v 1.6 2002/12/20 16:26:46 anhi Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h>
 
@@ -23,6 +23,8 @@ namespace BALL
 				static_wireframe_always_front_list_(),
 				dynamic_list_(),
 				dynamic_always_front_list_(),
+				dynamic_wireframe_list_(),
+				dynamic_wireframe_always_front_list_(),
 				transparent_list_(),
 				transparent_always_front_list_()
 		{
@@ -48,6 +50,8 @@ namespace BALL
 			static_wireframe_always_front_list_.clear();
 			dynamic_list_.clear();
 			dynamic_always_front_list_.clear();
+			dynamic_wireframe_list_.clear(),
+			dynamic_wireframe_always_front_list_.clear(),
 			transparent_list_.clear();
 			transparent_always_front_list_.clear();
 		}
@@ -75,13 +79,15 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG_PROCESSORS
 				cerr << "finished collect process ..." << endl;
 				cerr << "              static wireframe: " << static_wireframe_list_.size() << endl;
-				cerr << "static wireframe always front: " << static_wireframe_always_front_list_.size() << endl;
+				cerr << " static wireframe always front: " << static_wireframe_always_front_list_.size() << endl;
 				cerr << "                        static: " << static_list_.size() << endl;
-				cerr << "          static always front: " << static_always_front_list_.size() << endl;
+				cerr << "           static always front: " << static_always_front_list_.size() << endl;
 				cerr << "                       dynamic: " << dynamic_list_.size() << endl;
-				cerr << "         dynamic always front: " << dynamic_always_front_list_.size() << endl;
+				cerr << "          dynamic always front: " << dynamic_always_front_list_.size() << endl;
+				cerr << "             dynamic wireframe: " << dynamic_wireframe_list_.size() << endl;
+				cerr << "dynamic wireframe always front: " << dynamic_wireframe_always_front_list_.size() << endl;
 				cerr << "                   transparent: " << transparent_list_.size() << endl;
-				cerr << "     transparent always front: " << transparent_always_front_list_.size() << endl;
+				cerr << "      transparent always front: " << transparent_always_front_list_.size() << endl;
 			#endif
 
 			return true;
@@ -123,7 +129,6 @@ namespace BALL
 			if (   (geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC))
 					&& (geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC)) )
 			{
-//				Log.error() << "Property mismatch" << endl;
 				geometric_object->clearProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
 			}
 
@@ -131,8 +136,6 @@ namespace BALL
 			// (choice: static, static wireframe, transparent, static always front, transparent always front)
 			if (geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC))
 			{
-//				Log.info() << "static" << endl;
-//				Log.info() << geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) << endl;
 				if (geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_ALWAYS_FRONT)) // always front
 				{
 					// object transparent
@@ -199,24 +202,48 @@ namespace BALL
 			}
 
 			// dynamic objects
-			// (choice: dynamic, dynamic always front)
+			// (choice: dynamic, dynamic always front, wireframe)
 			if (geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC))
 			{
 				if (geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_ALWAYS_FRONT)) // always front
 				{
-          #ifdef BALL_VIEW_DEBUG_PROCESSORS
-					 cout << "collect dynamic always front " << endl;
-  				#endif
+					// dynamic wireframe
+					if (geometric_object->hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID) == false)
+					{
+						#ifdef BALL_VIEW_DEBUG_PROCESSORS
+					  	cout << "collect dynamic wireframe always front" << endl;
+					  #endif
 
-  				dynamic_always_front_list_.push_back(GL_object);
+						dynamic_wireframe_always_front_list_.push_back(GL_object);
+					}
+					else
+					{
+            #ifdef BALL_VIEW_DEBUG_PROCESSORS
+						  cout << "collect dynamic always front " << endl;
+  					#endif
+
+						dynamic_always_front_list_.push_back(GL_object);
+					}
+
 				}
 				else // z-Buffer enabled
 				{
-          #ifdef BALL_VIEW_DEBUG_PROCESSORS
-					 cout << "collect dynamic " << endl;
-  				#endif
+					if (geometric_object->hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID) == false)
+					{
+            #ifdef BALL_VIEW_DEBUG_PROCESSORS
+					    cout << "collect dynamic wireframe" << endl;
+					  #endif
 
-  				dynamic_list_.push_back(GL_object);
+						dynamic_wireframe_list_.push_back(GL_object);
+					}
+					else
+					{
+            #ifdef BALL_VIEW_DEBUG_PROCESSORS
+			  		  cout << "collect dynamic " << endl;
+  			  	#endif
+
+						dynamic_list_.push_back(GL_object);
+					}
 				}
 			}
 
@@ -246,6 +273,10 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth + 1);
 			s << "dynamic list: " 
 					 << dynamic_list_.size() << endl;
+
+			BALL_DUMP_DEPTH(s, depth + 1);
+			s << "dynamic wireframe list: " 
+					 << dynamic_wireframe_list_.size() << endl;
 
 			BALL_DUMP_DEPTH(s, depth + 1);
 			s << "transparent list: " 

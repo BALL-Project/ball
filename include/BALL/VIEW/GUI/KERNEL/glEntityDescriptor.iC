@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glEntityDescriptor.iC,v 1.7 2002/02/27 12:20:00 sturm Exp $
+// $Id: glEntityDescriptor.iC,v 1.8 2002/12/20 16:27:48 anhi Exp $
 
 BALL_INLINE 
 GLDisplayList* GLEntityDescriptor::getStaticDisplayList()
@@ -71,6 +71,34 @@ const GLDisplayList* GLEntityDescriptor::getDynamicDisplayList() const
   throw()
 {
   return &dynamic_display_list_;
+}
+
+BALL_INLINE 
+GLDisplayList* GLEntityDescriptor::getDynamicWireframeDisplayList()
+  throw()
+{
+  return &dynamic_wireframe_display_list_;
+}
+
+BALL_INLINE 
+const GLDisplayList* GLEntityDescriptor::getDynamicWireframeDisplayList() const
+  throw()
+{
+  return &dynamic_wireframe_display_list_;
+}
+
+BALL_INLINE 
+GLDisplayList* GLEntityDescriptor::getDynamicWireframeAlwaysFrontDisplayList()
+  throw()
+{
+  return &dynamic_wireframe_always_front_display_list_;
+}
+
+BALL_INLINE 
+const GLDisplayList* GLEntityDescriptor::getDynamicWireframeAlwaysFrontDisplayList() const
+  throw()
+{
+  return &dynamic_wireframe_always_front_display_list_;
 }
 
 BALL_INLINE 

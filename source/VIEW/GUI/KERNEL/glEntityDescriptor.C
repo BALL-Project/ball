@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glEntityDescriptor.C,v 1.7 2002/12/16 12:23:06 sturm Exp $
+// $Id: glEntityDescriptor.C,v 1.8 2002/12/20 16:26:47 anhi Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h>
 #include <BALL/COMMON/exception.h>
@@ -23,6 +23,8 @@ namespace BALL
 				static_wireframe_always_front_display_list_(),
 				dynamic_display_list_(),
 				dynamic_always_front_display_list_(),
+				dynamic_wireframe_display_list_(),
+				dynamic_wireframe_always_front_display_list_(),
 				transparent_display_list_(),
 				transparent_always_front_display_list_(),
 				update_(true)
@@ -50,6 +52,8 @@ namespace BALL
 			static_wireframe_always_front_display_list_.destroy();
 			dynamic_display_list_.destroy();
 			dynamic_always_front_display_list_.destroy();
+			dynamic_wireframe_display_list_.destroy();
+			dynamic_wireframe_always_front_display_list_.destroy();
 			transparent_display_list_.destroy();
 			transparent_always_front_display_list_.destroy();
 
@@ -70,6 +74,8 @@ namespace BALL
 										&& static_wireframe_always_front_display_list_.isValid()
 										&& dynamic_display_list_.isValid()
 										&& dynamic_always_front_display_list_.isValid()
+										&& dynamic_wireframe_display_list_.isValid()
+										&& dynamic_wireframe_always_front_display_list_.isValid()
 										&& transparent_display_list_.isValid()
 										&& transparent_always_front_display_list_.isValid());
 		}
@@ -89,6 +95,8 @@ namespace BALL
 			static_wireframe_always_front_display_list_.dump(s, depth + 1);
 			dynamic_display_list_.dump(s, depth + 1);
 			dynamic_always_front_display_list_.dump(s, depth + 1);
+			dynamic_wireframe_display_list_.dump(s, depth + 1);
+			dynamic_wireframe_always_front_display_list_.dump(s, depth + 1);
 			transparent_display_list_.dump(s, depth + 1);
 			transparent_always_front_display_list_.dump(s, depth + 1);
 			

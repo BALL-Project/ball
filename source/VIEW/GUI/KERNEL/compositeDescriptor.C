@@ -241,7 +241,6 @@ namespace BALL
 			glLoadIdentity();
 
 			list<GLObject*>::iterator it;
-
 			/* generating static display list */
 			entity->getStaticDisplayList()->startDefinition();
 
@@ -279,7 +278,9 @@ namespace BALL
 				(*it)->draw();
 			}
 
-			entity->getStaticWireframeAlwaysFrontDisplayList()->endDefinition();
+// ??? Probably a bug...
+//			entity->getStaticWireframeAlwaysFrontDisplayList()->endDefinition();
+			entity->getStaticWireframeDisplayList()->endDefinition();
 
 			/* generating static wireframe always front display list */
 			entity->getStaticWireframeAlwaysFrontDisplayList()->startDefinition();
@@ -296,7 +297,7 @@ namespace BALL
 
 			/* generating dynamic display list */
 			entity->getDynamicDisplayList()->startDefinition();
-			
+
 			for (it = object_collector_->getDynamicList().begin();
 					 it != object_collector_->getDynamicList().end(); 
 					 ++it)
@@ -319,6 +320,32 @@ namespace BALL
 			}
 			
 			entity->getDynamicAlwaysFrontDisplayList()->endDefinition();
+
+			/* generating dynamic wireframe display list */
+			entity->getDynamicWireframeDisplayList()->startDefinition();
+
+			for (it = object_collector_->getDynamicWireframeList().begin();
+					 it != object_collector_->getDynamicWireframeList().end(); 
+					 ++it)
+			{
+				(*it)->setGLPrimitiveManager(*primitive_manager_);
+				(*it)->draw();
+			}
+
+			entity->getDynamicWireframeDisplayList()->endDefinition();
+
+			/* generating dynamic wireframe always front display list */
+			entity->getDynamicWireframeAlwaysFrontDisplayList()->startDefinition();
+
+			for (it = object_collector_->getDynamicWireframeAlwaysFrontList().begin();
+					 it != object_collector_->getDynamicWireframeAlwaysFrontList().end(); 
+					 ++it)
+			{
+				(*it)->setGLPrimitiveManager(*primitive_manager_);
+				(*it)->draw();
+			}
+
+			entity->getDynamicWireframeAlwaysFrontDisplayList()->endDefinition();
 
 			/* generating transparent display list */
 			entity->getTransparentDisplayList()->startDefinition();
@@ -377,12 +404,12 @@ namespace BALL
 			{
 				compileEntity(entity);
 			}
-
 			// draw only dynamic objects
 			if (dynamic)
 			{
 				glDisable(GL_LIGHTING);
-
+				entity->getDynamicWireframeDisplayList()->draw();
+				glEnable(GL_LIGHTING);
 				entity->getDynamicDisplayList()->draw();
 
 				// always front objects
@@ -391,6 +418,14 @@ namespace BALL
 				glEnable(GL_DEPTH_TEST);
 
 				glEnable(GL_LIGHTING);
+				
+				// always front objects
+				glDisable(GL_DEPTH_TEST);
+				entity->getDynamicAlwaysFrontDisplayList()->draw();
+				glDisable(GL_LIGHTING);
+				entity->getDynamicWireframeAlwaysFrontDisplayList()->draw();
+				glEnable(GL_LIGHTING);
+				glEnable(GL_DEPTH_TEST);
 			}
 			else // draw static objects
 			{
@@ -403,7 +438,10 @@ namespace BALL
 				glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
 				/* make the depth buffer read only */
 				glDepthMask(GL_FALSE);
+				glCullFace(GL_BACK);
+				glEnable(GL_CULL_FACE);
 				entity->getTransparentDisplayList()->draw();
+				glDisable(GL_CULL_FACE);
 				/* restore to normal mode */
 				glDepthMask(GL_TRUE);
 				/* disable blenging */
@@ -420,7 +458,9 @@ namespace BALL
 				glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
 				/* make the depth buffer read only */
 				glDepthMask(GL_FALSE);
+				glEnable(GL_CULL_FACE);
 				entity->getTransparentAlwaysFrontDisplayList()->draw();
+				glDisable(GL_CULL_FACE);
 				/* restore to normal mode */
 				glDepthMask(GL_TRUE);
 				/* disable blenging */
@@ -483,6 +523,9 @@ namespace BALL
 			glBlendFunc(GL_SRC_ALPHA, GL_SRC_ALPHA);
 			// make the depth buffer read only 
 			glDepthMask(GL_FALSE);
+
+			glCullFace(GL_BACK);
+			glEnable(GL_CULL_FACE);
 									
 			// transparent objects
 			for (it  = object_collector_->getTransparentList().begin();
@@ -493,6 +536,8 @@ namespace BALL
 				(*it)->draw(with_names);
 			}
 			
+			glDisable(GL_CULL_FACE);
+
 			// restore to normal mode 
 			glDepthMask(GL_TRUE);
 			// disable blenging 
@@ -528,6 +573,9 @@ namespace BALL
 			// make the depth buffer read only 
 			glDepthMask(GL_FALSE);
 									
+			glCullFace(GL_BACK);
+			glEnable(GL_CULL_FACE);
+
 			// transparent objects
 			for (it  = object_collector_->getTransparentAlwaysFrontList().begin();
 					 it != object_collector_->getTransparentAlwaysFrontList().end();
@@ -536,6 +584,8 @@ namespace BALL
 				(*it)->setGLPrimitiveManager(*primitive_manager_);
 				(*it)->draw(with_names);
 			}
+			
+			glDisable(GL_CULL_FACE);
 			
 			// restore to normal mode 
 			glDepthMask(GL_TRUE);
@@ -547,14 +597,27 @@ namespace BALL
 
 		void CompositeDescriptor::drawDirectDynamic_(bool with_names)
 		{
-			glDisable(GL_LIGHTING);
+		//	glDisable(GL_LIGHTING);
 
 			object_collector_->setRootComposite(getComposite());
 			
 			getComposite()->apply(*object_collector_);
 							
+			glDisable(GL_LIGHTING);
+									
 			List<GLObject *>::Iterator it;
-			
+
+			// dynamic wireframe objects
+			for (it = object_collector_->getDynamicWireframeList().begin();
+					 it != object_collector_->getDynamicWireframeList().end();
+					 ++it)
+			{
+				(*it)->setGLPrimitiveManager(*primitive_manager_);
+				(*it)->draw(with_names);
+			}
+
+			glEnable(GL_LIGHTING);
+
 			// dynamic objects
 			for (it = object_collector_->getDynamicList().begin();
 					 it != object_collector_->getDynamicList().end();
@@ -576,8 +639,18 @@ namespace BALL
 				(*it)->draw(with_names);
 			}
 
-			glEnable(GL_DEPTH_TEST);	
+			glDisable(GL_LIGHTING);
+			// dynamic wireframe always front objects
+			for (it = object_collector_->getDynamicWireframeAlwaysFrontList().begin();
+					 it != object_collector_->getDynamicWireframeAlwaysFrontList().end();
+					 ++it)
+			{
+				(*it)->setGLPrimitiveManager(*primitive_manager_);
+				(*it)->draw(with_names);
+			}
 			glEnable(GL_LIGHTING);
+
+			glEnable(GL_DEPTH_TEST);	
 		}
 
 		bool CompositeDescriptor::isValid() const

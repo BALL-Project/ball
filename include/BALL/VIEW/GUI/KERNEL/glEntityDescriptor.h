@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glEntityDescriptor.h,v 1.12 2002/12/16 12:22:48 sturm Exp $
+// $Id: glEntityDescriptor.h,v 1.13 2002/12/20 16:27:48 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
@@ -43,7 +43,12 @@ namespace BALL
 								 moveable state
 					\item  {\bf dynamic always front display list} - this \Ref{GLDisplayList} stores the visualization 
 								 of an object in the moveable state that should be always in front of other objects
-					\item  {\bf transparent display list} - this \Ref{GLDisplayList} stores the visualization of 
+	  			\item  {\bf dynamic wireframe display list} - this \Ref{GLDisplayList} stores the 
+					 			 visualization of an object in the moveable state that should be drawn as wireframe
+	  			\item  {\bf dynamic wireframe always front display list} - this \Ref{GLDisplayList} stores the 
+					 			 visualization of an object in the moveable state that should be drawn as wireframe and should be always
+								 in front of other objects
+				  \item  {\bf transparent display list} - this \Ref{GLDisplayList} stores the visualization of 
 								 an object in the moveable state that should be drawn transparent
 					\item  {\bf transparent always front display list} - this \Ref{GLDisplayList} stores the visualization
 								 of an object in the moveable state that should be drawn transparent and should be always in front 
@@ -206,6 +211,39 @@ namespace BALL
 			const GLDisplayList* getDynamicAlwaysFrontDisplayList() const
 				throw();
 
+			/** Mutable inspection of the dynamic wireframe display list.
+					Access the mutable pointer of the dynamic wireframe display
+					list of	{\em *this} glEntityDescriptor. This method will be 
+					called internally by \Ref{CompositeDescriptor}.
+					@return      GLDisplayList* mutable pointer to the dynamic wireframe display list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
+			*/
+			GLDisplayList* getDynamicWireframeDisplayList()
+				throw();
+
+			/** Non-mutable inspection of the dynamic wireframe display list.
+					For further information see \Ref{getDynamicWireframeDisplayList}.
+			*/
+			const GLDisplayList* getDynamicWireframeDisplayList() const
+				throw();
+			
+			/** Mutable inspection of the dynamic wireframe always front display list.
+					Access the mutable pointer of the dynamic wireframe always front display
+					list of	{\em *this} glEntityDescriptor. This method will be 
+					called internally by \Ref{CompositeDescriptor}.
+					@return      GLDisplayList* mutable pointer to the dynamic wireframe always front display 
+												list of {\em *this} glEntityDescriptor
+					@see         GLDisplayList
+			*/
+			GLDisplayList* getDynamicWireframeAlwaysFrontDisplayList()
+				throw();
+
+			/** Non-mutable inspection of the dynamic wireframe always front display list.
+					For further information see \Ref{getDynamicWireframeAlwaysFrontDisplayList}.
+			*/
+			const GLDisplayList* getDynamicWireframeAlwaysFrontDisplayList() const
+				throw();
+
 			/** Mutable inspection of the transparent display list.
 					Access the mutable pointer of the transparent display
 					list of	{\em *this} glEntityDescriptor. This method will be 
@@ -313,6 +351,8 @@ namespace BALL
 			GLDisplayList static_wireframe_always_front_display_list_;
 			GLDisplayList dynamic_display_list_;
 			GLDisplayList dynamic_always_front_display_list_;
+			GLDisplayList dynamic_wireframe_display_list_;
+			GLDisplayList dynamic_wireframe_always_front_display_list_;
 			GLDisplayList transparent_display_list_;
 			GLDisplayList transparent_always_front_display_list_;
 
