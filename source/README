@@ -1,0 +1,45 @@
+
+                    BALL  -  Biochemical ALgorithm Library
+                    --------------------------------------
+                        alpha release 0.9a - 17.01.2000
+------------------------------------------------------------------------------
+    (N.P. Boghossian, H. Klein, O. Kohlbacher, H.-P. Lenhof, P. Mueller)		
+	
+
+To install BALL it should be sufficient to typed the following
+commands:
+ 
+   ./configure                 - to determine your setup
+
+   make                        - to build the library
+
+   make install                - to install the library under BALL/lib
+
+	 export LD_LIBRARY_PATH=...  - set the library search path (sh-like shells)
+or setenv LD_LIBRARY_PATH ...                                (csh-like shells)
+
+   make test                   - to build and run the library test suite
+                                 (not required, but recommended)
+
+   make molview                - to build the stand-alone molecule viewer
+                                 (only if you had OpenGL/Mesa and QT installed)
+
+The configuration of the visualization component BALLVIEW is a bit tricky
+since it requires OpenGL (or Mesa) and QT to be installed.
+The details of your local installation have to be passed to configure as
+command line arguments. A list of these arguments can be obtained by 
+calling configure with --help. Please refer to the file INSTALLATION for more 
+detailled instructions.
+
+After building the libraries, please remember to set the shared library search
+path (environment variable LD_LIBRARY_PATH) to the location of the libraries
+(this location is printed after the execution of make install).
+
+Please remember: this is an ALPHA release! Help us to improve the quality
+of this library by sending all the problems you ran into, all criticism,
+encouragements, improvements, bug reports, and wishes for further 
+functionality to 
+  
+  BALL@mpi-sb.mpg.de
+
+Have fun!
