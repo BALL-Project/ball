@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.9 2000/08/05 23:58:34 amoll Exp $
+// $Id: binarySearchTree.h,v 1.10 2000/08/06 15:27:52 amoll Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -397,21 +397,31 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/**	Set the nodes data.
 		*/
-		const DataType& getData() const
+		void setData(const DataType& data)
+		{
+			data_ = data;
+		}
+
+		/**	Return the nodes data.
+				@return the item's data
+		*/
+		DataType getData() const
 		{
 			return data_;
 		}
 
-		/**
+		/**	Return the left child.
+				@return the item's left child item
 		*/
 		TBSTreeItem*& getLeftChild()
 		{
 			return (TBSTreeItem*&)left_;
 		}
 		
-		/**
+		/**	Return the right child.
+				@return the item's right child item
 		*/
 		TBSTreeItem*& getRightChild()
 		{
@@ -422,9 +432,14 @@ namespace BALL
 		*/
 		Size count(const DataType& data, const Comparator<DataType>* comparator) const
 		{
+			if (comparator == 0)
+			{
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			}
+
 			const TBSTreeItem* item = this;
 			Size size = 0;
-			
+
 			while(item) 
 			{
 				if (comparator->isEqual(item->data_, data) == true)
@@ -519,18 +534,11 @@ namespace BALL
 		}
 		//@}
 
-		/**	@name	Attributes
-		*/
-		//@{
-		
-		/**	The node data.
-		*/
-		DataType data_;
-		//@}
-
 		private:
 
-		class TreeItemProcessor_
+		DataType data_;
+
+		friend class TreeItemProcessor_
 			: public UnaryProcessor<BSTreeItem>
 		{
 			public:
