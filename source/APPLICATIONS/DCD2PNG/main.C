@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.16 2004/12/13 13:38:41 amoll Exp $
+// $Id: main.C,v 1.17 2004/12/13 13:41:30 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -24,7 +24,7 @@ using namespace BALL::VIEW;
 void showUsage()
 {
  	Log.insert(std::cerr);
-	Log.error() << "DCD2PNG <DCDFILE.dcd> <BALLViewProject.bvp | molecular_file.[pdb|hin]> <DCD2PNG.ini>" << std::endl;
+	Log.error() << "DCD2PNG DCDFILE.dcd  file.[bvp|pdb|hin]  [DCD2PNG.ini]" << std::endl;
 	Log.error() << "Read a BALLView project or a molecular file format and create PNG images from it by using POVRay." << std::endl;
  	Log.remove(std::cerr);
 }
