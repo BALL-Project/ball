@@ -1,4 +1,4 @@
-// $Id: radialDistributionFunction.C,v 1.4 2000/09/24 13:29:31 oliver Exp $
+// $Id: radialDistributionFunction.C,v 1.5 2000/09/25 11:19:21 anker Exp $
 
 #include <BALL/STRUCTURE/radialDistributionFunction.h>
 
@@ -102,7 +102,7 @@ namespace BALL
 	
 	void RadialDistributionFunction::dump(ostream& stream, Size /* depth */) const
 	{
-		representation_.dump();
+		representation_.dump(stream);
 	}
 
 } // namespace BALL

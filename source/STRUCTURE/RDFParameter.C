@@ -1,4 +1,4 @@
-// $Id: RDFParameter.C,v 1.3 2000/09/21 13:28:54 anker Exp $
+// $Id: RDFParameter.C,v 1.4 2000/09/25 11:19:21 anker Exp $
 
 #include <BALL/STRUCTURE/RDFParameter.h>
 #include <BALL/STRUCTURE/RDFSection.h>
@@ -86,7 +86,16 @@ namespace BALL
 
 	const RadialDistributionFunction& RDFParameter::getRDF(Position index) const
 	{
-		return rdf_list_[index];
+		if (index < rdf_list_.size())
+		{
+			return rdf_list_[index];
+		}
+		else
+		{
+			Log.error() << "RDFParameter::getRDF(): "
+				<< "Index out of range." <<endl;
+			return RTTI::getDefault<RadialDistributionFunction>();
+		}
 	}
 
 
@@ -102,12 +111,19 @@ namespace BALL
 			}
 			else
 			{
-				// BAUSTELLE
+				Log.error() << "RDFParameter::getRDF(): "
+					<< "RDf for type combination  (" << type_i << "," << type_j 
+					<< ") could not be found." << endl 
+					<< "Something went terribly wrong." << endl;
+				return RTTI::getDefault<RadialDistributionFunction>();
 			}
 		}
 		else
 		{
-			// BAUSTELLE
+			Log.error() << "RDFParameter::getRDF(): "
+				<< "no RDf defined for type combination  (" << type_i << "," 
+				<< type_j << ")" << endl;
+			return RTTI::getDefault<RadialDistributionFunction>();
 		}
 	}
 
