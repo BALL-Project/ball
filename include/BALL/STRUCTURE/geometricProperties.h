@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.4 2000/01/10 15:51:07 oliver Exp $
+// $Id: geometricProperties.h,v 1.5 2000/02/16 19:15:15 oliver Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -103,9 +103,9 @@ namespace BALL
 			This processor calculates the geometric center of the atom coordinates
 			of a given molecular object.\\
 			The geometric center is calculated as follows:\\
-			\begin{equation}\nonumber
+			\[
 				\vec{C} = \frac{1}{N} \sum_{i}{N} \vec{r_i}
-			\end{equation}\\
+			\]
 			Where $\vec{r_i}$ represents the coordinates of the ith atom.\\
 			{\bf Definition:} \URL{BALL/STRUCTURE/geometricProperties.h}
 			\\

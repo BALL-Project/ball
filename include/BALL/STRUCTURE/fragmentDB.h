@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.5 2000/01/14 20:41:56 oliver Exp $
+// $Id: fragmentDB.h,v 1.6 2000/02/16 19:15:14 oliver Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -405,12 +405,16 @@ namespace BALL
 			virtual Processor::Result operator()(Fragment&);
 			//@}
 		
-			/** @name other functions*/
+			/** @name Accessors
+			*/
 			//@{
 			
 			/**returns number of recently inserted hydrogens*/
-			unsigned long getNumberOfInsertedH();
+			Size getNumberOfInsertedH();
 
+			/**	Set the fragment database
+			*/
+			void setFragmentDB(const FragmentDB& fragment_db);
 			//@}
 			
 		
@@ -423,7 +427,7 @@ namespace BALL
 			const FragmentDB*	fragment_db_;
 			
 			/*_ Counts recently inserted hydrogens*/
-			unsigned long			count_h_;
+			Size			count_h_;
 			
 			/*_ saves shortnames of the aminoacids*/
 			vector<String>		template_names_;
@@ -557,6 +561,10 @@ namespace BALL
 			/**	Return the number of bonds built during the last application.
 			*/
 			Size getNumberOfBondsBuilt();
+
+			/**	Set the fragment database
+			*/
+			void setFragmentDB(const FragmentDB& fragment_db);
 			//@}
 			
 			/**	@name	Bond building methods */
@@ -605,15 +613,15 @@ namespace BALL
 
 		/**	The standard name normalization processor
 		*/
-		NormalizeNamesProcessor*	normalizeNames;
+		NormalizeNamesProcessor		normalize_names;
 
 		/**	The standard hydrogen adder
 		*/
-		AddHydrogensProcessor*		addHydrogens;
+		AddHydrogensProcessor			add_hydrogens;
 
 		/**	The standard bond builder
 		*/
-		BuildBondsProcessor*			buildBonds;
+		BuildBondsProcessor				build_bonds;
 
 		/**	The resource tree read from the database file
 		*/
