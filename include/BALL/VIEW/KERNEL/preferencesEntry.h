@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.h,v 1.2 2004/09/28 17:35:52 amoll Exp $
+// $Id: preferencesEntry.h,v 1.3 2004/09/28 22:46:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_PREFERENCES_ENTRY
@@ -16,6 +16,7 @@
 #endif
 
 class QWidget;
+class QLabel;
 
 namespace BALL
 {
@@ -23,6 +24,7 @@ namespace BALL
 
 	namespace VIEW
 	{
+		class ColorRGBA;
 
 		/**
 		 */
@@ -58,12 +60,20 @@ namespace BALL
 
 			protected:
 
-			///
+			//_
 			void registerObject_(QWidget* widget);
 
-			String 					inifile_section_name_;
-			HashSet<QWidget*> 	preferences_objects_;
+			//_
+			void setLabelColor_(QLabel* label, const ColorRGBA& color);
+			
+			//_
+			ColorRGBA getLabelColor_(QLabel* label) const;
+			
+			//_
+			void chooseColor_(QLabel* label);
 
+			String 							inifile_section_name_;
+			HashSet<QWidget*> 	preferences_objects_;
 		};
   
 	} // namespace VIEW

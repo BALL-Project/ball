@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.16 2004/09/10 15:28:58 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.17 2004/09/28 22:46:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -9,17 +9,17 @@
 
 #include <BALL/VIEW/UIC/coloringSettingsDialogData.h>
 
-#ifndef BALL_DATATYPE_STRING_H
- #include <BALL/DATATYPE/string.h>
-#endif
-
-#ifndef BALL_VIEW_DATATYPE_COLORGBA_H
- #include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#ifndef BALL_VIEW_KERNEL_PREFERENCESENTRY
+# include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif
+
+#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
+# include <BALL/VIEW/DATATYPE/colorRGBA.h>
+#endif 
 
 #include <qtable.h>
 #include <vector>
@@ -79,7 +79,7 @@ namespace BALL
 			private:
 				vector<ColorRGBA> colors_;
 				vector<String>    names_;
-				bool setting_content_;
+				bool 							setting_content_;
 		};
 
 
@@ -88,7 +88,8 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class ColoringSettingsDialog 
-			: public ColoringSettingsDialogData
+			: public ColoringSettingsDialogData,
+				public PreferencesEntry
 		{ 
 			Q_OBJECT
 
@@ -101,12 +102,10 @@ namespace BALL
 			~ColoringSettingsDialog() {}
 
 			///
-			void writePreferences(INIFile& file)
-				throw();
+			void writePreferenceEntries(INIFile& inifile);
 
 			///
-			void fetchPreferences(const INIFile& file)
-				throw();
+			void readPreferenceEntries(const INIFile& inifile);
 
 			/// 
 			virtual void setDefaults(bool all = true)
@@ -171,45 +170,11 @@ namespace BALL
 
 			protected:
 
-			void setNewColor_(QLabel* label, ColorRGBA& to)
-				throw();
-
-			void setColorToLabel_(QLabel* label, const ColorRGBA& color)
-				throw();
-
-			void setLabelColorsFromValues_()
-				throw();
-
-			bool fetchPreference_(const INIFile& inifile, const String& entry, ColorRGBA& color)
-				throw();
-
-			void writePreference_(INIFile& inifile, const String& entry, 
-														const ColorRGBA& color) const
-				throw();
+      bool fetchPreference_(const INIFile& inifile, const String& entry, ColorRGBA& color)
+				        throw();
 
 			QColorTable* element_table_;
 			QColorTable* residue_table_;
-
-			ColorRGBA minimum_occupancy_color_,
-								middle_residue_color_,
-								last_residue_color_,
-								negative_charge_color_,
-								neutral_charge_color_,
-								positive_charge_color_,
-								null_distance_color_,
-								max_distance_color_,
-								minimum_tf_color_,
-								maximum_tf_color_,
-								unassigned_tf_color_,
-								maximum_occupancy_color_,
-								unassigned_occupancy_color_,
-								first_residue_color_,
-								helix_color_,
-								coil_color_,
-								strand_color_,
-								turn_color_,
-								force_min_color_,
-								force_max_color_;
 		};
 
 } }

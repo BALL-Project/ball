@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferencesEntry.C,v 1.3 2004/09/28 21:41:05 amoll Exp $
+// $Id: preferencesEntry.C,v 1.4 2004/09/28 22:47:17 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/preferencesEntry.h>
@@ -11,7 +11,9 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
+#include <qtextedit.h>
 #include <qbuttongroup.h>
+#include <qcolordialog.h>
 
 using namespace std;
 
@@ -49,16 +51,11 @@ void PreferencesEntry::writePreferenceEntries(INIFile& inifile)
 		}
 		else if (RTTI::isKindOf<QLabel>(**it))
 		{
-			// differ between colored and non colored labels
-			QLabel* label = (QLabel*) *it;
-			if (label->text() == "")
-			{
-				inifile.insertValue(inifile_section_name_, name, ColorRGBA(label->backgroundColor()));
-			}
-			else
-			{
-				inifile.insertValue(inifile_section_name_, name, String(label->text().ascii()));
-			}
+			inifile.insertValue(inifile_section_name_, name, getLabelColor_((QLabel*)*it));
+		}
+		else if (RTTI::isKindOf<QTextEdit>(**it))
+		{
+			inifile.insertValue(inifile_section_name_, name, ((QTextEdit*)(*it))->text().ascii());
 		}
 		else if (RTTI::isKindOf<QCheckBox>(**it))
 		{
@@ -100,16 +97,11 @@ void PreferencesEntry::readPreferenceEntries(const INIFile& inifile)
 			}
 			else if (RTTI::isKindOf<QLabel>(**it))
 			{
-				// differ between colored and non colored labels
-				QLabel* label = (QLabel*) *it;
-				if (String((**it).name()).hasSuffix("_color"))
-				{
-					label->setBackgroundColor(ColorRGBA(value).getQColor());
-				}
-				else
-				{
-					label->setText(value);
-				}
+				setLabelColor_((QLabel*)*it, ColorRGBA(value));
+			}
+			else if (RTTI::isKindOf<QTextEdit>(**it))
+			{
+				((QTextEdit*)(*it))->setText(value);
 			}
 			else if (RTTI::isKindOf<QCheckBox>(**it))
 			{
@@ -155,6 +147,25 @@ void PreferencesEntry::registerObject_(QWidget* widget)
 
 	preferences_objects_.insert(widget);
 }
+
+void PreferencesEntry::setLabelColor_(QLabel* label, const ColorRGBA& color)
+{
+	label->setBackgroundColor(color.getQColor());
+}
+
+ColorRGBA PreferencesEntry::getLabelColor_(QLabel* label) const
+{
+	return ColorRGBA(label->backgroundColor());
+}
+
+void PreferencesEntry::chooseColor_(QLabel* label)
+{
+	QColor qcolor = QColorDialog::getColor(label->backgroundColor());
+	if (!qcolor.isValid()) return;
+
+	label->setBackgroundColor(qcolor);
+}
+
 
 	} // namespace VIEW
 } // namespace BALL

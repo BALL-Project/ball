@@ -13,7 +13,7 @@
 #include <qwidgetstack.h>
 #include <qcheckbox.h>
 
-#include <qpoint.h>
+//#include < qpoint.h>
 namespace BALL
 {
 	namespace VIEW
@@ -97,93 +97,73 @@ QWidget* QColorTable::beginEdit(int row, int col, bool)
 				
 // =========================================================================================
 ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* name, WFlags fl )
-    : ColoringSettingsDialogData( parent, name, fl )
+	: ColoringSettingsDialogData(parent, name, fl),
+		PreferencesEntry()
 {
+	setINIFileSectionName("COLORING_OPTIONS");
+
 	element_table_ = new QColorTable(widget_stack->widget(0));
 	residue_table_ = new QColorTable(widget_stack->widget(2));
 	setDefaults();
+
+	registerObject_(first_residue_label);
+	registerObject_(middle_residue_label);
+	registerObject_(last_residue_label);
+	
+	registerObject_(negative_charge_label);
+	registerObject_(neutral_charge_label);
+	registerObject_(positive_charge_label);
+
+	registerObject_(null_distance_label);
+	registerObject_(max_distance_label);
+	registerObject_(max_distance_slider);
+	registerObject_(distance_show_selected);
+
+	registerObject_(minimum_tf_label);
+	registerObject_(maximum_tf_label);
+	registerObject_(unassigned_tf_label);
+	registerObject_(max_tf_slider);
+
+	registerObject_(minimum_o_label);
+	registerObject_(unassigned_o_label);
+	registerObject_(maximum_o_label);
+
+	registerObject_(helix_color_label);
+	registerObject_(coil_color_label);
+	registerObject_(strand_color_label);
+	registerObject_(turn_color_label);
+
+	registerObject_(force_max_color_label);
+	registerObject_(force_min_color_label);
+	registerObject_(force_max_value_slider);
+	registerObject_(force_min_value_slider);
 }
 
-void ColoringSettingsDialog::writePreferences(INIFile& file)
-	throw()
+void ColoringSettingsDialog::writePreferenceEntries(INIFile& inifile)
 {
-	file.appendSection("COLORING_OPTIONS");
-	writePreference_(file, "minimum_occupancy_color", minimum_occupancy_color_);
-	writePreference_(file, "middle_residue_color", middle_residue_color_);
-	writePreference_(file, "last_residue_color", last_residue_color_);
-	writePreference_(file, "negative_charge_color", negative_charge_color_);
-	writePreference_(file, "neutral_charge_color", neutral_charge_color_);
-	writePreference_(file, "positive_charge_color", positive_charge_color_);
-	writePreference_(file, "null_distance_color", null_distance_color_);
-	writePreference_(file, "max_distance_color", max_distance_color_);
-	writePreference_(file, "minimum_tf_color", minimum_tf_color_);
-	writePreference_(file, "maximum_tf_color", maximum_tf_color_);
-	writePreference_(file, "unassigned_tf_color", unassigned_tf_color_);
-	writePreference_(file, "maximum_occupancy_color", maximum_occupancy_color_);
-	writePreference_(file, "unassigned_occupancy_color", unassigned_occupancy_color_);
-	writePreference_(file, "first_residue_color", first_residue_color_);
-	writePreference_(file, "helix_color", helix_color_);
-	writePreference_(file, "coil_color", coil_color_);
-	writePreference_(file, "strand_color", strand_color_);
-	writePreference_(file, "turn_color", turn_color_);
-	writePreference_(file, "force_min_color", force_min_color_);
-	writePreference_(file, "force_max_color", force_max_color_);
+	PreferencesEntry::writePreferenceEntries(inifile);
 
 	for (Position p = 0; p < element_table_->getColors().size(); p ++)
 	{
-		writePreference_(file, String(p).c_str(), element_table_->getColors()[p]);
+		inifile.insertValue(inifile_section_name_, String(p).c_str(), element_table_->getColors()[p]);
 	}
 
 	for (Position p = 0; p < residue_table_->getColors().size(); p ++)
 	{
-		writePreference_(file, residue_table_->getNames()[p].c_str(), 
+		inifile.insertValue(inifile_section_name_, residue_table_->getNames()[p].c_str(), 
 										 residue_table_->getColors()[p]);
 	}
-
-	file.insertValue("COLORING_OPTIONS", "max_distance", 
-			String((float)max_distance_slider->value() / 10.0).c_str() );
-	file.insertValue("COLORING_OPTIONS", "max_tf", 
-			String((float)max_tf_slider->value() / 10.0).c_str());
-	file.insertValue("COLORING_OPTIONS", "force_max_value", 
-			String((float)force_max_value_slider->value() / 10.0).c_str());
-	file.insertValue("COLORING_OPTIONS", "force_min_value", 
-			String((float)force_min_value_slider->value() / 10.0).c_str());
 }
 
-void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
-	throw()
+void ColoringSettingsDialog::readPreferenceEntries(const INIFile& inifile)
 {
-	if (!file.hasSection("COLORING_OPTIONS"))
-	{
-		return;
-	}
-
-	fetchPreference_(file, "minimum_occupancy_color", minimum_occupancy_color_);
-	fetchPreference_(file, "middle_residue_color", middle_residue_color_);
-	fetchPreference_(file, "last_residue_color", last_residue_color_);
-	fetchPreference_(file, "negative_charge_color", negative_charge_color_);
-	fetchPreference_(file, "neutral_charge_color", neutral_charge_color_);
-	fetchPreference_(file, "positive_charge_color", positive_charge_color_);
-	fetchPreference_(file, "null_distance_color", null_distance_color_);
-	fetchPreference_(file, "max_distance_color", max_distance_color_);
-	fetchPreference_(file, "minimum_tf_color", minimum_tf_color_);
-	fetchPreference_(file, "maximum_tf_color", maximum_tf_color_);
-	fetchPreference_(file, "unassigned_tf_color", unassigned_tf_color_);
-	fetchPreference_(file, "maximum_occupancy_color", maximum_occupancy_color_);
-	fetchPreference_(file, "unassigned_occupancy_color", unassigned_occupancy_color_);
-	fetchPreference_(file, "first_residue_color", first_residue_color_);
-	fetchPreference_(file, "helix_color", helix_color_);
-	fetchPreference_(file, "coil_color", coil_color_);
-	fetchPreference_(file, "strand_color", strand_color_);
-	fetchPreference_(file, "turn_color", turn_color_);
-	fetchPreference_(file, "force_max_color", force_max_color_);
-	fetchPreference_(file, "force_min_color", force_min_color_);
+	PreferencesEntry::readPreferenceEntries(inifile);
 
 	vector<ColorRGBA> colors;
 	for (Position p = 0; p < 112; p ++)
 	{
 		ColorRGBA color;
-		if (!fetchPreference_(file, String(p), color)) break;
+		if (!fetchPreference_(inifile, String(p), color)) break;
 		colors.push_back(color);
 	}
 	if (colors.size() == element_table_->getNames().size())
@@ -195,37 +175,13 @@ void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
 	for (Position p = 0; p < residue_table_->getColors().size(); p ++)
 	{
 		ColorRGBA color;
-		if (!fetchPreference_(file, residue_table_->getNames()[p], color)) break;
+		if (!fetchPreference_(inifile, residue_table_->getNames()[p], color)) break;
 		colors.push_back(color);
 	}
 	if (colors.size() == residue_table_->getColors().size())
 	{
 		residue_table_->setColors(colors);
 	}
-	
-	
-	if (file.hasEntry("COLORING_OPTIONS", "max_distance")) 
-	{
-		max_distance_slider->setValue((Size)(file.getValue("COLORING_OPTIONS", "max_distance").toFloat() * 10.0));
-	}
-
-	if (file.hasEntry("COLORING_OPTIONS", "max_tf")) 
-	{
-		max_tf_slider->setValue((Size)(file.getValue("COLORING_OPTIONS", "max_tf").toFloat() * 10.0));
-	}
-
-	if (file.hasEntry("COLORING_OPTIONS", "force_max_value")) 
-	{
-		force_max_value_slider->setValue((Size)(file.getValue("COLORING_OPTIONS", "force_max_value").toFloat() * 10.0));
-	}
-
-	if (file.hasEntry("COLORING_OPTIONS", "force_min_value")) 
-	{
-		force_min_value_slider->setValue((Size)(file.getValue("COLORING_OPTIONS", "force_min_value").toFloat() * 10.0));
-	}
-
-
-	setLabelColorsFromValues_();
 }
 
 void ColoringSettingsDialog::setDefaults(bool all)
@@ -326,10 +282,6 @@ void ColoringSettingsDialog::setDefaults(bool all)
 		ForceColorProcessor dummy;
 		getSettings(dummy);
 	}
-
-
-	// =============================================================
-	setLabelColorsFromValues_();
 }
 
 vector<ColorRGBA> ColoringSettingsDialog::getElementColors() const
@@ -389,26 +341,26 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 	if (RTTI::isKindOf<ResidueNumberColorProcessor>(cp))
 	{
 		ResidueNumberColorProcessor& dp = (*(ResidueNumberColorProcessor*)&cp);
-		dp.setFirstColor(first_residue_color_);
-		dp.setMiddleColor(middle_residue_color_);
-		dp.setLastColor(last_residue_color_);
+		dp.setFirstColor(getLabelColor_(first_residue_label));
+		dp.setMiddleColor(getLabelColor_(middle_residue_label));
+		dp.setLastColor(getLabelColor_(last_residue_label));
 		return;
 	}
 
 	if (RTTI::isKindOf<AtomChargeColorProcessor>(cp))
 	{
 		AtomChargeColorProcessor& dp = (*(AtomChargeColorProcessor*)&cp);
-		dp.setPositiveColor(positive_charge_color_);
-		dp.setNegativeColor(negative_charge_color_);
-		dp.setNeutralColor(neutral_charge_color_);
+		dp.setPositiveColor(getLabelColor_(positive_charge_label));
+		dp.setNegativeColor(getLabelColor_(negative_charge_label));
+		dp.setNeutralColor(getLabelColor_(neutral_charge_label));
 		return;
 	}
 
 	if (RTTI::isKindOf<AtomDistanceColorProcessor>(cp))
 	{
 		AtomDistanceColorProcessor& dp = (*(AtomDistanceColorProcessor*)&cp);
-		dp.setNullDistanceColor(null_distance_color_);
-		dp.setMaxDistanceColor(max_distance_color_);
+		dp.setNullDistanceColor(getLabelColor_(null_distance_label));
+		dp.setMaxDistanceColor(getLabelColor_(max_distance_label));
 		dp.setDistance(((float)max_distance_slider->value()) / 10.0);
 		dp.setShowSelected(distance_show_selected->isChecked());
 		return;
@@ -417,8 +369,8 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 	if (RTTI::isKindOf<OccupancyColorProcessor>(cp))
 	{
 		OccupancyColorProcessor& dp = (*(OccupancyColorProcessor*)&cp);
-		dp.setMinColor(minimum_occupancy_color_);
-		dp.setMaxColor(maximum_occupancy_color_);
+		dp.setMinColor(getLabelColor_(minimum_o_label));
+		dp.setMaxColor(getLabelColor_(maximum_o_label));
 		return;
 	}
 
@@ -426,10 +378,10 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 	{
 		SecondaryStructureColorProcessor& dp = (*(SecondaryStructureColorProcessor*)&cp);
 
-		dp.setHelixColor(helix_color_);
-		dp.setCoilColor(coil_color_);
-		dp.setStrandColor(strand_color_);
-		dp.setTurnColor(turn_color_);
+		dp.setHelixColor(getLabelColor_(helix_color_label));
+		dp.setCoilColor(getLabelColor_(coil_color_label));
+		dp.setStrandColor(getLabelColor_(strand_color_label));
+		dp.setTurnColor(getLabelColor_(turn_color_label));
 
 		return;
 	}
@@ -437,10 +389,10 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 	if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
 	{
 		TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
-		dp.setMinMinColor(unassigned_tf_color_);
-		dp.setMinColor(minimum_tf_color_);
-		dp.setMaxColor(maximum_tf_color_);
-		dp.setMaxMaxColor(unassigned_tf_color_);
+		dp.setMinMinColor(getLabelColor_(unassigned_tf_label));
+		dp.setMinColor(getLabelColor_(minimum_tf_label));
+		dp.setMaxColor(getLabelColor_(maximum_tf_label));
+		dp.setMaxMaxColor(getLabelColor_(unassigned_tf_label));
 		dp.setMaxValue(((float)max_tf_slider->value()) / 10.0);
 		return;
 	}
@@ -448,8 +400,8 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 	if (RTTI::isKindOf<ForceColorProcessor>(cp))
 	{
 		ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
-		dp.setMinColor(force_min_color_);
-		dp.setMaxColor(force_max_color_);
+		dp.setMinColor(getLabelColor_(force_min_color_label));
+		dp.setMaxColor(getLabelColor_(force_max_color_label));
 		dp.setMaxValue(((float)force_max_value_slider->value()) / 10.0);
 		dp.setMinValue(((float)force_min_value_slider->value()) / 10.0);
 		return;
@@ -457,115 +409,104 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 }
 	
 
-void ColoringSettingsDialog::setNewColor_(QLabel* label, ColorRGBA& to)
-	throw()
-{
-	QColor qcolor = QColorDialog::getColor(label->backgroundColor());
-	if (!qcolor.isValid()) return;
-
-	label->setBackgroundColor(qcolor);
-	to.set(qcolor);
-	update();
-}
-
 void ColoringSettingsDialog::minimumOccupancyColorPressed()
 {
-	setNewColor_(minimum_o_label, minimum_occupancy_color_);
+	chooseColor_(minimum_o_label);
 }
 	
 void ColoringSettingsDialog::middleResidueColorPressed()
 {
-	setNewColor_(middle_residue_label, middle_residue_color_);
+	chooseColor_(middle_residue_label);
 }
 	
 void ColoringSettingsDialog::lastResidueColorPressed()
 {
-	setNewColor_(last_residue_label, last_residue_color_);
+	chooseColor_(last_residue_label);
 }
 	
 void ColoringSettingsDialog::negativeChargeColorPressed()
 {
-	setNewColor_(negative_charge_label, negative_charge_color_);
+	chooseColor_(negative_charge_label);
 }
 	
 void ColoringSettingsDialog::neutralChargeColorPressed()
 {
-	setNewColor_(neutral_charge_label, neutral_charge_color_);
+	chooseColor_(neutral_charge_label);
 }
 	
 void ColoringSettingsDialog::positiveChargeColorPressed()
 {
-	setNewColor_(positive_charge_label, positive_charge_color_);
+	chooseColor_(positive_charge_label);
 }
 	
 void ColoringSettingsDialog::nullDistanceColorPressed()
 {
-	setNewColor_(null_distance_label, null_distance_color_);
+	chooseColor_(null_distance_label);
 }
 	
 void ColoringSettingsDialog::maxDistanceColorPressed()
 {
-	setNewColor_(max_distance_label, max_distance_color_);
+	chooseColor_(max_distance_label);
 }
 
 void ColoringSettingsDialog::minimumTFColorPressed()
 {
-	setNewColor_(minimum_tf_label, minimum_tf_color_);
+	chooseColor_(minimum_tf_label);
 }
 	
 void ColoringSettingsDialog::maximumTFColorPressed()
 {
-	setNewColor_(maximum_tf_label, maximum_tf_color_);
+	chooseColor_(maximum_tf_label);
 }
 	
 void ColoringSettingsDialog::unassignedTFColorPressed()
 {
-	setNewColor_(unassigned_tf_label, unassigned_tf_color_);
+	chooseColor_(unassigned_tf_label);
 }
 	
 void ColoringSettingsDialog::maximumOccupancyColorPressed()
 {
-	setNewColor_(maximum_o_label, maximum_occupancy_color_);
+	chooseColor_(maximum_o_label);
 }
 	
 void ColoringSettingsDialog::unassignedOccupancyColorPressed()
 {
-	setNewColor_(unassigned_o_label, unassigned_occupancy_color_);
+	chooseColor_(unassigned_o_label);
 }
 
 void ColoringSettingsDialog::firstResidueColorPressed()
 {
-	setNewColor_(first_residue_label, first_residue_color_);
+	chooseColor_(first_residue_label);
 }
 
 void ColoringSettingsDialog::helixColorPressed()
 {
-	setNewColor_(helix_color_label, helix_color_);
+	chooseColor_(helix_color_label);
 }
 
 void ColoringSettingsDialog::turnColorPressed()
 {
-	setNewColor_(turn_color_label, turn_color_);
+	chooseColor_(turn_color_label);
 }
 
 void ColoringSettingsDialog::strandColorPressed()
 {
-	setNewColor_(strand_color_label, strand_color_);
+	chooseColor_(strand_color_label);
 }
 
 void ColoringSettingsDialog::coilColorPressed()
 {
-	setNewColor_(coil_color_label, coil_color_);
+	chooseColor_(coil_color_label);
 }
 
 void ColoringSettingsDialog::forceMaxColorPressed()
 {
-	setNewColor_(force_max_color_label, force_max_color_);
+	chooseColor_(force_max_color_label);
 }
 
 void ColoringSettingsDialog::forceMinColorPressed()
 {
-	setNewColor_(force_min_color_label, force_min_color_);
+	chooseColor_(force_min_color_label);
 }
 
 void ColoringSettingsDialog::maxDistanceChanged()
@@ -601,42 +542,6 @@ void ColoringSettingsDialog::forceMinValueChanged()
 }
 
 
-void ColoringSettingsDialog::setColorToLabel_(QLabel* label, const ColorRGBA& color)
-	throw()
-{
-	label->setBackgroundColor(color.getQColor());
-}
-
-void ColoringSettingsDialog::setLabelColorsFromValues_()
-	throw()
-{
-	setColorToLabel_(minimum_o_label, minimum_occupancy_color_);
-	setColorToLabel_(middle_residue_label, middle_residue_color_);
-	setColorToLabel_(last_residue_label, last_residue_color_);
-	setColorToLabel_(negative_charge_label, negative_charge_color_);
-	setColorToLabel_(neutral_charge_label, neutral_charge_color_);
-	setColorToLabel_(positive_charge_label, positive_charge_color_);
-	setColorToLabel_(null_distance_label, null_distance_color_);
-	setColorToLabel_(max_distance_label, max_distance_color_);
-	setColorToLabel_(minimum_tf_label, minimum_tf_color_);
-	setColorToLabel_(maximum_tf_label, maximum_tf_color_);
-	setColorToLabel_(unassigned_tf_label, unassigned_tf_color_);
-	setColorToLabel_(maximum_o_label, maximum_occupancy_color_);
-	setColorToLabel_(unassigned_o_label, unassigned_occupancy_color_);
-	setColorToLabel_(first_residue_label, first_residue_color_);
-	setColorToLabel_(helix_color_label, helix_color_);
-	setColorToLabel_(coil_color_label, coil_color_);
-	setColorToLabel_(strand_color_label, strand_color_);
-	setColorToLabel_(turn_color_label, turn_color_);
-	setColorToLabel_(force_max_color_label, force_max_color_);
-	setColorToLabel_(force_min_color_label, force_min_color_);
-
-	setColorToLabel_(first_residue_label, first_residue_color_);
-	setColorToLabel_(middle_residue_label, middle_residue_color_);
-	setColorToLabel_(last_residue_label, last_residue_color_);
-}
-	
-
 bool ColoringSettingsDialog::fetchPreference_(const INIFile& inifile, const String& entry, 
 																						  ColorRGBA& color)
 	throw()
@@ -653,13 +558,6 @@ bool ColoringSettingsDialog::fetchPreference_(const INIFile& inifile, const Stri
 		Log.error() << entry << std::endl; 
 	}
 	return false;
-}
-
-void ColoringSettingsDialog::writePreference_(INIFile& inifile, const String& entry, 
-																							const ColorRGBA& color) const
-	throw()
-{
-	inifile.insertValue("COLORING_OPTIONS", entry, color);
 }
 
 void ColoringSettingsDialog::setDefaultValues()
@@ -745,24 +643,24 @@ void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 	if (RTTI::isKindOf<ResidueNumberColorProcessor>(cp))
 	{
 		ResidueNumberColorProcessor& dp = (*(ResidueNumberColorProcessor*)&cp);
-		first_residue_color_ = dp.getFirstColor();
-		middle_residue_color_ = dp.getMiddleColor();
-		last_residue_color_ = dp.getLastColor();
+		setLabelColor_(first_residue_label, dp.getFirstColor());
+		setLabelColor_(middle_residue_label, dp.getMiddleColor());
+		setLabelColor_(last_residue_label, dp.getLastColor());
 	} else
 
 	if (RTTI::isKindOf<AtomChargeColorProcessor>(cp))
 	{
 		AtomChargeColorProcessor& dp = (*(AtomChargeColorProcessor*)&cp);
-		positive_charge_color_ = dp.getPositiveColor();
-		negative_charge_color_ = dp.getNegativeColor();
-		neutral_charge_color_ =  dp.getNeutralColor();
+		setLabelColor_(positive_charge_label, dp.getPositiveColor());
+		setLabelColor_(negative_charge_label, dp.getNegativeColor());
+		setLabelColor_(neutral_charge_label, dp.getNeutralColor());
 	} else
 
 	if (RTTI::isKindOf<AtomDistanceColorProcessor>(cp))
 	{
 		AtomDistanceColorProcessor& dp = (*(AtomDistanceColorProcessor*)&cp);
-		null_distance_color_ = dp.getNullDistanceColor();
-		max_distance_color_ = dp.getMaxDistanceColor();
+		setLabelColor_(null_distance_label, dp.getNullDistanceColor());
+		setLabelColor_(max_distance_label, dp.getMaxDistanceColor());
 		max_distance_slider->setValue((Size)(dp.getDistance() * 10.0));
 		distance_show_selected->setChecked(dp.showSelected());
 	} else
@@ -770,27 +668,27 @@ void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 	if (RTTI::isKindOf<OccupancyColorProcessor>(cp))
 	{
 		OccupancyColorProcessor& dp = (*(OccupancyColorProcessor*)&cp);
-		minimum_occupancy_color_ = dp.getMinColor();
-		maximum_occupancy_color_ = dp.getMaxColor();
+		setLabelColor_(minimum_o_label, dp.getMinColor());
+		setLabelColor_(maximum_o_label, dp.getMaxColor());
 	} else
 
 	if (RTTI::isKindOf<SecondaryStructureColorProcessor>(cp))
 	{
 		SecondaryStructureColorProcessor& dp = (*(SecondaryStructureColorProcessor*)&cp);
 
-		helix_color_ = dp.getHelixColor();
-		coil_color_  = dp.getCoilColor();
-		strand_color_ = dp.getStrandColor();
-		turn_color_ =   dp.getTurnColor();
+		setLabelColor_(helix_color_label, dp.getHelixColor());
+		setLabelColor_(coil_color_label, dp.getCoilColor());
+		setLabelColor_(strand_color_label, dp.getStrandColor());
+		setLabelColor_(turn_color_label, dp.getTurnColor());
 	} else
 
 	if (RTTI::isKindOf<TemperatureFactorColorProcessor>(cp))
 	{
 		TemperatureFactorColorProcessor& dp = (*(TemperatureFactorColorProcessor*)&cp);
 
-		unassigned_tf_color_ = dp.getMinMinColor();
-		minimum_tf_color_ = dp.getMinColor();
-		maximum_tf_color_ = dp.getMaxColor();
+		setLabelColor_(unassigned_tf_label, dp.getMinMinColor());
+		setLabelColor_(minimum_tf_label, dp.getMinColor());
+		setLabelColor_(maximum_tf_label, dp.getMaxColor());
 		max_tf_slider->setValue((Size)(dp.getMaxValue() * 10.0));
 	} else
 
@@ -798,13 +696,11 @@ void ColoringSettingsDialog::getSettings(const ColorProcessor& cp)
 	{
 		ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
 
-		force_min_color_ = dp.getMinColor();
-		force_max_color_ = dp.getMaxColor();
+		setLabelColor_(force_min_color_label, dp.getMinColor());
+		setLabelColor_(force_max_color_label, dp.getMaxColor());
 		force_max_value_slider->setValue((Size)(dp.getMaxValue() * 10.0));
 		force_min_value_slider->setValue((Size)(dp.getMinValue() * 10.0));
 	}
-
-	setLabelColorsFromValues_();
 }
 
 void ColoringSettingsDialog::showPage_(int nr)
@@ -868,6 +764,5 @@ void ColoringSettingsDialog::showPage(ColoringMethod method)
 	}
 }
 
-	
 
 } } // NAMESPACE
