@@ -1,10 +1,14 @@
-// $Id: triangulatedSurface.h,v 1.9 2000/12/13 15:14:29 strobel Exp $
+// $Id: triangulatedSurface.h,v 1.10 2000/12/13 17:14:10 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 
 #ifndef BALL_MATHS_VECTOR3_H
 #	include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_MATHS_PLANE3_H
+#	include <BALL/MATHS/plane3.h>
 #endif
 
 #ifndef BALL_MATHS_SURFACE_H
@@ -35,16 +39,19 @@ namespace BALL
 		*/
 		//@{
 
-		/**
-		*/
+		// forward declarations
 		class Point;
 		class Edge;
+
+		/**
+		*/
 		class Triangle
 		{
 			public:
 			Triangle() :  point(3), edge(3)/*, triangle(3)*/, index(-1)
 			{
 			}
+
 			~Triangle()
 			{
 			}
