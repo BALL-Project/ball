@@ -1,4 +1,4 @@
-// $Id: Atom_test.C,v 1.3 1999/12/30 18:05:42 oliver Exp $
+// $Id: Atom_test.C,v 1.4 2000/03/14 19:35:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/KERNEL/atom.h>
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.3 1999/12/30 18:05:42 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.4 2000/03/14 19:35:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -344,9 +344,9 @@ NEW_TMP_FILE(filename)
 ofstream	ofile(filename.c_str(), ios::out);
 pm.setOstream(ofile);
 using namespace RTTI;
-pm.registerClass(getStreamName<Composite>(), getNew<Composite>);
-pm.registerClass(getStreamName<Atom>(), getNew<Atom>);
-pm.registerClass(getStreamName<Bond>(), getNew<Bond>);
+pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
+pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
+pm.registerClass(getStreamName<Bond>(), Bond::createDefault);
 fragment->remove(*atom);
 *atom >> pm;
 ofile.close();

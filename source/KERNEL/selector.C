@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.11 2000/02/12 19:28:49 oliver Exp $
+// $Id: selector.C,v 1.12 2000/03/14 19:35:45 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -463,6 +463,12 @@ namespace BALL
 		setExpression(expression);
 	}
 
+	Selector::Selector(const Selector& selector)
+		:	expression_tree_(new ExpressionNode(*selector.expression_tree_)),
+			number_of_selected_atoms_(selector.number_of_selected_atoms_)
+	{
+	}
+
 	Selector::~Selector()
 	{
 		delete expression_tree_;
@@ -471,17 +477,17 @@ namespace BALL
 	void Selector::registerStandardPredicates_()
 	{
 		using namespace RTTI;
-		create_methods_.insert("name", (CreationMethod)getNew<AtomNamePredicate>);
-		create_methods_.insert("type", (CreationMethod)getNew<AtomTypePredicate>);
-		create_methods_.insert("element", (CreationMethod)getNew<ElementPredicate>);
-		create_methods_.insert("residue", (CreationMethod)getNew<ResiduePredicate>);
-		create_methods_.insert("residueID", (CreationMethod)getNew<ResidueIDPredicate>);
-		create_methods_.insert("protein", (CreationMethod)getNew<ProteinPredicate>);
-		create_methods_.insert("secondarystruct", (CreationMethod)getNew<SecondaryStructurePredicate>);
-		create_methods_.insert("solvent", (CreationMethod)getNew<SolventPredicate>);
-		create_methods_.insert("backbone", (CreationMethod)getNew<BackBonePredicate>);
-		create_methods_.insert("chain", (CreationMethod)getNew<ChainPredicate>);
-		create_methods_.insert("nucleotide", (CreationMethod)getNew<NucleotidePredicate>);
+		create_methods_.insert("name", AtomNamePredicate::createDefault);
+		create_methods_.insert("type", AtomTypePredicate::createDefault);
+		create_methods_.insert("element", ElementPredicate::createDefault);
+		create_methods_.insert("residue", ResiduePredicate::createDefault);
+		create_methods_.insert("residueID", ResidueIDPredicate::createDefault);
+		create_methods_.insert("protein", ProteinPredicate::createDefault);
+		create_methods_.insert("secondarystruct", SecondaryStructurePredicate::createDefault);
+		create_methods_.insert("solvent", SolventPredicate::createDefault);
+		create_methods_.insert("backbone", BackBonePredicate::createDefault);
+		create_methods_.insert("chain", ChainPredicate::createDefault);
+		create_methods_.insert("nucleotide", NucleotidePredicate::createDefault);
 	}
 
 	void Selector::setExpression(const String& expression)

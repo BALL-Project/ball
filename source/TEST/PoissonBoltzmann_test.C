@@ -1,4 +1,4 @@
-// $Id: PoissonBoltzmann_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: PoissonBoltzmann_test.C,v 1.2 2000/03/14 19:35:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -6,7 +6,7 @@
 #undef PRECISION
 #define PRECISION 0.005
 
-START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(FDPB, "$Id: PoissonBoltzmann_test.C,v 1.2 2000/03/14 19:35:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -52,6 +52,7 @@ options.setReal(FDPB::Option::SOLVENT_DC, 78.0);
 options.setReal(FDPB::Option::SOLUTE_DC, 1.0);
 options.setReal(FDPB::Option::SPACING, 0.3);
 options.setReal(FDPB::Option::BORDER, 10.0);
+options["ionic_strength"] = 0.000000001;
 fdpb = new FDPB(*system, options);
 TEST_NOT_EQUAL(fdpb, 0)
 RESULT

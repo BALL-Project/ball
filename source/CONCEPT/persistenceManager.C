@@ -1,4 +1,4 @@
-// $Id: persistenceManager.C,v 1.4 2000/03/12 22:19:59 oliver Exp $
+// $Id: persistenceManager.C,v 1.5 2000/03/14 19:35:42 oliver Exp $
 
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/KERNEL/system.h>
@@ -51,7 +51,7 @@ namespace BALL
 		// and the classes used in kernel classes
 		//
 		using namespace RTTI;
-		#define REGISTER_CLASS(T) {CreateMethod m(getNew<T>); registerClass(getStreamName<T>(), m);}
+		#define REGISTER_CLASS(T) {registerClass(getStreamName<T>(), T::createDefault);}
 		REGISTER_CLASS(BaseFragment)
 		REGISTER_CLASS(NamedProperty)
 		REGISTER_CLASS(Vector3)
@@ -117,7 +117,7 @@ namespace BALL
 
 	void PersistenceManager::setOstream(ostream& s) 
 	{
-		os = &s;
+		ostr_ = &s;
 
 		object_out_.clear();
 		object_out_needed_.clear();
@@ -125,7 +125,7 @@ namespace BALL
 
 	void PersistenceManager::setIstream(istream& s) 
 	{
-		is = &s;
+		istr_ = &s;
 
 		pointer_list_.clear();
 		pointer_map_.clear();
@@ -160,7 +160,7 @@ namespace BALL
 
 	PersistentObject*	PersistenceManager::readObject()
 	{
-		if (is == 0)
+		if (istr_ == 0)
 		{
 			return 0;
 		}
@@ -182,7 +182,7 @@ namespace BALL
 		// loop while the stream is not empty, 
 		// we did not read the END mark and
 		// an error did not occur
-		while (*is && checkStreamHeader() && !error) 
+		while (*istr_ && checkStreamHeader() && !error) 
 		{
 			// retrieve the first object signature
 			getObjectHeader(type_name, ptr);

@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.17 2000/03/09 18:55:13 amoll Exp $
+// $Id: Vector3_test.C,v 1.18 2000/03/14 19:35:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.17 2000/03/09 18:55:13 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.18 2000/03/14 19:35:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -123,7 +123,7 @@ CHECK(virtual void persistentWrite(PersistenceManager& pm, const char* name = 0)
 	NEW_TMP_FILE(filename)
 	ofstream  ofile(filename.c_str(), ios::out);
 	pm.setOstream(ofile);
-	pm.registerClass(getStreamName<Vector3>(), getNew<Vector3>);
+	pm.registerClass(getStreamName<Vector3>(), Vector3::createDefault);
 	v >> pm;
 	ofile.close();	
 RESULT

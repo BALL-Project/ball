@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.4 1999/12/30 18:05:27 oliver Exp $
+// $Id: property.C,v 1.5 2000/03/14 19:35:42 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -71,14 +71,16 @@ namespace BALL
 	{
 	}
 
-	NamedProperty::NamedProperty(const NamedProperty& property, bool /* deep */) 
+	NamedProperty::NamedProperty(const NamedProperty& property) 
 		: type_(property.type_),
 			name_(property.name_)
 	{	
 		if (type_ != STRING)
 		{
 			data_ = property.data_;
-		} else {
+		} 
+		else 
+		{
 			data_.s = new string(*property.data_.s);
 		}
 	}

@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.C,v 1.5 2000/03/12 22:21:43 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.6 2000/03/14 19:35:41 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -44,34 +44,34 @@ namespace BALL
 
 	void XDRPersistenceManager::writeStreamHeader()
 	{
-		os->put('S');
+		ostr_->put('S');
 	}
 
 	bool XDRPersistenceManager::checkStreamHeader()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkStreamHeader()" << endl;
+			Log.info() << "entering checkStreamHeader()" << endl;
 #		endif
 
 		char c;
-		is->get(c);
+		istr_->get(c);
 
 		return (c == 'S');
 	}
 
 	void XDRPersistenceManager::writeStreamTrailer()
 	{
-		os->put('X');
+		ostr_->put('X');
 	}
 
 	bool XDRPersistenceManager::checkStreamTrailer()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkStreamTrailer()" << endl;
+			Log.info() << "entering checkStreamTrailer()" << endl;
 #		endif
 
 		char c;
-		is->get(c);
+		istr_->get(c);
 
 		return (c == 'X');
 	}
@@ -84,9 +84,13 @@ namespace BALL
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
 			if (name != 0)
-				Log.level(LogStream::INFORMATION) << "entering checkTrailer(" << name << ")" << endl;
+			{
+				Log.info() << "entering checkTrailer(" << name << ")" << endl;
+			}
 			else
-				Log.level(LogStream::INFORMATION) << "entering checkTrailer()" << endl;
+			{
+				Log.info() << "entering checkTrailer()" << endl;	
+			}
 #		endif
 		return true;
 	}
@@ -94,7 +98,7 @@ namespace BALL
 	bool XDRPersistenceManager::checkHeader(const char* type_name, const char* name, LongPointerType& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkHeader(" << type_name << ", " << name << ")" << endl;
+			Log.info() << "entering checkHeader(" << type_name << ", " << name << ")" << endl;
 #		endif
     if ((name != 0) && (!strcmp(name, "")))
 		{
@@ -119,13 +123,13 @@ namespace BALL
 	bool XDRPersistenceManager::getObjectHeader(String& type_name, LongPointerType& ptr)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering getObjectHeader()" << endl;
+			Log.info() << "entering getObjectHeader()" << endl;
 #		endif
 
 		get(type_name);
 
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "read type name: " << type_name << endl;
+			Log.info() << "read type name: " << type_name << endl;
 #		endif
 
 		get(ptr);
@@ -140,7 +144,7 @@ namespace BALL
 #		ifdef BALL_DEBUG_PERSISTENCE
 		else 
 		{
-			Log.level(LogStream::INFORMATION) << "Read pointer: " << ptr << endl;
+			Log.info() << "Read pointer: " << ptr << endl;
 		}
 #		endif
 
@@ -154,7 +158,7 @@ namespace BALL
 	bool XDRPersistenceManager::checkName(const char* /* name */)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkName()" << endl;
+			Log.info() << "entering checkName()" << endl;
 #		endif
 
 		return true;
@@ -168,7 +172,7 @@ namespace BALL
 		(const char* /* type_name */, const char* /* name */)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkStorableHeader()" << endl;
+			Log.info() << "entering checkStorableHeader()" << endl;
 #		endif
 
 		return true;
@@ -181,7 +185,7 @@ namespace BALL
 	bool XDRPersistenceManager::checkStorableTrailer()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkStorableTrailer()" << endl;
+			Log.info() << "entering checkStorableTrailer()" << endl;
 #		endif
 
 		return true;
@@ -196,7 +200,7 @@ namespace BALL
 		(const char* /* type_name */, const char* /* name */)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkPrimitiveHeader()" << endl;
+			Log.info() << "entering checkPrimitiveHeader()" << endl;
 #		endif
 		return true;
 	}
@@ -208,7 +212,7 @@ namespace BALL
 	bool XDRPersistenceManager::checkPrimitiveTrailer()
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkPrimitiveTrailer()" << endl;
+			Log.info() << "entering checkPrimitiveTrailer()" << endl;
 #		endif
 
 		return true;
@@ -223,7 +227,7 @@ namespace BALL
 		(const char* /* type_name */, const char* /* name */)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkObjectPointerHeader()" << endl;
+			Log.info() << "entering checkObjectPointerHeader()" << endl;
 #		endif
 
 		return true;
@@ -238,7 +242,7 @@ namespace BALL
 		(const char* /* type_name */, const char* /* name */)
 	{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::INFORMATION) << "entering checkObjectReferenceHeader()" << endl;
+			Log.info() << "entering checkObjectReferenceHeader()" << endl;
 #		endif
 
 		return true;
@@ -269,17 +273,17 @@ namespace BALL
 	/// Layer 0: primitive put methods
 	void XDRPersistenceManager::put(const char c)
 	{
-		os->put((unsigned char)c);
+		ostr_->put((unsigned char)c);
 	}
 
 	void XDRPersistenceManager::put(const unsigned char c)
 	{
-		os->put((unsigned char)c);
+		ostr_->put((unsigned char)c);
 	}
 
 	void XDRPersistenceManager::put(const bool b)
 	{		
-		os->put(b ? (unsigned char)1 : (unsigned char)0);
+		ostr_->put(b ? (unsigned char)1 : (unsigned char)0);
 	}
 
 #define BALL_DEFINE_NUMBER_PUT(type)\
@@ -288,7 +292,7 @@ namespace BALL
 		const unsigned char*	ptr = (const unsigned char*)&i;\
 		for (unsigned short j = 0; j < sizeof(i); ++j)\
 		{\
-			os->put((unsigned char)*ptr++);\
+			ostr_->put((unsigned char)*ptr++);\
 		}\
 	}\
 
@@ -310,27 +314,27 @@ namespace BALL
 
 		do
 		{
-			os->put(*ptr);
+			ostr_->put(*ptr);
 		}	while (*ptr++ != (unsigned char)0);
 	}
 
 	void XDRPersistenceManager::get(char& c)
 	{
 		char tmp;
-		is->get(tmp);
+		istr_->get(tmp);
 		c = tmp;
 	}
 
 	void XDRPersistenceManager::get(unsigned char& c)
 	{
 		char& c_ref = (char&)c;
-		is->get(c_ref);
+		istr_->get(c_ref);
 	}
 
 	void XDRPersistenceManager::get(bool& b)
 	{
 		char c;
-		is->get(c);
+		istr_->get(c);
 		b = (c == (char)1);
 	}
 
@@ -341,7 +345,7 @@ namespace BALL
 		
 		do
 		{
-			is->get(*ptr);
+			istr_->get(*ptr);
 		} while (*ptr++ != (char)0);
 
 		s.assign((char*)&buf[0]);
@@ -353,7 +357,7 @@ namespace BALL
 		char* ptr = (char*)&i;\
 		for (unsigned short j = 0; j < sizeof(i); ++j)\
 		{\
-			is->get(*ptr++);\
+			istr_->get(*ptr++);\
 		}\
 	}\
 

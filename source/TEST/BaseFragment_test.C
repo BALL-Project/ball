@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.6 2000/01/10 15:51:16 oliver Exp $
+// $Id: BaseFragment_test.C,v 1.7 2000/03/14 19:35:46 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.6 2000/01/10 15:51:16 oliver Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.7 2000/03/14 19:35:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -207,9 +207,9 @@ RESULT
 
 TextPersistenceManager pm;
 using namespace RTTI;
-pm.registerClass(getStreamName<Composite>(), getNew<Composite>);
-pm.registerClass(getStreamName<BaseFragment>(), getNew<BaseFragment>);
-pm.registerClass(getStreamName<Atom>(), getNew<Atom>);
+pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
+pm.registerClass(getStreamName<BaseFragment>(), BaseFragment::createDefault);
+pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 String filename;
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
