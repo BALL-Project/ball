@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.4 2003/09/11 22:36:28 amoll Exp $
+// $Id: modularWidget.h,v 1.5 2003/10/15 14:23:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -210,7 +210,23 @@ namespace BALL
 			*/
 			FragmentDB& getFragmentDB() const
 				throw();
-	
+
+			//@}
+			/**	@name	Debugging and Diagnostics
+			*/
+			//@{
+
+			/** Internal state dump.
+					Dump the current internal state of this mainControl to 
+					the output ostream <b>s</b> with dumping depth <b>depth</b>.
+					\param   s output stream where to output the internal state 
+					\param   depth the dumping depth
+			*/
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
+					
+			//@}
+
 			protected:
 			
 			//_ id in the menubar entry "WINDOWS" for every widget

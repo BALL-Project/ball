@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connectionObject.h,v 1.18 2003/09/04 23:14:10 amoll Exp $
+// $Id: connectionObject.h,v 1.19 2003/10/15 14:22:00 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -158,9 +158,9 @@ namespace BALL
 				throw();
 
 			/** Internal value dump.
-					Dump the current state of this connectionObject to 
+					Dump the current state to 
 					the output ostream <b> s</b> with dumping depth <b> depth</b>.
-					\param   s output stream where to output the state of this connectionObject
+					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
