@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.C,v 1.29 2003/12/01 07:35:11 oliver Exp $
+// $Id: residue.C,v 1.30 2004/02/23 21:29:10 oliver Exp $
 //
 
 #include <BALL/KERNEL/residue.h>
@@ -286,6 +286,26 @@ namespace BALL
 		throw()
 	{
 		return ((Residue *)this)->getChain();
+	}
+
+	SecondaryStructure* Residue::getSecondaryStructure()
+		throw()
+	{
+		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
+		{
+			if (RTTI::isKindOf<SecondaryStructure>(*ancestor_it))
+			{
+				return (SecondaryStructure*)&*ancestor_it;
+			}
+		}
+
+		return 0;
+	}
+
+	const SecondaryStructure* Residue::getSecondaryStructure() const
+		throw()
+	{
+		return const_cast<Residue*>(this)->getSecondaryStructure();
 	}
 
 	PDBAtom *Residue::getPDBAtom(Position position)

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Residue_test.C,v 1.26 2003/07/03 13:20:04 amoll Exp $
+// $Id: Residue_test.C,v 1.27 2004/02/23 21:29:16 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +17,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.26 2003/07/03 13:20:04 amoll Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.27 2004/02/23 21:29:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -292,6 +293,26 @@ CHECK(const Chain* getChain() const throw())
 	Chain c;
 	c.insert(r1);
 	TEST_EQUAL(r1.getChain(), &c)
+RESULT
+
+CHECK(SecondaryStructure* getSecondaryStructure() throw())
+	Residue r1("r1");
+	TEST_EQUAL(r1.getSecondaryStructure(), 0)
+	SecondaryStructure s;
+	Chain c;
+	c.insert(s);
+	s.insert(r1);
+	r1.getSecondaryStructure()->setName("c");
+	TEST_EQUAL(s.getName(), "c")
+RESULT
+
+CHECK(const SecondaryStructure* getSecondaryStructure() const throw())
+	Residue r1("r1");
+	SecondaryStructure s;
+	Chain c;
+	c.insert(s);
+	s.insert(r1);
+	TEST_EQUAL(r1.getSecondaryStructure(), &s)
 RESULT
 
 CHECK(PDBAtom* getPDBAtom(Position position) throw())

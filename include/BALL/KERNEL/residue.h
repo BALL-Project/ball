@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.40 2003/12/01 07:35:10 oliver Exp $
+// $Id: residue.h,v 1.41 2004/02/23 21:29:08 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_RESIDUE_H
@@ -27,6 +27,7 @@ namespace BALL
 {
 	class Chain;
 	class Protein;
+	class SecondaryStructure;
 
 	/** Residue class.
 			This class is used to represent residues in proteins.
@@ -221,44 +222,50 @@ namespace BALL
 		/**	Calculate the torsion angle psi.
 				@return Angle - the torsion angle phi
 		*/
-		Angle getTorsionPsi() const
-			throw();
+		Angle getTorsionPsi() const	throw();
 
 		/** Get a pointer to the parent protein.
 				The pointer is 0 if this instance does not have a parent protein.
 				@return  Protein* - mutable pointer to the parent protein
 		*/
-		Protein* getProtein()
-			throw();
+		Protein* getProtein()	throw();
 
 		/** Get a constant pointer to the parent protein.
 				The pointer is 0 if this instance does not have a parent protein.
 				@return  Protein* - constant pointer to the parent protein
 		*/
-		const Protein* getProtein() const
-			throw();
+		const Protein* getProtein() const	throw();
 
 		/** Get a pointer to the parent chain.
 				The pointer is 0 if this instance does not have a parent chain.
 				@return  Chain* - mutable pointer to the parent chain
 		*/
-		Chain* getChain()
-			throw();
+		Chain* getChain() throw();
 
 		/** Get a pointer to the parent chain.
 				The pointer is 0 if this instance does not have a parent chain.
 				@return  Chain* - constant pointer to the parent chain
 		*/
-		const Chain* getChain() const
-			throw();
+		const Chain* getChain() const	throw();
+
+		/** Get a pointer to the parent secondary structure.
+				The pointer is 0 if this instance does not have a parent secondary structure.
+				@return  SecondaryStructure* - mutable pointer to the parent chain
+		*/
+		SecondaryStructure* getSecondaryStructure() throw();
+
+		/** Get a pointer to the parent secondary structure.
+				The pointer is 0 if this instance does not have a parent secondary structure.
+				@return  SecondaryStructure* - mutable pointer to the parent chain
+		*/
+		const SecondaryStructure* getSecondaryStructure() const throw();
 
 		/** Get a pointer to a child PDBAtom at a given position.
 				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
 				@return  PDBAtom* - mutable pointer to the child
 		*/
-		PDBAtom* getPDBAtom(Position position)
-			throw();
+		PDBAtom* getPDBAtom(Position position) throw();
 	
 		/** Get a pointer to a child PDBAtom at a given position.
 				The pointer is 0 if this instance does not have a PDBAtom at this position.
