@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.h,v 1.18 2002/02/27 12:19:39 sturm Exp $ 
+// $Id: poissonBoltzmann.h,v 1.19 2002/12/16 14:23:58 anker Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -236,30 +236,172 @@ namespace BALL
 			
 			/**	The grid spacing in Angstrom.
 					Use this option to define the distance between a grid point
-					and its closest neighbour.
+					and its closest neighbour in units o Angstrom. The default
+					spacing is 0.6 A.
 					@see	Default::SPACING
 					@parameter	spacing float
 			*/
 			static const char* SPACING;
+
+			/** The border of the system.
+					Use this option to define the aumount of space left between the
+					bounding box of the solute and the border of the cubic grid in
+					every direction. Use units of Angstrom with this option. The
+					default is 4 A.
+					@see	Default::BORDER
+					@parameter	border float
+			*/
 			static const char* BORDER;
+
+			/** The ionic strength of the salt solution
+					This parameter defines the ionic strength of the salt solution in
+					which the Poisson-Boltzmann calculation takes place. This
+					parameter is given in units of mol/l. The default is 0, i. e.
+					only a Poisson equation will be calculated.
+					@see	Default::IONIC_STRENGTH
+					@parameter ionic_strength float
+			*/
 			static const char* IONIC_STRENGTH;
+
+			/** The dielectric constant of the solute. This parameter derfaults
+					to 2.0.
+					@see	Default::SOLUTE_DC
+					@parameter	solute_dielectric_constant float
+			*/
 			static const char* SOLUTE_DC;
+
+			/** The dielectric constant of the solvent. This parameter defaults
+					to 78.0.
+					@see	Default::SOLVENT_DC
+					@parameter	solvent_dielectric_constant float
+			*/
 			static const char* SOLVENT_DC;
+
+			/** The probe radius used for calculating the SAS of the molecule.
+					This parameter defaults to 1.4 A (water).
+					@see	Default::PROBE_RADIUS
+					@parameter	probe_radius float
+			*/
 			static const char* PROBE_RADIUS;
+
+			/** The ion exclusion radius.
+					@see	Default::ION_RADIUS
+					@parameter	ion_radius float
+			*/
 			static const char* ION_RADIUS;
+
+			/** The temperature of the system. This parameter needs values in
+					units of K. The default temperature is 298.15 K = 25.15 deg C.
+					@see	Default::TEMPERATURE
+					@parameter	temperature float
+			*/
 			static const char* TEMPERATURE;
+
+			/** Boundary condition for solving the differential equation.
+					This parameter defines the type of boundary condition will be
+					used for initializing the equation solver. Possible options are:
+					zero, Debye, Coulomb, dipole and focusing. Default is dipole.
+					@see	Default::BOUNDARY
+					@parameter	boundary_condition String
+			*/
 			static const char* BOUNDARY;
+
+			/** Charge distribution of the system.
+					This parameter chooses the method used for distributing charges
+					oiver grid points. Possible methods are: trilinear and uniform.
+					The default is uniform.
+					@see	Default::BORDER
+					@parameter	border float
+			*/
 			static const char* CHARGE_DISTRIBUTION;
+
+			/** Smoothing the dielectric constant.
+					With this option you can choose a smoothing function for the
+					dielectric thus permitting a smooth transition from the inside of
+					the molecule (usually dc = 2.0) to the surrounding solvent
+					(78.5). You have the followin options: none, uniform and
+					harmonic. Default is none.
+					different dielectric constant 
+					@see	Default::DIELECTRIC_SMOOTHING
+					@parameter	dielectric_smoothing String
+			*/
 			static const char* DIELECTRIC_SMOOTHING;
+
+			/** Use an offset.
+					This option allows to offset the wohle system by the vector
+					defined in thos option. The calculation does not use an offset by
+					default. Use threedimensional vectors in units of Angstrom with
+					this option.
+					@parameter	offset Vector3
+			*/
 			static const char* OFFSET;
+
+			/** Define the RMS criterion.
+					This option defines the RMS criterion in Angstrom used for
+					terminating the iteration of the solver. If the RMS lies below
+					rms_criterion and the maximum residuals are below max_criterion,
+					the iteration terminates. The default is 1e-5 Angstrom.
+					@see	Default::RMS_CRITERION
+					@parameter	rms_criterion float
+			*/
 			static const char* RMS_CRITERION;
+
+			/** Define the MAX criterion.
+					This option defines the upper limit for the residuals. If the
+					maximum residuals are below this value and the RMS lies below
+					rms_criterion, the iteration terminates. The default is 1e-4.
+					@see	Default::MAX_CRITERION
+					@parameter	max_criterion float
+			*/
 			static const char* MAX_CRITERION;
+
+			/** Checking frequency.
+					This option defines the number of iterations which will be
+					performed without checking the criterions. The default is 10.
+					@see	Default::CHECK_AFTER_ITERATIONS
+					@parameter	check_after_iterations int
+			*/
 			static const char* CHECK_AFTER_ITERATIONS;
+
+			/** The upper limit of iterations.
+					Use this option to define the maximum number of iterations to be
+					performed. If the solver does not terminate when this number of
+					iterations is reached, the calculation did not converge. The
+					default is 500 interations.
+					@see	Default::MAX_ITERATIONS
+					@parameter	max_iterations int
+			*/
 			static const char* MAX_ITERATIONS;
+
+			/** The lower corner of the grid.
+					This option contains the lower corner of the grid. It can be used
+					to fix it before setting up the solver. If this option was not
+					used for initializing the solver gtrid it contains the
+					automatically computed lower corner after the calculation.
+					Use a vector of Angstroms with this option.
+					@parameter	lower Vector3
+			*/
 			static const char* LOWER;
+
+			/** The upper corner of the grid.
+					This is the analogous option to @see LOWER.
+					@parameter	upper Vector3
+			*/
 			static const char* UPPER;
+
+			/** The lower corner of the bounding box of the solute molecule.
+					This option works like @see LOWER for the bounding box of the
+					solvent molecule.
+					@parameter	bounding_box_lower Vector3
+			*/
 			static const char* BOUNDING_BOX_LOWER;
+
+			/** The upper corner of the bounding box of the solute molecule.
+					This is the analogous option to @see BOUNDING_BOX_LOWER.
+					@parameter	bounding_box_upper Vector3
+			*/
 			static const char* BOUNDING_BOX_UPPER;
+
 		};
 
 		/** This struct contains symbols for the available 
