@@ -1,4 +1,4 @@
-// $Id: message.h,v 1.1 2000/03/21 16:23:27 hekl Exp $
+// $Id: message.h,v 1.2 2000/05/16 15:50:19 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -427,7 +427,7 @@ namespace BALL
 
 			void setSelection(const List<Composite*> *selection);
 
-			const List<Composite*>* getSelection() const;
+			const List<Composite*>& getSelection() const;
 			//@}
 
 			/**	@name	Debugging and Diagnostics
@@ -442,8 +442,50 @@ namespace BALL
 			
 			private:
 
-			List<Composite*>* selection_;
+			List<Composite*> selection_;
 		};
+
+
+
+		/**	GeometricObjectSelection Message Class		
+		*/
+		class GeometricObjectSelectionMessage: public SelectionMessage
+		{
+			public:
+
+			/**	@name	Constructors and Destructors
+			*/	
+			//@{
+			GeometricObjectSelectionMessage();
+
+			GeometricObjectSelectionMessage(const SelectionMessage& message, bool deep = true);
+
+			virtual ~GeometricObjectSelectionMessage();
+			//@}
+		
+			/**	@name	Assignment
+			*/
+			//@{
+			//@}
+
+			/**	@name	Accessors
+			*/
+			//@{
+			//@}
+
+			/**	@name	Debugging and Diagnostics
+			*/	
+			//@{
+			//@}
+
+			/**	@name	Storers
+			*/
+			//@{
+			//@}
+			
+			private:
+		};
+
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/message.iC>

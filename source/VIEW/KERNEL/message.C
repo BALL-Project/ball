@@ -1,4 +1,4 @@
-// $Id: message.C,v 1.1 2000/03/21 16:10:31 hekl Exp $
+// $Id: message.C,v 1.2 2000/05/16 15:46:57 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 
@@ -203,6 +203,27 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<SelectionMessage>() << endl;
+			#endif 
+		}
+
+
+		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage()
+			:
+			SelectionMessage()
+		{
+		}
+
+		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage(const SelectionMessage& message, bool /* deep */)
+			:
+			SelectionMessage(message)
+		{
+		}
+
+		GeometricObjectSelectionMessage::~GeometricObjectSelectionMessage()
+		{
+			#ifdef BALL_VIEW_DEBUG
+				cout << "Destructing object " << (void *)this 
+					<< " of class " << RTTI::getName<GeometricObjectSelectionMessage>() << endl;
 			#endif 
 		}
 
