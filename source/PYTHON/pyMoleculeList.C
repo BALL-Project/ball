@@ -1,4 +1,4 @@
-// $Id: pyMoleculeList.C,v 1.1 2000/06/27 13:10:24 oliver Exp $
+// $Id: pyMoleculeList.C,v 1.2 2000/07/03 11:11:10 oliver Exp $
 
 #include <BALL/PYTHON/pyMoleculeList.h>
 #include <BALL/KERNEL/molecule.h>
@@ -36,11 +36,11 @@ namespace BALL
 
     for (; +it; ++it)
     {
-      Molecule* molecule = const_cast<Molecule*>(&dynamic_cast<const Molecule&>(*it));
+      const Molecule* molecule = dynamic_cast<const Molecule*>(&*it);
       if ((molecule != 0) && (it->isSelected() || !selected_only))
       {
         // store the molecule pointer in the list
-        push_back(molecule);
+        push_back(const_cast<Molecule*>(molecule));
 			}
 		}
   }

@@ -11,7 +11,7 @@ PyObject *sipConvertFrom_PyPDBAtomList(const PyPDBAtomList *sipCpp)
 		return Py_None;
 	}
 
-#line 10 "pyPDBAtomList.sip"
+#line 12 "pyPDBAtomList.sip"
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -23,10 +23,10 @@ PyObject *sipConvertFrom_PyPDBAtomList(const PyPDBAtomList *sipCpp)
 
 	for (PyPDBAtomList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		PDBAtom* obj = *it;
+		PDBAtom& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_PDBAtom)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -41,7 +41,7 @@ PyObject *sipClass_PyPDBAtomList;
 
 int sipCanConvertTo_PyPDBAtomList(PyObject *sipPy)
 {
-#line 35 "pyPDBAtomList.sip"
+#line 37 "pyPDBAtomList.sip"
 	return PyList_Check(sipPy);
 #line 51 "./sipBALLPyPDBAtomList.cpp"
 }
@@ -61,7 +61,7 @@ int sipConvertTo_PyPDBAtomList(PyObject *sipPy,PyPDBAtomList **sipCppPtr,int sip
 		return false;
 	}
 
-#line 39 "pyPDBAtomList.sip"
+#line 41 "pyPDBAtomList.sip"
 	// Convert a Python list of PDBAtom instances to an PDBAtomList object on the
 	// heap.
  

@@ -6,6 +6,7 @@
 PyObject *sipClass_Molecule;
 
 static void sipDealloc_Molecule(sipThisType *);
+static PyObject *sipPyInternalRepr_Molecule(sipThisType *);
 
 static PyTypeObject sipType_Molecule = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_Molecule = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_Molecule,
 };
 
 sipMolecule::sipMolecule(): Molecule()
@@ -883,6 +884,18 @@ static void sipDealloc_Molecule(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_Molecule(sipThisType *sipThis)
+{
+#line 46 "molecule.sip"
+  Molecule* ptr;
+  if ((ptr = (Molecule*)sipGetCppPtr(sipThis,sipClass_Molecule)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Molecule ") + ptr->getName() 
+				+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+#line 903 "./sipBALLMolecule.cpp"
 }
 
 PyObject *sipNew_Molecule(PyObject *sipSelf,PyObject *sipArgs)

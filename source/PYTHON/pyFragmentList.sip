@@ -1,9 +1,11 @@
+// $Id: pyFragmentList.sip,v 1.2 2000/07/03 11:11:10 oliver Exp $
 
 class PyFragmentList
 {
 %HeaderCode
-#include <BALL/PYTHON/pyFragmentList.h>
-#include "sipBALLFragment.h"
+	#include <BALL/PYTHON/pyFragmentList.h>
+	#include "sipBALLFragment.h"
+  #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromClassCode
@@ -16,10 +18,10 @@ class PyFragmentList
 
 	for (PyFragmentList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Fragment* obj = *it;
+		Fragment& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Fragment)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;

@@ -6,7 +6,7 @@
 PyObject *sipClass_Size;
 
 static void sipDealloc_Size(sipThisType *);
-static PyObject *sipInternalRepr_Size(sipThisType *);
+static PyObject *sipPyInternalRepr_Size(sipThisType *);
 
 static PyTypeObject sipType_Size = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,7 +19,7 @@ static PyTypeObject sipType_Size = {
 	0,
 	0,
 	0,
-	(reprfunc)sipInternalRepr_Size,
+	(reprfunc)sipPyInternalRepr_Size,
 };
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
@@ -43,9 +43,9 @@ static void sipDealloc_Size(sipThisType *sipThis)
 	sipDeleteThis(sipThis);
 }
 
-static PyObject *sipPyOperatorRepr_Size(sipThisType *sipThis)
+static PyObject *sipPyInternalRepr_Size(sipThisType *sipThis)
 {
-#line 65 "global.sip"
+#line 67 "global.sip"
 	Size* ptr;
   if ((ptr = (Size*)sipGetCppPtr(sipThis,sipClass_Size)) == NULL)
     return NULL;
@@ -123,7 +123,7 @@ PyMethodDef sipClassAttrTab_Size[] = {
 
 int sipCanConvertTo_Size(PyObject *sipPy)
 {
-#line 72 "global.sip"
+#line 74 "global.sip"
 	// automatic conversion of Py integers to Size 
 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Size));
 #line 134 "./sipBALLSize.cpp"
@@ -144,7 +144,7 @@ int sipConvertTo_Size(PyObject *sipPy,Size **sipCppPtr,int sipNoNull,int *sipIsE
 		return false;
 	}
 
-#line 76 "global.sip"
+#line 78 "global.sip"
 	if (PyInt_Check(sipPy))
 	{
 		*sipCppPtr = new Size(PyInt_AS_LONG(sipPy));

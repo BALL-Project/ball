@@ -6,6 +6,7 @@
 PyObject *sipClass_Fragment;
 
 static void sipDealloc_Fragment(sipThisType *);
+static PyObject *sipPyInternalRepr_Fragment(sipThisType *);
 
 static PyTypeObject sipType_Fragment = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_Fragment = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_Fragment,
 };
 
 sipFragment::sipFragment(): Fragment()
@@ -207,6 +208,18 @@ static void sipDealloc_Fragment(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_Fragment(sipThisType *sipThis)
+{
+#line 27 "fragment.sip"
+  Fragment* ptr;
+  if ((ptr = (Fragment*)sipGetCppPtr(sipThis,sipClass_Fragment)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Fragment ") + ptr->getName() 
+				+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+#line 227 "./sipBALLFragment.cpp"
 }
 
 PyObject *sipNew_Fragment(PyObject *sipSelf,PyObject *sipArgs)

@@ -1,16 +1,18 @@
- class System
+// $Id: system.sip,v 1.4 2000/07/03 11:11:41 oliver Exp $
+
+class System
   : BaseFragment,
   	PropertyManager
- {
+{
 %HeaderCode
-#include <BALL/KERNEL/system.h>
-using namespace BALL;
+	#include <BALL/KERNEL/system.h>
+	using namespace BALL;
 %End
   public:
   System();
-  System(const System&, bool = true);
-  System(const String&);
-//  virtual ~System;
+  System(const System& /system/, bool /deep/ = true);
+  System(const String& /name/);
+  ~System();
   virtual void clear();
   virtual void destroy();
 //  void persistentWrite(PersistenceManager& pm, const char* = 0) const;
@@ -36,34 +38,22 @@ using namespace BALL;
   void splice(System&);  
   void destroyBonds();
   virtual bool isValid() const;
-//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
-//  virtual void read(istream& s);
-//  virtual void write(ostream& s) const;
-//  template <typename T>
-//  bool apply(UnaryProcessor<T>& processor)
-//  {
-// if (processor.start() == false)
-//    return false;
-//   Processor::Result  result;
-//   SubcompositeIterator it = beginSubcomposite();
-//	 for (; it != endSubcomposite(); ++it)
-//   {
-//    T*  object = dynamic_cast<T*>(&(*it));
-  //  if (object != 0)
-//    {
-//     result = processor(*object);
-//     if (result <= Processor::BREAK)
-//      return (result == Processor::BREAK) ? true : false;
-//    }
-//   }
-//   return processor.finish();
-//  }
-//  BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Atom)
-  //BALL_KERNEL_DEFINE_ITERATOR_CREATORS(BaseFragment)
-//  BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment)
-//  BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Molecule)
-//  BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Protein)
-//  BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Residue)
-//  BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Chain)
-//  BALL_KERNEL_DEFINE_ITERATOR_CREATORS(SecondaryStructure)
- };
+	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+	//  virtual void read(istream& s);
+	//  virtual void write(ostream& s) const;
+
+	//  template <typename T>
+	//  bool apply(UnaryProcessor<T>& processor)
+
+	operator const char* ();
+%MemberCode
+  System* ptr;
+  if ((ptr = (System*)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("System ") + ptr->getName() 
+					+ " { " + String(ptr->countMolecules()) + " molecules,  " 
+					+ String(ptr->countAtoms()) + " atoms }").c_str());
+%End
+
+};

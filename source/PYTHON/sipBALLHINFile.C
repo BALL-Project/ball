@@ -23,45 +23,29 @@ static PyTypeObject sipType_HINFile = {
 
 sipHINFile::sipHINFile(): HINFile()
 {
-	sipCommonCtor(sipPyMethods,3);
+	sipCommonCtor(sipPyMethods,2);
 }
 
 sipHINFile::sipHINFile(String& a0,int a1): HINFile(a0,a1)
 {
-	sipCommonCtor(sipPyMethods,3);
+	sipCommonCtor(sipPyMethods,2);
 }
 
 sipHINFile::sipHINFile(const HINFile& a0): HINFile(a0)
 {
-	sipCommonCtor(sipPyMethods,3);
+	sipCommonCtor(sipPyMethods,2);
 }
 
 sipHINFile::~sipHINFile()
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipHINFile::hasFormat(const String& a0) const
-{
-	int relLock;
-
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_hasFormat,&relLock) ?
-		sipFile::sipVH_hasFormat(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		File::hasFormat(a0);
-}
-bool sipHINFile::hasFormat()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_hasFormat,&relLock) ?
-		sipFile::sipVH_hasFormat(&sipPyMethods[0],sipPyThis,relLock) :
-		File::hasFormat();
-}
 void sipHINFile::write(System& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_write,&relLock))
-		sipHINFile::sipVH_write(&sipPyMethods[1],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_write,&relLock))
+		sipHINFile::sipVH_write(&sipPyMethods[0],sipPyThis,relLock,a0);
 	else
 		HINFile::write(a0);
 }
@@ -69,8 +53,8 @@ void sipHINFile::read(System& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_read,&relLock))
-		sipHINFile::sipVH_read(&sipPyMethods[2],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_read,&relLock))
+		sipHINFile::sipVH_read(&sipPyMethods[1],sipPyThis,relLock,a0);
 	else
 		HINFile::read(a0);
 }

@@ -1,4 +1,4 @@
-// $Id: pyNucleicAcidList.C,v 1.1 2000/06/27 13:10:25 oliver Exp $
+// $Id: pyNucleicAcidList.C,v 1.2 2000/07/03 11:11:11 oliver Exp $
 
 #include <BALL/PYTHON/pyNucleicAcidList.h>
 #include <BALL/KERNEL/nucleicAcid.h>
@@ -36,11 +36,11 @@ namespace BALL
 
     for (; +it; ++it)
     {
-      NucleicAcid* nucleic_acid = const_cast<NucleicAcid*>(&dynamic_cast<const NucleicAcid&>(*it));
+      const NucleicAcid* nucleic_acid = dynamic_cast<const NucleicAcid*>(&*it);
       if ((nucleic_acid != 0) && (it->isSelected() || !selected_only))
       {
         // store the nucleic_acid pointer in the list
-        push_back(nucleic_acid);
+        push_back(const_cast<NucleicAcid*>(nucleic_acid));
 			}
 		}
 	}

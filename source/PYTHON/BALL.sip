@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.9 2000/06/30 05:58:42 oliver Exp $
+// $Id: BALL.sip,v 1.10 2000/07/03 11:11:03 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -36,7 +36,7 @@
 // persitenceManager.h // ??
 %Include persistentObject.sip
 // predicate.h       // ??
-// processor.h       // ??
+%Include processor.sip
 %Include property.sip
 // randomAccessIterator.h // not supported
 // reverseBidirectionalIterator.h // not supported
@@ -202,6 +202,9 @@
 %Include extractors.sip
 // %Include pyAtomDict.sip
 %Include pyAtomList.sip
+%Include pyAtomProcessor.sip
+%Include pyBondList.sip
+%Include pyBaseFragmentList.sip
 %Include pyFragmentList.sip
 %Include pyMoleculeList.sip
 %Include pyPDBAtomList.sip
@@ -220,7 +223,7 @@
 
 // STRUCTURE
 // %Include analyticalSES.sip
-// %Include defaultProcessors.h // ??
+%Include defaultProcessors.sip
 // %Include fragmentDB.sip
 // %Include geometricProperties.sip // ??
 // %Include geometricTransformations.sip // ??

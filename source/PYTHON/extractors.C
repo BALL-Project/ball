@@ -1,7 +1,9 @@
-// $Id: extractors.C,v 1.2 2000/06/27 13:10:17 oliver Exp $
+// $Id: extractors.C,v 1.3 2000/07/03 11:11:05 oliver Exp $
 
 #include <BALL/PYTHON/pyAtomList.h>
 #include <BALL/PYTHON/pyPDBAtomList.h>
+#include <BALL/PYTHON/pyBondList.h>
+#include <BALL/PYTHON/pyBaseFragmentList.h>
 #include <BALL/PYTHON/pyFragmentList.h>
 #include <BALL/PYTHON/pyMoleculeList.h>
 #include <BALL/PYTHON/pyResidueList.h>
@@ -23,6 +25,21 @@ namespace BALL
 	PyPDBAtomList* PDBAtoms(const BaseFragment& fragment, bool selected_only)
 	{
 		return new PyPDBAtomList(fragment, selected_only);
+	}
+
+	PyBondList* bonds(const BaseFragment& fragment, bool selected_only)
+	{
+		return new PyBondList(fragment, selected_only);
+	}
+
+	PyBondList* bonds(const Atom& atom)
+	{
+		return new PyBondList(atom);
+	}
+
+	PyBaseFragmentList* baseFragments(const BaseFragment& fragment, bool selected_only)
+	{
+		return new PyBaseFragmentList(fragment, selected_only);
 	}
 
 	PyFragmentList* fragments(const BaseFragment& fragment, bool selected_only)

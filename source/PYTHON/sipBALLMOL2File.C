@@ -23,45 +23,29 @@ static PyTypeObject sipType_MOL2File = {
 
 sipMOL2File::sipMOL2File(): MOL2File()
 {
-	sipCommonCtor(sipPyMethods,3);
+	sipCommonCtor(sipPyMethods,2);
 }
 
 sipMOL2File::sipMOL2File(const String& a0,int a1): MOL2File(a0,a1)
 {
-	sipCommonCtor(sipPyMethods,3);
+	sipCommonCtor(sipPyMethods,2);
 }
 
 sipMOL2File::sipMOL2File(const MOL2File& a0): MOL2File(a0)
 {
-	sipCommonCtor(sipPyMethods,3);
+	sipCommonCtor(sipPyMethods,2);
 }
 
 sipMOL2File::~sipMOL2File()
 {
 	sipCommonDtor(sipPyThis);
 }
-bool sipMOL2File::hasFormat(const String& a0) const
-{
-	int relLock;
-
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_hasFormat,&relLock) ?
-		sipFile::sipVH_hasFormat(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		File::hasFormat(a0);
-}
-bool sipMOL2File::hasFormat()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_hasFormat,&relLock) ?
-		sipFile::sipVH_hasFormat(&sipPyMethods[0],sipPyThis,relLock) :
-		File::hasFormat();
-}
 void sipMOL2File::write(const System& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_write,&relLock))
-		sipMOL2File::sipVH_write(&sipPyMethods[1],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_write,&relLock))
+		sipMOL2File::sipVH_write(&sipPyMethods[0],sipPyThis,relLock,a0);
 	else
 		MOL2File::write(a0);
 }
@@ -69,8 +53,8 @@ void sipMOL2File::read(System& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_read,&relLock))
-		sipMOL2File::sipVH_read(&sipPyMethods[2],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_read,&relLock))
+		sipMOL2File::sipVH_read(&sipPyMethods[1],sipPyThis,relLock,a0);
 	else
 		MOL2File::read(a0);
 }

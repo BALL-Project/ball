@@ -1,4 +1,4 @@
-// $Id: pyNucleotideList.C,v 1.1 2000/06/27 13:10:26 oliver Exp $
+// $Id: pyNucleotideList.C,v 1.2 2000/07/03 11:11:11 oliver Exp $
 
 #include <BALL/PYTHON/pyNucleotideList.h>
 #include <BALL/KERNEL/nucleotide.h>
@@ -36,11 +36,11 @@ namespace BALL
 
     for (; +it; ++it)
     {
-      Nucleotide* nucleotide = const_cast<Nucleotide*>(&dynamic_cast<const Nucleotide&>(*it));
+      const Nucleotide* nucleotide = dynamic_cast<const Nucleotide*>(&*it);
       if ((nucleotide != 0) && (it->isSelected() || !selected_only))
       {
         // store the nucleotide pointer in the list
-        push_back(nucleotide);
+        push_back(const_cast<Nucleotide*>(nucleotide));
 			}
 		}
 	}

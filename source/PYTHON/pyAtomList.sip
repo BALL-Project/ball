@@ -1,9 +1,11 @@
+// $Id: pyAtomList.sip,v 1.2 2000/07/03 11:11:07 oliver Exp $
 
 class PyAtomList
 {
 %HeaderCode
-#include <BALL/PYTHON/pyAtomList.h>
-#include "sipBALLAtom.h"
+	#include <BALL/PYTHON/pyAtomList.h>
+	#include "sipBALLAtom.h"
+  #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromClassCode
@@ -18,10 +20,10 @@ class PyAtomList
 
 	for (PyAtomList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Atom* obj = *it;
+		Atom& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Atom)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;

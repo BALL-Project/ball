@@ -6,6 +6,7 @@
 PyObject *sipClass_Residue;
 
 static void sipDealloc_Residue(sipThisType *);
+static PyObject *sipPyInternalRepr_Residue(sipThisType *);
 
 static PyTypeObject sipType_Residue = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_Residue = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_Residue,
 };
 
 sipResidue::sipResidue(): Residue()
@@ -1095,6 +1096,18 @@ static void sipDealloc_Residue(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_Residue(sipThisType *sipThis)
+{
+#line 53 "residue.sip"
+  Residue* ptr;
+  if ((ptr = (Residue*)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Residue ") + ptr->getName() + ptr->getID()
+				+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+#line 1115 "./sipBALLResidue.cpp"
 }
 
 PyObject *sipNew_Residue(PyObject *sipSelf,PyObject *sipArgs)

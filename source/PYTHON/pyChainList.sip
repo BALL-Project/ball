@@ -1,9 +1,11 @@
+// $Id: pyChainList.sip,v 1.2 2000/07/03 11:11:10 oliver Exp $
 
 class PyChainList
 {
 %HeaderCode
-#include <BALL/PYTHON/pyChainList.h>
-#include "sipBALLChain.h"
+	#include <BALL/PYTHON/pyChainList.h>
+	#include "sipBALLChain.h"
+  #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromClassCode
@@ -18,10 +20,10 @@ class PyChainList
 
 	for (PyChainList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Chain* obj = *it;
+		Chain& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Chain)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;

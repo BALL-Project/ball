@@ -6,7 +6,7 @@
 PyObject *sipClass_Index;
 
 static void sipDealloc_Index(sipThisType *);
-static PyObject *sipInternalRepr_Index(sipThisType *);
+static PyObject *sipPyInternalRepr_Index(sipThisType *);
 
 static PyTypeObject sipType_Index = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,7 +19,7 @@ static PyTypeObject sipType_Index = {
 	0,
 	0,
 	0,
-	(reprfunc)sipInternalRepr_Index,
+	(reprfunc)sipPyInternalRepr_Index,
 };
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
@@ -43,9 +43,9 @@ static void sipDealloc_Index(sipThisType *sipThis)
 	sipDeleteThis(sipThis);
 }
 
-static PyObject *sipPyOperatorRepr_Index(sipThisType *sipThis)
+static PyObject *sipPyInternalRepr_Index(sipThisType *sipThis)
 {
-#line 6 "global.sip"
+#line 8 "global.sip"
 	Index* ptr;
   if ((ptr = (Index*)sipGetCppPtr(sipThis,sipClass_Index)) == NULL)
     return NULL;
@@ -123,7 +123,7 @@ PyMethodDef sipClassAttrTab_Index[] = {
 
 int sipCanConvertTo_Index(PyObject *sipPy)
 {
-#line 13 "global.sip"
+#line 15 "global.sip"
 	// automatic conversion of Py integers to Position 
 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Index));
 #line 134 "./sipBALLIndex.cpp"
@@ -144,7 +144,7 @@ int sipConvertTo_Index(PyObject *sipPy,Index **sipCppPtr,int sipNoNull,int *sipI
 		return false;
 	}
 
-#line 17 "global.sip"
+#line 19 "global.sip"
 	if (PyInt_Check(sipPy))
 	{
 		*sipCppPtr = new Index(PyInt_AS_LONG(sipPy));

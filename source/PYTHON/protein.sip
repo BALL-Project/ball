@@ -1,21 +1,23 @@
- class Protein
+// $Id: protein.sip,v 1.2 2000/07/03 11:11:07 oliver Exp $
+
+class Protein
   : Molecule
- {
+{
 %HeaderCode
-#include <BALL/KERNEL/protein.h>
-using namespace BALL;
+	#include <BALL/KERNEL/protein.h>
+	using namespace BALL;
 %End
   public:
   Protein();
   Protein(const Protein&, bool = true);
   Protein(const String&, const String& = "" );
-//  virtual ~Protein();
+	~Protein();
   virtual void clear();
   virtual void destroy();
-//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-//  void persistentRead(PersistenceManager& pm);
+	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+	//  void persistentRead(PersistenceManager& pm);
   void set(const Protein&, bool = true);
-//  Protein& operator = (const Protein& protein);
+	//  Protein& operator = (const Protein& protein);
   void get(Protein&, bool = true) const;
   void swap(Protein&);
   Chain* getChain(int);
@@ -37,7 +39,17 @@ using namespace BALL;
   int countResidues() const;
   int countPDBAtoms() const;
   virtual bool isValid() const;
-//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
-//  virtual void read(istream& s);
-//  virtual void write(ostream& s) const;
- };
+	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+	//  virtual void read(istream& s);
+	//  virtual void write(ostream& s) const;
+	operator const char* ();
+%MemberCode
+  Protein* ptr;
+  if ((ptr = (Protein*)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Protein ") + ptr->getName() 
+				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
+%End
+
+};

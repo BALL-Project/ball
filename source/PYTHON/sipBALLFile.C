@@ -21,129 +21,6 @@ static PyTypeObject sipType_File = {
 	0,
 };
 
-sipFile::sipFile(): File()
-{
-	sipCommonCtor(sipPyMethods,1);
-}
-
-sipFile::sipFile(const String& a0,int a1): File(a0,a1)
-{
-	sipCommonCtor(sipPyMethods,1);
-}
-
-sipFile::sipFile(const File& a0): File(a0)
-{
-	sipCommonCtor(sipPyMethods,1);
-}
-
-sipFile::~sipFile()
-{
-	sipCommonDtor(sipPyThis);
-}
-bool sipFile::hasFormat(const String& a0) const
-{
-	int relLock;
-
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_hasFormat,&relLock) ?
-		sipFile::sipVH_hasFormat(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		File::hasFormat(a0);
-}
-bool sipFile::hasFormat()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_hasFormat,&relLock) ?
-		sipFile::sipVH_hasFormat(&sipPyMethods[0],sipPyThis,relLock) :
-		File::hasFormat();
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipFile::sipVH_hasFormat(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const String& a0)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-	PyObject *a0obj;
-
-	a0obj = sipMapCppToSelf(&a0,sipClass_String);
-
-	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
-
-	Py_XDECREF(a0obj);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_File,sipName_BALL_hasFormat);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
-// The common handler for all classes that inherit this virtual member
-// function.
-
-bool sipFile::sipVH_hasFormat(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock)
-{
-	bool res;
-	PyObject *resobj;
-	PyObject *sipArgs;
-
-	sipArgs = Py_BuildValue("(O)",sipThis -> sipSelf);
-
-	if (sipArgs == NULL)
-		goto reportError;
-
-	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
-
-	Py_DECREF(sipArgs);
-
-	if (resobj != NULL)
-	{
-		res = (bool)PyInt_AsLong(resobj);
-
-		Py_DECREF(resobj);
-
-		if (PyErr_Occurred() == NULL)
-		{
-			goto releaseLock;
-		}
-
-		sipBadVirtualResultType(sipName_BALL_File,sipName_BALL_hasFormat);
-	}
-
-reportError:
-	PyErr_Print();
-
-releaseLock:
-	sipCondReleaseLock(sipRelLock);
-
-	return res;
-}
-
 static PyObject *sipDo_File_open(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -185,7 +62,7 @@ static PyObject *sipDo_File_open(PyObject *sipThisObj,PyObject *sipArgs)
 
       return sipConvertFromBool((int)res);
     }
-#line 193 "./sipBALLFile.cpp"
+#line 70 "./sipBALLFile.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -278,35 +155,6 @@ static PyObject *sipDo_File_getName(PyObject *sipThisObj,PyObject *sipArgs)
 	// Report an error if the arguments couldn't be parsed.
 
 	sipNoMethod(sipName_BALL_File,sipName_BALL_getName);
-
-	return NULL;
-}
-
-static PyObject *sipDo_File_getOriginalName(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			const String *res;
-			File *ptr;
-
-			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
-				return NULL;
-
-			res = &ptr -> File::getOriginalName();
-
-			return sipMapCppToSelf(res,sipClass_String);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_File,sipName_BALL_getOriginalName);
 
 	return NULL;
 }
@@ -758,78 +606,6 @@ static PyObject *sipDo_File_isExecutable(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_hasFormat(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_File)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			bool res;
-			File *ptr;
-
-			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
-				return NULL;
-
-			res = ptr -> File::hasFormat();
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			bool res;
-			File *ptr;
-
-			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
-				return NULL;
-
-			res = ptr -> File::hasFormat();
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	{
-		const String *a0;
-		PyObject *a0obj;
-
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_String,&a0obj))
-		{
-			bool res;
-			File *ptr;
-
-			if ((ptr = (File *)sipGetCppPtr(sipThis,sipClass_File)) == NULL)
-				return NULL;
-
-			int iserr = 0;
-
-			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			res = ptr -> File::hasFormat(* a0);
-
-			if (istemp0)
-				delete a0;
-
-			return sipConvertFromBool((int)res);
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_File,sipName_BALL_hasFormat);
-
-	return NULL;
-}
-
 static PyObject *sipDo_File_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -873,14 +649,8 @@ static void sipDealloc_File(sipThisType *sipThis)
 {
 	if (sipThis -> u.cppPtr != NULL)
 	{
-		if (!sipIsSimple(sipThis))
-			((sipFile *)sipThis -> u.cppPtr) -> sipPyThis = NULL;
-
 		if (sipIsPyOwned(sipThis))
-			if (sipIsSimple(sipThis))
-				delete (File *)sipThis -> u.cppPtr;
-			else
-				delete (sipFile *)sipThis -> u.cppPtr;
+			delete (File *)sipThis -> u.cppPtr;
 	}
 
 	sipDeleteThis(sipThis);
@@ -904,7 +674,7 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,"-"))
 		{
-			sipNew = new sipFile();
+			sipNew = new File();
 		}
 	}
 
@@ -923,7 +693,7 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			sipNew = new sipFile(* a0, a1);
+			sipNew = new File(* a0, a1);
 
 			if (istemp0)
 				delete a0;
@@ -944,7 +714,7 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			sipNew = new sipFile(* a0);
+			sipNew = new File(* a0);
 		}
 	}
 
@@ -959,16 +729,10 @@ PyObject *sipNew_File(PyObject *sipSelf,PyObject *sipArgs)
 	if ((sipThis = sipCreateThis(sipSelf,sipNew,&sipType_File,sipFlags,&et)) == NULL)
 	{
 		if (sipFlags & SIP_PY_OWNED)
-			if (sipFlags & SIP_SIMPLE)
-				delete (File *)sipNew;
-			else
-				delete (sipFile *)sipNew;
+			delete (File *)sipNew;
 
 		return NULL;
 	}
-
-	if (!(sipFlags & SIP_SIMPLE))
-		((sipFile *)sipNew) -> sipPyThis = sipThis;
 
 	Py_INCREF(Py_None);
 	return Py_None;
@@ -979,7 +743,6 @@ PyMethodDef sipClassAttrTab_File[] = {
 	{sipName_BALL_reopen, sipDo_File_reopen, METH_VARARGS, NULL},
 	{sipName_BALL_close, sipDo_File_close, METH_VARARGS, NULL},
 	{sipName_BALL_getName, sipDo_File_getName, METH_VARARGS, NULL},
-	{sipName_BALL_getOriginalName, sipDo_File_getOriginalName, METH_VARARGS, NULL},
 	{sipName_BALL_getSize, sipDo_File_getSize, METH_VARARGS, NULL},
 	{sipName_BALL_getOpenMode, sipDo_File_getOpenMode, METH_VARARGS, NULL},
 	{sipName_BALL_copyTo, sipDo_File_copyTo, METH_VARARGS, NULL},
@@ -994,7 +757,6 @@ PyMethodDef sipClassAttrTab_File[] = {
 	{sipName_BALL_isReadable, sipDo_File_isReadable, METH_VARARGS, NULL},
 	{sipName_BALL_isWritable, sipDo_File_isWritable, METH_VARARGS, NULL},
 	{sipName_BALL_isExecutable, sipDo_File_isExecutable, METH_VARARGS, NULL},
-	{sipName_BALL_hasFormat, sipDo_File_hasFormat, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_File_isValid, METH_VARARGS, NULL},
 	{NULL}
 };

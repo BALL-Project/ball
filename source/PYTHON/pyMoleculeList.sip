@@ -1,9 +1,11 @@
+// $Id: pyMoleculeList.sip,v 1.2 2000/07/03 11:11:11 oliver Exp $
 
 class PyMoleculeList
 {
 %HeaderCode
-#include <BALL/PYTHON/pyMoleculeList.h>
-#include "sipBALLMolecule.h"
+	#include <BALL/PYTHON/pyMoleculeList.h>
+	#include "sipBALLMolecule.h"
+  #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromClassCode
@@ -18,10 +20,10 @@ class PyMoleculeList
 
 	for (PyMoleculeList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Molecule* obj = *it;
+		Molecule& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Molecule)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;

@@ -1,21 +1,23 @@
- class Chain
-  : BaseFragment
- {
+// $Id: chain.sip,v 1.2 2000/07/03 11:11:04 oliver Exp $
+
+class Chain
+ : BaseFragment
+{
 %HeaderCode
-#include <BALL/KERNEL/chain.h>
-using namespace BALL;
+	#include <BALL/KERNEL/chain.h>
+	using namespace BALL;
 %End
   public:
   Chain();
   Chain(const Chain&, bool = true);
   Chain(const String&);
-//  virtual ~Chain();
+  ~Chain();
   virtual void clear();
   virtual void destroy();
-//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-//  void persistentRead(PersistenceManager& pm);
+	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+	//  void persistentRead(PersistenceManager& pm);
   void set(const Chain&, bool = true);
-//  Chain& operator = (const Chain&);
+	//  Chain& operator = (const Chain&);
   void get(Chain&, bool = true) const;
   void swap(Chain&);
   Protein* getProtein();
@@ -49,7 +51,18 @@ using namespace BALL;
   void spliceAfter(Chain&);
   void splice(Chain&);
   virtual bool isValid() const;
-//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
-//  virtual void read(istream& s);
-//  virtual void write(ostream& s) const;
- };
+	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+	//  virtual void read(istream& s);
+	//  virtual void write(ostream& s) const;
+	
+	operator const char* ();
+%MemberCode
+  Chain* ptr;
+  if ((ptr = (Chain*)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Chain ") + ptr->getName()
+				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
+%End
+
+};

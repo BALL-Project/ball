@@ -1,4 +1,4 @@
-// $Id: pySecondaryStructureList.C,v 1.1 2000/06/27 13:10:30 oliver Exp $
+// $Id: pySecondaryStructureList.C,v 1.2 2000/07/03 11:11:13 oliver Exp $
 
 #include <BALL/PYTHON/pySecondaryStructureList.h>
 #include <BALL/KERNEL/secondaryStructure.h>
@@ -36,11 +36,11 @@ namespace BALL
 
     for (; +it; ++it)
     {
-      SecondaryStructure* sec_struct = const_cast<SecondaryStructure*>(&dynamic_cast<const SecondaryStructure&>(*it));
+      const SecondaryStructure* sec_struct = dynamic_cast<const SecondaryStructure*>(&*it);
       if ((sec_struct != 0) && (it->isSelected() || !selected_only))
       {
         // store the sec_struct pointer in the list
-        push_back(sec_struct);
+        push_back(const_cast<SecondaryStructure*>(sec_struct));
 			}
 		}
 	}

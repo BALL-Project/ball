@@ -11,7 +11,7 @@ PyObject *sipConvertFrom_PyMoleculeList(const PyMoleculeList *sipCpp)
 		return Py_None;
 	}
 
-#line 10 "pyMoleculeList.sip"
+#line 12 "pyMoleculeList.sip"
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -23,10 +23,10 @@ PyObject *sipConvertFrom_PyMoleculeList(const PyMoleculeList *sipCpp)
 
 	for (PyMoleculeList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Molecule* obj = *it;
+		Molecule& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Molecule)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -41,7 +41,7 @@ PyObject *sipClass_PyMoleculeList;
 
 int sipCanConvertTo_PyMoleculeList(PyObject *sipPy)
 {
-#line 35 "pyMoleculeList.sip"
+#line 37 "pyMoleculeList.sip"
 	return PyList_Check(sipPy);
 #line 51 "./sipBALLPyMoleculeList.cpp"
 }
@@ -61,7 +61,7 @@ int sipConvertTo_PyMoleculeList(PyObject *sipPy,PyMoleculeList **sipCppPtr,int s
 		return false;
 	}
 
-#line 39 "pyMoleculeList.sip"
+#line 41 "pyMoleculeList.sip"
 	// Convert a Python list of Molecule instances to an MoleculeList object on the
 	// heap.
  

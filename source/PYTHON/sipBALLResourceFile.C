@@ -21,42 +21,6 @@ static PyTypeObject sipType_ResourceFile = {
 	0,
 };
 
-sipResourceFile::sipResourceFile(): ResourceFile()
-{
-	sipCommonCtor(sipPyMethods,1);
-}
-
-sipResourceFile::sipResourceFile(const String& a0): ResourceFile(a0)
-{
-	sipCommonCtor(sipPyMethods,1);
-}
-
-sipResourceFile::sipResourceFile(const ResourceFile& a0): ResourceFile(a0)
-{
-	sipCommonCtor(sipPyMethods,1);
-}
-
-sipResourceFile::~sipResourceFile()
-{
-	sipCommonDtor(sipPyThis);
-}
-bool sipResourceFile::hasFormat(const String& a0) const
-{
-	int relLock;
-
-	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_hasFormat,&relLock) ?
-		sipFile::sipVH_hasFormat(&sipPyMethods[0],sipPyThis,relLock,a0) :
-		File::hasFormat(a0);
-}
-bool sipResourceFile::hasFormat()
-{
-	int relLock;
-
-	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_hasFormat,&relLock) ?
-		sipFile::sipVH_hasFormat(&sipPyMethods[0],sipPyThis,relLock) :
-		File::hasFormat();
-}
-
 static PyObject *sipDo_ResourceFile_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -660,14 +624,8 @@ static void sipDealloc_ResourceFile(sipThisType *sipThis)
 {
 	if (sipThis -> u.cppPtr != NULL)
 	{
-		if (!sipIsSimple(sipThis))
-			((sipResourceFile *)sipThis -> u.cppPtr) -> sipPyThis = NULL;
-
 		if (sipIsPyOwned(sipThis))
-			if (sipIsSimple(sipThis))
-				delete (ResourceFile *)sipThis -> u.cppPtr;
-			else
-				delete (sipResourceFile *)sipThis -> u.cppPtr;
+			delete (ResourceFile *)sipThis -> u.cppPtr;
 	}
 
 	sipDeleteThis(sipThis);
@@ -691,7 +649,7 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,"-"))
 		{
-			sipNew = new sipResourceFile();
+			sipNew = new ResourceFile();
 		}
 	}
 
@@ -709,7 +667,7 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			sipNew = new sipResourceFile(* a0);
+			sipNew = new ResourceFile(* a0);
 
 			if (istemp0)
 				delete a0;
@@ -730,7 +688,7 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			sipNew = new sipResourceFile(* a0);
+			sipNew = new ResourceFile(* a0);
 		}
 	}
 
@@ -745,16 +703,10 @@ PyObject *sipNew_ResourceFile(PyObject *sipSelf,PyObject *sipArgs)
 	if ((sipThis = sipCreateThis(sipSelf,sipNew,&sipType_ResourceFile,sipFlags,&et)) == NULL)
 	{
 		if (sipFlags & SIP_PY_OWNED)
-			if (sipFlags & SIP_SIMPLE)
-				delete (ResourceFile *)sipNew;
-			else
-				delete (sipResourceFile *)sipNew;
+			delete (ResourceFile *)sipNew;
 
 		return NULL;
 	}
-
-	if (!(sipFlags & SIP_SIMPLE))
-		((sipResourceFile *)sipNew) -> sipPyThis = sipThis;
 
 	Py_INCREF(Py_None);
 	return Py_None;

@@ -1,9 +1,8 @@
-# 1 "selector.h"
-namespace BALL 
+// $Id: selector.sip,v 1.2 2000/07/03 11:11:13 oliver Exp $
+
+class ExpressionPredicate
+//  : public UnaryPredicate<Composite>
 {
- class ExpressionPredicate
-  : public UnaryPredicate<Composite>
- {
   public:
   ExpressionPredicate();
   ExpressionPredicate(const String& argument);
@@ -12,10 +11,11 @@ namespace BALL
   virtual void setArgument(const String& argument);
   protected:
   String argument_;
- };
- class Selector
+};
+
+class Selector
   : public UnaryProcessor<Composite>
- {
+{
   class ExpressionNode
   {
    public:

@@ -1,9 +1,11 @@
+// $Id: pyProteinList.sip,v 1.2 2000/07/03 11:11:12 oliver Exp $
 
 class PyProteinList
 {
 %HeaderCode
-#include <BALL/PYTHON/pyProteinList.h>
-#include "sipBALLProtein.h"
+	#include <BALL/PYTHON/pyProteinList.h>
+	#include "sipBALLProtein.h"
+  #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromClassCode
@@ -18,10 +20,10 @@ class PyProteinList
 
 	for (PyProteinList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Protein* obj = *it;
+		Protein& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Protein)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;

@@ -1,3 +1,5 @@
+// $Id: global.sip,v 1.5 2000/07/03 11:11:06 oliver Exp $
+
 class Index
 {
 	public:

@@ -1,9 +1,11 @@
+// $Id: pyNucleicAcidList.sip,v 1.2 2000/07/03 11:11:11 oliver Exp $
 
 class PyNucleicAcidList
 {
 %HeaderCode
-#include <BALL/PYTHON/pyNucleicAcidList.h>
-#include "sipBALLNucleicAcid.h"
+	#include <BALL/PYTHON/pyNucleicAcidList.h>
+	#include "sipBALLNucleicAcid.h"
+  #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromClassCode
@@ -18,10 +20,10 @@ class PyNucleicAcidList
 
 	for (PyNucleicAcidList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		NucleicAcid* obj = *it;
+		NucleicAcid& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_NucleicAcid)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;

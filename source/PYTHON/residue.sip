@@ -1,21 +1,23 @@
- class Residue
+// $Id: residue.sip,v 1.2 2000/07/03 11:11:13 oliver Exp $
+
+class Residue
   : Fragment
- {
+{
 %HeaderCode
-#include <BALL/KERNEL/residue.h>
-using namespace BALL;
+	#include <BALL/KERNEL/residue.h>
+	using namespace BALL;
 %End
   public:
   Residue();
   Residue(const Residue&, bool = true);
   Residue(const String&, const String&, char);
-//  virtual ~Residue();
+	~Residue();
   virtual void clear();
   virtual void destroy();
-//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-//  void persistentRead(PersistenceManager& pm);
+	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+	//  void persistentRead(PersistenceManager& pm);
   void set(const Residue&, bool = true);
-//  Residue &operator = (const Residue&);
+	//  Residue& operator = (const Residue&);
   void get(Residue&, bool = true) const;
   void swap(Residue&);
   Protein* getProtein();
@@ -43,7 +45,16 @@ using namespace BALL;
   bool isNTerminal() const;
   bool isCTerminal() const;
   virtual bool isValid() const;
-//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
-//  virtual void read(istream& s);
-//  virtual void write(ostream& s) const;
- };
+	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+	//  virtual void read(istream& s);
+	//  virtual void write(ostream& s) const;
+	operator const char* ();
+%MemberCode
+  Residue* ptr;
+  if ((ptr = (Residue*)sipGetCppPtr(sipThis,sipClass_Residue)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Residue ") + ptr->getName() + ptr->getID()
+				+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+%End
+};

@@ -24,7 +24,21 @@ using namespace BALL;
 	int size() const;
 
 	operator const char* () const;
+%MemberCode
+  const char *s;
+  String *ptr;
 
+  if ((ptr = (String *)sipGetCppPtr(sipThis,sipClass_String)) == NULL)
+    return NULL;
+
+  if ((s = ptr->c_str()) == NULL)
+  {
+    Py_INCREF(Py_None);
+    return Py_None;
+  }
+
+  return PyString_FromString(s);
+%End
 
 	PyMethods:
 	__cmp__(self,other):

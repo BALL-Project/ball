@@ -6,6 +6,7 @@
 PyObject *sipClass_PDBAtom;
 
 static void sipDealloc_PDBAtom(sipThisType *);
+static PyObject *sipPyInternalRepr_PDBAtom(sipThisType *);
 
 static PyTypeObject sipType_PDBAtom = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_PDBAtom = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_PDBAtom,
 };
 
 sipPDBAtom::sipPDBAtom(): PDBAtom()
@@ -31,7 +32,7 @@ sipPDBAtom::sipPDBAtom(const PDBAtom& a0,bool a1): PDBAtom(a0,a1)
 	sipCommonCtor(sipPyMethods,5);
 }
 
-sipPDBAtom::sipPDBAtom(Element& a0,const String& a1,const String& a2,int a3,const Vector3& a4,const Vector3& a5,const Vector3& a6,float a7,float a8,char a9,char a10,char a11,float a12,float a13): PDBAtom(a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
+sipPDBAtom::sipPDBAtom(Element& a0,const String& a1,const String& a2,AtomType a3,const Vector3& a4,const Vector3& a5,const Vector3& a6,float a7,float a8,char a9,char a10,char a11,float a12,float a13): PDBAtom(a0,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12,a13)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
@@ -760,6 +761,20 @@ static void sipDealloc_PDBAtom(sipThisType *sipThis)
 	sipDeleteThis(sipThis);
 }
 
+static PyObject *sipPyInternalRepr_PDBAtom(sipThisType *sipThis)
+{
+#line 59 "PDBAtom.sip"
+  PDBAtom* ptr;
+  if ((ptr = (PDBAtom*)sipGetCppPtr(sipThis,sipClass_PDBAtom)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("PDBAtom ") + ptr->getName()
+        + " { " + ptr->getElement().getSymbol() + " @ ("
+        + String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " "
+        + String(ptr->getPosition().z) + " }").c_str());
+#line 780 "./sipBALLPDBAtom.cpp"
+}
+
 PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 {
 	static sipExtraType et = {
@@ -809,7 +824,8 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a1obj;
 		const String *a2;
 		PyObject *a2obj;
-		int a3;
+		AtomType *a3;
+		PyObject *a3obj;
 		const Vector3 *a4;
 		PyObject *a4obj;
 		const Vector3 *a5;
@@ -824,13 +840,14 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 		float a12;
 		float a13;
 
-		if (sipParseArgs(sipArgs,"-IIIiIIIffcccff",sipCanConvertTo_Element,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_String,&a2obj,&a3,sipCanConvertTo_Vector3,&a4obj,sipCanConvertTo_Vector3,&a5obj,sipCanConvertTo_Vector3,&a6obj,&a7,&a8,&a9,&a10,&a11,&a12,&a13))
+		if (sipParseArgs(sipArgs,"-IIIIIIIffcccff",sipCanConvertTo_Element,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_String,&a2obj,sipCanConvertTo_AtomType,&a3obj,sipCanConvertTo_Vector3,&a4obj,sipCanConvertTo_Vector3,&a5obj,sipCanConvertTo_Vector3,&a6obj,&a7,&a8,&a9,&a10,&a11,&a12,&a13))
 		{
 			int iserr = 0;
 
 			sipConvertTo_Element(a0obj,&a0,1,&iserr);
 			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
 			int istemp2 = sipConvertTo_String(a2obj,(String **)&a2,1,&iserr);
+			int istemp3 = sipConvertTo_AtomType(a3obj,&a3,1,&iserr);
 			sipConvertTo_Vector3(a4obj,(Vector3 **)&a4,1,&iserr);
 			sipConvertTo_Vector3(a5obj,(Vector3 **)&a5,1,&iserr);
 			sipConvertTo_Vector3(a6obj,(Vector3 **)&a6,1,&iserr);
@@ -838,13 +855,16 @@ PyObject *sipNew_PDBAtom(PyObject *sipSelf,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			sipNew = new sipPDBAtom(* a0,* a1,* a2, a3,* a4,* a5,* a6, a7, a8, a9, a10, a11, a12, a13);
+			sipNew = new sipPDBAtom(* a0,* a1,* a2,* a3,* a4,* a5,* a6, a7, a8, a9, a10, a11, a12, a13);
 
 			if (istemp1)
 				delete a1;
 
 			if (istemp2)
 				delete a2;
+
+			if (istemp3)
+				delete a3;
 		}
 	}
 

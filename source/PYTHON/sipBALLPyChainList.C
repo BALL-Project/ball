@@ -11,7 +11,7 @@ PyObject *sipConvertFrom_PyChainList(const PyChainList *sipCpp)
 		return Py_None;
 	}
 
-#line 10 "pyChainList.sip"
+#line 12 "pyChainList.sip"
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -23,10 +23,10 @@ PyObject *sipConvertFrom_PyChainList(const PyChainList *sipCpp)
 
 	for (PyChainList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Chain* obj = *it;
+		Chain& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Chain)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -41,7 +41,7 @@ PyObject *sipClass_PyChainList;
 
 int sipCanConvertTo_PyChainList(PyObject *sipPy)
 {
-#line 35 "pyChainList.sip"
+#line 37 "pyChainList.sip"
 	return PyList_Check(sipPy);
 #line 51 "./sipBALLPyChainList.cpp"
 }
@@ -61,7 +61,7 @@ int sipConvertTo_PyChainList(PyObject *sipPy,PyChainList **sipCppPtr,int sipNoNu
 		return false;
 	}
 
-#line 39 "pyChainList.sip"
+#line 41 "pyChainList.sip"
 	// Convert a Python list of Chain instances to an ChainList object on the
 	// heap.
  

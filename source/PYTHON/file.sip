@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.3 2000/06/22 10:21:32 oliver Exp $
+// $Id: file.sip,v 1.4 2000/07/03 11:11:06 oliver Exp $
 class File
 {
 %HeaderCode
@@ -53,7 +53,6 @@ using namespace BALL;
   bool reopen();
   void close();
   const String& getName() const;
-  const String& getOriginalName() const;
   int getSize();
   int getOpenMode() const;
   // int getType() const;
@@ -72,8 +71,5 @@ using namespace BALL;
   bool isReadable() const;
   bool isWritable() const;
   bool isExecutable() const;
-  virtual bool hasFormat();
-  bool hasFormat() const;
-  virtual bool hasFormat(const String&) const;
   bool isValid() const;
 };

@@ -6,7 +6,7 @@
 PyObject *sipClass_String;
 
 static void sipDealloc_String(sipThisType *);
-static PyObject *sipInternalRepr_String(sipThisType *);
+static PyObject *sipPyInternalRepr_String(sipThisType *);
 
 static PyTypeObject sipType_String = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -19,7 +19,7 @@ static PyTypeObject sipType_String = {
 	0,
 	0,
 	0,
-	(reprfunc)sipInternalRepr_String,
+	(reprfunc)sipPyInternalRepr_String,
 };
 
 static PyObject *sipDo_String_destroy(PyObject *sipThisObj,PyObject *sipArgs)
@@ -542,22 +542,23 @@ static void sipDealloc_String(sipThisType *sipThis)
 	sipDeleteThis(sipThis);
 }
 
-static PyObject *sipPyOperatorRepr_String(sipThisType *sipThis)
+static PyObject *sipPyInternalRepr_String(sipThisType *sipThis)
 {
- const char *s;
- String *ptr;
+#line 28 "string.sip"
+  const char *s;
+  String *ptr;
 
- if ((ptr = (String *)sipGetCppPtr(sipThis,sipClass_String)) == NULL)
-   return NULL;
+  if ((ptr = (String *)sipGetCppPtr(sipThis,sipClass_String)) == NULL)
+    return NULL;
 
- if ((s = *ptr) == NULL)
- {
-   Py_INCREF(Py_None);
-   return Py_None;
- }
+  if ((s = ptr->c_str()) == NULL)
+  {
+    Py_INCREF(Py_None);
+    return Py_None;
+  }
 
- return PyString_FromString(s);
-#line 565 "./sipBALLString.cpp"
+  return PyString_FromString(s);
+#line 566 "./sipBALLString.cpp"
 }
 
 PyObject *sipNew_String(PyObject *sipSelf,PyObject *sipArgs)
@@ -654,10 +655,10 @@ PyMethodDef sipClassAttrTab_String[] = {
 
 int sipCanConvertTo_String(PyObject *sipPy)
 {
-#line 36 "string.sip"
+#line 50 "string.sip"
 	// automatic conversion of Py-Strings to Strings
 	return (PyString_Check(sipPy) || sipIsSubClassInstance(sipPy,sipClass_String));
-#line 665 "./sipBALLString.cpp"
+#line 666 "./sipBALLString.cpp"
 }
 
 int sipConvertTo_String(PyObject *sipPy,String **sipCppPtr,int sipNoNull,int *sipIsErr)
@@ -675,7 +676,7 @@ int sipConvertTo_String(PyObject *sipPy,String **sipCppPtr,int sipNoNull,int *si
 		return false;
 	}
 
-#line 40 "string.sip"
+#line 54 "string.sip"
   if (PyString_Check(sipPy))
   {
     *sipCppPtr = new String(PyString_AS_STRING(sipPy));
@@ -686,7 +687,7 @@ int sipConvertTo_String(PyObject *sipPy,String **sipCppPtr,int sipNoNull,int *si
   *sipCppPtr = (String*)sipConvertToCpp(sipPy,sipClass_String,sipIsErr);
 
   return 0;
-#line 694 "./sipBALLString.cpp"
+#line 695 "./sipBALLString.cpp"
 }
 
 String *sipForceConvertTo_String(PyObject *valobj,int *iserrp)

@@ -658,6 +658,406 @@ static PyObject *sipDo_Matrix4x4_getDiagonal(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
+static PyObject *sipDo_Matrix4x4_Operator__call__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		Position *a0;
+		PyObject *a0obj;
+		Position *a1;
+		PyObject *a1obj;
+
+		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Position,&a0obj,sipCanConvertTo_Position,&a1obj))
+		{
+			float res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+			int istemp1 = sipConvertTo_Position(a1obj,&a1,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Matrix4x4::operator()(* a0,* a1);
+
+			if (istemp0)
+				delete a0;
+
+			if (istemp1)
+				delete a1;
+
+			return PyFloat_FromDouble((double)res);
+		}
+	}
+
+	{
+		Position *a0;
+		PyObject *a0obj;
+		Position *a1;
+		PyObject *a1obj;
+
+		if (sipParseArgs(sipArgs,"II",sipCanConvertTo_Position,&a0obj,sipCanConvertTo_Position,&a1obj))
+		{
+			float res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+			int istemp1 = sipConvertTo_Position(a1obj,&a1,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Matrix4x4::operator()(* a0,* a1);
+
+			if (istemp0)
+				delete a0;
+
+			if (istemp1)
+				delete a1;
+
+			return PyFloat_FromDouble((double)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Matrix4x4,sipName_BALL_Operator__call__);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Matrix4x4_Operator__getitem__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		Position *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
+		{
+			float res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Matrix4x4::operator[](* a0);
+
+			if (istemp0)
+				delete a0;
+
+			return PyFloat_FromDouble((double)res);
+		}
+	}
+
+	{
+		Position *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
+		{
+			float res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Matrix4x4::operator[](* a0);
+
+			if (istemp0)
+				delete a0;
+
+			return PyFloat_FromDouble((double)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Matrix4x4,sipName_BALL_Operator__getitem__);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Matrix4x4_Operator__pos__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			res = new Matrix4x4(ptr -> Matrix4x4::operator+());
+
+			return sipNewCppToSelf(res,sipClass_Matrix4x4,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Matrix4x4,sipName_BALL_Operator__pos__);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Matrix4x4_Operator__neg__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		if (sipParseArgs(sipArgs,""))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			res = new Matrix4x4(ptr -> Matrix4x4::operator-());
+
+			return sipNewCppToSelf(res,sipClass_Matrix4x4,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Matrix4x4,sipName_BALL_Operator__neg__);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Matrix4x4_Operator__add__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		const Matrix4x4 *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Matrix4x4(a0obj,(Matrix4x4 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = new Matrix4x4(ptr -> Matrix4x4::operator+(* a0));
+
+			return sipNewCppToSelf(res,sipClass_Matrix4x4,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Matrix4x4,sipName_BALL_Operator__add__);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Matrix4x4_Operator__sub__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		const Matrix4x4 *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Matrix4x4(a0obj,(Matrix4x4 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = new Matrix4x4(ptr -> Matrix4x4::operator-(* a0));
+
+			return sipNewCppToSelf(res,sipClass_Matrix4x4,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Matrix4x4,sipName_BALL_Operator__sub__);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Matrix4x4_Operator__mul__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		float a0;
+
+		if (sipParseArgs(sipArgs,"f",&a0))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			res = new Matrix4x4(ptr -> Matrix4x4::operator*( a0));
+
+			return sipNewCppToSelf(res,sipClass_Matrix4x4,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	{
+		const Matrix4x4 *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Matrix4x4(a0obj,(Matrix4x4 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = new Matrix4x4(ptr -> Matrix4x4::operator*(* a0));
+
+			return sipNewCppToSelf(res,sipClass_Matrix4x4,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	{
+		const Vector4 *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Vector4,&a0obj))
+		{
+			Vector4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Vector4(a0obj,(Vector4 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = &ptr -> Matrix4x4::operator*(* a0);
+
+			return sipMapCppToSelf(res,sipClass_Vector4);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Matrix4x4,sipName_BALL_Operator__mul__);
+
+	return NULL;
+}
+
+static PyObject *sipDo_Matrix4x4_Operator__div__(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		float a0;
+
+		if (sipParseArgs(sipArgs,"f",&a0))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			res = new Matrix4x4(ptr -> Matrix4x4::operator/( a0));
+
+			return sipNewCppToSelf(res,sipClass_Matrix4x4,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_Matrix4x4,sipName_BALL_Operator__div__);
+
+	return NULL;
+}
+
 static PyObject *sipDo_Matrix4x4_invert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -2313,6 +2713,14 @@ PyMethodDef sipClassAttrTab_Matrix4x4[] = {
 	{sipName_BALL_setColumn, sipDo_Matrix4x4_setColumn, METH_VARARGS, NULL},
 	{sipName_BALL_isEqual, sipDo_Matrix4x4_isEqual, METH_VARARGS, NULL},
 	{sipName_BALL_getDiagonal, sipDo_Matrix4x4_getDiagonal, METH_VARARGS, NULL},
+	{sipName_BALL_Operator__call__, sipDo_Matrix4x4_Operator__call__, METH_VARARGS, NULL},
+	{sipName_BALL_Operator__getitem__, sipDo_Matrix4x4_Operator__getitem__, METH_VARARGS, NULL},
+	{sipName_BALL_Operator__pos__, sipDo_Matrix4x4_Operator__pos__, METH_VARARGS, NULL},
+	{sipName_BALL_Operator__neg__, sipDo_Matrix4x4_Operator__neg__, METH_VARARGS, NULL},
+	{sipName_BALL_Operator__add__, sipDo_Matrix4x4_Operator__add__, METH_VARARGS, NULL},
+	{sipName_BALL_Operator__sub__, sipDo_Matrix4x4_Operator__sub__, METH_VARARGS, NULL},
+	{sipName_BALL_Operator__mul__, sipDo_Matrix4x4_Operator__mul__, METH_VARARGS, NULL},
+	{sipName_BALL_Operator__div__, sipDo_Matrix4x4_Operator__div__, METH_VARARGS, NULL},
 	{sipName_BALL_invert, sipDo_Matrix4x4_invert, METH_VARARGS, NULL},
 	{sipName_BALL_getDeterminant, sipDo_Matrix4x4_getDeterminant, METH_VARARGS, NULL},
 	{sipName_BALL_translate, sipDo_Matrix4x4_translate, METH_VARARGS, NULL},

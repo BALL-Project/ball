@@ -11,7 +11,7 @@ PyObject *sipConvertFrom_PyNucleicAcidList(const PyNucleicAcidList *sipCpp)
 		return Py_None;
 	}
 
-#line 10 "pyNucleicAcidList.sip"
+#line 12 "pyNucleicAcidList.sip"
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -23,10 +23,10 @@ PyObject *sipConvertFrom_PyNucleicAcidList(const PyNucleicAcidList *sipCpp)
 
 	for (PyNucleicAcidList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		NucleicAcid* obj = *it;
+		NucleicAcid& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_NucleicAcid)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -41,7 +41,7 @@ PyObject *sipClass_PyNucleicAcidList;
 
 int sipCanConvertTo_PyNucleicAcidList(PyObject *sipPy)
 {
-#line 35 "pyNucleicAcidList.sip"
+#line 37 "pyNucleicAcidList.sip"
 	return PyList_Check(sipPy);
 #line 51 "./sipBALLPyNucleicAcidList.cpp"
 }
@@ -61,7 +61,7 @@ int sipConvertTo_PyNucleicAcidList(PyObject *sipPy,PyNucleicAcidList **sipCppPtr
 		return false;
 	}
 
-#line 39 "pyNucleicAcidList.sip"
+#line 41 "pyNucleicAcidList.sip"
 	// Convert a Python list of NucleicAcid instances to an NucleicAcidList object on the
 	// heap.
  

@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.12 2000/06/30 05:58:43 oliver Exp $
+# $Id: Makefile,v 1.13 2000/07/03 11:11:04 oliver Exp $
 #
 
 all: libBALLc.so
@@ -13,10 +13,12 @@ SIP_SOURCES_COMMON=\
 	sipBALLVersionInfo.C
 
 SIP_SOURCES_CONCEPT=\
+	sipBALLAtomProcessor.C\
 	sipBALLComposite.C\
 	sipBALLNamedProperty.C\
 	sipBALLObject.C\
 	sipBALLPersistentObject.C\
+	sipBALLProcessor.C\
 	sipBALLPropertyManager.C\
 	sipBALLSelectable.C
 
@@ -39,6 +41,7 @@ SIP_SOURCES_FORMAT=\
 
 SIP_SOURCES_KERNEL=\
 	sipBALLAtom.C\
+	sipBALLAtomType.C\
 	sipBALLBaseFragment.C\
 	sipBALLBond.C\
 	sipBALLChain.C\
@@ -102,6 +105,8 @@ SIP_SOURCES_SYSTEM=\
 
 SIP_SOURCES_PYTHON=\
 	sipBALLPyAtomList.C\
+	sipBALLPyBondList.C\
+	sipBALLPyBaseFragmentList.C\
 	sipBALLPyFragmentList.C\
 	sipBALLPyMoleculeList.C\
 	sipBALLPyPDBAtomList.C\
@@ -114,7 +119,11 @@ SIP_SOURCES_PYTHON=\
 
 SIP_SOURCES_SOLVATION=
 
-SIP_SOURCES_STRUCTURE=
+SIP_SOURCES_STRUCTURE=\
+	sipBALLClearChargeProcessor.C\
+	sipBALLClearRadiusProcessor.C\
+	sipBALLAssignRadiusProcessor.C\
+	sipBALLAssignChargeProcessor.C
 
 SIP_SOURCES=\
 	$(SIP_SOURCES_COMMON)\
@@ -136,8 +145,11 @@ SIP_SOURCES=\
 
 PYBALL_SOURCES=\
 	extractors.C\
-	pyConstant.C\
+	pyBALLSipHelper.C\
 	pyAtomList.C\
+	pyBaseFragmentList.C\
+	pyBondList.C\
+	pyConstant.C\
 	pyFragmentList.C\
 	pyMoleculeList.C\
 	pyPDBAtomList.C\
@@ -158,10 +170,9 @@ sip:
 	@echo "running SIP..."
 	@$(SIP) -c . BALL.sip
 	@echo "removing SIP header..."
-	@for i in `ls ./sip*cpp`; do cat $$i | sed 1,4d > $$i.tmp ; rm $$i ; done
+	@for i in `ls ./sip*cpp` BALLcmodule.cpp; do cat $$i | sed 1,4d > $$i.tmp ; rm $$i ; done
 	@echo "replacing new files..."
-	@for i in `ls ./sip*cpp.tmp`; do if cmp $$i `basename $$i .cpp.tmp`.C 2>/dev/null >/dev/null ; then true ;  else mv $$i `basename $$i .cpp.tmp`.C ; echo "replacing file: `basename $$i .cpp.tmp`" ; fi ; done
-	@mv ./BALLcmodule.cpp ./BALLcmodule.C
+	@for i in `ls ./*cpp.tmp`; do if cmp $$i `basename $$i .cpp.tmp`.C 2>/dev/null >/dev/null ; then rm $$i ;  else mv $$i `basename $$i .cpp.tmp`.C ; echo "replacing file: `basename $$i .cpp.tmp`" ; fi ; done
 			 	
 SIP_OBJECTS			=	$(SIP_SOURCES:.C=.o)
 PYBALL_OBJECTS 	= $(PYBALL_SOURCES:.C=.o)

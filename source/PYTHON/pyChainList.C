@@ -1,4 +1,4 @@
-// $Id: pyChainList.C,v 1.1 2000/06/27 13:10:22 oliver Exp $
+// $Id: pyChainList.C,v 1.2 2000/07/03 11:11:10 oliver Exp $
 
 #include <BALL/PYTHON/pyChainList.h>
 #include <BALL/KERNEL/chain.h>
@@ -36,11 +36,11 @@ namespace BALL
 
     for (; +it; ++it)
     {
-      Chain* chain = const_cast<Chain*>(&dynamic_cast<const Chain&>(*it));
+      const Chain* chain = dynamic_cast<const Chain*>(&*it);
       if ((chain != 0) && (it->isSelected() || !selected_only))
       {
         // store the chain pointer in the list
-        push_back(chain);
+        push_back(const_cast<Chain*>(chain));
 			}
 		}
 	}

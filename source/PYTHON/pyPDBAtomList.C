@@ -1,4 +1,4 @@
-// $Id: pyPDBAtomList.C,v 1.1 2000/06/27 13:10:27 oliver Exp $
+// $Id: pyPDBAtomList.C,v 1.2 2000/07/03 11:11:12 oliver Exp $
 
 #include <BALL/PYTHON/pyPDBAtomList.h>
 #include <BALL/KERNEL/PDBAtom.h>
@@ -36,11 +36,11 @@ namespace BALL
 
     for (; +it; ++it)
     {
-      PDBAtom* pdb_atom = const_cast<PDBAtom*>(&dynamic_cast<const PDBAtom&>(*it));
+      const PDBAtom* pdb_atom = dynamic_cast<const PDBAtom*>(&*it);
       if ((pdb_atom != 0) && (it->isSelected() || !selected_only))
       {
         // store the pdb atom pointer in the list
-        push_back(pdb_atom);
+        push_back(const_cast<PDBAtom*>(pdb_atom));
 			}
 		}
 	}

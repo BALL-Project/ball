@@ -6,6 +6,7 @@
 PyObject *sipClass_BaseFragment;
 
 static void sipDealloc_BaseFragment(sipThisType *);
+static PyObject *sipPyInternalRepr_BaseFragment(sipThisType *);
 
 static PyTypeObject sipType_BaseFragment = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_BaseFragment = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_BaseFragment,
 };
 
 sipBaseFragment::sipBaseFragment(): BaseFragment()
@@ -449,9 +450,10 @@ static PyObject *sipDo_BaseFragment_getBaseFragment(PyObject *sipThisObj,PyObjec
 		return NULL;
 
 	{
-		int a0;
+		Position *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
 		{
 			BaseFragment *res;
 			BaseFragment *ptr;
@@ -459,16 +461,27 @@ static PyObject *sipDo_BaseFragment_getBaseFragment(PyObject *sipThisObj,PyObjec
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = ptr -> BaseFragment::getBaseFragment( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> BaseFragment::getBaseFragment(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_BaseFragment);
 		}
 	}
 
 	{
-		int a0;
+		Position *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
 		{
 			const BaseFragment *res;
 			BaseFragment *ptr;
@@ -476,7 +489,17 @@ static PyObject *sipDo_BaseFragment_getBaseFragment(PyObject *sipThisObj,PyObjec
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = ptr -> BaseFragment::getBaseFragment( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> BaseFragment::getBaseFragment(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_BaseFragment);
 		}
@@ -497,9 +520,10 @@ static PyObject *sipDo_BaseFragment_getAtom(PyObject *sipThisObj,PyObject *sipAr
 		return NULL;
 
 	{
-		int a0;
+		Position *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
 		{
 			Atom *res;
 			BaseFragment *ptr;
@@ -507,16 +531,27 @@ static PyObject *sipDo_BaseFragment_getAtom(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = ptr -> BaseFragment::getAtom( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> BaseFragment::getAtom(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_Atom);
 		}
 	}
 
 	{
-		int a0;
+		Position *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
 		{
 			const Atom *res;
 			BaseFragment *ptr;
@@ -524,7 +559,17 @@ static PyObject *sipDo_BaseFragment_getAtom(PyObject *sipThisObj,PyObject *sipAr
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = ptr -> BaseFragment::getAtom( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> BaseFragment::getAtom(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_Atom);
 		}
@@ -603,15 +648,15 @@ static PyObject *sipDo_BaseFragment_countBaseFragments(PyObject *sipThisObj,PyOb
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			Size *res;
 			BaseFragment *ptr;
 
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = ptr -> BaseFragment::countBaseFragments();
+			res = new Size(ptr -> BaseFragment::countBaseFragments());
 
-			return PyInt_FromLong((long)res);
+			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -632,15 +677,15 @@ static PyObject *sipDo_BaseFragment_countAtoms(PyObject *sipThisObj,PyObject *si
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			Size *res;
 			BaseFragment *ptr;
 
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = ptr -> BaseFragment::countAtoms();
+			res = new Size(ptr -> BaseFragment::countAtoms());
 
-			return PyInt_FromLong((long)res);
+			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -661,15 +706,15 @@ static PyObject *sipDo_BaseFragment_countBonds(PyObject *sipThisObj,PyObject *si
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			Size *res;
 			BaseFragment *ptr;
 
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = ptr -> BaseFragment::countBonds();
+			res = new Size(ptr -> BaseFragment::countBonds());
 
-			return PyInt_FromLong((long)res);
+			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -690,15 +735,15 @@ static PyObject *sipDo_BaseFragment_countInterBonds(PyObject *sipThisObj,PyObjec
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			Size *res;
 			BaseFragment *ptr;
 
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = ptr -> BaseFragment::countInterBonds();
+			res = new Size(ptr -> BaseFragment::countInterBonds());
 
-			return PyInt_FromLong((long)res);
+			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -719,15 +764,15 @@ static PyObject *sipDo_BaseFragment_countIntraBonds(PyObject *sipThisObj,PyObjec
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			Size *res;
 			BaseFragment *ptr;
 
 			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
 				return NULL;
 
-			res = ptr -> BaseFragment::countIntraBonds();
+			res = new Size(ptr -> BaseFragment::countIntraBonds());
 
-			return PyInt_FromLong((long)res);
+			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -1387,6 +1432,45 @@ static PyObject *sipDo_BaseFragment_isValid(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
+static PyObject *sipDo_BaseFragment_apply(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_BaseFragment)) == NULL)
+		return NULL;
+
+	{
+		AtomProcessor *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomProcessor,&a0obj))
+		{
+			bool res;
+			BaseFragment *ptr;
+
+			if ((ptr = (BaseFragment *)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_AtomProcessor(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> BaseFragment::apply(* a0);
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipName_BALL_BaseFragment,sipName_BALL_apply);
+
+	return NULL;
+}
+
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
 const void *sipCast_BaseFragment(const void *ptr,PyObject *targetClass)
@@ -1420,6 +1504,18 @@ static void sipDealloc_BaseFragment(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_BaseFragment(sipThisType *sipThis)
+{
+#line 72 "baseFragment.sip"
+  BaseFragment* ptr;
+  if ((ptr = (BaseFragment*)sipGetCppPtr(sipThis,sipClass_BaseFragment)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("BaseFragment ") + ptr->getName() 
+						+ " { " + String(ptr->countAtoms()) + " atoms }").c_str());
+#line 1523 "./sipBALLBaseFragment.cpp"
 }
 
 PyObject *sipNew_BaseFragment(PyObject *sipSelf,PyObject *sipArgs)
@@ -1558,6 +1654,7 @@ PyMethodDef sipClassAttrTab_BaseFragment[] = {
 	{sipName_BALL_isSubBaseFragmentOf, sipDo_BaseFragment_isSubBaseFragmentOf, METH_VARARGS, NULL},
 	{sipName_BALL_isSuperBaseFragmentOf, sipDo_BaseFragment_isSuperBaseFragmentOf, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_BaseFragment_isValid, METH_VARARGS, NULL},
+	{sipName_BALL_apply, sipDo_BaseFragment_apply, METH_VARARGS, NULL},
 	{NULL}
 };
 

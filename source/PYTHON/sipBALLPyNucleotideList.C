@@ -11,7 +11,7 @@ PyObject *sipConvertFrom_PyNucleotideList(const PyNucleotideList *sipCpp)
 		return Py_None;
 	}
 
-#line 10 "pyNucleotideList.sip"
+#line 12 "pyNucleotideList.sip"
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -23,10 +23,10 @@ PyObject *sipConvertFrom_PyNucleotideList(const PyNucleotideList *sipCpp)
 
 	for (PyNucleotideList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Nucleotide* obj = *it;
+		Nucleotide& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Nucleotide)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -41,7 +41,7 @@ PyObject *sipClass_PyNucleotideList;
 
 int sipCanConvertTo_PyNucleotideList(PyObject *sipPy)
 {
-#line 35 "pyNucleotideList.sip"
+#line 37 "pyNucleotideList.sip"
 	return PyList_Check(sipPy);
 #line 51 "./sipBALLPyNucleotideList.cpp"
 }
@@ -61,7 +61,7 @@ int sipConvertTo_PyNucleotideList(PyObject *sipPy,PyNucleotideList **sipCppPtr,i
 		return false;
 	}
 
-#line 39 "pyNucleotideList.sip"
+#line 41 "pyNucleotideList.sip"
 	// Convert a Python list of Nucleotide instances to an NucleotideList object on the
 	// heap.
  

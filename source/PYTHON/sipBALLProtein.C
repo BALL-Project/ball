@@ -6,6 +6,7 @@
 PyObject *sipClass_Protein;
 
 static void sipDealloc_Protein(sipThisType *);
+static PyObject *sipPyInternalRepr_Protein(sipThisType *);
 
 static PyTypeObject sipType_Protein = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_Protein = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_Protein,
 };
 
 sipProtein::sipProtein(): Protein()
@@ -793,6 +794,18 @@ static void sipDealloc_Protein(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_Protein(sipThisType *sipThis)
+{
+#line 47 "protein.sip"
+  Protein* ptr;
+  if ((ptr = (Protein*)sipGetCppPtr(sipThis,sipClass_Protein)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Protein ") + ptr->getName() 
+				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
+#line 813 "./sipBALLProtein.cpp"
 }
 
 PyObject *sipNew_Protein(PyObject *sipSelf,PyObject *sipArgs)

@@ -11,7 +11,7 @@ PyObject *sipConvertFrom_PyFragmentList(const PyFragmentList *sipCpp)
 		return Py_None;
 	}
 
-#line 10 "pyFragmentList.sip"
+#line 12 "pyFragmentList.sip"
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -21,10 +21,10 @@ PyObject *sipConvertFrom_PyFragmentList(const PyFragmentList *sipCpp)
 
 	for (PyFragmentList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Fragment* obj = *it;
+		Fragment& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Fragment)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -39,7 +39,7 @@ PyObject *sipClass_PyFragmentList;
 
 int sipCanConvertTo_PyFragmentList(PyObject *sipPy)
 {
-#line 33 "pyFragmentList.sip"
+#line 35 "pyFragmentList.sip"
 	return PyList_Check(sipPy);
 #line 49 "./sipBALLPyFragmentList.cpp"
 }
@@ -59,7 +59,7 @@ int sipConvertTo_PyFragmentList(PyObject *sipPy,PyFragmentList **sipCppPtr,int s
 		return false;
 	}
 
-#line 37 "pyFragmentList.sip"
+#line 39 "pyFragmentList.sip"
 	// Convert a Python list of Fragment instances to an FragmentList object on the
 	// heap.
  

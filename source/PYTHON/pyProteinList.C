@@ -1,4 +1,4 @@
-// $Id: pyProteinList.C,v 1.1 2000/06/27 13:10:28 oliver Exp $
+// $Id: pyProteinList.C,v 1.2 2000/07/03 11:11:12 oliver Exp $
 
 #include <BALL/PYTHON/pyProteinList.h>
 #include <BALL/KERNEL/protein.h>
@@ -36,11 +36,11 @@ namespace BALL
 
     for (; +it; ++it)
     {
-      Protein* protein = const_cast<Protein*>(&dynamic_cast<const Protein&>(*it));
+      const Protein* protein = dynamic_cast<const Protein*>(&*it);
       if ((protein != 0) && (it->isSelected() || !selected_only))
       {
         // store the protein pointer in the list
-        push_back(protein);
+        push_back(const_cast<Protein*>(protein));
 			}
 		}
 	}

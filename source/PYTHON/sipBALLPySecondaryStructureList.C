@@ -11,7 +11,7 @@ PyObject *sipConvertFrom_PySecondaryStructureList(const PySecondaryStructureList
 		return Py_None;
 	}
 
-#line 10 "pySecondaryStructureList.sip"
+#line 12 "pySecondaryStructureList.sip"
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -23,10 +23,10 @@ PyObject *sipConvertFrom_PySecondaryStructureList(const PySecondaryStructureList
 
 	for (PySecondaryStructureList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		SecondaryStructure* obj = *it;
+		SecondaryStructure& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_SecondaryStructure)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -41,7 +41,7 @@ PyObject *sipClass_PySecondaryStructureList;
 
 int sipCanConvertTo_PySecondaryStructureList(PyObject *sipPy)
 {
-#line 35 "pySecondaryStructureList.sip"
+#line 37 "pySecondaryStructureList.sip"
 	return PyList_Check(sipPy);
 #line 51 "./sipBALLPySecondaryStructureList.cpp"
 }
@@ -61,7 +61,7 @@ int sipConvertTo_PySecondaryStructureList(PyObject *sipPy,PySecondaryStructureLi
 		return false;
 	}
 
-#line 39 "pySecondaryStructureList.sip"
+#line 41 "pySecondaryStructureList.sip"
 	// Convert a Python list of SecondaryStructure instances to an SecondaryStructureList object on the
 	// heap.
  

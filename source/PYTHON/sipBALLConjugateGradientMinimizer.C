@@ -36,7 +36,7 @@ sipConjugateGradientMinimizer::sipConjugateGradientMinimizer(ForceField& a0,Snap
 	sipCommonCtor(sipPyMethods,10);
 }
 
-sipConjugateGradientMinimizer::sipConjugateGradientMinimizer(ForceField& a0,SnapShotManager * a1,Options& a2): ConjugateGradientMinimizer(a0,a1,a2)
+sipConjugateGradientMinimizer::sipConjugateGradientMinimizer(ForceField& a0,SnapShotManager * a1,const Options& a2): ConjugateGradientMinimizer(a0,a1,a2)
 {
 	sipCommonCtor(sipPyMethods,10);
 }
@@ -143,7 +143,61 @@ bool sipConjugateGradientMinimizer::minimize(int a0,bool a1)
 
 	return sipIsPyMethod(&sipPyMethods[9],sipPyThis,NULL,sipName_BALL_minimize,&relLock) ?
 		sipEnergyMinimizer::sipVH_minimize(&sipPyMethods[9],sipPyThis,relLock,a0,a1) :
+		EnergyMinimizer::minimize(a0,a1);
+}
+bool sipConjugateGradientMinimizer::minimize(Size a0,bool a1)
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[9],sipPyThis,NULL,sipName_BALL_minimize,&relLock) ?
+		sipConjugateGradientMinimizer::sipVH_minimize(&sipPyMethods[9],sipPyThis,relLock,a0,a1) :
 		ConjugateGradientMinimizer::minimize(a0,a1);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+bool sipConjugateGradientMinimizer::sipVH_minimize(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Size a0,bool a1)
+{
+	bool res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+	PyObject *a0obj;
+
+	a0obj = sipMapCppToSelf(&a0,sipClass_Size);
+
+	sipArgs = Py_BuildValue("(OOi)",sipThis -> sipSelf,a0obj,a1);
+
+	Py_XDECREF(a0obj);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		res = (bool)PyInt_AsLong(resobj);
+
+		Py_DECREF(resobj);
+
+		if (PyErr_Occurred() == NULL)
+		{
+			goto releaseLock;
+		}
+
+		sipBadVirtualResultType(sipName_BALL_ConjugateGradientMinimizer,sipName_BALL_minimize);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return res;
 }
 
 static PyObject *sipDo_ConjugateGradientMinimizer_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
@@ -301,10 +355,11 @@ static PyObject *sipDo_ConjugateGradientMinimizer_minimize(PyObject *sipThisObj,
 		return NULL;
 
 	{
-		int a0;
-		long a1;
+		Size *a0 = NULL;
+		PyObject *a0obj = NULL;
+		long a1 = false;
 
-		if (sipParseArgs(sipArgs,"il",&a0,&a1))
+		if (sipParseArgs(sipArgs,"|Il",sipCanConvertTo_Size,&a0obj,&a1))
 		{
 			bool res;
 			ConjugateGradientMinimizer *ptr;
@@ -312,7 +367,17 @@ static PyObject *sipDo_ConjugateGradientMinimizer_minimize(PyObject *sipThisObj,
 			if ((ptr = (ConjugateGradientMinimizer *)sipGetCppPtr(sipThis,sipClass_ConjugateGradientMinimizer)) == NULL)
 				return NULL;
 
-			res = ptr -> ConjugateGradientMinimizer::minimize( a0, (bool)a1);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Size(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> ConjugateGradientMinimizer::minimize(* a0, (bool)a1);
+
+			if (istemp0)
+				delete a0;
 
 			return sipConvertFromBool((int)res);
 		}
@@ -424,7 +489,7 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		SnapShotManager *a1;
 		PyObject *a1obj;
-		Options *a2;
+		const Options *a2;
 		PyObject *a2obj;
 
 		if (sipParseArgs(sipArgs,"-III",sipCanConvertTo_ForceField,&a0obj,sipCanConvertTo_SnapShotManager,&a1obj,sipCanConvertTo_Options,&a2obj))
@@ -433,7 +498,7 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 
 			sipConvertTo_ForceField(a0obj,&a0,1,&iserr);
 			sipConvertTo_SnapShotManager(a1obj,&a1,0,&iserr);
-			sipConvertTo_Options(a2obj,&a2,1,&iserr);
+			sipConvertTo_Options(a2obj,(Options **)&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -467,9 +532,9 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		const ConjugateGradientMinimizer *a0;
 		PyObject *a0obj;
-		long a1;
+		long a1 = true;
 
-		if (sipParseArgs(sipArgs,"-Il",sipCanConvertTo_ConjugateGradientMinimizer,&a0obj,&a1))
+		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_ConjugateGradientMinimizer,&a0obj,&a1))
 		{
 			int iserr = 0;
 

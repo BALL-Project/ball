@@ -1,4 +1,4 @@
-// $Id: vector4.sip,v 1.2 2000/06/30 05:59:50 oliver Exp $
+// $Id: vector4.sip,v 1.3 2000/07/03 11:11:41 oliver Exp $
 
 class Vector4
 {
@@ -28,17 +28,17 @@ class Vector4
   static const Vector4& getZero();
   static const Vector4& getUnit();
   void set(float /value/ = 1);
-  // float operator [] (Index index);
-  // float operator [] (Index index) const;
-  // Vector4 operator + () const;
-  // Vector4 operator - () const;
+  float operator [] (Index /index/);
+  float operator [] (Index /index/) const;
+  Vector4 operator + () const;
+  Vector4 operator - () const;
   // Vector4& operator += (const Vector4& vector);
   // Vector4& operator -= (const Vector4& vector);
-  // Vector4 operator * (float scalar);
-  // Vector4& operator *= (float scalar);
-  // Vector4 operator / (float scalar);
-  // Vector4& operator /= (float scalar);
-  // float operator * (const Vector4& /vector/) const;
+  Vector4 operator * (float /scalar/);
+  // Vector4& operator *= (float /scalar/);
+  Vector4 operator / (float /scalar/);
+  // Vector4& operator /= (float /scalar/);
+  float operator * (const Vector4& /vector/) const;
   float getDistance(const Vector4& /vector/) const;
   float getSquareDistance(const Vector4& /vector/) const;
   // bool operator == (const Vector4& /vector/) const;

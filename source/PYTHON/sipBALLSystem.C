@@ -6,6 +6,7 @@
 PyObject *sipClass_System;
 
 static void sipDealloc_System(sipThisType *);
+static PyObject *sipPyInternalRepr_System(sipThisType *);
 
 static PyTypeObject sipType_System = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_System = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_System,
 };
 
 sipSystem::sipSystem(): System()
@@ -888,6 +889,19 @@ static void sipDealloc_System(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_System(sipThisType *sipThis)
+{
+#line 50 "system.sip"
+  System* ptr;
+  if ((ptr = (System*)sipGetCppPtr(sipThis,sipClass_System)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("System ") + ptr->getName() 
+					+ " { " + String(ptr->countMolecules()) + " molecules,  " 
+					+ String(ptr->countAtoms()) + " atoms }").c_str());
+#line 909 "./sipBALLSystem.cpp"
 }
 
 PyObject *sipNew_System(PyObject *sipSelf,PyObject *sipArgs)

@@ -6,6 +6,7 @@
 PyObject *sipClass_SecondaryStructure;
 
 static void sipDealloc_SecondaryStructure(sipThisType *);
+static PyObject *sipPyInternalRepr_SecondaryStructure(sipThisType *);
 
 static PyTypeObject sipType_SecondaryStructure = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_SecondaryStructure = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_SecondaryStructure,
 };
 
 sipSecondaryStructure::sipSecondaryStructure(): SecondaryStructure()
@@ -1013,6 +1014,18 @@ static void sipDealloc_SecondaryStructure(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_SecondaryStructure(sipThisType *sipThis)
+{
+#line 52 "secondaryStructure.sip"
+  SecondaryStructure* ptr;
+  if ((ptr = (SecondaryStructure*)sipGetCppPtr(sipThis,sipClass_SecondaryStructure)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("SecondaryStructure ") + ptr->getName() 
+				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
+#line 1033 "./sipBALLSecondaryStructure.cpp"
 }
 
 PyObject *sipNew_SecondaryStructure(PyObject *sipSelf,PyObject *sipArgs)

@@ -6,6 +6,7 @@
 PyObject *sipClass_Atom;
 
 static void sipDealloc_Atom(sipThisType *);
+static PyObject *sipPyInternalRepr_Atom(sipThisType *);
 
 static PyTypeObject sipType_Atom = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_Atom = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_Atom,
 };
 
 sipAtom::sipAtom(): Atom()
@@ -27,6 +28,11 @@ sipAtom::sipAtom(): Atom()
 }
 
 sipAtom::sipAtom(const Atom& a0,bool a1): Atom(a0,a1)
+{
+	sipCommonCtor(sipPyMethods,5);
+}
+
+sipAtom::sipAtom(Element& a0,const String& a1,const String& a2,int a3,const Vector3& a4,const Vector3& a5,const Vector3& a6,float a7,float a8): Atom(a0,a1,a2,a3,a4,a5,a6,a7,a8)
 {
 	sipCommonCtor(sipPyMethods,5);
 }
@@ -572,7 +578,9 @@ static PyObject *sipDo_Atom_getFullName(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		long a0 = Atom::ADD_VARIANT_EXTENSIONS;
+
+		if (sipParseArgs(sipArgs,"|l",&a0))
 		{
 			String *res;
 			Atom *ptr;
@@ -580,9 +588,9 @@ static PyObject *sipDo_Atom_getFullName(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Atom *)sipGetCppPtr(sipThis,sipClass_Atom)) == NULL)
 				return NULL;
 
-			res = &ptr -> Atom::getFullName();
+			res = new String(ptr -> Atom::getFullName( (Atom::FullNameType)a0));
 
-			return sipMapCppToSelf(res,sipClass_String);
+			return sipNewCppToSelf(res,sipClass_String,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -744,16 +752,27 @@ static PyObject *sipDo_Atom_setType(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		int a0;
+		AtomType *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_AtomType,&a0obj))
 		{
 			Atom *ptr;
 
 			if ((ptr = (Atom *)sipGetCppPtr(sipThis,sipClass_Atom)) == NULL)
 				return NULL;
 
-			ptr -> Atom::setType( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_AtomType(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			ptr -> Atom::setType(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			Py_INCREF(Py_None);
 			return Py_None;
@@ -777,15 +796,15 @@ static PyObject *sipDo_Atom_getType(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			AtomType *res;
 			Atom *ptr;
 
 			if ((ptr = (Atom *)sipGetCppPtr(sipThis,sipClass_Atom)) == NULL)
 				return NULL;
 
-			res = ptr -> Atom::getType();
+			res = new AtomType(ptr -> Atom::getType());
 
-			return PyInt_FromLong((long)res);
+			return sipNewCppToSelf(res,sipClass_AtomType,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -1028,15 +1047,15 @@ static PyObject *sipDo_Atom_countBonds(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			int res;
+			Size *res;
 			Atom *ptr;
 
 			if ((ptr = (Atom *)sipGetCppPtr(sipThis,sipClass_Atom)) == NULL)
 				return NULL;
 
-			res = ptr -> Atom::countBonds();
+			res = new Size(ptr -> Atom::countBonds());
 
-			return PyInt_FromLong((long)res);
+			return sipNewCppToSelf(res,sipClass_Size,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -1055,9 +1074,10 @@ static PyObject *sipDo_Atom_getBond(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		int a0;
+		Position *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
 		{
 			Bond *res;
 			Atom *ptr;
@@ -1065,16 +1085,27 @@ static PyObject *sipDo_Atom_getBond(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Atom *)sipGetCppPtr(sipThis,sipClass_Atom)) == NULL)
 				return NULL;
 
-			res = ptr -> Atom::getBond( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Atom::getBond(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_Bond);
 		}
 	}
 
 	{
-		int a0;
+		Position *a0;
+		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"i",&a0))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Position,&a0obj))
 		{
 			const Bond *res;
 			Atom *ptr;
@@ -1082,7 +1113,17 @@ static PyObject *sipDo_Atom_getBond(PyObject *sipThisObj,PyObject *sipArgs)
 			if ((ptr = (Atom *)sipGetCppPtr(sipThis,sipClass_Atom)) == NULL)
 				return NULL;
 
-			res = ptr -> Atom::getBond( a0);
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Position(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Atom::getBond(* a0);
+
+			if (istemp0)
+				delete a0;
 
 			return sipMapCppToSelf(res,sipClass_Bond);
 		}
@@ -1571,6 +1612,20 @@ static void sipDealloc_Atom(sipThisType *sipThis)
 	sipDeleteThis(sipThis);
 }
 
+static PyObject *sipPyInternalRepr_Atom(sipThisType *sipThis)
+{
+#line 101 "atom.sip"
+  Atom* ptr;
+  if ((ptr = (Atom*)sipGetCppPtr(sipThis,sipClass_Atom)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Atom ") + ptr->getName() 
+				+ " { " + ptr->getElement().getSymbol() + " @ (" 
+				+ String(ptr->getPosition().x) + " " + String(ptr->getPosition().y) + " " 
+				+ String(ptr->getPosition().z) + " }").c_str());
+#line 1631 "./sipBALLAtom.cpp"
+}
+
 PyObject *sipNew_Atom(PyObject *sipSelf,PyObject *sipArgs)
 {
 	static sipExtraType et = {
@@ -1609,6 +1664,51 @@ PyObject *sipNew_Atom(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipAtom(* a0, (bool)a1);
+		}
+	}
+
+	if (sipNew == NULL)
+	{
+		Element *a0;
+		PyObject *a0obj;
+		const String *a1;
+		PyObject *a1obj;
+		const String *a2 = NULL;
+		PyObject *a2obj = NULL;
+		int a3 = Atom::UNKNOWN_TYPE;
+		Vector3 a4def = Vector3(0,0,0);
+		const Vector3 *a4 = &a4def;
+		PyObject *a4obj = NULL;
+		Vector3 a5def = Vector3(0,0,0);
+		const Vector3 *a5 = &a5def;
+		PyObject *a5obj = NULL;
+		Vector3 a6def = Vector3(0,0,0);
+		const Vector3 *a6 = &a6def;
+		PyObject *a6obj = NULL;
+		float a7 = 0;
+		float a8 = 0;
+
+		if (sipParseArgs(sipArgs,"-II|IiIIIff",sipCanConvertTo_Element,&a0obj,sipCanConvertTo_String,&a1obj,sipCanConvertTo_String,&a2obj,&a3,sipCanConvertTo_Vector3,&a4obj,sipCanConvertTo_Vector3,&a5obj,sipCanConvertTo_Vector3,&a6obj,&a7,&a8))
+		{
+			int iserr = 0;
+
+			sipConvertTo_Element(a0obj,&a0,1,&iserr);
+			int istemp1 = sipConvertTo_String(a1obj,(String **)&a1,1,&iserr);
+			int istemp2 = sipConvertTo_String(a2obj,(String **)&a2,1,&iserr);
+			sipConvertTo_Vector3(a4obj,(Vector3 **)&a4,1,&iserr);
+			sipConvertTo_Vector3(a5obj,(Vector3 **)&a5,1,&iserr);
+			sipConvertTo_Vector3(a6obj,(Vector3 **)&a6,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			sipNew = new sipAtom(* a0,* a1,* a2, a3,* a4,* a5,* a6, a7, a8);
+
+			if (istemp1)
+				delete a1;
+
+			if (istemp2)
+				delete a2;
 		}
 	}
 

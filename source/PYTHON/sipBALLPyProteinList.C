@@ -11,7 +11,7 @@ PyObject *sipConvertFrom_PyProteinList(const PyProteinList *sipCpp)
 		return Py_None;
 	}
 
-#line 10 "pyProteinList.sip"
+#line 12 "pyProteinList.sip"
 	PyObject *pl;
 
 	if ((pl = PyList_New(0)) == NULL)
@@ -23,10 +23,10 @@ PyObject *sipConvertFrom_PyProteinList(const PyProteinList *sipCpp)
 
 	for (PyProteinList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Protein* obj = *it;
+		Protein& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Protein)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
@@ -41,7 +41,7 @@ PyObject *sipClass_PyProteinList;
 
 int sipCanConvertTo_PyProteinList(PyObject *sipPy)
 {
-#line 35 "pyProteinList.sip"
+#line 37 "pyProteinList.sip"
 	return PyList_Check(sipPy);
 #line 51 "./sipBALLPyProteinList.cpp"
 }
@@ -61,7 +61,7 @@ int sipConvertTo_PyProteinList(PyObject *sipPy,PyProteinList **sipCppPtr,int sip
 		return false;
 	}
 
-#line 39 "pyProteinList.sip"
+#line 41 "pyProteinList.sip"
 	// Convert a Python list of Protein instances to an ProteinList object on the
 	// heap.
  

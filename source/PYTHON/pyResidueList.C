@@ -1,4 +1,4 @@
-// $Id: pyResidueList.C,v 1.1 2000/06/27 13:10:29 oliver Exp $
+// $Id: pyResidueList.C,v 1.2 2000/07/03 11:11:12 oliver Exp $
 
 #include <BALL/PYTHON/pyResidueList.h>
 #include <BALL/KERNEL/residue.h>
@@ -36,11 +36,11 @@ namespace BALL
 
     for (; +it; ++it)
     {
-      Residue* residue = const_cast<Residue*>(&dynamic_cast<const Residue&>(*it));
+			const Residue* residue = dynamic_cast<const Residue*>(&*it);
       if ((residue != 0) && (it->isSelected() || !selected_only))
       {
         // store the residue pointer in the list
-        push_back(residue);
+        push_back(const_cast<Residue*>(residue));
 			}
 		}
 	}

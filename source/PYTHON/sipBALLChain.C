@@ -6,6 +6,7 @@
 PyObject *sipClass_Chain;
 
 static void sipDealloc_Chain(sipThisType *);
+static PyObject *sipPyInternalRepr_Chain(sipThisType *);
 
 static PyTypeObject sipType_Chain = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -18,7 +19,7 @@ static PyTypeObject sipType_Chain = {
 	0,
 	0,
 	0,
-	0,
+	(reprfunc)sipPyInternalRepr_Chain,
 };
 
 sipChain::sipChain(): Chain()
@@ -1202,6 +1203,18 @@ static void sipDealloc_Chain(sipThisType *sipThis)
 	}
 
 	sipDeleteThis(sipThis);
+}
+
+static PyObject *sipPyInternalRepr_Chain(sipThisType *sipThis)
+{
+#line 60 "chain.sip"
+  Chain* ptr;
+  if ((ptr = (Chain*)sipGetCppPtr(sipThis,sipClass_Chain)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("Chain ") + ptr->getName()
+				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
+#line 1222 "./sipBALLChain.cpp"
 }
 
 PyObject *sipNew_Chain(PyObject *sipSelf,PyObject *sipArgs)

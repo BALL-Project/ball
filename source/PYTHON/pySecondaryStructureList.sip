@@ -1,9 +1,11 @@
+// $Id: pySecondaryStructureList.sip,v 1.2 2000/07/03 11:11:13 oliver Exp $
 
 class PySecondaryStructureList
 {
 %HeaderCode
-#include <BALL/PYTHON/pySecondaryStructureList.h>
-#include "sipBALLSecondaryStructure.h"
+	#include <BALL/PYTHON/pySecondaryStructureList.h>
+	#include "sipBALLSecondaryStructure.h"
+  #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromClassCode
@@ -18,10 +20,10 @@ class PySecondaryStructureList
 
 	for (PySecondaryStructureList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		SecondaryStructure* obj = *it;
+		SecondaryStructure& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_SecondaryStructure)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;

@@ -1,4 +1,4 @@
-// $Id: matrix44.sip,v 1.1 2000/06/30 05:58:51 oliver Exp $
+// $Id: matrix44.sip,v 1.2 2000/07/03 11:11:06 oliver Exp $
 
 class Matrix4x4
 {
@@ -59,23 +59,23 @@ class Matrix4x4
   void setColumn(Position /col/, const Vector4& /col_value/);
   bool isEqual(const Matrix4x4& /m/) const;
   Vector4& getDiagonal() const;
-  // float operator () (Position /row/, Position /col/);
-  // float operator () (Position row, Position col) const;
-  // float operator [] (Position index) const;
-  // float operator [] (Position index);
-  // Matrix4x4 operator + () const;
-  // Matrix4x4 operator - () const;
-  // Matrix4x4 operator + (const Matrix4x4& m) const;
-  // Matrix4x4& operator += (const Matrix4x4& m);
-  // Matrix4x4 operator - (const Matrix4x4& m) const;
-  // Matrix4x4& operator -= (const Matrix4x4& m);
-  // Matrix4x4 operator * (float scalar) const;
-  // Matrix4x4& operator *= (float scalar);
-  // Matrix4x4 operator / (float scalar) const;
-  // Matrix4x4& operator /= (float scalar);
-  // Matrix4x4 operator * (const Matrix4x4& m) const;
-  // Matrix4x4& operator *= (const Matrix4x4& m);
-  // Vector4& operator * (const Vector4& &) const;
+  float operator () (Position /row/, Position /col/);
+  float operator () (Position /row/, Position /col/) const;
+  float operator [] (Position /index/) const;
+  float operator [] (Position /index/);
+  Matrix4x4 operator + () const;
+  Matrix4x4 operator - () const;
+  Matrix4x4 operator + (const Matrix4x4& /m/) const;
+  // Matrix4x4& operator += (const Matrix4x4& /m/);
+  Matrix4x4 operator - (const Matrix4x4& /m/) const;
+  // Matrix4x4& operator -= (const Matrix4x4& /m/);
+  Matrix4x4 operator * (float /scalar/) const;
+  // Matrix4x4& operator *= (float /scalar/);
+  Matrix4x4 operator / (float /scalar/) const;
+  // Matrix4x4& operator /= (float /scalar/);
+  Matrix4x4 operator * (const Matrix4x4& /m/) const;
+  // Matrix4x4& operator *= (const Matrix4x4& /m/);
+  Vector4& operator * (const Vector4& /vector/) const;
   bool invert(Matrix4x4& /inverse/) const;
   bool invert();
   float getDeterminant() const;
@@ -101,8 +101,8 @@ class Matrix4x4
   void setRotation(const Angle& /phi/, float /axis_x/, float /axis_y/, float /axis_z/); 
   void setRotation(const Angle& /phi/, const Vector3& /axis/);
   void setRotation(const Angle& /phi/, const Vector4& /axis/);
-  // bool operator == (const Matrix4x4& m) const; 
-  // bool operator != (const Matrix4x4& m) const;
+  // bool operator == (const Matrix4x4& /m/) const; 
+  // bool operator != (const Matrix4x4& /m/) const;
   bool isIdentity() const;
   bool isRegular() const;
   bool isSingular() const;

@@ -1,21 +1,23 @@
- class SecondaryStructure
+// $Id: secondaryStructure.sip,v 1.2 2000/07/03 11:11:13 oliver Exp $
+
+class SecondaryStructure
   : BaseFragment
- {
+{
 %HeaderCode
-#include <BALL/KERNEL/secondaryStructure.h>
-using namespace BALL;
+	#include <BALL/KERNEL/secondaryStructure.h>
+	using namespace BALL;
 %End
   public:
   SecondaryStructure();
   SecondaryStructure(const SecondaryStructure&,bool = true);
   SecondaryStructure(const String&);
-//  virtual ~SecondaryStructure();
+  ~SecondaryStructure();
   virtual void clear();
   virtual void destroy();
-//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
-//  void persistentRead(PersistenceManager& pm);
+	//  void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+	//  void persistentRead(PersistenceManager& pm);
   void set(const SecondaryStructure&, bool = true);
-//  SecondaryStructure &operator =(const SecondaryStructure&);
+	//  SecondaryStructure &operator =(const SecondaryStructure&);
   void get(SecondaryStructure&, bool = true) const;
   void swap(SecondaryStructure&);
   Protein* getProtein();
@@ -42,7 +44,17 @@ using namespace BALL;
   void spliceAfter(SecondaryStructure&);
   void splice(SecondaryStructure&);
   virtual bool isValid() const;
-//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
-//  virtual void read(istream& s);
-//  virtual void write(ostream& s) const;
- };
+	//  virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+	//  virtual void read(istream& s);
+	//  virtual void write(ostream& s) const;
+	operator const char* ();
+%MemberCode
+  SecondaryStructure* ptr;
+  if ((ptr = (SecondaryStructure*)sipGetCppPtr(sipThis,sipClass_SecondaryStructure)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(String("SecondaryStructure ") + ptr->getName() 
+				+ " { " + String(ptr->countResidues()) + " residues }").c_str());
+%End
+
+};

@@ -1,9 +1,11 @@
+// $Id: pyResidueList.sip,v 1.2 2000/07/03 11:11:13 oliver Exp $
 
 class PyResidueList
 {
 %HeaderCode
-#include <BALL/PYTHON/pyResidueList.h>
-#include "sipBALLResidue.h"
+	#include <BALL/PYTHON/pyResidueList.h>
+	#include "sipBALLResidue.h"
+  #include <BALL/PYTHON/pyBALLSipHelper.h>
 %End
 
 %ConvertFromClassCode
@@ -18,10 +20,10 @@ class PyResidueList
 
 	for (PyResidueList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
-		Residue* obj = *it;
+		Residue& obj = **it;
 		PyObject *inst;
 
-		if ((inst = sipMapCppToSelf(obj,sipClass_Residue)) == NULL || PyList_Append(pl,inst) < 0)
+		if ((inst = pyMapBALLObjectToSip(obj)) == NULL || PyList_Append(pl,inst) < 0)
 		{
 			Py_DECREF(pl);
 			return NULL;
