@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventParameter.C,v 1.9 2002/02/27 12:24:07 sturm Exp $
+// $Id: solventParameter.C,v 1.10 2003/02/22 12:54:39 anker Exp $
 
 #include <BALL/SOLVATION/solventParameter.h>
+#include <BALL/SYSTEM/path.h>
 
 using namespace std;
 
@@ -15,7 +16,8 @@ namespace BALL
 			name_(),
 			number_density_(0.0),
 			solvent_atoms_(),
-			solvent_descriptor_()
+			solvent_descriptor_(),
+			atom_types_()
 	{
 	}
 
@@ -25,7 +27,19 @@ namespace BALL
 			name_(param.name_),
 			number_density_(param.number_density_),
 			solvent_atoms_(param.solvent_atoms_),
-			solvent_descriptor_(param.solvent_descriptor_)
+			solvent_descriptor_(param.solvent_descriptor_),
+			atom_types_(param.atom_types_)
+	{
+	}
+
+
+	SolventParameter::SolventParameter(const AtomTypes& atom_types) throw()
+		: ParameterSection(),
+			name_(),
+			number_density_(),
+			solvent_atoms_(),
+			solvent_descriptor_(),
+			atom_types_(atom_types)
 	{
 	}
 
@@ -44,6 +58,7 @@ namespace BALL
 		number_density_ = 0.0;
 		solvent_descriptor_.clear();
 		solvent_atoms_.clear();
+		atom_types_.clear();
 	}
 
 
@@ -55,6 +70,7 @@ namespace BALL
 		number_density_ = param.number_density_;
 		solvent_atoms_ = param.solvent_atoms_;
 		solvent_descriptor_ = param.solvent_descriptor_;
+		atom_types_ = param.atom_types_;
 
 		return *this;
 	}
@@ -82,22 +98,22 @@ namespace BALL
 		return solvent_descriptor_;
 	}
 
-        const String& SolventParameter::getSolventName() const throw()
+	const String& SolventParameter::getSolventName() const throw()
 	{
-	        return name_;
+		return name_;
 	}
 
-        const std::vector<SolventAtomDescriptor>& SolventParameter::getSolventDescription() const throw()
-        {
-                return solvent_atoms_;
-        }  
+	const std::vector<SolventAtomDescriptor>& SolventParameter::getSolventDescription() const throw()
+	{
+		return solvent_atoms_;
+	}  
 
-        const float& SolventParameter::getSolventDensity() const throw()
-        {
-                return number_density_;
-        }
+	const float& SolventParameter::getSolventDensity() const throw()
+	{
+		return number_density_;
+	}
 
-	bool SolventParameter::extractSection(ForceFieldParameters& parameters,
+	bool SolventParameter::extractSection(Parameters& parameters,
 			const String& section_name) throw()
 	{
 		// ?????
@@ -135,7 +151,27 @@ namespace BALL
 				Log.warn() << "SolventParameter::extractSection(): " << "no number density given." << endl;
 			}
 
-			AtomTypes& atom_types = parameters.getAtomTypes();         
+			if (!atom_types_.isValid())
+			{
+				if (options.has("force_field"))
+				{
+					Path path;
+					String force_field_file = path.find(options.get("force_field"));
+					if (force_field_file == "") 
+					{
+						force_field_file = options.get("force_field");
+					}
+					Parameters tmp_ffp(force_field_file);
+					tmp_ffp.init();
+					atom_types_.extractSection(tmp_ffp, "AtomTypes");
+				}
+				else
+				{
+					Log.error() << "SolventParameter::extractSection(): "
+						<< "did not find atom types, aborting." << endl;
+					return(false);
+				}
+			}
 
 			Size number_of_keys = getNumberOfKeys();
 			solvent_atoms_.resize(number_of_keys);
@@ -147,16 +183,17 @@ namespace BALL
 			for (Size i = 0; i < number_of_keys; ++i)
 			{
 				String type_name = getKey(i);
-				if (atom_types.has(type_name))
+				if (atom_types_.has(type_name))
 				{
-					solvent_atoms_[i].type = atom_types.getType(type_name);
+					solvent_atoms_[i].type = atom_types_.getType(type_name);
 					solvent_atoms_[i].element_symbol = getValue(i, index_element_symbol);
 					solvent_atoms_[i].radius = getValue(i, index_radius).toFloat();
 					solvent_atoms_[i].number_of_atoms = getValue(i, index_number_of_atoms).toInt();
 				}
 				else
 				{
-					Log.warn() << "SolventParameter::extractSection(): " << "Cannot assign atom type." << endl;
+					Log.error() << "SolventParameter::extractSection(): " << "Cannot assign atom type." << endl;
+					return(false);
 				}
 			}
 			// build descriptor 

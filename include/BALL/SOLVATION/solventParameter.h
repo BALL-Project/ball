@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventParameter.h,v 1.10 2003/02/21 16:06:25 anhi Exp $
+// $Id: solventParameter.h,v 1.11 2003/02/22 12:54:37 anker Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTPARAMETER_H
 #define BALL_SOLVATION_SOLVENTPARAMETER_H
@@ -50,6 +50,10 @@ namespace BALL
 		/** Copy constructor 
 		*/
 		SolventParameter(const SolventParameter& param) throw();
+
+		/** 
+		*/
+		SolventParameter(const AtomTypes& atom_types) throw();
 
 		/** Destructor */
 		virtual ~SolventParameter() throw();
@@ -108,7 +112,7 @@ namespace BALL
 
 		/** 
 		*/
-		virtual bool extractSection(ForceFieldParameters& parameters, const String&
+		virtual bool extractSection(Parameters& parameters, const String&
 				section_name) throw();
 
 
@@ -129,6 +133,10 @@ namespace BALL
 		/*_ The solvent descriptor to be created 
 		*/
 		SolventDescriptor solvent_descriptor_;
+
+		/*_
+		*/
+		AtomTypes atom_types_;
 
 	};
 } // namespace BALL

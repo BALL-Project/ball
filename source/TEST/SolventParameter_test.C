@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SolventParameter_test.C,v 1.14 2003/01/22 17:16:59 anker Exp $
+// $Id: SolventParameter_test.C,v 1.15 2003/02/22 12:54:41 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/solventParameter.h>
 ///////////////////////////
 
-START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.14 2003/01/22 17:16:59 anker Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.15 2003/02/22 12:54:41 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -37,40 +37,40 @@ CHECK(~SolventParameter())
 	delete s_ptr;
 RESULT
 
-CHECK(extractSection(ForceFieldParameters& parameters, const String& section_name))
+CHECK(extractSection(Parameters& parameters, const String& section_name))
 	//????? , da ????? in SolventParameter.C
  	bool result;
 	SolventParameter s_ptr;
 
-	ForceFieldParameters param("data/SolventParameter_test1.ini");
+	Parameters param("data/SolventParameter_test1.ini");
 	param.init();
 	CAPTURE_OUTPUT_LEVEL(2000)	
 	result = s_ptr.extractSection(param,"SolventDescription");
 	COMPARE_OUTPUT("SolventParameter::extractSection(): Variable missing.\n")
 	TEST_EQUAL(result,false)
 	
-	param = ForceFieldParameters("data/SolventParameter_test2.ini");
+	param = Parameters("data/SolventParameter_test2.ini");
 	param.init();
 	CAPTURE_OUTPUT_LEVEL(2000)	
 	result = s_ptr.extractSection(param,"SolventDescription");
 	COMPARE_OUTPUT("SolventParameter::extractSection(): no name given.\n")
 	TEST_EQUAL(result,true)
 	
-	param = ForceFieldParameters("data/SolventParameter_test3.ini");
+	param = Parameters("data/SolventParameter_test3.ini");
 	param.init();
 	CAPTURE_OUTPUT_LEVEL(2000)	
 	result = s_ptr.extractSection(param,"SolventDescription");
 	COMPARE_OUTPUT("SolventParameter::extractSection(): no number density given.\n")
 	TEST_EQUAL(result,true)
 
-	param = ForceFieldParameters("data/SolventParameter_test4.ini");
+	param = Parameters("data/SolventParameter_test4.ini");
 	param.init();
 	CAPTURE_OUTPUT_LEVEL(2000)	
 	result = s_ptr.extractSection(param,"SolventDescription");
 	COMPARE_OUTPUT("SolventParameter::extractSection(): Cannot assign atom type.\n")
 	TEST_EQUAL(result,true)
 	
-	param = ForceFieldParameters("data/SolventParameter_test.ini");
+	param = Parameters("data/SolventParameter_test.ini");
 	param.init();
 	result = s_ptr.extractSection(param,"SolventDescription");
 	TEST_EQUAL(result,true)
@@ -79,7 +79,7 @@ RESULT
 
 CHECK(clear())	
 	SolventParameter s_ptr;
-	ForceFieldParameters param("data/SolventParameter_test.ini");
+	Parameters param("data/SolventParameter_test.ini");
 	param.init();
 	s_ptr.extractSection(param,"SolventDescription");
 	s_ptr.clear();
@@ -92,7 +92,7 @@ RESULT
 
 CHECK(SolventParameter& operator = (const SolventParameter& param))
 	SolventParameter s_ptr;
-	ForceFieldParameters param("data/SolventParameter_test.ini");
+	Parameters param("data/SolventParameter_test.ini");
 	param.init();
 	s_ptr.extractSection(param,"SolventDescription");
 	SolventParameter s_ptr2;
@@ -105,7 +105,7 @@ RESULT
 
 CHECK(SolventParameter(const SolventParameter& param))
 	SolventParameter s_ptr;
-	ForceFieldParameters param("data/SolventParameter_test.ini");
+	Parameters param("data/SolventParameter_test.ini");
 	param.init();
 	s_ptr.extractSection(param,"SolventDescription");
 	SolventParameter s_ptr2;
@@ -118,7 +118,7 @@ RESULT
 
 CHECK(getSolventDescriptor() const )
 	SolventParameter s_ptr;
-	ForceFieldParameters param("data/SolventParameter_test.ini");
+	Parameters param("data/SolventParameter_test.ini");
 	param.init();
 	s_ptr.extractSection(param,"SolventDescription");
 	const SolventDescriptor sd = s_ptr.getSolventDescriptor();
@@ -128,7 +128,7 @@ RESULT
 
 CHECK(getSolventDescriptor() )
 	SolventParameter s_ptr;
-	ForceFieldParameters param("data/SolventParameter_test.ini");
+	Parameters param("data/SolventParameter_test.ini");
 	param.init();
 	s_ptr.extractSection(param,"SolventDescription");
 	SolventDescriptor sd = s_ptr.getSolventDescriptor();
