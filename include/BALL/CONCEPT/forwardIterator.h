@@ -1,4 +1,4 @@
-// $Id: forwardIterator.h,v 1.4 2001/06/06 10:56:12 anker Exp $
+// $Id: forwardIterator.h,v 1.5 2001/06/07 12:44:59 anker Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -267,24 +267,6 @@ namespace BALL
 				return (const DataType *)&(traits_ptr_->getData());
 
 		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator begin(const Container& container)
-		throw(Exception::InvalidIterator)
-	{
-		ConstForwardIterator<Container, DataType, Position, Traits> iterator(container);
-		iterator.toBegin();
-		return iterator;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	static ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator end(const Container &container) 
-		throw(Exception::InvalidIterator)
-	{
-		ConstForwardIterator<Container, DataType, Position, Traits> iterator(container);
-		iterator.toEnd();
-		return iterator;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
