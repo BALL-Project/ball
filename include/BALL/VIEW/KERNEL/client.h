@@ -1,4 +1,4 @@
-// $Id: client.h,v 1.8 2001/05/13 13:47:44 hekl Exp $
+// $Id: client.h,v 1.9 2001/07/08 11:30:09 aubertin Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -48,9 +48,9 @@ namespace BALL
 				the VIEW library. See \Ref{Server} for further information.
 				@see     Server
 				@memo    Client class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/05/13 13:47:44 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.9 $
+				@date    $Date: 2001/07/08 11:30:09 $
 		*/
 		class Client
 		{
@@ -93,7 +93,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new client.
+					Constructs new client.
 					The client will have no working connection yet.
 					@return      Client new constructed client
 					@see         connect
@@ -102,7 +102,7 @@ namespace BALL
 				throw();
 
 			/** Detailed state initializing constructor.
-					Construct new client.
+					Constructs new client.
 					The state of {\em *this} client is:
 					\begin{itemize}
 						\item host is {\em host}
@@ -145,7 +145,7 @@ namespace BALL
 			*/
 			//@{
 
-			/** Connect to a specified host and port.
+			/** Connects to a specified host and port.
 					This method connects {\em *this} client to a specified host and port.
 					Must be called before any other methodes!
 					@param   host the host (a string) to connect to
@@ -154,8 +154,8 @@ namespace BALL
 			void connect(const String& host, int port = VIEW_DEFAULT_PORT)
 				throw();
 
-			/** Add a new composite.
-					Insert a new \Ref{Composite} to {\em *this} client. 
+			/** Adds a new composite.
+					Inserts a new \Ref{Composite} to {\em *this} client. 
 					With this method \Ref{Composite}'s can be added to the visualization.
 					If the same \Ref{Composite} was already added before it will be replaced 
 					by the new representation of {\em composite}.
@@ -176,7 +176,7 @@ namespace BALL
 			//@{
 
 			/** Internal state and consistency self-validation.
-					Initiate self-validation of the internal state of {\em *this} client. 
+					Initiates self-validation of the internal state of {\em *this} client. 
 					If the {\em *this} client has a connection to a server than {\tt true}
 					is returned, {\tt false} otherwise. 
 					@return			bool -
@@ -187,7 +187,7 @@ namespace BALL
 				throw();
 
 			/** Internal value dump.
-					Dump the current host and port of {\em *this} client to 
+					Dumps the current host and port of {\em *this} client to 
 					the output ostream {\em s} with dumping depth {\em depth}.
 					@param   s output stream where to output the host and port of {\em *this} client
 					@param   depth the dumping depth
@@ -201,8 +201,8 @@ namespace BALL
 			//@{
 
 			/** Persistent stream output and state restorage.
-  			  Read persistent client data from the input stream {\em s} and 
-				  restore the state of {\em *this}. \\
+  			  Reads persistent client data from the input stream {\em s} and 
+				  restores the state of {\em *this}. \\
 				  {\bf Note:} Not yet implemented.
 			 	  @param       s input stream from where to restore the internal state of {\em *this} client
 			*/
@@ -210,8 +210,8 @@ namespace BALL
 				throw();
 
 			/** Persistent stream output and state storage.
-  			  Write persistent client data to the output stream {\em s} and 
-				  store the state of {\em *this}.\\
+  			  Writes persistent client data to the output stream {\em s} and 
+				  stores the state of {\em *this}.\\
 				  {\bf Note:} Not yet implemented.
 				  @param       s output stream to where to store the internal state of {\em *this} client
 			*/
