@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileGeneral.C,v 1.2 2005/02/14 12:45:10 amoll Exp $
+// $Id: PDBFileGeneral.C,v 1.3 2005/02/14 17:07:55 amoll Exp $
 //
 
 // This file contains the more or less "general" portion of PDBFile.
@@ -1553,7 +1553,11 @@ namespace BALL
 
 		va_list args;
 		va_start(args, tag);
-		vsnprintf(line_buffer, PDB::SIZE_OF_PDB_LINE_BUFFER, format, args);
+
+		//???????????????????
+		//vsnprintf(line_buffer, PDB::SIZE_OF_PDB_LINE_BUFFER, format, args);
+		// -> windows has no vsnprintf
+		vsprintf(line_buffer, format, args);
 		va_end(args);
 
     // Terminate each line with a line break and a zero to indicate
@@ -1620,7 +1624,11 @@ namespace BALL
 		va_list var_args;
 		va_start(var_args, record);		
     static char line_buffer[PDB::SIZE_OF_PDB_LINE_BUFFER];
-		vsnprintf(line_buffer, PDB::SIZE_OF_PDB_LINE_BUFFER, PDB::RECORD_TYPE_FORMAT[record].format_string, var_args);
+		// ???????????????????
+		//vsnprintf(line_buffer, PDB::SIZE_OF_PDB_LINE_BUFFER, PDB::RECORD_TYPE_FORMAT[record].format_string, var_args);
+		// -> windows has no vsnprintf
+		vsprintf(line_buffer, PDB::RECORD_TYPE_FORMAT[record].format_string, var_args);
+
 		va_end(var_args);
 
     // Terminate each line with a line break and a zero to indicate
