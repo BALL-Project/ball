@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.10 2000/07/12 19:38:26 oliver Exp $
+// $Id: resourceFile.C,v 1.11 2000/09/25 19:13:09 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -120,7 +120,9 @@ namespace BALL
 		if (entry != 0) 
 		{
 			return entry->findChild(key);
-		} else {
+		} 
+		else 
+		{
 			return 0;
 		}
 	}
@@ -188,7 +190,9 @@ namespace BALL
 			child_ = newEntryArray(1);
 			
 			entry = child_[0] = newEntry(key, value, this);
-		} else {
+		} 
+		else 
+		{
 			ResourceEntry** new_child = newEntryArray(number_children_ + 1);
 			
 			entry = newEntry(key, value, this);
@@ -211,7 +215,9 @@ namespace BALL
 					child_ = new_child;
 		
 					return entry;
-				} else {
+				} 
+				else 
+				{
 					new_child[new_index] = child_[old_index];
 				}
 			}
@@ -367,7 +373,9 @@ namespace BALL
 			{
 				deleteEntry(child_[found]);
 				child_[found] = 0;
-			} else {
+			} 
+			else 
+			{
 				*removed = child_[found];
 			}
 			
@@ -595,7 +603,9 @@ namespace BALL
 			if (child_[median_index]->key_ < key)
 			{
 				lower_index = median_index + 1;
-			} else {
+			} 
+			else 
+			{
 				upper_index = median_index;
 			}
 		}
@@ -782,7 +792,9 @@ namespace BALL
 					{
 						Log.error() << "ResourceFile: unknown tag " << tag << endl;
 					}
-				} else {
+				} 
+				else 
+				{
 					if (tag == "node")
 					{
 						if (last_node_tag == "node")

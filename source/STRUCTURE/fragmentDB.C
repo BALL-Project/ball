@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.23 2000/08/07 12:53:34 oliver Exp $
+// $Id: fragmentDB.C,v 1.24 2000/09/25 19:13:35 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -714,21 +714,21 @@ namespace BALL
 		entry = tree->getEntry("/Names");
 		if (entry != 0){
 			for (entry_iterator = ++entry->begin(); +entry_iterator; ++entry_iterator){
-				if ((*entry_iterator).getDepth() == 2){
-
-						StringHashMap<String>*	name_map_to;
-						StringHashMap<String>*	name_map_from;
-						name_map_to = new StringHashMap<String>;
-						name_map_from = new StringHashMap<String>;
-						standards_[(*entry_iterator).getKey() + "-" + (*entry_iterator).getValue()] = name_map_to;
-						standards_[(*entry_iterator).getValue() + "-" + (*entry_iterator).getKey()] = name_map_from;
-						
-						ResourceEntry::Iterator	alias_iterator;
-						for (alias_iterator = ++(*entry_iterator).begin(); +alias_iterator; ++alias_iterator)
-						{
-							(*name_map_to)[(*alias_iterator).getKey()] = (*alias_iterator).getValue();
-							(*name_map_from)[(*alias_iterator).getValue()] = (*alias_iterator).getKey();
-						}
+				if ((*entry_iterator).getDepth() == 2)
+				{
+					StringHashMap<String>*	name_map_to;
+					StringHashMap<String>*	name_map_from;
+					name_map_to = new StringHashMap<String>;
+					name_map_from = new StringHashMap<String>;
+					standards_[(*entry_iterator).getKey() + "-" + (*entry_iterator).getValue()] = name_map_to;
+					standards_[(*entry_iterator).getValue() + "-" + (*entry_iterator).getKey()] = name_map_from;
+					
+					ResourceEntry::Iterator	alias_iterator;
+					for (alias_iterator = ++(*entry_iterator).begin(); +alias_iterator; ++alias_iterator)
+					{
+						(*name_map_to)[(*alias_iterator).getKey()] = (*alias_iterator).getValue();
+						(*name_map_from)[(*alias_iterator).getValue()] = (*alias_iterator).getKey();
+					}
 				}
 			}
 		}
