@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.36 2005/03/08 14:57:14 amoll Exp $
+// $Id: datasetControl.C,v 1.37 2005/03/09 12:41:46 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -101,13 +101,10 @@ void DatasetControl::checkMenu(MainControl& main_control)
 	throw()
 {
 	menuBar()->setItemEnabled(open_trajectory_id_, main_control.getSelectedSystem());
-	ItemList item_list = getSelectedItems(); 
-	if (item_list.size() > 0) main_control.setDeleteEntryEnabled(true);
+	if (getSelectedItems().size() > 0) main_control.setDeleteEntryEnabled(true);
 
-	bool enable_cs = (getSelectedItems().size() == 1) && 
-									 item_to_grid3_.has(*getSelectedItems().begin()) && 
-									 !getMainControl()->compositesAreLocked();
- 	menuBar()->setItemEnabled(menu_cs_, enable_cs);
+  menuBar()->setItemEnabled(menu_cs_, 
+										!getMainControl()->compositesAreLocked() && item_to_grid3_.size() > 0);
 }
 
 
