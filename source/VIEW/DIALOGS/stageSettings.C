@@ -44,7 +44,7 @@ void StageSettings::updateFromStage()
 	wheel_slider_->setValue((int) Scene::getMouseWheelSensitivity() - 1);
 
 	eye_distance_slider->setValue((int) (stage_->getEyeDistance() * 10.0));
-	focal_distance_slider->setValue((int) (stage_->getFocalDistance()));
+	focal_distance_slider->setValue((int) (stage_->getFocalDistance() * 10.0));
 	fog_slider->setValue((int) (stage_->getFogIntensity()));
 	enable_fog->setChecked(stage_->getFogIntensity() > 0);
 	eyeDistanceChanged();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.99 2004/07/03 17:41:25 amoll Exp $
+// $Id: scene.C,v 1.100 2004/07/05 13:17:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1455,50 +1455,89 @@ namespace BALL
 				}
 
 				// setting of eye and focal distance
-				if (e->key() >= Key_Left &&
-						e->key() <= Key_Down)
+				if (e->key() != Key_Left  &&
+						e->key() != Key_Right &&
+						e->key() != Key_Up    &&
+						e->key() != Key_Down)
+				{
+					return;
+				}
+
+				// setting of eye distance
+				if (e->key() == Key_Left ||
+						e->key() == Key_Right)
 				{
 					float new_distance = stage_->getEyeDistance();
-					float new_focal_distance = stage_->getFocalDistance();
 
-					// setting of eye distance
-					if (e->key() == Key_Left ||
-					    e->key() == Key_Right)
+					float modifier;
+					if (e->key() == Key_Left)
 					{
-						if (e->key() == Key_Left)
-						{
-							new_distance -= 0.1;
-						}
-						else
-						{
-							new_distance += 0.1;
-						}
-						
-						// prevent strange values
-						if (new_distance < 0 || new_distance > 4) return;
+						modifier = -0.1;
 					}
-					// setting of focal distance
 					else
 					{
-						if (e->key() == Key_Down)
-						{
-							new_focal_distance -= 1;
-						}
-						else
-						{
-							new_focal_distance += 1;
-						}
-			
-						// prevent strange values
-						if (new_focal_distance < 7 || new_focal_distance > 100) return;
+						modifier = +0.1;
+					}
+
+					if (e->key() == ShiftButton)
+					{
+						modifier *= 10;
+					}
+
+					new_distance += modifier;
+					
+					// prevent strange values
+					if (new_distance < 0)
+					{
+						new_distance = 0;
+					}
+
+					if (new_distance > 4)
+					{
+						new_distance = 4;
 					}
 
 					stage_->setEyeDistance(new_distance);
-					stage_->setFocalDistance(new_focal_distance);
-					stage_settings_->updateFromStage();
-
-					paintGL();
 				}
+				// setting of focal distance
+				else
+				{
+					float new_focal_distance = stage_->getFocalDistance();
+
+					float modifier;
+					if (e->key() == Key_Down)
+					{
+						modifier = -1;
+					}
+					else
+					{
+						modifier = +1;
+					}
+
+					if (e->key() == ShiftButton)
+					{
+						modifier *= 10;
+					}
+
+					new_focal_distance += modifier;
+	
+					// prevent strange values
+					if (new_focal_distance < 7)
+					{
+						new_focal_distance = 7;
+					}
+					
+					if (new_focal_distance > 100) 
+					{
+						new_focal_distance = 100;
+					}
+
+					stage_->setFocalDistance(new_focal_distance);
+				}
+
+				stage_settings_->updateFromStage();
+
+				paintGL();
 			}
 		}
 
