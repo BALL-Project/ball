@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.17 2004/06/03 14:41:07 amoll Exp $
+// $Id: glRenderer.h,v 1.18 2004/06/04 14:37:19 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -45,6 +45,18 @@ namespace BALL
 		class BALL_EXPORT GLRenderer: public Renderer
 		{
 			public:
+
+			///
+ 			enum StereoMode
+			{
+				NO_STEREO = 0,
+
+				/// Stereo mode for shutter glasses
+				ACTIVE_STEREO,
+
+				/// Stereo mode for output on two projectors
+				DUAL_VIEW_STEREO
+			};
 
 			/** WrongModes Exception class.
 					This exeption will be thrown if the <b> drawing_precision_</b> or
@@ -177,11 +189,11 @@ namespace BALL
 				throw();
 			
 			///
-			void setStereoMode(bool on)
+			void setStereoMode(StereoMode state)
 				throw();
 
 			///
-			bool isInStereoMode() const
+			StereoMode getStereoMode() const
 				throw() { return stereo_;}
 			
 			///
@@ -343,7 +355,7 @@ namespace BALL
 			GLuint 									object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
 			Vector3 								normal_vector_;
 
-			bool stereo_;
+			StereoMode stereo_;
 		};
 
 	} // namespace VIEW

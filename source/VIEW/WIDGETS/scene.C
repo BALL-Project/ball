@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.68 2004/06/03 17:05:25 amoll Exp $
+// $Id: scene.C,v 1.69 2004/06/04 14:37:47 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -305,7 +305,7 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			if (!gl_renderer_.isInStereoMode())
+			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
 			{
 				glPushMatrix();
 				renderRepresentations_(mode);
@@ -313,6 +313,13 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 
 				return;
 			}
+
+			if (gl_renderer_.getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
+			{
+        glDrawBuffer(GL_BACK);
+			  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+				glViewport(0, 0, width() / 2, height());
+		  }
 			
 			stereo_camera_ = stage_->getCamera();
 
@@ -351,6 +358,10 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 			glPopMatrix();
 
 			//================== draw second buffer =============
+			if (gl_renderer_.getStereoMode() == GLRenderer::DUAL_VIEW_STEREO)
+			{
+				glViewport(width() / 2, 0, width(), height());
+			}
       glMatrixMode(GL_PROJECTION);
       glLoadIdentity();
       left  = -2.0 *gl_renderer_.getXScale() + 0.5 * stage_->getEyeDistance() * ndfl;
@@ -705,7 +716,7 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 		void Scene::updateCamera_()
 			throw()
 		{
-			if (!gl_renderer_.isInStereoMode())
+			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
 			{
 				gl_renderer_.updateCamera();
 				gl_renderer_.setLights();
@@ -1119,9 +1130,13 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-			stereo_id_ = main_control.insertMenuEntry (
- 					MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()), ALT+Key_Y);
- 			menuBar()->setItemChecked(stereo_id_, false) ;
+			no_stereo_id_ = main_control.insertMenuEntry (
+ 					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()), ALT+Key_Y);
+ 			menuBar()->setItemChecked(no_stereo_id_, true) ;
+			active_stereo_id_ = main_control.insertMenuEntry (
+ 					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()), ALT+Key_Y);
+			dual_stereo_id_ = main_control.insertMenuEntry (
+ 					MainControl::DISPLAY_STEREO, "Dual Stereo", this, SLOT(enterDualStereo()), ALT+Key_Y);
 
 			hint = "Print the coordinates of the current viewpoint";
 			main_control.insertMenuEntry(
@@ -1310,13 +1325,12 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 
 		void Scene::keyPressEvent(QKeyEvent* e)
 		{
-			QMenuBar* menu = getMainControl()->menuBar();
-			if (menu->isItemChecked(stereo_id_))
+			if (gl_renderer_.getStereoMode() != GLRenderer::NO_STEREO)
 			{
 				if ((e->key() == Key_Y && e->state() == AltButton) ||
 						 e->key() == Key_Escape)
 				{
-					switchStereo();
+					exitStereo();
 				}
 			}
 		}
@@ -1441,55 +1455,75 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 		}
 
 
-		void Scene::switchStereo()
+		void Scene::exitStereo()
 			throw()
 		{
-			/*
+			gl_renderer_.setStereoMode(GLRenderer::NO_STEREO);
+			gl_renderer_.setSize(width(), height());
+
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glFrustum(-2.0 * gl_renderer_.getXScale(), 
+								 2.0 * gl_renderer_.getXScale(), 
+								-2.0 * gl_renderer_.getYScale(), 
+								 2.0 * gl_renderer_.getYScale(),
+								 1.5, 300);
+			glMatrixMode(GL_MODELVIEW);
+
+			hide();
+			reparent((QWidget*)getMainControl(), getWFlags() & ~WType_Mask, last_pos_, false);
+			((QMainWindow*)getMainControl())->setCentralWidget(this);
+			show();
+
+			getMainControl()->menuBar()->setItemChecked(no_stereo_id_, true);
+			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, false);
+			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, false);
+			update();
+		}
+
+		void Scene::enterActiveStereo()
+			throw()
+		{
+			gl_renderer_.setStereoMode(GLRenderer::ACTIVE_STEREO);
 			GLboolean enabled = false;
 			glGetBooleanv(GL_STEREO, &enabled);
 			if (!enabled)
 			{
 				Log.error() << "No Stereo mode capability in driver" << std::endl;
 				setStatusbarText("No Stereo mode capability in driver");
-				return;
+//		 		return;
 			}
-			*/
 			
-			QMenuBar* menu = getMainControl()->menuBar();
-			bool stereo;
-			if (menu->isItemChecked(stereo_id_))
-			{
-				glMatrixMode(GL_PROJECTION);
-				glLoadIdentity();
-				glFrustum(-2.0 * gl_renderer_.getXScale(), 
-									 2.0 * gl_renderer_.getXScale(), 
-									-2.0 * gl_renderer_.getYScale(), 
-									 2.0 * gl_renderer_.getYScale(),
-									 1.5, 300);
-				glMatrixMode(GL_MODELVIEW);
+			last_pos_ = pos();
+			hide();
+			showNormal();  // needed on windows
+			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
+			showFullScreen();
+			show();
 
-				hide();
-// 				showNormal();  // to be removed (today 3.6.2004) ?????
-				reparent((QWidget*)getMainControl(), getWFlags() & ~WType_Mask, last_pos_, false);
-				((QMainWindow*)getMainControl())->setCentralWidget(this);
-				show();
-				stereo = false;
-			}
-			else
-			{
-				last_pos_ = pos();
-				hide();
- 				showNormal(); // needed on windows
-				reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
-				showFullScreen();
-//  				setGeometry(qApp->desktop()->screenGeometry());// to be removed (today 3.6.2004) ?????
-				stereo = true;
-				show();
-			}
-
-			menu->setItemChecked(stereo_id_, stereo);
-			gl_renderer_.setStereoMode(stereo);
+			getMainControl()->menuBar()->setItemChecked(no_stereo_id_, false);
+			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, true);
+			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, false);
 			update();
 		}
+
+		void Scene::enterDualStereo()
+			throw()
+		{
+			gl_renderer_.setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
+			last_pos_ = pos();
+			hide();
+			showNormal();  // needed on windows
+			reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
+			showFullScreen();
+			show();
+
+			gl_renderer_.setStereoMode(GLRenderer::DUAL_VIEW_STEREO);
+			getMainControl()->menuBar()->setItemChecked(no_stereo_id_, false);
+			getMainControl()->menuBar()->setItemChecked(active_stereo_id_, false);
+			getMainControl()->menuBar()->setItemChecked(dual_stereo_id_, true);
+			update();
+		}
+
 
 } }// namespaces

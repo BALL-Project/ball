@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.37 2004/06/03 14:40:58 amoll Exp $
+// $Id: scene.h,v 1.38 2004/06/04 14:37:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -448,7 +448,15 @@ namespace BALL
 				throw();
 
 			///
-			void switchStereo()
+			void exitStereo()
+				throw();
+
+			///
+			void enterActiveStereo()
+				throw();
+
+			///
+			void enterDualStereo()
 				throw();
 
 			protected slots:
@@ -542,7 +550,8 @@ namespace BALL
 				throw();
 			
 			// Menu entry IDs
-			Index rotate_id_, picking_id_, stereo_id_;
+			Index rotate_id_, picking_id_;
+			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;
 			
 			Vector3 system_origin_;
 			Quaternion quaternion_;

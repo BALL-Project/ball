@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.26 2004/06/03 16:35:25 amoll Exp $
+// $Id: glRenderer.C,v 1.27 2004/06/04 14:37:16 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -45,7 +45,7 @@ namespace BALL
 				name_to_object_(),
 				object_to_name_(),
 				all_names_(0),
-				stereo_(false)
+				stereo_(NO_STEREO)
 		{
 		}
 
@@ -1365,16 +1365,18 @@ namespace BALL
 		}
 
 
-		void GLRenderer::setStereoMode(bool on)
+		void GLRenderer::setStereoMode(StereoMode state)
 			throw()
 		{
-			if (on == stereo_) return;
-			stereo_ = on;
+			if (state == stereo_) return;
+			stereo_ = state;
 
+			/*
 			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glDrawBuffer(GL_BACK_RIGHT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			*/
 		}
 
 } } // namespaces
