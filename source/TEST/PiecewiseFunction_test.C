@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PiecewiseFunction_test.C,v 1.8 2003/06/09 22:40:53 oliver Exp $
+// $Id: PiecewiseFunction_test.C,v 1.9 2003/06/12 14:50:13 anker Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.8 2003/06/09 22:40:53 oliver Exp $")
+START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.9 2003/06/12 14:50:13 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -161,11 +161,11 @@ CHECK(const Coefficients& getCoefficients(double x) const throw(Exception::OutOf
 	PiecewiseFunction PWF2;
 	PWF2.setCoefficients(coefs);
 	Coefficients cf;
-	bool test = (PWF2.getCoefficients(0.5) == cf);
-	TEST_EQUAL(test, true)
+	// bool test = (PWF2.getCoefficients(0.5) == cf);
+	TEST_EXCEPTION(Exception::OutOfRange, PWF2.getCoefficients(0.5))
 	PWF2.setIntervals(intervals);
-	test = (PWF2.getCoefficients(0.5) == coefs[0]);
-	// ?????: false
+	bool test = (PWF2.getCoefficients(0.5) == coefs[0]);
+	TEST_EQUAL(test, true)
 RESULT
 
 
@@ -175,7 +175,6 @@ CHECK(const Coefficients& getCoefficients(Position index) const throw(Exception:
 	Position index = 0;
 	bool test = (PWF2.getCoefficients(index) == coefs[0]);
 	TEST_EQUAL(test, true)
-	// ?????: false
 RESULT
 
 
