@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.21 2000/07/12 19:37:54 oliver Exp $
+// $Id: HINFile.C,v 1.22 2000/08/02 16:06:17 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -433,7 +433,8 @@ namespace BALL
 				{
 					if (state == IN_RESIDUE || state == IN_MOLECULE) 
 					{
-						if (line.countFields() < 11) 
+						Size number_of_fields = line.countFields();
+						if (number_of_fields < 11) 
 						{
 							ERROR_HEADER << "illegal <atom> line: at least 10 arguments are required for <atom>!" << endl;
 							continue;
@@ -489,8 +490,27 @@ namespace BALL
 						atom->setCharge(line.getField(6).toFloat());
 						atom->setPosition(Vector3(line.getField(7).toFloat(), line.getField(8).toFloat(), line.getField(9).toFloat()));
 
-						Size	number_of_atom_bonds((Size)line.getField(10).toInt());
-						Position atom_number = (Position)line.getField(1).toInt();
+						Size number_of_atom_bonds;
+						try 
+						{
+							number_of_atom_bonds = ((Size)line.getField(10).toInt());
+						}
+						catch (Exception::InvalidFormat)
+						{
+							ERROR_HEADER << "illegal number of bonds: " << line.getField(10) << endl;
+							continue;
+						}
+
+						Position atom_number;
+						try 
+						{
+							atom_number = (Position)line.getField(1).toInt();
+						}
+						catch (Exception::InvalidFormat)
+						{
+							ERROR_HEADER << "illegal atom number: " << line.getField(1) << endl;
+							continue;
+						}
 
 						// store the atom pointer in the atom_vector - we need it later to create the bonds!
 						// if the atom_vector is to small, grow it!
@@ -505,37 +525,62 @@ namespace BALL
 						// the bound atoms are not yet created by now
 						if (number_of_atom_bonds > 0)
 						{
-							for (Position i = 0 ; i < number_of_atom_bonds; i++) 
-							{ 
-								if (number_of_bonds >= bond_vector.capacity())
+							// check whether the total number of fields is consistent
+							// with the number of bonds
+							if (number_of_fields != (11 + 2 * number_of_atom_bonds))
+							{
+								// write an error message!
+								if (number_of_fields < (11 + 2 * number_of_atom_bonds))
 								{
-									bond_vector.resize(number_of_bonds * 2);
+									ERROR_HEADER << "too few fields in atom line for " << number_of_atom_bonds << " bonds" << endl;
 								}
-
-								bond_vector[number_of_bonds].atom1 = atom_number;
-								bond_vector[number_of_bonds].atom2 = (Index)line.getField(11 + 2 * (Index)i).toInt();
-								Bond::Order order = Bond::ORDER__UNKNOWN;
-								String type_field = line.getField(12 + 2 * (Index)i);
-
-								if (type_field.size() == 1)
+								else 
 								{
-									switch (type_field[0]) 
+									ERROR_HEADER << "too many fields in atom line for " << number_of_atom_bonds << " bonds" << endl;
+								}
+							}
+							else 
+							{
+								for (Position i = 0 ; i < number_of_atom_bonds; i++) 
+								{ 
+									if (number_of_bonds >= bond_vector.capacity())
 									{
-										case 's':	order = Bond::ORDER__SINGLE;		break;
-										case 'd':	order = Bond::ORDER__DOUBLE;		break;
-										case 't': order = Bond::ORDER__TRIPLE;		break;
-										case 'a': order = Bond::ORDER__AROMATIC;	break;
+										bond_vector.resize(number_of_bonds * 2);
 									}
+
+									bond_vector[number_of_bonds].atom1 = atom_number;
+									try 
+									{
+										bond_vector[number_of_bonds].atom2 = (Index)line.getField(11 + 2 * (Index)i).toInt();
+									}
+									catch (Exception::InvalidFormat)
+									{
+										ERROR_HEADER << "illegal atom number for bond " 
+																 << i << ": " << line.getField(11 + 2 * (Index)i) << endl;
+										break;
+									}
+									Bond::Order order = Bond::ORDER__UNKNOWN;
+									String type_field = line.getField(12 + 2 * (Index)i);
+
+									if (type_field.size() == 1)
+									{
+										switch (type_field[0]) 
+										{
+											case 's':	order = Bond::ORDER__SINGLE;		break;
+											case 'd':	order = Bond::ORDER__DOUBLE;		break;
+											case 't': order = Bond::ORDER__TRIPLE;		break;
+											case 'a': order = Bond::ORDER__AROMATIC;	break;
+										}
+									}
+												
+									bond_vector[number_of_bonds++].order = order;
 								}
-											
-								bond_vector[number_of_bonds++].order = order;
 							}
 						}
 
 					}	
 					else 
 					{
-
 						ERROR_HEADER << "<atom> tag may appear only inside a <mol> or <res>!" << endl;
 					}
 					continue;
@@ -552,10 +597,22 @@ namespace BALL
 					velocity.z = line.getField(4).toFloat();
 						
 					// check whether the atom exists
-					Position atom_number = (Position)line.getField(1).toInt();
+					// BAUSTELLE: missing try/catch
+					Position atom_number;
+					try
+					{
+						atom_number = (Position)line.getField(1).toInt();
+					}
+					catch (Exception::InvalidFormat)
+					{
+						ERROR_HEADER << "illegal atom number " << line.getField(1) << endl;
+						continue;
+					}
+
 					if (atom_number >= atom_vector.size())
 					{
 						ERROR_HEADER << "cannot assign velocity for atom " << atom_number << ": atom not defined!" << endl;
+						continue;
 					} 
 					else 
 					{
