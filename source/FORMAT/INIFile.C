@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.20 2001/04/21 20:29:40 amoll Exp $
+// $Id: INIFile.C,v 1.21 2001/04/22 18:11:56 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -226,16 +226,16 @@ namespace BALL
 
 	bool INIFile::insertLine(LineIterator line_it, const String& line)
 	{
-		if (line_it.isSectionLastLine())
-    {
-			return appendLine(line_it.getSection()->getName(), line);
-		}
-
 		if (!isValid(line_it))
 		{
       Log.error() << "In INIFile " << filename_ << " , error while inserting line: "
                   << line << " . Illegal iterator!" << endl;			
 			return false;
+		}
+
+		if (line_it.isSectionLastLine())
+    {
+			return appendLine(line_it.getSection()->getName(), line);
 		}
 
 		Section& section(*line_it.getSection());
