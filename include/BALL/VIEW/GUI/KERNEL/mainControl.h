@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.5 2000/10/07 15:28:08 hekl Exp $
+// $Id: mainControl.h,v 1.6 2000/10/22 15:25:36 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -222,10 +222,11 @@ namespace BALL
 					@return bool - indicated if the remove operation was successfull
 			*/
 			bool remove
-				(const Composite& composite);
+				(const Composite& composite, bool sent_message = true);
 
 			/** Removes a given \Ref{CompositeDescriptor}.
 					@param  composite_descriptor the composite_descriptor to be removed
+					@param  sent_message a boolean flag that indicates, whether a message of the action should be sent or not.
 					@return bool - indicated if the remove operation was successfull
 			*/
 			bool remove
@@ -390,6 +391,11 @@ namespace BALL
 			/**	Initialize the modular widgets and display the main window.
 			*/
 			virtual void show();
+
+			/** Checks, enables or disables all the inserted menu entries
+					as the checkMenu-Function of the inserted ModularWidgets indicates.
+			*/
+			virtual void checkMenus();
 			//@}
 
 			public:
