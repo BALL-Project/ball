@@ -1,4 +1,4 @@
-// $Id: spectrum.h,v 1.1 2001/06/14 11:43:30 oliver Exp $
+// $Id: spectrum.h,v 1.2 2001/07/10 10:38:00 oliver Exp $
 
 #ifndef BALL_NMR_SPECTRUM_H
 #define BALL_NMR_SPECTRUM_H
@@ -44,6 +44,15 @@ namespace BALL
 		typedef	PeakT			PeakType;
 		//@}
 
+		/**	Constructors and Destructor
+		*/	
+		//@{
+			// BAUSTELLE
+		Spectrum() {}
+			// BAUSTELLE
+		virtual ~Spectrum() {}
+		//@}
+
 		/**	@name	Accessors
 		*/
 		//@{
@@ -52,7 +61,7 @@ namespace BALL
 		//@}
 
 		virtual void clear();
-		virtual double difference(const Spectrum<DataT, PositionT, PeakT>& spectrum);
+		virtual double difference(const Spectrum<DataT, PeakT, PositionT>& spectrum) const;
 
 		virtual void setSpacing(const PositionType& spacing);
 		virtual PositionType getSpacing() const;
@@ -64,17 +73,59 @@ namespace BALL
 		PositionType	max_;
 	};
 
+	/**	Clear the spectrum.
+			Sets all data to zero.
+	*/
+	template <typename DataT, typename PeakT, typename PositionT>
+	void Spectrum<DataT, PeakT, PositionT>::clear()
+	{
+		// BAUSTELLE
+	}
 
+	/**	Calculate the difference between two spectra.
+	*/
+	template <typename DataT, typename PeakT, typename PositionT>
+	double Spectrum<DataT, PeakT, PositionT>::difference(const Spectrum<DataT, PeakT, PositionT>& spectrum) const
+	{
+		// BAUSTELLE
+		return 0.0;
+	}
+
+	/**	Return the spacing.
+	*/
+	template <typename DataT, typename PeakT, typename PositionT>
+	Spectrum<DataT, PeakT, PositionT>::PositionType Spectrum<DataT, PeakT, PositionT>::getSpacing() const
+	{
+		return spacing_;
+	}
+
+	/** Set the spacing.
+	*/
+	template <typename DataT, typename PeakT, typename PositionT>
+	void Spectrum<DataT, PeakT, PositionT>::setSpacing(const Spectrum<DataT, PeakT, PositionT>::PositionType& spacing)
+	{
+		spacing_ = spacing;
+	}
+
+	/**	Difference operator.
+			Calculate the sum of the unsigned differences of the two spectra
+	*/
+	template <typename DataT, typename PeakT, typename PositionT>
+	double operator - (const Spectrum<DataT, PeakT, PositionT>& s1, const Spectrum<DataT, PeakT, PositionT>& s2)
+	{
+		return s1.difference(s2);
+	}
 
 	/**	Convenience typedefs
 	*/
 	//@{
-	///
+	/// One-dimensional spectrum
 	typedef Spectrum<RegularData1D, Peak1D> Spectrum1D;
-	///
-	// BAUSTELLE
-	// typedef Spectrum<RegularData1D, Peak2D> Spectrum2D;
-	///
+
+	/// Two-dimensional spectrum
+	typedef Spectrum<RegularData1D, Peak2D> Spectrum2D;
+
+	/// Three-dimensional spectrum
 	typedef Spectrum<RegularData1D, Peak3D> Spectrum3D;
 	//@}
 
