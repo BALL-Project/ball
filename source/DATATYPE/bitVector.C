@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.11 2000/07/24 09:07:38 oliver Exp $
+// $Id: bitVector.C,v 1.12 2000/07/24 09:12:36 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
@@ -30,7 +30,7 @@ namespace BALL
 			 block_size_ << (sizeof(BlockType) - 1));
 	}
 
-	BitVector::BitVector(BALL::Size size)
+	BitVector::BitVector(Size size)
 		:	size_(size),
 			block_size_(BALL_BLOCK_SIZE(size)),
 			resizable_(true)
@@ -62,7 +62,7 @@ namespace BALL
 			 block_size_ << (sizeof(BlockType) - 1));
 	}
 
-	BitVector::BitVector(const char *bit_string)
+	BitVector::BitVector(const char* bit_string)
 		: size_(BALL_BLOCK_BITS),
 			block_size_(BALL_BLOCK_SIZE(BALL_BLOCK_BITS)),
 			bitset_(new BlockType[1]),
@@ -118,24 +118,39 @@ namespace BALL
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
 		if (last < 0)
-			last += size_;
+		{
+			last += size_;	
+		}
 
 		if (first < 0)
+		{
 			first += size_;
+		}
 		
 		// if the values are out of bounds - throw an exception
 		// and leave it...
 		if (last < 0)
+		{
 			throw Exception::IndexUnderflow(__FILE__, __LINE__, last, size_);
+		}
 		if (first < 0)
+		{
 			throw Exception::IndexUnderflow(__FILE__, __LINE__, first, size_);
+		}
 		if ((Size)last >= size_)
+		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, last, size_);
+		}
 		if ((Size)first >= size_)
+		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, first, size_);
+		}
 		
 		// now swap, if last < first
-		if (last >= first) return;
+		if (last >= first) 
+		{
+			return;
+		}
 		Index tmp = last;
 		last = first;
 		first = tmp;
@@ -146,15 +161,21 @@ namespace BALL
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
 		if (index < 0)
+		{
 			index += size_;
+		}
 
 		// if the values are out of bounds - throw an exception
 		// leave it...
 		if (index < 0)
+		{
 			throw Exception::IndexUnderflow(__FILE__, __LINE__);
+		}
 
 		if ((Size)index >= size_)
+		{
 			const_cast<BitVector*>(this)->setSize(index);
+		}
 	}
 
 	BitVector BitVector::operator ()(Index first, Index last) const
@@ -183,18 +204,22 @@ namespace BALL
 		for (Position index = 0; index < size_; index++)
 		{
 			if (getBit((Index)index) == value)
+			{
 				size++;
+			}
 		}
 
 		return size;
 	}
 
-	void BitVector::set(const char *bit_string)
+	void BitVector::set(const char* bit_string)
 	{
 		if (bit_string == 0)
+		{
 			return;
+		}
 
-		const char *tmp = bit_string;
+		const char* tmp = bit_string;
 		setSize(strlen(bit_string));
 		for (Size i = 0; i < size_ ; i++)
 		{
