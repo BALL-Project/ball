@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorCalculator.C,v 1.13 2002/02/27 12:21:51 sturm Exp $
+// $Id: standardColorCalculator.C,v 1.14 2002/12/12 10:57:43 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
+#include <BALL/KERNEL/residue.h>
 
 namespace BALL
 {

@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: connolly.C,v 1.10 2002/02/27 12:24:11 sturm Exp $
+// $Id: connolly.C,v 1.11 2002/12/12 11:07:19 oliver Exp $
+
 
 #include <math.h>
-#ifdef BALL_INCLUDE_VALUES
+
+#ifdef BALL_HAS_VALUES_H
 # include <values.h> // required for M_PI on some systems
 #endif
 
@@ -23,7 +25,7 @@ namespace	BALL
 
 	struct
 	{
-		double x[5000], y[5000], z__[5000];
+		double x[10000], y[10000], z__[10000];
 		int n;
 	}
 	atoms_;
@@ -32,7 +34,7 @@ namespace	BALL
 
 	struct
 	{
-		double a[15000] /* was [3][5000] */ , ar[5000], pr;
+		double a[30000] /* was [3][5000] */ , ar[10000], pr;
 		int na;
 	}
 	face01_;
@@ -41,7 +43,7 @@ namespace	BALL
 
 	struct
 	{
-		bool skip[5000], nosurf[5000], afree[5000], abur[5000];
+		bool skip[10000], nosurf[10000], afree[10000], abur[10000];
 	}
 	face02_;
 
@@ -49,7 +51,7 @@ namespace	BALL
 
 	struct
 	{
-		int anbr[20000] /* was [2][5000] */ , nbr[500000], nbrt[500000];
+		int anbr[40000] /* was [2][5000] */ , nbr[1000000], nbrt[1000000];
 	}
 	face03_;
 
@@ -57,8 +59,8 @@ namespace	BALL
 
 	struct
 	{
-		int ntt, tta[500000] /* was [2][250000] */ , ttfe[250000], ttle[250000], enext[50000];
-		bool ttbur[250000], ttfree[250000];
+		int ntt, tta[1000000] /* was [2][250000] */ , ttfe[500000], ttle[500000], enext[100000];
+		bool ttbur[500000], ttfree[500000];
 	}
 	face04_;
 
@@ -66,9 +68,9 @@ namespace	BALL
 
 	struct
 	{
-		double t[45000] /* was [3][15000] */ , tr[15000], tax[45000]	/* was [3][15000] */ ;
-		int nt, ta[30000] /* was [2][15000] */ , tfe[15000];
-		bool tfree[15000];
+		double t[90000] /* was [3][15000] */ , tr[45000], tax[90000]	/* was [3][15000] */ ;
+		int nt, ta[60000] /* was [2][15000] */ , tfe[30000];
+		bool tfree[30000];
 	}
 	face05_;
 
@@ -76,8 +78,8 @@ namespace	BALL
 
 	struct
 	{
-		double p[30000] /* was [3][10000] */ ;
-		int np, pa[30000] /* was [3][10000] */ ;
+		double p[60000] /* was [3][10000] */ ;
+		int np, pa[60000] /* was [3][10000] */ ;
 	}
 	face06_;
 
@@ -85,8 +87,8 @@ namespace	BALL
 
 	struct
 	{
-		double v[75000] /* was [3][25000] */ ;
-		int nv, va[25000], vp[25000];
+		double v[150000] /* was [3][25000] */ ;
+		int nv, va[50000], vp[50000];
 	}
 	face07_;
 
@@ -94,7 +96,7 @@ namespace	BALL
 
 	struct
 	{
-		int nen, env[50000] /* was [2][25000] */ , nfn, fnen[30000]	/* was [3][10000] */ ;
+		int nen, env[100000] /* was [2][25000] */ , nfn, fnen[60000]	/* was [3][10000] */ ;
 	}
 	face08_;
 
@@ -102,8 +104,8 @@ namespace	BALL
 
 	struct
 	{
-		double c__[75000] /* was [3][25000] */ , cr[25000];
-		int nc, ca[25000], ct[25000];
+		double c__[150000] /* was [3][50000] */ , cr[50000];
+		int nc, ca[50000], ct[50000];
 	}
 	face09_;
 
@@ -111,7 +113,7 @@ namespace	BALL
 
 	struct
 	{
-		int nep, epc[25000], epv[50000] /* was [2][25000] */ , afe[5000], ale[5000], epnext[25000];
+		int nep, epc[50000], epv[100000] /* was [2][25000] */ , afe[10000], ale[10000], epnext[50000];
 	}
 	face10_;
 
@@ -119,7 +121,7 @@ namespace	BALL
 
 	struct
 	{
-		int nfs, fsen[30000] /* was [2][15000] */ , fsep[30000]	/* was [2][15000] */ ;
+		int nfs, fsen[60000] /* was [2][15000] */ , fsep[60000]	/* was [2][15000] */ ;
 	}
 	face11_;
 
@@ -127,7 +129,7 @@ namespace	BALL
 
 	struct
 	{
-		int ncy, cynep[5000], cyep[150000] /* was [30][5000] */ ;
+		int ncy, cynep[10000], cyep[300000] /* was [30][5000] */ ;
 	}
 	face12_;
 
@@ -135,7 +137,7 @@ namespace	BALL
 
 	struct
 	{
-		int nfp, fpa[5000], fpcy[50000] /* was [10][5000] */ , fpncy[5000];
+		int nfp, fpa[10000], fpcy[100000] /* was [10][5000] */ , fpncy[10000];
 	}
 	face13_;
 

@@ -1,16 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.15 2002/09/10 06:12:16 oliver Exp $
+// $Id: surfaceModel.C,v 1.16 2002/12/12 10:57:43 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
+#include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -22,9 +22,7 @@ namespace BALL
 		{
 		}
 
-		AddSurfaceModel::AddSurfaceModel
-			(const AddSurfaceModel& add_surface,
-			 bool deep)
+		AddSurfaceModel::AddSurfaceModel(const AddSurfaceModel& add_surface, bool deep)
 			throw()
 			:	BaseModelProcessor(add_surface, deep),
 				get_composite_(true),
@@ -36,8 +34,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-						 << " of class " << RTTI::getName<AddSurfaceModel>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<AddSurfaceModel>() << endl;
 			#endif 
 
 			destroy();
@@ -72,8 +70,7 @@ namespace BALL
 
 				if (mesh == 0)
 				{
-					throw Exception::OutOfMemory
-						(__FILE__, __LINE__, sizeof(Mesh));
+					throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
 				}
 				// create mesh
 				// ...
@@ -96,14 +93,19 @@ namespace BALL
 					{
 						Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e << endl;
 					}
+					catch (std::exception e)
+					{
+						Log.error() << "SurfaceModel: caught exception while calculating molecular surface: " << e.what() << endl;
+					}
 					catch (...)
 					{
-						Log.error() << "SurfaceModel: caught exception while calculating molecular surface" << endl;
+						Log.error() << "SurfaceModel: caught unknown exception while calculating molecular surface" << endl;
 					}
 					Log.info() << "assigning surface (" << sp.getSurface().vertex.size() << " vertices, " 
 										 << sp.getSurface().triangle.size() << " triangles)" << endl;
+					
 					*static_cast<Surface*>(mesh) = sp.getSurface();
-
+				
 					mesh->setName(String("Surface of ")
 												+ molecular_information.getTypeName() 
 												+ String(" (")
@@ -119,8 +121,7 @@ namespace BALL
 			return true;
 		}
 				
-		Processor::Result 
-		AddSurfaceModel::operator () (Composite& composite)
+		Processor::Result AddSurfaceModel::operator () (Composite& composite)
 		{
 			// take first composite, surface will be inserted to it later
 			if (get_composite_)
@@ -149,11 +150,6 @@ namespace BALL
 		{
 			return (Mesh *)(new Mesh());
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/surfaceModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

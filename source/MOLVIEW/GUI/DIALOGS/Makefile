@@ -7,27 +7,22 @@ CPP_SOURCES=\
 	displayPropertiesData.C\
 	labelProperties.C\
 	labelPropertiesData.C\
-	openHINFile.C\
-	openMOL2File.C\
-	openPDBFile.C\
+	molecularFileDialog.C\
 	openBruker1DFile.C\
 	openBruker2DFile.C\
-	DlgMoveOverlay.C\
-	DlgMoveOverlayData.C\
-	contourSurfaceDialog.C
+	contourSurfaceDialog.C\
+	contourSurfaceDialogData.C
 
 MOC_SOURCES=\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
 	labelProperties_moc.C\
 	labelPropertiesData_moc.C\
-	openHINFile_moc.C\
-	openPDBFile_moc.C\
+	molecularFileDialog_moc.C\
 	openBruker1DFile_moc.C\
 	openBruker2DFile_moc.C\
-	DlgMoveOverlay_moc.C\
-	DlgMoveOverlayData_moc.C\
-	contourSurfaceDialog_moc.C
+	contourSurfaceDialog_moc.C\
+	contourSurfaceDialogData_moc.C
 
 include ../../../common.mak
 include .Dependencies

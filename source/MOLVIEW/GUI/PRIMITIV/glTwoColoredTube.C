@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glTwoColoredTube.C,v 1.6 2002/02/27 12:23:48 sturm Exp $
+// $Id: glTwoColoredTube.C,v 1.7 2002/12/12 10:57:47 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h>
 
@@ -9,6 +9,7 @@ using namespace std;
 
 namespace BALL
 {
+	using VIEW::BALL_SELECTED_COLOR;
 
 	namespace MOLVIEW
 	{
@@ -43,7 +44,7 @@ namespace BALL
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<GLTwoColordTube>() << endl;
+					<< " of class " << RTTI::getName<GLTwoColoredTube>() << endl;
 			#endif 
 
 			destroy();
@@ -101,10 +102,10 @@ namespace BALL
 
 			if (isSelected())
 			{
-				glColor4ub((unsigned char)getSelectedColor().getRed(),
-									 (unsigned char)getSelectedColor().getGreen(),
-									 (unsigned char)getSelectedColor().getBlue(),
-									 (unsigned char)getSelectedColor().getAlpha());
+				glColor4ub((unsigned char)BALL_SELECTED_COLOR.getRed(),
+									 (unsigned char)BALL_SELECTED_COLOR.getGreen(),
+									 (unsigned char)BALL_SELECTED_COLOR.getBlue(),
+									 (unsigned char)BALL_SELECTED_COLOR.getAlpha());
 			}
 
 			if (with_names)
@@ -123,7 +124,7 @@ namespace BALL
 			// angle between z-axis-vector and result
 			angle = BALL_ANGLE_RADIAN_TO_DEGREE(acos(result.z / result.getLength()));
 
-			if (isSelected() == false)
+			if (!isSelected())
 			{
 				glColor4ub((unsigned char)getColor1().getRed(),
 									 (unsigned char)getColor1().getGreen(),
@@ -133,7 +134,7 @@ namespace BALL
 
 			draw_(getVertex1(), getMiddleVertex(), rotation_axis, angle);
 
-			if (isSelected() == false)
+			if (!isSelected())
 			{
 				glColor4ub((unsigned char)getColor2().getRed(),
 									 (unsigned char)getColor2().getGreen(),
@@ -176,11 +177,6 @@ namespace BALL
 
 			glPopMatrix();
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

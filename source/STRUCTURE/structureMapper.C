@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.18 2002/06/14 02:55:10 oliver Exp $
+// $Id: structureMapper.C,v 1.19 2002/12/12 11:07:20 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -127,7 +127,7 @@ namespace BALL
 			fragment_A = A[i];
 			fragment_B = B[i];
 
-			// ?????: Atomnamen sollten auf Eindeutigkeit geprueft werden!
+			// ?????: atom names should be checked for uniqueness
 
 			//iterate over all atoms of A and compare names with atoms of B
 			for(AtomIterator atom_iterator1 = fragment_A->beginAtom(); +atom_iterator1; ++atom_iterator1)
@@ -364,7 +364,12 @@ namespace BALL
 	Matrix4x4 StructureMapper::matchBackboneAtoms
 		(const Residue& r1, const Residue& r2)
 	{
+<<<<<<< structureMapper.C
 		Size counter = 0;
+=======
+		Size counter = 0;
+		
+>>>>>>> 1.15.4.4
 		bool	got_p1_r1 = false;
 		bool  got_p2_r1 = false;
 		bool	got_p3_r1 = false;

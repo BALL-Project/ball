@@ -1,15 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.8 2002/02/27 12:21:46 sturm Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.9 2002/12/12 10:57:42 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
+# include <BALL/KERNEL/forEach.h>
+# include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 

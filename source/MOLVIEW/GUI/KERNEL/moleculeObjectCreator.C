@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.C,v 1.4 2002/02/27 12:23:48 sturm Exp $
+// $Id: moleculeObjectCreator.C,v 1.5 2002/12/12 10:57:46 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
 
@@ -22,7 +22,7 @@ namespace BALL
 		MoleculeObjectCreator::~MoleculeObjectCreator()
 			throw()
 		{
-			#ifdef BALL_MOLVIEW_DEBUG
+			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<MoleculeObjectCreator>() << endl;
 			#endif 
@@ -124,10 +124,6 @@ namespace BALL
 
 			return 0;
     }
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,12 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.C,v 1.5 2002/02/27 12:22:39 sturm Exp $
+// $Id: openBruker1DFile.C,v 1.6 2002/12/12 10:57:45 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h>
-
-using std::istream;
-using std::ostream;
+#include <BALL/FORMAT/bruker1DFile.h>
 
 namespace BALL
 {
@@ -25,35 +23,26 @@ namespace BALL
       throw()
     {
       #ifdef BALL_VIEW_DEBUG
-      Log.info() << "Destructing object " << (void *)this
-				<< " of class " << RTTI::getName<OpenBruker1DFile>() << endl;
+      Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<OpenBruker1DFile>() << endl;
       #endif
     }
 
     void OpenBruker1DFile::initializeWidget(MainControl& main_control)
-  throw()
+  		throw()
     {
-      main_control.insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&1D File", this,
-											SLOT(exec()),
-											CTRL+Key_1);
+      main_control.insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&1D File", this, SLOT(exec()), CTRL+Key_1);
     }
 
     void OpenBruker1DFile::finalizeWidget(MainControl& main_control)
-  throw()
+		  throw()
     {
-      main_control.removeMenuEntry
-  (MainControl::FILE_IMPORT, "Bruker&1D File", this,
-   SLOT(exec()),
-   CTRL+Key_1);
-    }
+      main_control.removeMenuEntry (MainControl::FILE_IMPORT, "Bruker&1D File", this, SLOT(exec()), CTRL+Key_1);
+		}
 
-    void OpenBruker1DFile::openFile_()
-  throw()
+	  void OpenBruker1DFile::openFile_()
+		  throw()
     {
-      // notify the main window
-      WindowMessage window_message;
-      window_message.setStatusBar("reading Bruker1D file...");
-      notify_(window_message);
+      setStatusbarText("reading Bruker1D file...");
 
       // reading the file
       Bruker1D *myfile = new Bruker1D();
@@ -62,18 +51,17 @@ namespace BALL
 
       try
       {
-  myfile->read(mydir);
+			  myfile->read(mydir);
       }
       catch(...)
       {
-  Log.info() << "> read Bruker1D file failed." << endl;
-  delete myfile;
-
-  return;
+				Log.info() << "> read Bruker1D file failed." << std::endl;
+			  delete myfile;
+			  return;
       }
 
       // writing to log
-      Log.info() << "> Bruker file " << mydir << " succesfully read." << endl;
+			Log.info() << "> Bruker file " << mydir << " succesfully read." << std::endl;
 
       // notify main window
       NewRegularData1DMessage new_message;
@@ -82,9 +70,7 @@ namespace BALL
 
       notify_(new_message);
 
-      // notify main window
-      window_message.setStatusBar("");
-      notify_(window_message);
+      setStatusbarText("");
     }
   }
 }

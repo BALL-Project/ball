@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBallAndStickModel.C,v 1.5 2002/02/27 12:23:46 sturm Exp $
+// $Id: glBallAndStickModel.C,v 1.6 2002/12/12 10:57:46 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h>
 
@@ -54,10 +54,6 @@ namespace BALL
 			return (TwoColoredTube *)(new GLTwoColoredTube());
 		}
 
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

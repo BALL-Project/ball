@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.14 2002/02/27 12:21:48 sturm Exp $
+// $Id: ballAndStickModel.C,v 1.15 2002/12/12 10:57:43 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -170,7 +170,7 @@ namespace BALL
 			sphere_ptr->PropertyManager::set(*this);
 			sphere_ptr->PropertyManager::setProperty(PROPERTY__MODEL_BALL_AND_STICK);
 
-			if (ball_and_stick_ == true)
+			if (ball_and_stick_)
 			{
 				sphere_ptr->setRadius(ball_radius_);
 			}
@@ -218,22 +218,6 @@ namespace BALL
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
-
-		Sphere* AddBallAndStickModel::createSphere_()
-		{
-			return (Sphere *)(new Sphere());
-		}
-
-		Tube* AddBallAndStickModel::createTube_()
-		{
-			return (Tube *)(new Tube());
-		}
-
-		TwoColoredTube*AddBallAndStickModel::createTwoColoredTube_()
-		{
-			return (TwoColoredTube *)(new TwoColoredTube());
-		}
-
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.iC>

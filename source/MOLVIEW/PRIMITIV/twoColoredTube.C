@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.C,v 1.10 2002/02/27 12:23:51 sturm Exp $
+// $Id: twoColoredTube.C,v 1.11 2002/12/12 10:57:48 oliver Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 
@@ -17,28 +17,26 @@ namespace BALL
 			throw()
 			:	GeometricObject(),			
 			  ColorExtension2(),
-  			Radius(),
-	  		Vertex2()
+	  		Vertex2(),
+				radius_(1)
 		{
 		}
 
-		TwoColoredTube::TwoColoredTube
-			(const TwoColoredTube& two_colored_tube, bool deep)
+		TwoColoredTube::TwoColoredTube(const TwoColoredTube& two_colored_tube, bool deep)
 			throw()
 			:	GeometricObject(two_colored_tube, deep),
 				ColorExtension2(two_colored_tube),
-				Radius(two_colored_tube),
-				Vertex2(two_colored_tube)
+				Vertex2(two_colored_tube),
+				radius_(two_colored_tube.radius_)
 		{
 		}
 
-		TwoColoredTube::TwoColoredTube
-			(const GeometricObject& geometric_object)
+		TwoColoredTube::TwoColoredTube(const GeometricObject& geometric_object)
 			throw()
 			:	GeometricObject(geometric_object),
 				ColorExtension2(),
-  			Radius(),
-	  		Vertex2()
+	  		Vertex2(),
+				radius_(1)
 		{
 		}
 
@@ -46,8 +44,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<TwoColoredTube>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<TwoColoredTube>() << endl;
 			#endif 
 
 			destroy();
@@ -58,8 +56,8 @@ namespace BALL
 		{
 			GeometricObject::clear();
 			ColorExtension2::clear();
-			Radius::clear();
 			Vertex2::clear();
+			radius_ = 1;
 		}
 
 		void TwoColoredTube::destroy()
@@ -67,7 +65,6 @@ namespace BALL
 		{
 			GeometricObject::destroy();
 			ColorExtension2::destroy();
-			Radius::destroy();
 			Vertex2::destroy();
 		}
 
@@ -76,8 +73,8 @@ namespace BALL
 		{
 			GeometricObject::set(two_colored_tube, deep);
 			ColorExtension2::set(two_colored_tube);
-			Radius::set(two_colored_tube);
 			Vertex2::set(two_colored_tube);
+			radius_ = two_colored_tube.radius_;
 		}
 
 		const TwoColoredTube& TwoColoredTube::operator = (const TwoColoredTube& two_colored_tube)
@@ -98,8 +95,11 @@ namespace BALL
 		{
 			GeometricObject::swap(two_colored_tube);
 			ColorExtension2::swap(two_colored_tube);
-			Radius::swap(two_colored_tube);
 			Vertex2::swap(two_colored_tube);
+
+			Real temp = two_colored_tube.radius_;
+			two_colored_tube.radius_ = radius_;
+			radius_ = temp;
 		}
 
 		bool TwoColoredTube::isValid() const
@@ -118,8 +118,8 @@ namespace BALL
 
 			GeometricObject::dump(s, depth + 1);
 			ColorExtension2::dump(s, depth + 1);
-			Radius::dump(s, depth + 1);
 			Vertex2::dump(s, depth + 1);
+			s << "radius : " << radius_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}

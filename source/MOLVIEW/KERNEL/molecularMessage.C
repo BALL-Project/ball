@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularMessage.C,v 1.4 2002/02/27 12:23:50 sturm Exp $
+// $Id: molecularMessage.C,v 1.5 2002/12/12 10:57:47 oliver Exp $
 
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 
@@ -15,15 +15,13 @@ namespace BALL
 
 		NewMolecularMessage::NewMolecularMessage()
 			throw()
-			:
-			CompositeMessage()
+			: CompositeMessage()
 		{
 		}
 
 		NewMolecularMessage::NewMolecularMessage(const CompositeMessage& message)
 			throw()
-			:
-			CompositeMessage(message)
+			: CompositeMessage(message)
 		{
 		}
 
@@ -38,15 +36,13 @@ namespace BALL
 
 		RemovedMolecularMessage::RemovedMolecularMessage()
 			throw()
-			:
-			RemovedCompositeMessage()
+			: RemovedCompositeMessage()
 		{
 		}
 
 		RemovedMolecularMessage::RemovedMolecularMessage(const CompositeMessage& message)
 			throw()
-			:
-			RemovedCompositeMessage(message)
+			: RemovedCompositeMessage(message)
 		{
 		}
 
@@ -61,15 +57,13 @@ namespace BALL
 
 		ChangedMolecularMessage::ChangedMolecularMessage()
 			throw()
-			:
-			ChangedCompositeMessage()
+			: ChangedCompositeMessage()
 		{
 		}
 
 	  ChangedMolecularMessage::ChangedMolecularMessage(const CompositeMessage& message)
 			throw()
-			:
-			ChangedCompositeMessage(message)
+			: ChangedCompositeMessage(message)
 		{
 		}
 
@@ -85,15 +79,13 @@ namespace BALL
 
 		MolecularSelectionMessage::MolecularSelectionMessage()
 			throw()
-			:
-			SelectionMessage()
+			: SelectionMessage()
 		{
 		}
 
 		MolecularSelectionMessage::MolecularSelectionMessage(const SelectionMessage& message)
 			throw()
-			:
-			SelectionMessage(message)
+			: SelectionMessage(message)
 		{
 		}
 
@@ -101,14 +93,10 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<MolecularSelectionMessage>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+							 		  << " of class " << RTTI::getName<MolecularSelectionMessage>() << endl;
 			#endif 
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/KERNEL/molecularMessage.iC>
-#		endif 
 
 	} // namespace MOLVIEW
 

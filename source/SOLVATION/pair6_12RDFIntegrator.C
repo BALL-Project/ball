@@ -1,12 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pair6_12RDFIntegrator.C,v 1.16 2002/02/27 12:24:05 sturm Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.17 2002/12/12 11:04:08 oliver Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
 
 using namespace std;
+
+#ifdef BALL_COMPILER_MSVC
+#	define atanh(x) ((log  (1+x) - log (1-x))/2)
+#endif
 
 namespace BALL
 {

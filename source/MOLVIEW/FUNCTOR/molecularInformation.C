@@ -1,21 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.C,v 1.8 2002/02/27 12:21:51 sturm Exp $
+// $Id: molecularInformation.C,v 1.9 2002/12/12 10:57:43 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
+#include <BALL/KERNEL/system.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
 		MolecularInformation::MolecularInformation()
 			throw()
-			:	Information()
+			:	VIEW::Information()
 		{
 		}
 
@@ -33,7 +33,7 @@ namespace BALL
 		void MolecularInformation::clear()
 			throw()
 		{
-			Information::clear();
+			VIEW::Information::clear();
 			type_ = TYPE__UNKNOWN;
 		}
 
@@ -54,7 +54,7 @@ namespace BALL
 			}
 			else // try your luck within View-objects
 			{
-				Information::visit(composite);
+				VIEW::Information::visit(composite);
 			}
 		}
 

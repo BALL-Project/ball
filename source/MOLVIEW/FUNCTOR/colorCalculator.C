@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorCalculator.C,v 1.10 2002/02/27 12:21:49 sturm Exp $
+// $Id: colorCalculator.C,v 1.11 2002/12/12 10:57:43 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/colorCalculator.h>
 
@@ -9,7 +9,6 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -20,8 +19,7 @@ namespace BALL
 		{
 		}
 
-		ColorCalculator::ColorCalculator
-			(const ColorCalculator& color_calculator)
+		ColorCalculator::ColorCalculator(const ColorCalculator& color_calculator)
 			throw()
 			:	Visitor<Atom>(color_calculator),
 				Visitor<Composite>(color_calculator),
@@ -35,8 +33,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<ColorCalculator>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<ColorCalculator>() << endl;
 			#endif 
 
 			destroy();
@@ -64,24 +62,20 @@ namespace BALL
 			color_ = color_calculator.color_;
 		}
 
-		const ColorCalculator& 	ColorCalculator::operator =
-			(const ColorCalculator& color_calculator)
+		const ColorCalculator& 	ColorCalculator::operator = (const ColorCalculator& color_calculator)
 			throw()
 		{
 			set(color_calculator);
-
 			return *this;
 		}
 
-		void ColorCalculator::get
-			(ColorCalculator& color_calculator) const
+		void ColorCalculator::get(ColorCalculator& color_calculator) const
 			throw()
 		{
 			color_calculator.set(*this);
 		}
 
-		void ColorCalculator::swap
-			(ColorCalculator& color_calculator)
+		void ColorCalculator::swap(ColorCalculator& color_calculator)
 			throw()
 		{
 			color_map_.swap(color_calculator.color_map_);
@@ -113,8 +107,7 @@ namespace BALL
 			}
 		}
 
-		void ColorCalculator::dump
-			(ostream& s, Size depth) const
+		void ColorCalculator::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -133,12 +126,6 @@ namespace BALL
 			color_map_.dump(s, depth + 2)
 					
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		const String& ColorCalculator::calculateKey(const Atom& atom) const
-			throw()
-		{
-			return atom.getElement().getSymbol();
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

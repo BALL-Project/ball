@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glVanDerWaalsModel.C,v 1.5 2002/02/27 12:23:47 sturm Exp $
+// $Id: glVanDerWaalsModel.C,v 1.6 2002/12/12 10:57:46 oliver Exp $
 
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h>
@@ -31,7 +31,7 @@ namespace BALL
  		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-			 << " of class " << getBallClass().getName() << endl;
+			 << " of class " << RTTI::getName<AddGLVanDerWaalsModel>() << endl;
 			#endif 
 
 			AddVanDerWaalsModel::destroy();
@@ -41,10 +41,6 @@ namespace BALL
 		{
 			return (Sphere *)(new GLSphere());
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

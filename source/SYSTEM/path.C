@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: path.C,v 1.3 2002/02/27 12:24:20 sturm Exp $
+// $Id: path.C,v 1.4 2002/12/12 11:10:06 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/file.h>
 #include <fstream>
-#include <stdlib.h>
 
 using std::ifstream;
 
@@ -15,7 +14,7 @@ namespace BALL
 {
 
 	Path::Path()
-		:	path_(BALL_PATH"/data/"),
+		:	path_(BALL_PATH "/data/"),
 			path_array_valid_(false),
 			environment_checked_(false),
 			path_array_()
@@ -24,6 +23,7 @@ namespace BALL
 
 	string Path::getDataPath()
 	{
+		buildPathArray_();
 		return path_;
 	}
 
@@ -33,9 +33,16 @@ namespace BALL
 		path_ = path;
 	}
 
+	void Path::addDataPath(const string& path)
+	{
+		path_array_valid_ = false;
+		path_ += "\n";
+		path_ += path;
+	}
+
 	string Path::getDefaultDataPath()
 	{	
-		return BALL_PATH"/data/";
+		return BALL_PATH "/data/";
 	}
 
 	void Path::buildPathArray_() 
@@ -55,9 +62,9 @@ namespace BALL
 			char*	ball_data_path = getenv("BALL_DATA_PATH");
 			if (ball_data_path != 0)
 			{	
-				string bdp = ball_data_path;
-				bdp.append(":");
-				bdp.append(getDataPath());
+				string bdp(ball_data_path);
+				bdp.append("\n");
+				bdp.append(path_);
 				setDataPath(bdp);
 			}
 			
@@ -67,8 +74,8 @@ namespace BALL
 
 		// segment the path string and insert each path 
 		// into the path array. append slashes where neccessary
-		string tmp = path_ + ":";
-		string::size_type position = tmp.find(":");
+		string tmp = path_ + "\n";
+		string::size_type position = tmp.find("\n");
 		while (position != string::npos) 
 		{
 			// extract the next path...
@@ -85,7 +92,7 @@ namespace BALL
 			tmp.erase(0, position + 1);
 
 			// find the next occurence	
-			position = tmp.find(":");
+			position = tmp.find("\n");
 		}
 
 		// remember we don't have to do this again - computation on demand!
@@ -107,7 +114,7 @@ namespace BALL
 			// if the full (path-specified) name could not be found,
 			// only try the basename (remove leading directories)
 			string tmp = name;
-			tmp.erase(0, tmp.rfind("/") + 1);
+			tmp.erase(0, tmp.rfind(FileSystem::PATH_SEPARATOR) + 1);
 			if (tmp != name)
 			{
 				result = findStrict(tmp);
@@ -139,7 +146,7 @@ namespace BALL
 
 			// if the file could be opened, we return its name
 			if (File::isAccessible(filename))
-			{
+			{				
 				return filename;
 			}
 		}

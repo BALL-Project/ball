@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.C,v 1.26 2002/02/27 12:24:20 sturm Exp $
+// $Id: socket.C,v 1.27 2002/12/12 11:10:06 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -17,14 +17,29 @@
 
 #include <BALL/SYSTEM/socket.h>
 
-#include <sys/time.h>
-#include <sys/socket.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <errno.h>
 #include <stdio.h>
-#include <netdb.h>
-#include <arpa/inet.h>
+#include <errno.h>
+#include <stdlib.h>
+
+#ifdef BALL_HAS_SYS_TIME_H
+#	include <sys/time.h>
+#endif
+#ifdef BALL_HAS_UNISTD_H
+#	include <unistd.h>
+#endif
+#ifdef BALL_HAS_NETDB_H
+#	include <netdb.h>
+#endif
+#ifdef BALL_HAS_ARPA_INET_H
+#	include <arpa/inet.h>
+#endif
+
+#ifdef BALL_USE_WINSOCK
+#	include <io.h>
+#	define GLOBAL_CLOSE	_close
+#else
+#	define GLOBAL_CLOSE ::close
+#endif
 
 #ifndef BUFSIZ
 #  define BUFSIZ 1024
@@ -140,6 +155,13 @@ namespace BALL
 			stmo(-1), 
 			rtmo(-1)
 	{
+#ifdef BALL_COMPILER_MSVC
+		WORD    wsa_vers = 0x0101;
+    WSADATA wsa_data;
+   
+    WSAStartup(wsa_vers, &wsa_data);
+      
+#endif
 		int soc = ::socket(domain, socket_type, proto);
 		rep = new sockcnt(soc, 1);
 #	ifdef BALL_HAS_ANSI_IOSTREAM
@@ -215,7 +237,7 @@ namespace BALL
 	{
 		if (rep->sock >= 0) 
 		{
-			if (::close (rep->sock) == -1) 
+			if (GLOBAL_CLOSE(rep->sock) == -1) 
 			{
 				return this;
 			}
@@ -1036,7 +1058,20 @@ namespace BALL
 	SocketBuf* SockInetBuf::open(SocketBuf::type socket_type, int proto)
 		throw()
 	{
+		
+		#ifdef BALL_USE_WINSOCK
+			WORD    wsa_vers = 0x0101;
+			WSADATA wsa_data;
+ 
+		   if (WSAStartup(wsa_vers, &wsa_data) != 0)
+			 {
+				 Log.error() << "SockInetBuf::open: No WINSOCK.DLL found!" << std::endl;
+			 }	
+		 
+		#endif
+
 		*this = SockInetBuf(socket_type, proto);
+
 		return this;
 	}
 
@@ -1138,11 +1173,14 @@ namespace BALL
 			{
 				return 0;
 			}
-
-			if (eno != EADDRINUSE)
-			{
+#			ifndef BALL_USE_WINSOCK
+				if (eno != EADDRINUSE)
+				{
+					return eno;
+				}
+#			else
 				return eno;
-			}
+#			endif
 		}
 	}
 
@@ -1233,7 +1271,7 @@ namespace BALL
 	}
 
 	IOStreamSocket::IOStreamSocket(SocketBuf::type ty, int proto)
-		throw()
+		throw(Exception::NullPointer)
 		:	IOSockStream(new SockInetBuf(ty, proto))
 	{
 		if (rdbuf() == 0)
@@ -1243,7 +1281,7 @@ namespace BALL
 	}
 
 	IOStreamSocket::IOStreamSocket(const SocketBuf& sb)
-		throw()
+		throw(Exception::NullPointer)
 		: IOSockStream(new SockInetBuf(sb))
 	{
 		if (rdbuf() == 0)

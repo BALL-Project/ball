@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.30 2002/02/27 12:24:06 sturm Exp $ 
+// $Id: poissonBoltzmann.C,v 1.31 2002/12/12 11:04:08 oliver Exp $ 
+
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -57,19 +58,19 @@ namespace BALL
 
 	const int		FDPB::Default::VERBOSITY  = 0;
 	const bool	FDPB::Default::PRINT_TIMING  = false;
-	const float FDPB::Default::SPACING =  0.6;
-	const float FDPB::Default::BORDER = 4.0;
-	const float FDPB::Default::TEMPERATURE = 298.15;
-	const float FDPB::Default::PROBE_RADIUS = 1.5;
-	const float FDPB::Default::ION_RADIUS = 2.0;
-	const float FDPB::Default::IONIC_STRENGTH = 0.0;
+	const float FDPB::Default::SPACING =  0.6F;
+	const float FDPB::Default::BORDER = 4.0F;
+	const float FDPB::Default::TEMPERATURE = 298.15F;
+	const float FDPB::Default::PROBE_RADIUS = 1.5F;
+	const float FDPB::Default::ION_RADIUS = 2.0F;
+	const float FDPB::Default::IONIC_STRENGTH = 0.0F;
 	const char* FDPB::Default::BOUNDARY = FDPB::Boundary::DIPOLE;
 	const char* FDPB::Default::CHARGE_DISTRIBUTION = FDPB::ChargeDistribution::UNIFORM;
 	const char* FDPB::Default::DIELECTRIC_SMOOTHING = FDPB::DielectricSmoothing::NONE;
 	const float FDPB::Default::SOLVENT_DC = 78.0;
 	const float FDPB::Default::SOLUTE_DC = 2.0;
-	const float FDPB::Default::RMS_CRITERION = 1e-5;
-	const float FDPB::Default::MAX_CRITERION = 1e-4;
+	const float FDPB::Default::RMS_CRITERION = 1e-5F;
+	const float FDPB::Default::MAX_CRITERION = 1e-4F;
 	const Index  FDPB::Default::MAX_ITERATIONS = 500;
 	const Index  FDPB::Default::CHECK_AFTER_ITERATIONS = 10;
 
@@ -741,7 +742,7 @@ namespace BALL
 			}
 
 			// copy the temporary grid back to the old dielectric grid
-			eps_grid->set(tmp_grid);
+			(*eps_grid) = tmp_grid;
 		}
 
 		step_timer.stop();

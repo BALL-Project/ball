@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.C,v 1.12 2002/02/27 12:21:53 sturm Exp $
+// $Id: vanDerWaalsModel.C,v 1.13 2002/12/12 10:57:43 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 
@@ -119,11 +119,6 @@ namespace BALL
 		{
 			return (Sphere *)(new Sphere());
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

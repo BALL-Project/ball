@@ -1,9 +1,10 @@
-// $Id: fragmentDB.sip,v 1.1 2001/09/03 16:53:08 oliver Exp $
+// $Id: fragmentDB.sip,v 1.2 2002/12/12 11:00:19 oliver Exp $
 
 class FragmentDB 
 {
 %HeaderCode
 	#include <BALL/STRUCTURE/fragmentDB.h>
+	#include <BALL/STRUCTURE/reconstructFragmentProcessor.h>
 	using namespace BALL;
 %End
   public:
@@ -42,9 +43,9 @@ class FragmentDB
   // StringHashMap<StringHashMap<String>*>& getNamingStandards();
   bool isValid() const;
 
-  NormalizeNamesProcessor  normalize_names;
-  AddHydrogensProcessor   add_hydrogens;
-  BuildBondsProcessor    build_bonds;
+  NormalizeNamesProcessor 			normalize_names;
+	ReconstructFragmentProcessor  add_hydrogens;
+  BuildBondsProcessor   				build_bonds;
   ResourceEntry* tree;
 };
 
@@ -82,25 +83,7 @@ class NormalizeNamesProcessor
 	virtual bool finish();
 	virtual Processor::Result operator () (Fragment& /fragment/);
 };
-class AddHydrogensProcessor 
-//  : public UnaryProcessor<Fragment> 
-	: FragmentProcessor
-{
-%HeaderCode
-	#include <BALL/STRUCTURE/fragmentDB.h>
-	typedef FragmentDB::AddHydrogensProcessor AddHydrogensProcessor;
-	using namespace BALL;
-%End
-	public:
-	AddHydrogensProcessor();
-	AddHydrogensProcessor(const FragmentDB& /db/);
-	~AddHydrogensProcessor();
-	virtual bool start();
-	virtual bool finish();
-	virtual Processor::Result operator()(Fragment&);
-	Size getNumberOfInsertedHydrogens();
-	void setFragmentDB(const FragmentDB& /fragment_db/);
-};
+
 
 class BuildBondsProcessor 
 // : public UnaryProcessor<Fragment> 

@@ -1,9 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.8 2002/02/27 12:23:49 sturm Exp $
+// $Id: molecularProperties.C,v 1.9 2002/12/12 10:57:47 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
+#include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
+#include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
+
 
 using namespace std;
 
@@ -34,12 +37,12 @@ namespace BALL
     {
 			if (RTTI::isKindOf<NewCompositeMessage>(*message))
 			{
-				NewCompositeMessage *composite_message 
-					= RTTI::castTo<NewCompositeMessage>(*message);
+				NewCompositeMessage *composite_message = RTTI::castTo<NewCompositeMessage>(*message);
 				
 				// properties will be used only for atom containers
 				if (!RTTI::isKindOf<AtomContainer>(*(composite_message->getComposite())))
 				{
+					// BAUSTELLE
 					// ??????????????? warum wird eine MolecularMessage gesendet wenn
 					// composite kein AtomContainer ?????????????????????????????????
 					//
@@ -139,11 +142,32 @@ namespace BALL
 					}
 				}
 			}
+			else if(RTTI::isKindOf<CompositeSelectedMessage>(*message))
+			{
+				// Information from Control: 1 Composite selected or deselected.
+				CompositeSelectedMessage* selection_message = RTTI::castTo<CompositeSelectedMessage>(*message);
+				if (selection_message->selected_) 
+				{
+					// select the geometric objects of the composite
+					ObjectSelector selector;
+					selection_message->composite_->apply(selector);
+				}
+				else
+				{
+					// deselect the geometric objects of the composite
+					ObjectDeselector deselector;
+					selection_message->composite_->apply(deselector);
+				}
+
+				// Inform the Scene of the changes
+				MainControl::getMainControl(this)->update(selection_message->composite_->getRoot());
+
+				SceneMessage* scene_message = new SceneMessage;
+				scene_message->updateOnly();
+				notify_(scene_message);
+			}
     }
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

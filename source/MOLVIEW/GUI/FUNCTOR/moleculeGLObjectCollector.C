@@ -1,13 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeGLObjectCollector.C,v 1.5 2002/02/27 12:23:47 sturm Exp $
+// $Id: moleculeGLObjectCollector.C,v 1.6 2002/12/12 10:57:46 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/molecule.h>
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -20,7 +23,7 @@ namespace BALL
 		MoleculeGLObjectCollector::~MoleculeGLObjectCollector()
       throw()
  		{
-			#ifdef BALL_MOLVIEW_DEBUG
+			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<MoleculeGLObjectCollector>() << endl;
 			#endif 
@@ -54,10 +57,6 @@ namespace BALL
 
 			return GLObjectCollector::finish();
 		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

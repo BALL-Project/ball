@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.11 2002/02/27 12:24:04 sturm Exp $
+// $Id: molecularSurfaceGrid.C,v 1.12 2002/12/12 11:04:08 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 #include <BALL/KERNEL/forEach.h>
@@ -220,7 +220,9 @@ namespace BALL
 		unsigned long q;
 
 		for (s = 1; s < grid->getMaxZIndex(); s++)
+		{
 			for (t = 1; t < grid->getMaxYIndex(); t++)
+			{
 				for (q = 1; q < grid->getMaxXIndex(); q++)
 				{
 					// calculate the absolute grid index the hard way (faster!)
@@ -244,14 +246,19 @@ namespace BALL
 							grid_pointer = (long)&(grid->data[idx]);
 							fast_sphere_end = &(fast_sphere_relative[relative_count - 1]);
 
-							for (sphere_pointer = fast_sphere_relative; sphere_pointer <= fast_sphere_end; sphere_pointer++){
+							for (sphere_pointer = fast_sphere_relative; sphere_pointer <= fast_sphere_end; sphere_pointer++)
+							{
 								grid_pointer += *sphere_pointer;
 								if ((grid_pointer <= grid_end) && (grid_pointer >= grid_begin))
+								{
 									*((char*)grid_pointer) |= CCONN__INSIDE_PROBE;
+								}
 							}
 						}
 					}
 				}
+			}
+		}
 
 		delete [] fast_sphere_relative;
 
@@ -273,7 +280,7 @@ namespace BALL
 		return &(*grid);
 	}
 
-	TRegularData3D<char> *calculateSASGrid(
+	TRegularData3D<char>* calculateSASGrid(
 				const Vector3 &lower, 
 				const Vector3 &upper,
 				const float spacing,
@@ -372,9 +379,12 @@ namespace BALL
 																		 r0.y + R_b + d, 
 																		 r0.z + R_b + d);
 
-				for(unsigned long k = lower_index.z; k <= upper_index.z; k++)
-					for(unsigned long j = lower_index.y; j <= upper_index.y; j++)
-						for(unsigned long i = lower_index.x; i <= upper_index.x; i++){
+				for (unsigned long k = lower_index.z; k <= upper_index.z; k++)
+				{
+					for (unsigned long j = lower_index.y; j <= upper_index.y; j++)
+					{
+						for (unsigned long i = lower_index.x; i <= upper_index.x; i++)
+						{
 							x = (float)i * spacing + origin_x;
 							y = (float)j * spacing + origin_y;
 							z = (float)k * spacing + origin_z;
@@ -393,6 +403,8 @@ namespace BALL
 								}
 							}
 						}
+					}
+				}
 			}
 		}
 

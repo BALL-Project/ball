@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.34 2002/02/27 12:24:19 sturm Exp $
+// $Id: file.C,v 1.35 2002/12/12 11:10:06 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -17,6 +17,15 @@ using std::endl;
 // maximum number of substitutions performed in TransformationManager::transform()
 // (in order to avoid infinite recursion)
 #define MAX_SUBSTITUTIONS 10
+
+#ifdef BALL_COMPILER_MSVC
+#	define S_ISREG _S_ISREG
+#	define S_ISDIR _S_ISDIR
+#	define S_ISCHR _S_ISCHR
+#	define S_ISBLK _S_ISBLK
+#	define S_ISFIFO _S_ISFIFO
+#	define access _access
+#endif
 
 namespace BALL 
 {
@@ -163,14 +172,6 @@ namespace BALL
 																				| BALL_BIT(File::TRANSFORMATION__FILTER) 
 																				| BALL_BIT(File::TRANSFORMATION__URL);
 
-
-  const File::OpenMode File::IN;
-  const File::OpenMode File::OUT;
-  const File::OpenMode File::APP;
-  const File::OpenMode File::BINARY;
-  const File::OpenMode File::ATE;
-  const File::OpenMode File::TRUNC;
- 
 	File::File()
 		throw()
 		:	fstream(),
@@ -409,52 +410,76 @@ namespace BALL
 	File::Type File::getType(String name, bool trace_link)
 		throw (Exception::FileNotFound)
 	{
-		struct stat stats;
+		// Canonize the path
 		FileSystem::canonizePath(name);
 		
-		if ((trace_link == true) 
-				?  ::stat(name.c_str(), &stats) < 0
-				: ::lstat(name.c_str(), &stats) < 0)
-		{ /* unknown file type */
-			return File::TYPE__UNKNOWN;
-		}
+		#ifdef BALL_COMPILER_MSVC
+			struct _stat stats;
+			if (_stat(name.c_str(), &stats) < 0)
+			{
+				return File::TYPE__UNKNOWN;
+			}
+		#else
+			struct stat stats;
+			if ((trace_link == true) 
+					?  ::stat(name.c_str(), &stats) < 0
+					: ::lstat(name.c_str(), &stats) < 0)
+			{ 
+				/* unknown file type */
+				return File::TYPE__UNKNOWN;
+			}
+		#endif
 
-		if (S_ISREG(stats.st_mode))
-		{ /* regular file */
-			return File::TYPE__REGULAR_FILE;
-		}
+		#ifdef BALL_COMPILER_MSVC
+			if ((stats.st_mode & _S_IFDIR) == _S_IFDIR)
+			{
+				return File::TYPE__DIRECTORY;
+			}
+			if ((stats.st_mode & _S_IFREG)== _S_IFREG)
+			{
+				return File::TYPE__REGULAR_FILE;
+			}
+		#else
+			if (S_ISREG(stats.st_mode))
+			{ 
+				/* regular file */
+				return File::TYPE__REGULAR_FILE;
+			}
 
-		if (S_ISDIR(stats.st_mode))
-		{ /* directory */
-			return File::TYPE__DIRECTORY;
-		}  
+			if (S_ISDIR(stats.st_mode))
+			{ /* directory */
+				return File::TYPE__DIRECTORY;
+			}  
 
-		if (S_ISCHR(stats.st_mode))
-		{ /* char oriented device */
-			return File::TYPE__CHAR_SPECIAL_FILE;
-		}
+			if (S_ISCHR(stats.st_mode))
+			{ /* char oriented device */
+				return File::TYPE__CHAR_SPECIAL_FILE;
+			}
 
-		if (S_ISBLK(stats.st_mode))
-		{ /* block oriented device */
-			return File::TYPE__BLOCK_SPECIAL_FILE;
-		}
+			if (S_ISBLK(stats.st_mode))
+			{ /* block oriented device */
+				return File::TYPE__BLOCK_SPECIAL_FILE;
+			}
 
-		if (S_ISFIFO(stats.st_mode))
-		{ /* fifo device */
-			return File::TYPE__FIFO_SPECIAL_FILE;
-		}
-#ifdef S_ISLNK
-		if (S_ISLNK(stats.st_mode))
-		{ /* symbolic link */
-			return File::TYPE__SYMBOLIC_LINK;
-		}
-#endif
-#ifdef S_ISSOCK
-		if (S_ISSOCK(stats.st_mode)) 
-		{ /* socket */
-			return File::TYPE__SOCKET;
-		}
-#endif
+			if (S_ISFIFO(stats.st_mode))
+			{ /* fifo device */
+				return File::TYPE__FIFO_SPECIAL_FILE;
+			}
+			
+			#ifdef S_ISLNK
+				if (S_ISLNK(stats.st_mode))
+				{ /* symbolic link */
+					return File::TYPE__SYMBOLIC_LINK;
+				}
+			#endif
+			#ifdef S_ISSOCK
+				if (S_ISSOCK(stats.st_mode)) 
+				{ /* socket */
+					return File::TYPE__SOCKET;
+				}
+			#endif
+		#endif
+
 		/* unknown file type */
 		return File::TYPE__UNKNOWN;
 	}
@@ -482,7 +507,7 @@ namespace BALL
 									temporary[6] = f;
 									temporary[7] = g;
 			
-									if (::access(temporary.c_str(),F_OK) < 0)
+									if (::access(temporary.c_str(), F_OK) < 0)
 									{ 
 										return true;
 									}					

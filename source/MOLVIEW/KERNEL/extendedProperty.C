@@ -1,31 +1,29 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extendedProperty.C,v 1.9 2002/02/27 12:23:50 sturm Exp $
+// $Id: extendedProperty.C,v 1.10 2002/12/12 10:57:47 oliver Exp $
 
 #include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
+#include <BALL/MOLVIEW/COMMON/common.h>
+#include <BALL/VIEW/KERNEL/geometricObject.h>
 
+using BALL::VIEW::GeometricObject;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
-		ExtendedPropertyManager::ExtendedPropertyManager
-			()
+		ExtendedPropertyManager::ExtendedPropertyManager ()
 			throw()
-				:
-				PropertyManager()
+			: PropertyManager()
 		{
 		}
 
 		ExtendedPropertyManager::ExtendedPropertyManager
-			(const ExtendedPropertyManager &__rExtendedPropertyManager,
-			 bool /* deep */)
+			(const ExtendedPropertyManager &__rExtendedPropertyManager, bool /* deep */)
 			throw()
-				:
-				PropertyManager(__rExtendedPropertyManager)
+			: PropertyManager(__rExtendedPropertyManager)
 		{
 		}
 
@@ -34,8 +32,7 @@ namespace BALL
 		{
 		}
 
-		void ExtendedPropertyManager::setProperty
-			(int property)
+		void ExtendedPropertyManager::setProperty(int property)
 			throw()
 		{
 			if (property == GeometricObject::PROPERTY__OBJECT_TRANSPARENT 
@@ -82,11 +79,6 @@ namespace BALL
 
 			PropertyManager::setProperty(property);
 		}
-
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/KERNEL/extendedProperty.iC>
-#		endif
 
 	} // namespace MOLVIEW
 
