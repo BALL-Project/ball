@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.4 2000/02/14 22:44:08 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.5 2000/02/22 10:16:31 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -105,7 +105,7 @@ namespace BALL
 		getForceField()->options.setDefaultReal(CharmmFF::Option::VDW_CUTON, CharmmFF::Default::VDW_CUTON);
 		cut_on_vdw_ = getForceField()->options.getReal(CharmmFF::Option::VDW_CUTON);
 
-		getForceField()->options.setDefaultReal(CharmmFF::Option::SCALING_ELECTROSTATIC_1_4,CharmmFF::Default::SCALING_ELECTROSTATIC_1_4);
+		getForceField()->options.setDefaultReal(CharmmFF::Option::SCALING_ELECTROSTATIC_1_4, CharmmFF::Default::SCALING_ELECTROSTATIC_1_4);
 		scaling_electrostatic_1_4_ = 1 / getForceField()->options.getReal(CharmmFF::Option::SCALING_ELECTROSTATIC_1_4);
 
 		getForceField()->options.setDefaultReal(CharmmFF::Option::SCALING_VDW_1_4,CharmmFF::Default::SCALING_VDW_1_4);
@@ -159,12 +159,14 @@ namespace BALL
 			if (van_der_waals_parameters_.options.has("CUTNB"))
 			{    
 				cut_off_ = van_der_waals_parameters_.options.getReal("CUTNB");
+				getForceField()->options[CharmmFF::Option::NONBONDED_CUTOFF] = cut_off_;
 			}
 
 			// the cut on for the switch fct.
 			if (van_der_waals_parameters_.options.has("CTONNB"))
 			{
 				cut_on_vdw_ = van_der_waals_parameters_.options.getReal("CTONNB");
+				getForceField()->options[CharmmFF::Option::VDW_CUTOFF] = cut_off_;
 			}
 			
 			// the cut off for the switch fct.
@@ -172,12 +174,38 @@ namespace BALL
 			{
 				cut_off_electrostatic_ = van_der_waals_parameters_.options.getReal("CTOFNB");
 				cut_off_vdw_ = cut_off_electrostatic_;
+				getForceField()->options[CharmmFF::Option::ELECTROSTATIC_CUTOFF] = cut_off_electrostatic_;
+				getForceField()->options[CharmmFF::Option::VDW_CUTOFF] = cut_off_vdw_;
 			}
 
 			// electrostatic 1-4 scaling factor
 			if (van_der_waals_parameters_.options.has("E14FAC"))
 			{
 				scaling_electrostatic_1_4_ = van_der_waals_parameters_.options.getReal("E14FAC");
+				getForceField()->options[CharmmFF::Option::SCALING_ELECTROSTATIC_1_4] = scaling_electrostatic_1_4_;
+			}
+
+			// electrostatic 1-4 scaling factor
+			if (van_der_waals_parameters_.options.has("ATOM"))
+			{
+				// the ATOM option either takes CDIEL or RDIEL as an argument
+				// meaning constant DC or distance-dependend DC
+				String value = van_der_waals_parameters_.options["ATOM"];
+				if ((value != "CDIEL") && (value != "RDIEL"))
+				{
+					Log.warn() << "CharmmNonBonded::setup: unknown CHARMM arguemtn to ATOM: " << value 
+							<< "   - using distance dependend electrostatics." << endl;
+				}
+				
+				if (value == "CDIEL")
+				{
+					use_dist_depend_dielectric_ = false;
+				} else {
+					use_dist_depend_dielectric_ = false;
+				}
+
+				// store the value back in the options
+				getForceField()->options[CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = use_dist_depend_dielectric_;
 			}
 		}
 
@@ -191,7 +219,7 @@ namespace BALL
 
 				if (result == false)
 				{
-					Log.error() << "CHarmmNonBonded::setup: cannot setup EEF1 solvation component." << endl;
+					Log.error() << "CharmmNonBonded::setup: cannot setup EEF1 solvation component." << endl;
 					return false;
 				}
 			}
