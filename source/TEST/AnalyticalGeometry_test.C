@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.11 2000/03/24 18:57:08 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.12 2000/03/26 12:11:44 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.11 2000/03/24 18:57:08 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.12 2000/03/26 12:11:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -189,8 +189,7 @@ CHECK(GetDistance(const TLine3<T>& line, const TPlane3<T>& plane))
 	v2.set(0.0, 10.0, 0.0);
 	l1.set(v1, v2);
 	TEST_REAL_EQUAL(GetDistance(l1, p1), 0.0)
-	v2.set(0.0, 0.0, 0.0);
-	l1.set(v1, v2);
+	p1.n.set(0.0, 0.0, 0.0);
 	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(l1, p1))
 RESULT
 
@@ -212,17 +211,25 @@ RESULT
 
 //line465
 CHECK(GetDistance(const TPlane3<T>& a, const TPlane3<T>& b))
-	v1.set(0.0, 0.0, 0.0);
-	v2.set(-10.0, 0.0, 0.0);
-	v3.set(0.0, -10.0, 0.0);  
+	v1.set(0.0, 0.0, 5.0);
+	v2.set(-10.0, 0.0, 5.0);
+	v3.set(0.0, -10.0, 5.0);  
 	p1 = Plane3(v1, v2, v3);
 	v1.set(10.0, 0.0, 0.0);
 	v2.set(20.0, 0.0, 0.0);
 	v3.set(10.0, 10.0, 0.0);  
 	p2 = Plane3(v1, v2, v3);
-	TEST_REAL_EQUAL(GetDistance(p1, p2), 10.0)
+	TEST_REAL_EQUAL(GetDistance(p1, p2), 5.0)
+
 	p1 = p2;
 	TEST_REAL_EQUAL(GetDistance(p1, p2), 0.0)
+
+	v1.set(10.0, 10.0, 0.0);
+	v2.set(20.0, 0.0, 0.0);
+	v3.set(10.0, 10.0, 0.0);  
+	p2 = Plane3(v1, v2, v3);
+	TEST_REAL_EQUAL(GetDistance(p1, p2), 0.0)
+
 	v3.set(0.0, 0.0, 0.0);  
 	p1 = Plane3(v1, v1, v1);
 	TEST_EXCEPTION(Exception::DivisionByZero, GetDistance(p1, p2))
@@ -358,15 +365,20 @@ CHECK(GetIntersection(const TPlane3<T>& plane, const TLine3<T>& line, TVector3<T
 	v1.set(5.0, 5.0, 0.0);
 	TEST_EQUAL(GetIntersection(p1, l1, v2), true)
 	TEST_EQUAL(v1, v2);
-	v1.set(500.0, 5.0, -5.0);
+	v1.set(0.0, 0.0, 10.0);
+	v2.set(10.0, 0.0, 0.0);
+	l1.set(v1, v2);
+	TEST_EQUAL(l1.d * p1.n, 0.0)
+	TEST_EQUAL(GetIntersection(p1, l1, v2), false)
+	v1.set(0.0, 0.0, 0.0);
 	v2.set(0.0, 0.0, 10.0);
 	l1.set(v1, v2);
-	TEST_EQUAL(GetIntersection(p1, l1, v2), false)
-	TEST_EQUAL(v2, v1);//???
+	TEST_EQUAL(GetIntersection(p1, l1, v2), true)
+	TEST_REAL_EQUAL(v1.getDistance(v2), 0.0)
 RESULT
 
 //line682
-CHECK(GetIntersection(const TLine3<T>& line, const TPlane3<T>& plane TVector3<T>& intersection_point))
+CHECK(GetIntersection(const TLine3<T>& line, const TPlane3<T>& plane, TVector3<T>& intersection_point))
 	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
 	v3.set(0.0, 10.0, 0.0);  
@@ -377,8 +389,8 @@ CHECK(GetIntersection(const TLine3<T>& line, const TPlane3<T>& plane TVector3<T>
 	v1.set(5.0, 5.0, 0.0);
 	TEST_EQUAL(GetIntersection(l1, p1, v2), true)
 	TEST_EQUAL(v1, v2);
-	v1.set(500.0, 5.0, -5.0);
-	v2.set(0.0, 0.0, 10.0);
+	v1.set(0.0, 5.0, 10.0);
+	v2.set(1.0, 2.0, 0.0);
 	l1.set(v1, v2);
 	TEST_EQUAL(GetIntersection(l1, p1, v2), false)
 RESULT
@@ -393,55 +405,31 @@ CHECK(GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
 	v2.set(10.0, 0.0, 0.0);
 	v3.set(0.0, 0.0, 10.0);  
 	p2 = Plane3(v1, v2, v3);
-	v1.set(0.0, 5.0, 0.0);
-	v2.set(10.0, 0.0, 0.0);
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(1.0, 0.0, 0.0);
 	l1.set(v1, v2);
 	TEST_EQUAL(GetIntersection(p1, p2, l2), true)
+	l2.normalize();
 	TEST_EQUAL(l2, l1);
-	v1.set(0.0, 0.0, 0.0);
-	v2.set(10.0, 0.0, 0.0);
-	v3.set(0.0, 0.0, 10.0);  
+	v1.set(0.0, 0.0, 5.0);
+	v2.set(10.0, 0.0, 5.0);
+	v3.set(0.0, 0.0, 15.0);  
 	p2 = Plane3(v1, v2, v3);
 	TEST_EQUAL(GetIntersection(p1, p1, l1), false)
 RESULT
 
-//line736
-CHECK(GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b,
-	 		 const TPlane3<T>& c, TVector3<T>& point))
-	v1.set(0.0, 0.0, 0.0);
-	v2.set(10.0, 0.0, 0.0);
-	v3.set(0.0, 10.0, 0.0);  
-	p1 = Plane3(v1, v2, v3);
-	v1.set(0.0, 0.0, 0.0);
-	v2.set(10.0, 0.0, 0.0);
-	v3.set(0.0, 0.0, 10.0);  
-	p2 = Plane3(v1, v2, v3);
-	v1.set(0.0, 0.0, 0.0);
-	v2.set(0.0, 10.0, 0.0);
-	v3.set(0.0, 0.0, 10.0);  
-	p3 = Plane3(v1, v2, v3);
-	v2.set(0.0, 0.0, 0.0);
-	TEST_EQUAL(GetIntersection(p1, p2, p3, v1), true)
-	TEST_EQUAL(v1, v2);
-	v1.set(100.0, 200.0, 0.0);
-	v2.set(100.0, 0.0, 0.0);
-	v3.set(100.0, 0.0, 10.0);  
-	p2 = Plane3(v1, v2, v3);
-	TEST_EQUAL(GetIntersection(p1, p2, p3, v1), false)
-RESULT
-
 //line772: method GetIntersection(const TSphere3<T> &sphere, const TLine3<T>& line, TVector3<T> &intersection_point1, TVector3<T> &intersection_point2)
 CHECK(GetIntersection(const TSphere3<T> &sphere, const TLine3<T>& line, TVector3<T> &intersection_point1, TVector3<T> &intersection_point2))
-	v1.set(5.0, 0.0, 0.0);
-	s1 = Sphere3(v1, 2);
 	v1.set(0.0, 0.0, 0.0);
-	v2.set(10.0, 0.0, 0.0);
+	s1 = Sphere3(v1, sqrt(3.0));
+	v1.set(-10.0, -10.0, -10.0);
+	v2.set(10.0, 10.0, 10.0);
 	l1.set(v1, v2);
-	v1.set(3.0, 0.0, 0.0);
-	v2.set(7.0, 0.0, 0.0);
+	v1.set(1.0, 1.0, 1.0);
+	v2.set(-1.0, -1.0, -1.0);
 	TEST_EQUAL(GetIntersection(s1, l1, v3, v4), true);
-	TEST_EQUAL(v1, v4);
-	TEST_EQUAL(v2, v3);
+	TEST_REAL_EQUAL(v1.getDistance(v3), 0.0);
+	TEST_REAL_EQUAL(v2.getDistance(v4), 0.0);
 	v1.set(500.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 2);
 	TEST_EQUAL(GetIntersection(s1, l1, v3, v4), false);
@@ -459,10 +447,9 @@ CHECK(GetIntersection(const TLine3<T>& line, const TSphere3<T> &sphere TVector3<
 	TEST_EQUAL(GetIntersection(l1, s1, v3, v4), true);
 	TEST_EQUAL(v1, v4);
 	TEST_EQUAL(v2, v3);
-	v1.set(500.0, 0.0, 0.0);
+	v1.set(500.0, -500.0, 1000.0);
 	s1 = Sphere3(v1, 2);
 	TEST_EQUAL(GetIntersection(l1, s1, v3, v4), false);
-	TEST_EQUAL(v4, v1);//???
 RESULT
 
 //line818: method GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane, TCircle3<T>& intersectionCircle)
@@ -478,15 +465,15 @@ CHECK(GetIntersection(const TSphere3<T>& sphere, const TPlane3<T>& plane, TCircl
 	c1.set(v1, v2, 2.0);
 	TEST_EQUAL(GetIntersection(s1, p1, c2), true)
 
-	v1.set(-5.0, 0.0, 0.0);
+	v1.set(-5.0, 0.0, 4.0);
 	s1.set(v1, 5.0);
-	v1.set(5.0, 0.0, 0.0);
+	v1.set(-5.0, 0.0, 0.0);
 	v2.set(-0.0, -0.0, -100.0);
-	c1.set(v1, v2, 2.0);
+	c1.set(v1, v2, 3.0);
 	TEST_EQUAL(GetIntersection(s1, p1, c2), true)
-
 	TEST_EQUAL(c2, c1)
-	v1.set(500.0, 0.0, 0.0);
+
+	v1.set(0.0, 0.0, 500.0);
 	s1 = Sphere3(v1, 2);
 	TEST_EQUAL(GetIntersection(s1, p1, c1), false)
 RESULT
@@ -504,7 +491,7 @@ CHECK(GetIntersection(const TPlane3<T>& plane, const TSphere3<T>& sphere TCircle
 	c1.set(v1, v2, 2.0);
 	TEST_EQUAL(GetIntersection(p1, s1, c2), true)
 	TEST_EQUAL(c2, c1)
-	v1.set(500.0, 0.0, 0.0);
+	v1.set(0.0, 0.0, 500.0);
 	s1 = Sphere3(v1, 2);
 	TEST_EQUAL(GetIntersection(p1, s1, c1), false)
 RESULT
@@ -514,12 +501,15 @@ CHECK(GetIntersection(const TSphere3<T>& a, const TSphere3<T>& b, TCircle3<T>& i
 	v1.set(0.0, 0.0, 0.0);
 	s1 = Sphere3(v1, 5);
 	v1.set(5.0, 0.0, 0.0);
-	s1 = Sphere3(v1, 5);
+	s2 = Sphere3(v1, 5);
 	TEST_EQUAL(GetIntersection(s1, s2, c1), true)
-	v1.set(0.0, 0.0, 0.0);
-	v2.set(0.0, 0.0, 0.0);
-	c2 = Circle3(v1, v2, 3.0);
-	TEST_EQUAL(c1, c2)
+	v1.set(2.5, 0.0, 0.0);
+	v2.set(1.0, 0.0, 0.0);
+	c2 = Circle3(v1, v2, 4.33);
+	float radius = sqrt(25.0 - 6.25);
+	TEST_REAL_EQUAL(c1.p.getDistance(c2.p), 0.0)
+	TEST_REAL_EQUAL(c1.n.getDistance(c2.n), 0.0)
+	TEST_REAL_EQUAL(c1.radius, radius)
 RESULT
 
 //line903
