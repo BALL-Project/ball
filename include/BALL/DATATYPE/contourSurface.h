@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.12 2003/05/04 20:15:20 oliver Exp $
+// $Id: contourSurface.h,v 1.13 2003/05/23 15:39:07 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
@@ -336,27 +336,33 @@ namespace BALL
 		// We start in the left-front-bottom-most corner of the grid.
 		Position current_index = 0;
 		Cube cube(data);
-		for (Position curr_cell_z = 0; curr_cell_z < number_of_cells_z - 1; curr_cell_z++)
+		for (Position curr_cell_z = 0; curr_cell_z < (number_of_cells_z - 1); curr_cell_z++)
 		{ 
 			// Determine the start position in the current XY plane.
 			current_index = curr_cell_z * number_of_cells_y * number_of_cells_x;
 
 			// Walk along the y-axis....
-			for (Position curr_cell_y = 0; curr_cell_y < number_of_cells_y - 1; curr_cell_y++)
+			for (Position curr_cell_y = 0; curr_cell_y < (number_of_cells_y - 1); curr_cell_y++)
 			{
 				// Retrieve the cube from the current grid position (the first position along
 				// along the x-axis).
 				cube.setTo(current_index);
 
 				// Walk along the x-axis....
-				for (Position curr_cell_x = 0; curr_cell_x < number_of_cells_x - 1; curr_cell_x++, cube.shift())
+				Position curr_cell_x = 0;
+				for (Position curr_cell_x = 0; (curr_cell_x < (number_of_cells_x - 2)); )
 				{
 					// Compute topology, triangles, and add those triangles to the surface.
 					addTriangles_(cube, facet_data);
 						
-					// Done. cube.shift() in the for loop will now shift the cube
+					// Done. cube.shift() will now shift the cube
 					// along the x-axis and efficently retrieve the four new values.
+					curr_cell_x++;
+					cube.shift();
 				}
+
+				// Add the triangles from the last cube position.
+				addTriangles_(cube, facet_data);
 	
 				// Shift the cube by one along the y-axis.
 				current_index += number_of_cells_x;
