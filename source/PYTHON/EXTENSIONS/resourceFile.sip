@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.sip,v 1.3 2003/10/29 22:54:46 oliver Exp $
+// $Id: resourceFile.sip,v 1.4 2005/02/26 13:22:04 oliver Exp $
 //
 
 class ResourceEntry
@@ -109,6 +109,6 @@ class ResourceFile
   // void host(Visitor<ResourceFile>& visitor);
   // bool apply(UnaryProcessor<Entry>& processor);
   // static bool applyChildren(Entry& entry, UnaryProcessor<Entry>& processor);
-  typedef Entry::Iterator Iterator;
+  // typedef Entry::Iterator Iterator;
 };
   

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.sip,v 1.7 2003/11/01 09:27:39 oliver Exp $
+// $Id: residue.sip,v 1.8 2005/02/26 13:22:04 oliver Exp $
 //
 
 class Residue
@@ -15,7 +15,7 @@ class Residue
   // BALL_CREATE(Residue)
   enum Property
   {
-   	PROPERTY__NON_STANDARD = Fragment::Property::NUMBER_OF_PROPERTIES + 1,
+   	PROPERTY__NON_STANDARD,
 	  PROPERTY__AMINO_ACID,
    	PROPERTY__WATER,
   	PROPERTY__HAS_SSBOND,
