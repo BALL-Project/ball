@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.C,v 1.10 2001/05/18 13:06:22 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.11 2001/07/14 19:46:08 oliver Exp $
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -16,24 +16,24 @@ namespace BALL
 
 	const int RING_MAX_ATOMS = 6;
 
-	BALL_INLINE 
-	float SQR(float x)
+	BALL_INLINE
+	double SQR(double x)
 	{
 		return (x*x);
 	}
 		
-	float JohnsonBoveyShiftProcessor::carlsonEllipticalIntegral1_(float x,float y,float z)
+	double JohnsonBoveyShiftProcessor::carlsonEllipticalIntegral1_(double x,double y,double z)
 	{
 		// Lokale Konstanten Definitionen :
 		
-		const float ERRTOL=0.08;
-		const float TINY=1.5e-38;
-		const float BIG=3.0e37;
-		const float THIRD=(1.0/3.0);
-		const float C1=(1.0/24.0);
-		const float C2=0.1;
-		const float C3=(3.0/44.0);
-		const float C4=(1.0/14.0);
+		const double ERRTOL=0.08;
+		const double TINY=1.5e-38;
+		const double BIG=3.0e37;
+		const double THIRD=(1.0/3.0);
+		const double C1=(1.0/24.0);
+		const double C2=0.1;
+		const double C3=(3.0/44.0);
+		const double C4=(1.0/14.0);
 		
 		/*
 		Computes Carlson's elliptic integral of the first kind, Rf(x,y,z). x,y,z must be nonnegative, and at most
@@ -41,11 +41,11 @@ namespace BALL
 		machine overflow limit.
 		*/
 		
-		float alamb,ave,delx,dely,delz,e2,e3,sqrtx,sqrty,sqrtz,xt,yt,zt;
+		double alamb,ave,delx,dely,delz,e2,e3,sqrtx,sqrty,sqrtz,xt,yt,zt;
 		
-		if(BALL_MIN3(x, y, z)  < 0.0 || BALL_MIN3(x + y, x + z ,y + z) < TINY || BALL_MAX3(x, y, z) > BIG)
+		if (BALL_MIN3(x, y, z)  < 0.0 || BALL_MIN3(x + y, x + z ,y + z) < TINY || BALL_MAX3(x, y, z) > BIG)
 		{
-			Log.error() << "Funktion rf : Fehler bei den Argumenten" << endl;
+			Log.error() << "JohnsonBoveyShiftProcessor::rf : arguemnt error" << endl;
 			return 0;
 		}
 		else 	
@@ -74,19 +74,19 @@ namespace BALL
 		}
 	}
 		
-	float JohnsonBoveyShiftProcessor::carlsonEllipticalIntegral2_(float x,float y,float z)
+	double JohnsonBoveyShiftProcessor::carlsonEllipticalIntegral2_(double x,double y,double z)
 	{
 		//Lokale Konstanten Definitionen :
 		
-		const float ERRTOL=0.05;
-		const float TINY=1.0e-25;
-		const float BIG=4.5e21;
-		const float C1=(3.0/14.0);
-		const float C2=(1.0/6.0);
-		const float C3=(9.0/22.0);
-		const float C4=(3.0/26.0);
-		const float C5=(0.25*C3);
-		const float C6=(1.5*C4);
+		const double ERRTOL=0.05;
+		const double TINY=1.0e-25;
+		const double BIG=4.5e21;
+		const double C1=(3.0/14.0);
+		const double C2=(1.0/6.0);
+		const double C3=(9.0/22.0);
+		const double C4=(3.0/26.0);
+		const double C5=(0.25*C3);
+		const double C6=(1.5*C4);
 		
 		/*
 		Computes Carlson's ellipic integral of the second kind, Rd(x,y,z). x,y,z must be nonnegative, and at most
@@ -94,12 +94,11 @@ namespace BALL
 		overflow limit. BIG must be at mos 0.1xERRTOL time the negative 2/3 power of the machin underflow limit
 		*/
 		
-		float alamb,ave,delx,dely,delz,ea,eb,ec,ed,ee,fac,sqrtx,sqrty,sqrtz,sum,xt,yt,zt;
+		double alamb,ave,delx,dely,delz,ea,eb,ec,ed,ee,fac,sqrtx,sqrty,sqrtz,sum,xt,yt,zt;
 		
 		if (BALL_MIN(x, y) < 0.0 || BALL_MIN(x  +  y, z) < TINY || BALL_MAX3(x, y, z) > BIG)
 		{
-			//cout << endl << "Funktion rd : Fehler bei den Argumenten";
-			Log.error() << "Funktion rd : Fehler bei den Argumenten" << endl;
+			Log.error() << "JohnsonBoveyShiftProcessor::rd : argument error" << endl;
 			return 0;
 		}
 		else
@@ -135,27 +134,27 @@ namespace BALL
 			}
 	}
 		
-	float JohnsonBoveyShiftProcessor::legendreEllipticalIntegral1_(float phi,float ak)
+	double JohnsonBoveyShiftProcessor::legendreEllipticalIntegral1_(double phi,double ak)
 	{
 		/*
 		Legendre elliptic integral of the 1st kind f(phi,k) , evaluated using Carlson's function rf.
 		The argument ranges are 0 <=phi <=PI/2 , 0 <=k*sin(phi) <=1.
 		*/
 		
-		float s;
+		double s;
 		
 		s=sin(phi);
 		return s*carlsonEllipticalIntegral1_(SQR(cos(phi)),(1.0-s*ak)*(1.0 + s*ak),1.0);
 	}
 		
-	float JohnsonBoveyShiftProcessor::legendreEllipticalIntegral2_(float phi,float ak)
+	double JohnsonBoveyShiftProcessor::legendreEllipticalIntegral2_(double phi,double ak)
 	{
 		/*
 		Legendre elliptic integral of the 2nd kind E(phi,k). evaluated usin Carlson's functions Rd and Rf.
 		The argument ranges are 0 <=phi <=PI/2, o <=ksin(phi) <=1.
 		*/
 		
-		float cc,q,s;
+		double cc,q,s;
 		
 		s=sin(phi);
 		cc=SQR(cos(phi));
@@ -304,8 +303,8 @@ namespace BALL
 		
 		std::vector<String> ring_atoms;
 		
-		Position vzaehler;
-		float  p, z, lambda, k, e, hshift;
+		Position vcounter;
+		double  p, z, lambda, k, e, hshift;
 		Vector3 left, center, right;
 		Vector3* vector_field = new Vector3[RING_MAX_ATOMS];
 
@@ -317,7 +316,7 @@ namespace BALL
 			// iterate over all aromatic rings and add their contributions
 			// to the curent shift of the nucleus
 
-			float shift = 0;
+			double shift = 0;
 			for (std::list<Residue*>::iterator arom_iter = aromat_list_.begin();
 					 arom_iter != aromat_list_.end(); ++arom_iter)
 			{
@@ -338,14 +337,14 @@ namespace BALL
 				Size number_of_rings = residues_with_rings_[residue_name];				
 				for	(Position pos = 1; pos <= number_of_rings; pos++)
 				{
-					vzaehler = 0;
+					vcounter = 0;
 					
 					String ring_name = residue_name;
 					ring_name.append(String(pos));
 					Ring& ring = rings_[ring_name];
 					
-					float intensity = ring.intensity;
-					float radius = ring.radius;
+					double intensity = ring.intensity;
+					double radius = ring.radius;
 					ring_atoms = ring.atom_names;
 
 					for (Position counter2 = 0; counter2 < ring_atoms.size(); counter2++)
@@ -355,37 +354,37 @@ namespace BALL
 						{
 							if ((*atomiterator).getName() == ring_atoms[counter2])
 							{
-								vector_field[vzaehler] = (*atomiterator).getPosition();
-								vzaehler++;
+								vector_field[vcounter] = (*atomiterator).getPosition();
+								vcounter++;
 								break;  // found
 							}
 						}	
 					}
-					if (vzaehler != ring_atoms.size())
+					if (vcounter != ring_atoms.size())
 					{
 						Log.warn() << "JohnsonBoveyShiftProcessor::finish: problem: could not identify all ring atoms for " 
 											 << residue->getName() << residue->getID() << endl;
 					}
 					
-					// das VektorFeld ist bestimmt und vzaehler zeigt hinter den letzten gueltigen vector
+					// das VektorFeld ist bestimmt und vcounter zeigt hinter den letzten gueltigen vector
 		
 					
 					// determine the center of the ring
 					Vector3 center;
-					for (Position counter = 0; counter < vzaehler; counter++)
+					for (Position counter = 0; counter < vcounter; counter++)
 					{
 						center += vector_field[counter];
 					}
-					center /= vzaehler;
+					center /= vcounter;
 				
 					// determine the vector perpendicular to the 
 					// ring plane
 					Vector3 normal;
-					for (Position counter = 0; counter < vzaehler; counter++)
+					for (Position counter = 0; counter < vcounter; counter++)
 					{
-						left  = vector_field[(counter + 0) % (vzaehler)];
-						center  = vector_field[(counter + 1) % (vzaehler)];
-						right = vector_field[(counter + 2) % (vzaehler)];
+						left  = vector_field[(counter + 0) % (vcounter)];
+						center  = vector_field[(counter + 1) % (vcounter)];
+						right = vector_field[(counter + 2) % (vcounter)];
 						normal += (center - left) % (center - right);
 					}
 
@@ -404,9 +403,9 @@ namespace BALL
 						// calculate p und z;
 						z = normal * atom_position  -  normal * center;
 					
-						lambda= normal * (atom_position - center) / (normal * normal);
+						lambda = normal * (atom_position - center) / (normal * normal);
 					
-						p = ((center +  lambda * normal)  -  atom_position).getLength();
+						p = ((center +  (float)lambda * normal)  -  atom_position).getLength();
 					
 						p *= 1e-10;
 						z *= 1e-10;
@@ -416,33 +415,34 @@ namespace BALL
 						
 						// calculate the geometry factor: two elliptical integrals
 						using namespace Constants;
-						float value = sqrt(4 * p / (SQR(1 + p)  +  SQR(z)));
+						double value = sqrt(4 * p / (SQR(1 + p)  +  SQR(z)));
 						k = legendreEllipticalIntegral1_(PI / 2, value);
 						e = legendreEllipticalIntegral2_(PI / 2, value);
-					
+
 						// p und z sind berechnet, berechne nun die Integrale		
 						hshift = VACUUM_PERMEABILITY * (double)ring.electrons * ELEMENTARY_CHARGE * ELEMENTARY_CHARGE;
 						hshift /= 4 * PI * 6 * PI * ELECTRON_MASS * radius;
-						hshift*= (1 / sqrt( ((1 + p) * (1 + p)) + (z * z)));				
-						hshift*= (k + ((1 - p * p - z * z) / ((1 - p) * (1 - p) + z * z)) *e );
-						hshift*= intensity;
+						hshift *= (1 / sqrt( ((1 + p) * (1 + p)) + (z * z)));				
+						hshift *= (k + ((1 - p * p - z * z) / ((1 - p) * (1 - p) + z * z)) *e );
+						hshift *= intensity;
 						
 						shift += hshift;								
-						vzaehler=0;
+						vcounter = 0;
 					}
-				}// Schleife ueber die Anzahl der Ringe des Residues					
+				} // Lop over all rings of a residue
 			
-			}// Schleife ueber alle Ringe
+			} // Loop over all rings
 
 			
 
 			hshift = shift * 1e6;
 			shift = ((*atom_iter)->getProperty(ShiftModule::PROPERTY__SHIFT)).getFloat();
 			shift += hshift;
-			(*atom_iter)->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
-			(*atom_iter)->setProperty(PROPERTY__RING_CURRENT_SHIFT, hshift);
-			
-		}// Schleife ueber alle Atome
+
+			(*atom_iter)->setProperty(ShiftModule::PROPERTY__SHIFT, (float)shift);
+			(*atom_iter)->setProperty(PROPERTY__RING_CURRENT_SHIFT, (float)hshift);
+		}	
+		// Loop over all atoms
 				
 		return true;
 	}
@@ -460,8 +460,8 @@ namespace BALL
 				aromat_list_.push_back(residue);
 			}
 		}
-		// Liste um Aromaten erweitert
-		
+
+		// Liste um Aromaten erweitert		
 		if (RTTI::isKindOf<Atom>(composite))
 		{			
 			Atom* atom_ptr = RTTI::castTo<Atom>(composite);

@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.h,v 1.7 2001/06/21 21:35:57 amoll Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.8 2001/07/14 19:46:04 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -46,8 +46,8 @@ namespace BALL
 		///
 		struct Ring
     {
-			float						radius;
-			float						intensity;
+			double						radius;
+			double						intensity;
 			Size						electrons;
 			vector<String>	atom_names;
 		} ;
@@ -115,10 +115,10 @@ namespace BALL
 		StringHashMap<Position>	residues_with_rings_;
 		vector<Expression>			expressions_;
 		
-		float carlsonEllipticalIntegral1_(float, float, float);	// Carlson elliptical Integral of 1st kind
-		float carlsonEllipticalIntegral2_(float, float, float);	// Carlson elliptical Integral of 2nd kind
-		float legendreEllipticalIntegral1_(float, float);	// Legendre elliptical Integral of 1st kind
-		float legendreEllipticalIntegral2_(float, float);	// Legendre elliptical Integral of 2nd kind
+		double carlsonEllipticalIntegral1_(double, double, double);	// Carlson elliptical Integral of 1st kind
+		double carlsonEllipticalIntegral2_(double, double, double);	// Carlson elliptical Integral of 2nd kind
+		double legendreEllipticalIntegral1_(double, double);	// Legendre elliptical Integral of 1st kind
+		double legendreEllipticalIntegral2_(double, double);	// Legendre elliptical Integral of 2nd kind
 	};
 
 } // namespace BALL 
