@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: config.h.in,v 1.42 2004/02/10 13:20:06 amoll Exp $ 
+// $Id: config.h.in,v 1.43 2004/02/23 16:27:26 oliver Exp $ 
 //
 
 #ifndef BALL_CONFIG_CONFIG_H
@@ -197,6 +197,7 @@
 #undef BALL_HAS_FFTW_H
 
 // QT options
+#undef BALL_HAS_VIEW
 #undef BALL_QT_HAS_THREADS
 #undef BALL_QT_VERSION
 #undef BALL_QT_VERSION_STR

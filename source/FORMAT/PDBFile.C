@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.42 2003/08/26 09:17:46 oliver Exp $
+// $Id: PDBFile.C,v 1.43 2004/02/23 16:27:23 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -1614,7 +1614,7 @@ namespace BALL
 					}
 		
 					sec_struc = new SecondaryStructure();
-					sec_struc->setProperty(SecondaryStructure::PROPERTY__RANDOM_COIL);
+					sec_struc->setProperty(SecondaryStructure::PROPERTY__COIL);
 		
 					Composite::insertParent(*sec_struc, *initial_residue, *terminal_residue, false);
 		

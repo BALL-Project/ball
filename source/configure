@@ -18925,6 +18925,10 @@ echo "$as_me: error: Aborted." >&2;}
 
 
 	if test "${USE_VIEW}" = "true" ; then
+		cat >>confdefs.h <<\_ACEOF
+#define BALL_HAS_VIEW
+_ACEOF
+
 		LIBVIEW="libVIEW.a"
 		VIEW="VIEW"
 	else

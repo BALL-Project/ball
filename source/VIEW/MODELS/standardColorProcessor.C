@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.22 2004/02/20 11:43:57 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.23 2004/02/23 16:27:26 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -639,13 +639,27 @@ namespace BALL
 				ss = (const SecondaryStructure*) composite->getAncestor(dummy);
 			}
 
-			if (ss == 0) return default_color_;
-
-			if      (ss->hasProperty(SecondaryStructure::PROPERTY__HELIX)) 				return helix_color_;
-			else if (ss->hasProperty(SecondaryStructure::PROPERTY__RANDOM_COIL))  return coil_color_;
-			else if (ss->hasProperty(SecondaryStructure::PROPERTY__STRAND))  			return strand_color_;
-			else if (ss->hasProperty(SecondaryStructure::PROPERTY__TURN))	 			  return turn_color_;
-			else 																																	return default_color_;
+			ColorRGBA color = default_color_;
+			if (ss != 0) 
+			{
+				if (ss->hasProperty(SecondaryStructure::PROPERTY__HELIX)) 
+				{
+					color = helix_color_;
+				}
+				else if (ss->hasProperty(SecondaryStructure::PROPERTY__COIL))
+				{
+					color = coil_color_;
+				}
+				else if (ss->hasProperty(SecondaryStructure::PROPERTY__STRAND))
+				{
+					color = strand_color_;
+				}
+				else if (ss->hasProperty(SecondaryStructure::PROPERTY__TURN))	 			  
+				{
+					color = turn_color_;
+				}
+			}
+			return color;
 		}
 
 		void SecondaryStructureColorProcessor::setTransparency(Size t)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.65 2004/02/18 17:14:24 amoll Exp $
+// $Id: mainframe.h,v 1.66 2004/02/23 16:27:22 oliver Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -84,7 +84,7 @@ namespace BALL
 		{
 			MENU_EXPORT_POVRAYFILE = 20000,
 			MENU_EXPORT_VRMLFILE,
-						MENU_STOPSIMULATION,
+			MENU_STOPSIMULATION,
 			MENU_FDPB,
 
 			MENU_FULLSCREEN,
@@ -96,18 +96,11 @@ namespace BALL
 
 		Mainframe(QWidget* parent = 0, const char* name = 0);
 
-		virtual ~Mainframe()
-			throw();
+		virtual ~Mainframe() throw();
 
-		virtual void fetchPreferences(INIFile& inifile)
-		throw();
-
-		virtual void writePreferences(INIFile& inifile)
-		throw();
-
-		virtual void onNotify(Message *message)
-		throw();
+		virtual void onNotify(Message *message) throw();
 		
+
 		public slots:
 
 		void exportPOVRay();
@@ -127,13 +120,7 @@ namespace BALL
 		/** Open a file.
 				Calls MolecularFileDialog::openFile
 		*/
-		void openFile(const String& file)
-			throw();
-
-		/** Download a structure file
-		 */
-		//void downloadStructure()
-		//	throw();
+		void openFile(const String& file) throw();
 
 		private:
 
@@ -150,7 +137,6 @@ namespace BALL
 		FDPBDialog*  							FDPB_dialog_;
 		Server*   								server_;
 		LogView*									logview_;
-
 		bool 											fullscreen_;
 	};
 

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.C,v 1.2 2003/08/26 15:26:32 amoll Exp $
+// $Id: molecularInformation.C,v 1.3 2004/02/23 16:27:26 oliver Exp $
+//
 
 #include <BALL/VIEW/KERNEL/molecularInformation.h>
 #include <BALL/KERNEL/system.h>
@@ -183,7 +184,7 @@ namespace BALL
 				{
 					temp += " Strand";
 				}
-				else if (ss.hasProperty(SecondaryStructure::PROPERTY__RANDOM_COIL))
+				else if (ss.hasProperty(SecondaryStructure::PROPERTY__COIL))
 				{
 					temp += " Random Coil";
 				}

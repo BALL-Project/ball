@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SecondaryStructure_test.C,v 1.13 2003/07/03 13:20:04 amoll Exp $
+// $Id: SecondaryStructure_test.C,v 1.14 2004/02/23 16:27:24 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +13,7 @@
 #include <BALL/KERNEL/protein.h>
 ///////////////////////////
 
-START_TEST(SecondaryStructure, "$Id: SecondaryStructure_test.C,v 1.13 2003/07/03 13:20:04 amoll Exp $")
+START_TEST(SecondaryStructure, "$Id: SecondaryStructure_test.C,v 1.14 2004/02/23 16:27:24 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
