@@ -1,4 +1,4 @@
-// $Id: atomContainer.C,v 1.10 2001/07/15 16:12:42 oliver Exp $
+// $Id: atomContainer.C,v 1.11 2001/07/15 20:41:33 oliver Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -139,28 +139,6 @@ namespace BALL
 		return name_;
 	}
 
-/*  BAUSTELLE - remove?
-	Molecule* AtomContainer::getMolecule()
-		throw()
-	{
-		for (Composite::AncestorIterator ancestor_it = beginAncestor();
-				 !ancestor_it.isEnd(); ++ancestor_it)
-		{
-			if (RTTI::isKindOf<Molecule>(*ancestor_it) == true)
-			{
-				return (Molecule *)&*ancestor_it;
-			}
-		}
-
-		return 0;
-	}
-
-	const Molecule* AtomContainer::getMolecule() const
-		throw()
-	{
-		return ((AtomContainer *)this)->getMolecule();
-	}
-*/
 	AtomContainer* AtomContainer::getSuperAtomContainer()
 		throw()
 	{
