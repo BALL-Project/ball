@@ -1,0 +1,41 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: moveOverlayDialog.h,v 1.1 2003/08/28 16:43:21 amoll Exp $
+
+#ifndef BALL_VIEW_DIALOGS_MOVEOVERLAYDIALOG_H
+#define BALL_VIEW_DIALOGS_MOVEOVERLAYDIALOG_H 
+
+#include <BALL/VIEW/UIC/moveOverlayDialogData.h>
+
+/** MoveOverlayDialog
+		\ingroup ViewGuiDialogs
+*/
+class MoveOverlayDialog 
+	: public MoveOverlayDialogData
+{
+  Q_OBJECT
+
+	public:
+
+    MoveOverlayDialog(QWidget *parent = NULL, const char *name = NULL );
+
+    virtual ~MoveOverlayDialog();
+
+    protected slots:
+
+    virtual void slotLeft();
+		
+    virtual void slotRight();
+		
+    virtual void slotOK();
+    
+		virtual void slotUp();
+    
+		virtual void slotDown();
+
+ signals:
+    void sigMove(int i);
+};
+
+#endif //BALL_VIEW_DIALOGS_MOVEOVERLAYDIALOG_H
