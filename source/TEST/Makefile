@@ -161,6 +161,7 @@ EXECUTABLES_SOLVATION = \
 	ReissCavFreeEnergyProcessor_test\
         UhligCavFreeEnergyProcessor_test\
         PCMCavFreeEnergyProcessor_test\
+        PierottiCavFreeEnergyProcessor_test\
 	Pair6_12RDFIntegrator_test\
 	Pair6_12InteractionEnergyProcessor_test\
 	PairExpInteractionEnergyProcessor_test\
