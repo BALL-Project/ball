@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.42 2004/09/04 11:38:11 amoll Exp $
+// $Id: glRenderer.C,v 1.43 2004/09/07 13:56:42 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -20,6 +20,8 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+
+#include <BALL/MATHS/matrix44.h>
 
 #include <qfont.h>
 #include <qpainter.h>
@@ -511,29 +513,32 @@ namespace BALL
 			glPushMatrix();
 			setColor4ub_(box);
 			
-			translateVector3_(box.getPoint());
-/*
-				
- 		 	float angle = Vector3(1,0,0).getAngle(bo x.getRightVector()).toDegree();
- 		 	rotateVector3Angle_(Vector3(1,0,0) % box.getRightVector(), angle);
+	 		translateVector3_(box.getPoint());
 
+			Vector3 v1(box.getRightVector());
+			v1.normalize();
+			Vector3 v2(box.getHeightVector());
+			v2.normalize();
+			Vector3 v3(box.getRightVector() % box.getHeightVector());
+			v3.normalize();
+
+			float m[16] = {
+									v1.x, v1.y, v1.z, 0,
+									v2.x, v2.y, v2.z, 0,
+									v3.x, v3.y, v3.z, 0,
+									0,0,0,1};
+//		 	glLoadMatrixf(m);
+			glMultMatrixf(m);
+			
 			scaleVector3_(Vector3(
 					box.getRightVector().getLength(),
 			 		box.getHeightVector().getLength(),
  					box.getDepth()));
+				
 	
 			GL_boxes_list_[drawing_mode_ * BALL_VIEW_MAXIMAL_DRAWING_PRECISION 
 										 + drawing_precision_].draw();
-*/
 
-			// ?????? bullshit for testing
-			glBegin(GL_QUADS);
-			glVertex3f(0,0,0);
-			vertexVector3_(box.getRightVector());
-			vertexVector3_(box.getDiagonalVector());
-			vertexVector3_(box.getHeightVector());
-			glEnd();
-			
 			glPopMatrix();
 		}
 
