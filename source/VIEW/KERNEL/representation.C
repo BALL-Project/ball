@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.37 2004/06/07 10:16:38 amoll Exp $
+// $Id: representation.C,v 1.38 2004/06/25 12:09:26 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -46,7 +46,18 @@ namespace BALL
 					
 		Representation::Representation(const Representation& rp)
 			throw()
-				: PropertyManager(rp)
+				: PropertyManager(rp),
+					drawing_mode_(DRAWING_MODE_SOLID),
+					drawing_precision_(DRAWING_PRECISION_HIGH),
+					surface_drawing_precision_(-1),
+					model_type_(MODEL_UNKNOWN),
+					coloring_method_(COLORING_UNKNOWN),
+					transparency_(0),
+					model_processor_(0),
+					color_processor_(0),
+					geometric_objects_(),
+					composites_(),
+					update_running_(false)
 		{
 			*this = rp;
 		}
