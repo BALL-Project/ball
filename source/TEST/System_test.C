@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: System_test.C,v 1.12 2003/01/21 11:06:29 oliver Exp $
+// $Id: System_test.C,v 1.13 2003/07/01 15:03:42 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(System, "$Id: System_test.C,v 1.12 2003/01/21 11:06:29 oliver Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.13 2003/07/01 15:03:42 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,22 +22,22 @@ String filename;
 NEW_TMP_FILE(filename)
 
 System*	s;
-CHECK(default constructor)
+CHECK(System() throw())
 s = new System;
 TEST_NOT_EQUAL(s, 0);
 RESULT
 
-CHECK(isValid)
+CHECK([EXTRA]isValid)
 TEST_EQUAL(s->isValid(), true)
 RESULT
 
-CHECK(destructor)
+CHECK(~System() throw())
 delete s;
 s = new System;
 delete s;
 RESULT
 
-CHECK(System(String&))
+CHECK(System(const String& name) throw())
 	System* f1 = new System("hello");
 	TEST_NOT_EQUAL(f1, 0)
 	if (f1 != 0)
@@ -47,7 +47,7 @@ CHECK(System(String&))
 	}
 RESULT
 
-CHECK(System(System&, bool))
+CHECK(System(const System& system, bool deep = true) throw())
 	System* f1 = new System;
 	f1->setName("testname");
 	Molecule a;
@@ -70,7 +70,7 @@ CHECK(System(System&, bool))
 	delete f1;
 RESULT
 
-CHECK(set(System&, bool))
+CHECK(void set(const System& system, bool deep = true) throw())
 	System s1("name1");
 	Molecule m1;
 	s1.insert(m1);
@@ -84,7 +84,7 @@ CHECK(set(System&, bool))
 	TEST_EQUAL(s3.countMolecules(), 1);
 RESULT
 
-CHECK(get(System&, bool))
+CHECK(void get(System& system, bool deep = true) const throw())
 	System s1("name1");
 	Molecule m1;
 	s1.insert(m1);
@@ -98,17 +98,27 @@ CHECK(get(System&, bool))
 	TEST_EQUAL(s3.countMolecules(), 1);
 RESULT
 
-CHECK(operator = (System&))
+CHECK(Size countProteins() const throw())
 	System f1("name1");
-	Molecule a;
+	Protein a;
 	f1.insert(a);
-	System f2;
-	f2 = f1;
-	TEST_EQUAL(f2.getName(), "name1");
-	TEST_EQUAL(f2.countMolecules(), 1);
+	TEST_EQUAL(f1.countProteins(), 1);
 RESULT
 
-CHECK(getMolecule(Position))
+CHECK(Size countResidues() const throw())
+	System f1("name1");
+	Protein p;
+	Chain c;
+	Residue r;
+	p.insert(c);
+	f1.insert(p);
+	TEST_EQUAL(f1.countResidues(), 0);
+	c.insert(r);
+	TEST_EQUAL(f1.countResidues(), 1);
+RESULT
+
+
+CHECK(Molecule* getMolecule(Position position) throw())
 	System s1;
 	Molecule m;
 	Molecule* ptr = s1.getMolecule(0);
@@ -121,7 +131,7 @@ CHECK(getMolecule(Position))
 	TEST_EQUAL(s1.getMolecule(25), 0)
 RESULT
 
-CHECK(getMolecule(Position) const)
+CHECK(const Molecule* getMolecule(Position position) const throw())
 	System s1;
 	Molecule m;
 	Molecule* ptr = s1.getMolecule(0);
@@ -133,7 +143,7 @@ CHECK(getMolecule(Position) const)
 	TEST_EQUAL(s1.getMolecule(25), 0)
 RESULT
 
-CHECK(countMolecules())
+CHECK(Size countMolecules() const throw())
 	System s;
 	TEST_EQUAL(s.countMolecules(), 0);
 	Molecule m;
@@ -141,7 +151,7 @@ CHECK(countMolecules())
 	TEST_EQUAL(s.countMolecules(), 1);
 RESULT
 
-CHECK(countFragments())
+CHECK(Size countFragments() const throw())
 	System s;
 	TEST_EQUAL(s.countFragments(), 0);
 	Molecule m;
@@ -151,7 +161,7 @@ CHECK(countFragments())
 	TEST_EQUAL(s.countFragments(), 1);
 RESULT
 
-CHECK(countAtoms())
+CHECK(Size countAtoms() const throw())
 	System s;
 	TEST_EQUAL(s.countAtoms(), 0);
 	Molecule m;
@@ -161,7 +171,7 @@ CHECK(countAtoms())
 	TEST_EQUAL(s.countAtoms(), 1);
 RESULT
 
-CHECK(countSecondaryStructures())
+CHECK(Size countSecondaryStructures() const throw())
 	System s;
 	TEST_EQUAL(s.countSecondaryStructures(), 0);
 	Protein p;
@@ -171,7 +181,7 @@ CHECK(countSecondaryStructures())
 	TEST_EQUAL(s.countSecondaryStructures(), 1);
 RESULT
 
-CHECK(countChains())
+CHECK(Size countChains() const throw())
 	System s;
 	TEST_EQUAL(s.countChains(), 0);
 	Protein p;
@@ -181,7 +191,7 @@ CHECK(countChains())
 	TEST_EQUAL(s.countChains(), 1);
 RESULT
 
-CHECK(countNucleotides())
+CHECK(Size countNucleotides() const throw())
 	System s;
 	TEST_EQUAL(s.countNucleotides(), 0);
 	NucleicAcid n;
@@ -191,7 +201,7 @@ CHECK(countNucleotides())
 	TEST_EQUAL(s.countNucleotides(), 1);
 RESULT
 
-CHECK(countNucleicAcids())
+CHECK(Size countNucleicAcids() const throw())
 	System s;
 	TEST_EQUAL(s.countNucleicAcids(), 0);
 	NucleicAcid n;
@@ -199,7 +209,7 @@ CHECK(countNucleicAcids())
 	TEST_EQUAL(s.countNucleicAcids(), 1);
 RESULT
 
-CHECK(prepend(Molecule& molecule))
+CHECK(void prepend(Molecule& molecule) throw())
 	System s;
 	Molecule m1;
 	Molecule m2;
@@ -223,7 +233,7 @@ CHECK(prepend(Molecule& molecule))
 	TEST_EQUAL(counter, 2);
 RESULT
 
-CHECK(append(Molecule& molecule))
+CHECK(void append(Molecule& molecule) throw())
 	System s;
 	Molecule m1;
 	Molecule m2;
@@ -247,7 +257,7 @@ CHECK(append(Molecule& molecule))
 	TEST_EQUAL(counter, 2);
 RESULT
 
-CHECK(insert(Molecule& molecule))
+CHECK(void insert(Molecule& molecule) throw())
 	System s;
 	Molecule m1;
 	Molecule m2;
@@ -271,7 +281,7 @@ CHECK(insert(Molecule& molecule))
 	TEST_EQUAL(counter, 2);
 RESULT
 
-CHECK(insertBefore(Molecule& molecule, Composite& before))
+CHECK(void insertBefore(Molecule& molecule, Composite& before) throw())
 	System s;
 	Molecule m1;
 	Molecule m2;
@@ -301,7 +311,7 @@ CHECK(insertBefore(Molecule& molecule, Composite& before))
 	TEST_EQUAL(counter, 3);
 RESULT
 
-CHECK(insertAfter(Molecule& molecule, Composite& after))
+CHECK(void insertAfter(Molecule& molecule, Composite& after) throw())
 	System s;
 	Molecule m1;
 	Molecule m2;
@@ -331,7 +341,7 @@ CHECK(insertAfter(Molecule& molecule, Composite& after))
 	TEST_EQUAL(counter, 3);
 RESULT
 
-CHECK(remove(Molecule& molecule))
+CHECK(bool remove(Molecule& molecule) throw())
 	System s;
 	Molecule m1;
 	Molecule m2;
@@ -359,7 +369,7 @@ CHECK(remove(Molecule& molecule))
 RESULT
 
 
-CHECK(spliceBefore(System& system))
+CHECK(void spliceBefore(System& system) throw())
 	System s1;
 	System s2;
 	Molecule m1;
@@ -385,7 +395,7 @@ CHECK(spliceBefore(System& system))
 	TEST_EQUAL(counter, 2);
 RESULT
 
-CHECK(spliceAfter(System& system))
+CHECK(void spliceAfter(System& system) throw())
 	System s1;
 	System s2;
 	Molecule m1;
@@ -411,7 +421,7 @@ CHECK(spliceAfter(System& system))
 	TEST_EQUAL(counter, 2);
 RESULT
 
-CHECK(splice(System& system))
+CHECK(void splice(System& system) throw())
 	System s1;
 	System s2;
 	Molecule m1;
@@ -437,7 +447,7 @@ CHECK(splice(System& system))
 	TEST_EQUAL(counter, 2);
 RESULT
 
-CHECK(destroyBonds())
+CHECK([EXTRA]destroyBonds())
 	System s1;
 	Molecule m1;
 	Atom a1, a2, a3, a4;
@@ -460,7 +470,7 @@ pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
 pm.registerClass(getStreamName<System>(), System::createDefault);
 pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(persistentWrite(PersistenceManager&, String, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	System* f1 = new System("name1");
 	Molecule* f2 = new Molecule("name2");
@@ -471,7 +481,7 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	delete f1;
 RESULT
 
-CHECK(persistentRead(PersistenceManager&))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
@@ -491,7 +501,7 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const System& system) const throw())
 	System c1, c2;
 	TEST_EQUAL(c1 == c2, false)
 
@@ -501,7 +511,7 @@ CHECK(operator ==)
 	TEST_EQUAL(c2 == c2, true)
 RESULT
 
-CHECK(operator !=)
+CHECK(bool operator != (const System& system) const throw())
 	System c1, c2;
 	TEST_EQUAL(c1 != c2, true)
 
@@ -511,7 +521,7 @@ CHECK(operator !=)
 	TEST_EQUAL(c2 != c2, false)
 RESULT
 
-CHECK(Chain iteration)
+CHECK([EXTRA]Chain iteration)
 	System S;
 	Protein p1;
 	Protein p2;
@@ -547,6 +557,36 @@ CHECK(Chain iteration)
 	TEST_EQUAL(ci->getName(), "C4")
 	ci++;
 	TEST_EQUAL(+ci, false)
+RESULT
+
+CHECK(BALL_CREATE_DEEP(System))
+	System S("system1");
+	Protein p1;
+	S.insert(p1);
+	System* test = (System*) S.create(false, true);
+	TEST_EQUAL(test->getName(), "")
+	TEST_EQUAL(test->countProteins(), 0)
+	delete test;
+	test = (System*) S.create(true, false);
+	TEST_EQUAL(test->getName(), "system1")
+	TEST_EQUAL(test->countProteins(), 1)
+	delete test;
+RESULT
+
+
+CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Atom)(AtomContainer)(Fragment)(Molecule)(Protein)(Residue)(Chain)(SecondaryStructure) (Nucleotide)(NucleicAcid))
+	// ???
+RESULT
+
+
+CHECK(System& operator = (const System& system) throw())
+	System S("system1");
+	Protein p1;
+	S.insert(p1);
+	System test;
+	test = S;
+	TEST_EQUAL(test.getName(), "system1")
+	TEST_EQUAL(test.countProteins(), 1)
 RESULT
 
 
