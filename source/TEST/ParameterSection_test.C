@@ -1,4 +1,4 @@
-// $Id: ParameterSection_test.C,v 1.8 2001/04/09 23:02:52 amoll Exp $
+// $Id: ParameterSection_test.C,v 1.9 2001/05/10 17:16:57 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.8 2001/04/09 23:02:52 amoll Exp $")
+START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.9 2001/05/10 17:16:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -140,7 +140,7 @@ CHECK(ParameterSection::getValue(Position key_index, Position variable_index) co
 	TEST_EQUAL(ps.getValue(2, 0), "E")
 	TEST_EQUAL(ps.getValue(2, 1), ParameterSection::UNDEFINED)
 	TEST_EQUAL(ps.getValue(20, 1), ParameterSection::UNDEFINED)
-	TEST_EQUAL(ps.getValue(20, -1), ParameterSection::UNDEFINED)
+	TEST_EQUAL(ps.getValue(20, 60000), ParameterSection::UNDEFINED)
 RESULT
 
 
