@@ -1,5 +1,5 @@
 # 
-# $Id: common.mak.in,v 1.8 2000/07/17 10:18:38 oliver Exp $
+# $Id: common.mak.in,v 1.9 2000/07/20 19:24:02 oliver Exp $
 #
 
 include @BALL_PATH@/source@BINFMT_PATH@/config.mak
@@ -32,4 +32,4 @@ collectlib:	default
 depend:
 	@echo "creating dependencies for $(DIRECTORY)..."
 	@echo "" > .Dependencies
-	@@CXX_MAKEDEPEND@ @MAKEDEP_CXX_OPTS@ @BINFMT_INDEX@ $(CPP_SOURCES) $(ADD_CPP_SOURCES) $(STD_CPP_INCLUDES) $(BALL_INCLUDES) @MAKEDEP_CXX_SUFFIX@
+	@@CXX_MAKEDEPEND@ @MAKEDEP_CXX_OPTS@ @BINFMT_INDEX@ $(CPP_SOURCES) $(ADD_CPP_SOURCES) $(STD_CPP_INCLUDES) $(ADD_INCLUDES) $(BALL_INCLUDES) @MAKEDEP_CXX_SUFFIX@
