@@ -1,4 +1,4 @@
-// $Id: Object_test.C,v 1.2 2001/05/29 12:24:27 anker Exp $
+// $Id: Object_test.C,v 1.3 2001/07/05 17:55:51 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Object_test.C,v 1.2 2001/05/29 12:24:27 anker Exp $")
+START_TEST(class_name, "$Id: Object_test.C,v 1.3 2001/07/05 17:55:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -185,54 +185,6 @@ RESULT
 CHECK(Object::dump(::std::ostream& s = std::cout, Size depth = 0) const  throw())
   // BAUSTELLE
 RESULT
-
-
-// BAUSTELLE
-// #ifdef BALL_SUPPORT_OBJECT_MANAGER
-#ifdef THIS_SHOULD_NOT_BE_DEFINED
-
-CHECK(Object::getPrevious() throw())
-	Object object22;
-	Object object23;
-	ptr = object23.getPrevious();
-	TEST_NOT_EQUAL(ptr, 0)
-	bool test = (*ptr == object22);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-const Object* const_ptr;
-
-CHECK(Object::getPrevious() const  throw())
-	Object object24;
-	Object object25;
-	const_ptr = object25.getPrevious();
-	TEST_NOT_EQUAL(const_ptr, 0)
-	bool test = (*const_ptr == object24);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(Object::getNext() throw())
-	Object object26;
-	Object object27;
-	ptr = object26.getNext();
-	TEST_NOT_EQUAL(ptr, 0)
-	bool test = (*ptr == object27);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(Object::getNext() const  throw())
-	Object object28;
-	Object object29;
-	const_ptr = object28.getNext();
-	TEST_NOT_EQUAL(const_ptr, 0)
-	bool test = (*const_ptr == object29);
-	TEST_EQUAL(test, true)
-RESULT
-
-#endif
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
