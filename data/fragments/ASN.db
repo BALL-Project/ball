@@ -24,24 +24,24 @@
  <node>2H<value>H 0.1272759 0.3139404 -0.2256562</value></node>
  <node>OXT<value>O -1.806735 3.963976 -0.572751</value></node>
  </node>
- <node>Bonds
- <node>1<value>3H N</value></node>
- <node>2<value>CA N</value></node>
- <node>3<value>HA CA</value></node>
- <node>4<value>C CA</value></node>
- <node>5<value>O C</value></node>
- <node>6<value>CB CA</value></node>
- <node>7<value>1HB CB</value></node>
- <node>8<value>2HB CB</value></node>
- <node>9<value>CG CB</value></node>
- <node>10<value>OD1 CG</value></node>
- <node>11<value>ND2 CG</value></node>
- <node>12<value>1HD2 ND2</value></node>
- <node>13<value>2HD2 ND2</value></node>
- <node>14<value>1H N</value></node>
- <node>15<value>2H N</value></node>
- <node>16<value>OXT C</value></node>
- </node>
+  <node>Bonds
+    <node>5<value>3H N s</value></node>
+    <node>6<value>CA N s</value></node>
+    <node>10<value>HA CA s</value></node>
+    <node>11<value>C CA s</value></node>
+    <node>14<value>O C a</value></node>
+    <node>15<value>CB CA s</value></node>
+    <node>19<value>1HB CB s</value></node>
+    <node>20<value>2HB CB s</value></node>
+    <node>21<value>CG CB s</value></node>
+    <node>24<value>OD1 CG d</value></node>
+    <node>25<value>ND2 CG s</value></node>
+    <node>28<value>1HD2 ND2 s</value></node>
+    <node>29<value>2HD2 ND2 s</value></node>
+    <node>30<value>1H N s</value></node>
+    <node>31<value>2H N s</value></node>
+    <node>32<value>OXT C a</value></node>
+  </node>
  <node>Connections
  <node>N-term<value>N C-term 1.33 0.5</value></node>
  <node>C-term<value>C N-term 1.33 0.5</value></node>

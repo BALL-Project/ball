@@ -29,29 +29,29 @@
  <node>2H<value>H 0.3236403 0.2433889 -0.5670705</value></node>
  <node>OXT<value>O -1.135264 4.21782 -1.641576</value></node>
  </node>
- <node>Bonds
- <node>1<value>3H N</value></node>
- <node>2<value>CA N</value></node>
- <node>3<value>HA CA</value></node>
- <node>4<value>C CA</value></node>
- <node>5<value>O C</value></node>
- <node>6<value>CB CA</value></node>
- <node>7<value>HB CB</value></node>
- <node>8<value>CG1 CB</value></node>
- <node>9<value>1HG1 CG1</value></node>
- <node>10<value>2HG1 CG1</value></node>
- <node>11<value>CG2 CB</value></node>
- <node>12<value>1HG2 CG2</value></node>
- <node>13<value>2HG2 CG2</value></node>
- <node>14<value>3HG2 CG2</value></node>
- <node>15<value>CD1 CG1</value></node>
- <node>16<value>1HD1 CD1</value></node>
- <node>17<value>2HD1 CD1</value></node>
- <node>18<value>3HD1 CD1</value></node>
- <node>19<value>1H N</value></node>
- <node>20<value>2H N</value></node>
- <node>21<value>OXT C</value></node>
- </node> 
+  <node>Bonds
+    <node>5<value>3H N s</value></node>
+    <node>6<value>CA N s</value></node>
+    <node>10<value>HA CA s</value></node>
+    <node>11<value>C CA s</value></node>
+    <node>14<value>O C a</value></node>
+    <node>15<value>CB CA s</value></node>
+    <node>19<value>HB CB s</value></node>
+    <node>20<value>CG1 CB s</value></node>
+    <node>24<value>1HG1 CG1 s</value></node>
+    <node>25<value>2HG1 CG1 s</value></node>
+    <node>26<value>CG2 CB s</value></node>
+    <node>30<value>1HG2 CG2 s</value></node>
+    <node>31<value>2HG2 CG2 s</value></node>
+    <node>32<value>3HG2 CG2 s</value></node>
+    <node>33<value>CD1 CG1 s</value></node>
+    <node>37<value>1HD1 CD1 s</value></node>
+    <node>38<value>2HD1 CD1 s</value></node>
+    <node>39<value>3HD1 CD1 s</value></node>
+    <node>40<value>1H N s</value></node>
+    <node>41<value>2H N s</value></node>
+    <node>42<value>OXT C a</value></node>
+  </node>
  <node>Connections
  <node>N-term<value>N C-term 1.33 0.5</value></node>
  <node>C-term<value>C N-term 1.33 0.5</value></node>

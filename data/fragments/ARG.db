@@ -34,34 +34,34 @@
  <node>1H<value>H -0.3621705 1.521632 0.867786</value></node>
  <node>2H<value>H -0.05222332 0.2284002 -0.1067282</value></node>
  </node>
- <node>Bonds
- <node>1<value>3H N</value></node>
- <node>2<value>CA N</value></node>
- <node>3<value>HA CA</value></node>
- <node>4<value>C CA</value></node>
- <node>5<value>O C</value></node>
- <node>6<value>CB CA</value></node>
- <node>7<value>1HB CB</value></node>
- <node>8<value>2HB CB</value></node>
- <node>9<value>CG CB</value></node>
- <node>10<value>1HG CG</value></node>
- <node>11<value>2HG CG</value></node>
- <node>12<value>CD CG</value></node>
- <node>13<value>1HD CD</value></node>
- <node>14<value>2HD CD</value></node>
- <node>15<value>NE CD</value></node>
- <node>16<value>HE NE</value></node>
- <node>17<value>CZ NE</value></node>
- <node>18<value>NH1 CZ</value></node>
- <node>19<value>1HH1 NH1</value></node>
- <node>20<value>2HH1 NH1</value></node>
- <node>21<value>NH2 CZ</value></node>
- <node>22<value>1HH2 NH2</value></node>
- <node>23<value>2HH2 NH2</value></node>
- <node>24<value>OXT C</value></node>
- <node>25<value>1H N</value></node>
- <node>26<value>2H N</value></node>
- </node>
+  <node>Bonds
+    <node>5<value>3H N s</value></node>
+    <node>6<value>CA N s</value></node>
+    <node>10<value>HA CA s</value></node>
+    <node>11<value>C CA s</value></node>
+    <node>14<value>O C a</value></node>
+    <node>15<value>CB CA s</value></node>
+    <node>19<value>1HB CB s</value></node>
+    <node>20<value>2HB CB s</value></node>
+    <node>21<value>CG CB s</value></node>
+    <node>25<value>1HG CG s</value></node>
+    <node>26<value>2HG CG s</value></node>
+    <node>27<value>CD CG s</value></node>
+    <node>31<value>1HD CD s</value></node>
+    <node>32<value>2HD CD s</value></node>
+    <node>33<value>NE CD s</value></node>
+    <node>36<value>HE NE s</value></node>
+    <node>37<value>CZ NE s</value></node>
+    <node>40<value>NH1 CZ a</value></node>
+    <node>43<value>1HH1 NH1 s</value></node>
+    <node>44<value>2HH1 NH1 s</value></node>
+    <node>45<value>NH2 CZ a</value></node>
+    <node>48<value>1HH2 NH2 s</value></node>
+    <node>49<value>2HH2 NH2 s</value></node>
+    <node>50<value>OXT C a</value></node>
+    <node>51<value>1H N s</value></node>
+    <node>52<value>2H N s</value></node>
+  </node>
  <node>Connections
  <node>N-term<value>N C-term 1.33 0.5</value></node>
  <node>C-term<value>C N-term 1.33 0.5</value></node>

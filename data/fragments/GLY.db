@@ -17,17 +17,17 @@
  <node>2H<value>H 0.4027565 0.2984461 -0.3934918</value></node>
  <node>OXT<value>O -1.901015 3.866009 -1.413833</value></node>
  </node>
- <node>Bonds
- <node>1<value>3H N</value></node>
- <node>2<value>CA N</value></node>
- <node>3<value>1HA CA</value></node>
- <node>4<value>2HA CA</value></node>
- <node>5<value>C CA</value></node>
- <node>6<value>O C</value></node>
- <node>7<value>1H N</value></node>
- <node>8<value>2H N</value></node>
- <node>9<value>OXT C</value></node>
- </node>
+  <node>Bonds
+    <node>5<value>3H N s</value></node>
+    <node>6<value>CA N s</value></node>
+    <node>10<value>1HA CA s</value></node>
+    <node>11<value>2HA CA s</value></node>
+    <node>12<value>C CA s</value></node>
+    <node>15<value>O C a</value></node>
+    <node>16<value>1H N s</value></node>
+    <node>17<value>2H N s</value></node>
+    <node>18<value>OXT C a</value></node>
+  </node>
  <node>Connections
  <node>N-term<value>N C-term 1.33 0.5</value></node>
  <node>C-term<value>C N-term 1.33 0.5</value></node>

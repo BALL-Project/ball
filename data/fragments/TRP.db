@@ -34,36 +34,36 @@
  <node>1H<value>H 0.590273 0.5789365 -0.4086703</value></node>
  <node>2H<value>H -0.5252197 0.7968075 0.7903904</value></node>
  </node>
- <node>Bonds
- <node>1<value>3H N</value></node>
- <node>2<value>CA N</value></node>
- <node>3<value>HA CA</value></node>
- <node>4<value>C CA</value></node>
- <node>5<value>O C</value></node>
- <node>6<value>CB CA</value></node>
- <node>7<value>1HB CB</value></node>
- <node>8<value>2HB CB</value></node>
- <node>9<value>CG CB</value></node>
- <node>10<value>CD1 CG</value></node>
- <node>11<value>HD1 CD1</value></node>
- <node>12<value>CD2 CG</value></node>
- <node>13<value>NE1 CD1</value></node>
- <node>14<value>HE1 NE1</value></node>
- <node>15<value>CE2 CD2</value></node>
- <node>16<value>CE2 NE1</value></node>
- <node>17<value>CE3 CD2</value></node>
- <node>18<value>HE3 CE3</value></node>
- <node>19<value>CZ2 CE2</value></node>
- <node>20<value>HZ2 CZ2</value></node>
- <node>21<value>CZ3 CE3</value></node>
- <node>22<value>HZ3 CZ3</value></node>
- <node>23<value>CH2 CZ2</value></node>
- <node>24<value>CH2 CZ3</value></node>
- <node>25<value>HH2 CH2</value></node>
- <node>26<value>OXT C</value></node>
- <node>27<value>1H N</value></node>
- <node>28<value>2H N</value></node>
- </node>
+  <node>Bonds
+    <node>5<value>3H N s</value></node>
+    <node>6<value>CA N s</value></node>
+    <node>10<value>HA CA s</value></node>
+    <node>11<value>C CA s</value></node>
+    <node>14<value>O C a</value></node>
+    <node>15<value>CB CA s</value></node>
+    <node>19<value>1HB CB s</value></node>
+    <node>20<value>2HB CB s</value></node>
+    <node>21<value>CG CB s</value></node>
+    <node>24<value>CD1 CG a</value></node>
+    <node>27<value>HD1 CD1 s</value></node>
+    <node>28<value>CD2 CG a</value></node>
+    <node>31<value>NE1 CD1 a</value></node>
+    <node>34<value>HE1 NE1 s</value></node>
+    <node>35<value>CE2 CD2 a</value></node>
+    <node>36<value>CE2 NE1 a</value></node>
+    <node>39<value>CE3 CD2 a</value></node>
+    <node>41<value>HE3 CE3 s</value></node>
+    <node>42<value>CZ2 CE2 a</value></node>
+    <node>45<value>HZ2 CZ2 s</value></node>
+    <node>47<value>CZ3 CE3 a</value></node>
+    <node>49<value>HZ3 CZ3 s</value></node>
+    <node>50<value>CH2 CZ2 a</value></node>
+    <node>51<value>CH2 CZ3 a</value></node>
+    <node>53<value>HH2 CH2 s</value></node>
+    <node>54<value>OXT C a</value></node>
+    <node>55<value>1H N s</value></node>
+    <node>56<value>2H N s</value></node>
+  </node>
  <node>Connections
  <node>N-term<value>N C-term 1.33 0.5</value></node>
  <node>C-term<value>C N-term 1.33 0.5</value></node>
