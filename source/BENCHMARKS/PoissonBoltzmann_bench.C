@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PoissonBoltzmann_bench.C,v 1.4 2002/02/27 12:20:33 sturm Exp $
+// $Id: PoissonBoltzmann_bench.C,v 1.5 2002/12/23 10:23:00 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
 
-START_BENCHMARK(FDPB, 1.0, "$Id: PoissonBoltzmann_bench.C,v 1.4 2002/02/27 12:20:33 sturm Exp $")
+START_BENCHMARK(FDPB, 1.0, "$Id: PoissonBoltzmann_bench.C,v 1.5 2002/12/23 10:23:00 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,12 +33,15 @@ START_SECTION(setup, 0.5)
 	options.set(FDPB::Option::DIELECTRIC_SMOOTHING, FDPB::DielectricSmoothing::NONE);
 	options[FDPB::Option::IONIC_STRENGTH] = 0.0;
 	options[FDPB::Option::VERBOSITY] = 0;
-	fdpb = new FDPB(*system, options);
-	END_SECTION
+
+	START_TIMER
+		fdpb = new FDPB(*system, options);
+	STOP_TIMER
+END_SECTION
 
 START_SECTION(solve, 0.5)
 	START_TIMER
-	fdpb->solve();
+		fdpb->solve();
 	STOP_TIMER
 END_SECTION
 
