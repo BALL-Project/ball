@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.6 2004/03/14 13:25:08 amoll Exp $
+// $Id: renderer.h,v 1.7 2004/06/26 10:58:30 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -122,8 +122,11 @@ namespace BALL
 			bool operator == (const Renderer& /*renderer*/) const
 				throw() { return true; }
 
-			////
 			protected:
+
+			///
+			virtual void renderClippingPlane_(const Representation& /*rep*/)
+				throw() {Log.error() << "renderClippingPlane_ not implemented in derived Renderer class" << std::endl;}
 
 			/// Wrapper for the renderering of special GeometricObjects
 			virtual void render_(const GeometricObject* object)

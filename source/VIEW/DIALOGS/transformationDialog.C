@@ -38,9 +38,13 @@ bool TransformationDialog::translate(float x, float y, float z)
 {
 	if (rep_ != 0)
 	{
-		rep_->setProperty("TX", rep_->getProperty("TX").getDouble() + x); 
-		rep_->setProperty("TY", rep_->getProperty("TY").getDouble() + y); 
-		rep_->setProperty("TZ", rep_->getProperty("TZ").getDouble() + z); 
+		Vector3 t(x,y,z);
+		Vector3 n(rep_->getProperty("AX").getDouble(),
+							rep_->getProperty("BY").getDouble(),
+							rep_->getProperty("CZ").getDouble());
+Log.error() << "#~~#   3 " << n << " "   << __FILE__ << "  " << __LINE__<< std::endl;
+		rep_->setProperty("D", rep_->getProperty("D").getDouble() + t*n);
+
 		return true;
 	}
 
@@ -55,12 +59,26 @@ bool TransformationDialog::rotateX(float angle, bool radian)
 {
  	if (rep_ != 0)
 	{
-Log.error() << "#~~#   x " << rep_->getProperty("VX").getDouble() << " " << rep_->getProperty("VY").getDouble() << " " << rep_->getProperty("VZ").getDouble() << " " << __FILE__ << "  " << __LINE__<< std::endl;
-		rep_->setProperty("VX", rep_->getProperty("VX").getDouble() + angle); 
+		Vector3 n(rep_->getProperty("AX").getDouble(),
+							rep_->getProperty("BY").getDouble(),
+							rep_->getProperty("CZ").getDouble());
+		n.normalize();
+
+		float d = rep_->getProperty("D").getDouble();
+		matrix_.setIdentity();
+		angle_.set(angle, radian);
+//	 	matrix_.setTranslation(d*n);
+		matrix_.setRotationX(angle_);
+		n = matrix_ * n;
+		
+		rep_->setProperty("AX", n.x);
+		rep_->setProperty("BY", n.y);
+		rep_->setProperty("CZ", n.z);
+
 		return true;
 	}
 
- if (!composite_) return false;
+	if (!composite_) return false;
   
 	composite_->apply(center_processor_);
 	composite_center_ = center_processor_.getCenter();
@@ -84,8 +102,22 @@ bool TransformationDialog::rotateY(float angle, bool radian)
 {
  	if (rep_ != 0)
 	{
-Log.error() << "#~~#   x " << rep_->getProperty("VX").getDouble() << " " << rep_->getProperty("VY").getDouble() << " " << rep_->getProperty("VZ").getDouble() << " " << __FILE__ << "  " << __LINE__<< std::endl;
-		rep_->setProperty("VY", rep_->getProperty("VY").getDouble() + angle); 
+		Vector3 n(rep_->getProperty("AX").getDouble(),
+							rep_->getProperty("BY").getDouble(),
+							rep_->getProperty("CZ").getDouble());
+		n.normalize();
+
+		float d = rep_->getProperty("D").getDouble();
+		matrix_.setIdentity();
+		angle_.set(angle, radian);
+//		matrix_.s etTranslation(d*n);
+		matrix_.setRotationY(angle_);
+		n = matrix_ * n;
+		
+		rep_->setProperty("AX", n.x);
+		rep_->setProperty("BY", n.y);
+		rep_->setProperty("CZ", n.z);
+
 		return true;
 	}
 
@@ -113,8 +145,22 @@ bool TransformationDialog::rotateZ(float angle, bool radian)
 {
  	if (rep_ != 0)
 	{
-Log.error() << "#~~#   x " << rep_->getProperty("VX").getDouble() << " " << rep_->getProperty("VY").getDouble() << " " << rep_->getProperty("VZ").getDouble() << " " << __FILE__ << "  " << __LINE__<< std::endl;
-		rep_->setProperty("VZ", rep_->getProperty("VZ").getDouble() + angle); 
+		Vector3 n(rep_->getProperty("AX").getDouble(),
+							rep_->getProperty("BY").getDouble(),
+							rep_->getProperty("CZ").getDouble());
+		n.normalize();
+
+		float d = rep_->getProperty("D").getDouble();
+		matrix_.setIdentity();
+		angle_.set(angle, radian);
+// 		matrix_.setTranslation(d*n);
+		matrix_.setRotationZ(angle_);
+		n = matrix_ * n;
+		
+		rep_->setProperty("AX", n.x);
+		rep_->setProperty("BY", n.y);
+		rep_->setProperty("CZ", n.z);
+
 		return true;
 	}
 

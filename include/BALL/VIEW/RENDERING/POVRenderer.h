@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.5 2004/02/26 08:41:45 anhi Exp $
+// $Id: POVRenderer.h,v 1.6 2004/06/26 10:58:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -38,6 +38,14 @@ namespace BALL
 		class BALL_EXPORT POVRenderer : public Renderer
 		{
 			public:
+
+			struct POVRendererClippingPlane
+			{
+				public:
+					Vector3 normal;
+					float translation;
+//					 Vector3 translation;
+			};
 
 			/** @name Constructors and Destructors.
 			 */
@@ -109,6 +117,10 @@ namespace BALL
 			virtual bool finish()
 				throw();
 
+			///
+			virtual void renderClippingPlane_(const Representation& /*rep*/)
+				throw();
+
 			void renderSphere_(const Sphere& sphere)
 				throw();
 			
@@ -131,6 +143,7 @@ namespace BALL
 
 				Vector3   origin_;
 				Matrix4x4 rotation_;
+				vector<POVRendererClippingPlane> clipping_planes_;
 		};
   
 	} // namespace BALL
