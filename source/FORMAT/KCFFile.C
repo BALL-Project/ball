@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile.C,v 1.1 2005/03/10 19:38:30 oliver Exp $
+// $Id: KCFFile.C,v 1.2 2005/03/14 21:38:39 oliver Exp $
 //
 
 #include <BALL/FORMAT/KCFFile.h>
@@ -138,11 +138,16 @@ namespace BALL
 
 	bool KCFFile::read(System& system) throw(Exception::ParseError)
 	{
+		
 		// read the molecule
 		Molecule* molecule = 0;
 		try
 		{
-			molecule = read();
+			while ((molecule = read()) != 0)
+			{
+				// add the molecule to the system
+				system.append(*molecule);
+			}	
 		}
 		catch (Exception::ParseError& e)
 		{
@@ -154,14 +159,6 @@ namespace BALL
 			delete molecule;
 			throw e;
 		}
-
-		if (molecule == 0) 
-		{
-			return false;
-		}
-
-		// add the molecule to the system
-		system.append(*molecule);
 
 		return true;
 	}

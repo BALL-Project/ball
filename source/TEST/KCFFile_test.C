@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: KCFFile_test.C,v 1.1 2005/03/10 19:38:30 oliver Exp $
+// $Id: KCFFile_test.C,v 1.2 2005/03/14 21:38:39 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(KCFFile, "$Id: KCFFile_test.C,v 1.1 2005/03/10 19:38:30 oliver Exp $")
+START_TEST(KCFFile, "$Id: KCFFile_test.C,v 1.2 2005/03/14 21:38:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -40,19 +40,18 @@ RESULT
 
 
 CHECK(bool read(System& system) throw(Exception::ParseError))
-	KCFFile f("data/KCFFile_test1.mol");
+	KCFFile f("data/KCFFile_test1.kcf");
 	System system;
 	f.read(system);
-	TEST_EQUAL(system.countAtoms(), 23)
-	TEST_EQUAL(system.countBonds(), 26)
+	TEST_EQUAL(system.countAtoms(), 31 + 44 + 44)
+	TEST_EQUAL(system.countBonds(), 33 + 48 + 48)
+	TEST_EQUAL(system.countMolecules(), 3)
 	ABORT_IF(system.countAtoms() == 0)
 	Atom& atom = *system.beginAtom();
-	TEST_REAL_EQUAL(atom.getPosition().x,  1.5737)
-	TEST_REAL_EQUAL(atom.getPosition().y, -3.1475)
+	TEST_REAL_EQUAL(atom.getPosition().x,  7.4091)
+	TEST_REAL_EQUAL(atom.getPosition().y, -11.6324)
 	TEST_REAL_EQUAL(atom.getPosition().z,  0.0000)
 	system.clear();
-	KCFFile f2("KCFFile_test.C");	
-	TEST_EXCEPTION(Exception::ParseError, f2.read(system))
 	KCFFile f3("data/Selectable_test.txt");
 	bool result = f3.read(system);
 	TEST_EQUAL(result, false)
@@ -60,13 +59,13 @@ RESULT
 
 
 CHECK(KCFFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
-	KCFFile f("data/KCFFile_test1.mol", std::ios::in);
+	KCFFile f("data/KCFFile_test1.kcf", std::ios::in);
 	System system;
 	f.read(system);
-	TEST_EQUAL(system.countAtoms(), 23)
-	TEST_EQUAL(system.countMolecules(), 1)
-	TEST_EQUAL(system.countBonds(), 26)
-	TEST_EXCEPTION(Exception::FileNotFound, KCFFile f2("KCFFile_test1.mol"))
+	TEST_EQUAL(system.countAtoms(), 31 + 44 + 44)
+	TEST_EQUAL(system.countMolecules(), 3)
+	TEST_EQUAL(system.countBonds(), 33 + 48 + 48)
+	TEST_EXCEPTION(Exception::FileNotFound, KCFFile f2("KCFFile_test_which_does_not_exist.kcf"))
 RESULT
 
 
@@ -101,7 +100,7 @@ CHECK(bool write(const System& system) throw(File::CannotWrite))
 	f.write(S);
 	f.close();
 	
-	TEST_FILE_REGEXP(filename.c_str(), "data/KCFFile_test2.mol")
+	TEST_FILE_REGEXP(filename.c_str(), "data/KCFFile_test2kcf")
 
 	KCFFile f2("KCFFile_test.C", std::ios::in);
 	TEST_EXCEPTION(File::CannotWrite, f2.write(S))
@@ -109,7 +108,7 @@ RESULT
 
 
 CHECK([EXTRA]KCFFile::KCFFile& operator >> (System& system))
-  KCFFile f("data/KCFFile_test1.mol");
+  KCFFile f("data/KCFFile_test1.kcf");
 	System S;
 	f >> S;
 	f.close();
@@ -117,7 +116,7 @@ CHECK([EXTRA]KCFFile::KCFFile& operator >> (System& system))
 	TEST_EQUAL(S.countBonds(), 26)
 	TEST_EQUAL(S.countMolecules(), 1)
 
-	KCFFile f2("data/KCFFile_test3.mol");
+	KCFFile f2("data/KCFFile_test3.kcf");
 	S.destroy();
 	f2 >> S;
 	TEST_EQUAL(S.countAtoms(), 49)
@@ -132,7 +131,7 @@ CHECK([EXTRA]KCFFile::KCFFile& operator >> (System& system))
 
 	// check whether we handle file with only 
 	// 48 columns in the atom lines correctly
-	KCFFile f3("data/KCFFile_test4.mol");
+	KCFFile f3("data/KCFFile_test4.kcf");
 	S.destroy();
 	f3 >> S;
 	TEST_EQUAL(S.countAtoms(), 23)
@@ -141,7 +140,7 @@ CHECK([EXTRA]KCFFile::KCFFile& operator >> (System& system))
 RESULT
 
 CHECK(Molecule* read() throw(Exception::ParseError))
-  KCFFile f("data/KCFFile_test1.mol");
+  KCFFile f("data/KCFFile_test1.kcf");
 	Molecule* m = f.read();
 	f.close();
 	TEST_EQUAL(m->countAtoms(), 23)
@@ -179,7 +178,7 @@ CHECK([EXTRA]KCFFile::KCFFile& operator << (const System& system))
 	KCFFile f(filename, std::ios::out);
 	f << S;	
 	f.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/KCFFile_test2.mol")
+	TEST_FILE_REGEXP(filename.c_str(), "data/KCFFile_test2.kcf")
 RESULT
 
 CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
@@ -187,24 +186,24 @@ CHECK(bool write(const Molecule& molecule) throw(File::CannotWrite))
 	KCFFile f(filename, std::ios::out);
 	f.write(*m);
 	f.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/KCFFile_test2.mol")
+	TEST_FILE_REGEXP(filename.c_str(), "data/KCFFile_test2.kcf")
 RESULT
 
 CHECK(BALL_CREATE(KCFFile))
-  KCFFile f("data/KCFFile_test1.mol");
+  KCFFile f("data/KCFFile_test1.kcf");
 	KCFFile* f_ptr = (KCFFile*) f.create();
-	TEST_EQUAL(f_ptr->getName(), "data/KCFFile_test1.mol")
+	TEST_EQUAL(f_ptr->getName(), "data/KCFFile_test1.kcf")
 	delete f_ptr;
 RESULT
 
 CHECK(KCFFile(const KCFFile& file) throw(Exception::FileNotFound))
-  KCFFile f("data/KCFFile_test1.mol");
+  KCFFile f("data/KCFFile_test1.kcf");
 	KCFFile f2(f);
-	TEST_EQUAL(f2.getName(), "data/KCFFile_test1.mol")
+	TEST_EQUAL(f2.getName(), "data/KCFFile_test1.kcf")
 RESULT
 
 CHECK([EXTRA]bool read(System& system) throw(Exception::ParseError))
-	KCFFile f("data/KCFFile_test5.mol");
+	KCFFile f("data/KCFFile_test5.kcf");
 	System system;
 	f.read(system);
 	TEST_EQUAL(system.countAtoms(), 30)
