@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.2 1999/09/01 12:59:29 hekl Exp $
+// $Id: common.h,v 1.3 1999/09/15 11:17:41 hekl Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -31,7 +31,8 @@ namespace BALL
 			ADDRESS__STATIC_DRAWING_PRECISION  = 4,
 			ADDRESS__STATIC_DRAWING_MODE       = 5,
 			ADDRESS__DYNAMIC_DRAWING_PRECISION = 6,
-			ADDRESS__DYNAMIC_DRAWING_MODE      = 7
+			ADDRESS__DYNAMIC_DRAWING_MODE      = 7,
+			ADDRESS__CAMERA_DISTANCE           = 8
 		};		
 
 		enum Value
