@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.4 2003/09/19 18:41:58 amoll Exp $
+// $Id: molecularProperties.h,v 1.5 2003/10/15 14:25:38 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
@@ -97,6 +97,11 @@ namespace BALL
 
 
 			/**	Check the menu entries.
+			 		The menus <b> Select</b>, <b> Deselect</b>, <b> Add Hydrogens</b> and <b> Build Bonds</b>
+					will be enabled if the selection of molecular objects is not empty.
+					The menu <b> Focus camera</b> will be enabled only if only one molecular object
+					is in the selection list.
+
 			 */
 			void checkMenu(MainControl& main_control)
 				throw();
