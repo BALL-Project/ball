@@ -1,4 +1,4 @@
-// $Id: datatype.h,v 1.2 2000/12/05 13:01:50 amoll Exp $
+// $Id: datatype.h,v 1.3 2001/07/15 18:56:03 amoll Exp $
 // DATATYPE header file
 // collective header file for all headers in BALL/DATATYPE
 
@@ -37,7 +37,7 @@
 #	include <BALL/DATATYPE/options.h>
 #endif
 
-#ifndef BALL_DATATYPE_POINTGRID_H
+#ifndef BALL_DATATYPE_REGULARDATA3D_H
 #	include <BALL/DATATYPE/regularData3D.h>
 #endif
 
