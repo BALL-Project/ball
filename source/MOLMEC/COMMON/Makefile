@@ -9,6 +9,7 @@ CPP_SOURCES=\
 	forceFieldComponent.C\
 	gradient.C\
 	periodicBoundary.C\
+	rules.C\
 	snapShot.C\
 	support.C
 
