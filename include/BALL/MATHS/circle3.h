@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.18 2000/08/30 19:58:13 oliver Exp $
+// $Id: circle3.h,v 1.19 2000/09/01 13:49:23 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -239,13 +239,13 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "  position: " << p << endl;
+			s << "  position: " << p << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "  normal: " << n << endl;
+			s << "  normal: " << n << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "  radius: " << radius << endl;
+			s << "  radius: " << radius << std::endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
