@@ -1,3 +1,7 @@
+#
+# $Id: Makefile,v 1.2 2003/08/26 09:18:35 oliver Exp $
+#
+
 include ../../config.mak
 
 DIRECTORY=VIEW/GUI
@@ -8,7 +12,6 @@ DIRS=\
 	DIALOGS\
 	FUNCTOR\
 	KERNEL\
-	PRIMITIV\
 	WIDGETS
 
 default: dirs

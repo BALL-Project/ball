@@ -1,14 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.C,v 1.13 2002/12/12 10:57:43 oliver Exp $
+// $Id: lineModel.C,v 1.14 2003/08/26 09:18:00 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
+#include <BALL/VIEW/PRIMITIV/point.h>
 
 using namespace std;
 
 namespace BALL
 {
+	using VIEW::Point;
+
 	namespace MOLVIEW
 	{
 
@@ -19,9 +24,9 @@ AddLineModel::AddLineModel()
 {
 }
 
-AddLineModel::AddLineModel(const AddLineModel& rAddLineModel, bool deep)
+AddLineModel::AddLineModel(const AddLineModel& rAddLineModel)
 	throw()
-	: AtomBondModelBaseProcessor(rAddLineModel, deep)
+	: AtomBondModelBaseProcessor(rAddLineModel)
 {
 }
 
@@ -30,32 +35,14 @@ AddLineModel::~AddLineModel()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << (void *)this 
-							  << " of class " << RTTI::getName<AddLineModel>() << endl;
+							  << " of class " << RTTI::getName<AddLineModel>() << std::endl;
 	#endif 
-
-	destroy();
-}
-
-void AddLineModel::clear()
-	throw()
-{
-	AtomBondModelBaseProcessor::clear();
-}
-
-void AddLineModel::destroy()
-	throw()
-{
 }
 
 bool AddLineModel::start()
 {
-	if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID))
-	{
-		setProperty(GeometricObject::PROPERTY__DRAWING_MODE_WIREFRAME);
-	}
-
 	// init model connector
-	getModelConnector()->setProperties(*this);
+	//getModelConnector()->setProperties(*this);
 
 	return AtomBondModelBaseProcessor::start();
 }
@@ -76,30 +63,20 @@ Processor::Result AddLineModel::operator() (Composite &composite)
 
 	Atom *atom = RTTI::castTo<Atom>(composite);
 
-	// remove all models appended to atom
-	removeGeometricObjects_(*atom, true);
-
 	// generate help BallPrimitive
-	Point *point_ptr = createPoint_();
+	Point *point_ptr = new Point;
 
-	if (point_ptr == 0)
-	{
-		throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Point));
-	}
+	if (point_ptr == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Point));
 
-	// carry on selected flag
-	point_ptr->Selectable::set(*atom);
+	point_ptr->setVertex(atom->getPosition());
 
-	point_ptr->PropertyManager::set(*this);
-	point_ptr->PropertyManager::setProperty(PROPERTY__MODEL_LINES);
-	point_ptr->setVertexAddress(atom->getPosition());
+	point_ptr->setComposite(atom);
 	
-	atom->host(*getColorCalculator());
-
-	point_ptr->setColor(getColorCalculator()->getColor());
+	getColorProcessor()->operator() (atom);
+	point_ptr->setColor(getColorProcessor()->getColor());
 
 	// append line in Atom
-	composite.appendChild(*point_ptr);
+	geometric_objects_.push_back(point_ptr);
 
 	// collect used atoms
 	insertAtom_(atom);
@@ -120,10 +97,5 @@ void AddLineModel::dump(ostream& s, Size depth) const
 	BALL_DUMP_STREAM_SUFFIX(s);
 }
 
-#	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/MOLVIEW/FUNCTOR/lineModel.iC>
-#	endif
-
 	} // namespace MOLVIEW
-
 } // namespace BALL

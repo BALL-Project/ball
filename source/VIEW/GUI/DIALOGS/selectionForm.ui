@@ -1,0 +1,518 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>SelectionFormData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>SelectionFormData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>693</width>
+            <height>315</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Selection from regular expression</string>
+    </property>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>buttonGroup1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>3</x>
+                <y>-1</y>
+                <width>134</width>
+                <height>188</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>type</string>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>15</y>
+                    <width>121</width>
+                    <height>166</height>
+                </rect>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>residue()</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>chain()</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>secondaryStructure()</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_5</cstring>
+                    </property>
+                    <property name="text">
+                        <string>protein()</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>nucleotide()</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>buttonGroup1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>141</x>
+                <y>0</y>
+                <width>134</width>
+                <height>186</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>bonds</string>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>4</x>
+                    <y>13</y>
+                    <width>126</width>
+                    <height>132</height>
+                </rect>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_7_3_2_2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>doubleBonds()</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_7_3_2_2_2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>tripleBonds()</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_7_3_2_2_2_2_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>aromaticBonds()</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_7_3_2_2_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>numberOfBonds("?")</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>buttonGroup1_2_2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>280</x>
+                <y>0</y>
+                <width>276</width>
+                <height>222</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>others</string>
+        </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_6_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>17</y>
+                    <width>120</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>element("?")</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_6_2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>51</y>
+                    <width>120</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>residueID("?")</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_7_2_2_2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>85</y>
+                    <width>120</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>charge("?")</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_7_3_2_2_2_2_2_2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>119</y>
+                    <width>120</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>connectedTo("?")</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_7_2_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>153</y>
+                    <width>120</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>name("????")</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_7_2_2_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>187</y>
+                    <width>120</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>type("?")</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_7_3_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>136</x>
+                    <y>15</y>
+                    <width>132</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>selected()</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_7_3_2_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>136</x>
+                    <y>49</y>
+                    <width>132</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>solvent()</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_7_5</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>136</x>
+                    <y>83</y>
+                    <width>132</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>backbone()</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_7_3_2_2_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>136</x>
+                    <y>117</y>
+                    <width>132</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>inRing()</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_7_3_2_3_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>136</x>
+                    <y>151</y>
+                    <width>132</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>isAxial()</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>pushButton1_7_3_2_3_2_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>136</x>
+                    <y>185</y>
+                    <width>132</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>is4Cl()</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>buttonGroup1_2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>560</x>
+                <y>0</y>
+                <width>134</width>
+                <height>119</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>hybridized</string>
+        </property>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>5</x>
+                    <y>14</y>
+                    <width>124</width>
+                    <height>98</height>
+                </rect>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_7_4</cstring>
+                    </property>
+                    <property name="text">
+                        <string>spHybridized()</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_7_4_2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>sp2Hybridized()</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pushButton1_7_4_3</cstring>
+                    </property>
+                    <property name="text">
+                        <string>sp3Hybridized()</string>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>lineEdit1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>234</y>
+                <width>679</width>
+                <height>27</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout10</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>205</x>
+                <y>278</y>
+                <width>293</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pushButton49</cstring>
+                </property>
+                <property name="text">
+                    <string>OK</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pushButton49_2</cstring>
+                </property>
+                <property name="text">
+                    <string>Close</string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout12</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>563</x>
+                <y>125</y>
+                <width>125</width>
+                <height>98</height>
+            </rect>
+        </property>
+        <vbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pushButton51</cstring>
+                </property>
+                <property name="text">
+                    <string>AND</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pushButton51_2</cstring>
+                </property>
+                <property name="text">
+                    <string>OR</string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>pushButton51_2_2</cstring>
+                </property>
+                <property name="text">
+                    <string>!</string>
+                </property>
+            </widget>
+        </vbox>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

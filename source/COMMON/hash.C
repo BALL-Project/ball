@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.C,v 1.12 2003/05/21 14:38:19 oliver Exp $
+// $Id: hash.C,v 1.13 2003/08/26 09:17:44 oliver Exp $
+//
 
 #include <BALL/COMMON/hash.h>
 

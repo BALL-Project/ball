@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: 
+// $Id: serverPreferences.C,v 1.8 2003/08/26 09:18:46 oliver Exp $
+//
 
 #include <BALL/VIEW/GUI/WIDGETS/serverPreferences.h>
 #include <BALL/VIEW/COMMON/global.h>
+#include <BALL/FORMAT/INIFile.h>
 #include <BALL/COMMON/rtti.h>
 
-#include <qpixmap.h>
-#include <qlayout.h>
 #include <qlabel.h>
 #include <qpushbutton.h>
 
@@ -82,23 +82,11 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<ServerPreferences>() << endl;
+				Log.info() << "Destructing object " << (void *)this 
+				 					 << " of class " << RTTI::getName<ServerPreferences>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 		
-		void ServerPreferences::clear()
-			throw()
-		{
-		}
-
-		void ServerPreferences::destroy()
-			throw()
-		{
-		}
-
 		void ServerPreferences::writePreferences(INIFile& inifile)
 			throw()
 		{
@@ -145,7 +133,7 @@ namespace BALL
 		int ServerPreferences::getPort()
 			throw()
 		{
-			return String(port_->text().latin1()).toInt();
+			return String(port_->text().ascii()).toInt();
 		}
 		
 		bool ServerPreferences::getServerStatus()

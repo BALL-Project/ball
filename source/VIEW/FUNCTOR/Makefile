@@ -3,9 +3,8 @@ DIRECTORY=VIEW/FUNCTOR
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	filter.C\
-	geometricCollector.C\
-	information.C	
+	information.C\
+	molecularInformation.C
 
 
 include ../../common.mak

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clientScene.C,v 1.9 2002/12/16 12:23:11 sturm Exp $
+// $Id: clientScene.C,v 1.10 2003/08/26 09:18:47 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/clientScene.h>
 
@@ -47,8 +47,6 @@ namespace BALL
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<ClientScene>() << endl;
 			#endif 
-
-			destroy();
 		}
 
 		void ClientScene::clear()
@@ -58,30 +56,6 @@ namespace BALL
 			host_ = 0;
 			port_ = 0;
 			scenehandle_ = 0;
-			*/
-		}
-
-		void ClientScene::destroy()
-		{
-			/*
-			#ifdef BALL_VIEW_DEBUG
-					
-			if (!isValid())
-			{
-				throw InvalidClientScene(__FILE__, __LINE__);
-			}
-				
-			#endif
-
-			IOStreamSocket iostream_socket;	
-			iostream_socket->connect(host_, port_);
-
-			iostream_socket << (int)COMMAND__DESTROY_SCENE << " ";
-			iostream_socket << scenehandle_ << endl;
-
-			iostream_socket->close();
-
-			clear();
 			*/
 		}
 

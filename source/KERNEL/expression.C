@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.43 2003/07/01 18:20:02 amoll Exp $
+// $Id: expression.C,v 1.44 2003/08/26 09:17:48 oliver Exp $
 //
 
 #include <BALL/KERNEL/expression.h>

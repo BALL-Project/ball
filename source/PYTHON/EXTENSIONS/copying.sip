@@ -1,4 +1,8 @@
-// $Id: copying.sip,v 1.2 2003/04/20 12:46:12 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: copying.sip,v 1.3 2003/08/26 09:18:15 oliver Exp $
+//
 
 %Copying
 You are installing the RESEARCH version (BALL-R) of BALL that can

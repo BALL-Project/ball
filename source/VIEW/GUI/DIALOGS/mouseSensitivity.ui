@@ -1,0 +1,127 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>MouseSensitivityData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>MouseSensitivityData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>202</width>
+            <height>134</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Mouse Sensitivity</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>40</y>
+                <width>25</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>min</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>160</x>
+                <y>40</y>
+                <width>25</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>max</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancel_button_</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>120</x>
+                <y>90</y>
+                <width>70</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>cancel</string>
+        </property>
+    </widget>
+    <widget class="QSlider">
+        <property name="name">
+            <cstring>slider_</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>180</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="maxValue">
+            <number>10</number>
+        </property>
+        <property name="value">
+            <number>5</number>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>ok_button_</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>90</y>
+                <width>70</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>OK</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>ok_button_</sender>
+        <signal>clicked()</signal>
+        <receiver>MouseSensitivityData</receiver>
+        <slot>okPressed()</slot>
+    </connection>
+    <connection>
+        <sender>cancel_button_</sender>
+        <signal>pressed()</signal>
+        <receiver>MouseSensitivityData</receiver>
+        <slot>cancelPressed()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>cancelPressed()</slot>
+    <slot>okPressed()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

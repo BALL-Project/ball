@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.C,v 1.12 2003/06/19 13:24:47 oliver Exp $
+// $Id: atomVector.C,v 1.13 2003/08/26 09:17:52 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>

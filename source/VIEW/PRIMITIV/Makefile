@@ -7,10 +7,13 @@ CPP_SOURCES=\
 	line.C\
 	mesh.C\
 	point.C\
+	box.C\
+	disc.C\
 	simpleBox.C\
 	sphere.C\
-	tube.C
-
+	tube.C\
+	twoColoredLine.C\
+	twoColoredTube.C
 
 include ../../common.mak
 include .Dependencies

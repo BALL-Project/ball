@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.25 2003/08/19 16:06:50 amoll Exp $
+// $Id: charmmNonBonded.C,v 1.26 2003/08/26 09:17:52 oliver Exp $
+//
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>

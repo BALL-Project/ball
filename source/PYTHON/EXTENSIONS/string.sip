@@ -1,4 +1,8 @@
-// $Id: string.sip,v 1.10 2003/04/20 16:40:17 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: string.sip,v 1.11 2003/08/26 09:18:24 oliver Exp $
+//
 
 class Substring
 {
@@ -268,7 +272,6 @@ class String
 
     return 1;
   }
-
   if (PyString_Check(sipPy))
   {
     *sipCppPtr = new String(PyString_AS_STRING(sipPy));

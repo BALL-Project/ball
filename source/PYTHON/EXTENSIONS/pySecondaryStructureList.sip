@@ -1,4 +1,8 @@
-// $Id: pySecondaryStructureList.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pySecondaryStructureList.sip,v 1.3 2003/08/26 09:18:21 oliver Exp $
+//
 
 %MappedType PySecondaryStructureList
 {

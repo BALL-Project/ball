@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.28 2003/07/01 18:15:04 oliver Exp $
+// $Id: TCPTransfer.C,v 1.29 2003/08/26 09:18:28 oliver Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002

@@ -1,3 +1,9 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: atomVector.sip,v 1.2 2003/08/26 09:18:12 oliver Exp $
+//
+
 class AtomVector
 {
 %HeaderCode

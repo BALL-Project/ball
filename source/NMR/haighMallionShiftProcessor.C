@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: haighMallionShiftProcessor.C,v 1.16 2003/05/26 14:22:52 oliver Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.17 2003/08/26 09:18:09 oliver Exp $
+//
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>

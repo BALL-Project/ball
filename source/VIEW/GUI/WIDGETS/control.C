@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.C,v 1.21 2003/07/21 07:59:58 amoll Exp $
+// $Id: control.C,v 1.22 2003/08/26 09:18:45 oliver Exp $
 //
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
-#include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/forEach.h>
-
+#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/COMMON/global.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/VIEW/GUI/DIALOGS/transformationDialog.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 
@@ -29,6 +29,7 @@ Control::SelectableListViewItem::SelectableListViewItem(QListViewItem* parent, c
 	setText(1, type);
 }
 
+
 Control::SelectableListViewItem::SelectableListViewItem(QListView* parent, const QString& text, const QString& type, Composite* composite, VIEW::Control& control)
 	throw()
 	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
@@ -38,11 +39,11 @@ Control::SelectableListViewItem::SelectableListViewItem(QListView* parent, const
 	setText(1, type);
 }
 
+
 void Control::SelectableListViewItem::stateChange(bool)
 	throw()
 {
-	if (RTTI::isKindOf<GeometricObject> (*composite_)) return;
-	control_reference_.selectedComposite(composite_, isOn());
+	control_reference_.selectedComposite_(composite_, isOn());
 }
 
 
@@ -57,11 +58,10 @@ Control::Control(QWidget* parent, const char* name)
 			clipboard_id_(-1),
 			selected_(),
 			information_(),
-			geometric_filter_(),
 			context_menu_(),
 			context_composite_(0),
 			context_item_(0),
-			color_mesh_dialog_(new ColorMeshDialog(this))
+			transformation_dialog_(0)
 {
 	// appearance
 	setRootIsDecorated(TRUE);
@@ -78,11 +78,12 @@ Control::Control(QWidget* parent, const char* name)
 	connect(this, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 
 	connect(this, SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)), this,
-					SLOT(onContextMenu(QListViewItem*, const QPoint&, int)));
+					SLOT(onContextMenu_(QListViewItem*, const QPoint&, int)));
 
 	// register ModularWidget
 	registerWidget(this);
 }
+
 
 Control::~Control()
 	throw()
@@ -90,54 +91,67 @@ Control::~Control()
   #ifdef BALL_VIEW_DEBUG
 	  Log.error() << "Destructing object " << (void *)this << " of class " << RTTI::getName<Control>() << endl;
   #endif 
-		
-	destroy();
+
+	if (transformation_dialog_) delete transformation_dialog_;
 }
+
 
 void Control::clear()
 	throw()
 {
 }
 
-void Control::destroy()
-	throw()
-{
-}
 
 void Control::initializeWidget(MainControl& main_control)
 	throw()
 {
-	cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Cut", this, SLOT(cut()), CTRL+Key_C);
-	copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "C&opy", this, SLOT(copy()), CTRL+Key_O);
-	paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), CTRL+Key_P);
-	clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cl&ear Clipboard", this, 
-																							 SLOT(clearClipboard()), CTRL+Key_E);
+	cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cut", this, SLOT(cut()), CTRL+Key_X);
+	copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
+	paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Paste", this, SLOT(paste()), CTRL+Key_V);
+	clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Clear Clipboard", this, 
+																							 SLOT(clearClipboard()));
+	window_menu_entry_id_ = 
+		main_control.insertMenuEntry(MainControl::WINDOWS, "Control", this, SLOT(switchShowWidget()));
+	getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
 }
+
 
 void Control::finalizeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.removeMenuEntry(MainControl::EDIT, "&Cut", this, SLOT(cut()), CTRL+Key_C);
-	main_control.removeMenuEntry(MainControl::EDIT, "C&opy", this, SLOT(copy()), CTRL+Key_O);
-	main_control.removeMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), CTRL+Key_P);
-	main_control.removeMenuEntry(MainControl::EDIT, "Cl&ear Clipboard", this, SLOT(clearClipboard()), CTRL+Key_E);
+	main_control.removeMenuEntry(MainControl::EDIT, "Cut", this, SLOT(cut()), CTRL+Key_X);
+	main_control.removeMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
+	main_control.removeMenuEntry(MainControl::EDIT, "Paste", this, SLOT(paste()), CTRL+Key_V);
+	main_control.removeMenuEntry(MainControl::EDIT, "Clear Clipboard", this, SLOT(clearClipboard()));
+	main_control.removeMenuEntry(MainControl::WINDOWS, "Control", this, SLOT(switchShowWidget()));
 }
 
-void Control::checkMenu(MainControl& /* main_control */)
+
+void Control::checkMenu(MainControl& main_control)
 	throw()
 {
+	bool copy_list_filled = (getCopyList_().size() > 0);
+	// prevent changes to composites while simulations are running
+	copy_list_filled = copy_list_filled && main_control.compositesAreMuteable();
+
+	// check for paste-slot: enable only if copy_list_ not empty
+	(main_control.menuBar())->setItemEnabled(paste_id_, copy_list_filled);	
+
+	// check for clearClipboard-slot: enable only if copy_list_ not empty
+	(main_control.menuBar())->setItemEnabled(clipboard_id_, copy_list_filled);
+
+	// check for cut-slot 
+	bool list_filled = (selected_.size() != 0);
+	list_filled = list_filled && main_control.compositesAreMuteable();
+	(main_control.menuBar())->setItemEnabled(cut_id_, list_filled);
 }
 
-bool Control::addComposite(Composite* composite, QString* own_name)
+
+void Control::addComposite(Composite& composite, QString* own_name)
 	throw()
 {
-	if (composite == 0)
-	{
-		return false;
-	}
-
 	// get information about the composite
-	composite->host(getInformationVisitor_());
+	composite.host(getInformationVisitor_());
 
 	// if the own name is empty use name as name
 	QString name = getInformationVisitor_().getName().c_str();
@@ -152,65 +166,41 @@ bool Control::addComposite(Composite* composite, QString* own_name)
 
 	// update the view
 	updateContents();
-
-	return true;
 }
 
-bool Control::removeComposite(Composite* composite)
+
+void Control::removeComposite(Composite& composite)
 	throw()
 {
-	QListViewItem* item = findListViewItem_(composite);
-	if (item != 0)
-	{
-		delete item;
-		composite_to_item_.erase(composite);		
-		updateContents();
-		return true;
-	}
+	if (!composite_to_item_.has(&composite)) return;
 
-	return false;
+	SelectableListViewItem* item = composite_to_item_[&composite];
+	delete item;
+	composite_to_item_.erase(&composite);		
+	updateContents();
 }
 
-Size Control::removeRecursiveComposite(Composite* composite)
+
+Size Control::removeRecursiveComposite(Composite& composite)
 	throw()
 {
-	QListViewItem* item = findListViewItem_(composite);
-	if (item == 0) return 0;
+	if (!composite_to_item_.has(&composite)) return 0;
+	SelectableListViewItem* item = composite_to_item_[&composite];
 
-	Size nr = 0;
+	Size nr = 1;
 
-	for (Size i = 0; i < composite->getDegree(); i++)
+	for (Size i = 0; i < composite.getDegree(); i++)
 	{
-		Composite* child = composite->getChild(i);
+		Composite& child = *composite.getChild(i);
 		nr += removeRecursiveComposite(child);
 	}
 
 	delete item;
-	composite_to_item_.erase(composite);		
+	composite_to_item_.erase(&composite);		
 
-	RemovedCompositeMessage *remove_message = new RemovedCompositeMessage;
-	remove_message->setComposite(composite);
-	remove_message->setDeletable(true);
-	notify_(remove_message);
 	return nr;
 }
 
-bool Control::updateComposite(Composite* composite)
-	throw()
-{
-	if (composite == 0)
-	{
-		return false;
-	}
-
-	// update ListViewItem and insert it into the ListView
-	bool changed = updateListViewItem_(0, composite);
-
-	// update the view
-	updateContents();
-
-	return changed;
-}
 
 void Control::onNotify(Message *message)
 	throw()
@@ -219,34 +209,18 @@ void Control::onNotify(Message *message)
 	if (reactToMessages_(message))
 	{
 		// if message makes an update of the control necessary
-		// sent new selection through tree
+		// sends new selection through tree
 		updateSelection();
 	}
 }
 
-void Control::buildContextMenu(Composite* composite, QListViewItem* /* item */)
-	throw()
-{
-	if (RTTI::isKindOf<GeometricObject>(*composite))
-	{
-		String entry = String("Delete");// + getTypeName_(item).ascii();
-		insertContextMenuEntry(entry, this, SLOT(eraseGeometricObject()));
-	}
-
-	// This is used to provide the coloring for meshes...
-	if (RTTI::isKindOf<Mesh>(*composite))
-	{	
-		color_mesh_dialog_->setMesh(*(Mesh*)RTTI::castTo<Mesh>(*composite));
-		color_mesh_dialog_->setComposite(*composite->getParent());
-		insertContextMenuEntry("Properties", color_mesh_dialog_, SLOT(show()));	
-	}
-}
 
 void Control::insertContextMenuEntry(const String& name, const QObject* receiver, const char* slot, int entry_ID, int accel)
 	throw()
 {
 	context_menu_.insertItem(name.c_str(), receiver, slot, accel, entry_ID);
 }
+
 
 void Control::invalidateSelection()
 {
@@ -262,15 +236,10 @@ void Control::invalidateSelection()
 
 // set the checkboxes according to the selection in the MainControl
 void Control::setSelection_(bool open)
-	throw(MainControlMissing)
+	throw()
 {	
-	MainControl* main_control = MainControl::getMainControl(this);	
-	if (main_control == 0) 
-	{
-		throw(MainControlMissing(__FILE__, __LINE__, ""));
-	}
-
-	const HashSet<Composite*>& selection = main_control->getSelection();
+	const HashSet<Composite*>& selection = getMainControl()->getSelection();
+	
 	if (selection.size() == 0)
 	{
 		QListViewItemIterator it(this);
@@ -286,27 +255,28 @@ void Control::setSelection_(bool open)
 	QListViewItemIterator it(this);
 	for (; it.current(); ++it)
 	{
-		if (selection.has(getCompositeAddress_(it.current())))
+		SelectableListViewItem* item = (SelectableListViewItem*) it.current();
+		if (selection.has(item->getComposite()))
 		{
-			((QCheckListItem*) it.current())->setOn(true);
+			item->setOn(true);
 			if (open)
 			{
-				it.current()->setSelected(true);
-				QListViewItem* parent = it.current()->parent();
+				item->setSelected(true);
+				QListViewItem* parent = item->parent();
 				while (parent != 0)
 				{
 					parent->setOpen(true);
-					parent = parent->parent();
+					parent = (QListViewItem*)parent->parent();
 				}
 			}
 		}
 		else
 		{
-			((QCheckListItem*) it.current())->setOn(false);
+			item->setOn(false);
 			if (open)
 			{
-				it.current()->setSelected(false);
-				it.current()->setOpen(false);
+				item->setSelected(false);
+				item->setOpen(false);
 			}
 		}
 	}
@@ -315,166 +285,93 @@ void Control::setSelection_(bool open)
 
 void Control::updateSelection()
 {
-	filterSelection_(geometric_filter_);
-	sentSelection();
+	setStatusbarText("");
+	selected_.clear();
+
+	QListViewItemIterator it(this);
+	for (; it.current(); ++it)
+	{
+		SelectableListViewItem* item = (SelectableListViewItem*) it.current();
+		if (item->isSelected())
+		{
+			selected_.push_back(item->getComposite());
+		}
+	}
+
+	sendSelection();
 }
 
 
-void Control::sentSelection()
+void Control::sendSelection()
 {
 	// sent new selection through tree
 	ControlSelectionMessage* message = new ControlSelectionMessage;
 	message->setSelection(selected_);
 	message->setDeletable(true);
 
+	if (transformation_dialog_ && selected_.size()>0)
+	{
+		transformation_dialog_->setComposite(*selected_.begin());
+	}
+
 	notify_(message);
 }
 
-Information& Control::getInformationVisitor_()
+MolecularInformation& Control::getInformationVisitor_()
 	throw()
 {
 	return information_;
 }
 
-void Control::recurseGeneration_(QListViewItem* item, Composite* composite)
-	throw()
-{
-	// we iterate over all children and recurse
-	Composite::ChildCompositeIterator it = composite->beginChildComposite();
-	for (; it != composite->endChildComposite(); ++it)
-	{
-		generateListViewItem_(item, &*it);
-	}
-}
-
-bool Control::recurseUpdate_(QListViewItem* item, Composite* composite)
-	throw()
-{
-	bool tree_updated = false;
-
-	// we iterate over all children and recurse
-	Composite::ChildCompositeIterator it = composite->beginChildComposite();
-	for (; it != composite->endChildComposite(); ++it)
-	{
-		tree_updated = (tree_updated || updateListViewItem_(item, &*it));
-	}
-
-	return tree_updated;
-}
-
-void Control::filterSelection_(Filter& /*filter*/)
-	throw()
-{
-	selected_.clear();
-
-	QListViewItemIterator it(this);
-	for (; it.current(); ++it)
-	{
-		if (it.current()->isSelected())
-		{
-			Composite* composite = getCompositeAddress_(it.current());
-			selected_.push_back(composite);
-		}
-	}
-}
 
 bool Control::reactToMessages_(Message* message)
 	throw()
 {
-	bool update = false;
-	if (RTTI::isKindOf<NewCompositeMessage>(*message))
-	{
-		NewCompositeMessage *composite_message = RTTI::castTo<NewCompositeMessage>(*message);
-		update = addComposite((Composite *)composite_message->getComposite());
-	}
-	else if (RTTI::isKindOf<RemovedCompositeMessage>(*message))
+	if (RTTI::isKindOf<RemovedCompositeMessage>(*message))
   {
     RemovedCompositeMessage *composite_message = RTTI::castTo<RemovedCompositeMessage>(*message);
-    update = removeComposite((Composite *)composite_message->getComposite());
+    removeComposite(*(Composite *)composite_message->getComposite());
 	}   
-	else if  (RTTI::isKindOf<ChangedCompositeMessage>(*message))
+	else if (RTTI::isKindOf<ChangedCompositeMessage>(*message))
   {
+		#ifdef BALL_VIEW_DEBUG
+			Log.error() << "updating composite in Control" << std::endl;
+		#endif 
     ChangedCompositeMessage *composite_message = RTTI::castTo<ChangedCompositeMessage>(*message);
-		update = updateComposite(&(composite_message->getComposite()->getRoot()));
+		recurseUpdate_(0, *composite_message->getComposite());
+		#ifdef BALL_VIEW_DEBUG
+			Log.error() << "updating composite in Control finished" << std::endl;
+		#endif 
+		return (composite_message->isUpdateControl());
+	}
+	else if (RTTI::isKindOf<CompositeSelectedMessage>(*message))
+  {
+    CompositeSelectedMessage* composite_message = RTTI::castTo<CompositeSelectedMessage>(*message);
+		updateListViewItem_(0, *composite_message->getComposite());
+		return true;
 	}
 	else if (RTTI::isKindOf<NewSelectionMessage> (*message))
 	{
 		setSelection_(true);
 	}
-
-	return update;
-}
-
-QListViewItem* Control::getRoot_(QListViewItem* item)
-	throw()
-{
-	QListViewItem* parent = item;
-
-	while (parent->parent() != 0)
+	else if (RTTI::isKindOf<NewCompositeMessage>(*message))
 	{
-		parent = parent->parent();
+		NewCompositeMessage *composite_message = RTTI::castTo<NewCompositeMessage>(*message);
+		addComposite(*(Composite *)composite_message->getComposite());
 	}
 
-	return parent;
+	return false;
 }
 
-QString Control::getName_(QListViewItem* item)
+
+Control::SelectableListViewItem* Control::generateListViewItem_(SelectableListViewItem* parent, 
+																													Composite& composite, QString* default_name)
 	throw()
 {
-	if (item == 0)
-	{
-		return QString("unknown");
-	}
-
-	return item->text(COLUMN_ID__NAME);
-}
-
-QString Control::getRootName_(QListViewItem* item)
-	throw()
-{
-	return getName_(getRoot_(item));
-}
-
-QString Control::getTypeName_(QListViewItem* item)
-	throw()
-{
-	if (item == 0)
-	{
-		return QString("unknown");
-	}
-
-	return item->text(COLUMN_ID__TYPE);
-}
-
-QString Control::getRootTypeName_(QListViewItem* item)
-	throw()
-{
-	return getTypeName_(getRoot_(item));
-}
-
-Composite* Control::getCompositeAddress_(QListViewItem* item)
-	throw()
-{
-	if (item == 0)
-	{
-		return 0;
-	}
-
-	return ((SelectableListViewItem*) item)->getComposite();
-}
-
-void Control::generateListViewItem_(QListViewItem* item, Composite* composite, QString* default_name)
-	throw()
-{
-	if (composite == 0)
-	{
-		return;
-	}
-
 	// if getName returns "<xxxx>"  and name contains a valid string
 	// use it instead of the default name
 	// get information about the composite
-	composite->host(getInformationVisitor_());
+	composite.host(getInformationVisitor_());
 
 	QString name = getInformationVisitor_().getName().c_str();
 
@@ -496,68 +393,41 @@ void Control::generateListViewItem_(QListViewItem* item, Composite* composite, Q
 	QString type = getInformationVisitor_().getTypeName().c_str();
 
 	// create a new list item
-	QListViewItem* new_item = 0;
+	SelectableListViewItem* new_item = 0;
 
-	// is this the first item?
-	if (item == 0)
+	// is this a root item?
+	if (parent == 0)
 	{
-		new_item = new SelectableListViewItem(this, name, type, composite, *this);
+		new_item = new SelectableListViewItem(this, name, type, &composite, *this);
 	} 
 	else 
 	{
 		// no, insert into the current item
-		new_item = new SelectableListViewItem(item, name, type, composite, *this);
+		new_item = new SelectableListViewItem(parent, name, type, &composite, *this);
 	}
 	CHECK_PTR(new_item);
 
-	composite_to_item_[composite] = new_item;
+	composite_to_item_[&composite] = new_item;
 
 	recurseGeneration_(new_item, composite);
+
+	return new_item;
 }
 
-bool Control::updateListViewItem_(QListViewItem* item, Composite* composite, QString* /* default_name */)
+void Control::updateListViewItem_(SelectableListViewItem* parent, Composite& composite)
 	throw()
 {
-	// was the tree updated ?
-	bool tree_updated = false;
-
-	if (composite == 0)
+	// an item does not exist => create a new SelectableListViewItem 
+	if (!composite_to_item_.has(&composite))
 	{
-		return tree_updated;
+		generateListViewItem_(parent, composite);
+		return;
 	}
 
 	// find the ListViewItem belonging to the composite
-	// if it is already inserted
-	QListViewItem* attached_item = findListViewItem_(composite);
-
-	// an item does not exist => create a new listviewitem 
-	if (attached_item == 0)
-	{
-		generateListViewItem_(item, composite);
-		attached_item = item;
-		tree_updated = true;
-	}
-
-	return (recurseUpdate_(attached_item, composite) || tree_updated);
+	recurseUpdate_(composite_to_item_[&composite], composite);
 }
 
-QListViewItem* Control::findListViewItem_(Composite* composite)
-	throw()
-{
-	QListViewItemIterator it(this);
-
-	// iterate through all items
-	for (; it.current(); ++it)
-	{
-		// find the address of the composite
-		if (((SelectableListViewItem*) it.current())->getComposite() == composite)
-		{
-			return it.current();
-		}
-	}
-
-	return 0;
-}
 
 void Control::cut()
 {
@@ -573,40 +443,92 @@ void Control::cut()
 		copy_list_.clear();
 	}
 
-	// remove all system composites from the tree and from the scene
-	// but do not delete them from memory
-	System* system = MainControl::getMainControl(this)->getSelectedSystem();
-	// insert deep clone of the composite into the cut list
-	copy_list_.push_back((Composite*)system->create());
-			
-	// remove composite representation from tree
-	Size nr_of_items = removeRecursiveComposite(system);
-			
-	/*
-	GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
+	// remove the selected composites from the tree and from the scene
+	// selected systems are copied to the copy_list_
+	// for all selected items, which are not Systems, the representations of their root are rebuild
+	HashSet<Composite*> roots;
+	HashSet<Composite*> to_delete;
+	List<Composite*>::Iterator it = selected_.begin();	
+	for (; it != selected_.end(); it++)
+	{
+		getMainControl()->deselectCompositeRecursive(*it, false);
+
+		if (RTTI::isKindOf<System>(**it)) 
+		{
+			// insert deep clone of the composite into the cut list
+			copy_list_.push_back((System*)(*it)->create());
+			to_delete.insert(*it);
+		}
+		else
+		{
+			roots.insert(&(*it)->getRoot());
+			to_delete.insert(*it);
+		}
+	}
+
+	List<Composite*> childs;
+	HashSet<Composite*>::Iterator delete_it = to_delete.begin();
+	for (; delete_it != to_delete.end(); delete_it++)
+	{
+		HashSet<Composite*>::Iterator delete_it2 = to_delete.begin();
+		for (; delete_it2 != to_delete.end(); delete_it2++)
+		{
+			if ((*delete_it)->isAncestorOf(**delete_it2))
+			{
+				childs.push_back(*delete_it2);
+			}
+		}
+	}
+
+	List<Composite*>::Iterator child_it = childs.begin();
+	for (; child_it != childs.end(); child_it++)
+	{
+		to_delete.erase(*child_it);
+	}
+	
+	RemovedCompositeMessage* remove_message = new RemovedCompositeMessage;
+	remove_message->setDeletable(false);
+	Size nr_of_items = 0;
+
+	delete_it = to_delete.begin();
+	for (; delete_it!= to_delete.end(); delete_it++)
+	{
+		// remove composite representation from tree
+		nr_of_items += removeRecursiveComposite(**delete_it);
+		remove_message->setComposite(*delete_it);
+		notify_(remove_message);
+	}
+
+	setStatusbarText("Deleted " + String(nr_of_items) + " items.");
+
+	selected_.clear();
+	ControlSelectionMessage* message = new ControlSelectionMessage;
+	message->setDeletable(true);
 	notify_(message);
 	*/
 	selected_.clear();
 	sentSelection();
 
-	// update scene
-	SceneMessage *scene_message = new SceneMessage;
-	scene_message->updateOnly();
-	scene_message->setDeletable(true);
-	notify_(scene_message);
+	ChangedCompositeMessage* ccmessage = new ChangedCompositeMessage;
+	ccmessage->setDeletable(false);
+	ccmessage->setUpdateControl(false);
+	HashSet<Composite*>::Iterator roots_it = roots.begin();
+	for (roots_it = roots.begin(); roots_it != roots.end(); roots_it++)
+	{
+		ccmessage->setComposite(*roots_it);
+		notify_(ccmessage);
+	}
 
-	setStatusbarText("Deleted the items.");
+	delete ccmessage;
 }
+
 
 void Control::copy()
 {
 	const List<Composite*> selection = getSelection();
-	if (selection.size() == 0)
-	{
-		return;
-	}
+	if (selection.size() == 0) return;
 
-	setStatusbarText("copying %d objects ..." + String(selection.size()));
+	setStatusbarText("copying " + String(selection.size()) + " objects ...");
 
 	// delete old cutted composites
 	if (copy_list_.size() > 0)
@@ -621,24 +543,24 @@ void Control::copy()
 	}
 
 	// copy the selected composites into the copy_list_
-	List<Composite*>::ConstIterator list_it = selection.begin();	
-	for (; list_it != selection.end(); ++list_it)
+	List<Composite*>::Iterator it = selected_.begin();	
+	for (; it != selected_.end(); it++)
 	{
-		// insert deep clone of the composite into the cut list
-		copy_list_.push_back((Composite*)(*list_it)->create());
+		if (RTTI::isKindOf<System>(**it)) 
+		{
+			copy_list_.push_back((Composite*)(*it)->create());
+		}
 	}
-
+	
 	setStatusbarText("");
 }
 
+
 void Control::paste()
 {
-	if (copy_list_.size() == 0)
-	{
-		return;
-	}
+	if (copy_list_.size() == 0) return;
 
-	setStatusbarText("pasting %d objects ..." + String(copy_list_.size()));
+	setStatusbarText("pasting " + String(copy_list_.size()) + " objects...");
 
 	// copying composites
 	List<Composite*>::ConstIterator list_it = copy_list_.begin();	
@@ -661,6 +583,7 @@ void Control::paste()
 	setStatusbarText("");
 }
 
+
 void Control::clearClipboard()
 {
 	setStatusbarText("clearing clipboard...");
@@ -680,117 +603,193 @@ void Control::clearClipboard()
 	setStatusbarText("");
 }
 
-void Control::onContextMenu(QListViewItem* item,  const QPoint& point, int /* column */)
+
+void Control::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* column */)
 {
 	// clear the context menu
 	context_menu_.clear();
 
 	// get composite address
-	Composite* composite = getCompositeAddress_(item);
+	if (item == 0) return;
+
+	Composite* composite = ((SelectableListViewItem*)item)->getComposite();
+
 	// create the context menu
-	if (composite != 0 && item != 0)
+	if (composite != 0)
 	{
 		context_composite_ = composite;
-		context_item_ = item;
+		context_item_ = (SelectableListViewItem*)item;
 
-		buildContextMenu(composite, item);
+		buildContextMenu(*composite);
 	}
 
-	// is the context menu not empty
+	// show the context menu if it is not empty
 	if (context_menu_.count())
 	{
 		context_menu_.exec(point);
 	}
 }
 
-void Control::eraseGeometricObject()
+
+void Control::selectedComposite_(Composite* composite, bool state)
 {
-	Composite *parent = context_composite_->getParent();
-
-	if (parent != 0)
-	{
-		parent->removeChild(*context_composite_);
-
-		// mark root Composite for update
-		ChangedCompositeMessage *changed_message = new ChangedCompositeMessage;
-		changed_message->setComposite(parent->getRoot());
-		changed_message->setDeletable(true);
-		notify_(changed_message);
-		
-		// delete composite
-		delete context_composite_;
-	}
-	else // no parent => composite is root
-	{
-		// remove Composite from from mainControl
-		RemovedCompositeMessage *remove_message = new RemovedCompositeMessage;
-		remove_message->setComposite(context_composite_);
-		remove_message->setDeletable(true);
-		notify_(remove_message);
-	}
-
-	// update scene
-	SceneMessage *scene_message = new SceneMessage;
-	scene_message->updateOnly();
-	scene_message->setDeletable(true);
-	notify_(scene_message);
-
-	// clean up
-	delete context_item_;
-	updateContents();
-}
-
-void Control::selectedComposite(Composite* composite, bool state)
-{
-	const HashSet<Composite*>& selection = MainControl::getMainControl(this)->getSelection();
+	const HashSet<Composite*>& selection = getMainControl()->getSelection();
 	if (selection.has(composite) == state)
 	{
 		return;
 	}
 
-	MainControl::getMainControl(this)->selectCompositeRecursive(composite, state);
+	if (state)
+	{
+		getMainControl()->selectCompositeRecursive(composite, true);
+	}
+	else
+	{
+		getMainControl()->deselectCompositeRecursive(composite, true);
+	}
 	
-	if (state)	selectRecursive_(composite);
-	else			  deselectRecursive_(composite);
+	SelectableListViewItem* item = composite_to_item_[composite];
+	item->setOn(state);
+  item->setSelected(true);
+	if (selection.size() < 10)
+	{
+		QListViewItem* parent = item->parent();
+		while (parent != 0)
+		{
+			parent->setOpen(true);
+			parent = parent->parent();
+		}
+  }
 
-	
 	CompositeSelectedMessage* message = new CompositeSelectedMessage(composite, state);
 	message->setDeletable(false);
-	message->composite_ = composite;
+	message->setComposite(composite);
 	notify_(message);
 	
 	setSelection_(false);
-	MainControl::getMainControl(this)->printSelectionInfos();
 }
 
-void Control::selectRecursive_(Composite* composite)
+
+void Control::recurseGeneration_(SelectableListViewItem* item, Composite& composite)
 	throw()
 {
-	if (RTTI::isKindOf<GeometricObject> (*composite)) return;
-	if (!composite_to_item_.has(composite)) return;		
-	((QCheckListItem*) composite_to_item_[composite])->setOn(true);		
-	for (Size i=0; i< composite->getDegree();i++)
+	Composite::ChildCompositeReverseIterator it = composite.rbeginChildComposite();
+	for (; it != composite.rendChildComposite(); ++it)
 	{
-		selectRecursive_(composite->getChild(i));			
+		generateListViewItem_(item, *it);
 	}
-}		
+}
 
-void Control::deselectRecursive_(Composite* composite)
+
+void Control::recurseUpdate_(SelectableListViewItem* item, Composite& composite)
 	throw()
 {
-	if (RTTI::isKindOf<GeometricObject> (*composite)) return;
-	if (!composite_to_item_.has(composite)) return;		
-	((QCheckListItem*) composite_to_item_[composite])->setOn(false);
-	for (Size i=0; i< composite->getDegree();i++)
+	Composite::ChildCompositeReverseIterator it = composite.rbeginChildComposite();
+	for (; it != composite.rendChildComposite(); ++it)
 	{
-		deselectRecursive_(composite->getChild(i));			
+		updateListViewItem_(item, *it);
 	}
-}		
+}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/WIDGETS/control.iC>
-#		endif
+
+void Control::buildContextMenu(Composite& composite)
+	throw()
+{
+	insertContextMenuEntry("Cut", this, SLOT(cut()), OBJECT__CUT);
+	insertContextMenuEntry("Copy", this, SLOT(copy()), OBJECT__COPY);
+	insertContextMenuEntry("Paste", this, SLOT(paste()), OBJECT__PASTE);
+
+	insertContextMenuEntry("Move", this, SLOT(move()), OBJECT__MOVE);
+
+	bool composites_muteable = getMainControl()->compositesAreMuteable();
+	context_menu_.setItemEnabled(OBJECT__CUT, composites_muteable);
+	context_menu_.setItemEnabled(OBJECT__PASTE, getCopyList_().size() > 0 && composites_muteable);
+	context_menu_.setItemEnabled(OBJECT__MOVE, composites_muteable);
+	context_menu_.insertSeparator();
+
+	insertContextMenuEntry("Select", this, SLOT(select()), SELECT);
+	insertContextMenuEntry("Deselect", this, SLOT(deselect()), DESELECT);
+	context_menu_.setItemEnabled(SELECT,   !composite.isSelected() && composites_muteable);
+	context_menu_.setItemEnabled(DESELECT,  composite.isSelected() && composites_muteable);
+}
+
+
+void Control::select()
+{
+	// copy list, because selection could change
+	List<Composite*> selection = selected_;
+
+	List<Composite*>::Iterator it = selection.begin();
+	for(; it != selection.end(); it++)
+	{
+		selectedComposite_(*it, true);
+	}
+}
+
+void Control::deselect()
+{
+	// copy list, because selection could change
+	List<Composite*> selection = selected_;
+
+	List<Composite*>::Iterator it = selection.begin();
+	for(; it != selection.end(); it++)
+	{
+		selectedComposite_(*it, false);
+	}	
+}
+
+void Control::move()
+{
+	if (selected_.size() == 0) return;
+
+	if (transformation_dialog_) 
+	{
+		transformation_dialog_->hide();
+		delete transformation_dialog_;
+	}
+	
+	transformation_dialog_ = new TransformationDialog(this);
+	transformation_dialog_->show();
+	transformation_dialog_->setComposite(*selected_.begin());
+}
+
+void Control::switchShowWidget()
+	throw()
+{
+	QMenuBar* menu = getMainControl()->menuBar();
+	if (menu->isItemChecked(window_menu_entry_id_))
+	{
+		hide();
+		menu->setItemChecked(window_menu_entry_id_, false);
+	}
+	else
+	{
+		show();
+		menu->setItemChecked(window_menu_entry_id_, true);
+	}
+}
+
+void Control::writePreferences(INIFile& inifile)
+	throw()
+{
+	inifile.insertValue("WINDOWS", "Control::on", 
+		String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
+}
+
+void Control::fetchPreferences(INIFile & inifile)
+	throw()
+{
+	if (!inifile.hasEntry("WINDOWS", "Control::on")) return;
+	if (inifile.getValue("WINDOWS", "Control::on").toUnsignedInt() == 0) 
+	{
+		switchShowWidget();
+	}
+}
+
+
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/GUI/WIDGETS/control.iC>
+#	endif
 
 	} // namespace VIEW
-
 } // namespace BALL

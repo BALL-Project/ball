@@ -3,20 +3,16 @@ DIRECTORY=VIEW/GUI/KERNEL
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	compositeDescriptor.C\
-	glDisplayList.C\
-	glEntityDescriptor.C\
-	glObject.C\
-	glPrimitiveManager.C\
-	glQuadricObject.C\
 	mainControl.C\
 	objectCreator.C\
-	server.C
+	server.C\
+	representation.C\
+	primitiveManager.C\
+	stage.C\
+	renderer.C
 
 MOC_SOURCES=\
 	mainControl_moc.C
-
-MOC=/KM/comp-bio/BALL-contrib/qt/bin/IRIX6/moc
 
 include ../../../common.mak
 include .Dependencies

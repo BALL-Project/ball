@@ -3,8 +3,8 @@ DIRECTORY=MOLVIEW/KERNEL
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	extendedProperty.C\
-	molecularMessage.C
+	molecularMessage.C\
+	moleculeObjectCreator.C
 
 include ../../common.mak
 include .Dependencies

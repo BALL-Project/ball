@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.C,v 1.48 2003/05/26 14:22:51 oliver Exp $
+// $Id: string.C,v 1.49 2003/08/26 09:17:45 oliver Exp $
 //
 
 #include <BALL/DATATYPE/string.h>

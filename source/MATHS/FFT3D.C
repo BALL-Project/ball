@@ -1,4 +1,8 @@
-// $Id: FFT3D.C,v 1.5 2003/05/06 12:34:59 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: FFT3D.C,v 1.6 2003/08/26 09:17:50 oliver Exp $
+//
 
 #include <BALL/MATHS/FFT3D.h>
 

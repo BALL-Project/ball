@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.15 2003/07/25 12:45:55 amoll Exp $
+// $Id: MOLFile.C,v 1.16 2003/08/26 09:17:46 oliver Exp $
+//
+
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -81,11 +83,11 @@ namespace BALL
 	}
 
 	bool MOLFile::write(const Molecule& molecule)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != File::OUT)
 		{
-			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 
 		// write header block
@@ -151,7 +153,7 @@ namespace BALL
 			atom.exact_change = false;
 
 			// store the atom index in a hash map
-			atom_map.insert(pair<const Atom*, Position>(&*it, atom_number++));
+			atom_map.insert(std::pair<const Atom*, Position>(&*it, atom_number++));
 
 			writeAtomLine_(atom);
 		}
@@ -208,7 +210,7 @@ namespace BALL
 	}
 
 	bool MOLFile::write(const System& system)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		MoleculeConstIterator mol = system.beginMolecule();
 		if (!write(*mol)) return false;

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.C,v 1.8 2003/07/11 15:27:44 amoll Exp $
+// $Id: genericMolFile.C,v 1.9 2003/08/26 09:17:47 oliver Exp $
+//
 
 #include <BALL/FORMAT/genericMolFile.h>
 #include <BALL/KERNEL/system.h>
@@ -66,21 +67,21 @@ namespace BALL
 	}
 
 	bool GenericMolFile::write(const Molecule& /* molecule */)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != File::OUT)
 		{
-			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 		return true;
 	}
 
 	bool GenericMolFile::write(const System& system)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != File::OUT)
 		{
-			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 
 		initWrite_();
@@ -101,7 +102,7 @@ namespace BALL
 	}
  
 	GenericMolFile& GenericMolFile::operator << (const System& system)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		write(system);
 		return *this;
@@ -120,7 +121,7 @@ namespace BALL
 	}
  
 	GenericMolFile& GenericMolFile::operator << (const Molecule& molecule)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		write(molecule);
 		return *this;

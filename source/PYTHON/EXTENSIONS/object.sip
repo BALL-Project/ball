@@ -1,5 +1,11 @@
- class Object
- {
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: object.sip,v 1.4 2003/08/26 09:18:18 oliver Exp $
+//
+
+class Object
+{
 %HeaderCode
 #include <BALL/CONCEPT/object.h>
 using namespace BALL;
@@ -25,4 +31,4 @@ using namespace BALL;
   // friend ::std::ostream& operator << (::std::ostream& s, const Object& /object/);
   virtual bool isValid() const throw();
   //virtual void dump(::std::ostream& s = std::cout, unsigned long depth = 0) const;
- };
+};

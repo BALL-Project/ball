@@ -1,21 +1,24 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.C,v 1.5 2002/02/27 12:25:11 sturm Exp $
+// $Id: information.C,v 1.6 2003/08/26 09:18:35 oliver Exp $
 
 #include <BALL/VIEW/FUNCTOR/information.h>
-
-using namespace std;
+#include <BALL/VIEW/PRIMITIV/line.h>
+#include <BALL/VIEW/PRIMITIV/sphere.h>
+#include <BALL/VIEW/PRIMITIV/tube.h>
+#include <BALL/VIEW/PRIMITIV/point.h>
+#include <BALL/VIEW/PRIMITIV/mesh.h>
+#include <BALL/VIEW/PRIMITIV/box.h>
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
 		Information::Information()
 			throw()
-			:	Visitor<Composite>()
+			:	Visitor<GeometricObject>()
 		{
 			clear();
 		}
@@ -24,154 +27,95 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Information>() << endl;
+				Log.info() << "Destructing object " << (void *)this 
+									 << " of class " << RTTI::getName<Information>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 
 		void Information::clear()
 			throw()
 		{
-				name_ = "unkown";
-				type_name_ = "unkown type";
-				type_ = TYPE__UNKNOWN;
+			name_ = "unkown";
+			type_name_ = "unkown type";
+			type_ = TYPE__UNKNOWN;
 		}
 
-		void Information::destroy()
-			throw()
+		void Information::visit(GeometricObject& object)
 		{
+			getType_(object);
+			getTypeName_();
+			getName_(object);
 		}
 
-		void Information::visit(Composite& composite)
-		{
-			getType_(composite);
-			getTypeName_(composite);
-			getName_(composite);
-		}
-
-	  void Information::getType_(Composite& composite)
+	  void Information::getType_(GeometricObject& object)
     {
 			Information::Type type = TYPE__UNKNOWN;
 			
-			if (RTTI::isKindOf<Line>(composite))
+			if (RTTI::isKindOf<Line>(object))
 			{
 				type = TYPE__LINE;
 			}	
-			else if (RTTI::isKindOf<Sphere>(composite))
+			else if (RTTI::isKindOf<Sphere>(object))
 			{
 				type = TYPE__SPHERE;
 			}
-			else if (RTTI::isKindOf<Tube>(composite))
+			else if (RTTI::isKindOf<Tube>(object))
 			{
 				type = TYPE__TUBE;
 			}
-			else if (RTTI::isKindOf<Point>(composite))
+			else if (RTTI::isKindOf<Point>(object))
 			{
 				type = TYPE__POINT;
 			}	
-			else if (RTTI::isKindOf<Mesh>(composite))
+			else if (RTTI::isKindOf<Mesh>(object))
 			{
 				type = TYPE__MESH;
 			}	
-			else if (RTTI::isKindOf<SimpleBox>(composite))
+			else if (RTTI::isKindOf<Box>(object))
 			{
-				type = TYPE__SIMPLE_BOX;
-			}	
-			else if (RTTI::isKindOf<GeometricObject>(composite))
-			{
-				type = TYPE__GEOMETRIC_OBJECT;
-			}	
-			else
-			{
-				type = TYPE__COMPOSITE;
+				type = TYPE__BOX;
 			}	
 
 			type_ = type;
     }
 
-	  void Information::getTypeName_(Composite& composite)
+	  void Information::getTypeName_()
     {
-			String temp;
-			
 			switch(type_)
 			{
 			  case TYPE__LINE:
-					temp = "Line";
+					type_name_ = "Line";
 					break;
 
 			  case TYPE__SPHERE:
-					temp = "Sphere";
+					type_name_ = "Sphere";
 					break;
 					
 			  case TYPE__TUBE:
-					temp = "Tube";
+					type_name_ = "Tube";
 					break;
 					
 			  case TYPE__POINT:
-					temp = "Point";
+					type_name_ = "Point";
 					break;
 					
 			  case TYPE__MESH:
-					temp = "Mesh";
+					type_name_ = "Mesh";
 					break;
 					
-			  case TYPE__SIMPLE_BOX:
-					temp = "SimpleBox";
+			  case TYPE__BOX:
+					type_name_ = "Box";
 					break;
-					
-  			case TYPE__GEOMETRIC_OBJECT:
-					{
-						// every GeometricObject has a type name
-						// (default set to: GeometricObject)
-						// new objects can write their type in this variable
-						GeometricObject* object = RTTI::castTo<GeometricObject>(composite);
 
-						temp = object->getTypeName();
-					}
-					break;
-					
-			  case TYPE__COMPOSITE:
-					temp = "Composite";
-					break;
-					
   			default:
-					temp = "unknown";
+					type_name_ = "unknown GeometricObject";
 					break;
 			}
-
-			type_name_ = temp;
     }
 
-	  void Information::getName_(Composite& composite)
+	  void Information::getName_(GeometricObject& object)
     {
-			String temp = "UNKNOWN";
-			
-			switch(type_)
-			{
-			  case TYPE__LINE:
-			  case TYPE__SPHERE:
-			  case TYPE__TUBE:
-			  case TYPE__POINT:
-			  case TYPE__MESH:
-			  case TYPE__SIMPLE_BOX:
-			  case TYPE__GEOMETRIC_OBJECT:
-				{
-					GeometricObject* object = RTTI::castTo<GeometricObject>(composite);
-					temp = object->getName();
-				}
-				break;
-				
-			  case TYPE__COMPOSITE:
-				{
-					temp = "";
-				}
-				break;
-				
-			  default:
-				  break;
-			}
+			String temp = object.getName();
 			
 			// empty string
 			if (temp == "")
@@ -189,5 +133,4 @@ namespace BALL
 #		endif
 
 	} // namespace VIEW
-
 } // namespace BALL

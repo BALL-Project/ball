@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.C,v 1.7 2003/07/11 15:27:44 amoll Exp $
+// $Id: SDFile.C,v 1.8 2003/08/26 09:17:47 oliver Exp $
+//
 
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -48,7 +49,7 @@ namespace BALL
 	}
 
 	bool SDFile::write(const System& system)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		MoleculeConstIterator molecule = system.beginMolecule();
 		for (; +molecule; ++molecule)
@@ -60,7 +61,7 @@ namespace BALL
 	}
 	
 	bool SDFile::write(const Molecule& molecule)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		if (!MOLFile::write(molecule)) return false;
 		writePropertyBlock_(molecule);

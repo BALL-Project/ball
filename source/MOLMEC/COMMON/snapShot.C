@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.C,v 1.30 2003/08/21 20:36:02 amoll Exp $
+// $Id: snapShot.C,v 1.31 2003/08/26 09:17:52 oliver Exp $
+//
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/KERNEL/system.h>

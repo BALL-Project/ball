@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.8 2003/06/10 21:30:30 amoll Exp $
+// $Id: backboneModel.C,v 1.9 2003/08/26 09:17:59 oliver Exp $
+//
 
 #include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
-#include <BALL/MOLVIEW/PRIMITIV/backbone.h>
+#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
 #include <BALL/VIEW/PRIMITIV/sphere.h>
 #include <BALL/VIEW/PRIMITIV/tube.h>
 #include <BALL/KERNEL/atom.h>
@@ -21,21 +22,23 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
+		AddBackboneModel::SplinePoint::SplinePoint(const Vector3& point, const ColorRGBA& color)
+			: point_(point),
+				tangent_(),
+				color_(color)
+		{}
+
 		AddBackboneModel::AddBackboneModel()
 			throw()
-			: BaseModelProcessor(),
-				last_parent_(0),
-				root_(0),
-				backbone_(0)
+			: MolecularModelProcessor(),
+				last_parent_(0)
 		{
 		}
 
 		AddBackboneModel::AddBackboneModel(const AddBackboneModel& add_Backbone)
 			throw()
-			:	BaseModelProcessor(add_Backbone),
-				last_parent_(0),
-				root_(0),
-				backbone_(0)
+			:	MolecularModelProcessor(add_Backbone),
+				last_parent_(0)
 		{
 		}
 
@@ -51,69 +54,56 @@ namespace BALL
 		void AddBackboneModel::clear()
 			throw()
 		{
-			BaseModelProcessor::clear();
+			MolecularModelProcessor::clear();
 			spline_vector_.clear();
 			last_parent_ = 0;
-			backbone_ = 0;
-			root_ = 0;
 		}
 
 		bool AddBackboneModel::start()
 		{
-			return BaseModelProcessor::start();
+			return MolecularModelProcessor::start();
 		}
 				
 		bool AddBackboneModel::finish()
 		{
-			if (root_ == 0 || 
-					spline_vector_.size() == 0) return false;
+			if (spline_vector_.size() == 0) return false;
 
-			buildBackbone_();
-			root_->appendChild(*backbone_);
-			spline_vector_.clear();
-			last_parent_ = 0;
-			backbone_ = 0;
-			root_ = 0;
+			createBackbone_();
 			return true;
 		}
-				
+
 		Processor::Result AddBackboneModel::operator () (Composite& composite)
 		{
-			if (root_ == 0)
-			{
-				root_ = &composite.getRoot();
-			}
-
 			if (!RTTI::isKindOf<Residue>(composite))  return Processor::CONTINUE;
 			Residue& residue(*RTTI::castTo<Residue>(composite));
 			if (!residue.isAminoAcid()) return Processor::CONTINUE;
 			
 			// if have already visited some residues and this reside was not in the same
 			// chain, build the backbone for the last chain
+			// this prevents building backbones between different chains
 			if (last_parent_ != 0 &&
-					residue.getParent() != last_parent_ &&
+					residue.getParent()->getParent() != last_parent_ &&
 					spline_vector_.size() > 0) 
 			{
-				buildBackbone_();
+				createBackbone_();
 			}
 			
-			last_parent_ = residue.getParent();
+			last_parent_ = residue.getParent()->getParent();
 			AtomIterator it;
 			BALL_FOREACH_ATOM(residue, it)
 			{
-				// collect only CA-Atoms
-				if ((it->getName().hasSubstring(String("CA"))) ||
-				    (it->getName().hasSubstring(String("CH3")) &&
-						(residue.getFullName() == "ACE" ||
+				// collect only CA-Atoms and CH3 atoms in ACE and NME
+				if ((it->getName().hasSubstring("CA")) ||
+				    (it->getName().hasSubstring("CH3") &&
+						(residue.getFullName() == "ACE" 	||
 						 residue.getFullName() == "ACE-N" ||
-						 residue.getFullName() == "NME" ||
+						 residue.getFullName() == "NME" 	||
 						 residue.getFullName() == "NME-C" )
 						))
 				{
-					it->host(*getColorCalculator());
-					SplinePoint spline_point;
-					spline_point.setVector((*it).getPosition());
-					spline_point.setColor(getColorCalculator()->getColor());
+					getColorProcessor()->operator() (&*it);
+				
+					SplinePoint spline_point((*it).getPosition(), getColorProcessor()->getColor());
 					spline_vector_.push_back(spline_point);
 				}
 			}
@@ -129,17 +119,16 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			BaseModelProcessor::dump(s, depth + 1);
+			MolecularModelProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
 
 		// creates the backbone representation from the given atom and atom colors list
-		void AddBackboneModel::buildBackbone_()
+		void AddBackboneModel::createBackbone_()
 			throw()
 		{
-			if (backbone_ == 0) createBackbone_();
 			have_start_point_ = false;
 			calculateTangentialVectors_();
 			createSplinePath_();
@@ -231,20 +220,17 @@ namespace BALL
 		{
 			if (have_start_point_)
 			{
-				if (point == last_point_)
-				{
-					return;
-				}
+				if (point == last_point_) return;
 				
 				// build tube connection to the last point
-				Tube* tube = backbone_->createTube_();
+				Tube* tube = new Tube;
+				if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
+				
 				tube->setRadius(0.4);
 				tube->setVertex1(last_point_);
 				tube->setVertex2(point);
 				tube->setColor(color);
-				backbone_->appendChild(*tube);
-				tube->setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
-				tube->PropertyManager::set(*this);
+				geometric_objects_.push_back(tube);
 			}
 			else
 			{
@@ -254,29 +240,15 @@ namespace BALL
 			last_point_ = point;
 
 			// create sphere for the point
-			Sphere* sphere = backbone_->createSphere_();
+			Sphere* sphere = new Sphere;
+			if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+
 			sphere->setRadius(0.4);
-			sphere->setVertex(point);
+			sphere->setPosition(point);
 			sphere->setColor(color);
-			backbone_->appendChild(*sphere);
-			sphere->setProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
-			sphere->PropertyManager::set(*this);
-			
-			Line* line = backbone_->createLine_();
-			line->PropertyManager::set(*this);
-			line->setProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC);
-			line->setVertex1(last_point_);
-			line->setVertex2(point);
-			line->setColor(color);
-			backbone_->appendChild(*line);
+			geometric_objects_.push_back(sphere);
 		}
 
-		Backbone* AddBackboneModel::createBackbone_()
-			throw()
-		{
-			backbone_ = new Backbone;
-			return backbone_;
-		}
-
+		
 	} // namespace MOLVIEW
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.18 2003/05/04 20:15:44 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.19 2003/08/26 09:18:26 oliver Exp $
 //
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>

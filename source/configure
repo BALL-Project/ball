@@ -310,7 +310,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=`cd ..; pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX BALLVIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS ADDITIONAL_COMMENTS USE_BALLVIEW BALLVIEW_PLATFORM BALLVIEW_INCLUDES LIBBALLVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE VALGRIND VALGRIND_OPTS BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX BALLVIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS ADDITIONAL_COMMENTS USE_BALLVIEW BALL_HAS_VIEW BALLVIEW_PLATFORM BALLVIEW_INCLUDES LIBBALLVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -849,7 +849,7 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-optimization   optimize the library for speed. Omits debug info!
   --enable-debuginfo      add -g to the compiler flags (to create debug information)
-  --disable-BALLVIEW      disable the compilation of BALLVIEW, the visualization component
+  --disable-VIEW          disable the compilation of the visualization component
   --enable-64             create 64 bit binaries (if allowed by the compiler)
   --enable-python         enable Python support and search for executable
   --enable-fftw           enable the build of BALL with support for FFTW (a FFT library)
@@ -1390,9 +1390,9 @@ if test "${enable_debuginfo+set}" = set; then
   enableval="$enable_debuginfo"
 
 fi;
-# Check whether --enable-BALLVIEW or --disable-BALLVIEW was given.
-if test "${enable_BALLVIEW+set}" = set; then
-  enableval="$enable_BALLVIEW"
+# Check whether --enable-VIEW or --disable-VIEW was given.
+if test "${enable_VIEW+set}" = set; then
+  enableval="$enable_VIEW"
 
 fi;
 # Check whether --enable-64 or --disable-64 was given.
@@ -1651,10 +1651,12 @@ else
 	USE_LIBXNET=false
 fi
 
-if test "$with_BALLVIEW" = "no" -o "$enable_BALLVIEW" = "no"; then
+if test "$with_VIEW" = "no" -o "$enable_VIEW" = "no"; then
 	USE_BALLVIEW=false
+	BALL_HAS_VIEW=""
 else
 	USE_BALLVIEW=true
+	BALL_HAS_VIEW=true
 fi
 
 if test "$with_xdr" = "no" ; then
@@ -16274,7 +16276,7 @@ echo "${ECHO_T}(${QT_LIBPATH})" >&6
 
 
 																QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
-				QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
+				QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3 | ${TR} -d \\"`
 				echo "$as_me:$LINENO: checking for QT version number in qglobal.h" >&5
 echo $ECHO_N "checking for QT version number in qglobal.h... $ECHO_C" >&6
 				if test "${QT_VERSION}" = "" ; then
@@ -17355,7 +17357,9 @@ echo "${ECHO_T}" >&6
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 		fi
-                if test ! -x "${MOC}" ; then
+            		echo "$as_me:$LINENO: checking whether we can run moc" >&5
+echo $ECHO_N "checking whether we can run moc... $ECHO_C" >&6
+    if test ! -x "${MOC}" ; then
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
 			echo "$as_me:$LINENO: result: The QT Meta Object Compiler (moc) found in " >&5
@@ -17366,12 +17370,41 @@ echo "${ECHO_T}\"  ${MOC}\"" >&6
 echo "${ECHO_T}seems not to be an executable!" >&6
 			echo "$as_me:$LINENO: result: Please include the correct path to moc into your" >&5
 echo "${ECHO_T}Please include the correct path to moc into your" >&6
-			echo "$as_me:$LINENO: result: PATH environment variable or specify the path to uic" >&5
-echo "${ECHO_T}PATH environment variable or specify the path to uic" >&6
+			echo "$as_me:$LINENO: result: PATH environment variable or specify the path to moc" >&5
+echo "${ECHO_T}PATH environment variable or specify the path to moc" >&6
 			echo "$as_me:$LINENO: result: using the option --with-moc=PATH to rerun configure." >&5
 echo "${ECHO_T}using the option --with-moc=PATH to rerun configure." >&6
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+			{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+		else
+			echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+			echo "$as_me:$LINENO: checking moc version" >&5
+echo $ECHO_N "checking moc version... $ECHO_C" >&6
+			MOC_VERSION=`${MOC} -v 2>&1 | ${TR} -d "()" | ${SED} "s/.* Qt //"`
+			echo "$as_me:$LINENO: result: ${MOC_VERSION}" >&5
+echo "${ECHO_T}${MOC_VERSION}" >&6
+
+			if test "${MOC_VERSION}" != "${QT_VERSION_STR}" ; then
+				echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+				echo "$as_me:$LINENO: result: QT version (${QT_VERSION_STR}) is incompatible with moc version (${MOC_VERISON})!" >&5
+echo "${ECHO_T}QT version (${QT_VERSION_STR}) is incompatible with moc version (${MOC_VERISON})!" >&6
+				echo "$as_me:$LINENO: result: Please check your QTDRI environment variable, include the correct" >&5
+echo "${ECHO_T}Please check your QTDRI environment variable, include the correct" >&6
+				echo "$as_me:$LINENO: result: path to moc in your PATH environment variable, or specify the correct" >&5
+echo "${ECHO_T}path to moc in your PATH environment variable, or specify the correct" >&6
+				echo "$as_me:$LINENO: result: path to moc using the option --with-moc=PATH to rerun configure." >&5
+echo "${ECHO_T}path to moc using the option --with-moc=PATH to rerun configure." >&6
+				echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+				{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+			fi
 		fi
 	fi
 
@@ -17442,7 +17475,9 @@ echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
 		fi
 
-                if test ! -x "${UIC}" ; then
+            		echo "$as_me:$LINENO: checking whether uic is executable" >&5
+echo $ECHO_N "checking whether uic is executable... $ECHO_C" >&6
+    if test ! -x "${UIC}" ; then
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
 			echo "$as_me:$LINENO: result: The QT User Interface Compiler (uic) found in " >&5
@@ -17459,6 +17494,35 @@ echo "${ECHO_T}PATH environment variable or specify the path to uic" >&6
 echo "${ECHO_T}using the option --with-uic=PATH to rerun configure." >&6
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+			{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+		else
+			echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+			echo "$as_me:$LINENO: checking uic version" >&5
+echo $ECHO_N "checking uic version... $ECHO_C" >&6
+			UIC_VERSION=`${UIC} -version 2>&1 | ${TR} -d "()" | ${SED} "s/.*version //"`
+			echo "$as_me:$LINENO: result: ${UIC_VERSION}" >&5
+echo "${ECHO_T}${UIC_VERSION}" >&6
+
+			if test "${UIC_VERSION}" != "${QT_VERSION_STR}" ; then
+				echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+				echo "$as_me:$LINENO: result: QT version (${QT_VERSION_STR}) is incompatible with uic version (${UIC_VERISON})!" >&5
+echo "${ECHO_T}QT version (${QT_VERSION_STR}) is incompatible with uic version (${UIC_VERISON})!" >&6
+				echo "$as_me:$LINENO: result: Please check your QTDIR environment variable, include the correct" >&5
+echo "${ECHO_T}Please check your QTDIR environment variable, include the correct" >&6
+				echo "$as_me:$LINENO: result: path to uic in your PATH environment variable, or specify the correct" >&5
+echo "${ECHO_T}path to uic in your PATH environment variable, or specify the correct" >&6
+				echo "$as_me:$LINENO: result: path to uic using the option --with-uic=PATH to rerun configure." >&5
+echo "${ECHO_T}path to uic using the option --with-uic=PATH to rerun configure." >&6
+				echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+				{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+			fi
 		fi
 	fi
 
@@ -18903,6 +18967,7 @@ s,@DYNAR@,$DYNAR,;t t
 s,@DYNAROPTS@,$DYNAROPTS,;t t
 s,@ADDITIONAL_COMMENTS@,$ADDITIONAL_COMMENTS,;t t
 s,@USE_BALLVIEW@,$USE_BALLVIEW,;t t
+s,@BALL_HAS_VIEW@,$BALL_HAS_VIEW,;t t
 s,@BALLVIEW_PLATFORM@,$BALLVIEW_PLATFORM,;t t
 s,@BALLVIEW_INCLUDES@,$BALLVIEW_INCLUDES,;t t
 s,@LIBBALLVIEW@,$LIBBALLVIEW,;t t

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.C,v 1.30 2003/05/23 10:26:02 oliver Exp $
+// $Id: property.C,v 1.31 2003/08/26 09:17:45 oliver Exp $
+//
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>

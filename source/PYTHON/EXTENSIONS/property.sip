@@ -1,4 +1,8 @@
-// $Id: property.sip,v 1.2 2001/12/28 02:25:52 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: property.sip,v 1.3 2003/08/26 09:18:19 oliver Exp $
+//
 
 class NamedProperty
   : PersistentObject

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.C,v 1.9 2003/05/08 12:05:11 oliver Exp $
+// $Id: surfaceProcessor.C,v 1.10 2003/08/26 09:18:28 oliver Exp $
+//
 
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 

@@ -1,4 +1,9 @@
-# $Id: Makefile,v 1.36 2003/07/21 07:54:00 amoll Exp $
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
+#
+# $Id: Makefile,v 1.37 2003/08/26 09:17:35 oliver Exp $
+#
+
 
 EXECUTABLE=molview
 DIRECTORY=APPLICATIONS/MOLVIEW
@@ -29,14 +34,10 @@ MOC_SOURCES=\
 	DIALOGS/DlgAboutData_moc.C\
 	mainframe_moc.C
 
-
 SPECIAL_OBJECTS=
 
 molview:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS) -DQT_THREAD_SUPPORT
-
-example: example02.o 
-	$(CXX)	$(LDFLAGS) -o example example02.o $(BALLVIEW_LIBS) $(PYTHON_LIBS)
 
 DIALOGS/DlgAbout_moc.C:     DIALOGS/DlgAbout.h
 				$(MOC) DIALOGS/DlgAbout.h -o $@

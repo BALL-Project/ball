@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.32 2003/07/11 00:13:28 amoll Exp $
+// $Id: INIFile.C,v 1.33 2003/08/26 09:17:46 oliver Exp $
+//
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>

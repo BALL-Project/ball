@@ -1,4 +1,8 @@
-// $Id: PTE_.sip,v 1.2 2001/12/27 11:47:18 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: PTE_.sip,v 1.3 2003/08/26 09:18:11 oliver Exp $
+//
 
 class Element
   : PropertyManager

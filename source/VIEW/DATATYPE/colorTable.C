@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorTable.C,v 1.8 2003/06/04 15:46:29 amoll Exp $
+// $Id: colorTable.C,v 1.9 2003/08/26 09:18:34 oliver Exp $
+//
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 #include <BALL/COMMON/rtti.h>
@@ -124,7 +125,6 @@ namespace BALL
 			return color_number_;
 		}
 		
-		/*
 		void ColorTable::setBaseColors(const ColorRGBA* color_array, Size array_size)
 			throw()
 		{
@@ -134,7 +134,6 @@ namespace BALL
 				push_back(color_array[i]);
 			}
 		}	
-		*/
 
 		void ColorTable::setAlphaBlending(const bool blending)
 			throw()

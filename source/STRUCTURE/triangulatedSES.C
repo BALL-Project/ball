@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSES.C,v 1.8 2003/06/05 11:17:03 amoll Exp $
+// $Id: triangulatedSES.C,v 1.9 2003/08/26 09:18:28 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/solventExcludedSurface.h>

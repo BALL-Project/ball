@@ -1,4 +1,8 @@
-// $Id: vector2.sip,v 1.5 2003/03/28 14:53:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: vector2.sip,v 1.6 2003/08/26 09:18:24 oliver Exp $
+//
 
 //Vector2 operator * (float scalar, const Vector2& vector)
 //  throw();

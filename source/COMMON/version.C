@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.C,v 1.12 2003/04/01 21:13:07 oliver Exp $
+// $Id: version.C,v 1.13 2003/08/26 09:17:44 oliver Exp $
+//
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>
@@ -56,7 +57,7 @@ namespace BALL
 		String minor = release.getField(1, ".");
 		String tmp = minor;
 		tmp.trimRight(String::CHARACTER_CLASS__ASCII_NUMERIC);
-		if (tmp.size() > 0)
+		if (tmp.size() == 0)
 		{
 			return STABLE;
 		}

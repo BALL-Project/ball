@@ -1,4 +1,8 @@
-// $Id: HINFile.sip,v 1.8 2003/06/19 15:24:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: HINFile.sip,v 1.9 2003/08/26 09:18:10 oliver Exp $
+//
 
 class HINFile
 	: GenericMolFile

@@ -1,0 +1,1053 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>PeptideDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>PeptideBuilder</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>385</width>
+            <height>240</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>385</width>
+            <height>240</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>385</width>
+            <height>240</height>
+        </size>
+    </property>
+    <property name="caption">
+        <string>PeptideBuilder</string>
+    </property>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>ala</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>50</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Ala</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>gln</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>69</x>
+                <y>80</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Gln</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>val</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>170</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Val</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>his</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>110</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>His</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>asp</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>50</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Asp</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cys</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>80</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Cys</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>lys</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>110</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Lys</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>pro</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>129</x>
+                <y>140</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Pro</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>met</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>140</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Met</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>asn</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>129</x>
+                <y>50</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Asn</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>phe</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>69</x>
+                <y>140</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Phe</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>ser</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>140</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Ser</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>arg</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>70</x>
+                <y>50</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Arg</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>leu</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>129</x>
+                <y>110</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Leu</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>ile</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>69</x>
+                <y>110</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Ile</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>glu</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>129</x>
+                <y>80</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Glu</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>gly</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>80</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Gly</string>
+        </property>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>angles_group</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>257</x>
+                <y>44</y>
+                <width>120</width>
+                <height>150</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Angles</string>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>100</y>
+                    <width>30</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Psi:</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>120</y>
+                    <width>46</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Omega:</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>80</y>
+                    <width>30</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Phi:</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>phi</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>60</x>
+                    <y>80</y>
+                    <width>50</width>
+                    <height>18</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>-47</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>psi</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>60</x>
+                    <y>100</y>
+                    <width>50</width>
+                    <height>18</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>-58</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>omega</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>60</x>
+                    <y>120</y>
+                    <width>50</width>
+                    <height>18</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>180</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>other</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>60</y>
+                    <width>92</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Other</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>beta</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>40</y>
+                    <width>92</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Beta sheet</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>alpha</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>20</y>
+                    <width>92</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Alpha helix</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>thr</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>170</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Thr</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>trp</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>69</x>
+                <y>170</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Trp</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>tyr</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>129</x>
+                <y>170</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Tyr</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>back_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>41</x>
+                <y>211</y>
+                <width>144</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>27</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>32767</width>
+                <height>27</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Back</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>close_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>191</x>
+                <y>211</y>
+                <width>144</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>27</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>32767</width>
+                <height>27</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Build</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>sequence</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>10</y>
+                <width>364</width>
+                <height>23</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>203</red>
+                <green>203</green>
+                <blue>203</blue>
+            </color>
+        </property>
+        <property name="palette">
+            <palette>
+                <active>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>220</red>
+                        <green>220</green>
+                        <blue>220</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>237</red>
+                        <green>237</green>
+                        <blue>237</blue>
+                    </color>
+                    <color>
+                        <red>110</red>
+                        <green>110</green>
+                        <blue>110</blue>
+                    </color>
+                    <color>
+                        <red>146</red>
+                        <green>146</green>
+                        <blue>146</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>203</red>
+                        <green>203</green>
+                        <blue>203</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                </active>
+                <disabled>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>220</red>
+                        <green>220</green>
+                        <blue>220</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>253</red>
+                        <green>253</green>
+                        <blue>253</blue>
+                    </color>
+                    <color>
+                        <red>110</red>
+                        <green>110</green>
+                        <blue>110</blue>
+                    </color>
+                    <color>
+                        <red>146</red>
+                        <green>146</green>
+                        <blue>146</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>128</red>
+                        <green>128</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>203</red>
+                        <green>203</green>
+                        <blue>203</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>0</green>
+                        <blue>255</blue>
+                    </color>
+                </disabled>
+                <inactive>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>220</red>
+                        <green>220</green>
+                        <blue>220</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>253</red>
+                        <green>253</green>
+                        <blue>253</blue>
+                    </color>
+                    <color>
+                        <red>110</red>
+                        <green>110</green>
+                        <blue>110</blue>
+                    </color>
+                    <color>
+                        <red>146</red>
+                        <green>146</green>
+                        <blue>146</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>203</red>
+                        <green>203</green>
+                        <blue>203</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>0</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>128</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>255</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>0</red>
+                        <green>0</green>
+                        <blue>255</blue>
+                    </color>
+                    <color>
+                        <red>255</red>
+                        <green>0</green>
+                        <blue>255</blue>
+                    </color>
+                </inactive>
+            </palette>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>ala</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>ala_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>arg</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>arg_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>asn</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>asn_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>cys</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>cys_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>gln</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>gln_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>glu</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>glu_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>gly</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>gly_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>his</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>his_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>ile</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>ile_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>leu</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>leu_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>lys</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>lys_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>met</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>met_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>phe</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>phe_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>pro</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>pro_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>ser</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>ser_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>thr</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>thr_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>trp</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>trp_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>tyr</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>tyr_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>val</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>val_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>close_button</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>close_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>back_button</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>back_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>alpha</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>phi</sender>
+        <signal>returnPressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>psi</sender>
+        <signal>returnPressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>omega</sender>
+        <signal>returnPressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>asp</sender>
+        <signal>pressed()</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>asp_pressed()</slot>
+    </connection>
+    <connection>
+        <sender>beta</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+    <connection>
+        <sender>other</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>PeptideBuilder</receiver>
+        <slot>angle_changed()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>ala_pressed()</slot>
+    <slot>arg_pressed()</slot>
+    <slot>asn_pressed()</slot>
+    <slot>asp_pressed()</slot>
+    <slot>cys_pressed()</slot>
+    <slot>gln_pressed()</slot>
+    <slot>glu_pressed()</slot>
+    <slot>gly_pressed()</slot>
+    <slot>his_pressed()</slot>
+    <slot>ile_pressed()</slot>
+    <slot>leu_pressed()</slot>
+    <slot>lys_pressed()</slot>
+    <slot>met_pressed()</slot>
+    <slot>phe_pressed()</slot>
+    <slot>pro_pressed()</slot>
+    <slot>ser_pressed()</slot>
+    <slot>thr_pressed()</slot>
+    <slot>trp_pressed()</slot>
+    <slot>tyr_pressed()</slot>
+    <slot>val_pressed()</slot>
+    <slot>back_pressed()</slot>
+    <slot>close_pressed()</slot>
+    <slot>angle_changed()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

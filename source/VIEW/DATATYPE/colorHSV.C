@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorHSV.C,v 1.5 2002/12/16 12:23:04 sturm Exp $
+// $Id: colorHSV.C,v 1.6 2003/08/26 09:18:34 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -65,8 +65,6 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 			cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColorHSV>() << endl;
 			#endif 
-
-			destroy();
 		}
 
 		void ColorHSV::clear()
@@ -75,12 +73,6 @@ namespace BALL
 			hue_ = (float)0;
 			saturation_ = (float)0;
 			value_ = (float)0;
-		}
-
-		void ColorHSV::destroy()
-			throw()
-		{
-			clear();
 		}
 
 		ColorHSV::operator String() const

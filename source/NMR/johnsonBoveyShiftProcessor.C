@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: johnsonBoveyShiftProcessor.C,v 1.15 2003/05/25 21:38:09 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.16 2003/08/26 09:18:09 oliver Exp $
+//
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>

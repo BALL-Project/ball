@@ -1,4 +1,11 @@
-dnl    $Id: configure.ac,v 1.10 2003/06/30 19:09:09 oliver Exp $
+dnl -*- Mode: C++; tab-width: 2; -*-
+dnl vi: set ts=2:
+dnl
+dnl $Id: configure.ac,v 1.11 2003/08/26 09:17:35 oliver Exp $
+dnl
+dnl
+
+dnl
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -28,7 +35,7 @@ dnl    includes and libraries
 dnl
 AC_ARG_ENABLE(optimization,    [  --enable-optimization   optimize the library for speed. Omits debug info!])
 AC_ARG_ENABLE(debuginfo,       [  --enable-debuginfo      add -g to the compiler flags (to create debug information)])
-AC_ARG_ENABLE(BALLVIEW,        [  --disable-BALLVIEW      disable the compilation of BALLVIEW, the visualization component])
+AC_ARG_ENABLE(VIEW,            [  --disable-VIEW          disable the compilation of the visualization component])
 AC_ARG_ENABLE(64,              [  --enable-64             create 64 bit binaries (if allowed by the compiler)])
 AC_ARG_WITH(compiler,          [  --with-compiler=CXX     use CXX as C++ compiler])
 AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ compiler flags (commas are converted to blanks)])
@@ -147,10 +154,12 @@ else
 	USE_LIBXNET=false
 fi
 
-if test "$with_BALLVIEW" = "no" -o "$enable_BALLVIEW" = "no"; then
+if test "$with_VIEW" = "no" -o "$enable_VIEW" = "no"; then
 	USE_BALLVIEW=false
+	BALL_HAS_VIEW=""
 else	
 	USE_BALLVIEW=true
+	BALL_HAS_VIEW=true
 fi
 
 if test "$with_xdr" = "no" ; then
@@ -599,6 +608,7 @@ AC_SUBST(ADDITIONAL_COMMENTS)
 dnl	    BALLVIEW
 
 AC_SUBST(USE_BALLVIEW)				dnl bool: use ballview (default=true)
+AC_SUBST(BALL_HAS_VIEW)				dnl true if VIEW is enabled, "" otherwise
 AC_SUBST(BALLVIEW_PLATFORM)		dnl Mesa or OpenGL
 AC_SUBST(BALLVIEW_INCLUDES)		dnl BALLVIEW includes
 AC_SUBST(LIBBALLVIEW)					dnl static library name

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.C,v 1.11 2002/12/16 12:23:16 sturm Exp $
+// $Id: tube.C,v 1.12 2003/08/26 09:18:50 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/tube.h>
 
@@ -15,7 +15,6 @@ namespace BALL
 		Tube::Tube()
 			throw()
 			: GeometricObject(),
-			  ColorExtension(),
    			Vertex2(),
 				radius_(1)
 		{
@@ -24,17 +23,7 @@ namespace BALL
 		Tube::Tube(const Tube& tube, bool deep)
 			throw()
 			: GeometricObject(tube, deep),
-			  ColorExtension(tube),
    			Vertex2(tube),
-				radius_(1)
-		{
-		}
-
-		Tube::Tube(const GeometricObject& geometric_object)
-			throw()
-			: GeometricObject(geometric_object),
-			  ColorExtension(),
-   			Vertex2(),
 				radius_(1)
 		{
 		}
@@ -43,35 +32,23 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<Tube>() << endl;
+				Log.info()  << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<Tube>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 
 		void Tube::clear()
 			throw()
 		{
 			GeometricObject::clear();
-			ColorExtension::clear();
 			Vertex2::clear();
 			radius_ = 1;
-		}
-
-		void Tube::destroy()
-			throw()
-		{
-			GeometricObject::destroy();
-			ColorExtension::destroy();
-			Vertex2::destroy();
 		}
 
 		void Tube::set(const Tube& tube, bool deep)
 			throw()
 		{
 			GeometricObject::set(tube, deep);
-			ColorExtension::set(tube);
 			Vertex2::set(tube);
 			radius_ = tube.radius_;
 		}
@@ -93,7 +70,6 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::swap(tube);
-			ColorExtension::swap(tube);
 			Vertex2::swap(tube);
 
 			Real temp = tube.radius_;
@@ -117,23 +93,11 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			GeometricObject::dump(s, depth + 1);
-			ColorExtension::dump(s, depth + 1);
 			Vertex2::dump(s, depth + 1);
 			s << "radius : " << radius_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		bool Tube::extract()
-			throw()
-		{
-			return true;  
-		}
-
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/tube.iC>
-#		endif
-
 	} // namespace VIEW
-
 } // namespace BALL

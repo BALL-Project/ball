@@ -1,4 +1,8 @@
-// $Id: pyWidget.sip,v 1.3 2003/04/01 21:16:16 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pyWidget.sip,v 1.4 2003/08/26 09:18:21 oliver Exp $
+//
 
 class PyWidget
   // : public QMultiLineEdit,

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: poissonBoltzmann.C,v 1.38 2003/05/12 10:53:18 anker Exp $ 
+// $Id: poissonBoltzmann.C,v 1.39 2003/08/26 09:18:26 oliver Exp $ 
+//
 
 // FDPB: Finite Difference Poisson Solver
 

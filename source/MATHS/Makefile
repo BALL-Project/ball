@@ -22,6 +22,7 @@ CPP_SOURCES= $(FFT_SOURCES)\
 	piecewiseFunction.C\
 	piecewisePolynomial.C\
 	quaternion.C\
+	simpleBox3.C\
 	sphere3.C\
 	surface.C\
 	vector2.C\

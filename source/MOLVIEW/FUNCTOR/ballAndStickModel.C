@@ -1,9 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.15 2002/12/12 10:57:43 oliver Exp $
+// $Id: ballAndStickModel.C,v 1.16 2003/08/26 09:17:59 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
+#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
+#include <BALL/KERNEL/atom.h>
 
 using namespace std;
 
@@ -21,10 +23,9 @@ namespace BALL
 		{
 		}
 
-		AddBallAndStickModel::AddBallAndStickModel
-			(const AddBallAndStickModel &add_ball_and_stick, bool deep)
+		AddBallAndStickModel::AddBallAndStickModel(const AddBallAndStickModel &add_ball_and_stick)
 			throw()
-			: AtomBondModelBaseProcessor(add_ball_and_stick, deep),
+			: AtomBondModelBaseProcessor(add_ball_and_stick),
 				ball_radius_(add_ball_and_stick.ball_radius_),
 				stick_radius_(add_ball_and_stick.stick_radius_),
 				ball_and_stick_(add_ball_and_stick.ball_and_stick_)
@@ -35,11 +36,9 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-			 << " of class " << RTTI::getName<AddBallAndStickModel>() << endl;
+				Log.info() << "Destructing object " << (void *)this 
+									 << " of class " << RTTI::getName<AddBallAndStickModel>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 
 		void AddBallAndStickModel::clear()
@@ -52,16 +51,10 @@ namespace BALL
 			ball_and_stick_ = true;
 		}
 
-		void AddBallAndStickModel::destroy()
+		void AddBallAndStickModel::set(const AddBallAndStickModel &add_ball_and_stick)
 			throw()
 		{
-		}
-
-		void AddBallAndStickModel::set
-			(const AddBallAndStickModel &add_ball_and_stick, bool deep)
-			throw()
-		{
-			AtomBondModelBaseProcessor::set(add_ball_and_stick, deep);
+			AtomBondModelBaseProcessor::set(add_ball_and_stick);
 
 			ball_radius_ = add_ball_and_stick.ball_radius_;
 			stick_radius_ = add_ball_and_stick.stick_radius_;
@@ -73,14 +66,7 @@ namespace BALL
 			throw()
 		{
 			set(add_ball_and_stick);
-
 			return *this;
-		}
-
-		void AddBallAndStickModel::get(AddBallAndStickModel &add_ball_and_stick, bool deep) const
-			throw()
-		{
-			add_ball_and_stick.set(*this, deep);
 		}
 
 		void AddBallAndStickModel::swap(AddBallAndStickModel &add_ball_and_stick)
@@ -107,7 +93,7 @@ namespace BALL
 			// a radius never can be lower or equal 0
 			if (radius <= (Real)0)
 			{
-					throw Exception::OutOfRange(__FILE__, __LINE__);
+				throw Exception::OutOfRange(__FILE__, __LINE__);
 			}
 			
 			ball_radius_ = radius;
@@ -131,14 +117,13 @@ namespace BALL
 			getModelConnector()->setProperties(*this);
 			getModelConnector()->setProperty(String("STICK_RADIUS"), (float)stick_radius_);
 			getModelConnector()->setProperty(String("BALL_RADIUS"), (float)ball_radius_);
-
+			
 			return AtomBondModelBaseProcessor::start();
 		}
 				
 		bool AddBallAndStickModel::finish()
 		{
 			buildBondModels_();
-			
 			return true;
 		}
 				
@@ -152,23 +137,11 @@ namespace BALL
 
 			Atom *atom = RTTI::castTo<Atom>(composite);
 
-			// remove only models appended to atom
-			removeGeometricObjects_(*atom, true);
+			Sphere* sphere_ptr = new Sphere;
 
-			// generate BallPrimitive
-			Sphere* sphere_ptr = createSphere_();
+			if (sphere_ptr == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
 
-			if (sphere_ptr == 0)
-			{
-					throw Exception::OutOfMemory
-						(__FILE__, __LINE__, sizeof(Sphere));
-			}
-
-			// carry on selected flag
-			sphere_ptr->Selectable::set(*atom);
-
-			sphere_ptr->PropertyManager::set(*this);
-			sphere_ptr->PropertyManager::setProperty(PROPERTY__MODEL_BALL_AND_STICK);
+			sphere_ptr->setComposite(atom);
 
 			if (ball_and_stick_)
 			{
@@ -179,14 +152,14 @@ namespace BALL
 				sphere_ptr->setRadius(stick_radius_);
 			}
 
-			sphere_ptr->setVertexAddress(atom->getPosition());
+			sphere_ptr->setPositionAddress(atom->getPosition());
 			
-			atom->host(*getColorCalculator());
+			getColorProcessor()->operator() (atom);
 
-			sphere_ptr->setColor(getColorCalculator()->getColor());
+			sphere_ptr->setColor(getColorProcessor()->getColor());
 			
 			// append sphere in Atom
-			composite.appendChild(*sphere_ptr);
+			geometric_objects_.push_back(sphere_ptr);
 
 			// collect used atoms
 			insertAtom_(atom);

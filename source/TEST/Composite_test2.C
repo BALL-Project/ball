@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Composite_test2.C,v 1.6 2003/06/19 10:45:51 oliver Exp $
+// $Id: Composite_test2.C,v 1.7 2003/08/26 09:18:30 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -30,7 +30,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test2.C,v 1.6 2003/06/19 10:45:51 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test2.C,v 1.7 2003/08/26 09:18:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.C,v 1.24 2003/08/17 20:13:30 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.25 2003/08/26 09:17:44 oliver Exp $
 //
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>

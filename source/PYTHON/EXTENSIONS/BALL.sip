@@ -1,4 +1,11 @@
-// $Id: BALL.sip,v 1.10 2003/06/19 15:24:33 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: BALL.sip,v 1.11 2003/08/26 09:18:10 oliver Exp $
+//
+//
+//
+
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////

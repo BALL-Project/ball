@@ -1,5 +1,8 @@
-// $Id: regularData2D.sip,v 1.5 2003/06/19 15:24:36 oliver Exp $
-
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: regularData2D.sip,v 1.6 2003/08/26 09:18:22 oliver Exp $
+//
 
 typedef float GridDataType;
 class RegularData2D

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.C,v 1.12 2003/07/24 10:42:44 amoll Exp $
+// $Id: snapShotManager.C,v 1.13 2003/08/26 09:17:53 oliver Exp $
+//
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>

@@ -1,8 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.14 2003/07/11 15:27:36 amoll Exp $
+// $Id: JCAMPFile.C,v 1.15 2003/08/26 09:17:46 oliver Exp $
 //
+
 
 #include <BALL/FORMAT/JCAMPFile.h>
 #include <BALL/DATATYPE/regularExpression.h>
@@ -144,11 +145,11 @@ namespace BALL
 	}
 
 	bool JCAMPFile::write()
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != File::OUT)
 		{
-			throw(File::CanNotWrite(__FILE__, __LINE__, name_));
+			throw(File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 
 		HeaderMap::ConstIterator header_it(header_.begin());

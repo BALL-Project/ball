@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.C,v 1.14 2003/02/05 13:00:18 oliver Exp $
+// $Id: molecularDynamics.C,v 1.15 2003/08/26 09:17:53 oliver Exp $
+//
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>

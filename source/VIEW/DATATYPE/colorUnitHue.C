@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.C,v 1.10 2003/04/17 14:48:06 oliver Exp $
+// $Id: colorUnitHue.C,v 1.11 2003/08/26 09:18:34 oliver Exp $
+//
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
 #include <BALL/COMMON/rtti.h>
@@ -133,8 +134,6 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColorUnitHue>() << endl;
 			#endif 
-
-			destroy();
 		}
 
 		void ColorUnitHue::clear()
@@ -143,29 +142,20 @@ namespace BALL
 			value_ = (float)0;
 		}
 
-		void ColorUnitHue::destroy()
-			throw()
-		{
-		}
-
-		void ColorUnitHue::set
-			(const ColorUnitHue& color_h_unit)
+		void ColorUnitHue::set(const ColorUnitHue& color_h_unit)
 			throw()
 		{
 			value_ = color_h_unit.value_;
 		}
 
-		const ColorUnitHue& ColorUnitHue::operator =
-			(const ColorUnitHue& color_h_unit)
+		const ColorUnitHue& ColorUnitHue::operator = (const ColorUnitHue& color_h_unit)
 			throw()
 		{
 			set(color_h_unit);
-
 			return *this;
 		}
 
-		void ColorUnitHue::get
-			(ColorUnitHue& color_h_unit) const
+		void ColorUnitHue::get(ColorUnitHue& color_h_unit) const
 			throw()
 		{
 			color_h_unit.set(*this);
@@ -181,7 +171,6 @@ namespace BALL
 			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(char_ptr);
-
 			return *this;
 		}
 			
@@ -201,7 +190,6 @@ namespace BALL
 			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(s);
-
 			return *this;
 		}
 			
@@ -209,9 +197,7 @@ namespace BALL
 			throw()
 		{
 			char temp[6];
-
 			sprintf(&temp[0], "%x", (unsigned char)(value_ * 360.0));
-
 			s.set(&temp[0]);
 		}
 
@@ -231,7 +217,6 @@ namespace BALL
 			throw(Exception::InvalidRange)
 		{
 			set(s);
-
 			return *this;
 		}
 
@@ -256,7 +241,6 @@ namespace BALL
 			throw(Exception::InvalidRange)
 		{
 			set(s);
-
 			return *this;
 		}
 

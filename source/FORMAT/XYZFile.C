@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.C,v 1.5 2003/07/11 15:27:44 amoll Exp $
+// $Id: XYZFile.C,v 1.6 2003/08/26 09:17:47 oliver Exp $
+//
 
 #include <BALL/FORMAT/XYZFile.h>
 #include <BALL/DATATYPE/string.h>
@@ -37,11 +38,11 @@ namespace BALL
 	}
 	
 	bool XYZFile::write(const System& system)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != File::OUT)
 		{
-			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 
 		// write the first and the second line:

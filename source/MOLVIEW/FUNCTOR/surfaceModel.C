@@ -1,34 +1,36 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.22 2003/05/08 12:05:08 oliver Exp $
+// $Id: surfaceModel.C,v 1.23 2003/08/26 09:18:01 oliver Exp $
+//
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
-#include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
-#include <BALL/KERNEL/atomContainer.h>
-#include <BALL/KERNEL/forEach.h>
+#include <BALL/VIEW/FUNCTOR/molecularInformation.h>
+#include <BALL/VIEW/GUI/KERNEL/representation.h>
+#include <BALL/VIEW/COMMON/global.h>
 
 using namespace std;
 
 namespace BALL
 {
+	using VIEW::Representation;
+	using VIEW::MolecularInformation;
+
 	namespace MOLVIEW
 	{
 
 		AddSurfaceModel::AddSurfaceModel()
 			throw()
-			: BaseModelProcessor(),
-				UnaryProcessor<BALL::Composite*>(),
+			: MolecularModelProcessor(),
 				get_composite_(true),
 				start_composite_(0)
 		{
 		}
 
-		AddSurfaceModel::AddSurfaceModel(const AddSurfaceModel& add_surface, bool deep)
+		AddSurfaceModel::AddSurfaceModel(const AddSurfaceModel& add_surface)
 			throw()
-			:	BaseModelProcessor(add_surface, deep),
-				UnaryProcessor<BALL::Composite*>(add_surface),
+			:	MolecularModelProcessor(add_surface),
 				get_composite_(true),
 				start_composite_(0)
 		{
@@ -38,77 +40,59 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<AddSurfaceModel>() << endl;
+				Log.info() << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<AddSurfaceModel>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 
 		void AddSurfaceModel::clear()
 			throw()
 		{
-			BaseModelProcessor::clear();
+			MolecularModelProcessor::clear();
 			get_composite_ = true;
 			start_composite_ = 0;
-		}
-
-		void AddSurfaceModel::destroy()
-			throw()
-		{
 		}
 
 		bool AddSurfaceModel::start()
 		{
 			get_composite_ = true;
 			start_composite_ = 0;
-			atoms_.clear();
-			return BaseModelProcessor::start();
+			return MolecularModelProcessor::start();
 		}
 				
 		bool AddSurfaceModel::finish()
 		{
-			// insert surface only if a composite exist
-			if (start_composite_ == 0)
-			{
-				return false;
-			}
+			// return if no composite found
+			if (start_composite_ == 0)  return false;
 			
-			Mesh* mesh = createMesh_();
+			Mesh* mesh = new Mesh;
 
-			if (mesh == 0)
-			{
-				throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
-			}
+			if (mesh == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
 
 			// get info from the start composite
 			MolecularInformation molecular_information;
 			start_composite_->host(molecular_information);
 
-			mesh->PropertyManager::set(*this);
-
 			SurfaceProcessor sp;
 
-			if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW))
+			switch (getDrawingPrecision())
 			{
-				sp.setDensity(2.0);
-			}
-			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM))
-			{
-				sp.setDensity(4.5);
-			}
-			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH))
-			{
-				sp.setDensity(7.0);
-			}
-			else 
-			{
-				Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
+				case VIEW::DRAWING_PRECISION_LOW:
+					sp.setDensity(1.5);
+					break;
+
+				case VIEW::DRAWING_PRECISION_MEDIUM:
+					sp.setDensity(3.5);
+					break;
+
+				case VIEW::DRAWING_PRECISION_HIGH:
+					sp.setDensity(6.0);
+					break;
+
+				default:
+					Log.error() << "Unknown precision in " << __FILE__ << "   " << __LINE__ << std::endl;
 			}
 
-
-			// Initialize the surface processor
-			sp.start();
 			try 
 			{
 				// Since we have container of *pointers* only, we have to 
@@ -134,8 +118,6 @@ namespace BALL
 			{
 				Log.error() << "SurfaceModel: caught unknown exception while calculating molecular surface" << endl;
 			}
-			Log.info() << "assigning surface (" << sp.getSurface().vertex.size() << " vertices, " 
-								 << sp.getSurface().triangle.size() << " triangles)" << endl;
 			
 			// Compute the surface
 			sp.finish();
@@ -148,7 +130,7 @@ namespace BALL
 										+ String(")"));
 
 
-			start_composite_->getRoot().appendChild(*mesh);
+			geometric_objects_.push_back(mesh);
 			return true;
 		}
 				
@@ -185,16 +167,10 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			BaseModelProcessor::dump(s, depth + 1);
+			MolecularModelProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		Mesh*	AddSurfaceModel::createMesh_()
-		{
-			return (Mesh *)(new Mesh());
-		}
-
 	} // namespace MOLVIEW
-
 } // namespace BALL

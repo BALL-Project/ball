@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.C,v 1.11 2002/12/16 12:23:14 sturm Exp $
+// $Id: line.C,v 1.12 2003/08/26 09:18:50 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/line.h>
 
@@ -9,14 +9,12 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
 		Line::Line()
 			throw()
 			:	GeometricObject(),
-				ColorExtension(),
 				Vertex2()
 		{
 		}
@@ -24,16 +22,7 @@ namespace BALL
 		Line::Line(const Line& line, bool deep)
 			throw()
 			:	GeometricObject(line, deep),
-				ColorExtension(line),
 				Vertex2(line)
-		{
-		}
-
-		Line::Line(const GeometricObject& geometric_object)
-			throw()
-			:	GeometricObject(geometric_object),
-				ColorExtension(),
-				Vertex2()
 		{
 		}
 
@@ -41,34 +30,22 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Line>() << endl;
+				Log.info() << "Destructing object " << (void *)this 
+									 << " of class " << RTTI::getName<Line>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 
 		void Line::clear()
 			throw()
 		{
 			GeometricObject::clear();
-			ColorExtension::clear();
 			Vertex2::clear();
-		}
-
-		void Line::destroy()
-			throw()
-		{
-			GeometricObject::destroy();
-			ColorExtension::destroy();
-			Vertex2::destroy();
 		}
 
 		void Line::set(const Line& line, bool deep)
 			throw()
 		{
 			GeometricObject::set(line, deep);
-			ColorExtension::set(line);
 			Vertex2::set(line);
 		}
 
@@ -89,7 +66,6 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::swap(line);
-			ColorExtension::swap(line);
 			Vertex2::swap(line);
 		}
 
@@ -109,18 +85,10 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			GeometricObject::dump(s, depth + 1);
-			ColorExtension::dump(s, depth + 1);
 			Vertex2::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		bool Line::extract()
-			throw()
-		{
-			return true;  
-		}
-
 	} // namespace VIEW
-
 } // namespace BALL

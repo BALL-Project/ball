@@ -1,7 +1,7 @@
 #! python
 from ClassTest import *
 
-START_TEST(String,"$Id: String_test1.py,v 1.2 2003/04/21 12:33:39 oliver Exp $")
+START_TEST(String,"$Id: String_test1.py,v 1.3 2003/08/26 09:18:25 oliver Exp $")
 
 CHECK('String::String()')
 s = String()

@@ -1,11 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.11 2002/12/12 11:43:25 oliver Exp $
+// $Id: modularWidget.C,v 1.12 2003/08/26 09:18:45 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
-
-#include <qwidget.h>
+#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/FORMAT/INIFile.h>
+#include <BALL/VIEW/GUI/DIALOGS/preferences.h>
+#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 
 using namespace std;
 
@@ -46,17 +48,21 @@ namespace BALL
 		{
 		}
 
-		void ModularWidget::destroy()
-			throw()
-		{
-		}
-
 		void ModularWidget::registerWidget(ModularWidget* mwidget)
 			throw()
 		{
       #ifdef BALL_VIEW_DEBUG
   			Log.info() << "registering ModularWidget at " << mwidget << endl;
 			#endif
+
+			if (!mwidget) throw(Exception::NullPointer(__FILE__, __LINE__));
+
+			if (!RTTI::isKindOf<QObject>(*mwidget)) 
+			{
+				Log.error() << "ModularWidget::ModularWidget: widget is not " 
+										<< "in a MainControl object!" << endl;
+				return;
+			}
 
 			QObject* object = dynamic_cast<QObject*>(mwidget);
 			if (object != 0)
@@ -120,12 +126,20 @@ namespace BALL
 		void ModularWidget::setStatusbarText(String text)
 			throw()
 		{
-			WindowMessage *window_message = new WindowMessage;
-			window_message->setStatusBar(text);
-			window_message->setDeletable(true);
-			notify_(window_message);
+			getMainControl()->setStatusbarText(text);
+		}
+
+		MainControl* ModularWidget::getMainControl() const
+			throw()
+		{ 
+			return (MainControl*) ((ConnectionObject*)this)->getRoot();
+		}
+
+		FragmentDB& ModularWidget::getFragmentDB() const
+			throw()
+		{
+			return *((FragmentDB*)&getMainControl()->getFragmentDB());
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.25 2003/07/02 19:14:33 oliver Exp $
+// $Id: directory.C,v 1.26 2003/08/26 09:18:29 oliver Exp $
 //
 
 #include <BALL/SYSTEM/directory.h>

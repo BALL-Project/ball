@@ -1,4 +1,8 @@
-// $Id: predicateConcept.sip,v 1.4 2003/06/19 13:27:21 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: predicateConcept.sip,v 1.5 2003/08/26 09:18:19 oliver Exp $
+//
 
 class UnaryCompositePredicate 
 //  : public unary_function<T, bool> 

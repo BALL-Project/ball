@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.27 2003/08/19 16:00:14 amoll Exp $
+// $Id: amberNonBonded.C,v 1.28 2003/08/26 09:17:51 oliver Exp $
+//
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>

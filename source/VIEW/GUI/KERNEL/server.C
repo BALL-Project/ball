@@ -1,14 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.10 2002/12/17 19:50:31 amoll Exp $
+// $Id: server.C,v 1.11 2003/08/26 09:18:42 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
+#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/GUI/DIALOGS/preferences.h>
+#include <BALL/VIEW/GUI/WIDGETS/serverPreferences.h>
+#include <BALL/SYSTEM/socket.h>
+#include <BALL/FORMAT/INIFile.h>
 
 #include <qstatusbar.h>
 #include <qpixmap.h>
 #include <qtooltip.h>
 #include <qstring.h>
+#include <qlabel.h>
 
 using namespace std;
 
@@ -71,7 +78,7 @@ namespace BALL
 										<< " of class " << RTTI::getName<Server>() << endl;
 			#endif 
 
-			destroy();
+			ConnectionObject::destroy();
 		}
 
 		void Server::clear()
@@ -81,12 +88,6 @@ namespace BALL
 			ConnectionObject::clear();
 		}
 
-		void Server::destroy()
-			throw()
-		{
-			QTTimer::destroy();
-			ConnectionObject::destroy();
-		}
 
 		// initializes a new socket and starts the timer
 		void Server::activate()
@@ -367,5 +368,4 @@ namespace BALL
 #		endif 
 
 	} // namespace VIEW
-
 } // namespace BALL

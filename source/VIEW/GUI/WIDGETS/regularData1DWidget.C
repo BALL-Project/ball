@@ -1,65 +1,75 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.12 2003/05/03 17:29:35 oliver Exp $
+// $Id: regularData1DWidget.C,v 1.13 2003/08/26 09:18:46 oliver Exp $
+//
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
+#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <qpointarray.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
-
-using std::endl;
-using std::cout;
-
 
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		NewRegularData1DMessage::NewRegularData1DMessage()
-			:    CompositeMessage()
+		UpdateRegularData1DMessage::UpdateRegularData1DMessage()
+			: Message(),
+				data_(0)
 		{
 		}
 
-		NewRegularData1DMessage::NewRegularData1DMessage(const CompositeMessage &message, bool /* deep */)
-			:    CompositeMessage(message)
+		UpdateRegularData1DMessage::UpdateRegularData1DMessage(const UpdateRegularData1DMessage& message)
+			: Message(message),
+				data_(message.data_)
 		{
 		}
 
-		NewRegularData1DMessage::~NewRegularData1DMessage()
+		UpdateRegularData1DMessage::~UpdateRegularData1DMessage()
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-			cout << "Destructing object " << (void *)this
-					 << " of class " << RTTI::getName<NewRegularData1DMessage>() << endl;
+			Log.error() << "Destructing object " << (void *)this
+									<< " of class " << RTTI::getName<UpdateRegularData1DMessage>() << std::endl;
 			#endif
 		}
 
-		RegularData1DWidget::RegularData1DWidget(Size l, DoubleReal min, DoubleReal max, QWidget *parent) 
+		RegularData1DWidget::RegularData1DWidget(RegularData1D* data, QWidget *parent) 
 			throw()
-			: QScrollView(parent), 
+			: QScrollView(parent, "1D Diagram"), 
 				ModularWidget("RegularData1DWidget"), 
-				pm_(0), 
-				length_(l), 
-				min_(min), 
-				max_(max)
+				layout_(viewport(),2,2),
+				pm_(),
+				diagram_(viewport()),
+				x_label_(viewport()),
+				y_label_(viewport()),
+				dummy_label_(viewport()),
+				data_(data),
+				width_(200),
+				height_(200),
+				background_color_(QColor(white)),
+				diagram_color_(QColor(red)),
+				line_style_(true)
 		{
 			setCaption("RegularData1DWidget");
-
-			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
 
-			viewport()->setMouseTracking(true);
-		}
+			layout_.addWidget(&y_label_, 0, 0);
+			layout_.addWidget(&diagram_, 0, 1);
+			layout_.addWidget(&dummy_label_, 1, 0);
+			layout_.addWidget(&x_label_, 1, 1);
+			layout_.setColStretch(1, 5);
+			layout_.setRowStretch(0, 5);
 
-		RegularData1DWidget::RegularData1DWidget(const RegularData1DWidget& /* widget */) 
-			throw()
-			: QScrollView(), 
-				ModularWidget("RegularData1DWidget"),
-				spec_(0)
-		{
-			// ?????
+			x_label_.setAlignment(AlignRight);
+			y_label_.setAlignment(AlignTop);
+
+			diagram_.resize(width_,height_);
+			diagram_.setScaledContents(true);  
+			diagram_.setFrameShape(QFrame::Box);  
+			diagram_.setLineWidth(1);
 		}
 
 		RegularData1DWidget::~RegularData1DWidget()
@@ -80,134 +90,136 @@ namespace BALL
 		void RegularData1DWidget::onNotify(Message* message)
 			throw()
 		{
-			reactToMessages_(message);
-		}
-
-		bool RegularData1DWidget::reactToMessages_(Message* message)
-		{
-			if (RTTI::isKindOf<NewRegularData1DMessage>(*message))
+			if ( data_ == 0 ||
+					!RTTI::isKindOf<UpdateRegularData1DMessage>(*message) ||
+					RTTI::castTo<UpdateRegularData1DMessage>(*message)->getData() != data_)
 			{
-				NewRegularData1DMessage *composite_message = RTTI::castTo<NewRegularData1DMessage>(*message);
-				
-				// set the RegularData1D we have been sent. Then set all the other attributes.
-				if (spec_)
-				{
-					cout << spec_ << endl;
-					//      delete (spec_);
-				}
-				spec_ = (RegularData1D *)composite_message->getComposite();
-				min_ = spec_->getOrigin();
-				max_ = spec_->getDimension() + spec_->getOrigin();
-				length_ = spec_->getSize();
-
-				createPlot();
-				
-				return true;
+				return;
 			}
-			
-			return false;
+
+			createPlot();
 		}
 
 		const RegularData1DWidget& RegularData1DWidget::operator = (const RegularData1DWidget &widget)
 			throw()
 		{
-			pm_     =     widget.pm_;
-			length_ = widget.length_;
-			min_    =    widget.min_;
-			max_    =    widget.max_;
-			spec_   =   widget.spec_;
-
+			data_ = widget.data_;
 			return *this;
 		}
 
 		void RegularData1DWidget::clear()
 			throw()
 		{
-			pm_ = QPixmap();
-			length_ = 0;
-			min_ = 0;
-			max_ = 0;
-			if (spec_)
-			{
-				delete spec_;
-				spec_ = 0;
-			}
+			data_ = 0;
 		}
 
 		bool RegularData1DWidget::operator == (const RegularData1DWidget &widget) const
 			throw()
 		{
-			if ((spec_ == widget.spec_) && (length_ == widget.length_) &&
-					(min_  == widget.min_)  && (max_    == widget.max_))
-			{
-				return true;
-			}
-
-			return false;
+			return (data_ == widget.data_);
 		}
 
 		void RegularData1DWidget::createPlot()
 		{
-			QPointArray fdummy(length_);
+			if (data_->size() == 0) return;
+		Log.error() << "createPlot " << data_->size() << std::endl;
+			x_label_.setBackgroundColor(background_color_);
+			y_label_.setBackgroundColor(background_color_);
+			diagram_.setBackgroundColor(background_color_);
+			dummy_label_.setBackgroundColor(background_color_);
+			setPaletteBackgroundColor(background_color_);
 
-			// we have to be careful not to lose important digits
-			double max_el(spec_->getOrigin() + spec_->getDimension());
+			//pm_.resize(width_, height_);
+			pm_.resize(data_->size(), height_);
+			pm_.fill(background_color_);
+			resizeContents(data_->size() + 20, height_ + 30);
+			resize(width_, height_+50);
 
-			pm_.fill();
-			resize(length_, height());
-			pm_.resize(length_, height());
-
-			QPainter p(&pm_);
-
-			// scale
-			p.setWindow(0, 0, length_, (int)max_el);
-			p.setViewport(0, 0, length_, (int)height());
-			
-			// transform: set (0,0) to lower left corner
-			QWMatrix m(1, 0, 0, -1, 0, max_el);
-			p.setWorldMatrix(m);
-
-			for (Size i = 0; i < length_; i++)
+			QPainter p( &pm_ );
+			p.setPen(diagram_color_);
+			for (Size i = 0; i < data_->size(); i++)
 			{
-				fdummy.putPoints(i, 1, i, (int)((*spec_)[i]*10e4));
+				if (line_style_)
+				{
+					p.drawLine(i,height_-(Size)(*data_)[i], i, height_);
+				}
+				else
+				{
+					p.drawPoint(i,(Position)(*data_)[i]);
+				}
 			}
-			p.setPen(QColor(red));
-			p.drawPolyline(fdummy);
 
-			// ?????: remove debugging code!
-			p.drawText(length_/2, (int)((*spec_)[length_/2]), "Hallo!");
-			cout << (*spec_)[length_/2] << endl; 
-			p.drawLine(0,0,length_, (int)max_el);
+			Log.error() <<std::endl << (*data_)[width_/2] << std::endl; 
+		//  p.drawLine(1,height_-1,width_-1, height_-1);
+		//  p.drawLine(1,1,1, height_-1);
 
 			p.end();
-
-			//  repaint();
-		}
-
-		void RegularData1DWidget::drawContents(QPainter *paint, int clipx, int clipy, int clipw, int cliph)
-		{
-			if ((pm_.size() != QSize(0,0)))
-			{
-				paint->drawPixmap(clipx, clipy, pm_, clipx, clipy, clipw, cliph);
-			};
-		}
-
-		void RegularData1DWidget::paintEvent(QPaintEvent* /* e */)
-		{
-			if ((pm_.size() != QSize(0,0)))
-			{
-				QPainter paint(viewport());
-				paint.setClipRect(contentsX(), contentsY(), contentsWidth(), contentsHeight());
-				paint.drawPixmap(contentsX(), contentsY(), pm_, contentsX(), contentsY(), contentsWidth(), contentsHeight());
-			};
-		}
-
-		void RegularData1DWidget::resizeEvent(QResizeEvent *e)
-		{
-			QScrollView::resizeEvent(e);
+			diagram_.setPixmap(pm_);
+			x_label_.setText(x_axis_text_.c_str());
+			y_label_.setText(y_axis_text_.c_str());
 			repaint();
 		}
 
-	} 
+		void RegularData1DWidget::setXAxisText(const String& text)
+			throw()
+		{
+			x_axis_text_ = text;
+		}
 
-} // namespaces
+		void RegularData1DWidget::setYAxisText(const String& text)
+			throw()
+		{
+			y_axis_text_ = text;
+		}
+
+		const String& RegularData1DWidget::getXAxisText() const
+			throw()
+		{
+			return x_axis_text_;
+		}
+
+		const String& RegularData1DWidget::getYAxisText() const
+			throw()
+		{
+			return y_axis_text_;
+		}
+
+		void RegularData1DWidget::setBackgroundColor(const QColor& color)
+			throw()
+		{
+			background_color_ = color;
+		}
+
+		const QColor& RegularData1DWidget::getBackgroundColor() const
+			throw()
+		{
+			return background_color_;
+		}
+
+		void RegularData1DWidget::setDiagramColor(const QColor& color)
+			throw()
+		{
+			diagram_color_ = color;
+		}
+
+		const QColor& RegularData1DWidget::getDiagramColor() const
+			throw()
+		{
+			return diagram_color_;
+		}
+
+		void RegularData1DWidget::setLineStyle(bool state)
+			throw()
+		{
+			line_style_ = state;
+		}
+
+		bool RegularData1DWidget::isLineStyle() const
+			throw()
+		{
+			return line_style_;
+		}
+
+} // namespace VIEW
+
+} // namespace BALL

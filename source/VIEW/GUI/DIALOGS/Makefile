@@ -1,6 +1,14 @@
+#
+# $Id: Makefile,v 1.14 2003/08/26 09:18:35 oliver Exp $
+#
+
 DIRECTORY=VIEW/GUI/DIALOGS
 
-HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
+# Where the headers of the derived classes reside
+HEADER_DIR		=$(BALL_PATH)/include/BALL/$(DIRECTORY)
+
+# Where the UIC-created headers reside
+UIC_DIR				=$(BALL_PATH)/include/BALL/VIEW/UIC
 
 THISLIB=$(LIBNAME)
 
@@ -11,16 +19,22 @@ CPP_SOURCES=\
 	colorMeshDialogData.C\
 	dlgMoveOverlay.C\
 	dlgMoveOverlayData.C\
+	mouseSensitivity.C\
+	mouseSensitivityData.C\
+	setCamera.C\
+	setCameraData.C\
+	lightSettings.C\
+	lightSettingsData.C\
+	stageSettings.C\
+	stageSettingsData.C\
 	pythonSettings.C\
 	pythonSettingsData.C\
 	FDPBDialog.C\
-	FDPBDialogData.C
-
-UIC_SOURCES=\
-	colorMeshDialog.ui\
-	pythonSettings.ui\
-	FDPBDialog.ui
-	
+	FDPBDialogData.C\
+	transformationDialog.C\
+	transformationDialogData.C\
+	parsedFunctionDialog.C\
+	parsedFunctionDialogData.C
 
 MOC_SOURCES=\
 	fileDialog_moc.C\
@@ -29,62 +43,53 @@ MOC_SOURCES=\
 	colorMeshDialogData_moc.C\
 	dlgMoveOverlay_moc.C\
 	dlgMoveOverlayData_moc.C\
+	mouseSensitivity_moc.C\
+	mouseSensitivityData_moc.C\
+	setCamera_moc.C\
+	setCameraData_moc.C\
+	lightSettings_moc.C\
+	lightSettingsData_moc.C\
+	stageSettings_moc.C\
+	stageSettingsData_moc.C\
 	pythonSettings_moc.C\
 	pythonSettingsData_moc.C\
 	FDPBDialog_moc.C\
-	FDPBDialogData_moc.C
+	FDPBDialogData_moc.C\
+	transformationDialog_moc.C\
+	transformationDialogData_moc.C\
+	parsedFunctionDialog_moc.C\
+	parsedFunctionDialogData_moc.C
+
+UIC_SOURCES=\
+	colorMeshDialogData.C\
+	mouseSensitivityData.C\
+	setCameraData.C\
+	lightSettingsData.C\
+	stageSettingsData.C\
+	pythonSettingsData.C\
+	FDPBDialogData.C\
+	transformationDialogData.C\
+	parsedFunctionDialogData.C
+
+UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
 include ../../../common.mak
 include .Dependencies
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES)
 
+$(UIC_SOURCES):	$(UIC_HDR)
+
+depend: $(UIC_SOURCES) $(MOC_SOURCES)
+
 fileDialog_moc.C:	$(HEADER_DIR)/fileDialog.h
-	$(MOC) $< -o $@
+	$(MOC) $(HEADER_DIR)/fileDialog.h -o $@
 
 preferences_moc.C:	$(HEADER_DIR)/preferences.h
-	$(MOC) $< -o $@
+	$(MOC) $(HEADER_DIR)/preferences.h -o $@
 
 dlgMoveOverlay_moc.C:	$(HEADER_DIR)/dlgMoveOverlay.h
-	$(MOC) $< -o $@
+	$(MOC) $(HEADER_DIR)/dlgMoveOverlay.h -o $@
 
 dlgMoveOverlayData_moc.C:	$(HEADER_DIR)/dlgMoveOverlayData.h
-	$(MOC) $< -o $@
-
-colorMeshDialog_moc.C:	$(HEADER_DIR)/colorMeshDialog.h
-	$(MOC) $< -o $@
-
-colorMeshDialogData_moc.C:	$(HEADER_DIR)/colorMeshDialogData.h
-	$(MOC) $< -o $@
-
-pythonSettings_moc.C:	$(HEADER_DIR)/pythonSettings.h
-	$(MOC) $< -o $@
-
-pythonSettingsData_moc.C:	$(HEADER_DIR)/pythonSettingsData.h
-	$(MOC) $< -o $@
-
-colorMeshDialogData.C:	$(HEADER_DIR)/colorMeshDialogData.h
-	$(UIC) -o $@ -impl $(HEADER_DIR)/colorMeshDialogData.h colorMeshDialog.ui
-
-$(HEADER_DIR)/colorMeshDialogData.h:	colorMeshDialog.ui
-	$(UIC) -o $@ colorMeshDialog.ui
-
-pythonSettingsData.C:	$(HEADER_DIR)/pythonSettingsData.h
-	$(UIC) -o $@ -impl $(HEADER_DIR)/pythonSettingsData.h pythonSettings.ui
-
-$(HEADER_DIR)/pythonSettingsData.h:	pythonSettings.ui
-	$(UIC) -o $@ pythonSettings.ui
-
-
-FDPBDialog_moc.C:	$(HEADER_DIR)/FDPBDialog.h
-	$(MOC) $< -o $@
-
-FDPBDialogData_moc.C:	$(HEADER_DIR)/FDPBDialogData.h
-	$(MOC) $< -o $@
-
-FDPBDialogData.C:	$(HEADER_DIR)/FDPBDialogData.h
-	$(UIC) -o $@ -impl $(HEADER_DIR)/FDPBDialogData.h FDPBDialog.ui
-
-$(HEADER_DIR)/FDPBDialogData.h:	FDPBDialog.ui
-	$(UIC) -o $@ FDPBDialog.ui
-
+	$(MOC) $(HEADER_DIR)/dlgMoveOverlayData.h -o $@

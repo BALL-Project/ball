@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.9 2002/12/12 10:57:42 oliver Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.10 2003/08/26 09:17:59 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
-# include <BALL/KERNEL/forEach.h>
-# include <BALL/KERNEL/bond.h>
+#include <BALL/VIEW/PRIMITIV/point.h>
+#include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
@@ -16,16 +17,15 @@ namespace BALL
 
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor()
 			throw()
-			:	BaseModelProcessor(),
+			:	MolecularModelProcessor(),
 			  used_atoms_(),
 				hashed_atoms_()
 		{
 		}
 
-		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor
-		  (const AtomBondModelBaseProcessor& processor, bool deep)
+		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor(const AtomBondModelBaseProcessor& processor)
 			throw()
-			:	BaseModelProcessor(processor, deep),
+			:	MolecularModelProcessor(processor),
 				used_atoms_(),
 				hashed_atoms_()
 		{
@@ -35,68 +35,47 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-						 << " of class " << RTTI::getName<AtomBondModelBaseProcessor>() << endl;
+				Log.info() << "Destructing object " << (void *)this 
+						 			 << " of class " << RTTI::getName<AtomBondModelBaseProcessor>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 
 		void AtomBondModelBaseProcessor::clear()
 			throw()
 		{
-			BaseModelProcessor::clear();
+			MolecularModelProcessor::clear();
 			clearUsedAtoms_();
 		}
 
-		void AtomBondModelBaseProcessor::destroy()
-			throw()
-		{
-		}
-
-		void AtomBondModelBaseProcessor::set
-			(const AtomBondModelBaseProcessor& processor, bool deep)
+		void AtomBondModelBaseProcessor::set(const AtomBondModelBaseProcessor& processor)
 			throw()
 		{
 			clearUsedAtoms_();
-
-			BaseModelProcessor::set(processor, deep);
+			MolecularModelProcessor::set(processor);
 		}
 
-		const AtomBondModelBaseProcessor& AtomBondModelBaseProcessor::operator =
-			(const AtomBondModelBaseProcessor& processor)
+		const AtomBondModelBaseProcessor& AtomBondModelBaseProcessor::operator = (const AtomBondModelBaseProcessor& processor)
 			throw()
 		{
 			set(processor);
-
 			return *this;
 		}
 
-		void AtomBondModelBaseProcessor::get
-			(AtomBondModelBaseProcessor& processor, bool deep) const
+		void AtomBondModelBaseProcessor::swap(AtomBondModelBaseProcessor& processor)
 			throw()
 		{
-			processor.set(*this, deep);
-		}
-
-		void AtomBondModelBaseProcessor::swap
-			(AtomBondModelBaseProcessor& processor)
-			throw()
-		{
-			BaseModelProcessor::swap(processor);
+			MolecularModelProcessor::swap(processor);
 		}
 
 		bool AtomBondModelBaseProcessor::start()
 		{
 			clearUsedAtoms_();
-			
-			return BaseModelProcessor::start();
+			return MolecularModelProcessor::start();
 		}
 				
 		bool AtomBondModelBaseProcessor::finish()
 		{
 			buildBondModels_();
-
 			return true;
 		}
 				
@@ -108,11 +87,10 @@ namespace BALL
 		bool AtomBondModelBaseProcessor::isValid() const
 			throw()
 		{
-			return BaseModelProcessor::isValid();
+			return MolecularModelProcessor::isValid();
 		}
 
-		void AtomBondModelBaseProcessor::dump
-			(ostream& s, Size depth) const
+		void AtomBondModelBaseProcessor::dump(ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -120,7 +98,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			BaseModelProcessor::dump(s, depth + 1);
+			MolecularModelProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "used atoms: " << used_atoms_.size() << endl;
@@ -131,44 +109,34 @@ namespace BALL
 		void AtomBondModelBaseProcessor::buildBondModels_()
     {
 			// generate bond primitive
-			Atom* first_atom_ptr = 0;
-			Atom* second_atom_ptr = 0;
-			Bond* pbond = 0;
-			AtomBondIterator bond_Iterator;
-			List<Atom*>::Iterator list_iterator;
+			const Atom* second_atom_ptr = 0;
+			AtomBondConstIterator bond_it;
+			List<const Atom*>::ConstIterator atom_it;
 
 			// for all used atoms
-			for (list_iterator = getAtomList_().begin();
-					 list_iterator != getAtomList_().end(); ++list_iterator)
+			for (atom_it  = getAtomList_().begin();
+					 atom_it != getAtomList_().end(); ++atom_it)
 			{
-				first_atom_ptr = *list_iterator;
-
 				// for all bonds connected from first- to second atom
-				BALL_FOREACH_ATOM_BOND(*first_atom_ptr, bond_Iterator)
+				BALL_FOREACH_ATOM_BOND(**atom_it, bond_it)
 				{
-					pbond = &(*bond_Iterator);
-					
-					if (first_atom_ptr != pbond->getSecondAtom())
+					if (*atom_it != bond_it->getSecondAtom())
 					{
-						second_atom_ptr = const_cast<Atom*>(pbond->getSecondAtom());
+						second_atom_ptr = bond_it->getSecondAtom();
 					}
 					else
 					{
-						second_atom_ptr = const_cast<Atom*>(pbond->getFirstAtom());
+						second_atom_ptr = bond_it->getFirstAtom();
 					}
 
 					// use only atoms with greater handles than first atom
 					// or
 					// second atom not a used atom, but smaller as the first atom
 					// process bond between them		
-					if (*first_atom_ptr < *second_atom_ptr
-							|| !getAtomSet_().has(second_atom_ptr))
+					if (**atom_it < *second_atom_ptr || !getAtomSet_().has(second_atom_ptr))
 					{
-						// remove all models append to bond
-						removeGeometricObjects_(*pbond, true);
-
 						// build connection primitive
-						pbond->host(*getModelConnector());
+						((Bond*)&*bond_it)->host(*getModelConnector());
 					}
 				}
 			}
@@ -179,5 +147,4 @@ namespace BALL
 #		endif
 
 	} // namespace MOLVIEW
-
 } // namespace BALL

@@ -1,4 +1,8 @@
-dnl		$Id: aclocal.m4,v 1.32 2003/08/19 10:41:13 oliver Exp $
+dnl -*- Mode: C++; tab-width: 2; -*-
+dnl vi: set ts=2:
+dnl
+dnl
+dnl		$Id: aclocal.m4,v 1.33 2003/08/26 09:17:30 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -2694,7 +2698,7 @@ AC_DEFUN(CF_BALLVIEW, [
 				dnl extract the QT version number and version number string from include/qglobal.h
 				dnl
 				QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
-				QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
+				QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3 | ${TR} -d \\"`
 				AC_MSG_CHECKING(for QT version number in qglobal.h)
 				if test "${QT_VERSION}" = "" ; then
 					AC_MSG_RESULT([<unknown>])
@@ -3088,15 +3092,32 @@ AC_DEFUN(CF_BALLVIEW, [
     dnl
     dnl  Make sure the MOC we found is actually executable
     dnl
+		AC_MSG_CHECKING(whether we can run moc)
     if test ! -x "${MOC}" ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([The QT Meta Object Compiler (moc) found in ])
       AC_MSG_RESULT("  ${MOC}")
       AC_MSG_RESULT([seems not to be an executable!])
 			AC_MSG_RESULT([Please include the correct path to moc into your])
-			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
+			AC_MSG_RESULT([PATH environment variable or specify the path to moc])
 			AC_MSG_RESULT([using the option --with-moc=PATH to rerun configure.])
 			AC_MSG_RESULT()
+			AC_MSG_ERROR(Aborted.)
+		else
+			AC_MSG_RESULT(yes)
+			AC_MSG_CHECKING(moc version)
+			MOC_VERSION=`${MOC} -v 2>&1 | ${TR} -d "()" | ${SED} "s/.* Qt //"`
+			AC_MSG_RESULT(${MOC_VERSION})
+			
+			if test "${MOC_VERSION}" != "${QT_VERSION_STR}" ; then
+				AC_MSG_RESULT()
+				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with moc version (${MOC_VERISON})!])
+				AC_MSG_RESULT([Please check your QTDRI environment variable, include the correct])
+				AC_MSG_RESULT([path to moc in your PATH environment variable, or specify the correct])
+				AC_MSG_RESULT([path to moc using the option --with-moc=PATH to rerun configure.])
+				AC_MSG_RESULT()
+				AC_MSG_ERROR(Aborted.)
+			fi
 		fi
 	fi
 
@@ -3129,6 +3150,7 @@ AC_DEFUN(CF_BALLVIEW, [
     dnl
     dnl  Make sure the UIC we found is actually executable
     dnl
+		AC_MSG_CHECKING(whether uic is executable)
     if test ! -x "${UIC}" ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([The QT User Interface Compiler (uic) found in ])
@@ -3138,6 +3160,22 @@ AC_DEFUN(CF_BALLVIEW, [
 			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
 			AC_MSG_RESULT([using the option --with-uic=PATH to rerun configure.])
 			AC_MSG_RESULT()
+			AC_MSG_ERROR(Aborted.)
+		else
+			AC_MSG_RESULT(yes)
+			AC_MSG_CHECKING(uic version)
+			UIC_VERSION=`${UIC} -version 2>&1 | ${TR} -d "()" | ${SED} "s/.*version //"`
+			AC_MSG_RESULT(${UIC_VERSION})
+			
+			if test "${UIC_VERSION}" != "${QT_VERSION_STR}" ; then
+				AC_MSG_RESULT()
+				AC_MSG_RESULT([QT version (${QT_VERSION_STR}) is incompatible with uic version (${UIC_VERISON})!])
+				AC_MSG_RESULT([Please check your QTDIR environment variable, include the correct])
+				AC_MSG_RESULT([path to uic in your PATH environment variable, or specify the correct])
+				AC_MSG_RESULT([path to uic using the option --with-uic=PATH to rerun configure.])
+				AC_MSG_RESULT()
+				AC_MSG_ERROR(Aborted.)
+			fi
 		fi
 	fi
     

@@ -1,3 +1,9 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: forceField.sip,v 1.2 2003/08/26 09:18:16 oliver Exp $
+//
+
 class ForceField
 {
 %HeaderCode

@@ -1,0 +1,433 @@
+<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<class>TransformationDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>TransformationDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>163</width>
+            <height>182</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>Transformation</string>
+    </property>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>defaultRotationValue</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>128</x>
+                <y>116</y>
+                <width>30</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>10</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>closeButton</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>34</x>
+                <y>148</y>
+                <width>90</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Close</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>3</x>
+                <y>0</y>
+                <width>76</width>
+                <height>113</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Sunken</enum>
+        </property>
+        <property name="title">
+            <string>Translation</string>
+        </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>zNegTranslationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>37</x>
+                    <y>77</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>-Z</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>xTranslationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>17</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>X</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>zTranslationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>77</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Z</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>yTranslationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>47</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Y</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>yNegTranslationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>37</x>
+                    <y>47</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>-Y</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>xNegTranslationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>37</x>
+                    <y>17</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>-X</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>83</x>
+                <y>0</y>
+                <width>74</width>
+                <height>113</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Rotation</string>
+        </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>xRotationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>16</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>X</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>zRotationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>76</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Z</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>yRotationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>46</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Y</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>xNegRotationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>37</x>
+                    <y>16</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>-X</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>zNegRotationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>37</x>
+                    <y>76</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>-Z</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>yNegRotationButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>37</x>
+                    <y>46</y>
+                    <width>30</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>-Y</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>defaultTranslationValue</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>47</x>
+                <y>117</y>
+                <width>30</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>1.0</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>2</x>
+                <y>116</y>
+                <width>41</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="text">
+            <string>amount</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>85</x>
+                <y>116</y>
+                <width>41</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>amount</string>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>xTranslationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>xTranslationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>yTranslationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>yTranslationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>zTranslationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>zTranslationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>xNegTranslationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>xNegTranslationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>yNegTranslationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>yNegTranslationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>zNegTranslationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>zNegTranslationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>xRotationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>xRotationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>yRotationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>yRotationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>zRotationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>zRotationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>xNegRotationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>xNegRotationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>yNegRotationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>yNegRotationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>zNegRotationButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>zNegRotationClicked()</slot>
+    </connection>
+    <connection>
+        <sender>closeButton</sender>
+        <signal>clicked()</signal>
+        <receiver>TransformationDialogData</receiver>
+        <slot>accept()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>xTranslationClicked()</slot>
+    <slot>yTranslationClicked()</slot>
+    <slot>zTranslationClicked()</slot>
+    <slot>xNegTranslationClicked()</slot>
+    <slot>yNegTranslationClicked()</slot>
+    <slot>zNegTranslationClicked()</slot>
+    <slot>xRotationClicked()</slot>
+    <slot>yRotationClicked()</slot>
+    <slot>zRotationClicked()</slot>
+    <slot>xNegRotationClicked()</slot>
+    <slot>yNegRotationClicked()</slot>
+    <slot>zNegRotationClicked()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

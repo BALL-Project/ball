@@ -1,6 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: mainframe.C,v 1.57 2003/08/26 09:17:36 oliver Exp $
+
+
 #include "mainframe.h"
 #include "icons.h"
 #include "DIALOGS/DlgAbout.h"
@@ -10,16 +13,20 @@
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
+#include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 
 #include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
-#include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
-#include <BALL/MOLVIEW/GUI/DIALOGS/peptideDialog.h>
+#include <BALL/VIEW/GUI/DIALOGS/FDPBDialog.h>
+#include <BALL/VIEW/PRIMITIV/mesh.h>
+#include <BALL/MOLVIEW/KERNEL/moleculeObjectCreator.h>
+#include <BALL/MOLVIEW/DIALOGS/peptideDialog.h>
+#include <BALL/MOLVIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/DATATYPE/regularData3D.h>
 #include <BALL/DATATYPE/contourSurface.h>
-#include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/SYSTEM/path.h>
 
 #ifdef BALL_PYTHON_SUPPORT
 #	include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
@@ -30,12 +37,21 @@
 #include <qsplitter.h>
 #include <qstatusbar.h>
 #include <qlabel.h>
+#include <qaccel.h> 
 
 #ifdef QT_THREAD_SUPPORT
-	 #include "threads.h"
+ #include "threads.h"
 #endif
 
+// testing
+#include <BALL/VIEW/GUI/DIALOGS/parsedFunctionDialog.h>
+
 using namespace std;
+namespace BALL
+{
+using namespace BALL::VIEW;
+using BALL::MOLVIEW::PeptideDialog;
+
 
 namespace BALL
 {
@@ -43,23 +59,20 @@ namespace BALL
 using BALL::MOLVIEW::PeptideDialog;
 
 Mainframe::Mainframe(QWidget* parent, const char* name)
-	:	MainControl(parent, name, ".options"),
+	:	MainControl(parent, name, ".molview"),
 		scene_(0),
 		control_(0),
+		geometric_control_(0),
 		display_properties_(0),
 		minimization_dialog_(0),
 		label_properties_(0),
 		molecular_properties_(0),
 		file_dialog_(0),
 		server_(0),
-		GL_object_collector_(),
-		fragment_db_(),
 		hor_splitter_(0),
 		vert_splitter_(0),
+		vert_splitter2_(0),
 		logview_(0),
-		vboxlayout_(0),
-		popup_menus_(),
-		tool_box_(0),
 		simulation_thread_(0),
 		fullscreen_(false),
 		stop_simulation_(false)
@@ -69,7 +82,6 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	// ---------------------
 	setCaption("MolVIEW");
 	setIcon(*new QPixmap(bucky_64x64_xpm));
-
 	resize(640,400);
 
 	// ---------------------
@@ -88,14 +100,21 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	hor_splitter_ = new QSplitter(vert_splitter_, "HorSplitter");
 	CHECK_PTR(hor_splitter_);
 
-	FDPB_dialog_ = new FDPBDialog(this);
-	CHECK_PTR(FDPB_dialog_);
-
-	control_ = new MolecularControl(hor_splitter_);
+	vert_splitter2_ = new QSplitter(hor_splitter_, "VertSplitter2");
+	vert_splitter2_->setOrientation(Vertical);
+	CHECK_PTR(vert_splitter2_);
+	
+	control_ = new MolecularControl(vert_splitter2_);
 	CHECK_PTR(control_);
+	control_->setMinimumSize(10, 10);
+
+	geometric_control_ = new GeometricControl(vert_splitter2_);
+	CHECK_PTR(geometric_control_);
+	geometric_control_->setMinimumSize(10, 10);
 
 	scene_ = new Scene(hor_splitter_);
 	CHECK_PTR(scene_);
+	scene_->setMinimumSize(10, 10);
 
 	display_properties_ = new DisplayProperties(this);
 	CHECK_PTR(display_properties_);
@@ -123,48 +142,57 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 
 	logview_ = new LogView(vert_splitter_);
 	CHECK_PTR(logview_);
+	logview_->setMinimumSize(10, 10);
+
+	FDPB_dialog_ = new FDPBDialog(this);
+	CHECK_PTR(FDPB_dialog_);
 
 	#ifdef BALL_PYTHON_SUPPORT
-		PyWidget* py_widget = new PyWidget(vert_splitter_);
-		CHECK_PTR(py_widget);
-		py_widget->startInterpreter();
+		vert_splitter3_ = new QSplitter(vert_splitter_, "VertSplitter3");
+		CHECK_PTR(vert_splitter3_);
+
+		PyWidget* pywidget = new PyWidget(vert_splitter3_);
+		CHECK_PTR(pywidget);
+		pywidget->startInterpreter();
 	#endif
-
-	// ---------------------
-	// Scene setup ---------
-	// ---------------------
-
-	scene_->registerGLObjectCollector(GL_object_collector_);
 
 	// ---------------------
 	// Menus ---------------
 	// ---------------------
 
 	// File Menu
-	insertMenuEntry(MainControl::FILE, "Export POVRay &file", this, SLOT(exportPOVRay()), 
-									CTRL+Key_F, MENU__FILE_EXPORT_POVRAYFILE);
+	insertMenuEntry(MainControl::FILE, "Export POVRa&y file", this, SLOT(exportPOVRay()), 
+									CTRL+Key_Y, MENU__FILE_EXPORT_POVRAYFILE);
+
+	insertMenuEntry(MainControl::FILE, "Visualise DCD file", this, SLOT(visualiseDCDFile()), 
+									CTRL+Key_2, MENU__FILE_VISUALISE_DCD);
+
+	// Display Menu
+	insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
+									ALT+Key_X, MENU__DISPLAY_FULLSCREEN);
+  insertMenuEntry(MainControl::DISPLAY, "Contour S&urface", this,  SLOT(computeSurface()), 
+									CTRL+Key_U,MENU__DISPLAY_OPEN_SURFACE_DIALOG);
 
 	// DISPLAY Menu
 	insertMenuEntry(MainControl::DISPLAY, "Toggle Fullscreen", this, SLOT(toggleFullScreen()),
 									ALT+Key_X, MENU__DISPLAY_FULLSCREEN);
 	// Build Menu -------------------------------------------------------------------
-	insertMenuEntry(MainControl::BUILD, "Assign &Charges", this, SLOT(assignCharges()), 
-									CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
-	insertMenuEntry(MainControl::BUILD, "Calculate AMBER &Energy", this, SLOT(calculateAmberEnergy()), 
-									CTRL+Key_U, MENU__BUILD_AMBER_ENERGY);
-	insertMenuEntry(MainControl::BUILD, "Perform Energy &Minimization", this, SLOT(amberMinimization()), 
-									CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
-	insertMenuEntry(MainControl::BUILD, "Perform MD &Simulation", this, SLOT(amberMDSimulation()), 
-									CTRL+Key_S, MENU__BUILD_AMBER_MDSIMULATION);
-
+	insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()), 
+									CTRL+Key_G, MENU__BUILD_ASSIGN_CHARGES);
+	insertMenuEntry(MainControl::BUILD, "Calculate &AMBER Energy", this, SLOT(calculateAmberEnergy()), 
+									CTRL+Key_A, MENU__BUILD_AMBER_ENERGY);
+	insertMenuEntry(MainControl::BUILD, "Perform &Energy Minimization", this, SLOT(amberMinimization()), 
+									CTRL+Key_E, MENU__BUILD_AMBER_MINIMIZATION);
+	insertMenuEntry(MainControl::BUILD, "Perform M&D Simulation", this, SLOT(amberMDSimulation()), 
+									CTRL+Key_D, MENU__BUILD_AMBER_MDSIMULATION);
 #ifdef QT_THREAD_SUPPORT
 	insertMenuEntry(MainControl::BUILD, "Stop simulation", this, SLOT(stopSimulation()),ALT+Key_C, MENU__BUILD_STOPSIMULATION);
 #endif
-  insertMenuEntry(MainControl::DISPLAY, "Contour Surface", this,  SLOT(computeSurface()), 
-									CTRL+Key_S,MENU__DISPLAY_OPEN_SURFACE_DIALOG);
-	insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()));
+	insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, MENU__BUILD_PEPTIDE);
+	insertMenuEntry(MainControl::BUILD, "Calculate FDPB", FDPB_dialog_, SLOT(show()));
+			
 	// Help-Menu -------------------------------------------------------------------
-	insertMenuEntry(MainControl::HELP, "&About", this, SLOT(about()), CTRL+Key_A, MENU__HELP_ABOUT);
+	insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()), CTRL+Key_9, MENU__HELP_ABOUT);
 
 	// Menu ------------------------------------------------------------------------
 	menuBar()->setSeparator(QMenuBar::InWindowsStyle);
@@ -174,6 +202,7 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	// ---------------------
 
 	connect(initPopupMenu(MainControl::BUILD), SIGNAL(aboutToShow()), this, SLOT(checkMenuEntries()));
+	connect(initPopupMenu(MainControl::FILE), SIGNAL(aboutToShow()), this, SLOT(checkMenuEntries()));
 
 	// check the active menu entries
 	checkMenuEntries();
@@ -183,23 +212,17 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	//--------------------------------
 
   // registering object generator
-  MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
-  server_->registerObjectCreator(*object_creator);
+//  MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
+//  server_->registerObjectCreator(*object_creator);
 
 	setStatusbarText("Ready.");
+	Log.error() << "Starting GUI..." << std::endl;
 }
 
 Mainframe::~Mainframe()
 	throw()
 {
-	List<QPopupMenu *>::Iterator list_it = popup_menus_.begin();
-
-	for (; list_it != popup_menus_.end(); ++list_it)
-	{
-		delete *list_it;
-	}
-
-	popup_menus_.clear();
+	stopSimulation();
 }
 
 void Mainframe::onNotify(Message *message)
@@ -212,33 +235,18 @@ void Mainframe::checkMenuEntries()
 {
 	setCompositesMuteable(!simulation_thread_);
 
-	bool selected;
-	int number_of_selected_objects = 0;
+	bool one_item = (control_selection_.size() == 1);
 
-	if (control_selection_.size() == 0)
-	{
-		selected = false;
-	}
-	else
-	{
-		number_of_selected_objects = control_selection_.size();
-		selected = (number_of_selected_objects > 0);
-	}
-
-	bool all_systems = (number_of_selected_objects > 0 && composites_muteable_);
-
-	menuBar()->setItemEnabled(MENU__BUILD_ASSIGN_CHARGES, selected);
+	menuBar()->setItemEnabled(MENU__BUILD_ASSIGN_CHARGES, one_item && composites_muteable_);
 
 	// AMBER methods are available only for single systems
-	menuBar()->setItemEnabled(MENU__BUILD_AMBER_ENERGY, 
-														(all_systems && (number_of_selected_objects == 1)));
-
-	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MINIMIZATION, 
-														(all_systems && (number_of_selected_objects == 1)));
-
-	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MDSIMULATION, 
-														(all_systems && (number_of_selected_objects == 1)));
-
+	menuBar()->setItemEnabled(MENU__BUILD_AMBER_ENERGY, one_item);
+	// disable simulation entries, if a simulation is already running
+	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MINIMIZATION, one_item && composites_muteable_);
+	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MDSIMULATION, one_item && composites_muteable_);
+	menuBar()->setItemEnabled(MENU__FILE_VISUALISE_DCD, 
+			getSelectedSystem() && composites_muteable_);
+	menuBar()->setItemEnabled(MENU__BUILD_PEPTIDE, composites_muteable_);
 	// enable stopSimulation if simulation is running
 	menuBar()->setItemEnabled(MENU__BUILD_STOPSIMULATION, !composites_muteable_);
 }
@@ -249,7 +257,11 @@ void Mainframe::exportPOVRay()
 	if (pov.exec())
 	{
 		POVRenderer pr(pov.getFileName());
+		pr.width  = scene_->width();
+		pr.height = scene_->height(); 
+		pr.init(*(scene_->getStage()));
 		scene_->exportScene(pr);
+		pr.finish();
 	}
 	removeModularWidget(&pov);	
 }
@@ -272,6 +284,15 @@ void Mainframe::calculateAmberEnergy()
 	// set up the AMBER force field
 	setStatusbarText("setting up force field...");
 
+	String filename(minimization_dialog_->getFilename());
+	Path path;
+	filename = path.find(filename);
+	if (filename == "")
+	{
+		Log.error() << "Invalid filename for amber options" << std::endl;
+		return;
+	}
+
 	AmberFF amber;
 	amber.options[AmberFF::Option::ASSIGN_TYPES] = "true";
 	amber.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
@@ -280,7 +301,7 @@ void Mainframe::calculateAmberEnergy()
 	amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
   amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] 
 		= String(minimization_dialog_->getUseDistanceDependentDC());
-  amber.options[AmberFF::Option::FILENAME] = String(minimization_dialog_->getFilename());
+  amber.options[AmberFF::Option::FILENAME] = String(filename);
 
 	if (!amber.setup(*system))
 	{
@@ -294,26 +315,15 @@ void Mainframe::calculateAmberEnergy()
 	amber.updateEnergy();
 
 	// print the result
-	Log.info() << "AMBER Energy:" << endl;
-	Log.info() << " - electrostatic     : " << amber.getESEnergy() << " kJ/mol" << endl;
-	Log.info() << " - van der Waals     : " << amber.getVdWEnergy() << " kJ/mol" << endl;
-	Log.info() << " - bond stretch      : " << amber.getStretchEnergy() << " kJ/mol" << endl;
-	Log.info() << " - angle bend        : " << amber.getBendEnergy() << " kJ/mol" << endl;
-	Log.info() << " - torsion           : " << amber.getTorsionEnergy() << " kJ/mol" << endl;
-	Log.info() << "---------------------------------------" << endl;
-	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
-
-	setStatusbarText("Total AMBER energy: %f kJ/mol." + String(amber.getEnergy()));
+	printAmberResults(amber);
+	setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
 }
 
 void Mainframe::computeSurface()
 {
-	System *system = new System();
-
 	// execute the surface dialog
 	// and abort if cancel is clicked
-	int result = surface_dialog_->exec();
-	if (result == 0)
+	if (surface_dialog_->exec() == 0)
 	{
 		return;
 	}
@@ -323,49 +333,18 @@ void Mainframe::computeSurface()
   Log.info()<<surface_dialog_->threshold_->text().toFloat()<<endl;
 	ContourSurface cs(surface_dialog_->threshold_->text().toFloat());
   Log.info()<<surface_dialog_->threshold_->text().toFloat()<<endl;
-	// Compute contour surface.
-	cs << rd; 
-	GLMesh *mesh = new GLMesh();
+	//cs.createContourSurface(rd);   ????
+	Mesh* mesh = new Mesh();
 	*static_cast<Surface*>(mesh) = (Surface) cs;
-	//mesh->PropertyManager::set(*this);
-	mesh->setName(String("TestSurface"));
-	system->getRoot().appendChild(*mesh);
 
-	insert(system);
+	Representation* rep = getPrimitiveManager().createRepresentation();
+	rep->insert(*mesh);
+	rep->setModelType(4); // Setting Representation type to Surface
 
-	NewCompositeMessage ncm;
-	ncm.setComposite(system);
-	notify_(ncm);
-
-	// notify tree of the changes
-	ChangedMolecularMessage changed_message; 
-	changed_message.setComposite(system);
-
-	notify_(changed_message);
-	// calculate center of the new composite
-	SceneMessage *scene_message = new SceneMessage;
-	GeometricCenterProcessor center;
-	system->apply(center);        
-
-	scene_message->setCameraLookAt(center.getCenter());
-
-	Vector3 view_point = center.getCenter();
-	view_point.z = view_point.z + 5;
-	scene_message->setCameraViewPoint(view_point);
-
-	// notify scene to perform an update and set the camera to the new object
-	notify_(scene_message);
-
-	SceneMessage sc;
-	sc.updateOnly();
-	notify_(sc);
-
-	WindowMessage wm;
-	notify_(wm);
-
-	MainControl::update(*system);
-	QWidget::update();
-
+	RepresentationMessage* message = new RepresentationMessage;
+	message->setRepresentation(rep);
+	message->setType(RepresentationMessage::ADD);
+	notify_(message);
 }
 
 void Mainframe::amberMinimization()
@@ -435,7 +414,7 @@ void Mainframe::amberMinimization()
 	// perform an initial step (no restart step)
 	minimizer->minimize(1, false);
 
-	// ============================= WITH MULTITHREADING ==============================================
+	// ============================= WITH MULTITHREADING ====================================
 #ifdef QT_THREAD_SUPPORT
 	EnergyMinimizerThread* thread = new EnergyMinimizerThread;
 	simulation_thread_ = thread;
@@ -445,9 +424,8 @@ void Mainframe::amberMinimization()
 	thread->setNumberOfStepsBetweenUpdates(minimization_dialog_->getRefresh());
 	thread->setMainframe(this);
 	thread->start();
-
 #else
-	// ============================= WITHOUT MULTITHREADING ===========================================
+	// ============================= WITHOUT MULTITHREADING =================================
 	// iterate until done and refresh the screen every "steps" iterations
 	while (!minimizer->minimize(minimization_dialog_->getRefresh(), true) &&
 					minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
@@ -545,9 +523,9 @@ void Mainframe::amberMDSimulation()
 	mds->simulateIterations(1, false);
 
 	// we update everything every so and so steps
-	Size steps = 2;
+	Size steps = md_dialog_->getStepsBetweenRefreshs();
 
-	// ============================= WITH MULTITHREADING ==============================================
+	// ============================= WITH MULTITHREADING ===================================
 #ifdef QT_THREAD_SUPPORT
 	MDSimulationThread* thread = new MDSimulationThread;
 	simulation_thread_ = thread;
@@ -558,11 +536,19 @@ void Mainframe::amberMDSimulation()
 	thread->setNumberOfStepsBetweenUpdates(steps);
 	thread->setMainframe(this);
 	thread->setSaveImages(md_dialog_->saveImages());
+	thread->setDCDFileName(md_dialog_->getDCDFile());
 	thread->start();
 
 #else
-	// ============================= WITHOUT MULTITHREADING ===========================================
+	// ============================= WITHOUT MULTITHREADING ==============================
 	// iterate until done and refresh the screen every "steps" iterations
+	String dcdfile = md_dialog_->getDCDFile();
+	bool store_dcd = dcdfile.size() != 0;
+	DCDFile dcd;
+	if store_dcd dcd = dcd.open(dcdfile, File::OUT);
+	dcd.enableVelocityStorage();
+	SnapShotManager manager(amber->getSystem(), amber, &dcd);
+	manager.setFlushToDiskFrequency(10);
 	while (mds->getNumberOfIterations() < md_dialog_->getNumberOfSteps())
 	{
 		mds->simulateIterations(steps, true);
@@ -572,12 +558,17 @@ void Mainframe::amberMDSimulation()
 			Scene* scene= (Scene*) Scene::getInstance(0);
 			scene->exportPNG();
 		}
+		
+		
+		if (store_dcd) manager.takeSnapShot();
 
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 										mds->getNumberOfIterations(), amber->getEnergy(), amber->getRMSGradient());
 		setStatusbarText(String(message.ascii()));
  	}
+
+	if (store_dcd) manager.flushToDisk();
 
 	Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 	printAmberResults(*amber);
@@ -591,21 +582,21 @@ void Mainframe::amberMDSimulation()
 #endif
 }
 
-
 void Mainframe::about()
 {
+	ParsedFunctionDialog* pfd = new ParsedFunctionDialog();
+	pfd->show();
+	return;
+	
 	DlgAbout about_box;
 	about_box.exec();
-
-	setStatusbarText("MolVIEW V1.0");
+	
 }
 
 void Mainframe::fetchPreferences(INIFile& inifile)
 	throw()
 {
-	// 
 	// the splitter positions
-	//
 	QValueList<int> value_list;
 	String value_string;
 	if (inifile.hasEntry("WINDOWS", "Main::hor_splitter"))
@@ -626,7 +617,35 @@ void Mainframe::fetchPreferences(INIFile& inifile)
 			value_list.append(value_string.getField(i).toInt());
 		}
 		vert_splitter_->setSizes(value_list);
+		value_list.clear();
 	}
+	if (inifile.hasEntry("WINDOWS", "Main::vert_splitter2"))
+	{
+		value_string = inifile.getValue("WINDOWS", "Main::vert_splitter2");
+		for (Size i = 0; i < value_string.countFields(); i++)
+		{
+			value_list.append(value_string.getField(i).toInt());
+		}
+		vert_splitter2_->setSizes(value_list);
+		value_list.clear();
+	}
+
+	#ifdef BALL_PYTHON_SUPPORT
+		if (inifile.hasEntry("WINDOWS", "Main::vert_splitter3"))
+		{
+			value_string = inifile.getValue("WINDOWS", "Main::vert_splitter3");
+			for (Size i = 0; i < value_string.countFields(); i++)
+			{
+				value_list.append(value_string.getField(i).toInt());
+			}
+			vert_splitter3_->setSizes(value_list);
+			value_list.clear();
+		}
+	#endif
+
+	// preferences for the dialogs
+	minimization_dialog_->readPreferences(inifile);
+	md_dialog_->readPreferences(inifile);
 
 	MainControl::fetchPreferences(inifile);
 }
@@ -644,6 +663,7 @@ void Mainframe::writePreferences(INIFile& inifile)
 	}
 	inifile.insertValue("WINDOWS", "Main::hor_splitter", value_string);
 
+	// --------------------------------
 	value_string = "";
 	size_list = vert_splitter_->sizes();
 	list_it = size_list.begin();
@@ -653,30 +673,31 @@ void Mainframe::writePreferences(INIFile& inifile)
 	}
 	inifile.insertValue("WINDOWS", "Main::vert_splitter", value_string);
 
+	// --------------------------------
+	value_string = "";
+	size_list = vert_splitter2_->sizes();
+	list_it = size_list.begin();
+	for (; list_it != size_list.end(); ++list_it)
+	{
+		value_string += String(*list_it) + " ";
+	}
+	inifile.insertValue("WINDOWS", "Main::vert_splitter2", value_string);
+
 	minimization_dialog_->writePreferences(inifile);
+	md_dialog_->writePreferences(inifile);
+
+	#ifdef BALL_PYTHON_SUPPORT
+		value_string = "";
+		size_list = vert_splitter3_->sizes();
+		list_it = size_list.begin();
+		for (; list_it != size_list.end(); ++list_it)
+		{
+			value_string += String(*list_it) + " ";
+		}
+		inifile.insertValue("WINDOWS", "Main::vert_splitter3", value_string);
+	#endif
 
 	MainControl::writePreferences(inifile);
-}
-
-void Mainframe::buildPeptide()
-{
-	PeptideDialog* dialog = new PeptideDialog;
-	dialog->exec();
-
-	Protein* protein = dialog->getProtein();
-	if (protein == 0) return;
-
-	System* system = new System;
-	system->insert(*protein);
-	insert(*system);
-
-	// repaint of the scene and the composites needed
-	for (Position p = 0; ; p++)
-	{
-		Scene* scene= (Scene*) Scene::getInstance(p);
-		if (scene == 0) return;
-		scene->update(true);
-	}
 }
 
 void Mainframe::toggleFullScreen()
@@ -724,6 +745,30 @@ void Mainframe::toggleFullScreen()
 	fullscreen_ = false;
 }
 
+void Mainframe::openFile(const String& file)
+	throw()
+{
+	file_dialog_->openFile(file);
+}
+
+
+void Mainframe::buildPeptide()
+{
+	PeptideDialog* dialog = new PeptideDialog;
+	dialog->exec();
+
+	Protein* protein = dialog->getProtein();
+	if (protein == 0) return;
+
+	System* system = new System;
+	system->insert(*protein);
+	composite_manager_.insert(*system);
+	NewCompositeMessage* new_message = new NewCompositeMessage;
+	new_message->setDeletable(false);
+	new_message->setComposite(system);
+	new_message->setCompositeName("Peptide");
+	notify_(new_message);
+}
 
 void Mainframe::stopSimulation() 
 {
@@ -738,7 +783,7 @@ void Mainframe::stopSimulation()
 
 	Log.insert(std::cout);
 	Log.insert(std::cerr);
-//	setStatusbarText("Simulation finished.");
+	setStatusbarText("Simulation finished.");
 	stop_simulation_ = false;
 	checkMenuEntries();
 #endif
@@ -773,15 +818,33 @@ void Mainframe::customEvent( QCustomEvent * e )
 	}
 }
 
-void Mainframe::openFile(const String& file)
-	throw()
+
+void Mainframe::visualiseDCDFile()
 {
-	file_dialog_->openFile(file);
+	if (!getSelectedSystem()) return;
+	QFileDialog *fd = new QFileDialog(this, "", true);
+	fd->setMode(QFileDialog::ExistingFile);
+	fd->setFilter("DCD files(*.dcd)");
+	fd->setCaption("Select a DCD file");
+	fd->setViewMode(QFileDialog::Detail);
+
+	if (!fd->exec()== QDialog::Accepted) return;
+
+	String filename(fd->selectedFile().ascii());
+	delete fd;
+
+	// construct a name for the system(the filename without the dir path)
+	DCDFile* dcd = new DCDFile(filename, File::IN);
+	if (dcd->getNumberOfAtoms() != getSelectedSystem()->countAtoms())
+	{
+		setStatusbarText("Number of atoms do not match. Aborting...");
+		delete dcd;
+		return;
+	}
+	SnapShotManager* manager = new SnapShotManager(getSelectedSystem(), 0, dcd);
+	SnapshotVisualisationDialog* dialog = new SnapshotVisualisationDialog(this);
+	dialog->setSnapShotManager(manager);
+	dialog->show();
 }
 
-
-#ifdef BALL_NO_INLINE_FUNCTIONS
-#	include "mainframe.iC"
-#endif
-
-} // namespace
+} 

@@ -1,4 +1,8 @@
-// $Id: timeStamp.sip,v 1.6 2003/03/28 14:53:55 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: timeStamp.sip,v 1.7 2003/08/26 09:18:24 oliver Exp $
+//
 
 class PreciseTime
 {

@@ -1,4 +1,8 @@
-// $Id: client.sip,v 1.1 2002/02/15 01:57:28 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: client.sip,v 1.2 2003/08/26 09:18:14 oliver Exp $
+//
 
 class Client
 {

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventParameter.C,v 1.10 2003/02/22 12:54:39 anker Exp $
+// $Id: solventParameter.C,v 1.11 2003/08/26 09:18:26 oliver Exp $
+//
 
 #include <BALL/SOLVATION/solventParameter.h>
 #include <BALL/SYSTEM/path.h>

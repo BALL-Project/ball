@@ -1,4 +1,8 @@
-// $Id: conjugateGradient.sip,v 1.2 2003/03/25 17:08:57 anhi Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: conjugateGradient.sip,v 1.3 2003/08/26 09:18:15 oliver Exp $
+//
 
 class ConjugateGradientMinimizer 
   : EnergyMinimizer

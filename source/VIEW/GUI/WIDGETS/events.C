@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.C,v 1.5 2002/12/16 12:23:10 sturm Exp $
+// $Id: events.C,v 1.6 2003/08/26 09:18:45 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/events.h>
 
@@ -359,15 +359,9 @@ namespace BALL
 		Events::~Events()
 			throw()
 		{
-			destroy();
 		}
 
 		void Events::clear()
-			throw()
-		{
-		}
-			
-		void Events::destroy()
 			throw()
 		{
 		}

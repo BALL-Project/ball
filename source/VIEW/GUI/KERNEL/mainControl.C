@@ -1,13 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.38 2003/07/21 07:59:57 amoll Exp $
+// $Id: mainControl.C,v 1.39 2003/08/26 09:18:41 oliver Exp $
+//
 
 // this is required for QMenuItem
 //#define iNCLUDE_MENUITEM_DEy
 
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#include <BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h>
+#include <BALL/VIEW/GUI/DIALOGS/preferences.h>
+#include <BALL/VIEW/KERNEL/message.h>
+
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
@@ -15,11 +21,19 @@
 #include <BALL/MATHS/common.h>
 
 #include <qapplication.h>
-#include <qwidget.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
 #include <qstatusbar.h>
+#include <qlabel.h>
 
+#include <algorithm> // sort
+
+
+#include <BALL/VIEW/GUI/WIDGETS/control.h>
+#include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
+#include <BALL/VIEW/KERNEL/logView.h>
+#include <BALL/VIEW/GUI/WIDGETS/scene.h>
+#include <BALL/VIEW/GUI/WIDGETS/geometricControl.h>
 using std::istream;
 using std::ostream;
 using std::endl;
@@ -29,20 +43,11 @@ namespace BALL
 	namespace VIEW
 	{
 
-	  MainControl::PreferencesError::PreferencesError(const char* file, int line, const string& data)
-			throw()
-			: Exception::GeneralException(file, line, string("PreferencesError"), data)
-		{
-    }
-  
 		MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 			throw()
 			:	QMainWindow(parent, name),
 				selection_(),
 				message_label_(new QLabel("" , statusBar())),
-				composite_map_(),
-				descriptor_map_(),
-				descriptors_(),
 				main_control_preferences_(0),
 				preferences_dialog_(0),
 				preferences_id_(-1),
@@ -63,13 +68,10 @@ namespace BALL
 				ConnectionObject(main_control),
 				Embeddable(main_control),
 				selection_(),
-				composite_map_(),
-				descriptor_map_(),
-				descriptors_(),
 				main_control_preferences_(0),
 				preferences_dialog_(0),
 				preferences_id_(-1),
-				composites_muteable_(true)
+				composites_muteable_(main_control.composites_muteable_)
 		{
 		}
 		
@@ -119,8 +121,11 @@ namespace BALL
 					case TOOLS:
 						menuBar()->insertItem("&Tools", menu, TOOLS, (4 <= max_id) ? 4 : -1);
 						break;
+					case WINDOWS:
+						menuBar()->insertItem("&Windows", menu, WINDOWS, (5 <= max_id) ? 5 : -1);
+						break;
 					case USER:
-						menuBar()->insertItem("&User", menu, USER, (5 <= max_id) ? 5 : -1);
+						menuBar()->insertItem("&User", menu, USER, (6 <= max_id) ? 6 : -1);
 						break;
 
 					case HELP:
@@ -144,16 +149,9 @@ namespace BALL
 		void MainControl::clear()
 			throw()
 		{
-			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
-			for (; it != descriptors_.end(); ++it)
-			{
-				delete *it;
-			}
-
-			descriptors_.clear();
-			composite_map_.clear();
-			descriptor_map_.clear();
 			selection_.clear();
+			primitive_manager_.clear();
+			composite_manager_.clear();
 		}
 			
 		void MainControl::show()
@@ -170,15 +168,17 @@ namespace BALL
 			}
 
 			// create own preferences dialog
-			preferences_dialog_ = new Preferences(this);
+			preferences_dialog_ = new Preferences(this, "Molview Preferences", 455, 352);
 
 			if (preferences_dialog_ == 0)
 			{
-				throw PreferencesError(__FILE__, __LINE__, "memory allocation failed for preferences dialog.");
+				throw Exception::GeneralException(__FILE__, __LINE__, 
+						"memory allocation failed for preferences dialog.", "");
 			}
 
 			// establish connection 
 			connect(preferences_dialog_, SIGNAL(applyButtonPressed()), this, SLOT(applyPreferencesTab()));
+			connect(preferences_dialog_, SIGNAL(cancelButtonPressed()), this, SLOT(cancelPreferencesTab()));
 
 			// initialize own preferences tab
 			initializePreferencesTab(*preferences_dialog_);
@@ -187,6 +187,7 @@ namespace BALL
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (; it != modular_widgets_.end(); ++it)
 			{
+
 				registerConnectionObject(**it);
 				(*it)->initializeWidget(*this);
 				(*it)->initializePreferencesTab(*preferences_dialog_);
@@ -211,7 +212,7 @@ namespace BALL
 
 			// own menu entries
 			insertPopupMenuSeparator(MainControl::FILE);
-			insertMenuEntry(MainControl::FILE, "E&xit", qApp, SLOT(quit()), CTRL+Key_X);	
+			insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), CTRL+Key_Q);	
 			
 			// if the preferences dialog has any tabs then show it
 			if (preferences_dialog_->hasTabs())
@@ -219,9 +220,9 @@ namespace BALL
 				initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 				
 				preferences_id_ = insertMenuEntry(MainControl::DISPLAY, 
-																					"&Preferences", 
+																					"Preferences", 
 																					preferences_dialog_, 
-																					SLOT(openDialog()), CTRL+Key_P);
+																					SLOT(openDialog()), CTRL+Key_Z);
 			}
 
 			QMainWindow::show();
@@ -256,6 +257,19 @@ namespace BALL
 			}
 		}
 
+		
+		void MainControl::cancelPreferencesTab()
+			throw()
+		{
+			// checks all modular widgets 
+			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
+			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			{
+				(*it)->cancelPreferences(*preferences_dialog_);
+			}
+		}
+
+		
 		void MainControl::aboutToExit()
 		{
 			preferences_.clear();
@@ -287,211 +301,80 @@ namespace BALL
 			preferences_dialog_ = 0;
 		}
 
-		bool MainControl::remove(const Composite& composite, bool sent_message)
+		bool MainControl::remove_(Composite& composite)
 			throw()
 		{
-			ListIteratorHashMap::Iterator map_iterator = composite_map_.find((void*)&composite);
-
-			if (map_iterator != composite_map_.end())
-			{
-				if (sent_message)
-				{
-					// send a message that the composite descriptor
-					// will be deleted
-					RemovedCompositeMessage *message = new RemovedCompositeMessage;
-					message->setComposite(composite);
-					message->setDeletable(true);
-					notify_(message);
-				}
- 
-				// delete all information concerning the composite
-				CompositeDescriptor* descriptor = *(map_iterator->second);
-
-				// remove Iterator from DescriptorList
-				descriptors_.erase(map_iterator->second);
-
-				// remove Composite from Composite2CompositeDescriptorIterator HashMap
-				composite_map_.erase((void*)&composite);
-				
-				// remove CompositeDescriptor from CompositeDescriptor2CompositeDescriptorIterator HashMap
-				descriptor_map_.erase((void *)descriptor);
-
-				// delete CompositeDescriptor
-				delete descriptor;
-
-				return true;
-			}
-
-			return false;
-		}
-
-		bool MainControl::remove(const CompositeDescriptor& composite_descriptor)
-			throw()
-		{
-			ListIteratorHashMap::Iterator map_iterator = descriptor_map_.find((void*)&composite_descriptor);
-
-			if (map_iterator != descriptor_map_.end())
-			{
-				composite_map_.erase((void*)composite_descriptor.getComposite());
-				descriptor_map_.erase((void*)&composite_descriptor);
-				delete (CompositeDescriptor*)map_iterator->first;
-				descriptors_.erase(map_iterator->second);
-
-				return true;
-			}
-
-			return false;
-		}
-
-		bool MainControl::setName(const Composite& composite, const String& s)
-			throw()
-		{
-			ListIteratorHashMap::Iterator map_iterator = composite_map_.find((void*)&composite);
-
-			if (map_iterator != composite_map_.end())
-			{
-				(*map_iterator->second)->setName(s);
-				return true;
-			}
-
-			return false;
-		}
-
-		String* MainControl::getName(const Composite& composite)
-			throw()
-		{
-			ListIteratorHashMap::Iterator map_iterator = composite_map_.find((void*)&composite);
-
-			if (map_iterator != composite_map_.end())
-			{
-				return &((*map_iterator->second)->getName());
-			}
-
-			return 0;  
-		}
-
-		CompositeDescriptor* MainControl::getDescriptor(const String& name)
-			throw()
-		{
-			List<CompositeDescriptor*>::Iterator it = descriptors_.begin();
-
-			for (; it != descriptors_.end(); ++it)
-			{
-				if ((*it)->getName() == name)
-				{
-					return (*it);
-				}
-			}
+			if (!composite_manager_.has(composite)) return false;
 			
-			return 0;
-		}
+			composite_manager_.remove(composite);
 
-		bool MainControl::setCenter(const Composite& composite, const Vector3& v)
-			throw()
-		{
-			ListIteratorHashMap::Iterator map_iterator = composite_map_.find((void*)&composite);
-
-			if (map_iterator != composite_map_.end())
+			// delete all representations containing the composite
+			List<Representation*> removed_representations;
+			removed_representations = primitive_manager_.removedComposite(composite);
+			RepresentationMessage* rr_message = 0;
+			List<Representation*>::Iterator reps_it = removed_representations.begin();
+			// notify GeometricControl of removed representations
+			for (; reps_it != removed_representations.end(); reps_it++)
 			{
-				(*map_iterator->second)->setCenter(v);
-				return true;
+				rr_message = new RepresentationMessage;
+				rr_message->setType(RepresentationMessage::REMOVE);
+				rr_message->setRepresentation(*reps_it);
+				rr_message->setDeletable(true);
+				notify_(rr_message);
 			}
 
-			return false;
-		}
+			if (removed_representations.size() > 0) updateAll();
 
-		Vector3* MainControl::getCenter(const Composite& composite)
-			throw()
-		{
-			ListIteratorHashMap::Iterator map_iterator =
-				composite_map_.find((void*)&composite);
-
-			if (map_iterator != composite_map_.end())
-			{
-				return &(*map_iterator->second)->getCenter();
-			}
-
-			return 0;
-		}
-
-		CompositeDescriptor* MainControl::getDescriptor(const Vector3& center)
-			throw()
-		{
-			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
-
-			for (; it != descriptors_.end();++it)
-			{
-				if ((*it)->getCenter() == center)
-				{
-					return (*it);
-				}
-			}
-			
-			return 0;
+			return true;
 		}
 
 		bool MainControl::update(const Composite& composite)
 			throw()
 		{
-			ListIteratorHashMap::Iterator map_iterator = composite_map_.find((void*)&composite);
-
-			if (map_iterator != composite_map_.end())
+			if (!composite_manager_.has(composite)) return false;
+			
+			// delete all representations containing the composite
+			List<Representation*> changed_representations;
+			changed_representations = primitive_manager_.changedComposite(composite);
+			RepresentationMessage* ur_message = 0;
+			List<Representation*>::Iterator reps_it = changed_representations.begin();
+			// notify GeometricControl of changed representations
+			for (; reps_it != changed_representations.end(); reps_it++)
 			{
-				(*map_iterator->second)->update();
-				return true;
+				ur_message = new RepresentationMessage;
+				ur_message->setRepresentation(*reps_it);
+				ur_message->setType(RepresentationMessage::UPDATE);
+				ur_message->setDeletable(true);
+				notify_(ur_message);
 			}
 
-			return false;
+			SceneMessage *scene_message = new SceneMessage;
+			scene_message->setType(SceneMessage::REDRAW);
+			scene_message->setDeletable(true);
+			notify_(scene_message);
+
+			return true;
 		}
 
-		void MainControl::updateAll()
+
+		void MainControl::updateAll(bool rebuild_display_lists)
 			throw()
 		{
-			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
-
-			for (; it != descriptors_.end();++it)
-			{
-				(*it)->update();
-			}
-
 			// update scene
 			SceneMessage *scene_message = new SceneMessage;
-			scene_message->updateOnly();
+			if (rebuild_display_lists)
+			{
+				scene_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
+			}
+			else
+			{
+				scene_message->setType(SceneMessage::REDRAW);
+			}
+
 			scene_message->setDeletable(true);
 			notify_(scene_message); 
 		}
 
-		void MainControl::insert(Composite* composite, const String& name, const Vector3& center)
-			throw()
-		{
-			if (composite == 0)
-			{
-				return;
-			}
-
-			// is already inserted => remove it and sent a message
-			if (isInserted(*composite))
-			{
-				remove(*composite, true);
-			}
-
-			// create a new composite descriptor and enable the self deletion mechanism
-			// for the composite
-			List<CompositeDescriptor*>::Iterator list_iterator = descriptors_.end();
-
-			CompositeDescriptor* composite_descriptor = new CompositeDescriptor();
-
-			composite_descriptor->setComposite(composite, true);
-			composite_descriptor->setName(name);
-			composite_descriptor->setCenter(center);
-
-			descriptors_.push_back(composite_descriptor);
-			list_iterator = descriptors_.end();
-			list_iterator--;
-
-			 composite_map_.insert(ListIteratorHashMap::ValueType((void*)composite, list_iterator));
-			descriptor_map_.insert(ListIteratorHashMap::ValueType((void*)composite_descriptor, list_iterator));
- 		}	
 
 		void MainControl::onNotify(Message *message)
 			throw()
@@ -499,12 +382,12 @@ namespace BALL
 			if (RTTI::isKindOf<NewCompositeMessage>(*message))
 			{
 				NewCompositeMessage* new_message = RTTI::castTo<NewCompositeMessage>(*message);
-				insert(new_message->getComposite(), new_message->getCompositeName());
+				composite_manager_.insert(*new_message->getComposite());
  			}
 			else if (RTTI::isKindOf<RemovedCompositeMessage>(*message))
 			{
 				RemovedCompositeMessage *composite_message = RTTI::castTo<RemovedCompositeMessage>(*message);
-				remove(*composite_message->getComposite(), false);
+				remove_(*composite_message->getComposite());
 			}
 			else if (RTTI::isKindOf<ChangedCompositeMessage>(*message))
 			{
@@ -518,53 +401,35 @@ namespace BALL
 			}
 			else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
 			{
-				GeometricObjectSelectionMessage* selection_message = RTTI::castTo<GeometricObjectSelectionMessage>(*message);
+				GeometricObjectSelectionMessage* selection_message = 
+					RTTI::castTo<GeometricObjectSelectionMessage>(*message);
 				selectComposites_(*selection_message);
 			}
 			else if(RTTI::isKindOf<CompositeSelectedMessage>(*message))
 			{
 				// Selection came from selecting checkbox in Control or "select" menu in displayProperties
 				CompositeSelectedMessage * selection_message = RTTI::castTo<CompositeSelectedMessage>(*message);
-				if (selection_message->selected_ == selection_.has(selection_message->composite_)) return;
-				selectCompositeRecursive(selection_message->composite_, selection_message->selected_);
+				if (selection_message->isSelected() == selection_.has(selection_message->getComposite())) return;
+				if (selection_message->isSelected())
+				{
+					selectCompositeRecursive(selection_message->getComposite(), true);
+				}
+				else
+				{
+					deselectCompositeRecursive(selection_message->getComposite(), true);
+				}
 				NewSelectionMessage* nws_message = new NewSelectionMessage;					
 				notify_(nws_message);
 
 				// sending of scene message and geometric object selector is done in MolecularProperties, because
 				// ObjectSelector is part of MOLVIEW
 			}
-			else if (RTTI::isKindOf<WindowMessage>(*message))
-			{
-				WindowMessage *window_message = RTTI::castTo<WindowMessage>(*message);
-				setStatusbarText(window_message->getStatusBar().c_str());	
-			}
     }
 
-		bool MainControl::isInserted(const Composite& composite) const
-			throw()
-		{
-			return (composite_map_.find((void*)&composite) != composite_map_.end());
-		}
-
-		bool MainControl::isInserted(const CompositeDescriptor& composite_descriptor) const
-			throw()
-		{
-			return (descriptor_map_.find((void*)&composite_descriptor) != descriptor_map_.end());
-		}
 
 		bool MainControl::isValid() const
 			throw()
 		{
-			List<CompositeDescriptor*>::ConstIterator it = descriptors_.begin();
-
-			for ( ; it != descriptors_.end();++it)
-			{
-				if (!(*it)->isValid())
-				{
-					return false;
-				}
-			}
-
 			return true;
 		}
 
@@ -576,63 +441,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			List<CompositeDescriptor*>::ConstIterator it = descriptors_.begin();
-
-			for ( ; it != descriptors_.end(); ++it)
-			{
-				(*it)->dump(s, depth + 1);
-			}
-
 			BALL_DUMP_STREAM_SUFFIX(s);     
-		}
-
-		CompositeDescriptor*  MainControl::insert_(const Composite& composite, const String& s, const Vector3& v)
-			throw()
-		{
-			if (composite_map_.has((void *)&composite))
-			{
-				return 0;
-			}
-
-			List<CompositeDescriptor*>::Iterator list_iterator = descriptors_.end();
-
-			CompositeDescriptor* composite_descriptor = new CompositeDescriptor();
-			composite_descriptor->setComposite(&composite);
-			composite_descriptor->setName(s);
-			composite_descriptor->setCenter(v);
-
-			descriptors_.push_back(composite_descriptor);
-			list_iterator = descriptors_.end();
-			list_iterator--;
-
-			composite_map_.insert(ListIteratorHashMap::ValueType((void *)&composite, list_iterator));
-			descriptor_map_.insert(ListIteratorHashMap::ValueType((void *)composite_descriptor, list_iterator));
-
-			return composite_descriptor;
-		}
-
-		CompositeDescriptor* MainControl::insert_(CompositeDescriptor& composite_descriptor, bool deep)
-			throw()
-		{
-			if (descriptor_map_.has((void*)&composite_descriptor) && !deep)
-			{
-				return 0;
-			}
-
-			List<CompositeDescriptor*>::Iterator list_iterator;
-
-			CompositeDescriptor* new_composite_descriptor = (CompositeDescriptor*)composite_descriptor.create(deep);
-
-			descriptors_.push_back(new_composite_descriptor);
-			list_iterator = descriptors_.end();
-			list_iterator--;
-
-			composite_map_.insert(ListIteratorHashMap::ValueType((void*)new_composite_descriptor->getComposite(), 
-																													 list_iterator));
-
-			descriptor_map_.insert(ListIteratorHashMap::ValueType((void*)new_composite_descriptor, list_iterator));
-
-			return new_composite_descriptor;
 		}
 
 		// VIEW automatic module registration
@@ -672,32 +481,40 @@ namespace BALL
 			throw()
 		{
 			QMenuBar* menu_bar = menuBar();
-			if (menu_bar != 0)
+			if (menu_bar == 0) return -1;
+			
+			// enable the corresponding popup menu
+			menu_bar->setItemEnabled(ID, true);
+			QPopupMenu* popup = initPopupMenu(ID);
+			if (popup == 0)
 			{
-				// enable the corresponding popup menu
-				menu_bar->setItemEnabled(ID, true);
-				//
-				QPopupMenu* popup = initPopupMenu(ID);
-				if (popup == 0)
-				{
-					Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
-				}
-				else
-				{
-					// insert the menu entry
-					if (entry_ID == -1)
-					{
-						entry_ID = getNextID_();
-					}
-
-					popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID);
-					return entry_ID;
-				}
+				Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
+				return -1;
 			}
+				
+			// insert the menu entry
+			if (entry_ID == -1)
+			{
+				entry_ID = getNextID_();
+			}
+
+			popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID);
+			return entry_ID;
 
 			return -1;
 		}
 		
+
+		void MainControl::removeMenuEntry
+			(int /* ID */, const String& /* name */, 
+			 const QObject* /* receiver */, const char* /* slot */, 
+			 int /* accel */, int /* entry_ID */)
+			throw()
+		{
+			// ?????
+		}
+
+
 		void MainControl::insertPopupMenuSeparator(int ID)
 			throw()
 		{
@@ -719,14 +536,6 @@ namespace BALL
 			}
 		}
 
-		void MainControl::removeMenuEntry
-			(int /* ID */, const String& /* name */, 
-			 const QObject* /* receiver */, const char* /* slot */, 
-			 int /* accel */, int /* entry_ID */)
-			throw()
-		{
-			// ?????
-		}
 
 		void MainControl::initializePreferencesTab(Preferences &preferences)
 			throw()
@@ -835,22 +644,27 @@ namespace BALL
 		void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 			throw()
 		{
-			selection_.clear();		
-			// wird GeometricObject list
-			List<Composite*>& objects = const_cast<List<Composite*>&>(message.getSelection());
-			List<Composite*>::Iterator it_objects = objects.begin();
+			List<GeometricObject*>& objects = const_cast<List<GeometricObject*>&>(message.getSelection());
+			List<GeometricObject*>::Iterator it_objects = objects.begin();
 
 			Size nr = 0;
 			for (; it_objects != objects.end(); it_objects++)
 			{
-				if (!RTTI::isKindOf<GeometricObject>(*(*it_objects)->getParent()) &&
-						!selection_.has((*it_objects)->getParent())) 
+				if ((*it_objects)->getComposite() != 0  &&
+						selection_.has((Composite*)(*it_objects)->getComposite()) != message.isSelected())
 				{	
-					selectCompositeRecursive((*it_objects)->getParent(), true);	
+					if (message.isSelected())
+					{
+						selectCompositeRecursive((Composite*)(*it_objects)->getComposite(), true);
+					}
+					else
+					{
+						deselectCompositeRecursive((Composite*)(*it_objects)->getComposite(), true);
+					}
 					nr++;
 				}				
 			}
-
+		
 			printSelectionInfos();
 
 			#ifdef BALL_DEBUG_VIEW
@@ -872,6 +686,7 @@ namespace BALL
 				return;
 			}
 
+			vector<PreciseTime> times;
 			Atom* atoms[4];
 			Size nr_of_atoms = 0;
 			HashSet<Composite*>::Iterator it = selection_.begin();
@@ -880,10 +695,26 @@ namespace BALL
 						 nr_of_atoms < 5)
 			{
 				atoms[nr_of_atoms] = (Atom*) *it;
+				times.push_back(((Atom*) *it)->getSelectionTime());
 				nr_of_atoms++;
 				it++;
 			}
 
+			sort(times.begin(), times.end());
+			vector<Atom*> ordered_atoms;
+
+			for (Position o = 0; o < nr_of_atoms; o++)
+			{
+				for (Position p = 0; p < nr_of_atoms; p++)
+				{
+					if (atoms[p]->getSelectionTime() == times[o])
+					{
+						ordered_atoms.push_back(atoms[p]);
+					 	break;
+					}
+				}
+			}
+			
 			switch(nr_of_atoms)
 			{
 				case 1:
@@ -910,22 +741,6 @@ namespace BALL
 				}
 				case 3:
 				{
-					PreciseTime min_time = Maths::min(atoms[0]->getSelectionTime(),
-																						atoms[1]->getSelectionTime(),
-																						atoms[2]->getSelectionTime());
-					PreciseTime max_time = Maths::max(atoms[0]->getSelectionTime(),
-																						atoms[1]->getSelectionTime(),
-																						atoms[2]->getSelectionTime());
-
-					Atom* ordered_atoms[3];
-
-					for (int pos = 0; pos < 3; pos++)
-					{
-						if 			(atoms[pos]->getSelectionTime() == min_time)  ordered_atoms[0] = atoms[pos];
-						else if (atoms[pos]->getSelectionTime() == max_time)  ordered_atoms[2] = atoms[pos];
-						else 																									ordered_atoms[1] = atoms[pos];
-					}
-
 					Vector3 vector1(ordered_atoms[1]->getPosition() - ordered_atoms[2]->getPosition());
 					Vector3 vector2(ordered_atoms[1]->getPosition() - ordered_atoms[0]->getPosition());
 					Angle result;
@@ -940,16 +755,17 @@ namespace BALL
 				case 4:
 				{
 					// if tree atoms were picked, show their torsion angle
-					Angle result = getTorsionAngle(atoms[0]->getPosition().x, atoms[0]->getPosition().y, atoms[0]->getPosition().z,
-																				 atoms[1]->getPosition().x, atoms[1]->getPosition().y, atoms[1]->getPosition().z,
-																				 atoms[2]->getPosition().x, atoms[2]->getPosition().y, atoms[2]->getPosition().z,
-																				 atoms[3]->getPosition().x, atoms[3]->getPosition().y, atoms[3]->getPosition().z);
+					Angle result = getTorsionAngle(
+							ordered_atoms[0]->getPosition().x, ordered_atoms[0]->getPosition().y, ordered_atoms[0]->getPosition().z,
+							ordered_atoms[1]->getPosition().x, ordered_atoms[1]->getPosition().y, ordered_atoms[1]->getPosition().z,
+							ordered_atoms[2]->getPosition().x, ordered_atoms[2]->getPosition().y, ordered_atoms[2]->getPosition().z,
+							ordered_atoms[3]->getPosition().x, ordered_atoms[3]->getPosition().y, ordered_atoms[3]->getPosition().z);
 
 					setStatusbarText("Torsion angle between atoms " + 
-														atoms[0]->getFullName() + ", " + 
-														atoms[1]->getFullName() + ", " +
-														atoms[2]->getFullName() + ", " +
-														atoms[3]->getFullName() + ": " +
+														ordered_atoms[0]->getFullName() + ", " + 
+														ordered_atoms[1]->getFullName() + ", " +
+														ordered_atoms[2]->getFullName() + ", " +
+														ordered_atoms[3]->getFullName() + ": " +
 														String(result.toDegree()));
 					break;
 				}
@@ -967,24 +783,26 @@ namespace BALL
 		System* MainControl::getSelectedSystem()
 			throw()
 		{
-			System* system = NULL;
-			if (control_selection_.size() != 1) return system;
-			
-			if (RTTI::isKindOf<System>(**control_selection_.begin()))
+			if (control_selection_.size() != 1 || 
+					!RTTI::isKindOf<System>(**control_selection_.begin()))
 			{
-				system = (System*) *control_selection_.begin();
+				return 0;
 			}
-			return system;
+			
+			return (System*) *control_selection_.begin();
 		}
 
 
-		void MainControl::selectCompositeRecursive(Composite* composite, bool state)
+		void MainControl::selectCompositeRecursive(Composite* composite, bool first_call)
 			throw()
 		{
-			if (selection_.has(composite) == state)
+			if (selection_.has(composite))
 			{
 				return;
 			}
+
+			composite->select();
+			selection_.insert(composite);
 
 			if (RTTI::isKindOf<Atom> (*composite))
 			{
@@ -992,103 +810,80 @@ namespace BALL
 				AtomBondIterator bi;		
 				BALL_FOREACH_ATOM_BOND(*atom, bi)
 				{
-					if (selection_.has(bi->getPartner(*atom)) == state)
+					if (selection_.has(bi->getPartner(*atom)))
 					{
-						if (state) bi->select();			
-						else			 bi->deselect();
+						bi->select();			
 					}				
 				}				
-
-				if (state)
+			}		
+			else if (RTTI::isKindOf<AtomContainer> (*composite))
+			{
+				for (Size i=0; i< composite->getDegree();i++)
 				{
-					atom->select();
-					selection_.insert(atom);
-				}
-				else
-				{
-					atom->deselect();
-					selection_.erase(atom);
+					selectCompositeRecursive(composite->getChild(i), false);
 				}
 			}		
 
-
-			if (RTTI::isKindOf<AtomContainer> (*composite))
+			if (first_call)
 			{
-				if (state)	selectRecursive_(composite);
-				else			  deselectRecursive_(composite);
-
-				AtomIterator ai;
-				AtomBondIterator bi;		
-				BALL_FOREACH_INTRABOND((*(AtomContainer*) composite), ai, bi)
+				Composite* parent = composite->getParent();
+				while (parent != 0 && !selection_.has(parent))
 				{
-					if (state) bi->select();			
-					else			 bi->deselect();
-				}						
-				BALL_FOREACH_INTERBOND((*(AtomContainer*) composite), ai, bi)
-				{
-					if (selection_.has(bi->getPartner(*ai)) == state)
-					{			
-						if (state) bi->select();			
-						else			 bi->deselect();
-					}				
-					else
+					for (Size i=0; i < parent->getDegree();i++)
 					{
-						bi->deselect();
+						if (!selection_.has(parent->getChild(i)))
+						{
+							return;
+						}
 					}
-				}						
-			}		
-
-			Composite* parent = composite->getParent();
-			while (parent != 0 && !selection_.has(parent) == state)
-			{
-				for (Size i=0; i < parent->getDegree();i++)
-				{
-					if (!selection_.has(parent->getChild(i)) == state)
-					{
-						return;
-					}
-				}
-				
-				if (state)
-				{
+					
 					selection_.insert(parent);
 					parent->select();
+					parent = parent->getParent();
 				}
-				else
-				{
-					selection_.erase(parent);
-					parent->deselect();
-				}
-				parent = parent->getParent();
 			}
 		}
 
 
-		void MainControl::selectRecursive_(Composite* composite)
+		void MainControl::deselectCompositeRecursive(Composite* composite, bool first_call)
 			throw()
 		{
-			if (RTTI::isKindOf<GeometricObject> (*composite)) return;
-			composite->select();
-			selection_.insert(composite);
-			if (RTTI::isKindOf<Atom> (*composite)) return;
-			for (Size i=0; i< composite->getDegree();i++)
+			if (!selection_.has(composite))
 			{
-				selectRecursive_(composite->getChild(i));			
+				return;
 			}
-		}		
 
-		void MainControl::deselectRecursive_(Composite* composite)
-			throw()
-		{
-			if (RTTI::isKindOf<GeometricObject> (*composite)) return;
 			composite->deselect();
 			selection_.erase(composite);
-			if (RTTI::isKindOf<Atom> (*composite)) return;
-			for (Size i=0; i< composite->getDegree();i++)
+
+			if (RTTI::isKindOf<Atom> (*composite))
 			{
-				deselectRecursive_(composite->getChild(i));			
+				Atom *atom = (Atom*) composite;
+				AtomBondIterator bi;		
+				BALL_FOREACH_ATOM_BOND(*atom, bi)
+				{
+					bi->deselect();			
+				}				
+			}		
+			else if (RTTI::isKindOf<AtomContainer> (*composite))
+			{
+				for (Size i=0; i< composite->getDegree();i++)
+				{
+					deselectCompositeRecursive(composite->getChild(i), false);
+				}
+			}		
+
+			if (first_call)
+			{
+				Composite* parent = composite->getParent();
+				while (parent != 0)
+				{
+					selection_.erase(parent);
+					parent = parent->getParent();
+				}
 			}
-		}		
+		}
+
 
 		void MainControl::setStatusbarText(const String& text)
 			throw()
@@ -1102,5 +897,4 @@ namespace BALL
 #	endif
 
 	} // namespace VIEW
-
 } // namespace BALL

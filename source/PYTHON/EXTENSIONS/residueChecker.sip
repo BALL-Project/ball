@@ -1,4 +1,8 @@
-// $Id: residueChecker.sip,v 1.2 2003/04/19 14:47:23 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: residueChecker.sip,v 1.3 2003/08/26 09:18:22 oliver Exp $
+//
 
 class ResidueChecker
 //  : public UnaryProcessor<Residue>

@@ -1,257 +1,201 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.3 2002/12/18 16:00:43 sturm Exp $
+// $Id: primitiveManager.C,v 1.4 2003/08/26 09:18:42 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/primitiveManager.h>
-#include <stdio.h>
-
-using std::endl;
-using std::cout;
-using std::ostream;
-using std::istream;
 
 namespace BALL
 {
 	namespace VIEW
 	{
+
 		PrimitiveManager::PrimitiveManager()
 			throw()
+			:Object()
 		{
-		}		
+		}
 
 		PrimitiveManager::~PrimitiveManager()
 			throw()
 		{
+			clear();
 		}
 
-		bool PrimitiveManager::hasComposite(const Composite* composite) const
-			throw()		
-		{
-			return composite_to_objects_.has((Composite*) composite);
-		}
-				
-		bool PrimitiveManager::hasGeometricObject(const GeometricObject* object) const
+		PrimitiveManager::PrimitiveManager(const PrimitiveManager& pm)
 			throw()
-		{			
-			return object_set_.has((GeometricObject*)object);		
+			: Object(pm)
+		{
+			*this = pm;
 		}
 
-		bool PrimitiveManager::insertGeometricObject(GeometricObject* object, Composite* composite)
-			throw(NullPointer)
-		{		
-			if (object == 0) throw(NullPointer(__FILE__, __LINE__));
-
-			if (hasGeometricObject(object)) return false;
-			
-			object->setComposite(composite);
-			object_set_.insert(object);
-			
-						
-			if(!composite_to_objects_.has(composite))
+		void PrimitiveManager::clear()
+			throw()
+		{
+			// call clear for all stored representations to clear also their geometric objects
+			RepresentationsIterator it = begin();
+			for (; it != end(); it++)
 			{
-				// insert composite to hashmap
-				composite_to_objects_[composite];
+				(*it)->clear();
+			}
+			representations_.clear();
+		}
 
-				// parent->childs schachteln
-				List_it start_it;
-				if (composite == 0 || composite->getParent() == 0 || ! hasComposite(composite->getParent()))
+
+		void PrimitiveManager::insert(Representation& representation)
+			throw()
+		{
+			if (has(representation)) return;
+			representations_.push_back(&representation);
+		}
+
+
+		bool PrimitiveManager::has(const Representation& representation) const
+			throw()
+		{
+			RepresentationsConstIterator it = begin();
+			for (; it != end(); it++)
+			{
+				if (*it == &representation) return true;
+			}
+			return false;
+		}
+
+
+		void PrimitiveManager::remove(Representation& representation)
+			throw()
+		{
+			bool found = false;
+			RepresentationsIterator it = begin();
+			for( ; it != end(); it++)
+			{
+				if (*it == &representation)
 				{
-		   		start_it = objects_list_.insert(objects_list_.end(), object);
+					found = true;
+					break;
 				}
-				else
-				{
-					Composite* parent = composite->getParent();
-
-					// insert childs geometric objects after parents objects
-					List_it parent_it = getSecondIterator(parent);
-					parent_it++;
-					start_it = objects_list_.insert(parent_it, object);
-
-					// set new end iterator for parent
-					It_pair parent_pair(getFirstIterator(parent), start_it);
-					composite_to_objects_[parent] = parent_pair;
-				}
-
-				It_pair it_pair(start_it, start_it);			
-				composite_to_objects_[composite] = it_pair;
-
-				return true;				
 			}
 
+			if (!found) return;
 
-			// ok, composite exists already
-
-			List_it list_it = objects_list_.insert(getSecondIterator(composite), object);			
-			composite_to_objects_[composite] = It_pair(list_it, getSecondIterator(composite));
-			return true;
-		}		
-
-		bool PrimitiveManager::applyToAllComposites(UnaryProcessor<Composite>& processor)
-			throw()
-		{
-			bool ok =	true; 
-			Map_it it = composite_to_objects_.begin();
-			for(; +it; ++it)
-			{
-				ok = ok && (it->first)->apply(processor);
-			}				
-
-			return ok;			
-		}			
-				
-		PrimitiveManager::List_const_it PrimitiveManager::getFirstIterator(Composite* composite) const
-			throw()
-		{
-			if (!hasComposite(composite)) return objects_list_.end();
-			return (List_const_it) composite_to_objects_[composite].first;
+			representations_.erase(it);
+			delete &representation;
 		}
 
-		
-		PrimitiveManager::List_const_it PrimitiveManager::getSecondIterator(Composite* composite) const
-			throw()		
-		{
-			if (!hasComposite(composite)) return objects_list_.end();
-			return composite_to_objects_[composite].second;
-		}
-					
-		PrimitiveManager::List_it PrimitiveManager::getFirstIterator(Composite* composite)
-			throw()
-		{
-			if (!hasComposite(composite)) return objects_list_.end();
-			return composite_to_objects_[composite].first;
-		}
-
-		
-		PrimitiveManager::List_it PrimitiveManager::getSecondIterator(Composite* composite)
-			throw()		
-		{
-			if (!hasComposite(composite)) return objects_list_.end();
-			return composite_to_objects_[composite].second;
-		}
-				
-		void PrimitiveManager::dump(std::ostream& s = std::cout, Size depth = 0) const
+		void PrimitiveManager::dump(std::ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
+
 			BALL_DUMP_DEPTH(s, depth);
-			
-			List_const_it it = objects_list_.begin();
-			for(;it != objects_list_.end(); it++)
+			BALL_DUMP_HEADER(s, this, this);
+
+			BALL_DUMP_DEPTH(s, depth);
+
+			s << "number of representations: " << representations_.size() << std::endl;
+
+			RepresentationsConstIterator it = begin();
+			for (; it != end(); it++)
 			{
-				s << "GeometricObject: " << *it <<	" Composite: " << (*it)->getComposite();
-			
-				for (Composite* composite = (*it)->getComposite(); composite != 0; )
-				{
-					if (it == getFirstIterator(composite)) s << " >";
-					if (it == getSecondIterator(composite)) s << " <";
-					composite = composite->getParent();
-				}
-				s << endl;
+				(*it)->dump(s, depth +1);
+				s << std::endl;
 			}
 
-			BALL_DUMP_STREAM_SUFFIX(s);
+			BALL_DUMP_STREAM_SUFFIX(s);     
 		}
 
-		void PrimitiveManager::read(std::istream& s)
+		Representation* PrimitiveManager::createRepresentation()
 			throw()
 		{
+			Representation* rp = new Representation;
+			insert(*rp);
+			return rp;
 		}
 
-		void PrimitiveManager::write(std::ostream& s) const
+		const PrimitiveManager& PrimitiveManager::operator = (const PrimitiveManager& pm)
 			throw()
 		{
-		}
+			RepresentationsConstIterator it = pm.begin();
 
-		void PrimitiveManager::destroy()
-			throw()
-		{
-		}
-
-		bool PrimitiveManager::isValid() const
-			throw()
-		{
-			if (!object_set_.isValid() || composite_to_objects_.isValid()) return false;
-
-			List_const_it it = objects_list_.begin();
-			for (; it != objects_list_.end(); it++)
+			for (; it != pm.end(); it++)
 			{
-				if (*it == 0) return false;
+				Representation* rp = new Representation(**it);
+				representations_.push_back(rp);
+			}
+
+			return *this;
+		}
+
+		bool PrimitiveManager::operator == (const PrimitiveManager& pm) const
+			throw()
+		{
+			if (!pm.getNumberOfRepresentations() == getNumberOfRepresentations()) return false;
+
+			RepresentationsConstIterator it1 = begin();
+			RepresentationsConstIterator it2 = pm.begin();
+			for (; it1 != end() && it2 != pm.end(); it1++)
+			{
+				if (**it1 != **it2) return false;
+				it2++;
 			}
 
 			return true;
 		}
 
-		/*
-		bool PrimitiveManager::applyToGeometricObjects(UnaryProcessor<GeometricObject>& processor, Composite* composite)
+		
+		List<Representation*> PrimitiveManager::removedComposite(const Composite& composite)
 			throw()
 		{
-			if (!hasComposite(composite))
+			List<Representation*> removed_representations;
+			RepresentationsIterator rep_it = begin();
+			for (; rep_it != end(); rep_it++)
 			{
-				return false;
+				Representation::CompositesConstIterator composite_it = (*rep_it)->begin();
+				for(; composite_it != (*rep_it)->end(); composite_it++)
+				{
+					if (&composite == *composite_it ||
+							composite.isAncestorOf(**composite_it))
+					{
+						removed_representations.push_back(*rep_it);
+						break;
+					}
+				}
 			}
 
-			bool result = true;
-			List_it it = getFirstIterator(composite);
-			for (; it != getSecondIterator(composite); it++)
+			rep_it = removed_representations.begin();
+			for (; rep_it != removed_representations.end(); rep_it++)
 			{
-				result &=(*it)->apply(processor);
+				remove(**rep_it);
+			}
+			return removed_representations;
+		}
+
+		List<Representation*> PrimitiveManager::changedComposite(const Composite& composite)
+			throw()
+		{
+			List<Representation*> changed_representations;
+			RepresentationsIterator rep_it = begin();
+			for (; rep_it != end(); rep_it++)
+			{
+				Representation::CompositesConstIterator composite_it = (*rep_it)->begin();
+				for(; composite_it != (*rep_it)->end(); composite_it++)
+				{
+					if (&composite == *composite_it ||
+							composite.isAncestorOf(**composite_it))
+					{
+						changed_representations.push_back(*rep_it);
+						break;
+					}
+				}
 			}
 
-			return result;
-		}
-
-		bool PrimitiveManager::applyToAllGeometricObjects(UnaryProcessor<GeometricObject>& processor)
-			throw()
-		{
-			bool result = true;
-			List_it it = objects_list_.begin();
-			for (; it != objects_list_.end(); it++)
+			rep_it = changed_representations.begin();
+			for (; rep_it != changed_representations.end(); rep_it++)
 			{
-				result &=(*it)->apply(processor);
+				(*rep_it)->update();
 			}
-
-			return result;
+			return changed_representations;
 		}
-*/
-		Size PrimitiveManager::countGeometricObjects(Composite* composite) const
-			throw()
-		{
-			if (!hasComposite(composite))
-			{
-				return 0;
-			}
-			Size nr = 1;
-			List_const_it it = getFirstIterator(composite);
-			for (; it != getSecondIterator(composite); it++)
-			{
-				++nr;
-			}
-
-			return nr;
-		}
-
-		Size PrimitiveManager::getNumberOfGeometricObjects() const
-			throw()
-		{
-			return object_set_.size();
-		}
-
-		PrimitiveManager::List_it PrimitiveManager::getEndIterator()
-			throw()
-		{
-			return objects_list_.end();
-		}
-
-		PrimitiveManager::List_const_it PrimitiveManager::getEndIterator() const
-			throw()
-		{
-			return objects_list_.end();
-		}
-//#ifdef BALL_NO_INLINE_FUNCTIONS
-//#	include <BALL/VIEW/GUI/KERNEL/primitiveManager.iC>
-//#	endif 
 
 	} // namespace VIEW
 } // namespace BALL
-

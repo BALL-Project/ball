@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.C,v 1.7 2003/08/19 15:58:18 amoll Exp $
+// $Id: reducedSurface.C,v 1.8 2003/08/26 09:18:27 oliver Exp $
+//
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 
@@ -1161,9 +1162,9 @@ namespace BALL
 		Index atom1(vertex1->atom_);
 		Index atom2(vertex2->atom_);
 		neighboursOfTwoAtoms(atom1,atom2);
-		list< pair< Index,TSphere3<double> > > candidates;
+		std::list<std::pair<Index,TSphere3<double> > > candidates;
 		findThirdAtom(atom1,atom2,neighbours_of_two_[atom1][atom2],candidates);
-		std::list< std::pair< Index,TSphere3<double> > >::iterator k;
+		std::list<std::pair<Index,TSphere3<double> > >::iterator k;
 		TAngle<double> old_angle(3*Constants::PI,true);
 		TAngle<double> new_angle;
 		TAngle<double> two_pi(2*Constants::PI,true);
@@ -1184,7 +1185,7 @@ namespace BALL
 		TVector3<double> start_probe = face->center_;
 		TVector3<double> v1 = start_probe-circle.p;
 		TVector3<double> face_normal = face->normal_;
-		std::list< std::pair< Index,TSphere3<double> > > third;
+		std::list<std::pair<Index,TSphere3<double> > > third;
 		for (k = candidates.begin(); k != candidates.end(); k++)
 		{
 			if ((k->first != third_face_atom) || (k->second.p != start_probe))
@@ -1204,7 +1205,7 @@ namespace BALL
 					if (new_angle < old_angle)
 					{
 						old_angle = new_angle;
-						std::list< std::pair< Index,TSphere3<double> > >::iterator t;
+						std::list<std::pair<Index,TSphere3<double> > >::iterator t;
 						for (t = third.begin(); t != third.end(); t++)
 						{
 							if (atom_status_[t->first] == STATUS_UNKNOWN)
@@ -1333,13 +1334,13 @@ namespace BALL
 			return NULL;
 		}
 		neighboursOfTwoAtoms(a1,a2);
-		list< pair< Index,TSphere3<double> > > candidates;
+		std::list<std::pair<Index,TSphere3<double> > > candidates;
 		findThirdAtom(a1,a2,neighbours_of_two_[a1][a2],candidates);
 		if (candidates.size() == 0)
 		{
 			return NULL;
 		}
-		std::list< pair< Index,TSphere3<double> > >::iterator i
+		std::list<std::pair<Index,TSphere3<double> > >::iterator i
 				= candidates.begin();
 		Index a3 = -1;
 		TSphere3<double> probe;
@@ -1522,13 +1523,13 @@ namespace BALL
 		 (Index																				 atom1,
 			Index																				 atom2,
 			const std::list<Index>&											 third,
-			std::list< std::pair< Index,TSphere3<double> > >& atoms)
+			std::list<std::pair<Index,TSphere3<double> > >& atoms)
 		throw()
 	{
 		// This function computes a list of all atoms (with its probe positions)
 		// which can be touched by the probe sphere when it touches the two given
 		// atoms
-		std::pair< Index,TSphere3<double> > candidate;
+		std::pair<Index, TSphere3<double> > candidate;
 		std::list<Index>::const_iterator i = third.begin();
 		TVector3<double> center1, center2;
 		TSphere3<double> probe;
@@ -1565,11 +1566,11 @@ namespace BALL
 		throw()
 	{
 		bool found = false;
-		HashMap< Position,HashMap< Position,std::list<Index> > >::Iterator
+		HashMap<Position, HashMap<Position, std::list<Index> > >::Iterator
 			n1 = neighbours_of_two_.find(atom1);
 		if (n1 != neighbours_of_two_.end())
 		{
-			HashMap< Position,std::list<Index> >::Iterator n2
+			HashMap<Position, std::list<Index> >::Iterator n2
 					= n1->second.find(atom2);
 			found = (n2 != n1->second.end());
 		}
@@ -1615,9 +1616,9 @@ namespace BALL
 	{
 		neighboursOfTwoAtoms(atom1,atom2);
 		neighboursOfTwoAtoms(atom1,atom3);
-		HashMap< Position,HashMap< Position,std::list<Index> > >::Iterator n1;
-		HashMap< Position,std::list<Index> >::Iterator n2;
-		HashMap< Position,std::list<Index> >::Iterator n3;
+		HashMap<Position, HashMap<Position,std::list<Index> > >::Iterator n1;
+		HashMap<Position, std::list<Index> >::Iterator n2;
+		HashMap<Position, std::list<Index> >::Iterator n3;
 		n1 = neighbours_of_two_.find(atom1);
 		n2 = n1->second.find(atom2);
 		n3 = n1->second.find(atom3);
@@ -1842,10 +1843,10 @@ namespace BALL
 
 	RSFace* RSComputer::faceExists
 		 (RSFace* face,
-			const std::list< RSVertex* >& vertices)
+			const std::list<RSVertex*>& vertices)
 		throw()
 	{
-		std::list< RSVertex* >::const_iterator v;
+		std::list<RSVertex*>::const_iterator v;
 		RSFace* f;
 		for (v = vertices.begin(); v != vertices.end(); v++)
 		{
@@ -1868,11 +1869,10 @@ namespace BALL
 		throw()
 	{
 		sort(a1,a2,a3,a1,a2,a3);
-		HashMap< Position,
-						 HashMap< Position,
-						 					HashMap< Position,ProbePosition* > > >::Iterator pp1;
-		HashMap< Position,HashMap< Position,ProbePosition* > >::Iterator pp2;
-		HashMap< Position,ProbePosition* >::Iterator pp3;
+		HashMap<Position,
+						HashMap<Position,	HashMap<Position,ProbePosition* > > >::Iterator pp1;
+		HashMap<Position, HashMap<Position,ProbePosition* > >::Iterator pp2;
+		HashMap<Position, ProbePosition* >::Iterator pp3;
 		bool back = false;
 		bool found = false;
 		pp1 = probe_positions_.find(a1);
@@ -1974,11 +1974,11 @@ namespace BALL
 	void RSComputer::correctProbePosition(Position atom)
 		throw()
 	{
-		HashMap< Position,
-						 HashMap< Position,
-						 					HashMap< Position,ProbePosition* > > >::Iterator pp1;
-		HashMap< Position,HashMap< Position,ProbePosition* > >::Iterator pp2;
-		HashMap< Position,ProbePosition* >::Iterator pp3;
+		HashMap<Position,
+						HashMap<Position,
+						 					HashMap<Position,ProbePosition* > > >::Iterator pp1;
+		HashMap<Position,HashMap<Position,ProbePosition* > >::Iterator pp2;
+		HashMap<Position,ProbePosition* >::Iterator pp3;
 		for (pp1 = probe_positions_.begin(); pp1 != probe_positions_.end(); pp1++)
 		{
 			if (pp1->first < atom)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.59 2003/08/19 15:57:24 amoll Exp $
+// $Id: HINFile.C,v 1.60 2003/08/26 09:17:46 oliver Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -145,7 +145,7 @@ namespace BALL
 	}
 
 	bool HINFile::write(const Molecule& molecule)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		System S;
 		S.insert(*(Molecule*)molecule.create(true));
@@ -153,11 +153,11 @@ namespace BALL
 	}
 	
 	bool HINFile::write(const System& system)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != File::OUT)
 		{
-			throw(File::CanNotWrite(__FILE__, __LINE__, name_));
+			throw(File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 
 		// the atom_vector contains the atoms in the order of

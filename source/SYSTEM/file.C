@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.44 2003/07/15 11:58:36 amoll Exp $
+// $Id: file.C,v 1.45 2003/08/26 09:18:29 oliver Exp $
 //
 
 #include <BALL/SYSTEM/file.h>
@@ -23,21 +23,21 @@ namespace BALL
 {
 	using namespace Exception;
 
-	File::CanNotWrite::CanNotWrite(const char* file, int line, const String& filename)
+	File::CannotWrite::CannotWrite(const char* file, int line, const String& filename)
 		throw()
-		:	Exception::GeneralException(file, line, "File::CanNotWrite", ""),
+		:	Exception::GeneralException(file, line, "File::CannotWrite", ""),
 			filename_(filename)
 	{
 		message_ = "the file " + filename + " could not be written(i.g. not open or wrong open mode)";
 		globalHandler.setMessage(message_);
 	}
 
-	File::CanNotWrite::~CanNotWrite()
+	File::CannotWrite::~CannotWrite()
 		throw()
 	{
 	}
 
-	String File::CanNotWrite::getFilename() const
+	String File::CannotWrite::getFilename() const
 		throw()
 	{
 		return filename_;

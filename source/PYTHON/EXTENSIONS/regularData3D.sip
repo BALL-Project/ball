@@ -1,4 +1,9 @@
-// $Id: regularData3D.sip,v 1.6 2003/06/19 15:24:36 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: regularData3D.sip,v 1.7 2003/08/26 09:18:22 oliver Exp $
+//
+
 class RegularData3D 
 {
 %HeaderCode
@@ -114,5 +119,4 @@ class RegularData3D
 		throw();
 	void binaryRead(const String& /filename/)
 		throw();
-
 };

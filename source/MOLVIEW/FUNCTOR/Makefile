@@ -3,20 +3,15 @@ DIRECTORY=MOLVIEW/FUNCTOR
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	molecularModel.C\
 	atomBondModelBaseProcessor.C\
 	atomBondModelConnector.C\
 	backboneModel.C\
 	ballAndStickModel.C\
-	baseModel.C\
 	baseModelConnector.C\
-	colorCalculator.C\
-	findGeometricObject.C\
+	cartoonModel.C\
 	lineModel.C\
-	molecularInformation.C\
-	molecularFilter.C\
-	objectSelector.C\
-	removeModel.C\
-	standardColorCalculator.C\
+	standardColorProcessor.C\
 	surfaceModel.C\
 	vanDerWaalsModel.C
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.C,v 1.12 2002/12/16 12:23:16 sturm Exp $
+// $Id: sphere.C,v 1.13 2003/08/26 09:18:50 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/sphere.h>
 
@@ -9,34 +9,22 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
 		Sphere::Sphere()
 			throw()
 			:	GeometricObject(),
-				ColorExtension(),
-				Vertex(),
-				radius_(1)
+				Sphere3(),
+				point_ptr_(&p)
 		{
 		}
 
 		Sphere::Sphere(const Sphere& sphere, bool deep)
 			throw()
 			:	GeometricObject(sphere, deep),
-				ColorExtension(sphere),
-				Vertex(sphere),
-				radius_(sphere.radius_)
-		{
-		}
-
-		Sphere::Sphere(const GeometricObject& geometric_object)
-			throw()
-			:	GeometricObject(geometric_object),
-				ColorExtension(),
-				Vertex(),
-				radius_(1)
+				Sphere3(sphere),
+				point_ptr_(sphere.point_ptr_)
 		{
 		}
 
@@ -44,37 +32,25 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.erro() << "Destructing object " << (void *)this 
-									 << " of class " << RTTI::getName<Sphere>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+									  << " of class " << RTTI::getName<Sphere>() << endl;
 			#endif 
-
-			destroy();
 		}
 
 		void Sphere::clear()
 			throw()
 		{
 			GeometricObject::clear();
-			ColorExtension::clear();
-			Vertex::clear();
-			radius_ = 1;
-		}
-
-		void Sphere::destroy()
-			throw()
-		{
-			GeometricObject::destroy();
-			ColorExtension::destroy();
-			Vertex::destroy();
+			Sphere3::clear();
+			point_ptr_ = &p;
 		}
 
 		void Sphere::set(const Sphere& sphere, bool deep)
 			throw()
 		{
 			GeometricObject::set(sphere, deep);
-			ColorExtension::set(sphere);
-			Vertex::set(sphere);
-			radius_ = sphere.radius_;
+			Sphere3::set(sphere);
+			point_ptr_ = sphere.point_ptr_;
 		}
 
 		const Sphere& Sphere::operator = (const Sphere& sphere)
@@ -94,18 +70,39 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::swap(sphere);
-			ColorExtension::swap(sphere);
-			Vertex::swap(sphere);
-			Real temp = sphere.radius_;
-			sphere.radius_ = radius_;
-			radius_ = temp;
+			Sphere3::swap(sphere);
+
+
+			Vector3 *tmp_vector = point_ptr_;
+
+			if (sphere.point_ptr_ != &sphere.p)
+			{
+				point_ptr_ = sphere.point_ptr_;
+				
+				if (tmp_vector != &p)
+				{
+					sphere.point_ptr_ = tmp_vector;
+				}
+				else
+				{
+					sphere.point_ptr_ = &sphere.p;
+				}
+			}
+			else if (point_ptr_ != &p)
+			{
+				sphere.point_ptr_ = tmp_vector;
+				
+				point_ptr_ = &sphere.p;
+			}  
+
+			p.swap(sphere.p);
 		}
 
 		bool Sphere::isValid() const
 			throw()
 		{
 			return (GeometricObject::isValid() && 
-											 Vertex::isValid());
+											Sphere3::isValid());
 		}
 
 		void Sphere::dump(ostream& s, Size depth) const
@@ -117,23 +114,18 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			GeometricObject::dump(s, depth + 1);
-			ColorExtension::dump(s, depth + 1);
-			Vertex::dump(s, depth + 1);
-			s << "radius : " << radius_ << endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "point : " << (*point_ptr_) << endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "pointer : " << (point_ptr_) << endl;
+
+			BALL_DUMP_DEPTH(s, depth);
+			s << "radius: " << (radius) << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		bool Sphere::extract()
-			throw()
-		{
-			return true;  
-		}
-		
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/sphere.iC>
-#		endif
-
 	} // namespace VIEW
-
 } // namespace BALL

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.C,v 1.27 2003/04/29 16:07:16 oliver Exp $
+// $Id: amberTorsion.C,v 1.28 2003/08/26 09:17:51 oliver Exp $
+//
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>

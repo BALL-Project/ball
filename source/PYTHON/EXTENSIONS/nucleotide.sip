@@ -1,4 +1,9 @@
-// $Id: nucleotide.sip,v 1.1 2001/09/03 16:53:10 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: nucleotide.sip,v 1.2 2003/08/26 09:18:18 oliver Exp $
+//
+
 class Nucleotide
   : Fragment
 {

@@ -1,9 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.C,v 1.14 2003/02/04 17:27:56 amoll Exp $
+// $Id: vanDerWaalsModel.C,v 1.15 2003/08/26 09:18:02 oliver Exp $
+//
 
 #include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/VIEW/GUI/FUNCTOR/colorProcessor.h>
 
 using namespace std;
 
@@ -18,9 +21,9 @@ namespace BALL
 		{
  		}
 
-		AddVanDerWaalsModel::AddVanDerWaalsModel(const AddVanDerWaalsModel& model, bool deep)
+		AddVanDerWaalsModel::AddVanDerWaalsModel(const AddVanDerWaalsModel& model)
 			throw()
-			: AtomBondModelBaseProcessor(model, deep)
+			: AtomBondModelBaseProcessor(model)
 		{
 		}
 
@@ -28,36 +31,29 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-						 << " of class " << RTTI::getName<AddVanDerWaalsModel>() << endl;
+				Log.error() << "Destructing object " << (void *)this 
+						 				<< " of class " << RTTI::getName<AddVanDerWaalsModel>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 
 		void AddVanDerWaalsModel::clear()
 			throw()
 		{
 			AtomBondModelBaseProcessor::clear();
-			setProperty(PROPERTY__MODEL_VDW);
-		}
-
-		void AddVanDerWaalsModel::destroy()
-			throw()
-		{
+			//setProperty(PROPERTY__MODEL_VDW);
 		}
 
 		bool AddVanDerWaalsModel::start()
 		{
 			// init model connector
-			getModelConnector()->setProperties(*this);
+			//getModelConnector()->setProperties(*this);
 
 			return AtomBondModelBaseProcessor::start();
 		}
 				
 		bool AddVanDerWaalsModel::finish()
 		{
-			buildBondModels_();
+			buildBondModels_(); // ????? kann man vielleicht weglassen?
 
 			return true;
 		}
@@ -72,34 +68,19 @@ namespace BALL
 
 			Atom* atom = RTTI::castTo<Atom>(composite);
 
-			// remove all models appended to atom
-			removeGeometricObjects_(*atom, true);
+			Sphere* sphere_ptr = new Sphere;
 
-			Sphere* sphere_ptr = createSphere_();
+			if (sphere_ptr == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
 
-			if (sphere_ptr == 0)
-			{
-					throw Exception::OutOfMemory
-						(__FILE__, __LINE__, sizeof(Sphere));
-			}
+			sphere_ptr->setComposite(atom);
 
-			// carry on selected flag
-			sphere_ptr->Selectable::set(*atom);
+			sphere_ptr->setRadius(atom->getElement().getVanDerWaalsRadius());
+			sphere_ptr->setPositionAddress(atom->getPosition());
 
-			sphere_ptr->PropertyManager::set(*this);
-			sphere_ptr->PropertyManager::setProperty(PROPERTY__MODEL_VDW);
-			sphere_ptr->setRadius((atom->getElement()).getVanDerWaalsRadius());
+			getColorProcessor()->operator() (atom);
+			sphere_ptr->setColor(getColorProcessor()->getColor());
 			
-			// setting default value for vanDerWaalsRadius if none is defined in the PTE
-			if (sphere_ptr->getRadius() == 0) sphere_ptr->setRadius(1.5);
-			
-			sphere_ptr->setVertexAddress(atom->getPosition());
-
-			atom->host(*getColorCalculator());
-
-			sphere_ptr->setColor(getColorCalculator()->getColor());
-			
-			composite.appendChild(*sphere_ptr);
+			geometric_objects_.push_back(sphere_ptr);
 			
 			insertAtom_(atom);
 			
@@ -119,11 +100,5 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		Sphere* AddVanDerWaalsModel::createSphere_()
-		{
-			return (Sphere *)(new Sphere());
-		}
-
 	} // namespace MOLVIEW
-
 } // namespace BALL

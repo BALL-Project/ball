@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.C,v 1.11 2002/12/16 12:23:15 sturm Exp $
+// $Id: point.C,v 1.12 2003/08/26 09:18:50 oliver Exp $
 
 #include <BALL/VIEW/PRIMITIV/point.h>
 
@@ -9,15 +9,12 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
-
 
 		Point::Point()
 			throw()
 			:	GeometricObject(),
-				ColorExtension(),
 				Vertex()
 		{
 		}
@@ -25,16 +22,7 @@ namespace BALL
 		Point::Point(const Point& point, bool deep)
 			throw()
 			:	GeometricObject(point, deep),
-				ColorExtension(point),
 				Vertex(point)
-		{
-		}
-
-		Point::Point(const GeometricObject& geometric_object)
-			throw()
-			:	GeometricObject(geometric_object),
-				ColorExtension(),
-				Vertex()
 		{
 		}
 
@@ -42,34 +30,22 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Point>() << endl;
+				Log.info () << "Destructing object " << (void *)this 
+										<< " of class " << RTTI::getName<Point>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 
 		void Point::clear()
 			throw()
 		{
 			GeometricObject::clear();
-			ColorExtension::clear();
 			Vertex::clear();
-		}
-
-		void Point::destroy()
-			throw()
-		{
-			GeometricObject::destroy();
-			ColorExtension::destroy();
-			Vertex::destroy();
 		}
 
 		void Point::set(const Point& point, bool deep)
 			throw()
 		{
 			GeometricObject::set(point, deep);
-			ColorExtension::set(point);
 			Vertex::set(point);
 		}
 
@@ -90,7 +66,6 @@ namespace BALL
 			throw()
 		{
 			GeometricObject::swap(point);
-			ColorExtension::swap(point);
 			Vertex::swap(point);
 		}
 
@@ -110,18 +85,10 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			GeometricObject::dump(s, depth + 1);
-			ColorExtension::dump(s, depth + 1);
 			Vertex::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		bool Point::extract()
-			throw()
-		{
-			return true;  
-		}
-
 	} // namespace VIEW
-
 } // namespace BALL

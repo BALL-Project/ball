@@ -1,4 +1,8 @@
-// $Id: composite.sip,v 1.2 2003/06/19 15:24:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: composite.sip,v 1.3 2003/08/26 09:18:14 oliver Exp $
+//
 
 class Composite
   :  PersistentObject,

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.5 2002/12/16 12:23:04 sturm Exp $
+// $Id: colorRGBA.C,v 1.6 2003/08/26 09:18:34 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
@@ -10,10 +10,8 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
-
 		ColorRGBA BALL_SELECTED_COLOR(255, 255, 0, 255);
 		
 		ColorRGBA::ColorRGBA()
@@ -53,9 +51,8 @@ namespace BALL
 			stringToRGBA_(s);
 		}
 		 
-		ColorRGBA::ColorRGBA
-			(const ColorUnit& red, const ColorUnit& green,
-			 const ColorUnit& blue, const ColorUnit& alpha)
+		ColorRGBA::ColorRGBA(const ColorUnit& red, const ColorUnit& green,
+												 const ColorUnit& blue, const ColorUnit& alpha)
 			throw()
 			:	red_(red),
 				green_(green),
@@ -71,8 +68,6 @@ namespace BALL
 			cout << "Destructing object " << (void *)this << " of class " 
 					 << RTTI::getName<ColorRGBA>() << endl;
 			#endif 
-
-			destroy();
 		}
 
 		void ColorRGBA::clear()
@@ -80,11 +75,6 @@ namespace BALL
 		{
 			red_ = green_ = blue_ = (float)0;
 			alpha_ = ((float)1);
-		}
-
-		void ColorRGBA::destroy()
-			throw()
-		{
 		}
 
 		ColorRGBA::operator String() const
@@ -112,7 +102,6 @@ namespace BALL
 			throw()
 		{
 			set(color);
-
 			return *this;
 		}
 
@@ -126,7 +115,6 @@ namespace BALL
 			throw()
 		{
 			color_HSV.calculateRGB_(red_, green_, blue_);
-
 			alpha_ = (float)1;
 		}
 
@@ -134,7 +122,6 @@ namespace BALL
 			throw()
 		{
 			set(color_HSV);
-
 			return *this;
 		}
 
@@ -154,7 +141,6 @@ namespace BALL
 			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(char_ptr);
-
 			return *this;
 		}
 
@@ -177,7 +163,6 @@ namespace BALL
 			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(s);
-
 			return *this;
 		}
 
@@ -287,11 +272,9 @@ namespace BALL
 			}
 		}
 
-
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/DATATYPE/colorRGBA.iC>
 #		endif
 
 	} // namespace VIEW
-
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: QTTimer.C,v 1.15 2002/12/16 12:23:10 sturm Exp $
+// $Id: QTTimer.C,v 1.16 2003/08/26 09:18:46 oliver Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
@@ -52,7 +52,7 @@ namespace BALL
 					<< " of class " << RTTI::getName<QTTimer>() << endl;
 #endif 
 
-			destroy();
+			clear();
 		}
 
 		void QTTimer::clear()
@@ -62,12 +62,6 @@ namespace BALL
 
 			timer_running_ = false;
 			interval_ = 100;
-		}
-
-		void QTTimer::destroy()
-				throw()
-		{
-			stopTimer();
 		}
 
 		void QTTimer::set(const QTTimer& timer)

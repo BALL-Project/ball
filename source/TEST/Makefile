@@ -1,5 +1,7 @@
+# -*- Mode: C++; tab-width: 2; -*-
+# vi: set ts=2:
 #
-# $Id: Makefile,v 1.210 2003/08/20 21:34:49 oliver Exp $
+# $Id: Makefile,v 1.211 2003/08/26 09:18:30 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -10,6 +12,10 @@ DIRECTORY=TEST
 # Please remember to include the $(EXEEXT) at the end
 # of the executable name!
 include Makefile.lst
+
+EXECUTABLES_VIEW = \
+	PrimitiveManager_test\
+	Stage_test
 
 EXECUTABLES = \
 	$(EXECUTABLES_BASIC)\
@@ -26,7 +32,7 @@ EXECUTABLES = \
 	$(EXECUTABLES_QSAR)\
 	$(EXECUTABLES_SOLVATION)\
 	$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
-	$(USE_BALLVIEW:true=$(VIEW_DEPENDENT_EXECUTABLES))
+	$(BALL_HAS_VIEW:true=$(VIEW_DEPENDENT_EXECUTABLES))
  
 
 # default target
@@ -107,6 +113,9 @@ qsar_test:	$(EXECUTABLES_QSAR)
 
 solvation_test:	$(EXECUTABLES_SOLVATION)
 	@./runtests -section SOLVATION $(TEST_OPTIONS) $(EXECUTABLES_SOLVATION)
+
+view_test:	$(EXECUTABLES_VIEW)
+	@./runtests -section "VIEW" $(TEST_OPTIONS) $(EXECUTABLES_VIEW)
 
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.vgr *.log ii_files Templates.DB	SunWS_cache *.TMP core core.* a.out $(EXECUTABLES)

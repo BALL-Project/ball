@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.27 2003/07/03 13:30:37 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.28 2003/08/26 09:18:28 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>

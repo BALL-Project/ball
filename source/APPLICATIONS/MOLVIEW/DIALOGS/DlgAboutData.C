@@ -77,7 +77,7 @@ DlgAboutData::DlgAboutData(QWidget *parent, const char *name)
         qtarch_Label_4->setPalette( palette );
     }
     {
-        QFont font("linotype-helvetica", 24, 50, 0);
+        QFont font("linotype-helvetica", 22, 50, 0);
         font.setStyleHint((QFont::StyleHint)5);
         qtarch_Label_4->setFont( font );
     }
@@ -87,7 +87,7 @@ DlgAboutData::DlgAboutData(QWidget *parent, const char *name)
     qtarch_Label_4->setLineWidth( 1 );
     qtarch_Label_4->setMidLineWidth( 0 );
     qtarch_Label_4->QFrame::setMargin( 0 );
-    qtarch_Label_4->setText( "MolView V1.0" );
+    qtarch_Label_4->setText( "MolView V1.0 VNG" );
     qtarch_Label_4->setAlignment( AlignHCenter|AlignVCenter|ExpandTabs );
     qtarch_Label_4->setMargin( 0 );
 

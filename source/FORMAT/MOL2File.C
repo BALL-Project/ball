@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.21 2003/07/11 15:27:43 amoll Exp $
+// $Id: MOL2File.C,v 1.22 2003/08/26 09:17:46 oliver Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -48,11 +48,11 @@ namespace BALL
 	const Size MOL2File::MAX_LENGTH_ = 4096;
 
 	bool MOL2File::write(const System& system)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != File::OUT)
 		{
-			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 
 		// create a shorthand for the file of the MOL2File object
@@ -319,7 +319,7 @@ namespace BALL
 	}
 				
 	bool MOL2File::write(const Molecule& molecule)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		return GenericMolFile::write(molecule);
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension5.C,v 1.10 2002/12/16 12:23:12 sturm Exp $
+// $Id: colorExtension5.C,v 1.11 2003/08/26 09:18:47 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension5.h>
 #include <BALL/COMMON/rtti.h>
@@ -37,8 +37,6 @@ namespace BALL
 				cout << "Destructing object " << (void *)this << " of class " 
 					<< RTTI::getName<ColorExtension5>() << endl;
 			#endif 
-
-			destroy();
 		}
 
 		void ColorExtension5::clear()
@@ -48,17 +46,10 @@ namespace BALL
 			color5_.clear();
 		}
 
-		void ColorExtension5::destroy()
-			throw()
-		{
-		}
-
-		void ColorExtension5::set
-			(const ColorExtension5& color_extension)
+		void ColorExtension5::set(const ColorExtension5& color_extension)
 			throw()
 		{
 			ColorExtension4::set(color_extension);
-
 			color5_.set(color_extension.color5_);
 		}
 
@@ -70,8 +61,7 @@ namespace BALL
 			return *this;
 		}
 
-		void ColorExtension5::get
-			(ColorExtension5& color_extension) const
+		void ColorExtension5::get(ColorExtension5& color_extension) const
 			throw()
 		{
 			color_extension.set(*this);

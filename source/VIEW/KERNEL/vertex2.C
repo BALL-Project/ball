@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertex2.C,v 1.11 2002/12/16 12:23:14 sturm Exp $
+// $Id: vertex2.C,v 1.12 2003/08/26 09:18:48 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/vertex2.h>
 
@@ -38,8 +38,6 @@ namespace BALL
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<Vertex2>() << endl;
 			#endif 
-
-			destroy();
 		}
 
 		void Vertex2::clear()
@@ -49,11 +47,6 @@ namespace BALL
 			vertex2_.set(0.0);
 			vertex1_ptr_ = &vertex1_;
 			vertex2_ptr_ = &vertex2_;
-		}
-
-		void Vertex2::destroy()
-			throw()
-		{
 		}
 
 		void Vertex2::set(const Vertex2& v)

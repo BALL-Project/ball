@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.24 2003/06/19 13:25:41 oliver Exp $
+// $Id: structureMapper.C,v 1.25 2003/08/26 09:18:28 oliver Exp $
+//
 
 #include <BALL/STRUCTURE/structureMapper.h>
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.C,v 1.13 2002/12/17 18:21:23 oliver Exp $
+// $Id: client.C,v 1.14 2003/08/26 09:18:47 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -48,16 +48,9 @@ namespace BALL
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<Client>() << endl;
 			#endif 
-
-			destroy();
 		}
 
 		void Client::clear()
-			throw()
-		{
-		}
-
-		void Client::destroy()
 			throw()
 		{
 		}

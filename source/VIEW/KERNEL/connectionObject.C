@@ -4,18 +4,17 @@
 // $Id:
 
 #include <BALL/VIEW/KERNEL/connectionObject.h>
-
-using namespace std;
+#include <BALL/VIEW/KERNEL/message.h>
 
 namespace BALL
 {
 	namespace VIEW
 	{
+		using std::ostream;
 
 		ConnectionObject::ConnectionObject()
 			throw()
-			:
-			processing_message_queue_(false),
+		: processing_message_queue_(false),
 			message_queue_(),
 			parent_(0),
 			children_connection_objects_()
@@ -26,8 +25,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<ConnectionObject>() << endl;
+				Log.info() << "Destructing object " << (void *)this 
+									 << " of class " << RTTI::getName<ConnectionObject>() << std::endl;
 			#endif 
 
 			destroy();
@@ -205,13 +204,13 @@ namespace BALL
 			BALL_DUMP_HEADER(s, this, this);
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "size of message queue: " << message_queue_.size() << endl;
+			s << "size of message queue: " << message_queue_.size() << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "parent: " << (void*)parent_ << endl;
+			s << "parent: " << (void*)parent_ << std::endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "number of registered objects: " << children_connection_objects_.size() << endl;
+			s << "number of registered objects: " << children_connection_objects_.size() << std::endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}

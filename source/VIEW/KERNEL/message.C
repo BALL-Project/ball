@@ -1,16 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.6 2002/12/12 11:43:26 oliver Exp $
+// $Id: message.C,v 1.7 2003/08/26 09:18:48 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
 
+//#define BALL_VIEW_DEBUG
 using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -31,10 +31,6 @@ namespace BALL
 		Message::~Message()
 			throw()
 		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<Message>() << endl;
-			#endif 
 		}
 
 		CompositeMessage::CompositeMessage()
@@ -56,10 +52,6 @@ namespace BALL
 		CompositeMessage::~CompositeMessage()
 			throw()
 		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<CompositeMessage>() << endl;
-			#endif 
 		}
 
 		NewCompositeMessage::NewCompositeMessage()
@@ -106,16 +98,18 @@ namespace BALL
 
 		ChangedCompositeMessage::ChangedCompositeMessage()
 			throw()
-			: CompositeMessage()
+			: CompositeMessage(),
+				update_control_(false)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "new ChangedCompositeMessage" << std::endl;		
 			#endif
 		}
 
-	  ChangedCompositeMessage::ChangedCompositeMessage(const CompositeMessage& message)
+	  ChangedCompositeMessage::ChangedCompositeMessage(const ChangedCompositeMessage& message)
 			throw()
-			: CompositeMessage(message)
+			: CompositeMessage(message),
+				update_control_(message.update_control_)
 		{
 		}
 
@@ -131,9 +125,7 @@ namespace BALL
 		SceneMessage::SceneMessage()
 			throw()
 			: Message(),
-				update_only_(false),
-				camera_look_at_(),
-				camera_view_point_()
+				type_(UNDEFINED)
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "new SceneMessage" << std::endl;		
@@ -143,9 +135,8 @@ namespace BALL
 		SceneMessage::SceneMessage(const SceneMessage& message)
 			throw()
 			: Message(message),
-				update_only_(message.update_only_),
-				camera_look_at_(message.camera_look_at_),
-				camera_view_point_(message.camera_view_point_)
+				type_(message.type_),
+				camera_(message.camera_)
 		{
 		}
 
@@ -158,31 +149,16 @@ namespace BALL
 			#endif 
 		}
 
-		WindowMessage::WindowMessage()
-			throw()
-			: Message(),
-				status_bar_()
-		{
+		void SceneMessage::setType(Type type)
+			throw() 
+		{ 
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "new WindowMessage" << std::endl;		
-			#endif
-		}
-
-		WindowMessage::WindowMessage(const WindowMessage& message)
-			throw()
-			: Message(message),
-				status_bar_(message.status_bar_)
-		{
-		}
-
-		WindowMessage::~WindowMessage()
-			throw()
-		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<WindowMessage>() << endl;
+				Log.error() << "SceneMessage::setType " << type << std::endl;
 			#endif 
+
+			type_ = type;
 		}
+
 
 		SelectionMessage::SelectionMessage()
 			throw()
@@ -201,26 +177,16 @@ namespace BALL
 		SelectionMessage::~SelectionMessage()
 			throw()
 		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<SelectionMessage>() << endl;
-			#endif 
 		}
 
 
 		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage()
 			throw()
-			: SelectionMessage()
+			: Message()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "new GeometricObjectSelectionMessage" << std::endl;		
 			#endif
-		}
-
-		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage(const SelectionMessage& message)
-			throw()
-			: SelectionMessage(message)
-		{
 		}
 
 		GeometricObjectSelectionMessage::~GeometricObjectSelectionMessage()
@@ -251,19 +217,49 @@ namespace BALL
 
 		CompositeSelectedMessage::CompositeSelectedMessage(Composite* composite, bool selected) 
 			throw()
-			:	composite_(composite),
+			:	CompositeMessage(),
 				selected_(selected)
 		{
 			#ifdef BALL_VIEW_DEBUG
-			  Log.error() << "CompositeSelectedMessage" << std::endl;		
+			  Log.error() << "new CompositeSelectedMessage" << std::endl;		
+			#endif
+
+			setComposite(composite);
+		}
+
+		CenterCameraMessage::CenterCameraMessage()
+			throw()
+			: CompositeMessage()
+		{
+			#ifdef BALL_VIEW_DEBUG
+			  Log.error() << "new CenterCameraMessage" << std::endl;		
 			#endif
 		}
 
+		RepresentationMessage::RepresentationMessage()
+			throw()
+			: representation_(0),
+				type_(UNKNOWN)
+		{
+			#ifdef BALL_VIEW_DEBUG
+			  Log.error() << "new RepresentationMessage" << std::endl;		
+			#endif
+		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/message.iC>
-#		endif 
+		void RepresentationMessage::setType(Type type)
+			throw() 
+		{ 
+			#ifdef BALL_VIEW_DEBUG
+				Log.error() << "RepresentationMessage::setType " << type << std::endl;
+			#endif 
 
+			type_ = type;
+		}
+
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/KERNEL/message.iC>
+#	endif 
+
+#undef BALL_VIEW_DEBUG
 	} // namespace VIEW
-
 } // namespace BALL

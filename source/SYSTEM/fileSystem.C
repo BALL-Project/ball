@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.C,v 1.18 2003/06/16 12:02:04 anker Exp $
+// $Id: fileSystem.C,v 1.19 2003/08/26 09:18:29 oliver Exp $
 //
 
 #include <BALL/SYSTEM/fileSystem.h>

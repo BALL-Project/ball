@@ -1,4 +1,8 @@
-// $Id: molecularDynamics.sip,v 1.2 2003/03/25 17:08:58 anhi Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: molecularDynamics.sip,v 1.3 2003/08/26 09:18:18 oliver Exp $
+//
 
 class MolecularDynamics
 {

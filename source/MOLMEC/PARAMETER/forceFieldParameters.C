@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldParameters.C,v 1.12 2003/07/10 12:50:55 amoll Exp $
+// $Id: forceFieldParameters.C,v 1.13 2003/08/26 09:17:54 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>

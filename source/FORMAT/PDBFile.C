@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.41 2003/07/11 15:27:44 amoll Exp $
+// $Id: PDBFile.C,v 1.42 2003/08/26 09:17:46 oliver Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -435,11 +435,11 @@ namespace BALL
 	}
 
 	bool PDBFile::write(const System& system)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		if (!isOpen() || getOpenMode() != File::OUT)
 		{
-			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 
 		Size number_of_proteins = system.count(RTTI::getDefault<KernelPredicate<Protein> >());

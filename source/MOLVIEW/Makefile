@@ -7,9 +7,9 @@ THISLIB=libMOLVIEW
 DIRS=\
 	COMMON\
 	FUNCTOR\
-	GUI\
 	KERNEL\
-	PRIMITIV
+	DIALOGS\
+	WIDGETS
 
 default: dirs
 

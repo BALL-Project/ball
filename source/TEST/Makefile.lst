@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.6 2003/08/20 07:02:35 oliver Exp $
+# $Id: Makefile.lst,v 1.7 2003/08/26 09:18:30 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\

@@ -1,16 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: main.C,v 1.16 2003/08/26 09:17:36 oliver Exp $
+//
+
 // order of includes is important:
 #include <qapplication.h>
 #include "mainframe.h"
 #include <BALL/common.h>
 
-/*
-#ifdef Q_WS_X11
-# include <X11/Xlib.h>
-#endif
-*/
+
 
 int main(int argc, char **argv)
 {

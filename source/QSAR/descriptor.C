@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: descriptor.C,v 1.9 2003/07/01 17:09:52 oliver Exp $
+// $Id: descriptor.C,v 1.10 2003/08/26 09:18:26 oliver Exp $
 //
 
 #include <BALL/CONCEPT/composite.h>

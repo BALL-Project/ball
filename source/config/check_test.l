@@ -1,5 +1,5 @@
 %{
-	// $Id: check_test.l,v 1.10 2003/06/28 17:40:11 oliver Exp $
+	// $Id: check_test.l,v 1.11 2003/08/26 09:18:51 oliver Exp $
 	// C++ scanner
 
 	#define YY_NO_UNPUT 

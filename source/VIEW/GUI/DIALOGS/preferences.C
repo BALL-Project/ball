@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: 
+// $Id: preferences.C,v 1.7 2003/08/26 09:18:37 oliver Exp $
+//
 
 #include <BALL/VIEW/GUI/DIALOGS/preferences.h>
-#include <BALL/COMMON/rtti.h>
+#include <BALL/FORMAT/INIFile.h>
 
 namespace BALL
 {
@@ -18,23 +19,20 @@ namespace BALL
 		{
 			setApplyButton();
 			setCancelButton();
-			//			setOKButton();
 			
 			resize(width,height);
 			setMinimumSize(width, height);
 			setMaximumSize(width, height);
 
-			connect(this,
-							SIGNAL(cancelButtonPressed()),
-							SLOT(hide()));
+			connect(this, SIGNAL(cancelButtonPressed()), SLOT(hide()));
 		}
 		
 		Preferences::~Preferences()
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Preferences>() << endl;
+				Log.info() << "Destructing object " << (void *)this 
+									 << " of class " << RTTI::getName<Preferences>() << std::endl;
 			#endif 
 
 			clear();
@@ -101,10 +99,5 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL
-
-
-
-
 

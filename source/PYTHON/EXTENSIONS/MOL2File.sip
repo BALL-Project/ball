@@ -1,4 +1,9 @@
-// $Id: MOL2File.sip,v 1.5 2003/06/19 15:24:34 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: MOL2File.sip,v 1.6 2003/08/26 09:18:10 oliver Exp $
+//
+
 class MOL2File
   : File
 {

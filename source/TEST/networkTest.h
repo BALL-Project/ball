@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: networkTest.h,v 1.8 2003/05/08 13:53:39 anhi Exp $
+// $Id: networkTest.h,v 1.9 2003/08/26 09:18:31 oliver Exp $
+//
 
 // ugly workaround for Intel C++ 7.0/Linux w/ optimization
 #ifdef __OPTIMIZE__

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.45 2003/07/01 18:20:02 amoll Exp $
+// $Id: atom.C,v 1.46 2003/08/26 09:17:48 oliver Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -62,7 +62,7 @@ namespace BALL
 	{
 		charge = attr.charge;
 		type = attr.type;
-		// Do not assigne the back pointer!
+		// Do not assign the back pointer!
 		// ptr = attr.ptr;
 		position = attr.position;
 		velocity = attr.velocity;

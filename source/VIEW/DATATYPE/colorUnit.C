@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.C,v 1.11 2003/04/17 14:48:06 oliver Exp $
+// $Id: colorUnit.C,v 1.12 2003/08/26 09:18:34 oliver Exp $
+//
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
 #include <stdio.h>
@@ -146,19 +147,12 @@ namespace BALL
 				cout << "Destructing object " << (void *)this << " of class " 
 						 << RTTI::getName<ColorUnit>() << endl;
 			#endif 
-
-			destroy();
 		}
 
 		void ColorUnit::clear()
 			throw()
 		{
 			value_ = (float)0;
-		}
-
-		void ColorUnit::destroy()
-			throw()
-		{
 		}
 
 		void ColorUnit::set(const ColorUnit& color)
@@ -538,5 +532,4 @@ namespace BALL
 #		endif 
 
 	} // namespace VIEW
-
 } // namespace BALL

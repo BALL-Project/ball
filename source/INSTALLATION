@@ -1,15 +1,13 @@
 1) System requirements
 ======================
 Compiler:
-  BALL requires an ANSI compliant C++ compiler or GNU egcs 
-  (version above 2.95 or above).
+  BALL requires a more or less ANSI compliant C++ compiler.
   It has been successfully built and tested on the following platforms:
 
     - Linux/x86 2.x using g++ 3.2.1
     - Linux/x86 2.x using g++ 2.95.3
     - Solaris/SPARC 8 using g++ 3.2.1
     - Solaris/SPARC 8 using g++ 2.95.3
-		- Solaris/SPARC 8 using SUN Forte Developer 7 C++ 5.4 2002/03/09
     - IRIX 6.5 using CC 7.3.1.1m (32 and 64 bit)
 		- Microsoft Windows XP using Microsoft Visual Studio .NET (MSVC 7.0)
 
@@ -207,4 +205,4 @@ and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the
 OpenGL/Mesa libraries (libGL.so, libGLU.so).
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.11 2003/03/17 09:52:36 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.12 2003/08/26 09:17:29 oliver Exp $

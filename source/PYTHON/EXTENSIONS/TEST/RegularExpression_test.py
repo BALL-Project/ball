@@ -1,7 +1,7 @@
 #!/usr/bin/env /opt/bin/python2.1
 from ClassTest import *
 
-START_TEST("RegularExpression", "$Id: RegularExpression_test.py,v 1.2 2003/04/22 21:58:11 oliver Exp $")
+START_TEST("RegularExpression", "$Id: RegularExpression_test.py,v 1.3 2003/08/26 09:18:25 oliver Exp $")
 
 CHECK('RegularExpression()')
 re = RegularExpression()

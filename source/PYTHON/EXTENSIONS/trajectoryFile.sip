@@ -1,4 +1,9 @@
-// $Id: trajectoryFile.sip,v 1.4 2003/06/19 15:24:36 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: trajectoryFile.sip,v 1.5 2003/08/26 09:18:24 oliver Exp $
+//
+
 class TrajectoryFile
 				:  File
 {

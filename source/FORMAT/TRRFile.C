@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.C,v 1.6 2003/07/11 15:27:44 amoll Exp $
+// $Id: TRRFile.C,v 1.7 2003/08/26 09:17:47 oliver Exp $
+//
 
 #include <BALL/FORMAT/TRRFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -696,11 +697,11 @@ namespace BALL
 	
 
 	bool TRRFile::flushToDisk(const std::vector<SnapShot>& buffer)
-		throw(File::CanNotWrite)
+		throw(File::CannotWrite)
 	{
 		if (!reopen(File::APP | File::BINARY) && good())
 		{
-			throw (File::CanNotWrite(__FILE__, __LINE__, name_));
+			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
 
 		std::vector<SnapShot>::const_iterator it = buffer.begin();

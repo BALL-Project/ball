@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.C,v 1.18 2003/06/09 22:40:50 oliver Exp $
+// $Id: persistenceManager.C,v 1.19 2003/08/26 09:17:45 oliver Exp $
 //
 
 #include <BALL/CONCEPT/persistenceManager.h>

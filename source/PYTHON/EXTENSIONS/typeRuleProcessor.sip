@@ -1,4 +1,8 @@
-// $Id: typeRuleProcessor.sip,v 1.1 2001/09/03 16:53:18 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: typeRuleProcessor.sip,v 1.2 2003/08/26 09:18:24 oliver Exp $
+//
 
 class TypeRuleProcessor
 	: RuleProcessor

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.C,v 1.9 2003/04/29 16:07:17 oliver Exp $
+// $Id: charmmStretch.C,v 1.10 2003/08/26 09:17:52 oliver Exp $
+//
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>

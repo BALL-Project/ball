@@ -1,4 +1,8 @@
-// $Id: amberStretch.sip,v 1.2 2003/06/18 15:50:43 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: amberStretch.sip,v 1.3 2003/08/26 09:18:12 oliver Exp $
+//
 
 class AmberStretch 
   : ForceFieldComponent

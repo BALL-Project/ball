@@ -1,4 +1,8 @@
-// $Id: file.sip,v 1.11 2003/06/19 15:24:35 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: file.sip,v 1.12 2003/08/26 09:18:16 oliver Exp $
+//
 
 class std__openmode
 {

@@ -1,4 +1,8 @@
-// $Id: system.sip,v 1.6 2003/04/20 12:46:13 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: system.sip,v 1.7 2003/08/26 09:18:24 oliver Exp $
+//
 
 class System
   : AtomContainer,

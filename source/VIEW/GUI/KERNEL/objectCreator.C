@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectCreator.C,v 1.6 2002/12/16 12:23:08 sturm Exp $
+// $Id: objectCreator.C,v 1.7 2003/08/26 09:18:41 oliver Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
 
@@ -28,8 +28,6 @@ namespace BALL
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<ObjectCreator>() << endl;
 			#endif 
-
-			destroy();
 		}
 
 		void ObjectCreator::clear()
@@ -37,10 +35,6 @@ namespace BALL
 		{
 		}
 
-		void ObjectCreator::destroy()
-				throw()
-		{
-		}
 
  	  void ObjectCreator::initPersistenceManager(TextPersistenceManager & /* pm */)
 				throw()

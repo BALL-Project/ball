@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker2DFile.C,v 1.22 2003/06/01 17:05:57 oliver Exp $
+// $Id: bruker2DFile.C,v 1.23 2003/08/26 09:17:47 oliver Exp $
 //
 
 #include <BALL/FORMAT/bruker2DFile.h>

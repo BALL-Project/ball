@@ -1,8 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalSES.C,v 1.12 2002/02/27 12:24:11 sturm Exp $
-// $Id: analyticalSES.C,v 1.12 2002/02/27 12:24:11 sturm Exp $
+// $Id: analyticalSES.C,v 1.13 2003/08/26 09:18:27 oliver Exp $
+// 
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>
@@ -117,7 +117,7 @@ namespace BALL
 		atom_areas.clear();
 		for (Position i = 0; i < atoms.size(); ++i)
 		{
-			atom_areas.insert(pair<const Atom*, float>(atoms[i], tmp_atom_areas[i]));
+			atom_areas.insert(std::pair<const Atom*, float>(atoms[i], tmp_atom_areas[i]));
 		}
 
 		// free the input fields

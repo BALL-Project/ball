@@ -1,4 +1,8 @@
-// $Id: surface.sip,v 1.5 2001/12/28 02:32:45 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: surface.sip,v 1.6 2003/08/26 09:18:24 oliver Exp $
+//
 
 class Surface
 {

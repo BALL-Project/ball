@@ -1,20 +1,8 @@
-// $Id: INIFile.sip,v 1.1 2001/09/03 16:53:02 oliver Exp $
-
-//class Section
-//{
-//	public:
-//		friend class INIFile;
-//	friend class INIFile::IteratorTraits_;
-//	const String& getName() const
-//	{
-//					return name_;
-//	}
-//	bool operator == (const Section& section) const
-//	{
-//					return (name_ == section.name_ &&
-//																					lines_ == section.lines_);
-//	}
-//};
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: INIFile.sip,v 1.2 2003/08/26 09:18:10 oliver Exp $
+//
 
 
 class INIFile

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.C,v 1.10 2002/12/16 12:23:12 sturm Exp $
+// $Id: colorExtension2.C,v 1.11 2003/08/26 09:18:47 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension2.h>
 #include <BALL/COMMON/rtti.h>
@@ -16,16 +16,13 @@ namespace BALL
 
 		ColorExtension2::ColorExtension2()
 			throw()
-			:	color1_(),
-				color2_()
+			:	color2_()
 		{
 		}
 
-		ColorExtension2::ColorExtension2
-			(const ColorExtension2& color_extension)
+		ColorExtension2::ColorExtension2(const ColorExtension2& color_extension)
 			throw()
-			:	color1_(color_extension.color1_),
-				color2_(color_extension.color2_)
+			: color2_(color_extension.color2_)
 		{
 		}
 
@@ -33,31 +30,20 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this << " of class " 
-					<< RTTI::getName<ColorExtension2>() << endl;
+				Log.info() << "Destructing object " << (void *)this << " of class " 
+									 << RTTI::getName<ColorExtension2>() << std::endl;
 			#endif 
-
-			destroy();
 		}
 
 		void ColorExtension2::clear()
 			throw()
 		{
-			color1_.clear();
 			color2_.clear();
 		}
 
-		void ColorExtension2::destroy()
+		void ColorExtension2::set(const ColorExtension2& color_extension)
 			throw()
 		{
-		}
-
-		void ColorExtension2::set
-			(const ColorExtension2& color_extension)
-			throw()
-		{
-			color1_.set(color_extension.color1_);
-				
 			color2_.set(color_extension.color2_);
 		}
 
@@ -65,12 +51,10 @@ namespace BALL
 			throw()
 		{
 			set(color_extension);
-
 			return *this;
 		}
 
-		void ColorExtension2::get
-			(ColorExtension2& color_extension) const
+		void ColorExtension2::get(ColorExtension2& color_extension) const
 			throw()
 		{
 			color_extension.set(*this);
@@ -79,7 +63,6 @@ namespace BALL
 		void ColorExtension2::swap(ColorExtension2& color_extension)
 			throw()
 		{
-			color1_.swap(color_extension.color1_);
 			color2_.swap(color_extension.color2_);
 		}
 
@@ -90,9 +73,6 @@ namespace BALL
 			
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "color1 : " << color1_ << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "color2 : " << color2_ << endl;
@@ -106,5 +86,4 @@ namespace BALL
 #		endif 
 
 	} // namespace VIEW
-
 } // namespace BALL

@@ -4,10 +4,10 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	control.C\
+	geometricControl.C\
 	mainControlPreferences.C\
 	modularWidget.C\
 	regularData1DWidget.C\
-	regularData2DWidget.C\
 	scene.C\
 	serverPreferences.C
 
@@ -16,9 +16,9 @@ PYTHON_CPP_SOURCES=\
 
 MOC_SOURCES=\
 	control_moc.C\
+	geometricControl_moc.C\
 	scene_moc.C\
 	regularData1DWidget_moc.C\
-	regularData2DWidget_moc.C\
 	mainControlPreferences_moc.C\
 	serverPreferences_moc.C
 
@@ -32,6 +32,9 @@ BALL_INCLUDES=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
 
 control_moc.C:	$(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/control.h
 	$(MOC) $(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/control.h -o control_moc.C
+
+geometricControl_moc.C:	$(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/geometricControl.h
+	$(MOC) $(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/geometricControl.h -o geometricControl_moc.C
 
 mainControlPreferences_moc.C:	$(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h
 	$(MOC) $(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h -o mainControlPreferences_moc.C
