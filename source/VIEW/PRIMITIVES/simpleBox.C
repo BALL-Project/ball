@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox.C,v 1.1 2003/08/26 12:38:44 oliver Exp $
+// $Id: simpleBox.C,v 1.2 2003/08/26 15:32:48 amoll Exp $
 
-#include <BALL/VIEW/PRIMITIV/simpleBox.h>
+#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 
 using namespace std;
 
@@ -84,5 +84,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

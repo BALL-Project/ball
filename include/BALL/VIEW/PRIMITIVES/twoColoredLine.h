@@ -1,21 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.h,v 1.1 2003/08/26 12:11:38 oliver Exp $
+// $Id: twoColoredLine.h,v 1.2 2003/08/26 15:32:57 amoll Exp $
 
 #ifndef BALL_VIEW_VIEW_PRIMITIV_TWOCOLOREDLINE_H
 #define BALL_VIEW_VIEW_PRIMITIV_TWOCOLOREDLINE_H
 
-#ifndef BALL_VIEW_KERNEL_COLOREXTENSION2_H
-#	include <BALL/VIEW/KERNEL/colorExtension2.h>
+#ifndef BALL_VIEW_DATATYPE_COLOREXTENSION2_H
+#	include <BALL/VIEW/DATATYPE/colorExtension2.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_VERTEX2_H
-#	include <BALL/VIEW/KERNEL/vertex2.h>
+#ifndef BALL_VIEW_DATATPYE_VERTEX2_H
+#	include <BALL/VIEW/DATATYPE/vertex2.h>
 #endif
 
 namespace BALL

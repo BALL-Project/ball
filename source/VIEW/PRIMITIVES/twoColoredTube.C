@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.C,v 1.1 2003/08/26 12:38:44 oliver Exp $
+// $Id: twoColoredTube.C,v 1.2 2003/08/26 15:32:49 amoll Exp $
 
-#include <BALL/VIEW/PRIMITIV/twoColoredTube.h>
+#include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
 using namespace std;
 
@@ -105,7 +105,7 @@ namespace BALL
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/twoColoredTube.iC>
+#			include <BALL/VIEW/PRIMITIVES/twoColoredTube.iC>
 #		endif
 
 	} // namespace VIEW

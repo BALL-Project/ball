@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredLine.C,v 1.1 2003/08/26 12:38:44 oliver Exp $
+// $Id: twoColoredLine.C,v 1.2 2003/08/26 15:32:49 amoll Exp $
 
-#include <BALL/VIEW/PRIMITIV/twoColoredLine.h>
+#include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 
 using namespace std;
 
@@ -96,7 +96,7 @@ namespace BALL
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/twoColoredLine.iC>
+#			include <BALL/VIEW/PRIMITIVES/twoColoredLine.iC>
 #		endif
 
 	} // namespace VIEW

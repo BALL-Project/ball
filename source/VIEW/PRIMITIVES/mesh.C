@@ -1,15 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mesh.C,v 1.1 2003/08/26 12:38:43 oliver Exp $
+// $Id: mesh.C,v 1.2 2003/08/26 15:32:48 amoll Exp $
 
-#include <BALL/VIEW/PRIMITIV/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -106,5 +105,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

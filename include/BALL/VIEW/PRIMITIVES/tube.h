@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.h,v 1.1 2003/08/26 12:11:38 oliver Exp $
+// $Id: tube.h,v 1.2 2003/08/26 15:32:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
@@ -11,8 +11,8 @@
 #	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_VERTEX2_H
-#	include <BALL/VIEW/KERNEL/vertex2.h>
+#ifndef BALL_VIEW_DATATYPE_VERTEX2_H
+#	include <BALL/VIEW/DATATYPE/vertex2.h>
 #endif
 
 namespace BALL

@@ -1,15 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box.C,v 1.1 2003/08/26 12:38:42 oliver Exp $
+// $Id: box.C,v 1.2 2003/08/26 15:32:47 amoll Exp $
 
-#include <BALL/VIEW/PRIMITIV/box.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -95,5 +94,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

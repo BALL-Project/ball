@@ -1,18 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.1 2003/08/26 12:11:37 oliver Exp $
+// $Id: point.h,v 1.2 2003/08/26 15:32:57 amoll Exp $
 //
 
-#ifndef BALL_VIEW_PRIMITIV_POINT_H
-#define BALL_VIEW_PRIMITIV_POINT_H
+#ifndef BALL_VIEW_PRIMITIVES_POINT_H
+#define BALL_VIEW_PRIMITIVES_POINT_H
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_VERTEX1_H
-#	include <BALL/VIEW/KERNEL/vertex1.h>
+#ifndef BALL_VIEW_DATATYPE_VERTEX1_H
+#	include <BALL/VIEW/DATATYPE/vertex1.h>
 #endif
 
 namespace BALL
@@ -171,7 +171,6 @@ namespace BALL
 		};
   
 	} // namespace VIEW
-
 } // namespace BALL
 
-#endif // BALL_VIEW_PRIMITIV_POINT_H
+#endif // BALL_VIEW_PRIMITIVES_POINT_H

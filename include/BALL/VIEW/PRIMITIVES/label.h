@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.h,v 1.1 2003/08/26 12:11:37 oliver Exp $
+// $Id: label.h,v 1.2 2003/08/26 15:32:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
@@ -11,8 +11,8 @@
 # include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_VERTEX1_H
-#	include <BALL/VIEW/KERNEL/vertex1.h>
+#ifndef BALL_VIEW_DATATYPE_VERTEX1_H
+#	include <BALL/VIEW/DATATYPE/vertex1.h>
 #endif
 
 namespace BALL

@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line.C,v 1.1 2003/08/26 12:38:43 oliver Exp $
+// $Id: line.C,v 1.2 2003/08/26 15:32:48 amoll Exp $
 
-#include <BALL/VIEW/PRIMITIV/line.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
 
 using namespace std;
 
