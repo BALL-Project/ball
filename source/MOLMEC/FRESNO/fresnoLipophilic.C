@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.C,v 1.1.2.7 2002/06/04 11:58:06 anker Exp $
+// $Id: fresnoLipophilic.C,v 1.1.2.8 2002/11/21 20:54:46 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -152,11 +152,11 @@ namespace BALL
 		throw()
 	{
 
-		double E = 0.0;
-		double val = 0.0;
-		double distance;
-		double R1;
-		double R2;
+		energy_ = 0.0;
+		float val = 0.0;
+		float distance;
+		float R1;
+		float R2;
 		const Atom* atom1;
 		const Atom* atom2;
 
@@ -189,14 +189,13 @@ namespace BALL
 				// 	<< endl;
 				// /DEBUG
 				
-				E += val;
+				energy_ += val;
 			}
 		}
 
-		energy_ = factor_ *= E;
+		energy_ = factor_ * energy_;
 
 		// DEBUG
-		cout << "LIPO: score is " << E << endl;
 		cout << "LIPO: energy is " << energy_ << endl;
 		// /DEBUG
 

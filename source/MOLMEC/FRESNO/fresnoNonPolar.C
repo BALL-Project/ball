@@ -1,4 +1,4 @@
-// $Id: fresnoNonPolar.C,v 1.1.2.4 2002/11/21 12:52:30 anker Exp $
+// $Id: fresnoNonPolar.C,v 1.1.2.5 2002/11/21 20:54:47 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -275,6 +275,8 @@ namespace BALL
 			<< energy_ << endl;
 		// /DEBUG
 
+		energy_ *= factor_;
+
 		return true;
 
 	}
@@ -286,6 +288,7 @@ namespace BALL
 		// DEBUG
 		cout << "NONPOLAR: energy is " << energy_ << endl;
 		// /DEBUG
+
 		return energy_;
 	}
 

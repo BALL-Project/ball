@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.8 2002/04/08 16:38:08 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.9 2002/11/21 20:54:46 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -21,7 +21,7 @@ namespace BALL
 			already_used_()
 	{
 		// set component name
-		setName("Fresno Hydrogen Bond");
+		setName("Fresno HydrogenBond");
 	}
 
 
@@ -32,7 +32,7 @@ namespace BALL
 			already_used_()
 	{
 		// set component name
-		setName("Fresno Hydrogen Bond");
+		setName("Fresno HydrogenBond");
 	}
 
 
@@ -211,10 +211,10 @@ namespace BALL
 			au_it->second = false;
 		}
 
-		double E = 0.0;
-		double val = 0.0;
-		double distance;
-		double angle;
+		energy_ = 0.0;
+		float val = 0.0;
+		float distance;
+		float angle;
 		const Atom* hydrogen;
 		const Atom* acceptor;
 		Vector3 h_bond;
@@ -298,7 +298,7 @@ namespace BALL
 							// 	<< ", angle " << angle << ")"
 							// 	<< endl;
 							// /DEBUG
-							E += val;
+							energy_ += val;
 						}
 					}
 				}
@@ -310,11 +310,13 @@ namespace BALL
 					<< endl;
 			}
 		}
-		energy_ = factor_ * E;
+
+		energy_ = factor_ * energy_;
+
 		// DEBUG
-		cout << "HB: score is " << E << endl;
 		cout << "HB: energy is " << energy_ << endl;
 		// /DEBUG
+
 		return energy_;
 	}
 

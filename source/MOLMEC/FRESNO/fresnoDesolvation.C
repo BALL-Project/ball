@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.14 2002/11/12 16:24:59 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.15 2002/11/21 20:54:46 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -100,7 +100,7 @@ namespace BALL
 		// we should check whether force_field is a FresnoFF, because we need
 		// the fresno types
 
-		System* original = force_field->getSystem();
+		// System* original = force_field->getSystem();
     Options& options = force_field->options;
 
 		calculation_method_ 
@@ -129,14 +129,13 @@ namespace BALL
 
 		// ????? hardcoded
 		spacing_ = 0.5;
-		//	= options.setDefaultInteger(FresnoFF::Option::DESOLV_AVG,
-		//			FresnoFF::Default::DESOLV_AVG);
+		//	= options.setDefaultInteger(FresnoFF::Option::SPACING
+		//			FresnoFF::Default::SPACING);
 
 		// maybe we should set this via options, but for now this will be
 		// sufficient
 		bulk_water_dc_ = 80.0;
 		vacuum_dc_ = 1.0;
-		float tmp_energy = 0.0;
 
 		if (verbosity_ > 0)
 		{
@@ -170,16 +169,13 @@ namespace BALL
 			}
 		}
 
+		// ????? 
+		// Does Molecule:::operator = () really copy? What about the constructor? 
 		// we need local copies of the molecules
-		Molecule protein(*((FresnoFF*)force_field)->getProtein(), true);
-		Molecule ligand(*((FresnoFF*)force_field)->getLigand(), true);
+		desolv_protein_ = Molecule(*((FresnoFF*)force_field)->getProtein(), true);
+		desolv_ligand_ = Molecule(*((FresnoFF*)force_field)->getLigand(), true);
 
 		// declare a system and some more or less globally neede variables
-		System system;
-		bool result = false;
-		BoundingBoxProcessor bb_proc;
-		float single_energy = 0.0;
-
 		energy_ = 0.0;
 
 		// initialize all those necessary PB options
@@ -193,7 +189,11 @@ namespace BALL
 		fdpb_.options[FDPB::Option::CHARGE_DISTRIBUTION]
 			= FDPB::ChargeDistribution::TRILINEAR;
 
-		// now calculate the desolvation energy
+		System system;
+		bool result = false;
+		BoundingBoxProcessor bb_proc;
+
+		float tmp_energy = 0.0;
 
 		if ((calculation_method_ == CALCULATION__FRESNO)
 				|| (calculation_method_ == CALCULATION__FULL_FRESNO))
@@ -211,8 +211,8 @@ namespace BALL
 			{
 
 				system.clear();
-				system.insert(*(new Molecule(ligand, true)));
-				system.insert(*((Molecule*)(protein.create(true))));
+				system.insert(*(new Molecule(desolv_ligand_, true)));
+				system.insert(*((Molecule*)(desolv_protein_.create(true))));
 
 				// we have to be sure that all systems will be calculated in the
 				// same bounding box.
@@ -226,7 +226,7 @@ namespace BALL
 				if (result == false) return false;
 
 				system.clear();
-				system.insert(*((Molecule*)(protein.create(true))));
+				system.insert(*((Molecule*)(desolv_protein_.create(true))));
 				result = computeEnergyDifference_(system, dG_reac_protein);
 				if (result == false) return false;
 
@@ -234,7 +234,7 @@ namespace BALL
 			}
 
 			system.clear();
-			system.insert(*((Molecule*)(ligand.create(true))));
+			system.insert(*((Molecule*)(desolv_ligand_.create(true))));
 
 			if ((calculation_method_ == CALCULATION__FRESNO)
 					&& (averaging_ != AVERAGING__NONE))
@@ -311,8 +311,8 @@ namespace BALL
 
 				// insert our candidates into the system
 				system.clear();
-				Molecule tmp_ligand(*((Molecule*)(ligand.create(true))));
-				Molecule tmp_protein(*((Molecule*)(protein.create(true))));
+				Molecule tmp_ligand(*((Molecule*)(desolv_ligand_.create(true))));
+				Molecule tmp_protein(*((Molecule*)(desolv_protein_.create(true))));
 				system.insert(tmp_protein);
 				system.insert(tmp_ligand);
 
@@ -344,7 +344,7 @@ namespace BALL
 						Molecule cut_protein;
 						System cut_system;
 
-						ligand.apply(bb_proc);
+						desolv_ligand_.apply(bb_proc);
 
 						Vector3 lower = bb_proc.getLower() - Vector3(8.0, 8.0, 8.0);
 						Vector3 upper = bb_proc.getUpper() + Vector3(8.0, 8.0, 8.0);
@@ -354,7 +354,7 @@ namespace BALL
 						fdpb_.options.setVector(FDPB::Option::BOUNDING_BOX_UPPER,
 								upper);
 
-						AtomIterator it = ligand.beginAtom();
+						AtomIterator it = desolv_ligand_.beginAtom();
 						Vector3 position;
 
 						for (; +it; ++it)
@@ -378,7 +378,7 @@ namespace BALL
 							}
 						}
 
-						it = protein.beginAtom();
+						it = desolv_protein_.beginAtom();
 
 						for (; +it; ++it)
 						{
@@ -493,12 +493,8 @@ namespace BALL
 			}
 		}
 
-		// DEBUG
-		Log.info() << "DESOLV " << calculation_method_ << ": score is " 
-			<< energy_ << endl;
-		// /DEBUG
-
 		energy_ *= factor_;
+
 		return true;
 	}
 
@@ -506,9 +502,12 @@ namespace BALL
 	double FresnoDesolvation::updateEnergy()
 		throw()
 	{
+
 		// DEBUG
-		cout << "DESOLV: energy is " << energy_ << endl;
+		Log.info() << "DESOLV" << calculation_method_ << ": energy is " 
+			<< energy_ << endl;
 		// /DEBUG
+
 		return energy_;
 	}
 

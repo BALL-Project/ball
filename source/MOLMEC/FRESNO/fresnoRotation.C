@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.10 2002/04/10 16:43:45 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.11 2002/11/21 20:54:47 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -35,7 +35,7 @@ namespace BALL
 			fresno_types_(0)
 	{
 		// set component name
-		setName("Fresno Rotation");
+		setName("Fresno RotationalEntropyLoss");
 	}
 
 
@@ -52,7 +52,7 @@ namespace BALL
 			fresno_types_(0)
 	{
 		// set component name
-		setName("Fresno Rotation");
+		setName("Fresno RotationalEntropyLoss");
 	}
 
 
@@ -159,7 +159,7 @@ namespace BALL
 			 bb_proc.getUpper() - bb_proc.getLower() + Vector3(1.0),
 			 grid_spacing_);
 
-		HashGridBox3<const Atom*>* box;
+		// HashGridBox3<const Atom*>* box;
 		AtomConstIterator atom_it = system->beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
@@ -436,8 +436,8 @@ namespace BALL
 		else
 		{
 
-			double E = 0.0;
-			double val;
+			energy_ = 0.0;
+			float val;
 
 			updateFrozenBonds_();
 
@@ -448,17 +448,18 @@ namespace BALL
 					val = heavy_atom_fractions_[i].first + heavy_atom_fractions_[i].second;
 					val /= 2.0;
 					cout << "ROT: adding score of " << val << endl;
-					E += val;
+					energy_ += val;
 				}
 			}
 
-			E *= (1 - 1/N_rot_);
-			E += 1.0;
-			energy_ = factor_ * E;
+			energy_ *= (1 - 1/N_rot_);
+			energy_ += 1.0;
+			energy_ = factor_ * energy_;
+
 			// DEBUG
-			cout << "ROT: score is " << E << endl;
 			cout << "ROT: energy is " << energy_ << endl;
 			// /DEBUG
+
 			return energy_;
 		}
 

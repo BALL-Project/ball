@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.8 2002/06/04 11:53:24 anker Exp $
+// $Id: fresnoBuriedPolar.C,v 1.1.2.9 2002/11/21 20:54:45 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -159,11 +159,11 @@ namespace BALL
 		throw()
 	{
 
-		double E = 0.0;
-		double val = 0.0;
-		double distance;
-		double R1;
-		double R2;
+		energy_ = 0.0;
+		float val = 0.0;
+		float distance;
+		float R1;
+		float R2;
 		const Atom* atom1;
 		const Atom* atom2;
 
@@ -196,18 +196,18 @@ namespace BALL
 				// 	<< endl;
 				// /DEBUG
 
-				E += val;
+				energy_ += val;
 			}
 		}
 
-		energy_ = factor_ * E;
+		energy_ = factor_ * energy_;
 
 		// DEBUG
-		cout << "BP: score is " << E << endl;
 		cout << "BP: energy is " << energy_ << endl;
 		// /DEBUG
 
 		return energy_;
+
 	}
 
 
