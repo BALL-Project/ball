@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.46 2003/01/15 10:50:56 anhi Exp $
+// $Id: atom.h,v 1.47 2003/02/08 16:11:41 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -131,8 +131,8 @@ namespace BALL
 				*/
 				ANY_TYPE = 0,
 
-				/// Maximaum number of bonds of an atom
-				MAX_NUMBER_OF_BONDS = 8
+				/// Maximum number of bonds of an atom
+				MAX_NUMBER_OF_BONDS = 12
 			};
 
 			/** Predefined properties.
