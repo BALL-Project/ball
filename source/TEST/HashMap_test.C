@@ -1,4 +1,4 @@
-// $Id: HashMap_test.C,v 1.3 2000/08/30 19:59:15 oliver Exp $
+// $Id: HashMap_test.C,v 1.4 2000/08/30 22:21:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,12 +7,13 @@
 
 ///////////////////////////
 
-START_TEST(HashMap<T>, "$Id: HashMap_test.C,v 1.3 2000/08/30 19:59:15 oliver Exp $")
+START_TEST(HashMap<T>, "$Id: HashMap_test.C,v 1.4 2000/08/30 22:21:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 HashMap<int, int>* map_ptr;
 CHECK(HashMap::HashMap())
