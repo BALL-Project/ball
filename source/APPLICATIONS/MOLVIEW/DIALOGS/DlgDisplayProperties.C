@@ -24,6 +24,8 @@ DlgDisplayProperties::DlgDisplayProperties
   model_string_("stick"),
   precision_string_("high"),
   coloring_method_string_("by element"),
+	distance_color_calculator_(),
+	distance_coloring_(false),
 	selection_()
 {
 	setCaption("Display Settings");
@@ -266,6 +268,8 @@ void DlgDisplayProperties::selectColoringMethod(const QString& string)
 {
 	coloring_method_string_ = string;
 
+	distance_coloring_ = false;
+
 	if (string == "by element")
 	{
 		object_processor_
@@ -280,6 +284,13 @@ void DlgDisplayProperties::selectColoringMethod(const QString& string)
 	{
 		object_processor_
 			->setColorCalculator(COLORCALCULATOR_VALUES__ATOM_CHARGE);
+	}
+	else if (string == "by atom distance")
+	{
+		object_processor_
+			->setColorCalculator(distance_color_calculator_);
+		
+		distance_coloring_ = true;
 	}
 	else if (string == "custom")
 	{
@@ -301,6 +312,21 @@ void DlgDisplayProperties::applyButtonClicked()
 	if (selection_.empty())
 	{
 		return;
+	}
+
+	// calculate distance color if selected
+	if (distance_coloring_)
+	{
+		distance_color_calculator_.destroy();
+
+		// for each element in the selection => perform generation
+		List<Composite*>::Iterator list_it = selection_.begin();
+		for (; list_it != selection_.end(); ++list_it)
+		{
+			(**list_it).apply(*((UnaryProcessor<Composite>*)&distance_color_calculator_));
+		}
+
+		distance_color_calculator_.calculateDistances();
 	}
 	
 	List<Composite*> update_list;

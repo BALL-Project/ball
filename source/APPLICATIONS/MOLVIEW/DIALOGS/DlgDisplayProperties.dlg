@@ -142,6 +142,7 @@ ComboBox {
 		Item {by residue type}
 		Item {by residue name}
 		Item {by atom charge}
+		Item {by atom distance}
 		Item {custom}
 		MaxCount {2147483647}
 		AutoCompletion {FALSE}

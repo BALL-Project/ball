@@ -78,6 +78,9 @@ public:
 
 		MoleculeObjectProcessor *object_processor_;
 
+		AtomDistanceColorCalculator distance_color_calculator_;
+		bool distance_coloring_;
+
 		List<Composite*> selection_;
 };
 #endif // DlgDisplayProperties_included
