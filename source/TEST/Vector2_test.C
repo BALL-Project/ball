@@ -1,4 +1,4 @@
-// $Id: Vector2_test.C,v 1.1 2001/05/31 21:51:51 amoll Exp $
+// $Id: Vector2_test.C,v 1.2 2001/05/31 21:56:44 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,10 +6,9 @@
 #include <math.h>
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
-#include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector2, "$Id: Vector2_test.C,v 1.1 2001/05/31 21:51:51 amoll Exp $")
+START_TEST(TVector2, "$Id: Vector2_test.C,v 1.2 2001/05/31 21:56:44 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -278,19 +277,27 @@ CHECK(TVector2::T operator * (const TVector2& vector) const )
 RESULT
 
 CHECK(TVector2 operator % (const TVector2& vector) const)
+	// BAUSTELLE: werte
  	v1 = Vector2(1.0, 2.0);
 	v2 = Vector2(4.0, 5.0);
 	v  = v1 % v2;
 	TEST_REAL_EQUAL(v[0], -3.0)
-	TEST_REAL_EQUAL(v[1], 6.0)
+	TEST_REAL_EQUAL(v[1], 3.0)
+	
+ 	v1 = Vector2(0.0, 2.0);
+	v2 = Vector2(4.0, 0.0);
+	v  = v1 % v2;
+	TEST_REAL_EQUAL(v[0], 0.0)
+	TEST_REAL_EQUAL(v[1], 0.0)
 RESULT
 
 CHECK(TVector2 operator %= (const TVector2& vector))
+	// BAUSTELLE: werte
  	v  = Vector2(1.0, 2.0);
 	v2 = Vector2(4.0, 5.0);
 	v  %= v2;
 	TEST_REAL_EQUAL(v[0], -3.0)
-	TEST_REAL_EQUAL(v[1], 6.0)
+	TEST_REAL_EQUAL(v[1], 3.0)
 RESULT
 
 CHECK(TVector2::getDistance(const TVector2& vector) const )
