@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.48 2004/10/21 12:57:00 amoll Exp $
+// $Id: glRenderer.C,v 1.49 2004/10/28 13:28:40 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1405,6 +1405,12 @@ namespace BALL
 			throw()
 		{
 			if (camera == 0) camera = &stage_->getCamera();
+
+			if (Maths::isZero(camera->getViewVector().getSquareLength()))
+			{
+				Log.error() << "Unvalid camera settings: View point = LookAt point" << std::endl;
+				return;
+			}
 
 			glLoadIdentity();
 
