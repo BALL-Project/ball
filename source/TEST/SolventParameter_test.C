@@ -1,11 +1,11 @@
-// $Id: SolventParameter_test.C,v 1.8 2001/08/19 18:34:46 sturm Exp $
+// $Id: SolventParameter_test.C,v 1.9 2001/08/22 09:26:36 aubertin Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/solventParameter.h>
 ///////////////////////////
 
-START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.8 2001/08/19 18:34:46 sturm Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.9 2001/08/22 09:26:36 aubertin Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -13,12 +13,28 @@ START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.8 2001/08/19 18:3
 using namespace BALL;
 
 SolventParameter* s_ptr;
+SolventParameter* s_ptr2;
+
 CHECK(SolventParameter())
-	s_ptr = new SolventParameter;
+	s_ptr = new SolventParameter;	
 	TEST_NOT_EQUAL(s_ptr,0)
-  //BAUSTELLE , da kein name_, number_density_ und solvent_atoms_ ohne accessor!
+	bool test = ( "" == s_ptr->getSolventName());
+	TEST_EQUAL(test,true)
+	test = ( 0.0 == s_ptr->getSolventDensity());
+	TEST_EQUAL(test,true)
+  ::std::vector<SolventAtomDescriptor> test_sae;
+	//test = ( test_sae == s_ptr->getSolventDescription()); 
+  //TEST_EQUAL(test, true)
+  SolventDescriptor test_sd;
+	test = ( test_sd == s_ptr->getSolventDescriptor());
+	TEST_EQUAL(test, true)
 RESULT
 
+CHECK(SolventParameter(const SolventParameter&))
+	s_ptr2 = new SolventParameter(*s_ptr);
+	TEST_NOT_EQUAL(s_ptr2,0)
+	TEST_EQUAL(s_ptr,s_ptr2)
+RESULT
 
 CHECK(~SolventParameter())
 	delete s_ptr;
