@@ -1,17 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.6 2003/10/18 20:31:48 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.7 2003/10/19 14:09:34 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 
 #ifndef BALL_VIEW_GUI_MODELS_COLORPROCESSOR_H
 #	include <BALL/VIEW/MODELS/colorProcessor.h>
-#endif
-
-#ifndef BALL_DATATYPE_HASHMAP_H
-#	include <BALL/DATATYPE/hashMap.h>
 #endif
 
 namespace BALL
@@ -231,8 +227,7 @@ namespace BALL
       AtomDistanceColorProcessor()
 				throw();
 
-			/** Copy constructor.
-					Construct with copying the colors and the distance.
+			/** Construct with copying the colors and the distance.
 			*/
  			AtomDistanceColorProcessor(const AtomDistanceColorProcessor& color_Processor)
 				throw();
@@ -337,9 +332,8 @@ namespace BALL
 		};
 
 
-		/** CustomColorProcessor is just a typedef of the class ColorProcessor.
-				For every given object only the default color will be returned by the method
-				ColorProcessor::getColor. 
+		/** CustomColorProcessor colorizes every GeometricObject with the default color.
+		 		An extra class had to be created, because colorMeshFromGrid_ doesnt need the grid here.
 				\ingroup  ViewModels
 		*/
 		class CustomColorProcessor

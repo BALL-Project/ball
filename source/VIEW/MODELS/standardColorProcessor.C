@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.5 2003/10/18 20:31:25 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.6 2003/10/19 14:09:48 amoll Exp $
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
 
 namespace BALL

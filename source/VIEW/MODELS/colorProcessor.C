@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.8 2003/10/18 20:31:25 amoll Exp $
+// $Id: colorProcessor.C,v 1.9 2003/10/19 14:09:48 amoll Exp $
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/DATATYPE/colorExtension2.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/list.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -171,7 +172,8 @@ void ColorProcessor::createAtomGrid_()
 	}
 	boxp.finish();
 
-	atom_grid_ = AtomGrid(boxp.getLower(), boxp.getUpper() - boxp.getLower(), 12);
+	atom_grid_ = AtomGrid(boxp.getLower() - Vector3(10,10,10), 
+												(boxp.getUpper() - boxp.getLower()) + Vector3(10,10,10), 5);
  
 	for(lit = atoms.begin(); lit != atoms.end(); lit++)
 	{
@@ -189,33 +191,38 @@ void ColorProcessor::colorMeshFromGrid_(Mesh& mesh)
 		return;
 	}
 	mesh.colorList.clear();
-	vector<Surface::Triangle>::iterator sit = mesh.triangle.begin();
-	for(; sit != mesh.triangle.end(); sit++)
+	vector<Vector3>::iterator sit = mesh.vertex.begin();
+	for(; sit != mesh.vertex.end(); sit++)
 	{
-		Vector3 pos = mesh.vertex[(*sit).v1];
-		HashGridBox3<const Atom*>* box = atom_grid_.getBox(pos);
-		if (box == 0 ||
-				box->isEmpty())
-		{
-			//mesh.colorList.push_back(default_color_);
-			mesh.colorList.push_back(ColorRGBA(0,.0,1));
-			continue;
-		}
-		HashGridBox3<const Atom*>::DataIterator hit = box->beginData();
+		AtomBox* box = atom_grid_.getBox(*sit);
 		float distance = 9999999;
 		const Atom* atom = 0;
-		for (;hit != box->endData(); hit++)
+		
+		List<AtomBox*> boxes = getNeighbourBoxes_(*box);
+		List<AtomBox*>::Iterator boxes_it = boxes.begin();
+		for (; boxes_it != boxes.end(); boxes_it++)
 		{
-			float new_dist = ((*hit)->getPosition() - pos).getSquareLength();
-			if (new_dist < distance)
+			AtomBox::DataIterator hit = (*boxes_it)->beginData();
+			for (;hit != box->endData(); hit++)
 			{
-				atom = *hit;
-				distance = new_dist;
+				float new_dist = ((*hit)->getPosition() - *sit).getSquareLength();
+				if (new_dist < distance)
+				{
+					atom = *hit;
+					distance = new_dist;
+				}
 			}
 		}
-		mesh.colorList.push_back(getColor(atom));
-	}
 
+		if (atom == 0)
+		{
+			mesh.colorList.push_back(ColorRGBA(0,.0,1));
+		}
+		else
+		{
+			mesh.colorList.push_back(getColor(atom));
+		}
+	}
 }
 
 void ColorProcessor::setComposites(const CompositeSet* composites)
@@ -224,6 +231,30 @@ void ColorProcessor::setComposites(const CompositeSet* composites)
 	composites_ = composites;
 	atom_grid_created_ = false;
 	atom_grid_.clear();
+}
+
+
+List<ColorProcessor::AtomBox*> ColorProcessor::getNeighbourBoxes_(ColorProcessor::AtomBox& box)
+	throw()
+{
+	List<ColorProcessor::AtomBox*> box_list;
+	Position x, y, z;
+	atom_grid_.getIndices(box, x, y, z);
+	for (Index xi = -1; xi <= 1; xi++)
+	{
+		for (Index yi = -1; yi <= 1; yi++)
+		{
+			for (Index zi = -1; zi <= 1; zi++)
+			{
+				AtomBox* box_ptr = atom_grid_.getBox(x+xi, y+yi, z+zi);	
+				if (box_ptr != 0 && !box_ptr->isEmpty())
+				{
+					box_list.push_back(box_ptr);
+				}
+			}
+		}
+	}
+	return box_list;
 }
 
 

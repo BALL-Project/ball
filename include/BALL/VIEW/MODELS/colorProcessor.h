@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.8 2003/10/18 20:31:48 amoll Exp $
+// $Id: colorProcessor.h,v 1.9 2003/10/19 14:09:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -15,51 +15,52 @@
 #	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
-#ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
-#	include <BALL/VIEW/DATATYPE/colorTable.h>
-#endif
-
-#ifndef BALL_COMPOSITE_ATOM_H
-# include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_COMPOSITE_PTE_H
-# include <BALL/KERNEL/PTE.h>
-#endif
-
 #ifndef BALL_DATATYPE_HASHGRID_H
 # include <BALL/DATATYPE/hashGrid.h>
 #endif
 
+#ifndef BALL_DATATYPE_LIST_H
+# include <BALL/DATATYPE/list.h>
+#endif
+
 namespace BALL
 {
+	class Atom;
+
 	namespace VIEW
 	{
 		class Mesh;
 				
-		/** ColorProcessor class.
-				The class ColorProcessor is used for calculating a ColorRGBA for each given GeometricObject. 
+		/** Calculating colors for given GeometricObject instances. 
+				This class defines the interface and basic algorithms to colorize geometric objects, e.g. 
+				Sphere, Tube, TwoColoredTube, etc.
+				Derived classes implement special ways to colorize, e.g. by charge or element.
+				They have to overload the method getColor(Composite*).\par
+				If no color can be calculated for a GeometricObject, e.g. if it has no Composite, the default
+				color is set.\par
+				A bit tricky is the coloring of meshes. The goal was to give every triangle of a mesh a color
+				according to its nearest atom. To do so, a threedimensional HashGrid3 is used. It is
+				computed, when the ColorProcessor first encounters a Mesh in the operator ().
+				For this a pointer to the HashSet with the used Composite instances exists, which is set by the 
+				Representation.
 		*/
 		class ColorProcessor
 			: public UnaryProcessor<GeometricObject*>
 		{
 			public:
 			
-			///
-			typedef HashSet<const Composite*>  CompositeSet;
-
-			typedef HashGrid3<const Atom*>  AtomGrid;
-
 			/**	@name	Type definitions
 			*/
 			//@{
 				
-			/**	ColorMap type.
-					Define the type of a ColorMap as a StringHashMap to ColorRGBA objects.
-					\see   StringHashMap
-					\see   ColorRGBA
-			*/
-			typedef StringHashMap<ColorRGBA>	ColorMap;
+			/// A HashSet with the used Composites, see also Representation
+			typedef HashSet<const Composite*>  CompositeSet;
+
+			/// a threedimensioal grid with the pointers to the atoms
+			typedef HashGrid3<const Atom*>  AtomGrid;
+
+			/// a single box in the threedimensional grid
+			typedef HashGridBox3<const Atom*> AtomBox;
 
 			//@} 
 			/**	@name	Constructors 
@@ -87,7 +88,8 @@ namespace BALL
 
 			/** Explicit default initialization.
 					Reset the state of the
-					 <b> default_color_</b> to red (<tt> "FF0000FF"</b>)
+					 <b> default_color_</b> to red (<tt> "FF0000FF"</b>).
+					The grid is cleared and the pointer to the CompositeSet is set to NULL.
 			*/
 			virtual void clear()
 				throw();
@@ -121,15 +123,21 @@ namespace BALL
 			*/
 			virtual Processor::Result operator() (GeometricObject*& object);
 
-			///
+			/** Calculate a color for a Composite.
+			 		This method is called by the operator().
+					Here it just returns the default color.
+					You have to overload this operator in derived classes.
+			*/
 			virtual ColorRGBA getColor(const Composite* /*composite*/)
 			{ return default_color_;}
 
-			///
+			/** Set the pointer to the CompositeSet.
+			 		This method is called by Representation::setColorProcessor and Representation::update.
+			*/
 			void setComposites(const CompositeSet* composites)
 				throw();
 
-			///
+			/// Return a pointer to the CompositeSet.
 			const CompositeSet* getComposites()
 				throw() { return composites_;}
 
@@ -149,27 +157,30 @@ namespace BALL
 
 			protected:
 			
-			//_
+			//_ Create the threedimensional grid from the CompositeSet.
 			virtual void createAtomGrid_()
 				throw();
 
-			//_
+			//_ Colorize the mesh with the computed grid.
 			virtual void colorMeshFromGrid_(Mesh& mesh)
 				throw();
+
+			//_ Get the neighbour boxes of a box in its grid
+			List<AtomBox*> getNeighbourBoxes_(AtomBox& box)
+				throw();
+
 			//@} 
 			/** @name Protected member variables 
 			*/ 
 			//@{
 
-			/** Access to the default color.
-				  This variable contains a color that will be used if no other color can be calculated.
-			*/
+			//_ a color that will be used if no other color can be calculated.
 			ColorRGBA		default_color_;
 
-			const CompositeSet* composites_;
+			const 			CompositeSet* composites_;
 
-			AtomGrid atom_grid_;
-			bool atom_grid_created_;
+			AtomGrid 		atom_grid_;
+			bool 				atom_grid_created_;
 			//@}
 		};
 
