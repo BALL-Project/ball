@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.2 2001/02/10 20:01:00 amoll Exp $ 
+// $Id: regularData3D.h,v 1.3 2001/05/10 13:44:43 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -88,15 +88,15 @@ namespace BALL
 				@param	upper_z	float, the z coordinate of the upper corner of the grid
 		*/
 		RegularData3D
-			(const float lower_x, 
-			 const float lower_y, 
-			 const float lower_z,
-			 const float upper_x, 
-			 const float upper_y, 
-			 const float upper_z,
-			 const Size grid_points_x, 
-			 const Size grid_points_y, 
-			 const Size grid_points_z)
+			(float lower_x, 
+			 float lower_y, 
+			 float lower_z,
+			 float upper_x, 
+			 float upper_y, 
+			 float upper_z,
+			 Size grid_points_x, 
+			 Size grid_points_y, 
+			 Size grid_points_z)
 			 throw(Exception::OutOfMemory);
 
 		/**	Constructor.
@@ -106,9 +106,9 @@ namespace BALL
 		RegularData3D
 			(const Vector3& lower, 
 			 const Vector3& upper,
-			 const Size grid_points_x, 
-			 const Size grid_points_y, 
-			 const Size grid_points_z)
+			 Size grid_points_x, 
+			 Size grid_points_y, 
+			 Size grid_points_z)
 			 throw(Exception::OutOfMemory);
 
 		/**	Constructor. 
@@ -117,7 +117,7 @@ namespace BALL
 				Its origin is in the lower corner, it may extend up to spacing over
 				the upper corner.
 		*/
-		RegularData3D(const Vector3& lower, const Vector3& upper, const float spacing)
+		RegularData3D(const Vector3& lower, const Vector3& upper, float spacing)
 			throw(Exception::OutOfMemory);
 
 		/**	Destructor. 
@@ -253,7 +253,7 @@ namespace BALL
 				returned.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridIndex getIndex(const float, const float, const float) const
+		GridIndex getIndex(float x, float y, float z) const
 			throw(Exception::OutOfGrid);
 		
 		/**	Returns a pointer to the grid contents determined by the three indices.
@@ -385,7 +385,7 @@ namespace BALL
 				@param		y new origin y
 				@param		z new origin z
 		*/
-		void setOrigin(const float x, const float y, const float z) throw();
+		void setOrigin(float x, float y, float z) throw();
 
 		/**	Returns a vector containing the grid's dimensions.
 				@return		Vector3&
@@ -409,7 +409,7 @@ namespace BALL
 				@param x, y, z the coordinates
 				@return bool
 		*/
-		bool has(const float& x, const float& y,const float& z) const throw();
+		bool has(float& x, float& y,float& z) const throw();
 
 		/**	Returns the linear interpolation of the eight surrounding grid points.
 				This method calculates the corresponding box to a vector and linearly.
@@ -670,7 +670,7 @@ namespace BALL
 	RegularData3D<GridDataType>::RegularData3D
 		(const Vector3& lower,
 		 const Vector3& upper,
-		 const float spacing) 
+		 float spacing) 
 		throw(Exception::OutOfMemory)
 		: data(0)
 	{
@@ -830,7 +830,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	void RegularData3D<GridDataType>::setOrigin(const float x, const float y, const float z) 
+	void RegularData3D<GridDataType>::setOrigin(float x, float y, float z) 
 	 	throw()
 	{
 		origin_.set(x, y, z);
@@ -850,7 +850,7 @@ namespace BALL
 
 	template <class GridDataType> 
 	BALL_INLINE
-	bool RegularData3D<GridDataType>::has(const float& x, const float& y,const float& z) const		
+	bool RegularData3D<GridDataType>::has(float& x, float& y,float& z) const		
 		throw()
 	{
 		if (x > upper_.x  ||	y > upper_.y  ||	z > upper_.z  ||
@@ -879,7 +879,7 @@ namespace BALL
 	template <class GridDataType>
 	BALL_INLINE 
 	RegularData3D<GridDataType>::GridIndex RegularData3D<GridDataType>::getIndex
-		(const float x, const float y, const float z) const 
+		(float x, float y, float z) const 
 		throw(Exception::OutOfGrid)
 	{
 		if (!has(x, y, z))
