@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.h,v 1.1.2.3 2003/05/07 16:10:39 anker Exp $
+// $Id: fresnoLipophilic.h,v 1.1.2.4 2003/09/30 15:12:03 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOLIPOPHILIC_H
@@ -96,7 +96,7 @@ namespace BALL
 
 		/*_
 		*/
-		::vector< pair<const Atom*, const Atom*> > possible_lipophilic_interactions_;
+		std::vector< std::pair<const Atom*, const Atom*> > possible_lipophilic_interactions_;
 
 		/*_
 		*/

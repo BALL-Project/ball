@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.h,v 1.1.2.10 2003/06/13 14:38:01 anker Exp $
+// $Id: fresnoRotation.h,v 1.1.2.11 2003/09/30 15:12:04 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOROTATION_H
@@ -150,7 +150,7 @@ namespace BALL
 		/* The percentages of nonlipophilc heavy atoms on each side of the bond
 		 * (named P(r) in the paper).
 		*/
-		::vector< ::pair<double, double> > heavy_atom_fractions_;
+		std::vector< std::pair<double, double> > heavy_atom_fractions_;
 
 		/*_ This hash grid contains all receptor atoms. We need it for obtaining
 		 * those ligand atoms that are close to the receptor.

@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.h,v 1.1.2.4 2003/05/07 16:10:39 anker Exp $
+// $Id: fresnoHydrogenBond.h,v 1.1.2.5 2003/09/30 15:12:03 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNOHYDROGENBOND_H
@@ -103,7 +103,7 @@ namespace BALL
 		 * acceptor). The donor can be found easily by following the only bond
 		 * of the hydrogen.
 		*/
-		::vector< pair<const Atom*, const Atom*> > possible_hydrogen_bonds_;
+		std::vector< std::pair<const Atom*, const Atom*> > possible_hydrogen_bonds_;
 
 		/*_ A hash map containing all hydrogens and bools indicating whether
 		 * this hydrigen was already used for scoring a hydrogen bond. At the

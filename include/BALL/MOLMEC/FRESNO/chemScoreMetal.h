@@ -1,4 +1,4 @@
-// $Id: chemScoreMetal.h,v 1.1.2.2 2003/05/07 16:10:39 anker Exp $
+// $Id: chemScoreMetal.h,v 1.1.2.3 2003/09/30 15:12:02 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_CHEMSCOREMETAL_H
 #define BALL_MOLMEC_FRESNO_CHEMSCOREMETAL_H
@@ -95,7 +95,7 @@ namespace BALL
 
 		/*_
 		*/
-		::vector< pair<const Atom*, const Atom*> > possible_metal_interactions_;
+		std::vector< std::pair<const Atom*, const Atom*> > possible_metal_interactions_;
 
 		/*_
 		*/
