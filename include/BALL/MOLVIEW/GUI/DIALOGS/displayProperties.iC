@@ -16,8 +16,6 @@ bool DisplayProperties::hasValue_(int address, int value)
 	return (address_array_[address] == value);
 }
 
-
-
 BALL_INLINE
 void DisplayProperties::setViewCenter_(const Vector3 &vector)
 {
@@ -53,3 +51,22 @@ Real DisplayProperties::getViewDistance_() const
 {
 	return view_distance_;
 }
+
+BALL_INLINE
+void DisplayProperties::setColorCalculator_(ColorCalculator& color_calculator)
+{
+	color_calculator_ = &color_calculator;
+}
+
+BALL_INLINE
+void DisplayProperties::applyOnComposite_(Composite &composite, UnaryProcessor<Composite> *processor)
+{
+	composite.apply(*processor);
+}
+
+BALL_INLINE
+void DisplayProperties::applyOnComposite_(Composite &composite, UnaryProcessor<Atom> *processor)
+{
+	composite.apply(*processor);
+}
+

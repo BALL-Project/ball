@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.11.4.2 2002/10/23 13:07:46 amoll Exp $
+// $Id: displayProperties.h,v 1.11.4.3 2002/11/06 21:28:09 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -37,6 +37,34 @@
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIESDATA_H
 # include <BALL/MOLVIEW/GUI/DIALOGS/displayPropertiesData.h>
+#endif
+
+#ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
+# include <BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.h>
+#endif
+
+#ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
+# include <BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h>
+#endif
+
+#ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLLINEMODEL_H
+# include <BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.h>
+#endif
+
+#ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
+# include <BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h>
+#endif
+
+#ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
+# include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h>
+#endif
+
+#ifndef BALL_MOLVIEW_GUI_FUNCTOR_REMOVEMODEL_H
+# include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
+#endif
+
+#ifndef BALL_MOLVIEW_GUI_FUNCTOR_OBJECTSELECTOR_H
+# include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 #endif
 
 namespace BALL
@@ -106,8 +134,8 @@ namespace BALL
 			*/
 			DisplayProperties(QWidget *parent = NULL, const char* name = NULL)
 					throw();
-			//@}
 
+			//@}
 			/** @name Destructors 
 			*/
 			//@{
@@ -117,8 +145,8 @@ namespace BALL
 			*/
 			virtual ~DisplayProperties()
 				throw();
+
 			//@}
-				
 			/**	@name	Accessors: inspectors and mutators 
 			 */
 			//@{
@@ -148,8 +176,8 @@ namespace BALL
 			*/
 			virtual void onNotify(Message *message)
 					throw();
+			
 			//@}
-
 			/**	ModularWidget methods
 			*/
 			//@{
@@ -192,8 +220,7 @@ namespace BALL
 						\item  {\em Add Hydrogens} - adds hydrogens to the molecular objects in the selection
 					\end{itemize}
 					and adds them to the appropriate slots.
-					This method is called automatically	immediately before the main application 
-					is started. 
+					This method is called automatically	immediately before the main application is started. 
 					This method will be called by \Ref{show} from the \Ref{MainControl} object.
 					@param main_control the \Ref{MainControl} object to be initialized with {\em *this} displayProperties
 					@see   openDialog
@@ -215,8 +242,7 @@ namespace BALL
 			/**	Removes the widget.
 					Removes the checkable submenus from the popup menu
 					{\em Display}	and cut the all previously registered connections.
-					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl}
-					object.
+					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl} object.
 					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} displayProperties
 					@see   initializeWidget
 					@see   checkMenu
@@ -246,10 +272,10 @@ namespace BALL
 			*/
 			virtual void checkMenu(MainControl& main_control)
 					throw();
-			//@}
 				
 			public slots:
 					
+			//@}
 			/** @name Public slots
 			*/
 			//@{
@@ -345,10 +371,10 @@ namespace BALL
 					See documentation of QT-library for information concerning QDialog widgets.
 			*/
 			void openDialog();
-			//@}
 				
 			protected slots:
 					
+			//@}
 			/** @name Protected slots
 			*/
 			//@{
@@ -476,7 +502,7 @@ namespace BALL
 			Vector3 getViewCenter_() const;
 
 			void setViewDirection_(int view_direction);
-			// muss noch verbessert werden (VIEW_DIRECTION)
+			// ????? muss noch verbessert werden (VIEW_DIRECTION)
 			int getViewDirection_() const;
 			void setViewDistance_(Real view_distance);
 			Real getViewDistance_() const;
@@ -490,11 +516,14 @@ namespace BALL
 																			 const ColorRGBA &third_color = ColorRGBA());
 			virtual void setColorCalculator_(ColorCalculator& color_calculator);
 
+			virtual void setupStaticProcessor_()
+				throw();
 
-			void applyOnComposite_(Composite& composite, UnaryProcessor<Composite>* processor);		
-			void applyOnComposite_(Composite& composite, UnaryProcessor<Atom>* processor);		
+			virtual void setupDynamicProcessor_()
+				throw();
 
-
+			void applyOnComposite_(Composite &composite, UnaryProcessor<Composite> *processor);
+			void applyOnComposite_(Composite &composite, UnaryProcessor<Atom> *processor);
 			// --------------------------------------------------------------------------------
 			// attributs
 			// --------------------------------------------------------------------------------
@@ -506,14 +535,14 @@ namespace BALL
 			int build_bonds_id_;
 			int add_hydrogens_id_;
 			
-			QString   model_string_;
-			QString   precision_string_;
-			QString   coloring_method_string_;
-			ColorRGBA custom_color_;
+			QString  					model_string_;
+			QString   				precision_string_;
+			QString   				coloring_method_string_;
+			ColorRGBA 				custom_color_;
 			
-			bool distance_coloring_;
+			bool 							distance_coloring_;
 			
-			List<Composite*> selection_;
+			List<Composite*> 	selection_;
 
 
 			// --------------------------------------------------------------------------------
@@ -521,15 +550,28 @@ namespace BALL
 			// --------------------------------------------------------------------------------
 		
 			// general
-			Vector3 view_center_vector_;
-			int view_direction_;
-			Real view_distance_;
-			vector<int> address_array_;
+			Vector3 										view_center_vector_;
+			int 												view_direction_;
+			Real 												view_distance_;
+			vector<int> 								address_array_;
 
 			// model specific
-			FragmentDB fragmentdb_;
-			ColorCalculator *color_calculator_;
-			GLAtomBondModelConnector model_connector_;
+			FragmentDB 									fragmentdb_;
+			ColorCalculator*						color_calculator_;
+			GLAtomBondModelConnector 		model_connector_;
+
+			AddGLBallAndStickModel 			ball_and_stick_model_;
+			AddGLBackboneModel 					backbone_model_;
+			AddGLLineModel 							line_model_;
+			AddGLSurfaceModel 					surface_model_static_;
+			AddGLSurfaceModel 					surface_model_dynamic_;
+			AddGLVanDerWaalsModel 			van_der_waals_model_;
+			RemoveModel 								remove_model_static_;
+			RemoveModel 								remove_model_dynamic_;
+			ObjectSelector 							selector_;			
+
+			BaseModelProcessor* 				static_base_model_pointer_;
+			BaseModelProcessor* 				dynamic_base_model_pointer_;
 
 			ElementColorCalculator      element_color_calculator_;
 			ResidueNameColorCalculator  residue_name_color_calculator_;
