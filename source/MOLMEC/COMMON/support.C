@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.23 2001/02/23 14:39:27 anker Exp $
+// $Id: support.C,v 1.24 2001/03/06 14:08:37 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -15,10 +15,13 @@ namespace BALL
 	namespace MolmecSupport 
 	{
 
+		// Calculate a vector of non-bonded atom pairs whose distance is
+		// smaller than the value of the distance variable
 		Size calculateNonBondedAtomPairs
 			(vector< pair <Atom*, Atom*> >& pair_vector, 
 			 const AtomVector& atom_vector,
-			 const Box3& box, double distance,
+			 const Box3& box, 
+			 double distance,
 			 bool periodic_boundary_enabled, 
 			 PairListAlgorithmType type)
 		{
@@ -59,7 +62,8 @@ namespace BALL
 				period_x = box.getWidth();
 				period_y = box.getHeight();
 				period_z = box.getDepth(); 
-				period = Vector3(period_x, period_y, period_z);
+				// BAUSTELLE
+				// period = Vector3(period_x, period_y, period_z);
 			
 				// ... and add at least distance to each coordinate to gain a box
 				// that contains enough neighbouring boxes.
@@ -129,6 +133,8 @@ namespace BALL
 			double  squared_distance = distance * distance;
 
 			// initialize the hash grid
+			// we enlarge the box by some constant to be sure not to run into
+			// numerical problems
 			HashGrid3<Atom*> grid(lower - Vector3(0.1),
 					upper - lower + Vector3(0.2), distance);
 
@@ -149,7 +155,9 @@ namespace BALL
 
 				if (type == BRUTE_FORCE) 
 				{
-					// Brute force algorithm:
+					// Brute force algorithm: for every atom calculate the minimum
+					// image of every other atom and check whether this atomis within
+					// the cutoff radius
 
 					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end();
 							++atom_it) 
@@ -164,6 +172,9 @@ namespace BALL
 							// BAUSTELLE
 							// calculateMinimumImage(difference, period);
 
+							// BAUSTELLE: should it be < or <= ? We have to define what
+							// should happen when an antom sits on the border
+							// (numerically quite improbable, of course)
 							if (difference.x < -half_period_x) 
 							{
 								new_position.x += period_x;
@@ -211,6 +222,8 @@ namespace BALL
 				} 
 				else 
 				{ 
+					// HashGrid algorithm.
+					//
 					// Use a hash grid with box length "distance" to determine all
 					// neigboured atom pairs
 
@@ -238,10 +251,15 @@ namespace BALL
 
 									if (hbox != 0)
 									{
+										// iterate over all neighbouring boxes
 										for (box_it = hbox->beginBox(); +box_it; ++box_it) 
 										{
+											// iterate ove all items stored in this box
 											for (data_it = box_it->beginData(); +data_it; ++data_it) 
 											{
+												// difference is the vector pointing from the
+												// current atom to the one that we got from the
+												// gridbox
 												difference = new_position - (*data_it)->getPosition();
 												if ((difference.x > -half_period_x) 
 													&& (difference.x < half_period_x) 
@@ -293,6 +311,8 @@ namespace BALL
 				} 
 				else 
 				{  	
+					// Algorithm using a 3d hash grid
+					//
 					// Use a hash grid with box length "distance" to determine all
 					// neigboured atom pairs
 
