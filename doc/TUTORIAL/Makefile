@@ -8,7 +8,9 @@ b:
 build:
 	latex tutorial
 
-html:
+html: 
+	@latex tutorial
+	@bibtex tutorial
 	@createHTML
 
 tutorial.ps:	tutorial.dvi
