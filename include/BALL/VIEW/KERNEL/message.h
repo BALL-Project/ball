@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.64 2005/02/14 23:18:27 amoll Exp $
+// $Id: message.h,v 1.65 2005/02/28 19:36:06 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -810,6 +810,8 @@ class BALL_EXPORT RegularData3DMessage
 	RegularData3D* data_;
 };
 
+	
+///
 class BALL_EXPORT TransformationMessage
 	: public Message
 {
@@ -834,6 +836,17 @@ class BALL_EXPORT TransformationMessage
 	private:
 
 	Matrix4x4 matrix_;
+};
+
+///
+class BALL_EXPORT FinishedSimulationMessage
+	: public Message
+{
+	public:
+
+	///
+	FinishedSimulationMessage()
+		throw();
 };
 	
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.167 2005/02/27 18:33:42 amoll Exp $
+// $Id: mainControl.C,v 1.168 2005/02/28 19:36:08 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1558,6 +1558,9 @@ Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
 			}
 			stop_simulation_ = false;
 			unlockCompositesFor(locking_widget_);
+
+			FinishedSimulationMessage* msg = new FinishedSimulationMessage();
+			notify_(msg);
 			#endif
 		}
 
