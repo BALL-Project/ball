@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.48 2005/02/28 20:29:56 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.49 2005/02/28 21:19:33 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -617,6 +617,17 @@ void ColorMeshDialog::setMinValue(float value)
 {
 	min_label->setText(String(value).c_str());
 }
+
+void ColorMeshDialog::setMaxValue(float value)
+{
+	max_label->setText(String(value).c_str());
+}
+
+void ColorMeshDialog::setMidValue(float value)
+{
+	mid_label->setText(String(value).c_str());
+}
+
 
 
 } } // namespaces
