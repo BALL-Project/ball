@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.16 2004/02/25 12:04:36 oliver Exp $
+// $Id: contourSurface.h,v 1.17 2004/03/07 01:10:25 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
@@ -385,7 +385,7 @@ namespace BALL
 
 	template <typename T>
 	void TContourSurface<T>::addTriangles_
-		(TContourSurface<T>::Cube& cube, const FacetArray& facet_data) 
+		(typename TContourSurface<T>::Cube& cube, const FacetArray& facet_data) 
 		throw()
 	{ 
 		// Some static variables we need below -- since we will
