@@ -7,7 +7,8 @@ CPP_SOURCES=\
 	glQuadricObject.C\
 	glRenderer.C\
 	renderer.C\
-	POVRenderer.C
+	POVRenderer.C\
+	VRMLRenderer.C
 
 include ../../common.mak
 include .Dependencies
