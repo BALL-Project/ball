@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.C,v 1.12 2004/12/22 16:02:26 amoll Exp $
+// $Id: charmmStretch.C,v 1.13 2004/12/27 17:06:12 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
@@ -61,7 +61,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmStretch::setup()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.C,v 1.13 2004/12/22 16:02:25 amoll Exp $
+// $Id: charmmImproperTorsion.C,v 1.14 2004/12/27 17:06:11 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
@@ -54,7 +54,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmImproperTorsion::setup()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{

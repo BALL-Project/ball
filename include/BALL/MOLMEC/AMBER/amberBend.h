@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.h,v 1.18 2004/12/22 16:01:49 amoll Exp $
+// $Id: amberBend.h,v 1.19 2004/12/27 17:06:29 amoll Exp $
 //
 
 // Molecular Mechanics: Amber force field, bond stretch component
@@ -67,7 +67,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw(ForceField::TooManyErrors);
+			throw(Exception::TooManyErrors);
 
 		//@}
 

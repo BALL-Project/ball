@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.31 2004/12/22 16:02:23 amoll Exp $
+// $Id: amberNonBonded.C,v 1.32 2004/12/27 17:06:07 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
@@ -202,7 +202,7 @@ namespace BALL
 	}
 
 	void AmberNonBonded::update()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -231,7 +231,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberNonBonded::setup()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -391,7 +391,7 @@ namespace BALL
 		(const vector<pair<Atom*, Atom*> >& atom_vector,
 		 const LennardJones& lennard_jones, 
 		 const Potential1210& hydrogen_bond)
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		// throw away the old rubbish
 		non_bonded_.clear();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.h,v 1.24 2004/12/22 16:01:49 amoll Exp $ 
+// $Id: amber.h,v 1.25 2004/12/27 17:06:28 amoll Exp $ 
 //
 
 // Molecular Mechanics: Amber force field class
@@ -19,6 +19,10 @@
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #	include <BALL/KERNEL/system.h>
+#endif
+
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
 #endif
 
 namespace BALL 
@@ -213,7 +217,7 @@ namespace BALL
 		/**	Force field specific setup
 		*/
 		virtual bool specificSetup()
-			throw(ForceField::TooManyErrors);
+			throw(Exception::TooManyErrors);
 
 		//@}
 		/**	@name Accessors specific to the AMBER force field

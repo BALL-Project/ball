@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.23 2004/12/22 16:02:23 amoll Exp $
+// $Id: amberStretch.C,v 1.24 2004/12/27 17:06:08 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
@@ -49,7 +49,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberStretch::setup()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -142,6 +142,7 @@ namespace BALL
 
 	// update bond lists if the selection has changed
 	void AmberStretch::update()
+		throw(Exception::TooManyErrors)
 	{
 	}
 	

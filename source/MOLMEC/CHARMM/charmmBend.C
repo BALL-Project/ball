@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmBend.C,v 1.11 2004/12/22 16:02:25 amoll Exp $
+// $Id: charmmBend.C,v 1.12 2004/12/27 17:06:11 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmBend.h>
@@ -47,7 +47,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmBend::setup()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		// clear old bends:
 		bend_.clear();

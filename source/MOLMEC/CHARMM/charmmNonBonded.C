@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.28 2004/12/22 16:02:26 amoll Exp $
+// $Id: charmmNonBonded.C,v 1.29 2004/12/27 17:06:12 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
@@ -214,7 +214,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmNonBonded::setup()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.C,v 1.28 2004/12/26 17:22:46 amoll Exp $
+// $Id: amber.C,v 1.29 2004/12/27 17:06:07 amoll Exp $
 //
 // Molecular Mechanics: Amber force field class
 //
@@ -150,7 +150,7 @@ namespace BALL
 	}
 
 	bool AmberFF::specificSetup()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		// check whether the system is assigned
 		if (getSystem() == 0)
@@ -265,7 +265,7 @@ namespace BALL
 	
 			if (number_of_errors_ > max_number_of_errors_)
 			{
-				throw(TooManyErrors(__FILE__, __LINE__));
+				throw(Exception::TooManyErrors(__FILE__, __LINE__));
 			}
 		}
 		if (assign_types)
@@ -285,7 +285,7 @@ namespace BALL
 
 			if (number_of_errors_ > max_number_of_errors_)
 			{
-				throw(TooManyErrors(__FILE__, __LINE__));
+				throw(Exception::TooManyErrors(__FILE__, __LINE__));
 			}
 		}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.C,v 1.24 2004/12/22 16:02:23 amoll Exp $
+// $Id: amberBend.C,v 1.25 2004/12/27 17:06:07 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
@@ -46,7 +46,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberBend::setup()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		// clear old bends:
 		bend_.clear();

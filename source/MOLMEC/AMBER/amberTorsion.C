@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.C,v 1.32 2004/12/22 16:02:24 amoll Exp $
+// $Id: amberTorsion.C,v 1.33 2004/12/27 17:06:08 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
@@ -54,7 +54,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberTorsion::setup()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{

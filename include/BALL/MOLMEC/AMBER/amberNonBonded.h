@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.h,v 1.28 2004/12/22 16:01:49 amoll Exp $
+// $Id: amberNonBonded.h,v 1.29 2004/12/27 17:06:29 amoll Exp $
 //
 
 // Molecular Mechanics: Amber force field, non-bonded component
@@ -99,7 +99,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw(ForceField::TooManyErrors);
+			throw(Exception::TooManyErrors);
 
 		//@}
 		/**	@name	Accessors	
@@ -122,7 +122,7 @@ namespace BALL
 				to recalculate the nonbonded pair list.
 		*/
 		virtual void update()
-			throw(ForceField::TooManyErrors);
+			throw(Exception::TooManyErrors);
 
 		/**	Return the electrostatic energy.
 		*/
@@ -151,7 +151,7 @@ namespace BALL
 			(const std::vector<std::pair<Atom*, Atom*> >& atom_vector,
 			 const LennardJones& lennard_jones,
 			 const Potential1210& hydrogen_bond)
-			throw(ForceField::TooManyErrors);
+			throw(Exception::TooManyErrors);
 
 		//@}
 

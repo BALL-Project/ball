@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.23 2004/12/26 17:22:59 amoll Exp $
+// $Id: charmm.C,v 1.24 2004/12/27 17:06:11 amoll Exp $
 //
 
 // Molecular Mechanics: Charmm force field class
@@ -157,6 +157,7 @@ namespace BALL
 
 	// force field specific setup method
 	bool CharmmFF::specificSetup()
+		throw(Exception::TooManyErrors)
 	{
 		// check whether the system is assigned
 		if (getSystem() == 0)
@@ -299,7 +300,7 @@ namespace BALL
 	
 			if (number_of_errors_ > max_number_of_errors_)
 			{
-				throw(TooManyErrors(__FILE__, __LINE__));
+				throw(Exception::TooManyErrors(__FILE__, __LINE__));
 			}
 		}
 
@@ -321,7 +322,7 @@ namespace BALL
 
 			if (number_of_errors_ > max_number_of_errors_)
 			{
-				throw(TooManyErrors(__FILE__, __LINE__));
+				throw(Exception::TooManyErrors(__FILE__, __LINE__));
 			}
 		}
 

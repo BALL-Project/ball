@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.48 2004/09/01 12:38:15 amoll Exp $
+// $Id: exception.h,v 1.49 2004/12/27 17:05:51 amoll Exp $
 //
    
 #ifndef BALL_COMMON_EXCEPTION_H
@@ -442,6 +442,16 @@ namespace BALL
 
 				///
 				InvalidOption(const char* file, int line, String option)
+					throw();
+		};
+		
+		/// Exception to be thrown if too many errors occur, e.g. in ForceField
+		class TooManyErrors: public Exception::GeneralException
+		{
+			public:
+
+				///
+				TooManyErrors(const char* file, int line)
 					throw();
 		};
 
