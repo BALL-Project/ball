@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBdefs.h,v 1.3 2005/02/13 22:38:48 oliver Exp $
+// $Id: PDBdefs.h,v 1.4 2005/02/15 23:45:40 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBDEFS_H
@@ -25,6 +25,10 @@
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #	include <BALL/KERNEL/residue.h>
+#endif
+
+#ifndef BALL_DATATYPES_HASHSET_H
+#	include <BALL/DATATYPE/hashSet.h>
 #endif
 
 namespace BALL 
@@ -1081,13 +1085,21 @@ namespace BALL
 				}
 			};
 			
+
+			struct ConectAtomList
+			{
+				Position serial_number;
+				std::list<Position> bonds;
+				std::list<Position> hbonds;
+				std::list<Position> saltbridges;
+			};
+
 			std::vector<AtomEntry> atoms;
 
-			std::vector<const Bond*> covalent_hetero_bonds;
-			std::vector<const Bond*> covalent_atom_bonds;
-			std::vector<const Bond*> hydrogen_bonds;
-			std::vector<const Bond*> saltbridges;
-			std::vector<const Bond*> ssbonds;
+			HashSet<const ::BALL::Atom*>	conect_atoms;
+			std::vector<const Bond*>			hydrogen_bonds;
+			std::vector<const Bond*>			saltbridges;
+			std::vector<const Bond*>			ssbonds;
 
 			std::vector<std::pair<AChar, String> >		chain_residue_names;
 			std::vector<const SecondaryStructure*>		sec_structs;
@@ -1095,8 +1107,7 @@ namespace BALL
 			void clear()
 			{
 				atoms.clear();
-				covalent_hetero_bonds.clear();
-				covalent_atom_bonds.clear();
+				conect_atoms.clear();
 				hydrogen_bonds.clear();
 				saltbridges.clear();
 				ssbonds.clear();

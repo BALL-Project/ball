@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.32 2005/02/14 17:13:13 amoll Exp $
+// $Id: PDBFile.h,v 1.33 2005/02/15 23:45:40 oliver Exp $
 //
 
 #ifndef BALL_FORMAT_PDBFILE_H
@@ -653,6 +653,7 @@ namespace BALL
 				@see PDB::RecordType
 		*/
 		void writeRecord_(PDB::RecordType record, ...);
+		void writeCONECTRecords_(PDB::Structure::ConectAtomList& cl);
 
 		/** Write a record to the stream using a predefined format string.
 				You should not use this method unless you know what you are doing.
