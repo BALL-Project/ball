@@ -1,9 +1,9 @@
-// $Id: PointGrid_test.C,v 1.6 2000/07/04 07:25:04 oliver Exp $
-#include <BALL/CONCEPT/classTest.h>
+// $Id: PointGrid_test.C,v 1.7 2000/07/04 16:41:28 oliver Exp $
 
+#include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/pointGrid.h>
 
-START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.6 2000/07/04 07:25:04 oliver Exp $")
+START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.7 2000/07/04 16:41:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -68,6 +68,11 @@ CHECK(dump)
   String filename;
 	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), ios::out);
+	// fill g with zero!
+	for (Position k = 0; k < g.getSize(); k++)
+	{
+		g[k] = 0.0;
+	}
 	g.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/PointGrid_test.txt", true)
@@ -77,19 +82,19 @@ CHECK(isValid)
 	TEST_EQUAL(g.isValid(), true)
 RESULT
 
-CHECK(getMaxX)
+CHECK(getMaxX())
 	TEST_REAL_EQUAL(grid->getMaxX(), 10.0)
 RESULT
 
-CHECK(getMaxY)
+CHECK(getMaxY())
 	TEST_REAL_EQUAL(grid->getMaxY(), 10.0)
 RESULT
 
-CHECK(getMaxZ)
+CHECK(getMaxZ())
 	TEST_REAL_EQUAL(grid->getMaxZ(), 10.0)
 RESULT
 
-CHECK(getMinX)
+CHECK(getMinX())
 	TEST_REAL_EQUAL(grid->getMinX(), 0.0)
 RESULT
 
