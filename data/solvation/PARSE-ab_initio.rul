@@ -4,7 +4,7 @@
 #   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
 #   Using Macroscopic Solvent Models, H. Phys. Chem, (1994), 98, 1978-1988
 #
-# $Id: PARSE.rul,v 1.3 2000/06/05 15:28:20 anker Exp $
+# $Id: PARSE-ab_initio.rul,v 1.1 2000/06/05 15:28:19 anker Exp $
 #
 [ChargeRules:H]
 ; -NH-CH=NH+-CH= (imidazolium) - NH hydrogen
@@ -168,6 +168,7 @@
  0.0  = connectedTo((-C(-*)(-*)(-*)))
 ; amine groups are also considered as united atoms
  0.0  = connectedTo((-N(-*)(-*)))
+; default
  1.0  = true()
 
 [RadiusRules:N]
@@ -175,11 +176,11 @@
 ; the neutral group 
  2.0  = sp3Hybridized()
 ; default
- 1.5  = true()
+ 1.45  = true()
 
 [RadiusRules:C]
 ; aliphatic CHn groups are "united atoms"
- 2.0  = sp3Hybridized()
+ 1.9  = sp3Hybridized()
 ; default
  1.7  = true()
 
@@ -187,6 +188,6 @@
  1.4  = true()
 
 [RadiusRules:S]
- 1.85 = true()
+ 1.9 = true()
 
 
