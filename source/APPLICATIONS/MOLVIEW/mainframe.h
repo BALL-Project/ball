@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.30.4.7 2002/10/30 20:57:37 amoll Exp $
+// $Id: mainframe.h,v 1.30.4.8 2002/11/29 01:06:48 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -162,7 +162,6 @@ class Mainframe
 	QVBoxLayout*	vboxlayout_;
 	
 	List<QPopupMenu*> popup_menus_;
-	List<Composite*>  selection_;
 
 	QLabel*						tool_box_;
 };
