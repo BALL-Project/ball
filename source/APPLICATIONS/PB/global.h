@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.5 2000/06/02 09:32:54 oliver Exp $
+// $Id: global.h,v 1.6 2000/06/06 13:16:11 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -33,7 +33,29 @@ extern System S;
 // the name of the dump file
 extern String dump_file;
 
+// the default probe sphere radius for surface calculations
+extern float probe_radius;
+
 // flags:
+
+// the three main options:
+
+// true, if the solvent excluded surface is to be calculated
+extern bool ses_calculation;
+
+// true, if the solvent accessible surface is to be calculated
+extern bool sas_calculation;
+
+// true, if a FDPB calculation is to ber performed
+extern bool fdpb_calculation;
+
+// the results of the SES and SAS area calculations
+extern float total_SAS_area;
+extern float total_SES_area;
+
+// a hash map containing the atom surfaces of the SAS (if calculated)
+extern HashMap<Atom*, float> surface_map;
+
 //  true, if timing information and final options should be printed
 extern bool verbose;
 
@@ -54,5 +76,5 @@ extern bool use_radius_rules;
 // (difference calculation solvent/vacuum)
 extern bool calculate_solvation_energy;
 
-// true, if the solvent excluded surface is to be calculated
-extern bool calculate_SES;
+
+

@@ -1,43 +1,54 @@
-// $Id: main.C,v 1.5 2000/06/02 09:32:54 oliver Exp $
+// $Id: main.C,v 1.6 2000/06/06 13:16:13 oliver Exp $
+
+#include <iomanip>
 
 #include "global.h"
 #include "reading.h"
 #include "assignment.h"
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
+#include <BALL/STRUCTURE/analyticalSES.h>
 
 using namespace BALL;
 using namespace std;
 
 void usage()
 {
-	Log.error() << "BALL -- Finite Difference Poisson-Boltzmann Solver" << endl << endl;
-	Log.error() << "PB [<options>]" << endl;
-	Log.error() <<"   where <options> is one or more of the following possibilities:" << endl;
-	Log.error() << "     -p <FILE>            read <FILE> as a PDB file" << endl;
-	Log.error() << "     -h <FILE>            read <FILE> as a HyperChem file" << endl;
-	Log.error() << "     -H <FILE>            read <FILE> as a HyperChem file but do not assign charges" << endl;
-	Log.error() << "     -o <FILE>            read FDPB options from <FILE>" << endl;
-	Log.error() << "     -c <FILE>            read charges from <FILE>" << endl;
-	Log.error() << "     -r <FILE>            read radii from <FILE>" << endl;
-	Log.error() << "     -t <FILE>            read charge and radius rules from <FILE>" << endl;
-	Log.error() << "     -u <FILE>            read charge rules from <FILE>" << endl;
-	Log.error() << "     -w <FILE>            read radius rules from <FILE>" << endl;
-	Log.error() << "     -0                   clear all charges in subsequently read structures" << endl;
-	Log.error() << "     -s                   calculate the solvation free energy by performing a second" << endl;
-	Log.error() << "                          FDPB calculation in vacuum" << endl;
-	Log.error() << "     -a                   calculate the solvent accessible surface of the solute" << endl;
-	Log.error() << "     -n                   normalize all atom names in subsequently read structures" << endl;
-	Log.error() << "     -b                   try to build the bonds (e.g. for PDB files)" << endl;
-	Log.error() << "     -d <FILE>            dump the atom charges and radii to <FILE> (for debugging)" << endl;
-	Log.error() << "     -v                   verbose output (implies ``verbosity 99'' in the" << endl;
-	Log.error() << "                            option file, print additional results and options)" << endl;
-	Log.error() << endl;
-	Log.error() << "  By default, charges and radii are taken from data/charges/PARSE.crg" << endl;
-	Log.error() << "  and data/radii/PARSE.siz." << endl << endl;
-	Log.error() << "  Charge and radius assignment options can be repeated. They are valid for all" << endl;
-	Log.error() << "  subsequently read structures." << endl;
-	Log.error() << endl;
+	Log.error() << "BALL -- Finite Difference Poisson-Boltzmann Solver" << endl 
+							<< endl
+	            << "PB [<options>]" << endl
+	            <<"   where <options> is one or more of the following possibilities:" << endl
+	            << "     -P                   perform a Finite DIfference Poisson Boltzmann calculation" << endl
+	            << "     -A                   calculate the solvent accessible surface of the solute" << endl
+	            << "     -E                   calculate the solvent excluded surface of the solute" << endl
+	            << endl
+	            << "further options:" << endl
+	            << "     -p <FILE>            read <FILE> as a PDB file" << endl
+	            << "     -h <FILE>            read <FILE> as a HyperChem file" << endl
+	            << "     -H <FILE>            read <FILE> as a HyperChem file but do not assign charges" << endl
+	            << "     -o <FILE>            read FDPB options from <FILE>" << endl
+	            << "     -c <FILE>            read charges from <FILE>" << endl
+	            << "     -r <FILE>            read radii from <FILE>" << endl
+	            << "     -t <FILE>            read charge and radius rules from <FILE>" << endl
+	            << "     -u <FILE>            read charge rules from <FILE>" << endl
+	            << "     -w <FILE>            read radius rules from <FILE>" << endl
+	            << "     -0                   clear all charges in subsequently read structures" << endl
+	            << "     -s                   calculate the solvation free energy by performing a second" << endl
+	            << "                          FDPB calculation in vacuum" << endl
+	            << "     -n                   normalize all atom names in subsequently read structures" << endl
+	            << "     -b                   try to build the bonds (e.g. for PDB files)" << endl
+	            << "     -d <FILE>            dump the atom charges, radii, and surface fractions to <FILE> (for debugging)" << endl
+	            << "     -v                   verbose output (implies ``verbosity 99'' in the" << endl
+	            << "                            option file, print additional results and options)" << endl
+	            << "     -x <RADIUS>          the probe sphere radius for solvent accessible and" << endl
+	            << "                            solvent excluded surface calculations [default = 1.4 A]" << endl
+	            << endl
+	            << "  By default, charges and radii are taken from data/charges/PARSE.crg" << endl
+	            << "  and data/radii/PARSE.siz." << endl 
+							<< endl
+	            << "  Charge and radius assignment options can be repeated. They are valid for all" << endl
+	            << "  subsequently read structures." << endl
+	            << endl;
 }
 
 int main(int argc, char** argv)
@@ -65,18 +76,36 @@ int main(int argc, char** argv)
 		}
 
 		// check for another argument for those 
-		// options requiring a filename (-p -h -c -r -o -u -t -w -d)
-		if (String("phcroutwd").has(option[1]) && (i == (argc - 1)))
+		// options requiring a filename (-p -h -c -r -o -u -t -w -d -x)
+		if (String("phcroutwdx").has(option[1]) && (i == (argc - 1)))
 		{
 			// pring usage hints, an error message, exit
 			usage();
-			Log.error() << "Option " << option << " requires an additional argument (filename)." << endl;
+			Log.error() << "Option " << option << " requires an additional argument." << endl;
 			return 3;
 		}		
 
 		// interpret all command line options
 		switch (option[1])
 		{
+			// check for the 'main' options (FDPB/SAS/SES)
+			case 'P':
+				// perform a FDPB calculation
+				fdpb_calculation = true;
+				break;
+
+			case 'A':
+				// perform a SAS calculation
+				sas_calculation = true;
+				break;
+
+			case 'E':
+				// perform a SES calculation
+				ses_calculation = true;
+				break;
+			
+			// further options
+
 			case 'p':		// read a PDB file
 				readPDBFile(argv[++i]);
 				break;
@@ -117,10 +146,6 @@ int main(int argc, char** argv)
 				calculate_solvation_energy = true;
 				break;
 
-			case 'a':		// calculate solvent excluded surface
-				calculate_SES = true;
-				break;
-
 			case 'd':		// dump the final results
 				dump_file = argv[++i];
 				break;
@@ -145,12 +170,30 @@ int main(int argc, char** argv)
 				build_bonds = true;
 				break;
 
+			case 'x':		// set the probe sphere radius
+				probe_radius = atof(argv[++i]);
+				if (verbose)
+				{
+					Log.info() << "probe sphere radius for surface calculations is set to " 
+										 << probe_radius << " Angstrom" << endl;
+				}
+				break;
+
 			default:		// unknown option
 				// print usage hints and an error message, exit
 				usage();
 				Log.error() << "Illegal option: " << option << endl;
 				return 2;
 		}
+	}
+
+	// check whether at least one of the main options 
+	// was given 
+	if (!(fdpb_calculation || ses_calculation || sas_calculation))
+	{
+		usage();
+		Log.error() << "Error: specify at least one of the main options -P, -A, or -E!" << endl;
+		return 8;
 	}
 
 	// check whether anything was constructed at all
@@ -171,64 +214,23 @@ int main(int argc, char** argv)
 	Log.setPrefix(cout, "[%T] ");
 	Log.setPrefix(cerr, "[%T ERROR] ");
 
-	// setup the calculation
-	Timer T;
-	T.start();
-	fdpb.setup(S, options);
-	if (verbose)
+	// the part that performs the FDPB calculation
+	if (fdpb_calculation)
 	{
-		Log.info() << "FDPB setup CPU time: " << T.getCPUTime() << endl;
-	}
-
-	if (calculate_solvation_energy)
-	{
-		Log.info() << "Calculating the solvation free energy." << endl;
-		Log.info() << "first calculation step: solvent dielectric constant = " 
-							 << fdpb.options[FDPB::Option::SOLVENT_DC] << endl;
-	}
-
-	// solve the PB equation
-	T.reset();
-	fdpb.solve();
-	if (verbose)
-	{
-		Log.info() << "FDPB solve CPU time: " << T.getCPUTime() << endl;
-		// dump the options for documentation purposes
-		fdpb.options.dump(Log);
-	}
-	
-	// print the energies
-	Log.info() << "total energy:          " << fdpb.getEnergy() << " kJ/mol" << endl;
-	Log.info() << "reaction field energy: " << fdpb.getReactionFieldEnergy() << " kJ/mol" << endl;
-
-	if (calculate_solvation_energy)
-	{
-		Log.info() << "Calculating the solvation free energy." << endl;
-		Log.info() << "first calculation step: solvent dielectric constant = " 
-							 << fdpb.options[FDPB::Option::SOLVENT_DC] << endl;
-	}
-
-	T.start();
-	fdpb.setup(S, options);
-	if (verbose)
-	{
-		Log.info() << "FDPB setup CPU time: " << T.getCPUTime() << endl;
-	}
-
-	if (calculate_solvation_energy)
-	{
-		Log.info() << "second calculation step: solvent dielectric constant = 1.0 (vacuum)"  << endl;
-
-		// store the old energies
-		double dG = fdpb.getEnergy();
-		double dG_RF = fdpb.getReactionFieldEnergy();
-
-		T.reset();
-		options[FDPB::Option::SOLVENT_DC] = 1.0;
+		// setup the calculation
+		Timer T;
+		T.start();
 		fdpb.setup(S, options);
 		if (verbose)
 		{
 			Log.info() << "FDPB setup CPU time: " << T.getCPUTime() << endl;
+		}
+
+		if (calculate_solvation_energy)
+		{
+			Log.info() << "Calculating the solvation free energy." << endl;
+			Log.info() << "first calculation step: solvent dielectric constant = " 
+								 << fdpb.options[FDPB::Option::SOLVENT_DC] << endl;
 		}
 
 		// solve the PB equation
@@ -240,26 +242,81 @@ int main(int argc, char** argv)
 			// dump the options for documentation purposes
 			fdpb.options.dump(Log);
 		}
-
+		
 		// print the energies
 		Log.info() << "total energy:          " << fdpb.getEnergy() << " kJ/mol" << endl;
 		Log.info() << "reaction field energy: " << fdpb.getReactionFieldEnergy() << " kJ/mol" << endl;
-		Log.info() << endl;
-		
-		Log.info() << "Solvation energy as change of the total energy:   " 
-							 << dG - fdpb.getEnergy()<< " kJ/mol" << endl;
-		Log.info() << "Solvation energy as change of the reaction field: " 
-							 << dG_RF - fdpb.getReactionFieldEnergy() << " kJ/mol" << endl;
+
+		if (calculate_solvation_energy)
+		{
+			Log.info() << "Calculating the solvation free energy." << endl;
+			Log.info() << "first calculation step: solvent dielectric constant = " 
+								 << fdpb.options[FDPB::Option::SOLVENT_DC] << endl;
+		}
+
+		T.start();
+		fdpb.setup(S, options);
+		if (verbose)
+		{
+			Log.info() << "FDPB setup CPU time: " << T.getCPUTime() << endl;
+		}
+
+		if (calculate_solvation_energy)
+		{
+			Log.info() << "second calculation step: solvent dielectric constant = 1.0 (vacuum)"  << endl;
+
+			// store the old energies
+			double dG = fdpb.getEnergy();
+			double dG_RF = fdpb.getReactionFieldEnergy();
+
+			T.reset();
+			options[FDPB::Option::SOLVENT_DC] = 1.0;
+			fdpb.setup(S, options);
+			if (verbose)
+			{
+				Log.info() << "FDPB setup CPU time: " << T.getCPUTime() << endl;
+			}
+
+			// solve the PB equation
+			T.reset();
+			fdpb.solve();
+			if (verbose)
+			{
+				Log.info() << "FDPB solve CPU time: " << T.getCPUTime() << endl;
+				// dump the options for documentation purposes
+				fdpb.options.dump(Log);
+			}
+
+			// print the energies
+			Log.info() << "total energy:          " << fdpb.getEnergy() << " kJ/mol" << endl;
+			Log.info() << "reaction field energy: " << fdpb.getReactionFieldEnergy() << " kJ/mol" << endl;
+			Log.info() << endl;
+			
+			Log.info() << "Solvation energy as change of the total energy:   " 
+								 << dG - fdpb.getEnergy()<< " kJ/mol" << endl;
+			Log.info() << "Solvation energy as change of the reaction field: " 
+								 << dG_RF - fdpb.getReactionFieldEnergy() << " kJ/mol" << endl;
+		}
 	}
 
 	// calculate the solvent excluded surface area of the solute
 	// (used to estimate the non electrostatic contribution
 	// to the solvation free energy)
-	if (calculate_SES)
+	if (ses_calculation)
 	{
-		double A = calculateNumericalSASArea(S, 1.4);
-		Log.info() << "Solvent accessible surface : " << A << "A^2";
-		Log.info() << " (1.4 Angstrom probe radius)" << endl;
+		total_SES_area = calculateSESArea(S, probe_radius);
+		Log.info() << "Solvent excluded surface : " << total_SES_area << " A^2";
+		Log.info() << " (" << probe_radius << " Angstrom probe radius)" << endl;
+	}
+
+	// calculate the solvent accessible surface area of the solute
+	// (used to estimate the non electrostatic contribution
+	// to the solvation free energy)
+	if (sas_calculation)
+	{
+		total_SAS_area = calculateSASAtomAreas(S, surface_map, probe_radius);
+		Log.info() << "Solvent accessible surface : " << total_SAS_area << " A^2";
+		Log.info() << " (" << probe_radius << " Angstrom probe radius)" << endl;
 	}
 
 	// done
