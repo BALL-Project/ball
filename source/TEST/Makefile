@@ -23,6 +23,7 @@ EXECUTABLES = \
 	Bond_test\
 	BaseFragment_test\
 	Box3_test\
+	Chain_test\
 	CharmmFF_test\
 	ClassTest_test\
 	Composite_test\
@@ -101,6 +102,9 @@ Box3_test:	Box3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 CharmmFF_test:	CharmmFF_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Chain_test:	Chain_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Circle3_test:	Circle3_test.o
