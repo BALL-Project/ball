@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.3 2003/08/27 11:04:17 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.4 2003/08/28 15:13:26 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -63,9 +63,7 @@ namespace BALL
 
 		void MolecularFileDialog::readFile()
 		{
-			QFileDialog *fd = new QFileDialog(
-					(MainControl*) ((ConnectionObject*)this)->getRoot()
-					, "Molecular File Dialog", true);
+			QFileDialog *fd = new QFileDialog(getMainControl(), "Molecular File Dialog", true);
 
 			fd->setMode(QFileDialog::ExistingFile);
 			fd->setFilter("PDB Files (*.pdb *.brk *.ent)");

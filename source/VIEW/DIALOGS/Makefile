@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.13 2003/08/28 13:23:12 oliver Exp $
+# $Id: Makefile,v 1.14 2003/08/28 15:13:26 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -19,6 +19,8 @@ CPP_SOURCES=\
 	atomPropertiesData.C\
 	colorMeshDialog.C\
 	colorMeshDialogData.C\
+	contourSurfaceDialog.C\
+	contourSurfaceDialogData.C\
 	displayProperties.C\
 	displayPropertiesData.C\
 	FDPBDialog.C\
@@ -33,6 +35,8 @@ CPP_SOURCES=\
 	molecularFileDialog.C\
 	mouseSensitivity.C\
 	mouseSensitivityData.C\
+	openBruker1DFile.C\
+	openBruker2DFile.C\
 	parsedFunctionDialog.C\
 	parsedFunctionDialogData.C\
 	peptideDialog.C\
@@ -57,6 +61,8 @@ MOC_SOURCES=\
 	atomPropertiesData_moc.C\
 	colorMeshDialog_moc.C\
 	colorMeshDialogData_moc.C\
+	contourSurfaceDialog_moc.C\
+	contourSurfaceDialogData_moc.C\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
 	FDPBDialog_moc.C\
@@ -71,6 +77,8 @@ MOC_SOURCES=\
 	molecularDynamicsDialogData_moc.C\
 	mouseSensitivity_moc.C\
 	mouseSensitivityData_moc.C\
+	openBruker1DFile_moc.C\
+	openBruker2DFile_moc.C\
 	parsedFunctionDialog_moc.C\
 	parsedFunctionDialogData_moc.C\
 	peptideDialog_moc.C\
@@ -91,6 +99,7 @@ MOC_SOURCES=\
 UIC_SOURCES=amberMinimizationDialogData.C\
 	atomPropertiesData.C\
 	colorMeshDialogData.C\
+	contourSurfaceDialogData.C\
 	displayPropertiesData.C\
 	FDPBDialogData.C\
 	labelDialogData.C\
@@ -122,6 +131,9 @@ amberMinimizationDialog_moc.C:	$(HEADER_DIR)/amberMinimizationDialog.h
 atomProperties_moc.C:	$(HEADER_DIR)/atomProperties.h
 	$(MOC) $(HEADER_DIR)/atomProperties.h -o $@
 
+contourSurfaceDialog_moc.C:	$(HEADER_DIR)/contourSurfaceDialog.h
+	$(MOC) $(HEADER_DIR)/contourSurfaceDialog.h -o $@
+
 displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
 	$(MOC) $(HEADER_DIR)/displayProperties.h -o $@
 
@@ -139,6 +151,12 @@ molecularDynamicsDialog_moc.C:	$(HEADER_DIR)/molecularDynamicsDialog.h
 
 molecularFileDialog_moc.C:	$(HEADER_DIR)/molecularFileDialog.h
 	$(MOC) $(HEADER_DIR)/molecularFileDialog.h -o $@
+
+openBruker1DFile_moc.C:	$(HEADER_DIR)/openBruker1DFile.h
+	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
+
+openBruker2DFile_moc.C:	$(HEADER_DIR)/openBruker2DFile.h
+	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
 
 peptideDialog_moc.C:	$(HEADER_DIR)/peptideDialog.h
 	$(MOC) $(HEADER_DIR)/peptideDialog.h -o $@
