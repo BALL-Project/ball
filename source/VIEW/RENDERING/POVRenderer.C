@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.12 2004/04/17 15:47:37 oliver Exp $
+// $Id: POVRenderer.C,v 1.13 2004/06/13 15:29:48 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -150,11 +150,12 @@ namespace BALL
 			outfile_	<< "// POVRay file created by the BALL POVRenderer" 
 								<< std::endl << std::endl;
 
+			String filename = FileSystem::baseName(outfile_.getName());
 			outfile_ << "// Width of the original scene: " << width_ << std::endl;
 			outfile_ << "// Height of the original scene: " << height_ << std::endl;
 			outfile_ << "// To render this scene, call povray (available from www.povray.org) like this:\n//" << std::endl;
-			outfile_ << "// povray +I" << outfile_.getName() 
-							 << " +FN +Otest.png +QR +W" << width_ << " +H" << height_ << " -UV\n//" << std::endl;
+			outfile_ << "// povray +I" << filename 
+							 << " +FN +O" << filename << ".png +QR +W" << width_ << " +H" << height_ << " -UV\n//" << std::endl;
 			outfile_ << "camera {" << std::setprecision(12) << std::endl;
 			outfile_ << "\tperspective" << std::endl;
 			outfile_ << "\tdirection <0.0, 0.0, -1.0>" << std::endl;
@@ -210,7 +211,7 @@ namespace BALL
 			}
 			
 			// Add some global blurb for radiosity support
-			outfile_ << "global_settings { radiosity {} }" << std::endl;
+			outfile_ << "global_settings { radiosity { brightness 0.6 } }" << std::endl;
 			// Set the background color
 			outfile_ << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << std::endl << std::endl;
 
