@@ -1,5 +1,5 @@
-// $Id: Vector3_test.C,v 1.3 2000/02/20 13:28:26 oliver Exp $
-#include <BALL/CONCEPT/classTest.h>
+// $Id: Vector3_test.C,v 1.4 2000/02/20 14:34:46 oliver Exp $ #include
+<BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.3 2000/02/20 13:28:26 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.4 2000/02/20 14:34:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ CHECK(TVector3(const T* ptr);)
 	TEST_EQUAL(v[0], 1)
 	TEST_EQUAL(v[1], 2)
 	TEST_EQUAL(v[2], 3)
-	TEST_EXCEPTION(Exception::NullPointer, v = Vector3(0))
+	TEST_EXCEPTION(Exception::NullPointer, v = Vector3((float*)0))
 RESULT
 
 //line
@@ -106,20 +106,20 @@ RESULT
 
 //line 
 CHECK(std::istream& operator >> (std::istream& s, TVector3<T>& vector))
-	std::ostream ostream;
-	v = Vector3(1, 2, 3);
+	//std::ostream ostream;
+	//v = Vector3(1, 2, 3);
 	//ostream = << v;
 	//TEST_EQUAL(ostream, << 1 << 2 << 3)  //BAUSTELLE
 RESULT
 
 //line 
 CHECK(std::ostream& operator << (std::ostream& s, const TVector3<T>& vector))
-	std::istream instream;
+	//std::istream instream;
 	//instream >> 1 >> 2 >> 3 ;
 	//v  = Vector3(instream);  //BAUSTELLE
-	TEST_EQUAL(v[0], 1)
-	TEST_EQUAL(v[1], 2)
-	TEST_EQUAL(v[2], 3)
+	//TEST_EQUAL(v[0], 1)
+	//TEST_EQUAL(v[1], 2)
+	//TEST_EQUAL(v[2], 3)
 RESULT
 
 //line 
@@ -143,7 +143,7 @@ RESULT
 CHECK(TVector3::normalize())
 	v = Vector3(4, 9, 16);
 	v.normalize();
-	float erg = sqrt (4 *4 + 9 * 9 + 16 * 16)
+	float erg = sqrt (4 *4 + 9 * 9 + 16 * 16);
 	TEST_REAL_EQUAL(v[0], 4/erg)
 	TEST_REAL_EQUAL(v[1], 9/erg)
 	TEST_REAL_EQUAL(v[2], 16/erg)
