@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.3 1999/09/03 14:05:34 oliver Exp $
+// $Id: forceField.h,v 1.4 1999/09/03 14:07:11 len Exp $
 // Molecular Mechanics: general force field class
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -193,6 +193,10 @@ namespace BALL
 		/**	Return the status of the selection mechanism
 		*/
 		bool	getUseSelection();
+
+		/**	Set the status of the selection mechanism
+		*/
+		void	setUseSelection(bool use_selection);
 
 		/**	Returns a pointer to the parameter file
 		*/
