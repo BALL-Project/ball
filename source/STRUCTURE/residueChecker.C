@@ -1,9 +1,10 @@
-// $Id: residueChecker.C,v 1.10 2000/07/18 08:30:01 oliver Exp $
+// $Id: residueChecker.C,v 1.11 2000/09/27 07:44:50 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/chain.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/hashSet.h>
 
 using namespace std;
@@ -112,7 +113,9 @@ namespace BALL
 					if (reference_names.has(atom_it->getName()))
 					{
 						reference_names.erase(atom_it->getName());
-					} else {
+					} 
+					else 
+					{
 						Log.warn() << "ResidueChecker: did not find atom " << atom_it->getName() << " of " << res_name  << " in the reference residue " << reference->getName() << endl;
 						status_ = false;
 					}
@@ -149,7 +152,7 @@ namespace BALL
 						}
 					}
 					
-					// if we found the bond atoms in resdiue, check the atom distance
+					// if we found the bond atoms in residue, check the atom distance
 					if ((first != 0) && (second != 0))
 					{
 						float distance = first->getPosition().getDistance(second->getPosition());
@@ -159,6 +162,24 @@ namespace BALL
 							Log.warn() << "ResidueChecker: in residue " << res_name << ": atom distance " 
 												 << "between " << first->getName() << " and " << second->getName() << " suspect: " 
 												 << distance << " A instead of " << bond_it->getLength() << " A" << endl;
+							status_ = false;
+						}
+
+						// check for the element type of each atom
+						if (first->getElement() != bond_it->getFirstAtom()->getElement())
+						{
+							Log.warn() << "ResidueChecker: in residue " << res_name << ": atom "
+												 << first->getName() << " is " 
+												 << first->getElement().getSymbol() << " should be "
+												 << bond_it->getFirstAtom()->getElement().getSymbol() << endl;
+							status_ = false;
+						}
+						if (second->getElement() != bond_it->getSecondAtom()->getElement())
+						{
+							Log.warn() << "ResidueChecker: in residue " << res_name << ": atom "
+												 << second->getName() << " is " 
+												 << second->getElement().getSymbol() << " should be "
+												 << bond_it->getSecondAtom()->getElement().getSymbol() << endl;
 							status_ = false;
 						}
 					}
