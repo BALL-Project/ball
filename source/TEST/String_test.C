@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.19 2000/07/12 19:36:49 oliver Exp $
+// $Id: String_test.C,v 1.20 2000/07/14 14:40:33 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.19 2000/07/12 19:36:49 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.20 2000/07/14 14:40:33 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -585,86 +585,110 @@ CHECK(String::toShort())
 	s4.set("123");
 	TEST_EQUAL(s4.toShort(), (short)123)
 	s4.set("abc");
-	TEST_EQUAL(s4.toShort(), (short)0)
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toShort())
 	s4.set("");
-	TEST_EQUAL(s4.toShort(), (short)0)
+	//TEST_EQUAL(s4.toShort(), (short)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toShort(), (short)12)
+	s4.set("999999999999999999999999");
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toShort())
 RESULT
 
 CHECK(String::toUnsignedShort())
 	s4.set("123");
 	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)123)
 	s4.set("abc");
-	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)0)
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedShort())
 	s4.set("");
-	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)0)
+	//TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)12)
+	s4.set("999999999999999999999999");
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedShort())
 RESULT
 
 CHECK(String::toInt())
 	s4.set("123");
 	TEST_EQUAL(s4.toInt(), (int)123)
 	s4.set("abc");
-	TEST_EQUAL(s4.toInt(), (int)0)
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toInt())
 	s4.set("");
-	TEST_EQUAL(s4.toInt(), (int)0)
+	//TEST_EQUAL(s4.toInt(), (int)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toInt(), (int)12)
+	s4.set("999999999999999999999999");
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toInt())
 RESULT
 
 CHECK(String::toUnsignedInt())
 	s4.set("123");
 	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)123)
 	s4.set("abc");
-	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedInt())
 	s4.set("");
-	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
+	//TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)12.34)
+	s4.set("999999999999999999999999");
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedInt())
 RESULT
 
 CHECK(String::toLong())
 	s4.set("123.4");
 	TEST_EQUAL(s4.toLong(),(long)123.4)
 	s4.set("abc");
-	TEST_EQUAL(s4.toLong(), (long)0)
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toLong())
 	s4.set("");
-	TEST_EQUAL(s4.toLong(), (long)0)
+	//TEST_EQUAL(s4.toLong(), (long)0)
 	s4.set("-12.34");
 	TEST_EQUAL(s4.toLong(), (long)-12.34)
+	s4.set("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toLong())
 RESULT
 
 CHECK(String::toUnsignedLong())
 	s4.set("123.4");
 	TEST_EQUAL(s4.toUnsignedLong(),(unsigned long)123.4)
 	s4.set("abc");
-	TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedLong())
 	s4.set("");
-	TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
+	//TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
+	s4.set("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedLong())
 RESULT
 
 CHECK(String::toFloat())
 	s4.set("123.4");
 	TEST_REAL_EQUAL(s4.toFloat(),(float)123.4)
 	s4.set("abc");
-	TEST_EQUAL(s4.toFloat(), (float)0)
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toFloat())
 	s4.set("");
-	TEST_EQUAL(s4.toFloat(), (float)0)
+	//TEST_EQUAL(s4.toFloat(), (float)0)
 	s4.set("-12.34");
 	TEST_REAL_EQUAL(s4.toFloat(), (float)-12.34)
+	s4 = "";
+	for (int i=0; i<999; i++ )
+	{
+		s4+="9";
+	}
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toFloat())
 RESULT
 
 CHECK(String::toDouble())
 	s4.set("123.4");
 	TEST_REAL_EQUAL(s4.toDouble(),(double)123.4)
 	s4.set("abc");
-	TEST_EQUAL(s4.toDouble(), (double)0)
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toDouble())
 	s4.set("");
-	TEST_EQUAL(s4.toDouble(), (double)0)
+	//TEST_EQUAL(s4.toDouble(), (double)0)
 	s4.set("-12.34");
 	TEST_REAL_EQUAL(s4.toDouble(), (double)-12.34)
+	s4 = "";
+	for (int i=0; i<999; i++ )
+	{
+		s4+="9";
+	}
+	TEST_EXCEPTION(Exception::InvalidFormat, s4.toDouble())
 RESULT
 
 CHECK(String::toLower())
@@ -1223,6 +1247,25 @@ CHECK(String::isWhitespace())
 	s4 = "      \t\ta";
 	TEST_EQUAL(s4.isWhitespace(), false)
 RESULT
+
+CHECK(String::isFloat())
+	s4 = "";
+	TEST_EQUAL(s4.isFloat(), true)
+	s4 = "z";
+	TEST_EQUAL(s4.isFloat(), false)
+	s4 = "1";
+	TEST_EQUAL(s4.isFloat(), true)
+	s4 = "1.2";
+	TEST_EQUAL(s4.isFloat(), true)
+	s4 = "1..2";
+	TEST_EQUAL(s4.isFloat(), false)
+	s4 = ".2";
+	TEST_EQUAL(s4.isFloat(), true)
+	s4 = "99999999999999999999999999999999999999999999999999999999";
+	TEST_EQUAL(s4.isFloat(), true)
+RESULT
+
+
 
 CHECK(String::isAlpha(char))
 	String char_class = String::CHARACTER_CLASS__ASCII_ALPHA;
@@ -1834,7 +1877,7 @@ RESULT
 CHECK(String::dump(ostream&, Size))
 	String tmp_filename;
 	NEW_TMP_FILE(tmp_filename)
-	std::ofstream dump_stream(tmp_filename.c_str(), File::OUT);
+	std::ofstream dump_stream(tmp_filename.c_str(), std::ios::out);
 	s2 = new String("abcdefghijklm");
 	s2->dump(dump_stream, 0);
 	dump_stream.clear();
@@ -1842,7 +1885,7 @@ CHECK(String::dump(ostream&, Size))
 	TEST_FILE(tmp_filename.c_str(), "data/string_test_dump0.txt", true)
 
 	NEW_TMP_FILE(tmp_filename)
-	std::ofstream dump_stream2(tmp_filename.c_str(), File::OUT);
+	std::ofstream dump_stream2(tmp_filename.c_str(), std::ios::out);
 	s2->dump(dump_stream2, 4);
 	dump_stream2.close();
 	TEST_FILE(tmp_filename.c_str(), "data/string_test_dump4.txt", true)
@@ -2096,16 +2139,18 @@ CHECK(Substring::char operator [] (Index index) const )
 	TEST_EXCEPTION(Substring::UnboundSubstring, c2 = empty_sub[0])	
 RESULT
 
-CHECK(Substring:: ())
+CHECK(Substring::toLower())
 	test_string = abcdef + ABCDEF + "1";
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1.toLower(), "abcdefabcdef1")
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.toLower())	
 RESULT
 
 CHECK(Substring::toUpper())
 	test_string = abcdef + ABCDEF + "1";
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1.toUpper(), "ABCDEFABCDEF1")
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.toUpper())	
 RESULT
 
 CHECK(Substring::isBound() const )
@@ -2118,7 +2163,6 @@ RESULT
 CHECK(Substring::isEmpty() const )
 	test_string = "";
 	test_sub1.bind(test_string);
-	//TEST_EQUAL(test_sub1.isEmpty(), true)//////
 	test_string = "A";
 	TEST_EQUAL(test_sub1.isEmpty(), false)
 	test_sub1.unbind();
@@ -2179,8 +2223,7 @@ CHECK(Substring::bool operator == (const String& string, const Substring& substr
 	TEST_EQUAL(ABCDEF == test_sub1, true)
 	test_string = "ABCDE";
 	TEST_EQUAL(ABCDEF == test_sub1, false)
-	test_sub1.unbind();
-	TEST_EXCEPTION(Substring::UnboundSubstring, ABCDEF == test_sub1)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, ABCDEF == empty_sub)	
 RESULT
 
 CHECK(Substring::bool operator != (const String& string, const Substring& substring))
@@ -2189,8 +2232,7 @@ CHECK(Substring::bool operator != (const String& string, const Substring& substr
 	TEST_EQUAL(ABCDEF != test_sub1, false)
 	test_string = "ABCDE";
 	TEST_EQUAL(ABCDEF != test_sub1, true)
-	test_sub1.unbind();
-	TEST_EXCEPTION(Substring::UnboundSubstring, ABCDEF != test_sub1)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, ABCDEF != empty_sub)	
 RESULT
 
 CHECK(Substring::bool operator == (const char* char_ptr) const )
@@ -2200,8 +2242,9 @@ CHECK(Substring::bool operator == (const char* char_ptr) const )
 	test_string = "ABCDE";
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1 == char1, false)
-	test_sub1.unbind();
-	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 == char1)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub == char1)	
+	char* c = 0;
+	TEST_EXCEPTION(Exception::NullPointer, test_sub1 == c)	
 RESULT
 
 CHECK(Substring::bool operator != (const char* char_ptr) const )
@@ -2211,8 +2254,9 @@ CHECK(Substring::bool operator != (const char* char_ptr) const )
 	test_string = "ABCDE";
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1 != char1, true)
-	test_sub1.unbind();
-	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 != char1)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub != char1)	
+	char* c = 0;
+	TEST_EXCEPTION(Exception::NullPointer, test_sub1 != c)	
 RESULT
 
 CHECK(Substring::bool operator == (char c) const )
@@ -2223,8 +2267,7 @@ CHECK(Substring::bool operator == (char c) const )
 	test_string = "ABCDE";
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1 == c, false)
-	test_sub1.unbind();
-	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 == c)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub == c)	
 RESULT
 
 CHECK(Substring::bool operator != (char c) const )
@@ -2235,8 +2278,7 @@ CHECK(Substring::bool operator != (char c) const )
 	test_string = "ABCDE";
 	test_sub1.bind(test_string);
 	TEST_EQUAL(test_sub1 != c, true)
-	test_sub1.unbind();
-	TEST_EXCEPTION(Substring::UnboundSubstring, test_sub1 != c)	
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub != c)	
 RESULT
 
 String filename;
@@ -2245,11 +2287,14 @@ using std::ios;
 
 CHECK(Substring::friend::std::ostream& operator << (::std::ostream& s, const Substring& substring))
 	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	test_sub1.bind(ABCDEF, 1, 4);
 	outstr << test_sub1;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/String_test2.txt", false)
+	std::ofstream outstr2(filename.c_str(), std::ios::out);
+	outstr2 << empty_sub;
+	outstr2.close();
 RESULT
 
 CHECK(Substring::isValid() const )
@@ -2262,13 +2307,15 @@ RESULT
 
 CHECK(Substring::dump(::std::ostream& s = ::std::cout, Size depth = 0) const )
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), File::OUT);
+	std::ofstream outfile(filename.c_str(), ios::out);
 	test_sub1.bind(ABCDEF, 1, 4);
 	test_sub1.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/String_test.txt", true)
+	std::ofstream outfile2(filename.c_str(), ios::out);
+	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.dump(outfile2))
+	outfile2.close();
 RESULT
-
 
 CHECK(String::operator Substring())
 	s4 = "abcdef";
