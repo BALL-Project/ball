@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.1 2003/08/26 12:38:47 oliver Exp $
+// $Id: pyWidget.C,v 1.2 2003/08/26 16:07:03 amoll Exp $
 //
 
-#include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
-#include <BALL/VIEW/GUI/DIALOGS/pythonSettings.h>
+#include <BALL/VIEW/WIDGETS/pyWidget.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/DIALOGS/pythonSettings.h>
 #include <BALL/PYTHON/pyInterpreter.h>
-#include <BALL/VIEW/GUI/DIALOGS/preferences.h>
+#include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <Python.h>
 
@@ -501,7 +501,6 @@ namespace BALL
 				menu->setItemChecked(window_menu_entry_id_, true);
 			}
 		}
-
 
   } // namespace VIEW
 } // namespace BALL

@@ -1,25 +1,25 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.1 2003/08/26 12:11:41 oliver Exp $
+// $Id: geometricControl.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
 
-#ifndef BALL_VIEW_GUI_WIDGETS_GEOMETRICCONTROL_H
-#define BALL_VIEW_GUI_WIDGETS_GEOMETRICCONTROL_H
+#ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
+#define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-#	include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+#	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_COMMON_GLOBAL_H
-# include <BALL/VIEW/COMMON/global.h>
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
 #endif 
 
-#ifndef BALL_VIEW_FUNCTOR_MOLECULARINFORMATION_H
-#	include <BALL/VIEW/FUNCTOR/molecularInformation.h>
+#ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
+#	include <BALL/VIEW/KERNEL/molecularInformation.h>
 #endif
 
 #include <qlistview.h>
@@ -266,4 +266,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
+#endif // BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H

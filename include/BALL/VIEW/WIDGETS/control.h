@@ -1,21 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.h,v 1.1 2003/08/26 12:11:40 oliver Exp $
+// $Id: control.h,v 1.2 2003/08/26 16:07:13 amoll Exp $
 
-#ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
-#define BALL_VIEW_GUI_WIDGETS_CONTROL_H
+#ifndef BALL_VIEW_WIDGETS_CONTROL_H
+#define BALL_VIEW_WIDGETS_CONTROL_H
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-#	include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+#	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_FUNCTOR_MOLECULARINFORMATION_H
-#	include <BALL/VIEW/FUNCTOR/molecularInformation.h>
+#ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
+#	include <BALL/VIEW/KERNEL/molecularInformation.h>
 #endif
 
-#ifndef BALL_VIEW_COMMON_GLOBAL_H
-# include <BALL/VIEW/COMMON/global.h>
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 #include <qlistview.h>
@@ -491,10 +491,10 @@ namespace BALL
 		};
 		
 #		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/WIDGETS/control.iC>
+#			include <BALL/VIEW/WIDGETS/control.iC>
 #		endif
 
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_WIDGETS_CONTROL_H_
+#endif // BALL_VIEW_WIDGETS_CONTROL_H

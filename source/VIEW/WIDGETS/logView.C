@@ -4,10 +4,10 @@
 // $Id:
 //
 
-#include <BALL/VIEW/KERNEL/logView.h>
+#include <BALL/VIEW/WIDGETS/logView.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 

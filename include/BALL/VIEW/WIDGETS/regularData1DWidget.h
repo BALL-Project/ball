@@ -1,22 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.1 2003/08/26 12:11:42 oliver Exp $
+// $Id: regularData1DWidget.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
-#define BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
+#ifndef BALL_VIEW_WIDGET_REGULARDATA1DWIDGET_H
+#define BALL_VIEW_WIDGET_REGULARDATA1DWIDGET_H
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 # include <BALL/VIEW/KERNEL/message.h>
 #endif
 
-#ifndef BALL_DATATYPE_STRING_H
-//# include <BALL/DATATYPE/string.h>
-#endif
-
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-# include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+# include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
@@ -214,7 +210,6 @@ namespace BALL
 			bool line_style_;
 		};
 	} // namespace VIEW
-
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_WIDGET_REGULARDATA1DWIDGET_H
+#endif // BALL_VIEW_WIDGET_REGULARDATA1DWIDGET_H

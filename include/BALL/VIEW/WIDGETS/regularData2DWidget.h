@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.1 2003/08/26 12:11:42 oliver Exp $
+// $Id: regularData2DWidget.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
-#define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
+#ifndef BALL_VIEW_WIDGET_REGULARDATA2DWIDGET_H
+#define BALL_VIEW_WIDGET_REGULARDATA2DWIDGET_H
 
 #include <qscrollview.h>
 
@@ -13,8 +13,8 @@
 # include <BALL/VIEW/KERNEL/message.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-#	include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+#	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -311,7 +311,6 @@ namespace BALL
 		};
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif

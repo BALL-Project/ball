@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.3 2003/08/26 14:57:29 oliver Exp $
+# $Id: Makefile,v 1.4 2003/08/26 16:07:22 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -13,6 +13,7 @@ UIC_DIR				=$(BALL_PATH)/include/BALL/VIEW/UIC
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
+	atomProperties.C\
 	fileDialog.C\
 	preferences.C\
 	colorMeshDialog.C\
@@ -37,6 +38,7 @@ CPP_SOURCES=\
 	parsedFunctionDialogData.C
 
 MOC_SOURCES=\
+	atomProperties_moc.C\
 	fileDialog_moc.C\
 	preferences_moc.C\
 	colorMeshDialog_moc.C\
@@ -61,6 +63,7 @@ MOC_SOURCES=\
 	parsedFunctionDialogData_moc.C
 
 UIC_SOURCES=\
+	atomPropertiesData.C\
 	colorMeshDialogData.C\
 	mouseSensitivityData.C\
 	setCameraData.C\
@@ -81,6 +84,9 @@ BALL_INCLUDES=$(VIEW_INCLUDES)
 $(UIC_SOURCES):	$(UIC_HDR)
 
 depend: $(UIC_SOURCES) $(MOC_SOURCES)
+
+atomProperties_moc.C:	$(HEADER_DIR)/atomProperties.h
+	$(MOC) $(HEADER_DIR)/atomProperties.h -o $@
 
 fileDialog_moc.C:	$(HEADER_DIR)/fileDialog.h
 	$(MOC) $(HEADER_DIR)/fileDialog.h -o $@

@@ -1,28 +1,26 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.1 2003/08/26 12:11:41 oliver Exp $
+// $Id: molecularControl.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
 
-#ifndef BALL_MOLVIEW_WIDGETS_MOLECULARCONTROL_H
-#define BALL_MOLVIEW_WIDGETS_MOLECULARCONTROL_H
+#ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
+#define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 
-#ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
-#	include <BALL/VIEW/GUI/WIDGETS/control.h>
+#ifndef BALL_VIEW_WIDGETS_CONTROL_H
+#	include <BALL/VIEW/WIDGETS/control.h>
 #endif
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
-		using VIEW::Control;
-
 		/**	MolecularControl is a widget to display the molecular structure of Composite objects. 
 				This class is derived from the class Control and extends it for showing and modifiying
 				molecular structures. The methods checkMenu() and buildContextMenu() are overridden 
 				for performing special molecular tasks.
 		*/
 		class MolecularControl
-			: public VIEW::Control
+			: public Control
 		{			
 			Q_OBJECT
 			
@@ -131,4 +129,4 @@ namespace BALL
 	} // namespace MOLVIEW
 } // namespace BALL
 
-#endif // BALL_MOLVIE_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H_
+#endif // BALL_VIEW_WIDGETS_MOLECULARCONTROL_H

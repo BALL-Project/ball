@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.1 2003/08/26 12:38:46 oliver Exp $
+// $Id: molecularProperties.C,v 1.2 2003/08/26 16:07:03 amoll Exp $
 
-#include <BALL/MOLVIEW/WIDGETS/molecularProperties.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
-#include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
+#include <BALL/VIEW/WIDGETS/molecularProperties.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
-
 #include <BALL/STRUCTURE/fragmentDB.h>
 
 #include <qmenubar.h>
@@ -18,9 +17,7 @@ using namespace std;
 
 namespace BALL
 {
-	using namespace VIEW;
-
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
   	MolecularProperties::MolecularProperties(QWidget* parent, const char* name)
@@ -421,7 +418,7 @@ namespace BALL
 			}
 			catch (Exception::GeneralException e)
 			{
-				Log.error() << " > normalize named failed: " << e << endl;
+				Log.error() << " > normalize named failed: " <<endl; //<< e << endl;
 			}
 			catch (...)
 			{
@@ -437,7 +434,7 @@ namespace BALL
 			}
 			catch (Exception::GeneralException e)
 			{
-				Log.error() << " > generate missing bonds - failed: " << e << endl;
+				Log.error() << " > generate missing bonds - failed: " <<endl; //<< e << endl;
 			}
 			catch (...)
 			{
@@ -463,5 +460,5 @@ namespace BALL
 			notify_(mol_message);
 		}
 #undef BALL_VIEW_DEBUG
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

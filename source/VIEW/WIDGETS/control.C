@@ -1,15 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.C,v 1.1 2003/08/26 12:38:46 oliver Exp $
-//
+// $Id: control.C,v 1.2 2003/08/26 16:07:02 amoll Exp $
 
-#include <BALL/VIEW/GUI/WIDGETS/control.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/WIDGETS/control.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/COMMON/global.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/KERNEL/system.h>
-#include <BALL/VIEW/GUI/DIALOGS/transformationDialog.h>
+#include <BALL/VIEW/DIALOGS/transformationDialog.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 
@@ -505,9 +504,6 @@ void Control::cut()
 	ControlSelectionMessage* message = new ControlSelectionMessage;
 	message->setDeletable(true);
 	notify_(message);
-	*/
-	selected_.clear();
-	sentSelection();
 
 	ChangedCompositeMessage* ccmessage = new ChangedCompositeMessage;
 	ccmessage->setDeletable(false);
@@ -788,7 +784,7 @@ void Control::fetchPreferences(INIFile & inifile)
 
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/GUI/WIDGETS/control.iC>
+#		include <BALL/VIEW/WIDGETS/control.iC>
 #	endif
 
 	} // namespace VIEW

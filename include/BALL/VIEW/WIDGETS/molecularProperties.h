@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.1 2003/08/26 12:11:41 oliver Exp $
+// $Id: molecularProperties.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
 
-#ifndef BALL_MOLVIEW_WIDGETS_MOLECULARPROPERTIES_H
-#define BALL_MOLVIEW_WIDGETS_MOLECULARPROPERTIES_H
+#ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
+#define BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-# include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+# include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -20,11 +20,7 @@ namespace BALL
 {
 	class Composite;
 
-	using VIEW::ModularWidget;
-	using VIEW::Message;
-	using VIEW::MainControl;
-
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		/**	The MolecularProperties class.
@@ -182,8 +178,7 @@ namespace BALL
 
 		};
 
-	} // namespace MOLVIEW
-
+	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_MOLVIE_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H_
+#endif // BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H

@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#ifndef ATOMPROPERTIES_H
-#define ATOMPROPERTIES_H
-#include "atomPropertiesData.h"
+#ifndef BALL_VIEW_DIALOGS_ATOMPROPERTIES_H
+#define BALL_VIEW_DIALOGS_ATOMPROPERTIES_H
+
+#include <BALL/VIEW/UIC/atomPropertiesData.h>
 
 #ifndef BALL_KERNEL_ATOM_H
 # include <BALL/KERNEL/atom.h>
@@ -36,4 +37,4 @@ private:
 	}
 }
 
-#endif // ATOMProperties_H
+#endif // BALL_VIEW_DIALOGS_ATOMPROPERTIES_H

@@ -1,21 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.1 2003/08/26 12:38:47 oliver Exp $
+// $Id: scene.C,v 1.2 2003/08/26 16:07:03 amoll Exp $
 //
 
-#include <BALL/VIEW/GUI/WIDGETS/scene.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/GUI/DIALOGS/mouseSensitivity.h>
-#include <BALL/VIEW/GUI/DIALOGS/setCamera.h>
+#include <BALL/VIEW/KERNEL/events.h>
+#include <BALL/VIEW/DIALOGS/mouseSensitivity.h>
+#include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
-#include <BALL/VIEW/GUI/DIALOGS/preferences.h>
-#include <BALL/VIEW/GUI/DIALOGS/lightSettings.h>
-#include <BALL/VIEW/GUI/DIALOGS/stageSettings.h>
-#include <BALL/VIEW/PRIMITIV/simpleBox.h>
-#include <BALL/VIEW/PRIMITIV/label.h>
-#include "events.C"
+#include <BALL/VIEW/DIALOGS/preferences.h>
+#include <BALL/VIEW/DIALOGS/lightSettings.h>
+#include <BALL/VIEW/DIALOGS/stageSettings.h>
+#include <BALL/VIEW/PRIMITIVES/simpleBox.h>
+#include <BALL/VIEW/PRIMITIVES/label.h>
 
 #include <qpainter.h>
 #include <qmenubar.h>
@@ -1491,7 +1491,7 @@ namespace BALL
 		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/GUI/WIDGETS/scene.iC>
+#		include <BALL/VIEW/WIDGETS/scene.iC>
 #	endif
 
 	} // namespace VIEW

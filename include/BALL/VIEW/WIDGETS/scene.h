@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.1 2003/08/26 12:11:42 oliver Exp $
+// $Id: scene.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
-#define BALL_VIEW_GUI_WIDGETS_SCENE_H
+#ifndef BALL_VIEW_WIDGETS_SCENE_H
+#define BALL_VIEW_WIDGETS_SCENE_H
 
 #include <qgl.h>
 #include <iostream>
@@ -14,20 +14,20 @@
 #	include <BALL/MATHS/quaternion.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_EVENTS_H
-#	include <BALL/VIEW/GUI/WIDGETS/events.h>
+#ifndef BALL_VIEW_KERNEL_EVENTS_H
+#	include <BALL/VIEW/KERNEL/events.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-#	include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+#	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_OPENGL_GLRENDERER_H
-# include <BALL/VIEW/OPENGL/glRenderer.h>
+#ifndef BALL_VIEW_RENDERING_GLRENDERER_H
+# include <BALL/VIEW/RENDERING/glRenderer.h>
 #endif
 
-#ifndef BALL_VIEW_COMMON_GLOBAL_H
-# include <BALL/VIEW/COMMON/global.h>
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
 #endif 
 
 namespace BALL
@@ -617,11 +617,10 @@ namespace BALL
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/VIEW/GUI/WIDGETS/scene.iC>
+#		include <BALL/VIEW/WIDGETS/scene.iC>
 #	endif
 
 	} // namespace VIEW
-
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_WIDGETS_SCENE_H_
+#endif // BALL_VIEW_WIDGETS_SCENE_H

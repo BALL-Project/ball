@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.1 2003/08/26 12:11:41 oliver Exp $
+// $Id: pyWidget.h,v 1.2 2003/08/26 16:07:14 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
-#define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
+#ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
+#define BALL_VIEW_WIDGETS_PYWIDGET_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -15,8 +15,8 @@
 #	include <BALL/DATATYPE/string.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-#	include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+#	include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
 #include <qtextedit.h>
@@ -206,7 +206,6 @@ namespace BALL
 		}; 
 			
 	} // namespace VIEW
-
 } // namespace BALL
 	
-#endif // BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
+#endif // BALL_VIEW_WIDGETS_PYWIDGET_H

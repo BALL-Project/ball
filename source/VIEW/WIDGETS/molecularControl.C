@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.1 2003/08/26 12:38:46 oliver Exp $
+// $Id: molecularControl.C,v 1.2 2003/08/26 16:07:03 amoll Exp $
 
-#include <BALL/MOLVIEW/WIDGETS/molecularControl.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
-#include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
-#include <BALL/MOLVIEW/DIALOGS/atomProperties.h>
+#include <BALL/VIEW/WIDGETS/molecularControl.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/DIALOGS/atomProperties.h>
 #include <BALL/KERNEL/system.h>
 #include <qmenubar.h>
 
@@ -14,9 +14,7 @@ using std::endl;
 #define BALL_VIEW_DEBUG
 namespace BALL
 {
-	using namespace VIEW;
-
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 MolecularControl::MolecularControl(QWidget* parent, const char* name)
@@ -171,5 +169,5 @@ void MolecularControl::updateSelection()
 	}
 }
 #undef BALL_VIEW_DEBUG
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL
