@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.6 2003/09/15 15:13:55 amoll Exp $
+// $Id: common.h,v 1.7 2003/10/05 16:30:30 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -135,8 +135,10 @@ namespace BALL
 			MODEL_HBONDS,
 			
 			/// defines the property for the model: Label
-			MODEL_LABEL
+			MODEL_LABEL,
 
+			/// defines the property for the model: contour surface
+			MODEL_CONTOUR_SURFACE
 		};
 
 
