@@ -1,4 +1,4 @@
-// $Id: expression.C,v 1.28 2001/07/16 19:38:37 anker Exp $
+// $Id: expression.C,v 1.29 2001/07/17 00:52:48 oliver Exp $
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
@@ -248,6 +248,7 @@ namespace BALL
 	{
 		using namespace RTTI;
 		create_methods_.insert("true", TruePredicate::createDefault);
+		create_methods_.insert("false", FalsePredicate::createDefault);
 		create_methods_.insert("selected", SelectedPredicate::createDefault);
 		create_methods_.insert("name", AtomNamePredicate::createDefault);
 		create_methods_.insert("type", AtomTypePredicate::createDefault);
