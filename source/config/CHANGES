@@ -11,7 +11,7 @@ added:
 - 1D and 2D RegularDataWidgets update their contents automaticaly
 - Visualisation of forces
 - Writing and loading of project files
-- Benchmark Scritps for BALLView
+- Benchmark Scripts for BALLView
 - Visualisation for double-, triple- and aromatic bonds in BallAndStick Model
 - Hotkey support for starting any (BALL-)Python command from BALLView
 
