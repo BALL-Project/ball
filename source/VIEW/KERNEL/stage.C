@@ -141,8 +141,12 @@ bool Camera::operator == (const Camera& camera) const
 void Camera::calculateVectors_()
 	throw()
 {
+	if (!look_up_vector_.isZero()) look_up_vector_.normalize();
+	else look_up_vector_.set(0,1,0);
+
 	view_vector_  = look_at_ - view_point_;
 	right_vector_ = look_up_vector_ % view_vector_;
+
 	if (!right_vector_.isZero())	right_vector_.normalize();
 	else right_vector_.set(1,0,0);
 }
@@ -171,12 +175,9 @@ void Camera::dump(std::ostream& s, Size depth) const
 String Camera::toString() const
 	throw()
 {
-	String out;
-	out += vector3ToString(view_point_) + " ";
-	out += vector3ToString(look_at_) + " ";
-	out += vector3ToString(look_up_vector_);
-
-	return out;
+	return vector3ToString(view_point_) + " " +
+				 vector3ToString(look_at_) + " " +
+				 vector3ToString(look_up_vector_);
 }
 
 bool Camera::readFromString(const String& data)
@@ -376,50 +377,59 @@ Vector3 Stage::calculateRelativeCoordinates(Vector3 pos)
 	// make sure the three planes are far enough, to be always on one side of them
 	const float d = 1000000.0;
 
-	Vector3 dr(camera_.getRightVector());
-	dr.normalize();
-	dr *= d;
+	try
+	{
+		Vector3 dr(camera_.getRightVector() * d);
 
-	Vector3 dv(camera_.getViewVector());
-	dv.normalize();
-	dv *= d;
+		Vector3 dv(camera_.getViewVector());
+		dv.normalize();
+		dv *= d;
 
-	Vector3 du(camera_.getLookUpVector());
-	du.normalize();
-	du *= d;
+		Vector3 du(camera_.getLookUpVector() * d);
 
-	pos -= camera_.getViewPoint();
+		pos -= camera_.getViewPoint();
 
-	// calculate the planes
-	const Plane3 plane_rv(dr, dr);
-	const Plane3 plane_uv(du, du);
-	const Plane3 plane_vv(dv, dv);
+		// calculate the planes
+		const Plane3 plane_rv(dr, dr);
+		const Plane3 plane_uv(du, du);
+		const Plane3 plane_vv(dv, dv);
 
-	// distance of the destion of the light source from the three planes
-	Vector3 result(
-		GetDistance(plane_rv, pos),
-		GetDistance(plane_uv, pos),
-		GetDistance(plane_vv, pos));
-	result -= Vector3(d);
+		// distance of the destion of the light source from the three planes
+		Vector3 result(
+			GetDistance(plane_rv, pos),
+			GetDistance(plane_uv, pos),
+			GetDistance(plane_vv, pos));
+		result -= Vector3(d);
 
-	return -result;
+		return -result;
+	}
+	catch(...)
+	{
+		Log.error() << "Could not calculate relative light coordinates, degenerated view vectors." << std::endl;
+	}
+
+	return Vector3(1.0);
 }
 
 Vector3 Stage::calculateAbsoluteCoordinates(Vector3 pos)
 {
-	Vector3 dv(camera_.getViewVector());
-	dv.normalize();
+	try
+	{
+		Vector3 dv(camera_.getViewVector());
+		dv.normalize();
 
-	Vector3 du(camera_.getLookUpVector());
-	du.normalize();
+		return camera_.getViewPoint() + 
+			(pos.x * camera_.getRightVector() + 
+			 pos.y * camera_.getLookUpVector() +
+			 pos.z * dv);
+	}
+	catch(...)
+	{
+		Log.error() << "Could not calculate absolute light coordinates, degenerated view vectors." << std::endl;
+	}
 
-	Vector3 dr(camera_.getRightVector());
-	dr.normalize();
+	return Vector3(1.0);
 
-	return camera_.getViewPoint() + 
-		(pos.x * dr + 
-		 pos.y * du + 
-		 pos.z * dv);
 }
 
 void Stage::moveCameraTo(const Camera& new_camera)

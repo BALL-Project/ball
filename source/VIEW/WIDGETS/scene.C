@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.166 2005/02/17 16:20:02 amoll Exp $
+// $Id: scene.C,v 1.167 2005/02/23 13:22:34 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -35,7 +35,7 @@
 #include <qdir.h>
 
 
-//    #define BALL_BENCHMARKING
+ #define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
@@ -397,11 +397,9 @@ namespace BALL
 			// ok, this is going the stereo way...
 			stereo_camera_ = stage_->getCamera();
 
-			Vector3	diff = stage_->getCamera().getRightVector();
 			Vector3 old_view_point = stage_->getCamera().getViewPoint();
 			Vector3 old_look_at = stage_->getCamera().getLookAtPosition();
-			diff.normalize();
-			diff = diff * (stage_->getEyeDistance() / 2.0);  
+			Vector3	diff = stage_->getCamera().getRightVector() * (stage_->getEyeDistance() / 2.0);  
 
 			float nearf = 1.5; 
 			float farf = 300;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.65 2005/02/17 16:20:02 amoll Exp $
+// $Id: glRenderer.C,v 1.66 2005/02/23 13:24:48 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -562,20 +562,13 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 		translateVector3_(box.getPoint());
 
 		Vector3 v1(box.getRightVector());
+		if (v1.getSquareLength() != 0) v1.normalize();
+		
 		Vector3 v2(box.getHeightVector());
-		if (v1.getSquareLength() != 0)
-		{
-			v1.normalize();
-		}
-		if (v2.getSquareLength() != 0)
-		{
-			v2.normalize();
-		}
+		if (v2.getSquareLength() != 0) v2.normalize();
+		
 		Vector3 v3(box.getRightVector() % box.getHeightVector());
-		if (v3.getSquareLength() != 0)
-		{
-			v3.normalize();
-		}
+		if (v3.getSquareLength() != 0) v3.normalize();
 
 		float m[16] = { v1.x, v1.y, v1.z, 0,
 										v2.x, v2.y, v2.z, 0,
@@ -1545,7 +1538,7 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 		DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
 		if (dit != display_lists_.end())
 		{
-			dit->second->draw();
+ 			dit->second->draw();
 		}
 	}
 
