@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.31 2003/08/19 10:17:26 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.32 2003/08/19 10:41:13 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -3088,10 +3088,10 @@ AC_DEFUN(CF_BALLVIEW, [
     dnl
     dnl  Make sure the MOC we found is actually executable
     dnl
-    if test ! -x "${MOC} ; then
+    if test ! -x "${MOC}" ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([The QT Meta Object Compiler (moc) found in ])
-      AC_MSG_RESULT([  ]${MOC})
+      AC_MSG_RESULT("  ${MOC}")
       AC_MSG_RESULT([seems not to be an executable!])
 			AC_MSG_RESULT([Please include the correct path to moc into your])
 			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
@@ -3129,10 +3129,10 @@ AC_DEFUN(CF_BALLVIEW, [
     dnl
     dnl  Make sure the UIC we found is actually executable
     dnl
-    if test ! -x "${UIC} ; then
+    if test ! -x "${UIC}" ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT([The QT User Interface Compiler (uic) found in ])
-      AC_MSG_RESULT([  ]${UIC})
+      AC_MSG_RESULT("   ${UIC}")
       AC_MSG_RESULT([seems not to be an executable!])
 			AC_MSG_RESULT([Please include the correct path to uic into your])
 			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
