@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.11 2001/02/23 08:58:21 anker Exp $
+// $Id: surfaceProcessor.h,v 1.12 2001/02/25 18:32:00 strobel Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -56,8 +56,8 @@ namespace BALL
 	Processor::Result SurfaceProcessor::operator () (Atom& atom)
 	{
 		//spheres_.push_back(Sphere3(atom.getPosition(), atom.getRadius()));
-		//spheres_.push_back(Sphere3(atom.getPosition(), atom.getElement().getVanDerWaalsRadius()));
-		spheres_.push_back(Sphere3(atom.getPosition(), 1.0));
+		spheres_.push_back(Sphere3(atom.getPosition(), atom.getElement().getVanDerWaalsRadius()));
+		//spheres_.push_back(Sphere3(atom.getPosition(), 1.0));
 		return Processor::CONTINUE;
 	}
 
