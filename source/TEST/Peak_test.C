@@ -1,4 +1,4 @@
-// $Id: Peak_test.C,v 1.3 2000/09/22 12:16:49 amoll Exp $
+// $Id: Peak_test.C,v 1.4 2001/06/14 12:01:09 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(Peak, "$Id: Peak_test.C,v 1.3 2000/09/22 12:16:49 amoll Exp $")
+START_TEST(Peak, "$Id: Peak_test.C,v 1.4 2001/06/14 12:01:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,11 +31,11 @@ RESULT
 Peak1D peak;
 const Atom atom;
 
-	PRECISION(0.0001)
+PRECISION(0.0001)
 
-CHECK(Peak1D::getValue()/setValue() const )
-	peak.setValue(111.1);
-	TEST_REAL_EQUAL(peak.getValue(), 111.1)
+CHECK(Peak1D::getPosition()/setPosition() const )
+	peak.setPosition(111.1);
+	TEST_REAL_EQUAL(peak.getPosition(), 111.1)
 RESULT
 
 CHECK(Peak1D::getWidth()/setWidth() const )
@@ -43,9 +43,9 @@ CHECK(Peak1D::getWidth()/setWidth() const )
 	TEST_REAL_EQUAL(peak.getWidth(), 222.2)
 RESULT
 
-CHECK(Peak1D::getHeight() const )
-	peak.setHeight(333.3);
-	TEST_REAL_EQUAL(peak.getHeight(), 333.3)
+CHECK(Peak1D::getIntensity() const )
+	peak.setIntensity(333.3);
+	TEST_REAL_EQUAL(peak.getIntensity(), 333.3)
 RESULT
 
 CHECK(Peak1D::getAtom()/setAtom() const )
@@ -56,17 +56,17 @@ RESULT
 
 CHECK(Peak1D::Peak1D(const Peak1D& peak))
 	Peak1D peak2(peak);
-	TEST_REAL_EQUAL(peak2.getValue(), 111.1)
+	TEST_REAL_EQUAL(peak2.getPosition(), 111.1)
 	TEST_REAL_EQUAL(peak2.getWidth(), 222.2)
-	TEST_REAL_EQUAL(peak2.getHeight(), 333.3)
+	TEST_REAL_EQUAL(peak2.getIntensity(), 333.3)
 	TEST_EQUAL(peak2.getAtom(), &atom)
 RESULT
 
 CHECK(Peak1D::void operator = (const Peak1D& peak))
 	Peak1D peak2 = peak;
-	TEST_REAL_EQUAL(peak2.getValue(), 111.1)
+	TEST_REAL_EQUAL(peak2.getPosition(), 111.1)
 	TEST_REAL_EQUAL(peak2.getWidth(), 222.2)
-	TEST_REAL_EQUAL(peak2.getHeight(), 333.3)
+	TEST_REAL_EQUAL(peak2.getIntensity(), 333.3)
 	TEST_EQUAL(peak2.getAtom(), &atom)
 RESULT
 
