@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.23 2001/09/24 15:12:39 amoll Exp $
+// $Id: resourceFile.C,v 1.24 2002/01/12 01:59:48 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -93,7 +93,7 @@ namespace BALL
 	ResourceEntry* ResourceEntry::getEntry(const String& key_path)
 	{
 		char old = 0;
-		const char* key = ((String &)key_path).c_str();
+		const char* key = key_path.c_str();
 		ResourceEntry* entry = this;
 
 		if (*key == ResourceFile::SEPARATOR)

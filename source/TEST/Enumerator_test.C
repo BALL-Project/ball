@@ -1,4 +1,4 @@
-// $Id: Enumerator_test.C,v 1.8 2002/01/04 03:09:14 oliver Exp $
+// $Id: Enumerator_test.C,v 1.9 2002/01/12 01:59:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ void char_assign(char& c1, char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.8 2002/01/04 03:09:14 oliver Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.9 2002/01/12 01:59:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -56,17 +56,18 @@ CHECK(getModulus() const )
   TEST_EQUAL(modulus.size(), 0)
 RESULT
 
+CHECK(set(Position index))
+	EnumeratorIndex ei;
+	//????
+RESULT
+
+
 CHECK(EnumeratorIndex& operator ++ ())
 	//????
 RESULT
 
 
 CHECK(EnumeratorIndex& operator -- ())
-  //?????
-RESULT
-
-
-CHECK(set(Position index))
   //?????
 RESULT
 
@@ -157,16 +158,18 @@ CHECK(addVariant())
 	TEST_EQUAL(enumerator.countVariants(), 100000)
 RESULT
 
-String S;
 CHECK(createPermutation(Position i))
 	for (Position i = 0; i < enumerator.countVariants(); i++) 
 	{
 		enumerator.createPermutation(i); 
-		S = String(i);
-		S.reverse();
-		TEST_EQUAL(enumerator.getCurrent(), s)
+		s = enumerator.getCurrent();
+		s.reverse();
+		TEST_EQUAL(s.toUnsignedInt(), i)
 	}
 RESULT
+
+
+
 
 
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: resourceFile.iC,v 1.7 2001/01/26 01:36:49 amoll Exp $
+// $Id: resourceFile.iC,v 1.8 2002/01/12 01:59:48 oliver Exp $
 
 BALL_INLINE 
 void ResourceEntry::set(const ResourceEntry& entry, bool deep)
@@ -69,13 +69,13 @@ ResourceEntry* ResourceEntry::getChild(Position index)
 BALL_INLINE 
 const ResourceEntry* ResourceEntry::getChild(Position index) const
 {
-  return ((ResourceEntry *)this)->getChild(index);
+  return const_cast<ResourceEntry*>(this)->getChild(index);
 }
 
 BALL_INLINE 
 const ResourceEntry* ResourceEntry::getEntry(const String& key_path) const
 {
-  return ((ResourceEntry *)this)->getEntry(key_path);
+  return const_cast<ResourceEntry*>(this)->getEntry(key_path);
 }
 
 BALL_INLINE 

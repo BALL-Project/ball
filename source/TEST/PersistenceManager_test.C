@@ -1,4 +1,4 @@
-// $Id: PersistenceManager_test.C,v 1.5 2001/12/30 13:29:00 sturm Exp $
+// $Id: PersistenceManager_test.C,v 1.6 2002/01/12 01:59:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -16,7 +16,6 @@ namespace BALL
 	class PersistenceTest
 		: public PersistenceManager
 	{
-
 		public: 
 
 		PersistenceTest()
@@ -39,12 +38,12 @@ namespace BALL
 		// Layer 0
 
 		void writeHeader(const char* /* type_name */, const char* /* name */,
-				PointerSizeInt /* ptr */)
+										 PointerSizeInt /* ptr */)
 		{
 		}
 
 		bool checkHeader(const char* /* type_name */, const char* /* name */,
-				PointerSizeInt& /* ptr */)
+										 PointerSizeInt& /* ptr */)
 		{
 			return true;
 		}
@@ -244,7 +243,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.5 2001/12/30 13:29:00 sturm Exp $")
+START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.6 2002/01/12 01:59:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -263,7 +262,7 @@ CHECK(PersistenceManager::PersistenceManager() throw())
 RESULT
 
 
-CHECK(PersistenceManager::PersistenceManager(::std::istream& is) throw())
+CHECK(PersistenceManager::PersistenceManager(std::istream& is) throw())
 	// ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to istr_
@@ -272,14 +271,14 @@ CHECK(PersistenceManager::PersistenceManager(::std::istream& is) throw())
 RESULT
 
 
-CHECK(PersistenceManager::PersistenceManager(::std::ostream& os) throw())
+CHECK(PersistenceManager::PersistenceManager(std::ostream& os) throw())
   // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to ostr_
 RESULT
 
 
-CHECK(PersistenceManager::PersistenceManager(::std::istream& is, ::std::ostream& os) throw())
+CHECK(PersistenceManager::PersistenceManager(std::istream& is, std::ostream& os) throw())
   // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to istr_, ostr_
@@ -315,14 +314,14 @@ CHECK(PersistenceManager::getNumberOfClasses() const  throw())
 RESULT
 
 
-CHECK(PersistenceManager::setOstream(::std::ostream& s) throw())
+CHECK(PersistenceManager::setOstream(std::ostream& s) throw())
   // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to ostr_
 RESULT
 
 
-CHECK(PersistenceManager::setIstream(::std::istream& s) throw())
+CHECK(PersistenceManager::setIstream(std::istream& s) throw())
   // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to istr_

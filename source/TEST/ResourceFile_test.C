@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.14 2001/12/30 13:29:01 sturm Exp $
+// $Id: ResourceFile_test.C,v 1.15 2002/01/12 01:59:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.14 2001/12/30 13:29:01 sturm Exp $")
+START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.15 2002/01/12 01:59:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -88,7 +88,7 @@ CHECK(ResourceEntry::insertChild(ResourceEntry&, bool))
 	TEST_EQUAL(U.countChildren(), 0)
 RESULT
 
-CHECK(ResourceEntry::getChild(Index))
+CHECK(ResourceEntry::getChild(Position Index))
 	ResourceEntry R("TEST1", "test1");
 	ResourceEntry& S = *new ResourceEntry("TEST2", "test2");
 	ResourceEntry& T = *new ResourceEntry("TEST3", "test3");
@@ -106,8 +106,23 @@ CHECK(ResourceEntry::getChild(Index))
 	TEST_EQUAL(R.getChild(5), 0);
 RESULT
 
-CHECK(ResourceEntry::getChild(Index) const)
-	//?????
+CHECK(ResourceEntry::getChild(Poition Index) const)
+	ResourceEntry R("TEST1", "test1");
+	ResourceEntry& S = *new ResourceEntry("TEST2", "test2");
+	ResourceEntry& T = *new ResourceEntry("TEST3", "test3");
+	ResourceEntry& U = *new ResourceEntry("TEST4", "test4");
+	ResourceEntry& V = *new ResourceEntry("TEST5", "test5");
+	R.insertChild(S);
+	R.insertChild(T);
+	R.insertChild(U);
+	R.insertChild(V);
+	const ResourceEntry& const_R(R)
+	TEST_EQUAL(const_R.getChild(0), &S);
+	TEST_EQUAL(const_R.getChild(1), &T);
+	TEST_EQUAL(const_R.getChild(2), &U);
+	TEST_EQUAL(const_R.getChild(3), &V);
+	TEST_EQUAL(const_R.getChild(4), 0);
+	TEST_EQUAL(const_R.getChild(5), 0);
 RESULT
 
 CHECK(ResourceEntry::ResourceEntry(const ResourceEntry&, bool))
@@ -271,8 +286,21 @@ CHECK(ResourceEntry::getPath() const)
 	TEST_EQUAL(R.getPath(), "/TEST1")
 RESULT
 
-CHECK(ResourceEntry::getEntry(const String&))
-	//?????
+CHECK(ResourceEntry::getEntry(const String& key_path))
+	ResourceEntry R("TEST1", "test1");
+	ResourceEntry& S = *new ResourceEntry("TEST2", "test2");
+	ResourceEntry& T = *new ResourceEntry("TEST3", "test3");
+	ResourceEntry& U = *new ResourceEntry("TEST4", "test4");
+	ResourceEntry& V = *new ResourceEntry("TEST5", "test5");
+	R.insertChild(S);
+	R.insertChild(T);
+	R.insertChild(U);
+	U.insertChild(V);
+	TEST_EQUAL(R.getEntry("TEST2/TEST4/TEST5"), &V)
+	TEST_EQUAL(R.getEntry("TEST3"), &T)
+	TEST_EQUAL(R.getEntry("TEST2/TEST4"), &U)
+	TEST_EQUAL(R.getEntry("TEST2"), &S)
+	TEST_EQUAL(R.getEntry("TEST2/TEST6"), 0)
 RESULT
 
 CHECK(ResourceEntry::getEntry(const String&) const)

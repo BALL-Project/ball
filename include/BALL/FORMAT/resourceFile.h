@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.13 2001/08/01 01:06:28 oliver Exp $
+// $Id: resourceFile.h,v 1.14 2002/01/12 01:59:48 oliver Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -143,19 +143,25 @@ namespace BALL
 		*/
 		const ResourceEntry* getParent() const;
 
-		/**	
+		/**	Return a pointer to a child node.	
+				@return 0 if the child {\tt index} does not exist
 		*/
 		ResourceEntry* getChild(Position index);
 
-		/**	
+		/**	Return a const pointer to a child node.	
+				@return 0 if the child {\tt index} does not exist
 		*/
 		const ResourceEntry* getChild(Position index) const;
 
-		/**	
+		/**	Return a pointer to an entry.
+				Searches for an entry via its path.
+				@return 0 if the specified path does not exist
 		*/
 		ResourceEntry* getEntry(const String& key_path);
 
-		/**	
+		/**	Return a const pointer to an entry
+				Searches for an entry via its path.
+				@return 0 if the specified path does not exist
 		*/
 		const ResourceEntry* getEntry(const String& key_path) const;
 

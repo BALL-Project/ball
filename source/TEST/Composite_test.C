@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.26 2001/12/31 19:05:54 oliver Exp $
+// $Id: Composite_test.C,v 1.27 2002/01/12 01:59:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,12 +25,27 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.26 2001/12/31 19:05:54 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.27 2002/01/12 01:59:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-Composite* c_ptr;
+Composite* c_ptr = new Composite;
+std::cout << (void*)c_ptr << std::endl;
+std::cout << (void*)dynamic_cast<AutoDeletable*>(c_ptr) << std::endl;
+std::cout << (void*)dynamic_cast<Object*>(c_ptr) << std::endl;
+std::cout << (void*)dynamic_cast<PersistentObject*>(c_ptr) << std::endl;
+std::cout << (void*)dynamic_cast<Selectable*>(c_ptr) << std::endl;
+
+/*
+for (Size i = 0; i < 1e8; i++)
+{
+	c_ptr = new Composite;
+	c_ptr->appendChild(*new Composite);
+	if (!(i % 50000)) { std::cout << i << std::endl; }
+	delete c_ptr;
+}
+
 CHECK(Composite())
 	c_ptr = new Composite;
 	TEST_NOT_EQUAL(c_ptr, 0)
@@ -668,15 +683,6 @@ CHECK(isDescendantOf() const)
 	TEST_EQUAL(e.isDescendantOf(d), false)
 	TEST_EQUAL(f.isDescendantOf(d), false)
 RESULT
-/*
-cout << endl;
-cout << "a " << &a <<endl;
-cout << "b " << &b <<endl;
-cout << "c " << &c <<endl;
-cout << "d " << &d <<endl;
-cout << "e " << &e <<endl;
-cout << "f " << &f <<endl;
-cout << endl;*/
 
 CHECK(getLowestCommonAncestor(Composite& composite))
 	TEST_EQUAL(d.getLowestCommonAncestor(e), &b)
@@ -1305,7 +1311,16 @@ CHECK(operator !=)
 	TEST_EQUAL(a != a, false)
 RESULT
 
-
+CHECK(memory leaks...)
+	Composite* ptr = 0;
+	for (Size i = 0; i < 1e8; i++)
+	{
+		ptr = new Composite;
+		if (!(i % 1000)) { STATUS("constructed " << i  << " composites.") }
+		delete ptr;
+	}
+RESULT
+*/
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

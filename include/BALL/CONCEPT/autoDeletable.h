@@ -1,4 +1,4 @@
-// $Id: autoDeletable.h,v 1.12 2001/12/30 13:28:35 sturm Exp $
+// $Id: autoDeletable.h,v 1.13 2002/01/12 01:59:48 oliver Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -13,6 +13,7 @@
 
 #include <stdlib.h>
 #include <new>
+#include <iostream>
 
 namespace BALL 
 {

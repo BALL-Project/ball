@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.23 2002/01/11 03:29:07 oliver Exp $
+// $Id: Expression_test.C,v 1.24 2002/01/12 01:59:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.23 2002/01/11 03:29:07 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.24 2002/01/12 01:59:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -498,7 +498,7 @@ CHECK(SyntaxTree::begin() const  throw())
 	SyntaxTree st;
 	SyntaxTree::ConstIterator test_it = st.begin();
 	bool test = (*test_it == child1);
-	TEST_NOT_EQUAL(test, true)
+	TEST_EQUAL(test, true)
 
 	st.children = children;
 	test_it = st.begin();

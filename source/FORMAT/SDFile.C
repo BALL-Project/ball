@@ -1,4 +1,4 @@
-// $Id: SDFile.C,v 1.4 2001/12/20 01:12:15 oliver Exp $
+// $Id: SDFile.C,v 1.5 2002/01/12 01:59:48 oliver Exp $
 
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -17,19 +17,31 @@ namespace BALL
 
 	SDFile::SDFile(const String& name, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
-		: MOLFile(name, open_mode)
+		: MOLFile(name, open_mode),
+			read_atoms_(true)
 	{
 	}
 
 	SDFile::SDFile(const SDFile& file)
 		throw(Exception::FileNotFound)
-		: MOLFile(file)
+		: MOLFile(file),
+			read_atoms_(true)
 	{
 	}
 
 	SDFile::~SDFile()
 		throw()
 	{
+	}
+
+	void SDFile::disableAtoms() throw()
+	{
+		read_atoms_ = false;
+	}
+
+	void SDFile::enableAtoms() throw()
+	{
+		read_atoms_ = true;
 	}
 
 	void SDFile::write(const System& system)
@@ -57,6 +69,11 @@ namespace BALL
 		// properties a s named properties to the molecule
 		if (molecule != 0)
 		{
+			if (!read_atoms_)
+			{
+				// destroy those atoms and bonds if they are not desired 
+				molecule->clear();
+			}
 			readPropertyBlock_(*molecule);
 		}
 

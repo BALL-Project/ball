@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.31 2001/07/15 16:13:38 oliver Exp $
+// $Id: composite.C,v 1.32 2002/01/12 01:59:48 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -1169,14 +1169,11 @@ namespace BALL
 	void Composite::clear()
 		throw()
 	{
-		Composite* next_ptr = 0;
-		Composite* composite_ptr = first_child_;
-				
-		for (; composite_ptr != 0;)
+		for (Composite* composite_ptr = first_child_; composite_ptr != 0; )
 		{
-			next_ptr = composite_ptr->next_;
+			Composite* next_ptr = composite_ptr->next_;
 		
-			if (composite_ptr->isAutoDeletable() == true)
+			if (composite_ptr->isAutoDeletable())
 			{
 				delete composite_ptr;
 			} 
@@ -1184,6 +1181,7 @@ namespace BALL
 			{
 				composite_ptr->previous_ = composite_ptr->next_ = composite_ptr->parent_ = 0;
 				composite_ptr->clear();
+				std::cout << "Composite is not auto deletable!" << std::endl;
 			}
 			
 			composite_ptr = next_ptr;

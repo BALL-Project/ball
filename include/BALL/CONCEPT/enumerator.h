@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.15 2001/12/30 13:28:35 sturm Exp $
+// $Id: enumerator.h,v 1.16 2002/01/12 01:59:48 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -34,7 +34,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/CONCEPT/enumerator.h}
 	*/
 	class EnumeratorIndex
-		: public ::std::vector<Position>
+		: public std::vector<Position>
 	{
 		public:
 
@@ -48,15 +48,14 @@ namespace BALL
 		class IncompatibleIndex
 			: public Exception::GeneralException
 		{
-
 			public:
 
 			IncompatibleIndex(const char* file, int line)
 				throw();
-
 		};
 
 		//@}
+
 		/** @name Constructors and Destructors
 		 */
 		//@{    
@@ -66,32 +65,12 @@ namespace BALL
 		EnumeratorIndex()
 			throw();
 
-		// ?????:
-		// this implementation should vanish (see below)
 		/** Detailed Constructor
 			  @param variant_list the list of variants to be applied
 		 */
 		template <typename Variant, typename VariantIterator>
-		EnumeratorIndex(const ::std::list< ::std::pair< VariantIterator, ::std::vector<Variant> > >& variant_list)
-			throw()
-			: ::std::vector<Position>(variant_list.size()),
-				modulus_(variant_list.size()),
-				base_multipliers_(variant_list.size())
-		{ 
-			// compute the base multipliers for later usage 
-			Index i;
-			Size multiplier = 1;
-			typename std::list<std::pair<VariantIterator, std::vector<Variant> > >::const_iterator list_it = variant_list.begin();
-			for (i = size() - 1; i >= 0; i--, list_it++)
-			{
-				operator[](i) = 0;
-				modulus_[i] = list_it->second.size();
-
-				base_multipliers_[i] = multiplier;
-				multiplier *= modulus_[i];
-			}
-		}
-
+		EnumeratorIndex(const std::list< std::pair< VariantIterator, std::vector<Variant> > >& variant_list)
+			throw();
 
 		/** Destructor
 		 */
@@ -99,6 +78,7 @@ namespace BALL
 			throw();
 
 		//@}
+
 		/** @name Accessors
 		 */
 		//@{
@@ -143,6 +123,7 @@ namespace BALL
 		//@}
 
 		private:
+
 		/* The EnumeratorIndex class is derived from vector and additionally
        contains two vectors of the same size which hold the modulus and the
        base for each cell. The values of the EnumeratorIndex vector itself
@@ -157,14 +138,10 @@ namespace BALL
 	};
 
 
-	/*	?????:
-			This should be the place where this method shoulf be implemented, but
-			I still get nasty error messages...
-
 	template <typename Variant, typename VariantIterator>
-	EnumeratorIndex<Variant, VariantIterator>::EnumeratorIndex(const ::std::list< ::std::pair< VariantIterator, ::std::vector<Variant> > >& variant_list)
+	EnumeratorIndex::EnumeratorIndex(const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
 		throw()
-		: ::std::vector<Position>(variant_list.size()),
+		: std::vector<Position>(variant_list.size()),
 			modulus_(variant_list.size()),
 			base_multipliers_(variant_list.size())
 	{ 
@@ -181,7 +158,6 @@ namespace BALL
 			multiplier *= modulus_[i];
 		}
 	}
-	*/
 
 	/** @name Predicates for EnumeratorIndex class
 	 */
@@ -260,12 +236,12 @@ namespace BALL
 
 		/**
 		*/
-		typedef ::std::pair<VariantIterator, VariantVector>
+		typedef std::pair<VariantIterator, VariantVector>
 			Site;
 
 		/**
 		*/
-		typedef ::std::list<Site>
+		typedef std::list<Site>
 			SiteList;
 
 		/** Mutable forward iterator
@@ -328,7 +304,7 @@ namespace BALL
 		void deleteVariants(const VariantIterator& it, const VariantVector& variants)
 			throw()
 		{
-			// ?????
+			//???
 		}
 
 		/** Count all variants.

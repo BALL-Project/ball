@@ -1,4 +1,4 @@
-// $Id: SDFile.sip,v 1.1 2001/12/28 02:25:52 oliver Exp $
+// $Id: SDFile.sip,v 1.2 2002/01/12 01:59:49 oliver Exp $
 
 class SDFile
 	: GenericMolFile
@@ -21,4 +21,6 @@ class SDFile
 	virtual void write(const Molecule& /molecule/);
 	virtual Molecule* read()
 		throw(ParseError);
+	void disableAtoms() throw();
+	void enableAtoms() throw();
 };

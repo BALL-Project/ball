@@ -1,4 +1,4 @@
-// $Id: SDFile_test.C,v 1.2 2001/12/20 01:14:19 oliver Exp $
+// $Id: SDFile_test.C,v 1.3 2002/01/12 01:59:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(SDFile, "$Id: SDFile_test.C,v 1.2 2001/12/20 01:14:19 oliver Exp $")
+START_TEST(SDFile, "$Id: SDFile_test.C,v 1.3 2002/01/12 01:59:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -163,6 +163,31 @@ CHECK(SDFile::SDFile& operator << (const System& system))
 	f.close();
 	
 	TEST_FILE(filename.c_str(), "data/SDFile_test2.sdf", true)
+RESULT
+
+CHECK(disableAtoms() throw())
+  SDFile f;
+	f.disableAtoms();
+	f.open("data/SDFile_test1.sdf");
+	System S;
+	f >> S;
+	f.close();
+	TEST_EQUAL(S.countAtoms(), 0)
+	TEST_EQUAL(S.countBonds(), 0)
+	TEST_EQUAL(S.countMolecules(), 11)
+RESULT
+
+CHECK(enableAtoms() throw())
+  SDFile f;
+	open("data/SDFile_test1.sdf");
+	f.enableAtoms();
+	f.disableAtoms();
+	System S;
+	f >> S;
+	f.close();
+	TEST_EQUAL(S.countAtoms(), 518)
+	TEST_EQUAL(S.countBonds(), 528)
+	TEST_EQUAL(S.countMolecules(), 11)
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: SDFile.h,v 1.3 2001/12/19 02:40:23 oliver Exp $
+// $Id: SDFile.h,v 1.4 2002/01/12 01:59:48 oliver Exp $
 
 #ifndef BALL_FORMAT_SDFILE_H
 #define BALL_FORMAT_SDFILE_H
@@ -76,6 +76,25 @@ namespace BALL
 		*/
 		virtual Molecule* read()
 			throw(Exception::ParseError);
+
+		/** Do not read atoms and bonds.
+				This (seemingly strange) option allows the user to read
+				the properties of the molecules only. Since SD files can contain
+				all kinds of information besides the molecular structure
+				and reading the structure can be rather time and space consuming,
+				you can disable it with this option. The \Ref{read} and \Ref{write}
+				methods will still create molecules, but they will be empty. 
+				However, the \Ref{NamedProperties} of the molecules contain
+				the optional information contained in the SD file.
+		*/
+		void disableAtoms()
+			throw();
+
+		/** Read atoms and bonds.
+				@see disableAtoms
+		*/
+		void enableAtoms()
+			throw();
 		//@}
 
 		protected:
@@ -90,6 +109,10 @@ namespace BALL
 				molecule read.
 		*/
 		void writePropertyBlock_(const Molecule& molecule);
+
+		/**	Whether atoms and bonds should be read
+		*/
+		bool read_atoms_;
 	};
 
 } // namespace BALL
