@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.23 2002/02/15 01:57:27 oliver Exp $
+# $Id: Makefile,v 1.24 2002/02/24 16:03:58 oliver Exp $
 
 DIRECTORY=PYTHON
 
@@ -16,4 +16,5 @@ depend: subdepend
 
 subdepend:
 	@touch EXTENSIONS/.Dependencies
+	@touch EXTENSIONS/Makefile.inc
 	@cd EXTENSIONS ; $(MAKE) depend

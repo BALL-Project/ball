@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.12 2002/02/15 01:57:28 oliver Exp $
+# $Id: Makefile,v 1.13 2002/02/24 16:04:03 oliver Exp $
 #
 
 DIRECTORY=PYTHON/EXTENSIONS
@@ -14,7 +14,7 @@ all:	libBALLc.so
 
 #
 include ../../common.mak
--include Makefile.inc
+include Makefile.inc
 
 SIP_OPTS=-c SIP -o -e -s ".C" -m "Makefile.inc"
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
@@ -58,7 +58,7 @@ sip:
 	@echo "removing SIP headers..."
 	@for i in SIP/*; do mv $$i SIP/tmp ; cat SIP/tmp |sed 3d > $$i ; rm -f SIP/tmp ; done
 	@echo "updating modified files..."
-	@for i in SIP/*; do if ! cmp -s $$i `basename $$i`; then echo " - $$i"; cp $$i . ; fi ; done
+	@for i in SIP/*; do if cmp -s $$i `basename $$i`; then true ; else echo " - $$i"; cp $$i . ; fi ; done
 
 
 libBALLc.so:  sipBALLVersion.h $(CPP_OBJECTS)
