@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.12 2004/06/25 14:37:16 amoll Exp $
+// $Id: stage.h,v 1.13 2004/07/02 14:02:05 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -450,6 +450,14 @@ namespace BALL
 			/// Get settings for side by side stereo side swapping
 			bool swapSideBySideStereo() const
 				throw() { return swap_side_by_side_stereo_;}
+
+			///
+			float getFogIntensity() const
+				throw() { return fog_intensity_;}
+
+			///
+			void setFogIntensity(float value)
+				throw() { fog_intensity_ = value;}
 			
 			//@}
 			/**	@name Predicates
@@ -484,6 +492,9 @@ namespace BALL
 
 			//_
 			bool 								show_coordinate_system_;
+
+			//_
+			float 							fog_intensity_;
 
 			//_
 			float 							eye_distance_;

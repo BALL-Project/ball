@@ -170,6 +170,7 @@ Stage::Stage()
 		light_sources_(),
 		camera_(),
 		show_coordinate_system_(false),
+		fog_intensity_(0),
 		eye_distance_(2.0),
 		focal_distance_(40),
 		swap_side_by_side_stereo_(false)
@@ -181,6 +182,7 @@ Stage::Stage(const Stage& stage)
 		light_sources_(stage.light_sources_),
 		camera_(stage.camera_),
 		show_coordinate_system_(false),
+		fog_intensity_(stage.fog_intensity_),
 		eye_distance_(stage.eye_distance_),
 		focal_distance_(stage.focal_distance_),
 		swap_side_by_side_stereo_(stage.swap_side_by_side_stereo_)
@@ -197,6 +199,7 @@ void Stage::clear()
 	eye_distance_ = 2.0;
 	focal_distance_ = 40;
 	swap_side_by_side_stereo_ = false;
+	fog_intensity_ = 0;
 }
 
 void Stage::removeLightSource(const LightSource& light_source)
@@ -253,6 +256,9 @@ void Stage::dump(std::ostream& s, Size depth) const
 
 	BALL_DUMP_DEPTH(s, depth);
 	s << "Show coordinate system:  " << show_coordinate_system_ << endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "Fog intensity:  " << fog_intensity_ << endl;
 
 	BALL_DUMP_DEPTH(s, depth);
 	s << "Eye distance :  " << eye_distance_<< endl;
