@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotide.h,v 1.29 2003/06/30 15:30:35 amoll Exp $
+// $Id: nucleotide.h,v 1.30 2003/06/30 16:24:44 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #	include <BALL/KERNEL/fragment.h>
@@ -18,6 +14,11 @@
 #	include <BALL/KERNEL/nucleotideIterator.h>
 #endif
 
+// testing
+#ifndef BALL_KERNEL_ATOM_H
+#	include <BALL/KERNEL/atom.h>
+#endif
+
  
 #define BALL_NUCLEOTIDE_DEFAULT_ID               ""
 #define BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE   ' '
@@ -25,7 +26,6 @@
 namespace BALL 
 {
 	class NucleicAcid;
-	class Protein;
 
 	/**	Nucleotide class.
 			This class is used to represent nucleotides within
@@ -215,6 +215,22 @@ namespace BALL
 		*/
 		void splice(Nucleotide& nucleotide)
 			throw();
+
+#ifdef	BALL_CFG_USING_METHOD_DIRECTIVE
+		using AtomContainer::prepend;
+		using AtomContainer::append;
+		using AtomContainer::insert;
+		using AtomContainer::insertBefore;
+		using AtomContainer::insertAfter;
+		using AtomContainer::remove;
+#else
+		AtomContainer::prepend;
+		AtomContainer::append;
+		AtomContainer::insert;
+		AtomContainer::insertBefore;
+		AtomContainer::insertAfter;
+		AtomContainer::remove;
+#endif
 
 		//@}
 		/**	@name	Predicates 
