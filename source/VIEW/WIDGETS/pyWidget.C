@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.18 2003/11/14 13:40:06 amoll Exp $
+// $Id: pyWidget.C,v 1.19 2003/12/02 14:30:29 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -258,7 +258,7 @@ namespace BALL
 			int row, col;
 			getCursorPosition(&row, &col);
 
-			if (row != paragraphs()-1)
+			if (row != paragraphs()-1 || col < 4)
 			{
 				setCursorPosition(paragraphs()-1, paragraphLength(paragraphs() -1) -1);
 			}
