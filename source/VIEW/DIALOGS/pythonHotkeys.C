@@ -35,20 +35,18 @@ List<Hotkey> PythonHotkeys::getContent() const
 	throw()
 {
 	List<Hotkey> result;
-	for (Index p = 0; p < table->numRows(); p++)
+	for (Index pos = 0; pos < table->numRows(); pos++)
 	{
-		if (table->item(p, 2)->text().isEmpty() ||
-				table->item(p, 0) == 0  						||
-				!RTTI::isKindOf<QComboTableItem>(*table->item(p, 0))) 
+		if (table->item(pos, 2)->text().isEmpty() ||
+				!RTTI::isKindOf<QComboTableItem>(*table->item(pos, 0))) 
 		{
 			continue;
 		}
 
 		Hotkey hotkey;
 
-Log.error() << "#~~#   14 "    << __FILE__ << "  " << __LINE__<< std::endl;
-		Index p = ((QComboTableItem*) table->item(p, 0))->currentItem();
-Log.error() << "#~~#   16 "    << __FILE__ << "  " << __LINE__<< std::endl;
+		table->item(pos, 0);
+		Index p = (dynamic_cast<QComboTableItem*>( table->item(pos, 0)))->currentItem();
 		if (p == 0)
 		{
 			hotkey.button_state = Qt::NoButton;
@@ -58,9 +56,10 @@ Log.error() << "#~~#   16 "    << __FILE__ << "  " << __LINE__<< std::endl;
 			hotkey.button_state = (Qt::ButtonState) (Qt::ShiftButton + p - 1);
 		}
 
-Log.error() << "#~~#   15 "    << __FILE__ << "  " << __LINE__<< std::endl;
 		p = ((QComboTableItem*) table->item(p, 1))->currentItem();
 		hotkey.key = (Qt::Key) (Qt::Key_F1 + p);
+
+		hotkey.action = table->item(pos, 2)->text().ascii();
 
 		result.push_back(hotkey);
 	}
