@@ -1,4 +1,4 @@
-// $Id: makeSpectrumProcessor.C,v 1.2 2000/08/28 16:08:53 oliver Exp $
+// $Id: makeSpectrumProcessor.C,v 1.3 2000/09/07 19:38:30 oliver Exp $
 
 #include<BALL/NMR/makeSpectrumProcessor.h>
 
@@ -7,40 +7,36 @@ using namespace std;
 namespace BALL
 {
 
-	MakeSpectrumProcessor::MakeSpectrumProcessor ()
+	MakeSpectrumProcessor::MakeSpectrumProcessor()
 	{
-		spectrum_ = new NMRSpectrum;
-		spectrum_->insert_shift_module ("JB");
-		spectrum_->insert_shift_module ("LEF");
-		spectrum_->insert_shift_module ("ANISO");
+		spectrum_.insertShiftModule("JB");
+		spectrum_.insertShiftModule("LEF");
+		spectrum_.insertShiftModule("ANISO");
 	}
 
-	MakeSpectrumProcessor::~MakeSpectrumProcessor ()
+	MakeSpectrumProcessor::~MakeSpectrumProcessor()
 	{
 	}
 
-	bool MakeSpectrumProcessor::start ()
-	{
-		// hier passiert nichts
-		return 1;
-	}
-
-	bool MakeSpectrumProcessor::finish ()
+	bool MakeSpectrumProcessor::finish()
 	{
 		// starte die Berechnungen
 
-		spectrum_->calculate_shifts ();
+		spectrum_.calculateShifts();
 
-		return 1;
+		return true;
 	}
 
-	Processor::Result MakeSpectrumProcessor::operator () (Object & object)
+	Processor::Result MakeSpectrumProcessor::operator () (Atom& atom)
 	{
-		// identifieziere das System und gebe es an spectrum_
-		if (RTTI::isKindOf < System > (object))
+		// identify the system 
+		Composite& root = atom.getRoot();
+		if (RTTI::isKindOf<System>(root))
 		{
-			system_ = RTTI::castTo < System > (object);
-			spectrum_->set_system (system_);
+			system_ = RTTI::castTo<System>(root);
+			spectrum_.setSystem(system_);
+			
+			return Processor::BREAK;
 		}
 
 		return Processor::CONTINUE;

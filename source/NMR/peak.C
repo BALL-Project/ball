@@ -1,151 +1,94 @@
-// $Id: peak.C,v 1.3 2000/08/28 16:08:54 oliver Exp $
+// $Id: peak.C,v 1.4 2000/09/07 19:38:31 oliver Exp $
 
 #include<BALL/NMR/peak.h>
+#include<BALL/MATHS/common.h>
 
 using namespace std;
 
 namespace BALL
 {
 
-	peak::peak ()
+	Peak1D::Peak1D()
 	{
-		min_ = 0;
-		max_ = 0;
-		ppm_ = 0;
-		breadth_ = 0.1;
+		value_ = 0;
+		width_ = 0.1;
 		height_ = 1;
-		anzahl_ = 0;
+		atom_ = 0;
 	}
 
-	peak::peak (peak p, int /* i */ )
-	{
-		min_ = p.min_;
-		max_ = p.max_;
-		ppm_ = p.ppm_;
-		breadth_ = p.breadth_;
-		height_ = p.height_;
-		anzahl_ = p.anzahl_;
-		atomlist_ = p.atomlist_;
-	}
-
-	peak::~peak ()
+	Peak1D::Peak1D(const Peak1D& peak)
+		: value_(peak.value_),
+			width_(peak.width_),
+			height_(peak.height_),
+			atom_(peak.atom_)
 	{
 	}
 
-	float peak::get_ppm () const
+	Peak1D::~Peak1D()
 	{
-		return ppm_;
 	}
 
-	float peak::get_breadth ()
+	float Peak1D::getValue() const
 	{
-		return breadth_;
+		return value_;
 	}
 
-	float peak::get_height ()
+	float Peak1D::getWidth() const
+	{
+		return width_;
+	}
+
+	float Peak1D::getHeight() const
 	{
 		return height_;
 	}
 
-	float peak::get_anzahl ()
+	const Atom* Peak1D::getAtom() const
 	{
-		return anzahl_;
+		return atom_;
 	}
 
-	float peak::get_min ()
+	void Peak1D::setValue(float value)
 	{
-		return min_;
+		value_ = value;
 	}
 
-	float peak::get_max ()
+	void Peak1D::setWidth(float value)
 	{
-		return max_;
+		width_ = value;
 	}
 
-	list < PDBAtom * >peak::get_atomlist ()
+	void Peak1D::setAtom(const Atom* atom)
 	{
-		return atomlist_;
+		atom_ = atom;
 	}
 
-	void peak::set_ppm (float wert)
+	void Peak1D::setHeight(float value)
 	{
-		ppm_ = wert;
+		height_ = value;
 	}
 
-	void peak::set_breadth (float wert)
+	void Peak1D::operator = (const Peak1D& peak) 
 	{
-		breadth_ = wert;
+		value_ = peak.value_;
+		width_ = peak.width_;
+		height_ = peak.height_;
+		atom_ = peak.atom_;
 	}
 
-	void peak::set_anzahl (float wert)
+	bool Peak1D::operator == (const Peak1D& peak) const
 	{
-		anzahl_ = wert;
+		return Maths::isEqual(value_, peak.value_);
 	}
 
-	void peak::set_atomlist (list < PDBAtom * >liste)
+	bool Peak1D::operator < (const Peak1D& peak) const
 	{
-		atomlist_ = liste;
+		return Maths::isLess(value_, peak.value_);
 	}
 
-	void peak::add (PDBAtom * proteinatom)
+	ostream& operator << (ostream& os, const Peak1D& peak)
 	{
-		float wert;
-
-		  wert = proteinatom->getProperty ("chemical_shift").getFloat ();
-		  ppm_ = ppm_ * anzahl_ + wert;
-		  atomlist_.push_back (proteinatom);
-		  anzahl_++;
-		  ppm_ /= anzahl_;
-
-		if (anzahl_ == 1)
-		{
-			min_ = wert;
-			max_ = wert;
-		}
-		else if (wert < min_)
-			  min_ = wert;
-		else if (wert > max_)
-			max_ = wert;
-
+		return os << peak.getValue();
 	}
 
-	void peak::set_height (float wert)
-	{
-		height_ = wert;
-	}
-
-	void peak::set_min (float wert)
-	{
-		min_ = wert;
-	}
-
-	void peak::set_max (float wert)
-	{
-		max_ = wert;
-	}
-
-	void peak::operator = (peak p) {
-		min_ = p.min_;
-		max_ = p.max_;
-		ppm_ = p.ppm_;
-		breadth_ = p.breadth_;
-		height_ = p.height_;
-		anzahl_ = p.anzahl_;
-		atomlist_ = p.atomlist_;
-	}
-
-	bool operator == (peak p1, peak p2) {
-		return (bool) (p1.get_ppm () == p2.get_ppm ());
-	}
-
-	bool operator < (peak p1, peak p2)
-	{
-		return (bool) (p1.get_ppm () < p2.get_ppm ());
-	}
-
-	ostream & operator << (ostream & s, peak & p)
-	{
-		return s << p.get_ppm ();
-	}
-
-}	// namespace Ball
+}	// namespace BALL

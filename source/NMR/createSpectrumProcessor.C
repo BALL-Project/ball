@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.2 2000/08/28 16:08:53 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.3 2000/09/07 19:38:30 oliver Exp $
 
 #include<BALL/NMR/createSpectrumProcessor.h>
 
@@ -12,56 +12,34 @@ namespace BALL
 		raster_ = 0.01e-6;
 	}
 
+	bool CreateSpectrumProcessor::start ()
+	{
+		// clear the contents of the old peak list
+		peaklist_.clear();
+
+		return true;
+	}
+
 	CreateSpectrumProcessor::~CreateSpectrumProcessor ()
 	{
 	}
 
-	bool CreateSpectrumProcessor::start ()
+	Processor::Result CreateSpectrumProcessor::operator () (Atom& atom)
 	{
-		//cout <<endl<<"CreateSpectrumProcessor::start()";
-		return 1;
-	}
-
-	bool CreateSpectrumProcessor::finish ()
-	{
-		//cout <<endl<<"CreateSpectrumProcessor::finish()"; 
-		return 1;
-	}
-
-	Processor::Result CreateSpectrumProcessor::operator () (Object & object)
-	{
-		//cout <<endl<<"CreateSpectrumProcessor::operator()";
-
-		// Sammelt die Hydrogens in den Peaks
-
-		peak *neu;
-
-		if (RTTI::isKindOf < PDBAtom > (object))
+		// Collect all H atoms
+		if (atom.getElement() == PTE[Element::H])
 		{
-			patom_ = RTTI::castTo < PDBAtom > (object);
-
-			if (patom_->getElement () == PTE[Element::H])
-			{
-				neu = new peak;
-				neu->add (patom_);
-				peaklist_.push_back (*neu);
-			}
+			Peak1D peak;
+			peak.setAtom(&atom);
+			peaklist_.push_back(peak);
 		}
+
 		return Processor::CONTINUE;
 	}
 
-	list < peak > *CreateSpectrumProcessor::get_peaklist ()
+	const list<Peak1D>& CreateSpectrumProcessor::getPeakList() const
 	{
-		return &peaklist_;
+		return peaklist_;
 	}
 
-	float CreateSpectrumProcessor::get_raster ()
-	{
-		return raster_;
-	}
-
-	void CreateSpectrumProcessor::set_raster (float wert)
-	{
-		raster_ = wert;
-	}
-}																// namespace Ball
+}	// namespace Ball
