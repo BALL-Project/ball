@@ -86,7 +86,8 @@ EXECUTABLES_KERNEL = \
 	RuleEvaluator_test\
 	StandardPredicates_test\
 	DefaultProcessors_test\
-	FragmentDB_test
+	FragmentDB_test\
+	GlobalKernel_test
 
 EXECUTABLES_MOLMEC = \
 	Gradient_test\
@@ -100,7 +101,6 @@ EXECUTABLES_MOLMEC = \
 EXECUTABLES_NMR = \
 	RandomCoilShiftProcessor_test\
 	AnisotropyShiftProcessor_test\
-	AssignShiftProcessor_test\
 	ClearShiftProcessor_test\
 	CreateSpectrumProcessor_test\
 	EFShiftProcessor_test\
