@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.16.2.2 2002/11/21 12:51:47 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.16.2.3 2002/11/22 18:38:59 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -203,9 +203,10 @@ namespace BALL
 		{
 			lj_filename = options.get(Option::LJ_FILENAME);
 		}
-		// DEBUG
-		Log.info() << "LJ file: " << lj_filename << endl;
-		// /DEBUG
+		if (verbosity > 8)
+		{
+			Log.info() << "LJ file: " << lj_filename << endl;
+		}
 
 		// surface related variables
 		Size surface_type = (Size)options.getInteger(Option::SURFACE_TYPE);
@@ -269,9 +270,6 @@ namespace BALL
 		// Define the lennard-Jones parameter set.
 		ForceFieldParameters ljparam(lj_filename);
 		ljparam.init();
-		// DEBUG
-		AtomTypes& lj_atom_types = ljparam.getAtomTypes();         
-		// /DEBUG
 
 		LennardJones lennard_jones;
 		if (lennard_jones.extractSection(ljparam, "LennardJones") == false)

@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.29.2.3 2002/11/22 14:23:45 anker Exp $ 
+// $Id: poissonBoltzmann.C,v 1.29.2.4 2002/11/22 18:39:20 anker Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -267,8 +267,8 @@ namespace BALL
 			atom_array->push_back(fast_atom);
 			if ((fast_atom.r == 0.0) && (fast_atom.q != 0.0))
 			{
-				Log.warn() << "Encountered atom with radius 0 and charge != 0 while setting up atom array: "
-					<< atom_iterator->getFullName() << " " 
+				Log.warn() << "Warning: Encountered atom with radius 0 and charge != 0 while setting up atom array: " << endl
+					<< "\t" << atom_iterator->getFullName() << " " 
 					<< atom_iterator->getElement().getSymbol() << " " 
 					<< atom_iterator->getCharge() << endl;
 			}
@@ -1372,10 +1372,11 @@ namespace BALL
 			beta = Limits<float>::max();
 		}
 
-		// DEBUG
-		Log.info() << "beta = " << beta << endl;
-		Log.info() << "ionic_strength = " << ionic_strength << endl;
-		// /DEBUG
+		if (verbosity > 1)
+		{
+			Log.info(2) << "beta = " << beta << endl;
+			Log.info(2) << "ionic_strength = " << ionic_strength << endl;
+		}
 													
 
 		// variable to hold the calculated grid index
