@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.3 2003/08/29 10:36:41 amoll Exp $
+// $Id: cartoonModel.h,v 1.4 2003/09/01 10:27:42 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
 #define BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -52,7 +52,7 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
-					Calls MolecularModelProcessor::clear.
+					Calls ModelProcessor::clear.
 			*/
 			virtual void clear()
 				throw();
@@ -64,7 +64,7 @@ namespace BALL
 		
 			/** Start method.
 					Clear all internal structures.
-					Calls MolecularModelProcessor::start.
+					Calls ModelProcessor::start.
 					\return bool <tt>true<\tt> if the start was successful
 					\see    operator()
 			*/
@@ -102,7 +102,7 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current state to 
 					the output ostream <tt>s</tt> with dumping depth <tt>depth</tt>.
-					Calls MolecularModelProcessor::dump.
+					Calls ModelProcessor::dump.
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/

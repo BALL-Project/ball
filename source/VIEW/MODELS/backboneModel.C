@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.3 2003/08/29 10:52:25 amoll Exp $
+// $Id: backboneModel.C,v 1.4 2003/09/01 10:27:20 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -27,14 +27,14 @@ namespace BALL
 
 		AddBackboneModel::AddBackboneModel()
 			throw()
-			: MolecularModelProcessor(),
+			: ModelProcessor(),
 				last_parent_(0)
 		{
 		}
 
 		AddBackboneModel::AddBackboneModel(const AddBackboneModel& add_Backbone)
 			throw()
-			:	MolecularModelProcessor(add_Backbone),
+			:	ModelProcessor(add_Backbone),
 				last_parent_(0)
 		{
 		}
@@ -51,14 +51,14 @@ namespace BALL
 		void AddBackboneModel::clear()
 			throw()
 		{
-			MolecularModelProcessor::clear();
+			ModelProcessor::clear();
 			spline_vector_.clear();
 			last_parent_ = 0;
 		}
 
 		bool AddBackboneModel::start()
 		{
-			return MolecularModelProcessor::start();
+			return ModelProcessor::start();
 		}
 				
 		bool AddBackboneModel::finish()
@@ -116,7 +116,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			MolecularModelProcessor::dump(s, depth + 1);
+			ModelProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}

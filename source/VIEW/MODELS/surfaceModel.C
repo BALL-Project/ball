@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.2 2003/08/26 18:35:38 amoll Exp $
+// $Id: surfaceModel.C,v 1.3 2003/09/01 10:27:21 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -21,7 +21,7 @@ namespace BALL
 
 		AddSurfaceModel::AddSurfaceModel()
 			throw()
-			: MolecularModelProcessor(),
+			: ModelProcessor(),
 				get_composite_(true),
 				start_composite_(0)
 		{
@@ -29,7 +29,7 @@ namespace BALL
 
 		AddSurfaceModel::AddSurfaceModel(const AddSurfaceModel& add_surface)
 			throw()
-			:	MolecularModelProcessor(add_surface),
+			:	ModelProcessor(add_surface),
 				get_composite_(true),
 				start_composite_(0)
 		{
@@ -47,7 +47,7 @@ namespace BALL
 		void AddSurfaceModel::clear()
 			throw()
 		{
-			MolecularModelProcessor::clear();
+			ModelProcessor::clear();
 			get_composite_ = true;
 			start_composite_ = 0;
 		}
@@ -56,7 +56,7 @@ namespace BALL
 		{
 			get_composite_ = true;
 			start_composite_ = 0;
-			return MolecularModelProcessor::start();
+			return ModelProcessor::start();
 		}
 				
 		bool AddSurfaceModel::finish()
@@ -166,7 +166,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			MolecularModelProcessor::dump(s, depth + 1);
+			ModelProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}

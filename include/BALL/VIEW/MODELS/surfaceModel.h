@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.3 2003/08/29 10:36:42 amoll Exp $
+// $Id: surfaceModel.h,v 1.4 2003/09/01 10:27:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -15,8 +15,8 @@
 #	include <BALL/VIEW/PRIMITIVES/mesh.h>
 #endif
 
-#ifndef BALL_VIEW_MODELS_MOLECULARMODEL_H
-#	include <BALL/VIEW/MODELS/molecularModel.h>
+#ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
+#	include <BALL/VIEW/MODELS/modelProcessor.h>
 #endif
 
 namespace BALL
@@ -34,7 +34,7 @@ namespace BALL
 				\ingroup  ViewModels
 		*/
 		class AddSurfaceModel
-			: public MolecularModelProcessor
+			: public ModelProcessor
 		{
 			public:
 
@@ -55,7 +55,7 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
-					Calls MolecularModelProcessor::clear.
+					Calls ModelProcessor::clear.
 			*/
 			virtual void clear()
 				throw();
@@ -67,7 +67,7 @@ namespace BALL
 			
 			/** Start method.
 					Clears all internal structures.
-					Calls MolecularModelProcessor::start.
+					Calls ModelProcessor::start.
 					\return bool true if the start was successful
 			*/
 			virtual bool start();
@@ -97,7 +97,7 @@ namespace BALL
 			
 			/** Internal value dump.
 					Dump the current state to the output ostream with a given dumping depth.
-					Calls MolecularModelProcessor::dump.
+					Calls ModelProcessor::dump.
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/

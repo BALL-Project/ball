@@ -1,17 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.5 2003/08/31 00:23:47 amoll Exp $
+// $Id: displayProperties.h,v 1.6 2003/09/01 10:28:53 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #	include <BALL/VIEW/MODELS/standardColorProcessor.h>
-#endif
-
-#ifndef BALL_VIEW_MODELS_ATOMBONDMODELCONNECTOR_H
-# include <BALL/VIEW/MODELS/atomBondModelConnector.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
@@ -333,10 +329,7 @@ class DisplayProperties
 	Representation* rep_;
 
 	ColorRGBA 	custom_color_;
-	
-	AtomBondModelConnector 		model_connector_;
 };
-
 
 	} // namespace VIEW
 } // namespace BALL

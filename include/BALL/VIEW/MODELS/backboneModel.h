@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.3 2003/08/29 10:36:40 amoll Exp $
+// $Id: backboneModel.h,v 1.4 2003/09/01 10:27:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
 #define BALL_VIEW_MODELS_BACKBONEMODEL_H
 
-#ifndef BALL_VIEW_MODELS_MOLECULARMODEL_H
-#	include <BALL/VIEW/MODELS/molecularModel.h>
+#ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
+#	include <BALL/VIEW/MODELS/modelProcessor.h>
 #endif
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -33,7 +33,7 @@ namespace BALL
 				documentation.
 				\ingroup  ViewModels
 		*/
-		class AddBackboneModel: public MolecularModelProcessor
+		class AddBackboneModel: public ModelProcessor
 		{
 			//_
 			protected:
@@ -84,7 +84,7 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
-					Calls MolecularModelProcessor::clear.
+					Calls ModelProcessor::clear.
 			*/
 			virtual void clear()
 				throw();
@@ -96,7 +96,7 @@ namespace BALL
 		
 			/** Start method.
 					Clear all internal structures.
-					Calls MolecularModelProcessor::start.
+					Calls ModelProcessor::start.
 					\return bool <tt>true<\tt> if the start was successful
 					\see    operator()
 			*/
@@ -134,7 +134,7 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current state to 
 					the output ostream <tt>s</tt> with dumping depth <tt>depth</tt>.
-					Calls MolecularModelProcessor::dump.
+					Calls ModelProcessor::dump.
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/

@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.3 2003/09/01 10:27:20 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
@@ -14,188 +15,229 @@ namespace BALL
 	namespace VIEW
 	{
 
-		AddBallAndStickModel::AddBallAndStickModel()
-			throw()
-			: AtomBondModelBaseProcessor(),
-				ball_radius_((Real)0.4),
-				stick_radius_((Real)0.2),
-				ball_and_stick_(true)
-		{
-		}
+AddBallAndStickModel::AddBallAndStickModel()
+	throw()
+	: AtomBondModelBaseProcessor(),
+		ball_radius_((Real)0.4),
+		stick_radius_((Real)0.2),
+		ball_and_stick_(true)
+{
+}
 
-		AddBallAndStickModel::AddBallAndStickModel(const AddBallAndStickModel &add_ball_and_stick)
-			throw()
-			: AtomBondModelBaseProcessor(add_ball_and_stick),
-				ball_radius_(add_ball_and_stick.ball_radius_),
-				stick_radius_(add_ball_and_stick.stick_radius_),
-				ball_and_stick_(add_ball_and_stick.ball_and_stick_)
-		{
-		}
+AddBallAndStickModel::AddBallAndStickModel(const AddBallAndStickModel &add_ball_and_stick)
+	throw()
+	: AtomBondModelBaseProcessor(add_ball_and_stick),
+		ball_radius_(add_ball_and_stick.ball_radius_),
+		stick_radius_(add_ball_and_stick.stick_radius_),
+		ball_and_stick_(add_ball_and_stick.ball_and_stick_)
+{
+}
 
-		AddBallAndStickModel::~AddBallAndStickModel()
-			throw()
-		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object " << (void *)this 
-									 << " of class " << RTTI::getName<AddBallAndStickModel>() << std::endl;
-			#endif 
-		}
+AddBallAndStickModel::~AddBallAndStickModel()
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.info() << "Destructing object " << (void *)this 
+							 << " of class " << RTTI::getName<AddBallAndStickModel>() << std::endl;
+	#endif 
+}
 
-		void AddBallAndStickModel::clear()
-			throw()
-		{
-			AtomBondModelBaseProcessor::clear();
+void AddBallAndStickModel::clear()
+	throw()
+{
+	AtomBondModelBaseProcessor::clear();
 
-			ball_radius_ = (Real)0.4;
-			stick_radius_ = (Real)0.2;
-			ball_and_stick_ = true;
-		}
+	ball_radius_ = (Real)0.4;
+	stick_radius_ = (Real)0.2;
+	ball_and_stick_ = true;
+}
 
-		void AddBallAndStickModel::set(const AddBallAndStickModel &add_ball_and_stick)
-			throw()
-		{
-			AtomBondModelBaseProcessor::set(add_ball_and_stick);
+void AddBallAndStickModel::set(const AddBallAndStickModel &add_ball_and_stick)
+	throw()
+{
+	AtomBondModelBaseProcessor::set(add_ball_and_stick);
 
-			ball_radius_ = add_ball_and_stick.ball_radius_;
-			stick_radius_ = add_ball_and_stick.stick_radius_;
-			ball_and_stick_ = add_ball_and_stick.ball_and_stick_;
-		}
+	ball_radius_ = add_ball_and_stick.ball_radius_;
+	stick_radius_ = add_ball_and_stick.stick_radius_;
+	ball_and_stick_ = add_ball_and_stick.ball_and_stick_;
+}
 
-		const AddBallAndStickModel &AddBallAndStickModel::operator = 
-			(const AddBallAndStickModel &add_ball_and_stick)
-			throw()
-		{
-			set(add_ball_and_stick);
-			return *this;
-		}
+const AddBallAndStickModel &AddBallAndStickModel::operator = 
+	(const AddBallAndStickModel &add_ball_and_stick)
+	throw()
+{
+	set(add_ball_and_stick);
+	return *this;
+}
 
-		void AddBallAndStickModel::swap(AddBallAndStickModel &add_ball_and_stick)
-			throw()
-		{
-			AtomBondModelBaseProcessor::swap(add_ball_and_stick);
+void AddBallAndStickModel::swap(AddBallAndStickModel &add_ball_and_stick)
+	throw()
+{
+	AtomBondModelBaseProcessor::swap(add_ball_and_stick);
 
-			Real temp_Real = ball_radius_;
-			ball_radius_ = add_ball_and_stick.ball_radius_;
-			add_ball_and_stick.ball_radius_ = temp_Real;
+	Real temp_Real = ball_radius_;
+	ball_radius_ = add_ball_and_stick.ball_radius_;
+	add_ball_and_stick.ball_radius_ = temp_Real;
 
-			temp_Real = stick_radius_;
-			stick_radius_ = add_ball_and_stick.stick_radius_;
-			add_ball_and_stick.stick_radius_ = temp_Real;
+	temp_Real = stick_radius_;
+	stick_radius_ = add_ball_and_stick.stick_radius_;
+	add_ball_and_stick.stick_radius_ = temp_Real;
 
-			bool temp_bool = ball_and_stick_;
-			ball_and_stick_ = add_ball_and_stick.ball_and_stick_;
-			add_ball_and_stick.ball_and_stick_ = temp_bool;
-		}
+	bool temp_bool = ball_and_stick_;
+	ball_and_stick_ = add_ball_and_stick.ball_and_stick_;
+	add_ball_and_stick.ball_and_stick_ = temp_bool;
+}
 
-		void AddBallAndStickModel::setBallRadius(const Real radius)
-			throw(Exception::OutOfRange)
-		{
-			// a radius never can be lower or equal 0
-			if (radius <= (Real)0)
-			{
-				throw Exception::OutOfRange(__FILE__, __LINE__);
-			}
-			
-			ball_radius_ = radius;
-		}
+void AddBallAndStickModel::setBallRadius(const Real radius)
+	throw(Exception::OutOfRange)
+{
+	// a radius never can be lower or equal 0
+	if (radius <= (Real)0)
+	{
+		throw Exception::OutOfRange(__FILE__, __LINE__);
+	}
+	
+	ball_radius_ = radius;
+}
 
-		void AddBallAndStickModel::setStickRadius(const Real radius)
-			throw(Exception::OutOfRange)
-		{
-			// a radius never can be lower or equal 0
-			if (radius <= (Real)0)
-			{
-				throw Exception::OutOfRange(__FILE__, __LINE__);
-			}
+void AddBallAndStickModel::setStickRadius(const Real radius)
+	throw(Exception::OutOfRange)
+{
+	// a radius never can be lower or equal 0
+	if (radius <= (Real)0)
+	{
+		throw Exception::OutOfRange(__FILE__, __LINE__);
+	}
 
-			stick_radius_ = radius;
-		}
+	stick_radius_ = radius;
+}
 
-		bool AddBallAndStickModel::start()
-		{
-			// init model connector
-			getModelConnector()->setProperties(*this);
-			getModelConnector()->setProperty(String("STICK_RADIUS"), (float)stick_radius_);
-			getModelConnector()->setProperty(String("BALL_RADIUS"), (float)ball_radius_);
-			
-			return AtomBondModelBaseProcessor::start();
-		}
-				
-		bool AddBallAndStickModel::finish()
-		{
-			buildBondModels_();
-			return true;
-		}
-				
-		Processor::Result AddBallAndStickModel::operator() (Composite& composite)
-		{
-			// composite is an atom ?
-			if (!RTTI::isKindOf<Atom>(composite))
-			{
-				return Processor::CONTINUE;
-			}
+bool AddBallAndStickModel::start()
+{
+	return AtomBondModelBaseProcessor::start();
+}
+		
+bool AddBallAndStickModel::finish()
+{
+	buildBondModels_();
+	return true;
+}
+		
+Processor::Result AddBallAndStickModel::operator() (Composite& composite)
+{
+	// composite is an atom ?
+	if (!RTTI::isKindOf<Atom>(composite))
+	{
+		return Processor::CONTINUE;
+	}
 
-			Atom *atom = RTTI::castTo<Atom>(composite);
+	Atom *atom = RTTI::castTo<Atom>(composite);
 
-			Sphere* sphere_ptr = new Sphere;
+	Sphere* sphere_ptr = new Sphere;
 
-			if (sphere_ptr == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+	if (sphere_ptr == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
 
-			sphere_ptr->setComposite(atom);
+	sphere_ptr->setComposite(atom);
 
-			if (ball_and_stick_)
-			{
-				sphere_ptr->setRadius(ball_radius_);
-			}
-			else
-			{
-				sphere_ptr->setRadius(stick_radius_);
-			}
+	if (ball_and_stick_)
+	{
+		sphere_ptr->setRadius(ball_radius_);
+	}
+	else
+	{
+		sphere_ptr->setRadius(stick_radius_);
+	}
 
-			sphere_ptr->setPositionAddress(atom->getPosition());
-			
-			getColorProcessor()->operator() (atom);
+	sphere_ptr->setPositionAddress(atom->getPosition());
+	
+	getColorProcessor()->operator() (atom);
 
-			sphere_ptr->setColor(getColorProcessor()->getColor());
-			
-			// append sphere in Atom
-			geometric_objects_.push_back(sphere_ptr);
+	sphere_ptr->setColor(getColorProcessor()->getColor());
+	
+	// append sphere in Atom
+	geometric_objects_.push_back(sphere_ptr);
 
-			// collect used atoms
-			insertAtom_(atom);
+	// collect used atoms
+	insertAtom_(atom);
 
-			return Processor::CONTINUE;
-		}
+	return Processor::CONTINUE;
+}
 
-		void AddBallAndStickModel::dump(std::ostream& s, Size depth) const
-			throw()
-		{
-			BALL_DUMP_STREAM_PREFIX(s);
-			
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
+void AddBallAndStickModel::dump(std::ostream& s, Size depth) const
+	throw()
+{
+	BALL_DUMP_STREAM_PREFIX(s);
+	
+	BALL_DUMP_DEPTH(s, depth);
+	BALL_DUMP_HEADER(s, this, this);
 
-			AtomBondModelBaseProcessor::dump(s, depth + 1);
+	AtomBondModelBaseProcessor::dump(s, depth + 1);
 
-			BALL_DUMP_DEPTH(s, depth);
-			s << "ball radius: " << ball_radius_ << endl;
+	BALL_DUMP_DEPTH(s, depth);
+	s << "ball radius: " << ball_radius_ << endl;
 
-			BALL_DUMP_DEPTH(s, depth);
-			s << "stick radius: " << stick_radius_ << endl;
+	BALL_DUMP_DEPTH(s, depth);
+	s << "stick radius: " << stick_radius_ << endl;
 
-			BALL_DUMP_DEPTH(s, depth);
-			s << "b&s model: " << ball_and_stick_ << endl;
+	BALL_DUMP_DEPTH(s, depth);
+	s << "b&s model: " << ball_and_stick_ << endl;
 
-			BALL_DUMP_DEPTH(s, depth);
-			s << "s model: " << ball_and_stick_ << endl;
+	BALL_DUMP_DEPTH(s, depth);
+	s << "s model: " << ball_and_stick_ << endl;
 
-			BALL_DUMP_STREAM_SUFFIX(s);
-		}
+	BALL_DUMP_STREAM_SUFFIX(s);
+}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/MODELS/ballAndStickModel.iC>
-#		endif
+void AddBallAndStickModel::visualiseBond_(const Bond& bond)
+	throw()
+{
+	// get colors from both atoms
+	ColorRGBA first_color, second_color;
 
-	} // namespace VIEW
+	if (getColorProcessor() != 0)
+	{
+		getColorProcessor()->operator() (bond.getFirstAtom());
+		first_color = getColorProcessor()->getColor();
+						
+		getColorProcessor()->operator() (bond.getSecondAtom());
+		second_color = getColorProcessor()->getColor();
+	}
+					
+	// if both colors are identical
+	if (first_color == second_color)
+	{
+		// generate single colored tube
+		Tube *tube = new Tube;
 
-} // namespace BALL
+		if (tube == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
+						
+		tube->setRadius(stick_radius_);
+		tube->setVertex1Address(bond.getFirstAtom()->getPosition());
+		tube->setVertex2Address(bond.getSecondAtom()->getPosition());
+		tube->setColor(first_color);
+		tube->setComposite(&bond);
+		geometric_objects_.push_back(tube);
+	}
+	else
+	{
+		// generate two colored tube
+		TwoColoredTube *tube = new TwoColoredTube;
+						
+		if (tube == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(TwoColoredTube));
+						
+		tube->setRadius(stick_radius_);
+		tube->setVertex1Address(bond.getFirstAtom()->getPosition());
+		tube->setVertex2Address(bond.getSecondAtom()->getPosition());
+		tube->setColor(first_color);
+		tube->setColor2(second_color);
+		tube->setComposite(&bond);
+		geometric_objects_.push_back(tube);
+	}
+}
+
+
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/MODELS/ballAndStickModel.iC>
+#	endif
+
+} } // namespaces

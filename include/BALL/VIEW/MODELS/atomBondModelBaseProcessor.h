@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.3 2003/08/29 10:36:40 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.4 2003/09/01 10:27:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -19,8 +19,8 @@
 #	include <BALL/DATATYPE/hashSet.h>
 #endif
 
-#ifndef BALL_VIEW_MODELS_MOLECULARMODEL_H
-#	include <BALL/VIEW/MODELS/molecularModel.h>
+#ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
+#	include <BALL/VIEW/MODELS/modelProcessor.h>
 #endif
 
 #ifndef BALL_VIEW_COMMON_H
@@ -31,6 +31,7 @@
 namespace BALL
 {
 	class Atom;
+	class Bond;
 
 	namespace VIEW
 	{
@@ -38,19 +39,10 @@ namespace BALL
 				The class AtomBondModelBaseProcessor is the base class for all
 				models whose structure is somewhat orientated after the Atom
 				and Bond structure (e.g. the model <b>Ball And Stick</b>)
-				Because it is difficult to create the connecting model
-				between two models this class has helper methods to make the
-				generation process between different models easier. All
-				Atom objects that are processed to build the new model can be
-				inserted into the AtomBondModelBaseProcessor so that the
-				finish method can call the method buildBondModels_() so
-				that all Bond objects can get their connecting models. This is
-				achieved by the class BaseModelConnector and its derived
-				classes. 
 				\ingroup  ViewModels
 		*/
 		class AtomBondModelBaseProcessor
-			:	public MolecularModelProcessor
+			:	public ModelProcessor
 		{
 			public:
 
@@ -77,8 +69,8 @@ namespace BALL
 			/** Explicit default initialization.
 					Reset the state of this AtomBondModelBaseProcessor:
 					  - clear the used atoms
-					  ­ clear the MolecularModelProcessor
-					Calls MolecularModelProcessor::clear.
+					  ­ clear the ModelProcessor
+					Calls ModelProcessor::clear.
 					Calls clearUsedAtoms_().
 			*/
 			virtual void clear()
@@ -91,7 +83,7 @@ namespace BALL
 
 			/** Assignment.
 					Calls clearUsedAtoms_().
-					Calls MolecularModelProcessor::set.
+					Calls ModelProcessor::set.
 					\param       processor the AtomBondModelBaseProcessor to be copied 
 			*/
 			virtual void set(const AtomBondModelBaseProcessor& processor)
@@ -105,7 +97,7 @@ namespace BALL
 				throw();
 
 			/** Swapping of AtomBondModelBaseProcessor.
-					Calls MolecularModelProcessor::swap
+					Calls ModelProcessor::swap
 			*/
 			void swap(AtomBondModelBaseProcessor& processor)
 				throw();
@@ -117,7 +109,7 @@ namespace BALL
 			
 			/** Start method.
 					Calls clearUsedAtoms_().
-					Calls MolecularModelProcessor::start.
+					Calls ModelProcessor::start.
 					\return bool true if the start was successful
 			*/
 			virtual bool start();
@@ -150,7 +142,7 @@ namespace BALL
 			//@{
 
 			/** Internal state and consistency self-validation.
-					Calls MolecularModelProcessor::isValid.
+					Calls ModelProcessor::isValid.
 					\return			bool true if the internal state is correct 
 			*/
 			virtual bool isValid() const
@@ -159,7 +151,7 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current state to the output ostream <b>s</b> with 
 					dumping depth <b>depth</b>.
-					Calls MolecularModelProcessor::dump.
+					Calls ModelProcessor::dump.
 					\param   s output stream where to output the state 
 					\param   depth the dumping depth
 			*/
@@ -210,14 +202,14 @@ namespace BALL
 
 			/** Build the bond models.
 					This method is called from the finish method. It iterates over every Bond
-					object that can be reached from the stored Atom objects and hosts the 
-					BaseModelConnector on it.
-					This method is the control method that is responsible for creating the needed models
-					for Bond objects between different models.
-					See BaseModelConnector for more information about connecting different models.
+					object that can be reached from the stored Atom objects and calls visualiseBond_(),
+					which has to be overloaded in derived classes.
 			*/
 			void buildBondModels_();
 			//@}
+			
+			virtual void visualiseBond_(const Bond& bond)
+				throw();
 
 			private:
 
@@ -229,8 +221,6 @@ namespace BALL
 #		include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.iC>
 #	endif
 
-	} // namespace VIEW
-
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H 

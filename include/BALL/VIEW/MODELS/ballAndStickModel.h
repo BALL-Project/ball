@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.3 2003/08/29 10:36:41 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.4 2003/09/01 10:27:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -225,6 +225,11 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 			//@}
+
+			protected:
+
+			void visualiseBond_(const Bond& bond)
+				throw();
 
 			private:
 

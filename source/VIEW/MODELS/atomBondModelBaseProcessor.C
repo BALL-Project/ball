@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.2 2003/08/26 18:35:36 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.3 2003/09/01 10:27:20 amoll Exp $
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/point.h>
@@ -17,7 +17,7 @@ namespace BALL
 
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor()
 			throw()
-			:	MolecularModelProcessor(),
+			:	ModelProcessor(),
 			  used_atoms_(),
 				hashed_atoms_()
 		{
@@ -25,7 +25,7 @@ namespace BALL
 
 		AtomBondModelBaseProcessor::AtomBondModelBaseProcessor(const AtomBondModelBaseProcessor& processor)
 			throw()
-			:	MolecularModelProcessor(processor),
+			:	ModelProcessor(processor),
 				used_atoms_(),
 				hashed_atoms_()
 		{
@@ -43,7 +43,7 @@ namespace BALL
 		void AtomBondModelBaseProcessor::clear()
 			throw()
 		{
-			MolecularModelProcessor::clear();
+			ModelProcessor::clear();
 			clearUsedAtoms_();
 		}
 
@@ -51,7 +51,7 @@ namespace BALL
 			throw()
 		{
 			clearUsedAtoms_();
-			MolecularModelProcessor::set(processor);
+			ModelProcessor::set(processor);
 		}
 
 		const AtomBondModelBaseProcessor& AtomBondModelBaseProcessor::operator = (const AtomBondModelBaseProcessor& processor)
@@ -64,13 +64,13 @@ namespace BALL
 		void AtomBondModelBaseProcessor::swap(AtomBondModelBaseProcessor& processor)
 			throw()
 		{
-			MolecularModelProcessor::swap(processor);
+			ModelProcessor::swap(processor);
 		}
 
 		bool AtomBondModelBaseProcessor::start()
 		{
 			clearUsedAtoms_();
-			return MolecularModelProcessor::start();
+			return ModelProcessor::start();
 		}
 				
 		bool AtomBondModelBaseProcessor::finish()
@@ -87,7 +87,7 @@ namespace BALL
 		bool AtomBondModelBaseProcessor::isValid() const
 			throw()
 		{
-			return MolecularModelProcessor::isValid();
+			return ModelProcessor::isValid();
 		}
 
 		void AtomBondModelBaseProcessor::dump(ostream& s, Size depth) const
@@ -98,7 +98,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			MolecularModelProcessor::dump(s, depth + 1);
+			ModelProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "used atoms: " << used_atoms_.size() << endl;
@@ -135,12 +135,16 @@ namespace BALL
 					// process bond between them		
 					if (**atom_it < *second_atom_ptr || !getAtomSet_().has(second_atom_ptr))
 					{
-						// build connection primitive
-						((Bond*)&*bond_it)->host(*getModelConnector());
+						visualiseBond_(*bond_it);
 					}
 				}
 			}
     }
+
+		void AtomBondModelBaseProcessor::visualiseBond_(const Bond& /*bond*/)
+			throw()
+		{
+		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.iC>

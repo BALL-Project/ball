@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.3 2003/08/29 10:36:41 amoll Exp $
+// $Id: lineModel.h,v 1.4 2003/09/01 10:27:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LINEMODEL_H
@@ -100,6 +100,10 @@ namespace BALL
 							
 			//@}
 
+			protected:
+
+			void visualiseBond_(const Bond& bond)
+				throw();
 		};
 
 	} // namespace VIEW

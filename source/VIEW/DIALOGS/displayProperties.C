@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.6 2003/08/31 18:11:38 amoll Exp $
+// $Id: displayProperties.C,v 1.7 2003/09/01 10:28:13 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -325,7 +325,7 @@ namespace BALL
 		void DisplayProperties::createRepresentation_(const Composite* composite)
 			throw(InvalidOption)
 		{
-			MolecularModelProcessor* model_processor;
+			ModelProcessor* model_processor;
 
 			switch (model_type_)
 			{
@@ -417,8 +417,6 @@ namespace BALL
 			}
 
 			model_processor->setColorProcessor(color_processor);
-			model_connector_.setModelType(model_type_);
-			model_processor->registerModelConnector(model_connector_);
 			rep->setModelProcessor(model_processor);
 			if (transparency->value() != 0)
 			{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.3 2003/08/29 10:52:25 amoll Exp $
+// $Id: cartoonModel.C,v 1.4 2003/09/01 10:27:20 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -489,7 +489,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
 
-			MolecularModelProcessor::dump(s, depth + 1);
+			ModelProcessor::dump(s, depth + 1);
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
