@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.42 2003/03/26 14:11:13 anhi Exp $
+// $Id: classTest.h,v 1.43 2003/04/22 21:15:04 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -106,7 +106,7 @@ int main(int argc, char **argv)\
 	/* global try block */\
 	}\
 	/* catch FileNotFound exceptions to print out the file name */\
-	catch (BALL::Exception::FileNotFound e)\
+	catch (BALL::Exception::FileNotFound& e)\
 	{\
 		TEST::this_test = false;\
 		TEST::test = false;\
@@ -141,7 +141,19 @@ int main(int argc, char **argv)\
 			std::cout << "    (message is: " << e.getMessage() << ")" << std::endl;\
 		}\
   }\
-	/* catch all non-BALL exceptions */\
+	/* catch all std::exception-derived exceptions */\
+	catch (std::exception& e)\
+	{\
+		TEST::this_test = false;\
+		TEST::test = false;\
+		TEST::all_tests = false;\
+  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+    	std::cout << std::endl << "    (caught expected STL exception outside a subtest: " << e.what() << ")" << std::endl;\
+		}\
+	}\
+\
+	/* catch all non-BALL/non-STL exceptions */\
 	catch (...)\
 	{\
 		TEST::this_test = false;\
@@ -152,7 +164,6 @@ int main(int argc, char **argv)\
     	std::cout << std::endl << "    (caught unidentified and unexpected exception outside a subtest!) " << std::endl;\
 		}\
 	}\
-\
 	/* clean up all temporary files */\
 	while (TEST::tmp_file_list.size() > 0 && TEST::verbose < 1)\
 	{\
