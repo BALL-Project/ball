@@ -42,6 +42,7 @@ EXECUTABLES = \
 	ResourceFile_test\
 	RTTI_test\
 	Socket_test\
+	Sphere3_test\
 	String_test\
 	StructureMapper_test\
 	TransformationApplicator_test\
@@ -159,6 +160,9 @@ Socket_test:	Socket_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Skeleton_test:	Skeleton_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Sphere3_test:	Sphere3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 StructureMapper_test:	StructureMapper_test.o
