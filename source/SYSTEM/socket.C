@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.14 2000/01/24 20:30:38 oliver Exp $
+// $Id: socket.C,v 1.15 2000/01/25 16:25:00 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -31,6 +31,24 @@
 #  undef FD_ZERO    // bzero causes so much trouble to us
 #endif
 #define FD_ZERO(p) (memset ((p), 0, sizeof *(p)))
+
+
+// if configure detects gethostname but there's no
+// appropriate definition in unistd.h (e.g. Solaris 2.5.1)
+// we define it
+#ifdef BALL_DEFINE_GETHOSTNAME
+	extern "C" int gethostname(char* name, int len);
+#endif
+
+// if we have no gethostname, try sysinfo(SI_HOSTNAME,..)
+#ifdef BALL_HAVE_GETHOSTNAME
+#	define BALL_GETHOSTNAME(buf, size) ::gethostname(buf, size)
+#else
+#	ifdef	BALL_HAVE_SYSINFO
+#		include <sys/systeminfo.h>
+#		define BALL_GETHOSTNAME(buf, size) ::sysinfo(SI_HOSTNAME, buf, (long)size)
+#	endif
+#endif
 
 using std::endl;
 
@@ -881,7 +899,7 @@ namespace BALL
 		hostname = "";
 		if (sin_addr.s_addr == htonl(INADDR_ANY)) 
 		{
-			if (::gethostname(buf, 255) == -1) 
+			if (BALL_GETHOSTNAME(buf, 255) == -1) 
 			{
 				errnoError_("SockInetAddr::getHostname");
 				hostname = "";
