@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.21 2000/09/05 10:09:27 oliver Exp $
+// $Id: property.C,v 1.22 2000/10/19 20:03:26 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -8,6 +8,14 @@ using namespace std;
 
 namespace BALL 
 {
+
+
+	NamedProperty::NamedProperty()
+		: PersistentObject(),
+			type_(NONE),
+			name_("")
+	{
+	}
 
 	NamedProperty::NamedProperty(const NamedProperty& property) 
 		: PersistentObject(property),
