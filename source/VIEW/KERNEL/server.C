@@ -1,11 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.10 2004/02/11 13:42:18 amoll Exp $
+// $Id: server.C,v 1.11 2004/05/22 15:34:26 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/serverPreferences.h>
 #include <BALL/SYSTEM/socket.h>
@@ -307,12 +306,10 @@ namespace BALL
 			// get object handle
 			iostream_socket >> object_handle;
 			
-			Composite *new_composite_ptr = 0;
-
 			Log.info() << "creating object: object_creator_ = " << object_creator_ << endl;
 
 			// use specified object creator for inserting the object in the scene
-			new_composite_ptr = object_creator_->operator()(iostream_socket);
+			Composite* new_composite_ptr = object_creator_->operator()(iostream_socket);
 
 			if (new_composite_ptr == 0)
 			{
@@ -324,47 +321,20 @@ namespace BALL
 			// get composite with handle
  			CompositeHashMap::Iterator iterator = composite_hashmap_.find(object_handle);
 
-	 		Composite* inserted_composite_ptr = 0;
-
 		 	// already in hashmap ?
 			if (iterator != composite_hashmap_.end())
 			{
-			 	// get it
-				inserted_composite_ptr = iterator->second;
- 			}
-			
-			// composite already exists ?
-			if (inserted_composite_ptr != 0)
-			{
-				try
-				{
-					// remove old composite
-					CompositeMessage* message = new CompositeMessage;
-					message->setComposite(*inserted_composite_ptr);
-					message->setType(CompositeMessage::REMOVED_COMPOSITE);
-					notify_(message);
+				getMainControl()->remove(*iterator->second);
 					
-					// remove composite from hashmap
-					composite_hashmap_.erase(object_handle);
-					
-					// delete old composite
-					delete inserted_composite_ptr;
-				}
-				catch (...)
-				{
-					Log.info() << "> Server: error deleting old composite!" << endl;
-				}
+				// remove old composite from hashmap
+				composite_hashmap_.erase(object_handle);
 			}
-			
-			// insert into hashmap
+
+			// insert new composite 
 			composite_hashmap_.insert(CompositeHashMap::ValueType(object_handle, new_composite_ptr));
- 			
-			// notify main window
-			CompositeMessage* new_message = new CompositeMessage;
-			new_message->setComposite(*new_composite_ptr);
-			new_message->setType(CompositeMessage::NEW_COMPOSITE);
-			notify_(new_message);
+			getMainControl()->insert(*new_composite_ptr);
     }
+
 
 		void Server::defaultPreferences(Preferences&)
 			throw()

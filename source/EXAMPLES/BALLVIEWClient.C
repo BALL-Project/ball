@@ -52,7 +52,7 @@ int main(int argc, char** argv)
 		port = VIEW_DEFAULT_PORT;
 	}
 	
-	// create a MOLVIEW client and
+	// create a BALLVIEW client and
 	// connect to the given host and port
 	cout << "connecting to port " << port << " of " << host << endl;
 	Client client(host, port);
