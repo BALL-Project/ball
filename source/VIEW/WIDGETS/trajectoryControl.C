@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.C,v 1.3 2003/09/02 14:20:16 amoll Exp $
+// $Id: trajectoryControl.C,v 1.4 2003/09/02 16:06:16 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/trajectoryControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -34,7 +34,7 @@ TrajectoryControl::TrajectoryControl(QWidget* parent, const char* name)
 	setSorting(-1);
 	setSelectionMode(QListView::Extended);
 	addColumn("Name");
-	addColumn("Properties");
+	addColumn("from");
 	setColumnWidth(0, 120);
 	setColumnWidth(1, 60);
 
@@ -106,7 +106,6 @@ void TrajectoryControl::addTrajectory()
 void TrajectoryControl::insertTrajectory_(TrajectoryFile* file, System& system)
 	throw()
 {
-Log.error() << "#~~#   2 " << file << std::endl;
 	if (file->getNumberOfAtoms() != system.countAtoms())
 	{
 		setStatusbarText("Number of atoms do not match. Aborting...");
@@ -114,12 +113,19 @@ Log.error() << "#~~#   2 " << file << std::endl;
 		return;
 	}
 
-Log.error() << "#~~#   4" << std::endl;
 	SnapShotManager* manager = new SnapShotManager(&system, 0, file);
 
 	String name = file->getName();
-	name = name.getField(name.countFields(String(FileSystem::PATH_SEPARATOR).c_str()), 
-																			  String(FileSystem::PATH_SEPARATOR).c_str());
+
+	Position pos = 0;
+	for (Position p = 0; p < name.size(); p++)
+	{
+		if (name[p] == FileSystem::PATH_SEPARATOR) pos = p;
+	}
+	
+	if (pos) pos++;
+	name = name.getSubstring(pos);
+	
 	QListViewItem* item = new QListViewItem(this, name.c_str(), system.getName().c_str());
 	item_to_trajectory_[item] = manager;
 	updateContents();
@@ -133,20 +139,24 @@ void TrajectoryControl::onNotify(Message *message)
   {
     RemovedCompositeMessage *composite_message = RTTI::castTo<RemovedCompositeMessage>(*message);
     Composite* composite = (Composite *)composite_message->getComposite();
+		List<QListViewItem*> to_delete;
 		HashMap<QListViewItem*, SnapShotManager*>::Iterator it = item_to_trajectory_.begin();
 		for(;it != item_to_trajectory_.end(); it++)
 		{
 			if (it->second->getSystem() == composite)
 			{
-				context_item_ = it->first;
-				deleteTrajectory_();
-				return;
+				to_delete.push_back(it->first);
 			}
 		}
-		return;
-	}   
 
-	if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
+		List<QListViewItem*>::Iterator lit = to_delete.begin();
+		for (;lit != to_delete.end(); lit++)
+		{
+			context_item_ = *lit;
+			deleteTrajectory_();
+		}
+	}   
+	else if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
 	{
 		NewTrajectoryMessage* ntm = RTTI::castTo<NewTrajectoryMessage>(*message);
 		insertTrajectory_(ntm->getTrajectoryFile(), *(System*)ntm->getComposite());
@@ -174,15 +184,12 @@ void TrajectoryControl::onContextMenu_(QListViewItem* item,  const QPoint& point
 
 	QPopupMenu context_menu;
 	context_menu.insertItem("Save", this, SLOT(saveTrajectory_()));
-	context_menu.insertItem("Visualise", this, SLOT(visualiseTrajectory_()));
+	context_menu.insertItem("Visualise/Export", this, SLOT(visualiseTrajectory_()));
 	context_menu.insertItem("Delete", this, SLOT(deleteTrajectory_()));
 //	insertContextMenuEntry("Export to PNGs", this, SLOT(visualiseTrajectory_()));
 
 	// show the context menu if it is not empty
-	if (context_menu.count())
-	{
-		context_menu.exec(point);
-	}
+	if (context_menu.count()) context_menu.exec(point);
 }
 
 
