@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.6 1999/09/06 22:21:33 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.7 1999/09/15 09:06:38 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -50,19 +50,19 @@ namespace BALL
 		*/
 		float P;
 		
-		/**	Angle \TeX{$\Chi_1$}
+		/**	Angle \TeX{$\chi_1$}
 		*/
 		Angle chi1;
 
-		/**	Angle \TeX{$\Chi_2$}
+		/**	Angle \TeX{$\chi_2$}
 		*/
 		Angle chi2;
 		
-		/**	Angle \TeX{$\Chi_3$}
+		/**	Angle \TeX{$\chi_3$}
 		*/
 		Angle chi3;
 		
-		/**	Angle \TeX{$\Chi_4$}
+		/**	Angle \TeX{$\chi_4$}
 		*/
 		Angle chi4;
 		//@}
