@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.18 2003/08/26 09:17:51 oliver Exp $
+// $Id: charmm.C,v 1.19 2004/02/17 14:46:04 oliver Exp $
 //
 
 // Molecular Mechanics: Charmm force field class
@@ -354,22 +354,7 @@ namespace BALL
 
 	double CharmmFF::getTorsionEnergy() const
 	{
-		double energy = 0;
-		
-		// get the energy of the proper torsions
-		ForceFieldComponent* component = getComponent("CHARMM Torsion");
-		if (component != 0)
-		{
-			energy += component->getEnergy();
-		} 
-		// and add the energy of the improper torsions
-		component = getComponent("CHARMM ImproperTorsion");
-		if (component != 0)
-		{
-			energy += component->getEnergy();
-		} 
-		
-		return energy;
+		return getImproperTorsionEnergy() + getProperTorsionEnergy();
 	}
 
 	double CharmmFF::getVdWEnergy() const

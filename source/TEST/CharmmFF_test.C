@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_test.C,v 1.11 2003/04/30 08:12:08 oliver Exp $
+// $Id: CharmmFF_test.C,v 1.12 2004/02/17 14:46:04 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +19,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.11 2003/04/30 08:12:08 oliver Exp $")
+START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.12 2004/02/17 14:46:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -75,6 +77,7 @@ FragmentDB frag_db;
 		TEST_REAL_EQUAL(eef1.getBendEnergy(), 307.4544619)
 		TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 2.11036776)
 		TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 5.48237888)
+		TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 7.59275)
 		TEST_REAL_EQUAL(eef1.getVdWEnergy(), 26.64563664)
 		TEST_REAL_EQUAL(eef1.getESEnergy(), -53.3215644)
 		TEST_REAL_EQUAL(eef1.getSolvationEnergy(), -161.7481263)
@@ -103,6 +106,7 @@ FragmentDB frag_db;
 		TEST_REAL_EQUAL(eef1.getBendEnergy(), 0.0)
 		TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 0.0)
 		TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 0.0)
+		TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 0.0)
 		TEST_REAL_EQUAL(eef1.getStretchEnergy(), 30.83411352)
 		TEST_REAL_EQUAL(eef1.getESEnergy(), 0.0)
 		TEST_REAL_EQUAL(eef1.getVdWEnergy(), 0.0)
@@ -165,6 +169,7 @@ FragmentDB frag_db;
 		TEST_REAL_EQUAL(eef1.getBendEnergy(), 307.4544619)
 		TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 2.11036776)
 		TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 5.48237888)
+		TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 7.59275)
 		TEST_REAL_EQUAL(eef1.getVdWEnergy(), 26.64563664)
 		TEST_REAL_EQUAL(eef1.getESEnergy(), -53.3215644)
 		TEST_REAL_EQUAL(eef1.getSolvationEnergy(), -161.7481263)
@@ -185,6 +190,7 @@ FragmentDB frag_db;
 		TEST_REAL_EQUAL(eef1.getBendEnergy(), 307.4544619)
 		TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 2.11036776)
 		TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 5.48237888)
+		TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 7.59275)
 		TEST_REAL_EQUAL(eef1.getVdWEnergy(), 26.64563664)
 		TEST_REAL_EQUAL(eef1.getESEnergy(), -53.3215644)
 		TEST_REAL_EQUAL(eef1.getSolvationEnergy(), -161.7481263)
@@ -205,6 +211,7 @@ FragmentDB frag_db;
 		TEST_REAL_EQUAL(eef1.getBendEnergy(), 307.4544619)
 		TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 2.11036776)
 		TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 5.48237888)
+		TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 7.59275)
 		TEST_REAL_EQUAL(eef1.getVdWEnergy(), 26.64563664)
 		TEST_REAL_EQUAL(eef1.getESEnergy(), -53.3215644)
 		TEST_REAL_EQUAL(eef1.getSolvationEnergy(), -161.7481263)
@@ -244,6 +251,7 @@ CHECK(force test 2 (GLY, bend only) [EEF1])
 	TEST_REAL_EQUAL(eef1.getBendEnergy(), 307.4544619)
 	TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 0.0)
+	TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getStretchEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getESEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getVdWEnergy(), 0.0)
@@ -306,6 +314,7 @@ CHECK(force test 3 (GLY, torsion only) [EEF1])
 	TEST_REAL_EQUAL(eef1.getBendEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 2.11036776)
 	TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 0.0)
+	TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 2.11036776)
 	TEST_REAL_EQUAL(eef1.getStretchEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getESEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getVdWEnergy(), 0.0)
@@ -369,6 +378,7 @@ CHECK(force test 4 (GLY, improper torsion only) [EEF1])
 	TEST_REAL_EQUAL(eef1.getBendEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 5.48237888)
+	TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 5.48237888)
 	TEST_REAL_EQUAL(eef1.getStretchEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getESEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getVdWEnergy(), 0.0)
@@ -435,6 +445,7 @@ CHECK(force test 5 (GLY, VdW only) [EEF1])
 	TEST_REAL_EQUAL(eef1.getBendEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 0.0)
+	TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getStretchEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getESEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getVdWEnergy(), 26.64563664)
@@ -501,6 +512,7 @@ CHECK(force test 6 (2 atoms, electrostatic only) [EEF1/CDIEL])
 	TEST_REAL_EQUAL(eef1.getBendEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 0.0)
+	TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getStretchEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getESEnergy(), -910.321)
 	TEST_REAL_EQUAL(eef1.getVdWEnergy(), 0.0)
@@ -553,6 +565,7 @@ CHECK(force test 7 (2 atoms, electrostatic only) [EEF1/RDIEL])
 	TEST_REAL_EQUAL(eef1.getBendEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getProperTorsionEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getImproperTorsionEnergy(), 0.0)
+	TEST_REAL_EQUAL(eef1.getTorsionEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getStretchEnergy(), 0.0)
 	TEST_REAL_EQUAL(eef1.getESEnergy(), -368.181)
 	TEST_REAL_EQUAL(eef1.getVdWEnergy(), 0.0)
