@@ -1,99 +1,114 @@
-// $Id: composite.iC,v 1.14 2000/10/19 20:10:15 oliver Exp $
+// $Id: composite.iC,v 1.15 2000/12/15 20:19:02 amoll Exp $
 
 BALL_INLINE 
 void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
+	throw()
 {
   composite.clone(*this, predicate);
 }
 
 BALL_INLINE 
-Composite& Composite::operator = (const Composite& composite)
+const Composite& Composite::operator = (const Composite& composite)
+	throw()
 {
   set(composite);
-
   return *this;
 }    
 
 BALL_INLINE 
 void Composite::get(Composite& composite, UnaryPredicate<Composite>& predicate) const
+	throw()
 {
   composite.set(*this, predicate);
 }
 
 BALL_INLINE 
 void Composite::get(Composite& composite, bool deep) const
+	throw()
 {
   composite.set(*this, deep);
 }
 
 BALL_INLINE 
 Size Composite::getDegree() const
+	throw()
 {
   return number_of_children_;
 }
 
 BALL_INLINE 
 Size Composite::countDescendants() const
+	throw()
 {
   return (countDescendants_() - 1);
 }
 
 BALL_INLINE 
 const Composite& Composite::getRoot() const
+	throw()
 {
   return (const_cast<Composite*>(this)->getRoot());
 }
 
 BALL_INLINE 
 const Composite* Composite::getLowestCommonAncestor(const Composite &composite) const
+	throw()
 {
   return ((Composite *)this)->getLowestCommonAncestor((Composite &)composite);
 }
 
 BALL_INLINE 
 Composite* Composite::getParent()
+	throw()
 {
   return parent_;
 }
 
 BALL_INLINE 
 const Composite* Composite::getParent() const
+	throw()
 {
   return parent_;
 }
 
 BALL_INLINE 
 const Composite* Composite::getChild(Index index) const
+	throw()
 {
   return ((Composite *)this)->getChild(index);
 }
 
 BALL_INLINE 
 const Composite* Composite::getSibling(Index index) const
+	throw()
 {
   return ((Composite *)this)->getSibling(index);
 }
 
 BALL_INLINE 
 Composite* Composite::getFirstChild()
+	throw()
 {
   return first_child_;
 }
 
 BALL_INLINE 
 const Composite* Composite::getFirstChild() const
+	throw()
 {
   return first_child_;
 }
 
 BALL_INLINE 
 Composite* Composite::getLastChild()
+	throw()
 {
   return last_child_;
 }
 
 BALL_INLINE 
 const Composite* Composite::getLastChild() const
+	throw()
 {
   return last_child_;
 }
@@ -114,144 +129,168 @@ const PreciseTime& Composite::getSelectionTime() const
 
 BALL_INLINE 
 void Composite::expand()
+	throw()
 {
   BALL_BIT_CLEAR(properties_, PROPERTY__COLLAPSED_);
 }
 
 BALL_INLINE 
 void Composite::collapse()
+	throw()
 {
   BALL_BIT_SET(properties_, PROPERTY__COLLAPSED_);
 }
 
 BALL_INLINE 
 bool Composite::isExpanded() const
+	throw()
 {
   return BALL_BIT_IS_CLEARED(properties_, PROPERTY__COLLAPSED_);
 }
 
 BALL_INLINE 
 bool Composite::isCollapsed() const
+	throw()
 {
   return BALL_BIT_IS_SET(properties_, PROPERTY__COLLAPSED_);
 }
 
 BALL_INLINE 
 bool Composite::isEmpty() const
+	throw()
 {
   return (number_of_children_ == 0);
 }
 
 BALL_INLINE 
 bool Composite::isRoot() const
+	throw()
 {
   return (parent_ == 0);
 }
   
 BALL_INLINE 
 bool Composite::isAncestorOf(const Composite& composite) const
+	throw()
 {
 	return composite.isDescendantOf(*this);
 }
 
 BALL_INLINE 
 bool Composite::isRootOf(const Composite& composite) const
+	throw()
 {
   return ((parent_ == 0) && (isAncestorOf(composite) == true) || (&composite == this));
 }
   
 BALL_INLINE 
 bool Composite::isInterior() const
+	throw()
 {
   return (parent_ != 0 && first_child_ != 0);
 }
 
 BALL_INLINE 
 bool Composite::hasChild() const
+	throw()
 {
   return (first_child_ != 0);
 }
 
 BALL_INLINE 
 bool Composite::isChildOf(const Composite &composite) const
+	throw()
 {
   return (parent_ == &composite);
 }
 
 BALL_INLINE 
 bool Composite::isFirstChild() const
+	throw()
 {
   return (parent_ != 0 && parent_->first_child_ == this);
 }
 
 BALL_INLINE 
 bool Composite::isFirstChildOf(const Composite &composite) const
+	throw()
 {
   return (composite.first_child_ == this);
 }
 
 BALL_INLINE 
 bool Composite::isLastChild() const
+	throw()
 {
   return (parent_ != 0 && parent_->last_child_ == this);
 }
 
 BALL_INLINE 
 bool Composite::isLastChildOf(const Composite &composite) const
+	throw()
 {
   return (composite.last_child_ == this);
 }
 
 BALL_INLINE 
 bool Composite::hasParent() const
+	throw()
 {
   return (parent_ != 0);
 }
 
 BALL_INLINE 
 bool Composite::isParentOf(const Composite &composite) const
+	throw()
 {
   return (composite.parent_ == this);
 }
 
 BALL_INLINE 
 bool Composite::hasSibling() const
+	throw()
 {
   return (parent_ != 0 && parent_->number_of_children_ > 1);
 }
 
 BALL_INLINE 
 bool Composite::isSiblingOf(const Composite &composite) const
+	throw()
 {
   return ((composite.parent_ == parent_) && (parent_ != 0) && (&composite != this));
 }
 
 BALL_INLINE 
 bool Composite::hasPreviousSibling() const
+	throw()
 {
   return (previous_ != 0);
 }
 
 BALL_INLINE 
 bool Composite::isPreviousSiblingOf(const Composite &composite) const
+	throw()
 {
   return (next_ == &composite);
 }
 
 BALL_INLINE 
 bool Composite::hasNextSibling() const
+	throw()
 {
   return (next_ != 0);
 }
 
 BALL_INLINE 
 bool Composite::isNextSiblingOf(const Composite &composite) const
+	throw()
 {
   return (previous_ == &composite);
 }
   
 BALL_INLINE 
 bool Composite::isRelatedWith(const Composite &composite) const
+	throw()
 {
   return ((&composite == this)
 					|| composite.isAncestorOf(*this)
@@ -260,13 +299,14 @@ bool Composite::isRelatedWith(const Composite &composite) const
   
 BALL_INLINE
 bool Composite::containsSelection() const
+	throw()
 {
 	return (contains_selection_);
 }
 
 BALL_INLINE 
 void Composite::host(Visitor<Composite>& visitor)
+	throw()
 {
   visitor.visit(*this);
 }
-

@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.26 2000/12/11 21:15:13 oliver Exp $
+// $Id: composite.C,v 1.27 2000/12/15 20:19:06 amoll Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -15,6 +15,7 @@ namespace BALL
 
 	// default ctor
 	Composite::Composite()
+		throw()
 		:	PersistentObject(),
 			Object(),
 			Selectable(),
@@ -35,6 +36,7 @@ namespace BALL
 
 	// copy ctor
 	Composite::Composite(const Composite& composite, bool deep)
+			throw()
 		:	PersistentObject(composite),
 			Object(composite),
 			Selectable(composite),
@@ -65,6 +67,7 @@ namespace BALL
 	}
 
 	void Composite::set(const Composite& composite, bool deep)
+		throw()
 	{
 		if (deep == true)
 		{
@@ -87,6 +90,7 @@ namespace BALL
 	}
 
   void Composite::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw()
   {
 		pm.writeObjectHeader(this, name);
 			pm.writeStorableObject(*(Selectable*)this, "Selectable");
@@ -107,6 +111,7 @@ namespace BALL
 	}
 
   void Composite::persistentRead(PersistenceManager& pm)
+		throw()
   {
 		pm.readStorableObject(*(Selectable*)this, "Selectable");
 
@@ -125,6 +130,7 @@ namespace BALL
 	}
  
 	Size Composite::getPathLength(const Composite& composite) const
+		throw()
 	{
 		// if composite equals *this - return 0
 		if (&composite == this)
@@ -160,6 +166,7 @@ namespace BALL
 	}
 
 	Size Composite::getDepth() const
+		throw()
 	{
 		// walk up to the root (if possible)
 		Size size = 0;
@@ -173,6 +180,7 @@ namespace BALL
 	}
 
 	Composite& Composite::getRoot()
+		throw()
 	{
 		// walk up to the root
 		Composite* composite_ptr = this;
@@ -182,6 +190,7 @@ namespace BALL
 	}
 
 	Composite* Composite::getChild(Index index)
+		throw()
 	{
 		if (first_child_ != 0)
 		{
@@ -201,6 +210,7 @@ namespace BALL
 	} 
 
 	Composite* Composite::getLowestCommonAncestor(Composite& composite)
+		throw()
 	{
 		Composite* composite_ptr = 0;
 
@@ -252,6 +262,7 @@ namespace BALL
 	} 
 
 	Composite* Composite::getSibling(Index index)
+		throw()
 	{
 		Composite* composite_ptr = this;
 
@@ -278,6 +289,7 @@ namespace BALL
 	}
 
 	void* Composite::clone(Composite& root, UnaryPredicate<Composite>& predicate) const
+		throw()
 	{
 		// avoid self-cloning
 		if (&root == this)	
@@ -314,7 +326,8 @@ namespace BALL
 		return &root;
 	}
 
-	void Composite::stamp(Composite::StampType stamp_type) throw()
+	void Composite::stamp(Composite::StampType stamp_type)
+		throw()
 	{
 		if ((stamp_type & MODIFICATION) != 0)
 		{
@@ -339,6 +352,7 @@ namespace BALL
 	}
 
 	void Composite::select_(bool update_parent)
+		throw()
 	{
 		if (!selected_)
 		{
@@ -392,6 +406,7 @@ namespace BALL
 	}
 
 	void Composite::deselect_(bool update_parent)
+		throw()
 	{
 		// if anything is selected, deselect everything below
 		if (selected_ || (number_of_selected_children_ > 0)
@@ -438,6 +453,7 @@ namespace BALL
 	}
 	
 	void Composite::updateSelection_()
+		throw()
 	{
 		// update the time stamp
 		selection_stamp_.stamp();
@@ -523,6 +539,7 @@ namespace BALL
 	}
 
 	void Composite::determineSelection_()
+		throw()
 	{
 		number_of_selected_children_ = 0;
 		number_of_children_containing_selection_ = 0;
@@ -546,6 +563,7 @@ namespace BALL
 	}
 
 	void Composite::prependChild(Composite& composite)
+		throw()
 	{
 		// avoid self-prepend and prepend of children
 		if (&composite == this || isDescendantOf(composite) == true)
@@ -601,6 +619,7 @@ namespace BALL
 	}
 
 	void Composite::appendChild(Composite& composite)
+		throw()
 	{
 		// avoid self-appending and appending of parent nodes
 		if (&composite == this || isDescendantOf(composite) == true)
@@ -656,6 +675,7 @@ namespace BALL
 	}
 
 	bool Composite::insertParent(Composite& parent, Composite& first, Composite& last, bool destroy_parent)
+		throw()
 	{
 		// return if first and last have different parents, 
 		// if either doesn't possess a parent, or if parent equals first or last
@@ -736,6 +756,7 @@ namespace BALL
 	}
 
 	void Composite::insertBefore(Composite& composite)
+		throw()
 	{
 		// abort if a self-insertion is requested, there`s no parent at all,
 		// or this node is a descendant of composite
@@ -796,6 +817,7 @@ namespace BALL
 	}
 
 	void Composite::insertAfter(Composite& composite)
+		throw()
 	{
 		// abort if there`s no parent, on self-insertion, or
 		// if this node is a descendant of composite
@@ -856,6 +878,7 @@ namespace BALL
 	}
 
 	void Composite::replace(Composite& composite)
+		throw()
 	{
 		if (parent_ != 0 && &composite != this)
 		{
@@ -865,6 +888,7 @@ namespace BALL
 	} 
 
 	void Composite::spliceBefore(Composite& composite)
+		throw()
 	{
 		// avoid self-splicing and the splicing of nodes that are
 		// descendants of composite
@@ -922,6 +946,7 @@ namespace BALL
 	}
 
 	void  Composite::spliceAfter(Composite& composite)
+		throw()
 	{
 		// avoid self-splicing and the splicing of nodes that are
 		// descendants of composite
@@ -979,6 +1004,7 @@ namespace BALL
 	}
 
 	void Composite::splice(Composite& composite)
+		throw()
 	{
 		// avoid self-splicing and splicing of descendants of composite
 		if (&composite == this|| isDescendantOf(composite) == true)
@@ -994,11 +1020,14 @@ namespace BALL
 			spliceBefore(composite);
 			return;
 		} 
-		else if (&composite == last_child_)
+		else 
 		{
-			// ... or spliceAfter()
-			spliceAfter(composite);
-			return;
+			if (&composite == last_child_)
+			{
+				// ... or spliceAfter()
+				spliceAfter(composite);
+				return;
+			}
 		}
 
 		// set the parent of each of composite`s children
@@ -1066,6 +1095,7 @@ namespace BALL
 	}
 
 	bool Composite::removeChild(Composite& child)
+		throw()
 	{
 		// avoid self-removal and removal of ancestors
 		if (&child == this || isDescendantOf(child) == true)
@@ -1188,6 +1218,7 @@ namespace BALL
 	}
 
 	void Composite::destroy(bool virtual_flag)
+		throw()
 	{
 		if (parent_ != 0)
 		{
@@ -1206,6 +1237,7 @@ namespace BALL
 	}
 
 	void Composite::swap(Composite& composite)
+		throw()
 	{
 		if (&composite == this || isAncestorOf(composite) == true
 				|| isDescendantOf(composite) == true)
@@ -1298,6 +1330,7 @@ namespace BALL
 	}
 
 	bool Composite::isDescendantOf(const Composite& composite) const
+		throw()
 	{
 		for (Composite* composite_ptr = parent_;
 				 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
@@ -1312,6 +1345,7 @@ namespace BALL
 	}
 
 	bool Composite::isHomomorph(const Composite& composite) const
+		throw()
 	{
 		if (this == &composite)
 		{
@@ -1339,6 +1373,7 @@ namespace BALL
 	}
 
 	bool Composite::isValid() const
+		throw()
 	{
 		Composite* composite_ptr = first_child_;
 		Size number_of_children = 0;
@@ -1519,6 +1554,7 @@ namespace BALL
 	}
 
 	Size Composite::getHeight() const
+		throw()
 	{
 		Size size = 0;
 
@@ -1535,6 +1571,7 @@ namespace BALL
 	}
 
 	Size Composite::getHeight_(Size size, Size& max_height) const
+		throw()
 	{
 		if (++size > max_height)
 		{
@@ -1554,9 +1591,9 @@ namespace BALL
 	}
 		
 	Size Composite::countDescendants_() const
+		throw()
 	{
-	
-		// walk over all children and recursively call countDescendants
+			// walk over all children and recursively call countDescendants
 		Size number_of_descendants = 1;
 		for (Composite* composite_ptr = first_child_;
 				 composite_ptr != 0; 
@@ -1569,6 +1606,7 @@ namespace BALL
 	}
 
 	Size Composite::count(const KernelPredicateType& predicate) const
+		throw()
 	{
 		// iterate over the node itself and all its descendants
 		// and count hits of the predicate
@@ -1586,6 +1624,7 @@ namespace BALL
 	}
 
 	void Composite::clone_(Composite& parent, Composite& stack, UnaryPredicate<Composite>& predicate) const
+		throw()
 	{
 		Composite* cloned_ptr = 0;
 
@@ -1601,8 +1640,7 @@ namespace BALL
 				if (composite_ptr->first_child_ != 0)
 				{
 					clone_(*composite_ptr, *cloned_ptr, predicate);
-				}
-				
+				}		
 			}	
 			else 
 			{
@@ -1618,19 +1656,20 @@ namespace BALL
 	}
 				
 	Composite* Composite::setCurrentPreorderIteratorPosition_
-		(Composite& composite,
-		 Composite::CompositeIteratorPosition_& position,
-		 bool subcomposite)
+		(Composite& composite, Composite::CompositeIteratorPosition_& position, bool subcomposite)
+		throw()
 	{
 		return setCurrentPreorderForward_(composite, position, subcomposite);
 	}
 
 	Composite& Composite::getFirstPreorderIteratorPosition_(Composite& composite)
+		throw()
 	{
 		return composite;
 	}
 		
 	Composite& Composite::getLastPreorderIteratorPosition_(Composite& composite)
+		throw()
 	{
 		Composite* composite_ptr = &composite;
 		
@@ -1641,6 +1680,7 @@ namespace BALL
 			
 	Composite& Composite::setLastPreorderIteratorPosition_
 		(Composite& composite, CompositeIteratorPosition_ &position, bool subcomposite)
+		throw()
 	{
 		if (subcomposite == true)
 		{
@@ -1664,6 +1704,7 @@ namespace BALL
 	}
 			
 	Composite* Composite::getNextPreorderIteratorPosition_(CompositeIteratorPosition_ &position)
+		throw()
 	{
 		if (position.traversing_forward_ == false)
 		{
@@ -1733,6 +1774,7 @@ namespace BALL
 	}
 
 	Composite* Composite::getPreviousPreorderIteratorPosition_(CompositeIteratorPosition_& position)
+		throw()
 	{
 		if (position.traversing_forward_ == true)
 		{
@@ -1779,8 +1821,7 @@ namespace BALL
 			position.current_ = position.current_->last_child_;
 		}
 				
-		if (position.current_->last_child_ != 0
-				&& position.current_->isCollapsed() == false)
+		if (position.current_->last_child_ != 0	&& position.current_->isCollapsed() == false)
 		{
 			position.continue_ = true;
 			return position.current_;
@@ -1791,8 +1832,8 @@ namespace BALL
 	}
 
 	Composite* Composite::setCurrentPreorderForward_
-		(Composite& composite, CompositeIteratorPosition_& position,
-		 bool subcomposite)
+		(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite)
+		throw()
 	{
 		if (subcomposite == true)
 		{
@@ -1821,8 +1862,8 @@ namespace BALL
 	}
 
 	Composite* Composite::setCurrentPreorderBackward_
-		(Composite& composite, CompositeIteratorPosition_& position,
-		 bool subcomposite)
+		(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite)
+		throw()
 	{
 		if (subcomposite == false)
 		{
