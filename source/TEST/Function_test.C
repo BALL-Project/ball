@@ -1,4 +1,4 @@
-// $Id: Function_test.C,v 1.5 2001/03/09 16:05:46 oliver Exp $
+// $Id: Function_test.C,v 1.6 2001/06/09 11:48:09 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Function_test.C,v 1.5 2001/03/09 16:05:46 oliver Exp $")
+START_TEST(class_name, "$Id: Function_test.C,v 1.6 2001/06/09 11:48:09 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -469,8 +469,9 @@ CHECK(Reciprocal::operator () (DataType x))
 	Reciprocal<MutableConstant<> > rec1;
 	rec1.setFunction(c3);
 	TEST_REAL_EQUAL(rec1.operator() (13), 0.000212269)
-	// BAUSTELLE
-	// DivisionByZero fangen
+	c3 = MutableConstant<>(0.0);
+	rec1.setFunction(c3);
+	TEST_EXCEPTION(Exception::DivisionByZero, rec1.operator() (10))
 RESULT
 
 CHECK(Reciprocal::setFunction(const Function& function))
