@@ -1,8 +1,6 @@
-
-// $Id: bond.C,v 1.14 2001/01/21 21:05:31 amoll Exp $
+// $Id: bond.C,v 1.15 2001/01/24 12:01:09 amoll Exp $
 
 #include <BALL/KERNEL/bond.h>
-
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/atomContainer.h>
 
