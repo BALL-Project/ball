@@ -1,6 +1,7 @@
-// $Id: amberBend.C,v 1.2 1999/09/03 07:49:20 oliver Exp $
+// $Id: amberBend.C,v 1.3 1999/09/19 18:37:44 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
+#include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 
@@ -45,22 +46,31 @@ namespace BALL
 	// setup the internal datastructures for the component
 	bool AmberBend::setup()
 	{
+		// clear old bends:
+		bend_.clear();
+
 		if (getForceField() == 0) 
 		{
 			Log.level(LogStream::ERROR) << "AmberBend::setup: component not bound to force field" << endl;
 			return false;
 		}
 
-		FFPSQuadraticAngleBend bend_parameters;
-		bool result = bend_parameters.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
-
-		if (result == false) 
+		static FFPSQuadraticAngleBend bend_parameters;
+		static bool result = false;
+		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
+		if ((amber_force_field != 0) && !amber_force_field->hasInitializedParameters())
 		{
-			Log.level(LogStream::ERROR) << "cannot find section QuadraticAngleBend" << endl;
-			return false;
+			bend_parameters.extractSection(getForceField()->getParameters(), "QuadraticAngleBend");
+
+			if (result == false) 
+			{
+				Log.level(LogStream::ERROR) << "cannot find section QuadraticAngleBend" << endl;
+				return false;
+			}
 		}
 
 		// retrieve all bend parameters
+		
 		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
 		Atom::BondIterator it1;
 		Atom::BondIterator it2;
