@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.7 2003/11/05 23:27:26 amoll Exp $
+// $Id: molecularControl.h,v 1.8 2003/11/23 22:51:55 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -12,6 +12,10 @@
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 #	include <BALL/VIEW/KERNEL/molecularInformation.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 #include <qlistview.h>
@@ -34,9 +38,13 @@ namespace BALL
 		class MolecularControl
 			: public GenericControl
 		{			
+			///
 			enum MolecularMenuEntries
 			{
-				CREATE_REPRESENTATION = 1,
+				// show DisplayPropertiesDialog
+				CREATE_REPRESENTATION_MODE = 1,
+				// create a new Representation
+				CREATE_REPRESENTATION,
 				OBJECT__REMOVE      	= 10,
 				OBJECT__CUT         	= 11,
 				OBJECT__COPY        	= 12,
@@ -460,6 +468,14 @@ namespace BALL
 			int clipboard_id_;
 
 			//@}
+			
+			protected slots:
+
+			//_ called when a model is selected in the context menu
+			void activatedItem_(int pos);
+
+			//_
+			void createRepresentation_();
 
 		  protected:
 			
@@ -470,13 +486,18 @@ namespace BALL
 			MolecularInformation 		information_;
 			
 			// the context menu
-			QPopupMenu 							context_menu_;
+			QPopupMenu 							context_menu_, 
+															model_menu_, 
+															color_menu_[MODEL_LABEL - MODEL_LINES];
 
 			Composite* 							context_composite_;
 			SelectableListViewItem* context_item_;
 			TransformationDialog* 	transformation_dialog_;
 
 			HashMap<Composite*, SelectableListViewItem*> composite_to_item_;
+
+			Position selected_model_;
+			Position selected_coloring_method_;
 
 			//@}
 		};

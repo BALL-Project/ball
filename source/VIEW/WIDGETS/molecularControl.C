@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.16 2003/11/17 17:37:32 amoll Exp $
+// $Id: molecularControl.C,v 1.17 2003/11/23 22:50:51 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -55,7 +55,8 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			clipboard_id_(-1),
 			selected_(),
 			information_(),
-			context_menu_(),
+			context_menu_(this),
+			model_menu_(this),
 			context_composite_(0),
 			transformation_dialog_(0)
 {
@@ -71,6 +72,26 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 	// mark the complete selection as invalid
 	// it is then re-determined by getSelection()
 	connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
+
+	Position p = 0;
+	for (Position pos = MODEL_LINES; pos < MODEL_LABEL; pos++)
+	{
+		model_menu_.insertItem(getModelName((ModelType)pos).c_str(), &color_menu_[p], 1000+pos); 
+		p++;
+	}
+
+	// create a new coloring popupmenu for every model entry
+	// otherwise we get into trouble with qt
+	for (Position i = 0; i< p; i++)
+	{
+		for (Position pos = COLORING_ELEMENT; pos < COLORING_UNKNOWN; pos++)
+		{
+			color_menu_[i].insertItem(getColoringName((ColoringMethod)pos).c_str(), this, 
+																						 SLOT(createRepresentation_()), 0,2000 + pos);  
+		}
+	}
+
+	connect(&model_menu_, SIGNAL(highlighted(int)), this, SLOT(activatedItem_(int)));
 }
 
 MolecularControl::~MolecularControl()
@@ -153,16 +174,25 @@ bool MolecularControl::reactToMessages_(Message* message)
 	return false;
 }
 
+void MolecularControl::activatedItem_(int pos)
+{
+	if (pos >= 1000 && pos < 2000)
+	{
+		selected_model_ = pos -1000;
+	}
+}
 
 void MolecularControl::buildContextMenu(Composite& composite)
 	throw()
 {
-	context_menu_.insertItem("Create Representation", this, SLOT(createRepresentation()), CREATE_REPRESENTATION);
+	context_menu_.insertItem("Create Representation...", this, 
+			SLOT(createRepresentation()), CREATE_REPRESENTATION_MODE);
+	context_menu_.insertItem("Create Representation", &model_menu_, CREATE_REPRESENTATION);
 	context_menu_.insertSeparator();
 
-	context_menu_.insertItem("Cut", this, SLOT(cut()), OBJECT__CUT);
-	context_menu_.insertItem("Copy", this, SLOT(copy()), OBJECT__COPY);
-	context_menu_.insertItem("Paste", this, SLOT(paste()), OBJECT__PASTE);
+	context_menu_.insertItem("Cut", this, SLOT(cut()), 0, OBJECT__CUT);
+	context_menu_.insertItem("Copy", this, SLOT(copy()), 0, OBJECT__COPY);
+	context_menu_.insertItem("Paste", this, SLOT(paste()), 0, OBJECT__PASTE);
 
 	context_menu_.insertItem("Move", this, SLOT(move()), OBJECT__MOVE);
 
@@ -172,8 +202,8 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.setItemEnabled(OBJECT__MOVE, composites_muteable);
 	context_menu_.insertSeparator();
 
-	context_menu_.insertItem("Select", this, SLOT(select()), SELECT);
-	context_menu_.insertItem("Deselect", this, SLOT(deselect()), DESELECT);
+	context_menu_.insertItem("Select", this, SLOT(select()), 0, SELECT);
+	context_menu_.insertItem("Deselect", this, SLOT(deselect()), 0, DESELECT);
 	context_menu_.setItemEnabled(SELECT,   !composite.isSelected() && composites_muteable);
 	context_menu_.setItemEnabled(DESELECT,  composite.isSelected() && composites_muteable);
 
@@ -181,7 +211,7 @@ void MolecularControl::buildContextMenu(Composite& composite)
 
 	if (RTTI::isKindOf<AtomContainer>(composite))
 	{
-		context_menu_.insertItem("Check residue", this, SLOT(checkResidue()), RESIDUE__CHECK);
+		context_menu_.insertItem("Check residue", this, SLOT(checkResidue()), 0, RESIDUE__CHECK);
 
 		bool system_selected = true;
 		List<Composite*>::Iterator it = selected_.begin();	
@@ -193,21 +223,21 @@ void MolecularControl::buildContextMenu(Composite& composite)
 
 		context_menu_.setItemEnabled(OBJECT__COPY, system_selected);
 
-		context_menu_.insertItem("Build Bonds", this, SLOT(buildBonds()), BONDS__BUILD);
+		context_menu_.insertItem("Build Bonds", this, SLOT(buildBonds()), 0, BONDS__BUILD);
 		context_menu_.setItemEnabled(BONDS__BUILD, composites_muteable);
 	}
 
-	context_menu_.insertItem("Focus camera", this, SLOT(centerCamera()), CAMERA__CENTER);
+	context_menu_.insertItem("Focus camera", this, SLOT(centerCamera()), 0, CAMERA__CENTER);
 
 	if (RTTI::isKindOf<Atom>(composite))
 	{
-		context_menu_.insertItem("Properties", this, SLOT(atomProperties()), ATOM__PROPERTIES);
+		context_menu_.insertItem("Properties", this, SLOT(atomProperties()), 0, ATOM__PROPERTIES);
 	}
 
 	context_menu_.insertSeparator();
-	context_menu_.insertItem("Show filename", this, SLOT(showFilename()), SHOW__FILENAME);
+	context_menu_.insertItem("Show filename", this, SLOT(showFilename()), 0, SHOW__FILENAME);
 	context_menu_.insertSeparator();
-	context_menu_.insertItem("Collapse all", this, SLOT(collapseAll()), COLLAPSE_ALL);
+	context_menu_.insertItem("Collapse all", this, SLOT(collapseAll()), 0, COLLAPSE_ALL);
 }
 
 
@@ -866,6 +896,13 @@ void MolecularControl::collapseAll()
 	{
 		(*it)->setOpen(false);
 	}
+}
+
+void MolecularControl::createRepresentation_()
+{
+	CreateRepresentationMessage* crm = new CreateRepresentationMessage(selected_, 
+			selected_model_, selected_coloring_method_);
+	notify_(crm);
 }
 
 } } // namespaces
