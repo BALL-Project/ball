@@ -1,13 +1,16 @@
-// $Id: Peptides_test.C,v 1.1.2.1 2002/05/14 23:28:15 oliver Exp $
+// $Id: Peptides_test.C,v 1.1.2.2 2002/05/15 23:42:14 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/STRUCTURE/peptides.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/protein.h>
+#include <BALL/FORMAT/HINFile.h>
 
 ///////////////////////////
 
-START_TEST(Peptides, "$Id: Peptides_test.C,v 1.1.2.1 2002/05/14 23:28:15 oliver Exp $")
+START_TEST(Peptides, "$Id: Peptides_test.C,v 1.1.2.2 2002/05/15 23:42:14 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -73,15 +76,40 @@ CHECK(ThreeLetterCode(char aa))
 RESULT
 
 CHECK(ThreeLetterToOneLetter(const ThreeLetterAASequence& sequence))
-	// ???
+	ThreeLetterAASequence seq;
+	seq.push_back("UNK");
+	seq.push_back("ala");
+	seq.push_back("ser");
+	seq.push_back("GLY");
+	TEST_EQUAL(ThreeLetterToOneLetter(seq), "?ASG")
+	seq.clear();
+	TEST_EQUAL(ThreeLetterToOneLetter(seq), "");
 RESULT
 
 CHECK(OneLetterToThreeLetter(const OneLetterAASequence& sequence))
-	// ???
+	OneLetterAASequence s("");
+	ThreeLetterAASequence seq = OneLetterToThreeLetter("");
+	TEST_EQUAL(seq.size(), 0)
+	seq = OneLetterToThreeLetter("AGZ?");
+	TEST_EQUAL(seq.size(), 4)
+	ABORT_IF(seq.size() != 4)
+	ThreeLetterAASequence::iterator it = seq.begin();
+	TEST_EQUAL(*it, "ALA")
+	it++;
+	TEST_EQUAL(*it, "GLY")
+	it++;
+	TEST_EQUAL(*it, "UNK")
+	it++;
+	TEST_EQUAL(*it, "UNK")
 RESULT
 
 CHECK(GetSequence(const Protein& protein))
-	// ???
+	HINFile f("data/AlaGlySer.hin");
+	System S;
+	f >> S;
+	TEST_EQUAL(S.countResidues(), 3)
+	OneLetterAASequence seq = GetSequence(*S.beginProtein());
+	TEST_EQUAL(seq, "AGS")
 RESULT
 
 /////////////////////////////////////////////////////////////
