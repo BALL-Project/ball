@@ -21,8 +21,9 @@ extern void ExpressionParsererror(char* s);
 	ExpressionParser::SyntaxTree* node;
 }
 
-%token	<text>		TK_AND
-%token	<text>		TK_OR
+%left 	<text>		TK_OR
+%left 	<text>		TK_AND
+%left							TK_NOT
 %token	<text>		TK_ARGS
 %token	<text>		TK_PREDICATE_NAME
 
@@ -44,7 +45,7 @@ expression:
 		predicate { 
 			$$ = $1;
 		}
-	|	'!' expression {
+	|	TK_NOT expression {
 			$$ = $2;
 			$2->negate = true;
 		}

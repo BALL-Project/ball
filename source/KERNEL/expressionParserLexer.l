@@ -1,4 +1,5 @@
 %{
+// $Id: expressionParserLexer.l,v 1.2 2002/01/27 05:08:59 oliver Exp $
 #include <BALL/KERNEL/expressionParser.h>
 
 using namespace BALL;
@@ -12,6 +13,11 @@ using namespace BALL;
 %option noyywrap
 
 %%
+
+NOT|! {
+						ExpressionParser::state.current_parser->state.char_count += strlen(yytext);						
+						return TK_NOT;
+}
 
 AND|\&\& {
 						ExpressionParser::state.current_parser->state.char_count += strlen(yytext);						
