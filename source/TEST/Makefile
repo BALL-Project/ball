@@ -73,7 +73,6 @@ EXECUTABLES = \
 	PiecewiseFunction_test\
 	PiecewisePolynomial_test\
 	Plane3_test\
-	PointGrid_test\
 	PoissonBoltzmann_test\
 	PropertyManager_test\
 	Protein_test\
@@ -85,6 +84,7 @@ EXECUTABLES = \
 	RDFParameter_test\
 	RDFSection_test\
 	RegularData1D_test\
+	RegularData3D_test\
 	RegularExpression_test\
 	Residue_test\
 	ResourceFile_test\
