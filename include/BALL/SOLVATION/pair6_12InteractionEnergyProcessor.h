@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.4 2000/10/17 17:14:35 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.5 2000/11/06 17:56:55 anker Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -108,14 +108,6 @@ namespace BALL
 			 */
 			static const char* SOLVENT_NUMBER_DENSITY;
 
-			/** The rule file containing the atomic radii.
-				This option determines the file containing the rules defining atomic
-				radii.
-				@see Default::RADIUS_RULE_FILE
-				@param radius_rule_file char*
-			 */
-			static const char* RADIUS_RULE_FILE;
-			
 			/** The type of surface to be used.
 				@see Default::SURFACE_TYPE
 				@param surface_type int the type of the surface
@@ -156,13 +148,6 @@ namespace BALL
 				@see Option::SOLVENT_NUMBER_DENSITY;
 			 */
 			static const float SOLVENT_NUMBER_DENSITY;
-
-			/** The standard radius rule file.
-				This is the name of the standard rule file for interaction energy
-				calculation ("radius.rul")
-				@see Option::RADIUS_RULE_FILE;
-			 */
-			static const char* RADIUS_RULE_FILE;
 
 			/** 
 				@see Option::SURFACE_TYPE
