@@ -1,11 +1,11 @@
-// $Id: residueTorsions.h,v 1.2 2000/02/10 15:05:29 oliver Exp $
+// $Id: residueTorsions.h,v 1.3 2000/02/14 09:38:00 oliver Exp $
 // Molecular Mechanics Parameter: class describing the ResidueTorsions section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
 #define BALL_MOLMEC_PARAMETER_RESIDUETORSIONS_H
 
-#ifndef BALL_MOLMEC_PARAMETER_FFPARAMETERSECTION_H
-#	include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include <BALL/FORMAT/ParameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -27,8 +27,8 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/residueTorsions.h}
 			\\
 	*/
-	class FFPSResidueTorsions 
-		:	public FFParameterSection
+	class ResidueTorsions 
+		:	public ParameterSection
 	{
 		public:
 
@@ -72,11 +72,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		FFPSResidueTorsions();
+		ResidueTorsions();
 
 		/**	Destructor.
 		*/
-		virtual ~FFPSResidueTorsions();
+		virtual ~ResidueTorsions();
 
 		/**	Destroy method.
 		*/

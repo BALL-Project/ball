@@ -1,5 +1,6 @@
-// $Id: charmmEEF1.h,v 1.3 2000/02/06 19:49:03 oliver Exp $
-// Molecular Mechanics Parameter: class describing the atom type section of a parameter file
+// $Id: charmmEEF1.h,v 1.4 2000/02/14 09:37:58 oliver Exp $
+// Molecular Mechanics Parameter: class describing parameters needed 
+// for the EEF1 solvation component in the CHARMM force field
  
 #ifndef BALL_MOLMEC_PARAMETER_CHARMMEEF1_H
 #define BALL_MOLMEC_PARAMETER_CHARMMEEF1_H
@@ -19,8 +20,8 @@ namespace BALL
 			This class reads and administers a aparameter set of solvation
 			parameters for the CHARMm/EEF1 force field (Lazaridis, Karplus, ???).
 	*/
-	class FFPSCharmmEEF1 
-		:	public FFParameterSection
+	class CharmmEEF1 
+		:	public ParameterSection
 	{
 		public:
 
@@ -48,11 +49,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		FFPSCharmmEEF1();
+		CharmmEEF1();
 
 		/**	Destructor.
 		*/
-		virtual ~FFPSCharmmEEF1();
+		virtual ~CharmmEEF1();
 
 		/**	Destroy method.
 		*/
@@ -71,13 +72,13 @@ namespace BALL
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		FFPSCharmmEEF1::Values getParameters(Atom::Type I) const;
+		CharmmEEF1::Values getParameters(Atom::Type I) const;
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
-		bool assignParameters(FFPSCharmmEEF1::Values& parameters, Atom::Type I) const;
+		bool assignParameters(CharmmEEF1::Values& parameters, Atom::Type I) const;
 
 
 		protected:

@@ -1,8 +1,11 @@
-// $Id: templates.h,v 1.1 1999/09/21 06:48:51 oliver Exp $
+// $Id: templates.h,v 1.2 2000/02/14 09:38:00 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
-#ifndef BALL_MOLMEC_PARAMETER_TEMPLATES_H
-#	include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
+#ifndef BALL_FORMAT_TEMPLATES_H
+#define BALL_FORMAT_TEMPLATES_H
+
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include <BALL/FORMAT/ParameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_TEMPLATES_H
@@ -15,8 +18,8 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/templates.h}
 			\\
 	*/
-	class FFPSTemplates 
-		:	public FFParameterSection
+	class Templates 
+		:	public ParameterSection
 	{
 		public:
 
@@ -26,15 +29,15 @@ namespace BALL
 		
 		/**	Default constructor.
 		*/
-		FFPSTemplates();
+		Templates();
 
 		/**	Copy constructor.
 		*/
-		FFPSTemplates(const FFPSTemplates& templates, bool deep = true);
+		Templates(const Templates& templates, bool deep = true);
 
 		/**	Destructor.
 		*/
-		virtual ~FFPSTemplates();
+		virtual ~Templates();
 
 		/**	Destroy method.
 		*/
@@ -89,7 +92,7 @@ namespace BALL
 				residue template object.
 				@param	templates the residue template object to be copied
 		*/
-		FFPSTemplates& operator = (const FFPSTemplates& templates);
+		Templates& operator = (const Templates& templates);
 		//@}
 
 

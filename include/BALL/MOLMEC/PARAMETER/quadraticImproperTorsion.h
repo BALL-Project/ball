@@ -1,11 +1,12 @@
-// $Id: quadraticImproperTorsion.h,v 1.1 2000/02/06 20:00:10 oliver Exp $
-// Molecular Mechanics Parameter: class describing the atom type section of a parameter file
+// $Id: quadraticImproperTorsion.h,v 1.2 2000/02/14 09:37:59 oliver Exp $
+// Molecular Mechanics Parameter: class describing the parameters required to
+// describe a harmonic improper torsion (out-of-plane) potential
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICIMPROPERTORSION_H
 #define BALL_MOLMEC_PARAMETER_QUADRATICIMPROPERTORSION_H
 
-#ifndef BALL_MOLMEC_PARAMETER_FFPARAMETERSECTION_H
-#	include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include <BALL/FORAMT/ParameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -15,8 +16,10 @@
 namespace BALL 
 {
 		
-	class FFPSQuadraticImproperTorsion 
-		:	public FFParameterSection
+	/**
+	*/
+	class QuadraticImproperTorsion 
+		:	public ParameterSection
 	{
 		public:
 
@@ -43,11 +46,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		FFPSQuadraticImproperTorsion();
+		QuadraticImproperTorsion();
 
 		/**	Destructor.
 		*/
-		virtual ~FFPSQuadraticImproperTorsion();
+		virtual ~QuadraticImproperTorsion();
 
 		/**	Destroy method.
 		*/
@@ -66,13 +69,13 @@ namespace BALL
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		FFPSQuadraticImproperTorsion::Values getParameters(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
+		QuadraticImproperTorsion::Values getParameters(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
-		bool assignParameters(FFPSQuadraticImproperTorsion::Values& parameters, Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
+		bool assignParameters(QuadraticImproperTorsion::Values& parameters, Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
 
 		protected:
 

@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.h,v 1.4 2000/02/14 09:18:35 oliver Exp $
+// $Id: forceFieldParameters.h,v 1.5 2000/02/14 09:37:58 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -54,7 +54,7 @@ namespace BALL
 
 		/**	Return a reference to the atom type parameter section
 		*/
-		FFPSAtomTypes&	getAtomTypes();
+		AtomTypes&	getAtomTypes();
 
 		/**	Read the contents of the INI file and interpret them.
 		*/
@@ -81,7 +81,7 @@ namespace BALL
 
 		/*_	the atom types section
 		*/
-		FFPSAtomTypes	atom_types_;
+		AtomTypes	atom_types_;
 		//_@} 
 	};
 

@@ -1,11 +1,12 @@
-// $Id: potential1210.h,v 1.3 2000/01/10 15:51:05 oliver Exp $
-// Molecular Mechanics Parameter: class describing the atom type section of a parameter file
+// $Id: potential1210.h,v 1.4 2000/02/14 09:37:59 oliver Exp $
+// Molecular Mechanics Parameter: class describing the parameters required
+// for a 12-10 (hydrogen bond) potential
  
 #ifndef BALL_MOLMEC_PARAMETER_POTENTIAL1210_H
 #define BALL_MOLMEC_PARAMETER_POTENTIAL1210_H
 
-#ifndef BALL_MOLMEC_PARAMETER_FFPARAMETERSECTION_H
-#	include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include <BALL/FORMAT/ParameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -15,8 +16,10 @@
 namespace BALL 
 {
 		
-	class FFPSPotential1210 
-		:	public FFParameterSection
+	/**	
+	*/
+	class Potential1210 
+		:	public ParameterSection
 	{
 		public:
 
@@ -41,11 +44,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		FFPSPotential1210();
+		Potential1210();
 
 		/**	Destructor.
 		*/
-		virtual ~FFPSPotential1210();
+		virtual ~Potential1210();
 
 		/**	Destroy method.
 		*/
@@ -64,7 +67,7 @@ namespace BALL
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		FFPSPotential1210::Values getParameters
+		Potential1210::Values getParameters
 			(Atom::Type I, Atom::Type J) const;
 		
 		/**	Assign the parameters for a given atom type combination.
@@ -72,7 +75,7 @@ namespace BALL
 				returned and nothing is changed.
 		*/
 		bool assignParameters
-			(FFPSPotential1210::Values& parameters, 
+			(Potential1210::Values& parameters, 
 			 Atom::Type I, Atom::Type J) const;
 
 		protected:

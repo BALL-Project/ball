@@ -1,11 +1,12 @@
-// $Id: quadraticAngleBend.h,v 1.3 2000/01/10 15:51:06 oliver Exp $
-// Molecular Mechanics Parameter: class describing the atom type section of a parameter file
+// $Id: quadraticAngleBend.h,v 1.4 2000/02/14 09:37:59 oliver Exp $
+// Molecular Mechanics Parameter: class describing the parameters required to
+// implement a harmonic potential describing angles
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
 #define BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
 
-#ifndef BALL_MOLMEC_PARAMETER_FFPARAMETERSECTION_H
-#	include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include <BALL/FORMAT/ParameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -15,8 +16,10 @@
 namespace BALL 
 {
 		
-	class FFPSQuadraticAngleBend 
-		:	public FFParameterSection
+	/**
+	*/
+	class QuadraticAngleBend 
+		:	public ParameterSection
 	{
 		public:
 
@@ -42,11 +45,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		FFPSQuadraticAngleBend();
+		QuadraticAngleBend();
 
 		/**	Destructor.
 		*/
-		virtual ~FFPSQuadraticAngleBend();
+		virtual ~QuadraticAngleBend();
 
 		/**	Destroy method.
 		*/
@@ -65,7 +68,7 @@ namespace BALL
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		FFPSQuadraticAngleBend::Values getParameters
+		QuadraticAngleBend::Values getParameters
 			(Atom::Type I, Atom::Type J, Atom::Type K) const;
 		
 		/**	Assign the parameters for a given atom type combination.
@@ -73,7 +76,7 @@ namespace BALL
 				returned and nothing is changed.
 		*/
 		bool assignParameters
-			(FFPSQuadraticAngleBend::Values& parameters, 
+			(QuadraticAngleBend::Values& parameters, 
 			 Atom::Type I, Atom::Type J, Atom::Type K) const;
 
 		protected:

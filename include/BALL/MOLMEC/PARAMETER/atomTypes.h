@@ -1,25 +1,25 @@
-// $Id: atomTypes.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: atomTypes.h,v 1.2 2000/02/14 09:37:57 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
-
-#ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
-#	include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
-#endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
 #define BALL_MOLMEC_PARAMETER_ATOMTYPES_H
 
-namespace BALL 
-{
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include <BALL/FORMAT/parameterSection.h>
+#endif
 
 #define	BALL_ATOM_WILDCARD_NAME "*"
 #define	BALL_ATOM_UNKNOWN_NAME "?"
+
+namespace BALL 
+{
 	
 	/**	Force Field Atom Type Class.	
 			{\bf Definition:} \URL{BALL/MOLMEC/PARAMETER/atomTypes.h}
 			\\
 	*/
-	class FFPSAtomTypes 
-		:	public FFParameterSection
+	class AtomTypesSection
+		:	public ParameterSection
 	{
 		public:
 
@@ -29,15 +29,15 @@ namespace BALL
 		
 		/**	Default constructor.
 		*/
-		FFPSAtomTypes();
+		AtomTypesSection();
 
 		/**	Copy constructor.
 		*/
-		FFPSAtomTypes(const FFPSAtomTypes& atom_types, bool deep = true);
+		AtomTypesSection(const AtomTypesSection& atom_types, bool deep = true);
 
 		/**	Destructor.
 		*/
-		virtual ~FFPSAtomTypes();
+		virtual ~AtomTypesSection();
 
 		/**	Destroy method.
 		*/
@@ -82,7 +82,7 @@ namespace BALL
 				atom types object.
 				@param	atom_types the atom types object to be copied
 		*/
-		FFPSAtomTypes& operator = (const FFPSAtomTypes& atom_types);
+		AtomTypesSection& operator = (const AtomTypesSection& atom_types);
 		//@}
 		protected:
 		

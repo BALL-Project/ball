@@ -1,11 +1,12 @@
-// $Id: cosineTorsion.h,v 1.3 2000/01/10 15:51:05 oliver Exp $
-// Molecular Mechanics Parameter: class describing the atom type section of a parameter file
+// $Id: cosineTorsion.h,v 1.4 2000/02/14 09:37:58 oliver Exp $
+// Molecular Mechanics Parameter: class describing the parameter
+// section required for torsions using a cosine type potential function
  
 #ifndef BALL_MOLMEC_PARAMETER_COSINETORSION_H
 #define BALL_MOLMEC_PARAMETER_COSINETORSION_H
 
-#ifndef BALL_MOLMEC_PARAMETER_FFPARAMETERSECTION_H
-#	include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include <BALL/FORMAT/ParameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -15,7 +16,9 @@
 namespace BALL 
 {
 		
-	class FFPSCosineTorsion 
+	/**
+	*/
+	class CosineTorsion 
 		:	public FFParameterSection
 	{
 		public:
@@ -117,18 +120,25 @@ namespace BALL
 			SingleValues	values;
 		};
 
+		/**	@name	Constructors and Destructors
+		*/	
+		//@{
 		/**	Default constructor.
 		*/
-		FFPSCosineTorsion();
+		CosineTorsion();
 
 		/**	Destructor.
 		*/
-		virtual ~FFPSCosineTorsion();
+		virtual ~CosineTorsion();
 
 		/**	Destroy method.
 		*/
 		virtual void destroy();
+		//@}
 		
+		/**	@name	 Accessors
+		*/
+		//@{
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section\_name from ini\_file,
 				interprets (if given) a format line, reads the data from this section according to 
@@ -142,13 +152,14 @@ namespace BALL
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		FFPSCosineTorsion::Values getParameters(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
+		CosineTorsion::Values getParameters(Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
-		bool assignParameters(FFPSCosineTorsion::Values& parameters, Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
+		bool assignParameters(CosineTorsion::Values& parameters, Atom::Type I, Atom::Type J, Atom::Type K, Atom::Type L) const;
+		//@}
 
 		protected:
 
@@ -161,4 +172,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_MOLMEC_PARAMETER_TORSION_H
+#endif // BALL_MOLMEC_PARAMETER_COSINETORSION_H

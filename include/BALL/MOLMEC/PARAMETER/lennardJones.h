@@ -1,11 +1,11 @@
-// $Id: lennardJones.h,v 1.4 2000/02/10 15:05:14 oliver Exp $
+// $Id: lennardJones.h,v 1.5 2000/02/14 09:37:58 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
 #define BALL_MOLMEC_PARAMETER_LENNARDJONES_H
 
-#ifndef BALL_MOLMEC_PARAMETER_FFPARAMETERSECTION_H
-#	include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
+#ifndef BALL_FORMAT_PARAMETERSECTION_H
+#	include <BALL/FORAMT/parameterSection.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -32,8 +32,8 @@ namespace BALL
 				A_{ij} & = & \frac{1}2{} B_{ij} (R_i + R_j)^6
 			\end{*eqnarray}
 	*/
-	class FFPSLennardJones 
-		:	public FFParameterSection
+	class LennardJones 
+		:	public ParameterSection
 	{
 		public:
 
@@ -75,11 +75,11 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		FFPSLennardJones();
+		LennardJones();
 
 		/**	Destructor.
 		*/
-		virtual ~FFPSLennardJones();
+		virtual ~LennardJones();
 
 		/**	Destroy method.
 		*/
@@ -99,13 +99,13 @@ namespace BALL
 		
 		/**	Returns the parameters for a given atom type combination.
 		*/
-		FFPSLennardJones::Values getParameters(Atom::Type I, Atom::Type J) const;
+		LennardJones::Values getParameters(Atom::Type I, Atom::Type J) const;
 		
 		/**	Assign the parameters for a given atom type combination.
 				If no parameters are defined for this combination, false is
 				returned and nothing is changed.
 		*/
-		bool assignParameters(FFPSLennardJones::Values& parameters, Atom::Type I, Atom::Type J) const;
+		bool assignParameters(LennardJones::Values& parameters, Atom::Type I, Atom::Type J) const;
 
 
 		protected:
