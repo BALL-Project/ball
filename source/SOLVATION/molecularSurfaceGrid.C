@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.20 2004/02/23 19:51:27 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.21 2004/02/24 11:34:57 oliver Exp $
 //
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
@@ -253,7 +253,7 @@ namespace BALL
 
 							for (sphere_pointer = fast_sphere_relative; sphere_pointer <= fast_sphere_end; sphere_pointer++)
 							{
-								grid_pointer += reinterpret_cast<BALL_POINTERSIZEINT_TYPE>(*sphere_pointer);
+								grid_pointer += static_cast<BALL_POINTERSIZEINT_TYPE>(*sphere_pointer);
 								if ((grid_pointer <= grid_end) && (grid_pointer >= grid_begin))
 								{
 									*((char*)grid_pointer) |= CCONN__INSIDE_PROBE;
