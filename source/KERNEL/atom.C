@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.16 2000/04/16 19:46:46 amoll Exp $
+// $Id: atom.C,v 1.17 2000/04/17 15:22:08 amoll Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -242,6 +242,16 @@ namespace BALL
 	void Atom::setName(const String &name)
 	{
 		name_ = name;
+	}
+
+	String *Atom::getName()
+	{
+		return name_;
+	}
+
+	const String *Atom::getName() const
+	{
+		return name_;
 	}
 
 	String Atom::getFullName(Atom::FullNameType type) const

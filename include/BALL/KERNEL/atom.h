@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.15 2000/04/17 14:31:24 amoll Exp $
+// $Id: atom.h,v 1.16 2000/04/17 15:21:53 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -83,8 +83,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.15 $
-			@date    $Date: 2000/04/17 14:31:24 $
+			@version $Revision: 1.16 $
+			@date    $Date: 2000/04/17 15:21:53 $
 	*/
 	class Atom
 		: public Composite,
@@ -442,6 +442,14 @@ namespace BALL
 					@see         Atom::getName
 			*/
 			void setName(const String& name);
+
+			/** Mutable inspection of the atom's name.
+			Access a mutable reference to the name of {\em *this} atom.
+			@return  String& - mutable reference to the name of {\em *this} atom
+			@see     Atom::setName
+			*/
+			String& getName();
+
 
 			/** Constant inspection of the atom's name.
 					Access a constant reference to the name of {\em *this} atom.

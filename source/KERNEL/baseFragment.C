@@ -1,4 +1,4 @@
-// $Id: baseFragment.C,v 1.6 2000/04/17 13:46:04 amoll Exp $
+// $Id: baseFragment.C,v 1.7 2000/04/17 15:22:13 amoll Exp $
 
 #include <BALL/KERNEL/baseFragment.h>
 
@@ -120,6 +120,11 @@ namespace BALL
 	void BaseFragment::setName(const String& name)
 	{
 		name_ = name;
+	}
+
+	String& BaseFragment::getName()
+  {
+	  return name_;
 	}
 
 	const String& BaseFragment::getName() const
