@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.12 2000/08/24 12:00:00 amoll Exp $
+// $Id: property.h,v 1.13 2000/08/28 15:53:10 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -33,6 +33,12 @@ namespace BALL
 		:	public PersistentObject
 	{
 		public:
+
+		BALL_CREATE_NODEEP(NamedProperty)
+
+		/**	@name Enums
+		*/
+		//@{
 		/**	The different types of data a NamedProperty may contain.
 				
 		*/
@@ -76,12 +82,11 @@ namespace BALL
 			*/
 			NONE
 		};
+		//@}
 
 		/**	@name	Constructors and Destructors 
 		*/
 		//@{
-
-		BALL_CREATE_NODEEP(NamedProperty)
 
 		/*	The default constructor
 		*/
@@ -283,6 +288,9 @@ namespace BALL
 			It uses the class NamedProperty that also allows to store additional information 
 			along with the property. In this case, each property is accessed via a 
 			unique name.\\
+			
+			{\bf Interface:} Storable
+			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/property.h}
 			\\
 	*/
@@ -543,7 +551,7 @@ namespace BALL
 		//@}
 
 
-		/**	@name Storable Model
+		/**	@name Storable Interface
 		*/
 		//@{
 		

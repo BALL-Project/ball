@@ -1,4 +1,4 @@
-// $Id: selectable.h,v 1.5 2000/02/17 00:30:38 oliver Exp $
+// $Id: selectable.h,v 1.6 2000/08/28 15:53:58 oliver Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -21,8 +21,12 @@ namespace BALL
 			It is used in the BALL kernel to mark parts of the kernel
 			objects for special operations. In principle, Selectable
 			provides a boolean flag and defines an interface to access
-			this flag.
+			this flag.\\
+
+			{\bf Interface:} Storable
+			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/selectable.h}
+			\\
 	*/
 	class Selectable
 	{
@@ -129,7 +133,7 @@ namespace BALL
 		//@}
 
 
-		/**	@name Storable Model
+		/**	@name Storable interface.
 		*/
 		//@{
 
