@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.7 2005/03/17 13:39:32 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.8 2005/03/17 14:03:02 haid Exp $
 //
 
 #include "dockDialog.h"
 #include "geometricFitDialog.h"
-#include "dockingProgressDialog.h"
+#include "dockProgressDialog.h"
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -304,7 +304,7 @@ namespace BALL
 			}
 			
 			
-			DockingProgressDialog progress;
+			DockProgressDialog progress;
 			QString s = "Docking partner 1: ";
 			progress.options->append(s.append(docking_partner1_->getName()));
 			s = "Docking partner 2: ";
@@ -329,8 +329,9 @@ namespace BALL
 			Log.error() << "finished docking" << std::endl;
 			
 			ConformationSet rc = geo_fit.getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
-	 		
-			System* docked_system = new System(rc.getSystem());
+			
+	 		System* docked_system = new System(rc.getSystem());
+
 			getMainControl()->insert(*docked_system, "Docked System");
 			
 			result_dialog_->exec();
@@ -359,7 +360,6 @@ namespace BALL
 					dialog->setOptions(options_);
 					break;
 			}
-			
 			
 			Options::Iterator it = options_.begin();
 			for(; +it; ++it)

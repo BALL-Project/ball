@@ -2,8 +2,8 @@
 // vi: set ts=2:
 //
 
-#ifndef BALL_VIEW_DIALOGS_DOCKINGPROGRESSDIALOG_H
-#define BALL_VIEW_DIALOGS_DOCKINGPROGRESSDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_DOCKPROGRESSDIALOG_H
+#define BALL_VIEW_DIALOGS_DOCKPROGRESSDIALOG_H
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -13,28 +13,28 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
-#include "dockingProgressDialogData.h"
+#include "dockProgressDialogData.h"
 
 namespace BALL
 {
 	namespace VIEW
 	{
-		class BALL_EXPORT DockingProgressDialog : 
-				public DockingProgressDialogData,
+		class BALL_EXPORT DockProgressDialog : 
+				public DockProgressDialogData,
 				public ModularWidget,
 				public PreferencesEntry
 		{ 
 				Q_OBJECT
-				BALL_EMBEDDABLE(DockingProgressDialog,ModularWidget)
+				BALL_EMBEDDABLE(DockProgressDialog,ModularWidget)
 				
 				public:
 				
 					//Constructor
-					DockingProgressDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
+					DockProgressDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0)
 						throw();
 						
 					//Destructor	
-					~DockingProgressDialog()
+					~DockProgressDialog()
 						throw();
 				
 				public slots:

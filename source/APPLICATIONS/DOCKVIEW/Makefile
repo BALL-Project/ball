@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.8.2.3 2005/03/17 13:39:32 leonhardt Exp $
+# $Id: Makefile,v 1.1.2.8.2.4 2005/03/17 14:03:02 haid Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -20,11 +20,11 @@ CPP_SOURCES=\
 	aboutDialog.C\
 	dockDialog.C\
 	geometricFitDialog.C\
-	dockingProgressDialog.C\
+	dockProgressDialog.C\
 	dockResultDialog.C\
 	dockDialogData.C\
 	geometricFitDialogData.C\
-	dockingProgressDialogData.C\
+	dockProgressDialogData.C\
 	dockResultDialogData.C\
 	icons.C\
 	main.C\
@@ -36,8 +36,8 @@ MOC_SOURCES=\
 	dockDialogData_moc.C\
 	geometricFitDialog_moc.C\
 	geometricFitDialogData_moc.C\
-	dockingProgressDialog_moc.C\
-	dockingProgressDialogData_moc.C\
+	dockProgressDialog_moc.C\
+	dockProgressDialogData_moc.C\
 	dockResultDialog_moc.C\
 	dockResultDialogData_moc.C\
 	mainframe_moc.C
@@ -49,8 +49,8 @@ UIC_FILES=\
 	dockDialogData.h\
 	geometricFitDialogData.C\
 	geometricFitDialogData.h\
-	dockingProgressDialogData.C\
-	dockingProgressDialogData.h\
+	dockProgressDialogData.C\
+	dockProgressDialogData.h\
 	dockResultDialogData.h\
 	dockResultDialogData.C
 
@@ -69,8 +69,8 @@ dockDialogData.h: dockDialog.ui
 geometricFitDialogData.h: geometricFitDialog.ui
 	$(UIC) geometricFitDialog.ui > geometricFitDialogData.h
 	
-dockingProgressDialogData.h: dockingProgressDialog.ui
-	$(UIC) dockingProgressDialog.ui > dockingProgressDialogData.h
+dockProgressDialogData.h: dockProgressDialog.ui
+	$(UIC) dockProgressDialog.ui > dockProgressDialogData.h
 	
 dockResultDialogData.h: dockResultDialog.ui
 	$(UIC) dockResultDialog.ui > dockResultDialogData.h	
@@ -94,11 +94,11 @@ geometricFitDialog_moc.C: geometricFitDialog.h
 geometricFitDialogData_moc.C: geometricFitDialogData.h
 	$(MOC) geometricFitDialogData.h -o $@
 	
-dockingProgressDialog_moc.C: dockingProgressDialog.h
-	$(MOC) dockingProgressDialog.h -o $@
+dockProgressDialog_moc.C: dockProgressDialog.h
+	$(MOC) dockProgressDialog.h -o $@
 	
-dockingProgressDialogData_moc.C: dockingProgressDialogData.h
-	$(MOC) dockingProgressDialogData.h -o $@
+dockProgressDialogData_moc.C: dockProgressDialogData.h
+	$(MOC) dockProgressDialogData.h -o $@
 	
 dockResultDialog_moc.C: dockResultDialog.h
 	$(MOC) dockResultDialog.h -o $@
@@ -116,8 +116,8 @@ dockDialogData.C: dockDialogData.h
 geometricFitDialogData.C: geometricFitDialogData.h
 	$(UIC) -impl geometricFitDialogData.h geometricFitDialog.ui > geometricFitDialogData.C
 	
-dockingProgressDialogData.C: dockingProgressDialogData.h
-	$(UIC) -impl dockingProgressDialogData.h dockingProgressDialog.ui > dockingProgressDialogData.C
+dockProgressDialogData.C: dockProgressDialogData.h
+	$(UIC) -impl dockProgressDialogData.h dockProgressDialog.ui > dockProgressDialogData.C
 	
 dockResultDialogData.C: dockResultDialogData.h
 	$(UIC) -impl dockResultDialogData.h dockResultDialog.ui > dockResultDialogData.C
