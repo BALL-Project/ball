@@ -110,11 +110,15 @@ EXECUTABLES_MOLMEC = \
 	Gradient_test\
 	AtomVector_test\
 	MolmecSupport_test\
-	EnergyMinimizer_test\
 	SnapShot_test\
 	SnapShotManager_test\
+	ForceField_test\
 	AmberFF_test\
-	CharmmFF_test
+	CharmmFF_test\
+	EnergyMinimizer_test\
+	LineSearch_test\
+	SteepestDescentMinimizer_test\
+	ConjugateGradientMinimizer_test
 
 EXECUTABLES_NMR = \
 	AssignShiftProcessor_test\
