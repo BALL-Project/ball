@@ -1,4 +1,4 @@
-// $Id: amberStretch.C,v 1.12 2001/06/24 21:25:20 oliver Exp $
+// $Id: amberStretch.C,v 1.13 2001/06/26 02:40:33 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -52,9 +52,8 @@ namespace BALL
 			return false;
 		}
 
+		// throw away the old contents
 		stretch_.clear();
-
-		bool use_selection = getForceField()->getUseSelection();
 
 		AmberFF* amber_force_field = dynamic_cast<AmberFF*>(force_field_);
 		if ((amber_force_field == 0) || !amber_force_field->hasInitializedParameters())
@@ -69,6 +68,7 @@ namespace BALL
 		}
 
 		QuadraticBondStretch::Values values;
+		bool use_selection = getForceField()->getUseSelection();
 
 		// retrieve all stretch parameters
 		Atom::BondIterator bond_iterator;
@@ -83,7 +83,7 @@ namespace BALL
 
 					if (use_selection == false ||
 					   (use_selection == true && 
-					   (bond.getFirstAtom()->isSelected() && bond.getSecondAtom()->isSelected())))
+					   (bond.getFirstAtom()->isSelected() || bond.getSecondAtom()->isSelected())))
 					{
 						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
 						Atom::Type atom_type_B = bond.getSecondAtom()->getType();
@@ -165,11 +165,12 @@ namespace BALL
 	// calculates and adds its forces to the current forces of the force field
 	void AmberStretch::updateForces()
 	{
-
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < stretch_.size(); i++)
 		{
-			Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
+			Atom& atom1(*stretch_[i].atom1);
+			Atom& atom2(*stretch_[i].atom2);
+			Vector3 direction(atom1.getPosition() - atom2.getPosition());
 			double distance = direction.getLength(); 
 
 			if (distance != 0.0) 
@@ -178,10 +179,16 @@ namespace BALL
 				//   kJ -> J: 1e3
 				//   A  -> m: 1e10
 				//   J/mol -> J: Avogadro
-				direction *= 1e13 / Constants::AVOGADRO * 2 * stretch_[i].values.k * (distance - stretch_[i].values.r0)/distance;
+				direction *= 1e13 / Constants::AVOGADRO * 2 * stretch_[i].values.k * (distance - stretch_[i].values.r0) / distance;
 
-				stretch_[i].atom1->setForce(stretch_[i].atom1->getForce() - direction);
-				stretch_[i].atom2->setForce(stretch_[i].atom2->getForce() + direction);
+				if (atom1.isSelected()) 
+				{
+					atom1.setForce(atom1.getForce() - direction);
+				}
+				if (atom2.isSelected()) 
+				{
+					atom2.setForce(atom2.getForce() + direction);
+				}
 			}
 		}                                                                                                          
 	}
