@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.C,v 1.4 1999/12/28 17:52:38 oliver Exp $
+// $Id: quadraticAngleBend.C,v 1.5 2000/02/11 18:18:17 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
@@ -114,7 +114,7 @@ namespace BALL
 		String	fields[4];
 
 		// start with line 1: skip the format line!
-		for (i = 1; i < getNumberOfKeys(); i++)
+		for (i = 1; i <= getNumberOfKeys(); i++)
 		{
 			key = getKey(i);
 

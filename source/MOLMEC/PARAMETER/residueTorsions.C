@@ -1,4 +1,4 @@
-// $Id: residueTorsions.C,v 1.2 2000/02/10 15:16:57 oliver Exp $
+// $Id: residueTorsions.C,v 1.3 2000/02/11 18:18:17 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/residueTorsions.h>
@@ -36,7 +36,7 @@ namespace BALL
 		FFParameterSection::extractSection(parameters, section_name);
 
 		// iterate over all keys and construct the hash map of vectors
-		for (Size i = 0; i < getNumberOfKeys(); i++)
+		for (Size i = 1; i <= getNumberOfKeys(); i++)
 		{
 			String key = getKey(i);
 			String residue = key.getField(0);

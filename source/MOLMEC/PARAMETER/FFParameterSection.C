@@ -1,4 +1,4 @@
-// $Id: FFParameterSection.C,v 1.4 2000/02/11 17:58:41 oliver Exp $
+// $Id: FFParameterSection.C,v 1.5 2000/02/11 18:18:17 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
@@ -318,12 +318,12 @@ namespace BALL
 		
 	const String& FFParameterSection::getKey(Size key_index) const 
 	{
-		// define a dummy value returned, if a undefined key/variable
+		// define a dummy value returned, if an undefined key/variable
 		// pair is requested
 		static const String undefined("(undefined)");
 		
 		// check whether the entry exists
-		if (key_index > section_entries_.size())
+		if ((key_index > section_entries_.size()) || (key_index == 0))
 		{
 			return undefined;
 		}
