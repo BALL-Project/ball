@@ -1,4 +1,4 @@
-// $Id: stringHashMap.h,v 1.5 1999/12/22 17:00:09 oliver Exp $
+// $Id: stringHashMap.h,v 1.6 1999/12/28 18:36:42 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -19,7 +19,10 @@
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
-#include <BALL/DATATYPE/internal_hash_map.h>
+#ifndef BALL_DATATYPE_HASHMAP_H
+#	include <BALL/DATATYPE/hashMap.h>
+#endif
+
 #include <algorithm>
 
 namespace BALL 
@@ -27,7 +30,7 @@ namespace BALL
 
 	template <class Value>
 	class StringHashMap
-		:	public hash_map<String, Value, HashFunction<string>, std::equal_to<string> >
+		:	public HashMap<String, Value>
 	{
 		public:
 
@@ -39,15 +42,15 @@ namespace BALL
 
 		/**	Iterator type
 		*/
-		typedef typename hash_map<String, Value, HashFunction<string>, std::equal_to<string> >::iterator Iterator;
+		typedef typename HashMap<String, Value>::Iterator Iterator;
 
 		/**	Const iterator type
 		*/
-		typedef typename hash_map<String, Value, HashFunction<string>, std::equal_to<string> >::const_iterator ConstIterator;	
+		typedef typename HashMap<String, Value>::ConstIterator ConstIterator;	
 		
 		/**	Value type
 		*/
-		typedef typename hash_map<String, Value, HashFunction<string>, std::equal_to<string> >::value_type ValueType;	
+		typedef typename HashMap<String, Value>::ValueType ValueType;	
 		//@}
 
 		/**	@name	Constructors and Destructors */
@@ -57,7 +60,7 @@ namespace BALL
 				Create an empty hash map.
 		*/
 		StringHashMap()
-			: hash_map<String, Value, HashFunction<string>, std::equal_to<string> >()
+			: HashMap<String, Value>()
 		{
 		}
 
@@ -67,7 +70,7 @@ namespace BALL
 				@param	deep ignored
 		*/
 		StringHashMap(const StringHashMap& map, bool /* deep = true */)
-			: hash_map<String, Value, HashFunction<string>, std::equal_to<string> >(map)
+			: HashMap<String, Value>(map)
 		{
 		}
 			
@@ -100,7 +103,7 @@ namespace BALL
 		{
 			clear();
 
-			const_iterator it = hash_map.begin();
+			ConstIterator it = hash_map.begin();
 			for ( ; it != hash_map.end(); ++it)
 			{
 				insert(*it);
@@ -134,9 +137,9 @@ namespace BALL
 
 		/**	Insert a pair of key and value.
 		*/
-		pair<Iterator, bool> insert(const ValueType& obj)
+		std::pair<Iterator, bool> insert(const ValueType& obj)
 		{
-			return hash_map<String, Value, HashFunction<string>, std::equal_to<string> >::insert(obj);
+			return HashMap<String, Value>::insert(obj);
 		}
 		
 
@@ -144,9 +147,9 @@ namespace BALL
 				@param	value the value to be inserted
 				@param	key the value`s key
 		*/
-		pair<Iterator, bool> insert(const String key, Value value)
+		std::pair<Iterator, bool> insert(const String& key, const Value& value)
 		{
-			return insert(pair<const String, Value>(key, value));
+			return HashMap<String, Value>::insert(HashMap<String, Value>::ValueType(key, value));
 		}
 
 			
@@ -154,7 +157,7 @@ namespace BALL
 				@param	key the key of the entry to be removed
 				@return	{\bf true} if the key was removed
 		*/
-		bool remove(const String key)	
+		bool remove(const String& key)	
 		{
 			// search the key
 			Iterator it = find(key);
