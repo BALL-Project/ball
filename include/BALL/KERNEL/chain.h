@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.9 2000/04/17 13:50:42 amoll Exp $
+// $Id: chain.h,v 1.10 2000/04/17 20:39:38 oliver Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -45,7 +45,7 @@ namespace BALL
 		*/
 		enum Property
 		{
-			NUMBER_OF_PROPERTIES = Fragment::NUMBER_OF_PROPERTIES
+			NUMBER_OF_PROPERTIES = BaseFragment::NUMBER_OF_PROPERTIES
 		};
 		//@}
 
