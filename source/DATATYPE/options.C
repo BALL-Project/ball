@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.10 2000/07/12 19:35:03 oliver Exp $ 
+// $Id: options.C,v 1.12 2000/07/26 10:28:47 amoll Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -256,7 +256,6 @@ namespace BALL
 		}
 	}
 
-
 	long Options::setDefaultInteger(const String& key, const long value)
 	{
 		if (!has(key) || !isInteger(key))
@@ -267,8 +266,6 @@ namespace BALL
 			return getInteger(key);
 		}
 	}
-
-
 
 	void Options::setName(const String& name)
 	{
@@ -318,7 +315,6 @@ namespace BALL
 		return true;
 	}
 		
-
 	void Options::dump (ostream& stream, Size /* depth */) const
 	{
 		std::list<String>		entry_list;
