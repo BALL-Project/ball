@@ -9,30 +9,31 @@ using namespace BALL;
 %}
 
 %option nounput
+%option noyywrap
 
 %%
 
 [0-9]	{
 						SmilesParser::state.current_parser->state.char_count++;
-						yylval.number = yytext[0] - '0';
+						SmilesParserlval.number = yytext[0] - '0';
 						return TK_DIGIT;
 }
 
 He|Li|Be|Ne|Na|Mg|Al|Si|Ar|K|Ca|Sc|Ti|V|Cr|Mn|Fe|Co|Ni|Cu|Zn|Ga|Ge|As|Se|Kr|Rb|Sr|Y|Zr|Nb|Mo|Tc|Ru|Rh|Pd|Ag|Cd|In|Sn|Sb|Te|Xe|Cs|Ba|Lu|Hf|Ta|W|Re|Os|Ir|Pt|Au|Hg|Tl|Pb|Bi|Po|At|Rn|Fr|Ra|Lr|Rf|Db|Sg|Bh|Hs|Mt|Uun|Uuu|Uub|Uut|Uuq|Uup|Uuh|Uus|Uuo|La|Ce|Pr|Nd|Pm|Sm|Eu|Gd|Tb|Dy|Ho|Er|Tm|Yb|Ac|Th|Pa|U|Np|Pu|Am|Cm|Bk|Cf|Es|Fm|Md|No {
 						SmilesParser::state.current_parser->state.char_count += strlen(yytext);
-						yylval.text = yytext;
+						SmilesParserlval.text = yytext;
 						return TK_ATOM;
 }
 
 b|c|n|o|p|s|f|i|br|cl {
 						SmilesParser::state.current_parser->state.char_count += strlen(yytext);
-						yylval.text = yytext;
+						SmilesParserlval.text = yytext;
             return TK_ORG_SUBSET_ATOM;
 }
 
 B|C|N|O|P|S|F|I|Br|Cl {
 						SmilesParser::state.current_parser->state.char_count += strlen(yytext);
-						yylval.text = yytext;
+						SmilesParserlval.text = yytext;
             return TK_ORG_SUBSET_ATOM;
 }
 
@@ -81,13 +82,13 @@ H	{
 
 %%
 
-YY_BUFFER_STATE buffer;
-void initBuffer(const char* buf)
+YY_BUFFER_STATE SmilesParser_buffer;
+void SmilesParser_initBuffer(const char* buf)
 {
-	buffer = yy_scan_string(buf);
+	SmilesParser_buffer = SmilesParser_scan_string(buf);
 }
 
-void delBuffer()
+void SmilesParser_delBuffer()
 {
-	yy_delete_buffer(buffer);
+	SmilesParser_delete_buffer(SmilesParser_buffer);
 }

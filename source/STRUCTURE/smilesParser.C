@@ -1,4 +1,4 @@
-// $Id: smilesParser.C,v 1.3 2002/01/17 17:33:10 oliver Exp $
+// $Id: smilesParser.C,v 1.4 2002/01/26 22:09:15 oliver Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -6,9 +6,9 @@
 #include <algorithm>
 
 // defined in the lexer (smilesParserLexer.l)
-extern void initBuffer(const char* buf);
-extern void delBuffer();
-extern int yyparse();
+extern void SmilesParser_initBuffer(const char* buf);
+extern void SmilesParser_delBuffer();
+extern int SmilesParserparse();
 
 namespace BALL
 {
@@ -101,13 +101,13 @@ namespace BALL
 		
 		try
 		{
-			initBuffer(state.buffer);
-			yyparse();
-			delBuffer();	
+			SmilesParser_initBuffer(state.buffer);
+			SmilesParserparse();
+			SmilesParser_delBuffer();	
 		}
 		catch (Exception::ParseError& e)
 		{
-			delBuffer();
+			SmilesParser_delBuffer();
 			throw e;
 		}		
 

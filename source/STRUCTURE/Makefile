@@ -1,9 +1,12 @@
 DIRECTORY=STRUCTURE
 THISLIB=$(LIBNAME)
 
-SMILES_SOURCES=$(BALL_HAS_FLEX_YACC:true=smilesParser.C smilesParserParser.C smilesParserLexer.C)
+SMILES_SOURCES= \
+	smilesParser.C\
+	smilesParserParser.C\
+	smilesParserLexer.C
 
-CPP_SOURCES= $(SMILES_SOURCES)\
+CPP_SOURCES= \
 	analyticalSES.C\
 	BSDTree.C\
 	connolly.C\
@@ -28,6 +31,9 @@ CPP_SOURCES= $(SMILES_SOURCES)\
 	SESEdge.C\
 	SESFace.C\
 	SESVertex.C\
+	smilesParser.C\
+	smilesParserLexer.C\
+	smilesParserParser.C\
 	solventExcludedSurface.C\
 	structureMapper.C\
 	surfaceProcessor.C\
@@ -37,6 +43,7 @@ CPP_SOURCES= $(SMILES_SOURCES)\
 	triangulatedSES.C\
 	triangulatedSurface.C
 
+PARSER_PREFIX=SmilesParser
 
 include ../common.mak
 include .Dependencies
