@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.8 2000/07/03 13:44:32 anker Exp $ 
+// $Id: hashMap.h,v 1.9 2000/08/29 16:37:48 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -588,15 +588,15 @@ namespace BALL
 		capacity_ = hash_map.capacity_;
 		bucket_.resize(hash_map.bucket_.size());
 
-		PointerType item = 0;
+		Node* node = 0;
 		
 		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
 		{
 			bucket_[bucket] = 0;
 
-			for (item = hash_map.bucket_[bucket]; item != 0; item = item->next)
+			for (node = hash_map.bucket_[bucket]; node != 0; node = node->next)
 			{
-				bucket_[bucket]	= newNode_(item->value, bucket_[bucket]);
+				bucket_[bucket] = newNode_(node->value, bucket_[bucket]);
 			}
 		}
 	}
@@ -733,7 +733,9 @@ namespace BALL
 			it.getTraits().bucket_ = bucket;
 
 			return std::pair<Iterator, bool>(it, true);
-		} else {
+		} 
+		else 
+		{
 			// replace the existing value
 			it->second = item.second;
 
