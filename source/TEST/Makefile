@@ -11,14 +11,15 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 EXECUTABLES = \
 	AmberFF_test\
 	AnalyticalSES_test\
-        Angle_test\
+  Angle_test\
 	Atom_test\
 	AtomicContactEnergy_test\
 	BitVector_test\
 	Bond_test\
 	BaseFragment_test\
-        Box3_test\
+  Box3_test\
 	CharmmFF_test\
+	Circle3_test\
 	ClassTest_test\
 	Composite_test\
 	DefaultProcessors_test\
@@ -29,7 +30,7 @@ EXECUTABLES = \
 	HashSet_test\
 	KernelPredicate_test\
 	Limits_test\
-        Line3_test\
+  Line3_test\
 	List_test\
 	NumericalSAS_test\
 	Options_test\
@@ -82,6 +83,10 @@ Box3_test:	Box3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 CharmmFF_test:	CharmmFF_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+
+Circle3_test:	Circle_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 ClassTest_test:	ClassTest_test.o
