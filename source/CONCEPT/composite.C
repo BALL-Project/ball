@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.6 1999/09/21 06:47:07 oliver Exp $
+// $Id: composite.C,v 1.7 1999/09/27 13:17:20 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -316,13 +316,24 @@ namespace BALL
 			}
 			
 			selected_ = false;
-			contains_selection_ = false;
 			number_of_selected_children_ = 0;
 			number_of_children_containing_selection_ = 0;
 
+			// check whether we have to inform the parent
 			if (update_parent && (parent_ != 0))
 			{
+				// we were selected beforehand, so decrease
+				// the corresponding counters
+				parent_->number_of_selected_children_--;
+				if (contains_selection_)
+				{
+					// increase the corresponding counter in the parent
+					parent_->number_of_children_containing_selection_--;
+				}
+				contains_selection_ = false;
 				parent_->updateSelection_();
+			} else {
+				contains_selection_ = false;
 			}
 		}
 	}
