@@ -1,4 +1,4 @@
-// $Id: EnergyProcessor_test.C,v 1.4 2001/07/15 22:15:20 amoll Exp $
+// $Id: EnergyProcessor_test.C,v 1.5 2001/07/16 00:35:20 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,12 +7,42 @@
 #include <BALL/ENERGY/energyProcessor.h>
 ///////////////////////////
 
-START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.4 2001/07/15 22:15:20 amoll Exp $")
+START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.5 2001/07/16 00:35:20 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+
+
+/** Test class.
+ * 	The energy is calculated as:
+ * 	(fragment_.countAtomContainers() + 1 + change) * fragment_.countAtoms()
+ */
+ class MyEnergyProcessor
+	: public EnergyProcessor
+{
+	public:
+		
+	MyEnergyProcessor()
+		: change(0)
+	{}
+		
+	virtual Processor::Result operator () (AtomContainer& fragment) throw()
+	{
+		change += 1;
+		EnergyProcessor::operator() (fragment);
+		return Processor::CONTINUE;
+	}
+	
+	virtual bool finish() throw()
+	{
+		energy_ = fragment_->countAtoms() * change;
+		return true;
+	}
+
+	float change;
+};
 
 HINFile f("data/AnisotropyShiftProcessor_test.hin");
 System S;
@@ -64,6 +94,15 @@ CHECK(EnergyProcessor::getEnergy() const )
   TEST_REAL_EQUAL(ep.getEnergy(), 0)
 RESULT
 
+
+CHECK(apply)
+	MyEnergyProcessor mep;
+	mep.change = 2.0;
+	TEST_EQUAL(S.apply(mep), true)
+	TEST_EQUAL(S.countAtoms(), 31)
+	TEST_EQUAL(S.countAtomContainers(), 5)
+	TEST_REAL_EQUAL(mep.getEnergy(), S.countAtoms() * (S.countAtomContainers() + 2 + 1 ))
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
