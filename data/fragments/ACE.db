@@ -1,7 +1,7 @@
 <node>ACE
 	<node>Names
-		<node>ACE<node>
-		<node>Acetic acid<node>
+		<node>ACE</node>
+		<node>acetic acid</node>
 	</node>
 	<node>Atoms
 		<node>C<value>C -0.710977 -1.12008 0.000774821</value></node>
@@ -21,10 +21,14 @@
 		<node>6<value>CH3 3HH3 s</value></node>
 	</node>
 	<node>Connections
-		<node>C-term<value>C N-term s 1.33 0.5</value></node>
+		<node>C-term
+			<value>C N-term s 1.33 0.5
+			</value>
+		</node>
 	</node>
 	<node>Properties
-		<node>AMINO_ACID</node>
+		<node>AMINO_ACID
+		</node>
 	</node>
 	<node>Variants
 		<node>ACE-N
@@ -35,5 +39,11 @@
 				<node>N_TERMINAL</node>
 			</node>
 		</node>
+    <node>ACE-M
+      <node>Properties
+        <node>C_TERMINAL</node>
+        <node>N_TERMINAL</node>
+      </node>
+    </node>
 	</node>
 </node>
