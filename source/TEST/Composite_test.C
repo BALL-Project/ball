@@ -1,16 +1,17 @@
-// $Id: Composite_test.C,v 1.12 2000/08/22 16:59:56 amoll Exp $
+// $Id: Composite_test.C,v 1.13 2000/08/24 11:55:22 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <../source/TEST/ItemCollector.h>
+#include <BALL/KERNEL/atom.h>
 ///////////////////////////
 
 using namespace BALL;
 using namespace std;
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.12 2000/08/22 16:59:56 amoll Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.13 2000/08/24 11:55:22 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -334,6 +335,7 @@ const Composite& c_c = c;
 const Composite& c_d = d;
 const Composite& c_e = e;
 const Composite& c_f = f;
+
 CHECK(getDepth() const)
 	TEST_EQUAL(c_a.getDepth(), 0)
 	TEST_EQUAL(c_b.getDepth(), 1)
@@ -853,27 +855,19 @@ CHECK(static bool insertParent(Composite& parent, Composite& first,
 RESULT
 
 CHECK(insertBefore(Composite& composite))
-	f.insertBefore(e);
+	e.insertBefore(f);
 	TEST_EQUAL(c.getFirstChild(), &f)
 	TEST_EQUAL(c.getLastChild(), &e)
 	TEST_EQUAL(f.getParent(), &c)
 	c.removeChild(f);
-	Composite x;
-	f.insertBefore(x);
-	TEST_EQUAL(x.getParent(), &f)
-	TEST_EQUAL(f.getFirstChild(), &x)
 RESULT
 
 CHECK(insertAfter(Composite& composite))
-	f.insertAfter(e);
+	e.insertAfter(f);
 	TEST_EQUAL(c.getFirstChild(), &e)
 	TEST_EQUAL(c.getLastChild(), &f)
 	TEST_EQUAL(f.getParent(), &c)
 	c.removeChild(f);
-	Composite x;
-	f.insertAfter(x);
-	TEST_EQUAL(x.getFirstChild(), &f)
-	TEST_EQUAL(f.getParent(), &x)
 RESULT
 
 CHECK(spliceBefore(Composite& composite))
@@ -895,27 +889,79 @@ CHECK(bool removeChild(Composite& child))
 	b.appendChild(d);
 	f.clear();
 	TEST_EQUAL(f.getFirstChild(), 0)
-	TEST_EQUAL(f.removeChild(d), false)
+	TEST_EQUAL(f.removeChild(d), false) // ???
 RESULT
 
 CHECK(replace(Composite& composite))
-	f.replace(d);
-	TEST_EQUAL(d.getParent(), 0)
-	TEST_EQUAL(f.getParent(), &d)
-	TEST_EQUAL(b.getChild(1), &f)
-	d.replace(f);
+	Composite a, b, c, d, e;
+	a.appendChild(b);
+	b.appendChild(c);
+	b.appendChild(d);
+	c.appendChild(e);
+
+	b.replace(b);
+
+	Composite a1, b1, c1, d1, e1;
+	a1.appendChild(b1);
+	b1.appendChild(c1);
+	b1.appendChild(d1);
+	c1.appendChild(e1);
+	b1.replace(b);
+
+	TEST_EQUAL(a.getFirstChild(), 0)
+	TEST_EQUAL(b.getParent(), &a1)
+	TEST_EQUAL(c.getParent(), &b)
+
+	TEST_EQUAL(a1.getFirstChild(), &b)
+	TEST_EQUAL(b1.getParent(), 0)
+	TEST_EQUAL(c1.getParent(), &b1)
 RESULT
 
 CHECK(swap(Composite& composite))
-	b.swap(c);
-	TEST_EQUAL(c.getParent(), &a)
-	TEST_EQUAL(b.getParent(), &c)
-	TEST_EQUAL(e.getParent(), &b)
-	TEST_EQUAL(d.getParent(), &c)
-	TEST_EQUAL(a.getChild(1), &b)
-	TEST_EQUAL(c.getChild(1), &b)
-	TEST_EQUAL(b.getChild(1), &e)
-	b.swap(c);
+	Composite a, b, c, d, e;
+	a.appendChild(b);
+	b.appendChild(c);
+	b.appendChild(d);
+	c.appendChild(e);
+
+	Composite a1, b1, c1, d1, e1;
+	a1.appendChild(b1);
+	b1.appendChild(c1);
+	b1.appendChild(d1);
+	c1.appendChild(e1);
+
+	cout <<endl;
+	cout << "a " << &a <<endl;
+	cout << "b " << &b <<endl;
+	cout << "c " << &c <<endl;
+	cout << "d " << &d <<endl;
+	cout << "e " << &e <<endl;
+	cout << endl;
+	cout << "a1 " << &a1 <<endl;
+	cout << "b1 " << &b1 <<endl;
+	cout << "c1 " << &c1 <<endl;
+	cout << "d1 " << &d1 <<endl;
+	cout << "e1 " << &e1 <<endl;
+	cout << endl;
+
+	a.swap(e);
+	TEST_EQUAL(b.getParent(), &a)
+	TEST_EQUAL(c.getParent(), &b)
+	TEST_EQUAL(e.getParent(), &c)
+
+	b1.swap(b);
+	cout << "-----------1";
+	TEST_EQUAL(a.getFirstChild(), &b1)
+	cout << "-----------2";
+	TEST_EQUAL(a1.getFirstChild(), &b)
+	cout << "-----------3";
+	TEST_EQUAL(b.getParent(), &a1)
+	cout << "-----------4";
+	TEST_EQUAL(b1.getParent(), &a)
+	cout << "-----------5";
+
+	TEST_EQUAL(c.getParent(), &b1)
+	TEST_EQUAL(c1.getParent(), &b)
 RESULT
 
 CHECK(bool isExpanded() const)
@@ -946,6 +992,7 @@ CHECK(bool hasAncestor(const T& t) const) //??
 	TEST_EQUAL(e.hasAncestor(a), true)
 	TEST_EQUAL(b.hasAncestor(c), false)
 	TEST_EQUAL(e.hasAncestor(e), false)
+
 RESULT
 
 CHECK(isAncestor())
@@ -1028,11 +1075,16 @@ CHECK(bool applyChild(UnaryProcessor<Composite>& processor))
 	myproc.start();
 	a.applyChild(myproc);
 	myproc.reset();
-	TEST_EQUAL(myproc.getSize(), 4)
+	TEST_EQUAL(myproc.getSize(), 1)
 	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), 0)
+
+	myproc.start();
+	b.applyChild(myproc);
+	myproc.reset();
+	TEST_EQUAL(myproc.getSize(), 2)
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
@@ -1046,11 +1098,10 @@ CHECK(bool applyDescendantPreorder(UnaryProcessor<Composite>& processor))
 	a.applyDescendantPreorder(myproc);
 	myproc.reset();
 	TEST_EQUAL(myproc.getSize(), 4)
-	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
@@ -1068,12 +1119,10 @@ CHECK(bool applyDescendantPostorder(UnaryProcessor<Composite>& processor))
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-//fehler in methode applyPostorder???
-CHECK(bool applyDescendant(UnaryProcessor<Composite>& processor))/*
+CHECK(bool applyDescendant(UnaryProcessor<Composite>& processor))
 	myproc.start();
 	e.applyDescendant(myproc);
 	myproc.reset();
@@ -1083,34 +1132,31 @@ CHECK(bool applyDescendant(UnaryProcessor<Composite>& processor))/*
 	a.applyDescendant(myproc);
 	myproc.reset();
 	TEST_EQUAL(myproc.getSize(), 4)
-	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), 0)*/
+	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
 CHECK(bool applyPreorder(UnaryProcessor<Composite>& processor))
 	myproc.start();
 	e.applyPreorder(myproc);
 	myproc.reset();
-	TEST_EQUAL(myproc.getSize(), 0)
+	TEST_EQUAL(myproc.getSize(), 1)
 
 	myproc.start();
 	a.applyPreorder(myproc);
 	myproc.reset();
-	TEST_EQUAL(myproc.getSize(), 4)
+	TEST_EQUAL(myproc.getSize(), 5)
 	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-//fehler in methode applyPostorder???
-/*
 CHECK(bool applyPostorder(UnaryProcessor<Composite>& processor))
 	myproc.start();
 	e.applyPostorder(myproc);
@@ -1124,92 +1170,94 @@ CHECK(bool applyPostorder(UnaryProcessor<Composite>& processor))
 	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();// ???
+	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();// ???
 	TEST_EQUAL(myproc.getPointer(), 0)
-RESULT*/
+RESULT
 
 CHECK(bool apply(UnaryProcessor<Composite>& processor))
 	myproc.start();
 	e.apply(myproc);
 	myproc.reset();
-	TEST_EQUAL(myproc.getSize(), 0)
+	TEST_EQUAL(myproc.getSize(), 1)
 
 	myproc.start();
 	a.apply(myproc);
 	myproc.reset();
-	TEST_EQUAL(myproc.getSize(), 4)
+	TEST_EQUAL(myproc.getSize(), 5)
 	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-//fehler in methode applyLevel_???
-/*
 CHECK(bool applyLevel(UnaryProcessor<Composite>& processor, long level))
 	myproc.start();
 	e.applyLevel(myproc,0 );
 	myproc.reset();
-	TEST_EQUAL(myproc.getSize(), 0)
+	TEST_EQUAL(myproc.getSize(), 1)
+	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
 
 	myproc.start();
-	a.applyLevel(myproc, 0);
+	c.applyLevel(myproc, 0);
 	myproc.reset();
-	TEST_EQUAL(myproc.getSize(), 4)
-	TEST_EQUAL(myproc.getPointer(), &a) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &b) myproc.forward();
+	TEST_EQUAL(myproc.getSize(), 2)
 	TEST_EQUAL(myproc.getPointer(), &c) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();
-	TEST_EQUAL(myproc.getPointer(), &e) myproc.forward();
+	TEST_EQUAL(myproc.getPointer(), &d) myproc.forward();// ???
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
-*/
 
 CHECK(set(const Composite&, KernelPredicateType&))
 	Composite x;
-	x.set(b, Composite::DEFAULT_UNARY_PREDICATE);
-	TEST_EQUAL(x.getFirstChild(), &c)
-	TEST_EQUAL(x.getLastChild(), &d)
+	x.set(a, Composite::DEFAULT_UNARY_PREDICATE);
+	TEST_EQUAL(x.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
+	TEST_NOT_EQUAL(x.getFirstChild()->getChild(1), 0)
+	TEST_NOT_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild(), 0)
+	TEST_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild()->getFirstChild(), 0)
 RESULT
 
 CHECK(set(const Composite&, bool))
 	Composite x;
-	x.set(b, true);
-	TEST_EQUAL(x.getFirstChild(), &c)
-	TEST_EQUAL(x.getLastChild(), &d)
+	x.set(a, true);
+	TEST_EQUAL(x.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
+	TEST_NOT_EQUAL(x.getFirstChild()->getChild(1), 0)
+	TEST_NOT_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild(), 0)
+	TEST_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild()->getFirstChild(), 0)
 RESULT
 
 CHECK(operator = (const Composite&))
 	Composite x;
-	x = b;
-	TEST_EQUAL(x.getFirstChild(), &c)
-	TEST_EQUAL(x.getLastChild(), &d)
+	x = a;
+	TEST_EQUAL(x.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
+	TEST_NOT_EQUAL(x.getFirstChild()->getChild(1), 0)
+	TEST_NOT_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild(), 0)
+	TEST_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild()->getFirstChild(), 0)
 RESULT
 
 CHECK(get(Composite&, KernelPredicateType&) const)
 	Composite x;
-	b.get(b, Composite::DEFAULT_UNARY_PREDICATE);
-	TEST_EQUAL(x.getFirstChild(), &c)
-	TEST_EQUAL(x.getLastChild(), &d)
+	a.get(x, Composite::DEFAULT_UNARY_PREDICATE);
+	TEST_EQUAL(x.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
+	TEST_NOT_EQUAL(x.getFirstChild()->getChild(1), 0)
+	TEST_NOT_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild(), 0)
+	TEST_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild()->getFirstChild(), 0)
 RESULT
 
 CHECK(get(Composite&, bool) const)
 	Composite x;
-	b.get(b, true);/*
-	TEST_EQUAL(x.getFirstChild(), &c)
-	TEST_EQUAL(x.getLastChild(), &d)*/
+	a.get(x, true);
 	TEST_EQUAL(x.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
-
+	TEST_NOT_EQUAL(x.getFirstChild()->getChild(1), 0)
+	TEST_NOT_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild(), 0)
+	TEST_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild()->getFirstChild(), 0)
 RESULT
 
 CHECK(count(const KernelPredicateType&) const)
 	TEST_EQUAL(a.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
 	TEST_EQUAL(e.count(Composite::DEFAULT_UNARY_PREDICATE), 1)
 RESULT
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
