@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.3 2003/09/18 03:53:39 oliver Exp $
+// $Id: POVRenderer.C,v 1.4 2004/02/08 00:03:39 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -180,7 +180,6 @@ namespace BALL
 
 			outfile_ << "camera {" << endl;
 			outfile_ << "\tlocation " << POVVector3(view_point) << endl;
-			outfile_ << "\tlook_at  " << POVVector3(look_at) << endl;
 
 
 //			right_vector += origin_;
@@ -209,6 +208,7 @@ namespace BALL
 
 			outfile_ << "\trotate   <0, 0, 180>" << endl;
 
+			outfile_ << "\tlook_at  " << POVVector3(look_at) << endl;
 			outfile_ << "}" << endl;
 
 			// Set the light sources
