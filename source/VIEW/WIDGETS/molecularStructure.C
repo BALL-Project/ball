@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.4 2004/02/04 12:18:59 amoll Exp $
+// $Id: molecularStructure.C,v 1.5 2004/02/05 11:55:45 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -549,6 +549,8 @@ namespace BALL
 		message->setCompositeName(S.getName() + "_distance");
 		message->setRegularData3D(*regdat);
 		notify_(message);
+
+		setStatusBarText("done");
 	}
 
 	void MolecularStructure::calculateSecondaryStructure()
