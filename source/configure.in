@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19.4.9 2002/11/08 18:52:16 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.10 2002/11/25 09:48:55 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -812,7 +812,7 @@ dnl		operating systems and differentiate between gcc/egcs
 dnl
 if test "${IS_GXX}" = "true" ; then
 	AC_MSG_CHECKING(compiler version)
-	CXX_VERSION=`${CXX} --version | ${SED} -n 1p | ${SED} ["]s/^[[^0-9]]*//["]`
+	CXX_VERSION=`${CXX} --version | ${SED} -n 1p | ${SED} ["]s/^[[^0-9]]*//["] | ${CUT} -f1`
 	if test `echo ${CXX_VERSION}|${CUT} -c1-4` = "egcs" ; then
 		IS_EGXX=true
 		CXX_NAME="egcs"
@@ -838,6 +838,14 @@ if test "${IS_GXX}" = "true" ; then
 	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
 		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
 	fi
+
+	dnl  Debugging of compiler version output
+	dnl
+	dnl AC_MSG_RESULT()
+	dnl AC_MSG_RESULT(V1: ${CXX_VERSION_1})
+	dnl AC_MSG_RESULT(V2: ${CXX_VERSION_2})
+	dnl AC_MSG_RESULT(V3: ${CXX_VERSION_3})
+	dnl AC_MSG_RESULT(V4: ${CXX_VERSION_4})
 
 	if test "${IS_EGXX}" = "true" ; then	
 		AC_MSG_RESULT()
