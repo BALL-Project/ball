@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.1 2000/08/01 08:08:06 oliver Exp $
+// $Id: amberNonBonded.C,v 1.2 2000/08/01 17:53:36 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -89,7 +89,8 @@ namespace BALL
 		Size number_of_non_bonded_interactions = MolmecSupport::calculateNonBondedAtomPairs
 																								(atom_pair_vector, getForceField()->getAtoms(), 
 																								 getForceField()->periodic_boundary.getBox(),
-																								 cut_off_, force_field_->periodic_boundary.isEnabled(), algorithm_type_); 
+																								 cut_off_, force_field_->periodic_boundary.isEnabled(), 
+																								 algorithm_type_); 
 
 		// Build the vector "non_bonded_" with the atom pairs and parameters
 		buildVectorOfNonBondedAtomPairs(atom_pair_vector, van_der_waals_, hydrogen_bond_);
@@ -268,7 +269,7 @@ namespace BALL
 			is_torsion.push_back(pair_it->first->isVicinal(*pair_it->second));
 		}
 
-		vector< bool >::iterator bool_it = is_torsion.begin(); 
+		vector<bool>::iterator bool_it = is_torsion.begin(); 
 		LennardJones::Data tmp;
 		Atom*	atom1;
 		Atom* atom2;
@@ -361,13 +362,41 @@ namespace BALL
 	}
 
 
+
 	BALL_INLINE
 	void AMBERcalculateMinimumImage
-		(Vector3& difference, const Vector3& period)
+    (Vector3& difference, const Vector3& period,  const Vector3& half_period)
   {
-		difference.x -= period.x * (float)(long)(difference.x / period.x);
-		difference.y -= period.y * (float)(long)(difference.y / period.y);
-		difference.z -= period.z * (float)(long)(difference.z / period.z);
+		// difference.x -= period.x * (float)(long)(difference.x / period.x);
+		// difference.y -= period.y * (float)(long)(difference.y / period.y);
+		// difference.z -= period.z * (float)(long)(difference.z / period.z);
+
+    if (difference.x < -half_period.x)
+    {
+      difference.x += period.x;
+		}
+    else if (difference.x > half_period.x)
+    {
+      difference.x -= period.x;
+		}
+
+    if (difference.y < -half_period.y)
+    {
+      difference.y += period.y;
+		}
+    else if (difference.y > half_period.y)
+    {
+      difference.y -= period.y;
+		}
+
+    if (difference.z < -half_period.z)
+    {
+      difference.z += period.z;
+		}
+    else if (difference.z > half_period.z)
+    {
+      difference.z -= period.z;
+		}
   }
 
 
