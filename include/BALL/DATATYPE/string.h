@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.25 2000/09/19 15:42:25 oliver Exp $
+// $Id: string.h,v 1.26 2000/09/19 19:04:04 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -413,7 +413,7 @@ namespace BALL
 		*/
 		static const char* CHARACTER_CLASS__WHITESPACE;
 
-		/**	Character class containing single and double quotes.
+		/**	Character class containing double quotes.
 		*/
 		static const char* CHARACTER_CLASS__QUOTES;
 		//@}
