@@ -1,4 +1,4 @@
-// $Id: SESVertex.h,v 1.10 2001/12/08 17:02:01 strobel Exp $
+// $Id: SESVertex.h,v 1.11 2002/01/07 17:49:40 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -119,7 +119,7 @@ namespace BALL
 				@param	sesvertex	the SESVertex object to assign from
 				@param	bool			ignored
 		*/
-		virtual void set(const TSESVertex<T>& sesvertex, bool = false)
+		void set(const TSESVertex<T>& sesvertex, bool = false)
 			throw();
 
 		/**	Assign to two vectors and two indices.
@@ -128,7 +128,7 @@ namespace BALL
 				@param	atom		assigned to the index of the closest atom
 				@param	index		assigned to the index of the vertex
 		*/
-		virtual void set(const TVector3<T> point,
+		void set(const TVector3<T> point,
 				const TVector3<T>& normal,
 				Index atom,
 				Index index)

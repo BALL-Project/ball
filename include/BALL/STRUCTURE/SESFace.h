@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.14 2001/12/08 17:03:04 strobel Exp $
+// $Id: SESFace.h,v 1.15 2002/01/07 17:48:58 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -258,7 +258,7 @@ namespace BALL
 
 		//@}
 
-		protected:
+		//protected:
 
 		/**	@name	Attributes
 		*/

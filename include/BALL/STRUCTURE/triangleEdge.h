@@ -134,12 +134,12 @@ namespace BALL
 
 		/** Equality operator
 		*/
-		virtual bool operator == (const TTriangleEdge<T>& e)
+		bool operator == (const TTriangleEdge<T>& e)
 			throw();
 
 		/** Inequality operator
 		*/
-		virtual bool operator != (const TTriangleEdge<T>& e)
+		bool operator != (const TTriangleEdge<T>& e)
 			throw();
 
 		//@}
@@ -188,6 +188,66 @@ namespace BALL
 	//		}
 	//	}
 	//}
+
+
+	template <class T>
+	void TTriangleEdge<T>::setPoint(Position i, TTrianglePoint<T>* point)
+		throw()
+	{
+		if (i == 0)
+		{
+			vertex_[0] = point;
+		}
+		else
+		{
+			vertex_[1] = point;
+		}
+	}
+
+
+	template <class T>
+	TTrianglePoint<T>* TTriangleEdge<T>::getPoint(Position i) const
+		throw()
+	{
+		if (i == 0)
+		{
+			return vertex_[0];
+		}
+		else
+		{
+			return vertex_[1];
+		}
+	}
+
+
+	template <class T>
+	void TTriangleEdge<T>::setTriangle(Position i, TTriangle<T>* triangle)
+		throw()
+	{
+		if (i == 0)
+		{
+			face_[0] = triangle;
+		}
+		else
+		{
+			face_[1] = triangle;
+		}
+	}
+
+
+	template <class T>
+	TTriangle<T>* TTriangleEdge<T>::getTriangle(Position i) const
+		throw()
+	{
+		if (i == 0)
+		{
+			return face_[0];
+		}
+		else
+		{
+			return face_[1];
+		}
+	}
 
 
 	template <class T>

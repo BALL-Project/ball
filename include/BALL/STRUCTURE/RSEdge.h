@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.20 2001/12/08 17:00:14 strobel Exp $
+// $Id: RSEdge.h,v 1.21 2002/01/07 17:47:03 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -164,7 +164,7 @@ namespace BALL
 				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the
 												RSEdge object is linked to the neighbours of the RSEdge object to be copied.
 		*/
-		virtual void set(const TRSEdge& rsedge, bool deep = false)
+		void set(const TRSEdge& rsedge, bool deep = false)
 			throw();
 
 		/**	Assign from a lot of nice objects
@@ -184,7 +184,7 @@ namespace BALL
 				@param	singular
 				@param	index								assigned to the index
 		*/
-		virtual void set(TRSVertex<T>* vertex0,
+		void set(TRSVertex<T>* vertex0,
 				TRSVertex<T>* vertex1,
 				TRSFace<T>* face0,
 				TRSFace<T>* face1,
@@ -324,7 +324,7 @@ namespace BALL
 				@return bool, {\bf true} if all vertices are similar and all faces	
 											are equal modulo order, {\bf false} otherwise
 		*/
-		virtual bool operator == (const TRSEdge<T>& rsedge) const
+		bool operator == (const TRSEdge<T>& rsedge) const
 			throw();
 
 		/**	similar.
@@ -338,7 +338,7 @@ namespace BALL
 				@return	bool	{\bf false} if all vertices are similar and all faces	
 											are equal modulo order, {\bf true} otherwise
 		*/
-		virtual bool operator != (const TRSEdge<T>& rsedge) const
+		bool operator != (const TRSEdge<T>& rsedge) const
 			throw();
 		
 		/** isSingular

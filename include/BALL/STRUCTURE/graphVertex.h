@@ -69,7 +69,7 @@ namespace BALL
 				@param	deep	if deep = false, all pointers are set to NULL (default). Otherwise the	
 											GraphVertex object is linked to the neighbours of the GraphVertex object to be copied.
 		*/
-		virtual void set(const GraphVertex<Edge,Face>& vertex, bool deep = false)
+		void set(const GraphVertex<Edge,Face>& vertex, bool deep = false)
 			throw();
 
 		/**	Assign to two lists and an Index.
@@ -77,7 +77,7 @@ namespace BALL
 				@param	faces	assigned to list of faces
 				@param	i			asiigned to the index of the GraphVertex
 		*/
-		virtual void set
+		void set
 				(const std::list<Edge*>& edges,
 				 const std::list<Face*>& faces,
 				 Index i)
@@ -112,6 +112,12 @@ namespace BALL
 		std::list<Edge*> getEdges() const
 			throw();
 
+		/** Return the number of edges the GraphVertex belongs to.
+				@return	Position	the number of edges the GraphVertex belongs to
+		*/
+		Position numberOfEdges() const
+			throw();
+
 		/** Set the list of faces the GraphVertex belongs to.
 				@param	faces	the new list of faces
 		*/
@@ -136,6 +142,12 @@ namespace BALL
 		std::list<Face*> getFaces() const
 			throw();
 
+		/** Return the number of faces the GraphVertex belongs to.
+				@return	Position	the number of faces the GraphVertex belongs to
+		*/
+		Position numberOfFaces() const
+			throw();
+
 		/** Set the index of the vertex.
 				@param	index	the new index
 		*/
@@ -158,14 +170,14 @@ namespace BALL
 				@return	bool	{\bf true} if the vertices are equal in all	
 											components, {\bf false} otherwise
 		*/
-		virtual bool operator == (const GraphVertex<Edge,Face>&) const
+		bool operator == (const GraphVertex<Edge,Face>&) const
 			throw();// = 0;
 
 		/**	Inequality operator.
 				@return	bool	{\bf false} if the vertices are equal in all	
 											components, {\bf true} otherwise
 		*/
-		virtual bool operator != (const GraphVertex<Edge,Face>&) const
+		bool operator != (const GraphVertex<Edge,Face>&) const
 			throw();// = 0;
 
 		/**	Test if the vertex is meber of a given face.
@@ -190,7 +202,7 @@ namespace BALL
 
 		//@}
 
-		protected:
+		//protected:
 
 		/*_ The RSEdges the RSVetex belongs to
 		*/
@@ -310,6 +322,14 @@ namespace BALL
 
 
 	template <typename Edge, typename Face>
+	Position GraphVertex<Edge,Face>::numberOfEdges() const
+		throw()
+	{
+		return edges_.size();
+	}
+
+
+	template <typename Edge, typename Face>
 	void GraphVertex<Edge,Face>::setFaces(std::list<Face*> faces)
 		throw()
 	{
@@ -338,6 +358,14 @@ namespace BALL
 		throw()
 	{
 		return faces_;
+	}
+
+
+	template <typename Edge, typename Face>
+	Position GraphVertex<Edge,Face>::numberOfFaces() const
+		throw()
+	{
+		return faces_.size();
 	}
 
 

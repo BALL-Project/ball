@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.19 2001/12/08 17:01:26 strobel Exp $
+// $Id: RSVertex.h,v 1.20 2002/01/07 17:48:33 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -139,7 +139,7 @@ namespace BALL
 				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the	
 												RSVertex object is linked to the neighbours of the RSVertex object to be copied.
 		*/
-		virtual void set(const TRSVertex<T>& rsvertex, bool deep = false)
+		void set(const TRSVertex<T>& rsvertex, bool deep = false)
 			throw();
 
 		/**	Assign to a Index, two HashSets amd another Index.
@@ -148,7 +148,7 @@ namespace BALL
 				@param	faces	assigned to list of faces
 				@param	i			asiigned to the index of the RSVertex
 		*/
-		virtual void set(Index atom,
+		void set(Index atom,
 				const HashSet<TRSEdge<T>*>& edges,
 				const HashSet<TRSFace<T>*>& faces,
 				Index i)
@@ -249,14 +249,14 @@ namespace BALL
 				@return	bool	{\bf true} if the vertices are equal in all	
 											components, {\bf false} otherwise
 		*/
-		virtual bool operator == (const TRSVertex<T>& rsvertex) const
+		bool operator == (const TRSVertex<T>& rsvertex) const
 			throw();
 
 		/**	Inequality operator.
 				@return	bool	{\bf false} if the vertices are equal in all	
 											components, {\bf true} otherwise
 		*/
-		virtual bool operator != (const TRSVertex<T>& rsvertex) const
+		bool operator != (const TRSVertex<T>& rsvertex) const
 			throw();
 
 		/**	Similar

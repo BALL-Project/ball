@@ -1,4 +1,4 @@
-// $Id: SESEdge.h,v 1.11 2001/12/08 17:03:43 strobel Exp $
+// $Id: SESEdge.h,v 1.12 2002/01/07 17:49:20 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -202,7 +202,7 @@ namespace BALL
 
 		//@}
 		
-		protected:
+		//protected:
 		
 		/**	@name	Attributes
 		*/

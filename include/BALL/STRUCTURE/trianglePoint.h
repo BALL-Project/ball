@@ -127,12 +127,12 @@ namespace BALL
 
 		/** Equality operator
 		*/
-		virtual bool operator == (const TTrianglePoint& point) const
+		bool operator == (const TTrianglePoint& point) const
 			throw();
 
 		/** Inequality operator
 		*/
-		virtual bool operator != (const TTrianglePoint& point) const
+		bool operator != (const TTrianglePoint& point) const
 			throw();
 
 		//@}

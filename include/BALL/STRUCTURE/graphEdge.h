@@ -69,7 +69,7 @@ namespace BALL
 				@param	deep	if deep = false, all pointers are set to NULL (default). Otherwise the	
 											GraphEdge object is linked to the neighbours of the GraphEdge object to be copied.
 		*/
-		virtual void set(const GraphEdge<Vertex,Face>& edge, bool deep = false)
+		void set(const GraphEdge<Vertex,Face>& edge, bool deep = false)
 			throw();
 
 		/**	Assign from a lot of nice objects
@@ -79,7 +79,7 @@ namespace BALL
 				@param	face2		assigned to the second face
 				@param	index		assigned to the index
 		*/
-		virtual void set(Vertex* vertex0, Vertex* vertex1, Face* face0, Face* face1, Index index)
+		void set(Vertex* vertex0, Vertex* vertex1, Face* face0, Face* face1, Index index)
 			throw();
 		
 		//@}
@@ -194,18 +194,18 @@ namespace BALL
 
 		/**	Equality operator.
 		*/
-		virtual bool operator == (const GraphEdge<Vertex,Face>&) const
-			throw();// = 0;
+		bool operator == (const GraphEdge<Vertex,Face>&) const
+			throw();
 
 		/**	Inequality operator.
 		*/
-		virtual bool operator != (const GraphEdge<Vertex,Face>&) const
-			throw();// = 0;
+		bool operator != (const GraphEdge<Vertex,Face>&) const
+			throw();
 		
 		//@}
 
 
-		protected:
+		//protected:
 
 		/*_ The vertices of the GraphEdge
 		*/
@@ -224,20 +224,20 @@ namespace BALL
 	template <typename Vertex, typename Face>
 	GraphEdge<Vertex,Face>::GraphEdge()
 		throw()
-		//:	vertex_(2,NULL),
-		//	face_(2,NULL),
 		:	vertex_(2),
 			face_(2),
 			index_(-1)
 	{
+		vertex_[0] = NULL;
+		vertex_[1] = NULL;
+		face_[0] = NULL;
+		face_[1] = NULL;
 	}
 
 
 	template <typename Vertex, typename Face>
 	GraphEdge<Vertex,Face>::GraphEdge(const GraphEdge<Vertex,Face>& edge, bool deep)
 		throw()
-		//:	vertex_(2,NULL),
-		//	face_(2,NULL),
 		:	vertex_(2),
 			face_(2),
 			index_(edge.index_)
@@ -248,6 +248,13 @@ namespace BALL
 			vertex_[1] = edge.vertex_[1];
 			face_[0] = edge.face_[0];
 			face_[1] = edge.face_[1];
+		}
+		else
+		{
+			vertex_[0] = NULL;
+			vertex_[1] = NULL;
+			face_[0] = NULL;
+			face_[1] = NULL;
 		}
 	}
 

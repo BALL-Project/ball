@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.20 2001/12/08 17:00:53 strobel Exp $
+// $Id: RSFace.h,v 1.21 2002/01/07 17:48:09 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -143,7 +143,7 @@ namespace BALL
 				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the
 												RSFace object is linked to the neighbours of the RSFace object to be copied.
 		*/
-		virtual void set(const TRSFace<T>& rsface, bool deep = false)
+		void set(const TRSFace<T>& rsface, bool deep = false)
 			throw();
 
 		/**	Assign to a lot of nice objects
@@ -156,7 +156,7 @@ namespace BALL
 				@param	singular
 				@param	index			assigned to the index
 		*/
-		virtual void set(TRSVertex<T>* vertex1,
+		void set(TRSVertex<T>* vertex1,
 				TRSVertex<T>* vertex2,
 				TRSVertex<T>* vertex3,
 				TRSEdge<T>* edge1,
@@ -177,7 +177,7 @@ namespace BALL
 				@return bool	{\bf true} if all vertices are similar modulo order	
 											and the normals are equal, {\bf false} otherwise
 		*/
-		virtual bool operator == (const TRSFace& rsface) const
+		bool operator == (const TRSFace& rsface) const
 			throw();
 
 		/**	similar
@@ -191,7 +191,7 @@ namespace BALL
 				@return	bool	{\bf false} if all vertices are similar modulo order	
 											and the normals are equal, {\bf true} otherwise
 		*/
-		virtual bool operator != (const TRSFace<T>& rsface) const
+		bool operator != (const TRSFace<T>& rsface) const
 			throw();
 		
 		/** isSingular

@@ -68,7 +68,7 @@ namespace BALL
 				@param	deep	if deep = false, all pointers are set to NULL (default). Otherwise the	
 											GraphFace object is linked to the neighbours of the GraphFace object to be copied.
 		*/
-		virtual void set(const GraphFace<Vertex,Edge>& face, bool deep = false)
+		void set(const GraphFace<Vertex,Edge>& face, bool deep = false)
 			throw();
 
 		/**	Assign to a lot of nice objects
@@ -76,7 +76,7 @@ namespace BALL
 				@param	edges			assigned to the edges
 				@param	index			assigned to the index
 		*/
-		virtual void set(const std::vector<Vertex*>& vertices, const std::vector<Edge*>& edges, Index index)
+		void set(const std::vector<Vertex*>& vertices, const std::vector<Edge*>& edges, Index index)
 			throw();
 
 		//@}
@@ -86,13 +86,13 @@ namespace BALL
 
 		/**	Equality operator.
 		*/
-		virtual bool operator == (const GraphFace&) const
-			throw();// = 0;
+		bool operator == (const GraphFace&) const
+			throw();
 
 		/**	Inequality operator.
 		*/
-		virtual bool operator != (const GraphFace&) const
-			throw();// = 0;
+		bool operator != (const GraphFace&) const
+			throw();
 		
 		//@}
 		/**	@name	Accessors
@@ -243,7 +243,7 @@ namespace BALL
 
 		//@}
 
-		protected:
+		//protected:
 
 		/*_ The number of vertices of the GrpahFace
 		*/
