@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.54 2003/08/26 08:04:07 oliver Exp $
+// $Id: composite.h,v 1.55 2004/01/14 13:54:08 anhi Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -1087,14 +1087,14 @@ B		*/
 			BALL_INLINE CompositeIteratorTraits()
 				throw()
 				:	bound_(0),
-					position_()
+					position_(0)
 			{
 			}
 		
 			CompositeIteratorTraits(const Composite& composite)
 				throw()
 				:	bound_(const_cast<Composite*>(&composite)),
-					position_()
+					position_(0)
 			{
 			}
 		
