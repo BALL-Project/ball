@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.20 2001/02/10 20:00:59 amoll Exp $
+// $Id: bitVector.iC,v 1.21 2001/03/06 13:44:04 balltest Exp $
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
@@ -308,7 +308,7 @@ const Bit& Bit::operator = (const Bit& bit)
 
 BALL_INLINE
 const Bit& Bit::operator = (const bool bit)
-	throw(Exception::NullPointer, IllegalOperation)
+	throw(Exception::NullPointer, Bit::IllegalOperation)
 {
 	if (bitvector_ == 0)
 	{
