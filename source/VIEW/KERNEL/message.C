@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.27.4.1 2005/04/01 14:35:16 haid Exp $
+// $Id: message.C,v 1.27.4.2 2005/04/04 16:29:31 haid Exp $
 
 #include <../source/APPLICATIONS/DOCKVIEW/dockResult.h>
 
@@ -255,7 +255,7 @@ NewTrajectoryMessage::NewTrajectoryMessage()
 NewDockResultMessage::NewDockResultMessage()
 	throw()
 	: CompositeMessage(),
-		dock_res_(0)        ///???
+		dock_res_(0)
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new NewDockResultMessage" << std::endl;
