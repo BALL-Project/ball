@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.19 2000/09/30 16:44:07 oliver Exp $
+// $Id: assignShiftProcessor.C,v 1.20 2000/10/02 18:58:21 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 #include<BALL/KERNEL/atom.h>
@@ -22,16 +22,14 @@ namespace BALL
 
 		// ----------transforming the names from STAR-FILE-STANDARD to PDB------
 		FragmentDB frag_db;
-		StringHashMap<String>* map = 0;
-		if (frag_db.getNamingStandards().has("Star-PDB"))
+		if (!frag_db.getNamingStandards().has("Star-PDB"))
 		{
-			map = frag_db.getNamingStandards()["Star-PDB"];
+			 Log.error() << "AssignShiftProcessor::start: "
+									 << "no appropriate map found for name conversion" << endl;
+			return false;
 		}
-		else 
-		{
-			 Log.warn() << "AssignShiftProcessor::start: "
-									<< "no appropriate map found for name conversion" << endl;
-		}
+
+		StringHashMap<String>* map = frag_db.getNamingStandards()["Star-PDB"];
 
 		// ---------------------read translate table ------------------------
 		Path path;
@@ -42,7 +40,7 @@ namespace BALL
 			return false;
 		}
 
-		StringHashMap<String> transformTable;
+		StringHashMap<String> transform_table;
 		String name;
 
 		do
@@ -50,18 +48,18 @@ namespace BALL
 			String entry;
 			tableFile >> name;
 			tableFile >> entry;
-			transformTable[name] = entry;
+			transform_table[name] = entry;
 		}
 		while (name != "END");
 
 		tableFile.close();
 
 		// ----------------------read the shiftdata ------------------------
-		for (Position atompos = 0; atompos < atom_data_.size() ; atompos++)
+		for (Position atom_pos = 0; atom_pos < atom_data_.size() ; atom_pos++)
 		{
 			// normalize the atom name to reflect the PDB standard
-			String residue_name = atom_data_[atompos]->residueLabel;
-			String atom_name    = atom_data_[atompos]->atomName;
+			String residue_name = atom_data_[atom_pos]->residueLabel;
+			String atom_name    = atom_data_[atom_pos]->atomName;
 			bool normalized = false;
 			if (map != 0)
 			{
@@ -70,43 +68,43 @@ namespace BALL
 
 			const String entry(residue_name + ":" + atom_name);
 
-			if (!normalized && !transformTable.has(entry))
+			if (!normalized && !transform_table.has(entry))
 			{
-				Log.warn() << "AssignShiftProcessor::start: could not convert atom name " 
-									 << residue_name << ":" << atom_name << endl;
+				Log.warn() << "AssignShiftProcessor::start: could not convert atom name " << entry << endl;
 			}
 
-			String prefix(atom_data_[atompos]->residueSeqCode);
+			String prefix(atom_data_[atom_pos]->residueSeqCode);
 			prefix += residue_name;
 			prefix += ":";
 
-			if (!transformTable.has(entry))
+			if (!transform_table.has(entry))
 			{
-				String fullName(prefix);
-				fullName += atom_name;
-				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
-cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
+				String full_name(prefix);
+				full_name += atom_name;
+				shift_table_[full_name] = atom_data_[atom_pos]->shiftValue;
+				//cout << full_name << " " << atom_data_[atom_pos]->shiftValue << endl;
 				continue;
 			}
 
-			// from now on getting the transformed name for H-atoms
-			if (!transformTable[entry].has('/'))
+			// from now on getting the transformed names for atoms
+			if (!transform_table[entry].has('/'))
 			{
-				String fullName(residue_name);
-				fullName += transformTable[entry];
-				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
-cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
+				String full_name(residue_name);
+				full_name += transform_table[entry];
+				shift_table_[full_name] = atom_data_[atom_pos]->shiftValue;
+				//cout << full_name << " " << atom_data_[atom_pos]->shiftValue << endl;
 				continue;
 			}
-
+			
+			// adding multiple atoms for one entry
 			std::vector<String> tokens;
-			Size size = transformTable[entry].split(tokens, "/");
+			Size size = transform_table[entry].split(tokens, "/");
 			for (Position wordpos = 0; wordpos < size ; wordpos++)
 			{
-				String fullName(atom_data_[atompos]->residueSeqCode);
-				fullName += tokens[wordpos];
-				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
-cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
+				String full_name(atom_data_[atom_pos]->residueSeqCode);
+				full_name += tokens[wordpos];
+				shift_table_[full_name] = atom_data_[atom_pos]->shiftValue;
+				//cout << full_name << " " << atom_data_[atom_pos]->shiftValue << endl;
 			}
 		}
 
@@ -123,7 +121,6 @@ cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 			{
 				molecule_ = RTTI::castTo<Molecule>(object);
 				number_of_fragment_ = 0;
-cout << "molekuel gesetzt" << endl;
 				return Processor::CONTINUE;
 			}
 			else
@@ -145,35 +142,35 @@ cout << "molekuel gesetzt" << endl;
 		}
 
 		// --------------------set the shift value--------------------------------------------
-		Atom* patom_;
-		patom_= RTTI::castTo<Atom>(object);
+		Atom* patom = RTTI::castTo<Atom>(object);
 		
-		String fullName;
-		if (patom_->getResidue() != 0)
+		String full_name;
+		if (patom->getResidue() != 0)
 		{
-			fullName = patom_->getResidue()->getID();
+			full_name = patom->getResidue()->getID();
 		}
 		else 
 		{
-			fullName = String(number_of_fragment_);
+			full_name = String(number_of_fragment_);
 		}
-		fullName += patom_->getFragment()->getName();
-		fullName += ":";
-		fullName += patom_->getName();
+		full_name += patom->getFragment()->getName();
+		full_name += ":";
+		full_name += patom->getName();
 
-		if (patom_->hasProperty(ShiftModule::PROPERTY__SHIFT))
+		if (patom->hasProperty(ShiftModule::PROPERTY__SHIFT))
 		{
-			Log.error() << "AssignShiftProcessor: atom contains already shift data: " << fullName << endl;   
-			patom_->clearProperty(ShiftModule::PROPERTY__SHIFT);
+			Log.error() << "AssignShiftProcessor: atom contains already shift data: " << full_name << endl;   
+			patom->clearProperty(ShiftModule::PROPERTY__SHIFT);
 		}
-		if (shift_table_.has(fullName))
+
+		if (shift_table_.has(full_name))
 		{
-			patom_->setProperty(ShiftModule::PROPERTY__SHIFT, shift_table_[fullName]);
-cout << "atom found " << fullName << endl;
+			patom->setProperty(ShiftModule::PROPERTY__SHIFT, shift_table_[full_name]);
+			Log.info() << "atom found " << full_name << endl;
 		}
 		else 
 		{
-			Log.info() << "AssignShiftProcessor: entry not found: " << fullName << endl;   
+			Log.info() << "AssignShiftProcessor: entry not found: " << full_name << endl;   
 		}               
 
 		return Processor::CONTINUE;

@@ -1,9 +1,9 @@
 BALL_INLINE
-AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atomData)
-	:	atom_data_(atomData),
+AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)
+	:	atom_data_(atom_data),
 		molecule_(0)
 {
-	if (atomData.size() == 0)
+	if (atom_data.size() == 0)
 	{
 		Log.error() << endl << "AssignShiftProcessor: given vector contains no shift data " << endl;
 	}

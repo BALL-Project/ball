@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.h,v 1.7 2000/09/19 11:48:42 amoll Exp $
+// $Id: assignShiftProcessor.h,v 1.9 2000/10/03 02:03:58 amoll Exp $
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
 #define BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -39,7 +39,7 @@ namespace BALL
 
 		/**	Detailed constructor.
 		*/
-		AssignShiftProcessor(const vector<NMRAtomData*>& atomData);
+		AssignShiftProcessor(const vector<NMRAtomData*>& atom_data);
 
 		/**	Copy constructor.
 		*/
