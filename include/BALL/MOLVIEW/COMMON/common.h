@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.5 2000/01/08 20:30:17 hekl Exp $
+// $Id: common.h,v 1.6 2000/01/11 20:09:11 hekl Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -52,6 +52,14 @@ namespace BALL
 			VALUE__DRAWING_MODE_DOTS      = 0,
 			VALUE__DRAWING_MODE_WIREFRAME = 1,
 			VALUE__DRAWING_MODE_SOLID     = 2
+		};
+
+		enum ColorCalculatorValues
+		{
+			COLORCALCULATOR_VALUES__ELEMENT          = 0,
+			COLORCALCULATOR_VALUES__RESIDUE_NAME     = 1,
+			COLORCALCULATOR_VALUES__ATOM_CHARGE      = 2,
+			COLORCALCULATOR_VALUES__CUSTOM           = 3
 		};
 
 		struct GeometricObject
