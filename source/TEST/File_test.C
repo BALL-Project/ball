@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.43 2003/07/03 10:38:51 amoll Exp $
+// $Id: File_test.C,v 1.44 2003/09/02 12:46:16 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -20,7 +21,7 @@ using namespace std;
 #	define sleep(a) _sleep(1000 * a)
 #endif
 
-START_TEST(File, "$Id: File_test.C,v 1.43 2003/07/03 10:38:51 amoll Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.44 2003/09/02 12:46:16 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -733,6 +734,20 @@ CHECK(void unregisterTransformation(const String& pattern))
 	f.registerTransformation("asdddasd", "addd");
 	f.unregisterTransformation("asdddasd");
 	TEST_EQUAL(f.findTransformation("asdddasd"), "")
+RESULT
+
+File::CannotWrite* cw_ptr = 0;
+CHECK(CannotWrite(const char* file, int line, const String& filename) throw())	
+	cw_ptr = new File::CannotWrite("asdf", 1234, "filename");
+	TEST_NOT_EQUAL(cw_ptr, 0)
+RESULT
+
+CHECK(String getFilename() const throw())
+	TEST_EQUAL(cw_ptr->getFilename(), "filename")
+RESULT
+
+CHECK(~CannotWrite() throw())
+	delete cw_ptr;
 RESULT
 
 

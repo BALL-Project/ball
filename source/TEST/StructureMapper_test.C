@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StructureMapper_test.C,v 1.6 2003/08/19 16:00:35 amoll Exp $
+// $Id: StructureMapper_test.C,v 1.7 2003/09/02 12:46:17 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +12,7 @@
 #include <BALL/MATHS/quaternion.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.6 2003/08/19 16:00:35 amoll Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.7 2003/09/02 12:46:17 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -20,19 +21,19 @@ using namespace BALL;
 using std::vector;
 
 StructureMapper*	m;
-CHECK(Default constructor)
+CHECK(StructureMapper())
 	m = new StructureMapper();
 	TEST_NOT_EQUAL(m, 0)
 RESULT
 
-CHECK(Destructor)
+CHECK(~StructureMapper())
 	delete m;
 RESULT
 
 Fragment*	frag1 = new Fragment;
 Fragment*	frag2 = new Fragment;
 Matrix4x4	t;
-CHECK(Constructor)
+CHECK(StructureMapper(AtomContainer& A, AtomContainer& B))
 	Atom*	atom1 = new Atom;
 	Atom*	atom2 = new Atom;
 	Atom*	atom3 = new Atom;
@@ -77,7 +78,7 @@ CHECK(Constructor)
 	TEST_NOT_EQUAL(m, 0)
 RESULT
 
-CHECK(mapFragments)
+CHECK(bool mapFragments(const vector<Fragment*>& A, const vector<Fragment*>& B, Matrix4x4* transformation, double upper_bound = 8.0, double lower_bound = 2.5))
 	Matrix4x4	map_result;
 	vector<Fragment*>	A;
 	vector<Fragment*>	B;
@@ -102,7 +103,7 @@ CHECK(mapFragments)
 	TEST_REAL_EQUAL(map_result.m44, t.m44)
 RESULT
 
-CHECK(Matrix4x4 StructureMapper::matchPoints(const Vector3& w1, const Vector3& w2, const Vector3& w3, const Vector& v1, const Vector3& v2, const Vector3& v3))
+CHECK(static Matrix4x4 matchPoints(const Vector3& w1, const Vector3& w2, const Vector3& w3, const Vector3& v1, const Vector3& v2, const Vector3& v3))
 	Vector3 v1(2.0, 2.0, 2.0);
 	Vector3 v2(3.0, 2.0, 2.0);
 	Vector3 v3(2.0, 3.0, 2.0);
@@ -192,6 +193,207 @@ CHECK(double calculateRMSD())
 	f2.insert(b2);
 	StructureMapper m(f1,f2);
 	TEST_REAL_EQUAL(m.calculateRMSD(), 1.0)
+RESULT
+
+CHECK((Matrix4x4 mapProteins(Protein& P1, Protein& P2, map<String, Size>& type_map, Size& no_matched_ca, double& rmsd, double upper_bound = 8.0, double lower_bound = 4.0, double tolerance = 0.6)))
+  // ???
+RESULT
+
+CHECK((Size mapResiduesByBackbone(const list<Residue*>& l1, const list<Residue*>& l2)))
+  // ???
+RESULT
+
+CHECK((StructureMapper::AtomBijection calculateFragmentBijection(const vector<Fragment*>& A, const vector<Fragment*>& B)))
+  // ???
+RESULT
+
+CHECK(bool calculateTransformation())
+  // ???
+RESULT
+
+CHECK((static Matrix4x4 matchBackboneAtoms(const Residue& r1, const Residue& r2)))
+  // ???
+RESULT
+
+CHECK((vector<vector<Fragment*>& searchPattern(vector<Fragment*>& pattern, AtomContainer& composite, double max_rmsd = 4.0, double max_center_tolerance = 2.0, double upper_bound = 8.0, double lower_bound = 4.0)))
+  // ???
+RESULT
+
+CHECK(const AtomBijection& getBijection() const)
+	// not much to be tested here...
+	StructureMapper sm;
+	TEST_EQUAL(sm.getBijection().size(), 0)
+RESULT
+
+CHECK(void calculateDefaultBijection())
+	{
+		AtomContainer ac1;
+		Residue* r1 = new Residue;
+		Residue* r2 = new Residue;
+		ac1.insert(*r1);
+		ac1.insert(*r2);
+		r1->setName("RES1");
+		r2->setName("RES2");
+		PDBAtom* a1 = new PDBAtom;
+		PDBAtom* a2 = new PDBAtom;
+		PDBAtom* a3 = new PDBAtom;
+		PDBAtom* a4 = new PDBAtom;
+		a1->setName("A1");
+		a2->setName("A2");
+		a3->setName("A3");
+		a4->setName("A4");
+		r1->insert(*a1);
+		r1->insert(*a2);
+		r2->insert(*a3);
+		r2->insert(*a4);
+
+		AtomContainer ac2;
+		Residue* r3 = new Residue;
+		Residue* r4 = new Residue;
+		ac2.insert(*r3);
+		ac2.insert(*r4);
+		r3->setName("RES1");
+		r4->setName("RES2");
+		PDBAtom* a5 = new PDBAtom;
+		PDBAtom* a6 = new PDBAtom;
+		PDBAtom* a7 = new PDBAtom;
+		PDBAtom* a8 = new PDBAtom;
+		a5->setName("A4");
+		a6->setName("A3");
+		a7->setName("A2");
+		a8->setName("A1");
+		r4->insert(*a6);
+		r4->insert(*a5);
+		r3->insert(*a8);
+		r3->insert(*a7);
+
+		StructureMapper sm(ac1, ac2);
+		sm.calculateDefaultBijection();
+		TEST_EQUAL(sm.getBijection().size(), 4)
+		ABORT_IF(sm.getBijection().size() != 4)
+
+		const StructureMapper::AtomBijection& b = sm.getBijection();
+		TEST_EQUAL(b[0].first->getFullName(), b[0].second->getFullName())
+		TEST_NOT_EQUAL(b[0].first, b[0].second)
+		TEST_EQUAL(b[1].first->getFullName(), b[1].second->getFullName())
+		TEST_NOT_EQUAL(b[1].first, b[1].second)
+		TEST_EQUAL(b[2].first->getFullName(), b[2].second->getFullName())
+		TEST_NOT_EQUAL(b[2].first, b[2].second)
+		TEST_EQUAL(b[3].first->getFullName(), b[3].second->getFullName())
+		TEST_NOT_EQUAL(b[3].first, b[3].second)
+	}
+
+	{
+		AtomContainer ac1;
+		Residue* r1 = new Residue;
+		Residue* r2 = new Residue;
+		ac1.insert(*r1);
+		ac1.insert(*r2);
+		r1->setName("RES1");
+		r2->setName("RES2");
+		PDBAtom* a1 = new PDBAtom;
+		PDBAtom* a2 = new PDBAtom;
+		PDBAtom* a3 = new PDBAtom;
+		PDBAtom* a4 = new PDBAtom;
+		a1->setName("A1");
+		a2->setName("A2");
+		a3->setName("A3");
+		a4->setName("A4");
+		r1->insert(*a1);
+		r1->insert(*a2);
+		r2->insert(*a3);
+		r2->insert(*a4);
+
+		AtomContainer ac2;
+		Residue* r3 = new Residue;
+		Residue* r4 = new Residue;
+		ac2.insert(*r3);
+		ac2.insert(*r4);
+		r4->setName("RES1");
+		r3->setName("RES2");
+		PDBAtom* a5 = new PDBAtom;
+		PDBAtom* a6 = new PDBAtom;
+		PDBAtom* a7 = new PDBAtom;
+		PDBAtom* a8 = new PDBAtom;
+		a5->setName("A4");
+		a6->setName("A3");
+		a7->setName("A2");
+		a8->setName("A1");
+		r4->insert(*a6);
+		r4->insert(*a5);
+		r3->insert(*a8);
+		r3->insert(*a7);
+
+		StructureMapper sm(ac1, ac2);
+		sm.calculateDefaultBijection();
+		TEST_EQUAL(sm.getBijection().size(), 4)
+		ABORT_IF(sm.getBijection().size() != 4)
+
+		const StructureMapper::AtomBijection& b = sm.getBijection();
+		TEST_EQUAL(b[0].first->getName(), b[0].second->getName())
+		TEST_NOT_EQUAL(b[0].first->getFullName(), b[0].second->getFullName())
+		TEST_NOT_EQUAL(b[0].first, b[0].second)
+		TEST_EQUAL(b[1].first->getName(), b[1].second->getName())
+		TEST_NOT_EQUAL(b[1].first->getFullName(), b[1].second->getFullName())
+		TEST_NOT_EQUAL(b[1].first, b[1].second)
+		TEST_EQUAL(b[2].first->getName(), b[2].second->getName())
+		TEST_NOT_EQUAL(b[2].first->getFullName(), b[2].second->getFullName())
+		TEST_NOT_EQUAL(b[2].first, b[2].second)
+		TEST_EQUAL(b[3].first->getName(), b[3].second->getName())
+		TEST_NOT_EQUAL(b[3].first->getFullName(), b[3].second->getFullName())
+		TEST_NOT_EQUAL(b[3].first, b[3].second)
+	}
+
+	// test for unnamed atoms -- they should be mapped by order only.
+	{
+		Molecule m1;
+		Atom* a1 = new Atom;
+		Atom* a2 = new Atom;
+		Atom* a3 = new Atom;
+		Atom* a4 = new Atom;
+		a1->setName("A1");
+		a2->setName("A2");
+		a3->setName("A3");
+		a4->setName("A4");
+		m1.insert(*a1);
+		m1.insert(*a2);
+		m1.insert(*a3);
+		m1.insert(*a4);
+
+		Molecule m2;
+		Atom* a5 = new Atom;
+		Atom* a6 = new Atom;
+		Atom* a7 = new Atom;
+		Atom* a8 = new Atom;
+		a5->setName("B1");
+		a6->setName("B2");
+		a7->setName("B3");
+		a8->setName("B4");
+		m2.insert(*a8);
+		m2.insert(*a7);
+		m2.insert(*a6);
+		m2.insert(*a5);
+
+		StructureMapper sm(m1, m2);
+		sm.calculateDefaultBijection();
+		TEST_EQUAL(sm.getBijection().size(), 4)
+		ABORT_IF(sm.getBijection().size() != 4)
+
+		const StructureMapper::AtomBijection& b = sm.getBijection();
+		TEST_EQUAL(b[0].first->getName(), "A1")
+		TEST_EQUAL(b[0].second->getName(), "B4")
+		TEST_EQUAL(b[1].first->getName(), "A2")
+		TEST_EQUAL(b[1].second->getName(), "B3")
+		TEST_EQUAL(b[2].first->getName(), "A3")
+		TEST_EQUAL(b[2].second->getName(), "B2")
+		TEST_EQUAL(b[3].first->getName(), "A4")
+		TEST_EQUAL(b[3].second->getName(), "B1")
+	}
+
+RESULT
+
+CHECK((void set(AtomContainer& A, AtomContainer& B)))
+  // ???
 RESULT
 
 /////////////////////////////////////////////////////////////
