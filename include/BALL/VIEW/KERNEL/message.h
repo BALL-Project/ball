@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.49 2004/06/10 16:32:42 amoll Exp $
+// $Id: message.h,v 1.50 2004/06/10 16:41:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -698,11 +698,11 @@ class BALL_EXPORT RegularData1DMessage
 		throw();
 
 	///
-	void setRegularData1D(RegularData1D& data)
+	void setData(RegularData1D& data)
 		throw() { data_ = &data;}
 
 	///
-	RegularData1D* getRegularData1D()
+	RegularData1D* getData()
 		throw() { return data_;}
 
 protected:
@@ -719,11 +719,11 @@ class BALL_EXPORT RegularData2DMessage
 		throw();
 
 	///
-	void setRegularData2D(RegularData2D& data)
+	void setData(RegularData2D& data)
 		throw() { data_ = &data;}
 
 	///
-	RegularData2D* getRegularData2D()
+	RegularData2D* getData()
 		throw() { return data_;}
 
 protected:
@@ -740,11 +740,11 @@ class BALL_EXPORT RegularData3DMessage
 		throw();
 
 	///
-	void setRegularData3D(RegularData3D& data)
+	void setData(RegularData3D& data)
 		throw() { data_ = &data;}
 
 	///
-	RegularData3D* getRegularData3D()
+	RegularData3D* getData()
 		throw() { return data_;}
 
 protected:
