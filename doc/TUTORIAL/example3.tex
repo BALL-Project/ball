@@ -30,7 +30,7 @@ naming convention. \member{}{normalize\_names} is a processor, so we
 can \member{Composite}{apply} it to any given kernel data structure:
 
 \begin{lstlisting}{}
-	FragmentDB db;
+	FragmentDB db("fragments/Fragments.db");
 	S.apply(db.normalize_names);
 \end{lstlisting}
 

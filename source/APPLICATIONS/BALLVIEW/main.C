@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.7 2004/05/05 18:03:53 amoll Exp $
+// $Id: main.C,v 1.8 2004/05/05 18:16:13 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -26,26 +26,6 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 
 
 	QApplication application(argc, argv);
-
-	// =============== looking for the BALL_DATA_PATH variable =========================
-	char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
-	if (BALLView_data_path != 0)
-	{
- 		putenv((char*)((BALL::String("BALL_DATA_PATH=") + BALL::String(BALLView_data_path)).c_str()));
-	}
-
-
-	BALL::Path d;
-	if (BALL::String(d.find("CHARMM")) == "")
-	{
-		QMessageBox::critical(0, "Error while starting BALLView",
-				QString("Could not find the BALL data directory!\n") + 
-				"Please set the BALL_DATA_PATH or BALLVIEW_DATA_PATH\n" + 
-				"environment variable to the directory containing the\n" + 
-				"BALL or BALLView data directory (e.g. to C:\\BALL\\data).", 
-				QMessageBox::Abort,  QMessageBox::NoButton);
-		exit(-1);
-	}
 
 	// =============== testing if we can write in current directoy =====================
 	bool dir_error = false;
