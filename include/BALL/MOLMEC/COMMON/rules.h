@@ -1,4 +1,4 @@
-// $Id: rules.h,v 1.2 2000/05/19 12:05:34 oliver Exp $
+// $Id: rules.h,v 1.3 2000/05/19 13:21:41 oliver Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULES_H
@@ -17,7 +17,7 @@
 #endif
 
 #include <list>
-#include <pair>
+#include <utility>
 
 namespace BALL 
 {
