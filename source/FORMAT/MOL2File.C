@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.24 2005/03/02 21:58:50 oliver Exp $
+// $Id: MOL2File.C,v 1.24.4.1 2005/03/21 14:00:33 amoll Exp $
 //
 
 #include <BALL/FORMAT/MOL2File.h>
@@ -294,7 +294,12 @@ namespace BALL
 				}	
 				else if (RTI == "SUBSTRUCTURE") 
 				{
-					 readSubstructureSection_();
+					readSubstructureSection_();
+				} 
+				else if (RTI == "COMMENT") 
+				{
+					// do nothing
+					readLine();
 				} 
 				else 
 				{	
