@@ -1,4 +1,4 @@
-// $Id: molecularProperties.C,v 1.11 2002/12/15 01:10:39 amoll Exp $
+// $Id: molecularProperties.C,v 1.12 2002/12/15 14:23:39 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -60,16 +60,6 @@ namespace BALL
 				// properties will be used only for atom containers
 				if (!RTTI::isKindOf<AtomContainer>(*(composite_message->getComposite())))
 				{
-					// BAUSTELLE
-					// ??????????????? warum wird eine MolecularMessage gesendet wenn
-					// composite kein AtomContainer ?????????????????????????????????
-					//
-					//					NewMolecularMessage* mol_message = new NewMolecularMessage;
-					//					mol_message->setComposite(composite_message->getComposite());
-					//					mol_message->setDeletable(true);
-					
-					//					notify_(mol_message);
-					
 					return;
 				}
 				
@@ -123,8 +113,7 @@ namespace BALL
 			}
 			else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
 			{
-				GeometricObjectSelectionMessage* geometric_selection 
-					= RTTI::castTo<GeometricObjectSelectionMessage>(*message);
+				GeometricObjectSelectionMessage* geometric_selection = RTTI::castTo<GeometricObjectSelectionMessage>(*message);
 
 				// geometric selection is not empty
 				if (!geometric_selection->getSelection().empty())
