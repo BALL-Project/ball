@@ -17,6 +17,7 @@ int main(int argc, char **argv)
 	application.setMainWidget(&mainframe);
 
 	// start the application
+	mainframe.registerThis();
 	mainframe.show();
   return application.exec();
 }

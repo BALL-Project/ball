@@ -8,8 +8,9 @@ clean:	default_clean
 include ../../common.mak
 include .Dependencies
 
-BALL_INCLUDES=$(BALLVIEW_INCLUDES)
+BALL_INCLUDES=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
 
+PYTHON_LIBS=/opt/misc/lib/python1.5/config/libpython1.5.a -lsocket -lnsl -ldl  -lpthread -lthread -lreadline -ltermcap
 
 SOURCES=\
 	DIALOGS/DlgAbout.C\
@@ -57,7 +58,7 @@ CPP_SOURCES=$(SOURCES)
 SPECIAL_OBJECTS=
 
 molview:	$(OBJECTS) $(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS)
 
 DIALOGS/DlgAbout_moc.C:     DIALOGS/DlgAbout.h
 				$(MOC) DIALOGS/DlgAbout.h -o $@

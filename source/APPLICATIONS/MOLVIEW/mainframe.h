@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.17 2000/06/04 17:49:48 hekl Exp $
+// $Id: mainframe.h,v 1.18 2000/07/16 19:33:16 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -31,6 +31,10 @@
 
 #ifndef BALL_VIEW_KERNEL_LOGVIEW_H
 #	include <BALL/VIEW/KERNEL/logView.h>
+#endif
+
+#ifndef BALL_VIEW_OPENGL_WIDGETS_PYWIDGET_H
+#	include <BALL/VIEW/OPENGL/WIDGETS/pyWidget.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -88,13 +92,14 @@ using namespace BALL::MOLVIEW;
 
 
 class Mainframe	
-: public QMainWindow,
-	public MainControl
+	: public BALL::VIEW::MainControl
 {
 	Q_OBJECT
 
 
   public:
+
+	public:
 
 	enum MenuKey
 	{
@@ -216,10 +221,10 @@ class Mainframe
 
 	FragmentDB		fragment_db_;
 				
-	QPopupMenu*		edit_menu_;
 	QSplitter*		hor_splitter_;
 	QSplitter*		vert_splitter_;
 	LogView*			logview_;
+	PyWidget*			py_widget_;
 	QVBoxLayout*	vboxlayout_;
 	
 	List<QPopupMenu*> popup_menus_;

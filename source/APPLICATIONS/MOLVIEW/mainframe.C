@@ -18,10 +18,8 @@ using namespace std;
 
 
 Mainframe::Mainframe
-  (QWidget* parent, const char* name)
-		:	
-		QMainWindow(parent, name),
-		MainControl(".options"),
+	(QWidget* parent, const char* name)
+	:	MainControl(parent, name, ".options"),
 		scene_(0),
 		control_(0),
 		display_properties_(0),
@@ -36,10 +34,10 @@ Mainframe::Mainframe
 		GL_object_collector_(),
 		object_processor_(),
 		fragment_db_(),
-		edit_menu_(0),
 		hor_splitter_(0),
 		vert_splitter_(0),
 		logview_(0),
+		py_widget_(0),
 		vboxlayout_(0),
 		popup_menus_(),
 		selection_(),
@@ -109,6 +107,9 @@ Mainframe::Mainframe
 	logview_ = new LogView(vert_splitter_);
 	CHECK_PTR(logview_);
 
+	py_widget_ = new PyWidget(vert_splitter_);
+	CHECK_PTR(py_widget_);
+
 	QLabel* message_label = new QLabel(tr("Ready."), statusBar());
 	statusBar()->addWidget(message_label, 20);
 
@@ -164,9 +165,15 @@ Mainframe::Mainframe
 	
 	QFont f("Courier", 12, QFont::DemiBold, false);
 	logview_->setFont(f);
-
 	Log.info() << "Welcome to MolVIEW." << endl;
 
+
+	// ---------------------
+	// PyWidget setup
+	// ---------------------
+	py_widget_->setFont(f);
+	py_widget_->startInterpreter();
+	
 
 	// ---------------------
 	// Menu ----------------
@@ -178,142 +185,70 @@ Mainframe::Mainframe
 	CHECK_PTR(files_menu);
 	popup_menus_.push_back(files_menu);
 
-	QPopupMenu* file_menu = new QPopupMenu(this);
-	CHECK_PTR(file_menu);
-	popup_menus_.push_back(file_menu);
-
 	QPopupMenu* export_menu = new QPopupMenu(this);
 	CHECK_PTR(export_menu);
 	popup_menus_.push_back(export_menu);
 	
-	file_menu->insertItem("&Import File", files_menu, CTRL+Key_I);
-	file_menu->insertSeparator();
-	file_menu->insertItem("E&xit", qApp, SLOT(quit()), CTRL+Key_X);
 
+	initPopupMenu(MainControl::FILE)->insertItem("&Import File", files_menu, CTRL+Key_I);
+	insertMenuEntry(MainControl::FILE, "E&xit", qApp, SLOT(quit()), CTRL+Key_X);
 	files_menu->insertItem("&PDB File", this, SLOT(importPDB()), CTRL+Key_P, MENU__OPEN_FILE_PDB);
 	files_menu->insertItem("&HIN File", this, SLOT(importHIN()), CTRL+Key_H, MENU__OPEN_FILE_HIN);
 
 	// Edit-Menu -------------------------------------------------------------------
 	
-	edit_menu_ = new QPopupMenu(this);
-	CHECK_PTR(edit_menu_);
-	popup_menus_.push_back(edit_menu_);
+	insertMenuEntry(MainControl::EDIT, "&Cut", this, SLOT(cut()), CTRL+Key_C, MENU__EDIT_CUT);
+	insertMenuEntry(MainControl::EDIT, "C&opy", this, SLOT(copy()), CTRL+Key_O, MENU__EDIT_COPY);
+	insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), CTRL+Key_P, MENU__EDIT_PASTE);
+	insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S, MENU__EDIT_SELECT);
+	insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D, MENU__EDIT_DESELECT);
+	insertMenuEntry(MainControl::EDIT, "Cl&ear Clipboard", this, SLOT(clearClipboard()), CTRL+Key_E, MENU__EDIT_CLEAR_CLIPBOARD);
 
-	edit_menu_->insertItem("&Cut", this, SLOT(cut()), CTRL+Key_C, MENU__EDIT_CUT);
-	edit_menu_->insertItem("C&opy", this, SLOT(copy()), CTRL+Key_O, MENU__EDIT_COPY);
-	edit_menu_->insertItem("&Paste", this, SLOT(paste()), CTRL+Key_P, MENU__EDIT_PASTE);
-	edit_menu_->insertSeparator();
-	edit_menu_->insertItem("&Select", this, SLOT(select()), CTRL+Key_S, MENU__EDIT_SELECT);
-	edit_menu_->insertItem("&Deselect", this, SLOT(deselect()), CTRL+Key_D, MENU__EDIT_DESELECT);
-	edit_menu_->insertSeparator();
-	edit_menu_->insertItem("Cl&ear Clipboard", this, SLOT(clearClipboard()), CTRL+Key_E, MENU__EDIT_CLEAR_CLIPBOARD);
+	// Build Menu -------------------------------------------------------------------
 
-	edit_menu_->setItemEnabled(MENU__EDIT_CUT, FALSE);
-	edit_menu_->setItemEnabled(MENU__EDIT_COPY, FALSE);
-	edit_menu_->setItemEnabled(MENU__EDIT_PASTE, FALSE);
-	edit_menu_->setItemEnabled(MENU__EDIT_SELECT, FALSE);
-	edit_menu_->setItemEnabled(MENU__EDIT_DESELECT, FALSE);
-	edit_menu_->setItemEnabled(MENU__EDIT_CLEAR_CLIPBOARD, FALSE);
-
-	QPopupMenu* build_menu = new QPopupMenu(this);
-	CHECK_PTR(build_menu);
-	popup_menus_.push_back(build_menu);
-
-	build_menu->insertItem("Check St&ructure", this, 
-												 SLOT(checkResidue()), CTRL+Key_R, MENU__BUILD_CHECK_RESIDUE);
-	build_menu->insertItem("&Build Bonds", this, 
-												 SLOT(buildBonds()), CTRL+Key_B, MENU__BUILD_BUILD_BONDS);
-	build_menu->insertItem("Add &Hydrogens", this, 
-												 SLOT(addHydrogens()), CTRL+Key_H, MENU__BUILD_ADD_HYDROGENS);
-	build_menu->insertItem("Assign &Charges", this, 
-												 SLOT(assignCharges()), CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
-	build_menu->insertSeparator();
-	build_menu->insertItem("Calculate AMBER &Energy", this, 
-												 SLOT(calculateAmberEnergy()), CTRL+Key_U, MENU__BUILD_AMBER_ENERGY);
-	build_menu->insertItem("Perform Energy &Minimization", this, 
-												 SLOT(amberMinimization()), CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
+	insertMenuEntry(MainControl::BUILD, "Check St&ructure", this, SLOT(checkResidue()), CTRL+Key_R, MENU__BUILD_CHECK_RESIDUE);
+	insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B, MENU__BUILD_BUILD_BONDS);
+	insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H, MENU__BUILD_ADD_HYDROGENS);
+	insertMenuEntry(MainControl::BUILD, "Assign &Charges", this, SLOT(assignCharges()), CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
+	insertMenuEntry(MainControl::BUILD, "Calculate AMBER &Energy", this, SLOT(calculateAmberEnergy()), CTRL+Key_U, MENU__BUILD_AMBER_ENERGY);
+	insertMenuEntry(MainControl::BUILD, "Perform Energy &Minimization", this, SLOT(amberMinimization()), CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
 			
 
-	// Insert -Menu ------------------------------------------------------------------
-
-	QPopupMenu* insert_menu = new QPopupMenu(this);
-	CHECK_PTR(insert_menu);
-	popup_menus_.push_back(insert_menu);
-
-	insert_menu->insertItem("&Label", this, SLOT(insertLabel()), CTRL+Key_L, MENU__INSERT_LABEL);
-	//	insert_menu->setItemEnabled(MENU__INSERT_LABEL, FALSE);
-
   // Display Menu -------------------------------------------------------------------
+	initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
+	insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this,
+									SLOT(openDisplayPropertiesDialog()), CTRL+Key_I, MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG);   
+	insertMenuEntry(MainControl::DISPLAY, "&Preferences", this, 
+									SLOT(openPreferencesDialog()), CTRL+Key_I, MENU__DISPLAY_OPEN_PREFERENCES_DIALOG);
+	insertMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A, MENU__DISPLAY_CENTER_CAMERA);
+	insertMenuEntry(MainControl::DISPLAY, "&Label", this, SLOT(insertLabel()), CTRL+Key_L, MENU__INSERT_LABEL);
 
-	QPopupMenu* display_menu = new QPopupMenu(this);
-	CHECK_PTR(display_menu);
-	popup_menus_.push_back(display_menu);
-	display_menu->setCheckable(TRUE);
-	
-	display_menu->insertItem("D&isplay Properties", this,
-													 SLOT(openDisplayPropertiesDialog()),
-													 CTRL+Key_I, MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG);   
-	display_menu->insertItem("&Preferences", this, 
-													 SLOT(openPreferencesDialog()),
-													 CTRL+Key_I, MENU__DISPLAY_OPEN_PREFERENCES_DIALOG);
-	display_menu->insertSeparator();
-	display_menu->insertItem("Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A, MENU__DISPLAY_CENTER_CAMERA);
-	display_menu->setItemEnabled(MENU__DISPLAY_CENTER_CAMERA, FALSE);
-
-	// Control -Menu ------------------------------------------------------------------
-
-	QPopupMenu* control_menu = new QPopupMenu(this);
-	CHECK_PTR(control_menu);
-	popup_menus_.push_back(control_menu);
-	control_menu->setCheckable(TRUE);
-
-	control_menu->insertItem("&Move Mode", this, SLOT(rotateMode()), CTRL+Key_R, MENU__CONTROL_ROTATE_MODE);
-	control_menu->insertItem("&Picking Mode", this, SLOT(pickingMode()), CTRL+Key_P, MENU__CONTROL_PICKING_MODE);
-
-	control_menu->setItemEnabled(MENU__CONTROL_ROTATE_MODE, TRUE);
-	control_menu->setItemEnabled(MENU__CONTROL_PICKING_MODE, TRUE);
+	insertMenuEntry(MainControl::DISPLAY, "&Move Mode", this, SLOT(rotateMode()), CTRL+Key_R, MENU__CONTROL_ROTATE_MODE);
+	insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode()), CTRL+Key_P, MENU__CONTROL_PICKING_MODE);
+	menuBar()->setItemEnabled(MENU__CONTROL_ROTATE_MODE, TRUE);
+	menuBar()->setItemEnabled(MENU__CONTROL_PICKING_MODE, TRUE);
 
 	// Help-Menu -------------------------------------------------------------------
 
-	QPopupMenu* help_menu = new QPopupMenu(this);
-	CHECK_PTR(help_menu);
-	popup_menus_.push_back(help_menu);
-	
-	help_menu->insertItem("&About", this, SLOT(about()), CTRL+Key_A, MENU__HELP_ABOUT);
+	insertMenuEntry(MainControl::HELP, "&About", this, SLOT(about()), CTRL+Key_A, MENU__HELP_ABOUT);
 
 	// Menu ------------------------------------------------------------------------
 
-	menuBar()->insertItem("&File", file_menu);
-	menuBar()->insertItem("&Edit", edit_menu_);
-	menuBar()->insertItem("&Insert", insert_menu);
-	menuBar()->insertItem("&Control", control_menu);
-	menuBar()->insertItem("&Build", build_menu);
-	menuBar()->insertItem("&Display", display_menu);
-	menuBar()->insertSeparator();
-	menuBar()->insertItem("&Help", help_menu);
 	menuBar()->setSeparator(QMenuBar::InWindowsStyle);
 
 	// ---------------------
 	// Connectivity --------
 	// ---------------------
 
-	connect(display_menu,
+	connect(initPopupMenu(MainControl::DISPLAY),
 					SIGNAL(aboutToShow()),
 					this,
 					SLOT(checkMenuEntries()));
-	connect(insert_menu,
+	connect(initPopupMenu(MainControl::BUILD),
 					SIGNAL(aboutToShow()),
 					this,
 					SLOT(checkMenuEntries()));
-	connect(control_menu,
-					SIGNAL(aboutToShow()),
-					this,
-					SLOT(checkMenuEntries()));
-	connect(build_menu,
-					SIGNAL(aboutToShow()),
-					this,
-					SLOT(checkMenuEntries()));
-	connect(edit_menu_,
+	connect(initPopupMenu(MainControl::EDIT),
 					SIGNAL(aboutToShow()),
 					this,
 					SLOT(checkMenuEntries()));
@@ -321,6 +256,9 @@ Mainframe::Mainframe
 					SIGNAL(applyButtonPressed()),
 					this,
 					SLOT(applyPreferencesDialog()));
+
+	// check the active menu entries
+	checkMenuEntries();
 
 	//--------------------------------
 	// setup the VIEW server
@@ -1098,7 +1036,7 @@ void Mainframe::about()
 {
 	DlgAbout about_box;
 	about_box.exec();
-	statusBar()->message("MolVIEW V 0.9 alpha", 1500);
+	statusBar()->message("MolVIEW V 0.96a", 1500);
 }
 
 void Mainframe::applyPreferencesDialog()
