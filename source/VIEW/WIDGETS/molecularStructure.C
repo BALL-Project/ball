@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.53 2004/06/24 23:03:24 amoll Exp $
+// $Id: molecularStructure.C,v 1.54 2004/08/27 11:23:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -357,18 +357,36 @@ namespace BALL
 			List<Composite*> temp_selection_ = getMainControl()->getMolecularControlSelection();
 			List<Composite*>::ConstIterator it = temp_selection_.begin();	
 			
-			Size number_of_bonds = 0;
+			Size old_number_of_bonds = 0;
+
+			HashSet<System*> roots;
+
+			for (; it != temp_selection_.end(); ++it)
+			{	
+				if (!roots.has((System*)&(**it).getRoot()))
+				{
+					old_number_of_bonds += (((AtomContainer*)&(**it).getRoot()))->countBonds();
+					roots.insert((System*)&(**it).getRoot());
+				}
+			}
+
 			for (; it != temp_selection_.end(); ++it)
 			{	
 				(*it)->apply(getFragmentDB().build_bonds);
-				number_of_bonds += getFragmentDB().build_bonds.getNumberOfBondsBuilt();
 
 				CompositeMessage *change_message = 
 					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 				notify_(change_message);
 			}
 
-			String result = "added " + String(number_of_bonds) + " bonds.";
+			Size new_number_of_bonds = 0;
+			for (HashSet<System*>::iterator sit = roots.begin(); sit != roots.end(); sit++)
+			{	
+				new_number_of_bonds += ((**sit).countBonds());
+			}
+
+			String result = "added " + String(new_number_of_bonds - old_number_of_bonds) + 
+										  " bonds (total " + String(new_number_of_bonds) + ").";
 			setStatusbarText(result);
 			Log.info() << result << std::endl;
 		}
