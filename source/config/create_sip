@@ -22,7 +22,6 @@ sed -e "s/ [a-z_0-9]*,/,/g" \
 >> $FILE2
 
 cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip | sed -n -e '1,14p' | sed -e "s/^class/class "$CLASS/ | sed -e "s/BALL\/.h/"$INCLUDE"/"
-exit
 cat $FILE2
 echo "};"
 
