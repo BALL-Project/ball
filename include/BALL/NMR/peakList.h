@@ -1,4 +1,4 @@
- // $Id: peakList.h,v 1.3 2001/06/22 14:07:29 amoll Exp $
+ // $Id: peakList.h,v 1.4 2001/08/16 00:44:49 oliver Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -62,6 +62,7 @@ namespace BALL
 			throw();
 		
 		//@}
+
 		/**	@name	Accessors
 		*/
 		//@{
@@ -87,7 +88,6 @@ namespace BALL
 		/**	Determine the maximum position of the spectrum (all dimensions)
 		*/
 		Position getMaxPosition() const;
-		
 		//@}
 	};
 
