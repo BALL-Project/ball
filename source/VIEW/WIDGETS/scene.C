@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.3 2003/08/29 15:38:01 amoll Exp $
+// $Id: scene.C,v 1.4 2003/08/31 00:25:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -243,9 +243,6 @@ namespace BALL
 						gl_renderer_.removeRepresentation(*rep);
 						gl_renderer_.addRepresentation(*rep);
 						break;
-
-					default:
-						Log.error() << "Unknown RepresentationMessage type in " << __FILE__ << __LINE__ << std::endl;
 				}
 
 				return;
