@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.4 2001/09/11 21:53:13 amoll Exp $
+// $Id: TCPTransfer.C,v 1.5 2001/09/12 11:00:20 amoll Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -437,12 +437,47 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return status_;
 	}
 
-	String temp(buffer_);
-	if (!temp.hasSubstring("ready.") && !waitForOutput_("ready.", 20))
-	{
-		status_ = LOGON_ERROR;
-		return status_;
+	setBlock_(socket_, false);
+	Timer timer;
+	timer.start();
+	
+	// got "220 " (important: space)  -> last line has arrived
+	bool last_line1 = false;
+	
+	// last line has ended
+	bool last_line2 = false;
+	
+	// try to read login message, abort after 20 seconds
+	do		
+	{	
+		String temp(buffer_);
+		if (temp.hasSubstring("220 "))
+		{
+			last_line1 = true;
+		}
+		if (last_line1 && temp.has('\n'))
+		{
+			last_line2 = true;
+			break;
+		}
+
+		received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
+		if (received_bytes_ > 0)
+		{
+			buffer_[received_bytes_] = '\0';
+			if (debug_)
+			{
+				(*fstream_) << "<<" << buffer_ << endl;
+			}
+		}
 	}
+	while (timer.getClockTime() < 20);
+	
+	if (!last_line2)
+	{
+		return LOGON_ERROR; 
+	}
+	
 	//================================================== login
 	String query;
 	if (login_.isEmpty())
@@ -464,6 +499,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return SEND_ERROR;
 	}
 	
+	setBlock_(socket_, true);
 	received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
 	if (received_bytes_ < 0)
 	{
@@ -523,8 +559,15 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	//================================================ opening passive connection
 		
 	setBlock_(socket_, false);
-	Timer timer;
-	timer.start();
+	timer.reset();
+	
+	// got "230 "  (important: space!) -> last line has arrived
+	last_line1 = false;
+	
+	// last line has ended
+	last_line2 = false;
+	
+	// try to read login message, abort after 20 seconds
 	do
 	{
 		received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
@@ -535,9 +578,25 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 			{
 				(*fstream_) << "<<" << buffer_ << endl;
 			}
+	
+			String temp(buffer_);
+			if (temp.hasSubstring("230 "))
+			{
+				last_line1 = true;
+			}
+			if (last_line1 && temp.has('\n'))
+			{
+				last_line2 = true;
+				break;
+			}
 		}
 	}
-	while (timer.getClockTime() < 5);
+	while (timer.getClockTime() < 20);
+	
+	if (!last_line2)
+	{
+		return LOGON_ERROR; 
+	}
 	
 	query = "PASV\n";
 	
@@ -647,7 +706,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	{
 		(*fstream_) << "<<" << buffer_ << endl;
 	}
-	temp = buffer_;
+	String temp(buffer_);
 	temp = temp.getSubstring(0, 3);
 	if (temp != "150")
 	{ 
