@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventAccessibleSurface.h,v 1.10 2003/08/26 08:04:53 oliver Exp $
-//
+// $Id: solventAccessibleSurface.h,v 1.11 2003/11/04 20:09:24 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
 #define BALL_STRUCTURE_SOLVENTACCESSIBLESURFACE_H
